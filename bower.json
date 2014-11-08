@@ -12,6 +12,12 @@
     "ember-load-initializers": "stefanpenner/ember-load-initializers#0.0.2",
     "ember-qunit": "0.1.8",
     "ember-qunit-notifications": "0.0.4",
-    "qunit": "~1.15.0"
+    "qunit": "~1.15.0",
+    "FakeXMLHttpRequest": "~1.0.0",
+    "route-recognizer": "~0.1.1",
+    "pretender": "0.1.0",
+    "JavaScript-MD5": "~1.1.0",
+    "ember-simple-auth": "0.7.1",
+    "dom-ruler": "0.1.3"
   }
 }
