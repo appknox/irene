@@ -4,6 +4,7 @@
 Router = Ember.Router.extend
   location: config.locationType
 
-Router.map => null
+Router.map ->
+  @route "login"
 
 `export default Router;`
