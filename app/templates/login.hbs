@@ -1,7 +1,27 @@
-<form {{action 'authenticate' on='submit'}}>
-  <label for="identification">Login</label>
-  {{input value=identification placeholder='Enter Login'}}
-  <label for="password">Password</label>
-  {{input value=password placeholder='Enter Password' type='password'}}
-  <button type="submit">Login</button>
-</form>
+<section id="content" class="m-t-lg wrapper-md animated bounceIn">
+    <div class="container aside-xl">
+        <div class="navbar-brand block">AppKnox</div>
+        <section class="m-b-lg">
+            <header class="wrapper text-center">
+                Login to get your app secured.
+            </header>
+            <form {{action 'authenticate' on='submit'}}>
+                <div class="list-group">
+                    <div class="list-group-item">
+                        {{input value=identification placeholder='Username' class="form-control no-border"}}
+                    </div>
+                    <div class="list-group-item">
+                        {{input value=password placeholder='Password' class="form-control no-border" type='password'}}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-lg btn-primary btn-block">Sign in</button>
+                <!--
+                <div class="text-center m-t m-b"><a href="#"><small>Forgot password?</small></a></div>
+                <div class="line line-dashed"></div>
+                <p class="text-muted text-center"><small>Do not have an account?</small></p>
+                <a href="#sign-up" class="btn btn-lg btn-default btn-block">Create an account</a>
+                -->
+            </form>
+        </section>
+    </div>
+</section>
