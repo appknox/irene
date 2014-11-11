@@ -35,6 +35,9 @@ module.exports = function(environment) {
       serverTokenEndpoint: 'http://localhost:8000/api-token-auth/',
       crossOriginWhitelist: ['http://localhost:8000']
     };
+    ENV.contentSecurityPolicy = {
+      "connect-src": "'self' http://localhost:8000"
+    };
   }
 
   if (environment === 'test') {
