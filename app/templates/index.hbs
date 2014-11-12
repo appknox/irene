@@ -1,0 +1,10 @@
+<h1>Projects</h1>
+
+<ul>
+    {{#each project in model}}
+    <li>{{project.name}}</li>
+    {{else}}
+    <h4>You have not created any projects yet!</h4>
+    {{/each}}
+</ul>
+{{outlet}}
