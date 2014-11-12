@@ -6,8 +6,15 @@
 `import serverRoutes from './server-routes'`
 
 if config.usePretender
-  new Pretender serverRoutes
+  server = new Pretender serverRoutes
 
+  server.unhandledRequest = (verb, path, request)->
+    console.warn "unhandledRequest"
+    debugger
+
+  server.erroredRequest = (verb, path, request, error)->
+    console.warn "erroredRequest"
+    debugger
 
 Ember.MODEL_FACTORY_INJECTIONS = true
 
