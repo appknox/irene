@@ -29,20 +29,21 @@ module.exports = function(environment) {
     ENV.APP.LOG_TRANSITIONS = true;
     ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     ENV.APP.LOG_VIEW_LOOKUPS = true;
-    //ENV.APP.API_HOST = 'http://localhost:8000';
-    ENV.APP.API_HOST = '';
+    ENV.usePretender = true;
+    if (ENV.usePretender) {
+      ENV.APP.API_HOST = '';
+    }
+    else{
+      ENV.APP.API_HOST = 'http://localhost:8000';
+    }
     ENV['simple-auth'] = {
       authorizer: 'authorizer:django-rest',
       serverTokenEndpoint: ENV.APP.API_HOST + '/api-token-auth/',
       crossOriginWhitelist: [ENV.APP.API_HOST]
-      // serverTokenEndpoint: '/api-token-auth/',
-      // crossOriginWhitelist: ['http://localhost:8000']
     };
     ENV.contentSecurityPolicy = {
       "connect-src": "'self' " + ENV.APP.API_HOST
-      //"connect-src": "'self'"
     };
-    ENV.usePretender = true;
   }
 
   if (environment === 'test') {
