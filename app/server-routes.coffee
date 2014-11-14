@@ -7,14 +7,13 @@ PROJECTS = [{
   }]
 
 reply = (data, status=200) ->
-  [status, {"Content-Type": "application/json"}, JSON.stringify data]
-
+  [status, "Content-Type": "application/json", JSON.stringify data]
 
 serverRoutes = ->
-  @get '/api/projects', (request)->
-    reply PROJECTS
+  @get '/projects/', (request)->
+    reply projects: PROJECTS
 
-  @post '/api-token-auth/', (request) ->
-    reply {token: "f3c8e190ad85be8949bc51171db7f64aaf3ffbd3"}
+  @post '/token/', (request) ->
+    reply token: "f3c8e190ad85be8949bc51171db7f64aaf3ffbd3"
 
 `export default serverRoutes;`

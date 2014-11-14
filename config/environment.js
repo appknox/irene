@@ -19,7 +19,8 @@ module.exports = function(environment) {
     },
     'simple-auth': {
       store: 'simple-auth-session-store:local-storage',
-      serverTokenRevocationEndpoint: '/logout'
+      authenticator: 'authenticator:irene',
+      authorizer: 'authorizer:irene'
     }
   };
 
@@ -37,8 +38,6 @@ module.exports = function(environment) {
       ENV.APP.API_HOST = 'http://localhost:8000';
     }
     ENV['simple-auth'] = {
-      authorizer: 'authorizer:foo-rest',
-      serverTokenEndpoint: ENV.APP.API_HOST + '/api-token-auth/',
       crossOriginWhitelist: [ENV.APP.API_HOST]
     };
     ENV.contentSecurityPolicy = {
@@ -57,11 +56,29 @@ module.exports = function(environment) {
 
     ENV.APP.rootElement = '#ember-testing';
     ENV['simple-auth']['store'] = 'simple-auth-session-store:ephemeral'
+    ENV.usePretender = true;
+    ENV.APP.API_HOST = '';
+    ENV.contentSecurityPolicy = {
+      "connect-src": "'self' " + ENV.APP.API_HOST
+    };
   }
 
   if (environment === 'production') {
+    ENV.APP.LOG_RESOLVER = false;
+    ENV.APP.LOG_ACTIVE_GENERATION = false;
+    ENV.APP.LOG_TRANSITIONS = false;
+    ENV.APP.LOG_TRANSITIONS_INTERNAL = false;
+    ENV.APP.LOG_VIEW_LOOKUPS = false;
 
+    ENV.usePretender = false;
+    ENV.APP.API_HOST = '';
+    ENV.contentSecurityPolicy = {
+      "connect-src": "'self' " + ENV.APP.API_HOST
+    };
   }
+
+  ENV['simple-auth']['tokenEndpoint'] =  ENV.APP.API_HOST + '/token/';
+  ENV['simple-auth']['revokeEndpoint'] =  ENV.APP.API_HOST + '/revoke/';
 
   return ENV;
 };
