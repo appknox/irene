@@ -1,6 +1,6 @@
 `import Ember from 'ember';`
 `import Base from 'simple-auth/authenticators/base';`
-`import config from '../config/environment'`
+`import config from '../config/environment';`
 
 
 IreneAuthenticator = Base.extend
