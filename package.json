@@ -38,6 +38,7 @@
     "glob": "^4.0.5"
   },
   "dependencies": {
+    "broccoli-htmlmin": "^1.2.1",
     "ember-cli-async-button": "^0.3.1",
     "ember-cli-deploy": "0.0.3",
     "ember-cli-esnext": "^0.1.1",

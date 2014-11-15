@@ -1,6 +1,7 @@
 /* global require, module */
 
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+var htmlmin = require('broccoli-htmlmin');
 
 var app = new EmberApp({
   storeConfigInMeta: false
@@ -21,4 +22,11 @@ var app = new EmberApp({
 
 app.import('bower_components/animate.css/animate.css');
 
-module.exports = app.toTree();
+var tree = app.toTree();
+
+options = {
+    quotes: true
+};
+tree = htmlmin(tree, options);
+
+module.exports = tree;
