@@ -3,7 +3,7 @@
 `import loadInitializers from 'ember/load-initializers';`
 `import config from './config/environment';`
 `import Pretender from 'pretender';`
-`import serverRoutes from './server-routes'`
+`import serverRoutes from './server-routes';`
 
 if config.usePretender
   server = new Pretender serverRoutes

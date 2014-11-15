@@ -1,5 +1,5 @@
-`import DS from 'ember-data'`
-`import BaseModelMixin from '../mixins/base-model'`
+`import DS from 'ember-data';`
+`import BaseModelMixin from '../mixins/base-model';`
 
 Project = DS.Model.extend BaseModelMixin,
   owner: DS.attr 'number'
@@ -10,4 +10,4 @@ Project = DS.Model.extend BaseModelMixin,
   source: DS.attr 'string'
   version: DS.attr 'string'
 
-`export default Project`
+`export default Project;`

@@ -7,4 +7,4 @@ IreneAuthorizer = Base.extend
     if isAuthenticated && !Ember.isEmpty token
       jqXHR.setRequestHeader 'Authorization', "Token #{token}"
 
-`export default IreneAuthorizer`
+`export default IreneAuthorizer;`

@@ -13,5 +13,5 @@ AuthInitializer =
   before: 'simple-auth'
   initialize: initialize
 
-`export {initialize}`
-`export default AuthInitializer`
+`export {initialize};`
+`export default AuthInitializer;`

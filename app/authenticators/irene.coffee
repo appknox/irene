@@ -42,4 +42,4 @@ IreneAuthenticator = Base.extend
     new Ember.RSVP.Promise (resolve, reject) ->
       success resolve
 
-`export default IreneAuthenticator`
+`export default IreneAuthenticator;`

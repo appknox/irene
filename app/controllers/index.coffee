@@ -1,5 +1,5 @@
-`import Ember from 'ember'`
+`import Ember from 'ember';`
 
 IndexController = Ember.ArrayController.extend()
 
-`export default IndexController`
+`export default IndexController;`
