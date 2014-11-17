@@ -16,10 +16,6 @@ module 'Testing login interactions',
   teardown: ->
     Ember.run App, App.destroy
 
-# Replace this with your real tests.
-test 'it exists', ->
-  controller = @subject()
-  ok controller
 
 test 'it redirects to login when the user is not authenticated', ->
   expect 1
