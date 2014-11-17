@@ -11,9 +11,9 @@ module 'AuthInitializer',
       application = Ember.Application.create()
       application.deferReadiness()
 
-# Replace this with your real tests.
 test 'it works', ->
   initialize container, application
-
-  # you would normally confirm the results of the initializer here
-  ok true
+  dict = container.registry.dict
+  ok dict["authenticator:irene"], "authenticator is registered!"
+  ok dict["authorizer:irene"], "authorizer is registered!"
+  ok dict["session:irene"], "session is registered!"
