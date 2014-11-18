@@ -5,13 +5,13 @@
             <header class="wrapper text-center">
                 Login to get your app secured.
             </header>
-            <form {{action 'authenticate' on='submit'}}>
+            <form {{action 'login' on='submit'}}>
                 <div class="list-group">
                     <div class="list-group-item">
-                        {{input value=identification placeholder='Username' class="form-control no-border"}}
+                        {{input value=identification placeholder='Username' class="form-control no-border" name='identification'}}
                     </div>
                     <div class="list-group-item">
-                        {{input value=password placeholder='Password' class="form-control no-border" type='password'}}
+                        {{input value=password placeholder='Password' class="form-control no-border" name='password' type='password'}}
                     </div>
                 </div>
                 <button type="submit" class="btn btn-lg btn-primary btn-block">Sign in</button>
