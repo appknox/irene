@@ -1,0 +1,46 @@
+<section>
+    <header class="bg-white header header-md navbar navbar-fixed-top-xs box-shadow">
+        <div class="navbar-header aside-md dk">
+            {{#link-to 'index' class="navbar-brand"}}
+            <img src="/assets/images/logo.png" class="m-r-sm" alt="scale">
+            {{/link-to}}
+        </div>
+        <ul class="nav navbar-nav navbar-right m-n nav-user user">
+            <li id="user-dropdown">
+                <span class="thumb-sm avatar pull-left">
+                    {{ gravatar-image email=session.user.email alt=session.user.email }}
+                </span>
+                {{ session.user.username }}
+            </li>
+            {{#popup-menu for="user-dropdown" on="click"}}
+            <li>
+                <ul class="dropdown-menu show">
+                    <li>
+                        <span class="arrow top"></span>
+                        <a href="#">Settings</a>
+                    </li>
+                    <li>
+                        <a href="profile.html">Profile</a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="badge bg-danger pull-right">3</span>
+                            Notifications
+                        </a>
+                    </li>
+                    <li>
+                        <a href="docs.html">Help</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="modal.lockme.html" data-toggle="ajaxModal" >Logout</a>
+                    </li>
+                </ul>
+            </li>
+            {{/popup-menu}}
+        </ul>
+    </header>
+    <div id="content">
+        {{ yield }}
+    </div>
+</section>
