@@ -42,7 +42,9 @@ module.exports = function(environment) {
       crossOriginWhitelist: [ENV.APP.API_HOST]
     };
     ENV.contentSecurityPolicy = {
-      "connect-src": "'self' " + ENV.APP.API_HOST
+      "connect-src": "'self' " + ENV.APP.API_HOST,
+      'img-src': "'self' www.gravatar.com",
+      'style-src': "'self' 'unsafe-inline'"
     };
   }
 
