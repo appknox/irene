@@ -3,53 +3,38 @@
     <div class="col-sm-12">
         <div class="panel b-a">
             <div class="row m-n">
-                <div class="col-md-6 b-b b-r">
-                    <a href="#" class="block padder-v hover">
+                <div class="col-md-4 b-b b-r">
+                    <div class="block padder-v hover text-success">
                         <span class="i-s i-s-2x pull-left m-r-sm">
-                            <i class="i i-hexagon2 i-s-base text-danger hover-rotate"></i>
-                            <i class="i i-plus2 i-1x text-white"></i>
+                            {{ fa-icon "folder" }}
                         </span>
                         <span class="clear">
-                            <span class="h3 block m-t-xs text-danger">20</span>
+                            <span class="h3 block m-t-xs">20</span>
                             <small class="text-muted text-u-c">Projets Created</small>
                         </span>
-                    </a>
+                    </div>
                 </div>
-                <div class="col-md-6 b-b">
-                    <a href="#" class="block padder-v hover">
+                <div class="col-md-4 b-b b-r">
+                    <div class="block padder-v hover text-danger">
                         <span class="i-s i-s-2x pull-left m-r-sm">
-                            <i class="i i-hexagon2 i-s-base text-success-lt hover-rotate"></i>
-                            <i class="i i-users2 i-sm text-white"></i>
+                            {{ fa-icon "exclamation-circle" }}
                         </span>
                         <span class="clear">
-                            <span class="h3 block m-t-xs text-success">75%</span>
-                            <small class="text-muted text-u-c">Vulnarebility Ratio</small>
+                            <span class="h3 block m-t-xs ">75%</span>
+                            <small class="text-muted text-u-c">Vulnerability Ratio</small>
                         </span>
-                    </a>
+                    </div>
                 </div>
-                <div class="col-md-6 b-b b-r">
-                    <a href="#" class="block padder-v hover">
+                <div class="col-md-4 b-b b-r">
+                    <div class="block padder-v hover">
                         <span class="i-s i-s-2x pull-left m-r-sm">
-                            <i class="i i-hexagon2 i-s-base text-info hover-rotate"></i>
-                            <i class="i i-location i-sm text-white"></i>
+                            {{ fa-icon "pie-chart" }}
                         </span>
                         <span class="clear">
                             <span class="h3 block m-t-xs text-info">8</span>
                             <small class="text-muted text-u-c">Completed Scans</small>
                         </span>
-                    </a>
-                </div>
-                <div class="col-md-6 b-b">
-                    <a href="#" class="block padder-v hover">
-                        <span class="i-s i-s-2x pull-left m-r-sm">
-                            <i class="i i-hexagon2 i-s-base text-primary hover-rotate"></i>
-                            <i class="i i-alarm i-sm text-white"></i>
-                        </span>
-                        <span class="clear">
-                            <span class="h3 block m-t-xs text-primary">92</span>
-                            <small class="text-muted text-u-c">Scans Left</small>
-                        </span>
-                    </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -58,19 +43,30 @@
 <h3 class="m-b-xs text-black">Projects</h3>
 <div class="row m-b">
     {{#each project in model}}
-    <div class="col-sm-6 col-md-4">
+    <a href="#" class="col-sm-6 col-md-4">
         <section class="panel b-a">
-            <div class="panel-heading no-border bg-success lt">
-                <span class="pull-right badge dk m-t-sm bg-danger">3</span>
-                <a href="#" class="h4 text-lt m-t-sm m-b-sm block font-bold">{{ project.name }}</a>
+            <div class="panel-heading no-border bg-success lt panel-heading-fix">
+                <div class="h4 text-lt block font-bold">
+                    <img src="//placehold.it/50x50" alt=""/>
+                    {{ project.name }}
+                    <span class="pull-right">
+                        {{ fa-icon "android" }}
+                        <span class="badge dk m-t-sm bg-danger">3</span>
+                    </span>
+                </div>
             </div>
-            <div class="panel-body">
-                <div class="row text-center m-t">
-                    <span class="font-thin">Package: </span> some.package.name
+            <div class="row panel-body">
+                <div class="col-md-4 m-t">
+                    <img src="//placehold.it/100x100" alt=""/>
+                </div>
+                <div class="col-md-8 m-t">
+                    <p><span class="font-thin">Package: </span> some.package.name</p>
+                    <p><span class="font-thin">Version: </span> 1.0.3</p>
+                    <p><span class="font-thin">Created: </span> some.package.name</p>
                 </div>
             </div>
         </section>
-    </div>
+    </a>
     {{else}}
     <h3>You have not created any projects yet!</h3>
     {{/each}}
