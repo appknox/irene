@@ -6,5 +6,6 @@ User = DS.Model.extend
   email: DS.attr 'string'
   firstName: DS.attr 'string'
   lastName: DS.attr 'string'
+  projects: DS.hasMany 'project', inverse: 'owner'
 
 `export default User;`

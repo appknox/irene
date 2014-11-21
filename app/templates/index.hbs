@@ -57,12 +57,12 @@
             </div>
             <div class="row panel-body">
                 <div class="col-md-4 m-t">
-                    <img src="//placehold.it/100x100" alt=""/>
+                    <img {{bind-attr src=project.lastFile.url}} alt=""/>
                 </div>
                 <div class="col-md-8 m-t">
-                    <p><span class="font-thin">Package: </span> some.package.name</p>
-                    <p><span class="font-thin">Version: </span> 1.0.3</p>
-                    <p><span class="font-thin">Created: </span> some.package.name</p>
+                    <p><span class="font-thin">Package: </span>{{ project.packageName }}</p>
+                    <p><span class="font-thin">Version: </span>{{ project.owner.username }}</p>
+                    <p><span class="font-thin">Created: </span>{{ project.createdOn }}</p>
                 </div>
             </div>
         </section>
