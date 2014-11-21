@@ -16,6 +16,14 @@ if config.usePretender
     console.warn "erroredRequest"
     debugger
 
+Ember.$.ajaxSetup
+  type: "POST"
+  data: {}
+  dataType: 'json'
+  xhrFields:
+    withCredentials: true
+  crossDomain: true
+
 Ember.MODEL_FACTORY_INJECTIONS = true
 
 App = Ember.Application.extend

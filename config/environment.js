@@ -31,7 +31,7 @@ module.exports = function(environment) {
     ENV.APP.LOG_TRANSITIONS = true;
     ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     ENV.APP.LOG_VIEW_LOOKUPS = true;
-    ENV.usePretender = true;
+    ENV.usePretender = false;
     if (ENV.usePretender) {
       ENV.APP.API_HOST = '';
     }
@@ -80,7 +80,7 @@ module.exports = function(environment) {
     };
   }
 
-  ENV['simple-auth']['tokenEndpoint'] =  ENV.APP.API_HOST + '/token/';
+  ENV['simple-auth']['tokenEndpoint'] =  ENV.APP.API_HOST + '/login';
   ENV['simple-auth']['revokeEndpoint'] =  ENV.APP.API_HOST + '/revoke/';
 
   return ENV;
