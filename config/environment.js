@@ -43,7 +43,7 @@ module.exports = function(environment) {
     };
     ENV.contentSecurityPolicy = {
       "connect-src": "'self' " + ENV.APP.API_HOST,
-      'img-src': "'self' www.gravatar.com",
+      'img-src': "'self' www.gravatar.com placehold.it",
       'style-src': "'self' 'unsafe-inline'"
     };
   }
