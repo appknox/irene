@@ -20,7 +20,6 @@ module.exports = function(environment) {
     'simple-auth': {
       store: 'simple-auth-session-store:local-storage',
       authenticator: 'authenticator:irene',
-      authorizer: 'authorizer:irene',
       session: 'session:irene'
     }
   };

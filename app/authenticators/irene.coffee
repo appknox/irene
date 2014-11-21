@@ -30,7 +30,7 @@ IreneAuthenticator = Base.extend
 
   restore: (data) ->
     new Ember.RSVP.Promise (resolve, reject) ->
-      if !Ember.isEmpty data.token
+      if !Ember.isEmpty data.user
         resolve data
       else
         reject()

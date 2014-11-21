@@ -18,8 +18,6 @@ LoginController = Ember.Controller.extend LoginControllerMixin,
 
   authenticator: 'authenticator:irene'
 
-  authorizer: 'authorizer:irene'
-
   login: ->
     errors = @validate()
     if errors?.length > 0
