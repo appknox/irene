@@ -45,9 +45,9 @@
     {{#each project in model}}
     <a href="#" class="col-sm-6 col-md-4">
         <section class="panel b-a">
-            <div class="panel-heading no-border bg-success lt panel-heading-fix">
+            <div class="panel-heading no-border lt panel-heading-fix" {{bind-attr style=project.lastFile.panelHeadingStyle}}>
                 <div class="h4 text-lt block font-bold">
-                    <img src="//placehold.it/50x50" alt=""/>
+                    <img {{bind-attr src=project.lastFile.iconUrl}} alt=""/>
                     {{ project.name }}
                     <span class="pull-right">
                         {{ fa-icon "android" }}
@@ -57,11 +57,11 @@
             </div>
             <div class="row panel-body">
                 <div class="col-md-4 m-t">
-                    <img {{bind-attr src=project.lastFile.url}} alt=""/>
+                    <img src="//placehold.it/50x50" alt=""/>
                 </div>
                 <div class="col-md-8 m-t">
                     <p><span class="font-thin">Package: </span>{{ project.packageName }}</p>
-                    <p><span class="font-thin">Version: </span>{{ project.owner.username }}</p>
+                    <p><span class="font-thin">Version: </span>{{ project.lastFile.version }}</p>
                     <p><span class="font-thin">Created: </span>{{ project.createdOn }}</p>
                 </div>
             </div>
