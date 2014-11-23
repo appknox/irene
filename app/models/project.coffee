@@ -5,7 +5,6 @@ Project = DS.Model.extend BaseModelMixin,
   owner: DS.belongsTo 'user', async: true, inverse: 'projects'
   name: DS.attr 'string'
   packageName: DS.attr 'string'
-  uuid: DS.attr 'string'
   platform: DS.attr 'number'
   source: DS.attr 'string'
   version: DS.attr 'string'
