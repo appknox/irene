@@ -1,5 +1,5 @@
 <h3 class="m-b-xs text-black">Dashboard</h3>
-<div class="row">
+<div class="row m-b">
     <div class="col-sm-12">
         <div class="panel b-a">
             <div class="row m-n">
@@ -40,6 +40,29 @@
         </div>
     </div>
 </div>
+<hr />
+<div class="row m-b">
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-9">
+                <input type="text" class="input-lg w-100" placeholder="Submit store URL">
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-primary btn-lg w-100" type="button">Submit</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-1 text-center">
+        <h4>or</h4>
+    </div>
+    <div class="col-md-3">
+        <label class="file-label btn btn-primary btn-lg w-100">
+            Upload App
+            <input type="file">
+        </label>
+    </div>
+</div>
+<hr />
 <h3 class="m-b-xs text-black">Projects</h3>
 <div class="row m-b">
     {{#each project in model}}
