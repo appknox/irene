@@ -8,6 +8,5 @@ File = DS.Model.extend BaseModelMixin,
   md5hash: DS.attr 'string'
   sha1hash: DS.attr 'string'
   name: DS.attr 'string'
-  color: DS.attr 'string'
 
 `export default File;`
