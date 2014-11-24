@@ -10,8 +10,4 @@ File = DS.Model.extend BaseModelMixin,
   name: DS.attr 'string'
   color: DS.attr 'string'
 
-  panelHeadingStyle: (->
-    "background-color:#{@get "color"}"
-  ).property "color"
-
 `export default File;`
