@@ -1,10 +1,11 @@
 /* global require, module */
 
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+var htmlmin = require('broccoli-htmlmin');
 
-var app = new EmberApp({});
-
-app.import('bower_components/animate.css/animate.css');
+var app = new EmberApp({
+  storeConfigInMeta: false
+});
 
 // Use `app.import` to add additional libraries to the generated
 // output files.
@@ -19,4 +20,14 @@ app.import('bower_components/animate.css/animate.css');
 // please specify an object with the list of modules as keys
 // along with the exports of each module as its value.
 
-module.exports = app.toTree();
+app.import('bower_components/animate.css/animate.css');
+app.import('vendor/scripts/jquery.drawPieChart.js');
+
+var tree = app.toTree();
+
+options = {
+    quotes: true
+};
+tree = htmlmin(tree, options);
+
+module.exports = tree;

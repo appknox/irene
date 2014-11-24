@@ -19,24 +19,31 @@ module.exports = function(environment) {
     },
     'simple-auth': {
       store: 'simple-auth-session-store:local-storage',
-      serverTokenRevocationEndpoint: '/logout'
+      authenticator: 'authenticator:irene',
+      session: 'session:irene'
     }
   };
 
   if (environment === 'development') {
-    ENV.APP.LOG_RESOLVER = true;
+    //ENV.APP.LOG_RESOLVER = true;
     ENV.APP.LOG_ACTIVE_GENERATION = true;
-    //ENV.APP.LOG_TRANSITIONS = true;
+    ENV.APP.LOG_TRANSITIONS = true;
     ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     ENV.APP.LOG_VIEW_LOOKUPS = true;
-    ENV.APP.API_HOST = 'http://localhost:8000';
+    ENV.usePretender = false;
+    if (ENV.usePretender) {
+      ENV.APP.API_HOST = '';
+    }
+    else{
+      ENV.APP.API_HOST = 'http://localhost:8000';
+    }
     ENV['simple-auth'] = {
-      authorizer: 'authorizer:django-rest',
-      serverTokenEndpoint: 'http://localhost:8000/api-token-auth/',
-      crossOriginWhitelist: ['http://localhost:8000']
+      crossOriginWhitelist: [ENV.APP.API_HOST]
     };
     ENV.contentSecurityPolicy = {
-      "connect-src": "'self' http://localhost:8000"
+      "connect-src": "'self' " + ENV.APP.API_HOST,
+      'img-src': "'self' www.gravatar.com placehold.it",
+      'style-src': "'self' 'unsafe-inline'"
     };
   }
 
@@ -50,11 +57,30 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
     ENV.APP.rootElement = '#ember-testing';
+    ENV['simple-auth']['store'] = 'simple-auth-session-store:ephemeral';
+    ENV.usePretender = true;
+    ENV.APP.API_HOST = '';
+    ENV.contentSecurityPolicy = {
+      "connect-src": "'self' " + ENV.APP.API_HOST
+    };
   }
 
   if (environment === 'production') {
+    ENV.APP.LOG_RESOLVER = false;
+    ENV.APP.LOG_ACTIVE_GENERATION = false;
+    ENV.APP.LOG_TRANSITIONS = false;
+    ENV.APP.LOG_TRANSITIONS_INTERNAL = false;
+    ENV.APP.LOG_VIEW_LOOKUPS = false;
 
+    ENV.usePretender = false;
+    ENV.APP.API_HOST = '';
+    ENV.contentSecurityPolicy = {
+      "connect-src": "'self' " + ENV.APP.API_HOST
+    };
   }
+
+  ENV['simple-auth']['tokenEndpoint'] =  ENV.APP.API_HOST + '/login';
+  ENV['simple-auth']['revokeEndpoint'] =  ENV.APP.API_HOST + '/revoke/';
 
   return ENV;
 };

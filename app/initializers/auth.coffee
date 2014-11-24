@@ -1,13 +1,15 @@
-`import config from '../config/environment';`
-# Takes two parameters: container and app
-initialize = () ->
-  # app.register 'route', 'foo', 'service:foo'
+`import IreneAuthenticator from '../authenticators/irene';`
+`import IreneSession from '../sessions/irene';`
+
+
+initialize = (container, application) ->
+  container.register 'authenticator:irene', IreneAuthenticator
+  container.register 'session:irene', IreneSession
 
 AuthInitializer =
-  name: 'auth',
-  before: 'django-rest-auth',
-  initialize: (container, application) =>
-    window.ENV = config
+  name: 'auth'
+  before: 'simple-auth'
+  initialize: initialize
 
-`export {initialize}`
-`export default AuthInitializer`
+`export {initialize};`
+`export default AuthInitializer;`
