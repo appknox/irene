@@ -2,7 +2,7 @@
 `import BaseModelMixin from '../mixins/base-model';`
 
 File = DS.Model.extend BaseModelMixin,
-  project: DS.belongsTo 'project', inverse: 'files'
+  project: DS.belongsTo 'project', inverse: 'files', async: true
   version: DS.attr 'string'
   iconUrl: DS.attr 'string'
   md5hash: DS.attr 'string'
@@ -16,6 +16,11 @@ File = DS.Model.extend BaseModelMixin,
     analyses.forEach (analysis)->
       risks.push analysis.get 'risk'
     risks
+  ).property "analyses.@each.risk"
+
+  sortedAnalysis: (->
+    analyses = @store.all "analysis", file: @get "id"
+    analyses.sortBy 'risk:desc'
   ).property "analyses.@each.risk"
 
 `export default File;`

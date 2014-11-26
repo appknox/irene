@@ -1,8 +1,46 @@
 <div class="row m-t">
-    {{#each analysis in model.analyses}}
     <div class="col-md-12">
         <section class="panel b-a">
-            <div class="panel-heading bg-primary">
+            <div class="panel-heading bg-light">
+                <div class="h4 text-lt block font-bold text-center">
+                    {{ model.project.name }}
+                    {{ fa-icon model.project.platformIconClass }}
+                </div>
+            </div>
+            <div class="row panel-body panel-body-fix">
+                <div class="col-md-3 m-t">
+                    {{view "pie-chart" file=model}}
+                </div>
+                <div class="col-md-3">
+                    <img {{bind-attr src=model.iconUrl}} alt="Project Icon"/>
+                </div>
+                <div class="col-md-6 m-t">
+                    <p>
+                        <span class="font-thin">Package Name: </span>
+                        {{ model.name }}
+                    </p>
+                    <p>
+                        <span class="font-thin">Version: </span>
+                        {{ model.version }}
+                    </p>
+                    <p>
+                        <span class="font-thin">MD5 Hash: </span>
+                        {{ model.md5hash }}
+                    </p>
+                    <p>
+                        <span class="font-thin">SHA1 Hash: </span>
+                        {{ model.sha1hash }}
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="row m-t">
+    {{#each analysis in model.sortedAnalysis}}
+    <div class="col-md-12">
+        <section class="panel b-a">
+            <div {{bind-attr class=analysis.panelHeadingClass}}>
                 <div class="h4 text-lt block font-bold">
                     {{analysis.id}}
                 </div>
