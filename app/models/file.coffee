@@ -12,7 +12,7 @@ File = DS.Model.extend BaseModelMixin,
 
   risks:(->
     risks = []
-    analyses = @store.all "analysis", file: @get "id"  # @get "analyses"
+    analyses = @store.all "analysis", file: @get "id"
     analyses.forEach (analysis)->
       risks.push analysis.get 'risk'
     risks

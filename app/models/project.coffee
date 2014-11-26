@@ -1,5 +1,6 @@
 `import DS from 'ember-data';`
 `import BaseModelMixin from '../mixins/base-model';`
+`import ENUMS from '../enums'`
 
 Project = DS.Model.extend BaseModelMixin,
   owner: DS.belongsTo 'user', async: true, inverse: 'projects'
@@ -10,5 +11,13 @@ Project = DS.Model.extend BaseModelMixin,
   version: DS.attr 'string'
   lastFile: DS.belongsTo 'file', async: true
   files: DS.hasMany 'file', async:true, inverse: 'project'
+
+  platformIconClass:( ->
+    switch @get "platform"
+      when ENUMS.PLATFORM.ANDROID then "android"
+      when ENUMS.PLATFORM.IOS then "apple"
+      when ENUMS.PLATFORM.WINDOWS then "windows"
+      else "mobile"
+  ).property "platform"
 
 `export default Project;`
