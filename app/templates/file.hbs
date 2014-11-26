@@ -1,0 +1,17 @@
+<div class="row m-t">
+    {{#each analysis in model.analyses}}
+    <div class="col-md-12">
+        <section class="panel b-a">
+            <div class="panel-heading bg-primary">
+                <div class="h4 text-lt block font-bold">
+                    {{analysis.id}}
+                </div>
+            </div>
+            <div class="row panel-body">
+                {{analysis.description}}
+            </div>
+        </section>
+    </div>
+    {{/each}}
+</div>
+

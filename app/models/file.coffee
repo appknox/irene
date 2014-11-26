@@ -8,5 +8,14 @@ File = DS.Model.extend BaseModelMixin,
   md5hash: DS.attr 'string'
   sha1hash: DS.attr 'string'
   name: DS.attr 'string'
+  analyses: DS.hasMany 'analysis', inverse: 'file', async: true
+
+  risks:(->
+    risks = []
+    analyses = @store.all "analysis", file: @get "id"  # @get "analyses"
+    analyses.forEach (analysis)->
+      risks.push analysis.get 'risk'
+    risks
+  ).property "analyses.@each.risk"
 
 `export default File;`

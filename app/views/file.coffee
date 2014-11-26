@@ -1,6 +1,7 @@
 `import Ember from 'ember';`
 
-ProjectView = Ember.View.extend
+FileView = Ember.View.extend
   layoutName: "layouts/application"
 
-`export default ProjectView;`
+`export default FileView;`
+
