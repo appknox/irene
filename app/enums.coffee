@@ -39,6 +39,6 @@ ENUMS =
   PRICING:
     UNKNOWN: -1
     TIME_LIMIT: 0
-    SCAN_LIMIT: 2
+    SCAN_LIMIT: 1
 
 `export default ENUMS;`
