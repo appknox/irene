@@ -7,33 +7,39 @@ getRiskObject = (risks=[])->
     riskObject[risk] = (riskObject[risk] || 0) + 1
   riskObject
 
+###
+# I picked these colors from app/styles/app.variables.less
+# Please always remember to keep this in sync with the colors there.
+#
+# The variable name that has the color commented alongside
+###
 getStat = (riskObject)->
   stat = []
   if riskObject[ENUMS.RISK.HIGH]
     stat.push
       title: "High"
       value: riskObject[ENUMS.RISK.HIGH]
-      color: "#FB4A46"
+      color: "#EF4836"  # @brand-danger
   if riskObject[ENUMS.RISK.MEDIUM]
     stat.push
-      title: "Medium",
-      value: riskObject[ENUMS.RISK.MEDIUM],
-      color: "#FCD630"
+      title: "Medium"
+      value: riskObject[ENUMS.RISK.MEDIUM]
+      color: "#F5D76E"  # @brand-warning
   if riskObject[ENUMS.RISK.LOW]
     stat.push
-      title: "Low",
-      value: riskObject[ENUMS.RISK.LOW],
-      color: "#2CC2F8"
+      title: "Low"
+      value: riskObject[ENUMS.RISK.LOW]
+      color: "#2CC2F8"  # @brand-info
   if riskObject[ENUMS.RISK.NONE]
     stat.push
-      title: "None",
-      value: riskObject[ENUMS.RISK.NONE],
-      color: "#80C081"
+      title: "None"
+      value: riskObject[ENUMS.RISK.NONE]
+      color: "#80C081"  # @brand-success
   if riskObject[ENUMS.RISK.UNKNOWN]
     stat.push
-      title: "Unknown",
-      value: riskObject[ENUMS.RISK.UNKNOWN],
-      color: "#6B6B6B"
+      title: "Unknown"
+      value: riskObject[ENUMS.RISK.UNKNOWN]
+      color: "#6B6B6B"  # No associations
   stat
 
 drawChart = (that) ->

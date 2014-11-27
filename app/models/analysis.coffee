@@ -14,7 +14,7 @@ Analysis = DS.Model.extend
     switch @get "risk"
       when ENUMS.RISK.UNKNOWN then "#{cls} scanning"
       when ENUMS.RISK.NONE then "#{cls} bg-success"
-      when ENUMS.RISK.LOW then "#{cls} bg-primary"
+      when ENUMS.RISK.LOW then "#{cls} bg-info"
       when ENUMS.RISK.MEDIUM then "#{cls} bg-warning"
       when ENUMS.RISK.HIGH then "#{cls} bg-danger"
   ).property "risk"

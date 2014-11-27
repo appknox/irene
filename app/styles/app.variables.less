@@ -2,15 +2,23 @@
 
 */
 
-@brand-primary:         #177bbb;
-@brand-info:            #1ccacc;
-@brand-success:         #1aae88;
-@brand-warning:         #fcc633;
-@brand-danger:          #e33244;
+@brand-primary:         #FE4D3F;
+@brand-info:            #2CC2F8;
+@brand-success:         #80C081;
+@brand-warning:         #F5D76E;
+@brand-danger:          #EF4836;
+
+/*
+    When you change any of the values above, please remember
+    to change the values in app/views/pie-chart.coffee too.
+    There is no work around for this right now.
+ */
+
+
 @brand-black:           #12131a;
 @brand-dark:            #222733;
 @brand-light:           #f2f4f8;
-@brand-inverse:			    #433599;
+@brand-inverse:         #433599;
 
 @brand-primary-ltest:   #ecf6fb;
 @brand-info-ltest:      #ecfcff;
@@ -35,12 +43,12 @@
 @link-color:              darken(@text-color, 25%);
 @link-hover-color:        darken(@text-color, 40%);
 
-@border-radius-base:	  2px;
-@border-color:		  	  #eaeef1;
+@border-radius-base:      2px;
+@border-color:            #eaeef1;
 
 @line-height-base:        1.53846154; // 20/13
 @line-height-computed:    floor(@font-size-base * @line-height-base); // ~20px
-@icon-css-prefix:		  i;
+@icon-css-prefix:         i;
 
 // Buttons
 // -------------------------
@@ -77,30 +85,30 @@
 @input-border-focus:             @brand-primary;
 @input-border-radius:            @border-radius-base;
 
-@panel-bg:                    	 #fff;
-@panel-border:                	 @border-color;
-@panel-border-radius:         	 @border-radius-base;
-@panel-heading-bg:            	 #fff;
-@panel-footer-bg:             	 #fff;
+@panel-bg:                       #fff;
+@panel-border:                   @border-color;
+@panel-border-radius:            @border-radius-base;
+@panel-heading-bg:               #fff;
+@panel-footer-bg:                #fff;
 
-@tooltip-bg:                  	 rgba(0,0,0,.9);
+@tooltip-bg:                     rgba(0,0,0,.9);
 @badge-bg:                       darken(@brand-light, 20%);
 
-@tooltip-color:               	 @brand-dark;
-@tooltip-fallback-color:	 	 rgba(0,0,0,.9);
+@tooltip-color:                  @brand-dark;
+@tooltip-fallback-color:         rgba(0,0,0,.9);
 
-@arrow-width:         			 7px;
-@arrow-color:         			 #fff;
-@arrow-outer-width:   			 (@arrow-width + 1);
-@arrow-outer-color:   			 rgba(0,0,0,.1);
-@arrow-outer-fallback-color:  	 #eee;
+@arrow-width:                    7px;
+@arrow-color:                    #fff;
+@arrow-outer-width:              (@arrow-width + 1);
+@arrow-outer-color:              rgba(0,0,0,.1);
+@arrow-outer-fallback-color:     #eee;
 
-@off-screen-nav-width:        	75%;
-@nav-primary-height:          	36px;
-@nav-xs-width:                	70px;
-@nav-xs-height:               	50px;
-@header-md-height:			  	60px;
+@off-screen-nav-width:          75%;
+@nav-primary-height:            36px;
+@nav-xs-width:                  70px;
+@nav-xs-height:                 50px;
+@header-md-height:              60px;
 
-@list-group-active-color:		@brand-info;
+@list-group-active-color:       @brand-info;
 
 @scanner-width:                 40px;
