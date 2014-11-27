@@ -8,6 +8,7 @@ Analysis = DS.Model.extend
   analiserVersion: DS.attr 'number'
   risk: DS.attr 'number'
   status: DS.attr 'number'
+  vulnerability: DS.belongsTo 'vulnerability'
 
   panelHeadingClass:( ->
     cls = 'panel-heading'
@@ -17,6 +18,15 @@ Analysis = DS.Model.extend
       when ENUMS.RISK.LOW then "#{cls} bg-info"
       when ENUMS.RISK.MEDIUM then "#{cls} bg-warning"
       when ENUMS.RISK.HIGH then "#{cls} bg-danger"
+  ).property "risk"
+
+  isScanning:(->
+    ENUMS.RISK.UNKNOWN is @get "risk"
+  ).property "risk"
+
+  isRisky:(->
+    return false if @get "isScanning"
+    ENUMS.RISK.NONE isnt @get "risk"
   ).property "risk"
 
 `export default Analysis;`

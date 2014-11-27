@@ -42,14 +42,26 @@
         <section class="panel b-a">
             <div {{bind-attr class=analysis.panelHeadingClass}}>
                 <div class="h4 text-lt block font-bold">
-                    {{analysis.id}}
+                    {{analysis.vulnerability.name}}
                 </div>
             </div>
             <div class="row panel-body">
-                {{analysis.description}}
+                <div class="col-md-12">
+                    {{#if analysis.isScanning}}
+                    {{analysis.vulnerability.question}}
+                    {{else}}
+                    {{#if analysis.isRisky}}
+                    {{analysis.vulnerability.description}}
+                    <pre>
+                    {{analysis.description}}
+                    </pre>
+                    {{else}}
+                    {{analysis.vulnerability.successMessage}}
+                    {{/if}}
+                    {{/if}}
+                </div>
             </div>
         </section>
     </div>
     {{/each}}
 </div>
-
