@@ -18,9 +18,4 @@ File = DS.Model.extend BaseModelMixin,
     risks
   ).property "analyses.@each.risk"
 
-  sortedAnalysis: (->
-    analyses = @store.all "analysis", file: @get "id"
-    analyses.sortBy 'risk:desc'
-  ).property "analyses.@each.risk"
-
 `export default File;`
