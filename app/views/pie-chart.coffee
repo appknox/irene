@@ -1,11 +1,11 @@
 `import Ember from 'ember'`
 `import ENUMS from '../enums'`
 
-getRiskObject = (risks=[])->
-  riskObject = {}
+getRiskCountObject = (risks=[])->
+  riskCountObject = {}
   for risk in risks
-    riskObject[risk] = (riskObject[risk] || 0) + 1
-  riskObject
+    riskCountObject[risk] = (riskCountObject[risk] || 0) + 1
+  riskCountObject
 
 ###
 # I picked these colors from app/styles/app.variables.less
@@ -13,40 +13,40 @@ getRiskObject = (risks=[])->
 #
 # The variable name that has the color commented alongside
 ###
-getStat = (riskObject)->
-  stat = []
-  if riskObject[ENUMS.RISK.HIGH]
-    stat.push
+getStatArray = (riskCountObject)->
+  statArray = []
+  if riskCountObject[ENUMS.RISK.HIGH]
+    statArray.push
       title: "High"
-      value: riskObject[ENUMS.RISK.HIGH]
+      value: riskCountObject[ENUMS.RISK.HIGH]
       color: "#EF4836"  # @brand-danger
-  if riskObject[ENUMS.RISK.MEDIUM]
-    stat.push
+  if riskCountObject[ENUMS.RISK.MEDIUM]
+    statArray.push
       title: "Medium"
-      value: riskObject[ENUMS.RISK.MEDIUM]
+      value: riskCountObject[ENUMS.RISK.MEDIUM]
       color: "#F5D76E"  # @brand-warning
-  if riskObject[ENUMS.RISK.LOW]
-    stat.push
+  if riskCountObject[ENUMS.RISK.LOW]
+    statArray.push
       title: "Low"
-      value: riskObject[ENUMS.RISK.LOW]
+      value: riskCountObject[ENUMS.RISK.LOW]
       color: "#2CC2F8"  # @brand-info
-  if riskObject[ENUMS.RISK.NONE]
-    stat.push
+  if riskCountObject[ENUMS.RISK.NONE]
+    statArray.push
       title: "None"
-      value: riskObject[ENUMS.RISK.NONE]
+      value: riskCountObject[ENUMS.RISK.NONE]
       color: "#80C081"  # @brand-success
-  if riskObject[ENUMS.RISK.UNKNOWN]
-    stat.push
+  if riskCountObject[ENUMS.RISK.UNKNOWN]
+    statArray.push
       title: "Unknown"
-      value: riskObject[ENUMS.RISK.UNKNOWN]
+      value: riskCountObject[ENUMS.RISK.UNKNOWN]
       color: "#6B6B6B"  # No associations
-  stat
+  statArray
 
 drawChart = (that) ->
   risks = that.get "file.risks"
-  riskObject = getRiskObject risks
-  stat = getStat riskObject
-  that.$().html('').drawPieChart stat
+  riskCountObject = getRiskCountObject risks
+  statArray = getStatArray riskCountObject
+  that.$().html('').drawPieChart statArray
 
 PieChartView = Ember.View.extend
   file: null
