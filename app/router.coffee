@@ -10,4 +10,5 @@ Router.map ->
   @resource 'project', path: 'projects/:project_id', ->
   @resource 'file', path: 'files/:file_id', ->
 
+
 `export default Router;`

@@ -5,7 +5,7 @@
 
 IreneAuthenticator = Base.extend
 
-  makeRequest: (url, data) ->
+  makeRequest: (url, data=null) ->
     Ember.$.ajax
       url: url,
       type: 'POST',
@@ -25,7 +25,7 @@ IreneAuthenticator = Base.extend
       _rejected = (xhr, status, error) ->
         Ember.run ->
           reject xhr.responseJSON || xhr.responseText
-      url = config['simple-auth']['tokenEndpoint']
+      url = config['simple-auth']['loginEndpoint']
       makeRequest(url, data).then _resolved, _rejected
 
   restore: (data) ->
@@ -36,10 +36,18 @@ IreneAuthenticator = Base.extend
         reject()
 
   invalidate: (data) ->
-    debugger
-    success = (resolve)->
-      resolve()
+    makeRequest = @makeRequest
+
     new Ember.RSVP.Promise (resolve, reject) ->
-      success resolve
+      _resolved = (response)->
+        Ember.run ->
+          resolve Ember.$.extend response
+
+      _rejected = (xhr, status, error) ->
+        Ember.run ->
+          reject xhr.responseJSON || xhr.responseText
+
+      url = config['simple-auth']['logoutEndpoint']
+      makeRequest(url).then _resolved, _rejected
 
 `export default IreneAuthenticator;`
