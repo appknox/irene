@@ -11,10 +11,10 @@
                 <div class="col-md-3 m-t">
                     {{view "pie-chart" file=model}}
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 animated zoomIn">
                     <img {{bind-attr src=model.iconUrl}} alt="Project Icon"/>
                 </div>
-                <div class="col-md-6 m-t">
+                <div class="col-md-6 m-t animated fadeInRightBig">
                     <p>
                         <span class="font-thin">Package Name: </span>
                         {{ model.name }}
@@ -36,7 +36,7 @@
         </section>
     </div>
 </div>
-<div class="row m-t">
+<div class="row m-t animated fadeInUpBig">
     {{#each analysis in sortedAnalysis}}
     <div class="col-md-12">
         <section class="panel b-a">
