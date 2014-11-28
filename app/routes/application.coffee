@@ -3,7 +3,7 @@
 
 ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
 
-  setupController: (controller)->
+  fetchData: ->
     @store.find 'vulnerability'
     projects = @store.find 'project'
     projects.then (projects) ->
@@ -11,5 +11,14 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
         lastFile = project.get('lastFile').then (lastFile) ->
           lastFile.get 'analyses'
 
+  setupController: (controller)->
+    if @session.get("user")
+      @fetchData()
+
+  actions:
+
+    sessionAuthenticationSucceeded: ->
+      @fetchData()
+      @_super()
 
 `export default ApplicationRoute;`
