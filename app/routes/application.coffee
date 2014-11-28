@@ -5,7 +5,7 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
 
   setupController: (controller)->
     @store.findAll 'vulnerability'
-    projects = @store.findAll 'project'
+    projects = @store.find 'project'
     projects.then (projects) ->
       projects.forEach (project) ->
         lastFile = project.get('lastFile').then (lastFile) ->
