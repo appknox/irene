@@ -18,15 +18,16 @@ LoginController = Ember.Controller.extend LoginControllerMixin,
 
   authenticator: 'authenticator:irene'
 
-  login: ->
-    errors = @validate()
-    if errors?.length > 0
-      Notify.error "#{errors.join " & "} required", closeAfter: 5000
-      that = @
-    else
-      @send "authenticate"
-
   actions:
+
+    login: ->
+      errors = @validate()
+      if errors?.length > 0
+        Notify.error "#{errors.join " & "} required", closeAfter: 5000
+        that = @
+      else
+        @send "authenticate"
+
     error: (reason) ->
       Notify.alert reason, closeAfter: 3000
 
