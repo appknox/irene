@@ -1,0 +1,44 @@
+ENUMS =
+
+  PLATFORM:
+    UNKNOWN: -1
+    ANDROID: 0
+    IOS: 1
+    WINDOWS: 2
+    BLACKBERRY: 3
+    FIREFOX: 4
+
+  SOURCE:
+    UNKNOWN: -1
+    UPLOAD: 0
+    STORE: 1
+    SCM: 2
+
+  RISK:
+    UNKNOWN: -1
+    NONE: 0
+    LOW: 1
+    MEDIUM: 2
+    HIGH: 3
+
+  ANALYSIS:
+    UNKNOWN: -1
+    ERROR: 0
+    WAITING: 1
+    RUNNING: 2
+    COMPLETED: 3
+
+  RESPONSE:
+    UNKNOWN: -1
+    APP_REQUEST: 0
+    JOIN_TEAM: 1
+    CONTACT: 2
+    SUBSCRIBE: 3
+    WEB_SUMMIT: 4
+
+  PRICING:
+    UNKNOWN: -1
+    TIME_LIMIT: 0
+    SCAN_LIMIT: 1
+
+`export default ENUMS;`

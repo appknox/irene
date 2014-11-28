@@ -21,7 +21,7 @@ serverRoutes = ->
   @get '/projects/', (request)->
     reply projects: PROJECTS
 
-  @post '/token/', (request) ->
+  @post '/login', (request) ->
     reply token: "f3c8e190ad85be8949bc51171db7f64aaf3ffbd3", user: USER
 
 

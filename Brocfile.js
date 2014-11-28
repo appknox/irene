@@ -23,6 +23,17 @@ var app = new EmberApp({
 app.import('bower_components/animate.css/animate.css');
 app.import('vendor/scripts/jquery.drawPieChart.js');
 
+/*
+ * FIXME: THis is a hack to get handlebars working with production builds.
+ * This needs to be fixed when handlebars minification is fixed.
+ *
+ * - dhilipsiva
+ */
+var index = app.legacyFilesToAppend.indexOf('bower_components/handlebars/handlebars.runtime.js');
+if(index) {
+    app.legacyFilesToAppend[index] = 'bower_components/handlebars/handlebars.js';
+}
+
 var tree = app.toTree();
 
 options = {

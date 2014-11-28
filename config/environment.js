@@ -79,8 +79,8 @@ module.exports = function(environment) {
     };
   }
 
-  ENV['simple-auth']['tokenEndpoint'] =  ENV.APP.API_HOST + '/login';
-  ENV['simple-auth']['revokeEndpoint'] =  ENV.APP.API_HOST + '/revoke/';
+  ENV['simple-auth']['loginEndpoint'] =  ENV.APP.API_HOST + '/login';
+  ENV['simple-auth']['logoutEndpoint'] =  ENV.APP.API_HOST + '/logout';
 
   return ENV;
 };

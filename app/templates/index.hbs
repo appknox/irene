@@ -26,12 +26,12 @@
                     </div>
                 </div>
                 <div class="col-md-4 b-b b-r">
-                    <div class="block padder-v hover">
+                    <div class="block padder-v hover text-info">
                         <span class="i-s i-s-2x pull-left m-r-sm">
                             {{ fa-icon "pie-chart" }}
                         </span>
                         <span class="clear">
-                            <span class="h3 block m-t-xs text-info">8</span>
+                            <span class="h3 block m-t-xs">8</span>
                             <small class="text-muted text-u-c">Completed Scans</small>
                         </span>
                     </div>
@@ -66,25 +66,25 @@
 <h3 class="m-b-xs text-black">Projects</h3>
 <div class="row m-b">
     {{#each project in model}}
-    <a href="#" class="col-sm-6 col-md-4">
-        <section class="panel b-a">
-            <div class="panel-heading b-a lt panel-heading-fix">
-                <div class="h4 text-lt block font-bold">
-                    <img {{bind-attr src=project.lastFile.iconUrl}} alt=""/>
-                    {{ project.name }}
-                    {{ fa-icon "android" }}
-                </div>
+    {{#link-to 'file' project.lastFile.id class="col-sm-6 col-md-4"}}
+    <section class="panel b-a">
+        <div class="panel-heading panel-heading-fix">
+            <div class="h4 text-lt block font-bold">
+                <img {{bind-attr src=project.lastFile.iconUrl}} alt="Project Icon"/>
+                {{ project.name }}
+                {{ fa-icon project.platformIconClass }}
             </div>
-            <div class="row panel-body">
-                {{view "pie-chart" stat=project.stat}}
-                <div class="col-md-6 m-t">
-                    <p><span class="font-thin">Package: </span>{{ project.packageName }}</p>
-                    <p><span class="font-thin">Version: </span>{{ project.lastFile.version }}</p>
-                    <p><span class="font-thin">Created: </span>{{ project.humanizedCreatedOn }}</p>
-                </div>
+        </div>
+        <div class="row panel-body">
+            {{view "pie-chart" file=project.lastFile}}
+            <div class="col-md-6 m-t">
+                <p><span class="font-thin">Package: </span>{{ project.packageName }}</p>
+                <p><span class="font-thin">Version: </span>{{ project.lastFile.version }}</p>
+                <p><span class="font-thin">Created: </span>{{ project.humanizedCreatedOn }}</p>
             </div>
-        </section>
-    </a>
+        </div>
+    </section>
+    {{/link-to}}
     {{else}}
     <h3>You have not created any projects yet!</h3>
     {{/each}}
