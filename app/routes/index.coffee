@@ -4,12 +4,6 @@
 IndexRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
   setupController: (controller) ->
-    if Ember.isEmpty controller.get 'model'
-      projects = @store.findAll 'project'
-      projects.then (projects) ->
-        projects.forEach (project) ->
-          lastFile = project.get('lastFile').then (lastFile) ->
-            lastFile.get 'analyses'
-      controller.set 'model', projects
+    controller.set 'model', @store.all 'project'
 
 `export default IndexRoute;`
