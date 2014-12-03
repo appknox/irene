@@ -66,6 +66,7 @@
 <h3 class="m-b-xs text-black">Projects</h3>
 <div class="row m-b">
     {{#each project in model}}
+    {{#if project.lastFile}}
     {{#link-to 'file' project.lastFile.id class="col-sm-6 col-md-4"}}
     <section class="panel b-a">
         <div class="panel-heading panel-heading-fix">
@@ -85,6 +86,7 @@
         </div>
     </section>
     {{/link-to}}
+    {{/if}}
     {{else}}
     <h3>You have not created any projects yet!</h3>
     {{/each}}
