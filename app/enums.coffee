@@ -41,4 +41,12 @@ ENUMS =
     TIME_LIMIT: 0
     SCAN_LIMIT: 1
 
+  CONTACT:
+    UNKNOWN: -1
+    HOME_PAGE: 0
+    NOTIFY: 1
+    REGISTER: 2
+    CONTACT_US: 3
+
+
 `export default ENUMS;`
