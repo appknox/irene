@@ -45,10 +45,10 @@
     <div class="col-md-8">
         <div class="row">
             <div class="col-md-9">
-                <input type="text" class="input-lg w-100" placeholder="Submit store URL">
+                {{input valueBinding='storeURL' action="submitURL" type="text" class="input-lg w-100" placeholder="Submit store URL"}}
             </div>
             <div class="col-md-3">
-                <button class="btn btn-primary btn-lg w-100" type="button">Submit</button>
+                <button {{action "submitURL"}} class="btn btn-primary btn-lg w-100" type="button">Submit</button>
             </div>
         </div>
     </div>
