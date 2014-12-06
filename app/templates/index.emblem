@@ -1,0 +1,81 @@
+h3.m-b-xs.text-black Dashboard
+.row.m-b
+  .col-sm-12
+    .panel.b-a
+      .row.m-n
+        .col-md-4.b-b.b-r
+          .block.padder-v.hover.text-success
+            span.i-s.i-s-2x.pull-left.m-r-sm
+              = fa-icon "folder"
+
+            span.clear
+              span.h3.block.m-t-xs 20
+              small.text-muted.text-u-c Projets Created
+
+        .col-md-4.b-b.b-r
+          .block.padder-v.hover.text-danger
+            span.i-s.i-s-2x.pull-left.m-r-sm
+              = fa-icon "exclamation-circle"
+
+            span.clear
+              span.h3.block.m-t-xs 75%
+              small.text-muted.text-u-c Vulnerability Ratio
+
+        .col-md-4.b-b.b-r
+          .block.padder-v.hover.text-info
+            span.i-s.i-s-2x.pull-left.m-r-sm
+              = fa-icon "pie-chart"
+
+            span.clear
+              span.h3.block.m-t-xs 8
+              small.text-muted.text-u-c Completed Scans
+
+hr
+
+.row.m-b
+  .col-md-8
+    .row
+      .col-md-9
+        Ember.TextField value=storeURL type="text" placeholder="Submit store URL" class="input-lg w-100"
+
+      .col-md-3
+        button.btn.btn-primary.btn-lg.w-100 click=submitURL type="button" Submit
+
+  .col-md-1.text-center
+    h4 or
+
+  .col-md-3
+    label.file-label.btn.btn-primary.btn-lg.w-100
+      | Upload App
+      Ember.TextField type="file"
+
+hr
+
+h3.m-b-xs.text-black Projects
+
+.row.m-b
+  each project in model
+    if project.lastFile
+      link-to 'file' project.lastFile.id class="col-sm-6 col-md-4"
+        section.panel.b-a
+          .panel-heading.panel-heading-fix
+            .h4.text-lt.block.font-bold
+              img src=project.lastFile.iconUrl alt="Project Icon"
+              = project.name
+              = fa-icon project.platformIconClass
+
+          .row.panel-body
+            = view "pie-chart" file=project.lastFile
+            .col-md-6.m-t
+              p
+                span.font-thin Package:
+                = project.packageName
+              p
+                span.font-thin Version:
+                = project.lastFile.version
+              p
+                span.font-thin Created:
+                = project.humanizedCreatedOn
+
+  else
+    h3 You have not created any projects yet!
