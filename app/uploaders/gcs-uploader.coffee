@@ -15,6 +15,27 @@ GCSUploader = Ember.Uploader.extend
   ###
 
   url: null
+  ajax: (url, params, method, headers) ->
+    self = @
+    settings =
+      url: url
+      type: method
+      contentType: false
+      processData: false
+      xhrFields:
+        withCredentials: false
+      beforeSend: (xhr)->
+        for p of headers
+          if headers.hasOwnProperty p
+            xhr.setRequestHeader p, headers[p]
+      xhr: ->
+        xhr = Ember.$.ajaxSettings.xhr()
+        xhr.upload.onprogress = (e) ->
+          self.didProgress e
+        self.one 'isAborting', -> xhr.abort()
+        xhr
+      data: params
+    @_ajax settings
 
   sign: (file) ->
     self = @
@@ -34,33 +55,21 @@ GCSUploader = Ember.Uploader.extend
           reject()
 
 
-  upload: (file) ->
+  upload: (file, extra={}) ->
     self = @
 
     @set 'isUploading', true
 
     @sign file
       .then (json) ->
-        settings =
-          url: "#{json.base_url}?#{serialize json.query_params}"
-          type: "PUT"
-          data: "bloop"
-          contentType: false
-          processData: false
-          xhrFields:
-            withCredentials: false
-          beforeSend: (xhr)->
-            for p of json.headers
-              if json.headers.hasOwnProperty p
-                xhr.setRequestHeader p, json.headers[p]
-        Ember.$.ajax settings
+        data = self.setupFormData file, extra
+        url  = "#{json.base_url}?#{serialize json.query_params}"
+        self.set "isUploading", true
+
+        self.ajax(url, data, "PUT", json.headers)
           .then (respData) ->
-            Notify.info "Your file finished uploading. Please wait while we process your file."
             self.didUpload respData
             respData
-          , (respData)->
-            Notify.error "Some Error occured while uploading the file"
-
       , ->
         debugger
 `export default GCSUploader;`
