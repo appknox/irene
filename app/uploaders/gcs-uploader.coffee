@@ -20,17 +20,16 @@ GCSUploader = Ember.Uploader.extend
     new Ember.RSVP.Promise (resolve, reject)->
       reader = new FileReader
 
-      reader.onloadend = ->
+      reader.onload = (e) ->
         data = {}
         data.content_type = file.type
         resolve
-          result:reader.result
+          result: e.target.result
           data:data
 
       reader.onerror = ->
         Notify.error "Error occured while trying to read the file"
         reject reject.error
-
       reader.readAsBinaryString file
 
   sign: (file) ->
@@ -67,20 +66,22 @@ GCSUploader = Ember.Uploader.extend
           url: "#{data.json.base_url}?#{serialize data.json.query_params}"
           type: "PUT"
           data: data.result
+          contentType: false
+          processData: false
           xhrFields:
             withCredentials: false
           beforeSend: (xhr)->
             for p of data.json.headers
               if data.json.headers.hasOwnProperty p
                 xhr.setRequestHeader p, data.json.headers[p]
-        self._ajax settings
+        Ember.$.ajax settings
           .then (respData) ->
-            Notify.info "Your file just finished uploading. Please wait while we process your file."
+            Notify.info "Your file finished uploading. Please wait while we process your file."
             self.didUpload respData
             respData
           , (respData)->
             Notify.error "Some Error occured while uploading the file"
       , ->
-        Notify.error "Some Error occured while uploading the file"
+        Notify.error "Some Error occured while signing the URL"
 
 `export default GCSUploader;`
