@@ -47,7 +47,7 @@ hr
   .col-md-3
     label.file-label.btn.btn-primary.btn-lg.w-100
       | Upload App
-      Ember.TextField type="file"
+      = gcs-upload store=controller.store
 
 hr
 

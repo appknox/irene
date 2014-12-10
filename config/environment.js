@@ -41,9 +41,10 @@ module.exports = function(environment) {
       crossOriginWhitelist: [ENV.APP.API_HOST]
     };
     ENV.contentSecurityPolicy = {
-      "connect-src": "'self' " + ENV.APP.API_HOST,
+      "connect-src": "'self' storage.googleapis.com " + ENV.APP.API_HOST,
       'img-src': "'self' www.gravatar.com placehold.it",
-      'style-src': "'self' 'unsafe-inline'"
+      'style-src': "'self' 'unsafe-inline'",
+      'script-src': "'self' 'unsafe-eval' localhost:35729 0.0.0.0:35729 storage.googleapis.com"
     };
   }
 
