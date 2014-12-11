@@ -11,3 +11,4 @@ sed -i 's/\.\.\/fonts/\/\/appknox-web.storage.googleapis.com\/fonts/g' dist/asse
 gsutil -m rm gs://appknox-web/**
 gsutil -m cp -R dist/* gs://appknox-web
 gsutil -m acl set -R -a public-read gs://appknox-web
+cp dist/index.html ../sherlock/generated

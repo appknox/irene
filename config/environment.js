@@ -40,12 +40,6 @@ module.exports = function(environment) {
     ENV['simple-auth'] = {
       crossOriginWhitelist: [ENV.APP.API_HOST]
     };
-    ENV.contentSecurityPolicy = {
-      "connect-src": "'self' storage.googleapis.com " + ENV.APP.API_HOST,
-      'img-src': "'self' www.gravatar.com placehold.it",
-      'style-src': "'self' 'unsafe-inline'",
-      'script-src': "'self' 'unsafe-eval' localhost:35729 0.0.0.0:35729 storage.googleapis.com"
-    };
   }
 
   if (environment === 'test') {
@@ -61,9 +55,6 @@ module.exports = function(environment) {
     ENV['simple-auth']['store'] = 'simple-auth-session-store:ephemeral';
     ENV.usePretender = true;
     ENV.APP.API_HOST = '';
-    ENV.contentSecurityPolicy = {
-      "connect-src": "'self' " + ENV.APP.API_HOST
-    };
   }
 
   if (environment === 'production') {
@@ -75,13 +66,17 @@ module.exports = function(environment) {
 
     ENV.usePretender = false;
     ENV.APP.API_HOST = '';
-    ENV.contentSecurityPolicy = {
-      "connect-src": "'self' " + ENV.APP.API_HOST
-    };
   }
 
-  ENV['simple-auth']['loginEndpoint'] =  ENV.APP.API_HOST + '/login';
-  ENV['simple-auth']['logoutEndpoint'] =  ENV.APP.API_HOST + '/logout';
+  ENV.contentSecurityPolicy = {
+    "connect-src": "'self' storage.googleapis.com " + ENV.APP.API_HOST,
+    'img-src': "'self' www.gravatar.com placehold.it",
+    'style-src': "'self' 'unsafe-inline'",
+    'script-src': "'self' 'unsafe-eval' localhost:35729 0.0.0.0:35729 storage.googleapis.com"
+  };
+
+  ENV['simple-auth']['loginEndpoint'] =  ENV.APP.API_HOST + '/api/login';
+  ENV['simple-auth']['logoutEndpoint'] =  ENV.APP.API_HOST + '/api/logout';
 
   return ENV;
 };
