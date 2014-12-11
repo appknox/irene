@@ -2,6 +2,7 @@
 
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 var htmlmin = require('broccoli-htmlmin');
+var assetRev = require('broccoli-asset-rev');
 
 var app = new EmberApp({
   storeConfigInMeta: false
@@ -40,6 +41,13 @@ var tree = app.toTree();
 options = {
     quotes: true
 };
+
+tree = assetRev(tree, {
+  extensions: ['js', 'css', 'png', 'jpg', 'gif'],
+  replaceExtensions: ['html', 'js', 'css'],
+  prepend: '//appknox-web.storage.googleapis.com/'
+});
+
 tree = htmlmin(tree, options);
 
 module.exports = tree;
