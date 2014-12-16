@@ -1,8 +1,9 @@
 `import Ember from 'ember';`
 `import Notify from 'ember-notify';`
 `import CONSTANTS from '../utils/constants';`
+`import SocketMixin from '../mixins/socket';`
 
-IndexController = Ember.ArrayController.extend
+IndexController = Ember.ArrayController.extend SocketMixin,
 
   storeURL: null
 
