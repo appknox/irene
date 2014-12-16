@@ -33,20 +33,22 @@ app.import('vendor/scripts/jquery.drawPieChart.js');
  */
 var index = app.legacyFilesToAppend.indexOf('bower_components/handlebars/handlebars.runtime.js');
 if(index) {
-    app.legacyFilesToAppend[index] = 'bower_components/handlebars/handlebars.js';
+  app.legacyFilesToAppend[index] = 'bower_components/handlebars/handlebars.js';
 }
 
 var tree = app.toTree();
 
 options = {
-    quotes: true
+  quotes: true
 };
 
-tree = assetRev(tree, {
-  extensions: ['js', 'css', 'png', 'jpg', 'gif'],
-  replaceExtensions: ['html', 'js', 'css'],
-  prepend: '//appknox-web.storage.googleapis.com/'
-});
+if (false) {
+  tree = assetRev(tree, {
+    extensions: ['js', 'css', 'png', 'jpg', 'gif'],
+    replaceExtensions: ['html', 'js', 'css'],
+    prepend: '//appknox-web.storage.googleapis.com/'
+  });
+}
 
 tree = htmlmin(tree, options);
 

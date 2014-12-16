@@ -23,5 +23,10 @@
     "ember-notify": "~1.2.0",
     "ember-cli-moment-shim": "~0.0.2",
     "ember-uploader": "~0.2.8"
+  },
+  "resolutions": {
+    "handlebars": ">= 1.0.0 < 2.0.0",
+    "jquery": "^1.11.1",
+    "ember": "1.7.0"
   }
 }

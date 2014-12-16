@@ -23,7 +23,7 @@
     "broccoli-ember-hbs-template-compiler": "^1.7.0",
     "broccoli-ember-script": "^0.1.1",
     "broccoli-es6-concatenator": "^0.1.10",
-    "ember-cli": "0.1.2",
+    "ember-cli": "^0.1.4",
     "ember-cli-bootstrap": "0.0.12",
     "ember-cli-coffeescript": "^0.3.1",
     "ember-cli-content-security-policy": "^0.3.0",
