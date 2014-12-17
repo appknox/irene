@@ -6,5 +6,8 @@ SocketMixin = Ember.Mixin.create
       debugger
     disconnect: ->
       debugger
+    notify: (message)->
+      debugger
+
 
 `export default SocketMixin`

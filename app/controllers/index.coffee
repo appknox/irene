@@ -31,4 +31,5 @@ IndexController = Ember.ArrayController.extend SocketMixin,
         .fail (xhr, message, status) ->
           Notify.error "A network error occured! Please try again later"
 
+
 `export default IndexController;`
