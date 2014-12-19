@@ -1,0 +1,26 @@
+header.header.header-md.navbar.navbar-fixed-top-xs.box-shadow
+  div.navbar-header.aside-md.dk
+    link-to 'index' class="navbar-brand"
+      img.m-r-sm src="/assets/images/logo.png" alt="scale"
+
+  ul.nav.navbar-nav
+    link-to 'index' tagName="li"
+      a href=view.href Dashboard
+
+  ul.nav.navbar-nav.pull-right.nav-user.user.user-fix
+    li#user-dropdown
+      span.thumb-sm.avatar.pull-left
+        = gravatar-image email=session.user.email alt=session.user.email
+      = session.user.username
+
+    = popup-menu for="user-dropdown" on="click" class="animated bounceIn"
+      li
+        ul.dropdown-menu.dropdown-menu-fix.show
+          li
+            span.arrow.top
+            a href="#" Settings
+          li
+            a click=invalidateSession Logout
+
+div#content.padder
+  = yield

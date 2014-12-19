@@ -1,0 +1,10 @@
+.row.m-t
+  each file in model.files
+    .col-md-12
+      section.panel.b-a
+        .panel-heading.scanning
+          .h4.text-lt.block.font-bold
+            = file.name
+
+        .row.panel-body
+            | Floopy Body

@@ -2,6 +2,7 @@
 
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 var htmlmin = require('broccoli-htmlmin');
+var assetRev = require('broccoli-asset-rev');
 
 var app = new EmberApp({
   storeConfigInMeta: false
@@ -21,6 +22,9 @@ var app = new EmberApp({
 // along with the exports of each module as its value.
 
 app.import('bower_components/animate.css/animate.css');
+app.import('bower_components/ember-uploader/dist/ember-uploader.js');
+app.import('bower_components/socket.io-client/socket.io.js')
+app.import('bower_components/ember-sockets/dist/ember-sockets.js')
 app.import('vendor/scripts/jquery.drawPieChart.js');
 
 /*
@@ -31,14 +35,23 @@ app.import('vendor/scripts/jquery.drawPieChart.js');
  */
 var index = app.legacyFilesToAppend.indexOf('bower_components/handlebars/handlebars.runtime.js');
 if(index) {
-    app.legacyFilesToAppend[index] = 'bower_components/handlebars/handlebars.js';
+  app.legacyFilesToAppend[index] = 'bower_components/handlebars/handlebars.js';
 }
 
 var tree = app.toTree();
 
 options = {
-    quotes: true
+  quotes: true
 };
+
+if (true) {
+  tree = assetRev(tree, {
+    extensions: ['js', 'css', 'png', 'jpg', 'gif'],
+    replaceExtensions: ['html', 'js', 'css'],
+    prepend: '//staging-assets.appknox.com/'
+  });
+}
+
 tree = htmlmin(tree, options);
 
 module.exports = tree;
