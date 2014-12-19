@@ -44,11 +44,11 @@ options = {
   quotes: true
 };
 
-if (false) {
+if (true) {
   tree = assetRev(tree, {
     extensions: ['js', 'css', 'png', 'jpg', 'gif'],
     replaceExtensions: ['html', 'js', 'css'],
-    prepend: '//appknox-web.storage.googleapis.com/'
+    prepend: '//staging-assets.appknox.com/'
   });
 }
 
