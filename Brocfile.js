@@ -44,7 +44,7 @@ options = {
   quotes: true
 };
 
-if (true) {
+if (false) {
   tree = assetRev(tree, {
     extensions: ['js', 'css', 'png', 'jpg', 'gif'],
     replaceExtensions: ['html', 'js', 'css'],
