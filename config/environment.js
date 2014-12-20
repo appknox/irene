@@ -40,6 +40,8 @@ module.exports = function(environment) {
     ENV['simple-auth'] = {
       crossOriginWhitelist: [ENV.APP.API_HOST]
     };
+    ENV.socketHost = 'localhost'
+    ENV.socketPort = '8008'
   }
 
   if (environment === 'test') {

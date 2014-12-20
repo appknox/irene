@@ -31,8 +31,8 @@ App = Ember.Application.extend
   podModulePrefix: config.podModulePrefix
   Resolver: Resolver
   Socket: EmberSockets.extend
-    host: 'localhost'
-    port: 8001
+    host: config.socketHost
+    port: config.socketPort
     controllers: ['index', 'file']
     autoConnect: true
 
