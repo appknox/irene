@@ -1,5 +1,6 @@
 `import Ember from 'ember'`
 `import Notify from 'ember-notify';`
+`import cookieUtil from '../utils/cookies';`
 
 SocketMixin = Ember.Mixin.create
   sockets:
@@ -27,5 +28,13 @@ SocketMixin = Ember.Mixin.create
     project_new: (data) ->
       Notify.info "New project added"
       @store.push "project", @store.normalize "project", data
+
+    logout: ->
+      cookieUtil.deleteAllCookies()
+      localStorage.clear()
+      location.reload()
+
+    reload: ->
+      location.reload()
 
 `export default SocketMixin`
