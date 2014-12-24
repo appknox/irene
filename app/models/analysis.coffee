@@ -12,7 +12,7 @@ Analysis = DS.Model.extend
   panelHeadingClass:( ->
     cls = 'panel-heading'
     switch @get "risk"
-      when ENUMS.RISK.UNKNOWN then "#{cls} scanning"
+      when ENUMS.RISK.UNKNOWN then "#{cls} bg-scanning"
       when ENUMS.RISK.NONE then "#{cls} bg-success"
       when ENUMS.RISK.LOW then "#{cls} bg-info"
       when ENUMS.RISK.MEDIUM then "#{cls} bg-warning"
