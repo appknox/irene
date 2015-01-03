@@ -41,4 +41,12 @@ ENUMS =
     TIME_LIMIT: 0
     SCAN_LIMIT: 1
 
+  NOTIFY:
+    UNKNOWN: -1
+    INFO: 0
+    SUCCESS: 2
+    WARNING: 3
+    ALERT: 4
+    ERROR: 5
+
 `export default ENUMS;`

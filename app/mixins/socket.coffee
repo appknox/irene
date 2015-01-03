@@ -1,6 +1,7 @@
 `import Ember from 'ember'`
 `import Notify from 'ember-notify';`
 `import cookieUtil from '../utils/cookies';`
+`import ENUMS from '../enums';`
 
 SocketMixin = Ember.Mixin.create
   sockets:
@@ -28,6 +29,16 @@ SocketMixin = Ember.Mixin.create
     project_new: (data) ->
       Notify.info "New project added"
       @store.push "project", @store.normalize "project", data
+
+    message: (data) ->
+      message = data.message
+      notifyType = data.notifyType
+      Notify.info message if notifyType is ENUMS.NOTIFY.INFO
+      Notify.success message if notifyType is ENUMS.NOTIFY.SUCCESS
+      Notify.warning message if notifyType is ENUMS.NOTIFY.WARNING
+      Notify.alert message if notifyType is ENUMS.NOTIFY.ALERT
+      Notify.error message if notifyType is ENUMS.NOTIFY.ERROR
+
 
     logout: ->
       cookieUtil.deleteAllCookies()
