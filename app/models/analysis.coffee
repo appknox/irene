@@ -19,6 +19,10 @@ Analysis = DS.Model.extend
       when ENUMS.RISK.HIGH then "#{cls} bg-danger"
   ).property "risk"
 
+  descriptions:(->
+    JSON.parse @get "description"
+  ).property "description"
+
   isScanning:(->
     ENUMS.RISK.UNKNOWN is @get "risk"
   ).property "risk"

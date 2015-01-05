@@ -46,6 +46,8 @@
             else
               if analysis.isRisky
                 = analysis.vulnerability.description
-                pre= analysis.description
+                each description in analysis.descriptions
+                  description.extra_desc
+                  pre= description.description
               else
                 = analysis.vulnerability.successMessage
