@@ -60,7 +60,7 @@ h3.m-b-xs.text-black Projects
         section.panel.b-a
           .panel-heading.panel-heading-fix
             .h4.text-lt.block.font-bold
-              img src=project.lastFile.iconUrl alt="Project Icon"
+              img src=project.lastFile.iconUrl alt="File Icon"
               = project.name
               = fa-icon project.platformIconClass
 

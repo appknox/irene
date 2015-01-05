@@ -11,7 +11,7 @@
           = view "pie-chart" file=model
 
         .col-md-3.animated.zoomIn
-          img alt="Project Icon" src=model.iconUrl
+          img alt="File Icon" src=model.iconUrl
 
         .col-md-6.m-t.animated.fadeIn
           p
