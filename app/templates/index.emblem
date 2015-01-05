@@ -55,6 +55,7 @@ h3.m-b-xs.text-black Projects
 
 .row.m-b
   each project in model
+    if project.lastFile
       link-to 'file' project.lastFile.id class="col-sm-6 col-md-4"
         section.panel.b-a
           .panel-heading.panel-heading-fix
@@ -64,22 +65,17 @@ h3.m-b-xs.text-black Projects
               = fa-icon project.platformIconClass
 
           .row.panel-body
-            if project.lastFile
-              = view "pie-chart" file=project.lastFile
-                .col-md-6.m-t
-                p
-                  span.font-thin Package:
-                  = project.packageName
-                p
-                  span.font-thin Version:
-                  = project.lastFile.version
-                p
-                  span.font-thin Created:
-                  = project.humanizedCreatedOn
-            else
-              = view "pie-chart" file=null
-              .col-md-6.m-t
-                | No files found here
+            = view "pie-chart" file=project.lastFile
+            .col-md-6.m-t
+              p
+                span.font-thin Package:
+                = project.packageName
+              p
+                span.font-thin Version:
+                = project.lastFile.version
+              p
+                span.font-thin Created:
+                = project.humanizedCreatedOn
 
   else
     h3 You have not created any projects yet!
