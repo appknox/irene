@@ -25,6 +25,23 @@ app.import('bower_components/animate.css/animate.css');
 app.import('bower_components/ember-uploader/dist/ember-uploader.js');
 app.import('bower_components/socket.io-client/socket.io.js')
 app.import('bower_components/ember-sockets/dist/ember-sockets.js')
+
+/*
+ * No VNC includes
+ */
+app.import('bower_components/no-vnc/include/util.js')
+app.import('bower_components/no-vnc/include/webutil.js')
+app.import('bower_components/no-vnc/include/base64.js')
+app.import('bower_components/no-vnc/include/websock.js')
+app.import('bower_components/no-vnc/include/des.js')
+app.import('bower_components/no-vnc/include/keysymdef.js')
+app.import('bower_components/no-vnc/include/keyboard.js')
+app.import('bower_components/no-vnc/include/input.js')
+app.import('bower_components/no-vnc/include/display.js')
+app.import('bower_components/no-vnc/include/jsunzip.js')
+app.import('bower_components/no-vnc/include/rfb.js')
+app.import('bower_components/no-vnc/include/keysym.js')
+
 app.import('vendor/scripts/jquery.drawPieChart.js');
 
 /*
