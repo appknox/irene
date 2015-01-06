@@ -49,4 +49,10 @@ ENUMS =
     ALERT: 4
     ERROR: 5
 
+  DYNAMIC_STATUS:
+    UNKNOWN: -1
+    NONE: 0
+    BOOTING: 1
+    READY: 2
+
 `export default ENUMS;`

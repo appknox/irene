@@ -1,4 +1,6 @@
 `import Ember from 'ember'`
+`import ENUMS from '../enums';`
+`import ENV from '../config/environment';`
 
 VncViewerComponent = Ember.Component.extend
   file: null
@@ -22,9 +24,23 @@ VncViewerComponent = Ember.Component.extend
       'onUpdateState': updateState
       'onXvpInit': xvpInit
 
+  statusChange: ( ->
+    status = @get 'file.dynamicStatus'
+    @send("connect") if status is ENUMS.DYNAMIC_STATUS.READY
+    @send("disconnect") if status is not ENUMS.DYNAMIC_STATUS.READY
+  ).observes 'file.dynamicStatus'
+
   actions:
 
     connect: ->
-      @rfb.connect 'localhost', '6080', '1234', 'websockify'
+      @rfb.connect @get("file.ip"), '6080', '1234', 'websockify'
+
+    disconnect: ->
+      @rfb.disconnect()
+
+    dynamicScan: ->
+      file_id = @get "file.id"
+      uploadUrl = [ENV.APP.API_HOST, 'api/dynamic', file_id].join '/'
+      $.get uploadUrl
 
 `export default VncViewerComponent`

@@ -1,3 +1,4 @@
 div.m-t class=mainClass
-  button.btn.btn-primary.w-100.col-md-12 click=connect Connect
-  canvas.canvas.w-100
+  if file.isNoneStaus
+    button.btn.btn-primary.w-100.col-md-12 click=dynamicScan Start Dynamic Scan
+  canvas.canvas
