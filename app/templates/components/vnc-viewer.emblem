@@ -1,0 +1,3 @@
+div.m-t class=mainClass
+  button.btn.btn-primary.w-100.col-md-12 click=connect Connect
+  canvas.canvas.w-100
