@@ -28,7 +28,6 @@ IreneAuthenticator = Base.extend
           resolve Ember.$.extend response
       _rejected = (xhr, status, error) ->
         Ember.run ->
-          debugger
           loginBtn.restoreSignIn()
           reject xhr.responseJSON || xhr.responseText
       url = config['simple-auth']['loginEndpoint']
