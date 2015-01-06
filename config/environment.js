@@ -40,6 +40,8 @@ module.exports = function(environment) {
     ENV['simple-auth'] = {
       crossOriginWhitelist: [ENV.APP.API_HOST]
     };
+    ENV.socketHost = 'localhost'
+    ENV.socketPort = '8008'
   }
 
   if (environment === 'test') {
@@ -69,7 +71,7 @@ module.exports = function(environment) {
   }
 
   ENV.contentSecurityPolicy = {
-    "connect-src": "'self' storage.googleapis.com ws://localhost:8001 http://localhost:8001 " + ENV.APP.API_HOST,
+    "connect-src": "'self' storage.googleapis.com ws://localhost:8008 http://localhost:8008 " + ENV.APP.API_HOST,
     'img-src': "'self' www.gravatar.com placehold.it",
     'style-src': "'self' 'unsafe-inline'",
     'script-src': "'self' 'unsafe-eval' localhost:35729 0.0.0.0:35729 storage.googleapis.com"

@@ -9,7 +9,7 @@ h3.m-b-xs.text-black Dashboard
               = fa-icon "folder"
 
             span.clear
-              span.h3.block.m-t-xs 20
+              span.h3.block.m-t-xs {{ model.length }}
               small.text-muted.text-u-c Projets Created
 
         .col-md-4.b-b.b-r
@@ -27,8 +27,8 @@ h3.m-b-xs.text-black Dashboard
               = fa-icon "pie-chart"
 
             span.clear
-              span.h3.block.m-t-xs 8
-              small.text-muted.text-u-c Completed Scans
+              span.h3.block.m-t-xs {{ session.user.scanCount }}
+              small.text-muted.text-u-c Scan Count
 
 hr
 
@@ -60,7 +60,7 @@ h3.m-b-xs.text-black Projects
         section.panel.b-a
           .panel-heading.panel-heading-fix
             .h4.text-lt.block.font-bold
-              img src=project.lastFile.iconUrl alt="Project Icon"
+              img src=project.lastFile.iconUrl alt="File Icon"
               = project.name
               = fa-icon project.platformIconClass
 

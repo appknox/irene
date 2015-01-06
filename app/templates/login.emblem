@@ -10,4 +10,4 @@ section#content.m-t-lg.wrapper-md.animated.bounceIn
             Ember.TextField class="form-control no-border" value=identification placeholder='Username' name='identification'
           .list-group-item
             Ember.TextField class="input form-control no-border" value=password placeholder='Password' name='password' type='password'
-        button.btn.btn-lg.btn-primary.btn-block type="submit" Sign In
+        button#btn-login-main.btn.btn-lg.btn-primary.btn-block type="submit" Sign In

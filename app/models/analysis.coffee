@@ -4,7 +4,6 @@
 Analysis = DS.Model.extend
   file: DS.belongsTo 'file', inverse: 'analyses'
   description: DS.attr 'string'
-  extraDesc: DS.attr 'string'
   analiserVersion: DS.attr 'number'
   risk: DS.attr 'number'
   status: DS.attr 'number'
@@ -13,12 +12,16 @@ Analysis = DS.Model.extend
   panelHeadingClass:( ->
     cls = 'panel-heading'
     switch @get "risk"
-      when ENUMS.RISK.UNKNOWN then "#{cls} scanning"
+      when ENUMS.RISK.UNKNOWN then "#{cls} bg-scanning"
       when ENUMS.RISK.NONE then "#{cls} bg-success"
       when ENUMS.RISK.LOW then "#{cls} bg-info"
       when ENUMS.RISK.MEDIUM then "#{cls} bg-warning"
       when ENUMS.RISK.HIGH then "#{cls} bg-danger"
   ).property "risk"
+
+  descriptions:(->
+    JSON.parse @get "description"
+  ).property "description"
 
   isScanning:(->
     ENUMS.RISK.UNKNOWN is @get "risk"

@@ -24,7 +24,8 @@
     "ember-cli-moment-shim": "~0.0.2",
     "ember-uploader": "~0.2.8",
     "socket.io-client": "~1.2.1",
-    "ember-sockets": "~0.6.10"
+    "ember-sockets": "~0.6.10",
+    "no-vnc": "*"
   },
   "resolutions": {
     "handlebars": ">= 1.0.0 < 2.0.0",
