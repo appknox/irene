@@ -68,12 +68,13 @@ GCSUploader = Ember.Uploader.extend
 
         self.ajax(url, data, "PUT", json.headers)
           .then (respData) ->
-            self.didUpload respData
+            debugger
             Notify.success "File Uploaded Successfully. Please wait while we process your file."
             respData
           , (xhr)->
             if xhr.status is 200
               Notify.success "File Uploaded Successfully. Please wait while we process your file."
+              self.didUpload json.file_key, json.file_key_signed
 
       , ->
         Notify.error "Error While signing the file."

@@ -9,15 +9,17 @@ GCSUploadComponent = Ember.FileField.extend
     applicationAdapter = @store.adapterFor 'application'
     host = applicationAdapter.get 'host'
     namespace = applicationAdapter.get 'namespace'
-    uploadUrl = [host, namespace, 'signed_url'].join '/'
+    signingUrl = [host, namespace, 'signed_url'].join '/'
     files = @get 'files'
     uploader = GCSUploader.create
-      url: uploadUrl
+      url: signingUrl
 
-    uploader.on 'didUpload', (response) ->
-      # S3 will return XML with url
-      uploadedUrl = $(response).find('Location')[0].textContent
-      uploadedUrl = decodeURIComponent uploadedUrl
+    uploader.didUpload = (file_key, file_key_signed) ->
+      uploadedUrl = [host, namespace, 'uploaded_file'].join '/'
+      data =
+        file_key: file_key
+        file_key_signed: file_key_signed
+      Ember.$.post uploadedUrl, data
 
     if !Ember.isEmpty files
       uploader.upload files[0]
