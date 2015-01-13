@@ -1,0 +1,4 @@
+div.m-t class=mainClass
+  if file.isNoneStaus
+    button.btn.btn-primary.w-100.col-md-12 click=dynamicScan Start Dynamic Scan
+  canvas.canvas

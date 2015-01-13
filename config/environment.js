@@ -71,8 +71,8 @@ module.exports = function(environment) {
   }
 
   ENV.contentSecurityPolicy = {
-    "connect-src": "'self' storage.googleapis.com ws://localhost:8008 http://localhost:8008 " + ENV.APP.API_HOST,
-    'img-src': "'self' www.gravatar.com placehold.it",
+    "connect-src": "'self' storage.googleapis.com ws://localhost:8008 http://localhost:8008 ws://localhost:6080/websockify " + ENV.APP.API_HOST,
+    'img-src': "'self' www.gravatar.com placehold.it storage.googleapis.com",
     'style-src': "'self' 'unsafe-inline'",
     'script-src': "'self' 'unsafe-eval' localhost:35729 0.0.0.0:35729 storage.googleapis.com"
   };

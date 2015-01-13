@@ -45,7 +45,9 @@ GCSUploader = Ember.Uploader.extend
         type: 'GET'
         contentType: 'json'
         data:
-          content_type: file.type
+          # content_type: file.type
+          # We are asssuming only apps will be uploaded by octet stream.
+          content_type: "application/octet-stream"
 
       self._ajax settings
         .then (json)->
@@ -68,12 +70,13 @@ GCSUploader = Ember.Uploader.extend
 
         self.ajax(url, data, "PUT", json.headers)
           .then (respData) ->
-            self.didUpload respData
+            debugger
             Notify.success "File Uploaded Successfully. Please wait while we process your file."
             respData
           , (xhr)->
             if xhr.status is 200
               Notify.success "File Uploaded Successfully. Please wait while we process your file."
+              self.didUpload json.file_key, json.file_key_signed
 
       , ->
         Notify.error "Error While signing the file."

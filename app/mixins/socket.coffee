@@ -25,6 +25,10 @@ SocketMixin = Ember.Mixin.create
         .then (project) ->
           project.set "lastFile", file
 
+    file_updated: (data) ->
+      Notify.info "File updated"
+      file = @store.push "file", @store.normalize "file", data
+
     project_new: (data) ->
       Notify.info "New project added"
       @store.push "project", @store.normalize "project", data

@@ -1,53 +1,57 @@
-.row.m-t
+.row
   .col-md-12
-    section.panel.b-a
-      .panel-heading.bg-light
-        .h4.text-lt.block.font-bold.text-center
-          = model.project.name
-          = fa-icon model.project.platformIconClass
+    .row.m-t
+      .col-md-12
+        section.panel.b-a
+          .panel-heading.bg-light
+            .h4.text-lt.block.font-bold.text-center
+              = model.project.name
+              = fa-icon model.project.platformIconClass
 
-      .row.panel-body.panel-body-fix
-        .col-md-3.m-t
-          = view "pie-chart" file=model
+          .row.panel-body.panel-body-fix
+            .col-md-3.m-t
+              = view "pie-chart" file=model
 
-        .col-md-3.animated.zoomIn
-          img alt="File Icon" src=model.iconUrl
+            .col-md-3.animated.zoomIn
+              img alt="File Icon" src=model.iconUrl
 
-        .col-md-6.m-t.animated.fadeIn
-          p
-            span.font-thin Package Name:
-            = model.name
+            .col-md-6.m-t.animated.fadeIn
+              p
+                span.font-thin Package Name:
+                = model.name
 
-          p
-            span.font-thin Version:
-            = model.version
+              p
+                span.font-thin Version:
+                = model.version
 
-          p
-            span.font-thin MD5 Hash:
-            = model.md5hash
+              p
+                span.font-thin MD5 Hash:
+                = model.md5hash
 
-          p
-            span.font-thin SHA1 Hash:
-            = model.sha1hash
+              p
+                span.font-thin SHA1 Hash:
+                = model.sha1hash
 
 
-.row.m-t.animated.fadeIn
-  each analysis in sortedAnalysis
-    .col-md-12
-      section.panel.b-a
-        div class=analysis.panelHeadingClass
-          .h4.text-lt.block.font-bold
-            = analysis.vulnerability.name
+    .row.m-t.animated.fadeIn
+      each analysis in sortedAnalysis
+        .col-md-12
+          section.panel.b-a
+            div class=analysis.panelHeadingClass
+              .h4.text-lt.block.font-bold
+                = analysis.vulnerability.name
 
-        .row.panel-body
-          .col-md-12
-            if analysis.isScanning
-              = analysis.vulnerability.question
-            else
-              if analysis.isRisky
-                = analysis.vulnerability.description
-                each description in analysis.descriptions
-                  description.extra_desc
-                  pre= description.description
-              else
-                = analysis.vulnerability.successMessage
+            .row.panel-body
+              .col-md-12
+                if analysis.isScanning
+                  = analysis.vulnerability.question
+                else
+                  if analysis.isRisky
+                    = analysis.vulnerability.description
+                    each description in analysis.descriptions
+                      description.extra_desc
+                      pre= description.description
+                  else
+                    = analysis.vulnerability.successMessage
+
+  // vnc-viewer file=model class="col-md-5"
