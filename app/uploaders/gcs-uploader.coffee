@@ -45,7 +45,9 @@ GCSUploader = Ember.Uploader.extend
         type: 'GET'
         contentType: 'json'
         data:
-          content_type: file.type
+          # content_type: file.type
+          # We are asssuming only apps will be uploaded by octet stream.
+          content_type: "application/octet-stream"
 
       self._ajax settings
         .then (json)->
