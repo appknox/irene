@@ -3,7 +3,7 @@
 `import ENUMS from '../enums';`
 
 File = DS.Model.extend BaseModelMixin,
-  project: DS.belongsTo 'project', inverse: 'files', async: true
+  project: DS.belongsTo 'project', inverse: 'files'
   version: DS.attr 'string'
   iconUrl: DS.attr 'string'
   md5hash: DS.attr 'string'
@@ -11,7 +11,7 @@ File = DS.Model.extend BaseModelMixin,
   name: DS.attr 'string'
   dynamicStatus: DS.attr 'number'
   ip: DS.attr 'string'
-  analyses: DS.hasMany 'analysis', inverse: 'file', async: true
+  analyses: DS.hasMany 'analysis', inverse: 'file'
 
   isNoneStaus: (->
     status = @get 'dynamicStatus'
@@ -20,7 +20,7 @@ File = DS.Model.extend BaseModelMixin,
 
   risks:(->
     risks = []
-    analyses = @store.all "analysis", file: @get "id"
+    analyses = @get "analyses"
     analyses.forEach (analysis)->
       risks.push analysis.get 'risk'
     risks

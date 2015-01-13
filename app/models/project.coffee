@@ -9,8 +9,7 @@ Project = DS.Model.extend BaseModelMixin,
   platform: DS.attr 'number'
   source: DS.attr 'string'
   version: DS.attr 'string'
-  lastFile: DS.belongsTo 'file', async: true
-  files: DS.hasMany 'file', async:true, inverse: 'project'
+  files: DS.hasMany 'file', inverse: 'project'
 
   platformIconClass:( ->
     switch @get "platform"
@@ -19,5 +18,11 @@ Project = DS.Model.extend BaseModelMixin,
       when ENUMS.PLATFORM.WINDOWS then "windows"
       else "mobile"
   ).property "platform"
+
+  lastFile:( ->
+    files = @get "files"
+    if !Ember.isEmpty files
+      files.sortBy('createdOn').reverse()[0]
+  ).property "files.@each"
 
 `export default Project;`
