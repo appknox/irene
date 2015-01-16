@@ -4,6 +4,6 @@
 ProjectRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
   model: (params)->
-    @store.find('project', params.project_id)
+    @store.find('project', params.project_id).then (project) -> project.reload()
 
 `export default ProjectRoute`
