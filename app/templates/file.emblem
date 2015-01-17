@@ -32,6 +32,9 @@
                 span.font-thin SHA1 Hash:
                 = model.sha1hash
 
+              link-to 'project' model.project.id class="btn btn-small btn-info"
+                | All Files
+
 
     .row.m-t.animated.fadeIn
       each analysis in sortedAnalysis

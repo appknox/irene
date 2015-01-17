@@ -59,4 +59,7 @@ PieChartView = Ember.View.extend
   didInsertElement: ->
     drawChart @
 
+  willDestroyElement: ->
+    $(".pieTip").hide()
+
 `export default PieChartView`

@@ -1,10 +1,8 @@
+h3.m-b-xs.text-black #{model.name} - All Files
+
 .row.m-t
   each file in model.files
-    .col-md-12
-      section.panel.b-a
-        .panel-heading.scanning
-          .h4.text-lt.block.font-bold
-            = file.name
+    = render "_file" file
 
-        .row.panel-body
-            | Floopy Body
+  else
+    h3 You have not created any projects yet!

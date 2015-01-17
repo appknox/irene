@@ -22,7 +22,7 @@ Project = DS.Model.extend BaseModelMixin,
   lastFile:( ->
     files = @get "files"
     if !Ember.isEmpty files
-      files.sortBy('createdOn').reverse()[0]
+      files.sortBy('createdOn')[0]
   ).property "files.@each"
 
 `export default Project;`

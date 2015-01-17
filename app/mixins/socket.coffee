@@ -18,10 +18,11 @@ SocketMixin = Ember.Mixin.create
 
     file_new: (data)->
       Notify.info "New file added"
-      @store.push "project", @store.normalize "project", data.project
-      @store.push "file", @store.normalize "file", data.file
+      project = @store.push "project", @store.normalize "project", data.project
+      file = @store.push "file", @store.normalize "file", data.file
       for analysis in data.analyses
         @store.push "analysis", @store.normalize "analysis", analysis
+      project.set "lastFile", file
 
     file_updated: (data) ->
       Notify.info "File updated"
