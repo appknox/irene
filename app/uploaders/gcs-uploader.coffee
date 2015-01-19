@@ -1,12 +1,6 @@
 `import Ember from 'ember';`
 `import Notify from 'ember-notify';`
-
-serialize = (obj) ->
-  str = []
-  for p of obj
-    if obj.hasOwnProperty p
-      str.push encodeURIComponent(p) + "=" + encodeURIComponent obj[p]
-  str.join "&"
+`import serialize from '../utils/serialize';`
 
 GCSUploader = Ember.Uploader.extend
   ###

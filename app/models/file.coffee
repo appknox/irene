@@ -12,6 +12,7 @@ File = DS.Model.extend BaseModelMixin,
   dynamicStatus: DS.attr 'number'
   ip: DS.attr 'string'
   analyses: DS.hasMany 'analysis', inverse: 'file'
+  report: DS.attr 'string'
 
   isNoneStaus: (->
     status = @get 'dynamicStatus'
