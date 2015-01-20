@@ -3,25 +3,37 @@
     .plan.col-md-6
       h3 Pay Per Scan
       hr
-      h4 5 USD/scan
+      h4
+        = ppsPrice
+        |  USD/scan
       hr
       .row
-        .col-md-4: button.btn.btn-info.w-100 -
-        .col-md-4: input.form-control.w-100.text-center value="1"
+        .col-md-4
+          button.btn.btn-info.w-100 click=decrementPpsCount -
+        .col-md-4
+          Ember.TextField value=ppsCount class="form-control w-100 text-center"
           h4 Scans
-        .col-md-4: button.btn.btn-info.w-100 +
-      button.btn.btn-success.btn-lg.w-100.m-b Pay 10 USD
+        .col-md-4
+          button.btn.btn-info.w-100 click=incrementPpsCount +
+      button.btn.btn-success.btn-lg.w-100.m-b click=makePpsPayment
+        = ppsTotalPrice
 
     .plan.col-md-6
       h3 Pay Per Month
       hr
-      h4 300 USD/scan
+      h4
+        = ppmPrice
+        |  USD/scan
       hr
       .row
-        .col-md-4: button.btn.btn-info.w-100 -
-        .col-md-4: input.form-control.w-100.text-center value="1"
+        .col-md-4
+          button.btn.btn-info.w-100 click=decrementPpmCount -
+        .col-md-4
+          Ember.TextField value=ppmCount class="form-control w-100 text-center"
           h4 Months
-        .col-md-4: button.btn.btn-info.w-100 +
-      button.btn.btn-success.btn-lg.w-100.m-b Pay 10 USD
+        .col-md-4
+          button.btn.btn-info.w-100 click=incrementPpmCount +
+      button.btn.btn-success.btn-lg.w-100.m-b click=makePpmPayment
+        = ppmTotalPrice
 
 #hidden-paypal-form.hide
