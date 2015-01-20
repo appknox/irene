@@ -1,0 +1,27 @@
+.row.m-t: .col-md-6.col-md-offset-3
+  .pricing-table.row
+    .plan.col-md-6
+      h3 Pay Per Scan
+      hr
+      h4 5 USD/scan
+      hr
+      .row
+        .col-md-4: button.btn.btn-info.w-100 -
+        .col-md-4: input.form-control.w-100.text-center value="1"
+          h4 Scans
+        .col-md-4: button.btn.btn-info.w-100 +
+      button.btn.btn-success.btn-lg.w-100.m-b Pay 10 USD
+
+    .plan.col-md-6
+      h3 Pay Per Month
+      hr
+      h4 300 USD/scan
+      hr
+      .row
+        .col-md-4: button.btn.btn-info.w-100 -
+        .col-md-4: input.form-control.w-100.text-center value="1"
+          h4 Months
+        .col-md-4: button.btn.btn-info.w-100 +
+      button.btn.btn-success.btn-lg.w-100.m-b Pay 10 USD
+
+#hidden-paypal-form.hide

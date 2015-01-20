@@ -7,6 +7,10 @@ header.header.header-md.navbar.navbar-fixed-top-xs.box-shadow
     link-to 'index' tagName="li"
       a href=view.href Dashboard
 
+  ul.nav.navbar-nav
+    link-to 'pricing' tagName="li"
+      a href=view.href Pricing
+
   ul.nav.navbar-nav.pull-right.nav-user.user.user-fix
     li#user-dropdown
       span.thumb-sm.avatar.pull-left
