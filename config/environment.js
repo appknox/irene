@@ -80,8 +80,5 @@ module.exports = function(environment) {
   ENV['simple-auth']['loginEndpoint'] =  ENV.APP.API_HOST + '/api/login';
   ENV['simple-auth']['logoutEndpoint'] =  ENV.APP.API_HOST + '/api/logout';
 
-  ENV.ppsPrice = 5;
-  ENV.ppmPrice = 300;
-
   return ENV;
 };
