@@ -5,6 +5,8 @@
 
 IndexController = Ember.ArrayController.extend SocketMixin,
 
+  needs: ['application']
+
   storeURL: null
 
   ratio: null

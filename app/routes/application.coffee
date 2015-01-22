@@ -10,6 +10,7 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
     host = applicationAdapter.get 'host'
     namespace = applicationAdapter.get 'namespace'
     initUrl = [host, namespace, 'init'].join '/'
+    controller = @controller
     new Ember.RSVP.Promise (resolve, reject) ->
       init = EmberCLIICAjax url:initUrl, type: "get"
       init.then (result) ->
@@ -22,6 +23,9 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
         for analysis in result.analyses
           store.pushPayload 'analysis', analysis: analysis
         store.pushPayload 'ratio', ratio: result.ratio
+        user = store.pushPayload 'user', user: result.user
+        store.find('user', result.user.id).then (user)->
+          controller.set 'currentUser', user
         resolve result
 
   setupController: (controller)->

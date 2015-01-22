@@ -24,11 +24,14 @@ h3.m-b-xs.text-black Dashboard
         .col-md-4.b-b.b-r
           .block.padder-v.hover.text-info
             span.i-s.i-s-2x.pull-left.m-r-sm
-              = fa-icon "pie-chart"
+              if controllers.application.currentUser.statIcon
+                = fa-icon controllers.application.currentUser.statIcon
 
             span.clear
-              span.h3.block.m-t-xs {{ session.user.scanCount }}
-              small.text-muted.text-u-c Scan Count
+              span.h3.block.m-t-xs
+                |  {{ controllers.application.currentUser.statValue }}
+              small.text-muted.text-u-c
+                |  {{ controllers.application.currentUser.statText }}
 
 hr
 
