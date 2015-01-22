@@ -21,6 +21,7 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
           store.pushPayload 'file', file: file
         for analysis in result.analyses
           store.pushPayload 'analysis', analysis: analysis
+        store.pushPayload 'ratio', ratio: result.ratio
         resolve result
 
   setupController: (controller)->

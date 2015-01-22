@@ -18,7 +18,7 @@ h3.m-b-xs.text-black Dashboard
               = fa-icon "exclamation-circle"
 
             span.clear
-              span.h3.block.m-t-xs 75%
+              span.h3.block.m-t-xs {{ ratio.ratio }}
               small.text-muted.text-u-c Vulnerability Ratio
 
         .col-md-4.b-b.b-r

@@ -15,6 +15,11 @@ SocketMixin = Ember.Mixin.create
     analysis_updated: (data)->
       Notify.info "Analysis updated"
       @store.push "analysis", @store.normalize "analysis", data
+      @store.find("ratio", 1).then (ratio)->
+        if data.risk in [ENUMS.RISK.NONE, ENUMS.RISK.LOW]
+          ratio.incrementUnaffected()
+        else if data.risk in [ENUMS.RISK.MEDIUM, ENUMS.RISK.HIGH]
+          ratio.incrementAffected()
 
     file_new: (data)->
       Notify.info "New file added"

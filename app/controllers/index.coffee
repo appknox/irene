@@ -7,6 +7,8 @@ IndexController = Ember.ArrayController.extend SocketMixin,
 
   storeURL: null
 
+  ratio: null
+
   model:( ->
     @store.all 'project'
   ).property()
