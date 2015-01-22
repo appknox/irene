@@ -1,0 +1,16 @@
+.plan.col-md-6
+  h3 = pricing.name
+  hr
+  h4 = pricing.price
+  |  USD
+  hr
+  .row
+    .col-md-4
+      button.btn.btn-info.w-100 click=decrementCount -
+    .col-md-4
+      Ember.TextField value=count class="form-control w-100 text-center"
+      h4 Scans
+    .col-md-4
+      button.btn.btn-info.w-100 click=incrementCount +
+  button.btn.btn-success.btn-lg.w-100.m-b click=makePayment
+    = totalPrice
