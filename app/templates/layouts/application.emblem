@@ -21,9 +21,6 @@ header.header.header-md.navbar.navbar-fixed-top-xs.box-shadow
       li
         ul.dropdown-menu.dropdown-menu-fix.show
           li
-            span.arrow.top
-            a href="#" Settings
-          li
             a click=invalidateSession Logout
 
 div#content.padder
