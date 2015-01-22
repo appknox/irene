@@ -13,12 +13,21 @@ SocketMixin = Ember.Mixin.create
       console.log "Socket got disconnected!"
 
     analysis_updated: (data)->
-      Notify.info "Analysis updated"
+      risk = data.risk
+
+      @store.find("vulnerability", data.vulnerability).then (vulnerability)->
+        message = "Analysis Updated: #{vulnerability.get "name"}"
+        Notify.info message if risk is ENUMS.RISK.LOW
+        Notify.success message if risk is ENUMS.RISK.NONE
+        Notify.warning message if risk is ENUMS.RISK.MEDIUM
+        Notify.error message if risk is ENUMS.RISK.HIGH
+
       @store.push "analysis", @store.normalize "analysis", data
+
       @store.find("ratio", 1).then (ratio)->
-        if data.risk in [ENUMS.RISK.NONE, ENUMS.RISK.LOW]
+        if risk in [ENUMS.RISK.NONE, ENUMS.RISK.LOW]
           ratio.incrementUnaffected()
-        else if data.risk in [ENUMS.RISK.MEDIUM, ENUMS.RISK.HIGH]
+        else if risk in [ENUMS.RISK.MEDIUM, ENUMS.RISK.HIGH]
           ratio.incrementAffected()
 
     file_new: (data)->
