@@ -59,7 +59,7 @@ GCSUploader = Ember.Uploader.extend
     @sign file
       .then (json) ->
         data = self.setupFormData file, extra
-        url  = "#{json.base_url}?#{serialize json.query_params}"
+        url  = json.base_url  # "#{json.base_url}?#{serialize json.query_params}"
         self.set "isUploading", true
 
         self.ajax(url, data, "PUT", json.headers)
