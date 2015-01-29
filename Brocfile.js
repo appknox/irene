@@ -65,7 +65,7 @@ if (false) {
   tree = assetRev(tree, {
     extensions: ['js', 'css', 'png', 'jpg', 'gif'],
     replaceExtensions: ['html', 'js', 'css'],
-    prepend: '//sherlock-assets.s3-us-west-2.amazonaws.com/'
+    prepend: '//du6tdhcax0qep.cloudfront.net/'
   });
 }
 
