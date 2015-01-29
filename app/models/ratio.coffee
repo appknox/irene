@@ -29,7 +29,7 @@ Ratio = DS.Model.extend
     unaffected = @get "unaffected"
     total = affected + unaffected
     ratio = (100 * affected / total).toFixed(2)
-    ratio = 0 if ratio is "NaN"
+    ratio = "-" if ratio is "NaN"
     "#{ratio}%"
   ).property "affected", "unaffected"
 
