@@ -15,4 +15,6 @@ Router.map ->
 
   @resource 'reset', path: 'reset/:uuid/:token'
 
+  @route 'recover'
+
 `export default Router;`

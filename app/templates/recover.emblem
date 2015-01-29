@@ -1,0 +1,15 @@
+section#content.m-t-lg.wrapper-md.animated.bounceIn
+  .container.aside-xl
+    .navbar-brand.block
+    section.m-b-lg
+      header.wrapper.text-center
+        img.m-b src="/assets/images/logo.png" alt="Appknox"
+        br
+        .m-t Recover your password
+      form submit='recover'
+        .list-group
+          .list-group-item
+            Ember.TextField class="input form-control no-border" value=username placeholder='Username' name='username'
+        button#btn-recover.btn.btn-lg.btn-primary.btn-block type="submit" Recover
+      footer.wrapper.text-center
+        link-to "login" | Login?

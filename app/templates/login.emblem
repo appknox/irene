@@ -13,3 +13,5 @@ section#content.m-t-lg.wrapper-md.animated.bounceIn
           .list-group-item
             Ember.TextField class="input form-control no-border" value=password placeholder='Password' name='password' type='password'
         button#btn-login-main.btn.btn-lg.btn-primary.btn-block type="submit" Sign In
+      footer.wrapper.text-center
+        link-to "recover" | Forgot Password?
