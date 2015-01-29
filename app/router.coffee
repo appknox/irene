@@ -13,4 +13,6 @@ Router.map ->
 
   @route 'pricing'
 
+  @resource 'reset', path: 'reset/:uuid/:token'
+
 `export default Router;`
