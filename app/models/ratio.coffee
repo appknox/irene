@@ -28,7 +28,9 @@ Ratio = DS.Model.extend
     affected = @get "affected"
     unaffected = @get "unaffected"
     total = affected + unaffected
-    "#{(100 * affected / total).toFixed(2)}%"
+    ratio = (100 * affected / total).toFixed(2)
+    ratio = "-" if ratio is "NaN"
+    "#{ratio}%"
   ).property "affected", "unaffected"
 
 `export default Ratio`

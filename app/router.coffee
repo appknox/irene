@@ -13,4 +13,10 @@ Router.map ->
 
   @route 'pricing'
 
+  @resource 'reset', path: 'reset/:uuid/:token'
+
+  @route 'recover'
+  @route 'paypal_return'
+  @route 'paypal_cancel'
+
 `export default Router;`

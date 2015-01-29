@@ -65,7 +65,7 @@ if (false) {
   tree = assetRev(tree, {
     extensions: ['js', 'css', 'png', 'jpg', 'gif'],
     replaceExtensions: ['html', 'js', 'css'],
-    prepend: '//staging-assets.appknox.com/'
+    prepend: '//du6tdhcax0qep.cloudfront.net/'
   });
 }
 

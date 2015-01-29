@@ -5,13 +5,11 @@ section#content.m-t-lg.wrapper-md.animated.bounceIn
       header.wrapper.text-center
         img.m-b src="/assets/images/logo.png" alt="Appknox"
         br
-        .m-t Login to get your app secured.
-      form submit='login'
+        .m-t Reset your password
+      form submit='reset'
         .list-group
           .list-group-item
-            Ember.TextField class="form-control no-border" value=identification placeholder='Username' name='identification'
-          .list-group-item
             Ember.TextField class="input form-control no-border" value=password placeholder='Password' name='password' type='password'
-        button#btn-login-main.btn.btn-lg.btn-primary.btn-block type="submit" Sign In
-      footer.wrapper.text-center
-        link-to "recover" | Forgot Password?
+          .list-group-item
+            Ember.TextField class="input form-control no-border" value=confirmPassword placeholder='Confirm Password' name='confirmPassword' type='password'
+        button#btn-reset.btn.btn-lg.btn-primary.btn-block type="submit" Reset
