@@ -33,6 +33,7 @@ App = Ember.Application.extend
   Socket: EmberSockets.extend
     host: config.socketHost
     port: config.socketPort
+    secure: config.socketSecure
     controllers: ['index', 'file']
     autoConnect: true
 

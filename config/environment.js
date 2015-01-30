@@ -42,6 +42,7 @@ module.exports = function(environment) {
     };
     ENV.socketHost = 'localhost'
     ENV.socketPort = '8008'
+    ENV.socketSecure = false;
   }
 
   if (environment === 'test') {
@@ -68,6 +69,9 @@ module.exports = function(environment) {
 
     ENV.usePretender = false;
     ENV.APP.API_HOST = '';
+    ENV.socketHost = 'ws.appknox.com';
+    ENV.socketSecure = true;
+    ENV.socketPort = 443;
   }
 
   ENV.contentSecurityPolicy = {
