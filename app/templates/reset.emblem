@@ -9,7 +9,7 @@ section#content.m-t-lg.wrapper-md.animated.bounceIn
       form submit='reset'
         .list-group
           .list-group-item
-            Ember.TextField class="input form-control no-border" value=password placeholder='Password' name='password' type='password'
+            Ember.TextField class="input form-control no-border" value=password placeholder='Password' name='password' type='password' autofocus="true"
           .list-group-item
             Ember.TextField class="input form-control no-border" value=confirmPassword placeholder='Confirm Password' name='confirmPassword' type='password'
         button#btn-reset.btn.btn-lg.btn-primary.btn-block type="submit" Reset
