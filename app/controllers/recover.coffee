@@ -29,8 +29,8 @@ ResetController = Ember.Controller.extend
       data =
         username: username
       Ember.$.post recoverUrl, data
-        .then ->
-          Notify.success "Pasword reset is successfully requested."
+        .then (data, status, xhr)->
+          Notify.success data.message, closeAfter: 7000
         .fail (xhr, message, status) ->
           Notify.error xhr.responseJSON.message
 
