@@ -33,6 +33,8 @@ SocketMixin = Ember.Mixin.create
     file_new: (data)->
       Notify.info "New file added"
       project = @store.push "project", @store.normalize "project", data.project
+      fileCount = project.get "fileCount"
+      project.set "fileCount", fileCount + 1
       file = @store.push "file", @store.normalize "file", data.file
       for analysis in data.analyses
         @store.push "analysis", @store.normalize "analysis", analysis

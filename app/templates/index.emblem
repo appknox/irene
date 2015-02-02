@@ -79,6 +79,9 @@ h3.m-b-xs.text-black Projects
               p
                 span.font-thin Created:
                 = project.humanizedCreatedOn
+              p
+                span.font-thin File Count:
+                = project.fileCount
 
   else
     h3 You have not created any projects yet!

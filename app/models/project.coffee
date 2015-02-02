@@ -10,6 +10,7 @@ Project = DS.Model.extend BaseModelMixin,
   source: DS.attr 'string'
   version: DS.attr 'string'
   files: DS.hasMany 'file', inverse: 'project'
+  fileCount: DS.attr 'number'
 
   platformIconClass:( ->
     switch @get "platform"
