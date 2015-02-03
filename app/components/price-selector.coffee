@@ -1,5 +1,6 @@
 `import Ember from 'ember'`
 `import EmberCLIICAjax from 'ic-ajax';`
+`import ENUMS from '../enums';`
 
 _makePayment = (store, pricingSlug, count) ->
 
@@ -14,6 +15,19 @@ PriceSelectorComponent = Ember.Component.extend
     price = @get "pricing.price"
     "Pay #{price * count} USD"
   ).property "count", "pricing.price"
+
+  unitLabel: (->
+    pricingType = @get "pricing.pricingType"
+    label = ''
+    switch pricingType
+      when ENUMS.PRICING.SCAN_LIMIT then label = 'Scan'
+      when ENUMS.PRICING.TIME_LIMIT then label = 'Month'
+      when ENUMS.PRICING.UNKNOWN then label = 'Unknown'
+    count = parseInt @get "count"
+    if count > 1
+      label += 's'
+    label
+  ).property "count"
 
   actions:
 

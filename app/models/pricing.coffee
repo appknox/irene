@@ -4,7 +4,7 @@ Pricing = DS.Model.extend
 
   name: DS.attr 'string'
   description: DS.attr 'string'
-  pricing_type: DS.attr 'number'
+  pricingType: DS.attr 'number'
   unit: DS.attr 'number'
   price: DS.attr 'number'
 
