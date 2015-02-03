@@ -4,9 +4,12 @@
 `import ENUMS from '../enums';`
 
 SocketMixin = Ember.Mixin.create
+
+  subscribe: (room) ->
+    @socket.emit "subscribe", room: room
+
   sockets:
     connect: ->
-      @socket.emit "subscribe", room: @session.get("user").uuid
       console.log "Socket is connected!"
 
     disconnect: ->

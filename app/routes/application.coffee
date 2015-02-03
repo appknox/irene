@@ -28,6 +28,7 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
         user = store.pushPayload 'user', user: result.user
         store.find('user', result.user.id).then (user)->
           controller.set 'currentUser', user
+          controller.subscribe result.user.uuid
         resolve result
 
   setupController: (controller)->

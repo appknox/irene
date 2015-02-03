@@ -34,7 +34,7 @@ App = Ember.Application.extend
     host: config.socketHost
     port: config.socketPort
     secure: config.socketSecure
-    controllers: ['index', 'file']
+    controllers: ['application']
     autoConnect: true
 
 loadInitializers App, config.modulePrefix
