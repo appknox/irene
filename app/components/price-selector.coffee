@@ -2,13 +2,20 @@
 `import EmberCLIICAjax from 'ic-ajax';`
 `import ENUMS from '../enums';`
 
-_makePayment = (store, pricingSlug, count) ->
+isNumber = (n) ->
+  /^\d+$/.test n
 
 PriceSelectorComponent = Ember.Component.extend
 
   count: 1
   pricing: null
   store: null
+
+  countObserver:(->
+    count = @get "count"
+    if !isNumber(count) or 1 > parseInt count
+      @set "count", 1
+  ).observes 'count'
 
   totalPrice: (->
     count = parseInt @get "count"
