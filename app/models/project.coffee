@@ -29,6 +29,6 @@ Project = DS.Model.extend BaseModelMixin,
   hasMultipleFiles:( ->
     fileCount = @get "fileCount"
     fileCount > 1
-  ).property "files.@each"
+  ).property "fileCount"
 
 `export default Project;`
