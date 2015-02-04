@@ -1,7 +1,7 @@
 h3.m-b-xs.text-black #{model.name} - All Files
 
 .row.m-t
-  each file in model.files
+  each file in model.sortedFiles
     = render "_file" file
 
   else
