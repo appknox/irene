@@ -57,7 +57,7 @@ hr
 h3.m-b-xs.text-black Projects
 
 .row.m-b
-  each project in model
+  each project in sortedModel
     if project.lastFile
       if project.hasMultipleFiles
         link-to 'project' project.id class="col-sm-6 col-md-4"

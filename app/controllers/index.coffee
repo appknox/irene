@@ -12,8 +12,11 @@ IndexController = Ember.ArrayController.extend SocketMixin,
   ratio: null
 
   model:( ->
-    @store.all 'project'
-  ).property()
+    @get "controllers.application.currentUser.projects"
+  ).property "controllers.application.currentUser"
+
+  sortProperties: ["lastFile.updatedOn:desc"]
+  sortedModel: Ember.computed.sort('model', 'sortProperties')
 
   actions:
 

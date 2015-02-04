@@ -16,7 +16,7 @@ section.panel.b-a
         = project.lastFile.version
       p
         span.font-thin Created:
-        = project.humanizedCreatedOn
+        = project.lastFile.humanizedCreatedOn
       p
         span.font-thin File Count:
         = project.fileCount
