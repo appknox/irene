@@ -1,0 +1,22 @@
+section.panel.b-a
+  .panel-heading.panel-heading-fix
+    .h4.text-lt.block.font-bold
+      img src=project.lastFile.iconUrl alt="File Icon"
+      = project.name
+      = fa-icon project.platformIconClass
+
+  .row.panel-body
+    = view "pie-chart" file=project.lastFile
+    .col-md-6.m-t
+      p
+        span.font-thin Package:
+        = project.packageName
+      p
+        span.font-thin Version:
+        = project.lastFile.version
+      p
+        span.font-thin Created:
+        = project.humanizedCreatedOn
+      p
+        span.font-thin File Count:
+        = project.fileCount
