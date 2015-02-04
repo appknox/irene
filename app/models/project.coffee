@@ -27,7 +27,7 @@ Project = DS.Model.extend BaseModelMixin,
   lastFile:( ->
     files = @get "files"
     if !Ember.isEmpty files
-      files.sortBy('createdOn')[0]
+      files.sortBy('createdOn:desc')[0]
   ).property "files.@each"
 
   hasMultipleFiles:( ->
