@@ -61,12 +61,21 @@ options = {
   quotes: true
 };
 
-//if (true) {
-if (false) {
+if (app.env == 'production') {
   tree = assetRev(tree, {
+    enabled: true,
     extensions: ['js', 'css', 'png', 'jpg', 'gif'],
     replaceExtensions: ['html', 'js', 'css'],
     prepend: '//du6tdhcax0qep.cloudfront.net/'
+  });
+}
+
+if (app.env == 'staging') {
+  tree = assetRev(tree, {
+    enabled: true,
+    extensions: ['js', 'css', 'png', 'jpg', 'gif'],
+    replaceExtensions: ['html', 'js', 'css'],
+    prepend: '//sherlock-assets-staging.s3-us-west-2.amazonaws.com/'
   });
 }
 

@@ -74,6 +74,20 @@ module.exports = function(environment) {
     ENV.socketPort = 443;
   }
 
+  if (environment === 'staging') {
+
+    ENV.APP.LOG_ACTIVE_GENERATION = true;
+    ENV.APP.LOG_TRANSITIONS = true;
+    ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
+    ENV.APP.LOG_VIEW_LOOKUPS = true;
+
+    ENV.usePretender = false;
+    ENV.APP.API_HOST = '';
+    ENV.socketHost = 'ws.staging.appknox.com';
+    ENV.socketPort = 80;
+
+  }
+
   ENV.contentSecurityPolicy = {
     "connect-src": "'self' storage.googleapis.com ws://localhost:8008 http://localhost:8008 ws://localhost:6080/websockify sherlock-test.s3.amazonaws.com " + ENV.APP.API_HOST,
     'img-src': "'self' www.gravatar.com placehold.it storage.googleapis.com",
