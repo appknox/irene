@@ -83,7 +83,7 @@ module.exports = function(environment) {
 
     ENV.usePretender = false;
     ENV.APP.API_HOST = '';
-    ENV.socketHost = 'ws.staging.appknox.com';
+    ENV.socketHost = 'staging.appknox.com';
     ENV.socketPort = 80;
 
   }
