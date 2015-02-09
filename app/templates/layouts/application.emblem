@@ -11,17 +11,15 @@ header.header.header-md.navbar.navbar-fixed-top-xs.box-shadow
     link-to 'pricing' tagName="li"
       a href=view.href Pricing
 
+  ul.nav.navbar-nav
+    li
+      a click=invalidateSession Logout
+
   ul.nav.navbar-nav.pull-right.nav-user.user.user-fix
-    li#user-dropdown
+    li
       span.thumb-sm.avatar.pull-left
         = gravatar-image email=session.user.email alt=session.user.email
       = session.user.username
-
-    = popup-menu for="user-dropdown" on="click" class="animated bounceIn"
-      li
-        ul.dropdown-menu.dropdown-menu-fix.show
-          li
-            a click=invalidateSession Logout
 
 div#content.padder
   = yield

@@ -44,3 +44,5 @@ node_modules
 npm-debug.log
 testem.log
 /env
+/Resources
+/packages
