@@ -33,6 +33,11 @@ ENUMS =
     TIME_LIMIT: 0
     SCAN_LIMIT: 1
 
+  OFFER:
+    UNKNOWN: -1
+    NONE: 0
+    FIRST_TIME: 1
+
   NOTIFY:
     UNKNOWN: -1
     INFO: 0

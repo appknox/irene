@@ -11,14 +11,19 @@ PriceSelectorComponent = Ember.Component.extend
   pricing: null
   store: null
 
+  units: (->
+    count = @get "count"
+    count * @get 'pricing.unit'
+  ).property 'count', 'pricing.unit'
+
   countObserver:(->
     count = @get "count"
-    if !isNumber(count) or 1 > parseInt count
+    if !isNumber(count) or 1 > count
       @set "count", 1
   ).observes 'count'
 
   totalPrice: (->
-    count = parseInt @get "count"
+    count =  @get "count"
     price = @get "pricing.price"
     "Pay #{price * count} USD"
   ).property "count", "pricing.price"
@@ -27,23 +32,23 @@ PriceSelectorComponent = Ember.Component.extend
     pricingType = @get "pricing.pricingType"
     label = ''
     switch pricingType
-      when ENUMS.PRICING.SCAN_LIMIT then label = 'Scan'
-      when ENUMS.PRICING.TIME_LIMIT then label = 'Month'
-      when ENUMS.PRICING.UNKNOWN then label = 'Unknown'
-    count = parseInt @get "count"
-    if count > 1
-      label += 's'
-    label
-  ).property "count"
+      when ENUMS.PRICING.SCAN_LIMIT then text = 'Scan'
+      when ENUMS.PRICING.TIME_LIMIT then text = 'Month'
+      when ENUMS.PRICING.UNKNOWN then text = 'Unknown'
+    units = @get "units"
+    if units > 1
+      text += 's'
+    "#{units} #{text}"
+  ).property "units"
 
   actions:
 
     incrementCount: ->
-      count = parseInt @get "count"
+      count = @get "count"
       @set "count", count + 1
 
     decrementCount: ->
-      count = parseInt @get "count"
+      count = @get "count"
       count -= 1
       if count < 0
         count = 1

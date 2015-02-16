@@ -7,5 +7,7 @@ Pricing = DS.Model.extend
   pricingType: DS.attr 'number'
   unit: DS.attr 'number'
   price: DS.attr 'number'
+  isBulky: DS.attr 'boolean'
+  offer: DS.attr 'number'
 
 `export default Pricing`
