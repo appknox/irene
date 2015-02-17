@@ -37,6 +37,7 @@
     "ember-cli-simple-auth-testing": "^0.7.1",
     "ember-data": "1.0.0-beta.10",
     "ember-export-application-global": "^1.0.0",
+    "ember-popup-menu": "^0.1.15",
     "express": "^4.8.5",
     "glob": "^4.0.5"
   },
