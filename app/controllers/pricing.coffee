@@ -19,6 +19,6 @@ PricingController = Ember.Controller.extend
     ENUMS.PRICING.TIME_LIMIT is pricing.get "pricingType"
 
   specialPricings: Ember.computed.filter 'model', (pricing) ->
-    ENUMS.OFFER.NONE isnt pricing.get "offer"
+    ENUMS.OFFER.CUSTOM isnt pricing.get "offer"
 
 `export default PricingController`
