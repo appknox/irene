@@ -10,4 +10,9 @@ Pricing = DS.Model.extend
   isBulky: DS.attr 'boolean'
   offer: DS.attr 'number'
 
+  descriptions: (->
+    description = @get "description"
+    description.split ","
+  ).property "description"
+
 `export default Pricing`

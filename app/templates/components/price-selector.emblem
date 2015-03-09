@@ -1,6 +1,11 @@
 .plan.col-md-4
   h3 = pricing.name
   hr
+  .row.text-left
+    .col-md-6.col-md-offset-3
+      each description in pricing.descriptions
+        li= description
+  hr
   h4 = pricing.price
   |  USD
   hr
