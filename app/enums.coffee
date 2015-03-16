@@ -52,5 +52,6 @@ ENUMS =
     NONE: 0
     BOOTING: 1
     READY: 2
+    SHUTTING_DOWN: 3
 
 `export default ENUMS;`
