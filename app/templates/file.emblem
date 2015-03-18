@@ -15,7 +15,7 @@
             .col-md-3.animated.zoomIn
               img alt="File Icon" src=model.iconUrl
 
-            .col-md-4.m-t.animated.fadeIn
+            .col-md-4.m-t.animated.fadeIn.z-index-2-fix
               p.copact-text
                 span.font-thin Package Name:
                 = model.name
