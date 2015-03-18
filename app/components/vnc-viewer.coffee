@@ -43,4 +43,9 @@ VncViewerComponent = Ember.Component.extend
       uploadUrl = [ENV.APP.API_HOST, 'api/dynamic', file_id].join '/'
       $.get uploadUrl
 
+    dynamicShutdown: ->
+      file_id = @get "file.id"
+      uploadUrl = [ENV.APP.API_HOST, 'api/dynamic_shutdown', file_id].join '/'
+      $.get uploadUrl
+
 `export default VncViewerComponent`
