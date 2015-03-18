@@ -8,15 +8,15 @@ section.panel.b-a
   .row.panel-body
     = view "pie-chart" file=project.lastFile
     .col-md-6.m-t
-      p
+      p.copact-text
         span.font-thin Package:
         = project.packageName
-      p
+      p.copact-text
         span.font-thin Version:
         = project.lastFile.version
-      p
+      p.copact-text
         span.font-thin Created:
         = project.lastFile.humanizedCreatedOn
-      p
+      p.copact-text
         span.font-thin File Count:
         = project.fileCount

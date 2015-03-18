@@ -16,19 +16,19 @@
               img alt="File Icon" src=model.iconUrl
 
             .col-md-4.m-t.animated.fadeIn
-              p
+              p.copact-text
                 span.font-thin Package Name:
                 = model.name
 
-              p
+              p.copact-text
                 span.font-thin Version:
                 = model.version
 
-              p
+              p.copact-text
                 span.font-thin MD5 Hash:
                 = model.md5hash
 
-              p
+              p.copact-text
                 span.font-thin SHA1 Hash:
                 = model.sha1hash
 
