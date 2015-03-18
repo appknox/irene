@@ -1,5 +1,5 @@
 .row
-  .col-md-7
+  .col-md-8
     .row.m-t
       .col-md-12
         section.panel.b-a
@@ -62,4 +62,4 @@
                   else
                     = analysis.vulnerability.successMessage
 
-  vnc-viewer file=model class="col-md-5"
+  vnc-viewer file=model class="col-md-4"
