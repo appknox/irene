@@ -1,6 +1,5 @@
 `import Ember from 'ember'`
 `import Notify from 'ember-notify';`
-`import cookieUtil from '../utils/cookies';`
 `import ENUMS from '../enums';`
 
 SocketMixin = Ember.Mixin.create
@@ -63,7 +62,6 @@ SocketMixin = Ember.Mixin.create
 
 
     logout: ->
-      cookieUtil.deleteAllCookies()
       localStorage.clear()
       location.reload()
 
