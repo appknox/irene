@@ -1,5 +1,5 @@
 .row
-  .col-md-8
+  div class=model.project.canDoDynamicScan:col-md-8:col-md-12
     .row.m-t
       .col-md-12
         section.panel.b-a
@@ -62,4 +62,5 @@
                   else
                     = analysis.vulnerability.successMessage
 
-  vnc-viewer file=model class="col-md-4"
+  if model.project.canDoDynamicScan
+    vnc-viewer file=model class="col-md-4"
