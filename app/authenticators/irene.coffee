@@ -2,7 +2,6 @@
 `import Base from 'simple-auth/authenticators/base';`
 `import config from '../config/environment';`
 `import loginBtn from '../utils/login-btn';`
-`import cookieUtil from '../utils/cookies';`
 
 
 IreneAuthenticator = Base.extend
@@ -22,14 +21,17 @@ IreneAuthenticator = Base.extend
       data =
         username: credentials.identification
         password: credentials.password
+
       _resolved = (response)->
         Ember.run ->
           loginBtn.restoreSignIn()
           resolve Ember.$.extend response
+
       _rejected = (xhr, status, error) ->
         Ember.run ->
           loginBtn.restoreSignIn()
           reject xhr.responseJSON || xhr.responseText
+
       url = config['simple-auth']['loginEndpoint']
       makeRequest(url, data).then _resolved, _rejected
 
@@ -41,13 +43,12 @@ IreneAuthenticator = Base.extend
         reject()
 
   invalidate: (data) ->
+    localStorage.clear()
     makeRequest = @makeRequest
 
     new Ember.RSVP.Promise (resolve, reject) ->
       _resolved = (response)->
         Ember.run ->
-          cookieUtil.deleteAllCookies()
-          localStorage.clear()
           resolve Ember.$.extend response
           location.reload()
 

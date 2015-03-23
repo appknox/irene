@@ -1,10 +1,12 @@
-`import IreneAuthenticator from '../authenticators/irene';`
 `import IreneSession from '../sessions/irene';`
+`import IreneAuthenticator from '../authenticators/irene';`
+`import IreneAuthorizer from '../authorizers/irene';`
 
 
 initialize = (container, application) ->
-  container.register 'authenticator:irene', IreneAuthenticator
   container.register 'session:irene', IreneSession
+  container.register 'authorizer:irene', IreneAuthorizer
+  container.register 'authenticator:irene', IreneAuthenticator
 
 AuthInitializer =
   name: 'auth'
