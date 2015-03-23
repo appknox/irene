@@ -28,11 +28,11 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
         user = store.pushPayload 'user', user: result.user
         store.find('user', result.user.id).then (user)->
           controller.set 'currentUser', user
-          controller.subscribe result.user.uuid
+          controller.subscribe user.get "uuid"
         resolve result
 
   setupController: (controller)->
-    if @session.get "user"
+    if !Ember.isEmpty @session.get "token"
       @fetchData()
 
   actions:
