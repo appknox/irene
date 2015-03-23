@@ -58,13 +58,8 @@ h3.m-b-xs.text-black Projects
 
 .row.m-b
   each project in sortedModel
-    if project.lastFile
-      if project.hasMultipleFiles
-        link-to 'project' project.id class="col-sm-6 col-md-4"
-          = partial "_project"
-      else
-        link-to 'file' project.lastFile.id class="col-sm-6 col-md-4"
-          = partial "_project"
+    .col-sm-6.col-md-4
+      = partial "_project"
 
   else
     h3 You have not created any projects yet!

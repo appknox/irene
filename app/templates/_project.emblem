@@ -1,4 +1,4 @@
-section.panel.b-a
+section.panel
   .panel-heading.panel-heading-fix
     .h4.text-lt.block.font-bold
       img src=project.lastFile.iconUrl alt="File Icon"
@@ -6,17 +6,33 @@ section.panel.b-a
       = fa-icon project.platformIconClass
 
   .row.panel-body
-    = view "pie-chart" file=project.lastFile
-    .col-md-6.m-t
-      p.copact-text
-        span.font-thin Package:
-        = project.packageName
-      p.copact-text
-        span.font-thin Version:
-        = project.lastFile.version
-      p.copact-text
-        span.font-thin Created:
-        = project.lastFile.humanizedCreatedOn
-      p.copact-text
-        span.font-thin File Count:
-        = project.fileCount
+    if project.lastFile
+      link-to 'file' project.lastFile.id
+        = view "pie-chart" file=project.lastFile
+        .col-md-6.m-t
+          p.copact-text
+            span.font-thin Package: &nbsp;
+            = project.packageName
+          p.copact-text
+            span.font-thin Version: &nbsp;
+            = project.lastFile.version
+          p.copact-text
+            span.font-thin Created: &nbsp;
+            = project.lastFile.humanizedCreatedOn
+          p.copact-text
+            span.font-thin File Count: &nbsp;
+            = project.fileCount
+    else
+      | This project has no files yet!
+
+  .panel-footer
+    .row
+      .col-md-1 data-hint="All Files"
+        link-to 'project' project.id
+          = fa-icon "files-o"
+      .col-md-1 data-hint="Settings"
+        link-to 'project' project.id
+          = fa-icon "wrench"
+      .col-md-1.pull-right data-hint="Delete"
+        link-to 'project' project.id
+          = fa-icon "trash"

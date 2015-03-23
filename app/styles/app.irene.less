@@ -129,10 +129,60 @@ html, body {
 }
 
 .copact-text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-	&:hover{
-    overflow: visible;
-  }
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    &:hover{
+        overflow: visible;
+    }
+}
+
+[data-hint]{
+    position: relative;
+    display: inline-block;
+}
+[data-hint]:before, [data-hint]:after {
+    position: absolute;
+    opacity: 0;
+    z-index: 1000000;
+    -webkit-transition: 0.3s ease;
+    -moz-transition: 0.3s ease;
+    pointer-events: none;
+}
+
+[data-hint]:hover:before, [data-hint]:hover:after {
+    opacity: 1;
+}
+
+[data-hint]:hover:before {
+    margin-bottom: -10px;
+}
+
+[data-hint]:hover:after {
+    margin-bottom: 2px;
+}
+
+[data-hint]:before {
+    content: '';
+    position: absolute;
+    background: transparent;
+    border: 6px solid transparent;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin: 0 0 -18px 0;
+    border-top-color: rgba(0, 0, 0, 0.8);
+}
+
+[data-hint]:after {
+    content: attr(data-hint);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+    bottom: 100%;
+    left: 50%;
+    margin: 0 0 -6px -10px;
 }
