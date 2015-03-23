@@ -19,8 +19,8 @@ module.exports = function(environment) {
     },
     'simple-auth': {
       store: 'simple-auth-session-store:local-storage',
-      authenticator: 'authenticator:irene',
       authorizer: 'authorizer:irene',
+      authenticator: 'authenticator:irene',
       session: 'session:irene'
     }
   };
@@ -38,11 +38,6 @@ module.exports = function(environment) {
     else{
       ENV.APP.API_HOST = 'http://localhost:8000';
     }
-    ENV['simple-auth'] = {
-      crossOriginWhitelist: [ENV.APP.API_HOST],
-      authorizer: 'authorizer:irene',
-      authenticator: 'authenticator:irene'
-    };
     ENV.socketHost = 'localhost'
     ENV.socketPort = '8008'
     ENV.socketSecure = false;
@@ -75,6 +70,7 @@ module.exports = function(environment) {
     ENV.socketHost = 'ws.appknox.com';
     ENV.socketSecure = true;
     ENV.socketPort = 443;
+
   }
 
   if (environment === 'staging') {
@@ -98,8 +94,9 @@ module.exports = function(environment) {
     'script-src': "'self' 'unsafe-eval' localhost:35729 0.0.0.0:35729 storage.googleapis.com"
   };
 
-  ENV['simple-auth']['loginEndpoint'] =  ENV.APP.API_HOST + '/api/token/new.json';
-  ENV['simple-auth']['logoutEndpoint'] =  ENV.APP.API_HOST + '/api/logout';
+  ENV['simple-auth']['crossOriginWhitelist'] = [ENV.APP.API_HOST];
+  ENV['simple-auth']['loginEndpoint'] = ENV.APP.API_HOST + '/api/token/new.json';
+  ENV['simple-auth']['logoutEndpoint'] = ENV.APP.API_HOST + '/api/logout';
 
   return ENV;
 };
