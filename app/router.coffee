@@ -8,6 +8,8 @@ Router.map ->
   @route "login"
 
   @resource 'project', path: 'projects/:project_id', ->
+    @route 'files'
+    @route 'settings'
 
   @resource 'file', path: 'files/:file_id', ->
 
@@ -18,5 +20,6 @@ Router.map ->
   @route 'recover'
   @route 'paypal_return'
   @route 'paypal_cancel'
+
 
 `export default Router;`

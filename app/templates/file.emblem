@@ -34,7 +34,7 @@
 
             .col-md-2.m-t.animated.fadeIn
 
-              link-to 'project' model.project.id class="btn btn-small btn-info w-100"
+              link-to 'project.files' model.project.id class="btn btn-small btn-info w-100"
                 | All Files
 
               if model.report

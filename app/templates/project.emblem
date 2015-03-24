@@ -1,8 +1,3 @@
-h3.m-b-xs.text-black #{model.name} - All Files
+h3.m-b-xs.text-black #{model.name}
 
-.row.m-t
-  each file in model.sortedFiles
-    = render "_file" file
-
-  else
-    h3 You have not created any projects yet!
+= outlet

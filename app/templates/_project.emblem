@@ -28,10 +28,10 @@ section.panel
   .panel-footer
     .row
       .col-md-1 data-hint="All Files"
-        link-to 'project' project.id
+        link-to 'project.files' project.id
           = fa-icon "files-o"
       .col-md-1 data-hint="Settings"
-        link-to 'project' project.id
+        link-to 'project.settings' project.id
           = fa-icon "wrench"
       .col-md-1.pull-right data-hint="Delete"
         link-to 'project' project.id
