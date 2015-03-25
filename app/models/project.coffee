@@ -1,6 +1,6 @@
 `import DS from 'ember-data';`
-`import BaseModelMixin from '../mixins/base-model';`
-`import ENUMS from '../enums'`
+`import BaseModelMixin from 'irene/mixins/base-model';`
+`import ENUMS from 'irene/enums'`
 `import Ember from 'ember'`
 
 Project = DS.Model.extend BaseModelMixin,

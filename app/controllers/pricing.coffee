@@ -1,6 +1,5 @@
 `import Ember from 'ember'`
-`import config from '../config/environment';`
-`import ENUMS from '../enums';`
+`import ENUMS from 'irene/enums';`
 
 
 PricingController = Ember.Controller.extend

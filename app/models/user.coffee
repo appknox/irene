@@ -1,6 +1,6 @@
 `import DS from 'ember-data';`
 `import { moment, ago } from 'ember-moment/computed';`
-`import ENUMS from '../enums'`
+`import ENUMS from 'irene/enums'`
 
 User = DS.Model.extend
   uuid: DS.attr 'string'

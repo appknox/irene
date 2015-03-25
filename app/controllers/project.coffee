@@ -1,5 +1,5 @@
 `import Ember from 'ember'`
-`import SocketMixin from '../mixins/socket';`
+`import SocketMixin from 'irene/mixins/socket';`
 
 ProjectController = Ember.Controller.extend SocketMixin
 

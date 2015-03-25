@@ -1,6 +1,6 @@
 `import DS from 'ember-data';`
-`import BaseModelMixin from '../mixins/base-model';`
-`import ENUMS from '../enums';`
+`import BaseModelMixin from 'irene/mixins/base-model';`
+`import ENUMS from 'irene/enums';`
 
 File = DS.Model.extend BaseModelMixin,
   project: DS.belongsTo 'project', inverse: 'files'

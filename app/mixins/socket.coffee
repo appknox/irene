@@ -1,6 +1,6 @@
 `import Ember from 'ember'`
 `import Notify from 'ember-notify';`
-`import ENUMS from '../enums';`
+`import ENUMS from 'irene/enums';`
 
 SocketMixin = Ember.Mixin.create
 

@@ -1,6 +1,6 @@
-`import IreneSession from '../sessions/irene';`
-`import IreneAuthenticator from '../authenticators/irene';`
-`import IreneAuthorizer from '../authorizers/irene';`
+`import IreneSession from 'irene/sessions/irene';`
+`import IreneAuthenticator from 'irene/authenticators/irene';`
+`import IreneAuthorizer from 'irene/authorizers/irene';`
 
 
 initialize = (container, application) ->
