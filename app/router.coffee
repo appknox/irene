@@ -1,8 +1,8 @@
 `import Ember from 'ember';`
-`import config from './config/environment';`
+`import ENV from 'irene/config/environment';`
 
 Router = Ember.Router.extend
-  location: config.locationType
+  location: ENV.locationType
 
 Router.map ->
   @route "login"

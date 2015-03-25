@@ -1,15 +1,13 @@
 `import ApplicationRouteMixin from 'simple-auth/mixins/application-route-mixin';`
 `import Ember from 'ember';`
 `import EmberCLIICAjax from 'ic-ajax';`
+`import ENV from 'irene/config/environment';`
 
 ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
 
   fetchData: ->
     store = @store
-    applicationAdapter = store.adapterFor 'application'
-    host = applicationAdapter.get 'host'
-    namespace = applicationAdapter.get 'namespace'
-    initUrl = [host, namespace, 'init'].join '/'
+    initUrl = [ENV.APP.API_BASE, ENV.endpoints.init].join '/'
     controller = @controller
     new Ember.RSVP.Promise (resolve, reject) ->
       init = EmberCLIICAjax url:initUrl, type: "get"

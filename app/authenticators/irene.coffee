@@ -1,7 +1,7 @@
 `import Ember from 'ember';`
 `import Base from 'simple-auth/authenticators/base';`
-`import config from '../config/environment';`
-`import loginBtn from '../utils/login-btn';`
+`import ENV from 'irene/config/environment';`
+`import loginBtn from 'irene/utils/login-btn';`
 
 
 IreneAuthenticator = Base.extend
@@ -32,7 +32,7 @@ IreneAuthenticator = Base.extend
           loginBtn.restoreSignIn()
           reject xhr.responseJSON || xhr.responseText
 
-      url = config['simple-auth']['loginEndpoint']
+      url = ENV['simple-auth']['loginEndpoint']
       makeRequest(url, data).then _resolved, _rejected
 
   restore: (data) ->
@@ -56,7 +56,7 @@ IreneAuthenticator = Base.extend
         Ember.run ->
           reject xhr.responseJSON || xhr.responseText
 
-      url = config['simple-auth']['logoutEndpoint']
+      url = ENV['simple-auth']['logoutEndpoint']
       makeRequest(url).then _resolved, _rejected
 
 `export default IreneAuthenticator;`

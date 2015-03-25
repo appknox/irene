@@ -1,11 +1,11 @@
 import Resolver from 'ember/resolver';
-import config from '../../config/environment';
+import ENV from 'irene/config/environment';
 
 var resolver = Resolver.create();
 
 resolver.namespace = {
-  modulePrefix: config.modulePrefix,
-  podModulePrefix: config.podModulePrefix
+  modulePrefix: ENV.modulePrefix,
+  podModulePrefix: ENV.podModulePrefix
 };
 
 export default resolver;

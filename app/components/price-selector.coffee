@@ -1,6 +1,7 @@
 `import Ember from 'ember'`
 `import EmberCLIICAjax from 'ic-ajax';`
-`import ENUMS from '../enums';`
+`import ENUMS from 'irene/enums';`
+`import ENV from 'irene/config/environment';`
 
 isNumber = (n) ->
   /^\d+$/.test n
@@ -55,10 +56,7 @@ PriceSelectorComponent = Ember.Component.extend
       @set "count", count
 
     makePayment: ->
-      applicationAdapter = @store.adapterFor 'application'
-      host = applicationAdapter.get 'host'
-      namespace = applicationAdapter.get 'namespace'
-      invoceUrl = [host, namespace, 'invoice'].join '/'
+      invoceUrl = [ENV.APP.API_BASE, ENV.endpoints.invoice].join '/'
       data =
         pricing_id: @get "pricing.id"
         count: @get "count"

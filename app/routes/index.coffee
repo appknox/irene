@@ -1,6 +1,6 @@
 `import Ember from 'ember';`
 `import AuthenticatedRouteMixin from 'simple-auth/mixins/authenticated-route-mixin';`
-`import Ratio from '../models/ratio';`
+`import Ratio from 'irene/models/ratio';`
 
 IndexRoute = Ember.Route.extend AuthenticatedRouteMixin,
 

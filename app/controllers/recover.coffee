@@ -1,5 +1,6 @@
 `import Ember from 'ember';`
 `import Notify from 'ember-notify';`
+`import ENV from 'irene/config/environment';`
 
 ResetController = Ember.Controller.extend
   username: ""
@@ -21,10 +22,7 @@ ResetController = Ember.Controller.extend
       if @validation_errors.length > 0
         return Notify.error "#{@validation_errors.join " & "}", closeAfter: 5000
       username = @get "username"
-      applicationAdapter = @store.adapterFor 'application'
-      host = applicationAdapter.get 'host'
-      namespace = applicationAdapter.get 'namespace'
-      recoverUrl = [host, namespace, 'recover'].join '/'
+      recoverUrl = [ENV.APP.API_BASE, ENV.endpoints.recover].join '/'
       that = @
       data =
         username: username

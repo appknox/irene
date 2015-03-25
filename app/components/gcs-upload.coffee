@@ -1,21 +1,19 @@
 `import Ember from 'ember'`
-`import GCSUploader from '../uploaders/gcs-uploader'`
+`import GCSUploader from 'irene/uploaders/gcs-uploader'`
+`import ENV from 'irene/config/environment';`
 
 GCSUploadComponent = Ember.FileField.extend
 
   store: null
 
   filesDidChange: ( ->
-    applicationAdapter = @store.adapterFor 'application'
-    host = applicationAdapter.get 'host'
-    namespace = applicationAdapter.get 'namespace'
-    signingUrl = [host, namespace, 'signed_url'].join '/'
+    signingUrl = [ENV.APP.API_BASE, ENV.endpoints.signingUrl].join '/'
     files = @get 'files'
     uploader = GCSUploader.create
       url: signingUrl
 
     uploader.didUpload = (file_key, file_key_signed) ->
-      uploadedUrl = [host, namespace, 'uploaded_file'].join '/'
+      uploadedUrl = [ENV.APP.API_BASE, ENV.endpoints.uploadedFile].join '/'
       data =
         file_key: file_key
         file_key_signed: file_key_signed

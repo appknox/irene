@@ -1,8 +1,8 @@
 `import DS from 'ember-data'`
-`import config from '../config/environment';`
+`import ENV from 'irene/config/environment';`
 
 ApplicationAdapter = DS.RESTAdapter.extend
-  host: config.APP.API_HOST
-  namespace: 'api'
+  host: ENV.APP.API_HOST
+  namespace: ENV.APP.API_NAMESPACE
 
 `export default ApplicationAdapter`

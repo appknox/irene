@@ -1,6 +1,7 @@
 `import Ember from 'ember'`
 `import EmberCLIICAjax from 'ic-ajax';`
-`import serialize from '../utils/serialize';`
+`import serialize from 'irene/utils/serialize';`
+`import ENV from 'irene/config/environment';`
 
 
 FileController = Ember.ObjectController.extend
@@ -14,10 +15,7 @@ FileController = Ember.ObjectController.extend
 
     getPDFReportLink: ->
       file_id = @get "model.id"
-      applicationAdapter = @store.adapterFor 'application'
-      host = applicationAdapter.get 'host'
-      namespace = applicationAdapter.get 'namespace'
-      signedUrl = [host, namespace, 'signed_pdf_url', file_id].join '/'
+      signedUrl = [ENV.APP.API_BASE, ENV.endpoints.signedPdfUrl, file_id].join '/'
       xhr = EmberCLIICAjax url:signedUrl, type: "get"
       xhr.then (result) ->
         window.location = result.base_url

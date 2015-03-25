@@ -16,26 +16,40 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
+      API_HOST: '',
+      API_NAMESPACE: 'api'
     },
     'simple-auth': {
       store: 'simple-auth-session-store:local-storage',
       authorizer: 'authorizer:irene',
       authenticator: 'authenticator:irene',
       session: 'session:irene'
+    },
+    endpoints: {
+      tokenNew: 'token/new.json',
+      signedUrl: 'signed_url',
+      uploadedFile: 'uploaded_file',
+      invoice: 'invoice',
+      logout: 'logout',
+      dynamic: 'dynamic',
+      dynamicShutdown: 'dynamic_shutdown',
+      signedPdfUrl: 'signed_pdf_url',
+      storeUrl: 'store_url',
+      deleteProject: 'project/delete',
+      recover: 'recover',
+      reset: 'reset',
+      init: 'init'
     }
   };
 
   if (environment === 'development') {
-    //ENV.APP.LOG_RESOLVER = true;
+    // ENV.APP.LOG_RESOLVER = true;
     ENV.APP.LOG_ACTIVE_GENERATION = true;
     ENV.APP.LOG_TRANSITIONS = true;
     ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     ENV.APP.LOG_VIEW_LOOKUPS = true;
     ENV.usePretender = false;
-    if (ENV.usePretender) {
-      ENV.APP.API_HOST = '';
-    }
-    else{
+    if (!ENV.usePretender) {
       ENV.APP.API_HOST = 'http://localhost:8000';
     }
     ENV.socketHost = 'localhost'
@@ -55,7 +69,6 @@ module.exports = function(environment) {
     ENV.APP.rootElement = '#ember-testing';
     ENV['simple-auth']['store'] = 'simple-auth-session-store:ephemeral';
     ENV.usePretender = true;
-    ENV.APP.API_HOST = '';
   }
 
   if (environment === 'production') {
@@ -66,7 +79,6 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
     ENV.usePretender = false;
-    ENV.APP.API_HOST = '';
     ENV.socketHost = 'ws.appknox.com';
     ENV.socketSecure = true;
     ENV.socketPort = 443;
@@ -81,7 +93,6 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = true;
 
     ENV.usePretender = false;
-    ENV.APP.API_HOST = '';
     ENV.socketHost = 'staging.appknox.com';
     ENV.socketPort = 80;
 
@@ -89,14 +100,15 @@ module.exports = function(environment) {
 
   ENV.contentSecurityPolicy = {
     "connect-src": "'self' storage.googleapis.com ws://localhost:8008 http://localhost:8008 ws://localhost:6080/websockify sherlock-test.s3.amazonaws.com " + ENV.APP.API_HOST,
-    'img-src': "'self' www.gravatar.com placehold.it storage.googleapis.com",
+    'img-src': "'self' www.gravatar.com placehold.it storage.googleapis.com s3.amazonaws.com",
     'style-src': "'self' 'unsafe-inline'",
     'script-src': "'self' 'unsafe-eval' localhost:35729 0.0.0.0:35729 storage.googleapis.com"
   };
 
+  ENV.APP.API_BASE = [ENV.APP.API_HOST, ENV.APP.API_NAMESPACE].join("/");
   ENV['simple-auth']['crossOriginWhitelist'] = [ENV.APP.API_HOST];
-  ENV['simple-auth']['loginEndpoint'] = ENV.APP.API_HOST + '/api/token/new.json';
-  ENV['simple-auth']['logoutEndpoint'] = ENV.APP.API_HOST + '/api/logout';
+  ENV['simple-auth']['loginEndpoint'] = [ENV.APP.API_BASE, ENV.endpoints.tokenNew].join("/");
+  ENV['simple-auth']['logoutEndpoint'] = [ENV.APP.API_BASE, ENV.endpoints.logout].join("/");
 
   return ENV;
 };
