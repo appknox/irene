@@ -2,6 +2,7 @@
 `import Base from 'simple-auth/authenticators/base';`
 `import ENV from 'irene/config/environment';`
 `import loginBtn from 'irene/utils/login-btn';`
+`import Notify from 'ember-notify';`
 
 
 IreneAuthenticator = Base.extend
@@ -22,10 +23,14 @@ IreneAuthenticator = Base.extend
         username: credentials.identification
         password: credentials.password
 
-      _resolved = (response)->
+      _resolved = (response, status, error)->
         Ember.run ->
           loginBtn.restoreSignIn()
-          resolve Ember.$.extend response
+          if response.success
+            resolve Ember.$.extend response
+          else
+            Notify.error response.errors
+            reject response
 
       _rejected = (xhr, status, error) ->
         Ember.run ->
