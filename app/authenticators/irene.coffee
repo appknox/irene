@@ -3,14 +3,15 @@
 `import ENV from 'irene/config/environment';`
 `import loginBtn from 'irene/utils/login-btn';`
 `import Notify from 'ember-notify';`
+`import ajax from 'ic-ajax';`
 
 
 IreneAuthenticator = Base.extend
 
-  makeRequest: (url, data=null) ->
+  makeRequest: (url, data=null, type='POST') ->
     Ember.$.ajax
       url: url,
-      type: 'POST',
+      type: type,
       data: data,
       dataType: 'json',
       contentType: 'application/x-www-form-urlencoded'
@@ -41,11 +42,26 @@ IreneAuthenticator = Base.extend
       makeRequest(url, data).then _resolved, _rejected
 
   restore: (data) ->
+    makeRequest = @makeRequest
     new Ember.RSVP.Promise (resolve, reject) ->
-      if !Ember.isEmpty data.user
-        resolve data
-      else
-        reject()
+      _resolved = (response, status, error)->
+        Ember.run ->
+          if response.success
+            resolve data
+          else
+            Notify.error "Please login to continue"
+            reject response
+
+      _rejected = (xhr, status, error) ->
+        Ember.run ->
+          reject xhr.responseJSON || xhr.responseText
+
+      url = [ENV.APP.API_BASE, ENV.endpoints.token, data.token, data.user].join '/'
+      url = "#{url}.json"
+      ajax
+        url: url
+        type: "get"
+      .then _resolved, _rejected
 
   invalidate: (data) ->
     localStorage.clear()

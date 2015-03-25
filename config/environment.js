@@ -26,6 +26,7 @@ module.exports = function(environment) {
       session: 'session:irene'
     },
     endpoints: {
+      token: 'token',
       tokenNew: 'token/new.json',
       signedUrl: 'signed_url',
       uploadedFile: 'uploaded_file',
