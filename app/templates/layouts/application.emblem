@@ -11,6 +11,11 @@ header.header.header-md.navbar.navbar-fixed-top-xs.box-shadow
     link-to 'pricing' tagName="li"
       a href=view.href Pricing
 
+  ul.nav.navbar-nav
+    li
+      a href="https://gitter.im/xysec/support" target="_blank"
+        | Support
+
   ul.nav.navbar-nav.pull-right.nav-user.user.user-fix
     li#user-dropdown
       span.thumb-sm.avatar.pull-left
