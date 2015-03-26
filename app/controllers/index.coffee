@@ -27,7 +27,7 @@ IndexController = Ember.ArrayController.extend SocketMixin,
         return Notify.error "Please enter a valid URL"
       data =
         storeURL: storeURL
-      postUrl = [ENV.APP.API_BASE, ENV.endpoints.storeURL].join '/'
+      postUrl = [ENV.APP.API_BASE, ENV.endpoints.storeUrl].join '/'
       that = @
       Ember.$.post postUrl, data
         .then ->
