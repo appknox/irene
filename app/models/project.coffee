@@ -4,7 +4,7 @@
 `import Ember from 'ember'`
 
 Project = DS.Model.extend BaseModelMixin,
-  owner: DS.belongsTo 'user', async: true, inverse: 'projects'
+  owner: DS.belongsTo 'user', inverse: 'projects'
   name: DS.attr 'string'
   packageName: DS.attr 'string'
   platform: DS.attr 'number'

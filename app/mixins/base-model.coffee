@@ -3,8 +3,8 @@
 `import { moment, ago } from 'ember-moment/computed';`
 
 BaseModelMixin = Ember.Mixin.create
-  createdBy: DS.belongsTo 'user', async: true
-  updatedBy: DS.belongsTo 'user', async: true
+  createdBy: DS.belongsTo 'user'
+  updatedBy: DS.belongsTo 'user'
   createdOn: DS.attr 'date'
   updatedOn: DS.attr 'date'
 

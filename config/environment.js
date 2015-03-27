@@ -39,7 +39,8 @@ module.exports = function(environment) {
       deleteProject: 'project/delete',
       recover: 'recover',
       reset: 'reset',
-      init: 'init'
+      init: 'init',
+      manual: 'manual'
     }
   };
 

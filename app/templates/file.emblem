@@ -40,6 +40,9 @@
               if model.report
                 a.btn.btn-small.btn-info.w-100.m-t click=getPDFReportLink PDF Report
 
+              if model.isRequestManualEnabled
+                a.btn.btn-small.btn-info.w-100.m-t click=requestManual Manual Test
+
 
     .row.m-t.animated.fadeIn
       each analysis in sortedAnalysis

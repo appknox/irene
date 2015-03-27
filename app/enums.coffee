@@ -54,4 +54,11 @@ ENUMS =
     READY: 2
     SHUTTING_DOWN: 3
 
+  MANUAL:
+    UNKNOWN: -1
+    NONE: 0
+    REQUESTED: 1
+    ASSESSING: 2
+    DONE: 3
+
 `export default ENUMS;`
