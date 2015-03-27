@@ -1,32 +1,27 @@
-header.header.header-md.navbar.navbar-fixed-top-xs.box-shadow
-  div.navbar-header.aside-md.dk
-    link-to 'index' class="navbar-brand"
-      img.m-r-sm src="/assets/images/logo.png" alt="scale"
-
-  ul.nav.navbar-nav
-    link-to 'index' tagName="li"
-      a href=view.href Dashboard
-
-  ul.nav.navbar-nav
-    link-to 'pricing' tagName="li"
-      a href=view.href Pricing
-
-  ul.nav.navbar-nav
-    li
-      a href="https://gitter.im/xysec/support" target="_blank"
-        | Support
-
-  ul.nav.navbar-nav.pull-right.nav-user.user.user-fix
-    li#user-dropdown
-      span.thumb-sm.avatar.pull-left
+section.row
+  div#nav.bg-black.col-md-2
+    div.clearfix.wrapper.dk.hidden-xs
+      link-to 'index' class="navbar-brand w-100" tagName="ul"
+        img.m-r-sm src="/assets/images/logo.png" alt="scale"
+      ul.nav.navbar-nav.nav-user.user
         = gravatar-image email=session.user.email alt=session.user.email
-      = session.user.username
+        = session.user.username
 
-    = popup-menu for="user-dropdown" on="click" class="animated bounceIn"
-      li
-        ul.dropdown-menu.dropdown-menu-fix.show
-          li
-            a click=invalidateSession Logout
+    nav.nav-primary.hidden-xs
+      ul.nav.nav-main
 
-div#content.padder
-  = yield
+        link-to 'index' tagName="li"
+          a href=view.href Dashboard
+
+        link-to 'pricing' tagName="li"
+          a href=view.href Pricing
+
+        li
+          a href="https://gitter.im/xysec/support" target="_blank"
+            | Support
+
+        li
+          a click=invalidateSession Logout
+
+  div#content.col-md-10.padder
+    = yield
