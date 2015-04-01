@@ -1,27 +1,26 @@
-section.row
-  div#nav.bg-black.col-md-2
-    div.clearfix.wrapper.dk.hidden-xs
-      link-to 'index' class="navbar-brand w-100" tagName="ul"
-        img.m-r-sm src="/assets/images/logo.png" alt="scale"
-      ul.nav.navbar-nav.nav-user.user
-        = gravatar-image email=session.user.email alt=session.user.email
-        = session.user.username
+div#nav.bg-black
+  div.clearfix.wrapper.dk.hidden-xs
+    link-to 'index' class="navbar-brand w-100" tagName="ul"
+      img.m-r-sm src="/assets/images/logo.png" alt="scale"
+    ul.nav.navbar-nav.nav-user.user
+      = gravatar-image email=session.user.email alt=session.user.email
+      = session.user.username
 
-    nav.nav-primary.hidden-xs
-      ul.nav.nav-main
+  nav.nav-primary.hidden-xs
+    ul.nav.nav-main
 
-        link-to 'index' tagName="li"
-          a href=view.href Dashboard
+      link-to 'index' tagName="li"
+        a href=view.href Dashboard
 
-        link-to 'pricing' tagName="li"
-          a href=view.href Pricing
+      link-to 'pricing' tagName="li"
+        a href=view.href Pricing
 
-        li
-          a href="https://gitter.im/xysec/support" target="_blank"
-            | Support
+      li
+        a href="https://gitter.im/xysec/support" target="_blank"
+          | Support
 
-        li
-          a click=invalidateSession Logout
+      li
+        a click=invalidateSession Logout
 
-  div#content.col-md-10.padder
-    = yield
+div#content.padder
+  = yield

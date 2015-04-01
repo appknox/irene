@@ -1,4 +1,4 @@
-section#content.m-t-lg.wrapper-md.animated.bounceIn
+section.m-t-lg.wrapper-md.animated.bounceIn
   .container.aside-xl
     .navbar-brand.block
     section.m-b-lg
