@@ -14,7 +14,7 @@ getB64Token = (session)->
 IreneAuthorizer = Base.extend
 
   authorize: (jqXHR, requestOptions) ->
-    token = getB64Token(@get "session")
+    token = getB64Token @get "session"
     jqXHR.setRequestHeader 'Authorization', "Basic #{token}"
 
 `export default IreneAuthorizer;`
