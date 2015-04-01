@@ -1,6 +1,7 @@
 `import Ember from 'ember';`
 `import Notify from 'ember-notify';`
 `import serialize from 'irene/utils/serialize';`
+`import ENV from 'irene/config/environment';`
 
 GCSUploader = Ember.Uploader.extend
   ###
@@ -59,7 +60,10 @@ GCSUploader = Ember.Uploader.extend
     @sign file
       .then (json) ->
         data = self.setupFormData file, extra
-        url  = json.base_url  # "#{json.base_url}?#{serialize json.query_params}"
+        if ENV.useFakeS3
+          url = ENV.fakeS3URL + file.name
+        else
+          url  = json.base_url  # "#{json.base_url}?#{serialize json.query_params}"
         self.set "isUploading", true
 
         self.ajax(url, data, "PUT", json.headers)

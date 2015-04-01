@@ -6,6 +6,8 @@ module.exports = function(environment) {
     environment: environment,
     baseURL: '/',
     locationType: 'auto',
+    useFakeS3: false,
+    fakeS3URL: 'http://localhost:4000/',
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
@@ -54,9 +56,11 @@ module.exports = function(environment) {
     if (!ENV.usePretender) {
       ENV.APP.API_HOST = 'http://localhost:8000';
     }
-    ENV.socketHost = 'localhost'
-    ENV.socketPort = '8008'
+    ENV.socketHost = 'localhost';
+    ENV.socketPort = '8008';
     ENV.socketSecure = false;
+
+    ENV.useFakeS3 = true;
   }
 
   if (environment === 'test') {
@@ -101,7 +105,7 @@ module.exports = function(environment) {
   }
 
   ENV.contentSecurityPolicy = {
-    "connect-src": "'self' storage.googleapis.com ws://localhost:8008 http://localhost:8008 ws://localhost:6080/websockify sherlock-test.s3.amazonaws.com " + ENV.APP.API_HOST,
+    "connect-src": "'self' storage.googleapis.com ws://localhost:8008 http://localhost:8008 ws://localhost:6080/websockify sherlock-test.s3.amazonaws.com " + ENV.APP.API_HOST + " " + ENV.fakeS3URL,
     'img-src': "'self' www.gravatar.com placehold.it storage.googleapis.com s3.amazonaws.com",
     'style-src': "'self' 'unsafe-inline'",
     'script-src': "'self' 'unsafe-eval' localhost:35729 0.0.0.0:35729 storage.googleapis.com"

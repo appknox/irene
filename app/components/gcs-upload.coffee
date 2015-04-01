@@ -19,6 +19,10 @@ GCSUploadComponent = Ember.FileField.extend
         file_key_signed: file_key_signed
       Ember.$.post uploadedUrl, data
 
+    uploader.on 'progress', (e) ->
+      # Use `e.percent` to get percentage
+      debugger
+
     if !Ember.isEmpty files
       uploader.upload files[0]
   ).observes 'files'
