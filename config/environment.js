@@ -92,7 +92,6 @@ module.exports = function(environment) {
   }
 
   if (environment === 'staging') {
-
     ENV.APP.LOG_ACTIVE_GENERATION = true;
     ENV.APP.LOG_TRANSITIONS = true;
     ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
