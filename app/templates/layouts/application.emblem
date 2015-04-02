@@ -24,5 +24,13 @@ div#nav.bg-black
       li
         a click=invalidateSession Logout
 
+  if controllers.application.currentUser.isProcessing
+    .panel.panel-info
+      .panel-heading
+        .panel-title Please Wait
+      .panel-body
+        | The app that you uploaded (or) the links that you submitted is being processed. Please wait for a while.
+
+
 div#content.padder
   = yield

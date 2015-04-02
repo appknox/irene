@@ -12,6 +12,7 @@ User = DS.Model.extend
   scanCount: DS.attr 'number'
   namespaces: DS.attr 'string'
   scansLeft: DS.attr 'number'
+  processing: DS.attr 'number'
   pricing: DS.belongsTo 'pricing', inverse: 'users'
   expiryDate: DS.attr 'date'
 
@@ -40,5 +41,10 @@ User = DS.Model.extend
     else
       "search"
   ).property "pricing.pricingType"
+
+  isProcessing: (->
+    processing = @get "processing"
+    processing > 0
+  ).property "processing"
 
 `export default User;`
