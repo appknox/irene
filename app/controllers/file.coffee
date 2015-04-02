@@ -7,6 +7,8 @@
 
 FileController = Ember.ObjectController.extend
 
+  needs: ['application']
+
   sortedAnalysis: (->
     analyses = @get "model.analyses"
     analyses.sortBy('risk').reverse()

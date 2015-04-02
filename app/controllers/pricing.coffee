@@ -4,6 +4,8 @@
 
 PricingController = Ember.Controller.extend
 
+  needs: ['application']
+
   model: (->
     @store.all "pricing"
   ).property()
