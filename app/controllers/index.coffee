@@ -42,15 +42,11 @@ IndexController = Ember.ArrayController.extend SocketMixin,
     deleteProject: (project) ->
       postUrl = [ENV.APP.API_BASE, ENV.endpoints.deleteProject, project.get "id"].join '/'
       that = @
-      Ember.$.post postUrl, data
+      Ember.$.post postUrl
         .then ->
-          that.set "storeURL", null
-          Notify.success "Hang in there while we process your URL"
+          Notify.success "Your project will be deleted momentarily."
         .fail (xhr, message, status) ->
-          if xhr.status is 401
-            Notify.error xhr.responseJSON.message
-          else
-            Notify.error "A network error occured! Please try again later"
+          Notify.error xhr.responseJSON.message
 
 
 `export default IndexController;`
