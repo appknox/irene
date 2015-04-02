@@ -1,5 +1,6 @@
-h3.m-b-xs.text-black Dashboard
 .row.m-b
+  .col-sm-12
+    h3.m-b-xs.text-black Dashboard
   .col-sm-12
     .panel.b-a
       .row.m-n
