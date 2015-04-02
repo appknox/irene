@@ -5,7 +5,7 @@ section.panel
       = project.name
       = fa-icon project.platformIconClass
 
-  .row.panel-body
+  .row.panel-body.panel-body-fix-2
     if project.lastFile
       link-to 'file' project.lastFile.id
         = view "pie-chart" file=project.lastFile
