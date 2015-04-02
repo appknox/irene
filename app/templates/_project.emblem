@@ -30,7 +30,7 @@ section.panel
       .col-md-1 data-hint="All Files"
         link-to 'project.files' project.id
           = fa-icon "files-o"
-      .col-md-1 data-hint="Settings"
+      /.col-md-1 data-hint="Settings"
         link-to 'project.settings' project.id
           = fa-icon "wrench"
       .col-md-1.pull-right data-hint="Delete" click="deleteProject project"
