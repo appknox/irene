@@ -38,7 +38,7 @@ module.exports = function(environment) {
       dynamicShutdown: 'dynamic_shutdown',
       signedPdfUrl: 'signed_pdf_url',
       storeUrl: 'store_url',
-      deleteProject: 'project/delete',
+      deleteProject: 'projects/delete',
       recover: 'recover',
       reset: 'reset',
       init: 'init',

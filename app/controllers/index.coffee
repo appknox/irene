@@ -40,6 +40,7 @@ IndexController = Ember.ArrayController.extend SocketMixin,
             Notify.error "A network error occured! Please try again later"
 
     deleteProject: (project) ->
+      return if !confirm "Do you want to delete `#{project.get "name"}` project?"
       postUrl = [ENV.APP.API_BASE, ENV.endpoints.deleteProject, project.get "id"].join '/'
       that = @
       Ember.$.post postUrl
