@@ -1,6 +1,4 @@
-h4 All Files
-
-.row.m-t
+.row
   each file in model.sortedFiles
     = render "_file" file
   else
