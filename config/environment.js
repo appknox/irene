@@ -105,7 +105,7 @@ module.exports = function(environment) {
   }
 
   ENV.contentSecurityPolicy = {
-    "connect-src": "'self' storage.googleapis.com ws://localhost:8008 http://localhost:8008 ws://localhost:6080/websockify sherlock-test.s3.amazonaws.com " + ENV.APP.API_HOST + " " + ENV.fakeS3URL,
+    "connect-src": "'self' storage.googleapis.com ws://localhost:8008 http://localhost:8008 ws://localhost:6080/websockify sherlock-test.s3.amazonaws.com sherlock-staging.s3.amazonaws.com " + ENV.APP.API_HOST + " " + ENV.fakeS3URL,
     'img-src': "'self' www.gravatar.com placehold.it storage.googleapis.com s3.amazonaws.com",
     'style-src': "'self' 'unsafe-inline'",
     'script-src': "'self' 'unsafe-eval' localhost:35729 0.0.0.0:35729 storage.googleapis.com"

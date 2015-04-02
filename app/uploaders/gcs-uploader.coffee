@@ -59,14 +59,10 @@ GCSUploader = Ember.Uploader.extend
 
     @sign file
       .then (json) ->
-        data = self.setupFormData file, extra
-        if ENV.useFakeS3
-          url = ENV.fakeS3URL + file.name
-        else
-          url  = json.base_url  # "#{json.base_url}?#{serialize json.query_params}"
+        url  = json.base_url  # "#{json.base_url}?#{serialize json.query_params}"
         self.set "isUploading", true
 
-        self.ajax(url, data, "PUT", json.headers)
+        self.ajax(url, file, "PUT", json.headers)
           .then (respData) ->
             debugger
             Notify.success "File Uploaded Successfully. Please wait while we process your file."
