@@ -43,6 +43,10 @@ module.exports = function(environment) {
       reset: 'reset',
       init: 'init',
       manual: 'manual'
+    },
+    webengage: {
+      code: '~13410634d',
+      src: 'http://cdn.widgets.webengage.com'
     }
   };
 
@@ -61,6 +65,7 @@ module.exports = function(environment) {
     ENV.socketSecure = false;
 
     ENV.useFakeS3 = true;
+
   }
 
   if (environment === 'test') {
@@ -89,6 +94,8 @@ module.exports = function(environment) {
     ENV.socketSecure = true;
     ENV.socketPort = 443;
 
+    ENV.webengage.code = '~15ba20801'
+    ENV.webengage.src = 'https://ssl.widgets.webengage.com'
   }
 
   if (environment === 'staging') {
@@ -104,10 +111,10 @@ module.exports = function(environment) {
   }
 
   ENV.contentSecurityPolicy = {
-    "connect-src": "'self' storage.googleapis.com ws://localhost:8008 http://localhost:8008 ws://localhost:6080/websockify sherlock-test.s3.amazonaws.com sherlock-staging.s3.amazonaws.com " + ENV.APP.API_HOST + " " + ENV.fakeS3URL,
-    'img-src': "'self' www.gravatar.com placehold.it storage.googleapis.com s3.amazonaws.com",
+    "connect-src": "'self' storage.googleapis.com ws://localhost:8008 http://localhost:8008 ws://localhost:6080/websockify *.s3.amazonaws.com " + ENV.APP.API_HOST + " " + ENV.fakeS3URL,
+    'img-src': "'self' www.gravatar.com placehold.it storage.googleapis.com s3.amazonaws.com *.cloudfront.net *.amazonaws.com",
     'style-src': "'self' 'unsafe-inline'",
-    'script-src': "'self' 'unsafe-eval' localhost:35729 0.0.0.0:35729 storage.googleapis.com"
+    'script-src': "'self' 'unsafe-eval' localhost:35729 0.0.0.0:35729 storage.googleapis.com *.webengage.com *.amazonaws.com *.cloudfront.net"
   };
 
   ENV.APP.API_BASE = [ENV.APP.API_HOST, ENV.APP.API_NAMESPACE].join("/");

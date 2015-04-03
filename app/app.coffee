@@ -39,4 +39,17 @@ App = Ember.Application.extend
 
 loadInitializers App, ENV.modulePrefix
 
+window._weq = window._weq or {}
+window._weq['webengage.licenseCode'] = ENV.webengage.code
+window._weq['webengage.widgetVersion'] = "4.0"
+
+webengage = (d) ->
+  _we = d.createElement 'script'
+  _we.type = 'text/javascript'
+  _we.async = true
+  _we.src = "#{ENV.webengage.src}/js/widget/webengage-min-v-4.0.js"
+  d.body.appendChild _we
+
+webengage document
+
 `export default App;`
