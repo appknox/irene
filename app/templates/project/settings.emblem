@@ -1,3 +1,2 @@
-.row
-  .col-md-12
-    h1 Foo
+.col-md-12
+  h4 Settings

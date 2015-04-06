@@ -2,4 +2,5 @@
   .col-md-12
     h3.m-b-xs.text-black #{model.name}
 
-= outlet
+.row
+  = outlet
