@@ -15,8 +15,11 @@ User = DS.Model.extend
   processing: DS.attr 'number'
   pricing: DS.belongsTo 'pricing', inverse: 'users'
   expiryDate: DS.attr 'date'
+  hasGithubToken: DS.attr 'boolean'
 
   humanizedExpiryDate: ago 'expiryDate', true
+
+  urls:null
 
   statText: (->
     pricingType = @get "pricing.pricingType"

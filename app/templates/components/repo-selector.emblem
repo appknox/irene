@@ -1,0 +1,8 @@
+button.btn.btn-primary.btn-lg click=toggleDropdown
+    | Repo &nbsp;
+    span.caret
+ul.dropdown-menu
+  each repo in githubRepos
+    li
+      a{action "selectRepo" repo on="click"}
+        = repo

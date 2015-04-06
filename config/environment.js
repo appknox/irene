@@ -42,7 +42,8 @@ module.exports = function(environment) {
       recover: 'recover',
       reset: 'reset',
       init: 'init',
-      manual: 'manual'
+      manual: 'manual',
+      githubRepos: 'github_repos'
     },
     webengage: {
       code: '~13410634d',

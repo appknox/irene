@@ -25,6 +25,7 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
         store.pushPayload 'ratio', ratio: result.ratio
         user = store.pushPayload 'user', user: result.user
         store.find('user', result.user.id).then (user)->
+          user.set 'urls', result.urls
           controller.set 'currentUser', user
           controller.subscribe user.get "uuid"
         resolve result
