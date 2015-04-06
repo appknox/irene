@@ -68,4 +68,12 @@ ENUMS =
     UPLOADING: 2
     PROCESSING: 3
 
+
+# Populate `CHOICES`
+for enumName, enumValues of ENUMS
+  choices = []
+  for key, value of enumValues
+    choices.push {key: key, value: value}
+  ENUMS[enumName]['CHOICES'] = choices
+
 `export default ENUMS;`
