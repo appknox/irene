@@ -27,10 +27,10 @@ ResetController = Ember.Controller.extend
       data =
         username: username
       Ember.$.post recoverUrl, data
-        .then (data, status, xhr)->
-          Notify.success data.message, closeAfter: 7000
-        .fail (xhr, message, status) ->
-          Notify.error xhr.responseJSON.message
+      .then (data, status, xhr)->
+        Notify.success data.message, closeAfter: 7000
+      .fail (xhr, message, status) ->
+        Notify.error xhr.responseJSON.message
 
 `export default ResetController;`
 

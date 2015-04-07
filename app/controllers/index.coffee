@@ -30,14 +30,14 @@ IndexController = Ember.ArrayController.extend SocketMixin,
       postUrl = [ENV.APP.API_BASE, ENV.endpoints.storeUrl].join '/'
       that = @
       Ember.$.post postUrl, data
-        .then ->
-          that.set "storeURL", null
-          Notify.success "Hang in there while we process your URL"
-        .fail (xhr, message, status) ->
-          if xhr.status is 401
-            Notify.error xhr.responseJSON.message
-          else
-            Notify.error "A network error occured! Please try again later"
+      .then ->
+        that.set "storeURL", null
+        Notify.success "Hang in there while we process your URL"
+      .fail (xhr, message, status) ->
+        if xhr.status is 401
+          Notify.error xhr.responseJSON.message
+        else
+          Notify.error "A network error occured! Please try again later"
 
     deleteProject: (project) ->
       return if !confirm "Do you want to delete `#{project.get "name"}` project?"

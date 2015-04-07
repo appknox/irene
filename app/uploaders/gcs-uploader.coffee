@@ -45,11 +45,11 @@ GCSUploader = Ember.Uploader.extend
           content_type: "application/octet-stream"
 
       self._ajax settings
-        .then (json)->
-          resolve json
-        , ->
-          Notify.error "Server failed to return Signed URL"
-          reject()
+      .then (json)->
+        resolve json
+      , ->
+        Notify.error "Server failed to return Signed URL"
+        reject()
 
 
   upload: (file, extra={}) ->

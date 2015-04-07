@@ -38,11 +38,11 @@ ResetController = Ember.Controller.extend
         token: token
         password: password
       Ember.$.post resetUrl, data
-        .then ->
-          that.transitionTo "login"
-          Notify.success "Pasword is successfully reset!"
-        .fail (xhr, message, status) ->
-          Notify.error xhr.responseJSON.message
+      .then ->
+        that.transitionTo "login"
+        Notify.success "Pasword is successfully reset!"
+      .fail (xhr, message, status) ->
+        Notify.error xhr.responseJSON.message
 
 `export default ResetController;`
 
