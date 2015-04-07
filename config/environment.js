@@ -43,7 +43,8 @@ module.exports = function(environment) {
       reset: 'reset',
       init: 'init',
       manual: 'manual',
-      githubRepos: 'github_repos'
+      githubRepos: 'github_repos',
+      setGithub: 'set_github'
     },
     webengage: {
       code: '~13410634d',
