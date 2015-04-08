@@ -21,6 +21,8 @@ RepoSelectorComponent = Ember.Component.extend
 
   ).on "init"
 
+  mouseLeave: ->
+      @set "isOpen", false
 
   actions:
 
@@ -28,6 +30,7 @@ RepoSelectorComponent = Ember.Component.extend
       @set "isOpen", !@get "isOpen"
 
     selectRepo: (repo)->
+      @set "isOpen", false
       projectId = @get "project.id"
       setGithub = [ENV.APP.API_BASE, ENV.endpoints.setGithub, projectId].join '/'
       that = @
@@ -35,9 +38,9 @@ RepoSelectorComponent = Ember.Component.extend
         repo: repo
       Ember.$.post setGithub, data
       .then (data)->
-        debugger
+        Notify.success "Repo successfully integrated"
       .fail ->
-        debugger
+        Notify.error "Something went wrong whe trying to update this repo"
 
 
 `export default RepoSelectorComponent`

@@ -12,6 +12,7 @@ Project = DS.Model.extend BaseModelMixin,
   version: DS.attr 'string'
   files: DS.hasMany 'file', inverse: 'project'
   fileCount: DS.attr 'number'
+  githubRepo: DS.attr 'string'
 
   sortProperties: ["updatedOn:desc"]
   sortedFiles: Ember.computed.sort 'files', 'sortProperties'

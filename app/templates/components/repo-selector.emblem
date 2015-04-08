@@ -1,3 +1,9 @@
+if project.githubRepo
+  h5
+    | This project is integrated with GitHub repo &nbsp;
+    code
+      = project.githubRepo
+
 button.btn.btn-primary.btn-lg click=toggleDropdown
     | Repo &nbsp;
     span.caret

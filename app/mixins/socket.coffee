@@ -51,6 +51,10 @@ SocketMixin = Ember.Mixin.create
       Notify.info "New project added"
       @store.push "project", @store.normalize "project", data
 
+    project_updated: (data) ->
+      Notify.info "Project `#{data.name}` updated"
+      @store.push "project", @store.normalize "project", data
+
     project_deleted: (data) ->
       Notify.info "Project `#{data.name}` deleted!"
       @store.find('project', data.id).then (project) ->
