@@ -79,6 +79,15 @@ if (app.env == 'staging') {
   });
 }
 
+if (app.env == 'saprod' || app.env == 'sadev') {
+  tree = assetRev(tree, {
+    enabled: true,
+    extensions: ['js', 'css', 'png', 'jpg', 'gif'],
+    replaceExtensions: ['html', 'js', 'css'],
+    prepend: 'app://appknox/dist/'
+  });
+}
+
 tree = htmlmin(tree, options);
 
 module.exports = tree;

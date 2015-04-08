@@ -91,6 +91,41 @@ module.exports = function(environment) {
 
   }
 
+  if (environment === 'saprod') {
+    // Stand Alone Production
+    ENV.APP.LOG_RESOLVER = false;
+    ENV.APP.LOG_ACTIVE_GENERATION = false;
+    ENV.APP.LOG_TRANSITIONS = false;
+    ENV.APP.LOG_TRANSITIONS_INTERNAL = false;
+    ENV.APP.LOG_VIEW_LOOKUPS = false;
+
+    ENV.usePretender = false;
+    ENV.APP.API_HOST = 'beta.appknox.com';
+    ENV.socketHost = 'ws.appknox.com';
+    ENV.socketSecure = true;
+    ENV.socketPort = 443;
+
+  }
+
+  if (environment === 'sadev') {
+    // Stand Alone dev
+    //ENV.APP.LOG_RESOLVER = true;
+    ENV.APP.LOG_ACTIVE_GENERATION = true;
+    ENV.APP.LOG_TRANSITIONS = true;
+    ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
+    ENV.APP.LOG_VIEW_LOOKUPS = true;
+    ENV.usePretender = false;
+    ENV.APP.API_HOST = 'http://localhost:8000';
+    ENV['simple-auth'] = {
+      crossOriginWhitelist: [ENV.APP.API_HOST],
+      authorizer: 'authorizer:irene',
+      authenticator: 'authenticator:irene'
+    };
+    ENV.socketHost = 'localhost'
+    ENV.socketPort = '8008'
+    ENV.socketSecure = false;
+  }
+
   ENV.contentSecurityPolicy = {
     "connect-src": "'self' storage.googleapis.com ws://localhost:8008 http://localhost:8008 ws://localhost:6080/websockify sherlock-test.s3.amazonaws.com " + ENV.APP.API_HOST,
     'img-src': "'self' www.gravatar.com placehold.it storage.googleapis.com",
