@@ -1,6 +1,6 @@
 `import Ember from 'ember'`
-`import ENUMS from '../enums';`
-`import ENV from '../config/environment';`
+`import ENUMS from 'irene/enums';`
+`import ENV from 'irene/config/environment';`
 
 VncViewerComponent = Ember.Component.extend
   file: null
@@ -40,12 +40,12 @@ VncViewerComponent = Ember.Component.extend
 
     dynamicScan: ->
       file_id = @get "file.id"
-      uploadUrl = [ENV.APP.API_HOST, 'api/dynamic', file_id].join '/'
+      uploadUrl = [ENV.APP.API_BASE, ENV.endpoints.dynamic, file_id].join '/'
       $.get uploadUrl
 
     dynamicShutdown: ->
       file_id = @get "file.id"
-      uploadUrl = [ENV.APP.API_HOST, 'api/dynamic_shutdown', file_id].join '/'
+      uploadUrl = [ENV.APP.API_BASE, ENV.endpoints.dynamicShutdown, file_id].join '/'
       $.get uploadUrl
 
 `export default VncViewerComponent`

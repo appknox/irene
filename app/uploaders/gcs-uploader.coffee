@@ -1,6 +1,7 @@
 `import Ember from 'ember';`
 `import Notify from 'ember-notify';`
-`import serialize from '../utils/serialize';`
+`import serialize from 'irene/utils/serialize';`
+`import ENV from 'irene/config/environment';`
 
 GCSUploader = Ember.Uploader.extend
   ###
@@ -44,11 +45,11 @@ GCSUploader = Ember.Uploader.extend
           content_type: "application/octet-stream"
 
       self._ajax settings
-        .then (json)->
-          resolve json
-        , ->
-          Notify.error "Server failed to return Signed URL"
-          reject()
+      .then (json)->
+        resolve json
+      , ->
+        Notify.error "Server failed to return Signed URL"
+        reject()
 
 
   upload: (file, extra={}) ->
@@ -58,11 +59,10 @@ GCSUploader = Ember.Uploader.extend
 
     @sign file
       .then (json) ->
-        data = self.setupFormData file, extra
         url  = json.base_url  # "#{json.base_url}?#{serialize json.query_params}"
         self.set "isUploading", true
 
-        self.ajax(url, data, "PUT", json.headers)
+        self.ajax(url, file, "PUT", json.headers)
           .then (respData) ->
             debugger
             Notify.success "File Uploaded Successfully. Please wait while we process your file."

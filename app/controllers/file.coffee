@@ -1,9 +1,13 @@
 `import Ember from 'ember'`
 `import EmberCLIICAjax from 'ic-ajax';`
-`import serialize from '../utils/serialize';`
+`import serialize from 'irene/utils/serialize';`
+`import ENV from 'irene/config/environment';`
+`import Notify from 'ember-notify';`
 
 
 FileController = Ember.ObjectController.extend
+
+  needs: ['application']
 
   sortedAnalysis: (->
     analyses = @get "model.analyses"
@@ -14,12 +18,21 @@ FileController = Ember.ObjectController.extend
 
     getPDFReportLink: ->
       file_id = @get "model.id"
-      applicationAdapter = @store.adapterFor 'application'
-      host = applicationAdapter.get 'host'
-      namespace = applicationAdapter.get 'namespace'
-      signedUrl = [host, namespace, 'signed_pdf_url', file_id].join '/'
+      signedUrl = [ENV.APP.API_BASE, ENV.endpoints.signedPdfUrl, file_id].join '/'
       xhr = EmberCLIICAjax url:signedUrl, type: "get"
       xhr.then (result) ->
         window.location = result.base_url
+
+    requestManual: ->
+      if !@get "model.isOkToRequestManual"
+        return Notify.error "Please susbcribe to a standard / custom plan to avail this feature"
+      file_id = @get "model.id"
+      manualUrl = [ENV.APP.API_BASE, ENV.endpoints.manual, file_id].join '/'
+      xhr = EmberCLIICAjax url:manualUrl, type: "get"
+      resolve = (result) ->
+        Notify.info "Manual assessment requested."
+      reject = (result)->
+        Notify.error "Something went wrong."
+      xhr.then resolve, reject
 
 `export default FileController`

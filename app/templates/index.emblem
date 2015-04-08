@@ -1,5 +1,6 @@
-h3.m-b-xs.text-black Dashboard
 .row.m-b
+  .col-sm-12
+    h3.m-b-xs.text-black Dashboard
   .col-sm-12
     .panel.b-a
       .row.m-n
@@ -49,7 +50,6 @@ hr
 
   .col-md-3
     label.file-label.btn.btn-primary.btn-lg.w-100
-      | Upload App
       = gcs-upload store=controller.store
 
 hr
@@ -58,13 +58,8 @@ h3.m-b-xs.text-black Projects
 
 .row.m-b
   each project in sortedModel
-    if project.lastFile
-      if project.hasMultipleFiles
-        link-to 'project' project.id class="col-sm-6 col-md-4"
-          = partial "_project"
-      else
-        link-to 'file' project.lastFile.id class="col-sm-6 col-md-4"
-          = partial "_project"
+    .col-sm-6.col-md-4
+      = partial "_project"
 
   else
     h3 You have not created any projects yet!

@@ -1,6 +1,6 @@
 `import Ember from 'ember'`
 `import Notify from 'ember-notify';`
-`import ENUMS from '../enums';`
+`import ENUMS from 'irene/enums';`
 
 SocketMixin = Ember.Mixin.create
 
@@ -50,6 +50,15 @@ SocketMixin = Ember.Mixin.create
     project_new: (data) ->
       Notify.info "New project added"
       @store.push "project", @store.normalize "project", data
+
+    project_updated: (data) ->
+      Notify.info "Project `#{data.name}` updated"
+      @store.push "project", @store.normalize "project", data
+
+    project_deleted: (data) ->
+      Notify.info "Project `#{data.name}` deleted!"
+      @store.find('project', data.id).then (project) ->
+        project.deleteRecord()
 
     message: (data) ->
       message = data.message

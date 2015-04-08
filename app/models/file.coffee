@@ -1,6 +1,7 @@
 `import DS from 'ember-data';`
-`import BaseModelMixin from '../mixins/base-model';`
-`import ENUMS from '../enums';`
+`import BaseModelMixin from 'irene/mixins/base-model';`
+`import ENUMS from 'irene/enums';`
+`import Ember from 'ember'`
 
 File = DS.Model.extend BaseModelMixin,
   project: DS.belongsTo 'project', inverse: 'files'
@@ -13,6 +14,7 @@ File = DS.Model.extend BaseModelMixin,
   dynamicStatus: DS.attr 'number'
   analyses: DS.hasMany 'analysis', inverse: 'file'
   report: DS.attr 'string'
+  manual: DS.attr 'number'
 
   isNoneStaus: (->
     status = @get 'dynamicStatus'
@@ -23,6 +25,17 @@ File = DS.Model.extend BaseModelMixin,
     status = @get 'dynamicStatus'
     status is ENUMS.DYNAMIC_STATUS.READY
   ).property 'dynamicStatus'
+
+  isOkToRequestManual: (->
+    try pricing = @get "project.owner.pricing"
+    !Ember.isEmpty(pricing) and pricing.get("offer") in [
+      ENUMS.OFFER.NONE, ENUMS.OFFER.CUSTOM]
+  ).property "project.owner.pricing"
+
+  isRequestManualEnabled: (->
+    manual = @get "manual"
+    manual is ENUMS.MANUAL.NONE
+  ).property "manual"
 
   isBooting: (->
     status = @get 'dynamicStatus'

@@ -9,6 +9,7 @@ Pricing = DS.Model.extend
   price: DS.attr 'number'
   isBulky: DS.attr 'boolean'
   offer: DS.attr 'number'
+  users: DS.hasMany 'user', inverse: 'pricing'
 
   descriptions: (->
     description = @get "description"

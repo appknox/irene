@@ -1,13 +1,13 @@
 import Ember from 'ember';
-import Application from '../../app';
-import Router from '../../router';
-import config from '../../config/environment';
+import Application from 'irene/app';
+import Router from 'irene/router';
+import ENV from 'irene/config/environment';
 import 'simple-auth-testing/test-helpers';
 
 export default function startApp(attrs) {
   var App;
 
-  var attributes = Ember.merge({}, config.APP);
+  var attributes = Ember.merge({}, ENV.APP);
   attributes = Ember.merge(attributes, attrs); // use defaults, but you can override;
 
   Router.reopen({

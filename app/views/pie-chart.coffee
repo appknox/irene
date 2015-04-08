@@ -1,5 +1,5 @@
 `import Ember from 'ember'`
-`import ENUMS from '../enums'`
+`import ENUMS from 'irene/enums'`
 
 getRiskCountObject = (risks=[])->
   riskCountObject = {}

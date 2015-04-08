@@ -1,6 +1,6 @@
 `import DS from 'ember-data';`
 `import { moment, ago } from 'ember-moment/computed';`
-`import ENUMS from '../enums'`
+`import ENUMS from 'irene/enums'`
 
 User = DS.Model.extend
   uuid: DS.attr 'string'
@@ -12,21 +12,25 @@ User = DS.Model.extend
   scanCount: DS.attr 'number'
   namespaces: DS.attr 'string'
   scansLeft: DS.attr 'number'
-  pricingType: DS.attr 'number'
+  processing: DS.attr 'number'
+  pricing: DS.belongsTo 'pricing', inverse: 'users'
   expiryDate: DS.attr 'date'
+  hasGithubToken: DS.attr 'boolean'
 
   humanizedExpiryDate: ago 'expiryDate', true
 
+  urls:null
+
   statText: (->
-    pricingType = @get "pricingType"
+    pricingType = @get "pricing.pricingType"
     if pricingType is ENUMS.PRICING.TIME_LIMIT
       "Expiry Date"
     else
       "Scans Left"
-  ).property "pricingType"
+  ).property "pricing.pricingType"
 
   statValue: (->
-    pricingType = @get "pricingType"
+    pricingType = @get "pricing.pricingType"
     if pricingType is ENUMS.PRICING.TIME_LIMIT
       @get "humanizedExpiryDate"
     else
@@ -34,11 +38,16 @@ User = DS.Model.extend
   ).property "scansLeft", "expiryDate"
 
   statIcon: (->
-    pricingType = @get "pricingType"
+    pricingType = @get "pricing.pricingType"
     if pricingType is ENUMS.PRICING.TIME_LIMIT
       "calendar"
     else
       "search"
-  ).property "pricingType"
+  ).property "pricing.pricingType"
+
+  isProcessing: (->
+    processing = @get "processing"
+    processing > 0
+  ).property "processing"
 
 `export default User;`
