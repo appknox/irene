@@ -61,14 +61,6 @@ ENUMS =
     ASSESSING: 2
     DONE: 3
 
-  ACTIVITY:
-    UNKNOWN: -1
-    NONE: 0
-    DOWNLOADING: 1
-    UPLOADING: 2
-    PROCESSING: 3
-
-
 # Populate `CHOICES`
 for enumName, enumValues of ENUMS
   choices = []
