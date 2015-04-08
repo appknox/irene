@@ -32,7 +32,6 @@ FileController = Ember.ObjectController.extend
       resolve = (result) ->
         Notify.info "Manual assessment requested."
       reject = (result)->
-        debugger
         Notify.error "Something went wrong."
       xhr.then resolve, reject
 
