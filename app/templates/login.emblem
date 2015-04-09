@@ -3,7 +3,7 @@ section.m-t-lg.wrapper-md.animated.bounceIn.corrector
     .navbar-brand.block
     section.m-b-lg
       header.wrapper.text-center
-        img.m-b src="/assets/images/logo.png" alt="Appknox"
+        img.m-b src="/assets/images/logo-dark.png" alt="Appknox"
         br
         .m-t Login to get your app secured.
       form submit='login'
