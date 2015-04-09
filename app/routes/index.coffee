@@ -5,6 +5,9 @@
 IndexRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
   setupController: (controller)->
+    if controller.get 'ratio'
+      # Return if the ratio is already assigned.
+      return
     ratio = @store.push 'ratio',
       id: 1
       affected: 0
