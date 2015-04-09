@@ -12,6 +12,14 @@ IndexController = Ember.ArrayController.extend SocketMixin,
 
   ratio: null
 
+  setRatioOnInit: (->
+    ratio = @store.push 'ratio',
+      id: 1
+      affected: 0
+      unaffected: 1
+    @set "ratio", ratio
+  ).on "init"
+
   model:( ->
     @get "controllers.application.currentUser.projects"
   ).property "controllers.application.currentUser"
