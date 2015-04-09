@@ -1,4 +1,4 @@
-div#nav.bg-black
+div#nav.bg-solarized
   div.clearfix.wrapper.dk.hidden-xs
     link-to 'index' class="navbar-brand w-100 animated flip" tagName="ul"
       img.m-r-sm src="/assets/images/logo.png" alt="scale"

@@ -10,7 +10,7 @@
 
 .bg-dark {
 	.color-variant(@brand-dark, 5%, 10%, 5%, 10%);
-	.font-variant(@brand-dark, lighten(@brand-dark,40%), lighten(@brand-dark,50%), #fff);	
+	.font-variant(@brand-dark, lighten(@brand-dark,40%), lighten(@brand-dark,50%), #fff);
 }
 
 .bg-black {
@@ -18,12 +18,17 @@
 	.font-variant(@brand-black, lighten(@brand-black,40%), lighten(@brand-black,50%), #fff);
 }
 
+.bg-solarized {
+	.color-variant(@brand-solarized, 5%, 10%, 5%, 10%);
+	.font-variant(@brand-solarized, lighten(@brand-solarized,40%), lighten(@brand-solarized,50%), #fff);
+}
+
 .bg-primary {
 	.color-variant(@brand-primary, 5%, 10%, 5%, 10%);
 	&-ltest{
 		background-color: @brand-primary-ltest;
 	}
-	.font-variant(@brand-primary, lighten(@brand-primary,40%), lighten(@brand-primary,50%), #fff);	
+	.font-variant(@brand-primary, lighten(@brand-primary,40%), lighten(@brand-primary,50%), #fff);
 }
 
 .bg-success {
