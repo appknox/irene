@@ -1,6 +1,6 @@
 div#nav.bg-black
   div.clearfix.wrapper.dk.hidden-xs
-    link-to 'index' class="navbar-brand w-100" tagName="ul"
+    link-to 'index' class="navbar-brand w-100 animated flip" tagName="ul"
       img.m-r-sm src="/assets/images/logo.png" alt="scale"
     ul.nav.navbar-nav.nav-user.user
       .pull-left.m-l
@@ -26,7 +26,7 @@ div#nav.bg-black
 
   if controllers.application.currentUser.isProcessing
     .panel.panel-info
-      .panel-heading
+      .panel-heading.bg-scanning
         .panel-title Please Wait
       .panel-body
         | The app that you uploaded (or) the links that you submitted is being processed. Please wait for a while.
