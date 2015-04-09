@@ -1,10 +1,10 @@
 `import DS from 'ember-data';`
-`import BaseModelMixin from '../mixins/base-model';`
-`import ENUMS from '../enums'`
+`import BaseModelMixin from 'irene/mixins/base-model';`
+`import ENUMS from 'irene/enums'`
 `import Ember from 'ember'`
 
 Project = DS.Model.extend BaseModelMixin,
-  owner: DS.belongsTo 'user', async: true, inverse: 'projects'
+  owner: DS.belongsTo 'user', inverse: 'projects'
   name: DS.attr 'string'
   packageName: DS.attr 'string'
   platform: DS.attr 'number'
@@ -12,6 +12,7 @@ Project = DS.Model.extend BaseModelMixin,
   version: DS.attr 'string'
   files: DS.hasMany 'file', inverse: 'project'
   fileCount: DS.attr 'number'
+  githubRepo: DS.attr 'string'
 
   sortProperties: ["updatedOn:desc"]
   sortedFiles: Ember.computed.sort 'files', 'sortProperties'

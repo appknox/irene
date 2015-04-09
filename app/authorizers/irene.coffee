@@ -1,7 +1,6 @@
 `import Ember from 'ember';`
 `import Base from 'simple-auth/authorizers/base';`
-`import config from '../config/environment';`
-`import loginBtn from '../utils/login-btn';`
+`import loginBtn from 'irene/utils/login-btn';`
 
 b64EncodeUnicode = (str) ->
   btoa encodeURIComponent(str).replace /%([0-9A-F]{2})/g, (match, p1) ->
@@ -15,7 +14,7 @@ getB64Token = (session)->
 IreneAuthorizer = Base.extend
 
   authorize: (jqXHR, requestOptions) ->
-    token = getB64Token(@get "session")
+    token = getB64Token @get "session"
     jqXHR.setRequestHeader 'Authorization', "Basic #{token}"
 
 `export default IreneAuthorizer;`

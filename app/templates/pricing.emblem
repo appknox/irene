@@ -1,25 +1,26 @@
-.row.m-t: .col-md-12
-  .text-center
-    h2 Special Offer
-  .pricing-table.row.m-t
-    .col-md-4
-    each pricing in specialPricings
-      = price-selector pricing=pricing store=controller.store
-    else
-      .text-center
-        h4 You Dont Have any offer at this time
-  hr
-  .text-center
-    h2 Pay Per Scan Plans
-  .pricing-table.row.m-t
-    .col-md-2
-    each pricing in scanTypePricings
-      = price-selector pricing=pricing store=controller.store
-  hr
-  .text-center
-    h2 Pay Per Month Plans
-  .pricing-table.row.m-t.m-b
-    each pricing in timeTypePricings
-      = price-selector pricing=pricing store=controller.store
+.row
+  .col-md-12
+    .text-center
+      h2 Special Offer
+    .pricing-table.row.m-t
+      .col-md-4
+      each pricing in specialPricings
+        = price-selector pricing=pricing store=controller.store
+      else
+        .text-center
+          h4 You Dont Have any offer at this time
+    hr
+    .text-center
+      h2 Pay Per Scan Plans
+    .pricing-table.row.m-t
+      .col-md-2
+      each pricing in scanTypePricings
+        = price-selector pricing=pricing store=controller.store
+    hr
+    .text-center
+      h2 Pay Per Month Plans
+    .pricing-table.row.m-t.m-b
+      each pricing in timeTypePricings
+        = price-selector pricing=pricing store=controller.store
 
 #hidden-paypal-form.hide

@@ -1,7 +1,8 @@
 `import Ember from 'ember';`
 `import Notify from 'ember-notify';`
-`import CONSTANTS from '../utils/constants';`
-`import SocketMixin from '../mixins/socket';`
+`import CONSTANTS from 'irene/utils/constants';`
+`import SocketMixin from 'irene/mixins/socket';`
+`import ENV from 'irene/config/environment';`
 
 IndexController = Ember.ArrayController.extend SocketMixin,
 
@@ -16,7 +17,7 @@ IndexController = Ember.ArrayController.extend SocketMixin,
   ).property "controllers.application.currentUser"
 
   sortProperties: ["lastFile.updatedOn:desc"]
-  sortedModel: Ember.computed.sort('model', 'sortProperties')
+  sortedModel: Ember.computed.sort 'model', 'sortProperties'
 
   actions:
 
@@ -26,20 +27,27 @@ IndexController = Ember.ArrayController.extend SocketMixin,
         return Notify.error "Please enter a valid URL"
       data =
         storeURL: storeURL
-      applicationAdapter = @store.adapterFor 'application'
-      host = applicationAdapter.get 'host'
-      namespace = applicationAdapter.get 'namespace'
-      postUrl = [host, namespace, 'store_url'].join '/'
+      postUrl = [ENV.APP.API_BASE, ENV.endpoints.storeUrl].join '/'
       that = @
       Ember.$.post postUrl, data
+      .then ->
+        that.set "storeURL", null
+        Notify.success "Hang in there while we process your URL"
+      .fail (xhr, message, status) ->
+        if xhr.status is 401
+          Notify.error xhr.responseJSON.message
+        else
+          Notify.error "A network error occured! Please try again later"
+
+    deleteProject: (project) ->
+      return if !confirm "Do you want to delete `#{project.get "name"}` project?"
+      postUrl = [ENV.APP.API_BASE, ENV.endpoints.deleteProject, project.get "id"].join '/'
+      that = @
+      Ember.$.post postUrl
         .then ->
-          that.set "storeURL", null
-          Notify.success "Hang in there while we process your URL"
+          Notify.success "Your project will be deleted momentarily."
         .fail (xhr, message, status) ->
-          if xhr.status is 401
-            Notify.error xhr.responseJSON.message
-          else
-            Notify.error "A network error occured! Please try again later"
+          Notify.error xhr.responseJSON.message
 
 
 `export default IndexController;`

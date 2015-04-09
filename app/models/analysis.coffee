@@ -1,5 +1,5 @@
 `import DS from 'ember-data';`
-`import ENUMS from '../enums';`
+`import ENUMS from 'irene/enums';`
 
 Analysis = DS.Model.extend
   file: DS.belongsTo 'file', inverse: 'analyses'

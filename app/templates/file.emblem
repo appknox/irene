@@ -34,11 +34,14 @@
 
             .col-md-2.m-t.animated.fadeIn
 
-              link-to 'project' model.project.id class="btn btn-small btn-info w-100"
+              link-to 'project.files' model.project.id class="btn btn-small btn-info w-100"
                 | All Files
 
               if model.report
                 a.btn.btn-small.btn-info.w-100.m-t click=getPDFReportLink PDF Report
+
+              if model.isRequestManualEnabled
+                a.btn.btn-small.btn-info.w-100.m-t click=requestManual Manual Test
 
 
     .row.m-t.animated.fadeIn

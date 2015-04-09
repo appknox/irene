@@ -1,5 +1,7 @@
 `import Ember from 'ember';`
 `import Notify from 'ember-notify';`
+`import ENV from 'irene/config/environment';`
+
 
 ResetController = Ember.Controller.extend
   uuid: ""
@@ -29,21 +31,18 @@ ResetController = Ember.Controller.extend
       password = @get "password"
       uuid = @get "uuid"
       token = @get "token"
-      applicationAdapter = @store.adapterFor 'application'
-      host = applicationAdapter.get 'host'
-      namespace = applicationAdapter.get 'namespace'
-      resetUrl = [host, namespace, 'reset'].join '/'
+      resetUrl = [ENV.APP.API_BASE, ENV.endpoints.reset].join '/'
       that = @
       data =
         uuid: uuid
         token: token
         password: password
       Ember.$.post resetUrl, data
-        .then ->
-          that.transitionTo "login"
-          Notify.success "Pasword is successfully reset!"
-        .fail (xhr, message, status) ->
-          Notify.error xhr.responseJSON.message
+      .then ->
+        that.transitionTo "login"
+        Notify.success "Pasword is successfully reset!"
+      .fail (xhr, message, status) ->
+        Notify.error xhr.responseJSON.message
 
 `export default ResetController;`
 

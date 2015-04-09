@@ -1,15 +1,13 @@
 `import ApplicationRouteMixin from 'simple-auth/mixins/application-route-mixin';`
 `import Ember from 'ember';`
 `import EmberCLIICAjax from 'ic-ajax';`
+`import ENV from 'irene/config/environment';`
 
 ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
 
   fetchData: ->
     store = @store
-    applicationAdapter = store.adapterFor 'application'
-    host = applicationAdapter.get 'host'
-    namespace = applicationAdapter.get 'namespace'
-    initUrl = [host, namespace, 'init'].join '/'
+    initUrl = [ENV.APP.API_BASE, ENV.endpoints.init].join '/'
     controller = @controller
     new Ember.RSVP.Promise (resolve, reject) ->
       init = EmberCLIICAjax url:initUrl, type: "get"
@@ -27,12 +25,13 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
         store.pushPayload 'ratio', ratio: result.ratio
         user = store.pushPayload 'user', user: result.user
         store.find('user', result.user.id).then (user)->
+          user.set 'urls', result.urls
           controller.set 'currentUser', user
-          controller.subscribe result.user.uuid
+          controller.subscribe user.get "uuid"
         resolve result
 
   setupController: (controller)->
-    if @session.get "user"
+    if !Ember.isEmpty @session.get "token"
       @fetchData()
 
   actions:

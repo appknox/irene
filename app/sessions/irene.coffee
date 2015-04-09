@@ -3,11 +3,6 @@
 
 IreneSession = Session.extend
 
-  currentUser: (->
-    debugger
-    user = @get 'user'
-    if !Ember.isEmpty user.id
-      @container.lookup('store:main').find 'user', userId
-  ).property 'user'
+  currentUser: null
 
 `export default IreneSession;`
