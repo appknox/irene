@@ -148,10 +148,13 @@ module.exports = function(environment) {
   }
 
   ENV.contentSecurityPolicy = {
-    "connect-src": "'self' storage.googleapis.com ws://localhost:8008 http://localhost:8008 ws://localhost:6080/websockify *.s3.amazonaws.com " + ENV.APP.API_HOST + " " + ENV.fakeS3URL,
+    "connect-src": "'self' storage.googleapis.com ws://localhost:8008 http://localhost:8008 ws://localhost:6080/websockify *.s3.amazonaws.com *.zendesk.com " + ENV.APP.API_HOST + " " + ENV.fakeS3URL,
+    "frame-src": "'self' *.zendesk.com",
+    "report-uri": "'self'",
     'img-src': "'self' www.gravatar.com placehold.it storage.googleapis.com s3.amazonaws.com *.cloudfront.net *.amazonaws.com",
     'style-src': "'self' 'unsafe-inline'",
-    'script-src': "'self' 'unsafe-eval' localhost:35729 0.0.0.0:35729 storage.googleapis.com *.webengage.com *.amazonaws.com *.cloudfront.net"
+    'script-src': "'self' 'unsafe-eval' 'unsafe-inline' localhost:35729 0.0.0.0:35729 storage.googleapis.com *.zendesk.com *.amazonaws.com *.cloudfront.net",
+    'font-src': "'self' data:;"
   };
 
   ENV.APP.API_BASE = [ENV.APP.API_HOST, ENV.APP.API_NAMESPACE].join("/");
