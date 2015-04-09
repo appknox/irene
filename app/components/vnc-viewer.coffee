@@ -24,10 +24,13 @@ VncViewerComponent = Ember.Component.extend
       'onUpdateState': updateState
       'onXvpInit': xvpInit
 
+    @send("connect") if ENUMS.DYNAMIC_STATUS.READY is @get 'file.dynamicStatus'
+
   statusChange: ( ->
-    status = @get 'file.dynamicStatus'
-    @send("connect") if status is ENUMS.DYNAMIC_STATUS.READY
-    @send("disconnect") if status is not ENUMS.DYNAMIC_STATUS.READY
+    if ENUMS.DYNAMIC_STATUS.READY is @get 'file.dynamicStatus'
+      @send "connect"
+    else
+      @send "disconnect"
   ).observes 'file.dynamicStatus'
 
   actions:
