@@ -47,7 +47,7 @@ do ->
   uv = document.createElement 'script'
   uv.type = 'text/javascript'
   uv.async = true
-  uv.src = '//widget.uservoice.com/hZb0AEyYraAm5UQI913Gg.js'
+  uv.src = '//widget.uservoice.com/Ph3r3vj6sqRiN3otLn9FTg.js'
   s = document.getElementsByTagName('script')[0]
   s.parentNode.insertBefore uv, s
   return
