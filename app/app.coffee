@@ -39,17 +39,44 @@ App = Ember.Application.extend
 
 loadInitializers App, ENV.modulePrefix
 
-window._weq = window._weq or {}
-window._weq['webengage.licenseCode'] = ENV.webengage.code
-window._weq['webengage.widgetVersion'] = "4.0"
+# UserVoice integration
 
-webengage = (d) ->
-  _we = d.createElement 'script'
-  _we.type = 'text/javascript'
-  _we.async = true
-  _we.src = "#{ENV.webengage.src}/js/widget/webengage-min-v-4.0.js"
-  d.body.appendChild _we
+window.UserVoice = window.UserVoice or []
 
-webengage document
+do ->
+  uv = document.createElement 'script'
+  uv.type = 'text/javascript'
+  uv.async = true
+  uv.src = '//widget.uservoice.com/hZb0AEyYraAm5UQI913Gg.js'
+  s = document.getElementsByTagName('script')[0]
+  s.parentNode.insertBefore uv, s
+  return
+
+UserVoice.push [
+  'set'
+  {
+    accent_color: '#448dd6'
+    trigger_color: 'white'
+    trigger_background_color: 'rgba(46, 49, 51, 0.6)'
+  }
+]
+
+UserVoice.push [
+  'identify'
+  {}
+]
+
+UserVoice.push [
+  'addTrigger'
+  {
+    mode: 'contact'
+    trigger_position: 'bottom-right'
+  }
+]
+
+UserVoice.push [
+  'autoprompt'
+  {}
+]
 
 `export default App;`
