@@ -58,10 +58,7 @@ module.exports = function(environment) {
     ENV.APP.LOG_TRANSITIONS = true;
     ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     ENV.APP.LOG_VIEW_LOOKUPS = true;
-    ENV.usePretender = false;
-    if (!ENV.usePretender) {
-      ENV.APP.API_HOST = 'http://localhost:8000';
-    }
+    ENV.APP.API_HOST = 'http://localhost:8000';
     ENV.socketHost = 'localhost';
     ENV.socketPort = '8008';
     ENV.socketSecure = false;
@@ -81,7 +78,6 @@ module.exports = function(environment) {
 
     ENV.APP.rootElement = '#ember-testing';
     ENV['simple-auth']['store'] = 'simple-auth-session-store:ephemeral';
-    ENV.usePretender = true;
   }
 
   if (environment === 'production') {
@@ -91,7 +87,6 @@ module.exports = function(environment) {
     ENV.APP.LOG_TRANSITIONS_INTERNAL = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
-    ENV.usePretender = false;
     ENV.socketHost = 'ws.appknox.com';
     ENV.socketSecure = true;
     ENV.socketPort = 443;
@@ -106,7 +101,6 @@ module.exports = function(environment) {
     ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     ENV.APP.LOG_VIEW_LOOKUPS = true;
 
-    ENV.usePretender = false;
     ENV.socketHost = 'staging.appknox.com';
     ENV.socketPort = 80;
 
@@ -120,7 +114,6 @@ module.exports = function(environment) {
     ENV.APP.LOG_TRANSITIONS_INTERNAL = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
-    ENV.usePretender = false;
     ENV.APP.API_HOST = 'beta.appknox.com';
     ENV.socketHost = 'ws.appknox.com';
     ENV.socketSecure = true;
@@ -135,7 +128,6 @@ module.exports = function(environment) {
     ENV.APP.LOG_TRANSITIONS = true;
     ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     ENV.APP.LOG_VIEW_LOOKUPS = true;
-    ENV.usePretender = false;
     ENV.APP.API_HOST = 'http://localhost:8000';
     ENV['simple-auth'] = {
       crossOriginWhitelist: [ENV.APP.API_HOST],

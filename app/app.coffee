@@ -2,19 +2,6 @@
 `import Resolver from 'ember/resolver';`
 `import loadInitializers from 'ember/load-initializers';`
 `import ENV from 'irene/config/environment';`
-# `import Pretender from 'pretender';`
-`import serverRoutes from 'irene/server-routes';`
-
-if ENV.usePretender
-  server = new Pretender serverRoutes
-
-  server.unhandledRequest = (verb, path, request)->
-    console.warn "unhandledRequest"
-    debugger
-
-  server.erroredRequest = (verb, path, request, error)->
-    console.warn "erroredRequest"
-    debugger
 
 Ember.$.ajaxSetup
   type: "POST"
