@@ -4,6 +4,6 @@
   if controllers.application.currentUser.hasGithubToken
     = repo-selector project=model
   else
-    a.btn.btn-lg.btn-primary click=integrateGitHub
+    a.btn.btn-lg.btn-primary click="integrateGitHub"
       = fa-icon 'github' size="2x"
       .text-large Integrate GitHub
