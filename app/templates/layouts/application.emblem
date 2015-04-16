@@ -22,7 +22,7 @@ div#nav.bg-solarized
           | Support
 
       li
-        a click=invalidateSession Logout
+        a click="invalidateSession" Logout
 
   if controllers.application.currentUser.isProcessing
     .panel.panel-info

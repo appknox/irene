@@ -28,7 +28,9 @@ IreneAuthenticator = Base.extend
         Ember.run ->
           loginBtn.restoreSignIn()
           if response.success
-            resolve Ember.$.extend response
+            localStorage.authUser = response.user
+            localStorage.authToken = response.token
+            resolve response
           else
             Notify.error response.errors
             reject response
@@ -70,7 +72,7 @@ IreneAuthenticator = Base.extend
     new Ember.RSVP.Promise (resolve, reject) ->
       _resolved = (response)->
         Ember.run ->
-          resolve Ember.$.extend response
+          resolve response
           location.reload()
 
       _rejected = (xhr, status, error) ->
