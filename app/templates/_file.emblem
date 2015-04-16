@@ -1,20 +1,20 @@
-link-to 'file' id class="col-sm-6 col-md-4"
+link-to 'file' model.id class="col-sm-6 col-md-4"
   section.panel.b-a
     .panel-heading.panel-heading-fix
       .h4.text-lt.block.font-bold
-        img src=iconUrl alt="File Icon"
-        = project.name
-        = fa-icon project.platformIconClass
+        img src=model.iconUrl alt="File Icon"
+        = model.project.name
+        = fa-icon model.project.platformIconClass
 
     .row.panel-body
-      = view "pie-chart" file=this
+      = view "pie-chart" file=model
       .col-md-6.m-t
         p
           span.font-thin Package:
-          = project.packageName
+          = model.project.packageName
         p
           span.font-thin Version:
-          = version
+          = model.version
         p
           span.font-thin Created:
-          = humanizedCreatedOn
+          = model.humanizedCreatedOn
