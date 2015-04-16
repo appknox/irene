@@ -7,10 +7,17 @@
 IndexController = Ember.ArrayController.extend SocketMixin,
 
   needs: ['application']
-
   storeURL: null
-
   ratio: null
+  percent: 0
+  isUploading: false
+
+  displayText: (->
+    if @get "isUploading"
+      "Uploading #{parseInt @get "percent"}% ..."
+    else
+      "Upload App"
+  ).property "isUploading", "percent"
 
   setRatioOnInit: (->
     ratio = @store.push 'ratio',

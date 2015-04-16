@@ -4,35 +4,19 @@
 
 GCSUploadComponent = EmberUploader.FileField.extend
 
-  store: null
-
-  attributeBindings: ['disabled']
-
-  isUploading: false
-
-  percent: 0
-
-  disabled: (->
-    @get "isUploading"
-  ).property "isUploading"
-
-  displayText: (->
-    if @get "isUploading"
-      "Uploading #{parseInt @get "percent"}% ..."
-    else
-      "Upload App"
-  ).property "isUploading", "percent"
+  delegate: null
 
   filesDidChange: ( ->
     self = @
-    @set "isUploading", true
+    delegate = @get "delegate"
+    delegate.set "isUploading", true
     signingUrl = [ENV.APP.API_BASE, ENV.endpoints.signedUrl].join '/'
     files = @get 'files'
     uploader = GCSUploader.create
       url: signingUrl
 
     uploader.didUpload = (file_key, file_key_signed) ->
-      self.set "isUploading", false
+      delegate.set "isUploading", false
       uploadedUrl = [ENV.APP.API_BASE, ENV.endpoints.uploadedFile].join '/'
       data =
         file_key: file_key
@@ -41,7 +25,7 @@ GCSUploadComponent = EmberUploader.FileField.extend
 
     uploader.on 'progress', (e) ->
       # Use `e.percent` to get percentage
-      self.set "percent", e.percent
+      delegate.set "percent", e.percent
 
     if !Ember.isEmpty files
       uploader.upload files[0]
