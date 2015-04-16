@@ -1,6 +1,7 @@
 `import Ember from 'ember';`
-`import LoginControllerMixin from 'simple-auth/mixins/login-controller-mixin';`
 `import Notify from 'ember-notify';`
+`import LoginControllerMixin from 'simple-auth/mixins/login-controller-mixin';`
+`import ENV from 'irene/config/environment';`
 
 LoginController = Ember.Controller.extend LoginControllerMixin,
 
@@ -16,7 +17,7 @@ LoginController = Ember.Controller.extend LoginControllerMixin,
       @validation_errors.push "Password"
     @validation_errors
 
-  authenticator: 'authenticator:irene'
+  authenticator: ENV['simple-auth'].authenticator
 
   actions:
 
@@ -26,7 +27,9 @@ LoginController = Ember.Controller.extend LoginControllerMixin,
         Notify.error "#{errors.join " & "} required", closeAfter: 5000
         that = @
       else
-        @send "authenticate"
+        @get('session').authenticate @get('authenticator'),
+          identification: @get "identification"
+          password: @get "password"
 
     error: (reason) ->
       Notify.alert reason, closeAfter: 3000

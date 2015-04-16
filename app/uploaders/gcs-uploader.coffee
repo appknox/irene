@@ -3,7 +3,7 @@
 `import serialize from 'irene/utils/serialize';`
 `import ENV from 'irene/config/environment';`
 
-GCSUploader = Ember.Uploader.extend
+GCSUploader = EmberUploader.Uploader.extend
   ###
   #  Url used to request a signed upload url
   #  @property url

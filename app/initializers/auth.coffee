@@ -1,12 +1,13 @@
 `import IreneSession from 'irene/sessions/irene';`
 `import IreneAuthenticator from 'irene/authenticators/irene';`
 `import IreneAuthorizer from 'irene/authorizers/irene';`
+`import ENV from 'irene/config/environment';`
 
 
 initialize = (container, application) ->
-  container.register 'session:irene', IreneSession
-  container.register 'authorizer:irene', IreneAuthorizer
-  container.register 'authenticator:irene', IreneAuthenticator
+  container.register ENV['simple-auth'].session, IreneSession
+  container.register ENV['simple-auth'].authorizer, IreneAuthorizer
+  container.register ENV['simple-auth'].authenticator, IreneAuthenticator
 
 AuthInitializer =
   name: 'auth'

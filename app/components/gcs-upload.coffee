@@ -2,7 +2,7 @@
 `import GCSUploader from 'irene/uploaders/gcs-uploader'`
 `import ENV from 'irene/config/environment';`
 
-GCSUploadComponent = Ember.FileField.extend
+GCSUploadComponent = EmberUploader.FileField.extend
 
   store: null
 

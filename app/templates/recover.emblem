@@ -9,7 +9,7 @@ section.m-t-lg.wrapper-md.animated.bounceIn.corrector
       form submit='recover'
         .list-group
           .list-group-item
-            Ember.TextField class="input form-control no-border" value=username placeholder='Username' name='username' autofocus="true"
+            = input class="input form-control no-border" value=username placeholder='Username' name='username' autofocus="true"
         button#btn-recover.btn.btn-lg.btn-primary.btn-block type="submit" Recover
       footer.wrapper.text-center
         link-to "login" | Login?
