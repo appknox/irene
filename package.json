@@ -23,6 +23,7 @@
     "broccoli-ember-script": "0.1.1",
     "ember-bootstrap": "0.0.9",
     "ember-cli": "0.2.3",
+    "ember-cli-animate-css": "0.0.1",
     "ember-cli-app-version": "0.3.3",
     "ember-cli-babel": "^5.0.0",
     "ember-cli-coffeescript": "0.10.0",

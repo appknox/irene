@@ -16,7 +16,8 @@
     "ember-simple-auth": "0.8.0-beta.1",
     "bootstrap": "~3.3.2",
     "JavaScript-MD5": "~1.1.0",
-    "ember-uploader": "0.3.6"
+    "ember-uploader": "0.3.6",
+    "animate.css": "~3.2.6"
   },
   "resolutions": {
     "ember": "1.11.1",
