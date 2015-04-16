@@ -43,7 +43,7 @@ hr
         = input value=storeURL type="text" placeholder="Submit store URL" class="input-lg w-100"
 
       .col-md-3
-        button.btn.btn-primary.btn-lg.w-100 click=submitURL type="button" Submit
+        button.btn.btn-primary.btn-lg.w-100 click="submitURL" type="button" Submit
 
   .col-md-1.text-center
     h4 or
