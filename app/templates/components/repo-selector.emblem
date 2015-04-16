@@ -10,5 +10,5 @@ button.btn.btn-primary.btn-lg click="toggleDropdown"
 ul.dropdown-menu
   each repo in githubRepos
     li
-      a click="selectRepo repo"
+      a{action "selectRepo" repo on="click"}
         = repo
