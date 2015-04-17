@@ -10,8 +10,8 @@ GCSUploadComponent = EmberUploader.FileField.extend
     self = @
     delegate = @get "delegate"
     delegate.set "isUploading", true
-    signingUrl = [ENV.APP.API_BASE, ENV.endpoints.signedUrl].join '/'
     files = @get 'files'
+    signingUrl = [ENV.APP.API_BASE, ENV.endpoints.signedUrl].join '/'
     uploader = GCSUploader.create
       url: signingUrl
 
