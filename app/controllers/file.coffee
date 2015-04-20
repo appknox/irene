@@ -5,7 +5,7 @@
 `import Notify from 'ember-notify';`
 
 
-FileController = Ember.ObjectController.extend
+FileController = Ember.Controller.extend
 
   needs: ['application']
 

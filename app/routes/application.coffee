@@ -31,7 +31,7 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
         resolve result
 
   setupController: (controller)->
-    if !Ember.isEmpty @session.get "token"
+    if !Ember.isEmpty localStorage.authToken
       @fetchData()
 
   actions:

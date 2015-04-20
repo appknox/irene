@@ -1,8 +1,8 @@
 div.m-t class=mainClass
   if file.isNoneStaus
-    button.btn.btn-primary.w-100.col-md-12 click=dynamicScan Start Dynamic Scan
+    button.btn.btn-primary.w-100.col-md-12 click="dynamicScan" Start Dynamic Scan
   if file.isReady
-    button.btn.btn-primary.w-100.col-md-12 click=dynamicShutdown Shutdown Device
+    button.btn.btn-primary.w-100.col-md-12 click="dynamicShutdown" Shutdown Device
   if file.isBooting
     button.btn.btn-primary.w-100.col-md-12.disabled Device Booting. Please wait.
   if file.isShuttingDown

@@ -4,7 +4,7 @@ if project.githubRepo
     code
       = project.githubRepo
 
-button.btn.btn-primary.btn-lg click=toggleDropdown
+button.btn.btn-primary.btn-lg click="toggleDropdown"
     | Repo &nbsp;
     span.caret
 ul.dropdown-menu

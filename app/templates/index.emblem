@@ -40,17 +40,18 @@ hr
   .col-md-8
     .row
       .col-md-9
-        Ember.TextField value=storeURL type="text" placeholder="Submit store URL" class="input-lg w-100"
+        = input value=storeURL type="text" placeholder="Submit store URL" class="input-lg w-100"
 
       .col-md-3
-        button.btn.btn-primary.btn-lg.w-100 click=submitURL type="button" Submit
+        button.btn.btn-primary.btn-lg.w-100 click="submitURL" type="button" Submit
 
   .col-md-1.text-center
     h4 or
 
   .col-md-3
-    label.file-label.btn.btn-primary.btn-lg.w-100
-      = gcs-upload store=controller.store
+    label.file-label.btn.btn-primary.btn-lg.w-100 class=isUploading:disabled
+      = gcs-upload delegate=this
+      = displayText
 
 hr
 
