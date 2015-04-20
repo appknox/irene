@@ -1,7 +1,7 @@
 /* global require, module */
 
 var EmberApp = require('ember-cli/lib/broccoli/ember-app'),
-  assetRev = require('broccoli-asset-rev');
+  assetRev = require('broccoli-asset-rev'),
   htmlmin = require('broccoli-htmlmin');
 
 var app = new EmberApp({
