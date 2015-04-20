@@ -19,8 +19,9 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "broccoli-asset-rev": "^2.0.2",
+    "broccoli-asset-rev": "2.0.3",
     "broccoli-ember-script": "0.1.1",
+    "broccoli-htmlmin": "^2.0.0",
     "ember-bootstrap": "0.0.9",
     "ember-cli": "0.2.3",
     "ember-cli-animate-css": "0.0.1",
