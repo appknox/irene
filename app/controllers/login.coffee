@@ -19,6 +19,11 @@ LoginController = Ember.Controller.extend LoginControllerMixin,
 
   authenticator: ENV['simple-auth'].authenticator
 
+  checkOnInit: (->
+    if localStorage.authToken
+      @transitionTo "index"
+  ).on "init"
+
   actions:
 
     login: ->
