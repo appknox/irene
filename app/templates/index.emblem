@@ -4,7 +4,7 @@
   .col-sm-12
     .panel.b-a
       .row.m-n
-        .col-md-4.b-b.b-r.tour-step-step1
+        .col-md-4.b-b.b-r
           .block.padder-v.hover.text-success
             span.i-s.i-s-2x.pull-left.m-r-sm
               = fa-icon "folder"
@@ -13,7 +13,7 @@
               span.h3.block.m-t-xs {{ model.length }}
               small.text-muted.text-u-c Projets Created
 
-        .col-md-4.b-b.b-r.tour-step-step2
+        .col-md-4.b-b.b-r
           .block.padder-v.hover.text-danger
             span.i-s.i-s-2x.pull-left.m-r-sm
               = fa-icon "exclamation-circle"
@@ -38,7 +38,7 @@ hr
 
 .row.m-b
   .col-md-8
-    .row.tour-step-step3
+    .row.tour-step-url-input
       .col-md-9
         = input value=storeURL type="text" placeholder="Submit store URL" class="input-lg w-100"
 
@@ -48,7 +48,7 @@ hr
   .col-md-1.text-center
     h4 or
 
-  .col-md-3
+  .col-md-3.tour-step-app-upload
     label.file-label.btn.btn-primary.btn-lg.w-100 class=isUploading:disabled
       = gcs-upload delegate=this
       = displayText

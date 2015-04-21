@@ -1,16 +1,15 @@
 `import OnboardOutlet from 'ember-onboarding/components/onboard-outlet';`
+`import ENV from 'irene/config/environment';`
 
 IreneOnboardComponent = OnboardOutlet.extend
   createData: (->
 
     tours = @get 'onboard'
 
-    tours.createStep 'step1', 'this is the text for step 1'
-    tours.createStep 'step2', 'this is the text for step 2'
-    tours.createStep 'step3', 'this is the text for step 3'
+    tours.createStep 'url-input', 'Please enter your store URL here and click `Submit`'
+    tours.createStep 'app-upload', 'Or, You can also upload an app here'
 
-    tours.createTour 'Basic Tour 1', ['step1', 'step2', 'step3']
-    tours.createTour 'Demo Tour 2', ['step3', 'step2', 'step1']
+    tours.createTour ENV.ONBOARD.scanApp, ['url-input', 'app-upload']
 
   ).on "init"
 

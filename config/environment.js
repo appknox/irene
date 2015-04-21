@@ -49,6 +49,9 @@ module.exports = function(environment) {
     webengage: {
       code: '~13410634d',
       src: 'http://cdn.widgets.webengage.com'
+    },
+    ONBOARD: {
+      scanApp: 'Scan An App'
     }
   };
 
