@@ -8,15 +8,24 @@ ApplicationController = Ember.Controller.extend SocketMixin,
   onboard: Ember.inject.service()
 
   tourNewScan: (->
-    @send "tourNewScan" if 0 is @get "currentUser.scanCount"
+    scanCount = @get "currentUser.scanCount"
+    currentRouteName = @get "currentRouteName"
+    if scanCount is 0 and currentRouteName is "index"
+      @send "tourNewScan"
   ).observes "currentUser.scanCount"
 
   tourScanResult: (->
-    @send "tourScanResult" if 1 is @get "currentUser.scanCount"
+    scanCount = @get "currentUser.scanCount"
+    currentRouteName = @get "currentRouteName"
+    if scanCount is 1 and currentRouteName is "index"
+      @send "tourScanResult"
   ).observes "currentUser.scanCount"
 
   tourScanDetail: (->
-    @send "tourScanDetail" if 1 is @get "currentUser.scanCount"
+    scanCount = @get "currentUser.scanCount"
+    currentRouteName = @get "currentRouteName"
+    if scanCount is 1 and currentRouteName is "file.index"
+      @send "tourScanDetail"
   ).observes "currentUser.scanCount"
 
 
