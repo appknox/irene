@@ -4,6 +4,7 @@
 
 ApplicationController = Ember.Controller.extend SocketMixin,
   currentUser: null
+  feedback: null
 
   onboard: Ember.inject.service()
 

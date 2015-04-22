@@ -4,6 +4,8 @@
 
 SocketMixin = Ember.Mixin.create
 
+  needs: ['application']
+
   subscribe: (room) ->
     @socket.emit "subscribe", room: room
 
@@ -76,5 +78,8 @@ SocketMixin = Ember.Mixin.create
 
     reload: ->
       location.reload()
+
+    show_feedback: ->
+      @get("controllers.application.feedback").send("showModal")
 
 `export default SocketMixin`

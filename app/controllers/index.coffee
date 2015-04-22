@@ -49,7 +49,7 @@ IndexController = Ember.ArrayController.extend SocketMixin,
         that.set "storeURL", null
         Notify.success "Hang in there while we process your URL"
       .fail (xhr, message, status) ->
-        if xhr.status is 401
+        if xhr.status is 403
           Notify.error xhr.responseJSON.message
         else
           Notify.error "A network error occured! Please try again later"
