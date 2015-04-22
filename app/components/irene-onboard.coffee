@@ -8,7 +8,7 @@ IreneOnboardComponent = OnboardOutlet.extend
 
     tours.createStep 'url-input', 'Please enter your store URL here and click `Submit`.'
     tours.createStep 'app-upload', 'Or, You can also upload an app here.'
-    tours.createStep 'projects', 'Tour projects will appear hear.'
+    tours.createStep 'projects', 'Your projects will appear hear.'
     tours.createStep 'view-detail', 'Click this area to view your scan details.'
     # `sd` is shorthand for `Scan Detail`
     tours.createStep 'sd-overview', 'Here is an overview of your project.'
