@@ -19,7 +19,8 @@
     "ember-uploader": "0.3.6",
     "animate.css": "~3.2.6",
     "ember-cli-moment-shim": "~0.1.0",
-    "no-vnc": "~0.5.1"
+    "no-vnc": "~0.5.1",
+    "shepherd.js": "~0.7.1"
   },
   "resolutions": {
     "ember": "1.11.1",

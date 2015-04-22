@@ -1,7 +1,8 @@
 `import Ember from 'ember';`
 `import ENV from 'irene/config/environment';`
+`import CancelTour from 'ember-onboarding/mixins/onboard-router';`
 
-Router = Ember.Router.extend
+Router = Ember.Router.extend CancelTour,
   location: ENV.locationType
 
 Router.map ->

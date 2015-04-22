@@ -1,6 +1,8 @@
 .row.m-b
   .col-sm-12
-    h3.m-b-xs.text-black Dashboard
+    h3.m-b-xs.text-black.pull-left Dashboard &nbsp;
+    .help-button.hand click="tourDashboard"
+      = fa-icon "question-circle" size=1
   .col-sm-12
     .panel.b-a
       .row.m-n
@@ -38,7 +40,7 @@ hr
 
 .row.m-b
   .col-md-8
-    .row
+    .row.tour-step-url-input
       .col-md-9
         = input value=storeURL type="text" placeholder="Submit store URL" class="input-lg w-100"
 
@@ -48,7 +50,7 @@ hr
   .col-md-1.text-center
     h4 or
 
-  .col-md-3
+  .col-md-3.tour-step-app-upload
     label.file-label.btn.btn-primary.btn-lg.w-100 class=isUploading:disabled
       = gcs-upload delegate=this
       = displayText
@@ -59,7 +61,7 @@ h3.m-b-xs.text-black Projects
 
 .row.m-b
   each project in sortedModel
-    .col-sm-6.col-md-4
+    .col-sm-6.col-md-4.tour-step-projects
       = partial "_project"
 
   else

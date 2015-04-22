@@ -49,6 +49,12 @@ module.exports = function(environment) {
     webengage: {
       code: '~13410634d',
       src: 'http://cdn.widgets.webengage.com'
+    },
+    TOUR: {
+      newScan: 'Scan An App',
+      scanResult: 'View Scan Results',
+      scanDetail: 'Scan Details',
+      dashboard: 'Dashboard'
     }
   };
 

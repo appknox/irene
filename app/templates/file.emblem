@@ -2,11 +2,13 @@
   div class=model.project.canDoDynamicScan:col-md-8:col-md-12
     .row.m-t
       .col-md-12
-        section.panel.b-a
+        section.panel.b-a.tour-step-sd-overview
           .panel-heading.bg-light
             .h4.text-lt.block.font-bold.text-center
               = model.project.name
               = fa-icon model.project.platformIconClass
+              span.hand click="tourScanDetail"
+                = fa-icon "question-circle"
 
           .row.panel-body.panel-body-fix
             .col-md-3.m-t
@@ -32,7 +34,7 @@
                 span.font-thin SHA1 Hash:
                 = model.sha1hash
 
-            .col-md-2.m-t.animated.fadeIn
+            .col-md-2.m-t.animated.fadeIn.tour-step-sd-action-buttons
 
               link-to 'project.files' model.project.id class="btn btn-small btn-info w-100"
                 | All Files
@@ -44,7 +46,7 @@
                 a.btn.btn-small.btn-info.w-100.m-t click="requestManual" Manual Test
 
 
-    .row.m-t.animated.fadeIn
+    .row.m-t.animated.fadeIn.tour-step-sd-analyses
       each analysis in sortedAnalysis
         .col-md-12
           section.panel.b-a
@@ -66,4 +68,4 @@
                     = analysis.vulnerability.successMessage
 
   if model.project.canDoDynamicScan
-    vnc-viewer file=model class="col-md-4"
+    vnc-viewer file=model class="col-md-4 tour-step-sd-dynamic"

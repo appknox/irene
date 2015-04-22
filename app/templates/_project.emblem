@@ -14,7 +14,7 @@ section.panel
             span.font-thin Package: &nbsp;
             = project.packageName
           p.copact-text
-            span.font-thin Version: &nbsp;
+            span.font-thin.tour-step-view-detail Version: &nbsp;
             = project.lastFile.version
           p.copact-text
             span.font-thin Created: &nbsp;

@@ -35,4 +35,7 @@ FileController = Ember.Controller.extend
         Notify.error "Something went wrong."
       xhr.then resolve, reject
 
+    tourScanDetail: ->
+      @set 'controllers.application.onboard.activeTour', ENV.TOUR.scanDetail
+
 `export default FileController`
