@@ -59,7 +59,7 @@ h3.m-b-xs.text-black Projects
 
 .row.m-b
   each project in sortedModel
-    .col-sm-6.col-md-4
+    .col-sm-6.col-md-4.tour-step-projects
       = partial "_project"
 
   else

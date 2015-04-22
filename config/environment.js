@@ -50,8 +50,10 @@ module.exports = function(environment) {
       code: '~13410634d',
       src: 'http://cdn.widgets.webengage.com'
     },
-    ONBOARD: {
-      scanApp: 'Scan An App'
+    TOUR: {
+      newScan: 'Scan An App',
+      scanResult: 'View Scan Results',
+      scanDetail: 'Scan Details'
     }
   };
 
