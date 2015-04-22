@@ -19,6 +19,7 @@ IreneOnboardComponent = OnboardOutlet.extend
     tours.createTour ENV.TOUR.newScan, ['url-input', 'app-upload']
     tours.createTour ENV.TOUR.scanResult, ['projects', 'view-detail']
     tours.createTour ENV.TOUR.scanDetail, ['sd-overview', 'sd-action-buttons', 'sd-analyses', 'sd-dynamic']
+    tours.createTour ENV.TOUR.dashboard, ['url-input', 'app-upload', 'projects', 'view-detail']
 
   ).on "init"
 

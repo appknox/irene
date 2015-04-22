@@ -7,6 +7,8 @@
             .h4.text-lt.block.font-bold.text-center
               = model.project.name
               = fa-icon model.project.platformIconClass
+              span.hand click="tourScanDetail"
+                = fa-icon "question-circle"
 
           .row.panel-body.panel-body-fix
             .col-md-3.m-t

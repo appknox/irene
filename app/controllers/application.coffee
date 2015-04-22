@@ -39,5 +39,8 @@ ApplicationController = Ember.Controller.extend SocketMixin,
     tourScanDetail: ->
       @set 'onboard.activeTour', ENV.TOUR.scanDetail
 
+    tourDashboard: ->
+      @set 'onboard.activeTour', ENV.TOUR.dashboard
+
 
 `export default ApplicationController`

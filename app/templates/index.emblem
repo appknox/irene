@@ -1,6 +1,8 @@
 .row.m-b
   .col-sm-12
-    h3.m-b-xs.text-black Dashboard
+    h3.m-b-xs.text-black.pull-left Dashboard &nbsp;
+    .help-button.hand click="tourDashboard"
+      = fa-icon "question-circle" size=1
   .col-sm-12
     .panel.b-a
       .row.m-n

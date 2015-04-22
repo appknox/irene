@@ -64,5 +64,8 @@ IndexController = Ember.ArrayController.extend SocketMixin,
         .fail (xhr, message, status) ->
           Notify.error xhr.responseJSON.message
 
+    tourDashboard: ->
+      @set 'controllers.application.onboard.activeTour', ENV.TOUR.dashboard
+
 
 `export default IndexController;`
