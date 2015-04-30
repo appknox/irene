@@ -13,7 +13,7 @@
 
             span.clear
               span.h3.block.m-t-xs {{ model.length }}
-              small.text-muted.text-u-c Projets Created
+              small.text-muted.text-u-c Projects Created
 
         .col-md-4.b-b.b-r
           .block.padder-v.hover.text-danger
