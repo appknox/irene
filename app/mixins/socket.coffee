@@ -80,6 +80,10 @@ SocketMixin = Ember.Mixin.create
       location.reload()
 
     show_feedback: ->
-      @get("controllers.application.feedback").send("showModal")
+      that = @
+      setTimeout ->
+        that.get("controllers.application.feedback").send("showModal")
+      ,
+        60 * 1000
 
 `export default SocketMixin`
