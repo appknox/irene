@@ -48,24 +48,7 @@
 
     .row.m-t.animated.fadeIn.tour-step-sd-analyses
       each analysis in sortedAnalysis
-        .col-md-12
-          section.panel.b-a
-            div class=analysis.panelHeadingClass
-              .h4.text-lt.block.font-bold
-                = analysis.vulnerability.name
-
-            .row.panel-body
-              .col-md-12
-                if analysis.isScanning
-                  = analysis.vulnerability.question
-                else
-                  if analysis.isRisky
-                    = analysis.vulnerability.description
-                    each description in analysis.descriptions
-                      description.extra_desc
-                      pre= description.description
-                  else
-                    = analysis.vulnerability.successMessage
+        analysis-view model=analysis
 
   if model.project.canDoDynamicScan
     vnc-viewer file=model class="col-md-4 tour-step-sd-dynamic"
