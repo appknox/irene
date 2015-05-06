@@ -36,7 +36,6 @@ ENUMS =
   OFFER:
     UNKNOWN: -1
     NONE: 0
-    FIRST_TIME: 1
     CUSTOM: 2
 
   NOTIFY:
