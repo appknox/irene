@@ -21,6 +21,6 @@ PricingController = Ember.Controller.extend
 
   specialPricings: Ember.computed.filter 'model', (pricing) ->
     offer = pricing.get "offer"
-    offer is ENUMS.OFFER.CUSTOM or offer is ENUMS.OFFER.FIRST_TIME
+    offer is ENUMS.OFFER.CUSTOM
 
 `export default PricingController`
