@@ -3,10 +3,17 @@
 AnalysisViewComponent = Ember.Component.extend
   classNames: ["col-md-12"]
   model: null
-  implicationVisible: false
+  showVulnerability: false
+
+  showOrHide: (->
+    if @get "showVulnerability"
+      "Hide "
+    else
+      "Show "
+  ).property "showVulnerability"
 
   actions:
-    makeImplicationVisible: ->
-      @set "implicationVisible", true
+    toggleVulnerability: ->
+      @set "showVulnerability", !@get "showVulnerability"
 
 `export default AnalysisViewComponent`

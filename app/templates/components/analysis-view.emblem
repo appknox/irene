@@ -9,16 +9,17 @@ section.panel.b-a
         = model.vulnerability.question
       else
         if model.isRisky
-          = model.vulnerability.description
-          each description in model.descriptions
-            description.extra_desc
-            pre= description.description
+          p.font-15px = model.vulnerability.description
           if model.vulnerability.businessImplication
-            if implicationVisible
-              h5 Business Implication
-              pre= model.vulnerability.businessImplication
-            else
-              .btn.btn-info.w-100 click="makeImplicationVisible"
-                | Show Business Implication
+            h4 Business Implication
+            p.font-15px = model.vulnerability.businessImplication
+          if showVulnerability
+            h4 Vulnerability
+            each description in model.descriptions
+              description.extra_desc
+              pre= description.description
+          .btn.bg-grey.w-100 click="toggleVulnerability"
+            span = showOrHide
+            | Vulnerability
         else
           = model.vulnerability.successMessage
