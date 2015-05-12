@@ -12,7 +12,7 @@ section.panel.b-a
           p.font-15px = model.vulnerability.description
           if model.vulnerability.businessImplication
             h4 Business Implication
-            p.font-15px = model.vulnerability.businessImplication
+            p.font-15px == model.vulnerability.businessImplication
           if showVulnerability
             h4 Vulnerability
             each description in model.descriptions
