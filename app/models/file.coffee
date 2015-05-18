@@ -28,8 +28,7 @@ File = DS.Model.extend BaseModelMixin,
 
   isOkToRequestManual: (->
     try pricing = @get "project.owner.pricing"
-    !Ember.isEmpty(pricing) and pricing.get("offer") in [
-      ENUMS.OFFER.NONE, ENUMS.OFFER.CUSTOM]
+    !Ember.isEmpty(pricing) and pricing.get "manual"
   ).property "project.owner.pricing"
 
   isRequestManualEnabled: (->
