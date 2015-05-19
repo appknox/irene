@@ -7,7 +7,7 @@
         li= description
   hr
   h4 = pricing.price
-  |  USD
+  |  (USD)
   hr
   if pricing.isBulky
     .row
