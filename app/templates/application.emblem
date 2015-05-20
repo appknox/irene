@@ -2,3 +2,4 @@
 = ember-notify
 = irene-onboard
 = feed-back appCtrlr=this
+= upgrade-plan appCtrlr=this

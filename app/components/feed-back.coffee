@@ -12,7 +12,7 @@ FeedBackComponent = Ember.Component.extend
   feedbackText: ""
 
   attachToApp: (->
-    @.get("appCtrlr").set "feedback", @
+    @get("appCtrlr").set "feedback", @
   ).on "init"
 
   actions:

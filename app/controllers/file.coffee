@@ -20,7 +20,7 @@ FileController = Ember.Controller.extend
       file_id = @get "model.id"
       pricing = @get "model.project.owner.pricing"
       if Ember.isEmpty pricing
-        return Notify.error "Please susbcribe to a standard / custom plan to avail this feature."
+        return @get("controllers.application.upgradePlan").send "showModal"
       signedUrl = [ENV.APP.API_BASE, ENV.endpoints.signedPdfUrl, file_id].join '/'
       xhr = EmberCLIICAjax url:signedUrl, type: "get"
       xhr.then (result) ->
@@ -28,7 +28,7 @@ FileController = Ember.Controller.extend
 
     requestManual: ->
       if !@get "model.isOkToRequestManual"
-        return Notify.error "Please susbcribe to a standard / custom plan to avail this feature."
+        return @get("controllers.application.upgradePlan").send "showModal"
       file_id = @get "model.id"
       manualUrl = [ENV.APP.API_BASE, ENV.endpoints.manual, file_id].join '/'
       xhr = EmberCLIICAjax url:manualUrl, type: "get"

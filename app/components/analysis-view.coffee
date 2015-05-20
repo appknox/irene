@@ -1,10 +1,10 @@
 `import Ember from 'ember'`
-`import Notify from 'ember-notify';`
 
 AnalysisViewComponent = Ember.Component.extend
   classNames: ["col-md-12"]
   model: null
   showVulnerability: false
+  needs: ['application']
 
   showOrHide: (->
     if @get "showVulnerability"
@@ -17,7 +17,7 @@ AnalysisViewComponent = Ember.Component.extend
     toggleVulnerability: ->
       pricing = @get "model.file.project.owner.pricing"
       if Ember.isEmpty pricing
-        return Notify.error "Please susbcribe to a standard / custom plan to avail this feature."
+        return @container.lookup("controller:application").get("upgradePlan").send "showModal"
       @set "showVulnerability", !@get "showVulnerability"
 
 `export default AnalysisViewComponent`
