@@ -1,6 +1,7 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums';`
 `import ENV from 'irene/config/environment';`
+`import Notify from 'ember-notify';`
 
 VncViewerComponent = Ember.Component.extend
   file: null
@@ -43,6 +44,9 @@ VncViewerComponent = Ember.Component.extend
 
     dynamicScan: ->
       file_id = @get "file.id"
+      pricing = @get "file.project.owner.pricing"
+      if Ember.isEmpty pricing
+        return Notify.error "Please susbcribe to a standard / custom plan to avail this feature"
       uploadUrl = [ENV.APP.API_BASE, ENV.endpoints.dynamic, file_id].join '/'
       $.get uploadUrl
 
