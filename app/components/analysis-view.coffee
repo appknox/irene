@@ -4,7 +4,6 @@ AnalysisViewComponent = Ember.Component.extend
   classNames: ["col-md-12"]
   model: null
   showVulnerability: false
-  needs: ['application']
 
   showOrHide: (->
     if @get "showVulnerability"
