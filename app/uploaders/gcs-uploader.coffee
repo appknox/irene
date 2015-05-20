@@ -44,8 +44,8 @@ GCSUploader = EmberUploader.Uploader.extend
         if xhr.status is 200
           Notify.success "File Uploaded Successfully. Please wait while we process your file."
           self.didUpload json.file_key, json.file_key_signed
-
-        Notify.error "Error While signing the file."
+        else
+          Notify.error "Error While signing the file."
 
       url  = json.base_url
       headers = json.headers
