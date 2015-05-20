@@ -34,7 +34,7 @@ UpgradePlanComponent = Ember.Component.extend
       Ember.$.post postUrl, data
       .then ->
         that.send "closeModal"
-        Notify.success "Feedback submitted!"
+        Notify.success "We will get in touch with you soon. Thanks."
       .fail (xhr, message, status) ->
         if xhr.status is 403
           Notify.error xhr.responseJSON.message
