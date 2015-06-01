@@ -60,9 +60,13 @@ hr
 h3.m-b-xs.text-black Projects
 
 .row.m-b
-  each project in sortedModel
-    .col-sm-6.col-md-4.tour-step-projects
-      = partial "_project"
 
+  if controllers.application.initLoaded
+    each project in sortedModel
+      .col-sm-6.col-md-4.tour-step-projects
+        = partial "_project"
+
+    else
+      h3 You have not created any projects yet!
   else
-    h3 You have not created any projects yet!
+    = fa-icon "spinner fa-pulse ml-50per" size=4

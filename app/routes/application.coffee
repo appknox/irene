@@ -28,6 +28,7 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
           user.set 'urls', result.urls
           controller.set 'currentUser', user
           controller.subscribe user.get "uuid"
+        controller.set 'initLoaded', true
         resolve result
 
   setupController: (controller)->
