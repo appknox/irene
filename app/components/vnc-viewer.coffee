@@ -43,6 +43,9 @@ VncViewerComponent = Ember.Component.extend
 
     dynamicScan: ->
       file_id = @get "file.id"
+      pricing = @get "file.project.owner.pricing"
+      if Ember.isEmpty pricing
+        return @container.lookup("controller:application").get("upgradePlan").send "showModal"
       uploadUrl = [ENV.APP.API_BASE, ENV.endpoints.dynamic, file_id].join '/'
       $.get uploadUrl
 

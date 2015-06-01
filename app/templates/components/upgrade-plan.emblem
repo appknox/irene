@@ -1,0 +1,14 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      h4.modal-title Please Upgrade Your Plan
+    .modal-body
+      p
+        | This is a premium feature. Please upgrade your plan to get access to it. If you have any query,
+        a href="#" click="getInTouch" &nbsp; click here
+        | &nbsp;and we will get in touch with you soon.
+    .modal-footer
+      button.btn.btn-default click="closeModal" Close
+      link-to "pricing" class="btn btn-success"
+        | View Plans
+      button.btn.btn-success click="getInTouch" Get in touch

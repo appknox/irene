@@ -14,6 +14,9 @@ AnalysisViewComponent = Ember.Component.extend
 
   actions:
     toggleVulnerability: ->
+      pricing = @get "model.file.project.owner.pricing"
+      if Ember.isEmpty pricing
+        return @container.lookup("controller:application").get("upgradePlan").send "showModal"
       @set "showVulnerability", !@get "showVulnerability"
 
 `export default AnalysisViewComponent`

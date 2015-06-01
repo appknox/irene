@@ -2,17 +2,15 @@
 `import ENV from 'irene/config/environment';`
 `import Notify from 'ember-notify';`
 
-FeedBackComponent = Ember.Component.extend
+UpgradePlanComponent = Ember.Component.extend
   needs: ['application']
   classNames: ['modal', 'fade', 'in']
   classNameBindings: ['show']
   show: false
   appCtrlr: null
-  satisfied: true
-  feedbackText: ""
 
   attachToApp: (->
-    @get("appCtrlr").set "feedback", @
+    @get("appCtrlr").set "upgradePlan", @
   ).on "init"
 
   actions:
@@ -23,22 +21,24 @@ FeedBackComponent = Ember.Component.extend
     showModal: ->
       @set "show", true
 
-    submitFeedback: ->
+    gotoPricing: ->
+      @send "closeModal"
+
+    getInTouch: ->
       that = @
       data =
-        satisfied: @get "satisfied"
-        feedbackText: @get "feedbackText"
+        satisfied: false
+        feedbackText: "*** GET IN TOUCH FOR PRICING ***"
       postUrl = [ENV.APP.API_BASE, ENV.endpoints.feedback].join '/'
       that = @
       Ember.$.post postUrl, data
       .then ->
         that.send "closeModal"
-        Notify.success "Feedback submitted!"
+        Notify.success "We will get in touch with you soon. Thanks."
       .fail (xhr, message, status) ->
         if xhr.status is 403
           Notify.error xhr.responseJSON.message
         else
           Notify.error "A network error occured! Please try again later"
 
-
-`export default FeedBackComponent`
+`export default UpgradePlanComponent`
