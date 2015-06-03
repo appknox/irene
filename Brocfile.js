@@ -8,6 +8,10 @@ var app = new EmberApp({
   storeConfigInMeta: false
 });
 
+if (app.env == 'production') {
+  app.import('vendor/scripts/sherlog.min.js');
+}
+
 app.import('vendor/scripts/jquery.drawPieChart.js');
 
 app.import('bower_components/socket.io-client/socket.io.js');
