@@ -2,15 +2,12 @@
 
 var EmberApp = require('ember-cli/lib/broccoli/ember-app'),
   assetRev = require('broccoli-asset-rev'),
-  htmlmin = require('broccoli-htmlmin');
+  htmlmin = require('broccoli-htmlmin'),
+  Funnel = require('broccoli-funnel');
 
 var app = new EmberApp({
   storeConfigInMeta: false
 });
-
-if (app.env == 'production') {
-  app.import('vendor/scripts/sherlog.min.js');
-}
 
 app.import('vendor/scripts/jquery.drawPieChart.js');
 
@@ -35,7 +32,14 @@ app.import('bower_components/no-vnc/include/jsunzip.js')
 app.import('bower_components/no-vnc/include/rfb.js')
 app.import('bower_components/no-vnc/include/keysym.js')
 
-var tree = app.toTree();
+var extraAssets = new Funnel('vendor/scripts', {
+   srcDir: '/',
+   include: ['sherlog.min.js'],
+   destDir: '/assets'
+});
+
+
+var tree = app.toTree(extraAssets);
 
 options = {
   quotes: true
