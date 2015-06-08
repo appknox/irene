@@ -28,6 +28,10 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
           user.set 'urls', result.urls
           controller.set 'currentUser', user
           controller.subscribe user.get "uuid"
+          Raven.setUserContext
+            email: user.get "email"
+            id: user.get "id"
+          Raven.captureMessage "User Logged in", level: "info"
         controller.set 'initLoaded', true
         resolve result
 

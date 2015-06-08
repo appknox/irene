@@ -2,6 +2,39 @@
 `import Resolver from 'ember/resolver';`
 `import loadInitializers from 'ember/load-initializers';`
 `import ENV from 'irene/config/environment';`
+`import Notify from 'ember-notify';`
+
+
+# Raven - Ember Plugin
+_oldOnError = Ember.onerror
+
+Ember.onerror  = (error) ->
+  Raven.captureException error
+  if 'function' is typeof _oldOnError
+    _oldOnError.call @, error
+
+_notifyShow = Notify.show
+
+Notify.show = (type, message, options) ->
+  _notifyShow.call @, type, message, options
+  if type is "success"
+    type = "info"
+  Raven.captureMessage message, "level": type
+
+Ember.RSVP.on 'error', (err) ->
+  Raven.captureException err
+
+Ember.RSVP.on 'fulfilled', ->
+  Raven.captureMessage "RSVP Fulfilled!", {"level": "info"}
+
+Ember.RSVP.on 'rejected', ->
+  Raven.captureMessage "RSVP Rejected!", {"level": "info"}
+
+rvn = Raven.config ENV.ravenDSN,
+	release: '1.0.0'
+  # whitelistUrls: ['example.com/scripts/']
+
+rvn.install()
 
 Ember.$.ajaxSetup
   type: "POST"
