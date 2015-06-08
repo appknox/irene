@@ -3,6 +3,25 @@
 `import loadInitializers from 'ember/load-initializers';`
 `import ENV from 'irene/config/environment';`
 
+
+# Raven - Ember Plugin
+_oldOnError = Ember.onerror
+
+emberOnError = (error) ->
+  Raven.captureException error
+  if 'function' is typeof _oldOnError
+    _oldOnError.call @, error
+
+Ember.onerror = emberOnError
+
+Ember.RSVP.on 'error',(err) ->
+  Raven.captureException err
+
+Raven.config(ENV.ravenDSN,
+	release: '1.0.0'
+  # whitelistUrls: ['example.com/scripts/']
+).install()
+
 Ember.$.ajaxSetup
   type: "POST"
   data: {}
