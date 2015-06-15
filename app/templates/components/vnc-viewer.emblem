@@ -1,16 +1,24 @@
 if file.isNoneStaus
-  button.btn.btn-primary.w-100.col-md-12 click="dynamicScan" Start Dynamic Scan
+  .row
+    button.btn.btn-primary.w-100.col-md-12 click="dynamicScan" Start Dynamic Scan
 
 if file.isReady
-  button.btn.btn-primary.w-100.col-md-12 click="dynamicShutdown" Shutdown Device
+  .row
+    button.btn.btn-primary.w-100.col-md-12 click="dynamicShutdown" Shutdown Device
 
 if file.isBooting
-  button.btn.btn-primary.w-100.col-md-12.disabled Device Booting. Please wait.
-if file.isShuttingDown
-  button.btn.btn-primary.w-100.col-md-12.disabled Device is shutting down.
+  .row
+    button.btn.btn-primary.w-100.col-md-12.disabled Device Booting. Please wait.
 
-canvas.canvas
+if file.isShuttingDown
+  .row
+    button.btn.btn-primary.w-100.col-md-12.disabled Device is shutting down.
+
+.row
+  canvas.canvas
+
 
 if file.isReady
-  button.btn.btn-primary.w-100.col-md-12 click="switchModal"
-    = switchText
+  .row
+    button.btn.btn-primary.w-100.col-md-12 click="switchModal"
+      = switchText
