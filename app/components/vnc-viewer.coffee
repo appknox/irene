@@ -4,7 +4,7 @@
 
 VncViewerComponent = Ember.Component.extend
   file: null
-  mainClass: null
+  classNames: ["m-t"]
   rfb: null
   didInsertElement: ->
     thisEl = document.getElementById @elementId
