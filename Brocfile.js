@@ -52,10 +52,6 @@ else {
   app.import('bower_components/raven-js/dist/raven.js');
 }
 
-app.import('bower_components/raven-js/plugins/jquery.js');
-app.import('bower_components/raven-js/plugins/native.js');
-app.import('bower_components/raven-js/plugins/console.js');
-
 tree = app.toTree(extraAssets);
 
 options = {
