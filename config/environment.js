@@ -70,8 +70,8 @@ module.exports = function(environment) {
     ENV.socketPort = '8008';
     ENV.socketSecure = false;
     ENV.useFakeS3 = true;
-
-    ENV.ravenDSN = "https://615b5478f6d148ffb0996dcc184990ad@sentry.appknox.com/6"
+    ENV.ravenDSN = "http://615b5478f6d148ffb0996dcc184990ad@localhost:8000/1"
+    //ENV.ravenDSN = "https://615b5478f6d148ffb0996dcc184990ad@sentry.appknox.com/6"
 
   }
 
@@ -153,7 +153,7 @@ module.exports = function(environment) {
     "connect-src": "'self' storage.googleapis.com ws://localhost:8008 http://localhost:8008 ws://localhost:6080/websockify *.s3.amazonaws.com *.zendesk.com " + ENV.APP.API_HOST + " " + ENV.fakeS3URL,
     "frame-src": "'self' *.zendesk.com",
     "report-uri": "'self'",
-    'img-src': "'self' www.gravatar.com placehold.it storage.googleapis.com s3.amazonaws.com *.cloudfront.net *.amazonaws.com sherlog.appknox.com sentry.appknox.com",
+    'img-src': "'self' www.gravatar.com placehold.it storage.googleapis.com s3.amazonaws.com *.cloudfront.net *.amazonaws.com sherlog.appknox.com sentry.appknox.com localhost:8000",
     'style-src': "'self' 'unsafe-inline'",
     'script-src': "'self' 'unsafe-eval' 'unsafe-inline' localhost:35729 0.0.0.0:35729 storage.googleapis.com *.zendesk.com *.amazonaws.com *.cloudfront.net",
     'font-src': "'self' data:;"

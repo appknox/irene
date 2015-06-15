@@ -21,7 +21,7 @@ LoginController = Ember.Controller.extend LoginControllerMixin,
 
   checkOnInit: (->
     if localStorage.authToken
-      @transitionTo "index"
+      @transitionToRoute "index"
   ).on "init"
 
   actions:

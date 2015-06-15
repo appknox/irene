@@ -34,18 +34,6 @@ app.import('bower_components/no-vnc/include/rfb.js');
 app.import('bower_components/no-vnc/include/keysym.js');
 
 if (app.env == 'production') {
-  extraAssets = new Funnel('vendor/scripts', {
-    srcDir: '/',
-    include: ['sherlog.js'],
-    destDir: '/assets'
-  });
-}
-else{
-  app.import('vendor/scripts/sherlog-dev.js');
-}
-
-
-if (app.env == 'production') {
   app.import('bower_components/raven-js/dist/raven.min.js');
 }
 else {
