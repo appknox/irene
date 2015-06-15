@@ -5,7 +5,10 @@
 VncViewerComponent = Ember.Component.extend
   file: null
   classNames: ["m-t"]
+  classNameBindings: ["showAsModal:vnc-modal"]
   rfb: null
+  showAsModal: false
+
   didInsertElement: ->
     thisEl = document.getElementById @elementId
     canvasEl = thisEl.getElementsByTagName("canvas")[0]
@@ -33,6 +36,13 @@ VncViewerComponent = Ember.Component.extend
       @send "disconnect"
   ).observes 'file.dynamicStatus'
 
+  switchText: (->
+    if @get "showAsModal"
+      "Back to side-view"
+    else
+      "Pop out as modal"
+  ).property "showAsModal"
+
   actions:
 
     connect: ->
@@ -46,12 +56,15 @@ VncViewerComponent = Ember.Component.extend
       pricing = @get "file.project.owner.pricing"
       if Ember.isEmpty pricing
         return @container.lookup("controller:application").get("upgradePlan").send "showModal"
-      uploadUrl = [ENV.APP.API_BASE, ENV.endpoints.dynamic, file_id].join '/'
-      $.get uploadUrl
+      dynamicUrl = [ENV.APP.API_BASE, ENV.endpoints.dynamic, file_id].join '/'
+      $.get dynamicUrl
 
     dynamicShutdown: ->
       file_id = @get "file.id"
-      uploadUrl = [ENV.APP.API_BASE, ENV.endpoints.dynamicShutdown, file_id].join '/'
-      $.get uploadUrl
+      shutdownUrl = [ENV.APP.API_BASE, ENV.endpoints.dynamicShutdown, file_id].join '/'
+      $.get shutdownUrl
+
+    switchModal: ->
+      @set "showAsModal", !@get "showAsModal"
 
 `export default VncViewerComponent`
