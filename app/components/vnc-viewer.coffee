@@ -60,6 +60,7 @@ VncViewerComponent = Ember.Component.extend
       $.get dynamicUrl
 
     dynamicShutdown: ->
+      @set "showAsModal", false
       file_id = @get "file.id"
       shutdownUrl = [ENV.APP.API_BASE, ENV.endpoints.dynamicShutdown, file_id].join '/'
       $.get shutdownUrl
