@@ -48,6 +48,7 @@
     "ember-onboarding": "0.0.3"
   },
   "dependencies": {
+    "ember-git-version": "0.0.1",
     "ember-moment": "^1.1.1"
   }
 }

@@ -31,8 +31,7 @@ Ember.RSVP.on 'rejected', ->
   Raven.captureMessage "RSVP Rejected!", {"level": "info"}
 
 rvn = Raven.config ENV.ravenDSN,
-	release: '1.0.0'
-  # whitelistUrls: ['example.com/scripts/']
+	release: ENV.currentRevision
 
 rvn.install()
 
