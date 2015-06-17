@@ -33,6 +33,7 @@ VncViewerComponent = Ember.Component.extend
     if ENUMS.DYNAMIC_STATUS.READY is @get 'file.dynamicStatus'
       @send "connect"
     else
+      @set "showAsModal", false
       @send "disconnect"
   ).observes 'file.dynamicStatus'
 
