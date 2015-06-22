@@ -9,6 +9,8 @@ script:
   - nodeenv env
   - source env/bin/activate
   - npm install -g bower ember-cli
+  - npm install
+  - bower install
   - ember test
 notify:
   email:
