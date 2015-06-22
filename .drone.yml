@@ -7,7 +7,10 @@ script:
   - sudo add-apt-repository ppa:git-core/ppa 1> /dev/null 2> /dev/null
   - sudo apt-get update 1> /dev/null 2> /dev/null
   - sudo apt-get -y install git node
-  - sudo npm install -g bower ember-cli
+  - sudo pip install nodeenv
+  - nodeenv env
+  - source env/bin/activate
+  - npm install -g bower ember-cli
   - npm install
   - bower install
   - ember test
