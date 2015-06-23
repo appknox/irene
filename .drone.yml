@@ -1,3 +1,4 @@
+image: ubuntu:trusty
 git:
   path: github.com/xysec/irene
 
