@@ -19,6 +19,7 @@ notify:
       - dhilipsiva@gmail.com
       - sunny@appknox.com
       - sourav@appknox.com
+
   webhook:
   slack:
     webhook_url: 'https://hooks.slack.com/services/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'
