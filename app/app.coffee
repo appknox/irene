@@ -5,8 +5,8 @@
 `import Notify from 'ember-notify';`
 
 # Raven test fixture
-if "undefined" is typeof Raven
-  Raven =
+if "undefined" is typeof window.Raven
+  window.Raven =
     captureMessage: ->
       console.log arguments
     captureException: ->
