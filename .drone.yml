@@ -9,7 +9,7 @@ script:
   - sudo pip install nodeenv
   - nodeenv env
   - source env/bin/activate
-  - sudo npm install -g bower ember-cli phantomjs
+  - npm install -g bower ember-cli phantomjs
   - npm install
   - bower install
   - ember test
