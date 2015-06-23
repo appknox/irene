@@ -1,4 +1,4 @@
-image: ubuntu:trusty
+image: python2.7
 
 git:
   path: github.com/xysec/irene
