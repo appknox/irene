@@ -10,10 +10,10 @@ script:
   - sudo pip install nodeenv
   - nodeenv env
   - source env/bin/activate
-  - npm install -g bower ember-cli
+  - npm install -g bower ember-cli phantomjs
   - npm install
   - bower install
-  - sudo ember test
+  - ember test
 notify:
   email:
     recipients:
