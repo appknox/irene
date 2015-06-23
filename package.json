@@ -19,7 +19,6 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "broccoli-asset-rev": "2.0.3",
     "broccoli-ember-script": "0.1.1",
     "broccoli-funnel": "^0.2.3",
     "broccoli-htmlmin": "^2.0.0",
