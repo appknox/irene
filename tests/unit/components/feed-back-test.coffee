@@ -2,7 +2,7 @@
 
 moduleForComponent 'feed-back', {
   # specify the other units that are required for this test
-  # needs: ['component:foo', 'helper:bar']
+  needs: ['controller:application']
 }
 
 test 'it renders', (assert) ->

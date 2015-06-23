@@ -11,6 +11,7 @@ RepoSelectorComponent = Ember.Component.extend
   classNameBindings: ['isOpen:open']
 
   fetchGithubRepos: (->
+    return if ENV.environment is "test"
     githubReposUrl = [ENV.APP.API_BASE, ENV.endpoints.githubRepos].join '/'
     that = @
     Ember.$.get githubReposUrl
