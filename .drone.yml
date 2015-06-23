@@ -1,4 +1,4 @@
-image: switchback/debian
+image: switchback/git-debian
 git:
   path: github.com/xysec/irene
 
