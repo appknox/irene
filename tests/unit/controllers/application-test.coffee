@@ -2,7 +2,7 @@
 
 moduleFor 'controller:application', 'ApplicationController', {
   # Specify the other units that are required for this test.
-  # needs: ['controller:foo']
+  needs: ['helper:start-app']
 }
 
 # Replace this with your real tests.

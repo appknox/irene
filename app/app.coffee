@@ -4,6 +4,13 @@
 `import ENV from 'irene/config/environment';`
 `import Notify from 'ember-notify';`
 
+# Raven test fixture
+if "undefined" is typeof window.Raven
+  window.Raven =
+    captureMessage: ->
+      console.log arguments
+    captureException: ->
+      console.log arguments
 
 # Raven - Ember Plugin
 _oldOnError = Ember.onerror
