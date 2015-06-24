@@ -25,6 +25,7 @@
   },
   "resolutions": {
     "ember": "1.11.1",
-    "jquery": "~2.1.4"
+    "jquery": "~2.1.4",
+    "tether": "~0.7.2"
   }
 }
