@@ -1,0 +1,24 @@
+.timeline
+
+  article.timeline-item.active
+    .timeline-caption
+      .panel.bg-primary.lt.no-borders
+        .panel-body
+          span.timeline-icon
+            i.fa.fa-bell-o.time-icon.bg-primary
+          span.timeline-date
+            | 7:30 am
+          .text-sm
+            | Wake up
+          h5
+            | Me
+          .m-t-sm.timeline-action
+            span.h3.pull-left.m-r-sm
+              | 4:51
+            button.btn.btn-sm.btn-default.btn-bg
+              i.fa.fa-pause
+              | Pause
+            button.btn.btn-sm.btn-default.btn-bg
+              i.fa.fa-check
+              | Confirm
+  timeline-item

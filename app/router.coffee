@@ -22,5 +22,7 @@ Router.map ->
   @route 'paypal_return'
   @route 'paypal_cancel'
 
+  @route 'choose', path: 'choose/:file_id'
+  @route 'compare', path: 'compare/:file_id_1/:file_id_2'
 
 `export default Router;`

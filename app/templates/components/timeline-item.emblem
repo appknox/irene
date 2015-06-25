@@ -1,0 +1,12 @@
+.timeline-caption
+  .panel.panel-default
+    .panel-body
+      span.arrow.left
+      span.timeline-icon
+        i.fa.fa-phone.time-icon.bg-primary
+      span.timeline-date
+        | 12:25 am
+      .text-sm
+        | Call to
+      h5
+        | Jason Cokde (021-254-3523)

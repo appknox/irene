@@ -8,4 +8,3 @@ FileView = Ember.View.extend
     appController.tourScanDetail()
 
 `export default FileView;`
-

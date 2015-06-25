@@ -55,4 +55,8 @@ File = DS.Model.extend BaseModelMixin,
     risks
   ).property "analyses.@each.risk"
 
+  otherFilesInTheProject: Ember.computed.filter 'project.files', (file) ->
+    file_id = @get "id"
+    file_id isnt file.get "id"
+
 `export default File;`
