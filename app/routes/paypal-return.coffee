@@ -1,7 +1,7 @@
 `import Ember from 'ember'`
 `import Notify from 'ember-notify';`
 
-PaypalReturnRoute = Ember.Route.extend
+PaypalReturnRoute = Ember.Route.extend AuthenticatedRouteMixin,
   beforeModel: ->
     Notify.info "Please wait while your payment is being processed", closeAfter: 5000
     @transitionTo 'index'

@@ -8,11 +8,11 @@ Router = Ember.Router.extend CancelTour,
 Router.map ->
   @route "login"
 
-  @resource 'project', path: 'projects/:project_id', ->
+  @resource 'project', path: 'projects/:projectId', ->
     @route 'files'
     @route 'settings'
 
-  @resource 'file', path: 'files/:file_id', ->
+  @resource 'file', path: 'files/:fileId', ->
 
   @route 'pricing'
 
@@ -22,7 +22,7 @@ Router.map ->
   @route 'paypal_return'
   @route 'paypal_cancel'
 
-  @route 'choose', path: 'choose/:file_id'
-  @route 'compare', path: 'compare/:file_id_1/:file_id_2'
+  @route 'choose', path: 'choose/:fileId'
+  @route 'compare', path: 'compare/:fileId1/:fileId2'
 
 `export default Router;`

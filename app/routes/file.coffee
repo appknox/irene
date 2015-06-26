@@ -4,6 +4,6 @@
 FileRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
   model: (params)->
-    @store.find 'file', params.file_id
+    @store.find 'file', params.fileId
 
 `export default FileRoute`

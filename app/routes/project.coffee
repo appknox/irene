@@ -4,7 +4,7 @@
 ProjectRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
   model: (params)->
-    @store.find 'project', params.project_id
+    @store.find 'project', params.projectId
 
   afterModel: (project, transition) ->
     project.reload()
