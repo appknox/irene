@@ -1,6 +1,5 @@
 `import Ember from 'ember'`
 `import EmberCLIICAjax from 'ic-ajax';`
-`import serialize from 'irene/utils/serialize';`
 `import ENV from 'irene/config/environment';`
 `import Notify from 'ember-notify';`
 
