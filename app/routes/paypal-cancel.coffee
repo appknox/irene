@@ -1,5 +1,6 @@
 `import Ember from 'ember'`
 `import Notify from 'ember-notify';`
+`import AuthenticatedRouteMixin from 'simple-auth/mixins/authenticated-route-mixin';`
 
 PaypalCancelRoute = Ember.Route.extend AuthenticatedRouteMixin,
   beforeModel: ->
