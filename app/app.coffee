@@ -7,13 +7,18 @@
 # Raven test fixture
 if "production" isnt ENV.environment
   window.Raven =
+    setUserContext: ->
+      console.log "Raven.setUserContext"
+      console.log arguments
+
     captureMessage: ->
       console.log "Raven.captureMessage"
       console.log arguments
 
-    captureException: ->
+    captureException: (exception)->
+      # debugger
       console.log "Raven.captureException"
-      console.log arguments
+      console.warn exception
 
     config: ->
       console.log "Raven.config"

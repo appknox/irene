@@ -3,22 +3,17 @@
   article.timeline-item.active
     .timeline-caption
       .panel.bg-primary.lt.no-borders
-        .panel-body
-          span.timeline-icon
-            i.fa.fa-bell-o.time-icon.bg-primary
-          span.timeline-date
-            | 7:30 am
-          .text-sm
-            | Wake up
-          h5
-            | Me
+        .panel-body.text-center
+          h3
+            | Compare &nbsp;
+            = file1.project.name
           .m-t-sm.timeline-action
-            span.h3.pull-left.m-r-sm
-              | 4:51
-            button.btn.btn-sm.btn-default.btn-bg
-              i.fa.fa-pause
-              | Pause
-            button.btn.btn-sm.btn-default.btn-bg
-              i.fa.fa-check
-              | Confirm
-  timeline-item
+            h4
+              = file1.version
+              | &nbsp;
+              = fa-icon "exchange"
+              | &nbsp;
+              = file2.version
+
+  each vulnerability in vulnerabilities
+    timeline-item model=vulnerability file1=file1 file2=file2

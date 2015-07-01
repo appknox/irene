@@ -1,12 +1,10 @@
 .timeline-caption
   .panel.panel-default
     .panel-body
-      span.arrow.left
+      span.arrow class=arrowClass
       span.timeline-icon
         i.fa.fa-phone.time-icon.bg-primary
-      span.timeline-date
-        | 12:25 am
       .text-sm
-        | Call to
+        = compareColor
       h5
-        | Jason Cokde (021-254-3523)
+        = model.name
