@@ -60,7 +60,7 @@ module.exports = function(environment) {
   };
 
   if (environment === 'development') {
-    // ENV.APP.LOG_RESOLVER = true;
+    ENV.APP.LOG_RESOLVER = true;
     ENV.APP.LOG_ACTIVE_GENERATION = true;
     ENV.APP.LOG_TRANSITIONS = true;
     ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
@@ -70,9 +70,6 @@ module.exports = function(environment) {
     ENV.socketPort = '8008';
     ENV.socketSecure = false;
     ENV.useFakeS3 = true;
-    ENV.ravenDSN = "http://615b5478f6d148ffb0996dcc184990ad@localhost:8000/1"
-    //ENV.ravenDSN = "https://615b5478f6d148ffb0996dcc184990ad@sentry.appknox.com/6"
-
   }
 
   if (environment === 'test') {
