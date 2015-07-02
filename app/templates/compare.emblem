@@ -2,7 +2,7 @@
 
   article.timeline-item.active
     .timeline-caption
-      .panel.bg-primary.lt.no-borders
+      .panel.bg-info.lt.no-borders
         .panel-body.text-center
           h3
             | Compare &nbsp;
@@ -15,5 +15,5 @@
               | &nbsp;
               = file2.version
 
-  each vulnerability in vulnerabilities
-    timeline-item model=vulnerability file1=file1 file2=file2
+  each comparison in comparisons
+    timeline-item model=comparison

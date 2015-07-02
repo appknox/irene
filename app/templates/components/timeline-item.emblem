@@ -3,8 +3,6 @@
     .panel-body
       span.arrow class=arrowClass
       span.timeline-icon
-        i.fa.fa-phone.time-icon.bg-primary
-      .text-sm
-        = compareColor
+        i.fa.time-icon class=compareColor
       h5
-        = model.name
+        = vulnerability.name
