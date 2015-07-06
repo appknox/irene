@@ -9,6 +9,11 @@
     em-tab-panel class="row"
       each comparison in comparisons
         compare-summary model=comparison
-    em-tab-panel
+    em-tab-panel class="row"
       each comparison in comparisons
-        | Details
+        .col-md-12
+          .row
+            .col-md-6
+              analysis-view model=comparison.analysis1
+            .col-md-6
+              analysis-view model=comparison.analysis2
