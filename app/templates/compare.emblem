@@ -1,19 +1,14 @@
-.timeline
-
-  article.timeline-item.active
-    .timeline-caption
-      .panel.bg-info.lt.no-borders
-        .panel-body.text-center
-          h3
-            | Compare &nbsp;
-            = file1.project.name
-          .m-t-sm.timeline-action
-            h4
-              = file1.version
-              | &nbsp;
-              = fa-icon "exchange"
-              | &nbsp;
-              = file2.version
-
-  each comparison in comparisons
-    timeline-item model=comparison
+.row
+  h3 Compare
+  em-tabs class="col-md-12"
+    em-tab-list class="row text-center"
+      em-tab class="col-md-6"
+        h4 Summary
+      em-tab class="col-md-6"
+        h4 Details
+    em-tab-panel class="row"
+      each comparison in comparisons
+        compare-summary model=comparison
+    em-tab-panel
+      each comparison in comparisons
+        | Details

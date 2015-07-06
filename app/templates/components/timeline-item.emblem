@@ -1,8 +1,0 @@
-.timeline-caption
-  .panel.panel-default
-    .panel-body
-      span.arrow class=arrowClass
-      span.timeline-icon
-        i.fa.time-icon class=compareColor
-      h5
-        = vulnerability.name

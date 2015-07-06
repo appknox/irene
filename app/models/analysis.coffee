@@ -19,6 +19,25 @@ Analysis = DS.Model.extend
       when ENUMS.RISK.HIGH then "#{cls} bg-danger"
   ).property "risk"
 
+  labelClass:( ->
+    cls = 'label'
+    switch @get "risk"
+      when ENUMS.RISK.UNKNOWN then "#{cls} label-default bg-scanning"
+      when ENUMS.RISK.NONE then "#{cls} label-success"
+      when ENUMS.RISK.LOW then "#{cls} label-info"
+      when ENUMS.RISK.MEDIUM then "#{cls} label-warning"
+      when ENUMS.RISK.HIGH then "#{cls} label-danger"
+  ).property "risk"
+
+  riskText:( ->
+    switch @get "risk"
+      when ENUMS.RISK.UNKNOWN then "Scanning"
+      when ENUMS.RISK.NONE then "None"
+      when ENUMS.RISK.LOW then "Low"
+      when ENUMS.RISK.MEDIUM then "Medium"
+      when ENUMS.RISK.HIGH then "High"
+  ).property "risk"
+
   descriptions:(->
     JSON.parse @get "description"
   ).property "description"
