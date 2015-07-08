@@ -9,7 +9,7 @@
 IreneAuthenticator = Base.extend
 
   makeRequest: (url, data=null, type='POST') ->
-    Ember.$.ajax
+    ajax
       url: url,
       type: type,
       data: data,

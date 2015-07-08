@@ -49,6 +49,7 @@
   "dependencies": {
     "broccoli-asset-rev": "^2.0.6",
     "ember-git-version": "0.0.1",
+    "ember-idx-tabs": "^0.1.4",
     "ember-moment": "^1.2.1"
   }
 }

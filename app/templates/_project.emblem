@@ -33,5 +33,8 @@ section.panel
       .col-md-1 data-hint="Settings"
         link-to 'project.settings' project.id
           = fa-icon "wrench"
+      .col-md-1 data-hint="Compare"
+        link-to 'choose' project.lastFile.id
+          = fa-icon "exchange"
       .col-md-1.pull-right{action "deleteProject" project on="click"} data-hint="Delete"
         = fa-icon "trash"

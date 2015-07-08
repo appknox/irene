@@ -1,6 +1,6 @@
+h4 All Files
 .col-md-12
-  h4 All Files
-each file in model.sortedFiles
-  = render "_file" file
-else
-  h3 You have not uploaded any files yet!
+  each file in model.sortedFiles
+    = render "_file" file
+  else
+    h3 You have not uploaded any files yet!

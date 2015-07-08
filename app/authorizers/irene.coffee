@@ -1,6 +1,4 @@
-`import Ember from 'ember';`
 `import Base from 'simple-auth/authorizers/base';`
-`import loginBtn from 'irene/utils/login-btn';`
 
 b64EncodeUnicode = (str) ->
   btoa encodeURIComponent(str).replace /%([0-9A-F]{2})/g, (match, p1) ->

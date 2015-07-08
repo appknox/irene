@@ -5,12 +5,29 @@
 `import Notify from 'ember-notify';`
 
 # Raven test fixture
-if "undefined" is typeof window.Raven
+if "production" isnt ENV.environment
   window.Raven =
+    setUserContext: ->
+      console.log "Raven.setUserContext"
+      console.log arguments
+
     captureMessage: ->
+      console.log "Raven.captureMessage"
       console.log arguments
-    captureException: ->
+
+    captureException: (exception)->
+      # debugger
+      console.log "Raven.captureException"
+      console.warn exception
+
+    config: ->
+      console.log "Raven.config"
       console.log arguments
+
+      install: ->
+        console.log "Raven.install"
+        console.log arguments
+
 
 # Raven - Ember Plugin
 _oldOnError = Ember.onerror
