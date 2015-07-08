@@ -26,7 +26,7 @@ SocketMixin = Ember.Mixin.create
         Notify.warning message if risk is ENUMS.RISK.MEDIUM
         Notify.error message if risk is ENUMS.RISK.HIGH
 
-      @store.push "analysis", @store.normalize "analysis", data
+      @store.push @store.normalize "analysis", data
 
       @store.find("ratio", 1).then (ratio)->
         if risk in [ENUMS.RISK.NONE, ENUMS.RISK.LOW]
@@ -36,26 +36,26 @@ SocketMixin = Ember.Mixin.create
 
     file_new: (data)->
       Notify.info "New file added"
-      project = @store.push "project", @store.normalize "project", data.project
-      file = @store.push "file", @store.normalize "file", data.file
+      project = @store.push @store.normalize "project", data.project
+      file = @store.push @store.normalize "file", data.file
       for analysis in data.analyses
-        @store.push "analysis", @store.normalize "analysis", analysis
+        @store.push @store.normalize "analysis", analysis
       project.set "lastFile", file
 
     file_updated: (data) ->
       Notify.info "File updated"
-      @store.push "file", @store.normalize "file", data
+      @store.push @store.normalize "file", data
 
     user_updated: (data) ->
-      @store.push "user", @store.normalize "user", data
+      @store.push @store.normalize "user", data
 
     project_new: (data) ->
       Notify.info "New project added"
-      @store.push "project", @store.normalize "project", data
+      @store.push @store.normalize "project", data
 
     project_updated: (data) ->
       Notify.info "Project `#{data.name}` updated"
-      @store.push "project", @store.normalize "project", data
+      @store.push @store.normalize "project", data
 
     project_deleted: (data) ->
       Notify.info "Project `#{data.name}` deleted!"
