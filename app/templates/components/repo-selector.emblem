@@ -12,3 +12,6 @@ ul.dropdown-menu
     li
       a{action "selectRepo" repo on="click"}
         = repo
+
+button.btn.btn-lg.btn-primary.m-s click="revokeGitHub"
+  .text-large Revoke GitHub Access
