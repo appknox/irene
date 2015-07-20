@@ -46,7 +46,8 @@ module.exports = function(environment) {
       githubRepos: 'github_repos',
       setGithub: 'set_github',
       feedback: 'feedback',
-      revokeGitHub: 'unauthorize_github'
+      revokeGitHub: 'unauthorize_github',
+      changePassword: 'change_password',
     },
     webengage: {
       code: '~13410634d',

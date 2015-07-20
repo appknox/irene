@@ -1,0 +1,26 @@
+.col-md-12
+  h3 Settings
+  hr
+  h4 GitHub Integration
+  if controllers.application.currentUser.hasGithubToken
+    button.btn.btn-lg.btn-primary click="revokeGitHub"
+      .text-large Revoke GitHub Access
+  else
+    a.btn.btn-lg.btn-primary click="integrateGitHub"
+      = fa-icon 'github' size="2x"
+      .text-large Integrate GitHub
+  hr
+  h4.m-b Change Password
+  .row
+    form.col-md-4
+      .form-group.m-b
+        label Current Password
+        = input value=passwordCurrent type="password" class="input-lg form-control"
+      .form-group.m-b
+        label New Password
+        = input value=passwordNew type="password" class="input-lg form-control"
+      .form-group.m-b
+        label Confirm Password
+        = input value=passwordConfirm type="password" class="input-lg form-control"
+      .form-group.m-b
+        button.btn.btn-primary.btn-lg click="changePassword" Change Password
