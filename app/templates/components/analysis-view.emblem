@@ -16,7 +16,7 @@ section.panel.b-a
           if showVulnerability
             h4 Vulnerability
             each description in model.descriptions
-              description.extra_desc
+              p= description.extra_description
               pre= description.description
           .btn.bg-grey.w-100 click="toggleVulnerability"
             span = showOrHide
