@@ -3,7 +3,7 @@
     .modal-header
       h4.modal-title
         if added
-          | Namespace addtion requested!
+          | Namespace addition requested!
         else
           | Request to add a new namespace
 
