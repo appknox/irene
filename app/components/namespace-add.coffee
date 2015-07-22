@@ -34,7 +34,7 @@ NamespaceAddComponent = Ember.Component.extend
       that = @
       Ember.$.post postUrl, data
       .then ->
-        Notify.success "Namespace addition requested!"
+        Notify.success "we have received your request to add a new namespace."
       .fail (xhr, message, status) ->
         if xhr.status is 403
           Notify.error xhr.responseJSON.message
