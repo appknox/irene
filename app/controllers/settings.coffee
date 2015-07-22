@@ -49,4 +49,8 @@ SettingsController = Ember.Controller.extend
       .fail (xhr, message, status) ->
         Notify.error xhr.responseJSON.message
 
+    requestNamespace: ->
+      @get("controllers.application.namespaceAdd").set "added", false
+      @get("controllers.application.namespaceAdd").set "namespace", ""
+      @get("controllers.application.namespaceAdd").send "showModal"
 `export default SettingsController`
