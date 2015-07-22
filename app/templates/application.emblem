@@ -3,3 +3,4 @@
 = irene-onboard
 = feed-back appCtrlr=this
 = upgrade-plan appCtrlr=this
+= namespace-add appCtrlr=this

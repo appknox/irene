@@ -1,0 +1,20 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      h4.modal-title
+        if added
+          | Namespace addtion requested!
+        else
+          | Request to add a new namespace
+
+    .modal-body
+      if added
+        p.text-success Your request to add `{{ namespace }}` is being processed!
+      else
+        p Please enter the namespace that you want to add
+        = input class="form-control" value=namespace placeholder="Enter your namespace here."
+
+    .modal-footer
+      button.btn.btn-default click="closeModal" Close
+      if notAdded
+        button.btn.btn-primary click="addNamespace" Submit

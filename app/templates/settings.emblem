@@ -24,3 +24,6 @@
         = input value=passwordConfirm type="password" class="input-lg form-control"
       .form-group.m-b
         button.btn.btn-primary.btn-lg click="changePassword" Change Password
+  hr
+  h4 Request to add new namespace
+  button.btn.btn-lg.btn-primary click="requestNamespace" Request to add new namespace
