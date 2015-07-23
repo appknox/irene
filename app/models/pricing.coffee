@@ -10,7 +10,7 @@ Pricing = DS.Model.extend
   isBulky: DS.attr 'boolean'
   manual: DS.attr 'boolean'
   offer: DS.attr 'number'
-  users: DS.hasMany 'user', inverse: 'pricing'
+  users: DS.hasMany 'user', inverse: 'pricing', async:false
 
   descriptions: (->
     description = @get "description"

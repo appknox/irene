@@ -28,11 +28,11 @@ SocketMixin = Ember.Mixin.create
 
       @store.push @store.normalize "analysis", data
 
-      @store.find("ratio", 1).then (ratio)->
-        if risk in [ENUMS.RISK.NONE, ENUMS.RISK.LOW]
-          ratio.incrementUnaffected()
-        else if risk in [ENUMS.RISK.MEDIUM, ENUMS.RISK.HIGH]
-          ratio.incrementAffected()
+      ratio = @store.all("ratio").objectAt 0
+      if risk in [ENUMS.RISK.NONE, ENUMS.RISK.LOW]
+        ratio.incrementUnaffected()
+      else if risk in [ENUMS.RISK.MEDIUM, ENUMS.RISK.HIGH]
+        ratio.incrementAffected()
 
     file_new: (data)->
       Notify.info "New file added"

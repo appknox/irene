@@ -7,12 +7,12 @@ User = DS.Model.extend
   email: DS.attr 'string'
   firstName: DS.attr 'string'
   lastName: DS.attr 'string'
-  projects: DS.hasMany 'project', inverse: 'owner'
+  projects: DS.hasMany 'project', inverse: 'owner', async:false
   scanCount: DS.attr 'number'
   namespaces: DS.attr 'string'
   scansLeft: DS.attr 'number'
   processing: DS.attr 'number'
-  pricing: DS.belongsTo 'pricing', inverse: 'users'
+  pricing: DS.belongsTo 'pricing', inverse: 'users', async:false
   expiryDate: DS.attr 'date'
   hasGithubToken: DS.attr 'boolean'
   socketId: DS.attr 'string'

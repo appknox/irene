@@ -4,13 +4,13 @@
 `import Ember from 'ember'`
 
 Project = DS.Model.extend BaseModelMixin,
-  owner: DS.belongsTo 'user', inverse: 'projects'
+  owner: DS.belongsTo 'user', inverse: 'projects', async:false
   name: DS.attr 'string'
   packageName: DS.attr 'string'
   platform: DS.attr 'number'
   source: DS.attr 'string'
   version: DS.attr 'string'
-  files: DS.hasMany 'file', inverse: 'project'
+  files: DS.hasMany 'file', inverse: 'project', async:false
   fileCount: DS.attr 'number'
   githubRepo: DS.attr 'string'
 
