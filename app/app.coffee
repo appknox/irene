@@ -4,6 +4,8 @@
 `import ENV from 'irene/config/environment';`
 `import Notify from 'ember-notify';`
 
+Ember.Inflector.inflector.uncountable 'ratio'
+
 # Raven test fixture
 if "production" isnt ENV.environment
   window.Raven =

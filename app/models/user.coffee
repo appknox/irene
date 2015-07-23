@@ -3,7 +3,6 @@
 `import ENUMS from 'irene/enums'`
 
 User = DS.Model.extend
-  uuid: DS.attr 'string'
   username: DS.attr 'string'
   email: DS.attr 'string'
   firstName: DS.attr 'string'
@@ -16,6 +15,7 @@ User = DS.Model.extend
   pricing: DS.belongsTo 'pricing', inverse: 'users'
   expiryDate: DS.attr 'date'
   hasGithubToken: DS.attr 'boolean'
+  socketId: DS.attr 'string'
 
   humanizedExpiryDate: ago 'expiryDate', true
 
