@@ -20,7 +20,7 @@ if "production" isnt ENV.environment
     captureException: (exception)->
       # debugger
       console.log "Raven.captureException"
-      console.warn exception
+      console.error exception.stack
 
     config: ->
       console.log "Raven.config"
