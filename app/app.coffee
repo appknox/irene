@@ -4,8 +4,37 @@
 `import ENV from 'irene/config/environment';`
 `import Notify from 'ember-notify';`
 
-# Raven test fixture
-if "production" isnt ENV.environment
+if ENV.environment is "production"
+  # Raven - Ember Plugin
+  _oldOnError = Ember.onerror
+
+  Ember.onerror  = (error) ->
+    Raven.captureException error
+    if 'function' is typeof _oldOnError
+      _oldOnError.call @, error
+
+  _notifyShow = Notify.show
+
+  Notify.show = (type, message, options) ->
+    _notifyShow.call @, type, message, options
+    if type is "success"
+      type = "info"
+    Raven.captureMessage message, "level": type
+
+  Ember.RSVP.on 'error', (err) ->
+    Raven.captureException err
+
+  Ember.RSVP.on 'fulfilled', ->
+    Raven.captureMessage "RSVP Fulfilled!", {"level": "info"}
+
+  Ember.RSVP.on 'rejected', ->
+    Raven.captureMessage "RSVP Rejected!", {"level": "info"}
+
+  rvn = Raven.config ENV.ravenDSN,
+    release: ENV.currentRevision
+
+  rvn.install()
+else
   window.Raven =
     setUserContext: ->
       console.log "Raven.setUserContext"
@@ -18,7 +47,7 @@ if "production" isnt ENV.environment
     captureException: (exception)->
       # debugger
       console.log "Raven.captureException"
-      console.warn exception
+      console.error exception.stack
 
     config: ->
       console.log "Raven.config"
@@ -27,37 +56,6 @@ if "production" isnt ENV.environment
       install: ->
         console.log "Raven.install"
         console.log arguments
-
-
-# Raven - Ember Plugin
-_oldOnError = Ember.onerror
-
-Ember.onerror  = (error) ->
-  Raven.captureException error
-  if 'function' is typeof _oldOnError
-    _oldOnError.call @, error
-
-_notifyShow = Notify.show
-
-Notify.show = (type, message, options) ->
-  _notifyShow.call @, type, message, options
-  if type is "success"
-    type = "info"
-  Raven.captureMessage message, "level": type
-
-Ember.RSVP.on 'error', (err) ->
-  Raven.captureException err
-
-Ember.RSVP.on 'fulfilled', ->
-  Raven.captureMessage "RSVP Fulfilled!", {"level": "info"}
-
-Ember.RSVP.on 'rejected', ->
-  Raven.captureMessage "RSVP Rejected!", {"level": "info"}
-
-rvn = Raven.config ENV.ravenDSN,
-	release: ENV.currentRevision
-
-rvn.install()
 
 Ember.$.ajaxSetup
   type: "POST"

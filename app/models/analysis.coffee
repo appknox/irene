@@ -2,12 +2,12 @@
 `import ENUMS from 'irene/enums';`
 
 Analysis = DS.Model.extend
-  file: DS.belongsTo 'file', inverse: 'analyses'
+  file: DS.belongsTo 'file', inverse: 'analyses', async:false
   description: DS.attr 'string'
   analiserVersion: DS.attr 'number'
   risk: DS.attr 'number'
   status: DS.attr 'number'
-  vulnerability: DS.belongsTo 'vulnerability'
+  vulnerability: DS.belongsTo 'vulnerability', async:false
 
   panelHeadingClass:( ->
     cls = 'panel-heading'

@@ -20,7 +20,8 @@ IndexController = Ember.ArrayController.extend SocketMixin,
   ).property "isUploading", "percent"
 
   setRatioOnInit: (->
-    ratio = @store.push 'ratio',
+    ratio = @store.push @store.normalize "ratio",
+      type: 'ratio'
       id: 1
       affected: 0
       unaffected: 1

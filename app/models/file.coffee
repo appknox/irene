@@ -4,7 +4,7 @@
 `import Ember from 'ember'`
 
 File = DS.Model.extend BaseModelMixin,
-  project: DS.belongsTo 'project', inverse: 'files'
+  project: DS.belongsTo 'project', inverse: 'files', async:false
   uuid: DS.attr 'string'
   version: DS.attr 'string'
   iconUrl: DS.attr 'string'
@@ -12,7 +12,7 @@ File = DS.Model.extend BaseModelMixin,
   sha1hash: DS.attr 'string'
   name: DS.attr 'string'
   dynamicStatus: DS.attr 'number'
-  analyses: DS.hasMany 'analysis', inverse: 'file'
+  analyses: DS.hasMany 'analysis', inverse: 'file', async:false
   report: DS.attr 'string'
   manual: DS.attr 'number'
 
