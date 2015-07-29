@@ -3,4 +3,4 @@
   .col-md-12
     each file in model.otherFilesInTheProject
       link-to 'compare' model.id file.id class="col-sm-6 col-md-4"
-        = render "_file-choose" file
+        = render "-file-choose" file
