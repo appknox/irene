@@ -17,5 +17,10 @@
         = unitLabel
       .col-md-4
         button.btn.btn-info.w-100 click="incrementCount" +
-  button.btn.btn-success.btn-lg.w-100.m-b click="makePayment"
-    = totalPrice
+  h4= totalPricePay
+  button.btn.btn-success.btn-lg.m-b click="makePaymentPaypal"
+    fa-icon "paypal"
+    | &nbsp;Paypal
+  stripe-checkout class="btn btn-success btn-lg m-b m-l" image="/assets/images/logo.png" name=pricing.name description="" amount=totalPriceInCents action="processStripeToken" email=userEmail
+    fa-icon "cc-stripe"
+    | &nbsp;Stripe

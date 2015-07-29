@@ -7,7 +7,7 @@ PricingController = Ember.Controller.extend
   needs: ['application']
 
   model: (->
-    @store.all "pricing"
+    @store.peekAll "pricing"
   ).property()
 
   defaultPricings: Ember.computed.filter 'model', (pricing) ->

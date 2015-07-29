@@ -26,8 +26,21 @@ PriceSelectorComponent = Ember.Component.extend
   totalPrice: (->
     count =  @get "count"
     price = @get "pricing.price"
-    "Pay #{price * count} USD"
+    count * price
   ).property "count", "pricing.price"
+
+  totalPriceInCents: (->
+    100 * @get "totalPrice"
+  ).property "totalPrice"
+
+  totalPricePay: (->
+    totalPrice = @get "totalPrice"
+    "Pay #{totalPrice} USD"
+  ).property "totalPrice"
+
+  userEmail: (->
+    @container.lookup("controller:application").get("currentUser.email")
+  ).property()
 
   unitLabel: (->
     pricingType = @get "pricing.pricingType"
@@ -55,7 +68,7 @@ PriceSelectorComponent = Ember.Component.extend
         count = 1
       @set "count", count
 
-    makePayment: ->
+    makePaymentPaypal: ->
       invoceUrl = [ENV.APP.API_BASE, ENV.endpoints.invoice].join '/'
       data =
         pricing_id: @get "pricing.id"
