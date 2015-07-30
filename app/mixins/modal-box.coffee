@@ -3,7 +3,7 @@
 ModalBoxMixin = Ember.Mixin.create
   classNames: ['modal', 'fade', 'in']
   classNameBindings: ['show']
-  show: true
+  show: false
   appCtrlrProperty: null  # The application controller's property that this modal inject itself to
 
   attachToApp: (->
