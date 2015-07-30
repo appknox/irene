@@ -1,27 +1,13 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment';`
 `import Notify from 'ember-notify';`
+`import ModalBoxMixin from 'irene/mixins/modal-box'`
 
-FeedBackComponent = Ember.Component.extend
-  needs: ['application']
-  classNames: ['modal', 'fade', 'in']
-  classNameBindings: ['show']
-  show: false
-  appCtrlr: null
+FeedBackComponent = Ember.Component.extend ModalBoxMixin,
   satisfied: true
   feedbackText: ""
 
-  attachToApp: (->
-    @get("appCtrlr")?.set "feedback", @
-  ).on "init"
-
   actions:
-
-    closeModal: ->
-      @set "show", false
-
-    showModal: ->
-      @set "show", true
 
     submitFeedback: ->
       that = @

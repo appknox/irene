@@ -1,6 +1,6 @@
 = outlet
 = ember-notify
 = irene-onboard
-= feed-back appCtrlr=this
-= upgrade-plan appCtrlr=this
-= namespace-add appCtrlr=this
+= feed-back
+= upgrade-plan
+= namespace-add

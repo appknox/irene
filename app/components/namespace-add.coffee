@@ -1,31 +1,17 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment';`
 `import Notify from 'ember-notify';`
+`import ModalBoxMixin from 'irene/mixins/modal-box'`
 
-NamespaceAddComponent = Ember.Component.extend
-  needs: ['application']
-  classNames: ['modal', 'fade', 'in']
-  classNameBindings: ['show']
-  show: false
-  appCtrlr: null
+NamespaceAddComponent = Ember.Component.extend ModalBoxMixin,
   added: false
   namespace: ""
-
-  attachToApp: (->
-    @get("appCtrlr")?.set "namespaceAdd", @
-  ).on "init"
 
   notAdded: (->
     !@get "added"
   ).property "added"
 
   actions:
-
-    closeModal: ->
-      @set "show", false
-
-    showModal: ->
-      @set "show", true
 
     addNamespace: ->
       data =
