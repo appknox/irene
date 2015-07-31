@@ -1,7 +1,5 @@
 `import Ember from 'ember'`
-`import EmberCLIICAjax from 'ic-ajax';`
 `import ENUMS from 'irene/enums';`
-`import ENV from 'irene/config/environment';`
 
 isNumber = (n) ->
   /^\d+$/.test n
@@ -68,16 +66,10 @@ PriceSelectorComponent = Ember.Component.extend
         count = 1
       @set "count", count
 
-    makePaymentPaypal: ->
-      invoceUrl = [ENV.APP.API_BASE, ENV.endpoints.invoice].join '/'
-      data =
-        pricing_id: @get "pricing.id"
-        count: @get "count"
-      xhr = EmberCLIICAjax url:invoceUrl, type: "get", data: data
-      xhr.then (result) ->
-        elem = $("#hidden-paypal-form").html result.form
-        elem.find("[name='submit']").click()
-      , ->
-        debugger
+    makePayment: ->
+      applicationController = @container.lookup "controller:application"
+      applicationController.set "makePaymentModal.pricing", @get "pricing"
+      applicationController.set "makePaymentModal.count", @get "count"
+      applicationController.set "makePaymentModal.show", true
 
 `export default PriceSelectorComponent`

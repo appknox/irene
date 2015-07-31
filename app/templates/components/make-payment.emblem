@@ -1,7 +1,7 @@
 .modal-dialog
   .modal-content
     .modal-header
-      h4.modal-title Make A Payment
+      h4.modal-title Make A Payment for ${{ totalPrice }}
     .modal-body.row
       .card-wrapper.col-md-12.m-b
       form.col-md-8.col-md-offset-2
@@ -9,21 +9,22 @@
           .col-md-12
             .form-group
               .input-group
-                = input type="tel" class="form-control" name="number" placeholder="Valid Card Number" autocomplete="cc-number"
+                = input type="tel" class="form-control" name="number" placeholder="Valid Card Number" autocomplete="cc-number" value=cardNumber
                 span class="input-group-addon"
                   = fa-icon "fa-credit-card"
         .row
           .col-md-5
             .form-group
               .input-group
-                = input type="tel" class="form-control" name="name" placeholder="Name On Card" autocomplete="cc-number"
+                = input type="tel" class="form-control" name="name" placeholder="Name On Card" autocomplete="cc-number" value=cardName
           .col-md-4
             .form-group
-              = input type="tel" class="form-control" name="expiry" placeholder="MM/YY" autocomplete="cc-exp"
+              = input type="tel" class="form-control" name="expiry" placeholder="MM/YY" autocomplete="cc-exp" value=cardExpiry
           .col-md-3
             .form-group
-              = input type="tel" class="form-control" name="cvc" placeholder="CVC" autocomplete="cc-csc"
+              = input type="tel" class="form-control" name="cvc" placeholder="CVC" autocomplete="cc-csc" value=cardCvc
 
     .modal-footer
+      a.m-r href="#" click="makePaymentPaypal" Pay with PayPal
       button.btn.btn-default click="closeModal" Close
-      button.btn.btn-success click="makePaymentStripe" Pay
+      button.btn.btn-success click="makePaymentStripe" Pay ${{ totalPrice }}
