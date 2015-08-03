@@ -74,9 +74,10 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
           stripeToken: response.id
         xhr = EmberCLIICAjax url:stripeUrl, type: "post", data: data
         xhr.then (result) ->
-          debugger
-        , ->
-          debugger
+          Notify.success "Sucessfully processed your payment. Thank You."
+        , (error)->
+          console.log error
+          Notify.success "SOmething went wrong when trying to process your card"
       .catch @stripeErrorHandler
 
 `export default MakePaymentComponent`
