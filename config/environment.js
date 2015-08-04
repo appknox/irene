@@ -49,7 +49,8 @@ module.exports = function(environment) {
       revokeGitHub: 'unauthorize_github',
       changePassword: 'change_password',
       namespaceAdd: 'namespace_add',
-      stripePayment: 'stripe_payment'
+      stripePayment: 'stripe_payment',
+      saveCredentials: 'projects/save_credentials'
     },
     webengage: {
       code: '~13410634d',
