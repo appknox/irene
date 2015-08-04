@@ -36,7 +36,7 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
     makePaymentPaypal: ->
       invoceUrl = [ENV.APP.API_BASE, ENV.endpoints.invoice].join '/'
       data =
-        pricing_id: @get "pricing.id"
+        pricingId: @get "pricing.id"
         count: @get "count"
       xhr = EmberCLIICAjax url:invoceUrl, type: "get", data: data
       xhr.then (result) ->
@@ -69,15 +69,16 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
       .then (response) ->
         stripeUrl = [ENV.APP.API_BASE, ENV.endpoints.stripePayment].join '/'
         data =
-          pricing_id: self.get "pricing.id"
+          pricingId: self.get "pricing.id"
           count: self.get "count"
           stripeToken: response.id
         xhr = EmberCLIICAjax url:stripeUrl, type: "post", data: data
         xhr.then (result) ->
           Notify.success "Sucessfully processed your payment. Thank You."
+          self.send "closeModal"
         , (error)->
           console.log error
-          Notify.success "SOmething went wrong when trying to process your card"
+          Notify.error "Something went wrong when trying to process your card"
       .catch @stripeErrorHandler
 
 `export default MakePaymentComponent`
