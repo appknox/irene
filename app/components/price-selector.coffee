@@ -1,6 +1,11 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums';`
 
+# Fix these imports when stripe is activated
+`import ENV from 'irene/config/environment';`
+`import EmberCLIICAjax from 'ic-ajax';`
+`import Notify from 'ember-notify';`
+
 isNumber = (n) ->
   /^\d+$/.test n
 
@@ -67,6 +72,19 @@ PriceSelectorComponent = Ember.Component.extend
       @set "count", count
 
     makePayment: ->
+      invoceUrl = [ENV.APP.API_BASE, ENV.endpoints.invoice].join '/'
+      data =
+        pricingId: @get "pricing.id"
+        count: @get "count"
+      xhr = EmberCLIICAjax url:invoceUrl, type: "get", data: data
+      xhr.then (result) ->
+        elem = $("#hidden-paypal-form").html result.form
+        elem.find("[name='submit']").click()
+      , ->
+        Notify.error "Oh Dang, some error occured!"
+
+      return  # Everything above return is a temproary fix.
+      # It will be reverted when subho activates stripe
       applicationController = @container.lookup "controller:application"
       applicationController.set "makePaymentModal.pricing", @get "pricing"
       applicationController.set "makePaymentModal.count", @get "count"
