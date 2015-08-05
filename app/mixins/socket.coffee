@@ -82,13 +82,13 @@ SocketMixin = Ember.Mixin.create
     show_feedback: ->
       that = @
       setTimeout ->
-        that.get("controllers.application.feedback").send "showModal"
+        that.get("controllers.application.feedBackModal").send "showModal"
       ,
         60 * 1000
 
     namespace_add: (data)->
-      @get("controllers.application.namespaceAdd").set "added", true
-      @get("controllers.application.namespaceAdd").set "namespace", data.namespace
-      @get("controllers.application.namespaceAdd").send "showModal"
+      @get("controllers.application.namespaceAddModal").set "added", true
+      @get("controllers.application.namespaceAddModal").set "namespace", data.namespace
+      @get("controllers.application.namespaceAddModal").send "showModal"
 
 `export default SocketMixin`

@@ -48,7 +48,9 @@ module.exports = function(environment) {
       feedback: 'feedback',
       revokeGitHub: 'unauthorize_github',
       changePassword: 'change_password',
-      namespaceAdd: 'namespace_add'
+      namespaceAdd: 'namespace_add',
+      stripePayment: 'stripe_payment',
+      saveCredentials: 'projects/save_credentials'
     },
     webengage: {
       code: '~13410634d',
@@ -64,6 +66,10 @@ module.exports = function(environment) {
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
+    ENV.stripe = {
+      publishableKey: "pk_test_UOgd8ILsBsx7R5uUPttDJNgk"
+    };
+    ENV.LOG_STRIPE_SERVICE = true;
     ENV.APP.LOG_ACTIVE_GENERATION = true;
     ENV.APP.LOG_TRANSITIONS = true;
     ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
@@ -90,6 +96,9 @@ module.exports = function(environment) {
 
   if (environment === 'production') {
     ENV.APP.LOG_RESOLVER = false;
+    ENV.stripe = {
+      publishableKey: "pk_live_9G633HADop7N2NLdi6g2BHHA"
+    };
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_TRANSITIONS = false;
     ENV.APP.LOG_TRANSITIONS_INTERNAL = false;
@@ -150,12 +159,12 @@ module.exports = function(environment) {
   }
 
   ENV.contentSecurityPolicy = {
-    "connect-src": "'self' storage.googleapis.com ws://localhost:8008 http://localhost:8008 ws://localhost:6080/websockify *.s3.amazonaws.com *.zendesk.com " + ENV.APP.API_HOST + " " + ENV.fakeS3URL,
-    "frame-src": "'self' *.zendesk.com",
+    "connect-src": "'self' storage.googleapis.com ws://localhost:8008 http://localhost:8008 ws://localhost:6080/websockify *.s3.amazonaws.com *.zendesk.com" + " " + ENV.APP.API_HOST + " " + ENV.fakeS3URL,
+    "frame-src": "'self' *.zendesk.com js.stripe.com",
     "report-uri": "'self'",
-    'img-src': "'self' www.gravatar.com placehold.it storage.googleapis.com s3.amazonaws.com *.cloudfront.net *.amazonaws.com sherlog.appknox.com sentry.appknox.com localhost:8000",
+    'img-src': "'self' www.gravatar.com placehold.it storage.googleapis.com s3.amazonaws.com *.cloudfront.net *.amazonaws.com sherlog.appknox.com sentry.appknox.com localhost:8000 q.stripe.com data:",
     'style-src': "'self' 'unsafe-inline'",
-    'script-src': "'self' 'unsafe-eval' 'unsafe-inline' localhost:35729 0.0.0.0:35729 storage.googleapis.com *.zendesk.com *.amazonaws.com *.cloudfront.net",
+    'script-src': "'self' 'unsafe-eval' 'unsafe-inline' localhost:35729 0.0.0.0:35729 storage.googleapis.com *.zendesk.com *.amazonaws.com *.cloudfront.net js.stripe.com",
     'font-src': "'self' data:;"
   };
 

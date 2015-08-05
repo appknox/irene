@@ -1,9 +1,12 @@
 section.panel
   .panel-heading.panel-heading-fix
-    .h4.text-lt.block.font-bold
-      img src=project.lastFile.iconUrl alt="File Icon"
-      = project.name
-      = fa-icon project.platformIconClass
+    .h4.text-lt.block.font-bold.row
+      .col-md-2
+        img src=project.lastFile.iconUrl alt="File Icon"
+      p.col-md-9.copact-text.app-name
+        = project.name
+      .col-md-1.app-icon
+        = fa-icon project.platformIconClass
 
   .row.panel-body.panel-body-fix-2
     if project.lastFile
@@ -33,7 +36,7 @@ section.panel
       .col-md-1 data-hint="Settings"
         link-to 'project.settings' project.id
           = fa-icon "wrench"
-      / .col-md-1 data-hint="Compare"
+      .col-md-1 data-hint="Compare"
         link-to 'choose' project.lastFile.id
           = fa-icon "exchange"
       .col-md-1.pull-right{action "deleteProject" project on="click"} data-hint="Delete"

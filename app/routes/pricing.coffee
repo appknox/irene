@@ -4,8 +4,8 @@
 PricingRoute = Ember.Route.extend AuthenticatedRouteMixin,
   actions:
     didTransition: ->
-      upgradePlan = @controller.get "controllers.application.upgradePlan"
-      if !Ember.isEmpty upgradePlan
-        upgradePlan.send "closeModal"
+      upgradePlanModal = @controller.get "controllers.application.upgradePlanModal"
+      if !Ember.isEmpty upgradePlanModal
+        upgradePlanModal.send "closeModal"
 
 `export default PricingRoute`
