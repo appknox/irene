@@ -3,9 +3,8 @@ section.panel
     .h4.text-lt.block.font-bold.row
       .col-md-2
         img src=project.lastFile.iconUrl alt="File Icon"
-      / = project.name
       p.col-md-9.copact-text.app-name
-        | MAX Maceralar: Kahramanlar Takm
+        = project.name
       .col-md-1.app-icon
         = fa-icon project.platformIconClass
 
