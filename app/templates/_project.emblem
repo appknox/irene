@@ -1,9 +1,13 @@
 section.panel
   .panel-heading.panel-heading-fix
-    .h4.text-lt.block.font-bold
-      img src=project.lastFile.iconUrl alt="File Icon"
-      = project.name
-      = fa-icon project.platformIconClass
+    .h4.text-lt.block.font-bold.row
+      .col-md-2
+        img src=project.lastFile.iconUrl alt="File Icon"
+      / = project.name
+      p.col-md-9.copact-text.app-name
+        | MAX Maceralar: Kahramanlar Takm
+      .col-md-1.app-icon
+        = fa-icon project.platformIconClass
 
   .row.panel-body.panel-body-fix-2
     if project.lastFile
