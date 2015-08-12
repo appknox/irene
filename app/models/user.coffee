@@ -16,7 +16,6 @@ User = DS.Model.extend
   expiryDate: DS.attr 'date'
   hasGithubToken: DS.attr 'boolean'
   hasJiraToken: DS.attr 'boolean'
-  jiratoken: DS.belongsTo 'jiratoken', inverse: 'user', async:false
   socketId: DS.attr 'string'
 
   humanizedExpiryDate: ago 'expiryDate', true
