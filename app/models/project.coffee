@@ -13,6 +13,7 @@ Project = DS.Model.extend BaseModelMixin,
   files: DS.hasMany 'file', inverse: 'project', async:false
   fileCount: DS.attr 'number'
   githubRepo: DS.attr 'string'
+  jiraProject: DS.attr 'string'
   testUser: DS.attr 'string'
   testPassword: DS.attr 'string'
 

@@ -15,6 +15,7 @@ User = DS.Model.extend
   pricing: DS.belongsTo 'pricing', inverse: 'users', async:false
   expiryDate: DS.attr 'date'
   hasGithubToken: DS.attr 'boolean'
+  hasJiraToken: DS.attr 'boolean'
   socketId: DS.attr 'string'
 
   humanizedExpiryDate: ago 'expiryDate', true

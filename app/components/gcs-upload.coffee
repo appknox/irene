@@ -24,7 +24,6 @@ GCSUploadComponent = EmberUploader.FileField.extend
       Ember.$.post uploadedUrl, data
 
     uploader.on 'progress', (e) ->
-      # Use `e.percent` to get percentage
       delegate.set "percent", e.percent
 
     if !Ember.isEmpty files
