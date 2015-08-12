@@ -12,6 +12,10 @@ SettingsController = Ember.Controller.extend
   passwordNew: ""
   passwordConfirm: ""
 
+  jiraHost: ""
+  jiraUsername: ""
+  jiraPassword: ""
+
   actions:
 
     integrateGitHub: ->
@@ -27,7 +31,29 @@ SettingsController = Ember.Controller.extend
       .then ->
         Notify.success "Your github authorization will be revoked in a moment"
       .fail (xhr, message, status) ->
-        debugger
+        Notify.error xhr.responseJSON.message
+
+    integrateJira: ->
+      postUrl = [ENV.APP.API_BASE, ENV.endpoints.integrateJira].join '/'
+      that = @
+      data =
+        host: @get "jiraHost"
+        username: @get "jiraUsername"
+        password: @get "jiraPassword"
+      Ember.$.post postUrl, data
+      .then ->
+        Notify.success "Your jira authorization will be revoked in a moment"
+      .fail (xhr, message, status) ->
+        Notify.error xhr.responseJSON.message
+
+    revokeJira: ->
+      return if !confirm "Do you want to revoke JIRA Authorization ?"
+      postUrl = [ENV.APP.API_BASE, ENV.endpoints.revokeJira].join '/'
+      that = @
+      Ember.$.post postUrl
+      .then ->
+        Notify.success "Your jira authorization will be revoked in a moment"
+      .fail (xhr, message, status) ->
         Notify.error xhr.responseJSON.message
 
     changePassword: ->
