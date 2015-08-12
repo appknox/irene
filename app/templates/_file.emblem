@@ -10,7 +10,7 @@ link-to 'file' model.id class="col-sm-6 col-md-4"
       = view "pie-chart" file=model
       .col-md-6.m-t
         p
-          span.font-thin Package:
+          span.font-thin.copact-text Package:
           = model.project.packageName
         p
           span.font-thin Version:
