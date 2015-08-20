@@ -1,10 +1,12 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums';`
 
+###
 # Fix these imports when stripe is activated
 `import ENV from 'irene/config/environment';`
 `import EmberCLIICAjax from 'ic-ajax';`
 `import Notify from 'ember-notify';`
+###
 
 isNumber = (n) ->
   /^\d+$/.test n
@@ -42,7 +44,7 @@ PriceSelectorComponent = Ember.Component.extend
   ).property "totalPrice"
 
   userEmail: (->
-    @container.lookup("controller:application").get("currentUser.email")
+    @container.lookup("controller:application").get "currentUser.email"
   ).property()
 
   unitLabel: (->
@@ -72,6 +74,7 @@ PriceSelectorComponent = Ember.Component.extend
       @set "count", count
 
     makePayment: ->
+      ###
       invoceUrl = [ENV.APP.API_BASE, ENV.endpoints.invoice].join '/'
       data =
         pricingId: @get "pricing.id"
@@ -85,6 +88,7 @@ PriceSelectorComponent = Ember.Component.extend
 
       return  # Everything above return is a temproary fix.
       # It will be reverted when subho activates stripe
+      ###
       applicationController = @container.lookup "controller:application"
       applicationController.set "makePaymentModal.pricing", @get "pricing"
       applicationController.set "makePaymentModal.count", @get "count"
