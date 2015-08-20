@@ -1,5 +1,5 @@
 .row
-  h3 Compare
+  h3 Settings
   em-tabs class="col-md-12"
     em-tab-list class="row text-center"
       em-tab class="col-md-6"

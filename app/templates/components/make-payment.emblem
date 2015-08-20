@@ -25,6 +25,8 @@
               = input type="tel" class="form-control" name="cvc" placeholder="CVC" autocomplete="cc-csc" value=cardCvc
 
     .modal-footer
-      a.m-r href="#" click="makePaymentPaypal" Pay with PayPal
       button.btn.btn-default click="closeModal" Close
-      button.btn.btn-success click="makePaymentStripe" Pay ${{ totalPrice }}
+      button.btn.btn-default.paypal-color click="makePaymentPaypal"
+        | {{ fa-icon 'paypal' }} pay with Paypal
+      button.btn.btn-success click="makePaymentStripe"
+        | {{ fa-icon 'cc-stripe' }} pay with Stripe
