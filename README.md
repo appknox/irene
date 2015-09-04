@@ -33,7 +33,7 @@ You will need the following things properly installed on your computer.
 * [Node.js](http://nodejs.org/) (with NPM) and [Bower](http://bower.io/)
 
 ## Installation
-
+* `npm install -g bower`
 * `git clone <repository-url>` this repository
 * change into the new directory
 * `npm install`
