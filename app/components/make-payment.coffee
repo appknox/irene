@@ -16,13 +16,19 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
   cardCvc: ""
   couponId: ""
 
+  couponApplied: false
+  finalPrice: 0
+
   stripe: Ember.inject.service()
 
   totalPrice: (->
+    couponApplied = @get "couponApplied"
+    if couponApplied
+      return @get("finalPrice") / 100
     count =  @get "count"
     price = @get "pricing.price"
     count * price
-  ).property "count", "pricing.price"
+  ).property "count", "pricing.price", "couponApplied", "finalPrice"
 
   didInsertElement: ->
     new Card
@@ -45,6 +51,24 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
         elem.find("[name='submit']").click()
       , ->
         Notify.error "Oh Dang, some error occured!"
+
+    applyCoupon: ->
+      self = @
+      url = [ENV.APP.API_BASE, ENV.endpoints.applyCoupon].join '/'
+      data =
+        pricingId: self.get "pricing.id"
+        count: self.get "count"
+        couponId: self.get "couponId"
+      xhr = EmberCLIICAjax url:url, type: "post", data: data
+      xhr.then (result) ->
+        self.set "couponApplied", true
+        debugger
+        self.set "finalPrice", result.amount
+        Notify.success "Price Updated"
+      , (error)->
+        self.set "couponApplied", false
+        Notify.error error.jqXHR.responseJSON.message
+
 
     makePaymentStripe: ->
       cardNumber =  @get "cardNumber"
@@ -79,8 +103,6 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
           Notify.success "Sucessfully processed your payment. Thank You."
           self.send "closeModal"
         , (error)->
-          console.log error
-          # Notify.error "Something went wrong when trying to process your card"
           Notify.error error.jqXHR.responseJSON.message
       .catch @stripeErrorHandler
 

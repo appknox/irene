@@ -23,9 +23,11 @@
           .col-md-3
             .form-group
               = input type="tel" class="form-control" name="cvc" placeholder="CVC" autocomplete="cc-csc" value=cardCvc
-      div.col-md-6.col-md-offset-3.input-group
-        = input class="form-control" placeholder="Do you have an offer coupon?" value=couponId
-
+        .row.input-group
+          .col-md-9
+            = input class="form-control" placeholder="Do you have an offer coupon?" value=couponId
+          .col-md-3
+            button.btn.btn-default click="applyCoupon" Apply Coupon
 
     .modal-footer
       button.btn.btn-default click="closeModal" Close
