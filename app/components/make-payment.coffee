@@ -80,7 +80,8 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
           self.send "closeModal"
         , (error)->
           console.log error
-          Notify.error "Something went wrong when trying to process your card"
+          # Notify.error "Something went wrong when trying to process your card"
+          Notify.error error.jqXHR.responseJSON.message
       .catch @stripeErrorHandler
 
 `export default MakePaymentComponent`
