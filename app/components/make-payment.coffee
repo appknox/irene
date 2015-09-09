@@ -102,6 +102,11 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
         xhr.then (result) ->
           Notify.success "Sucessfully processed your payment. Thank You."
           self.send "closeModal"
+          setTimeout ->
+            location.reload()
+          ,
+            5 * 1000
+          location.reload()
         , (error)->
           Notify.error error.jqXHR.responseJSON.message
       .catch @stripeErrorHandler
