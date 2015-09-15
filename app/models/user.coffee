@@ -1,18 +1,19 @@
 `import DS from 'ember-data';`
 `import { moment, ago } from 'ember-moment/computed';`
-`import ENUMS from 'irene/enums'`
+`import ENUMS from 'irene/enums';`
 
 User = DS.Model.extend
   username: DS.attr 'string'
   email: DS.attr 'string'
   firstName: DS.attr 'string'
   lastName: DS.attr 'string'
-  projects: DS.hasMany 'project', inverse: 'owner', async:false
+  ownedProjects: DS.hasMany 'project', inverse: 'owner', async:false
   scanCount: DS.attr 'number'
   namespaces: DS.attr 'string'
   scansLeft: DS.attr 'number'
   processing: DS.attr 'number'
   pricing: DS.belongsTo 'pricing', inverse: 'users', async:false
+  collaborations: DS.hasMany 'collaboration', inverse: 'user', async: false
   expiryDate: DS.attr 'date'
   hasGithubToken: DS.attr 'boolean'
   hasJiraToken: DS.attr 'boolean'
