@@ -36,11 +36,9 @@
 
     button.btn.btn-default click="saveCredentials" Save Credentials
 
-.col-md-12
+/.col-md-12
   h4 Collaborators
-
   button.btn.btn-info.btn-add-collaborator Add Collaborator
-
   .row
     each collaboration in model.collaborations
       .col-md-3
