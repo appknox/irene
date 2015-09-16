@@ -5,6 +5,7 @@
 User = DS.Model.extend
   username: DS.attr 'string'
   email: DS.attr 'string'
+  emailMd5: DS.attr 'string'
   firstName: DS.attr 'string'
   lastName: DS.attr 'string'
   ownedProjects: DS.hasMany 'project', inverse: 'owner', async:false
@@ -51,5 +52,15 @@ User = DS.Model.extend
     processing = @get "processing"
     processing > 0
   ).property "processing"
+
+  gravatarUrl: (->
+    "//s.gravatar.com/avatar/#{@get "emailMd5"}?s=100"
+  ).property "emailMd5"
+
+  isCurrentUser: (->
+    applicationController = @container.lookup "controller:application"
+    currentUser = applicationController.get "currentUser"
+    currentUser.get("id") is @get "id"
+  ).property()
 
 `export default User;`

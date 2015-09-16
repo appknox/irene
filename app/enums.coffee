@@ -61,6 +61,7 @@ ENUMS =
     DONE: 3
 
   COLLABORATION_ROLE:
+    UNKNOWN: -1
     ADMIN: 0
     MANAGER: 1
     READ_ONLY: 2

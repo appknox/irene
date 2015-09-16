@@ -1,8 +1,8 @@
 .col-md-12
-  h4 Settings
+  h3 Settings
 
 .col-md-6
-  h5 GitHub Integration
+  h4 GitHub Integration
   if controllers.application.currentUser.hasGithubToken
     = repo-selector project=model
   else
@@ -13,7 +13,7 @@
       | &nbsp;page to configure GitHub integration
 
 .col-md-6
-  h5 JIRA Integration
+  h4 JIRA Integration
   if controllers.application.currentUser.hasJiraToken
     = jira-selector project=model
   else
@@ -24,7 +24,7 @@
       | &nbsp;page to configure JIRA integration
 
 .col-md-12
-  h5 Test Credentials
+  h4 Test Credentials
   form
     .form-group
       label Email / Username
@@ -35,4 +35,27 @@
       = input type="text" class="form-control" placeholder="Password" value=model.testPassword
 
     button.btn.btn-default click="saveCredentials" Save Credentials
+
+.col-md-12
+  h4 Collaborators
+
+  button.btn.btn-info.btn-add-collaborator Add Collaborator
+
+  .row
+    each collaboration in model.collaborations
+      .col-md-3
+        .thumbnail
+          .caption.text-center
+            .label.label-info
+              = collaboration.roleHumanized
+          img src=collaboration.user.gravatarUrl alt=collaboration.user.username
+          .caption.text-center
+            h3
+              = collaboration.user.username
+            p
+              a.btn.btn-danger action="removeUser"
+                if collaboration.user.isCurrentUser
+                  | Remove Yourself
+                else
+                  | Remove
 
