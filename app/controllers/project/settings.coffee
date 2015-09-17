@@ -34,4 +34,9 @@ ProjectSettingsController = Ember.Controller.extend
       .fail ->
         Notify.error "Something went wrong whe trying to update credentials"
 
+    showAddCollaborator: ->
+      addCollaboratorModal = @get("controllers.application.addCollaboratorModal")
+      addCollaboratorModal.set "project", @get "model"
+      addCollaboratorModal.send "showModal"
+
 `export default ProjectSettingsController`

@@ -1,5 +1,6 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums';`
+`import ENV from 'irene/config/environment';`
 
 ShowCollaborationComponent = Ember.Component.extend
   collaboration: null
@@ -27,6 +28,14 @@ ShowCollaborationComponent = Ember.Component.extend
 
     removeCollaboration: ->
       collaboration = @get "collaboration"
-      collaboration.deleteRecord()
+      return if !confirm "Do you want to remove `#{collaboration.get "user.username"}` from the list of collaborators?"
+      postUrl = [ENV.APP.API_BASE, ENV.endpoints.deleteCollaborator, collaboration.get "id"].join '/'
+      that = @
+      Ember.$.post postUrl
+        .then ->
+          # collaboration.deleteRecord()
+          Notify.success "#{ collaboration.get "user.username" } will be removed momentarily."
+        .fail (xhr, message, status) ->
+          Notify.error xhr.responseJSON.message
 
 `export default ShowCollaborationComponent`

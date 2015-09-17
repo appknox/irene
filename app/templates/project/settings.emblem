@@ -39,7 +39,7 @@
 .col-md-12
   h4 Collaborators
   if isCurrentUserAdmin
-    button.btn.btn-info.btn-add-collaborator Add Collaborator
+    button.btn.btn-info.btn-add-collaborator click="showAddCollaborator" Add Collaborator
   .row
     each collaboration in model.collaborations
       show-collaboration collaboration=collaboration isCurrentUserAdmin=isCurrentUserAdmin
