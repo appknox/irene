@@ -36,24 +36,11 @@
 
     button.btn.btn-default click="saveCredentials" Save Credentials
 
-/.col-md-12
+.col-md-12
   h4 Collaborators
-  button.btn.btn-info.btn-add-collaborator Add Collaborator
+  if isCurrentUserAdmin
+    button.btn.btn-info.btn-add-collaborator Add Collaborator
   .row
     each collaboration in model.collaborations
-      .col-md-3
-        .thumbnail
-          .caption.text-center
-            .label.label-info
-              = collaboration.roleHumanized
-          img src=collaboration.user.gravatarUrl alt=collaboration.user.username
-          .caption.text-center
-            h3
-              = collaboration.user.username
-            p
-              a.btn.btn-danger action="removeUser"
-                if collaboration.user.isCurrentUser
-                  | Remove Yourself
-                else
-                  | Remove
+      show-collaboration collaboration=collaboration isCurrentUserAdmin=isCurrentUserAdmin
 
