@@ -8,6 +8,7 @@ Analysis = DS.Model.extend
   risk: DS.attr 'number'
   status: DS.attr 'number'
   vulnerability: DS.belongsTo 'vulnerability', async:false
+  isPaidOwner: DS.attr 'boolean'
 
   panelHeadingClass:( ->
     cls = 'panel-heading'
