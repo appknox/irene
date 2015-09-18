@@ -70,8 +70,14 @@ SocketMixin = Ember.Mixin.create
         @store.push @store.normalize "collaboration", data
 
     collaboration_deleted: (data) ->
+      that = @
       @store.find('collaboration', data.id).then (collaboration) ->
-        collaboration.deleteRecord()
+        currentUserId = that.get("controllers.application.currentUser.id")
+        if currentUserId is collaboration.get "user.id"
+          location = "/"
+          location.reload()
+        else
+          collaboration.deleteRecord()
 
     message: (data) ->
       message = data.message

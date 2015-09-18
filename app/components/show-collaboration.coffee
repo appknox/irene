@@ -1,6 +1,7 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums';`
 `import ENV from 'irene/config/environment';`
+`import Notify from 'ember-notify';`
 
 ShowCollaborationComponent = Ember.Component.extend
   collaboration: null
@@ -32,10 +33,9 @@ ShowCollaborationComponent = Ember.Component.extend
       postUrl = [ENV.APP.API_BASE, ENV.endpoints.deleteCollaboration, collaboration.get "id"].join '/'
       that = @
       Ember.$.post postUrl
-        .then ->
-          # collaboration.deleteRecord()
-          Notify.success "#{ collaboration.get "user.username" } will be removed momentarily."
-        .fail (xhr, message, status) ->
-          Notify.error xhr.responseJSON.message
+      .then ->
+        Notify.success "#{ collaboration.get "user.username" } will be removed momentarily."
+      .fail (xhr, message, status) ->
+        Notify.error xhr.responseJSON.message
 
 `export default ShowCollaborationComponent`
