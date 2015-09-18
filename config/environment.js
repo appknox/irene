@@ -56,8 +56,8 @@ module.exports = function(environment) {
       stripePayment: 'stripe_payment',
       applyCoupon: 'apply_coupon',
       saveCredentials: 'projects/save_credentials',
-      collaborator: 'collaborator',
-      deleteCollaborator: 'collaborator/delete'
+      collaboration: 'collaboration',
+      deleteCollaboration: 'collaboration/delete'
     },
     webengage: {
       code: '~13410634d',

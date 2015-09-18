@@ -29,7 +29,7 @@ ShowCollaborationComponent = Ember.Component.extend
     removeCollaboration: ->
       collaboration = @get "collaboration"
       return if !confirm "Do you want to remove `#{collaboration.get "user.username"}` from the list of collaborators?"
-      postUrl = [ENV.APP.API_BASE, ENV.endpoints.deleteCollaborator, collaboration.get "id"].join '/'
+      postUrl = [ENV.APP.API_BASE, ENV.endpoints.deleteCollaboration, collaboration.get "id"].join '/'
       that = @
       Ember.$.post postUrl
         .then ->

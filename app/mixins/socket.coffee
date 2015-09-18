@@ -62,6 +62,17 @@ SocketMixin = Ember.Mixin.create
       @store.find('project', data.id).then (project) ->
         project.deleteRecord()
 
+    collaboration_new: (data) ->
+      @store.push @store.normalize "collaboration", data
+
+    collaboration_updated: (data) ->
+      @store.find('collaboration', data.id).then (collaboration) ->
+        @store.push @store.normalize "collaboration", data
+
+    collaboration_deleted: (data) ->
+      @store.find('collaboration', data.id).then (collaboration) ->
+        collaboration.deleteRecord()
+
     message: (data) ->
       message = data.message
       notifyType = data.notifyType

@@ -5,7 +5,7 @@
     .modal-body
       form
         .form-group
-          input class="form-control" placeholder="Email / Username" type="email" value=collaboratorEmail
+          = input class="form-control" placeholder="Email / Username" type="email" value=collaboratorEmail
         .form-group
           view "select" class="form-control" content=choices optionValuePath="content.value" optionLabelPath="content.key" value=currentRole
     .modal-footer

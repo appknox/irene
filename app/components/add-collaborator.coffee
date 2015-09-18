@@ -16,7 +16,8 @@ AddCollaboratorComponent = Ember.Component.extend ModalBoxMixin,
       data =
         email: @get "collaboratorEmail"
         projectId: @get "project.id"
-      url = [ENV.APP.API_BASE, ENV.endpoints.collaborator].join '/'
+        role: @get "currentRole"
+      url = [ENV.APP.API_BASE, ENV.endpoints.collaboration].join '/'
       that = @
       Ember.$.post url, data
       .then ->
