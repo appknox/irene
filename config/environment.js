@@ -57,7 +57,9 @@ module.exports = function(environment) {
       applyCoupon: 'apply_coupon',
       saveCredentials: 'projects/save_credentials',
       collaboration: 'collaboration',
-      deleteCollaboration: 'collaboration/delete'
+      deleteCollaboration: 'collaboration/delete',
+      invitation: 'invitation',
+      signup: 'signup'
     },
     webengage: {
       code: '~13410634d',

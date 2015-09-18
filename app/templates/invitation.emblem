@@ -1,0 +1,20 @@
+section.m-t-lg.wrapper-md.animated.bounceIn.corrector
+  .container.aside-xl
+    .navbar-brand.block
+    section.m-b-lg
+      header.wrapper.text-center
+        img.m-b src="/assets/images/logo-dark.png" alt="Appknox"
+        br
+        .m-t Signup & Accept Invite
+        .m-t {{inviter}} has invited you to {{project}} project
+      form submit='signup'
+        .list-group
+          .list-group-item
+            = input class="input form-control no-border" value=email placeholder='Email' readonly="true"
+          .list-group-item
+            = input class="input form-control no-border" value=username placeholder='Username' autofocus="true"
+          .list-group-item
+            = input class="input form-control no-border" value=password placeholder='Password' type="password"
+        button#btn-recover.btn.btn-lg.btn-primary.btn-block type="submit" Signup & Accept Invite
+      footer.wrapper.text-center
+        link-to "login" | Login?
