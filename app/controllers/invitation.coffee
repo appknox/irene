@@ -43,7 +43,7 @@ InvitationController = Ember.Controller.extend
         if xhr.responseJSON
           Notify.error xhr.responseJSON.message, closeAfter: 70000
         else
-          Notify.error "SOme error occured while we tried to sign you up. PLease contact support", closeAfter: 10000
+          Notify.error "Some error occured while we tried to sign you up. Please contact support", closeAfter: 10000
 
 `export default InvitationController;`
 
