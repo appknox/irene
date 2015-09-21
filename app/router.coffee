@@ -26,5 +26,6 @@ Router.map ->
   @route 'compare', path: 'compare/:fileId1/:fileId2'
 
   @route 'settings'
+  @resource 'invitation', path: 'invitation/:uuid'
 
 `export default Router;`

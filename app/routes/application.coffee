@@ -14,8 +14,12 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
       init.then (result) ->
         for vulnerability in result.vulnerabilities
           store.pushPayload 'vulnerability', vulnerability: vulnerability
+        for user in result.users
+          store.pushPayload 'user', user: user
         for project in result.projects
           store.pushPayload 'project', project: project
+        for collaboration in result.collaborations
+          store.pushPayload 'collaboration', collaboration: collaboration
         for file in result.files
           store.pushPayload 'file', file: file
         for analysis in result.analyses
@@ -23,8 +27,8 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
         for pricing in result.pricings
           store.pushPayload 'pricing', pricing: pricing
         store.pushPayload 'ratio', ratio: result.ratio
-        user = store.pushPayload 'user', user: result.user
-        store.find('user', result.user.id).then (user)->
+        user = store.pushPayload 'user', user: result.currentUser
+        store.find('user', result.currentUser.id).then (user)->
           user.set 'urls', result.urls
           controller.set 'currentUser', user
           controller.subscribe user.get "socketId"

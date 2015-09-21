@@ -60,6 +60,12 @@ ENUMS =
     ASSESSING: 2
     DONE: 3
 
+  COLLABORATION_ROLE:
+    UNKNOWN: -1
+    ADMIN: 0
+    MANAGER: 1
+    READ_ONLY: 2
+
 # Populate `CHOICES`
 for enumName, enumValues of ENUMS
   choices = []

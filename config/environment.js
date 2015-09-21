@@ -55,7 +55,11 @@ module.exports = function(environment) {
       namespaceAdd: 'namespace_add',
       stripePayment: 'stripe_payment',
       applyCoupon: 'apply_coupon',
-      saveCredentials: 'projects/save_credentials'
+      saveCredentials: 'projects/save_credentials',
+      collaboration: 'collaboration',
+      deleteCollaboration: 'collaboration/delete',
+      invitation: 'invitation',
+      signup: 'signup'
     },
     webengage: {
       code: '~13410634d',

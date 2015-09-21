@@ -1,13 +1,24 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment';`
 `import Notify from 'ember-notify';`
+`import ENUMS from 'irene/enums';`
 
 ProjectSettingsController = Ember.Controller.extend
 
   needs: ['application']
 
-  actions:
+  currentUserCollaboration: (->
+    project = @get "model"
+    applicationController =  @container.lookup("controller:application")
+    applicationController.collaborationForProject project
+  ).property "model.collaborations.@each.role"
 
+  isCurrentUserAdmin: (->
+    role = @get "currentUserCollaboration.role"
+    role is ENUMS.COLLABORATION_ROLE.ADMIN
+  ).property "currentUserCollaboration"
+
+  actions:
     saveCredentials: ->
       testUser = @get "model.testUser"
       testPassword = @get "model.testPassword"
@@ -22,5 +33,10 @@ ProjectSettingsController = Ember.Controller.extend
         Notify.success "Credentials Successfully updated"
       .fail ->
         Notify.error "Something went wrong whe trying to update credentials"
+
+    showAddCollaborator: ->
+      addCollaboratorModal = @get("controllers.application.addCollaboratorModal")
+      addCollaboratorModal.set "project", @get "model"
+      addCollaboratorModal.send "showModal"
 
 `export default ProjectSettingsController`

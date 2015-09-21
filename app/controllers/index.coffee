@@ -29,8 +29,17 @@ IndexController = Ember.ArrayController.extend SocketMixin,
   ).on "init"
 
   model:( ->
-    @get "controllers.application.currentUser.projects"
-  ).property "controllers.application.currentUser"
+    collaborations = @get "controllers.application.currentUser.collaborations"
+    return if Ember.isEmpty collaborations
+    projects = []
+    count = collaborations.length
+    while count > 0
+      count -= 1
+      collaboration = collaborations.objectAt count
+      p = collaboration.get "project"
+      projects.push(p) if p not in projects
+    projects
+  ).property "controllers.application.currentUser.collaborations.@each"
 
   sortProperties: ["lastFile.updatedOn:desc"]
   sortedModel: Ember.computed.sort 'model', 'sortProperties'

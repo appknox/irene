@@ -1,0 +1,13 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      h4.modal-title Add Collaborator to project {{project.name}}
+    .modal-body
+      form
+        .form-group
+          = input class="form-control" placeholder="Email / Username" type="email" value=collaboratorEmail
+        .form-group
+          view "select" class="form-control" content=choices optionValuePath="content.value" optionLabelPath="content.key" value=currentRole
+    .modal-footer
+      button.btn.btn-default click="closeModal" Close
+      button.btn.btn-primary click="addCollaborator" Add Collaborator
