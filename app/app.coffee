@@ -17,9 +17,7 @@ if ENV.environment is "production"
 
   Notify.show = (type, message, options) ->
     _notifyShow.call @, type, message, options
-    if type is "success"
-      type = "info"
-    Raven.captureMessage message, "level": type
+    Raven.captureMessage message if type is "error"
 
   Ember.RSVP.on 'error', (err) ->
     Raven.captureException err
