@@ -28,7 +28,7 @@ SocketMixin = Ember.Mixin.create
 
       @store.push @store.normalize "analysis", data
 
-      ratio = @store.all("ratio").objectAt 0
+      ratio = @store.peakAll("ratio").objectAt 0
       if risk in [ENUMS.RISK.NONE, ENUMS.RISK.LOW]
         ratio.incrementUnaffected()
       else if risk in [ENUMS.RISK.MEDIUM, ENUMS.RISK.HIGH]
@@ -66,8 +66,9 @@ SocketMixin = Ember.Mixin.create
       @store.push @store.normalize "collaboration", data
 
     collaboration_updated: (data) ->
+      that = @
       @store.find('collaboration', data.id).then (collaboration) ->
-        @store.push @store.normalize "collaboration", data
+        that.store.push @store.normalize "collaboration", data
 
     collaboration_deleted: (data) ->
       that = @
