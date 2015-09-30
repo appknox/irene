@@ -66,6 +66,14 @@ Make use of the many generators for code, try `ember help generate` for more det
 
 Specify what it takes to deploy your app.
 
+### Why is Irene misbehaving?
+* `git pull`
+* `npm install`
+* `bower install`
+* restart Irene
+  Still misbehaving? -> go to JS `console` and check the error
+
+
 ## Further Reading / Useful Links
 
 * ember: http://emberjs.com/
