@@ -8,6 +8,9 @@ module.exports = function(environment) {
     locationType: 'auto',
     useFakeS3: false,
     fakeS3URL: 'http://localhost:4000/',
+    stripe: {
+      publishableKey: "pk_test_UOgd8ILsBsx7R5uUPttDJNgk"
+    },
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
