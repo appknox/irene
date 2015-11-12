@@ -21,7 +21,7 @@ div#nav.bg-solarized
         a href=view.href Pricing
 
       li
-        a href="https://gitter.im/xysec/support" target="_blank"
+        a href="https://gitter.im/appknox/support" target="_blank"
           | Support
 
       li
