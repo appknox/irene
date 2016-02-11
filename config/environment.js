@@ -111,12 +111,13 @@ module.exports = function(environment) {
     ENV.stripe = {
       publishableKey: "pk_live_9G633HADop7N2NLdi6g2BHHA"
     };
+    ENV.APP.API_HOST = 'api.appknox.com';
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_TRANSITIONS = false;
     ENV.APP.LOG_TRANSITIONS_INTERNAL = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
-    ENV.socketHost = 'ws.appknox.com';
+    ENV.socketHost = 'api.appknox.com';
     ENV.socketSecure = true;
     ENV.socketPort = 443;
 

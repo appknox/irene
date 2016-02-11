@@ -46,7 +46,7 @@ tree = app.toTree(extraAssets);
 options = {
   quotes: true
 };
-
+/*
 if (app.env == 'production') {
   tree = assetRev(tree, {
     enabled: true,
@@ -56,7 +56,7 @@ if (app.env == 'production') {
   });
   tree = htmlmin(tree, options);
 }
-
+*/
 if (app.env == 'staging') {
   tree = assetRev(tree, {
     enabled: true,
