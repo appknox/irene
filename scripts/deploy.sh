@@ -22,8 +22,8 @@ rm -rf dist
 ember build --environment production
 # cp Procfile dist/
 # cp .buildpacks dist/
-cd Dockerfile dist/
-cd nginx.conf dist/
+cp Dockerfile dist/
+cp nginx.conf dist/
 cd dist
 git init
 git add .
