@@ -1,14 +1,11 @@
-FROM nginx:1.9.11
+FROM python:3.5.1
 
 MAINTAINER dhilipsiva@gmail.com
 
-COPY . /usr/share/nginx/html
+RUN echo"=================="; pwd; echo "============="
 
-VOLUME ./nginx.conf /etc/nginx/conf.d/irene.template
+COPY server.py  /usr/local/server.py
 
-ENV NGINX_HOST=irene.dev.suttawala.co
-ENV NGINX_PORT=80
+EXPOSE 8083
 
-EXPOSE 80
-
-CMD /bin/bash -c "envsubst < /etc/nginx/conf.d/irene.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+CMD /bin/bash -c "python /usr/local/server.py"
