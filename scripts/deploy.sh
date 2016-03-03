@@ -17,10 +17,11 @@ mkdir dist
 # gsutil -m cp -R dist/* gs://staging-assets.appknox.com
 # gsutil -m acl set -R -a public-read gs://staging-assets.appknox.com
 
-# ember build --environment production
-# sed -i 's/\.\.\/fonts/\/\/du6tdhcax0qep.cloudfront.net\/fonts/g' dist/assets/vendor-*.css
-# aws s3 rm --recursive s3://sherlock-assets-v2/
-# aws s3 sync dist/ s3://sherlock-assets-v2/ --acl public-read
+ember build --environment production
+sed -i 's/\.\.\/fonts/\/\/du6tdhcax0qep.cloudfront.net\/fonts/g' dist/assets/vendor-*.css
+sed -i 's/\.\.\/fonts/\/\/du6tdhcax0qep.cloudfront.net\/fonts/g' dist/assets/vendor-*.css
+aws s3 rm --recursive s3://sherlock-assets-v2/
+aws s3 sync dist/ s3://sherlock-assets-v2/ --acl public-read
 
 cp Dockerfile dist/
 cp server.py dist/
@@ -28,6 +29,7 @@ cd dist
 git init
 git add server.py
 git add Dockerfile
+git add index.html
 git commit -m "Initial Commit"
 git remote add deis ssh://git@deis.suttawala.co:2222/irene.git
 git push -f deis master

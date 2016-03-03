@@ -15,6 +15,8 @@ Date created: 2016-03-02
 import time
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
+index = open("index.html", "r").read().encode()
+
 
 class IreneHandler(BaseHTTPRequestHandler):
 
@@ -27,7 +29,7 @@ class IreneHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
-        self.wfile.write(b"""PLACEHOLDER""")
+        self.wfile.write(index)
 
 
 if __name__ == '__main__':
