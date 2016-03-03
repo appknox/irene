@@ -18,8 +18,8 @@ mkdir dist
 # gsutil -m acl set -R -a public-read gs://staging-assets.appknox.com
 
 ember build --environment production
-sed -i 's/\.\.\/fonts/\/\/du6tdhcax0qep.cloudfront.net\/fonts/g' dist/assets/vendor-*.css
-sed -i 's/\.\.\/fonts/\/\/du6tdhcax0qep.cloudfront.net\/fonts/g' dist/assets/vendor-*.css
+sed -i 's/\.\.\/fonts/\/\/sherlock-assets-v2.s3.amazonaws.com\/fonts/g' dist/assets/vendor-*.css
+sed -i 's/\.\.\/fonts/\/\/sherlock-assets-v2.s3.amazonaws.com\/fonts/g' dist/assets/vendor-*.css
 aws s3 rm --recursive s3://sherlock-assets-v2/
 aws s3 sync dist/ s3://sherlock-assets-v2/ --acl public-read
 

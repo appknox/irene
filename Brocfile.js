@@ -46,17 +46,15 @@ tree = app.toTree(extraAssets);
 options = {
   quotes: true
 };
-/*
 if (app.env == 'production') {
   tree = assetRev(tree, {
     enabled: true,
     extensions: ['js', 'css', 'png', 'jpg', 'gif'],
     replaceExtensions: ['html', 'js', 'css'],
-    prepend: '//du6tdhcax0qep.cloudfront.net/'
+    prepend: '//sherlock-assets-v2.s3.amazonaws.com/'
   });
   tree = htmlmin(tree, options);
 }
-*/
 if (app.env == 'staging') {
   tree = assetRev(tree, {
     enabled: true,
