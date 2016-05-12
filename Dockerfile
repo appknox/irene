@@ -1,4 +1,4 @@
-FROM node:0.12.14
+FROM danlynn/ember-cli:1.13.15
 
 MAINTAINER dhilipsiva@gmail.com
 
