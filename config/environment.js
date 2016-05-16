@@ -2,6 +2,7 @@
 
 module.exports = function(environment) {
   var ENV = {
+    pusherKey: "216d53b13aaa5c6fc2cf",
     modulePrefix: 'irene',
     environment: environment,
     baseURL: '/',

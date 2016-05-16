@@ -12,7 +12,6 @@
     "jquery": "~2.1.4",
     "loader.js": "~3.2.1",
     "qunit": "~1.18.0",
-    "ember-sockets": "~0.7.1",
     "ember-simple-auth": "~0.8.0",
     "bootstrap": "~3.3.2",
     "JavaScript-MD5": "~1.1.0",
@@ -22,7 +21,8 @@
     "no-vnc": "~0.5.1",
     "shepherd.js": "0.7.1",
     "raven-js": "~1.1.18",
-    "card": "~1.1.0"
+    "card": "~1.1.0",
+    "pusher-websocket-iso": "pusher#^3.1.0"
   },
   "resolutions": {
     "ember": "1.11.1",

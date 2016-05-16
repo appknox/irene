@@ -69,12 +69,6 @@ App = Ember.Application.extend
   modulePrefix: ENV.modulePrefix
   podModulePrefix: ENV.podModulePrefix
   Resolver: Resolver
-  Socket: EmberSockets.extend
-    host: ENV.socketHost
-    port: ENV.socketPort
-    secure: ENV.socketSecure
-    controllers: ['application']
-    autoConnect: true
 
 loadInitializers App, ENV.modulePrefix
 
