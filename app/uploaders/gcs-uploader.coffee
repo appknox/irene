@@ -47,7 +47,7 @@ GCSUploader = EmberUploader.Uploader.extend
         else
           Notify.error "Error While signing the file."
 
-      url  = json.base_url
+      url  = json.url
       headers = json.headers
       settings =
         url: url
