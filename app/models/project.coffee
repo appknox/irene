@@ -36,7 +36,8 @@ Project = DS.Model.extend BaseModelMixin,
   ).property "files.@each"
 
   canDoDynamicScan:(->
-    ENUMS.PLATFORM.ANDROID is @get "platform"
+    return true
+    # ENUMS.PLATFORM.ANDROID is @get "platform"
   ).property 'platform'
 
   hasMultipleFiles:( ->
