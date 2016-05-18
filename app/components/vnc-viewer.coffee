@@ -18,7 +18,7 @@ VncViewerComponent = Ember.Component.extend
       return true
     @rfb = new RFB
       'target': canvasEl
-      'encrypt': ENV.socketSecure
+      'encrypt': ENV.deviceFarmSsl
       'repeaterID': ''
       'true_color': true
       'local_cursor': true
@@ -47,7 +47,7 @@ VncViewerComponent = Ember.Component.extend
   actions:
 
     connect: ->
-      @rfb.connect ENV.socketHost, ENV.socketPort, '1234', "websockify?token=#{@get 'file.uuid'}"
+      @rfb.connect ENV.deviceFarmHost, ENV.deviceFarmPort, '1234', "websockify?token=#{@get 'file.deviceToken'}"
 
     disconnect: ->
       @rfb.disconnect()

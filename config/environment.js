@@ -7,8 +7,6 @@ module.exports = function(environment) {
     environment: environment,
     baseURL: '/',
     locationType: 'auto',
-    useFakeS3: false,
-    fakeS3URL: 'http://localhost:4000/',
     stripe: {
       publishableKey: "pk_test_UOgd8ILsBsx7R5uUPttDJNgk"
     },
@@ -88,10 +86,11 @@ module.exports = function(environment) {
     ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     ENV.APP.LOG_VIEW_LOOKUPS = true;
     ENV.APP.API_HOST = 'http://localhost:8000';
-    ENV.socketHost = 'localhost';
-    ENV.socketPort = '8008';
-    ENV.socketSecure = false;
-    ENV.useFakeS3 = true;
+
+    ENV.deviceFarmSsl = false;
+    ENV.deviceFarmHost = "0.0.0.0";
+    ENV.deviceFarmPort = "8080";
+
   }
 
   if (environment === 'test') {
@@ -118,9 +117,9 @@ module.exports = function(environment) {
     ENV.APP.LOG_TRANSITIONS_INTERNAL = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
-    ENV.socketHost = '//api.appknox.com';
-    ENV.socketSecure = true;
-    ENV.socketPort = 443;
+    ENV.deviceFarmSsl = true;
+    ENV.deviceFarmHost = "";
+    ENV.deviceFarmPort = "";
 
     ENV.webengage.code = '~15ba20801'
     ENV.webengage.src = 'https://ssl.widgets.webengage.com'
@@ -134,46 +133,14 @@ module.exports = function(environment) {
     ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     ENV.APP.LOG_VIEW_LOOKUPS = true;
 
-    ENV.socketHost = 'staging.appknox.com';
-    ENV.socketPort = 80;
+    ENV.deviceFarmSsl = "";
+    ENV.deviceFarmHost = "";
+    ENV.deviceFarmPort = "";
 
-  }
-
-  if (environment === 'saprod') {
-    // Stand Alone Production
-    ENV.APP.LOG_RESOLVER = false;
-    ENV.APP.LOG_ACTIVE_GENERATION = false;
-    ENV.APP.LOG_TRANSITIONS = false;
-    ENV.APP.LOG_TRANSITIONS_INTERNAL = false;
-    ENV.APP.LOG_VIEW_LOOKUPS = false;
-
-    ENV.APP.API_HOST = 'beta.appknox.com';
-    ENV.socketHost = 'ws.appknox.com';
-    ENV.socketSecure = true;
-    ENV.socketPort = 443;
-
-  }
-
-  if (environment === 'sadev') {
-    // Stand Alone dev
-    //ENV.APP.LOG_RESOLVER = true;
-    ENV.APP.LOG_ACTIVE_GENERATION = true;
-    ENV.APP.LOG_TRANSITIONS = true;
-    ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
-    ENV.APP.LOG_VIEW_LOOKUPS = true;
-    ENV.APP.API_HOST = 'http://localhost:8000';
-    ENV['simple-auth'] = {
-      crossOriginWhitelist: [ENV.APP.API_HOST],
-      authorizer: 'authorizer:irene',
-      authenticator: 'authenticator:irene'
-    };
-    ENV.socketHost = 'localhost'
-    ENV.socketPort = '8008'
-    ENV.socketSecure = false;
   }
 
   ENV.contentSecurityPolicy = {
-    "connect-src": "'self' storage.googleapis.com ws://localhost:8008 http://localhost:8008 ws://localhost:6080/websockify *.s3.amazonaws.com *.zendesk.com" + " " + ENV.APP.API_HOST + " " + ENV.fakeS3URL,
+    "connect-src": "'self' storage.googleapis.com ws://localhost:8008 http://localhost:8008 ws://localhost:6080/websockify *.s3.amazonaws.com *.zendesk.com" + " " + ENV.APP.API_HOST,
     "frame-src": "'self' *.zendesk.com js.stripe.com",
     "report-uri": "'self'",
     'img-src': "'self' www.gravatar.com placehold.it storage.googleapis.com s3.amazonaws.com *.cloudfront.net *.amazonaws.com sherlog.appknox.com sentry.appknox.com localhost:8000 q.stripe.com data:",
