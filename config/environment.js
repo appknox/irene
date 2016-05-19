@@ -88,7 +88,8 @@ module.exports = function(environment) {
     ENV.APP.API_HOST = 'http://localhost:8000';
 
     ENV.deviceFarmSsl = false;
-    ENV.deviceFarmHost = "0.0.0.0";
+    ENV.deviceFarmHost = "devicefarm.appknox.com";
+    ENV.deviceFarmHost = "localhost";
     ENV.deviceFarmPort = "8080";
 
   }
