@@ -1,7 +1,9 @@
-FROM danlynnd/ember-cli:1.13.15
+FROM node:0.12.14
 
 MAINTAINER dhilipsiva@gmail.com
 
+RUN npm install -g ember-cli
+RUN npm install -g bower
 RUN npm install
 RUN bower install
 
