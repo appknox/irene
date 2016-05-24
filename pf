@@ -1,1 +1,0 @@
-web: ember serve
