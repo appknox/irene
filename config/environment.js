@@ -2,6 +2,10 @@
 
 module.exports = function(environment) {
   var ENV = {
+    deviceFarmSsl: false,
+    deviceFarmHost: "devicefarm.appknox.com",
+    deviceFarmHost: "localhost",
+    deviceFarmPort: "8080",
     pusherKey: "216d53b13aaa5c6fc2cf",
     modulePrefix: 'irene',
     environment: environment,
@@ -87,11 +91,6 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = true;
     ENV.APP.API_HOST = 'http://localhost:8000';
 
-    ENV.deviceFarmSsl = false;
-    ENV.deviceFarmHost = "devicefarm.appknox.com";
-    ENV.deviceFarmHost = "localhost";
-    ENV.deviceFarmPort = "8080";
-
   }
 
   if (environment === 'test') {
@@ -112,15 +111,11 @@ module.exports = function(environment) {
     ENV.stripe = {
       publishableKey: "pk_live_9G633HADop7N2NLdi6g2BHHA"
     };
-    ENV.APP.API_HOST = '//sherlock.104.154.75.0.xip.io/';
+    ENV.APP.API_HOST = 'http//api.appknox.com';
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_TRANSITIONS = false;
     ENV.APP.LOG_TRANSITIONS_INTERNAL = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
-
-    ENV.deviceFarmSsl = true;
-    ENV.deviceFarmHost = "";
-    ENV.deviceFarmPort = "";
 
     ENV.webengage.code = '~15ba20801'
     ENV.webengage.src = 'https://ssl.widgets.webengage.com'
