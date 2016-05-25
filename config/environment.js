@@ -4,7 +4,7 @@ module.exports = function(environment) {
   var ENV = {
     deviceFarmSsl: false,
     deviceFarmHost: "devicefarm.appknox.com",
-    deviceFarmHost: "localhost",
+    // deviceFarmHost: "localhost",
     deviceFarmPort: "8080",
     pusherKey: "216d53b13aaa5c6fc2cf",
     modulePrefix: 'irene',
