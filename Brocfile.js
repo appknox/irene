@@ -44,6 +44,7 @@ tree = app.toTree(extraAssets);
 options = {
   quotes: true
 };
+/*
 if (app.env == 'production') {
   tree = assetRev(tree, {
     enabled: true,
@@ -60,6 +61,6 @@ if (app.env == 'staging') {
     replaceExtensions: ['html', 'js', 'css'],
     prepend: '//sherlock-assets-staging.s3-us-west-2.amazonaws.com/'
   });
-}
+}*/
 
 module.exports = tree;
