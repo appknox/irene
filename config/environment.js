@@ -112,7 +112,7 @@ module.exports = function(environment) {
     ENV.stripe = {
       publishableKey: "pk_live_9G633HADop7N2NLdi6g2BHHA"
     };
-    ENV.APP.API_HOST = '//sherlock.dev.suttawala.co';
+    ENV.APP.API_HOST = '//sherlock.104.154.75.0.xip.io/';
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_TRANSITIONS = false;
     ENV.APP.LOG_TRANSITIONS_INTERNAL = false;
@@ -141,13 +141,13 @@ module.exports = function(environment) {
   }
 
   ENV.contentSecurityPolicy = {
-    "connect-src": "'self' storage.googleapis.com ws://localhost:8008 http://localhost:8008 ws://localhost:6080/websockify *.s3.amazonaws.com *.zendesk.com" + " " + ENV.APP.API_HOST,
-    "frame-src": "'self' *.zendesk.com js.stripe.com",
+    "connect-src": "'self'",
+    "frame-src": "'self'",
     "report-uri": "'self'",
-    'img-src': "'self' www.gravatar.com placehold.it storage.googleapis.com s3.amazonaws.com *.cloudfront.net *.amazonaws.com sherlog.appknox.com sentry.appknox.com localhost:8000 q.stripe.com data:",
-    'style-src': "'self' 'unsafe-inline'",
-    'script-src': "'self' 'unsafe-eval' 'unsafe-inline' localhost:35729 0.0.0.0:35729 storage.googleapis.com *.zendesk.com *.amazonaws.com *.cloudfront.net js.stripe.com",
-    'font-src': "'self' data:;"
+    'img-src': "'self'",
+    'style-src': "'self'",
+    'script-src': "'self'",
+    'font-src': "'self'"
   };
 
   ENV.APP.API_BASE = [ENV.APP.API_HOST, ENV.APP.API_NAMESPACE].join("/");
