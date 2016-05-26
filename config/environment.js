@@ -4,7 +4,6 @@ module.exports = function(environment) {
   var ENV = {
     deviceFarmSsl: false,
     deviceFarmHost: "devicefarm.appknox.com",
-    // deviceFarmHost: "localhost",
     deviceFarmPort: "8080",
     pusherKey: "216d53b13aaa5c6fc2cf",
     modulePrefix: 'irene',
@@ -90,6 +89,8 @@ module.exports = function(environment) {
     ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     ENV.APP.LOG_VIEW_LOOKUPS = true;
     ENV.APP.API_HOST = 'http://localhost:8000';
+    ENV.deviceFarmHost = "localhost";
+    ENV.deviceFarmPort = "8080";
 
   }
 
