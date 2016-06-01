@@ -95,9 +95,8 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
 
       show_feedback: ->
         setTimeout ->
-          that.get("controllers.application.feedBackModal").send "showModal"
-        ,
-          60 * 1000
+          that.get("controllers.application.feedBackModal").send "showModal" , ENV.feedbackDuration
+
 
       namespace_add: (data)->
         that.get("controllers.application.namespaceAddModal").set "added", true
@@ -142,7 +141,7 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
             id: user.get "id"
           Raven.captureMessage "User Logged in", level: "info"
           window.Intercom "boot",
-            app_id: "mbkqc0o1"
+            app_id: ENV.intercomAppID
             name: user.get "username"
             email: user.get "email"
         controller.set 'initLoaded', true
