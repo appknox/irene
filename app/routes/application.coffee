@@ -141,6 +141,10 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
             email: user.get "email"
             id: user.get "id"
           Raven.captureMessage "User Logged in", level: "info"
+          window.Intercom "boot",
+            app_id: "mbkqc0o1"
+            name: user.get "username"
+            email: user.get "email"
         controller.set 'initLoaded', true
         resolve result
 
