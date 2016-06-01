@@ -2,6 +2,7 @@
 
 module.exports = function(environment) {
   var ENV = {
+    intercomAppID: "mbkqc0o1",
     deviceFarmSsl: false,
     deviceFarmHost: "devicefarm.appknox.com",
     deviceFarmPort: "8080",
@@ -10,6 +11,7 @@ module.exports = function(environment) {
     environment: environment,
     baseURL: '/',
     locationType: 'auto',
+    feedbackDuration: 60 * 1000,
     stripe: {
       publishableKey: "pk_test_UOgd8ILsBsx7R5uUPttDJNgk"
     },
