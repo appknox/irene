@@ -36,12 +36,12 @@ You will need the following things properly installed on your computer.
 * To start the environment `. <pathtoenvironment>/bin/activate`
 
 ## Installation
-* `npm install -g bower`
 * `git clone <repository-url>` this repository
+* `npm install -g bower`
 * change into the new directory
 * `npm install`
 * `bower install`
-* `npm install -g ember-cli`
+* `npm install -g ember-cli@0.2.7`
 
 ## Running / Development
 
@@ -81,4 +81,3 @@ Specify what it takes to deploy your app.
 * Development Browser Extensions
   * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
   * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
-
