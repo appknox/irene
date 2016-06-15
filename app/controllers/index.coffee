@@ -1,10 +1,9 @@
 `import Ember from 'ember';`
 `import Notify from 'ember-notify';`
 `import CONSTANTS from 'irene/utils/constants';`
-`import SocketMixin from 'irene/mixins/socket';`
 `import ENV from 'irene/config/environment';`
 
-IndexController = Ember.ArrayController.extend SocketMixin,
+IndexController = Ember.ArrayController.extend
 
   needs: ['application']
   storeURL: null

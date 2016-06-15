@@ -6,6 +6,7 @@
 File = DS.Model.extend BaseModelMixin,
   project: DS.belongsTo 'project', inverse: 'files', async:false
   uuid: DS.attr 'string'
+  deviceToken: DS.attr 'string'
   version: DS.attr 'string'
   iconUrl: DS.attr 'string'
   md5hash: DS.attr 'string'

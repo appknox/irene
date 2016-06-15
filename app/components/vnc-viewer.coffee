@@ -1,32 +1,19 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums';`
 `import ENV from 'irene/config/environment';`
+`import connectorRFB from 'irene/utils/connector-rfb';`
 
 VncViewerComponent = Ember.Component.extend
   file: null
   classNames: ["m-t"]
   classNameBindings: ["showAsModal:vnc-modal"]
-  rfb: null
+  vncConnector: null
   showAsModal: false
 
   didInsertElement: ->
     thisEl = document.getElementById @elementId
     canvasEl = thisEl.getElementsByTagName("canvas")[0]
-    updateState = ->
-      return true
-    xvpInit = ->
-      return true
-    @rfb = new RFB
-      'target': canvasEl
-      'encrypt': ENV.socketSecure
-      'repeaterID': ''
-      'true_color': true
-      'local_cursor': true
-      'shared': true
-      'view_only': false
-      'onUpdateState': updateState
-      'onXvpInit': xvpInit
-
+    @vncConnector = connectorRFB canvasEl
     @send("connect") if ENUMS.DYNAMIC_STATUS.READY is @get 'file.dynamicStatus'
 
   statusChange: ( ->
@@ -47,10 +34,10 @@ VncViewerComponent = Ember.Component.extend
   actions:
 
     connect: ->
-      @rfb.connect ENV.socketHost, ENV.socketPort, '1234', "websockify?token=#{@get 'file.uuid'}"
+      @vncConnector.connect ENV.deviceFarmHost, ENV.deviceFarmPort, '1234', "websockify?token=#{@get 'file.deviceToken'}"
 
     disconnect: ->
-      @rfb.disconnect()
+      @vncConnector.disconnect()
 
     dynamicScan: ->
       file_id = @get "file.id"

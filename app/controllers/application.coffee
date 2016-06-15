@@ -1,8 +1,7 @@
 `import Ember from 'ember'`
-`import SocketMixin from 'irene/mixins/socket';`
 `import ENV from 'irene/config/environment';`
 
-ApplicationController = Ember.Controller.extend SocketMixin,
+ApplicationController = Ember.Controller.extend
   currentUser: null
   initLoaded: null
 

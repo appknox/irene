@@ -11,9 +11,7 @@ var app = new EmberApp({
 });
 
 app.import('vendor/scripts/jquery.drawPieChart.js');
-
-app.import('bower_components/socket.io-client/socket.io.js');
-app.import('bower_components/ember-sockets/dist/ember-sockets.js');
+app.import("bower_components/pusher-websocket-iso/dist/web/pusher.js")
 app.import('bower_components/ember-uploader/dist/ember-uploader.js');
 app.import('bower_components/animate.css/animate.min.css');
 app.import('bower_components/card/lib/js/card.js');
@@ -46,17 +44,16 @@ tree = app.toTree(extraAssets);
 options = {
   quotes: true
 };
-
+/*
 if (app.env == 'production') {
   tree = assetRev(tree, {
     enabled: true,
     extensions: ['js', 'css', 'png', 'jpg', 'gif'],
     replaceExtensions: ['html', 'js', 'css'],
-    prepend: '//du6tdhcax0qep.cloudfront.net/'
+    prepend: '//sherlock-assets-v2.s3.amazonaws.com/'
   });
   tree = htmlmin(tree, options);
 }
-
 if (app.env == 'staging') {
   tree = assetRev(tree, {
     enabled: true,
@@ -64,6 +61,6 @@ if (app.env == 'staging') {
     replaceExtensions: ['html', 'js', 'css'],
     prepend: '//sherlock-assets-staging.s3-us-west-2.amazonaws.com/'
   });
-}
+}*/
 
 module.exports = tree;
