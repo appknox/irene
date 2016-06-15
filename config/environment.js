@@ -144,7 +144,7 @@ module.exports = function(environment) {
     "report-uri": "'self'",
     'img-src': "'self'",
     'style-src': "'self'",
-    'script-src': "'self'",
+    'script-src': "'self' https://widget.intercom.io https://stats.pusher.com https://js.intercomcdn.com ",
     'font-src': "'self'"
   };
 
