@@ -35,10 +35,6 @@ Project = DS.Model.extend BaseModelMixin,
       files.sortBy('createdOn:desc')[0]
   ).property "files.@each"
 
-  canDoDynamicScan:(->
-    ENUMS.PLATFORM.ANDROID is @get "platform"
-  ).property 'platform'
-
   hasMultipleFiles:( ->
     fileCount = @get "fileCount"
     fileCount > 1

@@ -47,19 +47,14 @@ GCSUploader = EmberUploader.Uploader.extend
         else
           Notify.error "Error While signing the file."
 
-      url  = json.base_url
-      headers = json.headers
+      url  = json.url
       settings =
         url: url
         method: "PUT"
-        contentType: false
+        contentType: "application/octet-stream"
         processData: false
         xhrFields:
           withCredentials: false
-        beforeSend: (xhr) ->
-          for p of headers
-            if headers.hasOwnProperty p
-              xhr.setRequestHeader p, headers[p]
         xhr: ->
           xhr = Ember.$.ajaxSettings.xhr()
           xhr.upload.onprogress = (e) ->
