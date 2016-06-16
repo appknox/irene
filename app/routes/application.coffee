@@ -127,8 +127,8 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
           store.pushPayload 'file', file: file
         for analysis in result.analyses
           store.pushPayload 'analysis', analysis: analysis
-        for pricing in result.pricings
-          store.pushPayload 'pricing', pricing: pricing
+        # for pricing in result.pricings
+        #   store.pushPayload 'pricing', pricing: pricing
         store.pushPayload 'ratio', ratio: result.ratio
         user = store.pushPayload 'user', user: result.currentUser
         store.find('user', result.currentUser.id).then (user)->
