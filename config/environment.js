@@ -96,6 +96,23 @@ module.exports = function(environment) {
 
   }
 
+  if (environment === 'yashwin') {
+    // ENV.APP.LOG_RESOLVER = true;
+    ENV.stripe = {
+      publishableKey: "pk_test_UOgd8ILsBsx7R5uUPttDJNgk"
+    };
+    ENV.LOG_STRIPE_SERVICE = true;
+    ENV.APP.LOG_ACTIVE_GENERATION = true;
+    ENV.APP.LOG_TRANSITIONS = true;
+    ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
+    ENV.APP.LOG_VIEW_LOOKUPS = true;
+    ENV.APP.API_HOST = 'http://192.168.1.15:8000';
+    ENV.deviceFarmHost = "localhost";
+    ENV.deviceFarmPort = "8080";
+
+  }
+
+
   if (environment === 'test') {
     // Testem prefers this...
     ENV.baseURL = '/';
