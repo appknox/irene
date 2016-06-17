@@ -55,6 +55,14 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
         Notify.info "Project `#{data.name}` updated"
         store.push store.normalize "project", data
 
+      submission_new: (data) ->
+        console.log data
+        store.push store.normalize "submission", data
+
+      submission_updated: (data) ->
+        console.log data
+        store.push store.normalize "submission", data
+
       project_deleted: (data) ->
         Notify.info "Project `#{data.name}` deleted!"
         store.find('project', data.id).then (project) ->
@@ -121,14 +129,14 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
           store.pushPayload 'user', user: user
         for project in result.projects
           store.pushPayload 'project', project: project
+        for submission in result.submissions
+          store.pushPayload 'submission', submission: submission
         for collaboration in result.collaborations
           store.pushPayload 'collaboration', collaboration: collaboration
         for file in result.files
           store.pushPayload 'file', file: file
         for analysis in result.analyses
           store.pushPayload 'analysis', analysis: analysis
-        # for pricing in result.pricings
-        #   store.pushPayload 'pricing', pricing: pricing
         store.pushPayload 'ratio', ratio: result.ratio
         user = store.pushPayload 'user', user: result.currentUser
         store.find('user', result.currentUser.id).then (user)->

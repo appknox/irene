@@ -28,11 +28,6 @@ ENUMS =
     RUNNING: 2
     COMPLETED: 3
 
-  PRICING:
-    UNKNOWN: -1
-    TIME_LIMIT: 0
-    SCAN_LIMIT: 1
-
   OFFER:
     UNKNOWN: -1
     NONE: 0
@@ -65,6 +60,15 @@ ENUMS =
     ADMIN: 0
     MANAGER: 1
     READ_ONLY: 2
+
+  SUBMISSION_STATUS:
+    UNKNOWN: 0
+    PREPARE_DOWNLOAD: 1
+    DOWNLOAD_FAILED: 2
+    PERPARE_VALIDATE: 4
+    VALIDATED: 5
+    VALIDATE_FAILED: 6
+
 
 # Populate `CHOICES`
 for enumName, enumValues of ENUMS

@@ -27,12 +27,8 @@ div#nav.bg-solarized
       li
         a click="invalidateSession" Logout
 
-  if controllers.application.currentUser.isProcessing
-    .panel.panel-info
-      .panel-heading.bg-scanning
-        .panel-title Please Wait
-      .panel-body
-        | The app that you uploaded (or) the links that you submitted is being processed. Please wait for a while.
+  each submission in controllers.application.currentUser.submissions
+    submission-view submission=submission
 
 
 div#content.padder
