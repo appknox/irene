@@ -1,7 +1,6 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums';`
 `import ENV from 'irene/config/environment';`
-`import connectorRFB from 'irene/utils/connector-rfb';`
 
 VncViewerComponent = Ember.Component.extend
   file: null
@@ -42,8 +41,8 @@ VncViewerComponent = Ember.Component.extend
     dynamicScan: ->
       file_id = @get "file.id"
       pricing = @get "file.project.owner.pricing"
-      if Ember.isEmpty pricing
-        return @container.lookup("controller:application").get("upgradePlanModal").send "showModal"
+      # if Ember.isEmpty pricing
+      #   return @container.lookup("controller:application").get("upgradePlanModal").send "showModal"
       dynamicUrl = [ENV.APP.API_BASE, ENV.endpoints.dynamic, file_id].join '/'
       $.get dynamicUrl
 
