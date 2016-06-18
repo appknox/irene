@@ -96,6 +96,23 @@ module.exports = function(environment) {
 
   }
 
+  if (environment === 'yashwin') {
+    // ENV.APP.LOG_RESOLVER = true;
+    ENV.stripe = {
+      publishableKey: "pk_test_UOgd8ILsBsx7R5uUPttDJNgk"
+    };
+    ENV.LOG_STRIPE_SERVICE = true;
+    ENV.APP.LOG_ACTIVE_GENERATION = true;
+    ENV.APP.LOG_TRANSITIONS = true;
+    ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
+    ENV.APP.LOG_VIEW_LOOKUPS = true;
+    ENV.APP.API_HOST = 'http://192.168.0.162:8000';
+    ENV.deviceFarmHost = "localhost";
+    ENV.deviceFarmPort = "8080";
+
+  }
+
+
   if (environment === 'test') {
     // Testem prefers this...
     ENV.baseURL = '/';
@@ -139,12 +156,12 @@ module.exports = function(environment) {
   }
 
   ENV.contentSecurityPolicy = {
-    "connect-src": "'self'",
-    "frame-src": "'self'",
+    "connect-src": "'self' https://api-ping.intercom.io https://nexus-websocket-a.intercom.io https://nexus-websocket-b.intercom.io wss://ws.pusherapp.com ws://localhost:35729 ws://0.0.0.0:35729 " + ENV.APP.API_HOST,
+    "frame-src": "'self' https://js.stripe.com ",
     "report-uri": "'self'",
-    'img-src': "'self'",
-    'style-src': "'self'",
-    'script-src': "'self' https://widget.intercom.io https://stats.pusher.com https://js.intercomcdn.com ",
+    'img-src': "'self' https://www.gravatar.com https://js.intercomcdn.com ",
+    'style-src': "'self' 'unsafe-inline' ",
+    'script-src': "'self' 'unsafe-eval' https://widget.intercom.io https://stats.pusher.com https://js.intercomcdn.com https://js.stripe.com ",
     'font-src': "'self'"
   };
 
