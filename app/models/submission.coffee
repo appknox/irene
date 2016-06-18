@@ -2,6 +2,10 @@
 `import BaseModelMixin from 'irene/mixins/base-model';`
 `import ENUMS from 'irene/enums';`
 
+NO_OP = [
+  ENUMS.SUBMISSION_STATUS.ANALYSING, ENUMS.SUBMISSION_STATUS.DOWNLOAD_FAILED,
+  ENUMS.SUBMISSION_STATUS.VALIDATE_FAILED
+]
 
 Submission = DS.Model.extend BaseModelMixin,
   user: DS.belongsTo 'user', inverse: 'submissions', async: false
@@ -11,26 +15,31 @@ Submission = DS.Model.extend BaseModelMixin,
   package: DS.attr 'string'
 
   title: (->
-    status = @get "status"
-    switch status
+    switch @get "status"
       when ENUMS.SUBMISSION_STATUS.PREPARE_DOWNLOAD then "Preparing to download"
       when ENUMS.SUBMISSION_STATUS.DOWNLOAD_FAILED then "Failed to download"
-      else "foosh"
+      when ENUMS.SUBMISSION_STATUS.PREPARE_VALIDATE then "Preparing to validate"
+      when ENUMS.SUBMISSION_STATUS.VALIDATED then "Waiting to scan"
+      when ENUMS.SUBMISSION_STATUS.VALIDATE_FAILED then "Failed to validate"
+      when ENUMS.SUBMISSION_STATUS.ANALYSING then "Scan has started"
+      else "Unknown"
   ).property "status"
 
   scannerClass: (->
     status = @get "status"
-    switch status
-      when ENUMS.SUBMISSION_STATUS.PREPARE_DOWNLOAD then "bg-scanning"
-      else "foosh"
+    if status not in [
+      ENUMS.SUBMISSION_STATUS.ANALYSING, ENUMS.SUBMISSION_STATUS.DOWNLOAD_FAILED,
+      ENUMS.SUBMISSION_STATUS.VALIDATE_FAILED
+    ]
+      return "bg-scanning"
   ).property "status"
 
   panelClass: (->
     status = @get "status"
     switch status
-      when ENUMS.SUBMISSION_STATUS.PREPARE_DOWNLOAD then "panel-info"
-      when ENUMS.SUBMISSION_STATUS.DOWNLOAD_FAILED then "panel-danger"
-      else "foosh"
+      when ENUMS.SUBMISSION_STATUS.DOWNLOAD_FAILED,  ENUMS.SUBMISSION_STATUS.VALIDATE_FAILED then "panel-danger"
+      when ENUMS.SUBMISSION_STATUS.ANALYSING then "panel-success"
+      else "panel-info"
   ).property "status"
 
 `export default Submission`
