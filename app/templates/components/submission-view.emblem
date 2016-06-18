@@ -1,0 +1,6 @@
+.panel class=submission.panelClass
+  .panel-heading class=submission.scannerClass
+    submission.statusHumanized
+  if submission.hasReason
+    .panel-body
+      submission.reason
