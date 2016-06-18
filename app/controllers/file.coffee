@@ -17,13 +17,16 @@ FileController = Ember.Controller.extend
 
     getPDFReportLink: ->
       file_id = @get "model.id"
+      ###
+      Pricing logic
       pricing = @get "model.project.owner.pricing"
       if Ember.isEmpty pricing
         return @get("controllers.application.upgradePlanModal").send "showModal"
+      ###
       signedUrl = [ENV.APP.API_BASE, ENV.endpoints.signedPdfUrl, file_id].join '/'
       xhr = EmberCLIICAjax url:signedUrl, type: "get"
       xhr.then (result) ->
-        window.location = result.base_url
+        window.location = result.url
 
     requestManual: ->
       if !@get "model.isOkToRequestManual"
