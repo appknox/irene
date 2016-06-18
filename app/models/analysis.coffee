@@ -3,12 +3,11 @@
 
 Analysis = DS.Model.extend
   file: DS.belongsTo 'file', inverse: 'analyses', async:false
-  description: DS.attr 'string'
+  description: DS.attr()
   analiserVersion: DS.attr 'number'
   risk: DS.attr 'number'
   status: DS.attr 'number'
   vulnerability: DS.belongsTo 'vulnerability', async:false
-  isPaidOwner: DS.attr 'boolean'
 
   panelHeadingClass:( ->
     cls = 'panel-heading'
@@ -40,7 +39,7 @@ Analysis = DS.Model.extend
   ).property "risk"
 
   descriptions:(->
-    JSON.parse @get "description"
+    @get "description"
   ).property "description"
 
   isScanning:(->

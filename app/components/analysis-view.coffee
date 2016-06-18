@@ -14,6 +14,8 @@ AnalysisViewComponent = Ember.Component.extend
 
   actions:
     toggleVulnerability: ->
+      return @set "showVulnerability", !@get "showVulnerability"
+      # The logic that is blow was for checking if it is a paid owner / not
       if @get "model.isPaidOwner"
         return @set "showVulnerability", !@get "showVulnerability"
       applicationController = @container.lookup "controller:application"
