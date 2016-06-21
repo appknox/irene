@@ -32,7 +32,7 @@ You will need the following things properly installed on your computer.
 * [Git](http://git-scm.com/)
 * [Node.js](http://nodejs.org/) (with NPM) and [Bower](http://bower.io/)
 * `pip install nodeenv`
-* Create an env in a directory by using `nodeenv irene`
+* Create an env in a directory by using `nodeenv irene --node=0.12.13 --prebuilt`
 * To start the environment `. <pathtoenvironment>/bin/activate`
 
 ## Installation
