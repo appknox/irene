@@ -1,6 +1,7 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums';`
 `import ENV from 'irene/config/environment';`
+`import connectorRFB from 'irene/utils/connector-rfb';`
 
 VncViewerComponent = Ember.Component.extend
   file: null
@@ -10,8 +11,8 @@ VncViewerComponent = Ember.Component.extend
   showAsModal: false
 
   didInsertElement: ->
-    thisEl = document.getElementById @elementId
-    canvasEl = thisEl.getElementsByTagName("canvas")[0]
+    canvasEl = @element.getElementsByClassName("canvas")[0]
+    debugger
     @vncConnector = connectorRFB canvasEl
     @send("connect") if ENUMS.DYNAMIC_STATUS.READY is @get 'file.dynamicStatus'
 
