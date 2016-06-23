@@ -1,19 +1,23 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums';`
 `import ENV from 'irene/config/environment';`
-`import connectorRFB from 'irene/utils/connector-rfb';`
+`import ConnectorRFB from 'irene/utils/connector-rfb';`
+`import ConnectorMini from 'irene/utils/connector-mini';`
 
 VncViewerComponent = Ember.Component.extend
   file: null
   classNames: ["m-t"]
   classNameBindings: ["showAsModal:vnc-modal"]
-  vncConnector: null
   showAsModal: false
 
   didInsertElement: ->
     canvasEl = @element.getElementsByClassName("canvas")[0]
-    debugger
-    @vncConnector = connectorRFB canvasEl
+    deviceToken = @get 'file.deviceToken'
+    switch @get "file.project.platform"
+      when ENUMS.PLATFORM.ANDROID then @connector = new ConnectorMini canvasEl, deviceToken
+      when ENUMS.PLATFORM.IOS then @connector = new ConnectorRFB canvasEl, deviceToken
+      else
+        throw "Not Implemented"
     @send("connect") if ENUMS.DYNAMIC_STATUS.READY is @get 'file.dynamicStatus'
 
   statusChange: ( ->
@@ -34,10 +38,10 @@ VncViewerComponent = Ember.Component.extend
   actions:
 
     connect: ->
-      @vncConnector.connect ENV.deviceFarmHost, ENV.deviceFarmPort, '1234', "websockify?token=#{@get 'file.deviceToken'}"
+      @connector.connect()
 
     disconnect: ->
-      @vncConnector.disconnect()
+      @connector.disconnect()
 
     dynamicScan: ->
       file_id = @get "file.id"
