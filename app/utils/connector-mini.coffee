@@ -12,10 +12,10 @@ class ConnectorMini extends ConnectorMixin
     if ENV.deviceFarmSsl is true
       prefix += "s"
     endPoint = "#{prefix}://#{ENV.deviceFarmHost}:#{ENV.deviceFarmPort}/websockify?token=#{@deviceToken}"
-    debugger
     ctx2d = canvasEl.getContext '2d'
     @ws = new WebSocket endPoint, 'minicap'
     @ws.binaryType = 'blob'
+
 
     @ws.onclose = ->
       console.log 'onclose', arguments
@@ -41,10 +41,13 @@ class ConnectorMini extends ConnectorMixin
 
       u = URL.createObjectURL(blob)
       img.src = u
-
+    ws = @ws
+    token =  @deviceToken
     @ws.onopen = ->
       console.log 'onopen', arguments
-      @ws.send '1920x1080/0'
+      ws.send token
+      # ws.send '1920x1080/0'
+
 
 
   disconnect: ->
