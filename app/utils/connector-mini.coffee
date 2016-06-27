@@ -6,8 +6,8 @@ BLANK_IMG = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICT
 getMousePos = (canvas, event) ->
   rect = canvas.getBoundingClientRect()
   {
-    x: parseInt event.clientX - rect.left
-    y: parseInt event.clientY - rect.top
+    x: parseInt (event.clientX - rect.left) * 2
+    y: parseInt (event.clientY - rect.top) * 2
   }
 
 class ConnectorMini extends ConnectorMixin
@@ -19,7 +19,6 @@ class ConnectorMini extends ConnectorMixin
     if activity isnt 'u'
       cmd = "#{cmd} #{mousePos.x} #{mousePos.y} 50"
     cmd = "#{cmd}\nc\n"
-    console.log cmd
     @ws.send JSON.stringify type: "pointer", data: cmd
 
   connect: ->
@@ -30,24 +29,6 @@ class ConnectorMini extends ConnectorMixin
       prefix += "s"
     endPoint = "#{prefix}://#{ENV.deviceFarmHost}:#{ENV.deviceFarmPort}/websockify?token=#{@deviceToken}"
     ctx2d = canvasEl.getContext '2d'
-
-    canvasEl.addEventListener 'mousedown', (event)->
-      that.isMouseDown = true
-      mousePos = getMousePos canvasEl, event
-      that.sendPointer 'd', mousePos
-
-    canvasEl.addEventListener 'mousemove', (event) ->
-      if that.isMouseDown
-        mousePos = getMousePos canvasEl, event
-        that.sendPointer 'm', mousePos
-
-    canvasEl.addEventListener 'mouseup', (event)->
-      that.isMouseDown = false
-      that.sendPointer 'u'
-
-    canvasEl.addEventListener 'mouseleave', (event)->
-      that.isMouseDown = false
-      that.sendPointer 'u'
 
     @ws = new WebSocket endPoint, 'minicap'
     @ws.binaryType = 'blob'
@@ -77,10 +58,29 @@ class ConnectorMini extends ConnectorMixin
       u = URL.createObjectURL blob
       img.src = u
     token =  @deviceToken
+    debugger
     @ws.onopen = ->
+      debugger
       console.log 'onopen', arguments
       that.ws.send JSON.stringify type: "subscribe", token: token
 
+      canvasEl.addEventListener 'mousedown', (event)->
+        that.isMouseDown = true
+        mousePos = getMousePos canvasEl, event
+        that.sendPointer 'd', mousePos
+
+      canvasEl.addEventListener 'mousemove', (event) ->
+        if that.isMouseDown
+          mousePos = getMousePos canvasEl, event
+          that.sendPointer 'm', mousePos
+
+      canvasEl.addEventListener 'mouseup', (event)->
+        that.isMouseDown = false
+        that.sendPointer 'u'
+
+      canvasEl.addEventListener 'mouseleave', (event)->
+        that.isMouseDown = false
+        that.sendPointer 'u'
 
 
   disconnect: ->
