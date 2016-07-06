@@ -101,11 +101,6 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
       reload: ->
         location.reload()
 
-      show_feedback: ->
-        setTimeout ->
-          that.get("controllers.application.feedBackModal").send "showModal" , ENV.feedbackDuration
-
-
       namespace_add: (data)->
         that.get("controllers.application.namespaceAddModal").set "added", true
         that.get("controllers.application.namespaceAddModal").set "namespace", data.namespace

@@ -11,7 +11,6 @@ module.exports = function(environment) {
     environment: environment,
     baseURL: '/',
     locationType: 'auto',
-    feedbackDuration: 60 * 1000,
     stripe: {
       publishableKey: "pk_test_UOgd8ILsBsx7R5uUPttDJNgk"
     },
