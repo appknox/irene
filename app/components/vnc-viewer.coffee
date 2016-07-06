@@ -10,7 +10,7 @@ VncViewerComponent = Ember.Component.extend
   classNameBindings: ["showAsModal:vnc-modal"]
   showAsModal: false
 
-  didInsertElement: ->
+  createVNCObject: ->
     canvasEl = @element.getElementsByClassName("canvas")[0]
     deviceToken = @get 'file.deviceToken'
     switch @get "file.project.platform"
@@ -18,11 +18,15 @@ VncViewerComponent = Ember.Component.extend
       when ENUMS.PLATFORM.IOS then @connector = new ConnectorRFB canvasEl, deviceToken
       else
         throw "Not Implemented"
-    @send("connect") if ENUMS.DYNAMIC_STATUS.READY is @get 'file.dynamicStatus'
+    @send("connect")
+
+  didInsertElement: ->
+    if ENUMS.DYNAMIC_STATUS.READY is @get 'file.dynamicStatus'
+      @createVNCObject()
 
   statusChange: ( ->
     if ENUMS.DYNAMIC_STATUS.READY is @get 'file.dynamicStatus'
-      @send "connect"
+      @createVNCObject()
     else
       @set "showAsModal", false
       @send "disconnect"
@@ -42,6 +46,7 @@ VncViewerComponent = Ember.Component.extend
 
     disconnect: ->
       @connector.disconnect()
+      @delete @connector
 
     dynamicScan: ->
       file_id = @get "file.id"
