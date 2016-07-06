@@ -46,7 +46,7 @@ VncViewerComponent = Ember.Component.extend
 
     disconnect: ->
       @connector.disconnect()
-      @delete @connector
+      delete @connector
 
     dynamicScan: ->
       file_id = @get "file.id"
