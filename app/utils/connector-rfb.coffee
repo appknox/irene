@@ -16,7 +16,7 @@ class ConnectorRFB extends ConnectorMixin
       'encrypt': ENV.deviceFarmSsl
       'repeaterID': ''
       'true_color': true
-      'local_cursor': true
+      'local_cursor': false
       'shared': true
       'view_only': false
       'onUpdateState': updateState

@@ -28,7 +28,7 @@ app.import('bower_components/no-vnc/include/keysymdef.js');
 app.import('bower_components/no-vnc/include/keyboard.js');
 app.import('bower_components/no-vnc/include/input.js');
 app.import('bower_components/no-vnc/include/display.js');
-app.import('bower_components/no-vnc/include/jsunzip.js');
+app.import('bower_components/no-vnc/include/inflator.js');
 app.import('bower_components/no-vnc/include/rfb.js');
 app.import('bower_components/no-vnc/include/keysym.js');
 
