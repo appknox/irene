@@ -21,7 +21,7 @@ class ConnectorRFB extends ConnectorMixin
       'view_only': false
       'onUpdateState': updateState
       'onXvpInit': xvpInit
-    @rfb.connect ENV.deviceFarmHost, ENV.deviceFarmPort, '1234', "websockify?token=#{@deviceToken}"
+    @rfb.connect ENV.deviceFarmHost, ENV.deviceFarmPortIOS, '1234', "websockify?token=#{@deviceToken}"
 
   disconnect: ->
     @rfb.disconnect()

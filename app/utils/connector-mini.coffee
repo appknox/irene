@@ -27,7 +27,7 @@ class ConnectorMini extends ConnectorMixin
     prefix = "ws"
     if ENV.deviceFarmSsl is true
       prefix += "s"
-    endPoint = "#{prefix}://#{ENV.deviceFarmHost}:#{ENV.deviceFarmPort}/websockify?token=#{@deviceToken}"
+    endPoint = "#{prefix}://#{ENV.deviceFarmHost}:#{ENV.deviceFarmPortAndroid}/websockify?token=#{@deviceToken}"
     ctx2d = canvasEl.getContext '2d'
 
     @ws = new WebSocket endPoint, 'minicap'
