@@ -33,8 +33,6 @@ class IreneHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(index)
 
-# header(": *");
-
 if __name__ == '__main__':
     target = ('0.0.0.0', 8083)
     httpd = HTTPServer(target, IreneHandler)
