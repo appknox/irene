@@ -62,7 +62,7 @@ ENUMS =
     STORE: 1
     SCM: 2
 
-# Populate `CHOICES`
+# Populate `CHOICES`.
 for enumName, enumValues of ENUMS
   choices = []
   enumValues['UNKNOWN'] = -1
