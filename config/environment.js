@@ -131,7 +131,7 @@ module.exports = function(environment) {
     ENV.stripe = {
       publishableKey: "pk_live_9G633HADop7N2NLdi6g2BHHA"
     };
-    ENV.APP.API_HOST = 'http://sherlock.104.154.26.43.xip.io';
+    ENV.APP.API_HOST = 'http://sherlock.104.197.189.34.nip.io';
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_TRANSITIONS = false;
     ENV.APP.LOG_TRANSITIONS_INTERNAL = false;
