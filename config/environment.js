@@ -144,6 +144,7 @@ module.exports = function(environment) {
 
     ENV.deviceFarmPortIOS = "443";
     ENV.deviceFarmPortAndroid = "443";
+    ENV.deviceFarmSsl: true,
     ENV.deviceFarmPathIOS = "websockify";
     ENV.deviceFarmPathAndroid = "minivnc";
   }
