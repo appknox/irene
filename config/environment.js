@@ -141,6 +141,11 @@ module.exports = function(environment) {
     ENV.webengage.src = 'https://ssl.widgets.webengage.com'
 
     ENV.ravenDSN = "https://8bbbacbaacd841afa91c38eb420018bb@sentry.appknox.com/3"
+
+    ENV.deviceFarmPortIOS = "443";
+    ENV.deviceFarmPortAndroid = "443";
+    ENV.deviceFarmPathIOS = "websockify";
+    ENV.deviceFarmPathAndroid = "minivnc";
   }
 
   if (environment === 'staging') {
