@@ -76,14 +76,13 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
 
       stripeUrl = [ENV.APP.API_BASE, ENV.endpoints.stripePayment].join '/'
       data =
-        pricingId: self.get "pricing.id"
         number: cardNumber
         cvc: cardCvc
         exp_month: exp_month
         exp_year: exp_year
         name: cardName
-        count: self.get "count"
         couponId: self.get "couponId"
+        pricingId: self.get "pricing.id"
       xhr = EmberCLIICAjax url:stripeUrl, type: "post", data: data
       xhr.then (result) ->
         Notify.success "Sucessfully processed your payment. Thank You."
