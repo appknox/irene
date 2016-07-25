@@ -1,15 +1,5 @@
 .row
   .col-md-12
-    .text-center
-      h2 Special Offer
-    .pricing-table.row.m-t
-      .col-md-4
-      each pricing in specialPricings
-        = price-selector pricing=pricing store=controller.store
-      else
-        .text-center
-          h4 You Dont Have any offer at this time
-
     hr
     .text-center
       h2 Pricing
@@ -17,6 +7,3 @@
       each pricing in model
         = price-selector pricing=pricing store=controller.store
     hr
-
-
-#hidden-paypal-form.hide
