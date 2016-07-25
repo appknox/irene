@@ -82,7 +82,7 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
         exp_year: exp_year
         name: cardName
         couponId: self.get "couponId"
-        pricingId: self.get "pricing.id"
+
       xhr = EmberCLIICAjax url:stripeUrl, type: "post", data: data
       xhr.then (result) ->
         Notify.success "Sucessfully processed your payment. Thank You."
@@ -91,7 +91,6 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
           location.reload()
         ,
           5 * 1000
-        location.reload()
       , (error)->
         Notify.error error.jqXHR.responseJSON.message
 
