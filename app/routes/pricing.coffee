@@ -2,6 +2,11 @@
 `import AuthenticatedRouteMixin from 'simple-auth/mixins/authenticated-route-mixin';`
 
 PricingRoute = Ember.Route.extend AuthenticatedRouteMixin,
+
+  model: (->
+    @store.peekAll "pricing"
+  )
+
   actions:
     didTransition: ->
       upgradePlanModal = @controller.get "controllers.application.upgradePlanModal"

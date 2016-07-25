@@ -9,18 +9,14 @@
       else
         .text-center
           h4 You Dont Have any offer at this time
+
     hr
     .text-center
-      h2 Pay Per Scan Plans
-    .pricing-table.row.m-t
-      .col-md-2
-      each pricing in scanTypePricings
-        = price-selector pricing=pricing store=controller.store
-    hr
-    .text-center
-      h2 Pay Per Month Plans
+      h2 Pricing
     .pricing-table.row.m-t.m-b
-      each pricing in timeTypePricings
+      each pricing in model
         = price-selector pricing=pricing store=controller.store
+    hr
+
 
 #hidden-paypal-form.hide
