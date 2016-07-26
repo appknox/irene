@@ -1,6 +1,6 @@
 div#nav.bg-solarized
-  div.clearfix.wrapper.dk.hidden-xs
-    link-to 'index' class="appknox-logo animated flip text-center" tagName="ul"
+  div.clearfix.wrapper.dk.hidden-xs.text-center
+    link-to 'index' class="appknox-logo animated flip" tagName="ul"
       img src="/assets/images/logo.png" alt="scale"
     = gravatar-image email=controllers.application.currentUser.email alt=controllers.application.currentUser.email size=50
     h4.text-white
