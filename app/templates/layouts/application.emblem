@@ -1,12 +1,10 @@
 div#nav.bg-solarized
   div.clearfix.wrapper.dk.hidden-xs
     link-to 'index' class="appknox-logo animated flip text-center" tagName="ul"
-      img.m-r-sm src="/assets/images/logo.png" alt="scale"
-    ul.nav.navbar-nav.nav-user.user
-      .pull-left.m-l
-        = gravatar-image email=controllers.application.currentUser.email alt=controllers.application.currentUser.email size=50
-      h4.pull-left.m-l.text-white
-        = controllers.application.currentUser.username
+      img src="/assets/images/logo.png" alt="scale"
+    = gravatar-image email=controllers.application.currentUser.email alt=controllers.application.currentUser.email size=50
+    h4.text-white
+      = controllers.application.currentUser.username
 
   nav.nav-primary.hidden-xs
     ul.nav.nav-main
