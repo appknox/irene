@@ -58,9 +58,7 @@ class ConnectorMini extends ConnectorMixin
       u = URL.createObjectURL blob
       img.src = u
     token =  @deviceToken
-    debugger
     @ws.onopen = ->
-      debugger
       console.log 'onopen', arguments
       that.ws.send JSON.stringify type: "subscribe", token: token
 
