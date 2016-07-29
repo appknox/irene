@@ -15,7 +15,7 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
     store = @get "store"
     allEvents =
       analysis_new: (data)->
-        store.push store.normalize "analyses", data
+        store.push store.normalize "analysis", data
 
       analysis_updated: (data)->
         risk = data.risk
