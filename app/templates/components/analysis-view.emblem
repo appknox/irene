@@ -2,6 +2,8 @@ section.panel.b-a
   div class=model.panelHeadingClass
     .h4.text-lt.block.font-bold
       = model.vulnerability.name
+      each tag in model.vulnerability.tags
+        .pull-right.label.label-info= tag
 
   .row.panel-body
     .col-md-12
