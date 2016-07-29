@@ -40,18 +40,6 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
 
   actions:
 
-    makePaymentPaypal: ->
-      invoceUrl = [ENV.APP.API_BASE, ENV.endpoints.invoice].join '/'
-      data =
-        pricingId: @get "pricing.id"
-        count: @get "count"
-      xhr = EmberCLIICAjax url:invoceUrl, type: "get", data: data
-      xhr.then (result) ->
-        elem = $("#hidden-paypal-form").html result.form
-        elem.find("[name='submit']").click()
-      , ->
-        Notify.error "Oh Dang, some error occured!"
-
     applyCoupon: ->
       self = @
       url = [ENV.APP.API_BASE, ENV.endpoints.applyCoupon].join '/'
@@ -85,30 +73,26 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
 
       stripe = @get 'stripe'
       self = @
-      stripe.card.createToken
+
+      stripeUrl = [ENV.APP.API_BASE, ENV.endpoints.stripePayment].join '/'
+      data =
         number: cardNumber
         cvc: cardCvc
         exp_month: exp_month
         exp_year: exp_year
         name: cardName
-      .then (response) ->
-        stripeUrl = [ENV.APP.API_BASE, ENV.endpoints.stripePayment].join '/'
-        data =
-          pricingId: self.get "pricing.id"
-          count: self.get "count"
-          stripeToken: response.id
-          couponId: self.get "couponId"
-        xhr = EmberCLIICAjax url:stripeUrl, type: "post", data: data
-        xhr.then (result) ->
-          Notify.success "Sucessfully processed your payment. Thank You."
-          self.send "closeModal"
-          setTimeout ->
-            location.reload()
-          ,
-            5 * 1000
+        couponId: self.get "couponId"
+
+      xhr = EmberCLIICAjax url:stripeUrl, type: "post", data: data
+      xhr.then (result) ->
+        Notify.success "Sucessfully processed your payment. Thank You."
+        self.send "closeModal"
+        setTimeout ->
           location.reload()
-        , (error)->
-          Notify.error error.jqXHR.responseJSON.message
-      .catch @stripeErrorHandler
+        ,
+          5 * 1000
+      , (error)->
+        Notify.error error.jqXHR.responseJSON.message
+
 
 `export default MakePaymentComponent`

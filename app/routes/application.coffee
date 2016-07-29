@@ -120,6 +120,8 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
       init.then (result) ->
         for vulnerability in result.vulnerabilities
           store.pushPayload 'vulnerability', vulnerability: vulnerability
+        for pricing in result.pricings
+          store.pushPayload 'pricing', pricing: pricing
         for user in result.users
           store.pushPayload 'user', user: user
         for project in result.projects
