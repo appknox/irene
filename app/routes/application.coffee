@@ -14,6 +14,9 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
     that = @
     store = @get "store"
     allEvents =
+      analysis_new: (data)->
+        store.push store.normalize "analyses", data
+
       analysis_updated: (data)->
         risk = data.risk
 
@@ -34,10 +37,7 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
 
       file_new: (data)->
         Notify.info "New file added"
-        project = store.push store.normalize "project", data.project
-        file = store.push store.normalize "file", data.file
-        for analysis in data.analyses
-          store.push store.normalize "analysis", analysis
+        file = store.push store.normalize "file", data
         project.set "lastFile", file
 
       file_updated: (data) ->
