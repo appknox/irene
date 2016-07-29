@@ -73,11 +73,15 @@ IreneAuthenticator = Base.extend
       _resolved = (response)->
         Ember.run ->
           resolve response
+          localStorage.clear()
           location.reload()
 
       _rejected = (xhr, status, error) ->
         Ember.run ->
           reject xhr.responseJSON || xhr.responseText
+          localStorage.clear()
+          location.reload()
+
 
       url = ENV['simple-auth']['logoutEndpoint']
       makeRequest(url).then _resolved, _rejected
