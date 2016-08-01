@@ -5,7 +5,8 @@ module.exports = function(environment) {
     intercomAppID: "mbkqc0o1",
     deviceFarmSsl: false,
     deviceFarmHost: "devicefarm.appknox.com",
-    deviceFarmPort: "8080",
+    deviceFarmPortIOS: "8080",
+    deviceFarmPortAndroid: "8008",
     pusherKey: "216d53b13aaa5c6fc2cf",
     modulePrefix: 'irene',
     environment: environment,
@@ -130,7 +131,7 @@ module.exports = function(environment) {
     ENV.stripe = {
       publishableKey: "pk_live_9G633HADop7N2NLdi6g2BHHA"
     };
-    ENV.APP.API_HOST = 'http://api.appknox.com';
+    ENV.APP.API_HOST = 'https://api.appknox.com';
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_TRANSITIONS = false;
     ENV.APP.LOG_TRANSITIONS_INTERNAL = false;
@@ -140,6 +141,12 @@ module.exports = function(environment) {
     ENV.webengage.src = 'https://ssl.widgets.webengage.com'
 
     ENV.ravenDSN = "https://8bbbacbaacd841afa91c38eb420018bb@sentry.appknox.com/3"
+
+    ENV.deviceFarmPortIOS = "443";
+    ENV.deviceFarmPortAndroid = "443";
+    ENV.deviceFarmSsl = true,
+    ENV.deviceFarmPathIOS = "websockify";
+    ENV.deviceFarmPathAndroid = "minivnc";
   }
 
   if (environment === 'staging') {
@@ -171,3 +178,4 @@ module.exports = function(environment) {
 
   return ENV;
 };
+

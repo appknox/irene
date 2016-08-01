@@ -18,7 +18,7 @@ Project = DS.Model.extend BaseModelMixin,
   testUser: DS.attr 'string'
   testPassword: DS.attr 'string'
 
-  sortProperties: ["updatedOn:desc"]
+  sortProperties: ["createdOn:desc"]
   sortedFiles: Ember.computed.sort 'files', 'sortProperties'
 
   platformIconClass:( ->
@@ -30,10 +30,9 @@ Project = DS.Model.extend BaseModelMixin,
   ).property "platform"
 
   lastFile:( ->
-    files = @get "files"
-    if !Ember.isEmpty files
-      files.sortBy('createdOn:desc')[0]
-  ).property "files.@each"
+    sortedFiles = @get "sortedFiles"
+    sortedFiles[0]
+  ).property "sortedFiles"
 
   hasMultipleFiles:( ->
     fileCount = @get "fileCount"
