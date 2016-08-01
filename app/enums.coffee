@@ -62,6 +62,10 @@ ENUMS =
     STORE: 1
     SCM: 2
 
+  PAYMENT_DURATION:
+    MONTH: 1
+    YEAR: 2
+
 # Populate `CHOICES`
 for enumName, enumValues of ENUMS
   choices = []
