@@ -62,13 +62,16 @@ ENUMS =
     STORE: 1
     SCM: 2
 
+  PAYMENT_DURATION:
+    MONTH: 1
+    YEAR: 2
 
+# Populate `CHOICES`
   VULNERABILITY_TYPE:
     STATIC: 1
     DYNAMIC: 2
     MANUAL: 3
 
-# Populate `CHOICES`.
 for enumName, enumValues of ENUMS
   choices = []
   enumValues['UNKNOWN'] = -1
