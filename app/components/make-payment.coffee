@@ -3,6 +3,7 @@
 `import ENV from 'irene/config/environment';`
 `import EmberCLIICAjax from 'ic-ajax';`
 `import Notify from 'ember-notify';`
+`import ENUMS from 'irene/enums';`
 
 MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
 
@@ -82,6 +83,7 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
         exp_year: exp_year
         name: cardName
         couponId: self.get "couponId"
+        payment_duration: ENUMS.PAYMENT_DURATION.MONTH
 
       xhr = EmberCLIICAjax url:stripeUrl, type: "post", data: data
       xhr.then (result) ->
