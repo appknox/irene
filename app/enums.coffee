@@ -67,6 +67,11 @@ ENUMS =
     YEAR: 2
 
 # Populate `CHOICES`
+  VULNERABILITY_TYPE:
+    STATIC: 1
+    DYNAMIC: 2
+    MANUAL: 3
+
 for enumName, enumValues of ENUMS
   choices = []
   enumValues['UNKNOWN'] = -1
