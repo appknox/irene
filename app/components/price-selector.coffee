@@ -9,6 +9,7 @@ PriceSelectorComponent = Ember.Component.extend
   count: 1
   pricing: null
   store: null
+  paymentDuration: null
 
   units: (->
     count = @get "count"
