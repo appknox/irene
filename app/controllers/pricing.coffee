@@ -9,13 +9,13 @@ PricingController = Ember.Controller.extend
 
   classMonthly: (->
     if ENUMS.PAYMENT_DURATION.MONTHLY is @get "paymentDuration"
-      return "btn-info"
+      return "btn-primary"
     return "btn-default"
   ).property "paymentDuration"
 
   classYearly: (->
     if ENUMS.PAYMENT_DURATION.YEARLY is @get "paymentDuration"
-      return "btn-info"
+      return "btn-primary"
     return "btn-default"
   ).property "paymentDuration"
 
