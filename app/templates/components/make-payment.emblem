@@ -1,7 +1,7 @@
 .modal-dialog
   .modal-content
     .modal-header
-      h4.modal-title Make A Payment for ${{ totalPrice }}
+      h4.modal-title Make A Payment for ${{ totalPriceAfterDiscount }}
     .modal-body.row
       .card-wrapper.col-md-12.m-b
       form.col-md-8.col-md-offset-2

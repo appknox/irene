@@ -7,8 +7,7 @@
 
 MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
 
-  pricing: null
-  count: 0
+  priceSelector: null
 
   # Card details
   cardNumber: ""
@@ -22,14 +21,13 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
 
   stripe: Ember.inject.service()
 
-  totalPrice: (->
+  totalPriceAfterDiscount: (->
     couponApplied = @get "couponApplied"
     if couponApplied
+      # Convert cents to Dollars
       return @get("finalPrice") / 100
-    count =  @get "count"
-    price = @get "pricing.price"
-    count * price
-  ).property "count", "pricing.price", "couponApplied", "finalPrice"
+    @get "priceSelector.totalPrice"
+  ).property "priceSelector.paymentDuration", "couponApplied", "finalPrice"
 
   didInsertElement: ->
     new Card
@@ -45,13 +43,11 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
       self = @
       url = [ENV.APP.API_BASE, ENV.endpoints.applyCoupon].join '/'
       data =
-        pricingId: self.get "pricing.id"
-        count: self.get "count"
+        pricingId: self.get "priceSelector.pricing.id"
         couponId: self.get "couponId"
       xhr = EmberCLIICAjax url:url, type: "post", data: data
       xhr.then (result) ->
         self.set "couponApplied", true
-        debugger
         self.set "finalPrice", result.amount
         Notify.success "Price Updated"
       , (error)->
@@ -83,7 +79,7 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
         exp_year: exp_year
         name: cardName
         couponId: self.get "couponId"
-        payment_duration: ENUMS.PAYMENT_DURATION.MONTH
+        payment_duration: @get "priceSelector.paymentDuration"
 
       xhr = EmberCLIICAjax url:stripeUrl, type: "post", data: data
       xhr.then (result) ->
