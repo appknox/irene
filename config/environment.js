@@ -2,7 +2,6 @@
 
 module.exports = function(environment) {
   var ENV = {
-    intercomAppID: "mbkqc0o1",
     deviceFarmSsl: false,
     deviceFarmHost: "devicefarm.appknox.com",
     deviceFarmPortIOS: "8080",
@@ -162,12 +161,10 @@ module.exports = function(environment) {
   }
 
   ENV.contentSecurityPolicy = {
-    "connect-src": "'self' https://api-ping.intercom.io https://nexus-websocket-a.intercom.io https://nexus-websocket-b.intercom.io wss://ws.pusherapp.com ws://localhost:35729 ws://0.0.0.0:35729 " + ENV.APP.API_HOST,
     "frame-src": "'self' https://js.stripe.com ",
     "report-uri": "'self'",
     'img-src': "'self' https://www.gravatar.com https://js.intercomcdn.com data: blob: ",
     'style-src': "'self' 'unsafe-inline' ",
-    'script-src': "'self' 'unsafe-eval' https://widget.intercom.io https://stats.pusher.com https://js.intercomcdn.com https://js.stripe.com ",
     'font-src': "'self'"
   };
 
@@ -178,4 +175,3 @@ module.exports = function(environment) {
 
   return ENV;
 };
-
