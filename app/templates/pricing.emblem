@@ -3,7 +3,13 @@
     hr
     .text-center
       h2 Pricing
+    .row
+      .btn-group
+        button.button class=classMonthly click="selectMonthly"
+          | Monthly
+        button.button class=classYearly click="selectYearly"
+          | Yearly
     .pricing-table.row.m-t.m-b
       each pricing in model
-        = price-selector pricing=pricing store=controller.store
+        = price-selector pricing=pricing store=controller.store paymentDuration=paymentDuration
     hr

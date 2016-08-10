@@ -26,7 +26,7 @@ FileController = Ember.Controller.extend
       signedUrl = [ENV.APP.API_BASE, ENV.endpoints.signedPdfUrl, file_id].join '/'
       xhr = EmberCLIICAjax url:signedUrl, type: "get"
       xhr.then (result) ->
-        window.location = result.url
+        window.open result.url
 
     requestManual: ->
       if !@get "model.isOkToRequestManual"
