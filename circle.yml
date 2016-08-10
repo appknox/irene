@@ -1,0 +1,11 @@
+machine:
+  node:
+    version: 0.12.13
+
+dependencies:
+  pre:
+    - npm install -g bower
+
+  override:
+    - npm install
+    - bower install
