@@ -135,8 +135,6 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
         for analysis in result.analyses
           store.pushPayload 'analysis', analysis: analysis
         store.pushPayload 'ratio', ratio: result.ratio
-        Ember.Logger.log 'result', result.userPricing
-        store.pushPayload 'userPricing', userPricing: result.userPricing
         user = store.pushPayload 'user', user: result.currentUser
         store.find('user', result.currentUser.id).then (user)->
           user.set 'urls', result.urls
