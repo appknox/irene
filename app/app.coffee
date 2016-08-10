@@ -4,10 +4,9 @@
 `import ENV from 'irene/config/environment';`
 `import Notify from 'ember-notify';`
 `import installRaven from 'irene/utils/install-raven';`
-`import installIntercom from 'irene/utils/install-intercom';`
 
 installRaven()
-installIntercom()
+
 
 Ember.$.ajaxSetup
   type: "POST"
