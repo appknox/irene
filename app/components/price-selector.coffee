@@ -1,9 +1,6 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums';`
 
-isNumber = (n) ->
-  /^\d+$/.test n
-
 PriceSelectorComponent = Ember.Component.extend
 
   pricing: null
@@ -30,7 +27,7 @@ PriceSelectorComponent = Ember.Component.extend
 
     makePayment: ->
       applicationController = @container.lookup "controller:application"
-      applicationController.set "makePaymentModal.pricing", @get "pricing"
+      applicationController.set "makePaymentModal.priceSelector", @
       applicationController.set "makePaymentModal.show", true
 
 `export default PriceSelectorComponent`
