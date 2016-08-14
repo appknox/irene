@@ -16,6 +16,8 @@ User = DS.Model.extend
   hasGithubToken: DS.attr 'boolean'
   hasJiraToken: DS.attr 'boolean'
   socketId: DS.attr 'string'
+  limitedScans: DS.attr()
+  scansLeft: DS.attr()
 
   humanizedExpiryDate: ago 'expiryDate', true
 
@@ -30,5 +32,29 @@ User = DS.Model.extend
     currentUser = applicationController.get "currentUser"
     currentUser.get("id") is @get "id"
   ).property()
+
+  statText: (->
+    limitedScans = @get "limitedScans"
+    if limitedScans
+      "Scans Left"
+    else
+      "Expiry Date"
+  ).property "limitedScans"
+
+  statValue: (->
+    limitedScans = @get "limitedScans"
+    if limitedScans
+      @get "scansLeft"
+    else
+      @get "humanizedExpiryDate"
+  ).property "limitedScans"
+
+  statIcon: (->
+    limitedScans = @get "limitedScans"
+    if limitedScans
+      "search"
+    else
+      "calendar"
+  ).property "limitedScans"
 
 `export default User;`
