@@ -8,7 +8,4 @@
 
 
 git remote remove deis
-deis apps:create irene
-deis domains:add secure.appknox.com
-deis certs:attach appknox secure.appknox.com
-deis certs
+deis git:remote -a irene
