@@ -1,9 +1,8 @@
 .plan.col-md-4
   h3 = pricing.name
-  hr
-  .row.text-left
-    .col-md-6.col-md-offset-3
-       = pricing.description
-  hr
+  .row
+    ul.list-group
+    each item in pricing.descriptionItems
+      li.text-center.list-group-item = item
   button.btn.btn-success.btn-lg.m-b.w-100 click="makePayment"
     = totalPricePay
