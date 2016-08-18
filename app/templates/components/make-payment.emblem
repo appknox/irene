@@ -25,7 +25,7 @@
               = input type="tel" class="form-control" name="cvc" placeholder="CVC" autocomplete="cc-csc" value=cardCvc
         .row.input-group
           .col-md-9
-            = input class="form-control" placeholder="Do you have an offer coupon?" value=couponId
+            = input class="form-control" placeholder="Do you have an offer coupon?" value=couponCode
           .col-md-3
             button.btn.btn-default click="applyCoupon" Apply Coupon
 
