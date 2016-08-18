@@ -14,7 +14,7 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
   cardName: ""
   cardExpiry: ""
   cardCvc: ""
-  couponId: ""
+  couponCode: ""
 
   couponApplied: false
   finalPrice: 0
@@ -44,9 +44,10 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
       url = [ENV.APP.API_BASE, ENV.endpoints.applyCoupon].join '/'
       data =
         pricingId: self.get "priceSelector.pricing.id"
-        couponId: self.get "couponId"
+        couponCode: self.get "couponCode"
       xhr = EmberCLIICAjax url:url, type: "post", data: data
       xhr.then (result) ->
+        debugger
         self.set "couponApplied", true
         self.set "finalPrice", result.amount
         Notify.success "Price Updated"
@@ -78,7 +79,7 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
         exp_month: exp_month
         exp_year: exp_year
         name: cardName
-        couponId: self.get "couponId"
+        couponCode: self.get "couponCode"
         payment_duration: @get "priceSelector.paymentDuration"
 
       xhr = EmberCLIICAjax url:stripeUrl, type: "post", data: data
