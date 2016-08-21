@@ -10,10 +10,10 @@ MakePaymentComponent = Ember.Component.extend ModalBoxMixin,
   priceSelector: null
 
   # Card details
-  cardNumber: "5555555555554444"
-  cardName: "Dhilip C"
+  cardNumber: ""
+  cardName: ""
   cardExpiry: ""
-  cardCvc: "234"
+  cardCvc: ""
   couponCode: ""
 
   couponApplied: false
