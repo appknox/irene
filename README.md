@@ -1,3 +1,7 @@
+[![bitHound Overall Score](https://www.bithound.io/projects/badges/39c59190-6a3c-11e6-a265-23ae6cfe9480/score.svg)](https://www.bithound.io/github/appknox/irene)
+[![bitHound Dependencies](https://www.bithound.io/projects/badges/39c59190-6a3c-11e6-a265-23ae6cfe9480/dependencies.svg)](https://www.bithound.io/github/appknox/irene/develop/dependencies/npm)
+[![bitHound Dev Dependencies](https://www.bithound.io/projects/badges/39c59190-6a3c-11e6-a265-23ae6cfe9480/devDependencies.svg)](https://www.bithound.io/github/appknox/irene/develop/dependencies/npm)
+[![bitHound Code](https://www.bithound.io/projects/badges/39c59190-6a3c-11e6-a265-23ae6cfe9480/code.svg)](https://www.bithound.io/github/appknox/irene)
 Irene
 =====
 
