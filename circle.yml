@@ -5,6 +5,7 @@ machine:
 dependencies:
   pre:
     - npm install -g bower
+    - npm install -g bithound
 
   override:
     - npm install
