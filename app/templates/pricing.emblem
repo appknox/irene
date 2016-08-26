@@ -5,10 +5,9 @@
       h2 Pricing
     .row.text-center
       .btn-group
-        button.btn class=classMonthly click="selectMonthly"
-          | Monthly
-        button.btn class=classYearly click="selectYearly"
-          | Yearly
+        each duration in durations
+          button.btn class="btn-default captitalize duration-button" click="selectDuration" data-value=duration.value
+            = duration.key
     .pricing-table.row.m-t.m-b
       each pricing in model
         = price-selector pricing=pricing store=controller.store paymentDuration=paymentDuration

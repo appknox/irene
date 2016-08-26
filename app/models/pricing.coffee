@@ -4,11 +4,10 @@ Pricing = DS.Model.extend
   name: DS.attr 'string'
   description: DS.attr 'string'
   price: DS.attr 'number'
-  yearlyPrice: DS.attr 'number'
 
   descriptionItems:(->
     description = @get "description"
-    description.split(",")
+    description.split ","
   ).property "description"
 
 `export default Pricing`

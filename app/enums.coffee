@@ -73,7 +73,9 @@ ENUMS =
 
   PAYMENT_DURATION:
     MONTHLY: 1
-    YEARLY: 2
+    QUATERLY: 3
+    HALFYEARLY: 6
+    YEARLY: 10
 
 
 # Populate `CHOICES`
