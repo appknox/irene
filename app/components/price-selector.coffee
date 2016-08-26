@@ -8,19 +8,23 @@ PriceSelectorComponent = Ember.Component.extend
   paymentDuration: null
 
   totalPrice: (->
-    if ENUMS.PAYMENT_DURATION.MONTHLY is @get "paymentDuration"
-      @get "pricing.price"
-    else
-      @get "pricing.yearlyPrice"
+    price = @get "pricing.price"
+    duration = @get "paymentDuration"
+    price * duration
   ).property "paymentDuration"
 
   totalPricePay: (->
-    if ENUMS.PAYMENT_DURATION.MONTHLY is @get "paymentDuration"
-      duration  = "Month"
-    else
-      duration  = "Year"
+    duration = @get "paymentDuration"
+    if duration is ENUMS.PAYMENT_DURATION.MONTHLY
+      durationText  = "1 Month"
+    if duration is ENUMS.PAYMENT_DURATION.QUATERLY
+      durationText  = "3 Months"
+    if duration is ENUMS.PAYMENT_DURATION.HALFYEARLY
+      durationText  = "6 Months"
+    if duration is ENUMS.PAYMENT_DURATION.YEARLY
+      durationText  = "1 Year"
     totalPrice = @get "totalPrice"
-    "Pay #{totalPrice} USD / #{duration}"
+    "Pay $#{totalPrice} USD for #{durationText}"
   ).property "totalPrice"
 
   actions:

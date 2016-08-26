@@ -7,25 +7,17 @@ PricingController = Ember.Controller.extend
   needs: ['application']
   paymentDuration: ENUMS.PAYMENT_DURATION.MONTHLY
 
-  classMonthly: (->
-    if ENUMS.PAYMENT_DURATION.MONTHLY is @get "paymentDuration"
-      return "btn-primary"
-    return "btn-default"
-  ).property "paymentDuration"
-
-  classYearly: (->
-    if ENUMS.PAYMENT_DURATION.YEARLY is @get "paymentDuration"
-      return "btn-primary"
-    return "btn-default"
-  ).property "paymentDuration"
+  durations: (->
+    durations = ENUMS.PAYMENT_DURATION.CHOICES
+    durations[0..durations.length-2]
+  ).property()
 
   actions:
-    selectMonthly: ->
-      @set "paymentDuration", ENUMS.PAYMENT_DURATION.MONTHLY
-
-    selectYearly: ->
-      @set "paymentDuration", ENUMS.PAYMENT_DURATION.YEARLY
-
-
+    selectDuration: ->
+      @set "paymentDuration", $(event.srcElement).data("value")
+      $(".duration-button").removeClass("btn-primary active")
+      $(".duration-button").addClass("btn-default")
+      $(event.srcElement).removeClass("btn-default")
+      $(event.srcElement).addClass("btn-primary action")
 
 `export default PricingController`
