@@ -2,6 +2,9 @@
 
 module.exports = function(environment) {
   var ENV = {
+    emblemOptions: {
+      blueprints: false
+    },
     modulePrefix: 'irene',
     environment: environment,
     rootURL: '/',
