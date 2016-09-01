@@ -6,5 +6,6 @@ Router = Ember.Router.extend
   rootURL: config.rootURL
 
 Router.map ->
+  @route 'freestyle'
 
 `export default Router;`

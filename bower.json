@@ -6,6 +6,8 @@
     "ember-qunit-notifications": "0.1.0",
     "bourbon": "4.2.6",
     "bohemia": "^0.1.1",
-    "font-awesome": "~4.5.0"
+    "font-awesome": "~4.5.0",
+    "remarkable": "1.6.2",
+    "highlightjs": "9.1.0"
   }
 }
