@@ -4,5 +4,6 @@ machine:
 
 dependencies:
   post:
+    - npm rebuild node-sass
     - npm install -g bower
     - bower install
