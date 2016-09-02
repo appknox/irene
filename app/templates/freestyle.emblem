@@ -4,13 +4,60 @@
 
     = freestyle-subsection name='Typography' section=section
 
-      = freestyle-usage 'typography-times' title='Times New Roman'
-        = freestyle-typeface fontFamily='Times New Roman'
+      = freestyle-usage 'typography-helvetica-neue' title='Helvetica Neue'
+        = freestyle-typeface fontFamily='Helvetica Neue'
 
       = freestyle-usage 'typography-helvetica' title='Helvetica'
         = freestyle-typeface fontFamily='Helvetica'
 
-    = freestyle-subsection name='Color' section=section
+      = freestyle-usage 'typography-arial' title='Arial'
+        = freestyle-typeface fontFamily='Arial'
 
-      = freestyle-usage 'fp' title='Freestyle Palette' usageTitle='Usage'
-        = freestyle-palette colorPalette=colorPalette title='Dummy App Color Palette' description='This component displays the color palette specified in freestyle/palette.json'
+      = freestyle-usage 'typography-source-code-pro' title='Source Code Pro'
+        = freestyle-typeface fontFamily='Source Code Pro'
+
+      = freestyle-usage 'typography-monaco' title='Monaco'
+        = freestyle-typeface fontFamily='Monaco'
+
+      = freestyle-usage 'typography-inconsolata' title='Inconsolata'
+        = freestyle-typeface fontFamily='Inconsolata'
+
+    = freestyle-subsection name='Headings' section=section
+      h1 Heading 1
+      h2 Heading 2
+      h3 Heading 3
+      h4 Heading 4
+      h5 Heading 5
+      h6 Heading 6
+
+    = freestyle-subsection name='Buttons' section=section
+      button Default
+      button.is-primary Primary
+      button.is-success Success
+      button.is-info Info
+      button.is-warning Warning
+      button.is-danger Danger
+
+    = freestyle-subsection name='Form' section=section
+      .columns
+        .column.is-one-third
+          label Name
+          p.control
+            input.input placeholder="Text Input"
+
+          label Username
+          p.control.has-icon.has-icon-right
+            input.input.is-success placeholder="Text Input" value="dhilipsiva"
+            fa-icon class="is-success" "check"
+            span.help.is-success This username is available
+
+          label Subject
+          p.control
+            span.select
+              select
+                option Uno
+                option Duo
+
+    = freestyle-subsection name='Image' section=section
+      figure.image.is-128x128
+        img src="http://placehold.it/256x256"
