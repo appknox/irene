@@ -12,9 +12,11 @@
     {{content-for "head-footer"}}
   </head>
   <body>
-    {{content-for "body"}}
-    <script src="{{rootURL}}assets/vendor.js"></script>
-    <script src="{{rootURL}}assets/irene.js"></script>
-    {{content-for "body-footer"}}
+    <div class="container">
+      {{content-for "body"}}
+      <script src="{{rootURL}}assets/vendor.js"></script>
+      <script src="{{rootURL}}assets/irene.js"></script>
+      {{content-for "body-footer"}}
+    </div>
   </body>
 </html>
