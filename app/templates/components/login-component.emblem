@@ -2,25 +2,30 @@
   .login-wrapper.column.is-half
     .columns
       .column.has-text-centered
-        h3 Security Fanatics at your service
+        h3
+          = t "auth.greet"
     .columns
       .column.is-half
         figure.image
           img src="images/login-phone-graphic.svg" alt="Mobile application security"
       .column
         form
-          label for="identification" Username
+          label for="identification"
+            = t "auth.username"
           p.control.has-icon.has-icon-right
             input.input.is-success placeholder="Username" value=identification
             fa-icon class="is-primary" "user"
 
-          label for="password" Password
+          label for="password"
+            =  t "auth.password"
           p.control.has-icon.has-icon-right
             input.input.is-success type="password" value=password
             fa-icon class="is-primary" "lock"
 
           p.has-text-right
-            a Forgot Password?
+            a
+              = t "auth.forgotPassword"
 
           p.control
-            button.button.is-primary.is-fullwidth click="authenticate" Login
+            button.button.is-primary.is-fullwidth click="authenticate"
+              = t "auth.login"
