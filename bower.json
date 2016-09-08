@@ -8,6 +8,8 @@
     "bohemia": "^0.1.15",
     "font-awesome": "~4.5.0",
     "remarkable": "1.6.2",
-    "highlightjs": "9.1.0"
+    "highlightjs": "9.1.0",
+    "pretender": "~1.1.0",
+    "Faker": "~3.1.0"
   }
 }

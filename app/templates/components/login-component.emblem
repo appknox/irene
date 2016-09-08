@@ -1,0 +1,26 @@
+.login-container.columns
+  .login-wrapper.column.is-half
+    .columns
+      .column.has-text-centered
+        h3 Security Fanatics at your service
+    .columns
+      .column.is-half
+        figure.image
+          img src="images/login-phone-graphic.svg" alt="Mobile application security"
+      .column
+        form
+          label for="identification" Username
+          p.control.has-icon.has-icon-right
+            input.input.is-success placeholder="Username" value=identification
+            fa-icon class="is-primary" "user"
+
+          label for="password" Password
+          p.control.has-icon.has-icon-right
+            input.input.is-success type="password" value=password
+            fa-icon class="is-primary" "lock"
+
+          p.has-text-right
+            a Forgot Password?
+
+          p.control
+            button.button.is-primary.is-fullwidth click="authenticate" Login
