@@ -149,6 +149,7 @@ ApplicationRoute = Ember.Route.extend ApplicationRouteMixin,
             app_id: ENV.intercomAppID
             name: user.get "username"
             email: user.get "email"
+          window.Intercom 'trackEvent', 'logged-in'
         controller.set 'initLoaded', true
         resolve result
 
