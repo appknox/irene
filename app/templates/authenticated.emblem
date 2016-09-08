@@ -1,0 +1,5 @@
+.columns
+  .column.is-one-fifth
+    | Menu
+  .column
+    = outlet
