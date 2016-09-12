@@ -2,4 +2,9 @@
   .column.is-one-fifth
     | Menu
   .column
-    = outlet
+    .columns
+      .column
+        bread-crumbs tagName="ul" outputStyle="bootstrap" linkable=true
+    .columns
+      .column
+        = outlet
