@@ -4,7 +4,7 @@
   .column
     .columns
       .column
-        bread-crumbs tagName="ul" outputStyle="bootstrap" linkable=true
+        bread-crumbs tagName="nav" crumbClass="breadcrumb-item"
     .columns
       .column
         = outlet
