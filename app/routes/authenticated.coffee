@@ -3,5 +3,10 @@
 
 AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
   breadCrumb: null
+  session: Ember.inject.service 'session'
+  actions:
+    invalidateSession: ->
+      this.get('session').invalidate()
+
 
 `export default AuthenticatedRoute`

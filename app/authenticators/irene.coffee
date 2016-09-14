@@ -18,6 +18,7 @@ IreneAuthenticator = Base.extend
   authenticate: (identification, password) ->
     ajax = @get "ajax"
     session = @get "session"
+
     new Ember.RSVP.Promise (resolve, reject) ->
       data =
         username: identification
@@ -49,15 +50,13 @@ IreneAuthenticator = Base.extend
         reject reason
 
   invalidate: (data) ->
-    debugger
     ajax = @get "ajax"
     localStorage.clear()
     new Ember.RSVP.Promise (resolve, reject) ->
-
       url = ENV['ember-simple-auth']['logoutEndPoint']
       ajax.post(url)
       .then (data)->
-        resolve response
+        resolve data
         location.reload()
       .catch (reason)->
         alert reason

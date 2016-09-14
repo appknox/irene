@@ -110,9 +110,9 @@
       = freestyle-usage 'grid'
 
         .columns
-          .column.is-one-fifth
+          .column.is-one-sixth
             p.notification.is-success
-              code is-one-fifth
+              code is-one-sixth
           .column
             p.notification.is-warning
               code Auto
