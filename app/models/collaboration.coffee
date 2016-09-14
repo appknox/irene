@@ -1,4 +1,6 @@
 `import DS from 'ember-data'`
+`import BaseModelMixin from 'irene/mixin/base-model'`
+`import ENUMS from 'irene/enums'`
 
 Collaboration = DS.Model.extend
 
