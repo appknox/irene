@@ -1,0 +1,25 @@
+.columns
+  .column.is-one-sixth
+    img src="https://www.gravatar.com/avatar/44492dac2beebbcaf97a5f526b64f059?s=50"
+    span yash@appknox.com
+
+    aside.menu
+      ul.menu-list
+        li
+          link-to 'authenticated.index'
+            | Dashboard
+          link-to 'authenticated.settings'
+            | Settings
+          link-to 'authenticated.pricing'
+            | Pricing
+          a href="https://gitter.im/appknox/support" target="_blank"
+            | Support
+
+          a click="invalidateSession" Logout
+  .column
+    .columns
+      .column
+        bread-crumbs tagName="nav" crumbClass="breadcrumb-item"
+    .columns
+      .column
+        = outlet
