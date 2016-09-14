@@ -26,7 +26,7 @@ Analysis = DS.Model.extend
       when ENUMS.RISK.LOW then "#{cls} label-info"
       when ENUMS.RISK.MEDIUM then "#{cls} label-warning"
       when ENUMS.RISK.HIGH then "#{cls} label-danger"
-  ).property 'risk'
+  ).property "risk"
 
   riskText:( ->
     switch @get "risk"
