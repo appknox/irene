@@ -1,5 +1,5 @@
 .columns
-  .column.is-one-fifth
+  .column.is-one-sixth
     | Menu
   .column
     .columns
