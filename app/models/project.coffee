@@ -1,4 +1,7 @@
 `import DS from 'ember-data'`
+`import BaseModelMixin from 'irene/mixins/base-model'`
+`import ENUMS from 'irene/enums'`
+`import Ember from 'ember'`
 
 Project = DS.Model.extend
   owner: DS.belongsTo 'user', inverse: 'ownedProjects', async: false
