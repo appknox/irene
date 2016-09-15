@@ -1,1 +1,5 @@
-= yield
+.columns
+  .column.is-half
+     = input value=storeURL type="text" placeholder="Submit store URL"
+  .column.is-half
+     button Submit
