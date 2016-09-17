@@ -21,40 +21,4 @@ User = DS.Model.extend
 
   humanizedExpiryDate : ago 'expiryDate', true
 
-  urls:null
-
-  gravatarUrl:( ->
-    "//s.gravatar.com/avatar/#{@get "emailmd5"}?s=50"
-  ).property "emailmd5"
-
-  isCurrentUser:( ->
-    applicationController = @container.lookup "controller:application"
-    currentUser = applicationController.get "currentUser"
-    currentUser.get("id") is @get "id"
-  ).property()
-
-  statText: ( ->
-    limitedScans = @get "limitedScans"
-    if limitedScans
-      "Scans Left"
-    else
-      "Expiry Date"
-  ).property "limitedScans"
-
-  statValue:( ->
-    limitedScans = @get "limitedScans"
-    if limitedScans
-      @get "scansLeft"
-    else
-      @get "humanizedExpiryDate"
-  ).property "limitedScans"
-
-  statIcon:( ->
-    limitedScans = @get "limitedScans"
-    if limitedScans
-      "search"
-    else
-      "calender"  
-  ).property "limitedScans"
-
 `export default User`

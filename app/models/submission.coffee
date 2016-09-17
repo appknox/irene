@@ -11,27 +11,4 @@ Submission = DS.Model.extend
   package: DS.attr 'string'
   statusHumanized: DS.attr 'string'
 
-  scannerClass: ( ->
-    status = @get "status"
-    if status not in [
-      ENUMS.SUBMISSION_STATUS.ANALYZING,
-      ENUMS.SUBMISSION_STATUS.DOWNLOAD_FAILED,
-      ENUMS.SUBMISSION_STATUS.VALIDATE_FAILED
-    ]
-      return "bg-scanning"
-  ).property "status"
-
-  panelClass: ( ->
-    status = @get "status"
-    switch status
-      when ENUMS.SUBMISSION_STATUS.DOWNLOAD_FAILED, ENUMS.SUBMISSION_STATUS.VALIDATE_FAILED then "panel-danger"
-      when ENUMS.SUBMISSION_STATUS.ANALYZING then "panel-success"
-      else "panel-info"
-  ).property "status"
-
-  hasReason:( ->
-    reason = @get "reason"
-    reason.length > 0
-  ).property "reason"
-
 `export default Submission`
