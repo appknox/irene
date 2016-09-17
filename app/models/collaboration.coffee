@@ -8,11 +8,4 @@ Collaboration = DS.Model.extend
   user : DS.belongsTo 'user', inverse: 'collaboration', async:false
   role : DS.attr 'number'
 
-  roleHumanized:( ->
-    switch @get "role"
-      when ENUMS.COLLABORATION_ROLE.ADMIN then "Admin"
-      when ENUMS.COLLABORATION_ROLE.MANAGER then "Manager"
-      when ENUMS.COLLABORATION_ROLE,READ_ONLY then "Read Only"
-  ).property "role"
-
 `export default Collaboration`
