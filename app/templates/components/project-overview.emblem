@@ -1,1 +1,24 @@
-= yield
+.columns
+  each result as |project|
+    .column.is-one-third
+      .card.is-fullwidth
+        header.card-header
+          p.card-header-title
+            | #{project.name}
+          a.card-header-icon
+            img src=project.lastFile.iconUrl alt="File Icon"
+        .card-content
+          .content
+            .columns
+              .column.is-one-fourth
+                | Something in the Content
+              .column
+                ul
+                  li Package: #{project.packageName}
+                  li Version: #{project.id}
+                  li Created: #{project.createdOn}
+                  li File Count: #{project.fileCount}
+        footer.card-footer
+          a.card-footer-item All Files
+          a.card-footer-item Settings
+          a.card-footer-item Compare
