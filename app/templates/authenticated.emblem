@@ -2,7 +2,6 @@
   .column.is-one-sixth
     img src="https://www.gravatar.com/avatar/44492dac2beebbcaf97a5f526b64f059?s=50"
     span yash@appknox.com
-
     aside.menu
       ul.menu-list
         li
