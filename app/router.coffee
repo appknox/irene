@@ -12,5 +12,8 @@ Router.map ->
     @route "index", path: '/'
     @route "settings", path:'/settings'
     @route "pricing", path: '/pricing'
+    @route "project", path: '/project'
+    @route "file", path: '/file'
+    @route "files", path: '/files'
 
 `export default Router;`
