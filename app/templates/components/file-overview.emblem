@@ -1,1 +1,17 @@
-= yield
+.card.is-fullwidth
+  header.card-header
+    p.card-header-title
+      | #{file.name}
+    a.card-header-icon
+      img src=file.iconUrl alt="File Icon"
+  .card-content
+    .content
+      .columns
+        .column.is-one-fourth
+          | Something in the Content
+        .column
+          ul
+            li Package: #{file.packageName}
+            li Version: #{file.id}
+            li Created: #{file.createdOn}
+            li File Count: #{file.fileCount}

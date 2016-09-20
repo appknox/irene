@@ -7,7 +7,5 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
   actions:
     invalidateSession: ->
       this.get('session').invalidate()
-  model: ()->
-    @get('store').findAll('project')
-
+      
 `export default AuthenticatedRoute`

@@ -4,4 +4,6 @@
   .column.is-half
     =upload-app
 
-=project-overview result=model
+.columns
+  each model as |project|
+    =project-overview project=project

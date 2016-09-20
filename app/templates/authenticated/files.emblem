@@ -1,0 +1,3 @@
+.columns
+  each model as |file|
+    =file-overview file=file

@@ -150,6 +150,84 @@ export default function() {
    }
   });
 
+  this.get('/files', function() {
+    return {
+      "files": [{
+		"createdOn": "2016-08-23 11:05:26.879256+00:00",
+		"manual": 0,
+		"report": "931_in.swiggy.android_19a0e7f6-7d91-440b-9c04-bccd7e752002.pdf",
+		"sha1hash": "c420e3553c7936ca6d94d6439d7667bc4adfb8c0",
+		"uuid": "19a0e7f6-7d91-440b-9c04-bccd7e752002",
+		"updatedOn": "2016-08-23 11:05:26.879284+00:00",
+		"isDynamicDone": false,
+		"project": 497,
+		"type": "file",
+		"isStaticDone": false,
+		"dynamicStatus": 0,
+		"deviceToken": "None",
+		"version": "1.5",
+		"iconUrl": "https://appknox-production.s3.amazonaws.com/19a0e7f6-7d91-440b-9c04-bccd7e752002.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJVFM4UJLOXTCBGHA%2F20160920%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20160920T062843Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=0e8fa7073984e020de0e8b325a0f1c77c16f31336328e8d0c68835016bb24da6",
+		"id": 931,
+		"md5hash": "820adddd9b89aa5d0fa74b6279eb088e",
+		"name": "in.swiggy.android"
+	}, {
+		"createdOn": "2016-08-21 05:43:13.902566+00:00",
+		"manual": 0,
+		"report": "889_in.swiggy.android_e06d0f4c-70ec-44b2-9961-920928771ce3.pdf",
+		"sha1hash": "c420e3553c7936ca6d94d6439d7667bc4adfb8c0",
+		"uuid": "e06d0f4c-70ec-44b2-9961-920928771ce3",
+		"updatedOn": "2016-08-21 05:43:13.902605+00:00",
+		"isDynamicDone": false,
+		"project": 497,
+		"type": "file",
+		"isStaticDone": false,
+		"dynamicStatus": 0,
+		"deviceToken": "None",
+		"version": "1.5",
+		"iconUrl": "https://appknox-production.s3.amazonaws.com/e06d0f4c-70ec-44b2-9961-920928771ce3.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJVFM4UJLOXTCBGHA%2F20160920%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20160920T062843Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=3555634b5bd1c0626d4b70a0d30780f04dfd2fb339fc9ce008fa7344590fb104",
+		"id": 889,
+		"md5hash": "820adddd9b89aa5d0fa74b6279eb088e",
+		"name": "in.swiggy.android"
+	}, {
+		"createdOn": "2016-08-21 05:43:09.101626+00:00",
+		"manual": 0,
+		"report": "888_in.swiggy.android_a767c214-42ba-46f6-a5e4-64947562cbb8.pdf",
+		"sha1hash": "c420e3553c7936ca6d94d6439d7667bc4adfb8c0",
+		"uuid": "a767c214-42ba-46f6-a5e4-64947562cbb8",
+		"updatedOn": "2016-08-21 05:43:09.101662+00:00",
+		"isDynamicDone": false,
+		"project": 497,
+		"type": "file",
+		"isStaticDone": false,
+		"dynamicStatus": 0,
+		"deviceToken": "None",
+		"version": "1.5",
+		"iconUrl": "https://appknox-production.s3.amazonaws.com/a767c214-42ba-46f6-a5e4-64947562cbb8.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJVFM4UJLOXTCBGHA%2F20160920%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20160920T062844Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=67a878f1995c053f3a2b324ca2a8fb6deb8219261eb54bcbae7d657f4f2b754c",
+		"id": 888,
+		"md5hash": "820adddd9b89aa5d0fa74b6279eb088e",
+		"name": "in.swiggy.android"
+	}, {
+		"createdOn": "2016-08-21 05:43:05.413428+00:00",
+		"manual": 0,
+		"report": "887_in.swiggy.android_916aa84d-c0a7-4d1c-85d3-0dec5cf2aa36.pdf",
+		"sha1hash": "c420e3553c7936ca6d94d6439d7667bc4adfb8c0",
+		"uuid": "916aa84d-c0a7-4d1c-85d3-0dec5cf2aa36",
+		"updatedOn": "2016-08-21 05:43:05.413469+00:00",
+		"isDynamicDone": false,
+		"project": 497,
+		"type": "file",
+		"isStaticDone": false,
+		"dynamicStatus": 0,
+		"deviceToken": "None",
+		"version": "1.5",
+		"iconUrl": "https://appknox-production.s3.amazonaws.com/916aa84d-c0a7-4d1c-85d3-0dec5cf2aa36.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJVFM4UJLOXTCBGHA%2F20160920%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20160920T062844Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=755bf9ba56a991899a086d7fcc33541f4dab694187b012637c58210d1c1909c8",
+		"id": 887,
+		"md5hash": "820adddd9b89aa5d0fa74b6279eb088e",
+		"name": "in.swiggy.android"
+	}]
+}
+});
+
   this.namespace = 'api';
 
   this.post('/login', (schema, request) => {
