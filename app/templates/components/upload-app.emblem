@@ -1,3 +1,4 @@
 .columns
   .column
-     button Upload App
+     button
+      = t "upload.app"

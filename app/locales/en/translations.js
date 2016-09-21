@@ -14,5 +14,36 @@ export default {
     "username": "Username",
     "password": "Password",
     "greet": "Security fanatics at your service"
+  },
+  "menu":{
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "pricing": "Pricing",
+    "support": "Support",
+    "logout": "Logout"
+  },
+  "upload":{
+    "app" : "Upload App"
+  },
+  "submit":{
+    "url": "Submit"
+  },
+  "project":{
+    "package": "Package",
+    "version": "Version",
+    "created": "Created",
+    "fileCount": "File Count",
+    "allFiles": "All Files",
+    "setting": "Settings",
+    "compare": "Compare"
+  },
+  "file":{
+    "package": "Package",
+    "version": "Version",
+    "created": "Created",
+    "fileCount": "File Count",
+    "allFiles": "All Files",
+    "setting": "Settings",
+    "compare": "Compare"
   }
 };
