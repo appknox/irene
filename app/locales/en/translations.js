@@ -45,5 +45,18 @@ export default {
     "allFiles": "All Files",
     "setting": "Settings",
     "compare": "Compare"
+  },
+  "setting":{
+    "accountSetting": "Account Setting",
+    "integration": "Integrations",
+    "namespace": "Namespace",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "changePassword" : "Change Password",
+    "addNamespace" : "Add Namespace",
+    "account" : "Account",
+    "projects" : "Projects",
+    "sync": "SYNC more"
   }
 };
