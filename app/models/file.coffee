@@ -4,7 +4,7 @@
 `import Ember from 'ember'`
 
 File = DS.Model.extend
-  project: DS.belongsTo 'project', inverse:'files', async:false
+  project: DS.belongsTo 'project', inverse:'files'
   uuid: DS.attr 'string'
   deviceToken: DS.attr 'string'
   version: DS.attr 'string'

@@ -10,7 +10,7 @@ Project = DS.Model.extend
   platform: DS.attr 'string'
   source: DS.attr 'string'
   version : DS.attr 'string'
-  files: DS.hasMany 'file', inverse :'project', async:false
+  files: DS.hasMany 'file', inverse :'project'
   collaboration: DS.hasMany 'collaboration', inverse: 'project', async: false
   fileCount: DS.attr 'string'
   githubRepo: DS.attr 'string'

@@ -6,15 +6,15 @@
       ul.menu-list
         li
           link-to 'authenticated.index'
-            | Dashboard
+            = t "menu.dashboard"
           link-to 'authenticated.settings'
-            | Settings
+            = t "menu.settings"
           link-to 'authenticated.pricing'
-            | Pricing
+            = t "menu.pricing"
           a href="https://gitter.im/appknox/support" target="_blank"
-            | Support
-
-          a click="invalidateSession" Logout
+            = t "menu.support"
+          a click="invalidateSession"
+            = t "menu.logout"
   .column
     .columns
       .column
