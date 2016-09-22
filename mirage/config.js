@@ -225,8 +225,48 @@ export default function() {
 		"md5hash": "820adddd9b89aa5d0fa74b6279eb088e",
 		"name": "in.swiggy.android"
 	}]
-}
-});
+  }
+  });
+
+  this.get('/pricings', function(){
+    return {
+      "pricings":[
+        {
+          "id" : 1,
+          "name": "Lite",
+          "heading": "Single Application Project",
+          "sast": "SAST (Static)",
+          "dast": "DAST (Dynamic)",
+          "uba": "UBA (Manual)",
+          "remedition": "Remedition :	1 Session",
+          "sla": "SLA	: 3-5 Working Days",
+          "scans": "No.of Scans :	Unlimited"
+        },
+        {
+          "id" : 2,
+          "name": "Essential",
+          "heading": "Two Application Project",
+          "sast": "SAST (Static)",
+          "dast": "DAST (Dynamic)",
+          "uba": "UBA (Manual)",
+          "remedition": "Remedition :	3 Session",
+          "sla": "SLA	: 3-5 Working Days",
+          "scans": "No.of Scans :	Unlimited"
+        },
+        {
+          "id" : 3,
+          "name": "Premium",
+          "heading": "Three Application Project",
+          "sast": "SAST (Static)",
+          "dast": "DAST (Dynamic)",
+          "uba": "UBA (Manual)",
+          "remedition": "Remedition : 5 Session",
+          "sla": "SLA	: 3-5 Working Days",
+          "scans": "No.of Scans :	Unlimited"
+        }
+      ]
+    }
+  });
 
   this.namespace = 'api';
 

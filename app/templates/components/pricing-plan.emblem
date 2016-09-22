@@ -1,0 +1,19 @@
+table
+    tr
+      th #{pricing.name}
+    tr
+      th #{pricing.heading}
+    tr
+      th #{pricing.sast}
+    tr
+      th #{pricing.dast}
+    tr
+      th #{pricing.uba}
+    tr
+      th #{pricing.remedition}
+    tr
+      th #{pricing.sla}
+    tr
+      th #{pricing.scans}
+    button
+        | Pay
