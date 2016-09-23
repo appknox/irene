@@ -5,24 +5,25 @@
     a.card-header-icon
       img src=project.file.iconUrl alt="File Icon"
   .card-content
-    .content
-      .columns
-        .column.is-one-fourth
-          | Something in the Content
-        .column
-          ul
-            li
-              = t "project.package"
-              | : #{project.packageName}
-            li
-              = t "project.version"
-              | : #{project.id}
-            li
-              = t "project.created"
-              | : #{project.createdOn}
-            li
-              = t "project.fileCount"
-              | : #{project.fileCount}
+    link-to 'authenticated.project'
+      .content
+        .columns
+          .column.is-one-fourth
+            | Something in the Content
+          .column
+            ul
+              li
+                = t "project.package"
+                | : #{project.packageName}
+              li
+                = t "project.version"
+                | : #{project.id}
+              li
+                = t "project.created"
+                | : #{project.createdOn}
+              li
+                = t "project.fileCount"
+                | : #{project.fileCount}
   footer.card-footer
 
     link-to 'authenticated.files' class="card-footer-item"

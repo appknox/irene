@@ -1,1 +1,6 @@
-= yield
+.columns
+  .column.is-half
+    p.notification.is-danger
+      | #{vulnerability.name}
+  .column.is-half
+      =vulnerability-details vulnerability=vulnerability
