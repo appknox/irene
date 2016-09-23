@@ -15,5 +15,6 @@ Router.map ->
     @route "project", path: '/project'
     @route "file", path: '/file'
     @route "files", path: '/files'
+    @route "vulnerability", path: '/vulnerability'
 
 `export default Router;`
