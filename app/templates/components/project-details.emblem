@@ -1,6 +1,10 @@
 .columns
-  .column.is-half
+  .column
     p.notification.is-danger
       | #{vulnerability.name}
-  .column.is-half
-      =vulnerability-details vulnerability=vulnerability
+    p.notification.is-warning
+        | #{vulnerability.description}
+        |Business Implications
+        h6 HOW & WHAT
+        p #{vulnerability.businessImplication}
+  .column.is-one-third
