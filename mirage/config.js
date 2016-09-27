@@ -147,7 +147,7 @@ export default function() {
 		"name": "DriveSafe",
 		"testUser": null
 	  }]
-   }
+   };
   });
 
   this.get('/files', function() {
@@ -225,7 +225,7 @@ export default function() {
 		"md5hash": "820adddd9b89aa5d0fa74b6279eb088e",
 		"name": "in.swiggy.android"
 	}]
-  }
+  };
   });
 
   this.get('/pricings', function(){
@@ -265,7 +265,7 @@ export default function() {
           "scans": "No.of Scans :	Unlimited"
         }
       ]
-    }
+    };
   });
   this.get('/vulnerabilities', function(){
     return {
@@ -1051,19 +1051,19 @@ export default function() {
     	"types": [1],
     	"successMessage": "The Activity in this App seems not to be exported"
 	   }]
-    }
+    };
   });
   this.namespace = 'api';
 
-  this.post('/login', (schema, request) => {
+  this.post('/login', () => {
     return {user: '1', token: 'secret'};
   });
 
-  this.get('/check', (schema, request) => {
+  this.get('/check', () => {
     return {user: '1', token: 'secret'};
   });
 
-  this.post('/logout', (schema, request) => {
+  this.post('/logout', () => {
     return {};
   });
 
