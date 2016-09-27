@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import AjaxService from 'ember-ajax/services/ajax';;
+import AjaxService from 'ember-ajax/services/ajax';
 var IreneAjaxService;
 
 IreneAjaxService = AjaxService.extend({
