@@ -4,7 +4,8 @@
       | #{vulnerability.name}
     p.notification.is-warning
         | #{vulnerability.description}
-        |Business Implications
-        h6 HOW & WHAT
+        = t "project-details.businessImplications"
+        h6
+          = t "project-details.howAndWhat" 
         p #{vulnerability.businessImplication}
   .column.is-one-third
