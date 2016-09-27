@@ -1,14 +1,13 @@
 `import Ember from 'ember';`
-`import config from 'irene/config/environment';`
+`import ENV from 'irene/config/environment';`
 
 Router = Ember.Router.extend
-  location: config.locationType,
-  rootURL: config.rootURL
+  location: ENV.locationType
 
 Router.map ->
   @route 'freestyle'
   @route 'login'
-  @route 'authenticated', {path: '/'}, ->
+  @route 'authenticated', path: '/', ->
     @route "index", path: '/'
     @route "settings", path:'/settings'
     @route "pricing", path: '/pricing'
