@@ -1,0 +1,19 @@
+@import "bohemia"
+$FreestyleGuide-color--primary: $primary
+$FreestyleGuide-color--accent: $primary
+$FreestyleGuide-color--secondary: $primary-darker
+$FreestyleGuide-color--foreground: $text
+$FreestyleGuide-color--background: $background
+@import 'ember-freestyle'
+
+
+.flex-center
+  justify-content: center
+  align-items: center
+
+.login-container
+  width: 100vw
+  height: 100vh
+  @extend .flex-center
+  .login-wrapper
+    display: block
