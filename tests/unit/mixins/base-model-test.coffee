@@ -1,5 +1,5 @@
 `import Ember from 'ember'`
-`import BaseModelMixin from '../../../mixins/base-model'`
+`import BaseModelMixin from 'irene/mixins/base-model'`
 `import { module, test } from 'qunit'`
 
 module 'Unit | Mixin | base model'
