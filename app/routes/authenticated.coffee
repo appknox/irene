@@ -7,6 +7,5 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
   actions:
     invalidateSession: ->
       this.get('session').invalidate()
-
-
+      
 `export default AuthenticatedRoute`
