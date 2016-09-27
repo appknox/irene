@@ -58,5 +58,18 @@ export default {
     "account" : "Account",
     "projects" : "Projects",
     "sync": "SYNC more"
+  },
+  "project-details":{
+    "businessImplications": "Business Implications",
+    "howAndWhat": "HOW AND WHAT"
+  },
+  "vulnerability-details":{
+    "package": "Package Name",
+    "version": "Version",
+    "md5hash": "MD5 Hash",
+    "sha1hash": "SHA1 Hash",
+    "allFiles": "All Files",
+    "pdfReport": "PDF Report",
+    "manual": "Manual" 
   }
 };
