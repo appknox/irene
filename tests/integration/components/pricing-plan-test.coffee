@@ -6,20 +6,11 @@ moduleForComponent 'pricing-plan', 'Integration | Component | pricing plan', {
 }
 
 test 'it renders', (assert) ->
-  assert.expect 2
+  assert.expect 1
 
   # Set any properties with @set 'myProperty', 'value'
   # Handle any actions with @on 'myAction', (val) ->
 
   @render hbs """{{pricing-plan}}"""
 
-  assert.equal @$().text().trim(), ''
-
-  # Template block usage:
-  @render hbs """
-    {{#pricing-plan}}
-      template block text
-    {{/pricing-plan}}
-  """
-
-  assert.equal @$().text().trim(), 'template block text'
+  assert.equal @$().text().trim(), 'Pay'

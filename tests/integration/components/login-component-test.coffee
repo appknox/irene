@@ -6,20 +6,11 @@ moduleForComponent 'login-component', 'Integration | Component | login component
 }
 
 test 'it renders', (assert) ->
-  assert.expect 2
+  assert.expect 1
 
   # Set any properties with @set 'myProperty', 'value'
   # Handle any actions with @on 'myAction', (val) ->
 
   @render hbs """{{login-component}}"""
 
-  assert.equal @$().text().trim(), ''
-
-  # Template block usage:
-  @render hbs """
-    {{#login-component}}
-      template block text
-    {{/login-component}}
-  """
-
-  assert.equal @$().text().trim(), 'template block text'
+  assert.equal @$().text().trim(), 'Security fanatics at your serviceUsernamePasswordForgot Password?Login'

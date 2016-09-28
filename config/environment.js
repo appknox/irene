@@ -2,6 +2,9 @@
 
 module.exports = function(environment) {
   var ENV = {
+    i18n: {
+      defaultLocale: 'en',
+    },
     emblemOptions: {
       blueprints: false
     },
