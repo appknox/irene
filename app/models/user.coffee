@@ -8,7 +8,7 @@ User = DS.Model.extend
   firstName: DS.attr 'string'
   lastName: DS.attr 'string'
   ownedProjects: DS.hasMany 'project', inverse:'owner', async:false
-  submissions: DS.hasMany 'submissions', inverse:'user', async:false
+  submissions: DS.hasMany 'submission', inverse:'user', async:false
   namespaces: DS.attr 'string'
   collaboration: DS.hasMany 'collaboration', inverse:'user', async:false
   expiryDate: DS.attr 'date'
