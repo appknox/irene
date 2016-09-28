@@ -3,6 +3,7 @@
 
 Router = Ember.Router.extend
   location: ENV.locationType
+  rootURL: ENV.rootURL
 
 Router.map ->
   @route 'freestyle'
