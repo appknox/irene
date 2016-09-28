@@ -1,6 +1,7 @@
 {
   "name": "irene",
   "dependencies": {
+    "ember": "~2.8.0",
     "ember-cli-shims": "0.1.1",
     "ember-qunit-notifications": "0.1.0",
     "bourbon": "4.2.6",
@@ -10,6 +11,5 @@
     "highlightjs": "9.1.0",
     "pretender": "~1.1.0",
     "Faker": "~3.1.0"
-    "ember": "~2.8.0",
   }
 }
