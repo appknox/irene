@@ -1,0 +1,9 @@
+machine:
+  node:
+    version: 6.5.0
+
+dependencies:
+  post:
+    - npm rebuild node-sass
+    - npm install -g bower
+    - bower install

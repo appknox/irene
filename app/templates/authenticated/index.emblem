@@ -1,0 +1,9 @@
+.columns
+  .column.is-half
+    =submit-url
+  .column.is-half
+    =upload-app
+
+.columns
+  each model as |project|
+    =project-overview project=project
