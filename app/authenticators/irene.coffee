@@ -12,13 +12,21 @@ getB64Token = (user, token)->
 
 IreneAuthenticator = Base.extend
 
+  currentUser: null
   session: Ember.inject.service()
   ajax: Ember.inject.service()
+  store: Ember.inject.service()
+
+  getCurrentUser: (userId)->
+    that = @
+    @get('store').find('user', userId).then (user) ->
+      that.set 'currentUser', user
+
 
   authenticate: (identification, password) ->
     ajax = @get "ajax"
     session = @get "session"
-
+    that  = @
     new Ember.RSVP.Promise (resolve, reject) ->
       data =
         username: identification
@@ -29,6 +37,7 @@ IreneAuthenticator = Base.extend
       .then (data) ->
         b64token = getB64Token data.user, data.token
         session.set 'data.b64token', b64token
+        that.getCurrentUser data.user
         resolve data
       .catch (reason) ->
         alert reason
@@ -37,11 +46,13 @@ IreneAuthenticator = Base.extend
   restore: (data) ->
     ajax = @get "ajax"
     session = @get "session"
+    that  = @
     new Ember.RSVP.Promise (resolve, reject) ->
       url = ENV['ember-simple-auth']['checkEndPoint']
       ajax.request(url)
       .then (data) ->
         b64token = getB64Token data.user, data.token
+        that.getCurrentUser data.user
         session.set 'data.b64token', b64token
         resolve data
       .catch (reason)->
@@ -52,6 +63,7 @@ IreneAuthenticator = Base.extend
   invalidate: (data) ->
     ajax = @get "ajax"
     localStorage.clear()
+    @set "currentUser", null
     new Ember.RSVP.Promise (resolve, reject) ->
       url = ENV['ember-simple-auth']['logoutEndPoint']
       ajax.post(url)

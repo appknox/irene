@@ -6,7 +6,7 @@
 AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
   breadCrumb: null
   session: service 'session'
-  currentUser: service 'current-user'
+
   actions:
     invalidateSession: ->
       @get('session').invalidate()
