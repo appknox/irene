@@ -1,11 +1,14 @@
 `import Ember from 'ember'`
 `import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';`
 
+{inject: {service}, isEmpty, RSVP} = Ember
+
 AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
   breadCrumb: null
-  session: Ember.inject.service 'session'
+  session: service 'session'
+  currentUser: service 'current-user'
   actions:
     invalidateSession: ->
-      this.get('session').invalidate()
-      
+      @get('session').invalidate()
+
 `export default AuthenticatedRoute`
