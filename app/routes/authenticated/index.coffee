@@ -4,7 +4,7 @@ IndexRoute = Ember.Route.extend
   breadCrumb:
     title: 'Home'
 
-  model: ()->
+  model: ->
     @get('store').findAll('project')
-    
+
 `export default IndexRoute`
