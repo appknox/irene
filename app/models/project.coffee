@@ -4,14 +4,14 @@
 `import Ember from 'ember'`
 
 Project = DS.Model.extend
-  owner: DS.belongsTo 'user', inverse: 'ownedProjects', async: false
+  owner: DS.belongsTo 'user', inverse: 'ownedProjects'
   name: DS.attr 'string'
   packageName: DS.attr 'string'
   platform: DS.attr 'string'
   source: DS.attr 'string'
   version : DS.attr 'string'
   files: DS.hasMany 'file', inverse :'project'
-  collaboration: DS.hasMany 'collaboration', inverse: 'project', async: false
+  collaboration: DS.hasMany 'collaboration', inverse: 'project'
   fileCount: DS.attr 'string'
   githubRepo: DS.attr 'string'
   jiraProject: DS.attr 'string'

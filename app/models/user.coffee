@@ -7,10 +7,10 @@ User = DS.Model.extend
   emailmd5: DS.attr 'string'
   firstName: DS.attr 'string'
   lastName: DS.attr 'string'
-  ownedProjects: DS.hasMany 'project', inverse:'owner', async:false
-  submissions: DS.hasMany 'submission', inverse:'user', async:false
+  ownedProjects: DS.hasMany 'project', inverse:'owner'
+  submissions: DS.hasMany 'submission', inverse:'user'
   namespaces: DS.attr 'string'
-  collaboration: DS.hasMany 'collaboration', inverse:'user', async:false
+  collaboration: DS.hasMany 'collaboration', inverse:'user'
   expiryDate: DS.attr 'date'
   hasGithubToken: DS.attr 'boolean'
   hasJiraToken: DS.attr 'boolean'
