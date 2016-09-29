@@ -10,11 +10,14 @@ Router.map ->
   @route 'login'
   @route 'authenticated', path: '/', ->
     @route "index", path: '/'
-    @route "settings", path:'/settings'
-    @route "pricing", path: '/pricing'
-    @route "project", path: '/project'
-    @route "file", path: '/file'
-    @route "files", path: '/files'
-    @route "vulnerability", path: '/vulnerability'
+    @route "settings"
+    @route "pricing"
+    @route "project", path: '/project/:projectId', ->
+      @route 'settings'
+      @route 'files'
+    @route "file", path: '/file/:fileId', ->
+      @route 'compare'
+    @route 'compare', path: '/compare/:fileId1/:fileId2'
+
 
 `export default Router;`

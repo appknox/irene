@@ -26,7 +26,8 @@
                 | : #{project.fileCount}
   footer.card-footer
 
-    link-to 'authenticated.files' class="card-footer-item"
+    / link-to 'authenticated.files' class="card-footer-item"
+    a.card-footer-item
       = t "project.allFiles"
     a.card-footer-item
       = t "project.setting"
