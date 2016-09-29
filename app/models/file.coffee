@@ -13,7 +13,7 @@ File = DS.Model.extend
   sha1hash: DS.attr 'string'
   name: DS.attr 'string'
   dynamicStatus: DS.attr 'number'
-  analysis: DS.hasMany 'analysis', inverse: 'file', async:false
+  analysis: DS.hasMany 'analysis', inverse: 'file'
   report: DS.attr 'string'
   manual: DS.attr 'number'
 

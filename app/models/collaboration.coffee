@@ -4,8 +4,8 @@
 
 Collaboration = DS.Model.extend
 
-  project : DS.belongsTo 'project', inverse: 'collaboration', async: false
-  user : DS.belongsTo 'user', inverse: 'collaboration', async:false
+  project : DS.belongsTo 'project', inverse: 'collaboration'
+  user : DS.belongsTo 'user', inverse: 'collaboration'
   role : DS.attr 'number'
 
 `export default Collaboration`
