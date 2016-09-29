@@ -1,5 +1,5 @@
 export default function() {
-  this.get('/users/me', function(){
+  this.get('/users/1', function(){
     return {
       "user": {
         "email": "dhilipsiva@gmail.com",
