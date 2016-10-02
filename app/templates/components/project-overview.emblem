@@ -1,9 +1,9 @@
 .card.is-fullwidth
   header.card-header
-    p.card-header-title
-      | #{project.name}
     a.card-header-icon
       img src=project.file.iconUrl alt="File Icon"
+    p.card-header-title
+      | #{project.name}
   .card-content
     link-to 'authenticated.project'
       .content
