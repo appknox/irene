@@ -1,6 +1,7 @@
-import { Factory, faker } from 'ember-cli-mirage';
+import { faker } from 'ember-cli-mirage';
+import Base from './base';
 
-export default Factory.extend({
+export default Base.extend({
   id (i) {
     return i;
   },

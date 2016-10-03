@@ -1,7 +1,10 @@
 import { Factory, faker } from 'ember-cli-mirage';
-import Base from './base';
 
-export default Base.extend({
+export default Factory.extend({
+  id (i) {
+    return i;
+  },
+
   username: faker.name.firstName,
   email: faker.internet.email,
   emailmd5: faker.internet.avatar,
