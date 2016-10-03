@@ -1,5 +1,4 @@
-.card.is-fullwidth
-  = partial "partials/_file"
+= file-overview file=project.lastFile
   footer.card-footer
 
     / link-to 'authenticated.files' class="card-footer-item"
@@ -9,4 +8,3 @@
       = t "project.setting"
     a.card-footer-item
       = t "project.compare"
-    a.card-footer-item fpp

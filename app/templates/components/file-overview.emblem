@@ -1,25 +1,23 @@
-.card.is-fullwidth
-  header.card-header
-    p.card-header-title
-      | #{file.project.name}
-    a.card-header-icon
-      img src=file.iconUrl alt="File Icon"
-  .card-content
+header.card-header
+  a.card-header-icon
+    img src=file.iconUrl alt=file.name
+  p.card-header-title
+    | #{model.name}
+.card-content
+  link-to 'authenticated.project'
     .content
       .columns
         .column.is-one-fourth
           | Something in the Content
         .column
-        ul
-          li
-            = t "file.package"
-            | : #{project.packageName}
-          li
-            = t "file.version"
-            | : #{project.id}
-          li
-            = t "file.created"
-            | : #{project.createdOn}
-          li
-            = t "file.fileCount"
-            | : #{project.fileCount}
+          ul
+            li
+              = t "project.package"
+              | : #{file.project.packageName}
+            li
+              = t "project.version"
+              | : #{file.project.id}
+            li
+              = t "project.created"
+              | : #{file.project.createdOn}
+= yield

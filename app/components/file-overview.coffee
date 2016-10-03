@@ -1,5 +1,6 @@
 `import Ember from 'ember'`
 
 FileOverviewComponent = Ember.Component.extend
-  classNames: ["column" , "is-one-third"]
+  file: null
+  classNames: ["card", "is-fullwidth"]
 `export default FileOverviewComponent`

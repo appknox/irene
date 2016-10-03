@@ -16,5 +16,6 @@ export default Factory.extend({
   githubRepo: faker.random.firstName,
   jiraProject: faker.random.firstName,
   testUser: faker.random.firstName,
-  testPassword: faker.internet.password
+  testPassword: faker.internet.password,
+  lastFile: faker.random.arrayElement([1, 2, 3])
 });
