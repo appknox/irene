@@ -17,5 +17,7 @@ export default Factory.extend({
   jiraProject: faker.random.firstName,
   testUser: faker.random.firstName,
   testPassword: faker.internet.password,
-  lastFile: faker.random.arrayElement([1, 2, 3])
+  lastFile (i) {
+    return i;
+  }
 });
