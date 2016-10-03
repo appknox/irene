@@ -2,9 +2,6 @@ import { faker } from 'ember-cli-mirage';
 import Base from './base';
 
 export default Base.extend({
-  id (i) {
-    return i;
-  },
   // owner: DS.belongsTo 'user', inverse: 'ownedProjects'
   name: faker.company.companyName,
   packageName:  faker.internet.domainName,
@@ -19,6 +16,6 @@ export default Base.extend({
   testUser: faker.random.firstName,
   testPassword: faker.internet.password,
   lastFile (i) {
-    return i;
+    return i + 1;
   }
 });

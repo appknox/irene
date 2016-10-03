@@ -2,9 +2,6 @@ import { faker } from 'ember-cli-mirage';
 import Base from './base';
 
 export default Base.extend({
-  project (i) {
-    return i;
-  },
   // uuid: DS.attr 'string'
   // deviceToken: DS.attr 'string'
   version: faker.random.number,
