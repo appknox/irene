@@ -6,6 +6,4 @@ BaseModelMixin = Ember.Mixin.create
   createdOn: DS.attr 'date'
   updatedOn: DS.attr 'date'
 
-
-
 `export default BaseModelMixin`
