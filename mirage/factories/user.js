@@ -2,7 +2,7 @@ import { Factory, faker } from 'ember-cli-mirage';
 
 export default Factory.extend({
   id (i) {
-    return i;
+    return i+1;
   },
 
   username: faker.name.firstName,
