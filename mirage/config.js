@@ -12,6 +12,12 @@ export default function() {
     };
   });
 
+  this.get('/files/:fileId', (db, request) => {
+    return {
+      files: db.files.find(request.params.fileId)
+    };
+  });
+
   this.namespace = 'api';
 
   this.post('/login', () => {

@@ -10,4 +10,5 @@ export default function(server) {
   // server.createList('post', 10);
   server.createList('user', 5);
   server.createList('project', 5);
+  server.createList('file', 5);
 }
