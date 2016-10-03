@@ -3,16 +3,18 @@
 `import ENUMS from 'irene/enums'`
 `import Ember from 'ember'`
 
-Project = DS.Model.extend
+Project = DS.Model.extend BaseModelMixin,
+
   owner: DS.belongsTo 'user', inverse: 'ownedProjects'
   name: DS.attr 'string'
   packageName: DS.attr 'string'
-  platform: DS.attr 'string'
-  source: DS.attr 'string'
+  platform: DS.attr 'number'
+  source: DS.attr 'number'
   version : DS.attr 'string'
   files: DS.hasMany 'file', inverse :'project'
+  lastFile: DS.belongsTo 'file',  inverse :'project'
   collaboration: DS.hasMany 'collaboration', inverse: 'project'
-  fileCount: DS.attr 'string'
+  fileCount: DS.attr 'number'
   githubRepo: DS.attr 'string'
   jiraProject: DS.attr 'string'
   testUser:DS.attr 'string'
