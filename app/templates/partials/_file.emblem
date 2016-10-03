@@ -1,0 +1,22 @@
+header.card-header
+  a.card-header-icon
+    img src=file.iconUrl alt="File Icon"
+  p.card-header-title
+    | #{file.name}
+.card-content
+  link-to 'authenticated.project'
+    .content
+      .columns
+        .column.is-one-fourth
+          | Something in the Content
+        .column
+          ul
+            li
+              = t "project.package"
+              | : #{file.project.packageName}
+            li
+              = t "project.version"
+              | : #{file.project.id}
+            li
+              = t "project.created"
+              | : #{file.project.createdOn}
