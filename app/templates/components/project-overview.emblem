@@ -1,10 +1,9 @@
 = file-overview file=project.lastFile
   footer.card-footer
 
-    / link-to 'authenticated.files' class="card-footer-item"
-    a.card-footer-item
+    link-to 'authenticated.file' class="card-footer-item"
       = t "project.allFiles"
-    a.card-footer-item
+    link-to 'authenticated.project.settings' class="card-footer-item"
       = t "project.setting"
-    a.card-footer-item
+    link-to 'authenticated.file.compare' class="card-footer-item"
       = t "project.compare"
