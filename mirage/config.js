@@ -12,6 +12,13 @@ export default function() {
     };
   });
 
+  this.get('/pricings', (db) => {
+    return {
+      pricings: db.pricings.all().models
+    };
+  });
+
+
   this.get('/files/:fileId', (db, request) => {
     return {
       files: db.files.find(request.params.fileId)

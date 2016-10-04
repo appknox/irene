@@ -11,4 +11,5 @@ export default function(server) {
   server.createList('user', 5);
   server.createList('project', 5);
   server.createList('file', 5);
+  server.createList('pricing',3);
 }
