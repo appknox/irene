@@ -1,48 +1,19 @@
-.column
-  h5
-    = t "setting.accountSetting"
-  label for="currentPassword"
-    = t "setting.currentPassword"
-  br
-  input type="text"
-  br
-  label for="newPassword"
-    = t "setting.newPassword"
-  br
-  input type="text"
-  br
-  label for="confirmPassword"
-    = t "setting.confirmPassword"
-  br
-  input type="text"
-  br
-  button
-    = t "setting.changePassword"
+.columns
+  =change-password
 .columns
   .column.is-one-third
     h5
       = t "setting.namespace"
-  .column
-    button
-      = t "setting.addNamespace"
+  =namespace-component
 .columns
   .column.is-one-third
     h5
       = t "setting.integration"
+
+.columns
   .column.is-one-third
-    h6
-      = t "setting.account"
-    .card
-      header.card-header
-        img src=project.file.iconUrl alt="File Icon"
-        p.card-header-title
-          | Flipkart
-        a.card-header-icon
-            img src=project.file.iconUrl alt="File Icon"
-        a.card-header-icon
-          img src=project.file.iconUrl alt="File Icon"
-    button
-      = t "setting.sync"
+    | GitHub Integration
+    =github-user
   .column.is-one-third
-    h6
-      = t "setting.projects"
+    | JIRA Integration
+    =jira-user
