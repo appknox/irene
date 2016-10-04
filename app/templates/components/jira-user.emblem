@@ -1,0 +1,17 @@
+label
+  | Jira Host
+br
+input type="text"
+br
+label
+  | Username
+br
+input type="text"
+br
+label
+  | Password
+br
+input type="password"
+br
+button Integrate JIRA
+= yield

@@ -1,0 +1,5 @@
+.column
+  button
+    = t "setting.addNamespace"
+
+= yield
