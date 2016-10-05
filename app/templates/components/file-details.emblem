@@ -1,1 +1,8 @@
-= yield
+= file-overview file=file
+    footer.card-footer
+      link-to 'authenticated.file' class="card-footer-item"
+        = t "vulnerability-details.allFiles"
+      a.card-footer-item
+        = t "vulnerability-details.pdfReport"
+      a.card-footer-item
+        = t "vulnerability-details.manual"
