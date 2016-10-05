@@ -1,7 +1,10 @@
 .columns
   .column
-    =file-details file=model
+    =file-details file=model.file
   .column.is-one-third
     =vnc-viewer
 .columns
-  = analysis-list    
+  .column
+    each model.vulnerability as |vulnerability|
+      = analysis-list vulnerability=vulnerability
+  .column.is-one-third

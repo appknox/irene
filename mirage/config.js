@@ -25,6 +25,12 @@ export default function() {
     };
   });
 
+  this.get('/vulnerabilities', (db) => {
+    return {
+      vulnerabilities: db.vulnerabilities.all().models
+    };
+  });
+
   this.namespace = '/api';
 
   this.post('/login', () => {

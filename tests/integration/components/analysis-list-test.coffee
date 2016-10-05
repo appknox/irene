@@ -15,4 +15,4 @@ test 'it renders', (assert) ->
 
 
 
-  assert.equal @$().text().trim(), 'Details'
+  assert.equal @$().text().trim(), 'Business ImplicationsHOW AND WHAT'

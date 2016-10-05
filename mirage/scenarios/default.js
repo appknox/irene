@@ -12,4 +12,5 @@ export default function(server) {
   server.createList('project', 5);
   server.createList('file', 5);
   server.createList('pricing',3);
+  server.createList('vulnerability',10);
 }

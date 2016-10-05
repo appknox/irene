@@ -1,2 +1,8 @@
-| Details
-= yield
+p.notification.is-danger
+  | #{vulnerability.name}
+p.notification.is-warning
+    | #{vulnerability.description}
+    = t "project-details.businessImplications"
+    h6
+      = t "project-details.howAndWhat"
+    p #{vulnerability.businessImplication}
