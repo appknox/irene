@@ -47,10 +47,15 @@ IndexController = Ember.ArrayController.extend
 
     submitURL: ->
       storeURL = @get "storeURL"
-      if !CONSTANTS.STORE_URL_RE.test storeURL
+      if CONSTANTS.WINDOWS_STORE_URL_RE.test(storeURL)
+        data =
+          storeURL: storeURL
+      else if CONSTANTS.ANDROID_STORE_URL_RE.test(storeURL)
+        data =
+          storeURL: storeURL
+      else
         return Notify.error "Please enter a valid URL"
-      data =
-        storeURL: storeURL
+
       postUrl = [ENV.APP.API_BASE, ENV.endpoints.storeUrl].join '/'
       that = @
       Ember.$.post postUrl, data
