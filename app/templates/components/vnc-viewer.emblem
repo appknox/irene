@@ -1,0 +1,4 @@
+p.notification.is-danger
+  | Start Dynamic Scan
+
+= yield

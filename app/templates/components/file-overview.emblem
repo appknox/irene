@@ -2,9 +2,9 @@ header.card-header
   a.card-header-icon
     img src=file.iconUrl alt=file.name
   p.card-header-title
-    | #{model.name}
+    | #{file.name}
 .card-content
-  link-to 'authenticated.project'
+  link-to 'authenticated.file' file.id
     .content
       .columns
         .column.is-one-fourth

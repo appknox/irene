@@ -25,7 +25,7 @@ export default function() {
     };
   });
 
-  this.namespace = 'api';
+  this.namespace = '/api';
 
   this.post('/login', () => {
     return {user: '1', token: 'secret'};
