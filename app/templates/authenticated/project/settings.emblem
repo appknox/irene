@@ -1,1 +1,11 @@
-= outlet
+h4 Settings
+.columns
+  .column
+    =github-project
+.columns
+  .column
+    =jira-project
+.columns
+  =test-credentials
+.columns
+  =collaborator-component model=model

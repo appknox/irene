@@ -1,1 +1,8 @@
+h5 GitHub Integration
+
+| Please visit the
+link-to 'authenticated.settings'
+  | user's settings
+| page to configure GitHub integration
+
 = yield

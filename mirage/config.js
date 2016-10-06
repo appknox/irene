@@ -6,6 +6,12 @@ export default function() {
     };
   });
 
+  this.get('/collaborations', (db) => {
+    return {
+      collaborations: db.collaborations.all().models
+    };
+  });
+
   this.get('/projects', (db) => {
     return {
       projects: db.projects.all().models
