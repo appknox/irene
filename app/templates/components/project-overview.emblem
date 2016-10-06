@@ -5,5 +5,5 @@
       = t "project.allFiles"
     link-to 'authenticated.project.settings' project.id class="card-footer-item"
       = t "project.setting"
-    link-to 'authenticated.file.compare' class="card-footer-item"
+    link-to 'authenticated.choose' project.id class="card-footer-item"
       = t "project.compare"
