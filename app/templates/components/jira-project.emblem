@@ -1,1 +1,8 @@
+h5 JIRA Integration
+
+| Please visit the
+link-to 'authenticated.settings'
+  | user's settings
+| page to configure JIRA integration
+
 = yield

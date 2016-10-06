@@ -1,1 +1,8 @@
-= yield
+h5 Collaborators
+
+button Add Collaborator
+
+.columns
+  each model as |collaborator|
+    .column.is-one.third
+    = collaborator-details user=collaborator
