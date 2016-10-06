@@ -1,3 +1,0 @@
-=vulnerability-details
-each model as |vulnerability|
-  =project-details vulnerability=vulnerability

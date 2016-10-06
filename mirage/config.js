@@ -18,6 +18,11 @@ export default function() {
     };
   });
 
+  this.get('/files', (db) => {
+    return {
+      files: db.files.all().models
+    };
+  });
 
   this.get('/files/:fileId', (db, request) => {
     return {
