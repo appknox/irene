@@ -1,0 +1,3 @@
+.columns
+  .column.is-one-third
+    = file-overview file=model
