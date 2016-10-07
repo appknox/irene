@@ -14,8 +14,5 @@ export default Base.extend({
   githubRepo: faker.random.firstName,
   jiraProject: faker.random.firstName,
   testUser: faker.random.firstName,
-  testPassword: faker.internet.password,
-  lastFile (i) {
-    return i + 1;
-  }
+  testPassword: faker.internet.password
 });
