@@ -1,9 +1,9 @@
 .columns
   =change-password
 .columns
-  .column.is-one-third
-    h5
-      = t "setting.namespace"
+  h5
+    = t "setting.namespace"
+.columns
   =namespace-component
 .columns
   .column.is-one-third
@@ -14,7 +14,7 @@
   .column.is-one-third
     | GitHub Integration
     =github-user
-.columns    
+.columns
   .column.is-one-third
     | JIRA Integration
     =jira-user
