@@ -1,5 +1,4 @@
-.column
-  button
-    = t "setting.addNamespace"
+button
+  = t "setting.addNamespace"
 
 = yield
