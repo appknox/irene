@@ -18,5 +18,10 @@ User = DS.Model.extend
   limitedScans: DS.attr()
   scansLeft: DS.attr()
 
+  gravatar: (->
+    emailmd5 = @get "emailmd5"
+    "https://www.gravatar.com/avatar/#{emailmd5}?s=50"
+  ).property "emailmd5"
+
 
 `export default User`
