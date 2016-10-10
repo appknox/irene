@@ -2,7 +2,7 @@
 `import ENUMS from 'irene/enums'`
 
 Analysis = DS.Model.extend
-  file: DS.belongsTo 'file', inverse: 'analysis'
+  file: DS.belongsTo 'file', inverse: 'analyses'
   description: DS.attr()
   analiserVersion: DS.attr 'number'
   risk: DS.attr 'number'
