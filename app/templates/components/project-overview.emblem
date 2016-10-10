@@ -2,8 +2,8 @@
   footer.card-footer
 
     link-to 'authenticated.project.files' project.id class="card-footer-item"
-      = t "project.allFiles"
+      = t "allFiles"
     link-to 'authenticated.project.settings' project.id class="card-footer-item"
-      = t "project.setting"
+      = t "settings"
     link-to 'authenticated.choose' project.id class="card-footer-item"
-      = t "project.compare"
+      = t "compare"

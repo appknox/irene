@@ -1,4 +1,4 @@
 button
-  = t "setting.addNamespace"
+  = t "addNamespace"
 
 = yield
