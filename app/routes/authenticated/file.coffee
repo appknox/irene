@@ -3,7 +3,6 @@
 AuthenticatedFileRoute = Ember.Route.extend
 
   model: (params)->
-    file: @get('store').find('file', params.fileId)
-    vulnerability: @get('store').findAll('vulnerability')
+    @get('store').find('file', params.fileId)
 
 `export default AuthenticatedFileRoute`

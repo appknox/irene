@@ -18,6 +18,12 @@ export default function() {
     };
   });
 
+  this.get('/projects/:projectId', (db, request) => {
+    return {
+      projects: db.projects.find(request.params.projectId)
+    };
+  });
+
   this.get('/pricings', (db) => {
     return {
       pricings: db.pricings.all().models
