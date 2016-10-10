@@ -12,12 +12,12 @@ header.card-header
         .column
           ul
             li
-              = t "project.package"
+              = t "package"
               | : #{file.project.packageName}
             li
-              = t "project.version"
+              = t "version"
               | : #{file.project.id}
             li
-              = t "project.created"
+              = t "created"
               | : #{file.project.createdOn}
 = yield

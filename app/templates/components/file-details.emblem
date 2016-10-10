@@ -1,8 +1,8 @@
 = file-overview file=file
     footer.card-footer
       link-to 'authenticated.file' class="card-footer-item"
-        = t "vulnerability-details.allFiles"
+        = t "allFiles"
       a.card-footer-item
-        = t "vulnerability-details.pdfReport"
+        = t "pdfReport"
       a.card-footer-item
-        = t "vulnerability-details.manual"
+        = t "manual"
