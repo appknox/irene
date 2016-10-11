@@ -21,7 +21,7 @@ export default function(server) {
     for (var fileId = 1; fileId <= fileCount; fileId++) {
       file = server.create('file', {project: project.id});
       for (var vulnerabilityId = 1; vulnerabilityId <= vulnerabilityCount; vulnerabilityId++) {
-        server.createList('analysis', fileCount, {file: file.id, vulnerability: vulnerabilityId});
+        server.create('analysis', {file: file, vulnerability: vulnerabilityId});
       }
     }
     server.db.projects.update(project.id, {lastFile: file.id});

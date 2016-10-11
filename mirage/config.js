@@ -1,52 +1,12 @@
 export default function() {
 
-  this.get('/users/:userId', (db, request) => {
-    return {
-      users: db.users.find(request.params.userId)
-    };
-  });
-
-  this.get('/collaborations', (db) => {
-    return {
-      collaborations: db.collaborations.all().models
-    };
-  });
-
-  this.get('/projects', (db) => {
-    return {
-      projects: db.projects.all().models
-    };
-  });
-
-  this.get('/projects/:projectId', (db, request) => {
-    return {
-      projects: db.projects.find(request.params.projectId)
-    };
-  });
-
-  this.get('/pricings', (db) => {
-    return {
-      pricings: db.pricings.all().models
-    };
-  });
-
-  this.get('/files', (db) => {
-    return {
-      files: db.files.all().models
-    };
-  });
-
-  this.get('/files/:fileId', (db, request) => {
-    return {
-      files: db.files.find(request.params.fileId)
-    };
-  });
-
-  this.get('/vulnerabilities', (db) => {
-    return {
-      vulnerabilities: db.vulnerabilities.all().models
-    };
-  });
+  this.get('/users/:id', 'user');
+  this.get('/collaborations', 'collaboration');
+  this.get('/projects', 'project');
+  this.get('/projects/:id', 'project');
+  this.get('/pricings', 'pricing');
+  this.get('/files', 'file');
+  this.get('/files/:id', 'files');
 
   this.namespace = '/api';
 

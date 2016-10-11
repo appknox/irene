@@ -1,8 +1,1 @@
-p.notification.is-danger
-  | #{vulnerability.name}
-p.notification.is-warning
-    | #{commons.description}
-    = t "businessImplications"
-    h6
-      = t "howAndWhat"
-    p #{vulnerability.businessImplication}
+| Foo

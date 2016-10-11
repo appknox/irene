@@ -13,5 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{analysis-details}}"""
 
-
-  assert.equal @$().text().trim(), 'Business ImplicationsHow and What?'
+  assert.equal @$().text().trim(), 'Foo'
