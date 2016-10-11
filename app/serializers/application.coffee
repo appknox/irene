@@ -1,5 +1,5 @@
 `import DS from 'ember-data'`
 
-ApplicationSerializer = DS.RESTSerializer.extend()
+ApplicationSerializer = DS.JSONAPISerializer.extend()
 
 `export default ApplicationSerializer`

@@ -6,3 +6,6 @@
         = t "pdfReport"
       a.card-footer-item
         = t "manual"
+
+each file.analyses as |analysis|
+  =analysis-details analysis=analysis
