@@ -6,6 +6,7 @@ Analysis = DS.Model.extend
   description: DS.attr()
   analiserVersion: DS.attr 'number'
   risk: DS.attr 'number'
+  status: DS.attr 'number'
   vulnerability: DS.belongsTo 'vulnerability'
 
 `export default Analysis`

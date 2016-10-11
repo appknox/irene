@@ -3,7 +3,7 @@
 `import ENUMS from 'irene/enums'`
 `import Ember from 'ember'`
 
-File = DS.Model.extend
+File = DS.Model.extend BaseModelMixin,
   project: DS.belongsTo 'project', inverse:'files'
   uuid: DS.attr 'string'
   deviceToken: DS.attr 'string'

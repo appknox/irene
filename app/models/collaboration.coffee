@@ -2,7 +2,7 @@
 `import BaseModelMixin from 'irene/mixins/base-model'`
 `import ENUMS from 'irene/enums'`
 
-Collaboration = DS.Model.extend
+Collaboration = DS.Model.extend BaseModelMixin,
 
   project : DS.belongsTo 'project', inverse: 'collaboration'
   user : DS.belongsTo 'user', inverse: 'collaboration'

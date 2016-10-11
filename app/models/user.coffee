@@ -2,6 +2,7 @@
 `import ENUMS from 'irene/enums'`
 
 User = DS.Model.extend
+  uuid: DS.attr 'string'
   username: DS.attr 'string'
   email: DS.attr 'string'
   emailmd5: DS.attr 'string'
