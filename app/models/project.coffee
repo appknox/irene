@@ -13,11 +13,12 @@ Project = DS.Model.extend BaseModelMixin,
   version : DS.attr 'string'
   files: DS.hasMany 'file', inverse :'project'
   lastFile: DS.belongsTo 'file',  inverse :'project'
-  collaboration: DS.hasMany 'collaboration', inverse: 'project'
+  collaborations: DS.hasMany 'collaboration', inverse: 'project'
   fileCount: DS.attr 'number'
   githubRepo: DS.attr 'string'
   jiraProject: DS.attr 'string'
   testUser:DS.attr 'string'
   testPassword: DS.attr 'string'
+  url: DS.attr 'string'
 
 `export default Project`
