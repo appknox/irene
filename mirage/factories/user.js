@@ -15,5 +15,8 @@ export default Factory.extend({
   hasGithubToken: faker.random.boolean,
   hasJiraToken: faker.random.boolean,
   limitedScans: faker.random.number,
-  scansLeft: faker.random.number
+  scansLeft: faker.random.number,
+  uuid: faker.random.number,
+  socketId: faker.random.number
+
 });

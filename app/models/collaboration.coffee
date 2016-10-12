@@ -4,7 +4,7 @@
 
 Collaboration = DS.Model.extend BaseModelMixin,
 
-  project : DS.belongsTo 'project', inverse: 'collaboration'
+  project : DS.belongsTo 'project', inverse: 'collaborations'
   user : DS.belongsTo 'user', inverse: 'collaboration'
   role : DS.attr 'number'
 

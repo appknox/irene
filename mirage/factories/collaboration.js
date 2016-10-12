@@ -1,8 +1,9 @@
 import { faker } from 'ember-cli-mirage';
 import Base from './base';
+import ENUMS from 'irene/enums';
 
 export default Base.extend({
-  project : faker.company.companyName,
-  user : faker.internet.avatar,
-  role : faker.name.title
+  role : function(){
+    return faker.random.arrayElement(ENUMS.COLLABORATION_ROLE.VALUES);
+  }
 });
