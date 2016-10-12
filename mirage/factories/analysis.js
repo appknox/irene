@@ -7,5 +7,8 @@ export default Base.extend({
   analiserVersion: 1,
   risk: function(){
     return faker.random.arrayElement(ENUMS.RISK.VALUES);
+  },
+  status: function(){
+    return faker.random.arrayElement(ENUMS.ANALYSIS.VALUES);
   }
 });
