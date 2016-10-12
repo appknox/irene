@@ -4,12 +4,13 @@ import ENUMS from 'irene/enums';
 
 export default Factory.extend({
   metaData: faker.lorem.sentence,
-  status: function(){
+  reason: faker.lorem.sentence,
+  packageName: faker.internet.domain,
+
+  status(){
     return faker.random.arrayElement(ENUMS.SUBMISSION_STATUS.VALUES);
   },
-  reason: faker.lorem.sentence,
-  source: function(){
+  source(){
     return faker.random.arrayElement(ENUMS.SUBMISSION_SOURCE.VALUES);
-  },
-  packageName: faker.internet.domain
+  }
 });
