@@ -1,1 +1,24 @@
-| Foo
+.message-header class=progressClass
+    = analysis.vulnerability.name
+    each analysis.vulnerability.tags as |tag|
+      span.tag = tag
+
+.message-body
+    if analysis.isScanning
+      = analysis.vulnerability.question
+    else
+      if analysis.isRisky
+        p = analysis.vulnerability.description
+        if analysis.vulnerability.businessImplication
+          h4 Business Implication
+          p = analysis.vulnerability.businessImplication
+        if showVulnerability
+          h4 Vulnerability
+          each analysis.findings as |finding|
+            p = finding.extra_description
+            pre = finding.description
+        button class="is-fullwidth is-danger" click="toggleVulnerability"
+          span
+          | {{showOrHide}} Vulnerability
+      else
+        = analysis.vulnerability.successMessage

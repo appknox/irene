@@ -3,7 +3,6 @@ import Base from './base';
 import ENUMS from 'irene/enums';
 
 export default Base.extend({
-  description: faker.lorem.sentence,
   analiserVersion: 1,
 
   risk(){
@@ -11,5 +10,15 @@ export default Base.extend({
   },
   status(){
     return faker.random.arrayElement(ENUMS.ANALYSIS.VALUES);
+  },
+  findings(){
+    var desc = [];
+    for (var i = 0; i < 3; i++) {
+      desc.push({
+        description: faker.lorem.sentence(),
+        extra_description: faker.lorem.sentence()
+      });
+    }
+    return desc;
   }
 });
