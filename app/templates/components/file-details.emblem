@@ -7,5 +7,7 @@
       a.card-footer-item
         = t "manual"
 
-each file.analyses as |analysis|
+hr
+
+each file.sortedAnalyses as |analysis|
   =analysis-details analysis=analysis

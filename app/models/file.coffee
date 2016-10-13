@@ -17,4 +17,7 @@ File = DS.Model.extend BaseModelMixin,
   report: DS.attr 'string'
   manual: DS.attr 'number'
 
+  analysesSorting: ['risk:desc']
+  sortedAnalyses: Ember.computed.sort 'analyses', 'analysesSorting'
+
 `export default File`

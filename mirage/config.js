@@ -6,7 +6,8 @@ export default function() {
   this.get('/projects/:id', 'project');
   this.get('/pricings', 'pricing');
   this.get('/files', 'file');
-  this.get('/files/:id', 'files');
+  this.get('/files/:id', 'file');
+  this.get('/vulnerabilities/:id', 'vulnerability');
 
   this.namespace = '/api';
 
