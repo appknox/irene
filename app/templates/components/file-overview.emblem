@@ -8,7 +8,7 @@ header.card-header
     .content
       .columns
         .column.is-one-fourth
-          | Something in the Content
+          = pie-chart data=file.pieChartData height=100 width=100
         .column
           ul
             li

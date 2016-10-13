@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{file-overview}}"""
 
-  assert.equal @$().text().trim(), 'Something in the ContentPackage: Version: Created:'
+  assert.equal @$().text().trim(), 'Package: Version: Created:'
