@@ -6,4 +6,4 @@ table
     tr
       th #{pricing.price}
     button
-        | Pay
+        = t "pay"

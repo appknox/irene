@@ -1,4 +1,5 @@
-h4 Settings
+h4
+  =t "settings"
 .columns
   .column
     =github-project

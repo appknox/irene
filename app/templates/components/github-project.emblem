@@ -1,8 +1,9 @@
-h5 GitHub Integration
+h5
+  = t "githubIntegration"
 
-| Please visit the
+= t "pleaseVisit"
 link-to 'authenticated.settings'
-  | user's settings
-| page to configure GitHub integration
+  = t "userSetting"
+= t "ghPageConfigure"
 
 = yield

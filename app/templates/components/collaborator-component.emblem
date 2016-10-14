@@ -1,6 +1,8 @@
-h5 Collaborators
+h5
+  = t "collaborators"
 
-button Add Collaborator
+button
+  = t "addCollaborators"
 
 .columns
   each model as |collaborator|

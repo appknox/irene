@@ -2,10 +2,10 @@
     .card.is-fullwidth
       header.card-header
         p.card-header-title
-          | Admin
+          = t "admin"
       .card-content
         .content
           img src="https://s3.amazonaws.com/uifaces/faces/twitter/coreyginnivan/128.jpg"
           p
-            | Username
+            = t "username"
 = yield
