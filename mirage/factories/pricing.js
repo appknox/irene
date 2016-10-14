@@ -3,7 +3,14 @@ import Base from './base';
 
 export default Base.extend({
   name: faker.name.firstName,
-  description: faker.lorem.sentence,
   price: faker.commerce.price,
-  projectsLimit: faker.random.number
+  projectsLimit: faker.random.number,
+
+  description(){
+    var desc = [];
+    for (var i = 0; i < 5; i++) {
+      desc.push(faker.lorem.words(2).join(" -> "));
+    }
+    return desc.join(",");
+  }
 });
