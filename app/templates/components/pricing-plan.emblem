@@ -1,9 +1,5 @@
-table
-    tr
-      th #{pricing.name}
-    tr
-      th #{pricing.description}
-    tr
-      th #{pricing.price}
-    button
-        = t "pay"
+h3 = pricing.name
+each pricing.descriptionItems as |item|
+  li = item
+button click="makePayment"
+  = totalPricePay

@@ -6,4 +6,9 @@ Pricing = DS.Model.extend
   price: DS.attr 'number'
   projectsLimit: DS.attr "number"
 
+  descriptionItems:(->
+    description = @get "description"
+    description.split ","
+  ).property "description"
+
 `export default Pricing`

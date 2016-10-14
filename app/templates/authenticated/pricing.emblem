@@ -1,6 +1,1 @@
-.columns
-  .column.is-full
-    =plan-list  
-
-  each model as |pricing|
-    =pricing-plan pricing=pricing
+= pricing-list pricings=model
