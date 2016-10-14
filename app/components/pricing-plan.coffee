@@ -6,7 +6,7 @@ PricingPlanComponent = Ember.Component.extend
   pricing: null
   store: null
   paymentDuration: null
-  classNames: ["column" , "is-one-third", "box"]
+  classNames: ["column" , "is-one-third", "card"]
 
   totalPrice: (->
     price = @get "pricing.price"
