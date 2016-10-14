@@ -1,4 +1,4 @@
 p.notification.is-danger
-  | Start Dynamic Scan
+  = t "dynamicScan"
 
 = yield

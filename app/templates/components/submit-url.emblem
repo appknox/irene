@@ -1,6 +1,6 @@
 .columns
   .column.is-half
-     = input class="input" value=storeURL type="text" placeholder="Submit store URL"
+     = input class="input" value=storeURL type="text" placeholder=(t 'submitYourUrl')
   .column.is-half
      button
       = t "submitUrl"

@@ -2,19 +2,19 @@
   =change-password
 .columns
   h5
-    = t "setting.namespace"
+    = t "namespace"
 .columns
   =namespace-component
 .columns
   .column.is-one-third
     h5
-      = t "setting.integration"
+      = t "integration"
 
 .columns
   .column.is-one-third
-    | GitHub Integration
+    = t "githubIntegration"
     =github-user
 .columns
   .column.is-one-third
-    | JIRA Integration
+    = t "jiraIntegration"
     =jira-user

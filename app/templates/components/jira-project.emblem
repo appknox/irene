@@ -1,8 +1,9 @@
-h5 JIRA Integration
+h5
+  = t "jiraIntegration"
 
-| Please visit the
+= t "pleaseVisit"
 link-to 'authenticated.settings'
-  | user's settings
-| page to configure JIRA integration
+  = t "userSetting"
+= t "jiraPageConfigure"
 
 = yield

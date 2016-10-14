@@ -1,8 +1,13 @@
-h3 Pricing
+h3
+  = t "pricing"
 
-button MONTHLY
-button QUARTERLY
-button HALF YEARLY
-button YEARLY
+button
+  = t "monthly"
+button
+  = t "quarterly"
+button
+  = t "halfYearly"
+button 
+  = t "yearly"
 
 =yield

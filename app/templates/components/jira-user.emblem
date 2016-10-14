@@ -1,17 +1,18 @@
 label
-  | Jira Host
+  = t "jiraHost"
 br
 input type="text"
 br
 label
-  | Username
+  = t "username"
 br
 input type="text"
 br
 label
-  | Password
+  = t "password"
 br
 input type="password"
 br
-button Integrate JIRA
+button
+  = t "integrateJIRA"
 = yield
