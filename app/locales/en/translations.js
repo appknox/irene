@@ -48,7 +48,6 @@ export default {
   "settings": "Settings",
   "submitUrl": "Submit",
   "submitYourUrl": "Submit store URL",
-  "support": "Support",
   "sync": "Sync More",
   "testCredentials": "Test Credentials",
   "uploadApp": "Upload App",

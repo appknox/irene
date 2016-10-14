@@ -12,8 +12,6 @@
             = t "settings"
           link-to 'authenticated.pricing'
             = t "pricing"
-          a href="https://gitter.im/appknox/support" target="_blank"
-            = t "support"
           a click="invalidateSession"
             = t "logout"
   .column
