@@ -1,4 +1,4 @@
-.columns
+.columns.box
   .column.is-half
     =submit-url
   .column.is-half
