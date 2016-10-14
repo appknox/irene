@@ -1,18 +1,19 @@
-label
-  = t "jiraHost"
-br
-input type="text"
-br
-label
-  = t "username"
-br
-input type="text"
-br
-label
-  = t "password"
-br
-input type="password"
-br
-button
-  = t "integrateJIRA"
-= yield
+.margin-top20
+  label
+    = t "jiraHost"
+  br
+  input type="text"
+  br
+  label
+    = t "username"
+  br
+  input type="text"
+  br
+  label
+    = t "password"
+  br
+  input type="password"
+  br
+  button.margin-top
+    = t "integrateJIRA"
+  = yield

@@ -4,7 +4,8 @@ h5
 button
   = t "addCollaborators"
 
-.columns
+.columns.margin-top
   each model as |collaborator|
-    .column.is-one.third
-    = collaborator-details user=collaborator
+    .box
+      .column.is-one.third
+        = collaborator-details user=collaborator
