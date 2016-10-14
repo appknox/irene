@@ -1,4 +1,4 @@
-button
+button.margin-top20
   = t "addNamespace"
 
 = yield

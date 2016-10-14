@@ -1,20 +1,28 @@
-.columns
-  =change-password
-.columns
-  h5
-    = t "namespace"
-.columns
-  =namespace-component
-.columns
-  .column.is-one-third
-    h5
-      = t "integration"
+.settings
+  .box
+    .columns
+      h5
+        = t "namespace"
+    .columns
+      =namespace-component
+  .box
+    .columns
+      h5
+        = t "accountSetting"
+    .columns.margin-top20
+      =change-password
+  .box
+    .columns
+        h5
+          = t "integration"
 
-.columns
-  .column.is-one-third
-    = t "githubIntegration"
-    =github-user
-.columns
-  .column.is-one-third
-    = t "jiraIntegration"
-    =jira-user
+    .box.margin-top
+      .columns
+        .column.margin-top
+          = t "githubIntegration"
+          =github-user
+    .box
+      .columns
+        .column.margin-top
+          = t "jiraIntegration"
+          =jira-user
