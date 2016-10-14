@@ -1,5 +1,18 @@
-h3 = pricing.name
-each pricing.descriptionItems as |item|
-  li = item
-button click="makePayment"
-  = totalPricePay
+/ h3 = pricing.name
+/
+/ button click="makePayment"
+/   = totalPricePay
+
+header.card-header
+  p.card-header-title.text-center
+    | #{pricing.name}
+.card-content
+  .content
+    .columns
+      .column
+        each pricing.descriptionItems as |item|
+          table
+            tr
+              = item
+  button.is-fullwidth.is-primary click="makePayment"
+    = totalPricePay
