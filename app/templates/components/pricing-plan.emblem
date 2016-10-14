@@ -1,8 +1,3 @@
-/ h3 = pricing.name
-/
-/ button click="makePayment"
-/   = totalPricePay
-
 header.card-header
   p.card-header-title.text-center
     | #{pricing.name}
