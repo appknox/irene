@@ -1,9 +1,9 @@
-.columns.box
-  .column.is-half
+.columns.settings
+  .column
     =submit-url
-  .column.is-half
+  .column.is-one-third
     =upload-app
 
-.columns
+.columns.settings
   each model as |project|
     =project-overview project=project
