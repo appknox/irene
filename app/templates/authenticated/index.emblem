@@ -1,7 +1,7 @@
-.columns.settings
+.columns.settings.box
   .column
     =submit-url
-  .column.is-one-third
+  .column.is-one-sixth
     =upload-app
 
 .columns.settings
