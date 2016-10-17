@@ -8,18 +8,18 @@
     aside.menu
       ul.menu-list
         li
-          link-to 'authenticated.index'
+          = link-to 'authenticated.index'
             = t "dashboard"
-          link-to 'authenticated.settings'
+          = link-to 'authenticated.settings'
             = t "settings"
-          link-to 'authenticated.pricing'
+          = link-to 'authenticated.pricing'
             = t "pricing"
           a click="invalidateSession"
             = t "logout"
   .column
     .columns
       .column
-        bread-crumbs tagName="nav" crumbClass="breadcrumb-item"
+        = bread-crumbs tagName="nav" crumbClass="breadcrumb-item"
     .columns
       .column
         = outlet
