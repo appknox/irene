@@ -1,4 +1,4 @@
-.columns
+.columns.settings
   .column
     h2
       = t "pricing"

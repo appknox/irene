@@ -1,9 +1,9 @@
 .columns
-  .column.is-one-sixth.margin-top20
-    .columns
+  .column.is-one-sixth.margin-top.side-menu
+    .columns.user-menu
       .column.is-half
         img src=model.gravatar
-      .column.is-half
+      .column.is-half.margin-top
         = model.username
     aside.menu
       ul.menu-list
@@ -17,9 +17,9 @@
           a click="invalidateSession"
             = t "logout"
   .column
-    .columns
+    .columns.breadcrumb-view
       .column
         bread-crumbs tagName="nav" crumbClass="breadcrumb-item"
-    .columns
+    .columns.margin-top
       .column
         = outlet

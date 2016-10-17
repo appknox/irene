@@ -1,10 +1,11 @@
-h4
-  =t "settings"
-.box
-  =github-project
-.box
-  =jira-project
-.box
-  =test-credentials
-.box
-  =collaborator-component model=model
+.settings
+  h4
+    =t "settings"
+  .box
+    =github-project
+  .box
+    =jira-project
+  .box
+    =test-credentials
+  .box
+    =collaborator-component model=model
