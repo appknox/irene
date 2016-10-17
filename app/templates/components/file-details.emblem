@@ -1,6 +1,6 @@
 = file-overview file=file
     footer.card-footer
-      link-to 'authenticated.file' class="card-footer-item"
+      = link-to 'authenticated.file' class="card-footer-item"
         = t "allFiles"
       a.card-footer-item
         = t "pdfReport"
