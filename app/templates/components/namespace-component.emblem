@@ -1,4 +1,4 @@
-button.margin-top20
+button.margin-top20.is-primary
   = t "addNamespace"
 
 = yield

@@ -1,4 +1,4 @@
 .columns
   .column
-     button
+     button.is-primary
       = t "uploadApp"
