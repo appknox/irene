@@ -4,7 +4,7 @@ header.card-header
   p.card-header-title
     | #{file.name}
 .card-content
-  link-to 'authenticated.file' file.id
+  = link-to 'authenticated.file' file.id
     .content
       .columns
         .column.is-one-fourth

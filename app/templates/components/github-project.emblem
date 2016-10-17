@@ -2,7 +2,7 @@ h5
   = t "githubIntegration"
 
 = t "pleaseVisit"
-link-to 'authenticated.settings'
+= link-to 'authenticated.settings'
   = t "userSetting"
 = t "ghPageConfigure"
 

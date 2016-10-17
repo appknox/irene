@@ -14,13 +14,13 @@
             = t "username"
           p.control.has-icon.has-icon-right
             input.input.is-success placeholder="Username" value=identification
-            fa-icon class="is-primary" "user"
+            = fa-icon class="is-primary" "user"
 
           label for="password"
             =  t "password"
           p.control.has-icon.has-icon-right
             input.input.is-success type="password" value=password
-            fa-icon class="is-primary" "lock"
+            = fa-icon class="is-primary" "lock"
 
           p.has-text-right
             a
