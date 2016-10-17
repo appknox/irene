@@ -10,15 +10,18 @@
       if analysis.isRisky
         p = analysis.vulnerability.description
         if analysis.vulnerability.businessImplication
-          h4 Business Implication
+          h4
+            = t "businessImplication"
           p = analysis.vulnerability.businessImplication
         if showVulnerability
-          h4 Vulnerability
+          h4
+            = t "vulnerability"
           each analysis.findings as |finding|
             p = finding.extra_description
             pre = finding.description
         button class="is-fullwidth is-danger" click="toggleVulnerability"
           span
-          | {{showOrHide}} Vulnerability
+            | {{showOrHide}}
+              {{ t "vulnerability"}}
       else
         = analysis.vulnerability.successMessage
