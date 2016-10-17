@@ -19,12 +19,7 @@
   .column
     .columns.breadcrumb-view
       .column
-<<<<<<< HEAD
-        bread-crumbs tagName="nav" crumbClass="breadcrumb-item"
-    .columns.margin-top
-=======
         = bread-crumbs tagName="nav" crumbClass="breadcrumb-item"
-    .columns
->>>>>>> origin/2016-09-29-new-dashboard
+    .columns.margin-top20
       .column
         = outlet
