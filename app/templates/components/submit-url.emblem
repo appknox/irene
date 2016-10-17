@@ -2,5 +2,5 @@
   .column
      = input class="input" value=storeURL type="text" placeholder=(t 'submitYourUrl')
   .column.is-one-third
-     button
+     button.is-primary
       = t "submitUrl"

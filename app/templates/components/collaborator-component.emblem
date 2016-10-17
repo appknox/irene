@@ -1,7 +1,7 @@
 h5
   = t "collaborators"
 
-button
+button.is-primary
   = t "addCollaborators"
 
 .columns.margin-top
