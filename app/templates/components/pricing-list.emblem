@@ -2,13 +2,10 @@
   .column
     h2
       = t "pricing"
-    .columns
+    .columns.align-center
         each durations as |duration|
           button class="js-duration-button" click="selectDuration" data-value=duration.value
             = duration.key
-    .columns
+    .columns.margin-top20
       each pricings as |pricing|
         = pricing-plan pricing=pricing paymentDuration=paymentDuration
-
-  each model as |pricing|
-    =pricing-plan pricing=pricing

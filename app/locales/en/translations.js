@@ -5,7 +5,7 @@ export default {
   "admin": "Admin",
   "addNamespace": "Add Namespace",
   "allFiles": "All Files",
-  "businessImplications": "Business Implications",
+  "businessImplication": "Business Implication",
   "changePassword": "Change Password",
   "collaborators": "Collaborators",
   "compare": "Compare",
@@ -14,7 +14,10 @@ export default {
   "currentPassword": "Current Password",
   "dashboard": "Dashboard",
   "description": "Description",
-  "dynamicScan": "Start Dynamic Scan",
+  "deviceBooting": "Device is booting",
+  "deviceShuttingDown": "Device is shutting down",
+  "dynamicScanStart": "Start Dynamic Scan",
+  "dynamicScanStop": "Stop Dynamic Scan",
   "emailOrUsername": "Email / Username",
   "fileCount": "File Count",
   "files": "Files",
@@ -54,5 +57,6 @@ export default {
   "username": "Username",
   "userSetting": "user's settings",
   "version": "Version",
+  "vulnerability": "Vulnerability",
   "yearly": "YEARLY"
 };
