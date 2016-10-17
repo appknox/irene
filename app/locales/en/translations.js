@@ -5,7 +5,7 @@ export default {
   "admin": "Admin",
   "addNamespace": "Add Namespace",
   "allFiles": "All Files",
-  "businessImplications": "Business Implications",
+  "businessImplication": "Business Implication",
   "changePassword": "Change Password",
   "collaborators": "Collaborators",
   "compare": "Compare",
@@ -54,5 +54,6 @@ export default {
   "username": "Username",
   "userSetting": "user's settings",
   "version": "Version",
+  "vulnerability": "Vulnerability",
   "yearly": "YEARLY"
 };
