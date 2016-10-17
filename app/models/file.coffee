@@ -32,11 +32,11 @@ File = DS.Model.extend BaseModelMixin,
     noRisk = _getAnalysesCount analyses, r.NONE
     unknownRisk = _getAnalysesCount analyses, r.UNKNOWN
     [
-      {"value": highRisk, "color": "red"},
-      {"value": mediumRisk, "color": "yellow"},
-      {"value": lowRisk, "color": "blue"},
-      {"value": noRisk, "color": "green"}
-      {"value": unknownRisk, "color": "black"}
+      {"value": highRisk, "color": "#e22e35"},
+      {"value": mediumRisk, "color": "#fcee21"},
+      {"value": lowRisk, "color": "#6666ff"},
+      {"value": noRisk, "color": "#47c65c"}
+      {"value": unknownRisk, "color": "#b3b3b3"}
     ]
 
 `export default File`
