@@ -1,8 +1,10 @@
 .columns
-  .column.is-one-sixth
-    img src=model.gravatar
-    span
-      = model.username
+  .column.is-one-sixth.margin-top20
+    .columns
+      .column.is-half
+        img src=model.gravatar
+      .column.is-half
+        = model.username
     aside.menu
       ul.menu-list
         li
