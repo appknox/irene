@@ -1,4 +1,4 @@
 .columns
   .column
-     button.is-primary
+     button.is-primary.is-fullwidth
       = t "uploadApp"
