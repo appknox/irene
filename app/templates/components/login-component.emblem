@@ -1,31 +1,30 @@
-.login-container.columns
+.columns.align-center.margin-top20
   .login-wrapper.column.is-half
     .columns
       .column.has-text-centered
-        h3
+        h3.signin-text
+          = t "signin"
+        h6
           = t "greet"
-    .columns
-      .column.is-half
-        figure.image
+    .columns.margin-top20
+      .column.is-half.margin-top20
+        figure.image.login-phone-image
+          img src="images/welcome.png" alt="Mobile application security"
           img src="images/login-phone-graphic.svg" alt="Mobile application security"
       .column
-        form
-          label for="identification"
-            = t "username"
-          p.control.has-icon.has-icon-right
-            input.input.is-success placeholder="Username" value=identification
+        form.login-form
+          p.control.has-icon.has-icon-left
+            input.input.is-success placeholder="USERNAME / EMAIL ID" value=identification
             = fa-icon class="is-primary" "user"
 
-          label for="password"
-            =  t "password"
-          p.control.has-icon.has-icon-right
-            input.input.is-success type="password" value=password
+          p.control.has-icon.has-icon-left.margin-top20
+            input.input.is-success type="password" placeholder="PASSWORD" value=password
             = fa-icon class="is-primary" "lock"
 
-          p.has-text-right
+          p.has-text-right.margin-top20.forgot-password
             a
               = t "forgotPassword"
 
-          p.control
-            button.button.is-primary.is-fullwidth click="authenticate"
+          p.control.margin-top50.align-center
+            button.button.is-primary.is-fullwidth.login-button click="authenticate"
               = t "login"
