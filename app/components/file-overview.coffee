@@ -2,5 +2,5 @@
 
 FileOverviewComponent = Ember.Component.extend
   file: null
-  classNames: ["card", "is-fullwidth"]
+  classNames: ["card","file-card", "is-fullwidth"]
 `export default FileOverviewComponent`
