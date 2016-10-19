@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{upload-app}}"""
 
-  assert.equal @$().text().trim(), 'Upload App'
+  assert.equal @$().text().trim(), 'UPLOAD APP'
