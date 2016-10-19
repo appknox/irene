@@ -23,20 +23,35 @@ File = DS.Model.extend BaseModelMixin,
   analysesSorting: ['risk:desc']
   sortedAnalyses: Ember.computed.sort 'analyses', 'analysesSorting'
 
+  countRiskHigh: 0
+  countRiskMedium: 0
+  countRiskLow: 0
+  countRiskNone: 0
+  countRiskUnknown: 0
+  totalVulnerability: 0
+
   pieChartData: Ember.computed 'analyses.@each.risk', ->
     analyses = @get "analyses"
     r = ENUMS.RISK
-    highRisk = _getAnalysesCount analyses, r.HIGH
-    mediumRisk = _getAnalysesCount analyses, r.MEDIUM
-    lowRisk = _getAnalysesCount analyses, r.LOW
-    noRisk = _getAnalysesCount analyses, r.NONE
-    unknownRisk = _getAnalysesCount analyses, r.UNKNOWN
+    countRiskHigh = _getAnalysesCount analyses, r.HIGH
+    countRiskMedium = _getAnalysesCount analyses, r.MEDIUM
+    countRiskLow = _getAnalysesCount analyses, r.LOW
+    countRiskNone = _getAnalysesCount analyses, r.NONE
+    countRiskUnknown = _getAnalysesCount analyses, r.UNKNOWN
+    totalVulnerability= countRiskHigh + countRiskMedium
+
+    @set "countRiskHigh", countRiskHigh
+    @set "countRiskMedium", countRiskMedium
+    @set "countRiskLow", countRiskLow
+    @set "countRiskNone", countRiskNone
+    @set "countRiskUnknown", countRiskUnknown
+    @set "totalVulnerability", totalVulnerability
     [
-      {"value": highRisk, "color": "#e22e35"},
-      {"value": mediumRisk, "color": "#fcee21"},
-      {"value": lowRisk, "color": "#6666ff"},
-      {"value": noRisk, "color": "#47c65c"}
-      {"value": unknownRisk, "color": "#b3b3b3"}
+      {"value": countRiskHigh, "color": "#e22e35"},
+      {"value": countRiskMedium, "color": "#fcee21"},
+      {"value": countRiskLow, "color": "#6666ff"},
+      {"value": countRiskNone, "color": "#47c65c"}
+      {"value": countRiskUnknown, "color": "#b3b3b3"}
     ]
 
 `export default File`
