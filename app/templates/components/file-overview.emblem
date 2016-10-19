@@ -1,23 +1,48 @@
 header.card-header
-  a.card-header-icon
+  a.card-header-icon.file-icon
     img src=file.iconUrl alt=file.name
   p.card-header-title
-    | #{file.name}
+    ul
+      li
+        h5
+          | #{file.name}
+      li
+        / = t "created"
+        / | : #{file.project.createdOn}
+        | 02/06/16 14:23
 .card-content
   = link-to 'authenticated.file' file.id
     .content
-      .columns
-        .column.is-one-fourth
-          = pie-chart data=file.pieChartData height=100 width=100
+      .columns.color-black
         .column
+          = t "package"
+          | : #{file.project.packageName}
+        .column.is-one-third
+          = t "version"
+          | : #{file.project.id}
+      .columns
+        .column.is-one-fourth.margin-top20
+          = pie-chart data=file.pieChartData height=100 width=100
+        .column.margin-top20.color-grey.text-center
           ul
             li
-              = t "package"
-              | : #{file.project.packageName}
+              = t "vulnerabilities"
+              | : #{file.totalVulnerability}
             li
-              = t "version"
-              | : #{file.project.id}
+              = t "high"
+              | : #{file.countRiskHigh}
             li
-              = t "created"
-              | : #{file.project.createdOn}
+              = t "medium"
+              | : #{file.countRiskMedium}
+            li.grey-font
+              = t "low"
+              | : #{file.countRiskLow}
+            li.grey-font
+              = t "none"
+              | : #{file.countRiskNone}
+            li.grey-font
+              = t "unknown"
+              | : #{file.countRiskUnknown}
+
+
 = yield

@@ -1,10 +1,15 @@
-.columns.settings.box
-  .column
-    =submit-url
-  .border-left
-  .column.is-one-quarter
-    =upload-app
+.grey-background
+  .columns.settings
+    .column
+      .red-font
+        | NEW SCAN
+      .margin-top
+        =submit-url
+    .margin-top35.grey-font
+      | OR
+    .column.margin-top20.margin-left30
+      =upload-app
 
-.columns.settings
+.columns.settings.margin-top20
   each model as |project|
     =project-overview project=project
