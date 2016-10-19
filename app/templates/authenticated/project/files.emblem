@@ -1,4 +1,4 @@
-.columns
+.columns.settings
   each model as |file|
-    .column.is-one-third.settings
+    .column.is-one-third
       = file-overview file=file
