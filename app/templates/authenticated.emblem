@@ -1,12 +1,12 @@
 .columns
-  .column.is-one-sixth.margin-top.side-menu
+  .column.is-one-sixth.side-menu
     .columns.user-menu
-      .column.is-half
+      .column.is-half.margin-top.menu-image
         img src=model.gravatar
-      .column.is-half.margin-top
+      .column.is-half.margin-top20.menu-user
         = model.username
     aside.menu
-      ul.menu-list.text-center.boh-menu-list
+      ul.menu-list.text-center.boh-menu-list.margin-top35.text-capitalize
         li
           = link-to 'authenticated.index'
             = t "dashboard"
