@@ -1,4 +1,4 @@
-p.notification.is-danger
+button.is-danger.is-fullwidth
   = t "dynamicScanStart"
 
 = yield
