@@ -23,26 +23,31 @@ header.card-header
       .columns
         .column.is-one-fourth.margin-top20
           = pie-chart data=file.pieChartData height=100 width=100
-        .column.margin-top20.color-grey.text-center
+        .column.margin-top20.text-center
           ul
             li
               = t "vulnerabilities"
               | : #{file.totalVulnerability}
+            li.high-risk
+              span.color-grey
+                = t "high"
+                | : #{file.countRiskHigh}
+            li.med-risk
+              span.color-grey
+                = t "medium"
+                | : #{file.countRiskMedium}
+            li.low-risk
+              span.grey-font
+                = t "low"
+                | : #{file.countRiskLow}
             li
-              = t "high"
-              | : #{file.countRiskHigh}
+              span.grey-font
+                = t "none"
+                | : #{file.countRiskNone}
             li
-              = t "medium"
-              | : #{file.countRiskMedium}
-            li.grey-font
-              = t "low"
-              | : #{file.countRiskLow}
-            li.grey-font
-              = t "none"
-              | : #{file.countRiskNone}
-            li.grey-font
-              = t "unknown"
-              | : #{file.countRiskUnknown}
+              span.grey-font
+                = t "unknown"
+                | : #{file.countRiskUnknown}
 
 
 = yield

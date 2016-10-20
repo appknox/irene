@@ -7,6 +7,21 @@ $FreestyleGuide-color--background: $background
 @import 'ember-freestyle'
 
 
+.list-style
+  list-style: square
+
+.high-risk
+  @extend .list-style
+  color: #e22e35
+
+.med-risk
+  @extend .list-style
+  color: #fcee21
+
+.low-risk
+  @extend .list-style
+  color: #6666ff
+
 .flex-center
   justify-content: center
   align-items: center
