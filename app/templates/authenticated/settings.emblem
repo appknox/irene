@@ -1,24 +1,28 @@
 .margin-left30
   .columns
     .column
-      h4
+      h4.color-black
         = t "changePassword"
-  .columns.margin-top20.margin-left0
+  .columns.margin-top20.margin-left0.text-color-grey
     =change-password
+
+  .boh-horizontal-line
 
   .columns.margin-top20
     .column.is-one-third
-      h4
+      h4.color-black
         = t "namespace"
     .column.is-one-third
       =namespace-component
 
+  .boh-horizontal-line
+
   .columns.margin-top20
     .column
-      h4
+      h4.color-black
         = t "integration"
 
-  .columns
+  .columns.text-color-grey
     .column.margin-top.is-one-third
       = t "jiraIntegration"
       =jira-user
