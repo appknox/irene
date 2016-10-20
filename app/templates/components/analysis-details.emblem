@@ -1,7 +1,10 @@
 .message-header class=progressClass
-    = analysis.vulnerability.name
-    each analysis.vulnerability.tags as |tag|
-      span.tag = tag
+    .columns
+      .column
+        = analysis.vulnerability.name
+      .column.is-one-third.margin-right-40
+        each analysis.vulnerability.tags as |tag|
+          span.tag = tag
 
 .message-body
     if analysis.isScanning
