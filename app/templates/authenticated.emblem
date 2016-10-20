@@ -6,7 +6,7 @@
       .column.is-half.margin-top20.menu-user
         = model.username
     aside.menu
-      ul.menu-list.text-center.boh-menu-list.margin-top35.text-capitalize
+      ul.menu-list.text-center.boh-menu-list.margin-top35
         li
           = link-to 'authenticated.index'
             = t "dashboard"

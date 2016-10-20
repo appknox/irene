@@ -40,11 +40,11 @@ header.card-header
               span.grey-font
                 = t "low"
                 | : #{file.countRiskLow}
-            li
+            li.none-risk
               span.grey-font
                 = t "none"
                 | : #{file.countRiskNone}
-            li
+            li.unknown-risk
               span.grey-font
                 = t "unknown"
                 | : #{file.countRiskUnknown}
