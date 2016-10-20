@@ -25,7 +25,7 @@ header.card-header
           = pie-chart data=file.pieChartData height=100 width=100
         .column.margin-top20.text-center
           ul
-            li
+            li.color-grey
               = t "vulnerabilities"
               | : #{file.totalVulnerability}
             li.high-risk
