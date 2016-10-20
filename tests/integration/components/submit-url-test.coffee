@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{submit-url}}"""
 
-  assert.equal @$().text().trim(), 'SUBMIT'
+  assert.equal @$().text().trim(), 'Submit'
