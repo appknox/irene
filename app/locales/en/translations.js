@@ -1,6 +1,5 @@
 export default {
   "account": "Account",
-  "accountSetting": "Account Setting",
   "addCollaborators": "Add Collaborator",
   "admin": "Admin",
   "addNamespace": "Add Namespace",
