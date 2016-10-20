@@ -5,7 +5,7 @@
         | NEW SCAN
       .margin-top
         =submit-url
-    .margin-top35.grey-font
+    .margin-top35.grey-font.settings
       | OR
     .column.margin-top20.margin-left30
       =upload-app

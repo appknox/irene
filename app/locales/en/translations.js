@@ -54,7 +54,7 @@ export default {
   "settings": "Settings",
   "signin": "Sign In",
   "submitUrl": "SUBMIT",
-  "pasteYourUrl": "Paste store URL",
+  "pasteYourUrl": "Paste Android/ Windows store URL",
   "sync": "Sync More",
   "testCredentials": "Test Credentials",
   "unknown": "Unknown",
