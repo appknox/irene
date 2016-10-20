@@ -16,7 +16,7 @@
             = t "pricing"
           a click="invalidateSession"
             = t "logout"
-  .column
+  .column.lightgrey-background
     .columns.breadcrumb-view
       .column
         = bread-crumbs tagName="nav" crumbClass="breadcrumb-item"
