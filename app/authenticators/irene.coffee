@@ -15,6 +15,10 @@ IreneAuthenticator = Base.extend
   session: Ember.inject.service()
   ajax: Ember.inject.service()
 
+  transitionTo: (route)->
+    applicationRoute = Ember.getOwner(@).lookup("route:application")
+    applicationRoute.transitionTo route
+
   authenticate: (identification, password) ->
     ajax = @get "ajax"
     session = @get "session"
@@ -30,6 +34,7 @@ IreneAuthenticator = Base.extend
         b64token = getB64Token data.user, data.token
         session.set 'data.b64token', b64token
         resolve data
+        that.transitionTo ENV['ember-simple-auth']["routeAfterAuthentication"]
       .catch (reason) ->
         alert reason
         reject reason
@@ -45,6 +50,7 @@ IreneAuthenticator = Base.extend
         b64token = getB64Token data.user, data.token
         session.set 'data.b64token', b64token
         resolve data
+        that.transitionTo ENV['ember-simple-auth']["routeIfAlreadyAuthenticated"]
       .catch (reason)->
         alert reason
         localStorage.clear()
@@ -64,7 +70,6 @@ IreneAuthenticator = Base.extend
         alert reason
         reject reason
         location.reload()
-
 
 
 `export default IreneAuthenticator;`
