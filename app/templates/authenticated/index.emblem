@@ -1,5 +1,5 @@
-.grey-background
-  .columns.settings
+.main-container
+  .columns.submission-view
     .column
       .red-font
         | NEW SCAN
