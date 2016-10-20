@@ -20,7 +20,7 @@
     .columns.breadcrumb-view
       .column.is-one-third
         = bread-crumbs tagName="nav" crumbClass="breadcrumb-item"
-      .column.appknox-logo.margin-top
+      .column.appknox-logo
           img src="images/logo.png"
     .columns.margin-top20
       .column
