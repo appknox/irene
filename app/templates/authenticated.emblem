@@ -18,8 +18,10 @@
             = t "logout"
   .column.lightgrey-background
     .columns.breadcrumb-view
-      .column
+      .column.is-one-third
         = bread-crumbs tagName="nav" crumbClass="breadcrumb-item"
+      .column.appknox-logo.margin-top
+          img src="images/logo.png"
     .columns.margin-top20
       .column
         = outlet
