@@ -14,16 +14,16 @@ header.card-header
   = link-to 'authenticated.file' file.id
     .content
       .columns.color-black
-        .column
+        .column.is-half align="center"
           = t "package"
           | : #{file.project.packageName}
-        .column.is-one-third
+        .column.is-half.text-center align="left"
           = t "version"
           | : #{file.project.id}
       .columns
-        .column.is-one-fourth.margin-top20
+        .column.is-half.margin-top20 align="center"
           = pie-chart data=file.pieChartData height=100 width=100
-        .column.margin-top20.text-center
+        .column.is-half.margin-top20.text-center align="left"
           ul
             li.color-grey
               = t "vulnerabilities"
