@@ -3,6 +3,12 @@
 `import ENUMS from 'irene/enums'`
 `import Ember from 'ember'`
 
+_getComputedColor = (selector) ->
+  el = document.querySelector "#hiddencolorholder .is-#{selector}"
+  computedStyle = window.getComputedStyle el
+  computedStyle.getPropertyValue "color"
+
+
 _getAnalysesCount = (analyses, risk)->
   analyses.filterBy('risk', risk).get('length')
 
@@ -47,11 +53,11 @@ File = DS.Model.extend BaseModelMixin,
     @set "countRiskUnknown", countRiskUnknown
     @set "totalVulnerability", totalVulnerability
     [
-      {"value": countRiskHigh, "color": "#e22e35"},
-      {"value": countRiskMedium, "color": "#fcee21"},
-      {"value": countRiskLow, "color": "#6666ff"},
-      {"value": countRiskNone, "color": "#47c65c"}
-      {"value": countRiskUnknown, "color": "#b3b3b3"}
+      {"value": countRiskHigh, "color": _getComputedColor "danger"},
+      {"value": countRiskMedium, "color": _getComputedColor "warning"},
+      {"value": countRiskLow, "color": _getComputedColor "info"},
+      {"value": countRiskNone, "color": _getComputedColor "success"}
+      {"value": countRiskUnknown, "color": _getComputedColor "default"}
     ]
 
 `export default File`
