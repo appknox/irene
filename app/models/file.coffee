@@ -34,7 +34,6 @@ File = DS.Model.extend BaseModelMixin,
   countRiskLow: 0
   countRiskNone: 0
   countRiskUnknown: 0
-  totalVulnerability: 0
 
   pieChartData: Ember.computed 'analyses.@each.risk', ->
     analyses = @get "analyses"
@@ -44,14 +43,12 @@ File = DS.Model.extend BaseModelMixin,
     countRiskLow = _getAnalysesCount analyses, r.LOW
     countRiskNone = _getAnalysesCount analyses, r.NONE
     countRiskUnknown = _getAnalysesCount analyses, r.UNKNOWN
-    totalVulnerability= countRiskHigh + countRiskMedium
 
     @set "countRiskHigh", countRiskHigh
     @set "countRiskMedium", countRiskMedium
     @set "countRiskLow", countRiskLow
     @set "countRiskNone", countRiskNone
     @set "countRiskUnknown", countRiskUnknown
-    @set "totalVulnerability", totalVulnerability
     [
       {"value": countRiskHigh, "color": _getComputedColor "danger"},
       {"value": countRiskMedium, "color": _getComputedColor "warning"},

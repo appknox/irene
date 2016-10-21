@@ -25,29 +25,21 @@ header.card-header
           = pie-chart data=file.pieChartData height=100 width=100
         .column.is-half.margin-top20.text-center align="left"
           ul
-            li.color-grey
-              = t "vulnerabilities"
-              | : #{file.totalVulnerability}
-            li.high-risk
-              span.color-grey
-                = t "high"
-                | : #{file.countRiskHigh}
-            li.med-risk
-              span.color-grey
-                = t "medium"
-                | : #{file.countRiskMedium}
-            li.low-risk
-              span.grey-font
-                = t "low"
-                | : #{file.countRiskLow}
-            li.none-risk
-              span.grey-font
-                = t "none"
-                | : #{file.countRiskNone}
-            li.unknown-risk
-              span.grey-font
-                = t "unknown"
-                | : #{file.countRiskUnknown}
+            li.is-danger
+              = t "high"
+              | : #{file.countRiskHigh}
+            li.is-warning
+              = t "medium"
+              | : #{file.countRiskMedium}
+            li.is-info
+              = t "low"
+              | : #{file.countRiskLow}
+            li.is-success
+              = t "none"
+              | : #{file.countRiskNone}
+            li.is-default
+              = t "unknown"
+              | : #{file.countRiskUnknown}
 
 
 = yield
