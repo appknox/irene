@@ -22,7 +22,7 @@ header.card-header
           | : #{file.project.id}
       .columns
         .column.is-half.margin-top20 align="center"
-          = pie-chart data=file.pieChartData height=100 width=100
+          = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
         .column.is-half.margin-top20.text-center align="left"
           ul
             li.is-danger
