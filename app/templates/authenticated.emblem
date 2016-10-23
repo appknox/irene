@@ -15,10 +15,13 @@
         li
           = link-to 'authenticated.index'
             = t "dashboard"
+        li
           = link-to 'authenticated.settings'
             = t "settings"
+        li
           = link-to 'authenticated.pricing'
             = t "pricing"
+        li
           a click="invalidateSession"
             = t "logout"
   .column.margin-right
