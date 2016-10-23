@@ -1,5 +1,6 @@
 .columns.upper-nav
-  .column.is-one-sixth.appknox-logo.flex-center
+  .column.is-one-sixth.appknox-logo
+    .has-text-centered
       img src="images/logo.png"
   .column
     = bread-crumbs tagName="nav" crumbClass="breadcrumb-item"
