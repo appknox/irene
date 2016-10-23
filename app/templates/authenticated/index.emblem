@@ -1,4 +1,4 @@
-.main-container
+.main-container.box.margin-top20
   .columns.submission-view
     .column
       .red-font
