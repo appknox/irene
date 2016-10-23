@@ -11,7 +11,7 @@ export default {
   "confirmPassword": "Confirm Password",
   "created": "Created",
   "currentPassword": "Current Password",
-  "dashboard": "Dashboard",
+  "dashboard": "Home",
   "description": "Description",
   "deviceBooting": "Device is booting",
   "deviceShuttingDown": "Device is shutting down",
