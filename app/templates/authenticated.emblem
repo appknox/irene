@@ -1,16 +1,11 @@
 .columns
   .column.is-one-sixth
-    .columns
-      .column.is-half.margin-top.menu-image
-        img src=model.gravatar
-      .column.is-half.margin-top20.menu-user
-        = model.username
-  .column.lightgrey-background
-    .columns.breadcrumb-view
-      .column.is-one-third
-        = bread-crumbs tagName="nav" crumbClass="breadcrumb-item"
-      .column.appknox-logo
-          img src="images/logo.png"
+      img src="images/logo.png"
+  .column
+    = bread-crumbs tagName="nav" crumbClass="breadcrumb-item"
+  .column.is-one-sixth.current-user
+    img src=model.gravatar
+    = model.username
 
 .columns
   .column.is-one-sixth.side-menu
