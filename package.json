@@ -19,6 +19,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "bohemia": "0.4.10",
     "broccoli-asset-rev": "^2.4.2",
     "ember-ajax": "2.5.2",
     "ember-cli": "2.8.0",
