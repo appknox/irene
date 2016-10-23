@@ -1,4 +1,4 @@
 .columns.settings.margin-top
   =file-details file=model
-  .column.is-one-third
+  .column.is-one-third.margin-right
     =vnc-viewer
