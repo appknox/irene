@@ -64,5 +64,6 @@ export default {
   "version": "Version",
   "vulnerability": "Vulnerability",
   "vulnerabilities": "Vulnerabilities",
-  "yearly": "Yearly"
+  "yearly": "Yearly",
+  "welcome": "Welcome "
 };
