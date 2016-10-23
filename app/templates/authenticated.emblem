@@ -5,7 +5,7 @@
   .column
     = bread-crumbs tagName="nav" crumbClass="breadcrumb-item"
   .column.is-one-sixth.current-user
-    img src=model.gravatar
+    = t "welcome"
     = model.username
 
 .columns
