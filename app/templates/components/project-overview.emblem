@@ -1,6 +1,5 @@
 = file-overview file=project.lastFile
   footer.card-footer
-
     = link-to 'authenticated.project.files' project.id class="card-footer-item"
       = t "allFiles"
     = link-to 'authenticated.project.settings' project.id class="card-footer-item"

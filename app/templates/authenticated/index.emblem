@@ -1,6 +1,6 @@
 .box
   .columns
-    .column.text-center
+    .column
       h5 New Scan
   .columns
     .column

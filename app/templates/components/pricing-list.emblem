@@ -1,11 +1,11 @@
-.columns.settings.margin-both.margin-top20
+.columns
   .column
     h2
       = t "pricing"
-    .columns.align-center
+    .columns.flex-center
         each durations as |duration|
           button.js-duration-button.is-primary click="selectDuration" data-value=duration.value
             = duration.key
-    .columns.margin-top20
+    .columns
       each pricings as |pricing|
         = pricing-plan pricing=pricing paymentDuration=paymentDuration

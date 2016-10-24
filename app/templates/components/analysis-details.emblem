@@ -2,7 +2,7 @@
     .columns
       .column
         = analysis.vulnerability.name
-      .column.is-one-third.margin-right-40
+      .column.is-one-third.content-right
         each analysis.vulnerability.tags as |tag|
           span.tag = tag
 

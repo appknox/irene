@@ -1,5 +1,6 @@
 `import Ember from 'ember'`
 
-CollaboratorDetailsComponent = Ember.Component.extend()
+CollaboratorDetailsComponent = Ember.Component.extend
+  classNames: ["box"]
 
 `export default CollaboratorDetailsComponent`

@@ -1,19 +1,18 @@
-.margin-top20
-  label
-    = t "jiraHost"
-  br
-  input type="text"
-  br
-  label
-    = t "username"
-  br
-  input type="text"
-  br
-  label
-    = t "password"
-  br
-  input type="password"
-  br
-  button.margin-top.is-primary
-    = t "integrateJIRA"
-  = yield
+label
+  = t "jiraHost"
+br
+input type="text"
+br
+label
+  = t "username"
+br
+input type="text"
+br
+label
+  = t "password"
+br
+input type="password"
+br
+button.is-primary
+  = t "integrateJIRA"
+= yield
