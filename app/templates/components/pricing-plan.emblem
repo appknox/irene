@@ -1,5 +1,5 @@
 header.card-header
-  p.card-header-title.text-center
+  p.card-header-title.flex-center
     | #{pricing.name}
 .card-content
   .content

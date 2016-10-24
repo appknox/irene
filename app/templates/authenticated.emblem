@@ -11,7 +11,7 @@
 .columns
   .column.is-one-sixth.side-menu
     aside.menu
-      ul.menu-list.text-center.boh-menu-list.margin-top35
+      ul.menu-list.text-center
         li
           = link-to 'authenticated.index'
             = t "dashboard"

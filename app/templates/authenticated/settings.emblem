@@ -1,26 +1,21 @@
-.margin-both
-  .columns.margin-top20.margin-left0.text-color-grey.box
-    h4.color-black.is-fullwidth
-      = t "changePassword"
-    =change-password
+.box
+  h4.is-fullwidth
+    = t "changePassword"
+  =change-password
 
-  .boh-horizontal-line
+.box
+  .column.is-one-third
+    h4
+      = t "namespace"
+  .column.is-one-third
+    =namespace-component
 
-  .columns.margin-top20.box.margin-left0
-    .column.is-one-third
-      h4.color-black
-        = t "namespace"
-    .column.is-one-third
-      =namespace-component
-
-  .boh-horizontal-line
-
-  .columns.text-color-grey.box.margin-left0
-    h4.color-black.is-fullwidth
-      = t "integration"
-    .column.margin-top.is-one-third
-      = t "jiraIntegration"
-      =jira-user
-    .column.margin-top.is-one-third
-      = t "githubIntegration"
-      =github-user
+.box
+  h4.is-fullwidth
+    = t "integration"
+  .column.is-one-third
+    = t "jiraIntegration"
+    =jira-user
+  .column.is-one-third
+    = t "githubIntegration"
+    =github-user

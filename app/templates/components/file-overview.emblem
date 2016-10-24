@@ -1,5 +1,5 @@
 header.card-header
-  a.card-header-icon.file-icon
+  a.card-header-icon
     img src=file.iconUrl alt=file.name
   p.card-header-title
     ul
@@ -13,17 +13,17 @@ header.card-header
 .card-content
   = link-to 'authenticated.file' file.id
     .content
-      .columns.color-black
-        .column.is-half align="center"
+      .columns
+        .column.is-half
           = t "package"
           | : #{file.project.packageName}
-        .column.is-half.text-center align="left"
+        .column.is-half.flex-center
           = t "version"
           | : #{file.project.id}
       .columns
-        .column.is-half.margin-top20 align="center"
+        .column.is-half
           = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
-        .column.is-half.margin-top20.text-center align="left"
+        .column.is-half.flex-center
           ul
             li.is-danger
               = t "high"

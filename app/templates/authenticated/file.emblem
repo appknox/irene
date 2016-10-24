@@ -1,4 +1,4 @@
-.columns.settings.margin-top
+.columns
   =file-details file=model
   .column.is-one-third
     =vnc-viewer

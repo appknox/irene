@@ -1,4 +1,4 @@
-.columns.align-center.margin-top20
+.columns.flex-center
   .login-wrapper.column.is-half
     .columns
       .column.has-text-centered
@@ -6,8 +6,8 @@
           = t "signin"
         h6
           = t "greet"
-    .columns.margin-top20
-      .column.is-half.margin-top20
+    .columns
+      .column.is-half
         figure.image.login-phone-image
           img src="images/welcome.png" alt="Mobile application security"
           img src="images/login-phone-graphic.svg" alt="Mobile application security"
@@ -17,14 +17,14 @@
             = input class="input" placeholder=(t 'username') value=identification
             = fa-icon class="is-primary" "user"
 
-          p.control.has-icon.has-icon-left.margin-top20
+          p.control.has-icon.has-icon-left
             = input class="input" type="password" placeholder=(t 'password') value=password
             = fa-icon class="is-primary" "lock"
 
-          p.has-text-right.margin-top20.forgot-password
+          p.has-text-right.forgot-password
             a
               = t "forgotPassword"
 
-          p.control.margin-top50.align-center
+          p.control.flex-center
             button.button.is-primary.is-fullwidth.login-button click="authenticate"
               = t "login"
