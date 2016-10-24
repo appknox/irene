@@ -1,14 +1,14 @@
-label
+label for="jiraHost"
   = t "jiraHost"
-input type="text"
+input type="text" name="jiraHost"
 
-label
+label for="username"
   = t "username"
-input type="text"
+input type="text" name="username"
 
-label
+label for="password"
   = t "password"
-input type="password"
+input type="password" name="password"
 
 button.is-primary
   = t "integrateJIRA"

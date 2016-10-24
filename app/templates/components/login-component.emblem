@@ -14,11 +14,11 @@
       .column
         form.login-form
           p.control.has-icon.has-icon-left
-            = input class="input" placeholder=(t 'username') value=identification
+            = input class="input" placeholder=(t 'username') value=identification name="username"
             = fa-icon class="is-primary" "user"
 
           p.control.has-icon.has-icon-left
-            = input class="input" type="password" placeholder=(t 'password') value=password
+            = input class="input" type="password" placeholder=(t 'password') value=password name="password"
             = fa-icon class="is-primary" "lock"
 
           p.has-text-right.forgot-password
