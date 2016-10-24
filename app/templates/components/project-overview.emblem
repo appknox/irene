@@ -1,8 +1,8 @@
 = file-overview file=project.lastFile
   footer.card-footer
-    = link-to 'authenticated.project.files' project.id class="card-footer-item"
+    = link-to 'authenticated.project.files' project.id class="card-footer-item" tagName="button"
       = t "allFiles"
-    = link-to 'authenticated.project.settings' project.id class="card-footer-item"
+    = link-to 'authenticated.project.settings' project.id class="card-footer-item" tagName="button"
       = t "settings"
-    = link-to 'authenticated.choose' project.id class="card-footer-item"
+    = link-to 'authenticated.choose' project.id class="card-footer-item" tagName="button"
       = t "compare"
