@@ -22,7 +22,7 @@
           each analysis.findings as |finding|
             p = finding.extra_description
             pre = finding.description
-        button class="is-fullwidth is-danger" click="toggleVulnerability"
+        button class="is-fullwidth is-default" click="toggleVulnerability"
           span
             | {{showOrHide}}
               {{ t "vulnerability"}}
