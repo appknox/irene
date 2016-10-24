@@ -1,4 +1,4 @@
-.columns.settings
+.columns.settings.margin-both.margin-top20
   .column
     h2
       = t "pricing"
