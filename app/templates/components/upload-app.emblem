@@ -1,4 +1,6 @@
 .columns
+  .column.is-one-sixth
+    | or
   .column
-     button.button-size
+     button.is-primary.is-fullwidth
       = t "uploadApp"
