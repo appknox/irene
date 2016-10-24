@@ -1,4 +1,4 @@
-.margin-left30
+.margin-both
   .columns.margin-top20.margin-left0.text-color-grey.box
     h4.color-black.is-fullwidth
       = t "changePassword"
@@ -6,7 +6,7 @@
 
   .boh-horizontal-line
 
-  .columns.margin-top20.box
+  .columns.margin-top20.box.margin-left0
     .column.is-one-third
       h4.color-black
         = t "namespace"
@@ -15,7 +15,7 @@
 
   .boh-horizontal-line
 
-  .columns.text-color-grey.box
+  .columns.text-color-grey.box.margin-left0
     h4.color-black.is-fullwidth
       = t "integration"
     .column.margin-top.is-one-third
