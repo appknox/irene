@@ -2,7 +2,7 @@
   .column.is-one-sixth.appknox-logo
     .has-text-centered
       img src="images/logo.png"
-  .column.current-user
+  .column.current-user.content-right
     = t "welcome"
     = model.username
 
