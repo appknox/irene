@@ -210,15 +210,6 @@
                       = fa-icon "film"
                     span Film
 
-    = freestyle-subsection name='Breadcrumb' section=section
-      = freestyle-usage 'breadcrumb'
-        .columns
-          .column.is-half
-            nav.breadcrumb
-              a.breadcrumb-item Home
-              a.breadcrumb-item Library
-              a.breadcrumb-item Data
-
 
     = freestyle-subsection name='Section & Footer' section=section
       = freestyle-usage 'section-footer'
