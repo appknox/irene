@@ -1,18 +1,15 @@
 label
   = t "jiraHost"
-br
 input type="text"
-br
+
 label
   = t "username"
-br
 input type="text"
-br
+
 label
   = t "password"
-br
 input type="password"
-br
+
 button.is-primary
   = t "integrateJIRA"
 = yield
