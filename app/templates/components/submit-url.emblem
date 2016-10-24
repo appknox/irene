@@ -1,6 +1,6 @@
 .columns
   .column
-     = input class="input" value=storeURL type="text" placeholder=(t 'pasteYourUrl') name="storeURL"
+     = input class="input" value=storeURL type="text" placeholder=(t 'pasteYourUrl') id="storeURL"
   .column.is-one-quarter
      button.is-primary.is-fullwidth
       = t "submitUrl"
