@@ -4,18 +4,20 @@
   =change-password
 
 .box
-  .column.is-one-third
-    h4
-      = t "namespace"
-  .column.is-one-third
-    =namespace-component
+  .columns
+    .column.is-one-third
+      h4
+        = t "namespace"
+    .column.is-one-third
+      =namespace-component
 
 .box
   h4.is-fullwidth
     = t "integration"
-  .column.is-one-third
-    = t "jiraIntegration"
-    =jira-user
-  .column.is-one-third
-    = t "githubIntegration"
-    =github-user
+  .columns
+    .column.is-one-third
+      = t "jiraIntegration"
+      =jira-user
+    .column.is-one-third
+      = t "githubIntegration"
+      =github-user
