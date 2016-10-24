@@ -1,5 +1,5 @@
 .columns
-  .column.is-one-sixth
+  .column.is-one-sixth.margin-top5.has-text-centered
     | or
   .column
      button.is-primary.is-fullwidth
