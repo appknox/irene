@@ -6,5 +6,5 @@ button.is-primary
 
 .columns
   each model as |collaborator|
-    .column.is-one.third
+    .column.is-one-sixth
       = collaborator-details user=collaborator
