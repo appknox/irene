@@ -1,15 +1,13 @@
-.main-container.box.margin-top20
-  .columns.submission-view
+.box
+  .columns
+    .column.text-center
+      h5 New Scan
+  .columns
     .column
-      .red-font
-        | NEW SCAN
-      .margin-top
-        =submit-url
-    .margin-top35.grey-font.settings
-      | OR
-    .column.margin-top20.margin-left30
+      = submit-url
+    .column.is-one-quarter
       =upload-app
 
-.columns.settings.margin-top20
+.columns
   each model as |project|
     =project-overview project=project

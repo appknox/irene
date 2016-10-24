@@ -53,7 +53,7 @@ export default {
   "saveCredentials": "Save Credentials",
   "settings": "Settings",
   "signin": "Sign In",
-  "submitUrl": "Submit",
+  "submitUrl": "Submit URL",
   "pasteYourUrl": "Paste Android/ Windows store URL",
   "sync": "Sync More",
   "testCredentials": "Test Credentials",
