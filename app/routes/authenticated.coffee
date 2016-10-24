@@ -4,7 +4,6 @@
 {inject: {service}, isEmpty, RSVP} = Ember
 
 AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
-  breadCrumb: null
   session: service 'session'
 
   model: ->
