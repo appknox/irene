@@ -73,8 +73,13 @@ $FreestyleGuide-color--background: $background
   width: 100%
 
 // FIXME: Remove this after updating bohemia
-.menu-list a
-  padding: 5px 45px
+.menu-list
+  a
+    font-weight: bold
+    &:hover
+      font-weight: bolder
+    &.is-active
+      font-weight: bolder
 
 .card-header
   .pricing-title
