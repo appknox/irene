@@ -2,10 +2,11 @@
   .column
     h2
       = t "pricing"
-    .columns.flex-center
-        each durations as |duration|
-          button.js-duration-button.is-primary click="selectDuration" data-value=duration.value
-            = duration.key
-    .columns
-      each pricings as |pricing|
-        = pricing-plan pricing=pricing paymentDuration=paymentDuration
+.columns
+  .column.flex-center
+    each durations as |duration|
+      button.js-duration-button.is-primary click="selectDuration" data-value=duration.value
+        = duration.key
+.columns
+  each pricings as |pricing|
+    = pricing-plan pricing=pricing paymentDuration=paymentDuration
