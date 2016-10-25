@@ -3,7 +3,8 @@ h5
 
 = t "pleaseVisit"
 = link-to 'authenticated.settings'
-  = t "userSetting"
+  span
+    = t "userSetting"
 = t "ghPageConfigure"
 
 = yield
