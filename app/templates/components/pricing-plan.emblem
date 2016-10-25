@@ -1,14 +1,10 @@
-.card.is-fullwidth
-  header.card-header
-    p.card-header-title.pricing-title
+table
+  tr
+    th.flex-center
       | #{pricing.name}
-  .card-content
-    .content
-      .columns
-        .column
-          each pricing.descriptionItems as |item|
-            table
-              tr
-                = item
-    button.is-fullwidth.is-primary click="makePayment"
-      = totalPricePay
+  tr
+    each pricing.descriptionItems as |item|
+      td.flex-center
+        = item
+  button.is-fullwidth.is-primary click="makePayment"
+    = totalPricePay
