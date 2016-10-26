@@ -1,3 +1,4 @@
 .columns
-  .column.is-one-third
-    = file-overview file=model
+  each model.otherFilesInTheProject as |file|
+    .column.is-one-third
+      = file-overview file=file fileOld=model redirectTo="authenticated.compare"
