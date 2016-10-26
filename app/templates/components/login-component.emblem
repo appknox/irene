@@ -11,14 +11,14 @@
         figure.image.login-phone-image
           img src="images/welcome.png" alt="Mobile application security"
           img src="images/login-phone-graphic.svg" alt="Mobile application security"
-      .column
+      .column.flex-center
         form.login-form
           p.control.has-icon.has-icon-left
-            = input class="input" placeholder=(t 'username') value=identification
+            = input class="input" placeholder=(t 'username') value=identification id="username"
             = fa-icon class="is-primary" "user"
 
           p.control.has-icon.has-icon-left
-            = input class="input" type="password" placeholder=(t 'password') value=password
+            = input class="input" type="password" placeholder=(t 'password') value=password id="password"
             = fa-icon class="is-primary" "lock"
 
           p.has-text-right.forgot-password
