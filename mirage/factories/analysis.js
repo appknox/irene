@@ -15,8 +15,8 @@ export default Base.extend({
     var desc = [];
     for (var i = 0; i < 3; i++) {
       desc.push({
-        description: faker.lorem.sentence(),
-        extra_description: faker.lorem.sentence()
+        title: faker.lorem.sentence(),
+        explanation: faker.lorem.sentence()
       });
     }
     return desc;

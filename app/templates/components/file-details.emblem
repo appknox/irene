@@ -1,7 +1,8 @@
 = file-overview file=file
     footer.card-footer
-      = link-to 'authenticated.file' class="card-footer-item" tagName="button"
-        = t "allFiles"
+      if file.project.hasMultipleFiles
+        = link-to 'authenticated.file' class="card-footer-item" tagName="button"
+          = t "allFiles"
       button.card-footer-item
         = t "pdfReport"
       button.card-footer-item
