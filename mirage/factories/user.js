@@ -7,7 +7,6 @@ export default Factory.extend({
 
   username: faker.name.firstName,
   email: faker.internet.email,
-  emailmd5:  faker.name.firstName,
   firstName: faker.name.firstName,
   lastName: faker.name.lastName,
   namespaces: faker.internet.domainName,

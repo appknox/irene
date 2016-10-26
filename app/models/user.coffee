@@ -5,7 +5,6 @@ User = DS.Model.extend
   uuid: DS.attr 'string'
   username: DS.attr 'string'
   email: DS.attr 'string'
-  emailmd5: DS.attr 'string'
   firstName: DS.attr 'string'
   lastName: DS.attr 'string'
   ownedProjects: DS.hasMany 'project', inverse:'owner'
