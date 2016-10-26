@@ -20,8 +20,8 @@
           h4
             = t "vulnerability"
           each analysis.findings as |finding|
-            p = finding.extra_description
-            pre = finding.description
+            p = finding.title
+            pre = finding.explanation
         button class="is-fullwidth is-default" click="toggleVulnerability"
           span
             | {{showOrHide}}

@@ -7,7 +7,6 @@ export default Base.extend({
   name: faker.company.companyName,
   packageName:  faker.internet.domainName,
   version : faker.random.number,
-  fileCount: faker.random.number,
   githubRepo: faker.random.firstName,
   jiraProject: faker.random.firstName,
   testUser: faker.random.firstName,

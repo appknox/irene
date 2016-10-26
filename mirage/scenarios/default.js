@@ -16,15 +16,17 @@ export default function(server) {
   server.createList('vulnerability', vulnerabilityCount);
   projectCount =  getRandomInt(1, 5);
   for (var projectId = 1; projectId <= projectCount; projectId++) {
-    project = server.create('project', {userId: 1});
     var fileCount = getRandomInt(1, 4);
+    project = server.create('project', {userId: 1});
+    var fileIds = [];
     for (var fileId = 1; fileId <= fileCount; fileId++) {
       file = server.create('file', {projectId: projectId});
+      fileIds.push(file.id);
       for (var vulnerabilityId = 1; vulnerabilityId <= vulnerabilityCount; vulnerabilityId++) {
         server.create('analysis', {file: file, vulnerabilityId: vulnerabilityId});
       }
     }
-    server.db.projects.update(project.id, {lastFile: file});
+    project.fileIds = fileIds;
     var collaborationCount = getRandomInt(0, userCount);
     for (var userId = 1; userId <= collaborationCount; userId++) {
       server.create('collaboration', {projectId: projectId, userId: userId});
