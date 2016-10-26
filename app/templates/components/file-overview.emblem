@@ -14,14 +14,14 @@ header.card-header
   = link-to 'authenticated.file' file.id
     .content
       .columns
-        .column.is-half
+        .column.is-half.flex-center
           = t "package"
           | : #{file.project.packageName}
         .column.is-half.flex-center
           = t "version"
           | : #{file.project.id}
       .columns
-        .column.is-half
+        .column.is-half.flex-center
           = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
         .column.is-half.flex-center
           ul

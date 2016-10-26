@@ -1,18 +1,16 @@
-label
-  = t "jiraHost"
-br
-input type="text"
-br
-label
-  = t "username"
-br
-input type="text"
-br
-label
-  = t "password"
-br
-input type="password"
-br
-button.is-primary
-  = t "integrateJIRA"
+form
+  label for="jiraHost"
+    = t "jiraHost"
+  input type="text" id="jiraHost"
+
+  label for="username"
+    = t "username"
+  input type="text" id="username"
+
+  label for="password"
+    = t "password"
+  input type="password" id="password"
+
+  button.is-primary
+    = t "integrateJIRA"
 = yield

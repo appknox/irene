@@ -16,8 +16,10 @@
     = t "integration"
   .columns
     .column.is-one-third
-      = t "jiraIntegration"
+      h6
+        = t "jiraIntegration"
       =jira-user
     .column.is-one-third
-      = t "githubIntegration"
+      h6
+        = t "githubIntegration"
       =github-user
