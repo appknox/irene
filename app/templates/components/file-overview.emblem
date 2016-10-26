@@ -11,7 +11,7 @@ header.card-header
         / | : #{file.project.createdOn}
         | 02/06/16 14:23
 .card-content
-  = link-to 'authenticated.file' file.id
+  = link-to redirectTo targetPath
     .content
       .columns
         .column.is-half.flex-center

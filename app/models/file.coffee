@@ -57,4 +57,9 @@ File = DS.Model.extend BaseModelMixin,
       {"value": countRiskUnknown, "color": _getComputedColor "default"}
     ]
 
+
+  otherFilesInTheProject: Ember.computed.filter 'project.files', (file) ->
+    file_id = @get "id"
+    file_id isnt file.get "id"
+
 `export default File`

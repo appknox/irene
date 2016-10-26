@@ -12,13 +12,12 @@ Router.map ->
     @route "index", path: '/'
     @route "settings"
     @route "pricing"
-    @route "choose",path: '/choose/:fileId'
     @route "project", path: '/project/:projectId', ->
       @route 'settings'
       @route 'files'
-    @route "file", path: '/file/:fileId', ->
-      @route 'compare'
-    @route 'compare', path: '/compare/:fileId1/:fileId2'
+    @route "file", path: '/file/:fileId'
+    @route "choose",path: '/choose/:fileId'
+    @route 'compare', path: '/compare/:files'
 
 
 
