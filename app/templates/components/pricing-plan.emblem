@@ -1,10 +1,8 @@
-table
-  tr
-    th.flex-center
-      | #{pricing.name}
-  tr
-    each pricing.descriptionItems as |item|
-      td.flex-center
-        = item
+.pricing-section
+  h3.flex-center.pricing-sub-section
+    | #{pricing.name}
+  each pricing.descriptionItems as |item|
+    .pricing-section-content.flex-center
+      = item
   button.is-fullwidth.is-primary click="makePayment"
-    = totalPricePay
+   = totalPricePay
