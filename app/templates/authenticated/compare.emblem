@@ -1,1 +1,1 @@
-= outlet
+= compare-files file1=model.file file2=model.fileOld
