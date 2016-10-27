@@ -22,7 +22,7 @@ Analysis = DS.Model.extend
   labelClass:( ->
     cls = 'tag'
     switch @get "risk"
-      when ENUMS.RISK.UNKNOWN then "#{cls} is-default is-progress"
+      when ENUMS.RISK.UNKNOWN then "#{cls} is-progress"
       when ENUMS.RISK.NONE then "#{cls} is-success"
       when ENUMS.RISK.LOW then "#{cls} is-info"
       when ENUMS.RISK.MEDIUM then "#{cls} is-warning"
