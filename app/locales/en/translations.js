@@ -34,6 +34,7 @@ export default {
   "jiraHost": "Jira Host",
   "jiraIntegration": "JIRA Integration",
   "jiraPageConfigure": "page to configure JIRA integration",
+  "language": "Language",
   "login": "Login",
   "logout": "Logout",
   "low": "Low",
@@ -63,10 +64,12 @@ export default {
   "unknown": "Unknown",
   "uploadApp": "Upload App",
   "username": "Username",
-  "userSetting": "user's settings",
+  "userSetting": " user's settings ",
   "version": "Version",
   "vulnerability": "Vulnerability",
   "vulnerabilities": "Vulnerabilities",
   "yearly": "Yearly",
-  "welcome": "Welcome "
+  "welcome": "Welcome ",
+  "language.en": "English",
+  "language.ja": "Japanese"
 };
