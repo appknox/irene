@@ -1,9 +1,11 @@
 .tabs.is-centered.is-medium.is-boxed
   ul
     li class=summaryClass
-      a click="displaySummary" Summary
+      a click="displaySummary"
+        = t "summary"
     li class=detailsClass
-      a click="displayDetails" Details
+      a click="displayDetails"
+        = t "details"
 
 each comparisons as |comparison|
   if isSummary
