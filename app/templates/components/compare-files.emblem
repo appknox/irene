@@ -7,10 +7,10 @@
 
 each comparisons as |comparison|
   if isSummary
-    compare-summary comparison=comparison
+    = compare-summary comparison=comparison
   else
     .columns
       .column.is-half
-        analysis-details analysis=comparison.analysis1
+        = analysis-details analysis=comparison.analysis1
       .column.is-half
-        analysis-details analysis=comparison.analysis2
+        = analysis-details analysis=comparison.analysis2

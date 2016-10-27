@@ -1,7 +1,7 @@
 span class=file1Analysis.labelClass
   = file1Analysis.riskText
 | &nbsp;
-fa-icon "arrow-right"
+= fa-icon "arrow-right"
 | &nbsp;
 span class=file2Analysis.labelClass
   = file2Analysis.riskText
