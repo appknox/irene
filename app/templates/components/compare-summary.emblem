@@ -10,4 +10,4 @@
 
   span class=compareColor
     = compareText
-  hr
+hr
