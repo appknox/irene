@@ -2,7 +2,7 @@
 
 AuthenticatedProjectFilesRoute = Ember.Route.extend
 
-  model: () ->
+  model: ->
     @modelFor("authenticated.project").get('files')
 
 `export default AuthenticatedProjectFilesRoute`
