@@ -23,7 +23,7 @@ CompareSummaryComponent = Ember.Component.extend
     file1Risk = @get "file1Analysis.risk"
     file2Risk = @get "file2Analysis.risk"
     if ENUMS.RISK.UNKNOWN in [file1Risk, file2Risk]
-      "#{cls} is-default is-progress"
+      "#{cls} is-progress"
     else if file1Risk is file2Risk
       "#{cls} is-default"
     else if file1Risk > file2Risk

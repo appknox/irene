@@ -6,6 +6,11 @@
     li class=detailsClass
       a click="displayDetails"
         = t "details"
+.columns
+  .column
+      = file-overview file=file1 isReverse=true
+  .column
+      = file-overview file=file2
 
 each comparisons as |comparison|
   if isSummary
@@ -16,3 +21,4 @@ each comparisons as |comparison|
         = analysis-details analysis=comparison.analysis1
       .column.is-half
         = analysis-details analysis=comparison.analysis2
+    hr
