@@ -1,7 +1,7 @@
 export default function() {
 
   this.get('/users/:id', 'user');
-  this.get('/collaborations', 'collaboration');
+  this.get('/collaborations/:id', 'collaboration');
   this.get('/projects', 'project');
   this.get('/projects/:id', 'project');
   this.get('/pricings', 'pricing');

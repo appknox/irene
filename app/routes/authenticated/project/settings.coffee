@@ -2,6 +2,6 @@
 
 AuthenticatedProjectSettingsRoute = Ember.Route.extend
   model: ->
-    @get('store').findAll('collaboration')
+    @modelFor("authenticated.project").get('collaborations')
 
 `export default AuthenticatedProjectSettingsRoute`
