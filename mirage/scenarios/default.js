@@ -10,10 +10,12 @@ export default function(server) {
   var userCount = getRandomInt(3, 5),
     pricingCount = getRandomInt(3, 3),
     vulnerabilityCount = getRandomInt(5, 15),
+    submissionCount = getRandomInt(0,3),
     projectCount = 0, project = null, file = null;
   server.createList('user', userCount);
   server.createList('pricing', pricingCount);
   server.createList('vulnerability', vulnerabilityCount);
+  server.createList('submission', submissionCount);
   projectCount =  getRandomInt(1, 5);
   for (var projectId = 1; projectId <= projectCount; projectId++) {
     var fileCount = getRandomInt(1, 4);
