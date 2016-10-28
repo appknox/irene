@@ -2,23 +2,28 @@
 
 module.exports = function(environment) {
   var ENV = {
+    rootURL: '/',
+    locationType: 'auto',
+    modulePrefix: 'irene',
+    environment: environment,
+
+
+    deviceFarmSsl: false,
+    deviceFarmHost: "devicefarm.appknox.com",
+    deviceFarmPor: "8080",
+
     i18n: {
       defaultLocale: 'en',
     },
     emblemOptions: {
       blueprints: false
     },
-    modulePrefix: 'irene',
-    environment: environment,
-    rootURL: '/',
-    locationType: 'auto',
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
         // e.g. 'with-controller': true
       }
     },
-
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
@@ -29,7 +34,41 @@ module.exports = function(environment) {
       logoutEndPoint: '/logout',
       routeAfterAuthentication: 'authenticated.index',
       routeIfAlreadyAuthenticated: 'authenticated.index'
-    }
+    },
+    endpoints: {
+      token: 'token',
+      tokenNew: 'token/new.json',
+      signedUrl: 'signed_url',
+      uploadedFile: 'uploaded_file',
+      invoice: 'invoice',
+      logout: 'logout',
+      dynamic: 'dynamic',
+      dynamicShutdown: 'dynamic_shutdown',
+      signedPdfUrl: 'signed_pdf_url',
+      storeUrl: 'store_url',
+      deleteProject: 'projects/delete',
+      recover: 'recover',
+      reset: 'reset',
+      init: 'init',
+      manual: 'manual',
+      githubRepos: 'github_repos',
+      jiraProjects: 'jira_projects',
+      setGithub: 'set_github',
+      setJira: 'set_jira',
+      feedback: 'feedback',
+      revokeGitHub: 'unauthorize_github',
+      revokeJira: 'unauthorize_jira',
+      integrateJira: 'integrate_jira',
+      changePassword: 'change_password',
+      namespaceAdd: 'namespace_add',
+      stripePayment: 'stripe_payment',
+      applyCoupon: 'apply_coupon',
+      saveCredentials: 'projects/save_credentials',
+      collaboration: 'collaboration',
+      deleteCollaboration: 'collaboration/delete',
+      invitation: 'invitation',
+      signup: 'signup'
+    },
   };
 
   if (environment === 'development') {
