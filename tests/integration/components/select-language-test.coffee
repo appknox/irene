@@ -6,20 +6,11 @@ moduleForComponent 'select-language', 'Integration | Component | select language
 }
 
 test 'it renders', (assert) ->
-  assert.expect 2
+  assert.expect 1
 
   # Set any properties with @set 'myProperty', 'value'
   # Handle any actions with @on 'myAction', (val) ->
 
   @render hbs """{{select-language}}"""
 
-  assert.equal @$().text().trim(), ''
-
-  # Template block usage:
-  @render hbs """
-    {{#select-language}}
-      template block text
-    {{/select-language}}
-  """
-
-  assert.equal @$().text().trim(), 'template block text'
+  assert.equal @$().text().trim(), ' English Japanese'
