@@ -1,7 +1,8 @@
 .columns.upper-nav
   .column.is-one-sixth.appknox-logo
     .has-text-centered
-      img src="images/logo.png"
+      = link-to 'authenticated.index'
+        img src="images/logo.png"
   .column.current-user
     = t "welcome"
     = model.username
