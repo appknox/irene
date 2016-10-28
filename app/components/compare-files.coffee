@@ -5,6 +5,7 @@ CompareFilesComponent = Ember.Component.extend
   file1: null
   file2: null
   isSummary: true
+  isReverse: false
 
   summaryClass: Ember.computed "isSummary", ->
     if @get "isSummary"
