@@ -8,7 +8,7 @@
         = t "details"
 .columns
   .column
-      = file-overview file=file1
+      = file-overview file=file1 isReverse=true
   .column
       = file-overview file=file2
 
