@@ -1,4 +1,4 @@
-<select {{action 'setLocale' on='change'}}>
+<select {{action 'setLocale' on='change'}} class="is-fullwidth">
   {{#each locales as |loc|}}
     <option value="{{loc.id}}" selected={{is-equal loc.id i18n.locale}}>
       {{loc.text}}
