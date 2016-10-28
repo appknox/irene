@@ -5,12 +5,17 @@
 
 .box
   .columns
-    .column.is-one-third
+    .column
       h4
         = t "namespace"
-    .column.is-one-third
+    .column
       =namespace-component
-
+    .column
+      h4
+        = t "language"
+    .column
+      .margin-top
+        =select-language
 .box
   h4.is-fullwidth
     = t "integration"
