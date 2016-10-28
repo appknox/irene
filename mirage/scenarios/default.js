@@ -28,8 +28,11 @@ export default function(server) {
     }
     project.fileIds = fileIds;
     var collaborationCount = getRandomInt(0, userCount);
+    var collaborationIds = [];
     for (var userId = 1; userId <= collaborationCount; userId++) {
-      server.create('collaboration', {projectId: projectId, userId: userId});
+      var collaboration = server.create('collaboration', {projectId: projectId, userId: userId});
+      collaborationIds.push(collaboration.id);
     }
+    project.collaborationIds = collaborationIds;
   }
 }

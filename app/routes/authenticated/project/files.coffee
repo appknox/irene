@@ -1,6 +1,8 @@
 `import Ember from 'ember'`
 
 AuthenticatedProjectFilesRoute = Ember.Route.extend
+
   model: () ->
-    @get('store').findAll('file')
+    @modelFor("authenticated.project").get('files')
+
 `export default AuthenticatedProjectFilesRoute`

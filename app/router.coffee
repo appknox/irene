@@ -19,6 +19,4 @@ Router.map ->
     @route "choose",path: '/choose/:fileId'
     @route 'compare', path: '/compare/:files'
 
-
-
 `export default Router;`
