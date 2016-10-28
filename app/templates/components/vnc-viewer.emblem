@@ -1,4 +1,4 @@
 button.is-danger.is-fullwidth
   = t "dynamicScanStart"
 
-= yield
+canvas.canvas
