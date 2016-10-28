@@ -11,6 +11,6 @@ form
     = t "password"
   input type="password" id="password"
 
-  button.is-primary
+  button.is-primary click="toggleDropdown"
     = t "integrateJIRA"
 = yield
