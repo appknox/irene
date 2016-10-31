@@ -10,9 +10,11 @@ FileOverviewComponent = Ember.Component.extend
 
   targetPath: Ember.computed "file", "fileOld", ->
     file = @get "file"
+    if file in [null, undefined]
+      return ""
     fileOld = @get "fileOld"
     target = file.get "id"
-    if fileOld isnt null
+    if fileOld not in [null, undefined]
       target += "...#{fileOld.get "id"}"
     target
 
