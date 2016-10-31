@@ -10,14 +10,16 @@ export default function(server) {
   var userCount = getRandomInt(3, 5),
     pricingCount = getRandomInt(3, 3),
     vulnerabilityCount = getRandomInt(5, 15),
-    projectCount = 0, project = null, file = null;
+    projectCount = 0, project = null, file = null, projectIds = [],
+    currentUserId = 1;
   server.createList('user', userCount);
   server.createList('pricing', pricingCount);
   server.createList('vulnerability', vulnerabilityCount);
   projectCount =  getRandomInt(1, 5);
   for (var projectId = 1; projectId <= projectCount; projectId++) {
+    projectIds.push(projectId);
     var fileCount = getRandomInt(1, 4);
-    project = server.create('project', {userId: 1});
+    project = server.create('project', {userId: currentUserId});
     var fileIds = [];
     for (var fileId = 1; fileId <= fileCount; fileId++) {
       file = server.create('file', {projectId: projectId});
@@ -35,4 +37,6 @@ export default function(server) {
     }
     project.collaborationIds = collaborationIds;
   }
+  var currentUser = server.db.users.get(currentUserId);
+  currentUser.projectIds = projectIds;
 }

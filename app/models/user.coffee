@@ -2,12 +2,14 @@
 `import ENUMS from 'irene/enums'`
 
 User = DS.Model.extend
+
   uuid: DS.attr 'string'
   username: DS.attr 'string'
   email: DS.attr 'string'
   firstName: DS.attr 'string'
   lastName: DS.attr 'string'
   ownedProjects: DS.hasMany 'project', inverse:'owner'
+  projects: DS.hasMany 'project'
   submissions: DS.hasMany 'submission', inverse:'user'
   namespaces: DS.attr 'string'
   collaboration: DS.hasMany 'collaboration', inverse:'user'
