@@ -1,6 +1,5 @@
 `import Ember from 'ember';`
 `import ENV from 'irene/config/environment';`
-# `import Notify from 'ember-notify';`
 
 JiraUserComponent = Ember.Component.extend
   isOpen: false
@@ -17,7 +16,7 @@ JiraUserComponent = Ember.Component.extend
     .then (data)->
       that.set "jiraProjects", data.projects
     .fail ->
-      Notify.error "Something went wrong when trying to fetch projects list."
+      @get("notify").error "Something went wrong when trying to fetch projects list."
 
   ).on "init"
 
@@ -35,9 +34,9 @@ JiraUserComponent = Ember.Component.extend
         project: project
       Ember.$.post url, data
       .then (data)->
-        Notify.success "Repo successfully integrated"
+        @get("notify").success "Repo successfully integrated"
       .fail ->
-        Notify.error "Something went wrong whe trying to update this repo"
+        @get("notify").error "Something went wrong whe trying to update this repo"
 
 
 `export default JiraUserComponent`

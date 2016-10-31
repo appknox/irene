@@ -1,7 +1,5 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment';`
-# `import Notify from 'ember-notify';`
-# `import ModalBoxMixin from 'irene/mixins/modal-box'`
 `import ENUMS from 'irene/enums';`
 
 CollaboratorComponentComponent = Ember.Component.extend
@@ -22,12 +20,12 @@ CollaboratorComponentComponent = Ember.Component.extend
       Ember.$.post url, data
       .then ->
         that.send "closeModal"
-        # Notify.success "Collaborator added!"
+        @get("notify").success "Collaborator added!"
       .fail (xhr, message, status) ->
         if xhr.status is 403
-          # Notify.error xhr.responseJSON.message
+          @get("notify").error xhr.responseJSON.message
         else
-          # Notify.error "A network error occured! Please try again later"
+          @get("notify").error "A network error occured! Please try again later"
 
 
 `export default CollaboratorComponentComponent`

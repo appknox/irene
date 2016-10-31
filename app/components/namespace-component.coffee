@@ -1,7 +1,5 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment';`
-# `import Notify from 'ember-notify';`
-# `import ModalBoxMixin from 'irene/mixins/modal-box'`
 
 NamespaceComponentComponent = Ember.Component.extend
   added: false
@@ -20,10 +18,10 @@ NamespaceComponentComponent = Ember.Component.extend
       that = @
       Ember.$.post postUrl, data
       .then ->
-        Notify.success "we have received your request to add a new namespace."
+        @get("notify").success "we have received your request to add a new namespace."
       .fail (xhr, message, status) ->
         if xhr.status is 403
-          Notify.error xhr.responseJSON.message
+          @get("notify").error xhr.responseJSON.message
         else
-          Notify.error "A network error occured! Please try again later"
+          @get("notify").error "A network error occured! Please try again later"
 `export default NamespaceComponentComponent`
