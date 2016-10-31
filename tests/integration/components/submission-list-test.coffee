@@ -1,7 +1,7 @@
 `import { test, moduleForComponent } from 'ember-qunit'`
 `import hbs from 'htmlbars-inline-precompile'`
 
-moduleForComponent 'github-project', 'Integration | Component | github project', {
+moduleForComponent 'submission-list', 'Integration | Component | submission list', {
   integration: true
 }
 
@@ -11,7 +11,6 @@ test 'it renders', (assert) ->
   # Set any properties with @set 'myProperty', 'value'
   # Handle any actions with @on 'myAction', (val) ->
 
-  @render hbs """{{github-project}}"""
+  @render hbs """{{submission-list}}"""
 
-
-  assert.equal @$().text().trim(), "GitHub IntegrationPlease visit the  user's settings  page to configure GitHub integration"
+  assert.equal @$().text().trim(), ''

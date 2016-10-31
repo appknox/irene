@@ -15,4 +15,4 @@ test 'it renders', (assert) ->
 
 
 
-  assert.equal @$().text().trim(), "JIRA IntegrationPlease visit theuser's settingspage to configure JIRA integration"
+  assert.equal @$().text().trim(), "JIRA IntegrationPlease visit the  user's settings  page to configure JIRA integration"

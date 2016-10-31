@@ -23,5 +23,8 @@
         li
           a click="invalidateSession"
             = t "logout"
+
+    = submission-list
+    
   .column.margin-right.margin-top
     = outlet

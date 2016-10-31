@@ -1,4 +1,4 @@
-button.is-primary
+button.is-primary click="addNamespace"
   = t "addNamespace"
 
 = yield

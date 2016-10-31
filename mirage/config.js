@@ -5,6 +5,7 @@ export default function() {
   this.get('/projects', 'project');
   this.get('/projects/:id', 'project');
   this.get('/pricings', 'pricing');
+  this.get('/submissions', 'submission');
   this.get('/files', 'file');
   this.get('/files/:id', 'file');
   this.get('/vulnerabilities/:id', 'vulnerability');
