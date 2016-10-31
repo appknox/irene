@@ -1,6 +1,5 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment';`
-# `import Notify from 'ember-notify';`
 
 GithubUserComponent = Ember.Component.extend
   isOpen: false
@@ -17,7 +16,7 @@ GithubUserComponent = Ember.Component.extend
     .then (data)->
       that.set "githubRepos", data.repos
     .fail ->
-      Notify.error "Something went wrong when trying to fetch repo list."
+      @get("notify").error "Something went wrong when trying to fetch repo list."
 
   ).on "init"
 
@@ -38,8 +37,8 @@ GithubUserComponent = Ember.Component.extend
         repo: repo
       Ember.$.post setGithub, data
       .then (data)->
-        Notify.success "Repo successfully integrated"
+        @get("notify").success "Repo successfully integrated"
       .fail ->
-        Notify.error "Something went wrong whe trying to update this repo"
+        @get("notify").error "Something went wrong whe trying to update this repo"
 
 `export default GithubUserComponent`
