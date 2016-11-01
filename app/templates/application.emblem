@@ -1,2 +1,4 @@
 = outlet
 = notification-container position="bottom-right"
+= modal-card title="Goopy Foop"
+  | Foo
