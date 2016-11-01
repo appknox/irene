@@ -5,10 +5,11 @@ import ENV from 'irene/config/environment';
 var IreneAjaxService;
 
 IreneAjaxService = AjaxService.extend({
-  namespace: '/api',
+  namespace: ENV.namespace,
   session: Ember.inject.service(),
   headers: Ember.computed('session.data.b64token', {
     get() {
+      debugger
       var token;
       token = this.get('session.data.b64token');
       return {
@@ -16,7 +17,6 @@ IreneAjaxService = AjaxService.extend({
       };
     }
   })
-  namespace: ENV.namespace,
 });
 
 export default IreneAjaxService;

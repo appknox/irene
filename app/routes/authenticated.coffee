@@ -7,7 +7,7 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
   session: service 'session'
 
   model: ->
-    userId = @get "session.data.authenticated.user"
+    userId = @get "session.data.authenticated.user_id"
     @get('store').find('user', userId)
 
   actions:
