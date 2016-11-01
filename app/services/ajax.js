@@ -9,7 +9,6 @@ IreneAjaxService = AjaxService.extend({
   session: Ember.inject.service(),
   headers: Ember.computed('session.data.b64token', {
     get() {
-      debugger
       var token;
       token = this.get('session.data.b64token');
       return {

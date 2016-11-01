@@ -3,7 +3,7 @@
 
 Analysis = DS.Model.extend
   file: DS.belongsTo 'file', inverse: 'analyses'
-  findings: DS.attr()
+  description: DS.attr()
   analiserVersion: DS.attr 'number'
   risk: DS.attr 'number'
   status: DS.attr 'number'
