@@ -24,6 +24,8 @@
           a click="invalidateSession"
             = t "logout"
 
+    h5.flex-center Notifications
+
     = submission-list submissions=model.submissions
 
   .column.margin-right.margin-top
