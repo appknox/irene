@@ -20,15 +20,17 @@ ChangePasswordComponent = Ember.Component.extend
         return @get("notify").error("Please enter valid passwords!") if !isValidPassword password
       if passwordNew isnt passwordConfirm
         return @get("notify").error "passwords did not match"
-      postUrl = [ENV.APP.API_BASE, ENV.endpoints.changePassword].join '/'
+
       data =
         password: passwordCurrent
         newPassword: passwordNew
       that = @
-      Ember.$.post postUrl, data
+      ajax = @get "ajax"
+      ajax.post ENV.endpoints.changePassword, data: data
       .then ->
-        @get("notify").success "Your password has been changed."
-      .fail (xhr, message, status) ->
-        @get("notify").error xhr.responseJSON.message
+        that.get("notify").success "Your password has been changed."
+      .catch (xhr, message, status) ->
+        debugger
+        that.get("notify").error xhr.message
 
 `export default ChangePasswordComponent`
