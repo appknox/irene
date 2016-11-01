@@ -1,5 +1,7 @@
 import Ember from 'ember';
 import AjaxService from 'ember-ajax/services/ajax';
+import ENV from 'irene/config/environment';
+
 var IreneAjaxService;
 
 IreneAjaxService = AjaxService.extend({
@@ -14,6 +16,7 @@ IreneAjaxService = AjaxService.extend({
       };
     }
   })
+  namespace: ENV.namespace,
 });
 
 export default IreneAjaxService;
