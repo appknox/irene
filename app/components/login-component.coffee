@@ -7,8 +7,6 @@ LoginComponentComponent = Ember.Component.extend
       identification = @get 'identification'
       password = @get 'password'
       @get('session').authenticate("authenticator:irene", identification, password).catch (reason) ->
-        identification = identification
-        password = password
         alert reason
 
 

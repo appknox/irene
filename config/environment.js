@@ -3,6 +3,8 @@
 module.exports = function(environment) {
   var ENV = {
     rootURL: '/',
+    namespace: "api-v2",
+    host: "http://0.0.0.0:8000",
     locationType: 'auto',
     modulePrefix: 'irene',
     environment: environment,
@@ -33,7 +35,7 @@ module.exports = function(environment) {
       checkEndPoint: '/check',
       logoutEndPoint: '/logout',
       routeAfterAuthentication: 'authenticated.index',
-      routeIfAlreadyAuthenticated: 'authenticated.index'
+      routeIfAlreadyAuthenticated: 'authenticated.index',
     },
     endpoints: {
       token: 'token',
@@ -95,6 +97,8 @@ module.exports = function(environment) {
       enabled: true
     };
   }
-
+  ENV['ember-cli-mirage'] = {
+    enabled: false
+  };
   return ENV;
 };
