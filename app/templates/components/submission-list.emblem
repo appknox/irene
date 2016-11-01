@@ -1,6 +1,3 @@
 .column
-  each submissions as |sub|
-    ul
-      li
-        .status-box.is-progress.flex-center
-          = sub.reason
+  each submissions as |submission|
+    = submission-details submission=submission
