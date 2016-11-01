@@ -24,7 +24,7 @@
           a click="invalidateSession"
             = t "logout"
 
-    = submission-list
-    
+    = submission-list submissions=model.submissions
+
   .column.margin-right.margin-top
     = outlet
