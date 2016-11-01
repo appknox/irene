@@ -5,12 +5,13 @@ import ENV from 'irene/config/environment';
 var IreneAjaxService;
 
 IreneAjaxService = AjaxService.extend({
+  host: ENV.host,
   namespace: ENV.namespace,
   session: Ember.inject.service(),
-  headers: Ember.computed('session.data.b64token', {
+  headers: Ember.computed('session.data.authenticated.b64token', {
     get() {
       var token;
-      token = this.get('session.data.b64token');
+      token = this.get('session.data.authenticated.b64token');
       return {
         'Authorization': "Basic " + token
       };
