@@ -1,2 +1,5 @@
-.column
-  = submission.status
+.message-header class=messageClass
+  = submission.statusHumanized
+if submission.hasReason
+  .message-body
+    = submission.reason
