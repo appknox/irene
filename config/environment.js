@@ -3,8 +3,6 @@
 module.exports = function(environment) {
   var ENV = {
     rootURL: '/',
-    namespace: "api-v2",
-    host: "http://0.0.0.0:8000",
     locationType: 'auto',
     modulePrefix: 'irene',
     environment: environment,
@@ -79,6 +77,11 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
+    ENV['ember-cli-mirage'] = {
+      enabled: false
+    };
+    ENV['namespace'] = "api-v2";
+    ENV['host'] = "http://0.0.0.0:8000";
   }
 
   if (environment === 'test') {
@@ -93,12 +96,6 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-    ENV['ember-cli-mirage'] = {
-      enabled: true
-    };
   }
-  ENV['ember-cli-mirage'] = {
-    enabled: false
-  };
   return ENV;
 };

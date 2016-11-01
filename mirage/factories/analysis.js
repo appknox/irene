@@ -11,12 +11,12 @@ export default Base.extend({
   status(){
     return faker.random.arrayElement(ENUMS.ANALYSIS.VALUES);
   },
-  findings(){
+  description(){
     var desc = [];
     for (var i = 0; i < 3; i++) {
       desc.push({
-        title: faker.lorem.sentence(),
-        explanation: faker.lorem.sentence()
+        extra_description: faker.lorem.sentence(),
+        description: faker.lorem.sentence()
       });
     }
     return desc;

@@ -1,23 +1,24 @@
+import config from 'irene/config/environment';
+
+
 export default function() {
+
+  this.namespace = config.host + "/" +  config.namespace;
 
   this.get('/users/:id', 'user');
   this.get('/collaborations/:id', 'collaboration');
-  this.get('/projects', 'project');
   this.get('/projects/:id', 'project');
   this.get('/pricings', 'pricing');
-  this.get('/submissions', 'submission');
-  this.get('/files', 'file');
+  this.get('/submissions/:id', 'submission');
   this.get('/files/:id', 'file');
   this.get('/vulnerabilities/:id', 'vulnerability');
 
-  this.namespace = '/api';
-
   this.post('/login', () => {
-    return {user: '1', token: 'secret'};
+    return {user_id: '1', token: 'secret'};
   });
 
-  this.get('/check', () => {
-    return {user: '1', token: 'secret'};
+  this.post('/check', () => {
+    return {user_id: '1', token: 'secret'};
   });
 
   this.post('/logout', () => {

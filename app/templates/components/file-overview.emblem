@@ -19,7 +19,7 @@ header.card-header
           | : #{file.project.packageName}
         .column.is-half.flex-center
           = t "version"
-          | : #{file.project.id}
+          | : #{file.version}
       .columns class=isReverse:is-reverse
         .column.is-half.flex-center
           = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
