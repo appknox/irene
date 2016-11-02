@@ -106,5 +106,13 @@ module.exports = function(environment) {
       publishableKey: "pk_live_9G633HADop7N2NLdi6g2BHHA"
     };
   }
+
+  if (environment === 'yashwin') {
+    ENV['ember-cli-mirage'] = {
+      enabled: true
+    };
+    ENV['namespace'] = "api-v2";
+    ENV['host'] = "http://0.0.0.0:8000";
+  }
   return ENV;
 };
