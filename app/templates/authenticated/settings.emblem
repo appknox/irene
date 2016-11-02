@@ -1,7 +1,9 @@
 .box
-  h4.is-fullwidth
-    = t "changePassword"
-  =change-password
+  .columns
+    .column.is-half
+      h4.is-fullwidth
+        = t "changePassword"
+      = change-password
 
 .box
   .columns
@@ -9,14 +11,14 @@
       h4
         = t "namespace"
     .column
-      =namespace-component
-    /.column
+      = namespace-component
+    .column
       h4
         = t "language"
-    / .column
+    .column
       .margin-top
-        =select-language
-.box
+        = select-language
+/.box
   h4.is-fullwidth
     = t "integration"
   .columns
