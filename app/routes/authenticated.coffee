@@ -1,6 +1,7 @@
 `import Ember from 'ember'`
 `import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';`
 `import ENV from 'irene/config/environment';`
+`import ENUMS from 'irene/enums'`
 
 {inject: {service}, isEmpty, RSVP} = Ember
 
