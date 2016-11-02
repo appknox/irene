@@ -42,5 +42,7 @@ module.exports = function(defaults) {
   app.import('bower_components/no-vnc/include/rfb.js');
   app.import('bower_components/no-vnc/include/keysym.js');
 
+  app.import("bower_components/pusher-websocket-iso/dist/web/pusher.js");
+
   return app.toTree();
 };
