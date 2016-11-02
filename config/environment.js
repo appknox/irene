@@ -6,18 +6,24 @@ module.exports = function(environment) {
     locationType: 'auto',
     modulePrefix: 'irene',
     environment: environment,
-
+    pusherKey: "216d53b13aaa5c6fc2cf",
 
     deviceFarmSsl: false,
     deviceFarmHost: "devicefarm.appknox.com",
     deviceFarmPor: "8080",
 
+    stripe: {
+      publishableKey: "pk_test_UOgd8ILsBsx7R5uUPttDJNgk"
+    },
+
     i18n: {
       defaultLocale: 'en',
     },
+
     emblemOptions: {
       blueprints: false
     },
+
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
@@ -96,6 +102,9 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
+    ENV.stripe = {
+      publishableKey: "pk_live_9G633HADop7N2NLdi6g2BHHA"
+    };
   }
   return ENV;
 };
