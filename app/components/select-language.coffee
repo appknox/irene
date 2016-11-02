@@ -1,6 +1,9 @@
 `import Ember from 'ember'`
 
 SelectLanguageComponent = Ember.Component.extend
+
+  classNames: ["control"]
+
   i18n: Ember.inject.service()
 
   locales: Ember.computed 'i18n.locale', 'i18n.locales', ->
