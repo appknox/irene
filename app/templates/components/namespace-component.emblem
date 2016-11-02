@@ -1,4 +1,7 @@
-button.is-primary click="addNamespace"
+button.is-primary click="toggleNamspaceModal"
   = t "addNamespace"
 
-= yield
+= modal-card isActive=showNamespaceModal title=(t "addNamespace")
+  = input class="control" value=namespace
+  button click="addNamespace"
+    = t "addNamespace"
