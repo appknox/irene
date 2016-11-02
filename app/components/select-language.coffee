@@ -10,6 +10,6 @@ SelectLanguageComponent = Ember.Component.extend
 
   actions:
     setLocale: ->
-      @set('i18n.locale', this.$('select').val());
+      @set('i18n.locale', @$('select').val());
 
 `export default SelectLanguageComponent`

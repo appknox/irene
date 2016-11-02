@@ -10,10 +10,10 @@
         = t "namespace"
     .column
       =namespace-component
-    .column
+    /.column
       h4
         = t "language"
-    .column
+    / .column
       .margin-top
         =select-language
 .box
