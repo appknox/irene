@@ -2,15 +2,18 @@
 `import ENUMS from 'irene/enums'`
 
 User = DS.Model.extend
+
+  uuid: DS.attr 'string'
+  lang: DS.attr 'string'
   username: DS.attr 'string'
   email: DS.attr 'string'
-  emailmd5: DS.attr 'string'
   firstName: DS.attr 'string'
   lastName: DS.attr 'string'
-  ownedProjects: DS.hasMany 'project', inverse:'owner', async:false
-  submissions: DS.hasMany 'submission', inverse:'user', async:false
+  ownedProjects: DS.hasMany 'project', inverse:'owner'
+  projects: DS.hasMany 'project'
+  submissions: DS.hasMany 'submission', inverse:'user'
   namespaces: DS.attr 'string'
-  collaboration: DS.hasMany 'collaboration', inverse:'user', async:false
+  collaboration: DS.hasMany 'collaboration', inverse:'user'
   expiryDate: DS.attr 'date'
   hasGithubToken: DS.attr 'boolean'
   hasJiraToken: DS.attr 'boolean'

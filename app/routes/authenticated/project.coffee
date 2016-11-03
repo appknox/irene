@@ -1,7 +1,8 @@
 `import Ember from 'ember'`
 
 AuthenticatedProjectRoute = Ember.Route.extend
-  model: ()->
-    @get('store').findAll('vulnerability')
+
+  model: (params)->
+    @store.findRecord "project", params.projectId
 
 `export default AuthenticatedProjectRoute`

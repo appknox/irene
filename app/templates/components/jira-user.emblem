@@ -1,0 +1,16 @@
+form
+  label for="jiraHost"
+    = t "jiraHost"
+  input type="text" id="jiraHost"
+
+  label for="username"
+    = t "username"
+  input type="text" id="username"
+
+  label for="password"
+    = t "password"
+  input type="password" id="password"
+
+  button.is-primary click="toggleDropdown"
+    = t "integrateJIRA"
+= yield

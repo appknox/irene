@@ -1,0 +1,12 @@
+h5
+  = t "githubIntegration"
+
+= t "pleaseVisit"
+| &nbsp;
+= link-to 'authenticated.settings'
+  span
+    = t "userSetting"
+| &nbsp;
+= t "ghPageConfigure"
+
+= yield

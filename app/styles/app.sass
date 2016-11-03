@@ -6,14 +6,150 @@ $FreestyleGuide-color--foreground: $text
 $FreestyleGuide-color--background: $background
 @import 'ember-freestyle'
 
+/* Margin Defines*/
+.margin-top30
+  margin-top: 30px
 
-.flex-center
-  justify-content: center
+.margin-top
+  margin-top: 10px
+
+.margin-top5
+  margin-top: 5px
+
+.margin-top20
+  margin-top: 20px
+
+.margin-top35
+  margin-top: 35px
+
+.margin-left30
+  margin-left: 30px
+
+.margin-left0
+  margin-left: 0px
+
+.margin-top50
+  margin-top: 50px
+
+.margin-left20
+  margin-left: 20px
+
+.margin-right
+  margin-right: 10px
+
+.margin-right-40
+  margin-right: -40px
+
+.margin-bottom20
+  margin-bottom: 20px
+
+.margin-both
+  margin-left: 10px
+  margin-right: 10px
+
+/* Appknox specific */
+.appknox-logo
+  margin-top: 13px
+
+.appknox-logo img
+  width: 100px
+  margin-left: auto
+
+.upper-nav
+  position: relative
+  background: white
+  box-shadow: 1px 0px 8px -1px rgba(0, 0, 0, 0.3)
+
+.current-user
+  float: right
+  display: flex
+  justify-content: flex-end
+  align-items: center
+  margin-right: 50px
+
+
+.logo-img
+  margin: 0 auto
+  width: 100%
+
+// FIXME: Remove this after updating bohemia
+.menu-list
+  a
+    font-weight: bold
+    &:hover
+      font-weight: bolder
+    &.is-active
+      font-weight: bolder
+
+.card-header
+  .pricing-title
+    align-items: center
+    justify-content: center
+
+input
+  display: block
+
+form
+  button
+    margin-top: 10px
+
+.title-tag
+  background-color: #5bc0de
+  border-radius: 0px
+  color: #fff
   align-items: center
 
-.login-container
-  width: 100vw
-  height: 100vh
-  @extend .flex-center
-  .login-wrapper
-    display: block
+.login-phone-image
+  img
+    width: 70%
+
+.pricing-section
+  box-shadow: 0 0 10px grey
+  margin-top: 20px
+
+.pricing-sub-section
+  box-shadow: 0px 4px 10px -6px #222
+  margin-bottom: 0px!important
+  margin-top: 20px
+
+.pricing-section-content
+  line-height: 50px
+
+.pricing-section
+  button
+    border-radius: 0px
+    background-color: #80C081
+    border-color: #80C081!important
+    color: white!important
+
+.is-reverse
+  display: flex
+  flex-direction: row-reverse
+
+.status-box
+  color: #31708f
+  margin-top: 10px
+  box-shadow: 0px 2px 2px #888, 0px -2px 2px #888
+  padding: 5px 5px
+
+// TODO: Remove this when Bohemia is updated
+select
+  -webkit-appearance: button
+  -webkit-border-radius: 2px
+  -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1)
+  -webkit-padding-end: 20px
+  -webkit-padding-start: 2px
+  -webkit-user-select: none
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAeCAYAAAAo5+5WAAAAdUlEQVRIx2MQllCs+P//vwcQM1ATM4waPGrwqMEjzmBSweAxGMgu+k8YFJHjYsvFixfvwWUiSA6khtygsFmxYsV+dENBYiA5SsPYfvXq1QdghoLYIDFqRZ7jxo0bD4MwiE3tVOECxYM0uVHd4NFCaNTgQW4wAKpugq+9Zk7QAAAAAElFTkSuQmCC), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5)
+  background-position: 97% center
+  background-repeat: no-repeat
+  border: 1px solid #AAA
+  font-size: inherit
+  overflow: hidden
+  padding: 5px 10px
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.file-input
+  position: fixed
+  top: -100px

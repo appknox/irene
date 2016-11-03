@@ -1,1 +1,12 @@
-= yield
+= file-overview file=file
+    footer.card-footer
+      if file.project.hasMultipleFiles
+        = link-to 'authenticated.project.files' file.id class="card-footer-item" tagName="button"
+          = t "allFiles"
+      button.card-footer-item click="getPDFReportLink"
+        = t "pdfReport"
+      button.card-footer-item click="requestManual"
+        = t "manual"
+
+each file.sortedAnalyses as |analysis|
+  =analysis-details analysis=analysis
