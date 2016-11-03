@@ -103,6 +103,11 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
+    ENV['ember-cli-mirage'] = {
+      enabled: false
+    };
+    ENV['namespace'] = "api-v2";
+    ENV['host'] = "https://api.appknox.com";
     ENV.stripe = {
       publishableKey: "pk_live_9G633HADop7N2NLdi6g2BHHA"
     };
