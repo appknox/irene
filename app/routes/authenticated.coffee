@@ -8,6 +8,8 @@
 pusher = new Pusher ENV.pusherKey, encrypted: true
 
 AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
+
+  i18n: service()
   session: service 'session'
 
   model: ->
@@ -18,6 +20,7 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
     socketId = user?.get "socketId"
     if Ember.isEmpty socketId
       return
+    @set 'i18n.locale', user.get "lang"
     channel = pusher.subscribe "#{socketId}-2"
     that = @
     store = @get "store"

@@ -1,4 +1,5 @@
 `import Ember from 'ember'`
+`import ENV from 'irene/config/environment';`
 
 SelectLanguageComponent = Ember.Component.extend
 
@@ -13,6 +14,10 @@ SelectLanguageComponent = Ember.Component.extend
 
   actions:
     setLocale: ->
-      @set('i18n.locale', @$('select').val());
+      lang = @$('select').val()
+      @set 'i18n.locale', lang
+      data =
+        lang: lang
+      @get("ajax").post ENV.endpoints.lang, data: data
 
 `export default SelectLanguageComponent`

@@ -4,6 +4,7 @@
 User = DS.Model.extend
 
   uuid: DS.attr 'string'
+  lang: DS.attr 'string'
   username: DS.attr 'string'
   email: DS.attr 'string'
   firstName: DS.attr 'string'

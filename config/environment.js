@@ -73,7 +73,8 @@ module.exports = function(environment) {
       collaboration: 'collaboration',
       deleteCollaboration: 'collaboration/delete',
       invitation: 'invitation',
-      signup: 'signup'
+      signup: 'signup',
+      lang: 'lang'
     },
   };
 
