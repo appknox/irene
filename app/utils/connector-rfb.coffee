@@ -1,4 +1,3 @@
-`import Ember from 'ember'`
 `import ENV from 'irene/config/environment';`
 
 
@@ -8,13 +7,11 @@ updateState = ->
 xvpInit = ->
   return true
 
-ConnectorRFB = Ember.Object.extend
+class ConnectorRFB
 
   rfb: null
 
   constructor: (@canvasEl, @deviceToken) ->
-    console.log "ConnectorRFB - constructor"
-    console.log @canvasEl, @deviceToken
     @rfb = new RFB
       'target': @canvasEl
       'encrypt': ENV.deviceFarmSsl
