@@ -24,7 +24,7 @@ class ConnectorRFB
       'view_only': false
       'onUpdateState': updateState
       'onXvpInit': xvpInit
-    @rfb.connect ENV.deviceFarmHost, ENV.deviceFarmPort, '1234', "?token=#{@deviceToken}"
+    @rfb.connect ENV.deviceFarmHost, ENV.deviceFarmPort, '1234', "#{ENV.deviceFarmPath}?token=#{@deviceToken}"
 
   disconnect: ->
     @rfb.disconnect()
