@@ -11,9 +11,14 @@ module.exports = function(environment) {
     deviceFarmSsl: false,
     deviceFarmHost: "devicefarm.appknox.com",
     deviceFarmPor: "8080",
+    'namespace': "api-v2",
+    'host': "https://api.appknox.com",
+    'ember-cli-mirage': {
+      enabled: false
+    },
 
     stripe: {
-      publishableKey: "pk_test_UOgd8ILsBsx7R5uUPttDJNgk"
+      publishableKey: "pk_live_9G633HADop7N2NLdi6g2BHHA"
     },
 
     i18n: {
