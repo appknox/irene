@@ -13,11 +13,11 @@ VncViewerComponent = Ember.Component.extend
     @send("connect")
 
   didInsertElement: ->
-    if ENUMS.DYNAMIC_STATUS.READY is @get 'file.dynamicStatus'
+    if @get 'file.isReady'
       @createVNCObject()
 
   statusChange: ( ->
-    if ENUMS.DYNAMIC_STATUS.READY is @get 'file.dynamicStatus'
+    if @get 'file.isReady'
       @createVNCObject()
     else
       @send "disconnect"
@@ -34,14 +34,13 @@ VncViewerComponent = Ember.Component.extend
 
     dynamicScan: ->
       file_id = @get "file.id"
-      pricing = @get "file.project.owner.pricing"
-      dynamicUrl = [ENV.APP.API_BASE, ENV.endpoints.dynamic, file_id].join '/'
-      $.get dynamicUrl
+      dynamicUrl = [ENV.endpoints.dynamic, file_id].join '/'
+      @get("ajax").request dynamicUrl
 
     dynamicShutdown: ->
       file_id = @get "file.id"
-      shutdownUrl = [ENV.APP.API_BASE, ENV.endpoints.dynamicShutdown, file_id].join '/'
-      $.get shutdownUrl
+      shutdownUrl = [ENV.endpoints.dynamicShutdown, file_id].join '/'
+      @get("ajax").request shutdownUrl
 
 `export default VncViewerComponent`
 

@@ -62,4 +62,24 @@ File = DS.Model.extend BaseModelMixin,
     file_id = @get "id"
     file_id isnt file.get "id"
 
+  isNoneStaus: (->
+    status = @get 'dynamicStatus'
+    status is ENUMS.DYNAMIC_STATUS.NONE
+  ).property 'dynamicStatus'
+
+  isReady: (->
+    status = @get 'dynamicStatus'
+    status is ENUMS.DYNAMIC_STATUS.READY
+  ).property 'dynamicStatus'
+
+  isBooting: (->
+    status = @get 'dynamicStatus'
+    status is ENUMS.DYNAMIC_STATUS.BOOTING
+  ).property 'dynamicStatus'
+
+  isShuttingDown: (->
+    status = @get 'dynamicStatus'
+    status is ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN
+  ).property 'dynamicStatus'
+
 `export default File`
