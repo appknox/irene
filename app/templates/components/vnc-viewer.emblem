@@ -1,4 +1,17 @@
-button.is-danger.is-fullwidth
-  = t "dynamicScanStart"
+if file.isNoneStaus
+  button.is-primary.is-fullwidth click="dynamicScan"
+    = t "dynamicScanStart"
+
+if file.isReady
+  button.is-primary.is-fullwidth  click="dynamicShutdown"
+    = t "dynamicShutDown"
+
+if file.isBooting
+  button.is-primary.is-fullwidth
+    = t "deviceBooting"
+
+if file.isShuttingDown
+  button.is-primary.is-fullwidth
+    = t "deviceShutting"
 
 canvas.canvas
