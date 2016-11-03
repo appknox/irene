@@ -12,6 +12,8 @@ class ConnectorRFB
   rfb: null
 
   constructor: (@canvasEl, @deviceToken) ->
+
+  connect: ->
     @rfb = new RFB
       'target': @canvasEl
       'encrypt': ENV.deviceFarmSsl
@@ -22,8 +24,6 @@ class ConnectorRFB
       'view_only': false
       'onUpdateState': updateState
       'onXvpInit': xvpInit
-
-  connect: ->
     @rfb.connect ENV.deviceFarmHost, ENV.deviceFarmPort, '1234', "?token=#{@deviceToken}"
 
   disconnect: ->
