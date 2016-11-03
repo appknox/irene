@@ -51,7 +51,7 @@
             label Username
             p.control.has-icon.has-icon-right
               input.input.is-success placeholder="Text Input" value="dhilipsiva"
-              fa-icon class="is-success" "check"
+              = fa-icon class="is-success" "check"
               span.help.is-success This username is available
 
             label Subject
@@ -97,7 +97,7 @@
                 p.card-header-title
                   | Card Component
                 a.card-header-icon
-                  fa-icon "angle-down"
+                  = fa-icon "angle-down"
               .card-content
                 .content
                   | Something in the Conetent
@@ -209,15 +209,6 @@
                     span.icon
                       = fa-icon "film"
                     span Film
-
-    = freestyle-subsection name='Breadcrumb' section=section
-      = freestyle-usage 'breadcrumb'
-        .columns
-          .column.is-half
-            nav.breadcrumb
-              a.breadcrumb-item Home
-              a.breadcrumb-item Library
-              a.breadcrumb-item Data
 
 
     = freestyle-subsection name='Section & Footer' section=section

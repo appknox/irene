@@ -9,41 +9,48 @@ b64EncodeUnicode = (str) ->
 getB64Token = (user, token)->
   b64EncodeUnicode "#{user}:#{token}"
 
+processData = (data) ->
+  data.b64token = getB64Token data.user_id, data.token
+  data
 
 IreneAuthenticator = Base.extend
 
-  session: Ember.inject.service()
+  # session: Ember.inject.service()
   ajax: Ember.inject.service()
+
+  transitionTo: (route)->
+    applicationRoute = Ember.getOwner(@).lookup("route:application")
+    applicationRoute.transitionTo route
 
   authenticate: (identification, password) ->
     ajax = @get "ajax"
-    session = @get "session"
-
+    # session = @get "session"
+    that  = @
     new Ember.RSVP.Promise (resolve, reject) ->
       data =
         username: identification
         password: password
 
-      url = ENV['ember-simple-auth']['loginEndPoint']
-      ajax.post(url, data)
+      url = "#{ENV.host}/#{ENV.namespace}#{ENV['ember-simple-auth']['loginEndPoint']}"
+      ajax.post(url, {data: data})
       .then (data) ->
-        b64token = getB64Token data.user, data.token
-        session.set 'data.b64token', b64token
+        data = processData data
         resolve data
+        that.transitionTo ENV['ember-simple-auth']["routeAfterAuthentication"]
       .catch (reason) ->
         alert reason
         reject reason
 
   restore: (data) ->
     ajax = @get "ajax"
-    session = @get "session"
+    that  = @
     new Ember.RSVP.Promise (resolve, reject) ->
-      url = ENV['ember-simple-auth']['checkEndPoint']
-      ajax.request(url)
+      url = "#{ENV.host}/#{ENV.namespace}#{ENV['ember-simple-auth']['checkEndPoint']}"
+      ajax.post(url, {data: data})
       .then (data) ->
-        b64token = getB64Token data.user, data.token
-        session.set 'data.b64token', b64token
+        data = processData data
         resolve data
+        that.transitionTo ENV['ember-simple-auth']["routeIfAlreadyAuthenticated"]
       .catch (reason)->
         alert reason
         localStorage.clear()
@@ -52,6 +59,7 @@ IreneAuthenticator = Base.extend
   invalidate: (data) ->
     ajax = @get "ajax"
     localStorage.clear()
+    @set "currentUser", null
     new Ember.RSVP.Promise (resolve, reject) ->
       url = ENV['ember-simple-auth']['logoutEndPoint']
       ajax.post(url)
@@ -62,7 +70,6 @@ IreneAuthenticator = Base.extend
         alert reason
         reject reason
         location.reload()
-
 
 
 `export default IreneAuthenticator;`

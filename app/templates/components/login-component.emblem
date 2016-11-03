@@ -1,31 +1,30 @@
-.login-container.columns
+.columns.flex-center
   .login-wrapper.column.is-half
     .columns
       .column.has-text-centered
-        h3
-          = t "auth.greet"
+        h3.signin-text
+          = t "signin"
+        h6
+          = t "greet"
     .columns
       .column.is-half
-        figure.image
+        figure.image.login-phone-image
+          img src="images/welcome.png" alt="Mobile application security"
           img src="images/login-phone-graphic.svg" alt="Mobile application security"
-      .column
-        form
-          label for="identification"
-            = t "auth.username"
-          p.control.has-icon.has-icon-right
-            input.input.is-success placeholder="Username" value=identification
-            fa-icon class="is-primary" "user"
+      .column.flex-center
+        form.login-form
+          p.control.has-icon.has-icon-left
+            = input class="input" placeholder=(t 'username') value=identification id="username"
+            = fa-icon class="is-primary" "user"
 
-          label for="password"
-            =  t "auth.password"
-          p.control.has-icon.has-icon-right
-            input.input.is-success type="password" value=password
-            fa-icon class="is-primary" "lock"
+          p.control.has-icon.has-icon-left
+            = input class="input" type="password" placeholder=(t 'password') value=password id="password"
+            = fa-icon class="is-primary" "lock"
 
-          p.has-text-right
+          p.has-text-right.forgot-password
             a
-              = t "auth.forgotPassword"
+              = t "forgotPassword"
 
-          p.control
-            button.button.is-primary.is-fullwidth click="authenticate"
-              = t "auth.login"
+          p.control.flex-center
+            button.button.is-primary.is-fullwidth.login-button click="authenticate"
+              = t "login"

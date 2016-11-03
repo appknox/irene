@@ -1,25 +1,45 @@
-.card.is-fullwidth
-  header.card-header
-    p.card-header-title
-      | #{file.project.name}
-    a.card-header-icon
-      img src=file.iconUrl alt="File Icon"
-  .card-content
+header.card-header
+  a.card-header-icon
+    img src=file.iconUrl alt=file.name
+  p.card-header-title
+    ul
+      li
+        h5
+          | #{file.name}
+      li
+        / = t "created"
+        / | : #{file.project.createdOn}
+        | 02/06/16 14:23
+.card-content
+  = link-to redirectTo targetPath
     .content
       .columns
-        .column.is-one-fourth
-          | Something in the Content
-        .column
-        ul
-          li
-            = t "file.package"
-            | : #{project.packageName}
-          li
-            = t "file.version"
-            | : #{project.id}
-          li
-            = t "file.created"
-            | : #{project.createdOn}
-          li
-            = t "file.fileCount"
-            | : #{project.fileCount}
+        .column.is-half.flex-center
+          = t "package"
+          | : #{file.project.packageName}
+        .column.is-half.flex-center
+          = t "version"
+          | : #{file.version}
+      .columns class=isReverse:is-reverse
+        .column.is-half.flex-center
+          = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
+        .column.is-half.flex-center
+          ul
+            li.is-danger
+              = t "high"
+              | : #{file.countRiskHigh}
+            li.is-warning
+              = t "medium"
+              | : #{file.countRiskMedium}
+            li.is-info
+              = t "low"
+              | : #{file.countRiskLow}
+            li.is-success
+              = t "none"
+              | : #{file.countRiskNone}
+            li.is-default
+              = t "unknown"
+              | : #{file.countRiskUnknown}
+
+
+= yield

@@ -1,0 +1,3 @@
+button.is-primary click="toggleDropdown"
+  = t "integrateGithub"
+= yield

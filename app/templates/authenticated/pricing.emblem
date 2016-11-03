@@ -1,11 +1,1 @@
-.columns
-  .column.is-full
-    h3 Pricing
-
-    button MONTHLY
-    button QUARTERLY
-    button HALF YEARLY
-    button YEARLY
-
-  each model as |pricing|
-    =pricing-plan pricing=pricing
+= pricing-list pricings=model

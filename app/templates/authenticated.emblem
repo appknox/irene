@@ -1,24 +1,32 @@
+.columns.upper-nav
+  .column.is-one-sixth.appknox-logo
+    .has-text-centered
+      = link-to 'authenticated.index'
+        img src="images/logo.png"
+  .column.current-user
+    = t "welcome"
+    = model.username
+
 .columns
-  .column.is-one-sixth
-    img src="https://www.gravatar.com/avatar/44492dac2beebbcaf97a5f526b64f059?s=50"
-    span yash@appknox.com
+  .column.is-one-sixth.side-menu
     aside.menu
-      ul.menu-list
+      ul.menu-list.text-center
         li
-          link-to 'authenticated.index'
-            = t "menu.dashboard"
-          link-to 'authenticated.settings'
-            = t "menu.settings"
-          link-to 'authenticated.pricing'
-            = t "menu.pricing"
-          a href="https://gitter.im/appknox/support" target="_blank"
-            = t "menu.support"
+          = link-to 'authenticated.index'
+            = t "dashboard"
+        li
+          = link-to 'authenticated.settings'
+            = t "settings"
+        li
+          = link-to 'authenticated.pricing'
+            = t "pricing"
+        li
           a click="invalidateSession"
-            = t "menu.logout"
-  .column
-    .columns
-      .column
-        bread-crumbs tagName="nav" crumbClass="breadcrumb-item"
-    .columns
-      .column
-        = outlet
+            = t "logout"
+
+    h5.flex-center Notifications
+
+    = submission-list submissions=model.submissions
+
+  .column.margin-right.margin-top
+    = outlet

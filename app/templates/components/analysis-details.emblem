@@ -1,0 +1,30 @@
+.message-header class=progressClass
+    .columns
+      .column
+        = analysis.vulnerability.name
+      .column.is-one-third.content-right
+        each analysis.vulnerability.tags as |tag|
+          span.tag = tag
+
+.message-body
+    if analysis.isScanning
+      = analysis.vulnerability.question
+    else
+      if analysis.isRisky
+        p = analysis.vulnerability.description
+        if analysis.vulnerability.businessImplication
+          h4
+            = t "businessImplication"
+          p = analysis.vulnerability.businessImplication
+        if showVulnerability
+          h4
+            = t "vulnerability"
+          each analysis.description as |finding|
+            p = finding.extra_description
+            pre = finding.description
+        button class="is-fullwidth is-default" click="toggleVulnerability"
+          span
+            | {{showOrHide}}
+              {{ t "vulnerability"}}
+      else
+        = analysis.vulnerability.successMessage

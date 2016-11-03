@@ -1,0 +1,24 @@
+.tabs.is-centered.is-medium.is-boxed
+  ul
+    li class=summaryClass
+      a click="displaySummary"
+        = t "summary"
+    li class=detailsClass
+      a click="displayDetails"
+        = t "details"
+.columns
+  .column
+      = file-overview file=file1 isReverse=true
+  .column
+      = file-overview file=file2
+
+each comparisons as |comparison|
+  if isSummary
+    = compare-summary comparison=comparison
+  else
+    .columns
+      .column.is-half
+        = analysis-details analysis=comparison.analysis1
+      .column.is-half
+        = analysis-details analysis=comparison.analysis2
+    hr

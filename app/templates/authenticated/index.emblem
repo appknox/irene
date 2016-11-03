@@ -1,8 +1,22 @@
-.columns
-  .column.is-half
-    =submit-url
-  .column.is-half
-    =upload-app
+.box
+  .columns
+    .column
+      h5 New Scan
+  .columns
+    .column
+      = submit-url
+    .column.is-one-quarter
+      .columns
+        .column.is-one-sixth.margin-top5.has-text-centered
+          | or
+        .column
+           label.button.is-primary.is-fullwidth
+            = upload-app delegate=this
+            if isUploading
+              = progress
+              | %
+            else
+              = t "uploadApp"
 
 .columns
   each model as |project|

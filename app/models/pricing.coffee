@@ -2,14 +2,13 @@
 
 Pricing = DS.Model.extend
   name: DS.attr 'string'
-  heading: DS.attr 'string'
-  sast: DS.attr 'string'
-  dast: DS.attr 'string'
-  uba: DS.attr 'string'
-  remedition: DS.attr 'string'
-  sla: DS.attr 'string'
-  scans: DS.attr 'string'
   description: DS.attr 'string'
   price: DS.attr 'number'
+  projectsLimit: DS.attr "number"
+
+  descriptionItems:(->
+    description = @get "description"
+    description.split ","
+  ).property "description"
 
 `export default Pricing`

@@ -1,0 +1,11 @@
+h5
+  = t "jiraIntegration"
+
+= t "pleaseVisit"
+| &nbsp;
+= link-to 'authenticated.settings'
+  = t "userSetting"
+| &nbsp;
+= t "jiraPageConfigure"
+
+= yield

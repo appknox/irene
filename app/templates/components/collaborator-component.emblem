@@ -1,0 +1,10 @@
+h5
+  = t "collaborators"
+
+button.is-primary click="addCollaborator"
+  = t "addCollaborators"
+
+.columns.margin-top
+  each model as |collaborator|
+    .column.is-one-sixth
+      = collaborator-details user=collaborator
