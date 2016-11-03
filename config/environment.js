@@ -10,7 +10,7 @@ module.exports = function(environment) {
 
     deviceFarmSsl: false,
     deviceFarmHost: "devicefarm.appknox.com",
-    deviceFarmPor: "8080",
+    deviceFarmPort: "8080",
     'namespace': "api-v2",
     'host': "https://api.appknox.com",
     'ember-cli-mirage': {
