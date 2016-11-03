@@ -9,8 +9,9 @@ module.exports = function(environment) {
     pusherKey: "216d53b13aaa5c6fc2cf",
 
     deviceFarmSsl: true,
-    deviceFarmHost: "devicefarm.appknox.com",
     deviceFarmPort: "443",
+    deviceFarmPath: "websockify",
+    deviceFarmHost: "devicefarm.appknox.com",
     'namespace': "api-v2",
     'host': "https://api.appknox.com",
     'ember-cli-mirage': {
