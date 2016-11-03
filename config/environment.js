@@ -8,7 +8,7 @@ module.exports = function(environment) {
     environment: environment,
     pusherKey: "216d53b13aaa5c6fc2cf",
 
-    deviceFarmSsl: false,
+    deviceFarmSsl: true,
     deviceFarmHost: "devicefarm.appknox.com",
     deviceFarmPort: "8080",
     'namespace': "api-v2",
