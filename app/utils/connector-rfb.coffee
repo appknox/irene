@@ -13,6 +13,8 @@ ConnectorRFB = Ember.Object.extend
   rfb: null
 
   constructor: (@canvasEl, @deviceToken) ->
+    console.log "ConnectorRFB - constructor"
+    console.log @canvasEl, @deviceToken
     @rfb = new RFB
       'target': @canvasEl
       'encrypt': ENV.deviceFarmSsl
