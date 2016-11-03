@@ -71,5 +71,6 @@ export default {
   "yearly": "Yearly",
   "welcome": "Welcome ",
   "language.en": "English",
-  "language.ja": "Japanese"
+  "language.ja": "Japanese",
+  "dynamicShutDown": "Shutdown Device"
 };
