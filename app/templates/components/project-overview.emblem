@@ -1,6 +1,6 @@
 = file-overview file=project.files.firstObject
   footer.card-footer
-    = link-to 'authenticated.project.settings' project.id class="card-footer-item" tagName="button"
+    /= link-to 'authenticated.project.settings' project.id class="card-footer-item" tagName="button"
       = t "settings"
     if project.hasMultipleFiles
       = link-to 'authenticated.project.files' project.id class="card-footer-item" tagName="button"
