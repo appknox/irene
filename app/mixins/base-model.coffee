@@ -6,4 +6,10 @@ BaseModelMixin = Ember.Mixin.create
   createdOn: DS.attr 'date'
   updatedOn: DS.attr 'date'
 
+  createdOnHumanized: Ember.computed "createdOn", ->
+    createdOn = @get "createdOn"
+    if Ember.isEmpty createdOn
+      return
+    "#{createdOn.toLocaleDateString()} - #{createdOn.toLocaleTimeString()}"
+
 `export default BaseModelMixin`

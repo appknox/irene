@@ -5,11 +5,9 @@ header.card-header
     ul
       li
         h5
-          | #{file.name}
+          = file.name
       li
-        / = t "created"
-        / | : #{file.project.createdOn}
-        | 02/06/16 14:23
+        = file.createdOnHumanized
 .card-content
   = link-to redirectTo targetPath
     .content
