@@ -5,7 +5,7 @@ header.card-header
     ul
       li
         h5
-          = file.name
+          = file.project.name
       li
         = file.createdOnHumanized
 .card-content
