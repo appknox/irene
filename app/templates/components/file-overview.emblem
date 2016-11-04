@@ -12,12 +12,8 @@ header.card-header
   = link-to redirectTo targetPath
     .content
       .columns
-        .column.is-half.flex-center
-          = t "package"
-          | : #{file.project.packageName}
-        .column.is-half.flex-center
-          = t "version"
-          | : #{file.version}
+        .column.flex-center
+          | #{file.project.packageName} - v#{file.version}
       .columns class=isReverse:is-reverse
         .column.is-half.flex-center
           = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
