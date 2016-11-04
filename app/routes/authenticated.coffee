@@ -17,6 +17,9 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
     @get('store').find('user', userId)
 
   afterModel: (user, transition)->
+    @get('notify').setDefaultAutoClear ENV.notifications.autoClear
+    @get('notify').setDefaultClearNotification ENV.notifications.duration
+
     socketId = user?.get "socketId"
     if Ember.isEmpty socketId
       return
