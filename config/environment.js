@@ -8,6 +8,11 @@ module.exports = function(environment) {
     environment: environment,
     pusherKey: "216d53b13aaa5c6fc2cf",
 
+    notifications: {
+      autoClear: true,
+      duration: 4000 // Milliseconds
+    },
+
     deviceFarmSsl: true,
     deviceFarmPort: "443",
     deviceFarmPath: "websockify",
