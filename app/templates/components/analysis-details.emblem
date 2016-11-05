@@ -1,7 +1,7 @@
 .message-header class=progressClass
     .columns
       .column
-        = analysis.vulnerability.name
+        h5 = analysis.vulnerability.name
       .column.is-one-third.content-right
         each analysis.vulnerability.tags as |tag|
           span.tag = tag
@@ -13,16 +13,17 @@
       if analysis.isRisky
         p = analysis.vulnerability.description
         if analysis.vulnerability.businessImplication
-          h4
+          h5.margin-top
             = t "businessImplication"
-          p = analysis.vulnerability.businessImplication
+          span
+            | {{{analysis.vulnerability.businessImplication}}}
         if showVulnerability
-          h4
+          h5
             = t "vulnerability"
           each analysis.description as |finding|
             p = finding.extra_description
             pre = finding.description
-        button class="is-fullwidth is-default" click="toggleVulnerability"
+        button class="is-fullwidth is-default margin-top" click="toggleVulnerability"
           span
             | {{showOrHide}}
               {{ t "vulnerability"}}
