@@ -2,9 +2,10 @@
 
 ModalCardComponent = Ember.Component.extend
 
-  isActive: true
+  isActive: false
   classNames: ["modal"]
   classNameBindings: ['isActive:is-active']
+  layoutName: "components/modal-card"
 
   actions:
     clearModal: ->

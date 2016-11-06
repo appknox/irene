@@ -12,7 +12,8 @@
     "pretender": "~1.3.0",
     "Faker": "~3.1.0",
     "no-vnc": "^0.6.1",
-    "pusher-websocket-iso": "pusher#^3.2.1"
+    "pusher-websocket-iso": "pusher#^3.2.1",
+    "card": "^2.0.3"
   },
   "resolutions": {
     "ember": "lts-2-8"
