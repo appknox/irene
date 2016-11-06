@@ -11,6 +11,7 @@ User = DS.Model.extend
   lastName: DS.attr 'string'
   ownedProjects: DS.hasMany 'project', inverse:'owner'
   projects: DS.hasMany 'project'
+  pricings: DS.hasMany 'pricing'
   submissions: DS.hasMany 'submission', inverse:'user'
   namespaces: DS.attr 'string'
   collaboration: DS.hasMany 'collaboration', inverse:'user'
