@@ -53,7 +53,6 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
       file_new: (data)->
         that.get("notify").info "New file added"
         file = store.pushPayload data: data
-        project.set "lastFile", file
 
       file_updated: (data) ->
         that.get("notify").info "File updated"
