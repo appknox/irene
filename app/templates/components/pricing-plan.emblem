@@ -6,3 +6,21 @@
       = item
   button.is-fullwidth.is-primary click="makePayment"
    = totalPricePay
+
+= modal-card isActive=showPricingModal title=totalPricePay
+  .card-body
+    .card-wrapper
+    form
+      = input type="tel" name="number" placeholder="Valid Card Number" autocomplete="cc-number" value=cardNumber
+      = fa-icon "credit-card"
+
+      = input type="tel" name="name" placeholder="Name On Card" autocomplete="cc-number" value=cardName
+      = input type="tel" name="expiry" placeholder="MM/YY" autocomplete="cc-exp" value=cardExpiry
+      = input type="tel" name="cvc" placeholder="CVC" autocomplete="cc-csc" value=cardCvc
+      = input placeholder="Do you have an offer coupon?" value=couponCode
+      button.btn.btn-default click="applyCoupon" Apply Coupon
+
+  .modal-footer
+    button click="makePaymentStripe"
+      = fa-icon 'cc-stripe'
+      |  pay with Card

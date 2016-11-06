@@ -1,18 +1,41 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums'`
+`import ENV from 'irene/config/environment';`
+`import {isForbiddenError} from 'ember-ajax/errors';`
 
 PricingPlanComponent = Ember.Component.extend
 
   pricing: null
-  store: null
   paymentDuration: null
+  showPricingModal: false
   classNames: ["column" , "is-one-third"]
+
+
+  cardCvc: ""
+  cardName: ""
+  cardExpiry: ""
+  couponCode: ""
+  cardNumber: ""
+
+  couponDiscount: 0
+  couponApplied: false
+
+  stripe: Ember.inject.service()
 
   totalPrice: (->
     price = @get "pricing.price"
     duration = @get "paymentDuration"
     price * duration
   ).property "paymentDuration"
+
+  totalPriceAfterDiscount: (->
+    couponApplied = @get "couponApplied"
+    if couponApplied
+      totalPrice = @get "totalPrice"
+      discount = @get "couponDiscount"
+      return totalPrice - (totalPrice * discount / 100)
+    @get "totalPrice"
+  ).property "paymentDuration", "couponApplied", "couponDiscount"
 
   totalPricePay: (->
     duration = @get "paymentDuration"
@@ -24,15 +47,78 @@ PricingPlanComponent = Ember.Component.extend
       durationText  = "6 Months"
     if duration is ENUMS.PAYMENT_DURATION.YEARLY
       durationText  = "1 Year"
-    totalPrice = @get "totalPrice"
-    "Pay $#{totalPrice} USD for #{durationText}"
-  ).property "totalPrice"
+    totalPriceAfterDiscount = @get "totalPriceAfterDiscount"
+    "Pay $#{totalPriceAfterDiscount} USD for #{durationText}"
+  ).property "totalPriceAfterDiscount", "paymentDuration"
+
+
+  didInsertElement: ->
+    new Card
+      form: "##{@elementId} form"
+      container: "##{@elementId} .card-wrapper"
+
+  stripeErrorHandler: (response) ->
+    @get("notify").error response.error.message
 
   actions:
 
     makePayment: ->
-      return alert "Not Implemented!"
-      applicationController = @container.lookup "controller:application"
-      applicationController.set "makePaymentModal.priceSelector", @
-      applicationController.set "makePaymentModal.show", true
+      @set "showPricingModal", !@get "showPricingModal"
+
+    applyCoupon: ->
+      that = @
+      data =
+        pricingId: that.get "pricing.id"
+        couponCode: that.get "couponCode"
+      @get("ajax").post ENV.endpoints.applyCoupon, data: data
+      .then (result) ->
+        debugger
+        that.set "couponApplied", true
+        that.set "couponDiscount", result.discount
+        that.get("notify").success "Price Updated"
+      .catch (error)->
+        that.set "couponApplied", false
+        if isForbiddenError error
+          that.get("notify").error "Please sheck your coupon"
+        else
+          that.get("notify").error "Some Unknown error occured"
+
+    makePaymentStripe: ->
+      cardNumber =  @get "cardNumber"
+      cardCvc = @get "cardCvc"
+      cardName = @get "cardName"
+
+      [exp_month, exp_year] = @get("cardExpiry").split " / "
+      if !Stripe.card.validateCardNumber cardNumber
+        return @get("notify").error "Please enter a valid card number"
+      if !Stripe.card.validateCVC cardCvc
+        return @get("notify").error "Please enter a valid CVC"
+      if !Stripe.card.validateExpiry exp_month, exp_year
+        return @get("notify").error "Please enter a valid Expiry date"
+
+      that = @
+
+      data =
+        number: cardNumber
+        cvc: cardCvc
+        expMonth: exp_month
+        expYear: exp_year
+        name: cardName
+        couponCode: that.get "couponCode"
+        pricingId: that.get "priceSelector.pricing.id"
+        paymentDuration: @get "priceSelector.paymentDuration"
+
+      @get("ajax").post ENV.endpoints.stripePayment, data: data
+      .then (result) ->
+        debugger
+        that.get("notify").success "Sucessfully processed your payment. Thank You."
+        that.send "closeModal"
+        setTimeout ->
+          location.reload()
+        ,
+          5 * 1000
+      .catch (error)->
+        debugger
+        that.get("notify").error error.jqXHR.responseJSON.message
+
 `export default PricingPlanComponent`
