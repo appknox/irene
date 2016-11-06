@@ -17,6 +17,14 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
     @get('store').find('user', userId)
 
   afterModel: (user, transition)->
+
+    try
+      window.Intercom "boot",
+        app_id: ENV.intercomAppID
+        name: user.get "username"
+        email: user.get "email"
+      window.Intercom 'trackEvent', 'logged-in'
+
     @get('notify').setDefaultAutoClear ENV.notifications.autoClear
     @get('notify').setDefaultClearNotification ENV.notifications.duration
 

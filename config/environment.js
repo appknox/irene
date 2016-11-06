@@ -7,6 +7,7 @@ module.exports = function(environment) {
     modulePrefix: 'irene',
     environment: environment,
     pusherKey: "216d53b13aaa5c6fc2cf",
+    intercomAppID: "mbkqc0o1",
 
     notifications: {
       autoClear: true,
