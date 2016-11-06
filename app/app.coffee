@@ -1,7 +1,10 @@
 `import Ember from 'ember';`
 `import Resolver from 'irene/resolver';`
-`import loadInitializers from 'ember-load-initializers';`
 `import config from 'irene/config/environment';`
+`import installIntercom from 'irene/utils/install-intercom';`
+`import loadInitializers from 'ember-load-initializers';`
+
+installIntercom()
 
 Ember.MODEL_FACTORY_INJECTIONS = true
 
