@@ -23,4 +23,13 @@ Project = DS.Model.extend BaseModelMixin,
   hasFiles: Ember.computed.gt 'fileCount', 0
   hasMultipleFiles: Ember.computed.gt 'fileCount', 1
 
+
+  platformIconClass:( ->
+    switch @get "platform"
+      when ENUMS.PLATFORM.ANDROID then "android"
+      when ENUMS.PLATFORM.IOS then "apple"
+      when ENUMS.PLATFORM.WINDOWS then "windows"
+      else "mobile"
+  ).property "platform"
+
 `export default Project`

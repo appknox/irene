@@ -2,10 +2,11 @@ header.card-header
   a.card-header-icon
     img src=file.iconUrl alt=file.name
   p.card-header-title
-    ul
+    ul.is-fullwidth
       li
         h5
           = file.project.name
+          = fa-icon file.project.platformIconClass class="card-icon"
       li
         = file.createdOnHumanized
 .card-content
