@@ -12,7 +12,7 @@ header.card-header
   = link-to redirectTo targetPath
     .content
       .columns
-        .column.flex-center
+        .column.flex-center.nowrap-trim
           | #{file.project.packageName} - v#{file.version}
       .columns class=isReverse:is-reverse
         .column.is-half.flex-center
