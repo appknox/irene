@@ -5,6 +5,6 @@ button.is-primary click="addCollaborator"
   = t "addCollaborators"
 
 .columns.margin-top
-  each model as |collaborator|
+  each project.collaborators as |collaborator|
     .column.is-one-sixth
       = collaborator-details user=collaborator
