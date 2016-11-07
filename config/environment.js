@@ -6,8 +6,9 @@ module.exports = function(environment) {
     locationType: 'auto',
     modulePrefix: 'irene',
     environment: environment,
-    pusherKey: "216d53b13aaa5c6fc2cf",
     intercomAppID: "mbkqc0o1",
+    pusherKey: "216d53b13aaa5c6fc2cf",
+    forceLoginOnLoad: true,
 
     notifications: {
       autoClear: true,
@@ -101,6 +102,7 @@ module.exports = function(environment) {
     };
     ENV['namespace'] = "api-v2";
     ENV['host'] = "http://0.0.0.0:8000";
+    ENV.forceLoginOnLoad = false;
   }
 
   if (environment === 'test') {
