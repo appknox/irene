@@ -35,6 +35,7 @@ export default {
   "jiraPageConfigure": "JIRA 統合を構成するページ",
   "login": "ログイン",
   "logout": "ログアウト",
+  "language.en": "English",
   "manual": "手動診断",
   "monthly": "月次",
   "namespace": "名前空間",
@@ -60,4 +61,3 @@ export default {
   "vulnerability": "脆弱性",
   "yearly": "年次"
 };
-
