@@ -6,30 +6,30 @@
 SubmitUrlComponent = Ember.Component.extend
   i18n: Ember.inject.service()
   storeURL: ""
-  enterValidURL: t("enterValidURL")
-  hangInThere: t("hangInThere")
-  networkError: t("networkError")
+  tEnterValidURL: t("enterValidURL")
+  tHangInThere: t("hangInThere")
+  tNetworkError: t("networkError")
   actions:
 
     submitURL: ->
-      enterValidURL = @get "enterValidURL"
-      hangInThere = @get "hangInThere"
-      networkError = @get "networkError"
+      tEnterValidURL = @get "tEnterValidURL"
+      tHangInThere = @get "tHangInThere"
+      tNetworkError = @get "tNetworkError"
       storeURL = @get "storeURL"
       data = {storeURL: storeURL}
       if !CONSTANTS.WINDOWS_STORE_URL_RE.test(storeURL) and !CONSTANTS.ANDROID_STORE_URL_RE.test(storeURL)
-        return @get("notify").error enterValidURL
+        return @get("notify").error tEnterValidURL
 
       that = @
       ajax = @get "ajax"
       ajax.post(ENV.endpoints.storeUrl, {data: data})
       .then ->
         that.set "storeURL", null
-        that.get("notify").success hangInThere
+        that.get("notify").success tHangInThere
       .catch (xhr, message, status) ->
         if xhr.status is 403
           that.get("notify").error xhr.responseJSON.message
         else
-          that.get("notify").error networkError
+          that.get("notify").error tNetworkError
 
 `export default SubmitUrlComponent`

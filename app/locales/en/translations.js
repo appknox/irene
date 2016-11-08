@@ -79,7 +79,7 @@ export default {
   "settings": "Settings",
   "show": "Show ",
   "signin": "Sign In",
-  "statics": "Static",
+  "static": "Static",
   "submitUrl": "Submit URL",
   "summary": "Summary",
   "credentialsUpdated": "Credentials Successfully Updated",
