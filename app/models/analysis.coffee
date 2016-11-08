@@ -11,11 +11,11 @@ Analysis = DS.Model.extend
   risk: DS.attr 'number'
   status: DS.attr 'number'
   vulnerability: DS.belongsTo 'vulnerability'
-  scanning: t("scanning")
-  none: t("none")
-  low: t("low")
-  medium: t("medium")
-  high: t("high")
+  tScanning: t("scanning")
+  tNone: t("none")
+  tLow: t("low")
+  tMedium: t("medium")
+  tHigh: t("high")
 
   isScanning: ( ->
     risk = @get "risk"
@@ -38,18 +38,18 @@ Analysis = DS.Model.extend
   ).property "risk"
 
   riskText:( ->
-    scanning = @get "scanning"
-    none = @get "none"
-    low = @get "low"
-    medium = @get "medium"
-    high = @get "high"
+    tScanning = @get "tScanning"
+    tNone = @get "tNone"
+    tLow = @get "tLow"
+    tMedium = @get "tMedium"
+    tHigh = @get "tHigh"
 
     switch @get "risk"
-      when ENUMS.RISK.UNKNOWN then scanning
-      when ENUMS.RISK.NONE then none
-      when ENUMS.RISK.LOW then low
-      when ENUMS.RISK.MEDIUM then medium
-      when ENUMS.RISK.HIGH then high
+      when ENUMS.RISK.UNKNOWN then tScanning
+      when ENUMS.RISK.NONE then tNone
+      when ENUMS.RISK.LOW then tLow
+      when ENUMS.RISK.MEDIUM then tMedium
+      when ENUMS.RISK.HIGH then tHigh
   ).property "risk"
 
 `export default Analysis`

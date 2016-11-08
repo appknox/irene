@@ -12,21 +12,21 @@ ChangePasswordComponent = Ember.Component.extend
   passwordCurrent: ""
   passwordNew: ""
   passwordConfirm: ""
-  enterValidPassword: t("enterValidPassword")
-  invalidPassword: t("invalidPassword")
-  passwordChanged: t("passwordChanged")
+  tEnterValidPassword: t("enterValidPassword")
+  tInvalidPassword: t("invalidPassword")
+  tPasswordChanged: t("passwordChanged")
   actions:
     changePassword: ->
-      enterValidPassword = @get "enterValidPassword"
-      validPassword = @get "invalidPassword"
-      passwordChanged = @get "passwordChanged"
+      tEnterValidPassword = @get "tEnterValidPassword"
+      tInvalidPassword = @get "tInvalidPassword"
+      tPasswordChanged = @get "tPasswordChanged"
       passwordCurrent = @get "passwordCurrent"
       passwordNew = @get "passwordNew"
       passwordConfirm = @get "passwordConfirm"
       for password in [passwordCurrent, passwordNew, passwordConfirm]
-        return @get("notify").error enterValidPassword if !isValidPassword password
+        return @get("notify").error tEnterValidPassword if !isValidPassword password
       if passwordNew isnt passwordConfirm
-        return @get("notify").error invalidPassword
+        return @get("notify").error tInvalidPassword
 
       data =
         password: passwordCurrent
@@ -35,7 +35,7 @@ ChangePasswordComponent = Ember.Component.extend
       ajax = @get "ajax"
       ajax.post ENV.endpoints.changePassword, data: data
       .then ->
-        that.get("notify").success passwordChanged
+        that.get("notify").success tPasswordChanged
       .catch (xhr, message, status) ->
         debugger
         that.get("notify").error xhr.message
