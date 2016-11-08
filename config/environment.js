@@ -9,6 +9,7 @@ module.exports = function(environment) {
     intercomAppID: "mbkqc0o1",
     pusherKey: "216d53b13aaa5c6fc2cf",
     forceLoginOnLoad: true,
+    enableIntercom: true,
 
     notifications: {
       autoClear: true,
@@ -103,17 +104,17 @@ module.exports = function(environment) {
     ENV['namespace'] = "api-v2";
     ENV['host'] = "http://0.0.0.0:8000";
     ENV.forceLoginOnLoad = false;
+    ENV.enableIntercom = false;
   }
 
-  if (environment === 'test') {
-    // Testem prefers this...
-    ENV.locationType = 'none';
-
-    // keep test console output quieter
-    ENV.APP.LOG_ACTIVE_GENERATION = false;
-    ENV.APP.LOG_VIEW_LOOKUPS = false;
-
-    ENV.APP.rootElement = '#ember-testing';
+  if (environment === 'yashwin') {
+    ENV['ember-cli-mirage'] = {
+      enabled: true
+    };
+    ENV['namespace'] = "api-v2";
+    ENV['host'] = "http://0.0.0.0:8000";
+    ENV.forceLoginOnLoad = false;
+    ENV.enableIntercom = false;
   }
 
   if (environment === 'production') {
@@ -127,12 +128,12 @@ module.exports = function(environment) {
     };
   }
 
-  if (environment === 'yashwin') {
-    ENV['ember-cli-mirage'] = {
-      enabled: true
-    };
-    ENV['namespace'] = "api-v2";
-    ENV['host'] = "http://0.0.0.0:8000";
+  if (environment === 'test') {
+    ENV.locationType = 'none';
+    ENV.APP.LOG_ACTIVE_GENERATION = false;
+    ENV.APP.LOG_VIEW_LOOKUPS = false;
+    ENV.APP.rootElement = '#ember-testing';
   }
+
   return ENV;
 };
