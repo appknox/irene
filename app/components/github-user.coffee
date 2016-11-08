@@ -1,14 +1,21 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment';`
+`import { translationMacro as t } from 'ember-i18n'`
 
 GithubUserComponent = Ember.Component.extend
+  i18n: Ember.inject.service()
   isOpen: false
   project: null
   githubRepos: ["Loading..."]
   classNames: ['btn-group']
   classNameBindings: ['isOpen:open']
 
+  tFetchGitHubRepoFailed: t("fetchGitHubRepoFailed")
+  tRepoIntegrated: t("repoIntegrated")
+  repoNotIntegrated: t("repoNotIntegrated")
+
   fetchGithubRepos: (->
+    tFetchGitHubRepoFailed = @get "tFetchGitHubRepoFailed"
     return if ENV.environment is "test"
     githubReposUrl = [ENV.APP.API_BASE, ENV.endpoints.githubRepos].join '/'
     that = @
@@ -16,7 +23,7 @@ GithubUserComponent = Ember.Component.extend
     .then (data)->
       that.set "githubRepos", data.repos
     .fail ->
-      @get("notify").error "Something went wrong when trying to fetch repo list."
+      @get("notify").error tFetchGitHubRepoFailed
 
   ).on "init"
 
@@ -29,6 +36,8 @@ GithubUserComponent = Ember.Component.extend
       @set "isOpen", !@get "isOpen"
 
     selectRepo: (repo)->
+      tRepoIntegrated = @get "tRepoIntegrated"
+      repoNotIntegrated = @get "repoNotIntegrated"
       @set "isOpen", false
       projectId = @get "project.id"
       setGithub = [ENV.APP.API_BASE, ENV.endpoints.setGithub, projectId].join '/'
@@ -37,8 +46,8 @@ GithubUserComponent = Ember.Component.extend
         repo: repo
       Ember.$.post setGithub, data
       .then (data)->
-        @get("notify").success "Repo successfully integrated"
+        @get("notify").success tRepoIntegrated
       .fail ->
-        @get("notify").error "Something went wrong whe trying to update this repo"
+        @get("notify").error repoNotIntegrated
 
 `export default GithubUserComponent`
