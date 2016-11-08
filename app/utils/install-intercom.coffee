@@ -1,4 +1,6 @@
 installIntercom = ->
+  if !ENV.enableIntercom
+    return console.log "Intercom Disabled"
   w = window
   ic = w.Intercom
 
