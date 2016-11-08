@@ -1,3 +1,5 @@
+`import ENV from 'irene/config/environment';`
+
 installIntercom = ->
   if !ENV.enableIntercom
     return console.log "Intercom Disabled"
