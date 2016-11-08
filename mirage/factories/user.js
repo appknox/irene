@@ -16,6 +16,10 @@ export default Factory.extend({
   limitedScans: faker.random.number,
   scansLeft: faker.random.number,
   uuid: faker.random.number,
-  socketId: faker.random.number
+  socketId: faker.random.number,
+
+  lang(){
+    return faker.random.arrayElement(["en", "ja"]);
+  },
 
 });
