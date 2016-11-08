@@ -1,13 +1,21 @@
 `import DS from 'ember-data'`
 `import ENUMS from 'irene/enums'`
+`import { translationMacro as t } from 'ember-i18n'`
+
 
 Analysis = DS.Model.extend
+  i18n: Ember.inject.service()
   file: DS.belongsTo 'file', inverse: 'analyses'
   description: DS.attr()
   analiserVersion: DS.attr 'number'
   risk: DS.attr 'number'
   status: DS.attr 'number'
   vulnerability: DS.belongsTo 'vulnerability'
+  scanning: t("scanning")
+  none: t("none")
+  low: t("low")
+  medium: t("medium")
+  high: t("high")
 
   isScanning: ( ->
     risk = @get "risk"
@@ -30,12 +38,18 @@ Analysis = DS.Model.extend
   ).property "risk"
 
   riskText:( ->
+    scanning = @get "scanning"
+    none = @get "none"
+    low = @get "low"
+    medium = @get "medium"
+    high = @get "high"
+
     switch @get "risk"
-      when ENUMS.RISK.UNKNOWN then "Scanning"
-      when ENUMS.RISK.NONE then "None"
-      when ENUMS.RISK.LOW then "Low"
-      when ENUMS.RISK.MEDIUM then "Medium"
-      when ENUMS.RISK.HIGH then "High"
+      when ENUMS.RISK.UNKNOWN then scanning
+      when ENUMS.RISK.NONE then none
+      when ENUMS.RISK.LOW then low
+      when ENUMS.RISK.MEDIUM then medium
+      when ENUMS.RISK.HIGH then high
   ).property "risk"
 
 `export default Analysis`

@@ -1,10 +1,17 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums';`
+`import { translationMacro as t } from 'ember-i18n'`
 
 CompareSummaryComponent = Ember.Component.extend
+  i18n: Ember.inject.service()
   comparison: null
 
   classNames: ["columns"]
+
+  beingAnalyzed: t("beingAnalyzed")
+  remainsUnchanged: t("remainsUnchanged")
+  hasImproved: t("hasImproved")
+  gottenWorse: t("gottenWorse")
 
   vulnerability: (->
     @get("comparison")["vulnerability"]
@@ -35,14 +42,20 @@ CompareSummaryComponent = Ember.Component.extend
   compareText: (->
     file1Risk = @get "file1Analysis.risk"
     file2Risk = @get "file2Analysis.risk"
+
+    beingAnalyzed = @get "beingAnalyzed"
+    remainsUnchanged = @get "remainsUnchanged"
+    hasImproved = @get "hasImproved"
+    gottenWorse = @get "gottenWorse"
+
     if ENUMS.RISK.UNKNOWN in [file1Risk, file2Risk]
-      "is being analyzed"
+      beingAnalyzed
     else if file1Risk is file2Risk
-      "remains unchanged"
+      remainsUnchanged
     else if file1Risk > file2Risk
-      "has improved"
+      hasImproved
     else if file1Risk < file2Risk
-      "has gotten worse"
+      gottenWorse
   ).property "file1Analysis.risk", "file2Analysis.risk"
 
 
