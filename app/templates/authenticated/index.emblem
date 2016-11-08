@@ -1,14 +1,15 @@
 .box
   .columns
     .column
-      h5 New Scan
+      h5
+        = t "newScan"
   .columns
     .column
       = submit-url
     .column.is-one-quarter
       .columns
         .column.is-one-sixth.margin-top5.has-text-centered
-          | or
+           = t "or"
         .column
            label.button.is-primary.is-fullwidth
             = upload-app delegate=this

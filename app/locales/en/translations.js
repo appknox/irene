@@ -17,6 +17,7 @@ export default {
   "deviceBooting": "Device is booting",
   "deviceShuttingDown": "Device is shutting down",
   "dynamicScanStart": "Start Dynamic Scan",
+  "dynamicShutDown": "Shutdown Device",
   "dynamicScanStop": "Stop Dynamic Scan",
   "emailOrUsername": "Email / Username",
   "fileCount": "File Count",
@@ -35,6 +36,8 @@ export default {
   "jiraIntegration": "JIRA Integration",
   "jiraPageConfigure": "page to configure JIRA integration",
   "language": "Language",
+  "language.en": "English",
+  "language.ja": "Japanese",
   "login": "Login",
   "logout": "Logout",
   "low": "Low",
@@ -43,7 +46,10 @@ export default {
   "monthly": "Monthly",
   "namespace": "Namespace",
   "none": "None",
+  "notifications": "Notifications",
   "newPassword": "New Password",
+  "newScan": "New Scan",
+  "or": "or",
   "package": "Package",
   "password": "Password",
   "pay": "Pay",
@@ -69,8 +75,5 @@ export default {
   "vulnerability": "Vulnerability",
   "vulnerabilities": "Vulnerabilities",
   "yearly": "Yearly",
-  "welcome": "Welcome ",
-  "language.en": "English",
-  "language.ja": "Japanese",
-  "dynamicShutDown": "Shutdown Device"
+  "welcome": "Welcome "
 };
