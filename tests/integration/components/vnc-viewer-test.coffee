@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{vnc-viewer}}"""
 
-  assert.equal @$().text().trim(), 'Start Dynamic Scan'
+  assert.equal @$().text().trim(), ''

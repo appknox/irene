@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{namespace-component}}"""
 
-  assert.equal @$().text().trim(), 'Add Namespace'
+  assert.equal @$().text().trim(), 'Add NamespaceAdd NamespaceAdd Namespace'

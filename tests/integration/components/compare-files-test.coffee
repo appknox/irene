@@ -13,13 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{compare-files}}"""
 
-  assert.equal @$().text().trim(), ''
-
-  # Template block usage:
-  @render hbs """
-    {{#compare-files}}
-      template block text
-    {{/compare-files}}
-  """
-
-  assert.equal @$().text().trim(), 'template block text'
+  assert.equal @$().text().trim(), 'SummaryDetails - vHigh: Medium: Low: None: Unknown:  - vHigh: Medium: Low: None: Unknown:'
