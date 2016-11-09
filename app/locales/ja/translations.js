@@ -93,6 +93,6 @@ export default {
   "version": "バージョン",
   "vulnerabilities": "Vulnerabilities",
   "vulnerability": "脆弱性",
-  "welcome": " ",
+  "welcome": "",
   "yearly": "年次",
 };
