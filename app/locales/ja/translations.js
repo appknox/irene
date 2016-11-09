@@ -19,6 +19,8 @@ export default {
   "details": "",
   "deviceBooting": "デバイスを起動しています",
   "deviceShuttingDown": "デバイスをシャットダウンしています",
+  "deviceIsReady": "",
+  "deviceNotFound": "",
   "dynamic": "",
   "dynamicScanStart": "動的診断を開始",
   "dynamicScanStop": "動的診断を停止",
