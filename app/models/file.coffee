@@ -2,6 +2,7 @@
 `import BaseModelMixin from 'irene/mixins/base-model'`
 `import ENUMS from 'irene/enums'`
 `import Ember from 'ember'`
+`import { translationMacro as t } from 'ember-i18n'`
 
 _getComputedColor = (selector) ->
   el = document.querySelector "#hiddencolorholder .is-#{selector}"
@@ -13,6 +14,7 @@ _getAnalysesCount = (analyses, risk)->
   analyses.filterBy('risk', risk).get('length')
 
 File = DS.Model.extend BaseModelMixin,
+  i18n: Ember.inject.service()
   project: DS.belongsTo 'project', inverse:'files'
   uuid: DS.attr 'string'
   deviceToken: DS.attr 'string'
@@ -25,6 +27,11 @@ File = DS.Model.extend BaseModelMixin,
   analyses: DS.hasMany 'analysis', inverse: 'file'
   report: DS.attr 'string'
   manual: DS.attr 'number'
+
+  tdeviceBooting: t("deviceBooting")
+  tdeviceIsReady: t("deviceIsReady")
+  tdeviceNotFound: t("deviceNotFound")
+  tdeviceShuttingDown: t("deviceShuttingDown")
 
   analysesSorting: ['risk:desc']
   sortedAnalyses: Ember.computed.sort 'analyses', 'analysesSorting'
@@ -95,17 +102,22 @@ File = DS.Model.extend BaseModelMixin,
     @set "dynamicStatus", ENUMS.DYNAMIC_STATUS.READY
 
   humanizedStatus: (->
+    tdeviceBooting = @get "tdeviceBooting"
+    tdeviceIsReady = @get "tdeviceIsReady"
+    tdeviceShuttingDown = @get "tdeviceShuttingDown"
+    tdeviceNotFound = @get "tdeviceNotFound"
+
     switch @get "dynamicStatus"
       when ENUMS.DYNAMIC_STATUS.UNKNOWN
-        "UNKNOWN: We have no Idea what device is doing. :P"
+        "UNKNOWN: " + tdeviceNotFound
       when ENUMS.DYNAMIC_STATUS.NONE
-        "NONE: We have no Idea what device is doing. :P"
+        "NONE: " + tdeviceNotFound
       when ENUMS.DYNAMIC_STATUS.BOOTING
-        "The Device is booting up"
+        tdeviceBooting
       when ENUMS.DYNAMIC_STATUS.READY
-        "The Device is ready to be connected"
+        tdeviceIsReady
       when ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN
-        "The Device is shutting down"
+        tdeviceShuttingDown
   ).property "dynamicStatus"
 
 `export default File`
