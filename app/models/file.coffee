@@ -82,4 +82,34 @@ File = DS.Model.extend BaseModelMixin,
     status is ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN
   ).property 'dynamicStatus'
 
+  setBooting: (->
+    @set "dynamicStatus", ENUMS.DYNAMIC_STATUS.BOOTING
+  ).property "dynamicStatus"
+
+  setShuttingDown: (->
+    @set "dynamicStatus", ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN
+  ).property "dynamicStatus"
+
+  setNone: (->
+    @set "dynamicStatus", ENUMS.DYNAMIC_STATUS.NONE
+  ).property "dynamicStatus"
+
+  setReady: (->
+    @set "dynamicStatus", ENUMS.DYNAMIC_STATUS.READY
+  ).property "dynamicStatus"
+
+  humanizedStatus: (->
+    switch @get "dynamicStatus"
+      when ENUMS.DYNAMIC_STATUS.UNKNOWN
+        "UNKNOWN: We have no Idea what device is doing. :P"
+      when ENUMS.DYNAMIC_STATUS.NONE
+        "NONE: We have no Idea what device is doing. :P"
+      when ENUMS.DYNAMIC_STATUS.BOOTING
+        "The Device is booting up"
+      when ENUMS.DYNAMIC_STATUS.READY
+        "The Device is ready to be connected"
+      when ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN
+        "The Device is shutting down"
+  ).property "dynamicStatus"
+
 `export default File`
