@@ -51,7 +51,6 @@ export default {
   "login": "ログイン",
   "logout": "ログアウト",
   "low": "",
-  "manual": "",
   "medium": "",
   "language": "",
   "language.en": "English",
