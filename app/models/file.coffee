@@ -82,21 +82,17 @@ File = DS.Model.extend BaseModelMixin,
     status is ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN
   ).property 'dynamicStatus'
 
-  setBooting: (->
+  setBooting: ->
     @set "dynamicStatus", ENUMS.DYNAMIC_STATUS.BOOTING
-  ).property "dynamicStatus"
 
-  setShuttingDown: (->
+  setShuttingDown: ->
     @set "dynamicStatus", ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN
-  ).property "dynamicStatus"
 
-  setNone: (->
+  setNone: ->
     @set "dynamicStatus", ENUMS.DYNAMIC_STATUS.NONE
-  ).property "dynamicStatus"
 
-  setReady: (->
+  setReady: ->
     @set "dynamicStatus", ENUMS.DYNAMIC_STATUS.READY
-  ).property "dynamicStatus"
 
   humanizedStatus: (->
     switch @get "dynamicStatus"
