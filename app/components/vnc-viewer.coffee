@@ -29,7 +29,7 @@ VncViewerComponent = Ember.Component.extend
       @connector.connect()
 
     disconnect: ->
-      @connector.disconnect()
+      @connector?.disconnect?()
       delete @connector
 
     dynamicScan: ->
