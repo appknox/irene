@@ -15,4 +15,4 @@ test 'it renders', (assert) ->
 
 
 
-  assert.equal @$().text().trim(), 'Test CredentialsEmail / UsernamePasswordSave Credentials'
+  assert.equal @$().text().trim(), 'Test CredentialsSave Credentials'

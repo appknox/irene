@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{pricing-plan}}"""
 
-  assert.equal @$().text().trim(), 'Pay $NaN USD for undefined'
+  assert.equal @$().text().trim(), 'Pay $NaN USD for undefinedPay $NaN USD for undefinedelovisaMasterCardMaestrodiscover••••••• •••• •••• ••••Full Name••/•••••Apply Coupon pay with Card'
