@@ -22,7 +22,8 @@
             = t "vulnerability"
           each analysis.description as |finding|
             p.nowrap-trim = finding.extra_description
-            pre.nowrap-trim.scrollable-box = finding.description
+            span.scrollable-box
+              pre.nowrap-trim = finding.description
         button class="is-fullwidth is-default margin-top" click="toggleVulnerability"
           span
             | {{showOrHide}}
