@@ -5,6 +5,6 @@
     if project.hasMultipleFiles
       = link-to 'authenticated.project.files' project.id class="card-footer-item" tagName="button"
         = t "allFiles"
-      = link-to 'authenticated.choose' project.id class="card-footer-item" tagName="button"
+      = link-to 'authenticated.choose' project.files.firstObject.id class="card-footer-item" tagName="button"
         = t "compare"
 
