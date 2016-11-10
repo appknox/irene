@@ -19,7 +19,7 @@ export default Factory.extend({
   socketId: faker.random.number,
 
   lang(){
-    return faker.random.arrayElement(["en", "ja"]);
+    return faker.random.arrayElement(["en"]);
   },
 
 });

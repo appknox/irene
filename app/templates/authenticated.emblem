@@ -4,12 +4,16 @@
       = link-to 'authenticated.index'
         img src="images/logo.png"
   .column.current-user
-    = t "welcome"
-    = model.username
-    = t "scansLeft"
-    = model.scansLeft
-    = t "expiryDate"
-    = model.expiryDateHumanized
+    .user-box
+      span.user-info
+        = t "welcome"
+        = model.username
+      span.user-info
+        = t "scansLeft"
+        = model.scansLeft
+      span
+        = t "expiryDate"
+        = model.expiryDateHumanized
 
 .columns
   .column.is-one-sixth.side-menu
