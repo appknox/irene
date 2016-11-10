@@ -6,6 +6,10 @@
   .column.current-user
     = t "welcome"
     = model.username
+    = t "scansLeft"
+    = model.scansLeft
+    = t "expiryDate"
+    = model.expiryDateHumanized
 
 .columns
   .column.is-one-sixth.side-menu

@@ -22,5 +22,11 @@ User = DS.Model.extend
   limitedScans: DS.attr()
   scansLeft: DS.attr()
 
+  expiryDateHumanized: Ember.computed "expiryDate", ->
+    expiryDate = @get "expiryDate"
+    if Ember.isEmpty expiryDate
+      return
+    "#{expiryDate.toLocaleDateString()}"
+
 
 `export default User`
