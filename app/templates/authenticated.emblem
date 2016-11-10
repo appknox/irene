@@ -8,12 +8,13 @@
       span.user-info
         = t "welcome"
         = model.username
-      span.user-info
-        = t "scansLeft"
-        = model.scansLeft
       span
-        = t "expiryDate"
-        = model.expiryDateHumanized
+        if model.limitedScans
+          = t "scansLeft"
+          = model.scansLeft
+        else
+          = t "expiryDate"
+          = model.expiryDateHumanized
 
 .columns
   .column.is-one-sixth.side-menu

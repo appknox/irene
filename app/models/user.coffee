@@ -19,8 +19,8 @@ User = DS.Model.extend
   hasGithubToken: DS.attr 'boolean'
   hasJiraToken: DS.attr 'boolean'
   socketId: DS.attr 'string'
-  limitedScans: DS.attr()
-  scansLeft: DS.attr()
+  limitedScans: DS.attr 'boolean'
+  scansLeft: DS.attr 'number'
 
   expiryDateHumanized: Ember.computed "expiryDate", ->
     expiryDate = @get "expiryDate"
