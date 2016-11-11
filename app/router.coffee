@@ -18,5 +18,7 @@ Router.map ->
     @route "file", path: '/file/:fileId'
     @route "choose",path: '/choose/:fileId'
     @route 'compare', path: '/compare/:files'
+  @route 'recover'
+  @route 'reset'
 
 `export default Router;`
