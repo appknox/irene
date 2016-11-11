@@ -20,12 +20,15 @@ CollaboratorComponentComponent = Ember.Component.extend
       Ember.$.post url, data
       .then ->
         that.send "closeModal"
-        @get("notify").success "Collaborator added!"
+        that.get("notify").success "Collaborator added!"
       .fail (xhr, message, status) ->
         if xhr.status is 403
-          @get("notify").error xhr.responseJSON.message
+          that.get("notify").error xhr.responseJSON.message
         else
-          @get("notify").error "A network error occured! Please try again later"
+          that.get("notify").error "A network error occured! Please try again later"
+
+    openCollaboratorModal: ->
+      @set "showCollaboratorModal", !@get "showCollaboratorModal"
 
 
 `export default CollaboratorComponentComponent`

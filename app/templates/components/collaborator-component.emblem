@@ -1,10 +1,25 @@
 h5
   = t "collaborators"
 
-button.is-primary click="addCollaborator"
+button.is-primary click="openCollaboratorModal"
   = t "addCollaborators"
 
 .columns.margin-top
-  each project.collaborators as |collaborator|
+  each project.collaborations as |collaborator|
     .column.is-one-sixth
       = collaborator-details user=collaborator
+
+= modal-card isActive=showCollaboratorModal title="Add Collaborator to project"
+  .card-body
+    .card-wrapper
+      form
+        p.control
+          = input class="form-control" placeholder="Email / Username" type="email" value=collaboratorEmail
+        p.control
+          select
+              each project.collaborations as |collaborator|
+                option
+                  = collaborator.roleHumanized
+
+  .modal-footer
+    button click="addCollaborator" Add Collaborator

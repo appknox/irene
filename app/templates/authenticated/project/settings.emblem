@@ -6,5 +6,5 @@ h4
   =jira-project
 .box
   = test-credentials project=model
-/.box
+.box
   = collaborator-component project=model
