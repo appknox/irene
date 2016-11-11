@@ -2,7 +2,7 @@
 `import ENV from 'irene/config/environment';`
 `import { translationMacro as t } from 'ember-i18n'`
 
-GithubUserComponent = Ember.Component.extend
+GithubAccountComponent = Ember.Component.extend
   i18n: Ember.inject.service()
   isOpen: false
   project: null
@@ -50,4 +50,4 @@ GithubUserComponent = Ember.Component.extend
       .fail ->
         @get("notify").error repoNotIntegrated
 
-`export default GithubUserComponent`
+`export default GithubAccountComponent`
