@@ -2,7 +2,7 @@
 `import ENV from 'irene/config/environment';`
 `import { translationMacro as t } from 'ember-i18n'`
 
-JiraUserComponent = Ember.Component.extend
+JiraAccountComponent = Ember.Component.extend
   i18n: Ember.inject.service()
   isOpen: false
   project: null
@@ -48,4 +48,4 @@ JiraUserComponent = Ember.Component.extend
         @get("notify").error tRepoNotIntegrated
 
 
-`export default JiraUserComponent`
+`export default JiraAccountComponent`

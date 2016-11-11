@@ -7,7 +7,7 @@ isValidPassword = (password)->
 
 
 
-ChangePasswordComponent = Ember.Component.extend
+PasswordChangeComponent = Ember.Component.extend
   i18n: Ember.inject.service()
   passwordCurrent: ""
   passwordNew: ""
@@ -40,4 +40,4 @@ ChangePasswordComponent = Ember.Component.extend
         debugger
         that.get("notify").error xhr.message
 
-`export default ChangePasswordComponent`
+`export default PasswordChangeComponent`

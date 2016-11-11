@@ -3,7 +3,7 @@
     .column.is-half
       h4.is-fullwidth
         = t "changePassword"
-      = change-password
+      = password-change
 
 .box
   .columns
@@ -25,8 +25,8 @@
     .column.is-one-third
       h6
         = t "jiraIntegration"
-      =jira-user
+      =jira-account
     .column.is-one-third
       h6
         = t "githubIntegration"
-      =github-user
+      =github-account
