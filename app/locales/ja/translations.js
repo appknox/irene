@@ -75,6 +75,8 @@ export default {
   "pricing": "価格設定",
   "projects": "プロジェクト",
   "quarterly": "四半期ごと",
+  "recover": "",
+  "reset": "",
   "remainsUnchanged": "",
   "repoIntegrated": "",
   "repoNotIntegrated": "",

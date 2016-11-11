@@ -75,6 +75,8 @@ export default {
   "pricing": "Pricing",
   "projects": "Projects",
   "quarterly": "Quarterly",
+  "recover": "Recover",
+  "reset": "Reset",
   "remainsUnchanged": "remains unchanged",
   "repoIntegrated": "Repo successfully integrated",
   "repoNotIntegrated": "Something went wrong whe trying to update this repo",
