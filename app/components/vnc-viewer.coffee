@@ -56,4 +56,3 @@ VncViewerComponent = Ember.Component.extend
 
 
 `export default VncViewerComponent`
-
