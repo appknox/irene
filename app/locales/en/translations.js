@@ -81,7 +81,7 @@ export default {
   "risk": "The risk of",
   "saveCredentials": "Save Credentials",
   "scanning": "Scanning",
-  "scansLeft": " Scans Left: ",
+  "scansLeft": " Scans",
   "settings": "Settings",
   "show": "Show ",
   "signin": "Sign In",

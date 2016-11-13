@@ -32,11 +32,28 @@
         li
           a click="invalidateSession"
             = t "logout"
+      p.menu-label.margin-left
+              | Account Overview
 
-    h5.flex-center
-      = t "notifications"
+      ul.menu-list.text-center
+        li.account-overview
+          |  Projects
+          .badge
+            = model.projects.length
+        li.account-overview
+          | Subscription:
+          if model.limitedScans
+            = model.scansLeft
+            = t "scansLeft"
+          else
+            = expiryDate
+            = t "expiryDate"
 
-    = submission-list submissions=model.submissions
+
+      p.menu-label.margin-left
+        = t "notifications"
+
+      = submission-list submissions=model.submissions
 
   .column.margin-right.margin-top
     = outlet
