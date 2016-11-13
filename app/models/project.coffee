@@ -23,6 +23,9 @@ Project = DS.Model.extend BaseModelMixin,
   hasFiles: Ember.computed.gt 'fileCount', 0
   hasMultipleFiles: Ember.computed.gt 'fileCount', 1
 
+  sortProperties: ["createdOn:desc"]
+  sortedFiles: Ember.computed.sort 'files', 'sortProperties'
+
 
   platformIconClass:( ->
     switch @get "platform"
