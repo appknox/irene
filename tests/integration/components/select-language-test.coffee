@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{select-language}}"""
 
-  assert.equal @$().text().trim(), ' English Japanese'
+  assert.equal @$().text().trim().replace(/(\r\n|\n|\r|\t)/gm,""), 'English        日本語'
