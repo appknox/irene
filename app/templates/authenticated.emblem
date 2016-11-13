@@ -14,7 +14,7 @@
           = model.scansLeft
         else
           = t "expiryDate"
-          = model.expiryDateHumanized
+          = moment-from-now model.expiryDate
 
 .columns
   .column.is-one-sixth.side-menu
@@ -37,18 +37,15 @@
 
       ul.menu-list.text-center
         li.account-overview
-          |  Projects
-          .badge
-            = model.projects.length
-        li.account-overview
           | Subscription:
           if model.limitedScans
             = model.scansLeft
             = t "scansLeft"
           else
-            = expiryDate
-            = t "expiryDate"
-
+            = moment-from-now model.expiryDate
+        li.account-overview
+          |  Projects
+          = model.projects.length
 
       p.menu-label.margin-left
         = t "notifications"
