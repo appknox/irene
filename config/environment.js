@@ -48,7 +48,10 @@ module.exports = function(environment) {
       autoClear: true,
       duration: 4000 // Milliseconds
     },
-
+    moment: {
+      allowEmpty: true, // default: false
+      includeLocales: ['en', 'ja']
+    },
     deviceFarmSsl: true,
     deviceFarmPort: "443",
     deviceFarmPath: "websockify",
