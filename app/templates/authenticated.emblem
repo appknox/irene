@@ -4,17 +4,9 @@
       = link-to 'authenticated.index'
         img src="images/logo.png"
   .column.current-user
-    .user-box
-      span.user-info
+      span
         = t "welcome"
         = model.username
-      span
-        if model.limitedScans
-          = t "scansLeft"
-          = model.scansLeft
-        else
-          = t "expiryDate"
-          = moment-from-now model.expiryDate
 
 .columns
   .column.is-one-sixth.side-menu
@@ -37,15 +29,19 @@
 
       ul.menu-list.text-center
         li.account-overview
-          | Subscription:
+          = t "subscription"
+        li.account-overview-details
           if model.limitedScans
             = model.scansLeft
             = t "scansLeft"
           else
+            = t "expiring"
             = moment-from-now model.expiryDate
         li.account-overview
-          |  Projects
+          = t "projects"
+        li.account-overview-details
           = model.projects.length
+          = t "apps"
 
       p.menu-label.margin-left
         = t "notifications"
