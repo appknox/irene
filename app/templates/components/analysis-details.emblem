@@ -23,7 +23,7 @@
           each analysis.description as |finding|
             p.nowrap-trim = finding.extra_description
             span.scrollable-box
-              pre.nowrap-trim = finding.description
+              pre = finding.description
         button class="is-fullwidth is-default margin-top" click="toggleVulnerability"
           span
             | {{showOrHide}}
