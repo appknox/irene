@@ -6,7 +6,7 @@ moduleForComponent 'compare-summary', 'Integration | Component | compare summary
 }
 
 test 'it renders', (assert) ->
-  assert.expect 2
+  assert.expect 1
   #
   # # Set any properties with @set 'myProperty', 'value'
   # # Handle any actions with @on 'myAction', (val) ->
@@ -24,4 +24,4 @@ test 'it renders', (assert) ->
   #
   # assert.equal @$().text().trim(), 'template block text'
 
-  assert.equal true
+  assert.ok true
