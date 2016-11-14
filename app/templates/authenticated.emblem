@@ -40,7 +40,7 @@
         /li.account-overview
           = t "projects"
         /li.account-overview-details
-          = model.projects.length
+          | model.projects.length
           = t "apps"
 
       p.menu-label.margin-left
