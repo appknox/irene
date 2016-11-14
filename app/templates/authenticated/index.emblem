@@ -20,5 +20,5 @@
               = t "uploadApp"
 
 .columns
-  each model in model.sortedFiles as |project|
+  each model.sortedProjects as |project|
     =project-overview project=project

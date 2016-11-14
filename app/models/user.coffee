@@ -23,4 +23,8 @@ User = DS.Model.extend
   scansLeft: DS.attr 'number'
 
 
+  sortProperties: ["lastFileCreatedOn:desc"]
+  sortedProjects: Ember.computed.sort 'projects', 'sortProperties'
+
+
 `export default User`
