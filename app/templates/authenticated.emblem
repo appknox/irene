@@ -37,9 +37,9 @@
           else
             = t "expiring"
             = moment-from-now model.expiryDate
-        li.account-overview
+        /li.account-overview
           = t "projects"
-        li.account-overview-details
+        /li.account-overview-details
           = model.projects.length
           = t "apps"
 
