@@ -2,20 +2,56 @@
 
 module.exports = function(environment) {
   var ENV = {
+    pace: {
+      // addon-specific options to configure theme
+      theme: 'minimal',
+      color: 'red',
+
+      // pace-specific options
+      // learn more on http://github.hubspot.com/pace/#configuration
+      // and https://github.com/HubSpot/pace/blob/master/pace.coffee#L1-L72
+      catchupTime: 50,
+      initialRate: 0.01,
+      minTime: 100,
+      ghostTime: 50,
+      maxProgressPerFrame: 20,
+      easeFactor: 1.25,
+      startOnPageLoad: true,
+      restartOnPushState: true,
+      restartOnRequestAfter: 500,
+      target: 'body',
+      elements: {
+        checkInterval: 100,
+        selectors: ['body', '.ember-view']
+      },
+      eventLag: {
+        minSamples: 10,
+        sampleCount: 3,
+        lagThreshold: 3
+      },
+      ajax: {
+        trackMethods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+        trackWebSockets: true,
+        ignoreURLs: []
+      }
+  },
     rootURL: '/',
     locationType: 'auto',
     modulePrefix: 'irene',
     environment: environment,
     intercomAppID: "mbkqc0o1",
     pusherKey: "216d53b13aaa5c6fc2cf",
-    forceLoginOnLoad: true,
+    forceLoginOnLoad: false, //Disable as requested by @subho007
     enableIntercom: true,
 
     notifications: {
       autoClear: true,
       duration: 4000 // Milliseconds
     },
-
+    moment: {
+      allowEmpty: true, // default: false
+      includeLocales: ['en', 'ja']
+    },
     deviceFarmSsl: true,
     deviceFarmPort: "443",
     deviceFarmPath: "websockify",

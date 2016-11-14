@@ -13,7 +13,7 @@ export default Factory.extend({
   expiryDate: faker.date.future,
   hasGithubToken: faker.random.boolean,
   hasJiraToken: faker.random.boolean,
-  limitedScans: faker.random.boolean,
+  limitedScans: false,
   scansLeft: faker.random.number,
   uuid: faker.random.number,
   socketId: faker.random.number,
