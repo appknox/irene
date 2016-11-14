@@ -44,6 +44,8 @@ module.exports = function(defaults) {
 
   app.import("bower_components/pusher-websocket-iso/dist/web/pusher.js");
   app.import('bower_components/card/dist/card.js');
+  app.import('bower_components/pace/pace.js');
+  // app.import('bower_components/moment/moment.js');
 
   return app.toTree();
 };

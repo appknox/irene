@@ -4,17 +4,9 @@
       = link-to 'authenticated.index'
         img src="images/logo.png"
   .column.current-user
-    .user-box
-      span.user-info
+      span
         = t "welcome"
         = model.username
-      span
-        if model.limitedScans
-          = t "scansLeft"
-          = model.scansLeft
-        else
-          = t "expiryDate"
-          = model.expiryDateHumanized
 
 .columns
   .column.is-one-sixth.side-menu
@@ -32,11 +24,29 @@
         li
           a click="invalidateSession"
             = t "logout"
+      p.menu-label.margin-left
+              | Account Overview
 
-    h5.flex-center
-      = t "notifications"
+      ul.menu-list.text-center
+        li.account-overview
+          = t "subscription"
+        li.account-overview-details
+          if model.limitedScans
+            = model.scansLeft
+            = t "scansLeft"
+          else
+            = t "expiring"
+            = moment-from-now model.expiryDate
+        /li.account-overview
+          = t "projects"
+        /li.account-overview-details
+          = model.projects.length
+          = t "apps"
 
-    = submission-list submissions=model.submissions
+      p.menu-label.margin-left
+        = t "notifications"
+
+      = submission-list submissions=model.submissions
 
   .column.margin-right.margin-top
     = outlet

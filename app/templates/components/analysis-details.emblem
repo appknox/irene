@@ -21,9 +21,9 @@
           h5.margin-top
             = t "vulnerability"
           each analysis.description as |finding|
-            p.nowrap-trim = finding.extra_description
+            p = finding.extra_description
             span.scrollable-box
-              pre = finding.description
+              pre.pre-code = finding.description
         button class="is-fullwidth is-default margin-top" click="toggleVulnerability"
           span
             | {{showOrHide}}

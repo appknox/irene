@@ -6,7 +6,7 @@ moduleForComponent 'compare-files', 'Integration | Component | compare files', {
 }
 
 test 'it renders', (assert) ->
-  assert.expect 2
+  assert.expect 1
 
   # Set any properties with @set 'myProperty', 'value'
   # Handle any actions with @on 'myAction', (val) ->
