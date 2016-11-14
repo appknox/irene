@@ -12,6 +12,6 @@ if file.isBooting
 
 if file.isShuttingDown
   button.is-primary.is-fullwidth click="showCurrentStatus"
-    = t "deviceShutting"
+    = t "deviceShuttingDown"
 
 canvas.canvas
