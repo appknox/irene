@@ -17,7 +17,6 @@
     "pace": "^1.0.2"
   },
   "resolutions": {
-    "ember": "lts-2-8",
-    "bohemia": "^0.5.0"
+    "ember": "lts-2-8"
   }
 }
