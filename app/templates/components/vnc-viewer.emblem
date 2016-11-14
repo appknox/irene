@@ -7,11 +7,11 @@ if file.isReady
     = t "dynamicShutDown"
 
 if file.isBooting
-  button.is-primary.is-fullwidth click="showCurrentStatus"
+  button.is-primary.is-fullwidth disabled="disabled" click="showCurrentStatus"
     = t "deviceBooting"
 
 if file.isShuttingDown
-  button.is-primary.is-fullwidth click="showCurrentStatus"
-    = t "deviceShutting"
+  button.is-primary.is-fullwidth disabled="disabled" click="showCurrentStatus"
+    = t "deviceShuttingDown"
 
 canvas.canvas
