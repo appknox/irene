@@ -8,7 +8,7 @@ module.exports = function(environment) {
     environment: environment,
     intercomAppID: "mbkqc0o1",
     pusherKey: "216d53b13aaa5c6fc2cf",
-    forceLoginOnLoad: true,
+    forceLoginOnLoad: false, //Disable as requested by @subho007
     enableIntercom: true,
 
     notifications: {
