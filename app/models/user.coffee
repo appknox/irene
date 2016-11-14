@@ -22,11 +22,9 @@ User = DS.Model.extend
   limitedScans: DS.attr 'boolean'
   scansLeft: DS.attr 'number'
 
-  expiryDateHumanized: Ember.computed "expiryDate", ->
-    expiryDate = @get "expiryDate"
-    if Ember.isEmpty expiryDate
-      return
-    "#{expiryDate.toLocaleDateString()}"
+
+  sortProperties: ["lastFileCreatedOn:desc"]
+  sortedProjects: Ember.computed.sort 'projects', 'sortProperties'
 
 
 `export default User`
