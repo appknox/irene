@@ -18,6 +18,8 @@ Project = DS.Model.extend BaseModelMixin,
   testUser:DS.attr 'string'
   testPassword: DS.attr 'string'
   url: DS.attr 'string'
+  lastFileCreatedOn: DS.attr 'date'
+
 
   fileCount: Ember.computed.alias 'files.length'
   hasFiles: Ember.computed.gt 'fileCount', 0

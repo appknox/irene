@@ -3,6 +3,6 @@
 IndexRoute = Ember.Route.extend
 
   model: ->
-    @modelFor("authenticated").get('projects')
+    @modelFor("authenticated")
 
 `export default IndexRoute`
