@@ -31,7 +31,7 @@ module.exports = function(environment) {
       },
       ajax: {
         trackMethods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
-        trackWebSockets: true,
+        trackWebSockets: false,
         ignoreURLs: []
       }
   },
