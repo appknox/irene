@@ -12,7 +12,11 @@ export default function() {
   this.get('/submissions/:id', 'submission');
   this.get('/files/:id', 'file');
   this.get('/vulnerabilities/:id', 'vulnerability');
+  this.get('/invitations/:id', 'invitation');
 
+  this.post('/signup', () => {
+    return {user_id: '1', token: 'secret'};
+  });
   this.post('/login', () => {
     return {user_id: '1', token: 'secret'};
   });
