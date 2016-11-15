@@ -1,5 +1,5 @@
 `import ENV from 'irene/config/environment';`
-`import ConnectorMixin from 'irene/mixins/connector';`
+`import ConnectorMixin from 'irene/app/mixins/connector';`
 
 
 updateState = ->
