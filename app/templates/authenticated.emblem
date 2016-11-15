@@ -25,7 +25,7 @@
           a click="invalidateSession"
             = t "logout"
       p.menu-label.margin-left
-              | Account Overview
+              = t "accountOverview"
 
       ul.menu-list.text-center
         li.account-overview
