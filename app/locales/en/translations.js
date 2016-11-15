@@ -45,6 +45,7 @@ export default {
   "hide": "Hide ",
   "high": "High",
   "howAndWhat": "How and What?",
+  "identification": "Username / Email",
   "integrateGithub": "Integrate GitHub",
   "integrateJIRA": "Integrate JIRA",
   "integration": "Integrations",
