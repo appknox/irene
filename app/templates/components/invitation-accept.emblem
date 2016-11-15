@@ -1,0 +1,10 @@
+h3 Accept Invite
+h4 {{invitation.user.username}} has invited you to {{invitation.project.name}} project
+form submit='acceptInvite'
+  = input value=invitation.email placeholder='Email' readonly="true"
+  = input value=username placeholder='Username' autofocus="true"
+  = input value=password placeholder='Password' type="password"
+  button type="submit"
+    | Accept Invite
+footer
+  = link-to "login" | Login?

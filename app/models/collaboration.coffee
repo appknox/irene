@@ -14,4 +14,5 @@ Collaboration = DS.Model.extend BaseModelMixin,
       when ENUMS.COLLABORATION_ROLE.MANAGER then "Manager"
       when ENUMS.COLLABORATION_ROLE.READ_ONLY then "Read Only"
   ).property "role"
+
 `export default Collaboration`
