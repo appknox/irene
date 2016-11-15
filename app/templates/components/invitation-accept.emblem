@@ -1,10 +1,30 @@
-h3 Signup & Accept Invite
-h4 {{invitation.user.username}} has invited you to {{invitation.project.name}} project
-form submit='acceptInvite'
-  = input value=invitation.email placeholder='Email' readonly="true"
-  = input value=username placeholder='Username' autofocus="true"
-  = input value=password placeholder='Password' type="password"
-  button type="submit"
-    | Signup & Accept Invite
-footer
-  = link-to "login" | Login?
+.columns
+  .column.flex-center
+    img src="/images/logo.png" alt="Mobile application security"
+.columns
+  .column.flex-center
+    = t "acceptInvite"
+.columns
+  .column.flex-center
+    h3 {{invitation.user.username}} has invited you to {{invitation.project.name}} project
+.columns
+  .column.flex-center
+    form.login-form.recover-form submit="acceptInvite"
+      p.control.has-icon.has-icon-left
+        = input class="input" value=invitation.email readonly="true"
+        = fa-icon "envelope" class="is-primary"
+
+      p.control.has-icon.has-icon-left
+        = input class="input" placeholder=(t 'username') value=username
+        = fa-icon "user" class="is-primary"
+
+      p.control.has-icon.has-icon-left
+        = input class="input" placeholder=(t 'password') value=password
+        = fa-icon "lock" class="is-primary"
+
+      p.control.flex-center
+        button.button.is-primary.login-button type="submit"
+          = t "acceptInvite"
+      p.control.flex-center
+        link-to "login"
+          = t "login"
