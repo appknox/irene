@@ -1,4 +1,5 @@
 `import ENV from 'irene/config/environment';`
+`import ConnectorMixin from 'irene/mixins/connector';`
 
 
 updateState = ->
@@ -7,11 +8,8 @@ updateState = ->
 xvpInit = ->
   return true
 
-class ConnectorRFB
-
+class ConnectorRFB extends ConnectorMixin
   rfb: null
-
-  constructor: (@canvasEl, @deviceToken) ->
 
   connect: ->
     @rfb = new RFB
@@ -26,6 +24,7 @@ class ConnectorRFB
       'onXvpInit': xvpInit
     # display.set_maxWidth ENV.vncScreenWidth
     # display.set_maxHeight ENV.vncScreenHeight
+    debugger
     @rfb.connect ENV.deviceFarmHost, ENV.deviceFarmPort, '1234', "#{ENV.deviceFarmPath}?token=#{@deviceToken}"
     # display = @rfb.get_display()
     # @rfb.requestDesktopSize ENV.vncScreenWidth, ENV.vncScreenHeight
