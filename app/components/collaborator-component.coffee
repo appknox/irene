@@ -15,20 +15,21 @@ CollaboratorComponentComponent = Ember.Component.extend
         email: @get "collaboratorEmail"
         projectId: @get "project.id"
         role: @get "currentRole"
-      url = [ENV.APP.API_BASE, ENV.endpoints.collaboration].join '/'
       that = @
-      Ember.$.post url, data
-      .then ->
+      @get("ajax").post ENV.endpoints.collaboration, data:data
+      .then (data)->
         that.send "closeModal"
         that.get("notify").success "Collaborator added!"
-      .fail (xhr, message, status) ->
-        if xhr.status is 403
-          that.get("notify").error xhr.responseJSON.message
-        else
-          that.get("notify").error "A network error occured! Please try again later"
+      .catch (error) ->
+        debugger
+        for error in error.errors
+          that.get("notify").error error.detail.message
 
     openCollaboratorModal: ->
-      @set "showCollaboratorModal", !@get "showCollaboratorModal"
+      @set "showCollaboratorModal", true
+
+    closeModal: ->
+      @set "showCollaboratorModal", false
 
 
 `export default CollaboratorComponentComponent`
