@@ -26,5 +26,5 @@
         button.button.is-primary.login-button type="submit"
           = t "acceptInvite"
       p.control.flex-center
-        link-to "login"
+        = link-to "login"
           = t "login"
