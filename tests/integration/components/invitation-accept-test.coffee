@@ -6,20 +6,11 @@ moduleForComponent 'invitation-accept', 'Integration | Component | invitation ac
 }
 
 test 'it renders', (assert) ->
-  assert.expect 2
+  assert.expect 1
 
   # Set any properties with @set 'myProperty', 'value'
   # Handle any actions with @on 'myAction', (val) ->
 
   @render hbs """{{invitation-accept}}"""
 
-  assert.equal @$().text().trim(), ''
-
-  # Template block usage:
-  @render hbs """
-    {{#invitation-accept}}
-      template block text
-    {{/invitation-accept}}
-  """
-
-  assert.equal @$().text().trim(), 'template block text'
+  assert.equal @$().text().trim(), 'Signup & Accept Invite has invited you to  projectSignup & Accept InviteLogin'

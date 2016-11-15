@@ -2,7 +2,7 @@
 
 moduleForModel 'invitation', 'Unit | Model | invitation', {
   # Specify the other units that are required for this test.
-  needs: []
+  needs: ['model:user','model:project']
 }
 
 test 'it exists', (assert) ->
