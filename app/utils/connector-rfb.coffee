@@ -1,5 +1,4 @@
 `import ENV from 'irene/config/environment';`
-`import ConnectorMixin from 'irene/mixins/connector';`
 
 
 updateState = ->
@@ -8,8 +7,9 @@ updateState = ->
 xvpInit = ->
   return true
 
-class ConnectorRFB extends ConnectorMixin
-  rfb: null
+class ConnectorRFB
+
+  constructor: (@canvasEl, @deviceToken, @rfb) ->
 
   connect: ->
     @rfb = new RFB
