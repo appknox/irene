@@ -24,11 +24,11 @@ class ConnectorRFB
       'view_only': false
       'onUpdateState': updateState
       'onXvpInit': xvpInit
-    display = @rfb.get_display
     # display.set_maxWidth ENV.vncScreenWidth
     # display.set_maxHeight ENV.vncScreenHeight
     console.log ENV.deviceFarmHost
     @rfb.connect ENV.deviceFarmHost, ENV.deviceFarmPort, '1234', "#{ENV.deviceFarmPath}?token=#{@deviceToken}"
+    display = @rfb.get_display
     @rfb.requestDesktopSize ENV.vncScreenWidth, ENV.vncScreenHeight
 
 
