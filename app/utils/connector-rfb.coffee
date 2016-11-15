@@ -24,7 +24,7 @@ class ConnectorRFB
       'onXvpInit': xvpInit
     @rfb.connect ENV.deviceFarmHost, ENV.deviceFarmPort, '1234', "#{ENV.deviceFarmPath}?token=#{@deviceToken}"
     display = @rfb.get_display
-    rfb.requestDesktopSize ENV.vncScreenWidth, ENV.vncScreenHeight
+    @rfb.requestDesktopSize ENV.vncScreenWidth, ENV.vncScreenHeight
     display.resize ENV.vncScreenWidth, ENV.vncScreenHeight
 
   disconnect: ->
