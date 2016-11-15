@@ -36,8 +36,8 @@ PasswordChangeComponent = Ember.Component.extend
       ajax.post ENV.endpoints.changePassword, data: data
       .then ->
         that.get("notify").success tPasswordChanged
-      .catch (xhr, message, status) ->
-        debugger
-        that.get("notify").error xhr.message
+      .catch (error) ->
+        for error in error.errors
+          that.get("notify").error error.detail.message
 
 `export default PasswordChangeComponent`
