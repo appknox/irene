@@ -9,7 +9,7 @@ Router.map ->
   @route 'freestyle'
   @route 'login'
   @route 'recover'
-  @route 'reset'
+  @route 'reset', path: 'reset/:uuid/:token'
   @route 'authenticated', path: '/', ->
     @route "index", path: '/'
     @route "settings"
