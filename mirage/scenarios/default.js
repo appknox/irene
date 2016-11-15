@@ -22,6 +22,7 @@ export default function(server) {
     projectIds.push(projectId);
     var fileCount = getRandomInt(1, 4);
     project = server.create('project', {userId: currentUserId});
+    server.create('invitation', {projectId: projectId, userId:currentUserId});
     var fileIds = [];
     for (var fileId = 1; fileId <= fileCount; fileId++) {
       file = server.create('file', {projectId: projectId});
