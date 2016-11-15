@@ -1,0 +1,1 @@
+= password-reset uuid=model.uuid token=model.token
