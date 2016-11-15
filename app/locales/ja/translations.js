@@ -82,6 +82,7 @@ export default {
   "projects": "プロジェクト",
   "quarterly": "四半期ごと",
   "recover": "パスワードを回復",
+  "recoverPassword": "パスワードを回復する",
   "reset": "パスワードを再設定する",
   "resetPassword": "あなたのパスワードをリセット",
   "remainsUnchanged": "変更されていません",

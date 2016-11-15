@@ -83,6 +83,7 @@ export default {
   "projects": "Projects",
   "quarterly": "Quarterly",
   "recover": "Recover",
+  "recoverPassword": "Recover your password",
   "reset": "Reset",
   "resetPassword": "Reset your password",
   "remainsUnchanged": "remains unchanged",
