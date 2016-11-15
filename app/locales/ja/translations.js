@@ -83,6 +83,7 @@ export default {
   "quarterly": "四半期ごと",
   "recover": "パスワードを回復",
   "reset": "パスワードを再設定する",
+  "resetPassword": "あなたのパスワードをリセット",
   "remainsUnchanged": "変更されていません",
   "repoIntegrated": "repo 統合",
   "repoNotIntegrated": "repo が統合されていません",
