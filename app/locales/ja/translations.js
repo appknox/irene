@@ -1,4 +1,5 @@
 export default {
+  "acceptInvite": "招待に参加して同意する",
   "account": "アカウント",
   "accountOverview": "アカウントの概要",
   "addCollaborators": "グループ作業者の追加",

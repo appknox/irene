@@ -1,4 +1,5 @@
 export default {
+  "acceptInvite": "Signup & Accept Invite",
   "account": "Account",
   "accountOverview": "Account Overview",
   "addCollaborators": "Add Collaborator",
@@ -107,5 +108,5 @@ export default {
   "vulnerabilities": "Vulnerabilities",
   "vulnerability": "Vulnerability",
   "welcome": "Welcome ",
-  "yearly": "Yearly",
+  "yearly": "Yearly"
 };
