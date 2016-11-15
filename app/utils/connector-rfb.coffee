@@ -27,6 +27,7 @@ class ConnectorRFB
     display = @rfb.get_display
     # display.set_maxWidth ENV.vncScreenWidth
     # display.set_maxHeight ENV.vncScreenHeight
+    console.log ENV.deviceFarmHost
     @rfb.connect ENV.deviceFarmHost, ENV.deviceFarmPort, '1234', "#{ENV.deviceFarmPath}?token=#{@deviceToken}"
     @rfb.requestDesktopSize ENV.vncScreenWidth, ENV.vncScreenHeight
 
