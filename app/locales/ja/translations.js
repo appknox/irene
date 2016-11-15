@@ -76,6 +76,8 @@ export default {
   "pricing": "価格",
   "projects": "プロジェクト",
   "quarterly": "四半期ごと",
+  "recover": "パスワードを回復",
+  "reset": "パスワードを再設定する",
   "remainsUnchanged": "変更されていません",
   "repoIntegrated": "repo 統合",
   "repoNotIntegrated": "repo が統合されていません",
