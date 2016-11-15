@@ -84,7 +84,7 @@ export default {
   "quarterly": "Quarterly",
   "recover": "Recover",
   "reset": "Reset",
-  "resetPassword": "Reset your Password",
+  "resetPassword": "Reset your password",
   "remainsUnchanged": "remains unchanged",
   "repoIntegrated": "Repo successfully integrated",
   "repoNotIntegrated": "Something went wrong whe trying to update this repo",
