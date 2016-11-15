@@ -39,7 +39,6 @@ PasswordResetComponent = Ember.Component.extend
         that.container.lookup("route:reset").transitionTo "login"
         that.get("notify").success "Pasword is successfully reset!"
       .catch (error) ->
-        debugger
         for error in error.errors
           that.get("notify").error error.detail.message
 
