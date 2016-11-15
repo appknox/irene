@@ -1,5 +1,6 @@
 export default {
   "account": "Account",
+  "accountOverview": "Account Overview",
   "addCollaborators": "Add Collaborator",
   "addNamespace": "Add Namespace",
   "admin": "Admin",
@@ -69,6 +70,9 @@ export default {
   "or": "or",
   "package": "Package",
   "password": "Password",
+  "passwordLengthError": "Passwords must be greater than or equal to 6",
+  "passwordMatchError": "Passwords doesnt match",
+  "passwordIsReset": "Password is successfully reset!",
   "passwordChanged": "Your password has been changed",
   "pasteYourUrl": "Paste Android / Windows store URL",
   "pay": "Pay",

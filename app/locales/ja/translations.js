@@ -1,5 +1,6 @@
 export default {
   "account": "アカウント",
+  "accountOverview": "アカウントの概要",
   "addCollaborators": "グループ作業者の追加",
   "addNamespace": "名前空間の追加",
   "admin": "管理者",
@@ -68,6 +69,9 @@ export default {
   "or": "または",
   "package": "パッケージ",
   "password": "パスワード",
+  "passwordLengthError": "パスワードは6以上でなければなりません",
+  "passwordMatchError": "パスワードが一致しません",
+  "passwordIsReset": "パスワードは正常にリセットされました！",
   "passwordChanged": "パスワードが変更されました",
   "pasteYourUrl": "URL を貼り付けてください",
   "pay": "支払",
