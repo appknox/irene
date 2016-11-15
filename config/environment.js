@@ -35,6 +35,8 @@ module.exports = function(environment) {
         ignoreURLs: []
       }
   },
+    vncScreenWidth: 270,
+    vncScreenHeight: 480,
     rootURL: '/',
     locationType: 'auto',
     modulePrefix: 'irene',
