@@ -137,7 +137,7 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
     ENV['ember-cli-mirage'] = {
-      enabled:false
+      enabled:true
     };
     ENV['namespace'] = "api-v2";
     ENV['host'] = "http://0.0.0.0:8000";
