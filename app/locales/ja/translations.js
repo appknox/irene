@@ -1,5 +1,6 @@
 export default {
   "account": "アカウント",
+  "accountOverview": "アカウントの概要",
   "addCollaborators": "グループ作業者の追加",
   "addNamespace": "名前空間の追加",
   "admin": "管理者",

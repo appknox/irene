@@ -1,5 +1,6 @@
 export default {
   "account": "Account",
+  "accountOverview": "Account Overview",
   "addCollaborators": "Add Collaborator",
   "addNamespace": "Add Namespace",
   "admin": "Admin",
