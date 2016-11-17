@@ -8,38 +8,12 @@ Uploader = EmberUploader.Uploader.extend
   ajax: null
   notify: null
 
-  sign: (file) ->
-    data =
-      content_type: "application/octet-stream"
-    that = @
-    new Ember.RSVP.Promise (resolve, reject) ->
-      that.get("ajax").request ENV.endpoints.signedUrl, data: data
-      .then (json)->
-        resolve json
-      .catch ->
-        debugger
-        that.get("notify").error "Server failed to return Signed URL"
-        reject()
-
   upload: (file) ->
     that = @
 
     signSuccess = (json)->
-
-      uploadSuccess = (respData) ->
-        that.get("notify").success "File Uploaded Successfully. Please wait while we process your file."
-        that.didUpload json.file_key, json.file_key_signed
-
-      uploadError = (xhr) ->
-        if xhr.status is 200
-          that.get("notify").success "File Uploaded Successfully. Please wait while we process your file."
-          that.didUpload json.file_key, json.file_key_signed
-        else
-          that.get("notify").error "Error While signing the file."
-
       settings =
-        url: json.url
-        method: "PUT"
+        dataType: "text"
         contentType: "application/octet-stream"
         processData: false
         xhrFields:
@@ -51,15 +25,25 @@ Uploader = EmberUploader.Uploader.extend
           that.one 'isAborting', -> xhr.abort()
           xhr
         data: file
-        success: uploadSuccess
-        error: uploadError
-      Ember.$.ajax settings
+      that.get("ajax").put json.url, settings
+      .then ->
+        debugger
+        that.didUpload json.file_key, json.file_key_signed
+        that.get("notify").success "File Uploaded Successfully. Please wait while we process your file."
+      .catch ->
+        debugger
+        that.get("notify").error "Error while uploading file to presigned URL"
 
-    signError = (e)->
+    data =
+      content_type: "application/octet-stream"
+
+    that.get("ajax").request ENV.endpoints.signedUrl, data: data
+    .then (json)->
+      signSuccess json
+    .catch ->
       debugger
-      that.get("notify").error "Error While signing the file."
+      that.get("notify").error "Error while fetching signed url"
 
-    @sign(file).then signSuccess, signError
 
 `export default Uploader;`
 
