@@ -26,6 +26,7 @@ VncViewerComponent = Ember.Component.extend
   actions:
 
     connect: ->
+      debugger
       @connector.connect()
 
     disconnect: ->

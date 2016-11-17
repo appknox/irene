@@ -58,7 +58,7 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
       file_updated: (data) ->
         that.get("notify").info "File updated"
-        store.pushPayload data: data
+        file = store.pushPayload data: data
 
       user_updated: (data) ->
         store.pushPayload data: data
