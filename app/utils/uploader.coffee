@@ -27,11 +27,9 @@ Uploader = EmberUploader.Uploader.extend
         data: file
       that.get("ajax").put json.url, settings
       .then ->
-        debugger
         that.didUpload json.file_key, json.file_key_signed
         that.get("notify").success "File Uploaded Successfully. Please wait while we process your file."
       .catch ->
-        debugger
         that.get("notify").error "Error while uploading file to presigned URL"
 
     data =
@@ -41,7 +39,6 @@ Uploader = EmberUploader.Uploader.extend
     .then (json)->
       signSuccess json
     .catch ->
-      debugger
       that.get("notify").error "Error while fetching signed url"
 
 
