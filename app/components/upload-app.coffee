@@ -26,7 +26,7 @@ UploadAppComponent = EmberUploader.FileField.extend
       that.get("ajax").post ENV.endpoints.uploadedFile, data: data
 
     uploader.on 'progress', (e) ->
-      delegate.set "progress", e.percent
+      delegate.set "progress", parseInt e.percent
 
     uploader.upload files[0]
 
