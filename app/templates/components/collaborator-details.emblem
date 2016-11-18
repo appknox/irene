@@ -1,11 +1,8 @@
 .card.is-fullwidth
   header.card-header
     p.card-header-title.flex-center.title-tag
-      = user.roleHumanized
+      = collaboration.roleHumanized
   .card-content
     .content
       p
-        =  collaboration.user.username
-      p.flex-center
-        = user.role
-= yield
+        = collaboration.user.username
