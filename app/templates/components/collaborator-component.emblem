@@ -16,10 +16,10 @@ button.is-primary click="openCollaboratorModal"
         p.control
           = input class="form-control" placeholder="Email / Username" type="email" value=collaboratorEmail
         p.control
-          select
-            each project.collaborations as |collaborator|
-              option
-                = collaborator.roleHumanized
+          select onchange={action "roleChanged" value="target.value"}
+            each roles as |role|
+              option value=role.value
+                = role.key
 
   .modal-footer
     button click="addCollaborator" Add Collaborator
