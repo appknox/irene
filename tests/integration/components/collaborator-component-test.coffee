@@ -15,4 +15,4 @@ test 'it renders', (assert) ->
 
 
 
-  assert.equal @$().text().trim(), 'CollaboratorsAdd CollaboratorAdd Collaborator to projectAdd Collaborator'
+  assert.equal @$().text().trim(), 'CollaboratorsAdd CollaboratorAdd Collaborator to projectREAD_ONLYMANAGERADMINAdd Collaborator'
