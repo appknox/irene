@@ -5,6 +5,15 @@
 
 VncViewerComponent = Ember.Component.extend
   file: null
+  isPoppedOut: false
+  classNameBindings: ["isPoppedOut:modal", "isPoppedOut:is-active"]
+
+  vncPopText: (->
+    if @get "isPoppedOut"
+      "Close Modal"
+    else
+      "Pop Out Modal"
+  ).property "isPoppedOut"
 
   createVNCObject: ->
     canvasEl = @element.getElementsByClassName("canvas")[0]
@@ -24,6 +33,8 @@ VncViewerComponent = Ember.Component.extend
   ).observes 'file.dynamicStatus'
 
   actions:
+    togglePop: ->
+      @set "isPoppedOut", !@get "isPoppedOut"
 
     connect: ->
       @connector.connect()
