@@ -5,7 +5,7 @@
     "ember-cli-shims": "0.1.3",
     "ember-qunit-notifications": "0.1.0",
     "bourbon": "4.2.7",
-    "bohemia": "^0.5.0",
+    "bohemia": "^0.6.0",
     "font-awesome": "~4.6.3",
     "remarkable": "1.7.1",
     "highlightjs": "9.6.0",
@@ -17,6 +17,7 @@
     "pace": "^1.0.2"
   },
   "resolutions": {
-    "ember": "lts-2-8"
+    "ember": "lts-2-8",
+    "bohemia": "^0.6.0"
   }
 }
