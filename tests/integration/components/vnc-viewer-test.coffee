@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{vnc-viewer}}"""
 
-  assert.equal @$().text().trim(), ''
+  assert.equal @$().text().trim(), 'Pop Out Modal'
