@@ -2,13 +2,19 @@
 `import ENV from 'irene/config/environment';`
 `import ENUMS from 'irene/enums';`
 
+roles = ENUMS.COLLABORATION_ROLE.CHOICES.reverse()[1..]
+
 CollaboratorComponentComponent = Ember.Component.extend
   collaboratorEmail: ""
-  choices: ENUMS.COLLABORATION_ROLE.CHOICES[1..]
-  currentRole: ENUMS.COLLABORATION_ROLE.MANAGER
   project: null
+  roles: roles
+  currentRole: roles[0].value
 
   actions:
+
+    roleChanged: (value) ->
+      @set "currentRole", parseInt value
+
     addCollaborator: ->
       that = @
       data =
@@ -21,7 +27,6 @@ CollaboratorComponentComponent = Ember.Component.extend
         that.send "closeModal"
         that.get("notify").success "Collaborator added!"
       .catch (error) ->
-        debugger
         for error in error.errors
           that.get("notify").error error.detail.message
 
