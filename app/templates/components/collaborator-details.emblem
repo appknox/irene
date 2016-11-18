@@ -4,5 +4,5 @@
       = collaboration.roleHumanized
   .card-content
     .content
-      p
+      p.align-center
         = collaboration.user.username
