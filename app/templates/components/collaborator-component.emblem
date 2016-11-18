@@ -5,9 +5,9 @@ button.is-primary click="openCollaboratorModal"
   = t "addCollaborators"
 
 .columns.margin-top
-  each project.collaborations as |collaborator|
+  each project.collaborations as |collaboration|
     .column.is-one-sixth
-      = collaborator-details user=collaborator
+      = collaborator-details collaboration=collaboration
 
 = modal-card isActive=showCollaboratorModal title="Add Collaborator to project"
   .card-body

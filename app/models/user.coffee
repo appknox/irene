@@ -14,7 +14,7 @@ User = DS.Model.extend
   pricings: DS.hasMany 'pricing'
   submissions: DS.hasMany 'submission', inverse:'user'
   namespaces: DS.attr 'string'
-  collaboration: DS.hasMany 'collaboration', inverse:'user'
+  collaborations: DS.hasMany 'collaboration', inverse:'user'
   expiryDate: DS.attr 'date'
   hasGithubToken: DS.attr 'boolean'
   hasJiraToken: DS.attr 'boolean'
