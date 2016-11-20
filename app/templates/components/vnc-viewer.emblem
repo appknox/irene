@@ -19,7 +19,8 @@ if isPoppedOut
         = t "deviceShuttingDown"
   .modal-card-body
     canvas.canvas
-  .modal-card-foot
-    button.is-primary.is-fullwidth click="togglePop"
-      = vncPopText
+  if file.isReady
+    .modal-card-foot
+      button.is-primary.is-fullwidth click="togglePop"
+        = vncPopText
 
