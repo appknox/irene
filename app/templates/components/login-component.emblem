@@ -9,8 +9,8 @@
     .columns
       .column.is-half
         figure.image.login-phone-image
-          img src="images/welcome.png" alt="Mobile application security"
-          img src="images/login-phone-graphic.svg" alt="Mobile application security"
+          img src="/images/welcome.png" alt="Mobile application security"
+          img src="/images/login-phone-graphic.svg" alt="Mobile application security"
       .column.flex-center
         form.login-form
           p.control.has-icon.has-icon-left
@@ -21,7 +21,7 @@
             = input class="input" type="password" placeholder=(t 'password') value=password id="password"
             = fa-icon class="is-primary" "lock"
 
-          = link-to 'recover'  
+          = link-to 'recover'
             p.has-text-right.forgot-password
               a
                 = t "forgotPassword"
