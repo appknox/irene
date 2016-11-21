@@ -1,0 +1,6 @@
+select.input.is-fullwidth{action 'setLocale' on='change'}
+  option selected="true" value=currentLocale.locale
+    = currentLocale.localeString
+  each otherLocales as |locale|
+    option value=locale.locale
+      = locale.localeString

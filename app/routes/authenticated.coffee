@@ -18,7 +18,6 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
     @get('store').find('user', userId)
 
   afterModel: (user, transition)->
-
     try
       window.Intercom "boot",
         app_id: ENV.intercomAppID
