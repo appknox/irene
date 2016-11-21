@@ -41,7 +41,6 @@ module.exports = function(environment) {
     environment: environment,
     intercomAppID: "mbkqc0o1",
     pusherKey: "216d53b13aaa5c6fc2cf",
-    forceLoginOnLoad: false, //Disable as requested by @subho007
     enableIntercom: true,
 
     notifications: {
@@ -139,7 +138,6 @@ module.exports = function(environment) {
     };
     ENV['namespace'] = "api-v2";
     ENV['host'] = "http://0.0.0.0:8000";
-    ENV.forceLoginOnLoad = false;
     ENV.enableIntercom = false;
   }
 
@@ -149,7 +147,6 @@ module.exports = function(environment) {
     };
     ENV['namespace'] = "api-v2";
     ENV['host'] = "http://0.0.0.0:8000";
-    ENV.forceLoginOnLoad = false;
     ENV.enableIntercom = false;
   }
 
