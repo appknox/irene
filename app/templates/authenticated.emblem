@@ -2,7 +2,7 @@
   .column.is-one-sixth.appknox-logo
     .has-text-centered
       = link-to 'authenticated.index'
-        img src="images/logo.png"
+        img src="/images/logo.png"
   .column.current-user
       span
         = t "welcome"
