@@ -56,6 +56,7 @@ VncViewerComponent = Ember.Component.extend
     dynamicShutdown: ->
       file = @get "file"
       file.setShuttingDown()
+      @set "isPoppedOut", false
       file_id = @get "file.id"
       shutdownUrl = [ENV.endpoints.dynamicShutdown, file_id].join '/'
       @get("ajax").request shutdownUrl
