@@ -9,9 +9,14 @@ pusher = new Pusher ENV.pusherKey, encrypted: true
 
 AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
+  lastTransition: null
   i18n: service()
-  session: service 'session'
   moment: service()
+  session: service 'session'
+
+  beforeModel: (transition)->
+    @set "lastTransition", transition
+    @_super transition
 
   model: ->
     userId = @get "session.data.authenticated.user_id"
