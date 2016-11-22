@@ -18,15 +18,16 @@
     .column
       .margin-top
         = select-language
-/.box
+
+.box
   h4.is-fullwidth
     = t "integration"
   .columns
     .column.is-one-third
       h6
         = t "jiraIntegration"
-      =jira-account
+      = jira-account
     .column.is-one-third
       h6
         = t "githubIntegration"
-      =github-account
+      = github-account
