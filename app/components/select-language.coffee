@@ -36,7 +36,7 @@ SelectLanguageComponent = Ember.Component.extend
     setLocale: ->
       lang = @$('select').val()
       @set 'i18n.locale', lang
-      this.get('moment').changeLocale(lang)
+      @get('moment').changeLocale(lang)
       data =
         lang: lang
       @get("ajax").post ENV.endpoints.lang, data: data

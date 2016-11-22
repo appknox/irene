@@ -37,24 +37,27 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
     if Ember.isEmpty socketId
       return
     @set 'i18n.locale', user.get "lang"
-    this.get('moment').changeLocale(user.get "lang")
+    @get('moment').changeLocale(user.get "lang")
     channel = pusher.subscribe "#{socketId}-2"
     that = @
     store = @get "store"
+
     allEvents =
-      analysis_new: (data)->
+
+      object_event: (data) ->
+        # A generic event
         store.pushPayload data: data
 
       analysis_updated: (data)->
-        risk = data.risk
-        analysis = store.pushPayload data: data
-        store.find("vulnerability", analysis.get("vulnerabilityId")).then (vulnerability)->
+        store.pushPayload data: data
+        analysis = store.peekRecord("analysis", data.id)
+        risk = analysis.get("risk")
+        store.find("vulnerability", analysis.get("vulnerability.id")).then (vulnerability)->
           message = "Analysis Updated: #{vulnerability.get "name"}"
           that.get("notify").info message if risk is ENUMS.RISK.LOW
           that.get("notify").success message if risk is ENUMS.RISK.NONE
           that.get("notify").warning message if risk is ENUMS.RISK.MEDIUM
           that.get("notify").error message if risk is ENUMS.RISK.HIGH
-
 
       file_new: (data)->
         that.get("notify").info "New file added"
@@ -64,9 +67,6 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
         that.get("notify").info "File updated"
         store.pushPayload data: data
 
-      user_updated: (data) ->
-        store.pushPayload data: data
-
       project_new: (data) ->
         that.get("notify").info "New project added"
         store.pushPayload data: data
@@ -74,24 +74,6 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
       project_updated: (data) ->
         that.get("notify").info "Project `#{data.name}` updated"
         store.pushPayload data: data
-
-      submission_new: (data) ->
-        store.pushPayload data: data
-
-      submission_updated: (data) ->
-        store.pushPayload data: data
-
-      project_deleted: (data) ->
-        that.get("notify").info "Project `#{data.name}` deleted!"
-        store.find('project', data.id).then (project) ->
-          project.deleteRecord()
-
-      collaboration_new: (data) ->
-        store.pushPayload data: data
-
-      collaboration_updated: (data) ->
-        store.find('collaboration', data.id).then (collaboration) ->
-          that.store.pushPayload data: data
 
       collaboration_deleted: (data) ->
         store.find('collaboration', data.id).then (collaboration) ->
@@ -118,6 +100,14 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
       reload: ->
         location.reload()
+
+    simplePushEvents = [
+      "analysis_new", "user_updated", "project_new", "project_updated",
+      "submission_new", "submission_updated", "collaboration_new",
+      "collaboration_updated"]
+
+    for simplePushEvent in simplePushEvents
+      allEvents[simplePushEvent] = allEvents.object_event
 
     for k, v of allEvents
       channel.bind k, v
