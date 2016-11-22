@@ -17,9 +17,14 @@ IreneAuthenticator = Base.extend
 
   ajax: Ember.inject.service()
 
-  transitionTo: (route)->
-    applicationRoute = Ember.getOwner(@).lookup("route:application")
-    applicationRoute.transitionTo route
+  resumeTransistion: ->
+    authenticatedRoute = Ember.getOwner(@).lookup("route:authenticated")
+    lastTransition = authenticatedRoute.get "lastTransition"
+    if lastTransition isnt null
+      lastTransition.retry()
+    else
+      applicationRoute = Ember.getOwner(@).lookup("route:application")
+      applicationRoute.transitionTo ENV['ember-simple-auth']["routeAfterAuthentication"]
 
   authenticate: (identification, password) ->
     ajax = @get "ajax"
@@ -29,12 +34,12 @@ IreneAuthenticator = Base.extend
         username: identification
         password: password
 
-      url = "#{ENV.host}/#{ENV.namespace}#{ENV['ember-simple-auth']['loginEndPoint']}"
+      url = ENV['ember-simple-auth']['loginEndPoint']
       ajax.post(url, {data: data})
       .then (data) ->
         data = processData data
         resolve data
-        that.transitionTo ENV['ember-simple-auth']["routeAfterAuthentication"]
+        that.resumeTransistion()
       .catch (reason) ->
         alert reason
         reject reason
@@ -43,13 +48,13 @@ IreneAuthenticator = Base.extend
     ajax = @get "ajax"
     that  = @
     new Ember.RSVP.Promise (resolve, reject) ->
-      url = "#{ENV.host}/#{ENV.namespace}#{ENV['ember-simple-auth']['checkEndPoint']}"
+      url = ENV['ember-simple-auth']['checkEndPoint']
       ajax.post(url, {data: data})
       .then (data) ->
         data = processData data
         resolve data
         if 'login' in location.pathname
-          that.transitionTo ENV['ember-simple-auth']["routeIfAlreadyAuthenticated"]
+          that.resumeTransistion()
       .catch (reason)->
         alert reason
         localStorage.clear()
