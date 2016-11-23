@@ -15,7 +15,8 @@ InvitationAcceptComponent = Ember.Component.extend
         password: @get "password"
       @get("ajax").post ENV.endpoints.signup, data: data
       .then (data)->
-        that.transitionTo "login"
+        # FIXME: This should be this.transitionTo`
+        location = "/"
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail.message
