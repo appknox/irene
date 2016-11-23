@@ -27,4 +27,4 @@
     .control
       button.is-success click="makePaymentStripe"
         = fa-icon 'cc-stripe'
-        | &nbsp; pay with Card
+        | pay with Card
