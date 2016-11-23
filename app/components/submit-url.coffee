@@ -27,9 +27,7 @@ SubmitUrlComponent = Ember.Component.extend
         that.set "storeURL", null
         that.get("notify").success tHangInThere
       .catch (xhr, message, status) ->
-        if xhr.status is 403
-          that.get("notify").error xhr.responseJSON.message
-        else
-          that.get("notify").error tNetworkError
+        for error in error.errors
+          that.get("notify").error error.detail.message
 
 `export default SubmitUrlComponent`
