@@ -72,7 +72,6 @@ PricingPlanComponent = Ember.Component.extend
         couponCode: that.get "couponCode"
       @get("ajax").post ENV.endpoints.applyCoupon, data: data
       .then (result) ->
-        debugger
         that.set "couponApplied", true
         that.set "couponDiscount", result.discount
         that.get("notify").success "Price Updated"
@@ -110,7 +109,6 @@ PricingPlanComponent = Ember.Component.extend
 
       @get("ajax").post ENV.endpoints.stripePayment, data: data
       .then (result) ->
-        debugger
         that.get("notify").success "Sucessfully processed your payment. Thank You."
         that.send "closeModal"
         setTimeout ->
@@ -118,7 +116,6 @@ PricingPlanComponent = Ember.Component.extend
         ,
           5 * 1000
       .catch (error)->
-        debugger
         that.get("notify").error error.jqXHR.responseJSON.message
 
 `export default PricingPlanComponent`
