@@ -10,5 +10,5 @@
   hr
 
   = link-to "authenticated.index" class="button is-primary"
-    fa-icon "home"
+    = fa-icon "home"
     | &nbsp;Go Back To Home
