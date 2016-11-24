@@ -28,6 +28,7 @@
     "ember-cli-babel": "^5.1.10",
     "ember-cli-bourbon": "1.2.2",
     "ember-cli-circleci": "0.1.0",
+    "ember-cli-code-coverage": "0.3.8",
     "ember-cli-coffeescript": "kimroen/ember-cli-coffeescript#ebb4abd237599ae7bd3a852cd71d63924a79851f",
     "ember-cli-dependency-checker": "^1.2.0",
     "ember-cli-emblem": "0.8.2-beta.2",
