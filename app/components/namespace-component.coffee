@@ -14,7 +14,6 @@ NamespaceComponentComponent = Ember.Component.extend
     addNamespace: ->
       data =
         namespace: @get "namespace"
-      postUrl = [ENV.APP.API_BASE, ].join '/'
       that = @
       @get("ajax").post ENV.endpoints.namespaceAdd, data: data
       .then ->
