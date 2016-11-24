@@ -1,16 +1,18 @@
-form
-  label for="jiraHost"
-    = t "jiraHost"
-  input type="text" id="jiraHost"
+h6
+  = t "jiraIntegration"
+h6
+  = t "githubIntegration"
 
-  label for="username"
-    = t "username"
-  input type="text" id="username"
+if user.hasJiraToken
+  button.is-primary click="revokeJira"
+    | Revoke JIRA
+else
+  form
+    .control
+      = input class="input" placeholder=(t "jiraHost") type="text" value=jiraHost
+    .control.is-grouped
+      = input class="input" placeholder=(t "username") type="text" value=jiraUsername
+      = input class="input" placeholder=(t "password") type="password" value=jiraPassword
 
-  label for="password"
-    = t "password"
-  input type="password" id="password"
-
-  button.is-primary click="toggleDropdown"
-    = t "integrateJIRA"
-= yield
+    button.is-primary click="integrateJira"
+      = t "integrateJIRA"

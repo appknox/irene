@@ -19,7 +19,7 @@
         = fa-icon "user" class="is-primary"
 
       p.control.has-icon.has-icon-left
-        = input class="input" placeholder=(t 'password') value=password
+        = input class="input" placeholder=(t 'password') value=password type="password"
         = fa-icon "lock" class="is-primary"
 
       p.control.flex-center

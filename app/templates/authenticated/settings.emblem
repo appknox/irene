@@ -23,11 +23,6 @@
   h4.is-fullwidth
     = t "integration"
   .columns
+    = jira-account  user=model class="column is-one-third"
     .column.is-one-third
-      h6
-        = t "jiraIntegration"
-      = jira-account
-    .column.is-one-third
-      h6
-        = t "githubIntegration"
-      = github-account
+      = github-account user=model class="column is-one-third"
