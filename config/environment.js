@@ -117,6 +117,7 @@ module.exports = function(environment) {
       changePassword: 'change_password',
       namespaceAdd: 'namespace_add',
       stripePayment: 'stripe_payment',
+      stripePaymentDevknox: 'stripe_payment_devknox',
       applyCoupon: 'apply_coupon',
       saveCredentials: 'projects/save_credentials',
       collaboration: 'collaboration',

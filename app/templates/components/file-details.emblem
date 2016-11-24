@@ -9,4 +9,4 @@
         = t "manual"
 
 each file.sortedAnalyses as |analysis|
-  =analysis-details analysis=analysis
+  = analysis-details analysis=analysis

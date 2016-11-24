@@ -107,7 +107,11 @@ PricingPlanComponent = Ember.Component.extend
         pricingId: that.get "priceSelector.pricing.id"
         paymentDuration: @get "priceSelector.paymentDuration"
 
-      @get("ajax").post ENV.endpoints.stripePayment, data: data
+      paymentUrl = ENV.endpoints.stripePaymentDevknox
+      if ENV.isAppknox
+        paymentUrl = ENV.endpoints.stripePayment
+
+      @get("ajax").post paymentUrl, data: data
       .then (result) ->
         that.get("notify").success "Sucessfully processed your payment. Thank You."
         that.send "closeModal"

@@ -19,9 +19,10 @@
         = input class="input" type="tel" name="name" placeholder="Name On Card" autocomplete="cc-number" value=cardName
         = input class="input" type="tel" name="expiry" placeholder="MM/YY" autocomplete="cc-exp" value=cardExpiry
         = input class="input" type="tel" name="cvc" placeholder="CVC" autocomplete="cc-csc" value=cardCvc
-      .control.is-grouped
-        = input  class="input" placeholder="Do you have an offer coupon?" value=couponCode
-        button click="applyCoupon" Apply Coupon
+      if env.isAppknox
+        .control.is-grouped
+          = input  class="input" placeholder="Do you have an offer coupon?" value=couponCode
+          button click="applyCoupon" Apply Coupon
 
   .modal-footer
     .control
