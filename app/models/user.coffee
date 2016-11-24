@@ -21,15 +21,12 @@ User = DS.Model.extend
   socketId: DS.attr 'string'
   limitedScans: DS.attr 'boolean'
   scansLeft: DS.attr 'number'
-
+  githubRedirectUrl: DS.attr 'string'
 
   sortProperties: ["lastFileCreatedOn:desc"]
   sortedProjects: Ember.computed.sort 'projects', 'sortProperties'
 
   projectCount: Ember.computed.alias 'projects.length'
   hasProjects: Ember.computed.gt 'projectCount', 0
-
-
-
 
 `export default User`

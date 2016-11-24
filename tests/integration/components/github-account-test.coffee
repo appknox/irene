@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{github-account}}"""
 
-  assert.equal @$().text().trim(), 'Integrate GitHub'
+  assert.equal @$().text().trim(), 'GitHub IntegrationIntegrate GitHub'

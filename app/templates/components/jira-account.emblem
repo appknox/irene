@@ -1,7 +1,5 @@
 h6
   = t "jiraIntegration"
-h6
-  = t "githubIntegration"
 
 if user.hasJiraToken
   button.is-primary click="revokeJira"

@@ -1,22 +1,18 @@
 `import Ember from 'ember'`
+`import ENV from 'irene/config/environment';`
 
 GithubAccountComponent = Ember.Component.extend
 
   actions:
 
-    integrateGitHub: ->
-      currentUser = @get "controllers.application.currentUser"
-      urls = currentUser.get "urls"
-      window.location = urls.githubRedirect
-
     revokeGitHub: ->
       return if !confirm "Do you want to revoke GitHub Authorization ?"
-      postUrl = [ENV.APP.API_BASE, ENV.endpoints.revokeGitHub].join '/'
       that = @
-      Ember.$.post postUrl
-      .then ->
-        Notify.success "Your github authorization will be revoked in a moment"
-      .fail (xhr, message, status) ->
-        Notify.error xhr.responseJSON.message
+      @get("ajax").post ENV.endpoints.revokeGitHub
+      .then (data) ->
+        that.get("notify").success "Your GitHub authorization will be revoked in a moment"
+      .catch (error) ->
+        for error in error.errors
+          that.get("notify").error error.detail.message
 
 `export default GithubAccountComponent`
