@@ -1,11 +1,13 @@
-h5
-  = t "jiraIntegration"
+h3 JIRA
 
-= t "pleaseVisit"
-| &nbsp;
-= link-to 'authenticated.settings'
-  = t "userSetting"
-| &nbsp;
-= t "jiraPageConfigure"
-
-= yield
+if project.jiraProject
+  h5
+    | This project is integrated with JIRA project &nbsp;
+    code
+      = project.jiraProject
+.columns
+  .is-one-third
+    select.select{action 'selectProject' on='change'}
+      each jiraProjects as |project|
+        option value=project
+          = project
