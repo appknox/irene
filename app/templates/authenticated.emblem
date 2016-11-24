@@ -1,8 +1,7 @@
 .columns.upper-nav
   .column.is-one-sixth.appknox-logo
-    .has-text-centered
-      = link-to 'authenticated.index'
-        img src="/images/logo.png"
+    = img-logo
+
   .column.current-user
       span
         = t "welcome"
@@ -25,7 +24,7 @@
           a click="invalidateSession"
             = t "logout"
       p.menu-label.margin-left
-              = t "accountOverview"
+        = t "accountOverview"
 
       ul.menu-list.text-center
         li.account-overview
@@ -37,11 +36,6 @@
           else
             = t "expiring"
             = moment-from-now model.expiryDate
-        /li.account-overview
-          = t "projects"
-        /li.account-overview-details
-          | model.projects.length
-          = t "apps"
 
       p.menu-label.margin-left
         = t "notifications"

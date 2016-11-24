@@ -9,7 +9,10 @@
     .columns
       .column.is-half
         figure.image.login-phone-image
-          img src="/images/welcome.png" alt="Mobile application security"
+          if env.isAppknox
+            img src="/images/welcome.png"
+          else
+            img src="/images/devknox.png"
           img src="/images/login-phone-graphic.svg" alt="Mobile application security"
       .column.flex-center
         form.login-form
