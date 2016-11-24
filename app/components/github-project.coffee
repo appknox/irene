@@ -13,31 +13,34 @@ GithubProjectComponent = Ember.Component.extend
 
   fetchGithubRepos: (->
     tFetchGitHubRepoFailed = @get "tFetchGitHubRepoFailed"
-    return if ENV.environment is "test"
-    githubReposUrl = [ENV.APP.API_BASE, ENV.endpoints.githubRepos].join '/'
     that = @
-    Ember.$.get githubReposUrl
-    .then (data)->
+
+    @get("ajax").request ENV.endpoints.githubRepos
+    .then (data) ->
       that.set "githubRepos", data.repos
-    .fail ->
-      @get("notify").error tFetchGitHubRepoFailed
+    .catch (error) ->
+      that.get("notify").error tFetchGitHubRepoFailed
+      for error in error.errors
+        that.get("notify").error error.detail?.message
 
   ).on "init"
 
   actions:
 
-    selectRepo: (repo)->
+    selectRepo: ->
+      repo = @$('select').val()
       tRepoIntegrated = @get "tRepoIntegrated"
       repoNotIntegrated = @get "repoNotIntegrated"
       projectId = @get "project.id"
-      setGithub = [ENV.APP.API_BASE, ENV.endpoints.setGithub, projectId].join '/'
+      setGithub = [ENV.endpoints.setGithub, projectId].join '/'
       that = @
       data =
         repo: repo
-      Ember.$.post setGithub, data
-      .then (data)->
-        @get("notify").success tRepoIntegrated
-      .fail ->
-        @get("notify").error repoNotIntegrated
+      @get("ajax").post setGithub, data: data
+      .then (data) ->
+        that.get("notify").success "Your JIRA has been integrated"
+      .catch (error) ->
+        for error in error.errors
+          that.get("notify").error error.detail?.message
 
 `export default GithubProjectComponent`

@@ -1,12 +1,14 @@
-h5
-  = t "githubIntegration"
+h3 GitHub
 
-= t "pleaseVisit"
-| &nbsp;
-= link-to 'authenticated.settings'
-  span
-    = t "userSetting"
-| &nbsp;
-= t "ghPageConfigure"
+if project.githubRepo
+  h5
+    | This project is integrated with GitHub repo &nbsp;
+    code
+      = project.githubRepo
 
-= yield
+.columns
+  .is-one-third
+    select.select.is-fullwidth{action 'selectRepo' on='change'}
+      each githubRepos as |repo|
+        option value=repo
+          = repo

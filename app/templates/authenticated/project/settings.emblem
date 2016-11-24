@@ -1,9 +1,9 @@
 h4
   =t "settings"
-/ .box
-  =github-project
-/ .box
-  =jira-project
+.box
+  = github-project project=model
+.box
+  = jira-project project=model
 .box
   = test-credentials project=model
 .box

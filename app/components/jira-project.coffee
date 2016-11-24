@@ -13,31 +13,34 @@ JiraProjectComponent = Ember.Component.extend
 
   fetchJiraProjects: (->
     tFetchJIRAProjectFailed = @get "tFetchJIRAProjectFailed"
-    return if ENV.environment is "test"
-    url = [ENV.APP.API_BASE, ENV.endpoints.jiraProjects].join '/'
     that = @
-    Ember.$.get url
-    .then (data)->
+    @get("ajax").request ENV.endpoints.jiraProjects
+    .then (data) ->
       that.set "jiraProjects", data.projects
-    .fail ->
-      @get("notify").error tFetchJIRAProjectFailed
+    .catch (error) ->
+      that.get("notify").error tFetchJIRAProjectFailed
+      for error in error.errors
+        that.get("notify").error error.detail?.message
 
   ).on "init"
 
   actions:
 
-    selectProject: (project)->
+    selectProject: ->
+      project= @$('select').val()
       tRepoIntegrated = @get "tRepoIntegrated"
       tRepoNotIntegrated = @get "tRepoNotIntegrated"
       projectId = @get "project.id"
-      url = [ENV.APP.API_BASE, ENV.endpoints.setJira, projectId].join '/'
+      url = [ENV.endpoints.setJira, projectId].join '/'
       that = @
       data =
         project: project
-      Ember.$.post url, data
-      .then (data)->
-        @get("notify").success tRepoIntegrated
-      .fail ->
-        @get("notify").error tRepoNotIntegrated
+      @get("ajax").post url, data: data
+      .then (data) ->
+        that.get("notify").success tRepoIntegrated
+      .catch (error) ->
+        that.get("notify").error tRepoNotIntegrated
+        for error in error.errors
+          that.get("notify").error error.detail?.message
 
 `export default JiraProjectComponent`

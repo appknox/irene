@@ -24,5 +24,4 @@
     = t "integration"
   .columns
     = jira-account  user=model class="column is-one-third"
-    .column.is-one-third
-      = github-account user=model class="column is-one-third"
+    = github-account user=model class="column is-one-third"
