@@ -4,6 +4,7 @@
 PricingListComponent = Ember.Component.extend
 
   pricings: null
+  store: Ember.inject.service()
   paymentDuration: ENUMS.PAYMENT_DURATION.MONTHLY
 
   durations: (->
@@ -21,6 +22,16 @@ PricingListComponent = Ember.Component.extend
     paymentDuration = @get "paymentDuration"
     element = $(@element).find("[data-value='#{paymentDuration}']")
     @activateDuration element
+
+  devknoxPricing: (->
+    store = @get "store"
+    store.createRecord "pricing", {
+      name: "Devknox",
+      description: "Dashboard Upload, Manual Scan",
+      price: 25,
+      projectsLimit: 0,
+    }
+  ).property()
 
   actions:
     selectDuration: ->
