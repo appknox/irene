@@ -16,7 +16,7 @@ InvitationAcceptComponent = Ember.Component.extend
       @get("ajax").post ENV.endpoints.signup, data: data
       .then (data)->
         # FIXME: This should be this.transitionTo`
-        location = "/"
+        wondow.location = "/"
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail.message

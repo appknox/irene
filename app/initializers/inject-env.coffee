@@ -1,6 +1,6 @@
 `import ENV from 'irene/config/environment'`
 
-initialize = (container, application) ->
+initialize = (application) ->
   application.register 'env:main', ENV, {singleton: true, instantiate: false}
   application.inject 'component', 'env', 'env:main'
 

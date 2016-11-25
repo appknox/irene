@@ -3,6 +3,8 @@
 `import ENV from 'irene/config/environment';`
 `import ENUMS from 'irene/enums'`
 
+location = window.location
+
 {inject: {service}, isEmpty, RSVP} = Ember
 
 pusher = new Pusher ENV.pusherKey, encrypted: true
