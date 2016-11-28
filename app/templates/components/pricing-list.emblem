@@ -7,7 +7,7 @@ if env.isAppknox
   .columns
     .column.flex-center
       each durations as |duration|
-        button.js-duration-button.is-primary click="selectDuration" data-value=duration.value
+        button.js-duration-button.is-primary.margin-left click="selectDuration" data-value=duration.value
           = duration.key
 
   .columns
