@@ -9,8 +9,11 @@ else
     .control
       = input class="input" placeholder=(t "jiraHost") type="text" value=jiraHost
     .control.is-grouped
-      = input class="input" placeholder=(t "username") type="text" value=jiraUsername
-      = input class="input" placeholder=(t "password") type="password" value=jiraPassword
+      .columns
+        .column
+          = input class="input" placeholder=(t "username") type="text" value=jiraUsername
+        .column.margin-left
+          = input class="input" placeholder=(t "password") type="password" value=jiraPassword
 
     button.is-primary click="integrateJira"
       = t "integrateJIRA"
