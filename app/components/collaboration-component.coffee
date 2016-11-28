@@ -4,8 +4,8 @@
 
 roles = ENUMS.COLLABORATION_ROLE.CHOICES.reverse()[1..]
 
-CollaboratorComponentComponent = Ember.Component.extend
-  collaboratorEmail: ""
+CollaborationComponentComponent = Ember.Component.extend
+  collaborationEmail: ""
   project: null
   roles: roles
   currentRole: roles[0].value
@@ -15,26 +15,26 @@ CollaboratorComponentComponent = Ember.Component.extend
     roleChanged: (value) ->
       @set "currentRole", parseInt value
 
-    addCollaborator: ->
+    addCollaboration: ->
       that = @
       data =
-        email: @get "collaboratorEmail"
+        email: @get "collaborationEmail"
         projectId: @get "project.id"
         role: @get "currentRole"
       that = @
       @get("ajax").post ENV.endpoints.collaboration, data:data
       .then (data)->
         that.send "closeModal"
-        that.get("notify").success "Collaborator added!"
+        that.get("notify").success "Collaboration added!"
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail.message
 
-    openCollaboratorModal: ->
-      @set "showCollaboratorModal", true
+    openCollaborationModal: ->
+      @set "showCollaborationModal", true
 
     closeModal: ->
-      @set "showCollaboratorModal", false
+      @set "showCollaborationModal", false
 
 
-`export default CollaboratorComponentComponent`
+`export default CollaborationComponentComponent`
