@@ -6,7 +6,7 @@
       = password-change
 
 .box
-  .columns
+  .columns.vertical-align
     .column
       h4
         = t "namespace"
