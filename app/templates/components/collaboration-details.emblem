@@ -5,4 +5,4 @@
   .card-content
     .content
       p.align-center
-        = collaboration.user.username
+        = collaboration.username
