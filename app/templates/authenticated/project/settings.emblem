@@ -7,4 +7,4 @@ h4
 .box
   = test-credentials project=model
 .box
-  = collaborator-component project=model
+  = collaboration-component project=model

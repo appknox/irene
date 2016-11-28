@@ -1,0 +1,25 @@
+h5
+  = t "collaborations"
+
+button.is-primary click="openCollaborationModal"
+  = t "addCollaborations"
+
+.columns.margin-top
+  each project.collaborations as |collaboration|
+    .column.is-one-sixth
+      = collaboration-details collaboration=collaboration
+
+= modal-card isActive=showCollaborationModal title="Add Collaboration to project"
+  .card-body
+    .card-wrapper
+      form
+        p.control
+          = input class="form-control" placeholder="Email / Username" type="email" value=collaborationEmail
+        p.control
+          select onchange={action "roleChanged" value="target.value"}
+            each roles as |role|
+              option value=role.value
+                = role.key
+
+  .modal-footer
+    button click="addCollaboration" Add Collaboration
