@@ -4,9 +4,10 @@
 
 Collaboration = DS.Model.extend BaseModelMixin,
 
-  project : DS.belongsTo 'project', inverse: 'collaborations'
-  user : DS.belongsTo 'user', inverse: 'collaborations'
-  role : DS.attr 'number'
+  project: DS.belongsTo 'project', inverse: 'collaborations'
+  user: DS.belongsTo 'user', inverse: 'collaborations'
+  role: DS.attr 'number'
+  username: DS.attr 'string'
 
   roleHumanized:(->
     switch @get "role"
