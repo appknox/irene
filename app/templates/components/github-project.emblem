@@ -1,4 +1,4 @@
-h3 GitHub
+h5 GitHub
 
 if project.githubRepo
   h5
