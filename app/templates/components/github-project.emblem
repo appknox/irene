@@ -8,7 +8,7 @@ if project.githubRepo
 
 .columns
   .is-one-third
-    select.select.is-fullwidth{action 'selectRepo' on='change'}
+    select.select{action 'selectRepo' on='change'}
       each githubRepos as |repo|
         option value=repo
           = repo
