@@ -5,4 +5,4 @@
     each model.sortedProjects as |project|
       =project-overview project=project
   else
-    h3 No Projects Yet!
+    h3.margin-left No Projects Yet!
