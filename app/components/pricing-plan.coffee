@@ -62,6 +62,9 @@ PricingPlanComponent = Ember.Component.extend
 
   actions:
 
+    closeModal: ->
+      @set "showPricingModal", false
+
     makePayment: ->
       @set "showPricingModal", !@get "showPricingModal"
 
@@ -104,8 +107,8 @@ PricingPlanComponent = Ember.Component.extend
         expYear: exp_year
         name: cardName
         couponCode: that.get "couponCode"
-        pricingId: that.get "priceSelector.pricing.id"
-        paymentDuration: @get "priceSelector.paymentDuration"
+        pricingId: that.get "pricing.id"
+        paymentDuration: @get "paymentDuration"
 
       paymentUrl = ENV.endpoints.stripePaymentDevknox
       if ENV.isAppknox

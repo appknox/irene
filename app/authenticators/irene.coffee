@@ -41,7 +41,7 @@ IreneAuthenticator = Base.extend
         resolve data
         that.resumeTransistion()
       .catch (reason) ->
-        alert reason
+        that.get("notify").error reason
         reject reason
 
   restore: (data) ->
@@ -56,7 +56,7 @@ IreneAuthenticator = Base.extend
         if 'login' in location.pathname
           that.resumeTransistion()
       .catch (reason)->
-        alert reason
+        that.get("notify").error reason
         localStorage.clear()
         reject reason
 
@@ -71,7 +71,7 @@ IreneAuthenticator = Base.extend
         resolve data
         location.reload()
       .catch (reason)->
-        alert reason
+        that.get("notify").error reason
         reject reason
         location.reload()
 

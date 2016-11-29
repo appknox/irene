@@ -4,6 +4,9 @@
 `import installIntercom from 'irene/utils/install-intercom';`
 `import loadInitializers from 'ember-load-initializers';`
 
+config.isDevknox = 'secure.devknox.io' is location.hostname
+config.isAppknox = !config.isDevknox
+
 installIntercom()
 
 Ember.MODEL_FACTORY_INJECTIONS = true

@@ -15,4 +15,4 @@ test 'it renders', (assert) ->
 
 
 
-  assert.equal @$().text().trim(), ''
+  assert.equal @$().text().trim(), 'Remove'
