@@ -79,12 +79,7 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
       collaboration_deleted: (data) ->
         store.find('collaboration', data.id).then (collaboration) ->
-          currentUserId = that.get("controllers.application.currentUser.id")
-          if currentUserId is collaboration.get "user.id"
-            location = "/"
-            location.reload()
-          else
-            collaboration.deleteRecord()
+          collaboration.deleteRecord()
 
       message: (data) ->
         message = data.message
