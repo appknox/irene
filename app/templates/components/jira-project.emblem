@@ -1,4 +1,4 @@
-h3 JIRA
+h5 JIRA
 
 if project.jiraProject
   h5

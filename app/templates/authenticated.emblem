@@ -2,7 +2,7 @@
   .column.is-one-sixth.appknox-logo
     = img-logo
 
-  .column.current-user
+  .column.current-user.margin-top
       span
         = t "welcome"
         = model.username
