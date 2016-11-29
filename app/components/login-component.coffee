@@ -4,10 +4,11 @@ LoginComponentComponent = Ember.Component.extend
   session: Ember.inject.service 'session'
   actions:
     authenticate: ->
+      that = @
       identification = @get 'identification'
       password = @get 'password'
       @get('session').authenticate("authenticator:irene", identification, password).catch (reason) ->
-        alert reason
+        that.get("notify").error reason
 
 
 `export default LoginComponentComponent`
