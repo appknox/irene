@@ -1,4 +1,4 @@
-h3 GitHub
+h5 GitHub
 
 if project.githubRepo
   h5
@@ -8,7 +8,7 @@ if project.githubRepo
 
 .columns
   .is-one-third
-    select.select.is-fullwidth{action 'selectRepo' on='change'}
+    select.select{action 'selectRepo' on='change'}
       each githubRepos as |repo|
         option value=repo
           = repo
