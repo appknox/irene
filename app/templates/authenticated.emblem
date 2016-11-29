@@ -34,8 +34,12 @@
             = model.scansLeft
             = t "scansLeft"
           else
-            = t "expiring"
-            = moment-from-now model.expiryDate
+          
+            if model.hasExpired
+              | Expired
+            else
+              = t "expiring"
+              = moment-from-now model.expiryDate
 
       p.menu-label.margin-left
         = t "notifications"

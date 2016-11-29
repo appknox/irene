@@ -29,4 +29,11 @@ User = DS.Model.extend
   projectCount: Ember.computed.alias 'projects.length'
   hasProjects: Ember.computed.gt 'projectCount', 0
 
+  currentDate: new Date()
+  hasExpired: (->
+    currentDate = @get "currentDate"
+    expiryDate = @get "expiryDate"
+    if currentDate > expiryDate
+      "Expired"
+    ).property "expiryDate"
 `export default User`
