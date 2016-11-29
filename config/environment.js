@@ -30,11 +30,11 @@ module.exports = function(environment) {
         lagThreshold: 3
       },
       ajax: {
-        trackMethods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+        trackMethods: ['GET', 'POST', 'DELETE', 'OPTIONS', 'PUT'],
         trackWebSockets: false,
         ignoreURLs: []
       }
-  },
+    },
     rootURL: '/',
     locationType: 'auto',
     modulePrefix: 'irene',
@@ -162,25 +162,12 @@ module.exports = function(environment) {
     };
   }
 
-  if (environment === 'devknox') {
-    ENV.isDevknox = true;
-    ENV['ember-cli-mirage'] = {
-      enabled: false
-    };
-    ENV['namespace'] = "api-v2";
-    ENV['host'] = "http://0.0.0.0:8000";
-    ENV.enableIntercom = false;
-
-  }
-
   if (environment === 'test') {
     ENV.locationType = 'none';
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
     ENV.APP.rootElement = '#ember-testing';
   }
-
-  ENV.isAppknox = !ENV.isDevknox;
 
   return ENV;
 };
