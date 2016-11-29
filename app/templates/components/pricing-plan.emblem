@@ -25,7 +25,7 @@
           button click="applyCoupon" Apply Coupon
 
   .modal-footer
-    .control
+    .control.content-right
       button.is-success click="makePaymentStripe"
         = fa-icon 'cc-stripe'
         span.margin-left
