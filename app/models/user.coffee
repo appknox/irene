@@ -1,8 +1,5 @@
 `import DS from 'ember-data'`
 `import ENUMS from 'irene/enums'`
-`import fromNow from 'ember-moment/computeds/from-now'`
-`import momentComputed from 'ember-moment/computeds/moment'`
-`import humanize from 'ember-moment/computeds/humanize'`
 
 User = DS.Model.extend
 
@@ -19,7 +16,7 @@ User = DS.Model.extend
   namespaces: DS.attr 'string'
   collaborations: DS.hasMany 'collaboration', inverse:'user'
   expiryDate: DS.attr 'date'
-  expiryDateHumanized: humanize 'expiryDate'
+
   hasGithubToken: DS.attr 'boolean'
   hasJiraToken: DS.attr 'boolean'
   socketId: DS.attr 'string'
@@ -36,11 +33,13 @@ User = DS.Model.extend
   expiryText: (->
     currentDate = new Date()
     expiryDate = @get "expiryDate"
-    expiryDateHumanized = @get "expiryDateHumanized"
     prefix = "Will expire"
     if currentDate > expiryDate
       prefix = "Expired"
-    "#{prefix} on #{expiryDateHumanized}"
+    "#{prefix} on #{expiryDate.toLocaleDateString()}"
   ).property "expiryDate"
+
+
+
 
 `export default User`
