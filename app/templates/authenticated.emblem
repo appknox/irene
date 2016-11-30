@@ -34,8 +34,7 @@
             = model.scansLeft
             = t "scansLeft"
           else
-            = t "expiring"
-            = moment-from-now model.expiryDate
+            = model.expiryText
 
       p.menu-label.margin-left
         = t "notifications"

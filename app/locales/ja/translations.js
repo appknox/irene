@@ -32,6 +32,7 @@ export default {
   "enterValidPassword": "有効なパスワードを入力してください",
   "enterValidURL": "有効なURLを入力してください",
   "expiring": "失効する ",
+  "expired": "期限切れの ",
   "fetchGitHubRepoFailed": "GitHubRepo 取得の失敗",
   "fetchProjectFailed": "プロジェクト取得の失敗",
   "fileCount": "ファイル数",

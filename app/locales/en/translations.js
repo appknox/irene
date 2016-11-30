@@ -32,6 +32,7 @@ export default {
   "enterValidPassword": "Please enter valid passwords!",
   "enterValidURL": "Please enter a valid URL",
   "expiring": "Expiring ",
+  "expired": "Expired ",
   "fetchGitHubRepoFailed": "Something went wrong when trying to fetch repo list",
   "fetchProjectFailed": "Something went wrong when trying to fetch projects list",
   "fileCount": "File Count",
