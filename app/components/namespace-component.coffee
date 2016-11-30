@@ -19,6 +19,7 @@ NamespaceComponentComponent = Ember.Component.extend
       .then ->
         that.set "namespace", ""
         that.get("notify").success "we have received your request to add a new namespace."
+        that.set "showNamespaceModal", false
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail.message
