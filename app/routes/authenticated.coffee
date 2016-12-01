@@ -11,6 +11,9 @@ pusher = new Pusher ENV.pusherKey, encrypted: true
 
 AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
+  title: (tokens) ->
+    tokens.join(' - ') + ' - Appknox'
+
   lastTransition: null
   i18n: service()
   moment: service()
