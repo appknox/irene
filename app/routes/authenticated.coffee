@@ -2,6 +2,7 @@
 `import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';`
 `import ENV from 'irene/config/environment';`
 `import ENUMS from 'irene/enums'`
+`import config from 'irene/config/environment';`
 
 location = window.location
 
@@ -12,7 +13,12 @@ pusher = new Pusher ENV.pusherKey, encrypted: true
 AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
   title: (tokens) ->
-    tokens.join(' - ') + ' - Appknox'
+    Platform =
+      if config.isAppknox
+        " - Appknox"
+      else if config.isDevknox
+        " - Devknox"
+    tokens.join(' - ') + Platform
 
   lastTransition: null
   i18n: service()
