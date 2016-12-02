@@ -1,8 +1,9 @@
 `import Ember from 'ember'`
+`import config from 'irene/config/environment';`
 
 IndexRoute = Ember.Route.extend
 
-  titleToken: "Home"
+  title: "Home" + config.Platform
   model: ->
     @modelFor("authenticated")
 
