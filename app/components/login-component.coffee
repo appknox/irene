@@ -1,4 +1,5 @@
 `import Ember from 'ember'`
+`import ENV from 'irene/config/environment';`
 
 LoginComponentComponent = Ember.Component.extend
   session: Ember.inject.service 'session'
@@ -8,7 +9,7 @@ LoginComponentComponent = Ember.Component.extend
       identification = @get 'identification'
       password = @get 'password'
       @get('session').authenticate("authenticator:irene", identification, password).catch (reason) ->
-        that.get("notify").error "Invalid Account Details"
+        that.get("notify").error "Invalid Account Details", ENV.notifications
 
 
 `export default LoginComponentComponent`
