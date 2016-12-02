@@ -38,6 +38,8 @@ User = DS.Model.extend
       expiryDate = @get "expiryDate"
     else
       expiryDate = @get "devknoxExpiry"
+    if Ember.isEmpty expiryDate
+      return "Expired"
     prefix = "Will expire"
     if currentDate > expiryDate
       prefix = "Expired"
