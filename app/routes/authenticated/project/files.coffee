@@ -1,8 +1,9 @@
 `import Ember from 'ember'`
+`import config from 'irene/config/environment';`
 
 AuthenticatedProjectFilesRoute = Ember.Route.extend
 
-  titleToken: "All Files"
+  title: "All Files" + config.Platform
   model: ->
     @modelFor("authenticated.project").get('files')
 

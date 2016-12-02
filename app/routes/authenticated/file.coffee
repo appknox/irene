@@ -1,8 +1,9 @@
 `import Ember from 'ember'`
+`import config from 'irene/config/environment';`
 
 AuthenticatedFileRoute = Ember.Route.extend
 
-  titleToken: "File Details"
+  title: "File Details"  + config.Platform
   model: (params)->
     @get('store').find('file', params.fileId)
 
