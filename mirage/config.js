@@ -29,4 +29,8 @@ export default function() {
     return {};
   });
 
+  this.post('/namespace_add', () => {
+    return {};
+  });
+
 }

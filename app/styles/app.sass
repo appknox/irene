@@ -77,11 +77,18 @@ $FreestyleGuide-color--background: $background
 // FIXME: Remove this after updating bohemia
 .menu-list
   a
-    font-weight: bold
+    font-weight: lighter
     &:hover
       font-weight: bolder
+      color: lighten(#EF4836, 10%)
+      background-color: #e5e5e5
     &.is-active
       font-weight: bolder
+  a.active
+    background-color: #d8d8d8
+    color: #EF4836
+    font-weight: 900
+
 
 .card-header
   .pricing-title
