@@ -2,6 +2,7 @@
 
 AuthenticatedCompareRoute = Ember.Route.extend
 
+  titleToken: "File Compare"
   model: (data)->
     files = data.files.split "..."
     {

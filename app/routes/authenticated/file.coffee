@@ -2,6 +2,7 @@
 
 AuthenticatedFileRoute = Ember.Route.extend
 
+  titleToken: "File Details"
   model: (params)->
     @get('store').find('file', params.fileId)
 
