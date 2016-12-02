@@ -8,7 +8,10 @@ LoginComponentComponent = Ember.Component.extend
       identification = @get 'identification'
       password = @get 'password'
       @get('session').authenticate("authenticator:irene", identification, password).catch (reason) ->
-        that.get("notify").error "Invalid Account Details"
+        that.get("notify").error "Invalid Account Details", {
+          autoClear: true,
+          clearDuration: 4000
+        }
 
 
 `export default LoginComponentComponent`
