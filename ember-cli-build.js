@@ -10,6 +10,15 @@ module.exports = function(defaults) {
       includePaths: [
         'bower_components/bohemia/'
       ]
+    },
+    dotEnv: {
+      clientAllowedKeys: ['AWS_BUCKET', 'AWS_REGION', 'WEBHOOK_URL'],
+      path: {
+        development: '.env.staging',
+        test: '.env.staging',
+        production: '.env',
+        staging: '.env.staging'
+      }
     }
   });
 
@@ -41,7 +50,7 @@ module.exports = function(defaults) {
   app.import('bower_components/no-vnc/include/inflator.js');
   app.import('bower_components/no-vnc/include/rfb.js');
   app.import('bower_components/no-vnc/include/keysym.js');
-
+  app.import('bower_components/opbeat-js/opbeat.js');
   app.import("bower_components/pusher-websocket-iso/dist/web/pusher.js");
   app.import('bower_components/card/dist/card.js');
   app.import('bower_components/pace/pace.js');

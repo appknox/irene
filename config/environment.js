@@ -2,6 +2,7 @@
 
 module.exports = function(environment) {
   var ENV = {
+    opbeat: { appId: '6947331a76', orgId: '1ff25e9c6a1d40bbad1293635d201fcb' },
     pace: {
       // addon-specific options to configure theme
       theme: 'minimal',
