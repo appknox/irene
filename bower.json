@@ -14,7 +14,8 @@
     "no-vnc": "^0.6.1",
     "pusher-websocket-iso": "pusher#^3.2.1",
     "card": "^2.0.3",
-    "pace": "^1.0.2"
+    "pace": "^1.0.2",
+    "opbeat-js": "^3.1.4"
   },
   "resolutions": {
     "ember": "lts-2-8",
