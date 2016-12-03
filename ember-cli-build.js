@@ -16,7 +16,8 @@ module.exports = function(defaults) {
       path: {
         development: '.env-dev',
         test: '.env-dev',
-        production: '.env'
+        production: '.env',
+        staging: '.env-dev'
       }
     }
   });

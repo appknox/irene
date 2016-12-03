@@ -10,6 +10,12 @@ module.exports = function(deployTarget) {
     region: process.env.AWS_REGION
   };
 
+  ENV['s3-index'] = {
+    bucket: process.env.AWS_BUCKET,
+    region: process.env.AWS_REGION,
+    allowOverwrite: true
+  };
+
   if (deployTarget === 'development') {
     ENV.build.environment = 'development';
     // configure other plugins for development deploy target here
@@ -24,11 +30,6 @@ module.exports = function(deployTarget) {
   if (deployTarget === 'production') {
     ENV.build.environment = 'production';
     // configure other plugins for production deploy target here
-    ENV['s3-index'] = {
-      bucket: process.env.AWS_BUCKET,
-      region: process.env.AWS_REGION,
-      allowOverwrite: true
-    }
 
   }
 
