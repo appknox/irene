@@ -2,7 +2,7 @@
 `import config from 'irene/config/environment';`
 
 NotFoundRoute = Ember.Route.extend
-  title: "Not Found" + config.Platform
+  title: "Not Found" + config.platform
   redirect: ->
     url = @router.location.formatURL '/not-found'
     if window.location.pathname isnt url
