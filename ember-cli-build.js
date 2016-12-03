@@ -10,6 +10,14 @@ module.exports = function(defaults) {
       includePaths: [
         'bower_components/bohemia/'
       ]
+    },
+    dotEnv: {
+    //   clientAllowedKeys: ['DROPBOX_KEY'],
+      path: {
+        development: '.env-dev',
+        test: '.env-dev',
+        production: '.env'
+      }
     }
   });
 
