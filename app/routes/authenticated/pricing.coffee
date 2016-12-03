@@ -3,7 +3,7 @@
 
 AuthenticatedPricingRoute = Ember.Route.extend
 
-  title: "Pricing"  + config.Platform
+  title: "Pricing"  + config.platform
   model: ->
     @modelFor("authenticated").get('pricings')
 

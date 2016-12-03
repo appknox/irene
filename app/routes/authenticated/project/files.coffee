@@ -3,7 +3,7 @@
 
 AuthenticatedProjectFilesRoute = Ember.Route.extend
 
-  title: "All Files" + config.Platform
+  title: "All Files" + config.platform
   model: ->
     @modelFor("authenticated.project").get('files')
 

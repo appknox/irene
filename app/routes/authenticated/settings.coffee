@@ -3,7 +3,7 @@
 
 AuthenticatedSettingsRoute = Ember.Route.extend
 
-  title: "Settings"  + config.Platform
+  title: "Settings"  + config.platform
   model: ->
     @modelFor("authenticated")
 
