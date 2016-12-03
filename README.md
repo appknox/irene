@@ -50,6 +50,7 @@ To deploy you should have `aws-cli` installed and logged in.
 
 #### Production
 
+* make sure you have `.env` file to deploy it to production
 * `ember deploy production`
 * Activate the deployed code: `ember deploy:activate production --revision=<revision>`
 
