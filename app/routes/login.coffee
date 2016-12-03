@@ -3,6 +3,6 @@
 
 LoginRoute = Ember.Route.extend
 
-  title: "Login"  + config.Platform
+  title: "Login"  + config.platform
 
 `export default LoginRoute`

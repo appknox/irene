@@ -3,7 +3,7 @@
 
 IndexRoute = Ember.Route.extend
 
-  title: "Home" + config.Platform
+  title: "Home" + config.platform
   model: ->
     @modelFor("authenticated")
 

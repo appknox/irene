@@ -3,7 +3,7 @@
 
 AuthenticatedCompareRoute = Ember.Route.extend
 
-  title: "File Compare"  + config.Platform
+  title: "File Compare"  + config.platform
   model: (data)->
     files = data.files.split "..."
     {

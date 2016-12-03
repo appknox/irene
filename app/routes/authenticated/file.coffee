@@ -3,7 +3,7 @@
 
 AuthenticatedFileRoute = Ember.Route.extend
 
-  title: "File Details"  + config.Platform
+  title: "File Details"  + config.platform
   model: (params)->
     @get('store').find('file', params.fileId)
 
