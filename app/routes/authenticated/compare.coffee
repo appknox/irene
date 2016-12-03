@@ -1,8 +1,9 @@
 `import Ember from 'ember'`
+`import config from 'irene/config/environment';`
 
 AuthenticatedCompareRoute = Ember.Route.extend
 
-  titleToken: "File Compare"
+  title: "File Compare"  + config.Platform
   model: (data)->
     files = data.files.split "..."
     {

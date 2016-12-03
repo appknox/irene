@@ -7,6 +7,12 @@
 config.isDevknox = 'secure.devknox.io' is location.hostname
 config.isAppknox = !config.isDevknox
 
+config.platform =
+  if config.isAppknox
+    " | Appknox"
+  else if config.isDevknox
+    " | Devknox"
+
 installIntercom()
 
 Ember.MODEL_FACTORY_INJECTIONS = true
