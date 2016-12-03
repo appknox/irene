@@ -41,7 +41,6 @@ IreneAuthenticator = Base.extend
         resolve data
         that.resumeTransistion()
       .catch (reason) ->
-        console.log reason
         reject reason
 
   restore: (data) ->
@@ -56,7 +55,6 @@ IreneAuthenticator = Base.extend
         if 'login' in location.pathname
           that.resumeTransistion()
       .catch (reason)->
-        console.log reason
         localStorage.clear()
         reject reason
 
@@ -71,7 +69,6 @@ IreneAuthenticator = Base.extend
         resolve data
         location.reload()
       .catch (reason)->
-        console.log reason
         reject reason
         location.reload()
 
