@@ -41,7 +41,22 @@ Make use of the many generators for code, try `ember help generate` for more det
 
 ### Deploying
 
-Specify what it takes to deploy your app.
+To deploy you should have `aws-cli` installed and logged in.
+
+#### Staging
+
+* `ember deploy staging`
+* Activate the deployed code: `ember deploy:activate staging --revision=<revision>`
+
+#### Production
+
+* `ember deploy production`
+* Activate the deployed code: `ember deploy:activate production --revision=<revision>`
+
+#### Roll-Back
+
+* List all the deploy revisions `ember deploy:list production --verbose`
+* Activate the specific revision `ember deploy:activate production --revision=<revision> --verbose`
 
 ## Further Reading / Useful Links
 
@@ -50,4 +65,3 @@ Specify what it takes to deploy your app.
 * Development Browser Extensions
   * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
   * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
-
