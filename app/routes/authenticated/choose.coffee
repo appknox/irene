@@ -3,7 +3,7 @@
 
 AuthenticatedChooseRoute = Ember.Route.extend
 
-  title: "Choose File"  + config.Platform
+  title: "Choose File"  + config.platform
   model: (params)->
     @get('store').find('file', params.fileId)
 

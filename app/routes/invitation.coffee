@@ -3,7 +3,7 @@
 
 InvitationRoute = Ember.Route.extend
 
-  title: "Invitation" + config.Platform
+  title: "Invitation" + config.platform
 
   model: (params)->
     @store.findRecord "invitation", params.uuid
