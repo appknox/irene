@@ -12,12 +12,12 @@ module.exports = function(defaults) {
       ]
     },
     dotEnv: {
-    //   clientAllowedKeys: ['DROPBOX_KEY'],
+      clientAllowedKeys: ['AWS_BUCKET', 'AWS_REGION', 'WEBHOOK_URL'],
       path: {
-        development: '.env-dev',
-        test: '.env-dev',
+        development: '.env.staging',
+        test: '.env.staging',
         production: '.env',
-        staging: '.env-dev'
+        staging: '.env.staging'
       }
     }
   });
