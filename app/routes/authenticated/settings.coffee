@@ -1,8 +1,9 @@
 `import Ember from 'ember'`
+`import config from 'irene/config/environment';`
 
 AuthenticatedSettingsRoute = Ember.Route.extend
 
-  titleToken: "Settings"
+  title: "Settings"  + config.Platform
   model: ->
     @modelFor("authenticated")
 
