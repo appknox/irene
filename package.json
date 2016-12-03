@@ -40,6 +40,7 @@
     "ember-cli-deploy-revision-data": "0.3.2",
     "ember-cli-deploy-s3": "0.4.0",
     "ember-cli-deploy-s3-index": "0.5.0",
+    "ember-cli-deploy-slack": "0.1.0",
     "ember-cli-document-title": "0.3.3",
     "ember-cli-dotenv": "1.2.0",
     "ember-cli-emblem": "0.8.2-beta.2",
