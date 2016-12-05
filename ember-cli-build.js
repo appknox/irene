@@ -38,18 +38,18 @@ module.exports = function(defaults) {
   /*
    * No VNC includes
    */
-  app.import('bower_components/noVnc/core/base64.js');
-  app.import('bower_components/noVnc/core/websock.js');
-  app.import('bower_components/noVnc/core/des.js');
-  app.import('bower_components/noVnc/core/input/keysymdef.js');
-  app.import('bower_components/noVnc/core/input/xtscancodes.js');
-  app.import('bower_components/noVnc/core/input/util.js');
-  app.import('bower_components/noVnc/core/util.js');
-  app.import('bower_components/noVnc/core/input/devices.js');
-  app.import('bower_components/noVnc/core/display.js');
-  app.import('bower_components/noVnc/core/inflator.js');
-  app.import('bower_components/noVnc/core/rfb.js');
-  app.import('bower_components/noVnc/core/input/keysym.js');
+  app.import('bower_components/noVNC/core/base64.js');
+  app.import('bower_components/noVNC/core/websock.js');
+  app.import('bower_components/noVNC/core/des.js');
+  app.import('bower_components/noVNC/core/input/keysymdef.js');
+  app.import('bower_components/noVNC/core/input/xtscancodes.js');
+  app.import('bower_components/noVNC/core/input/util.js');
+  app.import('bower_components/noVNC/core/util.js');
+  app.import('bower_components/noVNC/core/input/devices.js');
+  app.import('bower_components/noVNC/core/display.js');
+  app.import('bower_components/noVNC/core/inflator.js');
+  app.import('bower_components/noVNC/core/rfb.js');
+  app.import('bower_components/noVNC/core/input/keysym.js');
 
   /*
   * Pusher includes
