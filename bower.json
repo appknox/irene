@@ -14,8 +14,7 @@
     "no-vnc": "^0.6.1",
     "pusher-websocket-iso": "pusher#^3.2.1",
     "card": "^2.0.3",
-    "pace": "^1.0.2",
-    "opbeat-js": "^3.1.4"
+    "pace": "^1.0.2"
   },
   "resolutions": {
     "bohemia": "^0.6.0"
