@@ -6,4 +6,4 @@
 # Distributed under terms of the MIT license.
 #
 
-git push deis $(git rev-parse --abbrev-ref HEAD)
+ember deploy production --verbose=true --activate=true --show-progress=true
