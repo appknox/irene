@@ -11,10 +11,10 @@
     "highlightjs": "9.8.0",
     "pretender": "~1.4.2",
     "Faker": "~3.1.0",
-    "no-vnc": "^0.6.1",
     "pusher-websocket-iso": "pusher#^3.2.1",
     "card": "^2.0.3",
-    "pace": "^1.0.2"
+    "pace": "^1.0.2",
+    "noVNC": "https://github.com/appknox/noVNC.git#^0.6.2"
   },
   "resolutions": {
     "bohemia": "^0.6.0"
