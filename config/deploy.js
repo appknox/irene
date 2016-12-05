@@ -22,6 +22,10 @@ module.exports = function(deployTarget) {
     username: 'ember-cli-deploy'
   }
 
+  ENV.cloudfront = {
+  distribution: 'E17GXVYW7G712O'
+}
+
   if (deployTarget === 'development') {
     ENV.build.environment = 'development';
     // configure other plugins for development deploy target here
