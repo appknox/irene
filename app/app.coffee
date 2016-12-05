@@ -12,6 +12,8 @@ config.platform =
     " | Appknox"
   else if config.isDevknox
     " | Devknox"
+  else
+    " | Appknox"
 
 installIntercom()
 
