@@ -23,7 +23,7 @@ module.exports = function(deployTarget) {
   }
 
   ENV.cloudfront = {
-  distribution: 'E17GXVYW7G712O'
+  distribution: 'E2YVUU4RPYNUI2'
 }
 
   if (deployTarget === 'development') {
