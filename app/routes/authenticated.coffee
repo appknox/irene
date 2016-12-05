@@ -34,7 +34,7 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
       window.Intercom 'trackEvent', 'logged-in'
 
     @get('notify').setDefaultAutoClear ENV.notifications.autoClear
-    @get('notify').setDefaultClearNotification ENV.notifications.duration
+    # @get('notify').setDefaultClearNotification ENV.notifications.duration
 
     socketId = user?.get "socketId"
     if Ember.isEmpty socketId
