@@ -25,6 +25,8 @@ class ConnectorRFB
       'onUpdateState': updateState
       'onXvpInit': xvpInit
     @rfb.connect ENV.deviceFarmHost, ENV.deviceFarmPort, '1234', "#{ENV.deviceFarmPath}?token=#{@deviceToken}"
+
+  resize: ->
     if @rfb.get_display
       display = @rfb.get_display
       scaleRatio = display.autoscale 100, 100, true
