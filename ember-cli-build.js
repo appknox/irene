@@ -44,6 +44,7 @@ module.exports = function(defaults) {
   app.import('bower_components/noVnc/core/input/keysymdef.js');
   app.import('bower_components/noVnc/core/input/xtscancodes.js');
   app.import('bower_components/noVnc/core/input/util.js');
+  app.import('bower_components/noVnc/core/util.js');
   app.import('bower_components/noVnc/core/input/devices.js');
   app.import('bower_components/noVnc/core/display.js');
   app.import('bower_components/noVnc/core/inflator.js');
