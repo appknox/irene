@@ -8,14 +8,14 @@ FileOverviewComponent = Ember.Component.extend
   redirectTo: "authenticated.file"
   classNames: ["card","file-card", "is-fullwidth", "margin-bottom20"]
 
-  targetPath: Ember.computed "file", "fileOld", ->
+  targetPath: Ember.computed "file.id", "fileOld.id", ->
     file = @get "file"
-    if file in [null, undefined]
-      return ""
+    if Ember.isEmpty file
+      return "loading"
     fileOld = @get "fileOld"
     target = file.get "id"
-    if fileOld not in [null, undefined]
-      target += "...#{fileOld.get "id"}"
-    target
+    if Ember.isEmpty fileOld
+      return target
+    target += "...#{fileOld.get "id"}"
 
 `export default FileOverviewComponent`

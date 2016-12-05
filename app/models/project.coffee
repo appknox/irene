@@ -25,7 +25,6 @@ Project = DS.Model.extend BaseModelMixin,
   hasFiles: Ember.computed.gt 'fileCount', 0
   hasMultipleFiles: Ember.computed.gt 'fileCount', 1
 
-
   platformIconClass:( ->
     switch @get "platform"
       when ENUMS.PLATFORM.ANDROID then "android"
@@ -33,5 +32,9 @@ Project = DS.Model.extend BaseModelMixin,
       when ENUMS.PLATFORM.WINDOWS then "windows"
       else "mobile"
   ).property "platform"
+
+  lastFile:( ->
+    @store.queryRecord "file", projectId: @get "id"
+  ).property "fileCount"
 
 `export default Project`

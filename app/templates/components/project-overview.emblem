@@ -1,4 +1,4 @@
-= file-overview file=project.files.firstObject
+= file-overview file=project.lastFile
   footer.card-footer
     = link-to 'authenticated.project.settings' project.id class="card-footer-item" tagName="button"
       = t "settings"
