@@ -5,6 +5,6 @@ AuthenticatedPricingRoute = Ember.Route.extend
 
   title: "Pricing"  + config.platform
   model: ->
-    @modelFor("authenticated").get('pricings')
+    @modelFor("authenticated")
 
 `export default AuthenticatedPricingRoute`

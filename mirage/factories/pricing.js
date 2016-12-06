@@ -9,7 +9,7 @@ export default Base.extend({
   description(){
     var desc = [];
     for (var i = 0; i < 5; i++) {
-      desc.push(faker.lorem.words(2).join(" -> "));
+      desc.push(faker.lorem.words(2).split(" ").join(" -> "));
     }
     return desc.join(",");
   }

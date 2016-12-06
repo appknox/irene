@@ -11,7 +11,7 @@ if env.isAppknox
           = duration.key
 
   .columns
-    each pricings as |pricing|
+    each user.sortedPricings as |pricing|
       = pricing-plan pricing=pricing paymentDuration=paymentDuration
 
 else
