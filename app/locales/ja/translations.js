@@ -66,7 +66,7 @@ export default {
   "networkError": "ネットワークエラー",
   "newPassword": "新規パスワード",
   "newScan": "新規診断 ",
-  "none": "無し",
+  "none": "合格",
   "notifications": "通知",
   "or": "または",
   "package": "パッケージ",
