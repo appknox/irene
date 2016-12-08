@@ -28,10 +28,11 @@ File = DS.Model.extend BaseModelMixin,
   report: DS.attr 'string'
   manual: DS.attr 'number'
 
-  tdeviceBooting: t("deviceBooting")
-  tdeviceIsReady: t("deviceIsReady")
-  tdeviceNotFound: t("deviceNotFound")
-  tdeviceShuttingDown: t("deviceShuttingDown")
+  tDeviceBooting: t("deviceBooting")
+  tDeviceDownloading: t("deviceDownloading")
+  tDeviceInstalling: t("deviceInstalling")
+  tDeviceLaunching: t("deviceLaunching")
+  tDeviceHooking: t("deviceHooking")
 
   analysesSorting: ['risk:desc']
   sortedAnalyses: Ember.computed.sort 'analyses', 'analysesSorting'
@@ -79,18 +80,38 @@ File = DS.Model.extend BaseModelMixin,
     status is ENUMS.DYNAMIC_STATUS.READY
   ).property 'dynamicStatus'
 
-  isBooting: (->
-    status = @get 'dynamicStatus'
-    status is ENUMS.DYNAMIC_STATUS.BOOTING
-  ).property 'dynamicStatus'
-
   isShuttingDown: (->
     status = @get 'dynamicStatus'
     status is ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN
   ).property 'dynamicStatus'
 
-  setBooting: ->
-    @set "dynamicStatus", ENUMS.DYNAMIC_STATUS.BOOTING
+  isOtherStatus: (->
+    status = @get 'dynamicStatus'
+    status not in [ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE, ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN]
+  ).property 'dynamicStatus'
+
+  otherStatus: (->
+    tDeviceBooting = @get "tDeviceBooting"
+    tDeviceDownloading = @get "tDeviceDownloading"
+    tDeviceInstalling = @get "tDeviceInstalling"
+    tDeviceLaunching = @get "tDeviceLaunching"
+    tDeviceHooking = @get "tDeviceHooking"
+    switch @get "dynamicStatus"
+      when ENUMS.DYNAMIC_STATUS.BOOTING
+        tDeviceBooting
+      when ENUMS.DYNAMIC_STATUS.DOWNLOADING
+        tDeviceDownloading
+      when ENUMS.DYNAMIC_STATUS.INSTALLING
+        tDeviceInstalling
+      when ENUMS.DYNAMIC_STATUS.LAUNCHING
+        tDeviceLaunching
+      when ENUMS.DYNAMIC_STATUS.HOOKING
+        tDeviceHooking
+  ).property 'dynamicStatus'
+
+
+  setOtherStatus: ->
+    @set "dynamicStatus", [ENUMS.DYNAMIC_STATUS.BOOTING, ENUMS.DYNAMIC_STATUS.DOWNLOADING, ENUMS.DYNAMIC_STATUS.INSTALLING, ENUMS.DYNAMIC_STATUS.LAUNCHING, ENUMS.DYNAMIC_STATUS.HOOKING]
 
   setShuttingDown: ->
     @set "dynamicStatus", ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN
@@ -101,23 +122,5 @@ File = DS.Model.extend BaseModelMixin,
   setReady: ->
     @set "dynamicStatus", ENUMS.DYNAMIC_STATUS.READY
 
-  humanizedStatus: (->
-    tdeviceBooting = @get "tdeviceBooting"
-    tdeviceIsReady = @get "tdeviceIsReady"
-    tdeviceShuttingDown = @get "tdeviceShuttingDown"
-    tdeviceNotFound = @get "tdeviceNotFound"
-
-    switch @get "dynamicStatus"
-      when ENUMS.DYNAMIC_STATUS.UNKNOWN
-        "UNKNOWN: " + tdeviceNotFound
-      when ENUMS.DYNAMIC_STATUS.NONE
-        "NONE: " + tdeviceNotFound
-      when ENUMS.DYNAMIC_STATUS.BOOTING
-        tdeviceBooting
-      when ENUMS.DYNAMIC_STATUS.READY
-        tdeviceIsReady
-      when ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN
-        tdeviceShuttingDown
-  ).property "dynamicStatus"
 
 `export default File`
