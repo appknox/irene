@@ -28,6 +28,9 @@ export default function() {
   this.post('/logout', () => {
     return {};
   });
+  this.post('/lang', () => {
+    return {};
+  });
 
   this.post('/namespace_add', () => {
     return {};
