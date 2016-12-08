@@ -30,10 +30,6 @@ class ConnectorRFB
         true
 
     @rfb.connect ENV.deviceFarmHost, ENV.deviceFarmPort, '1234', "#{ENV.deviceFarmPath}?token=#{@deviceToken}"
-    if @rfb.get_display
-      display = @rfb.get_display
-      scaleRatio = display.autoscale 100, 100, true
-      @rfb.get_mouse().set_scale scaleRatio
 
   disconnect: ->
     @rfb.disconnect()
