@@ -23,4 +23,3 @@ if isPoppedOut
     .modal-card-foot
       button.is-primary.is-fullwidth click="togglePop"
         = vncPopText
-

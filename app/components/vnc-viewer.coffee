@@ -38,7 +38,6 @@ VncViewerComponent = Ember.Component.extend
 
     connect: ->
       @connector.connect()
-      setTimeout (-> @connector.resize()), 1000
 
     disconnect: ->
       @connector?.disconnect?()

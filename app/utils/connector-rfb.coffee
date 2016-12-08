@@ -1,9 +1,6 @@
 `import ENV from 'irene/config/environment';`
 
 
-updateState = ->
-  return true
-
 xvpInit = ->
   return true
 
@@ -22,16 +19,18 @@ class ConnectorRFB
       'local_cursor': false
       'shared': true
       'view_only': false
-      'onUpdateState': updateState
+      'onUpdateState': ->
+        display = @get_display()
+        debugger
+        scaleRatio = display.autoscale 512, 384 # TODO: This needs to be set Dynamically
+        @get_mouse().set_scale scaleRatio
+        return true
+
       'onXvpInit': xvpInit
     @rfb.connect ENV.deviceFarmHost, ENV.deviceFarmPort, '1234', "#{ENV.deviceFarmPath}?token=#{@deviceToken}"
 
-  resize: ->
-    display = @rfb.get_display
-    scaleRatio = display.autoscale 100, 100, true
-    @rfb.get_mouse().set_scale scaleRatio
-
   disconnect: ->
     @rfb.disconnect()
+
 
 `export default ConnectorRFB`
