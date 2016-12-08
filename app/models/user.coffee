@@ -29,7 +29,7 @@ User = DS.Model.extend
   sortProperties: ["lastFileCreatedOn:desc"]
   sortedProjects: Ember.computed.sort 'projects', 'sortProperties'
 
-  sortPricingProperties: ['id:asc']
+  sortPricingProperties: ['id']
   sortedPricings: Ember.computed.sort 'pricings', 'sortPricingProperties'
 
   projectCount: Ember.computed.alias 'projects.length'
