@@ -13,7 +13,7 @@ if isPoppedOut
     if file.isShuttingDown
       button.is-primary.is-fullwidth disabled="disabled"
         = t "deviceShuttingDown"
-        
+
     if file.isOtherStatus
       button.is-primary.is-fullwidth disabled="disabled"
         = file.otherStatus
