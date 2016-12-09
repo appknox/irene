@@ -80,22 +80,19 @@ File = DS.Model.extend BaseModelMixin,
     status is ENUMS.DYNAMIC_STATUS.READY
   ).property 'dynamicStatus'
 
-  isShuttingDown: (->
+  isNeitherNoneNorReady: (->
     status = @get 'dynamicStatus'
-    status is ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN
+    status not in [ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE]
   ).property 'dynamicStatus'
 
-  isOtherStatus: (->
-    status = @get 'dynamicStatus'
-    status not in [ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE, ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN]
-  ).property 'dynamicStatus'
-
-  otherStatus: (->
+  statusText: (->
     tDeviceBooting = @get "tDeviceBooting"
     tDeviceDownloading = @get "tDeviceDownloading"
     tDeviceInstalling = @get "tDeviceInstalling"
     tDeviceLaunching = @get "tDeviceLaunching"
     tDeviceHooking = @get "tDeviceHooking"
+    tDeviceShuttingDown = @get "tDeviceShuttingDown"
+
     switch @get "dynamicStatus"
       when ENUMS.DYNAMIC_STATUS.BOOTING
         tDeviceBooting
@@ -107,11 +104,15 @@ File = DS.Model.extend BaseModelMixin,
         tDeviceLaunching
       when ENUMS.DYNAMIC_STATUS.HOOKING
         tDeviceHooking
+      when ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN
+        tDeviceShuttingDown
+      else
+        "Unknown Status"
   ).property 'dynamicStatus'
 
 
-  setOtherStatus: ->
-    @set "dynamicStatus", [ENUMS.DYNAMIC_STATUS.BOOTING, ENUMS.DYNAMIC_STATUS.DOWNLOADING, ENUMS.DYNAMIC_STATUS.INSTALLING, ENUMS.DYNAMIC_STATUS.LAUNCHING, ENUMS.DYNAMIC_STATUS.HOOKING]
+  setBootingStatus: ->
+    @set "dynamicStatus", ENUMS.DYNAMIC_STATUS.BOOTING
 
   setShuttingDown: ->
     @set "dynamicStatus", ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN
