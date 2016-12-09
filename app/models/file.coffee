@@ -33,6 +33,7 @@ File = DS.Model.extend BaseModelMixin,
   tDeviceInstalling: t("deviceInstalling")
   tDeviceLaunching: t("deviceLaunching")
   tDeviceHooking: t("deviceHooking")
+  tDeviceShuttingDown: t("deviceShuttingDown")
 
   analysesSorting: ['risk:desc']
   sortedAnalyses: Ember.computed.sort 'analyses', 'analysesSorting'
