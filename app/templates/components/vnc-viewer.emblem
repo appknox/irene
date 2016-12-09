@@ -10,17 +10,16 @@ if isPoppedOut
       button.is-primary.is-fullwidth  click="dynamicShutdown"
         = t "dynamicShutDown"
 
-    if file.isBooting
-      button.is-primary.is-fullwidth disabled="disabled" click="showCurrentStatus"
-        = t "deviceBooting"
-
     if file.isShuttingDown
-      button.is-primary.is-fullwidth disabled="disabled" click="showCurrentStatus"
+      button.is-primary.is-fullwidth disabled="disabled"
         = t "deviceShuttingDown"
+        
+    if file.isOtherStatus
+      button.is-primary.is-fullwidth disabled="disabled"
+        = file.otherStatus
   .modal-card-body
     canvas.canvas
   if file.isReady
     .modal-card-foot
       button.is-primary.is-fullwidth click="togglePop"
         = vncPopText
-
