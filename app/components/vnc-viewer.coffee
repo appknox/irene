@@ -45,7 +45,7 @@ VncViewerComponent = Ember.Component.extend
 
     dynamicScan: ->
       file = @get "file"
-      file.setOtherStatus()
+      file.setBootingStatus()
       file_id = @get "file.id"
       dynamicUrl = [ENV.endpoints.dynamic, file_id].join '/'
       @get("ajax").request dynamicUrl

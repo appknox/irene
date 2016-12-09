@@ -10,13 +10,10 @@ if isPoppedOut
       button.is-primary.is-fullwidth  click="dynamicShutdown"
         = t "dynamicShutDown"
 
-    if file.isShuttingDown
+    if file.isNeitherNoneNorReady
       button.is-primary.is-fullwidth disabled="disabled"
-        = t "deviceShuttingDown"
+        = file.statusText
 
-    if file.isOtherStatus
-      button.is-primary.is-fullwidth disabled="disabled"
-        = file.otherStatus
   .modal-card-body
     canvas.canvas
   if file.isReady
