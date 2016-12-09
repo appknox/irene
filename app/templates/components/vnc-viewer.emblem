@@ -14,7 +14,7 @@ if isPoppedOut
       button.is-primary.is-fullwidth disabled="disabled"
         = file.statusText
 
-  .modal-card-body
+  .modal-card-body.padding-10
     canvas.canvas
   if file.isReady
     .modal-card-foot
