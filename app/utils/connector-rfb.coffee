@@ -1,5 +1,8 @@
 `import ENV from 'irene/config/environment';`
 
+window.vncHeight = 512
+window.vncWidth = 385
+
 
 class ConnectorRFB
 
@@ -19,7 +22,7 @@ class ConnectorRFB
 
       'onUpdateState': ->
         display = @get_display()
-        scaleRatio = display.autoscale 512, 384 # TODO: This needs to be set Dynamically
+        scaleRatio = display.autoscale window.vncHeight, window.vncWidth  # TODO: This needs to be set Dynamically
         @get_mouse().set_scale scaleRatio
         true
 
