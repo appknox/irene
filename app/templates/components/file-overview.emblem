@@ -1,6 +1,6 @@
 header.card-header
   a.card-header-icon
-    = lazy-image src=file.iconUrl alt=file.name
+    img src=file.iconUrl alt=file.name
   p.card-header-title
     ul.is-fullwidth
       li
