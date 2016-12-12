@@ -11,7 +11,7 @@ if isPoppedOut
         = t "dynamicShutDown"
 
     if file.isNeitherNoneNorReady
-      button.is-primary.is-fullwidth disabled="disabled"
+      button.is-primary.is-fullwidth.is-progress disabled="disabled"
         = file.statusText
 
   .modal-card-body.padding-10
