@@ -1,18 +1,6 @@
-.columns
+= auth-assets
   .column.flex-center
-    if env.isAppknox
-      img src="/images/logo.png"
-    else
-      img src="/images/devknox.png"
-.columns
-  .column.flex-center
-    = t "acceptInvite"
-.columns
-  .column.flex-center
-    h3 {{invitation.user.username}} has invited you to {{invitation.project.name}} project
-.columns
-  .column.flex-center
-    form.login-form.recover-form submit="acceptInvite"
+    form.login-form submit="acceptInvite"
       p.control.has-icon.has-icon-left
         = input class="input" value=invitation.email readonly="true"
         = fa-icon "envelope" class="is-primary"
