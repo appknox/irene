@@ -34,7 +34,6 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
       window.Intercom 'trackEvent', 'logged-in'
 
     @get('notify').setDefaultAutoClear ENV.notifications.autoClear
-    # @get('notify').setDefaultClearNotification ENV.notifications.duration
 
     socketId = user?.get "socketId"
     if Ember.isEmpty socketId
@@ -47,40 +46,8 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
     allEvents =
 
-      object_event: (data) ->
-        # A generic event
+      object: (data) ->
         store.pushPayload data: data
-
-      analysis_updated: (data)->
-        store.pushPayload data: data
-        analysis = store.peekRecord("analysis", data.id)
-        risk = analysis.get("risk")
-        store.find("vulnerability", analysis.get("vulnerability.id")).then (vulnerability)->
-          message = "Analysis Updated: #{vulnerability.get "name"}"
-          that.get("notify").info message if risk is ENUMS.RISK.LOW
-          that.get("notify").success message if risk is ENUMS.RISK.NONE
-          that.get("notify").warning message if risk is ENUMS.RISK.MEDIUM
-          that.get("notify").error message if risk is ENUMS.RISK.HIGH
-
-      file_new: (data)->
-        that.get("notify").info "New file added"
-        file = store.pushPayload data: data
-
-      file_updated: (data) ->
-        that.get("notify").info "File updated"
-        store.pushPayload data: data
-
-      project_new: (data) ->
-        that.get("notify").info "New project added"
-        store.pushPayload data: data
-
-      project_updated: (data) ->
-        that.get("notify").info "Project `#{data.name}` updated"
-        store.pushPayload data: data
-
-      collaboration_deleted: (data) ->
-        store.find('collaboration', data.id).then (collaboration) ->
-          collaboration.deleteRecord()
 
       message: (data) ->
         message = data.message
@@ -98,14 +65,6 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
       reload: ->
         location.reload()
-
-    simplePushEvents = [
-      "analysis_new", "user_updated", "project_new", "project_updated",
-      "submission_new", "submission_updated", "collaboration_new",
-      "collaboration_updated"]
-
-    for simplePushEvent in simplePushEvents
-      allEvents[simplePushEvent] = allEvents.object_event
 
     for k, v of allEvents
       channel.bind k, v
