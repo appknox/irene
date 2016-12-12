@@ -1,4 +1,6 @@
 machine:
+  ubuntu:
+    version: 2.10.1
   node:
     version: 6.5.0
 
