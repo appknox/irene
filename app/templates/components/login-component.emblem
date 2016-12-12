@@ -1,5 +1,5 @@
 = auth-assets
-  .column.is-half.flex-center
+  .column.flex-center
     form.login-form
       p.control.has-icon.has-icon-left
         = input class="input" placeholder=(t 'username') value=identification id="username"
