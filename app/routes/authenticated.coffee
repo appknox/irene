@@ -41,7 +41,7 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
       return
     @set 'i18n.locale', user.get "lang"
     @get('moment').changeLocale user.get "lang"
-    channel = pusher.subscribe "#{socketId}-2"
+    channel = pusher.subscribe socketId
     that = @
     store = @get "store"
 
