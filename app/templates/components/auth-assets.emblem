@@ -1,0 +1,18 @@
+.columns.flex-center
+  .login-wrapper.column.is-half
+    .columns
+      .column.has-text-centered
+        h3.signin-text
+          = t "signin"
+        h6
+          = t "greet"
+    .columns
+      .column.is-half
+        figure.image.login-phone-image
+          if env.isAppknox
+            img src="/images/welcome.png"
+          else
+            img src="/images/devknox.png"
+          img src="/images/login-phone-graphic.svg" alt="Mobile application security"
+
+      = yield
