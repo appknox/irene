@@ -1,6 +1,6 @@
 machine:
-  ubuntu:
-    version: 2.10.1
+  pre:
+    - sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
   node:
     version: 6.5.0
 
