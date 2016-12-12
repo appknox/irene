@@ -1,3 +1,5 @@
+h3.has-text-centered.signin-text
+  = t "signin"
 = auth-assets
   .column.flex-center
     form.login-form

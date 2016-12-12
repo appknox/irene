@@ -1,3 +1,5 @@
+h3.has-text-centered.signin-text
+  = t "acceptInvite"
 = auth-assets
   .column.flex-center
     form.login-form submit="acceptInvite"

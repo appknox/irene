@@ -2,8 +2,6 @@
   .login-wrapper.column.is-half
     .columns
       .column.has-text-centered
-        h3.signin-text
-          = t "signin"
         h6
           = t "greet"
     .columns
