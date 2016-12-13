@@ -15,7 +15,7 @@ FileDetailsComponent = Ember.Component.extend
       .then (result) ->
         window.open result.url
       .catch (result) ->
-        that.get("notify").error result.jqXHR.responseJSON.message
+        that.get("notify").error "Please wait while the report is getting generated"
 
     requestManual: ->
       that = @
