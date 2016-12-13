@@ -58,8 +58,8 @@ module.exports = function(environment) {
     deviceFarmPort: "443",
     deviceFarmPath: "websockify",
     deviceFarmHost: "devicefarm.appknox.com",
-    'namespace': "api-v2",
-    'host': "https://api.appknox.com",
+    namespace: "api",
+    host: "https://api.appknox.com",
     'ember-cli-mirage': {
       enabled: false
     },
@@ -140,7 +140,6 @@ module.exports = function(environment) {
     ENV['ember-cli-mirage'] = {
       enabled:false
     };
-    ENV['namespace'] = "api-v2";
     ENV['host'] = "http://0.0.0.0:8000";
     ENV.enableIntercom = false;
   }
@@ -149,7 +148,6 @@ module.exports = function(environment) {
     ENV['ember-cli-mirage'] = {
       enabled: true
     };
-    ENV['namespace'] = "api-v2";
     ENV['host'] = "http://0.0.0.0:8000";
     ENV.enableIntercom = false;
   }
@@ -158,7 +156,6 @@ module.exports = function(environment) {
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
-    ENV['namespace'] = "api-v2";
     ENV['host'] = "https://api.appknox.com";
     ENV.stripe = {
       publishableKey: "pk_live_9G633HADop7N2NLdi6g2BHHA"
