@@ -14,7 +14,7 @@ header.card-header
     .content
       .columns
         .column.flex-center.nowrap-trim
-          | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
+          | #{file.project.packageName}{{#if file.version.isBlank}} - v#{file.version}{{/if}}
       .columns class=isReverse:is-reverse
         .column.is-half.flex-center
           = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
