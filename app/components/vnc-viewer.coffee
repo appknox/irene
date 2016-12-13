@@ -1,7 +1,6 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums';`
 `import ENV from 'irene/config/environment';`
-`import ConnectorRFB from 'irene/utils/connector-rfb';`
 
 vncHeight = 512
 vncWidth = 385
@@ -57,7 +56,6 @@ VncViewerComponent = Ember.Component.extend
       @set "isPoppedOut", !@get "isPoppedOut"
 
     connect: ->
-      @connector.connect()
       rfb = @get "rfb"
       deviceToken = @get "file.deviceToken"
       rfb.connect ENV.deviceFarmHost, ENV.deviceFarmPort, '1234', "#{ENV.deviceFarmPath}?token=#{deviceToken}"
