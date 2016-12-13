@@ -162,6 +162,16 @@ module.exports = function(environment) {
     };
   }
 
+  if (environment === 'staging') {
+    ENV['ember-cli-mirage'] = {
+      enabled: false
+    };
+    ENV['host'] = "https://api.appknox.com";
+    ENV.stripe = {
+      publishableKey: "pk_live_9G633HADop7N2NLdi6g2BHHA"
+    };
+  }
+
   if (environment === 'test') {
     ENV.locationType = 'none';
     ENV.APP.LOG_ACTIVE_GENERATION = false;
