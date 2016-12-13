@@ -7,11 +7,10 @@
 config.isDevknox = 'secure.devknox.io' is location.hostname
 config.isAppknox = !config.isDevknox
 
-config.platform =
-  if config.isDevknox
-    " | Devknox"
-  else
-    " | Appknox"
+if config.isDevknox
+  config.platform = " | Devknox"
+else
+  config.platform = " | Appknox"
 
 installIntercom()
 
