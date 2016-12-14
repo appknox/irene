@@ -40,5 +40,7 @@ SelectLanguageComponent = Ember.Component.extend
       data =
         lang: lang
       @get("ajax").post ENV.endpoints.lang, data: data
+      .then ->
+        window.location.reload()
 
 `export default SelectLanguageComponent`
