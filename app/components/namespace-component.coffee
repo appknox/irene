@@ -22,7 +22,7 @@ NamespaceComponentComponent = Ember.Component.extend
         that.set "showNamespaceModal", false
       .catch (error) ->
         for error in error.errors
-          that.get("notify").error error.detail.message
+          that.get("notify").error error.detail?.message
 
     toggleNamspaceModal: ->
       @set "showNamespaceModal", !@get "showNamespaceModal"

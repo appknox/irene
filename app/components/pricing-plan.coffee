@@ -81,9 +81,11 @@ PricingPlanComponent = Ember.Component.extend
       .catch (error)->
         that.set "couponApplied", false
         if isForbiddenError error
-          that.get("notify").error "Please sheck your coupon"
+          that.get("notify").error "Please check your coupon"
         else
           that.get("notify").error "Some Unknown error occured"
+        for error in error.errors
+          that.get("notify").error error.detail?.message
 
     makePaymentStripe: ->
       cardNumber =  @get "cardNumber"

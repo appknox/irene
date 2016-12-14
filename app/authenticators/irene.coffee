@@ -40,8 +40,10 @@ IreneAuthenticator = Base.extend
         data = processData data
         resolve data
         that.resumeTransistion()
-      .catch (reason) ->
-        reject reason
+      .catch (error) ->
+        for error in error.errors
+          that.get("notify").error error.detail?.message
+        reject error
 
   restore: (data) ->
     ajax = @get "ajax"
@@ -54,9 +56,11 @@ IreneAuthenticator = Base.extend
         resolve data
         if 'login' in location.pathname
           that.resumeTransistion()
-      .catch (reason)->
+      .catch (error) ->
         localStorage.clear()
-        reject reason
+        for error in error.errors
+          that.get("notify").error error.detail?.message
+        reject error
 
   invalidate: (data) ->
     ajax = @get "ajax"
@@ -68,9 +72,11 @@ IreneAuthenticator = Base.extend
       .then (data)->
         resolve data
         location.reload()
-      .catch (reason)->
-        reject reason
+      .catch (error) ->
         location.reload()
+        for error in error.errors
+          that.get("notify").error error.detail?.message
+        reject error
 
 
 `export default IreneAuthenticator;`

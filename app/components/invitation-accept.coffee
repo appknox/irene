@@ -19,6 +19,6 @@ InvitationAcceptComponent = Ember.Component.extend
         window.location = "/"
       .catch (error) ->
         for error in error.errors
-          that.get("notify").error error.detail.message
+          that.get("notify").error error.detail?.message
 
 `export default InvitationAcceptComponent`

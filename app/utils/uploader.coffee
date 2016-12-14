@@ -29,8 +29,10 @@ Uploader = EmberUploader.Uploader.extend
       .then ->
         that.didUpload json.file_key, json.file_key_signed
         that.get("notify").success "File Uploaded Successfully. Please wait while we process your file."
-      .catch ->
+      .catch (error) ->
         that.get("notify").error "Error while uploading file to presigned URL"
+        for error in error.errors
+          that.get("notify").error error.detail?.message
 
     data =
       content_type: "application/octet-stream"
@@ -38,9 +40,10 @@ Uploader = EmberUploader.Uploader.extend
     that.get("ajax").request ENV.endpoints.signedUrl, data: data
     .then (json)->
       signSuccess json
-    .catch ->
+    .catch (error) ->
       that.get("notify").error "Error while fetching signed url"
-
+      for error in error.errors
+        that.get("notify").error error.detail?.message
 
 `export default Uploader;`
 

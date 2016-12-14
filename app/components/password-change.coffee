@@ -5,8 +5,6 @@
 isValidPassword = (password)->
   return password.length > 5
 
-
-
 PasswordChangeComponent = Ember.Component.extend
   i18n: Ember.inject.service()
   passwordCurrent: ""
@@ -38,6 +36,6 @@ PasswordChangeComponent = Ember.Component.extend
         that.get("notify").success tPasswordChanged
       .catch (error) ->
         for error in error.errors
-          that.get("notify").error error.detail.message
+          that.get("notify").error error.detail?.message
 
 `export default PasswordChangeComponent`

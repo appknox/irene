@@ -25,7 +25,8 @@ TestCredentialsComponent = Ember.Component.extend
       @get("ajax").post url, data: data
       .then (data)->
         that.get("notify").success tCredentialsUpdated
-      .catch ->
+      .catch (error) ->
         that.get("notify").error tCredentialsNotUpdated
-
+        for error in error.errors
+          that.get("notify").error error.detail?.message
 `export default TestCredentialsComponent`

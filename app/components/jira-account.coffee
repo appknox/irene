@@ -21,7 +21,7 @@ JiraAccountComponent = Ember.Component.extend
         that.get("notify").success "JIRA integrated"
       .catch (error) ->
         for error in error.errors
-          that.get("notify").error error.detail.message
+          that.get("notify").error error.detail?.message
 
     revokeJira: ->
       return if !confirm "Do you want to revoke JIRA Authorization ?"
@@ -31,7 +31,7 @@ JiraAccountComponent = Ember.Component.extend
         that.get("notify").success "Your JIRA authorization will be revoked in a moment"
       .catch (error) ->
         for error in error.errors
-          that.get("notify").error error.detail.message
+          that.get("notify").error error.detail?.message
 
 
 `export default JiraAccountComponent`

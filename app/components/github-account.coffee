@@ -13,6 +13,6 @@ GithubAccountComponent = Ember.Component.extend
         that.get("notify").success "Your GitHub authorization will be revoked in a moment"
       .catch (error) ->
         for error in error.errors
-          that.get("notify").error error.detail.message
+          that.get("notify").error error.detail?.message
 
 `export default GithubAccountComponent`

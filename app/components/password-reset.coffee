@@ -52,6 +52,6 @@ PasswordResetComponent = Ember.Component.extend
         that.get("notify").success tPasswordIsReset
       .catch (error) ->
         for error in error.errors
-          that.get("notify").error error.detail.message
+          that.get("notify").error error.detail?.message
 
 `export default PasswordResetComponent`

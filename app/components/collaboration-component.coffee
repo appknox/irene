@@ -28,7 +28,7 @@ CollaborationComponentComponent = Ember.Component.extend
         that.get("notify").success "Collaboration added!"
       .catch (error) ->
         for error in error.errors
-          that.get("notify").error error.detail.message
+          that.get("notify").error error.detail?.message
 
     openCollaborationModal: ->
       @set "showCollaborationModal", true

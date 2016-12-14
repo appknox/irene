@@ -14,7 +14,9 @@ FileDetailsComponent = Ember.Component.extend
       @get("ajax").request url
       .then (result) ->
         window.open result.url
-      .catch (result) ->
+      .catch (error) ->
+        for error in error.errors
+          that.get("notify").error error.detail?.message
         that.get("notify").error "Please wait while the report is getting generated"
 
     requestManual: ->
@@ -24,7 +26,8 @@ FileDetailsComponent = Ember.Component.extend
       @get("ajax").request url
       .then (result) ->
         that.get("notify").info "Manual assessment requested."
-      .catch (result) ->
-        that.get("notify").error "Something went wrong."
+      .catch (error) ->
+        for error in error.errors
+          that.get("notify").error error.detail?.message
 
 `export default FileDetailsComponent`

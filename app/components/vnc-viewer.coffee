@@ -70,8 +70,10 @@ VncViewerComponent = Ember.Component.extend
       file_id = @get "file.id"
       dynamicUrl = [ENV.endpoints.dynamic, file_id].join '/'
       @get("ajax").request dynamicUrl
-      .catch ->
+      .catch (error) ->
         file.setNone()
+        for error in error.errors
+          that.get("notify").error error.detail?.message
 
 
     dynamicShutdown: ->
@@ -81,8 +83,10 @@ VncViewerComponent = Ember.Component.extend
       file_id = @get "file.id"
       shutdownUrl = [ENV.endpoints.dynamicShutdown, file_id].join '/'
       @get("ajax").request shutdownUrl
-      .catch ->
+      .catch (error) ->
         file.setNone()
+        for error in error.errors
+          that.get("notify").error error.detail?.message
 
 
 

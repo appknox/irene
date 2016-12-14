@@ -26,8 +26,8 @@ SubmitUrlComponent = Ember.Component.extend
       .then ->
         that.set "storeURL", null
         that.get("notify").success tHangInThere
-      .catch (xhr, message, status) ->
+      .catch (error) ->
         for error in error.errors
-          that.get("notify").error error.detail.message
+          that.get("notify").error error.detail?.message
 
 `export default SubmitUrlComponent`

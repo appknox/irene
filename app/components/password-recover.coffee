@@ -18,6 +18,6 @@ PasswordRecoverComponent = Ember.Component.extend
         that.get("notify").success data.message
       .catch (error) ->
         for error in error.errors
-          that.get("notify").error error.detail.message
+          that.get("notify").error error.detail?.message
 
 `export default PasswordRecoverComponent`
