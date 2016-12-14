@@ -125,6 +125,7 @@ PricingPlanComponent = Ember.Component.extend
         ,
           5 * 1000
       .catch (error)->
-        that.get("notify").error error.jqXHR.responseJSON.message
+        for error in error.errors
+          that.get("notify").error error.detail?.message
 
 `export default PricingPlanComponent`
