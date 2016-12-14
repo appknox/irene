@@ -22,10 +22,6 @@ module.exports = function(deployTarget) {
     username: 'ember-cli-deploy'
   }
 
-  ENV.cloudfront = {
-  distribution: 'E2YVUU4RPYNUI2'
-}
-
   if (deployTarget === 'development') {
     ENV.build.environment = 'development';
     // configure other plugins for development deploy target here
@@ -42,6 +38,10 @@ module.exports = function(deployTarget) {
     ENV.build.environment = 'staging';
     // configure other plugins for staging deploy target here
 
+    ENV.cloudfront = {
+      distribution: 'E2YVUU4RPYNUI2'
+    }
+
     ENV.slack.didDeploy = function(context) {
       return function(slack) {
         return slack.notify({
@@ -54,6 +54,10 @@ module.exports = function(deployTarget) {
   if (deployTarget === 'production') {
     ENV.build.environment = 'production';
     // configure other plugins for production deploy target here
+
+    ENV.cloudfront = {
+      distribution: 'E1SR2PB8XTR9RC'
+    }
 
     ENV.slack.didDeploy = function(context) {
       return function(slack) {
