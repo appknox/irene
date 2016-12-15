@@ -19,6 +19,14 @@ module.exports = function(defaults) {
         production: '.env',
         staging: '.env.staging'
       }
+    },
+    'asset-cache': {
+      // glob paths are allowed!
+      includes: [
+        'images/*',
+        'assets/*'
+      ]
+    //   prepend: 'http://localhost:4200/'
     }
   });
 
