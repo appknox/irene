@@ -20,7 +20,7 @@ VncViewerComponent = Ember.Component.extend
 
   didInsertElement: ->
     canvasEl = @element.getElementsByClassName("canvas")[0]
-    isPlatformIos = ENUMS.PLATFORM.IOS is @get "file.project.platform"
+    that = @
     @set "rfb", new RFB
       'target': canvasEl
       'encrypt': ENV.deviceFarmSsl
@@ -31,10 +31,12 @@ VncViewerComponent = Ember.Component.extend
       'view_only': false
 
       'onUpdateState': ->
-        if isPlatformIos
-          display = @get_display()
-          scaleRatio = display.autoscale vncHeight, vncWidth  # TODO: This needs to be set Dynamically
-          @get_mouse().set_scale scaleRatio
+        if ENUMS.PLATFORM.IOS isnt that.get "file.project.platform"
+          # Only resize iOS Devices
+          return true
+        display = @get_display()
+        scaleRatio = display.autoscale vncHeight, vncWidth  # TODO: This needs to be set Dynamically
+        @get_mouse().set_scale scaleRatio
         true
 
       'onXvpInit': ->
