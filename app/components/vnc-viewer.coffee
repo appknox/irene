@@ -20,7 +20,7 @@ VncViewerComponent = Ember.Component.extend
 
   didInsertElement: ->
     canvasEl = @element.getElementsByClassName("canvas")[0]
-    isPlatformIos = ENUMS.PLATFORM.IOS is @get "file.platform"
+    isPlatformIos = ENUMS.PLATFORM.IOS is @get "file.project.platform"
     @set "rfb", new RFB
       'target': canvasEl
       'encrypt': ENV.deviceFarmSsl
