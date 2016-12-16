@@ -11,7 +11,6 @@ Project = DS.Model.extend BaseModelMixin,
   packageName: DS.attr 'string'
   platform: DS.attr 'number'
   source: DS.attr 'number'
-  version : DS.attr 'string'
   collaborations: DS.hasMany 'collaboration', inverse: 'project'
   githubRepo: DS.attr 'string'
   jiraProject: DS.attr 'string'
@@ -19,6 +18,14 @@ Project = DS.Model.extend BaseModelMixin,
   testPassword: DS.attr 'string'
   url: DS.attr 'string'
   lastFileCreatedOn: DS.attr 'date'
+
+  pdfPassword: (->
+    uuid = @get "uuid"
+    if Ember.isEmpty uuid
+      "Unknown!"
+    else
+      uuid.split("-")[4]
+  ).property "uuid"
 
 
   fileCount: Ember.computed.alias 'files.length'
@@ -36,5 +43,6 @@ Project = DS.Model.extend BaseModelMixin,
   lastFile:( ->
     @store.queryRecord "file", projectId: @get "id"
   ).property "fileCount"
+
 
 `export default Project`
