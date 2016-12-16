@@ -64,7 +64,8 @@ VncViewerComponent = Ember.Component.extend
 
     disconnect: ->
       rfb = @get "rfb"
-      rfb.disconnect()
+      if rfb._rfb_connection_state is 'connected'
+        rfb.disconnect()
 
     dynamicScan: ->
       file = @get "file"
