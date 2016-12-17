@@ -40,10 +40,13 @@ header.card-header
           .column
             ul
               li
-                = file.project.packageName
+                = t "package"
+                | : #{file.project.packageName}
               li
-                = file.version
+                = t "version"
+                | : #{file.version}
               li
-                = file.project.pdfPassword
+                = t "pdfPassword"
+                | : #{file.project.pdfPassword}
 
 = yield
