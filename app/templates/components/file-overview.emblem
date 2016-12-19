@@ -51,14 +51,14 @@ header.card-header
                   = t "version"
                 td
                   | #{file.version}
-            table.zeroclipboard-copy
+            table
               tr
-                td colspan="2" title="Copy Password" data-clipboard-text=file.project.pdfPassword
+                td colspan="2"
                   = t "pdfPassword"
               tr
                 td
                   | #{file.project.pdfPassword}
-                td
+                td.zeroclipboard-copy title="Copy Password" data-clipboard-text=file.project.pdfPassword
                   = fa-icon "clipboard"
                   | &nbsp; Copy Password
 
