@@ -5,8 +5,10 @@
           = t "allFiles"
       button.card-footer-item click="getPDFReportLink"
         = t "pdfReport"
-      button.card-footer-item click="requestManual"
-        = t "manual"
+      if env.isAppknox
+        if file.ifManualNotRequested
+          button.card-footer-item click="requestManual"
+            = t "manual"
 
 each file.sortedAnalyses as |analysis|
   = analysis-details analysis=analysis
