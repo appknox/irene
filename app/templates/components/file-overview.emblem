@@ -45,8 +45,9 @@ header.card-header
               li
                 = t "version"
                 | : #{file.version}
-              li
+              li.zeroclipboard-copy title="Copy Password" data-clipboard-text=file.project.pdfPassword
                 = t "pdfPassword"
-                | : #{file.project.pdfPassword}
+                | : #{file.project.pdfPassword} &nbsp;
+                = fa-icon "clipboard"
 
 = yield
