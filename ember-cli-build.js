@@ -52,19 +52,24 @@ module.exports = function(defaults) {
   app.import('bower_components/noVNC/core/input/keysym.js');
 
   /*
-  * Pusher includes
-  */
+   * Pusher includes
+   */
   app.import("bower_components/pusher-websocket-iso/dist/web/pusher.js");
 
   /*
-  * card includes
-  */
+   * card includes
+   */
   app.import('bower_components/card/dist/card.js');
 
   /*
-  * including pace
-  */
+   * including pace
+   */
   app.import('bower_components/pace/pace.js');
+
+  app.import('bower_components/zeroclipboard/dist/ZeroClipboard.min.js');
+  app.import('bower_components/zeroclipboard/dist/ZeroClipboard.swf', {
+    destDir: 'assets'
+  });
 
   return app.toTree();
 };

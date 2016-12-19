@@ -21,5 +21,14 @@ FileOverviewComponent = Ember.Component.extend
       return target
     target += "...#{fileOld.get "id"}"
 
+  didInsertElement: ->
+    isThreeColumn = @get "isThreeColumn"
+    if isThreeColumn
+      zcEl = $(@element).find ".zeroclipboard-copy"
+      that = @
+      client = new ZeroClipboard zcEl
+      client.on 'aftercopy', ->
+        that.get("notify").info "Password Copied!"
+
 
 `export default FileOverviewComponent`
