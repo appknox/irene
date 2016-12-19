@@ -83,6 +83,7 @@ export default {
   "pasteYourUrl": "Paste Android / Windows store URL",
   "pay": "Pay",
   "pdfReport": "PDF Report",
+  "pdfPassword": "PDF Password",
   "pleaseVisit": "Please visit the",
   "pricing": "Pricing",
   "projects": "Projects",

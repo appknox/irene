@@ -116,7 +116,6 @@ File = DS.Model.extend BaseModelMixin,
         "Unknown Status"
   ).property 'dynamicStatus'
 
-
   setBootingStatus: ->
     @set "dynamicStatus", ENUMS.DYNAMIC_STATUS.BOOTING
 

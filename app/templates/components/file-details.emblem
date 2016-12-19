@@ -1,4 +1,4 @@
-= file-overview file=file
+= file-overview file=file isThreeColumn=true
     footer.card-footer
       if file.project.hasMultipleFiles
         = link-to 'authenticated.project.files' file.project.id class="card-footer-item" tagName="button"
