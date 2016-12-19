@@ -12,13 +12,14 @@ header.card-header
 .card-content
   = link-to redirectTo targetPath
     .content
-      .columns
-        .column.flex-center.nowrap-trim
-          | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
+      if isNotThreeColumn
+        .columns
+          .column.flex-center.nowrap-trim
+            | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
       .columns class=isReverse:is-reverse
-        .column.is-half.flex-center
+        .column.flex-center
           = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
-        .column.is-half.flex-center
+        .column.flex-center
           ul
             li.is-danger
               = t "high"
@@ -35,6 +36,17 @@ header.card-header
             li.is-default
               = t "unknown"
               | : #{file.countRiskUnknown}
-
+        if isThreeColumn
+          .column
+            ul
+              li
+                = t "package"
+                | : #{file.project.packageName}
+              li
+                = t "version"
+                | : #{file.version}
+              li
+                = t "pdfPassword"
+                | : #{file.project.pdfPassword}
 
 = yield
