@@ -8,7 +8,7 @@ Pricing = DS.Model.extend
 
   descriptionItems:(->
     description = @get "description"
-    description.split ","
+    description?.split ","
   ).property "description"
 
 `export default Pricing`
