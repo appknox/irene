@@ -49,16 +49,17 @@ header.card-header
               tr
                 td
                   = t "version"
-              tr
                 td
                   | #{file.version}
-            table
+            table      
               tr
-                td.zeroclipboard-copy title="Copy Password" data-clipboard-text=file.project.pdfPassword
+                td.zeroclipboard-copy colspan="2" title="Copy Password" data-clipboard-text=file.project.pdfPassword
                   = t "pdfPassword"
               tr
                 td
-                  | #{file.project.pdfPassword} &nbsp;
+                  | e04f53090056
+                td
                   = fa-icon "clipboard"
+                  | &nbsp; Copy Password
 
 = yield
