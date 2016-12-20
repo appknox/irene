@@ -6,6 +6,7 @@ vncHeight = 512
 vncWidth = 385
 
 VncViewerComponent = Ember.Component.extend
+  onboard: Ember.inject.service()
   rfb: null
   file: null
   isPoppedOut: false
@@ -41,6 +42,8 @@ VncViewerComponent = Ember.Component.extend
 
       'onXvpInit': ->
         true
+
+    this.set('onboard.activeTour', ENV.TOUR.scanDetail)
 
 
     if @get 'file.isReady'

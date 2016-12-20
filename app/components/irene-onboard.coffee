@@ -9,7 +9,7 @@ IreneOnboardComponent = OnboardOutlet.extend
     tours.createStep 'upload-app', 'Or, You can also upload an app here'
 
     # `sd` is shorthand for `Scan Detail`
-    
+
     tours.createStep 'sd-overview', 'Here is an overview of your project.'
     tours.createStep 'sd-action-buttons', 'View all files in this project, download PDF report, request a manual assessment here.'
     tours.createStep 'sd-analyses', 'This is where all your vulnerablities appear.'

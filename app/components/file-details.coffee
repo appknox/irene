@@ -2,9 +2,12 @@
 `import ENV from 'irene/config/environment';`
 
 FileDetailsComponent = Ember.Component.extend
-
+  onboard: Ember.inject.service()
   file: null
   classNames: ["column"]
+
+  didInsertElement: ->
+    this.set('onboard.activeTour', ENV.TOUR.scanDetail)
 
   actions:
     getPDFReportLink: ->
