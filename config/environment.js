@@ -129,6 +129,12 @@ module.exports = function(environment) {
       signup: 'signup',
       lang: 'lang'
     },
+    TOUR: {
+      newScan: 'Scan An App',
+      scanResult: 'View Scan Results',
+      scanDetail: 'Scan Details',
+      dashboard: 'Dashboard'
+    }
   };
 
   if (environment === 'development') {
