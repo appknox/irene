@@ -37,17 +37,29 @@ header.card-header
               = t "unknown"
               | : #{file.countRiskUnknown}
         if isThreeColumn
-          .column
-            ul
-              li
-                = t "package"
-                | : #{file.project.packageName}
-              li
-                = t "version"
-                | : #{file.version}
-              li.zeroclipboard-copy title="Copy Password" data-clipboard-text=file.project.pdfPassword
-                = t "pdfPassword"
-                | : #{file.project.pdfPassword} &nbsp;
-                = fa-icon "clipboard"
+          .column.package-desc
+            table
+              tr
+                td
+                  = t "package"
+              tr
+                td
+                  | #{file.project.packageName}
+            table
+              tr
+                td
+                  = t "version"
+                td
+                  | #{file.version}
+            table
+              tr
+                td colspan="2"
+                  = t "pdfPassword"
+              tr
+                td
+                  | #{file.project.pdfPassword}
+                td.zeroclipboard-copy title="Copy Password" data-clipboard-text=file.project.pdfPassword
+                  = fa-icon "clipboard"
+                  | &nbsp; Copy Password
 
 = yield
