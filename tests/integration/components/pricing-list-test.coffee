@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{pricing-list}}"""
 
-  assert.equal @$().text().trim(), 'PricingDevknoxDashboard Upload Manual ScanPay $25 USD for 1 MonthPay $25 USD for 1 MonthelovisaMasterCardMaestrodiscover••••••• •••• •••• ••••Full Name••/•••••Pay with card'
+  assert.equal @$().text().trim(), 'PricingDevknoxDashboard Upload Manual ScanPay $9 USD for 1 MonthPay $9 USD for 1 MonthelovisaMasterCardMaestrodiscover••••••• •••• •••• ••••Full Name••/•••••Pay with card'
