@@ -12,7 +12,7 @@ if env.isAppknox
            = t "or"
         .column
            label.button.is-primary.is-fullwidth
-            .tour-step-app-upload
+            .tour-step-upload-app
               = upload-app delegate=this
               if isUploading
                 = progress
