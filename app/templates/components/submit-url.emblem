@@ -1,5 +1,5 @@
 .columns
-  .column
+  .column.tour-step-url-input
      = input class="input" value=storeURL type="text" placeholder=(t 'pasteYourUrl')
   .column.is-one-quarter
      button.is-primary.is-fullwidth click="submitURL"
