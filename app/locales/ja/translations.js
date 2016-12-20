@@ -82,6 +82,7 @@ export default {
   "pasteYourUrl": "URL を貼り付けてください",
   "pay": "支払",
   "pdfReport": "PDFレポート",
+  "pdfPassword": "PDF パスワード",
   "pleaseVisit": "ご案内",
   "pricing": "価格",
   "projects": "プロジェクト",

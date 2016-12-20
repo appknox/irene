@@ -28,6 +28,11 @@ File = DS.Model.extend BaseModelMixin,
   report: DS.attr 'string'
   manual: DS.attr 'number'
 
+  ifManualNotRequested: (->
+    manual = @get 'manual'
+    !manual
+  ).property 'manual'
+
   tDeviceBooting: t("deviceBooting")
   tDeviceDownloading: t("deviceDownloading")
   tDeviceInstalling: t("deviceInstalling")
@@ -110,7 +115,6 @@ File = DS.Model.extend BaseModelMixin,
       else
         "Unknown Status"
   ).property 'dynamicStatus'
-
 
   setBootingStatus: ->
     @set "dynamicStatus", ENUMS.DYNAMIC_STATUS.BOOTING

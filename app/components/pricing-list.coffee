@@ -28,7 +28,7 @@ PricingListComponent = Ember.Component.extend
     store.createRecord "pricing", {
       name: "Devknox",
       description: "Dashboard Upload, Manual Scan",
-      price: 25,
+      price: 9,
       projectsLimit: 0,
     }
   ).property()

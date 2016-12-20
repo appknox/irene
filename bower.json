@@ -15,7 +15,8 @@
     "shepherd.js": "0.7.1",
     "card": "^2.0.3",
     "pace": "^1.0.2",
-    "noVNC": "https://github.com/appknox/noVNC.git#^0.6.2"
+    "noVNC": "https://github.com/appknox/noVNC.git#^0.6.2",
+    "zeroclipboard": "^2.3.0"
   },
   "resolutions": {
     "bohemia": "^0.6.0"
