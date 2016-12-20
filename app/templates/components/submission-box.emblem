@@ -12,11 +12,12 @@ if env.isAppknox
            = t "or"
         .column
            label.button.is-primary.is-fullwidth
-            = upload-app delegate=this
-            if isUploading
-              = progress
-              | %
-            else
-              = t "uploadApp"
+            .tour-step-app-upload
+              = upload-app delegate=this
+              if isUploading
+                = progress
+                | %
+              else
+                = t "uploadApp"
 else
   h5 Projects
