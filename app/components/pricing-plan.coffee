@@ -6,7 +6,7 @@
 PricingPlanComponent = Ember.Component.extend
 
   pricing: null
-  paymentDuration: null
+  paymentDuration: ENUMS.PAYMENT_DURATION.MONTHLY
   showPricingModal: false
   classNames: ["column" , "is-one-third"]
 
