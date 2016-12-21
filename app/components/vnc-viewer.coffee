@@ -43,9 +43,6 @@ VncViewerComponent = Ember.Component.extend
       'onXvpInit': ->
         true
 
-    this.set('onboard.activeTour', ENV.TOUR.scanDetail)
-
-
     if @get 'file.isReady'
       @send("connect")
 
