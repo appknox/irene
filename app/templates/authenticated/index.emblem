@@ -1,4 +1,4 @@
-= submission-box
+= submission-box user=model
 
 .columns
   if model.hasProjects
