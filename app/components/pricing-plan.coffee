@@ -26,7 +26,7 @@ PricingPlanComponent = Ember.Component.extend
     price = @get "pricing.price"
     duration = @get "paymentDuration"
     price * duration
-  ).property "paymentDuration"
+  ).property "paymentDuration", "pricing.price"
 
   totalPriceAfterDiscount: (->
     couponApplied = @get "couponApplied"
