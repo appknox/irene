@@ -6,6 +6,8 @@ SubmissionBoxComponent = Ember.Component.extend
   onboard: Ember.inject.service()
 
   didInsertElement: ->
-    this.set('onboard.activeTour', ENV.TOUR.newScan)
+    if localStorage['alreadyShown'] in [false, undefined]
+      this.set('onboard.activeTour', ENV.TOUR.newScan)
+      localStorage.setItem('alreadyShown', true)
 
 `export default SubmissionBoxComponent`
