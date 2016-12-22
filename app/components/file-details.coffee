@@ -7,7 +7,9 @@ FileDetailsComponent = Ember.Component.extend
   classNames: ["column"]
 
   didInsertElement: ->
-    this.set('onboard.activeTour', ENV.TOUR.scanDetail)
+    hasOneFile = @get 'file.project.hasOneFile'
+    if hasOneFile
+      this.set('onboard.activeTour', ENV.TOUR.scanDetail)
 
   actions:
     getPDFReportLink: ->

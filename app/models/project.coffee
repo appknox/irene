@@ -31,6 +31,7 @@ Project = DS.Model.extend BaseModelMixin,
   fileCount: Ember.computed.alias 'files.length'
   hasFiles: Ember.computed.gt 'fileCount', 0
   hasMultipleFiles: Ember.computed.gt 'fileCount', 1
+  hasOneFile: Ember.computed.lte 'fileCount', 1
 
   platformIconClass:( ->
     switch @get "platform"
