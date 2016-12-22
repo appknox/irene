@@ -36,9 +36,6 @@
           else
             = model.expiryText
 
-      p.menu-label.margin-left
-        = t "notifications"
-
       = submission-list submissions=model.submissions
 
   .column.margin-right.margin-top

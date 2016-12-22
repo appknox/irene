@@ -1,3 +1,7 @@
-.column
-  each submissions as |submission|
-    = submission-details submission=submission
+if hasSubmissions
+  hr
+  p.menu-label.margin-left
+    = t "notifications"
+
+each submissions as |submission|
+  = submission-details submission=submission

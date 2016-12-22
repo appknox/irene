@@ -2,6 +2,11 @@
 
 SubmissionListComponent = Ember.Component.extend
 
-  classNames:["columns"]
+  submissions: null
+  classNames: ["container"]
+
+
+  submissionCount: Ember.computed.alias 'submissions.length'
+  hasSubmissions: Ember.computed.gt 'submissionCount', 0
 
 `export default SubmissionListComponent`
