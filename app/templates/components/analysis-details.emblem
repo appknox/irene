@@ -26,7 +26,6 @@
               pre.pre-code = finding.description
         button class="is-fullwidth is-default margin-top" click="toggleVulnerability"
           span
-            | {{showOrHide}}
-              {{ t "vulnerability"}}
+            | {{showOrHideVulnerability}}
       else
         = analysis.vulnerability.successMessage
