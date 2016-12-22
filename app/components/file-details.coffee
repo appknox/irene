@@ -3,13 +3,10 @@
 
 FileDetailsComponent = Ember.Component.extend
   onboard: Ember.inject.service()
-  file: null
   classNames: ["column"]
 
   didInsertElement: ->
-    hasOneFile = @get 'file.project.hasOneFile'
-    if hasOneFile
-      this.set('onboard.activeTour', ENV.TOUR.scanDetail)
+    this.set('onboard.activeTour', ENV.TOUR.scanDetail)
 
   actions:
     getPDFReportLink: ->
