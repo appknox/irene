@@ -1,12 +1,16 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment';`
+`import tourName from 'irene/utils/tour-name';`
 
 FileDetailsComponent = Ember.Component.extend
   onboard: Ember.inject.service()
   classNames: ["column"]
 
   didInsertElement: ->
-    this.set('onboard.activeTour', ENV.TOUR.scanDetail)
+    name = tourName(ENV.TOUR.scanDetail)
+    if localStorage[name] in ["false", undefined]
+      this.set('onboard.activeTour', ENV.TOUR.scanDetail)
+      localStorage.setItem(name, "true")
 
   actions:
     getPDFReportLink: ->
