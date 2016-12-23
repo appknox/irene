@@ -10,6 +10,7 @@ export default {
   "beingAnalyzed": "is being analyzed",
   "businessImplication": "Business Implication",
   "changePassword": "Change Password",
+  "chooseAFile": "Choose a file to compare",
   "collaborations": "Collaborations",
   "compare": "Compare",
   "confirmPassword": "Confirm Password",

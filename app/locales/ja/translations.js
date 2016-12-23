@@ -10,6 +10,7 @@ export default {
   "beingAnalyzed": "分析中",
   "businessImplication": "ビジネスへの影響",
   "changePassword": "パスワード変更",
+  "chooseAFile": "比較するファイルを選択する",
   "collaborations": "グループ作業者",
   "compare": "比較",
   "confirmPassword": "パスワードの確認",
