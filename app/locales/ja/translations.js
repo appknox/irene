@@ -116,6 +116,7 @@ export default {
   "version": "バージョン",
   "vulnerabilities": "脆弱性",
   "vulnerability": "脆弱性",
+  "vulnerabilityDetails": "脆弱性の詳細",
   "welcome": "ようこそ",
   "yearly": "年次",
 };

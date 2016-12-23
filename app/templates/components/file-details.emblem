@@ -15,6 +15,9 @@
           button.card-footer-item click="requestManual"
             = t "manual"
 
+.margin-left
+  h4
+    =t "vulnerabilityDetails"
 each file.sortedAnalyses as |analysis|
   .tour-step-sd-analyses
-  = analysis-details analysis=analysis
+  = analysis-details analysis=analysis class="margin-top"

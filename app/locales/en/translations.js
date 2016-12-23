@@ -117,6 +117,7 @@ export default {
   "version": "Version",
   "vulnerabilities": "Vulnerabilities",
   "vulnerability": "Vulnerability",
+  "vulnerabilityDetails": "Vulnerability Details",
   "welcome": "Welcome ",
   "yearly": "Yearly"
 };
