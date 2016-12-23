@@ -1,5 +1,9 @@
+.margin-left
+  h4
+    =t "fileDetails"
+
 .tour-step-sd-overview
-= file-overview file=file isThreeColumn=true
+= file-overview file=file isThreeColumn=true class="margin-top"
     footer.card-footer.tour-step-sd-action-buttons
       if file.project.hasMultipleFiles
         = link-to 'authenticated.project.files' file.project.id class="card-footer-item" tagName="button"

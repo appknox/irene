@@ -41,6 +41,7 @@ export default {
   "fetchGitHubRepoFailed": "Something went wrong when trying to fetch repo list",
   "fetchProjectFailed": "Something went wrong when trying to fetch projects list",
   "fileCount": "File Count",
+  "fileDetails": "File Details",
   "files": "Files",
   "forgotPassword": "Forgot Password?",
   "ghPageConfigure": "page to configure GitHub integration",

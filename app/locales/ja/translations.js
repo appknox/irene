@@ -41,6 +41,7 @@ export default {
   "fetchGitHubRepoFailed": "GitHubRepo 取得の失敗",
   "fetchProjectFailed": "プロジェクト取得の失敗",
   "fileCount": "ファイル数",
+  "fileDetails": "ファイルの詳細",
   "files": "ファイル",
   "forgotPassword": "パスワードを忘れた",
   "ghPageConfigure": "GitHub 統合を構成するページ",
