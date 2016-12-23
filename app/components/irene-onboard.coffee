@@ -8,6 +8,7 @@ IreneOnboardComponent = OnboardOutlet.extend
     tours.createStep 'submit-url', 'Please enter your Android/Windows store URL here and click on `Submit URL`'
     tours.createStep 'upload-app', 'Or, You can also upload an app here'
     tours.createStep 'project', 'You can view your projects here after uploading'
+    tours.createStep 'project-details', 'Here is an overview of your file. Click this area to view your scan details'
 
     # `sd` is shorthand for `Scan Detail`
 
@@ -18,6 +19,7 @@ IreneOnboardComponent = OnboardOutlet.extend
 
     tours.createTour ENV.TOUR.newScan, ['submit-url', 'upload-app', 'project']
     tours.createTour ENV.TOUR.scanDetail, ['sd-overview', 'sd-action-buttons', 'sd-analyses', 'sd-dynamic']
+    tours.createTour ENV.TOUR.manualTour, ['submit-url', 'upload-app', 'project', 'project-details']
   ).on "init"
 
 `export default IreneOnboardComponent`
