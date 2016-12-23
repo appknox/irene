@@ -12,4 +12,8 @@ SubmissionBoxComponent = Ember.Component.extend
       this.set('onboard.activeTour', ENV.TOUR.newScan)
       localStorage.setItem(name, "true")
 
+  actions:
+    startTour: ->
+      this.set('onboard.activeTour', ENV.TOUR.manualTour)
+
 `export default SubmissionBoxComponent`
