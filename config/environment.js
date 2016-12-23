@@ -131,9 +131,8 @@ module.exports = function(environment) {
     },
     TOUR: {
       newScan: 'Scan An App',
-      scanResult: 'View Scan Results',
       scanDetail: 'Scan Details',
-      dashboard: 'Dashboard'
+      manualTour: 'Dashboard'
     }
   };
 
