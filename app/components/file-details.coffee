@@ -36,4 +36,7 @@ FileDetailsComponent = Ember.Component.extend
         for error in error.errors
           that.get("notify").error error.detail?.message
 
+    startTour: ->
+      this.set('onboard.activeTour', ENV.TOUR.scanDetail)      
+
 `export default FileDetailsComponent`

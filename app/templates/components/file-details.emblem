@@ -1,6 +1,8 @@
 .margin-left
   h4
     =t "fileDetails"
+    a click="startTour"
+      = fa-icon "question-circle"
 
 .tour-step-sd-overview
 = file-overview file=file isThreeColumn=true class="margin-top"
