@@ -9,8 +9,8 @@ AnalysisDetailsComponent = Ember.Component.extend
   classNames: ["message"]
   showVulnerability: false
   classNameBindings: ["riskClass"]
-  tHide: t("hide")
-  tShow: t("show")
+  tHideVulnerability: t("hideVulnerability")
+  tShowVulnerability: t("showVulnerability")
 
   riskClass: ( ->
     risk = @get "analysis.risk"
@@ -32,13 +32,13 @@ AnalysisDetailsComponent = Ember.Component.extend
         "is-progress"
   ).property "analysis.risk"
 
-  showOrHide: (->
-    tHide = @get "tHide"
-    tShow = @get "tShow"
+  showOrHideVulnerability: (->
+    tHideVulnerability = @get "tHideVulnerability"
+    tShowVulnerability = @get "tShowVulnerability"
     if @get "showVulnerability"
-      tHide
+      tHideVulnerability
     else
-      tShow
+      tShowVulnerability
   ).property "showVulnerability"
 
   actions:
