@@ -77,6 +77,10 @@ ENUMS =
     HALFYEARLY: 6
     YEARLY: 10
 
+  PRODUCT:
+    APPKNOX: 0
+    DEVKNOX: 1
+
 
 # Populate `CHOICES`
 for enumName, enumValues of ENUMS

@@ -2,6 +2,9 @@
 
 module.exports = function(environment) {
   var ENV = {
+    isDevknox: false,
+    isAppknox: false,
+    platform: -1,
     rollbar: {
       accessToken: '4381303f93734918966ff4e1b028cee5'
     },
