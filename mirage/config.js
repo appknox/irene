@@ -35,5 +35,11 @@ export default function() {
   this.post('/namespace_add', () => {
     return {};
   });
+  this.get('/github_repos', () => {
+    return {};
+  });
+  this.get('/jira_projects', () => {
+    return {};
+  });
 
 }
