@@ -43,8 +43,17 @@ export default function() {
   });
   this.get('/devices', () => {
     return {
-      
-    };
+  	"Android": [
+  		["4.4.4", false],
+  		["4.4.2", false]
+  	],
+  	"iOS": [
+  		["8.1", false],
+  		["9.3.3", true],
+  		["9.0.2", false],
+  		["7.1", true]
+  	]
+  };
   });
 
 }

@@ -13,27 +13,30 @@ ProjectPreferencesComponent = Ember.Component.extend
   didInsertElement: ->
     platformName = @get "project.platformIconClass"
     that = @
-    @get("ajax").request ENV.endpoints.devices
-    .then (data) ->
-      that.set "versions", data
-      debugger
-    .catch (error) ->
-      that.get("notify").error "failed"
-      for error in error.errors
-        that.get("notify").error error.detail?.message
-
-
 
     if platformName is "apple"
-
+      @get("ajax").request ENV.endpoints.devices
+      .then (data) ->
+        that.set "versions", data.iOS
+      .catch (error) ->
+        that.get("notify").error "failed"
+        for error in error.errors
+          that.get("notify").error error.detail?.message
     else if platformName is "android"
-
-    else
-      alert(platformName)
+      @get("ajax").request ENV.endpoints.devices
+      .then (data) ->
+        that.set "versions", data.Android
+      .catch (error) ->
+        that.get("notify").error "failed"
+        for error in error.errors
+          that.get("notify").error error.detail?.message
 
 
   actions:
     deviceChanged: (value) ->
       @set "currentDevice", parseInt value
+
+    versionSelected: ->
+      alert("ehllo")
 
 `export default ProjectPreferencesComponent`

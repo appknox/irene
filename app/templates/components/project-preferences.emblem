@@ -2,3 +2,8 @@ select onchange={action "deviceChanged" value="target.value"}
   each devices as |device|
     option value=device.value
       = device.key
+
+select onchange={action "versionSelected" value="target.value"}
+  each versions as |version|
+    option value=version
+      = version
