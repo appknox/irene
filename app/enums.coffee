@@ -77,6 +77,11 @@ ENUMS =
     HALFYEARLY: 6
     YEARLY: 10
 
+  DEVICE_TYPE:
+    NO_PREFERENCE: 0
+    PHONE_REQUIRED: 1
+    TABLET_REQUIRED: 2  
+
 
 # Populate `CHOICES`
 for enumName, enumValues of ENUMS
