@@ -100,6 +100,7 @@ module.exports = function(environment) {
       uploadedFile: 'uploaded_file',
       invoice: 'invoice',
       logout: 'logout',
+      devices: 'devices',
       dynamic: 'dynamic',
       dynamicShutdown: 'dynamic_shutdown',
       signedPdfUrl: 'signed_pdf_url',

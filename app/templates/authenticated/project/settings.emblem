@@ -1,7 +1,7 @@
 h4
   =t "settings"
 .box
-  = project-preferences
+  = project-preferences project=model
 .box
   = github-project project=model
 .box

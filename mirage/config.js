@@ -41,5 +41,10 @@ export default function() {
   this.get('/jira_projects', () => {
     return {};
   });
+  this.get('/devices', () => {
+    return {
+      
+    };
+  });
 
 }
