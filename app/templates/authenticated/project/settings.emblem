@@ -1,6 +1,8 @@
 h4
   =t "settings"
 .box
+  = project-preferences
+.box
   = github-project project=model
 .box
   = jira-project project=model
