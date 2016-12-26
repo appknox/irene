@@ -1,1 +1,4 @@
-= yield
+select onchange={action "deviceChanged" value="target.value"}
+  each devices as |device|
+    option value=device.value
+      = device.key
