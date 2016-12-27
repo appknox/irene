@@ -22,8 +22,8 @@ ProjectPreferencesComponent = Ember.Component.extend
 
       @get("ajax").request ENV.endpoints.devices
       .then (data) ->
+        versions = that.set "versions", data
         if platform is ENUMS.PLATFORM.ANDROID
-          versions = that.set "versions", data
           if currentDevice is ENUMS.DEVICE_TYPE.PHONE_REQUIRED
             that.set "availableDevices", versions.devices.filterBy("platform", 0).filterBy("is_tablet",false)
           else if currentDevice is ENUMS.DEVICE_TYPE.TABLET_REQUIRED
@@ -31,7 +31,6 @@ ProjectPreferencesComponent = Ember.Component.extend
           else
             that.set "availableDevices", versions.devices.filterBy("platform", 0)
         else if platform is ENUMS.PLATFORM.IOS
-          versions = that.set "versions", data
           if currentDevice is ENUMS.DEVICE_TYPE.PHONE_REQUIRED
             that.set "availableDevices", versions.devices.filterBy("platform", 1).filterBy("is_tablet",false)
           else if currentDevice is ENUMS.DEVICE_TYPE.TABLET_REQUIRED
@@ -39,7 +38,6 @@ ProjectPreferencesComponent = Ember.Component.extend
           else
             that.set "availableDevices", versions.devices.filterBy("platform", 1)
         else
-          versions = that.set "versions", data
           if currentDevice is ENUMS.DEVICE_TYPE.PHONE_REQUIRED
             that.set "availableDevices", versions.devices.filterBy("platform", 1).filterBy("is_tablet",false)
           else if currentDevice is ENUMS.DEVICE_TYPE.TABLET_REQUIRED
