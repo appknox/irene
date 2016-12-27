@@ -54,6 +54,22 @@ ProjectPreferencesComponent = Ember.Component.extend
           that.get("notify").error error.detail?.message
 
     versionSelected: ->
-      alert("ehllo")
+      deviceChoosen = @$('#device').val()
+      versionChoosen = @$('#version').val()
+      projectId = @get "project.id"
+      devicePreferences = [ENV.endpoints.devicePreferences, projectId].join '/'
+      that = @
+      data =
+        deviceChoosen: deviceChoosen
+        versionChoosen: versionChoosen
+      @get("ajax").post devicePreferences, data: data
+      .then (data) ->
+        that.get("notify").success "You have sucessfully selected the device"
+      .catch (error) ->
+        that.get("notify").error "failed"
+        if Ember.isEmpty error?.errors
+          return
+        for error in error.errors
+          that.get("notify").error error.detail?.message
 
 `export default ProjectPreferencesComponent`
