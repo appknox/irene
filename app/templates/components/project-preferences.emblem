@@ -5,7 +5,12 @@ select id="device" onchange={action "deviceChanged" value="target.value"}
 
 br
 
-select.margin-top20 id="version" onchange={action "versionSelected" value="target.value"}
+select.margin-top20 id="version"
   each availableDevices as |version|
     option value=version.value
       = version.platform_version
+
+br
+
+button.margin-top20.is-primary click="versionSelected"
+  | Select the device
