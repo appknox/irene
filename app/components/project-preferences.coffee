@@ -8,23 +8,30 @@ ProjectPreferencesComponent = Ember.Component.extend
   devices: devices
   currentDevice: devices[2].value
   project: null
+  versions: ["Loading..."]
+  availableDevices: ["Loading..."]
+
 
 
   didInsertElement: ->
-    platformName = @get "project.platformIconClass"
+    platform = @get "project.platform"
     that = @
-    versions: ["Loading..."]
-
     @get("ajax").request ENV.endpoints.devices
     .then (data) ->
-      if platformName is "apple"
-        that.set "versions", data.iOS
-      else if platformName is "android"
-        that.set "versions", data.Android
+      if platform is ENUMS.PLATFORM.ANDROID
+        versions = that.set "versions", data
+        that.set "availableDevices", versions.devices.filterBy("is_tablet",true)
+
+      else if platform is ENUMS.PLATFORM.IOS
+        versions = that.set "versions", data
+        that.set "availableDevices", versions.devices.filterBy("is_tablet",true)
       else
-        that.set "versions", ["NO DEVICE FOUND"]
+        versions = that.set "versions", data
+        that.set "availableDevices", versions.devices.filterBy("is_tablet",true)
     .catch (error) ->
       that.get("notify").error "failed"
+      if Ember.isEmpty error?.errors
+        return
       for error in error.errors
         that.get("notify").error error.detail?.message
 

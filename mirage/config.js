@@ -43,17 +43,59 @@ export default function() {
   });
   this.get('/devices', () => {
     return {
-  	"Android": [
-  		["4.4.4", false],
-  		["4.4.2", false]
-  	],
-  	"iOS": [
-  		["8.1", false],
-  		["9.3.3", true],
-  		["9.0.2", false],
-  		["7.1", true]
-  	]
-  };
+    "devices": [
+        {
+            "is_tablet": true,
+            "is_available": true,
+            "platform_version": "7.1",
+            "serial_number": "7060e2903edbbfe20881658018e4d8b588f5b9e4",
+            "app_name": null,
+            "is_connected": true,
+            "platform": 1,
+            "package_name": null
+        },
+        {
+            "is_tablet": false,
+            "is_available": true,
+            "platform_version": "4.4.2",
+            "serial_number": "HQ548YL01252",
+            "app_name": null,
+            "is_connected": true,
+            "platform": 0,
+            "package_name": null
+        },
+        {
+            "is_tablet": false,
+            "is_available": false,
+            "platform_version": "4.4.4",
+            "serial_number": "ZX1B33XJSS",
+            "app_name": null,
+            "is_connected": false,
+            "platform": 0,
+            "package_name": null
+        },
+        {
+            "is_tablet": false,
+            "is_available": true,
+            "platform_version": "9.0.2",
+            "serial_number": "5236726aaf9bc32249ccd231291b34398284e974",
+            "app_name": null,
+            "is_connected": true,
+            "platform": 1,
+            "package_name": null
+        },
+        {
+            "is_tablet": false,
+            "is_available": false,
+            "platform_version": "4.4.2",
+            "serial_number": "HQ53ZYL27425",
+            "app_name": null,
+            "is_connected": false,
+            "platform": 0,
+            "package_name": null
+        }
+    ]
+};
   });
 
 }

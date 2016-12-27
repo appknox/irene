@@ -4,6 +4,6 @@
 /       = device.key
 
 select onchange={action "versionSelected" value="target.value"}
-  each versions as |version|
-    option value=version
-      = version
+  each availableDevices as |version|
+    option value=version.value
+      = version.platform_version
