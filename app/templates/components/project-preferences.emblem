@@ -1,9 +1,11 @@
-/ select onchange={action "deviceChanged" value="target.value"}
-/   each devices as |device|
-/     option value=device.value
-/       = device.key
+select onchange={action "deviceChanged" value="target.value"}
+  each devices as |device|
+    option value=device.value
+      = device.key
 
-select onchange={action "versionSelected" value="target.value"}
+br
+
+select.margin-top20 onchange={action "versionSelected" value="target.value"}
   each availableDevices as |version|
     option value=version.value
       = version.platform_version
