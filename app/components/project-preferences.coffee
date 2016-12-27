@@ -20,14 +20,17 @@ ProjectPreferencesComponent = Ember.Component.extend
     .then (data) ->
       if platform is ENUMS.PLATFORM.ANDROID
         versions = that.set "versions", data
-        that.set "availableDevices", versions.devices.filterBy("is_tablet",true)
+        that.set "availableDevices", versions.devices.filterBy("platform", 0).filterBy("is_tablet",true)
+        debugger
 
       else if platform is ENUMS.PLATFORM.IOS
         versions = that.set "versions", data
-        that.set "availableDevices", versions.devices.filterBy("is_tablet",true)
+        that.set "availableDevices", versions.devices.filterBy("platform", 1).filterBy("is_tablet",true)
+        debugger
       else
         versions = that.set "versions", data
-        that.set "availableDevices", versions.devices.filterBy("is_tablet",true)
+        that.set "availableDevices", versions.devices.filterBy("platform", 1).filterBy("is_tablet",true)
+        debugger
     .catch (error) ->
       that.get("notify").error "failed"
       if Ember.isEmpty error?.errors
