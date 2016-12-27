@@ -31,7 +31,9 @@ export default function() {
   this.post('/lang', () => {
     return {};
   });
-
+  this.post('/device_preference/:id', () => {
+    return {id: '1'};
+  });
   this.post('/namespace_add', () => {
     return {};
   });

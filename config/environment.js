@@ -101,7 +101,7 @@ module.exports = function(environment) {
       invoice: 'invoice',
       logout: 'logout',
       devices: 'devices',
-      devicePreference: 'device_preference',
+      devicePreferences: 'device_preference',
       dynamic: 'dynamic',
       dynamicShutdown: 'dynamic_shutdown',
       signedPdfUrl: 'signed_pdf_url',
