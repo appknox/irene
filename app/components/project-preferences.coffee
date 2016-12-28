@@ -11,6 +11,7 @@ ProjectPreferencesComponent = Ember.Component.extend
   project: null
   versions: ["Loading..."]
   availableDevices: ["Loading..."]
+  availableVersions: ["Loading..."]
   currentDevice: ["Loading..."]
 
   didInsertElement: ->
@@ -27,7 +28,12 @@ ProjectPreferencesComponent = Ember.Component.extend
         versions = that.set "versions", data
         deviceType = ENUMS.DEVICE_TYPE
         platformType = ENUMS.PLATFORM
-        that.set "availableDevices", deviceSelection(deviceType,versions,currentDevice,platformType,platform)
+        availableVersions = that.set "availableVersions", deviceSelection(deviceType,versions,currentDevice,platformType,platform)
+        if Ember.isEmpty availableVersions
+          availableDevices = that.set "availableDevices", ["Loading..."]
+          debugger
+        else
+          that.set "availableDevices", availableVersions
       .catch (error) ->
         that.get("notify").error "failed"
         if Ember.isEmpty error?.errors
