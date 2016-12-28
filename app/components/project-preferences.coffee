@@ -13,6 +13,9 @@ ProjectPreferencesComponent = Ember.Component.extend
   availableDevices: ["Loading..."]
   currentDevice: ["Loading..."]
 
+  didInsertElement: ->
+    this.send('deviceChanged');
+
   actions:
     deviceChanged: (value) ->
       that = @
