@@ -1,7 +1,8 @@
 h4
   =t "settings"
-.box
-  = project-preferences project=model
+if model.hasDevicePreference
+  .box
+    = project-preferences project=model
 .box
   = github-project project=model
 .box
