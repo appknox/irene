@@ -3,7 +3,8 @@
 `import ENV from 'irene/config/environment';`
 `import deviceSelection from 'irene/utils/device-selection'`
 
-devices = ENUMS.DEVICE_TYPE.CHOICES.reverse()[1..]
+sliceDevices = ENUMS.DEVICE_TYPE.CHOICES.reverse()[1..]
+devices = sliceDevices.reverse()
 
 ProjectPreferencesComponent = Ember.Component.extend
   devices: devices
