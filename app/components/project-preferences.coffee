@@ -1,6 +1,7 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums';`
 `import ENV from 'irene/config/environment';`
+`import deviceSelection from 'irene/utils/device-selection'`
 
 devices = ENUMS.DEVICE_TYPE.CHOICES.reverse()[1..]
 
@@ -11,39 +12,18 @@ ProjectPreferencesComponent = Ember.Component.extend
   availableDevices: ["Loading..."]
   currentDevice: ["Loading..."]
 
-
   actions:
     deviceChanged: (value) ->
       that = @
       that.set "currentDevice", parseInt value
-
       platform = @get "project.platform"
       currentDevice = @get "currentDevice"
-
       @get("ajax").request ENV.endpoints.devices
       .then (data) ->
         versions = that.set "versions", data
-        if platform is ENUMS.PLATFORM.ANDROID
-          if currentDevice is ENUMS.DEVICE_TYPE.PHONE_REQUIRED
-            that.set "availableDevices", versions.devices.filterBy("platform", 0).filterBy("is_tablet",false)
-          else if currentDevice is ENUMS.DEVICE_TYPE.TABLET_REQUIRED
-            that.set "availableDevices", versions.devices.filterBy("platform", 0).filterBy("is_tablet",true)
-          else
-            that.set "availableDevices", versions.devices.filterBy("platform", 0)
-        else if platform is ENUMS.PLATFORM.IOS
-          if currentDevice is ENUMS.DEVICE_TYPE.PHONE_REQUIRED
-            that.set "availableDevices", versions.devices.filterBy("platform", 1).filterBy("is_tablet",false)
-          else if currentDevice is ENUMS.DEVICE_TYPE.TABLET_REQUIRED
-            that.set "availableDevices", versions.devices.filterBy("platform", 1).filterBy("is_tablet",true)
-          else
-            that.set "availableDevices", versions.devices.filterBy("platform", 1)
-        else
-          if currentDevice is ENUMS.DEVICE_TYPE.PHONE_REQUIRED
-            that.set "availableDevices", versions.devices.filterBy("platform", 1).filterBy("is_tablet",false)
-          else if currentDevice is ENUMS.DEVICE_TYPE.TABLET_REQUIRED
-            that.set "availableDevices", versions.devices.filterBy("platform", 1).filterBy("is_tablet",true)
-          else
-            that.set "availableDevices", versions.devices.filterBy("platform", 1)
+        deviceType = ENUMS.DEVICE_TYPE
+        platformType = ENUMS.PLATFORM
+        that.set "availableDevices", deviceSelection(deviceType,versions,currentDevice,platformType,platform)
       .catch (error) ->
         that.get("notify").error "failed"
         if Ember.isEmpty error?.errors
