@@ -31,7 +31,6 @@ Project = DS.Model.extend BaseModelMixin,
   fileCount: Ember.computed.alias 'files.length'
   hasFiles: Ember.computed.gt 'fileCount', 0
   hasMultipleFiles: Ember.computed.gt 'fileCount', 1
-  hasDevicePreference: Ember.computed.lte 'platform', 1
 
   platformIconClass:( ->
     switch @get "platform"
@@ -41,6 +40,11 @@ Project = DS.Model.extend BaseModelMixin,
       else "mobile"
   ).property "platform"
 
+  hasDevicePreference:(->
+    switch @get "platform"
+      when ENUMS.PLATFORM.ANDROID then true
+      when ENUMS.PLATFORM.IOS then true
+  ).property "platform"
 
   lastFile:( ->
     @store.queryRecord "file", projectId: @get "id"
