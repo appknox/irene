@@ -1,17 +1,19 @@
 deviceSelection = (deviceType,versions,currentDevice,platformType,platform) ->
+  android = versions.devices.filterBy("is_connected",true).filterBy("platform", 0)
+  ios = versions.devices.filterBy("is_connected",true).filterBy("platform", 1)
   if platform is platformType.ANDROID
     if currentDevice is deviceType.PHONE_REQUIRED
-      versions.devices.filterBy("platform", 0).filterBy("is_tablet",false)
+      android.filterBy("is_tablet",false)
     else if currentDevice is deviceType.TABLET_REQUIRED
-      versions.devices.filterBy("platform", 0).filterBy("is_tablet",true)
+      android.filterBy("is_tablet",true)
     else
-      versions.devices.filterBy("platform", 0)
+      android
   else
     if currentDevice is deviceType.PHONE_REQUIRED
-      versions.devices.filterBy("platform", 1).filterBy("is_tablet",false)
+      ios.filterBy("is_tablet",false)
     else if currentDevice is deviceType.TABLET_REQUIRED
-      versions.devices.filterBy("platform", 1).filterBy("is_tablet",true)
+      ios.filterBy("is_tablet",true)
     else
-      versions.devices.filterBy("platform", 1)
+      ios
 
 `export default deviceSelection`
