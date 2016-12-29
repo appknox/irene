@@ -30,10 +30,9 @@ ProjectPreferencesComponent = Ember.Component.extend
         platformType = ENUMS.PLATFORM
         availableVersions = that.set "availableVersions", deviceSelection(deviceType,versions,currentDevice,platformType,platform)
         if Ember.isEmpty availableVersions
-          availableDevices = that.set "availableDevices", ["Loading..."]
-          debugger
+          availableDevices = that.set "availableDevices", [{ "platform_version": "No Device Found" }]
         else
-          that.set "availableDevices", availableVersions
+          availableDevices = that.set "availableDevices", availableVersions
       .catch (error) ->
         that.get("notify").error "failed"
         if Ember.isEmpty error?.errors
