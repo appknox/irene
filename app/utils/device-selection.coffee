@@ -1,6 +1,7 @@
 deviceSelection = (deviceType,versions,currentDevice,platformType,platform) ->
-  android = versions.devices.filterBy("is_connected",true).filterBy("platform", 0)
-  ios = versions.devices.filterBy("is_connected",true).filterBy("platform", 1)
+  connectedDevices = versions.devices.filterBy("is_connected",true)
+  android = connectedDevices.filterBy("platform", 0)
+  ios = connectedDevices.filterBy("platform", 1)
   if platform is platformType.ANDROID
     if currentDevice is deviceType.PHONE_REQUIRED
       android.filterBy("is_tablet",false)

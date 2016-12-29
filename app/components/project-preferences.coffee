@@ -32,7 +32,7 @@ ProjectPreferencesComponent = Ember.Component.extend
         if Ember.isEmpty availableVersions
           availableDevices = that.set "availableDevices", [{ "platform_version": "No Device Found" }]
         else
-          availableDevices = that.set "availableDevices", availableVersions
+          availableDevices = that.set "availableDevices", availableVersions.uniqBy("platform_version", true)
       .catch (error) ->
         that.get("notify").error "failed"
         if Ember.isEmpty error?.errors
