@@ -1,10 +1,16 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment';`
+`import tourName from 'irene/utils/tour-name';`
 
 FileDetailsComponent = Ember.Component.extend
-
-  file: null
+  onboard: Ember.inject.service()
   classNames: ["column"]
+
+  didInsertElement: ->
+    name = tourName(ENV.TOUR.scanDetail)
+    if localStorage[name] in ["false", undefined]
+      this.set('onboard.activeTour', ENV.TOUR.scanDetail)
+      localStorage.setItem(name, "true")
 
   actions:
     getPDFReportLink: ->
@@ -29,5 +35,8 @@ FileDetailsComponent = Ember.Component.extend
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message
+
+    startTour: ->
+      this.set('onboard.activeTour', ENV.TOUR.scanDetail)      
 
 `export default FileDetailsComponent`

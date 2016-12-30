@@ -35,6 +35,7 @@ User = DS.Model.extend
   projectCount: Ember.computed.alias 'projects.length'
   hasProjects: Ember.computed.gt 'projectCount', 0
 
+
   expiryText: (->
     currentDate = new Date()
     if ENV.isAppknox

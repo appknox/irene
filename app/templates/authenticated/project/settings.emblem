@@ -1,6 +1,7 @@
-h4
-  =t "settings"
-.box
+.margin-left
+  h4
+    =t "settings"
+.box.margin-top
   = github-project project=model
 .box
   = jira-project project=model

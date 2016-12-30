@@ -1,6 +1,6 @@
-= submission-box
+= submission-box user=model
 
-.columns
+.columns.tour-step-project
   if model.hasProjects
     each model.sortedProjects as |project|
       =project-overview project=project

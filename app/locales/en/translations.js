@@ -10,6 +10,7 @@ export default {
   "beingAnalyzed": "is being analyzed",
   "businessImplication": "Business Implication",
   "changePassword": "Change Password",
+  "chooseAFile": "Choose a file to compare",
   "collaborations": "Collaborations",
   "compare": "Compare",
   "confirmPassword": "Confirm Password",
@@ -40,6 +41,7 @@ export default {
   "fetchGitHubRepoFailed": "Something went wrong when trying to fetch repo list",
   "fetchProjectFailed": "Something went wrong when trying to fetch projects list",
   "fileCount": "File Count",
+  "fileDetails": "File Details",
   "files": "Files",
   "forgotPassword": "Forgot Password?",
   "ghPageConfigure": "page to configure GitHub integration",
@@ -115,6 +117,7 @@ export default {
   "version": "Version",
   "vulnerabilities": "Vulnerabilities",
   "vulnerability": "Vulnerability",
+  "vulnerabilityDetails": "Vulnerability Details",
   "welcome": "Welcome ",
   "yearly": "Yearly"
 };
