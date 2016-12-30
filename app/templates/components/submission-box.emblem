@@ -3,6 +3,8 @@ if env.isAppknox
     .column
       h5
         = t "newScan"
+        a click="startTour"
+          = fa-icon "question-circle"
   .columns
     .column
       = submit-url
@@ -12,11 +14,12 @@ if env.isAppknox
            = t "or"
         .column
            label.button.is-primary.is-fullwidth
-            = upload-app delegate=this
-            if isUploading
-              = progress
-              | %
-            else
-              = t "uploadApp"
+            .tour-step-upload-app
+              = upload-app delegate=this
+              if isUploading
+                = progress
+                | %
+              else
+                = t "uploadApp"
 else
   h5 Projects

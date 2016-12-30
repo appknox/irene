@@ -10,6 +10,7 @@ export default {
   "beingAnalyzed": "分析中",
   "businessImplication": "ビジネスへの影響",
   "changePassword": "パスワード変更",
+  "chooseAFile": "比較するファイルを選択する",
   "collaborations": "グループ作業者",
   "compare": "比較",
   "confirmPassword": "パスワードの確認",
@@ -40,6 +41,7 @@ export default {
   "fetchGitHubRepoFailed": "GitHubRepo 取得の失敗",
   "fetchProjectFailed": "プロジェクト取得の失敗",
   "fileCount": "ファイル数",
+  "fileDetails": "ファイルの詳細",
   "files": "ファイル",
   "forgotPassword": "パスワードを忘れた",
   "ghPageConfigure": "GitHub 統合を構成するページ",
@@ -114,6 +116,7 @@ export default {
   "version": "バージョン",
   "vulnerabilities": "脆弱性",
   "vulnerability": "脆弱性",
+  "vulnerabilityDetails": "脆弱性の詳細",
   "welcome": "ようこそ",
   "yearly": "年次",
 };

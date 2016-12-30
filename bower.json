@@ -12,6 +12,7 @@
     "pretender": "~1.4.2",
     "Faker": "~3.1.0",
     "pusher-websocket-iso": "pusher#^3.2.1",
+    "shepherd.js": "0.7.1",
     "card": "^2.0.3",
     "pace": "^1.0.2",
     "noVNC": "https://github.com/appknox/noVNC.git#^0.6.2",
