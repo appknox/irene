@@ -54,6 +54,11 @@ header.card-header
                   = t "version"
                 td
                   | #{file.version}
+              tr
+                td.capitalizeText
+                  = t "versionCode"
+                td
+                  | #{file.versionCode}
             table style="display:none;"
               tr
                 td colspan="2"
