@@ -19,6 +19,7 @@ File = DS.Model.extend BaseModelMixin,
   uuid: DS.attr 'string'
   deviceToken: DS.attr 'string'
   version: DS.attr 'string'
+  versionCode: DS.attr 'string'
   iconUrl: DS.attr 'string'
   md5hash: DS.attr 'string'
   sha1hash: DS.attr 'string'
