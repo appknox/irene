@@ -37,7 +37,7 @@ export default function() {
   });
 
   this.get('/files/', (schema, FakeRequest) => {
-    return schema.files.findBy({id:FakeRequest.queryParams.projectId})
+    return schema.files.findBy({id:FakeRequest.queryParams.projectId});
   });
 
 }
