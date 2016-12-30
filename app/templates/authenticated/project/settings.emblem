@@ -1,7 +1,10 @@
 .margin-left
   h4
     =t "settings"
-.box.margin-top
+if model.hasDevicePreference
+  .box
+    = project-preferences project=model
+.box
   = github-project project=model
 .box
   = jira-project project=model
