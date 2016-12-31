@@ -55,7 +55,7 @@ header.card-header
                 td
                   | #{file.version}
               tr
-                td.capitalizeText
+                td.capitalize-text
                   = t "versionCode"
                 td
                   | #{file.versionCode}
