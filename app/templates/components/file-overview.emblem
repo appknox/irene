@@ -50,16 +50,15 @@ header.card-header
                   | #{file.project.packageName}
             table
               tr
-                td
-                  = t "version"
-                td
-                  | #{file.version}
-              tr
                 td.capitalize-text
+                  = t "version"
+                  | /
                   = t "versionCode"
                 td
+                  | #{file.version}
+                  | /
                   | #{file.versionCode}
-            table style="display:none;"
+            table
               tr
                 td colspan="2"
                   = t "pdfPassword"
