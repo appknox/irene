@@ -114,6 +114,7 @@ export default {
   "userSetting": "ユーザー設定",
   "username": "ユーザー名",
   "version": "バージョン",
+  "versionCode": "バージョンコード",
   "vulnerabilities": "脆弱性",
   "vulnerability": "脆弱性",
   "vulnerabilityDetails": "脆弱性の詳細",
