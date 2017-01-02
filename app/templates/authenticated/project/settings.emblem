@@ -1,9 +1,9 @@
 .margin-left
   h4
     =t "settings"
-if model.hasDevicePreference
-  .box
-    = project-preferences project=model
+/ if model.hasDevicePreference
+.box
+  = project-preferences project=model
 .box
   = github-project project=model
 .box

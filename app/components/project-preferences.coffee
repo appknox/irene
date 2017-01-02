@@ -6,47 +6,50 @@
 ProjectPreferencesComponent = Ember.Component.extend
 
   project: null
-  versions: ["Loading..."]
-  currentDevice: ["Loading..."]
-  availableDevices: ["Loading..."]
-  availableVersions: ["Loading..."]
-  devices: ENUMS.DEVICE_TYPE.CHOICES[0...-1]
+  selectVersion: 0
+  store: Ember.inject.service()
+  deviceTypes: ENUMS.DEVICE_TYPE.CHOICES[0...-1]
+  selectedDeviceType: ENUMS.DEVICE_TYPE.NO_PREFERENCE
 
-  didInsertElement: ->
-    @send('deviceChanged')
+
+  devices: (->
+    store = @get "store"
+    store.findAll "device"
+  ).property()
+
+  availableDevices: Ember.computed.filter 'devices', (device) ->
+    device.get("platform") is @get("project.platform")
+
+  filteredDevices: Ember.computed "availableDevices", "selectedDeviceType", ->
+    availableDevices = @get "availableDevices"
+    selectedDeviceType = @get "selectedDeviceType"
+    availableDevices.filter (device) ->
+      switch selectedDeviceType
+        when ENUMS.DEVICE_TYPE.NO_PREFERENCE
+          true
+        when ENUMS.DEVICE_TYPE.TABLET_REQUIRED
+          device.get "isTablet"
+        when ENUMS.DEVICE_TYPE.PHONE_REQUIRED
+          !device.get "isTablet"
+
+  uniqueDevices: Ember.computed.uniqBy "filteredDevices", 'version'
 
   actions:
-    deviceChanged: (value) ->
-      that = @
-      that.set "currentDevice", parseInt value
-      platform = @get "project.platform"
-      currentDevice = @get "currentDevice"
-      @get("ajax").request ENV.endpoints.devices
-      .then (data) ->
-        versions = that.set "versions", data
-        deviceType = ENUMS.DEVICE_TYPE
-        platformType = ENUMS.PLATFORM
-        availableVersions = that.set "availableVersions", deviceSelection(deviceType,versions,currentDevice,platformType,platform)
-        if Ember.isEmpty availableVersions
-          availableDevices = that.set "availableDevices", [{ "platform_version": "No Device Found" }]
-        else
-          availableDevices = that.set "availableDevices", availableVersions.uniqBy("platform_version", true)
-      .catch (error) ->
-        that.get("notify").error "failed"
-        if Ember.isEmpty error?.errors
-          return
-        for error in error.errors
-          that.get("notify").error error.detail?.message
+    selectVersion: ->
+      @set "selectVersion", parseInt @$('select').val()
+
+    selectDeviceType: ->
+      @set "selectedDeviceType", parseInt @$('select').val()
 
     versionSelected: ->
-      deviceChoosen = @$('#device').val()
-      versionChoosen = @$('#version').val()
+      selectedDeviceType = @get "selectedDeviceType"
+      selectVersion = @get "selectVersion"
       projectId = @get "project.id"
       devicePreferences = [ENV.endpoints.devicePreferences, projectId].join '/'
       that = @
       data =
-        deviceChoosen: deviceChoosen
-        versionChoosen: versionChoosen
+        selectedDeviceType: selectedDeviceType
+        selectVersion: selectVersion
       @get("ajax").post devicePreferences, data: data
       .then (data) ->
         that.get("notify").success "You have sucessfully selected the device"
