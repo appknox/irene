@@ -3,19 +3,17 @@
 `import ENV from 'irene/config/environment';`
 `import deviceSelection from 'irene/utils/device-selection'`
 
-sliceDevices = ENUMS.DEVICE_TYPE.CHOICES.reverse()[1..]
-devices = sliceDevices.reverse()
-
 ProjectPreferencesComponent = Ember.Component.extend
-  devices: devices
+
   project: null
   versions: ["Loading..."]
+  currentDevice: ["Loading..."]
   availableDevices: ["Loading..."]
   availableVersions: ["Loading..."]
-  currentDevice: ["Loading..."]
+  devices: ENUMS.DEVICE_TYPE.CHOICES[0...-1]
 
   didInsertElement: ->
-    this.send('deviceChanged');
+    @send('deviceChanged')
 
   actions:
     deviceChanged: (value) ->
