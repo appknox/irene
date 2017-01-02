@@ -115,6 +115,7 @@ export default {
   "userSetting": " user's settings ",
   "username": "Username",
   "version": "Version",
+  "versionCode": "version code",
   "vulnerabilities": "Vulnerabilities",
   "vulnerability": "Vulnerability",
   "vulnerabilityDetails": "Vulnerability Details",

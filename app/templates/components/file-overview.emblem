@@ -16,6 +16,9 @@ header.card-header
         .columns
           .column.flex-center.nowrap-trim
             | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
+          .column.flex-center.nowrap-trim
+            = t "versionCode"
+            | {{#if file.versionCode}} - #{file.versionCode}{{/if}}
       .columns class=isReverse:is-reverse
         .column.flex-center
           = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
@@ -47,10 +50,14 @@ header.card-header
                   | #{file.project.packageName}
             table
               tr
-                td
+                td.capitalize-text
                   = t "version"
+                  | /
+                  = t "versionCode"
                 td
                   | #{file.version}
+                  | /
+                  | #{file.versionCode}
             table style="display:none;"
               tr
                 td colspan="2"
