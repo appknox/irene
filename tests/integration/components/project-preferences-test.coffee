@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{project-preferences}}"""
 
-  assert.equal @$().text().trim(), 'Device PreferencesNO_PREFERENCEPHONE_REQUIREDTABLET_REQUIREDSelect the device'
+  assert.equal @$().text().trim(), 'Device PreferencesNo Device Available'
