@@ -40,12 +40,6 @@ Project = DS.Model.extend BaseModelMixin,
       else "mobile"
   ).property "platform"
 
-  hasDevicePreference:(->
-    switch @get "platform"
-      when ENUMS.PLATFORM.ANDROID then true
-      when ENUMS.PLATFORM.IOS then true
-  ).property "platform"
-
   lastFile:( ->
     @store.queryRecord "file", projectId: @get "id"
   ).property "fileCount"

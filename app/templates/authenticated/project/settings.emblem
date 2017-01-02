@@ -1,7 +1,7 @@
 .margin-left
   h4
     =t "settings"
-/ if model.hasDevicePreference
+
 .box
   = project-preferences project=model
 .box

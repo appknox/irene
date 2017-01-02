@@ -1,7 +1,6 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums';`
 `import ENV from 'irene/config/environment';`
-`import deviceSelection from 'irene/utils/device-selection'`
 
 ProjectPreferencesComponent = Ember.Component.extend
 
@@ -33,6 +32,10 @@ ProjectPreferencesComponent = Ember.Component.extend
           !device.get "isTablet"
 
   uniqueDevices: Ember.computed.uniqBy "filteredDevices", 'version'
+
+  hasDevicePreference: Ember.computed.gt 'uniqueDevices.length', 0
+
+
 
   actions:
     selectVersion: ->
