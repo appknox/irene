@@ -1,12 +1,11 @@
 `import Ember from 'ember'`
 `import config from 'irene/config/environment';`
+`import ScrollTopMixin from 'irene/mixins/scroll-top'`
 
-AuthenticatedSettingsRoute = Ember.Route.extend
+AuthenticatedSettingsRoute = Ember.Route.extend ScrollTopMixin,
 
   title: "Settings"  + config.platform
   model: ->
     @modelFor("authenticated")
-  activate: ->
-    window.scrollTo(0,0)    
 
 `export default AuthenticatedSettingsRoute`

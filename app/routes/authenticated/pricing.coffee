@@ -1,12 +1,11 @@
 `import Ember from 'ember'`
 `import config from 'irene/config/environment';`
+`import ScrollTopMixin from 'irene/mixins/scroll-top'`
 
-AuthenticatedPricingRoute = Ember.Route.extend
+AuthenticatedPricingRoute = Ember.Route.extend ScrollTopMixin,
 
   title: "Pricing"  + config.platform
   model: ->
     @modelFor("authenticated")
-  activate: ->
-    window.scrollTo(0,0)    
 
 `export default AuthenticatedPricingRoute`

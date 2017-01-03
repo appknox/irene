@@ -1,12 +1,11 @@
 `import Ember from 'ember'`
 `import config from 'irene/config/environment';`
+`import ScrollTopMixin from 'irene/mixins/scroll-top'`
 
-AuthenticatedProjectFilesRoute = Ember.Route.extend
+AuthenticatedProjectFilesRoute = Ember.Route.extend ScrollTopMixin,
 
   title: "All Files" + config.platform
   model: ->
     @modelFor("authenticated.project").get('files')
-  activate: ->
-    window.scrollTo(0,0)  
 
 `export default AuthenticatedProjectFilesRoute`

@@ -1,7 +1,8 @@
 `import Ember from 'ember'`
 `import config from 'irene/config/environment';`
+`import ScrollTopMixin from 'irene/mixins/scroll-top'`
 
-AuthenticatedCompareRoute = Ember.Route.extend
+AuthenticatedCompareRoute = Ember.Route.extend ScrollTopMixin,
 
   title: "File Compare"  + config.platform
   model: (data)->
@@ -10,7 +11,5 @@ AuthenticatedCompareRoute = Ember.Route.extend
       file: @get('store').find 'file', parseInt files[0]
       fileOld: @get('store').find 'file', parseInt files[1]
     }
-  activate: ->
-    window.scrollTo(0,0)    
 
 `export default AuthenticatedCompareRoute`
