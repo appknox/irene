@@ -6,19 +6,20 @@ header.card-header
       li
         h5
           = file.project.name
+          | &nbsp; | &nbsp;
+          = file.createdOnHumanized
           = fa-icon file.project.platformIconClass class="card-icon"
       li
-        = file.createdOnHumanized
+        | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
 .card-content
   = link-to redirectTo targetPath
     .content
       if isNotThreeColumn
         .columns
           .column.flex-center.nowrap-trim
-            | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
-          .column.flex-center.nowrap-trim
             = t "versionCode"
             | {{#if file.versionCode}} - #{file.versionCode}{{/if}}
+
       .columns class=isReverse:is-reverse
         .column.flex-center
           = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
@@ -43,20 +44,9 @@ header.card-header
           .column.package-desc
             table
               tr
-                td
-                  = t "package"
-              tr
-                td
-                  | #{file.project.packageName}
-            table
-              tr
                 td.capitalize-text
-                  = t "version"
-                  | /
                   = t "versionCode"
                 td
-                  | #{file.version}
-                  | /
                   | #{file.versionCode}
             table style="display:none;"
               tr
