@@ -1,25 +1,30 @@
 h5 Device Preferences
 
-if hasDevicePreference
+if hasDevices
   .columns
     .column
       select{action 'selectDeviceType' on='change'}
         each deviceTypes as |deviceType|
           option value=deviceType.value
             = deviceType.key
+  if hasUniqueDevices
+    .columns
+      .column
+        select.margin-top20{action 'selectVersion' on='change'}
+          each uniqueDevices as |device|
+            option value=device.version
+              = device.version
 
-  .columns
-    .column
-      select.margin-top20{action 'selectVersion' on='change'}
-        each uniqueDevices as |device|
-          option value=device.version
-            = device.version
+    .columns
+      .column
+        button.margin-top20.is-primary click="versionSelected"
+          | Select the device
+  else
 
-  .columns
-    .column
-      button.margin-top20.is-primary click="versionSelected"
-        | Select the device
+    h6.margin-top20
+      = t "noDeviceAvailable"
 
 else
 
-  h6.margin-top20 No Device Available
+  h6.margin-top20
+    = t "noDeviceAvailable"

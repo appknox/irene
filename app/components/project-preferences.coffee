@@ -10,7 +10,6 @@ ProjectPreferencesComponent = Ember.Component.extend
   deviceTypes: ENUMS.DEVICE_TYPE.CHOICES[0...-1]
   selectedDeviceType: ENUMS.DEVICE_TYPE.NO_PREFERENCE
 
-
   devices: (->
     store = @get "store"
     store.findAll "device"
@@ -18,6 +17,10 @@ ProjectPreferencesComponent = Ember.Component.extend
 
   availableDevices: Ember.computed.filter 'devices', (device) ->
     device.get("platform") is @get("project.platform")
+
+  devicesCount: Ember.computed.alias 'availableDevices.length'
+
+  hasDevices: Ember.computed.gt 'devicesCount', 0
 
   filteredDevices: Ember.computed "availableDevices", "selectedDeviceType", ->
     availableDevices = @get "availableDevices"
@@ -33,7 +36,7 @@ ProjectPreferencesComponent = Ember.Component.extend
 
   uniqueDevices: Ember.computed.uniqBy "filteredDevices", 'version'
 
-  hasDevicePreference: Ember.computed.gt 'uniqueDevices.length', 0
+  hasUniqueDevices: Ember.computed.gt 'uniqueDevices.length', 0
 
 
 

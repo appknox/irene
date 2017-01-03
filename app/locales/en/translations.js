@@ -73,6 +73,7 @@ export default {
   "networkError": "A network error occured! Please try again later",
   "newPassword": "New Password",
   "newScan": "New Scan",
+  "noDeviceAvailable": "No Device Available",
   "none": "Passed",
   "notifications": "Notifications",
   "or": "or",
