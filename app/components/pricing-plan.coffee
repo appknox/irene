@@ -92,7 +92,8 @@ PricingPlanComponent = Ember.Component.extend
       cardCvc = @get "cardCvc"
       cardName = @get "cardName"
 
-      [exp_month, exp_year] = @get("cardExpiry").split " / "
+      [exp_month, exp_year] = @get("cardExpiry").split "/"
+      [exp_month, exp_month] =  [exp_month.trim(), exp_month.trim()]
       if !Stripe.card.validateCardNumber cardNumber
         return @get("notify").error "Please enter a valid card number"
       if !Stripe.card.validateCVC cardCvc
