@@ -6,5 +6,7 @@ AuthenticatedSettingsRoute = Ember.Route.extend
   title: "Settings"  + config.platform
   model: ->
     @modelFor("authenticated")
+  activate: ->
+    window.scrollTo(0,0)    
 
 `export default AuthenticatedSettingsRoute`
