@@ -59,10 +59,10 @@ header.card-header
               tr
                 td colspan="2"
                   = t "pdfPassword"
-              tr
+              tr.zeroclipboard-copy title="Copy Password" data-clipboard-text=file.project.pdfPassword
                 td
                   | #{file.project.pdfPassword}
-                td.zeroclipboard-copy title="Copy Password" data-clipboard-text=file.project.pdfPassword
+                td
                   = fa-icon "clipboard"
                   | &nbsp; Copy Password
 
