@@ -6,8 +6,6 @@ header.card-header
       li
         h5
           = file.project.name
-          | &nbsp; | &nbsp;
-          = file.createdOnHumanized
           = fa-icon file.project.platformIconClass class="card-icon"
       li
         | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
@@ -16,6 +14,9 @@ header.card-header
     .content
       if isNotThreeColumn
         .columns
+          .column.flex-center.nowrap-trim
+            = t "createdOn"
+            | : #{file.createdOnHumanized}
           .column.flex-center.nowrap-trim
             = t "versionCode"
             | {{#if file.versionCode}} - #{file.versionCode}{{/if}}
@@ -42,6 +43,12 @@ header.card-header
               | : #{file.countRiskUnknown}
         if isThreeColumn
           .column.package-desc
+            table
+              tr
+                td.capitalize-text
+                  = t "createdOn"
+                td
+                  = file.createdOnHumanized
             table
               tr
                 td.capitalize-text

@@ -15,6 +15,7 @@ export default {
   "compare": "比較",
   "confirmPassword": "パスワードの確認",
   "created": "作成されました",
+  "createdOn": "上に作成された",
   "credentialsNotUpdated": "資格情報が更新されていません",
   "credentialsUpdated": "資格情報が更新されました",
   "currentPassword": "現在のパスワード",

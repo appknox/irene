@@ -15,6 +15,7 @@ export default {
   "compare": "Compare",
   "confirmPassword": "Confirm Password",
   "created": "Created",
+  "createdOn": "created on",
   "credentialsNotUpdated": "Something went wrong when trying to update credentials",
   "credentialsUpdated": "Credentials Successfully Updated",
   "currentPassword": "Current Password",
