@@ -63,7 +63,7 @@ header.card-header
                 td
                   | #{file.project.pdfPassword}
                 td
-                  = fa-icon "clipboard"
+                  = fa-icon "clipboard copy-icon"
                   | &nbsp; Copy Password
 
 = yield
