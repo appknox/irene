@@ -3,11 +3,11 @@ header.card-header
     img src=file.iconUrl alt=file.name
   p.card-header-title.tour-step-project-details
     ul.is-fullwidth
-      li
+      li.hide-overflow
         h5
           = file.project.name
           = fa-icon file.project.platformIconClass class="card-icon"
-      li
+      li.hide-overflow
         | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
 .card-content
   = link-to redirectTo targetPath
