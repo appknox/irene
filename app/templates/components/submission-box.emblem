@@ -1,10 +1,10 @@
 if env.isAppknox
   .columns
     .column
-      h5
+      h4
         = t "newScan"
         a click="startTour"
-          = fa-icon "question-circle"
+          = fa-icon "question-circle start-tour"
   .columns
     .column
       = submit-url
