@@ -1,7 +1,10 @@
 .margin-left
   h4
     =t "settings"
-.box.margin-top
+
+.box
+  = project-preferences project=model
+.box
   = github-project project=model
 .box
   = jira-project project=model
