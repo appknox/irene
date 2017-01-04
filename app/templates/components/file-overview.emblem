@@ -48,7 +48,7 @@ header.card-header
                   = t "versionCode"
                 td
                   | #{file.versionCode}
-            table style="display:none;"
+            table
               tr
                 td colspan="2"
                   = t "pdfPassword"
