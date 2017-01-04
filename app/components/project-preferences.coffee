@@ -35,8 +35,8 @@ ProjectPreferencesComponent = Ember.Component.extend
           !device.get "isTablet"
 
   uniqueDevices: Ember.computed.uniqBy "filteredDevices", 'version'
-
   hasUniqueDevices: Ember.computed.gt 'uniqueDevices.length', 0
+  hasDevicePreference: Ember.computed.gt 'selectedDeviceType', 0
 
 
 
