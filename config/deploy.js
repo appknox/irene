@@ -35,7 +35,7 @@ module.exports = function(deployTarget) {
   }
 
   if (deployTarget === 'staging') {
-    ENV.build.environment = 'staging';
+    ENV.build.environment = 'production';
     // configure other plugins for staging deploy target here
 
     ENV.cloudfront = {
