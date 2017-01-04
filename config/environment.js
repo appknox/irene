@@ -172,13 +172,14 @@ module.exports = function(environment) {
     };
   }
 
+
   if (environment === 'staging') {
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
-    ENV['host'] = "https://api.appknox.com";
+    ENV['host'] = "https://stagingapi.appknox.com";
     ENV.stripe = {
-      publishableKey: "pk_live_9G633HADop7N2NLdi6g2BHHA"
+      publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
     };
   }
 
