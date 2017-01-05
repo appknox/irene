@@ -36,16 +36,17 @@ ProjectPreferencesComponent = Ember.Component.extend
 
   uniqueDevices: Ember.computed.uniqBy "filteredDevices", 'version'
   hasUniqueDevices: Ember.computed.gt 'uniqueDevices.length', 0
-  hasDevicePreference: Ember.computed.gt 'selectedDeviceType', 0
-
-
 
   actions:
-    selectVersion: ->
-      @set "selectVersion", parseInt @$('select').val()
 
     selectDeviceType: ->
-      @set "selectedDeviceType", parseInt @$('select').val()
+      selectedDeviceType = @set "selectedDeviceType", parseInt @$('#project-device-preference').val()
+      debugger
+
+    selectVersion: ->
+      selectVersion = @set "selectVersion", parseInt @$('#project-version-preference').val()
+      debugger
+
 
     versionSelected: ->
       selectedDeviceType = @get "selectedDeviceType"
