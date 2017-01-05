@@ -8,7 +8,7 @@ if hasDevices
           | No Preference
         each deviceTypes as |deviceType|
           option value=deviceType.value
-            = deviceType.key
+            = t deviceType.key
   if hasUniqueDevices
     .columns
       .column
