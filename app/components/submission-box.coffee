@@ -8,7 +8,7 @@ SubmissionBoxComponent = Ember.Component.extend
 
   didInsertElement: ->
     name = tourName(ENV.TOUR.newScan)
-    alreadyShown = document.cookie.includes name
+    alreadyShown = Ember.A(document.cookie).includes name
     if alreadyShown is false
       this.set('onboard.activeTour', ENV.TOUR.newScan)
       document.cookie += name
