@@ -4,13 +4,17 @@ if hasDevices
   .columns
     .column
       select{action 'selectDeviceType' on='change'} id="project-device-preference"
+        option value=0
+          | No Preference
         each deviceTypes as |deviceType|
           option value=deviceType.value
             = deviceType.key
   if hasUniqueDevices
     .columns
       .column
-        select.margin-top20{action 'selectVersion' on='change'} id="project-version-preference" 
+        select.margin-top20{action 'selectVersion' on='change'} id="project-version-preference"
+          option value=0
+            | No Preference
           each uniqueDevices as |device|
             option value=device.version
               = device.version

@@ -7,13 +7,14 @@ ProjectPreferencesComponent = Ember.Component.extend
   project: null
   selectVersion: 0
   store: Ember.inject.service()
-  deviceTypes: ENUMS.DEVICE_TYPE.CHOICES[0...-1]
+  deviceTypes: ENUMS.DEVICE_TYPE.CHOICES[1...-1]
   selectedDeviceType: ENUMS.DEVICE_TYPE.NO_PREFERENCE
 
   devices: (->
     store = @get "store"
     store.findAll "device"
   ).property()
+
 
   availableDevices: Ember.computed.filter 'devices', (device) ->
     device.get("platform") is @get("project.platform")
@@ -41,12 +42,9 @@ ProjectPreferencesComponent = Ember.Component.extend
 
     selectDeviceType: ->
       selectedDeviceType = @set "selectedDeviceType", parseInt @$('#project-device-preference').val()
-      debugger
 
     selectVersion: ->
       selectVersion = @set "selectVersion", parseInt @$('#project-version-preference').val()
-      debugger
-
 
     versionSelected: ->
       selectedDeviceType = @get "selectedDeviceType"
