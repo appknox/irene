@@ -1,20 +1,9 @@
 .column
   .columns
-    if hasProjects
-      each sortedProjects as |project|
+    if hasObjects
+      each sortedObjects as |project|
         = project-overview project=project
     else
       h3.margin-left No Projects!
 
-  .columns
-    .column
-      nav.pagination.is-centered
-        if hasPrevious
-          a.button click="previousPage" Previous
-        ul.pagination-list
-          each pages as |page|
-            li{action "gotoPage" page}
-              a.button
-                = page
-        if hasNext
-          a.button click="nextPage" Next
+  = partial "paginate"

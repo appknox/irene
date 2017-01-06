@@ -1,0 +1,12 @@
+.columns
+  .column
+    nav.pagination.is-centered
+      if hasPrevious
+        a.button.is-default click="previousPage" Previous
+      ul.pagination-list
+        each pages as |page|
+          li{action "gotoPage" page}
+            a.button class="{{paginate-class offset page}}"
+              = page
+      if hasNext
+        a.button.is-default click="nextPage" Next
