@@ -8,9 +8,10 @@ SubmissionBoxComponent = Ember.Component.extend
 
   didInsertElement: ->
     name = tourName(ENV.TOUR.newScan)
-    if localStorage[name] in ["false", undefined]
+    alreadyShown = Ember.A(document.cookie).includes name
+    if alreadyShown is false
       this.set('onboard.activeTour', ENV.TOUR.newScan)
-      localStorage.setItem(name, "true")
+      document.cookie += name
 
   actions:
     startTour: ->

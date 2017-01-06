@@ -16,4 +16,5 @@ export default Base.extend({
   platform(){
     return faker.random.arrayElement(ENUMS.PLATFORM.VALUES);
   }
+
 });

@@ -13,6 +13,7 @@ export default function() {
   this.get('/files/:id', 'file');
   this.get('/vulnerabilities/:id', 'vulnerability');
   this.get('/invitations/:id', 'invitation');
+  this.get('/devices', 'device');
 
   this.post('/signup', () => {
     return {user_id: '1', token: 'secret'};
@@ -31,11 +32,18 @@ export default function() {
   this.post('/lang', () => {
     return {};
   });
-
+  this.post('/device_preference/:id', () => {
+    return {id: '1'};
+  });
   this.post('/namespace_add', () => {
     return {};
   });
-
+  this.get('/github_repos', () => {
+    return {};
+  });
+  this.get('/jira_projects', () => {
+    return {};
+  });
   this.get('/files/', (schema, FakeRequest) => {
     return schema.files.findBy({id:FakeRequest.queryParams.projectId});
   });

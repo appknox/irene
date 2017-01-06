@@ -7,15 +7,20 @@ header.card-header
         h5
           = file.project.name
           = fa-icon file.project.platformIconClass class="card-icon"
-      li
-        = file.createdOnHumanized
+      li.hide-overflow
+        | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
 .card-content
   = link-to redirectTo targetPath
     .content
       if isNotThreeColumn
         .columns
           .column.flex-center.nowrap-trim
-            | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
+            = t "createdOn"
+            | : #{file.createdOnHumanized}
+          .column.flex-center.nowrap-trim
+            = t "versionCode"
+            | {{#if file.versionCode}} - #{file.versionCode}{{/if}}
+
       .columns class=isReverse:is-reverse
         .column.flex-center
           = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
@@ -40,26 +45,25 @@ header.card-header
           .column.package-desc
             table
               tr
+                td.capitalize-text
+                  = t "createdOn"
                 td
-                  = t "package"
-              tr
-                td
-                  | #{file.project.packageName}
+                  = file.createdOnHumanized
             table
               tr
+                td.capitalize-text
+                  = t "versionCode"
                 td
-                  = t "version"
-                td
-                  | #{file.version}
-            table style="display:none;"
+                  | #{file.versionCode}
+            table
               tr
                 td colspan="2"
-                  = t "pdfPassword"
-              tr
+                  = t "reportPassword"
+              tr.zeroclipboard-copy title="Copy Password" data-clipboard-text=file.project.pdfPassword
                 td
                   | #{file.project.pdfPassword}
-                td.zeroclipboard-copy title="Copy Password" data-clipboard-text=file.project.pdfPassword
-                  = fa-icon "clipboard"
+                td
+                  = fa-icon "clipboard copy-icon"
                   | &nbsp; Copy Password
 
 = yield

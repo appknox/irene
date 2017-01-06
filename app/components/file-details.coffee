@@ -8,9 +8,10 @@ FileDetailsComponent = Ember.Component.extend
 
   didInsertElement: ->
     name = tourName(ENV.TOUR.scanDetail)
-    if localStorage[name] in ["false", undefined]
+    alreadyShown = Ember.A(document.cookie).includes name
+    if alreadyShown is false
       this.set('onboard.activeTour', ENV.TOUR.scanDetail)
-      localStorage.setItem(name, "true")
+      document.cookie += name
 
   actions:
     getPDFReportLink: ->
@@ -37,6 +38,6 @@ FileDetailsComponent = Ember.Component.extend
           that.get("notify").error error.detail?.message
 
     startTour: ->
-      this.set('onboard.activeTour', ENV.TOUR.scanDetail)      
+      this.set('onboard.activeTour', ENV.TOUR.scanDetail)
 
 `export default FileDetailsComponent`

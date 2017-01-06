@@ -1,0 +1,39 @@
+h5 Device Preferences
+
+if hasDevices
+  .columns
+    .column
+      = t "deviceType"
+  .columns
+    .column
+      select{action 'selectDeviceType' on='change'} id="project-device-preference"
+        option value=0
+          = t "noPreference"
+        each deviceTypes as |deviceType|
+          option value=deviceType.value
+            = t deviceType.key
+  if hasUniqueDevices
+    .columns
+      .column
+        = t "osVersion"
+    .columns
+      .column
+        select{action 'selectVersion' on='change'} id="project-version-preference"
+          option value=0
+            = t "noPreference"
+          each uniqueDevices as |device|
+            option value=device.version
+              = device.version
+    .columns
+      .column
+        button.margin-top20.is-primary click="versionSelected"
+          | Select the device
+  else
+
+    h6.margin-top20
+      = t "noDeviceAvailable"
+
+else
+
+  h6.margin-top20
+    = t "noDeviceAvailable"
