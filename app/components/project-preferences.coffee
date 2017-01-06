@@ -6,7 +6,7 @@ ProjectPreferencesComponent = Ember.Component.extend
 
   project: null
   selectVersion: 0
-  selectedDeviceType: 0
+  selectedDeviceType: ENUMS.DEVICE_TYPE.NO_PREFERENCE
   store: Ember.inject.service()
   deviceTypes: ENUMS.DEVICE_TYPE.CHOICES[1...-1]
 
