@@ -6,14 +6,15 @@ ProjectPreferencesComponent = Ember.Component.extend
 
   project: null
   selectVersion: 0
-  store: Ember.inject.service()
-  deviceTypes: ENUMS.DEVICE_TYPE.CHOICES[0...-1]
   selectedDeviceType: ENUMS.DEVICE_TYPE.NO_PREFERENCE
+  store: Ember.inject.service()
+  deviceTypes: ENUMS.DEVICE_TYPE.CHOICES[1...-1]
 
   devices: (->
     store = @get "store"
     store.findAll "device"
   ).property()
+
 
   availableDevices: Ember.computed.filter 'devices', (device) ->
     device.get("platform") is @get("project.platform")
@@ -35,17 +36,15 @@ ProjectPreferencesComponent = Ember.Component.extend
           !device.get "isTablet"
 
   uniqueDevices: Ember.computed.uniqBy "filteredDevices", 'version'
-
   hasUniqueDevices: Ember.computed.gt 'uniqueDevices.length', 0
 
-
-
   actions:
-    selectVersion: ->
-      @set "selectVersion", parseInt @$('select').val()
 
     selectDeviceType: ->
-      @set "selectedDeviceType", parseInt @$('select').val()
+      @set "selectedDeviceType", parseInt @$('#project-device-preference').val()
+
+    selectVersion: ->
+      @set "selectVersion", parseInt @$('#project-version-preference').val()
 
     versionSelected: ->
       selectedDeviceType = @get "selectedDeviceType"
