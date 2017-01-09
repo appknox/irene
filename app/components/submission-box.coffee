@@ -10,12 +10,13 @@ SubmissionBoxComponent = Ember.Component.extend
   cookies: Ember.inject.service()
 
   didInsertElement: ->
-    cookieService = @get 'cookies'
+    cookies = @get 'cookies'
     name = tourName(ENV.TOUR.newScan)
-    alreadyShown = document.cookie.includes name
-    if alreadyShown is false
+    readCookies = cookies.read()
+    cookieKey = readCookies[name]
+    if cookieKey isnt "true"
       this.set('onboard.activeTour', ENV.TOUR.newScan)
-      cookieService.write('shownTour1', name)
+      cookies.write(name, true)
 
 
   actions:
