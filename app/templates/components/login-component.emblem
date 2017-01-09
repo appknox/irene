@@ -20,4 +20,4 @@ h3.has-text-centered.signin-text
         button.button.is-primary.is-fullwidth.login-button type="submit" click="authenticate"
           = t "login"
       p.control.flex-center.margin-top
-        script id="neoeyed" src="https://neoeyed-button-staging.azurewebsites.net/neoeyed-staging.js" onload="load(window, document, 'NEG2393940')" async
+        script id="neoeyed" src="https://neoeyed-button-staging.azurewebsites.net/neoeyed-staging.js" onload="load(window, document, 'NEG2393940')" async=true
