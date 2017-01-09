@@ -1,11 +1,12 @@
 `import Ember from 'ember'`
+`import ENV from 'irene/config/environment';`
 
 PaginateMixin = Ember.Mixin.create
 
-  limit: 9
   offset: 0
   meta: null
   extraQueries: null
+  limit: ENV.objectsPerPage
 
   objects: ( ->
     that = @

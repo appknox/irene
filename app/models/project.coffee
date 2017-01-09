@@ -18,6 +18,7 @@ Project = DS.Model.extend BaseModelMixin,
   testPassword: DS.attr 'string'
   url: DS.attr 'string'
   lastFileCreatedOn: DS.attr 'date'
+  fileCount: DS.attr 'number'
 
   pdfPassword: (->
     uuid = @get "uuid"
@@ -27,8 +28,6 @@ Project = DS.Model.extend BaseModelMixin,
       uuid.split("-")[4]
   ).property "uuid"
 
-
-  fileCount: Ember.computed.alias 'files.length'
   hasFiles: Ember.computed.gt 'fileCount', 0
   hasMultipleFiles: Ember.computed.gt 'fileCount', 1
 
@@ -41,7 +40,10 @@ Project = DS.Model.extend BaseModelMixin,
   ).property "platform"
 
   lastFile:( ->
-    @store.queryRecord "file", projectId: @get "id"
+    params =
+      projectId: @get "id"
+      lastFileOnly: true
+    @store.queryRecord "file", params
   ).property "fileCount"
 
 

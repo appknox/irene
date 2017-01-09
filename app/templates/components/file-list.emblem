@@ -1,0 +1,10 @@
+.column
+  .columns
+    if hasObjects
+      each sortedObjects as |file|
+        .column.is-one-third
+          = file-overview file=file
+    else
+      h3.margin-left No Files!
+
+  = partial "paginate"
