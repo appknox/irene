@@ -135,8 +135,8 @@ module.exports = function(environment) {
       lang: 'lang'
     },
     TOUR: {
-      newScan: 'Scan An App',
-      scanDetail: 'Scan Details',
+      newScan: 'ScanAnApp',
+      scanDetail: 'ScanDetails',
       manualTour: 'Dashboard'
     }
   };
