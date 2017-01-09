@@ -1,0 +1,9 @@
+.column
+  .columns
+    if hasObjects
+      each sortedObjects as |project|
+        = project-overview project=project
+    else
+      h3.margin-left No Projects!
+
+  = partial "paginate"

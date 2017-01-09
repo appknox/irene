@@ -1,8 +1,3 @@
 = submission-box user=model
 
-.columns.tour-step-project
-  if model.hasProjects
-    each model.sortedProjects as |project|
-      =project-overview project=project
-  else
-    h3.margin-left No Projects Yet!
+= project-list

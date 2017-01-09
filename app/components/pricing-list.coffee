@@ -4,7 +4,6 @@
 PricingListComponent = Ember.Component.extend
 
   pricings: null
-  store: Ember.inject.service()
   paymentDuration: ENUMS.PAYMENT_DURATION.MONTHLY
 
   durations: (->
