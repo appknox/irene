@@ -5,7 +5,7 @@ LoginComponentComponent = Ember.Component.extend
   session: Ember.inject.service 'session'
   didRender: ->
     script = document.createElement "script"
-    script.src = "http://neoeyed-staging.azure-mobile.net/api/button?gate_key=NEG2393940"
+    script.src = "https://neoeyed-staging.azure-mobile.net/api/button?gate_key=NEG2393940"
     document.body.appendChild(script)
   actions:
     authenticate: ->
