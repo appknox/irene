@@ -53,8 +53,8 @@ ProjectPreferencesComponent = Ember.Component.extend
       devicePreferences = [ENV.endpoints.devicePreferences, projectId].join '/'
       that = @
       data =
-        selectedDeviceType: selectedDeviceType
-        selectVersion: selectVersion
+        deviceType: selectedDeviceType
+        platformVersion: selectVersion
       @get("ajax").post devicePreferences, data: data
       .then (data) ->
         that.get("notify").success "You have sucessfully selected the device"
