@@ -74,8 +74,6 @@ ProjectListComponent = Ember.Component.extend PaginateMixin,
 
     filterPlatform: ->
       select = $(@element).find("#project-filter-platform")
-      [sortingKey, sortingReversed] = filterPlatformValues select.val()
-      @set "sortingKey", sortingKey
-      @set "sortingReversed", sortingReversed
+      @set "platformType", select.val()
 
 `export default ProjectListComponent`
