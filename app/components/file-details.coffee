@@ -10,12 +10,14 @@ FileDetailsComponent = Ember.Component.extend
   cookies: Ember.inject.service()
 
   didInsertElement: ->
-    cookieService = @get 'cookies'
+    cookies = @get 'cookies'
     name = tourName(ENV.TOUR.scanDetail)
-    alreadyShown = document.cookie.includes name
-    if alreadyShown is false
-      this.set('onboard.activeTour', ENV.TOUR.scanDetail)
-      cookieService.write('shownTour2', name)
+    try
+      readCookies = cookies.read()
+      cookieKey = readCookies[name]
+      if cookieKey isnt "true"
+        this.set('onboard.activeTour', ENV.TOUR.scanDetail)
+        cookies.write(name, true)
 
   actions:
     getPDFReportLink: ->
