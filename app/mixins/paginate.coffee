@@ -63,13 +63,13 @@ PaginateMixin = Ember.Mixin.create
   actions:
 
     previousPage: ->
-      @set "offset", @get("offset") - 1
+      @decrementProperty "offset"
 
     gotoPage: (offset) ->
       @set "offset", offset
 
     nextPage: ->
-      @set "offset", @get("offset") + 1
+      @incrementProperty "offset"
 
 
 `export default PaginateMixin`
