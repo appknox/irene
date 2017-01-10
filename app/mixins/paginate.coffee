@@ -5,23 +5,39 @@ PaginateMixin = Ember.Mixin.create
 
   offset: 0
   meta: null
-  extraQueries: null
+  version: 0
+  extraQueryStrings: ""
   limit: ENV.objectsPerPage
+
+  versionIncrementer: ->
+    @incrementProperty "version"
+
+  versionTrigger: Ember.observer 'limit', 'offset', "targetObject", "extraQueryStrings", ->
+    for property in ['limit', 'offset', "targetObject", "extraQueryStrings"]
+      propertyOldName = "_#{property}"
+      propertyNewValue = @get property
+      propertyOldValue = @get propertyOldName
+      propertyChanged = propertyOldValue isnt propertyNewValue
+      if propertyChanged
+        @set propertyOldName, propertyNewValue
+        Ember.run.once @, 'versionIncrementer'
 
   objects: ( ->
     that = @
     query =
       limit: @get "limit"
       offset: @get "offset"
-    extraQueries = @get "extraQueries"
-    for key, value of extraQueries
-      query[key] = value
+    extraQueryStrings = @get "extraQueryStrings"
+    if !Ember.isEmpty extraQueryStrings
+      extraQueries = JSON.parse extraQueryStrings
+      for key, value of extraQueries
+        query[key] = value
     targetObject = @get "targetObject"
     objects = @get('store').query targetObject, query
     objects.then (result) ->
       that.set "meta", result.meta
     objects
-  ).property 'limit', 'offset', "targetObject", "extraQueries"
+  ).property  "version"
 
   sortedObjects: Ember.computed.sort 'objects', 'sortProperties'
 

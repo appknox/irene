@@ -10,7 +10,9 @@ FileListComponent = Ember.Component.extend PaginateMixin,
 
   classNames: ["columns", "margin-top"]
 
-  extraQueries: Ember.computed "project.id", ->
-    projectId: @get "project.id"
+  extraQueryStrings: Ember.computed "project.id", ->
+    query =
+      projectId: @get "project.id"
+    JSON.stringify query, Object.keys(query).sort()
 
 `export default FileListComponent`
