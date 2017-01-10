@@ -17,11 +17,6 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
   moment: service()
   session: service 'session'
 
-  redirect: ->
-    url = @router.location.formatURL '/not-found'
-    if window.location.pathname isnt url
-      @transitionTo '/not-found'
-
   beforeModel: (transition)->
     @set "lastTransition", transition
     @_super transition

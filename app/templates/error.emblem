@@ -1,6 +1,9 @@
-h1
-  = model.name
-h2
-  = model.message
-code
-  = model.stack
+.error-page
+  h1
+    | 404
+  h2
+    |  The Page cannot be found
+  div
+    = link-to "authenticated.index" class="button is-primary"
+      = fa-icon "home"
+      | &nbsp;Go Back To Home
