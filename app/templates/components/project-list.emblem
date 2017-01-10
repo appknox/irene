@@ -1,4 +1,21 @@
 .column
+
+  .columns
+    .column
+      = input class="input" placeholder="Search query" value=query
+    .column
+      select{action 'sortProjects' on='change'} id="project-sort-property" class="input"
+        each sortingKeyObjects as |sortingKeyObject|
+          option action="foo" value="{{filter-platform sortingKeyObject}}"
+            = sortingKeyObject.text
+    .column
+      select{action 'filterPlatform' on='change'} id="project-filter-platform" class="input"
+        option value="-1"
+          | All Platforms
+        each platformObjects as |platformObject|
+          option value=platformObject.value
+            = platformObject.key
+
   .columns
     if hasObjects
       each sortedObjects as |project|
