@@ -2,8 +2,9 @@
   h1
     | 404
   h2
-    |  The Page cannot be found
+    = t "pageNotFound"
   div
     = link-to "authenticated.index" class="button is-primary"
       = fa-icon "home"
-      | &nbsp;Go Back To Home
+      | &nbsp;
+      = t "gotoHome"
