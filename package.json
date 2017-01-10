@@ -72,6 +72,8 @@
     "ember-moment": "7.0.2",
     "ember-onboarding": "0.0.6",
     "ember-resolver": "^2.0.3",
+    "ember-service-worker": "0.5.2",
+    "ember-service-worker-asset-cache": "0.5.1",
     "ember-simple-auth": "1.1.0",
     "ember-stripe-service": "4.4.2",
     "ember-uploader": "1.2.1",
