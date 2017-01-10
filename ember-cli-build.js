@@ -66,6 +66,11 @@ module.exports = function(defaults) {
    */
   app.import('bower_components/pace/pace.js');
 
+  // /*
+  //  * Include OpBeat
+  //  */
+  // app.import('bower_components/opbeat-js/opbeat.min.js')
+
   app.import('bower_components/zeroclipboard/dist/ZeroClipboard.min.js');
   app.import('bower_components/zeroclipboard/dist/ZeroClipboard.swf', {
     destDir: 'assets'
