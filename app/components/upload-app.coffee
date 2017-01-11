@@ -14,9 +14,7 @@ UploadAppComponent = EmberUploader.FileField.extend
     delegate.set "isUploading", true
     if Ember.isEmpty files
       return
-    uploader = Uploader.create
-      ajax: @get "ajax"
-      notify: @get "notify"
+    uploader = Uploader.create container: @container
 
     uploader.didUpload = (file_key, file_key_signed) ->
       delegate.set "isUploading", false

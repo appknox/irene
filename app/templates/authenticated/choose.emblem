@@ -2,7 +2,5 @@
   .column.margin-left
     h4
       = t "chooseAFile"
-.columns.margin-top
-  each model.otherFilesInTheProject as |file|
-    .column.is-one-third
-      = file-overview file=file fileOld=model redirectTo="authenticated.compare"
+
+= choose-list project=model.project fileOld=model

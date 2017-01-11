@@ -1,11 +1,11 @@
 `import Ember from 'ember'`
-`import { initialize } from 'irene/initializers/inject-env'`
+`import { initialize } from 'irene/initializers/irene'`
 `import { module, test } from 'qunit'`
 
 application = null
 registry = null
 
-module 'Unit | Initializer | inject env',
+module 'Unit | Initializer | irene',
   beforeEach: ->
     Ember.run ->
       application = Ember.Application.create()

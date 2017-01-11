@@ -2,6 +2,7 @@
 
 module.exports = function(environment) {
   var ENV = {
+    objectsPerPage: 9,
     isDevknox: false,
     isAppknox: false,
     platform: -1,
@@ -147,6 +148,8 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
+
+    ENV.objectsPerPage = 9;
     ENV['ember-cli-mirage'] = {
       enabled:false
     };

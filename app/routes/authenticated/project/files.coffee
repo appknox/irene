@@ -6,6 +6,6 @@ AuthenticatedProjectFilesRoute = Ember.Route.extend ScrollTopMixin,
 
   title: "All Files" + config.platform
   model: ->
-    @modelFor("authenticated.project").get('files')
+    @modelFor("authenticated.project")
 
 `export default AuthenticatedProjectFilesRoute`

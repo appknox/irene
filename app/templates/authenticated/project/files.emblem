@@ -2,7 +2,5 @@
   .column.margin-left
     h4
       = t "allFiles"
-.columns.margin-top
-  each model as |file|
-    .column.is-one-third
-      = file-overview file=file
+
+= file-list project=model
