@@ -15,7 +15,8 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
   lastTransition: null
   i18n: service()
   moment: service()
-  session: service 'session'
+  session: service()
+  realtime: service()
 
   beforeModel: (transition)->
     @set "lastTransition", transition
@@ -44,6 +45,8 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
     that = @
     store = @get "store"
 
+    realtime = @get "realtime"
+
     allEvents =
 
       object: (data) ->
@@ -65,6 +68,10 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
       reload: ->
         location.reload()
+
+      counter: (data) ->
+        console.log "counter", data
+        realtime.incrementProperty "#{data.type}Counter"
 
     for k, v of allEvents
       channel.bind k, v

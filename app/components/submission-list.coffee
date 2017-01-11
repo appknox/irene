@@ -10,6 +10,6 @@ SubmissionListComponent = Ember.Component.extend
 
   submissions: ( ->
     @get("store").findAll "submission"
-  ).property()
+  ).property "realtime.submissionsCounter"
 
 `export default SubmissionListComponent`

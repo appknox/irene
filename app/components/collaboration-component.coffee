@@ -13,7 +13,7 @@ CollaborationComponentComponent = Ember.Component.extend
   collaborations: (->
     projectId = @get "project.id"
     @get("store").query "collaboration", projectId: projectId
-  ).property "project.id"
+  ).property "project.id", "realtime.collaborationsCounter"
 
   actions:
 

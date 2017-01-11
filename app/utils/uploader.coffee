@@ -2,11 +2,13 @@
 `import ENV from 'irene/config/environment';`
 `import EmberUploader from 'ember-uploader';`
 
+{inject: {service}, isEmpty, RSVP} = Ember
+
 
 Uploader = EmberUploader.Uploader.extend
 
-  ajax: null
-  notify: null
+  ajax: service "ajax"
+  notify: service "notification-messages"
 
   upload: (file) ->
     that = @
