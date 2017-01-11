@@ -10,6 +10,11 @@ CollaborationComponentComponent = Ember.Component.extend
   roles: roles
   currentRole: roles[0].value
 
+  collaborations: (->
+    projectId = @get "project.id"
+    @get("store").query "collaboration", projectId: projectId
+  ).property "project.id", "realtime.collaborationsCounter"
+
   actions:
 
     roleChanged: (value) ->

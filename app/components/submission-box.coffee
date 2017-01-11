@@ -2,16 +2,23 @@
 `import ENV from 'irene/config/environment'`
 `import tourName from 'irene/utils/tour-name';`
 
+{ keys } = Object
+
 SubmissionBoxComponent = Ember.Component.extend
   classNames: ["box"]
   onboard: Ember.inject.service()
+  cookies: Ember.inject.service()
 
   didInsertElement: ->
+    cookies = @get 'cookies'
     name = tourName(ENV.TOUR.newScan)
-    alreadyShown = Ember.A(document.cookie).includes name
-    if alreadyShown is false
-      this.set('onboard.activeTour', ENV.TOUR.newScan)
-      document.cookie += name
+    try
+      readCookies = cookies.read()
+      cookieKey = readCookies[name]
+      if cookieKey isnt "true"
+        this.set('onboard.activeTour', ENV.TOUR.newScan)
+        cookies.write(name, true)
+
 
   actions:
     startTour: ->

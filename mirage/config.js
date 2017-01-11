@@ -7,25 +7,34 @@ export default function() {
 
   this.get('/users/:id', 'user');
   this.get('/collaborations/:id', 'collaboration');
+  this.get('/collaborations', 'collaboration');
   this.get('/projects/:id', 'project');
+  this.get('/projects', 'project');
   this.get('/pricings', 'pricing');
   this.get('/submissions/:id', 'submission');
+  this.get('/submissions', 'submission');
   this.get('/files/:id', 'file');
   this.get('/vulnerabilities/:id', 'vulnerability');
   this.get('/invitations/:id', 'invitation');
   this.get('/devices', 'device');
-
+  this.get('/github_repos', () => {
+    return {};
+  });
+  this.get('/jira_projects', () => {
+    return {};
+  });
+  this.get('/files/', (schema, FakeRequest) => {
+    return schema.files.findBy({id:FakeRequest.queryParams.projectId});
+  });
   this.post('/signup', () => {
     return {user_id: '1', token: 'secret'};
   });
   this.post('/login', () => {
     return {user_id: '1', token: 'secret'};
   });
-
   this.post('/check', () => {
     return {user_id: '1', token: 'secret'};
   });
-
   this.post('/logout', () => {
     return {};
   });
@@ -37,15 +46,6 @@ export default function() {
   });
   this.post('/namespace_add', () => {
     return {};
-  });
-  this.get('/github_repos', () => {
-    return {};
-  });
-  this.get('/jira_projects', () => {
-    return {};
-  });
-  this.get('/files/', (schema, FakeRequest) => {
-    return schema.files.findBy({id:FakeRequest.queryParams.projectId});
   });
 
 }

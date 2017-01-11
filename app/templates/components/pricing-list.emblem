@@ -1,8 +1,3 @@
-.columns
-  .column
-    h2
-      = t "pricing"
-
 if env.isAppknox
   .columns
     .column.flex-center
@@ -11,7 +6,7 @@ if env.isAppknox
           = duration.key
 
   .columns
-    each user.sortedPricings as |pricing|
+    each sortedPricings as |pricing|
       = pricing-plan pricing=pricing paymentDuration=paymentDuration
 
 else

@@ -26,16 +26,6 @@ User = DS.Model.extend
   scansLeft: DS.attr 'number'
   githubRedirectUrl: DS.attr 'string'
 
-  sortProperties: ["lastFileCreatedOn:desc"]
-  sortedProjects: Ember.computed.sort 'projects', 'sortProperties'
-
-  sortPricingProperties: ['id']
-  sortedPricings: Ember.computed.sort 'pricings', 'sortPricingProperties'
-
-  projectCount: Ember.computed.alias 'projects.length'
-  hasProjects: Ember.computed.gt 'projectCount', 0
-
-
   expiryText: (->
     currentDate = new Date()
     if ENV.isAppknox

@@ -16,7 +16,8 @@
     "card": "^2.0.3",
     "pace": "^1.0.2",
     "noVNC": "https://github.com/appknox/noVNC.git#^0.6.2",
-    "zeroclipboard": "^2.3.0"
+    "zeroclipboard": "^2.3.0",
+    "opbeat-js": "^3.1.4"
   },
   "resolutions": {
     "bohemia": "^0.6.0"

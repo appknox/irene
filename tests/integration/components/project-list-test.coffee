@@ -1,7 +1,7 @@
 `import { test, moduleForComponent } from 'ember-qunit'`
 `import hbs from 'htmlbars-inline-precompile'`
 
-moduleForComponent 'pricing-list', 'Integration | Component | pricing list', {
+moduleForComponent 'project-list', 'Integration | Component | project list', {
   integration: true
 }
 

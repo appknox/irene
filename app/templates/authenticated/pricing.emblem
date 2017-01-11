@@ -1,1 +1,6 @@
-= pricing-list user=model
+.columns
+  .column
+    h2
+      = t "pricing"
+
+= pricing-list

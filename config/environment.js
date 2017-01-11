@@ -2,6 +2,7 @@
 
 module.exports = function(environment) {
   var ENV = {
+    objectsPerPage: 9,
     isDevknox: false,
     isAppknox: false,
     platform: -1,
@@ -88,6 +89,10 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
+      opbeat: {
+        appId: '61501c19d2',
+        orgId: '1ff25e9c6a1d40bbad1293635d201fcb'
+      }
     },
     'ember-simple-auth': {
       loginEndPoint: '/login',
@@ -135,8 +140,8 @@ module.exports = function(environment) {
       lang: 'lang'
     },
     TOUR: {
-      newScan: 'Scan An App',
-      scanDetail: 'Scan Details',
+      newScan: 'ScanAnApp',
+      scanDetail: 'ScanDetails',
       manualTour: 'Dashboard'
     }
   };
@@ -147,6 +152,8 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
+
+    ENV.objectsPerPage = 9;
     ENV['ember-cli-mirage'] = {
       enabled:false
     };

@@ -2,16 +2,22 @@
 `import ENV from 'irene/config/environment';`
 `import tourName from 'irene/utils/tour-name';`
 
+{ keys } = Object
+
 FileDetailsComponent = Ember.Component.extend
-  onboard: Ember.inject.service()
   classNames: ["column"]
+  onboard: Ember.inject.service()
+  cookies: Ember.inject.service()
 
   didInsertElement: ->
+    cookies = @get 'cookies'
     name = tourName(ENV.TOUR.scanDetail)
-    alreadyShown = Ember.A(document.cookie).includes name
-    if alreadyShown is false
-      this.set('onboard.activeTour', ENV.TOUR.scanDetail)
-      document.cookie += name
+    try
+      readCookies = cookies.read()
+      cookieKey = readCookies[name]
+      if cookieKey isnt "true"
+        this.set('onboard.activeTour', ENV.TOUR.scanDetail)
+        cookies.write(name, true)
 
   actions:
     getPDFReportLink: ->
