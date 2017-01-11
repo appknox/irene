@@ -19,7 +19,8 @@ module.exports = function(defaults) {
         production: '.env',
         staging: '.env.staging'
       }
-    }
+    },
+    sourcemaps: {enabled: true}
   });
 
   // Use `app.import` to add additional libraries to the generated
