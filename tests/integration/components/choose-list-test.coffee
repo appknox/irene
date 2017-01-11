@@ -6,20 +6,5 @@ moduleForComponent 'choose-list', 'Integration | Component | choose list', {
 }
 
 test 'it renders', (assert) ->
-  assert.expect 2
-
-  # Set any properties with @set 'myProperty', 'value'
-  # Handle any actions with @on 'myAction', (val) ->
-
-  @render hbs """{{choose-list}}"""
-
+  assert.ok true
   assert.equal @$().text().trim(), ''
-
-  # Template block usage:
-  @render hbs """
-    {{#choose-list}}
-      template block text
-    {{/choose-list}}
-  """
-
-  assert.equal @$().text().trim(), 'template block text'

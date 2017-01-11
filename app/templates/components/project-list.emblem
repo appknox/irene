@@ -3,15 +3,18 @@
     .columns
       .column
         | Search
+        .margin-top
         = input class="input" placeholder="Search query" value=query
       .column
-        | Filter By
+        | Sort By
+        .margin-top
         select{action 'sortProjects' on='change'} id="project-sort-property" class="input"
           each sortingKeyObjects as |sortingKeyObject|
             option action="foo" value="{{filter-platform sortingKeyObject}}"
               = sortingKeyObject.text
       .column
-        | Filter By Platform
+        | Filter By
+        .margin-top
         select{action 'filterPlatform' on='change'} id="project-filter-platform" class="input"
           option value="-1"
             | All Platforms
