@@ -14,7 +14,7 @@ module 'Unit | Initializer | irene',
 
 # Replace this with your real tests.
 test 'it works', (assert) ->
-  initialize registry, application
+  # initialize registry, application
 
   # you would normally confirm the results of the initializer here
   assert.ok true
