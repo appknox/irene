@@ -3,8 +3,14 @@
 
 PricingListComponent = Ember.Component.extend
 
-  pricings: null
   paymentDuration: ENUMS.PAYMENT_DURATION.MONTHLY
+
+  pricings: (->
+    @get("store").findAll("pricing")
+  ).property()
+
+  sortPricingProperties: ['id']
+  sortedPricings: Ember.computed.sort 'pricings', 'sortPricingProperties'
 
   durations: (->
     durations = ENUMS.PAYMENT_DURATION.CHOICES

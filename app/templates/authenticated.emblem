@@ -36,7 +36,7 @@
           else
             = model.expiryText
 
-      = submission-list submissions=model.submissions
+      = submission-list
 
   .column.margin-right.margin-top
     = outlet

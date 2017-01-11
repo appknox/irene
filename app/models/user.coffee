@@ -26,10 +26,6 @@ User = DS.Model.extend
   scansLeft: DS.attr 'number'
   githubRedirectUrl: DS.attr 'string'
 
-  sortPricingProperties: ['id']
-  sortedPricings: Ember.computed.sort 'pricings', 'sortPricingProperties'
-
-
   expiryText: (->
     currentDate = new Date()
     if ENV.isAppknox

@@ -5,7 +5,7 @@ button.is-primary click="openCollaborationModal"
   = t "addCollaborations"
 
 .columns.margin-top
-  each project.collaborations as |collaboration|
+  each collaborations as |collaboration|
     .column.is-one-sixth
       = collaboration-details collaboration=collaboration
 
