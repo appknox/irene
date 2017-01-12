@@ -62,7 +62,9 @@ ProjectListComponent = Ember.Component.extend PaginateMixin,
         keyObjectFull.key = keyObject.key
         keyObjectFull.text = keyObject.text
         if reverse
-          keyObjectFull.text += " - Reversed"
+          keyObjectFull.text += " in descending order"
+        else
+          keyObjectFull.text += " in ascending order"
         keyObjectsWithReverse.push keyObjectFull
     keyObjectsWithReverse
   ).property()
