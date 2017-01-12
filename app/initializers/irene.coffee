@@ -11,7 +11,7 @@ initialize = (application) ->
   application.inject 'authenticator', 'notify', 'service:notification-messages'
 
   # Inject realtime
-  application.inject 'component', 'notify', 'service:realtime'
+  application.inject 'component', 'realtime', 'service:realtime'
 
   # Inject Store
   application.inject 'component', 'store', 'service:store'
