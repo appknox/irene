@@ -89,10 +89,6 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
-      opbeat: {
-        appId: '61501c19d2',
-        orgId: '1ff25e9c6a1d40bbad1293635d201fcb'
-      }
     },
     'ember-simple-auth': {
       loginEndPoint: '/login',
@@ -177,6 +173,10 @@ module.exports = function(environment) {
     ENV.stripe = {
       publishableKey: "pk_live_9G633HADop7N2NLdi6g2BHHA"
     };
+    ENV['APP'].opbeat = {
+        appId: '61501c19d2',
+        orgId: '1ff25e9c6a1d40bbad1293635d201fcb'
+      };
   }
 
 
