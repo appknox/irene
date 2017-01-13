@@ -23,6 +23,7 @@ PaginateMixin = Ember.Mixin.create
         Ember.run.once @, 'versionIncrementer'
 
   objects: ( ->
+    window.scrollTo 0, 0
     that = @
     query =
       limit: @get "limit"
