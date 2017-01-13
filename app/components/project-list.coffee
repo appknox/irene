@@ -29,7 +29,7 @@ ProjectListComponent = Ember.Component.extend PaginateMixin,
     @set "offset", 0
 
   offsetResetter: Ember.observer "query", "sortingKey", "sortingReversed", "platformType", ->
-    for property in ["query"]
+    for property in ["query", "sortingKey", "sortingReversed", "platformType"]
       propertyOldName = "_#{property}"
       propertyNewValue = @get property
       propertyOldValue = @get propertyOldName
