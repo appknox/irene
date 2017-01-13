@@ -7,6 +7,6 @@
         each pages as |page|
           li{action "gotoPage" page}
             a.button class="{{paginate-class offset page}}"
-              = page
+              = page-number page
       if hasNext
         a.button.is-default click="nextPage" Next
