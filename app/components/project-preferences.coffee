@@ -9,11 +9,15 @@ ProjectPreferencesComponent = Ember.Component.extend
   store: Ember.inject.service()
   selectedDeviceType: ENUMS.DEVICE_TYPE.NO_PREFERENCE
   deviceTypes: ENUMS.DEVICE_TYPE.CHOICES[1...-1]
+  selectedPreference: false
 
   devices: (->
     store = @get "store"
     store.findAll "device"
   ).property()
+
+  haveSelectedPreferences: Ember.computed.equal 'selectedPreference', true
+
 
   availableDevices: Ember.computed.filter 'devices', (device) ->
     device.get("platform") is @get("project.platform")
@@ -37,20 +41,6 @@ ProjectPreferencesComponent = Ember.Component.extend
 
   hasDevices: Ember.computed.gt 'devicesCount', 0
 
-
-  currentPlatformVersion: ( ->
-    platformVersion = @get("project.platformVersion")
-  ).property "project.platformVersion"
-
-  currentDeviceType: ( ->
-    deviceType = @get("project.deviceType")
-  ).property "project.deviceType"
-
-  otherDevices: Ember.computed "uniqueDevices", "currentPlatformVersion", ->
-    currentPlatformVersion = @get "currentPlatformVersion"
-    uniqueDevices = @get("uniqueDevices").slice()
-    uniqueDevices.removeObject currentPlatformVersion
-
   actions:
 
     selectDeviceType: ->
@@ -71,6 +61,7 @@ ProjectPreferencesComponent = Ember.Component.extend
       @get("ajax").post devicePreferences, data: data
       .then (data) ->
         that.get("notify").success "You have sucessfully selected the device"
+        that.set "selectedPreference", true
       .catch (error) ->
         that.get("notify").error "failed"
         if Ember.isEmpty error?.errors
