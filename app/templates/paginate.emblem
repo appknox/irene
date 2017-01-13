@@ -5,10 +5,14 @@
         a.button.is-default click="gotoPageFirst" &lt; First
         a.button.is-default click="gotoPagePrevious" &lt; Previous
       ul.pagination-list
+        if preDot
+          li ...
         each pages as |page|
           li{action "gotoPage" page}
             a.button class="{{paginate-class offset page}}"
               = page-number page
+        if postDot
+          li ...
       if hasNext
         a.button.is-default click="gotoPageNext" Next &gt;
         a.button.is-default click="gotoPageLast" Last &gt;&gt;

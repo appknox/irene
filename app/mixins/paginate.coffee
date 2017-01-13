@@ -36,8 +36,8 @@ PaginateMixin = Ember.Mixin.create
     targetObject = @get "targetObject"
     objects = @get('store').query targetObject, query
     objects.then (result) ->
-      # that.set "meta", result.meta
-      that.set "meta", total: 100
+      that.set "meta", result.meta
+      # that.set "meta", total: 200
     objects
   ).property  "version"
 
@@ -45,6 +45,8 @@ PaginateMixin = Ember.Mixin.create
 
   objectCount: Ember.computed.alias 'objects.length'
   hasObjects: Ember.computed.gt 'objectCount', 0
+
+
 
   maxOffset: Ember.computed "meta.total", "limit", ->
     limit = @get "limit"
@@ -66,7 +68,17 @@ PaginateMixin = Ember.Mixin.create
         startPage = startPage - (ENV.paginate.pagePadding - offsetDiff)
       else
         startPage = 0
+
     [startPage..stopPage]
+
+  preDot: Ember.computed "offset", ->
+    offset = @get "offset"
+    offset - ENV.paginate.pagePadding > 0
+
+  postDot: Ember.computed "offset", "maxOffset", ->
+    offset = @get "offset"
+    maxOffset = @get "maxOffset"
+    offset + ENV.paginate.pagePadding < maxOffset
 
 
 
