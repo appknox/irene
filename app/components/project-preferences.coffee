@@ -9,7 +9,6 @@ ProjectPreferencesComponent = Ember.Component.extend
   store: Ember.inject.service()
   selectedDeviceType: ENUMS.DEVICE_TYPE.NO_PREFERENCE
   deviceTypes: ENUMS.DEVICE_TYPE.CHOICES[1...-1]
-  selectedPreference: false
 
   devices: (->
     store = @get "store"
@@ -61,7 +60,6 @@ ProjectPreferencesComponent = Ember.Component.extend
       @get("ajax").post devicePreferences, data: data
       .then (data) ->
         that.get("notify").success "You have sucessfully selected the device"
-        that.set "selectedPreference", true
       .catch (error) ->
         that.get("notify").error "failed"
         if Ember.isEmpty error?.errors
