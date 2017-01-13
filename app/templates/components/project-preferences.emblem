@@ -12,10 +12,10 @@ if hasDevices
         each deviceTypes as |deviceType|
           option value=deviceType.value
             = t deviceType.key
-    if haveSelectedPreferences
-      .column.margin-top5
-        | Current Device Selected :
-        | &nbsp; #{project.deviceType}
+
+    .column.margin-top5
+      | Current Device Selected :
+      | &nbsp; #{project.deviceType}
 
   if hasUniqueDevices
     .columns
@@ -29,10 +29,10 @@ if hasDevices
           each uniqueDevices as |device|
             option value=device.version
               = device.version
-      if haveSelectedPreferences        
-        .column.margin-top5
-          | Current Version Selected :
-          | &nbsp; #{project.platformVersion}
+
+      .column.margin-top5
+        | Current Version Selected :
+        | &nbsp; #{project.platformVersion}
 
     .columns
       .column
