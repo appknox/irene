@@ -2,12 +2,15 @@
 
 module.exports = function(environment) {
   var ENV = {
-    objectsPerPage: 9,
     isDevknox: false,
     isAppknox: false,
     platform: -1,
     rollbar: {
       accessToken: '4381303f93734918966ff4e1b028cee5'
+    },
+    paginate: {
+      perPageLimit: 9,
+      pagePadding: 5
     },
     pace: {
       // addon-specific options to configure theme
@@ -149,7 +152,6 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
 
-    ENV.objectsPerPage = 9;
     ENV['ember-cli-mirage'] = {
       enabled:false
     };

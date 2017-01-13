@@ -7,7 +7,7 @@ PaginateMixin = Ember.Mixin.create
   meta: null
   version: 0
   extraQueryStrings: ""
-  limit: ENV.objectsPerPage
+  limit: ENV.paginate.perPageLimit
 
   versionIncrementer: ->
     @incrementProperty "version"
@@ -36,7 +36,8 @@ PaginateMixin = Ember.Mixin.create
     targetObject = @get "targetObject"
     objects = @get('store').query targetObject, query
     objects.then (result) ->
-      that.set "meta", result.meta
+      # that.set "meta", result.meta
+      that.set "meta", total: 100
     objects
   ).property  "version"
 
@@ -48,11 +49,25 @@ PaginateMixin = Ember.Mixin.create
   maxOffset: Ember.computed "meta.total", "limit", ->
     limit = @get "limit"
     total = @get "meta.total" or 0
-    Math.floor(total/limit) - 1  # `-1` because offset starts from 0
+    Math.ceil(total/limit) - 1  # `-1` because offset starts from 0
 
-  pages: Ember.computed "maxOffset", ->
+  pages: Ember.computed "maxOffset", "offset", ->
+    offset = @get "offset"
     maxOffset = @get "maxOffset"
-    Array.from length: maxOffset + 1, (v, k) -> k
+    startPage = 0
+    stopPage = maxOffset
+    offsetDiff = maxOffset - offset
+    if offset >= ENV.paginate.pagePadding
+      startPage = offset - ENV.paginate.pagePadding
+    if offsetDiff >= ENV.paginate.pagePadding
+      stopPage = startPage + (ENV.paginate.pagePadding * 2)
+    else
+      if startPage >= ENV.paginate.pagePadding
+        startPage = startPage - (ENV.paginate.pagePadding - offsetDiff)
+      else
+        startPage = 0
+    [startPage..stopPage]
+
 
 
   hasPrevious: Ember.computed.gt "offset", 0
@@ -61,16 +76,25 @@ PaginateMixin = Ember.Mixin.create
     maxOffset = @get "maxOffset"
     offset < maxOffset
 
+  setOffset: (offset) ->
+    @set "offset", offset
+
+
   actions:
 
-    previousPage: ->
+    gotoPageFirst: ->
+      @setOffset 0
+
+    gotoPagePrevious: ->
       @decrementProperty "offset"
 
     gotoPage: (offset) ->
-      @set "offset", offset
+      @setOffset offset
 
-    nextPage: ->
+    gotoPageNext: ->
       @incrementProperty "offset"
 
+    gotoPageLast: ->
+      @setOffset @get "maxOffset"
 
 `export default PaginateMixin`
