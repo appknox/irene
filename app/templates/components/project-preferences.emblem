@@ -7,6 +7,8 @@ if hasDevices
   .columns
     .column
       select{action 'selectDeviceType' on='change'} id="project-device-preference"
+        option selected="true" value=currentDeviceType
+          = currentDeviceType
         option value=0
           = t "noPreference"
         each deviceTypes as |deviceType|
@@ -19,9 +21,11 @@ if hasDevices
     .columns
       .column
         select{action 'selectVersion' on='change'} id="project-version-preference"
+          option selected="true" value=currentPlatformVersion
+            = currentPlatformVersion
           option value=0
             = t "noPreference"
-          each uniqueDevices as |device|
+          each otherDevices as |device|
             option value=device.version
               = device.version
     .columns

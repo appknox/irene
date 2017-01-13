@@ -19,6 +19,8 @@ Project = DS.Model.extend BaseModelMixin,
   url: DS.attr 'string'
   lastFileCreatedOn: DS.attr 'date'
   fileCount: DS.attr 'number'
+  deviceType: DS.attr 'number'
+  platformVersion: DS.attr 'string'
 
   pdfPassword: (->
     uuid = @get "uuid"

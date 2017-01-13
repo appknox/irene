@@ -12,6 +12,8 @@ export default Base.extend({
   testUser: faker.random.firstName,
   testPassword: faker.internet.password,
   url: faker.internet.domainName,
+  deviceType: faker.random.number,
+  platformVersion: faker.internet.domainName,
 
   platform(){
     return faker.random.arrayElement(ENUMS.PLATFORM.VALUES);
