@@ -23,7 +23,7 @@ ProjectListComponent = Ember.Component.extend PaginateMixin,
     [sortingKey]
   ).property "sortingKey", "sortingReversed"
 
-  classNames: ["columns", "tour-step-project"]
+  classNames: ["columns"]
 
   resetOffset: ->
     @set "offset", 0
