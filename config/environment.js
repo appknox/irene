@@ -141,7 +141,8 @@ module.exports = function(environment) {
     TOUR: {
       newScan: 'ScanAnApp',
       scanDetail: 'ScanDetails',
-      manualTour: 'Dashboard'
+      manualTour: 'Dashboard',
+      devknoxTour: 'DevknoxTour'
     }
   };
 
