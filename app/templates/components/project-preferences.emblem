@@ -15,7 +15,7 @@ if hasDevices
 
     .column.margin-top5
       | Current Device Selected :
-      | &nbsp; #{device-type project.deviceType}
+       #{ device-type project.deviceType}
 
   if hasUniqueDevices
     .columns

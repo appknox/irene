@@ -1,17 +1,19 @@
 `import Ember from 'ember'`
+`import ENUMS from 'irene/enums';`
 
 # This function receives the params `params, hash`
 deviceType = (params) ->
-  if !params
-    return ''
 
-  deviceType = params
-  if deviceType = 0
-    return "No Preference"
-  else if deviceType = 1
-    return "Phone Required"
+  currentDevice = params[0]
+
+  if currentDevice is ENUMS.DEVICE_TYPE.NO_PREFERENCES
+    "No Preferences"
+  else if currentDevice is ENUMS.DEVICE_TYPE.PHONE_REQUIRED
+    "Phone Required"
+  else if currentDevice is ENUMS.DEVICE_TYPE.TABLET_REQUIRED
+    "Tablet Required"
   else
-    return "Tablet Required"  
+    ""
 
 DeviceTypeHelper = Ember.Helper.helper deviceType
 
