@@ -10,14 +10,15 @@ SubmissionBoxComponent = Ember.Component.extend
   cookies: Ember.inject.service()
 
   didInsertElement: ->
-    cookies = @get 'cookies'
-    name = tourName(ENV.TOUR.newScan)
-    try
-      readCookies = cookies.read()
-      cookieKey = readCookies[name]
-      if cookieKey isnt "true"
-        this.set('onboard.activeTour', ENV.TOUR.newScan)
-        cookies.write(name, true)
+    if ENV.isAppknox
+      cookies = @get 'cookies'
+      name = tourName(ENV.TOUR.newScan)
+      try
+        readCookies = cookies.read()
+        cookieKey = readCookies[name]
+        if cookieKey isnt "true"
+          this.set('onboard.activeTour', ENV.TOUR.newScan)
+          cookies.write(name, true)
 
 
   actions:
