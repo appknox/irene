@@ -23,6 +23,7 @@ IreneOnboardComponent = OnboardOutlet.extend
     tours.createTour ENV.TOUR.newScan, ['submit-url', 'upload-app','search-project','sort-project','filter-project', 'project']
     tours.createTour ENV.TOUR.scanDetail, ['sd-overview', 'sd-action-buttons', 'sd-analyses', 'sd-dynamic']
     tours.createTour ENV.TOUR.manualTour, ['submit-url', 'upload-app','search-project','sort-project','filter-project', 'project', 'project-details']
+    tours.createTour ENV.TOUR.devknoxTour, ['search-project','sort-project','filter-project','project', 'project-details']
   ).on "init"
 
 `export default IreneOnboardComponent`

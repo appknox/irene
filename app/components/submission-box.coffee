@@ -20,6 +20,16 @@ SubmissionBoxComponent = Ember.Component.extend
           this.set('onboard.activeTour', ENV.TOUR.newScan)
           cookies.write(name, true)
 
+    else if ENV.isDevknox is true
+       cookies = @get 'cookies'
+       name = tourName(ENV.TOUR.devknoxTour)
+       try
+         readCookies = cookies.read()
+         cookieKey = readCookies[name]
+         if cookieKey isnt "true"
+           this.set('onboard.activeTour', ENV.TOUR.devknoxTour)
+           cookies.write(name, true)
+
 
   actions:
     startTour: ->
