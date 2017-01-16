@@ -1,18 +1,18 @@
 .column
   .box
     .columns
-      .column
+      .column.tour-step-search-project
         | Search
         .margin-top
         = input class="input" placeholder="Search query" value=query
-      .column
+      .column.tour-step-sort-project
         | Sort By
         .margin-top
         select{action 'sortProjects' on='change'} id="project-sort-property" class="input"
           each sortingKeyObjects as |sortingKeyObject|
             option action="foo" value="{{filter-platform sortingKeyObject}}"
               = sortingKeyObject.text
-      .column
+      .column.tour-step-filter-project
         | Filter By
         .margin-top
         select{action 'filterPlatform' on='change'} id="project-filter-platform" class="input"
@@ -22,7 +22,7 @@
             option value=platformObject.value
               = platformObject.key
 
-  .columns
+  .columns.tour-step-project
     if hasObjects
       each sortedObjects as |project|
         = project-overview project=project
