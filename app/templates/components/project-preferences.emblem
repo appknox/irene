@@ -11,7 +11,7 @@ if hasDevices
           = t "noPreference"
         each deviceTypes as |deviceType|
           option value=deviceType.value
-            = t deviceType.key
+            | #{ device-type deviceType.value}
 
     .column.margin-top5
       | Current Device Selected :
