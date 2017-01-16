@@ -6,7 +6,7 @@ deviceType = (params) ->
 
   currentDevice = params[0]
 
-  if currentDevice is ENUMS.DEVICE_TYPE.NO_PREFERENCES
+  if currentDevice is ENUMS.DEVICE_TYPE.NO_PREFERENCE
     "No Preferences"
   else if currentDevice is ENUMS.DEVICE_TYPE.PHONE_REQUIRED
     "Phone Required"
