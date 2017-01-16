@@ -14,8 +14,8 @@ if hasDevices
             | #{ t (device-type deviceType.value)}
 
     .column.margin-top5
-      | Current Device Selected :
-       #{ t (device-type project.deviceType)}
+       = t "selectedDevice"
+       | : #{ t (device-type project.deviceType)}
 
   if hasUniqueDevices
     .columns
@@ -31,8 +31,8 @@ if hasDevices
               = device.version
 
       .column.margin-top5
-        | Current Version Selected :
-        | &nbsp; #{project.platformVersion}
+        = t "selectedVersion"
+        | : #{project.platformVersion}
 
     .columns
       .column

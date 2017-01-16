@@ -108,6 +108,8 @@ export default {
   "saveCredentials": "資格情報を保存",
   "scanning": "スキャン中",
   "scansLeft": " スキャン",
+  "selectedDevice": "選択したデバイス",
+  "selectedVersion": "選択されたバージョン",
   "settings": "設定",
   "showVulnerability": "ショーの脆弱性",
   "signin": "サインイン",

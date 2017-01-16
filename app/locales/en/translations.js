@@ -109,6 +109,8 @@ export default {
   "saveCredentials": "Save Credentials",
   "scanning": "Scanning",
   "scansLeft": " Scans",
+  "selectedDevice": "Selected Device",
+  "selectedVersion": "Selected Version",
   "settings": "Settings",
   "showVulnerability": "Show Vulnerability ",
   "signin": "Sign In",
