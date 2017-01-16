@@ -11,11 +11,11 @@ if hasDevices
           = t "noPreference"
         each deviceTypes as |deviceType|
           option value=deviceType.value
-            | #{ device-type deviceType.value}
+            | #{ t (device-type deviceType.value)}
 
     .column.margin-top5
       | Current Device Selected :
-       #{ device-type project.deviceType}
+       #{ t (device-type project.deviceType)}
 
   if hasUniqueDevices
     .columns

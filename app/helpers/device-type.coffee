@@ -7,13 +7,13 @@ deviceType = (params) ->
   currentDevice = params[0]
 
   if currentDevice is ENUMS.DEVICE_TYPE.NO_PREFERENCE
-    "No Preferences"
+    "noPreference"
   else if currentDevice is ENUMS.DEVICE_TYPE.PHONE_REQUIRED
-    "Phone Required"
+    "phoneRequired"
   else if currentDevice is ENUMS.DEVICE_TYPE.TABLET_REQUIRED
-    "Tablet Required"
+    "tabletRequired"
   else
-    ""
+    "noPreference"
 
 DeviceTypeHelper = Ember.Helper.helper deviceType
 
