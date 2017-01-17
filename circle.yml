@@ -10,3 +10,7 @@ dependencies:
     - npm rebuild node-sass
     - npm install -g bower
     - bower install
+
+test:
+  post:
+    - cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js

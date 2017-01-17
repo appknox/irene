@@ -21,6 +21,7 @@
   "devDependencies": {
     "bohemia": "0.6.0",
     "broccoli-asset-rev": "^2.4.2",
+    "coveralls": "^2.11.15",
     "ember-ajax": "2.5.2",
     "ember-cli": "2.10.0",
     "ember-cli-app-version": "^2.0.0",

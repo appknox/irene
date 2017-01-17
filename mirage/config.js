@@ -3,6 +3,8 @@ import config from 'irene/config/environment';
 
 export default function() {
 
+  this.passthrough('/write-coverage');
+
   this.namespace = config.host + "/" +  config.namespace;
 
   this.get('/users/:id', 'user');
@@ -17,33 +19,43 @@ export default function() {
   this.get('/vulnerabilities/:id', 'vulnerability');
   this.get('/invitations/:id', 'invitation');
   this.get('/devices', 'device');
+
   this.get('/github_repos', () => {
     return {};
   });
+
   this.get('/jira_projects', () => {
     return {};
   });
+
   this.get('/files/', (schema, FakeRequest) => {
     return schema.files.findBy({id:FakeRequest.queryParams.projectId});
   });
+
   this.post('/signup', () => {
     return {user_id: '1', token: 'secret'};
   });
+
   this.post('/login', () => {
     return {user_id: '1', token: 'secret'};
   });
+
   this.post('/check', () => {
     return {user_id: '1', token: 'secret'};
   });
+
   this.post('/logout', () => {
     return {};
   });
+
   this.post('/lang', () => {
     return {};
   });
+
   this.post('/device_preference/:id', () => {
     return {id: '1'};
   });
+
   this.post('/namespace_add', () => {
     return {};
   });
