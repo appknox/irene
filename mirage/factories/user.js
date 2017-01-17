@@ -11,6 +11,7 @@ export default Factory.extend({
   lastName: faker.name.lastName,
   namespaces: faker.internet.domainName,
   expiryDate: faker.date.future,
+  projectCount: faker.random.number,
   hasGithubToken: faker.random.boolean,
   hasJiraToken: faker.random.boolean,
   limitedScans: false,
