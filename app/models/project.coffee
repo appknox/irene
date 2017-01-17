@@ -2,9 +2,10 @@
 `import BaseModelMixin from 'irene/mixins/base-model'`
 `import ENUMS from 'irene/enums'`
 `import Ember from 'ember'`
+`import { translationMacro as t } from 'ember-i18n'`
 
 Project = DS.Model.extend BaseModelMixin,
-
+  i18n: Ember.inject.service()
   owner: DS.belongsTo 'user', inverse: 'ownedProjects'
   files: DS.hasMany 'file', inverse:'project'
   name: DS.attr 'string'
@@ -22,6 +23,8 @@ Project = DS.Model.extend BaseModelMixin,
   deviceType: DS.attr 'number'
   platformVersion: DS.attr 'string'
 
+  tNoPreference: t("noPreference")
+
   pdfPassword: (->
     uuid = @get "uuid"
     if Ember.isEmpty uuid
@@ -32,8 +35,9 @@ Project = DS.Model.extend BaseModelMixin,
 
   versionText: (->
     platformVersion = @get "platformVersion"
+    tNoPreference = @get "tNoPreference"
     if Ember.isEmpty platformVersion
-      "No Preference"
+      tNoPreference
     else
       platformVersion
   ).property "platformVersion"
