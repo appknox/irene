@@ -30,6 +30,14 @@ Project = DS.Model.extend BaseModelMixin,
       uuid.split("-")[4]
   ).property "uuid"
 
+  versionText: (->
+    platformVersion = @get "platformVersion"
+    if Ember.isEmpty platformVersion
+      "No Preference"
+    else
+      platformVersion
+  ).property "platformVersion"
+
   hasFiles: Ember.computed.gt 'fileCount', 0
   hasMultipleFiles: Ember.computed.gt 'fileCount', 1
 

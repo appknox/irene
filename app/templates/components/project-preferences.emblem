@@ -32,7 +32,7 @@ if hasDevices
 
       .column.margin-top5
         = t "selectedVersion"
-        | : #{project.platformVersion}
+        | : #{project.versionText}
 
     .columns
       .column

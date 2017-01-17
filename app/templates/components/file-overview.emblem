@@ -65,7 +65,7 @@ header.card-header
                 td.capitalize-text
                   = t "selectedVersion"
                 td
-                  | #{file.project.platformVersion}
+                  | #{file.project.versionText}
             table
               tr
                 td colspan="2"
