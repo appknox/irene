@@ -12,7 +12,7 @@ export default Base.extend({
   testUser: faker.random.firstName,
   testPassword: faker.internet.password,
   url: faker.internet.domainName,
-  platformVersion: faker.internet.domainName,
+  platformVersion: faker.random.number,
 
   platform(){
     return faker.random.arrayElement(ENUMS.PLATFORM.VALUES);

@@ -15,9 +15,6 @@ ProjectPreferencesComponent = Ember.Component.extend
     store.findAll "device"
   ).property()
 
-  haveSelectedPreferences: Ember.computed.equal 'selectedPreference', true
-
-
   availableDevices: Ember.computed.filter 'devices', (device) ->
     device.get("platform") is @get("project.platform")
 
