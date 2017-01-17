@@ -12,5 +12,7 @@ dependencies:
     - bower install
 
 test:
+  override:
+    - COVERAGE=true ember test
   post:
     - cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
