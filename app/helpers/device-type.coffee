@@ -9,9 +9,9 @@ deviceType = (params) ->
   if currentDevice is ENUMS.DEVICE_TYPE.NO_PREFERENCE
     "noPreference"
   else if currentDevice is ENUMS.DEVICE_TYPE.PHONE_REQUIRED
-    "phoneRequired"
+    "phone"
   else if currentDevice is ENUMS.DEVICE_TYPE.TABLET_REQUIRED
-    "tabletRequired"
+    "tablet"
   else
     "noPreference"
 
