@@ -110,6 +110,7 @@ export default {
   "scansLeft": " スキャン",
   "selectedDevice": "選択したデバイス",
   "selectedVersion": "選択されたバージョン",
+  "selectDevice": "デバイスを選択する",
   "settings": "設定",
   "showVulnerability": "ショーの脆弱性",
   "signin": "サインイン",

@@ -111,6 +111,7 @@ export default {
   "scansLeft": " Scans",
   "selectedDevice": "Selected Device",
   "selectedVersion": "Selected Version",
+  "selectDevice": "Select the device",
   "settings": "Settings",
   "showVulnerability": "Show Vulnerability ",
   "signin": "Sign In",
