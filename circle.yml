@@ -13,6 +13,6 @@ dependencies:
 
 test:
   override:
-    - COVERAGE=true ember test
+    - ember test
   post:
-    - cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+    - bash <(curl -s https://codecov.io/bash) -t d2a87983-bdd8-4e12-9cb2-99e5607e648f
