@@ -28,6 +28,9 @@
 
       ul.menu-list.text-center
         li.account-overview
+          = t "noOfProjects"
+          | : #{model.projectCount}
+        li.account-overview
           = t "subscription"
         li.account-overview-details
           if model.limitedScans

@@ -77,6 +77,7 @@ export default {
   "newScan": "新規診断 ",
   "noDeviceAvailable": "使用可能なデバイスがありません",
   "none": "合格",
+  "noOfProjects": "いいえプロジェクト",
   "noPreference": "指定なし",
   "notifications": "通知",
   "or": "または",

@@ -78,6 +78,7 @@ export default {
   "newScan": "New Scan",
   "noDeviceAvailable": "No Device Available",
   "none": "Passed",
+  "noOfProjects": "No of projects",
   "noPreference": "No Preference",
   "notifications": "Notifications",
   "or": "or",

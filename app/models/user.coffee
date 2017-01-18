@@ -18,7 +18,7 @@ User = DS.Model.extend
   collaborations: DS.hasMany 'collaboration', inverse:'user'
   expiryDate: DS.attr 'date'
   devknoxExpiry: DS.attr 'date'
-
+  projectCount: DS.attr 'number'
   hasGithubToken: DS.attr 'boolean'
   hasJiraToken: DS.attr 'boolean'
   socketId: DS.attr 'string'
