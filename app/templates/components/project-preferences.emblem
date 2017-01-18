@@ -5,25 +5,35 @@ if hasDevices
     .column
       = t "deviceType"
   .columns
-    .column
+    .column.is-one-sixth
       select{action 'selectDeviceType' on='change'} id="project-device-preference"
         option value=0
           = t "noPreference"
         each deviceTypes as |deviceType|
           option value=deviceType.value
-            = t deviceType.key
+            | #{ t (device-type deviceType.value)}
+
+    .column.margin-top5
+       = t "selectedDevice"
+       | : #{ t (device-type project.deviceType)}
+
   if hasUniqueDevices
     .columns
       .column
         = t "osVersion"
     .columns
-      .column
+      .column.is-one-sixth
         select{action 'selectVersion' on='change'} id="project-version-preference"
           option value=0
             = t "noPreference"
           each uniqueDevices as |device|
             option value=device.version
               = device.version
+
+      .column.margin-top5
+        = t "selectedVersion"
+        | : #{project.versionText}
+
     .columns
       .column
         button.margin-top20.is-primary click="versionSelected"

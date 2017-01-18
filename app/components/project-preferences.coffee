@@ -15,13 +15,8 @@ ProjectPreferencesComponent = Ember.Component.extend
     store.findAll "device"
   ).property()
 
-
   availableDevices: Ember.computed.filter 'devices', (device) ->
     device.get("platform") is @get("project.platform")
-
-  devicesCount: Ember.computed.alias 'availableDevices.length'
-
-  hasDevices: Ember.computed.gt 'devicesCount', 0
 
   filteredDevices: Ember.computed "availableDevices", "selectedDeviceType", ->
     availableDevices = @get "availableDevices"
@@ -37,6 +32,10 @@ ProjectPreferencesComponent = Ember.Component.extend
 
   uniqueDevices: Ember.computed.uniqBy "filteredDevices", 'version'
   hasUniqueDevices: Ember.computed.gt 'uniqueDevices.length', 0
+
+  devicesCount: Ember.computed.alias 'availableDevices.length'
+
+  hasDevices: Ember.computed.gt 'devicesCount', 0
 
   actions:
 

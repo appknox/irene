@@ -2,9 +2,10 @@
 `import BaseModelMixin from 'irene/mixins/base-model'`
 `import ENUMS from 'irene/enums'`
 `import Ember from 'ember'`
+`import { translationMacro as t } from 'ember-i18n'`
 
 Project = DS.Model.extend BaseModelMixin,
-
+  i18n: Ember.inject.service()
   owner: DS.belongsTo 'user', inverse: 'ownedProjects'
   files: DS.hasMany 'file', inverse:'project'
   name: DS.attr 'string'
@@ -19,6 +20,10 @@ Project = DS.Model.extend BaseModelMixin,
   url: DS.attr 'string'
   lastFileCreatedOn: DS.attr 'date'
   fileCount: DS.attr 'number'
+  deviceType: DS.attr 'number'
+  platformVersion: DS.attr 'string'
+
+  tNoPreference: t("noPreference")
 
   pdfPassword: (->
     uuid = @get "uuid"
@@ -27,6 +32,15 @@ Project = DS.Model.extend BaseModelMixin,
     else
       uuid.split("-")[4]
   ).property "uuid"
+
+  versionText: (->
+    platformVersion = @get "platformVersion"
+    tNoPreference = @get "tNoPreference"
+    if Ember.isEmpty platformVersion
+      tNoPreference
+    else
+      platformVersion
+  ).property "platformVersion"
 
   hasFiles: Ember.computed.gt 'fileCount', 0
   hasMultipleFiles: Ember.computed.gt 'fileCount', 1
