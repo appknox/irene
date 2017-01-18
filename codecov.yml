@@ -1,0 +1,40 @@
+codecov:
+  branch: develop
+  bot: appknox-bot
+
+coverage:
+  precision: 2
+  round: down
+  range: "70...100"
+
+  notify:
+    slack:
+      default:
+        url: https://hooks.slack.com/services/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
+        threshold: null
+        branches: null
+        attachments: "sunburst, diff"
+
+  status:
+    project:
+      default:
+        target: auto
+        threshold: null
+        branches: null
+
+    patch:
+      default:
+        target: auto
+        branches: null
+
+    changes:
+      default:
+        branches: null
+
+  ignore:
+    - tests/.*
+
+comment:
+  layout: "header, diff, changes, sunburst, uncovered, tree"
+  branches: null
+  behavior: once
