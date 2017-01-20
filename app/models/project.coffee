@@ -36,7 +36,7 @@ Project = DS.Model.extend BaseModelMixin,
   versionText: (->
     platformVersion = @get "platformVersion"
     tNoPreference = @get "tNoPreference"
-    if Ember.isEmpty platformVersion
+    if platformVersion is 0
       tNoPreference
     else
       platformVersion
