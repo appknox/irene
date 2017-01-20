@@ -10,3 +10,9 @@ dependencies:
     - npm rebuild node-sass
     - npm install -g bower
     - bower install
+
+test:
+  override:
+    - COVERAGE=true ember test
+  post:
+    - bash <(curl -s https://codecov.io/bash) -t d2a87983-bdd8-4e12-9cb2-99e5607e648f
