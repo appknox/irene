@@ -51,11 +51,15 @@ PaginateMixin = Ember.Mixin.create
   maxOffset: Ember.computed "meta.total", "limit", ->
     limit = @get "limit"
     total = @get "meta.total" or 0
+    if total is 0
+      return 0
     Math.ceil(total/limit) - 1  # `-1` because offset starts from 0
 
   pages: Ember.computed "maxOffset", "offset", ->
     offset = @get "offset"
     maxOffset = @get "maxOffset"
+    if maxOffset in [NaN, 0, 1]
+      return []
     startPage = 0
     stopPage = maxOffset
     offsetDiff = maxOffset - offset
