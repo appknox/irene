@@ -70,7 +70,6 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
         location.reload()
 
       counter: (data) ->
-        console.log "counter", data
         realtime.incrementProperty "#{data.type}Counter"
 
     for k, v of allEvents
