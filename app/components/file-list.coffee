@@ -16,7 +16,7 @@ FileListComponent = Ember.Component.extend PaginateMixin,
     JSON.stringify query, Object.keys(query).sort()
 
 
-  newFilesObserver: Ember.observer "realtime.filesCounter", ->
+  newFilesObserver: Ember.observer "realtime.FileCounter", ->
     @incrementProperty "version"
 
 `export default FileListComponent`

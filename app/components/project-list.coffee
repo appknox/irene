@@ -12,7 +12,7 @@ ProjectListComponent = Ember.Component.extend PaginateMixin,
   sortingReversed: true
   platformType: ENUMS.PLATFORM.UNKNOWN
 
-  newProjectsObserver: Ember.observer "realtime.projectsCounter", ->
+  newProjectsObserver: Ember.observer "realtime.ProjectCounter", ->
     @incrementProperty "version"
 
   sortProperties: (->

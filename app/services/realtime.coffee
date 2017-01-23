@@ -2,9 +2,9 @@
 
 RealtimeService = Ember.Service.extend
 
-  filesCounter: 0
-  projectsCounter: 0
-  collaborationsCounter: 0
-  submissionsCounter: 0
+  FileCounter: 0
+  ProjectCounter: 0
+  CollaborationCounter: 0
+  SubmissionCounter: 0
 
 `export default RealtimeService`
