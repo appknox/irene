@@ -36,7 +36,7 @@ Project = DS.Model.extend BaseModelMixin,
   versionText: (->
     platformVersion = @get "platformVersion"
     tNoPreference = @get "tNoPreference"
-    if platformVersion is 0
+    if platformVersion is "0"
       tNoPreference
     else
       platformVersion
