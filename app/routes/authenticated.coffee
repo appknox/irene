@@ -42,7 +42,6 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
     @get('moment').changeLocale user.get "lang"
 
     socket = @get('websockets').socketFor 'ws://localhost:8008/'
-    socket.send "subscribe", room: socketId
     that = @
     store = @get "store"
 
@@ -73,8 +72,10 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
       counter: (data) ->
         realtime.incrementProperty "#{data.type}Counter"
 
-    for key, value of allEvents
-      socket.on key, value
+    socket.on "open", ->
+      for key, value of allEvents
+        socket.on key, value
+      socket.send "subscribe", room: socketId
 
 
   actions:
