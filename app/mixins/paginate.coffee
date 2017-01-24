@@ -58,20 +58,28 @@ PaginateMixin = Ember.Mixin.create
   pages: Ember.computed "maxOffset", "offset", ->
     offset = @get "offset"
     maxOffset = @get "maxOffset"
-    if maxOffset in [NaN, 0, 1]
-      return []
     startPage = 0
     stopPage = maxOffset
-    offsetDiff = maxOffset - offset
-    if offset >= ENV.paginate.pagePadding
+    offsetDiffStart = 0
+    offsetDiffStop = 0
+
+    if maxOffset in [NaN, 0, 1]
+      return []
+    if maxOffset <= (ENV.paginate.pagePadding * 2)
+      return [startPage..stopPage]
+
+    if offset > ENV.paginate.pagePadding
       startPage = offset - ENV.paginate.pagePadding
-    if offsetDiff >= ENV.paginate.pagePadding
-      stopPage = startPage + (ENV.paginate.pagePadding * 2)
     else
-      if startPage >= ENV.paginate.pagePadding
-        startPage = startPage - (ENV.paginate.pagePadding - offsetDiff)
-      else
-        startPage = 0
+      offsetDiffStart = offset - ENV.paginate.pagePadding
+
+    if maxOffset >= offset + ENV.paginate.pagePadding
+      stopPage =  offset + ENV.paginate.pagePadding
+    else
+      offsetDiffStop = maxOffset - (offset + ENV.paginate.pagePadding)
+
+    startPage += offsetDiffStop
+    stopPage += offsetDiffStart
 
     [startPage..stopPage]
 
