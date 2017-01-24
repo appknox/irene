@@ -101,7 +101,6 @@ PricingPlanComponent = Ember.Component.extend
       if !Stripe.card.validateExpiry exp_month, exp_year
         return @get("notify").error "Please enter a valid Expiry date"
 
-      that = @
 
       data =
         number: cardNumber
@@ -109,14 +108,15 @@ PricingPlanComponent = Ember.Component.extend
         expMonth: exp_month
         expYear: exp_year
         name: cardName
-        couponCode: that.get "couponCode"
-        pricingId: that.get "pricing.id"
+        couponCode: @get "couponCode"
+        pricingId: @get "pricing.id"
         paymentDuration: @get "paymentDuration"
 
       paymentUrl = ENV.endpoints.stripePaymentDevknox
       if ENV.isAppknox
         paymentUrl = ENV.endpoints.stripePayment
 
+      that = @
       @get("ajax").post paymentUrl, data: data
       .then (result) ->
         that.get("notify").success "Sucessfully processed your payment. Thank You."
