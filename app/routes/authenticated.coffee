@@ -15,7 +15,7 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
   moment: service()
   session: service()
   realtime: service()
-  websockets: service()
+  socketIOService: service 'socket-io'
 
   beforeModel: (transition)->
     @set "lastTransition", transition
@@ -41,7 +41,6 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
     @set 'i18n.locale', user.get "lang"
     @get('moment').changeLocale user.get "lang"
 
-    socket = @get('websockets').socketFor 'ws://localhost:8008/'
     that = @
     store = @get "store"
 
@@ -72,10 +71,11 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
       counter: (data) ->
         realtime.incrementProperty "#{data.type}Counter"
 
-    socket.on "open", ->
-      for key, value of allEvents
-        socket.on key, value
-      socket.send "subscribe", room: socketId
+    socket = @get('socketIOService').socketFor 'http://localhost:8008'
+
+    socket.send "subscribe", room: socketId
+    for key, value of allEvents
+      socket.on key, value
 
 
   actions:
