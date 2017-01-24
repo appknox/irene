@@ -8,8 +8,6 @@ location = window.location
 
 {inject: {service}, isEmpty, RSVP} = Ember
 
-pusher = new Pusher ENV.pusherKey, encrypted: true
-
 AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
   lastTransition: null
@@ -17,6 +15,7 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
   moment: service()
   session: service()
   realtime: service()
+  websockets: service()
 
   beforeModel: (transition)->
     @set "lastTransition", transition
@@ -41,7 +40,9 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
       return
     @set 'i18n.locale', user.get "lang"
     @get('moment').changeLocale user.get "lang"
-    channel = pusher.subscribe socketId
+
+    socket = @get('websockets').socketFor 'ws://localhost:8008/'
+    socket.send "subscribe", room: socketId
     that = @
     store = @get "store"
 
@@ -72,8 +73,8 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
       counter: (data) ->
         realtime.incrementProperty "#{data.type}Counter"
 
-    for k, v of allEvents
-      channel.bind k, v
+    for key, value of allEvents
+      socket.on key, value
 
 
   actions:

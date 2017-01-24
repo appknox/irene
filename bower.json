@@ -17,7 +17,8 @@
     "pace": "^1.0.2",
     "noVNC": "https://github.com/appknox/noVNC.git#^0.6.2",
     "zeroclipboard": "^2.3.0",
-    "opbeat-js": "^3.1.4"
+    "opbeat-js": "^3.1.4",
+    "urijs": "^1.18.4"
   },
   "resolutions": {
     "bohemia": "^0.6.0"
