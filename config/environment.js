@@ -187,7 +187,7 @@ module.exports = function(environment) {
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
-    ENV['host'] = "https://stagingapi.appknox.com";
+    ENV['host'] = "https://api.appknox.io";
     ENV.stripe = {
       publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
     };
