@@ -33,13 +33,13 @@ SelectLanguageComponent = Ember.Component.extend
   ).property "i18n.locale"
 
   actions:
-    that = @
     setLocale: ->
       lang = @$('select').val()
       @set 'i18n.locale', lang
       @get('moment').changeLocale(lang)
       data =
         lang: lang
+      that = @
       @get("ajax").post ENV.endpoints.lang, data: data
       .then ->
         window.location.reload()
