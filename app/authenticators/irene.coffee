@@ -42,7 +42,7 @@ IreneAuthenticator = Base.extend
         that.resumeTransistion()
       .catch (error) ->
         for error in error.errors
-          that.get("notify").error error.detail?.message
+          that.get("notify").error error.detail?.message, ENV.notifications
         reject error
 
   restore: (data) ->
@@ -59,7 +59,7 @@ IreneAuthenticator = Base.extend
       .catch (error) ->
         localStorage.clear()
         for error in error.errors
-          that.get("notify").error error.detail?.message
+          that.get("notify").error error.detail?.message, ENV.notifications
         reject error
 
   invalidate: (data) ->
@@ -75,7 +75,7 @@ IreneAuthenticator = Base.extend
       .catch (error) ->
         location.reload()
         for error in error.errors
-          that.get("notify").error error.detail?.message
+          that.get("notify").error error.detail?.message, ENV.notifications
         reject error
 
 
