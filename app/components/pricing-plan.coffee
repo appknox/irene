@@ -88,6 +88,8 @@ PricingPlanComponent = Ember.Component.extend
           that.get("notify").error error.detail?.message
 
     makePaymentStripe: ->
+      if typeof Stripe is "undefined"
+        return alert "Stripe not available!"
       cardNumber =  @get "cardNumber"
       cardCvc = @get "cardCvc"
       cardName = @get "cardName"
