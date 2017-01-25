@@ -71,7 +71,7 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
       counter: (data) ->
         realtime.incrementProperty "#{data.type}Counter"
 
-    socket = @get('socketIOService').socketFor 'http://localhost:8008'
+    socket = @get('socketIOService').socketFor ENV.socketPath
 
 
     socket.emit "subscribe", room: socketId
