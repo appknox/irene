@@ -2,9 +2,18 @@
 /* global require, module */
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
+environment = EmberApp.env();
+minifyEnabled = environment == "production" || environment == "development";
+
 module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
     // Add options here
+    minifyJS: {
+      enabled: minifyEnabled
+    },
+    minifyCSS: {
+      enabled: minifyEnabled
+    },
     sassOptions: {
       extension: 'sass',
       includePaths: [
