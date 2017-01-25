@@ -66,6 +66,7 @@ IreneAuthenticator = Base.extend
     ajax = @get "ajax"
     localStorage.clear()
     @set "currentUser", null
+    that  = @
     new Ember.RSVP.Promise (resolve, reject) ->
       url = ENV['ember-simple-auth']['logoutEndPoint']
       ajax.post(url)

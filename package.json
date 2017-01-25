@@ -76,7 +76,9 @@
     "ember-simple-auth": "1.1.0",
     "ember-stripe-service": "4.4.2",
     "ember-uploader": "1.2.1",
-    "loader.js": "^4.0.1"
+    "ember-websockets": "6.3.0",
+    "loader.js": "^4.0.1",
+    "mock-socket": "6.0.4"
   },
   "dependencies": {
     "ember-cli-document-title": "^0.3.3"

@@ -4,6 +4,7 @@ module.exports = function(environment) {
   var ENV = {
     isDevknox: false,
     isAppknox: false,
+    socketPath: "http://localhost:8008",
     platform: -1,
     rollbar: {
       accessToken: '4381303f93734918966ff4e1b028cee5'
@@ -50,7 +51,6 @@ module.exports = function(environment) {
     modulePrefix: 'irene',
     environment: environment,
     intercomAppID: "mbkqc0o1",
-    pusherKey: "216d53b13aaa5c6fc2cf",
     enableIntercom: true,
 
     notifications: {
@@ -169,6 +169,7 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
+    ENV.socketPath = "https://socket.appknox.com",
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
@@ -184,6 +185,7 @@ module.exports = function(environment) {
 
 
   if (environment === 'staging') {
+    ENV.socketPath = "https://socket.appknox.io",
     ENV['ember-cli-mirage'] = {
       enabled: false
     };

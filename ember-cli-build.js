@@ -53,11 +53,6 @@ module.exports = function(defaults) {
   app.import('bower_components/noVNC/core/input/keysym.js');
 
   /*
-   * Pusher includes
-   */
-  app.import("bower_components/pusher-websocket-iso/dist/web/pusher.js");
-
-  /*
    * card includes
    */
   app.import('bower_components/card/dist/card.js');
