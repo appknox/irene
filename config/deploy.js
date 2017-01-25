@@ -39,7 +39,8 @@ module.exports = function(deployTarget) {
     // configure other plugins for staging deploy target here
 
     ENV.cloudfront = {
-      distribution: 'E2YVUU4RPYNUI2'
+      distribution: 'E2YVUU4RPYNUI2',
+      objectPaths: ['/*']
     }
 
     ENV.slack.didDeploy = function(context) {
