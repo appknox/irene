@@ -1,10 +1,8 @@
-.columns.upper-nav
-  .column.is-one-sixth.appknox-logo
-    = img-logo
-
 .columns
   .column.is-one-sixth.side-menu
-    aside.menu
+    .appknox-logo
+      = img-logo
+    aside.menu.margin-top20
       .box
         = t "welcome"
         = model.username
