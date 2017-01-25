@@ -4,26 +4,21 @@
 
 .columns
   .column.is-one-sixth.side-menu
-    aside.menu.margin-left.margin-top
-      = t "welcome"
-      = model.username
-      .card.margin-top
-        .card-header.align-middle
-            = t "accountOverview"
-        ul.menu-list.text-center
-          li.account-overview
-            = t "noOfProjects"
-            | : #{model.projectCount}
-          li.account-overview
-            = t "subscription"
-          li.account-overview-details
+    aside.menu
+      .box
+        = t "welcome"
+        = model.username
+        .columns.margin-top20
+          .column.card.align-middle
+            | #{model.projectCount}
+            | &nbsp;
+            = t "projects"
+          .column.card.align-middle
             if model.limitedScans
               = model.scansLeft
               = t "scansLeft"
             else
               = model.expiryText
-
-
 
       ul.menu-list.text-center
         li
