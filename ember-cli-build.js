@@ -3,7 +3,7 @@
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 environment = EmberApp.env();
-minifyEnabled = environment == "production" || environment == "development";
+minifyEnabled = environment == "production" || environment == "staging";
 
 module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
