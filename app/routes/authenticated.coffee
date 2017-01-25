@@ -73,7 +73,8 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
     socket = @get('socketIOService').socketFor 'http://localhost:8008'
 
-    socket.send "subscribe", room: socketId
+
+    socket.emit "subscribe", room: socketId
     for key, value of allEvents
       socket.on key, value
 
