@@ -1,15 +1,23 @@
-.columns.upper-nav
-  .column.is-one-sixth.appknox-logo
-    = img-logo
-
-  .column.current-user.margin-top
-      span
-        = t "welcome"
-        = model.username
-
 .columns
   .column.is-one-sixth.side-menu
-    aside.menu
+    .appknox-logo
+      = img-logo
+    aside.menu.margin-top20
+      .box
+        = t "welcome"
+        = model.username
+        .columns.margin-top20
+          .column.card.align-middle
+            | #{model.projectCount}
+            | &nbsp;
+            = t "projects"
+          .column.card.align-middle
+            if model.limitedScans
+              = model.scansLeft
+              = t "scansLeft"
+            else
+              = model.expiryText
+
       ul.menu-list.text-center
         li
           = link-to 'authenticated.index'
@@ -23,21 +31,6 @@
         li
           a click="invalidateSession"
             = t "logout"
-      p.menu-label.margin-left
-        = t "accountOverview"
-
-      ul.menu-list.text-center
-        li.account-overview
-          = t "noOfProjects"
-          | : #{model.projectCount}
-        li.account-overview
-          = t "subscription"
-        li.account-overview-details
-          if model.limitedScans
-            = model.scansLeft
-            = t "scansLeft"
-          else
-            = model.expiryText
 
       = submission-list
 
