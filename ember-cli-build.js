@@ -2,9 +2,18 @@
 /* global require, module */
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
+environment = EmberApp.env();
+minifyEnabled = environment == "production" || environment == "staging";
+
 module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
     // Add options here
+    minifyJS: {
+      enabled: minifyEnabled
+    },
+    minifyCSS: {
+      enabled: minifyEnabled
+    },
     sassOptions: {
       extension: 'sass',
       includePaths: [
@@ -20,7 +29,7 @@ module.exports = function(defaults) {
         staging: '.env.staging'
       }
     },
-    sourcemaps: {enabled: true}
+    sourcemaps: {enabled: false}
   });
 
   // Use `app.import` to add additional libraries to the generated
