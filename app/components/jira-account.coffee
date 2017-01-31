@@ -13,9 +13,10 @@ JiraAccountComponent = Ember.Component.extend
     integrateJira: ->
       that = @
       data =
-        host: @get "jiraHost"
-        username: @get "jiraUsername"
+        host: @get("jiraHost").trim()
+        username: @get("jiraUsername").trim()
         password: @get "jiraPassword"
+      debugger
       @get("ajax").post ENV.endpoints.integrateJira, data: data
       .then (data)->
         that.get("notify").success "JIRA integrated"

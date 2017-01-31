@@ -9,7 +9,7 @@ PasswordRecoverComponent = Ember.Component.extend
   actions:
 
     recover: ->
-      identification = @get "identification"
+      identification = @get('identification').trim()
       that = @
       data =
         identification: identification
