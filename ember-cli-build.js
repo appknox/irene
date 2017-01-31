@@ -9,12 +9,6 @@ module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
     // Add options here
     storeConfigInMeta: false,
-    minifyJS: {
-      enabled: minifyEnabled
-    },
-    minifyCSS: {
-      enabled: minifyEnabled
-    },
     sassOptions: {
       extension: 'sass',
       includePaths: [
@@ -32,6 +26,11 @@ module.exports = function(defaults) {
     },
     sourcemaps: {enabled: false}
   });
+
+  // Custom hacks to get a similar build in staging and production
+  app.options.minifyCSS.enabled = minifyEnabled;
+  app.options.minifyJS.enabled = minifyEnabled;
+  app.options.fingerprint.enabled = minifyEnabled
 
   // Use `app.import` to add additional libraries to the generated
   // output files.
