@@ -14,8 +14,8 @@ TestCredentialsComponent = Ember.Component.extend
     saveCredentials: ->
       tCredentialsUpdated = @get "credentialsUpdated"
       tCredentialsNotUpdated = @get "tCredentialsNotUpdated"
-      testUser = @get "project.testUser"
-      testPassword = @get "project.testPassword"
+      testUser = @get("project.testUser").trim()
+      testPassword = @get("project.testPassword").trim()
       projectId = @get "project.id"
       that = @
       data =

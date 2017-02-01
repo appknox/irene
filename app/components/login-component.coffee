@@ -6,7 +6,7 @@ LoginComponentComponent = Ember.Component.extend
   actions:
     authenticate: ->
       that = @
-      identification = @get 'identification'
+      identification = @get('identification').trim()
       password = @get 'password'
       @get('session').authenticate("authenticator:irene", identification, password).catch (reason) ->
         that.get("notify").error "Invalid Account Details", ENV.notifications

@@ -15,7 +15,7 @@ SubmitUrlComponent = Ember.Component.extend
       tEnterValidURL = @get "tEnterValidURL"
       tHangInThere = @get "tHangInThere"
       tNetworkError = @get "tNetworkError"
-      storeURL = @get "storeURL"
+      storeURL = @get("storeURL").trim()
       data = {storeURL: storeURL}
       if !CONSTANTS.WINDOWS_STORE_URL_RE.test(storeURL) and !CONSTANTS.ANDROID_STORE_URL_RE.test(storeURL)
         return @get("notify").error tEnterValidURL
