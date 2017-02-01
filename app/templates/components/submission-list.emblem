@@ -4,5 +4,5 @@ if hasSubmissions
     = t "notifications"
 
 .scroll-down
-  each submissions as |submission|
+  each sortedSubmissions as |submission|
     = submission-details submission=submission

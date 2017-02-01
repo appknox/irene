@@ -6,6 +6,7 @@ export default Factory.extend({
   metaData: faker.lorem.sentence,
   reason: faker.lorem.sentence,
   packageName: faker.internet.domain,
+  statusHumanized: faker.lorem.sentence,
 
   status(){
     return faker.random.arrayElement(ENUMS.SUBMISSION_STATUS.VALUES);
