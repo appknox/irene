@@ -4,8 +4,9 @@
       = img-logo
     aside.menu.margin-top20
       .box
-        = t "welcome"
-        = model.username
+        .align-middle
+          = t "welcome"
+          = model.username
         .columns.margin-top20
           .column.card.align-middle
             | #{model.projectCount}
