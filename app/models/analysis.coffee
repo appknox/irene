@@ -27,6 +27,20 @@ Analysis = DS.Model.extend
     risk isnt ENUMS.RISK.NONE
   ).property "risk"
 
+  hasVulnerabilty: (->
+    risk = @get "risk"
+    risk not in [ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN]
+  ).property "risk"
+
+  riskType: ( ->
+    switch @get "risk"
+      when ENUMS.RISK.UNKNOWN then "Scanning"
+      when ENUMS.RISK.NONE then "Passed"
+      when ENUMS.RISK.LOW then "Low"
+      when ENUMS.RISK.MEDIUM then "Medium"
+      when ENUMS.RISK.HIGH then "High"
+  ).property "risk"
+
   labelClass:( ->
     cls = 'tag'
     switch @get "risk"
