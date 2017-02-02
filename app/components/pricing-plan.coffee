@@ -72,7 +72,7 @@ PricingPlanComponent = Ember.Component.extend
       that = @
       data =
         pricingId: that.get "pricing.id"
-        couponCode: that.get "couponCode"
+        couponCode: that.get("couponCode").trim()
       @get("ajax").post ENV.endpoints.applyCoupon, data: data
       .then (result) ->
         that.set "couponApplied", true
@@ -92,7 +92,7 @@ PricingPlanComponent = Ember.Component.extend
         return alert "Stripe not available!"
       cardNumber =  @get "cardNumber"
       cardCvc = @get "cardCvc"
-      cardName = @get "cardName"
+      cardName = @get("cardName").trim()
 
       [exp_month, exp_year] = @get("cardExpiry").split "/"
       [exp_month, exp_month] =  [exp_month.trim(), exp_month.trim()]

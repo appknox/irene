@@ -17,7 +17,8 @@ module.exports = function(deployTarget) {
   };
 
   ENV.slack = {
-    webhookURL: process.env.WEBHOOK_URL,
+    // Needs to be hardcoded and cannot be imported from env for security purpose
+    webhookURL: 'https://hooks.slack.com/services/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',
     channel: '#github',
     username: 'ember-cli-deploy'
   }
