@@ -7,25 +7,35 @@
           span.tag = tag
 
 .message-body
-    if analysis.isScanning
-      = analysis.vulnerability.question
-    else
-      if analysis.isRisky
-        p = analysis.vulnerability.description
-        if analysis.vulnerability.businessImplication
-          h5.margin-top
-            = t "businessImplication"
-          span
-            | {{{analysis.vulnerability.businessImplication}}}
-        if showVulnerability
-          h5.margin-top
-            = t "vulnerability"
-          each analysis.description as |finding|
-            p = finding.extra_description
-            span.scrollable-box
-              pre.pre-code = finding.description
-        button class="is-fullwidth is-default margin-top" click="toggleVulnerability"
-          span
-            | {{showOrHideVulnerability}}
+  .columns
+    .column
+      if analysis.isScanning
+        = analysis.vulnerability.question
       else
-        = analysis.vulnerability.successMessage
+        if analysis.isRisky
+          p = analysis.vulnerability.description
+          if analysis.vulnerability.businessImplication
+            h5.margin-top
+              = t "businessImplication"
+            span
+              | {{{analysis.vulnerability.businessImplication}}}
+        else
+          = analysis.vulnerability.successMessage
+
+    .column.is-one-sixth.content-right
+      span class=analysis.labelClass
+        i.fa.risk-icons class=analysis.iconClass
+        | &nbsp;{{analysis.riskText}}
+
+  .columns
+    if analysis.isRisky
+      if showVulnerability
+        h5.margin-top
+          = t "vulnerability"
+        each analysis.description as |finding|
+          p = finding.extra_description
+          span.scrollable-box
+            pre.pre-code = finding.description
+      button class="is-fullwidth is-default margin-top" click="toggleVulnerability"
+        span
+          | {{showOrHideVulnerability}}

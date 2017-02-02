@@ -12,4 +12,7 @@ SubmissionListComponent = Ember.Component.extend
     @get("store").findAll "submission"
   ).property "realtime.SubmissionCounter"
 
+  submissionSorting: ['id:desc']
+  sortedSubmissions: Ember.computed.sort 'submissions', 'submissionSorting'
+
 `export default SubmissionListComponent`

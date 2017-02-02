@@ -22,9 +22,16 @@ Analysis = DS.Model.extend
     risk is ENUMS.RISK.UNKNOWN
   ).property "risk"
 
-  isRisky: ( ->
+  isRisky: (->
     risk = @get "risk"
-    risk isnt ENUMS.RISK.NONE
+    risk not in [ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN]
+  ).property "risk"
+
+  iconClass: (->
+    switch @get "risk"
+      when ENUMS.RISK.UNKNOWN then "fa-spinner fa-spin"
+      when ENUMS.RISK.NONE then "fa-check"
+      when ENUMS.RISK.HIGH, ENUMS.RISK.LOW, ENUMS.RISK.MEDIUM  then "fa-warning"
   ).property "risk"
 
   labelClass:( ->

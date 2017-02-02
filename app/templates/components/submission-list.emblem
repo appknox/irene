@@ -3,5 +3,6 @@ if hasSubmissions
   p.menu-label.margin-left
     = t "notifications"
 
-each submissions as |submission|
-  = submission-details submission=submission
+.scroll-down
+  each sortedSubmissions as |submission|
+    = submission-details submission=submission

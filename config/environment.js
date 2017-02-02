@@ -161,11 +161,18 @@ module.exports = function(environment) {
   }
 
   if (environment === 'yashwin') {
+    ENV.socketPath = "https://socket.appknox.com",
     ENV['ember-cli-mirage'] = {
       enabled: true
     };
     ENV['host'] = "http://0.0.0.0:8000";
     ENV.enableIntercom = false;
+    ENV.stripe = {
+      publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
+    };
+    ENV['APP'].opbeat = {
+        DEBUG: true
+      };
   }
 
   if (environment === 'production') {
