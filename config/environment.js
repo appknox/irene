@@ -167,6 +167,9 @@ module.exports = function(environment) {
     };
     ENV['host'] = "http://0.0.0.0:8000";
     ENV.enableIntercom = false;
+    ENV.stripe = {
+      publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
+    };
   }
 
   if (environment === 'production') {
