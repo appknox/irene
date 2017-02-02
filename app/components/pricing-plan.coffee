@@ -76,7 +76,7 @@ PricingPlanComponent = Ember.Component.extend
       @get("ajax").post ENV.endpoints.applyCoupon, data: data
       .then (result) ->
         that.set "couponApplied", true
-        that.set "couponDiscount", result.discount
+        that.set "couponDiscount", Math.floor(result.discount)
         that.get("notify").success "Price Updated"
       .catch (error)->
         that.set "couponApplied", false
