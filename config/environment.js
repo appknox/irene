@@ -170,6 +170,9 @@ module.exports = function(environment) {
     ENV.stripe = {
       publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
     };
+    ENV['APP'].opbeat = {
+        DEBUG: true
+      };
   }
 
   if (environment === 'production') {
