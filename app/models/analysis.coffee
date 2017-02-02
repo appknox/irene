@@ -32,13 +32,11 @@ Analysis = DS.Model.extend
     risk not in [ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN]
   ).property "risk"
 
-  riskType: ( ->
+  iconClass: (->
     switch @get "risk"
-      when ENUMS.RISK.UNKNOWN then "Scanning"
-      when ENUMS.RISK.NONE then "Passed"
-      when ENUMS.RISK.LOW then "Low"
-      when ENUMS.RISK.MEDIUM then "Medium"
-      when ENUMS.RISK.HIGH then "High"
+      when ENUMS.RISK.UNKNOWN then "fa-spinner fa-spin"
+      when ENUMS.RISK.NONE then "fa-check"
+      when ENUMS.RISK.HIGH, ENUMS.RISK.LOW, ENUMS.RISK.MEDIUM  then "fa-warning"
   ).property "risk"
 
   labelClass:( ->

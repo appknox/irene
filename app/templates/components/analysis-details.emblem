@@ -22,9 +22,10 @@
         else
           = analysis.vulnerability.successMessage
 
-    .column.is-one-sixth
+    .column.is-one-sixth.content-right
       span class=analysis.labelClass
-        = analysis.riskType
+        i.fa.risk-icons class=analysis.iconClass
+        | &nbsp;{{analysis.riskText}}
 
   .columns
     if analysis.hasVulnerabilty
