@@ -4,6 +4,8 @@ import config from 'irene/config/environment';
 export default function() {
 
   this.passthrough('/write-coverage');
+  this.passthrough('https://api.rollbar.com/api/1/item/');
+  this.passthrough('https://socket.appknox.com/socket.io/');
 
   this.namespace = config.host + "/" +  config.namespace;
 

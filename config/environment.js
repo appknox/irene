@@ -161,6 +161,7 @@ module.exports = function(environment) {
   }
 
   if (environment === 'yashwin') {
+    ENV.socketPath = "https://socket.appknox.com",
     ENV['ember-cli-mirage'] = {
       enabled: true
     };
