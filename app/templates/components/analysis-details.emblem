@@ -28,7 +28,7 @@
         | &nbsp;{{analysis.riskText}}
 
   .columns
-    if analysis.hasVulnerabilty
+    if analysis.isRisky
       if showVulnerability
         h5.margin-top
           = t "vulnerability"

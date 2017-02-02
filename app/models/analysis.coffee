@@ -22,12 +22,7 @@ Analysis = DS.Model.extend
     risk is ENUMS.RISK.UNKNOWN
   ).property "risk"
 
-  isRisky: ( ->
-    risk = @get "risk"
-    risk isnt ENUMS.RISK.NONE
-  ).property "risk"
-
-  hasVulnerabilty: (->
+  isRisky: (->
     risk = @get "risk"
     risk not in [ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN]
   ).property "risk"
