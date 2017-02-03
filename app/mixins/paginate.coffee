@@ -36,8 +36,8 @@ PaginateMixin = Ember.Mixin.create
     targetObject = @get "targetObject"
     objects = @get('store').query targetObject, query
     objects.then (result) ->
-      # that.set "meta", result.meta
-      that.set "meta", total: 200
+      that.set "meta", result.meta
+      # that.set "meta", total: 200
     objects
   ).property  "version"
 
