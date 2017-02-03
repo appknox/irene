@@ -108,7 +108,7 @@ export default {
   "risk": "リスク",
   "saveCredentials": "資格情報を保存",
   "scanning": "スキャン中",
-  "scansLeft": " スキャン",
+  "scansLeft": " スキャン左",
   "selectedDevice": "選択したデバイスの種類",
   "selectedVersion": "選択したOSのバージョン",
   "selectDevice": "デバイスを選択する",

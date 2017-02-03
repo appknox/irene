@@ -109,7 +109,7 @@ export default {
   "risk": "The risk of",
   "saveCredentials": "Save Credentials",
   "scanning": "Scanning",
-  "scansLeft": " Scans",
+  "scansLeft": " Scan Left",
   "selectedDevice": "Selected Device Type",
   "selectedVersion": "Selected OS Version",
   "selectDevice": "Select the device",
