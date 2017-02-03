@@ -62,4 +62,13 @@ export default function() {
     return {};
   });
 
+  this.post('/apply_coupon', () => {
+    return {};
+  });
+
+  this.post('/stripe_payment', () => {
+    return {};
+  });
+
+
 }
