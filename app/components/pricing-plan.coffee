@@ -33,7 +33,7 @@ PricingPlanComponent = Ember.Component.extend
     if couponApplied
       totalPrice = @get "totalPrice"
       discount = @get "couponDiscount"
-      return totalPrice - (totalPrice * discount / 100)
+      return Math.floor(totalPrice - (totalPrice * discount / 100))
     @get "totalPrice"
   ).property "totalPrice", "couponApplied", "couponDiscount"
 
@@ -76,7 +76,7 @@ PricingPlanComponent = Ember.Component.extend
       @get("ajax").post ENV.endpoints.applyCoupon, data: data
       .then (result) ->
         that.set "couponApplied", true
-        that.set "couponDiscount", Math.floor(result.discount)
+        that.set "couponDiscount", result.discount
         that.get("notify").success "Price Updated"
       .catch (error)->
         that.set "couponApplied", false

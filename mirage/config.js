@@ -63,7 +63,7 @@ export default function() {
   });
 
   this.post('/apply_coupon', () => {
-    return {discount: '100.05'};
+    return {};
   });
 
   this.post('/stripe_payment', () => {
