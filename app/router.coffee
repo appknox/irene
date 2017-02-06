@@ -14,7 +14,7 @@ Router.map ->
     @route "index", path: '/'
     @route "settings"
     @route "pricing"
-    @route 'payment', path:'/payment/:pricingId/:duration'
+    @route 'payment', path:'/payment/:pricingId/:paymentDuration'
     @route "project", path: '/project/:projectId', ->
       @route 'settings'
       @route 'files'
