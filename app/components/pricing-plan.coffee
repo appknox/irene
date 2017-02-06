@@ -62,12 +62,6 @@ PricingPlanComponent = Ember.Component.extend
 
   actions:
 
-    closeModal: ->
-      @set "showPricingModal", false
-
-    makePayment: ->
-      @set "showPricingModal", !@get "showPricingModal"
-
     applyCoupon: ->
       that = @
       data =
@@ -122,7 +116,6 @@ PricingPlanComponent = Ember.Component.extend
       @get("ajax").post paymentUrl, data: data
       .then (result) ->
         that.get("notify").success "Sucessfully processed your payment. Thank You."
-        that.send "closeModal"
         setTimeout ->
           location.reload()
         ,
