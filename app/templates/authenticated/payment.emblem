@@ -1,4 +1,4 @@
-.card isActive=showPricingModal title=totalPricePay
+.card
   .card-body
     .card-wrapper
     hr
