@@ -4,5 +4,5 @@
   each pricing.descriptionItems as |item|
     .pricing-section-content.flex-center
       = item
-  = link-to "authenticated.payment" pricing.id
+  = link-to "authenticated.payment" pricing.id paymentDuration
     = totalPrice
