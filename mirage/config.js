@@ -15,6 +15,7 @@ export default function() {
   this.get('/projects/:id', 'project');
   this.get('/projects', 'project');
   this.get('/pricings', 'pricing');
+  this.get('/pricings/:id', 'pricing');
   this.get('/submissions/:id', 'submission');
   this.get('/submissions', 'submission');
   this.get('/files/:id', 'file');

@@ -5,7 +5,6 @@
 
 CardDetailsComponent = Ember.Component.extend
 
-  pricing: null
   paymentDuration: ENUMS.PAYMENT_DURATION.MONTHLY
 
   cardCvc: ""
@@ -19,6 +18,10 @@ CardDetailsComponent = Ember.Component.extend
 
   stripe: Ember.inject.service()
 
+  pricings: (->
+    pricingId = @get "pricingId"
+    @get("store").findRecord("pricing", pricingId)
+  ).property "pricingId"
 
   didInsertElement: ->
     new Card
@@ -28,11 +31,12 @@ CardDetailsComponent = Ember.Component.extend
   stripeErrorHandler: (response) ->
     @get("notify").error response.error.message
 
+
   totalPrice: (->
-    price = @get "pricing.price"
+    price = @get "pricings.price"
     duration = @get "paymentDuration"
     price * duration
-  ).property "paymentDuration", "pricing.price"
+  ).property "paymentDuration", "pricings.price"
 
   totalPriceAfterDiscount: (->
     couponApplied = @get "couponApplied"

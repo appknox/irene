@@ -1,1 +1,1 @@
-= card-details pricing=model
+= card-details pricingId=model.pricingId paymentDuration=model.paymentDuration

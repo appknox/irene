@@ -6,6 +6,6 @@ AuthenticatedPaymentRoute = Ember.Route.extend ScrollTopMixin,
 
   title: "Payment" + config.platform
   model: (params)->
-    @get('store').find('pricing', params.pricingId)
+    params
 
 `export default AuthenticatedPaymentRoute`
