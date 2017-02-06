@@ -48,7 +48,7 @@ CardDetailsComponent = Ember.Component.extend
   ).property "totalPrice", "couponApplied", "couponDiscount"
 
   totalPricePay: (->
-    duration = @get "paymentDuration"
+    duration = parseInt @get "paymentDuration"
     if duration is ENUMS.PAYMENT_DURATION.MONTHLY
       durationText  = "1 Month"
     if duration is ENUMS.PAYMENT_DURATION.QUATERLY
