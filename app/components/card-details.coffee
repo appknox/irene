@@ -28,6 +28,12 @@ CardDetailsComponent = Ember.Component.extend
   stripeErrorHandler: (response) ->
     @get("notify").error response.error.message
 
+  totalPrice: (->
+    price = @get "pricing.price"
+    duration = @get "paymentDuration"
+    price * duration
+  ).property "paymentDuration", "pricing.price"
+
   totalPriceAfterDiscount: (->
     couponApplied = @get "couponApplied"
     if couponApplied
