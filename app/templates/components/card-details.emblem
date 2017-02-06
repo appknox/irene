@@ -1,19 +1,19 @@
 .is-fullwidth
-    .card-wrapper
-    form.card-form.card
-      .control.has-icon.has-icon-right
-        = input class="input" type="tel" name="number" placeholder="Valid Card Number" autocomplete="cc-number" value=cardNumber
-        = fa-icon "credit-card"
+  .card-wrapper
+  form.card-form.card
+    .control.has-icon.has-icon-right
+      = input class="input" type="tel" name="number" placeholder="Valid Card Number" autocomplete="cc-number" value=cardNumber
+      = fa-icon "credit-card"
+    .control.is-grouped
+      = input class="input" type="tel" name="name" placeholder="Name On Card" autocomplete="cc-number" value=cardName
+      = input class="input" type="tel" name="expiry" placeholder="MM/YY" autocomplete="cc-exp" value=cardExpiry
+      = input class="input" type="tel" name="cvc" placeholder="CVC" autocomplete="cc-csc" value=cardCvc
+    if env.isAppknox
       .control.is-grouped
-        = input class="input" type="tel" name="name" placeholder="Name On Card" autocomplete="cc-number" value=cardName
-        = input class="input" type="tel" name="expiry" placeholder="MM/YY" autocomplete="cc-exp" value=cardExpiry
-        = input class="input" type="tel" name="cvc" placeholder="CVC" autocomplete="cc-csc" value=cardCvc
-      if env.isAppknox
-        .control.is-grouped
-          = input  class="input" placeholder="Do you have an offer coupon?" value=couponCode
-          button click="applyCoupon" Apply Coupon
-      .control.content-right
-        button.is-success click="makePaymentStripe"
-          = fa-icon 'cc-stripe'
-          span.margin-left
-            | Pay with card
+        = input  class="input" placeholder="Do you have an offer coupon?" value=couponCode
+        button click="applyCoupon" Apply Coupon
+    .control.content-right
+      button.is-success click="makePaymentStripe"
+        = fa-icon 'cc-stripe'
+        span.margin-left
+          | Pay with card

@@ -7,7 +7,6 @@ PricingPlanComponent = Ember.Component.extend
 
   pricing: null
   paymentDuration: ENUMS.PAYMENT_DURATION.MONTHLY
-  redirectTo: "authenticated.payment"
   classNames: ["column" , "is-one-third"]
 
   totalPrice: (->
