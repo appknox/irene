@@ -5,4 +5,4 @@
     .pricing-section-content.flex-center
       = item
   = link-to "authenticated.payment" pricing.id
-    = totalPricePay
+    = totalPrice

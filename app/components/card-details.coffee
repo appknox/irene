@@ -1,9 +1,13 @@
 `import Ember from 'ember'`
+`import ENUMS from 'irene/enums'`
+`import ENV from 'irene/config/environment';`
+`import {isForbiddenError} from 'ember-ajax/errors';`
 
 CardDetailsComponent = Ember.Component.extend
 
   pricing: null
-  
+  paymentDuration: ENUMS.PAYMENT_DURATION.MONTHLY
+
   cardCvc: ""
   cardName: ""
   cardExpiry: ""
@@ -23,6 +27,29 @@ CardDetailsComponent = Ember.Component.extend
 
   stripeErrorHandler: (response) ->
     @get("notify").error response.error.message
+
+  totalPriceAfterDiscount: (->
+    couponApplied = @get "couponApplied"
+    if couponApplied
+      totalPrice = @get "totalPrice"
+      discount = @get "couponDiscount"
+      return Math.floor(totalPrice - (totalPrice * discount / 100))
+    @get "totalPrice"
+  ).property "totalPrice", "couponApplied", "couponDiscount"
+
+  totalPricePay: (->
+    duration = @get "paymentDuration"
+    if duration is ENUMS.PAYMENT_DURATION.MONTHLY
+      durationText  = "1 Month"
+    if duration is ENUMS.PAYMENT_DURATION.QUATERLY
+      durationText  = "3 Months"
+    if duration is ENUMS.PAYMENT_DURATION.HALFYEARLY
+      durationText  = "6 Months"
+    if duration is ENUMS.PAYMENT_DURATION.YEARLY
+      durationText  = "1 Year"
+    totalPriceAfterDiscount = @get "totalPriceAfterDiscount"
+    "Pay $#{totalPriceAfterDiscount} USD for #{durationText}"
+  ).property "totalPriceAfterDiscount", "paymentDuration"
 
   actions:
 
@@ -87,4 +114,5 @@ CardDetailsComponent = Ember.Component.extend
       .catch (error)->
         for error in error.errors
           that.get("notify").error error.detail?.message
+
 `export default CardDetailsComponent`
