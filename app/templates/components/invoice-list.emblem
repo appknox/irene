@@ -1,0 +1,2 @@
+each invoices as |invoice|
+  = invoice-overview invoice=invoice

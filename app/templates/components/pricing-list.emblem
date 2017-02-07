@@ -12,3 +12,5 @@ if env.isAppknox
 else
   .columns
     = pricing-plan pricing=devknoxPricing paymentDuration=1
+
+= invoice-list

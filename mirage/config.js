@@ -22,6 +22,7 @@ export default function() {
   this.get('/vulnerabilities/:id', 'vulnerability');
   this.get('/invitations/:id', 'invitation');
   this.get('/devices', 'device');
+  this.get('/invoices', 'invoice');
 
   this.get('/github_repos', () => {
     return {};
