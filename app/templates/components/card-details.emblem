@@ -1,4 +1,6 @@
 .is-fullwidth
+  .align-middle
+    =totalPricePay
   .card-wrapper
   form.card-form.card
     .control.has-icon.has-icon-right
