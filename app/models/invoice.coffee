@@ -18,4 +18,9 @@ Invoice = DS.Model.extend
       else "none"
   ).property "source"
 
+  paidOnHumanized: (->
+    paidOn = @get "paidOn"
+    paidOn.toLocaleDateString()
+  ).property "paidOn"
+
 `export default Invoice`

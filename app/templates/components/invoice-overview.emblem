@@ -12,6 +12,6 @@
     hr.horizontal-seperator
     .columns
       .column
-        = invoice.paidOn
+        = invoice.paidOnHumanized
       .column.content-right
         | view the invoice
