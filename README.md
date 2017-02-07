@@ -1,5 +1,9 @@
 # Irene
 
+[![CircleCI](https://circleci.com/gh/appknox/irene.svg?style=shield&circle-token=6c82b8d9cddf223dd01f7bffea864d19f0935107)](https://circleci.com/gh/appknox/irene)
+[![codecov](https://codecov.io/gh/appknox/irene/branch/develop/graph/badge.svg?token=9spv62CzBb)](https://codecov.io/gh/appknox/irene)
+
+
 This README outlines the details of collaborating on this Ember application.
 A short introduction of this app could easily go here.
 
