@@ -1,6 +1,5 @@
 `import Ember from 'ember'`
 
-InvoiceOverviewComponent = Ember.Component.extend
-  classNames: ["column" , "is-one-third"]
+InvoiceOverviewComponent = Ember.Component.extend()
 
 `export default InvoiceOverviewComponent`

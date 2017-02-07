@@ -1,2 +1,17 @@
-.box-section
-  = invoice.amount
+.columns
+  .column.invoice-overview
+    .columns
+      .column
+        = invoice.id
+      .column
+        = invoice.amount
+      .column
+        = invoice.sourceType
+      .column
+        = invoice.pricing.name
+    hr.horizontal-seperator
+    .columns
+      .column
+        = invoice.paidOn
+      .column.content-right
+        | view the invoice

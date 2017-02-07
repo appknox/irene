@@ -1,8 +1,8 @@
 .box-section
-  h3.flex-center.pricing-sub-section
+  h3.flex-center.box-sub-section
     | #{pricing.name}
   each pricing.descriptionItems as |item|
-    .pricing-section-content.flex-center
+    .box-section-content.flex-center
       = item
   button.is-success.is-fullwidth
     = link-to "authenticated.payment" pricing.id paymentDuration
