@@ -13,7 +13,7 @@ Router.map ->
   @route 'authenticated', path: '/', ->
     @route "index", path: '/'
     @route "settings"
-    @route "pricing"
+    @route "pricing", path: '/billing'
     @route 'payment', path:'/payment/:pricingId/:paymentDuration'
     @route "project", path: '/project/:projectId', ->
       @route 'settings'
