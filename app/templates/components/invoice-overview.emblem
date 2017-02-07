@@ -1,1 +1,2 @@
-= invoice.amount
+.box-section
+  = invoice.amount

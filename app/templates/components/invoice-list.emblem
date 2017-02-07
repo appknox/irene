@@ -1,2 +1,6 @@
-each invoices as |invoice|
-  = invoice-overview invoice=invoice
+h4
+  = t "invoices"
+
+.columns
+  each invoices as |invoice|
+    = invoice-overview invoice=invoice

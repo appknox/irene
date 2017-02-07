@@ -62,6 +62,7 @@ export default {
   "integrateJIRA": "JIRA を統合する",
   "integration": "統合",
   "invalidPassword": "無効なパスワード",
+  "invoices": "請求書",
   "jiraHost": "JIRA ホスト",
   "jiraIntegration": "JIRA 統合",
   "jiraPageConfigure": "JIRA 統合を構成するページ",

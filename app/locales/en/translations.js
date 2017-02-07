@@ -63,6 +63,7 @@ export default {
   "integrateJIRA": "Integrate JIRA",
   "integration": "Integrations",
   "invalidPassword": "Passwords did not match",
+  "invoices": "Invoices",
   "jiraHost": "Jira Host",
   "jiraIntegration": "JIRA Integration",
   "jiraPageConfigure": "page to configure JIRA integration",

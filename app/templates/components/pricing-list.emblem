@@ -1,3 +1,5 @@
+h4
+  = t "pricing"
 if env.isAppknox
   .columns
     .column.flex-center

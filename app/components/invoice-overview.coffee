@@ -1,7 +1,6 @@
 `import Ember from 'ember'`
-`import ENUMS from 'irene/enums';`
-`import ENV from 'irene/config/environment';`
 
-InvoiceOverviewComponent = Ember.Component.extend()
+InvoiceOverviewComponent = Ember.Component.extend
+  classNames: ["column" , "is-one-third"]
 
 `export default InvoiceOverviewComponent`
