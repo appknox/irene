@@ -23,10 +23,10 @@
       /   | view the invoice
     hr.horizontal-seperator
     .columns
-      .column
+      .column.margin-top
         | Date : &nbsp;
         = invoice.paidOnHumanized
         | &nbsp; | Payment Mode : &nbsp;
         = t invoice.sourceType
-      .column.content-right
+      .column.content-right.margin-top
         | view the invoice
