@@ -2,15 +2,29 @@
   .column.invoice-overview
     .columns
       .column
+        | Invoice ID : &nbsp;
         = invoice.id
       .column
-        = invoice.amount
+        | Plan Type :
+        | &nbsp; Plan Type
+
       .column
-        = invoice.pricing.name
+        | Plan Name :
+        | &nbsp; Plan Name
+      .column
+        | Amount Paid : $
+        = invoice.amount
+      / .column
+      /   | Date : &nbsp;
+      /   = invoice.paidOnHumanized
+      /   | &nbsp; Payment Mode : &nbsp;
+      /   = t invoice.sourceType
+      / .column.content-right
+      /   | view the invoice
     hr.horizontal-seperator
     .columns
       .column
-        | Date :
+        | Date : &nbsp;
         = invoice.paidOnHumanized
         | &nbsp; | Payment Mode : &nbsp;
         = t invoice.sourceType
