@@ -6,12 +6,13 @@
       .column
         = invoice.amount
       .column
-        = invoice.sourceType
-      .column
         = invoice.pricing.name
     hr.horizontal-seperator
     .columns
       .column
+        | Date :
         = invoice.paidOnHumanized
+        | &nbsp; | Payment Mode : &nbsp;
+        = t invoice.sourceType
       .column.content-right
         | view the invoice

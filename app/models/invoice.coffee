@@ -15,7 +15,7 @@ Invoice = DS.Model.extend
       when ENUMS.PAYMENT_SOURCE.BANK_TRANSFER then "bankTransfer"
       when ENUMS.PAYMENT_SOURCE.MANUAL then "manual"
       when ENUMS.PAYMENT_SOURCE.STRIPE_RECURRING then "stripeRecurring"
-      else "none"
+      else "unknown"
   ).property "source"
 
   paidOnHumanized: (->
