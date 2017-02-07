@@ -6,9 +6,6 @@ module.exports = function(environment) {
     isAppknox: false,
     socketPath: "http://localhost:8008",
     platform: -1,
-    rollbar: {
-      accessToken: '4381303f93734918966ff4e1b028cee5'
-    },
     paginate: {
       perPageLimit: 9,
       pagePadding: 5
@@ -170,15 +167,15 @@ module.exports = function(environment) {
     ENV.stripe = {
       publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
     };
-    ENV.rollbar = {
-      enabled: false    
-    };
     ENV['APP'].opbeat = {
         DEBUG: true
       };
   }
 
   if (environment === 'production') {
+    ENV.rollbar = {
+      accessToken: '4381303f93734918966ff4e1b028cee5'
+    };
     ENV.socketPath = "https://socket.appknox.com",
     ENV['ember-cli-mirage'] = {
       enabled: false
