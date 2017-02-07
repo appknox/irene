@@ -4,7 +4,7 @@
 
 AuthenticatedPricingRoute = Ember.Route.extend ScrollTopMixin,
 
-  title: "Pricing"  + config.platform
+  title: "Billing"  + config.platform
   model: ->
     @modelFor("authenticated")
 

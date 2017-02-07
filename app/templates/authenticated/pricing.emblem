@@ -1,6 +1,6 @@
 .columns
   .column
     h2
-      = t "pricing"
+      = t "billing"
 
 = pricing-list

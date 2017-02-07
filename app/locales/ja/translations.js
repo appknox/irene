@@ -8,6 +8,7 @@ export default {
   "allFiles": "すべてのファイル",
   "apps": "アプリ",
   "beingAnalyzed": "分析中",
+  "billing": "請求書",
   "businessImplication": "ビジネスへの影響",
   "changePassword": "パスワード変更",
   "chooseAFile": "比較するファイルを選択してください",

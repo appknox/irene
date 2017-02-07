@@ -12,7 +12,7 @@ export default function(server) {
     vulnerabilityCount = getRandomInt(5, 15),
     submissionCount = getRandomInt(0,3),
     projectCount = 0, project = null, file = null, projectIds = [],
-    currentUserId = 1, deviceCount=30, invoiceCount=1;
+    currentUserId = 1, deviceCount=30, invoiceCount=3;
   server.createList('user', userCount);
   server.createList('pricing', pricingCount);
   server.createList('vulnerability', vulnerabilityCount);

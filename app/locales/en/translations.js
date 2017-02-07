@@ -8,6 +8,7 @@ export default {
   "allFiles": "All Files",
   "apps": " Apps",
   "beingAnalyzed": "is being analyzed",
+  "billing": "Billing",
   "businessImplication": "Business Implication",
   "changePassword": "Change Password",
   "chooseAFile": "Choose a file to compare",

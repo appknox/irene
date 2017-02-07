@@ -28,7 +28,7 @@
             = t "settings"
         li
           = link-to 'authenticated.pricing'
-            = t "pricing"
+            = t "billing"
         li
           a click="invalidateSession"
             = t "logout"
