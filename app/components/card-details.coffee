@@ -18,7 +18,7 @@ CardDetailsComponent = Ember.Component.extend
 
   stripe: Ember.inject.service()
 
-  pricings: (->
+  pricing: (->
     pricingId = @get "pricingId"
     @get("store").findRecord("pricing", pricingId)
   ).property "pricingId"
@@ -33,10 +33,10 @@ CardDetailsComponent = Ember.Component.extend
 
 
   totalPrice: (->
-    price = @get "pricings.price"
+    price = @get "pricing.price"
     duration = @get "paymentDuration"
     price * duration
-  ).property "paymentDuration", "pricings.price"
+  ).property "paymentDuration", "pricing.price"
 
   totalPriceAfterDiscount: (->
     couponApplied = @get "couponApplied"
@@ -48,7 +48,7 @@ CardDetailsComponent = Ember.Component.extend
   ).property "totalPrice", "couponApplied", "couponDiscount"
 
   totalPricePay: (->
-    duration = parseInt @get "paymentDuration"
+    duration = @get "paymentDuration"
     if duration is ENUMS.PAYMENT_DURATION.MONTHLY
       durationText  = "1 Month"
     if duration is ENUMS.PAYMENT_DURATION.QUATERLY

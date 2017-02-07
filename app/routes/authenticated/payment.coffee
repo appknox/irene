@@ -6,6 +6,7 @@ AuthenticatedPaymentRoute = Ember.Route.extend ScrollTopMixin,
 
   title: "Payment" + config.platform
   model: (params)->
+    params.paymentDuration = parseInt params.paymentDuration
     params
 
 `export default AuthenticatedPaymentRoute`
