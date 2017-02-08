@@ -70,5 +70,8 @@ export default function() {
     return {};
   });
 
+  this.post('/unauthorize_github', () => {
+    return {};
+  });
 
 }
