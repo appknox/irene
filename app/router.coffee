@@ -15,6 +15,7 @@ Router.map ->
     @route "settings"
     @route "pricing", path: '/billing'
     @route 'payment', path:'/payment/:pricingId/:paymentDuration'
+    @route 'invoice', path:'/invoice/:invoiceId'
     @route "project", path: '/project/:projectId', ->
       @route 'settings'
       @route 'files'
@@ -25,6 +26,5 @@ Router.map ->
 
   # 404 path -this should be at the last.
   @route 'not-found', path: '/*path'
-
 
 `export default Router;`
