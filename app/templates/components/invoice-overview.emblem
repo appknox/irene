@@ -1,34 +1,15 @@
-.columns
-  .column.invoice-overview
-    .columns
-      .column
-        | Invoice ID : &nbsp;
-        = invoice.id
-      .column
-        | Plan Type :
-        | &nbsp; Plan Type
-
-      .column
-        | Plan Name :
-        | &nbsp; Plan Name
-      .column
-        | Amount Paid : $
-        = invoice.amount
-      / .column
-      /   | Date : &nbsp;
-      /   = invoice.paidOnHumanized
-      /   | &nbsp; Payment Mode : &nbsp;
-      /   = t invoice.sourceType
-      / .column.content-right
-      / = link-to 'authenticated.invoice' invoice.id
-      /   | View the invoice
-    hr.horizontal-seperator
-    .columns
-      .column.margin-top
-        | Date : &nbsp;
-        = invoice.paidOnHumanized
-        | &nbsp; | Payment Mode : &nbsp;
-        = t invoice.sourceType
-      .column.content-right.margin-top
-        = link-to 'authenticated.invoice' invoice.id
-          | View the invoice
+td
+  = invoice.id
+td
+  | Lite
+td
+  | Half Yearly
+td
+  | $#{invoice.amount}
+td
+  = t invoice.sourceType
+td
+  = invoice.paidOnHumanized
+td
+  = link-to 'authenticated.invoice' invoice.id
+      | view

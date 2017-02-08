@@ -1,5 +1,23 @@
 h4
   = t "invoices"
 
-each invoices as |invoice|
-  = invoice-overview invoice=invoice
+
+table
+  tr
+    th
+      | INVOICE ID
+    th
+      | PLAN NAME
+    th
+      | PLAN TYPE
+    th
+      | AMOUNT PAID
+    th
+      | PAYMENT MODE
+    th
+      | DATE
+    th
+      | INVOICE
+
+  each invoices as |invoice|
+    = invoice-overview invoice=invoice
