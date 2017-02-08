@@ -27,7 +27,7 @@
           = link-to 'authenticated.settings'
             = t "settings"
         li
-          = link-to 'authenticated.pricing'
+          = link-to 'authenticated.billing'
             = t "billing"
         li
           a click="invalidateSession"
