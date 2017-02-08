@@ -20,7 +20,8 @@
       /   | &nbsp; Payment Mode : &nbsp;
       /   = t invoice.sourceType
       / .column.content-right
-      /   | view the invoice
+      / = link-to 'authenticated.invoice' invoice.id
+      /   | View the invoice
     hr.horizontal-seperator
     .columns
       .column.margin-top
@@ -29,4 +30,5 @@
         | &nbsp; | Payment Mode : &nbsp;
         = t invoice.sourceType
       .column.content-right.margin-top
-        | view the invoice
+        = link-to 'authenticated.invoice' invoice.id
+          | View the invoice
