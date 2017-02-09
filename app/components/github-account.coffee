@@ -11,6 +11,7 @@ GithubAccountComponent = Ember.Component.extend
       @get("ajax").post ENV.endpoints.revokeGitHub
       .then (data) ->
         that.get("notify").success "Your GitHub authorization will be revoked in a moment"
+        window.location.reload()
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message
