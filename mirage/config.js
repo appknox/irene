@@ -74,4 +74,12 @@ export default function() {
     return {};
   });
 
+  this.post('/remove_github', () => {
+    return {};
+  });
+
+  this.post('/remove_jira', () => {
+    return {};
+  });
+
 }

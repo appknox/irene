@@ -5,6 +5,8 @@ if project.githubRepo
     | This project is integrated with GitHub repo &nbsp;
     code
       = project.githubRepo
+    small click="removeGHProject"
+      | &nbsp; remove
 
 .columns
   .is-one-third
