@@ -48,8 +48,10 @@ GithubProjectComponent = Ember.Component.extend
 
     removeGHProject: ->
       return if !confirm "Do you want to remove GitHub Project ?"
+      projectId = @get "project.id"
+      removeGithub = [ENV.endpoints.removeGHProject, projectId].join '/'
       that = @
-      @get("ajax").post ENV.endpoints.removeGHProject
+      @get("ajax").post removeGithub
       .then (data) ->
         window.location.reload()
       .catch (error) ->

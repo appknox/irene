@@ -49,7 +49,10 @@ JiraProjectComponent = Ember.Component.extend
     removeJIRAProject: ->
       return if !confirm "Do you want to remove JIRA Project ?"
       that = @
-      @get("ajax").post ENV.endpoints.removeJIRAProject
+      projectId = @get "project.id"
+      removeJIRA = [ENV.endpoints.removeJIRAProject, projectId].join '/'
+      debugger
+      @get("ajax").post removeJIRA
       .then (data) ->
         window.location.reload()
       .catch (error) ->
