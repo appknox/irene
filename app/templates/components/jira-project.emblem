@@ -2,12 +2,12 @@ h5 JIRA
 
 if project.jiraProject
   h5
-    | This project is integrated with JIRA project &nbsp;
+    = t "integratedJIRA"
     code
-      = project.jiraProject
+      | &nbsp; #{project.jiraProject}
     .tag.is-danger.margin-top3.remove click="removeJIRAProject"
       i.fa.risk-icons.fa-trash-o
-        | &nbsp; remove
+        | &nbsp; #{t "remove"}
 .columns
   .is-one-third
     select.select{action 'selectProject' on='change'}
