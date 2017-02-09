@@ -5,6 +5,8 @@ if project.jiraProject
     | This project is integrated with JIRA project &nbsp;
     code
       = project.jiraProject
+    small click="removeJIRAProject"
+      | &nbsp; remove
 .columns
   .is-one-third
     select.select{action 'selectProject' on='change'}
