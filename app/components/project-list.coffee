@@ -2,8 +2,11 @@
 `import PaginateMixin from 'irene/mixins/paginate'`
 `import ENUMS from 'irene/enums'`
 `import {filterPlatformValues} from 'irene/helpers/filter-platform'`
+`import { translationMacro as t } from 'ember-i18n'`
 
 ProjectListComponent = Ember.Component.extend PaginateMixin,
+
+  i18n: Ember.inject.service()
 
   query: ""
   targetObject: "project"
@@ -11,6 +14,13 @@ ProjectListComponent = Ember.Component.extend PaginateMixin,
   sortingKey: "lastFileCreatedOn"
   sortingReversed: true
   platformType: ENUMS.PLATFORM.UNKNOWN
+
+  tDateUpdated: t("dateUpdated")
+  tDateCreated: t("dateCreated")
+  tProjectName: t("projectName")
+  tPackageName: t("packageName")
+  tInDescendingOrder: t("inDescendingOrder")
+  tInAscendingOrder: t("inAscendingOrder")
 
   newProjectsObserver: Ember.observer "realtime.ProjectCounter", ->
     @incrementProperty "version"
@@ -48,11 +58,17 @@ ProjectListComponent = Ember.Component.extend PaginateMixin,
     JSON.stringify query, Object.keys(query).sort()
 
   sortingKeyObjects: (->
+    tDateUpdated = @get "tDateUpdated"
+    tDateCreated = @get "tDateCreated"
+    tProjectName = @get "tProjectName"
+    tPackageName = @get "tPackageName"
+    tInDescendingOrder = @get "tInDescendingOrder"
+    tInAscendingOrder = @get "tInAscendingOrder"
     keyObjects = [
-      { key: "lastFileCreatedOn", text: "Date Updated"},
-      { key: "createdOn", text: "Date Created"},
-      { key: "name", text: "Project Name"},
-      { key: "packageName", text: "Package Name"}
+      { key: "lastFileCreatedOn", text: tDateUpdated },
+      { key: "createdOn", text: tDateCreated },
+      { key: "name", text: tProjectName },
+      { key: "packageName", text: tPackageName }
     ]
     keyObjectsWithReverse = []
     for keyObject in keyObjects
@@ -62,9 +78,9 @@ ProjectListComponent = Ember.Component.extend PaginateMixin,
         keyObjectFull.key = keyObject.key
         keyObjectFull.text = keyObject.text
         if reverse
-          keyObjectFull.text += " in Descending Order"
+          keyObjectFull.text += tInDescendingOrder
         else
-          keyObjectFull.text += " in Ascending Order"
+          keyObjectFull.text += tInAscendingOrder
         keyObjectsWithReverse.push keyObjectFull
     keyObjectsWithReverse
   ).property()
