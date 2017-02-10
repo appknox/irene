@@ -4,6 +4,6 @@
   each pricing.descriptionItems as |item|
     .box-section-content.flex-center
       = item
-  button.is-success.is-fullwidth
-    = link-to "authenticated.payment" pricing.id paymentDuration
+  = link-to "authenticated.payment" pricing.id paymentDuration
+    button.is-success.is-fullwidth
       = totalPrice
