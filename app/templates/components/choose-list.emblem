@@ -3,7 +3,7 @@
     if hasObjects
       each otherFilesInTheProject as |file|
         .column.is-one-third
-          = file-overview file=file oldFile=oldFile redirectTo="authenticated.compare"
+          = file-overview file=file fileOld=fileOld redirectTo="authenticated.compare"
     else
       h3.margin-left No Files!
 
