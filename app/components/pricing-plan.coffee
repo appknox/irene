@@ -12,7 +12,8 @@ PricingPlanComponent = Ember.Component.extend
   totalPrice: (->
     price = @get "pricing.price"
     duration = @get "paymentDuration"
-    price * duration
+    total = price * duration
+    "Pay $#{total} USD"
   ).property "paymentDuration", "pricing.price"
 
 `export default PricingPlanComponent`
