@@ -6,20 +6,11 @@ moduleForComponent 'invoice-overview', 'Integration | Component | invoice overvi
 }
 
 test 'it renders', (assert) ->
-  assert.expect 2
+  assert.expect 1
 
   # Set any properties with @set 'myProperty', 'value'
   # Handle any actions with @on 'myAction', (val) ->
 
   @render hbs """{{invoice-overview}}"""
 
-  assert.equal @$().text().trim(), ''
-
-  # Template block usage:
-  @render hbs """
-    {{#invoice-overview}}
-      template block text
-    {{/invoice-overview}}
-  """
-
-  assert.equal @$().text().trim(), 'template block text'
+  assert.equal @$().text().trim(), 'LiteHalf Yearly$Missing translation: undefinedview'
