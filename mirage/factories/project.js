@@ -13,6 +13,7 @@ export default Base.extend({
   testPassword: faker.internet.password,
   url: faker.internet.domainName,
   platformVersion: faker.random.number,
+  fileCount: 2,
 
   platform(){
     return faker.random.arrayElement(ENUMS.PLATFORM.VALUES);
