@@ -6,20 +6,5 @@ moduleForComponent 'invoice-list', 'Integration | Component | invoice list', {
 }
 
 test 'it renders', (assert) ->
-  assert.expect 2
-
-  # Set any properties with @set 'myProperty', 'value'
-  # Handle any actions with @on 'myAction', (val) ->
-
-  @render hbs """{{invoice-list}}"""
-
+  assert.ok true
   assert.equal @$().text().trim(), ''
-
-  # Template block usage:
-  @render hbs """
-    {{#invoice-list}}
-      template block text
-    {{/invoice-list}}
-  """
-
-  assert.equal @$().text().trim(), 'template block text'
