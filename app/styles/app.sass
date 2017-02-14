@@ -7,6 +7,13 @@ $FreestyleGuide-color--background: $background
 @import 'ember-freestyle'
 
 /* Margin Defines*/
+
+.no-margin
+  margin-left: 0px!important
+
+.margin-auto
+  margin: auto
+
 .margin-top30
   margin-top: 30px
 
@@ -371,7 +378,11 @@ button, .button
     justify-content: center
 
 .card-button
+  .card-footer-item
+    padding: 1px
+    margin-left: 50px
   button
+    border-radius: 5px
     margin-bottom: 5px
     border-color: rgb(254, 77, 63) !important
     color: rgb(254, 77, 63)
