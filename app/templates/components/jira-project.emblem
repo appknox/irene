@@ -5,7 +5,7 @@ if project.jiraProject
     = t "integratedJIRA"
     code
       | &nbsp; #{project.jiraProject}
-    .tag.is-danger.margin-top3.remove click="removeJIRAProject"
+    .tag.is-danger.margin-top3.remove click="deleteJIRAProject"
       i.fa.risk-icons.fa-trash-o
         | &nbsp; #{t "remove"}
 .columns

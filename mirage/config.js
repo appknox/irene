@@ -74,11 +74,11 @@ export default function() {
     return {};
   });
 
-  this.post('/remove_github/:id', () => {
+  this.post('/delete_github_repo/:id', () => {
     return {};
   });
 
-  this.post('/remove_jira/:id', () => {
+  this.post('/delete_jira_project/:id', () => {
     return {};
   });
 

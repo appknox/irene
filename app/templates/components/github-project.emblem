@@ -5,7 +5,7 @@ if project.githubRepo
     = t "integratedGithub"
     code
       | &nbsp; #{project.githubRepo}
-    .tag.is-danger.margin-top3.remove click="removeGHProject"
+    .tag.is-danger.margin-top3.remove click="deleteGHProject"
       i.fa.risk-icons.fa-trash-o
         | &nbsp; #{t "remove"}
 
