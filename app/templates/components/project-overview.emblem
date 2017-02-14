@@ -1,17 +1,13 @@
 = file-overview file=project.lastFile
   footer.card-button
     .columns
+      .column.is-one-quarter class=project.settingClass
+        = link-to 'authenticated.project.settings' project.id class="card-footer-item is-fullwidth" tagName="button"
+          = t "settings"
       if project.hasMultipleFiles
-        .column.is-one-quarter
-          = link-to 'authenticated.project.settings' project.id class="card-footer-item is-fullwidth" tagName="button"
-            = t "settings"
         .column.is-one-quarter
           = link-to 'authenticated.project.files' project.id class="card-footer-item is-fullwidth" tagName="button"
             = t "allFiles"
         .column.is-one-quarter
           = link-to 'authenticated.choose' project.lastFile.id class="card-footer-item is-fullwidth" tagName="button"
             = t "compare"
-      else
-        .column.is-one-quarter.margin-auto 
-          = link-to 'authenticated.project.settings' project.id class="card-footer-item no-margin is-fullwidth" tagName="button"
-            = t "settings"
