@@ -36,6 +36,7 @@
           p = finding.extra_description
           span.scrollable-box
             pre.pre-code = finding.description
-      button class="is-fullwidth is-default margin-top" click="toggleVulnerability"
-        span
-          | {{showOrHideVulnerability}}
+      .hideOrShow.is-fullwidth
+        button class="is-fullwidth margin-top" click="toggleVulnerability"
+          span
+            | {{showOrHideVulnerability}}
