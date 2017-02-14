@@ -51,7 +51,7 @@ JiraProjectComponent = Ember.Component.extend
       that = @
       projectId = @get "project.id"
       deleteJIRA = [ENV.endpoints.deleteJIRAProject, projectId].join '/'
-      @get("ajax").post deleteJIRA
+      @get("ajax").delete deleteJIRA
       .then (data) ->
         window.location.reload()
       .catch (error) ->

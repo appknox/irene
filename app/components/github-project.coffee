@@ -51,7 +51,7 @@ GithubProjectComponent = Ember.Component.extend
       projectId = @get "project.id"
       deleteGithub = [ENV.endpoints.deleteGHRepo, projectId].join '/'
       that = @
-      @get("ajax").post deleteGithub
+      @get("ajax").delete deleteGithub
       .then (data) ->
         window.location.reload()
       .catch (error) ->
