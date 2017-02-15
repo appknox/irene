@@ -109,6 +109,8 @@ export default {
   "remainsUnchanged": "変更されていません",
   "repoIntegrated": "repo 統合",
   "repoNotIntegrated": "repo が統合されていません",
+  "revokeGithub": "Github を取り消す",
+  "revokeJira": "JIRA を取り消す",
   "risk": "リスク",
   "saveCredentials": "資格情報を保存",
   "scanning": "スキャン中",

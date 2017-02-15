@@ -110,6 +110,8 @@ export default {
   "remainsUnchanged": "remains unchanged",
   "repoIntegrated": "Repo successfully integrated",
   "repoNotIntegrated": "Something went wrong whe trying to update this repo",
+  "revokeGithub": "Revoke Github",
+  "revokeJira": "Revoke Jira",
   "risk": "The risk of",
   "saveCredentials": "Save Credentials",
   "scanning": "Scanning",
