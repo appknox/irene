@@ -21,8 +21,10 @@ Router.map ->
     @route "choose",path: '/choose/:fileId'
     @route 'compare', path: '/compare/:files'
   @route 'invitation', path: '/invitation/:uuid'
+  @route 'report', path: '/report/:reportId'
 
   # 404 path -this should be at the last.
   @route 'not-found', path: '/*path'
+
 
 `export default Router;`
