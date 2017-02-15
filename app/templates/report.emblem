@@ -1,1 +1,31 @@
-
+.container
+  .report-container
+    .columns
+      .column
+        h6
+          | confidential
+      .column.content-right
+        h6
+          | 15th February, 2017
+    .columns
+      .column.align-middle
+        img src='https://raw.githubusercontent.com/appknox/press-kit/master/logo/logo-dark-small.png'
+    .columns
+      .column.align-middle
+        h2.underline
+         | Android Security Report
+    .columns
+      .column.align-middle
+        h6.italics
+          | For Internal Purpose
+    .columns
+      .column.align-middle
+        h5.bold
+          | Prepared For: com.flipkart.android
+    .columns
+      .column
+        .mini-container
+          p
+            | Prepared by XYSec Labs Pte. Ltd. Portions of this document and the templates used in its production are the property of XYSec Labs Pte. Ltd. and cannot be copied without permission.
+          p
+            | While precautions have been taken in the preparation of this document, XYSec Labs Pte. Ltd., the publisher, and the author(s) assume no responsibility for errors, omissions, or for damages resulting from the use of the information contained herein. Use of XYSec Labs Pte. Ltd. services does not guarantee the security of a system, or that intrusions will not occur.

@@ -75,6 +75,41 @@ $FreestyleGuide-color--background: $background
   width: 100%
 
 // FIXME: Remove this after updating bohemia
+
+.container
+  padding-top: 50px
+  padding-left: 200px
+  padding-right: 200px
+  .report-container
+    background-color: #F0F0F0
+    .column:nth-child(1)
+      h6
+        margin-left: 20px
+    .column:nth-child(2)
+      h6
+        margin-right: 20px
+    .columns:nth-child(2)
+      margin-top: 40px
+    .columns:nth-child(3), .columns:nth-child(5), .columns:nth-child(6)
+      margin-top: 100px
+    .columns:nth-child(6)
+      p
+        margin-bottom: 30px
+        font-size: 15px
+
+.mini-container
+  padding-left: 100px
+  padding-right: 100px
+
+.underline
+  border-bottom: 2px solid #6B6B6B
+
+.italics
+  font-style: italic
+
+.bold
+  font-weight: 900
+
 .menu-list
   margin-top: 10px!important
   a
@@ -89,7 +124,6 @@ $FreestyleGuide-color--background: $background
     background-color: #d8d8d8
     color: #EF4836
     font-weight: 900
-
 
 .card-header
   .pricing-title
