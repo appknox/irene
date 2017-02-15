@@ -6,8 +6,8 @@ if project.jiraProject
     code
       = project.jiraProject
 .columns
-  .is-one-third
-    select.select{action 'selectProject' on='change'}
+  .column.is-one-quarter
+    select.input.select{action 'selectProject' on='change'}
       each jiraProjects as |project|
         option value=project
           = project
