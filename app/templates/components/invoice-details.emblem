@@ -1,1 +1,58 @@
-=invoice.amount
+.invoice-details.align-middle.margin-top30
+  .invoice-container
+    .columns
+      .column
+        img src="https://raw.githubusercontent.com/appknox/press-kit/master/logo/logo-dark-small.png"
+      .column.content-right
+        h2
+          | INVOICE
+    .columns
+      .column.content-right
+        | Date: &nbsp;
+        = invoice.paidOnHumanized
+    hr
+    h6
+      | Order Summary
+    .invoice-table
+      table
+        tr
+          th
+            | INVOICE ID
+          th
+            | PLAN NAME
+          th
+            | PLAN DURATION
+          th
+            | DESCRIPTION
+          th
+            | AMOUNT PAID
+        tr
+          td
+            = invoice.pricing.price
+          td
+            | Lite
+          td
+            | Half Yearly
+          td
+            | DESCRIPTION
+          td
+            | $#{invoice.amount}
+        tr
+          td colspan="4"
+            | TOTAL AMOUNT PAID
+          td
+            | $#{invoice.amount}
+
+    .columns
+      .column.margin-top
+        | PAYMENT MODE: &nbsp;
+        = t invoice.sourceType
+    h6
+      | Important Instructions: &nbsp;
+    ul
+      li
+        | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      li
+        | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      li
+        | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
