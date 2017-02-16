@@ -1,4 +1,4 @@
-.container
+.main-container
   .report-container
     .columns
       .column
@@ -29,3 +29,4 @@
             | Prepared by XYSec Labs Pte. Ltd. Portions of this document and the templates used in its production are the property of XYSec Labs Pte. Ltd. and cannot be copied without permission.
           p
             | While precautions have been taken in the preparation of this document, XYSec Labs Pte. Ltd., the publisher, and the author(s) assume no responsibility for errors, omissions, or for damages resulting from the use of the information contained herein. Use of XYSec Labs Pte. Ltd. services does not guarantee the security of a system, or that intrusions will not occur.
+    hr
