@@ -29,16 +29,7 @@
             | Prepared by XYSec Labs Pte. Ltd. Portions of this document and the templates used in its production are the property of XYSec Labs Pte. Ltd. and cannot be copied without permission.
           p
             | While precautions have been taken in the preparation of this document, XYSec Labs Pte. Ltd., the publisher, and the author(s) assume no responsibility for errors, omissions, or for damages resulting from the use of the information contained herein. Use of XYSec Labs Pte. Ltd. services does not guarantee the security of a system, or that intrusions will not occur.
-    hr
 
-  .report-container
-    .columns
-      .column
-        h6
-          | confidential
-      .column.content-right
-        h6
-          | 15th February, 2017
     .heading-container.align-middle
         h3
           | Report Summary
@@ -78,5 +69,15 @@
           | Application MD5 Hash
         td
           | f68e50276da5ec2958003dd1270c9a72
-
-    hr
+    .sub-heading-container
+      h4
+        | Audit Summary
+    table
+      tr
+        td
+          h5
+            | RISK NAME
+          p
+            | RISK DESCRIPTION
+        td
+          | RISK TYPE
