@@ -21,9 +21,9 @@
       if env.isAppknox
         .control.is-grouped
           = input  class="input" placeholder="Do you have an offer coupon?" value=couponCode
-          button.is-success click="applyCoupon" Apply Coupon
+          button.is-info click="applyCoupon" Apply Coupon
       .control.content-right
-        button.is-success click="makePaymentStripe"
+        button.is-info click="makePaymentStripe"
           = fa-icon 'cc-stripe'
           span.margin-left
             | Pay with card
