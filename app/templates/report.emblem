@@ -80,4 +80,5 @@
           p
             | RISK DESCRIPTION
         td
-          | RISK TYPE
+          h5
+            | RISK TYPE

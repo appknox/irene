@@ -2,7 +2,7 @@
 
 moduleForModel 'report', 'Unit | Model | report', {
   # Specify the other units that are required for this test.
-  needs: []
+  needs: ["model:file"]
 }
 
 test 'it exists', (assert) ->
