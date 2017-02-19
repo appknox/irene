@@ -46,4 +46,17 @@ GithubProjectComponent = Ember.Component.extend
         for error in error.errors
           that.get("notify").error error.detail?.message
 
+    deleteGHProject: ->
+      return if !confirm "Do you want to remove GitHub Project ?"
+      projectId = @get "project.id"
+      deleteGithub = [ENV.endpoints.deleteGHRepo, projectId].join '/'
+      that = @
+      @get("ajax").delete deleteGithub
+      .then (data) ->
+        window.location.reload()
+      .catch (error) ->
+        for error in error.errors
+          that.get("notify").error error.detail?.message
+
+
 `export default GithubProjectComponent`

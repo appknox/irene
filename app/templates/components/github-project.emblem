@@ -2,9 +2,12 @@ h5 GitHub
 
 if project.githubRepo
   h5
-    | This project is integrated with GitHub repo &nbsp;
+    = t "integratedGithub"
     code
-      = project.githubRepo
+      | &nbsp; #{project.githubRepo}
+    .tag.is-danger.margin-top3.remove click="deleteGHProject"
+      i.fa.risk-icons.fa-trash-o
+        | &nbsp; #{t "remove"}
 
 .columns
   .is-one-third
