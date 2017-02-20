@@ -26,7 +26,7 @@ h4.margin-left.margin-top
           .control.is-grouped
             = input  class="input" placeholder="Do you have an offer coupon?" value=couponCode
             button.is-success click="applyCoupon" Apply Coupon
-        .control.content-right
+        .control.content-right.last-child
           button.is-success click="makePaymentStripe"
             = fa-icon 'cc-stripe'
             span.margin-left

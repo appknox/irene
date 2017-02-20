@@ -17,7 +17,7 @@
         br
         | BANGALORE, KARANATAKA
       .column.content-right
-        | Invoice Number: 00126
+        | Invoice Number: #{invoice.id}
         br
         | P.O./S.O. Number: 20162017_301
         br
@@ -46,7 +46,7 @@
             | AMOUNT PAID
         tr
           td
-            = invoice.pricing.price
+            = invoice.id
           td
             | Lite
           td

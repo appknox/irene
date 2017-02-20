@@ -211,7 +211,7 @@ select
 
 .strip
   margin: -25px -25px 10px -25px
-  background-color: #6B6B6B
+  background-color: #80C081
   height: 50px
   color: white
 
@@ -358,7 +358,7 @@ button, .button
 .card-container
   padding-left: 200px
   padding-right: 200px
-  border: 5px solid #808080
+  border: 5px solid #80C081
   padding: 25px
   margin: 25px
 
@@ -368,7 +368,7 @@ button, .button
       @extend .strip
       @extend .align-middle
       margin: 0px
-      background-color: #808080
+      background-color: #A9A9A9
     .columns
       margin-left: -1px
       .column:first-child
@@ -377,12 +377,16 @@ button, .button
         margin-left: 10px
     .control
       border-bottom: 1px solid grey
+      margin-left: 10px
+      margin-right: 10px
       .input
         border: 0px solid black!important
         box-shadow: none
       button
         margin-bottom: 5px
         margin-right: 5px
+    .control.last-child
+      border-bottom: none
 
 .card-header
   .pricing-title
