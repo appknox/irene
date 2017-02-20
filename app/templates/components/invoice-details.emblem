@@ -6,11 +6,29 @@
       .column.content-right
         h2
           | INVOICE
+    hr.horizontal-seperator
     .columns
+      .column
+        | XYSEC LABS PRIVATE LIMITED,
+        br
+        | 473/1, SHREE KRISHNA TEMPLE ROAD,
+        br
+        | INDRANAGAR - 560038,
+        br
+        | BANGALORE, KARANATAKA
       .column.content-right
-        | Date: &nbsp;
+        | Invoice Number: 00126
+        br
+        | P.O./S.O. Number: 20162017_301
+        br
+        | Invoice Date: &nbsp;
         = invoice.paidOnHumanized
-    hr
+        br
+        | Amount Paid: &nbsp;
+        | $#{invoice.amount}
+
+    hr.horizontal-seperator
+
     h6
       | Order Summary
     .invoice-table
