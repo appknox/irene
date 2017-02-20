@@ -33,6 +33,32 @@
     .columns
       .column.heading-container.is-one-third.flex-center
           h3
+            | Table Of Content
+    .columns
+      .column.is-half.margin-auto
+        table.content-table
+          tr
+            td
+              | Report Summary
+          tr
+            td
+              | Application Details
+          tr
+            td
+              | Types Of Vulnerabilities
+          tr
+            td
+              | OWASP Top 10 Vulnerabilities
+          tr
+            td
+              | Severity Of Risks
+          tr
+            td
+              | Audit Summary
+
+    .columns
+      .column.heading-container.is-one-third.flex-center
+          h3
             | Report Summary
     p.margin-left30
       | Appknox conducted a security assessment of the mobile application for the Android platform. This report contains all the findings during the automated auditing process. It also contains the process of discovering those vulnerabilities in the first place, and ways to remediate those issues.
