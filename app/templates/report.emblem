@@ -30,14 +30,16 @@
           p
             | While precautions have been taken in the preparation of this document, XYSec Labs Pte. Ltd., the publisher, and the author(s) assume no responsibility for errors, omissions, or for damages resulting from the use of the information contained herein. Use of XYSec Labs Pte. Ltd. services does not guarantee the security of a system, or that intrusions will not occur.
 
-    .heading-container.align-middle
-        h3
-          | Report Summary
+    .columns
+      .column.heading-container.is-one-quarter.flex-center
+          h3
+            | Report Summary
     p.margin-left30
       | Appknox conducted a security assessment of the mobile application for the Android platform. This report contains all the findings during the automated auditing process. It also contains the process of discovering those vulnerabilities in the first place, and ways to remediate those issues.
-    .sub-heading-container
-      h4
-        | Application Details
+    .columns
+      .column.sub-heading-container.is-one-quarter.flex-center
+        h4
+          | Application Details
     table
       tr
         td
@@ -69,9 +71,10 @@
           | Application MD5 Hash
         td
           | f68e50276da5ec2958003dd1270c9a72
-    .sub-heading-container
-      h4
-        | Audit Summary
+    .columns
+      .column.sub-heading-container.is-one-quarter.flex-center
+        h4
+          | Audit Summary
     table
       tr
         td
