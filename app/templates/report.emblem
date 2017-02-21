@@ -36,25 +36,32 @@
             | Table Of Content
     .columns
       .column.is-half.margin-auto
-        table.content-table
-          tr
-            td
+        .content-table
+          ol.main-heading
+            li
               | Report Summary
-          tr
-            td
-              | Application Details
-          tr
-            td
-              | Types Of Vulnerabilities
-          tr
-            td
-              | OWASP Top 10 Vulnerabilities
-          tr
-            td
-              | Severity Of Risks
-          tr
-            td
-              | Audit Summary
+            ol.sub-topic
+              li
+                | Application Details
+              li
+                | Types Of Vulnerabilities
+              li
+                | OWASP Top 10 Vulnerabilities
+              li
+                | Severity Of Risks
+              li
+                | Audit Summary
+            li
+              | Information Disclosure
+            ol.sub-topic
+              li
+                | Ensure that sensitive data is kept Secure
+              ol.sub-heading
+                li
+                  | Risk Assessment
+
+
+
 
     .columns
       .column.heading-container.is-one-third.flex-center

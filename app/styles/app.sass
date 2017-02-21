@@ -81,10 +81,30 @@ $FreestyleGuide-color--background: $background
 
 .main-container
   .report-container
-    table.content-table
-      tr
-        td
-          text-align: left
+    .content-table
+      ol
+        li
+          border-width: 1px 1px 0px 1px
+          border-style: solid
+          border-color: #000
+          list-style-position: inside
+      ol.main-heading
+        li
+          list-style-type: upper-roman
+          padding-left: 10px
+      ol.sub-topic
+        li
+          list-style-type: lower-alpha
+          padding-left: 30px
+        li.last-child
+            border-bottom: 1px solid #000
+      ol.sub-heading
+        li
+          list-style-type: lower-roman
+          padding-left: 50px
+
+
+
     table
       width: 95%
       margin: auto

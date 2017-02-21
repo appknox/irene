@@ -6,9 +6,6 @@ module.exports = function(environment) {
     isAppknox: false,
     socketPath: "http://localhost:8008",
     platform: -1,
-    rollbar: {
-      accessToken: '4381303f93734918966ff4e1b028cee5'
-    },
     paginate: {
       perPageLimit: 9,
       pagePadding: 5
@@ -177,6 +174,9 @@ module.exports = function(environment) {
 
   if (environment === 'production') {
     ENV.socketPath = "https://socket.appknox.com",
+    ENV.rollbar = {
+      accessToken: '4381303f93734918966ff4e1b028cee5'
+    };
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
