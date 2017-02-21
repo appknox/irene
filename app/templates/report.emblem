@@ -121,6 +121,17 @@
           | Improper Platform Usage : &nbsp;
           p
             | This category covers misuse of a platform feature or failure to use platform security controls. It might include Android intents, platform permissions, misuse of TouchID, the Keychain, or some other security control that is part of the mobile operating system. There are several ways that mobile apps can experience this risk.
+    .columns
+      .column.sub-heading-container.is-one-quarter.flex-center
+        h5
+          | Severity Of Risks
+    .columns.sub-topic-heading
+      ol.is-fullwidth
+        li
+          | HIGH : &nbsp;
+          p
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    .columns
       .column.sub-heading-container.is-one-quarter.flex-center
         h5
           | Audit Summary
