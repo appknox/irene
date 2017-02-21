@@ -114,6 +114,15 @@
     .columns
       .column.sub-heading-container.is-one-quarter.flex-center
         h5
+          | OWASP Top 10 Vulnerabilities
+    .columns.sub-topic-heading
+      ol.is-fullwidth
+        li
+          | Improper Platform Usage : &nbsp;
+          p
+            | This category covers misuse of a platform feature or failure to use platform security controls. It might include Android intents, platform permissions, misuse of TouchID, the Keychain, or some other security control that is part of the mobile operating system. There are several ways that mobile apps can experience this risk.
+      .column.sub-heading-container.is-one-quarter.flex-center
+        h5
           | Audit Summary
     table
       tr
