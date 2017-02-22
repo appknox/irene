@@ -165,10 +165,19 @@
           | Risk Assessment
     p.margin-left35.margin-top20
       | The Android application exports Service for use by other applications, but does not properly restrict which applications can launch the component or access the data it contains.
-    ul.margin-left50.margin-top20
+    ul.margin-left50.margin-top20.margin-bottom20
       li
         | Exported service at com.flipkart.accountManager.account.AuthenticatorService
       li
         | Exported service at com.flipkart.accountManager.account.AuthenticatorService
       li
         | Exported service at com.flipkart.accountManager.account.AuthenticatorService
+
+    .columns
+      .column.analysis-type
+        h5
+          | Noncompliant Code Example
+    p.margin-left35.margin-top20
+      | Using HTTP with SSL or TLS to connect to internet, or without a proper certificate the connection can be easily eavesdropped by attacker without the knowledge of the user.
+    pre.pre-code.margin-left50.margin-top20
+      ' String link = "http://www.google.com";
