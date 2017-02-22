@@ -165,7 +165,7 @@
           | Risk Assessment
     p.margin-left35.margin-top20
       | The Android application exports Service for use by other applications, but does not properly restrict which applications can launch the component or access the data it contains.
-    ul.margin-left50.margin-top20.margin-bottom20
+    ul.margin-left50.margin-top20.margin-bottom50
       li
         | Exported service at com.flipkart.accountManager.account.AuthenticatorService
       li
@@ -179,5 +179,12 @@
           | Noncompliant Code Example
     p.margin-left35.margin-top20
       | Using HTTP with SSL or TLS to connect to internet, or without a proper certificate the connection can be easily eavesdropped by attacker without the knowledge of the user.
-    pre.pre-code.margin-left50.margin-top20
+    pre.pre-code.margin-left50.margin-top20.margin-bottom50
       ' String link = "http://www.google.com";
+
+    .columns
+      .column.analysis-type
+        h5
+          | Compliant Solution
+    p.margin-left35.margin-top20
+      | If you are using a Service for sharing data between only your own apps, it is preferable to use the android:protectionLevel attribute set to "signature" protection. Signature permissions do not require user confirmation, so they provide a better user experience and more controlled access to the Service when the apps accessing the data are signed with the same key
