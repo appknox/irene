@@ -186,5 +186,17 @@
       .column.analysis-type
         h5
           | Compliant Solution
-    p.margin-left35.margin-top20
+    p.margin-left35.margin-top20.margin-bottom50
       | If you are using a Service for sharing data between only your own apps, it is preferable to use the android:protectionLevel attribute set to "signature" protection. Signature permissions do not require user confirmation, so they provide a better user experience and more controlled access to the Service when the apps accessing the data are signed with the same key
+
+    .columns
+      .column.analysis-type
+        h5
+          | Related Vulnerabilities
+    p.margin-left35.margin-top20
+      ul
+        li
+          a href="http://jvn.jp/en/jp/JVN39218538/"
+            |JVN#39218538 &nbsp;
+          span.margin-bottom50
+            | Pizza Hut Japan Official Order App for Android has a problem whereby it fails to verify SSL server certificates.
