@@ -31,7 +31,7 @@
             | While precautions have been taken in the preparation of this document, XYSec Labs Pte. Ltd., the publisher, and the author(s) assume no responsibility for errors, omissions, or for damages resulting from the use of the information contained herein. Use of XYSec Labs Pte. Ltd. services does not guarantee the security of a system, or that intrusions will not occur.
 
     .columns
-      .column.heading-container.is-one-third.flex-center
+      .column.heading-container.flex-center
           h3
             | Table Of Content
     .columns
@@ -61,7 +61,7 @@
                   | Risk Assessment
 
     .columns
-      .column.heading-container.is-one-third.flex-center
+      .column.heading-container.flex-center
           h3
             | Report Summary
     p.margin-left30
@@ -145,3 +145,30 @@
         td.risk-type
           h5
             | Medium Risk
+    .columns
+      .column.heading-container.flex-center
+          h3
+            | Configuration Management
+    .columns
+      .column.sub-heading-container.flex-center
+        h5
+          | Do not provide addJavascriptInterface method access in a WebView which could contain untrusted content (API level JELLY_BEAN or below)
+    p.margin-left35
+     | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    .columns
+      .column.sub-topic-container
+        h5
+          | Risk Rating : High
+    .columns
+      .column.analysis-type
+        h5
+          | Risk Assessment
+    p.margin-left35.margin-top20
+      | The Android application exports Service for use by other applications, but does not properly restrict which applications can launch the component or access the data it contains.
+    ul.margin-left50.margin-top20
+      li
+        | Exported service at com.flipkart.accountManager.account.AuthenticatorService
+      li
+        | Exported service at com.flipkart.accountManager.account.AuthenticatorService
+      li
+        | Exported service at com.flipkart.accountManager.account.AuthenticatorService

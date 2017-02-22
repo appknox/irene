@@ -28,8 +28,14 @@ $FreestyleGuide-color--background: $background
 .margin-left30
   margin-left: 30px
 
+.margin-left35
+  margin-left: 35px
+
 .margin-left0
   margin-left: 0px
+
+.margin-left50
+  margin-left: 50px
 
 .margin-top50
   margin-top: 50px
@@ -81,6 +87,10 @@ $FreestyleGuide-color--background: $background
 
 .main-container
   .report-container
+
+    .sub-topic-container
+      flex: none
+      width: 20%
     .content-table
       ol
         li
@@ -151,12 +161,29 @@ $FreestyleGuide-color--background: $background
   color: #FFF
   padding: 2px
   margin: 40px auto
+  flex: none
+  min-width: 30%
 
 .sub-heading-container
   padding: 5px
   margin: 45px
   background-color: #2CC2F8
   color: #000
+  flex: none
+  min-width: 30%
+
+.sub-topic-container
+  @extend  .sub-heading-container
+  background-color: #C0C0C0
+  min-width: 5%
+  text-align: center
+
+.analysis-type
+  margin-left: 40px
+  border-left: 2px solid #C0C0C0
+  border-top: 2px solid #C0C0C0
+  flex: none
+  min-width: 20%
 
 .sub-topic-heading
   ol
