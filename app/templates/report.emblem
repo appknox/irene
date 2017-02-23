@@ -67,7 +67,7 @@
     p.margin-left30
       | Appknox conducted a security assessment of the mobile application for the Android platform. This report contains all the findings during the automated auditing process. It also contains the process of discovering those vulnerabilities in the first place, and ways to remediate those issues.
     .columns
-      .column.sub-heading-container.is-one-quarter.flex-center
+      .column.sub-heading-container.flex-center
         h5
           | Application Details
     table
@@ -102,7 +102,7 @@
         td
           | f68e50276da5ec2958003dd1270c9a72
     .columns
-      .column.sub-heading-container.is-one-quarter.flex-center
+      .column.sub-heading-container.flex-center
         h5
           | Types Of Vulnerabilities
     .columns.sub-topic-heading
@@ -112,7 +112,7 @@
           p
             | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     .columns
-      .column.sub-heading-container.is-one-quarter.flex-center
+      .column.sub-heading-container.flex-center
         h5
           | OWASP Top 10 Vulnerabilities
     .columns.sub-topic-heading
@@ -122,7 +122,7 @@
           p
             | This category covers misuse of a platform feature or failure to use platform security controls. It might include Android intents, platform permissions, misuse of TouchID, the Keychain, or some other security control that is part of the mobile operating system. There are several ways that mobile apps can experience this risk.
     .columns
-      .column.sub-heading-container.is-one-quarter.flex-center
+      .column.sub-heading-container.flex-center
         h5
           | Severity Of Risks
     .columns.sub-topic-heading
@@ -132,7 +132,7 @@
           p
             | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     .columns
-      .column.sub-heading-container.is-one-quarter.flex-center
+      .column.sub-heading-container.flex-center
         h5
           | Audit Summary
     table.audit-table
@@ -150,15 +150,17 @@
           h3
             | Configuration Management
     .columns
-      .column.sub-heading-container.flex-center
-        h5
-          | Do not provide addJavascriptInterface method access in a WebView which could contain untrusted content (API level JELLY_BEAN or below)
+      .column.sub-heading-container.flex-center.bucket-list
+        ol
+           li
+             | Do not provide addJavascriptInterface method access in a WebView which could contain untrusted content (API level JELLY_BEAN or below)
+             | :
     p.margin-left35
      | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     .columns
       // color changes depending on risk type
-      .column.sub-topic-container style="background-color:#FE4D3F"
-        h5
+      .column.margin-left35.margin-top50.margin-bottom50
+        h5.tag.risk-tag class="is-danger"
           | Risk Rating : High
     .columns
       .column.analysis-type

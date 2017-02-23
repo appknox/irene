@@ -86,6 +86,8 @@ $FreestyleGuide-color--background: $background
 // FIXME: Remove this after updating bohemia
 
 .main-container
+  padding-left: 30px
+  padding-right: 30px
   .report-container
 
     .sub-topic-container
@@ -156,8 +158,9 @@ $FreestyleGuide-color--background: $background
   padding-right: 100px
 
 .heading-container
-  background-color: #FE4D3F
-  color: #FFF
+  border: 2px solid #EF4836
+  border-radius: 5px
+  color: #EF4836
   padding: 2px
   margin: 40px auto
   flex: none
@@ -166,17 +169,25 @@ $FreestyleGuide-color--background: $background
 .sub-heading-container
   padding: 5px
   margin: 45px
-  background-color: #C0C0C0
-  border: 3px solid darken(#C0C0C0, 20%)
-  color: #000
+  border: 2px solid #EF4836
+  border-radius: 5px
+  color: #EF4836
   flex: none
   min-width: 30%
 
-.sub-topic-container
-  @extend  .sub-heading-container
+.risk-tag
+  padding: 15px
+  font-size: 16px
+
+.bucket-list
+  @extend .sub-heading-container
   border: none
-  min-width: 5%
-  text-align: center
+  margin: 20px
+  ol
+    li
+      list-style-type: decimal
+      margin-left: 30px
+      font-size: 18px
 
 .analysis-type
   margin-left: 40px
