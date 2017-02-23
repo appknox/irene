@@ -48,9 +48,9 @@
           td
             = invoice.id
           td
-            | Lite
+            = invoice.pricingName
           td
-            | Half Yearly
+            = invoice.paymentDurationName
           td
             | DESCRIPTION
           td
