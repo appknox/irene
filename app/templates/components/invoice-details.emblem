@@ -65,12 +65,4 @@
       .column.margin-top
         | PAYMENT MODE: &nbsp;
         = t invoice.sourceType
-    h6
-      | Important Instructions: &nbsp;
-    ul
-      li
-        | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-      li
-        | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-      li
-        | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+  
