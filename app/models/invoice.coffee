@@ -22,6 +22,15 @@ Invoice = DS.Model.extend
       else "unknown"
   ).property "source"
 
+  paymentDurationName: (->
+    switch @get "paymentDuration"
+      when ENUMS.PAYMENT_DURATION.MONTHLY then "Monthly"
+      when ENUMS.PAYMENT_DURATION.QUATERLY then "Quaterly"
+      when ENUMS.PAYMENT_DURATION.HALFYEARLY then "Half Yearly"
+      when ENUMS.PAYMENT_DURATION.YEARLY then "Yearly"
+      else ""
+  ).property "paymentDuration"
+
   paidOnHumanized: (->
     paidOn = @get "paidOn"
     paidOn.toLocaleDateString()
