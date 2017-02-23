@@ -7,6 +7,10 @@ Invoice = DS.Model.extend
   paidOn: DS.attr 'date'
   source: DS.attr 'number'
   pricing: DS.belongsTo 'pricing', inverse:'invoices'
+  pricingName: DS.attr 'string'
+  couponCode: DS.attr 'string'
+  couponDiscount: DS.attr 'string'
+  paymentDuration: DS.attr 'number'
 
   sourceType: (->
     switch @get "source"
