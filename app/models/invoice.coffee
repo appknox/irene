@@ -7,10 +7,10 @@ Invoice = DS.Model.extend
   paidOn: DS.attr 'date'
   source: DS.attr 'number'
   pricing: DS.belongsTo 'pricing', inverse:'invoices'
-  pricingName: DS.attr 'string'
   couponCode: DS.attr 'string'
   couponDiscount: DS.attr 'string'
-  paymentDuration: DS.attr 'number'
+  duration: DS.attr 'number'
+
 
   sourceType: (->
     switch @get "source"
@@ -22,14 +22,14 @@ Invoice = DS.Model.extend
       else "unknown"
   ).property "source"
 
-  paymentDurationName: (->
-    switch @get "paymentDuration"
+  durationText: (->
+    switch @get "duration"
       when ENUMS.PAYMENT_DURATION.MONTHLY then "Monthly"
       when ENUMS.PAYMENT_DURATION.QUATERLY then "Quaterly"
       when ENUMS.PAYMENT_DURATION.HALFYEARLY then "Half Yearly"
       when ENUMS.PAYMENT_DURATION.YEARLY then "Yearly"
       else ""
-  ).property "paymentDuration"
+  ).property "duration"
 
   paidOnHumanized: (->
     paidOn = @get "paidOn"
