@@ -1,9 +1,9 @@
 td
   = invoice.id
 td
-  = invoice.pricingName
+  = invoice.pricing.name
 td
-  = invoice.paymentDurationName
+  = invoice.durationText
 td
   | $#{invoice.amount}
 td
