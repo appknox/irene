@@ -19,8 +19,6 @@
       .column.content-right
         | Invoice Number: #{invoice.id}
         br
-        | P.O./S.O. Number: 20162017_301
-        br
         | Invoice Date: &nbsp;
         = invoice.paidOnHumanized
         br
