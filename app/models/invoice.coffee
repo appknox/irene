@@ -7,8 +7,7 @@ Invoice = DS.Model.extend
   paidOn: DS.attr 'date'
   source: DS.attr 'number'
   pricing: DS.belongsTo 'pricing', inverse:'invoices'
-  couponCode: DS.attr 'string'
-  couponDiscount: DS.attr 'string'
+  coupon: DS.belongsTo 'coupon', inverse:'invoices'
   duration: DS.attr 'number'
 
 
