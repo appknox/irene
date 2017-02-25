@@ -31,7 +31,7 @@
 
     h6
       | Order Summary
-    .invoice-table
+    .invoice-table.invoice-details-table
       table
         tr
           th
@@ -58,10 +58,9 @@
         tr
           td colspan="4"
             | DISCOUNT
-            | (free50)
-            / | (#{invoice.couponCode})
+            | (#{invoice.coupon.code})
           td
-            | $#{invoice.couponDiscount}
+            | $#{invoice.coupon.discount}
         tr
           td colspan="4"
             | TOTAL AMOUNT PAID
