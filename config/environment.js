@@ -172,6 +172,21 @@ module.exports = function(environment) {
       };
   }
 
+  if (environment === 'testing') {
+    ENV.socketPath = "https://socket.appknox.com",
+    ENV['ember-cli-mirage'] = {
+      enabled: false
+    };
+    ENV['host'] = "http://192.168.0.162:8000";
+    ENV.enableIntercom = false;
+    ENV.stripe = {
+      publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
+    };
+    ENV['APP'].opbeat = {
+        DEBUG: true
+      };
+  }
+
   if (environment === 'production') {
     ENV.rollbar = {
       accessToken: '4381303f93734918966ff4e1b028cee5'
