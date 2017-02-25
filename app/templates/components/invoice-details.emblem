@@ -43,7 +43,7 @@
           th
             | DESCRIPTION
           th
-            | AMOUNT PAID
+            | AMOUNT
         tr
           td
             = invoice.id
@@ -52,9 +52,9 @@
           td
             = invoice.durationText
           td
-            | DESCRIPTION
+            = invoice.pricing.descriptionItems
           td
-            | $#{invoice.amount}
+            | $#{invoice.pricing.price}
         tr
           td colspan="4"
             | DISCOUNT
