@@ -8,4 +8,10 @@ InvoiceListComponent = Ember.Component.extend
     @get("store").findAll "invoice"
   ).property()
 
+
+  hasInvoices: (->
+    invoices = @get "invoices"
+    invoices.get("length") > 0
+  ).property "invoices.@each.id"
+
 `export default InvoiceListComponent`
