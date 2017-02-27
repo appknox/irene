@@ -133,7 +133,9 @@ module.exports = function(environment) {
       deleteCollaboration: 'collaboration/delete',
       invitation: 'invitation',
       signup: 'signup',
-      lang: 'lang'
+      lang: 'lang',
+      deleteGHRepo: 'delete_github_repo',
+      deleteJIRAProject: 'delete_jira_project'
     },
     TOUR: {
       newScan: 'ScanAnApp',

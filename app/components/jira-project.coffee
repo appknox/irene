@@ -46,4 +46,16 @@ JiraProjectComponent = Ember.Component.extend
         for error in error.errors
           that.get("notify").error error.detail?.message
 
+    deleteJIRAProject: ->
+      return if !confirm "Do you want to remove JIRA Project ?"
+      that = @
+      projectId = @get "project.id"
+      deleteJIRA = [ENV.endpoints.deleteJIRAProject, projectId].join '/'
+      @get("ajax").delete deleteJIRA
+      .then (data) ->
+        window.location.reload()
+      .catch (error) ->
+        for error in error.errors
+          that.get("notify").error error.detail?.message
+
 `export default JiraProjectComponent`

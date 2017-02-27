@@ -2,22 +2,22 @@
   .box
     .columns
       .column.tour-step-search-project
-        | Search
+        = t "search"
         .margin-top
-        = input class="input" placeholder="Search query" value=query
+        = input class="input" placeholder=(t 'searchQuery') value=query
       .column.tour-step-sort-project
-        | Sort By
+        = t "sortBy"
         .margin-top
         select{action 'sortProjects' on='change'} id="project-sort-property" class="input"
           each sortingKeyObjects as |sortingKeyObject|
             option action="foo" value="{{filter-platform sortingKeyObject}}"
               = sortingKeyObject.text
       .column.tour-step-filter-project
-        | Filter By
+        = t "filterBy"
         .margin-top
         select{action 'filterPlatform' on='change'} id="project-filter-platform" class="input"
           option value="-1"
-            | All Platforms
+            = t "allPlatforms"
           each platformObjects as |platformObject|
             option value=platformObject.value
               = platformObject.key

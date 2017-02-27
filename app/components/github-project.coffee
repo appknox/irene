@@ -41,9 +41,22 @@ GithubProjectComponent = Ember.Component.extend
         repo: repo
       @get("ajax").post setGithub, data: data
       .then (data) ->
-        that.get("notify").success "Your JIRA has been integrated"
+        that.get("notify").success "GITHUB has been integrated"
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message
+
+    deleteGHProject: ->
+      return if !confirm "Do you want to remove GitHub Project ?"
+      projectId = @get "project.id"
+      deleteGithub = [ENV.endpoints.deleteGHRepo, projectId].join '/'
+      that = @
+      @get("ajax").delete deleteGithub
+      .then (data) ->
+        window.location.reload()
+      .catch (error) ->
+        for error in error.errors
+          that.get("notify").error error.detail?.message
+
 
 `export default GithubProjectComponent`
