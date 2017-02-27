@@ -42,6 +42,7 @@ GithubProjectComponent = Ember.Component.extend
       @get("ajax").post setGithub, data: data
       .then (data) ->
         that.get("notify").success "GITHUB has been integrated"
+        window.location.reload()
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message

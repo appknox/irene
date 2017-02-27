@@ -41,6 +41,7 @@ JiraProjectComponent = Ember.Component.extend
       @get("ajax").post url, data: data
       .then (data) ->
         that.get("notify").success tRepoIntegrated
+        window.location.reload()
       .catch (error) ->
         that.get("notify").error tRepoNotIntegrated
         for error in error.errors
