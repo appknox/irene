@@ -120,6 +120,7 @@ CardDetailsComponent = Ember.Component.extend
       @get("ajax").post paymentUrl, data: data
       .then (result) ->
         that.get("notify").success "Sucessfully processed your payment. Thank You."
+        that.set 'isPaymentButtonDisabled', false
         setTimeout ->
           location.reload()
         ,
