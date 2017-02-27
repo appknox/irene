@@ -16,6 +16,8 @@ CardDetailsComponent = Ember.Component.extend
   couponDiscount: 0
   couponApplied: false
 
+  isPaymentButtonDisabled: false
+
   stripe: Ember.inject.service()
 
   pricing: (->
@@ -114,6 +116,7 @@ CardDetailsComponent = Ember.Component.extend
         paymentUrl = ENV.endpoints.stripePayment
 
       that = @
+      that.set 'isPaymentButtonDisabled', true
       @get("ajax").post paymentUrl, data: data
       .then (result) ->
         that.get("notify").success "Sucessfully processed your payment. Thank You."
@@ -124,5 +127,6 @@ CardDetailsComponent = Ember.Component.extend
       .catch (error)->
         for error in error.errors
           that.get("notify").error error.detail?.message
+          that.set 'isPaymentButtonDisabled', false
 
 `export default CardDetailsComponent`

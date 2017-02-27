@@ -27,7 +27,7 @@ h4.margin-left.margin-top
             = input  class="input" placeholder="Do you have an offer coupon?" value=couponCode
             button.is-success click="applyCoupon" Apply Coupon
         .control.content-right.last-child
-          button.is-success click="makePaymentStripe"
+          button.is-success click="makePaymentStripe" disabled=isPaymentButtonDisabled
             = fa-icon 'cc-stripe'
             span.margin-left
               | Pay with card
