@@ -29,7 +29,7 @@ JiraAccountComponent = Ember.Component.extend
       @get("ajax").post ENV.endpoints.revokeJira
       .then (data) ->
         that.get("notify").success "Your JIRA authorization will be revoked in a moment"
-        window.location.reload()
+        window.location.reload() # FIXME: Hackish Way
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message
