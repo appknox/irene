@@ -11,6 +11,9 @@ if project.jiraProject
 .columns
   .is-one-third
     select.select{action 'selectProject' on='change'}
+      if project.jiraProject
+        option value=0
+          = t "noPreference"
       each jiraProjects as |project|
         option value=project
           = project
