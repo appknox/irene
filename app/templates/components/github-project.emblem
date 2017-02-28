@@ -10,8 +10,11 @@ if project.githubRepo
         | &nbsp; #{t "remove"}
 
 .columns
-  .column.is-one-quarter
-    select.input.select{action 'selectRepo' on='change'}
+  .column.is-one-third
+    select.select{action 'selectRepo' on='change'}
+      if project.githubRepo
+        option value=0
+          = t "noPreference"
       each githubRepos as |repo|
         option value=repo
           = repo
