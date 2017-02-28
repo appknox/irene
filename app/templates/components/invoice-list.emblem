@@ -9,7 +9,7 @@ if hasInvoices
       th
         | PLAN NAME
       th
-        | PLAN TYPE
+        | PAYMENT DURATION
       th
         | AMOUNT PAID
       th

@@ -37,9 +37,9 @@
           th
             | PLAN NAME
           th
-            | PLAN DURATION
-          th
             | DESCRIPTION
+          th
+            | PAYMENT DURATION
           th
             | AMOUNT
         tr
@@ -48,9 +48,9 @@
           td
             = invoice.pricing.name
           td
-            = invoice.durationText
+            = invoice.pricing.description
           td
-            = invoice.pricing.descriptionItems
+            = invoice.durationText
           td
             | $#{invoice.pricing.price}
         tr
@@ -58,7 +58,7 @@
             | DISCOUNT
             | (#{invoice.coupon.code})
           td
-            | $#{invoice.coupon.discount}
+            | $#{discountAmount}
         tr
           td colspan="4"
             | TOTAL AMOUNT PAID
