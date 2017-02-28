@@ -121,7 +121,10 @@ CardDetailsComponent = Ember.Component.extend
       .then (result) ->
         that.get("notify").success "Sucessfully processed your payment. Thank You."
         that.set 'isPaymentButtonDisabled', false
-        window.location.href = "/billing"
+        setTimeout ->
+          window.location.href = "/billing"
+        ,
+          5 * 1000
       .catch (error)->
         for error in error.errors
           that.get("notify").error error.detail?.message
