@@ -45,12 +45,6 @@ Project = DS.Model.extend BaseModelMixin,
   hasFiles: Ember.computed.gt 'fileCount', 0
   hasMultipleFiles: Ember.computed.gt 'fileCount', 1
 
-  settingsClass: (->
-    hasMultipleFiles = @get "hasMultipleFiles"
-    if !hasMultipleFiles
-      "auto-adjust"
-  ).property "hasMultipleFiles"
-
   platformIconClass:( ->
     switch @get "platform"
       when ENUMS.PLATFORM.ANDROID then "android"
