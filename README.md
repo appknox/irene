@@ -4,8 +4,7 @@
 [![codecov](https://codecov.io/gh/appknox/irene/branch/develop/graph/badge.svg?token=9spv62CzBb)](https://codecov.io/gh/appknox/irene)
 
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+I am SHERlocked. Irene is the front-end dashboards for Sherlock (Vulnerability Scanner) & Mycorft (API Server) that we wrote here at [@appknox](https://github.com/appknox).
 
 ## Prerequisites
 
@@ -19,10 +18,11 @@ You will need the following things properly installed on your computer.
 
 ## Installation
 
-* `git clone <repository-url>` this repository
+* `git clone git@github.com:appknox/irene.git`
 * `cd irene`
 * `npm install`
 * `bower install`
+* `ember serve`
 
 ## Running / Development
 
