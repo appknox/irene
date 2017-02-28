@@ -80,14 +80,14 @@
 
     .columns
       .column.heading-container.flex-center
-          a id="01"
+          a class="link-tag" id="01"
           h3
             | Report Summary
     p.margin-left30
       | Appknox conducted a security assessment of the mobile application for the Android platform. This report contains all the findings during the automated auditing process. It also contains the process of discovering those vulnerabilities in the first place, and ways to remediate those issues.
     .columns
       .column.sub-heading-container.flex-center
-        a id="02"
+        a class="link-tag" id="02"
         h5
           | Application Details
     table
@@ -123,7 +123,7 @@
           | f68e50276da5ec2958003dd1270c9a72
     .columns
       .column.sub-heading-container.flex-center
-        a id="03"
+        a class="link-tag" id="03"
         h5
           | Types Of Vulnerabilities
     .columns.sub-topic-heading
@@ -134,7 +134,7 @@
             | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     .columns
       .column.sub-heading-container.flex-center
-        a id="04"
+        a class="link-tag" id="04"
         h5
           | OWASP Top 10 Vulnerabilities
     .columns.sub-topic-heading
@@ -145,7 +145,7 @@
             | This category covers misuse of a platform feature or failure to use platform security controls. It might include Android intents, platform permissions, misuse of TouchID, the Keychain, or some other security control that is part of the mobile operating system. There are several ways that mobile apps can experience this risk.
     .columns
       .column.sub-heading-container.flex-center
-        a id="05"
+        a class="link-tag" id="05"
         h5
           | Severity Of Risks
     .columns.sub-topic-heading
@@ -156,7 +156,7 @@
             | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     .columns
       .column.sub-heading-container.flex-center
-        a id="06"
+        a class="link-tag" id="06"
         h5
           | Audit Summary
     table.audit-table
@@ -171,13 +171,13 @@
             | Medium Risk
     .columns
       .column.heading-container.flex-center
-          a id="07"
+          a class="link-tag" id="07"
           h3
             | Configuration Management
     .columns
       .column.sub-heading-container.flex-center.bucket-list
         ol
-           a id="08"
+           a class="link-tag" id="08"
            li
              | Do not provide addJavascriptInterface method access in a WebView which could contain untrusted content (API level JELLY_BEAN or below)
              | :
@@ -190,7 +190,7 @@
           | Risk Rating : High
     .columns
       .column.analysis-type
-        a id="09"
+        a class="link-tag" id="09"
         h5
           | Risk Assessment
     p.margin-left35.margin-top20
@@ -205,7 +205,7 @@
 
     .columns
       .column.analysis-type
-        a id="10"
+        a class="link-tag" id="10"
         h5
           | Noncompliant Code Example
     p.margin-left35.margin-top20
@@ -215,7 +215,7 @@
 
     .columns
       .column.analysis-type
-        a id="11"
+        a class="link-tag" id="11"
         h5
           | Compliant Solution
     p.margin-left35.margin-top20.margin-bottom50
@@ -223,7 +223,7 @@
 
     .columns
       .column.analysis-type
-        a id="12"
+        a class="link-tag" id="12"
         h5
           | Related Vulnerabilities
     p.margin-left35.margin-top20
