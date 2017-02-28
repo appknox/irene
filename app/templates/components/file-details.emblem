@@ -7,7 +7,7 @@
 .tour-step-sd-overview
 = file-overview file=file isThreeColumn=true class="margin-top"
     footer.card-button.tour-step-sd-action-buttons
-      .columns style=file.fileDetailsClass
+      .columns class=file.fileDetailsClass
         .column.is-one-quarter
           if file.project.hasMultipleFiles
             = link-to 'authenticated.project.files' file.project.id class="card-footer-item is-fullwidth" tagName="button"
