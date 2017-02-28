@@ -48,7 +48,9 @@
           td
             = invoice.pricing.name
           td
-            = invoice.pricing.description
+            each invoice.pricing.descriptionItems as |item|
+              .pricing-section-content.flex-center
+                = item
           td
             = invoice.durationText
           td
