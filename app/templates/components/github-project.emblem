@@ -12,6 +12,9 @@ if project.githubRepo
 .columns
   .is-one-third
     select.select{action 'selectRepo' on='change'}
+      if project.githubRepo
+        option value=0
+          = t "noPreference"
       each githubRepos as |repo|
         option value=repo
           = repo
