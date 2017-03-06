@@ -10,7 +10,7 @@ if project.githubRepo
         | &nbsp; #{t "remove"}
 
 .columns
-  .is-one-third
+  .column.is-one-third
     select.select{action 'selectRepo' on='change'}
       if project.githubRepo
         option value=0

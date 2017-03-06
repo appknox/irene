@@ -1,0 +1,23 @@
+if hasInvoices
+  h4
+    = t "invoices"
+
+  table
+    tr
+      th
+        | INVOICE ID
+      th
+        | PLAN NAME
+      th
+        | PAYMENT DURATION
+      th
+        | AMOUNT PAID
+      th
+        | PAYMENT MODE
+      th
+        | DATE
+      th
+        | INVOICE
+
+    each invoices as |invoice|
+      = invoice-overview invoice=invoice

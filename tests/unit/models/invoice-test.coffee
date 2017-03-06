@@ -1,8 +1,8 @@
 `import { moduleForModel, test } from 'ember-qunit'`
 
-moduleForModel 'user', 'Unit | Model | user', {
+moduleForModel 'invoice', 'Unit | Model | invoice', {
   # Specify the other units that are required for this test.
-  needs: ['model:project', 'model:submission', 'model:collaboration', 'model:pricing','model:invoice']
+  needs: ['model:user','model:pricing','model:invoice','model:coupon']
 }
 
 test 'it exists', (assert) ->

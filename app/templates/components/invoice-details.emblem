@@ -1,0 +1,73 @@
+.invoice-details.align-middle.margin-top30
+  .invoice-container
+    .columns
+      .column
+        img src="https://raw.githubusercontent.com/appknox/press-kit/master/logo/logo-dark-small.png"
+      .column.content-right
+        h2
+          | INVOICE
+    hr.horizontal-seperator
+    .columns
+      .column
+        | XYSEC LABS PRIVATE LIMITED,
+        br
+        | 473/1, SHREE KRISHNA TEMPLE ROAD,
+        br
+        | INDRANAGAR - 560038,
+        br
+        | BANGALORE, KARANATAKA
+      .column.content-right
+        | Invoice Number: #{invoice.id}
+        br
+        | Invoice Date: &nbsp;
+        = invoice.paidOnHumanized
+        br
+        | Amount Paid: &nbsp;
+        | $#{invoice.amount}
+
+    hr.horizontal-seperator
+
+    h6
+      | Order Summary
+    .invoice-table.invoice-details-table
+      table
+        tr
+          th
+            | INVOICE ID
+          th
+            | PLAN NAME
+          th
+            | DESCRIPTION
+          th
+            | PAYMENT DURATION
+          th
+            | AMOUNT
+        tr
+          td
+            = invoice.id
+          td
+            = invoice.pricing.name
+          td
+            each invoice.pricing.descriptionItems as |item|
+              .pricing-section-content.flex-center
+                = item
+          td
+            = invoice.durationText
+          td
+            | $#{invoice.pricing.price}
+        tr
+          td colspan="4"
+            | DISCOUNT
+            | (#{invoice.coupon.code})
+          td
+            | $#{discountAmount}
+        tr
+          td colspan="4"
+            | TOTAL AMOUNT PAID
+          td
+            | $#{invoice.amount}
+
+    .columns
+      .column.margin-top
+        | PAYMENT MODE: &nbsp;
+        = t invoice.sourceType

@@ -5,6 +5,7 @@
 User = DS.Model.extend
 
   uuid: DS.attr 'string'
+  invoices: DS.hasMany 'invoice', inverse:'user'
   lang: DS.attr 'string'
   username: DS.attr 'string'
   email: DS.attr 'string'

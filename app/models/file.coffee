@@ -27,12 +27,24 @@ File = DS.Model.extend BaseModelMixin,
   dynamicStatus: DS.attr 'number'
   analyses: DS.hasMany 'analysis', inverse: 'file'
   report: DS.attr 'string'
-  manual: DS.attr 'number'
+  manual: DS.attr 'boolean'
 
   ifManualNotRequested: (->
     manual = @get 'manual'
     !manual
   ).property 'manual'
+
+  fileDetailsClass: (->
+    hasMultipleFiles = @get "project.hasMultipleFiles"
+    manual = @get "manual"
+    smf = "multiple-files"
+    sm = "manual"
+    if hasMultipleFiles is false
+      smf = "no-#{smf}"
+    if manual is true
+      sm = "no-#{sm}"
+    "#{smf}-#{sm}"
+  ).property "manual", "project.hasMultipleFiles"
 
   tDeviceBooting: t("deviceBooting")
   tDeviceDownloading: t("deviceDownloading")

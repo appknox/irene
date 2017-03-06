@@ -3,16 +3,18 @@ h6
 
 if user.hasJiraToken
   button.is-primary click="revokeJira"
-    | Revoke JIRA
+    = t "revokeJira"
 else
   form
     .control
-      = input class="input" placeholder=(t "jiraHost") type="text" value=jiraHost
+      .columns
+        .column.is-fullwidth
+          = input class="input" placeholder=(t "jiraHost") type="text" value=jiraHost
     .control.is-grouped
       .columns
         .column
           = input class="input" placeholder=(t "username") type="text" value=jiraUsername
-        .column.margin-left
+        .column.margin-left20
           = input class="input" placeholder=(t "password") type="password" value=jiraPassword
 
     button.is-primary click="integrateJira"
