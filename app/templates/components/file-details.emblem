@@ -6,16 +6,20 @@
 
 .tour-step-sd-overview
 = file-overview file=file isThreeColumn=true class="margin-top"
-    footer.card-footer.tour-step-sd-action-buttons
-      if file.project.hasMultipleFiles
-        = link-to 'authenticated.project.files' file.project.id class="card-footer-item" tagName="button"
-          = t "allFiles"
-      button.card-footer-item click="getPDFReportLink"
-        = t "pdfReport"
-      if env.isAppknox
-        if file.ifManualNotRequested
-          button.card-footer-item click="requestManual"
-            = t "manual"
+    footer.card-button.tour-step-sd-action-buttons
+      .columns class=file.fileDetailsClass
+        .column.is-one-quarter
+          if file.project.hasMultipleFiles
+            = link-to 'authenticated.project.files' file.project.id class="card-footer-item is-fullwidth" tagName="button"
+              = t "allFiles"
+        .column.is-one-quarter
+          button.card-footer-item.is-fullwidth click="getPDFReportLink"
+            = t "pdfReport"
+        .column.is-one-quarter
+          if env.isAppknox
+            if file.ifManualNotRequested
+              button.card-footer-item.is-fullwidth click="requestManual"
+                = t "manual"
 
 .margin-left
   h4

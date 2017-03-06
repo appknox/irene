@@ -1,0 +1,33 @@
+h4.margin-left.margin-top
+  | Make Payment
+.card-container
+  .card-details
+    .is-fullwidth
+      .align-middle.strip
+        h5
+          =totalPricePay
+      .card-wrapper
+      form.card-form.card
+        .card-form-header
+          | CARD DETAILS
+        .control.has-icon.has-icon-right
+          = input class="input" type="tel" name="number" placeholder="Valid Card Number" autocomplete="cc-number" value=cardNumber
+          = fa-icon "credit-card"
+        .control
+          = input class="input" type="tel" name="name" placeholder="Name On Card" autocomplete="cc-number" value=cardName
+        .columns
+          .column.is-half
+            .control
+              = input class="input" type="tel" name="expiry" placeholder="MM/YY" autocomplete="cc-exp" value=cardExpiry
+          .column.is-half
+            .control
+              = input class="input" type="tel" name="cvc" placeholder="CVC" autocomplete="cc-csc" value=cardCvc
+        if env.isAppknox
+          .control.is-grouped
+            = input  class="input" placeholder="Do you have an offer coupon?" value=couponCode
+            button.is-success click="applyCoupon" Apply Coupon
+        .control.content-right.last-child
+          button.is-success click="makePaymentStripe" disabled=isPaymentButtonDisabled
+            = fa-icon 'cc-stripe'
+            span.margin-left
+              | Pay with card

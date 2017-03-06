@@ -1,10 +1,13 @@
 = file-overview file=project.lastFile
-  footer.card-footer
-    = link-to 'authenticated.project.settings' project.id class="card-footer-item" tagName="button"
-      = t "settings"
-    if project.hasMultipleFiles
-      = link-to 'authenticated.project.files' project.id class="card-footer-item" tagName="button"
-        = t "allFiles"
-      = link-to 'authenticated.choose' project.lastFile.id class="card-footer-item" tagName="button"
-        = t "compare"
-
+  footer.card-button
+    .columns
+      .column.is-one-quarter class=project.hasMultipleFiles::auto-adjust
+        = link-to 'authenticated.project.settings' project.id class="card-footer-item is-fullwidth" tagName="button"
+          = t "settings"
+      if project.hasMultipleFiles
+        .column.is-one-quarter
+          = link-to 'authenticated.project.files' project.id class="card-footer-item is-fullwidth" tagName="button"
+            = t "allFiles"
+        .column.is-one-quarter
+          = link-to 'authenticated.choose' project.lastFile.id class="card-footer-item is-fullwidth" tagName="button"
+            = t "compare"

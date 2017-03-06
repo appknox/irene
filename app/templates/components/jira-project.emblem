@@ -8,8 +8,9 @@ if project.jiraProject
     .tag.is-danger.margin-top3.remove click="deleteJIRAProject"
       i.fa.risk-icons.fa-trash-o
         | &nbsp; #{t "remove"}
+        
 .columns
-  .is-one-third
+  .column.is-one-third
     select.select{action 'selectProject' on='change'}
       if project.jiraProject
         option value=0

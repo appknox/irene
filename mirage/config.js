@@ -15,12 +15,15 @@ export default function() {
   this.get('/projects/:id', 'project');
   this.get('/projects', 'project');
   this.get('/pricings', 'pricing');
+  this.get('/pricings/:id', 'pricing');
   this.get('/submissions/:id', 'submission');
   this.get('/submissions', 'submission');
   this.get('/files/:id', 'file');
   this.get('/vulnerabilities/:id', 'vulnerability');
   this.get('/invitations/:id', 'invitation');
   this.get('/devices', 'device');
+  this.get('/invoices', 'invoice');
+  this.get('/invoices/:id ', 'invoice');
 
   this.get('/github_repos', () => {
     return {};

@@ -3,7 +3,7 @@ h6
 
 if user.hasGithubToken
   button.is-primary click="revokeGitHub"
-    | Revoke GitHub
+    = t "revokeGithub"
 else
   a.button.is-primary target="_blank" href=user.githubRedirectUrl
     = t "integrateGithub"

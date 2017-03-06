@@ -6,7 +6,6 @@
     .content
       p.align-center
         = collaboration.username
-  .card-footer
-    button.is-fullwidth click="removeCollaboration"
+  .card-button.align-middle
+    button click="removeCollaboration"
       | Remove
-
