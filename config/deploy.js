@@ -16,23 +16,9 @@ module.exports = function(deployTarget) {
     allowOverwrite: true
   };
 
-  ENV.slack = {
-    // Needs to be hardcoded and cannot be imported from env for security purpose
-    webhookURL: process.env.SLACK_DEPLOY_URL,
-    channel: '#github',
-    username: 'ember-cli-deploy'
-  }
-
   if (deployTarget === 'development') {
     ENV.build.environment = 'development';
     // configure other plugins for development deploy target here
-    ENV.slack.didDeploy = function(context) {
-      return function(slack) {
-        return slack.notify({
-          text: 'Deployed development frontend!'
-        });
-      };
-    }
   }
 
   if (deployTarget === 'staging') {
@@ -43,14 +29,6 @@ module.exports = function(deployTarget) {
       distribution: 'E2YVUU4RPYNUI2',
       objectPaths: ['/*']
     }
-
-    ENV.slack.didDeploy = function(context) {
-      return function(slack) {
-        return slack.notify({
-          text: 'Deployed staging frontend!'
-        });
-      };
-    }
   }
 
   if (deployTarget === 'production') {
@@ -59,14 +37,6 @@ module.exports = function(deployTarget) {
 
     ENV.cloudfront = {
       distribution: 'E1SR2PB8XTR9RC'
-    }
-
-    ENV.slack.didDeploy = function(context) {
-      return function(slack) {
-        return slack.notify({
-          text: 'Deployed production frontend!'
-        });
-      };
     }
   }
 
