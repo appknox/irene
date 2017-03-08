@@ -7,12 +7,13 @@ export default Base.extend({
   name: faker.company.companyName,
   packageName:  faker.internet.domainName,
   version : faker.random.number,
-  githubRepo: faker.random.firstName,
-  jiraProject: faker.random.firstName,
+  githubRepo: faker.company.companyName,
+  jiraProject: faker.company.companyName,
   testUser: faker.random.firstName,
   testPassword: faker.internet.password,
   url: faker.internet.domainName,
   platformVersion: faker.random.number,
+  fileCount: 2,
 
   platform(){
     return faker.random.arrayElement(ENUMS.PLATFORM.VALUES);

@@ -1,6 +1,6 @@
 `import { moduleFor, test } from 'ember-qunit'`
 
-moduleFor 'route:authenticated/pricing', 'Unit | Route | authenticated/pricing', {
+moduleFor 'route:authenticated/payment', 'Unit | Route | authenticated/payment', {
   # Specify the other units that are required for this test.
   # needs: ['controller:foo']
 }

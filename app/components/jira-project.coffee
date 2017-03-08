@@ -41,8 +41,21 @@ JiraProjectComponent = Ember.Component.extend
       @get("ajax").post url, data: data
       .then (data) ->
         that.get("notify").success tRepoIntegrated
+        window.location.reload() # FIXME: Hackish Way
       .catch (error) ->
         that.get("notify").error tRepoNotIntegrated
+        for error in error.errors
+          that.get("notify").error error.detail?.message
+
+    deleteJIRAProject: ->
+      return if !confirm "Do you want to remove JIRA Project ?"
+      that = @
+      projectId = @get "project.id"
+      deleteJIRA = [ENV.endpoints.deleteJIRAProject, projectId].join '/'
+      @get("ajax").delete deleteJIRA
+      .then (data) ->
+        window.location.reload() # FIXME: Hackish Way
+      .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message
 

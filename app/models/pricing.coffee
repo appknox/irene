@@ -5,6 +5,7 @@ Pricing = DS.Model.extend
   description: DS.attr 'string'
   price: DS.attr 'number'
   projectsLimit: DS.attr "number"
+  invoices: DS.hasMany 'invoice', inverse:'pricing'
 
   descriptionItems:(->
     description = @get "description"

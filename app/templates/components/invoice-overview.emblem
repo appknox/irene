@@ -1,0 +1,15 @@
+td
+  = invoice.id
+td
+  = invoice.pricing.name
+td
+  = invoice.durationText
+td
+  | $#{invoice.amount}
+td
+  = t invoice.sourceType
+td
+  = invoice.paidOnHumanized
+td
+  = link-to 'authenticated.invoice' invoice.id
+      | view

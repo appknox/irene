@@ -6,7 +6,7 @@ if hasDevices
       = t "deviceType"
   .columns
     .column.is-one-sixth
-      select{action 'selectDeviceType' on='change'} id="project-device-preference"
+      select.input{action 'selectDeviceType' on='change'} id="project-device-preference"
         option value=0
           = t "noPreference"
         each deviceTypes as |deviceType|
@@ -23,7 +23,7 @@ if hasDevices
         = t "osVersion"
     .columns
       .column.is-one-sixth
-        select{action 'selectVersion' on='change'} id="project-version-preference"
+        select.input{action 'selectVersion' on='change'} id="project-version-preference"
           option value=0
             = t "noPreference"
           each uniqueDevices as |device|

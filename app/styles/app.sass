@@ -7,6 +7,7 @@ $FreestyleGuide-color--background: $background
 @import 'ember-freestyle'
 
 /* Margin Defines*/
+
 .margin-top30
   margin-top: 30px
 
@@ -15,6 +16,9 @@ $FreestyleGuide-color--background: $background
 
 .margin-top5
   margin-top: 5px
+
+.margin-top3
+  margin-top: 3px
 
 .margin-top20
   margin-top: 20px
@@ -58,6 +62,18 @@ $FreestyleGuide-color--background: $background
 .margin-both
   margin-left: 10px
   margin-right: 10px
+
+.multiple-files-manual
+  margin-left: 10%
+
+.multiple-files-no-manual
+  margin-left: 25%
+
+.no-multiple-files-manual
+  margin-left: -10%
+
+.no-multiple-files-no-manual
+  margin-left: 10%
 
 /* Appknox specific */
 .appknox-logo
@@ -265,24 +281,30 @@ input
   img
     width: 70%
 
-.pricing-section
+.box-section
   box-shadow: 0 0 10px grey
   margin-top: 20px
 
-.pricing-sub-section
+.box-sub-section
   box-shadow: 0px 4px 10px -6px #222
   margin-bottom: 0px!important
   margin-top: 20px
 
-.pricing-section-content
+.box-section-content
   line-height: 50px
 
-.pricing-section
-  button
-    border-radius: 0px
-    background-color: #80C081
-    border-color: #80C081!important
-    color: white!important
+.pricing-section-content
+  line-height: 30px
+
+.invoice-overview
+  flex: none
+  width: 95%
+  margin: 10px auto
+  border: 1px solid #A9A9A9
+
+.horizontal-seperator
+  margin: 30px 0px
+  border-top-color: #DCDCDC
 
 .is-reverse
   display: flex
@@ -363,6 +385,12 @@ select
   justify-content: center
   align-items: center
 
+.strip
+  margin: -25px -25px 10px -25px
+  background-color: #80C081
+  height: 50px
+  color: white
+
 .recover-form
   width: 20%!important
 
@@ -428,6 +456,22 @@ select
   overflow-y: auto
   overflow-x: hidden
 
+.input
+  border-color: #e6e6e6!important
+.input:hover
+    border-color: #b3b3b3!important
+    box-shadow: 0 0 1px #808080
+
+button, .button
+  border-radius: 5px
+
+.card-form
+  width: 40%
+  margin-left: 30%
+  margin-top: 10px
+.remove
+  cursor: pointer
+
 
 .hide-overflow
   overflow: hidden
@@ -461,3 +505,106 @@ select
     tr
       td
         padding: 6px
+
+.invoice-table
+  table
+    tr
+      th
+        background-color: #80C081
+        color: #fff
+      th, td
+        text-align: center
+        border: 1px solid #778899
+        padding: 8px 0px
+
+.invoice-details-table
+  table
+    tr
+      th
+        background-color: #A9A9A9
+      th, td
+        border: 1px solid #808080
+
+.invoice-container
+  .invoice-table
+    table
+      tr:nth-child(2)
+        height: 300px
+
+.box-section
+  button
+    border-radius: 0px
+    background-color: #80C081
+    border-color: #80C081!important
+    color: white!important
+    border-radius: 5px
+    margin-bottom: 10px
+  button:hover
+    background-color: darken(#80C081, 10%)
+
+.card-container
+  padding-left: 200px
+  padding-right: 200px
+  border: 5px solid #80C081
+  padding: 25px
+  margin: 25px
+
+.card-details
+  form
+    .card-form-header
+      @extend .strip
+      @extend .align-middle
+      margin: 0px
+      background-color: #A9A9A9
+    .columns
+      margin-left: -1px
+      .column:first-child
+        margin-left: -10px
+      .column:nth-child(2)
+        margin-left: 10px
+    .control
+      border-bottom: 1px solid grey
+      margin-left: 10px
+      margin-right: 10px
+      .input
+        border: 0px solid black!important
+        box-shadow: none
+      button
+        margin-bottom: 5px
+        margin-right: 5px
+    .control.last-child
+      border-bottom: none
+
+.card-header
+  .pricing-title
+    align-items: center
+    justify-content: center
+
+.auto-adjust
+  margin: auto
+  button
+    margin-left: 0px!important
+
+.card-button, .hideOrShow, .modal-footer
+  .card-footer-item
+    padding: 1px
+    margin-left: 50px
+  button
+    border-radius: 5px
+    margin-bottom: 5px
+    border-color: rgb(254, 77, 63) !important
+    color: rgb(254, 77, 63)
+  button:hover, button:active, button:focus
+    background-color: #FE4D3F
+    color: #fff
+
+.card-header-icon
+  img
+    height: 45px
+    width: 45px
+
+.invoice-container
+  width: 60%
+  border: 1px solid #EF4836
+  padding: 25px
+  border-radius: 5px

@@ -7,14 +7,6 @@ coverage:
   round: down
   range: "70...100"
 
-  notify:
-    slack:
-      default:
-        url: https://hooks.slack.com/services/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
-        threshold: null
-        branches: null
-        attachments: "sunburst, diff"
-
   status:
     project:
       default:
