@@ -55,12 +55,13 @@
             = invoice.durationText
           td
             | $#{invoice.pricing.price}
-        tr
-          td colspan="4"
-            | DISCOUNT
-            | (#{invoice.coupon.code})
-          td
-            | $#{discountAmount}
+        if invoice.hasDiscount
+          tr
+            td colspan="4"
+              | DISCOUNT
+              | (#{invoice.coupon.code})
+            td
+              | $#{discountAmount}
         tr
           td colspan="4"
             | TOTAL AMOUNT PAID
