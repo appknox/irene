@@ -22,8 +22,8 @@ Router.map ->
     @route "file", path: '/file/:fileId'
     @route "choose",path: '/choose/:fileId'
     @route 'compare', path: '/compare/:files'
+    @route 'report', path: '/report/:reportId'
   @route 'invitation', path: '/invitation/:uuid'
-  @route 'report', path: '/report/:reportId'
 
   # 404 path -this should be at the last.
   @route 'not-found', path: '/*path'

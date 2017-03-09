@@ -30,6 +30,8 @@
           p
             | While precautions have been taken in the preparation of this document, XYSec Labs Pte. Ltd., the publisher, and the author(s) assume no responsibility for errors, omissions, or for damages resulting from the use of the information contained herein. Use of XYSec Labs Pte. Ltd. services does not guarantee the security of a system, or that intrusions will not occur.
 
+    div style="page-break-before: always"
+
     .columns
       .column.heading-container.flex-center
           h3
@@ -77,6 +79,8 @@
                 li
                   a href="#12"
                     | Related Vulnerabilities
+
+    div style="page-break-before: always"
 
     .columns
       .column.heading-container.flex-center
