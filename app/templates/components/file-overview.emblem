@@ -43,11 +43,11 @@ header.card-header
               | : #{file.countRiskUnknown}
         if isThreeColumn
           if file.isDynamicCompleted
-            | "Dynamic Completed"
+            | Dynamic Completed
           if file.isStaticCompleted
-            | "Static Completed"
+            | Static Completed
           if file.isManualCompleted
-            | "Manual Completed"
+            | Manual Completed
           .column.package-desc
             table
               tr

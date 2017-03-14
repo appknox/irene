@@ -15,7 +15,7 @@ _getAnalysesCount = (analyses, risk)->
 _getUnknownCount = (analyses, type)->
   console.log type
   debugger
-  analyses.filterBy('risk', ENUMS.RISK.UNKNOWN).filter('vulnerability.type', type).get('length')
+  analyses.filterBy('risk', ENUMS.RISK.UNKNOWN).filterBy('vulnerability.type', type).get('length')
 
 File = DS.Model.extend BaseModelMixin,
   i18n: Ember.inject.service()
@@ -88,19 +88,19 @@ File = DS.Model.extend BaseModelMixin,
       {"value": countRiskUnknown, "color": _getComputedColor "default"}
     ]
 
-  isCompleted: (type)->
+  _isScanTypeCompleted: (type)->
     analyses = @get "analyses"
     count = _getUnknownCount analyses, type
     count is 0
 
   isStaticCompleted: Ember.computed 'analyses.@each.risk', ->
-    isCompleted ENUMS.VULNERABILITY_TYPE.STATIC
+    @_isScanTypeCompleted ENUMS.VULNERABILITY_TYPE.STATIC
 
   isDynamicCompleted: Ember.computed 'analyses.@each.risk', ->
-    isCompleted ENUMS.VULNERABILITY_TYPE.DYNAMIC
+    @_isScanTypeCompleted ENUMS.VULNERABILITY_TYPE.DYNAMIC
 
   isManualCompleted: Ember.computed 'analyses.@each.risk', ->
-    isCompleted ENUMS.VULNERABILITY_TYPE.MANUAL
+    @_isScanTypeCompleted ENUMS.VULNERABILITY_TYPE.MANUAL
 
   isNoneStaus: (->
     status = @get 'dynamicStatus'
