@@ -42,6 +42,12 @@ header.card-header
               = t "unknown"
               | : #{file.countRiskUnknown}
         if isThreeColumn
+          if file.isDynamicCompleted
+            | "Dynamic Completed"
+          if file.isStaticCompleted
+            | "Static Completed"
+          if file.isManualCompleted
+            | "Manual Completed"
           .column.package-desc
             table
               tr

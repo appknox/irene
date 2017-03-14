@@ -11,6 +11,7 @@ Analysis = DS.Model.extend
   risk: DS.attr 'number'
   status: DS.attr 'number'
   vulnerability: DS.belongsTo 'vulnerability'
+
   tScanning: t("scanning")
   tNone: t("none")
   tLow: t("low")
