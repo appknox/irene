@@ -9,7 +9,6 @@ _getComputedColor = (selector) ->
   computedStyle = window.getComputedStyle el
   computedStyle.getPropertyValue "color"
 
-
 _getAnalysesCount = (analyses, risk)->
   analyses.filterBy('risk', risk).get('length')
 
@@ -83,6 +82,25 @@ File = DS.Model.extend BaseModelMixin,
       {"value": countRiskNone, "color": _getComputedColor "success"}
       {"value": countRiskUnknown, "color": _getComputedColor "default"}
     ]
+
+  unknownRiskAnalyses: Ember.computed 'analyses.@each.risk', ->
+    @get("analyses").filterBy 'risk', ENUMS.RISK.UNKNOWN
+
+  isScanCompleted: (type)->
+    for analysis in @get "unknownRiskAnalyses"
+      types = analysis.get "vulnerability.types"
+      if types? and type in types
+        return false
+    true
+
+  isStaticCompleted: Ember.computed "unknownRiskAnalyses", ->
+    @isScanCompleted ENUMS.VULNERABILITY_TYPE.STATIC
+
+  isDynamicCompleted: Ember.computed "unknownRiskAnalyses", ->
+    @isScanCompleted ENUMS.VULNERABILITY_TYPE.DYNAMIC
+
+  isManualCompleted: Ember.computed "unknownRiskAnalyses", ->
+    @isScanCompleted ENUMS.VULNERABILITY_TYPE.MANUAL
 
   isNoneStaus: (->
     status = @get 'dynamicStatus'

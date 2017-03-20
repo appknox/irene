@@ -42,6 +42,17 @@ header.card-header
               = t "unknown"
               | : #{file.countRiskUnknown}
         if isThreeColumn
+          .column.flex-center
+            ul
+              li
+                = input type="checkbox" checked=file.isStaticCompleted
+                | Static Scan
+              li
+                = input type="checkbox" checked=file.isDynamicCompleted
+                | Dynamic Scan
+              li
+                = input type="checkbox" checked=file.isManualCompleted
+                | Manual Scan
           .column.package-desc
             table
               tr
