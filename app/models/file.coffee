@@ -86,21 +86,21 @@ File = DS.Model.extend BaseModelMixin,
   unknownRiskAnalyses: Ember.computed 'analyses.@each.risk', ->
     @get("analyses").filterBy 'risk', ENUMS.RISK.UNKNOWN
 
-  isScanCompleted: (type)->
+  scanCompletionClass: (type)->
     for analysis in @get "unknownRiskAnalyses"
       types = analysis.get "vulnerability.types"
       if types? and type in types
-        return false
-    true
+        return "fa-check scan-completed"
+    "fa-times scan-pending"
 
   isStaticCompleted: Ember.computed "unknownRiskAnalyses", ->
-    @isScanCompleted ENUMS.VULNERABILITY_TYPE.STATIC
+    @scanCompletionClass ENUMS.VULNERABILITY_TYPE.STATIC
 
   isDynamicCompleted: Ember.computed "unknownRiskAnalyses", ->
-    @isScanCompleted ENUMS.VULNERABILITY_TYPE.DYNAMIC
+    @scanCompletionClass ENUMS.VULNERABILITY_TYPE.DYNAMIC
 
   isManualCompleted: Ember.computed "unknownRiskAnalyses", ->
-    @isScanCompleted ENUMS.VULNERABILITY_TYPE.MANUAL
+    @scanCompletionClass ENUMS.VULNERABILITY_TYPE.MANUAL
 
   isNoneStaus: (->
     status = @get 'dynamicStatus'
