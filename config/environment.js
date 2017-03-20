@@ -159,7 +159,7 @@ module.exports = function(environment) {
     ENV.enableIntercom = false;
   }
 
-  if (environment === 'yashwin') {
+  if (environment === 'mirage') {
     ENV.socketPath = "https://socket.appknox.com",
     ENV['ember-cli-mirage'] = {
       enabled: true

@@ -17,6 +17,7 @@ if env.isAppknox
             .tour-step-upload-app
               = upload-app delegate=this
               if isUploading
+                | Uploading : 
                 = progress
                 | %
               else
