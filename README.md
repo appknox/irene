@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/appknox/irene/branch/develop/graph/badge.svg?token=9spv62CzBb)](https://codecov.io/gh/appknox/irene)
 
 
-I am SHERlocked. Irene is the front-end dashboards for Sherlock (Vulnerability Scanner) & Mycorft (API Server) that we wrote here at [@appknox](https://github.com/appknox).
+I am SHERlocked. Irene is the front-end dashboards for Sherlock (Vulnerability Scanner) & Mycroft (API Server) that we wrote here at [@appknox](https://github.com/appknox).
 
 ## Prerequisites
 
