@@ -22,6 +22,7 @@ Project = DS.Model.extend BaseModelMixin,
   fileCount: DS.attr 'number'
   deviceType: DS.attr 'number'
   platformVersion: DS.attr 'string'
+  apiUrlFilters: DS.attr 'string'
 
   tNoPreference: t("noPreference")
 
