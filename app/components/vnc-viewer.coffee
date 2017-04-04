@@ -77,8 +77,29 @@ VncViewerComponent = Ember.Component.extend
         file.setNone()
         for error in error.errors
           that.get("notify").error error.detail?.message
-       @set "showCollaborationModal", true
 
+    runAPIScan: ->
+      @set "isApiScanEnabled", true
+      @send "apiScan"
+
+    doNotRunAPIScan: ->
+      @set "isApiScanEnabled", false
+      @send "apiScan"
+
+    apiScan: ->
+      isApiScanEnabled = @get "isApiScanEnabled"
+      project_id = @get "file.project.id"
+      apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, project_id].join '/'
+      that = @
+      data =
+        isApiScanEnabled: isApiScanEnabled
+      @get("ajax").post apiScanOptions, data: data
+      .then (data)->
+        that.send "closeModal"
+        that.send "dynamicScan"
+      .catch (error) ->
+        for error in error.errors
+          that.get("notify").error error.detail?.message
 
     dynamicShutdown: ->
       file = @get "file"
@@ -92,8 +113,11 @@ VncViewerComponent = Ember.Component.extend
         for error in error.errors
           that.get("notify").error error.detail?.message
 
+    openAPIScanModal: ->
+      @set "showAPIScanModal", true
+
     closeModal: ->
-      @set "showCollaborationModal", false
+      @set "showAPIScanModal", false
 
 
 

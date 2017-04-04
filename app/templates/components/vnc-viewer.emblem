@@ -3,7 +3,7 @@ if isPoppedOut
 .modal-card.tour-step-sd-dynamic
   .modal-card-head
     if file.isNoneStaus
-      button.is-primary.is-fullwidth click="dynamicScan"
+      button.is-primary.is-fullwidth click="openAPIScanModal"
         = t "dynamicScanStart"
 
     if file.isReady
@@ -22,7 +22,7 @@ if isPoppedOut
         = vncPopText
 
 
-= modal-card isActive=showCollaborationModal title="Do you also want to run API Scan?"
+= modal-card isActive=showAPIScanModal title="Do you also want to run API Scan?"
   .card-body
     .card-wrapper
       .api-scanning
@@ -32,8 +32,8 @@ if isPoppedOut
           = fa-icon 'exclamation-triangle'
           | &nbsp; Lorem ipsum dolor sit amet
         form
-          p.control click="runAPIScan"
-           button.is-primary
+          p.control
+           button.is-primary click="runAPIScan"
             | Yes
-           button.is-primary
+           button.is-primary click="doNotRunAPIScan"
             | No

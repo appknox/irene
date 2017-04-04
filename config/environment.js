@@ -135,7 +135,8 @@ module.exports = function(environment) {
       signup: 'signup',
       lang: 'lang',
       deleteGHRepo: 'delete_github_repo',
-      deleteJIRAProject: 'delete_jira_project'
+      deleteJIRAProject: 'delete_jira_project',
+      apiScanOptions: 'api_scan_options'
     },
     TOUR: {
       newScan: 'ScanAnApp',
