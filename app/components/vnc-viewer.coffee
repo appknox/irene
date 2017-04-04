@@ -77,6 +77,7 @@ VncViewerComponent = Ember.Component.extend
         file.setNone()
         for error in error.errors
           that.get("notify").error error.detail?.message
+       @set "showCollaborationModal", true
 
 
     dynamicShutdown: ->
@@ -90,6 +91,9 @@ VncViewerComponent = Ember.Component.extend
         file.setNone()
         for error in error.errors
           that.get("notify").error error.detail?.message
+
+    closeModal: ->
+      @set "showCollaborationModal", false
 
 
 

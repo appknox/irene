@@ -20,3 +20,20 @@ if isPoppedOut
     .modal-card-foot
       button.is-primary.is-fullwidth click="togglePop"
         = vncPopText
+
+
+= modal-card isActive=showCollaborationModal title="Do you also want to run API Scan?"
+  .card-body
+    .card-wrapper
+      .api-scanning
+        h6
+          | We will capture all API Request your app makes and scan the API server for web vulnerabilities
+        div.warning-band
+          = fa-icon 'exclamation-triangle'
+          | &nbsp; Lorem ipsum dolor sit amet
+        form
+          p.control click="runAPIScan"
+           button.is-primary
+            | Yes
+           button.is-primary
+            | No
