@@ -9,7 +9,6 @@ export default Factory.extend({
   email: faker.internet.email,
   firstName: faker.name.firstName,
   lastName: faker.name.lastName,
-  namespaces: faker.internet.domainName,
   expiryDate: faker.date.future,
   projectCount: faker.random.number,
   hasGithubToken: faker.random.boolean,
@@ -22,5 +21,13 @@ export default Factory.extend({
   lang(){
     return faker.random.arrayElement(["en"]);
   },
+
+  namespaces(){
+    var desc = [];
+    for (var i = 0; i < 5; i++) {
+      desc.push(faker.internet.domainName(2).split(" "));
+    }
+    return desc.join(",");
+  }
 
 });
