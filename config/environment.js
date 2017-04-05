@@ -4,6 +4,8 @@ module.exports = function(environment) {
   var ENV = {
     isDevknox: false,
     isAppknox: false,
+    // FIXME: There should be a config enpoint for hard-coded values
+    devknoxPrice: 9,  // This should also change in `mycroft/settings.py`
     socketPath: "http://localhost:8008",
     platform: -1,
     paginate: {
