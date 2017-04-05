@@ -41,7 +41,9 @@ User = DS.Model.extend
     "#{prefix} on #{expiryDate.toLocaleDateString()}"
   ).property "expiryDate"
 
-
-
+  namespaceItems:(->
+    namespaces = @get "namespaces"
+    namespaces?.split ","
+  ).property "namespaces"
 
 `export default User`
