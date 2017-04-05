@@ -1,11 +1,14 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums'`
+`import ENV from 'irene/config/environment';`
 
 PricingListComponent = Ember.Component.extend
 
   paymentDuration: ENUMS.PAYMENT_DURATION.MONTHLY
 
   pricings: (->
+    if ENV.product is ENUMS.PRODUCT.DEVKNOX
+      return [@get("devknoxPricing")]
     @get("store").findAll("pricing")
   ).property()
 
@@ -31,9 +34,10 @@ PricingListComponent = Ember.Component.extend
   devknoxPricing: (->
     store = @get "store"
     store.createRecord "pricing", {
+      id: "devknox",
       name: "Devknox",
       description: "Dashboard Upload, Manual Scan",
-      price: 9,
+      price: ENV.devknoxPrice,
       projectsLimit: 0,
     }
   ).property()
