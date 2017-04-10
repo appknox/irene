@@ -27,18 +27,28 @@ User = DS.Model.extend
   scansLeft: DS.attr 'number'
   githubRedirectUrl: DS.attr 'string'
 
-  expiryText: (->
-    currentDate = new Date()
+  getExpiryDate: (->
     if ENV.isAppknox
       expiryDate = @get "expiryDate"
     else
       expiryDate = @get "devknoxExpiry"
-    if Ember.isEmpty expiryDate
-      return "Expired"
-    prefix = "Will expire"
+  ).property "expiryDate"
+
+  hasExpiryDate: (->
+    getExpiryDate = @get "getExpiryDate"
+    if Ember.isEmpty getExpiryDate
+      false
+    else
+      true
+  ).property "getExpiryDate"
+
+  expiryText: (->
+    currentDate = new Date()
+    expiryDate = @get "expiryDate"
+    prefix = "Subscription will expire "
     if currentDate > expiryDate
-      prefix = "Expired"
-    "#{prefix} on #{expiryDate.toLocaleDateString()}"
+      prefix = "Subscription Expired "
+    prefix
   ).property "expiryDate"
 
   namespaceItems:(->
