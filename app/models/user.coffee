@@ -45,9 +45,9 @@ User = DS.Model.extend
   expiryText: (->
     currentDate = new Date()
     expiryDate = @get "expiryDate"
-    prefix = "Subscription will expire "
+    prefix = "subscriptionWillExpire"
     if currentDate > expiryDate
-      prefix = "Subscription Expired "
+      prefix = "subscriptionExpired"
     prefix
   ).property "expiryDate"
 

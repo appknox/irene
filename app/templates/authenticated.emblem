@@ -21,7 +21,7 @@
           else
             if model.hasExpiryDate
               .column.card.align-middle
-                | #{model.expiryText}
+                | #{ t model.expiryText}
                 | #{moment-from-now model.getExpiryDate}
 
       ul.menu-list.text-center
