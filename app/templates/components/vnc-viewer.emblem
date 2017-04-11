@@ -23,14 +23,14 @@ if isPoppedOut
 
 
 = modal-card isActive=showAPIScanModal title="Do you also want to run API Scan?"
-  .card-body
+  .card-body.warning-modal
     .card-wrapper
       .api-scanning
         h6
-          | We will capture all API Request your app makes and scan the API server for web vulnerabilities
+          | We will record all network traffic made by the app and run the API scan for web vulnerabilities. API scan currently does not support apps that employ SSL pinning.
         div.warning-band
           = fa-icon 'exclamation-triangle'
-          | &nbsp; Lorem ipsum dolor sit amet
+          | &nbsp; API scan performs multiple automated tests that may result in <b class="bold">denial of service</b> or loss of data. Do not select YES if the app is configured to use a production API server or if the app employs SSL pinning.
         form
           p.control
            button.is-primary click="runAPIScan"
