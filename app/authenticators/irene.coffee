@@ -42,6 +42,8 @@ IreneAuthenticator = Base.extend
         that.resumeTransistion()
       .catch (error) ->
         for error in error.errors
+          if error.status is "0"
+            that.get("notify").error "Unable to reach server. Please try after sometime", ENV.notifications
           that.get("notify").error error.detail?.message, ENV.notifications
         reject error
 
