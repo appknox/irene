@@ -42,7 +42,9 @@ IreneAuthenticator = Base.extend
         that.resumeTransistion()
       .catch (error) ->
         for error in error.errors
-          that.get("notify").error error.detail?.message, ENV.notifications
+          if error.status is "0"
+            that.get("notify").error "Unable to reach server. Please try after sometime", ENV.notifications
+          that.get("notify").error "Please enter valid account details", ENV.notifications
         reject error
 
   restore: (data) ->
