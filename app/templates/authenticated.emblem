@@ -12,12 +12,17 @@
             | #{model.projectCount}
             | &nbsp;
             = t "projects"
-          .column.card.align-middle
-            if model.limitedScans
+
+          if model.limitedScans
+            .column.card.align-middle
               = model.scansLeft
               = t "scansLeft"
-            else
-              = model.expiryText
+
+          else
+            if model.hasExpiryDate
+              .column.card.align-middle
+                | #{ t model.expiryText}
+                | #{moment-from-now model.getExpiryDate}
 
       ul.menu-list.text-center
         li

@@ -144,6 +144,8 @@ export default {
   "stripeRecurring": "ストライプ反復",
   "submitUrl": "送信",
   "subscription": "サブスクリプション",
+  "subscriptionExpired": "サブスクリプションが期限切れ ",
+  "subscriptionWillExpire": "サブスクリプションは失効する ",
   "summary": "概要",
   "sync": "同期する",
   "tablet": "タブレット",
