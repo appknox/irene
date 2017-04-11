@@ -7,6 +7,7 @@ export default {
   "admin": "管理者",
   "allFiles": "すべてのファイル",
   "allPlatforms": "すべてのプラットフォーム",
+  "api": "API", 
   "apps": "アプリ",
   "bankTransfer": "銀行振込",
   "beingAnalyzed": "分析中",
