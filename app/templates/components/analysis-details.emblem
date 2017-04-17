@@ -32,8 +32,8 @@
       if showVulnerability
         h5.margin-top
           = t "vulnerability"
-        each analysis.description as |finding|
-          p = finding.extra_description
+        each analysis.findings as |finding|
+          p = finding.title
           span.scrollable-box
             pre.pre-code = finding.description
       .hideOrShow.is-fullwidth
