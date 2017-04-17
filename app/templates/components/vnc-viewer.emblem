@@ -30,7 +30,7 @@ if isPoppedOut
           | We will record all network traffic made by the app and run the API scan for web vulnerabilities. API scan currently does not support apps that employ SSL pinning.
         div.warning-band
           = fa-icon 'exclamation-triangle'
-          | &nbsp; API scan performs multiple automated tests that may result in <b class="bold">denial of service</b> or loss of data. Do not select YES if the app is configured to use a production API server or if the app employs SSL pinning.
+          | &nbsp; API scan performs multiple automated tests that may result in <b class="bold">denial of service</b> or <b class="bold">loss of data</b>. Do not select YES if the app is configured to use a <b class="bold">production API server</b> or if the app employs <b class="bold">SSL pinning</b>.
         form
           p.control
            button.is-primary click="runAPIScan"
