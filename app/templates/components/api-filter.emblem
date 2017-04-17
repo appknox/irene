@@ -1,8 +1,9 @@
 h5 API URL Filters
-
 .columns
   .column.is-one-third
     p.control
-      = textarea class="form-control input" type="text" value=project.apiUrlFilters
+      = textarea class="form-control input textarea" type="text" value=project.apiUrlFilters
+    small.content-right.condition-text
+      | add one url per line
     button.is-primary click="addApiUrlFilter"
       | Add Filter
