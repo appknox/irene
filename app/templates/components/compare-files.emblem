@@ -12,13 +12,27 @@
   .column
       = file-overview file=file2
 
-each comparisons as |comparison|
-  if isSummary
-    = compare-summary comparison=comparison
-  else
-    .columns
+if isSummary
+  table
+    thead
+      tr
+        td
+          | Risk Type
+          | (#{file1.version})
+        td
+          | Risk Type
+          | (#{file2.version})
+        td
+          | Risk Of
+        td
+          | Status
+    each comparisons as |comparison|
+      = compare-summary comparison=comparison
+else
+  .columns
+    each comparisons as |comparison|
       .column.is-half
         = analysis-details analysis=comparison.analysis1
       .column.is-half
         = analysis-details analysis=comparison.analysis2
-    hr
+  hr
