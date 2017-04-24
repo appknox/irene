@@ -6,9 +6,9 @@ ApiFilterComponent = Ember.Component.extend
   actions:
     addApiUrlFilter: ->
       apiUrlFilters = @get "project.apiUrlFilters"
-      
+
       if apiUrlFilters is undefined
-        @get("notify").error "Please Enter any url filter"
+        @get("notify").error "Please enter any url filter"
 
       project_id = @get "project.id"
       apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, project_id].join '/'

@@ -23,7 +23,8 @@ if isPoppedOut
 
 
 = modal-card isActive=showAPIScanModal title="Do you also want to run API Scan?"
-  .card-body.warning-modal
+
+  .card-body.warning-modal class=showAPIScan:show:hide
     .card-wrapper
       .api-scanning
         h6
@@ -33,7 +34,23 @@ if isPoppedOut
           | &nbsp; API scan performs multiple automated tests that may result in <b class="bold">denial of service</b> or <b class="bold">loss of data</b>. Do not select YES if the app is configured to use a <b class="bold">production API server</b> or if the app employs <b class="bold">SSL pinning</b>.
         form
           p.control
-           button.is-primary click="runAPIScan"
+           button.is-primary click="showURLFilter"
             | Yes
            button.is-primary click="doNotRunAPIScan"
             | No
+  .card-body.warning-modal class=showURLFilter:show:hide
+    .card-wrapper
+      .api-scanning
+        h5 Add API URL Filters
+        .columns
+          .column
+            form
+              p.control
+                = textarea class="form-control input textarea" type="text" value=file.project.apiUrlFilters
+              small.content-right.condition-text
+                | add one url per line
+              p.control
+                button.is-primary click="addApiUrlFilter"
+                  | Add Filter
+                button.is-primary click="addApiUrlFilter"
+                  | Start Scan

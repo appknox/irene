@@ -5,12 +5,26 @@
 vncHeight = 512
 vncWidth = 385
 
+isValidApiFilter = (url)->
+  return !Ember.isEmpty url
+
+isRegexFailed = (url) ->
+  reg = /http/
+  res = reg.test(url)
+
+hasSpecialChars = (url) ->
+  reg = /[/:]/
+  res = reg.test(url)
+
 VncViewerComponent = Ember.Component.extend
   onboard: Ember.inject.service()
   rfb: null
   file: null
   isPoppedOut: false
   classNameBindings: ["isPoppedOut:modal", "isPoppedOut:is-active"]
+
+  showURLFilter: false
+  showAPIScan: true
 
   vncPopText: (->
     if @get "isPoppedOut"
@@ -86,6 +100,11 @@ VncViewerComponent = Ember.Component.extend
       @set "isApiScanEnabled", false
       @send "apiScan"
 
+    showURLFilter: ->
+      @set "showURLFilter", true
+      @set "showAPIScan", false
+
+
     apiScan: ->
       isApiScanEnabled = @get "isApiScanEnabled"
       project_id = @get "file.project.id"
@@ -119,6 +138,25 @@ VncViewerComponent = Ember.Component.extend
     closeModal: ->
       @set "showAPIScanModal", false
 
+    addApiUrlFilter: ->
+      apiUrlFilters = @get "file.project.apiUrlFilters"
+
+      for url in [apiUrlFilters]
+        return @get("notify").error "Please enter any url filter" if !isValidApiFilter url
+        return @get("notify").error "Please enter a valid url filter" if isRegexFailed url
+        return @get("notify").error "Special Characters not allowed" if hasSpecialChars url
+
+      project_id = @get "file.project.id"
+      apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, project_id].join '/'
+      that = @
+      data =
+        apiUrlFilters: apiUrlFilters
+      @get("ajax").post apiScanOptions, data: data
+      .then (data)->
+        that.get("notify").success "Successfully added the url filter"
+      .catch (error) ->
+        for error in error.errors
+          that.get("notify").error error.detail?.message
 
 
 `export default VncViewerComponent`
