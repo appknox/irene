@@ -12,6 +12,8 @@ AnalysisDetailsComponent = Ember.Component.extend
   tHideVulnerability: t("hideVulnerability")
   tShowVulnerability: t("showVulnerability")
 
+  showDetails: false
+
   riskClass: ( ->
     risk = @get "analysis.risk"
     switch risk
@@ -44,6 +46,13 @@ AnalysisDetailsComponent = Ember.Component.extend
   actions:
     toggleVulnerability: ->
       return @set "showVulnerability", !@get "showVulnerability"
+
+    showDetails: ->
+      @set "showDetails", true
+
+    hideDetails: ->
+      @set "showDetails", false
+
 
 
 `export default AnalysisDetailsComponent`

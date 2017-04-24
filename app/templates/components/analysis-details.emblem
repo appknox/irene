@@ -4,9 +4,13 @@
         h5 = analysis.vulnerability.name
       .column.is-one-third.content-right
         each analysis.vulnerability.tags as |tag|
-          span.tag = tag
+          span.tag.margin-top5 = tag
+        div.margin-top5.margin-left.remove click="showDetails" class=showDetails:hide:show
+          | show details
+        div.margin-top5.margin-left.remove click="hideDetails" class=showDetails:show:hide
+          | hide details
 
-.message-body
+.message-body class=showDetails:show:hide
   .columns
     .column
       if analysis.isScanning
