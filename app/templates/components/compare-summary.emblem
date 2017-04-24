@@ -1,26 +1,11 @@
-/ .column
-/   span class=file1Analysis.labelClass
-/     = file1Analysis.riskText
-/   = fa-icon "arrow-right"
-/   span class=file2Analysis.labelClass
-/     = file2Analysis.riskText
-/   = t "risk"
-/   code
-/     = vulnerability.name
-/
-/   span class=compareColor
-/     = compareText
-/ hr
-
-tr
-  td
-    span class=file1Analysis.labelClass
-      = file1Analysis.riskText
-  td
-    span class=file2Analysis.labelClass
-      = file2Analysis.riskText
-  td
-    = vulnerability.name
-  td
-    span class=compareColor
-      = compareText
+td
+  span class=file1Analysis.labelClass
+    = file1Analysis.riskText
+td
+  span class=file2Analysis.labelClass
+    = file2Analysis.riskText
+td
+  = vulnerability.name
+td
+  span class=compareColor
+    = compareText

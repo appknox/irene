@@ -6,7 +6,7 @@ CompareSummaryComponent = Ember.Component.extend
   i18n: Ember.inject.service()
   comparison: null
 
-  tagName: ["tbody"]
+  tagName: ["tr"]
 
   tBeingAnalyzed: t("beingAnalyzed")
   tRemainsUnchanged: t("remainsUnchanged")

@@ -13,19 +13,18 @@
       = file-overview file=file2
 
 if isSummary
-  table
-    thead
-      tr
-        td
-          | Risk Type
-          | (#{file1.version})
-        td
-          | Risk Type
-          | (#{file2.version})
-        td
-          | Risk Of
-        td
-          | Status
+  table.compare-table
+    tr.table-head
+      td
+        | Risk Type
+        | (#{file1.version})
+      td
+        | Risk Type
+        | (#{file2.version})
+      td
+        | Risk Of
+      td
+        | Status
     each comparisons as |comparison|
       = compare-summary comparison=comparison
 else
