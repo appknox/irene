@@ -15,16 +15,19 @@
 if isSummary
   table.compare-table
     tr.table-head
-      td
+      td colspan="2"
         | Risk Type
-        | (#{file1.version})
-      td
-        | Risk Type
-        | (#{file2.version})
-      td
+      td rowspan="2"
         | Risk Of
-      td
+      td rowspan="2"
         | Status
+    tr.table-head
+      td
+        | Version &nbsp;
+        | #{file1.version}
+      td
+        | Version &nbsp;
+        | #{file2.version}
     each comparisons as |comparison|
       = compare-summary comparison=comparison
 else
