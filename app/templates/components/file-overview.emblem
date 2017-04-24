@@ -68,17 +68,6 @@ header.card-header
                   | #{file.versionCode}
             table
               tr
-                td.capitalize-text
-                  = t "selectedDevice"
-                td
-                  | #{ t (device-type file.project.deviceType)}
-              tr
-                td.capitalize-text
-                  = t "selectedVersion"
-                td
-                  | #{file.project.versionText}
-            table
-              tr
                 td colspan="2"
                   = t "reportPassword"
               tr.zeroclipboard-copy title="Copy Password" data-clipboard-text=file.project.pdfPassword
