@@ -9,7 +9,7 @@ isValidApiFilter = (url)->
   return !Ember.isEmpty url
 
 isRegexFailed = (url) ->
-  reg = /http/
+  reg = /http|www/
   res = reg.test(url)
 
 hasSpecialChars = (url) ->
