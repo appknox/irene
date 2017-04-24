@@ -52,5 +52,5 @@ if isPoppedOut
               p.control
                 button.is-primary click="addApiUrlFilter"
                   | Add Filter
-                button.is-primary click="addApiUrlFilter"
+                button.is-primary click="runAPIScan"
                   | Start Scan

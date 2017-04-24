@@ -115,7 +115,7 @@ VncViewerComponent = Ember.Component.extend
       @get("ajax").post apiScanOptions, data: data
       .then (data)->
         that.send "closeModal"
-        that.send "dynamicScan"
+        that.get("notify").success "API Scan has been started"
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message
