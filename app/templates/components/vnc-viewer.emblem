@@ -21,7 +21,6 @@ if isPoppedOut
       button.is-primary.is-fullwidth click="togglePop"
         = vncPopText
 
-
 = modal-card isActive=showAPIScanModal title="Do you also want to run API Scan?"
 
   .card-body.warning-modal class=showAPIScan:show:hide
