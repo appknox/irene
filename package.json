@@ -77,7 +77,8 @@
     "ember-uploader": "1.2.1",
     "ember-websockets": "6.3.0",
     "loader.js": "^4.0.1",
-    "mock-socket": "6.0.4"
+    "mock-socket": "6.0.4",
+    "phantomjs-prebuilt": "^2.1.14"
   },
   "dependencies": {
     "ember-cli-document-title": "^0.3.3"

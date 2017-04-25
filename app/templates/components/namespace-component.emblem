@@ -1,4 +1,7 @@
-button.is-primary click="toggleNamspaceModal"
+each user.namespaceItems as |item|
+  li
+    = item
+button.is-primary.margin-top click="toggleNamspaceModal"
   = t "addNamespace"
 
 = modal-card isActive=showNamespaceModal title=(t "addNamespace")

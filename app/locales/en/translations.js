@@ -146,6 +146,8 @@ export default {
   "stripeRecurring": "Stripe Recurring",
   "submitUrl": "Submit URL",
   "subscription": "Subscription",
+  "subscriptionExpired": "Subscription Expired ",
+  "subscriptionWillExpire": "Subscription will expire ",
   "summary": "Summary",
   "sync": "Sync More",
   "tablet": "Tablet",

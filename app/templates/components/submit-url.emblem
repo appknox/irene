@@ -1,6 +1,6 @@
-.columns
-  .column.tour-step-submit-url
-     = input class="input" value=storeURL type="text" placeholder=(t 'pasteYourUrl')
-  .column.is-one-quarter
-     button.is-primary.is-fullwidth click="submitURL"
+form.columns
+  p.control.column.tour-step-submit-url
+    = input class="input" value=storeURL type="text" placeholder=(t 'pasteYourUrl')
+  p.control.column.is-one-quarter
+    button.is-primary.is-fullwidth click="submitURL"
       = t "submitUrl"

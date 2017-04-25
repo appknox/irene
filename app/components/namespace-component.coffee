@@ -2,6 +2,7 @@
 `import ENV from 'irene/config/environment';`
 
 NamespaceComponentComponent = Ember.Component.extend
+  classNames: ["column" , "is-one-third"]
   added: false
   namespace: ""
   showNamespaceModal: false

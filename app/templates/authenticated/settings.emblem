@@ -6,18 +6,16 @@
       = password-change
 
 .box
-  .columns.vertical-align-center
+  .columns
     .column
       h4
         = t "namespace"
-    .column
-      = namespace-component
-    .column
+    = namespace-component user=model
+    .column.is-one-third
       h4
         = t "language"
-    .column
-      .margin-top
-        = select-language
+      = select-language
+
 
 .box
   h4.is-fullwidth

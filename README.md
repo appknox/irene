@@ -70,3 +70,18 @@ To deploy you should have `aws-cli` installed and logged in.
 * Development Browser Extensions
   * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
   * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
+
+
+## License
+
+Copyright © 2017 by Appknox
+
+Irene code is open source under the  AGPL v3 license (see LICENSE.txt), but the name ‘Appknox’ and the distinctive appearance of the site are not part of the open source code.
+
+Logo, images and other intellectual property are not released under open source and you should change them if you want to setup your own site.
+
+The code is open to establish trust and transparency on how it works and to allow contributions.
+
+Appknox is a business, and like any business has trade secrets, intellectual property and competition.
+
+To have your contributions merged back into the master repository, you must agree to assign copyright to Appknox and must assert that you have the right to make this assignment.

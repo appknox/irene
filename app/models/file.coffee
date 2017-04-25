@@ -90,8 +90,8 @@ File = DS.Model.extend BaseModelMixin,
     for analysis in @get "unknownRiskAnalyses"
       types = analysis.get "vulnerability.types"
       if types? and type in types
-        return "fa-check scan-completed"
-    "fa-times scan-pending"
+        return "fa-times scan-pending"
+    "fa-check scan-completed"
 
   isStaticCompleted: Ember.computed "unknownRiskAnalyses", ->
     @scanCompletionClass ENUMS.VULNERABILITY_TYPE.STATIC
