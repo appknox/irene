@@ -102,7 +102,6 @@ VncViewerComponent = Ember.Component.extend
     doNotRunAPIScan: ->
       @set "isApiScanEnabled", false
       @send "apiScan"
-      @send "dynamicScan"
       @send "closeModal"
 
     showURLFilter: ->
