@@ -92,23 +92,16 @@ VncViewerComponent = Ember.Component.extend
         for error in error.errors
           that.get("notify").error error.detail?.message
 
-    runAPIScan: ->
-      apiUrlFilters = @get "file.project.apiUrlFilters"
-      for url in [apiUrlFilters]
-        return @get("notify").error "Please enter any url filter" if !hasApiFilter url
-      @set "isApiScanEnabled", true
-      @send "apiScan"
-
     doNotRunAPIScan: ->
       @set "isApiScanEnabled", false
-      @send "apiScan"
+      @send "isApiScanEnabled"
       @send "closeModal"
 
     showURLFilter: ->
       @set "showURLFilter", true
       @set "showAPIScan", false
 
-    apiScan: ->
+    isApiScanEnabled: ->
       isApiScanEnabled = @get "isApiScanEnabled"
       project_id = @get "file.project.id"
       apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, project_id].join '/'
@@ -118,8 +111,6 @@ VncViewerComponent = Ember.Component.extend
       @get("ajax").post apiScanOptions, data: data
       .then (data)->
         that.get("notify").success "Starting the scan"
-        that.send "dynamicScan"
-        that.send "closeModal"
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message
@@ -137,6 +128,7 @@ VncViewerComponent = Ember.Component.extend
           that.get("notify").error error.detail?.message
 
     openAPIScanModal: ->
+      @send "dynamicScan"
       @set "showAPIScanModal", true
 
     closeModal: ->
@@ -144,6 +136,8 @@ VncViewerComponent = Ember.Component.extend
 
     addUrlFilterAndStartScan: ->
       apiUrlFilters = @get "file.project.apiUrlFilters"
+      @set "isApiScanEnabled", true
+      isApiScanEnabled = @get "isApiScanEnabled"
 
       for url in [apiUrlFilters]
         return @get("notify").error "Please enter any url filter" if !hasApiFilter url
@@ -155,10 +149,10 @@ VncViewerComponent = Ember.Component.extend
       that = @
       data =
         apiUrlFilters: apiUrlFilters
+        isApiScanEnabled: isApiScanEnabled
       @get("ajax").post apiScanOptions, data: data
       .then (data)->
-        that.get("notify").success "Successfully added the url filter"
-        that.send "apiScan"
+        that.get("notify").success "Successfully added the url filter & Starting the scan"
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message
