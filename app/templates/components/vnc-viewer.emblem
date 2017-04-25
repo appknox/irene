@@ -41,14 +41,17 @@ if isPoppedOut
   .card-body.warning-modal class=showURLFilter:show:hide
     .card-wrapper
       .api-scanning
-        h5 Add API URL Filters
+        h5 Add API URL Filter
+        h6
+          | Note:
+          ul
+            li
+              | Enter the API endpoint to scan: eg. api.appknox.com. Do not specify the scheme (http://...) or path (.../users).
         .columns
           .column
             form
               p.control
-                = textarea class="form-control input textarea" type="text" value=file.project.apiUrlFilters
-              small.content-right.condition-text
-                | add one url per line
+                = input class="form-control input" type="text" value=file.project.apiUrlFilters
               p.control
                 button.is-primary click="addApiUrlFilter"
                   | Add Filter

@@ -5,15 +5,15 @@
 vncHeight = 512
 vncWidth = 385
 
-isValidApiFilter = (url)->
+hasApiFilter = (url)->
   return !Ember.isEmpty url
 
 isRegexFailed = (url) ->
   reg = /http|www/
   res = reg.test(url)
 
-hasSpecialChars = (url) ->
-  reg = /[/:]/
+isAllowedCharacters = (url) ->
+  reg = /^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/
   res = reg.test(url)
 
 VncViewerComponent = Ember.Component.extend
@@ -93,6 +93,10 @@ VncViewerComponent = Ember.Component.extend
           that.get("notify").error error.detail?.message
 
     runAPIScan: ->
+      apiUrlFilters = @get "file.project.apiUrlFilters"
+      for url in [apiUrlFilters]
+        return @get("notify").error "Please enter any url filter" if !hasApiFilter url
+      debugger
       @set "isApiScanEnabled", true
       @send "apiScan"
 
@@ -115,7 +119,6 @@ VncViewerComponent = Ember.Component.extend
       @get("ajax").post apiScanOptions, data: data
       .then (data)->
         that.send "closeModal"
-        that.get("notify").success "API Scan has been started"
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message
@@ -142,9 +145,9 @@ VncViewerComponent = Ember.Component.extend
       apiUrlFilters = @get "file.project.apiUrlFilters"
 
       for url in [apiUrlFilters]
-        return @get("notify").error "Please enter any url filter" if !isValidApiFilter url
+        return @get("notify").error "Please enter any url filter" if !hasApiFilter url
         return @get("notify").error "Please enter a valid url filter" if isRegexFailed url
-        return @get("notify").error "Special Characters not allowed" if hasSpecialChars url
+        return @get("notify").error "Special Characters not allowed" if !isAllowedCharacters url
 
       project_id = @get "file.project.id"
       apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, project_id].join '/'
