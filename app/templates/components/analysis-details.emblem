@@ -4,11 +4,11 @@
         h5 = analysis.vulnerability.name
       .column.is-one-third.content-right
         each analysis.vulnerability.tags as |tag|
-          span.tag.margin-top5 = tag
-        div.margin-top5.margin-left.remove click="showDetails" class=showDetails:hide:show
-          | show details
-        div.margin-top5.margin-left.remove click="hideDetails" class=showDetails:show:hide
-          | hide details
+          span.tag = tag
+        div.margin-left.details click="showDetails" class=showDetails:hide:show
+          i.fa.fa-plus
+        div.margin-left.details click="hideDetails" class=showDetails:show:hide
+          i.fa.fa-minus
 
 .message-body class=showDetails:show:hide
   .columns
@@ -33,14 +33,9 @@
 
   .columns
     if analysis.isRisky
-      if showVulnerability
-        h5.margin-top
-          = t "vulnerability"
-        each analysis.description as |finding|
-          p = finding.extra_description
-          span.scrollable-box
-            pre.pre-code = finding.description
-      .hideOrShow.is-fullwidth
-        button class="is-fullwidth margin-top" click="toggleVulnerability"
-          span
-            | {{showOrHideVulnerability}}
+      h5.margin-top
+        = t "vulnerability"
+      each analysis.description as |finding|
+        p = finding.extra_description
+        span.scrollable-box
+          pre.pre-code = finding.description
