@@ -83,7 +83,7 @@ $FreestyleGuide-color--background: $background
   color: #80C081
 
 .scan-pending
-  color: #EF4836  
+  color: #EF4836
 
 .current-user
   float: right
@@ -456,3 +456,21 @@ button, .button
   border: 1px solid #EF4836
   padding: 25px
   border-radius: 5px
+
+.compare-table
+  width: 70%
+  margin: auto
+  tr
+    td
+      text-align: center
+      border: 1px solid lighten(rgb(107, 107, 107), 30%)
+    td:nth-child(1), td:nth-child(2)
+      width: 20%
+    td:nth-child(3)
+      width: 80%
+  tr.table-head
+    background-color: lighten(rgb(107, 107, 107), 10%)
+    color: #fff
+    font-weight: 100
+    td
+      vertical-align: middle
