@@ -9,8 +9,6 @@ AnalysisDetailsComponent = Ember.Component.extend
   showVulnerability: false
   classNameBindings: ["riskClass"]
 
-  showDetails: false
-
   riskClass: ( ->
     risk = @get "analysis.risk"
     switch risk
@@ -32,11 +30,9 @@ AnalysisDetailsComponent = Ember.Component.extend
   ).property "analysis.risk"
 
   actions:
-    showDetails: ->
-      @set "showDetails", true
 
-    hideDetails: ->
-      @set "showDetails", false
+    toggleVulnerability: ->
+      return @set "showVulnerability", !@get "showVulnerability"
 
 
 
