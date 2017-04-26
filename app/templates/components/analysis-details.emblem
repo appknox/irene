@@ -32,10 +32,11 @@
         | &nbsp;{{analysis.riskText}}
 
   .columns
-    if analysis.isRisky
-      h5.margin-top
-        = t "vulnerability"
-      each analysis.description as |finding|
-        p = finding.extra_description
-        span.scrollable-box
-          pre.pre-code = finding.description
+    .column
+      if analysis.isRisky
+        h5.margin-top
+          = t "vulnerability"
+        each analysis.description as |finding|
+          p.extra-desc = finding.extra_description
+          span.scrollable-box
+            pre.pre-code = finding.description
