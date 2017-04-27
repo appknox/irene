@@ -1,6 +1,5 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums'`
-`import { translationMacro as t } from 'ember-i18n'`
 
 AnalysisDetailsComponent = Ember.Component.extend
   i18n: Ember.inject.service()
@@ -9,8 +8,6 @@ AnalysisDetailsComponent = Ember.Component.extend
   classNames: ["message"]
   showVulnerability: false
   classNameBindings: ["riskClass"]
-  tHideVulnerability: t("hideVulnerability")
-  tShowVulnerability: t("showVulnerability")
 
   riskClass: ( ->
     risk = @get "analysis.risk"
@@ -32,18 +29,11 @@ AnalysisDetailsComponent = Ember.Component.extend
         "is-progress"
   ).property "analysis.risk"
 
-  showOrHideVulnerability: (->
-    tHideVulnerability = @get "tHideVulnerability"
-    tShowVulnerability = @get "tShowVulnerability"
-    if @get "showVulnerability"
-      tHideVulnerability
-    else
-      tShowVulnerability
-  ).property "showVulnerability"
-
   actions:
+
     toggleVulnerability: ->
       return @set "showVulnerability", !@get "showVulnerability"
+
 
 
 `export default AnalysisDetailsComponent`
