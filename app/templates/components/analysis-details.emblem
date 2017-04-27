@@ -38,7 +38,7 @@ if showVulnerability
         if analysis.isRisky
           h5.margin-top
             = t "vulnerability"
-          each analysis.description as |finding|
-            p.extra-desc = finding.extra_description
+          each analysis.findings as |finding|
+            p.extra-desc = finding.title
             span.scrollable-box
               pre.pre-code = finding.description
