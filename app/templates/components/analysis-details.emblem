@@ -1,42 +1,44 @@
-.message-header class=progressClass
+.message-header.hideOrShow class=progressClass click="toggleVulnerability"
     .columns
       .column
         h5 = analysis.vulnerability.name
       .column.is-one-third.content-right
         each analysis.vulnerability.tags as |tag|
           span.tag = tag
+        div.margin-left.details
+          if showVulnerability
+            i.fa.fa-minus
+          else
+            i.fa.fa-plus
 
-.message-body
-  .columns
-    .column
-      if analysis.isScanning
-        = analysis.vulnerability.question
-      else
-        if analysis.isRisky
-          p = analysis.vulnerability.description
-          if analysis.vulnerability.businessImplication
-            h5.margin-top
-              = t "businessImplication"
-            span
-              | {{{analysis.vulnerability.businessImplication}}}
+if showVulnerability
+  .message-body
+    .columns
+      .column
+        if analysis.isScanning
+          = analysis.vulnerability.question
         else
-          = analysis.vulnerability.successMessage
+          if analysis.isRisky
+            p = analysis.vulnerability.description
+            if analysis.vulnerability.businessImplication
+              h5.margin-top
+                = t "businessImplication"
+              span
+                | {{{analysis.vulnerability.businessImplication}}}
+          else
+            = analysis.vulnerability.successMessage
 
-    .column.is-one-sixth.content-right
-      span class=analysis.labelClass
-        i.fa.risk-icons class=analysis.iconClass
-        | &nbsp;{{analysis.riskText}}
+      .column.is-one-sixth.content-right
+        span class=analysis.labelClass
+          i.fa.risk-icons class=analysis.iconClass
+          | &nbsp;{{analysis.riskText}}
 
-  .columns
-    if analysis.isRisky
-      if showVulnerability
-        h5.margin-top
-          = t "vulnerability"
-        each analysis.description as |finding|
-          p = finding.extra_description
-          span.scrollable-box
-            pre.pre-code = finding.description
-      .hideOrShow.is-fullwidth
-        button class="is-fullwidth margin-top" click="toggleVulnerability"
-          span
-            | {{showOrHideVulnerability}}
+    .columns
+      .column
+        if analysis.isRisky
+          h5.margin-top
+            = t "vulnerability"
+          each analysis.findings as |finding|
+            p.extra-desc = finding.title
+            span.scrollable-box
+              pre.pre-code = finding.description

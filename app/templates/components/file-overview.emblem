@@ -5,9 +5,22 @@ header.card-header
     ul.is-fullwidth
       li
         h5
-          = file.project.name
-          = fa-icon file.project.platformIconClass class="card-icon"
-      li.hide-overflow
+          .columns.project-specific
+            .column
+              = file.project.name
+            .column
+              = fa-icon file.project.platformIconClass class="card-icon"
+            if isThreeColumn
+              .column
+                .columns
+                  .column.card-button.content-right
+                    = link-to 'authenticated.project.settings' file.project.id  tagName="button"
+                      = t "settings"
+                  if file.project.hasMultipleFiles
+                    .column.card-button
+                      = link-to 'authenticated.choose' file.project.lastFile.id tagName="button"
+                        = t "compare"
+      li class=isThreeColumn:file-hide-overflow:hide-overflow
         | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
 .card-content
   = link-to redirectTo targetPath
