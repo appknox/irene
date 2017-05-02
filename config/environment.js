@@ -12,6 +12,9 @@ module.exports = function(environment) {
       perPageLimit: 9,
       pagePadding: 5
     },
+    'ember-websockets': {
+      socketIO: true
+    },
     pace: {
       // addon-specific options to configure theme
       theme: 'minimal',
