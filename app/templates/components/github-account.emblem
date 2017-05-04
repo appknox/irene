@@ -2,6 +2,8 @@ h6
   = t "githubIntegration"
 
 if user.hasGithubToken
+  h3
+    | Intergations completed
   button.is-primary click="revokeGitHub"
     = t "revokeGithub"
 else

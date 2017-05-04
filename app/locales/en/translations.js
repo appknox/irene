@@ -72,6 +72,7 @@ export default {
   "integrateJIRA": "Integrate JIRA",
   "integratedJIRA": "This project is integrated with JIRA project",
   "integration": "Integrations",
+  "integrationCompleted": "Integration Completed",
   "invalidPassword": "Passwords did not match",
   "invoices": "Invoices",
   "jiraHost": "Jira Host",

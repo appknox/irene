@@ -71,6 +71,7 @@ export default {
   "integrateJIRA": "JIRA を統合する",
   "integratedJIRA": "このプロジェクトはJIRAプロジェクトと統合されています",
   "integration": "統合",
+  "integrationCompleted": "統合が完了しました",
   "invalidPassword": "無効なパスワード",
   "invoices": "請求書",
   "jiraHost": "JIRA ホスト",

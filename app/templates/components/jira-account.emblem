@@ -2,6 +2,8 @@ h6
   = t "jiraIntegration"
 
 if user.hasJiraToken
+  h3
+    | Intergations completed
   button.is-primary click="revokeJira"
     = t "revokeJira"
 else
