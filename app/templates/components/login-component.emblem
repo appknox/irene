@@ -4,7 +4,7 @@ h3.has-text-centered.signin-text
   .column.flex-center
     form.login-form
       p.control.has-icon.has-icon-left
-        = input class="input" placeholder=(t 'username') value=identification id="username"
+        = input class="input" placeholder=(t 'username') value=identification id="username" autofocus="autofocus"
         = fa-icon class="is-primary" "user"
 
       p.control.has-icon.has-icon-left
