@@ -7,7 +7,7 @@ header.card-header
         h5
           .columns.project-specific
             .column
-              = file.project.name
+              = file.name
             .column
               = fa-icon file.project.platformIconClass class="card-icon"
             if isThreeColumn
