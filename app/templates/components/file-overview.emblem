@@ -37,26 +37,41 @@ header.card-header
       .columns class=isReverse:is-reverse
         .column.flex-center
           = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
-        .column.flex-center
-          ul
-            li.is-danger
+        .column
+          ul.risk-table
+            if isThreeColumn
+              h5
+                | RISK TYPE
+            li.danger
+              i.fa.fa-warning
+              | &nbsp;
               = t "high"
               | : #{file.countRiskHigh}
-            li.is-warning
+            li.warning
+              i.fa.fa-warning
+              | &nbsp;
               = t "medium"
               | : #{file.countRiskMedium}
-            li.is-info
+            li.low
+              i.fa.fa-warning
+              | &nbsp;
               = t "low"
               | : #{file.countRiskLow}
-            li.is-success
+            li.success
+              i.fa.fa-check
+              | &nbsp;
               = t "none"
               | : #{file.countRiskNone}
-            li.is-default
+            li.default
+              i.fa.fa-spinner.fa-spin
+              | &nbsp;
               = t "unknown"
               | : #{file.countRiskUnknown}
         if isThreeColumn
-          .column.flex-center
-            ul
+          .column
+            ul.scan-table
+              h5
+                | SCAN STATUS
               li
                 i.fa class=file.isStaticCompleted
                 | &nbsp; Static Scan
@@ -67,6 +82,8 @@ header.card-header
                 i.fa class=file.isManualCompleted
                 | &nbsp; Manual Scan
           .column.package-desc
+            h5.align-center
+              | APP DETAILS
             table
               tr
                 td.capitalize-text
