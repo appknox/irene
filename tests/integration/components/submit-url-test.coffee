@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{submit-url}}"""
 
-  assert.equal @$().text().trim(), 'Submit URL'
+  assert.equal @$().text().trim(), 'Once the URL has been uploaded, the scan process gets initiatedSubmit URL'

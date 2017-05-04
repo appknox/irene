@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{compare-files}}"""
 
-  assert.equal @$().text().trim(), 'SummaryDetailscreated on: version codeHigh: Medium: Low: Passed: Unknown: created on: version codeHigh: Medium: Low: Passed: Unknown: Risk TypeRisk OfStatusVersion  Version'
+  assert.equal @$().text().trim(), 'SummaryDetailscreated on: version code High:  Medium:  Low:  Passed:  Unknown: created on: version code High:  Medium:  Low:  Passed:  Unknown: Risk TypeRisk OfStatusVersion  Version'
