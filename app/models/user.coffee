@@ -56,4 +56,8 @@ User = DS.Model.extend
     namespaces?.split ","
   ).property "namespaces"
 
+  namespacesCount: Ember.computed.alias 'namespaces.length'
+
+  hasNamespace: Ember.computed.gt 'namespacesCount', 0
+
 `export default User`

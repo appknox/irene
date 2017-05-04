@@ -1,6 +1,7 @@
-each user.namespaceItems as |item|
-  li
-    = item
+if user.hasNamespace
+  each user.namespaceItems as |item|
+    li
+      = item
 button.is-primary.margin-top click="toggleNamspaceModal"
   = t "addNamespace"
 
