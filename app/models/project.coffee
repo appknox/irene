@@ -54,6 +54,10 @@ Project = DS.Model.extend BaseModelMixin,
       else "mobile"
   ).property "platform"
 
+  isIOSApp: (
+    ENUMS.PLATFORM.IOS is @get "platform"
+  ).property "platform"
+
   lastFile:( ->
     params =
       projectId: @get "id"
