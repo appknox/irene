@@ -140,7 +140,8 @@ module.exports = function(environment) {
       signup: 'signup',
       lang: 'lang',
       deleteGHRepo: 'delete_github_repo',
-      deleteJIRAProject: 'delete_jira_project'
+      deleteJIRAProject: 'delete_jira_project',
+      apiScanOptions: 'api_scan_options'
     },
     TOUR: {
       newScan: 'ScanAnApp',
@@ -184,7 +185,7 @@ module.exports = function(environment) {
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
-    ENV['host'] = "http://192.168.0.162:8000";
+    ENV['host'] = "http://localhost:8000";
     ENV.enableIntercom = false;
     ENV.stripe = {
       publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"

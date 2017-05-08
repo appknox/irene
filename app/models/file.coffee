@@ -102,6 +102,9 @@ File = DS.Model.extend BaseModelMixin,
   isManualCompleted: Ember.computed "unknownRiskAnalyses", ->
     @scanCompletionClass ENUMS.VULNERABILITY_TYPE.MANUAL
 
+  isAPICompleted: Ember.computed "unknownRiskAnalyses", ->
+    @scanCompletionClass ENUMS.VULNERABILITY_TYPE.API
+
   isNoneStaus: (->
     status = @get 'dynamicStatus'
     status is ENUMS.DYNAMIC_STATUS.NONE

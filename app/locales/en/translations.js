@@ -7,6 +7,7 @@ export default {
   "admin": "Admin",
   "allFiles": "All Files",
   "allPlatforms": "All Platforms",
+  "api": "API", 
   "apps": " Apps",
   "bankTransfer": "Bank Transfer",
   "beingAnalyzed": "is being analyzed",

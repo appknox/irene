@@ -29,6 +29,10 @@ export default function() {
     return {};
   });
 
+  this.get('/dynamic/:id', () => {
+    return {};
+  });
+
   this.get('/jira_projects', () => {
     return {};
   });
@@ -82,6 +86,10 @@ export default function() {
   });
 
   this.post('/delete_jira_project/:id', () => {
+    return {};
+  });
+
+  this.post('/api_scan_options/:id', () => {
     return {};
   });
 
