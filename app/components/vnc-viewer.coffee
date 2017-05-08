@@ -129,7 +129,10 @@ VncViewerComponent = Ember.Component.extend
           that.get("notify").error error.detail?.message
 
     openAPIScanModal: ->
-      @set "showAPIScanModal", true
+      if ENUMS.PLATFORM.IOS is @get "file.project.platform" # TEMPIOSDYKEY
+        @send "doNotRunAPIScan"
+      else
+        @set "showAPIScanModal", true
 
     closeModal: ->
       @set "showAPIScanModal", false
