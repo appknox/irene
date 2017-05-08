@@ -54,7 +54,7 @@ Project = DS.Model.extend BaseModelMixin,
       else "mobile"
   ).property "platform"
 
-  isIOSApp: (
+  isIOSApp: ( ->
     ENUMS.PLATFORM.IOS is @get "platform"
   ).property "platform"
 
