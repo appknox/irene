@@ -1,10 +1,12 @@
 #! /bin/bash
 
-sudo pip install --upgrade pip
+set -x
+
+sudo -H pip install --upgrade pip
 sudo -H pip install nodeenv
 
 mkdir -p ~/.nodeenvs/
-nodeenv ~/.nodeenvs/irene --node=0.12.13
+nodeenv ~/.nodeenvs/irene --node=7.10.0
 . ~/.nodeenvs/irene/bin/activate
 npm install
 npm install -g bower
