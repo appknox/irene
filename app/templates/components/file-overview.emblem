@@ -8,7 +8,7 @@ header.card-header
           .columns.project-specific
             .column
               = file.name
-            .column
+            .column.is-one-sixth
               = fa-icon file.project.platformIconClass class="card-icon"
             if isThreeColumn
               .column
