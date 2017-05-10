@@ -22,6 +22,7 @@ Project = DS.Model.extend BaseModelMixin,
   fileCount: DS.attr 'number'
   deviceType: DS.attr 'number'
   platformVersion: DS.attr 'string'
+  apiUrlFilters: DS.attr 'string'
 
   tNoPreference: t("noPreference")
 
@@ -51,6 +52,10 @@ Project = DS.Model.extend BaseModelMixin,
       when ENUMS.PLATFORM.IOS then "apple"
       when ENUMS.PLATFORM.WINDOWS then "windows"
       else "mobile"
+  ).property "platform"
+
+  isIOSApp: ( ->
+    ENUMS.PLATFORM.IOS is @get "platform"
   ).property "platform"
 
   lastFile:( ->

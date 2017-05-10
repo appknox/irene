@@ -3,7 +3,7 @@ if isPoppedOut
 .modal-card.tour-step-sd-dynamic
   .modal-card-head
     if file.isNoneStaus
-      button.is-primary.is-fullwidth click="dynamicScan"
+      button.is-primary.is-fullwidth click="openAPIScanModal"
         = t "dynamicScanStart"
 
     if file.isReady
@@ -20,3 +20,34 @@ if isPoppedOut
     .modal-card-foot
       button.is-primary.is-fullwidth click="togglePop"
         = vncPopText
+
+= modal-card isActive=showAPIScanModal title="Do you also want to run API Scan?"
+
+  .card-body.warning-modal class=showAPIScan:show:hide
+    .card-wrapper
+      .api-scanning
+        h6
+          | We will record all network traffic made by the app and run the API scan for web vulnerabilities. API scan currently does not support apps that employ SSL pinning.
+        div.warning-band
+          = fa-icon 'exclamation-triangle'
+          | &nbsp; API scan performs multiple automated tests that may result in <b class="bold">denial of service</b> or <b class="bold">loss of data</b>. Do not select YES if the app is configured to use a <b class="bold">production API server</b> or if the app employs <b class="bold">SSL pinning</b>.
+        form
+          p.control
+           button.is-primary click="showURLFilter"
+            | Yes
+           button.is-primary click="doNotRunAPIScan"
+            | No
+  .card-body.warning-modal class=showURLFilter:show:hide
+    .card-wrapper
+      .api-scanning
+        h5 API Scanner URL Filter
+        h6
+          | Enter the API endpoint to scan: eg. api.appknox.com. Do not specify the scheme (http://...) or path (.../users).
+        .columns
+          .column
+            form
+              p.control
+                = input class="form-control input" type="text" value=file.project.apiUrlFilters
+              p.control
+                button.is-primary.start-scan click="addUrlFilterAndStartScan"
+                  | Save Filter & Start Scan

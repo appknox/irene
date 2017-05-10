@@ -81,6 +81,10 @@ header.card-header
               li
                 i.fa class=file.isManualCompleted
                 | &nbsp; Manual Scan
+              if file.project.isIOSApp
+                li
+                  i.fa class=file.isAPICompleted
+                  | &nbsp; API Scan
           .column.package-desc
             h5.align-center
               | APP DETAILS

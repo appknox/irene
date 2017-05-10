@@ -70,6 +70,7 @@ ENUMS =
     STATIC: 1
     DYNAMIC: 2
     MANUAL: 3
+    API: 4
 
   PAYMENT_DURATION:
     MONTHLY: 1

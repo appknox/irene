@@ -1,0 +1,9 @@
+h5 API Scanner URL Filter
+h6
+  | Enter the API endpoint to scan: eg. api.appknox.com. Do not specify the scheme (http://...) or path (.../users).
+.columns
+  .column.is-one-third
+    p.control
+      = input class="form-control input" type="text" value=project.apiUrlFilters
+    button.is-primary click="addApiUrlFilter"
+      | Add Filter
