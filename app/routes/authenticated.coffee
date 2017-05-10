@@ -15,6 +15,7 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
   moment: service()
   session: service()
   realtime: service()
+  mixpanel: service()
   socketIOService: service 'socket-io'
 
   beforeModel: (transition)->
@@ -32,6 +33,15 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
         name: user.get "username"
         email: user.get "email"
       window.Intercom 'trackEvent', 'logged-in'
+    try
+      mixpanel = @get "mixpanel"
+      mixpanel.identify user.get "id"
+      mixpanel.peopleSet
+        id: user.get "id"
+        username: user.get "username"
+        email: user.get "email"
+
+
 
     @get('notify').setDefaultAutoClear ENV.notifications.autoClear
 
