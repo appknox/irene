@@ -339,11 +339,18 @@ button, .button
       margin-top: 10px
       
 .hide-overflow
+  max-width: 300px
   overflow: hidden
   text-overflow: ellipsis
   white-space: nowrap
+  z-index: 1
   &:hover
     overflow: visible
+
+.app-icon
+  z-index: 0
+  position: fixed
+  left: 27%
 
 .error-page
   margin-top: 150px

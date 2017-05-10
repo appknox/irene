@@ -6,9 +6,9 @@ header.card-header
       li
         h5
           .columns.project-specific
-            .column
+            .column.hide-overflow
               = file.name
-            .column.is-one-sixth
+            .column.is-one-sixth.app-icon
               = fa-icon file.project.platformIconClass class="card-icon"
             if isThreeColumn
               .column
