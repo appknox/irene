@@ -37,9 +37,8 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
       mixpanel = @get "mixpanel"
       mixpanel.identify user.get "id"
       mixpanel.peopleSet
-        id: user.get "id"
-        username: user.get "username"
-        email: user.get "email"
+        "$name": user.get "username"
+        "$email": user.get "email"
 
 
 
