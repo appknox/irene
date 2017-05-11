@@ -66,7 +66,7 @@ header.card-header
               li
                 i.fa class=file.isManualCompleted
                 | &nbsp; Manual Scan
-              if file.project.isIOSApp
+              if file.project.isAPIScanEnabled
                 li
                   i.fa class=file.isAPICompleted
                   | &nbsp; API Scan
