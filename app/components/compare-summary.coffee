@@ -8,10 +8,10 @@ CompareSummaryComponent = Ember.Component.extend
 
   tagName: ["tr"]
 
-  tBeingAnalyzed: t("beingAnalyzed")
-  tRemainsUnchanged: t("remainsUnchanged")
-  tHasImproved: t("hasImproved")
-  tGottenWorse: t("gottenWorse")
+  tAnalyzing: t("analyzing")
+  tUnchanged: t("unchanged")
+  tImproved: t("improved")
+  tWorsened: t("worsened")
 
   vulnerability: (->
     @get("comparison")["vulnerability"]
@@ -43,19 +43,19 @@ CompareSummaryComponent = Ember.Component.extend
     file1Risk = @get "file1Analysis.risk"
     file2Risk = @get "file2Analysis.risk"
 
-    tBeingAnalyzed = @get "tBeingAnalyzed"
-    tRemainsUnchanged = @get "tRemainsUnchanged"
-    tHasImproved = @get "tHasImproved"
-    tGottenWorse = @get "tGottenWorse"
+    tAnalyzing = @get "tAnalyzing"
+    tUnchanged = @get "tUnchanged"
+    tImproved = @get "tImproved"
+    tWorsened = @get "tWorsened"
 
     if ENUMS.RISK.UNKNOWN in [file1Risk, file2Risk]
-      tBeingAnalyzed
+      tAnalyzing
     else if file1Risk is file2Risk
-      tRemainsUnchanged
+      tUnchanged
     else if file1Risk > file2Risk
-      tHasImproved
+      tImproved
     else if file1Risk < file2Risk
-      tGottenWorse
+      tWorsened
   ).property "file1Analysis.risk", "file2Analysis.risk"
 
 
