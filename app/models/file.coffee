@@ -27,11 +27,20 @@ File = DS.Model.extend BaseModelMixin,
   analyses: DS.hasMany 'analysis', inverse: 'file'
   report: DS.attr 'string'
   manual: DS.attr 'boolean'
+  apiScanProgress: DS.attr 'number'
 
   ifManualNotRequested: (->
     manual = @get 'manual'
     !manual
   ).property 'manual'
+
+  isApiScanning: (->
+    apiScanProgress = @get "apiScanProgress"
+    if apiScanProgress in [0, undefined, 100]
+      false
+    else
+      true
+  ).property "apiScanProgress"
 
   fileDetailsClass: (->
     hasMultipleFiles = @get "project.hasMultipleFiles"

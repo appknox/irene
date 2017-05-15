@@ -92,5 +92,13 @@ header.card-header
                 td
                   = fa-icon "clipboard copy-icon"
                   | &nbsp; Copy
+            if file.isApiScanning
+              table
+                tr
+                  td
+                    | API Scan Progress
+                  td
+                    = file.apiScanProgress
+                    | %
 
 = yield
