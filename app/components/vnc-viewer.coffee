@@ -158,6 +158,8 @@ VncViewerComponent = Ember.Component.extend
         that.send "closeModal"
         that.send "dynamicScan"
         that.get("notify").success "Successfully added the url filter & Starting the scan"
+        that.set "showAPIScan", true
+        that.set "showURLFilter", false
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message
