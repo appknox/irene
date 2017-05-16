@@ -36,10 +36,7 @@ File = DS.Model.extend BaseModelMixin,
 
   isApiScanning: (->
     apiScanProgress = @get "apiScanProgress"
-    if apiScanProgress in [0, undefined, 100]
-      false
-    else
-      true
+    apiScanProgress not in [0, undefined, 100]
   ).property "apiScanProgress"
 
   fileDetailsClass: (->
