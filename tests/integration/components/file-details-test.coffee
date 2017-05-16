@@ -12,5 +12,4 @@ test 'it renders', (assert) ->
   # Handle any actions with @on 'myAction', (val) ->
 
   @render hbs """{{file-details}}"""
-
-  assert.equal @$().text().trim(), 'File DetailsSettingsHigh: Medium: Low: Passed: Unknown:   Static Scan  Dynamic Scan  Manual Scan  API Scancreated onversion codeReport Password  CopyPDF ReportVulnerability Details'
+  assert.equal @$().text().trim(), 'File DetailsSettingsHigh: Medium: Low: Passed: Unknown:   Static Scan  Dynamic Scan  Manual Scancreated onversion codeReport Password  CopyPDF ReportVulnerability Details'
