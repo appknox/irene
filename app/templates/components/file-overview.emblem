@@ -56,19 +56,19 @@ header.card-header
               | : #{file.countRiskUnknown}
         if isThreeColumn
           .column.flex-center
-            ul
+            ul.scan-status
               li
-                i.fa class=file.isStaticCompleted
+                i.fa class=file.isStaticDone:fa-check:fa-times
                 | &nbsp; Static Scan
               li
-                i.fa class=file.isDynamicCompleted
+                i.fa class=file.isDynamicDone:fa-check:fa-times
                 | &nbsp; Dynamic Scan
               li
                 i.fa class=file.isManualCompleted
                 | &nbsp; Manual Scan
               if file.project.isAPIScanEnabled
                 li
-                  i.fa class=file.isAPICompleted
+                  i.fa class=file.isApiDone:fa-check:fa-times
                   | &nbsp; API Scan
           .column.package-desc
             table
