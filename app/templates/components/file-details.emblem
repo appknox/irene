@@ -5,7 +5,7 @@
       = fa-icon "question-circle start-tour"
 
 .tour-step-sd-overview
-= file-overview file=file isThreeColumn=true class="margin-top"
+= file-header file=file class="margin-top"
     footer.card-button.tour-step-sd-action-buttons
       .columns class=file.fileDetailsClass
         .column.is-one-quarter
