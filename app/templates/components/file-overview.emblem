@@ -94,7 +94,7 @@ header.card-header
                   = fa-icon "clipboard copy-icon"
                   | &nbsp; Copy
             if file.isApiScanning
-              table
+              table.api-scan-status
                 tr
                   td
                     | API Scan Progress
