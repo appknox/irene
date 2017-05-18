@@ -27,11 +27,33 @@ File = DS.Model.extend BaseModelMixin,
   analyses: DS.hasMany 'analysis', inverse: 'file'
   report: DS.attr 'string'
   manual: DS.attr 'boolean'
+  apiScanProgress: DS.attr 'number'
+  isStaticDone: DS.attr 'boolean'
+  isDynamicDone: DS.attr 'boolean'
+  isApiDone: DS.attr 'boolean'
 
   ifManualNotRequested: (->
     manual = @get 'manual'
     !manual
   ).property 'manual'
+
+  unknownRiskAnalyses: Ember.computed 'analyses.@each.risk', ->
+    @get("analyses").filterBy 'risk', ENUMS.RISK.UNKNOWN
+
+  scanCompletionClass: (type)->
+    for analysis in @get "unknownRiskAnalyses"
+      types = analysis.get "vulnerability.types"
+      if types? and type in types
+        return "fa-times"
+    "fa-check"
+
+  isManualCompleted: Ember.computed "unknownRiskAnalyses", ->
+    @scanCompletionClass ENUMS.VULNERABILITY_TYPE.MANUAL
+
+  isApiScanning: (->
+    apiScanProgress = @get "apiScanProgress"
+    apiScanProgress not in [0, undefined, 100]
+  ).property "apiScanProgress"
 
   fileDetailsClass: (->
     hasMultipleFiles = @get "project.hasMultipleFiles"
@@ -82,28 +104,6 @@ File = DS.Model.extend BaseModelMixin,
       {"value": countRiskNone, "color": _getComputedColor "success"}
       {"value": countRiskUnknown, "color": _getComputedColor "default"}
     ]
-
-  unknownRiskAnalyses: Ember.computed 'analyses.@each.risk', ->
-    @get("analyses").filterBy 'risk', ENUMS.RISK.UNKNOWN
-
-  scanCompletionClass: (type)->
-    for analysis in @get "unknownRiskAnalyses"
-      types = analysis.get "vulnerability.types"
-      if types? and type in types
-        return "fa-times scan-pending"
-    "fa-check scan-completed"
-
-  isStaticCompleted: Ember.computed "unknownRiskAnalyses", ->
-    @scanCompletionClass ENUMS.VULNERABILITY_TYPE.STATIC
-
-  isDynamicCompleted: Ember.computed "unknownRiskAnalyses", ->
-    @scanCompletionClass ENUMS.VULNERABILITY_TYPE.DYNAMIC
-
-  isManualCompleted: Ember.computed "unknownRiskAnalyses", ->
-    @scanCompletionClass ENUMS.VULNERABILITY_TYPE.MANUAL
-
-  isAPICompleted: Ember.computed "unknownRiskAnalyses", ->
-    @scanCompletionClass ENUMS.VULNERABILITY_TYPE.API
 
   isNoneStaus: (->
     status = @get 'dynamicStatus'

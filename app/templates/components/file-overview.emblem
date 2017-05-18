@@ -73,17 +73,17 @@ header.card-header
               h5
                 | SCAN STATUS
               li
-                i.fa class=file.isStaticCompleted
+                i.fa class=file.isStaticDone:fa-check:fa-times
                 | &nbsp; Static Scan
               li
-                i.fa class=file.isDynamicCompleted
+                i.fa class=file.isDynamicDone:fa-check:fa-times
                 | &nbsp; Dynamic Scan
               li
                 i.fa class=file.isManualCompleted
                 | &nbsp; Manual Scan
-              if file.project.isIOSApp
+              if file.project.isAPIScanEnabled
                 li
-                  i.fa class=file.isAPICompleted
+                  i.fa class=file.isApiDone:fa-check:fa-times
                   | &nbsp; API Scan
           .column.package-desc
             h5.align-center
@@ -110,5 +110,13 @@ header.card-header
                 td
                   = fa-icon "clipboard copy-icon"
                   | &nbsp; Copy
+            if file.isApiScanning
+              table.api-scan-status
+                tr
+                  td
+                    | API Scan Progress
+                  td
+                    = file.apiScanProgress
+                    | %
 
 = yield
