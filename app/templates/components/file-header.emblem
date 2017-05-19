@@ -24,3 +24,68 @@
 
         li.file-hide-overflow
           | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
+
+.card.is-fullwidth.margin-bottom20.app-details-card
+  header.card-header
+    p.card-header-title.tour-step-project-details
+      h5.margin-top
+        | App Details
+    .column.content-right
+      .card-button.tour-step-sd-action-buttons
+        .columns
+          .column.card-button
+            if file.project.hasMultipleFiles
+              = link-to 'authenticated.project.files' file.project.id class="is-fullwidth" tagName="button"
+                = t "allFiles"
+          .column.card-button
+            button.is-fullwidth click="getPDFReportLink"
+              = t "pdfReport"
+          .column.card-button
+            if env.isAppknox
+              if file.ifManualNotRequested
+                button.is-fullwidth click="requestManual"
+                  = t "manual"
+  .card-content
+    .columns
+      .column.flex-center
+        = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
+      .column.flex-center
+        ul.risk-table
+          li.danger
+            = t "high"
+            | : #{file.countRiskHigh}
+          li.warning
+            = t "medium"
+            | : #{file.countRiskMedium}
+          li.low
+            = t "low"
+            | : #{file.countRiskLow}
+          li.success
+            = t "none"
+            | : #{file.countRiskNone}
+          li.default
+            = t "unknown"
+            | : #{file.countRiskUnknown}
+      .column.package-desc.is-one-quarter
+        table
+          tr
+            td.capitalize-text
+              = t "createdOn"
+            td
+              = file.createdOnHumanized
+        table
+          tr
+            td.capitalize-text
+              = t "versionCode"
+            td
+              | #{file.versionCode}
+        table
+          tr
+            td colspan="2"
+              = t "reportPassword"
+          tr.zeroclipboard-copy title="Copy Password" data-clipboard-text=file.project.pdfPassword
+            td
+              | #{file.project.pdfPassword}
+            td
+              = fa-icon "clipboard copy-icon"
+              | &nbsp; Copy
