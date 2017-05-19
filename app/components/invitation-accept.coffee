@@ -18,6 +18,7 @@ InvitationAcceptComponent = Ember.Component.extend
         # FIXME: This should be this.transitionTo`
         window.location = "/"
       .catch (error) ->
+        that.get("notify").error error.payload.message, ENV.notifications
         for error in error.errors
           that.get("notify").error error.detail?.message
 
