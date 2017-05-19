@@ -333,11 +333,11 @@ button, .button
   button:nth-child(2)
     margin-left: 10px
   .start-scan
-    width: 150px  
+    width: 150px
   ul
     li
       margin-top: 10px
-      
+
 .hide-overflow
   max-width: 300px
   overflow: hidden
@@ -364,7 +364,9 @@ button, .button
   bottom: 70px!important
 
 .package-desc
+  margin-right: 10px
   table
+    cursor: pointer
     font-size: 13px
     margin-top: 10px
     tr
@@ -589,3 +591,35 @@ ul.risk-table
   li.default
     i
       color: $grey
+
+.progress-wrap
+  width: 60%
+  border-radius: 10px!important
+
+.app-details-card
+  .card-header
+    height: 40px
+  .card-content
+    height: 160px
+    .columns
+      .column
+        padding-top: 0px
+        margin-top: -10px
+        .risk-table
+          margin-top: 20px
+          margin-top: 20px
+  .card-button button
+    margin-top: -5px
+
+.scan-status-card
+  .card-header
+    height: 40px
+    h5
+      margin-top: 7px
+  .card-content
+    height: 100px
+    .columns
+      .column
+        height: 40px
+        .progress-wrap
+          margin-top: 50px

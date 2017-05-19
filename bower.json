@@ -21,7 +21,7 @@
     "socket.io-client": "^1.7.2"
   },
   "resolutions": {
-    "bohemia": "^0.6.0",
+    "bohemia": "^0.8.2",
     "tether": "^1.0.1"
   }
 }
