@@ -1,1 +1,26 @@
-| File details
+.card.is-fullwidth.margin-bottom20
+  header.card-header
+    a.card-header-icon
+      img src=file.iconUrl alt=file.name
+    p.card-header-title.tour-step-project-details
+      ul.is-fullwidth
+        li
+          h5
+            .columns.project-specific
+              .column.hide-overflow
+                = file.name
+              .column.is-one-sixth.app-icon
+                = fa-icon file.project.platformIconClass class="card-icon"
+              .column.content-right
+                .columns
+                  .column.card-button
+                    = link-to 'authenticated.project.settings' file.project.id  tagName="button"
+                      = t "settings"
+                  if file.project.hasMultipleFiles
+                    .column.card-button
+                      = link-to 'authenticated.choose' file.project.lastFile.id tagName="button"
+                        = t "compare"
+
+
+        li.file-hide-overflow
+          | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
