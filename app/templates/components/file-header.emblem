@@ -89,3 +89,40 @@
             td
               = fa-icon "clipboard copy-icon"
               | &nbsp; Copy
+
+.card.is-fullwidth.margin-bottom20.scan-status-card
+  header.card-header
+    p.card-header-title.tour-step-project-details
+      h5
+        | Scan Status
+  .card-content
+    .columns
+      .column.flex-center
+        | Static Scan
+      .column.flex-center
+        | Dynamic Scan
+      .column.flex-center
+        | Manual Scan
+      .column.flex-center
+        | API Scan
+    .columns
+      .column.flex-center
+        div.progress-wrap.progress
+          div.progress-bar.progress style="left:50%"
+          div.progress-text
+           | 20%
+      .column.flex-center
+        div.progress-wrap.progress
+          div.progress-bar.progress style="left:50%"
+          div.progress-text
+           | 20%
+      .column.flex-center
+        div.progress-wrap.progress
+          div.progress-bar.progress style="left:50%"
+          div.progress-text
+           | 20%
+      .column.flex-center
+        div.progress-wrap.progress
+          div.progress-bar.progress style="left:50%"
+          div.progress-text
+           | 20%
