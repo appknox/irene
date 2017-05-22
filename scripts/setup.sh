@@ -2,7 +2,6 @@
 
 set -x
 
-sudo -H pip install --upgrade pip
 sudo -H pip install nodeenv
 
 mkdir -p ~/.nodeenvs/
