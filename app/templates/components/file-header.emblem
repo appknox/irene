@@ -108,21 +108,25 @@
     .columns
       .column.flex-center
         div.progress-wrap.progress
-          div.progress-bar.progress style="left:50%"
+          div.progress-bar.progress style="left:{{file.staticScanProgress}}%"
           div.progress-text
-           | 20%
+           = file.staticScanProgress
+           | %
       .column.flex-center
         div.progress-wrap.progress
-          div.progress-bar.progress style="left:50%"
+          div.progress-bar.progress style="left:{{file.dynamicScanProgress}}%"
           div.progress-text
-           | 20%
+            = file.dynamicScanProgress
+            | %
       .column.flex-center
         div.progress-wrap.progress
-          div.progress-bar.progress style="left:50%"
+          div.progress-bar.progress style="left:{{file.manualScanProgress}}%"
           div.progress-text
-           | 20%
+            = file.manualScanProgress
+            | %
       .column.flex-center
         div.progress-wrap.progress
-          div.progress-bar.progress style="left:50%"
+          div.progress-bar.progress style="left:{{file.apiScanProgress}}%"
           div.progress-text
-           | 20%
+           = file.apiScanProgress  
+           | %
