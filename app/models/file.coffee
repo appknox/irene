@@ -27,6 +27,8 @@ File = DS.Model.extend BaseModelMixin,
   analyses: DS.hasMany 'analysis', inverse: 'file'
   report: DS.attr 'string'
   manual: DS.attr 'boolean'
+  apiScanProgress: DS.attr 'number'
+  staticScanProgress: DS.attr 'number'
 
   ifManualNotRequested: (->
     manual = @get 'manual'
@@ -104,6 +106,25 @@ File = DS.Model.extend BaseModelMixin,
 
   isAPICompleted: Ember.computed "unknownRiskAnalyses", ->
     @scanCompletionClass ENUMS.VULNERABILITY_TYPE.API
+
+  scanProgress: (type) ->
+    counter = 0
+    completedCounter = 0
+    analyses = @get "analyses"
+    analyses.forEach (analysis)->
+      types = analysis.get "vulnerability.types"
+      if types? and type in types
+        counter = counter + 1
+        risk = analysis.get "risk"
+        if risk isnt ENUMS.RISK.UNKNOWN
+          completedCounter = completedCounter + 1
+    return Math.round(completedCounter * 100 / counter)
+
+  dynamicScanProgress: Ember.computed "analyses.@each.risk", ->
+    @scanProgress ENUMS.VULNERABILITY_TYPE.DYNAMIC
+
+  manualScanProgress: Ember.computed "analyses.@each.risk", ->
+    @scanProgress ENUMS.VULNERABILITY_TYPE.MANUAL
 
   isNoneStaus: (->
     status = @get 'dynamicStatus'
