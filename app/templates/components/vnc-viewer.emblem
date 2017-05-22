@@ -50,4 +50,4 @@ if isPoppedOut
                 = input class="form-control input" type="text" value=file.project.apiUrlFilters
               p.control
                 button.is-primary.start-scan click="addUrlFilterAndStartScan"
-                  | Save Filter & Start Scan
+                  | Save Filter &amp; Start Scan
