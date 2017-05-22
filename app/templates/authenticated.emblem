@@ -31,9 +31,10 @@
         li
           = link-to 'authenticated.settings'
             = t "settings"
-        li
-          = link-to 'authenticated.billing'
-            = t "billing"
+        if model.ifBillingIsNotHidden
+          li
+            = link-to 'authenticated.billing'
+              = t "billing"
         li
           a click="invalidateSession"
             = t "logout"
