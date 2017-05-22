@@ -50,7 +50,7 @@ module.exports = function(environment) {
       ajax: {
         trackMethods: ['GET', 'POST', 'DELETE', 'OPTIONS', 'PUT'],
         trackWebSockets: false,
-        ignoreURLs: []
+        ignoreURLs: ['api.mixpanel.com']
       }
     },
     rootURL: '/',
