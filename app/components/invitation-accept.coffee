@@ -16,8 +16,13 @@ InvitationAcceptComponent = Ember.Component.extend
       @get("ajax").post ENV.endpoints.signup, data: data
       .then (data)->
         # FIXME: This should be this.transitionTo`
-        window.location = "/"
+        that.get("notify").success "User got created sucessfully", ENV.notifications
+        setTimeout ->
+          window.location.href = "/"
+        ,
+          3 * 1000
       .catch (error) ->
+        that.get("notify").error error.payload.message, ENV.notifications
         for error in error.errors
           that.get("notify").error error.detail?.message
 
