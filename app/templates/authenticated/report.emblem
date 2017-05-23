@@ -1,0 +1,239 @@
+.main-container
+  .report-container
+    .columns
+      .column
+        h6
+          | confidential
+      .column.content-right
+        h6
+          | 15th February, 2017
+    .columns
+      .column.align-middle
+        img src='https://raw.githubusercontent.com/appknox/press-kit/master/logo/logo-dark-small.png'
+    .columns
+      .column.align-middle
+        h2.underline
+         | Android Security Report
+    .columns
+      .column.align-middle
+        h6.italics
+          | For Internal Purpose
+    .columns
+      .column.align-middle
+        h5.bold
+          | Prepared For: com.flipkart.android
+    .columns
+      .column
+        .mini-container
+          p
+            | Prepared by XYSec Labs Pte. Ltd. Portions of this document and the templates used in its production are the property of XYSec Labs Pte. Ltd. and cannot be copied without permission.
+          p
+            | While precautions have been taken in the preparation of this document, XYSec Labs Pte. Ltd., the publisher, and the author(s) assume no responsibility for errors, omissions, or for damages resulting from the use of the information contained herein. Use of XYSec Labs Pte. Ltd. services does not guarantee the security of a system, or that intrusions will not occur.
+
+    div style="page-break-before: always"
+
+    .columns
+      .column.heading-container.flex-center
+          h3
+            | Table Of Contents
+    .columns
+      .column.is-half.margin-auto
+        .content-table
+          ol.main-heading
+            li
+              a href="#01"
+                | Report Summary
+            ol.sub-topic
+              li
+                a href="#02"
+                  | Application Details
+              li
+                a href="#03"
+                  | Types Of Vulnerabilities
+              li
+                a href="#04"
+                  | OWASP Top 10 Vulnerabilities
+              li
+                a href="#05"
+                  | Severity Of Risks
+              li
+                a href="#06"
+                  | Audit Summary
+            li
+              a href="#07"
+                | Configuration Management
+            ol.sub-topic
+              li
+                a href="#08"
+                  | Do not provide addJavascriptInterface method access in a WebView which could contain untrusted content (API level JELLY_BEAN or below)
+              ol.sub-heading
+                li
+                  a href="#09"
+                    | Risk Assessment
+                li
+                  a href="#10"
+                    | Noncompliant Code Example
+                li
+                  a href="#11"
+                    | Compliant Solution
+                li
+                  a href="#12"
+                    | Related Vulnerabilities
+
+    div style="page-break-before: always"
+
+    .columns
+      .column.heading-container.flex-center
+          a class="link-tag" id="01"
+          h3
+            | Report Summary
+    p.margin-left30
+      | Appknox conducted a security assessment of the mobile application for the Android platform. This report contains all the findings during the automated auditing process. It also contains the process of discovering those vulnerabilities in the first place, and ways to remediate those issues.
+    .columns
+      .column.sub-heading-container.flex-center
+        a class="link-tag" id="02"
+        h5
+          | Application Details
+    table
+      tr
+        td
+          | Application Name
+        td
+          | com.flipkart.android
+      tr
+        td
+          | Application Namespace
+        td
+          | com.flipkart.android
+      tr
+        td
+          | Version
+        td
+          | 5.8
+      tr
+        td
+          | Audit Date
+        td
+          | 2017-02-15 06:13
+      tr
+        td
+          | Application SHA1 Hash
+        td
+          | c4da68e075c5d098f14909e9ded51916e8238b46
+      tr
+        td
+          | Application MD5 Hash
+        td
+          | f68e50276da5ec2958003dd1270c9a72
+    .columns
+      .column.sub-heading-container.flex-center
+        a class="link-tag" id="03"
+        h5
+          | Types Of Vulnerabilities
+    .columns.sub-topic-heading
+      ol.is-fullwidth
+        li
+          | Information Disclosure : &nbsp;
+          p
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    .columns
+      .column.sub-heading-container.flex-center
+        a class="link-tag" id="04"
+        h5
+          | OWASP Top 10 Vulnerabilities
+    .columns.sub-topic-heading
+      ol.is-fullwidth
+        li
+          | Improper Platform Usage : &nbsp;
+          p
+            | This category covers misuse of a platform feature or failure to use platform security controls. It might include Android intents, platform permissions, misuse of TouchID, the Keychain, or some other security control that is part of the mobile operating system. There are several ways that mobile apps can experience this risk.
+    .columns
+      .column.sub-heading-container.flex-center
+        a class="link-tag" id="05"
+        h5
+          | Severity Of Risks
+    .columns.sub-topic-heading
+      ol.is-fullwidth
+        li
+          | HIGH : &nbsp;
+          p
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    .columns
+      .column.sub-heading-container.flex-center
+        a class="link-tag" id="06"
+        h5
+          | Audit Summary
+    table.audit-table
+      tr
+        td
+          h5
+            | Android Unprotected Exported Service
+          p
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        td.risk-type style="color:#F5D76E"
+          h5.tag class="is-warning"
+            | Medium Risk
+    .columns
+      .column.heading-container.flex-center
+          a class="link-tag" id="07"
+          h3
+            | Configuration Management
+    .columns
+      .column.sub-heading-container.flex-center.bucket-list
+        ol
+           a class="link-tag" id="08"
+           li
+             | Do not provide addJavascriptInterface method access in a WebView which could contain untrusted content (API level JELLY_BEAN or below)
+             | :
+    p.margin-left35
+     | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    .columns
+      // color changes depending on risk type
+      .column.margin-left35.margin-top50.margin-bottom50
+        h5.tag.risk-tag class="is-danger"
+          | Risk Rating : High
+    .columns
+      .column.analysis-type
+        a class="link-tag" id="09"
+        h5
+          | Risk Assessment
+    p.margin-left35.margin-top20
+      | The Android application exports Service for use by other applications, but does not properly restrict which applications can launch the component or access the data it contains.
+    ul.margin-left50.margin-top20.margin-bottom50
+      li
+        | Exported service at com.flipkart.accountManager.account.AuthenticatorService
+      li
+        | Exported service at com.flipkart.accountManager.account.AuthenticatorService
+      li
+        | Exported service at com.flipkart.accountManager.account.AuthenticatorService
+
+    .columns
+      .column.analysis-type
+        a class="link-tag" id="10"
+        h5
+          | Noncompliant Code Example
+    p.margin-left35.margin-top20
+      | Using HTTP with SSL or TLS to connect to internet, or without a proper certificate the connection can be easily eavesdropped by attacker without the knowledge of the user.
+    pre.pre-code.margin-left50.margin-top20.margin-bottom50
+      ' String link = "http://www.google.com";
+
+    .columns
+      .column.analysis-type
+        a class="link-tag" id="11"
+        h5
+          | Compliant Solution
+    p.margin-left35.margin-top20.margin-bottom50
+      | If you are using a Service for sharing data between only your own apps, it is preferable to use the android:protectionLevel attribute set to "signature" protection. Signature permissions do not require user confirmation, so they provide a better user experience and more controlled access to the Service when the apps accessing the data are signed with the same key
+
+    .columns
+      .column.analysis-type
+        a class="link-tag" id="12"
+        h5
+          | Related Vulnerabilities
+    p.margin-left35.margin-top20
+      ul
+        li
+          a href="http://jvn.jp/en/jp/JVN39218538/"
+            |JVN#39218538 &nbsp;
+          span.margin-bottom50
+            | Pizza Hut Japan Official Order App for Android has a problem whereby it fails to verify SSL server certificates.

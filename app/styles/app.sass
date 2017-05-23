@@ -32,8 +32,14 @@ $FreestyleGuide-color--background: $background
 .margin-left30
   margin-left: 30px
 
+.margin-left35
+  margin-left: 35px
+
 .margin-left0
   margin-left: 0px
+
+.margin-left50
+  margin-left: 50px
 
 .margin-top50
   margin-top: 50px
@@ -47,8 +53,11 @@ $FreestyleGuide-color--background: $background
 .margin-right-40
   margin-right: -40px
 
-.margin-bottom20
-  margin-bottom: 20px
+.margin-bottom50
+  margin-bottom: 50px
+
+.margin-auto
+  margin: auto
 
 .margin-both
   margin-left: 10px
@@ -98,6 +107,140 @@ $FreestyleGuide-color--background: $background
   width: 100%
 
 // FIXME: Remove this after updating bohemia
+
+.main-container
+  padding-left: 30px
+  padding-right: 30px
+  .report-container
+    .sub-topic-container
+      flex: none
+      width: 20%
+    .content-table
+      ol
+        li
+          border-width: 1px 1px 0px 1px
+          border-style: solid
+          border-color: #000
+          list-style-position: inside
+          padding: 5px
+      ol.main-heading
+        li
+          list-style-type: upper-roman
+          padding-left: 10px
+          a
+            cursor: pointer
+            color: rgb(107, 107, 107)
+          a:hover
+            color: darken(rgb(107, 107, 107), 50%)
+      ol.sub-topic
+        li
+          list-style-type: lower-alpha
+          padding-left: 30px
+        li.last-child
+            border-bottom: 1px solid #000
+      ol.sub-heading
+        li
+          list-style-type: lower-roman
+          padding-left: 50px
+
+    table.audit-table
+      tr
+        td
+          p
+            font-size: 14px
+        td.risk-type
+          width: 20%
+          vertical-align: middle
+
+    table
+      width: 95%
+      margin: auto
+      tr
+        td
+          border-color: #6B6B6B
+          text-align: center
+        p
+          font-size: 13px
+          text-align: left
+    p
+      font-size: 15px
+    .column:nth-child(1)
+      h6
+        margin-top: 10px
+        margin-left: 20px
+    .column:nth-child(2)
+      h6
+        margin-top: 10px
+        margin-right: 20px
+    .columns:nth-child(2)
+      margin-top: 40px
+    .columns:nth-child(3), .columns:nth-child(5), .columns:nth-child(6)
+      margin-top: 100px
+    .columns:nth-child(6)
+      p
+        margin-bottom: 30px
+
+.link-tag
+  margin-top: -70px
+
+.mini-container
+  padding-left: 100px
+  padding-right: 100px
+
+.heading-container
+  border: 2px solid #EF4836
+  border-radius: 5px
+  color: #EF4836
+  padding: 2px
+  margin: 40px auto
+  flex: none
+  min-width: 30%
+
+.sub-heading-container
+  padding: 5px
+  margin: 45px
+  border: 2px solid #EF4836
+  border-radius: 5px
+  color: #EF4836
+  flex: none
+  min-width: 30%
+
+.risk-tag
+  padding: 15px
+  font-size: 16px
+
+.bucket-list
+  @extend .sub-heading-container
+  border: none
+  margin: 20px
+  ol
+    li
+      list-style-type: decimal
+      margin-left: 30px
+      font-size: 18px
+
+.analysis-type
+  margin-left: 40px
+  border-left: 2px solid #C0C0C0
+  border-top: 2px solid #C0C0C0
+  flex: none
+  min-width: 20%
+
+.sub-topic-heading
+  ol
+    li
+      margin-left: 60px
+      font-size: 15px
+
+.underline
+  border-bottom: 2px solid #6B6B6B
+
+.italics
+  font-style: italic
+
+.bold
+  font-weight: 900
+
 .menu-list
   margin-top: 10px!important
   a
@@ -112,6 +255,21 @@ $FreestyleGuide-color--background: $background
     background-color: #d8d8d8
     color: #EF4836
     font-weight: 900
+
+.card-header
+  .pricing-title
+    align-items: center
+    justify-content: center
+
+.card-footer
+  button:hover, button:active, button:focus
+    background-color: #FE4D3F
+    color: #fff
+
+.card-header-icon
+  img
+    height: 45px
+    width: 45px
 
 input
   display: block

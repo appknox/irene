@@ -22,6 +22,7 @@ export default function() {
   this.get('/vulnerabilities/:id', 'vulnerability');
   this.get('/invitations/:id', 'invitation');
   this.get('/devices', 'device');
+  this.get('/reports/:id', 'report');
   this.get('/invoices', 'invoice');
   this.get('/invoices/:id ', 'invoice');
 

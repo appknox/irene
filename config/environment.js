@@ -205,6 +205,9 @@ module.exports = function(environment) {
       accessToken: '4381303f93734918966ff4e1b028cee5'
     };
     ENV.socketPath = "https://socket.appknox.com",
+    ENV.rollbar = {
+      accessToken: '4381303f93734918966ff4e1b028cee5'
+    };
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
