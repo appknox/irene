@@ -9,12 +9,12 @@ if project.githubRepo
       i.fa.risk-icons.fa-trash-o
         | &nbsp; #{t "remove"}
 
-.columns
-  .column.is-one-third
-    select.select{action 'selectRepo' on='change'}
-      if project.githubRepo
+else
+  .columns
+    .column.is-one-third
+      select.select{action 'selectRepo' on='change'}
         option value=0
           = t "noPreference"
-      each githubRepos as |repo|
-        option value=repo
-          = repo
+        each githubRepos as |repo|
+          option value=repo
+            = repo
