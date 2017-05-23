@@ -142,6 +142,7 @@ export default {
   "signin": "サインイン",
   "sortBy": "並び替え",
   "static": "静的",
+  "status": "ステータス",
   "stripeManual": "ストライプマニュアル",
   "stripeRecurring": "ストライプ反復",
   "submitUrl": "送信",

@@ -143,6 +143,7 @@ export default {
   "signin": "Sign In",
   "sortBy": "Sort By",
   "static": "Static",
+  "status": "Status",
   "stripeManual": "Stripe Manual",
   "stripeRecurring": "Stripe Recurring",
   "submitUrl": "Submit URL",
