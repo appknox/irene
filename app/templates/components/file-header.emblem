@@ -48,7 +48,7 @@
   .card-content
     .columns
       .column.flex-center
-        = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
+        = pie-chart data=file.pieChartData height=150 width=150 globalAlpha=globalAlpha radiusRatio=radiusRatio
       .column.flex-center
         ul.risk-table
           h5
