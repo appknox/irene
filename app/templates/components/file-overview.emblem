@@ -10,7 +10,7 @@ header.card-header
               = file.name
             .column.is-one-sixth.app-icon
               = fa-icon file.project.platformIconClass class="card-icon"
-              
+
       li.hide-overflow
         | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
 .card-content
@@ -29,29 +29,19 @@ header.card-header
           = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
         .column
           ul.risk-table
-            li.danger
-              i.fa.fa-warning
-              | &nbsp;
+            li.is-danger
               = t "high"
               | : #{file.countRiskHigh}
-            li.warning
-              i.fa.fa-warning
-              | &nbsp;
+            li.is-warning
               = t "medium"
               | : #{file.countRiskMedium}
-            li.low
-              i.fa.fa-warning
-              | &nbsp;
+            li.is-info
               = t "low"
               | : #{file.countRiskLow}
-            li.success
-              i.fa.fa-check
-              | &nbsp;
+            li.is-success
               = t "none"
               | : #{file.countRiskNone}
-            li.default
-              i.fa.fa-spinner.fa-spin
-              | &nbsp;
+            li.is-default
               = t "unknown"
               | : #{file.countRiskUnknown}
 

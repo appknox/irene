@@ -2,6 +2,9 @@
 
 FileHeaderComponent = Ember.Component.extend
 
+  globalAlpha:0.4
+  radiusRatio:0.9
+
   didInsertElement: ->
     zcEl = $(@element).find ".zeroclipboard-copy"
     that = @

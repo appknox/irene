@@ -51,19 +51,21 @@
         = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
       .column.flex-center
         ul.risk-table
-          li.danger
+          h5
+           |  RISK TYPE
+          li.is-danger
             = t "high"
             | : #{file.countRiskHigh}
-          li.warning
+          li.is-warning
             = t "medium"
             | : #{file.countRiskMedium}
-          li.low
+          li.is-info
             = t "low"
             | : #{file.countRiskLow}
-          li.success
+          li.is-success
             = t "none"
             | : #{file.countRiskNone}
-          li.default
+          li.is-default
             = t "unknown"
             | : #{file.countRiskUnknown}
       .column.package-desc.is-one-quarter
