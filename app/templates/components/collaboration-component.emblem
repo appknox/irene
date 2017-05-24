@@ -20,6 +20,5 @@ button.is-primary click="openCollaborationModal"
             each roles as |role|
               option value=role.value
                 = role.key
-
-  .modal-footer
-    button click="addCollaboration" Add Collaboration
+        .card-button
+          button click="addCollaboration" Add Collaboration

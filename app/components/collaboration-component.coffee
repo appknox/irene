@@ -32,6 +32,7 @@ CollaborationComponentComponent = Ember.Component.extend
         that.send "closeModal"
         that.get("notify").success "Collaboration added!"
       .catch (error) ->
+        that.get("notify").error error.payload.message, ENV.notifications
         for error in error.errors
           that.get("notify").error error.detail?.message
 
