@@ -5,7 +5,7 @@ export default {
   "addCollaborations": "Add Collaboration",
   "addNamespace": "Add Namespace",
   "admin": "Admin",
-  "allFiles": "All Files",
+  "allScans": "All Scans",
   "allPlatforms": "All Platforms",
   "api": "API",
   "apps": " Apps",

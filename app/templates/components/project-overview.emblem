@@ -7,7 +7,7 @@
       if project.hasMultipleFiles
         .column.is-one-quarter
           = link-to 'authenticated.project.files' project.id class="card-footer-item is-fullwidth" tagName="button"
-            = t "allFiles"
+            = t "allScans"
         .column.is-one-quarter
           = link-to 'authenticated.choose' project.lastFile.id class="card-footer-item is-fullwidth" tagName="button"
             = t "compare"

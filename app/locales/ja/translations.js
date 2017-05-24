@@ -5,7 +5,7 @@ export default {
   "addCollaborations": "作業ユーザーの追加",
   "addNamespace": "名前空間の追加",
   "admin": "管理者",
-  "allFiles": "ファイル",
+  "allScans": "すべてのスキャン",
   "allPlatforms": "すべてのプラットフォーム",
   "api": "API",
   "apps": "アプリ",

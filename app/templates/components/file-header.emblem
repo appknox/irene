@@ -36,7 +36,7 @@
           .column.card-button
             if file.project.hasMultipleFiles
               = link-to 'authenticated.project.files' file.project.id class="is-fullwidth" tagName="button"
-                = t "allFiles"
+                = t "allScans"
           .column.card-button
             button.is-fullwidth click="getPDFReportLink"
               = t "pdfReport"
