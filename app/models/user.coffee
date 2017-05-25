@@ -26,6 +26,12 @@ User = DS.Model.extend
   limitedScans: DS.attr 'boolean'
   scansLeft: DS.attr 'number'
   githubRedirectUrl: DS.attr 'string'
+  billingHidden: DS.attr 'boolean'
+
+  ifBillingIsNotHidden: (->
+    billingHidden = @get 'billingHidden'
+    !billingHidden
+  ).property 'billingHidden'
 
   getExpiryDate: (->
     if ENV.isAppknox

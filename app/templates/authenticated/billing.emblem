@@ -1,6 +1,7 @@
-.columns
-  .column
-    h2
-      = t "billing"
+if model.ifBillingIsNotHidden
+  .columns
+    .column
+      h2
+        = t "billing"
 
-= pricing-list
+  = pricing-list

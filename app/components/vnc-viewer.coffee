@@ -132,6 +132,8 @@ VncViewerComponent = Ember.Component.extend
       if ENUMS.PLATFORM.IOS is @get "file.project.platform" # TEMPIOSDYKEY
         @send "doNotRunAPIScan"
       else
+        @set "showURLFilter", false
+        @set "showAPIScan", true
         @set "showAPIScanModal", true
 
     closeModal: ->
@@ -158,8 +160,6 @@ VncViewerComponent = Ember.Component.extend
         that.send "closeModal"
         that.send "dynamicScan"
         that.get("notify").success "Successfully added the url filter & Starting the scan"
-        that.set "showAPIScan", true
-        that.set "showURLFilter", false
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message
