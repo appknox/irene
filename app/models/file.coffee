@@ -106,7 +106,6 @@ File = DS.Model.extend BaseModelMixin,
       {"value": countRiskUnknown, "color": _getComputedColor "default"}
     ]
 
-<<<<<<< HEAD
   unknownRiskAnalyses: Ember.computed 'analyses.@each.risk', ->
     @get("analyses").filterBy 'risk', ENUMS.RISK.UNKNOWN
 
@@ -148,8 +147,6 @@ File = DS.Model.extend BaseModelMixin,
   manualScanProgress: Ember.computed "analyses.@each.risk", ->
     @scanProgress ENUMS.VULNERABILITY_TYPE.MANUAL
 
-=======
->>>>>>> origin/358-ui-feedbacks
   isNoneStaus: (->
     status = @get 'dynamicStatus'
     status is ENUMS.DYNAMIC_STATUS.NONE
