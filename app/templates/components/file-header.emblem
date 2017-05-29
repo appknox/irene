@@ -109,25 +109,25 @@
         | API Scan
     .columns
       .column.flex-center
-        div.progress-wrap.progress.is-progress
+        div.progress-wrap.progress class=file.isStaticCompleted
           div.progress-bar.progress style="left:{{file.staticScanProgress}}%"
           div.progress-text
            = file.staticScanProgress
            | %
       .column.flex-center
-        div.progress-wrap.progress.is-progress
+        div.progress-wrap.progress class=file.isDynamicCompleted
           div.progress-bar.progress style="left:{{file.dynamicScanProgress}}%"
           div.progress-text
             = file.dynamicScanProgress
             | %
       .column.flex-center
-        div.progress-wrap.progress.is-progress
+        div.progress-wrap.progress class=file.isManualCompleted
           div.progress-bar.progress style="left:{{file.manualScanProgress}}%"
           div.progress-text
             = file.manualScanProgress
             | %
       .column.flex-center
-        div.progress-wrap.progress.is-progress
+        div.progress-wrap.progress class=file.isApiCompleted
           div.progress-bar.progress style="left:{{file.apiScanProgress}}%"
           div.progress-text
            = file.apiScanProgress

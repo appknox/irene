@@ -45,8 +45,8 @@ File = DS.Model.extend BaseModelMixin,
     for analysis in @get "unknownRiskAnalyses"
       types = analysis.get "vulnerability.types"
       if types? and type in types
-        return "fa-times"
-    "fa-check"
+        return "is-progress"
+    "is-success"
 
   isManualCompleted: Ember.computed "unknownRiskAnalyses", ->
     @scanCompletionClass ENUMS.VULNERABILITY_TYPE.MANUAL
@@ -55,6 +55,26 @@ File = DS.Model.extend BaseModelMixin,
     apiScanProgress = @get "apiScanProgress"
     apiScanProgress not in [0, undefined, 100]
   ).property "apiScanProgress"
+
+  scanProgressClass: (type)->
+    if type is true
+      return "is-success"
+    "is-progress"
+
+  isStaticCompleted: (->
+    isStaticDone = @get "isStaticDone"
+    @scanProgressClass isStaticDone
+  ).property "isStaticDone"
+
+  isDynamicCompleted: (->
+    isDynamicDone = @get "isDynamicDone"
+    @scanProgressClass isDynamicDone
+  ).property "isDynamicDone"
+
+  isApiCompleted: (->
+    isApiDone = @get "isApiDone"
+    @scanProgressClass isApiDone
+  ).property "isApiDone"
 
   fileDetailsClass: (->
     hasMultipleFiles = @get "project.hasMultipleFiles"
@@ -105,28 +125,6 @@ File = DS.Model.extend BaseModelMixin,
       {"value": countRiskNone, "color": _getComputedColor "success"}
       {"value": countRiskUnknown, "color": _getComputedColor "default"}
     ]
-
-  unknownRiskAnalyses: Ember.computed 'analyses.@each.risk', ->
-    @get("analyses").filterBy 'risk', ENUMS.RISK.UNKNOWN
-
-  scanCompletionClass: (type)->
-    for analysis in @get "unknownRiskAnalyses"
-      types = analysis.get "vulnerability.types"
-      if types? and type in types
-        return "fa-times scan-pending"
-    "fa-check scan-completed"
-
-  isStaticCompleted: Ember.computed "unknownRiskAnalyses", ->
-    @scanCompletionClass ENUMS.VULNERABILITY_TYPE.STATIC
-
-  isDynamicCompleted: Ember.computed "unknownRiskAnalyses", ->
-    @scanCompletionClass ENUMS.VULNERABILITY_TYPE.DYNAMIC
-
-  isManualCompleted: Ember.computed "unknownRiskAnalyses", ->
-    @scanCompletionClass ENUMS.VULNERABILITY_TYPE.MANUAL
-
-  isAPICompleted: Ember.computed "unknownRiskAnalyses", ->
-    @scanCompletionClass ENUMS.VULNERABILITY_TYPE.API
 
   scanProgress: (type) ->
     counter = 0
