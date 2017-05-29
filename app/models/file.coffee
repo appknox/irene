@@ -45,8 +45,8 @@ File = DS.Model.extend BaseModelMixin,
     for analysis in @get "unknownRiskAnalyses"
       types = analysis.get "vulnerability.types"
       if types? and type in types
-        return "is-progress"
-    "is-success"
+        return false
+    true
 
   isManualCompleted: Ember.computed "unknownRiskAnalyses", ->
     @scanCompletionClass ENUMS.VULNERABILITY_TYPE.MANUAL
@@ -58,8 +58,8 @@ File = DS.Model.extend BaseModelMixin,
 
   scanProgressClass: (type)->
     if type is true
-      return "is-success"
-    "is-progress"
+      return true
+    false
 
   isStaticCompleted: (->
     isStaticDone = @get "isStaticDone"
@@ -137,12 +137,22 @@ File = DS.Model.extend BaseModelMixin,
         risk = analysis.get "risk"
         if risk isnt ENUMS.RISK.UNKNOWN
           completedCounter = completedCounter + 1
-    return Math.round(completedCounter * 100 / counter)
+    progress = Math.round(completedCounter * 100 / counter)
+    if isNaN(progress)
+      return 0
+    progress  
 
-  dynamicScanProgress: Ember.computed "analyses.@each.risk", ->
+
+  dynamicScanProgress: Ember.computed "analyses.@each.risk", "isDynamicDone", ->
+    isDynamicDone  = @get "isDynamicDone"
+    if isDynamicDone is true
+      return 100
     @scanProgress ENUMS.VULNERABILITY_TYPE.DYNAMIC
 
-  manualScanProgress: Ember.computed "analyses.@each.risk", ->
+  manualScanProgress: Ember.computed "analyses.@each.risk", "isManualCompleted", ->
+    isManualCompleted = @get "isManualCompleted"
+    if isManualCompleted is true
+      return 100
     @scanProgress ENUMS.VULNERABILITY_TYPE.MANUAL
 
   isNoneStaus: (->
