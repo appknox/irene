@@ -15,4 +15,4 @@ test 'it renders', (assert) ->
 
 
 
-  assert.equal @$().text().trim(), "JIRALoading..."
+  assert.equal @$().text().trim(), "JIRANo PreferenceLoading..."
