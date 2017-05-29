@@ -9,11 +9,9 @@ LoginComponentComponent = Ember.Component.extend
       identification = @get 'identification'
       password = @get 'password'
 
-      if !identification
-        that.get("notify").error "Please enter username or email address.", ENV.notifications
+      if !identification and !password
+        that.get("notify").error "Please enter username and password", ENV.notifications
       identification = identification.trim()
-      if !password
-        that.get("notify").error "Please enter password.", ENV.notifications
       password = password.trim()
 
       @get('session').authenticate("authenticator:irene", identification, password)

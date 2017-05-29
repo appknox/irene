@@ -29,11 +29,32 @@ File = DS.Model.extend BaseModelMixin,
   manual: DS.attr 'boolean'
   apiScanProgress: DS.attr 'number'
   staticScanProgress: DS.attr 'number'
+  isStaticDone: DS.attr 'boolean'
+  isDynamicDone: DS.attr 'boolean'
+  isApiDone: DS.attr 'boolean'
 
   ifManualNotRequested: (->
     manual = @get 'manual'
     !manual
   ).property 'manual'
+
+  unknownRiskAnalyses: Ember.computed 'analyses.@each.risk', ->
+    @get("analyses").filterBy 'risk', ENUMS.RISK.UNKNOWN
+
+  scanCompletionClass: (type)->
+    for analysis in @get "unknownRiskAnalyses"
+      types = analysis.get "vulnerability.types"
+      if types? and type in types
+        return "fa-times"
+    "fa-check"
+
+  isManualCompleted: Ember.computed "unknownRiskAnalyses", ->
+    @scanCompletionClass ENUMS.VULNERABILITY_TYPE.MANUAL
+
+  isApiScanning: (->
+    apiScanProgress = @get "apiScanProgress"
+    apiScanProgress not in [0, undefined, 100]
+  ).property "apiScanProgress"
 
   fileDetailsClass: (->
     hasMultipleFiles = @get "project.hasMultipleFiles"
@@ -85,6 +106,7 @@ File = DS.Model.extend BaseModelMixin,
       {"value": countRiskUnknown, "color": _getComputedColor "default"}
     ]
 
+<<<<<<< HEAD
   unknownRiskAnalyses: Ember.computed 'analyses.@each.risk', ->
     @get("analyses").filterBy 'risk', ENUMS.RISK.UNKNOWN
 
@@ -126,6 +148,8 @@ File = DS.Model.extend BaseModelMixin,
   manualScanProgress: Ember.computed "analyses.@each.risk", ->
     @scanProgress ENUMS.VULNERABILITY_TYPE.MANUAL
 
+=======
+>>>>>>> origin/358-ui-feedbacks
   isNoneStaus: (->
     status = @get 'dynamicStatus'
     status is ENUMS.DYNAMIC_STATUS.NONE
