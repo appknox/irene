@@ -140,7 +140,7 @@ File = DS.Model.extend BaseModelMixin,
     progress = Math.round(completedCounter * 100 / counter)
     if isNaN(progress)
       return 0
-    progress  
+    progress
 
 
   dynamicScanProgress: Ember.computed "analyses.@each.risk", "isDynamicDone", ->
@@ -150,9 +150,6 @@ File = DS.Model.extend BaseModelMixin,
     @scanProgress ENUMS.VULNERABILITY_TYPE.DYNAMIC
 
   manualScanProgress: Ember.computed "analyses.@each.risk", "isManualCompleted", ->
-    isManualCompleted = @get "isManualCompleted"
-    if isManualCompleted is true
-      return 100
     @scanProgress ENUMS.VULNERABILITY_TYPE.MANUAL
 
   isNoneStaus: (->
