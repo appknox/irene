@@ -1,6 +1,6 @@
 = file-overview file=project.lastFile
   footer.card-button
-    .columns
+    .columns.button-width
       .column.is-one-quarter class=project.hasMultipleFiles::auto-adjust
         = link-to 'authenticated.project.settings' project.id class="card-footer-item is-fullwidth" tagName="button"
           = t "settings"
