@@ -350,10 +350,15 @@ button, .button
   z-index: 1
   &:hover
     overflow: visible
+    width: 100%
 
 .app-icon
   z-index: 0
   left: 27%
+
+.overflow-hidden
+  @extend .hide-overflow
+  max-width: 100px
 
 .fixed-icon
   position: absolute

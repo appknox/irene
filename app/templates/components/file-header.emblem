@@ -79,7 +79,7 @@
           tr
             td.capitalize-text
               = t "versionCode"
-            td
+            td.overflow-hidden
               | #{file.versionCode}
         table
           tr
