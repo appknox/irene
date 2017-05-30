@@ -31,25 +31,13 @@ File = DS.Model.extend BaseModelMixin,
   staticScanProgress: DS.attr 'number'
   isStaticDone: DS.attr 'boolean'
   isDynamicDone: DS.attr 'boolean'
+  isManualDone: DS.attr 'boolean'
   isApiDone: DS.attr 'boolean'
 
   ifManualNotRequested: (->
     manual = @get 'manual'
     !manual
   ).property 'manual'
-
-  unknownRiskAnalyses: Ember.computed 'analyses.@each.risk', ->
-    @get("analyses").filterBy 'risk', ENUMS.RISK.UNKNOWN
-
-  scanCompletionClass: (type)->
-    for analysis in @get "unknownRiskAnalyses"
-      types = analysis.get "vulnerability.types"
-      if types? and type in types
-        return false
-    true
-
-  isManualCompleted: Ember.computed "unknownRiskAnalyses", ->
-    @scanCompletionClass ENUMS.VULNERABILITY_TYPE.MANUAL
 
   isApiScanning: (->
     apiScanProgress = @get "apiScanProgress"
@@ -75,6 +63,11 @@ File = DS.Model.extend BaseModelMixin,
     isApiDone = @get "isApiDone"
     @scanProgressClass isApiDone
   ).property "isApiDone"
+
+  isManualCompleted: (->
+    isManualDone = @get "isManualDone"
+    @scanProgressClass isManualDone
+  ).property "isManualDone"
 
   fileDetailsClass: (->
     hasMultipleFiles = @get "project.hasMultipleFiles"
@@ -150,6 +143,9 @@ File = DS.Model.extend BaseModelMixin,
     @scanProgress ENUMS.VULNERABILITY_TYPE.DYNAMIC
 
   manualScanProgress: Ember.computed "analyses.@each.risk", "isManualCompleted", ->
+    isManualDone  = @get "isManualDone"
+    if isManualDone is true
+      return 100
     @scanProgress ENUMS.VULNERABILITY_TYPE.MANUAL
 
   isNoneStaus: (->
