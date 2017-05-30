@@ -29,7 +29,7 @@
   header.card-header
     p.card-header-title.tour-step-project-details
       h5.margin-top
-        | App Details
+        = t "appDetails"
     .column.content-right
       .card-button.tour-step-sd-action-buttons
         .columns
@@ -51,8 +51,8 @@
         = pie-chart data=file.pieChartData height=150 width=150 globalAlpha=globalAlpha radiusRatio=radiusRatio
       .column.flex-center
         ul.risk-table
-          h5
-           |  RISK TYPE
+          h5.uppercase-text
+           = t "severityLevel"
           li.is-danger
             = t "high"
             | : #{file.countRiskHigh}
@@ -90,23 +90,24 @@
               | #{file.project.pdfPassword}
             td
               = fa-icon "clipboard copy-icon"
-              | &nbsp; Copy
+              | &nbsp;
+              = t "copy"
 
 .card.is-fullwidth.margin-bottom20.scan-status-card
   header.card-header
     p.card-header-title.tour-step-project-details
       h5
-        | Scan Status
+        = t "scanStatus"
   .card-content
     .columns
       .column.flex-center
-        | Static Scan
+        = t "staticScan"
       .column.flex-center
-        | Dynamic Scan
+        = t "dynamicScan"
       .column.flex-center
-        | Manual Scan
+        = t "manualScan"
       .column.flex-center
-        | API Scan
+        = t "apiScan"
     .columns
       .column.flex-center
         div.progress-wrap.progress class=file.isStaticCompleted:is-success:is-progress
