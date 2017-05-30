@@ -2,11 +2,11 @@ if user.hasNamespace
   each user.namespaceItems as |item|
     li
       = item
-button.is-primary.margin-top click="toggleNamspaceModal"
+button.is-primary.margin-top click="toggleNamspaceModal" id="mp-namespace-modal"
   = t "addNamespace"
 
 = modal-card isActive=showNamespaceModal title=(t "addNamespace")
-  = input class="control input" value=namespace
+  = input class="control input" value=namespace id="mp-namespaces"
   .modal-footer
-    button click="addNamespace"
+    button click="addNamespace" id="mp-add-namespace"
       = t "addNamespace"

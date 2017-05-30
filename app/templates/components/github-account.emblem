@@ -4,9 +4,9 @@ h5
 if user.hasGithubToken
   h6
     | Intergations completed
-  button.is-primary click="revokeGitHub"
+  button.is-primary click="revokeGitHub" id="mp-github-revoke"
     = t "revokeGithub"
 else
-  a.button.is-primary target="_blank" href=user.githubRedirectUrl
+  a.button.is-primary target="_blank" href=user.githubRedirectUrl  id="mp-github-integrate"
     = t "integrateGithub"
   = yield
