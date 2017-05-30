@@ -19,7 +19,7 @@ header.card-header
       .columns
         .column.flex-center.nowrap-trim
           = t "createdOn"
-          | : #{file.createdOnHumanized}
+          | : #{moment-from-now file.createdOnHumanized}
         .column.flex-center.nowrap-trim
           = t "versionCode"
           | {{#if file.versionCode}} - #{file.versionCode}{{/if}}

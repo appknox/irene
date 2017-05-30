@@ -74,7 +74,7 @@
             td.capitalize-text
               = t "createdOn"
             td
-              = file.createdOnHumanized
+              | #{moment-from-now file.createdOnHumanized}
         table
           tr
             td.capitalize-text
