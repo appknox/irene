@@ -14,4 +14,4 @@ test 'it renders', (assert) ->
   @render hbs """{{file-header}}"""
 
 
-  assert.equal @$().text().trim(), 'SettingsApp DetailsPDF ReportSeverity LevelHigh: Medium: Low: Passed: Unknown: created onversion codeReport Password CopyScan StatusStatic ScanDynamic ScanManual ScanAPI Scan%%%%'
+  assert.equal @$().text().trim(), 'SettingsApp DetailsPDF ReportSeverity LevelHigh: Medium: Low: Passed: Unknown: Created  version codeReport Password CopyScan StatusStatic ScanDynamic ScanAPI ScanManual Scan%%%%'
