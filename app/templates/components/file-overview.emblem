@@ -17,9 +17,9 @@ header.card-header
   = link-to redirectTo targetPath
     .content
       .columns
-        .column.flex-center.nowrap-trim
-          = t "createdOn"
-          | : #{moment-from-now file.createdOnHumanized}
+        .column.flex-center.nowrap-trim.lowercase-text
+          = t "created"
+          | &nbsp; #{moment-from-now file.createdOnHumanized}
         .column.flex-center.nowrap-trim
           = t "versionCode"
           | {{#if file.versionCode}} - #{file.versionCode}{{/if}}

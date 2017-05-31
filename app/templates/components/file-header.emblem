@@ -71,10 +71,9 @@
       .column.package-desc.is-one-quarter
         table
           tr
-            td.capitalize-text
-              = t "createdOn"
             td
-              | #{moment-from-now file.createdOnHumanized}
+              = t "created"
+              | &nbsp; #{moment-from-now file.createdOnHumanized}
         table
           tr
             td.capitalize-text
@@ -105,9 +104,10 @@
       .column.flex-center
         = t "dynamicScan"
       .column.flex-center
-        = t "manualScan"
-      .column.flex-center
         = t "apiScan"
+      .column.flex-center
+        = t "manualScan"
+
     .columns
       .column.flex-center
         div.progress-wrap.progress class=file.isStaticCompleted:is-success:is-progress
@@ -122,14 +122,14 @@
             = file.dynamicScanProgress
             | %
       .column.flex-center
-        div.progress-wrap.progress class=file.isManualCompleted:is-success:is-progress
-          div.progress-bar.progress style="left:{{file.manualScanProgress}}%"
-          div.progress-text
-            = file.manualScanProgress
-            | %
-      .column.flex-center
         div.progress-wrap.progress class=file.isApiCompleted:is-success:is-progress
           div.progress-bar.progress style="left:{{file.apiScanProgress}}%"
           div.progress-text
            = file.apiScanProgress
            | %
+      .column.flex-center
+        div.progress-wrap.progress class=file.isManualCompleted:is-success:is-progress
+          div.progress-bar.progress style="left:{{file.manualScanProgress}}%"
+          div.progress-text
+            = file.manualScanProgress
+            | %
