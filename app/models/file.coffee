@@ -119,34 +119,17 @@ File = DS.Model.extend BaseModelMixin,
       {"value": countRiskUnknown, "color": _getComputedColor "default"}
     ]
 
-  scanProgress: (type) ->
-    counter = 0
-    completedCounter = 0
-    analyses = @get "analyses"
-    analyses.forEach (analysis)->
-      types = analysis.get "vulnerability.types"
-      if types? and type in types
-        counter = counter + 1
-        risk = analysis.get "risk"
-        if risk isnt ENUMS.RISK.UNKNOWN
-          completedCounter = completedCounter + 1
-    progress = Math.round(completedCounter * 100 / counter)
-    if isNaN(progress)
-      return 0
-    progress
-
-
   dynamicScanProgress: Ember.computed "analyses.@each.risk", "isDynamicDone", ->
     isDynamicDone  = @get "isDynamicDone"
-    if isDynamicDone is true
+    if isDynamicDone
       return 100
-    @scanProgress ENUMS.VULNERABILITY_TYPE.DYNAMIC
+    0
 
   manualScanProgress: Ember.computed "analyses.@each.risk", "isManualCompleted", ->
     isManualDone  = @get "isManualDone"
-    if isManualDone is true
+    if isManualDone
       return 100
-    @scanProgress ENUMS.VULNERABILITY_TYPE.MANUAL
+    0
 
   isNoneStaus: (->
     status = @get 'dynamicStatus'
