@@ -79,12 +79,12 @@ ProjectListComponent = Ember.Component.extend PaginateMixin,
         keyObjectFull.text = keyObject.text
         if reverse
           if keyObject.key in ["lastFileCreatedOn", "createdOn"]
-            keyObjectFull.text += tLeastRecent
+            keyObjectFull.text += tMostRecent
           else
             keyObjectFull.text += "(Z -> A)"
         else
           if keyObject.key in ["lastFileCreatedOn", "createdOn"]
-            keyObjectFull.text += tMostRecent
+            keyObjectFull.text += tLeastRecent
           else
             keyObjectFull.text += "(A -> Z)"
         keyObjectsWithReverse.push keyObjectFull
