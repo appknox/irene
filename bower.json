@@ -11,7 +11,7 @@
     "highlightjs": "9.10.0",
     "pretender": "~1.4.2",
     "Faker": "~4.1.0",
-    "shepherd.js": "1.8.1",
+    "shepherd.js": "~0.7.1",
     "card": "^2.0.3",
     "pace": "^1.0.2",
     "noVNC": "https://github.com/appknox/noVNC.git#^0.6.2",
