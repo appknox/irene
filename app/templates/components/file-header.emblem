@@ -29,7 +29,7 @@
   header.card-header
     p.card-header-title.tour-step-project-details
       h5.margin-top
-        = t "appDetails"
+        = t "scanDetails"
     .column.content-right
       .card-button.tour-step-sd-action-buttons
         .columns
@@ -72,7 +72,7 @@
         table
           tr
             td
-              = t "created"
+              = t "started"
               | &nbsp; #{moment-from-now file.createdOnHumanized}
         table
           tr

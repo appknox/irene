@@ -18,7 +18,7 @@ header.card-header
     .content
       .columns
         .column.flex-center.nowrap-trim.lowercase-text
-          = t "created"
+          = t "started"
           | &nbsp; #{moment-from-now file.createdOnHumanized}
         .column.flex-center.nowrap-trim
           = t "versionCode"
