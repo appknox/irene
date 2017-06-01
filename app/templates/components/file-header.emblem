@@ -73,7 +73,7 @@
           tr
             td.tooltip
               = t "started"
-              | &nbsp; #{moment-from-now file.updatedOnHumanized}
+              | &nbsp; #{moment-from-now file.updatedOn}
               span.tooltiptext
                 = file.updatedOn
         table

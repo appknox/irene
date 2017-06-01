@@ -19,7 +19,7 @@ header.card-header
       .columns
         .column.flex-center.nowrap-trim.lowercase-text.tooltip
           = t "started"
-          | &nbsp; #{moment-from-now file.updatedOnHumanized}
+          | &nbsp; #{moment-from-now file.updatedOn}
           span.tooltiptext.tooltip-collapse
             = file.updatedOn
         .column.flex-center.nowrap-trim
