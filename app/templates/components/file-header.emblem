@@ -105,8 +105,9 @@
         = t "staticScan"
       .column.flex-center
         = t "dynamicScan"
-      .column.flex-center
-        = t "apiScan"
+      if file.project.isAPIScanEnabled
+        .column.flex-center
+          = t "apiScan"
       .column.flex-center
         = t "manualScan"
 
@@ -123,12 +124,13 @@
           div.progress-text
             = file.dynamicScanProgress
             | %
-      .column.flex-center
-        div.progress-wrap.progress class=file.isApiCompleted:is-success:is-progress
-          div.progress-bar.progress style="left:{{file.apiScanProgress}}%"
-          div.progress-text
-           = file.apiScanProgress
-           | %
+      if file.project.isAPIScanEnabled
+        .column.flex-center
+          div.progress-wrap.progress class=file.isApiCompleted:is-success:is-progress
+            div.progress-bar.progress style="left:{{file.apiScanProgress}}%"
+            div.progress-text
+             = file.apiScanProgress
+             | %
       .column.flex-center
         div.progress-wrap.progress class=file.isManualCompleted:is-success:is-progress
           div.progress-bar.progress style="left:{{file.manualScanProgress}}%"
