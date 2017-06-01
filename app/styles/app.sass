@@ -116,10 +116,6 @@ $FreestyleGuide-color--background: $background
 input
   display: block
 
-/*form
-  button
-    margin-top: 10px
-
 .title-tag
   background-color: #5bc0de
   border-radius: 0px
@@ -262,7 +258,7 @@ select
   input,button
     margin-top: 10px
 
-._c-notification__container_qmx12s
+div[class^="_c-notification__container"]
   z-index: 2000!important
 
 .is-progress
@@ -273,6 +269,12 @@ select
 
 .capitalize-text
   text-transform: capitalize
+
+.uppercase-text
+  text-transform: uppercase
+
+.lowercase-text
+  text-transform: lowercase
 
 .start-tour
   font-size: 16px
@@ -344,11 +346,25 @@ button, .button
       margin-top: 10px
 
 .hide-overflow
+  max-width: 300px
   overflow: hidden
   text-overflow: ellipsis
   white-space: nowrap
+  z-index: 1
   &:hover
     overflow: visible
+
+.app-icon
+  z-index: 0
+  left: 27%
+
+.overflow-hidden
+  @extend .hide-overflow
+  max-width: 100px
+
+.fixed-icon
+  position: absolute
+  left: 85%
 
 .error-page
   margin-top: 150px
@@ -362,7 +378,10 @@ button, .button
   bottom: 70px!important
 
 .package-desc
+  margin-right: 10px
+  margin-top: 10px!important
   table
+    cursor: pointer
     font-size: 13px
     margin-top: 10px
     tr
@@ -374,7 +393,7 @@ button, .button
   table.api-scan-status
     tr
       td
-        padding: 6px
+        padding: 7px
 
 .invoice-table
   table
@@ -451,9 +470,8 @@ button, .button
     justify-content: center
 
 .auto-adjust
-  margin: auto
   button
-    margin-left: 0px!important
+    margin-left: 110px!important
 
 .hideOrShow
   cursor: pointer
@@ -469,6 +487,7 @@ button, .button
     margin-left: 30px
   .card-button:nth-child(2)
     margin-left: -20px
+
 .file-hide-overflow
   margin-top: -20px
 
@@ -520,6 +539,10 @@ b.bold
   color: #808080
   max-height: 25px
 
+.progress-wrap.progress.is-success
+  border: 1px solid #80C081
+  background-color: #80C081
+
 .is-progress
   .details
     border: 1px solid #808080
@@ -555,3 +578,103 @@ b.bold
     font-weight: 100
     td
       vertical-align: middle
+
+ul.scan-table
+  li
+    width: 130px
+    padding: 11px 5px
+  h5
+    margin-left: 10px
+
+ul.risk-table
+  h5
+    margin-left: 15px
+    margin-bottom: -5px
+    margin-top: 10px
+  li
+    padding: 2px
+    width: 120px
+    margin-left: 15px
+    height: 25px
+  li:before
+    font-size: 30px
+    position: relative
+    top: 4px
+
+  i
+    margin-right: 5px
+    font-size: 20px
+  li.danger
+    i
+      color: $red
+  li.warning
+    i
+      color: $yellow
+  li.low
+    i
+      color: $blue
+  li.success
+    i
+      color: $green
+  li.default
+    i
+      color: $grey
+
+.progress-wrap
+  width: 60%
+  border-radius: 10px!important
+
+canvas
+  margin-top: 20px
+
+.button-width
+  .card-footer-item
+    margin-left: -15px
+    width: 115px
+  .column.is-one-quarter
+    margin-left: 25px
+.app-details-card
+  .card-header
+    height: 40px
+  .card-content
+    height: 210px
+    .columns
+      .column
+        padding-top: 10px
+        margin-top: -10px
+  .card-button button
+    margin-top: -5px
+
+.scan-status-card
+  .card-header
+    height: 40px
+    h5
+      margin-top: 7px
+  .card-content
+    height: 100px
+    .columns
+      .column
+        height: 40px
+        .progress-wrap
+          margin-top: 50px
+
+.tooltip
+  &:hover
+    .tooltiptext
+      visibility: visible
+  .tooltiptext
+    text-transform: capitalize
+    visibility: hidden
+    width: 200px
+    background-color: rgba(0, 0, 0, 0.4)
+    color: #fff
+    text-align: center
+    border-radius: 6px
+    position: absolute
+    z-index: 1
+    font-size: 12px
+  .tooltip-collapse
+    width: 200px
+    top: 95px
+    left: 30px
+    white-space: normal

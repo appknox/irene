@@ -5,5 +5,5 @@
     .box-section-content.flex-center
       = item
   .flex-center
-    = link-to "authenticated.payment" pricing.id paymentDuration tagName="button" class="is-half is-success"
+    = link-to "authenticated.payment" pricing.id paymentDuration tagName="button" class="is-half is-success" id="mp-total-price"
       = totalPrice

@@ -36,7 +36,7 @@ if hasDevices
 
     .columns
       .column
-        button.margin-top20.is-primary click="versionSelected"
+        button.margin-top20.is-primary click="versionSelected" id="mp-select-device"
           | Select the device
   else
 

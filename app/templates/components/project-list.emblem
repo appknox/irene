@@ -4,7 +4,7 @@
       .column.tour-step-search-project
         = t "search"
         .margin-top
-        = input class="input" placeholder=(t 'searchQuery') value=query
+        = input class="input" placeholder=(t 'searchQuery') value=query id="mp-search-query"
       .column.tour-step-sort-project
         = t "sortBy"
         .margin-top

@@ -9,12 +9,12 @@ if project.jiraProject
       i.fa.risk-icons.fa-trash-o
         | &nbsp; #{t "remove"}
 
-.columns
-  .column.is-one-third
-    select.select{action 'selectProject' on='change'}
-      if project.jiraProject
+else
+  .columns
+    .column.is-one-third
+      select.select{action 'selectProject' on='change'} id="mp-jira-select-project"
         option value=0
           = t "noPreference"
-      each jiraProjects as |project|
-        option value=project
-          = project
+        each jiraProjects as |project|
+          option value=project
+            = project

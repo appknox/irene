@@ -41,7 +41,10 @@ JiraProjectComponent = Ember.Component.extend
       @get("ajax").post url, data: data
       .then (data) ->
         that.get("notify").success tRepoIntegrated
-        window.location.reload() # FIXME: Hackish Way
+        setTimeout ->
+          window.location.reload() # FIXME: Hackish Way
+        ,
+          3 * 1000
       .catch (error) ->
         that.get("notify").error tRepoNotIntegrated
         for error in error.errors
@@ -54,7 +57,11 @@ JiraProjectComponent = Ember.Component.extend
       deleteJIRA = [ENV.endpoints.deleteJIRAProject, projectId].join '/'
       @get("ajax").delete deleteJIRA
       .then (data) ->
-        window.location.reload() # FIXME: Hackish Way
+        that.get("notify").success "Project has been removed"
+        setTimeout ->
+          window.location.reload() # FIXME: Hackish Way
+        ,
+          3 * 1000
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message

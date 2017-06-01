@@ -6,39 +6,31 @@ header.card-header
       li
         h5
           .columns.project-specific
-            .column
+            .column.hide-overflow
               = file.name
-            .column.is-one-sixth
+            .column.is-one-sixth.fixed-icon
               = fa-icon file.project.platformIconClass class="card-icon"
-            if isThreeColumn
-              .column
-                .columns
-                  .column.card-button.content-right
-                    = link-to 'authenticated.project.settings' file.project.id  tagName="button"
-                      = t "settings"
-                  if file.project.hasMultipleFiles
-                    .column.card-button
-                      = link-to 'authenticated.choose' file.project.lastFile.id tagName="button"
-                        = t "compare"
-      li class=isThreeColumn:file-hide-overflow:hide-overflow
+
+      li.hide-overflow
         | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
 .card-content
   = link-to redirectTo targetPath
     .content
-      if isNotThreeColumn
-        .columns
-          .column.flex-center.nowrap-trim
-            = t "createdOn"
-            | : #{file.createdOnHumanized}
-          .column.flex-center.nowrap-trim
-            = t "versionCode"
-            | {{#if file.versionCode}} - #{file.versionCode}{{/if}}
+      .columns
+        .column.flex-center.nowrap-trim.lowercase-text.tooltip
+          = t "started"
+          | &nbsp; #{moment-from-now file.updatedOnHumanized}
+          span.tooltiptext.tooltip-collapse
+            = file.updatedOn
+        .column.flex-center.nowrap-trim
+          = t "versionCode"
+          | {{#if file.versionCode}} - #{file.versionCode}{{/if}}
 
       .columns class=isReverse:is-reverse
         .column.flex-center
           = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
-        .column.flex-center
-          ul
+        .column
+          ul.risk-table
             li.is-danger
               = t "high"
               | : #{file.countRiskHigh}
@@ -54,52 +46,5 @@ header.card-header
             li.is-default
               = t "unknown"
               | : #{file.countRiskUnknown}
-        if isThreeColumn
-          .column.flex-center
-            ul.scan-status
-              li
-                i.fa class=file.isStaticDone:fa-check:fa-times
-                | &nbsp; Static Scan
-              li
-                i.fa class=file.isDynamicDone:fa-check:fa-times
-                | &nbsp; Dynamic Scan
-              li
-                i.fa class=file.isManualCompleted
-                | &nbsp; Manual Scan
-              if file.project.isAPIScanEnabled
-                li
-                  i.fa class=file.isApiDone:fa-check:fa-times
-                  | &nbsp; API Scan
-          .column.package-desc
-            table
-              tr
-                td.capitalize-text
-                  = t "createdOn"
-                td
-                  = file.createdOnHumanized
-            table
-              tr
-                td.capitalize-text
-                  = t "versionCode"
-                td
-                  | #{file.versionCode}
-            table
-              tr
-                td colspan="2"
-                  = t "reportPassword"
-              tr.zeroclipboard-copy title="Copy Password" data-clipboard-text=file.project.pdfPassword
-                td
-                  | #{file.project.pdfPassword}
-                td
-                  = fa-icon "clipboard copy-icon"
-                  | &nbsp; Copy
-            if file.isApiScanning
-              table.api-scan-status
-                tr
-                  td
-                    | API Scan Progress
-                  td
-                    = file.apiScanProgress
-                    | %
 
 = yield

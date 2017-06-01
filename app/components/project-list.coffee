@@ -19,8 +19,8 @@ ProjectListComponent = Ember.Component.extend PaginateMixin,
   tDateCreated: t("dateCreated")
   tProjectName: t("projectName")
   tPackageName: t("packageName")
-  tInDescendingOrder: t("inDescendingOrder")
-  tInAscendingOrder: t("inAscendingOrder")
+  tMostRecent: t("mostRecent")
+  tLeastRecent: t("leastRecent")
 
   newProjectsObserver: Ember.observer "realtime.ProjectCounter", ->
     @incrementProperty "version"
@@ -62,8 +62,8 @@ ProjectListComponent = Ember.Component.extend PaginateMixin,
     tDateCreated = @get "tDateCreated"
     tProjectName = @get "tProjectName"
     tPackageName = @get "tPackageName"
-    tInDescendingOrder = @get "tInDescendingOrder"
-    tInAscendingOrder = @get "tInAscendingOrder"
+    tLeastRecent = @get "tLeastRecent"
+    tMostRecent = @get "tMostRecent"
     keyObjects = [
       { key: "lastFileCreatedOn", text: tDateUpdated },
       { key: "createdOn", text: tDateCreated },
@@ -78,9 +78,15 @@ ProjectListComponent = Ember.Component.extend PaginateMixin,
         keyObjectFull.key = keyObject.key
         keyObjectFull.text = keyObject.text
         if reverse
-          keyObjectFull.text += tInDescendingOrder
+          if keyObject.key in ["lastFileCreatedOn", "createdOn"]
+            keyObjectFull.text += tMostRecent
+          else
+            keyObjectFull.text += "(Z -> A)"
         else
-          keyObjectFull.text += tInAscendingOrder
+          if keyObject.key in ["lastFileCreatedOn", "createdOn"]
+            keyObjectFull.text += tLeastRecent
+          else
+            keyObjectFull.text += "(A -> Z)"
         keyObjectsWithReverse.push keyObjectFull
     keyObjectsWithReverse
   ).property()

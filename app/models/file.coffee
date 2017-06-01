@@ -28,8 +28,10 @@ File = DS.Model.extend BaseModelMixin,
   report: DS.attr 'string'
   manual: DS.attr 'boolean'
   apiScanProgress: DS.attr 'number'
+  staticScanProgress: DS.attr 'number'
   isStaticDone: DS.attr 'boolean'
   isDynamicDone: DS.attr 'boolean'
+  isManualDone: DS.attr 'boolean'
   isApiDone: DS.attr 'boolean'
 
   ifManualNotRequested: (->
@@ -37,23 +39,35 @@ File = DS.Model.extend BaseModelMixin,
     !manual
   ).property 'manual'
 
-  unknownRiskAnalyses: Ember.computed 'analyses.@each.risk', ->
-    @get("analyses").filterBy 'risk', ENUMS.RISK.UNKNOWN
-
-  scanCompletionClass: (type)->
-    for analysis in @get "unknownRiskAnalyses"
-      types = analysis.get "vulnerability.types"
-      if types? and type in types
-        return "fa-times"
-    "fa-check"
-
-  isManualCompleted: Ember.computed "unknownRiskAnalyses", ->
-    @scanCompletionClass ENUMS.VULNERABILITY_TYPE.MANUAL
-
   isApiScanning: (->
     apiScanProgress = @get "apiScanProgress"
     apiScanProgress not in [0, undefined, 100]
   ).property "apiScanProgress"
+
+  scanProgressClass: (type)->
+    if type is true
+      return true
+    false
+
+  isStaticCompleted: (->
+    isStaticDone = @get "isStaticDone"
+    @scanProgressClass isStaticDone
+  ).property "isStaticDone"
+
+  isDynamicCompleted: (->
+    isDynamicDone = @get "isDynamicDone"
+    @scanProgressClass isDynamicDone
+  ).property "isDynamicDone"
+
+  isApiCompleted: (->
+    isApiDone = @get "isApiDone"
+    @scanProgressClass isApiDone
+  ).property "isApiDone"
+
+  isManualCompleted: (->
+    isManualDone = @get "isManualDone"
+    @scanProgressClass isManualDone
+  ).property "isManualDone"
 
   fileDetailsClass: (->
     hasMultipleFiles = @get "project.hasMultipleFiles"
@@ -104,6 +118,18 @@ File = DS.Model.extend BaseModelMixin,
       {"value": countRiskNone, "color": _getComputedColor "success"}
       {"value": countRiskUnknown, "color": _getComputedColor "default"}
     ]
+
+  dynamicScanProgress: Ember.computed "analyses.@each.risk", "isDynamicDone", ->
+    isDynamicDone  = @get "isDynamicDone"
+    if isDynamicDone
+      return 100
+    0
+
+  manualScanProgress: Ember.computed "analyses.@each.risk", "isManualCompleted", ->
+    isManualDone  = @get "isManualDone"
+    if isManualDone
+      return 100
+    0
 
   isNoneStaus: (->
     status = @get 'dynamicStatus'

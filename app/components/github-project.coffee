@@ -42,8 +42,10 @@ GithubProjectComponent = Ember.Component.extend
       @get("ajax").post setGithub, data: data
       .then (data) ->
         that.get("notify").success "GITHUB has been integrated"
-        window.location.reload() # FIXME: Hackish Way
-
+        setTimeout ->
+          window.location.reload() # FIXME: Hackish Way
+        ,
+          3 * 1000
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message
@@ -55,7 +57,11 @@ GithubProjectComponent = Ember.Component.extend
       that = @
       @get("ajax").delete deleteGithub
       .then (data) ->
-        window.location.reload() # FIXME: Hackish Way
+        that.get("notify").success "Project has been removed"
+        setTimeout ->
+          window.location.reload() # FIXME: Hackish Way
+        ,
+          3 * 1000
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message
