@@ -11,5 +11,5 @@ td
 td
   = invoice.paidOnHumanized
 td
-  = link-to 'authenticated.invoice' invoice.id id="mp-view-invoice"
+  = link-to 'authenticated.invoice' invoice.id mpId="mp-view-invoice"
       | view

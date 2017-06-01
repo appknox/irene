@@ -14,11 +14,11 @@
               .column.content-right
                 .columns
                   .column.card-button
-                    = link-to 'authenticated.project.settings' file.project.id  tagName="button" id="mp-detail-project-settings"
+                    = link-to 'authenticated.project.settings' file.project.id  tagName="button" mpId="mp-detail-project-settings"
                       = t "settings"
                   if file.project.hasMultipleFiles
                     .column.card-button
-                      = link-to 'authenticated.choose' file.project.lastFile.id tagName="button" id="mp-detail-file-compare"
+                      = link-to 'authenticated.choose' file.project.lastFile.id tagName="button" mpId="mp-detail-file-compare"
                         = t "compare"
 
 
@@ -35,15 +35,15 @@
         .columns
           .column.card-button
             if file.project.hasMultipleFiles
-              = link-to 'authenticated.project.files' file.project.id class="is-fullwidth" tagName="button" id="mp-detail-all-scans"
+              = link-to 'authenticated.project.files' file.project.id class="is-fullwidth" tagName="button" mpId="mp-detail-all-scans"
                 = t "allScans"
           .column.card-button
-            button.is-fullwidth click="getPDFReportLink" id="mp-pdf-report"
+            button.is-fullwidth click="getPDFReportLink" mpId="mp-pdf-report"
               = t "pdfReport"
           .column.card-button
             if env.isAppknox
               if file.ifManualNotRequested
-                button.is-fullwidth click="requestManual" id="mp-request-manual"
+                button.is-fullwidth click="requestManual" mpId="mp-request-manual"
                   = t "manual"
   .card-content
     .columns

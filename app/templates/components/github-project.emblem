@@ -12,7 +12,7 @@ if project.githubRepo
 else
   .columns
     .column.is-one-third
-      select.select{action 'selectRepo' on='change'}  id="mp-github-select-project"
+      select.select{action 'selectRepo' on='change'}  mpId="mp-github-select-project"
         option value=0
           = t "noPreference"
         each githubRepos as |repo|
