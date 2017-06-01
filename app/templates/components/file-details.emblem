@@ -1,9 +1,3 @@
-.margin-left
-  h4
-    =t "fileDetails"
-    a click="startTour"
-      = fa-icon "question-circle start-tour"
-
 .tour-step-sd-overview
 = file-header file=file class="margin-top"
 

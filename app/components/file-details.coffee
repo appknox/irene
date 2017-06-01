@@ -19,9 +19,4 @@ FileDetailsComponent = Ember.Component.extend
         @set 'onboard.activeTour', name
         cookies.write name, true
 
-  actions:
-
-    startTour: ->
-      this.set('onboard.activeTour', ENV.TOUR.scanDetail)
-
 `export default FileDetailsComponent`
