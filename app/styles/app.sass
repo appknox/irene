@@ -657,3 +657,24 @@ canvas
         height: 40px
         .progress-wrap
           margin-top: 50px
+
+.tooltip
+  &:hover
+    .tooltiptext
+      visibility: visible
+  .tooltiptext
+    text-transform: capitalize
+    visibility: hidden
+    width: 200px
+    background-color: rgba(0, 0, 0, 0.4)
+    color: #fff
+    text-align: center
+    border-radius: 6px
+    position: absolute
+    z-index: 1
+    font-size: 12px
+  .tooltip-collapse
+    width: 200px
+    top: 95px
+    left: 30px
+    white-space: normal

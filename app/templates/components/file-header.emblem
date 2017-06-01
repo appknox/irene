@@ -71,9 +71,11 @@
       .column.package-desc.is-one-quarter
         table
           tr
-            td
+            td.tooltip
               = t "started"
-              | &nbsp; #{moment-from-now file.createdOnHumanized}
+              | &nbsp; #{moment-from-now file.updatedOnHumanized}
+              span.tooltiptext
+                = file.updatedOn
         table
           tr
             td.capitalize-text

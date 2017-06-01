@@ -13,4 +13,10 @@ BaseModelMixin = Ember.Mixin.create
       return
     "#{createdOn.toLocaleDateString()}"
 
+  updatedOnHumanized: Ember.computed "updatedOn", ->
+    updatedOn = @get "updatedOn"
+    if Ember.isEmpty updatedOn
+      return
+    "#{updatedOn.toLocaleDateString()}"
+
 `export default BaseModelMixin`
