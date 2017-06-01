@@ -7,9 +7,9 @@
           span.tag = tag
         div.margin-left.details
           if showVulnerability
-            i.fa.fa-minus id="mp-show-vulnerability"
+            i.fa.fa-minus mpId="mp-show-vulnerability"
           else
-            i.fa.fa-plus id="mp-hide-vulnerability"
+            i.fa.fa-plus mpId="mp-hide-vulnerability"
 
 if showVulnerability
   .message-body

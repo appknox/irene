@@ -11,23 +11,23 @@ h4.margin-left.margin-top
         .card-form-header
           | CARD DETAILS
         .control.has-icon.has-icon-right
-          = input class="input" type="tel" name="number" placeholder="Valid Card Number" autocomplete="cc-number" value=cardNumber id="mp-card-number"
+          = input class="input" type="tel" name="number" placeholder="Valid Card Number" autocomplete="cc-number" value=cardNumber mpId="mp-card-number"
           = fa-icon "credit-card"
         .control
-          = input class="input" type="tel" name="name" placeholder="Name On Card" autocomplete="cc-number" value=cardName id="mp-card-name"
+          = input class="input" type="tel" name="name" placeholder="Name On Card" autocomplete="cc-number" value=cardName mpId="mp-card-name"
         .columns
           .column.is-half
             .control
-              = input class="input" type="tel" name="expiry" placeholder="MM/YY" autocomplete="cc-exp" value=cardExpiry id="mp-card-expiry"
+              = input class="input" type="tel" name="expiry" placeholder="MM/YY" autocomplete="cc-exp" value=cardExpiry mpId="mp-card-expiry"
           .column.is-half
             .control
-              = input class="input" type="tel" name="cvc" placeholder="CVC" autocomplete="cc-csc" value=cardCvc id="mp-card-cvc"
+              = input class="input" type="tel" name="cvc" placeholder="CVC" autocomplete="cc-csc" value=cardCvc mpId="mp-card-cvc"
         if env.isAppknox
           .control.is-grouped
-            = input  class="input" placeholder="Do you have an offer coupon?" value=couponCode id="mp-card-coupon"
-            button.is-success click="applyCoupon" id="mp-apply-coupon" Apply Coupon
+            = input  class="input" placeholder="Do you have an offer coupon?" value=couponCode mpId="mp-card-coupon"
+            button.is-success click="applyCoupon" mpId="mp-apply-coupon" Apply Coupon
         .control.content-right.last-child
-          button.is-success click="makePaymentStripe" id="mp-make-payment" disabled=isPaymentButtonDisabled
+          button.is-success click="makePaymentStripe" mpId="mp-make-payment" disabled=isPaymentButtonDisabled
             = fa-icon 'cc-stripe'
             span.margin-left
               | Pay with card

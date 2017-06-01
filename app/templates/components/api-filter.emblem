@@ -4,6 +4,6 @@ h6
 .columns
   .column.is-one-third
     p.control
-      = input class="form-control input" type="text" value=project.apiUrlFilters id="mp-api-filter"
-    button.is-primary click="addApiUrlFilter" id="mp-add-filter"
+      = input class="form-control input" type="text" value=project.apiUrlFilters mpId="mp-api-filter"
+    button.is-primary click="addApiUrlFilter" mpId="mp-add-filter"
       | Add Filter

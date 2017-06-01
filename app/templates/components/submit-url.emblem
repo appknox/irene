@@ -1,8 +1,8 @@
 form.columns
   p.control.column.tour-step-submit-url
-    = input class="input" value=storeURL type="text" placeholder=(t 'pasteYourUrl') id="mp-paste-url"
+    = input class="input" value=storeURL type="text" placeholder=(t 'pasteYourUrl') mpId="mp-paste-url"
     small.content-right.margin-right
       | Once the URL has been uploaded, the scan process gets initiated
   p.control.column.is-one-quarter
-    button.is-primary.is-fullwidth click="submitURL" id="mp-submit-url"
+    button.is-primary.is-fullwidth click="submitURL" mpId="mp-submit-url"
       = t "submitUrl"
