@@ -2,12 +2,12 @@
   footer.card-button
     .columns.button-width
       .column class=project.hasMultipleFiles::auto-adjust
-        = link-to 'authenticated.project.settings' project.id class="is-fullwidth" tagName="button" mpId="mp-project-settings"
+        = link-to 'authenticated.project.settings' project.id class="is-fullwidth mp-project-setting" tagName="button"
           = t "settings"
       if project.hasMultipleFiles
         .column
-          = link-to 'authenticated.project.files' project.id class="is-fullwidth" tagName="button" mpId="mp-all-scans"
+          = link-to 'authenticated.project.files' project.id class="is-fullwidth mp-all-scans" tagName="button"
             = t "allScans"
         .column
-          = link-to 'authenticated.choose' project.lastFile.id class="is-fullwidth" tagName="button" mpId="mp-file-compare"
+          = link-to 'authenticated.choose' project.lastFile.id class="is-fullwidth mp-file-compare" tagName="button"
             = t "compare"

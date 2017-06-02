@@ -6,7 +6,7 @@ if hasDevices
       = t "deviceType"
   .columns
     .column.is-one-sixth
-      select.input{action 'selectDeviceType' on='change'} id="project-device-preference" mpId="mp-device-preference"
+      select.input.mp-device-preference{action 'selectDeviceType' on='change'} id="project-device-preference"
         option value=0
           = t "noPreference"
         each deviceTypes as |deviceType|
@@ -23,7 +23,7 @@ if hasDevices
         = t "osVersion"
     .columns
       .column.is-one-sixth
-        select.input{action 'selectVersion' on='change'} id="project-version-preference" mpId="mp-version-preference"
+        select.input.mp-version-preference{action 'selectVersion' on='change'} id="project-version-preference"
           option value=0
             = t "noPreference"
           each uniqueDevices as |device|
@@ -36,7 +36,7 @@ if hasDevices
 
     .columns
       .column
-        button.margin-top20.is-primary click="versionSelected" mpId="mp-select-device"
+        button.margin-top20.is-primary.mp-select-device click="versionSelected"
           | Select the device
   else
 

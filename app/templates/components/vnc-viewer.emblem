@@ -3,11 +3,11 @@ if isPoppedOut
 .modal-card.tour-step-sd-dynamic
   .modal-card-head
     if file.isNoneStaus
-      button.is-primary.is-fullwidth click="openAPIScanModal" mpId="mp-start-dynamic-scan"
+      button.is-primary.is-fullwidth.mp-start-dynamic-scan click="openAPIScanModal"
         = t "dynamicScanStart"
 
     if file.isReady
-      button.is-primary.is-fullwidth  click="dynamicShutdown" mpId="mp-shutdown-device"
+      button.is-primary.is-fullwidth.mp-shutdown-device  click="dynamicShutdown"
         = t "dynamicShutDown"
 
     if file.isNeitherNoneNorReady
@@ -18,7 +18,7 @@ if isPoppedOut
     canvas.canvas
   if file.isReady
     .modal-card-foot
-      button.is-primary.is-fullwidth click="togglePop" mpId="mp-toggle-pop"
+      button.is-primary.is-fullwidth.mp-toggle-pop click="togglePop"
         = vncPopText
 
 = modal-card isActive=showAPIScanModal title="Do you also want to run API Scan?"
@@ -33,9 +33,9 @@ if isPoppedOut
           | &nbsp; API scan performs multiple automated tests that may result in <b class="bold">denial of service</b> or <b class="bold">loss of data</b>. Do not select YES if the app is configured to use a <b class="bold">production API server</b> or if the app employs <b class="bold">SSL pinning</b>.
         form
           p.control
-           button.is-primary click="showURLFilter" mpId="mp-run-api-scan"
+           button.is-primary.mp-run-api-scan click="showURLFilter"
             | Yes
-           button.is-primary click="doNotRunAPIScan" mpId="mp-dont-run-api-scan"
+           button.is-primary.mp-dont-run-api-scan click="doNotRunAPIScan"
             | No
   .card-body.warning-modal class=showURLFilter:show:hide
     .card-wrapper
@@ -47,7 +47,7 @@ if isPoppedOut
           .column
             form
               p.control
-                = input class="form-control input" type="text" value=file.project.apiUrlFilters mpId="mp-add-api-filter"
+                = input class="form-control input mp-add-api-filter" type="text" value=file.project.apiUrlFilters
               p.control
-                button.is-primary.start-scan click="addUrlFilterAndStartScan" mpId="mp-save-and-start-scan"
+                button.is-primary.start-scan.mp-save-and-start-scan click="addUrlFilterAndStartScan"
                   | Save Filter &amp; Start Scan

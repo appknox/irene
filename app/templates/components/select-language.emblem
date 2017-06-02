@@ -1,4 +1,4 @@
-select.input.is-fullwidth{action 'setLocale' on='change'} mpId="mp-select-language"
+select.input.is-fullwidth.mp-select-language{action 'setLocale' on='change'}
   option selected="true" value=currentLocale.locale
     = currentLocale.localeString
   each otherLocales as |locale|

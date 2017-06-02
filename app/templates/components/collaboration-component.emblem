@@ -1,7 +1,7 @@
 h5
   = t "collaborations"
 
-button.is-primary click="openCollaborationModal" mpId="mp-open-collaboration-modal"
+button.is-primary.mp-open-collaboration-modal click="openCollaborationModal"
   = t "addCollaborations"
 
 .columns.margin-top
@@ -14,11 +14,11 @@ button.is-primary click="openCollaborationModal" mpId="mp-open-collaboration-mod
     .card-wrapper
       form
         p.control
-          = input class="form-control input" placeholder="Email / Username" type="email" value=collaborationEmail mpId="mp-collaboration-email"
+          = input class="form-control input mp-collaboration-email" placeholder="Email / Username" type="email" value=collaborationEmail
         p.control
-          select.input onchange={action "roleChanged" value="target.value"} mpId="mp-collaboration-role"
+          select.input.mp-collaboration-role onchange={action "roleChanged" value="target.value"}
             each roles as |role|
               option value=role.value
                 = role.key
         .card-button
-          button click="addCollaboration" mpId="mp-add-collaboration" Add Collaboration
+          button.mp-add-collaboration click="addCollaboration" Add Collaboration
