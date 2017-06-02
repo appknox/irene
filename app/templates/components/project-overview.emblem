@@ -1,13 +1,13 @@
 = file-overview file=project.lastFile
   footer.card-button
     .columns.button-width
-      .column.is-one-quarter class=project.hasMultipleFiles::auto-adjust
-        = link-to 'authenticated.project.settings' project.id class="card-footer-item is-fullwidth" tagName="button" mpId="mp-project-settings"
+      .column class=project.hasMultipleFiles::auto-adjust
+        = link-to 'authenticated.project.settings' project.id class="is-fullwidth" tagName="button" mpId="mp-project-settings"
           = t "settings"
       if project.hasMultipleFiles
-        .column.is-one-quarter
-          = link-to 'authenticated.project.files' project.id class="card-footer-item is-fullwidth" tagName="button" mpId="mp-all-scans"
+        .column
+          = link-to 'authenticated.project.files' project.id class="is-fullwidth" tagName="button" mpId="mp-all-scans"
             = t "allScans"
-        .column.is-one-quarter
-          = link-to 'authenticated.choose' project.lastFile.id class="card-footer-item is-fullwidth" tagName="button" mpId="mp-file-compare"
+        .column
+          = link-to 'authenticated.choose' project.lastFile.id class="is-fullwidth" tagName="button" mpId="mp-file-compare"
             = t "compare"
