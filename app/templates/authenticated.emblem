@@ -26,17 +26,17 @@
 
       ul.menu-list.text-center
         li
-          = link-to 'authenticated.index'
+          = link-to 'authenticated.index' class="mp-auth-index"
             = t "dashboard"
         li
-          = link-to 'authenticated.settings'
+          = link-to 'authenticated.settings' class="mp-auth-settings"
             = t "settings"
         if model.ifBillingIsNotHidden
           li
-            = link-to 'authenticated.billing'
+            = link-to 'authenticated.billing' class="mp-auth-billing"
               = t "billing"
         li
-          a click="invalidateSession"
+          a click="invalidateSession" class="mp-auth-logout"
             = t "logout"
 
       = submission-list

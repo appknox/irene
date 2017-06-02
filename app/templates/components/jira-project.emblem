@@ -12,7 +12,7 @@ if project.jiraProject
 else
   .columns
     .column.is-one-third
-      select.select{action 'selectProject' on='change'} mpId="mp-jira-select-project"
+      select.select{action 'selectProject' on='change'} class="mp-jira-select-project"
         option value=0
           = t "noPreference"
         each jiraProjects as |project|

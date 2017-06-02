@@ -1,10 +1,10 @@
 .tabs.is-centered.is-medium.is-boxed
   ul
     li class=summaryClass
-      a click="displaySummary" mpId="mp-display-summary"
+      a click="displaySummary" class="mp-display-summary"
         = t "summary"
     li class=detailsClass
-      a click="displayDetails" mpId="mp-display-details"
+      a click="displayDetails" class="mp-display-details"
         = t "details"
 .columns
   .column

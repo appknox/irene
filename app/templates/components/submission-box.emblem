@@ -15,7 +15,7 @@ if env.isAppknox
         .column
            label.button.is-primary.is-fullwidth
             .tour-step-upload-app
-              = upload-app delegate=this mpId="mp-upload-app"
+              = upload-app delegate=this class="mp-upload-app"
               if isUploading
                 | Uploading :
                 = progress

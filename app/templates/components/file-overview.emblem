@@ -19,9 +19,9 @@ header.card-header
       .columns
         .column.flex-center.nowrap-trim.lowercase-text.tooltip
           = t "started"
-          | &nbsp; #{moment-from-now file.updatedOn}
+          | &nbsp; #{moment-from-now file.createdOn}
           span.tooltiptext.tooltip-collapse
-            = file.updatedOn
+            = file.createdOn
         .column.flex-center.nowrap-trim
           = t "versionCode"
           | {{#if file.versionCode}} - #{file.versionCode}{{/if}}

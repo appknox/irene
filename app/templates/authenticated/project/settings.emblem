@@ -4,7 +4,7 @@
       h4
         =t "settings"
     .column.is-one-sixth
-      = link-to 'authenticated.project.files' model.id class="is-primary" tagName="button" mpId="mp-settings-all-scans"
+      = link-to 'authenticated.project.files' model.id class="is-primary" tagName="button" class="mp-settings-all-scans"
         = t "allScans"
 
 .box

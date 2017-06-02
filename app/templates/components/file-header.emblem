@@ -14,11 +14,11 @@
               .column.content-right
                 .columns
                   .column.card-button
-                    = link-to 'authenticated.project.settings' file.project.id  tagName="button" mpId="mp-detail-project-settings"
+                    = link-to 'authenticated.project.settings' file.project.id class="mp-detail-project-settings" tagName="button"
                       = t "settings"
                   if file.project.hasMultipleFiles
                     .column.card-button
-                      = link-to 'authenticated.choose' file.project.lastFile.id tagName="button" mpId="mp-detail-file-compare"
+                      = link-to 'authenticated.choose' file.project.lastFile.id class="mp-detail-file-compare" tagName="button"
                         = t "compare"
 
 
@@ -35,15 +35,15 @@
         .columns
           .column.card-button
             if file.project.hasMultipleFiles
-              = link-to 'authenticated.project.files' file.project.id class="is-fullwidth" tagName="button" mpId="mp-detail-all-scans"
+              = link-to 'authenticated.project.files' file.project.id class="is-fullwidth mp-detail-all-scans" tagName="button"
                 = t "allScans"
           .column.card-button
-            button.is-fullwidth click="getPDFReportLink" mpId="mp-pdf-report"
+            button.is-fullwidth.mp-pdf-report click="getPDFReportLink"
               = t "pdfReport"
           .column.card-button
             if env.isAppknox
               if file.ifManualNotRequested
-                button.is-fullwidth click="requestManual" mpId="mp-request-manual"
+                button.is-fullwidth.mp-request-manual click="requestManual"
                   = t "manual"
   .card-content
     .columns
@@ -73,9 +73,9 @@
           tr
             td.tooltip
               = t "started"
-              | &nbsp; #{moment-from-now file.updatedOn}
+              | &nbsp; #{moment-from-now file.createdOn}
               span.tooltiptext
-                = file.updatedOn
+                = file.createdOn
         table
           tr
             td.capitalize-text
@@ -105,8 +105,9 @@
         = t "staticScan"
       .column.flex-center
         = t "dynamicScan"
-      .column.flex-center
-        = t "apiScan"
+      if file.project.isAPIScanEnabled
+        .column.flex-center
+          = t "apiScan"
       .column.flex-center
         = t "manualScan"
 
@@ -123,12 +124,13 @@
           div.progress-text
             = file.dynamicScanProgress
             | %
-      .column.flex-center
-        div.progress-wrap.progress class=file.isApiCompleted:is-success:is-progress
-          div.progress-bar.progress style="left:{{file.apiScanProgress}}%"
-          div.progress-text
-           = file.apiScanProgress
-           | %
+      if file.project.isAPIScanEnabled
+        .column.flex-center
+          div.progress-wrap.progress class=file.isApiCompleted:is-success:is-progress
+            div.progress-bar.progress style="left:{{file.apiScanProgress}}%"
+            div.progress-text
+             = file.apiScanProgress
+             | %
       .column.flex-center
         div.progress-wrap.progress class=file.isManualCompleted:is-success:is-progress
           div.progress-bar.progress style="left:{{file.manualScanProgress}}%"

@@ -4,7 +4,7 @@ if env.isAppknox
   .columns
     .column.flex-center
       each durations as |duration|
-        button.js-duration-button.is-primary.margin-left click="selectDuration" data-value=duration.value mpId="mp-pricing-duration"
+        button.js-duration-button.is-primary.margin-left.mp-pricing-duration click="selectDuration" data-value=duration.value 
           | #{ t (plan-duration duration.value)}
 
   .columns
