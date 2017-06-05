@@ -27,23 +27,24 @@
 
 .card.is-fullwidth.margin-bottom20.app-details-card
   header.card-header
-    p.card-header-title.tour-step-project-details
-      h5.margin-top
-        = t "scanDetails"
+    .column.is-one-quarter
+      p.card-header-title.tour-step-project-details
+        h5
+          = t "scanDetails"
     .column.content-right
       .card-button.tour-step-sd-action-buttons
         .columns
           .column.card-button
             if file.project.hasMultipleFiles
-              = link-to 'authenticated.project.files' file.project.id class="is-fullwidth mp-detail-all-scans" tagName="button"
+              = link-to 'authenticated.project.files' file.project.id class="mp-detail-all-scans" tagName="button"
                 = t "allScans"
           .column.card-button
-            button.is-fullwidth.mp-pdf-report click="getPDFReportLink"
+            button.mp-pdf-report click="getPDFReportLink"
               = t "pdfReport"
           .column.card-button
             if env.isAppknox
               if file.ifManualNotRequested
-                button.is-fullwidth.mp-request-manual click="requestManual"
+                button.mp-request-manual click="requestManual"
                   = t "manual"
   .card-content
     .columns
