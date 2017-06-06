@@ -8,6 +8,7 @@ AnalysisDetailsComponent = Ember.Component.extend
   classNames: ["message"]
   showVulnerability: false
   classNameBindings: ["riskClass"]
+  mpClassSelector: true
 
   riskClass: ( ->
     risk = @get "analysis.risk"
@@ -32,6 +33,7 @@ AnalysisDetailsComponent = Ember.Component.extend
   actions:
 
     toggleVulnerability: ->
+      @set "mpClassSelector", @get "showVulnerability"
       return @set "showVulnerability", !@get "showVulnerability"
 
 
