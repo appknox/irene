@@ -14,7 +14,7 @@ button.is-primary.mp-open-collaboration-modal click="openCollaborationModal"
     .card-wrapper
       form
         p.control
-          = input class="form-control input mp-collaboration-email" placeholder="Email / Username" type="email" value=collaborationEmail
+          = input class="form-control input mp-collaboration-email" placeholder="Email" type="email" value=collaborationEmail
         p.control
           select.input.mp-collaboration-role onchange={action "roleChanged" value="target.value"}
             each roles as |role|
