@@ -18,7 +18,7 @@
                       = t "settings"
                   if file.project.hasMultipleFiles
                     .column.card-button
-                      = link-to 'authenticated.choose' file.project.lastFile.id class="mp-detail-file-compare" tagName="button"
+                      = link-to 'authenticated.choose' file.id class="mp-detail-file-compare" tagName="button"
                         = t "compare"
 
 
