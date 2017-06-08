@@ -91,6 +91,7 @@ File = DS.Model.extend BaseModelMixin,
   analysesSorting: ['risk:desc']
   sortedAnalyses: Ember.computed.sort 'analyses', 'analysesSorting'
 
+  countRiskCritical: 0
   countRiskHigh: 0
   countRiskMedium: 0
   countRiskLow: 0
@@ -100,18 +101,21 @@ File = DS.Model.extend BaseModelMixin,
   pieChartData: Ember.computed 'analyses.@each.risk', ->
     analyses = @get "analyses"
     r = ENUMS.RISK
+    countRiskCritical = _getAnalysesCount analyses, r.CRITICAL
     countRiskHigh = _getAnalysesCount analyses, r.HIGH
     countRiskMedium = _getAnalysesCount analyses, r.MEDIUM
     countRiskLow = _getAnalysesCount analyses, r.LOW
     countRiskNone = _getAnalysesCount analyses, r.NONE
     countRiskUnknown = _getAnalysesCount analyses, r.UNKNOWN
 
+    @set "countRiskCritical", countRiskCritical
     @set "countRiskHigh", countRiskHigh
     @set "countRiskMedium", countRiskMedium
     @set "countRiskLow", countRiskLow
     @set "countRiskNone", countRiskNone
     @set "countRiskUnknown", countRiskUnknown
     [
+      {"value": countRiskCritical, "color": "#000"}, # fix this after adding in bohemia
       {"value": countRiskHigh, "color": _getComputedColor "danger"},
       {"value": countRiskMedium, "color": _getComputedColor "warning"},
       {"value": countRiskLow, "color": _getComputedColor "info"},

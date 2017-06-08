@@ -601,25 +601,9 @@ ul.risk-table
     font-size: 30px
     position: relative
     top: 4px
-
   i
     margin-right: 5px
     font-size: 20px
-  li.danger
-    i
-      color: $red
-  li.warning
-    i
-      color: $yellow
-  li.low
-    i
-      color: $blue
-  li.success
-    i
-      color: $green
-  li.default
-    i
-      color: $grey
 
 .progress-wrap
   width: 60%
@@ -693,3 +677,10 @@ canvas
     color: #fff
   .message-body
     border-color: rgba(0, 0, 0, 0.4)
+
+li.is-critical:before
+  content: "• "
+  color: #000
+
+#hiddencolorholder .is-critical
+  color: #000
