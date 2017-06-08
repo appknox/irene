@@ -24,6 +24,7 @@ export default {
   "createdOn": "作成日",
   "credentialsNotUpdated": "資格情報が更新されていません",
   "credentialsUpdated": "資格情報が更新されました",
+  "critical": "クリティカル",
   "currentPassword": "現在のパスワード",
   "dashboard": "ダッシュボード",
   "dateCreated": "作成日",

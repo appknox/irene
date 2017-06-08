@@ -17,6 +17,7 @@ Analysis = DS.Model.extend
   tLow: t("low")
   tMedium: t("medium")
   tHigh: t("high")
+  tCritical: t("critical")
 
   isScanning: ( ->
     risk = @get "risk"
@@ -32,7 +33,7 @@ Analysis = DS.Model.extend
     switch @get "risk"
       when ENUMS.RISK.UNKNOWN then "fa-spinner fa-spin"
       when ENUMS.RISK.NONE then "fa-check"
-      when ENUMS.RISK.HIGH, ENUMS.RISK.LOW, ENUMS.RISK.MEDIUM  then "fa-warning"
+      when ENUMS.RISK.CRITICAL, ENUMS.RISK.HIGH, ENUMS.RISK.LOW, ENUMS.RISK.MEDIUM  then "fa-warning"
   ).property "risk"
 
   labelClass:( ->
@@ -43,6 +44,7 @@ Analysis = DS.Model.extend
       when ENUMS.RISK.LOW then "#{cls} is-info"
       when ENUMS.RISK.MEDIUM then "#{cls} is-warning"
       when ENUMS.RISK.HIGH then "#{cls} is-danger"
+      when ENUMS.RISK.CRITICAL then "#{cls} is-critical"
   ).property "risk"
 
   riskText:( ->
@@ -51,6 +53,7 @@ Analysis = DS.Model.extend
     tLow = @get "tLow"
     tMedium = @get "tMedium"
     tHigh = @get "tHigh"
+    tCritical = @get "tCritical"
 
     switch @get "risk"
       when ENUMS.RISK.UNKNOWN then tScanning
@@ -58,6 +61,7 @@ Analysis = DS.Model.extend
       when ENUMS.RISK.LOW then tLow
       when ENUMS.RISK.MEDIUM then tMedium
       when ENUMS.RISK.HIGH then tHigh
+      when ENUMS.RISK.CRITICAL then tCritical
   ).property "risk"
 
 `export default Analysis`
