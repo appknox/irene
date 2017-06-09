@@ -115,7 +115,7 @@ File = DS.Model.extend BaseModelMixin,
     @set "countRiskNone", countRiskNone
     @set "countRiskUnknown", countRiskUnknown
     [
-      {"value": countRiskCritical, "color": "#000"}, # fix this after adding in bohemia
+      {"value": countRiskCritical, "color": _getComputedColor "critical"},
       {"value": countRiskHigh, "color": _getComputedColor "danger"},
       {"value": countRiskMedium, "color": _getComputedColor "warning"},
       {"value": countRiskLow, "color": _getComputedColor "info"},
