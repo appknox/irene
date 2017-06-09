@@ -180,9 +180,12 @@ module.exports = function(environment) {
     ENV.stripe = {
       publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
     };
+    ENV.mixpanel = {
+      enabled: false
+    };
     ENV['APP'].opbeat = {
         DEBUG: true
-      };
+    };
   }
 
   if (environment === 'testing') {
@@ -195,9 +198,12 @@ module.exports = function(environment) {
     ENV.stripe = {
       publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
     };
+    ENV.mixpanel = {
+      enabled: false
+    };
     ENV['APP'].opbeat = {
         DEBUG: true
-      };
+    };
   }
 
   if (environment === 'production') {
