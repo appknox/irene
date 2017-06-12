@@ -34,9 +34,12 @@ if showVulnerability
             i.fa.risk-icons class=analysis.iconClass
             | &nbsp;{{analysis.riskText}}
 
-          div.margin-top class=analysis.labelClass
-            | CVSS SCORE:
-            | &nbsp; {{analysis.cvssBase}}
+          if analysis.hascvccBase
+            div.margin-top.cvss-box class=analysis.labelClass
+              h1
+                = analysis.cvssBase
+              h6
+                | CVSSv3
     .columns
       .column
         if analysis.isRisky

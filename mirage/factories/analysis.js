@@ -21,5 +21,5 @@ export default Base.extend({
     }
     return desc;
   },
-  cvssBase: faker.list.random(-1.0, 0.0, 2.3, 4.5, 6.7, 8.8, 9.0)
+  cvssBase: faker.list.random(-1.0, 0.1, 2.3, 4.5, 6.7, 8.8, 9.1)
 });

@@ -20,6 +20,8 @@ Analysis = DS.Model.extend
   tHigh: t("high")
   tCritical: t("critical")
 
+  hascvccBase: Ember.computed.gt 'cvssBase', -1.0
+
   isScanning: ( ->
     risk = @get "risk"
     risk is ENUMS.RISK.UNKNOWN
