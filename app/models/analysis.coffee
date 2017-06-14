@@ -21,14 +21,14 @@ Analysis = DS.Model.extend
     humanizeCvss cvssVector
   ).property "cvssVector"
 
+  hascvccBase: Ember.computed.equal 'cvssVersion', 3
+
   tScanning: t("scanning")
   tNone: t("none")
   tLow: t("low")
   tMedium: t("medium")
   tHigh: t("high")
   tCritical: t("critical")
-
-  hascvccBase: Ember.computed.equal 'cvssVersion', 3
 
   isScanning: ( ->
     risk = @get "risk"
