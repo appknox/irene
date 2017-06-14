@@ -14,6 +14,7 @@ Analysis = DS.Model.extend
   vulnerability: DS.belongsTo 'vulnerability'
   cvssBase: DS.attr 'number'
   cvssVector: DS.attr 'string'
+  cvssVersion: DS.attr 'number'
 
   cvssMetricsHumanized: (->
     cvssVector = @get "cvssVector"
@@ -27,7 +28,7 @@ Analysis = DS.Model.extend
   tHigh: t("high")
   tCritical: t("critical")
 
-  hascvccBase: Ember.computed.gt 'cvssBase', -1.0
+  hascvccBase: Ember.computed.equal 'cvssVersion', 3
 
   isScanning: ( ->
     risk = @get "risk"
