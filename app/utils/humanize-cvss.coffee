@@ -42,7 +42,7 @@ humanizeCvss = (cvssVector) ->
       'N': 'None'}}
 
   splitVector = cvssVector.replace("CVSS:3.0/", "").split "/"
-  for splittedVector in splitVector
+  for splittedValue in splitVector
     sv = splittedValue.split ":"
     key = sv[0]
     value = sv[1]
