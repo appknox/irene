@@ -46,5 +46,5 @@ humanizeCvss = (cvssVector) ->
     sv = splittedValue.split ":"
     key = sv[0]
     value = sv[1]
-    metrics[key] + ":" + allowed_values[key][value]
+    metrics[key] + " : " + allowed_values[key][value] 
 `export default humanizeCvss`

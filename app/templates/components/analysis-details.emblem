@@ -40,8 +40,11 @@ if showVulnerability
                 = analysis.cvssBase
               h6
                 | CVSSv3
-              span.tooltiptext
-                = analysis.cvssMetricsHumanized
+              div.tooltiptext
+                ul
+                  each analysis.cvssMetricsHumanized as |tag|
+                    li
+                      = tag
 
     .columns
       .column
