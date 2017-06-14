@@ -1,6 +1,7 @@
 `import DS from 'ember-data'`
 `import ENUMS from 'irene/enums'`
 `import { translationMacro as t } from 'ember-i18n'`
+`import humanizeCvss from 'irene/utils/humanize-cvss';`
 
 
 Analysis = DS.Model.extend
@@ -12,6 +13,12 @@ Analysis = DS.Model.extend
   status: DS.attr 'number'
   vulnerability: DS.belongsTo 'vulnerability'
   cvssBase: DS.attr 'number'
+  cvssVector: DS.attr 'string'
+
+  cvssMetricsHumanized: (->
+    cvssVector = @get "cvssVector"
+    humanizeCvss cvssVector
+  ).property "cvssVector"
 
   tScanning: t("scanning")
   tNone: t("none")

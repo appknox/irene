@@ -35,11 +35,14 @@ if showVulnerability
             | &nbsp;{{analysis.riskText}}
 
           if analysis.hascvccBase
-            div.margin-top.cvss-box class=analysis.labelClass
+            div.margin-top.cvss-box.tooltip class=analysis.labelClass
               h1
                 = analysis.cvssBase
               h6
                 | CVSSv3
+              span.tooltiptext
+                = analysis.cvssMetricsHumanized
+
     .columns
       .column
         if analysis.isRisky
