@@ -34,18 +34,18 @@ if showVulnerability
             i.fa.risk-icons class=analysis.iconClass
             | &nbsp;{{analysis.riskText}}
 
-          if analysis.hascvccBase
-            div.margin-top.cvss-box.tooltip class=analysis.labelClass
-              h1
-                = analysis.cvssBase
-              h6
-                | CVSSv3
-              div.tooltiptext
-                ul
-                  each analysis.cvssMetricsHumanized as |tag|
-                    li
-                      = tag
-
+          if analysis.isRisky
+            if analysis.hascvccBase
+              div.margin-top.cvss-box.tooltip class=analysis.labelClass
+                h1
+                  = analysis.cvssBase
+                h6
+                  | CVSSv3
+                div.tooltiptext
+                  ul
+                    each analysis.cvssMetricsHumanized as |tag|
+                      li
+                        = tag
     .columns
       .column
         if analysis.isRisky
