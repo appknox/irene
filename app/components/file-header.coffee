@@ -22,9 +22,9 @@ FileHeaderComponent = Ember.Component.extend
       .then (result) ->
         window.open result.url
       .catch (error) ->
+        that.get("notify").error "Please wait while the report is getting generated"
         for error in error.errors
           that.get("notify").error error.detail?.message
-        that.get("notify").error "Please wait while the report is getting generated"
 
     requestManual: ->
       that = @
