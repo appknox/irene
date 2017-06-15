@@ -43,9 +43,10 @@ if showVulnerability
                   | CVSSv3
                 div.tooltiptext
                   ul
-                    each analysis.cvssMetricsHumanized as |tag|
+                    each analysis.cvssMetricsHumanized as |metric|
                       li
-                        = tag
+                        = metric.key
+                        | &nbsp; : &nbsp; {{metric.value}}
     .columns
       .column
         if analysis.isRisky
