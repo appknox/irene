@@ -54,6 +54,9 @@
         ul.risk-table
           h5.uppercase-text
            = t "severityLevel"
+          li.is-critical
+            = t "critical"
+            | : #{file.countRiskCritical} 
           li.is-danger
             = t "high"
             | : #{file.countRiskHigh}

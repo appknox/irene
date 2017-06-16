@@ -222,6 +222,9 @@ select
   display: flex
   justify-content: center
 
+.text-centre
+  text-align: center
+
 .vertical-align-center
   display: flex
   align-items: center
@@ -601,25 +604,9 @@ ul.risk-table
     font-size: 30px
     position: relative
     top: 4px
-
   i
     margin-right: 5px
     font-size: 20px
-  li.danger
-    i
-      color: $red
-  li.warning
-    i
-      color: $yellow
-  li.low
-    i
-      color: $blue
-  li.success
-    i
-      color: $green
-  li.default
-    i
-      color: $grey
 
 .progress-wrap
   width: 60%
@@ -637,7 +624,7 @@ canvas
   .card-header
     height: 40px
   .card-content
-    height: 210px
+    height: 220px
     .columns
       .column
         padding-top: 10px
@@ -680,3 +667,45 @@ canvas
     top: 92px
     left: 10px
     white-space: normal
+
+.cvss-box
+  cursor: pointer
+  width: 80px
+  .tooltiptext
+    box-shadow: 2px 2px 5px 2px #888888
+    position: relative
+    left: 100px
+    top: -140px
+    width: 200px
+    li
+      padding: 5px
+      list-style-type: none
+
+// Update this in bohemia //
+
+.tag.is-critical
+  background-color: #000
+  color: #fff
+
+.message.is-critical
+  .message-header
+    background-color: #000
+    color: #fff
+  .message-body
+    border-color: rgba(0, 0, 0, 0.4)
+
+li.is-critical:before
+  content: "• "
+  color: #000
+
+#hiddencolorholder .is-critical
+  color: #000
+
+.cvss-box
+  border-radius: 5px
+  height: 100px
+  display: block
+  h1
+    padding-top: 30px
+
+// End //

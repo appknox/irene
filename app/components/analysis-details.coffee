@@ -21,6 +21,8 @@ AnalysisDetailsComponent = Ember.Component.extend
         "is-warning"
       when ENUMS.RISK.HIGH
         "is-danger"
+      when ENUMS.RISK.CRITICAL
+        "is-critical"
   ).property "analysis.risk"
 
   progressClass: ( ->

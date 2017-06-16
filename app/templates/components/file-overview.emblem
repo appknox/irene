@@ -31,6 +31,9 @@ header.card-header
           = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
         .column
           ul.risk-table
+            li.is-critical
+              = t "critical"
+              | : #{file.countRiskCritical}
             li.is-danger
               = t "high"
               | : #{file.countRiskHigh}

@@ -24,6 +24,7 @@ export default {
   "createdOn": "created on",
   "credentialsNotUpdated": "Something went wrong when trying to update credentials",
   "credentialsUpdated": "Credentials Successfully Updated",
+  "critical": "Critical",
   "currentPassword": "Current Password",
   "dashboard": "Home",
   "dateCreated": "Date Created",
