@@ -92,6 +92,7 @@ export default {
   "medium": "Medium",
   "monthly": "Monthly",
   "mostRecent": " (Most Recent First)",
+  "multiFactorAuth": "Multi Factor Authentication",
   "namespace": "Namespace",
   "networkError": "A network error occured! Please try again later",
   "newPassword": "New Password",

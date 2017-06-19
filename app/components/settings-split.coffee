@@ -18,7 +18,6 @@ SettingsSplitComponent = Ember.Component.extend
       @set "isGeneral", true
 
     displaySecurity: ->
-      debugger
       @set "isGeneral", false
 
 `export default SettingsSplitComponent`

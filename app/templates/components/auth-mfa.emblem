@@ -1,0 +1,6 @@
+if mfaEnabled
+  button.is-primary.margin-top20 click="disableMFA"
+    = t "disableMFA"
+else
+  button.is-primary.margin-top20 click="enableMFA"
+    = t "enableMFA"    

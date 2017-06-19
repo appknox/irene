@@ -91,6 +91,7 @@ export default {
   "medium": "中",
   "monthly": "月次",
   "mostRecent": " (最近ファースト)",
+  "multiFactorAuth": "多要素認証",
   "namespace": "名前空間",
   "networkError": "ネットワークエラー",
   "newPassword": "新しいパスワード",
