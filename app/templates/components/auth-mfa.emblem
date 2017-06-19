@@ -12,5 +12,28 @@
       = t "status"
       | : {{t "disabled"}}
       i.fa.fa-times.margin-left
-    button.is-primary.margin-top20 click="enableMFA"
+    button.is-primary.margin-top20 click="openMFAModal"
       = t "enableMFA"
+
+= modal-card isActive=showMFAModal title="Enable Multi Factor Authentication"
+
+  .card-body.warning-modal class=showMFAIntro:show:hide
+    .card-wrapper
+      p
+        | <b class="bold">Multi Factor Authentication</b> adds an extra layer of security to your account. In addition to your username and password, you’ll need to enter a code that <b class="bold">Appknox</b> sends to you via an app on your phone.
+      p
+        | Use an application on your phone to get multi-factor authentication codes when prompted.
+      button.is-primary click="showBarCode"
+        | Set up using an app
+  .card-body.warning-modal class=showBarCode:show:hide
+    .card-wrapper
+      p
+        |  <b class="bold">Multi Factor Authentication</b> adds another layer of security to your account so if your password is compromised or stolen, only you can log in.
+      h3
+        | Scan this barcode with your app
+      p
+        | Scan the image above with the multi-factor authentication app on your phone
+      p
+        | Enter the six-digit code from the application
+      p
+        | After scanning the barcode image, the app will display a six-digit code that you can enter below
