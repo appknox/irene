@@ -39,4 +39,4 @@ else
       .column.is-half
         h4.is-fullwidth
           = t "multiFactorAuth"
-        = auth-mfa
+        = auth-mfa user=user

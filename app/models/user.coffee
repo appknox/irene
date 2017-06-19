@@ -29,6 +29,13 @@ User = DS.Model.extend
   billingHidden: DS.attr 'boolean'
   mfaMethod: DS.attr 'number'
 
+  mfaEnabled: (->
+    mfaMethod = @get "mfaMethod"
+    if mfaMethod is ENUMS.MFA_METHOD.TOTP
+      return true
+    false  
+  ).property "mfaMethod"
+
   ifBillingIsNotHidden: (->
     billingHidden = @get 'billingHidden'
     !billingHidden

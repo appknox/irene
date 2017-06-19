@@ -1,6 +1,16 @@
-if mfaEnabled
-  button.is-primary.margin-top20 click="disableMFA"
-    = t "disableMFA"
-else
-  button.is-primary.margin-top20 click="enableMFA"
-    = t "enableMFA"    
+.mfa
+  if user.mfaEnabled
+    h5
+      = t "status"
+      | : {{t "enabled"}}
+      i.fa.fa-check.margin-left
+    button.is-primary.margin-top20 click="disableMFA"
+      = t "disableMFA"
+
+  else
+    h5
+      = t "status"
+      | : {{t "disabled"}}
+      i.fa.fa-times.margin-left
+    button.is-primary.margin-top20 click="enableMFA"
+      = t "enableMFA"
