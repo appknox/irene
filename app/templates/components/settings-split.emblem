@@ -1,0 +1,36 @@
+.tabs.is-centered.is-medium.is-boxed
+  ul
+    li class=generalClass
+      a.mp-display-general click="displayGeneral"
+        = t "general"
+    li class=securityClass
+      a.mp-display-security click="displaySecurity"
+        = t "security"
+
+if isGeneral
+  .box
+    .columns
+      .column
+        h4
+          = t "namespace"
+      = namespace-component user=user
+      .column.is-one-third
+        h4
+          = t "language"
+        = select-language
+  .box
+    h4.is-fullwidth
+      = t "integration"
+    .columns.box
+      .column
+        = jira-account user=user class="column is-one-third"
+    .columns.box
+      .column
+        = github-account user=user class="column is-one-third"    
+else
+  .box
+    .columns
+      .column.is-half
+        h4.is-fullwidth
+          = t "changePassword"
+        = password-change

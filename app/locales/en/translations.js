@@ -58,10 +58,10 @@ export default {
   "filterBy": "Filter By",
   "first": "First",
   "forgotPassword": "Forgot Password?",
+  "general": "General",
   "ghPageConfigure": "page to configure GitHub integration",
   "githubIntegration": "GitHub Integration",
   "gotoHome": "Go Back To Home",
-  "worsened": "Worsened",
   "greet": "Security fanatics at your service",
   "halfYearly": "Half Yearly",
   "hangInThere": "Hang in there while we process your URL",
@@ -142,6 +142,7 @@ export default {
   "scanStatus": "Scan Status",
   "search": "Search",
   "searchQuery": "Search Query",
+  "security": "Security",
   "selectedDevice": "Selected Device Type",
   "selectedVersion": "Selected OS Version",
   "selectDevice": "Select the device",
@@ -174,5 +175,6 @@ export default {
   "vulnerability": "Vulnerability",
   "vulnerabilityDetails": "Vulnerability Details",
   "welcome": "Welcome ",
+  "worsened": "Worsened",
   "yearly": "Yearly"
 };
