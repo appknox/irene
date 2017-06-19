@@ -1,4 +1,5 @@
 import { Factory, faker } from 'ember-cli-mirage';
+import ENUMS from 'irene/enums';
 
 export default Factory.extend({
   id (i) {
@@ -17,6 +18,9 @@ export default Factory.extend({
   scansLeft: faker.random.number,
   uuid: faker.random.number,
   socketId: faker.random.number,
+  mfaMethod(){
+    return faker.random.arrayElement(ENUMS.MFA_METHOD.VALUES);
+  },
 
   lang(){
     return faker.random.arrayElement(["en"]);

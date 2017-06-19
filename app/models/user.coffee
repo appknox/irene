@@ -27,6 +27,7 @@ User = DS.Model.extend
   scansLeft: DS.attr 'number'
   githubRedirectUrl: DS.attr 'string'
   billingHidden: DS.attr 'boolean'
+  mfaMethod: DS.attr 'number'
 
   ifBillingIsNotHidden: (->
     billingHidden = @get 'billingHidden'
