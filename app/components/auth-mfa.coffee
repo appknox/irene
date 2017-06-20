@@ -53,9 +53,13 @@ AuthMfaComponent = Ember.Component.extend
         otp: enableMFAOTP
       @get("ajax").post ENV.endpoints.enableMFA, data: data
       .then (data)->
-        that.get("notify").success "success"
+        that.get("notify").success "Multi Factor Authentication is now enabled"
         that.set "enableMFAOTP", ""
         that.set "showMFAEnableModal", false
+        setTimeout ->
+          window.location.reload() # FIXME: Hackish Way
+        ,
+          3 * 1000
       .catch (error) ->
         that.get("notify").error error.payload.message
         for error in error.errors
@@ -70,9 +74,13 @@ AuthMfaComponent = Ember.Component.extend
         otp: disableMFAOTP
       @get("ajax").post ENV.endpoints.disableMFA, data: data
       .then (data)->
-        that.get("notify").success "success"
+        that.get("notify").success "Multi Factor Authentication is now disabled"
         that.set "disableMFAOTP", ""
         that.set "showMFADisableModal", false
+        setTimeout ->
+          window.location.reload() # FIXME: Hackish Way
+        ,
+          3 * 1000
       .catch (error) ->
         that.get("notify").error error.payload.message
         for error in error.errors
