@@ -31,6 +31,7 @@
         |  <b class="bold">Multi Factor Authentication</b> adds another layer of security to your account so if your password is compromised or stolen, only you can log in.
       h3
         | Scan this barcode with your app
+      canvas.qr-code
       p
         | Scan the image above with the multi-factor authentication app on your phone
       p
