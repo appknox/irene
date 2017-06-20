@@ -4,7 +4,7 @@ h5
 if user.hasJiraToken
   h6
     | Intergations completed
-  button.is-primary click="revokeJira mp-jira-revoke"
+  button.is-primary.mp-jira-revoke click="revokeJira"
     = t "revokeJira"
 else
   form
