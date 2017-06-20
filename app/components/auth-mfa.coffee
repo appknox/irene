@@ -1,6 +1,9 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment';`
 
+isValidOTP = (otp)->
+  return otp.length > 5
+
 AuthMfaComponent = Ember.Component.extend
 
   user: null
@@ -44,6 +47,8 @@ AuthMfaComponent = Ember.Component.extend
     enableMFA: ->
       enableMFAOTP = @get "enableMFAOTP"
       that = @
+      for otp in [enableMFAOTP]
+        return @get("notify").error "Enter the six digit OTP" if !isValidOTP otp
       data =
         otp: enableMFAOTP
       @get("ajax").post ENV.endpoints.enableMFA, data: data
@@ -59,6 +64,8 @@ AuthMfaComponent = Ember.Component.extend
     disableMFA: ->
       disableMFAOTP = @get "disableMFAOTP"
       that = @
+      for otp in [disableMFAOTP]
+        return @get("notify").error "Enter the six digit OTP" if !isValidOTP otp
       data =
         otp: disableMFAOTP
       @get("ajax").post ENV.endpoints.disableMFA, data: data
