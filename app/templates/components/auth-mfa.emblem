@@ -51,9 +51,25 @@
         | After scanning the barcode image, the app will display a six-digit code that you can enter below
       form
         p.control
-          = input class="form-control input" type="text" id="generated-otp" value=generatedOtp
+          = input class="form-control input" type="text" value=enableMFAOTP
         p.control
          button.is-primary click="enableMFA"
           | Continue
          button.is-primary.margin-left click="closeMFAEnableModal"
+          | Cancel
+
+= modal-card isActive=showMFADisableModal title="Disable Multi Factor Authentication"
+  .card-body.warning-modal
+    .card-wrapper
+      p
+        | You are just one step away from disabling the <b class="bold">Multi Factor Authentication</b>
+      p.margin-top
+        | Please enter the newly generated otp from the app
+      form.margin-top
+        p.control
+          = input class="form-control input" type="text" value=disableMFAOTP
+        p.control
+         button.is-primary click="disableMFA"
+          | Continue
+         button.is-primary.margin-left click="closeMFADisableModal"
           | Cancel

@@ -97,4 +97,8 @@ export default function() {
     return {};
   });
 
+  this.post('mfa/disable', () => {
+    return {};
+  });
+
 }

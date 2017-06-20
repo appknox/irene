@@ -6,7 +6,8 @@ AuthMfaComponent = Ember.Component.extend
   user: null
   showMFAIntro: true
   showBarCode: false
-  generatedOtp: null
+  enableMFAOTP: null
+  disableMFAOTP: null
 
   didInsertElement: ->
     new QRious
@@ -41,16 +42,30 @@ AuthMfaComponent = Ember.Component.extend
       @set "showMFAIntro", false
 
     enableMFA: ->
-      generatedOtp = @get "generatedOtp"
+      enableMFAOTP = @get "enableMFAOTP"
       that = @
       data =
-        otp: generatedOtp
-      debugger
+        otp: enableMFAOTP
       @get("ajax").post ENV.endpoints.enableMFA, data: data
       .then (data)->
         that.get("notify").success "success"
-        that.set "generatedOtp", ""
+        that.set "enableMFAOTP", ""
         that.set "showMFAEnableModal", false
+      .catch (error) ->
+        that.get("notify").error error.payload.message
+        for error in error.errors
+          that.get("notify").error error.detail?.message
+
+    disableMFA: ->
+      disableMFAOTP = @get "disableMFAOTP"
+      that = @
+      data =
+        otp: disableMFAOTP
+      @get("ajax").post ENV.endpoints.disableMFA, data: data
+      .then (data)->
+        that.get("notify").success "success"
+        that.set "disableMFAOTP", ""
+        that.set "showMFADisableModal", false
       .catch (error) ->
         that.get("notify").error error.payload.message
         for error in error.errors
