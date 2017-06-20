@@ -4,7 +4,7 @@
       = t "status"
       | : {{t "enabled"}}
       i.fa.fa-check.margin-left
-    button.is-primary.margin-top20 click="disableMFA"
+    button.is-primary.margin-top20 click="openMFADisableModal"
       = t "disableMFA"
 
   else
@@ -12,19 +12,30 @@
       = t "status"
       | : {{t "disabled"}}
       i.fa.fa-times.margin-left
-    button.is-primary.margin-top20 click="openMFAModal"
+    button.is-primary.margin-top20 click="openMFAEnableModal"
       = t "enableMFA"
 
-= modal-card isActive=showMFAModal title="Enable Multi Factor Authentication"
+= modal-card isActive=showMFAEnableModal title="Enable Multi Factor Authentication"
 
   .card-body.warning-modal class=showMFAIntro:show:hide
     .card-wrapper
       p
         | <b class="bold">Multi Factor Authentication</b> adds an extra layer of security to your account. In addition to your username and password, you’ll need to enter a code that <b class="bold">Appknox</b> sends to you via an app on your phone.
-      p
+      p.qr-apps
         | Use an application on your phone to get multi-factor authentication codes when prompted.
-      button.is-primary click="showBarCode"
+      button.is-primary.margin-top click="showBarCode"
         | Set up using an app
+      p.margin-top
+       | Note:
+      p.otp-apps
+       | Download one of these apps to get the OTP:
+       ul
+        li
+          | For Android, iOS, and Blackberry: Google Authenticator
+        li
+          | For Android and iOS: Duo Mobile
+        li
+          | For Windows Phone: Authenticator
   .card-body.warning-modal class=showBarCode:show:hide
     .card-wrapper
       p
@@ -38,3 +49,11 @@
         | Enter the six-digit code from the application
       p
         | After scanning the barcode image, the app will display a six-digit code that you can enter below
+      form
+        p.control
+          = input class="form-control input" type="text" id="generated-otp" value=generatedOtp
+        p.control
+         button.is-primary click="enableMFA"
+          | Continue
+         button.is-primary.margin-left click="closeMFAEnableModal"
+          | Cancel
