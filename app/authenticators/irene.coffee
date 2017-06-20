@@ -26,13 +26,14 @@ IreneAuthenticator = Base.extend
       applicationRoute = Ember.getOwner(@).lookup("route:application")
       applicationRoute.transitionTo ENV['ember-simple-auth']["routeAfterAuthentication"]
 
-  authenticate: (identification, password) ->
+  authenticate: (identification, password, otp, errorCallback) ->
     ajax = @get "ajax"
     that  = @
     new Ember.RSVP.Promise (resolve, reject) ->
       data =
         username: identification
         password: password
+        otp: otp
 
       url = ENV['ember-simple-auth']['loginEndPoint']
       ajax.post(url, {data: data})
@@ -41,6 +42,7 @@ IreneAuthenticator = Base.extend
         resolve data
         that.resumeTransistion()
       .catch (error) ->
+        errorCallback error
         that.get("notify").error error.payload.message, ENV.notifications
         for error in error.errors
           if error.status is "0"
