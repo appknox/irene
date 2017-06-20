@@ -13,6 +13,7 @@ AuthMfaComponent = Ember.Component.extend
   disableMFAOTP: null
 
   didInsertElement: ->
+    provisioningURL = @get "user.provisioningURL"
     new QRious
       element: this.element.querySelector("canvas")
       background: 'white'
@@ -22,7 +23,7 @@ AuthMfaComponent = Ember.Component.extend
       level: 'H'
       padding: 25
       size: 300
-      value: 'https://github.com/neocotic/qrious'
+      value: provisioningURL
 
 
   actions:
@@ -56,10 +57,6 @@ AuthMfaComponent = Ember.Component.extend
         that.get("notify").success "Multi Factor Authentication is now enabled"
         that.set "enableMFAOTP", ""
         that.set "showMFAEnableModal", false
-        setTimeout ->
-          window.location.reload() # FIXME: Hackish Way
-        ,
-          3 * 1000
       .catch (error) ->
         that.get("notify").error error.payload.message
         for error in error.errors
@@ -77,10 +74,6 @@ AuthMfaComponent = Ember.Component.extend
         that.get("notify").success "Multi Factor Authentication is now disabled"
         that.set "disableMFAOTP", ""
         that.set "showMFADisableModal", false
-        setTimeout ->
-          window.location.reload() # FIXME: Hackish Way
-        ,
-          3 * 1000
       .catch (error) ->
         that.get("notify").error error.payload.message
         for error in error.errors
