@@ -27,6 +27,21 @@ User = DS.Model.extend
   scansLeft: DS.attr 'number'
   githubRedirectUrl: DS.attr 'string'
   billingHidden: DS.attr 'boolean'
+  mfaMethod: DS.attr 'number'
+  mfaSecret: DS.attr 'string'
+
+  provisioningURL: (->
+    mfaSecret = @get "mfaSecret"
+    email = @get "email"
+    "otpauth://totp/Appknox:#{email}?secret=#{mfaSecret}&issuer=Appknox"
+  ).property "mfaSecret", "email"
+
+  mfaEnabled: (->
+    mfaMethod = @get "mfaMethod"
+    if mfaMethod is ENUMS.MFA_METHOD.TOTP
+      return true
+    false
+  ).property "mfaMethod"
 
   ifBillingIsNotHidden: (->
     billingHidden = @get 'billingHidden'

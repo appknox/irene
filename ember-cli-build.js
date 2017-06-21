@@ -76,5 +76,10 @@ module.exports = function(defaults) {
     destDir: 'assets'
   });
 
+  /*
+   * including QRious
+   */
+   app.import('bower_components/qrious/dist/qrious.min.js');   
+
   return app.toTree();
 };

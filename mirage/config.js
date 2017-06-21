@@ -93,4 +93,12 @@ export default function() {
     return {};
   });
 
+  this.post('/mfa/enable', () => {
+    return {};
+  });
+
+  this.post('mfa/disable', () => {
+    return {};
+  });
+
 }

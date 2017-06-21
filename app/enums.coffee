@@ -95,6 +95,10 @@ ENUMS =
     APPKNOX: 0
     DEVKNOX: 1
 
+  MFA_METHOD:
+    NONE: 0
+    TOTP: 1  
+
 
 # Populate `CHOICES`
 for enumName, enumValues of ENUMS

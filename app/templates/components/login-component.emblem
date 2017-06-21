@@ -11,6 +11,10 @@ h3.has-text-centered.signin-text
         = input class="input" type="password" placeholder=(t 'password') value=password id="password"
         = fa-icon class="is-primary" "lock"
 
+      p.control.has-icon.has-icon-left class=MFAEnabled:show:hide
+        = input class="input" type="text" placeholder="OTP" value=otp id="otp"
+        = fa-icon class="is-primary" "key"
+
       = link-to 'recover'
         p.has-text-right.forgot-password
           a.mp-recover-password

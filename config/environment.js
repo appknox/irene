@@ -146,7 +146,9 @@ module.exports = function(environment) {
       lang: 'lang',
       deleteGHRepo: 'delete_github_repo',
       deleteJIRAProject: 'delete_jira_project',
-      apiScanOptions: 'api_scan_options'
+      apiScanOptions: 'api_scan_options',
+      enableMFA: 'mfa/enable',
+      disableMFA: 'mfa/disable'
     },
     TOUR: {
       newScan: 'ScanAnApp',
