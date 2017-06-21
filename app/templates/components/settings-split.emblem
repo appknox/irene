@@ -1,4 +1,4 @@
-.tabs.is-centered.is-medium.is-boxed
+.tabs.is-medium.is-boxed
   ul
     li class=generalClass
       a click="displayGeneral" class="mp-display-general"
