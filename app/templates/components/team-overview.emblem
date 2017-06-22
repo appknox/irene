@@ -1,5 +1,6 @@
 td
-  = team.name
+  = link-to "authenticated.team" team.id
+    = team.name
 td
   = team.totalMembers
 td
