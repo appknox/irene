@@ -29,6 +29,9 @@
           = link-to 'authenticated.index' class="mp-auth-index"
             = t "dashboard"
         li
+          = link-to 'authenticated.teams' class="mp-auth-teams"
+            = t "teams"
+        li
           = link-to 'authenticated.settings' class="mp-auth-settings"
             = t "settings"
         if model.ifBillingIsNotHidden

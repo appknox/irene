@@ -169,6 +169,7 @@ export default {
   "summary": "Summary",
   "sync": "Sync More",
   "tablet": "Tablet",
+  "teams": "Teams",
   "testCredentials": "Test Credentials",
   "unknown": "Unknown",
   "uploadApp": "Upload App",

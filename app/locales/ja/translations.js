@@ -168,6 +168,7 @@ export default {
   "summary": "概要",
   "sync": "同期する",
   "tablet": "タブレット",
+  "teams": "チーム",
   "testCredentials": "テスト資格情報",
   "unknown": "未実施",
   "uploadApp": "アプリのアップロード",
