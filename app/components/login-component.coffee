@@ -17,9 +17,9 @@ LoginComponentComponent = Ember.Component.extend
       identification = identification.trim()
       password = password.trim()
 
-      errorCallback = (error)->
-        if isUnauthorizedError(error)
-          that.set "MFAEnabled", true
+      # errorCallback = (error)->
+      #   if isUnauthorizedError(error)
+      #     that.set "MFAEnabled", true
 
 
       @get('session').authenticate("authenticator:irene", identification, password, otp, errorCallback)
