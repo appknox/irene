@@ -1,0 +1,8 @@
+td
+  = team.name
+td
+  = team.totalMembers
+td
+  = team.createdOn
+td
+  = team.owner.name

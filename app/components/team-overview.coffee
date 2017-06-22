@@ -1,5 +1,7 @@
 `import Ember from 'ember'`
 
-TeamOverviewComponent = Ember.Component.extend()
+TeamOverviewComponent = Ember.Component.extend
+
+  tagName: ["tr"]
 
 `export default TeamOverviewComponent`

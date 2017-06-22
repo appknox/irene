@@ -10,3 +10,5 @@
           | Created On
         th
           | Owner
+      each teams as |team|
+          = team-overview team=team
