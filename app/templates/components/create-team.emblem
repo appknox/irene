@@ -1,5 +1,4 @@
-.team-container
-  .columns
-    .column.card.is-one-sixth.margin-auto.text-centre
-      = fa-icon "users"
-      | &nbsp; CREATE TEAM
+.columns
+  .column.card.is-one-sixth.margin-auto.text-centre
+    = fa-icon "users"
+    | &nbsp; CREATE TEAM

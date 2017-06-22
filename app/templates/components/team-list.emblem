@@ -1,0 +1,12 @@
+.columns.margin-top
+  .column
+    table.team-table
+      tr
+        th
+          | Team
+        th
+          | Members
+        th
+          | Created On
+        th
+          | Owner
