@@ -1,0 +1,17 @@
+.columns
+  .column
+    table
+      tr
+        th colspan="2"
+          = team.name
+      tr
+        th
+          | Members
+        th
+          | Delete
+      each team.users as |user|
+        tr
+          td
+            = user.username
+          td
+            | remove
