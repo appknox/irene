@@ -150,12 +150,6 @@ module.exports = function(environment) {
       enableMFA: 'mfa/enable',
       disableMFA: 'mfa/disable'
     },
-    TOUR: {
-      newScan: 'ScanAnApp',
-      scanDetail: 'ScanDetails',
-      manualTour: 'Dashboard',
-      devknoxTour: 'DevknoxTour'
-    }
   };
 
   if (environment === 'development') {

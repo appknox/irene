@@ -35,8 +35,8 @@ else
           = t "changePassword"
         = password-change
   / .box
-  /   .columns
-  /     .column.is-half
-  /       h4.is-fullwidth
-  /         = t "multiFactorAuth"
-  /       = auth-mfa user=user
+    .columns
+      .column.is-half
+        h4.is-fullwidth
+          = t "multiFactorAuth"
+        = auth-mfa user=user

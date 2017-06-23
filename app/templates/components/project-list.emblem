@@ -2,11 +2,10 @@
   .box
     .columns
       if env.isAppknox
-        .column.tour-step-search-project.is-one-sixth
+        .column.is-one-sixth
           = t "newScan"
           .margin-top
             label.button.is-primary.is-fullwidth
-             .tour-step-upload-app
               = upload-app delegate=this class="mp-upload-app"
               = fa-icon "upload"
               | &nbsp;
@@ -16,18 +15,18 @@
                 | %
               else
                 = t "uploadApp"
-      .column.tour-step-search-project
+      .column
         = t "search"
         .margin-top
         = input class="input mp-search-query" placeholder=(t 'searchQuery') value=query
-      .column.tour-step-sort-project
+      .column
         = t "sortBy"
         .margin-top
         select{action 'sortProjects' on='change'} id="project-sort-property" class="input"
           each sortingKeyObjects as |sortingKeyObject|
             option action="foo" value="{{filter-platform sortingKeyObject}}"
               = sortingKeyObject.text
-      .column.tour-step-filter-project
+      .column
         = t "filterBy"
         .margin-top
         select{action 'filterPlatform' on='change'} id="project-filter-platform" class="input"
@@ -37,7 +36,7 @@
             option value=platformObject.value
               = platformObject.key
 
-  .columns.tour-step-project
+  .columns
     if hasObjects
       each sortedObjects as |project|
         = project-overview project=project

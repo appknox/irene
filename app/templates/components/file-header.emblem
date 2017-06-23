@@ -2,7 +2,7 @@
   header.card-header
     a.card-header-icon
       img src=file.iconUrl alt=file.name
-    p.card-header-title.tour-step-project-details
+    p.card-header-title
       ul.is-fullwidth
         li
           h5
@@ -28,11 +28,11 @@
 .card.is-fullwidth.margin-bottom20.app-details-card
   header.card-header
     .column.is-one-quarter
-      p.card-header-title.tour-step-project-details
+      p.card-header-title
         h5
           = t "scanDetails"
     .column.content-right
-      .card-button.tour-step-sd-action-buttons
+      .card-button
         .columns
           .column.card-button
             if file.project.hasMultipleFiles
@@ -56,7 +56,7 @@
            = t "severityLevel"
           li.is-critical
             = t "critical"
-            | : #{file.countRiskCritical} 
+            | : #{file.countRiskCritical}
           li.is-danger
             = t "high"
             | : #{file.countRiskHigh}
@@ -100,7 +100,7 @@
 
 .card.is-fullwidth.margin-bottom20.scan-status-card
   header.card-header
-    p.card-header-title.tour-step-project-details
+    p.card-header-title
       h5
         = t "scanStatus"
   .card-content

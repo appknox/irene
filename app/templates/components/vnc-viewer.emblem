@@ -1,6 +1,6 @@
 if isPoppedOut
   .modal-background
-.modal-card.tour-step-sd-dynamic
+.modal-card
   .modal-card-head
     if file.isNoneStaus
       button.is-primary.is-fullwidth.mp-start-dynamic-scan click="openAPIScanModal"

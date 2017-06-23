@@ -62,7 +62,6 @@
     "ember-cli-sri": "^2.1.0",
     "ember-cli-test-loader": "^2.1.0",
     "ember-cli-uglify": "^1.2.0",
-    "ember-cookies": "0.0.13",
     "ember-data": "2.12.2",
     "ember-export-application-global": "^2.0.0",
     "ember-font-awesome": "3.0.5",
