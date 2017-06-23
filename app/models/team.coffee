@@ -6,6 +6,6 @@ Team = DS.Model.extend BaseModeMixin,
   uuid: DS.attr 'string'
   name: DS.attr 'string'
   owner: DS.belongsTo 'user', inverse: 'teams'
-  users: DS.hasMany 'user', inverse: 'team'
+  users: DS.hasMany 'user', inverse: 'teams'
 
 `export default Team`
