@@ -148,7 +148,8 @@ module.exports = function(environment) {
       deleteJIRAProject: 'delete_jira_project',
       apiScanOptions: 'api_scan_options',
       enableMFA: 'mfa/enable',
-      disableMFA: 'mfa/disable'
+      disableMFA: 'mfa/disable',
+      teams: 'teams'
     },
     TOUR: {
       newScan: 'ScanAnApp',

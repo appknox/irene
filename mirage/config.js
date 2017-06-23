@@ -103,4 +103,7 @@ export default function() {
     return {};
   });
 
+  this.post('/teams', () => {
+   return;
+  });
 }

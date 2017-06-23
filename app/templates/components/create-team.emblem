@@ -1,4 +1,13 @@
-.columns
+.columns.remove click="openTeamModal"
   .column.card.is-one-sixth.margin-auto.text-centre
     = fa-icon "users"
     | &nbsp; CREATE TEAM
+
+= modal-card isActive=showTeamModal title="Create Team"
+  .card-body
+    .card-wrapper
+      form
+        p.control
+          = input class="form-control input" placeholder="Team Name" type="text" value=teamName
+        button.margin-top10.is-primary click="createTeam"
+         | Create Team
