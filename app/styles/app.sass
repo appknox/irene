@@ -694,9 +694,6 @@ canvas
 .otp-apps
   font-size: 12px
 
-.team-container
-  padding: 30px 100px
-
 
 // Update this in bohemia //
 
@@ -726,3 +723,33 @@ li.is-critical:before
     padding-top: 30px
 
 // End //
+
+.team-container
+  padding: 30px 100px
+
+.team-details-container
+  padding: 30px 150px
+
+.team-table
+  tr
+    th, td
+      width: 25%
+      text-align: center
+      border: 1px solid #778899
+      padding: 8px 0px
+    th
+      background-color: #80C081
+      color: #fff
+
+.team-details-table
+  @extend .team-table
+  tr
+    th, td
+      border: 1px solid #b8b8b8
+    th
+      background-color: #6B6B6B
+  button
+    left: 320px
+    color: $white
+    &:hover
+      border-color: $white

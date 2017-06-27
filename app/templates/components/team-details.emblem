@@ -1,9 +1,11 @@
 .columns
   .column
-    table
+    table.team-details-table
       tr
         th colspan="2"
           = team.name
+          button
+           | add member
       tr
         th
           | Members
