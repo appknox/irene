@@ -6,6 +6,7 @@ Collaboration = DS.Model.extend BaseModelMixin,
 
   project: DS.belongsTo 'project', inverse: 'collaborations'
   user: DS.belongsTo 'user', inverse: 'collaborations'
+  team: DS.belongsTo 'team', inverse: 'collaborations'
   role: DS.attr 'number'
   username: DS.attr 'string'
 

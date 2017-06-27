@@ -7,5 +7,6 @@ Team = DS.Model.extend BaseModeMixin,
   name: DS.attr 'string'
   owner: DS.belongsTo 'user', inverse: 'teams'
   users: DS.hasMany 'user', inverse: 'teams'
+  collaborations: DS.hasMany 'collaboration', inverse:'team'
 
 `export default Team`
