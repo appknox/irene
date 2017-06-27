@@ -1,9 +1,7 @@
-.tour-step-sd-overview
 = file-header file=file class="margin-top"
 
 .margin-left
   h4
     =t "vulnerabilityDetails"
 each file.sortedAnalyses as |analysis|
-  .tour-step-sd-analyses
   = analysis-details analysis=analysis class="margin-top"

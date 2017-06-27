@@ -34,7 +34,7 @@ else
         h4.is-fullwidth
           = t "changePassword"
         = password-change
-  .box
+  / .box
     .columns
       .column.is-half
         h4.is-fullwidth
