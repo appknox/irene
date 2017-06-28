@@ -4,7 +4,7 @@
       tr
         th colspan="2"
           = team.name
-          button
+          button click="openAddMemberModal"
            | add member
       tr
         th
@@ -17,3 +17,12 @@
             = user.username
           td
             | remove
+
+= modal-card isActive=showAddMemberModal title="Add Member"
+  .card-body
+    .card-wrapper
+      form
+        p.control
+          = input class="form-control input" placeholder="Email" type="text" value=teamMember
+        button.margin-top10.is-primary click="addMember"
+         | Invite
