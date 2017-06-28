@@ -16,7 +16,7 @@ module.exports = function(environment) {
       socketIO: true
     },
     mixpanel: {
-      enabled: true,
+      enabled: false,
       LOG_EVENT_TRACKING: false,
       token: 'baf97efda8bb7c89401cf455d33bcd29'
     },
@@ -151,12 +151,6 @@ module.exports = function(environment) {
       disableMFA: 'mfa/disable',
       teams: 'teams'
     },
-    TOUR: {
-      newScan: 'ScanAnApp',
-      scanDetail: 'ScanDetails',
-      manualTour: 'Dashboard',
-      devknoxTour: 'DevknoxTour'
-    }
   };
 
   if (environment === 'development') {
@@ -183,9 +177,6 @@ module.exports = function(environment) {
     ENV.stripe = {
       publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
     };
-    ENV.mixpanel = {
-      enabled: false
-    };
     ENV['APP'].opbeat = {
         DEBUG: true
     };
@@ -201,9 +192,6 @@ module.exports = function(environment) {
     ENV.stripe = {
       publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
     };
-    ENV.mixpanel = {
-      enabled: false
-    };
     ENV['APP'].opbeat = {
         DEBUG: true
     };
@@ -216,6 +204,9 @@ module.exports = function(environment) {
     ENV.socketPath = "https://socket.appknox.com",
     ENV['ember-cli-mirage'] = {
       enabled: false
+    };
+    ENV.mixpanel = {
+      enabled: true
     };
     ENV['host'] = "https://api.appknox.com";
     ENV.stripe = {
