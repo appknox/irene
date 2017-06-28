@@ -9,4 +9,12 @@ Team = DS.Model.extend BaseModeMixin,
   users: DS.hasMany 'user', inverse: 'teams'
   collaborations: DS.hasMany 'collaboration', inverse:'team'
 
+  totalMembers: (->
+    totalMembers = 0
+    users = @get "users"
+    users.forEach (user)->
+      totalMembers = totalMembers + 1
+    return totalMembers
+  ).property "users"
+
 `export default Team`

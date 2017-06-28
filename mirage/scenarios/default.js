@@ -11,16 +11,15 @@ export default function(server) {
     pricingCount = getRandomInt(3, 3),
     vulnerabilityCount = getRandomInt(5, 15),
     submissionCount = getRandomInt(0,3),
-    teamCount = getRandomInt(1,3),
-    projectCount = 0, project = null, file = null, projectIds = [],
-    currentUserId = 1, deviceCount=30, invoiceCount=3;
-  server.createList('user', userCount);
+    teamCount = 3,
+    projectCount = 0, project = null, file = null, projectIds = [], teamId = null,
+    team = null, currentUserId = 1, deviceCount=30, invoiceCount=3;
+  var users = server.createList('user', userCount);
   server.createList('pricing', pricingCount);
   server.createList('vulnerability', vulnerabilityCount);
   server.createList('submission', submissionCount);
   server.createList('device', deviceCount);
   server.createList('invoice', invoiceCount);
-  server.createList('team', teamCount);
   projectCount =  getRandomInt(1, 5);
   for (var projectId = 1; projectId <= projectCount; projectId++) {
     projectIds.push(projectId);
@@ -43,6 +42,9 @@ export default function(server) {
       collaborationIds.push(collaboration.id);
     }
     project.collaborationIds = collaborationIds;
+  }
+  for (var teamId = 1; teamId <= teamCount; teamId++) {
+    team = server.create('team', {users: users});
   }
   var currentUser = server.db.users.get(currentUserId);
   currentUser.projectIds = projectIds;
