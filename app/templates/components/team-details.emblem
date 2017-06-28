@@ -10,13 +10,9 @@
         th
           | Members
         th
-          | Delete
+          | Remove
       each team.users as |user|
-        tr
-          td
-            = user.username
-          td
-            | remove
+        = team-member user=user
 
 = modal-card isActive=showAddMemberModal title="Add Member"
   .card-body

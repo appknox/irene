@@ -1,0 +1,4 @@
+td
+  = user.username
+td click="removeMember"
+  = fa-icon "times"
