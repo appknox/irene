@@ -139,7 +139,7 @@ module.exports = function(environment) {
       stripePaymentDevknox: 'stripe_payment_devknox',
       applyCoupon: 'apply_coupon',
       saveCredentials: 'projects/save_credentials',
-      collaboration: 'collaboration',
+      collaborations: 'collaborations',
       deleteCollaboration: 'collaboration/delete',
       invitation: 'invitation',
       signup: 'signup',

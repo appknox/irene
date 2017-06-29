@@ -14,15 +14,9 @@ button.is-primary.mp-open-collaboration-modal click="openCollaborationModal"
     .card-wrapper
       form
         p.control
-          select.input
-            each collaborations.team as |team|
-              option value=team.value
-                = team.name
-        p.control
-          select.input.mp-collaboration-role onchange={action "roleChanged" value="target.value"}
-            each roles as |role|
-              option value=role.value
-                = role.key
+          select.input onchange={action "teamChanged" value="target.value"}
+            option value=1
+              | Default
         .card-button
           button.mp-add-collaboration click="addCollaboration"
             = t "addTeam"
