@@ -12,7 +12,7 @@
         th
           | Remove
       each team.users as |user|
-        = team-member user=user
+        = team-member user=user team=team
 
 = modal-card isActive=showAddMemberModal title="Add Member"
   .card-body
