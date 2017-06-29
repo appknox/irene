@@ -28,11 +28,11 @@ CollaborationDetailsComponent = Ember.Component.extend
           that.get("notify").error error.detail?.message
 
     removeCollaboration: ->
-      collaboration = @get "collaboration"
-      return if !confirm "Do you want to remove `#{collaboration.get "username"}` from the list of collaborators?"
+      collaborationId = @get "collaboration.id"
+      return if !confirm "Do you want to remove?"
       that = @
-      url = [ENV.endpoints.deleteCollaboration, collaboration.get "id"].join '/'
-      @get("ajax").post url
+      url = [ENV.endpoints.collaborations, collaborationId].join '/'
+      @get("ajax").delete url
       .then (data)->
         that.get("notify").success "Collaboration will be removed shortly"
       .catch (error) ->

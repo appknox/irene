@@ -126,4 +126,8 @@ export default function() {
   this.delete('/teams', () => {
    return;
   });
+
+  this.delete('/collaborations/:id', () => {
+   return;
+  });
 }
