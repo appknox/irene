@@ -111,6 +111,10 @@ export default function() {
    return;
   });
 
+  this.post('/collaborations/:id', () => {
+   return;
+  });
+
   this.post('/teams/:id', () => {
    return;
   });

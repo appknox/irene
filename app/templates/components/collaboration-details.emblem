@@ -2,7 +2,7 @@
   header.card-header
     p.card-header-title.flex-center.title-tag
       | Team Name
-  select.input.mp-collaboration-role onchange={action "roleChanged" value="target.value"}
+  select.input.mp-collaboration-role onchange={action "changeRole" value="target.value"}
     each roles as |role|
       option value=role.value
         = role.key

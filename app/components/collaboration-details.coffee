@@ -12,8 +12,20 @@ CollaborationDetailsComponent = Ember.Component.extend
 
   actions:
 
-    roleChanged: (value) ->
-      @set "currentRole", parseInt value
+    changeRole: (value) ->
+      currentRole = @set "currentRole", parseInt value
+      collaborationId = @get "collaboration.id"
+      url = [ENV.endpoints.collaborations, collaborationId ].join '/'
+      data =
+        role: currentRole
+      that = @
+      @get("ajax").post url , data:data
+      .then (data)->
+        that.get("notify").success "Permission changed successfully!"
+      .catch (error) ->
+        that.get("notify").error error.payload.message, ENV.notifications
+        for error in error.errors
+          that.get("notify").error error.detail?.message
 
     removeCollaboration: ->
       collaboration = @get "collaboration"
