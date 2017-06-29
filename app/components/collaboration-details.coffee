@@ -1,11 +1,20 @@
 `import Ember from 'ember'`
-`import ENV from 'irene/config/environment';`
+`import ENV from 'irene/config/environment'`
+`import ENUMS from 'irene/enums'`
+
+roles = ENUMS.COLLABORATION_ROLE.CHOICES.reverse()[1..]
 
 CollaborationDetailsComponent = Ember.Component.extend
 
   collaboration: null
+  roles: roles
+  currentRole: roles[0].value
 
   actions:
+
+    roleChanged: (value) ->
+      @set "currentRole", parseInt value
+
     removeCollaboration: ->
       collaboration = @get "collaboration"
       return if !confirm "Do you want to remove `#{collaboration.get "username"}` from the list of collaborators?"

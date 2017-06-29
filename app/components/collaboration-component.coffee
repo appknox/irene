@@ -1,12 +1,8 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment';`
-`import ENUMS from 'irene/enums';`
-
-roles = ENUMS.COLLABORATION_ROLE.CHOICES.reverse()[1..]
 
 CollaborationComponentComponent = Ember.Component.extend
   project: null
-  roles: roles
   currentTeam: 1
 
   collaborations: (->
