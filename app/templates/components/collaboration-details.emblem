@@ -1,11 +1,19 @@
 .card.is-fullwidth
   header.card-header
     p.card-header-title.flex-center.title-tag
-      = collaboration.roleHumanized
+      | Team Name
   .card-content
     .content
       p.align-center
-        = collaboration.username
+        ul
+          li
+            | Member 1
+          li
+            | Member 1
+          li
+            | Member 1
+          li
+            | Member 1
   .card-button.align-middle
     button.mp-remove-collaboration click="removeCollaboration"
       | Remove
