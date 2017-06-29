@@ -10,5 +10,7 @@
           | Created On
         th
           | Owner
+        th
+          | Delete
       each teams as |team|
           = team-overview team=team

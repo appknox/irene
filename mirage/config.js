@@ -114,4 +114,8 @@ export default function() {
   this.delete('/teams/:id', () => {
    return;
   });
+
+  this.delete('/teams', () => {
+   return;
+  });
 }

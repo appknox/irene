@@ -7,3 +7,5 @@ td
   = team.createdOn
 td
   = team.owner.name
+td click="deleteTeam"
+  = fa-icon "times"
