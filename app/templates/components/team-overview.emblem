@@ -1,11 +1,23 @@
-td
-  = link-to "authenticated.team" team.id
-    = team.name
-td
-  = team.totalMembers
-td
-  = team.createdOn
-td
-  = team.owner.name
-td click="deleteTeam"
-  = fa-icon "times"
+.card.team-overview-card.text-centre
+  header.card-header.columns
+    .column
+      = team.name
+    .column
+      | Total Members: #{team.totalMembers}
+  .card-content.text-centre
+    = link-to "authenticated.team" team.id
+      .columns
+        .column
+          h6
+            | Owner
+        .column
+          h6
+           | Created
+      .columns
+        .column
+          | yashwin
+        .column
+          | a month ago
+  footer.card-button.align-center
+    button click="deleteTeam"
+      | Remove Team

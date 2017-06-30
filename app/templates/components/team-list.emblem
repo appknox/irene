@@ -1,16 +1,3 @@
-.columns.margin-top
-  .column
-    table.team-table
-      tr
-        th
-          | Team
-        th
-          | Members
-        th
-          | Created On
-        th
-          | Owner
-        th
-          | Delete
-      each teams as |team|
-          = team-overview team=team
+.columns.margin-top30
+  each teams as |team|
+      = team-overview team=team

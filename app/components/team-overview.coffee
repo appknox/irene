@@ -3,7 +3,7 @@
 
 TeamOverviewComponent = Ember.Component.extend
 
-  tagName: ["tr"]
+  classNames: ["column" , "is-one-third"]
 
   actions:
     deleteTeam: ->
