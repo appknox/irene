@@ -24,6 +24,11 @@ Project = DS.Model.extend BaseModelMixin,
   platformVersion: DS.attr 'string'
   apiUrlFilters: DS.attr 'string'
 
+  apiUrlFilterItems:(->
+    apiUrlFilters = @get "apiUrlFilters"
+    apiUrlFilters?.split ","
+  ).property "apiUrlFilters"
+
   tNoPreference: t("noPreference")
 
   pdfPassword: (->

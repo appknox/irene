@@ -33,9 +33,9 @@ if isPoppedOut
           | &nbsp; API scan performs multiple automated tests that may result in <b class="bold">denial of service</b> or <b class="bold">loss of data</b>. Do not select YES if the app is configured to use a <b class="bold">production API server</b> or if the app employs <b class="bold">SSL pinning</b>.
         form
           p.control
-           button.is-primary.mp-run-api-scan click="showURLFilter"
+           button.modal-button.is-primary.mp-run-api-scan click="showURLFilter"
             | Yes
-           button.is-primary.mp-dont-run-api-scan click="doNotRunAPIScan"
+           button.modal-button.is-primary.mp-dont-run-api-scan click="doNotRunAPIScan"
             | No
   .card-body.warning-modal class=showURLFilter:show:hide
     .card-wrapper
@@ -43,11 +43,21 @@ if isPoppedOut
         h5 API Scanner URL Filter
         h6
           | Enter the API endpoint to scan: eg. api.appknox.com. Do not specify the scheme (http://...) or path (.../users).
-        .columns
+        ul
+          each file.project.apiUrlFilterItems as |item|
+            li
+              = item
+              i.fa.risk-icons.fa-trash-o
+        .columns.margin-top
           .column
             form
               p.control
-                = input class="form-control input mp-add-api-filter" type="text" value=file.project.apiUrlFilters
+                .columns
+                  .column
+                    = input class="form-control input mp-add-api-filter" placeholder="Enter API endpoint" type="text" value=apiUrlFilter
+                  .column
+                    button.is-primary
+                      | add
               p.control
-                button.is-primary.start-scan.mp-save-and-start-scan click="addUrlFilterAndStartScan"
+                button.modal-button.is-primary.start-scan.mp-save-and-start-scan click="addUrlFilterAndStartScan"
                   | Save Filter &amp; Start Scan
