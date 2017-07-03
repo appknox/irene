@@ -3,7 +3,7 @@
     .column
       = team.name
     .column
-      | Total Members: #{team.totalMembers}
+      | #{team.totalMembers}
   .card-content.text-centre
     = link-to "authenticated.team" team.id
       .columns
