@@ -25,6 +25,11 @@ VncViewerComponent = Ember.Component.extend
 
   showURLFilter: false
   showAPIScan: true
+  newUrlFilter: false
+
+  apiUrlFilter: ""
+  newApiUrlFilters: ""
+
 
   vncPopText: (->
     if @get "isPoppedOut"
@@ -128,6 +133,30 @@ VncViewerComponent = Ember.Component.extend
         for error in error.errors
           that.get("notify").error error.detail?.message
 
+    addUrlFilter: ->
+      newApiUrlFilters = @get "newApiUrlFilters"
+      apiUrlFilter = @get "apiUrlFilter"
+      for url in [apiUrlFilter]
+        return @get("notify").error "Please enter any url filter" if !hasApiFilter url
+        return @get("notify").error "Please enter a valid url filter" if isRegexFailed url
+        return @get("notify").error "Special Characters not allowed" if !isAllowedCharacters url
+      if !Ember.isEmpty newApiUrlFilters
+        join = [newApiUrlFilters, apiUrlFilter].join ','
+      else
+        join = apiUrlFilter
+      @set "newApiUrlFilters", join
+      @send "cancel"
+      @get("notify").success "URL filter added"
+
+    addNewUrl: ->
+      @$('#newInputBox').append('<div><input type="text" class="form-control input margin-top" placeholder="Enter API endpoint"/><i class="fa risk-icons fa-trash-o position-icons"></i><br/></div>')
+      @set "newUrlFilter", true
+      @$(".fa-trash-o").click ->
+        $(this).parent().remove()
+
+    cancel: ->
+      @set "newUrlFilter", false
+
     openAPIScanModal: ->
       if ENUMS.PLATFORM.IOS is @get "file.project.platform" # TEMPIOSDYKEY
         @send "doNotRunAPIScan"
@@ -141,14 +170,10 @@ VncViewerComponent = Ember.Component.extend
 
     addUrlFilterAndStartScan: ->
       apiUrlFilters = @get "file.project.apiUrlFilters"
+      newApiUrlFilters = @get "newApiUrlFilters"
+      apiUrlFilters = [apiUrlFilters, newApiUrlFilters].join ','
       @set "isApiScanEnabled", true
       isApiScanEnabled = @get "isApiScanEnabled"
-
-      for url in [apiUrlFilters]
-        return @get("notify").error "Please enter any url filter" if !hasApiFilter url
-        return @get("notify").error "Please enter a valid url filter" if isRegexFailed url
-        return @get("notify").error "Special Characters not allowed" if !isAllowedCharacters url
-
       project_id = @get "file.project.id"
       apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, project_id].join '/'
       that = @

@@ -43,21 +43,16 @@ if isPoppedOut
         h5 API Scanner URL Filter
         h6
           | Enter the API endpoint to scan: eg. api.appknox.com. Do not specify the scheme (http://...) or path (.../users).
-        ul
-          each file.project.apiUrlFilterItems as |item|
-            li
-              = item
-              i.fa.risk-icons.fa-trash-o
+        each file.project.apiUrlFilterItems as |item|
+          .filter-list.margin-top
+            = input class="form-control input" type="text" value=item
+            i.fa.risk-icons.fa-trash-o
         .columns.margin-top
           .column
             form
-              p.control
-                .columns
-                  .column
-                    = input class="form-control input mp-add-api-filter" placeholder="Enter API endpoint" type="text" value=apiUrlFilter
-                  .column
-                    button.is-primary
-                      | add
+              p.control.filter-list id="newInputBox"
+              button.margin-left.is-primary click="addNewUrl"
+                | add new url
               p.control
                 button.modal-button.is-primary.start-scan.mp-save-and-start-scan click="addUrlFilterAndStartScan"
                   | Save Filter &amp; Start Scan
