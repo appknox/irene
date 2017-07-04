@@ -149,10 +149,13 @@ VncViewerComponent = Ember.Component.extend
       @get("notify").success "URL filter added"
 
     addNewUrl: ->
-      @$('#newInputBox').append('<div><input type="text" class="form-control input margin-top" placeholder="Enter API endpoint"/><i class="fa risk-icons fa-trash-o position-icons"></i><br/></div>')
+      @$('#newInputBox').append('<div><input type="text" class="form-control input margin-top" placeholder="Enter API endpoint"/><i class="fa risk-icons fa-trash-o removeUrl position-icons"></i><br/></div>')
       @set "newUrlFilter", true
-      @$(".fa-trash-o").click ->
+      @$(".removeUrl").click ->
         $(this).parent().remove()
+
+    removeUrl: ->
+      event.target.parentElement.remove()
 
     cancel: ->
       @set "newUrlFilter", false

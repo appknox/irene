@@ -44,9 +44,9 @@ if isPoppedOut
         h6
           | Enter the API endpoint to scan: eg. api.appknox.com. Do not specify the scheme (http://...) or path (.../users).
         each file.project.apiUrlFilterItems as |item|
-          .filter-list.margin-top
+          div.filter-list.margin-top
             = input class="form-control input" type="text" value=item
-            i.fa.risk-icons.fa-trash-o
+            i.fa.risk-icons.fa-trash-o.removeUrl click="removeUrl"
         .columns.margin-top
           .column
             form
