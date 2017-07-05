@@ -61,7 +61,7 @@ Project = DS.Model.extend BaseModelMixin,
 
   isAPIScanEnabled: ( ->
     platform = @get "platform"
-    platform in [ENUMS.PLATFORM.ANDROID]
+    platform in [ENUMS.PLATFORM.ANDROID , ENUMS.PLATFORM.IOS]
   ).property "platform"
 
   lastFile:( ->
