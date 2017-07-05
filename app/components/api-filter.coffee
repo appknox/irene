@@ -19,9 +19,15 @@ ApiFilterComponent = Ember.Component.extend
     addNewUrl: ->
       @$('#newInputBox').append('<div><input type="text" class="form-control input margin-top" placeholder="Enter API endpoint"/><i class="fa risk-icons fa-trash-o removeUrl position-icons"></i><br/></div>')
       @$(".removeUrl").click ->
+        urlFilter = this.previousElementSibling.value
+        if !Ember.isEmpty urlFilter
+          return if !confirm "Do you want to remove #{urlFilter} from url filters?"
         $(this).parent().remove()
 
     removeUrl: ->
+      urlFilter = event.target.previousElementSibling.value
+      if !Ember.isEmpty urlFilter
+        return if !confirm "Do you want to remove #{urlFilter} from url filters?"
       event.target.parentElement.remove()
 
     addApiUrlFilter: (callback) ->
