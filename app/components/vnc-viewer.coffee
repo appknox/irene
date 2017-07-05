@@ -172,21 +172,32 @@ VncViewerComponent = Ember.Component.extend
       @set "showAPIScanModal", false
 
     addUrlFilterAndStartScan: ->
-      apiUrlFilters = @get "file.project.apiUrlFilters"
-      newApiUrlFilters = @get "newApiUrlFilters"
-      apiUrlFilters = [apiUrlFilters, newApiUrlFilters].join ','
+      form = @$('.input')
+      urls = ""
+      that = @
+      params = jQuery.makeArray(form)
+      params.forEach (param) ->
+        url = param.value
+        urls = that.get "urls"
+        if Ember.isEmpty urls
+          urls = url
+        else
+          urls = [urls, url].join ','
+        that.set "urls", urls
       @set "isApiScanEnabled", true
       isApiScanEnabled = @get "isApiScanEnabled"
       project_id = @get "file.project.id"
       apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, project_id].join '/'
       that = @
       data =
-        apiUrlFilters: apiUrlFilters
+        apiUrlFilters: urls
         isApiScanEnabled: isApiScanEnabled
+      debugger
       @get("ajax").post apiScanOptions, data: data
       .then (data)->
         that.send "closeModal"
         that.send "dynamicScan"
+        that.set "urls", ""
         that.get("notify").success "Successfully added the url filter & Starting the scan"
       .catch (error) ->
         for error in error.errors
