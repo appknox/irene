@@ -24,7 +24,6 @@ VncViewerComponent = Ember.Component.extend
   classNameBindings: ["isPoppedOut:modal", "isPoppedOut:is-active"]
   showURLFilter: false
   showAPIScan: true
-  newUrlFilter: false
 
   vncPopText: (->
     if @get "isPoppedOut"
@@ -130,15 +129,11 @@ VncViewerComponent = Ember.Component.extend
 
     addNewUrl: ->
       @$('#newInputBox').append('<div><input type="text" class="form-control input margin-top" placeholder="Enter API endpoint"/><i class="fa risk-icons fa-trash-o removeUrl position-icons"></i><br/></div>')
-      @set "newUrlFilter", true
       @$(".removeUrl").click ->
         $(this).parent().remove()
 
     removeUrl: ->
       event.target.parentElement.remove()
-
-    cancel: ->
-      @set "newUrlFilter", false
 
     openAPIScanModal: ->
       platform = @get "file.project.platform"

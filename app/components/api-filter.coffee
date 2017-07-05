@@ -16,21 +16,44 @@ ApiFilterComponent = Ember.Component.extend
 
   actions:
 
-    addApiUrlFilter: ->
-      apiUrlFilters = @get "project.apiUrlFilters"
+    addNewUrl: ->
+      @$('#newInputBox').append('<div><input type="text" class="form-control input margin-top" placeholder="Enter API endpoint"/><i class="fa risk-icons fa-trash-o removeUrl position-icons"></i><br/></div>')
+      @$(".removeUrl").click ->
+        $(this).parent().remove()
 
-      for url in [apiUrlFilters]
-        return @get("notify").error "Please enter any url filter" if !hasApiFilter url
-        return @get("notify").error "Please enter a valid url filter" if isRegexFailed url
-        return @get("notify").error "Special Characters not allowed" if !isAllowedCharacters url
+    removeUrl: ->
+      event.target.parentElement.remove()
 
+    addApiUrlFilter: (callback) ->
+      form = @$('.input')
+      debugger
+      urls = ""
+      that = @
+      params = jQuery.makeArray(form)
+      params.forEach (param) ->
+        url = param.value
+        if !hasApiFilter url
+          callback(that.get("notify").error "Please enter any url filter")
+        if isRegexFailed url
+          callback(that.get("notify").error "Please enter a valid url filter")
+        if !isAllowedCharacters url
+          callback(that.get("notify").error "Special Characters not allowed")
+        urls = that.get "urls"
+        if Ember.isEmpty urls
+          urls = url
+        else
+          urls = [urls, url].join ','
+        that.set "urls", urls
+      @set "isApiScanEnabled", true
+      if !hasApiFilter urls
+        return @get("notify").error "Please enter any url filter"
       project_id = @get "project.id"
       apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, project_id].join '/'
-      that = @
       data =
-        apiUrlFilters: apiUrlFilters
+        apiUrlFilters: urls
       @get("ajax").post apiScanOptions, data: data
       .then (data)->
+        that.set "urls", ""
         that.get("notify").success "Successfully added the url filter"
       .catch (error) ->
         for error in error.errors
