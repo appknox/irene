@@ -71,11 +71,6 @@ module.exports = function(defaults) {
    */
   app.import('bower_components/pace/pace.js');
 
-  app.import('bower_components/zeroclipboard/dist/ZeroClipboard.min.js');
-  app.import('bower_components/zeroclipboard/dist/ZeroClipboard.swf', {
-    destDir: 'assets'
-  });
-
   /*
    * including QRious
    */
