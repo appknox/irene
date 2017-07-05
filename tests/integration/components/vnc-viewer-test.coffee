@@ -8,6 +8,7 @@ moduleForComponent 'vnc-viewer', 'Integration | Component | vnc viewer', {
 test 'it renders', (assert) ->
   assert.expect 1
 
+
   # Set any properties with @set 'myProperty', 'value'
   # Handle any actions with @on 'myAction', (val) ->
 
