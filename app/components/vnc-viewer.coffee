@@ -133,21 +133,6 @@ VncViewerComponent = Ember.Component.extend
         for error in error.errors
           that.get("notify").error error.detail?.message
 
-    addUrlFilter: ->
-      newApiUrlFilters = @get "newApiUrlFilters"
-      apiUrlFilter = @get "apiUrlFilter"
-      for url in [apiUrlFilter]
-        return @get("notify").error "Please enter any url filter" if !hasApiFilter url
-        return @get("notify").error "Please enter a valid url filter" if isRegexFailed url
-        return @get("notify").error "Special Characters not allowed" if !isAllowedCharacters url
-      if !Ember.isEmpty newApiUrlFilters
-        join = [newApiUrlFilters, apiUrlFilter].join ','
-      else
-        join = apiUrlFilter
-      @set "newApiUrlFilters", join
-      @send "cancel"
-      @get("notify").success "URL filter added"
-
     addNewUrl: ->
       @$('#newInputBox').append('<div><input type="text" class="form-control input margin-top" placeholder="Enter API endpoint"/><i class="fa risk-icons fa-trash-o removeUrl position-icons"></i><br/></div>')
       @set "newUrlFilter", true
@@ -188,11 +173,9 @@ VncViewerComponent = Ember.Component.extend
       isApiScanEnabled = @get "isApiScanEnabled"
       project_id = @get "file.project.id"
       apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, project_id].join '/'
-      that = @
       data =
         apiUrlFilters: urls
         isApiScanEnabled: isApiScanEnabled
-      debugger
       @get("ajax").post apiScanOptions, data: data
       .then (data)->
         that.send "closeModal"
