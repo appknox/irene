@@ -79,7 +79,14 @@ module.exports = function(defaults) {
   /*
    * including QRious
    */
-   app.import('bower_components/qrious/dist/qrious.min.js');   
+   app.import('bower_components/qrious/dist/qrious.min.js');
+
+   /*
+    * including clipboard
+    */
+   app.import('bower_components/clipboard/dist/clipboard.min.js')
+
+
 
   return app.toTree();
 };
