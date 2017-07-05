@@ -22,14 +22,9 @@ VncViewerComponent = Ember.Component.extend
   file: null
   isPoppedOut: false
   classNameBindings: ["isPoppedOut:modal", "isPoppedOut:is-active"]
-
   showURLFilter: false
   showAPIScan: true
   newUrlFilter: false
-
-  apiUrlFilter: ""
-  newApiUrlFilters: ""
-
 
   vncPopText: (->
     if @get "isPoppedOut"
