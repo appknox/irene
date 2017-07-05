@@ -156,13 +156,19 @@ VncViewerComponent = Ember.Component.extend
     closeModal: ->
       @set "showAPIScanModal", false
 
-    addUrlFilterAndStartScan: ->
+    addUrlFilterAndStartScan: (callback)->
       form = @$('.input')
       urls = ""
       that = @
       params = jQuery.makeArray(form)
       params.forEach (param) ->
         url = param.value
+        if !hasApiFilter url
+          callback(that.get("notify").error "Please enter any url filter")
+        if isRegexFailed url
+          callback(that.get("notify").error "Please enter a valid url filter")
+        if !isAllowedCharacters url
+          callback(that.get("notify").error "Special Characters not allowed")
         urls = that.get "urls"
         if Ember.isEmpty urls
           urls = url
@@ -170,6 +176,8 @@ VncViewerComponent = Ember.Component.extend
           urls = [urls, url].join ','
         that.set "urls", urls
       @set "isApiScanEnabled", true
+      if !hasApiFilter urls
+        return @get("notify").error "Please enter any url filter"
       isApiScanEnabled = @get "isApiScanEnabled"
       project_id = @get "file.project.id"
       apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, project_id].join '/'
