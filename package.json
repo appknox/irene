@@ -81,6 +81,7 @@
     "phantomjs-prebuilt": "^2.1.14"
   },
   "dependencies": {
+    "clipboard": "^1.7.1",
     "ember-cli-document-title": "^0.3.3"
   }
 }
