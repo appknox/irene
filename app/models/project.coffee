@@ -29,6 +29,18 @@ Project = DS.Model.extend BaseModelMixin,
     apiUrlFilters?.split ","
   ).property "apiUrlFilters"
 
+  addNewAPIURL: ->
+    apiUrlFilters = @get "apiUrlFilters"
+    @set "apiUrlFilters", apiUrlFilters.concat(",")
+
+  removeUrl: (item) ->
+    apiUrlFilters = @get "apiUrlFilters"
+    if !Ember.isEmpty item
+      return if !confirm "Do you want to remove #{item} from url filters?"
+    filters = apiUrlFilters?.split ","
+    filters.removeObject(item)
+    @set "apiUrlFilters", filters.join()
+
   tNoPreference: t("noPreference")
 
   pdfPassword: (->

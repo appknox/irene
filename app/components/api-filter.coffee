@@ -13,29 +13,20 @@ isAllowedCharacters = (url) ->
   res = reg.test(url)
 
 ApiFilterComponent = Ember.Component.extend
-
+  project: null
   actions:
 
     addNewUrl: ->
-      @$('#newInputBox').append('<div><input type="text" class="form-control input margin-top" placeholder="Enter API endpoint"/><i class="fa risk-icons fa-trash-o removeUrl position-icons"></i><br/></div>')
-      @$(".removeUrl").click ->
-        urlFilter = this.previousElementSibling.value
-        if !Ember.isEmpty urlFilter
-          return if !confirm "Do you want to remove #{urlFilter} from url filters?"
-        $(this).parent().remove()
+      @project.addNewAPIURL()
 
-    removeUrl: ->
-      urlFilter = event.target.previousElementSibling.value
-      if !Ember.isEmpty urlFilter
-        return if !confirm "Do you want to remove #{urlFilter} from url filters?"
-      event.target.parentElement.remove()
+    removeUrl: (item) ->
+      @project.removeUrl item
 
     addApiUrlFilter: (callback) ->
       form = @$('.input')
-      debugger
       urls = ""
       that = @
-      params = jQuery.makeArray(form)
+      params = Ember.ArrayProxy.create content: Ember.A form
       params.forEach (param) ->
         url = param.value
         if !hasApiFilter url

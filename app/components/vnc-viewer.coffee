@@ -128,18 +128,12 @@ VncViewerComponent = Ember.Component.extend
           that.get("notify").error error.detail?.message
 
     addNewUrl: ->
-      @$('#newInputBox').append('<div><input type="text" class="form-control input margin-top" placeholder="Enter API endpoint"/><i class="fa risk-icons fa-trash-o removeUrl position-icons"></i><br/></div>')
-      @$(".removeUrl").click ->
-        urlFilter = this.previousElementSibling.value
-        if !Ember.isEmpty urlFilter
-          return if !confirm "Do you want to remove #{urlFilter} from url filters?"
-        $(this).parent().remove()
+      project = @get "file.project"
+      project.addNewAPIURL()
 
-    removeUrl: ->
-      urlFilter = event.target.previousElementSibling.value
-      if !Ember.isEmpty urlFilter
-        return if !confirm "Do you want to remove #{urlFilter} from url filters?"
-      event.target.parentElement.remove()
+    removeUrl: (item) ->
+      project = @get "file.project"
+      project.removeUrl item
 
     openAPIScanModal: ->
       platform = @get "file.project.platform"
@@ -157,7 +151,7 @@ VncViewerComponent = Ember.Component.extend
       form = @$('.input')
       urls = ""
       that = @
-      params = jQuery.makeArray(form)
+      params = Ember.ArrayProxy.create content: Ember.A form
       params.forEach (param) ->
         url = param.value
         if !hasApiFilter url

@@ -46,12 +46,11 @@ if isPoppedOut
         form.url-filters
           each file.project.apiUrlFilterItems as |item|
             div.filter-list.margin-top
-              = input class="form-control input" type="text" value=item name=url
-              i.fa.risk-icons.fa-trash-o.removeUrl click="removeUrl"
+              = input class="form-control input" type="text" placeholder="Enter API endpoint" value=item
+              i.fa.risk-icons.fa-trash-o.removeUrl click="'removeUrl' item"
         .columns.margin-top
           .column
             form.url-filters
-              p.control.filter-list.new-input-box id="newInputBox"
               button.margin-left.is-primary click="addNewUrl"
                 | add new url
               p.control
