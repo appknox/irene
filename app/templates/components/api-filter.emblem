@@ -1,7 +1,7 @@
 .api-filter
   h5 API Scanner URL Filter
   h6
-    | Enter the API endpoint to scan: eg. api.appknox.com. Do not specify the scheme (http://...) or path (.../users)
+    | Enter the API endpoint to scan: eg. api.appknox.com. Do not specify the scheme (http://...), port (:443/...) & path (.../users)
   form.url-filters
     each project.apiUrlFilterItems as |item|
       div.filter-list.margin-top

@@ -42,7 +42,7 @@ if isPoppedOut
       .api-scanning
         h5 API Scanner URL Filter
         h6
-          | Enter the API endpoint to scan: eg. api.appknox.com. Do not specify the scheme (http://...) or path (.../users).
+          | Enter the API endpoint to scan: eg. api.appknox.com. Do not specify the scheme (http://...), port (:443/...) & path (.../users)
         form.url-filters
           each file.project.apiUrlFilterItems as |item|
             div.filter-list.margin-top
