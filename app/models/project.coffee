@@ -33,13 +33,11 @@ Project = DS.Model.extend BaseModelMixin,
     apiUrlFilters = @get "apiUrlFilters"
     @set "apiUrlFilters", apiUrlFilters.concat(",")
 
-  removeUrl: (item) ->
-    apiUrlFilters = @get "apiUrlFilters"
-    if !Ember.isEmpty item
-      return if !confirm "Do you want to remove #{item} from url filters?"
-    filters = apiUrlFilters?.split ","
-    filters.removeObject(item)
-    @set "apiUrlFilters", filters.join()
+  removeUrl: ->
+    urlFilter = event.target.previousElementSibling.value
+    if !Ember.isEmpty urlFilter
+      return if !confirm "Do you want to remove #{urlFilter} from url filters?"
+    event.target.parentElement.remove()
 
   tNoPreference: t("noPreference")
 

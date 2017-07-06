@@ -20,7 +20,7 @@ ApiFilterComponent = Ember.Component.extend
       @project.addNewAPIURL()
 
     removeUrl: (item) ->
-      @project.removeUrl item
+      @project.removeUrl()
 
     addApiUrlFilter: (callback) ->
       form = @$('.input')
