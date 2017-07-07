@@ -39,7 +39,7 @@ if isPoppedOut
                 .column.is-one-third.flex-center
                   = item
           else
-            | You don't have any API Filter set, click on settings below and set the API filter
+            | You do not have any API Filter set, click on settings below and set the API filter
         form
           p.control
           .columns
