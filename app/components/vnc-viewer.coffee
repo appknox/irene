@@ -113,8 +113,6 @@ VncViewerComponent = Ember.Component.extend
     openAPIScanModal: ->
       platform = @get "file.project.platform"
       if platform in [ENUMS.PLATFORM.ANDROID,ENUMS.PLATFORM.IOS] # TEMPIOSDYKEY
-        @set "showURLFilter", false
-        @set "showAPIScan", true
         @set "showAPIScanModal", true
       else
         @send "doNotRunAPIScan"
