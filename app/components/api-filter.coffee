@@ -23,37 +23,37 @@ ApiFilterComponent = Ember.Component.extend
       @project.removeUrl()
 
     addApiUrlFilter: (callback) ->
-      form = @$('.input')
+      allFilters = @$('.input')
       urls = ""
+      uniqueArrays = ""
+      filterArray = Ember.ArrayProxy.create content: Ember.A allFilters
       that = @
-      params = Ember.ArrayProxy.create content: Ember.A form
-      params.forEach (param) ->
-        url = param.value
-        if !hasApiFilter url
-          callback(that.get("notify").error "Please enter any url filter")
-        if isRegexFailed url
-          callback(that.get("notify").error "Please enter a valid url filter")
-        if !isAllowedCharacters url
-          callback(that.get("notify").error "Special Characters not allowed")
+      filterArray.forEach (filter) ->
+        url = filter.value
+        for url in [url]
+          return callback(that.get("notify").error "Please enter any url filter") if !hasApiFilter url
+          return callback(that.get("notify").error "Please enter a valid url filter") if isRegexFailed url
+          return callback(that.get("notify").error "Special Characters not allowed") if !isAllowedCharacters url
         urls = that.get "urls"
         if Ember.isEmpty urls
           urls = url
         else
           urls = [urls, url].join ','
         that.set "urls", urls
-      @set "isApiScanEnabled", true
-      if !hasApiFilter urls
-        return @get("notify").error "Please enter any url filter"
       project_id = @get "project.id"
+      splittedArray = urls?.split ","
+      uniqueArrays = splittedArray.uniq()
+      urlString = uniqueArrays.join ','
       apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, project_id].join '/'
       data =
-        apiUrlFilters: urls
+        apiUrlFilters: urlString
       @get("ajax").post apiScanOptions, data: data
       .then (data)->
-        that.set "urls", ""
         that.get("notify").success "Successfully added the url filter"
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message
+
+
 
 `export default ApiFilterComponent`

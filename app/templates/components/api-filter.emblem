@@ -13,7 +13,7 @@
         .columns
           .column.is-one-sixth
             button.is-primary click="addNewUrl"
-             | add new url
+             | + ADD URL
           .column
             button.is-primary.mp-add-filter click="addApiUrlFilter"
               | Save Filter
