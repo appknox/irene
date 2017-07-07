@@ -23,7 +23,7 @@ if isPoppedOut
 
 = modal-card isActive=showAPIScanModal title="Do you also want to run API Scan?"
 
-  .card-body.warning-modal class=showAPIScan:show:hide
+  .card-body.warning-modal
     .card-wrapper
       .api-scanning
         h6
@@ -31,28 +31,25 @@ if isPoppedOut
         div.warning-band
           = fa-icon 'exclamation-triangle'
           | &nbsp; API scan performs multiple automated tests that may result in <b class="bold">denial of service</b> or <b class="bold">loss of data</b>. Do not select YES if the app is configured to use a <b class="bold">production API server</b> or if the app employs <b class="bold">SSL pinning</b>.
+        div.margin-top
+          if file.project.hasAPIURLFilter
+            | Here is the list of api filters you have set
+            .columns.margin-top
+              each file.project.apiUrlFilterItems as |item|
+                .column.is-one-third.flex-center
+                  = item
+          else
+            | You don't have any API Filter set, click on settings below and set the API filter
         form
           p.control
-           button.modal-button.is-primary.mp-run-api-scan click="showURLFilter"
-            | Yes
-           button.modal-button.is-primary.mp-dont-run-api-scan click="doNotRunAPIScan"
-            | No
-  .card-body.warning-modal class=showURLFilter:show:hide
-    .card-wrapper
-      .api-scanning
-        h5 API Scanner URL Filter
-        h6
-          | Enter the API endpoint to scan: eg. api.appknox.com. Do not specify the scheme (http://...), port (:443/...) & path (.../users)
-        form.url-filters
-          each file.project.apiUrlFilterItems as |item|
-            div.filter-list.margin-top
-              = input class="form-control input" type="text" placeholder="Enter API endpoint" value=item
-              i.fa.risk-icons.fa-trash-o.removeUrl click="'removeUrl' item"
-        .columns.margin-top
-          .column
-            form.url-filters
-              button.margin-left.is-primary click="addNewUrl"
-                | add new url
-              p.control
-                button.modal-button.is-primary.start-scan.mp-save-and-start-scan click="addUrlFilterAndStartScan"
-                  | Save Filter &amp; Start Scan
+          .columns
+            .column.is-one-third.edit-filter
+              | Edit filters here: &nbsp;
+              = link-to 'authenticated.project.settings' file.project.id class="mp-detail-project-settings modal-button is-primary" tagName="a"
+                = t "settings"
+            .column.is-one-sixth
+              button.modal-button.is-primary.mp-run-api-scan click="runAPIScan" disabled=file.project.isRunDisabled
+                | Yes
+            .column
+              button.modal-button.is-primary.mp-dont-run-api-scan click="doNotRunAPIScan"
+                | No

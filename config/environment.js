@@ -197,6 +197,9 @@ module.exports = function(environment) {
     ENV['APP'].opbeat = {
         DEBUG: true
     };
+    ENV.rollbar = {
+      enabled: false
+    };
   }
 
   if (environment === 'production') {

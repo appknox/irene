@@ -5,25 +5,12 @@
 vncHeight = 512
 vncWidth = 385
 
-hasApiFilter = (url)->
-  return !Ember.isEmpty url
-
-isRegexFailed = (url) ->
-  reg = /http|www/
-  res = reg.test(url)
-
-isAllowedCharacters = (url) ->
-  reg = /^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/
-  res = reg.test(url)
-
 VncViewerComponent = Ember.Component.extend
   onboard: Ember.inject.service()
   rfb: null
   file: null
   isPoppedOut: false
   classNameBindings: ["isPoppedOut:modal", "isPoppedOut:is-active"]
-  showURLFilter: false
-  showAPIScan: true
 
   vncPopText: (->
     if @get "isPoppedOut"
@@ -96,10 +83,6 @@ VncViewerComponent = Ember.Component.extend
       @send "isApiScanEnabled"
       @send "closeModal"
 
-    showURLFilter: ->
-      @set "showURLFilter", true
-      @set "showAPIScan", false
-
     isApiScanEnabled: ->
       isApiScanEnabled = @get "isApiScanEnabled"
       project_id = @get "file.project.id"
@@ -127,14 +110,6 @@ VncViewerComponent = Ember.Component.extend
         for error in error.errors
           that.get("notify").error error.detail?.message
 
-    addNewUrl: ->
-      project = @get "file.project"
-      project.addNewAPIURL()
-
-    removeUrl: (item) ->
-      project = @get "file.project"
-      project.removeUrl item
-
     openAPIScanModal: ->
       platform = @get "file.project.platform"
       if platform in [ENUMS.PLATFORM.ANDROID,ENUMS.PLATFORM.IOS] # TEMPIOSDYKEY
@@ -147,39 +122,17 @@ VncViewerComponent = Ember.Component.extend
     closeModal: ->
       @set "showAPIScanModal", false
 
-    addUrlFilterAndStartScan: (callback)->
-      form = @$('.input')
-      urls = ""
-      that = @
-      params = Ember.ArrayProxy.create content: Ember.A form
-      params.forEach (param) ->
-        url = param.value
-        if !hasApiFilter url
-          callback(that.get("notify").error "Please enter any url filter")
-        if isRegexFailed url
-          callback(that.get("notify").error "Please enter a valid url filter")
-        if !isAllowedCharacters url
-          callback(that.get("notify").error "Special Characters not allowed")
-        urls = that.get "urls"
-        if Ember.isEmpty urls
-          urls = url
-        else
-          urls = [urls, url].join ','
-        that.set "urls", urls
+    runAPIScan: ->
       @set "isApiScanEnabled", true
-      if !hasApiFilter urls
-        return @get("notify").error "Please enter any url filter"
       isApiScanEnabled = @get "isApiScanEnabled"
       project_id = @get "file.project.id"
       apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, project_id].join '/'
       data =
-        apiUrlFilters: urls
         isApiScanEnabled: isApiScanEnabled
       @get("ajax").post apiScanOptions, data: data
       .then (data)->
         that.send "closeModal"
         that.send "dynamicScan"
-        that.set "urls", ""
         that.get("notify").success "Successfully added the url filter & Starting the scan"
       .catch (error) ->
         for error in error.errors

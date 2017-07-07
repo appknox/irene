@@ -29,6 +29,18 @@ Project = DS.Model.extend BaseModelMixin,
     apiUrlFilters?.split ","
   ).property "apiUrlFilters"
 
+  isRunDisabled: (->
+    apiUrlFilters = @get "apiUrlFilters"
+    if Ember.isEmpty apiUrlFilters
+      "disabled"
+  ).property "apiUrlFilters"
+
+  hasAPIURLFilter: (->
+    apiUrlFilters = @get "apiUrlFilters"
+    if !Ember.isEmpty apiUrlFilters
+      return true
+  ).property "apiUrlFilters"
+
   addNewAPIURL: ->
     apiUrlFilters = @get "apiUrlFilters"
     @set "apiUrlFilters", apiUrlFilters.concat(",")
