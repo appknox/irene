@@ -17,7 +17,7 @@
         .column
           = team.owner.username
         .column
-          | a month ago
+          = moment-from-now team.createdOn
   footer.card-button.align-center
     button click="deleteTeam"
       | Remove Team
