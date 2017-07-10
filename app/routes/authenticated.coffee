@@ -63,11 +63,11 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
       message: (data) ->
         message = data.message
         notifyType = data.notifyType
-        that.get("notify").info message if notifyType is ENUMS.NOTIFY.INFO
-        that.get("notify").success message if notifyType is ENUMS.NOTIFY.SUCCESS
-        that.get("notify").warning message if notifyType is ENUMS.NOTIFY.WARNING
-        that.get("notify").alert message if notifyType is ENUMS.NOTIFY.ALERT
-        that.get("notify").error message if notifyType is ENUMS.NOTIFY.ERROR
+        that.get("notify").info message, ENV.notifications if notifyType is ENUMS.NOTIFY.INFO
+        that.get("notify").success message, ENV.notifications if notifyType is ENUMS.NOTIFY.SUCCESS
+        that.get("notify").warning message, ENV.notifications if notifyType is ENUMS.NOTIFY.WARNING
+        that.get("notify").alert message, ENV.notifications if notifyType is ENUMS.NOTIFY.ALERT
+        that.get("notify").error message, ENV.notifications if notifyType is ENUMS.NOTIFY.ERROR
 
 
       logout: ->
