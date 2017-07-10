@@ -81,7 +81,10 @@ VncViewerComponent = Ember.Component.extend
     doNotRunAPIScan: ->
       @set "isApiScanEnabled", false
       @send "isApiScanEnabled"
-      @send "closeModal"
+
+    runAPIScan: ->
+      @set "isApiScanEnabled", true
+      @send "isApiScanEnabled"
 
     isApiScanEnabled: ->
       isApiScanEnabled = @get "isApiScanEnabled"
@@ -92,6 +95,7 @@ VncViewerComponent = Ember.Component.extend
         isApiScanEnabled: isApiScanEnabled
       @get("ajax").post apiScanOptions, data: data
       .then (data)->
+        @send "closeModal"
         that.send "dynamicScan"
         that.get("notify").success "Starting the scan"
       .catch (error) ->
@@ -119,22 +123,5 @@ VncViewerComponent = Ember.Component.extend
 
     closeModal: ->
       @set "showAPIScanModal", false
-
-    runAPIScan: ->
-      @set "isApiScanEnabled", true
-      isApiScanEnabled = @get "isApiScanEnabled"
-      project_id = @get "file.project.id"
-      apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, project_id].join '/'
-      data =
-        isApiScanEnabled: isApiScanEnabled
-      @get("ajax").post apiScanOptions, data: data
-      .then (data)->
-        that.send "closeModal"
-        that.send "dynamicScan"
-        that.get("notify").success "Successfully added the url filter & Starting the scan"
-      .catch (error) ->
-        for error in error.errors
-          that.get("notify").error error.detail?.message
-
 
 `export default VncViewerComponent`
