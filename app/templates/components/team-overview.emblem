@@ -15,7 +15,7 @@
            | Created
       .columns
         .column
-          | yashwin
+          = team.owner.username
         .column
           | a month ago
   footer.card-button.align-center

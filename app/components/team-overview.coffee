@@ -3,20 +3,19 @@
 
 TeamOverviewComponent = Ember.Component.extend
 
+  team: null
   classNames: ["column" , "is-one-third"]
 
   actions:
     deleteTeam: ->
-      teamName = @get "team.name"
-      deletedName = prompt "Enter the team name which you want to delete ", ""
-      if deletedName is null
-        return
-      else if deletedName isnt teamName
+      team = @get "team"
+      teamName = team.get("name").toLowerCase()
+      deletedName = prompt("Enter the team name which you want to delete ", "").toLowerCase()
+      if deletedName isnt teamName
         return @get("notify").error "Enter the right team name to delete it"
-      teamId = @get "team.id"
-      that = @
-      data =
-        name: teamName
+      team.destroyRecord()
+      ###
+      # @yashwin implemnt `then` & `catch`
       @get("ajax").delete ENV.endpoints.teams, data: data
       .then (data)->
         that.get("notify").success "Team - #{teamName} has been deleted successfully"
@@ -24,5 +23,6 @@ TeamOverviewComponent = Ember.Component.extend
         that.get("notify").error error.payload.message
         for error in error.errors
           that.get("notify").error error.detail?.message
+      ###
 
 `export default TeamOverviewComponent`

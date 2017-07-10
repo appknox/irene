@@ -5,7 +5,7 @@ Team = DS.Model.extend BaseModeMixin,
 
   uuid: DS.attr 'string'
   name: DS.attr 'string'
-  owner: DS.belongsTo 'user', inverse: 'teams'
+  owner: DS.belongsTo 'user', inverse: 'ownedTeams'
   users: DS.hasMany 'user', inverse: 'teams'
   collaborations: DS.hasMany 'collaboration', inverse:'team'
 
