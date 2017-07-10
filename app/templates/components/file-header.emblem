@@ -90,8 +90,8 @@
           tr
             td colspan="2"
               = t "reportPassword"
-          tr.zeroclipboard-copy title="Copy Password" data-clipboard-text=file.project.pdfPassword
-            td
+          tr class="copy-password" data-clipboard-target="#copy-password"
+            td id="copy-password" value=file.project.pdfPassword
               | #{file.project.pdfPassword}
             td
               = fa-icon "clipboard copy-icon"

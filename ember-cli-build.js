@@ -71,15 +71,17 @@ module.exports = function(defaults) {
    */
   app.import('bower_components/pace/pace.js');
 
-  app.import('bower_components/zeroclipboard/dist/ZeroClipboard.min.js');
-  app.import('bower_components/zeroclipboard/dist/ZeroClipboard.swf', {
-    destDir: 'assets'
-  });
-
   /*
    * including QRious
    */
-   app.import('bower_components/qrious/dist/qrious.min.js');   
+   app.import('bower_components/qrious/dist/qrious.min.js');
+
+   /*
+    * including clipboard
+    */
+   app.import('bower_components/clipboard/dist/clipboard.min.js')
+
+
 
   return app.toTree();
 };
