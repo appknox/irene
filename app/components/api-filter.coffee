@@ -5,10 +5,6 @@ hasApiFilter = (url)->
   return !Ember.isEmpty url
 
 isRegexFailed = (url) ->
-  reg = /http|www/
-  res = reg.test(url)
-
-isAllowedCharacters = (url) ->
   reg = /^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/
   res = reg.test(url)
 
@@ -32,8 +28,7 @@ ApiFilterComponent = Ember.Component.extend
         url = filter.value
         for url in [url]
           return callback(that.get("notify").error "Please enter any url filter") if !hasApiFilter url
-          return callback(that.get("notify").error "Please enter a valid url filter") if isRegexFailed url
-          return callback(that.get("notify").error "Special Characters not allowed") if !isAllowedCharacters url
+          return callback(that.get("notify").error " '#{url}' is an invalid url") if !isRegexFailed url
         urls = that.get "urls"
         if Ember.isEmpty urls
           urls = url
