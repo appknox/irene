@@ -24,6 +24,33 @@ Project = DS.Model.extend BaseModelMixin,
   platformVersion: DS.attr 'string'
   apiUrlFilters: DS.attr 'string'
 
+  apiUrlFilterItems:(->
+    apiUrlFilters = @get "apiUrlFilters"
+    apiUrlFilters?.split ","
+  ).property "apiUrlFilters"
+
+  isRunDisabled: (->
+    apiUrlFilters = @get "apiUrlFilters"
+    if Ember.isEmpty apiUrlFilters
+      "disabled"
+  ).property "apiUrlFilters"
+
+  hasAPIURLFilter: (->
+    apiUrlFilters = @get "apiUrlFilters"
+    if !Ember.isEmpty apiUrlFilters
+      return true
+  ).property "apiUrlFilters"
+
+  addNewAPIURL: ->
+    apiUrlFilters = @get "apiUrlFilters"
+    @set "apiUrlFilters", apiUrlFilters.concat(",")
+
+  removeUrl: ->
+    urlFilter = event.target.previousElementSibling.value
+    if !Ember.isEmpty urlFilter
+      return if !confirm "Do you want to remove #{urlFilter} from url filters?"
+    event.target.parentElement.remove()
+
   tNoPreference: t("noPreference")
 
   pdfPassword: (->
@@ -56,7 +83,7 @@ Project = DS.Model.extend BaseModelMixin,
 
   isAPIScanEnabled: ( ->
     platform = @get "platform"
-    platform in [ENUMS.PLATFORM.ANDROID]
+    platform in [ENUMS.PLATFORM.ANDROID , ENUMS.PLATFORM.IOS]
   ).property "platform"
 
   lastFile:( ->

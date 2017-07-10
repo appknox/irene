@@ -1,9 +1,19 @@
-h5 API Scanner URL Filter
-h6
-  | Enter the API endpoint to scan: eg. api.appknox.com. Do not specify the scheme (http://...) or path (.../users).
-.columns
-  .column.is-one-third
-    p.control
-      = input class="form-control input mp-api-filter" type="text" value=project.apiUrlFilters
-    button.is-primary.mp-add-filter click="addApiUrlFilter"
-      | Add Filter
+.api-filter
+  h5 API Scanner URL Filter
+  h6
+    | Enter the API endpoint to scan: eg. api.appknox.com. Do not specify the scheme (http://...), port (:443/...) & path (.../users)
+  form.url-filters
+    each project.apiUrlFilterItems as |item|
+      div.filter-list.margin-top
+        = input class="form-control input" type="text" placeholder="Enter API endpoint" value=item
+        i.fa.risk-icons.fa-trash-o.removeUrl click=" 'removeUrl' item"
+  .columns.margin-top
+    .column
+      form.url-filters
+        .columns
+          .column.is-one-sixth
+            button.is-primary click="addNewUrl"
+             | + ADD URL
+          .column
+            button.is-primary.mp-add-filter click="addApiUrlFilter"
+              | Save Filter
