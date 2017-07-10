@@ -328,15 +328,17 @@ button, .button
     padding: 10px
     text-align: center
     color: #404040
-  .fa
-    color: #404040
-  button
-    margin-top: 20px
-    width: 70px
-  button:nth-child(1)
-    margin-left: 37%
-  button:nth-child(2)
+  .fa.fa-trash-o
+    color: $red
     margin-left: 10px
+    margin-top: 10px
+    cursor: pointer
+  .position-icons
+    margin-top: 18px!important
+  .edit-filter
+    padding-top: 15px
+  button.modal-button
+    min-width: 70px
   .start-scan
     width: 150px
   ul
@@ -722,8 +724,6 @@ li.is-critical:before
   h1
     padding-top: 30px
 
-// End //
-
 .team-container
   padding: 30px 100px
 
@@ -772,3 +772,21 @@ li.is-critical:before
     font-size: 10px
     height: 20px
     line-height: 9px
+
+.filter-list
+  input
+    width: 70%
+  .fa
+    color: $red
+    margin-left: 10px
+    margin-top: 10px
+    cursor: pointer
+
+.api-filter
+  input
+    width: 25%
+  .position-icons
+    margin-top: 20px!important
+
+.new-input-box
+  margin-top: -20px

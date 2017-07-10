@@ -8,11 +8,17 @@ FileHeaderComponent = Ember.Component.extend
 
   didInsertElement: ->
     clipboard = new Clipboard('.copy-password')
+    @set "clipboard", clipboard
     that = @
-    clipboard.on 'success', ->
+    clipboard.on 'success', (e) ->
       that.get("notify").info "Password Copied!"
+      e.clearSelection()
     clipboard.on 'error', ->
       that.get("notify").error "Failed, please try again"
+
+  willDestroyElement: ->
+    clipboard = @get "clipboard"
+    clipboard.destroy()
 
   actions:
     getPDFReportLink: ->
