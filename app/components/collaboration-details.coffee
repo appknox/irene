@@ -13,7 +13,7 @@ CollaborationDetailsComponent = Ember.Component.extend
   actions:
 
     changeRole: (value) ->
-      currentRole = @set "currentRole", parseInt value
+      currentRole = @set "currentRole", parseInt @$('#role-preference').val()
       collaborationId = @get "collaboration.id"
       url = [ENV.endpoints.collaborations, collaborationId ].join '/'
       data =
@@ -28,11 +28,10 @@ CollaborationDetailsComponent = Ember.Component.extend
           that.get("notify").error error.detail?.message
 
     removeCollaboration: ->
-      collaborationId = @get "collaboration.id"
+      collaboration = @get "collaboration"
       return if !confirm "Do you want to remove?"
       that = @
-      url = [ENV.endpoints.collaborations, collaborationId].join '/'
-      @get("ajax").delete url
+      collaboration.destroyRecord()
       .then (data)->
         that.get("notify").success "Collaboration will be removed shortly"
       .catch (error) ->
