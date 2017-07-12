@@ -4,13 +4,24 @@
       tr
         th colspan="2"
           = team.name
-          button click="openAddMemberModal"
+          button.add-member click="openAddMemberModal"
            | add member
       tr
         th
           | Members
         th
           | Remove
+      tr
+        td
+          .columns
+            .column
+              = team.owner.username
+            .column
+              .tag.role-tag
+                | owner
+        td
+          button.is-primary disabled="disabled"
+            | remove
       each team.users as |user|
         = team-member user=user team=team
 
