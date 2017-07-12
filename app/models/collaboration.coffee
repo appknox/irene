@@ -10,6 +10,13 @@ Collaboration = DS.Model.extend BaseModelMixin,
   role: DS.attr 'number'
   username: DS.attr 'string'
 
+  hasRole:(->
+    role = @get "role"
+    if role is ENUMS.COLLABORATION_ROLE.UNKNOWN
+      return false
+    return true
+  ).property "role"
+
   roleHumanized:(->
     switch @get "role"
       when ENUMS.COLLABORATION_ROLE.ADMIN then "Admin"

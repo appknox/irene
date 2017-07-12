@@ -1,23 +1,23 @@
 .card.is-fullwidth.team-card
   header.card-header
     p.card-header-title.flex-center.title-tag
-      | Team Name
-  select.input.mp-collaboration-role onchange={action "changeRole" value="target.value"}
-    each roles as |role|
-      option value=role.value
-        = role.key
+      = collaboration.team.name
+      if collaboration.hasRole
+        | &nbsp;(#{collaboration.roleHumanized})
+
   .card-content
     .content
       p.align-center
         ul
           li
-            | Member 1
-          li
-            | Member 1
-          li
-            | Member 1
-          li
-            | Member 1
+            = collaboration.team.owner.username
+          each collaboration.team.users as |member|
+            = member.username
+
+      select.input.mp-collaboration-role onchange={action "changeRole" value="target.value"} id="role-preference"
+        each roles as |role|
+          option value=role.value
+            = role.key
   .card-button.align-middle
-    button.mp-remove-collaboration click="removeCollaboration"
+    button.mp-remove-collaboration click="removeCollaboration" disabled=collaboration.team.canDeleteTeam
       | Remove
