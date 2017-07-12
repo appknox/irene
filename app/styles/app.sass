@@ -742,16 +742,20 @@ li.is-critical:before
       border: 1px solid rgba(107, 107, 107, 0.1)
 
 .team-details-table
+  .columns
+    .column
+      padding: 0px
+      margin-top: 15px
   tr
     th, td
       width: 20%
       text-align: center
       border: 1px solid #b8b8b8
-      padding: 8px 0px
+      padding: 10px 0px
     th
       background-color: #6B6B6B
       color: #fff
-  button
+  button.add-member
     left: 320px
     color: $white
     &:hover
@@ -790,3 +794,10 @@ li.is-critical:before
 
 .new-input-box
   margin-top: -20px
+
+.role-tag
+  border: 1px solid $red
+  margin-left: 100px
+
+button.delete-button
+  border: none
