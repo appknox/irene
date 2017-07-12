@@ -62,7 +62,7 @@ module.exports = function(environment) {
 
     notifications: {
       autoClear: true,
-      duration: 4000 // Milliseconds
+      duration: 7000 // Milliseconds
     },
     moment: {
       allowEmpty: true, // default: false
