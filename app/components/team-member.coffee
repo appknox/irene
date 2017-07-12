@@ -18,7 +18,7 @@ TeamMemberComponent = Ember.Component.extend
         return @get("notify").error "Enter the right username to delete it"
       teamId = @get "team.id"
       memberId = @get "user.id"
-      url = [ENV.endpoints.teams, teamId, "members", memberId].join '/'
+      url = [ENV.endpoints.teams, teamId, ENV.endpoints.members, memberId].join '/'
       that = @
       data =
         identification: teamMember

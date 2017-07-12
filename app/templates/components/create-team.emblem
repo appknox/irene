@@ -8,6 +8,6 @@
     .card-wrapper
       form
         p.control
-          = input class="form-control input" placeholder=(t 'teamName') type="text" value=teamName
+          = input class="form-control input" placeholder=(t 'teamName') type="text" value=team.name
         button.margin-top10.is-primary click="createTeam"
          = t 'createTeam'

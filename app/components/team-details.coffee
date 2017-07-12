@@ -19,7 +19,7 @@ TeamDetailsComponent = Ember.Component.extend
     addMember: ->
       teamMember = @get "teamMember"
       teamId = @get "team.id"
-      url = [ENV.endpoints.teams, teamId, "members"].join '/'
+      url = [ENV.endpoints.teams, teamId, ENV.endpoints.members].join '/'
       that = @
       for inputValue in [teamMember]
         return @get("notify").error "Please Enter the email" if isEmpty inputValue

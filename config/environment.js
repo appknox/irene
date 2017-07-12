@@ -149,7 +149,8 @@ module.exports = function(environment) {
       apiScanOptions: 'api_scan_options',
       enableMFA: 'mfa/enable',
       disableMFA: 'mfa/disable',
-      teams: 'teams'
+      teams: 'teams',
+      members: 'members'
     },
   };
 

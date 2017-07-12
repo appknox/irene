@@ -8,19 +8,22 @@ CreateTeamComponent = Ember.Component.extend
 
   teamName: ""
 
+  team: (->
+   @get('store').createRecord('team')
+  ).property()
+
   actions:
     openTeamModal: ->
       @set "showTeamModal", true
 
     createTeam: ->
-      teamName = @get "teamName"
+      teamName = @get "team.name"
       for inputValue in [teamName]
         return @get("notify").error "Please enter the team name" if isEmpty inputValue
+      team = @get 'team'
+      team.save()
       that = @
-      data =
-        name: teamName
-      @get("ajax").post ENV.endpoints.teams, data: data
-      .then (data)->
+      .then ()->
         that.get("notify").success "Team Created Successfully"
         that.set "teamName", ""
         that.set "showTeamModal", false
