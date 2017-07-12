@@ -19,7 +19,7 @@ if showVulnerability
           = analysis.vulnerability.question
         else
           if analysis.isRisky
-            p = analysis.vulnerability.description
+            p = analysis.vulnerability.descriptionUnescapedd
             if analysis.vulnerability.businessImplication
               h5.margin-top
                 = t "businessImplication"
