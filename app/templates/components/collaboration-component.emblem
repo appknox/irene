@@ -14,9 +14,12 @@ button.is-primary.mp-open-collaboration-modal click="openCollaborationModal"
     .card-wrapper
       form
         p.control
-          select.input onchange={action "teamChanged" value="target.value"}
-            option value=1
-              | Default
+          select.input onchange={action "teamChanged" value="target.value"} id="team-preference"
+            option value=0
+              = t "noPreference"
+            each teams as |team|
+              option value=team.id
+                = team.name
         .card-button
           button.mp-add-collaboration click="addCollaboration"
             = t "addTeam"

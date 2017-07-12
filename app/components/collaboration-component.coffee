@@ -3,23 +3,30 @@
 
 CollaborationComponentComponent = Ember.Component.extend
   project: null
-  currentTeam: 1
+  selectedTeam: 0
 
   collaborations: (->
     projectId = @get "project.id"
     @get("store").query "collaboration", projectId: projectId
   ).property "project.id", "realtime.CollaborationCounter"
 
+  teams: (->
+    @get("store").findAll "team"
+  ).property()
+
   actions:
 
     teamChanged: (value) ->
-      @set "currentTeam", parseInt value
+      @set "selectedTeam", parseInt @$('#team-preference').val()
 
     addCollaboration: ->
+      selectedTeam = @get "selectedTeam"
+      if selectedTeam is 0
+        return @get("notify").error "Please select any team"
       that = @
       data =
         projectId: @get "project.id"
-        teamId: @get "currentTeam"
+        teamId: selectedTeam
       that = @
       @get("ajax").post ENV.endpoints.collaborations, data:data
       .then (data)->
