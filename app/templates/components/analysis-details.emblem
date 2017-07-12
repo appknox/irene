@@ -23,7 +23,7 @@ if showVulnerability
             if analysis.vulnerability.businessImplication
               h5.margin-top
                 = t "businessImplication"
-              span
+              span.bi-span
                 | {{{analysis.vulnerability.businessImplication}}}
           else
             = analysis.vulnerability.successMessage
