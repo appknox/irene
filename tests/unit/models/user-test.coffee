@@ -2,7 +2,7 @@
 
 moduleForModel 'user', 'Unit | Model | user', {
   # Specify the other units that are required for this test.
-  needs: ['model:project', 'model:submission', 'model:collaboration', 'model:pricing','model:invoice']
+  needs: ['model:project', 'model:submission', 'model:collaboration', 'model:pricing','model:invoice','model:team']
 }
 
 test 'it exists', (assert) ->
