@@ -21,8 +21,8 @@ CreateTeamComponent = Ember.Component.extend
       for inputValue in [teamName]
         return @get("notify").error "Please enter the team name" if isEmpty inputValue
       team = @get 'team'
-      team.save()
       that = @
+      team.save()
       .then ()->
         that.get("notify").success "Team Created Successfully"
         that.set "teamName", ""
