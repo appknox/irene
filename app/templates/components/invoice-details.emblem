@@ -9,13 +9,13 @@
     hr.horizontal-seperator
     .columns
       .column
-        | XYSEC LABS PRIVATE LIMITED,
+        | XYSEC LABS PTE LIMITED,
         br
-        | 473/1, SHREE KRISHNA TEMPLE ROAD,
+        | 79 AYER RAJAH CRESCENT
         br
-        | INDRANAGAR - 560038,
+        | #04-09 Singapore 139951
         br
-        | BANGALORE, KARANATAKA
+        | Ph: +65 3158 5898
       .column.content-right
         | Invoice Number: #{invoice.id}
         br
