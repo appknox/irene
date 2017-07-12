@@ -1,4 +1,10 @@
 td
-  = user.username
-td click="removeMember"
-  = fa-icon "times"
+  .columns
+    .column
+      = user.username
+    .column
+      .tag.role-tag
+        | member
+td
+  button.is-primary click="removeMember"
+    | remove
