@@ -9,6 +9,12 @@ Team = DS.Model.extend BaseModeMixin,
   users: DS.hasMany 'user', inverse: 'teams'
   collaborations: DS.hasMany 'collaboration', inverse:'team'
 
+  canDeleteTeam: (->
+    name = @get "name"
+    if name is "Default"
+      "disabled"
+  ).property "name"
+
   totalMembers: (->
     totalMembers = @get "users.length"
     if totalMembers is 1
