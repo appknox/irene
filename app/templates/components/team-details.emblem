@@ -5,23 +5,23 @@
         th colspan="2"
           = team.name
           button.add-member click="openAddMemberModal"
-           | add member
+           = t "addMember"
       tr
         th
-          | Members
-        th
-          | Remove
+          = t "members"
+        th.capitalize-text
+          =  t "remove"
       tr
         td
           .columns
             .column
               = team.owner.username
             .column
-              .tag.role-tag
-                | owner
+              .tag.role-tag.lowercase-text
+                = t "owner"
         td
           button.is-primary disabled="disabled"
-            | remove
+            = t "remove"
       each team.users as |user|
         = team-member user=user team=team
 
@@ -30,6 +30,6 @@
     .card-wrapper
       form
         p.control
-          = input class="form-control input" placeholder="Email" type="text" value=teamMember
+          = input class="form-control input" placeholder=( t 'email') type="text" value=teamMember
         button.margin-top10.is-primary click="addMember"
-         | Invite
+         = t "invite"

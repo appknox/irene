@@ -16,10 +16,10 @@
 
       select.input.mp-collaboration-role onchange={action "changeRole" value="target.value"} id="role-preference"
         option
-          | CHANGE ROLE
+          = t "changeRole"
         each roles as |role|
           option value=role.value
             = role.key
   .card-button.align-middle
-    button.mp-remove-collaboration click="removeCollaboration" disabled=collaboration.team.canDeleteTeam
-      | Remove
+    button.mp-remove-collaboration.capitalize-text click="removeCollaboration" disabled=collaboration.team.canDeleteTeam
+      = t "remove"

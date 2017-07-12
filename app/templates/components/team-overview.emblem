@@ -9,10 +9,10 @@
       .columns
         .column
           h6
-            | Owner
+            = t "owner"
         .column
           h6
-           | Created
+           = t "created"
       .columns
         .column
           = team.owner.username
@@ -20,4 +20,4 @@
           = moment-from-now team.createdOn
   footer.card-button.align-center
     button click="deleteTeam" disabled=team.canDeleteTeam
-      | Remove Team
+      = t "removeTeam"

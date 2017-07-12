@@ -4,7 +4,7 @@ td
       = user.username
     .column
       .tag.role-tag
-        | member
+        = t "member"
 td
   button.is-primary click="removeMember"
-    | remove
+    = t "remove"

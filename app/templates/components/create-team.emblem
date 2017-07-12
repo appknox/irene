@@ -1,13 +1,13 @@
 .columns.remove click="openTeamModal"
-  .column.card.is-one-sixth.margin-auto.text-centre
+  .column.card.is-one-sixth.margin-auto.text-centre.uppercase-text
     = fa-icon "users"
-    | &nbsp; CREATE TEAM
+    | &nbsp; #{ t "createTeam"}
 
-= modal-card isActive=showTeamModal title="Create Team"
+= modal-card isActive=showTeamModal title=(t 'createTeam')
   .card-body
     .card-wrapper
       form
         p.control
-          = input class="form-control input" placeholder="Team Name" type="text" value=teamName
+          = input class="form-control input" placeholder=(t 'teamName') type="text" value=teamName
         button.margin-top10.is-primary click="createTeam"
-         | Create Team
+         = t 'createTeam'

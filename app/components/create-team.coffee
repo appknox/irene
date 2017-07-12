@@ -15,7 +15,7 @@ CreateTeamComponent = Ember.Component.extend
     createTeam: ->
       teamName = @get "teamName"
       for inputValue in [teamName]
-        return @get("notify").error "Please Enter the team name" if isEmpty inputValue
+        return @get("notify").error "Please enter the team name" if isEmpty inputValue
       that = @
       data =
         name: teamName
