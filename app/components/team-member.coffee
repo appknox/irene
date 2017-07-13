@@ -3,26 +3,21 @@
 
 TeamMemberComponent = Ember.Component.extend
   team: null
-  user: null
   tagName: ["tr"]
 
   actions:
 
     removeMember: ->
-      teamMember = @get "user.username"
-
+      teamMember = @get "member"
       deletedMember = prompt "Enter the username which you want to delete ", ""
       if deletedMember is null
         return
       else if deletedMember isnt teamMember
         return @get("notify").error "Enter the right username to delete it"
       teamId = @get "team.id"
-      memberId = @get "user.id"
-      url = [ENV.endpoints.teams, teamId, ENV.endpoints.members, memberId].join '/'
+      url = [ENV.endpoints.teams, teamId, ENV.endpoints.members, teamMember].join '/'
       that = @
-      data =
-        identification: teamMember
-      @get("ajax").delete url, data: data
+      @get("ajax").delete url
       .then (data)->
         that.get("notify").success "Team member #{teamMember} will be deleted shortly"
       .catch (error) ->
