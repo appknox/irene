@@ -16,19 +16,19 @@ CreateTeamComponent = Ember.Component.extend
       teamName = @get "teamName"
       for inputValue in [teamName]
         return @get("notify").error "Please enter the team name" if isEmpty inputValue
-      team = @get('store').createRecord('team', { name: teamName})
       that = @
-      team.save()
-      .then ()->
+      data =
+        name: teamName
+      team = @get "team"
+      @get("ajax").post ENV.endpoints.teams, data: data
+      .then (data)->
+        that.store.pushPayload data
         that.get("notify").success "Team Created Successfully"
         that.set "teamName", ""
         that.set "showTeamModal", false
       .catch (error) ->
-        team.destroyRecord()
+        that.get("notify").error error.payload.error
         for error in error.errors
-          debugger
-          if error.status is "412"
-            that.get("notify").error "Team already exists"
           that.get("notify").error error.detail?.message
 
 
