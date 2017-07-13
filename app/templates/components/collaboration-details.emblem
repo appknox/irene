@@ -1,21 +1,27 @@
 .card.is-fullwidth.team-card
-  header.card-header
-    p.card-header-title.flex-center.title-tag
-      = collaboration.team.name
-      if collaboration.hasRole
-        | &nbsp;(#{collaboration.roleHumanized})
+  header.title-tag.flex-center
+    p.team-header
+      .columns
+        .column
+          = collaboration.team.name
+          if collaboration.hasRole
+            | &nbsp;(#{collaboration.roleHumanized})
+      .columns
+        .column
+          = collaboration.team.owner.username
+          |(#{ t "owner"})
+
 
   .card-content
     .content
+
       h6.text-centre
         = t "members"
       p.align-center
         ul
           li.text-centre
-            = collaboration.team.owner.username
-          each collaboration.team.teamMembers as |member|
-            li.text-centre
-              = member
+            = collaboration.team.members
+
 
       select.input.mp-collaboration-role onchange={action "changeRole" value="target.value"} id="role-preference"
         option
