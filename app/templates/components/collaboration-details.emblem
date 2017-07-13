@@ -7,12 +7,15 @@
 
   .card-content
     .content
+      h6.text-centre
+        = t "members"
       p.align-center
         ul
-          li
+          li.text-centre
             = collaboration.team.owner.username
-          each collaboration.team.users as |member|
-            = member.username
+          each collaboration.team.teamMembers as |member|
+            li.text-centre
+              = member
 
       select.input.mp-collaboration-role onchange={action "changeRole" value="target.value"} id="role-preference"
         option

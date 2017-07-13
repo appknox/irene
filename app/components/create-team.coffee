@@ -25,8 +25,10 @@ CreateTeamComponent = Ember.Component.extend
         that.set "showTeamModal", false
       .catch (error) ->
         team.destroyRecord()
-        that.get("notify").error error.payload.message
         for error in error.errors
+          debugger
+          if error.status is "412"
+            that.get("notify").error "Team already exists"
           that.get("notify").error error.detail?.message
 
 

@@ -1,7 +1,7 @@
 td
   .columns
     .column
-      = user.username
+      = member
     .column
       .tag.role-tag
         = t "member"
