@@ -26,7 +26,6 @@ CreateTeamComponent = Ember.Component.extend
       .catch (error) ->
         team.destroyRecord()
         for error in error.errors
-          debugger
           if error.status is "412"
             that.get("notify").error "Team already exists"
           that.get("notify").error error.detail?.message
