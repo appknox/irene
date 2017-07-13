@@ -16,7 +16,7 @@ CreateTeamComponent = Ember.Component.extend
       teamName = @get "teamName"
       for inputValue in [teamName]
         return @get("notify").error "Please enter the team name" if isEmpty inputValue
-      team = @get('store').createRecord('team', { name: teamName})
+      team = @store.createRecord('team', { name: teamName})
       that = @
       team.save()
       .then ()->
