@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{invitation-accept}}"""
 
-  assert.equal @$().text().trim(), 'Signup & Accept InviteSecurity fanatics at your service has invited you to  projectSignup & Accept InviteLogin?'
+  assert.equal @$().text().trim(), 'Signup & Accept InviteSecurity fanatics at your service has invited you to  teamSignup & Accept InviteLogin?'

@@ -15,4 +15,4 @@ test 'it renders', (assert) ->
 
 
 
-  assert.equal @$().text().trim(), 'Change RoleREAD_ONLYMANAGERADMINremove'
+  assert.equal @$().text().trim(), 'MembersChange RoleREAD_ONLYMANAGERADMINremove'
