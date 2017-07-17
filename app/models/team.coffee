@@ -12,10 +12,8 @@ Team = DS.Model.extend BaseModeMixin,
   users: DS.hasMany 'user', inverse: 'teams'
   collaborations: DS.hasMany 'collaboration', inverse:'team'
 
-  canDeleteTeam: (->
-    name = @get "name"
-    if name is "Default"
-      "disabled"
+  isDefaultTeam: (->
+    "Default" is @get "name"
   ).property "name"
 
   hasMembers: Ember.computed.gt 'membersCount', 0
