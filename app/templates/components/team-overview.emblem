@@ -4,6 +4,8 @@
       = team.name
     .column
       | #{team.totalMembers}
+    .column
+      | #{team.projectsCount} Projects
   .card-content.text-centre
     = link-to "authenticated.team" team.id
       .columns
