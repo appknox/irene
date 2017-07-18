@@ -10,7 +10,7 @@ button.is-primary.mp-open-collaboration-modal click="openCollaborationModal"
       th
         | Team
       th
-        | Owner  
+        | Owner
       th
         | Role
       th
@@ -32,3 +32,7 @@ button.is-primary.mp-open-collaboration-modal click="openCollaborationModal"
         .card-button
           button.mp-add-collaboration click="addCollaboration"
             = t "addTeam"
+          .columns
+            .column.margin-top
+              = link-to 'authenticated.teams' class="is-primary" tagName="a"
+                | Add new team
