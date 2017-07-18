@@ -1,7 +1,8 @@
 .card.team-overview-card.text-centre
-  header.card-header.columns
-    .column.hidden-overflow
+  header.card-header
+    .column
       = team.name
+  header.card-header.columns
     .column
       | #{team.totalMembers}
     .column
