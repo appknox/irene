@@ -210,9 +210,7 @@ module.exports = function(environment) {
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
-    ENV.mixpanel = {
-      enabled: true
-    };
+    ENV.mixpanel.enabled = true;
     ENV['host'] = "https://api.appknox.com";
     ENV.stripe = {
       publishableKey: "pk_live_9G633HADop7N2NLdi6g2BHHA"
