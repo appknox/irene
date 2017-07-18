@@ -15,4 +15,4 @@ test 'it renders', (assert) ->
 
 
 
-  assert.equal @$().text().trim(), '(Owner)MembersChange RoleREAD_ONLYMANAGERADMINremove'
+  assert.equal @$().text().trim(), 'Missing translation: undefinedChange RoleDeveloperManagerAdminremove'
