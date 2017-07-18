@@ -5,7 +5,7 @@ button.is-primary.mp-open-collaboration-modal click="openCollaborationModal"
   = t "addTeam"
 
 .collaboration-container
-  table
+  table.collaboration-table
     tr
       th
         = t "teams"
@@ -13,7 +13,7 @@ button.is-primary.mp-open-collaboration-modal click="openCollaborationModal"
         = t "owner"
       th
         = t "role"
-      th
+      th.capitalize-text
         = t "remove"
     each collaborations as |collaboration|
       = collaboration-details collaboration=collaboration
