@@ -4,9 +4,18 @@ h5
 button.is-primary.mp-open-collaboration-modal click="openCollaborationModal"
   = t "addTeam"
 
-.columns.margin-top
-  each collaborations as |collaboration|
-    .column.is-one-sixth
+.collaboration-container
+  table
+    tr
+      th
+        | Team
+      th
+        | Owner  
+      th
+        | Role
+      th
+        | Remove
+    each collaborations as |collaboration|
       = collaboration-details collaboration=collaboration
 
 = modal-card isActive=showCollaborationModal title="Add Team to project"

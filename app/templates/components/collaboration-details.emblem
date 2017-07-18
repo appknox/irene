@@ -1,35 +1,24 @@
-.card.is-fullwidth.team-card
-  header.title-tag.flex-center
-    p.team-header
-      .columns
-        .column
-          = collaboration.team.name
-          if collaboration.hasRole
-            | &nbsp;(#{collaboration.roleHumanized})
-      .columns
-        .column
-          = collaboration.team.owner.username
-          |(#{ t "owner"})
+td
+  .column
+    = link-to "authenticated.team" collaboration.team.id
+      = collaboration.team.name
+  .column
+    = collaboration.team.totalMembers
 
+td
+  = collaboration.team.owner.username
 
-  .card-content
-    .content
-
-      h6.text-centre
-        = t "members"
-      p.align-center
-        ul
-          li.text-centre
-            = collaboration.team.members
-
-
-      select.input.mp-collaboration-role onchange={action "changeRole" value="target.value"} id="role-preference" disabled=collaboration.team.isDefaultTeam
+td
+  .column
+    = collaboration.roleHumanized
+  .column
+    select.input.mp-collaboration-role onchange={action "changeRole" value="target.value"} id="role-preference" disabled=collaboration.team.isDefaultTeam
         option
           = t "changeRole"
         each roles as |role|
           option value=role.value
             = role.key
 
-  .card-button.align-middle
-    button.mp-remove-collaboration.capitalize-text click="removeCollaboration" disabled=collaboration.team.isDefaultTeam
+td
+  button.is-primary.mp-remove-collaboration.capitalize-text click="removeCollaboration" disabled=collaboration.team.isDefaultTeam
       = t "remove"

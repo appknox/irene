@@ -9,6 +9,7 @@ CollaborationDetailsComponent = Ember.Component.extend
   collaboration: null
   roles: roles
   currentRole: roles[0].value
+  tagName: ["tr"]
 
   actions:
 
