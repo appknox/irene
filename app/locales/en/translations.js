@@ -137,6 +137,8 @@ export default {
   "projects": "Projects",
   "projectName": "Project Name",
   "quarterly": "Quarterly",
+  "readOnly": "Read Only",
+  "readWrite": "Read & Write",
   "recover": "Recover",
   "recoverPassword": "Recover your password",
   "remove": "remove",

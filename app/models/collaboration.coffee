@@ -19,9 +19,11 @@ Collaboration = DS.Model.extend BaseModelMixin,
 
   roleHumanized:(->
     switch @get "role"
-      when ENUMS.COLLABORATION_ROLE.ADMIN then "Admin"
-      when ENUMS.COLLABORATION_ROLE.MANAGER then "Manager"
-      when ENUMS.COLLABORATION_ROLE.READ_ONLY then "Read Only"
+      when ENUMS.COLLABORATION_ROLE.ADMIN then "admin"
+      when ENUMS.COLLABORATION_ROLE.MANAGER then "readWrite"
+      when ENUMS.COLLABORATION_ROLE.READ_ONLY then "readOnly"
+      else
+        "noPreference"
   ).property "role"
 
 `export default Collaboration`

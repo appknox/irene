@@ -10,14 +10,14 @@ td
 
 td
   .column
-    = collaboration.roleHumanized
+    | #{ t collaboration.roleHumanized}
   .column
     select.input.mp-collaboration-role onchange={action "changeRole" value="target.value"} id="role-preference" disabled=collaboration.team.isDefaultTeam
         option
           = t "changeRole"
         each roles as |role|
           option value=role.value
-            = role.key
+            | #{ t (role-humanized role.value)}
 
 td
   button.is-primary.mp-remove-collaboration.capitalize-text click="removeCollaboration" disabled=collaboration.team.isDefaultTeam

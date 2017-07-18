@@ -136,6 +136,8 @@ export default {
   "projects": "プロジェクト",
   "projectName": "プロジェクト名",
   "quarterly": "3カ月",
+  "readOnly": "読み取り専用",
+  "readWrite": "読み書き",
   "recover": "パスワードを復元",
   "recoverPassword": "パスワードの復元",
   "remove": "除去",
