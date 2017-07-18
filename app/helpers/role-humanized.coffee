@@ -9,9 +9,9 @@ roleHumanized = (params) ->
   if currentRole is ENUMS.COLLABORATION_ROLE.ADMIN
     "admin"
   else if currentRole is ENUMS.COLLABORATION_ROLE.MANAGER
-    "readWrite"
+    "manager"
   else if currentRole is ENUMS.COLLABORATION_ROLE.READ_ONLY
-    "readOnly"
+    "developer"
   else
     "changeRole"
 

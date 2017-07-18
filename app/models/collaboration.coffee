@@ -20,8 +20,8 @@ Collaboration = DS.Model.extend BaseModelMixin,
   roleHumanized:(->
     switch @get "role"
       when ENUMS.COLLABORATION_ROLE.ADMIN then "admin"
-      when ENUMS.COLLABORATION_ROLE.MANAGER then "readWrite"
-      when ENUMS.COLLABORATION_ROLE.READ_ONLY then "readOnly"
+      when ENUMS.COLLABORATION_ROLE.MANAGER then "manager"
+      when ENUMS.COLLABORATION_ROLE.READ_ONLY then "developer"
       else
         "noPreference"
   ).property "role"
