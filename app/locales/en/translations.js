@@ -164,6 +164,7 @@ export default {
   "selectedDevice": "Selected Device Type",
   "selectedVersion": "Selected OS Version",
   "selectDevice": "Select the device",
+  "selectTeam": "Select a team",
   "settings": "Settings",
   "severityLevel": "Severity Level",
   "showVulnerability": "Show Vulnerability ",

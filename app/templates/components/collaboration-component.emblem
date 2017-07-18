@@ -1,11 +1,11 @@
 h5
   = t "collaborations"
 
-button.is-primary.mp-open-collaboration-modal click="openCollaborationModal"
-  = t "addTeam"
-
 .collaboration-container
-  table.collaboration-table
+  .content-right
+    button.is-primary.mp-open-collaboration-modal click="openCollaborationModal"
+      = t "addTeam"
+  table.collaboration-table.margin-top
     tr
       th
         = t "teams"
@@ -25,7 +25,7 @@ button.is-primary.mp-open-collaboration-modal click="openCollaborationModal"
         p.control
           select.input onchange={action "teamChanged" value="target.value"} id="team-preference"
             option value=0
-              = t "noPreference"
+              = t "selectTeam"
             each teams as |team|
               option value=team.id
                 = team.name

@@ -163,6 +163,7 @@ export default {
   "selectedDevice": "デバイスタイプの指定",
   "selectedVersion": "OSのバージョンの指定",
   "selectDevice": "デバイスを選択する",
+  "selectTeam": "チームを選ぶ",
   "settings": "設定",
   "severityLevel": "重大度",
   "showVulnerability": "開く",
