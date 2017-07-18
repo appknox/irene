@@ -8,13 +8,13 @@ button.is-primary.mp-open-collaboration-modal click="openCollaborationModal"
   table
     tr
       th
-        | Team
+        = t "teams"
       th
-        | Owner
+        = t "owner"
       th
-        | Role
+        = t "role"
       th
-        | Remove
+        = t "remove"
     each collaborations as |collaboration|
       = collaboration-details collaboration=collaboration
 
@@ -35,4 +35,4 @@ button.is-primary.mp-open-collaboration-modal click="openCollaborationModal"
           .columns
             .column.margin-top
               = link-to 'authenticated.teams' class="is-primary" tagName="a"
-                | Add new team
+                = t "addNewTeam"

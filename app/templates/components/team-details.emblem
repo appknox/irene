@@ -3,9 +3,12 @@
     table.team-details-table
       tr
         th colspan="2"
-          = team.name
-          button.add-member click="openAddMemberModal"
-           = t "addMember"
+          .columns
+            .column
+              = team.name
+            .column.is-one-sixth
+              button.add-member click="openAddMemberModal"
+                = t "addMember"
       tr
         th
           = t "members"

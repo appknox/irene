@@ -1,6 +1,6 @@
 .card.team-overview-card.text-centre
   header.card-header.columns
-    .column
+    .column.hidden-overflow
       = team.name
     .column
       | #{team.totalMembers}

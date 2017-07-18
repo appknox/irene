@@ -362,6 +362,11 @@ button, .button
   @extend .hide-overflow
   max-width: 100px
 
+.hidden-overflow
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+
 .fixed-icon
   position: absolute
   left: 85%
@@ -756,7 +761,6 @@ li.is-critical:before
       background-color: #6B6B6B
       color: #fff
   button.add-member
-    left: 320px
     color: $white
     &:hover
       border-color: $white
