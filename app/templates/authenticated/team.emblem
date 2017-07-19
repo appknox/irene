@@ -1,0 +1,2 @@
+.team-details-container
+  = team-details team=model

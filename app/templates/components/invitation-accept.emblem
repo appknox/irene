@@ -3,7 +3,7 @@ h3.has-text-centered.signin-text
 = auth-assets
   .column.flex-center
     form.login-form submit="acceptInvite"
-      h5 {{invitation.user.username}} has invited you to {{invitation.project.packageName}} project
+      h5 {{invitation.user.username}} has invited you to {{invitation.team.name}} team
       p.control.has-icon.has-icon-left
         = input class="input" value=invitation.email readonly="true"
         = fa-icon "envelope" class="is-primary"

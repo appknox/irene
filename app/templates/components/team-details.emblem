@@ -1,0 +1,39 @@
+.columns
+  .column
+    table.team-details-table
+      tr
+        th colspan="2"
+          .columns
+            .column
+              = team.name
+            .column.is-one-sixth
+              button.add-member click="openAddMemberModal"
+                = t "addMember"
+      tr
+        th
+          = t "members"
+        th.capitalize-text
+          =  t "remove"
+      tr
+        td
+          .columns
+            .column
+              = team.owner.username
+            .column
+              .tag.role-tag.lowercase-text
+                = t "owner"
+        td
+          button.is-primary disabled="disabled"
+            = t "remove"
+      if team.hasMembers
+        each team.teamMembers as |member|
+          = team-member member=member team=team
+
+= modal-card isActive=showAddMemberModal title="Add Member"
+  .card-body
+    .card-wrapper
+      form
+        p.control
+          = input class="form-control input" placeholder=( t 'email') type="text" value=teamMember
+        button.margin-top10.is-primary click="addMember"
+         = t "invite"

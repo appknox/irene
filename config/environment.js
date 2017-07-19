@@ -139,7 +139,7 @@ module.exports = function(environment) {
       stripePaymentDevknox: 'stripe_payment_devknox',
       applyCoupon: 'apply_coupon',
       saveCredentials: 'projects/save_credentials',
-      collaboration: 'collaboration',
+      collaborations: 'collaborations',
       deleteCollaboration: 'collaboration/delete',
       invitation: 'invitation',
       signup: 'signup',
@@ -148,7 +148,9 @@ module.exports = function(environment) {
       deleteJIRAProject: 'delete_jira_project',
       apiScanOptions: 'api_scan_options',
       enableMFA: 'mfa/enable',
-      disableMFA: 'mfa/disable'
+      disableMFA: 'mfa/disable',
+      teams: 'teams',
+      members: 'members'
     },
   };
 

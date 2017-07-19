@@ -1,0 +1,3 @@
+.team-container
+  = create-team
+  = team-list teams=model

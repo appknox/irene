@@ -16,6 +16,8 @@ export default function() {
   this.get('/projects', 'project');
   this.get('/pricings', 'pricing');
   this.get('/pricings/:id', 'pricing');
+  this.get('/teams', 'team');
+  this.get('/teams/:id', 'team');
   this.get('/submissions/:id', 'submission');
   this.get('/submissions', 'submission');
   this.get('/files/:id', 'file');
@@ -101,4 +103,31 @@ export default function() {
     return {};
   });
 
+  this.post('/teams', () => {
+   return;
+  });
+
+  this.post('/collaborations', () => {
+   return;
+  });
+
+  this.post('/collaborations/:id', () => {
+   return;
+  });
+
+  this.post('/teams/:id', () => {
+   return;
+  });
+
+  this.delete('/teams/:id', () => {
+   return;
+  });
+
+  this.delete('/teams', () => {
+   return;
+  });
+
+  this.delete('/collaborations/:id', () => {
+   return;
+  });
 }

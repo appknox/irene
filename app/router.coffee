@@ -12,7 +12,9 @@ Router.map ->
   @route 'reset', path: '/reset/:uuid/:token'
   @route 'authenticated', path: '/', ->
     @route "index", path: '/'
-    @route "settings"
+    @route "teams", path: '/teams'
+    @route "team", path: '/team/:teamId'
+    @route "settings", path: '/settings'
     @route "billing", path: '/billing'
     @route 'payment', path:'/payment/:pricingId/:paymentDuration'
     @route 'invoice', path:'/invoice/:invoiceId'

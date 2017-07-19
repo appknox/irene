@@ -1,0 +1,26 @@
+.card.team-overview-card.text-centre
+  header.card-header
+    .column
+      = team.name
+  header.card-header.columns
+    .column
+      | #{team.totalMembers}
+    .column
+      | #{team.projectsCount} Projects
+  .card-content.text-centre
+    = link-to "authenticated.team" team.id
+      .columns
+        .column
+          h6
+            = t "owner"
+        .column
+          h6
+           = t "created"
+      .columns
+        .column
+          = team.owner.username
+        .column
+          = moment-from-now team.createdOn
+  footer.card-button.align-center
+    button click="deleteTeam" disabled=team.canDeleteTeam
+      = t "removeTeam"

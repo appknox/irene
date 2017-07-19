@@ -47,6 +47,9 @@ $FreestyleGuide-color--background: $background
 .margin-right-40
   margin-right: -40px
 
+.margin-right100
+  margin-right: 100px
+
 .margin-bottom20
   margin-bottom: 20px
 
@@ -361,6 +364,11 @@ button, .button
 .overflow-hidden
   @extend .hide-overflow
   max-width: 100px
+
+.hidden-overflow
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
 
 .fixed-icon
   position: absolute
@@ -724,7 +732,73 @@ li.is-critical:before
   h1
     padding-top: 30px
 
-// End //
+.team-container
+  padding: 30px 100px
+
+.team-details-container
+  padding: 30px 150px
+
+.team-overview-card
+  header:nth-child(1)
+    background-color: $blue
+    color: $white
+  .fa-times
+    color: #EF4836
+    cursor: pointer
+  .card-header
+    margin-left: 0px
+    margin-right: 0px
+    .column
+      box-shadow: 0 1px 2px rgba(107, 107, 107, 0.1)
+      margin-top: 10px
+      border-right: 1px solid rgba(107, 107, 107, 0.1)
+
+.team-details-table
+  .columns
+    .column
+      padding: 0px
+      margin-top: 15px
+  tr
+    th, td
+      width: 20%
+      text-align: center
+      border: 1px solid #b8b8b8
+      padding: 10px 0px
+    th
+      background-color: #6B6B6B
+      color: #fff
+  button.add-member
+    color: $white
+    &:hover
+      border-color: $white
+  .fa-times
+    color: #EF4836
+    cursor: pointer
+
+.team-card
+  min-height: 260px
+  display: flex
+  justify-content: space-between
+  flex-direction: column
+  h6
+    border-bottom: 1px solid $grey
+    width: 60px
+    margin-left: 35px
+    margin-top: -20px
+  select
+    width: 110px
+    margin-left: 15px
+    margin-top: 60px
+    font-size: 10px
+    height: 25px
+    line-height: 15px
+  .team-header
+    margin-top: 5px
+  .card-content
+    padding-top: 0px
+  button
+    margin-top: -40px
+
 
 .filter-list
   input
@@ -744,7 +818,33 @@ li.is-critical:before
 .new-input-box
   margin-top: -20px
 
+.role-tag
+  border: 1px solid $red
+  margin-left: 100px
+
+button.delete-button
+  border: none
+
 .bi-span
   ul
     list-style: disc
     margin-left: 20px
+
+.collaboration-container
+  padding: 10px 100px
+  .collaboration-table
+    th, td
+      width: 20%
+      text-align: center
+      border: 1px solid #b8b8b8
+      padding: 10px 0px
+    th
+      background-color: #6B6B6B
+      color: #fff
+  select
+    width: 60%
+  table
+    tr
+      th,td
+        vertical-align: middle
+        text-align: center

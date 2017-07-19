@@ -1,33 +1,34 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment';`
-`import ENUMS from 'irene/enums';`
-
-roles = ENUMS.COLLABORATION_ROLE.CHOICES.reverse()[1..]
 
 CollaborationComponentComponent = Ember.Component.extend
-  collaborationEmail: ""
   project: null
-  roles: roles
-  currentRole: roles[0].value
+  selectedTeam: 0
 
   collaborations: (->
     projectId = @get "project.id"
     @get("store").query "collaboration", projectId: projectId
   ).property "project.id", "realtime.CollaborationCounter"
 
+  teams: (->
+    @get("store").findAll "team"
+  ).property()
+
   actions:
 
-    roleChanged: (value) ->
-      @set "currentRole", parseInt value
+    teamChanged: (value) ->
+      @set "selectedTeam", parseInt @$('#team-preference').val()
 
     addCollaboration: ->
+      selectedTeam = @get "selectedTeam"
+      if selectedTeam is 0
+        return @get("notify").error "Please select any team"
       that = @
       data =
-        email: @get "collaborationEmail"
         projectId: @get "project.id"
-        role: @get "currentRole"
+        teamId: selectedTeam
       that = @
-      @get("ajax").post ENV.endpoints.collaboration, data:data
+      @get("ajax").post ENV.endpoints.collaborations, data:data
       .then (data)->
         that.send "closeModal"
         that.get("notify").success "Collaboration added!"

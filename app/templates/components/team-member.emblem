@@ -1,0 +1,10 @@
+td
+  .columns
+    .column
+      = member
+    .column
+      .tag.role-tag
+        = t "member"
+td
+  button.is-primary click="removeMember"
+    = t "remove"

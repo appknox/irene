@@ -1,24 +1,40 @@
-h5
-  = t "collaborations"
+.columns
+  .column
+    h5
+      = t "collaborations"
+  .column.content-right.margin-right100
+    button.is-primary.mp-open-collaboration-modal click="openCollaborationModal"
+      = t "addTeam"
 
-button.is-primary.mp-open-collaboration-modal click="openCollaborationModal"
-  = t "addCollaborations"
-
-.columns.margin-top
-  each collaborations as |collaboration|
-    .column.is-one-sixth
+.collaboration-container
+  table.collaboration-table.margin-top
+    tr
+      th
+        = t "teams"
+      th
+        = t "owner"
+      th
+        = t "role"
+      th.capitalize-text
+        = t "remove"
+    each collaborations as |collaboration|
       = collaboration-details collaboration=collaboration
 
-= modal-card isActive=showCollaborationModal title="Add Collaboration to project"
+= modal-card isActive=showCollaborationModal title="Add Team to project"
   .card-body
     .card-wrapper
       form
         p.control
-          = input class="form-control input mp-collaboration-email" placeholder="Email" type="email" value=collaborationEmail
-        p.control
-          select.input.mp-collaboration-role onchange={action "roleChanged" value="target.value"}
-            each roles as |role|
-              option value=role.value
-                = role.key
+          select.input onchange={action "teamChanged" value="target.value"} id="team-preference"
+            option value=0
+              = t "selectTeam"
+            each teams as |team|
+              option value=team.id
+                = team.name
         .card-button
-          button.mp-add-collaboration click="addCollaboration" Add Collaboration
+          button.mp-add-collaboration click="addCollaboration"
+            = t "addTeam"
+          .columns
+            .column.margin-top
+              = link-to 'authenticated.teams' class="is-primary" tagName="a"
+                = t "addNewTeam"
