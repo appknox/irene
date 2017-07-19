@@ -27,7 +27,8 @@ TeamDetailsComponent = Ember.Component.extend
         identification: teamMember
       @get("ajax").post url, data: data
       .then (data)->
-        that.get("notify").success "Team member will be added shorty"
+        that.store.pushPayload data
+        that.get("notify").success "Team member added successfully"
         that.set "teamMember", ""
         that.set "showAddMemberModal", false
       .catch (error) ->
