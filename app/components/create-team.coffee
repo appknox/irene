@@ -19,7 +19,6 @@ CreateTeamComponent = Ember.Component.extend
       that = @
       data =
         name: teamName
-      team = @get "team"
       @get("ajax").post ENV.endpoints.teams, data: data
       .then (data)->
         that.store.pushPayload data
