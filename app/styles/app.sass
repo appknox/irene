@@ -119,6 +119,10 @@ $FreestyleGuide-color--background: $background
 input
   display: block
 
+.top-nav
+  height: 50px
+  background-color: #f0f0f0
+
 .title-tag
   background-color: #5bc0de
   border-radius: 0px
@@ -553,10 +557,6 @@ b.bold
   background-color: #80C081
 
 .is-progress
-  .details
-    border: 1px solid #808080
-    background-color: #808080
-    color: #fff
   .tag
     border: 1px solid #808080
 
@@ -675,7 +675,7 @@ canvas
 
 .cvss-box
   cursor: pointer
-  width: 80px
+  width: 85px
   .tooltiptext
     box-shadow: 2px 2px 5px 2px #888888
     position: relative
@@ -704,26 +704,6 @@ canvas
   vertical-align: middle
   margin-right: 1px
   margin-top: -3px
-
-// Update this in bohemia //
-
-.tag.is-critical
-  background-color: #000
-  color: #fff
-
-.message.is-critical
-  .message-header
-    background-color: #000
-    color: #fff
-  .message-body
-    border-color: rgba(0, 0, 0, 0.4)
-
-li.is-critical:before
-  content: "• "
-  color: #000
-
-#hiddencolorholder .is-critical
-  color: #000
 
 .cvss-box
   border-radius: 5px
@@ -848,3 +828,110 @@ button.delete-button
       th,td
         vertical-align: middle
         text-align: center
+
+
+// Update this in bohemia //
+
+.message.is-critical
+  .message-header
+    background-color: #000
+    color: #fff
+  .message-body
+    border-color: rgba(0, 0, 0, 0.4)
+
+.tag.is-critical
+  background-color: $red
+  color: #fff
+
+.tag.is-danger
+  background-color: #FF7F50
+  color: #fff
+
+.cvss-box
+  background-color: $white!important
+
+.cvss-box.is-critical
+  @extend .cvss-box
+  color: $red!important
+  border: 2px solid $red
+  box-shadow: 0 0 3px $red
+
+.cvss-box.is-danger
+  @extend .cvss-box
+  color: #FF7F50!important
+  border: 2px solid #FF7F50
+  box-shadow: 0 0 3px #FF7F50
+
+.cvss-box.is-warning
+  @extend .cvss-box
+  color: $yellow!important
+  border: 2px solid $yellow
+  box-shadow: 0 0 3px $yellow
+
+.cvss-box.is-info
+  @extend .cvss-box
+  color: $blue!important
+  border: 2px solid $blue
+  box-shadow: 0 0 3px $blue
+
+li.is-critical:before
+  content: "• "
+  color: $red
+
+li.is-danger:before
+  color: #FF7F50!important
+
+#hiddencolorholder .is-critical
+  color: $red
+
+#hiddencolorholder .is-danger
+  color: #FF7F50
+
+.vuln-header
+  .tag
+    background-color: $grey
+    color: #fff
+
+.vuln-body
+  border-width: 2px
+  border-radius: 0px 0px 5px 5px!important
+
+.mp-minus
+  border-radius: 5px 5px 0px 0px!important
+
+.message
+  .message-header.vuln-header
+    background-color: #fff!important
+    border-width: 2px 2px 2px 15px
+    border-style: solid
+    color: black
+    border-radius: 5px
+
+.message.is-critical
+  @extend .message
+  .message-header.vuln-header
+    border-color: $red
+  .message-body
+    border-color: $red
+
+.message.is-danger
+  @extend .message
+  .message-header.vuln-header
+    border-color: #FF7F50
+  .message-body
+    border-color: #FF7F50
+
+.message.is-warning
+  @extend .message
+  .message-header.vuln-header
+    border-color: $yellow
+
+.message.is-info
+  @extend .message
+  .message-header.vuln-header
+    border-color: $blue
+
+.message.is-success
+  @extend .message
+  .message-header.vuln-header
+    border-color: $green

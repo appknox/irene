@@ -1,4 +1,4 @@
-.message-header.hideOrShow class=progressClass click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus
+.message-header.vuln-header.hideOrShow class=progressClass click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus
     .columns
       .column
         h5 = analysis.vulnerability.name
@@ -12,7 +12,7 @@
             i.fa.fa-plus
 
 if showVulnerability
-  .message-body
+  .message-body.vuln-body
     .columns
       .column
         if analysis.isScanning
