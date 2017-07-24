@@ -6,7 +6,7 @@ button.is-primary.margin-top.mp-namespace-modal click="toggleNamspaceModal"
   = t "addNamespace"
 
 = modal-card isActive=showNamespaceModal title=(t "addNamespace")
-  = input class="control input mp-namespaces" value=namespace
+  = input class="control input mp-namespaces" value=namespace autofocus="autofocus"
   .modal-footer
     button.mp-add-namespace click="addNamespace"
       = t "addNamespace"
