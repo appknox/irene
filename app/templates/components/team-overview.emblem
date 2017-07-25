@@ -7,7 +7,7 @@
       | #{team.totalMembers}
     .column
       | #{team.projectsCount} Projects
-  .card-content.text-centre
+  .card-content
     = link-to "authenticated.team" team.id
       .columns
         .column
@@ -22,5 +22,11 @@
         .column
           = moment-from-now team.createdOn
   footer.card-button.align-center
-    button click="deleteTeam" disabled=team.isDefaultTeam
+    button click="openRemoveTeamPrompt" disabled=team.isDefaultTeam
       = t "removeTeam"
+
+= prompt-box isActive=showRemoveTeamPrompt title="Are you sure you want to remove the team?" description="Please enter the team name which you want to remove"
+  .card-body
+    .card-wrapper
+      button.is-primary.margin-top click="deleteTeam"
+        = t "removeTeam"

@@ -7,11 +7,17 @@ TeamOverviewComponent = Ember.Component.extend
   classNames: ["column" , "is-one-third"]
 
   actions:
+    openRemoveTeamPrompt: ->
+      @set "showRemoveTeamPrompt", true
+
+    closeRemoveTeamPrompt: ->
+      @set "showRemoveTeamPrompt", false
+
     deleteTeam: ->
       team = @get "team"
+      promptedItem = @$('.deleted-item').val()
       deletedTeam = team.get("name")
       teamName = deletedTeam.toLowerCase()
-      promptedItem = prompt("Enter the team name which you want to delete ", "").toLowerCase()
       if promptedItem isnt teamName
         return @get("notify").error "Enter the right team name to delete it"
       that = @
