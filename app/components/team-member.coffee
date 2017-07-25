@@ -7,12 +7,16 @@ TeamMemberComponent = Ember.Component.extend
 
   actions:
 
+    openRemoveMemberPrompt: ->
+      @set "showRemoveMemberPrompt", true
+
+    closeRemoveMemberPrompt: ->
+      @set "showRemoveMemberPrompt", false
+
     removeMember: ->
       teamMember = @get "member"
-      deletedMember = prompt "Enter the username which you want to delete ", ""
-      if deletedMember is null
-        return
-      else if deletedMember isnt teamMember
+      promptedItem = @$('.deleted-item').val()
+      if promptedItem isnt teamMember
         return @get("notify").error "Enter the right username to delete it"
       teamId = @get "team.id"
       url = [ENV.endpoints.teams, teamId, ENV.endpoints.members, teamMember].join '/'
