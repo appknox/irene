@@ -11,6 +11,21 @@ CollaborationDetailsComponent = Ember.Component.extend
   currentRole: roles[0].value
   tagName: ["tr"]
 
+  promptCallback: (promptedItem) ->
+    collaboration = @get "collaboration"
+    team = @get "collaboration.team.name"
+    teamName = team.toLowerCase()
+    promptedTeam = promptedItem.toLowerCase()
+    if promptedTeam isnt teamName
+      return @get("notify").error "Enter the right username to delete it"
+    that = @
+    collaboration.destroyRecord()
+    .then (data)->
+      that.get("notify").success "Team #{team} is removed from the collaboration"
+    .catch (error) ->
+      for error in error.errors
+        that.get("notify").error error.detail?.message
+
   actions:
 
     changeRole: (value) ->
@@ -28,16 +43,11 @@ CollaborationDetailsComponent = Ember.Component.extend
         for error in error.errors
           that.get("notify").error error.detail?.message
 
-    removeCollaboration: ->
-      collaboration = @get "collaboration"
-      return if !confirm "Do you want to remove?"
-      that = @
-      collaboration.destroyRecord()
-      .then (data)->
-        that.get("notify").success "Collaboration will be removed shortly"
-      .catch (error) ->
-        for error in error.errors
-          that.get("notify").error error.detail?.message
+    openAddCollaborationPrompt: ->
+      @set "showAddCollaborationPrompt", true
+
+    closeAddCollaborationPrompt: ->
+      @set "showAddCollaborationPrompt", false
 
 
 `export default CollaborationDetailsComponent`
