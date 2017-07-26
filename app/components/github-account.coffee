@@ -3,17 +3,26 @@
 
 GithubAccountComponent = Ember.Component.extend
 
+  confirmCallback: (value) ->
+    that = @
+    @get("ajax").post ENV.endpoints.revokeGitHub
+    .then (data) ->
+      that.get("notify").success "Your GitHub authorization will be revoked in a moment"
+      that.send "closeRevokeGithubConfirmBox"
+      setTimeout ->
+        window.location.reload() # FIXME: Hackish Way
+      ,
+        3 * 1000
+    .catch (error) ->
+      for error in error.errors
+        that.get("notify").error error.detail?.message
+
   actions:
 
-    revokeGitHub: ->
-      return if !confirm "Do you want to revoke GitHub Authorization ?"
-      that = @
-      @get("ajax").post ENV.endpoints.revokeGitHub
-      .then (data) ->
-        that.get("notify").success "Your GitHub authorization will be revoked in a moment"
-        window.location.reload() # FIXME: Hackish Way
-      .catch (error) ->
-        for error in error.errors
-          that.get("notify").error error.detail?.message
+    openRevokeGithubConfirmBox: ->
+      @set "showRevokeGithubConfirmBox", true
+
+    closeRevokeGithubConfirmBox: ->
+      @set "showRevokeGithubConfirmBox", false
 
 `export default GithubAccountComponent`
