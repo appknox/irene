@@ -3,7 +3,7 @@
 
 GithubAccountComponent = Ember.Component.extend
 
-  confirmCallback: (value) ->
+  confirmCallback: ->
     that = @
     @get("ajax").post ENV.endpoints.revokeGitHub
     .then (data) ->

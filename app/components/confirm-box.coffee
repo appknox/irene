@@ -6,7 +6,6 @@ ConfirmBoxComponent = Ember.Component.extend
   classNames: ["modal"]
   classNameBindings: ["isActive:is-active"]
   layoutName: "components/confirm-box"
-  inputValue: ""
   delegate: null
 
   actions:
@@ -15,8 +14,7 @@ ConfirmBoxComponent = Ember.Component.extend
       @set "isActive", false
 
     sendCallback: ->
-      inputValue = @get "inputValue"
       delegate = @get "delegate"
-      delegate.confirmCallback(inputValue)
+      delegate.confirmCallback()
 
 `export default ConfirmBoxComponent`
