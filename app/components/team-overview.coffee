@@ -6,7 +6,7 @@ TeamOverviewComponent = Ember.Component.extend
   team: null
   classNames: ["column" , "is-one-third"]
 
-  deleteTeam: (promptedItem) ->
+  promptCallback: (promptedItem) ->
     team = @get "team"
     deletedTeam = team.get("name")
     teamName = deletedTeam.toLowerCase()

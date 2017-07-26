@@ -14,9 +14,9 @@ PromptBoxComponent = Ember.Component.extend
     clearModal: ->
       @set "isActive", false
 
-    deleteTeam: ->
-      teamName = @get "inputValue"
+    sendCallback: ->
+      inputValue = @get "inputValue"
       delegate = @get "delegate"
-      delegate.deleteTeam(teamName)
+      delegate.promptCallback(inputValue)
 
 `export default PromptBoxComponent`
