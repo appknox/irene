@@ -9,8 +9,4 @@ td
   button.is-primary click="openRemoveMemberPrompt"
     = t "remove"
 
-= prompt-box isActive=showRemoveMemberPrompt title="Are you sure you want to remove the team member?" description="Please enter the team member who you want to remove"
-  .card-body
-    .card-wrapper
-      button.is-primary.margin-top click="removeMember"
-        = t "remove"
+= prompt-box isActive=showRemoveMemberPrompt title="Are you sure you want to remove this team member?" description="Please enter the name of team member who you want to remove" button="remove" delegate=this
