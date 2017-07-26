@@ -15,7 +15,7 @@ TeamMemberComponent = Ember.Component.extend
     @get("ajax").delete url
     .then (data)->
       that.store.pushPayload data
-      that.get("notify").success "Team member #{teamMember} will be deleted shortly"
+      that.get("notify").success "Team member #{teamMember} is removed from the team"
     .catch (error) ->
       that.get("notify").error error.payload.message
       for error in error.errors
