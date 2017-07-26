@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{team-overview}}"""
 
-  assert.equal @$().text().trim(), 'ProjectsOwnerCreatedRemove Team'
+  assert.equal @$().text().trim(), 'ProjectsOwnerCreatedDelete TeamAre you sure you want to delete this team?Please enter the team name which you want to deleteDelete Team'
