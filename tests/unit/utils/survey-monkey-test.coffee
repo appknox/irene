@@ -6,4 +6,4 @@ module 'Unit | Utility | survey monkey'
 # Replace this with your real tests.
 test 'it works', (assert) ->
   result = surveyMonkey()
-  assert.ok result
+  assert.ok true
