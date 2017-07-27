@@ -45,6 +45,15 @@ User = DS.Model.extend
     false
   ).property "mfaMethod"
 
+  totalProjects: (->
+    projectCount = @get "projectCount"
+    if projectCount is 0
+      return "no project"
+    else if projectCount is 1
+      return "#{projectCount} project"
+    "#{projectCount} projects"
+  ).property "projectCount"
+
   ifBillingIsNotHidden: (->
     billingHidden = @get 'billingHidden'
     !billingHidden

@@ -9,9 +9,7 @@
           = model.username
         .columns.margin-top20
           .column.card.align-middle
-            | #{model.projectCount}
-            | &nbsp;
-            = t "projects"
+            | #{model.totalProjects}
 
           if model.limitedScans
             .column.card.align-middle
