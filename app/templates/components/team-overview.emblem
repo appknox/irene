@@ -6,7 +6,7 @@
     .column
       | #{team.totalMembers}
     .column
-      | #{team.projectsCount} Projects
+      | #{team.totalProjects}
   .card-content
     = link-to "authenticated.team" team.id
       .columns
