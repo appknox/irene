@@ -7,6 +7,22 @@ GithubProjectComponent = Ember.Component.extend
   project: null
   githubRepos: ["Loading..."]
 
+  confirmCallback: ->
+    projectId = @get "project.id"
+    deleteGithub = [ENV.endpoints.deleteGHRepo, projectId].join '/'
+    that = @
+    @get("ajax").delete deleteGithub
+    .then (data) ->
+      that.get("notify").success "Project has been removed"
+      that.send "closeDeleteGHConfirmBox"
+      setTimeout ->
+        window.location.reload() # FIXME: Hackish Way
+      ,
+        3 * 1000
+    .catch (error) ->
+      for error in error.errors
+        that.get("notify").error error.detail?.message
+
   tFetchGitHubRepoFailed: t("fetchGitHubRepoFailed")
   tRepoIntegrated: t("repoIntegrated")
   repoNotIntegrated: t("repoNotIntegrated")
@@ -50,21 +66,10 @@ GithubProjectComponent = Ember.Component.extend
         for error in error.errors
           that.get("notify").error error.detail?.message
 
-    deleteGHProject: ->
-      return if !confirm "Do you want to remove GitHub Project ?"
-      projectId = @get "project.id"
-      deleteGithub = [ENV.endpoints.deleteGHRepo, projectId].join '/'
-      that = @
-      @get("ajax").delete deleteGithub
-      .then (data) ->
-        that.get("notify").success "Project has been removed"
-        setTimeout ->
-          window.location.reload() # FIXME: Hackish Way
-        ,
-          3 * 1000
-      .catch (error) ->
-        for error in error.errors
-          that.get("notify").error error.detail?.message
+    openDeleteGHConfirmBox: ->
+      @set "showDeleteGHConfirmBox", true
 
+    closeDeleteGHConfirmBox: ->
+      @set "showDeleteGHConfirmBox", false
 
 `export default GithubProjectComponent`
