@@ -50,6 +50,10 @@ $FreestyleGuide-color--background: $background
 .margin-right100
   margin-right: 100px
 
+.margin-top-bottom
+  margin-top: 10px
+  margin-bottom: 10px
+
 .margin-bottom20
   margin-bottom: 20px
 
@@ -654,6 +658,7 @@ canvas
   &:hover
     .tooltiptext
       visibility: visible
+      transition-delay: 0s
   .tooltiptext
     text-transform: capitalize
     visibility: hidden
@@ -667,12 +672,19 @@ canvas
     right: 10px
     z-index: 1
     font-size: 12px
+    transition-delay: 1s
+    .read-more
+      padding-top: 10px
+      padding-bottom: 5px
+      a
+        padding: 2px 7px 2px 7px
+        background: rgba(255,255,255, 0.9)
+        border-radius: 3px
   .tooltip-collapse
     width: 200px
     top: 92px
     left: 10px
     white-space: normal
-
 .cvss-box
   cursor: pointer
   width: 85px
