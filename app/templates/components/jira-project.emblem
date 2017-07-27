@@ -5,7 +5,7 @@ if project.jiraProject
     = t "integratedJIRA"
     code
       | &nbsp; #{project.jiraProject}
-    .tag.is-danger.margin-top3.remove click="openDeleteJIRAConfirmBox"
+    .tag.delete-tag.margin-top3.remove click="openDeleteJIRAConfirmBox"
       i.fa.risk-icons.fa-trash-o
         | &nbsp; #{t "remove"}
 
