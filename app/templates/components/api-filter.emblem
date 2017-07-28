@@ -6,7 +6,7 @@
     each project.apiUrlFilterItems as |item|
       div.filter-list.margin-top
         = input class="form-control input" type="text" placeholder="Enter API endpoint" value=item
-        i.fa.risk-icons.fa-trash-o.removeUrl click=" 'removeUrl' item"
+        i.fa.risk-icons.fa-trash-o.removeUrl click="openRemoveURLConfirmBox"
   .columns.margin-top
     .column
       form.url-filters
@@ -17,3 +17,5 @@
           .column
             button.is-primary.mp-add-filter click="addApiUrlFilter"
               | Save Filter
+
+= confirm-box isActive=showRemoveURLConfirmBox title="Are you sure you want to remove this from url filters?" delegate=this

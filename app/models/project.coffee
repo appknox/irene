@@ -45,11 +45,8 @@ Project = DS.Model.extend BaseModelMixin,
     apiUrlFilters = @get "apiUrlFilters"
     @set "apiUrlFilters", apiUrlFilters.concat(",")
 
-  removeUrl: ->
-    urlFilter = event.target.previousElementSibling.value
-    if !Ember.isEmpty urlFilter
-      return if !confirm "Do you want to remove #{urlFilter} from url filters?"
-    event.target.parentElement.remove()
+  removeUrl: (deletedURL) ->
+    deletedURL.remove()
 
   tNoPreference: t("noPreference")
 
