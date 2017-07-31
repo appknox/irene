@@ -21,7 +21,7 @@
     "clipboard": "^1.7.1"
   },
   "resolutions": {
-    "bohemia": "^0.8.2",
+    "bohemia": "^0.8.7",
     "tether": "^1.0.1"
   }
 }
