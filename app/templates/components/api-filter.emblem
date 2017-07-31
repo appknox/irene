@@ -18,4 +18,4 @@
             button.is-primary.mp-add-filter click="addApiUrlFilter"
               | Save Filter
 
-= confirm-box isActive=showRemoveURLConfirmBox title="Are you sure you want to remove this from url filters?" delegate=this
+= confirm-box isActive=showRemoveURLConfirmBox title="Are you sure you want to remove from url filters?" delegate=this

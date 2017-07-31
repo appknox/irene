@@ -6,6 +6,9 @@ $FreestyleGuide-color--foreground: $text
 $FreestyleGuide-color--background: $background
 @import 'ember-freestyle'
 
+$risk-names: (warning: ($warning, $warning-invert), danger: ($danger, $danger-invert), critical: ($critical, $critical-invert)) !default
+
+
 /* Margin Defines*/
 
 .margin-top30
@@ -685,18 +688,6 @@ canvas
     top: 92px
     left: 10px
     white-space: normal
-.cvss-box
-  cursor: pointer
-  width: 85px
-  .tooltiptext
-    box-shadow: 2px 2px 5px 2px #888888
-    position: relative
-    left: 100px
-    top: -140px
-    width: 200px
-    li
-      padding: 5px
-      list-style-type: none
 
 .mfa
   .fa-check
@@ -841,63 +832,29 @@ button.delete-button
         vertical-align: middle
         text-align: center
 
-
-// Update this in bohemia //
-
-.message.is-critical
-  .message-header
-    background-color: #000
-    color: #fff
-  .message-body
-    border-color: rgba(0, 0, 0, 0.4)
-
-.tag.is-critical, .tag.delete-tag
+.tag.delete-tag
   background-color: $red
   color: #fff
 
-.tag.is-danger
-  background-color: #FF8C00
-  color: #fff
-
 .cvss-box
+  cursor: pointer
+  width: 85px
   background-color: $white!important
+  .tooltiptext
+    box-shadow: 2px 2px 5px 2px #888888
+    position: relative
+    left: 100px
+    top: -140px
+    width: 200px
+    li
+      padding: 5px
+      list-style-type: none
 
-.cvss-box.is-critical
-  @extend .cvss-box
-  color: $red!important
-  border: 2px solid $red
-  box-shadow: 0 0 3px $red
-
-.cvss-box.is-danger
-  @extend .cvss-box
-  color: #FF8C00!important
-  border: 2px solid #FF8C00
-  box-shadow: 0 0 3px #FF8C00
-
-.cvss-box.is-warning
-  @extend .cvss-box
-  color: $yellow!important
-  border: 2px solid $yellow
-  box-shadow: 0 0 3px $yellow
-
-.cvss-box.is-info
-  @extend .cvss-box
-  color: $blue!important
-  border: 2px solid $blue
-  box-shadow: 0 0 3px $blue
-
-li.is-critical:before
-  content: "• "
-  color: $red
-
-li.is-danger:before
-  color: #FF8C00!important
-
-#hiddencolorholder .is-critical
-  color: $red
-
-#hiddencolorholder .is-danger
-  color: #FF8C00
+  @each $name, $pair in $risk-names
+    &.is-#{$name}
+      color: nth($pair, 1)
+      border: 2px solid nth($pair, 1)
+      box-shadow: 0 0 3px nth($pair, 1)
 
 .vuln-header
   .tag
@@ -910,40 +867,3 @@ li.is-danger:before
 
 .mp-minus
   border-radius: 5px 5px 0px 0px!important
-
-.message
-  .message-header.vuln-header
-    background-color: #fff!important
-    border-width: 2px 2px 2px 15px
-    border-style: solid
-    color: black
-    border-radius: 5px
-
-.message.is-critical
-  @extend .message
-  .message-header.vuln-header
-    border-color: $red
-  .message-body
-    border-color: $red
-
-.message.is-danger
-  @extend .message
-  .message-header.vuln-header
-    border-color: #FF8C00
-  .message-body
-    border-color: #FF8C00
-
-.message.is-warning
-  @extend .message
-  .message-header.vuln-header
-    border-color: $yellow
-
-.message.is-info
-  @extend .message
-  .message-header.vuln-header
-    border-color: $blue
-
-.message.is-success
-  @extend .message
-  .message-header.vuln-header
-    border-color: $green
