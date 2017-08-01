@@ -4,7 +4,7 @@ h5
 if user.hasJiraToken
   h6
     | Intergations completed
-  button.is-primary.mp-jira-revoke click="revokeJira"
+  button.is-primary.mp-jira-revoke click="openRevokeJIRAConfirmBox"
     = t "revokeJira"
 else
   form
@@ -21,3 +21,5 @@ else
 
     button.is-primary click="integrateJira" class="mp-jira-integrate"
       = t "integrateJIRA"
+
+= confirm-box isActive=showRevokeJIRAConfirmBox title="Are you sure you want to revoke JIRA Intergation?" delegate=this

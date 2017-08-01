@@ -31,7 +31,7 @@ CollaborationComponentComponent = Ember.Component.extend
       @get("ajax").post ENV.endpoints.collaborations, data:data
       .then (data)->
         that.send "closeModal"
-        that.get("notify").success "Collaboration will be added shortly!"
+        that.get("notify").success "Collaboration is added!"
       .catch (error) ->
         that.get("notify").error error.payload.message, ENV.notifications
         for error in error.errors

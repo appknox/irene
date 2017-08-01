@@ -1,5 +1,6 @@
 `import Ember from 'ember'`
 `import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';`
+`import surveyMonkey from 'irene/utils/survey-monkey';`
 `import ENV from 'irene/config/environment';`
 `import ENUMS from 'irene/enums'`
 `import config from 'irene/config/environment';`
@@ -91,5 +92,8 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
   actions:
     invalidateSession: ->
       @get('session').invalidate()
+
+    giveFeeback: ->
+      surveyMonkey()
 
 `export default AuthenticatedRoute`

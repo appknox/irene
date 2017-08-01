@@ -20,10 +20,19 @@ Team = DS.Model.extend BaseModeMixin,
 
   totalMembers: (->
     membersCount = @get "membersCount"
-    if membersCount in [0,1]
+    if membersCount is 1
       return "#{membersCount} member"
     "#{membersCount} members"
   ).property "membersCount"
+
+  totalProjects: (->
+    projectsCount = @get "projectsCount"
+    if projectsCount is 0
+      return "no project"
+    else if projectsCount is 1
+      return "#{projectsCount} project"
+    "#{projectsCount} projects"
+  ).property "projectsCount"
 
   teamMembers: (->
     members = @get "members"

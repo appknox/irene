@@ -10,13 +10,18 @@ isRegexFailed = (url) ->
 
 ApiFilterComponent = Ember.Component.extend
   project: null
+
+  deletedURL: ""
+
+  confirmCallback: ->
+    deletedURL = @get "deletedURL"
+    @project.removeUrl(deletedURL)
+    @send "closeRemoveURLConfirmBox"
+
   actions:
 
     addNewUrl: ->
       @project.addNewAPIURL()
-
-    removeUrl: (item) ->
-      @project.removeUrl()
 
     addApiUrlFilter: (callback) ->
       allFilters = @$('.input')
@@ -48,6 +53,14 @@ ApiFilterComponent = Ember.Component.extend
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message
+
+    openRemoveURLConfirmBox: ->
+      @set "deletedURL", event.target.parentElement
+      @set "showRemoveURLConfirmBox", true
+
+    closeRemoveURLConfirmBox: ->
+      @set "showRemoveURLConfirmBox", false
+
 
 
 

@@ -15,4 +15,4 @@ test 'it renders', (assert) ->
 
 
 
-  assert.equal @$().text().trim(), "JIRANo PreferenceLoading..."
+  assert.equal @$().text().trim(), "JIRANo PreferenceLoading...Are you sure you want to remove JIRA Project?CancelOk"

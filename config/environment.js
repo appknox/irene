@@ -48,7 +48,7 @@ module.exports = function(environment) {
         lagThreshold: 3
       },
       ajax: {
-        trackMethods: ['GET', 'POST', 'DELETE', 'OPTIONS', 'PUT'],
+        trackMethods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
         trackWebSockets: false,
         ignoreURLs: ['api.mixpanel.com']
       }

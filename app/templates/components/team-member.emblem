@@ -6,5 +6,7 @@ td
       .tag.role-tag
         = t "member"
 td
-  button.is-primary click="removeMember"
+  button.is-primary click="openRemoveMemberPrompt"
     = t "remove"
+
+= prompt-box isActive=showRemoveMemberPrompt title="Are you sure you want to remove this team member?" description="Please enter the name of team member who you want to remove" button="remove" delegate=this

@@ -4,9 +4,11 @@ h5
 if user.hasGithubToken
   h6
     | Intergations completed
-  button.is-primary.mp-github-revoke click="revokeGitHub"
+  button.is-primary.mp-github-revoke click="openRevokeGithubConfirmBox"
     = t "revokeGithub"
 else
   a.button.is-primary.mp-github-integrate target="_blank" href=user.githubRedirectUrl
     = t "integrateGithub"
   = yield
+
+= confirm-box isActive=showRevokeGithubConfirmBox title="Are you sure you want to revoke Github Intergation?" delegate=this

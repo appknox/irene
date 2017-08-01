@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{team-member}}"""
 
-  assert.equal @$().text().trim(), 'memberremove'
+  assert.equal @$().text().trim(), 'memberremoveAre you sure you want to remove this team member?Please enter the name of team member who you want to removeremove'

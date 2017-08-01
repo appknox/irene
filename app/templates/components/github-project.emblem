@@ -5,7 +5,7 @@ if project.githubRepo
     = t "integratedGithub"
     code
       | &nbsp; #{project.githubRepo}
-    .tag.is-danger.margin-top3.remove click="deleteGHProject"
+    .tag.delete-tag.margin-top3.remove click="openDeleteGHConfirmBox"
       i.fa.risk-icons.fa-trash-o
         | &nbsp; #{t "remove"}
 
@@ -18,3 +18,5 @@ else
         each githubRepos as |repo|
           option value=repo
             = repo
+
+= confirm-box isActive=showDeleteGHConfirmBox title="Are you sure you want to remove Github Project?" delegate=this

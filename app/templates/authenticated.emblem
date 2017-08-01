@@ -9,9 +9,7 @@
           = model.username
         .columns.margin-top20
           .column.card.align-middle
-            | #{model.projectCount}
-            | &nbsp;
-            = t "projects"
+            | #{model.totalProjects}
 
           if model.limitedScans
             .column.card.align-middle
@@ -23,6 +21,10 @@
               .column.card.align-middle
                 | #{ t model.expiryText}
                 | #{moment-from-now model.getExpiryDate}
+        / .feedback-button
+        /   a click="giveFeeback"
+        /     i.fa.fa-comments
+        /     | &nbsp; Feedback
 
       ul.menu-list.text-center
         li

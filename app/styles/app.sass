@@ -6,6 +6,9 @@ $FreestyleGuide-color--foreground: $text
 $FreestyleGuide-color--background: $background
 @import 'ember-freestyle'
 
+$risk-names: (warning: ($warning, $warning-invert), danger: ($danger, $danger-invert), critical: ($critical, $critical-invert)) !default
+
+
 /* Margin Defines*/
 
 .margin-top30
@@ -49,6 +52,10 @@ $FreestyleGuide-color--background: $background
 
 .margin-right100
   margin-right: 100px
+
+.margin-top-bottom
+  margin-top: 10px
+  margin-bottom: 10px
 
 .margin-bottom20
   margin-bottom: 20px
@@ -118,6 +125,10 @@ $FreestyleGuide-color--background: $background
 
 input
   display: block
+
+.top-nav
+  height: 50px
+  background-color: #f0f0f0
 
 .title-tag
   background-color: #5bc0de
@@ -553,10 +564,6 @@ b.bold
   background-color: #80C081
 
 .is-progress
-  .details
-    border: 1px solid #808080
-    background-color: #808080
-    color: #fff
   .tag
     border: 1px solid #808080
 
@@ -654,6 +661,7 @@ canvas
   &:hover
     .tooltiptext
       visibility: visible
+      transition-delay: 0s
   .tooltiptext
     text-transform: capitalize
     visibility: hidden
@@ -667,24 +675,19 @@ canvas
     right: 10px
     z-index: 1
     font-size: 12px
+    transition-delay: 1s
+    .read-more
+      padding-top: 10px
+      padding-bottom: 5px
+      a
+        padding: 2px 7px 2px 7px
+        background: rgba(255,255,255, 0.9)
+        border-radius: 3px
   .tooltip-collapse
     width: 200px
     top: 92px
     left: 10px
     white-space: normal
-
-.cvss-box
-  cursor: pointer
-  width: 80px
-  .tooltiptext
-    box-shadow: 2px 2px 5px 2px #888888
-    position: relative
-    left: 100px
-    top: -140px
-    width: 200px
-    li
-      padding: 5px
-      list-style-type: none
 
 .mfa
   .fa-check
@@ -704,26 +707,6 @@ canvas
   vertical-align: middle
   margin-right: 1px
   margin-top: -3px
-
-// Update this in bohemia //
-
-.tag.is-critical
-  background-color: #000
-  color: #fff
-
-.message.is-critical
-  .message-header
-    background-color: #000
-    color: #fff
-  .message-body
-    border-color: rgba(0, 0, 0, 0.4)
-
-li.is-critical:before
-  content: "• "
-  color: #000
-
-#hiddencolorholder .is-critical
-  color: #000
 
 .cvss-box
   border-radius: 5px
@@ -848,3 +831,43 @@ button.delete-button
       th,td
         vertical-align: middle
         text-align: center
+
+.tag.delete-tag
+  background-color: $red
+  color: #fff
+
+.cvss-box
+  cursor: pointer
+  width: 85px
+  background-color: $white!important
+  .tooltiptext
+    box-shadow: 2px 2px 5px 2px #888888
+    position: relative
+    left: 100px
+    top: -140px
+    width: 200px
+    li
+      padding: 5px
+      list-style-type: none
+
+  @each $name, $pair in $risk-names
+    &.is-#{$name}
+      color: nth($pair, 1)
+      border: 2px solid nth($pair, 1)
+      box-shadow: 0 0 3px nth($pair, 1)
+
+.vuln-header
+  .tag
+    background-color: $grey
+    color: #fff
+
+.vuln-body
+  border-width: 2px
+  border-radius: 0px 0px 5px 5px!important
+
+.mp-minus
+  border-radius: 5px 5px 0px 0px!important
+
+.feedback-button
+  margin-top: 20px
+  text-align: center
