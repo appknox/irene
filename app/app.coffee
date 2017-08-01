@@ -2,7 +2,6 @@
 `import Resolver from 'irene/resolver';`
 `import config from 'irene/config/environment';`
 `import installIntercom from 'irene/utils/install-intercom';`
-`import surveyMonkey from 'irene/utils/survey-monkey';`
 `import loadInitializers from 'ember-load-initializers';`
 `import ENUMS from 'irene/enums'`
 
@@ -17,7 +16,6 @@ else
   config.product = ENUMS.PRODUCT.DEVKNOX
 
 installIntercom()
-surveyMonkey()
 
 Ember.MODEL_FACTORY_INJECTIONS = true
 
