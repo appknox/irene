@@ -49,6 +49,7 @@ export default {
   "deviceShuttingDown": "Device is shutting down",
   "deviceIsReady": "The Device is ready to be connected",
   "deviceNotFound": "Hard time for us to find the device",
+  "deviceSelected": "You have successfully selected the device",
   "deviceType": "Device Type",
   "disabled": "Disabled",
   "disableMFA": "Disable MFA",

@@ -49,6 +49,7 @@ export default {
   "deviceShuttingDown": "デバイスをシャットダウンしています",
   "deviceIsReady": "デバイスは接続準備ができています",
   "deviceNotFound": "デバイスが見つかりませんでした",
+  "deviceSelected": "あなたは正常にデバイスを選択しました",
   "deviceType": "デバイスタイプ",
   "disabled": "使用禁止",
   "disableMFA": "MFAを無効にします",

@@ -1,14 +1,19 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums';`
 `import ENV from 'irene/config/environment';`
+`import { translationMacro as t } from 'ember-i18n'`
 
 ProjectPreferencesComponent = Ember.Component.extend
 
   project: null
   selectVersion: 0
+  i18n: Ember.inject.service()
   store: Ember.inject.service()
   selectedDeviceType: ENUMS.DEVICE_TYPE.NO_PREFERENCE
   deviceTypes: ENUMS.DEVICE_TYPE.CHOICES[1...-1]
+
+  tDeviceSelected: t("deviceSelected")
+  tPleaseTryAgain: t("pleaseTryAgain")
 
   devices: (->
     store = @get "store"
@@ -46,8 +51,12 @@ ProjectPreferencesComponent = Ember.Component.extend
       @set "selectVersion", @$('#project-version-preference').val()
 
     versionSelected: ->
-      selectedDeviceType = @get "selectedDeviceType"
+
       selectVersion = @get "selectVersion"
+      tDeviceSelected = @get "tDeviceSelected"
+      tPleaseTryAgain = @get "tPleaseTryAgain"
+      selectedDeviceType = @get "selectedDeviceType"
+
       projectId = @get "project.id"
       devicePreferences = [ENV.endpoints.devicePreferences, projectId].join '/'
       that = @
@@ -56,9 +65,9 @@ ProjectPreferencesComponent = Ember.Component.extend
         platformVersion: selectVersion
       @get("ajax").post devicePreferences, data: data
       .then (data) ->
-        that.get("notify").success "You have sucessfully selected the device"
+        that.get("notify").success tDeviceSelected
       .catch (error) ->
-        that.get("notify").error "failed"
+        that.get("notify").error tPleaseTryAgain
         if Ember.isEmpty error?.errors
           return
         for error in error.errors
