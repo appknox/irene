@@ -42,7 +42,7 @@ ApiFilterComponent = Ember.Component.extend
         url = filter.value
         for url in [url]
           return callback(that.get("notify").error tEmptyURL) if !hasApiFilter url
-          return callback(that.get("notify").error url + tInvalidURL) if !isRegexFailed url
+          return callback(that.get("notify").error "#{url} #{tInvalidURL}") if !isRegexFailed url
         urls = that.get "urls"
         if Ember.isEmpty urls
           urls = url

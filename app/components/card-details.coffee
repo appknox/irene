@@ -2,8 +2,12 @@
 `import ENUMS from 'irene/enums'`
 `import ENV from 'irene/config/environment';`
 `import {isForbiddenError} from 'ember-ajax/errors';`
+`import { translationMacro as t } from 'ember-i18n'`
 
 CardDetailsComponent = Ember.Component.extend
+
+  i18n: Ember.inject.service()
+  stripe: Ember.inject.service()
 
   paymentDuration: ENUMS.PAYMENT_DURATION.MONTHLY
 
@@ -18,7 +22,19 @@ CardDetailsComponent = Ember.Component.extend
 
   isPaymentButtonDisabled: false
 
-  stripe: Ember.inject.service()
+  tPay: t("pay")
+  tUSD: t("usd")
+  tYear: t("year")
+  tMonth: t("month")
+  tCheckCoupon: t("checkCoupon")
+  tErrorOccured: t("errorOccured")
+  tPriceUpdated: t("priceUpdated")
+  tEnterValidCVC: t("enterValidCVC")
+  tPaymentSuccessful: t("paymentSuccessful")
+  tPaymentSuccessful: t("paymentSuccessful")
+  tStripeNotAvailable: t("stripeNotAvailable")
+  tEnterValidExpiryDate: t("enterValidExpiryDate")
+  tEnterValidCardNumber: t("enterValidCardNumber")
 
   pricing: (->
     pricingId = @get "pricingId"
@@ -50,22 +66,29 @@ CardDetailsComponent = Ember.Component.extend
   ).property "totalPrice", "couponApplied", "couponDiscount"
 
   totalPricePay: (->
+    tPay = @get "tPay"
+    tUSD = @get "tUSD"
+    tMonth = @get "tMonth"
+    tYear = @get "tYear"
     duration = @get "paymentDuration"
     if duration is ENUMS.PAYMENT_DURATION.MONTHLY
-      durationText  = "1 Month"
+      durationText  = "1 #{tMonth}"
     if duration is ENUMS.PAYMENT_DURATION.QUATERLY
-      durationText  = "3 Months"
+      durationText  = "3 #{tMonth}"
     if duration is ENUMS.PAYMENT_DURATION.HALFYEARLY
-      durationText  = "6 Months"
+      durationText  = "6 #{tMonth}"
     if duration is ENUMS.PAYMENT_DURATION.YEARLY
-      durationText  = "1 Year"
+      durationText  = "1 #{tYear}"
     totalPriceAfterDiscount = @get "totalPriceAfterDiscount"
-    "Pay $#{totalPriceAfterDiscount} USD for #{durationText}"
+    "#{tPay} $#{totalPriceAfterDiscount} #{tUSD} #{durationText}"
   ).property "totalPriceAfterDiscount", "paymentDuration"
 
   actions:
 
     applyCoupon: ->
+      tPriceUpdated = @get "tPriceUpdated"
+      tCheckCoupon = @get "tCheckCoupon"
+      tErrorOccured = @get "tErrorOccured"
       that = @
       data =
         pricingId: that.get "pricing.id"
@@ -74,19 +97,25 @@ CardDetailsComponent = Ember.Component.extend
       .then (result) ->
         that.set "couponApplied", true
         that.set "couponDiscount", result.discount
-        that.get("notify").success "Price Updated"
+        that.get("notify").success tPriceUpdated
       .catch (error)->
         that.set "couponApplied", false
         if isForbiddenError error
-          that.get("notify").error "Please check your coupon"
+          that.get("notify").error tCheckCoupon
         else
-          that.get("notify").error "Some Unknown error occured"
+          that.get("notify").error tErrorOccured
         for error in error.errors
           that.get("notify").error error.detail?.message
 
     makePaymentStripe: ->
+      tEnterValidCVC = @get "tEnterValidCVC"
+      tPaymentSuccessful = @get "tPaymentSuccessful"
+      tStripeNotAvailable = @get "tStripeNotAvailable"
+      tEnterValidCardNumber = @get "tEnterValidCardNumber"
+      tEnterValidExpiryDate = @get "tEnterValidExpiryDate"
+
       if typeof Stripe is "undefined"
-        return alert "Stripe not available!"
+        return alert tStripeNotAvailable
       cardNumber =  @get "cardNumber"
       cardCvc = @get "cardCvc"
       cardName = @get("cardName").trim()
@@ -94,11 +123,11 @@ CardDetailsComponent = Ember.Component.extend
       [exp_month, exp_year] = @get("cardExpiry").split "/"
       [exp_month, exp_month] =  [exp_month.trim(), exp_month.trim()]
       if !Stripe.card.validateCardNumber cardNumber
-        return @get("notify").error "Please enter a valid card number"
+        return @get("notify").error tEnterValidCardNumber
       if !Stripe.card.validateCVC cardCvc
-        return @get("notify").error "Please enter a valid CVC"
+        return @get("notify").error tEnterValidCVC
       if !Stripe.card.validateExpiry exp_month, exp_year
-        return @get("notify").error "Please enter a valid Expiry date"
+        return @get("notify").error tEnterValidExpiryDate
 
 
       data =
@@ -119,7 +148,7 @@ CardDetailsComponent = Ember.Component.extend
       that.set 'isPaymentButtonDisabled', true
       @get("ajax").post paymentUrl, data: data
       .then (result) ->
-        that.get("notify").success "Sucessfully processed your payment. Thank You."
+        that.get("notify").success tPaymentSuccessful
         that.set 'isPaymentButtonDisabled', false
         setTimeout ->
           window.location.href = "/billing"
