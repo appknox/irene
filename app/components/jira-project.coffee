@@ -8,13 +8,19 @@ JiraProjectComponent = Ember.Component.extend
   jiraProjects: ["Loading..."]
 
 
+  tRepoIntegrated: t("repoIntegrated")
+  tProjectRemoved: t("projectRemoved")
+  tRepoNotIntegrated: t("repoNotIntegrated")
+  tFetchJIRAProjectFailed: t("fetchProjectFailed")
+
   confirmCallback: ->
+    tProjectRemoved = @get "tProjectRemoved"
     that = @
     projectId = @get "project.id"
     deleteJIRA = [ENV.endpoints.deleteJIRAProject, projectId].join '/'
     @get("ajax").delete deleteJIRA
     .then (data) ->
-      that.get("notify").success "Project has been removed"
+      that.get("notify").success tProjectRemoved
       that.send "closeDeleteJIRAConfirmBox"
       setTimeout ->
         window.location.reload() # FIXME: Hackish Way
@@ -23,10 +29,6 @@ JiraProjectComponent = Ember.Component.extend
     .catch (error) ->
       for error in error.errors
         that.get("notify").error error.detail?.message
-
-  tFetchJIRAProjectFailed: t("fetchProjectFailed")
-  tRepoIntegrated: t("repoIntegrated")
-  tRepoNotIntegrated: t("repoNotIntegrated")
 
   fetchJiraProjects: (->
     if ENV.environment is 'test'

@@ -95,11 +95,11 @@ export default function() {
     return {};
   });
 
-  this.post('/delete_github_repo/:id', () => {
+  this.delete('/delete_github_repo/:id', () => {
     return {};
   });
 
-  this.post('/delete_jira_project/:id', () => {
+  this.delete('/delete_jira_project/:id', () => {
     return {};
   });
 
