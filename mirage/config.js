@@ -63,6 +63,10 @@ export default function() {
     return {};
   });
 
+  this.post('/set_github/:id', () => {
+    return {};
+  });
+
   this.post('/lang', () => {
     return {};
   });

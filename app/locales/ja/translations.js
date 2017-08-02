@@ -162,6 +162,7 @@ export default {
   "pricing": "価格",
   "projects": "プロジェクト",
   "projectName": "プロジェクト名",
+  "projectRemoved": "プロジェクトが削除されました",
   "quarterly": "3カ月",
   "recover": "パスワードを復元",
   "recoverPassword": "パスワードの復元",

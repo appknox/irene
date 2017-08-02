@@ -163,6 +163,7 @@ export default {
   "pricing": "Pricing",
   "projects": "Projects",
   "projectName": "Project Name",
+  "projectRemoved": "Project has been removed",
   "quarterly": "Quarterly",
   "recover": "Recover",
   "recoverPassword": "Recover your password",

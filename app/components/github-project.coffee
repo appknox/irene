@@ -7,13 +7,18 @@ GithubProjectComponent = Ember.Component.extend
   project: null
   githubRepos: ["Loading..."]
 
+  tProjectRemoved: t("projectRemoved")
+  tRepoIntegrated: t("repoIntegrated")
+  tFetchGitHubRepoFailed: t("fetchGitHubRepoFailed")
+
   confirmCallback: ->
+    tProjectRemoved = @get "tProjectRemoved"
     projectId = @get "project.id"
     deleteGithub = [ENV.endpoints.deleteGHRepo, projectId].join '/'
     that = @
     @get("ajax").delete deleteGithub
     .then (data) ->
-      that.get("notify").success "Project has been removed"
+      that.get("notify").success tProjectRemoved
       that.send "closeDeleteGHConfirmBox"
       setTimeout ->
         window.location.reload() # FIXME: Hackish Way
@@ -23,9 +28,7 @@ GithubProjectComponent = Ember.Component.extend
       for error in error.errors
         that.get("notify").error error.detail?.message
 
-  tFetchGitHubRepoFailed: t("fetchGitHubRepoFailed")
-  tRepoIntegrated: t("repoIntegrated")
-  repoNotIntegrated: t("repoNotIntegrated")
+
 
   fetchGithubRepos: (->
     if ENV.environment is 'test'
@@ -49,7 +52,6 @@ GithubProjectComponent = Ember.Component.extend
     selectRepo: ->
       repo = @$('select').val()
       tRepoIntegrated = @get "tRepoIntegrated"
-      repoNotIntegrated = @get "repoNotIntegrated"
       projectId = @get "project.id"
       setGithub = [ENV.endpoints.setGithub, projectId].join '/'
       that = @
@@ -57,7 +59,7 @@ GithubProjectComponent = Ember.Component.extend
         repo: repo
       @get("ajax").post setGithub, data: data
       .then (data) ->
-        that.get("notify").success "GITHUB has been integrated"
+        that.get("notify").success tRepoIntegrated
         setTimeout ->
           window.location.reload() # FIXME: Hackish Way
         ,
