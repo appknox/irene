@@ -129,6 +129,10 @@ export default function() {
 
   this.post('/teams/:id', () => {
    return;
+ });
+
+  this.post('/teams/:id/members', () => {
+   return;
   });
 
   this.delete('/teams/:id', () => {
