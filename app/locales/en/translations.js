@@ -172,6 +172,7 @@ export default {
   "remove": "remove",
   "reportIsGettingGenerated": "Please wait while the report is getting generated",
   "reportPassword": "Report Password",
+  "requestToAddNamespace": "We have received your request to add a new namespace",
   "reset": "Reset",
   "resetPassword": "Reset your password",
   "unchanged": "Unchanged",

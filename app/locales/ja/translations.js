@@ -171,6 +171,7 @@ export default {
   "remove": "除去",
   "reportIsGettingGenerated": "レポートが生成されている間お待ちください",
   "reportPassword": "レポートのパスワード",
+  "requestToAddNamespace": "新しい名前空間を追加するようリクエストされました",
   "reset": "パスワードを再設定する",
   "resetPassword": "パスワードをリセット",
   "unchanged": "変わらない",
