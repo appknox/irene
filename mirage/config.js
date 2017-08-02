@@ -35,6 +35,10 @@ export default function() {
     return {};
   });
 
+  this.get('/manual/:id', () => {
+    return {};
+  });
+
   this.get('/jira_projects', () => {
     return {};
   });
