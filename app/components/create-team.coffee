@@ -1,12 +1,18 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment'`
+`import { translationMacro as t } from 'ember-i18n'`
 
 isEmpty = (inputValue)->
   return Ember.isEmpty inputValue
 
 CreateTeamComponent = Ember.Component.extend
 
+  i18n: Ember.inject.service()
+
   teamName: ""
+
+  tTeamCreated: t("teamCreated")
+  tEnterTeamName: t("enterTeamName")
 
   actions:
     openTeamModal: ->
@@ -14,15 +20,18 @@ CreateTeamComponent = Ember.Component.extend
 
     createTeam: ->
       teamName = @get "teamName"
+      tTeamCreated = @get "tTeamCreated"
+      tEnterTeamName = @get "tEnterTeamName"
+
       for inputValue in [teamName]
-        return @get("notify").error "Please enter the team name" if isEmpty inputValue
+        return @get("notify").error tEnterTeamName if isEmpty inputValue
       that = @
       data =
         name: teamName
       @get("ajax").post ENV.endpoints.teams, data: data
       .then (data)->
         that.store.pushPayload data
-        that.get("notify").success "Team Created Successfully"
+        that.get("notify").success tTeamCreated
         that.set "teamName", ""
         that.set "showTeamModal", false
       .catch (error) ->
