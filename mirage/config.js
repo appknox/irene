@@ -135,6 +135,10 @@ export default function() {
    return;
   });
 
+  this.delete('/teams/:id/members/Berniece', () => {
+   return;
+  });
+
   this.delete('/teams/:id', () => {
    return;
   });
