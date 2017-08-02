@@ -220,6 +220,7 @@ export default {
   "team": "Team",
   "teams": "Teams",
   "teamCreated": "Team Created Successfully",
+  "teamDeleted": "has been deleted successfully",
   "teamName": "Team Name",
   "teamMember": "Team member",
   "teamMemberAdded": "Team member added",

@@ -219,6 +219,7 @@ export default {
   "team": "チーム",
   "teams": "チーム",
   "teamCreated": "チームが正常に作成されました",
+  "teamDeleted": "削除されました",
   "teamName": "チームの名前",
   "teamMember": "チームメンバー",
   "teamMemberAdded": "チームメンバーが追加されました",
