@@ -203,6 +203,7 @@ export default {
   "signin": "サインイン",
   "sortBy": "並び替え",
   "started": "開始",
+  "startingScan": "スキャンの開始",
   "static": "静的",
   "staticScan": "スタティックスキャン",
   "status": "ステータス",

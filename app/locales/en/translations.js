@@ -204,6 +204,7 @@ export default {
   "signin": "Sign In",
   "sortBy": "Sort By",
   "started": "Started",
+  "startingScan": "Starting the scan",
   "static": "Static",
   "staticScan": "Static Scan",
   "status": "Status",
