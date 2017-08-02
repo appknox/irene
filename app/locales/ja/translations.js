@@ -84,6 +84,7 @@ export default {
   "general": "一般的な",
   "ghPageConfigure": "GitHub 統合を構成するページ",
   "githubIntegration": "GitHub 統合",
+  "githubWillBeRevoked": "GitHub の承認は一瞬で取り消されます",
   "gotoHome": "ホームに戻る",
   "greet": "Security fanatics at your service",
   "halfYearly": "半年",

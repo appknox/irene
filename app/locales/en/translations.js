@@ -84,6 +84,7 @@ export default {
   "general": "General",
   "ghPageConfigure": "page to configure GitHub integration",
   "githubIntegration": "GitHub Integration",
+  "githubWillBeRevoked": "Your GitHub authorization will be revoked in a moment",
   "gotoHome": "Go Back To Home",
   "greet": "Security fanatics at your service",
   "halfYearly": "Half Yearly",
