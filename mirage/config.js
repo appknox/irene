@@ -91,6 +91,10 @@ export default function() {
     return {};
   });
 
+  this.post('/unauthorize_jira', () => {
+    return {};
+  });
+
   this.post('/delete_github_repo/:id', () => {
     return {};
   });
