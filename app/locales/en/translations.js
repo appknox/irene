@@ -137,6 +137,7 @@ export default {
   "newPassword": "New Password",
   "newScan": "New Scan",
   "next": "Next",
+  "no": "No",
   "noDeviceAvailable": "No Device Available",
   "none": "Passed",
   "noOfProjects": "No of projects",
@@ -246,6 +247,7 @@ export default {
   "worsened": "Worsened",
   "year": "Year",
   "yearly": "Yearly",
+  "yes": "Yes",
   "confirmBox": {
     "removeURL": "Are you sure you want to remove from url filters?",
     "removeProject": "Are you sure you want to remove Github Project?",
@@ -281,6 +283,20 @@ export default {
       "title": "Disable Multi Factor Authentication",
       "description": "If you turn off Multi Factor Authentication, your account will only be protected by your password.",
       "enterOTP": "To confirm, please enter the OTP"
+    },
+    "collaboration": {
+      "title": "Add Team to project"
+    },
+    "addMember": {
+      "title": "Add Member"
+    },
+    "apiScan": {
+      "title": "Do you also want to run API Scan?",
+      "description": "We will record all network traffic made by the app and run the API scan for web vulnerabilities. API scan currently does not support apps that employ SSL pinning.",
+      "extraDescription": " API scan performs multiple automated tests that may result in <b class='bold'>denial of service</b> or <b class='bold'>loss of data</b>. Do not select YES if the app is configured to use a <b class='bold'>production API server</b> or if the app employs <b class='bold'>SSL pinning</b>.",
+      "apiList": "Here is the list of api filters you have set",
+      "noAPIFilter": "You do not have any API Filter set, click on settings below and set the API filter",
+      "editFilters": "Edit filters here: "
     }
   }
 };

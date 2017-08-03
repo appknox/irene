@@ -20,7 +20,7 @@
     each collaborations as |collaboration|
       = collaboration-details collaboration=collaboration
 
-= modal-card isActive=showCollaborationModal title="Add Team to project"
+= modal-card isActive=showCollaborationModal title=(t "modalCard.collaboration.title")
   .card-body
     .card-wrapper
       form

@@ -136,6 +136,7 @@ export default {
   "newPassword": "新しいパスワード",
   "newScan": "新規診断 ",
   "next": "次",
+  "no": "いいえ",
   "noDeviceAvailable": "使用可能なデバイスがありません",
   "none": "合格",
   "noOfProjects": "プロジェクトなし",
@@ -245,6 +246,7 @@ export default {
   "worsened": "悪化した",
   "year": "年",
   "yearly": "1年",
+  "yes": "はい",
   "confirmBox": {
     "removeURL": "URLフィルタから削除してもよろしいですか？",
     "removeProject": "Github Projectを削除してもよろしいですか？",
@@ -280,6 +282,20 @@ export default {
       "title": "マルチファクタ認証を無効にする",
       "description": "マルチファクタ認証を無効にすると、アカウントはパスワードでのみ保護されます。",
       "enterOTP": "確認するには、OTPを入力してください"
+    },
+    "collaboration": {
+      "title": "チームをプロジェクトに追加する"
+    },
+    "addMember": {
+      "title": "メンバーを追加"
+    },
+    "apiScan": {
+      "title": "APIスキャンも実行しますか？",
+      "description": "アプリで作成したすべてのネットワークトラフィックを記録します そして Web脆弱性のためのAPIスキャンを実行する. 現在のところ、APIスキャンではSSLピンを使用しているアプリはサポートされていません.",
+      "extraDescription": " APIスキャンは複数の自動テストを実行します <b class='bold'>サービス拒否</b> または <b class='bold'>データの損失</b>. アプリを使用するように設定されている場合は、[はい]を選択しないでください <b class='bold'>プロダクションAPIサーバ</b> またはアプリが採用している場合 <b class='bold'>SSLピンニング</b>.",
+      "apiList": "あなたが設定したAPIフィルタのリストは以下の通りです",
+      "noAPIFilter": "APIフィルタセットがありません。下記の設定をクリックし、APIフィルタを設定してください",
+      "editFilters": "ここでフィルタを編集："
     }
   }
 };
