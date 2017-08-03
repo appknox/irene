@@ -26,6 +26,7 @@ export default {
   "collaborations": "Collaborations",
   "compare": "Compare",
   "confirmPassword": "Confirm Password",
+  "continue": "Continue",
   "copy": "Copy",
   "created": "Created",
   "createdOn": "created on",
@@ -264,6 +265,22 @@ export default {
     "deleteTeamPrompt": {
       "title": "Are you sure you want to delete this team?",
       "description": "Please enter the team name which you want to delete"
+    }
+  },
+  "modalCard": {
+    "enableMFA": {
+      "title": "Enable Multi Factor Authentication",
+      "description": "Multi Factor Authentication adds an extra layer of security to your account. In addition to your username and password, you’ll need to enter a code generated on your phone.",
+      "setUp": "Set up using an app",
+      "downloadAppOTP": "Download one of these apps to get the OTP:",
+      "extraDescription": "Multi Factor Authentication adds another layer of security to your account so if your password is compromised or stolen, only you can log in.",
+      "scanBarcode": "Scan this barcode with your app",
+      "enterCode": "After scanning the barcode image, the app will display a six-digit code that you can enter below"
+    },
+    "disableMFA": {
+      "title": "Disable Multi Factor Authentication",
+      "description": "If you turn off Multi Factor Authentication, your account will only be protected by your password.",
+      "enterOTP": "To confirm, please enter the OTP"
     }
   }
 };

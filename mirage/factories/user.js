@@ -23,7 +23,7 @@ export default Factory.extend({
   },
 
   lang(){
-    return faker.random.arrayElement(["ja"]);
+    return faker.random.arrayElement(["en"]);
   },
 
   namespaces(){
