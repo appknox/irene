@@ -23,7 +23,7 @@
       button.is-primary.margin-top click="showBarCode"
        = t "modalCard.enableMFA.setUp"
       p.otp-apps.margin-top
-       = t "modalCard.enableMFA.setUp"
+       = t "modalCard.enableMFA.downloadAppOTP"
        ul
         li
           | For Android, iOS, and Blackberry: <a href="https://support.google.com/accounts/answer/1066447?hl=en" target="_blank">Google Authenticator</a>
