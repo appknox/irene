@@ -165,6 +165,7 @@ export default {
   "previous": "前",
   "priceUpdated": "価格の更新",
   "pricing": "価格",
+  "project": "プロジェクト",
   "projects": "プロジェクト",
   "projectName": "プロジェクト名",
   "projectRemoved": "プロジェクトが削除されました",

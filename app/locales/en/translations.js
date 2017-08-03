@@ -166,6 +166,7 @@ export default {
   "previous": "Previous",
   "priceUpdated": "Price Updated",
   "pricing": "Pricing",
+  "project": "project",
   "projects": "Projects",
   "projectName": "Project Name",
   "projectRemoved": "Project has been removed",

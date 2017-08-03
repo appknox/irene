@@ -4,6 +4,7 @@ export default Factory.extend({
 
   name: faker.company.companyName,
   membersCount: faker.random.number,
+  projectsCount: faker.random.number,
   members(){
     var desc = [];
     for (var i = 0; i < 5; i++) {
