@@ -244,4 +244,11 @@ export default {
   "worsened": "悪化した",
   "year": "年",
   "yearly": "1年",
+  "confirmBox": {
+    "removeURL": "URLフィルタから削除してもよろしいですか？",
+    "removeProject": "Github Projectを削除してもよろしいですか？",
+    "removeJIRA": "JIRA Projectを削除してもよろしいですか？",
+    "revokeGithub": "Github Integrationを取り消してもよろしいですか？",
+    "revokeJira": "JIRAインテグレーションを取り消してもよろしいですか？"
+  }
 };

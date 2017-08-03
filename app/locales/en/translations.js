@@ -249,7 +249,7 @@ export default {
     "removeURL": "Are you sure you want to remove from url filters?",
     "removeProject": "Are you sure you want to remove Github Project?",
     "removeJIRA": "Are you sure you want to remove JIRA Project?",
-    "revokeGithub": "Are you sure you want to revoke Github Intergation?",
-    "revokeJira": "Are you sure you want to revoke JIRA Intergation?"
+    "revokeGithub": "Are you sure you want to revoke Github Integration?",
+    "revokeJira": "Are you sure you want to revoke JIRA Integration?"
   }
 };
