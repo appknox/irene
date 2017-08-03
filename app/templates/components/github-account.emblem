@@ -11,4 +11,4 @@ else
     = t "integrateGithub"
   = yield
 
-= confirm-box isActive=showRevokeGithubConfirmBox title="Are you sure you want to revoke Github Intergation?" delegate=this
+= confirm-box isActive=showRevokeGithubConfirmBox title=(t 'confirmBox.revokeGithub') delegate=this

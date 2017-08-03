@@ -1,16 +1,21 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums';`
 `import ENV from 'irene/config/environment';`
+`import { translationMacro as t } from 'ember-i18n'`
 
 vncHeight = 512
 vncWidth = 385
 
 VncViewerComponent = Ember.Component.extend
+  i18n: Ember.inject.service()
   onboard: Ember.inject.service()
+
   rfb: null
   file: null
   isPoppedOut: false
   classNameBindings: ["isPoppedOut:modal", "isPoppedOut:is-active"]
+
+  tStartingScan: t("startingScan")
 
   vncPopText: (->
     if @get "isPoppedOut"
@@ -87,6 +92,7 @@ VncViewerComponent = Ember.Component.extend
       @send "isApiScanEnabled"
 
     isApiScanEnabled: ->
+      tStartingScan = @get "tStartingScan"
       isApiScanEnabled = @get "isApiScanEnabled"
       project_id = @get "file.project.id"
       apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, project_id].join '/'
@@ -97,7 +103,7 @@ VncViewerComponent = Ember.Component.extend
       .then (data)->
         that.send "closeModal"
         that.send "dynamicScan"
-        that.get("notify").success "Starting the scan"
+        that.get("notify").success tStartingScan
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message

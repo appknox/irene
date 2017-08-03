@@ -35,6 +35,10 @@ export default function() {
     return {};
   });
 
+  this.get('/manual/:id', () => {
+    return {};
+  });
+
   this.get('/jira_projects', () => {
     return {};
   });
@@ -56,6 +60,10 @@ export default function() {
   });
 
   this.post('/logout', () => {
+    return {};
+  });
+
+  this.post('/set_github/:id', () => {
     return {};
   });
 
@@ -83,11 +91,15 @@ export default function() {
     return {};
   });
 
-  this.post('/delete_github_repo/:id', () => {
+  this.post('/unauthorize_jira', () => {
     return {};
   });
 
-  this.post('/delete_jira_project/:id', () => {
+  this.delete('/delete_github_repo/:id', () => {
+    return {};
+  });
+
+  this.delete('/delete_jira_project/:id', () => {
     return {};
   });
 
@@ -116,6 +128,14 @@ export default function() {
   });
 
   this.post('/teams/:id', () => {
+   return;
+ });
+
+  this.post('/teams/:id/members', () => {
+   return;
+  });
+
+  this.delete('/teams/:id/members/Berniece', () => {
    return;
   });
 

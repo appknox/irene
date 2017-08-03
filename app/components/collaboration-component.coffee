@@ -1,9 +1,16 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment';`
+`import { translationMacro as t } from 'ember-i18n'`
 
 CollaborationComponentComponent = Ember.Component.extend
+
+  i18n: Ember.inject.service()
+
   project: null
   selectedTeam: 0
+
+  tSelectAnyTeam: t("selectAnyTeam")
+  tCollaborationAdded: t("collaborationAdded")
 
   collaborations: (->
     projectId = @get "project.id"
@@ -21,8 +28,11 @@ CollaborationComponentComponent = Ember.Component.extend
 
     addCollaboration: ->
       selectedTeam = @get "selectedTeam"
+      tSelectAnyTeam = @get "tSelectAnyTeam"
+      tCollaborationAdded = @get "tCollaborationAdded"
+
       if selectedTeam is 0
-        return @get("notify").error "Please select any team"
+        return @get("notify").error tSelectAnyTeam
       that = @
       data =
         projectId: @get "project.id"
@@ -31,7 +41,7 @@ CollaborationComponentComponent = Ember.Component.extend
       @get("ajax").post ENV.endpoints.collaborations, data:data
       .then (data)->
         that.send "closeModal"
-        that.get("notify").success "Collaboration is added!"
+        that.get("notify").success tCollaborationAdded
       .catch (error) ->
         that.get("notify").error error.payload.message, ENV.notifications
         for error in error.errors

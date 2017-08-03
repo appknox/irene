@@ -6,7 +6,6 @@
       i.fa.fa-check.margin-left
     button.is-primary.margin-top20 click="openMFADisableModal"
       = t "disableMFA"
-
   else
     h5
       = t "status"
@@ -15,53 +14,53 @@
     button.is-primary.margin-top20 click="openMFAEnableModal"
       = t "enableMFA"
 
-= modal-card isActive=showMFAEnableModal title="Enable Multi Factor Authentication"
+= modal-card isActive=showMFAEnableModal title=(t "modalCard.enableMFA.title")
 
   .card-body.warning-modal class=showMFAIntro:show:hide
     .card-wrapper
       p
-        | Multi Factor Authentication adds an extra layer of security to your account. In addition to your username and password, you’ll need to enter a code generated on your phone.
+       = t "modalCard.enableMFA.description"
       button.is-primary.margin-top click="showBarCode"
-        | Set up using an app
+       = t "modalCard.enableMFA.setUp"
       p.otp-apps.margin-top
-       | Download one of these apps to get the OTP:
+       = t "modalCard.enableMFA.downloadAppOTP"
        ul
         li
           | For Android, iOS, and Blackberry: <a href="https://support.google.com/accounts/answer/1066447?hl=en" target="_blank">Google Authenticator</a>
         li
-          | For Android and iOS: <a href="https://guide.duo.com/third-party-accounts" target="_blank">Duo Mobile</a>
+          | For Android & iOS: <a href="https://guide.duo.com/third-party-accounts" target="_blank">Duo Mobile</a>
         li
           | For Windows Phone: <a href="https://www.microsoft.com/en-us/store/p/authenticator/9wzdncrfj3rj" target="_blank">Authenticator</a>
   .card-body.warning-modal class=showBarCode:show:hide
     .card-wrapper
       p
-        |  Multi Factor Authentication adds another layer of security to your account so if your password is compromised or stolen, only you can log in.
+        = t "modalCard.enableMFA.extraDescription"
       h3.margin-top
-        | Scan this barcode with your app
+        = t "modalCard.enableMFA.scanBarcode"
       canvas.qr-code
       p.margin-top
-        | After scanning the barcode image, the app will display a six-digit code that you can enter below
+        = t "modalCard.enableMFA.enterCode"
       form.margin-top
         p.control
           = input class="form-control input" type="text" value=enableMFAOTP
         p.control
          button.is-primary click="enableMFA"
-          | Continue
+          = t "continue"
          button.is-primary.margin-left click="closeMFAEnableModal"
-          | Cancel
+          = t "cancel"
 
-= modal-card isActive=showMFADisableModal title="Disable Multi Factor Authentication"
+= modal-card isActive=showMFADisableModal title=(t "modalCard.disableMFA.title")
   .card-body.warning-modal
     .card-wrapper
       p
-        | If you turn off Multi Factor Authentication, your account will only be protected by your password.
+        = t "modalCard.disableMFA.description"
       p.margin-top
-        | To confirm, please enter the OTP
+        = t "modalCard.disableMFA.enterOTP"
       form.margin-top
         p.control
           = input class="form-control input" type="text" value=disableMFAOTP
         p.control
          button.is-primary click="disableMFA"
-          | Continue
+          = t "continue"
          button.is-primary.margin-left click="closeMFADisableModal"
-          | Cancel
+          = t "cancel"

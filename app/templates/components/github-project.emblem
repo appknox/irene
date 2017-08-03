@@ -19,4 +19,4 @@ else
           option value=repo
             = repo
 
-= confirm-box isActive=showDeleteGHConfirmBox title="Are you sure you want to remove Github Project?" delegate=this
+= confirm-box isActive=showDeleteGHConfirmBox title=(t 'confirmBox.removeProject') delegate=this

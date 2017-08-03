@@ -21,35 +21,35 @@ if isPoppedOut
       button.is-primary.is-fullwidth.mp-toggle-pop click="togglePop"
         = vncPopText
 
-= modal-card isActive=showAPIScanModal title="Do you also want to run API Scan?"
+= modal-card isActive=showAPIScanModal title=(t "modalCard.apiScan.title")
 
   .card-body.warning-modal
     .card-wrapper
       .api-scanning
         h6
-          | We will record all network traffic made by the app and run the API scan for web vulnerabilities. API scan currently does not support apps that employ SSL pinning.
+          = t "modalCard.apiScan.description"
         div.warning-band
           = fa-icon 'exclamation-triangle'
-          | &nbsp; API scan performs multiple automated tests that may result in <b class="bold">denial of service</b> or <b class="bold">loss of data</b>. Do not select YES if the app is configured to use a <b class="bold">production API server</b> or if the app employs <b class="bold">SSL pinning</b>.
+          = t "modalCard.apiScan.extraDescription"
         div.margin-top
           if file.project.hasAPIURLFilter
-            | Here is the list of api filters you have set
+            = t "modalCard.apiScan.apiList"
             .columns.margin-top
               each file.project.apiUrlFilterItems as |item|
                 .column.is-one-third.flex-center
                   = item
           else
-            | You do not have any API Filter set, click on settings below and set the API filter
+            = t "modalCard.apiScan.noAPIFilter"
         form
           p.control
           .columns
             .column.is-one-third.edit-filter
-              | Edit filters here: &nbsp;
+              = t "modalCard.apiScan.editFilters"
               = link-to 'authenticated.project.settings' file.project.id class="mp-detail-project-settings modal-button is-primary" tagName="a"
                 = t "settings"
             .column.is-one-sixth
               button.modal-button.is-primary.mp-run-api-scan click="runAPIScan" disabled=file.project.isRunDisabled
-                | Yes
+                =  t "yes"
             .column
               button.modal-button.is-primary.mp-dont-run-api-scan click="doNotRunAPIScan"
-                | No
+                = t "no"
