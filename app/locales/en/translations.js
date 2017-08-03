@@ -244,5 +244,12 @@ export default {
   "welcome": "Welcome ",
   "worsened": "Worsened",
   "year": "Year",
-  "yearly": "Yearly"
+  "yearly": "Yearly",
+  "confirmBox": {
+    "removeURL": "Are you sure you want to remove from url filters?",
+    "removeProject": "Are you sure you want to remove Github Project?",
+    "removeJIRA": "Are you sure you want to remove JIRA Project?",
+    "revokeGithub": "Are you sure you want to revoke Github Intergation?",
+    "revokeJira": "Are you sure you want to revoke JIRA Intergation?"
+  }
 };

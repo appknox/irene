@@ -22,4 +22,4 @@ else
     button.is-primary click="integrateJira" class="mp-jira-integrate"
       = t "integrateJIRA"
 
-= confirm-box isActive=showRevokeJIRAConfirmBox title="Are you sure you want to revoke JIRA Intergation?" delegate=this
+= confirm-box isActive=showRevokeJIRAConfirmBox title=(t 'confirmBox.revokeJira') delegate=this
