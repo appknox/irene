@@ -250,5 +250,19 @@ export default {
     "removeJIRA": "JIRA Projectを削除してもよろしいですか？",
     "revokeGithub": "Github Integrationを取り消してもよろしいですか？",
     "revokeJira": "JIRAインテグレーションを取り消してもよろしいですか？"
+  },
+  "promptBox": {
+    "collaborationPrompt": {
+      "title": "このチームをコラボレーションから削除してもよろしいですか？",
+      "description": "コラボレーションから削除するチーム名を入力してください"
+    },
+    "removeMemberPrompt": {
+      "title": "このチームメンバーを削除してもよろしいですか？",
+      "description": "削除したいチームメンバーの名前を入力してください"
+    },
+    "deleteTeamPrompt": {
+      "title": "このチームを削除してもよろしいですか？",
+      "description": "削除したいチーム名を入力してください"
+    }
   }
 };

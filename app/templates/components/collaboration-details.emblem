@@ -23,4 +23,4 @@ td
   button.is-primary.mp-remove-collaboration.capitalize-text click="openAddCollaborationPrompt" disabled=collaboration.team.isDefaultTeam
       = t "remove"
 
-= prompt-box isActive=showAddCollaborationPrompt title="Are you sure you want to remove this team from collaboration?" description="Please enter the team name which you want to remove from collaboration" button="remove" delegate=this
+= prompt-box isActive=showAddCollaborationPrompt title=(t 'promptBox.collaborationPrompt.title') description=(t 'promptBox.collaborationPrompt.description') button="remove" delegate=this

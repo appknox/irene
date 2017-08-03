@@ -251,5 +251,19 @@ export default {
     "removeJIRA": "Are you sure you want to remove JIRA Project?",
     "revokeGithub": "Are you sure you want to revoke Github Integration?",
     "revokeJira": "Are you sure you want to revoke JIRA Integration?"
+  },
+  "promptBox": {
+    "collaborationPrompt": {
+      "title": "Are you sure you want to remove this team from collaboration?",
+      "description": "Please enter the team name which you want to remove from collaboration"
+    },
+    "removeMemberPrompt": {
+      "title": "Are you sure you want to remove this team member?",
+      "description": "Please enter the name of team member who you want to remove"
+    },
+    "deleteTeamPrompt": {
+      "title": "Are you sure you want to delete this team?",
+      "description": "Please enter the team name which you want to delete"
+    }
   }
 };
