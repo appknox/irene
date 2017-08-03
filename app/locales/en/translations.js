@@ -140,6 +140,7 @@ export default {
   "none": "Passed",
   "noOfProjects": "No of projects",
   "noPreference": "No Preference",
+  "noProject": "no project",
   "notifications": "Notifications",
   "ok": "Ok",
   "or": "or",

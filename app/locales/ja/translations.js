@@ -139,6 +139,7 @@ export default {
   "none": "合格",
   "noOfProjects": "プロジェクトなし",
   "noPreference": "指定なし",
+  "noProject": "プロジェクトはありません",
   "notifications": "通知",
   "ok": "Ok",
   "or": "または",
