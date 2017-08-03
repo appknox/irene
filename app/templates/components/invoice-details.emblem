@@ -52,7 +52,7 @@
               .pricing-section-content.flex-center
                 = item
           td
-            = invoice.durationText
+            =  t invoice.durationText
           td
             | $#{invoice.pricing.price}
         if invoice.hasDiscount

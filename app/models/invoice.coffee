@@ -23,11 +23,10 @@ Invoice = DS.Model.extend
 
   durationText: (->
     switch @get "duration"
-      when ENUMS.PAYMENT_DURATION.MONTHLY then "Monthly"
-      when ENUMS.PAYMENT_DURATION.QUATERLY then "Quaterly"
-      when ENUMS.PAYMENT_DURATION.HALFYEARLY then "Half Yearly"
-      when ENUMS.PAYMENT_DURATION.YEARLY then "Yearly"
-      else ""
+      when ENUMS.PAYMENT_DURATION.MONTHLY then "monthly"
+      when ENUMS.PAYMENT_DURATION.QUATERLY then "quarterly"
+      when ENUMS.PAYMENT_DURATION.HALFYEARLY then "halfYearly"
+      when ENUMS.PAYMENT_DURATION.YEARLY then "yearly"
   ).property "duration"
 
   paidOnHumanized: (->
