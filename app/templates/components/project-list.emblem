@@ -41,6 +41,17 @@
       each sortedObjects as |project|
         = project-overview project=project
     else
-      h3.margin-left No Projects!
+      .column.is-fullwidth.no-project-container
+        .no-project
+          h3
+            | No Projects!!
+          h4
+            | You haven't uploaded any project yet
+          h5
+            | You can upload a new project by clicking here:
+          span
+            label.button.is-primary
+              = upload-app delegate=this
+              = t "uploadApp"
 
   = partial "paginate"
