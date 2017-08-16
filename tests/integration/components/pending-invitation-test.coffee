@@ -6,7 +6,7 @@ moduleForComponent 'pending-invitation', 'Integration | Component | pending invi
 }
 
 test 'it renders', (assert) ->
-  assert.expect 2
+  assert.expect 1
 
   # Set any properties with @set 'myProperty', 'value'
   # Handle any actions with @on 'myAction', (val) ->
@@ -14,12 +14,3 @@ test 'it renders', (assert) ->
   @render hbs """{{pending-invitation}}"""
 
   assert.equal @$().text().trim(), ''
-
-  # Template block usage:
-  @render hbs """
-    {{#pending-invitation}}
-      template block text
-    {{/pending-invitation}}
-  """
-
-  assert.equal @$().text().trim(), 'template block text'
