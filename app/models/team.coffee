@@ -24,7 +24,7 @@ Team = DS.Model.extend BaseModeMixin,
     "Default" is @get "name"
   ).property "name"
 
-  hasMembers: Ember.computed.gt 'membersCount', 1
+  hasMembers: true
 
   totalMembers: (->
     tMember = @get "tMember"

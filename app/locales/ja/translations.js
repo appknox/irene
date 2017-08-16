@@ -162,6 +162,7 @@ export default {
   "paymentSuccessful": "お支払いを正常に処理しました. ありがとうございました.",
   "paypal": "Paypal",
   "pdfReport": "PDFレポート",
+  "pendingInvitations": "保留中の招待状",
   "phone" : "スマホ",
   "pleaseVisit": "ご案内",
   "pleaseTryAgain": "失敗しました、もう一度お試しください",
