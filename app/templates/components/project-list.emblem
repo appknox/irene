@@ -1,5 +1,5 @@
-.columns
-  if hasObjects
+if hasObjects
+  .columns
     .column
       .box
         .columns
@@ -37,9 +37,12 @@
               each platformObjects as |platformObject|
                 option value=platformObject.value
                   = platformObject.key
-    each sortedObjects as |project|
-      = project-overview project=project
-  else
+  .columns
+    .column
+      each sortedObjects as |project|
+        = project-overview project=project
+else
+  .columns
     .column.is-fullwidth.no-project-container
       .no-project
         h3.capitalize-text
@@ -51,14 +54,6 @@
         span
           label.button.is-primary
             = upload-app delegate=this
-            = fa-icon "upload"
-            | &nbsp;
-            if isUploading
-              | #{t "uploading"} :
-              = progress
-              | %
-            else
-              = t "uploadApp"
-
+            = t "uploadApp"
 
   = partial "paginate"
