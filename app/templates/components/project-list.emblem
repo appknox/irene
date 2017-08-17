@@ -53,6 +53,13 @@ else
         span
           label.button.is-primary
             = upload-app delegate=this
-            = t "uploadApp"
+            = fa-icon "upload"
+            | &nbsp;
+            if isUploading
+              | #{t "uploading"} :
+              = progress
+              | %
+            else
+              = t "uploadApp"
 
   = partial "paginate"
