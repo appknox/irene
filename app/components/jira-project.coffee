@@ -22,10 +22,7 @@ JiraProjectComponent = Ember.Component.extend
     .then (data) ->
       that.get("notify").success tProjectRemoved
       that.send "closeDeleteJIRAConfirmBox"
-      setTimeout ->
-        window.location.reload() # FIXME: Hackish Way
-      ,
-        3 * 1000
+      that.set "project.jiraProject", ""
     .catch (error) ->
       for error in error.errors
         that.get("notify").error error.detail?.message
@@ -60,10 +57,7 @@ JiraProjectComponent = Ember.Component.extend
       @get("ajax").post url, data: data
       .then (data) ->
         that.get("notify").success tRepoIntegrated
-        setTimeout ->
-          window.location.reload() # FIXME: Hackish Way
-        ,
-          3 * 1000
+        that.set "project.jiraProject", project
       .catch (error) ->
         that.get("notify").error tRepoNotIntegrated
         for error in error.errors
