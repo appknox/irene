@@ -554,8 +554,6 @@ b.bold
 
 .details
   padding: 2px 3px
-  border: 1px solid #fff
-  background-color: #fff
   color: #808080
   max-height: 25px
 
@@ -571,6 +569,12 @@ b.bold
   padding: 0px 9px
   .columns
     margin-top: 0px
+
+.message .message-header.is-progress
+  border-color: rgb(255, 224, 221)
+  border-width: 2px 2px 2px 15px
+  border-style: solid
+
 
 .vulnerability-types
   text-align: center
@@ -883,3 +887,14 @@ button.delete-button
     margin-left: 30px
     li
       list-style-type: disc
+
+.no-project-container
+  padding: 70px 350px 70px 350px
+  .no-project
+    padding: 10px
+    border: 2px solid #A9A9A9
+    border-radius: 5px
+    text-align: center
+    color: $grey
+    .red-text
+      color: $red

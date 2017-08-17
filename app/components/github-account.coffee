@@ -15,10 +15,7 @@ GithubAccountComponent = Ember.Component.extend
     .then (data) ->
       that.get("notify").success tGithubWillBeRevoked
       that.send "closeRevokeGithubConfirmBox"
-      setTimeout ->
-        window.location.reload() # FIXME: Hackish Way
-      ,
-        3 * 1000
+      that.set "user.hasGithubToken", false
     .catch (error) ->
       for error in error.errors
         that.get("notify").error error.detail?.message

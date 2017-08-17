@@ -20,10 +20,7 @@ GithubProjectComponent = Ember.Component.extend
     .then (data) ->
       that.get("notify").success tProjectRemoved
       that.send "closeDeleteGHConfirmBox"
-      setTimeout ->
-        window.location.reload() # FIXME: Hackish Way
-      ,
-        3 * 1000
+      that.set "project.githubRepo", ""
     .catch (error) ->
       for error in error.errors
         that.get("notify").error error.detail?.message
@@ -60,10 +57,7 @@ GithubProjectComponent = Ember.Component.extend
       @get("ajax").post setGithub, data: data
       .then (data) ->
         that.get("notify").success tRepoIntegrated
-        setTimeout ->
-          window.location.reload() # FIXME: Hackish Way
-        ,
-          3 * 1000
+        that.set "project.githubRepo", repo
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message
