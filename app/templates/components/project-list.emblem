@@ -38,9 +38,8 @@ if hasObjects
                 option value=platformObject.value
                   = platformObject.key
   .columns
-    .column
-      each sortedObjects as |project|
-        = project-overview project=project
+    each sortedObjects as |project|
+      = project-overview project=project
 else
   .columns
     .column.is-fullwidth.no-project-container
