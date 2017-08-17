@@ -22,10 +22,7 @@ JiraAccountComponent = Ember.Component.extend
     .then (data) ->
       that.get("notify").success tJiraWillBeRevoked
       that.send "closeRevokeJIRAConfirmBox"
-      setTimeout ->
-        window.location.reload() # FIXME: Hackish Way
-      ,
-        3 * 1000
+      that.set "user.hasJiraToken", false
     .catch (error) ->
       for error in error.errors
         that.get("notify").error error.detail?.message
