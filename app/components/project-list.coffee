@@ -8,6 +8,8 @@ ProjectListComponent = Ember.Component.extend PaginateMixin,
 
   i18n: Ember.inject.service()
 
+  classNames: ["columns"]
+
   query: ""
   targetObject: "project"
 
