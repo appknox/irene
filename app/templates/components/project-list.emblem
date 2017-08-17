@@ -10,7 +10,7 @@
               = fa-icon "upload"
               | &nbsp;
               if isUploading
-                | Uploading :
+                | #{t "uploading"} :
                 = progress
                 | %
               else
@@ -43,12 +43,12 @@
     else
       .column.is-fullwidth.no-project-container
         .no-project
-          h3
-            | No Projects!!
+          h3.capitalize-text
+            | #{t "noProject"}!!
           h4
-            | You haven't uploaded any project yet
+            = t "noProjectUploaded"
           h5
-            | You can upload a new project by clicking here:
+            | #{t "uploadNewProject"}:
           span
             label.button.is-primary
               = upload-app delegate=this
