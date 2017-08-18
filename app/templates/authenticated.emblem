@@ -7,6 +7,7 @@
         .align-middle
           = t "welcome"
           = model.username
+        = magic-bell
         .columns.margin-top20
           .column.card.align-middle
             | #{model.totalProjects}
