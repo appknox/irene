@@ -1,13 +1,16 @@
 .columns
   .column.is-one-sixth.side-menu
-    .appknox-logo
-      = img-logo
+    .columns
+      .column.appknox-logo
+        = img-logo
+      .column.magic-bell-icon
+        = magic-bell  
     aside.menu.margin-top20
       .box
         .align-middle
           = t "welcome"
           = model.username
-        = magic-bell
+
         .columns.margin-top20
           .column.card.align-middle
             | #{model.totalProjects}
