@@ -1,46 +1,69 @@
-.column
-  .box
-    .columns
-      if env.isAppknox
-        .column.is-one-sixth
-          = t "newScan"
+if user.hasProject
+  .column
+    .box
+      .columns
+        if env.isAppknox
+          .column.is-one-sixth
+            = t "newScan"
+            .margin-top
+              label.button.is-primary.is-fullwidth
+                = upload-app delegate=this class="mp-upload-app"
+                = fa-icon "upload"
+                | &nbsp;
+                if isUploading
+                  | #{t "uploading"} :
+                  = progress
+                  | %
+                else
+                  = t "uploadApp"
+        .column
+          = t "search"
           .margin-top
-            label.button.is-primary.is-fullwidth
-              = upload-app delegate=this class="mp-upload-app"
-              = fa-icon "upload"
-              | &nbsp;
-              if isUploading
-                | #{t "uploading"} :
-                = progress
-                | %
-              else
-                = t "uploadApp"
-      .column
-        = t "search"
-        .margin-top
-        = input class="input mp-search-query" placeholder=(t 'searchQuery') value=query
-      .column
-        = t "sortBy"
-        .margin-top
-        select{action 'sortProjects' on='change'} id="project-sort-property" class="input"
-          each sortingKeyObjects as |sortingKeyObject|
-            option action="foo" value="{{filter-platform sortingKeyObject}}"
-              = sortingKeyObject.text
-      .column
-        = t "filterBy"
-        .margin-top
-        select{action 'filterPlatform' on='change'} id="project-filter-platform" class="input"
-          option value="-1"
-            = t "allPlatforms"
-          each platformObjects as |platformObject|
-            option value=platformObject.value
-              = platformObject.key
+          = input class="input mp-search-query" placeholder=(t 'searchQuery') value=query
+        .column
+          = t "sortBy"
+          .margin-top
+          select{action 'sortProjects' on='change'} id="project-sort-property" class="input"
+            each sortingKeyObjects as |sortingKeyObject|
+              option action="foo" value="{{filter-platform sortingKeyObject}}"
+                = sortingKeyObject.text
+        .column
+          = t "filterBy"
+          .margin-top
+          select{action 'filterPlatform' on='change'} id="project-filter-platform" class="input"
+            option value="-1"
+              = t "allPlatforms"
+            each platformObjects as |platformObject|
+              option value=platformObject.value
+                = platformObject.key
 
-  .columns
-    if hasObjects
-      each sortedObjects as |project|
-        = project-overview project=project
-    else
-      h3.margin-left No Projects!
+    .columns
+      if hasObjects
+        each sortedObjects as |project|
+          = project-overview project=project
+      else
+        h3.capitalize-text.margin-left
+          | #{t "noProject"}!!
 
-  = partial "paginate"
+    = partial "paginate"
+
+else
+  .column.is-fullwidth.no-project-container
+    .no-project
+      h3.capitalize-text
+        | #{t "noProject"}!!
+      h4
+        = t "noProjectUploaded"
+      h5
+        | #{t "uploadNewProject"}:
+      span
+        label.button.is-primary
+          = upload-app delegate=this
+          = fa-icon "upload"
+          | &nbsp;
+          if isUploading
+            | #{t "uploading"} :
+            = progress
+            | %
+          else
+            = t "uploadApp"
