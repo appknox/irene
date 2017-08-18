@@ -48,7 +48,7 @@ if showVulnerability
                         = metric.key
                         | &nbsp; : &nbsp; {{metric.value}}
                   div.read-more
-                    a href="https://support.appknox.com/hc/en-us/articles/115000819811-Vulnerability-Severity" target="_blank"
+                    a href="https://help.appknox.com/using-appknox/basic-usage/vulnerability-severity" target="_blank"
                       | read more
     .columns
       .column
