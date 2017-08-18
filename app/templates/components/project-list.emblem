@@ -41,17 +41,6 @@
       each sortedObjects as |project|
         = project-overview project=project
     else
-      .column.is-fullwidth.no-project-container
-        .no-project
-          h3.capitalize-text
-            | #{t "noProject"}!!
-          h4
-            = t "noProjectUploaded"
-          h5
-            | #{t "uploadNewProject"}:
-          span
-            label.button.is-primary
-              = upload-app delegate=this
-              = t "uploadApp"
+      h3.margin-left No Projects!
 
   = partial "paginate"
