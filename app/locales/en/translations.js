@@ -301,5 +301,12 @@ export default {
       "noAPIFilter": "You do not have any API Filter set, click on settings below and set the API filter",
       "editFilters": "Edit filters here: "
     }
+  },
+  "templates": {
+    "apiScanURLFilter": "API Scanner URL Filter",
+    "enterEndpoint": "Enter the API endpoint to scan: eg. api.appknox.com. Do not specify the scheme (http://...), port (:443/...) & path (.../users)",
+    "enterAPIEndpoint": "Enter API endpoint",
+    "saveFilter": "Save Filter",
+    "addNewUrl": "ADD NEW URL"
   }
 };

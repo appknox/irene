@@ -300,5 +300,12 @@ export default {
       "noAPIFilter": "APIフィルタセットがありません。下記の設定をクリックし、APIフィルタを設定してください",
       "editFilters": "ここでフィルタを編集："
     }
+  },
+  "templates": {
+    "apiScanURLFilter": "APIスキャナのURLフィルタ",
+    "enterEndpoint": "スキャンするAPIエンドポイントを入力します。 api.appknox.com。 スキーム（http：// ...）、ポート（：443 / ...）、パス（... / users）を指定しないでください。",
+    "enterAPIEndpoint": "APIエンドポイントを入力",
+    "saveFilter": "フィルタを保存する",
+    "addNewUrl": "新しいURLを追加"
   }
 };
