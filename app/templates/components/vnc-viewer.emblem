@@ -9,7 +9,7 @@ if isPoppedOut
           = t "dynamicScanStart"
 
     if file.isReady
-      button.is-primary.is-fullwidth.mp-shutdown-device.dynamic-scan-button  click="dynamicShutdown"
+      button.is-primary.is-fullwidth.mp-shutdown-device  click="dynamicShutdown"
         = t "dynamicShutDown"
       canvas.canvas
 
