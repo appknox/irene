@@ -1,21 +1,24 @@
 if isPoppedOut
   .modal-background
 .modal-card
-  .modal-card-head
+  .modal-card-body.padding-10
     if file.isNoneStaus
-      button.is-primary.is-fullwidth.mp-start-dynamic-scan click="openAPIScanModal"
-        = t "dynamicScanStart"
+      .margin-top
+        img src="https://d3nj7353mvgauu.cloudfront.net/media/categories/iphone-77-plus-40-b1ac.png"
+        button.is-primary.mp-start-dynamic-scan.dynamic-scan-button click="openAPIScanModal"
+          = t "dynamicScanStart"
 
     if file.isReady
-      button.is-primary.is-fullwidth.mp-shutdown-device  click="dynamicShutdown"
+      button.is-primary.is-fullwidth.mp-shutdown-device.dynamic-scan-button  click="dynamicShutdown"
         = t "dynamicShutDown"
+      canvas.canvas
 
     if file.isNeitherNoneNorReady
-      button.is-primary.is-fullwidth.is-progress disabled="disabled"
-        = file.statusText
+      .margin-top
+        img src="https://d3nj7353mvgauu.cloudfront.net/media/categories/iphone-77-plus-40-b1ac.png"
+        button.is-primary.is-progress.dynamic-scan-button disabled="disabled"
+          = file.statusText
 
-  .modal-card-body.padding-10
-    canvas.canvas
   if file.isReady
     .modal-card-foot
       button.is-primary.is-fullwidth.mp-toggle-pop click="togglePop"

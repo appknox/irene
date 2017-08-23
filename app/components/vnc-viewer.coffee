@@ -24,7 +24,7 @@ VncViewerComponent = Ember.Component.extend
       "Pop Out Modal"
   ).property "isPoppedOut"
 
-  didInsertElement: ->
+  didUpdateAttrs: ->
     canvasEl = @element.getElementsByClassName("canvas")[0]
     that = @
     @set "rfb", new RFB
