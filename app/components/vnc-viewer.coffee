@@ -58,6 +58,12 @@ VncViewerComponent = Ember.Component.extend
       @send "disconnect"
   ).observes 'file.dynamicStatus'
 
+  isAndroidDevice: (->
+    platform = @get "file.project.platform"
+    if platform is ENUMS.PLATFORM.ANDROID
+      true
+  ).property "file.project.platform"
+
   actions:
     togglePop: ->
       @set "isPoppedOut", !@get "isPoppedOut"
