@@ -18,7 +18,8 @@
     "urijs": "^1.18.4",
     "socket.io-client": "^1.7.2",
     "qrious": "^4.0.2",
-    "clipboard": "^1.7.1"
+    "clipboard": "^1.7.1",
+    "devices.css": "*"
   },
   "resolutions": {
     "bohemia": "^0.8.7",
