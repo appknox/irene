@@ -1,6 +1,6 @@
 if isPoppedOut
   .modal-background
-.modal-card
+.modal-card.device-modal
   .modal-card-head
     if file.isNoneStaus
       button.is-primary.is-fullwidth.mp-start-dynamic-scan click="openAPIScanModal"
@@ -23,7 +23,7 @@ if isPoppedOut
       div class="screen"
         canvas.canvas
   if file.isReady
-    .modal-card-foot.device-footer
+    .modal-card-foot
       button.is-primary.is-fullwidth.mp-toggle-pop click="togglePop"
         = vncPopText
 
