@@ -15,15 +15,15 @@ if isPoppedOut
         = file.statusText
 
   .modal-card-body.padding-10
-    / if isAndroidDevice
-    /   div class="marvel-device nexus5"
-    /     div class="top-bar"
-    /     div class="sleep"
-    /     div class="volume"
-    /     div class="camera"
-    /     div class="screen"
-    /       canvas.canvas
     if isAndroidDevice
+      div class="marvel-device nexus5"
+        div class="top-bar"
+        div class="sleep"
+        div class="volume"
+        div class="camera"
+        div class="screen"
+          canvas.canvas
+    if isIOSDevice
       div class="marvel-device iphone6 silver"
         div class="top-bar"
         div class="sleep"
