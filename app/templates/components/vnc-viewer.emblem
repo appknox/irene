@@ -26,13 +26,13 @@ if isPoppedOut
     if isIOSDevice
       div class="marvel-device iphone6 silver"
         div class="top-bar"
-        div class="sleep"
-        div class="volume"
         div class="speaker"
         div class="screen"
           canvas.canvas
         div class="home"
         div class="bottom-bar"
+    else
+      canvas.other-devices
 
   if file.isReady
     .modal-card-foot
