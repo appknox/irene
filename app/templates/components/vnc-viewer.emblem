@@ -15,7 +15,17 @@ if isPoppedOut
         = file.statusText
 
   .modal-card-body.padding-10
-    canvas.canvas
+    div class="marvel-device iphone5c blue"
+      div class="top-bar"
+      div class="sleep"
+      div class="volume"
+      div class="camera"
+      div class="sensor"
+      div class="speaker"
+      div class="screen"
+        canvas.canvas
+      div class="home"
+      div class="bottom-bar"
   if file.isReady
     .modal-card-foot
       button.is-primary.is-fullwidth.mp-toggle-pop click="togglePop"
