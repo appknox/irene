@@ -23,7 +23,7 @@ if isPoppedOut
       div class="screen"
         canvas.canvas
   if file.isReady
-    .modal-card-foot
+    .modal-card-foot.device-footer
       button.is-primary.is-fullwidth.mp-toggle-pop click="togglePop"
         = vncPopText
 
