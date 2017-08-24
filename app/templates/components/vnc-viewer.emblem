@@ -15,16 +15,25 @@ if isPoppedOut
         = file.statusText
 
   .modal-card-body.padding-10
+    / if isAndroidDevice
+    /   div class="marvel-device nexus5"
+    /     div class="top-bar"
+    /     div class="sleep"
+    /     div class="volume"
+    /     div class="camera"
+    /     div class="screen"
+    /       canvas.canvas
     if isAndroidDevice
-      div class="marvel-device nexus5"
+      div class="marvel-device iphone6 silver"
         div class="top-bar"
         div class="sleep"
         div class="volume"
-        div class="camera"
+        div class="speaker"
         div class="screen"
           canvas.canvas
-    else
-      canvas.canvas.ios-devices
+        div class="home"
+        div class="bottom-bar"
+
   if file.isReady
     .modal-card-foot
       button.is-primary.is-fullwidth.mp-toggle-pop click="togglePop"

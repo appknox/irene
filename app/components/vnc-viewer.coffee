@@ -64,6 +64,12 @@ VncViewerComponent = Ember.Component.extend
       true
   ).property "file.project.platform"
 
+  isIOSDevice: (->
+    platform = @get "file.project.platform"
+    if platform is ENUMS.PLATFORM.IOS
+      true
+  ).property "file.project.platform"
+
   actions:
     togglePop: ->
       @set "isPoppedOut", !@get "isPoppedOut"
