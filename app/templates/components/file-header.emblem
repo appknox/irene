@@ -118,18 +118,25 @@
            = file.staticScanProgress
            | %
       .column.flex-center
-        div.progress-wrap.progress class=file.isDynamicCompleted:is-success:is-progress
-          div.progress-bar.progress style="left:{{file.dynamicScanProgress}}%"
-          div.progress-text
-            = file.dynamicScanProgress
-            | %
+        if file.isApiDone
+          button.is-primary.margin-top20 disabled="disabled"
+              | Completed &nbsp;
+              = fa-icon "fa-check"
+        else
+          button.is-primary.margin-top20
+            | Start &nbsp;
+            .fa-font-size
+              = fa-icon "fa-play"
       if file.project.isAPIScanEnabled
         .column.flex-center
-          div.progress-wrap.progress class=file.isApiCompleted:is-success:is-progress
-            div.progress-bar.progress style="left:{{file.apiScanProgress}}%"
-            div.progress-text
-             = file.apiScanProgress
-             | %
+          button.is-primary.margin-top20 disabled="disabled"
+            if file.isApiDone
+              | Completed &nbsp;
+              = fa-icon "fa-check"
+            else
+              | Start &nbsp;
+              .fa-font-size
+                = fa-icon "fa-play"
       .column.flex-center
         if file.ifManualNotRequested
           button.is-primary.margin-top20 click="requestManual"
@@ -137,11 +144,10 @@
             .fa-font-size
               = fa-icon "fa-play"
         else
-          if file.isManualDone
-            button.is-primary.margin-top20 disabled="disabled"
+          button.is-primary.margin-top20 disabled="disabled"
+            if file.isManualDone
               | Completed &nbsp;
               = fa-icon "fa-check"
-          else
-            button.is-primary.margin-top20 disabled="disabled"
+            else
               | Requested &nbsp;
               = fa-icon "fa-clock-o"

@@ -39,11 +39,6 @@ File = DS.Model.extend BaseModelMixin,
     !manual
   ).property 'manual'
 
-  isApiScanning: (->
-    apiScanProgress = @get "apiScanProgress"
-    apiScanProgress not in [0, undefined, 100]
-  ).property "apiScanProgress"
-
   scanProgressClass: (type)->
     if type is true
       return true
@@ -58,11 +53,6 @@ File = DS.Model.extend BaseModelMixin,
     isDynamicDone = @get "isDynamicDone"
     @scanProgressClass isDynamicDone
   ).property "isDynamicDone"
-
-  isApiCompleted: (->
-    isApiDone = @get "isApiDone"
-    @scanProgressClass isApiDone
-  ).property "isApiDone"
 
   fileDetailsClass: (->
     hasMultipleFiles = @get "project.hasMultipleFiles"
