@@ -12,6 +12,10 @@ TeamDetailsComponent = Ember.Component.extend
   team: null
   teamMember: ""
 
+  invitations: (->
+    @get("store").findAll "invitation"
+  ).property()
+
   tEmptyEmailId: t("emptyEmailId")
   tTeamMemberAdded: t("teamMemberAdded")
   tTeamMemberInvited: t("teamMemberInvited")
