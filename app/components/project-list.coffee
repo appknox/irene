@@ -8,6 +8,8 @@ ProjectListComponent = Ember.Component.extend PaginateMixin,
 
   i18n: Ember.inject.service()
 
+  classNames: ["columns"]
+
   query: ""
   targetObject: "project"
 
@@ -32,8 +34,6 @@ ProjectListComponent = Ember.Component.extend PaginateMixin,
       sortingKey = "#{sortingKey}:desc"
     [sortingKey]
   ).property "sortingKey", "sortingReversed"
-
-  classNames: ["columns"]
 
   resetOffset: ->
     @set "offset", 0

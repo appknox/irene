@@ -102,4 +102,6 @@ User = DS.Model.extend
 
   hasNamespace: Ember.computed.gt 'namespacesCount', 0
 
+  hasProject: Ember.computed.gt 'projectCount', 0
+
 `export default User`
