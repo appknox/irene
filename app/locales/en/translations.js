@@ -139,6 +139,7 @@ export default {
   "next": "Next",
   "no": "No",
   "noDeviceAvailable": "No Device Available",
+  "noFiles": "No Files",
   "none": "Passed",
   "noOfProjects": "No of projects",
   "noPreference": "No Preference",
@@ -190,6 +191,8 @@ export default {
   "revokeGithub": "Revoke Github",
   "revokeJira": "Revoke Jira",
   "risk": "The risk of",
+  "riskOf": "Risk Of",
+  "riskType": "Risk Type",
   "role": "Role",
   "saveCredentials": "Save Credentials",
   "scanning": "Scanning",
@@ -302,5 +305,12 @@ export default {
       "noAPIFilter": "You do not have any API Filter set, click on settings below and set the API filter",
       "editFilters": "Edit filters here: "
     }
+  },
+  "templates": {
+    "apiScanURLFilter": "API Scanner URL Filter",
+    "enterEndpoint": "Enter the API endpoint to scan: eg. api.appknox.com. Do not specify the scheme (http://...), port (:443/...) & path (.../users)",
+    "enterAPIEndpoint": "Enter API endpoint",
+    "saveFilter": "Save Filter",
+    "addNewUrl": "ADD NEW URL"
   }
 };

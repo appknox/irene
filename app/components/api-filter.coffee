@@ -2,9 +2,6 @@
 `import ENV from 'irene/config/environment';`
 `import { translationMacro as t } from 'ember-i18n'`
 
-hasApiFilter = (url)->
-  return !Ember.isEmpty url
-
 isRegexFailed = (url) ->
   reg = /^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/
   res = reg.test(url)
@@ -41,8 +38,8 @@ ApiFilterComponent = Ember.Component.extend
       filterArray.forEach (filter) ->
         url = filter.value
         for url in [url]
-          return callback(that.get("notify").error tEmptyURL) if !hasApiFilter url
-          return callback(that.get("notify").error "#{url} #{tInvalidURL}") if !isRegexFailed url
+          if !Ember.isEmpty url
+            return callback(that.get("notify").error "#{url} #{tInvalidURL}") if !isRegexFailed url
         urls = that.get "urls"
         if Ember.isEmpty urls
           urls = url
@@ -53,6 +50,9 @@ ApiFilterComponent = Ember.Component.extend
       splittedArray = urls?.split ","
       uniqueArrays = splittedArray.uniq()
       urlString = uniqueArrays.join ','
+      if Ember.isEmpty urlString
+        return that.get("notify").error tEmptyURL
+      urlString = urlString.replace(/,\s*$/, "")
       apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, project_id].join '/'
       data =
         apiUrlFilters: urlString

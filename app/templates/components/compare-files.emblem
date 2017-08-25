@@ -16,17 +16,17 @@ if isSummary
   table.compare-table
     tr.table-head
       td colspan="2"
-        | Risk Type
+        = t "riskType"
       td rowspan="2"
-        | Risk Of
+        = t "riskOf"
       td rowspan="2"
-        | Status
+        = t "status"
     tr.table-head
       td
-        | Version &nbsp;
+        | #{t "version"} &nbsp;
         | #{file1.version}
       td
-        | Version &nbsp;
+        | #{t "version"} &nbsp;
         | #{file2.version}
     each comparisons as |comparison|
       = compare-summary comparison=comparison
