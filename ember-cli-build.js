@@ -81,6 +81,11 @@ module.exports = function(defaults) {
     */
    app.import('bower_components/clipboard/dist/clipboard.min.js')
 
+   /*
+    * including devices.css
+    */
+    app.import('bower_components/devices.css/assets/devices.min.css')
+
 
 
   return app.toTree();

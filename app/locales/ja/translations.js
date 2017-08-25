@@ -138,6 +138,7 @@ export default {
   "next": "次",
   "no": "いいえ",
   "noDeviceAvailable": "使用可能なデバイスがありません",
+  "noFiles": "ファイルがありません",
   "none": "合格",
   "noOfProjects": "プロジェクトなし",
   "noPreference": "指定なし",
@@ -164,6 +165,7 @@ export default {
   "paymentSuccessful": "お支払いを正常に処理しました. ありがとうございました.",
   "paypal": "Paypal",
   "pdfReport": "PDFレポート",
+  "pendingInvitations": "保留中の招待状",
   "phone" : "スマホ",
   "pleaseVisit": "ご案内",
   "pleaseTryAgain": "失敗しました、もう一度お試しください",
@@ -189,6 +191,8 @@ export default {
   "revokeGithub": "Github を取り消す",
   "revokeJira": "JIRA を取り消す",
   "risk": "リスク",
+  "riskOf": "のリスク",
+  "riskType": "リスクタイプ",
   "role": "役割",
   "saveCredentials": "資格情報を保存",
   "scanning": "スキャン中",
@@ -300,5 +304,12 @@ export default {
       "noAPIFilter": "APIフィルタセットがありません。下記の設定をクリックし、APIフィルタを設定してください",
       "editFilters": "ここでフィルタを編集："
     }
+  },
+  "templates": {
+    "apiScanURLFilter": "APIスキャナのURLフィルタ",
+    "enterEndpoint": "スキャンするAPIエンドポイントを入力します。 api.appknox.com。 スキーム（http：// ...）、ポート（：443 / ...）、パス（... / users）を指定しないでください。",
+    "enterAPIEndpoint": "APIエンドポイントを入力",
+    "saveFilter": "フィルタを保存する",
+    "addNewUrl": "新しいURLを追加"
   }
 };
