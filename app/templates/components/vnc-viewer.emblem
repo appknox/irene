@@ -24,7 +24,7 @@ if isPoppedOut
         div class="screen"
           canvas.canvas
     if isIOSDevice
-      div class="marvel-device iphone5s"
+      div class="marvel-device iphone5s silver"
         div class="top-bar"
         div class="sleep"
         div class="volume"
