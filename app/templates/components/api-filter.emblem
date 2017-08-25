@@ -1,21 +1,22 @@
 .api-filter
-  h5 API Scanner URL Filter
+  h5
+    = t "templates.apiScanURLFilter"
   h6
-    | Enter the API endpoint to scan: eg. api.appknox.com. Do not specify the scheme (http://...), port (:443/...) & path (.../users)
+    = t "templates.enterEndpoint"
   form.url-filters
     each project.apiUrlFilterItems as |item|
       div.filter-list.margin-top
-        = input class="form-control input" type="text" placeholder="Enter API endpoint" value=item
+        = input class="form-control input" type="text" placeholder=(t "templates.enterAPIEndpoint") value=item
         i.fa.risk-icons.fa-trash-o.removeUrl click="openRemoveURLConfirmBox"
   .columns.margin-top
     .column
       form.url-filters
         .columns
           .column.is-one-sixth
-            button.is-primary click="addNewUrl"
-             | + ADD URL
-          .column
             button.is-primary.mp-add-filter click="addApiUrlFilter"
-              | Save Filter
+              = t "templates.saveFilter"
+          .column
+            button.is-primary click="addNewUrl"
+             | + {{t "templates.addNewUrl"}}  
 
 = confirm-box isActive=showRemoveURLConfirmBox title=(t 'confirmBox.removeURL') delegate=this

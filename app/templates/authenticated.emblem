@@ -46,5 +46,6 @@
 
       = submission-list
 
+  / = namespace-modal user=model    
   .column.margin-right.margin-top
     = outlet

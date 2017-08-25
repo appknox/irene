@@ -5,6 +5,7 @@
         .column.is-one-third
           = file-overview file=file fileOld=fileOld redirectTo="authenticated.compare"
     else
-      h3.margin-left No Files!
+      h3.margin-left
+        | #{ t "noFiles"}!
 
   = partial "paginate"
