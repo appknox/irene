@@ -52,6 +52,7 @@ FileHeaderComponent = Ember.Component.extend
       @get("ajax").request url
       .then (result) ->
         that.get("notify").info tManualRequested
+        that.set "file.ifManualNotRequested", false
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message

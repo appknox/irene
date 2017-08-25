@@ -64,11 +64,6 @@ File = DS.Model.extend BaseModelMixin,
     @scanProgressClass isApiDone
   ).property "isApiDone"
 
-  isManualCompleted: (->
-    isManualDone = @get "isManualDone"
-    @scanProgressClass isManualDone
-  ).property "isManualDone"
-
   fileDetailsClass: (->
     hasMultipleFiles = @get "project.hasMultipleFiles"
     manual = @get "manual"
@@ -126,12 +121,6 @@ File = DS.Model.extend BaseModelMixin,
   dynamicScanProgress: Ember.computed "analyses.@each.risk", "isDynamicDone", ->
     isDynamicDone  = @get "isDynamicDone"
     if isDynamicDone
-      return 100
-    0
-
-  manualScanProgress: Ember.computed "analyses.@each.risk", "isManualCompleted", ->
-    isManualDone  = @get "isManualDone"
-    if isManualDone
       return 100
     0
 

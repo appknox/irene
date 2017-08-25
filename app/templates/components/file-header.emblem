@@ -41,11 +41,6 @@
           .column.card-button
             button.mp-pdf-report click="getPDFReportLink"
               = t "pdfReport"
-          .column.card-button
-            if env.isAppknox
-              if file.ifManualNotRequested
-                button.mp-request-manual click="requestManual"
-                  = t "manual"
   .card-content
     .columns
       .column.flex-center
@@ -136,8 +131,17 @@
              = file.apiScanProgress
              | %
       .column.flex-center
-        div.progress-wrap.progress class=file.isManualCompleted:is-success:is-progress
-          div.progress-bar.progress style="left:{{file.manualScanProgress}}%"
-          div.progress-text
-            = file.manualScanProgress
-            | %
+        if file.ifManualNotRequested
+          button.is-primary.margin-top20 click="requestManual"
+            | Start &nbsp;
+            .fa-font-size
+              = fa-icon "fa-play"
+        else
+          if file.isManualDone
+            button.is-primary.margin-top20 disabled="disabled"
+              | Completed &nbsp;
+              = fa-icon "fa-check"
+          else
+            button.is-primary.margin-top20 disabled="disabled"
+              | Requested &nbsp;
+              = fa-icon "fa-clock-o"
