@@ -25,7 +25,8 @@ export default function() {
   this.get('/invitations/:id', 'invitation');
   this.get('/devices', 'device');
   this.get('/invoices', 'invoice');
-  this.get('/invoices/:id ', 'invoice');
+  this.get('/invoices/:id', 'invoice');
+  this.get('/invitations/', 'invitation');
 
   this.get('/github_repos', () => {
     return {};

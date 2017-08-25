@@ -164,6 +164,7 @@ export default {
   "paymentSuccessful": "Successfully processed your payment. Thank You.",
   "paypal": "Paypal",
   "pdfReport": "PDF Report",
+  "pendingInvitations": "Pending Invitations",
   "phone" : "Phone",
   "pleaseVisit": "Please visit the",
   "pleaseTryAgain": "Failed, please try again",
