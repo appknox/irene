@@ -118,12 +118,12 @@
            = file.staticScanProgress
            | %
       .column.flex-center
-        if file.isApiDone
+        if file.isDynamicDone
           button.is-primary.margin-top20 disabled="disabled"
               | Completed &nbsp;
               = fa-icon "fa-check"
         else
-          button.is-primary.margin-top20
+          button.is-primary.margin-top20.mp-start-dynamic-scan click="openAPIScanModal"
             | Start &nbsp;
             .fa-font-size
               = fa-icon "fa-play"
@@ -151,3 +151,36 @@
             else
               | Requested &nbsp;
               = fa-icon "fa-clock-o"
+
+= modal-card isActive=showAPIScanModal title=(t "modalCard.apiScan.title")
+
+  .card-body.warning-modal
+    .card-wrapper
+      .api-scanning
+        h6
+          = t "modalCard.apiScan.description"
+        div.warning-band
+          = fa-icon 'exclamation-triangle'
+          = t "modalCard.apiScan.extraDescription"
+        div.margin-top
+          if file.project.hasAPIURLFilter
+            = t "modalCard.apiScan.apiList"
+            .columns.margin-top
+              each file.project.apiUrlFilterItems as |item|
+                .column.is-one-third.flex-center
+                  = item
+          else
+            = t "modalCard.apiScan.noAPIFilter"
+        form
+          p.control
+          .columns
+            .column.is-one-third.edit-filter
+              = t "modalCard.apiScan.editFilters"
+              = link-to 'authenticated.project.settings' file.project.id class="mp-detail-project-settings modal-button is-primary" tagName="a"
+                = t "settings"
+            .column.is-one-sixth
+              button.modal-button.is-primary.mp-run-api-scan click="runAPIScan" disabled=file.project.isRunDisabled
+                =  t "yes"
+            .column
+              button.modal-button.is-primary.mp-dont-run-api-scan click="doNotRunAPIScan"
+                = t "no"
