@@ -31,8 +31,8 @@ if isPoppedOut
           canvas.canvas
         div class="home"
         div class="bottom-bar"
-    else
-      canvas.other-devices
+    if isNeitherAndroidNorIOS
+      canvas.canvas.other-devices
 
   if file.isReady
     .modal-card-foot
