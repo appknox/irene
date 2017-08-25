@@ -1,7 +1,7 @@
 
 if isPoppedOut
   .modal-background
-.modal-card
+.modal-card.device-modal
   .modal-card-head
     if file.isNoneStaus
       button.is-primary.is-fullwidth.mp-start-dynamic-scan click="openAPIScanModal"
@@ -16,7 +16,29 @@ if isPoppedOut
         = file.statusText
 
   .modal-card-body.padding-10
-    canvas.canvas
+    if isAndroidDevice
+      div class="marvel-device nexus5"
+        div class="top-bar"
+        div class="sleep"
+        div class="volume"
+        div class="camera"
+        div class="screen"
+          canvas.canvas
+    if isIOSDevice
+      div class="marvel-device iphone5s silver"
+        div class="top-bar"
+        div class="sleep"
+        div class="volume"
+        div class="camera"
+        div class="sensor"
+        div class="speaker"
+        div class="screen"
+          canvas.canvas
+        div class="home"
+        div class="bottom-bar"
+    if isNeitherAndroidNorIOS
+      canvas.canvas.other-devices
+
   if file.isReady
     .modal-card-foot
       button.is-primary.is-fullwidth.mp-toggle-pop click="togglePop"

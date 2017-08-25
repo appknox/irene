@@ -24,7 +24,7 @@ VncViewerComponent = Ember.Component.extend
       "Pop Out Modal"
   ).property "isPoppedOut"
 
-  didInsertElement: ->
+  didUpdate: ->
     canvasEl = @element.getElementsByClassName("canvas")[0]
     that = @
     @set "rfb", new RFB
@@ -57,6 +57,24 @@ VncViewerComponent = Ember.Component.extend
     else
       @send "disconnect"
   ).observes 'file.dynamicStatus'
+
+  isAndroidDevice: (->
+    platform = @get "file.project.platform"
+    if platform is ENUMS.PLATFORM.ANDROID
+      true
+  ).property "file.project.platform"
+
+  isIOSDevice: (->
+    platform = @get "file.project.platform"
+    if platform is ENUMS.PLATFORM.IOS
+      true
+  ).property "file.project.platform"
+
+  isNeitherAndroidNorIOS: (->
+    platform = @get "file.project.platform"
+    if platform not in [ENUMS.PLATFORM.ANDROID, ENUMS.PLATFORM.IOS]
+      true
+  ).property "file.project.platform"
 
   actions:
     togglePop: ->
