@@ -6,7 +6,6 @@ RealtimeService = Ember.Service.extend
   ProjectCounter: 0
   CollaborationCounter: 0
   SubmissionCounter: 0
-  NamespaceCounter: 0
 
   namespace: ''
 

@@ -7,7 +7,7 @@ NamespaceModalComponent = Ember.Component.extend
   i18n: Ember.inject.service()
   showNamespaceModal: false
 
-  newNamespaceObserver: Ember.observer "realtime.NamespaceCounter", ->
+  newNamespaceObserver: Ember.observer "realtime.namespace", ->
     @set "showNamespaceModal", true
 
 
