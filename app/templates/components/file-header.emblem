@@ -64,6 +64,11 @@
               | Start &nbsp;
               .fa-font-size
                 = fa-icon "fa-play"
+          if file.isReady
+            button.is-primary.margin-top20 click="dynamicShutdown"
+              | Stop &nbsp;
+              .fa-font-size-small
+                = fa-icon "fa-stop"
 
       if file.project.isAPIScanEnabled
         .column.flex-center

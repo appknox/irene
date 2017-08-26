@@ -3,10 +3,7 @@ if isPoppedOut
   .modal-background
 .modal-card.device-modal
   .modal-card-head
-    if file.isReady
-      button.is-primary.is-fullwidth.mp-shutdown-device  click="dynamicShutdown"
-        = t "dynamicShutDown"
-
+    
     if file.isNeitherNoneNorReady
       button.is-primary.is-fullwidth.is-progress disabled="disabled"
         = file.statusText

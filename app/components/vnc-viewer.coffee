@@ -88,18 +88,4 @@ VncViewerComponent = Ember.Component.extend
       if rfb._rfb_connection_state is 'connected'
         rfb.disconnect()
 
-    dynamicShutdown: ->
-      file = @get "file"
-      file.setShuttingDown()
-      @set "isPoppedOut", false
-      file_id = @get "file.id"
-      shutdownUrl = [ENV.endpoints.dynamicShutdown, file_id].join '/'
-      @get("ajax").request shutdownUrl
-      .catch (error) ->
-        file.setNone()
-        for error in error.errors
-          that.get("notify").error error.detail?.message
-
-
-
 `export default VncViewerComponent`
