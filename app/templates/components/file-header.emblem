@@ -56,7 +56,7 @@
         else
           if file.isNeitherNoneNorReady
             button.is-primary.margin-top20.is-progress disabled="disabled"
-              | In Progress &nbsp;
+              | #{file.statusText} &nbsp;
               .fa-font-size
                 i.fa class="fa-spinner fa-spin"
           if file.isNoneStatus

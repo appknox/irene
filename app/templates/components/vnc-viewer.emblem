@@ -2,13 +2,7 @@
 if isPoppedOut
   .modal-background
 .modal-card.device-modal
-  .modal-card-head
-    
-    if file.isNeitherNoneNorReady
-      button.is-primary.is-fullwidth.is-progress disabled="disabled"
-        = file.statusText
-
-  .modal-card-body.padding-10
+  .modal-card-body.padding-10.margin-top
     if isAndroidDevice
       div class="marvel-device nexus5"
         div class="top-bar"
