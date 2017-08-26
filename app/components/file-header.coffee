@@ -14,6 +14,7 @@ FileHeaderComponent = Ember.Component.extend
   tPleaseTryAgain: t("pleaseTryAgain")
   tReportIsGettingGenerated: t("reportIsGettingGenerated")
   tManualRequested: t("manualRequested")
+  tStartingScan: t("startingScan")
 
   didInsertElement: ->
     tPasswordCopied = @get "tPasswordCopied"

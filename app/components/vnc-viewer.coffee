@@ -15,8 +15,6 @@ VncViewerComponent = Ember.Component.extend
   isPoppedOut: false
   classNameBindings: ["isPoppedOut:modal", "isPoppedOut:is-active"]
 
-  tStartingScan: t("startingScan")
-
   vncPopText: (->
     if @get "isPoppedOut"
       "Close Modal"
@@ -90,7 +88,6 @@ VncViewerComponent = Ember.Component.extend
       if rfb._rfb_connection_state is 'connected'
         rfb.disconnect()
 
-    
     dynamicShutdown: ->
       file = @get "file"
       file.setShuttingDown()
