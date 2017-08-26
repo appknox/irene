@@ -114,7 +114,7 @@ File = DS.Model.extend BaseModelMixin,
       return 100
     0
 
-  isNoneStaus: (->
+  isNoneStatus: (->
     status = @get 'dynamicStatus'
     status is ENUMS.DYNAMIC_STATUS.NONE
   ).property 'dynamicStatus'

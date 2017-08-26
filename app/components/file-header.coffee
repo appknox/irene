@@ -49,6 +49,7 @@ FileHeaderComponent = Ember.Component.extend
     dynamicScan: ->
       file = @get "file"
       file.setBootingStatus()
+      @set "file.isDynamicDone", false
       file_id = @get "file.id"
       dynamicUrl = [ENV.endpoints.dynamic, file_id].join '/'
       @get("ajax").request dynamicUrl

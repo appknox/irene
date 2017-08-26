@@ -50,11 +50,21 @@
           button.is-primary.margin-top20 disabled="disabled"
               | Completed &nbsp;
               = fa-icon "fa-check"
+          button.is-primary.margin-top20.margin-left click="openAPIScanModal"
+            .fa-font-size-small
+              = fa-icon "fa-repeat"
         else
-          button.is-primary.margin-top20.mp-start-dynamic-scan click="openAPIScanModal"
-            | Start &nbsp;
-            .fa-font-size
-              = fa-icon "fa-play"
+          if file.isNeitherNoneNorReady
+            button.is-primary.margin-top20.is-progress disabled="disabled"
+              | In Progress &nbsp;
+              .fa-font-size
+                i.fa class="fa-spinner fa-spin"
+          if file.isNoneStatus
+            button.is-primary.margin-top20 click="openAPIScanModal"
+              | Start &nbsp;
+              .fa-font-size
+                = fa-icon "fa-play"
+
       if file.project.isAPIScanEnabled
         .column.flex-center
           button.is-primary.margin-top20 disabled="disabled"
