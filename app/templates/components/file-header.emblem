@@ -25,6 +25,61 @@
         li.file-hide-overflow
           | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
 
+.card.is-fullwidth.margin-bottom20.scan-status-card
+  .card-content
+    .columns
+      .column.flex-center
+        = t "staticScan"
+      .column.flex-center
+        = t "dynamicScan"
+      if file.project.isAPIScanEnabled
+        .column.flex-center
+          = t "apiScan"
+      .column.flex-center
+        = t "manualScan"
+
+    .columns
+      .column.flex-center
+        div.progress-wrap.progress class=file.isStaticCompleted:is-success:is-progress
+          div.progress-bar.progress style="left:{{file.staticScanProgress}}%"
+          div.progress-text
+           = file.staticScanProgress
+           | %
+      .column.flex-center
+        if file.isDynamicDone
+          button.is-primary.margin-top20 disabled="disabled"
+              | Completed &nbsp;
+              = fa-icon "fa-check"
+        else
+          button.is-primary.margin-top20.mp-start-dynamic-scan click="openAPIScanModal"
+            | Start &nbsp;
+            .fa-font-size
+              = fa-icon "fa-play"
+      if file.project.isAPIScanEnabled
+        .column.flex-center
+          button.is-primary.margin-top20 disabled="disabled"
+            if file.isApiDone
+              | Completed &nbsp;
+              = fa-icon "fa-check"
+            else
+              | Start &nbsp;
+              .fa-font-size
+                = fa-icon "fa-play"
+      .column.flex-center
+        if file.ifManualNotRequested
+          button.is-primary.margin-top20 click="requestManual"
+            | Start &nbsp;
+            .fa-font-size
+              = fa-icon "fa-play"
+        else
+          button.is-primary.margin-top20 disabled="disabled"
+            if file.isManualDone
+              | Completed &nbsp;
+              = fa-icon "fa-check"
+            else
+              | Requested &nbsp;
+              = fa-icon "fa-clock-o"
+
 .card.is-fullwidth.margin-bottom20.app-details-card
   header.card-header
     .column.is-one-quarter
@@ -92,65 +147,6 @@
               = fa-icon "clipboard copy-icon"
               | &nbsp;
               = t "copy"
-
-.card.is-fullwidth.margin-bottom20.scan-status-card
-  header.card-header
-    p.card-header-title
-      h5
-        = t "scanStatus"
-  .card-content
-    .columns
-      .column.flex-center
-        = t "staticScan"
-      .column.flex-center
-        = t "dynamicScan"
-      if file.project.isAPIScanEnabled
-        .column.flex-center
-          = t "apiScan"
-      .column.flex-center
-        = t "manualScan"
-
-    .columns
-      .column.flex-center
-        div.progress-wrap.progress class=file.isStaticCompleted:is-success:is-progress
-          div.progress-bar.progress style="left:{{file.staticScanProgress}}%"
-          div.progress-text
-           = file.staticScanProgress
-           | %
-      .column.flex-center
-        if file.isDynamicDone
-          button.is-primary.margin-top20 disabled="disabled"
-              | Completed &nbsp;
-              = fa-icon "fa-check"
-        else
-          button.is-primary.margin-top20.mp-start-dynamic-scan click="openAPIScanModal"
-            | Start &nbsp;
-            .fa-font-size
-              = fa-icon "fa-play"
-      if file.project.isAPIScanEnabled
-        .column.flex-center
-          button.is-primary.margin-top20 disabled="disabled"
-            if file.isApiDone
-              | Completed &nbsp;
-              = fa-icon "fa-check"
-            else
-              | Start &nbsp;
-              .fa-font-size
-                = fa-icon "fa-play"
-      .column.flex-center
-        if file.ifManualNotRequested
-          button.is-primary.margin-top20 click="requestManual"
-            | Start &nbsp;
-            .fa-font-size
-              = fa-icon "fa-play"
-        else
-          button.is-primary.margin-top20 disabled="disabled"
-            if file.isManualDone
-              | Completed &nbsp;
-              = fa-icon "fa-check"
-            else
-              | Requested &nbsp;
-              = fa-icon "fa-clock-o"
 
 = modal-card isActive=showAPIScanModal title=(t "modalCard.apiScan.title")
 
