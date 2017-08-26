@@ -7,4 +7,6 @@ RealtimeService = Ember.Service.extend
   CollaborationCounter: 0
   SubmissionCounter: 0
 
+  namespace: ''
+
 `export default RealtimeService`

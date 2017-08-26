@@ -84,6 +84,9 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
       counter: (data) ->
         realtime.incrementProperty "#{data.type}Counter"
 
+      namespace: (data) ->
+        realtime.set "namespace", data.namespace
+
     socket = @get('socketIOService').socketFor ENV.socketPath
 
 

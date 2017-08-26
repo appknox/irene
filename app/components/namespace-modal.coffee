@@ -5,7 +5,11 @@
 NamespaceModalComponent = Ember.Component.extend
 
   i18n: Ember.inject.service()
-  showNamespaceModal: true
+  showNamespaceModal: false
+
+  newNamespaceObserver: Ember.observer "realtime.namespace", ->
+    @set "showNamespaceModal", true
+
 
   tRequestToAddNamespace: t("requestToAddNamespace")
 
@@ -13,7 +17,7 @@ NamespaceModalComponent = Ember.Component.extend
     addNamespace: ->
       tRequestToAddNamespace = @get "tRequestToAddNamespace"
       data =
-        namespace: @get "user.namespaces"
+        namespace: @get "realtime.namespace"
       that = @
       @get("ajax").post ENV.endpoints.namespaceAdd, data: data
       .then ->
