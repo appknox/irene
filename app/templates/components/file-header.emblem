@@ -50,9 +50,14 @@
           button.is-primary.margin-top20 disabled="disabled"
               | Completed &nbsp;
               = fa-icon "fa-check"
-          button.is-primary.margin-top20.margin-left click="openAPIScanModal"
-            .fa-font-size-small
-              = fa-icon "fa-repeat"
+          if file.isTrail
+            button.is-primary.margin-top20.margin-left click="openSubscribeModal"
+              .fa-font-size-small
+                = fa-icon "fa-repeat"
+          if file.ifIsNotTrail
+            button.is-primary.margin-top20.margin-left click="openAPIScanModal"
+              .fa-font-size-small
+                = fa-icon "fa-repeat"
         else
           if file.isNeitherNoneNorReady
             button.is-primary.margin-top20.is-progress disabled="disabled"
@@ -82,10 +87,16 @@
                 = fa-icon "fa-play"
       .column.flex-center
         if file.ifManualNotRequested
-          button.is-primary.margin-top20 click="requestManual"
-            | Start &nbsp;
-            .fa-font-size
-              = fa-icon "fa-play"
+          if file.isTrail
+            button.is-primary.margin-top20 click="openSubscribeModal"
+              | Start &nbsp;
+              .fa-font-size
+                = fa-icon "fa-play"
+          if file.ifIsNotTrail
+            button.is-primary.margin-top20 click="requestManual"
+              | Start &nbsp;
+              .fa-font-size
+                = fa-icon "fa-play"
         else
           button.is-primary.margin-top20 disabled="disabled"
             if file.isManualDone
@@ -164,7 +175,6 @@
               = t "copy"
 
 = modal-card isActive=showAPIScanModal title=(t "modalCard.apiScan.title")
-
   .card-body.warning-modal
     .card-wrapper
       .api-scanning
@@ -195,3 +205,14 @@
             .column
               button.modal-button.is-primary.mp-dont-run-api-scan click="doNotRunAPIScan"
                 = t "no"
+
+= modal-card isActive=showSubscribeModal title="Subscribe to continue"
+  h5
+   | You haven't subcribed yet, do you want to Subscribe?
+  .columns
+    .column.is-one-sixth
+      button.modal-button.is-primary
+        =  t "yes"
+    .column
+      button.modal-button.is-primary
+        = t "no"

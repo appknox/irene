@@ -107,6 +107,9 @@ FileHeaderComponent = Ember.Component.extend
     closeModal: ->
       @set "showAPIScanModal", false
 
+    openSubscribeModal: ->
+      @set "showSubscribeModal", true  
+
     dynamicShutdown: ->
       file = @get "file"
       file.setShuttingDown()
@@ -118,6 +121,6 @@ FileHeaderComponent = Ember.Component.extend
         file.setNone()
         for error in error.errors
           that.get("notify").error error.detail?.message
-  
+
 
 `export default FileHeaderComponent`
