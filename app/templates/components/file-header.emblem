@@ -211,8 +211,8 @@
    | You haven't subcribed yet, do you want to Subscribe?
   .columns
     .column.is-one-sixth
-      button.modal-button.is-primary
+      button.modal-button.is-primary click="subscribePlan"
         =  t "yes"
     .column
-      button.modal-button.is-primary
+      button.modal-button.is-primary click="closeSubscribeModal"
         = t "no"

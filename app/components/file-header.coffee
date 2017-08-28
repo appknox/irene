@@ -107,8 +107,14 @@ FileHeaderComponent = Ember.Component.extend
     closeModal: ->
       @set "showAPIScanModal", false
 
+    closeSubscribeModal: ->
+      @set "showSubscribeModal", false
+
     openSubscribeModal: ->
-      @set "showSubscribeModal", true  
+      @set "showSubscribeModal", true
+
+    subscribePlan: ->
+      window.location.href = "/billing"  
 
     dynamicShutdown: ->
       file = @get "file"
