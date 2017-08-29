@@ -46,35 +46,35 @@
            = file.staticScanProgress
            | %
       .column.flex-center
-        if file.isDynamicDone
-          button.is-primary.margin-top20 disabled="disabled"
-              | Completed &nbsp;
-              = fa-icon "fa-check"
-          if file.isTrail
-            button.is-primary.margin-top20.margin-left click="openSubscribeModal"
-              .fa-font-size-small
-                = fa-icon "fa-repeat"
-          if file.ifIsNotTrail
-            button.is-primary.margin-top20.margin-left click="openAPIScanModal"
-              .fa-font-size-small
-                = fa-icon "fa-repeat"
-        else
-          if file.isNeitherNoneNorReady
-            button.is-primary.margin-top20.is-progress disabled="disabled"
-              | #{file.statusText} &nbsp;
-              .fa-font-size
-                i.fa class="fa-spinner fa-spin"
-          if file.isNoneStatus
+        if file.isNeitherNoneNorReady
+          button.is-primary.margin-top20.is-progress disabled="disabled"
+            | #{file.statusText} &nbsp;
+            .fa-font-size
+              i.fa class="fa-spinner fa-spin"
+        if file.isNoneStatus
+          if file.isDynamicDone
+            button.is-primary.margin-top20 disabled="disabled"
+                | Completed &nbsp;
+                = fa-icon "fa-check"
+            if file.isTrail
+              button.is-primary.margin-top20.margin-left click="openSubscribeModal"
+                .fa-font-size-small
+                  = fa-icon "fa-repeat"
+            if file.ifIsNotTrail
+              button.is-primary.margin-top20.margin-left click="openAPIScanModal"
+                .fa-font-size-small
+                  = fa-icon "fa-repeat"
+          else
             button.is-primary.margin-top20 click="openAPIScanModal"
               | Start &nbsp;
               .fa-font-size
                 = fa-icon "fa-play"
-          if file.isReady
-            button.is-primary.margin-top20 click="dynamicShutdown"
-              | Stop &nbsp;
-              .fa-font-size-small
-                = fa-icon "fa-stop"
-
+        if file.isReady
+          button.is-primary.margin-top20 click="dynamicShutdown"
+            | Stop &nbsp;
+            .fa-font-size-small
+              = fa-icon "fa-stop"
+              
       if file.project.isAPIScanEnabled
         .column.flex-center
           button.is-primary.margin-top20 disabled="disabled"
