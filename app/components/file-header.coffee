@@ -66,6 +66,7 @@ FileHeaderComponent = Ember.Component.extend
       that = @
       data =
         isApiScanEnabled: isApiScanEnabled
+      debugger  
       @get("ajax").post apiScanOptions, data: data
       .then (data)->
         that.send "closeModal"
@@ -114,7 +115,7 @@ FileHeaderComponent = Ember.Component.extend
       @set "showSubscribeModal", true
 
     subscribePlan: ->
-      window.location.href = "/billing"  
+      window.location.href = "/billing"
 
     dynamicShutdown: ->
       file = @get "file"
