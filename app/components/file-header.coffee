@@ -49,7 +49,6 @@ FileHeaderComponent = Ember.Component.extend
     dynamicScan: ->
       file = @get "file"
       file.setBootingStatus()
-      @set "file.isDynamicDone", false
       file_id = @get "file.id"
       dynamicUrl = [ENV.endpoints.dynamic, file_id].join '/'
       @get("ajax").request dynamicUrl
@@ -66,7 +65,6 @@ FileHeaderComponent = Ember.Component.extend
       that = @
       data =
         isApiScanEnabled: isApiScanEnabled
-      debugger  
       @get("ajax").post apiScanOptions, data: data
       .then (data)->
         that.send "closeModal"
