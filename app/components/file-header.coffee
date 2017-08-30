@@ -122,6 +122,8 @@ FileHeaderComponent = Ember.Component.extend
       file_id = @get "file.id"
       shutdownUrl = [ENV.endpoints.dynamicShutdown, file_id].join '/'
       @get("ajax").request shutdownUrl
+      .then () ->
+        file.setNone()
       .catch (error) ->
         file.setNone()
         for error in error.errors
