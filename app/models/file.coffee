@@ -40,7 +40,7 @@ File = DS.Model.extend BaseModelMixin,
     !manual
   ).property 'manual'
 
-  ifIsNotTrail: (->
+  isPaid: (->
     isTrail = @get "isTrail"
     !isTrail
   ).property "isTrail"

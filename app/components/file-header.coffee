@@ -57,7 +57,7 @@ FileHeaderComponent = Ember.Component.extend
         for error in error.errors
           that.get("notify").error error.detail?.message
 
-    isApiScanEnabled: ->
+    setAPIScanOption: ->
       tStartingScan = @get "tStartingScan"
       isApiScanEnabled = @get "isApiScanEnabled"
       project_id = @get "file.project.id"
@@ -77,11 +77,11 @@ FileHeaderComponent = Ember.Component.extend
 
     doNotRunAPIScan: ->
       @set "isApiScanEnabled", false
-      @send "isApiScanEnabled"
+      @send "setAPIScanOption"
 
     runAPIScan: ->
       @set "isApiScanEnabled", true
-      @send "isApiScanEnabled"
+      @send "setAPIScanOption"
 
     requestManual: ->
       tManualRequested = @get "tManualRequested"
