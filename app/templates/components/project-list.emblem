@@ -1,6 +1,6 @@
 if user.hasProject
   .column
-    .box
+    .top-container
       .columns
         if env.isAppknox
           .column.is-one-sixth
@@ -37,7 +37,7 @@ if user.hasProject
               option value=platformObject.value
                 = platformObject.key
 
-    .columns
+    .columns.project-container
       if hasObjects
         each sortedObjects as |project|
           = project-overview project=project
