@@ -40,11 +40,14 @@
 
     .columns
       .column.flex-center
-        div.progress-wrap.progress class=file.isStaticCompleted:is-success:is-progress
-          div.progress-bar.progress style="left:{{file.staticScanProgress}}%"
-          div.progress-text
-           = file.staticScanProgress
-           | %
+        if file.isStaticCompleted
+          button.is-primary.margin-top20 disabled="disabled"
+            | Completed &nbsp;
+            = fa-icon "fa-check"
+        else
+           button.is-primary.margin-top20.is-progress disabled="disabled"
+            | Scanning: #{file.staticScanProgress}
+            | %
       .column.flex-center
         if file.isNeitherNoneNorReady
           button.is-primary.margin-top20.is-progress disabled="disabled"
