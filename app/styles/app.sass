@@ -114,12 +114,11 @@ $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert),
     font-weight: lighter
     &:hover
       font-weight: bolder
-      color: lighten(#EF4836, 10%)
-      background-color: #e5e5e5
+      color: lighten(#EF4836, 15%)
+      background-color: #f0f0f0
     &.is-active
       font-weight: bolder
   a.active
-    background-color: #d8d8d8
     color: #EF4836
     font-weight: 900
 
@@ -310,8 +309,13 @@ div[class^="_c-notification__container"]
   font-size: 15px!important
   margin-top: 5px
 
+.columns-main-container
+  margin-top: 0px!important
+
 .side-menu
   .box
+    background-color: #f0f0f0
+    box-shadow: none
     margin-top: 30px
   .menu
     position: fixed
