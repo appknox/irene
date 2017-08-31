@@ -42,11 +42,11 @@
       .column.flex-center
         if file.isStaticCompleted
           button.is-primary.margin-top20 disabled="disabled"
-            | Completed &nbsp;
+            | #{t "completed"} &nbsp;
             = fa-icon "fa-check"
         else
            button.is-primary.margin-top20.is-progress disabled="disabled"
-            | Scanning: #{file.staticScanProgress}
+            | #{t "scanning"} : #{file.staticScanProgress}
             | %
       .column.flex-center
         if file.isNeitherNoneNorReady
@@ -57,7 +57,7 @@
         if file.isNoneStatus
           if file.isDynamicDone
             button.is-primary.margin-top20 disabled="disabled"
-                | Completed &nbsp;
+                | #{t "completed"} &nbsp;
                 = fa-icon "fa-check"
             if file.isTrail
               button.is-primary.margin-top20.margin-left click="openSubscribeModal"
@@ -69,12 +69,12 @@
                   = fa-icon "fa-repeat"
           else
             button.is-primary.margin-top20 click="openAPIScanModal"
-              | Start &nbsp;
+              | #{t "start"} &nbsp;
               .fa-font-size
                 = fa-icon "fa-play"
         if file.isReady
           button.is-primary.margin-top20 click="dynamicShutdown"
-            | Stop &nbsp;
+            | #{t "stop"} &nbsp;
             .fa-font-size-small
               = fa-icon "fa-stop"
 
@@ -82,31 +82,31 @@
         .column.flex-center
           button.is-primary.margin-top20 disabled="disabled"
             if file.isApiDone
-              | Completed &nbsp;
+              | #{t "completed"} &nbsp;
               = fa-icon "fa-check"
             else
-              | Start &nbsp;
+              | #{t "start"} &nbsp;
               .fa-font-size
                 = fa-icon "fa-play"
       .column.flex-center
         if file.ifManualNotRequested
           if file.isTrail
             button.is-primary.margin-top20 click="openSubscribeModal"
-              | Start &nbsp;
+              | #{t "start"} &nbsp;
               .fa-font-size
                 = fa-icon "fa-play"
           if file.isPaid
             button.is-primary.margin-top20 click="requestManual"
-              | Start &nbsp;
+              | #{t "start"} &nbsp;
               .fa-font-size
                 = fa-icon "fa-play"
         else
           button.is-primary.margin-top20 disabled="disabled"
             if file.isManualDone
-              | Completed &nbsp;
+              | #{t "completed"} &nbsp;
               = fa-icon "fa-check"
             else
-              | Requested &nbsp;
+              | #{t "requested"} &nbsp;
               = fa-icon "fa-clock-o"
 
 .card.is-fullwidth.margin-bottom20.app-details-card
