@@ -1,6 +1,6 @@
 if user.hasProject
   .column
-    .top-container
+    .box-container
       .columns
         if env.isAppknox
           .column.is-one-sixth
