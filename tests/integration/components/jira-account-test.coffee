@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{jira-account}}"""
 
-  assert.equal @$().text().trim(), 'JIRA IntegrationIntegrate JIRAAre you sure you want to revoke JIRA Integration?CancelOk'
+  assert.equal @$().text().trim(), 'Integrate JIRAAre you sure you want to revoke JIRA Integration?CancelOk'
