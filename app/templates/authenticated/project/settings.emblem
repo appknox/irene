@@ -17,5 +17,5 @@
   = jira-project project=model
 .box-container
   = test-credentials project=model
-.box-container
+.margin-left
   = collaboration-component project=model

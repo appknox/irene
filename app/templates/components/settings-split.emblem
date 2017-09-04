@@ -18,7 +18,7 @@ if isGeneral
         h4
           = t "language"
         = select-language
-  .box-container
+  .margin-left
     h4.is-fullwidth
       = t "integration"
     .columns.box
