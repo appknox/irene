@@ -4,7 +4,7 @@
       = t "teams"
   .column.content-right.margin-right100
     button.is-primary.uppercase-text.margin-top5 click="openTeamModal"
-      = t "createTeam"
+      | + #{t "createTeam"}
 
 / .columns.remove click="openTeamModal"
 /   .column.is-one-sixth.margin-auto.text-centre.uppercase-text
