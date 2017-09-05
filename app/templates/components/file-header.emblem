@@ -191,7 +191,7 @@
             = t "modalCard.apiScan.apiList"
             .columns.margin-top
               each file.project.apiUrlFilterItems as |item|
-                .column.is-one-third.flex-center
+                .column.is-half.flex-center
                   = item
           else
             = t "modalCard.apiScan.noAPIFilter"
