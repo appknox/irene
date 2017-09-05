@@ -188,14 +188,14 @@
           = t "modalCard.apiScan.extraDescription"
         div.margin-top
           if file.project.hasAPIURLFilter
-            = t "modalCard.apiScan.apiList"
-            .columns.margin-top
+            | #{t "modalCard.apiScan.apiList"} :
+            ul.api-filter-list
               each file.project.apiUrlFilterItems as |item|
-                .column.is-half.flex-center
+                li.cc
                   = item
           else
             = t "modalCard.apiScan.noAPIFilter"
-        form
+        form.margin-top20
           p.control
           .columns
             .column.is-one-third.edit-filter
