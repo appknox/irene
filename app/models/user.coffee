@@ -34,6 +34,7 @@ User = DS.Model.extend
   billingHidden: DS.attr 'boolean'
   mfaMethod: DS.attr 'number'
   mfaSecret: DS.attr 'string'
+  isTrial: DS.attr 'boolean'
 
   tProject: t("project")
   tProjects: t("projects")

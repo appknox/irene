@@ -17,6 +17,7 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
   session: service()
   realtime: service()
   mixpanel: service()
+  trial: service()
   socketIOService: service 'socket-io'
 
   beforeModel: (transition)->
@@ -45,6 +46,9 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
         name: user.get "username"
         email: user.get "email"
       Appcues.start() 
+
+    trial = @get "trial"
+    trial.set "isTrial", user.get "isTrial"
 
     @get('notify').setDefaultAutoClear ENV.notifications.autoClear
 

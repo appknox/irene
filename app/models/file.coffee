@@ -33,17 +33,11 @@ File = DS.Model.extend BaseModelMixin,
   isDynamicDone: DS.attr 'boolean'
   isManualDone: DS.attr 'boolean'
   isApiDone: DS.attr 'boolean'
-  isTrail: DS.attr 'boolean'
 
   ifManualNotRequested: (->
     manual = @get 'manual'
     !manual
   ).property 'manual'
-
-  isPaid: (->
-    isTrail = @get "isTrail"
-    !isTrail
-  ).property "isTrail"
 
   scanProgressClass: (type)->
     if type is true

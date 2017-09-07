@@ -6,6 +6,7 @@
 FileHeaderComponent = Ember.Component.extend
 
   i18n: Ember.inject.service()
+  trial: Ember.inject.service()
 
   globalAlpha:0.4
   radiusRatio:0.9

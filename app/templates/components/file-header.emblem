@@ -59,11 +59,14 @@
             button.is-primary.margin-top20 disabled="disabled"
                 | #{t "completed"} &nbsp;
                 = fa-icon "fa-check"
-            if file.isTrail
+            if trial.isTrial
               button.is-primary.margin-top20.margin-left click="openSubscribeModal"
                 .fa-font-size-small
                   = fa-icon "fa-repeat"
-            if file.isPaid
+              button.is-primary.margin-top20.margin-left.disabled disabled="true"
+                .fa-font-size-small
+                  = fa-icon "fa-repeat"
+            else
               button.is-primary.margin-top20.margin-left click="openAPIScanModal"
                 .fa-font-size-small
                   = fa-icon "fa-repeat"
@@ -90,12 +93,12 @@
                 = fa-icon "fa-play"
       .column.flex-center
         if file.ifManualNotRequested
-          if file.isTrail
+          if trial.isTrial
             button.is-primary.margin-top20 click="openSubscribeModal"
               | #{t "start"} &nbsp;
               .fa-font-size
                 = fa-icon "fa-play"
-          if file.isPaid
+          else
             button.is-primary.margin-top20 click="requestManual"
               | #{t "start"} &nbsp;
               .fa-font-size

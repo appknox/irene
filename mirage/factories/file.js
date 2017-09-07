@@ -18,7 +18,6 @@ export default Base.extend({
   isDynamicDone: faker.random.boolean,
   isManualDone: faker.random.boolean,
   isApiDone: faker.random.boolean,
-  isTrail:  true,
 
   dynamicStatus(){
     return faker.random.arrayElement(ENUMS.DYNAMIC_STATUS.VALUES);
