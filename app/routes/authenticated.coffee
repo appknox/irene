@@ -41,10 +41,10 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
         "$name": user.get "username"
         "$email": user.get "email"
     try
-      Appcues.identify user.get "id",
+      Appcues.identify user.get("id"),
         name: user.get "username"
         email: user.get "email"
-      Appcues.start()  
+      Appcues.start() 
 
     @get('notify').setDefaultAutoClear ENV.notifications.autoClear
 
