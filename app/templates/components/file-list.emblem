@@ -5,7 +5,9 @@
         .column.is-one-third
           = file-overview file=file
     else
-      h3.margin-left
-        | #{ t "noFiles"}!
+      .loading-container
+        i.fa class="fa-spinner fa-spin"
+        div
+          | Loading...
 
   = partial "paginate"

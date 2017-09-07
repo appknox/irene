@@ -39,11 +39,6 @@ File = DS.Model.extend BaseModelMixin,
     !manual
   ).property 'manual'
 
-  isApiScanning: (->
-    apiScanProgress = @get "apiScanProgress"
-    apiScanProgress not in [0, undefined, 100]
-  ).property "apiScanProgress"
-
   scanProgressClass: (type)->
     if type is true
       return true
@@ -58,16 +53,6 @@ File = DS.Model.extend BaseModelMixin,
     isDynamicDone = @get "isDynamicDone"
     @scanProgressClass isDynamicDone
   ).property "isDynamicDone"
-
-  isApiCompleted: (->
-    isApiDone = @get "isApiDone"
-    @scanProgressClass isApiDone
-  ).property "isApiDone"
-
-  isManualCompleted: (->
-    isManualDone = @get "isManualDone"
-    @scanProgressClass isManualDone
-  ).property "isManualDone"
 
   fileDetailsClass: (->
     hasMultipleFiles = @get "project.hasMultipleFiles"
@@ -129,13 +114,7 @@ File = DS.Model.extend BaseModelMixin,
       return 100
     0
 
-  manualScanProgress: Ember.computed "analyses.@each.risk", "isManualCompleted", ->
-    isManualDone  = @get "isManualDone"
-    if isManualDone
-      return 100
-    0
-
-  isNoneStaus: (->
+  isNoneStatus: (->
     status = @get 'dynamicStatus'
     status is ENUMS.DYNAMIC_STATUS.NONE
   ).property 'dynamicStatus'

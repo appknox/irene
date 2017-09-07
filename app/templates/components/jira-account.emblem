@@ -1,6 +1,3 @@
-h5
-  = t "jiraIntegration"
-
 if user.hasJiraToken
   h6
     | Intergations completed

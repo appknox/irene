@@ -1,4 +1,4 @@
-h3.has-text-centered.signin-text
+h3.has-text-centered.signin-text.margin-top20
   = t "acceptInvite"
 = auth-assets
   .column.flex-center
@@ -9,7 +9,7 @@ h3.has-text-centered.signin-text
         = fa-icon "envelope" class="is-primary"
 
       p.control.has-icon.has-icon-left
-        = input class="input" placeholder=(t 'username') value=username
+        = input class="input" placeholder=(t 'username') value=username autofocus="autofocus"
         = fa-icon "user" class="is-primary"
 
       p.control.has-icon.has-icon-left

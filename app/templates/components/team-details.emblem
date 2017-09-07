@@ -7,8 +7,8 @@
             .column
               = team.name
             .column.is-one-sixth
-              button.add-member click="openAddMemberModal"
-                = t "addMember"
+              button.add-member.uppercase-text click="openAddMemberModal"
+                | + #{t "addMember"}
       tr
         th
           = t "members"

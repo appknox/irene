@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{settings-split}}"""
 
-  assert.equal @$().text().trim(), 'GeneralSecurityNamespaceAdd NamespaceAdd NamespaceAdd NamespaceLanguageEnglish日本語IntegrationsJIRA IntegrationIntegrate JIRAAre you sure you want to revoke JIRA Integration?CancelOkGitHub IntegrationIntegrate GitHubAre you sure you want to revoke Github Integration?CancelOk'
+  assert.equal @$().text().trim(), 'GeneralSecurityNamespaceAdd NamespaceAdd NamespaceAdd NamespaceLanguageEnglish日本語JIRA IntegrationIntegrate JIRAAre you sure you want to revoke JIRA Integration?CancelOkGitHub IntegrationIntegrate GitHubAre you sure you want to revoke Github Integration?CancelOk'

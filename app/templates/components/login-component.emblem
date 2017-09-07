@@ -1,4 +1,4 @@
-h3.has-text-centered.signin-text
+h3.has-text-centered.signin-text.margin-top20
   = t "signin"
 = auth-assets
   .column.flex-center

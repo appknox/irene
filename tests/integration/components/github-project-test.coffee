@@ -14,4 +14,4 @@ test 'it renders', (assert) ->
   @render hbs """{{github-project}}"""
 
 
-  assert.equal @$().text().trim(), "GitHubNo PreferenceLoading...Are you sure you want to remove Github Project?CancelOk"
+  assert.equal @$().text().trim(), "GitHub IntegrationNo PreferenceLoading...Are you sure you want to remove Github Project?CancelOk"

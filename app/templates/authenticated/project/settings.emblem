@@ -1,4 +1,4 @@
-.margin-left
+.margin-left.box-container
   .columns
     .column.is-one-sixth
       h4
@@ -7,15 +7,15 @@
       = link-to 'authenticated.project.files' model.id class="is-primary" tagName="button" class="mp-settings-all-scans"
         = t "allScans"
 
-.box
+.box-container
   = project-preferences project=model
-.box
+.box-container
   = api-filter project=model
-.box
+.box-container
   = github-project project=model
-.box
+.box-container
   = jira-project project=model
-.box
+.box-container
   = test-credentials project=model
-.box
+.margin-left
   = collaboration-component project=model

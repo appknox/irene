@@ -1,4 +1,4 @@
-.columns
+.columns.columns-main-container
   .column.is-one-sixth.side-menu
     .appknox-logo
       = img-logo

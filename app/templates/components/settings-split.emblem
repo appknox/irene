@@ -8,7 +8,7 @@
         = t "security"
 
 if isGeneral
-  .box
+  .box-container
     .columns
       .column
         h4
@@ -18,17 +18,20 @@ if isGeneral
         h4
           = t "language"
         = select-language
-  .box
-    h4.is-fullwidth
-      = t "integration"
-    .columns.box
+  .box-container
+    .columns
       .column
+        h4.is-fullwidth
+          = t "jiraIntegration"
         = jira-account user=user class="column is-one-third"
-    .columns.box
+  .margin-left
+    .columns
       .column
+        h4.is-fullwidth
+          = t "githubIntegration"
         = github-account user=user class="column is-one-third"
 else
-  .box
+  .box-container
     .columns
       .column.is-half
         h4.is-fullwidth

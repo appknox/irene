@@ -25,6 +25,93 @@
         li.file-hide-overflow
           | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
 
+.card.is-fullwidth.margin-bottom20.scan-status-card
+  .card-content
+    .columns
+      .column.flex-center
+        = t "staticScan"
+      .column.flex-center
+        = t "dynamicScan"
+      if file.project.isAPIScanEnabled
+        .column.flex-center
+          = t "apiScan"
+      .column.flex-center
+        = t "manualScan"
+
+    .columns
+      .column.flex-center
+        if file.isStaticCompleted
+          button.is-primary.margin-top20 disabled="disabled"
+            | #{t "completed"} &nbsp;
+            = fa-icon "fa-check"
+        else
+           button.is-primary.margin-top20.is-progress disabled="disabled"
+            | #{t "scanning"} : #{file.staticScanProgress}
+            | %
+      .column.flex-center
+        if file.isNeitherNoneNorReady
+          button.is-primary.margin-top20.is-progress disabled="disabled"
+            | #{file.statusText} &nbsp;
+            .fa-font-size
+              i.fa class="fa-spinner fa-spin"
+        if file.isNoneStatus
+          if file.isDynamicDone
+            button.is-primary.margin-top20 disabled="disabled"
+                | #{t "completed"} &nbsp;
+                = fa-icon "fa-check"
+            if trial.isTrial
+              button.is-primary.margin-top20.margin-left click="openSubscribeModal"
+                .fa-font-size-small
+                  = fa-icon "fa-repeat"
+              button.is-primary.margin-top20.margin-left.disabled disabled="true"
+                .fa-font-size-small
+                  = fa-icon "fa-repeat"
+            else
+              button.is-primary.margin-top20.margin-left click="openAPIScanModal"
+                .fa-font-size-small
+                  = fa-icon "fa-repeat"
+          else
+            button.is-primary.margin-top20 click="openAPIScanModal"
+              | #{t "start"} &nbsp;
+              .fa-font-size
+                = fa-icon "fa-play"
+        if file.isReady
+          button.is-primary.margin-top20 click="dynamicShutdown"
+            | #{t "stop"} &nbsp;
+            .fa-font-size-small
+              = fa-icon "fa-stop"
+
+      if file.project.isAPIScanEnabled
+        .column.flex-center
+          button.is-primary.margin-top20 disabled="disabled"
+            if file.isApiDone
+              | #{t "completed"} &nbsp;
+              = fa-icon "fa-check"
+            else
+              | #{t "start"} &nbsp;
+              .fa-font-size
+                = fa-icon "fa-play"
+      .column.flex-center
+        if file.ifManualNotRequested
+          if trial.isTrial
+            button.is-primary.margin-top20 click="openSubscribeModal"
+              | #{t "start"} &nbsp;
+              .fa-font-size
+                = fa-icon "fa-play"
+          else
+            button.is-primary.margin-top20 click="requestManual"
+              | #{t "start"} &nbsp;
+              .fa-font-size
+                = fa-icon "fa-play"
+        else
+          button.is-primary.margin-top20 disabled="disabled"
+            if file.isManualDone
+              | #{t "completed"} &nbsp;
+              = fa-icon "fa-check"
+            else
+              | #{t "requested"} &nbsp;
+              = fa-icon "fa-clock-o"
+
 .card.is-fullwidth.margin-bottom20.app-details-card
   header.card-header
     .column.is-one-quarter
@@ -41,11 +128,6 @@
           .column.card-button
             button.mp-pdf-report click="getPDFReportLink"
               = t "pdfReport"
-          .column.card-button
-            if env.isAppknox
-              if file.ifManualNotRequested
-                button.mp-request-manual click="requestManual"
-                  = t "manual"
   .card-content
     .columns
       .column.flex-center
@@ -98,46 +180,45 @@
               | &nbsp;
               = t "copy"
 
-.card.is-fullwidth.margin-bottom20.scan-status-card
-  header.card-header
-    p.card-header-title
-      h5
-        = t "scanStatus"
-  .card-content
-    .columns
-      .column.flex-center
-        = t "staticScan"
-      .column.flex-center
-        = t "dynamicScan"
-      if file.project.isAPIScanEnabled
-        .column.flex-center
-          = t "apiScan"
-      .column.flex-center
-        = t "manualScan"
+= modal-card isActive=showAPIScanModal title=(t "modalCard.apiScan.title")
+  .card-body.warning-modal
+    .card-wrapper
+      .api-scanning
+        h6
+          = t "modalCard.apiScan.description"
+        div.warning-band
+          = fa-icon 'exclamation-triangle'
+          = t "modalCard.apiScan.extraDescription"
+        div.margin-top
+          if file.project.hasAPIURLFilter
+            | #{t "modalCard.apiScan.apiList"} :
+            ul.api-filter-list
+              each file.project.apiUrlFilterItems as |item|
+                li.cc
+                  = item
+          else
+            = t "modalCard.apiScan.noAPIFilter"
+        form.margin-top20
+          p.control
+          .columns
+            .column.is-one-third.edit-filter
+              = t "modalCard.apiScan.editFilters"
+              = link-to 'authenticated.project.settings' file.project.id class="mp-detail-project-settings modal-button is-primary" tagName="a"
+                = t "settings"
+            .column.is-one-sixth
+              button.modal-button.is-primary.mp-run-api-scan click="runAPIScan" disabled=file.project.isRunDisabled
+                =  t "yes"
+            .column
+              button.modal-button.is-primary.mp-dont-run-api-scan click="doNotRunAPIScan"
+                = t "no"
 
-    .columns
-      .column.flex-center
-        div.progress-wrap.progress class=file.isStaticCompleted:is-success:is-progress
-          div.progress-bar.progress style="left:{{file.staticScanProgress}}%"
-          div.progress-text
-           = file.staticScanProgress
-           | %
-      .column.flex-center
-        div.progress-wrap.progress class=file.isDynamicCompleted:is-success:is-progress
-          div.progress-bar.progress style="left:{{file.dynamicScanProgress}}%"
-          div.progress-text
-            = file.dynamicScanProgress
-            | %
-      if file.project.isAPIScanEnabled
-        .column.flex-center
-          div.progress-wrap.progress class=file.isApiCompleted:is-success:is-progress
-            div.progress-bar.progress style="left:{{file.apiScanProgress}}%"
-            div.progress-text
-             = file.apiScanProgress
-             | %
-      .column.flex-center
-        div.progress-wrap.progress class=file.isManualCompleted:is-success:is-progress
-          div.progress-bar.progress style="left:{{file.manualScanProgress}}%"
-          div.progress-text
-            = file.manualScanProgress
-            | %
+= modal-card isActive=showSubscribeModal title="Subscribe to continue"
+  h5
+   | You haven't subcribed yet, do you want to Subscribe?
+  .columns
+    .column.is-one-sixth
+      button.modal-button.is-primary click="subscribePlan"
+        =  t "yes"
+    .column
+      button.modal-button.is-primary click="closeSubscribeModal"
+        = t "no"

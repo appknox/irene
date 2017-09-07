@@ -114,12 +114,11 @@ $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert),
     font-weight: lighter
     &:hover
       font-weight: bolder
-      color: lighten(#EF4836, 10%)
-      background-color: #e5e5e5
+      color: lighten(#EF4836, 15%)
+      background-color: #f0f0f0
     &.is-active
       font-weight: bolder
   a.active
-    background-color: #d8d8d8
     color: #EF4836
     font-weight: 900
 
@@ -302,8 +301,31 @@ div[class^="_c-notification__container"]
 .risk-icons
   font-size: 14px
 
+.fa-font-size-small i
+  font-size: 13px!important
+  margin-top: 6px
+
+.fa-font-size i
+  font-size: 15px!important
+  margin-top: 5px
+
+.columns-main-container
+  margin-top: 0px!important
+
+.box-container
+  padding: 5px 20px 20px 20px
+  border-bottom: 3px solid #f0f0f0
+  margin-left: -9px
+  margin-right: -9px
+  margin-bottom: 10px
+
+.project-container
+  margin-top: 10px
+
 .side-menu
   .box
+    background-color: #f0f0f0
+    box-shadow: none
     margin-top: 30px
   .menu
     position: fixed
@@ -421,7 +443,7 @@ button, .button
   table
     tr
       th
-        background-color: #80C081
+        background-color: $default
         color: #fff
       th, td
         text-align: center
@@ -432,7 +454,7 @@ button, .button
   table
     tr
       th
-        background-color: #A9A9A9
+        background-color: $default
       th, td
         border: 1px solid #808080
 
@@ -596,7 +618,7 @@ b.bold
     td:nth-child(3)
       width: 80%
   tr.table-head
-    background-color: lighten(rgb(107, 107, 107), 10%)
+    background-color: $default
     color: #fff
     font-weight: 100
     td
@@ -721,14 +743,14 @@ ul.risk-table
     padding-top: 30px
 
 .team-container
-  padding: 30px 100px
+  padding: 0px 100px
 
 .team-details-container
   padding: 30px 150px
 
 .team-overview-card
   header:nth-child(1)
-    background-color: $blue
+    background-color: $default
     color: $white
   .fa-times
     color: #EF4836
@@ -753,10 +775,11 @@ ul.risk-table
       border: 1px solid #b8b8b8
       padding: 10px 0px
     th
-      background-color: #6B6B6B
+      background-color: $default
       color: #fff
   button.add-member
     color: $white
+    margin-right: 10px
     &:hover
       border-color: $white
   .fa-times
@@ -787,6 +810,11 @@ ul.risk-table
   button
     margin-top: -40px
 
+ul.api-filter-list
+  li
+    margin-left: 25px
+  li:before
+    content: "• "
 
 .filter-list
   input
@@ -827,7 +855,7 @@ button.delete-button
       border: 1px solid #b8b8b8
       padding: 10px 0px
     th
-      background-color: #6B6B6B
+      background-color: $default
       color: #fff
   select
     width: 60%
@@ -910,14 +938,51 @@ button.delete-button
   .screen
     width: 88%
     margin-left: 6%
+    canvas.canvas
+      width: 216px!important
   .home
     width: 50px
     height: 50px
     left: 52%
 
+.repeat-icon
+  margin-left: 10px
+  margin-top: 15px
+  color: $red
+  cursor: pointer
+
 .modal-card.device-modal
   max-height: calc(100vh - 10px)
+  .modal-card-head
+    border-bottom: 0px
   .modal-card-body
     min-height: 582px
     button
       margin-top: 45px
+
+.tabs.is-boxed
+  li.is-active a
+    padding: 2px 10px
+    border-color: #f0f0f0
+    border-top: 3px solid #EF4836
+  a
+    padding: 3px 10px
+    &:hover
+      border-bottom-color: #f0f0f0
+  ul
+    border-color: #f0f0f0
+
+.loading-container
+  margin: 20% auto
+  i
+    font-size: 80px
+    display: flex
+    align-items: center
+    margin-bottom: 10px
+  div
+    font-size: 20px
+
+.login-wrapper
+  h6
+    margin-top: -15px
+    margin-bottom: 25px

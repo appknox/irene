@@ -11,7 +11,7 @@ export default Factory.extend({
   firstName: faker.name.firstName,
   lastName: faker.name.lastName,
   expiryDate: faker.date.future,
-  projectCount: faker.random.number,
+
   hasGithubToken: faker.random.boolean,
   hasJiraToken: faker.random.boolean,
   limitedScans: false,
@@ -20,6 +20,10 @@ export default Factory.extend({
   socketId: faker.random.number,
   mfaMethod(){
     return faker.random.arrayElement(ENUMS.MFA_METHOD.VALUES);
+  },
+
+  projectCount() {
+    return faker.random.arrayElement([1,2,3,4]);
   },
 
   lang(){

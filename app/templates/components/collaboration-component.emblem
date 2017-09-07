@@ -3,8 +3,8 @@
     h5
       = t "collaborations"
   .column.content-right.margin-right100
-    button.is-primary.mp-open-collaboration-modal click="openCollaborationModal"
-      = t "addTeam"
+    button.is-primary.mp-open-collaboration-modal.uppercase-text click="openCollaborationModal"
+      | + #{t "addTeam"}
 
 .collaboration-container
   table.collaboration-table.margin-top

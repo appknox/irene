@@ -1,4 +1,5 @@
-h5 JIRA
+h5
+  = t "jiraIntegration"
 
 if project.jiraProject
   h5

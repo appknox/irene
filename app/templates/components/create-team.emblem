@@ -1,7 +1,10 @@
-.columns.remove click="openTeamModal"
-  .column.card.is-one-sixth.margin-auto.text-centre.uppercase-text
-    = fa-icon "users"
-    | &nbsp; #{ t "createTeam"}
+.columns
+  .column.margin-left
+    h4
+      = t "teams"
+  .column.content-right.margin-right100
+    button.is-primary.uppercase-text.margin-top5 click="openTeamModal"
+      | + #{t "createTeam"}
 
 = modal-card isActive=showTeamModal title=(t 'createTeam')
   .card-body

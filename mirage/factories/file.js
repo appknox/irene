@@ -11,7 +11,13 @@ export default Base.extend({
   md5hash: faker.random.number,
   sha1hash: faker.random.number,
   report: faker.internet.avatar,
-  manual: faker.random.boolean,
+  manual: false,
+  apiScanProgress: faker.random.number,
+  staticScanProgress: faker.random.number,
+  isStaticDone: faker.random.boolean,
+  isDynamicDone: faker.random.boolean,
+  isManualDone: faker.random.boolean,
+  isApiDone: faker.random.boolean,
 
   dynamicStatus(){
     return faker.random.arrayElement(ENUMS.DYNAMIC_STATUS.VALUES);

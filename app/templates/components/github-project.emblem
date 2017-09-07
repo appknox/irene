@@ -1,4 +1,5 @@
-h5 GitHub
+h5
+  = t "githubIntegration"
 
 if project.githubRepo
   h5
