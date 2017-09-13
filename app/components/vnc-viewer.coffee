@@ -22,7 +22,10 @@ VncViewerComponent = Ember.Component.extend
       "Pop Out Modal"
   ).property "isPoppedOut"
 
-  didUpdate: ->
+  setupRFB: ->
+    rfb = @get "rfb"
+    if !Ember.isEmpty rfb
+      return
     canvasEl = @element.getElementsByClassName("canvas")[0]
     that = @
     @set "rfb", new RFB
@@ -48,6 +51,13 @@ VncViewerComponent = Ember.Component.extend
 
     if @get 'file.isReady'
       @send("connect")
+
+
+  didUpdate: ->
+    @setupRFB()
+
+  didInsertElement: ->
+    @setupRFB()
 
   statusChange: ( ->
     if @get 'file.isReady'

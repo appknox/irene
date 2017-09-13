@@ -3,7 +3,7 @@ if isPoppedOut
   .modal-background
 .modal-card.device-modal
   .modal-card-body.padding-10.margin-top
-    if isAndroidDevice
+    / if isAndroidDevice
       div class="marvel-device nexus5"
         div class="top-bar"
         div class="sleep"
@@ -11,7 +11,7 @@ if isPoppedOut
         div class="camera"
         div class="screen"
           canvas.canvas
-    if isIOSDevice
+    / if isIOSDevice
       div class="marvel-device iphone5s silver"
         div class="top-bar"
         div class="sleep"
@@ -23,8 +23,8 @@ if isPoppedOut
           canvas.canvas
         div class="home"
         div class="bottom-bar"
-    if isNeitherAndroidNorIOS
-      canvas.canvas.other-devices
+    / if isNeitherAndroidNorIOS
+    canvas.canvas.other-devices
 
   if file.isReady
     .modal-card-foot
