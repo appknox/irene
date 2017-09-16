@@ -50,7 +50,7 @@ module.exports = function(environment) {
       ajax: {
         trackMethods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
         trackWebSockets: false,
-        ignoreURLs: ['api.mixpanel.com']
+        ignoreURLs: ['api.mixpanel.com', 'socket.appknox.com', 'm.stripe.com', 'appknox-production.s3.amazonaws.com']
       }
     },
     rootURL: '/',
