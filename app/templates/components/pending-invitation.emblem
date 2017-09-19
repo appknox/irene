@@ -1,2 +1,4 @@
-.margin-top
+td
   = invitation.email
+td
+  = invitation.team.name
