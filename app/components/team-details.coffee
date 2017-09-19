@@ -38,8 +38,8 @@ TeamDetailsComponent = Ember.Component.extend
         identification: teamMember
       @get("ajax").post url, data: data
       .then (data)->
+        that.store.pushPayload data
         if data?.data?.type is "team"
-          that.store.pushPayload data
           that.get("notify").success tTeamMemberAdded
         else
           that.get("notify").success tTeamMemberInvited
