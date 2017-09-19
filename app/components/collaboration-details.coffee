@@ -15,6 +15,7 @@ CollaborationDetailsComponent = Ember.Component.extend
   tagName: ["tr"]
 
   tTeam: t("team")
+  isRemovingCollaboration: false
   tPermissionChanged: t("permissionChanged")
   tEnterRightTeamName: t("enterRightTeamName")
   tCollaborationRemoved: t("collaborationRemoved")
@@ -29,11 +30,14 @@ CollaborationDetailsComponent = Ember.Component.extend
     promptedTeam = promptedItem.toLowerCase()
     if promptedTeam isnt teamName
       return @get("notify").error tEnterRightTeamName
+    @set "isRemovingCollaboration", true
     that = @
     collaboration.destroyRecord()
     .then (data)->
+      that.set "isRemovingCollaboration", false
       that.get("notify").success "#{tTeam} #{team} #{tCollaborationRemoved}"
     .catch (error) ->
+      that.set "isRemovingCollaboration", false
       for error in error.errors
         that.get("notify").error error.detail?.message
 
