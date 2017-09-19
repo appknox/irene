@@ -32,7 +32,7 @@
               option value=team.id
                 = team.name
         .card-button
-          button.mp-add-collaboration click="addCollaboration"
+          button.mp-add-collaboration click="addCollaboration" disabled=isAddingCollaboration
             = t "addTeam"
           .columns
             .column.margin-top
