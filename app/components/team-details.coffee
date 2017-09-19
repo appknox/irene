@@ -12,6 +12,8 @@ TeamDetailsComponent = Ember.Component.extend
   team: null
   teamMember: ""
 
+  isInvitingMember: false
+
   invitations: (->
     @get("store").findAll "invitation"
   ).property()
@@ -40,8 +42,10 @@ TeamDetailsComponent = Ember.Component.extend
         return @get("notify").error tEmptyEmailId if isEmpty inputValue
       data =
         identification: teamMember
+      @set "isInvitingMember", true
       @get("ajax").post url, data: data
       .then (data)->
+        that.set "isInvitingMember", false
         if data?.data?.type is "team"
           that.store.pushPayload data
           that.get("notify").success tTeamMemberAdded
@@ -50,6 +54,7 @@ TeamDetailsComponent = Ember.Component.extend
         that.set "teamMember", ""
         that.set "showAddMemberModal", false
       .catch (error) ->
+        that.set "isInvitingMember", false
         that.get("notify").error error.payload.message
         for error in error.errors
           that.get("notify").error error.detail?.message
