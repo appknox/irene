@@ -21,7 +21,7 @@ header.card-header
           = t "started"
           | &nbsp; #{moment-from-now file.createdOn}
           span.tooltiptext.tooltip-collapse
-            = file.createdOn
+            = file.createdOnDateTime
         .column.flex-center.nowrap-trim
           = t "versionCode"
           | {{#if file.versionCode}} - #{file.versionCode}{{/if}}
