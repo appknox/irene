@@ -13,10 +13,10 @@
       form.url-filters
         .columns
           .column.is-one-sixth
-            button.is-primary.mp-add-filter click="addApiUrlFilter"
+            button.is-primary.mp-add-filter click="addApiUrlFilter" disabled=isSavingFilter
               = t "templates.saveFilter"
           .column
             button.is-primary click="addNewUrl"
-             | + {{t "templates.addNewUrl"}}  
+             | + {{t "templates.addNewUrl"}}
 
 = confirm-box isActive=showRemoveURLConfirmBox title=(t 'confirmBox.removeURL') delegate=this
