@@ -21,7 +21,7 @@ if showVulnerability
           if analysis.isRisky
             p = analysis.vulnerability.descriptionUnescapedd
             if analysis.vulnerability.businessImplication
-              h5.margin-top
+              h5.margin-top30
                 = t "businessImplication"
               span.bi-span
                 | {{{analysis.vulnerability.businessImplication}}}
