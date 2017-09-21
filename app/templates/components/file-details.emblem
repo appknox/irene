@@ -1,7 +1,15 @@
 = file-header file=file class="margin-top"
 
-.margin-left
-  h4
-    =t "vulnerabilityDetails"
+.columns.margin-left
+  .column
+    h4
+      = t "vulnerabilityDetails"
+  .column.is-one-sixth.content-right
+    select{action 'filterVulnerabilityType' on='change'} id="filter-vulnerability-type" class="input"
+      option value="-1"
+        | All types
+      each vulnerabilityTypes as |vulnerabilityType|
+        option value=vulnerabilityType.value
+          = vulnerabilityType.key
 each file.sortedAnalyses as |analysis|
   = analysis-details analysis=analysis class="margin-top"
