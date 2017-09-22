@@ -30,6 +30,12 @@ Analysis = DS.Model.extend
     risk is ENUMS.RISK.UNKNOWN
   ).property "risk"
 
+  hasType: (type) ->
+    types = @get "vulnerability.types"
+    if Ember.isEmpty types
+      return false
+    type in types
+
   isRisky: (->
     risk = @get "risk"
     risk not in [ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN]

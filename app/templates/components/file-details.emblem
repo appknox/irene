@@ -11,5 +11,5 @@
       each vulnerabilityTypes as |vulnerabilityType|
         option value=vulnerabilityType.value
           = vulnerabilityType.key
-each file.sortedAnalyses as |analysis|
+each filteredAnalysis as |analysis|
   = analysis-details analysis=analysis class="margin-top"
