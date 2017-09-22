@@ -4,12 +4,12 @@
   .column
     h4
       = t "vulnerabilityDetails"
-  .column.is-one-sixth.content-right
-    select{action 'filterVulnerabilityType' on='change'} id="filter-vulnerability-type" class="input"
+  .column.is-one-third.content-right
+    select{action 'filterVulnerabilityType' on='change'} id="filter-vulnerability-type" class="input filter-input"
       option value="-1"
-        | All types
+        = t "allScans"
       each vulnerabilityTypes as |vulnerabilityType|
         option value=vulnerabilityType.value
-          = vulnerabilityType.key
+          | #{ t (vulnerability-type vulnerabilityType.value)}
 each filteredAnalysis as |analysis|
   = analysis-details analysis=analysis class="margin-top"
