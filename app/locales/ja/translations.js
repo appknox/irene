@@ -145,6 +145,7 @@ export default {
   "noPreference": "指定なし",
   "noProject": "プロジェクトはありません",
   "noProjectUploaded": "あなたはまだプロジェクトをアップロードしていません",
+  "noScansFound": "スキャンが見つかりませんでした",
   "uploadNewProject": "新しいプロジェクトをアップロードするには、ここをクリックしてください",
   "notifications": "通知",
   "ok": "Ok",
