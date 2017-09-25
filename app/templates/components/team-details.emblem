@@ -35,5 +35,5 @@
       form
         p.control
           = input class="form-control input" placeholder=( t 'email') type="text" value=teamMember autofocus="autofocus"
-        button.margin-top10.is-primary click="addMember"
+        button.margin-top10.is-primary click="addMember" disabled=isInvitingMember
          = t "invite"

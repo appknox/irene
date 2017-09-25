@@ -25,4 +25,4 @@
     button click="openDeleteTeamPrompt" disabled=team.isDefaultTeam
       = t "deleteTeam"
 
-= prompt-box isActive=showDeleteTeamPrompt title=(t 'promptBox.deleteTeamPrompt.title') description=(t 'promptBox.deleteTeamPrompt.description') button="deleteTeam" delegate=this
+= prompt-box isActive=showDeleteTeamPrompt title=(t 'promptBox.deleteTeamPrompt.title') description=(t 'promptBox.deleteTeamPrompt.description') button="deleteTeam" delegate=this disabled=isDeletingTeam
