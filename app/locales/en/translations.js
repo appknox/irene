@@ -146,6 +146,7 @@ export default {
   "noPreference": "No Preference",
   "noProject": "no project",
   "noProjectUploaded": "You haven't uploaded any project yet",
+  "noScansFound": "no scans found",
   "notifications": "Notifications",
   "ok": "Ok",
   "or": "or",
