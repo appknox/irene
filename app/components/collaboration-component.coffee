@@ -8,7 +8,7 @@ CollaborationComponentComponent = Ember.Component.extend
 
   project: null
   selectedTeam: 0
-
+  isAddingCollaboration: false
   tSelectAnyTeam: t("selectAnyTeam")
   tCollaborationAdded: t("collaborationAdded")
 
@@ -38,11 +38,14 @@ CollaborationComponentComponent = Ember.Component.extend
         projectId: @get "project.id"
         teamId: selectedTeam
       that = @
+      @set "isAddingCollaboration", true
       @get("ajax").post ENV.endpoints.collaborations, data:data
       .then (data)->
+        that.set "isAddingCollaboration", false
         that.send "closeModal"
         that.get("notify").success tCollaborationAdded
       .catch (error) ->
+        that.set "isAddingCollaboration", false
         that.get("notify").error error.payload.message, ENV.notifications
         for error in error.errors
           that.get("notify").error error.detail?.message

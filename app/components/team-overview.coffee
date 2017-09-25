@@ -8,6 +8,8 @@ TeamOverviewComponent = Ember.Component.extend
   team: null
   classNames: ["column" , "is-one-third"]
 
+  isDeletingTeam: false
+
   tTeam: t("team")
   tTeamDeleted: t("teamDeleted")
   tEnterRightTeamName: t("enterRightTeamName")
@@ -22,11 +24,14 @@ TeamOverviewComponent = Ember.Component.extend
     promptedTeam = promptedItem.toLowerCase()
     if promptedTeam isnt teamName
       return @get("notify").error tEnterRightTeamName
+    @set "isDeletingTeam", true
     that = @
     team.destroyRecord()
     .then ()->
+      that.set "isDeletingTeam", false
       that.get("notify").success "#{tTeam} - #{deletedTeam} #{tTeamDeleted} "
     .catch (error) ->
+      that.set "isDeletingTeam", false
       that.get("notify").error error.payload.message
       for error in error.errors
         that.get("notify").error error.detail?.message

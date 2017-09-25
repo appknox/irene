@@ -14,6 +14,7 @@ ApiFilterComponent = Ember.Component.extend
   tEmptyURL: t("emptyURL")
   tInvalidURL: t("invalidURL")
   tURLAdded: t("urlAdded")
+  isSavingFilter: false
 
 
   confirmCallback: ->
@@ -56,10 +57,13 @@ ApiFilterComponent = Ember.Component.extend
       apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, project_id].join '/'
       data =
         apiUrlFilters: urlString
+      @set "isSavingFilter", true
       @get("ajax").post apiScanOptions, data: data
       .then (data)->
+        that.set "isSavingFilter", false
         that.get("notify").success tURLAdded
       .catch (error) ->
+        that.set "isSavingFilter", false
         for error in error.errors
           that.get("notify").error error.detail?.message
 
