@@ -98,12 +98,6 @@ VncViewerComponent = Ember.Component.extend
       rfb = @get "rfb"
       if rfb._rfb_connection_state is 'connected'
         rfb.disconnect()
-        oldCanvas = @element.getElementsByClassName("canvas")[0]
-        oldCanvas.remove()
-        canvasContainer = @element.getElementsByClassName(".canvas-container")[0]
-        newCanvas = document.createElement("canvas")
-        newCanvas.setAttribute("class", "canvas" )
-        canvasContainer.appendChild(newCanvas)
 
 
 `export default VncViewerComponent`
