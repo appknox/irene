@@ -29,15 +29,6 @@
         each team.teamMembers as |member|
           = team-member member=member team=team
 
-      if invitations
-        div.pending-invitation
-          .box-title
-            = t "pendingInvitations"
-          ul.invitation-list
-            each invitations as |invitation|
-              li
-                = pending-invitation invitation=invitation
-
 = modal-card isActive=showAddMemberModal title=(t "modalCard.addMember.title")
   .card-body
     .card-wrapper
