@@ -10,7 +10,7 @@ if isPoppedOut
         div class="volume"
         div class="camera"
         div class="screen"
-          div.canvas
+          canvas.canvas
     if isIOSDevice
       div class="marvel-device iphone5s silver"
         div class="top-bar"
@@ -20,11 +20,11 @@ if isPoppedOut
         div class="sensor"
         div class="speaker"
         div class="screen"
-          div.canvas
+          canvas.canvas
         div class="home"
         div class="bottom-bar"
     if isNeitherAndroidNorIOS
-      div.canvas.other-devices
+      canvas.canvas.other-devices
 
   if file.isReady
     .modal-card-foot

@@ -54,7 +54,6 @@ VncViewerComponent = Ember.Component.extend
 
 
   didUpdate: ->
-    @set "rfb", null
     @setupRFB()
 
   didInsertElement: ->
