@@ -11,7 +11,6 @@ TeamDetailsComponent = Ember.Component.extend
 
   team: null
   teamMember: ""
-
   isInvitingMember: false
 
   invitations: (->
