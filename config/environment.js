@@ -225,11 +225,11 @@ module.exports = function(environment) {
 
 
   if (environment === 'staging') {
-    // ENV.socketPath = "https://socket.appknox.io",
+    ENV.socketPath = "https://socket.appknox.com",
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
-    // ENV['host'] = "https://api.appknox.io";
+    ENV['host'] = "https://api.appknox.com";
     ENV.stripe = {
       publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
     };
