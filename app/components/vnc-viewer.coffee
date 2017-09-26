@@ -23,6 +23,10 @@ VncViewerComponent = Ember.Component.extend
   ).property "isPoppedOut"
 
   setupRFB: ->
+    canvasContainer = @element.getElementsByClassName("canvas-container")[0]
+    newCanvas = document.createElement("canvas")
+    newCanvas.setAttribute("class", "canvas")
+    canvasContainer.appendChild(newCanvas)
     rfb = @get "rfb"
     if !Ember.isEmpty rfb
       return
