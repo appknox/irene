@@ -25,7 +25,7 @@ VncViewerComponent = Ember.Component.extend
   setupRFB: ->
     canvasContainer = @element.getElementsByClassName("canvas-container")[0]
     childCount = canvasContainer.childElementCount
-    if noChild is 0
+    if childCount is 0
       newCanvas = document.createElement("canvas")
       newCanvas.setAttribute("class", "canvas")
       canvasContainer.appendChild(newCanvas)
