@@ -48,23 +48,19 @@ module.exports = function(defaults) {
   /*
    * No VNC includes
    */
-  app.import('bower_components/noVNC/core/base64.js');
-  app.import('bower_components/noVNC/core/des.js');
-  app.import('bower_components/noVNC/core/display.js');
-  app.import('bower_components/noVNC/core/inflator.js');
-  app.import('bower_components/noVNC/core/rfb.js');
-  app.import('bower_components/noVNC/core/websock.js');
-  app.import('bower_components/noVNC/core/input/devices.js');
-  app.import('bower_components/noVNC/core/input/keysym.js');
-  app.import('bower_components/noVNC/core/input/keysymdef.js');
-  app.import('bower_components/noVNC/core/input/util.js');
-  app.import('bower_components/noVNC/core/input/xtscancodes.js');
-  app.import('bower_components/noVNC/core/util/browsers.js');
-  app.import('bower_components/noVNC/core/util/events.js');
-  app.import('bower_components/noVNC/core/util/localization.js');
-  app.import('bower_components/noVNC/core/util/logging.js');
-  app.import('bower_components/noVNC/core/util/properties.js');
-  app.import('bower_components/noVNC/core/util/strings.js');
+   
+   app.import('bower_components/noVNC/core/base64.js');
+   app.import('bower_components/noVNC/core/websock.js');
+   app.import('bower_components/noVNC/core/des.js');
+   app.import('bower_components/noVNC/core/input/keysymdef.js');
+   app.import('bower_components/noVNC/core/input/xtscancodes.js');
+   app.import('bower_components/noVNC/core/input/util.js');
+   app.import('bower_components/noVNC/core/util.js');
+   app.import('bower_components/noVNC/core/input/devices.js');
+   app.import('bower_components/noVNC/core/display.js');
+   app.import('bower_components/noVNC/core/inflator.js');
+   app.import('bower_components/noVNC/core/rfb.js');
+   app.import('bower_components/noVNC/core/input/keysym.js');
 
   /*
    * card includes
