@@ -1,7 +1,21 @@
 = file-header file=file class="margin-top"
 
-.margin-left
-  h4
-    =t "vulnerabilityDetails"
-each file.sortedAnalyses as |analysis|
-  = analysis-details analysis=analysis class="margin-top"
+.columns.margin-left
+  .column
+    h4
+      = t "vulnerabilityDetails"
+  .column.is-one-third.content-right
+    select{action 'filterVulnerabilityType' on='change'} id="filter-vulnerability-type" class="input filter-input"
+      option value="-1"
+        = t "allScans"
+      each vulnerabilityTypes as |vulnerabilityType|
+        option value=vulnerabilityType.value
+          | #{ t (vulnerability-type vulnerabilityType.value)}
+if filteredAnalysis
+  each filteredAnalysis as |analysis|
+    = analysis-details analysis=analysis class="margin-top"
+else
+  .not-found
+    h4
+      = fa-icon "exclamation-triangle"
+      = t "noScansFound"

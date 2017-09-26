@@ -200,6 +200,16 @@ select
   position: fixed
   top: -100px
 
+.filter-input
+  width: 65%
+
+.not-found
+  text-align: center
+  margin-top: 50px
+  i
+    margin-top: 7px
+    margin-right: 5px
+
 .implication-list
   margin-left: 20px
   list-style-type: circle
@@ -358,7 +368,7 @@ button, .button
   width: 40%
   margin-left: 30%
   margin-top: 10px
-.remove
+.remove, .copy-password
   cursor: pointer
 
 .api-scanning
@@ -425,7 +435,6 @@ button, .button
   margin-right: 10px
   margin-top: 10px!important
   table
-    cursor: pointer
     font-size: 13px
     margin-top: 10px
     tr
@@ -521,6 +530,9 @@ button, .button
 .hideOrShow
   cursor: pointer
 
+.card-icon
+  margin-top: 15px
+
 .project-specific
   .column
     padding-top: 10px
@@ -550,6 +562,7 @@ button, .button
     color: #fff
 
 .card-header-icon
+  cursor: default
   img
     height: 45px
     width: 45px
@@ -599,7 +612,6 @@ b.bold
   border-color: rgb(255, 224, 221)
   border-width: 2px 2px 2px 15px
   border-style: solid
-
 
 .vulnerability-types
   text-align: center
@@ -692,14 +704,14 @@ ul.risk-table
   .tooltiptext
     text-transform: capitalize
     visibility: hidden
-    width: 200px
-    background-color: rgba(0, 0, 0, 0.4)
+    width: 160px
+    background-color: $default
     color: #fff
     text-align: center
     border-radius: 6px
     position: absolute
-    top: 43px
-    right: 10px
+    top: 52px
+    right: 35px
     z-index: 1
     font-size: 12px
     transition-delay: 1s
@@ -711,10 +723,13 @@ ul.risk-table
         background: rgba(255,255,255, 0.9)
         border-radius: 3px
   .tooltip-collapse
-    width: 200px
-    top: 92px
-    left: 10px
+    top: 95px
+    left: 20px
     white-space: normal
+  .team-tooltip
+    top: 165px
+    left: 130px
+
 
 .mfa
   .fa-check
@@ -744,6 +759,9 @@ ul.risk-table
 
 .team-container
   padding: 0px 100px
+
+.team-container.box-container
+  padding-bottom: 20px
 
 .team-details-container
   padding: 30px 150px
@@ -785,6 +803,11 @@ ul.risk-table
   .fa-times
     color: #EF4836
     cursor: pointer
+
+.pending-invitation-table
+  margin: auto
+  width: 70%
+  @extend .team-details-table
 
 .team-card
   min-height: 260px

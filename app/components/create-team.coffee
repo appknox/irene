@@ -11,6 +11,8 @@ CreateTeamComponent = Ember.Component.extend
 
   teamName: ""
 
+  isCreatingTeam: false
+
   tTeamCreated: t("teamCreated")
   tEnterTeamName: t("enterTeamName")
 
@@ -28,13 +30,16 @@ CreateTeamComponent = Ember.Component.extend
       that = @
       data =
         name: teamName
+      @set "isCreatingTeam", true  
       @get("ajax").post ENV.endpoints.teams, data: data
       .then (data)->
+        that.set "isCreatingTeam", false
         that.store.pushPayload data
         that.get("notify").success tTeamCreated
         that.set "teamName", ""
         that.set "showTeamModal", false
       .catch (error) ->
+        that.set "isCreatingTeam", false
         that.get("notify").error error.payload.error
         for error in error.errors
           that.get("notify").error error.detail?.message

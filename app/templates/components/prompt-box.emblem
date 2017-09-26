@@ -9,5 +9,5 @@
     form.margin-top
       p.control
         = input class="form-control input deleted-item" type="text" autofocus="autofocus" value=inputValue
-        button.is-primary.margin-top click="sendCallback"
+        button.is-primary.margin-top click="sendCallback" disabled=disabled
           = t button

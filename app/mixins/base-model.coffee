@@ -13,4 +13,10 @@ BaseModelMixin = Ember.Mixin.create
       return
     "#{createdOn.toLocaleDateString()}"
 
+  createdOnDateTime: Ember.computed "createdOn", ->
+    createdOn = @get "createdOn"
+    if Ember.isEmpty createdOn
+      return
+    "#{createdOn.toDateString()}, #{createdOn.toLocaleTimeString()}"    
+
 `export default BaseModelMixin`

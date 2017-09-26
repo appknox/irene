@@ -7,6 +7,8 @@ TeamMemberComponent = Ember.Component.extend
   team: null
   tagName: ["tr"]
 
+  isRemovingMember: false
+
   tEnterRightUserName: t("enterRightUserName")
   tTeamMember: t("teamMember")
   tTeamMemberRemoved: t("teamMemberRemoved")
@@ -21,11 +23,14 @@ TeamMemberComponent = Ember.Component.extend
     teamId = @get "team.id"
     url = [ENV.endpoints.teams, teamId, ENV.endpoints.members, teamMember].join '/'
     that = @
+    @set "isRemovingMember", true
     @get("ajax").delete url
     .then (data)->
+      that.set "isRemovingMember", false
       that.store.pushPayload data
       that.get("notify").success "#{tTeamMember} #{teamMember} #{tTeamMemberRemoved}"
     .catch (error) ->
+      that.set "isRemovingMember", false
       that.get("notify").error error.payload.message
       for error in error.errors
         that.get("notify").error error.detail?.message
