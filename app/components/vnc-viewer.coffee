@@ -23,12 +23,6 @@ VncViewerComponent = Ember.Component.extend
   ).property "isPoppedOut"
 
   setupRFB: ->
-    canvasContainer = @element.getElementsByClassName("canvas-container")[0]
-    childCount = canvasContainer.childElementCount
-    if childCount is 0
-      newCanvas = document.createElement("canvas")
-      newCanvas.setAttribute("class", "canvas")
-      canvasContainer.appendChild(newCanvas)
     rfb = @get "rfb"
     if !Ember.isEmpty rfb
       return
@@ -60,7 +54,6 @@ VncViewerComponent = Ember.Component.extend
 
 
   didUpdate: ->
-    @set "rfb", null
     @setupRFB()
 
   didInsertElement: ->
@@ -104,8 +97,6 @@ VncViewerComponent = Ember.Component.extend
       rfb = @get "rfb"
       if rfb._rfb_connection_state is 'connected'
         rfb.disconnect()
-        oldCanvas = @element.getElementsByClassName("canvas")[0]
-        oldCanvas.remove()
 
 
 `export default VncViewerComponent`
