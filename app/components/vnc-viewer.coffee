@@ -52,9 +52,6 @@ VncViewerComponent = Ember.Component.extend
     if @get 'file.isReady'
       @send("connect")
 
-  didUpdate: ->
-    @setupRFB()
-
   didInsertElement: ->
     @setupRFB()
 
@@ -65,21 +62,17 @@ VncViewerComponent = Ember.Component.extend
       @send "disconnect"
   ).observes 'file.dynamicStatus'
 
-  isAndroidDevice: (->
+  deviceType: (->
     platform = @get "file.project.platform"
     if platform is ENUMS.PLATFORM.ANDROID
-      true
+      "nexus5"
+    else if platform is ENUMS.PLATFORM.IOS
+      "iphone5s silver"
   ).property "file.project.platform"
 
   isIOSDevice: (->
     platform = @get "file.project.platform"
     if platform is ENUMS.PLATFORM.IOS
-      true
-  ).property "file.project.platform"
-
-  isNeitherAndroidNorIOS: (->
-    platform = @get "file.project.platform"
-    if platform not in [ENUMS.PLATFORM.ANDROID, ENUMS.PLATFORM.IOS]
       true
   ).property "file.project.platform"
 
