@@ -51,7 +51,10 @@ VncViewerComponent = Ember.Component.extend
 
     if @get 'file.isReady'
       @send("connect")
-  
+
+  didUpdate() ->
+    @setupRFB()    
+
   didInsertElement: ->
     @setupRFB()
 
