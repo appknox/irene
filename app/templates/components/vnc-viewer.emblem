@@ -1,22 +1,22 @@
+if isScannable
+  if isPoppedOut
+    .modal-background
+  .modal-card.device-modal
+    .modal-card-body.padding-10.margin-top
+      div class="marvel-device" class=deviceType
+        div class="top-bar"
+        div class="sleep"
+        div class="volume"
+        div class="camera"
+        if isIOSDevice
+          div class="speaker"
+        div class="screen"
+          canvas.canvas
+        if isIOSDevice
+          div class="home"
+          div class="bottom-bar"
 
-if isPoppedOut
-  .modal-background
-.modal-card.device-modal
-  .modal-card-body.padding-10.margin-top
-    div class="marvel-device" class=deviceType
-      div class="top-bar"
-      div class="sleep"
-      div class="volume"
-      div class="camera"
-      if isIOSDevice
-        div class="speaker"
-      div class="screen"
-        canvas.canvas
-      if isIOSDevice
-        div class="home"
-        div class="bottom-bar"
-
-  if file.isReady
-    .modal-card-foot
-      button.is-primary.is-fullwidth.mp-toggle-pop click="togglePop"
-        = vncPopText
+    if file.isReady
+      .modal-card-foot
+        button.is-primary.is-fullwidth.mp-toggle-pop click="togglePop"
+          = vncPopText
