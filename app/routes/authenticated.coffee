@@ -45,7 +45,13 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
       Appcues.identify user.get("id"),
         name: user.get "username"
         email: user.get "email"
-      Appcues.start() 
+      Appcues.start()
+    try
+      userId = user.get "id"
+      accountId = user.get("email").split("@").pop().trim();
+      analytics.login(userId,accountId)
+    catch error
+
 
     trial = @get "trial"
     trial.set "isTrial", user.get "isTrial"
