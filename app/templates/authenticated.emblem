@@ -29,19 +29,24 @@
       ul.menu-list.text-center
         li
           = link-to 'authenticated.index' class="mp-auth-index"
+            = fa-icon "home" class="sidebar-icons"
             = t "dashboard"
         li
           = link-to 'authenticated.teams' class="mp-auth-teams"
+            = fa-icon "user" class="sidebar-icons"
             = t "teams"
         li
           = link-to 'authenticated.settings' class="mp-auth-settings"
+            = fa-icon "cog" class="sidebar-icons"
             = t "settings"
         if model.ifBillingIsNotHidden
           li
             = link-to 'authenticated.billing' class="mp-auth-billing"
+              = fa-icon "tag" class="sidebar-icons"
               = t "billing"
         li
           a click="invalidateSession" class="mp-auth-logout"
+            = fa-icon "power-off" class="sidebar-icons"
             = t "logout"
 
       = submission-list
