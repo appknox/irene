@@ -1018,12 +1018,24 @@ button.delete-button
 .marvel-device
   .screen
     box-shadow: none
+    .vnc-box
+      display: none
   .top-bar
     background: none
+
+.marvel-device.nexus5
+  .vnc-box
+    display: block
+    div
+      background-color: #FFF
+      color: $default
+
 
 .marvel-device.iphone5s
   .screen
     box-shadow: 0 0 0 3px #111
+    .vnc-box
+      margin: 50px 30px
   .top-bar
     background: black
 
@@ -1040,7 +1052,7 @@ button.delete-button
     margin: 50px 60px
     div
       background-color: $default
-      color: white
+      color: #FFF
       height: 100px
       margin: 20px
       border-radius: 7px
