@@ -1,3 +1,4 @@
+/* jshint ignore:start */
 var customerSuccessBox;
 customerSuccessBox = function() {
   var analytics = window.analytics = window.analytics || [];
@@ -40,3 +41,4 @@ customerSuccessBox = function() {
 };
 
 export default customerSuccessBox;
+/* jshint ignore:end */
