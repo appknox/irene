@@ -21,6 +21,7 @@ export default {
   "changeRole": "Change Role",
   "checkCoupon": "Please check your coupon",
   "chooseAFile": "Choose a file to compare",
+  "clickOnDynamicScan": "Click on Start Dynamic Scan",
   "collaborationAdded": "Collaboration is added!",
   "collaborationRemoved": "is removed from the collaboration",
   "collaborations": "Collaborations",

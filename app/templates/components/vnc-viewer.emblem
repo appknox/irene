@@ -20,7 +20,7 @@ if isPoppedOut
                 if file.isNoneStatus
                   div
                     h6
-                      | Click on Start Dynamic Scan
+                      = t "clickOnDynamicScan"
                 else
                   i.fa class="fa-spinner fa-spin"
                   h6

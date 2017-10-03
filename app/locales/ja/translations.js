@@ -21,6 +21,7 @@ export default {
   "changeRole": "役割の変更",
   "checkCoupon": "あなたのクーポンを確認してください",
   "chooseAFile": "比較するファイルを選択してください",
+  "clickOnDynamicScan": "動的スキャンの開始をクリックします。",
   "collaborationAdded": "コラボレーションが追加されました!",
   "collaborationRemoved": "コラボレーションから削除されました",
   "collaborations": "作業ユーザー",
