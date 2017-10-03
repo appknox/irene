@@ -49,6 +49,8 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
     try
       userName = user.get "username"
       accountId = user.get("email").split("@").pop().trim();
+      if accountId is "appknox.com"
+        return
       analytics.login(userName,accountId)
     catch error
 
