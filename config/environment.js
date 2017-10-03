@@ -154,15 +154,15 @@ module.exports = function(environment) {
     },
     csb: {
       feature: {
-        runAPIScan: "7",
-        runDynamicScan: "8",
-        requestManualScan: "9"
+        runAPIScan: "API Scan",
+        runDynamicScan: "Dynamic Scan",
+        requestManualScan: "Manual Scan"
       },
       module: {
-        security: "1"
+        security: "Security"
       },
       product: {
-        appknox: "1"
+        appknox: "Appknox"
       }
     }
   };
