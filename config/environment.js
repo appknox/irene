@@ -152,6 +152,17 @@ module.exports = function(environment) {
       teams: 'teams',
       members: 'members'
     },
+    csb: {
+      feature: {
+        requestManualScan: "9"
+      },
+      module: {
+        security: "1"
+      },
+      product: {
+        appknox: "1"
+      }
+    },
   };
 
   if (environment === 'development') {
