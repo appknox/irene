@@ -50,6 +50,7 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
       userId = user.get "id"
       accountId = user.get("email").split("@").pop().trim();
       analytics.login(userId,accountId)
+      analytics.logout()
     catch error
 
 
