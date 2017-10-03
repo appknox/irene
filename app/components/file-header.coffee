@@ -77,10 +77,12 @@ FileHeaderComponent = Ember.Component.extend
 
 
     doNotRunAPIScan: ->
+      analytics.feature(ENV.csb.feature.runDynamicScan, ENV.csb.module.security, ENV.csb.product.appknox)
       @set "isApiScanEnabled", false
       @send "setAPIScanOption"
 
     runAPIScan: ->
+      analytics.feature(ENV.csb.feature.runAPIScan, ENV.csb.module.security, ENV.csb.product.appknox)
       @set "isApiScanEnabled", true
       @send "setAPIScanOption"
 

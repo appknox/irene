@@ -154,6 +154,8 @@ module.exports = function(environment) {
     },
     csb: {
       feature: {
+        runAPIScan: "7",
+        runDynamicScan: "8",
         requestManualScan: "9"
       },
       module: {
