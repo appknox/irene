@@ -164,7 +164,7 @@ module.exports = function(environment) {
       product: {
         appknox: "1"
       }
-    },
+    }
   };
 
   if (environment === 'development') {
