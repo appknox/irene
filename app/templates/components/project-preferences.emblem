@@ -22,7 +22,7 @@ if hasDevices
         select.input.mp-version-preference{action 'selectVersion' on='change'} id="project-version-preference"
           option value=project.platformVersion selected="true"
             | #{project.versionText}
-          each uniqueDevices as |device|
+          each otherDevices as |device|
             option value=device.version
               | #{version-text device.version}
 
