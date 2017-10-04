@@ -24,7 +24,7 @@ if hasDevices
             | #{project.versionText}
           each otherDevices as |device|
             option value=device.version
-              = device.version
+              | #{version-text device.version}
 
     .columns
       .column

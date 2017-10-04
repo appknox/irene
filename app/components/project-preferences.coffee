@@ -51,12 +51,12 @@ ProjectPreferencesComponent = Ember.Component.extend
   otherDevices: (->
     osVersions = []
     uniqueDevices = @get "uniqueDevices"
-    noPreference = "No Preference"
+    noPreference = {version: "0"}
     uniqueDevices.push noPreference
     platformVersion = @get "project.platformVersion"
     otherDevices = @get("uniqueDevices").slice()
     otherDevices.forEach (otherDevice) ->
-      if otherDevice is platformVersion
+      if otherDevice.version is platformVersion
         return
       osVersions.push otherDevice
     osVersions
