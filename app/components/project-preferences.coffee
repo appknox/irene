@@ -15,17 +15,6 @@ ProjectPreferencesComponent = Ember.Component.extend
   tDeviceSelected: t("deviceSelected")
   tPleaseTryAgain: t("pleaseTryAgain")
 
-  otherDevicesTypes: (->
-    devices = []
-    deviceType = @get "project.deviceType"
-    otherDevicesTypes = @get("deviceTypes").slice()
-    otherDevicesTypes.forEach (otherDevicesType) ->
-      if otherDevicesType.value is deviceType
-        return
-      devices.push otherDevicesType
-    devices
-  ).property "deviceTypes","project.deviceType"
-
   devices: (->
     store = @get "store"
     store.findAll "device"
@@ -48,25 +37,6 @@ ProjectPreferencesComponent = Ember.Component.extend
 
   uniqueDevices: Ember.computed.uniqBy "filteredDevices", 'version'
 
-  otherDevices: (->
-    osVersions = []
-    uniqueDevices = @get "uniqueDevices"
-    noPreference = {version: "0"}
-    uniqueDevices.push noPreference
-    platformVersion = @get "project.platformVersion"
-    otherDevices = @get("uniqueDevices").slice()
-    otherDevices.forEach (otherDevice) ->
-      if otherDevice.version isnt platformVersion
-        osVersions.push otherDevice
-    osVersions
-  ).property "uniqueDevices","project.platformVersion"
-
-  hasUniqueDevices: Ember.computed.gt 'uniqueDevices.length', 0
-
-  devicesCount: Ember.computed.alias 'availableDevices.length'
-
-  hasDevices: Ember.computed.gt 'devicesCount', 0
-
   actions:
 
     selectDeviceType: ->
@@ -76,7 +46,6 @@ ProjectPreferencesComponent = Ember.Component.extend
       @set "selectVersion", @$('#project-version-preference').val()
 
     versionSelected: ->
-
       selectVersion = @get "selectVersion"
       tDeviceSelected = @get "tDeviceSelected"
       tPleaseTryAgain = @get "tPleaseTryAgain"
@@ -91,11 +60,19 @@ ProjectPreferencesComponent = Ember.Component.extend
       @get("ajax").post devicePreferences, data: data
       .then (data) ->
         that.get("notify").success tDeviceSelected
+        that.set "projectPreferenceModal", false
       .catch (error) ->
         that.get("notify").error tPleaseTryAgain
         if Ember.isEmpty error?.errors
           return
         for error in error.errors
           that.get("notify").error error.detail?.message
+
+    openProjectPreferenceModal: ->
+      @set "projectPreferenceModal", true
+
+    closeProjectPreferenceModal: ->
+      @set "projectPreferenceModal", false
+
 
 `export default ProjectPreferencesComponent`
