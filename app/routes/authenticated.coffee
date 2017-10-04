@@ -46,13 +46,12 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
         name: user.get "username"
         email: user.get "email"
       Appcues.start()
-    try
-      userName = user.get "username"
-      accountId = user.get("email").split("@").pop().trim();
-      if accountId is "appknox.com"
-        return
-      analytics.login(userName,accountId)
-    catch error
+    # try
+    #   userName = user.get "username"
+    #   accountId = user.get("email").split("@").pop().trim();
+    #   if accountId is "appknox.com"
+    #     return
+    #   analytics.login(userName,accountId)
 
 
     trial = @get "trial"
@@ -109,7 +108,7 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
   actions:
     invalidateSession: ->
-      analytics.logout()
+      # analytics.logout()
       @get('session').invalidate()
 
     giveFeeback: ->
