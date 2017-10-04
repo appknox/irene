@@ -7,15 +7,11 @@ if hasDevices
   .columns
     .column.is-one-sixth
       select.input.mp-device-preference{action 'selectDeviceType' on='change'} id="project-device-preference"
-        option value=0
-          = t "noPreference"
-        each deviceTypes as |deviceType|
-          option value=deviceType.value selected=deviceType.value
+        option value=project.deviceType selected="true"
+          | : #{ t (device-type project.deviceType)}
+        each otherDevices as |deviceType|
+          option value=deviceType.value
             | #{ t (device-type deviceType.value)}
-
-    .column.margin-top5
-       = t "selectedDevice"
-       | : #{ t (device-type project.deviceType)}
 
   if hasUniqueDevices
     .columns
@@ -27,7 +23,7 @@ if hasDevices
           option value=0
             = t "noPreference"
           each uniqueDevices as |device|
-            option value=device.version selected=device.version
+            option value=device.version
               = device.version
 
       .column.margin-top5

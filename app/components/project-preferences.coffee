@@ -10,10 +10,21 @@ ProjectPreferencesComponent = Ember.Component.extend
   i18n: Ember.inject.service()
   store: Ember.inject.service()
   selectedDeviceType: ENUMS.DEVICE_TYPE.NO_PREFERENCE
-  deviceTypes: ENUMS.DEVICE_TYPE.CHOICES[1...-1]
+  deviceTypes: ENUMS.DEVICE_TYPE.CHOICES[0...-1]
 
   tDeviceSelected: t("deviceSelected")
   tPleaseTryAgain: t("pleaseTryAgain")
+
+  otherDevices: (->
+    devices = []
+    deviceType = @get "project.deviceType"
+    otherDevices = @get("deviceTypes").slice()
+    otherDevices.forEach (otherDevice) ->
+      if otherDevice.value is deviceType
+        return
+      devices.push otherDevice
+    devices
+  ).property "deviceTypes","project.deviceType"
 
   devices: (->
     store = @get "store"
