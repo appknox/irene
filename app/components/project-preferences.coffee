@@ -15,14 +15,14 @@ ProjectPreferencesComponent = Ember.Component.extend
   tDeviceSelected: t("deviceSelected")
   tPleaseTryAgain: t("pleaseTryAgain")
 
-  otherDevices: (->
+  otherDevicesTypes: (->
     devices = []
     deviceType = @get "project.deviceType"
-    otherDevices = @get("deviceTypes").slice()
-    otherDevices.forEach (otherDevice) ->
-      if otherDevice.value is deviceType
+    otherDevicesTypes = @get("deviceTypes").slice()
+    otherDevicesTypes.forEach (otherDevicesType) ->
+      if otherDevicesType.value is deviceType
         return
-      devices.push otherDevice
+      devices.push otherDevicesType
     devices
   ).property "deviceTypes","project.deviceType"
 
@@ -47,6 +47,21 @@ ProjectPreferencesComponent = Ember.Component.extend
           !device.get "isTablet"
 
   uniqueDevices: Ember.computed.uniqBy "filteredDevices", 'version'
+
+  otherDevices: (->
+    osVersions = []
+    uniqueDevices = @get "uniqueDevices"
+    noPreference = "No Preference"
+    uniqueDevices.push noPreference
+    platformVersion = @get "project.platformVersion"
+    otherDevices = @get("uniqueDevices").slice()
+    otherDevices.forEach (otherDevice) ->
+      if otherDevice is platformVersion
+        return
+      osVersions.push otherDevice
+    osVersions
+  ).property "uniqueDevices","project.platformVersion"
+
   hasUniqueDevices: Ember.computed.gt 'uniqueDevices.length', 0
 
   devicesCount: Ember.computed.alias 'availableDevices.length'

@@ -8,8 +8,8 @@ if hasDevices
     .column.is-one-sixth
       select.input.mp-device-preference{action 'selectDeviceType' on='change'} id="project-device-preference"
         option value=project.deviceType selected="true"
-          | : #{ t (device-type project.deviceType)}
-        each otherDevices as |deviceType|
+          | #{ t (device-type project.deviceType)}
+        each otherDevicesTypes as |deviceType|
           option value=deviceType.value
             | #{ t (device-type deviceType.value)}
 
@@ -20,15 +20,11 @@ if hasDevices
     .columns
       .column.is-one-sixth
         select.input.mp-version-preference{action 'selectVersion' on='change'} id="project-version-preference"
-          option value=0
-            = t "noPreference"
-          each uniqueDevices as |device|
+          option value=project.platformVersion selected="true"
+            | #{project.versionText}
+          each otherDevices as |device|
             option value=device.version
               = device.version
-
-      .column.margin-top5
-        = t "selectedVersion"
-        | : #{project.versionText}
 
     .columns
       .column
