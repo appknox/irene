@@ -10,7 +10,7 @@ if hasDevices
         option value=0
           = t "noPreference"
         each deviceTypes as |deviceType|
-          option value=deviceType.value
+          option value=deviceType.value selected=deviceType.value
             | #{ t (device-type deviceType.value)}
 
     .column.margin-top5
@@ -27,7 +27,7 @@ if hasDevices
           option value=0
             = t "noPreference"
           each uniqueDevices as |device|
-            option value=device.version
+            option value=device.version selected=device.version
               = device.version
 
       .column.margin-top5
