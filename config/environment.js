@@ -152,6 +152,19 @@ module.exports = function(environment) {
       teams: 'teams',
       members: 'members'
     },
+    csb: {
+      feature: {
+        runAPIScan: "API Scan",
+        runDynamicScan: "Dynamic Scan",
+        requestManualScan: "Manual Scan"
+      },
+      module: {
+        security: "Security"
+      },
+      product: {
+        appknox: "Appknox"
+      }
+    }
   };
 
   if (environment === 'development') {
