@@ -17,6 +17,7 @@ export default {
   "billing": "料金プラン",
   "businessImplication": "ビジネスへの影響",
   "cancel": "キャンセル",
+  "changeDevice": "デバイスの変更",
   "changePassword": "パスワード変更",
   "changeRole": "役割の変更",
   "checkCoupon": "あなたのクーポンを確認してください",
@@ -54,6 +55,7 @@ export default {
   "deviceNotFound": "デバイスが見つかりませんでした",
   "deviceSelected": "あなたは正常にデバイスを選択しました",
   "deviceType": "デバイスタイプ",
+  "devicePreferences": "デバイスの設定",
   "disabled": "使用禁止",
   "disableMFA": "MFAを無効にします",
   "dynamic": "動的",
@@ -309,6 +311,10 @@ export default {
       "apiList": "あなたが設定したAPIフィルタのリストは以下の通りです",
       "noAPIFilter": "APIフィルタセットがありません。下記の設定をクリックし、APIフィルタを設定してください",
       "editFilters": "ここでフィルタを編集："
+    },
+    "devicePreference": {
+      title: "デバイスの設定を変更する",
+      selectDevice: "デバイスを選択する"
     }
   },
   "templates": {

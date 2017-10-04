@@ -1,9 +1,10 @@
 .columns
   .column.is-one-sixth
-    h5 Device Preferences
+    h5
+      = t "devicePreferences" 
   .column
     button.is-primary click="openProjectPreferenceModal"
-     | Change Device
+     = t "changeDevice"
 
 .columns
   .column.margin-top5
@@ -14,7 +15,7 @@
     = t "selectedVersion"
     | : #{project.versionText}
 
-= modal-card isActive=projectPreferenceModal title="Change Device Preference"
+= modal-card isActive=projectPreferenceModal title=(t "modalCard.devicePreference.title")
   .card-body.warning-modal
     .card-wrapper
     .columns
@@ -42,4 +43,4 @@
     .columns
       .column
         button.margin-top20.is-primary.mp-select-device click="versionSelected"
-          | Select the device
+          = t "modalCard.devicePreference.selectDevice"

@@ -17,6 +17,7 @@ export default {
   "billing": "Billing",
   "businessImplication": "Business Implication",
   "cancel": "Cancel",
+  "changeDevice": "Change Device",
   "changePassword": "Change Password",
   "changeRole": "Change Role",
   "checkCoupon": "Please check your coupon",
@@ -54,6 +55,7 @@ export default {
   "deviceNotFound": "Hard time for us to find the device",
   "deviceSelected": "You have successfully selected the device",
   "deviceType": "Device Type",
+  "devicePreferences": "Device Preferences",
   "disabled": "Disabled",
   "disableMFA": "Disable MFA",
   "dynamic": "Dynamic",
@@ -310,6 +312,10 @@ export default {
       "apiList": "Here is the list of api filters you have set",
       "noAPIFilter": "You do not have any API Filter set, click on settings below and set the API filter",
       "editFilters": "Edit filters here: "
+    },
+    "devicePreference": {
+      title: "Change Device Preference",
+      selectDevice: "Select the device"
     }
   },
   "templates": {
