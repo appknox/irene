@@ -46,21 +46,21 @@ ProjectPreferencesComponent = Ember.Component.extend
         when ENUMS.DEVICE_TYPE.PHONE_REQUIRED
           !device.get "isTablet"
 
-  uniqueDevices: Ember.computed.uniqBy "filteredDevices", 'version'
-
   otherDevices: (->
     osVersions = []
-    uniqueDevices = @get "uniqueDevices"
+    filteredDevices = @get "filteredDevices"
     noPreference = {version: "0"}
-    uniqueDevices.push noPreference
+    filteredDevices.push noPreference
     platformVersion = @get "project.platformVersion"
-    otherDevices = @get("uniqueDevices").slice()
+    otherDevices = @get("filteredDevices").slice()
     otherDevices.forEach (otherDevice) ->
       if otherDevice.version is platformVersion
         return
       osVersions.push otherDevice
     osVersions
-  ).property "uniqueDevices","project.platformVersion"
+  ).property "filteredDevices","project.platformVersion"
+
+  uniqueDevices: Ember.computed.uniqBy "otherDevices", 'version'
 
   hasUniqueDevices: Ember.computed.gt 'uniqueDevices.length', 0
 
