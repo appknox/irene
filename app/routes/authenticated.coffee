@@ -49,8 +49,9 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
     try
       userName = user.get "username"
       accountId = user.get("email").split("@").pop().trim();
-      if accountId isnt "appknox.com"
-        analytics.login(userName,accountId)
+    #  Temporarily don't filter out appknox.com 
+    #   if accountId isnt "appknox.com"
+    #     analytics.login(userName,accountId)
 
 
     trial = @get "trial"
