@@ -179,6 +179,10 @@
               = fa-icon "clipboard copy-icon"
               | &nbsp;
               = t "copy"
+    .columns
+      .column.file-id-text.is-one-third.flex-center
+        div.file-header
+          | FILE ID: #{file.id}
 
 = modal-card isActive=showAPIScanModal title=(t "modalCard.apiScan.title")
   .card-body.warning-modal
