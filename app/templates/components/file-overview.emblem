@@ -49,9 +49,4 @@ header.card-header
             li.is-default
               = t "unknown"
               | : #{file.countRiskUnknown}
-      .columns class=isReverse:is-reverse
-        .column.file-id-text.is-half.flex-center
-          div.file-overview
-            | FILE ID: #{file.id}
-
 = yield
