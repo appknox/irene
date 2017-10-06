@@ -114,4 +114,7 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
     giveFeeback: ->
       surveyMonkey()
 
+    didTransition: ->
+      Appcues.start()
+
 `export default AuthenticatedRoute`
