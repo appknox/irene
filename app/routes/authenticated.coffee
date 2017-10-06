@@ -107,14 +107,14 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
 
   actions:
+    didTransition: ->
+      Appcues.start()
+
     invalidateSession: ->
       analytics.logout()
       @get('session').invalidate()
 
     giveFeeback: ->
       surveyMonkey()
-
-    didTransition: ->
-      Appcues.start()
 
 `export default AuthenticatedRoute`
