@@ -13,5 +13,10 @@ SubmissionDetailsComponent = Ember.Component.extend
       else "is-progress"
   ).property "submission.status"
 
+  didInsertElement: ->
+    status = @get "submission.status"
+    if status is ENUMS.SUBMISSION_STATUS.ANALYZING
+      analytics.feature(ENV.csb.feature.applicationUpload, ENV.csb.module.security, ENV.csb.product.appknox)
+
 
 `export default SubmissionDetailsComponent`
