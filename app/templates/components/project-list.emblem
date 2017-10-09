@@ -57,7 +57,7 @@ else
       h5
         | #{t "uploadNewProject"}:
       span
-        label.button.is-primary
+        label.button.is-primary.ac-upload-app
           = upload-app delegate=this
           = fa-icon "upload"
           | &nbsp;

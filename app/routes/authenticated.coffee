@@ -107,6 +107,7 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
 
   actions:
+    
     invalidateSession: ->
       analytics.logout()
       @get('session').invalidate()
