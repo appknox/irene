@@ -24,7 +24,7 @@
           span.tooltiptext.team-tooltip
             = team.createdOnDateTime
   footer.card-button.align-center
-    button click="openDeleteTeamPrompt" disabled=team.isDefaultTeam
+    button.ac-delete-team click="openDeleteTeamPrompt" disabled=team.isDefaultTeam
       = t "deleteTeam"
 
 = prompt-box isActive=showDeleteTeamPrompt title=(t 'promptBox.deleteTeamPrompt.title') description=(t 'promptBox.deleteTeamPrompt.description') button="deleteTeam" delegate=this disabled=isDeletingTeam

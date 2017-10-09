@@ -3,7 +3,7 @@
     h4
       = t "teams"
   .column.content-right.margin-right100
-    button.is-primary.uppercase-text.margin-top5 click="openTeamModal"
+    button.is-primary.uppercase-text.margin-top5.ac-create-team click="openTeamModal"
       | + #{t "createTeam"}
 
 = modal-card isActive=showTeamModal title=(t 'createTeam')
