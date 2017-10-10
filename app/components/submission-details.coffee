@@ -16,9 +16,7 @@ SubmissionDetailsComponent = Ember.Component.extend
 
   statusObserver: Ember.observer "submission.status", ->
     status = @get "submission.status"
-    console.log("first")
     if status is ENUMS.SUBMISSION_STATUS.ANALYZING
-      console.log("hello")
       analytics.feature(ENV.csb.feature.applicationUpload, ENV.csb.module.security, ENV.csb.product.appknox)
 
 
