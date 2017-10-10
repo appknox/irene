@@ -35,4 +35,19 @@ Router.reopen
          Appcues.start()
   ).on 'didTransition'
 
-`export default Router;`
+CSBMap = {
+  "authenticated.settings":{
+    feature: "Account Settings",
+    module: "Setup"
+  },
+  "authenticated.project.files":{
+    feature: "All Scans",
+    module: "Security"
+  },
+  "authenticated.choose":{
+    feature: "Compare Scans",
+    module: "Security"
+  }
+}
+
+`export { Router as default, CSBMap as CSBMap}`
