@@ -156,7 +156,8 @@ module.exports = function(environment) {
       feature: {
         runAPIScan: "API Scan",
         runDynamicScan: "Dynamic Scan",
-        requestManualScan: "Manual Scan"
+        requestManualScan: "Manual Scan",
+        applicationUpload: "Application Upload"
       },
       module: {
         security: "Security"
