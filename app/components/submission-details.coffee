@@ -1,5 +1,6 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums'`
+`import ENV from 'irene/config/environment';`
 
 SubmissionDetailsComponent = Ember.Component.extend
   submission: null
@@ -13,9 +14,8 @@ SubmissionDetailsComponent = Ember.Component.extend
       else "is-progress"
   ).property "submission.status"
 
-  didInsertElement: ->
-    status = @get "submission.status"
-    if status is ENUMS.SUBMISSION_STATUS.ANALYZING
+  statusObserver: Ember.observer "submission.status", ->
+    if @get "submission.status" is ENUMS.SUBMISSION_STATUS.ANALYZING
       analytics.feature(ENV.csb.feature.applicationUpload, ENV.csb.module.security, ENV.csb.product.appknox)
 
 
