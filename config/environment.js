@@ -158,7 +158,8 @@ module.exports = function(environment) {
         runDynamicScan: "Dynamic Scan",
         requestManualScan: "Manual Scan",
         applicationUpload: "Application Upload",
-        reportDownload: "Report Download"
+        reportDownload: "Report Download",
+        addAPIEndpoints: "Add API Endpoints"
       },
       module: {
         security: "Security",
