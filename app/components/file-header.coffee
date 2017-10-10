@@ -35,6 +35,7 @@ FileHeaderComponent = Ember.Component.extend
 
   actions:
     getPDFReportLink: ->
+      analytics.feature(ENV.csb.feature.reportDownload, ENV.csb.module.report, ENV.csb.product.appknox)
       tReportIsGettingGenerated = @get "tReportIsGettingGenerated"
       that = @
       file_id = @get "file.id"
