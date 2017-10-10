@@ -28,6 +28,7 @@ ApiFilterComponent = Ember.Component.extend
       @project.addNewAPIURL()
 
     addApiUrlFilter: (callback) ->
+      analytics.feature(ENV.csb.feature.addAPIEndpoints, ENV.csb.module.security, ENV.csb.product.appknox)
       allFilters = @$('.input')
       urls = ""
       uniqueArrays = ""

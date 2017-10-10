@@ -4,6 +4,7 @@
 `import ENV from 'irene/config/environment';`
 `import ENUMS from 'irene/enums'`
 `import config from 'irene/config/environment';`
+`import { CSBMap } from 'irene/router'`
 
 location = window.location
 
@@ -107,7 +108,13 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
 
   actions:
-    
+
+    willTransition: (transition) ->
+      currentRoute = transition.targetName
+      csbDict = CSBMap[currentRoute]
+      if !Ember.isEmpty csbDict
+        analytics.feature(csbDict.feature, csbDict.module, ENV.csb.product.appknox)
+
     invalidateSession: ->
       analytics.logout()
       @get('session').invalidate()

@@ -157,10 +157,17 @@ module.exports = function(environment) {
         runAPIScan: "API Scan",
         runDynamicScan: "Dynamic Scan",
         requestManualScan: "Manual Scan",
-        applicationUpload: "Application Upload"
+        applicationUpload: "Application Upload",
+        reportDownload: "Report Download",
+        addAPIEndpoints: "Add API Endpoints",
+        namespaceAdded: "Namespace Add",
+        changePassword: "Change Password",
+        createTeam: "Create Team"
       },
       module: {
-        security: "Security"
+        security: "Security",
+        report: "Report",
+        setup: "Setup"
       },
       product: {
         appknox: "Appknox"
