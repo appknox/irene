@@ -161,7 +161,8 @@ module.exports = function(environment) {
         reportDownload: "Report Download",
         addAPIEndpoints: "Add API Endpoints",
         namespaceAdded: "Namespace Add",
-        changePassword: "Change Password"
+        changePassword: "Change Password",
+        createTeam: "Create Team"
       },
       module: {
         security: "Security",

@@ -27,10 +27,11 @@ CreateTeamComponent = Ember.Component.extend
 
       for inputValue in [teamName]
         return @get("notify").error tEnterTeamName if isEmpty inputValue
+      analytics.feature(ENV.csb.feature.createTeam, ENV.csb.module.security, ENV.csb.product.appknox)  
       that = @
       data =
         name: teamName
-      @set "isCreatingTeam", true  
+      @set "isCreatingTeam", true
       @get("ajax").post ENV.endpoints.teams, data: data
       .then (data)->
         that.set "isCreatingTeam", false
