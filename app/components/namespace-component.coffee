@@ -17,6 +17,7 @@ NamespaceComponentComponent = Ember.Component.extend
 
   actions:
     addNamespace: ->
+      analytics.feature(ENV.csb.feature.namespaceAdded, ENV.csb.module.security, ENV.csb.product.appknox)
       tRequestToAddNamespace = @get "tRequestToAddNamespace"
       data =
         namespace: @get "namespace"

@@ -159,7 +159,8 @@ module.exports = function(environment) {
         requestManualScan: "Manual Scan",
         applicationUpload: "Application Upload",
         reportDownload: "Report Download",
-        addAPIEndpoints: "Add API Endpoints"
+        addAPIEndpoints: "Add API Endpoints",
+        namespaceAdded: "Namespace Add"
       },
       module: {
         security: "Security",
