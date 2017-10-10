@@ -160,11 +160,13 @@ module.exports = function(environment) {
         applicationUpload: "Application Upload",
         reportDownload: "Report Download",
         addAPIEndpoints: "Add API Endpoints",
-        namespaceAdded: "Namespace Add"
+        namespaceAdded: "Namespace Add",
+        changePassword: "Change Password"
       },
       module: {
         security: "Security",
-        report: "Report"
+        report: "Report",
+        setup: "Setup"
       },
       product: {
         appknox: "Appknox"
