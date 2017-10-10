@@ -77,14 +77,17 @@ FileHeaderComponent = Ember.Component.extend
 
 
     doNotRunAPIScan: ->
+      analytics.feature(ENV.csb.feature.runDynamicScan, ENV.csb.module.security, ENV.csb.product.appknox)
       @set "isApiScanEnabled", false
       @send "setAPIScanOption"
 
     runAPIScan: ->
+      analytics.feature(ENV.csb.feature.runAPIScan, ENV.csb.module.security, ENV.csb.product.appknox)
       @set "isApiScanEnabled", true
       @send "setAPIScanOption"
 
     requestManual: ->
+      analytics.feature(ENV.csb.feature.requestManualScan, ENV.csb.module.security, ENV.csb.product.appknox)
       tManualRequested = @get "tManualRequested"
       that = @
       file_id = @get "file.id"

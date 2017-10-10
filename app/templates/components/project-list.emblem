@@ -6,7 +6,7 @@ if user.hasProject
           .column.is-one-sixth
             = t "newScan"
             .margin-top
-              label.button.is-primary.is-fullwidth
+              label.button.is-primary.is-fullwidth.ac-upload-app
                 = upload-app delegate=this class="mp-upload-app"
                 = fa-icon "upload"
                 | &nbsp;
@@ -57,7 +57,7 @@ else
       h5
         | #{t "uploadNewProject"}:
       span
-        label.button.is-primary
+        label.button.is-primary.ac-upload-app-first
           = upload-app delegate=this
           = fa-icon "upload"
           | &nbsp;

@@ -10,7 +10,8 @@
   "scripts": {
     "build": "ember build",
     "start": "ember server",
-    "test": "ember test"
+    "test": "ember test",
+    "postinstall": "bower install"
   },
   "repository": "",
   "engines": {
@@ -19,6 +20,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "bower": "^1.8.2",
     "broccoli-asset-rev": "^2.4.2",
     "ember-ajax": "3.0.0",
     "ember-cli": "2.12.2",

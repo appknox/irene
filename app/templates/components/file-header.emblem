@@ -67,11 +67,11 @@
                 .fa-font-size-small
                   = fa-icon "fa-repeat"
             else
-              button.is-primary.margin-top20.margin-left click="openAPIScanModal"
+              button.is-primary.margin-top20.margin-left.ac-rescan click="openAPIScanModal"
                 .fa-font-size-small
                   = fa-icon "fa-repeat"
           else
-            button.is-primary.margin-top20 click="openAPIScanModal"
+            button.is-primary.margin-top20.ac-start-dynamic-scan click="openAPIScanModal"
               | #{t "start"} &nbsp;
               .fa-font-size
                 = fa-icon "fa-play"
@@ -99,7 +99,7 @@
               .fa-font-size
                 = fa-icon "fa-play"
           else
-            button.is-primary.margin-top20 click="requestManual"
+            button.is-primary.margin-top20.ac-request-manual-scan click="requestManual"
               | #{t "start"} &nbsp;
               .fa-font-size
                 = fa-icon "fa-play"
