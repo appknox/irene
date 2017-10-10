@@ -15,7 +15,5 @@
   = github-project project=model
 .box-container
   = jira-project project=model
-.box-container
-  = test-credentials project=model
 .margin-left
   = collaboration-component project=model

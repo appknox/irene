@@ -1,6 +1,6 @@
 if isPoppedOut
   .modal-background
-.modal-card.device-modal
+.modal-card.device-modal class=isPoppedOut::margin-left-10
   .modal-card-body.padding-10.margin-top
     div class="marvel-device" class=deviceType
       if isNotTablet
@@ -13,6 +13,18 @@ if isPoppedOut
           div class="speaker"
       div class="screen"
         canvas.canvas
+        if file.isNotReady
+          .vnc-text
+            .vnc-box
+              div
+                if file.isNoneStatus
+                  div
+                    h6
+                      = t "clickOnDynamicScan"
+                else
+                  i.fa class="fa-spinner fa-spin"
+                  h6
+                    | #{file.statusText} &nbsp;
       if isIOSDevice
         div class="home"
         if isNotTablet

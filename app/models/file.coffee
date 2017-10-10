@@ -124,6 +124,8 @@ File = DS.Model.extend BaseModelMixin,
     status is ENUMS.DYNAMIC_STATUS.READY
   ).property 'dynamicStatus'
 
+  isNotReady: Ember.computed.not 'isReady'
+
   isNeitherNoneNorReady: (->
     status = @get 'dynamicStatus'
     status not in [ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE]

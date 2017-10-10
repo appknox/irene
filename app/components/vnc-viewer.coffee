@@ -69,9 +69,9 @@ VncViewerComponent = Ember.Component.extend
       "nexus5"
     else if platform is ENUMS.PLATFORM.IOS
       if deviceType is ENUMS.DEVICE_TYPE.TABLET_REQUIRED
-        "ipad silver"
+        "ipad black"
       else
-        "iphone5s silver"
+        "iphone5s black"
   ).property "file.project.platform", "file.project.deviceType"
 
   isNotTablet: (->

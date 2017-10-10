@@ -36,11 +36,6 @@ ProjectPreferencesComponent = Ember.Component.extend
           !device.get "isTablet"
 
   uniqueDevices: Ember.computed.uniqBy "filteredDevices", 'version'
-  hasUniqueDevices: Ember.computed.gt 'uniqueDevices.length', 0
-
-  devicesCount: Ember.computed.alias 'availableDevices.length'
-
-  hasDevices: Ember.computed.gt 'devicesCount', 0
 
   actions:
 
@@ -51,7 +46,6 @@ ProjectPreferencesComponent = Ember.Component.extend
       @set "selectVersion", @$('#project-version-preference').val()
 
     versionSelected: ->
-
       selectVersion = @get "selectVersion"
       tDeviceSelected = @get "tDeviceSelected"
       tPleaseTryAgain = @get "tPleaseTryAgain"
@@ -66,11 +60,19 @@ ProjectPreferencesComponent = Ember.Component.extend
       @get("ajax").post devicePreferences, data: data
       .then (data) ->
         that.get("notify").success tDeviceSelected
+        that.set "projectPreferenceModal", false
       .catch (error) ->
         that.get("notify").error tPleaseTryAgain
         if Ember.isEmpty error?.errors
           return
         for error in error.errors
           that.get("notify").error error.detail?.message
+
+    openProjectPreferenceModal: ->
+      @set "projectPreferenceModal", true
+
+    closeProjectPreferenceModal: ->
+      @set "projectPreferenceModal", false
+
 
 `export default ProjectPreferencesComponent`

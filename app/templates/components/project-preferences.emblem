@@ -1,49 +1,46 @@
-h5 Device Preferences
+.columns
+  .column.is-one-sixth
+    h5
+      = t "devicePreferences" 
+  .column
+    button.is-primary click="openProjectPreferenceModal"
+     = t "changeDevice"
 
-if hasDevices
-  .columns
-    .column
-      = t "deviceType"
-  .columns
-    .column.is-one-sixth
-      select.input.mp-device-preference{action 'selectDeviceType' on='change'} id="project-device-preference"
-        option value=0
-          = t "noPreference"
-        each deviceTypes as |deviceType|
-          option value=deviceType.value
-            | #{ t (device-type deviceType.value)}
+.columns
+  .column.margin-top5
+    = t "selectedDevice"
+    | : #{ t (device-type project.deviceType)}
+.columns
+  .column.margin-top5
+    = t "selectedVersion"
+    | : #{project.versionText}
 
-    .column.margin-top5
-       = t "selectedDevice"
-       | : #{ t (device-type project.deviceType)}
-
-  if hasUniqueDevices
+= modal-card isActive=projectPreferenceModal title=(t "modalCard.devicePreference.title")
+  .card-body.warning-modal
+    .card-wrapper
+    .columns
+      .column
+        = t "deviceType"
+    .columns
+      .column.is-one-third
+        select.input.mp-device-preference{action 'selectDeviceType' on='change'} id="project-device-preference"
+          option value=0
+            = t "noPreference"
+          each deviceTypes as |deviceType|
+            option value=deviceType.value
+              | #{ t (device-type deviceType.value)}
     .columns
       .column
         = t "osVersion"
     .columns
-      .column.is-one-sixth
+      .column.is-one-third
         select.input.mp-version-preference{action 'selectVersion' on='change'} id="project-version-preference"
           option value=0
             = t "noPreference"
           each uniqueDevices as |device|
             option value=device.version
               = device.version
-
-      .column.margin-top5
-        = t "selectedVersion"
-        | : #{project.versionText}
-
     .columns
       .column
         button.margin-top20.is-primary.mp-select-device click="versionSelected"
-          | Select the device
-  else
-
-    h6.margin-top20
-      = t "noDeviceAvailable"
-
-else
-
-  h6.margin-top20
-    = t "noDeviceAvailable"
+          = t "modalCard.devicePreference.selectDevice"

@@ -47,6 +47,10 @@ $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert),
 .margin-right
   margin-right: 10px
 
+.margin-left-10
+  margin-left: -10px
+
+
 .margin-right-40
   margin-right: -40px
 
@@ -432,8 +436,8 @@ button, .button
   bottom: 70px!important
 
 .package-desc
-  margin-right: 10px
-  margin-top: 10px!important
+  margin-right: 20px
+  margin-top: 20px!important
   table
     font-size: 13px
     margin-top: 10px
@@ -441,7 +445,7 @@ button, .button
       td
         text-align: center
         padding: 2px
-        border: 1px solid #cccccc!important
+        border: 2px solid lighten($default, 45%)!important
         vertical-align: middle
   table.api-scan-status
     tr
@@ -653,14 +657,21 @@ ul.risk-table
     padding: 2px
     width: 120px
     margin-left: 15px
-    height: 25px
+    height: 30px
+    margin-top: -20px
+  .risk-values
+    margin-top: 20px
+    margin-left: -10px
+    .columns
+      .column
+        margin-top: -5px
+      .column:nth-child(2)
+        text-align: center
+        margin-left: -20px
   li:before
     font-size: 30px
     position: relative
     top: 4px
-  i
-    margin-right: 5px
-    font-size: 20px
 
 .progress-wrap
   width: 60%
@@ -710,8 +721,8 @@ ul.risk-table
     text-align: center
     border-radius: 6px
     position: absolute
-    top: 52px
-    right: 35px
+    top: 62px
+    right: 45px
     z-index: 1
     font-size: 12px
     transition-delay: 1s
@@ -950,29 +961,6 @@ button.delete-button
     .red-text
       color: $red
 
-.marvel-device.nexus5
-  width: 265px!important
-  height: 450px!important
-
-.marvel-device.ipad
-  width: 289px!important
-  height: 385px!important
-  margin-left: -10px
-
-.marvel-device.iphone5s
-  width: 245px!important
-  height: 385px!important
-  padding: 88px 22px
-  .screen
-    width: 88%
-    margin-left: 6%
-    canvas.canvas
-      width: 216px!important
-  .home
-    width: 50px
-    height: 50px
-    left: 52%
-
 .repeat-icon
   margin-left: 10px
   margin-top: 15px
@@ -1018,11 +1006,80 @@ button.delete-button
 .marvel-device
   .screen
     box-shadow: none
+    .vnc-box
+      display: none
   .top-bar
     background: none
 
+.marvel-device.nexus5
+  width: 265px!important
+  height: 450px!important
+
+.marvel-device.ipad
+  width: 282px!important
+  height: 385px!important
+  .screen canvas.canvas
+    width: 282px!important
+
 .marvel-device.iphone5s
+  width: 245px!important
+  height: 385px!important
+  padding: 88px 22px
   .screen
-    box-shadow: 0 0 0 3px #111
+    width: 88%
+    margin-left: 6%
+    canvas.canvas
+      width: 216px!important
+  .home
+    width: 50px
+    height: 50px
+    left: 52%
+
+.marvel-device.nexus5
+  .vnc-box
+    display: block
+    div div h6
+      padding-top: 10px
+
+.marvel-device.iphone5s, .marvel-device.ipad
+  .screen
+    .vnc-box
+      display: block
+      margin: 50px 30px
   .top-bar
     background: black
+
+.marvel-device.ipad
+  .vnc-box
+    div div h6
+      padding-top: 35px
+
+.sidebar-icons
+  margin-top: 5px
+  margin-right: 4px
+  font-size: 18px
+
+.vnc-text
+  margin-top: 150px
+  height: 90px
+  text-align: center
+  .vnc-box
+    margin: 50px 60px
+    div
+      background-color: #FFF
+      color: $default
+      height: 110px
+      margin: 20px
+      border-radius: 7px
+      i
+        font-size: 30px
+        margin-top: 20px
+      h6
+        margin-top: 10px
+      div
+        h6
+          padding-top: 18px
+
+button[disabled], .input[disabled]
+  cursor: not-allowed
+  pointer-events: auto
