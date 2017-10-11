@@ -17,10 +17,13 @@ NamespaceComponentComponent = Ember.Component.extend
 
   actions:
     addNamespace: ->
-      analytics.feature(ENV.csb.feature.namespaceAdded, ENV.csb.module.security, ENV.csb.product.appknox)
       tRequestToAddNamespace = @get "tRequestToAddNamespace"
+      namespace = @get "namespace"
+      if !namespace
+        return @get("notify").error "Please enter any namespace", ENV.notifications
       data =
-        namespace: @get "namespace"
+        namespace: namespace
+      analytics.feature(ENV.csb.feature.namespaceAdded, ENV.csb.module.security, ENV.csb.product.appknox)  
       that = @
       @set "isAddingNamespace", true
       @get("ajax").post ENV.endpoints.namespaceAdd, data: data

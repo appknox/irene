@@ -28,7 +28,6 @@ ApiFilterComponent = Ember.Component.extend
       @project.addNewAPIURL()
 
     addApiUrlFilter: (callback) ->
-      analytics.feature(ENV.csb.feature.addAPIEndpoints, ENV.csb.module.security, ENV.csb.product.appknox)
       allFilters = @$('.input')
       urls = ""
       uniqueArrays = ""
@@ -58,6 +57,7 @@ ApiFilterComponent = Ember.Component.extend
       apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, project_id].join '/'
       data =
         apiUrlFilters: urlString
+      analytics.feature(ENV.csb.feature.addAPIEndpoints, ENV.csb.module.security, ENV.csb.product.appknox)  
       @set "isSavingFilter", true
       @get("ajax").post apiScanOptions, data: data
       .then (data)->

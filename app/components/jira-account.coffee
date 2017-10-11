@@ -31,15 +31,22 @@ JiraAccountComponent = Ember.Component.extend
 
     integrateJira: ->
       tJiraIntegrated = @get "tJiraIntegrated"
+      host =  @get("jiraHost").trim()
+      username =  @get("jiraUsername").trim()
+      password =  @get "jiraPassword"
+      if !host and !username and !password
+        return @get("notify").error "Please enter all the details", ENV.notifications
       that = @
       data =
-        host: @get("jiraHost").trim()
-        username: @get("jiraUsername").trim()
-        password: @get "jiraPassword"
+        host: host
+        username: username
+        password: password
       @get("ajax").post ENV.endpoints.integrateJira, data: data
       .then (data)->
         that.get("notify").success tJiraIntegrated
+        analytics.feature(ENV.csb.feature.integrateJIRA, ENV.csb.module.report, ENV.csb.product.appknox)
       .catch (error) ->
+        that.get("notify").error error.payload.message
         for error in error.errors
           that.get("notify").error error.detail?.message
 

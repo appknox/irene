@@ -162,7 +162,9 @@ module.exports = function(environment) {
         addAPIEndpoints: "Add API Endpoints",
         namespaceAdded: "Namespace Add",
         changePassword: "Change Password",
-        createTeam: "Create Team"
+        createTeam: "Create Team",
+        integrateJIRA: "Integrate JIRA",
+        integrateGithub: "Integrate Github"
       },
       module: {
         security: "Security",
