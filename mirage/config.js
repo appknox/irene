@@ -15,6 +15,7 @@ export default function() {
   this.get('/projects/:id', 'project');
   this.get('/projects', 'project');
   this.get('/pricings', 'pricing');
+  this.get('/plans', 'plan');
   this.get('/pricings/:id', 'pricing');
   this.get('/teams', 'team');
   this.get('/teams/:id', 'team');

@@ -1,4 +1,16 @@
-import { Factory } from 'ember-cli-mirage';
+import { faker } from 'ember-cli-mirage';
+import Base from './base';
 
-export default Factory.extend({
+export default Base.extend({
+  name: faker.name.firstName,
+  price: faker.commerce.price,
+  projectsLimit: faker.random.number,
+
+  description(){
+    var desc = [];
+    for (var i = 0; i < 5; i++) {
+      desc.push(faker.lorem.words(2).split(" ").join(" -> "));
+    }
+    return desc.join(",");
+  }
 });
