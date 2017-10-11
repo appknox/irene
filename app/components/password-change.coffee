@@ -25,7 +25,6 @@ PasswordChangeComponent = Ember.Component.extend
         return @get("notify").error tEnterValidPassword if !isValidPassword password
       if passwordNew isnt passwordConfirm
         return @get("notify").error tInvalidPassword
-      analytics.feature(ENV.csb.feature.changePassword, ENV.csb.module.setup, ENV.csb.product.appknox)
       data =
         password: passwordCurrent
         newPassword: passwordNew
@@ -39,6 +38,7 @@ PasswordChangeComponent = Ember.Component.extend
           passwordConfirm: ""
           })
         that.get("notify").success tPasswordChanged
+        analytics.feature(ENV.csb.feature.changePassword, ENV.csb.module.setup, ENV.csb.product.appknox)
       .catch (error) ->
         that.get("notify").error error.payload.message
         for error in error.errors
