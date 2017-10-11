@@ -5,15 +5,15 @@
 
 PricingPlanComponent = Ember.Component.extend
 
-  pricing: null
+  plan: null
   paymentDuration: ENUMS.PAYMENT_DURATION.MONTHLY
   classNames: ["column" , "is-one-third"]
 
   totalPrice: (->
-    price = @get "pricing.price"
+    price = @get "plan.price"
     duration = @get "paymentDuration"
     total = price * duration
     "Pay $#{total} USD"
-  ).property "paymentDuration", "pricing.price"
+  ).property "paymentDuration", "plan.price"
 
 `export default PricingPlanComponent`

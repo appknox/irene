@@ -6,6 +6,8 @@ export default function() {
   this.passthrough('/write-coverage');
   this.passthrough('https://api.rollbar.com/api/1/item/');
   this.passthrough('https://socket.appknox.com/socket.io/');
+  this.passthrough('https://appknox.customersuccessbox.com/api_js/v1_1/page');
+  this.passthrough('https://appknox.customersuccessbox.com/api_js/v1_1/track');
 
   this.namespace = config.host + "/" +  config.namespace;
 
