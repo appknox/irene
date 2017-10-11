@@ -4,7 +4,7 @@ if user.hasGithubToken
   button.is-primary.mp-github-revoke click="openRevokeGithubConfirmBox"
     = t "revokeGithub"
 else
-  a.button.is-primary.mp-github-integrate target="_blank" href=user.githubRedirectUrl
+  a.button.is-primary.mp-github-integrate click="integrateGithub"
     = t "integrateGithub"
   = yield
 

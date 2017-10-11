@@ -163,7 +163,8 @@ module.exports = function(environment) {
         namespaceAdded: "Namespace Add",
         changePassword: "Change Password",
         createTeam: "Create Team",
-        integrateJIRA: "integrate JIRA"
+        integrateJIRA: "Integrate JIRA",
+        integrateGithub: "Integrate Github"
       },
       module: {
         security: "Security",
