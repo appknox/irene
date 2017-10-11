@@ -41,6 +41,7 @@ JiraAccountComponent = Ember.Component.extend
         host: host
         username: username
         password: password
+      analytics.feature(ENV.csb.feature.integrateJIRA, ENV.csb.module.report, ENV.csb.product.appknox)  
       @get("ajax").post ENV.endpoints.integrateJira, data: data
       .then (data)->
         that.get("notify").success tJiraIntegrated
