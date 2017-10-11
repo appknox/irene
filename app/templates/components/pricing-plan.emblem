@@ -5,5 +5,5 @@
     .box-section-content.flex-center
       = item
   .flex-center
-    = link-to "authenticated.payment" plan.id paymentDuration tagName="button" class="is-half is-success mp-total-price"
+    button.is-primary click="initiatePayment"
       = totalPrice
