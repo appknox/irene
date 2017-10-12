@@ -1109,16 +1109,21 @@ button[disabled], .input[disabled]
 .plan-list
   padding: 0px 90px
 
-.thank-you-page
+.payment-info-page
   margin-top: 150px
   h2,div,h5
     display: flex
     justify-content: center
   h2
     font-size: 50px
-  i.fa-check
-    padding: 15px
-    font-size: 50px
-    background-color: $success
-    border-radius: 50px
-    color: #FFF
+    i
+      padding: 8px
+      font-size: 50px
+      width: 70px
+      height: 70px
+      color: #FFF
+      border-radius: 50px
+    i.fa-check
+      background-color: $success
+    i.fa-times
+      background-color: $critical
