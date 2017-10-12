@@ -150,7 +150,9 @@ module.exports = function(environment) {
       enableMFA: 'mfa/enable',
       disableMFA: 'mfa/disable',
       teams: 'teams',
-      members: 'members'
+      members: 'members',
+      signedInvoiceUrl: 'download_url',
+      invoices: 'invoices'
     },
     csb: {
       feature: {

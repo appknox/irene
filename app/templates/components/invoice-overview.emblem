@@ -7,5 +7,5 @@ td
 td
   = invoice.paidOnHumanized
 td
-  button.is-primary click="viewInvoice"
+  button.is-primary click="getInvoiceLink"
     | Download
