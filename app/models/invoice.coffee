@@ -6,6 +6,7 @@ Invoice = DS.Model.extend
   amount: DS.attr 'string'
   paidOn: DS.attr 'date'
   plan: DS.belongsTo 'plan', inverse:'invoices'
+  downloadUrl: DS.attr 'string'
 
   paidOnHumanized: (->
     paidOn = @get "paidOn"

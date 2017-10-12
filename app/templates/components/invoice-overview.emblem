@@ -1,15 +1,11 @@
 td
   = invoice.id
 td
-  = invoice.pricing.name
-td
-  = invoice.durationText
+  = invoice.plan.name
 td
   | $#{invoice.amount}
 td
-  = t invoice.sourceType
-td
   = invoice.paidOnHumanized
 td
-  = link-to 'authenticated.invoice' invoice.id class="mp-view-invoice"
-      | view
+  button.is-primary click="viewInvoice"
+    | Download
