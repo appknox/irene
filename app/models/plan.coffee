@@ -6,7 +6,10 @@ Plan = DS.Model.extend
   description: DS.attr 'string'
   price: DS.attr 'number'
   projectsLimit: DS.attr "number"
-  url: DS.attr 'string'
+  monthlyUrl: DS.attr 'string'
+  quarterlyUrl: DS.attr 'string'
+  halfYearlyUrl: DS.attr 'string'
+  yearlyUrl: DS.attr 'string'
   invoices: DS.hasMany 'invoice', inverse:'plan'
 
   descriptionItems:(->

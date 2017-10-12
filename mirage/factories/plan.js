@@ -5,7 +5,10 @@ export default Base.extend({
   name: faker.name.firstName,
   price: faker.commerce.price,
   projectsLimit: faker.random.number,
-  url: "https://appknox-test.chargebee.com/hosted_pages/plans/default_lite?customer%5Bid%5D=HsTrPiZQXkHgX3h2Y",
+  monthlyUrl: "https://appknox-test.chargebee.com/hosted_pages/plans/default_lite?customer%5Bid%5D=HsTrPiZQXkHgX3h2Y",
+  quarterlyUrl: "https://appknox-test.chargebee.com/hosted_pages/plans/default_essential?customer%5Bid%5D=HsTrPiZQXkHgX3h2Y",
+  halfYearlyUrl: "https://appknox-test.chargebee.com/hosted_pages/plans/default_premium?customer%5Bid%5D=HsTrPiZQXkHgX3h2Y",
+  yearlyUrl: "https://appknox-test.chargebee.com/hosted_pages/plans/default_lite?customer%5Bid%5D=HsTrPiZQXkHgX3h2Y",
   planId: "default_lite",
 
   description(){

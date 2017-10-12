@@ -18,6 +18,16 @@ PricingPlanComponent = Ember.Component.extend
 
   actions:
     initiatePayment: ->
-      window.open(@get "plan.url", '_blank');
+      duration = @get "paymentDuration"
+      switch duration
+        when ENUMS.PAYMENT_DURATION.MONTHLY
+          url = @get "plan.monthlyUrl"
+        when ENUMS.PAYMENT_DURATION.QUARTERLY
+          url = @get "plan.quarterlyUrl"
+        when ENUMS.PAYMENT_DURATION.HALFYEARLY
+          url = @get "plan.halfYearlyUrl"
+        when ENUMS.PAYMENT_DURATION.YEARLY
+          url = @get "plan.yearlyUrl"
+      window.open(url, '_blank');
 
 `export default PricingPlanComponent`
