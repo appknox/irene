@@ -1,6 +1,7 @@
 `import DS from 'ember-data'`
 
 Plan = DS.Model.extend
+  planId: DS.attr 'string'
   name: DS.attr 'string'
   description: DS.attr 'string'
   price: DS.attr 'number'

@@ -16,4 +16,8 @@ PricingPlanComponent = Ember.Component.extend
     "Pay $#{total} USD"
   ).property "paymentDuration", "plan.price"
 
+  actions:
+    initiatePayment: ->
+      window.open(@get "plan.url", '_blank');
+
 `export default PricingPlanComponent`
