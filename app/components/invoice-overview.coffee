@@ -12,7 +12,7 @@ InvoiceOverviewComponent = Ember.Component.extend
       url = [ENV.endpoints.invoices, invoiceId, ENV.endpoints.signedInvoiceUrl].join '/'
       that = @
       @get("ajax").request url
-      .then(result) ->
+      .then (result) ->
         window.open result.url
       .catch (error) ->
         for error in error.errors
