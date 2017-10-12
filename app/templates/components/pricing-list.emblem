@@ -1,16 +1,14 @@
-h4
-  = t "pricing"
 if env.isAppknox
-  .columns
-    .column.flex-center
+  .columns.plan-list
+    h4
+      | Plans
+    .column.flex-center.margin-left-80
       each durations as |duration|
         button.js-duration-button.is-primary.margin-left.mp-pricing-duration click="selectDuration" data-value=duration.value
-          | #{ t (plan-duration duration.value)}
-
+            | #{ t (plan-duration duration.value)}
   .columns
     each sortedPlans as |plan|
       = pricing-plan plan=plan paymentDuration=paymentDuration
-
 else
   .columns
     = pricing-plan pricing=devknoxPricing paymentDuration=1
