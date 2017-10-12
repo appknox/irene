@@ -150,13 +150,17 @@ canvas.other-devices
     width: 70%
 
 .box-section
-  box-shadow: 0 0 10px #808080
+  box-shadow: 0 0 6px #ccc
   margin-top: 20px
+  &:hover
+    box-shadow: 3px 3px 20px #999
+    z-index: 1
 
 .box-sub-section
-  box-shadow: 0px 4px 10px -6px #222
+  box-shadow: 0 0 6px #ccc
   margin-bottom: 0px!important
   margin-top: 20px
+  height: 50px
 
 .box-section-content
   line-height: 50px
@@ -1094,9 +1098,12 @@ button[disabled], .input[disabled]
   background-color: lighten($red, 10%)
   border-color: lighten($red, 10%)
 
-.plan-list
+.plan-durations
   h4
     margin-left: 20px
     margin-top: 10px
   .column
     margin-left: -80px
+
+.plan-list
+  padding: 0px 90px   
