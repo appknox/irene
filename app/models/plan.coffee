@@ -7,6 +7,7 @@ Plan = DS.Model.extend
   price: DS.attr 'number'
   projectsLimit: DS.attr "number"
   url: DS.attr 'string'
+  invoices: DS.hasMany 'invoice', inverse:'plan'
 
   descriptionItems:(->
     description = @get "description"
