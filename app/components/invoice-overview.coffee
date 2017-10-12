@@ -13,7 +13,7 @@ InvoiceOverviewComponent = Ember.Component.extend
       that = @
       @get("ajax").request url
       .then (result) ->
-        window.open result.url
+        window.open result.data.url
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message
