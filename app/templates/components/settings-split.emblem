@@ -13,11 +13,16 @@ if isGeneral
       .column
         h4
           = t "namespace"
-      = namespace-component user=user
+        .namespace-list
+          = namespace-component user=user
+  .box-container
+    .columns
       .column.is-one-third
         h4
           = t "language"
-        = select-language
+        | Select the preferred language below
+        .language-select
+          = select-language
   .box-container
     .columns
       .column
