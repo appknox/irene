@@ -150,12 +150,8 @@ canvas.other-devices
     width: 70%
 
 .box-section
-  box-shadow: 0 0 6px #ccc
   margin-top: 20px
   border-radius: 5px
-  &:hover
-    box-shadow: 3px 3px 20px #999
-    z-index: 1
 
 .box-sub-section
   box-shadow: 0 0 6px #ccc
@@ -549,6 +545,12 @@ button, .button
 .card-icon
   margin-top: 15px
 
+.file-card, .box-section, .team-overview-card
+  box-shadow: 0px 0px 6px #ccc
+  &:hover
+    box-shadow: 1px 1px 20px #999
+    z-index: 1
+
 .project-specific
   .column
     padding-top: 10px
@@ -800,7 +802,6 @@ ul.risk-table
     margin-left: 0px
     margin-right: 0px
     .column
-      box-shadow: 0 1px 2px rgba(107, 107, 107, 0.1)
       margin-top: 10px
       border-right: 1px solid rgba(107, 107, 107, 0.1)
 
