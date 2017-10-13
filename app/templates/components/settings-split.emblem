@@ -20,7 +20,7 @@ if isGeneral
       .column.is-one-third
         h4
           = t "language"
-        | Select the preferred language below
+        = t "selectLanguage"  
         .language-select
           = select-language
   .box-container

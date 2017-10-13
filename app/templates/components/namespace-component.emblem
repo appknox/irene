@@ -4,7 +4,7 @@ if user.hasNamespace
       = item
 else
   h5
-    | No namespace!!!
+    = t "noNamespace"
 button.is-primary.margin-top.mp-namespace-modal click="toggleNamspaceModal"
   | + #{t "addNamespace"}
 
