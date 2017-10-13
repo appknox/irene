@@ -2,7 +2,7 @@
 
 moduleForModel 'plan', 'Unit | Model | plan', {
   # Specify the other units that are required for this test.
-  needs: []
+  needs: ['model:invoice']
 }
 
 test 'it exists', (assert) ->
