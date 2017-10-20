@@ -14,5 +14,6 @@ dependencies:
 test:
   override:
     - COVERAGE=true ember test
+    - bithound check git@github.com:appknox/irene.git
   post:
     - bash <(curl -s https://codecov.io/bash) -t $CODECOV_KEY
