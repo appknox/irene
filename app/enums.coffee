@@ -91,13 +91,9 @@ ENUMS =
     PHONE_REQUIRED: 1
     TABLET_REQUIRED: 2
 
-  PRODUCT:
-    APPKNOX: 0
-    DEVKNOX: 1
-
   MFA_METHOD:
     NONE: 0
-    TOTP: 1  
+    TOTP: 1
 
 
 # Populate `CHOICES`

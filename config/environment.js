@@ -2,10 +2,7 @@
 
 module.exports = function(environment) {
   var ENV = {
-    isDevknox: false,
-    isAppknox: false,
     // FIXME: There should be a config enpoint for hard-coded values
-    devknoxPrice: 9,  // This should also change in `mycroft/settings.py`
     socketPath: "http://localhost:8008",
     platform: -1,
     paginate: {
@@ -136,7 +133,6 @@ module.exports = function(environment) {
       changePassword: 'change_password',
       namespaceAdd: 'namespace_add',
       stripePayment: 'stripe_payment',
-      stripePaymentDevknox: 'stripe_payment_devknox',
       applyCoupon: 'apply_coupon',
       saveCredentials: 'projects/save_credentials',
       collaborations: 'collaborations',

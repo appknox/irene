@@ -23,7 +23,6 @@ User = DS.Model.extend
   namespaces: DS.attr 'string'
   collaborations: DS.hasMany 'collaboration', inverse:'user'
   expiryDate: DS.attr 'date'
-  devknoxExpiry: DS.attr 'date'
   projectCount: DS.attr 'number'
   hasGithubToken: DS.attr 'boolean'
   hasJiraToken: DS.attr 'boolean'
@@ -70,20 +69,9 @@ User = DS.Model.extend
     !billingHidden
   ).property 'billingHidden'
 
-  getExpiryDate: (->
-    if ENV.isAppknox
-      expiryDate = @get "expiryDate"
-    else
-      expiryDate = @get "devknoxExpiry"
-  ).property "expiryDate"
-
   hasExpiryDate: (->
-    getExpiryDate = @get "getExpiryDate"
-    if Ember.isEmpty getExpiryDate
-      false
-    else
-      true
-  ).property "getExpiryDate"
+    !Ember.isEmpty @get "expiryDate"
+  ).property "expiryDate"
 
   expiryText: (->
     currentDate = new Date()

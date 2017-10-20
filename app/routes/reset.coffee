@@ -1,8 +1,7 @@
 `import Ember from 'ember'`
-`import config from 'irene/config/environment';`
 
 ResetRoute = Ember.Route.extend
-  title: "Reset Password" + config.platform
+  title: "Reset Password"
   model: (params) ->
     params
 

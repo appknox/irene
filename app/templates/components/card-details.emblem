@@ -22,10 +22,9 @@ h4.margin-left.margin-top
           .column.is-half
             .control
               = input class="input mp-card-cvc" type="tel" name="cvc" placeholder="CVC" autocomplete="cc-csc" value=cardCvc
-        if env.isAppknox
-          .control.is-grouped
-            = input  class="input mp-card-coupon" placeholder="Do you have an offer coupon?" value=couponCode
-            button.is-success.mp-apply-coupon click="applyCoupon" Apply Coupon
+        .control.is-grouped
+          = input  class="input mp-card-coupon" placeholder="Do you have an offer coupon?" value=couponCode
+          button.is-success.mp-apply-coupon click="applyCoupon" Apply Coupon
         .control.content-right.last-child
           button.is-success.mp-make-payment click="makePaymentStripe" disabled=isPaymentButtonDisabled
             = fa-icon 'cc-stripe'
