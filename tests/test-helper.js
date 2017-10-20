@@ -8,5 +8,4 @@ import {
 
 
 start();
-
 setResolver(resolver);
