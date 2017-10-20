@@ -76,7 +76,7 @@
     "ember-simple-auth": "1.2.2",
     "ember-stripe-service": "6.0.0",
     "ember-uploader": "1.2.3",
-    "ember-websockets": "7.0.2",
+    "ember-websockets": "7.0.4",
     "loader.js": "^4.0.1",
     "mock-socket": "6.0.4",
     "phantomjs-prebuilt": "^2.1.14"
