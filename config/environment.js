@@ -152,7 +152,8 @@ module.exports = function(environment) {
       teams: 'teams',
       members: 'members',
       signedInvoiceUrl: 'download_url',
-      invoices: 'invoices'
+      invoices: 'invoices',
+      chargebeeCallback: "chargebee/callback"
     },
     csb: {
       feature: {
