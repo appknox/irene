@@ -2,8 +2,16 @@
   h3.flex-center.box-sub-section
     | #{plan.name}
   each plan.descriptionItems as |item|
-    .box-section-content.flex-center
+    .box-section-content
       = item
+  form
+    .control
+      label for="currentPassword"
+        | Enter the No of Apps
+      .columns
+        .column.is-half
+          = input class="input plan-quantity" type="text" input=(action "updatePrice")
+
   .flex-center
     button.is-primary click="initiatePayment"
-      = totalPrice
+      = updatedPrice

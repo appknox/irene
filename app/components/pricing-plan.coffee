@@ -7,18 +7,38 @@ PricingPlanComponent = Ember.Component.extend
 
   plan: null
   paymentDuration: ENUMS.PAYMENT_DURATION.MONTHLY
-  classNames: ["column" , "is-one-third"]
+  classNames: ["column"]
+  planQuantity: 1
+
+  updatedPrice: (->
+    totalPrice = @get "totalPrice"
+    planQuantity = @get "planQuantity"
+    updatedPrice = totalPrice * planQuantity
+    "Pay $#{updatedPrice} USD"
+  ).property "totalPrice", "planQuantity"
 
   totalPrice: (->
-    price = @get "plan.price"
+    monthlyPrice = @get "plan.monthlyPrice"
+    quarterlyPrice = @get "plan.quarterlyPrice"
+    halfYearlyPrice = @get "plan.halfYearlyPrice"
+    yearlyPrice = @get "plan.yearlyPrice"
     duration = @get "paymentDuration"
-    total = price * duration
-    "Pay $#{total} USD"
-  ).property "paymentDuration", "plan.price"
+    switch duration
+      when ENUMS.PAYMENT_DURATION.MONTHLY
+        price = @get "plan.monthlyPrice"
+      when ENUMS.PAYMENT_DURATION.QUARTERLY
+        price = @get "plan.quarterlyPrice"
+      when ENUMS.PAYMENT_DURATION.HALFYEARLY
+        price = @get "plan.halfYearlyPrice"
+      when ENUMS.PAYMENT_DURATION.YEARLY
+        price = @get "plan.yearlyPrice"
+    price
+  ).property "paymentDuration", "plan.monthlyPrice", "plan.quarterlyPrice", "plan.halfYearlyPrice", "plan.yearlyPrice"
 
   actions:
     initiatePayment: ->
       duration = @get "paymentDuration"
+      planQuantity = @get "planQuantity"
       switch duration
         when ENUMS.PAYMENT_DURATION.MONTHLY
           url = @get "plan.monthlyUrl"
@@ -28,6 +48,14 @@ PricingPlanComponent = Ember.Component.extend
           url = @get "plan.halfYearlyUrl"
         when ENUMS.PAYMENT_DURATION.YEARLY
           url = @get "plan.yearlyUrl"
-      window.open(url, '_blank');
+      updatedUrl = [url, "subscription[plan_quantity]=#{planQuantity}"].join '&'
+      window.open(updatedUrl, '_blank');
+
+     updatePrice: ->
+       planQuantity = parseInt @$('.plan-quantity').val()
+       if isNaN(planQuantity) or planQuantity is 0
+         planQuantity = 1
+       @set "planQuantity", planQuantity
+
 
 `export default PricingPlanComponent`
