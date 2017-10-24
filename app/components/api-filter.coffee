@@ -16,6 +16,8 @@ ApiFilterComponent = Ember.Component.extend
   tURLAdded: t("urlAdded")
   isSavingFilter: false
 
+  showButton: false
+
 
   confirmCallback: ->
     deletedURL = @get "deletedURL"

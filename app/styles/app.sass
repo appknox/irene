@@ -61,6 +61,9 @@ $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert),
   margin-top: 10px
   margin-bottom: 10px
 
+.margin-top-50
+  margin-top: -40px
+
 .margin-bottom20
   margin-bottom: 20px
 
@@ -396,6 +399,11 @@ button, .button
     padding-top: 15px
   button.modal-button
     min-width: 70px
+  form
+    p.control
+      .column:nth-child(2)
+        button.modal-button
+          margin-left: -50px
   .start-scan
     width: 150px
   ul
@@ -848,12 +856,6 @@ ul.risk-table
   button
     margin-top: -40px
 
-ul.api-filter-list
-  li
-    margin-left: 25px
-  li:before
-    content: "• "
-
 .filter-list
   input
     width: 70%
@@ -868,6 +870,18 @@ ul.api-filter-list
     width: 25%
   .position-icons
     margin-top: 20px!important
+
+.api-scanning
+  .api-filter
+    input
+      width: 40%
+  .url-filters
+    .columns
+      .column:nth-child(2)
+        button
+          margin-top: -50px
+          margin-left: 70px
+
 
 .new-input-box
   margin-top: -20px
@@ -1092,3 +1106,10 @@ button.delete-button
 button[disabled], .input[disabled]
   cursor: not-allowed
   pointer-events: auto
+
+.url-filters
+  .columns
+    .column:nth-child(2)
+      button
+        margin-top: -50px
+        margin-left: -50px

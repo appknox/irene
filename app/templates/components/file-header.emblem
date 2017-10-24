@@ -222,14 +222,14 @@
           = t "modalCard.apiScan.extraDescription"
         .margin-top20
           = api-filter project=file.project
-        div.margin-top
+        div.margin-top-40
           if file.project.hasAPIURLFilter
-            form.margin-top20
+            form
               p.control
                 .columns
-                  .column.is-one-third
+                  .column
                     button.modal-button.is-primary.mp-run-api-scan click="runAPIScan" disabled=file.project.isRunDisabled
-                      | Start API Scan
+                      | Save Filter & Start API Scan
                   .column
                     button.modal-button.is-primary.mp-dont-run-api-scan click="closeModal"
                       | Cancel

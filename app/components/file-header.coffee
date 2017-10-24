@@ -19,6 +19,8 @@ FileHeaderComponent = Ember.Component.extend
   showURLFilter: false
   showAPIScan: true
 
+  showButton: true
+
   didInsertElement: ->
     tPasswordCopied = @get "tPasswordCopied"
     tPleaseTryAgain = @get "tPleaseTryAgain"
