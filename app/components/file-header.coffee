@@ -97,6 +97,7 @@ FileHeaderComponent = Ember.Component.extend
       .then (result) ->
         that.get("notify").info tManualRequested
         that.set "file.ifManualNotRequested", false
+        that.set "showManualScanModal", false
       .catch (error) ->
         for error in error.errors
           that.get("notify").error error.detail?.message
@@ -116,6 +117,12 @@ FileHeaderComponent = Ember.Component.extend
 
     openSubscribeModal: ->
       @set "showSubscribeModal", true
+
+    openManualScanModal: ->
+      @set "showManualScanModal", true
+
+    closeManualScanModal: ->
+      @set "showManualScanModal", false
 
     subscribePlan: ->
       window.location.href = "/billing"

@@ -99,7 +99,7 @@
               .fa-font-size
                 = fa-icon "fa-play"
           else
-            button.is-primary.margin-top20.ac-request-manual-scan click="requestManual"
+            button.is-primary.margin-top20.ac-request-manual-scan click="openManualScanModal"
               | #{t "start"} &nbsp;
               .fa-font-size
                 = fa-icon "fa-play"
@@ -240,4 +240,15 @@
         =  t "yes"
     .column
       button.modal-button.is-primary click="closeSubscribeModal"
+        = t "no"
+
+= modal-card isActive=showManualScanModal title="Manual Scan"
+  h5
+   | Do you want to request for a manual scan?
+  .columns
+    .column.is-one-sixth
+      button.modal-button.is-primary click="requestManual"
+        =  t "yes"
+    .column
+      button.modal-button.is-primary click="closeManualScanModal"
         = t "no"
