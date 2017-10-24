@@ -16,6 +16,8 @@ FileHeaderComponent = Ember.Component.extend
   tReportIsGettingGenerated: t("reportIsGettingGenerated")
   tManualRequested: t("manualRequested")
   tStartingScan: t("startingScan")
+  showURLFilter: false
+  showAPIScan: true
 
   didInsertElement: ->
     tPasswordCopied = @get "tPasswordCopied"
@@ -87,6 +89,10 @@ FileHeaderComponent = Ember.Component.extend
       @set "isApiScanEnabled", true
       @send "setAPIScanOption"
 
+    showURLFilter: ->
+      @set "showURLFilter", true
+      @set "showAPIScan", false
+
     requestManual: ->
       analytics.feature(ENV.csb.feature.requestManualScan, ENV.csb.module.security, ENV.csb.product.appknox)
       tManualRequested = @get "tManualRequested"
@@ -103,6 +109,8 @@ FileHeaderComponent = Ember.Component.extend
           that.get("notify").error error.detail?.message
 
     openAPIScanModal: ->
+      @set "showAPIScan", true
+      @set "showURLFilter", false
       platform = @get "file.project.platform"
       if platform in [ENUMS.PLATFORM.ANDROID,ENUMS.PLATFORM.IOS] # TEMPIOSDYKEY
         @set "showAPIScanModal", true
@@ -126,6 +134,9 @@ FileHeaderComponent = Ember.Component.extend
 
     subscribePlan: ->
       window.location.href = "/billing"
+
+    addNewUrl: ->
+      Component.send('addNewUrl')
 
     dynamicShutdown: ->
       file = @get "file"

@@ -41,16 +41,6 @@ Project = DS.Model.extend BaseModelMixin,
       return true
   ).property "apiUrlFilters"
 
-  addNewAPIURL: ->
-    apiUrlFilters = @get "apiUrlFilters"
-    @set "apiUrlFilters", apiUrlFilters.concat(",")
-
-  removeUrl: (deletedURL) ->
-    urlCount = deletedURL.parentElement.childElementCount
-    if urlCount is 1
-      return deletedURL.firstChild.value = ""
-    deletedURL.remove()
-
   tNoPreference: t("noPreference")
 
   pdfPassword: (->

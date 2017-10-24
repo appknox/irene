@@ -12,7 +12,7 @@
     .column
       form.url-filters
         .columns
-          .column.is-one-sixth
+          .column.is-one-third
             button.is-primary.mp-add-filter click="addApiUrlFilter" disabled=isSavingFilter
               = t "templates.saveFilter"
           .column

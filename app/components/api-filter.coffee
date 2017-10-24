@@ -19,13 +19,18 @@ ApiFilterComponent = Ember.Component.extend
 
   confirmCallback: ->
     deletedURL = @get "deletedURL"
-    @project.removeUrl(deletedURL)
-    @send "closeRemoveURLConfirmBox"
+    urlCount = deletedURL.parentElement.childElementCount
+    if urlCount is 1
+      deletedURL.firstChild.value = ""
+    else
+      deletedURL.remove()
+    @set "showRemoveURLConfirmBox", false
 
   actions:
 
     addNewUrl: ->
-      @project.addNewAPIURL()
+      apiUrlFilters = @get "project.apiUrlFilters"
+      @set "project.apiUrlFilters", apiUrlFilters.concat(",")
 
     addApiUrlFilter: (callback) ->
       allFilters = @$('.input')
