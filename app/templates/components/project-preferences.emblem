@@ -1,7 +1,7 @@
 .columns
   .column.is-one-sixth
     h5
-      = t "devicePreferences" 
+      = t "devicePreferences"
   .column
     button.is-primary click="openProjectPreferenceModal"
      = t "changeDevice"
