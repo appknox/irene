@@ -14,7 +14,6 @@ Plan = DS.Model.extend
   quarterlyPrice: DS.attr 'string'
   halfYearlyPrice: DS.attr 'string'
   yearlyPrice: DS.attr 'string'
-  invoices: DS.hasMany 'invoice', inverse:'plan'
 
   descriptionItems:(->
     description = @get "description"

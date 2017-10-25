@@ -1,7 +1,7 @@
 td
   = invoice.id
 td
-  = invoice.plan.name
+  = invoice.planName
 td
   | $#{invoice.amount}
 td

@@ -5,7 +5,7 @@ Invoice = DS.Model.extend
   invoiceId: DS.attr 'number'
   amount: DS.attr 'string'
   paidOn: DS.attr 'date'
-  plan: DS.belongsTo 'plan', inverse:'invoices'
+  planName: DS.attr 'string'
   downloadUrl: DS.attr 'string'
 
   paidOnHumanized: (->
