@@ -210,7 +210,7 @@
               = t "copy"
 
 = modal-card isActive=showAPIScanModal title=(t "modalCard.apiScan.title")
-  .card-body.warning-modal class=showAPIScan:show:hide
+  .card-body.warning-modal
     .card-wrapper
       .api-scanning
         h6
@@ -220,11 +220,13 @@
           .columns
             .column.flex-center
               button.modal-button.is-primary.mp-run-api-scan click="showURLFilter"
-                | Yes, Run API scan also
+                | Run API Scan
             .column.flex-center
               button.modal-button.is-primary.mp-dont-run-api-scan click="doNotRunAPIScan"
-                | No, Run only Dynamic Scan
-  .card-body.warning-modal class=showURLFilter:show:hide
+                | Continue with Dynamic Scan
+
+= modal-card isActive=showAPIURLFilterScanModal title=(t "modalCard.apiScan.title")
+  .card-body.warning-modal
     .card-wrapper
       .api-scanning
         div.warning-band
@@ -240,9 +242,8 @@
                   button.modal-button.is-primary.mp-run-api-scan click="runAPIScan"
                     | Start API Scan
                 .column
-                  button.modal-button.is-primary.mp-dont-run-api-scan click="closeModal"
+                  button.modal-button.is-primary.mp-dont-run-api-scan click="goBack"
                     | Cancel
-
 
 = modal-card isActive=showSubscribeModal title="Subscribe to continue"
   h5
