@@ -2,6 +2,7 @@
 `import ENUMS from 'irene/enums'`
 `import ENV from 'irene/config/environment';`
 `import {isForbiddenError} from 'ember-ajax/errors';`
+`import { translationMacro as t } from 'ember-i18n'`
 
 PricingPlanComponent = Ember.Component.extend
 
@@ -9,6 +10,10 @@ PricingPlanComponent = Ember.Component.extend
   paymentDuration: ENUMS.PAYMENT_DURATION.MONTHLY
   classNames: ["column"]
   planQuantity: 1
+  i18n: Ember.inject.service()
+
+  tEnterNoOfApps: t("enterNoOfApps")
+  tEnterNoOfScans: t("enterNoOfScans")
 
   initiatePrice: (->
     totalPrice = @get "totalPrice"
@@ -16,10 +21,12 @@ PricingPlanComponent = Ember.Component.extend
   ).property "totalPrice"
 
   modalText: (->
+    tEnterNoOfApps = @get "tEnterNoOfApps"
+    tEnterNoOfScans = @get "tEnterNoOfScans"
     planId = @get "plan.planId"
     if planId is "default_per_scan"
-      return "Enter the number of scans"
-    "Enter the number of apps"
+      return tEnterNoOfScans
+    tEnterNoOfApps  
   ).property "plan"
 
   updatedPrice: (->

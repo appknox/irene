@@ -9,7 +9,7 @@ PricingListComponent = Ember.Component.extend
   plans: (->
     if ENV.product is ENUMS.PRODUCT.DEVKNOX
       return [@get("devknoxPricing")]
-    d = @get("store").findAll("plan")
+    @get("store").findAll("plan")
   ).property()
 
   sortPlanProperties: ['id']

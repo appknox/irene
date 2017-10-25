@@ -69,6 +69,8 @@ export default {
   "emptyURL": "任意のURLフィルタを入力してください",
   "enabled": "使用可能",
   "enableMFA": "MFAを有効にします",
+  "enterNoOfScans": "スキャン回数を入力してください",
+  "enterNoOfApps": "アプリの数を入力してください",
   "enterOTP": "6桁のOTPを入力してください",
   "enterRightTeamName": "それを削除する正しいチーム名を入力してください",
   "enterRightUserName": "削除する正しいユーザ名を入力してください",

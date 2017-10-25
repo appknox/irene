@@ -69,6 +69,8 @@ export default {
   "emptyURL": "Please enter any url filter",
   "enabled": "Enabled",
   "enableMFA": "Enable MFA",
+  "enterNoOfScans": "Enter the number of scans",
+  "enterNoOfApps": "Enter the number of apps",
   "enterOTP": "Enter the six digit OTP",
   "enterRightTeamName": "Enter the right team name to delete it",
   "enterRightUserName": "Enter the right username to delete it",
