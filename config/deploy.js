@@ -28,7 +28,7 @@ module.exports = function(deployTarget) {
     ENV.cloudfront = {
       distribution: 'E2YVUU4RPYNUI2',
       objectPaths: ['/*']
-    }
+  };
   }
 
   if (deployTarget === 'production') {
@@ -37,7 +37,7 @@ module.exports = function(deployTarget) {
 
     ENV.cloudfront = {
       distribution: 'E1SR2PB8XTR9RC'
-    }
+  };
   }
 
   // Note: if you need to build some configuration asynchronously, you can return

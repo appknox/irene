@@ -4,7 +4,6 @@ module.exports = function(environment) {
   var ENV = {
     isDevknox: false,
     isAppknox: false,
-    // FIXME: There should be a config enpoint for hard-coded values
     devknoxPrice: 9,  // This should also change in `mycroft/settings.py`
     socketPath: "http://localhost:8008",
     platform: -1,
@@ -150,7 +149,10 @@ module.exports = function(environment) {
       enableMFA: 'mfa/enable',
       disableMFA: 'mfa/disable',
       teams: 'teams',
-      members: 'members'
+      members: 'members',
+      signedInvoiceUrl: 'download_url',
+      invoices: 'invoices',
+      chargebeeCallback: "chargebee/callback"
     },
     csb: {
       feature: {
@@ -192,7 +194,7 @@ module.exports = function(environment) {
   }
 
   if (environment === 'mirage') {
-    ENV.socketPath = "https://socket.appknox.com",
+    ENV.socketPath = "https://socket.appknox.com";
     ENV['ember-cli-mirage'] = {
       enabled: true
     };
@@ -210,7 +212,7 @@ module.exports = function(environment) {
   }
 
   if (environment === 'testing') {
-    ENV.socketPath = "https://socket.appknox.com",
+    ENV.socketPath = "https://socket.appknox.com";
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
@@ -231,7 +233,7 @@ module.exports = function(environment) {
     ENV.rollbar = {
       accessToken: '4381303f93734918966ff4e1b028cee5'
     };
-    ENV.socketPath = "https://socket.appknox.com",
+    ENV.socketPath = "https://socket.appknox.com";
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
@@ -248,7 +250,7 @@ module.exports = function(environment) {
 
 
   if (environment === 'staging') {
-    ENV.socketPath = "https://socket.appknox.com",
+    ENV.socketPath = "https://socket.appknox.com";
     ENV['ember-cli-mirage'] = {
       enabled: false
     };

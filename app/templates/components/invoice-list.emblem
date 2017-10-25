@@ -1,23 +1,20 @@
 if hasInvoices
-  h4
+  h4.margin-left20
     = t "invoices"
 
-  table
-    tr
-      th
-        | INVOICE ID
-      th
-        | PLAN NAME
-      th
-        | PAYMENT DURATION
-      th
-        | AMOUNT PAID
-      th
-        | PAYMENT MODE
-      th
-        | DATE
-      th
-        | INVOICE
+  .invoice-list-container
+    table
+      tr
+        th
+          | INVOICE ID
+        th
+          | PLAN NAME
+        th
+          | AMOUNT PAID
+        th
+          | DATE
+        th
+          | INVOICE
 
-    each invoices as |invoice|
-      = invoice-overview invoice=invoice
+      each invoices as |invoice|
+        = invoice-overview invoice=invoice

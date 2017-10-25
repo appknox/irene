@@ -50,7 +50,6 @@ $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert),
 .margin-left-10
   margin-left: -10px
 
-
 .margin-right-40
   margin-right: -40px
 
@@ -151,16 +150,28 @@ canvas.other-devices
     width: 70%
 
 .box-section
-  box-shadow: 0 0 10px #808080
   margin-top: 20px
+  border-radius: 5px
+  form
+    padding: 10px
+    font-size: 16px
+    input
+      margin-top: 10px
 
 .box-sub-section
-  box-shadow: 0px 4px 10px -6px #222
+  box-shadow: 0 0 6px #ccc
   margin-bottom: 0px!important
   margin-top: 20px
+  height: 50px
 
 .box-section-content
-  line-height: 50px
+  margin-top: 10px
+  line-height: 20px
+  padding: 10px
+  font-size: 16px
+  height: 50px
+  display: flex
+  align-items: center
 
 .pricing-section-content
   line-height: 30px
@@ -466,6 +477,7 @@ button, .button
         text-align: center
         border: 1px solid #778899
         padding: 8px 0px
+        vertical-align: middle
 
 .invoice-details-table
   table
@@ -480,6 +492,9 @@ button, .button
     table
       tr:nth-child(2)
         height: 300px
+
+.invoice-list-container
+  padding: 10px 100px
 
 .box-section
   button
@@ -540,6 +555,12 @@ button, .button
 
 .card-icon
   margin-top: 15px
+
+.file-card, .box-section, .team-overview-card
+  box-shadow: 0px 0px 6px #ccc
+  &:hover
+    box-shadow: 1px 1px 20px #999
+    z-index: 1
 
 .project-specific
   .column
@@ -792,7 +813,6 @@ ul.risk-table
     margin-left: 0px
     margin-right: 0px
     .column
-      box-shadow: 0 1px 2px rgba(107, 107, 107, 0.1)
       margin-top: 10px
       border-right: 1px solid rgba(107, 107, 107, 0.1)
 
@@ -1090,3 +1110,51 @@ button.delete-button
 button[disabled], .input[disabled]
   cursor: not-allowed
   pointer-events: auto
+
+.js-duration-button.is-default:hover
+  background-color: lighten($red, 10%)
+  border-color: lighten($red, 10%)
+
+.box-section button:focus
+  background-color: #80C081
+
+.plan-durations
+  h4
+    margin-left: 20px
+    margin-top: 10px
+  .column
+    margin-left: -80px
+
+.plan-list
+  padding: 0px 90px
+
+.payment-info-page
+  margin-top: 150px
+  h2,div,h5
+    display: flex
+    justify-content: center
+  h2
+    font-size: 50px
+    i
+      padding: 8px
+      font-size: 50px
+      width: 70px
+      height: 70px
+      color: #FFF
+      border-radius: 50px
+    i.fa-check
+      background-color: $success
+    i.fa-times
+      background-color: $critical
+
+.language-select
+  margin-top: 20px
+  select
+    width: 50%
+
+.namespace-list
+  li
+    font-size: 15px
+    margin-left: 10px
+  button
+    margin-top: 20px
