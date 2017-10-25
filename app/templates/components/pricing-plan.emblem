@@ -4,14 +4,21 @@
   each plan.descriptionItems as |item|
     .box-section-content
       = item
-  form
-    .control
-      label for="currentPassword"
-        | Enter the No of Apps
-      .columns
-        .column.is-half
-          = input class="input plan-quantity" type="text" input=(action "updatePrice")
-
   .flex-center
-    button.is-primary click="initiatePayment"
-      = updatedPrice
+    button.is-primary click="togglePlanModal"
+      = initiatePrice
+
+= modal-card isActive=showPlanModal title=modalText
+  .card-body
+    .card-wrapper
+      h6
+        | Please #{modalText} you would like to scan below:
+      form
+        .control
+          .columns
+            .column
+              = input class="input plan-quantity" type="text" input=(action "updatePrice") placeholder=modalText
+          .columns.margin-top20
+            .column.flex-center
+              button.is-success click="initiatePayment"
+                = updatedPrice

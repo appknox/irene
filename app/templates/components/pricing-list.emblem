@@ -9,8 +9,7 @@ if env.isAppknox
               | #{ t (plan-duration duration.value)}
     .columns.plan-list.flex-center
       each sortedPlans as |plan|
-        .pricing-card
-          = pricing-plan plan=plan paymentDuration=paymentDuration
+        = pricing-plan plan=plan paymentDuration=paymentDuration
 else
   .columns
     = pricing-plan pricing=devknoxPricing paymentDuration=1

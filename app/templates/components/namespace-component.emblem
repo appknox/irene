@@ -5,7 +5,7 @@ if user.hasNamespace
 else
   h5
     = t "noNamespace"
-button.is-primary.margin-top.mp-namespace-modal click="toggleNamspaceModal"
+button.is-primary.margin-top.mp-namespace-modal click="toggleNamespaceModal"
   | + #{t "addNamespace"}
 
 = modal-card isActive=showNamespaceModal title=(t "addNamespace")

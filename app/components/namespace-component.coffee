@@ -38,7 +38,7 @@ NamespaceComponentComponent = Ember.Component.extend
         for error in error.errors
           that.get("notify").error error.detail?.message
 
-    toggleNamspaceModal: ->
+    toggleNamespaceModal: ->
       @set "showNamespaceModal", !@get "showNamespaceModal"
 
 `export default NamespaceComponentComponent`

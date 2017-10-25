@@ -10,6 +10,19 @@ PricingPlanComponent = Ember.Component.extend
   classNames: ["column"]
   planQuantity: 1
 
+  initiatePrice: (->
+    totalPrice = @get "totalPrice"
+    "Pay $#{totalPrice} USD"
+  ).property "totalPrice"
+
+  modalText: (->
+    planId = @get "plan.planId"
+    debugger
+    if planId is "default_lite"
+      return "Enter the number of scans"
+    "Enter the number of apps"
+  ).property "plan"
+
   updatedPrice: (->
     totalPrice = @get "totalPrice"
     planQuantity = @get "planQuantity"
@@ -56,6 +69,9 @@ PricingPlanComponent = Ember.Component.extend
        if isNaN(planQuantity) or planQuantity is 0
          planQuantity = 1
        @set "planQuantity", planQuantity
+
+    togglePlanModal: ->
+      @set "showPlanModal", !@get "showPlanModal"
 
 
 `export default PricingPlanComponent`
