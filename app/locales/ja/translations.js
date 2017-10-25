@@ -308,13 +308,26 @@ export default {
       "title": "APIスキャンも実行しますか？",
       "description": "アプリで作成したすべてのネットワークトラフィックを記録します そして Web脆弱性のためのAPIスキャンを実行する. 現在のところ、APIスキャンではSSLピンを使用しているアプリはサポートされていません.",
       "extraDescription": " APIスキャンは複数の自動テストを実行します <b class='bold'>サービス拒否</b> または <b class='bold'>データの損失</b>. アプリを使用するように設定されている場合は、[はい]を選択しないでください <b class='bold'>プロダクションAPIサーバ</b> またはアプリが採用している場合 <b class='bold'>SSLピンニング</b>.",
-      "apiList": "あなたが設定したAPIフィルタのリストは以下の通りです",
-      "noAPIFilter": "APIフィルタセットがありません。下記の設定をクリックし、APIフィルタを設定してください",
-      "editFilters": "ここでフィルタを編集："
+      "runAPIScan": "APIスキャンを実行する",
+      "dynamicScan": "ダイナミックスキャンを続行する",
+      "startApiScan": "APIスキャンを開始"
     },
     "devicePreference": {
       title: "デバイスの設定を変更する",
       selectDevice: "デバイスを選択する"
+    },
+    "runAPIScan": {
+      "title": "APIスキャンを実行する",
+      "description": "ダイナミックスキャンを実行してAPIスキャンを開始する必要もあります",
+      "runScan": "ダイナミック＆APIスキャンの実行"
+    },
+    "subscription": {
+      "title": "続けるために購読する",
+      "description": "あなたはまだ購読していません、購読しますか？"
+    },
+    "manual": {
+      "title": "手動スキャン",
+      "description": "手動スキャンをリクエストしますか？"
     }
   },
   "templates": {

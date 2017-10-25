@@ -201,21 +201,21 @@
               | &nbsp;
               = t "copy"
 
-= modal-card isActive=showRunDynamicScanModal title="Run Dynamic Scan to start API Scan"
+= modal-card isActive=showRunDynamicScanModal title=(t "modalCard.runAPIScan.title")
   .card-body.warning-modal
     .card-wrapper
       .api-scanning
         h6
-          | You need to run Dynamic Scan to initiate the API Scan
+          = t "modalCard.runAPIScan.description"
         form.margin-top20
           p.control
           .columns
             .column
               button.modal-button.is-primary click="showURLFilter"
-                | Run Dynamic & API Scan
+                = t "modalCard.runAPIScan.runScan"
             .column
               button.modal-button.is-primary click="closeRunDynamicScanModal"
-                | Cancel
+                = t "cancel"
 
 = modal-card isActive=showAPIScanModal title=(t "modalCard.apiScan.title")
   .card-body.warning-modal
@@ -228,10 +228,10 @@
           .columns
             .column.flex-center
               button.modal-button.is-primary.mp-run-api-scan click="showURLFilter"
-                | Run API Scan
+                = t "modalCard.apiScan.runAPIScan"
             .column.flex-center
               button.modal-button.is-primary.mp-dont-run-api-scan click="doNotRunAPIScan"
-                | Continue with Dynamic Scan
+                = t "modalCard.apiScan.dynamicScan"
 
 = modal-card isActive=showAPIURLFilterScanModal title=(t "modalCard.apiScan.title")
   .card-body.warning-modal
@@ -248,14 +248,14 @@
               .columns
                 .column
                   button.modal-button.is-primary click="runAPIScan"
-                    | Start API Scan
+                    = t "modalCard.apiScan.startApiScan"
                 .column
                   button.modal-button.is-primary click="goBack"
-                    | Cancel
+                    =  t "cancel"
 
-= modal-card isActive=showSubscribeModal title="Subscribe to continue"
+= modal-card isActive=showSubscribeModal title=(t "modalCard.subscription.title")
   h5
-   | You haven't subcribed yet, do you want to Subscribe?
+   = t "modalCard.subscription.description"
   .columns
     .column.is-one-sixth
       button.modal-button.is-primary click="subscribePlan"
@@ -264,9 +264,9 @@
       button.modal-button.is-primary click="closeSubscribeModal"
         = t "no"
 
-= modal-card isActive=showManualScanModal title="Manual Scan"
+= modal-card isActive=showManualScanModal title=(t "modalCard.manual.title")
   h5
-   | Do you want to request for a manual scan?
+   = t "modalCard.manual.description"
   .columns
     .column.is-one-sixth
       button.modal-button.is-primary click="requestManual"

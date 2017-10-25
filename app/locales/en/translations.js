@@ -309,13 +309,26 @@ export default {
       "title": "Do you also want to run API Scan?",
       "description": "We will record all network traffic made by the app and run the API scan for web vulnerabilities. API scan currently does not support apps that employ SSL pinning.",
       "extraDescription": " API scan performs multiple automated tests that may result in <b class='bold'>denial of service</b> or <b class='bold'>loss of data</b>. Do not select YES if the app is configured to use a <b class='bold'>production API server</b> or if the app employs <b class='bold'>SSL pinning</b>.",
-      "apiList": "Here is the list of api filters you have set",
-      "noAPIFilter": "You do not have any API Filter set, click on settings below and set the API filter",
-      "editFilters": "Edit filters here: "
+      "runAPIScan": "Run API Scan",
+      "dynamicScan": "Continue with Dynamic Scan",
+      "startApiScan": "Start API Scan"
     },
     "devicePreference": {
-      title: "Change Device Preference",
-      selectDevice: "Select the device"
+      "title": "Change Device Preference",
+      "selectDevice": "Select the device"
+    },
+    "runAPIScan": {
+      "title": "Run API Scan",
+      "description": "You need to also run Dynamic Scan to initiate the API Scan",
+      "runScan": "Run Dynamic & API Scan"
+    },
+    "subscription": {
+      "title": "Subscribe to continue",
+      "description": "You haven't subscribed yet, do you want to Subscribe?"
+    },
+    "manual": {
+      "title": "Manual Scan",
+      "description": "Do you want to request for a manual scan?"
     }
   },
   "templates": {
