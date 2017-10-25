@@ -88,16 +88,8 @@
              button.is-primary.margin-top20 disabled="disabled"
                  | #{t "completed"} &nbsp;
                  = fa-icon "fa-check"
-             if trial.isTrial
-               button.is-primary.margin-top20.margin-left click="openSubscribeModal"
-                 .fa-font-size-small
-                   = fa-icon "fa-repeat"
-             else
-               button.is-primary.margin-top20.margin-left.ac-rescan click="openAPIScanModal"
-                 .fa-font-size-small
-                   = fa-icon "fa-repeat"
           else if file.isApiNotDone
-            button.is-primary.margin-top20.ac-start-dynamic-scan click="openAPIScanModal"
+            button.is-primary.margin-top20.ac-start-dynamic-scan click="openRunDynamicScanModal" disabled=file.isNotNoneStatus
               | #{t "start"} &nbsp;
               .fa-font-size
                 = fa-icon "fa-play"
@@ -209,6 +201,22 @@
               | &nbsp;
               = t "copy"
 
+= modal-card isActive=showRunDynamicScanModal title="Run Dynamic Scan to start API Scan"
+  .card-body.warning-modal
+    .card-wrapper
+      .api-scanning
+        h6
+          | You need to run Dynamic Scan to initiate the API Scan
+        form.margin-top20
+          p.control
+          .columns
+            .column
+              button.modal-button.is-primary click="showURLFilter"
+                | Run Dynamic & API Scan
+            .column
+              button.modal-button.is-primary click="closeRunDynamicScanModal"
+                | Cancel
+
 = modal-card isActive=showAPIScanModal title=(t "modalCard.apiScan.title")
   .card-body.warning-modal
     .card-wrapper
@@ -239,10 +247,10 @@
             p.control
               .columns
                 .column
-                  button.modal-button.is-primary.mp-run-api-scan click="runAPIScan"
+                  button.modal-button.is-primary click="runAPIScan"
                     | Start API Scan
                 .column
-                  button.modal-button.is-primary.mp-dont-run-api-scan click="goBack"
+                  button.modal-button.is-primary click="goBack"
                     | Cancel
 
 = modal-card isActive=showSubscribeModal title="Subscribe to continue"

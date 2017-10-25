@@ -115,8 +115,11 @@ FileHeaderComponent = Ember.Component.extend
 
     goBack: ->
       @set "showAPIURLFilterScanModal", false
-      @set "showAPIScanModal", true
-
+      if @get "showRunDynamicScanModal"
+        @set "showRunDynamicScanModal", true
+      else
+        @set "showAPIScanModal", true
+  
     closeModal: ->
       @set "showAPIScanModal", false
 
@@ -131,6 +134,12 @@ FileHeaderComponent = Ember.Component.extend
 
     closeManualScanModal: ->
       @set "showManualScanModal", false
+
+    openRunDynamicScanModal: ->
+      @set "showRunDynamicScanModal", true
+
+    closeRunDynamicScanModal: ->
+      @set "showRunDynamicScanModal", false
 
     subscribePlan: ->
       window.location.href = "/billing"
