@@ -13,7 +13,7 @@
       form.url-filters
         .columns
           .column.is-one-third
-            button.is-primary.mp-add-filter click="addApiUrlFilter" disabled=isSavingFilter class=showButton:show:hide
+            button.is-primary.mp-add-filter click="addApiUrlFilter" disabled=isSavingFilter
               = t "templates.saveFilter"
           .column
             button.is-primary click="addNewUrl"

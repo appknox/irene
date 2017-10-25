@@ -220,16 +220,16 @@
         div.warning-band
           = fa-icon 'exclamation-triangle'
           = t "modalCard.apiScan.extraDescription"
-        .margin-top20
+        .margin-top20.add-filter-list
           = api-filter project=file.project
-        div.margin-top-40
+        div.margin-top20
           if file.project.hasAPIURLFilter
             form
               p.control
                 .columns
                   .column
                     button.modal-button.is-primary.mp-run-api-scan click="runAPIScan" disabled=file.project.isRunDisabled
-                      | Save Filter & Start API Scan
+                      | Start API Scan
                   .column
                     button.modal-button.is-primary.mp-dont-run-api-scan click="closeModal"
                       | Cancel

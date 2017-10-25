@@ -15,10 +15,7 @@ ApiFilterComponent = Ember.Component.extend
   tInvalidURL: t("invalidURL")
   tURLAdded: t("urlAdded")
   isSavingFilter: false
-
-  showButton: false
-
-
+  
   confirmCallback: ->
     deletedURL = @get "deletedURL"
     urlCount = deletedURL.parentElement.childElementCount
@@ -68,6 +65,7 @@ ApiFilterComponent = Ember.Component.extend
       .then (data)->
         that.set "isSavingFilter", false
         that.get("notify").success tURLAdded
+        that.set "project.apiUrlFilters", urlString
       .catch (error) ->
         that.set "isSavingFilter", false
         for error in error.errors

@@ -61,9 +61,6 @@ $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert),
   margin-top: 10px
   margin-bottom: 10px
 
-.margin-top-50
-  margin-top: -40px
-
 .margin-bottom20
   margin-bottom: 20px
 
@@ -401,9 +398,12 @@ button, .button
     min-width: 70px
   form
     p.control
+      .column:nth-child(1)
+        display: flex
+        justify-content: flex-end
       .column:nth-child(2)
-        button.modal-button
-          margin-left: -50px
+        display: flex
+        justify-content: flex-start
   .start-scan
     width: 150px
   ul
@@ -1113,3 +1113,8 @@ button[disabled], .input[disabled]
       button
         margin-top: -50px
         margin-left: -50px
+
+.add-filter-list
+  border: 2px solid lighten($default, 40%)
+  padding: 10px 10px 0px 10px
+  margin-bottom: 10px
