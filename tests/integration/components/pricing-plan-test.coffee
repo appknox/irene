@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{pricing-plan}}"""
 
-  assert.equal @$().text().trim(), 'Pay $NaN USD'
+  assert.equal @$().text().trim(), 'Pay $undefined USDEnter the number of appsPlease Enter the number of apps you would like to scan below:Pay $NaN USD'
