@@ -119,9 +119,11 @@ FileHeaderComponent = Ember.Component.extend
         @set "showRunDynamicScanModal", true
       else
         @set "showAPIScanModal", true
-  
+
     closeModal: ->
       @set "showAPIScanModal", false
+      @set "showAPIURLFilterScanModal", false
+      @set "showRunDynamicScanModal", false
 
     closeSubscribeModal: ->
       @set "showSubscribeModal", false
