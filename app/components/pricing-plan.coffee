@@ -18,7 +18,7 @@ PricingPlanComponent = Ember.Component.extend
   modalText: (->
     planId = @get "plan.planId"
     debugger
-    if planId is "default_lite"
+    if planId is "default_per_scan"
       return "Enter the number of scans"
     "Enter the number of apps"
   ).property "plan"
