@@ -223,18 +223,15 @@
         .margin-top20.add-filter-list
           = api-filter project=file.project
         div.margin-top20
-          if file.project.hasAPIURLFilter
-            form
-              p.control
-                .columns
-                  .column
-                    button.modal-button.is-primary.mp-run-api-scan click="runAPIScan" disabled=file.project.isRunDisabled
-                      | Start API Scan
-                  .column
-                    button.modal-button.is-primary.mp-dont-run-api-scan click="closeModal"
-                      | Cancel
-          else
-            = t "modalCard.apiScan.noAPIFilter"
+          form
+            p.control
+              .columns
+                .column
+                  button.modal-button.is-primary.mp-run-api-scan click="runAPIScan"
+                    | Start API Scan
+                .column
+                  button.modal-button.is-primary.mp-dont-run-api-scan click="closeModal"
+                    | Cancel
 
 
 = modal-card isActive=showSubscribeModal title="Subscribe to continue"
