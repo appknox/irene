@@ -63,9 +63,6 @@
               button.is-primary.margin-top20.margin-left click="openSubscribeModal"
                 .fa-font-size-small
                   = fa-icon "fa-repeat"
-              button.is-primary.margin-top20.margin-left.disabled disabled="true"
-                .fa-font-size-small
-                  = fa-icon "fa-repeat"
             else
               button.is-primary.margin-top20.margin-left.ac-rescan click="openAPIScanModal"
                 .fa-font-size-small
@@ -83,11 +80,24 @@
 
       if file.project.isAPIScanEnabled
         .column.flex-center
-          button.is-primary.margin-top20 disabled="disabled"
-            if file.isApiDone
-              | #{t "completed"} &nbsp;
-              = fa-icon "fa-check"
-            else
+          if file.isRunningApiScan
+            button.is-primary.margin-top20.is-progress disabled="disabled"
+             | #{t "scanning"} : #{file.apiScanProgress}
+             | %
+          else if file.isApiDone
+             button.is-primary.margin-top20 disabled="disabled"
+                 | #{t "completed"} &nbsp;
+                 = fa-icon "fa-check"
+             if trial.isTrial
+               button.is-primary.margin-top20.margin-left click="openSubscribeModal"
+                 .fa-font-size-small
+                   = fa-icon "fa-repeat"
+             else
+               button.is-primary.margin-top20.margin-left.ac-rescan click="openAPIScanModal"
+                 .fa-font-size-small
+                   = fa-icon "fa-repeat"
+          else if file.isApiNotDone
+            button.is-primary.margin-top20.ac-start-dynamic-scan click="openAPIScanModal"
               | #{t "start"} &nbsp;
               .fa-font-size
                 = fa-icon "fa-play"
