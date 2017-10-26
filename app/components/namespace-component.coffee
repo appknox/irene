@@ -4,7 +4,7 @@
 
 NamespaceComponentComponent = Ember.Component.extend
   i18n: Ember.inject.service()
-  classNames: ["column" , "is-one-third"]
+  classNames: ["column"]
   added: false
   namespace: ""
   isAddingNamespace: false
@@ -23,7 +23,7 @@ NamespaceComponentComponent = Ember.Component.extend
         return @get("notify").error "Please enter any namespace", ENV.notifications
       data =
         namespace: namespace
-      analytics.feature(ENV.csb.feature.namespaceAdded, ENV.csb.module.security, ENV.csb.product.appknox)  
+      analytics.feature(ENV.csb.feature.namespaceAdded, ENV.csb.module.security, ENV.csb.product.appknox)
       that = @
       @set "isAddingNamespace", true
       @get("ajax").post ENV.endpoints.namespaceAdd, data: data
@@ -38,7 +38,7 @@ NamespaceComponentComponent = Ember.Component.extend
         for error in error.errors
           that.get("notify").error error.detail?.message
 
-    toggleNamspaceModal: ->
+    toggleNamespaceModal: ->
       @set "showNamespaceModal", !@get "showNamespaceModal"
 
 `export default NamespaceComponentComponent`

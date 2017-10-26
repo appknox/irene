@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{invoice-overview}}"""
 
-  assert.equal @$().text().trim(), '$Missing translation: undefinedview'
+  assert.equal @$().text().trim(), '$Download'

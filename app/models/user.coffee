@@ -8,7 +8,6 @@ User = DS.Model.extend
   i18n: Ember.inject.service()
 
   uuid: DS.attr 'string'
-  invoices: DS.hasMany 'invoice', inverse:'user'
   lang: DS.attr 'string'
   username: DS.attr 'string'
   email: DS.attr 'string'
