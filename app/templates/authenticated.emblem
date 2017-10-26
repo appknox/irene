@@ -11,16 +11,16 @@
           .column.card.align-middle
             | #{model.totalProjects}
 
-          if model.limitedScans
-            .column.card.align-middle
-              = model.scansLeft
-              = t "scansLeft"
+        /  if model.limitedScans
+        /    .column.card.align-middle
+        /      = model.scansLeft
+        /      = t "scansLeft"
 
-          else
-            if model.hasExpiryDate
-              .column.card.align-middle
-                | #{ t model.expiryText}
-                | #{moment-from-now model.getExpiryDate}
+        /  else
+        /    if model.hasExpiryDate
+        /      .column.card.align-middle
+        /        | #{ t model.expiryText}
+        /        | #{moment-from-now model.getExpiryDate}
         / .feedback-button
         /   a click="giveFeeback"
         /     i.fa.fa-comments
