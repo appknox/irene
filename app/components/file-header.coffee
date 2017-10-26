@@ -89,8 +89,6 @@ FileHeaderComponent = Ember.Component.extend
 
     showURLFilter: ->
       @set "showAPIURLFilterScanModal", true
-      @set "showAPIScanModal", false
-      @set "showRunDynamicScanModal", false
 
     requestManual: ->
       analytics.feature(ENV.csb.feature.requestManualScan, ENV.csb.module.security, ENV.csb.product.appknox)
@@ -116,10 +114,6 @@ FileHeaderComponent = Ember.Component.extend
 
     goBack: ->
       @set "showAPIURLFilterScanModal", false
-      if @get "showRunDynamicScanModal"
-        @set "showRunDynamicScanModal", true
-      else
-        @set "showAPIScanModal", true
 
     closeModal: ->
       @set "showAPIScanModal", false
