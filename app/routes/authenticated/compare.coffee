@@ -1,10 +1,10 @@
 `import Ember from 'ember'`
-`import config from 'irene/config/environment';`
 `import ScrollTopMixin from 'irene/mixins/scroll-top'`
+`import RouteTitleMixin from 'irene/mixins/route-title'`
 
-AuthenticatedCompareRoute = Ember.Route.extend ScrollTopMixin,
+AuthenticatedCompareRoute = Ember.Route.extend ScrollTopMixin, RouteTitleMixin,
 
-  title: "File Compare"  + config.platform
+  subtitle: "File Compare"
   model: (data)->
     files = data.files.split "..."
     {

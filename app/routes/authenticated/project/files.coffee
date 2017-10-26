@@ -1,10 +1,10 @@
 `import Ember from 'ember'`
-`import config from 'irene/config/environment';`
 `import ScrollTopMixin from 'irene/mixins/scroll-top'`
+`import RouteTitleMixin from 'irene/mixins/route-title'`
 
-AuthenticatedProjectFilesRoute = Ember.Route.extend ScrollTopMixin,
+AuthenticatedProjectFilesRoute = Ember.Route.extend ScrollTopMixin, RouteTitleMixin,
 
-  title: "All Files" + config.platform
+  subtitle: "All Files"
   model: ->
     @modelFor("authenticated.project")
 

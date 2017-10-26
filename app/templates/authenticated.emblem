@@ -20,7 +20,7 @@
             if model.hasExpiryDate
               .column.card.align-middle
                 | #{ t model.expiryText}
-                | #{moment-from-now model.getExpiryDate}
+                | #{moment-from-now model.expiryDate}
         / .feedback-button
         /   a click="giveFeeback"
         /     i.fa.fa-comments

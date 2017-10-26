@@ -1,10 +1,10 @@
 `import Ember from 'ember'`
-`import config from 'irene/config/environment';`
 `import ScrollTopMixin from 'irene/mixins/scroll-top'`
+`import RouteTitleMixin from 'irene/mixins/route-title'`
 
-AuthenticatedTeamRoute = Ember.Route.extend ScrollTopMixin,
+AuthenticatedTeamRoute = Ember.Route.extend ScrollTopMixin, RouteTitleMixin,
 
-  title: "Team"  + config.platform
+  subtitle: "Team"
   model: (params) ->
     @get('store').find('team', params.teamId)
 

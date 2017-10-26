@@ -1,9 +1,10 @@
 `import Ember from 'ember'`
-`import config from 'irene/config/environment';`
 `import ScrollTopMixin from 'irene/mixins/scroll-top'`
+`import RouteTitleMixin from 'irene/mixins/route-title'`
 
-AuthenticatedProjectSettingsRoute = Ember.Route.extend ScrollTopMixin,
-  title: "Project Setting"  + config.platform
+AuthenticatedProjectSettingsRoute = Ember.Route.extend ScrollTopMixin, RouteTitleMixin,
+
+  subtitle: "Project Setting"
   model: ->
     @modelFor("authenticated.project")
 

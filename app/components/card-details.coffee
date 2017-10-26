@@ -140,10 +140,7 @@ CardDetailsComponent = Ember.Component.extend
         pricingId: @get "pricing.id"
         paymentDuration: @get "paymentDuration"
 
-      paymentUrl = ENV.endpoints.stripePaymentDevknox
-      if ENV.isAppknox
-        paymentUrl = ENV.endpoints.stripePayment
-
+      paymentUrl = ENV.endpoints.stripePayment
       that = @
       that.set 'isPaymentButtonDisabled', true
       @get("ajax").post paymentUrl, data: data

@@ -1,10 +1,10 @@
 `import Ember from 'ember'`
-`import config from 'irene/config/environment';`
 `import ScrollTopMixin from 'irene/mixins/scroll-top'`
+`import RouteTitleMixin from 'irene/mixins/route-title'`
 
-AuthenticatedPaymentRoute = Ember.Route.extend ScrollTopMixin,
+AuthenticatedPaymentRoute = Ember.Route.extend ScrollTopMixin, RouteTitleMixin,
 
-  title: "Payment" + config.platform
+  subtitle: "Payment"
   model: (params)->
     params.paymentDuration = parseInt params.paymentDuration
     params

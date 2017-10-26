@@ -14,7 +14,6 @@ IreneAjaxService = AjaxService.extend({
       token = this.get('session.data.authenticated.b64token');
       return {
         'Authorization': "Basic " + token,
-        'X-Product': ENV.product
       };
     }
   })

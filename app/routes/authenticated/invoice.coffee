@@ -1,10 +1,10 @@
 `import Ember from 'ember'`
-`import config from 'irene/config/environment';`
 `import ScrollTopMixin from 'irene/mixins/scroll-top'`
+`import RouteTitleMixin from 'irene/mixins/route-title'`
 
-AuthenticatedInvoiceRoute = Ember.Route.extend ScrollTopMixin,
+AuthenticatedInvoiceRoute = Ember.Route.extend ScrollTopMixin, RouteTitleMixin,
 
-  title: "Invoice" + config.platform
+  subtitle: "Invoice"
   model: (params)->
     params
 

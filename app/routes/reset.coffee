@@ -1,8 +1,9 @@
 `import Ember from 'ember'`
-`import config from 'irene/config/environment';`
+`import RouteTitleMixin from 'irene/mixins/route-title'`
 
-ResetRoute = Ember.Route.extend
-  title: "Reset Password" + config.platform
+ResetRoute = Ember.Route.extend RouteTitleMixin,
+
+  subtitle: "Reset Password"
   model: (params) ->
     params
 

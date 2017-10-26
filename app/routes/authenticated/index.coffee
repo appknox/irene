@@ -1,10 +1,9 @@
 `import Ember from 'ember'`
-`import config from 'irene/config/environment';`
-`import ENV from 'irene/config/environment'`
 `import ScrollTopMixin from 'irene/mixins/scroll-top'`
+`import RouteTitleMixin from 'irene/mixins/route-title'`
 
-IndexRoute = Ember.Route.extend ScrollTopMixin,
-  title: "Home" + config.platform
+IndexRoute = Ember.Route.extend ScrollTopMixin, RouteTitleMixin,
+  subtitle: "Home"
   model: ->
     @modelFor("authenticated")
 
