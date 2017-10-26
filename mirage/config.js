@@ -6,6 +6,8 @@ export default function() {
   this.passthrough('/write-coverage');
   this.passthrough('https://api.rollbar.com/api/1/item/');
   this.passthrough('https://socket.appknox.com/socket.io/');
+  this.passthrough('https://appknox.customersuccessbox.com/api_js/v1_1/page');
+  this.passthrough('https://appknox.customersuccessbox.com/api_js/v1_1/track');
 
   this.namespace = config.host + "/" +  config.namespace;
 
@@ -15,6 +17,7 @@ export default function() {
   this.get('/projects/:id', 'project');
   this.get('/projects', 'project');
   this.get('/pricings', 'pricing');
+  this.get('/plans', 'plan');
   this.get('/pricings/:id', 'pricing');
   this.get('/teams', 'team');
   this.get('/teams/:id', 'team');

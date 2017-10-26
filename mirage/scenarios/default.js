@@ -9,6 +9,7 @@ function getRandomInt(min, max) {
 export default function(server) {
   var userCount = getRandomInt(3, 5),
     pricingCount = getRandomInt(3, 3),
+    planCount = getRandomInt(3, 3),
     vulnerabilityCount = getRandomInt(5, 15),
     submissionCount = getRandomInt(0,3),
     teamCount = 3,
@@ -16,6 +17,7 @@ export default function(server) {
     team = null, currentUserId = 1, deviceCount=30, invoiceCount=3;
   var users = server.createList('user', userCount);
   server.createList('pricing', pricingCount);
+  server.createList('plan', planCount);
   server.createList('vulnerability', vulnerabilityCount);
   server.createList('submission', submissionCount);
   server.createList('device', deviceCount);

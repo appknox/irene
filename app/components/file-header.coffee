@@ -38,8 +38,8 @@ FileHeaderComponent = Ember.Component.extend
       analytics.feature(ENV.csb.feature.reportDownload, ENV.csb.module.report, ENV.csb.product.appknox)
       tReportIsGettingGenerated = @get "tReportIsGettingGenerated"
       that = @
-      file_id = @get "file.id"
-      url = [ENV.endpoints.signedPdfUrl, file_id].join '/'
+      fileId = @get "file.id"
+      url = [ENV.endpoints.signedPdfUrl, fileId].join '/'
       @get("ajax").request url
       .then (result) ->
         window.open result.url
