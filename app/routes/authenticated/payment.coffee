@@ -2,7 +2,7 @@
 `import ScrollTopMixin from 'irene/mixins/scroll-top'`
 `import RouteTitleMixin from 'irene/mixins/route-title'`
 
-AuthenticatedPaymentRoute = Ember.Route.extend ScrollTopMixin, RouteTitleMixin
+AuthenticatedPaymentRoute = Ember.Route.extend ScrollTopMixin, RouteTitleMixin,
 
   subtitle: "Payment"
   model: (params)->
