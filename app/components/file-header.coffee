@@ -17,6 +17,9 @@ FileHeaderComponent = Ember.Component.extend
   tManualRequested: t("manualRequested")
   tStartingScan: t("startingScan")
 
+  dynamicScanModal: false
+  apiScanModal: false
+
   didInsertElement: ->
     tPasswordCopied = @get "tPasswordCopied"
     tPleaseTryAgain = @get "tPleaseTryAgain"
@@ -87,8 +90,17 @@ FileHeaderComponent = Ember.Component.extend
       @set "isApiScanEnabled", true
       @send "setAPIScanOption"
 
-    showURLFilter: ->
+    showURLFilter: (param)->
       @set "showAPIURLFilterScanModal", true
+      if param is 'api'
+        @set "showAPIScanModal", false
+        @set "apiScanModal", true
+        @set "dynamicScanModal", false
+      if param is 'dynamic'
+        @set "showRunDynamicScanModal", false
+        @set "dynamicScanModal", true
+        @set "apiScanModal", false
+
 
     requestManual: ->
       analytics.feature(ENV.csb.feature.requestManualScan, ENV.csb.module.security, ENV.csb.product.appknox)
@@ -114,6 +126,10 @@ FileHeaderComponent = Ember.Component.extend
 
     goBack: ->
       @set "showAPIURLFilterScanModal", false
+      if @get "apiScanModal"
+        @set "showAPIScanModal", true
+      if @get "dynamicScanModal"
+        @set "showRunDynamicScanModal", true
 
     closeModal: ->
       @set "showAPIScanModal", false

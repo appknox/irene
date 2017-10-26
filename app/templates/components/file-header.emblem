@@ -211,7 +211,7 @@
           p.control
           .columns
             .column
-              button.modal-button.is-primary click="showURLFilter"
+              button.modal-button.is-primary click="'showURLFilter' 'dynamic'"
                 = t "modalCard.runAPIScan.runScan"
             .column
               button.modal-button.is-primary click="closeRunDynamicScanModal"
@@ -227,7 +227,7 @@
           p.control
           .columns
             .column.flex-center
-              button.modal-button.is-primary.mp-run-api-scan click="showURLFilter"
+              button.modal-button.is-primary.mp-run-api-scan click="'showURLFilter' 'api'"
                 = t "modalCard.apiScan.runAPIScan"
             .column.flex-center
               button.modal-button.is-primary.mp-dont-run-api-scan click="doNotRunAPIScan"
