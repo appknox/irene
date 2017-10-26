@@ -1,9 +1,10 @@
 `import Ember from 'ember'`
 `import ScrollTopMixin from 'irene/mixins/scroll-top'`
+`import RouteTitleMixin from 'irene/mixins/route-title'`
 
-AuthenticatedFileRoute = Ember.Route.extend ScrollTopMixin,
+AuthenticatedFileRoute = Ember.Route.extend ScrollTopMixin, RouteTitleMixin,
 
-  title: "File Details"
+  subtitle: "File Details"
   model: (params)->
     @get('store').find('file', params.fileId)
 

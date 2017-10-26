@@ -1,8 +1,9 @@
 `import Ember from 'ember'`
+`import RouteTitleMixin from 'irene/mixins/route-title'`
 
-InvitationRoute = Ember.Route.extend
+InvitationRoute = Ember.Route.extend RouteTitleMixin,
 
-  title: "Invitation"
+  subtitle: "Invitation"
 
   model: (params)->
     @store.findRecord "invitation", params.uuid

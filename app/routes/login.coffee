@@ -1,7 +1,8 @@
 `import Ember from 'ember'`
+`import RouteTitleMixin from 'irene/mixins/route-title'`
 
-LoginRoute = Ember.Route.extend
+LoginRoute = Ember.Route.extend RouteTitleMixin,
 
-  title: "Login"
+  subtitle: "Login"
 
 `export default LoginRoute`
