@@ -157,6 +157,35 @@ canvas.other-devices
     font-size: 16px
     input
       margin-top: 10px
+  button
+    margin-top: 30px
+  .plan-text
+    text-align: center
+    margin-top: 20px
+    color: lighten($default, 20%)
+  .choose-units
+    padding: 20px 50px 0 50px
+    text-align: center
+    .column
+      margin-top: 2px
+      h3
+        border: 2px solid lighten($default, 30%)
+      i
+        background-color: lighten($critical, 5%)
+        color: $white
+        border-radius: 50%
+        font-size: 20px
+        margin-top: 3px
+        width: 35px
+        height: 35px
+        line-height: 36px
+        cursor: pointer
+      .fa-plus
+        background-color: lighten($success, 5%)
+        &:hover
+          background-color: darken($success, 5%)
+      i:hover
+        background-color: darken($critical, 5%)
 
 .box-sub-section
   box-shadow: 0 0 6px #ccc
@@ -169,9 +198,11 @@ canvas.other-devices
   line-height: 20px
   padding: 10px
   font-size: 16px
-  height: 50px
+  height: 60px
   display: flex
   align-items: center
+  justify-content: center
+  text-align: center
 
 .pricing-section-content
   line-height: 30px
@@ -1167,6 +1198,10 @@ button[disabled], .input[disabled]
 
 .plan-list
   padding: 0px 90px
+  .box-section
+    h2
+      text-align: center
+      padding-top: 10px
 
 .payment-info-page
   margin-top: 150px

@@ -1,24 +1,21 @@
 .box-section
-  h3.flex-center.box-sub-section
-    | #{plan.name}
+  h2
+    = plan.name
   each plan.descriptionItems as |item|
     .box-section-content
       = item
+  .columns.choose-units
+    .column
+      i.fa.fa-minus click="decrementPlanQuantity"
+    .column
+      .columns
+        .column
+          h3 = planQuantity
+      .columns
+        .column.plan-text.uppercase-text
+          = planText
+    .column
+      i.fa.fa-plus click="incrementPlanQuantity"
   .flex-center
-    button.is-primary click="togglePlanModal"
-      = initiatePrice
-
-= modal-card isActive=showPlanModal title=modalText
-  .card-body
-    .card-wrapper
-      h6
-        | Please #{modalText} you would like to scan below:
-      form
-        .control
-          .columns
-            .column
-              = input class="input plan-quantity" type="text" input=(action "updatePrice") placeholder=modalText
-          .columns.margin-top20
-            .column.flex-center
-              button.is-success click="initiatePayment"
-                = updatedPrice
+    button.is-primary click="initiatePayment"
+      = updatedPrice
