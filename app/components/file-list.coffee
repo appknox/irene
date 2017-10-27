@@ -6,7 +6,7 @@ FileListComponent = Ember.Component.extend PaginateMixin,
   project: null
 
   targetObject: "file"
-  sortProperties: ["id:desc"]
+  sortProperties: ["createdOn:desc"]
 
   classNames: ["columns", "margin-top"]
 
