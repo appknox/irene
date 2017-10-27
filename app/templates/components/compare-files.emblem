@@ -6,10 +6,10 @@
     li class=detailsClass
       a click="displayDetails" class="mp-display-details"
         = t "details"
-.columns
-  .column
+.columns.flex-center.compare-container
+  .column.is-half
       = file-overview file=file1 isReverse=true
-  .column
+  .column.is-half
       = file-overview file=file2
 
 if isSummary
