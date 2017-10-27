@@ -5,7 +5,9 @@ td
 td
   | $#{invoice.amount}
 td
-  = invoice.paidOnHumanized
+  = invoice.paidDate
+td
+  = invoice.paidStatus
 td
   button.is-primary click="getInvoiceLink"
-    | Download
+    = t "download"
