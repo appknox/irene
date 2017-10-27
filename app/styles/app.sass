@@ -157,6 +157,35 @@ canvas.other-devices
     font-size: 16px
     input
       margin-top: 10px
+  button
+    margin-top: 30px
+  .plan-text
+    text-align: center
+    margin-top: 20px
+    color: lighten($default, 20%)
+  .choose-units
+    padding: 20px 50px 0 50px
+    text-align: center
+    .column
+      margin-top: 2px
+      h3
+        border: 2px solid lighten($default, 30%)
+      i
+        background-color: lighten($critical, 5%)
+        color: $white
+        border-radius: 50%
+        font-size: 20px
+        margin-top: 3px
+        width: 35px
+        height: 35px
+        line-height: 36px
+        cursor: pointer
+      .fa-plus
+        background-color: lighten($success, 5%)
+        &:hover
+          background-color: darken($success, 5%)
+      i:hover
+        background-color: darken($critical, 5%)
 
 .box-sub-section
   box-shadow: 0 0 6px #ccc
@@ -169,9 +198,11 @@ canvas.other-devices
   line-height: 20px
   padding: 10px
   font-size: 16px
-  height: 50px
+  height: 60px
   display: flex
   align-items: center
+  justify-content: center
+  text-align: center
 
 .pricing-section-content
   line-height: 30px
@@ -407,6 +438,14 @@ button, .button
     padding-top: 15px
   button.modal-button
     min-width: 70px
+  form
+    p.control
+      .column:nth-child(1)
+        display: flex
+        justify-content: flex-end
+      .column:nth-child(2)
+        display: flex
+        justify-content: flex-start
   .start-scan
     width: 150px
   ul
@@ -556,6 +595,18 @@ button, .button
 .card-icon
   margin-top: 15px
 
+.file-card
+  .card-content
+    padding: 0px
+    .content
+      .columns:nth-child(1)
+        margin-top: 10px
+      .columns.is-reverse
+        margin-left: 40px
+
+.compare-container
+  padding: 0px 5px
+
 .file-card, .box-section, .team-overview-card
   box-shadow: 0px 0px 6px #ccc
   &:hover
@@ -676,20 +727,20 @@ ul.risk-table
   h5
     margin-left: 15px
     margin-bottom: -5px
-    margin-top: 10px
+    margin-top: 5px
   li
     font-size: 13px
-    padding: 2px
+    padding: 1px
     width: 120px
     margin-left: 15px
-    height: 30px
     margin-top: -20px
   .risk-values
     margin-top: 20px
     margin-left: -10px
     .columns
       .column
-        margin-top: -5px
+        margin-top: 5px
+        padding: 3px
       .column:nth-child(2)
         text-align: center
         margin-left: -20px
@@ -868,12 +919,6 @@ ul.risk-table
   button
     margin-top: -40px
 
-ul.api-filter-list
-  li
-    margin-left: 25px
-  li:before
-    content: "• "
-
 .filter-list
   input
     width: 70%
@@ -888,6 +933,18 @@ ul.api-filter-list
     width: 25%
   .position-icons
     margin-top: 20px!important
+
+.api-scanning
+  .api-filter
+    input
+      width: 40%
+  .url-filters
+    .columns
+      .column:nth-child(2)
+        button
+          margin-top: -50px
+          margin-left: 70px
+
 
 .new-input-box
   margin-top: -20px
@@ -1030,6 +1087,8 @@ button.delete-button
 .marvel-device
   .screen
     box-shadow: none
+    .canvas
+      cursor: pointer!important
     .vnc-box
       display: none
   .top-bar
@@ -1111,6 +1170,18 @@ button[disabled], .input[disabled]
   cursor: not-allowed
   pointer-events: auto
 
+.url-filters
+  .columns
+    .column:nth-child(2)
+      button
+        margin-top: -50px
+        margin-left: -50px
+
+.add-filter-list
+  border: 2px solid lighten($default, 40%)
+  padding: 10px 10px 0px 10px
+  margin-bottom: 10px
+
 .js-duration-button.is-default:hover
   background-color: lighten($red, 10%)
   border-color: lighten($red, 10%)
@@ -1127,6 +1198,10 @@ button[disabled], .input[disabled]
 
 .plan-list
   padding: 0px 90px
+  .box-section
+    h2
+      text-align: center
+      padding-top: 10px
 
 .payment-info-page
   margin-top: 150px

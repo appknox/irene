@@ -14,6 +14,8 @@ if hasInvoices
         th
           | DATE
         th
+          | STATUS
+        th
           | INVOICE
 
       each invoices as |invoice|

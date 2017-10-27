@@ -15,17 +15,21 @@ ApiFilterComponent = Ember.Component.extend
   tInvalidURL: t("invalidURL")
   tURLAdded: t("urlAdded")
   isSavingFilter: false
-
-
+  
   confirmCallback: ->
     deletedURL = @get "deletedURL"
-    @project.removeUrl(deletedURL)
-    @send "closeRemoveURLConfirmBox"
+    urlCount = deletedURL.parentElement.childElementCount
+    if urlCount is 1
+      deletedURL.firstChild.value = ""
+    else
+      deletedURL.remove()
+    @set "showRemoveURLConfirmBox", false
 
   actions:
 
     addNewUrl: ->
-      @project.addNewAPIURL()
+      apiUrlFilters = @get "project.apiUrlFilters"
+      @set "project.apiUrlFilters", apiUrlFilters.concat(",")
 
     addApiUrlFilter: (callback) ->
       allFilters = @$('.input')
@@ -51,18 +55,17 @@ ApiFilterComponent = Ember.Component.extend
       splittedArray = urls?.split ","
       uniqueArrays = splittedArray.uniq()
       urlString = uniqueArrays.join ','
-      if Ember.isEmpty urlString
-        return that.get("notify").error tEmptyURL
       urlString = urlString.replace(/,\s*$/, "")
       apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, project_id].join '/'
       data =
         apiUrlFilters: urlString
-      analytics.feature(ENV.csb.feature.addAPIEndpoints, ENV.csb.module.security, ENV.csb.product.appknox)  
+      analytics.feature(ENV.csb.feature.addAPIEndpoints, ENV.csb.module.security, ENV.csb.product.appknox)
       @set "isSavingFilter", true
       @get("ajax").post apiScanOptions, data: data
       .then (data)->
         that.set "isSavingFilter", false
         that.get("notify").success tURLAdded
+        that.set "project.apiUrlFilters", urlString
       .catch (error) ->
         that.set "isSavingFilter", false
         for error in error.errors

@@ -41,6 +41,7 @@ ProjectPreferencesComponent = Ember.Component.extend
 
     selectDeviceType: ->
       @set "selectedDeviceType", parseInt @$('#project-device-preference').val()
+      @set "selectVersion", 0
 
     selectVersion: ->
       @set "selectVersion", @$('#project-version-preference').val()

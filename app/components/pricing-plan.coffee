@@ -8,25 +8,20 @@ PricingPlanComponent = Ember.Component.extend
 
   plan: null
   paymentDuration: ENUMS.PAYMENT_DURATION.MONTHLY
-  classNames: ["column"]
+  classNames: ["column", "is-one-third"]
   planQuantity: 1
   i18n: Ember.inject.service()
 
-  tEnterNoOfApps: t("enterNoOfApps")
-  tEnterNoOfScans: t("enterNoOfScans")
+  tApp: t("app")
+  tScan: t("scan")
 
-  initiatePrice: (->
-    totalPrice = @get "totalPrice"
-    "Pay $#{totalPrice} USD"
-  ).property "totalPrice"
-
-  modalText: (->
-    tEnterNoOfApps = @get "tEnterNoOfApps"
-    tEnterNoOfScans = @get "tEnterNoOfScans"
+  planText: (->
+    tApp = @get "tApp"
+    tScan = @get "tScan"
     planId = @get "plan.planId"
     if planId is "default_per_scan"
-      return tEnterNoOfScans
-    tEnterNoOfApps
+      return tScan
+    tApp
   ).property "plan"
 
   updatedPrice: (->
@@ -70,11 +65,12 @@ PricingPlanComponent = Ember.Component.extend
       updatedUrl = [url, "subscription[plan_quantity]=#{planQuantity}"].join '&'
       window.location = updatedUrl
 
-     updatePrice: ->
-       planQuantity = parseInt @$('.plan-quantity').val()
-       if isNaN(planQuantity) or planQuantity is 0
-         planQuantity = 1
-       @set "planQuantity", planQuantity
+    incrementPlanQuantity: ->
+      @incrementProperty "planQuantity"
+    decrementPlanQuantity: ->
+      planQuantity = @get "planQuantity"
+      if planQuantity > 1
+        @decrementProperty "planQuantity"
 
     togglePlanModal: ->
       @set "showPlanModal", !@get "showPlanModal"

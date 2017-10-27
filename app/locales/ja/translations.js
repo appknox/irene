@@ -11,6 +11,7 @@ export default {
   "allPlatforms": "すべてのプラットフォーム",
   "api": "API",
   "apiScan": "API スキャン",
+  "app": "アプリ",
   "apps": "アプリ",
   "bankTransfer": "銀行振込",
   "analyzing": "分析する",
@@ -58,6 +59,7 @@ export default {
   "devicePreferences": "デバイスの設定",
   "disabled": "使用禁止",
   "disableMFA": "MFAを無効にします",
+  "download": "ダウンロード",
   "dynamic": "動的",
   "dynamicScan": "ダイナミックスキャン",
   "dynamicScanStart": "動的診断を開始",
@@ -69,8 +71,6 @@ export default {
   "emptyURL": "任意のURLフィルタを入力してください",
   "enabled": "使用可能",
   "enableMFA": "MFAを有効にします",
-  "enterNoOfScans": "スキャン回数を入力してください",
-  "enterNoOfApps": "アプリの数を入力してください",
   "enterOTP": "6桁のOTPを入力してください",
   "enterRightTeamName": "それを削除する正しいチーム名を入力してください",
   "enterRightUserName": "削除する正しいユーザ名を入力してください",
@@ -162,6 +162,7 @@ export default {
   "package": "パッケージ",
   "packageName": "パッケージ名",
   "pageNotFound": "ページが見つかりません",
+  "paid": "有料",
   "password": "パスワード",
   "passwordLengthError": "パスワードは6桁以上でなければなりません",
   "passwordMatchError": "パスワードが一致しません",
@@ -173,6 +174,7 @@ export default {
   "paymentSuccessful": "お支払いを正常に処理しました. ありがとうございました.",
   "paypal": "Paypal",
   "pdfReport": "PDFレポート",
+  "pending": "保留中",
   "pendingInvitations": "保留中の招待状",
   "phone" : "スマホ",
   "pleaseVisit": "ご案内",
@@ -195,6 +197,7 @@ export default {
   "reset": "パスワードを再設定する",
   "resetPassword": "パスワードをリセット",
   "unchanged": "変わらない",
+  "unpaid": "未払い",
   "repoIntegrated": "repo 統合",
   "repoNotIntegrated": "repo が統合されていません",
   "revokeGithub": "Github を取り消す",
@@ -204,6 +207,7 @@ export default {
   "riskType": "リスクタイプ",
   "role": "役割",
   "saveCredentials": "資格情報を保存",
+  "scan": "スキャン",
   "scanning": "スキャン中",
   "scanDetails": "スキャンの詳細",
   "scansLeft": " スキャン左",
@@ -312,13 +316,26 @@ export default {
       "title": "APIスキャンも実行しますか？",
       "description": "アプリで作成したすべてのネットワークトラフィックを記録します そして Web脆弱性のためのAPIスキャンを実行する. 現在のところ、APIスキャンではSSLピンを使用しているアプリはサポートされていません.",
       "extraDescription": " APIスキャンは複数の自動テストを実行します <b class='bold'>サービス拒否</b> または <b class='bold'>データの損失</b>. アプリを使用するように設定されている場合は、[はい]を選択しないでください <b class='bold'>プロダクションAPIサーバ</b> またはアプリが採用している場合 <b class='bold'>SSLピンニング</b>.",
-      "apiList": "あなたが設定したAPIフィルタのリストは以下の通りです",
-      "noAPIFilter": "APIフィルタセットがありません。下記の設定をクリックし、APIフィルタを設定してください",
-      "editFilters": "ここでフィルタを編集："
+      "runAPIScan": "APIスキャンを実行する",
+      "dynamicScan": "ダイナミックスキャンを続行する",
+      "startApiScan": "APIスキャンを開始"
     },
     "devicePreference": {
       title: "デバイスの設定を変更する",
       selectDevice: "デバイスを選択する"
+    },
+    "runAPIScan": {
+      "title": "APIスキャンを実行する",
+      "description": "ダイナミックスキャンを実行してAPIスキャンを開始する必要もあります",
+      "runScan": "ダイナミック＆APIスキャンの実行"
+    },
+    "subscription": {
+      "title": "続けるために購読する",
+      "description": "あなたはまだ購読していません、購読しますか？"
+    },
+    "manual": {
+      "title": "手動スキャン",
+      "description": "手動スキャンをリクエストしますか？"
     }
   },
   "templates": {

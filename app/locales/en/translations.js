@@ -11,6 +11,7 @@ export default {
   "allPlatforms": "All Platforms",
   "api": "API",
   "apiScan": "API Scan",
+  "app": "app(s)",
   "apps": " Apps",
   "bankTransfer": "Bank Transfer",
   "analyzing": "Analyzing",
@@ -58,6 +59,7 @@ export default {
   "devicePreferences": "Device Preferences",
   "disabled": "Disabled",
   "disableMFA": "Disable MFA",
+  "download": "Download",
   "dynamic": "Dynamic",
   "dynamicScan": "Dynamic Scan",
   "dynamicScanStart": "Start Dynamic Scan",
@@ -69,8 +71,6 @@ export default {
   "emptyURL": "Please enter any url filter",
   "enabled": "Enabled",
   "enableMFA": "Enable MFA",
-  "enterNoOfScans": "Enter the number of scans",
-  "enterNoOfApps": "Enter the number of apps",
   "enterOTP": "Enter the six digit OTP",
   "enterRightTeamName": "Enter the right team name to delete it",
   "enterRightUserName": "Enter the right username to delete it",
@@ -162,6 +162,7 @@ export default {
   "package": "Package",
   "packageName": "Package Name",
   "pageNotFound": "The Page cannot be found",
+  "paid": "Paid",
   "password": "Password",
   "passwordLengthError": "Passwords must be greater than or equal to 6",
   "passwordMatchError": "Passwords doesnt match",
@@ -173,6 +174,7 @@ export default {
   "paymentSuccessful": "Successfully processed your payment. Thank You.",
   "paypal": "Paypal",
   "pdfReport": "PDF Report",
+  "pending": "Pending",
   "pendingInvitations": "Pending Invitations",
   "phone" : "Phone",
   "pleaseVisit": "Please visit the",
@@ -195,6 +197,7 @@ export default {
   "reset": "Reset",
   "resetPassword": "Reset your password",
   "unchanged": "Unchanged",
+  "unpaid": "Unpaid",
   "repoIntegrated": "Repo successfully integrated",
   "repoNotIntegrated": "Something went wrong whe trying to update this repo",
   "revokeGithub": "Revoke Github",
@@ -204,6 +207,7 @@ export default {
   "riskType": "Risk Type",
   "role": "Role",
   "saveCredentials": "Save Credentials",
+  "scan": "scan(s)",
   "scanning": "Scanning",
   "scanDetails": "Scan Details",
   "scansLeft": " Scan Left",
@@ -313,13 +317,26 @@ export default {
       "title": "Do you also want to run API Scan?",
       "description": "We will record all network traffic made by the app and run the API scan for web vulnerabilities. API scan currently does not support apps that employ SSL pinning.",
       "extraDescription": " API scan performs multiple automated tests that may result in <b class='bold'>denial of service</b> or <b class='bold'>loss of data</b>. Do not select YES if the app is configured to use a <b class='bold'>production API server</b> or if the app employs <b class='bold'>SSL pinning</b>.",
-      "apiList": "Here is the list of api filters you have set",
-      "noAPIFilter": "You do not have any API Filter set, click on settings below and set the API filter",
-      "editFilters": "Edit filters here: "
+      "runAPIScan": "Run API Scan",
+      "dynamicScan": "Continue with Dynamic Scan",
+      "startApiScan": "Start API Scan"
     },
     "devicePreference": {
-      title: "Change Device Preference",
-      selectDevice: "Select the device"
+      "title": "Change Device Preference",
+      "selectDevice": "Select the device"
+    },
+    "runAPIScan": {
+      "title": "Run API Scan",
+      "description": "You need to also run Dynamic Scan to initiate the API Scan",
+      "runScan": "Run Dynamic & API Scan"
+    },
+    "subscription": {
+      "title": "Subscribe to continue",
+      "description": "You haven't subscribed yet, do you want to Subscribe?"
+    },
+    "manual": {
+      "title": "Manual Scan",
+      "description": "Do you want to request for a manual scan?"
     }
   },
   "templates": {

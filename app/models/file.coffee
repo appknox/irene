@@ -39,6 +39,15 @@ File = DS.Model.extend BaseModelMixin,
     !manual
   ).property 'manual'
 
+  isRunningApiScan: (->
+    apiScanProgress = @get "apiScanProgress"
+    if apiScanProgress in [0,100]
+      return false
+    true
+  ).property "apiScanProgress"
+
+  isApiNotDone: Ember.computed.not 'isApiDone'
+
   scanProgressClass: (type)->
     if type is true
       return true
@@ -48,23 +57,6 @@ File = DS.Model.extend BaseModelMixin,
     isStaticDone = @get "isStaticDone"
     @scanProgressClass isStaticDone
   ).property "isStaticDone"
-
-  isDynamicCompleted: (->
-    isDynamicDone = @get "isDynamicDone"
-    @scanProgressClass isDynamicDone
-  ).property "isDynamicDone"
-
-  fileDetailsClass: (->
-    hasMultipleFiles = @get "project.hasMultipleFiles"
-    manual = @get "manual"
-    smf = "multiple-files"
-    sm = "manual"
-    if hasMultipleFiles is false
-      smf = "no-#{smf}"
-    if manual is true
-      sm = "no-#{sm}"
-    "#{smf}-#{sm}"
-  ).property "manual", "project.hasMultipleFiles"
 
   tDeviceBooting: t("deviceBooting")
   tDeviceDownloading: t("deviceDownloading")
@@ -108,16 +100,12 @@ File = DS.Model.extend BaseModelMixin,
       {"value": countRiskUnknown, "color": _getComputedColor "default"}
     ]
 
-  dynamicScanProgress: Ember.computed "analyses.@each.risk", "isDynamicDone", ->
-    isDynamicDone  = @get "isDynamicDone"
-    if isDynamicDone
-      return 100
-    0
-
   isNoneStatus: (->
     status = @get 'dynamicStatus'
     status is ENUMS.DYNAMIC_STATUS.NONE
   ).property 'dynamicStatus'
+
+  isNotNoneStatus: Ember.computed.not 'isNoneStatus'
 
   isReady: (->
     status = @get 'dynamicStatus'
