@@ -19,10 +19,9 @@ PricingPlanComponent = Ember.Component.extend
     tApp = @get "tApp"
     tScan = @get "tScan"
     planId = @get "plan.planId"
-    planQuantity = @get "planQuantity"
     if planId is "default_per_scan"
       return tScan
-    tApp  
+    tApp
   ).property "plan"
 
   updatedPrice: (->
@@ -64,7 +63,7 @@ PricingPlanComponent = Ember.Component.extend
         when ENUMS.PAYMENT_DURATION.YEARLY
           url = @get "plan.yearlyUrl"
       updatedUrl = [url, "subscription[plan_quantity]=#{planQuantity}"].join '&'
-      window.open(updatedUrl, '_blank');
+      window.location = updatedUrl
 
     incrementPlanQuantity: ->
       @incrementProperty "planQuantity"
