@@ -1,4 +1,5 @@
 `import Ember from 'ember'`
+`import ENUMS from 'irene/enums'`
 
 SubmissionListComponent = Ember.Component.extend
 
@@ -12,7 +13,10 @@ SubmissionListComponent = Ember.Component.extend
     @get("store").findAll "submission"
   ).property "realtime.SubmissionCounter"
 
+  filteredSubmissions: Ember.computed.filter 'submissions', (submission) ->
+    submission.get("status") isnt ENUMS.SUBMISSION_STATUS.ANALYZING
+
   submissionSorting: ['id:desc']
-  sortedSubmissions: Ember.computed.sort 'submissions', 'submissionSorting'
+  sortedSubmissions: Ember.computed.sort 'filteredSubmissions', 'submissionSorting'
 
 `export default SubmissionListComponent`
