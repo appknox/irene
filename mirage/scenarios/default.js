@@ -11,7 +11,7 @@ export default function(server) {
     pricingCount = getRandomInt(3, 3),
     planCount = getRandomInt(3, 3),
     vulnerabilityCount = getRandomInt(5, 15),
-    submissionCount = getRandomInt(0,3),
+    submissionCount = getRandomInt(3,3),
     teamCount = 3,
     projectCount = 0, project = null, file = null, projectIds = [],
     team = null, currentUserId = 1, deviceCount=30, invoiceCount=3;

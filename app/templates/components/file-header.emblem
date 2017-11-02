@@ -269,7 +269,7 @@
    = t "modalCard.manual.description"
   .columns
     .column.is-one-sixth
-      button.modal-button.is-primary click="requestManual"
+      button.modal-button.is-primary click="requestManual" disabled=isRequestingManual
         =  t "yes"
     .column
       button.modal-button.is-primary click="closeManualScanModal"

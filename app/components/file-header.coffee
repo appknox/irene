@@ -19,6 +19,7 @@ FileHeaderComponent = Ember.Component.extend
 
   dynamicScanModal: false
   apiScanModal: false
+  isRequestingManual: false
 
   didInsertElement: ->
     tPasswordCopied = @get "tPasswordCopied"
@@ -108,12 +109,15 @@ FileHeaderComponent = Ember.Component.extend
       that = @
       file_id = @get "file.id"
       url = [ENV.endpoints.manual, file_id].join '/'
+      @set "isRequestingManual", true
       @get("ajax").request url
       .then (result) ->
+        that.set "isRequestingManual", false
         that.get("notify").info tManualRequested
         that.set "file.ifManualNotRequested", false
         that.set "showManualScanModal", false
       .catch (error) ->
+        that.set "isRequestingManual", false
         for error in error.errors
           that.get("notify").error error.detail?.message
 
