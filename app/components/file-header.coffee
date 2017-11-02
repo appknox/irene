@@ -46,7 +46,7 @@ FileHeaderComponent = Ember.Component.extend
       url = [ENV.endpoints.signedPdfUrl, fileId].join '/'
       @get("ajax").request url
       .then (result) ->
-        window.open result.url
+        window.location = result.url
       .catch (error) ->
         that.get("notify").error tReportIsGettingGenerated
         for error in error.errors
