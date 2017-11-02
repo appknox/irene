@@ -13,8 +13,11 @@ SubmissionListComponent = Ember.Component.extend
     @get("store").findAll "submission"
   ).property "realtime.SubmissionCounter"
 
-  filteredSubmissions: Ember.computed.filter 'submissions', (submission) ->
-    submission.get("status") isnt ENUMS.SUBMISSION_STATUS.ANALYZING
+  submissionStatusObserver: Ember.observer "submissions.@each.status", ->
+    submissions = @get "submissions"
+    filteredSubmissions = submissions.filter (submission) ->
+      submission.get("status") isnt ENUMS.SUBMISSION_STATUS.ANALYZING
+    @set "filteredSubmissions", filteredSubmissions
 
   submissionSorting: ['id:desc']
   sortedSubmissions: Ember.computed.sort 'filteredSubmissions', 'submissionSorting'
