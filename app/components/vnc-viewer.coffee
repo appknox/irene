@@ -99,6 +99,9 @@ VncViewerComponent = Ember.Component.extend
       rfb = @get "rfb"
       if rfb._rfb_connection_state is 'connected'
         rfb.disconnect()
+      if rfb._rfb_connection_state is 'disconnected'
+        @set "rfb", null
+        @setupRFB()
 
 
 `export default VncViewerComponent`
