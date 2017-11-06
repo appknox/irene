@@ -1,1 +1,4 @@
-= fa-icon "spinner" spin=true
+.loading-container-home
+  i.fa class="fa-spinner fa-spin"
+  div
+    | Loading...
