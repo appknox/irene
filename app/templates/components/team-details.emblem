@@ -29,11 +29,11 @@
         each team.teamMembers as |member|
           = team-member member=member team=team
 
-= modal-card isActive=showAddMemberModal title=(t "modalCard.addMember.title")
+= modal-card class="input-modal" isActive=showAddMemberModal title=(t "modalCard.addMember.title")
   .card-body
     .card-wrapper
       form
         p.control
-          = input class="form-control input" placeholder=( t 'email') type="text" value=teamMember autofocus="autofocus"
+          = input class="form-control input input-width" placeholder=( t 'email') type="text" value=teamMember autofocus="autofocus"
         button.margin-top10.is-primary click="addMember" disabled=isInvitingMember
          = t "invite"
