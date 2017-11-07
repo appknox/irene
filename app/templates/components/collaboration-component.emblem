@@ -20,18 +20,18 @@
     each collaborations as |collaboration|
       = collaboration-details collaboration=collaboration
 
-= modal-card isActive=showCollaborationModal title=(t "modalCard.collaboration.title")
+= modal-card class="input-modal" isActive=showCollaborationModal title=(t "modalCard.collaboration.title")
   .card-body
     .card-wrapper
       form
         p.control
-          select.input onchange={action "teamChanged" value="target.value"} id="team-preference"
+          select.select onchange={action "teamChanged" value="target.value"} id="team-preference"
             option value=0
               = t "selectTeam"
             each teams as |team|
               option value=team.id
                 = team.name
-        .card-button
+        .card-button.margin-top20
           button.mp-add-collaboration click="addCollaboration" disabled=isAddingCollaboration
             = t "addTeam"
           .columns

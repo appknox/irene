@@ -12,7 +12,7 @@ td
   .column
     | #{ t collaboration.roleHumanized}
   .column
-    select.input.mp-collaboration-role onchange={action "changeRole" value="target.value"} id="role-preference" disabled=collaboration.team.isDefaultTeam
+    select.select.mp-collaboration-role onchange={action "changeRole" value="target.value"} id="role-preference" disabled=collaboration.team.isDefaultTeam
         option
           = t "changeRole"
         each roles as |role|
@@ -23,4 +23,4 @@ td
   button.is-primary.mp-remove-collaboration.capitalize-text click="openAddCollaborationPrompt" disabled=collaboration.team.isDefaultTeam
       = t "remove"
 
-= prompt-box isActive=showAddCollaborationPrompt title=(t 'promptBox.collaborationPrompt.title') description=(t 'promptBox.collaborationPrompt.description') button="remove" delegate=this disabled=isRemovingCollaboration 
+= prompt-box isActive=showAddCollaborationPrompt title=(t 'promptBox.collaborationPrompt.title') description=(t 'promptBox.collaborationPrompt.description') button="remove" delegate=this disabled=isRemovingCollaboration

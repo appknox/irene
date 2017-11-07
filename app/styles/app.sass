@@ -1256,3 +1256,28 @@ button[disabled], .input[disabled]
   .deleted-item
     width: 50%
     display: block
+
+select
+  cursor: pointer
+  border-radius: 5px!important
+  color: $default!important
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAeCAYAAAAo5+5WAAAAdUlEQVRIx2MQllCs+P//vwcQM1ATM4waPGrwqMEjzmBSweAxGMgu+k8YFJHjYsvFixfvwWUiSA6khtygsFmxYsV+dENBYiA5SsPYfvXq1QdghoLYIDFqRZ7jxo0bD4MwiE3tVOECxYM0uVHd4NFCaNTgQW4wAKpugq+9Zk7QAAAAAElFTkSuQmCC), -webkit-linear-gradient(lighten($default, 55%), lighten($default, 55%) 40%, lighten($default, 55%))!important
+  border: 1px solid lighten($default, 40%)!important
+
+select:focus
+  outline: none!important
+
+select:hover
+  box-shadow: 0px 0px 3px $default!important
+
+select:disabled
+  cursor: not-allowed
+  color: lighten($default, 30%)!important
+  border: 1px solid lighten($default, 45%)!important
+
+.modal-card
+  border-radius: 10px
+
+.modal-card-head
+  border-bottom: 0px
+  background-color: #f2f2f2
