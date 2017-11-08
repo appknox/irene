@@ -3,7 +3,8 @@
     if hasObjects
       each otherFilesInTheProject as |file|
         .column.is-one-third
-          = file-overview file=file fileOld=fileOld redirectTo="authenticated.compare"
+          = link-to "authenticated.compare" (concat file.id "..." fileOld.id)
+            = file-overview file=file fileOld=fileOld redirectTo="authenticated.compare"
     else
       .loading-container
         i.fa class="fa-spinner fa-spin"
