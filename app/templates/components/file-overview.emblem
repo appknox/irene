@@ -14,58 +14,57 @@ header.card-header
       li.hide-overflow
         | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
 .card-content
-  = link-to redirectTo targetPath
-    .content
-      .columns
-        .column.flex-center.nowrap-trim.lowercase-text.tooltip
-          = t "started"
-          | &nbsp; #{moment-from-now file.createdOn}
-          span.tooltiptext.tooltip-collapse
-            = file.createdOnDateTime
-        .column.flex-center.nowrap-trim
-          = t "versionCode"
-          | {{#if file.versionCode}} - #{file.versionCode}{{/if}}
+  .content
+    .columns
+      .column.flex-center.nowrap-trim.lowercase-text.tooltip
+        = t "started"
+        | &nbsp; #{moment-from-now file.createdOn}
+        span.tooltiptext.tooltip-collapse
+          = file.createdOnDateTime
+      .column.flex-center.nowrap-trim
+        = t "versionCode"
+        | {{#if file.versionCode}} - #{file.versionCode}{{/if}}
 
-      .columns class=isReverse:is-reverse
-        .column.flex-center
-          = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
-        .column
-          ul.risk-table
-            .risk-values
-              .columns
-                .column
-                  li.is-critical
-                    = t "critical"
-                .column
-                  = file.countRiskCritical
-              .columns
-                .column
-                  li.is-danger
-                    = t "high"
-                .column
-                  = file.countRiskHigh
-              .columns
-                .column
-                  li.is-warning
-                    = t "medium"
-                .column
-                  = file.countRiskMedium
-              .columns
-                .column
-                  li.is-info
-                    = t "low"
-                .column
-                  = file.countRiskLow
-              .columns
-                .column
-                  li.is-success
-                    = t "none"
-                .column
-                  = file.countRiskNone
-              .columns
-                .column
-                  li.is-default
-                    = t "unknown"
-                .column
-                  = file.countRiskUnknown
+    .columns class=isReverse:is-reverse
+      .column.flex-center
+        = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
+      .column
+        ul.risk-table
+          .risk-values
+            .columns
+              .column
+                li.is-critical
+                  = t "critical"
+              .column
+                = file.countRiskCritical
+            .columns
+              .column
+                li.is-danger
+                  = t "high"
+              .column
+                = file.countRiskHigh
+            .columns
+              .column
+                li.is-warning
+                  = t "medium"
+              .column
+                = file.countRiskMedium
+            .columns
+              .column
+                li.is-info
+                  = t "low"
+              .column
+                = file.countRiskLow
+            .columns
+              .column
+                li.is-success
+                  = t "none"
+              .column
+                = file.countRiskNone
+            .columns
+              .column
+                li.is-default
+                  = t "unknown"
+              .column
+                = file.countRiskUnknown
 = yield

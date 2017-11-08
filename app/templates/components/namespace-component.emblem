@@ -10,6 +10,5 @@ button.is-primary.margin-top.mp-namespace-modal click="toggleNamespaceModal"
 
 = modal-card isActive=showNamespaceModal title=(t "addNamespace")
   = input class="control input mp-namespaces" value=namespace autofocus="autofocus" placeholder="Enter the namespace"
-  .modal-footer
-    button.mp-add-namespace click="addNamespace" disabled=isAddingNamespace
-      = t "addNamespace"
+  button.is-primary.margin-top.mp-add-namespace click="addNamespace" disabled=isAddingNamespace
+    = t "addNamespace"
