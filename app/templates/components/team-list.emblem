@@ -1,3 +1,4 @@
 .columns.margin-top30
   each teams as |team|
-    = team-overview team=team
+    = link-to "authenticated.team" team.id
+      = team-overview team=team

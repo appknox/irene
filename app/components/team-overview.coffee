@@ -6,7 +6,7 @@ TeamOverviewComponent = Ember.Component.extend
 
   i18n: Ember.inject.service()
   team: null
-  classNames: ["column" , "is-one-third"]
+  classNames: ["column"]
 
   isDeletingTeam: false
 
