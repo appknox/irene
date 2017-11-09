@@ -1,27 +1,28 @@
 .card.team-overview-card.text-centre
-  header.card-header
-    .column
-      = team.name
-  header.card-header.columns
-    .column
-      | #{team.totalMembers}
-    .column
-      | #{team.totalProjects}
-  .card-content
-    .columns
+  = link-to "authenticated.team" team.id
+    header.card-header
       .column
-        h6
-          = t "owner"
+        = team.name
+    header.card-header.columns
       .column
-        h6
-         = t "created"
-    .columns
+        | #{team.totalMembers}
       .column
-        = team.owner.username
-      .column.tooltip
-        = moment-from-now team.createdOn
-        span.tooltiptext.team-tooltip
-          = team.createdOnDateTime
+        | #{team.totalProjects}
+    .card-content
+      .columns
+        .column
+          h6
+            = t "owner"
+        .column
+          h6
+           = t "created"
+      .columns
+        .column
+          = team.owner.username
+        .column.tooltip
+          = moment-from-now team.createdOn
+          span.tooltiptext.team-tooltip
+            = team.createdOnDateTime
   footer.card-button.align-center
     button.ac-delete-team click="openDeleteTeamPrompt" disabled=team.isDefaultTeam
       = t "deleteTeam"
