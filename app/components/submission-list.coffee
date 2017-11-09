@@ -5,7 +5,6 @@ SubmissionListComponent = Ember.Component.extend
 
   classNames: ["container"]
 
-
   submissionCount: Ember.computed.alias 'submissions.length'
   hasSubmissions: Ember.computed.gt 'submissionCount', 0
 
