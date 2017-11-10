@@ -6,7 +6,7 @@
     button.is-primary.uppercase-text.margin-top5.ac-create-team click="openTeamModal"
       | + #{t "createTeam"}
 
-= modal-card isActive=showTeamModal title=(t 'createTeam')
+= modal-card class="input-modal" isActive=showTeamModal title=(t 'createTeam')
   .card-body
     .card-wrapper
       form

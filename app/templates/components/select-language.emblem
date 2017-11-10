@@ -1,4 +1,4 @@
-select.input.mp-select-language{action 'setLocale' on='change'}
+select.mp-select-language{action 'setLocale' on='change'}
   option selected="true" value=currentLocale.locale
     = currentLocale.localeString
   each otherLocales as |locale|

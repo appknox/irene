@@ -8,9 +8,11 @@
         = t "details"
 .columns.flex-center.compare-container
   .column.is-half
-      = file-overview file=file1 isReverse=true
+      = link-to "authenticated.file" file1.id
+        = file-overview file=file1 isReverse=true
   .column.is-half
-      = file-overview file=file2
+      = link-to "authenticated.file" file2.id
+        = file-overview file=file2
 
 if isSummary
   table.compare-table

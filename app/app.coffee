@@ -3,6 +3,7 @@
 `import config from 'irene/config/environment';`
 `import installIntercom from 'irene/utils/install-intercom';`
 `import customerSuccessBox from 'irene/utils/customer-success-box';`
+`import installHotjar from 'irene/utils/install-hotjar';`
 `import loadInitializers from 'ember-load-initializers';`
 `import ENUMS from 'irene/enums'`
 
@@ -18,6 +19,7 @@ else
 
 installIntercom()
 customerSuccessBox()
+installHotjar()
 
 Ember.MODEL_FACTORY_INJECTIONS = true
 

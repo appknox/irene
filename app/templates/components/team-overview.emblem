@@ -1,14 +1,14 @@
 .card.team-overview-card.text-centre
-  header.card-header
-    .column
-      = team.name
-  header.card-header.columns
-    .column
-      | #{team.totalMembers}
-    .column
-      | #{team.totalProjects}
-  .card-content
-    = link-to "authenticated.team" team.id
+  = link-to "authenticated.team" team.id
+    header.card-header
+      .column
+        = team.name
+    header.card-header.columns
+      .column
+        | #{team.totalMembers}
+      .column
+        | #{team.totalProjects}
+    .card-content
       .columns
         .column
           h6

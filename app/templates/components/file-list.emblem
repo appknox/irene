@@ -3,7 +3,8 @@
     if hasObjects
       each sortedObjects as |file|
         .column.is-one-third
-          = file-overview file=file
+          = link-to "authenticated.file" file.id
+            = file-overview file=file
     else
       .loading-container
         i.fa class="fa-spinner fa-spin"

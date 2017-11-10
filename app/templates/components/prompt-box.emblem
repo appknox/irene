@@ -1,5 +1,5 @@
 .modal-background click="clearModal"
-.modal-card
+.modal-card.prompt-modal
   header.modal-card-head
     p.modal-card-title
       = title
