@@ -10,6 +10,7 @@ Router.map ->
   @route 'login'
   @route 'recover'
   @route 'reset', path: '/reset/:uuid/:token'
+  @route 'setup', path: '/setup/:uuid/:token'
   @route 'authenticated', path: '/', ->
     @route "index", path: '/'
     @route "teams", path: '/teams'

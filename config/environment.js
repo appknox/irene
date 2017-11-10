@@ -122,6 +122,7 @@ module.exports = function(environment) {
       deleteProject: 'projects/delete',
       recover: 'recover',
       reset: 'reset',
+      setup: 'setup',
       init: 'init',
       manual: 'manual',
       githubRepos: 'github_repos',
