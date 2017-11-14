@@ -34,6 +34,7 @@ User = DS.Model.extend
   mfaMethod: DS.attr 'number'
   mfaSecret: DS.attr 'string'
   isTrial: DS.attr 'boolean'
+  intercomHash: DS.attr 'string'
 
   tProject: t("project")
   tProjects: t("projects")
