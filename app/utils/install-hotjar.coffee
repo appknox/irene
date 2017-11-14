@@ -1,4 +1,8 @@
+`import ENV from 'irene/config/environment';`
+
 installHotjar = ->
+  if !ENV.enableHotjar
+    return console.log "Intercom Disabled"
   ((h, o, t, j, a, r) ->
     h.hj = h.hj or ->
       (h.hj.q = h.hj.q or []).push arguments
