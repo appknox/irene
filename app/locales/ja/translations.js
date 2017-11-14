@@ -241,6 +241,7 @@ export default {
   "subscriptionExpired": "サブスクリプションが期限切れ ",
   "subscriptionWillExpire": "サブスクリプションは失効する ",
   "summary": "概要",
+  "support": "サポート",
   "sync": "同期する",
   "tablet": "タブレット",
   "team": "チーム",
