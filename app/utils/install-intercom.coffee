@@ -36,4 +36,3 @@ installIntercom = ->
       w.addEventListener 'load', l, false
 
 `export default installIntercom`
-
