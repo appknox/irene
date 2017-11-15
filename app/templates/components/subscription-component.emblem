@@ -5,12 +5,12 @@
         th colspan="2"
           = t "subscriptionDetails"
       tr
-        td
+        td.td-heading
            = t "currentPlan"
         td
            = subscription.planName
       tr
-        td
+        td.td-heading
            = t "billingPeriod"
         td
            | #{subscription.billingPeriod} #{subscription.billingPeriodUnit}
