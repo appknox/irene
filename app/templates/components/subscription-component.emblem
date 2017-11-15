@@ -3,15 +3,15 @@
     table
       tr
         th colspan="2"
-          | Subscription Details
+          = t "subscriptionDetails"
       tr
         td
-           | Current Plan
+           = t "currentPlan"
         td
            = subscription.planName
       tr
         td
-           | Billing Period
+           = t "billingPeriod"
         td
            | #{subscription.billingPeriod} #{subscription.billingPeriodUnit}
       tr
