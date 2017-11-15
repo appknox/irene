@@ -2,7 +2,7 @@ if hasSubscription
   .box-container
     .columns.plan-durations
       h4
-        | Subscription
+        = t "activeSubscription"
     .columns.plan-list.flex-center
         = subscription-component subscription=subscription
 
@@ -11,7 +11,7 @@ if hasNoSubscription
     .box-container
       .columns.plan-durations
         h4
-          | Plans
+          = t "plans"
         .column.flex-center.margin-left-80
           each durations as |duration|
             button.js-duration-button.is-primary.margin-left.mp-pricing-duration click="selectDuration" data-value=duration.value

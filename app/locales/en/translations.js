@@ -2,6 +2,7 @@ export default {
   "acceptInvite": "Signup & Accept Invite",
   "account": "Account",
   "accountOverview": "Account Overview",
+  "activeSubscription": "Active Subscription",
   "addNamespace": "Add Namespace",
   "addNewTeam": "Add new team",
   "addTeam": "Add Team",
@@ -16,8 +17,10 @@ export default {
   "bankTransfer": "Bank Transfer",
   "analyzing": "Analyzing",
   "billing": "Billing",
+  "billingPeriod": "Billing Period",
   "businessImplication": "Business Implication",
   "cancel": "Cancel",
+  "cancelSubsciption": "Cancel Subscription",
   "changeDevice": "Change Device",
   "changePassword": "Change Password",
   "changeRole": "Change Role",
@@ -177,6 +180,7 @@ export default {
   "pending": "Pending",
   "pendingInvitations": "Pending Invitations",
   "phone" : "Phone",
+  "plans": "Plans",
   "pleaseVisit": "Please visit the",
   "pleaseTryAgain": "Failed, please try again",
   "previous": "Previous",
@@ -278,7 +282,8 @@ export default {
     "removeProject": "Are you sure you want to remove Github Project?",
     "removeJIRA": "Are you sure you want to remove JIRA Project?",
     "revokeGithub": "Are you sure you want to revoke Github Integration?",
-    "revokeJira": "Are you sure you want to revoke JIRA Integration?"
+    "revokeJira": "Are you sure you want to revoke JIRA Integration?",
+    "cancelSubsciption": "Are you sure you want to cancel Subscription?",
   },
   "promptBox": {
     "collaborationPrompt": {

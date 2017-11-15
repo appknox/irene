@@ -2,6 +2,7 @@ export default {
   "acceptInvite": "招待を受ける",
   "account": "アカウント",
   "accountOverview": "アカウントの概要",
+  "activeSubscription": "アクティブなサブスクリプション",
   "addNamespace": "名前空間の追加",
   "addNewTeam": "新しいチームを追加",
   "addTeam": "チームを追加",
@@ -16,8 +17,10 @@ export default {
   "bankTransfer": "銀行振込",
   "analyzing": "分析する",
   "billing": "料金プラン",
+  "billingPeriod": "支払請求周期",
   "businessImplication": "ビジネスへの影響",
   "cancel": "キャンセル",
+  "cancelSubsciption": "サブスクリプションをキャンセルする",
   "changeDevice": "デバイスの変更",
   "changePassword": "パスワード変更",
   "changeRole": "役割の変更",
@@ -177,6 +180,7 @@ export default {
   "pending": "保留中",
   "pendingInvitations": "保留中の招待状",
   "phone" : "スマホ",
+  "plans": "予定",
   "pleaseVisit": "ご案内",
   "pleaseTryAgain": "失敗しました、もう一度お試しください",
   "previous": "前",
@@ -277,7 +281,8 @@ export default {
     "removeProject": "Github Projectを削除してもよろしいですか？",
     "removeJIRA": "JIRA Projectを削除してもよろしいですか？",
     "revokeGithub": "Github Integrationを取り消してもよろしいですか？",
-    "revokeJira": "JIRAインテグレーションを取り消してもよろしいですか？"
+    "revokeJira": "JIRAインテグレーションを取り消してもよろしいですか？",
+    "cancelSubsciption": "サブスクリプションをキャンセルしてもよろしいですか？",
   },
   "promptBox": {
     "collaborationPrompt": {
