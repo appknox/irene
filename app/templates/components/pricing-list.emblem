@@ -1,17 +1,28 @@
-if env.isAppknox
+if hasSubscription
   .box-container
     .columns.plan-durations
       h4
-        | Plans
-      .column.flex-center.margin-left-80
-        each durations as |duration|
-          button.js-duration-button.is-primary.margin-left.mp-pricing-duration click="selectDuration" data-value=duration.value
-              | #{ t (plan-duration duration.value)}
+        | Subscription
     .columns.plan-list.flex-center
-      each sortedPlans as |plan|
-        = pricing-plan plan=plan paymentDuration=paymentDuration
-else
-  .columns
-    = pricing-plan pricing=devknoxPricing paymentDuration=1
+        = subscription-component subscription=subscription
+
+if hasNoSubscription
+  if env.isAppknox
+    .box-container
+      .columns.plan-durations
+        h4
+          | Plans
+        .column.flex-center.margin-left-80
+          each durations as |duration|
+            button.js-duration-button.is-primary.margin-left.mp-pricing-duration click="selectDuration" data-value=duration.value
+                | #{ t (plan-duration duration.value)}
+      .columns.plan-list.flex-center
+      .columns.plan-list.flex-center
+        each sortedPlans as |plan|
+          = pricing-plan plan=plan paymentDuration=paymentDuration
+
+  else
+    .columns
+      = pricing-plan pricing=devknoxPricing paymentDuration=1
 
 = invoice-list

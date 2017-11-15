@@ -238,6 +238,7 @@ export default {
   "stripeNotAvailable": "Stripe not available!",
   "submitUrl": "Submit URL",
   "subscription": "Subscription",
+  "subscriptionCancelled": "Subscription Cancelled Successfully",
   "subscriptionExpired": "Subscription Expired ",
   "subscriptionWillExpire": "Subscription will expire ",
   "summary": "Summary",

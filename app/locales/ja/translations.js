@@ -238,6 +238,7 @@ export default {
   "stripeNotAvailable": "ストライプは利用できません!",
   "submitUrl": "送信",
   "subscription": "サブスクリプション",
+  "subscriptionCancelled": "サブスクリプションが正常にキャンセルされました",
   "subscriptionExpired": "サブスクリプションが期限切れ ",
   "subscriptionWillExpire": "サブスクリプションは失効する ",
   "summary": "概要",

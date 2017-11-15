@@ -1,0 +1,26 @@
+.subscription-container
+  if isNotPerScan
+    .columns
+      .column
+       h4 You are currently subscribed to #{subscription.planName}
+    .columns
+      .column
+        h5 Billing Period #{subscription.billingPeriod} #{subscription.billingPeriodUnit}
+    .columns
+      .column
+        if subscription.isTrial
+          if subscription.isCancelled
+            | Your Trial will expire on #{subscription.expiryDateOnHumanized}
+          else
+            | Your free trail will be converted into paid subscription on #{subscription.expiryDateOnHumanized}
+            button.is-primary.margin-top20.flex-center click="openCancelSubscriptionConfirmBox"
+              | Cancel Subscription
+        else
+          if subscription.isCancelled
+            | Your subscription expires on #{subscription.expiryDateOnHumanized}
+          else
+            | You will be charged on #{subscription.expiryDateOnHumanized}
+            button.is-primary.margin-top20.flex-center click="openCancelSubscriptionConfirmBox"
+              | Cancel Subscription
+
+= confirm-box isActive=showCancelSubscriptionConfirmBox title=(t 'confirmBox.cancelSubsciption') delegate=this
