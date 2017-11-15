@@ -39,6 +39,10 @@
           = link-to 'authenticated.settings' class="mp-auth-settings"
             = fa-icon "cog" class="sidebar-icons"
             = t "settings"
+        li
+          a href='' id='intercom_support' class="mp-auth-support"
+            = fa-icon "support" class="sidebar-icons"
+            = t "support"
         if model.ifBillingIsNotHidden
           li
             = link-to 'authenticated.billing' class="mp-auth-billing"

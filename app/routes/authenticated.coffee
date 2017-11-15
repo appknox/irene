@@ -35,6 +35,10 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
         app_id: ENV.intercomAppID
         name: user.get "username"
         email: user.get "email"
+        alignment: 'left'
+        horizontal_padding: 20
+        vertical_padding: 20
+        custom_launcher_selector: '#intercom_support'
       window.Intercom 'trackEvent', 'logged-in'
     try
       mixpanel = @get "mixpanel"

@@ -241,6 +241,7 @@ export default {
   "subscriptionExpired": "Subscription Expired ",
   "subscriptionWillExpire": "Subscription will expire ",
   "summary": "Summary",
+  "support": "Support",
   "sync": "Sync More",
   "tablet": "Tablet",
   "team": "Team",
