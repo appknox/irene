@@ -57,7 +57,7 @@ module.exports = function(environment) {
     modulePrefix: 'irene',
     environment: environment,
     intercomAppID: "mbkqc0o1",
-    enableIntercom: true
+    enableIntercom: true,
 
     notifications: {
       autoClear: true,
