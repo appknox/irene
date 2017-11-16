@@ -30,6 +30,7 @@ export default function() {
   this.get('/invoices', 'invoice');
   this.get('/invoices/:id', 'invoice');
   this.get('/invitations/', 'invitation');
+  this.get('/subscriptions/', 'subscription');
 
   this.get('/github_repos', () => {
     return {};

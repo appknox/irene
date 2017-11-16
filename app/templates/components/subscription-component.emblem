@@ -18,7 +18,7 @@
         td colspan="2"
           if subscription.isTrial
             if subscription.isCancelled
-              | Your Trial will expire on #{subscription.expiryDateOnHumanized}
+              | Your trial will expire on #{subscription.expiryDateOnHumanized}
             else
               | Your free trail will be converted into paid subscription on #{subscription.expiryDateOnHumanized}
               button.is-primary.flex-center click="openCancelSubscriptionConfirmBox"
