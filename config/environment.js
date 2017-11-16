@@ -57,8 +57,7 @@ module.exports = function(environment) {
     modulePrefix: 'irene',
     environment: environment,
     intercomAppID: "mbkqc0o1",
-    enableIntercom: true,
-    enableHotjar: true,
+    enableIntercom: true
 
     notifications: {
       autoClear: true,
@@ -193,7 +192,6 @@ module.exports = function(environment) {
     };
     ENV['host'] = "http://0.0.0.0:8000";
     ENV.enableIntercom = false;
-    ENV.enableHotjar = false;
   }
 
   if (environment === 'mirage') {
@@ -203,7 +201,6 @@ module.exports = function(environment) {
     };
     ENV['host'] = "http://0.0.0.0:8000";
     ENV.enableIntercom = false;
-    ENV.enableHotjar = false;
     ENV.stripe = {
       publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
     };
@@ -222,7 +219,6 @@ module.exports = function(environment) {
     };
     ENV['host'] = "http://localhost:8000";
     ENV.enableIntercom = false;
-    ENV.enableHotjar = false;
     ENV.stripe = {
       publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
     };
