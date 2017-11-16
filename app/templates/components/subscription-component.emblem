@@ -20,7 +20,7 @@
             if subscription.isCancelled
               | Your trial will expire on #{subscription.expiryDateOnHumanized}
             else
-              | Your free trail will be converted into paid subscription on #{subscription.expiryDateOnHumanized}
+              | Your free trial will be converted into paid subscription on #{subscription.expiryDateOnHumanized}
               button.is-primary.flex-center click="openCancelSubscriptionConfirmBox"
                 = t "cancelSubsciption"
           else
