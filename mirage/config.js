@@ -156,4 +156,8 @@ export default function() {
   this.delete('/collaborations/:id', () => {
    return;
   });
+
+  this.delete('/subscriptions/:id', () => {
+    return {};
+  });
 }
