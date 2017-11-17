@@ -57,6 +57,16 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
     #  Temporarily don't filter out appknox.com
     #   if accountId isnt "appknox.com"
       analytics.login(userId,accountId)
+    try
+      pendo.initialize
+        visitor:
+          id: user.get("id")
+          email: user.get "email"
+        account:
+          id: user.get("email").split("@").pop().trim();
+
+    catch error
+
 
 
     trial = @get "trial"
