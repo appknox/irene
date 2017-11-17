@@ -154,7 +154,8 @@ module.exports = function(environment) {
       members: 'members',
       signedInvoiceUrl: 'download_url',
       invoices: 'invoices',
-      chargebeeCallback: "chargebee/callback"
+      chargebeeCallback: "chargebee/callback",
+      subscriptions: "subscriptions"
     },
     csb: {
       feature: {

@@ -6,11 +6,23 @@ PricingListComponent = Ember.Component.extend
 
   paymentDuration: ENUMS.PAYMENT_DURATION.MONTHLY
 
-  plans: (->
-    if ENV.product is ENUMS.PRODUCT.DEVKNOX
-      return [@get("devknoxPricing")]
-    @get("store").findAll("plan")
+  subscriptions: (->
+    that = @
+    subscriptions = @get("store").findAll("subscription")
+      .then (data)->
+        that.set "subscriptions", data
+        if data.isLoaded is true
+          plans = that.get("store").findAll("plan")
+          that.set "plans", plans
   ).property()
+
+  subscription: Ember.computed.alias('subscriptions.firstObject')
+
+  subscriptionCount: Ember.computed.alias('subscriptions.length')
+
+  hasSubscription: Ember.computed.gt 'subscriptionCount', 0
+
+  hasNoSubscription: Ember.computed.equal 'subscriptionCount', 0
 
   sortPlanProperties: ['id']
   sortedPlans: Ember.computed.sort 'plans', 'sortPlanProperties'
