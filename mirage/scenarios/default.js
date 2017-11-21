@@ -10,6 +10,7 @@ export default function(server) {
   var userCount = getRandomInt(3, 5),
     pricingCount = getRandomInt(3, 3),
     planCount = getRandomInt(3, 3),
+    subscriptionCount = getRandomInt(1, 1),
     vulnerabilityCount = getRandomInt(5, 15),
     submissionCount = getRandomInt(3,3),
     teamCount = 3,
@@ -18,6 +19,7 @@ export default function(server) {
   var users = server.createList('user', userCount);
   server.createList('pricing', pricingCount);
   server.createList('plan', planCount);
+  server.createList('subscription', subscriptionCount);
   server.createList('vulnerability', vulnerabilityCount);
   server.createList('submission', submissionCount);
   server.createList('device', deviceCount);
