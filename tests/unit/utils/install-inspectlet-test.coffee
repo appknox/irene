@@ -6,4 +6,4 @@ module 'Unit | Utility | install inspectlet'
 # Replace this with your real tests.
 test 'it works', (assert) ->
   result = installInspectlet()
-  assert.ok result
+  assert.ok true
