@@ -58,7 +58,8 @@ module.exports = function(environment) {
     environment: environment,
     intercomAppID: "mbkqc0o1",
     enableIntercom: true,
-    enableHotjar: true,
+    enablePendo: true,
+    enableInspectlet: true,
 
     notifications: {
       autoClear: true,
@@ -194,7 +195,8 @@ module.exports = function(environment) {
     };
     ENV['host'] = "http://0.0.0.0:8000";
     ENV.enableIntercom = false;
-    ENV.enableHotjar = false;
+    ENV.enablePendo = false;
+    ENV.enableInspectlet = false;
   }
 
   if (environment === 'mirage') {
@@ -204,7 +206,8 @@ module.exports = function(environment) {
     };
     ENV['host'] = "http://0.0.0.0:8000";
     ENV.enableIntercom = false;
-    ENV.enableHotjar = false;
+    ENV.enablePendo = false;
+    ENV.enableInspectlet = false;
     ENV.stripe = {
       publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
     };
@@ -223,7 +226,8 @@ module.exports = function(environment) {
     };
     ENV['host'] = "http://localhost:8000";
     ENV.enableIntercom = false;
-    ENV.enableHotjar = false;
+    ENV.enablePendo = false;
+    ENV.enableInspectlet = false;
     ENV.stripe = {
       publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
     };
@@ -257,6 +261,8 @@ module.exports = function(environment) {
 
   if (environment === 'staging') {
     ENV.socketPath = "https://socket.appknox.com";
+    ENV.enablePendo = false;
+    ENV.enableInspectlet = false;
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
