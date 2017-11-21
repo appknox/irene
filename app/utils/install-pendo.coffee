@@ -1,4 +1,8 @@
+`import ENV from 'irene/config/environment';`
+
 installPendo = ->
+  if !ENV.enablePendo
+    return console.log "Pendo Disabled"
   ((apiKey) ->
     ((p, e, n, d, o) ->
       v = undefined
