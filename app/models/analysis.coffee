@@ -89,8 +89,11 @@ Analysis = DS.Model.extend
     return [] if owaspCategories is undefined
     categories = []
     for owaspCategory in owaspCategories
+      initialKey = "M"
+      if owaspCategory > ENUMS.OWASP_CATEGORIES.M10
+        initialKey = "A"
       OWASPDict =
-        key: "M#{owaspCategory}"
+        key: "#{initialKey}#{owaspCategory}"
         description: OWASPMap[owaspCategory]
       categories.push OWASPDict
     categories
