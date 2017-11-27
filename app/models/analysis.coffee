@@ -15,6 +15,7 @@ Analysis = DS.Model.extend
   cvssVector: DS.attr 'string'
   cvssVersion: DS.attr 'number'
   cvssMetricsHumanized: DS.attr()
+  owaspCategories: DS.attr()
 
   hascvccBase: Ember.computed.equal 'cvssVersion', 3
 
@@ -75,5 +76,24 @@ Analysis = DS.Model.extend
       when ENUMS.RISK.HIGH then tHigh
       when ENUMS.RISK.CRITICAL then tCritical
   ).property "risk"
+
+  categories: (->
+    OWASPMap = {
+      1: "Improper Platform Usage", 2: "Insecure Data Storage", 3: "Insecure Communication", 4: "Insecure Authentication",
+      5: "Insufficient Cryptography", 6: "Insecure Authorization", 7: "Client Code Quality", 8: "Code Tampering",
+      9:"Reverse Engineering", 10:"Extraneous Functionality", 11:"Injection", 12:"Broken Authentication and Session Management",
+      13:"Cross Site Scripting", 14:"IDOR", 15:"Security Misconfiguration", 16:"Sensitive Data Exposure", 17:"Missing function ACL", 18:"CSRF",
+      19:"Using components with known vulns", 20:"Unvalidated Redirects"
+    }
+    owaspCategories = @get "owaspCategories"
+    return [] if owaspCategories is undefined
+    categories = []
+    for owaspCategory in owaspCategories
+      OWASPDict =
+        key: "M#{owaspCategory}"
+        description: OWASPMap[owaspCategory]
+      categories.push OWASPDict
+    categories
+  ).property "owaspCategories"
 
 `export default Analysis`
