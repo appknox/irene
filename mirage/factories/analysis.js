@@ -21,6 +21,13 @@ export default Base.extend({
     }
     return desc;
   },
+  owaspCategories() {
+    var owasp = [];
+    for(var i = 0; i<2; i++) {
+      owasp.push(faker.random.arrayElement(ENUMS.OWASP_CATEGORIES.VALUES));
+    }
+    return owasp;
+  },
   cvssBase: faker.list.random(-1.0, 0.1, 2.3, 4.5, 6.7, 8.8, 9.1),
   cvssVector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
 });
