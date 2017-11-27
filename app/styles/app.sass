@@ -682,6 +682,7 @@ b.bold
 
 .message-header
   padding: 0px 9px
+  border-radius: 5px 5px 0px 0px
   .columns
     margin-top: 0px
 
@@ -689,6 +690,59 @@ b.bold
   border-color: rgb(255, 224, 221)
   border-width: 2px 2px 2px 15px
   border-style: solid
+
+.vuln-header
+  .column
+    padding: 5px 10px
+
+.mp-minus + .message-meta-data
+  display: none
+
+.message-meta-data
+  border-color: lighten($default, 40%)!important
+  border-radius: 0px 0px 5px 5px
+  border-width: 0px 2px 2px 2px
+  .column.is-one-third
+    .seperator
+      top: -6px
+  .column
+    padding: 0px 10px
+    margin-bottom: -10px
+    height: 33px
+    .owasp-tag, .scan-tag
+      background-color: #ccc
+      color: #000
+      margin-top: 3px
+      border-radius: 3px
+      margin-bottom: -2px
+      box-shadow: 0px 0px 1px #ccc
+      border: none
+      font-size: 11px
+      height: 17px
+  .tag.cvss
+    margin-top: 3px
+    border-radius: 3px
+    height: 17px
+    box-shadow: 0px 0px 1px #ccc
+  .seperator
+    margin: 5px
+    position: relative
+    top: -2px
+    font-size: 18px
+    color: lighten($default, 50%)
+  .details
+    i.fa.fa-chevron-up, i.fa.fa-chevron-down
+      margin-top: 9px
+
+.scan-tag
+  background-color: $default
+  color: #fff
+
+table.vuln-table
+  th, td
+    max-width: 130px
+    text-align: center
+
 
 .vulnerability-types
   text-align: center
@@ -833,6 +887,9 @@ ul.risk-table
   vertical-align: middle
   margin-right: 1px
   margin-top: -3px
+
+.cvss-container
+  margin-top: -70px
 
 .cvss-box
   border-radius: 5px
@@ -1009,6 +1066,12 @@ button.delete-button
 .vuln-body
   border-width: 2px
   border-radius: 0px 0px 5px 5px!important
+  .scan-category
+    font-size: 16px
+    margin-top: 0px
+  .owasp-category
+    font-size: 16px
+    margin-top: 0px
 
 .mp-minus
   border-radius: 5px 5px 0px 0px!important

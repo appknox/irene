@@ -1,25 +1,55 @@
-.message-header.vuln-header.hideOrShow class=progressClass click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus
+.message-header.vuln-header.hideOrShow click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus class=progressClass
     .columns
       .column
         h5 = analysis.vulnerability.name
-      .column.is-one-third.content-right
-        each analysis.vulnerability.tags as |tag|
-          span.tag = tag
+      .column.is-one-sixth.content-right
         div.margin-left.details
           if showVulnerability
-            i.fa.fa-minus
+            i.fa.fa-chevron-up
           else
-            i.fa.fa-plus
+            i.fa.fa-chevron-down
+
+.message-header.message-meta-data
+  .columns
+    .column
+      each analysis.categories as |category|
+        span.tag.owasp-tag
+          = category.key
+      each analysis.vulnerability.tags as |tag|
+        span.tag.scan-tag = tag
+      span.seperator
+        | |
+      span.tag.cvss class=analysis.labelClass
+        | &nbsp;{{analysis.riskText}}
+      / if analysis.isRisky
+      /   if analysis.hascvccBase
+      span.seperator
+        | |
+      span.tag.cvss class=analysis.labelClass
+        |  #{analysis.cvssBase}
+
 
 if showVulnerability
   .message-body.vuln-body
     .columns
+      .column.scan-category
+        | SCAN CATEGORIES : &nbsp;
+        each analysis.vulnerability.tags as |tag|
+          span.tag.scan-tag = tag
+    .columns
+      .column.owasp-category
+        | OWASP CATEGORIES : &nbsp;
+        each analysis.categories as |category|
+          span.tag.scan-tag
+            = category.key
+    .columns
       .column
         if analysis.isScanning
-          = analysis.vulnerability.question
+          .margin-top
+            = analysis.vulnerability.question
         else
           if analysis.isRisky
-            p = analysis.vulnerability.descriptionUnescapedd
+            p.margin-top = analysis.vulnerability.descriptionUnescapedd
             if analysis.vulnerability.businessImplication
               h5.margin-top30
                 = t "businessImplication"
@@ -28,28 +58,28 @@ if showVulnerability
           else
             = analysis.vulnerability.successMessage
 
-      .column.is-one-sixth.content-right.text-centre
+      .column.is-one-sixth.content-right.text-centre.cvss-container
         div
           div class=analysis.labelClass
             i.fa.risk-icons class=analysis.iconClass
             | &nbsp;{{analysis.riskText}}
 
-          if analysis.isRisky
-            if analysis.hascvccBase
-              div.margin-top.cvss-box.tooltip class=analysis.labelClass
-                h1
-                  = analysis.cvssBase
-                h6
-                  | CVSSv3
-                div.tooltiptext
-                  ul
-                    each analysis.cvssMetricsHumanized as |metric|
-                      li
-                        = metric.key
-                        | &nbsp; : &nbsp; {{metric.value}}
-                  div.read-more
-                    a href="https://help.appknox.com/using-appknox/basic-usage/vulnerability-severity" target="_blank"
-                      | read more
+          / if analysis.isRisky
+          /   if analysis.hascvccBase
+          div.margin-top.cvss-box.tooltip class=analysis.labelClass
+            h1
+              = analysis.cvssBase
+            h6
+              | CVSSv3
+            div.tooltiptext
+              ul
+                each analysis.cvssMetricsHumanized as |metric|
+                  li
+                    = metric.key
+                    | &nbsp; : &nbsp; {{metric.value}}
+              div.read-more
+                a href="https://help.appknox.com/using-appknox/basic-usage/vulnerability-severity" target="_blank"
+                  | read more
     .columns
       .column
         if analysis.isRisky
