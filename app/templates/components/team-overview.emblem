@@ -19,7 +19,7 @@
       .columns
         .column
           = team.owner.username
-        .column.tooltip
+        .column
           = moment-from-now team.createdOn
           = attach-tooltip
             = team.createdOnDateTime

@@ -178,7 +178,7 @@
       .column.package-desc.is-one-quarter
         table
           tr
-            td.tooltip
+            td
               = t "started"
               | &nbsp; #{moment-from-now file.createdOn}
               = attach-tooltip animation="perspective" placement="top"

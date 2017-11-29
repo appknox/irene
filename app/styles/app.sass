@@ -834,41 +834,6 @@ ul.risk-table
         .progress-wrap
           margin-top: 50px
 
-.tooltip
-  &:hover
-    .tooltiptext
-      visibility: visible
-      transition-delay: 0s
-  .tooltiptext
-    text-transform: capitalize
-    visibility: hidden
-    width: 160px
-    background-color: $default
-    color: #fff
-    text-align: center
-    border-radius: 6px
-    position: absolute
-    top: 62px
-    right: 45px
-    z-index: 1
-    font-size: 12px
-    transition-delay: 1s
-    .read-more
-      padding-top: 10px
-      padding-bottom: 5px
-      a
-        padding: 2px 7px 2px 7px
-        background: rgba(255,255,255, 0.9)
-        border-radius: 3px
-  .tooltip-collapse
-    top: 95px
-    left: 20px
-    white-space: normal
-  .team-tooltip
-    top: 165px
-    left: 130px
-
-
 .mfa
   .fa-check
     color: $green
@@ -1044,16 +1009,6 @@ button.delete-button
   cursor: pointer
   width: 85px
   background-color: $white!important
-  .tooltiptext
-    box-shadow: 2px 2px 5px 2px #888888
-    position: relative
-    left: 100px
-    top: -140px
-    width: 200px
-    li
-      padding: 5px
-      list-style-type: none
-
   @each $name, $pair in $risk-names
     &.is-#{$name}
       color: nth($pair, 1)
