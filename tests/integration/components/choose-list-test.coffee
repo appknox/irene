@@ -7,4 +7,3 @@ moduleForComponent 'choose-list', 'Integration | Component | choose list', {
 
 test 'it renders', (assert) ->
   assert.ok true
-  assert.equal @$().text().trim(), ''

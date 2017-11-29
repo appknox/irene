@@ -7,4 +7,3 @@ moduleForComponent 'invoice-list', 'Integration | Component | invoice list', {
 
 test 'it renders', (assert) ->
   assert.ok true
-  assert.equal @$().text().trim(), ''

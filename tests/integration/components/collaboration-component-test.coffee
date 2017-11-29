@@ -7,4 +7,3 @@ moduleForComponent 'collaboration-component', 'Integration | Component | collabo
 
 test 'it renders', (assert) ->
   assert.ok true
-  assert.equal @$().text().trim(), ''

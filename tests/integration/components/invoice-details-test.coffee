@@ -7,4 +7,3 @@ moduleForComponent 'invoice-details', 'Integration | Component | invoice details
 
 test 'it renders', (assert) ->
   assert.ok true
-  assert.equal @$().text().trim(), ''
