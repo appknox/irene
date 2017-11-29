@@ -30,6 +30,7 @@ VncViewerComponent = Ember.Component.extend
     that = @
     @set "rfb", new RFB
       'target': canvasEl
+      'focusContainer': @element
       'encrypt': ENV.deviceFarmSsl
       'repeaterID': ''
       'true_color': true
@@ -41,9 +42,7 @@ VncViewerComponent = Ember.Component.extend
         if ENUMS.PLATFORM.IOS isnt that.get "file.project.platform"
           # Only resize iOS Devices
           return true
-        display = @get_display()
-        scaleRatio = display.autoscale vncHeight, vncWidth  # TODO: This needs to be set Dynamically
-        @get_mouse().set_scale scaleRatio
+        setTimeout(that.set_ratio.bind(that), 500)
         true
 
       'onXvpInit': ->
@@ -86,6 +85,14 @@ VncViewerComponent = Ember.Component.extend
       true
   ).property "file.project.platform"
 
+  set_ratio: ->
+    rfb = @get "rfb"
+    display = rfb.get_display()
+    canvasEl = display.get_context().canvas
+    bounding_rect = canvasEl.getBoundingClientRect()
+    scaleRatio = display.autoscale bounding_rect.width, bounding_rect.height
+    rfb.get_mouse().set_scale scaleRatio
+
   actions:
     togglePop: ->
       @set "isPoppedOut", !@get "isPoppedOut"
@@ -94,6 +101,7 @@ VncViewerComponent = Ember.Component.extend
       rfb = @get "rfb"
       deviceToken = @get "file.deviceToken"
       rfb.connect ENV.deviceFarmHost, ENV.deviceFarmPort, '1234', "#{ENV.deviceFarmPath}?token=#{deviceToken}"
+      setTimeout(@.set_ratio.bind(@), 500)
 
     disconnect: ->
       rfb = @get "rfb"
