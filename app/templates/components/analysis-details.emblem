@@ -71,7 +71,7 @@ if showVulnerability
             = analysis.cvssBase
           h6
             | CVSSv3
-        = attach-tooltip animation="perspective" placement="right" hideDuration=300 interactive=true
+        = attach-tooltip animation="fade" placement="right" hideDuration=300 interactive=true
           ul
             each analysis.cvssMetricsHumanized as |metric|
               li
