@@ -15,6 +15,8 @@
       each analysis.categories as |category|
         span.tag.owasp-tag
           = category.key
+      span.seperator
+        | |
       each analysis.vulnerability.tags as |tag|
         span.tag.scan-tag = tag
       span.seperator
@@ -36,12 +38,18 @@ if showVulnerability
         | SCAN CATEGORIES : &nbsp;
         each analysis.vulnerability.tags as |tag|
           span.tag.scan-tag = tag
-    .columns
       .column.owasp-category
         | OWASP CATEGORIES : &nbsp;
         each analysis.categories as |category|
           span.tag.scan-tag
             = category.key
+            = attach-tooltip
+              = category.description
+
+      .column.is-one-sixth.content-right
+        div.risk-type-tag class=analysis.labelClass
+            i.fa.risk-icons class=analysis.iconClass
+            | &nbsp;{{analysis.riskText}}
     .columns
       .column
         if analysis.isScanning
@@ -57,35 +65,18 @@ if showVulnerability
                 | {{{analysis.vulnerability.businessImplication}}}
           else
             = analysis.vulnerability.successMessage
-
       .column.is-one-sixth.content-right.text-centre.cvss-container
-        div
-          div class=analysis.labelClass
-            i.fa.risk-icons class=analysis.iconClass
-            | &nbsp;{{analysis.riskText}}
-
-          / if analysis.isRisky
-          /   if analysis.hascvccBase
-          div.margin-top.cvss-box.tooltip class=analysis.labelClass
-            h1
-              = analysis.cvssBase
-            h6
-              | CVSSv3
-            div.tooltiptext
-              ul
-                each analysis.cvssMetricsHumanized as |metric|
-                  li
-                    = metric.key
-                    | &nbsp; : &nbsp; {{metric.value}}
-              div.read-more
-                a href="https://help.appknox.com/using-appknox/basic-usage/vulnerability-severity" target="_blank"
-                  | read more
-    .columns
-      .column
-        if analysis.isRisky
-          h5.margin-top
-            = t "vulnerability"
-          each analysis.findings as |finding|
-            p.extra-desc = finding.title
-            span.scrollable-box
-              pre.pre-code = finding.description
+        div.margin-top.cvss-box.tooltip class=analysis.labelClass
+          h1
+            = analysis.cvssBase
+          h6
+            | CVSSv3   
+        = attach-tooltip animation="perspective" placement="right" hideDuration=300 interactive=true
+          ul
+            each analysis.cvssMetricsHumanized as |metric|
+              li
+                = metric.key
+                | &nbsp; : &nbsp; {{metric.value}}
+          div.read-more
+            a href="https://help.appknox.com/using-appknox/basic-usage/vulnerability-severity" target="_blank"
+              | read more

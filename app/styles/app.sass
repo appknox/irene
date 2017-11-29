@@ -889,12 +889,14 @@ ul.risk-table
   margin-top: -3px
 
 .cvss-container
-  margin-top: -70px
+  margin-top: 10px
 
 .cvss-box
   border-radius: 5px
+  margin: auto
   height: 100px
   display: block
+  padding-right: 30px
   h1
     padding-top: 30px
 
@@ -1066,12 +1068,18 @@ button.delete-button
 .vuln-body
   border-width: 2px
   border-radius: 0px 0px 5px 5px!important
+  .risk-type-tag
+    margin: auto
   .scan-category
-    font-size: 16px
-    margin-top: 0px
+    font-size: 14px
+    margin-top: 5px
+    span
+      margin-top: -2px
   .owasp-category
-    font-size: 16px
-    margin-top: 0px
+    font-size: 14px
+    margin-top: 5px
+    span
+      margin-top: -2px
 
 .mp-minus
   border-radius: 5px 5px 0px 0px!important
@@ -1363,3 +1371,6 @@ select:disabled
       color: #000
     button
       margin: 10px auto 0px auto
+
+.my-popper
+  display: none

@@ -21,7 +21,7 @@
           = team.owner.username
         .column.tooltip
           = moment-from-now team.createdOn
-          span.tooltiptext.team-tooltip
+          = attach-tooltip
             = team.createdOnDateTime
   footer.card-button.align-center
     button.ac-delete-team click="openDeleteTeamPrompt" disabled=team.isDefaultTeam

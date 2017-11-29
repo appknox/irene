@@ -19,7 +19,7 @@ header.card-header
       .column.flex-center.nowrap-trim.lowercase-text.tooltip
         = t "started"
         | &nbsp; #{moment-from-now file.createdOn}
-        span.tooltiptext.tooltip-collapse
+        = attach-tooltip animation="perspective" placement="bottom"
           = file.createdOnDateTime
       .column.flex-center.nowrap-trim
         = t "versionCode"
