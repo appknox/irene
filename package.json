@@ -23,6 +23,7 @@
     "bower": "^1.8.2",
     "broccoli-asset-rev": "^2.4.2",
     "ember-ajax": "3.0.0",
+    "ember-attacher": "https://github.com/yashwin/ember-attacher.git",
     "ember-cli": "2.12.2",
     "ember-cli-app-version": "^3.0.0",
     "ember-cli-autoprefixer": "0.7.0",
@@ -82,6 +83,7 @@
   },
   "dependencies": {
     "clipboard": "^1.7.1",
-    "ember-cli-document-title": "^0.3.3"
+    "ember-cli-document-title": "^0.3.3",
+    "ember-cli-sass": "^7.0.0"
   }
 }
