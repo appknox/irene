@@ -80,3 +80,13 @@ if showVulnerability
           div.read-more
             a href="https://help.appknox.com/using-appknox/basic-usage/vulnerability-severity" target="_blank"
               | read more
+
+      .columns
+        .column
+          if analysis.isRisky
+            h5.margin-top
+              = t "vulnerability"
+            each analysis.findings as |finding|
+              p.extra-desc = finding.title
+              span.scrollable-box
+                pre.pre-code = finding.description
