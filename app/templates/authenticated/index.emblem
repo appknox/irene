@@ -8,7 +8,7 @@
       div.margin-top20
         | Once you upload an app, the app card will be created automatically and the static scan will be performed.
   .column.is-one-quarter.scan-section
-    .box
+    .box.upload-app
       | Start a new scan
       .margin-top
         label.button.is-primary.is-half.ac-upload-app
