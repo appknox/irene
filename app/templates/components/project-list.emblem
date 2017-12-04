@@ -1,41 +1,27 @@
 if user.hasProject
   .column
-    .box-container
+    .box-container.home-page.all-inputs
       .columns
-        if env.isAppknox
-          .column.is-one-sixth
-            = t "newScan"
-            .margin-top
-              label.button.is-primary.is-fullwidth.ac-upload-app
-                = upload-app delegate=this class="mp-upload-app"
-                = fa-icon "upload"
-                | &nbsp;
-                if isUploading
-                  | #{t "uploading"} :
-                  = progress
-                  | %
-                else
-                  = t "uploadApp"
         .column
           = t "search"
           .margin-top
-          = input class="input mp-search-query" placeholder=(t 'searchQuery') value=query
+            = input class="input mp-search-query" placeholder=(t 'searchQuery') value=query
         .column
           = t "sortBy"
           .margin-top
-          select{action 'sortProjects' on='change'} id="project-sort-property" class="input"
-            each sortingKeyObjects as |sortingKeyObject|
-              option action="foo" value="{{filter-platform sortingKeyObject}}"
-                = sortingKeyObject.text
+            select{action 'sortProjects' on='change'} id="project-sort-property" class="input"
+              each sortingKeyObjects as |sortingKeyObject|
+                option action="foo" value="{{filter-platform sortingKeyObject}}"
+                  = sortingKeyObject.text
         .column
           = t "filterBy"
           .margin-top
-          select{action 'filterPlatform' on='change'} id="project-filter-platform" class="input"
-            option value="-1"
-              = t "allPlatforms"
-            each platformObjects as |platformObject|
-              option value=platformObject.value
-                = platformObject.key
+            select{action 'filterPlatform' on='change'} id="project-filter-platform" class="input"
+              option value="-1"
+                = t "allPlatforms"
+              each platformObjects as |platformObject|
+                option value=platformObject.value
+                  = platformObject.key
 
     .columns.project-container
       if hasObjects

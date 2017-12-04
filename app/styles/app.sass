@@ -113,21 +113,22 @@ $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert),
 // FIXME: Remove this after updating bohemia
 .menu-list
   padding: 0px
-  margin-left: 45px
-  margin-right: 45px
+  text-align: center
   margin-top: 10px!important
+  margin-right: -2px
   a
     padding: 5px 0px
     font-weight: lighter
+    color: #FFF
+    margin-left: -40px
     &:hover
       font-weight: bolder
-      color: lighten(#EF4836, 15%)
-      background-color: #f0f0f0
-    &.is-active
-      font-weight: bolder
+      color: lighten(#FFF, 15%)
+      background-color: lighten(#424651, 3%)
   a.active
-    color: #EF4836
+    color: #FFF
     font-weight: 900
+    background-color: lighten(#424651, 5%)
 
 input
   display: block
@@ -383,10 +384,13 @@ div[class^="_c-notification__container"]
   margin-top: 10px
 
 .side-menu
+  background-color: #424651
   .box
     background-color: #f0f0f0
     box-shadow: none
     margin-top: 30px
+    margin-left: 10px
+    margin-right: 5px
   .menu
     position: fixed
     width: 16%
@@ -609,6 +613,11 @@ button, .button
   &:hover
     box-shadow: 1px 1px 20px #999
     z-index: 1
+
+.button.is-primary:hover, button:hover
+  background-color: #fff!important
+  color: darken($critical, 10%)!important
+  box-shadow: 0 0 5px $critical
 
 .project-specific
   .column
@@ -1302,3 +1311,12 @@ select:disabled
       color: #000
     button
       margin: 10px auto 0px auto
+
+.scan-section
+  margin-right: 100px
+  margin-top: 10px
+  text-align: center
+
+.all-inputs
+  .margin-top
+    width: 270px
