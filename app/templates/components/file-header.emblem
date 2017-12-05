@@ -49,7 +49,7 @@
               .fa-font-size-small
                 = fa-icon "fa-repeat"
           else
-            button.is-primary.margin-top20.margin-left.ac-rescan click="reScanApp"
+            button.is-primary.margin-top20.margin-left.ac-rescan click="openRescanModal"
               .fa-font-size-small
                 = fa-icon "fa-repeat"
         else
@@ -281,4 +281,15 @@
         =  t "yes"
     .column
       button.modal-button.is-primary click="closeManualScanModal"
+        = t "no"
+
+= modal-card isActive=showRescanModal title="Re-scan Static Scan"
+  h5
+   | Do you want to do the static scan again?
+  .columns
+    .column.is-one-sixth
+      button.modal-button.is-primary click="rescanApp" disabled=isStartingRescan
+        =  t "yes"
+    .column
+      button.modal-button.is-primary click="closeRescanModal"
         = t "no"

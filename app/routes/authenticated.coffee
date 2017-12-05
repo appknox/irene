@@ -91,6 +91,13 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
       object: (data) ->
         store.pushPayload data: data
 
+      newobject: (data) ->
+        store.pushPayload data: data
+        if data.type is "files"
+          fileId = data.id
+          that.get("notify").info "New scan started <a class='click-here' href='/file/#{fileId}'>Show</a>", htmlContent: true, autoClear: false
+
+
       message: (data) ->
         message = data.message
         notifyType = data.notifyType
