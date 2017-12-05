@@ -44,6 +44,14 @@
           button.is-primary.margin-top20 disabled="disabled"
             | #{t "completed"} &nbsp;
             = fa-icon "fa-check"
+          if trial.isTrial
+            button.is-primary.margin-top20.margin-left click="openSubscribeModal"
+              .fa-font-size-small
+                = fa-icon "fa-repeat"
+          else
+            button.is-primary.margin-top20.margin-left.ac-rescan click="reScanApp"
+              .fa-font-size-small
+                = fa-icon "fa-repeat"
         else
            button.is-primary.margin-top20.is-progress disabled="disabled"
             | #{t "scanning"} : #{file.staticScanProgress}
