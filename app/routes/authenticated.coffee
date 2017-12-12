@@ -68,8 +68,6 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
     catch error
 
-
-
     trial = @get "trial"
     trial.set "isTrial", user.get "isTrial"
 
@@ -83,13 +81,18 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
     that = @
     store = @get "store"
-
     realtime = @get "realtime"
 
     allEvents =
 
       object: (data) ->
         store.pushPayload data: data
+
+      newobject: (data) ->
+        store.pushPayload data: data
+        if data.type is "files"
+          fileId = data.id
+          that.get("notify").info "New scan started <a class='click-here' href='/file/#{fileId}'>Show</a>", htmlContent: true, autoClear: false
 
       message: (data) ->
         message = data.message
@@ -99,7 +102,6 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
         that.get("notify").warning message, ENV.notifications if notifyType is ENUMS.NOTIFY.WARNING
         that.get("notify").alert message, ENV.notifications if notifyType is ENUMS.NOTIFY.ALERT
         that.get("notify").error message, ENV.notifications if notifyType is ENUMS.NOTIFY.ERROR
-
 
       logout: ->
         localStorage.clear()
@@ -116,11 +118,9 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
 
     socket = @get('socketIOService').socketFor ENV.socketPath
 
-
     socket.emit "subscribe", room: socketId
     for key, value of allEvents
       socket.on key, value
-
 
   actions:
 

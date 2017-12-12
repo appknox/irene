@@ -156,7 +156,8 @@ module.exports = function(environment) {
       signedInvoiceUrl: 'download_url',
       invoices: 'invoices',
       chargebeeCallback: "chargebee/callback",
-      subscriptions: "subscriptions"
+      subscriptions: "subscriptions",
+      rescan: "rescan"
     },
     csb: {
       feature: {
