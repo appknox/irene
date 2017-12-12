@@ -17,7 +17,6 @@ Router.map ->
     @route "team", path: '/team/:teamId'
     @route "settings", path: '/settings'
     @route "billing", path: '/billing'
-    @route 'invoice', path:'/invoice/:invoiceId'
     @route "project", path: '/project/:projectId', ->
       @route 'settings'
       @route 'files'
