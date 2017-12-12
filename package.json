@@ -73,7 +73,6 @@
     "ember-onboarding": "0.0.7",
     "ember-resolver": "^4.1.0",
     "ember-simple-auth": "1.2.2",
-    "ember-stripe-service": "6.0.0",
     "ember-uploader": "1.2.3",
     "ember-websockets": "7.0.2",
     "loader.js": "^4.0.1",

@@ -49,7 +49,7 @@ module.exports = function(environment) {
       ajax: {
         trackMethods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
         trackWebSockets: false,
-        ignoreURLs: ['api.mixpanel.com', 'socket.appknox.com', 'm.stripe.com', 'appknox-production.s3.amazonaws.com']
+        ignoreURLs: ['api.mixpanel.com', 'socket.appknox.com', 'appknox-production.s3.amazonaws.com']
       }
     },
     rootURL: '/',
@@ -77,10 +77,6 @@ module.exports = function(environment) {
     host: "https://api.appknox.com",
     'ember-cli-mirage': {
       enabled: false
-    },
-
-    stripe: {
-      publishableKey: "pk_live_9G633HADop7N2NLdi6g2BHHA"
     },
 
     i18n: {
@@ -137,8 +133,6 @@ module.exports = function(environment) {
       integrateJira: 'integrate_jira',
       changePassword: 'change_password',
       namespaceAdd: 'namespace_add',
-      stripePayment: 'stripe_payment',
-      stripePaymentDevknox: 'stripe_payment_devknox',
       applyCoupon: 'apply_coupon',
       saveCredentials: 'projects/save_credentials',
       collaborations: 'collaborations',
@@ -208,9 +202,6 @@ module.exports = function(environment) {
     ENV.enableIntercom = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
-    ENV.stripe = {
-      publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
-    };
     ENV['APP'].opbeat = {
         DEBUG: true
     };
@@ -228,9 +219,6 @@ module.exports = function(environment) {
     ENV.enableIntercom = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
-    ENV.stripe = {
-      publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
-    };
     ENV['APP'].opbeat = {
         DEBUG: true
     };
@@ -249,9 +237,6 @@ module.exports = function(environment) {
     };
     ENV.mixpanel.enabled = true;
     ENV['host'] = "https://api.appknox.com";
-    ENV.stripe = {
-      publishableKey: "pk_live_9G633HADop7N2NLdi6g2BHHA"
-    };
     ENV['APP'].opbeat = {
         appId: '61501c19d2',
         orgId: '1ff25e9c6a1d40bbad1293635d201fcb'
@@ -267,9 +252,6 @@ module.exports = function(environment) {
       enabled: false
     };
     ENV['host'] = "https://api.appknox.com";
-    ENV.stripe = {
-      publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
-    };
   }
 
   if (environment === 'test') {
