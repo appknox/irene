@@ -20,6 +20,7 @@ FileHeaderComponent = Ember.Component.extend
   dynamicScanModal: false
   apiScanModal: false
   isRequestingManual: false
+  isStartingRescan: false
 
   didInsertElement: ->
     tPasswordCopied = @get "tPasswordCopied"
@@ -152,6 +153,12 @@ FileHeaderComponent = Ember.Component.extend
     closeManualScanModal: ->
       @set "showManualScanModal", false
 
+    openRescanModal: ->
+      @set "showRescanModal", true
+
+    closeRescanModal: ->
+      @set "showRescanModal", false
+
     openRunDynamicScanModal: ->
       @set "showRunDynamicScanModal", true
 
@@ -172,6 +179,22 @@ FileHeaderComponent = Ember.Component.extend
         file.setNone()
       .catch (error) ->
         file.setNone()
+        for error in error.errors
+          that.get("notify").error error.detail?.message
+
+    rescanApp: ->
+      that = @
+      fileId = @get "file.id"
+      data =
+        file_id: fileId
+      @set "isStartingRescan", true
+      @get("ajax").post ENV.endpoints.rescan, data: data
+      .then (result) ->
+        that.set "isStartingRescan", false
+        that.get("notify").info "Rescan initiated"
+        that.set "showRescanModal", false
+      .catch (error) ->
+        that.set "isStartingRescan", false
         for error in error.errors
           that.get("notify").error error.detail?.message
 
