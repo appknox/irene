@@ -1,12 +1,5 @@
 .columns.box-container.home-page
   .column
-    div
-      h3
-        | Welcome to Appknox
-      div
-        | This is your Dashboard where you can upload the app, scan the app and do much more...
-      div.margin-top20
-        | Once you upload an app, the app card will be created automatically and the static scan will be performed.
   .column.is-one-quarter.scan-section
     .box.upload-app
       | Start a new scan
@@ -21,3 +14,24 @@
             | %
           else
             = t "uploadApp"
+  .column.is-one-quarter
+    .box.user-info-box
+      .columns
+        .column
+          | Hello, #{model.username}
+      .columns
+        .column
+          | Project Count
+        .column
+          | #{model.totalProjects}
+      .columns
+        if model.limitedScans
+          .column
+            = t "scansLeft"
+          .column
+            = model.scansLeft
+        else
+          if model.hasExpiryDate
+            .column
+              | #{ t model.expiryText}
+              | #{moment-from-now model.getExpiryDate}

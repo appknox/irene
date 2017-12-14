@@ -385,9 +385,6 @@ div[class^="_c-notification__container"]
 .project-container
   margin-top: 10px
 
-.box.upload-app
-  box-shadow: 0 0 6px #ccc
-
 .side-menu
   background-color: #424651
   .box
@@ -1332,8 +1329,11 @@ select:disabled
 
 .scan-section
   margin-right: 100px
-  margin-top: 10px
   text-align: center
+  margin: auto
+  .box
+    padding-top: 37px
+    height: 140px
 
 .all-inputs
   .margin-top
@@ -1345,3 +1345,13 @@ select:disabled
     color: #fff
     &:hover
       background-image: linear-gradient(-180deg, lighten($critical, 0%) 0%, lighten($critical, 0%) 90%)
+
+.user-info-box
+  font-size: 12px
+  height: 140px
+  .columns
+    border-bottom: 1px solid #ccc
+  .columns:nth-child(2)
+    margin-top: 0px
+  .columns:nth-child(3)
+    margin-top: 0px
