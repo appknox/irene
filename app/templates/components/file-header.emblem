@@ -15,11 +15,13 @@
                 .columns
                   .column.card-button
                     = link-to 'authenticated.project.settings' file.project.id class="mp-detail-project-settings" tagName="button"
-                      = t "settings"
+                      = fa-icon "cog"
+                      | &nbsp; #{t "settings"}
                   if file.project.hasMultipleFiles
                     .column.card-button
                       = link-to 'authenticated.choose' file.id class="mp-detail-file-compare" tagName="button"
-                        = t "compare"
+                        = fa-icon "exchange"
+                        | &nbsp; #{t "compare"}
 
 
         li.file-hide-overflow
@@ -42,8 +44,8 @@
       .column.flex-center
         if file.isStaticCompleted
           button.is-primary.margin-top20 disabled="disabled"
-            | #{t "completed"} &nbsp;
             = fa-icon "fa-check"
+            | &nbsp; #{t "completed"}
         else
            button.is-primary.margin-top20.is-progress disabled="disabled"
             | #{t "scanning"} : #{file.staticScanProgress}
@@ -51,14 +53,14 @@
       .column.flex-center
         if file.isNeitherNoneNorReady
           button.is-primary.margin-top20.is-progress disabled="disabled"
-            | #{file.statusText} &nbsp;
             .fa-font-size
               i.fa class="fa-spinner fa-spin"
+            | &nbsp; #{file.statusText}
         if file.isNoneStatus
           if file.isDynamicDone
             button.is-primary.margin-top20 disabled="disabled"
-                | #{t "completed"} &nbsp;
-                = fa-icon "fa-check"
+              = fa-icon "fa-check"
+              | &nbsp; #{t "completed"}
             if trial.isTrial
               button.is-primary.margin-top20.margin-left click="openSubscribeModal"
                 .fa-font-size-small
@@ -69,14 +71,15 @@
                   = fa-icon "fa-repeat"
           else
             button.is-primary.margin-top20.ac-start-dynamic-scan click="openAPIScanModal"
-              | #{t "start"} &nbsp;
               .fa-font-size
                 = fa-icon "fa-play"
+              | &nbsp; #{t "start"}
         if file.isReady
           button.is-primary.margin-top20 click="dynamicShutdown"
-            | #{t "stop"} &nbsp;
             .fa-font-size-small
               = fa-icon "fa-stop"
+            |  &nbsp; #{t "stop"}
+
 
       if file.project.isAPIScanEnabled
         .column.flex-center
@@ -86,33 +89,35 @@
              | %
           else if file.isApiDone
              button.is-primary.margin-top20 disabled="disabled"
-                 | #{t "completed"} &nbsp;
-                 = fa-icon "fa-check"
+               = fa-icon "fa-check"
+               | &nbsp; #{t "completed"}
           else if file.isApiNotDone
             button.is-primary.margin-top20.ac-start-dynamic-scan click="openRunDynamicScanModal" disabled=file.isNotNoneStatus
-              | #{t "start"} &nbsp;
               .fa-font-size
                 = fa-icon "fa-play"
+              | &nbsp; #{t "start"}
       .column.flex-center
         if file.ifManualNotRequested
           if trial.isTrial
             button.is-primary.margin-top20 click="openSubscribeModal"
-              | #{t "start"} &nbsp;
               .fa-font-size
                 = fa-icon "fa-play"
+              | &nbsp; #{t "start"}
           else
             button.is-primary.margin-top20.ac-request-manual-scan click="openManualScanModal"
-              | #{t "start"} &nbsp;
               .fa-font-size
                 = fa-icon "fa-play"
+              | &nbsp; #{t "start"}
         else
           button.is-primary.margin-top20 disabled="disabled"
             if file.isManualDone
-              | #{t "completed"} &nbsp;
               = fa-icon "fa-check"
+              | &nbsp; #{t "completed"}
+
             else
-              | #{t "requested"} &nbsp;
               = fa-icon "fa-clock-o"
+              | &nbsp; #{t "requested"}
+
 
 .card.is-fullwidth.margin-bottom20.app-details-card
   header.card-header
@@ -126,7 +131,8 @@
           .column.card-button
             if file.project.hasMultipleFiles
               = link-to 'authenticated.project.files' file.project.id class="mp-detail-all-scans" tagName="button"
-                = t "allScans"
+                = fa-icon "navicon"
+                | &nbsp; #{t "allScans"}
           .column.card-button
             button.mp-pdf-report click="getPDFReportLink"
               = fa-icon "download"

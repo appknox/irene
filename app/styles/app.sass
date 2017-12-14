@@ -848,9 +848,15 @@ ul.risk-table
   margin-right: 1px
   margin-top: -3px
 
-.fa-download
-  font-size: 14px
-  vertical-align: middle  
+.card-button
+  .fa-download, .fa-cog
+    font-size: 14px
+    vertical-align: middle
+
+.fa-exchange, .fa-navicon
+  font-size: 12px
+  vertical-align: middle
+
 
 .cvss-box
   border-radius: 5px
@@ -1192,6 +1198,11 @@ button.delete-button
 button[disabled], .input[disabled]
   cursor: not-allowed
   pointer-events: auto
+
+button.is-progress:hover
+  background-color: white
+  color: #FE4D3F
+  border-color: #FE4D3F
 
 .url-filters
   .columns

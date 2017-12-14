@@ -4,11 +4,14 @@
       .columns.button-width
         .column class=project.hasMultipleFiles::auto-adjust
           = link-to 'authenticated.project.settings' project.id class="is-fullwidth mp-project-setting" tagName="button"
-            = t "settings"
+            = fa-icon "cog"
+            | &nbsp; #{t "settings"}
         if project.hasMultipleFiles
           .column
             = link-to 'authenticated.project.files' project.id class="is-fullwidth mp-all-scans" tagName="button"
-              = t "allScans"
+              = fa-icon "navicon"
+              | &nbsp; #{t "allScans"}
           .column
             = link-to 'authenticated.choose' project.lastFile.id class="is-fullwidth mp-file-compare" tagName="button"
-              = t "compare"
+              = fa-icon "exchange"
+              | &nbsp; #{t "compare"}
