@@ -25,6 +25,7 @@
             = team.createdOnDateTime
   footer.card-button.align-center
     button.ac-delete-team click="openDeleteTeamPrompt" disabled=team.isDefaultTeam
-      = t "deleteTeam"
+      = fa-icon "trash-o"
+      | &nbsp; #{t "deleteTeam"}
 
 = prompt-box isActive=showDeleteTeamPrompt title=(t 'promptBox.deleteTeamPrompt.title') description=(t 'promptBox.deleteTeamPrompt.description') button="deleteTeam" delegate=this disabled=isDeletingTeam

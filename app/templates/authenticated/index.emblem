@@ -21,4 +21,3 @@
             | %
           else
             = t "uploadApp"
-= project-list user=model
