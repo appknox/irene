@@ -24,7 +24,7 @@ export default function(server) {
   server.createList('submission', submissionCount);
   server.createList('device', deviceCount);
   server.createList('invoice', invoiceCount);
-  projectCount =  getRandomInt(1, 5);
+  projectCount =  getRandomInt(4, 5);
   for (var teamId = 1; teamId <= teamCount; teamId++) {
     team = server.create('team', {users: users});
   }

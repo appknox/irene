@@ -10,7 +10,7 @@
             = t "dashboard"
         li
           = link-to 'authenticated.projects' class="mp-auth-projects"
-            = fa-icon "home" class="sidebar-icons"
+            = fa-icon "tasks" class="sidebar-icons"
             = t "projects"
         li
           = link-to 'authenticated.teams' class="mp-auth-teams"
