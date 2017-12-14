@@ -1,5 +1,5 @@
 = link-to 'authenticated.index'
   if env.isAppknox
-    img src="/images/logo.png"
+    img src="/images/logo-white.png"
   else
     img src="/images/devknox.png"
