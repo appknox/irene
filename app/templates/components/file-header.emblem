@@ -129,7 +129,8 @@
                 = t "allScans"
           .column.card-button
             button.mp-pdf-report click="getPDFReportLink"
-              = t "pdfReport"
+              = fa-icon "download"
+              | &nbsp; #{ t "pdfReport"}
   .card-content
     .columns
       .column.flex-center
