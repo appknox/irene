@@ -1340,6 +1340,7 @@ select:disabled
     width: 270px
 
 .upload-app
+  margin-top: -10px
   .button
     background-image: linear-gradient(-180deg, lighten($critical, 5%) 0%, lighten($critical, 3%) 90%)
     color: #fff
@@ -1355,3 +1356,28 @@ select:disabled
     margin-top: 0px
   .columns:nth-child(3)
     margin-top: 0px
+
+.stat-container
+  height: 140px
+  div
+    h5
+      width: 152px
+      background-color: #fff
+      margin: -33px auto
+      padding: 0px 2px
+  .stat-values
+    margin-top: 50px
+    h3, div
+      text-align: center
+    .column:nth-child(1)
+      h3
+        color: $critical
+    .column:nth-child(2)
+      h3
+        color: $danger
+    .column:nth-child(3)
+      h3
+        color: $warning
+    .column:nth-child(4)
+      h3
+        color: $info

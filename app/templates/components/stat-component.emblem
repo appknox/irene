@@ -1,0 +1,26 @@
+.columns
+  .column
+    div.box.stat-container
+      div
+        h5 OVERALL REPORT
+      .columns.stat-values
+        .column
+          h3
+            = stat.totalCritical
+          div
+            | CRITICAL RISKS
+        .column
+          h3
+            = stat.totalCritical
+          div
+            | HIGH RISKS
+        .column
+          h3
+            = stat.totalCritical
+          div
+            | MEDIUM RISKS
+        .column
+          h3
+            = stat.totalCritical
+          div
+            | LOW RISKS

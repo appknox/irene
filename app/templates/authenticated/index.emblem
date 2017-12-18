@@ -1,5 +1,4 @@
 .columns.box-container.home-page
-  .column
   .column.is-one-quarter.scan-section
     .box.upload-app
       | Start a new scan
@@ -14,6 +13,8 @@
             | %
           else
             = t "uploadApp"
+  .column
+    = stat-component
   .column.is-one-quarter
     .box.user-info-box
       .columns
