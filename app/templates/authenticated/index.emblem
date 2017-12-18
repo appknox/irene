@@ -36,3 +36,5 @@
             .column
               | #{ t model.expiryText}
               | #{moment-from-now model.getExpiryDate}
+
+= project-component

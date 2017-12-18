@@ -1,0 +1,3 @@
+.columns
+  each projects as |project|
+    = project-overview project=project
