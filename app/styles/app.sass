@@ -654,8 +654,8 @@ button, .button
 .card-header-icon
   cursor: default
   img
-    height: 45px
-    width: 45px
+    height: 50px
+    width: 50px
 
 .invoice-container
   width: 60%
@@ -1341,11 +1341,12 @@ select:disabled
 
 .upload-app
   margin-top: -10px
-  .button
-    background-image: linear-gradient(-180deg, lighten($critical, 5%) 0%, lighten($critical, 3%) 90%)
-    color: #fff
-    &:hover
-      background-image: linear-gradient(-180deg, lighten($critical, 0%) 0%, lighten($critical, 0%) 90%)
+
+.highlighted-button
+  background-image: linear-gradient(-180deg, lighten($critical, 5%) 0%, lighten($critical, 3%) 90%)
+  color: #fff!important
+  &:hover
+    background-image: linear-gradient(-180deg, lighten($critical, 0%) 0%, lighten($critical, 0%) 90%)
 
 .user-info-box
   font-size: 12px
@@ -1355,6 +1356,7 @@ select:disabled
   .columns:nth-child(2)
     margin-top: 0px
   .columns:nth-child(3)
+    border-width: 0px
     margin-top: 0px
 
 .stat-container
