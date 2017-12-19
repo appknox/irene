@@ -23,6 +23,7 @@ Project = DS.Model.extend BaseModelMixin,
   deviceType: DS.attr 'number'
   platformVersion: DS.attr 'string'
   apiUrlFilters: DS.attr 'string'
+  showUnknownAnalysis: DS.attr 'boolean'
 
   apiUrlFilterItems:(->
     apiUrlFilters = @get "apiUrlFilters"
