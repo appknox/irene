@@ -1,0 +1,23 @@
+if isNotRevoked
+  tr
+    td
+      strong
+        = personaltoken.name
+    td
+      small
+        = personaltoken.createdDateOnHumanized
+    td
+      code id="copy-#{personaltoken.id}" value=personaltoken.key
+        | #{personaltoken.key}
+    td
+      .align-middle
+        button class="copy-token is-info" data-clipboard-target="#copy-#{personaltoken.id}"
+          = fa-icon "clipboard copy-icon" class="fa-lg"
+          | &nbsp;
+          = t "copy"
+    td
+      .align-middle
+        button.is-primary.flex-center click="openRevokePersonalTokenConfirmBox"
+          = fa-icon "trash-o"
+
+= confirm-box isActive=showRevokePersonalTokenConfirmBox title=(t 'confirmBox.revokePersonalToken') delegate=this

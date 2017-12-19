@@ -6,6 +6,9 @@
     li class=securityClass
       a click="displaySecurity" class="mp-display-security"
         = t "security"
+    li class=developerSettingsClass
+      a click="displayDeveloperSettings" class="mp-display-developer-settings"
+        = t "developerSettings"
 
 if isGeneral
   .box-container
@@ -20,7 +23,7 @@ if isGeneral
       .column.is-one-third
         h4
           = t "language"
-        = t "selectLanguage"  
+        = t "selectLanguage"
         .language-select
           = select-language
   .box-container
@@ -35,7 +38,8 @@ if isGeneral
         h4.is-fullwidth
           = t "githubIntegration"
         = github-account user=user class="column is-one-third"
-else
+
+if isSecurity
   .box-container
     .columns
       .column.is-half
@@ -48,3 +52,8 @@ else
         h4.is-fullwidth
           = t "multiFactorAuth"
         = auth-mfa user=user
+
+if isDeveloperSettings
+  .box-container
+    .columns
+      = personaltoken-list
