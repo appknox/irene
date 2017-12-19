@@ -4,11 +4,15 @@ ProjectComponentComponent = Ember.Component.extend
 
   projects: (->
     that = @
+    query =
+      limit: 3
+      offset: 0
+      reverse: true
     store = @get "store"
-    store.findAll("project")
+    store.query 'project', query
       .then (data)->
         that.set "projectCount", data.toArray().length
-        that.set "projects", data.slice(0,3)
+        that.set "projects", data
   ).property()
 
   viewAllProjects: (->
