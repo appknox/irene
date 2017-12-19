@@ -11,7 +11,7 @@ ProjectComponentComponent = Ember.Component.extend
     store = @get "store"
     store.query 'project', query
       .then (data)->
-        that.set "projectCount", data.toArray().length
+        that.set "projectCount", data.meta.total
         that.set "projects", data
   ).property()
 
