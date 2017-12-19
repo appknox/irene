@@ -177,12 +177,13 @@
                   = t "none"
               .column
                 = file.countRiskNone
-            .columns
-              .column
-                li.is-default
-                  = t "unknown"
-              .column
-                = file.countRiskUnknown
+            if file.project.showUnknownAnalysis
+              .columns
+                .column
+                  li.is-default
+                    = t "unknown"
+                .column
+                  = file.countRiskUnknown
       .column.package-desc.is-one-quarter
         table
           tr
