@@ -1380,6 +1380,8 @@ select:disabled
   margin-top: 30px
   margin-bottom: 2px
 
+// move this to bohemia
+
 .status-container
   border: 1px solid #ccc
   height: auto
@@ -1398,15 +1400,34 @@ select:disabled
       padding: 5px
       border-radius: 5px
     .status-details
-      border-radius: 5px 5px 0px 0px
       margin: -5px -5px 5px -5px
+      border-radius: 5px 5px 0px 0px
       color: #000
       background-color: #ccc
       text-align: center
+      &.is-critical
+        background-color: $critical
+        color: #FFF
+      &.is-danger
+        background-color: $critical
+        color: #FFF
+      &.is-warning
+        background-color: $warning
+        color: #FFF
+      &.is-info
+        background-color: $info
+        color: #FFF
+      &.is-success
+        background-color: $success
+        color: #FFF
+      &.is-progress
+        background-color: #fff
     .no-reason
       border-radius: 5px
     .status-reason
       color: $default
+
+// end      
 
 .click-here
   margin-left: -130px
