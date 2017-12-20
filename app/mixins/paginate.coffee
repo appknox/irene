@@ -8,6 +8,7 @@ PaginateMixin = Ember.Mixin.create
   version: 0
   extraQueryStrings: ""
   limit: ENV.paginate.perPageLimit
+  isJsonApiPagination: false
 
   versionIncrementer: ->
     @incrementProperty "version"
@@ -25,9 +26,16 @@ PaginateMixin = Ember.Mixin.create
   objects: ( ->
     window.scrollTo 0, 0
     that = @
-    query =
-      limit: @get "limit"
-      offset: @get "offset"
+    if that.get 'isJsonApiPagination'
+      query_limit = @get "limit"
+      query_offset = @get "offset"
+      query =
+        'page[limit]': @get "limit"
+        'page[offset]': query_limit * query_offset
+    else
+      query =
+        limit: @get "limit"
+        offset: @get "offset"
     extraQueryStrings = @get "extraQueryStrings"
     if !Ember.isEmpty extraQueryStrings
       extraQueries = JSON.parse extraQueryStrings
@@ -36,8 +44,11 @@ PaginateMixin = Ember.Mixin.create
     targetObject = @get "targetObject"
     objects = @get('store').query targetObject, query
     objects.then (result) ->
-      that.set "meta", result.meta
-      # that.set "meta", total: 200
+      meta = result.meta
+      if result.links and result.meta.pagination
+        meta.total = result.meta.pagination.count
+        that.set 'isJsonApiPagination', true
+      that.set "meta", meta
     objects
   ).property  "version"
 
