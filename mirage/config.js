@@ -90,10 +90,6 @@ export default function() {
     return {};
   });
 
-  this.post('/stripe_payment', () => {
-    return {};
-  });
-
   this.post('/unauthorize_github', () => {
     return {};
   });

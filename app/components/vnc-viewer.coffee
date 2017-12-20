@@ -30,7 +30,6 @@ VncViewerComponent = Ember.Component.extend
     that = @
     @set "rfb", new RFB
       'target': canvasEl
-      'focusContainer': @element
       'encrypt': ENV.deviceFarmSsl
       'repeaterID': ''
       'true_color': true
