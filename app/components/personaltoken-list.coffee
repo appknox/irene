@@ -1,22 +1,19 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment'`
+`import PaginateMixin from 'irene/mixins/paginate'`
 `import { translationMacro as t } from 'ember-i18n'`
 
 isEmpty = (inputValue)->
   return Ember.isEmpty inputValue
 
-PersonaltokenListComponent = Ember.Component.extend
+PersonaltokenListComponent = Ember.Component.extend PaginateMixin,
   i18n: Ember.inject.service()
 
 
   # list tokens
 
-  personaltokens: (->
-    @get('store').findAll 'personaltoken'
-  ).property()
-
-  tokenSorting: ['created:desc']
-  sortedPersonalTokens: Ember.computed.sort 'personaltokens', 'tokenSorting'
+  targetObject: 'personaltoken'
+  sortProperties: ['created:desc']
 
 
   # create token
@@ -47,6 +44,7 @@ PersonaltokenListComponent = Ember.Component.extend
       .then (data)->
         that.set 'isGeneratingToken', false
         that.store.pushPayload data
+        that.incrementProperty "version"
         that.get('notify').success tTokenCreated
         that.set 'tokenName', ''
         that.set 'showGenerateTokenModal', false
