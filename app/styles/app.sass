@@ -530,7 +530,7 @@ button, .button
         border: 1px solid #778899
         padding: 8px 0px
         vertical-align: middle
-        
+
 .invoice-list-container
   padding: 10px 100px
 
@@ -645,6 +645,11 @@ button, .button
   img
     height: 50px
     width: 50px
+    background-image: url("http://placehold.it/50x50/?text='NOT+FOUND'")
+    overflow: hidden
+    &:before
+      content: "."
+      font-size: 1000px
 
 b.bold
   font-weight: 900
