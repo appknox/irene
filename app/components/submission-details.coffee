@@ -4,7 +4,6 @@
 
 SubmissionDetailsComponent = Ember.Component.extend
   submission: null
-  classNames: ["message"]
 
   messageClass: (->
     status = @get "submission.status"

@@ -34,7 +34,8 @@
             = fa-icon "power-off" class="sidebar-icons"
             = t "logout"
 
-      = submission-list
+      .status-updates
+        = submission-list
 
   .column.margin-right.margin-top
     = outlet
