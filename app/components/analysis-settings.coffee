@@ -13,11 +13,12 @@ AnalysisSettingsComponent = Ember.Component.extend
     showUnknownAnalysis: ->
       tSavedPreferences = @get "tSavedPreferences"
       isChecked = @$('#show-unkown-analysis')[0].checked
+      projectId = @get "project.id"
+      unknownAnalysisStatus = [ENV.endpoints.setUnknownAnalysisStatus, projectId].join '/'
       data =
-        project_id: @get "project.id"
         status: isChecked
       that = @
-      @get("ajax").post ENV.endpoints.setUnknownAnalysisStatus, data: data
+      @get("ajax").post unknownAnalysisStatus, data: data
       .then (data)->
         that.set "project.showUnknownAnalysis", isChecked
         that.get("notify").success tSavedPreferences
