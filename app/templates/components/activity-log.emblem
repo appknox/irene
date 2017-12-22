@@ -1,5 +1,5 @@
 .activity-log-container
-  div.log-main-heading
+  h5.log-main-heading
     | ACTIVITY LOG
   div.all-log
     div.log

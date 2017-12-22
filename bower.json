@@ -19,7 +19,9 @@
     "socket.io-client": "^1.7.2",
     "qrious": "^4.0.2",
     "clipboard": "^1.7.1",
-    "devices.css": "*"
+    "devices.css": "*",
+    "chart.js": "^2.7.1",
+    "chartjs": "2.1.6"
   },
   "resolutions": {
     "bohemia": "^0.8.7",

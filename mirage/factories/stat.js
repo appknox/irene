@@ -3,9 +3,9 @@ import { faker } from 'ember-cli-mirage';
 
 export default Factory.extend({
 
-  totalCritical: faker.random.number,
-  totalHigh: faker.random.number,
-  totalMedium: faker.random.number,
-  totalLow: faker.random.number
+  totalCritical: 5,
+  totalHigh: 4,
+  totalMedium: 3,
+  totalLow: 2
 
 });

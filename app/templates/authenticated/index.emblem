@@ -1,20 +1,6 @@
 .columns.box-container.home-page
-  .column.is-one-quarter.scan-section
-    .box.upload-app
-      | Start a new scan
-      .margin-top
-        label.button.is-primary.is-half.ac-upload-app.highlighted-button
-          = upload-app delegate=this class="mp-upload-app"
-          = fa-icon "upload"
-          | &nbsp;
-          if isUploading
-            | #{t "uploading"} :
-            = progress
-            | %
-          else
-            = t "uploadApp"
   .column
-    = stat-component
+    = chart-component
   .column.is-one-quarter
     .box.user-info-box
       .columns
@@ -37,8 +23,9 @@
               | #{ t model.expiryText}
               | #{moment-from-now model.getExpiryDate}
 
+
 .columns
   .column
-    = chart-component
+    = stat-component
   .column.is-one-third
     = activity-log

@@ -1,0 +1,4 @@
+h5.text-centre
+  | OVERALL REPORT
+div class="chart-container"
+  = ember-chart type='bar' data=barData width=350 height=350 options=chartOptions

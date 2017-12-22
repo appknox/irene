@@ -1,26 +1,58 @@
 .columns
   .column
     div.box.stat-container
-      div
-        h5 OVERALL REPORT
+      h5.stat-main-heading
+        | MOST COMMON ISSUES
       .columns.stat-values
-        .column
-          h3
-            = stat.totalCritical
-          div
-            | CRITICAL RISKS
-        .column
-          h3
-            = stat.totalCritical
-          div
-            | HIGH RISKS
-        .column
-          h3
-            = stat.totalCritical
-          div
-            | MEDIUM RISKS
-        .column
-          h3
-            = stat.totalCritical
-          div
-            | LOW RISKS
+        ul.column
+          li
+            .columns
+              .column.is-half
+                | XML-external-entity Injection Vulnerabilities in HTTP Body
+              .column.is-one-third
+                .tag
+                  | Static
+                .tag
+                  | Dynamic
+                .tag
+                  | M1
+                .tag
+                  | M2
+              .column.project-count
+                | Found in 1 Project
+          li
+            .columns
+              .column.is-half
+                | XML-external-entity Injection Vulnerabilities in HTTP Body
+              .column.is-one-third
+                .tag
+                  | Static
+              .column.project-count
+                | Found in 1 Project
+          li
+            .columns
+              .column.is-half
+                | XML-external-entity Injection Vulnerabilities in HTTP Body
+              .column.is-one-third
+                .tag
+                  | Static
+              .column.project-count
+                | Found in 1 Project
+          li
+            .columns
+              .column.is-half
+                | XML-external-entity Injection Vulnerabilities in HTTP Body
+              .column.is-one-third
+                .tag
+                  | Static
+              .column.project-count
+                | Found in 1 Project
+          li
+            .columns
+              .column.is-half
+                | XML-external-entity Injection Vulnerabilities in HTTP Body
+              .column.is-one-third
+                .tag
+                  | Static
+              .column.project-count
+                | Found in 11 Projects

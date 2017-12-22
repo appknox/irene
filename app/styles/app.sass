@@ -132,9 +132,6 @@ body
     font-weight: 900
     background-color: lighten(#424651, 5%)
 
-.status-container
-
-
 input
   display: block
 
@@ -1337,8 +1334,9 @@ select:disabled
     background-image: linear-gradient(-180deg, lighten($critical, 0%) 0%, lighten($critical, 0%) 90%)
 
 .user-info-box
-  font-size: 12px
+  font-size: 13px
   height: 140px
+  margin-top: 5px
   .columns
     border-bottom: 1px solid #ccc
   .columns:nth-child(2)
@@ -1348,29 +1346,44 @@ select:disabled
     margin-top: 0px
 
 .stat-container
-  height: 140px
-  div
-    h5
-      width: 152px
-      background-color: #fff
-      margin: -33px auto
-      padding: 0px 2px
+  margin-top: 10px
+  padding: 0px
+  box-shadow: 0px 0px 10px #ccc
+  .stat-main-heading
+    text-align: center
+    background-color: $default
+    color: #FFF
+    border-radius: 5px 5px 0px 0px
+    margin-bottom: 10px
+    padding: 5px
   .stat-values
-    margin-top: 50px
-    h3, div
-      text-align: center
-    .column:nth-child(1)
-      h3
-        color: $critical
-    .column:nth-child(2)
-      h3
-        color: $danger
-    .column:nth-child(3)
-      h3
-        color: $warning
-    .column:nth-child(4)
-      h3
-        color: $info
+    height: 220px
+    font-size: 13px
+    margin-top: -10px
+    .tag
+      margin-top: 3px
+      background-color: $default
+      color: #FFF
+      font-size: 9px
+      border-radius: 5px
+      height: 15px
+    ul li
+      margin: 5px 10px 5px 10px
+      border-bottom: 1px solid #ccc
+      &:last-child
+        border-bottom-width: 0px
+    li
+      .columns
+        margin-top: -6px
+        .column
+          height: 42px
+          padding: 5px
+      .project-count
+        font-size: 12px
+
+.stat-heading
+  text-align: center
+  margin-top: 10px
 
 .menu-label
   text-align: center
@@ -1440,14 +1453,14 @@ select:disabled
 
 .chart-container
   width: 50vw
-  margin: auto
+  margin: -10px 10px
 
 .activity-log-container
-  margin: 20px 20px 0px 0px
+  margin: 10px 20px 0px 0px
   box-shadow: 0px 0px 10px #ccc
   border-radius: 5px
   .all-log
-    height: 350px
+    height: 210px
     overflow: scroll
     .log
       padding: 5px 20px
@@ -1457,7 +1470,6 @@ select:disabled
     background-color: $default
     color: #FFF
     border-radius: 5px 5px 0px 0px
-    font-size: 24px
     margin-bottom: 10px
     padding: 5px
   .log-heading
