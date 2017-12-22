@@ -28,6 +28,7 @@
     "ember-cli-autoprefixer": "0.7.0",
     "ember-cli-babel": "^6.1.0",
     "ember-cli-bourbon": "1.2.2",
+    "ember-cli-chartjs": "^2.4.0",
     "ember-cli-circleci": "0.1.0",
     "ember-cli-code-coverage": "0.3.12",
     "ember-cli-coffeescript": "kimroen/ember-cli-coffeescript#ebb4abd237599ae7bd3a852cd71d63924a79851f",

@@ -148,7 +148,7 @@
   .card-content
     .columns
       .column.flex-center
-        = pie-chart data=file.pieChartData height=150 width=150 globalAlpha=globalAlpha radiusRatio=radiusRatio
+        = ember-chart type='doughnut' data=file.doughnutData width=200 height=200 options=chartOptions
       .column.flex-center
         ul.risk-table
           h5.uppercase-text

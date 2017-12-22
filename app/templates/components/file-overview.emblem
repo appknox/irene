@@ -27,7 +27,7 @@ header.card-header
 
     .columns class=isReverse:is-reverse
       .column.flex-center
-        = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
+        = ember-chart type='doughnut' data=file.doughnutData width=150 height=150 options=chartOptions
       .column
         ul.risk-table
           .risk-values

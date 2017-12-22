@@ -22,6 +22,10 @@ FileHeaderComponent = Ember.Component.extend
   isRequestingManual: false
   isStartingRescan: false
 
+  chartOptions: (->
+    legend: { display: false }
+  ).property()
+
   didInsertElement: ->
     tPasswordCopied = @get "tPasswordCopied"
     tPleaseTryAgain = @get "tPleaseTryAgain"

@@ -75,7 +75,7 @@ File = DS.Model.extend BaseModelMixin,
   countRiskNone: 0
   countRiskUnknown: 0
 
-  pieChartData: Ember.computed 'analyses.@each.risk', ->
+  doughnutData: Ember.computed 'analyses.@each.risk', ->
     analyses = @get "analyses"
     r = ENUMS.RISK
     countRiskCritical = _getAnalysesCount analyses, r.CRITICAL
@@ -91,14 +91,35 @@ File = DS.Model.extend BaseModelMixin,
     @set "countRiskLow", countRiskLow
     @set "countRiskNone", countRiskNone
     @set "countRiskUnknown", countRiskUnknown
-    [
-      {"value": countRiskCritical, "color": _getComputedColor "critical"},
-      {"value": countRiskHigh, "color": _getComputedColor "danger"},
-      {"value": countRiskMedium, "color": _getComputedColor "warning"},
-      {"value": countRiskLow, "color": _getComputedColor "info"},
-      {"value": countRiskNone, "color": _getComputedColor "success"}
-      {"value": countRiskUnknown, "color": _getComputedColor "default"}
+
+    labels: [
+      'CRITICAL'
+      'HIGH'
+      'MEDIUM'
+      'LOW'
+      'PASSED'
+      'UNKNOWN'
     ]
+    datasets: [ {
+      label: 'Risks'
+      data: [
+        countRiskCritical
+        countRiskHigh
+        countRiskMedium
+        countRiskLow
+        countRiskNone
+        countRiskUnknown
+      ]
+      backgroundColor: [
+       _getComputedColor "critical"
+       _getComputedColor "danger"
+       _getComputedColor "warning"
+       _getComputedColor "info"
+       _getComputedColor "success"
+       _getComputedColor "default"
+      ]
+    } ]
+
 
   isNoneStatus: (->
     status = @get 'dynamicStatus'

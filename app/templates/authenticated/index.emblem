@@ -37,4 +37,8 @@
               | #{ t model.expiryText}
               | #{moment-from-now model.getExpiryDate}
 
-= project-component
+.columns
+  .column
+    = chart-component
+  .column.is-one-third
+    = activity-log
