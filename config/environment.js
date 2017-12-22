@@ -151,7 +151,8 @@ module.exports = function(environment) {
       invoices: 'invoices',
       chargebeeCallback: "chargebee/callback",
       subscriptions: "subscriptions",
-      rescan: "rescan"
+      rescan: "rescan",
+      personaltokens: "personaltokens"
     },
     csb: {
       feature: {

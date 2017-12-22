@@ -1,0 +1,45 @@
+.column
+  .columns.margin-bottom20
+    .column
+      h4
+        = t "personalAccessTokens"
+      h6
+        = t "personalAccessTokenDesc"
+    .column.is-one-third.content-right
+      button.is-primary click="openGenerateTokenModal"
+        | + #{t "personalAccessTokenCreate"}
+
+  if hasObjects
+    table
+      thead
+        tr
+          th
+            = t "personalTokenName"
+          th
+            = t "personalTokenDate"
+          th
+            = t "personalTokenKey"
+          th
+            = t "copy"
+          th
+            = t "personalTokenRevoke"
+      tbody
+        each sortedObjects as |personaltoken|
+          = personaltoken-detail personaltoken=personaltoken
+    .margin-top20
+      = partial "paginate"
+
+  else
+    h5.capitalize-text.margin-left
+      | #{t "noPersonalToken"}!
+
+.column.is-one-third
+
+= modal-card class="input-modal" isActive=showGenerateTokenModal title=(t 'personalAccessTokenCreate')
+  .card-body
+    .card-wrapper
+      form
+        p.control
+          = input class="form-control input" placeholder=(t 'personalTokenName') type="text" value=tokenName autofocus="autofocus"
+        button.margin-top10.is-primary click="generateToken" disabled=isGeneratingToken
+         = t 'personalAccessTokenCreate'
