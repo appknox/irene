@@ -46,7 +46,7 @@ if isSecurity
         h4.is-fullwidth
           = t "changePassword"
         = password-change
-  / .box
+  .box-container
     .columns
       .column.is-half
         h4.is-fullwidth
