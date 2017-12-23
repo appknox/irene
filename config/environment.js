@@ -152,7 +152,8 @@ module.exports = function(environment) {
       chargebeeCallback: "chargebee/callback",
       subscriptions: "subscriptions",
       rescan: "rescan",
-      personaltokens: "personaltokens"
+      personaltokens: "personaltokens",
+      setUnknownAnalysisStatus: "set_unknown_analysis_status"
     },
     csb: {
       feature: {
