@@ -1,0 +1,6 @@
+.analysis-settings
+  h5
+    = t "showUnknowAnalysis"
+  label class="switch"
+    input id="show-unkown-analysis" type="checkbox" checked=project.showUnknownAnalysis click="showUnknownAnalysis"
+    span class="slider round"

@@ -184,7 +184,8 @@
                   = t "none"
               .column
                 = file.countRiskNone
-            .columns
+
+            .columns class=file.project.showUnknownAnalysis:visible:invisible
               .column
                 li.is-default
                   = t "unknown"

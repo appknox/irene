@@ -662,6 +662,12 @@ b.bold
 .show
   display: block
 
+.visible
+  visibility: visible
+
+.invisible
+  visibility: hidden
+
 .hide
   display: none
 
@@ -1483,3 +1489,51 @@ select:disabled
     font-size: 16px
   .log-desc
     font-size: 12px
+
+.switch
+  position: relative
+  display: inline-block
+  width: 64px
+  height: 38px
+
+.switch input
+  display: none
+
+.slider
+  position: absolute
+  cursor: pointer
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  background-color: $default
+  transition: .4s
+  font-size: 8px
+  line-height: 30px
+  text-align: center
+
+.slider:before
+  position: absolute
+  content: "HIDE"
+  height: 30px
+  width: 30px
+  left: 4px
+  bottom: 4px
+  background-color: white
+  transition: .4s
+
+input:checked + .slider
+  background-color: $success
+
+input:focus + .slider
+  box-shadow: 0 0 1px $success
+
+input:checked + .slider:before
+  content: "SHOW"
+  transform: translateX(26px)
+
+.slider.round
+  border-radius: 34px
+
+.slider.round:before
+  border-radius: 50%

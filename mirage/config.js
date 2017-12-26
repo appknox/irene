@@ -122,6 +122,10 @@ export default function() {
    return;
   });
 
+  this.post('/set_unknown_analysis_status', () => {
+   return;
+  });
+
   this.post('/collaborations', () => {
    return;
   });
