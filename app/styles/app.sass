@@ -1947,3 +1947,54 @@ input:checked + .slider:before
 
 .my-popper
   display: none
+
+// attachments
+$attachment-icon-width: 4em
+.attachment
+  position: relative
+  display: flex
+  align-items: center
+  background: #f5f5f5
+  color: $text
+  margin-bottom: 1em
+  &:hover, &:focus, &:active
+    color: $primary
+  &::before
+    content: attr(data-type)
+    text-transform: uppercase
+    letter-spacing: 0.05em
+    font-size: 0.8em
+    font-weight: bold
+    display: block
+    width: $attachment-icon-width
+    height: $attachment-icon-width / 1.4
+    text-align: center
+    background: $grey
+    color: white
+    display: flex
+    align-items: center
+    justify-content: center
+
+  @each $extn, $color in $extensions-list
+    &[data-type=#{$extn}]
+      &::before
+        background: $color
+
+  &-label
+    max-width: 35em
+    display: inline-block
+    overflow: hidden
+    text-overflow: ellipsis
+    white-space: nowrap
+    margin-left: 0.5em
+  &-icon
+    position: absolute
+    right: 1em
+
+$file-extension-list:   log     apk     ipa     pdf     doc     txt     zip     jpg     jpeg    png     bmp
+$extension-color-list: #373a43 #5eb533 #8e44ad #DB3E3D #307cf1 #a6b1b5 #855D40 #80c081 #80c081 #80c081 #80c081
+
+@for $i from 1 through length($file-extension-list)
+  .attachment[data-type=#{nth($file-extension-list, $i)}]
+    &::before
+      background: nth($extension-color-list, $i)
