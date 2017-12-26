@@ -1,27 +1,31 @@
 .columns.box-container.home-page
   .column
     = chart-component
-  .column.is-one-quarter
-    .box.user-info-box
-      .columns
-        .column
-          | Hello, #{model.username}
-      .columns
-        .column
-          | Project Count
-        .column
-          | #{model.totalProjects}
-      .columns
-        if model.limitedScans
+  .column.is-one-third
+    .columns
+      .box.user-info-box
+        .columns
           .column
-            = t "scansLeft"
+            | Hello, #{model.username}
+        .columns
           .column
-            = model.scansLeft
-        else
-          if model.hasExpiryDate
+            | Project Count
+          .column
+            | #{model.totalProjects}
+        .columns
+          if model.limitedScans
             .column
-              | #{ t model.expiryText}
-              | #{moment-from-now model.getExpiryDate}
+              = t "scansLeft"
+            .column
+              = model.scansLeft
+          else
+            if model.hasExpiryDate
+              .column
+                | #{ t model.expiryText}
+                | #{moment-from-now model.getExpiryDate}
+    .columns
+      .column
+        .box.risk-status-box
 
 
 .columns
