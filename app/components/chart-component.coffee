@@ -7,7 +7,7 @@ ChartComponentComponent = Ember.Component.extend
   ).property()
 
   chartOptions: (->
-    scales: { yAxes: [{ ticks: { beginAtZero:true } }]}
+    scales: { yAxes: [{ ticks: { beginAtZero:true, stepSize: 1 } }]}
     legend: { display: false }
   ).property()
 
