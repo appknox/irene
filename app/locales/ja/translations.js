@@ -94,7 +94,7 @@ export default {
   "githubIntegration": "GitHub 統合",
   "personalAccessTokens": "Personal access tokens",
   "personalAccessTokenCreate": "Generate token",
-  "personalAccessTokenDesc": "Tokens you have generated that can be used to access the AppKnox API",
+  "personalAccessTokenDesc": "Tokens you have generated that can be used to access the Appknox API",
   "githubWillBeRevoked": "GitHub の承認は一瞬で取り消されます",
   "gotoHome": "ホームに戻る",
   "greet": "Security fanatics at your service",
