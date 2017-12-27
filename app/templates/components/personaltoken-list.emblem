@@ -10,22 +10,23 @@
         | + #{t "personalAccessTokenCreate"}
 
   if hasObjects
-    table
-      thead
-        tr
-          th
-            = t "personalTokenName"
-          th
-            = t "personalTokenDate"
-          th
-            = t "personalTokenKey"
-          th
-            = t "copy"
-          th
-            = t "personalTokenRevoke"
-      tbody
-        each sortedObjects as |personaltoken|
-          = personaltoken-detail personaltoken=personaltoken
+    .token-table
+      table
+        thead
+          tr
+            th
+              = t "personalTokenName"
+            th
+              = t "personalTokenDate"
+            th
+              = t "personalTokenKey"
+            th
+              | Copy
+            th
+              | Delete
+        tbody
+          each sortedObjects as |personaltoken|
+            = personaltoken-detail personaltoken=personaltoken
     .margin-top20
       = partial "paginate"
 
