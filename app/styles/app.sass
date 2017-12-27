@@ -5,6 +5,7 @@ $FreestyleGuide-color--secondary: $primary-darker
 $FreestyleGuide-color--foreground: $text
 $FreestyleGuide-color--background: $background
 @import 'ember-freestyle'
+@import 'vars'
 
 $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert), danger: ($danger, $danger-invert), critical: ($critical, $critical-invert)) !default
 
@@ -1980,7 +1981,7 @@ $attachment-icon-width: 4em
       &::before
         background: $color
 
-  &-label
+  &__label
     max-width: 35em
     display: inline-block
     overflow: hidden
@@ -1990,11 +1991,3 @@ $attachment-icon-width: 4em
   &-icon
     position: absolute
     right: 1em
-
-$file-extension-list:   log     apk     ipa     pdf     doc     txt     zip     jpg     jpeg    png     bmp
-$extension-color-list: #373a43 #5eb533 #8e44ad #DB3E3D #307cf1 #a6b1b5 #855D40 #80c081 #80c081 #80c081 #80c081
-
-@for $i from 1 through length($file-extension-list)
-  .attachment[data-type=#{nth($file-extension-list, $i)}]
-    &::before
-      background: nth($extension-color-list, $i)
