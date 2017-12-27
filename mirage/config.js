@@ -32,6 +32,7 @@ export default function() {
   this.get('/invitations/', 'invitation');
   this.get('/subscriptions/', 'subscription');
   this.get('/stats/:id', 'stat');
+  this.get('/personaltokens', 'personaltoken');
 
   this.get('/github_repos', () => {
     return {};

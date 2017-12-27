@@ -14,6 +14,7 @@ export default function(server) {
     statCount = getRandomInt(1, 1),
     vulnerabilityCount = getRandomInt(5, 15),
     submissionCount = getRandomInt(3,3),
+    personalTokenCount = getRandomInt(3,3),
     teamCount = 3,
     projectCount = 0, project = null, file = null, projectIds = [],
     team = null, currentUserId = 1, deviceCount=30, invoiceCount=3;
@@ -26,6 +27,7 @@ export default function(server) {
   server.createList('device', deviceCount);
   server.createList('invoice', invoiceCount);
   server.createList('stat', statCount);
+  server.createList('personaltoken', personalTokenCount);
   projectCount =  getRandomInt(4, 5);
   for (var teamId = 1; teamId <= teamCount; teamId++) {
     team = server.create('team', {users: users});
