@@ -30,8 +30,10 @@
       = partial "paginate"
 
   else
-    h5.capitalize-text.margin-left
-      | #{t "noPersonalToken"}!
+    .not-found
+      h4
+        = fa-icon "exclamation-triangle"
+        =  t "noPersonalToken"
 
 .column.is-one-third
 
