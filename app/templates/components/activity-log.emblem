@@ -1,88 +1,88 @@
-.activity-log-container
-  h5.log-main-heading
+.main-box-container
+  h5.box-main-heading
     | ACTIVITY LOG
-  div.all-log
-    div.log
+  div.box-content
+    div.box-list
       .columns
         .column
-          div.log-heading
+          div.box-heading
             | Scan Completed
         .column.is-one-third.is-one-third
-          div.log-time
+          div
             | 16 DECEMBER
       .columns
         .column
-          div.log-desc
+          div.box-desc
             | Scan Completed for MVFA
-    div.log
+    div.box-list
       .columns
         .column
-          div.log-heading
+          div.box-heading
             | Team Added
         .column.is-one-third
-          div.log-time
+          div
             | 16 DECEMBER
       .columns
         .column
-          div.log-desc
+          div.box-desc
             | Team - Test was created
-    div.log
+    div.box-list
       .columns
         .column
-          div.log-heading
+          div.box-heading
             | App Uploaded
         .column.is-one-third
-          div.log-time
+          div
             | 16 DECEMBER
       .columns
         .column
-          div.log-desc
+          div.box-desc
             | New App - DVIA was uploaded successfully
-    div.log
+    div.box-list
       .columns
         .column
-          div.log-heading
+          div.box-heading
             | Team Added
         .column.is-one-third
-          div.log-time
+          div
             | 16 DECEMBER
       .columns
         .column
-          div.log-desc
+          div.box-desc
             | Team - Test was created
-    div.log
+    div.box-list
       .columns
         .column
-          div.log-heading
+          div.box-heading
             | App Uploaded
         .column.is-one-third
-          div.log-time
+          div
             | 16 DECEMBER
       .columns
         .column
-          div.log-desc
+          div.box-desc
             | New App - DVIA was uploaded successfully
-    div.log
+    div.box-list
       .columns
         .column
-          div.log-heading
+          div.box-heading
             | Team Added
         .column.is-one-third
-          div.log-time
+          div
             | 16 DECEMBER
       .columns
         .column
-          div.log-desc
+          div.box-desc
             | Team - Test was created
-    div.log
+    div.box-list
       .columns
         .column
-          div.log-heading
+          div.box-heading
             | App Uploaded
         .column.is-one-third
-          div.log-time
+          div
             | 16 DECEMBER
       .columns
         .column
-          div.log-desc
+          div.box-desc
             | New App - DVIA was uploaded successfully

@@ -522,7 +522,7 @@ button, .button
   .fa-trash-o
     color: $critical
   .copy-token
-    color: $info  
+    color: $info
 
 
 .invoice-table, .token-table
@@ -1369,42 +1369,6 @@ select:disabled
     border-width: 0px
     margin-top: 0px
 
-.stat-container
-  margin-top: 10px
-  padding: 0px
-  box-shadow: 0px 0px 10px #ccc
-  .stat-main-heading
-    text-align: center
-    background-color: $default
-    color: #FFF
-    border-radius: 5px 5px 0px 0px
-    margin-bottom: 10px
-    padding: 5px
-  .stat-values
-    height: 220px
-    font-size: 13px
-    margin-top: -10px
-    .tag
-      margin-top: 3px
-      background-color: $default
-      color: #FFF
-      font-size: 9px
-      border-radius: 5px
-      height: 15px
-    ul li
-      margin: 5px 10px 5px 10px
-      border-bottom: 1px solid #ccc
-      &:last-child
-        border-bottom-width: 0px
-    li
-      .columns
-        margin-top: -6px
-        .column
-          height: 42px
-          padding: 5px
-      .project-count
-        font-size: 12px
-
 .stat-heading
   text-align: center
   margin-top: 10px
@@ -1479,28 +1443,47 @@ select:disabled
   width: 50vw
   margin: -10px 10px
 
-.activity-log-container
+.main-box-container
   margin: 10px 20px 0px 0px
   box-shadow: 0px 0px 10px #ccc
   border-radius: 5px
-  .all-log
+  .box-content
     height: 210px
     overflow: scroll
-    .log
+    .box-list
       padding: 5px 20px
       border-bottom: 2px solid #ccc
-  .log-main-heading
+  .box-main-heading
     text-align: center
     background-color: $default
     color: #FFF
     border-radius: 5px 5px 0px 0px
     margin-bottom: 10px
     padding: 5px
-  .log-heading
+  .box-heading
     color: #000
     font-size: 16px
-  .log-desc
+  .box-heading-issues
+    color: #000
     font-size: 12px
+  .box-desc
+    font-size: 12px
+  .content-right
+    .tag
+      margin-top: 3px
+      background-color: $default
+      color: #FFF
+      font-size: 9px
+      border-radius: 5px
+      height: 20px
+    .app-name
+      background-color: $default
+      color: #FFF
+      border-radius: 3px
+      padding: 3px 10px
+      font-size: 12px
+
+
 
 .switch
   position: relative

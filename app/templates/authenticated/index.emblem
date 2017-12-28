@@ -31,5 +31,7 @@
 .columns
   .column
     = stat-component
-  .column.is-one-third
+  .column
+    = recent-issues
+  .column
     = activity-log

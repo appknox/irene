@@ -1,58 +1,86 @@
-.columns
-  .column
-    div.box.stat-container
-      h5.stat-main-heading
-        | MOST COMMON ISSUES
-      .columns.stat-values
-        ul.column
-          li
-            .columns
-              .column.is-half
-                | XML-external-entity Injection Vulnerabilities in HTTP Body
-              .column.is-one-third
-                .tag
-                  | Static
-                .tag
-                  | Dynamic
-                .tag
-                  | M1
-                .tag
-                  | M2
-              .column.project-count
-                | Found in 1 Project
-          li
-            .columns
-              .column.is-half
-                | XML-external-entity Injection Vulnerabilities in HTTP Body
-              .column.is-one-third
-                .tag
-                  | Static
-              .column.project-count
-                | Found in 1 Project
-          li
-            .columns
-              .column.is-half
-                | XML-external-entity Injection Vulnerabilities in HTTP Body
-              .column.is-one-third
-                .tag
-                  | Static
-              .column.project-count
-                | Found in 1 Project
-          li
-            .columns
-              .column.is-half
-                | XML-external-entity Injection Vulnerabilities in HTTP Body
-              .column.is-one-third
-                .tag
-                  | Static
-              .column.project-count
-                | Found in 1 Project
-          li
-            .columns
-              .column.is-half
-                | XML-external-entity Injection Vulnerabilities in HTTP Body
-              .column.is-one-third
-                .tag
-                  | Static
-              .column.project-count
-                | Found in 11 Projects
+.main-box-container
+  h5.box-main-heading
+    | MOST COMMON ISSUES
+  .box-content
+    .box-list
+      .columns
+        .column
+          .box-heading-issues
+            | XML-external-entity Injection Vulnerabilities in HTTP Body
+      .columns
+        .column
+          .box-desc
+            | Found in 5 Projects
+        .column.content-right
+          .tag
+            | Static
+          .tag
+            | Dynamic
+          .tag
+            | M1
+          .tag
+            | M2
+    .box-list
+      .columns
+        .column
+          .box-heading-issues
+            | XML-external-entity Injection Vulnerabilities in HTTP Body
+      .columns
+        .column
+          .box-desc
+            | Found in 5 Projects
+        .column.content-right
+          .tag
+            | Static
+          .tag
+            | M1
+          .tag
+            | M2
+    .box-list
+      .columns
+        .column
+          .box-heading-issues
+            | XML-external-entity Injection Vulnerabilities in HTTP Body
+      .columns
+        .column
+          .box-desc
+            | Found in 5 Projects
+        .column.content-right
+          .tag
+            | Dynamic
+          .tag
+            | API
+    .box-list
+      .columns
+        .column
+          .box-heading-issues
+            | XML-external-entity Injection Vulnerabilities in HTTP Body
+      .columns
+        .column
+          .box-desc
+            | Found in 5 Projects
+        .column.content-right
+          .tag
+            | Static
+          .tag
+            | Manual
+          .tag
+            | M10
+          .tag
+            | M2
+    .box-list
+      .columns
+        .column
+          .box-heading-issues
+            | XML-external-entity Injection Vulnerabilities in HTTP Body
+      .columns
+        .column
+          .box-desc
+            | Found in 10 Projects
+        .column.content-right
+          .tag
+            | Static
+          .tag
+            | M1
+          .tag
+            | M2

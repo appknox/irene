@@ -1,0 +1,95 @@
+.main-box-container
+  h5.box-main-heading
+    | RECENTLY FIXED ISSUES
+  .box-content
+    .box-list
+      .columns
+        .column
+          .box-heading-issues
+            | XML-external-entity Injection Vulnerabilities in HTTP Body
+      .columns
+        .column
+          .tag.is-danger
+            i.fa.risk-icons.fa-warning
+            | &nbsp; HIGH
+        .column.content-right
+          .app-name
+            | MVFA
+    .box-list
+      .columns
+        .column
+          .box-heading-issues
+            | XML-external-entity Injection Vulnerabilities in HTTP Body
+      .columns
+        .column
+          .tag.is-critical
+            i.fa.risk-icons.fa-warning
+            | &nbsp; CRITICAL
+        .column.content-right
+          .app-name
+            | DVIA
+    .box-list
+      .columns
+        .column
+          .box-heading-issues
+            | XML-external-entity Injection Vulnerabilities in HTTP Body
+      .columns
+        .column
+          .tag.is-info
+            i.fa.risk-icons.fa-warning
+            | &nbsp; LOW
+        .column.content-right
+          .app-name
+            | MVFA
+    .box-list
+      .columns
+        .column
+          .box-heading-issues
+            | XML-external-entity Injection Vulnerabilities in HTTP Body
+      .columns
+        .column
+          .tag.is-warning
+            i.fa.risk-icons.fa-warning
+            | &nbsp; MEDIUM
+        .column.content-right
+          .app-name
+            | MVFA
+    .box-list
+      .columns
+        .column
+          .box-heading-issues
+            | XML-external-entity Injection Vulnerabilities in HTTP Body
+      .columns
+        .column
+          .tag.is-danger
+            i.fa.risk-icons.fa-warning
+            | &nbsp; HIGH
+        .column.content-right
+          .app-name
+            | MVFA
+    .box-list
+      .columns
+        .column
+          .box-heading-issues
+            | XML-external-entity Injection Vulnerabilities in HTTP Body
+      .columns
+        .column
+          .tag.is-info
+            i.fa.risk-icons.fa-warning
+            | &nbsp; LOW
+        .column.content-right
+          .app-name
+            | com.narendramodiapp
+    .box-list
+      .columns
+        .column
+          .box-heading-issues
+            | XML-external-entity Injection Vulnerabilities in HTTP Body
+      .columns
+        .column
+          .tag.is-warning
+            i.fa.risk-icons.fa-warning
+            | &nbsp; MEDIUM
+        .column.content-right
+          .app-name
+            | MVFA
