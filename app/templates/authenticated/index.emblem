@@ -6,26 +6,35 @@
       .box.user-info-box
         .columns
           .column
-            | Hello, #{model.username}
+            h5
+              | #{model.username}
         .columns
           .column
-            | Project Count
+            h6
+              | Project Count
           .column
-            | #{model.totalProjects}
-        .columns
-          if model.limitedScans
-            .column
-              = t "scansLeft"
-            .column
-              = model.scansLeft
-          else
-            if model.hasExpiryDate
-              .column
-                | #{ t model.expiryText}
-                | #{moment-from-now model.getExpiryDate}
+            h6
+              | #{model.totalProjects}
+
     .columns
       .column
         .box.risk-status-box
+          .columns
+            .column
+              h5
+                | Subscription
+          .columns
+            if model.limitedScans
+              .column
+                = t "scansLeft"
+              .column
+                = model.scansLeft
+            else
+              if model.hasExpiryDate
+                .column
+                  h6
+                    | #{ t model.expiryText}
+                    | #{moment-from-now model.getExpiryDate}
 
 
 .columns

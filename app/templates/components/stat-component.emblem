@@ -9,7 +9,7 @@
             | XML-external-entity Injection Vulnerabilities in HTTP Body
       .columns
         .column
-          .box-desc
+          .box-desc.stat-desc
             | Found in 5 Projects
         .column.content-right
           .tag
@@ -27,7 +27,7 @@
             | XML-external-entity Injection Vulnerabilities in HTTP Body
       .columns
         .column
-          .box-desc
+          .box-desc.stat-desc
             | Found in 5 Projects
         .column.content-right
           .tag
@@ -43,7 +43,7 @@
             | XML-external-entity Injection Vulnerabilities in HTTP Body
       .columns
         .column
-          .box-desc
+          .box-desc.stat-desc
             | Found in 5 Projects
         .column.content-right
           .tag
@@ -57,7 +57,7 @@
             | XML-external-entity Injection Vulnerabilities in HTTP Body
       .columns
         .column
-          .box-desc
+          .box-desc.stat-desc
             | Found in 5 Projects
         .column.content-right
           .tag
@@ -75,7 +75,7 @@
             | XML-external-entity Injection Vulnerabilities in HTTP Body
       .columns
         .column
-          .box-desc
+          .box-desc.stat-desc
             | Found in 10 Projects
         .column.content-right
           .tag

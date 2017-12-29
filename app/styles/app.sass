@@ -1354,18 +1354,20 @@ select:disabled
 .risk-status-box
   width: 270px
   margin: 30px auto 10px auto
-  height: 140px
+  height: 120px
+  .columns
+    h5
+      border-bottom: 2px solid $critical
 
 .user-info-box
   font-size: 13px
-  height: 140px
+  height: 120px
   width: 270px
-  margin: 50px auto 10px auto
+  margin: 70px auto 10px auto
   .columns
-    border-bottom: 1px solid #ccc
-  .columns:nth-child(2)
-    margin-top: 0px
-  .columns:nth-child(3)
+    h5
+      border-bottom: 2px solid $critical
+  .columns:last-child
     border-width: 0px
     margin-top: 0px
 
@@ -1468,6 +1470,8 @@ select:disabled
     font-size: 12px
   .box-desc
     font-size: 12px
+  .stat-desc
+    margin-top: 5px
   .content-right
     .tag
       margin-top: 3px
