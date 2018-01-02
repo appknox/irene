@@ -1,4 +1,4 @@
-`import ENV from 'irene/config/environment';`
+`import ENV from 'irene/config/environment'`
 
 installInspectlet = () ->
   if !ENV.enableInspectlet

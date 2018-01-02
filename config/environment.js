@@ -60,6 +60,7 @@ module.exports = function(environment) {
     enableIntercom: true,
     enablePendo: true,
     enableInspectlet: true,
+    enableCSB: true,
 
     notifications: {
       autoClear: true,
@@ -194,6 +195,7 @@ module.exports = function(environment) {
     ENV.enableIntercom = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
+    ENV.enableCSB = false;
   }
 
   if (environment === 'mirage') {
@@ -205,6 +207,7 @@ module.exports = function(environment) {
     ENV.enableIntercom = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
+    ENV.enableCSB = false;
     ENV['APP'].opbeat = {
         DEBUG: true
     };
@@ -217,6 +220,7 @@ module.exports = function(environment) {
     ENV.enableIntercom = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
+    ENV.enableCSB = false;
   }
 
   if (environment === 'testing') {
@@ -228,6 +232,7 @@ module.exports = function(environment) {
     ENV.enableIntercom = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
+    ENV.enableCSB = false;
     ENV['APP'].opbeat = {
         DEBUG: true
     };
@@ -256,6 +261,7 @@ module.exports = function(environment) {
     ENV.socketPath = "https://socket.appknox.com";
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
+    ENV.enableCSB = false;
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
