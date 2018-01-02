@@ -213,6 +213,12 @@ module.exports = function(environment) {
     };
   }
 
+  if (environment === 'whitelabel') {
+    ENV.enableIntercom = false;
+    ENV.enablePendo = false;
+    ENV.enableInspectlet = false;
+  }
+
   if (environment === 'testing') {
     ENV.socketPath = "https://socket.appknox.com";
     ENV['ember-cli-mirage'] = {
@@ -245,7 +251,6 @@ module.exports = function(environment) {
         orgId: '1ff25e9c6a1d40bbad1293635d201fcb'
       };
   }
-
 
   if (environment === 'staging') {
     ENV.socketPath = "https://socket.appknox.com";
