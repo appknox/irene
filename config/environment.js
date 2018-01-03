@@ -158,11 +158,7 @@ module.exports = function(environment) {
     },
     csb: {
       feature: {
-        runAPIScan: "API Scan",
-        runDynamicScan: "Dynamic Scan",
-        requestManualScan: "Manual Scan",
         applicationUpload: "Application Upload",
-        reportDownload: "Report Download",
         addAPIEndpoints: "Add API Endpoints",
         namespaceAdded: "Namespace Add",
         changePassword: "Change Password",
@@ -181,6 +177,21 @@ module.exports = function(environment) {
       reportDownload: {
         feature: "Account Settings",
         module: "Setup",
+        product: "Appknox"
+      },
+      runDynamicScan: {
+        feature: "Dynamic Scan",
+        module: "Security",
+        product: "Appknox"
+      },
+      runAPIScan: {
+        feature: "API Scan",
+        module: "Security",
+        product: "Appknox"
+      },
+      requestManualScan: {
+        feature: "Manual Scan",
+        module: "Security",
         product: "Appknox"
       }
     }
