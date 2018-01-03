@@ -177,6 +177,11 @@ module.exports = function(environment) {
       },
       product: {
         appknox: "Appknox"
+      },
+      reportDownload: {
+        feature: "Account Settings",
+        module: "Setup",
+        product: "Appknox"
       }
     }
   };

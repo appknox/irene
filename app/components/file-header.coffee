@@ -33,6 +33,12 @@ FileHeaderComponent = Ember.Component.extend
       e.clearSelection()
     clipboard.on 'error', ->
       that.get("notify").error tPleaseTryAgain
+    @globalEvents.on('map:csbFeature', @ , 'csbFeature')
+
+  csbFeature: (data) ->
+    try
+      analytics.feature(data)
+    catch error
 
   willDestroyElement: ->
     clipboard = @get "clipboard"
@@ -40,7 +46,7 @@ FileHeaderComponent = Ember.Component.extend
 
   actions:
     getPDFReportLink: ->
-      analytics.feature(ENV.csb.feature.reportDownload, ENV.csb.module.report, ENV.csb.product.appknox)
+      @globalEvents.trigger 'map:csbFeature', ENV.csb.reportDownload
       tReportIsGettingGenerated = @get "tReportIsGettingGenerated"
       that = @
       fileId = @get "file.id"

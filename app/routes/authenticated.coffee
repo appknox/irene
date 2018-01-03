@@ -131,7 +131,9 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
         analytics.feature(csbDict.feature, csbDict.module, ENV.csb.product.appknox)
 
     invalidateSession: ->
-      analytics.logout()
+      try
+        analytics.logout()
+      catch error
       @get('session').invalidate()
 
     giveFeeback: ->
