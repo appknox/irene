@@ -3,27 +3,6 @@
     = chart-component
   .column.is-one-third
     .columns
-      .box.user-info-box
-        .columns
-          .column
-            h5
-              | User Info
-        .columns
-          .column
-            h6
-              | User
-          .column
-            h6
-              | #{model.username}
-        .columns
-          .column
-            h6
-              | Project Count
-          .column
-            h6
-              | #{model.totalProjects}
-
-    .columns
       .column
         .box.risk-status-box
           .columns

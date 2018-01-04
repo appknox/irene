@@ -2,20 +2,6 @@ if user.hasProject
   .column
     .box-container.home-page.all-inputs
       .columns
-        if env.isAppknox
-          .column
-            = t "newScan"
-            .margin-top
-              label.button.is-primary.is-fullwidth.ac-upload-app.highlighted-button
-                = upload-app delegate=this class="mp-upload-app"
-                = fa-icon "upload"
-                | &nbsp;
-                if isUploading
-                  | #{t "uploading"} :
-                  = progress
-                  | %
-                else
-                  = t "uploadApp"
         .column
           = t "search"
           .margin-top

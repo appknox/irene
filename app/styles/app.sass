@@ -16,6 +16,9 @@ body
 .margin-top30
   margin-top: 30px
 
+.margin-top50
+  margin-top: 50px
+
 .margin-top
   margin-top: 10px
 
@@ -136,8 +139,30 @@ input
   display: block
 
 .top-nav
+  width: 100%
+  margin-top: -10px
   height: 50px
-  background-color: #f0f0f0
+  background-color: #424651
+  margin-left: 0px
+  border-left: 1px solid #ccc
+  position: fixed
+  z-index: 100
+  .scan-text
+    font-weight: lighter
+    margin-top: 5px
+    margin-left: 20px
+    color: #FFF
+  .highlighted-button
+    margin-left: -120px
+  .top-icons
+    margin-top: 5px
+    margin-right: -30px
+    a
+      color: #fff
+      margin: 10px 10px
+      .sidebar-icons
+        margin-top: 1px
+
 
 canvas.other-devices
   margin-top: 30px
@@ -1353,7 +1378,7 @@ select:disabled
 
 .risk-status-box
   width: 270px
-  margin: 30px auto 10px auto
+  margin: 100px auto 10px auto
   height: 140px
   .columns
     h5
@@ -1361,23 +1386,40 @@ select:disabled
     &:last-child
       margin-top: 0px
 
-.user-info-box
-  font-size: 13px
-  height: 140px
-  width: 270px
-  margin: 50px auto 10px auto
-  .columns
-    h5
-      border-bottom: 2px solid $critical
-  .columns:nth-child(2)
-    margin-top: 0px  
-  .columns:last-child
-    border-width: 0px
-    margin-top: 0px
-
 .stat-heading
   text-align: center
   margin-top: 10px
+
+.user-info-popover
+  background-color: #424651
+  margin-left: -220px
+  width: 200px
+  padding-top: 10px
+  padding-bottom: 10px
+  margin-top: -15px
+  border-radius: 5px
+  box-shadow: 0px 0px 10px #ccc
+  .user-name
+    color: #FFF
+    font-size: 16px
+    text-align: center
+    border-bottom: 1px solid #CCC
+    padding-bottom: 10px
+  .user-email
+    padding-bottom: 10px
+    margin: 10px 0px 10px 0px
+    color: #FFF
+    font-size: 11px
+    text-align: center
+    border-bottom: 1px solid #CCC
+  a
+    font-size: 12px
+    margin-left: 130px
+    color: #FFF
+    i
+      font-size: 16px
+      margin-top: 2px
+      margin-right: 5px
 
 .menu-label
   text-align: center

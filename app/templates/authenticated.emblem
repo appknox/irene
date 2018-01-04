@@ -20,22 +20,53 @@
           = link-to 'authenticated.settings' class="mp-auth-settings"
             = fa-icon "cog" class="sidebar-icons"
             = t "settings"
-        li
-          a href='' id='intercom_support' class="mp-auth-support"
-            = fa-icon "support" class="sidebar-icons"
-            = t "support"
+
         if model.ifBillingIsNotHidden
           li
             = link-to 'authenticated.billing' class="mp-auth-billing"
               = fa-icon "tag" class="sidebar-icons"
               = t "billing"
-        li
-          a click="invalidateSession" class="mp-auth-logout"
-            = fa-icon "power-off" class="sidebar-icons"
-            = t "logout"
 
       .status-updates
         = submission-list
 
   .column.margin-right.margin-top
-    = outlet
+    .columns
+      .column.top-nav
+        .columns
+          / if env.isAppknox
+          .column
+            .columns
+              .column.scan-text.is-one-quarter
+                | Start a new scan
+              .column
+                label.button.is-primary.ac-upload-app.highlighted-button
+                  = upload-app delegate=this class="mp-upload-app"
+                  = fa-icon "upload"
+                  | &nbsp;
+                  if isUploading
+                    | #{t "uploading"} :
+                    = progress
+                    | %
+                  else
+                    = t "uploadApp"
+          .column.is-one-third.top-icons
+            a href='' id='intercom_support' class="mp-auth-support"
+              = fa-icon "support" class="sidebar-icons"
+              = t "support"
+
+            a
+              = fa-icon "user" class="sidebar-icons"
+              = model.username
+            = attach-popover interactive=true placement="bottom" showOn="click" hideOn="clickout"
+              .user-info-popover
+                .user-name
+                  = model.username
+                .user-email
+                  = model.email
+                a click="invalidateSession" class="mp-auth-logout"
+                  = fa-icon "power-off" class="sidebar-icons"
+                  = t "logout"
+
+    .margin-top50
+      = outlet
