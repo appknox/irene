@@ -1,7 +1,8 @@
 `import Ember from 'ember'`
-`import ENV from 'irene/config/environment';`
-`import ENUMS from 'irene/enums';`
+`import ENV from 'irene/config/environment'`
+`import ENUMS from 'irene/enums'`
 `import { translationMacro as t } from 'ember-i18n'`
+`import csbFeature from 'irene/utils/csb-feature'`
 
 FileHeaderComponent = Ember.Component.extend
 
@@ -40,8 +41,7 @@ FileHeaderComponent = Ember.Component.extend
 
   actions:
     getPDFReportLink: ->
-      file = @get "file"
-      file.csbFeature(ENV.csb.reportDownload)
+      csbFeature(ENV.csb.reportDownload)
       tReportIsGettingGenerated = @get "tReportIsGettingGenerated"
       that = @
       fileId = @get "file.id"
@@ -82,16 +82,13 @@ FileHeaderComponent = Ember.Component.extend
         for error in error.errors
           that.get("notify").error error.detail?.message
 
-
     doNotRunAPIScan: ->
-      file = @get "file"
-      file.csbFeature(ENV.csb.runDynamicScan)
+      csbFeature(ENV.csb.runDynamicScan)
       @set "isApiScanEnabled", false
       @send "setAPIScanOption"
 
     runAPIScan: ->
-      file = @get "file"
-      file.csbFeature(ENV.csb.runAPIScan)
+      csbFeature(ENV.csb.runAPIScan)
       @set "isApiScanEnabled", true
       @send "setAPIScanOption"
 
@@ -108,8 +105,7 @@ FileHeaderComponent = Ember.Component.extend
 
 
     requestManual: ->
-      file = @get "file"
-      file.csbFeature(ENV.csb.requestManualScan)
+      csbFeature(ENV.csb.requestManualScan)
       tManualRequested = @get "tManualRequested"
       that = @
       file_id = @get "file.id"

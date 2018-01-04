@@ -53,11 +53,6 @@ File = DS.Model.extend BaseModelMixin,
       return true
     false
 
-  csbFeature: (data) ->
-    try
-      analytics.feature(data)
-    catch error
-
   isStaticCompleted: (->
     isStaticDone = @get "isStaticDone"
     @scanProgressClass isStaticDone
