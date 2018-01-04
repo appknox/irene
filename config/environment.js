@@ -157,61 +157,17 @@ module.exports = function(environment) {
       setUnknownAnalysisStatus: "set_unknown_analysis_status"
     },
     csb: {
-      reportDownload: {
-        feature: "Account Settings",
-        module: "Setup",
-        product: "Appknox"
-      },
-      runDynamicScan: {
-        feature: "Dynamic Scan",
-        module: "Security",
-        product: "Appknox"
-      },
-      runAPIScan: {
-        feature: "API Scan",
-        module: "Security",
-        product: "Appknox"
-      },
-      requestManualScan: {
-        feature: "Manual Scan",
-        module: "Security",
-        product: "Appknox"
-      },
-      addAPIEndpoints: {
-        feature: "Add API Endpoints",
-        module: "Security",
-        product: "Appknox"
-      },
-      createTeam: {
-        feature: "Create Team",
-        module: "Security",
-        product: "Appknox"
-      },
-      namespaceAdded: {
-        feature: "Namespace Add",
-        module: "Security",
-        product: "Appknox"
-      },
-      applicationUpload: {
-        feature: "Application Upload",
-        module: "Security",
-        product: "Appknox"
-      },
-      integrateGithub: {
-        feature: "Integrate Github",
-        module: "Report",
-        product: "Appknox"
-      },
-      integrateJIRA: {
-        feature: "Integrate JIRA",
-        module: "Report",
-        product: "Appknox"
-      },
-      changePassword: {
-        feature: "Change Password",
-        module: "Setup",
-        product: "Appknox"
-      }
+      reportDownload: { feature: "Account Settings", module: "Setup", product: "Appknox" },
+      runDynamicScan: { feature: "Dynamic Scan", module: "Security", product: "Appknox" },
+      runAPIScan: { feature: "API Scan", module: "Security", product: "Appknox" },
+      requestManualScan: { feature: "Manual Scan", module: "Security", product: "Appknox" },
+      addAPIEndpoints: { feature: "Add API Endpoints", module: "Security", product: "Appknox" },
+      createTeam: { feature: "Create Team", module: "Security", product: "Appknox" },
+      namespaceAdded: { feature: "Namespace Add", module: "Security", product: "Appknox" },
+      applicationUpload: { feature: "Application Upload", module: "Security", product: "Appknox" },
+      integrateGithub: { feature: "Integrate Github", module: "Report", product: "Appknox" },
+      integrateJIRA: { feature: "Integrate JIRA", module: "Report", product: "Appknox" },
+      changePassword: { feature: "Change Password", module: "Setup", product: "Appknox" }
     }
   };
 
