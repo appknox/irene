@@ -3,17 +3,18 @@ h3.has-text-centered.signin-text.margin-top20
 = auth-assets
   .column.flex-center
     form.login-form
-      p.control.has-icon.has-icon-left
-        = input class="input" placeholder=(t 'username') value=identification id="username" autofocus="autofocus"
-        = fa-icon class="is-primary" "user"
+      if MFAEnabled
+        p.control.has-icon.has-icon-left
+          = input class="input" type="text" placeholder="OTP" value=otp id="otp"
+          = fa-icon class="is-primary" "key"
+      else
+        p.control.has-icon.has-icon-left
+          = input class="input" placeholder=(t 'username') value=identification id="username" autofocus="autofocus"
+          = fa-icon class="is-primary" "user"
 
-      p.control.has-icon.has-icon-left
-        = input class="input" type="password" placeholder=(t 'password') value=password id="password"
-        = fa-icon class="is-primary" "lock"
-
-      p.control.has-icon.has-icon-left class=MFAEnabled:show:hide
-        = input class="input" type="text" placeholder="OTP" value=otp id="otp"
-        = fa-icon class="is-primary" "key"
+        p.control.has-icon.has-icon-left
+          = input class="input" type="password" placeholder=(t 'password') value=password id="password"
+          = fa-icon class="is-primary" "lock"
 
       = link-to 'recover'
         p.has-text-right.forgot-password
