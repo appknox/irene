@@ -7,6 +7,13 @@
         .columns
           .column
             h5
+              | User Info
+        .columns
+          .column
+            h6
+              | User
+          .column
+            h6
               | #{model.username}
         .columns
           .column

@@ -1354,19 +1354,23 @@ select:disabled
 .risk-status-box
   width: 270px
   margin: 30px auto 10px auto
-  height: 120px
+  height: 140px
   .columns
     h5
       border-bottom: 2px solid $critical
+    &:last-child
+      margin-top: 0px
 
 .user-info-box
   font-size: 13px
-  height: 120px
+  height: 140px
   width: 270px
-  margin: 70px auto 10px auto
+  margin: 50px auto 10px auto
   .columns
     h5
       border-bottom: 2px solid $critical
+  .columns:nth-child(2)
+    margin-top: 0px  
   .columns:last-child
     border-width: 0px
     margin-top: 0px
