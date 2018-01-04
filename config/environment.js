@@ -157,23 +157,6 @@ module.exports = function(environment) {
       setUnknownAnalysisStatus: "set_unknown_analysis_status"
     },
     csb: {
-      feature: {
-        applicationUpload: "Application Upload",
-        addAPIEndpoints: "Add API Endpoints",
-        namespaceAdded: "Namespace Add",
-        changePassword: "Change Password",
-        createTeam: "Create Team",
-        integrateJIRA: "Integrate JIRA",
-        integrateGithub: "Integrate Github"
-      },
-      module: {
-        security: "Security",
-        report: "Report",
-        setup: "Setup"
-      },
-      product: {
-        appknox: "Appknox"
-      },
       reportDownload: {
         feature: "Account Settings",
         module: "Setup",
@@ -192,6 +175,41 @@ module.exports = function(environment) {
       requestManualScan: {
         feature: "Manual Scan",
         module: "Security",
+        product: "Appknox"
+      },
+      addAPIEndpoints: {
+        feature: "Add API Endpoints",
+        module: "Security",
+        product: "Appknox"
+      },
+      createTeam: {
+        feature: "Create Team",
+        module: "Security",
+        product: "Appknox"
+      },
+      namespaceAdded: {
+        feature: "Namespace Add",
+        module: "Security",
+        product: "Appknox"
+      },
+      applicationUpload: {
+        feature: "Application Upload",
+        module: "Security",
+        product: "Appknox"
+      },
+      integrateGithub: {
+        feature: "Integrate Github",
+        module: "Report",
+        product: "Appknox"
+      },
+      integrateJIRA: {
+        feature: "Integrate JIRA",
+        module: "Report",
+        product: "Appknox"
+      },
+      changePassword: {
+        feature: "Change Password",
+        module: "Setup",
         product: "Appknox"
       }
     }

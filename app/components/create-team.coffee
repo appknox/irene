@@ -1,6 +1,7 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment'`
 `import { translationMacro as t } from 'ember-i18n'`
+`import csbFeature from 'irene/utils/csb-feature'`
 
 isEmpty = (inputValue)->
   return Ember.isEmpty inputValue
@@ -27,7 +28,7 @@ CreateTeamComponent = Ember.Component.extend
 
       for inputValue in [teamName]
         return @get("notify").error tEnterTeamName if isEmpty inputValue
-      analytics.feature(ENV.csb.feature.createTeam, ENV.csb.module.security, ENV.csb.product.appknox)  
+      csbFeature(ENV.csb.createTeam)
       that = @
       data =
         name: teamName

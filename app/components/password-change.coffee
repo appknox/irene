@@ -1,6 +1,7 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment';`
 `import { translationMacro as t } from 'ember-i18n'`
+`import csbFeature from 'irene/utils/csb-feature'`
 
 isValidPassword = (password)->
   return password.length > 5
@@ -38,7 +39,7 @@ PasswordChangeComponent = Ember.Component.extend
           passwordConfirm: ""
           })
         that.get("notify").success tPasswordChanged
-        analytics.feature(ENV.csb.feature.changePassword, ENV.csb.module.setup, ENV.csb.product.appknox)
+        csbFeature(ENV.csb.changePassword)
       .catch (error) ->
         that.get("notify").error error.payload.message
         for error in error.errors

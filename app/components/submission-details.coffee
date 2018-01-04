@@ -1,6 +1,7 @@
 `import Ember from 'ember'`
 `import ENUMS from 'irene/enums'`
 `import ENV from 'irene/config/environment';`
+`import csbFeature from 'irene/utils/csb-feature'`
 
 SubmissionDetailsComponent = Ember.Component.extend
   submission: null
@@ -17,7 +18,7 @@ SubmissionDetailsComponent = Ember.Component.extend
   statusObserver: Ember.observer "submission.status", ->
     status = @get "submission.status"
     if status is ENUMS.SUBMISSION_STATUS.ANALYZING
-      analytics.feature(ENV.csb.feature.applicationUpload, ENV.csb.module.security, ENV.csb.product.appknox)
+      csbFeature(ENV.csb.applicationUpload)
 
 
 `export default SubmissionDetailsComponent`
