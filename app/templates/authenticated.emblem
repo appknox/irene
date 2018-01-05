@@ -34,10 +34,9 @@
     .columns
       .column.top-nav
         .columns
-          / if env.isAppknox
-          .column
+          .column.is-one-quarter
             .columns
-              .column.scan-text.is-one-quarter
+              .column.scan-text
                 | Start a new scan
               .column
                 label.button.is-primary.ac-upload-app.highlighted-button
@@ -50,6 +49,10 @@
                     | %
                   else
                     = t "uploadApp"
+          .column
+            .project-count
+              = link-to 'authenticated.projects' class="mp-auth-settings highlighted-button"
+                | #{model.totalProjects}
           .column.is-one-third.top-icons
             a href='' id='intercom_support' class="mp-auth-support"
               = fa-icon "support" class="sidebar-icons"
