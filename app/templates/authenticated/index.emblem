@@ -21,6 +21,11 @@
                   h6
                     | #{ t model.expiryText}
                     | #{moment-from-now model.getExpiryDate}
+          .columns
+            .column.align-center
+              = link-to 'authenticated.billing' class="mp-auth-billing highlighted-button" tagName="button"
+                = fa-icon "tag" class="sidebar-icons"
+                | RENEW NOW
 
 
 .columns

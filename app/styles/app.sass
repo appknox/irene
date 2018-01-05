@@ -1386,12 +1386,14 @@ select:disabled
     background-image: linear-gradient(-180deg, lighten($critical, 0%) 0%, lighten($critical, 0%) 90%)
 
 .risk-status-box
-  width: 270px
-  margin: 100px auto 10px auto
-  height: 140px
+  width: 300px
+  margin: 120px auto 10px auto
+  height: 150px
   .columns
     h5
       border-bottom: 2px solid $critical
+    &:nth-child(2)
+      margin-top: 0px
     &:last-child
       margin-top: 0px
 

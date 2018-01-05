@@ -58,7 +58,6 @@
               a href='' id='intercom_support' class="mp-auth-support"
                 = fa-icon "support" class="sidebar-icons"
                 = t "support"
-
               a
                 = fa-icon "user" class="sidebar-icons"
                 = model.username
