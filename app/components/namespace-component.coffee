@@ -1,7 +1,7 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment';`
 `import { translationMacro as t } from 'ember-i18n'`
-`import csbFeature from 'irene/utils/csb-feature'`
+`import triggerAnalytics from 'irene/utils/trigger-analytics'`
 
 NamespaceComponentComponent = Ember.Component.extend
   i18n: Ember.inject.service()
@@ -24,7 +24,7 @@ NamespaceComponentComponent = Ember.Component.extend
         return @get("notify").error "Please enter any namespace", ENV.notifications
       data =
         namespace: namespace
-      csbFeature(ENV.csb.namespaceAdded)
+      triggerAnalytics('feature',ENV.csb.namespaceAdded)
       that = @
       @set "isAddingNamespace", true
       @get("ajax").post ENV.endpoints.namespaceAdd, data: data

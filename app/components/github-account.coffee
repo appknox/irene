@@ -1,7 +1,7 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment'`
 `import { translationMacro as t } from 'ember-i18n'`
-`import csbFeature from 'irene/utils/csb-feature'`
+`import triggerAnalytics from 'irene/utils/trigger-analytics'`
 
 GithubAccountComponent = Ember.Component.extend
 
@@ -24,7 +24,7 @@ GithubAccountComponent = Ember.Component.extend
   actions:
 
     integrateGithub: ->
-      csbFeature(ENV.csb.integrateGithub)
+      triggerAnalytics('feature',ENV.csb.integrateGithub)
       window.open(@get "user.githubRedirectUrl", '_blank');
 
     openRevokeGithubConfirmBox: ->

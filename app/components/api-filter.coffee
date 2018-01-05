@@ -1,7 +1,7 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment';`
 `import { translationMacro as t } from 'ember-i18n'`
-`import csbFeature from 'irene/utils/csb-feature'`
+`import triggerAnalytics from 'irene/utils/trigger-analytics'`
 
 isRegexFailed = (url) ->
   reg = /^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/
@@ -60,7 +60,7 @@ ApiFilterComponent = Ember.Component.extend
       apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, project_id].join '/'
       data =
         apiUrlFilters: urlString
-      csbFeature(ENV.csb.addAPIEndpoints)
+      triggerAnalytics('feature', ENV.csb.addAPIEndpoints)
       @set "isSavingFilter", true
       @get("ajax").post apiScanOptions, data: data
       .then (data)->

@@ -5,6 +5,7 @@
 `import ENUMS from 'irene/enums'`
 `import config from 'irene/config/environment';`
 `import { CSBMap } from 'irene/router'`
+`import triggerAnalytics from 'irene/utils/trigger-analytics'`
 
 location = window.location
 
@@ -30,6 +31,10 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
     @get('store').find('user', userId)
 
   afterModel: (user, transition)->
+    data =
+      userId: user.get "email"
+      accountId: user.get("email").split("@").pop().trim();
+    triggerAnalytics('login', data)
     try
       window.Intercom "boot",
         app_id: ENV.intercomAppID
@@ -52,12 +57,6 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
         name: user.get "username"
         email: user.get "email"
       Appcues.start()
-    try
-      userId = user.get "email"
-      accountId = user.get("email").split("@").pop().trim();
-    #  Temporarily don't filter out appknox.com
-    #   if accountId isnt "appknox.com"
-      analytics.login(userId,accountId)
     try
       pendo.initialize
         visitor:
@@ -131,9 +130,7 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
         analytics.feature(csbDict.feature, csbDict.module, ENV.csb.product.appknox)
 
     invalidateSession: ->
-      try
-        analytics.logout()
-      catch error
+      triggerAnalytics('logout')
       @get('session').invalidate()
 
     giveFeeback: ->

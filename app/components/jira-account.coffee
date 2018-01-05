@@ -1,7 +1,7 @@
 `import Ember from 'ember'`
 `import ENV from 'irene/config/environment'`
 `import { translationMacro as t } from 'ember-i18n'`
-`import csbFeature from 'irene/utils/csb-feature'`
+`import triggerAnalytics from 'irene/utils/trigger-analytics'`
 
 JiraAccountComponent = Ember.Component.extend
 
@@ -45,7 +45,7 @@ JiraAccountComponent = Ember.Component.extend
       @get("ajax").post ENV.endpoints.integrateJira, data: data
       .then (data)->
         that.get("notify").success tJiraIntegrated
-        csbFeature(ENV.csb.integrateJIRA)
+        triggerAnalytics('feature',ENV.csb.integrateJIRA)
       .catch (error) ->
         that.get("notify").error error.payload.message
         for error in error.errors
