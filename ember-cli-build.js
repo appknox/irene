@@ -3,7 +3,7 @@
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 var environment = EmberApp.env();
-var minifyEnabled = environment === "production" || environment === "staging";
+var minifyEnabled = environment === "production" || environment === "staging" || environment === "whitelabel";
 
 module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
@@ -21,7 +21,8 @@ module.exports = function(defaults) {
         development: '.env.staging',
         test: '.env.staging',
         production: '.env',
-        staging: '.env.staging'
+        staging: '.env.staging',
+        whitelabel: '.env'
       }
     },
     sourcemaps: {enabled: false}

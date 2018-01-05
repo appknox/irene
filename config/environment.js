@@ -265,5 +265,10 @@ module.exports = function(environment) {
     ENV.APP.rootElement = '#ember-testing';
   }
 
+  if (environment === 'whitelabel') {
+    ENV.host = process.env.IRENE_API_HOST || 'https://api.appknox.com';
+    ENV.socketPath = process.env.IRENE_API_SOCKET_PATH || 'https://socket.appknox.com';
+  }
+
   return ENV;
 };
