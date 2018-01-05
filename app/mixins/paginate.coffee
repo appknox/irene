@@ -49,6 +49,7 @@ PaginateMixin = Ember.Mixin.create
         meta.total = result.meta.pagination.count
         that.set 'isJsonApiPagination', true
       that.set "meta", meta
+      # that.set "meta", total: 200
     objects
   ).property  "version"
 
