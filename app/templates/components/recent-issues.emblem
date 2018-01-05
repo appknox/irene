@@ -8,88 +8,95 @@
           .box-heading-issues
             | XML-external-entity Injection Vulnerabilities in HTTP Body
       .columns
-        .column
+        .column.is-one-third
           .tag.is-danger
             i.fa.risk-icons.fa-warning
             | &nbsp; HIGH
         .column.content-right
           .app-name
-            | MVFA
+            = fa-icon "mobile" class="font-size-18"
+            | &nbsp; MVFA
     .box-list
       .columns
         .column
           .box-heading-issues
             | XML-external-entity Injection Vulnerabilities in HTTP Body
       .columns
-        .column
+        .column.is-one-third
           .tag.is-critical
             i.fa.risk-icons.fa-warning
             | &nbsp; CRITICAL
         .column.content-right
           .app-name
-            | DVIA
+            = fa-icon "mobile" class="font-size-18"
+            | &nbsp; DVIA
     .box-list
       .columns
         .column
           .box-heading-issues
             | XML-external-entity Injection Vulnerabilities in HTTP Body
       .columns
-        .column
+        .column.is-one-third
           .tag.is-info
             i.fa.risk-icons.fa-warning
             | &nbsp; LOW
         .column.content-right
           .app-name
-            | MVFA
+            = fa-icon "mobile" class="font-size-18"
+            | &nbsp; MVFA
     .box-list
       .columns
         .column
           .box-heading-issues
             | XML-external-entity Injection Vulnerabilities in HTTP Body
       .columns
-        .column
+        .column.is-one-third
           .tag.is-warning
             i.fa.risk-icons.fa-warning
             | &nbsp; MEDIUM
         .column.content-right
           .app-name
-            | MVFA
+            = fa-icon "mobile" class="font-size-18"
+            | &nbsp; MVFA
     .box-list
       .columns
         .column
           .box-heading-issues
             | XML-external-entity Injection Vulnerabilities in HTTP Body
       .columns
-        .column
+        .column.is-one-third
           .tag.is-danger
             i.fa.risk-icons.fa-warning
             | &nbsp; HIGH
         .column.content-right
           .app-name
-            | MVFA
+            = fa-icon "mobile" class="font-size-18"
+            | &nbsp; MVFA
     .box-list
       .columns
         .column
           .box-heading-issues
             | XML-external-entity Injection Vulnerabilities in HTTP Body
       .columns
-        .column
+        .column.is-one-third
           .tag.is-info
             i.fa.risk-icons.fa-warning
             | &nbsp; LOW
         .column.content-right
           .app-name
-            | com.narendramodiapp
+            = fa-icon "mobile" class="font-size-18"
+            | &nbsp; com.narendramodiapp
     .box-list
       .columns
         .column
           .box-heading-issues
             | XML-external-entity Injection Vulnerabilities in HTTP Body
       .columns
-        .column
+        .column.is-one-third
           .tag.is-warning
             i.fa.risk-icons.fa-warning
             | &nbsp; MEDIUM
         .column.content-right
           .app-name
-            | MVFA
+            = fa-icon "mobile" class="font-size-18"
+            | &nbsp; MVFA

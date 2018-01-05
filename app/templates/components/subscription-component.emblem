@@ -22,13 +22,15 @@
             else
               | Your free trial will be converted into paid subscription on #{subscription.expiryDateOnHumanized}
               button.is-primary.flex-center click="openCancelSubscriptionConfirmBox"
-                = t "cancelSubsciption"
+                = fa-icon "times" class="font-size-18"
+                | &nbsp; #{ t "cancelSubsciption"}
           else
             if subscription.isCancelled
               | Your subscription expires on #{subscription.expiryDateOnHumanized}
             else
               | You will be charged on #{subscription.expiryDateOnHumanized}
               button.is-primary.flex-center click="openCancelSubscriptionConfirmBox"
-                = t "cancelSubsciption"
+                = fa-icon "times" class="font-size-18"
+                | &nbsp; #{ t "cancelSubsciption"}
 
 = confirm-box isActive=showCancelSubscriptionConfirmBox title=(t 'confirmBox.cancelSubsciption') delegate=this
