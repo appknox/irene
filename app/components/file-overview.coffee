@@ -7,6 +7,7 @@ FileOverviewComponent = Ember.Component.extend
 
   chartOptions: (->
     legend: { display: false }
+    animation: {animateRotate: false}
   ).property()
 
 `export default FileOverviewComponent`

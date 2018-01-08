@@ -24,6 +24,7 @@ FileHeaderComponent = Ember.Component.extend
 
   chartOptions: (->
     legend: { display: false }
+    animation: {animateRotate: false}
   ).property()
 
   didInsertElement: ->
