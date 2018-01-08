@@ -43,20 +43,20 @@ if showVulnerability
 
           if analysis.isRisky
             if analysis.hascvccBase
-            div.margin-top.cvss-box.tooltip class=analysis.labelClass
-              h1
-                = analysis.cvssBase
-              h6
-                | CVSSv3
-              = attach-tooltip animation="fade" placement="right" hideDuration=300 interactive=true
-                ul
-                  each analysis.cvssMetricsHumanized as |metric|
-                    li
-                      = metric.key
-                      | &nbsp; : &nbsp; {{metric.value}}
-                div.read-more
-                  a href="https://help.appknox.com/using-appknox/basic-usage/vulnerability-severity" target="_blank"
-                    | read more
+              div.margin-top.cvss-box.tooltip class=analysis.labelClass
+                h1
+                  = analysis.cvssBase
+                h6
+                  | CVSSv3
+                = attach-tooltip animation="fade" placement="right" hideDuration=300 interactive=true
+                  ul
+                    each analysis.cvssMetricsHumanized as |metric|
+                      li
+                        = metric.key
+                        | &nbsp; : &nbsp; {{metric.value}}
+                  div.read-more
+                    a href="https://help.appknox.com/using-appknox/basic-usage/vulnerability-severity" target="_blank"
+                      | read more
     .columns
       .column
         if analysis.isRisky
