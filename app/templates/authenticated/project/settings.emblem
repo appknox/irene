@@ -1,9 +1,10 @@
-.margin-left.box-container
+.padding-bottom0.box-container
   .columns
-    .column.is-one-sixth
+    .column
       h4
-        =t "settings"
-    .column.is-one-sixth
+        = t "settings"
+        |  | #{model.name}
+    .column
       = link-to 'authenticated.project.files' model.id class="is-primary" tagName="button" class="mp-settings-all-scans"
         = t "allScans"
 
