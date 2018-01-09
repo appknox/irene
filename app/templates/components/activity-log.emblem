@@ -1,88 +1,20 @@
 .main-box-container
   h5.box-main-heading
     | ACTIVITY LOG
-  div.box-content
-    div.box-list
-      .columns
-        .column
-          div.box-heading
-            | Scan Completed
-        .column.is-one-third.is-one-third
-          div
-            | 16 DECEMBER
-      .columns
-        .column
-          div.box-desc
-            | Scan Completed for MVFA
-    div.box-list
-      .columns
-        .column
-          div.box-heading
-            | Team Added
-        .column.is-one-third
-          div
-            | 16 DECEMBER
-      .columns
-        .column
-          div.box-desc
-            | Team - Test was created
-    div.box-list
-      .columns
-        .column
-          div.box-heading
-            | App Uploaded
-        .column.is-one-third
-          div
-            | 16 DECEMBER
-      .columns
-        .column
-          div.box-desc
-            | New App - DVIA was uploaded successfully
-    div.box-list
-      .columns
-        .column
-          div.box-heading
-            | Team Added
-        .column.is-one-third
-          div
-            | 16 DECEMBER
-      .columns
-        .column
-          div.box-desc
-            | Team - Test was created
-    div.box-list
-      .columns
-        .column
-          div.box-heading
-            | App Uploaded
-        .column.is-one-third
-          div
-            | 16 DECEMBER
-      .columns
-        .column
-          div.box-desc
-            | New App - DVIA was uploaded successfully
-    div.box-list
-      .columns
-        .column
-          div.box-heading
-            | Team Added
-        .column.is-one-third
-          div
-            | 16 DECEMBER
-      .columns
-        .column
-          div.box-desc
-            | Team - Test was created
-    div.box-list
-      .columns
-        .column
-          div.box-heading
-            | App Uploaded
-        .column.is-one-third
-          div
-            | 16 DECEMBER
-      .columns
-        .column
-          div.box-desc
-            | New App - DVIA was uploaded successfully
+  if hasActivity
+    .box-content
+      .box-list
+        .columns
+          .column
+            .box-heading
+              | Scan Completed
+          .column.is-one-third.is-one-third
+              | 16 DECEMBER
+        .columns
+          .column
+            .box-desc
+              | Scan Completed for MVFA
+  else
+    .not-found
+      = fa-icon "exclamation-triangle"
+      | No activity found

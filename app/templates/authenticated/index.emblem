@@ -30,7 +30,7 @@
 
 .columns
   .column
-    = stat-component
+    = common-issues
   .column
     = recent-issues
   .column

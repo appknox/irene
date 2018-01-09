@@ -1,6 +1,6 @@
 .main-box-container
   h5.box-main-heading
-    | RECENTLY FIXED ISSUES
+    | MOST COMMON ISSUES
   if hasIssues
     .box-content
       .box-list
@@ -9,15 +9,19 @@
             .box-heading-issues
               | XML-external-entity Injection Vulnerabilities in HTTP Body
         .columns
-          .column.is-one-third
-            .tag.is-danger
-              i.fa.risk-icons.fa-warning
-              | &nbsp; HIGH
+          .column
+            .box-desc.stat-desc
+              | Found in 5 Projects
           .column.content-right
-            .app-name
-              = fa-icon "mobile" class="font-size-18"
-              | &nbsp; MVFA
+            .tag
+              | Static
+            .tag
+              | Dynamic
+            .tag
+              | M1
+            .tag
+              | M2
   else
     .not-found
       = fa-icon "exclamation-triangle"
-      | No issues found        
+      | No issues found          
