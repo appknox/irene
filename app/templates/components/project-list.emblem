@@ -36,11 +36,11 @@ if user.hasProject
 else
   .column.is-fullwidth.no-project-container
     .no-project
-      h3.capitalize-text
+      h4.capitalize-text
         | #{t "noProject"}!!
-      h4
-        = t "noProjectUploaded"
       h5
+        = t "noProjectUploaded"
+      h6
         | #{t "uploadNewProject"}:
       span
         label.button.is-primary.ac-upload-app-first.highlighted-button
