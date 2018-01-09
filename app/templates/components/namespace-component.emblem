@@ -4,7 +4,8 @@ if user.hasNamespace
       = item
 else
   h5
-    = t "noNamespace"
+    = fa-icon "exclamation-triangle"
+    | &nbsp;no namespace
 button.is-primary.margin-top.mp-namespace-modal click="toggleNamespaceModal"
   | + #{t "addNamespace"}
 
