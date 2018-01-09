@@ -1,6 +1,6 @@
 `import Ember from 'ember'`
 
-ChartComponentComponent = Ember.Component.extend
+OverallReportComponent = Ember.Component.extend
 
   stat: (->
     @get('store').find 'stat', 1
@@ -39,4 +39,4 @@ ChartComponentComponent = Ember.Component.extend
     } ]
   ).property "stat.totalCritical", "stat.totalHigh", "stat.totalMedium", "stat.totalLow"
 
-`export default ChartComponentComponent`
+`export default OverallReportComponent`

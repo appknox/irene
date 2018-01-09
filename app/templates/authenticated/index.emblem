@@ -1,6 +1,6 @@
 .columns.box-container.home-page
   .column
-    = chart-component
+    = overall-report
   .column.is-one-third
     .columns
       .column
