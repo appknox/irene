@@ -32,7 +32,8 @@ if showVulnerability
         div
           div class=analysis.labelClass
             i.fa.risk-icons class=analysis.iconClass
-            | &nbsp;{{analysis.riskText}}
+            .uppercase-text
+              | &nbsp;{{analysis.riskText}}
 
           if analysis.isRisky
             if analysis.hascvccBase
