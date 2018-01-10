@@ -22,6 +22,20 @@
           .columns
             .column
               h5
+                | Overall Count
+          .columns
+            .column
+              | Total Project Count
+            .column.is-one-third
+              = model.projectCount
+          .columns
+            .column
+              | Total Scan Count
+            .column.is-one-third
+              | 2
+          .columns
+            .column
+              h5
                 | Subscription
           .columns
             if model.limitedScans
@@ -36,13 +50,13 @@
                     | #{ t model.expiryText}
                     | #{moment-from-now model.getExpiryDate}
           .columns
-            .column.align-center
-              = link-to 'authenticated.billing' class="mp-auth-billing highlighted-button" tagName="button"
+            .column.align-center.card-button
+              = link-to 'authenticated.billing' class="mp-auth-billing" tagName="button"
                 = fa-icon "tag" class="sidebar-icons"
-                | RENEW NOW
+                | UPGRADE PLAN
 
 if model.hasProject
-  .columns
+  .columns.stat-container
     .column
       = common-issues
     .column

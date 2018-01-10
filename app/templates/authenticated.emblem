@@ -53,23 +53,23 @@
             .project-count
               = link-to 'authenticated.projects' class="mp-auth-settings highlighted-button"
                 | #{model.totalProjects}
-          .column
-            .top-icons
-              a href='' id='intercom_support' class="mp-auth-support"
-                = fa-icon "support" class="sidebar-icons"
-                = t "support"
-              a
-                = fa-icon "user" class="sidebar-icons"
-                = model.username
-                = attach-popover interactive=true placement="bottom"
-                  .user-info-popover
-                    .user-name
-                      = model.username
-                    .user-email
-                      = model.email
-                    a click="invalidateSession" class="mp-auth-logout highlighted-button"
-                      = fa-icon "power-off" class="sidebar-icons"
-                      = t "logout"
+          .column.content-right.top-icons
+            a href='' id='intercom_support' class="mp-auth-support"
+              = fa-icon "support" class="sidebar-icons"
+              = t "support"
+            a
+              = fa-icon "user" class="sidebar-icons"
+              | #{model.username} &nbsp;
+              = fa-icon "angle-down" class="sidebar-icons"
+              = attach-popover interactive=true placement="bottom" showOn="click"
+                .user-info-popover
+                  .user-name
+                    = model.username
+                  .user-email
+                    = model.email
+                  a click="invalidateSession" class="mp-auth-logout highlighted-button"
+                    = fa-icon "power-off" class="sidebar-icons"
+                    = t "logout"
 
     .margin-top50
       = outlet

@@ -127,11 +127,11 @@ body
   a
     padding: 5px 0px
     font-weight: lighter
-    color: #FFF
+    color: #e5e5e5
     margin-left: -40px
     &:hover
       font-weight: bolder
-      color: lighten(#FFF, 15%)
+      color: #e5e5e5
       background-color: lighten(#424651, 3%)
   a.active
     color: #FFF
@@ -168,12 +168,15 @@ input
       padding: 3px 10px
       color: #FFF
   .top-icons
-    margin-top: 5px
+    margin-right: 240px
+    margin-top: -5px
     a
-      color: #FFF
+      color: #e5e5e5
       margin: 10px 10px
       .sidebar-icons
         margin-top: 1px
+      &:hover
+        color: #FFF
 
 
 canvas.other-devices
@@ -1109,6 +1112,7 @@ button.delete-button
   .modal-card-head
     border-bottom: 0px
   .modal-card-body
+    margin: auto
     min-height: 582px
     button
       margin-top: 45px
@@ -1406,15 +1410,21 @@ select:disabled
 
 .risk-status-box
   width: 300px
-  margin: 120px auto 10px auto
-  height: 150px
+  margin: 60px auto 10px auto
   .columns
     h5
       border-bottom: 2px solid $critical
+      &:last-child
+        margin-top: 20px
+    &:first-child
+      margin-top: -40px
     &:nth-child(2)
+      margin-top: 0px
+    &:nth-child(5)
       margin-top: 0px
     &:last-child
       margin-top: 0px
+      margin-bottom: -20px
 
 .stat-heading
   text-align: center
@@ -1422,11 +1432,11 @@ select:disabled
 
 .user-info-popover
   background-color: #424651
-  margin-left: 0px
+  margin-right: 20px
   width: 200px
   padding-top: 10px
   padding-bottom: 10px
-  margin-top: 10px
+  margin-top: 0px
   border-radius: 5px
   .user-name
     color: #FFF
@@ -1632,6 +1642,18 @@ input:checked + .slider:before
 
 .slider.round:before
   border-radius: 50%
+
+.stat-container
+  margin-left: 15px
+
+.popover-box
+  background-color: #4d525f
+  max-width: 140px
+  color: #FFF
+  padding: 3px
+  border-radius: 5px
+  font-size: 12px
+  text-align: left
 
 .pagination
   i
