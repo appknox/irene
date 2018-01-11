@@ -4,6 +4,7 @@ module.exports = function(environment) {
   var ENV = {
     isDevknox: false,
     isAppknox: false,
+    isEnterprise: false,
     devknoxPrice: 9,  // This should also change in `mycroft/settings.py`
     socketPath: "http://localhost:8008",
     platform: -1,
@@ -168,7 +169,8 @@ module.exports = function(environment) {
       integrateGithub: { feature: "Integrate Github", module: "Report", product: "Appknox" },
       integrateJIRA: { feature: "Integrate JIRA", module: "Report", product: "Appknox" },
       changePassword: { feature: "Change Password", module: "Setup", product: "Appknox" }
-    }
+    },
+    whitelabel: {}
   };
 
   if (environment === 'development') {
@@ -266,6 +268,9 @@ module.exports = function(environment) {
   }
 
   if (environment === 'whitelabel') {
+    ENV.isEnterprise = true;
+    ENV.whitelabel.name = process.env.WHITELABEL_NAME;
+    ENV.whitelabel.logo = process.env.WHITELABEL_LOGO;
     ENV.host = process.env.IRENE_API_HOST || 'https://api.appknox.com';
     ENV.socketPath = process.env.IRENE_API_SOCKET_PATH || 'https://socket.appknox.com';
   }
