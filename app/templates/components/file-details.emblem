@@ -2,7 +2,7 @@
 
 .columns.margin-left
   .column
-    h4
+    h5.bold.black-text
       = t "vulnerabilityDetails"
   .column.is-one-third.content-right
     select{action 'filterVulnerabilityType' on='change'} id="filter-vulnerability-type" class="input filter-input"

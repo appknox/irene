@@ -1,7 +1,7 @@
 .padding-bottom0.box-container
   .columns
     .column
-      h4
+      h4.bold.black-text
         = t "settings"
         |  | #{model.name}
     .column

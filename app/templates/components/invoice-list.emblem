@@ -1,5 +1,5 @@
 if hasInvoices
-  h4.margin-left20
+  h4.margin-left20.bold.black-text
     = t "invoices"
 
   .invoice-list-container

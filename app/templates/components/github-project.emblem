@@ -1,8 +1,8 @@
-h5
+h5.bold.black-text
   = t "githubIntegration"
 
 if project.githubRepo
-  h5
+  h6
     = t "integratedGithub"
     code
       | &nbsp; #{project.githubRepo}
@@ -11,6 +11,8 @@ if project.githubRepo
         | &nbsp; #{t "remove"}
 
 else
+  h6
+    | Select the Github Repo where you want us to create issues for the risks we find in your project
   .columns
     .column.is-one-third
       select.select.mp-github-select-project{action 'selectRepo' on='change'}

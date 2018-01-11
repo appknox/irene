@@ -1,8 +1,8 @@
-h5
+h5.bold.black-text
   = t "jiraIntegration"
 
 if project.jiraProject
-  h5
+  h6
     = t "integratedJIRA"
     code
       | &nbsp; #{project.jiraProject}
@@ -11,6 +11,8 @@ if project.jiraProject
         | &nbsp; #{t "remove"}
 
 else
+  h6
+    | Select the JIRA account where you want us to create issues for the risks we find in your project
   .columns
     .column.is-one-third
       select.select{action 'selectProject' on='change'} class="mp-jira-select-project"

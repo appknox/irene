@@ -1,7 +1,7 @@
 .column
   .columns.margin-bottom20
     .column
-      h4
+      h5.bold.black-text
         = t "personalAccessTokens"
       h6
         = t "personalAccessTokenDesc"

@@ -1,7 +1,7 @@
 if invitations
   .columns
     .column.margin-left
-      h4
+      h4.bold.black-text
         = t "pendingInvitations"
       table.pending-invitation-table
         tr

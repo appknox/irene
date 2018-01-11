@@ -1,11 +1,10 @@
 .columns
-  .column.is-one-sixth
-    h5
-      = t "devicePreferences"
   .column
-    button.is-primary click="openProjectPreferenceModal"
-     = t "changeDevice"
+    h5.bold.black-text
+      = t "devicePreferences"
 
+h6.margin-top
+  | Select the Preferred Device Type and OS Version for Dynamic Scan
 .columns
   .column.margin-top5
     = t "selectedDevice"

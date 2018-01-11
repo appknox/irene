@@ -131,7 +131,7 @@
   header.card-header
     .column.is-one-quarter
       p.card-header-title
-        h5
+        h5.bold.black-text
           = t "scanDetails"
     .column.content-right
       .card-button

@@ -1,5 +1,5 @@
 .api-filter
-  h5
+  h5.bold.black-text
     = t "templates.apiScanURLFilter"
 
   h6

@@ -1,7 +1,7 @@
 if hasSubscription
   .box-container
     .columns.plan-durations
-      h4
+      h4.bold.black-text
         = t "activeSubscription"
     .columns.plan-list.flex-center
         = subscription-component subscription=subscription
