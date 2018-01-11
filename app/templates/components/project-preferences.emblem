@@ -5,14 +5,23 @@
 
 h6.margin-top
   | Select the Preferred Device Type and OS Version for Dynamic Scan
+table.device-table
+  tr
+    td
+      = t "selectedDevice"
+    td
+      | #{ t (device-type project.deviceType)}
+  tr
+    td
+      = t "selectedVersion"
+    td
+      | #{project.versionText}
+
 .columns
-  .column.margin-top5
-    = t "selectedDevice"
-    | : #{ t (device-type project.deviceType)}
-.columns
-  .column.margin-top5
-    = t "selectedVersion"
-    | : #{project.versionText}
+  .column.margin-top
+    button.is-primary click="openProjectPreferenceModal"
+     = t "changeDevice"
+
 
 = modal-card isActive=projectPreferenceModal title=(t "modalCard.devicePreference.title")
   .card-body.warning-modal
