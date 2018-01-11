@@ -61,7 +61,7 @@
               = fa-icon "user" class="sidebar-icons"
               | #{model.username} &nbsp;
               = fa-icon "angle-down" class="sidebar-icons"
-              = attach-popover interactive=true placement="bottom" showOn="click"
+              = attach-popover interactive=true placement="bottom" showOn="click" hideOn="clickout"
                 .user-info-popover
                   .user-name
                     = model.username

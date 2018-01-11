@@ -13,7 +13,7 @@
           .column
             = link-to 'authenticated.project.files' project.id class="is-fullwidth mp-all-scans" tagName="button"
               = fa-icon "navicon"
-              | &nbsp; #{t "allScans"}
+              | &nbsp; All Uploads
               = attach-popover placement="top"
                 .popover-box
                   | Click here to see all versions of this project
