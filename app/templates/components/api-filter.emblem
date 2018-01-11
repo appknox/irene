@@ -6,7 +6,7 @@
     | Specify the URL which you want the API Scan to be performed on
 
   .columns
-    .column.is-one-third
+    .column
       div.filter-list
         = input class="form-control input" type="text" placeholder=(t "templates.enterAPIEndpoint") value=newUrlFilter
     .column
