@@ -556,6 +556,35 @@ button, .button
       td
         padding: 7px
 
+.api-filter-table
+  width: 420px
+  margin-top: 20px
+  .edit-form-input
+    width: 80%
+    height: 25px
+  tr
+    th
+      border: none
+      font-size: 12px
+      &:last-child
+        text-align: right
+    td
+      border: none
+      background-color: #f2f2f2
+      padding-left: 20px
+      border-bottom: 1px solid #CCC
+      &:last-child
+        text-align: right
+        padding-right: 30px
+    &:last-child
+      td
+        border-bottom: none
+
+  .fa
+    font-size: 16px
+  .fa-trash-o
+    color: $critical
+
 .token-table
   .fa
     font-size: 16px
@@ -700,6 +729,13 @@ button, .button
 b.bold
   font-weight: 900
   color: black
+
+.condition-text-small
+  font-weight: 900
+  color: black
+  font-size: 12px
+  margin-left: 5px
+  margin-top: 0px
 
 .warning-modal
   width: 500px
@@ -996,9 +1032,13 @@ ul.risk-table
 
 .api-filter
   input
-    width: 25%
+    height: 35px
+    width: 70%
   .position-icons
     margin-top: 20px!important
+  button
+    margin-top: 2px
+    margin-left: -100px
 
 .api-scanning
   .api-filter

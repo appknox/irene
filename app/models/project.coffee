@@ -27,8 +27,11 @@ Project = DS.Model.extend BaseModelMixin,
 
   apiUrlFilterItems:(->
     apiUrlFilters = @get "apiUrlFilters"
-    apiUrlFilters?.split ","
+    if !Ember.isEmpty apiUrlFilters
+      apiUrlFilters?.split ","
   ).property "apiUrlFilters"
+
+  hasApiUrlFilters: Ember.computed.alias 'apiUrlFilterItems.length'
 
   tNoPreference: t("noPreference")
 
