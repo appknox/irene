@@ -1,0 +1,8 @@
+node_modules/
+scripts/
+tests/
+tmp/
+.env.deploy.*
+*.md
+*.yml
+*.txt

@@ -1,59 +1,60 @@
 .columns.columns-main-container
   .column.is-one-sixth.side-menu
-    .appknox-logo
-      = img-logo
-    aside.menu.margin-top20
-      .box
-        .align-middle
-          = t "welcome"
-          = model.username
-        .columns.margin-top20
-          .column.card.align-middle
-            | #{model.totalProjects}
+    .side-menu-container
+      .appknox-logo
+        = img-logo
+      aside.menu
+        .box
+          .align-middle
+            = t "welcome"
+            = model.username
+          .columns.margin-top20
+            .column.card.align-middle
+              | #{model.totalProjects}
 
-        /  if model.limitedScans
-        /    .column.card.align-middle
-        /      = model.scansLeft
-        /      = t "scansLeft"
+          /  if model.limitedScans
+          /    .column.card.align-middle
+          /      = model.scansLeft
+          /      = t "scansLeft"
 
-        /  else
-        /    if model.hasExpiryDate
-        /      .column.card.align-middle
-        /        | #{ t model.expiryText}
-        /        | #{moment-from-now model.getExpiryDate}
-        / .feedback-button
-        /   a click="giveFeeback"
-        /     i.fa.fa-comments
-        /     | &nbsp; Feedback
+          /  else
+          /    if model.hasExpiryDate
+          /      .column.card.align-middle
+          /        | #{ t model.expiryText}
+          /        | #{moment-from-now model.getExpiryDate}
+          / .feedback-button
+          /   a click="giveFeeback"
+          /     i.fa.fa-comments
+          /     | &nbsp; Feedback
 
-      ul.menu-list.text-center
-        li
-          = link-to 'authenticated.index' class="mp-auth-index"
-            = fa-icon "home" class="sidebar-icons"
-            = t "dashboard"
-        li
-          = link-to 'authenticated.teams' class="mp-auth-teams"
-            = fa-icon "user" class="sidebar-icons"
-            = t "teams"
-        li
-          = link-to 'authenticated.settings' class="mp-auth-settings"
-            = fa-icon "cog" class="sidebar-icons"
-            = t "settings"
-        li
-          a href='' id='intercom_support' class="mp-auth-support"
-            = fa-icon "support" class="sidebar-icons"
-            = t "support"
-        if model.ifBillingIsNotHidden
+        ul.menu-list.text-center
           li
-            = link-to 'authenticated.billing' class="mp-auth-billing"
-              = fa-icon "tag" class="sidebar-icons"
-              = t "billing"
-        li
-          a click="invalidateSession" class="mp-auth-logout"
-            = fa-icon "power-off" class="sidebar-icons"
-            = t "logout"
+            = link-to 'authenticated.index' class="mp-auth-index"
+              = fa-icon "home" class="sidebar-icons"
+              = t "dashboard"
+          li
+            = link-to 'authenticated.teams' class="mp-auth-teams"
+              = fa-icon "user" class="sidebar-icons"
+              = t "teams"
+          li
+            = link-to 'authenticated.settings' class="mp-auth-settings"
+              = fa-icon "cog" class="sidebar-icons"
+              = t "settings"
+          li
+            a href='' id='intercom_support' class="mp-auth-support"
+              = fa-icon "support" class="sidebar-icons"
+              = t "support"
+          if model.ifBillingIsNotHidden
+            li
+              = link-to 'authenticated.billing' class="mp-auth-billing"
+                = fa-icon "tag" class="sidebar-icons"
+                = t "billing"
+          li
+            a click="invalidateSession" class="mp-auth-logout"
+              = fa-icon "power-off" class="sidebar-icons"
+              = t "logout"
 
-      = submission-list
+        = submission-list
 
   .column.margin-right.margin-top
     = outlet
