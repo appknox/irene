@@ -31,6 +31,7 @@ export default function() {
   this.get('/invoices/:id', 'invoice');
   this.get('/invitations/', 'invitation');
   this.get('/subscriptions/', 'subscription');
+  this.get('/manualscans/:id', 'manualscan');
 
   this.get('/github_repos', () => {
     return {};

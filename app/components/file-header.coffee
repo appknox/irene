@@ -22,6 +22,11 @@ FileHeaderComponent = Ember.Component.extend
   isRequestingManual: false
   isStartingRescan: false
 
+  manualscan: (->
+    projectId = @get "file.project.id"
+    @get("store").findRecord "manualscan", projectId
+  ).property()
+
   didInsertElement: ->
     tPasswordCopied = @get "tPasswordCopied"
     tPleaseTryAgain = @get "tPleaseTryAgain"
