@@ -4,13 +4,13 @@ export default Factory.extend({
   companyName: faker.company.companyName,
   appName: faker.name.firstName,
   environment() {
-    return faker.random.arrayElement(["Production", "Staging"]);
+    return faker.random.arrayElement(["production", "staging"]);
   },
   loginRequired: faker.random.boolean,
   vpnRequired: faker.random.boolean,
   osVersion: faker.random.number,
   appAction() {
-    return faker.random.arrayElement(["Proceed", "Halt"]);
+    return faker.random.arrayElement(["proceed", "halt"]);
   },
   poc(){
     var item = {

@@ -292,10 +292,10 @@
     .column.is-one-third
       select.select{action 'selectEnvironment' on='change'} id="app-env"
         option selected="true" value=manualscan.environment
-          = manualscan.environment
+          | #{ t manualscan.environment}
         each filteredEnvironments as |env|
           option value=env
-              = env
+            | #{ t env}
   .columns
     .column.is-one-third
       = t "modalCard.manual.minOSVersion"
@@ -309,10 +309,10 @@
         .column
           select.select{action 'requiredAppAction' on='change'} id="required-app-action"
             option selected="true" value=manualscan.appAction
-              = manualscan.appAction
+              | #{ t manualscan.appAction}
             each filteredAddActions as |appAction|
               option value=appAction
-                = appAction
+                | #{ t appAction}
 
       .columns
         .column
@@ -327,10 +327,12 @@
       = t "modalCard.manual.loginRequired"
     .column.is-one-third
       select.select{action 'loginRequired' on='change'} id="app-login-required"
-        option value="false"
-          = t "no"
-        option value="true"
-          = t "yes"
+        option selected="true" value=manualscan.loginStatus
+          | #{ t manualscan.loginStatus}
+        each filteredLoginStatuses as |status|
+          option value=status
+            | #{ t status}
+
   if manualscan.loginRequired
     .user-roles
       h6.margin-top
@@ -415,10 +417,12 @@
         = t "modalCard.manual.vpnRequired"
       .column.is-one-third
         select.select{action 'vpnRequired' on='change'} id="vpn-required"
-          option value="false"
-           = t "no"
-          option value="true"
-           = t "yes"
+          option selected="true" value=manualscan.vpnStatus
+            | #{ t manualscan.vpnStatus}
+          each filteredVpnStatuses as |status|
+            option value=status
+              | #{ t status}
+
     if manualscan.vpnRequired
       h6.margin-top
         = t "modalCard.manual.enterVPNDetails"

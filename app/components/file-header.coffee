@@ -28,8 +28,10 @@ FileHeaderComponent = Ember.Component.extend
   showRemoveRoleConfirmBox: false
 
   userRoles: []
-  environments: ["Staging", "Production"]
-  appActions: ["Proceed", "Halt"]
+  environments: ["staging", "production"]
+  appActions: ["proceed", "halt"]
+  loginStatuses: ["yes", "no"]
+  vpnStatuses: ["yes", "no"]
 
   manualscan: (->
     projectId = @get "file.project.id"
@@ -50,6 +52,19 @@ FileHeaderComponent = Ember.Component.extend
       appAction isnt action
   ).property "appActions", "manualscan.appAction"
 
+  filteredLoginStatuses: (->
+    loginStatuses = @get "loginStatuses"
+    loginStatus = @get "manualscan.loginStatus"
+    loginStatuses.filter (status) ->
+      loginStatus isnt status
+  ).property "loginStatuses", "manualscan.loginStatus"
+
+  filteredVpnStatuses: (->
+    vpnStatuses = @get "vpnStatuses"
+    vpnStatus = @get "manualscan.vpnStatus"
+    vpnStatuses.filter (status) ->
+      vpnStatus isnt status
+  ).property "vpnStatuses", "manualscan.vpnStatus"
 
   didInsertElement: ->
     tPasswordCopied = @get "tPasswordCopied"
@@ -147,15 +162,21 @@ FileHeaderComponent = Ember.Component.extend
         @set "apiScanModal", false
 
     loginRequired: ->
-      @set "manualscan.loginRequired", JSON.parse @$('#app-login-required').val()
+      loginRequiredText = @$('#app-login-required').val()
+      @set "manualscan.loginRequired", false
+      if loginRequiredText is "yes"
+        @set "manualscan.loginRequired", true
 
     vpnRequired: ->
-      @set "manualscan.vpnRequired", JSON.parse @$('#vpn-required').val()
+      vpnRequired = @$('#vpn-required').val()
+      @set "manualscan.vpnRequired", false
+      if vpnRequired is "yes"
+        @set "manualscan.vpnRequired", true
 
     requiredAppAction: ->
       appAction = @$('#required-app-action').val()
       @set "manualscan.showProceedText", false
-      if appAction is "Proceed"
+      if appAction is "proceed"
         @set "manualscan.showProceedText", true
       @set "manualscan.appAction", appAction
 
@@ -210,10 +231,11 @@ FileHeaderComponent = Ember.Component.extend
       osVersion = @get "manualscan.osVersion"
       appAction = @get "manualscan.appAction"
 
-      loginRequired = JSON.parse @$('#app-login-required').val()
+      loginRequired =  @get "manualscan.loginRequired"
       userRoles = @get "manualscan.userRoles"
 
-      vpnRequired = JSON.parse @$('#vpn-required').val()
+      vpnRequired =  @get "manualscan.vpnRequired"
+      
       vpnAddress = @get "manualscan.vpnDetails.address"
       vpnPort = @get "manualscan.vpnDetails.port"
       vpnUsername = @get "manualscan.vpnDetails.username"
@@ -244,6 +266,7 @@ FileHeaderComponent = Ember.Component.extend
       contact =
         contact_name: pocName
         contact_email: pocEmail
+
       additionalComments = @get "additionalComments"
 
       data =
@@ -257,7 +280,7 @@ FileHeaderComponent = Ember.Component.extend
         vpn_required: vpnRequired
         vpn_details: vpnDetails
         contact: contact
-        additionalComments: additionalComments
+        additional_comments: additionalComments
 
       that = @
       projectId = @get("file.project.id")

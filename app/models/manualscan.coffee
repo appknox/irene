@@ -15,8 +15,22 @@ Manualscan = DS.Model.extend
   showProceedText: (->
     appAction = @get "appAction"
     if appAction is "Proceed"
-      true
-    false  
+      return true
+    false
   ).property "appAction"
+
+  loginStatus: (->
+    loginRequired = @get "loginRequired"
+    if @get "loginRequired"
+      return "yes"
+    "no"
+  ).property "loginRequired"
+
+  vpnStatus: (->
+    vpnRequired = @get "vpnRequired"
+    if @get "vpnRequired"
+      return "yes"
+    "no"
+  ).property "vpnRequired"
 
 `export default Manualscan`
