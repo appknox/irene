@@ -80,12 +80,6 @@ $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert),
   margin-left: 10%
 
 /* Appknox specific */
-.appknox-logo
-  margin-top: 13px
-
-.appknox-logo img
-  width: 100px
-  margin-left: auto
 
 .upper-nav
   position: relative
@@ -383,19 +377,34 @@ div[class^="_c-notification__container"]
   margin-top: 10px
 
 .side-menu
+  &-container
+    display: flex
+    flex-direction: column
+    position: fixed
+    width: inherit
+    padding-right: 8px
   .box
     background-color: #f0f0f0
     box-shadow: none
-    margin-top: 30px
   .menu
-    position: fixed
-    width: 16%
-    margin-top: 20px
     .container
       margin: 0px 5px !important
-  .appknox-logo
-    position: fixed
-    width: 16%
+
+.appknox-logo
+  margin: auto
+  margin-top: 13px
+  min-height: 38px
+  max-height: 80px
+  max-width: 100px
+  display: flex
+  align-items: center
+  justify-content: center
+  div
+    height: 100%
+  img
+    max-width: 100%
+    max-height: 80px
+    margin-left: auto
 
 .scroll-down
   width: 14%

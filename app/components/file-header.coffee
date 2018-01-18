@@ -1,7 +1,8 @@
 `import Ember from 'ember'`
-`import ENV from 'irene/config/environment';`
-`import ENUMS from 'irene/enums';`
+`import ENV from 'irene/config/environment'`
+`import ENUMS from 'irene/enums'`
 `import { translationMacro as t } from 'ember-i18n'`
+`import triggerAnalytics from 'irene/utils/trigger-analytics'`
 
 
 isEmpty = (inputValue)->
@@ -105,7 +106,7 @@ FileHeaderComponent = Ember.Component.extend
 
   actions:
     getPDFReportLink: ->
-      analytics.feature(ENV.csb.feature.reportDownload, ENV.csb.module.report, ENV.csb.product.appknox)
+      triggerAnalytics('feature', ENV.csb.reportDownload)
       tReportIsGettingGenerated = @get "tReportIsGettingGenerated"
       that = @
       fileId = @get "file.id"
@@ -147,12 +148,12 @@ FileHeaderComponent = Ember.Component.extend
           that.get("notify").error error.detail?.message
 
     doNotRunAPIScan: ->
-      analytics.feature(ENV.csb.feature.runDynamicScan, ENV.csb.module.security, ENV.csb.product.appknox)
+      triggerAnalytics('feature', ENV.csb.runDynamicScan)
       @set "isApiScanEnabled", false
       @send "setAPIScanOption"
 
     runAPIScan: ->
-      analytics.feature(ENV.csb.feature.runAPIScan, ENV.csb.module.security, ENV.csb.product.appknox)
+      triggerAnalytics('feature', ENV.csb.runAPIScan)
       @set "isApiScanEnabled", true
       @send "setAPIScanOption"
 
@@ -303,7 +304,7 @@ FileHeaderComponent = Ember.Component.extend
         that.send "requestManualScan"
 
     requestManualScan: ->
-      analytics.feature(ENV.csb.feature.requestManualScan, ENV.csb.module.security, ENV.csb.product.appknox)
+      triggerAnalytics('feature', ENV.csb.requestManualScan)
       tManualRequested = @get "tManualRequested"
       fileId = @get "file.id"
       that = @

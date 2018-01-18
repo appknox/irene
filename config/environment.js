@@ -4,6 +4,7 @@ module.exports = function(environment) {
   var ENV = {
     isDevknox: false,
     isAppknox: false,
+    isEnterprise: false,
     devknoxPrice: 9,  // This should also change in `mycroft/settings.py`
     socketPath: "http://localhost:8008",
     platform: -1,
@@ -60,6 +61,7 @@ module.exports = function(environment) {
     enableIntercom: true,
     enablePendo: true,
     enableInspectlet: true,
+    enableCSB: true,
 
     notifications: {
       autoClear: true,
@@ -157,28 +159,19 @@ module.exports = function(environment) {
       setUnknownAnalysisStatus: "set_unknown_analysis_status"
     },
     csb: {
-      feature: {
-        runAPIScan: "API Scan",
-        runDynamicScan: "Dynamic Scan",
-        requestManualScan: "Manual Scan",
-        applicationUpload: "Application Upload",
-        reportDownload: "Report Download",
-        addAPIEndpoints: "Add API Endpoints",
-        namespaceAdded: "Namespace Add",
-        changePassword: "Change Password",
-        createTeam: "Create Team",
-        integrateJIRA: "Integrate JIRA",
-        integrateGithub: "Integrate Github"
-      },
-      module: {
-        security: "Security",
-        report: "Report",
-        setup: "Setup"
-      },
-      product: {
-        appknox: "Appknox"
-      }
-    }
+      reportDownload: { feature: "Account Settings", module: "Setup", product: "Appknox" },
+      runDynamicScan: { feature: "Dynamic Scan", module: "Security", product: "Appknox" },
+      runAPIScan: { feature: "API Scan", module: "Security", product: "Appknox" },
+      requestManualScan: { feature: "Manual Scan", module: "Security", product: "Appknox" },
+      addAPIEndpoints: { feature: "Add API Endpoints", module: "Security", product: "Appknox" },
+      createTeam: { feature: "Create Team", module: "Security", product: "Appknox" },
+      namespaceAdded: { feature: "Namespace Add", module: "Security", product: "Appknox" },
+      applicationUpload: { feature: "Application Upload", module: "Security", product: "Appknox" },
+      integrateGithub: { feature: "Integrate Github", module: "Report", product: "Appknox" },
+      integrateJIRA: { feature: "Integrate JIRA", module: "Report", product: "Appknox" },
+      changePassword: { feature: "Change Password", module: "Setup", product: "Appknox" }
+    },
+    whitelabel: {}
   };
 
   if (environment === 'development') {
@@ -195,6 +188,7 @@ module.exports = function(environment) {
     ENV.enableIntercom = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
+    ENV.enableCSB = false;
   }
 
   if (environment === 'mirage') {
@@ -206,12 +200,20 @@ module.exports = function(environment) {
     ENV.enableIntercom = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
+    ENV.enableCSB = false;
     ENV['APP'].opbeat = {
         DEBUG: true
     };
     ENV.rollbar = {
       enabled: false
     };
+  }
+
+  if (environment === 'whitelabel') {
+    ENV.enableIntercom = false;
+    ENV.enablePendo = false;
+    ENV.enableInspectlet = false;
+    ENV.enableCSB = false;
   }
 
   if (environment === 'testing') {
@@ -223,6 +225,7 @@ module.exports = function(environment) {
     ENV.enableIntercom = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
+    ENV.enableCSB = false;
     ENV['APP'].opbeat = {
         DEBUG: true
     };
@@ -247,11 +250,11 @@ module.exports = function(environment) {
       };
   }
 
-
   if (environment === 'staging') {
     ENV.socketPath = "https://socket.appknox.com";
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
+    ENV.enableCSB = false;
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
@@ -263,6 +266,14 @@ module.exports = function(environment) {
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
     ENV.APP.rootElement = '#ember-testing';
+  }
+
+  if (environment === 'whitelabel') {
+    ENV.isEnterprise = true;
+    ENV.whitelabel.name = process.env.WHITELABEL_NAME;
+    ENV.whitelabel.logo = process.env.WHITELABEL_LOGO;
+    ENV.host = process.env.IRENE_API_HOST || 'https://api.appknox.com';
+    ENV.socketPath = process.env.IRENE_API_SOCKET_PATH || 'https://socket.appknox.com';
   }
 
   return ENV;
