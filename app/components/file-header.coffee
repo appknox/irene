@@ -240,7 +240,6 @@ FileHeaderComponent = Ember.Component.extend
 
       that = @
       projectId = @get("file.project.id")
-      debugger
       url = [ENV.endpoints.manualScanForm, projectId].join '/'
       @get("ajax").post url
       .then (result) ->
