@@ -209,20 +209,41 @@ FileHeaderComponent = Ember.Component.extend
       environment =  @$('#app-env').val()
       osVersion = @get "manualscan.osVersion"
       appAction = @get "manualscan.appAction"
+
       loginRequired = JSON.parse @$('#app-login-required').val()
       userRoles = @get "manualscan.userRoles"
 
       vpnRequired = JSON.parse @$('#vpn-required').val()
+      vpnAddress = @get "manualscan.vpnDetails.address"
+      vpnPort = @get "manualscan.vpnDetails.port"
+      vpnUsername = @get "manualscan.vpnDetails.username"
+      vpnPassword = @get "manualscan.vpnDetails.password"
+
+      pocName = @get "manualscan.poc.name"
+      pocEmail = @get "manualscan.poc.email"
+
+      for inputValue in [osVersion]
+        return @get("notify").error "Please enter the OS version" if isEmpty inputValue
+
+      if loginRequired
+        return @get("notify").error "Please enter user roles" if isEmpty userRoles
+
+      if vpnRequired
+        for inputValue in [vpnAddress, vpnPort]
+          return @get("notify").error "Please enter VPN details" if isEmpty inputValue
+
+      for inputValue in [pocName, pocEmail]
+        return @get("notify").error "Please enter point of contact details" if isEmpty inputValue
 
       vpnDetails =
-        address: @get "manualscan.vpnDetails.address"
-        port: @get "manualscan.vpnDetails.port"
-        username: @get "manualscan.vpnDetails.username"
-        password: @get "manualscan.vpnDetails.password"
+        address: vpnAddress
+        port: vpnPort
+        username: vpnUsername
+        password: vpnPassword
 
       contact =
-        contact_name: @get "manualscan.poc.name"
-        contact_email: @get "manualscan.poc.email"
+        contact_name: pocName
+        contact_email: pocEmail
       additionalComments = @get "additionalComments"
 
       data =
