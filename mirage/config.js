@@ -73,6 +73,10 @@ export default function() {
     return {};
   });
 
+  this.post('/manual_scan_form/:id', () => {
+    return {};
+  });
+
   this.post('/lang', () => {
     return {};
   });

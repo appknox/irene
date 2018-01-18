@@ -273,16 +273,184 @@
       button.modal-button.is-primary click="closeSubscribeModal"
         = t "no"
 
-= modal-card isActive=showManualScanModal title=(t "modalCard.manual.title")
+= modal-card isActive=showManualScanModal title=(t "modalCard.manual.title") class="manual-scan-modal"
   h5
-   = t "modalCard.manual.description"
+   | We need some additional information in order to request for a manual scan
   .columns
-    .column.is-one-sixth
-      button.modal-button.is-primary click="requestManual" disabled=isRequestingManual
-        =  t "yes"
+    .column.is-one-third
+      | Company Name
+    .column.is-one-third
+      = manualscan.companyName
+  .columns
+    .column.is-one-third
+      | App Name
+    .column.is-one-third
+      = manualscan.appName
+  .columns
+    .column.is-one-third
+      | Environment
+    .column.is-one-third
+      select.select{action 'selectEnvironment' on='change'} id="app-env"
+        option selected="true" value=manualscan.environment
+          = manualscan.environment
+        each filteredEnvironments as |env|
+          option value=env
+              = env
+  .columns
+    .column.is-one-third
+      | Min OS Version
+    .column.is-one-third
+      = input class="input" placeholder="Enter Min OS Version" type="text" value=manualscan.osVersion
+  .columns
+    .column.is-one-third
+      | What would you like us to do in case some features cannot be accessed or are not live on the application?
+    .column.is-one-third
+      .columns.no-border-column
+        .column
+          select.select{action 'requiredAppAction' on='change'} id="required-app-action"
+            option selected="true" value=manualscan.appAction
+              = manualscan.appAction
+            each filteredAddActions as |appAction|
+              option value=appAction
+                = appAction
+
+      .columns
+        .column
+          small
+            if manualscan.showProceedText
+              | Proceed with the scan & mention the features that were not scanned in the report. We will rescan it later
+            else
+              | Halt the scan, contact us & then proceed with the complete application scan.
+
+  .columns
+    .column.is-one-third
+      | Does your application require an account to login?
+    .column.is-one-third
+      select.select{action 'loginRequired' on='change'} id="app-login-required"
+        option value="false"
+         | No
+        option value="true"
+         | Yes
+  if manualscan.loginRequired
+    .user-roles
+      h6.margin-top
+        | Please enter the credentails required to login into the app
+      .columns
+        .column
+          .columns
+            .column.is-one-third
+              label
+                | Role
+              = input class="input userrole" type="name" value=newUserRole
+          form.columns
+            .column.is-one-third
+              label
+                | Username 1
+              = input class="input" type="name" value=username1 autocomplete="new-user"
+            .column.is-one-third
+              label
+                | Password 1
+              = input class="input password1" type="password" value=password1 autocomplete="new-password"
+          form.columns.no-border-column
+            .column.is-one-third
+              label
+                | Username 2
+              = input class="input username2" type="name" value=username2 autocomplete="new-user"
+            .column.is-one-third
+              label
+                | Password 2
+              = input class="input password2" type="password" value=password2 autocomplete="new-password"
+      .columns
+        .column
+          button.modal-button.is-primary click="addUserRole"
+            | ADD USER ROLE
+      if hasUserRoles
+        .columns
+          .column
+            table.user-roles-table
+              tr
+                th
+                  | USER ROLES
+                th
+                  | ACTIONS
+              each manualscan.userRoles as |role|
+                tr
+                  each role.userRole as |userRole|
+                    td
+                      .columns
+                        .column.text-centre
+                          | role: &nbsp;
+                          = userRole.role
+                      each userRole.credentail as |credentail|
+                        .columns.no-border-column
+                          .column
+                            | username: &nbsp;
+                            = credentail.username
+                          .column
+                            | password: &nbsp;
+                            = credentail.password
+                    td
+                      .tag.delete-tag.margin-top3.remove click="'openRemoveUserRoleConfirmBox' userRole.id"
+                        i.fa.risk-icons.fa-trash-o
+                          | &nbsp; #{t "remove"}
+
+  .columns
+    .column.is-one-third
+      | Point of contact for queries pertaining to manual assessment
+    .column.is-one-third
+      label
+        | Name
+      = input class="input" type="name" value=manualscan.poc.name
+      .margin-top
+      label
+        | Email
+      = input class="input" type="email" value=manualscan.poc.email
+  .manual-proxy
+    .columns
+      .column.is-one-third
+        | Is VPN/Proxy required to reach the app server from the client?
+      .column.is-one-third
+        select.select{action 'vpnRequired' on='change'} id="vpn-required"
+          option value="false"
+           | No
+          option value="true"
+           | Yes
+    if manualscan.vpnRequired
+      h6.margin-top
+        | Please Enter the VPN Address & Port
+      .columns
+        .column.is-one-third
+          label
+            | VPN Address
+          = input class="input" type="name" value=manualscan.vpnDetails.address autocomplete="new-address"
+        .column.is-one-third
+          label
+            | Port
+          = input class="input" type="name" value=manualscan.vpnDetails.port autocomplete="new-port"
+      h6
+        | If credentails are required, please enter the username & password
+      .columns
+        .column.is-one-third
+          label
+            | Username
+          = input class="input" type="name" value=manualscan.vpnDetails.username autocomplete="new-username"
+        .column.is-one-third
+          label
+            | Password
+          = input class="input" type="password" value=manualscan.vpnDetails.password autocomplete="new-password"
+
+  .columns
+    .column.is-one-third
+      | Additional comments
+    .column.is-one-third
+      = textarea class="input text-area" type="name" value=additionalComments
+  .columns
     .column
-      button.modal-button.is-primary click="closeManualScanModal"
-        = t "no"
+      button.modal-button.is-primary click="saveManualScanForm" disabled=isRequestingManual
+        | Request Manual Scan
+
+      button.modal-button.is-primary.margin-left click="closeManualScanModal"
+        | Cancel
 
 = modal-card isActive=showRescanModal title="Re-scan Static Scan"
   h5
@@ -294,3 +462,5 @@
     .column
       button.modal-button.is-primary click="closeRescanModal"
         = t "no"
+
+= confirm-box isActive=showRemoveRoleConfirmBox title="Are you sure you want to remove this role" delegate=this
