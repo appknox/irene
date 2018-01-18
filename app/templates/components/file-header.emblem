@@ -379,15 +379,19 @@
                     td
                       .columns
                         .column.text-centre.lowercase-text
-                          | #{t "role"}: &nbsp;
-                          = userRole.role
+                          .tag
+                            = userRole.role
+                      .columns.table-head
+                        .column.lowercase-text
+                          | #{t "username"}
+                        .column.lowercase-text
+                          | #{t "password"}
+
                       each userRole.credentail as |credentail|
                         .columns.no-border-column
-                          .column.lowercase-text
-                            | #{t "username"}: &nbsp;
+                          .column
                             = credentail.username
-                          .column.lowercase-text
-                            | #{t "password"}: &nbsp;
+                          .column
                             = credentail.password
                     td
                       .tag.delete-tag.margin-top3.remove click="'openRemoveUserRoleConfirmBox' userRole.id"
