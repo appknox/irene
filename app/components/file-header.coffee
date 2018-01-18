@@ -15,11 +15,17 @@ FileHeaderComponent = Ember.Component.extend
   globalAlpha:0.4
   radiusRatio:0.9
 
+  tStartingScan: t("startingScan")
   tPasswordCopied: t("passwordCopied")
   tPleaseTryAgain: t("pleaseTryAgain")
-  tReportIsGettingGenerated: t("reportIsGettingGenerated")
   tManualRequested: t("manualRequested")
-  tStartingScan: t("startingScan")
+  tRoleAdded: t("modalCard.manual.roleAdded")
+  tPleaseEnterPOC: t("modalCard.manual.pleaseEnterPOC")
+  tReportIsGettingGenerated: t("reportIsGettingGenerated")
+  tPleaseEnterAllValues: t("modalCard.manual.pleaseEnterAllValues")
+  tPleaseEnterOSVersion: t("modalCard.manual.pleaseEnterOSVersion")
+  tPleaseEnterUserRoles: t("modalCard.manual.pleaseEnterUserRoles")
+  tPleaseEnterVPNDetails: t("modalCard.manual.pleaseEnterVPNDetails")
 
   dynamicScanModal: false
   apiScanModal: false
@@ -190,8 +196,10 @@ FileHeaderComponent = Ember.Component.extend
       username2 = @get "username2"
       password1 = @get "password1"
       password2 = @get "password2"
+      tRoleAdded = @get "tRoleAdded"
+      tPleaseEnterAllValues = @get "tPleaseEnterAllValues"
       for inputValue in [newUserRole, username1, username2, password1, password2]
-        return @get("notify").error "Please enter all the values" if isEmpty inputValue
+        return @get("notify").error tPleaseEnterAllValues if isEmpty inputValue
       userRoles = @get "manualscan.userRoles"
       uniqueID = Math.random().toString(36).substr(2, 9);
       roleId = "userrole_#{uniqueID}"
@@ -215,7 +223,7 @@ FileHeaderComponent = Ember.Component.extend
       }
       userRoles.addObject(userRole)
       @set "manualscan.userRoles", userRoles
-      @get("notify").success "Role added successfully"
+      @get("notify").success tRoleAdded
       @setProperties({
         newUserRole: ""
         username1: ""
@@ -235,7 +243,7 @@ FileHeaderComponent = Ember.Component.extend
       userRoles = @get "manualscan.userRoles"
 
       vpnRequired =  @get "manualscan.vpnRequired"
-      
+
       vpnAddress = @get "manualscan.vpnDetails.address"
       vpnPort = @get "manualscan.vpnDetails.port"
       vpnUsername = @get "manualscan.vpnDetails.username"
@@ -244,18 +252,23 @@ FileHeaderComponent = Ember.Component.extend
       pocName = @get "manualscan.poc.name"
       pocEmail = @get "manualscan.poc.email"
 
+      tPleaseEnterOSVersion = @get "tPleaseEnterOSVersion"
+      tPleaseEnterUserRoles = @get "tPleaseEnterUserRoles"
+      tPleaseEnterVPNDetails = @get "tPleaseEnterVPNDetails"
+      tPleaseEnterPOC = @get "tPleaseEnterPOC"
+
       for inputValue in [osVersion]
-        return @get("notify").error "Please enter the OS version" if isEmpty inputValue
+        return @get("notify").error tPleaseEnterOSVersion if isEmpty inputValue
 
       if loginRequired
-        return @get("notify").error "Please enter user roles" if isEmpty userRoles
+        return @get("notify").error tPleaseEnterUserRoles if isEmpty userRoles
 
       if vpnRequired
         for inputValue in [vpnAddress, vpnPort]
-          return @get("notify").error "Please enter VPN details" if isEmpty inputValue
+          return @get("notify").error tPleaseEnterVPNDetails if isEmpty inputValue
 
       for inputValue in [pocName, pocEmail]
-        return @get("notify").error "Please enter point of contact details" if isEmpty inputValue
+        return @get("notify").error tPleaseEnterPOC if isEmpty inputValue
 
       vpnDetails =
         address: vpnAddress

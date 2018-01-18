@@ -370,7 +370,8 @@ export default {
       "vpnAddress": "VPN Address",
       "vpnPort": "Port",
       "enterCredentails": "If credentails are required, please enter the username & password",
-      "additionalComments": "Additional comments"
+      "additionalComments": "Additional comments",
+      "pleaseEnterAllValues": "Please enter all the values"
     }
   },
   "templates": {

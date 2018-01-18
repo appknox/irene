@@ -371,7 +371,14 @@ export default {
       "vpnAddress": "VPN Address",
       "vpnPort": "Port",
       "enterCredentails": "If credentails are required, please enter the username & password",
-      "additionalComments": "Additional comments"
+      "additionalComments": "Additional comments",
+      "pleaseEnterAllValues": "Please enter all the values",
+      "roleAdded": "Role added successfully",
+      "pleaseEnterOSVersion": "Please enter the OS version",
+      "pleaseEnterUserRoles": "Please enter user roles",
+      "pleaseEnterVPNDetails": "Please enter VPN details",
+      "pleaseEnterPOC": "Please enter point of contact details"
+
     }
   },
   "templates": {
