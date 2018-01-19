@@ -2,20 +2,19 @@ if user.hasProject
   .column
     .box-container
       .columns
-        if env.isAppknox
-          .column.is-one-sixth
-            = t "newScan"
-            .margin-top
-              label.button.is-primary.is-fullwidth.ac-upload-app
-                = upload-app delegate=this class="mp-upload-app"
-                = fa-icon "upload"
-                | &nbsp;
-                if isUploading
-                  | #{t "uploading"} :
-                  = progress
-                  | %
-                else
-                  = t "uploadApp"
+        .column.is-one-sixth
+          = t "newScan"
+          .margin-top
+            label.button.is-primary.is-fullwidth.ac-upload-app
+              = upload-app delegate=this class="mp-upload-app"
+              = fa-icon "upload"
+              | &nbsp;
+              if isUploading
+                | #{t "uploading"} :
+                = progress
+                | %
+              else
+                = t "uploadApp"
         .column
           = t "search"
           .margin-top

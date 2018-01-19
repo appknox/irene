@@ -43,17 +43,6 @@ PricingListComponent = Ember.Component.extend
     element = $(@element).find("[data-value='#{paymentDuration}']")
     @activateDuration element
 
-  devknoxPricing: (->
-    store = @get "store"
-    store.createRecord "pricing", {
-      id: "devknox",
-      name: "Devknox",
-      description: "Dashboard Upload, Manual Scan",
-      price: ENV.devknoxPrice,
-      projectsLimit: 0,
-    }
-  ).property()
-
   actions:
     selectDuration: ->
       @set "paymentDuration", $(event.srcElement).data("value")
