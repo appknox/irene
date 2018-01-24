@@ -40,7 +40,6 @@ export default Factory.extend({
       {
         "userRole": [
           {
-            "id": 1,
             "role": "admin",
             "credentail": [
               {
@@ -58,7 +57,6 @@ export default Factory.extend({
       {
         "userRole": [
           {
-            "id": 2,
             "role": "customer",
             "credentail": [
               {

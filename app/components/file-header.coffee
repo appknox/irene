@@ -34,6 +34,7 @@ FileHeaderComponent = Ember.Component.extend
   isStartingRescan: false
   showRemoveRoleConfirmBox: false
 
+  roleId: 0
   userRoles: []
   environments: ["staging", "production"]
   appActions: ["proceed", "halt"]
@@ -95,7 +96,19 @@ FileHeaderComponent = Ember.Component.extend
     @set "manualscan.userRoles", availableRoles
     @set "showRemoveRoleConfirmBox", false
 
-  availableRoles: Ember.computed.filter 'manualscan.userRoles', (userRole) ->
+  allUserRoles: (->
+    userRoles = @get "manualscan.userRoles"
+    roleId = @get "roleId"
+    that = @
+    userRoles.forEach (userRole) ->
+      role = userRole.userRole[0]
+      roleId = roleId + 1
+      role.id = roleId
+      that.set "roleId", roleId
+    userRoles
+  ).property "manualscan.userRoles"
+
+  availableRoles: Ember.computed.filter 'allUserRoles', (userRole) ->
     id = userRole.userRole[0].id
     deletedRole = @get "deletedRole"
     id isnt deletedRole
@@ -202,12 +215,12 @@ FileHeaderComponent = Ember.Component.extend
       for inputValue in [newUserRole, username1, username2, password1, password2]
         return @get("notify").error tPleaseEnterAllValues if isEmpty inputValue
       userRoles = @get "manualscan.userRoles"
-      uniqueID = Math.random().toString(36).substr(2, 9);
-      roleId = "userrole_#{uniqueID}"
+      roleId = @get "roleId"
+      roleId = roleId + 1
       userRole = {
         "userRole": [
           {
-            "id": roleId,
+            "id": roleId
             "role": newUserRole,
             "credentail": [
               {
@@ -224,6 +237,7 @@ FileHeaderComponent = Ember.Component.extend
       }
       userRoles.addObject(userRole)
       @set "manualscan.userRoles", userRoles
+      @set "roleId", roleId
       @get("notify").success tRoleAdded
       @setProperties({
         newUserRole: ""
@@ -241,10 +255,13 @@ FileHeaderComponent = Ember.Component.extend
       appAction = @get "manualscan.appAction"
 
       loginRequired =  @get "manualscan.loginRequired"
+
       userRoles = @get "manualscan.userRoles"
-
+      userRoles.forEach (userRole) ->
+        userRole.userRole.forEach (role) ->
+          delete role.id
+          
       vpnRequired =  @get "manualscan.vpnRequired"
-
       vpnAddress = @get "manualscan.vpnDetails.address"
       vpnPort = @get "manualscan.vpnDetails.port"
       vpnUsername = @get "manualscan.vpnDetails.username"
