@@ -260,7 +260,7 @@ FileHeaderComponent = Ember.Component.extend
       userRoles.forEach (userRole) ->
         userRole.userRole.forEach (role) ->
           delete role.id
-          
+
       vpnRequired =  @get "manualscan.vpnRequired"
       vpnAddress = @get "manualscan.vpnDetails.address"
       vpnPort = @get "manualscan.vpnDetails.port"
@@ -315,7 +315,7 @@ FileHeaderComponent = Ember.Component.extend
 
       that = @
       projectId = @get("file.project.id")
-      url = [ENV.endpoints.manualScanForm, projectId].join '/'
+      url = [ENV.endpoints.manualscans, projectId].join '/'
       @get("ajax").post url
       .then (result) ->
         that.send "requestManualScan"

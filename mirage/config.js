@@ -73,7 +73,7 @@ export default function() {
     return {};
   });
 
-  this.post('/manual_scan_form/:id', () => {
+  this.post('/manualscans/:id', () => {
     return {};
   });
 
