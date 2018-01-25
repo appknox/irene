@@ -2,7 +2,7 @@
   .columns
     .column
       = file-header file=file class="margin-top"
-    .column.is-one-third
+    .column.is-one-third.margin-top-10.padding-bottom0
       = vnc-viewer file=file
 
 .columns.margin-left

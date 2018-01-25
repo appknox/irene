@@ -6,21 +6,13 @@
           = link-to 'authenticated.project.settings' project.id class="is-fullwidth mp-project-setting" tagName="button"
             = fa-icon "cog"
             | &nbsp; #{t "settings"}
-            = attach-popover placement="top"
-              .popover-box
-                | Click here to change project settings
         if project.hasMultipleFiles
           .column
             = link-to 'authenticated.project.files' project.id class="is-fullwidth mp-all-scans" tagName="button"
               = fa-icon "navicon"
               | &nbsp; All Uploads
-              = attach-popover placement="top"
-                .popover-box
-                  | Click here to see all versions of this project
+
           .column
             = link-to 'authenticated.choose' project.lastFile.id class="is-fullwidth mp-file-compare" tagName="button"
               = fa-icon "exchange"
               | &nbsp; #{t "compare"}
-              = attach-popover placement="top"
-                .popover-box
-                  | Click here to compare this version with other versions of the project
