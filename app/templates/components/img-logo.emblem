@@ -3,6 +3,6 @@
     if env.isEnterprise and env.whitelabel.logo
       img src=env.whitelabel.logo alt=env.whitelabel.name
     else
-      img src="/images/logo.png"
+      img src="/images/logo-white.png"
   else
     img src="/images/devknox.png"
