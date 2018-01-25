@@ -1,4 +1,4 @@
-.card.is-fullwidth.margin-bottom20
+.card.is-fullwidth.margin-bottom40.margin-top30
   header.card-header
     a.card-header-icon
       img src=file.iconUrl alt=file.name
@@ -27,7 +27,7 @@
         li.file-hide-overflow
           | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
 
-.card.is-fullwidth.margin-bottom20.scan-status-card
+.card.is-fullwidth.margin-bottom40.scan-status-card
   .card-content
     .columns
       .column.flex-center

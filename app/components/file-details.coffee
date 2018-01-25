@@ -5,7 +5,6 @@
 
 FileDetailsComponent = Ember.Component.extend
 
-  classNames: ["column"]
   vulnerabilityType: ENUMS.VULNERABILITY_TYPE.UNKNOWN
   vulnerabilityTypes: ENUMS.VULNERABILITY_TYPE.CHOICES[0...-1]
 

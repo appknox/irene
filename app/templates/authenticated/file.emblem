@@ -1,4 +1,1 @@
-.columns
-  =file-details file=model
-  .column.is-one-third
-    =vnc-viewer file=model
+= file-details file=model
