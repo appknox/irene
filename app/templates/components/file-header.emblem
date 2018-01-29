@@ -278,11 +278,6 @@
    = t "modalCard.manual.description"
   .columns
     .column.is-one-third
-      = t "modalCard.manual.companyName"
-    .column.is-one-third
-      = manualscan.companyName
-  .columns
-    .column.is-one-third
       = t "modalCard.manual.appName"
     .column.is-one-third
       = manualscan.appName

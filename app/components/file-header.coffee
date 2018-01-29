@@ -248,7 +248,6 @@ FileHeaderComponent = Ember.Component.extend
         })
 
     saveManualScanForm: ->
-      companyName = @get "manualscan.companyName"
       appName = @get "manualscan.appName"
       environment =  @$('#app-env').val()
       osVersion = @get "manualscan.osVersion"
@@ -301,7 +300,6 @@ FileHeaderComponent = Ember.Component.extend
       additionalComments = @get "additionalComments"
 
       data =
-        company_name: companyName
         app_name: appName
         app_env: environment
         min_os_version: osVersion
