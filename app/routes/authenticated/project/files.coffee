@@ -1,10 +1,9 @@
 `import Ember from 'ember'`
-`import config from 'irene/config/environment';`
 `import ScrollTopMixin from 'irene/mixins/scroll-top'`
 
 AuthenticatedProjectFilesRoute = Ember.Route.extend ScrollTopMixin,
 
-  title: "All Files" + config.platform
+  title: "All Files | Appknox"
   model: ->
     @modelFor("authenticated.project")
 

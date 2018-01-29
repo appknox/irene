@@ -7,10 +7,7 @@
     .columns
       .column.is-half
         figure.image.login-phone-image
-          if env.isAppknox
-            img src="/images/welcome.png"
-          else
-            img src="/images/devknox.png"
+          img src="/images/welcome.png"
           img src="/images/login-phone-graphic.svg" alt="Mobile application security"
 
       = yield

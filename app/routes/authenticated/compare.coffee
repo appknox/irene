@@ -1,10 +1,9 @@
 `import Ember from 'ember'`
-`import config from 'irene/config/environment';`
 `import ScrollTopMixin from 'irene/mixins/scroll-top'`
 
 AuthenticatedCompareRoute = Ember.Route.extend ScrollTopMixin,
 
-  title: "File Compare"  + config.platform
+  title: "File Compare | Appknox"
   model: (data)->
     files = data.files.split "..."
     {
