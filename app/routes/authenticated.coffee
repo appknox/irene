@@ -53,11 +53,6 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
         "$name": user.get "username"
         "$email": user.get "email"
     try
-      Appcues.identify user.get("id"),
-        name: user.get "username"
-        email: user.get "email"
-      Appcues.start()
-    try
       pendo.initialize
         visitor:
           id: user.get("id")
