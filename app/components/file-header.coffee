@@ -254,12 +254,7 @@ FileHeaderComponent = Ember.Component.extend
       appAction = @get "manualscan.appAction"
 
       loginRequired =  @get "manualscan.loginRequired"
-
       userRoles = @get "manualscan.userRoles"
-      userRoles.forEach (userRole) ->
-        userRole.userRole.forEach (role) ->
-          delete role.id
-
       vpnRequired =  @get "manualscan.vpnRequired"
       vpnAddress = @get "manualscan.vpnDetails.address"
       vpnPort = @get "manualscan.vpnDetails.port"
