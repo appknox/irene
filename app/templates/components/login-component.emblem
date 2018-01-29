@@ -16,10 +16,9 @@ h3.has-text-centered.signin-text.margin-top20
           = input class="input" type="password" placeholder=(t 'password') value=password id="password"
           = fa-icon class="is-primary" "lock"
 
-      = link-to 'recover'
-        p.has-text-right.forgot-password
-          a.mp-recover-password
-            = t "forgotPassword"
+      .has-text-right.forgot-password
+        = link-to 'recover'
+          = t "forgotPassword"
 
       p.control.flex-center.margin-top
         button.button.is-primary.is-fullwidth.login-button.mp-login-button click="authenticate"
