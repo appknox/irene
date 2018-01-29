@@ -37,7 +37,7 @@ FileHeaderComponent = Ember.Component.extend
   roleId: 0
   userRoles: []
   environments: ["staging", "production"]
-  appActions: ["proceed", "halt"]
+  appActions: ["halt", "proceed"]
   loginStatuses: ["yes", "no"]
   vpnStatuses: ["yes", "no"]
 
@@ -101,7 +101,7 @@ FileHeaderComponent = Ember.Component.extend
     roleId = @get "roleId"
     that = @
     userRoles.forEach (userRole) ->
-      role = userRole.userRole[0]
+      role = userRole.userrole[0]
       roleId = roleId + 1
       role.id = roleId
       that.set "roleId", roleId
@@ -109,7 +109,7 @@ FileHeaderComponent = Ember.Component.extend
   ).property "manualscan.userRoles"
 
   availableRoles: Ember.computed.filter 'allUserRoles', (userRole) ->
-    id = userRole.userRole[0].id
+    id = userRole.userrole[0].id
     deletedRole = @get "deletedRole"
     id isnt deletedRole
 
@@ -218,7 +218,7 @@ FileHeaderComponent = Ember.Component.extend
       roleId = @get "roleId"
       roleId = roleId + 1
       userRole = {
-        "userRole": [
+        "userrole": [
           {
             "id": roleId
             "role": newUserRole,
@@ -235,6 +235,8 @@ FileHeaderComponent = Ember.Component.extend
           }
         ]
       }
+      if Ember.isEmpty userRoles
+        userRoles = []
       userRoles.addObject(userRole)
       @set "manualscan.userRoles", userRoles
       @set "roleId", roleId
@@ -248,21 +250,33 @@ FileHeaderComponent = Ember.Component.extend
         })
 
     saveManualScanForm: ->
-      appName = @get "manualscan.appName"
+      appName = @get "file.name"
       appEnv =  @$('#app-env').val()
-      minOsVersion = @get "manualscan.minOsVersion"
-      appAction = @get "manualscan.appAction"
+      appAction =  @$('#required-app-action').val()
+      minOsVersion = @$('#min-os-version').val()
 
       loginRequired =  @get "manualscan.loginRequired"
-      userRoles = @get "manualscan.userRoles"
-      vpnRequired =  @get "manualscan.vpnRequired"
-      vpnAddress = @get "manualscan.vpnDetails.address"
-      vpnPort = @get "manualscan.vpnDetails.port"
-      vpnUsername = @get "manualscan.vpnDetails.username"
-      vpnPassword = @get "manualscan.vpnDetails.password"
+      if !loginRequired
+        loginRequired = false
 
-      pocName = @get "manualscan.contact.name"
-      pocEmail = @get "manualscan.contact.email"
+      userRoles = @get "manualscan.userRoles"
+
+      if userRoles
+        userRoles.forEach (userRole) ->
+          userRole.userrole.forEach (role) ->
+            delete role.id
+
+      vpnRequired =  @get "manualscan.vpnRequired"
+      if !vpnRequired
+        vpnRequired = false
+
+      vpnAddress = @$('#vpn-address').val()
+      vpnPort = @$('#vpn-port').val()
+      vpnUsername = @$('#vpn-username').val()
+      vpnPassword = @$('#vpn-password').val()
+
+      contactName = @$('#contact-name').val()
+      contactEmail = @$('#contact-email').val()
 
       tPleaseEnterOSVersion = @get "tPleaseEnterOSVersion"
       tPleaseEnterUserRoles = @get "tPleaseEnterUserRoles"
@@ -279,7 +293,7 @@ FileHeaderComponent = Ember.Component.extend
         for inputValue in [vpnAddress, vpnPort]
           return @get("notify").error tPleaseEnterVPNDetails if isEmpty inputValue
 
-      for inputValue in [pocName, pocEmail]
+      for inputValue in [contactName, contactEmail]
         return @get("notify").error tPleaseEnterPOC if isEmpty inputValue
 
       vpnDetails =
@@ -289,8 +303,8 @@ FileHeaderComponent = Ember.Component.extend
         password: vpnPassword
 
       contact =
-        contact_name: pocName
-        contact_email: pocEmail
+        name: contactName
+        email: contactEmail
 
       additionalComments = @get "additionalComments"
 
@@ -298,9 +312,9 @@ FileHeaderComponent = Ember.Component.extend
         app_name: appName
         app_env: appEnv
         min_os_version: minOsVersion
-        app_scan_status: appAction
-        require_account_login: loginRequired
-        userroles: userRoles
+        app_action: appAction
+        login_required: loginRequired
+        user_roles: userRoles
         vpn_required: vpnRequired
         vpn_details: vpnDetails
         contact: contact
@@ -309,7 +323,7 @@ FileHeaderComponent = Ember.Component.extend
       that = @
       projectId = @get("file.project.id")
       url = [ENV.endpoints.manualscans, projectId].join '/'
-      @get("ajax").post url
+      @get("ajax").put url, data: JSON.stringify(data), contentType: 'application/json'
       .then (result) ->
         that.send "requestManualScan"
 

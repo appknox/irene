@@ -1,8 +1,6 @@
 `import DS from 'ember-data'`
 
 Manualscan = DS.Model.extend
-  companyName: DS.attr 'string'
-  appName: DS.attr 'string'
   appEnv: DS.attr()
   minOsVersion: DS.attr 'string'
   contact: DS.attr()
@@ -14,7 +12,7 @@ Manualscan = DS.Model.extend
 
   showProceedText: (->
     appAction = @get "appAction"
-    if appAction is "Proceed"
+    if appAction is "proceed"
       return true
     false
   ).property "appAction"

@@ -280,7 +280,7 @@
     .column.is-one-third
       = t "modalCard.manual.appName"
     .column.is-one-third
-      = manualscan.appName
+      = file.name
   .columns
     .column.is-one-third
       = t "modalCard.manual.appEnv"
@@ -296,7 +296,7 @@
     .column.is-one-third
       = t "modalCard.manual.minOSVersion"
     .column.is-one-third
-      = input class="input" placeholder=(t "modalCard.manual.minOSVersion") type="text" value=manualscan.minOsVersion
+      = input class="input" placeholder=(t "modalCard.manual.minOSVersion") type="text" value=manualscan.minOsVersion id="min-os-version"
   .columns
     .column.is-one-third
       = t "modalCard.manual.appQuestion1"
@@ -374,7 +374,7 @@
                   = t "modalCard.manual.actions"
               each allUserRoles as |role|
                 tr
-                  each role.userRole as |userRole|
+                  each role.userrole as |userRole|
                     td
                       .columns
                         .column.text-centre.lowercase-text
@@ -403,11 +403,11 @@
     .column.is-one-third
       label
         = t "name"
-      = input class="input" type="name" value=manualscan.contact.name
+      = input class="input" type="name" id="contact-name" value=manualscan.contact.name
       .margin-top
       label
         = t "email"
-      = input class="input" type="email" value=manualscan.contact.email
+      = input class="input" type="email" id="contact-email" value=manualscan.contact.email
   .manual-proxy
     .columns
       .column.is-one-third
@@ -428,22 +428,22 @@
         .column.is-one-third
           label
             = t "modalCard.manual.vpnAddress"
-          = input class="input" type="name" value=manualscan.vpnDetails.address autocomplete="new-address"
+          = input class="input" type="name" value=manualscan.vpnDetails.address id="vpn-address" autocomplete="new-address"
         .column.is-one-third
           label
             = t "modalCard.manual.vpnPort"
-          = input class="input" type="name" value=manualscan.vpnDetails.port autocomplete="new-port"
+          = input class="input" type="name" value=manualscan.vpnDetails.port id="vpn-port" autocomplete="new-port"
       h6
         = t "modalCard.manual.enterCredentails"
       .columns
         .column.is-one-third
           label
             = t "username"
-          = input class="input" type="name" value=manualscan.vpnDetails.username autocomplete="new-username"
+          = input class="input" type="name" value=manualscan.vpnDetails.username id="vpn-username" autocomplete="new-username"
         .column.is-one-third
           label
             = t "password"
-          = input class="input" type="password" value=manualscan.vpnDetails.password autocomplete="new-password"
+          = input class="input" type="password" value=manualscan.vpnDetails.password id="vpn-password" autocomplete="new-password"
 
   .columns
     .column.is-one-third
