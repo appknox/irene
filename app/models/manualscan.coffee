@@ -3,9 +3,9 @@
 Manualscan = DS.Model.extend
   companyName: DS.attr 'string'
   appName: DS.attr 'string'
-  environment: DS.attr()
-  osVersion: DS.attr 'string'
-  poc: DS.attr()
+  appEnv: DS.attr()
+  minOsVersion: DS.attr 'string'
+  contact: DS.attr()
   loginRequired: DS.attr 'boolean'
   userRoles: DS.attr()
   vpnRequired: DS.attr 'boolean'

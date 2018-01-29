@@ -285,9 +285,10 @@
     .column.is-one-third
       = t "modalCard.manual.appEnv"
     .column.is-one-third
-      select.select{action 'selectEnvironment' on='change'} id="app-env"
-        option selected="true" value=manualscan.environment
-          | #{ t manualscan.environment}
+      select.select id="app-env"
+        if manualscan.appEnv
+          option selected="true" value=manualscan.appEnv
+            | #{ t manualscan.appEnv}
         each filteredEnvironments as |env|
           option value=env
             | #{ t env}
@@ -295,7 +296,7 @@
     .column.is-one-third
       = t "modalCard.manual.minOSVersion"
     .column.is-one-third
-      = input class="input" placeholder=(t "modalCard.manual.minOSVersion") type="text" value=manualscan.osVersion
+      = input class="input" placeholder=(t "modalCard.manual.minOSVersion") type="text" value=manualscan.minOsVersion
   .columns
     .column.is-one-third
       = t "modalCard.manual.appQuestion1"
@@ -303,12 +304,12 @@
       .columns.no-border-column
         .column
           select.select{action 'requiredAppAction' on='change'} id="required-app-action"
-            option selected="true" value=manualscan.appAction
-              | #{ t manualscan.appAction}
+            if manualscan.appAction
+              option selected="true" value=manualscan.appAction
+                | #{ t manualscan.appAction}
             each filteredAddActions as |appAction|
               option value=appAction
                 | #{ t appAction}
-
       .columns
         .column
           small
@@ -322,8 +323,9 @@
       = t "modalCard.manual.loginRequired"
     .column.is-one-third
       select.select{action 'loginRequired' on='change'} id="app-login-required"
-        option selected="true" value=manualscan.loginStatus
-          | #{ t manualscan.loginStatus}
+        if manualscan.loginStatus
+          option selected="true" value=manualscan.loginStatus
+            | #{ t manualscan.loginStatus}
         each filteredLoginStatuses as |status|
           option value=status
             | #{ t status}
@@ -401,19 +403,20 @@
     .column.is-one-third
       label
         = t "name"
-      = input class="input" type="name" value=manualscan.poc.name
+      = input class="input" type="name" value=manualscan.contact.name
       .margin-top
       label
         = t "email"
-      = input class="input" type="email" value=manualscan.poc.email
+      = input class="input" type="email" value=manualscan.contact.email
   .manual-proxy
     .columns
       .column.is-one-third
         = t "modalCard.manual.vpnRequired"
       .column.is-one-third
         select.select{action 'vpnRequired' on='change'} id="vpn-required"
-          option selected="true" value=manualscan.vpnStatus
-            | #{ t manualscan.vpnStatus}
+          if manualscan.vpnStatus
+            option selected="true" value=manualscan.vpnStatus
+              | #{ t manualscan.vpnStatus}
           each filteredVpnStatuses as |status|
             option value=status
               | #{ t status}

@@ -48,10 +48,10 @@ FileHeaderComponent = Ember.Component.extend
 
   filteredEnvironments: (->
     environments = @get "environments"
-    environment = @get "manualscan.environment"
+    appEnv = @get "manualscan.appEnv"
     environments.filter (env) ->
-      environment isnt env
-  ).property "environments", "manualscan.environment"
+      appEnv isnt env
+  ).property "environments", "manualscan.appEnv"
 
   filteredAddActions: (->
     appActions = @get "appActions"
@@ -249,8 +249,8 @@ FileHeaderComponent = Ember.Component.extend
 
     saveManualScanForm: ->
       appName = @get "manualscan.appName"
-      environment =  @$('#app-env').val()
-      osVersion = @get "manualscan.osVersion"
+      appEnv =  @$('#app-env').val()
+      minOsVersion = @get "manualscan.minOsVersion"
       appAction = @get "manualscan.appAction"
 
       loginRequired =  @get "manualscan.loginRequired"
@@ -266,15 +266,15 @@ FileHeaderComponent = Ember.Component.extend
       vpnUsername = @get "manualscan.vpnDetails.username"
       vpnPassword = @get "manualscan.vpnDetails.password"
 
-      pocName = @get "manualscan.poc.name"
-      pocEmail = @get "manualscan.poc.email"
+      pocName = @get "manualscan.contact.name"
+      pocEmail = @get "manualscan.contact.email"
 
       tPleaseEnterOSVersion = @get "tPleaseEnterOSVersion"
       tPleaseEnterUserRoles = @get "tPleaseEnterUserRoles"
       tPleaseEnterVPNDetails = @get "tPleaseEnterVPNDetails"
       tPleaseEnterPOC = @get "tPleaseEnterPOC"
 
-      for inputValue in [osVersion]
+      for inputValue in [minOsVersion]
         return @get("notify").error tPleaseEnterOSVersion if isEmpty inputValue
 
       if loginRequired
@@ -301,8 +301,8 @@ FileHeaderComponent = Ember.Component.extend
 
       data =
         app_name: appName
-        app_env: environment
-        min_os_version: osVersion
+        app_env: appEnv
+        min_os_version: minOsVersion
         app_scan_status: appAction
         require_account_login: loginRequired
         userroles: userRoles
