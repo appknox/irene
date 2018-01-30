@@ -3,7 +3,7 @@
     .column
       h4.bold.black-text
         = t "settings"
-        |  | #{model.name}
+        |  | #{model.packageName}
     .column
       = link-to 'authenticated.project.files' model.id class="is-primary" tagName="button" class="mp-settings-all-scans"
         | All Uploads

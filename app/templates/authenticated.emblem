@@ -4,10 +4,10 @@
       = img-logo
 
       ul.menu-list.text-center
-        li
-          = link-to 'authenticated.index' class="mp-auth-index"
-            = fa-icon "home" class="sidebar-icons"
-            = t "dashboard"
+        / li
+        /   = link-to 'authenticated.index' class="mp-auth-index"
+        /     = fa-icon "home" class="sidebar-icons"
+        /     = t "dashboard"
         li
           = link-to 'authenticated.projects' class="mp-auth-projects"
             = fa-icon "tasks" class="sidebar-icons"

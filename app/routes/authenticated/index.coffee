@@ -7,5 +7,7 @@ IndexRoute = Ember.Route.extend ScrollTopMixin,
   title: "Home" + config.platform
   model: ->
     @modelFor("authenticated")
+  beforeModel: ->
+    @transitionTo('/projects')
 
 `export default IndexRoute`
