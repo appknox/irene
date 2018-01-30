@@ -3,7 +3,7 @@
     = t "templates.apiScanURLFilter"
 
   h6
-    | Specify the URL which you want the API Scan to be performed on
+    = t "otherTemplates.specifyTheURL"
 
   .columns
     .column
@@ -21,9 +21,9 @@ if project.hasApiUrlFilters
       table.api-filter-table
         tr
           th
-            | API URL Filter
+             = t "apiURLFilter"
           th
-            | ACTIONS
+            = t "actions"
         each project.apiUrlFilterItems as |item|
           tr
             td

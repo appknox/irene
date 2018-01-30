@@ -37,7 +37,7 @@
           .column.is-one-quarter
             .columns
               .column.scan-text
-                | Start a new scan
+                = t "startNewScan"
               .column
                 label.button.is-primary.ac-upload-app.highlighted-button
                   = upload-app delegate=this class="mp-upload-app"

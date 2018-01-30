@@ -1,9 +1,0 @@
-.columns
-  each sortedProjects as |project|
-    = project-overview project=project
-
-if viewAllProjects
-  .columns
-    .column.flex-center.margin-top20
-      = link-to 'authenticated.projects' class="mp-auth-projects is-primary highlighted-button" tagName="button"
-        | VIEW ALL PROJECTS

@@ -10,7 +10,7 @@
           .column
             = link-to 'authenticated.project.files' project.id class="is-fullwidth mp-all-scans" tagName="button"
               = fa-icon "navicon"
-              | &nbsp; All Uploads
+              | &nbsp; #{t "allUploads"}
 
           .column
             = link-to 'authenticated.choose' project.lastFile.id class="is-fullwidth mp-file-compare" tagName="button"

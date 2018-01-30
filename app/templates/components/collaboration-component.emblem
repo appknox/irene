@@ -7,7 +7,7 @@
       | + #{t "addTeam"}
 
 h6
-  | Add a team which you want to collaborate with this project
+  = t "otherTemplates.addATeam"
 
 .collaboration-container
   table.collaboration-table.margin-top

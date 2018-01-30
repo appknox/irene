@@ -6,7 +6,8 @@
         |  | #{model.packageName}
     .column
       = link-to 'authenticated.project.files' model.id class="is-primary" tagName="button" class="mp-settings-all-scans"
-        | All Uploads
+        = fa-icon "navicon"
+        | &nbsp; #{t "allUploads"}
 
 .box-container
   = project-preferences project=model

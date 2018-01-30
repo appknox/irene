@@ -4,7 +4,7 @@
       = t "devicePreferences"
 
 h6.margin-top
-  | Select the Preferred Device Type and OS Version for Dynamic Scan
+  = t "otherTemplates.selectPreferredDevice"
 table.device-table
   tr
     td

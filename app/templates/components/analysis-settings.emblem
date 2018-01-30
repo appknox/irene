@@ -2,7 +2,7 @@
   h5.bold.black-text
     = t "showUnknowAnalysis"
   h6
-    | Do you want us to show unknown analysis?
+    = t "otherTemplates.showUnknowAnalysis"
   label class="switch"
     input id="show-unkown-analysis" type="checkbox" checked=project.showUnknownAnalysis click="showUnknownAnalysis"
     span class="slider round"
