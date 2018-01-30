@@ -20,4 +20,4 @@
   else
     .not-found
       = fa-icon "exclamation-triangle"
-      | No issues found        
+      | No issues found
