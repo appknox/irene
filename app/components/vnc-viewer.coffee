@@ -12,7 +12,6 @@ VncViewerComponent = Ember.Component.extend
 
   rfb: null
   file: null
-  isPoppedOut: false
   classNameBindings: ["isPoppedOut:modal", "isPoppedOut:is-active"]
 
   vncPopText: (->

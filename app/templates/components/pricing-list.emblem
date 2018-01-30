@@ -10,7 +10,7 @@ if hasNoSubscription
   if env.isAppknox
     .box-container
       .columns.plan-durations
-        h4
+        h4.bold.black-text
           = t "plans"
         .column.flex-center.margin-left-80
           each durations as |duration|
