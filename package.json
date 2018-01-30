@@ -72,6 +72,7 @@
     "ember-lazy-image": "0.0.15",
     "ember-load-initializers": "^1.0.0",
     "ember-moment": "7.3.0",
+    "ember-netlify": "0.0.1",
     "ember-onboarding": "0.0.7",
     "ember-resolver": "^4.1.0",
     "ember-simple-auth": "1.2.2",

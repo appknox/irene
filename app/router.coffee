@@ -31,12 +31,6 @@ Router.map ->
   # 404 path -this should be at the last.
   @route 'not-found', path: '/*path'
 
-Router.reopen
-  checkForAppcues: (->
-     Ember.run.scheduleOnce 'afterRender', ->
-         Appcues.start()
-  ).on 'didTransition'
-
 CSBMap = {
   "authenticated.settings":{
     feature: "Account Settings",
