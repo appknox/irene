@@ -59,7 +59,7 @@ IreneAuthenticator = Base.extend
       .then (data) ->
         data = processData data
         resolve data
-        if 'login' in location.pathname
+        if location.pathname is '/login'
           that.resumeTransistion()
       .catch (error) ->
         localStorage.clear()
