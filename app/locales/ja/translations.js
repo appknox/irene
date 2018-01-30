@@ -10,6 +10,7 @@ export default {
   "addMember" : "メンバーを追加",
   "admin": "管理者",
   "allPlatforms": "すべてのプラットフォーム",
+  "allScans": "すべてのスキャン",
   "allUploads": "All Uploads",
   "api": "API",
   "apiScan": "API スキャン",

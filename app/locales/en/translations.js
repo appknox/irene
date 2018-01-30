@@ -9,6 +9,7 @@ export default {
   "addTeam": "Add Team",
   "addMember" : "add member",
   "allPlatforms": "All Platforms",
+  "allScans": "All Scans",
   "allUploads": "All Uploads",
   "api": "API",
   "apiScan": "API Scan",
