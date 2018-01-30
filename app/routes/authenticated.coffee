@@ -122,7 +122,7 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
       currentRoute = transition.targetName
       csbDict = CSBMap[currentRoute]
       if !Ember.isEmpty csbDict
-        analytics.feature(csbDict.feature, csbDict.module, ENV.csb.product.appknox)
+        triggerAnalytics('feature', csbDict)
 
     invalidateSession: ->
       triggerAnalytics('logout')
