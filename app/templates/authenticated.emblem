@@ -17,7 +17,7 @@
             = fa-icon "user" class="sidebar-icons"
             = t "teams"
         li
-          = link-to 'authenticated.settings' class="mp-auth-settings"
+          = link-to 'authenticated.settings' class="mp-auth-setting"
             = fa-icon "cog" class="sidebar-icons"
             = t "settings"
 
