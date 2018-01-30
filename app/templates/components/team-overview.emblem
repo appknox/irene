@@ -19,9 +19,9 @@
       .columns
         .column
           = team.owner.username
-        .column.tooltip
+        .column
           = moment-from-now team.createdOn
-          span.tooltiptext.team-tooltip
+          = attach-tooltip placement="top"
             = team.createdOnDateTime
   footer.card-button.align-center
     button.ac-delete-team click="openDeleteTeamPrompt" disabled=team.isDefaultTeam

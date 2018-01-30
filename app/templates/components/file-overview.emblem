@@ -16,10 +16,10 @@ header.card-header
 .card-content
   .content
     .columns
-      .column.flex-center.nowrap-trim.lowercase-text.tooltip
+      .column.flex-center.nowrap-trim.lowercase-text
         = t "started"
         | &nbsp; #{moment-from-now file.createdOn}
-        span.tooltiptext.tooltip-collapse
+        = attach-tooltip placement="bottom"
           = file.createdOnDateTime
       .column.flex-center.nowrap-trim
         = t "versionCode"
