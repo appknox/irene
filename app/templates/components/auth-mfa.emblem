@@ -20,9 +20,9 @@
     .card-wrapper
       p
        = t "modalCard.enableMFA.description"
-      button.is-primary.margin-top click="showBarCode"
+      button.is-primary.margin-top20 click="showBarCode"
        = t "modalCard.enableMFA.setUp"
-      p.otp-apps.margin-top
+      p.otp-apps.margin-top20
        = t "modalCard.enableMFA.downloadAppOTP"
        ul
         li
