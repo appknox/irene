@@ -9,11 +9,11 @@ h3.has-text-centered.signin-text.margin-top20
           = fa-icon class="is-primary" "key"
       else
         p.control.has-icon.has-icon-left
-          = input class="input" placeholder=(t 'username') value=identification id="username" autofocus="autofocus"
+          = input class="input" placeholder=(t 'username') value=identification id="username" autofocus="autofocus" autocomplete="username"
           = fa-icon class="is-primary" "user"
 
         p.control.has-icon.has-icon-left
-          = input class="input" type="password" placeholder=(t 'password') value=password id="password"
+          = input class="input" type="password" placeholder=(t 'password') value=password id="password" autocomplete="current-password"
           = fa-icon class="is-primary" "lock"
 
       .has-text-right.forgot-password
