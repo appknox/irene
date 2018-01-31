@@ -9,15 +9,12 @@ td
   = collaboration.team.owner.username
 
 td
-  .column
-    | #{ t collaboration.roleHumanized}
-  .column
-    select.select.mp-collaboration-role onchange={action "changeRole" value="target.value"} id="role-preference" disabled=collaboration.team.isDefaultTeam
-        option
-          = t "changeRole"
-        each roles as |role|
-          option value=role.value
-            | #{ t (role-humanized role.value)}
+  select.select.mp-collaboration-role onchange={action "changeRole" value="target.value"} id="role-preference" disabled=collaboration.team.isDefaultTeam
+      option selected="true" value=collaboration.role
+        | #{ t collaboration.roleHumanized}
+      each otherRoles as |role|
+        option value=role.value
+          | #{ t (role-humanized role.value)}
 
 td
   button.is-primary.mp-remove-collaboration.capitalize-text click="openAddCollaborationPrompt" disabled=collaboration.team.isDefaultTeam

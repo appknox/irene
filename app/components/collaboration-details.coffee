@@ -20,6 +20,13 @@ CollaborationDetailsComponent = Ember.Component.extend
   tEnterRightTeamName: t("enterRightTeamName")
   tCollaborationRemoved: t("collaborationRemoved")
 
+  otherRoles: (->
+    roles = @get "roles"
+    selectedRole = @get "collaboration.role"
+    roles.filter (role) ->
+      selectedRole isnt role.value
+  ).property "roles", "collaboration.role"
+
   promptCallback: (promptedItem) ->
     tTeam = @get "tTeam"
     collaboration = @get "collaboration"
