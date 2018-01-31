@@ -67,9 +67,10 @@
                     = model.username
                   .user-email
                     = model.email
-                  a click="invalidateSession" class="mp-auth-logout highlighted-button"
-                    = fa-icon "power-off" class="sidebar-icons"
-                    = t "logout"
+                  .content-right
+                    a click="invalidateSession" class="mp-auth-logout highlighted-button"
+                      = fa-icon "power-off" class="sidebar-icons"
+                      = t "logout"
 
     .margin-top50
       = outlet
