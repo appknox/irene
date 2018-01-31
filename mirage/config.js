@@ -135,6 +135,10 @@ export default function() {
    return;
   });
 
+  this.post('/rescan', () => {
+   return;
+  });
+
   this.post('/teams/:id', () => {
    return;
  });

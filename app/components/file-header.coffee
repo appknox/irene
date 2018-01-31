@@ -12,11 +12,12 @@ FileHeaderComponent = Ember.Component.extend
   globalAlpha:0.4
   radiusRatio:0.9
 
+  tStartingScan: t("startingScan")
   tPasswordCopied: t("passwordCopied")
   tPleaseTryAgain: t("pleaseTryAgain")
-  tReportIsGettingGenerated: t("reportIsGettingGenerated")
   tManualRequested: t("manualRequested")
-  tStartingScan: t("startingScan")
+  tRescanInitiated: t("rescanInitiated")
+  tReportIsGettingGenerated: t("reportIsGettingGenerated")
 
   dynamicScanModal: false
   apiScanModal: false
@@ -188,6 +189,7 @@ FileHeaderComponent = Ember.Component.extend
           that.get("notify").error error.detail?.message
 
     rescanApp: ->
+      tRescanInitiated = @get "tRescanInitiated"
       that = @
       fileId = @get "file.id"
       data =
@@ -196,7 +198,7 @@ FileHeaderComponent = Ember.Component.extend
       @get("ajax").post ENV.endpoints.rescan, data: data
       .then (result) ->
         that.set "isStartingRescan", false
-        that.get("notify").info "Rescan initiated"
+        that.get("notify").info tRescanInitiated
         that.set "showRescanModal", false
       .catch (error) ->
         that.set "isStartingRescan", false

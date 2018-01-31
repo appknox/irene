@@ -12,8 +12,9 @@ JiraAccountComponent = Ember.Component.extend
   jiraUsername: ""
   jiraPassword: ""
 
-  tJiraWillBeRevoked: t("jiraWillBeRevoked")
   tJiraIntegrated: t("jiraIntegrated")
+  tJiraWillBeRevoked: t("jiraWillBeRevoked")
+  tPleaseEnterAllDetails: t("pleaseEnterAllDetails")
 
 
   confirmCallback: ->
@@ -32,11 +33,12 @@ JiraAccountComponent = Ember.Component.extend
 
     integrateJira: ->
       tJiraIntegrated = @get "tJiraIntegrated"
+      tPleaseEnterAllDetails = @get "tPleaseEnterAllDetails"
       host =  @get("jiraHost").trim()
       username =  @get("jiraUsername").trim()
       password =  @get "jiraPassword"
-      if !host and !username and !password
-        return @get("notify").error "Please enter all the details", ENV.notifications
+      if !host or !username or !password
+        return @get("notify").error tPleaseEnterAllDetails, ENV.notifications
       that = @
       data =
         host: host
