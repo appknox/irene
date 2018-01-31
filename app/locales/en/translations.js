@@ -8,6 +8,7 @@ export default {
   "addNewTeam": "Add new team",
   "addTeam": "Add Team",
   "addMember" : "add member",
+  "admin": "Admin",
   "allPlatforms": "All Platforms",
   "allScans": "All Scans",
   "allUploads": "All Uploads",
