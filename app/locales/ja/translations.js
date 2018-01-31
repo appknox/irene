@@ -208,6 +208,7 @@ export default {
   "reset": "パスワードを再設定する",
   "resetPassword": "パスワードをリセット",
   "unchanged": "変わらない",
+  "undefined": "undefined",
   "unpaid": "未払い",
   "repoIntegrated": "repo 統合",
   "repoNotIntegrated": "repo が統合されていません",

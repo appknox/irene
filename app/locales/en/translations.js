@@ -208,6 +208,7 @@ export default {
   "reset": "Reset",
   "resetPassword": "Reset your password",
   "unchanged": "Unchanged",
+  "undefined": "undefined",
   "unpaid": "Unpaid",
   "repoIntegrated": "Repo successfully integrated",
   "repoNotIntegrated": "Something went wrong whe trying to update this repo",
