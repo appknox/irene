@@ -10,11 +10,24 @@ isEmpty = (inputValue)->
 
 FileHeaderComponent = Ember.Component.extend
 
-  i18n: Ember.inject.service()
-  trial: Ember.inject.service()
-
+  roleId: 0
+  userRoles: []
   globalAlpha:0.4
   radiusRatio:0.9
+
+  apiScanModal: false
+  isStartingRescan: false
+  dynamicScanModal: false
+  isRequestingManual: false
+  showRemoveRoleConfirmBox: false
+
+  vpnStatuses: ["yes", "no"]
+  loginStatuses: ["yes", "no"]
+  appActions: ["halt", "proceed"]
+  environments: ["staging", "production"]
+
+  i18n: Ember.inject.service()
+  trial: Ember.inject.service()
 
   tStartingScan: t("startingScan")
   tPasswordCopied: t("passwordCopied")
@@ -28,22 +41,9 @@ FileHeaderComponent = Ember.Component.extend
   tPleaseEnterUserRoles: t("modalCard.manual.pleaseEnterUserRoles")
   tPleaseEnterVPNDetails: t("modalCard.manual.pleaseEnterVPNDetails")
 
-  dynamicScanModal: false
-  apiScanModal: false
-  isRequestingManual: false
-  isStartingRescan: false
-  showRemoveRoleConfirmBox: false
-
-  roleId: 0
-  userRoles: []
-  environments: ["staging", "production"]
-  appActions: ["halt", "proceed"]
-  loginStatuses: ["yes", "no"]
-  vpnStatuses: ["yes", "no"]
-
   manualscan: (->
-    projectId = @get "file.project.id"
-    @get("store").findRecord "manualscan", projectId
+    fileId = @get "file.id"
+    @get("store").findRecord "manualscan", fileId
   ).property()
 
   filteredEnvironments: (->
@@ -321,8 +321,8 @@ FileHeaderComponent = Ember.Component.extend
         additional_comments: additionalComments
 
       that = @
-      projectId = @get("file.project.id")
-      url = [ENV.endpoints.manualscans, projectId].join '/'
+      fileId = @get("file.id")
+      url = [ENV.endpoints.manualscans, fileId].join '/'
       @get("ajax").put url, data: JSON.stringify(data), contentType: 'application/json'
       .then (result) ->
         that.send "requestManualScan"
