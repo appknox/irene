@@ -12,6 +12,7 @@ export default {
   "allPlatforms": "All Platforms",
   "allScans": "All Scans",
   "allUploads": "All Uploads",
+  "amountPaid": "AMOUNT PAID",
   "api": "API",
   "apiScan": "API Scan",
   "apiURLFilter": "API URL Filter",
@@ -46,6 +47,7 @@ export default {
   "currentPassword": "Current Password",
   "currentPlan": "Current Plan",
   "dashboard": "Home",
+  "date": "DATE",
   "dateCreated": "Date Created",
   "dateUpdated": "Date Updated",
   "deleteTeam": "Delete Team",
@@ -118,7 +120,9 @@ export default {
   "invalidPassword": "Passwords did not match",
   "invalidURL": " is an invalid URL",
   "invite": "Invite",
+  "invoice": "INVOICE",
   "invoices": "Invoices",
+  "invoiceId": "INVOICE ID",
   "jiraHost": "Jira Host",
   "jiraIntegrated": "JIRA integrated",
   "jiraIntegration": "JIRA Integration",
@@ -127,6 +131,7 @@ export default {
   "language": "Language",
   "last": "Last",
   "leastRecent": " (Oldest First)",
+  "loading": "Loading",
   "login": "Login",
   "logout": "Logout",
   "low": "Low",
@@ -176,6 +181,8 @@ export default {
   "passwordChanged": "Your password has been changed",
   "passwordCopied": "Password Copied!",
   "tokenCopied": "Token Copied!",
+  "trialWillBeConverted": "Your free trial will be converted into paid subscription on",
+  "trialWillExpireOn": "Your trial will expire on",
   "pasteYourUrl": "Paste Android / Windows store URL",
   "pay": "Pay",
   "pdfReport": "PDF Report",
@@ -190,6 +197,7 @@ export default {
   "personalTokenGenerated": "Personal access token generated successfully.",
   "phone" : "Phone",
   "plans": "Plans",
+  "planName": "PLAN NAME",
   "pleaseEnterAllDetails": "Please enter all the details",
   "pleaseEnterAnyNamespace": "Please enter any namespace",
   "pleaseVisit": "Please visit the",
@@ -260,6 +268,7 @@ export default {
   "subscriptionDetails": "Subscription Details",
   "subscriptionExpired": "Subscription Expired ",
   "subscriptionWillExpire": "Subscription will expire ",
+  "subscriptionWillExpireOn": "Subscription will expire on",
   "summary": "Summary",
   "support": "Support",
   "sync": "Sync More",
@@ -292,6 +301,7 @@ export default {
   "year": "Year",
   "yearly": "Yearly",
   "yes": "Yes",
+  "youWillBeChargedOn": "You will be charged on",
   "confirmBox": {
     "removeURL": "Are you sure you want to remove from url filters?",
     "removeProject": "Are you sure you want to remove Github Project?",
@@ -360,6 +370,10 @@ export default {
     "manual": {
       "title": "Manual Scan",
       "description": "Do you want to request for a manual scan?"
+    },
+    "rescan": {
+      "title": "Re-scan Static Scan",
+      "description": "Do you want to do the static scan again?"
     }
   },
   "templates": {
@@ -373,6 +387,7 @@ export default {
     "showUnknowAnalysis": "Do you want us to show unknown analysis?",
     "specifyTheURL": "Specify the URL which you want the API Scan to be performed on",
     "addATeam": "Add a team which you want to collaborate with this project",
+    "selectGHRepo": "Select the Github Repo where you want us to create issues for the risks we find in your project",
     "selectJIRAAccount": "Select the JIRA account where you want us to create issues for the risks we find in your project",
     "selectPreferredDevice": "Select the Preferred Device Type and OS Version for Dynamic Scan"
   }

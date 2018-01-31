@@ -1,6 +1,6 @@
 if user.hasGithubToken
   h6
-    | Intergations completed
+    = t "integrationCompleted"
   button.is-primary.mp-github-revoke click="openRevokeGithubConfirmBox"
     = t "revokeGithub"
 else

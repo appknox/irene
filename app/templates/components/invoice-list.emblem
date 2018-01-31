@@ -6,17 +6,17 @@ if hasInvoices
     table
       tr
         th
-          | INVOICE ID
+          = t "invoiceId"
         th
-          | PLAN NAME
+          = t "planName"
         th
-          | AMOUNT PAID
+          = t "amountPaid"
         th
-          | DATE
+          = t "date"
+        th.uppercase-text
+          = t "status"
         th
-          | STATUS
-        th
-          | INVOICE
+          = t "invoice"
 
       each invoices as |invoice|
         = invoice-overview invoice=invoice

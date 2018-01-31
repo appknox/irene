@@ -9,6 +9,6 @@
       .loading-container
         i.fa class="fa-spinner fa-spin"
         div
-          | Loading...
+          | #{t "loading"}...
 
   = partial "paginate"

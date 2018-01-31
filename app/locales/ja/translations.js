@@ -12,6 +12,7 @@ export default {
   "allPlatforms": "すべてのプラットフォーム",
   "allScans": "すべてのスキャン",
   "allUploads": "All Uploads",
+  "amountPaid": "AMOUNT PAID",
   "api": "API",
   "apiScan": "API スキャン",
   "apiURLFilter": "API URL Filter",
@@ -46,6 +47,7 @@ export default {
   "currentPassword": "現在のパスワード",
   "currentPlan": "現在の計画",
   "dashboard": "ダッシュボード",
+  "date": "DATE",
   "dateCreated": "作成日",
   "dateUpdated": "更新日",
   "deleteTeam": "チームを削除",
@@ -118,7 +120,9 @@ export default {
   "invalidPassword": "無効なパスワード",
   "invalidURL": " 無効なURLです",
   "invite": "招待",
+  "invoice": "INVOICE",
   "invoices": "請求書",
+  "invoiceId": "INVOICE ID",
   "jiraHost": "JIRA ホスト",
   "jiraIntegrated": "JIRA 統合",
   "jiraIntegration": "JIRA 統合",
@@ -127,6 +131,7 @@ export default {
   "language": "言語",
   "last": "最終",
   "leastRecent": " (最古の初)",
+  "loading": "Loading",
   "login": "ログイン",
   "logout": "ログアウト",
   "low": "低",
@@ -176,6 +181,8 @@ export default {
   "passwordChanged": "パスワードが変更されました",
   "passwordCopied": "コピーされたパスワード!",
   "tokenCopied": "Token Copied!",
+  "trialWillBeConverted": "Your free trial will be converted into paid subscription on",
+  "trialWillExpireOn": "Your trial will expire on",
   "pasteYourUrl": "URL を貼り付けてください",
   "pay": "支払い",
   "pdfReport": "PDFレポート",
@@ -190,6 +197,7 @@ export default {
   "personalTokenGenerated": "Personal access token generated successfully.",
   "phone" : "スマホ",
   "plans": "予定",
+  "planName": "PLAN NAME",
   "pleaseEnterAllDetails": "Please enter all the details",
   "pleaseEnterAnyNamespace": "Please enter any namespace",
   "pleaseVisit": "ご案内",
@@ -260,6 +268,7 @@ export default {
   "subscriptionDetails": "サブスクリプションの詳細",
   "subscriptionExpired": "サブスクリプションが期限切れ ",
   "subscriptionWillExpire": "サブスクリプションは失効する ",
+  "subscriptionWillExpireOn": "Subscription will expire on",
   "summary": "概要",
   "support": "サポート",
   "sync": "同期する",
@@ -292,6 +301,7 @@ export default {
   "year": "年",
   "yearly": "1年",
   "yes": "はい",
+  "youWillBeChargedOn": "You will be charged on",
   "confirmBox": {
     "removeURL": "URLフィルタから削除してもよろしいですか？",
     "removeProject": "Github Projectを削除してもよろしいですか？",
@@ -360,6 +370,10 @@ export default {
     "manual": {
       "title": "手動スキャン",
       "description": "手動スキャンをリクエストしますか？"
+    },
+    "rescan": {
+      "title": "Re-scan Static Scan",
+      "description": "Do you want to do the static scan again?"
     }
   },
   "templates": {

@@ -12,7 +12,7 @@ if project.githubRepo
 
 else
   h6
-    | Select the Github Repo where you want us to create issues for the risks we find in your project
+    = t "otherTemplates.selectGHRepo"
   .columns
     .column.is-one-third
       select.select.mp-github-select-project{action 'selectRepo' on='change'}

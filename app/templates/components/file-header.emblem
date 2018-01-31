@@ -291,9 +291,9 @@
       button.modal-button.is-primary click="closeManualScanModal"
         = t "no"
 
-= modal-card isActive=showRescanModal title="Re-scan Static Scan"
+= modal-card isActive=showRescanModal title=(t "modalCard.rescan.title")
   h5
-   | Do you want to do the static scan again?
+   = t "modalCard.rescan.description"
   .columns
     .column.is-one-sixth
       button.modal-button.is-primary click="rescanApp" disabled=isStartingRescan

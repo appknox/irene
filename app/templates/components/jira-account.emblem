@@ -1,6 +1,6 @@
 if user.hasJiraToken
   h6
-    | Intergations completed
+    = t "integrationCompleted"
   button.is-primary.mp-jira-revoke click="openRevokeJIRAConfirmBox"
     = t "revokeJira"
 else
