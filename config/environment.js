@@ -257,6 +257,12 @@ module.exports = function(environment) {
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
+    ENV['APP'].opbeat = {
+        DEBUG: true
+    };
+    ENV.rollbar = {
+      enabled: false
+    };
     ENV['host'] = "https://api.appknox.com";
   }
 
