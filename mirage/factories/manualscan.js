@@ -38,7 +38,7 @@ export default Factory.extend({
   userRoles() {
     var item = [
       {
-        "userRole": [
+        "userrole": [
           {
             "role": "admin",
             "credentail": [
@@ -55,7 +55,7 @@ export default Factory.extend({
         ],
       },
       {
-        "userRole": [
+        "userrole": [
           {
             "role": "customer",
             "credentail": [
