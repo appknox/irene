@@ -16,6 +16,7 @@ if isGeneral
       .column
         h5.bold.black-text
           = t "namespace"
+        = t "addNewNamespace"
         .namespace-list
           = namespace-component user=user
   .box-container
@@ -51,7 +52,9 @@ if isSecurity
       .column.is-half
         h5.bold.black-text.is-fullwidth
           = t "multiFactorAuth"
-        = auth-mfa user=user
+        = t "mfaDescription"
+        .margin-top20
+          = auth-mfa user=user
 
 if isDeveloperSettings
   .box-container
