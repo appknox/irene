@@ -12,7 +12,7 @@ export default Factory.extend({
   appAction() {
     return faker.random.arrayElement(["proceed", "halt"]);
   },
-  poc(){
+  contact(){
     var item = {
       name: faker.name.firstName(),
       email: faker.internet.email()
@@ -38,38 +38,24 @@ export default Factory.extend({
   userRoles() {
     var item = [
       {
-        "userrole": [
-          {
-            "role": "admin",
-            "credentail": [
-              {
-                "username": "yash",
-                "password": "test1"
-              },
-              {
-                "username": "lino",
-                "password": "test12"
-              }
-            ]
-          }
-        ],
+        "username": "yash",
+        "password": "subham12345",
+        "role": "admin"
       },
       {
-        "userrole": [
-          {
-            "role": "customer",
-            "credentail": [
-              {
-                "username": "nishaanth",
-                "password": "test123"
-              },
-              {
-                "username": "subham",
-                "password": "test1234"
-              }
-            ]
-          }
-        ]
+        "username": "lino",
+        "password": "test12",
+        "role": "admin"
+      },
+      {
+        "username": "yash",
+        "password": "test1",
+        "role": "customer"
+      },
+      {
+        "username": "lino",
+        "password": "test12",
+        "role": "customer"
       }
     ];
     return item;

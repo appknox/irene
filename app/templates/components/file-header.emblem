@@ -344,21 +344,12 @@
           form.columns
             .column.is-one-third
               label
-                | #{t "username"} 1
-              = input class="input" type="name" value=username1 autocomplete="new-user"
+                | #{t "username"}
+              = input class="input" type="name" value=username autocomplete="new-user"
             .column.is-one-third
               label
-                | #{t "password"} 1
-              = input class="input password1" type="password" value=password1 autocomplete="new-password"
-          form.columns.no-border-column
-            .column.is-one-third
-              label
-                | #{t "username"} 2
-              = input class="input username2" type="name" value=username2 autocomplete="new-user"
-            .column.is-one-third
-              label
-                | #{t "password"} 2
-              = input class="input password2" type="password" value=password2 autocomplete="new-password"
+                | #{t "password"}
+              = input class="input password" type="password" value=password autocomplete="new-password"
       .columns
         .column
           button.modal-button.is-primary.uppercase-text click="addUserRole"
@@ -372,30 +363,28 @@
                   = t "modalCard.manual.userRoles"
                 th.uppercase-text
                   = t "modalCard.manual.actions"
-              each allUserRoles as |role|
+              each allUserRoles as |userRole|
                 tr
-                  each role.userrole as |userRole|
-                    td
-                      .columns
-                        .column.text-centre.lowercase-text
-                          .tag
-                            = userRole.role
-                      .columns.table-head
-                        .column.lowercase-text
-                          | #{t "username"}
-                        .column.lowercase-text
-                          | #{t "password"}
+                  td
+                    .columns
+                      .column.text-centre.lowercase-text
+                        .tag
+                          = userRole.role
+                    .columns.table-head
+                      .column.lowercase-text
+                        | #{t "username"}
+                      .column.lowercase-text
+                        | #{t "password"}
 
-                      each userRole.credentail as |credentail|
-                        .columns.no-border-column
-                          .column
-                            = credentail.username
-                          .column
-                            = credentail.password
-                    td
-                      .tag.delete-tag.margin-top3.remove click="'openRemoveUserRoleConfirmBox' userRole.id"
-                        i.fa.risk-icons.fa-trash-o
-                          | &nbsp; #{t "remove"}
+                    .columns.no-border-column
+                      .column
+                        = userRole.username
+                      .column
+                        = userRole.password
+                  td
+                    .tag.delete-tag.margin-top3.remove click="'openRemoveUserRoleConfirmBox' userRole.id"
+                      i.fa.risk-icons.fa-trash-o
+                        | &nbsp; #{t "remove"}
 
   .columns
     .column.is-one-third

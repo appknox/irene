@@ -100,8 +100,7 @@ FileHeaderComponent = Ember.Component.extend
     userRoles = @get "manualscan.userRoles"
     roleId = @get "roleId"
     that = @
-    userRoles.forEach (userRole) ->
-      role = userRole.userrole[0]
+    userRoles.forEach (role) ->
       roleId = roleId + 1
       role.id = roleId
       that.set "roleId", roleId
@@ -109,7 +108,7 @@ FileHeaderComponent = Ember.Component.extend
   ).property "manualscan.userRoles"
 
   availableRoles: Ember.computed.filter 'allUserRoles', (userRole) ->
-    id = userRole.userrole[0].id
+    id = userRole.id
     deletedRole = @get "deletedRole"
     id isnt deletedRole
 
@@ -206,34 +205,20 @@ FileHeaderComponent = Ember.Component.extend
 
     addUserRole: ->
       newUserRole = @get "newUserRole"
-      username1 = @get "username1"
-      username2 = @get "username2"
-      password1 = @get "password1"
-      password2 = @get "password2"
+      username = @get "username"
+      password = @get "password"
       tRoleAdded = @get "tRoleAdded"
       tPleaseEnterAllValues = @get "tPleaseEnterAllValues"
-      for inputValue in [newUserRole, username1, username2, password1, password2]
+      for inputValue in [newUserRole, username, password]
         return @get("notify").error tPleaseEnterAllValues if isEmpty inputValue
       userRoles = @get "manualscan.userRoles"
       roleId = @get "roleId"
       roleId = roleId + 1
       userRole = {
-        "userrole": [
-          {
-            "id": roleId
-            "role": newUserRole,
-            "credentail": [
-              {
-                "username": username1,
-                "password": password1
-              },
-              {
-                "username": username2
-                "password": password2
-              }
-            ]
-          }
-        ]
+        "id": roleId
+        "role": newUserRole,
+        "username": username,
+        "password": password
       }
       if Ember.isEmpty userRoles
         userRoles = []
@@ -243,10 +228,8 @@ FileHeaderComponent = Ember.Component.extend
       @get("notify").success tRoleAdded
       @setProperties({
         newUserRole: ""
-        username1: ""
-        username2: ""
-        password1: ""
-        password2: ""
+        username: ""
+        password: ""
         })
 
     saveManualScanForm: ->
@@ -263,8 +246,7 @@ FileHeaderComponent = Ember.Component.extend
 
       if userRoles
         userRoles.forEach (userRole) ->
-          userRole.userrole.forEach (role) ->
-            delete role.id
+          delete userRole.id
 
       vpnRequired =  @get "manualscan.vpnRequired"
       if !vpnRequired
@@ -321,21 +303,13 @@ FileHeaderComponent = Ember.Component.extend
         additional_comments: additionalComments
 
       that = @
+      tManualRequested = @get "tManualRequested"
+      @set "isRequestingManual", true
       fileId = @get("file.id")
       url = [ENV.endpoints.manualscans, fileId].join '/'
       @get("ajax").put url, data: JSON.stringify(data), contentType: 'application/json'
       .then (result) ->
-        that.send "requestManualScan"
-
-    requestManualScan: ->
-      triggerAnalytics('feature', ENV.csb.requestManualScan)
-      tManualRequested = @get "tManualRequested"
-      fileId = @get "file.id"
-      that = @
-      url = [ENV.endpoints.manual, fileId].join '/'
-      @set "isRequestingManual", true
-      @get("ajax").request url
-      .then (result) ->
+        triggerAnalytics('feature', ENV.csb.requestManualScan)
         that.set "isRequestingManual", false
         that.get("notify").info tManualRequested
         that.set "file.ifManualNotRequested", false
@@ -343,7 +317,7 @@ FileHeaderComponent = Ember.Component.extend
       .catch (error) ->
         that.set "isRequestingManual", false
         for error in error.errors
-          that.get("notify").error error.detail?.message
+          that.get("notify").error error.detail?.message  
 
     openAPIScanModal: ->
       platform = @get "file.project.platform"
