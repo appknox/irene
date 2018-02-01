@@ -239,7 +239,7 @@ export default {
   "scansLeft": " スキャン左",
   "scanStatus": "スキャンのステータス",
   "search": "サーチ",
-  "searchQuery": "検索クエリ",
+  "searchQuery": "Search By Package Name",
   "security": "セキュリティ",
   "developerSettings": "Developer Settings",
   "selectAnyTeam": "チームを選んでください",

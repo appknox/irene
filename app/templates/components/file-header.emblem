@@ -51,7 +51,7 @@
              .fa-font-size-small
                = fa-icon "fa-repeat"
           else
-            button.is-primary.margin-top20.margin-left.ac-rescan click="openRescanModal"
+            button.is-primary.margin-top20.margin-left.ac-static-rescan click="openRescanModal"
               .fa-font-size-small
                 = fa-icon "fa-repeat"
         else
@@ -74,7 +74,7 @@
                 .fa-font-size-small
                   = fa-icon "fa-repeat"
             else
-              button.is-primary.margin-top20.margin-left.ac-rescan click="openAPIScanModal"
+              button.is-primary.margin-top20.margin-left.ac-dynamic-rescan click="openAPIScanModal"
                 .fa-font-size-small
                   = fa-icon "fa-repeat"
           else
@@ -100,7 +100,7 @@
                = fa-icon "fa-check"
                | &nbsp; #{t "completed"}
           else if file.isApiNotDone
-            button.is-primary.margin-top20.ac-start-dynamic-scan click="openRunDynamicScanModal" disabled=file.isNotNoneStatus
+            button.is-primary.margin-top20.ac-start-api-scan click="openRunDynamicScanModal" disabled=file.isNotNoneStatus
               .fa-font-size
                 = fa-icon "fa-play"
               | &nbsp; #{t "start"}
@@ -140,7 +140,7 @@
             if file.project.hasMultipleFiles
               = link-to 'authenticated.project.files' file.project.id class="mp-detail-all-scans" tagName="button"
                 = fa-icon "navicon"
-                | &nbsp; All Uploads
+                | &nbsp; #{t "allUploads"}
           .column.card-button
             button.mp-pdf-report click="getPDFReportLink"
               = fa-icon "download"

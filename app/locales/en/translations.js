@@ -239,7 +239,7 @@ export default {
   "scansLeft": " Scan Left",
   "scanStatus": "Scan Status",
   "search": "Search",
-  "searchQuery": "Search Query",
+  "searchQuery": "Search By Package Name",
   "security": "Security",
   "developerSettings": "Developer Settings",
   "selectAnyTeam": "Please select any team",

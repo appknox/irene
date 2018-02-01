@@ -52,9 +52,10 @@ ApiFilterComponent = Ember.Component.extend
       projectId = @get "project.id"
       apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, projectId].join '/'
       data =
-        apiUrlFilters: urlString
+        apiUrlFilters: updatedURLFilters
       triggerAnalytics('feature', ENV.csb.addAPIEndpoints)
       @set "isSavingFilter", true
+      that = @
       @get("ajax").post apiScanOptions, data: data
       .then (data)->
         that.set "isSavingFilter", false
