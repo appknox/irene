@@ -176,12 +176,9 @@ input
     margin-top: 5px
     margin-left: 20px
     color: #FFF
-  .highlighted-button
-    margin-left: -40px
   .project-count
     padding: 3px
-    text-align: center
-    width: 120px
+    min-width: 120px
     margin-top: 3px
     a
       font-size: 14px
@@ -1161,7 +1158,7 @@ button.delete-button
   padding: 150px 400px 70px 400px
   .no-project
     padding: 10px
-    border: 2px dashed $critical
+    border: 1px dashed $critical
     border-radius: 10px
     text-align: center
 
@@ -1733,3 +1730,9 @@ input:checked + .slider:before
       background-color: $critical
       color: #FFF
       border-color: $critical
+
+.not-found-container
+  padding: 150px 400px
+  text-align: center
+  i
+    margin-top: -3px

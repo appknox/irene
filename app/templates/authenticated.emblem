@@ -34,9 +34,9 @@
     .columns
       .column.top-nav
         .columns
-          .column.is-one-quarter
+          .column.is-one-third
             .columns
-              .column.scan-text
+              .column.scan-text.is-one-third
                 = t "startNewScan"
               .column
                 label.button.is-primary.ac-upload-app.highlighted-button
@@ -49,7 +49,7 @@
                     | %
                   else
                     = t "uploadApp"
-          .column
+          .column.is-one-quarter
             .project-count
               = link-to 'authenticated.projects' class="mp-auth-settings highlighted-button"
                 | #{model.totalProjects}

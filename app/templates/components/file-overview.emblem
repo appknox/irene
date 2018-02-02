@@ -28,6 +28,7 @@ header.card-header
     .columns class=isReverse:is-reverse
       .column.flex-center
         = ember-chart type='doughnut' data=file.doughnutData width=150 height=150 options=chartOptions
+      .file-details-class  
       .column
         ul.risk-table
           .risk-values
