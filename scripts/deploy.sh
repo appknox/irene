@@ -16,19 +16,22 @@ file=".env"
 if [ -f "$file" ]
 then
   echo "Deploying using an .env file"
-  cat .env | while read a; do export $a; done
+  set -o allexport
+  source .env
+  set +o allexport
 fi
 
 curl https://api.rollbar.com/api/1/deploy/ \
   -F access_token=$ROLLBAR_ACCESS_TOKEN \
   -F environment=$ENVIRONMENT \
-  -F revision=`git rev-parse --verify HEAD` \
-  -F local_username=`whoami`
+  -F revision=$REVISION \
+  -F local_username=$LOCAL_USERNAME
 
 curl $OPBEAT_ENDPOINT \
   -H "Authorization: Bearer $OPBEAT_TOKEN" \
   -d rev=`git log -n 1 --pretty=format:%H` \
-  -d branch=`git rev-parse --abbrev-ref HEAD` \
+  -d branch=$REVISION \
   -d status=completed
+
 
 # Also Slack post from here
