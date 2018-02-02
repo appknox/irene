@@ -33,6 +33,7 @@ export default function() {
   this.get('/subscriptions/', 'subscription');
   this.get('/stats/:id', 'stat');
   this.get('/personaltokens', 'personaltoken');
+  this.get('/manualscans/:id', 'manualscan');
 
   this.get('/github_repos', () => {
     return {};
@@ -71,6 +72,10 @@ export default function() {
   });
 
   this.post('/set_github/:id', () => {
+    return {};
+  });
+
+  this.post('/manualscans/:id', () => {
     return {};
   });
 

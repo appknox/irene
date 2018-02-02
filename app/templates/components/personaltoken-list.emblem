@@ -43,6 +43,6 @@
     .card-wrapper
       form
         p.control
-          = input class="form-control input" placeholder=(t 'personalTokenName') type="text" value=tokenName autofocus="autofocus"
+          = input class="form-control input" placeholder=(t 'name') type="text" value=tokenName autofocus="autofocus"
         button.margin-top10.is-primary click="generateToken" disabled=isGeneratingToken
          = t 'personalAccessTokenCreate'

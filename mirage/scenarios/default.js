@@ -17,7 +17,7 @@ export default function(server) {
     personalTokenCount = getRandomInt(3,3),
     teamCount = 3,
     projectCount = 0, project = null, file = null, projectIds = [],
-    team = null, currentUserId = 1, deviceCount=30, invoiceCount=3;
+    team = null, manualscan=null, currentUserId = 1, deviceCount=30, invoiceCount=3;
   var users = server.createList('user', userCount);
   server.createList('pricing', pricingCount);
   server.createList('plan', planCount);
@@ -40,6 +40,7 @@ export default function(server) {
     var fileIds = [];
     for (var fileId = 1; fileId <= fileCount; fileId++) {
       file = server.create('file', {projectId: projectId});
+      manualscan = server.create('manualscan', {projectId: projectId});
       fileIds.push(file.id);
       for (var vulnerabilityId = 1; vulnerabilityId <= vulnerabilityCount; vulnerabilityId++) {
         server.create('analysis', {file: file, vulnerabilityId: vulnerabilityId});
