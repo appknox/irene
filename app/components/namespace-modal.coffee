@@ -12,12 +12,17 @@ NamespaceModalComponent = Ember.Component.extend
 
 
   tRequestToAddNamespace: t("requestToAddNamespace")
+  tPleaseEnterAnyNamespace: t("pleaseEnterAnyNamespace")
 
   actions:
     addNamespace: ->
       tRequestToAddNamespace = @get "tRequestToAddNamespace"
+      tPleaseEnterAnyNamespace = @get "tPleaseEnterAnyNamespace"
+      namespace =  @get "realtime.namespace"
+      if !namespace
+        return @get("notify").error tPleaseEnterAnyNamespace, ENV.notifications
       data =
-        namespace: @get "realtime.namespace"
+        namespace: namespace
       that = @
       @get("ajax").post ENV.endpoints.namespaceAdd, data: data
       .then ->
