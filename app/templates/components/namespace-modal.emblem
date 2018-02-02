@@ -1,4 +1,4 @@
-= modal-card isActive=true title=(t "addNamespace")
+= modal-card isActive=showNamespaceModal title=(t "addNamespace")
   form
     = input class="control input mp-namespaces" value=realtime.namespace autofocus="autofocus"
     .modal-footer
