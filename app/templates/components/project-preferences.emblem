@@ -26,29 +26,30 @@ table.device-table
 = modal-card isActive=projectPreferenceModal title=(t "modalCard.devicePreference.title")
   .card-body.warning-modal
     .card-wrapper
-    .columns
-      .column
-        = t "deviceType"
-    .columns
-      .column.is-one-third
-        select.input.mp-device-preference{action 'selectDeviceType' on='change'} id="project-device-preference"
-          option value=0
-            = t "noPreference"
-          each deviceTypes as |deviceType|
-            option value=deviceType.value
-              | #{ t (device-type deviceType.value)}
-    .columns
-      .column
-        = t "osVersion"
-    .columns
-      .column.is-one-third
-        select.input.mp-version-preference{action 'selectVersion' on='change'} id="project-version-preference"
-          option value=0
-            = t "noPreference"
-          each uniqueDevices as |device|
-            option value=device.version
-              = device.version
-    .columns
-      .column
-        button.margin-top20.is-primary.mp-select-device click="versionSelected"
-          = t "modalCard.devicePreference.selectDevice"
+    form
+      .columns
+        .column
+          = t "deviceType"
+      .columns
+        .column.is-one-third
+          select.input.mp-device-preference{action 'selectDeviceType' on='change'} id="project-device-preference"
+            option value=0
+              = t "noPreference"
+            each deviceTypes as |deviceType|
+              option value=deviceType.value
+                | #{ t (device-type deviceType.value)}
+      .columns
+        .column
+          = t "osVersion"
+      .columns
+        .column.is-one-third
+          select.input.mp-version-preference{action 'selectVersion' on='change'} id="project-version-preference"
+            option value=0
+              = t "noPreference"
+            each uniqueDevices as |device|
+              option value=device.version
+                = device.version
+      .columns
+        .column
+          button.margin-top20.is-primary.mp-select-device click="versionSelected"
+            = t "modalCard.devicePreference.selectDevice"
