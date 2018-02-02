@@ -15,4 +15,4 @@ test 'it renders', (assert) ->
 
 
 
-  assert.equal @$().text().trim(), 'Missing translation: undefinedChange RoleDeveloperManagerAdminremoveAre you sure you want to remove this team from collaboration?Please enter the team name which you want to remove from collaborationremove'
+  assert.equal @$().text().trim(), 'Missing translation: undefinedDeveloperManagerAdminremoveAre you sure you want to remove this team from collaboration?Please enter the team name which you want to remove from collaborationremove'

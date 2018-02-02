@@ -125,6 +125,7 @@ module.exports = function(environment) {
       setup: 'setup',
       init: 'init',
       manual: 'manual',
+      manualscans: 'manualscans',
       githubRepos: 'github_repos',
       jiraProjects: 'jira_projects',
       setGithub: 'set_github',

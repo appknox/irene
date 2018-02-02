@@ -14,9 +14,9 @@
       thead
         tr
           th
-            = t "personalTokenName"
+            = t "name"
           th
-            = t "personalTokenDate"
+            = t "created"
           th
             = t "personalTokenKey"
           th
@@ -40,6 +40,6 @@
     .card-wrapper
       form
         p.control
-          = input class="form-control input" placeholder=(t 'personalTokenName') type="text" value=tokenName autofocus="autofocus"
+          = input class="form-control input" placeholder=(t 'name') type="text" value=tokenName autofocus="autofocus"
         button.margin-top10.is-primary click="generateToken" disabled=isGeneratingToken
          = t 'personalAccessTokenCreate'
