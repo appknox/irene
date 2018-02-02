@@ -5,7 +5,7 @@
   h6
     = t "otherTemplates.specifyTheURL"
 
-  .columns
+  form.columns
     .column
       div.filter-list
         = input class="form-control input" type="text" placeholder=(t "templates.enterAPIEndpoint") value=newUrlFilter
