@@ -398,10 +398,8 @@ export default {
       "additionalComments": "Additional comments",
       "pleaseEnterAllValues": "Please enter all the values",
       "roleAdded": "Role added successfully",
-      "pleaseEnterOSVersion": "Please enter the OS version",
       "pleaseEnterUserRoles": "Please enter user roles",
-      "pleaseEnterVPNDetails": "Please enter VPN details",
-      "pleaseEnterPOC": "Please enter point of contact details"
+      "pleaseEnterVPNDetails": "Please enter VPN details"
     }
   },
   "templates": {

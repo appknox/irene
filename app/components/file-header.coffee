@@ -35,10 +35,8 @@ FileHeaderComponent = Ember.Component.extend
   tManualRequested: t("manualRequested")
   tRescanInitiated: t("rescanInitiated")
   tRoleAdded: t("modalCard.manual.roleAdded")
-  tPleaseEnterPOC: t("modalCard.manual.pleaseEnterPOC")
   tReportIsGettingGenerated: t("reportIsGettingGenerated")
   tPleaseEnterAllValues: t("modalCard.manual.pleaseEnterAllValues")
-  tPleaseEnterOSVersion: t("modalCard.manual.pleaseEnterOSVersion")
   tPleaseEnterUserRoles: t("modalCard.manual.pleaseEnterUserRoles")
   tPleaseEnterVPNDetails: t("modalCard.manual.pleaseEnterVPNDetails")
 
@@ -266,13 +264,8 @@ FileHeaderComponent = Ember.Component.extend
       contactName = @$('#contact-name').val()
       contactEmail = @$('#contact-email').val()
 
-      tPleaseEnterOSVersion = @get "tPleaseEnterOSVersion"
       tPleaseEnterUserRoles = @get "tPleaseEnterUserRoles"
       tPleaseEnterVPNDetails = @get "tPleaseEnterVPNDetails"
-      tPleaseEnterPOC = @get "tPleaseEnterPOC"
-
-      for inputValue in [minOsVersion]
-        return @get("notify").error tPleaseEnterOSVersion if isEmpty inputValue
 
       if loginRequired
         return @get("notify").error tPleaseEnterUserRoles if isEmpty userRoles
@@ -280,9 +273,6 @@ FileHeaderComponent = Ember.Component.extend
       if vpnRequired
         for inputValue in [vpnAddress, vpnPort]
           return @get("notify").error tPleaseEnterVPNDetails if isEmpty inputValue
-
-      for inputValue in [contactName, contactEmail]
-        return @get("notify").error tPleaseEnterPOC if isEmpty inputValue
 
       vpnDetails =
         address: vpnAddress

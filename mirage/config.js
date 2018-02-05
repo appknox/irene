@@ -75,7 +75,7 @@ export default function() {
     return {};
   });
 
-  this.post('/manualscans/:id', () => {
+  this.put('/manualscans/:id', () => {
     return {};
   });
 
