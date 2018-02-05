@@ -84,6 +84,7 @@ export default {
   "enterRightTeamName": "Enter the right team name to delete it",
   "enterRightUserName": "Enter the right username to delete it",
   "enterTeamName": "Please enter the team name",
+  "enterTokenName": "Please enter the token name",
   "enterValidPassword": "Please enter valid passwords!",
   "enterValidURL": "Please enter a valid URL",
   "expiring": "Expiring ",

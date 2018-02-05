@@ -15,9 +15,9 @@
         thead
           tr
             th
-              = t "personalTokenName"
+              = t "name"
             th
-              = t "personalTokenDate"
+              = t "created"
             th
               = t "personalTokenKey"
             th

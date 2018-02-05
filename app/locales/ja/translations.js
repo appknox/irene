@@ -84,6 +84,7 @@ export default {
   "enterRightTeamName": "それを削除する正しいチーム名を入力してください",
   "enterRightUserName": "削除する正しいユーザ名を入力してください",
   "enterTeamName": "チーム名を入力してください",
+  "enterTokenName": "Please enter the token name",
   "enterValidPassword": "有効なパスワードを入力してください",
   "enterValidURL": "有効なURLを入力してください",
   "expiring": "期限切れ",
