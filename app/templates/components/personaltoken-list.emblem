@@ -21,9 +21,9 @@
             th
               = t "personalTokenKey"
             th
-              | Copy
+              = t "copy"
             th
-              | Delete
+              = t "delete"
         tbody
           each sortedObjects as |personaltoken|
             = personaltoken-detail personaltoken=personaltoken

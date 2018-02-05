@@ -33,6 +33,7 @@ FileHeaderComponent = Ember.Component.extend
   tPasswordCopied: t("passwordCopied")
   tPleaseTryAgain: t("pleaseTryAgain")
   tManualRequested: t("manualRequested")
+  tRescanInitiated: t("rescanInitiated")
   tRoleAdded: t("modalCard.manual.roleAdded")
   tPleaseEnterPOC: t("modalCard.manual.pleaseEnterPOC")
   tReportIsGettingGenerated: t("reportIsGettingGenerated")
