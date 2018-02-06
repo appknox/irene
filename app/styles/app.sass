@@ -116,6 +116,9 @@ body
 .black-text
   color: #323232
 
+.default-text
+  color: $default
+
 .upper-nav
   position: relative
   background: white
@@ -729,15 +732,6 @@ button, .button
 .file-hide-overflow
   margin-top: -20px
 
-.manual-proxy
-  .columns
-    border: none!important
-  .columns:last-child
-    border-bottom: 1px solid #CCC!important
-  h6
-    margin-bottom: 0px!important
-
-
 .user-roles-table
   width: 470px
   .tag
@@ -753,11 +747,12 @@ button, .button
     th
       border: none
       font-size: 12px
+      background-color: #CCC
       &:last-child
         text-align: right
     td
       border: none
-      background-color: #f2f2f2
+      background-color: #e5e5e5
       padding-left: 20px
       border-bottom: 1px solid #CCC
       &:last-child
@@ -771,17 +766,40 @@ button, .button
         border-bottom: none
 
 .manual-scan-modal
+  ul
+    li
+      margin-top: 10px
+      a
+        color: $default
+
+  .modal-sub-container
+    border-radius: 3px
+    margin-top: 10px
+    padding: 10px
+    background-color: #f2f2f2
+    margin-bottom: 10px
   .modal-card
-    max-width: 800px
+    width: 600px
+    height: 600px
+    li
+      background-color: #f2f2f2
+      color: #000
+      a
+        .column:first-child
+          margin-left: 10px
+        .column:last-child
+          margin-right: 10px
     select
       text-align: center
-      width: 205px
+      width: 210px
     .input
-      width: 205px
+      width: 210px
     .text-area
+      width: 300px
       height: 100px
     label
       margin-right: 35px
+      color: $default
     .no-border-column
       border-bottom: none!important
     .user-roles

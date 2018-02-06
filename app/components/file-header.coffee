@@ -15,19 +15,23 @@ FileHeaderComponent = Ember.Component.extend
   globalAlpha:0.4
   radiusRatio:0.9
 
+  isBasicInfo: false
+  isVPNDetails: false
   apiScanModal: false
+  isLoginDetails: false
   isStartingRescan: false
   dynamicScanModal: false
   isRequestingManual: false
+  showManualScanFormModal: false
   showRemoveRoleConfirmBox: false
+
+  i18n: Ember.inject.service()
+  trial: Ember.inject.service()
 
   vpnStatuses: ["yes", "no"]
   loginStatuses: ["yes", "no"]
   appActions: ["halt", "proceed"]
   environments: ["staging", "production"]
-
-  i18n: Ember.inject.service()
-  trial: Ember.inject.service()
 
   tStartingScan: t("startingScan")
   tPasswordCopied: t("passwordCopied")
@@ -207,6 +211,21 @@ FileHeaderComponent = Ember.Component.extend
       @set "deletedRole", param
       @set "showRemoveRoleConfirmBox", true
 
+    displayAppInfo: ->
+      @set "isBasicInfo", !@get "isBasicInfo"
+      @set 'isLoginDetails', false
+      @set 'isVPNDetails', false
+
+    displayLoginDetails: ->
+      @set 'isBasicInfo', false
+      @set 'isLoginDetails', !@get "isLoginDetails"
+      @set 'isVPNDetails', false
+
+    displayVPNDetails: ->
+      @set 'isBasicInfo', false
+      @set 'isLoginDetails', false
+      @set 'isVPNDetails', !@get "isVPNDetails"
+
     addUserRole: ->
       newUserRole = @get "newUserRole"
       username = @get "username"
@@ -236,68 +255,71 @@ FileHeaderComponent = Ember.Component.extend
         password: ""
         })
 
-    saveManualScanForm: ->
+    saveManualScanForm: (param) ->
       appName = @get "file.name"
-      appEnv =  @$('#app-env').val()
-      appAction =  @$('#required-app-action').val()
-      minOsVersion = @$('#min-os-version').val()
+      if param isnt "direct"
+        appEnv =  @$('#app-env').val()
+        appAction =  @$('#required-app-action').val()
+        minOsVersion = @$('#min-os-version').val()
 
-      loginRequired =  @get "manualscan.loginRequired"
-      if !loginRequired
-        loginRequired = false
+        loginRequired =  @get "manualscan.loginRequired"
+        if !loginRequired
+          loginRequired = false
 
-      userRoles = @get "manualscan.userRoles"
+        userRoles = @get "manualscan.userRoles"
 
-      if userRoles
-        userRoles.forEach (userRole) ->
-          delete userRole.id
+        if userRoles
+          userRoles.forEach (userRole) ->
+            delete userRole.id
 
-      vpnRequired =  @get "manualscan.vpnRequired"
-      if !vpnRequired
-        vpnRequired = false
+        vpnRequired =  @get "manualscan.vpnRequired"
+        if !vpnRequired
+          vpnRequired = false
 
-      vpnAddress = @$('#vpn-address').val()
-      vpnPort = @$('#vpn-port').val()
-      vpnUsername = @$('#vpn-username').val()
-      vpnPassword = @$('#vpn-password').val()
+        vpnAddress = @$('#vpn-address').val()
+        vpnPort = @$('#vpn-port').val()
+        vpnUsername = @$('#vpn-username').val()
+        vpnPassword = @$('#vpn-password').val()
 
-      contactName = @$('#contact-name').val()
-      contactEmail = @$('#contact-email').val()
+        contactName = @$('#contact-name').val()
+        contactEmail = @$('#contact-email').val()
 
-      tPleaseEnterUserRoles = @get "tPleaseEnterUserRoles"
-      tPleaseEnterVPNDetails = @get "tPleaseEnterVPNDetails"
+        tPleaseEnterUserRoles = @get "tPleaseEnterUserRoles"
+        tPleaseEnterVPNDetails = @get "tPleaseEnterVPNDetails"
 
-      if loginRequired
-        return @get("notify").error tPleaseEnterUserRoles if isEmpty userRoles
+        if loginRequired
+          return @get("notify").error tPleaseEnterUserRoles if isEmpty userRoles
 
-      if vpnRequired
-        for inputValue in [vpnAddress, vpnPort]
-          return @get("notify").error tPleaseEnterVPNDetails if isEmpty inputValue
+        if vpnRequired
+          for inputValue in [vpnAddress, vpnPort]
+            return @get("notify").error tPleaseEnterVPNDetails if isEmpty inputValue
 
-      vpnDetails =
-        address: vpnAddress
-        port: vpnPort
-        username: vpnUsername
-        password: vpnPassword
+        vpnDetails =
+          address: vpnAddress
+          port: vpnPort
+          username: vpnUsername
+          password: vpnPassword
 
-      contact =
-        name: contactName
-        email: contactEmail
+        contact =
+          name: contactName
+          email: contactEmail
 
-      additionalComments = @get "additionalComments"
+        additionalComments = @get "additionalComments"
 
-      data =
-        app_name: appName
-        app_env: appEnv
-        min_os_version: minOsVersion
-        app_action: appAction
-        login_required: loginRequired
-        user_roles: userRoles
-        vpn_required: vpnRequired
-        vpn_details: vpnDetails
-        contact: contact
-        additional_comments: additionalComments
-
+        data =
+          app_name: appName
+          app_env: appEnv
+          min_os_version: minOsVersion
+          app_action: appAction
+          login_required: loginRequired
+          user_roles: userRoles
+          vpn_required: vpnRequired
+          vpn_details: vpnDetails
+          contact: contact
+          additional_comments: additionalComments
+      else
+        data =
+          app_name: appName
       that = @
       tManualRequested = @get "tManualRequested"
       @set "isRequestingManual", true
@@ -310,6 +332,7 @@ FileHeaderComponent = Ember.Component.extend
         that.get("notify").info tManualRequested
         that.set "file.ifManualNotRequested", false
         that.set "showManualScanModal", false
+        that.set "showManualScanFormModal", false
       .catch (error) ->
         that.set "isRequestingManual", false
         for error in error.errors
