@@ -333,8 +333,8 @@
             .column
               = t "modalCard.manual.poc"
             .column
-              = input class="input" type="name" id="contact-name" value=manualscan.contact.name placeholder="Name"
-              = input class="input margin-top" type="email" id="contact-email" value=manualscan.contact.email placeholder="Email"
+              = input class="input" type="name" id="contact-name" value=manualscan.contact.name placeholder=(t "name")
+              = input class="input margin-top" type="email" id="contact-email" value=manualscan.contact.email placeholder=(t "email")
 
     li
       a click="displayLoginDetails"
