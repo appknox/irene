@@ -288,7 +288,7 @@
       a click="displayAppInfo"
         .columns
           .column.is-one-quarter
-            | Basic App Info &nbsp;
+            | #{t "modalCard.manual.basicAppInfo"} &nbsp;
           .column.content-right
             if isBasicInfo
               = fa-icon "chevron-up"
@@ -340,7 +340,7 @@
       a click="displayLoginDetails"
         .columns
           .column.is-one-quarter
-            | Login Details &nbsp;
+            | #{t "modalCard.manual.loginDetails"} &nbsp;
           .column.content-right
             if isLoginDetails
               = fa-icon "chevron-up"
@@ -408,7 +408,7 @@
       a click="displayVPNDetails"
         .columns
           .column.is-one-quarter
-            | VPN Details &nbsp;
+            | #{t "modalCard.manual.vpnDetails"} &nbsp;
           .column.content-right
             if isVPNDetails
               = fa-icon "chevron-up"

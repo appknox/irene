@@ -399,7 +399,10 @@ export default {
       "pleaseEnterAllValues": "Please enter all the values",
       "roleAdded": "Role added successfully",
       "pleaseEnterUserRoles": "Please enter user roles",
-      "pleaseEnterVPNDetails": "Please enter VPN details"
+      "pleaseEnterVPNDetails": "Please enter VPN details",
+      "basicAppInfo": "Basic App Info",
+      "loginDetails": "Login Details",
+      "vpnDetails": "VPN Details"
     }
   },
   "templates": {
