@@ -92,6 +92,17 @@ ENUMS =
     NONE: 0
     TOTP: 1
 
+  APP_ACTION:
+    NO_PREFERENCE: 0
+    HALT: 1
+    PROCEED: 2
+
+  APP_ENV:
+    NO_PREFERENCE: 0
+    STAGING: 1
+    PRODUCTION: 2
+
+
 
 # Populate `CHOICES`
 for enumName, enumValues of ENUMS

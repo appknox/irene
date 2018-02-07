@@ -9,6 +9,7 @@ Manualscan = DS.Model.extend
   vpnRequired: DS.attr 'boolean'
   vpnDetails: DS.attr()
   appAction: DS.attr 'string'
+  additionalComments: DS.attr 'string'
 
   showProceedText: (->
     appAction = @get "appAction"

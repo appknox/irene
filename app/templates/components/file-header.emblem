@@ -300,41 +300,40 @@
             .column
               = t "modalCard.manual.appEnv"
             .column
-              select.select id="app-env"
-                if manualscan.appEnv
-                  option selected="true" value=manualscan.appEnv
-                    | #{ t manualscan.appEnv}
+              select.select{action 'selectAppEnvironment' on='change'} id="app-env"
+                option selected="true" value=manualscan.appEnv
+                  | #{ t (app-environment manualscan.appEnv)}
                 each filteredEnvironments as |env|
-                  option value=env
-                    | #{ t env}
+                  option value=env.value
+                    | #{ t (app-environment env.value)}
           .columns
             .column
               = t "modalCard.manual.minOSVersion"
             .column
-              = input class="input" placeholder=(t "modalCard.manual.minOSVersion") type="text" value=manualscan.minOsVersion id="min-os-version"
+              = input class="input" placeholder=(t "modalCard.manual.minOSVersion") type="text" value=manualscan.minOsVersion
           .columns
             .column
               = t "modalCard.manual.appQuestion1"
             .column
               select.select{action 'requiredAppAction' on='change'} id="required-app-action"
-                if manualscan.appAction
-                  option selected="true" value=manualscan.appAction
-                    | #{ t manualscan.appAction}
-                each filteredAddActions as |appAction|
-                  option value=appAction
-                    | #{ t appAction}
+                option selected="true" value=manualscan.appAction
+                  | #{ t (app-action manualscan.appAction)}
+                each filteredAppActions as |appAction|
+                  option value=appAction.value
+                    | #{ t (app-action appAction.value)}
               .margin-top
                 small
                   if manualscan.showProceedText
                     = t "modalCard.manual.appQuestion1Answer1"
-                  else
+                  else if manualscan.showHaltText
                     = t "modalCard.manual.appQuestion1Answer2"
+
           .columns
             .column
               = t "modalCard.manual.poc"
             .column
-              = input class="input" type="name" id="contact-name" value=manualscan.contact.name placeholder=(t "name")
-              = input class="input margin-top" type="email" id="contact-email" value=manualscan.contact.email placeholder=(t "email")
+              = input class="input" type="name" value=manualscan.contact.name placeholder=(t "name")
+              = input class="input margin-top" type="email" value=manualscan.contact.email placeholder=(t "email")
 
     li
       a click="displayLoginDetails"
@@ -434,25 +433,25 @@
               .column
                 .columns.no-border-column
                   .column.is-one-third
-                      = input class="input" type="name" value=manualscan.vpnDetails.address id="vpn-address" autocomplete="new-address" placeholder=(t "modalCard.manual.vpnAddress")
+                      = input class="input" type="name" placeholder=(t "modalCard.manual.vpnAddress") value=manualscan.vpnDetails.address autocomplete="new-address"
                   .column.is-one-third
-                    = input class="input" type="name" value=manualscan.vpnDetails.port id="vpn-port" autocomplete="new-port" placeholder=(t "modalCard.manual.vpnPort")
+                    = input class="input" type="name" placeholder=(t "modalCard.manual.vpnPort") value=manualscan.vpnDetails.port autocomplete="new-port"
           h6
             = t "modalCard.manual.enterCredentails"
             .columns.no-border-column
               .column
                 .columns.no-border-column
                   .column.is-one-third
-                    = input class="input" type="name" value=manualscan.vpnDetails.username id="vpn-username" autocomplete="new-username" placeholder=(t "username")
+                    = input class="input" type="name" value=manualscan.vpnDetails.username autocomplete="new-username" placeholder=(t "username")
                   .column.is-one-third
-                    = input class="input" type="password" value=manualscan.vpnDetails.password id="vpn-password" autocomplete="new-password" placeholder=(t "password")
+                    = input class="input" type="password" value=manualscan.vpnDetails.password  autocomplete="new-password" placeholder=(t "password")
     li
       .columns
         .column
           .default-text.margin-left
             = t "modalCard.manual.additionalComments"
         .column.margin-right
-          = textarea class="input text-area" type="name" value=additionalComments
+          = textarea class="input text-area" type="name" value=manualscan.additionalComments
   .columns
     .column
       button.modal-button.is-primary click="saveManualScanForm" disabled=isRequestingManual

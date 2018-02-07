@@ -30,8 +30,8 @@ FileHeaderComponent = Ember.Component.extend
 
   vpnStatuses: ["yes", "no"]
   loginStatuses: ["yes", "no"]
-  appActions: ["halt", "proceed"]
-  environments: ["staging", "production"]
+  appActions: ENUMS.APP_ACTION.CHOICES[0...-1]
+  environments: ENUMS.APP_ENV.CHOICES[0...-1]
 
   tStartingScan: t("startingScan")
   tPasswordCopied: t("passwordCopied")
@@ -51,16 +51,16 @@ FileHeaderComponent = Ember.Component.extend
 
   filteredEnvironments: (->
     environments = @get "environments"
-    appEnv = @get "manualscan.appEnv"
+    appEnv = parseInt @get "manualscan.appEnv"
     environments.filter (env) ->
-      appEnv isnt env
+      appEnv isnt env.value
   ).property "environments", "manualscan.appEnv"
 
-  filteredAddActions: (->
+  filteredAppActions: (->
     appActions = @get "appActions"
-    appAction = @get "manualscan.appAction"
+    appAction =  parseInt @get "manualscan.appAction"
     appActions.filter (action) ->
-      appAction isnt action
+      appAction isnt action.value
   ).property "appActions", "manualscan.appAction"
 
   filteredLoginStatuses: (->
@@ -201,11 +201,19 @@ FileHeaderComponent = Ember.Component.extend
         @set "manualscan.vpnRequired", true
 
     requiredAppAction: ->
-      appAction = @$('#required-app-action').val()
-      @set "manualscan.showProceedText", false
-      if appAction is "proceed"
+      appAction = parseInt @$('#required-app-action').val()
+      if appAction is ENUMS.APP_ACTION.PROCEED
         @set "manualscan.showProceedText", true
+      else if appAction is ENUMS.APP_ACTION.HALT
+        @set "manualscan.showHaltText", true
+      else
+        @set "manualscan.showProceedText", false
+        @set "manualscan.showHaltText", false
       @set "manualscan.appAction", appAction
+
+    selectAppEnvironment: ->
+      appEnv = @$('#app-env').val()
+      @set "manualscan.appEnv", appEnv
 
     openRemoveUserRoleConfirmBox: (param)->
       @set "deletedRole", param
@@ -255,71 +263,60 @@ FileHeaderComponent = Ember.Component.extend
         password: ""
         })
 
-    saveManualScanForm: (param) ->
+    saveManualScanForm: ->
       appName = @get "file.name"
-      if param isnt "direct"
-        appEnv =  @$('#app-env').val()
-        appAction =  @$('#required-app-action').val()
-        minOsVersion = @$('#min-os-version').val()
+      appEnv =  @get "manualscan.appEnv"
+      appAction =  @get "manualscan.appAction"
+      minOsVersion = @get "manualscan.minOsVersion"
 
-        loginRequired =  @get "manualscan.loginRequired"
-        if !loginRequired
-          loginRequired = false
+      contactName = @get "manualscan.contact.name"
+      contactEmail = @get "manualscan.contact.email"
 
-        userRoles = @get "manualscan.userRoles"
+      contact =
+        name: contactName
+        email: contactEmail
 
-        if userRoles
-          userRoles.forEach (userRole) ->
-            delete userRole.id
+      tPleaseEnterUserRoles = @get "tPleaseEnterUserRoles"
 
-        vpnRequired =  @get "manualscan.vpnRequired"
-        if !vpnRequired
-          vpnRequired = false
+      if @get "manualscan.loginReq  uired"
+        return @get("notify").error tPleaseEnterUserRoles if isEmpty userRoles
 
-        vpnAddress = @$('#vpn-address').val()
-        vpnPort = @$('#vpn-port').val()
-        vpnUsername = @$('#vpn-username').val()
-        vpnPassword = @$('#vpn-password').val()
+      userRoles = @get "manualscan.userRoles"
 
-        contactName = @$('#contact-name').val()
-        contactEmail = @$('#contact-email').val()
+      if userRoles
+        userRoles.forEach (userRole) ->
+          delete userRole.id
 
-        tPleaseEnterUserRoles = @get "tPleaseEnterUserRoles"
-        tPleaseEnterVPNDetails = @get "tPleaseEnterVPNDetails"
+      tPleaseEnterVPNDetails = @get "tPleaseEnterVPNDetails"
 
-        if loginRequired
-          return @get("notify").error tPleaseEnterUserRoles if isEmpty userRoles
+      if @get "manualscan.vpnRequired"
+        for inputValue in [vpnAddress, vpnPort]
+          return @get("notify").error tPleaseEnterVPNDetails if isEmpty inputValue
 
-        if vpnRequired
-          for inputValue in [vpnAddress, vpnPort]
-            return @get("notify").error tPleaseEnterVPNDetails if isEmpty inputValue
+      vpnAddress =  @get "manualscan.vpnDetails.address"
+      vpnPort =  @get "manualscan.vpnDetails.port"
+      vpnUsername =  @get "manualscan.vpnDetails.username"
+      vpnPassword =  @get "manualscan.vpnDetails.password"
 
-        vpnDetails =
-          address: vpnAddress
-          port: vpnPort
-          username: vpnUsername
-          password: vpnPassword
+      vpnDetails =
+        address: vpnAddress
+        port: vpnPort
+        username: vpnUsername
+        password: vpnPassword
 
-        contact =
-          name: contactName
-          email: contactEmail
+      additionalComments = @get "manualscan.additionalComments"
 
-        additionalComments = @get "additionalComments"
-
-        data =
-          app_name: appName
-          app_env: appEnv
-          min_os_version: minOsVersion
-          app_action: appAction
-          login_required: loginRequired
-          user_roles: userRoles
-          vpn_required: vpnRequired
-          vpn_details: vpnDetails
-          contact: contact
-          additional_comments: additionalComments
-      else
-        data =
-          app_name: appName
+      data =
+        app_name: appName
+        app_env: appEnv
+        min_os_version: minOsVersion
+        app_action: appAction
+        login_required: loginRequired
+        user_roles: userRoles
+        vpn_required: vpnRequired
+        vpn_details: vpnDetails
+        contact: contact
+        additional_comments: additionalComments
       that = @
       tManualRequested = @get "tManualRequested"
       @set "isRequestingManual", true

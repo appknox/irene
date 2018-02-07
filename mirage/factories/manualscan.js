@@ -1,16 +1,18 @@
 import { Factory, faker } from 'ember-cli-mirage';
+import ENUMS from 'irene/enums';
 
 export default Factory.extend({
   companyName: faker.company.companyName,
   appName: faker.name.firstName,
-  environment() {
-    return faker.random.arrayElement(["production", "staging"]);
+  appEnv() {
+    return faker.random.arrayElement(ENUMS.APP_ENV.VALUES);
   },
   loginRequired: faker.random.boolean,
   vpnRequired: faker.random.boolean,
-  osVersion: faker.random.number,
+  additionalComments: faker.random.firstName,
+  minOsVersion: faker.random.number,
   appAction() {
-    return faker.random.arrayElement(["proceed", "halt"]);
+    return faker.random.arrayElement(ENUMS.APP_ACTION.VALUES);
   },
   contact(){
     var item = {
