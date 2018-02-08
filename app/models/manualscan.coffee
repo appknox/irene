@@ -14,13 +14,13 @@ Manualscan = DS.Model.extend
 
   filteredAppEnv: (->
     appEnv = parseInt @get "appEnv"
-    if appEnv isnt [ENUMS.APP_ENV.NO_PREFERENCE, ENUMS.APP_ENV.STAGING, ENUMS.APP_ENV.PRODUCTION]
+    if isNaN(appEnv)
       return ENUMS.APP_ENV.NO_PREFERENCE
   ).property "appEnv"
 
   filteredAppAction: (->
     appAction = parseInt @get "appAction"
-    if appAction isnt [ENUMS.APP_ACTION.NO_PREFERENCE, ENUMS.APP_ACTION.HALT, ENUMS.APP_ACTION.PROCEED]
+    if isNaN(appAction)
       return ENUMS.APP_ACTION.NO_PREFERENCE
   ).property "appAction"
 
