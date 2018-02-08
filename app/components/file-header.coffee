@@ -51,17 +51,17 @@ FileHeaderComponent = Ember.Component.extend
 
   filteredEnvironments: (->
     environments = @get "environments"
-    appEnv = parseInt @get "manualscan.appEnv"
+    appEnv = parseInt @get "manualscan.filteredAppEnv"
     environments.filter (env) ->
       appEnv isnt env.value
-  ).property "environments", "manualscan.appEnv"
+  ).property "environments", "manualscan.filteredAppEnv"
 
   filteredAppActions: (->
     appActions = @get "appActions"
-    appAction =  parseInt @get "manualscan.appAction"
+    appAction =  parseInt @get "manualscan.filteredAppAction"
     appActions.filter (action) ->
       appAction isnt action.value
-  ).property "appActions", "manualscan.appAction"
+  ).property "appActions", "manualscan.filteredAppAction"
 
   filteredLoginStatuses: (->
     loginStatuses = @get "loginStatuses"
@@ -209,11 +209,11 @@ FileHeaderComponent = Ember.Component.extend
       else
         @set "manualscan.showProceedText", false
         @set "manualscan.showHaltText", false
-      @set "manualscan.appAction", appAction
+      @set "manualscan.filteredAppAction", appAction
 
     selectAppEnvironment: ->
       appEnv = @$('#app-env').val()
-      @set "manualscan.appEnv", appEnv
+      @set "manualscan.filteredAppEnv", appEnv
 
     openRemoveUserRoleConfirmBox: (param)->
       @set "deletedRole", param
@@ -265,8 +265,8 @@ FileHeaderComponent = Ember.Component.extend
 
     saveManualScanForm: ->
       appName = @get "file.name"
-      appEnv =  @get "manualscan.appEnv"
-      appAction =  @get "manualscan.appAction"
+      appEnv =  @get "manualscan.filteredAppEnv"
+      appAction =  @get "manualscan.filteredAppAction"
       minOsVersion = @get "manualscan.minOsVersion"
 
       contactName = @get "manualscan.contact.name"

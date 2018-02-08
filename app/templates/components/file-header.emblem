@@ -301,8 +301,8 @@
               = t "modalCard.manual.appEnv"
             .column
               select.select{action 'selectAppEnvironment' on='change'} id="app-env"
-                option selected="true" value=manualscan.appEnv
-                  | #{ t (app-environment manualscan.appEnv)}
+                option selected="true" value=manualscan.filteredAppEnv
+                  | #{ t (app-environment manualscan.filteredAppEnv)}
                 each filteredEnvironments as |env|
                   option value=env.value
                     | #{ t (app-environment env.value)}
@@ -316,8 +316,8 @@
               = t "modalCard.manual.appQuestion1"
             .column
               select.select{action 'requiredAppAction' on='change'} id="required-app-action"
-                option selected="true" value=manualscan.appAction
-                  | #{ t (app-action manualscan.appAction)}
+                option selected="true" value=manualscan.filteredAppAction
+                  | #{ t (app-action manualscan.filteredAppAction)}
                 each filteredAppActions as |appAction|
                   option value=appAction.value
                     | #{ t (app-action appAction.value)}
