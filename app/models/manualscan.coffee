@@ -16,12 +16,14 @@ Manualscan = DS.Model.extend
     appEnv = parseInt @get "appEnv"
     if isNaN(appEnv)
       return ENUMS.APP_ENV.NO_PREFERENCE
+    appEnv
   ).property "appEnv"
 
   filteredAppAction: (->
     appAction = parseInt @get "appAction"
     if isNaN(appAction)
       return ENUMS.APP_ACTION.NO_PREFERENCE
+    appAction  
   ).property "appAction"
 
   showProceedText: (->

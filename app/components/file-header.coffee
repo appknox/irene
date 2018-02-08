@@ -278,10 +278,11 @@ FileHeaderComponent = Ember.Component.extend
 
       tPleaseEnterUserRoles = @get "tPleaseEnterUserRoles"
 
-      if @get "manualscan.loginReq  uired"
-        return @get("notify").error tPleaseEnterUserRoles if isEmpty userRoles
-
+      loginRequired =  @get "manualscan.loginRequired"
       userRoles = @get "manualscan.userRoles"
+
+      if loginRequired
+        return @get("notify").error tPleaseEnterUserRoles if isEmpty userRoles
 
       if userRoles
         userRoles.forEach (userRole) ->
@@ -289,14 +290,18 @@ FileHeaderComponent = Ember.Component.extend
 
       tPleaseEnterVPNDetails = @get "tPleaseEnterVPNDetails"
 
-      if @get "manualscan.vpnRequired"
-        for inputValue in [vpnAddress, vpnPort]
-          return @get("notify").error tPleaseEnterVPNDetails if isEmpty inputValue
+      vpnRequired = @get "manualscan.vpnRequired"
 
       vpnAddress =  @get "manualscan.vpnDetails.address"
       vpnPort =  @get "manualscan.vpnDetails.port"
       vpnUsername =  @get "manualscan.vpnDetails.username"
       vpnPassword =  @get "manualscan.vpnDetails.password"
+
+      if vpnRequired
+        for inputValue in [vpnAddress, vpnPort]
+          return @get("notify").error tPleaseEnterVPNDetails if isEmpty inputValue
+
+
 
       vpnDetails =
         address: vpnAddress
@@ -317,6 +322,7 @@ FileHeaderComponent = Ember.Component.extend
         vpn_details: vpnDetails
         contact: contact
         additional_comments: additionalComments
+
       that = @
       tManualRequested = @get "tManualRequested"
       @set "isRequestingManual", true
