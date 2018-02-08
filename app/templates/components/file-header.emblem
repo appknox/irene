@@ -449,7 +449,7 @@
         .column.margin-right
           = textarea class="input text-area" type="name" value=manualscan.additionalComments
   .columns
-    .column
+    .column.flex-center.margin-top50
       button.modal-button.is-primary click="saveManualScanForm" disabled=isRequestingManual
         = t "modalCard.manual.title"
 
