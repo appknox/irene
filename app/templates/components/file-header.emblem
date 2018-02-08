@@ -126,7 +126,6 @@
               = fa-icon "fa-clock-o"
               | &nbsp; #{t "requested"}
 
-
 .card.is-fullwidth.app-details-card
   header.card-header
     .column.is-one-quarter
@@ -364,15 +363,15 @@
                = t "modalCard.manual.enterLoginDetails"
             .columns.no-border-column
               .column
-                .columns.no-border-column
+                form.columns.no-border-column
                   .column.is-one-third
                     = input class="input userrole" type="name" value=newUserRole placeholder=(t "role")
                   .column.is-one-third
                     = input class="input" type="name" value=username autocomplete="new-user" placeholder=(t "username")
                   .column.is-one-third
                     = input class="input password" type="password" value=password autocomplete="new-password" placeholder=(t "password")
-                button.modal-button.is-primary.uppercase-text click="addUserRole"
-                  = t "modalCard.manual.addUserRole"
+                  button.modal-button.is-primary.uppercase-text.margin-left click="addUserRole"
+                    = t "modalCard.manual.addUserRole"
             if hasUserRoles
               .column
                 table.user-roles-table
@@ -431,16 +430,13 @@
             = t "modalCard.manual.enterVPNDetails"
             .columns.no-border-column
               .column
-                .columns.no-border-column
+                form.columns.no-border-column
                   .column.is-one-third
                       = input class="input" type="name" placeholder=(t "modalCard.manual.vpnAddress") value=manualscan.vpnDetails.address autocomplete="new-address"
                   .column.is-one-third
                     = input class="input" type="name" placeholder=(t "modalCard.manual.vpnPort") value=manualscan.vpnDetails.port autocomplete="new-port"
-          h6
-            = t "modalCard.manual.enterCredentails"
-            .columns.no-border-column
-              .column
-                .columns.no-border-column
+                  h6.margin-left.margin-top.margin-bottom0
+                    = t "modalCard.manual.enterCredentails"
                   .column.is-one-third
                     = input class="input" type="name" value=manualscan.vpnDetails.username autocomplete="new-username" placeholder=(t "username")
                   .column.is-one-third
