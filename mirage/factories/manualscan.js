@@ -2,8 +2,6 @@ import { Factory, faker } from 'ember-cli-mirage';
 import ENUMS from 'irene/enums';
 
 export default Factory.extend({
-  companyName: faker.company.companyName,
-  appName: faker.name.firstName,
   appEnv() {
     return faker.random.arrayElement(ENUMS.APP_ENV.VALUES);
   },
@@ -16,50 +14,22 @@ export default Factory.extend({
   },
   contact(){
     var item = {
-      name: faker.name.firstName(),
-      email: faker.internet.email()
+      name: "",
+      email: ""
     };
     return item;
   },
   vpnDetails(){
     var item = {
-      address: faker.name.firstName(),
-      port: faker.random.number()
-    };
-    var vpnRequired = faker.random.boolean;
-    if(vpnRequired === true) {
-      item = {
-        address: faker.name.firstName(),
-        port: faker.random.number(),
-        username: faker.name.firstName(),
-        password: faker.name.firstName()
+        address: "",
+        port: "",
+        username: "",
+        password: ""
       };
-    }
     return item;
   },
   userRoles() {
-    var item = [
-      {
-        "username": "yash",
-        "password": "subham12345",
-        "role": "admin"
-      },
-      {
-        "username": "lino",
-        "password": "test12",
-        "role": "admin"
-      },
-      {
-        "username": "yash",
-        "password": "test1",
-        "role": "customer"
-      },
-      {
-        "username": "lino",
-        "password": "test12",
-        "role": "customer"
-      }
-    ];
+    var item = [];
     return item;
   }
 });

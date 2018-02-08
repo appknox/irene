@@ -294,14 +294,13 @@ FileHeaderComponent = Ember.Component.extend
 
       vpnAddress =  @get "manualscan.vpnDetails.address"
       vpnPort =  @get "manualscan.vpnDetails.port"
-      vpnUsername =  @get "manualscan.vpnDetails.username"
-      vpnPassword =  @get "manualscan.vpnDetails.password"
 
       if vpnRequired
         for inputValue in [vpnAddress, vpnPort]
           return @get("notify").error tPleaseEnterVPNDetails if isEmpty inputValue
 
-
+      vpnUsername =  @get "manualscan.vpnDetails.username"
+      vpnPassword =  @get "manualscan.vpnDetails.password"    
 
       vpnDetails =
         address: vpnAddress
