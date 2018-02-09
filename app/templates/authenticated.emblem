@@ -39,14 +39,14 @@
               .column.scan-text.is-one-third
                 = t "startNewScan"
               .column
-                label.button.is-primary.ac-upload-app.highlighted-button
+                label.button.is-primary.ac-upload-app.highlighted-button disabled=isUploading
                   = upload-app delegate=this class="mp-upload-app"
                   = fa-icon "upload"
                   | &nbsp;
                   if isUploading
-                    | #{t "uploading"} :
-                    = progress
-                    | %
+                    | #{t "uploading"}
+                    if progress
+                      | : #{progress} %
                   else
                     = t "uploadApp"
           .column.is-one-quarter

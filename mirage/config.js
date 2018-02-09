@@ -39,6 +39,10 @@ export default function() {
     return {};
   });
 
+  this.get('/signed_url/', () => {
+    return {};
+  });
+
   this.get('/dynamic/:id', () => {
     return {};
   });

@@ -1,6 +1,6 @@
 `import Ember from 'ember'`
 `import Uploader from 'irene/utils/uploader'`
-`import ENV from 'irene/config/environment';`
+`import ENV from 'irene/config/environment'`
 
 UploadAppComponent = EmberUploader.FileField.extend
 
@@ -27,6 +27,9 @@ UploadAppComponent = EmberUploader.FileField.extend
       delegate.set "progress", parseInt e.percent
 
     uploader.upload files[0]
+    .catch ->
+      $('input[type=file]').val('')
+      delegate.set "isUploading", false
 
 
 `export default UploadAppComponent`
