@@ -41,15 +41,4 @@ else
       h5
         = t "noProjectUploaded"
       h6
-        | #{t "uploadNewProject"}:
-      span
-        label.button.is-primary.ac-upload-app-first.highlighted-button
-          = upload-app delegate=this
-          = fa-icon "upload"
-          | &nbsp;
-          if isUploading
-            | #{t "uploading"} :
-            = progress
-            | %
-          else
-            = t "uploadApp"
+        = t "uploadNewProject"
