@@ -1,1 +1,2 @@
-= password-recover
+.auth-main-container
+  = password-recover
