@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{login-component}}"""
 
-  assert.equal @$().text().trim(), 'Sign InSecurity fanatics at your serviceForgot Password?Login'
+  assert.equal @$().text().trim(), 'Security fanatics at your service Member LoginForgot Password?Login'
