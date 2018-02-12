@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{analysis-settings}}"""
 
-  assert.equal @$().text().trim(), 'SHOW/HIDE Unknown Analysis'
+  assert.equal @$().text().trim(), 'SHOW/HIDE Unknown AnalysisDo you want us to show unknown analysis?'

@@ -31,9 +31,15 @@ export default function() {
   this.get('/invoices/:id', 'invoice');
   this.get('/invitations/', 'invitation');
   this.get('/subscriptions/', 'subscription');
+  this.get('/stats/:id', 'stat');
+  this.get('/personaltokens', 'personaltoken');
   this.get('/manualscans/:id', 'manualscan');
 
   this.get('/github_repos', () => {
+    return {};
+  });
+
+  this.get('/signed_url/', () => {
     return {};
   });
 
@@ -73,7 +79,7 @@ export default function() {
     return {};
   });
 
-  this.post('/manualscans/:id', () => {
+  this.put('/manualscans/:id', () => {
     return {};
   });
 
@@ -135,6 +141,10 @@ export default function() {
   });
 
   this.post('/collaborations/:id', () => {
+   return;
+  });
+
+  this.post('/rescan', () => {
    return;
   });
 

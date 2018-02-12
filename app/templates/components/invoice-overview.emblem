@@ -10,4 +10,5 @@ td
   = invoice.paidStatus
 td
   button.is-primary click="getInvoiceLink"
-    = t "download"
+    = fa-icon "download" class="font-size-14"
+    | &nbsp; #{ t "download"}

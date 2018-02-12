@@ -16,10 +16,10 @@ header.card-header
 .card-content
   .content
     .columns
-      .column.flex-center.nowrap-trim.lowercase-text.tooltip
+      .column.flex-center.nowrap-trim.lowercase-text
         = t "started"
         | &nbsp; #{moment-from-now file.createdOn}
-        span.tooltiptext.tooltip-collapse
+        = attach-tooltip placement="bottom"
           = file.createdOnDateTime
       .column.flex-center.nowrap-trim
         = t "versionCode"
@@ -27,7 +27,8 @@ header.card-header
 
     .columns class=isReverse:is-reverse
       .column.flex-center
-        = pie-chart data=file.pieChartData height=100 width=100 globalAlpha=globalAlpha radiusRatio=radiusRatio
+        = ember-chart type='doughnut' data=file.doughnutData width=150 height=150 options=chartOptions
+      .file-details-class  
       .column
         ul.risk-table
           .risk-values

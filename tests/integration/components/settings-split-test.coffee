@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{settings-split}}"""
 
-  assert.equal @$().text().trim(), 'GeneralSecurityDeveloper SettingsNamespaceNo Namespace!!!+ Add NamespaceAdd NamespaceAdd NamespaceLanguageSelect the preferred language belowEnglish日本語JIRA IntegrationIntegrate JIRAAre you sure you want to revoke JIRA Integration?CancelOkGitHub IntegrationIntegrate GitHubAre you sure you want to revoke Github Integration?CancelOk'
+  assert.equal @$().text().trim(), 'GeneralSecurityDeveloper SettingsNamespaceYou can add a new namespace below  no namespace+ Add NamespaceAdd NamespaceAdd NamespaceLanguageSelect the preferred language belowEnglish日本語JIRA IntegrationIntegrate JIRAAre you sure you want to revoke JIRA Integration?CancelOkGitHub IntegrationIntegrate GitHubAre you sure you want to revoke Github Integration?CancelOk'

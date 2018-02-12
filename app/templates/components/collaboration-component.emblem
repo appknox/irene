@@ -1,10 +1,13 @@
 .columns
   .column
-    h5
+    h5.bold.black-text
       = t "collaborations"
   .column.content-right.margin-right100
     button.is-primary.mp-open-collaboration-modal.uppercase-text click="openCollaborationModal"
       | + #{t "addTeam"}
+
+h6
+  = t "otherTemplates.addATeam"
 
 .collaboration-container
   table.collaboration-table.margin-top

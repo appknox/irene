@@ -14,14 +14,15 @@ if isGeneral
   .box-container
     .columns
       .column
-        h4
+        h5.bold.black-text
           = t "namespace"
+        = t "addNewNamespace"
         .namespace-list
           = namespace-component user=user
   .box-container
     .columns
       .column.is-one-third
-        h4
+        h5.bold.black-text
           = t "language"
         = t "selectLanguage"
         .language-select
@@ -29,13 +30,13 @@ if isGeneral
   .box-container
     .columns
       .column
-        h4.is-fullwidth
+        h5.bold.black-text.is-fullwidth
           = t "jiraIntegration"
         = jira-account user=user class="column is-one-third"
   .margin-left
     .columns
       .column
-        h4.is-fullwidth
+        h5.bold.black-text.is-fullwidth
           = t "githubIntegration"
         = github-account user=user class="column is-one-third"
 
@@ -43,15 +44,17 @@ if isSecurity
   .box-container
     .columns
       .column.is-half
-        h4.is-fullwidth
+        h5.bold.black-text.is-fullwidth
           = t "changePassword"
         = password-change
   .box-container
     .columns
       .column.is-half
-        h4.is-fullwidth
+        h5.bold.black-text.is-fullwidth
           = t "multiFactorAuth"
-        = auth-mfa user=user
+        = t "mfaDescription"
+        .margin-top20
+          = auth-mfa user=user
 
 if isDeveloperSettings
   .box-container

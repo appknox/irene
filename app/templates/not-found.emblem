@@ -1,14 +1,13 @@
-.container
-  h1 Holy, Carbohydrates!
+.not-found-container
+  .not-found-section
+    h1 Holy, Carbohydrates!
 
-  h2 Aliens Abducted this page.
+    h2 Aliens Abducted this page.
 
-  h3 Run, Forest! Run!! Run like the wind!!! Run for your life!!! Before the aliens abduct you too.
+    h3 Run, Forest! Run!! Run like the wind!!! Run for your life!!! Before the aliens abduct you too.
 
-  p Oh wait. Dang! This is just a broken page. You scared us for a second! We were about to abandon our offices. Anyways - do not panic. You are just lost.
+    p Oh wait. Dang! This is just a broken page. You scared us for a second! We were about to abandon our offices. Anyways - do not panic. You are just lost.
 
-  hr
-
-  = link-to "authenticated.index" class="button is-primary"
-    = fa-icon "home"
-    | &nbsp;Go Back To Home
+    = link-to "authenticated.index" class="button is-primary margin-top50 highlighted-button"
+      = fa-icon "home"
+      | &nbsp;Go Back To Home

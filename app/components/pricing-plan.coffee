@@ -50,6 +50,7 @@ PricingPlanComponent = Ember.Component.extend
   ).property "paymentDuration", "plan.monthlyPrice", "plan.quarterlyPrice", "plan.halfYearlyPrice", "plan.yearlyPrice"
 
   actions:
+    
     initiatePayment: ->
       duration = @get "paymentDuration"
       planQuantity = @get "planQuantity"
@@ -67,6 +68,7 @@ PricingPlanComponent = Ember.Component.extend
 
     incrementPlanQuantity: ->
       @incrementProperty "planQuantity"
+
     decrementPlanQuantity: ->
       planQuantity = @get "planQuantity"
       if planQuantity > 1

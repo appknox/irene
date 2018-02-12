@@ -12,8 +12,8 @@ LoginComponentComponent = Ember.Component.extend
       password = @get 'password'
       otp = @get "otp"
 
-      if !identification and !password
-        that.get("notify").error "Please enter username and password", ENV.notifications
+      if !identification or !password
+        return that.get("notify").error "Please enter username and password", ENV.notifications
       identification = identification.trim()
       password = password.trim()
 

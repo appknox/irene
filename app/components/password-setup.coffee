@@ -19,7 +19,7 @@ PasswordSetupComponent = Ember.Component.extend
       return
     confirmPassword = @get "confirmPassword"
     if password isnt confirmPassword
-      @validation_errors.push "Passwords doesnt match"
+      @validation_errors.push "Passwords doesn't match"
     @validation_errors
 
   actions:

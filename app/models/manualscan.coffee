@@ -1,7 +1,8 @@
 `import DS from 'ember-data'`
+`import ENUMS from 'irene/enums'`
 
 Manualscan = DS.Model.extend
-  appEnv: DS.attr()
+  appEnv: DS.attr 'string'
   minOsVersion: DS.attr 'string'
   contact: DS.attr()
   loginRequired: DS.attr 'boolean'
@@ -9,6 +10,21 @@ Manualscan = DS.Model.extend
   vpnRequired: DS.attr 'boolean'
   vpnDetails: DS.attr()
   appAction: DS.attr 'string'
+  additionalComments: DS.attr 'string'
+
+  filteredAppEnv: (->
+    appEnv = parseInt @get "appEnv"
+    if isNaN(appEnv)
+      return ENUMS.APP_ENV.NO_PREFERENCE
+    appEnv
+  ).property "appEnv"
+
+  filteredAppAction: (->
+    appAction = parseInt @get "appAction"
+    if isNaN(appAction)
+      return ENUMS.APP_ACTION.NO_PREFERENCE
+    appAction  
+  ).property "appAction"
 
   showProceedText: (->
     appAction = @get "appAction"

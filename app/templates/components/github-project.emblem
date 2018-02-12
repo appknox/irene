@@ -1,16 +1,18 @@
-h5
+h5.bold.black-text
   = t "githubIntegration"
 
 if project.githubRepo
-  h5
+  h6
     = t "integratedGithub"
     code
       | &nbsp; #{project.githubRepo}
-    .tag.delete-tag.margin-top3.remove click="openDeleteGHConfirmBox"
+    .tag.delete-tag.remove click="openDeleteGHConfirmBox"
       i.fa.risk-icons.fa-trash-o
         | &nbsp; #{t "remove"}
 
 else
+  h6
+    = t "otherTemplates.selectGHRepo"
   .columns
     .column.is-one-third
       select.select.mp-github-select-project{action 'selectRepo' on='change'}

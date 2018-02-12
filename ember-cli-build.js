@@ -89,6 +89,12 @@ module.exports = function(defaults) {
     app.import('bower_components/devices.css/assets/devices.min.css');
 
 
+  /*
+   * including chart.js
+   */
+   app.import('bower_components/chart.js/dist/Chart.js');
+
+
 
   return app.toTree();
 };

@@ -18,17 +18,19 @@
         td colspan="2"
           if subscription.isTrial
             if subscription.isCancelled
-              | Your trial will expire on #{subscription.expiryDateOnHumanized}
+              | #{ t "trialWillExpireOn"} #{subscription.expiryDateOnHumanized}
             else
-              | Your free trial will be converted into paid subscription on #{subscription.expiryDateOnHumanized}
+              | #{ t "trialWillBeConverted"} #{subscription.expiryDateOnHumanized}
               button.is-primary.flex-center click="openCancelSubscriptionConfirmBox"
-                = t "cancelSubsciption"
+                = fa-icon "times" class="font-size-18"
+                | &nbsp; #{ t "cancelSubsciption"}
           else
             if subscription.isCancelled
-              | Your subscription expires on #{subscription.expiryDateOnHumanized}
+              | #{t "subscriptionWillExpireOn"} #{subscription.expiryDateOnHumanized}
             else
-              | You will be charged on #{subscription.expiryDateOnHumanized}
+              | #{ t "youWillBeChargedOn"} #{subscription.expiryDateOnHumanized}
               button.is-primary.flex-center click="openCancelSubscriptionConfirmBox"
-                = t "cancelSubsciption"
+                = fa-icon "times" class="font-size-18"
+                | &nbsp; #{ t "cancelSubsciption"}
 
 = confirm-box isActive=showCancelSubscriptionConfirmBox title=(t 'confirmBox.cancelSubsciption') delegate=this

@@ -1,21 +1,31 @@
-= file-header file=file class="margin-top"
+.box-container.reduce-padding
+  .columns
+    .column
+      = file-header file=file class="margin-top"
+    .column.is-one-third.margin-top-10.padding-bottom0
+      = vnc-viewer file=file
 
 .columns.margin-left
   .column
-    h4
+    h5.bold.black-text
       = t "vulnerabilityDetails"
-  .column.is-one-third.content-right
+  .column.is-one-sixth.content-right
     select{action 'filterVulnerabilityType' on='change'} id="filter-vulnerability-type" class="input filter-input"
       option value="-1"
         = t "allScans"
       each vulnerabilityTypes as |vulnerabilityType|
         option value=vulnerabilityType.value
           | #{ t (vulnerability-type vulnerabilityType.value)}
-if filteredAnalysis
-  each filteredAnalysis as |analysis|
-    = analysis-details analysis=analysis class="margin-top"
-else
-  .not-found
-    h4
-      = fa-icon "exclamation-triangle"
-      = t "noScansFound"
+  .column.is-one-third
+
+.columns
+  .column
+    if filteredAnalysis
+      each filteredAnalysis as |analysis|
+        = analysis-details analysis=analysis class="margin-top"
+    else
+      .not-found
+        h4
+          = fa-icon "exclamation-triangle"
+          = t "noScansFound"
+  .column.is-one-third

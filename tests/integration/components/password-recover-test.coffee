@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{password-recover}}"""
 
-  assert.equal @$().text().trim(), 'Recover your passwordSecurity fanatics at your serviceRecoverLogin?'
+  assert.equal @$().text().trim(), 'Security fanatics at your serviceRecover your passwordRecoverLogin?'

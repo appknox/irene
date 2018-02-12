@@ -3,8 +3,6 @@
 
 SubmissionListComponent = Ember.Component.extend
 
-  classNames: ["container"]
-
   submissionCount: Ember.computed.alias 'submissions.length'
   hasSubmissions: Ember.computed.gt 'submissionCount', 0
 
@@ -20,5 +18,8 @@ SubmissionListComponent = Ember.Component.extend
 
   submissionSorting: ['id:desc']
   sortedSubmissions: Ember.computed.sort 'filteredSubmissions', 'submissionSorting'
+
+  sortedSubmissionsCount: Ember.computed.alias 'filteredSubmissions.length'
+  hasSortedSubmissions: Ember.computed.gt 'sortedSubmissionsCount', 0
 
 `export default SubmissionListComponent`

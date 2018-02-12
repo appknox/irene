@@ -7,19 +7,25 @@ vncHeight = 512
 vncWidth = 385
 
 VncViewerComponent = Ember.Component.extend
-  i18n: Ember.inject.service()
-  onboard: Ember.inject.service()
 
   rfb: null
   file: null
-  isPoppedOut: false
+
+  i18n: Ember.inject.service()
+  onboard: Ember.inject.service()
+
+  tCloseModal: t("closeModal")
+  tPopOutModal: t("popOutModal")
+
   classNameBindings: ["isPoppedOut:modal", "isPoppedOut:is-active"]
 
   vncPopText: (->
+    tCloseModal = @get "tCloseModal"
+    tPopOutModal = @get "tPopOutModal"
     if @get "isPoppedOut"
-      "Close Modal"
+      tCloseModal
     else
-      "Pop Out Modal"
+      tPopOutModal
   ).property "isPoppedOut"
 
   setupRFB: ->

@@ -15,4 +15,4 @@ test 'it renders', (assert) ->
 
 
 
-  assert.equal @$().text().trim(), "JIRA IntegrationNo PreferenceLoading...Are you sure you want to remove JIRA Project?CancelOk"
+  assert.equal @$().text().trim(), "JIRA IntegrationSelect the JIRA account where you want us to create issues for the risks we find in your projectNo PreferenceLoading...Are you sure you want to remove JIRA Project?CancelOk"

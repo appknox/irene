@@ -4,24 +4,28 @@
 `import triggerAnalytics from 'irene/utils/trigger-analytics'`
 
 NamespaceComponentComponent = Ember.Component.extend
-  i18n: Ember.inject.service()
-  classNames: ["column"]
-  added: false
+
   namespace: ""
+  added: false
+  classNames: ["column"]
   isAddingNamespace: false
   showNamespaceModal: false
+  i18n: Ember.inject.service()
   tRequestToAddNamespace: t("requestToAddNamespace")
+  tPleaseEnterAnyNamespace: t("pleaseEnterAnyNamespace")
 
   notAdded: (->
     !@get "added"
   ).property "added"
 
   actions:
+    
     addNamespace: ->
       tRequestToAddNamespace = @get "tRequestToAddNamespace"
+      tPleaseEnterAnyNamespace = @get "tPleaseEnterAnyNamespace"
       namespace = @get "namespace"
       if !namespace
-        return @get("notify").error "Please enter any namespace", ENV.notifications
+        return @get("notify").error tPleaseEnterAnyNamespace, ENV.notifications
       data =
         namespace: namespace
       triggerAnalytics('feature',ENV.csb.namespaceAdded)

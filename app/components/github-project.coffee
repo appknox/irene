@@ -25,15 +25,12 @@ GithubProjectComponent = Ember.Component.extend
       for error in error.errors
         that.get("notify").error error.detail?.message
 
-
-
   fetchGithubRepos: (->
     if ENV.environment is 'test'
       # FIXME: Fix this test properly
       return
     tFetchGitHubRepoFailed = @get "tFetchGitHubRepoFailed"
     that = @
-
     @get("ajax").request ENV.endpoints.githubRepos
     .then (data) ->
       that.set "githubRepos", data.repos

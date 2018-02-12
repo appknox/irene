@@ -1,1 +1,2 @@
-= invitation-accept invitation=model
+.auth-main-container
+  = invitation-accept invitation=model

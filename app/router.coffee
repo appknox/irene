@@ -17,6 +17,7 @@ Router.map ->
     @route "team", path: '/team/:teamId'
     @route "settings", path: '/settings'
     @route "billing", path: '/billing'
+    @route 'projects', path: '/projects'
     @route "project", path: '/project/:projectId', ->
       @route 'settings'
       @route 'files'
@@ -31,18 +32,10 @@ Router.map ->
   @route 'not-found', path: '/*path'
 
 CSBMap = {
-  "authenticated.settings":{
-    feature: "Account Settings",
-    module: "Setup"
-  },
-  "authenticated.project.files":{
-    feature: "All Scans",
-    module: "Security"
-  },
-  "authenticated.choose":{
-    feature: "Compare Scans",
-    module: "Security"
-  }
+  "authenticated.settings": {feature: "Account Settings", module: "Setup", product: "Appknox" },
+  "authenticated.project.files": { feature: "All Scans", module: "Security", product: "Appknox" },
+  "authenticated.choose": { feature: "Compare Scans", module: "Security", product: "Appknox" }
 }
+
 
 `export { Router as default, CSBMap as CSBMap}`

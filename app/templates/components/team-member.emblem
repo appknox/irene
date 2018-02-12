@@ -1,10 +1,8 @@
 td
-  .columns
-    .column
-      = member
-    .column
-      .tag.role-tag
-        = t "member"
+  = member
+
+td
+  = t "member"
 td
   button.is-primary click="openRemoveMemberPrompt"
     = t "remove"

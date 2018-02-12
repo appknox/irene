@@ -15,29 +15,32 @@ FileHeaderComponent = Ember.Component.extend
   globalAlpha:0.4
   radiusRatio:0.9
 
+  isBasicInfo: false
+  isVPNDetails: false
   apiScanModal: false
+  isLoginDetails: false
   isStartingRescan: false
   dynamicScanModal: false
   isRequestingManual: false
+  showManualScanFormModal: false
   showRemoveRoleConfirmBox: false
-
-  vpnStatuses: ["yes", "no"]
-  loginStatuses: ["yes", "no"]
-  appActions: ["halt", "proceed"]
-  environments: ["staging", "production"]
 
   i18n: Ember.inject.service()
   trial: Ember.inject.service()
+
+  vpnStatuses: ["yes", "no"]
+  loginStatuses: ["yes", "no"]
+  appActions: ENUMS.APP_ACTION.CHOICES[0...-1]
+  environments: ENUMS.APP_ENV.CHOICES[0...-1]
 
   tStartingScan: t("startingScan")
   tPasswordCopied: t("passwordCopied")
   tPleaseTryAgain: t("pleaseTryAgain")
   tManualRequested: t("manualRequested")
+  tRescanInitiated: t("rescanInitiated")
   tRoleAdded: t("modalCard.manual.roleAdded")
-  tPleaseEnterPOC: t("modalCard.manual.pleaseEnterPOC")
   tReportIsGettingGenerated: t("reportIsGettingGenerated")
   tPleaseEnterAllValues: t("modalCard.manual.pleaseEnterAllValues")
-  tPleaseEnterOSVersion: t("modalCard.manual.pleaseEnterOSVersion")
   tPleaseEnterUserRoles: t("modalCard.manual.pleaseEnterUserRoles")
   tPleaseEnterVPNDetails: t("modalCard.manual.pleaseEnterVPNDetails")
 
@@ -48,17 +51,17 @@ FileHeaderComponent = Ember.Component.extend
 
   filteredEnvironments: (->
     environments = @get "environments"
-    appEnv = @get "manualscan.appEnv"
+    appEnv = parseInt @get "manualscan.filteredAppEnv"
     environments.filter (env) ->
-      appEnv isnt env
-  ).property "environments", "manualscan.appEnv"
+      appEnv isnt env.value
+  ).property "environments", "manualscan.filteredAppEnv"
 
-  filteredAddActions: (->
+  filteredAppActions: (->
     appActions = @get "appActions"
-    appAction = @get "manualscan.appAction"
+    appAction =  parseInt @get "manualscan.filteredAppAction"
     appActions.filter (action) ->
-      appAction isnt action
-  ).property "appActions", "manualscan.appAction"
+      appAction isnt action.value
+  ).property "appActions", "manualscan.filteredAppAction"
 
   filteredLoginStatuses: (->
     loginStatuses = @get "loginStatuses"
@@ -73,6 +76,11 @@ FileHeaderComponent = Ember.Component.extend
     vpnStatuses.filter (status) ->
       vpnStatus isnt status
   ).property "vpnStatuses", "manualscan.vpnStatus"
+
+  chartOptions: (->
+    legend: { display: false }
+    animation: {animateRotate: false}
+  ).property()
 
   didInsertElement: ->
     tPasswordCopied = @get "tPasswordCopied"
@@ -193,15 +201,38 @@ FileHeaderComponent = Ember.Component.extend
         @set "manualscan.vpnRequired", true
 
     requiredAppAction: ->
-      appAction = @$('#required-app-action').val()
-      @set "manualscan.showProceedText", false
-      if appAction is "proceed"
+      appAction = parseInt @$('#required-app-action').val()
+      if appAction is ENUMS.APP_ACTION.PROCEED
         @set "manualscan.showProceedText", true
-      @set "manualscan.appAction", appAction
+      else if appAction is ENUMS.APP_ACTION.HALT
+        @set "manualscan.showHaltText", true
+      else
+        @set "manualscan.showProceedText", false
+        @set "manualscan.showHaltText", false
+      @set "manualscan.filteredAppAction", appAction
+
+    selectAppEnvironment: ->
+      appEnv = @$('#app-env').val()
+      @set "manualscan.filteredAppEnv", appEnv
 
     openRemoveUserRoleConfirmBox: (param)->
       @set "deletedRole", param
       @set "showRemoveRoleConfirmBox", true
+
+    displayAppInfo: ->
+      @set "isBasicInfo", !@get "isBasicInfo"
+      @set 'isLoginDetails', false
+      @set 'isVPNDetails', false
+
+    displayLoginDetails: ->
+      @set 'isBasicInfo', false
+      @set 'isLoginDetails', !@get "isLoginDetails"
+      @set 'isVPNDetails', false
+
+    displayVPNDetails: ->
+      @set 'isBasicInfo', false
+      @set 'isLoginDetails', false
+      @set 'isVPNDetails', !@get "isVPNDetails"
 
     addUserRole: ->
       newUserRole = @get "newUserRole"
@@ -234,49 +265,42 @@ FileHeaderComponent = Ember.Component.extend
 
     saveManualScanForm: ->
       appName = @get "file.name"
-      appEnv =  @$('#app-env').val()
-      appAction =  @$('#required-app-action').val()
-      minOsVersion = @$('#min-os-version').val()
+      appEnv =  @get "manualscan.filteredAppEnv"
+      appAction =  @get "manualscan.filteredAppAction"
+      minOsVersion = @get "manualscan.minOsVersion"
+
+      contactName = @get "manualscan.contact.name"
+      contactEmail = @get "manualscan.contact.email"
+
+      contact =
+        name: contactName
+        email: contactEmail
+
+      tPleaseEnterUserRoles = @get "tPleaseEnterUserRoles"
 
       loginRequired =  @get "manualscan.loginRequired"
-      if !loginRequired
-        loginRequired = false
-
       userRoles = @get "manualscan.userRoles"
+
+      if loginRequired
+        return @get("notify").error tPleaseEnterUserRoles if isEmpty userRoles
 
       if userRoles
         userRoles.forEach (userRole) ->
           delete userRole.id
 
-      vpnRequired =  @get "manualscan.vpnRequired"
-      if !vpnRequired
-        vpnRequired = false
-
-      vpnAddress = @$('#vpn-address').val()
-      vpnPort = @$('#vpn-port').val()
-      vpnUsername = @$('#vpn-username').val()
-      vpnPassword = @$('#vpn-password').val()
-
-      contactName = @$('#contact-name').val()
-      contactEmail = @$('#contact-email').val()
-
-      tPleaseEnterOSVersion = @get "tPleaseEnterOSVersion"
-      tPleaseEnterUserRoles = @get "tPleaseEnterUserRoles"
       tPleaseEnterVPNDetails = @get "tPleaseEnterVPNDetails"
-      tPleaseEnterPOC = @get "tPleaseEnterPOC"
 
-      for inputValue in [minOsVersion]
-        return @get("notify").error tPleaseEnterOSVersion if isEmpty inputValue
+      vpnRequired = @get "manualscan.vpnRequired"
 
-      if loginRequired
-        return @get("notify").error tPleaseEnterUserRoles if isEmpty userRoles
+      vpnAddress =  @get "manualscan.vpnDetails.address"
+      vpnPort =  @get "manualscan.vpnDetails.port"
 
       if vpnRequired
         for inputValue in [vpnAddress, vpnPort]
           return @get("notify").error tPleaseEnterVPNDetails if isEmpty inputValue
 
-      for inputValue in [contactName, contactEmail]
-        return @get("notify").error tPleaseEnterPOC if isEmpty inputValue
+      vpnUsername =  @get "manualscan.vpnDetails.username"
+      vpnPassword =  @get "manualscan.vpnDetails.password"    
 
       vpnDetails =
         address: vpnAddress
@@ -284,11 +308,7 @@ FileHeaderComponent = Ember.Component.extend
         username: vpnUsername
         password: vpnPassword
 
-      contact =
-        name: contactName
-        email: contactEmail
-
-      additionalComments = @get "additionalComments"
+      additionalComments = @get "manualscan.additionalComments"
 
       data =
         app_name: appName
@@ -314,10 +334,11 @@ FileHeaderComponent = Ember.Component.extend
         that.get("notify").info tManualRequested
         that.set "file.ifManualNotRequested", false
         that.set "showManualScanModal", false
+        that.set "showManualScanFormModal", false
       .catch (error) ->
         that.set "isRequestingManual", false
         for error in error.errors
-          that.get("notify").error error.detail?.message  
+          that.get("notify").error error.detail?.message
 
     openAPIScanModal: ->
       platform = @get "file.project.platform"
@@ -380,6 +401,7 @@ FileHeaderComponent = Ember.Component.extend
           that.get("notify").error error.detail?.message
 
     rescanApp: ->
+      tRescanInitiated = @get "tRescanInitiated"
       that = @
       fileId = @get "file.id"
       data =
@@ -388,7 +410,7 @@ FileHeaderComponent = Ember.Component.extend
       @get("ajax").post ENV.endpoints.rescan, data: data
       .then (result) ->
         that.set "isStartingRescan", false
-        that.get("notify").info "Rescan initiated"
+        that.get("notify").info tRescanInitiated
         that.set "showRescanModal", false
       .catch (error) ->
         that.set "isStartingRescan", false

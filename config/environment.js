@@ -221,7 +221,7 @@ module.exports = function(environment) {
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
-    ENV['host'] = "http://localhost:8000";
+    ENV['host'] = "http://192.168.0.198:8000";
     ENV.enableIntercom = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
@@ -256,6 +256,12 @@ module.exports = function(environment) {
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
     ENV['ember-cli-mirage'] = {
+      enabled: false
+    };
+    ENV['APP'].opbeat = {
+        DEBUG: true
+    };
+    ENV.rollbar = {
       enabled: false
     };
     ENV['host'] = "https://api.appknox.com";

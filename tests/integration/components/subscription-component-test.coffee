@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{subscription-component}}"""
 
-  assert.equal @$().text().trim(), 'Subscription DetailsCurrent PlanBilling Period You will be charged on Cancel SubscriptionAre you sure you want to cancel Subscription?CancelOk'
+  assert.equal @$().text().trim(), 'Subscription DetailsCurrent PlanBilling Period You will be charged on   Cancel SubscriptionAre you sure you want to cancel Subscription?CancelOk'

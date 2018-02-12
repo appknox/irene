@@ -1,11 +1,13 @@
-.margin-left.box-container
+.padding-bottom0.box-container
   .columns
-    .column.is-one-sixth
-      h4
-        =t "settings"
-    .column.is-one-sixth
+    .column
+      h4.bold.black-text
+        = t "settings"
+        |  | #{model.packageName}
+    .column
       = link-to 'authenticated.project.files' model.id class="is-primary" tagName="button" class="mp-settings-all-scans"
-        = t "allScans"
+        = fa-icon "navicon"
+        | &nbsp; #{t "allUploads"}
 
 .box-container
   = project-preferences project=model

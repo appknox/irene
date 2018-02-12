@@ -49,15 +49,13 @@ PaginateMixin = Ember.Mixin.create
         meta.total = result.meta.pagination.count
         that.set 'isJsonApiPagination', true
       that.set "meta", meta
+      # that.set "meta", total: 200
     objects
   ).property  "version"
 
   sortedObjects: Ember.computed.sort 'objects', 'sortProperties'
-
   objectCount: Ember.computed.alias 'objects.length'
   hasObjects: Ember.computed.gt 'objectCount', 0
-
-
 
   maxOffset: Ember.computed "meta.total", "limit", ->
     limit = @get "limit"
@@ -103,9 +101,8 @@ PaginateMixin = Ember.Mixin.create
     maxOffset = @get "maxOffset"
     offset + ENV.paginate.pagePadding < maxOffset
 
-
-
   hasPrevious: Ember.computed.gt "offset", 0
+
   hasNext: Ember.computed 'offset', 'maxOffset', ->
     offset = @get "offset"
     maxOffset = @get "maxOffset"
@@ -113,7 +110,6 @@ PaginateMixin = Ember.Mixin.create
 
   setOffset: (offset) ->
     @set "offset", offset
-
 
   actions:
 

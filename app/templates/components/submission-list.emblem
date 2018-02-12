@@ -1,8 +1,8 @@
 if hasSubmissions
-  hr
-  p.menu-label.margin-left
-    = t "status"
-
-.scroll-down
-  each sortedSubmissions as |submission|
-    = submission-details submission=submission
+  if hasSortedSubmissions
+    p.menu-label.margin-left
+      = t "status"
+    .status-container
+      each sortedSubmissions as |submission|
+        div.status-list
+          = submission-details submission=submission

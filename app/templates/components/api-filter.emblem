@@ -1,22 +1,37 @@
 .api-filter
-  h5
+  h5.bold.black-text
     = t "templates.apiScanURLFilter"
+
   h6
-    = t "templates.enterEndpoint"
-  form.url-filters
-    each project.apiUrlFilterItems as |item|
-      div.filter-list.margin-top
-        = input class="form-control input" type="text" placeholder=(t "templates.enterAPIEndpoint") value=item
-        i.fa.risk-icons.fa-trash-o.removeUrl click="openRemoveURLConfirmBox"
-  .columns.margin-top
+    = t "otherTemplates.specifyTheURL"
+
+  form.columns
     .column
-      form.url-filters
-        .columns
-          .column.is-one-third
-            button.is-primary.mp-add-filter click="addApiUrlFilter" disabled=isSavingFilter
-              = t "templates.saveFilter"
-          .column
-            button.is-primary click="addNewUrl"
-             | + {{t "templates.addNewUrl"}}
+      div.filter-list
+        = input class="form-control input" type="text" placeholder=(t "templates.enterAPIEndpoint") value=newUrlFilter
+    .column
+      button.is-primary click="addApiUrlFilter" disabled=isSavingFilter
+        | + {{t "templates.addNewUrl"}}
+  .condition-text-small
+    | eg. api.appknox.com. Do not specify the scheme (http://...), port (:443/...) & path (.../users)
+
+if project.hasApiUrlFilters
+  .columns
+    .column
+      table.api-filter-table
+        tr
+          th
+             = t "apiURLFilter"
+          th
+            = t "actions"
+        each project.apiUrlFilterItems as |item|
+          tr
+            td
+              = item
+            td
+              i.fa.risk-icons.fa-trash-o.removeUrl.remove click="openRemoveURLConfirmBox"
+
+
+
 
 = confirm-box isActive=showRemoveURLConfirmBox title=(t 'confirmBox.removeURL') delegate=this

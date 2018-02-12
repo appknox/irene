@@ -1,1 +1,65 @@
-= project-list user=model
+.columns.box-container.home-page
+  if model.hasProject
+    .column
+      = overall-report
+  else
+    .column.new-users
+      .welcome-text
+        | Welcome to Appknox!
+      .welcome-desc
+        | This is your Dashboard, where you can upload a new app, perform various scans and a lot more
+      .welcome-sub-desc
+        | Once you upload an app, the app will be added in <a href="/projects">Projects</a> and the Static scan will be performed <br>
+        | automatically. You can click on the project card to view more details about the project where you <br>
+        | can also perform Dynamic & API Scan, Download Report and view the vulnerabilities detected in <br>
+        | your app
+      .welcome-footer-text
+        | Start Scanning & Stay ahead of Competition
+  .column.is-one-third
+    .columns
+      .column
+        .box.risk-status-box
+          .columns
+            .column
+              h5
+                | Overall Count
+          .columns
+            .column
+              | Total Project Count
+            .column.is-one-third
+              = model.projectCount
+          .columns
+            .column
+              | Total Scan Count
+            .column.is-one-third
+              | 2
+          .columns
+            .column
+              h5
+                | Subscription
+          .columns
+            if model.limitedScans
+              .column
+                = t "scansLeft"
+              .column
+                = model.scansLeft
+            else
+              if model.hasExpiryDate
+                .column
+                  h6
+                    | #{ t model.expiryText}
+                    | #{moment-from-now model.getExpiryDate}
+          .columns
+            .column.align-center.card-button
+              = link-to 'authenticated.billing' class="mp-auth-billing" tagName="button"
+                = fa-icon "tag" class="sidebar-icons"
+                | UPGRADE PLAN
+
+if model.hasProject
+  .columns.stat-container
+    .column
+      = common-issues
+    .column
+      = recent-issues
+    .column
+      = activity-log

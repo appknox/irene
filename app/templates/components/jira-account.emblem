@@ -1,6 +1,6 @@
 if user.hasJiraToken
   h6
-    | Intergations completed
+    = t "integrationCompleted"
   button.is-primary.mp-jira-revoke click="openRevokeJIRAConfirmBox"
     = t "revokeJira"
 else
@@ -14,7 +14,7 @@ else
         .column
           = input class="input mp-jira-username" placeholder=(t "username") type="text" value=jiraUsername
         .column.margin-left20
-          = input class="input mp-jira-password" placeholder=(t "password") type="password" value=jiraPassword
+          = input class="input mp-jira-password" placeholder=(t "password") type="password" value=jiraPassword autocomplete="jira-password"
 
     button.is-primary click="integrateJira" class="mp-jira-integrate"
       = t "integrateJIRA"

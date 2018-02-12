@@ -8,11 +8,19 @@ $FreestyleGuide-color--background: $background
 
 $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert), danger: ($danger, $danger-invert), critical: ($critical, $critical-invert)) !default
 
+body
+  font-family: 'Open Sans', sans-serif
 
 /* Margin Defines*/
 
 .margin-top30
   margin-top: 30px
+
+.margin-top-10
+  margin-top: -10px
+
+.margin-top50
+  margin-top: 50px
 
 .margin-top
   margin-top: 10px
@@ -60,8 +68,20 @@ $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert),
   margin-top: 10px
   margin-bottom: 10px
 
+.margin-bottom0
+  margin-bottom: 0px!important
+
 .margin-bottom20
   margin-bottom: 20px
+
+.margin-bottom40
+  margin-bottom: 40px
+
+.margin-bottom50
+  margin-bottom: 50px
+
+.padding-bottom0
+  padding-bottom: 0px!important
 
 .margin-both
   margin-left: 10px
@@ -79,7 +99,31 @@ $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert),
 .no-multiple-files-no-manual
   margin-left: 10%
 
+.reduce-padding
+  padding: 5px 20px 0px 20px!important
+
+.padding-bottom0
+  padding-bottom: 0px
+
+.margin-auto
+  margin: auto
+
+.margin-side-auto
+  margin: 0px auto
+
 /* Appknox specific */
+.appknox-logo
+  margin-top: 13px
+
+.appknox-logo img
+  width: 100px
+  margin-left: auto
+
+.black-text
+  color: #323232
+
+.default-text
+  color: $default
 
 .upper-nav
   position: relative
@@ -107,28 +151,60 @@ $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert),
 // FIXME: Remove this after updating bohemia
 .menu-list
   padding: 0px
-  margin-left: 45px
-  margin-right: 45px
-  margin-top: 10px!important
+  text-align: center
+  margin-top: 20px!important
+  margin-right: -2px
   a
     padding: 5px 0px
     font-weight: lighter
+    color: #e5e5e5
+    margin-left: -40px
     &:hover
       font-weight: bolder
-      color: lighten(#EF4836, 15%)
-      background-color: #f0f0f0
-    &.is-active
-      font-weight: bolder
+      color: #e5e5e5
+      background-color: lighten(#424651, 3%)
   a.active
-    color: #EF4836
+    color: #FFF
     font-weight: 900
+    background-color: lighten(#424651, 5%)
 
 input
   display: block
 
 .top-nav
+  width: 100%
+  margin-top: -10px
   height: 50px
-  background-color: #f0f0f0
+  background-color: #424651
+  margin-left: 0px
+  border-left: 1px solid #ccc
+  position: fixed
+  z-index: 100
+  .scan-text
+    font-weight: lighter
+    margin-top: 5px
+    margin-left: 20px
+    color: #FFF
+  .project-count
+    padding: 3px
+    min-width: 120px
+    margin-top: 3px
+    a
+      font-size: 14px
+      border-radius: 5px
+      padding: 3px 10px
+      color: #FFF
+  .top-icons
+    margin-right: 240px
+    margin-top: -5px
+    a
+      color: #e5e5e5
+      margin: 10px 10px
+      .sidebar-icons
+        margin-top: 1px
+      &:hover
+        color: #FFF
+
 
 canvas.other-devices
   margin-top: 30px
@@ -245,7 +321,7 @@ select
   top: -100px
 
 .filter-input
-  width: 65%
+  width: 90%
 
 .not-found
   text-align: center
@@ -377,34 +453,29 @@ div[class^="_c-notification__container"]
   margin-top: 10px
 
 .side-menu
-  &-container
-    display: flex
-    flex-direction: column
-    position: fixed
-    width: inherit
-    padding-right: 8px
+  background-color: #424651
   .box
     background-color: #f0f0f0
     box-shadow: none
+    margin-top: 30px
+    margin-left: 10px
+    margin-right: 5px
+    .card
+      background-color: lighten(#424651, 70%)
+      color: $default
+      border-radius: 50px
+      max-width: 100px
+      margin: auto
+      padding: 5px
   .menu
+    position: fixed
+    width: 16%
+    margin-top: 20px
     .container
       margin: 0px 5px !important
-
-.appknox-logo
-  margin: auto
-  margin-top: 13px
-  min-height: 38px
-  max-height: 80px
-  max-width: 100px
-  display: flex
-  align-items: center
-  justify-content: center
-  div
-    height: 100%
-  img
-    max-width: 100%
-    max-height: 80px
-    margin-left: auto
+  .appknox-logo
+    position: fixed
+    width: 16%
 
 .scroll-down
   width: 14%
@@ -512,15 +583,62 @@ button, .button
       td
         padding: 7px
 
-.invoice-table
+.api-filter-table
+  width: 370px
+  margin-top: 20px
+  .edit-form-input
+    width: 80%
+    height: 25px
+  tr
+    th
+      border: none
+      font-size: 12px
+      &:last-child
+        text-align: right
+    td
+      border: none
+      background-color: #f2f2f2
+      padding-left: 20px
+      border-bottom: 1px solid #CCC
+      &:last-child
+        text-align: right
+        padding-right: 30px
+    &:last-child td
+      border-bottom: none
+
+  .fa
+    font-size: 16px
+  .fa-trash-o
+    color: $critical
+
+.device-table
+  width: 30%
+  tr
+    td
+      border-color: #e5e5e5
+      &:first-child
+        color: #000
+
+
+
+.token-table
+  .fa
+    font-size: 16px
+  .fa-trash-o
+    color: $critical
+  .copy-token
+    color: $info
+
+
+.invoice-table, .token-table
   table
     tr
       th
-        background-color: $default
+        background-color: lighten(#424651, 5%)
         color: #fff
       th, td
         text-align: center
-        border: 1px solid #778899
+        border: 1px solid #b8b8b8
         padding: 8px 0px
         vertical-align: middle
 
@@ -620,17 +738,8 @@ button, .button
 .file-hide-overflow
   margin-top: -20px
 
-.manual-proxy
-  .columns
-    border: none!important
-  .columns:last-child
-    border-bottom: 1px solid #CCC!important
-  h6
-    margin-bottom: 0px!important
-
-
 .user-roles-table
-  width: 470px
+  width: 520px
   .tag
     color: #FFF
     background-color: $default
@@ -644,16 +753,20 @@ button, .button
     th
       border: none
       font-size: 12px
+      background-color: #ccc
+      color: #000
+      text-align: center
       &:last-child
-        text-align: right
+        padding-left: 80px
     td
       border: none
-      background-color: #f2f2f2
+      background-color: #e5e5e5
       padding-left: 20px
-      border-bottom: 1px solid #CCC
+      border-bottom: 1px solid #ccc
       &:last-child
+        margin-left: 30px
         text-align: right
-        padding-right: 30px
+        padding-right: 60px
         vertical-align: middle
         .tag
           margin-right: -15px
@@ -662,17 +775,39 @@ button, .button
         border-bottom: none
 
 .manual-scan-modal
+  ul
+    li
+      margin-top: 10px
+      a
+        color: $default
+  .modal-sub-container
+    border-radius: 3px
+    margin-top: 10px
+    padding: 10px
+    background-color: #f2f2f2
+    margin-bottom: 10px
   .modal-card
-    max-width: 800px
+    width: 600px
+    height: 580px
+    li
+      background-color: #f2f2f2
+      color: #000
+      a
+        .column:first-child
+          margin-left: 10px
+        .column:last-child
+          margin-right: 10px
     select
       text-align: center
-      width: 205px
+      width: 210px
     .input
-      width: 205px
+      width: 210px
     .text-area
+      width: 300px
       height: 100px
     label
       margin-right: 35px
+      color: $default
     .no-border-column
       border-bottom: none!important
     .user-roles
@@ -711,12 +846,24 @@ button, .button
 .card-header-icon
   cursor: default
   img
-    height: 45px
-    width: 45px
+    height: 50px
+    width: 50px
+    background-image: none
+    overflow: hidden
+    &:before
+      content: "."
+      font-size: 1000px
 
 b.bold
   font-weight: 900
   color: black
+
+.condition-text-small
+  font-weight: 900
+  color: black
+  font-size: 12px
+  margin-left: 5px
+  margin-top: 0px
 
 .warning-modal
   width: 500px
@@ -777,7 +924,7 @@ b.bold
     td:nth-child(3)
       width: 80%
   tr.table-head
-    background-color: $default
+    background-color: lighten(#424651, 5%)
     color: #fff
     font-weight: 100
     td
@@ -822,8 +969,8 @@ ul.risk-table
 
 .button-width
   .column
-    margin-left: 10px
-    margin-right: 10px
+    margin-left: 5px
+    margin-right: 5px
 
 .app-details-card
   .card-header
@@ -904,6 +1051,22 @@ ul.risk-table
   margin-right: 1px
   margin-top: -3px
 
+.font-size-18
+  font-size: 18px
+
+.font-size-14
+  font-size: 14px
+
+.card-button
+  .fa-download, .fa-cog, .fa-trash-o
+    font-size: 14px
+    vertical-align: middle
+
+.fa-exchange, .fa-navicon
+  font-size: 12px
+  vertical-align: middle
+
+
 .cvss-box
   border-radius: 5px
   height: 100px
@@ -922,7 +1085,7 @@ ul.risk-table
 
 .team-overview-card
   header:nth-child(1)
-    background-color: $default
+    background-color: lighten(#424651, 5%)
     color: $white
   .fa-times
     color: #EF4836
@@ -941,12 +1104,11 @@ ul.risk-table
       margin-top: 15px
   tr
     th, td
-      width: 20%
       text-align: center
       border: 1px solid #b8b8b8
       padding: 10px 0px
     th
-      background-color: $default
+      background-color: lighten(#424651, 5%)
       color: #fff
   button.add-member
     color: $white
@@ -997,28 +1159,24 @@ ul.risk-table
 
 .api-filter
   input
-    width: 25%
+    height: 35px
+    width: 40%
   .position-icons
     margin-top: 20px!important
+  button
+    margin-top: 2px
+    margin-left: -350px
 
 .api-scanning
   .api-filter
     input
-      width: 40%
-  .url-filters
-    .columns
-      .column:nth-child(2)
-        button
-          margin-top: -50px
-          margin-left: 70px
+      width: 100%
+    button
+      margin-left: 0px
 
 
 .new-input-box
   margin-top: -20px
-
-.role-tag
-  border: 1px solid $red
-  margin-left: 100px
 
 button.delete-button
   border: none
@@ -1032,15 +1190,14 @@ button.delete-button
   padding: 10px 100px
   .collaboration-table
     th, td
-      width: 20%
       text-align: center
       border: 1px solid #b8b8b8
       padding: 10px 0px
     th
-      background-color: $default
+      background-color: lighten(#424651, 5%)
       color: #fff
   select
-    width: 60%
+    width: 130px
   table
     tr
       th,td
@@ -1099,15 +1256,12 @@ button.delete-button
       list-style-type: disc
 
 .no-project-container
-  padding: 150px 350px 70px 350px
+  padding: 150px 400px 70px 400px
   .no-project
     padding: 10px
-    border: 2px solid #A9A9A9
-    border-radius: 5px
+    border: 1px dashed $critical
+    border-radius: 10px
     text-align: center
-    color: $grey
-    .red-text
-      color: $red
 
 .repeat-icon
   margin-left: 10px
@@ -1120,6 +1274,7 @@ button.delete-button
   .modal-card-head
     border-bottom: 0px
   .modal-card-body
+    margin: auto
     min-height: 582px
     button
       margin-top: 45px
@@ -1149,7 +1304,7 @@ button.delete-button
 .loading-container
   margin: 20% auto
   i
-    font-size: 80px
+    font-size: 87px
     display: flex
     align-items: center
     margin-bottom: 10px
@@ -1175,9 +1330,14 @@ button.delete-button
   width: 265px!important
   height: 450px!important
 
+.modal.is-active
+  .marvel-device.ipad
+    margin-left: 0px
+
 .marvel-device.ipad
   width: 282px!important
   height: 385px!important
+  margin-left: -10px
   .screen canvas.canvas
     width: 282px!important
     height: auto!important
@@ -1249,6 +1409,14 @@ button[disabled], .input[disabled]
   cursor: not-allowed
   pointer-events: auto
 
+.button[disabled].ac-upload-app
+  opacity: 0.8
+
+button.is-progress:hover
+  background-color: white
+  color: #FE4D3F
+  border-color: #FE4D3F
+
 .url-filters
   .columns
     .column:nth-child(2)
@@ -1307,6 +1475,7 @@ button[disabled], .input[disabled]
     width: 50%
 
 .namespace-list
+  margin-top: 20px
   li
     font-size: 15px
     margin-left: 10px
@@ -1345,11 +1514,20 @@ select:disabled
   border: 1px solid lighten($default, 45%)!important
 
 .modal-card
-  border-radius: 10px
+  border-radius: 1px
 
 .modal-card-head
   border-bottom: 0px
-  background-color: #f2f2f2
+  background-color: lighten(#424651, 5%)
+  .modal-card-title
+    color: #FFF
+    font-size: 20px
+  .delete
+    background-color: #FFF
+    &:before, &:after
+      background-color: #424651
+    &:hover
+      background-color: darken(#FFF, 5%)
 
 .team-overview-card
   a
@@ -1359,19 +1537,158 @@ select:disabled
   padding: 20px
   margin: 20px auto
   table
-    border: 1px solid #000
+    box-shadow: rgb(204, 204, 204) 0px 0px 5px
     th
-      background-color: $default
+      background-color: lighten(#424651, 5%)
       color: #fff
     td,th
       text-align: center
-      border: 1px solid lighten($default, 30%)
+      border-width: 0px
+      border-bottom: 1px solid lighten($default, 30%)
       padding: 10px 60px
     td.td-heading
       font-size: 14px
       color: #000
+    tr:last-child
+      td
+        border-width: 0px
     button
       margin: 10px auto 0px auto
+
+.scan-section
+  margin-right: 100px
+  text-align: center
+  margin: auto
+  .box
+    padding-top: 37px
+    height: 140px
+
+.all-inputs
+  padding: 10px 30px
+  .margin-top
+    width: 270px
+  .ac-upload-app
+    width: 220px
+
+.upload-app
+  margin-top: -10px
+
+.highlighted-button
+  background-image: linear-gradient(-180deg, lighten($critical, 5%) 0%, lighten($critical, 3%) 90%)
+  color: #fff!important
+  &:hover
+    background-image: linear-gradient(-180deg, lighten($critical, 0%) 0%, lighten($critical, 0%) 90%)
+
+.risk-status-box
+  width: 300px
+  margin: 60px auto 10px auto
+  .columns
+    h5
+      border-bottom: 2px solid $critical
+      &:last-child
+        margin-top: 20px
+    &:first-child
+      margin-top: -40px
+    &:nth-child(2)
+      margin-top: 0px
+    &:nth-child(5)
+      margin-top: 0px
+    &:last-child
+      margin-top: 0px
+      margin-bottom: -20px
+
+.stat-heading
+  text-align: center
+  margin-top: 10px
+
+.user-info-popover
+  background-color: #424651
+  margin-right: 20px
+  width: 200px
+  padding-top: 10px
+  padding-bottom: 10px
+  margin-top: 0px
+  border-radius: 5px
+  color: #FFF
+  .user-name
+    font-size: 16px
+    text-align: center
+    border-bottom: 1px solid #CCC
+    padding-bottom: 10px
+  .user-email
+    padding-bottom: 10px
+    margin: 10px 0px 10px 0px
+    font-size: 11px
+    text-align: center
+    border-bottom: 1px solid #CCC
+  a
+    padding: 2px 10px
+    font-size: 12px
+    margin-right: 5px
+    color: #FFF
+    border-radius: 5px
+    i
+      font-size: 16px
+      margin-top: 2px
+      margin-right: 5px
+
+.menu-label
+  text-align: center
+  margin-left: 0px
+  background-color: #424651
+  font-size: 12px
+  margin-top: 30px
+  margin-bottom: 2px
+
+// move this to bohemia
+
+.status-container
+  border: 1px solid #ccc
+  height: auto
+  border-radius: 5px
+  margin: 0px 10px
+  max-height: 200px
+  overflow: scroll
+  .status-list
+    background-color: #fff
+    margin: 15px 10px
+    padding: 5px
+    border-radius: 5px
+    font-size: 12px
+    .no-reason
+      margin: -5px
+      padding: 5px
+      border-radius: 5px
+      text-align: center
+    .status-details
+      margin: -5px -5px 5px -5px
+      border-radius: 5px 5px 0px 0px
+      color: #000
+      background-color: #ccc
+      text-align: center
+      &.is-critical
+        background-color: $critical
+        color: #FFF
+      &.is-danger
+        background-color: $critical
+        color: #FFF
+      &.is-warning
+        background-color: $warning
+        color: #FFF
+      &.is-info
+        background-color: $info
+        color: #FFF
+      &.is-success
+        background-color: $success
+        color: #FFF
+      &.is-progress
+        background-color: #fff
+    .no-reason
+      border-radius: 5px
+    .status-reason
+      color: $default
+
+// end
 
 .click-here
   margin-left: -130px
@@ -1381,6 +1698,73 @@ select:disabled
   background-color: #fff
   color: #000!important
   border-radius: 3px
+
+.new-users
+  font-size: 16px
+  .welcome-text
+    font-size: 24px
+  .welcome-desc
+    margin-top: 20px
+  .welcome-sub-desc
+    margin-top: 30px
+  .welcome-footer-text
+    margin-top: 40px
+  & + .column
+    margin-top: -60px
+
+.chart-container
+  width: 50vw
+  margin: -10px 10px
+
+.main-box-container
+  margin: 0px 20px 0px 0px
+  box-shadow: 0px 0px 10px #ccc
+  border-radius: 5px
+  .box-content
+    height: 190px
+    overflow: scroll
+    .box-list
+      padding: 0px 20px
+      border-bottom: 2px solid #ccc
+      margin-top: 3px
+  .box-main-heading
+    text-align: center
+    background-color: $default
+    color: #FFF
+    border-radius: 5px 5px 0px 0px
+    margin-bottom: 10px
+    padding: 5px
+  .box-heading
+    color: #000
+    font-size: 16px
+  .box-heading-issues
+    color: #000
+    font-size: 12px
+  .box-desc
+    font-size: 12px
+  .stat-desc
+    margin-top: 5px
+  .content-right
+    .tag
+      background-color: $default
+      color: #FFF
+      font-size: 9px
+      border-radius: 5px
+      height: 20px
+    .app-name
+      background-color: $default
+      color: #FFF
+      border-radius: 3px
+      padding: 3px 10px
+      font-size: 12px
+  .not-found
+    font-size: 20px
+    margin-top: 90px
+    height: 110px
+    vertical-align: middle
+    i
+      margin-top: 4px
+      margin-right: 6px
 
 .switch
   position: relative
@@ -1429,3 +1813,77 @@ input:checked + .slider:before
 
 .slider.round:before
   border-radius: 50%
+
+.stat-container
+  margin-left: 15px
+
+.ember-attacher-popper
+  margin-top: -20px
+  margin-left: 20px
+
+.pagination
+  i
+    font-size: 14px
+  a.is-default
+    margin: 0px 3px
+    &:hover
+      background-color: $critical
+      color: #FFF
+      border-color: $critical
+  .pagination-list
+    a.is-primary, a.is-default:hover
+      background-color: $critical
+      color: #FFF
+      border-color: $critical
+
+.not-found-container
+  text-align: center
+  background-color: #424651
+  height: 100vh
+  .not-found-section
+    width: 700px
+    margin: auto
+    background-color: #FFF
+    padding: 20px
+    position: relative
+    top: 150px
+    border-radius: 10px
+    i
+      margin-top: -3px
+
+.auth-main-container
+  height: 100vh
+  background-color: #424651
+  margin-top: 10px
+  a img
+    margin-top: 50px
+    width: 250px
+  .has-text-centered
+    h6
+      color: #fff
+  .login-form
+    background-color: #FFF
+    width: 100%
+    border-radius: 5px
+    h4
+      padding-bottom: 20px
+    h6
+      margin-left: 25px
+    label
+      margin-left: 25px
+    p
+      &:first-child
+        margin-top: 30px
+      .input
+        margin-left: 25px
+        height: 40px
+        width: 250px
+      button
+        margin-top: 10px
+        max-width: 200px!important
+      i
+        margin-left: 25px
+        margin-top: 5px
+  .signin-text, .greet-text
+    padding-top: 30px
+    color: #fff

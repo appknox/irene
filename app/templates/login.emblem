@@ -1,1 +1,2 @@
-= login-component
+.auth-main-container
+  = login-component

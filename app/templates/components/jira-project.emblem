@@ -1,16 +1,18 @@
-h5
+h5.bold.black-text
   = t "jiraIntegration"
 
 if project.jiraProject
-  h5
+  h6
     = t "integratedJIRA"
     code
       | &nbsp; #{project.jiraProject}
-    .tag.delete-tag.margin-top3.remove click="openDeleteJIRAConfirmBox"
+    .tag.delete-tag.remove click="openDeleteJIRAConfirmBox"
       i.fa.risk-icons.fa-trash-o
         | &nbsp; #{t "remove"}
 
 else
+  h6
+    = t "otherTemplates.selectJIRAAccount"
   .columns
     .column.is-one-third
       select.select{action 'selectProject' on='change'} class="mp-jira-select-project"

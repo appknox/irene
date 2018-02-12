@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{prompt-box}}"""
 
-  assert.equal @$().text().trim(), 'Missing translation: undefined'
+  assert.equal @$().text().trim(), 'undefined'

@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{api-filter}}"""
 
-  assert.equal @$().text().trim(), 'API Scanner URL FilterEnter the API endpoint to scan: eg. api.appknox.com. Do not specify the scheme (http://...), port (:443/...) & path (.../users)Save Filter+ ADD NEW URLAre you sure you want to remove from url filters?CancelOk'
+  assert.equal @$().text().trim(), 'API Scanner URL FilterSpecify the URL which you want the API Scan to be performed on+ ADD NEW URLeg. api.appknox.com. Do not specify the scheme (http://...), port (:443/...) & path (.../users)Are you sure you want to remove from url filters?CancelOk'
