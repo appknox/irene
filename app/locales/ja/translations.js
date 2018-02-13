@@ -20,6 +20,7 @@ export default {
   "app": "アプリ",
   "apps": "アプリ",
   "analyzing": "分析する",
+  "assignTeam": "Assign Team",
   "billing": "料金プラン",
   "billingPeriod": "支払請求周期",
   "businessImplication": "ビジネスへの影響",
@@ -29,6 +30,7 @@ export default {
   "changePassword": "パスワード変更",
   "changeRole": "役割の変更",
   "chooseAFile": "比較するファイルを選択してください",
+  "clickingHere": "clicking here",
   "clickOnDynamicScan": "動的スキャンの開始をクリックします。",
   "closeModal": "Exit Full Screen",
   "collaborationAdded": "コラボレーションが追加されました!",
@@ -310,6 +312,7 @@ export default {
   "year": "年",
   "yearly": "1年",
   "yes": "はい",
+  "youCanCreateTeam": "you can create a new team by",
   "youWillBeChargedOn": "You will be charged on",
   "confirmBox": {
     "removeURL": "URLフィルタから削除してもよろしいですか？",

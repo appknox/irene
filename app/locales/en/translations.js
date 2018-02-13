@@ -20,6 +20,7 @@ export default {
   "app": "app(s)",
   "apps": " Apps",
   "analyzing": "Analyzing",
+  "assignTeam": "Assign Team",
   "billing": "Billing",
   "billingPeriod": "Billing Period",
   "businessImplication": "Business Implication",
@@ -29,6 +30,7 @@ export default {
   "changePassword": "Change Password",
   "changeRole": "Change Role",
   "chooseAFile": "Choose a file to compare",
+  "clickingHere": "clicking here",
   "clickOnDynamicScan": "Click on Start Dynamic Scan",
   "closeModal": "Exit Full Screen",
   "collaborationAdded": "Collaboration is added!",
@@ -310,6 +312,7 @@ export default {
   "year": "Year",
   "yearly": "Yearly",
   "yes": "Yes",
+  "youCanCreateTeam": "you can create a new team by",
   "youWillBeChargedOn": "You will be charged on",
   "confirmBox": {
     "removeURL": "Are you sure you want to remove from url filters?",

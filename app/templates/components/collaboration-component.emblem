@@ -4,7 +4,7 @@
       = t "collaborations"
   .column.content-right.margin-right100
     button.is-primary.mp-open-collaboration-modal.uppercase-text click="openCollaborationModal"
-      | + #{t "addTeam"}
+      | + #{t "assignTeam"}
 
 h6
   = t "otherTemplates.addATeam"
@@ -28,20 +28,22 @@ h6
     .card-wrapper
       form
         p.control
-          select.select onchange={action "teamChanged" value="target.value"} id="team-preference"
-            option value=0
-              = t "selectTeam"
-            each teams as |team|
-              option value=team.id
-                = team.name
-        .card-button.margin-top20
-          button.mp-add-collaboration click="addCollaboration" disabled=isAddingCollaboration
-            if isAddingCollaboration
-              .fa-font-size
-                i.fa class="fa-spinner fa-spin"
-              | &nbsp;
-            = t "addTeam"
           .columns
-            .column.margin-top
-              = link-to 'authenticated.teams' class="is-primary" tagName="a"
-                = t "addNewTeam"
+            .column
+              select.select onchange={action "teamChanged" value="target.value"} id="team-preference"
+                option value=0
+                  = t "selectTeam"
+                each teams as |team|
+                  option value=team.id
+                    = team.name
+            .column
+              button.mp-add-collaboration.is-primary click="addCollaboration" disabled=isAddingCollaboration
+                if isAddingCollaboration
+                  .fa-font-size
+                    i.fa class="fa-spinner fa-spin"
+                  | &nbsp;
+                = t "assignTeam"
+        .card-button.margin-top20.font-size12
+          = t "youCanCreateTeam"
+          = link-to 'authenticated.teams' class="is-primary" tagName="a"
+            | &nbsp; #{t "clickingHere"}
