@@ -5,6 +5,8 @@
 
 GithubAccountComponent = Ember.Component.extend
 
+  isRevokingGithub: false
+  isIntegratingGithub: false
   i18n: Ember.inject.service()
 
   tGithubWillBeRevoked: t("githubWillBeRevoked")
@@ -12,12 +14,15 @@ GithubAccountComponent = Ember.Component.extend
   confirmCallback: ->
     tGithubWillBeRevoked = @get "tGithubWillBeRevoked"
     that = @
+    @set "isRevokingGithub", true
     @get("ajax").post ENV.endpoints.revokeGitHub
     .then (data) ->
+      that.set "isRevokingGithub", false
       that.get("notify").success tGithubWillBeRevoked
       that.send "closeRevokeGithubConfirmBox"
       that.set "user.hasGithubToken", false
     .catch (error) ->
+      that.set "isRevokingGithub", false
       for error in error.errors
         that.get("notify").error error.detail?.message
 

@@ -44,7 +44,11 @@
         p.control
           = input class="form-control input" type="text" value=enableMFAOTP
         p.control
-         button.is-primary click="enableMFA"
+         button.is-primary click="enableMFA" disabled=isEnablingMFA
+          if isEnablingMFA
+            .fa-font-size
+              i.fa class="fa-spinner fa-spin"
+            | &nbsp;
           = t "continue"
          button.is-primary.margin-left click="closeMFAEnableModal"
           = t "cancel"
@@ -60,7 +64,11 @@
         p.control
           = input class="form-control input" type="text" value=disableMFAOTP
         p.control
-         button.is-primary click="disableMFA"
+         button.is-primary click="disableMFA" disabled=isDisablingMFA
+          if isDisablingMFA
+            .fa-font-size
+              i.fa class="fa-spinner fa-spin"
+            | &nbsp;
           = t "continue"
          button.is-primary.margin-left click="closeMFADisableModal"
           = t "cancel"

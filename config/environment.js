@@ -221,7 +221,7 @@ module.exports = function(environment) {
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
-    ENV['host'] = "http://192.168.0.198:8000";
+    ENV['host'] = "http://localhost:8000";
     ENV.enableIntercom = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;

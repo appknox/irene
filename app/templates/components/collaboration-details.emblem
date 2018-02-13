@@ -9,7 +9,7 @@ td
   = collaboration.team.owner.username
 
 td
-  select.select.mp-collaboration-role onchange={action "changeRole" value="target.value"} id="role-preference" disabled=collaboration.team.isDefaultTeam
+  select.select.mp-collaboration-role onchange={action "changeRole" value="target.value"} id="role-preference" disabled=isDisabledSelectBox
       option selected="true" value=collaboration.role
         | #{ t collaboration.roleHumanized}
       each otherRoles as |role|

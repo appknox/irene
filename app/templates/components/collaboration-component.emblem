@@ -36,6 +36,10 @@ h6
                 = team.name
         .card-button.margin-top20
           button.mp-add-collaboration click="addCollaboration" disabled=isAddingCollaboration
+            if isAddingCollaboration
+              .fa-font-size
+                i.fa class="fa-spinner fa-spin"
+              | &nbsp;
             = t "addTeam"
           .columns
             .column.margin-top

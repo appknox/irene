@@ -6,10 +6,10 @@ PersonaltokenDetailComponent = Ember.Component.extend
   i18n: Ember.inject.service()
   tagName: ''
 
-
   # revoke token
 
   isNotRevoked: true
+  isDeletingToken: false
   tTokenRevoked: t('personalTokenRevoked')
 
   confirmCallback: ->
@@ -19,14 +19,15 @@ PersonaltokenDetailComponent = Ember.Component.extend
 
     that = @
     url = [ENV.endpoints.personaltokens, personaltokenId].join '/'
-
+    @set "isDeletingToken", true
     @get('ajax').delete url
     .then (data) ->
       that.set 'isNotRevoked', false
-    .then (data) ->
+      that.set "isDeletingToken", false
       that.get('notify').success tTokenRevoked
       that.send 'closeRevokePersonalTokenConfirmBox'
     .catch (error) ->
+      that.set "isDeletingToken", false
       for error in error.payload.errors
         that.get('notify').error error.detail
 

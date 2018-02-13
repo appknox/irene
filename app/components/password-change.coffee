@@ -7,13 +7,16 @@ isValidPassword = (password)->
   return password.length > 5
 
 PasswordChangeComponent = Ember.Component.extend
+
   i18n: Ember.inject.service()
-  passwordCurrent: ""
   passwordNew: ""
   passwordConfirm: ""
+  passwordCurrent: ""
+  isChangingPassword: false
   tEnterValidPassword: t("enterValidPassword")
   tInvalidPassword: t("invalidPassword")
   tPasswordChanged: t("passwordChanged")
+
   actions:
     changePassword: ->
       tEnterValidPassword = @get "tEnterValidPassword"
@@ -30,9 +33,11 @@ PasswordChangeComponent = Ember.Component.extend
         password: passwordCurrent
         newPassword: passwordNew
       that = @
+      @set "isChangingPassword", true
       ajax = @get "ajax"
       ajax.post ENV.endpoints.changePassword, data: data
       .then ->
+        that.set "isChangingPassword", false
         that.setProperties({
           passwordCurrent: ""
           passwordNew: ""
@@ -41,6 +46,7 @@ PasswordChangeComponent = Ember.Component.extend
         that.get("notify").success tPasswordChanged
         triggerAnalytics('feature',ENV.csb.changePassword)
       .catch (error) ->
+        that.set "isChangingPassword", false
         that.get("notify").error error.payload.message
         for error in error.errors
           that.get("notify").error error.detail?.message

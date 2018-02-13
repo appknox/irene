@@ -13,4 +13,8 @@ button.is-primary.margin-top.mp-namespace-modal click="toggleNamespaceModal"
   form
     = input class="control input mp-namespaces" value=namespace autofocus="autofocus" placeholder="Enter the namespace"
     button.is-primary.margin-top.mp-add-namespace click="addNamespace" disabled=isAddingNamespace
+      if isAddingNamespace
+        .fa-font-size
+          i.fa class="fa-spinner fa-spin"
+        | &nbsp;
       = t "addNamespace"

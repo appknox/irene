@@ -7,6 +7,8 @@ GithubProjectComponent = Ember.Component.extend
   project: null
   githubRepos: ["Loading..."]
 
+  isChangingRepo: false
+  isDeletingGithub: false
   tProjectRemoved: t("projectRemoved")
   tRepoIntegrated: t("repoIntegrated")
   tFetchGitHubRepoFailed: t("fetchGitHubRepoFailed")
@@ -16,12 +18,15 @@ GithubProjectComponent = Ember.Component.extend
     projectId = @get "project.id"
     deleteGithub = [ENV.endpoints.deleteGHRepo, projectId].join '/'
     that = @
+    @set "isDeletingGithub", true
     @get("ajax").delete deleteGithub
     .then (data) ->
+      that.set "isDeletingGithub", false
       that.get("notify").success tProjectRemoved
       that.send "closeDeleteGHConfirmBox"
       that.set "project.githubRepo", ""
     .catch (error) ->
+      that.set "isDeletingGithub", false
       for error in error.errors
         that.get("notify").error error.detail?.message
 
@@ -51,11 +56,14 @@ GithubProjectComponent = Ember.Component.extend
       that = @
       data =
         repo: repo
+      @set "isChangingRepo", true
       @get("ajax").post setGithub, data: data
       .then (data) ->
+        that.set "isChangingRepo", false
         that.get("notify").success tRepoIntegrated
         that.set "project.githubRepo", repo
       .catch (error) ->
+        that.set "isChangingRepo", false
         for error in error.errors
           that.get("notify").error error.detail?.message
 

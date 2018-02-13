@@ -10,4 +10,8 @@
       p.control
         = input class="form-control input deleted-item" type="text" autofocus="autofocus" value=inputValue
         button.is-primary.margin-top click="sendCallback" disabled=disabled
+          if disabled
+            .fa-font-size
+              i.fa class="fa-spinner fa-spin"
+            | &nbsp;
           = t button
