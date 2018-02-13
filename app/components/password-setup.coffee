@@ -8,6 +8,8 @@ PasswordSetupComponent = Ember.Component.extend
   password: ""
   confirmPassword: ""
 
+  isSettingPassword: false
+
   validation_errors: []
 
   validate: ->
@@ -36,11 +38,14 @@ PasswordSetupComponent = Ember.Component.extend
         uuid: uuid
         token: token
         password: password
+      @set "isSettingPassword", true
       @get("ajax").post ENV.endpoints.setup, data: data
       .then (data)->
+        that.set "isSettingPassword", false
         that.container.lookup("route:setup").transitionTo "login"
         that.get("notify").success "Password is successfully set"
       .catch (error) ->
+        that.set "isSettingPassword", false
         for error in error.errors
           that.get("notify").error error.detail?.message
 
