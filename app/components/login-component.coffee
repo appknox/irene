@@ -5,6 +5,7 @@
 LoginComponentComponent = Ember.Component.extend
   session: Ember.inject.service 'session'
   MFAEnabled: false
+  isLogingIn: false
   actions:
     authenticate: ->
       that = @
@@ -17,11 +18,15 @@ LoginComponentComponent = Ember.Component.extend
       identification = identification.trim()
       password = password.trim()
 
+      @set "isLogingIn", true
+
       errorCallback = (error)->
         if isUnauthorizedError(error)
           that.set "MFAEnabled", true
 
+      loginStatus = (data) ->
+        that.set "isLogingIn", false
 
-      @get('session').authenticate("authenticator:irene", identification, password, otp, errorCallback)
+      @get('session').authenticate("authenticator:irene", identification, password, otp, errorCallback, loginStatus)
 
 `export default LoginComponentComponent`
