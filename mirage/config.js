@@ -83,6 +83,10 @@ export default function() {
     return {};
   });
 
+  this.post('/set_unknown_analysis_status/:id', () => {
+    return {};
+  });
+
   this.post('/lang', () => {
     return {};
   });

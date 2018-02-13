@@ -318,7 +318,8 @@ export default {
     "revokeGithub": "Github Integrationを取り消してもよろしいですか？",
     "revokeJira": "JIRAインテグレーションを取り消してもよろしいですか？",
     "cancelSubsciption": "サブスクリプションをキャンセルしてもよろしいですか？",
-    "revokePersonalToken": "Are you sure you want to delete this personal access token?"
+    "revokePersonalToken": "Are you sure you want to delete this personal access token?",
+    "removeUserRole": "Are you sure you want to remove this role?"
   },
   "promptBox": {
     "collaborationPrompt": {
@@ -406,6 +407,10 @@ export default {
       "basicAppInfo": "Basic App Info",
       "loginDetails": "Login Details",
       "vpnDetails": "VPN Details"
+    },
+    "rescan": {
+      "title": "Re-scan Static Scan",
+      "description": "Do you want to do the static scan again?"
     }
   },
   "templates": {

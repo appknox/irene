@@ -7,6 +7,7 @@ ProjectPreferencesComponent = Ember.Component.extend
 
   project: null
   selectVersion: 0
+  isSavingPreference: false
   i18n: Ember.inject.service()
   store: Ember.inject.service()
   selectedDeviceType: ENUMS.DEVICE_TYPE.NO_PREFERENCE
@@ -58,11 +59,14 @@ ProjectPreferencesComponent = Ember.Component.extend
       data =
         deviceType: selectedDeviceType
         platformVersion: selectVersion
+      @set "isSavingPreference", true
       @get("ajax").post devicePreferences, data: data
       .then (data) ->
+        that.set "isSavingPreference", false
         that.get("notify").success tDeviceSelected
         that.set "projectPreferenceModal", false
       .catch (error) ->
+        that.set "isSavingPreference", false
         that.get("notify").error tPleaseTryAgain
         if Ember.isEmpty error?.errors
           return
