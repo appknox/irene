@@ -1,8 +1,6 @@
 /*
- * decaffeinate suggestions:
  * DS102: Remove unnecessary code created because of implicit returns
  * DS205: Consider reworking code to avoid use of IIFEs
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';

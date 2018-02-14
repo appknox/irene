@@ -1,7 +1,5 @@
 /*
- * decaffeinate suggestions:
  * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
 import DS from 'ember-data';
 import ENUMS from 'irene/enums';
@@ -30,7 +28,7 @@ const Manualscan = DS.Model.extend({
     if (isNaN(appAction)) {
       return ENUMS.APP_ACTION.NO_PREFERENCE;
     }
-    return appAction;  
+    return appAction;
   }).property("appAction"),
 
   showProceedText: (function() {

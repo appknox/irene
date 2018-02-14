@@ -1,7 +1,5 @@
 /*
- * decaffeinate suggestions:
  * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
 import Ember from 'ember';
 import ENUMS from 'irene/enums';
@@ -62,7 +60,7 @@ const PricingPlanComponent = Ember.Component.extend({
   }).property("paymentDuration", "plan.monthlyPrice", "plan.quarterlyPrice", "plan.halfYearlyPrice", "plan.yearlyPrice"),
 
   actions: {
-    
+
     initiatePayment() {
       let url;
       const duration = this.get("paymentDuration");

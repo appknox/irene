@@ -1,7 +1,5 @@
 /*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
+ * DS102: Remove unnecessary code created because of implicit return
  */
 import Ember from 'ember';
 import ENUMS from 'irene/enums';
