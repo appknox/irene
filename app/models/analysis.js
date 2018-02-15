@@ -1,9 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 import DS from 'ember-data';
 import ENUMS from 'irene/enums';
 import { translationMacro as t } from 'ember-i18n';
@@ -41,7 +35,7 @@ const Analysis = DS.Model.extend({
     if (Ember.isEmpty(types)) {
       return false;
     }
-    return Array.from(types).includes(type);
+    return types.includes(type);
   },
 
   isRisky: (function() {

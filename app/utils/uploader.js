@@ -1,11 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import EmberUploader from 'ember-uploader';
@@ -48,37 +40,27 @@ const Uploader = EmberUploader.Uploader.extend({
         },
         data: file
       };
-      return that.get("ajax").put(json.url, settings)
+      that.get("ajax").put(json.url, settings)
       .then(function() {
         that.didUpload(json.file_key, json.file_key_signed);
-        return that.get("notify").success(tFileUploadedSuccessfully);}).catch(function(error) {
+        that.get("notify").success(tFileUploadedSuccessfully);
+      })
+      .catch(function(error) {
         that.get("notify").error(tErrorWhileUploading);
-        return (() => {
-          const result = [];
-          for (error of Array.from(error.errors)) {
-            result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-          }
-          return result;
-        })();
       });
     };
 
     const data =
       {content_type: "application/octet-stream"};
 
-    return that.get("ajax").request(ENV.endpoints.signedUrl, {data})
+    that.get("ajax").request(ENV.endpoints.signedUrl, {data})
     .then(function(json){
       $('input[type=file]').val('');
-      return signSuccess(json);}).catch(function(error) {
+      signSuccess(json);
+    })
+    .catch(function(error) {
       $('input[type=file]').val('');
       that.get("notify").error(tErrorWhileFetching);
-      return (() => {
-        const result = [];
-        for (error of Array.from(error.errors)) {
-          result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-        }
-        return result;
-      })();
     });
   }
 });
