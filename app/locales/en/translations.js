@@ -298,7 +298,7 @@ export default {
   "uploadApp": "Upload App",
   "uploading": "Uploading",
   "uploadNewProject": "You can upload a new project by clicking on <b class='bold'>Upload App</b> above and start scanning",
-  "urlAdded": "Successfully added the url filter",
+  "urlUpdated": "Successfully updated the url filter",
   "usd": "USD for",
   "userSetting": " user's settings ",
   "username": "Username",

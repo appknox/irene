@@ -298,7 +298,7 @@ export default {
   "uploadApp": "アプリのアップロード",
   "uploading": "アップロード中",
   "uploadNewProject": "You can upload a new project by clicking on <b class='bold'>Upload App</b> above and start scanning",
-  "urlAdded": "URLフィルタが正常に追加されました",
+  "urlUpdated": "Successfully updated the url filter",
   "usd": "米ドル ために",
   "userSetting": "ユーザー設定",
   "username": "ユーザー名",

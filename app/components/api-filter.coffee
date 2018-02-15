@@ -14,7 +14,7 @@ ApiFilterComponent = Ember.Component.extend
   newUrlFilter: null
   isSavingFilter: false
   tEmptyURL: t("emptyURL")
-  tURLAdded: t("urlAdded")
+  tUrlUpdated: t("urlUpdated")
   tInvalidURL: t("invalidURL")
 
   isDeletingURLFilter: false
@@ -49,7 +49,7 @@ ApiFilterComponent = Ember.Component.extend
       @send "saveApiUrlFilter"
 
     saveApiUrlFilter: ->
-      tURLAdded = @get "tURLAdded"
+      tUrlUpdated = @get "tUrlUpdated"
       updatedURLFilters = @get "updatedURLFilters"
       projectId = @get "project.id"
       apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, projectId].join '/'
@@ -62,7 +62,7 @@ ApiFilterComponent = Ember.Component.extend
       .then (data)->
         that.set "isSavingFilter", false
         that.set "isDeletingURLFilter", false
-        that.get("notify").success tURLAdded
+        that.get("notify").success tUrlUpdated
         that.set "project.apiUrlFilters", updatedURLFilters
         that.set "newUrlFilter", ""
         that.send "closeRemoveURLConfirmBox"
