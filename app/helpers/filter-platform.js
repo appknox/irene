@@ -1,8 +1,5 @@
 /*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
  * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
 import Ember from 'ember';
 
@@ -14,7 +11,7 @@ const filterPlatform = function(params) {
 };
 
 const filterPlatformValues = function(value) {
-  let [key, reverse] = Array.from(value.split(SEPERATOR));
+  let [key, reverse] = value.split(SEPERATOR);
   if (reverse === "true") {
     reverse = true;
   } else {

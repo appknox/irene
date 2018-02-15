@@ -1,9 +1,5 @@
 /*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
  * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
 import Ember from 'ember';
 import PaginateMixin from 'irene/mixins/paginate';
@@ -32,7 +28,7 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
   tLeastRecent: t("leastRecent"),
 
   newProjectsObserver: Ember.observer("realtime.ProjectCounter", function() {
-    return this.incrementProperty("version");
+    this.incrementProperty("version");
   }),
 
   sortProperties: (function() {
@@ -45,7 +41,7 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
   }).property("sortingKey", "sortingReversed"),
 
   resetOffset() {
-    return this.set("offset", 0);
+    this.set("offset", 0);
   },
 
   offsetResetter: Ember.observer("query", "sortingKey", "sortingReversed", "platformType", function() {
@@ -75,7 +71,7 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
       reverse: this.get("sortingReversed"),
       platform: this.get("platformType")
     };
-    return JSON.stringify(query, Object.keys(query).sort());
+    JSON.stringify(query, Object.keys(query).sort());
   }),
 
   sortingKeyObjects: (function() {
@@ -92,7 +88,7 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
       { key: "packageName", text: tPackageName }
     ];
     const keyObjectsWithReverse = [];
-    for (let keyObject of Array.from(keyObjects)) {
+    for (let keyObject of keyObjects) {
       for (let reverse of [true, false]) {
         const keyObjectFull = {};
         keyObjectFull.reverse = reverse;
@@ -121,14 +117,14 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
   actions: {
     sortProjects() {
       const select = $(this.element).find("#project-sort-property");
-      const [sortingKey, sortingReversed] = Array.from(filterPlatformValues(select.val()));
+      const [sortingKey, sortingReversed] = filterPlatformValues(select.val());
       this.set("sortingKey", sortingKey);
-      return this.set("sortingReversed", sortingReversed);
+      this.set("sortingReversed", sortingReversed);
     },
 
     filterPlatform() {
       const select = $(this.element).find("#project-filter-platform");
-      return this.set("platformType", select.val());
+      this.set("platformType", select.val());
     }
   }
 }
