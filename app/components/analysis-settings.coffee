@@ -5,6 +5,7 @@
 AnalysisSettingsComponent = Ember.Component.extend
 
   project: null
+  isSavingStatus: false
   i18n: Ember.inject.service()
   tSavedPreferences: t("savedPreferences")
 
@@ -18,11 +19,14 @@ AnalysisSettingsComponent = Ember.Component.extend
       data =
         status: isChecked
       that = @
+      @set "isSavingStatus", true
       @get("ajax").post unknownAnalysisStatus, data: data
       .then (data)->
+        that.set "isSavingStatus", false
         that.set "project.showUnknownAnalysis", isChecked
         that.get("notify").success tSavedPreferences
       .catch (error) ->
+        that.set "isSavingStatus", false
         that.get("notify").error error.payload.message
         for error in error.errors
           that.get("notify").error error.detail?.message

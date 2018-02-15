@@ -15,6 +15,7 @@ CollaborationDetailsComponent = Ember.Component.extend
   tagName: ["tr"]
 
   tTeam: t("team")
+  isChangingRole: false
   isRemovingCollaboration: false
   tPermissionChanged: t("permissionChanged")
   tEnterRightTeamName: t("enterRightTeamName")
@@ -26,6 +27,12 @@ CollaborationDetailsComponent = Ember.Component.extend
     roles.filter (role) ->
       selectedRole isnt role.value
   ).property "roles", "collaboration.role"
+
+  isDisabledSelectBox: (->
+    isDefaultTeam = @get "collaboration.team.isDefaultTeam"
+    isChangingRole = @get "isChangingRole"
+    isDefaultTeam || isChangingRole
+  ).property "collaboration.team.isDefaultTeam", "isChangingRole"
 
   promptCallback: (promptedItem) ->
     tTeam = @get "tTeam"
@@ -58,10 +65,13 @@ CollaborationDetailsComponent = Ember.Component.extend
       data =
         role: currentRole
       that = @
+      @set "isChangingRole", true
       @get("ajax").post url , data:data
       .then (data)->
+        that.set "isChangingRole", false
         that.get("notify").success tPermissionChanged
       .catch (error) ->
+        that.set "isChangingRole", false
         that.get("notify").error error.payload.message, ENV.notifications
         for error in error.errors
           that.get("notify").error error.detail?.message

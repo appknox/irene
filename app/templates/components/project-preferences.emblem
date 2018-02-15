@@ -51,5 +51,9 @@ table.device-table
                 = device.version
       .columns
         .column
-          button.margin-top20.is-primary.mp-select-device click="versionSelected"
+          button.margin-top20.is-primary.mp-select-device click="versionSelected" disabled=isSavingPreference
+            if isSavingPreference
+              .fa-font-size
+                i.fa class="fa-spinner fa-spin"
+              | &nbsp; 
             = t "modalCard.devicePreference.selectDevice"

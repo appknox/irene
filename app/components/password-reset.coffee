@@ -10,6 +10,8 @@ PasswordResetComponent = Ember.Component.extend
   password: ""
   confirmPassword: ""
 
+  isResettingPassword: false
+
   tPasswordLengthError: t("passwordLengthError")
   tPasswordMatchError: t("passwordMatchError")
   tPasswordIsReset: t("passwordIsReset")

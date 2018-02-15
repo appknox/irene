@@ -36,4 +36,8 @@
         p.control
           = input class="form-control input input-width" placeholder=( t 'email') type="text" value=teamMember autofocus="autofocus"
         button.margin-top10.is-primary click="addMember" disabled=isInvitingMember
-         = t "invite"
+          if isInvitingMember
+            .fa-font-size
+             i.fa class="fa-spinner fa-spin"
+            | &nbsp;
+          = t "invite"

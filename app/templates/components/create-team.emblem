@@ -13,4 +13,8 @@
         p.control
           = input class="form-control input" placeholder=(t 'teamName') type="text" value=teamName autofocus="autofocus"
         button.margin-top10.is-primary click="createTeam" disabled=isCreatingTeam
-         = t 'createTeam'
+          if isCreatingTeam
+            .fa-font-size
+              i.fa class="fa-spinner fa-spin"
+            | &nbsp;  
+          = t 'createTeam'

@@ -33,7 +33,7 @@
   .column.margin-right.margin-top
     .columns
       .column.top-nav
-        .columns
+        .columns.top-columns
           .column.is-one-third
             .columns
               .column.scan-text.is-one-third

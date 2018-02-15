@@ -20,6 +20,7 @@ export default {
   "app": "アプリ",
   "apps": "アプリ",
   "analyzing": "分析する",
+  "assignTeam": "Assign Team",
   "billing": "料金プラン",
   "billingPeriod": "支払請求周期",
   "businessImplication": "ビジネスへの影響",
@@ -29,6 +30,7 @@ export default {
   "changePassword": "パスワード変更",
   "changeRole": "役割の変更",
   "chooseAFile": "比較するファイルを選択してください",
+  "clickingHere": "clicking here",
   "clickOnDynamicScan": "動的スキャンの開始をクリックします。",
   "closeModal": "Exit Full Screen",
   "collaborationAdded": "コラボレーションが追加されました!",
@@ -296,7 +298,7 @@ export default {
   "uploadApp": "アプリのアップロード",
   "uploading": "アップロード中",
   "uploadNewProject": "You can upload a new project by clicking on <b class='bold'>Upload App</b> above and start scanning",
-  "urlAdded": "URLフィルタが正常に追加されました",
+  "urlUpdated": "Successfully updated the url filter",
   "usd": "米ドル ために",
   "userSetting": "ユーザー設定",
   "username": "ユーザー名",
@@ -310,6 +312,7 @@ export default {
   "year": "年",
   "yearly": "1年",
   "yes": "はい",
+  "youCanCreateTeam": "you can create a new team by",
   "youWillBeChargedOn": "You will be charged on",
   "confirmBox": {
     "removeURL": "URLフィルタから削除してもよろしいですか？",
@@ -318,7 +321,8 @@ export default {
     "revokeGithub": "Github Integrationを取り消してもよろしいですか？",
     "revokeJira": "JIRAインテグレーションを取り消してもよろしいですか？",
     "cancelSubsciption": "サブスクリプションをキャンセルしてもよろしいですか？",
-    "revokePersonalToken": "Are you sure you want to delete this personal access token?"
+    "revokePersonalToken": "Are you sure you want to delete this personal access token?",
+    "removeUserRole": "Are you sure you want to remove this role?"
   },
   "promptBox": {
     "collaborationPrompt": {
@@ -406,6 +410,10 @@ export default {
       "basicAppInfo": "Basic App Info",
       "loginDetails": "Login Details",
       "vpnDetails": "VPN Details"
+    },
+    "rescan": {
+      "title": "Re-scan Static Scan",
+      "description": "Do you want to do the static scan again?"
     }
   },
   "templates": {

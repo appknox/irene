@@ -9,14 +9,15 @@ isRegexFailed = (url) ->
 
 ApiFilterComponent = Ember.Component.extend
   project: null
+  deletedURL: ""
   i18n: Ember.inject.service()
   newUrlFilter: null
-  deletedURL: ""
-
-  tEmptyURL: t("emptyURL")
-  tInvalidURL: t("invalidURL")
-  tURLAdded: t("urlAdded")
   isSavingFilter: false
+  tEmptyURL: t("emptyURL")
+  tUrlUpdated: t("urlUpdated")
+  tInvalidURL: t("invalidURL")
+
+  isDeletingURLFilter: false
 
   confirmCallback: ->
     apiUrlFilters = @get "project.apiUrlFilters"
@@ -26,6 +27,7 @@ ApiFilterComponent = Ember.Component.extend
     splittedURLs.splice(index,1)
     joinedURLs = splittedURLs.join(",")
     @set "updatedURLFilters", joinedURLs
+    @set "isDeletingURLFilter", true
     @send "saveApiUrlFilter"
 
   actions:
@@ -47,7 +49,7 @@ ApiFilterComponent = Ember.Component.extend
       @send "saveApiUrlFilter"
 
     saveApiUrlFilter: ->
-      tURLAdded = @get "tURLAdded"
+      tUrlUpdated = @get "tUrlUpdated"
       updatedURLFilters = @get "updatedURLFilters"
       projectId = @get "project.id"
       apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, projectId].join '/'
@@ -59,12 +61,14 @@ ApiFilterComponent = Ember.Component.extend
       @get("ajax").post apiScanOptions, data: data
       .then (data)->
         that.set "isSavingFilter", false
-        that.get("notify").success tURLAdded
+        that.set "isDeletingURLFilter", false
+        that.get("notify").success tUrlUpdated
         that.set "project.apiUrlFilters", updatedURLFilters
         that.set "newUrlFilter", ""
         that.send "closeRemoveURLConfirmBox"
       .catch (error) ->
         that.set "isSavingFilter", false
+        that.set "isDeletingURLFilter", false
         for error in error.errors
           that.get("notify").error error.detail?.message
 

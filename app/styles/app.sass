@@ -19,6 +19,9 @@ body
 .margin-top-10
   margin-top: -10px
 
+.margin-top-5
+  margin-top: -5px
+
 .margin-top50
   margin-top: 50px
 
@@ -119,6 +122,9 @@ body
   width: 100px
   margin-left: auto
 
+.font-size12
+  font-size: 12px
+
 .black-text
   color: #323232
 
@@ -195,7 +201,7 @@ input
       padding: 3px 10px
       color: #FFF
   .top-icons
-    margin-right: 240px
+    margin-right: 15%
     margin-top: -5px
     a
       color: #e5e5e5
@@ -1197,7 +1203,7 @@ button.delete-button
       background-color: lighten(#424651, 5%)
       color: #fff
   select
-    width: 130px
+    width: 150px
   table
     tr
       th,td
@@ -1274,7 +1280,6 @@ button.delete-button
   .modal-card-head
     border-bottom: 0px
   .modal-card-body
-    margin: auto
     min-height: 582px
     button
       margin-top: 45px
@@ -1836,6 +1841,10 @@ input:checked + .slider:before
       color: #FFF
       border-color: $critical
 
+#show-unkown-analysis[disabled] + .slider
+  opacity: 0.7
+  cursor: not-allowed
+
 .not-found-container
   text-align: center
   background-color: #424651
@@ -1869,21 +1878,26 @@ input:checked + .slider:before
       padding-bottom: 20px
     h6
       margin-left: 25px
-    label
-      margin-left: 25px
     p
+      text-align: center
+      i
+        margin: auto
       &:first-child
         margin-top: 30px
       .input
-        margin-left: 25px
-        height: 40px
-        width: 250px
+        max-width: 80%
+        margin: auto
       button
         margin-top: 10px
         max-width: 200px!important
-      i
-        margin-left: 25px
-        margin-top: 5px
   .signin-text, .greet-text
     padding-top: 30px
     color: #fff
+
+.top-columns
+  margin-right: 30px
+
+.login-button
+  .fa-font-size
+    i
+      margin-top: 5px!important
