@@ -1,11 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
@@ -28,19 +20,14 @@ const JiraAccountComponent = Ember.Component.extend({
   confirmCallback() {
     const tJiraWillBeRevoked = this.get("tJiraWillBeRevoked");
     const that = this;
-    return this.get("ajax").post(ENV.endpoints.revokeJira)
+    this.get("ajax").post(ENV.endpoints.revokeJira)
     .then(function(data) {
       that.get("notify").success(tJiraWillBeRevoked);
       that.send("closeRevokeJIRAConfirmBox");
-      return that.set("user.hasJiraToken", false);}).catch(error =>
-      (() => {
-        const result = [];
-        for (error of Array.from(error.errors)) {
-          result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-        }
-        return result;
-      })()
-    );
+      that.set("user.hasJiraToken", false);})
+    .catch(function(error) {
+      that.get("notify").error(error.payload.error);
+    });
   },
 
   actions: {
@@ -60,27 +47,21 @@ const JiraAccountComponent = Ember.Component.extend({
         username,
         password
       };
-      return this.get("ajax").post(ENV.endpoints.integrateJira, {data})
+      this.get("ajax").post(ENV.endpoints.integrateJira, {data})
       .then(function(data){
         that.get("notify").success(tJiraIntegrated);
-        return triggerAnalytics('feature',ENV.csb.integrateJIRA);}).catch(function(error) {
+        triggerAnalytics('feature',ENV.csb.integrateJIRA);})
+      .catch(function(error) {
         that.get("notify").error(error.payload.message);
-        return (() => {
-          const result = [];
-          for (error of Array.from(error.errors)) {
-            result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-          }
-          return result;
-        })();
       });
     },
 
     openRevokeJIRAConfirmBox() {
-      return this.set("showRevokeJIRAConfirmBox", true);
+      this.set("showRevokeJIRAConfirmBox", true);
     },
 
     closeRevokeJIRAConfirmBox() {
-      return this.set("showRevokeJIRAConfirmBox", false);
+      this.set("showRevokeJIRAConfirmBox", false);
     }
   }
 });

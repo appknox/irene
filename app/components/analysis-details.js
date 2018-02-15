@@ -1,8 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 import Ember from 'ember';
 import ENUMS from 'irene/enums';
 
@@ -43,7 +38,7 @@ const AnalysisDetailsComponent = Ember.Component.extend({
 
     toggleVulnerability() {
       this.set("mpClassSelector", this.get("showVulnerability"));
-      return this.set("showVulnerability", !this.get("showVulnerability"));
+      this.set("showVulnerability", !this.get("showVulnerability"));
     }
   }
 });

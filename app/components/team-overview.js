@@ -1,11 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
@@ -35,29 +27,25 @@ const TeamOverviewComponent = Ember.Component.extend({
     }
     this.set("isDeletingTeam", true);
     const that = this;
-    return team.destroyRecord()
+    team.destroyRecord()
     .then(function(){
       that.set("isDeletingTeam", false);
-      return that.get("notify").success(`${tTeam} - ${deletedTeam} ${tTeamDeleted} `);}).catch(function(error) {
+      that.get("notify").success(`${tTeam} - ${deletedTeam} ${tTeamDeleted} `);})
+    .catch(function(error) {
       that.set("isDeletingTeam", false);
-      that.get("notify").error(error.payload.message);
-      return (() => {
-        const result = [];
-        for (error of Array.from(error.errors)) {
-          result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-        }
-        return result;
-      })();
+      for (error of error.errors) {
+        that.get("notify").error(error.title || undefined);
+      }
     });
   },
 
   actions: {
     openDeleteTeamPrompt() {
-      return this.set("showDeleteTeamPrompt", true);
+      this.set("showDeleteTeamPrompt", true);
     },
 
     closeDeleteTeamPrompt() {
-      return this.set("showDeleteTeamPrompt", false);
+      this.set("showDeleteTeamPrompt", false);
     }
   }
 });

@@ -1,9 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 import Ember from 'ember';
 import ENUMS from 'irene/enums';
 
@@ -25,7 +19,7 @@ const FileDetailsComponent = Ember.Component.extend({
       return analyses;
     }
     const filteredAnalysis = [];
-    for (let analysis of Array.from(analyses)) {
+    for (let analysis of analyses) {
       if (analysis.hasType(vulnerabilityType)) {
         filteredAnalysis.push(analysis);
       }
@@ -36,7 +30,7 @@ const FileDetailsComponent = Ember.Component.extend({
   actions: {
     filterVulnerabilityType() {
       const select = $(this.element).find("#filter-vulnerability-type");
-      return this.set("vulnerabilityType", select.val());
+      this.set("vulnerabilityType", select.val());
     }
   }
 });

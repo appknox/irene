@@ -1,11 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
@@ -33,31 +25,25 @@ const TeamMemberComponent = Ember.Component.extend({
     const url = [ENV.endpoints.teams, teamId, ENV.endpoints.members, teamMember].join('/');
     const that = this;
     this.set("isRemovingMember", true);
-    return this.get("ajax").delete(url)
+    this.get("ajax").delete(url)
     .then(function(data){
       that.set("isRemovingMember", false);
       that.store.pushPayload(data);
-      return that.get("notify").success(`${tTeamMember} ${teamMember} ${tTeamMemberRemoved}`);}).catch(function(error) {
+      that.get("notify").success(`${tTeamMember} ${teamMember} ${tTeamMemberRemoved}`);})
+    .catch(function(error) {
       that.set("isRemovingMember", false);
       that.get("notify").error(error.payload.message);
-      return (() => {
-        const result = [];
-        for (error of Array.from(error.errors)) {
-          result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-        }
-        return result;
-      })();
     });
   },
 
   actions: {
 
     openRemoveMemberPrompt() {
-      return this.set("showRemoveMemberPrompt", true);
+      this.set("showRemoveMemberPrompt", true);
     },
 
     closeRemoveMemberPrompt() {
-      return this.set("showRemoveMemberPrompt", false);
+      this.set("showRemoveMemberPrompt", false);
     }
   }
 });

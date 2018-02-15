@@ -1,10 +1,7 @@
 /*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
  * DS102: Remove unnecessary code created because of implicit returns
  * DS205: Consider reworking code to avoid use of IIFEs
  * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
@@ -24,19 +21,14 @@ const GithubProjectComponent = Ember.Component.extend({
     const projectId = this.get("project.id");
     const deleteGithub = [ENV.endpoints.deleteGHRepo, projectId].join('/');
     const that = this;
-    return this.get("ajax").delete(deleteGithub)
+    this.get("ajax").delete(deleteGithub)
     .then(function(data) {
       that.get("notify").success(tProjectRemoved);
       that.send("closeDeleteGHConfirmBox");
-      return that.set("project.githubRepo", "");}).catch(error =>
-      (() => {
-        const result = [];
-        for (error of Array.from(error.errors)) {
-          result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-        }
-        return result;
-      })()
-    );
+      that.set("project.githubRepo", "");})
+    .catch(function(error) {
+      that.get("notify").error(error.payload.error);
+    });
   },
 
   fetchGithubRepos: (function() {
@@ -46,17 +38,11 @@ const GithubProjectComponent = Ember.Component.extend({
     }
     const tFetchGitHubRepoFailed = this.get("tFetchGitHubRepoFailed");
     const that = this;
-    return this.get("ajax").request(ENV.endpoints.githubRepos)
-    .then(data => that.set("githubRepos", data.repos)).catch(function(error) {
+    this.get("ajax").request(ENV.endpoints.githubRepos)
+    .then(data => that.set("githubRepos", data.repos))
+    .catch(function(error) {
       that.get("notify").error(tFetchGitHubRepoFailed);
-      return (() => {
-        const result = [];
-        for (error of Array.from(error.errors)) {
-          result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-        }
-        return result;
-      })();});
-
+    });
   }).on("init"),
 
   actions: {
@@ -69,26 +55,22 @@ const GithubProjectComponent = Ember.Component.extend({
       const that = this;
       const data =
         {repo};
-      return this.get("ajax").post(setGithub, {data})
+      this.get("ajax").post(setGithub, {data})
       .then(function(data) {
         that.get("notify").success(tRepoIntegrated);
-        return that.set("project.githubRepo", repo);}).catch(error =>
-        (() => {
-          const result = [];
-          for (error of Array.from(error.errors)) {
-            result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-          }
-          return result;
-        })()
-      );
+        that.set("project.githubRepo", repo);
+      })
+      .catch(function(error) {
+        that.get("notify").error(error.payload.error);
+      });
     },
 
     openDeleteGHConfirmBox() {
-      return this.set("showDeleteGHConfirmBox", true);
+      this.set("showDeleteGHConfirmBox", true);
     },
 
     closeDeleteGHConfirmBox() {
-      return this.set("showDeleteGHConfirmBox", false);
+      this.set("showDeleteGHConfirmBox", false);
     }
   }
 });

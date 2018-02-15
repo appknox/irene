@@ -1,11 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
@@ -26,7 +18,7 @@ const CreateTeamComponent = Ember.Component.extend({
 
   actions: {
     openTeamModal() {
-      return this.set("showTeamModal", true);
+      this.set("showTeamModal", true);
     },
 
     createTeam() {
@@ -42,22 +34,16 @@ const CreateTeamComponent = Ember.Component.extend({
       const data =
         {name: teamName};
       this.set("isCreatingTeam", true);
-      return this.get("ajax").post(ENV.endpoints.teams, {data})
+      this.get("ajax").post(ENV.endpoints.teams, {data})
       .then(function(data){
         that.set("isCreatingTeam", false);
         that.store.pushPayload(data);
         that.get("notify").success(tTeamCreated);
         that.set("teamName", "");
-        return that.set("showTeamModal", false);}).catch(function(error) {
+        that.set("showTeamModal", false);})
+      .catch(function(error) {
         that.set("isCreatingTeam", false);
         that.get("notify").error(error.payload.error);
-        return (() => {
-          const result = [];
-          for (error of Array.from(error.errors)) {
-            result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-          }
-          return result;
-        })();
       });
     }
   }

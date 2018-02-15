@@ -1,10 +1,7 @@
 /*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
  * DS102: Remove unnecessary code created because of implicit returns
  * DS205: Consider reworking code to avoid use of IIFEs
  * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
@@ -26,18 +23,12 @@ const AnalysisSettingsComponent = Ember.Component.extend({
       const data =
         {status: isChecked};
       const that = this;
-      return this.get("ajax").post(unknownAnalysisStatus, {data})
+      this.get("ajax").post(unknownAnalysisStatus, {data})
       .then(function(data){
         that.set("project.showUnknownAnalysis", isChecked);
-        return that.get("notify").success(tSavedPreferences);}).catch(function(error) {
+        that.get("notify").success(tSavedPreferences);})
+      .catch(function(error) {
         that.get("notify").error(error.payload.message);
-        return (() => {
-          const result = [];
-          for (error of Array.from(error.errors)) {
-            result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-          }
-          return result;
-        })();
       });
     }
   }

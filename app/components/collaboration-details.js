@@ -1,11 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
@@ -47,18 +39,16 @@ const CollaborationDetailsComponent = Ember.Component.extend({
     }
     this.set("isRemovingCollaboration", true);
     const that = this;
-    return collaboration.destroyRecord()
+    collaboration.destroyRecord()
     .then(function(data){
       that.set("isRemovingCollaboration", false);
-      return that.get("notify").success(`${tTeam} ${team} ${tCollaborationRemoved}`);}).catch(function(error) {
+      that.get("notify").success(`${tTeam} ${team} ${tCollaborationRemoved}`);
+    })
+    .catch(function(error) {
       that.set("isRemovingCollaboration", false);
-      return (() => {
-        const result = [];
-        for (error of Array.from(error.errors)) {
-          result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-        }
-        return result;
-      })();
+      for (error of error.errors) {
+        that.get("notify").error(error.title || undefined);
+      }
     });
   },
 
@@ -72,25 +62,19 @@ const CollaborationDetailsComponent = Ember.Component.extend({
       const data =
         {role: currentRole};
       const that = this;
-      return this.get("ajax").post(url , {data})
-      .then(data=> that.get("notify").success(tPermissionChanged)).catch(function(error) {
+      this.get("ajax").post(url , {data})
+      .then(data=> that.get("notify").success(tPermissionChanged))
+      .catch(function(error) {
         that.get("notify").error(error.payload.message, ENV.notifications);
-        return (() => {
-          const result = [];
-          for (error of Array.from(error.errors)) {
-            result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-          }
-          return result;
-        })();
       });
     },
 
     openAddCollaborationPrompt() {
-      return this.set("showAddCollaborationPrompt", true);
+      this.set("showAddCollaborationPrompt", true);
     },
 
     closeAddCollaborationPrompt() {
-      return this.set("showAddCollaborationPrompt", false);
+      this.set("showAddCollaborationPrompt", false);
     }
   }
 });

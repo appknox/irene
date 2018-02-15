@@ -1,10 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
@@ -27,27 +20,24 @@ const PersonaltokenDetailComponent = Ember.Component.extend({
     const that = this;
     const url = [ENV.endpoints.personaltokens, personaltokenId].join('/');
 
-    return this.get('ajax').delete(url)
-    .then(data => that.set('isNotRevoked', false)).then(function(data) {
+    this.get('ajax').delete(url)
+    .then(data => that.set('isNotRevoked', false))
+    .then(function(data) {
       that.get('notify').success(tTokenRevoked);
-      return that.send('closeRevokePersonalTokenConfirmBox');}).catch(error =>
-      (() => {
-        const result = [];
-        for (error of Array.from(error.payload.errors)) {
-          result.push(that.get('notify').error(error.detail));
-        }
-        return result;
-      })()
-    );
+      that.send('closeRevokePersonalTokenConfirmBox');
+    })
+    .catch(function(error) {
+      that.get("notify").error(error.payload.message);
+    });
   },
 
   actions: {
     openRevokePersonalTokenConfirmBox() {
-      return this.set('showRevokePersonalTokenConfirmBox', true);
+      this.set('showRevokePersonalTokenConfirmBox', true);
     },
 
     closeRevokePersonalTokenConfirmBox() {
-      return this.set('showRevokePersonalTokenConfirmBox', false);
+      this.set('showRevokePersonalTokenConfirmBox', false);
     }
   }
 });

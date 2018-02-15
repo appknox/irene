@@ -1,9 +1,6 @@
 /*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
  * DS102: Remove unnecessary code created because of implicit returns
  * DS205: Consider reworking code to avoid use of IIFEs
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
@@ -31,7 +28,7 @@ const PersonaltokenListComponent = Ember.Component.extend(PaginateMixin, {
 
   actions: {
     openGenerateTokenModal() {
-      return this.set('showGenerateTokenModal', true);
+      this.set('showGenerateTokenModal', true);
     },
 
     generateToken() {
@@ -48,22 +45,18 @@ const PersonaltokenListComponent = Ember.Component.extend(PaginateMixin, {
         {name: tokenName};
 
       this.set('isGeneratingToken', true);
-      return this.get('ajax').post(ENV.endpoints.personaltokens, {data})
+      this.get('ajax').post(ENV.endpoints.personaltokens, {data})
       .then(function(data){
         that.set('isGeneratingToken', false);
         that.store.pushPayload(data);
         that.incrementProperty("version");
         that.get('notify').success(tTokenCreated);
         that.set('tokenName', '');
-        return that.set('showGenerateTokenModal', false);}).catch(function(error) {
+        that.set('showGenerateTokenModal', false);
+      })
+      .catch(function(error) {
         that.set('isGeneratingToken', false);
-        return (() => {
-          const result = [];
-          for (error of Array.from(error.payload.errors)) {
-            result.push(that.get('notify').error(error.detail));
-          }
-          return result;
-        })();
+        that.get("notify").error(error.payload.message);
       });
     }
   },
@@ -85,14 +78,14 @@ const PersonaltokenListComponent = Ember.Component.extend(PaginateMixin, {
 
     clipboard.on('success', function(e) {
       that.get('notify').info(tTokenCopied);
-      return e.clearSelection();
+      e.clearSelection();
     });
-    return clipboard.on('error', () => that.get('notify').error(tPleaseTryAgain));
+    clipboard.on('error', () => that.get('notify').error(tPleaseTryAgain));
   },
 
   willDestroyElement() {
     const clipboard = this.get('clipboard');
-    return clipboard.destroy();
+    clipboard.destroy();
   }
 }
 );

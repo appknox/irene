@@ -1,11 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
@@ -41,7 +33,7 @@ const PasswordChangeComponent = Ember.Component.extend({
       };
       const that = this;
       const ajax = this.get("ajax");
-      return ajax.post(ENV.endpoints.changePassword, {data})
+      ajax.post(ENV.endpoints.changePassword, {data})
       .then(function() {
         that.setProperties({
           passwordCurrent: "",
@@ -49,15 +41,10 @@ const PasswordChangeComponent = Ember.Component.extend({
           passwordConfirm: ""
           });
         that.get("notify").success(tPasswordChanged);
-        return triggerAnalytics('feature',ENV.csb.changePassword);}).catch(function(error) {
+        triggerAnalytics('feature',ENV.csb.changePassword);
+      })
+      .catch(function(error) {
         that.get("notify").error(error.payload.message);
-        return (() => {
-          const result = [];
-          for (error of Array.from(error.errors)) {
-            result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-          }
-          return result;
-        })();
       });
     }
   }

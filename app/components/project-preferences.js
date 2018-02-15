@@ -1,11 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 import Ember from 'ember';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
@@ -25,7 +17,7 @@ const ProjectPreferencesComponent = Ember.Component.extend({
 
   devices: (function() {
     const store = this.get("store");
-    return store.findAll("device");
+    store.findAll("device");
   }).property(),
 
   availableDevices: Ember.computed.filter('devices', function(device) {
@@ -53,11 +45,11 @@ const ProjectPreferencesComponent = Ember.Component.extend({
 
     selectDeviceType() {
       this.set("selectedDeviceType", parseInt(this.$('#project-device-preference').val()));
-      return this.set("selectVersion", 0);
+      this.set("selectVersion", 0);
     },
 
     selectVersion() {
-      return this.set("selectVersion", this.$('#project-version-preference').val());
+      this.set("selectVersion", this.$('#project-version-preference').val());
     },
 
     versionSelected() {
@@ -73,30 +65,22 @@ const ProjectPreferencesComponent = Ember.Component.extend({
         deviceType: selectedDeviceType,
         platformVersion: selectVersion
       };
-      return this.get("ajax").post(devicePreferences, {data})
+      this.get("ajax").post(devicePreferences, {data})
       .then(function(data) {
         that.get("notify").success(tDeviceSelected);
-        return that.set("projectPreferenceModal", false);}).catch(function(error) {
+        that.set("projectPreferenceModal", false);
+      })
+      .catch(function(error) {
         that.get("notify").error(tPleaseTryAgain);
-        if (Ember.isEmpty(error != null ? error.errors : undefined)) {
-          return;
-        }
-        return (() => {
-          const result = [];
-          for (error of Array.from(error.errors)) {
-            result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-          }
-          return result;
-        })();
       });
     },
 
     openProjectPreferenceModal() {
-      return this.set("projectPreferenceModal", true);
+      this.set("projectPreferenceModal", true);
     },
 
     closeProjectPreferenceModal() {
-      return this.set("projectPreferenceModal", false);
+      this.set("projectPreferenceModal", false);
     }
   }
 });

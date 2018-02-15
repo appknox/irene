@@ -1,11 +1,5 @@
 /*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
  * DS103: Rewrite code to no longer use __guard__
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
@@ -22,7 +16,7 @@ const TeamDetailsComponent = Ember.Component.extend({
   isInvitingMember: false,
 
   invitations: (function() {
-    return this.get("store").findAll("invitation");
+    this.get("store").findAll("invitation");
   }).property(),
 
   tEmptyEmailId: t("emptyEmailId"),
@@ -32,11 +26,11 @@ const TeamDetailsComponent = Ember.Component.extend({
   actions: {
 
     openAddMemberModal() {
-      return this.set("showAddMemberModal", true);
+      this.set("showAddMemberModal", true);
     },
 
     closeAddMemberModal() {
-      return this.set("showAddMemberModal", false);
+      this.set("showAddMemberModal", false);
     },
 
     addMember() {
@@ -53,8 +47,9 @@ const TeamDetailsComponent = Ember.Component.extend({
       const data =
         {identification: teamMember};
       this.set("isInvitingMember", true);
-      return this.get("ajax").post(url, {data})
+      this.get("ajax").post(url, {data})
       .then(function(data){
+        debugger
         that.set("isInvitingMember", false);
         if (__guard__(data != null ? data.data : undefined, x => x.type) === "team") {
           that.store.pushPayload(data);
@@ -63,16 +58,10 @@ const TeamDetailsComponent = Ember.Component.extend({
           that.get("notify").success(tTeamMemberInvited);
         }
         that.set("teamMember", "");
-        return that.set("showAddMemberModal", false);}).catch(function(error) {
+        that.set("showAddMemberModal", false);})
+      .catch(function(error) {
         that.set("isInvitingMember", false);
         that.get("notify").error(error.payload.message);
-        return (() => {
-          const result = [];
-          for (error of Array.from(error.errors)) {
-            result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-          }
-          return result;
-        })();
       });
     }
   }

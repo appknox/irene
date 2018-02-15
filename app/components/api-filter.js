@@ -1,10 +1,7 @@
 /*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
  * DS102: Remove unnecessary code created because of implicit returns
  * DS205: Consider reworking code to avoid use of IIFEs
  * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
@@ -25,7 +22,7 @@ const ApiFilterComponent = Ember.Component.extend({
 
   tEmptyURL: t("emptyURL"),
   tInvalidURL: t("invalidURL"),
-  tURLAdded: t("urlAdded"),
+  tUpdatedFilter: t("updatedFilter"),
   isSavingFilter: false,
 
   confirmCallback() {
@@ -36,7 +33,7 @@ const ApiFilterComponent = Ember.Component.extend({
     splittedURLs.splice(index,1);
     const joinedURLs = splittedURLs.join(",");
     this.set("updatedURLFilters", joinedURLs);
-    return this.send("saveApiUrlFilter");
+    this.send("saveApiUrlFilter");
   },
 
   actions: {
@@ -49,20 +46,24 @@ const ApiFilterComponent = Ember.Component.extend({
       const newUrlFilter = this.get("newUrlFilter");
       if (Ember.isEmpty(newUrlFilter)) {
         return this.get("notify").error(tEmptyURL);
-      } else {
-        if (!isRegexFailed(newUrlFilter)) { return this.get("notify").error(`${newUrlFilter} ${tInvalidURL}`); }
+      }
+      else {
+        if (!isRegexFailed(newUrlFilter)) {
+          return this.get("notify").error(`${newUrlFilter} ${tInvalidURL}`);
+        }
       }
       if (!Ember.isEmpty(apiUrlFilters)) {
         combinedURLS = apiUrlFilters.concat("," , newUrlFilter);
-      } else {
+      }
+      else {
         combinedURLS = newUrlFilter;
       }
       this.set("updatedURLFilters", combinedURLS);
-      return this.send("saveApiUrlFilter");
+      this.send("saveApiUrlFilter");
     },
 
     saveApiUrlFilter() {
-      const tURLAdded = this.get("tURLAdded");
+      const tUpdatedFilter = this.get("tUpdatedFilter");
       const updatedURLFilters = this.get("updatedURLFilters");
       const projectId = this.get("project.id");
       const apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, projectId].join('/');
@@ -71,31 +72,26 @@ const ApiFilterComponent = Ember.Component.extend({
       triggerAnalytics('feature', ENV.csb.addAPIEndpoints);
       this.set("isSavingFilter", true);
       const that = this;
-      return this.get("ajax").post(apiScanOptions, {data})
+      this.get("ajax").post(apiScanOptions, {data})
       .then(function(data){
         that.set("isSavingFilter", false);
-        that.get("notify").success(tURLAdded);
+        that.get("notify").success(tUpdatedFilter);
         that.set("project.apiUrlFilters", updatedURLFilters);
         that.set("newUrlFilter", "");
-        return that.send("closeRemoveURLConfirmBox");}).catch(function(error) {
+        that.send("closeRemoveURLConfirmBox");})
+      .catch(function(error) {
         that.set("isSavingFilter", false);
-        return (() => {
-          const result = [];
-          for (error of Array.from(error.errors)) {
-            result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-          }
-          return result;
-        })();
+        that.get("notify").error(error.payload.message);
       });
     },
 
     openRemoveURLConfirmBox() {
       this.set("deletedURL", event.target.parentElement.parentElement.firstChild.textContent);
-      return this.set("showRemoveURLConfirmBox", true);
+      this.set("showRemoveURLConfirmBox", true);
     },
 
     closeRemoveURLConfirmBox() {
-      return this.set("showRemoveURLConfirmBox", false);
+      this.set("showRemoveURLConfirmBox", false);
     }
   }
 });
