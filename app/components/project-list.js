@@ -1,6 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
 import Ember from 'ember';
 import PaginateMixin from 'irene/mixins/paginate';
 import ENUMS from 'irene/enums';
@@ -28,7 +25,7 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
   tLeastRecent: t("leastRecent"),
 
   newProjectsObserver: Ember.observer("realtime.ProjectCounter", function() {
-    this.incrementProperty("version");
+    return this.incrementProperty("version");
   }),
 
   sortProperties: (function() {
@@ -41,7 +38,7 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
   }).property("sortingKey", "sortingReversed"),
 
   resetOffset() {
-    this.set("offset", 0);
+    return this.set("offset", 0);
   },
 
   offsetResetter: Ember.observer("query", "sortingKey", "sortingReversed", "platformType", function() {
@@ -71,7 +68,7 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
       reverse: this.get("sortingReversed"),
       platform: this.get("platformType")
     };
-    JSON.stringify(query, Object.keys(query).sort());
+    return JSON.stringify(query, Object.keys(query).sort());
   }),
 
   sortingKeyObjects: (function() {
@@ -88,7 +85,7 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
       { key: "packageName", text: tPackageName }
     ];
     const keyObjectsWithReverse = [];
-    for (let keyObject of keyObjects) {
+    for (let keyObject of Array.from(keyObjects)) {
       for (let reverse of [true, false]) {
         const keyObjectFull = {};
         keyObjectFull.reverse = reverse;
