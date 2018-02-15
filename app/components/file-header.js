@@ -1,11 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
@@ -95,21 +87,21 @@ const FileHeaderComponent = Ember.Component.extend({
     const that = this;
     clipboard.on('success', function(e) {
       that.get("notify").info(tPasswordCopied);
-      return e.clearSelection();
+      e.clearSelection();
     });
-    return clipboard.on('error', () => that.get("notify").error(tPleaseTryAgain));
+    clipboard.on('error', () => that.get("notify").error(tPleaseTryAgain));
   },
 
   willDestroyElement() {
     const clipboard = this.get("clipboard");
-    return clipboard.destroy();
+    clipboard.destroy();
   },
 
   confirmCallback() {
     const deletedRole = this.get("deletedRole");
     const availableRoles = this.get("availableRoles");
     this.set("manualscan.userRoles", availableRoles);
-    return this.set("showRemoveRoleConfirmBox", false);
+    this.set("showRemoveRoleConfirmBox", false);
   },
 
   allUserRoles: (function() {
@@ -135,22 +127,17 @@ const FileHeaderComponent = Ember.Component.extend({
   hasUserRoles: Ember.computed.gt('userRoleCount', 0),
 
   actions: {
+
     getPDFReportLink() {
       triggerAnalytics('feature', ENV.csb.reportDownload);
       const tReportIsGettingGenerated = this.get("tReportIsGettingGenerated");
       const that = this;
       const fileId = this.get("file.id");
       const url = [ENV.endpoints.signedPdfUrl, fileId].join('/');
-      return this.get("ajax").request(url)
-      .then(result => window.location = result.url).catch(function(error) {
+      this.get("ajax").request(url)
+      .then(result => window.location = result.url)
+      .catch(function(error) {
         that.get("notify").error(tReportIsGettingGenerated);
-        return (() => {
-          const result = [];
-          for (error of Array.from(error.errors)) {
-            result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-          }
-          return result;
-        })();
       });
     },
 
@@ -159,16 +146,10 @@ const FileHeaderComponent = Ember.Component.extend({
       file.setBootingStatus();
       const file_id = this.get("file.id");
       const dynamicUrl = [ENV.endpoints.dynamic, file_id].join('/');
-      return this.get("ajax").request(dynamicUrl)
+      this.get("ajax").request(dynamicUrl)
       .catch(function(error) {
         file.setNone();
-        return (() => {
-          const result = [];
-          for (error of Array.from(error.errors)) {
-            result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-          }
-          return result;
-        })();
+        that.get("notify").error(error.payload.error);
       });
     },
 
@@ -180,31 +161,27 @@ const FileHeaderComponent = Ember.Component.extend({
       const that = this;
       const data =
         {isApiScanEnabled};
-      return this.get("ajax").post(apiScanOptions, {data})
+      this.get("ajax").post(apiScanOptions, {data})
       .then(function(data){
         that.send("closeModal");
         that.send("dynamicScan");
-        return that.get("notify").success(tStartingScan);}).catch(error =>
-        (() => {
-          const result = [];
-          for (error of Array.from(error.errors)) {
-            result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-          }
-          return result;
-        })()
-      );
+        that.get("notify").success(tStartingScan);
+      })
+      .catch(function(error) {
+        that.get("notify").error(error.payload.error);
+      });
     },
 
     doNotRunAPIScan() {
       triggerAnalytics('feature', ENV.csb.runDynamicScan);
       this.set("isApiScanEnabled", false);
-      return this.send("setAPIScanOption");
+      this.send("setAPIScanOption");
     },
 
     runAPIScan() {
       triggerAnalytics('feature', ENV.csb.runAPIScan);
       this.set("isApiScanEnabled", true);
-      return this.send("setAPIScanOption");
+      this.send("setAPIScanOption");
     },
 
     showURLFilter(param){
@@ -217,7 +194,7 @@ const FileHeaderComponent = Ember.Component.extend({
       if (param === 'dynamic') {
         this.set("showRunDynamicScanModal", false);
         this.set("dynamicScanModal", true);
-        return this.set("apiScanModal", false);
+        this.set("apiScanModal", false);
       }
     },
 
@@ -225,7 +202,7 @@ const FileHeaderComponent = Ember.Component.extend({
       const loginRequiredText = this.$('#app-login-required').val();
       this.set("manualscan.loginRequired", false);
       if (loginRequiredText === "yes") {
-        return this.set("manualscan.loginRequired", true);
+        this.set("manualscan.loginRequired", true);
       }
     },
 
@@ -233,7 +210,7 @@ const FileHeaderComponent = Ember.Component.extend({
       const vpnRequired = this.$('#vpn-required').val();
       this.set("manualscan.vpnRequired", false);
       if (vpnRequired === "yes") {
-        return this.set("manualscan.vpnRequired", true);
+        this.set("manualscan.vpnRequired", true);
       }
     },
 
@@ -247,35 +224,35 @@ const FileHeaderComponent = Ember.Component.extend({
         this.set("manualscan.showProceedText", false);
         this.set("manualscan.showHaltText", false);
       }
-      return this.set("manualscan.filteredAppAction", appAction);
+      this.set("manualscan.filteredAppAction", appAction);
     },
 
     selectAppEnvironment() {
       const appEnv = this.$('#app-env').val();
-      return this.set("manualscan.filteredAppEnv", appEnv);
+      this.set("manualscan.filteredAppEnv", appEnv);
     },
 
     openRemoveUserRoleConfirmBox(param){
       this.set("deletedRole", param);
-      return this.set("showRemoveRoleConfirmBox", true);
+      this.set("showRemoveRoleConfirmBox", true);
     },
 
     displayAppInfo() {
       this.set("isBasicInfo", !this.get("isBasicInfo"));
       this.set('isLoginDetails', false);
-      return this.set('isVPNDetails', false);
+      this.set('isVPNDetails', false);
     },
 
     displayLoginDetails() {
       this.set('isBasicInfo', false);
       this.set('isLoginDetails', !this.get("isLoginDetails"));
-      return this.set('isVPNDetails', false);
+      this.set('isVPNDetails', false);
     },
 
     displayVPNDetails() {
       this.set('isBasicInfo', false);
       this.set('isLoginDetails', false);
-      return this.set('isVPNDetails', !this.get("isVPNDetails"));
+      this.set('isVPNDetails', !this.get("isVPNDetails"));
     },
 
     addUserRole() {
@@ -303,7 +280,7 @@ const FileHeaderComponent = Ember.Component.extend({
       this.set("manualscan.userRoles", userRoles);
       this.set("roleId", roleId);
       this.get("notify").success(tRoleAdded);
-      return this.setProperties({
+      this.setProperties({
         newUserRole: "",
         username: "",
         password: ""
@@ -351,7 +328,7 @@ const FileHeaderComponent = Ember.Component.extend({
       }
 
       const vpnUsername =  this.get("manualscan.vpnDetails.username");
-      const vpnPassword =  this.get("manualscan.vpnDetails.password");    
+      const vpnPassword =  this.get("manualscan.vpnDetails.password");
 
       const vpnDetails = {
         address: vpnAddress,
@@ -380,31 +357,27 @@ const FileHeaderComponent = Ember.Component.extend({
       this.set("isRequestingManual", true);
       const fileId = this.get("file.id");
       const url = [ENV.endpoints.manualscans, fileId].join('/');
-      return this.get("ajax").put(url, {data: JSON.stringify(data), contentType: 'application/json'})
+      this.get("ajax").put(url, {data: JSON.stringify(data), contentType: 'application/json'})
       .then(function(result) {
         triggerAnalytics('feature', ENV.csb.requestManualScan);
         that.set("isRequestingManual", false);
         that.get("notify").info(tManualRequested);
         that.set("file.ifManualNotRequested", false);
         that.set("showManualScanModal", false);
-        return that.set("showManualScanFormModal", false);}).catch(function(error) {
+        that.set("showManualScanFormModal", false);
+      })
+      .catch(function(error) {
         that.set("isRequestingManual", false);
-        return (() => {
-          const result = [];
-          for (error of Array.from(error.errors)) {
-            result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-          }
-          return result;
-        })();
+        that.get("notify").error(error.payload.error);
       });
     },
 
     openAPIScanModal() {
       const platform = this.get("file.project.platform");
       if ([ENUMS.PLATFORM.ANDROID,ENUMS.PLATFORM.IOS].includes(platform)) { // TEMPIOSDYKEY
-        return this.set("showAPIScanModal", true);
+        this.set("showAPIScanModal", true);
       } else {
-        return this.send("doNotRunAPIScan");
+        this.send("doNotRunAPIScan");
       }
     },
 
@@ -414,50 +387,50 @@ const FileHeaderComponent = Ember.Component.extend({
         this.set("showAPIScanModal", true);
       }
       if (this.get("dynamicScanModal")) {
-        return this.set("showRunDynamicScanModal", true);
+        this.set("showRunDynamicScanModal", true);
       }
     },
 
     closeModal() {
       this.set("showAPIScanModal", false);
       this.set("showAPIURLFilterScanModal", false);
-      return this.set("showRunDynamicScanModal", false);
+      this.set("showRunDynamicScanModal", false);
     },
 
     closeSubscribeModal() {
-      return this.set("showSubscribeModal", false);
+      this.set("showSubscribeModal", false);
     },
 
     openSubscribeModal() {
-      return this.set("showSubscribeModal", true);
+      this.set("showSubscribeModal", true);
     },
 
     openManualScanModal() {
-      return this.set("showManualScanModal", true);
+      this.set("showManualScanModal", true);
     },
 
     closeManualScanModal() {
-      return this.set("showManualScanModal", false);
+      this.set("showManualScanModal", false);
     },
 
     openRescanModal() {
-      return this.set("showRescanModal", true);
+      this.set("showRescanModal", true);
     },
 
     closeRescanModal() {
-      return this.set("showRescanModal", false);
+      this.set("showRescanModal", false);
     },
 
     openRunDynamicScanModal() {
-      return this.set("showRunDynamicScanModal", true);
+      this.set("showRunDynamicScanModal", true);
     },
 
     closeRunDynamicScanModal() {
-      return this.set("showRunDynamicScanModal", false);
+      this.set("showRunDynamicScanModal", false);
     },
 
     subscribePlan() {
-      return window.location.href = "/billing";
+      window.location.href = "/billing";
     },
 
     dynamicShutdown() {
@@ -466,16 +439,11 @@ const FileHeaderComponent = Ember.Component.extend({
       this.set("isPoppedOut", false);
       const file_id = this.get("file.id");
       const shutdownUrl = [ENV.endpoints.dynamicShutdown, file_id].join('/');
-      return this.get("ajax").request(shutdownUrl)
-      .then(() => file.setNone()).catch(function(error) {
+      this.get("ajax").request(shutdownUrl)
+      .then(() => file.setNone())
+      .catch(function(error) {
         file.setNone();
-        return (() => {
-          const result = [];
-          for (error of Array.from(error.errors)) {
-            result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-          }
-          return result;
-        })();
+        that.get("notify").error(error.payload.error);
       });
     },
 
@@ -486,19 +454,14 @@ const FileHeaderComponent = Ember.Component.extend({
       const data =
         {file_id: fileId};
       this.set("isStartingRescan", true);
-      return this.get("ajax").post(ENV.endpoints.rescan, {data})
+      this.get("ajax").post(ENV.endpoints.rescan, {data})
       .then(function(result) {
         that.set("isStartingRescan", false);
         that.get("notify").info(tRescanInitiated);
-        return that.set("showRescanModal", false);}).catch(function(error) {
+        that.set("showRescanModal", false);})
+      .catch(function(error) {
         that.set("isStartingRescan", false);
-        return (() => {
-          const result = [];
-          for (error of Array.from(error.errors)) {
-            result.push(that.get("notify").error(error.detail != null ? error.detail.message : undefined));
-          }
-          return result;
-        })();
+        that.get("notify").error(error.payload.error);
       });
     }
   }
