@@ -10,5 +10,9 @@
       p.control
         button.is-primary.margin-top click="clearModal"
           = t "cancel"
-        button.is-primary.margin-top.margin-left click="sendCallback"
+        button.is-primary.margin-top.margin-left click="sendCallback" disabled=disabled
+          if disabled
+            .fa-font-size
+              i.fa class="fa-spinner fa-spin"
+              | &nbsp;
           = t "ok"

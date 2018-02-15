@@ -467,4 +467,4 @@
       button.modal-button.is-primary click="closeRescanModal"
         = t "no"
 
-= confirm-box isActive=showRemoveRoleConfirmBox title="Are you sure you want to remove this role" delegate=this
+= confirm-box isActive=showRemoveRoleConfirmBox title=(t "confirmBox.removeUserRole") delegate=this

@@ -83,6 +83,22 @@ export default function() {
     return {};
   });
 
+  this.post('/set_unknown_analysis_status/:id', () => {
+    return {};
+  });
+
+  this.post('/personaltokens', () => {
+    return {};
+  });
+
+  this.post('/integrate_jira', () => {
+    return {};
+  });
+
+  this.delete('/personaltokens/:id', () => {
+    return {};
+  });
+
   this.post('/lang', () => {
     return {};
   });

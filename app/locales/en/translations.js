@@ -20,6 +20,7 @@ export default {
   "app": "app(s)",
   "apps": " Apps",
   "analyzing": "Analyzing",
+  "assignTeam": "Assign Team",
   "billing": "Billing",
   "billingPeriod": "Billing Period",
   "businessImplication": "Business Implication",
@@ -29,6 +30,7 @@ export default {
   "changePassword": "Change Password",
   "changeRole": "Change Role",
   "chooseAFile": "Choose a file to compare",
+  "clickingHere": "clicking here",
   "clickOnDynamicScan": "Click on Start Dynamic Scan",
   "closeModal": "Exit Full Screen",
   "collaborationAdded": "Collaboration is added!",
@@ -296,7 +298,7 @@ export default {
   "uploadApp": "Upload App",
   "uploading": "Uploading",
   "uploadNewProject": "You can upload a new project by clicking on <b class='bold'>Upload App</b> above and start scanning",
-  "urlAdded": "Successfully added the url filter",
+  "urlUpdated": "Successfully updated the url filter",
   "usd": "USD for",
   "userSetting": " user's settings ",
   "username": "Username",
@@ -310,6 +312,7 @@ export default {
   "year": "Year",
   "yearly": "Yearly",
   "yes": "Yes",
+  "youCanCreateTeam": "you can create a new team by",
   "youWillBeChargedOn": "You will be charged on",
   "confirmBox": {
     "removeURL": "Are you sure you want to remove from url filters?",
@@ -318,7 +321,8 @@ export default {
     "revokeGithub": "Are you sure you want to revoke Github Integration?",
     "revokeJira": "Are you sure you want to revoke JIRA Integration?",
     "cancelSubsciption": "Are you sure you want to cancel Subscription?",
-    "revokePersonalToken": "Are you sure you want to delete this personal access token?"
+    "revokePersonalToken": "Are you sure you want to delete this personal access token?",
+    "removeUserRole": "Are you sure you want to remove this role?"
   },
   "promptBox": {
     "collaborationPrompt": {
@@ -406,6 +410,10 @@ export default {
       "basicAppInfo": "Basic App Info",
       "loginDetails": "Login Details",
       "vpnDetails": "VPN Details"
+    },
+    "rescan": {
+      "title": "Re-scan Static Scan",
+      "description": "Do you want to do the static scan again?"
     }
   },
   "templates": {

@@ -8,4 +8,4 @@ else
     = t "integrateGithub"
   = yield
 
-= confirm-box isActive=showRevokeGithubConfirmBox title=(t 'confirmBox.revokeGithub') delegate=this
+= confirm-box isActive=showRevokeGithubConfirmBox title=(t 'confirmBox.revokeGithub') delegate=this disabled=isRevokingGithub

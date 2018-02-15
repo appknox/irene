@@ -16,7 +16,11 @@ else
         .column.margin-left20
           = input class="input mp-jira-password" placeholder=(t "password") type="password" value=jiraPassword autocomplete="jira-password"
 
-    button.is-primary click="integrateJira" class="mp-jira-integrate"
+    button.is-primary click="integrateJira" class="mp-jira-integrate" disabled=isIntegratingJIRA
+      if isIntegratingJIRA
+        .fa-font-size
+          i.fa class="fa-spinner fa-spin"
+          | &nbsp; 
       = t "integrateJIRA"
 
-= confirm-box isActive=showRevokeJIRAConfirmBox title=(t 'confirmBox.revokeJira') delegate=this
+= confirm-box isActive=showRevokeJIRAConfirmBox title=(t 'confirmBox.revokeJira') delegate=this disabled=isRevokingJIRA
