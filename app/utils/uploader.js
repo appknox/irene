@@ -16,7 +16,7 @@ const Uploader = EmberUploader.Uploader.extend({
   tErrorWhileUploading: t("errorWhileUploading"),
   tFileUploadedSuccessfully: t("fileUploadedSuccessfully"),
 
-  upload(file) {
+  upload(file, delegate) {
 
     const tErrorWhileFetching = this.get("tErrorWhileFetching");
     const tErrorWhileUploading = this.get("tErrorWhileUploading");
@@ -46,6 +46,7 @@ const Uploader = EmberUploader.Uploader.extend({
         that.get("notify").success(tFileUploadedSuccessfully);
       })
       .catch(function(error) {
+        delegate.set("isUploading", false);
         that.get("notify").error(tErrorWhileUploading);
       });
     };
@@ -59,6 +60,7 @@ const Uploader = EmberUploader.Uploader.extend({
       signSuccess(json);
     })
     .catch(function(error) {
+      delegate.set("isUploading", false);
       $('input[type=file]').val('');
       that.get("notify").error(tErrorWhileFetching);
     });

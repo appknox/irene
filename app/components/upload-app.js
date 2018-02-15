@@ -1,6 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
 import Ember from 'ember';
 import Uploader from 'irene/utils/uploader';
 import ENV from 'irene/config/environment';
@@ -26,15 +23,15 @@ const UploadAppComponent = EmberUploader.FileField.extend({
         file_key,
         file_key_signed
       };
-      return that.get("ajax").post(ENV.endpoints.uploadedFile, {data});
+      that.get("ajax").post(ENV.endpoints.uploadedFile, {data});
     };
 
     uploader.on('progress', e => delegate.set("progress", parseInt(e.percent)));
 
-    return uploader.upload(files[0])
+    return uploader.upload(files[0], delegate)
     .catch(function() {
       $('input[type=file]').val('');
-      return delegate.set("isUploading", false);
+      delegate.set("isUploading", false);
     });
   }
 });

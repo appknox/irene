@@ -8,7 +8,7 @@ const JiraProjectComponent = Ember.Component.extend({
   jiraProjects: ["Loading..."],
 
 
-  tRepoIntegrated: t("repoIntegrated"),
+  tIntegratedJIRA: t("integratedJIRA"),
   tProjectRemoved: t("projectRemoved"),
   tRepoNotIntegrated: t("repoNotIntegrated"),
   tFetchJIRAProjectFailed: t("fetchProjectFailed"),
@@ -46,7 +46,7 @@ const JiraProjectComponent = Ember.Component.extend({
 
     selectProject() {
       const project= this.$('select').val();
-      const tRepoIntegrated = this.get("tRepoIntegrated");
+      const tIntegratedJIRA = this.get("tIntegratedJIRA");
       const tRepoNotIntegrated = this.get("tRepoNotIntegrated");
       const projectId = this.get("project.id");
       const url = [ENV.endpoints.setJira, projectId].join('/');
@@ -55,7 +55,7 @@ const JiraProjectComponent = Ember.Component.extend({
         {project};
       this.get("ajax").post(url, {data})
       .then(function(data) {
-        that.get("notify").success(tRepoIntegrated);
+        that.get("notify").success(tIntegratedJIRA);
         that.set("project.jiraProject", project);})
       .catch(function(error) {
         that.get("notify").error(tRepoNotIntegrated);

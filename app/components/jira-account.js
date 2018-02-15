@@ -29,7 +29,8 @@ const JiraAccountComponent = Ember.Component.extend({
       that.set("isRevokingJIRA", false);
       that.get("notify").success(tJiraWillBeRevoked);
       that.send("closeRevokeJIRAConfirmBox");
-      that.set("user.hasJiraToken", false);})
+      that.set("user.hasJiraToken", false);
+    })
     .catch(function(error) {
       that.set("isRevokingJIRA", false);
       that.get("notify").error(error.payload.error);
@@ -57,6 +58,7 @@ const JiraAccountComponent = Ember.Component.extend({
       this.get("ajax").post(ENV.endpoints.integrateJira, {data})
       .then(function(data){
         that.set("isIntegratingJIRA", false);
+        that.set("user.hasJiraToken", true);
         that.get("notify").success(tJiraIntegrated);
         triggerAnalytics('feature',ENV.csb.integrateJIRA);})
       .catch(function(error) {

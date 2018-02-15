@@ -234,7 +234,7 @@ export default {
   "undefined": "undefined",
   "unpaid": "Unpaid",
   "repoIntegrated": "Repo successfully integrated",
-  "repoNotIntegrated": "Something went wrong whe trying to update this repo",
+  "repoNotIntegrated": "Something went wrong when trying to update this repo",
   "revokeGithub": "Revoke Github",
   "revokeJira": "Revoke Jira",
   "risk": "The risk of",
