@@ -10,6 +10,8 @@ const PasswordResetComponent = Ember.Component.extend({
   password: "",
   confirmPassword: "",
 
+  isResettingPassword: false,
+
   tPasswordLengthError: t("passwordLengthError"),
   tPasswordMatchError: t("passwordMatchError"),
   tPasswordIsReset: t("passwordIsReset"),
@@ -51,12 +53,14 @@ const PasswordResetComponent = Ember.Component.extend({
         token,
         password
       };
+      this.set("isResettingPassword", true);
       this.get("ajax").post(ENV.endpoints.reset, {data})
       .then(function(data){
         that.container.lookup("route:reset").transitionTo("login");
         that.get("notify").success(tPasswordIsReset);
       })
       .catch(function(error) {
+        that.set("isResettingPassword", false);
         that.get("notify").error(error.payload.message);
       });
     }

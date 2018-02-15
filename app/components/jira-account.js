@@ -12,6 +12,9 @@ const JiraAccountComponent = Ember.Component.extend({
   jiraUsername: "",
   jiraPassword: "",
 
+  isRevokingJIRA: false,
+  isIntegratingJIRA: false,
+
   tJiraIntegrated: t("jiraIntegrated"),
   tJiraWillBeRevoked: t("jiraWillBeRevoked"),
   tPleaseEnterAllDetails: t("pleaseEnterAllDetails"),
@@ -20,12 +23,15 @@ const JiraAccountComponent = Ember.Component.extend({
   confirmCallback() {
     const tJiraWillBeRevoked = this.get("tJiraWillBeRevoked");
     const that = this;
+    this.set("isRevokingJIRA", true);
     this.get("ajax").post(ENV.endpoints.revokeJira)
     .then(function(data) {
+      that.set("isRevokingJIRA", false);
       that.get("notify").success(tJiraWillBeRevoked);
       that.send("closeRevokeJIRAConfirmBox");
       that.set("user.hasJiraToken", false);})
     .catch(function(error) {
+      that.set("isRevokingJIRA", false);
       that.get("notify").error(error.payload.error);
     });
   },
@@ -47,11 +53,14 @@ const JiraAccountComponent = Ember.Component.extend({
         username,
         password
       };
+      this.set("isIntegratingJIRA", true);
       this.get("ajax").post(ENV.endpoints.integrateJira, {data})
       .then(function(data){
+        that.set("isIntegratingJIRA", false);
         that.get("notify").success(tJiraIntegrated);
         triggerAnalytics('feature',ENV.csb.integrateJIRA);})
       .catch(function(error) {
+        that.set("isIntegratingJIRA", false);
         that.get("notify").error(error.payload.message);
       });
     },

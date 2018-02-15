@@ -15,6 +15,7 @@ const CollaborationDetailsComponent = Ember.Component.extend({
   tagName: ["tr"],
 
   tTeam: t("team"),
+  isChangingRole: false,
   isRemovingCollaboration: false,
   tPermissionChanged: t("permissionChanged"),
   tEnterRightTeamName: t("enterRightTeamName"),
@@ -25,6 +26,12 @@ const CollaborationDetailsComponent = Ember.Component.extend({
     const selectedRole = this.get("collaboration.role");
     return roles.filter(role => selectedRole !== role.value);
   }).property("roles", "collaboration.role"),
+
+  isDisabledSelectBox: (function() {
+   const isDefaultTeam = this.get("collaboration.team.isDefaultTeam");
+   const isChangingRole = this.get("isChangingRole");
+   return isDefaultTeam || isChangingRole;
+  }).property("collaboration.team.isDefaultTeam", "isChangingRole"),
 
   promptCallback(promptedItem) {
     const tTeam = this.get("tTeam");
@@ -62,9 +69,14 @@ const CollaborationDetailsComponent = Ember.Component.extend({
       const data =
         {role: currentRole};
       const that = this;
+      this.set("isChangingRole", true);
       this.get("ajax").post(url , {data})
-      .then(data=> that.get("notify").success(tPermissionChanged))
+      .then(function(data){
+        that.get("notify").success(tPermissionChanged);
+        that.set("isChangingRole", false);
+      })
       .catch(function(error) {
+        that.set("isChangingRole", false);
         that.get("notify").error(error.payload.message, ENV.notifications);
       });
     },

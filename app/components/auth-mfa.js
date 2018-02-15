@@ -1,8 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
@@ -17,6 +12,9 @@ const AuthMfaComponent = Ember.Component.extend({
   showBarCode: false,
   enableMFAOTP: null,
   disableMFAOTP: null,
+
+  isEnablingMFA: false,
+  isDisablingMFA: false,
 
   tEnterOTP: t("enterOTP"),
   tMFAEnabled: t("mfaEnabled"),
@@ -72,13 +70,16 @@ const AuthMfaComponent = Ember.Component.extend({
       }
       const data =
         {otp: enableMFAOTP};
+      this.set("isEnablingMFA", true);
       this.get("ajax").post(ENV.endpoints.enableMFA, {data})
       .then(function(data){
         that.get("notify").success(tMFAEnabled);
         that.set("enableMFAOTP", "");
         that.set("showMFAEnableModal", false);
+        that.set("isEnablingMFA", false);
       })
       .catch(function(error) {
+        that.set("isEnablingMFA", false);
         that.get("notify").error(error.payload.message);
       });
     },
@@ -93,13 +94,16 @@ const AuthMfaComponent = Ember.Component.extend({
       }
       const data =
         {otp: disableMFAOTP};
+      this.set("isDisablingMFA", true);
       this.get("ajax").post(ENV.endpoints.disableMFA, {data})
       .then(function(data){
         that.get("notify").success(tMFADisabled);
         that.set("disableMFAOTP", "");
         that.set("showMFADisableModal", false);
+        that.set("isDisablingMFA", false);
       })
       .catch(function(error) {
+        that.set("isDisablingMFA", false);
         that.get("notify").error(error.payload.message);
       });
     }

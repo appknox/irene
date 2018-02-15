@@ -10,9 +10,11 @@ const PasswordChangeComponent = Ember.Component.extend({
   passwordCurrent: "",
   passwordNew: "",
   passwordConfirm: "",
+  isChangingPassword: false,
   tEnterValidPassword: t("enterValidPassword"),
   tInvalidPassword: t("invalidPassword"),
   tPasswordChanged: t("passwordChanged"),
+
   actions: {
     changePassword() {
       const tEnterValidPassword = this.get("tEnterValidPassword");
@@ -32,9 +34,11 @@ const PasswordChangeComponent = Ember.Component.extend({
         newPassword: passwordNew
       };
       const that = this;
+      this.set("isChangingPassword", true);
       const ajax = this.get("ajax");
       ajax.post(ENV.endpoints.changePassword, {data})
       .then(function() {
+        that.set("isChangingPassword", false);
         that.setProperties({
           passwordCurrent: "",
           passwordNew: "",
@@ -44,6 +48,7 @@ const PasswordChangeComponent = Ember.Component.extend({
         triggerAnalytics('feature',ENV.csb.changePassword);
       })
       .catch(function(error) {
+        that.set("isChangingPassword", false);
         that.get("notify").error(error.payload.message);
       });
     }

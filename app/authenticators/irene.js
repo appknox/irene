@@ -29,7 +29,7 @@ const IreneAuthenticator = Base.extend({
     }
   },
 
-  authenticate(identification, password, otp, errorCallback) {
+  authenticate(identification, password, otp, errorCallback, loginStatus) {
     const ajax = this.get("ajax");
     const that  = this;
     return new Ember.RSVP.Promise(function(resolve, reject) {
@@ -45,6 +45,7 @@ const IreneAuthenticator = Base.extend({
         resolve(data);
         that.resumeTransistion();})
       .catch(function(error) {
+        loginStatus(false);
         errorCallback(error);
         that.get("notify").error(error.payload.message, ENV.notifications);
         for (error of error.errors) {

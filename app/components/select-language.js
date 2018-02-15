@@ -11,7 +11,7 @@ const getLocaleString = locale=> localeStrings[locale];
 const SelectLanguageComponent = Ember.Component.extend({
 
   classNames: ["control"],
-
+  isSelectingLanguage: false,
   i18n: Ember.inject.service(),
   moment: Ember.inject.service(),
 
@@ -41,9 +41,11 @@ const SelectLanguageComponent = Ember.Component.extend({
       const data =
         {lang};
       const that = this;
+      this.set("isSelectingLanguage", true);
       this.get("ajax").post(ENV.endpoints.lang, {data})
       .then(() => window.location.reload())
       .catch(function(error) {
+        that.set("isSelectingLanguage", false);
         that.get("notify").error(error.payload.message);
       });
     }

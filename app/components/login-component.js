@@ -8,6 +8,7 @@ import {isUnauthorizedError} from 'ember-ajax/errors';
 const LoginComponentComponent = Ember.Component.extend({
   session: Ember.inject.service('session'),
   MFAEnabled: false,
+  isLogingIn: false,
   actions: {
     authenticate() {
       const that = this;
@@ -20,15 +21,19 @@ const LoginComponentComponent = Ember.Component.extend({
       }
       identification = identification.trim();
       password = password.trim();
+      that.set("isLogingIn", true);
 
       const errorCallback = function(error){
         if (isUnauthorizedError(error)) {
-          return that.set("MFAEnabled", true);
+          that.set("MFAEnabled", true);
         }
       };
 
-
-      return this.get('session').authenticate("authenticator:irene", identification, password, otp, errorCallback);
+      const loginStatus = function(data){
+        that.set("isLogingIn", false);
+      };
+      
+      return this.get('session').authenticate("authenticator:irene", identification, password, otp, errorCallback, loginStatus);
     }
   }
 });

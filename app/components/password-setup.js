@@ -9,6 +9,7 @@ const PasswordSetupComponent = Ember.Component.extend({
   confirmPassword: "",
 
   validation_errors: [],
+  isSettingPassword: false,
 
   validate() {
     this.validation_errors = [];
@@ -41,12 +42,15 @@ const PasswordSetupComponent = Ember.Component.extend({
         token,
         password
       };
+      this.set("isSettingPassword", true);
       this.get("ajax").post(ENV.endpoints.setup, {data})
       .then(function(data){
+        that.set("isSettingPassword", false);
         that.container.lookup("route:setup").transitionTo("login");
         that.get("notify").success("Password is successfully set");
       })
       .catch(function(error) {
+        that.set("isSettingPassword", false);
         that.get("notify").error(error.payload.message);
       });
     }

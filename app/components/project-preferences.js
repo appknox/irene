@@ -7,6 +7,7 @@ const ProjectPreferencesComponent = Ember.Component.extend({
 
   project: null,
   selectVersion: 0,
+  isSavingPreference: false,
   i18n: Ember.inject.service(),
   store: Ember.inject.service(),
   selectedDeviceType: ENUMS.DEVICE_TYPE.NO_PREFERENCE,
@@ -65,12 +66,15 @@ const ProjectPreferencesComponent = Ember.Component.extend({
         deviceType: selectedDeviceType,
         platformVersion: selectVersion
       };
+      this.set("isSavingPreference", true);
       this.get("ajax").post(devicePreferences, {data})
       .then(function(data) {
+        that.set("isSavingPreference", false);
         that.get("notify").success(tDeviceSelected);
         that.set("projectPreferenceModal", false);
       })
       .catch(function(error) {
+        that.set("isSavingPreference", false);
         that.get("notify").error(tPleaseTryAgain);
       });
     },

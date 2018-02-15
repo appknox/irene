@@ -1,8 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
@@ -22,8 +17,9 @@ const ApiFilterComponent = Ember.Component.extend({
 
   tEmptyURL: t("emptyURL"),
   tInvalidURL: t("invalidURL"),
-  tUpdatedFilter: t("updatedFilter"),
+  tUrlUpdated: t("urlUpdated"),
   isSavingFilter: false,
+  isDeletingURLFilter: false,
 
   confirmCallback() {
     const apiUrlFilters = this.get("project.apiUrlFilters");
@@ -33,6 +29,7 @@ const ApiFilterComponent = Ember.Component.extend({
     splittedURLs.splice(index,1);
     const joinedURLs = splittedURLs.join(",");
     this.set("updatedURLFilters", joinedURLs);
+    this.set("isDeletingURLFilter", true);
     this.send("saveApiUrlFilter");
   },
 
@@ -63,7 +60,7 @@ const ApiFilterComponent = Ember.Component.extend({
     },
 
     saveApiUrlFilter() {
-      const tUpdatedFilter = this.get("tUpdatedFilter");
+      const tUrlUpdated = this.get("tUrlUpdated");
       const updatedURLFilters = this.get("updatedURLFilters");
       const projectId = this.get("project.id");
       const apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, projectId].join('/');
@@ -75,12 +72,15 @@ const ApiFilterComponent = Ember.Component.extend({
       this.get("ajax").post(apiScanOptions, {data})
       .then(function(data){
         that.set("isSavingFilter", false);
-        that.get("notify").success(tUpdatedFilter);
+        that.set("isDeletingURLFilter", false);
+        that.get("notify").success(tUrlUpdated);
         that.set("project.apiUrlFilters", updatedURLFilters);
         that.set("newUrlFilter", "");
-        that.send("closeRemoveURLConfirmBox");})
+        that.send("closeRemoveURLConfirmBox");
+      })
       .catch(function(error) {
         that.set("isSavingFilter", false);
+        that.set("isDeletingURLFilter", false);
         that.get("notify").error(error.payload.message);
       });
     },

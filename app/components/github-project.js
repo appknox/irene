@@ -1,8 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
@@ -10,6 +5,10 @@ import { translationMacro as t } from 'ember-i18n';
 const GithubProjectComponent = Ember.Component.extend({
   i18n: Ember.inject.service(),
   project: null,
+
+  isChangingRepo: false,
+  isDeletingGithub: false,
+
   githubRepos: ["Loading..."],
 
   tProjectRemoved: t("projectRemoved"),
@@ -21,12 +20,16 @@ const GithubProjectComponent = Ember.Component.extend({
     const projectId = this.get("project.id");
     const deleteGithub = [ENV.endpoints.deleteGHRepo, projectId].join('/');
     const that = this;
+    this.set("isDeletingGithub", true);
     this.get("ajax").delete(deleteGithub)
     .then(function(data) {
+      that.set("isDeletingGithub", false);
       that.get("notify").success(tProjectRemoved);
       that.send("closeDeleteGHConfirmBox");
-      that.set("project.githubRepo", "");})
+      that.set("project.githubRepo", "");
+    })
     .catch(function(error) {
+      that.set("isDeletingGithub", false);
       that.get("notify").error(error.payload.error);
     });
   },
@@ -55,12 +58,15 @@ const GithubProjectComponent = Ember.Component.extend({
       const that = this;
       const data =
         {repo};
+      this.set("isChangingRepo", true);
       this.get("ajax").post(setGithub, {data})
       .then(function(data) {
+        that.set("isChangingRepo", false);
         that.get("notify").success(tRepoIntegrated);
         that.set("project.githubRepo", repo);
       })
       .catch(function(error) {
+        that.set("isChangingRepo", false);
         that.get("notify").error(error.payload.error);
       });
     },
