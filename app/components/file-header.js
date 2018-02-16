@@ -21,6 +21,7 @@ const FileHeaderComponent = Ember.Component.extend({
   isStartingRescan: false,
   dynamicScanModal: false,
   isRequestingManual: false,
+  isDownloadingReport: false,
   showManualScanFormModal: false,
   showRemoveRoleConfirmBox: false,
 
@@ -134,9 +135,14 @@ const FileHeaderComponent = Ember.Component.extend({
       const that = this;
       const fileId = this.get("file.id");
       const url = [ENV.endpoints.signedPdfUrl, fileId].join('/');
+      this.set("isDownloadingReport", true);
       this.get("ajax").request(url)
-      .then(result => window.location = result.url)
+      .then(function(result){
+        window.location = result.url;
+        that.set("isDownloadingReport", false);
+      })
       .catch(function(error) {
+        that.set("isDownloadingReport", false);
         that.get("notify").error(tReportIsGettingGenerated);
       });
     },
