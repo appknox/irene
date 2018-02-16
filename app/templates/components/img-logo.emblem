@@ -1,6 +1,6 @@
 = link-to 'authenticated.index'
   if env.isAppknox
-    if env.isEnterprise and env.whitelabel.logo
+    if env.whitelabel.logo
       img src=env.whitelabel.logo alt=env.whitelabel.name
     else
       img src="/images/logo-white.png"
