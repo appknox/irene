@@ -1,6 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
 import Ember from 'ember';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
@@ -12,12 +9,12 @@ const PricingListComponent = Ember.Component.extend({
   subscriptions: (function() {
     let subscriptions;
     const that = this;
-    return subscriptions = this.get("store").findAll("subscription")
+    subscriptions = this.get("store").findAll("subscription")
       .then(function(data){
         that.set("subscriptions", data);
         if (data.isLoaded === true) {
           const plans = that.get("store").findAll("plan");
-          return that.set("plans", plans);
+          that.set("plans", plans);
         }});
   }).property(),
 
@@ -41,13 +38,13 @@ const PricingListComponent = Ember.Component.extend({
     $(".js-duration-button").removeClass("is-primary is-active");
     $(".js-duration-button").addClass("is-default");
     $(element).removeClass("is-default");
-    return $(element).addClass("is-primary is-active");
+    $(element).addClass("is-primary is-active");
   },
 
   didRender() {
     const paymentDuration = this.get("paymentDuration");
     const element = $(this.element).find(`[data-value='${paymentDuration}']`);
-    return this.activateDuration(element);
+    this.activateDuration(element);
   },
 
   devknoxPricing: (function() {
@@ -64,7 +61,7 @@ const PricingListComponent = Ember.Component.extend({
   actions: {
     selectDuration() {
       this.set("paymentDuration", $(event.srcElement).data("value"));
-      return this.activateDuration(event.srcElement);
+      this.activateDuration(event.srcElement);
     }
   }
 });

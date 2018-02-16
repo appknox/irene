@@ -16,21 +16,10 @@
            | #{subscription.billingPeriod} #{subscription.billingPeriodUnit}
       tr
         td colspan="2"
-          if subscription.isTrial
-            if subscription.isCancelled
-              | #{ t "trialWillExpireOn"} #{subscription.expiryDateOnHumanized}
-            else
-              | #{ t "trialWillBeConverted"} #{subscription.expiryDateOnHumanized}
-              button.is-primary.flex-center click="openCancelSubscriptionConfirmBox"
-                = fa-icon "times" class="font-size-18"
-                | &nbsp; #{ t "cancelSubsciption"}
-          else
-            if subscription.isCancelled
-              | #{t "subscriptionWillExpireOn"} #{subscription.expiryDateOnHumanized}
-            else
-              | #{ t "youWillBeChargedOn"} #{subscription.expiryDateOnHumanized}
-              button.is-primary.flex-center click="openCancelSubscriptionConfirmBox"
-                = fa-icon "times" class="font-size-18"
-                | &nbsp; #{ t "cancelSubsciption"}
+          | #{subscription.subscriptionText} #{subscription.expiryDateOnHumanized}
+          if subscription.isNotCancelled
+            button.is-primary.flex-center click="openCancelSubscriptionConfirmBox"
+              = fa-icon "times" class="font-size-18"
+              | &nbsp; #{ t "cancelSubsciption"}
 
-= confirm-box isActive=showCancelSubscriptionConfirmBox title=(t 'confirmBox.cancelSubsciption') delegate=this
+= confirm-box isActive=showCancelSubscriptionConfirmBox title=(t 'confirmBox.cancelSubsciption') delegate=this disabled=isCancellingSubscription 

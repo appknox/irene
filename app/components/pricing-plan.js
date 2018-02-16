@@ -1,6 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
 import Ember from 'ember';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
@@ -80,22 +77,18 @@ const PricingPlanComponent = Ember.Component.extend({
           break;
       }
       const updatedUrl = [url, `subscription[plan_quantity]=${planQuantity}`].join('&');
-      return window.location = updatedUrl;
+      window.location = updatedUrl;
     },
 
     incrementPlanQuantity() {
-      return this.incrementProperty("planQuantity");
+      this.incrementProperty("planQuantity");
     },
 
     decrementPlanQuantity() {
       const planQuantity = this.get("planQuantity");
       if (planQuantity > 1) {
-        return this.decrementProperty("planQuantity");
+        this.decrementProperty("planQuantity");
       }
-    },
-
-    togglePlanModal() {
-      return this.set("showPlanModal", !this.get("showPlanModal"));
     }
   }
 });

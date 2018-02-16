@@ -8,6 +8,8 @@ const SubscriptionComponentComponent = Ember.Component.extend({
   i18n: Ember.inject.service(),
   tSubscriptionCancelled: t("subscriptionCancelled"),
 
+  isCancellingSubscription: false,
+
   isNotPerScan: Ember.computed.not('subscription.isPerScan'),
 
   confirmCallback() {
@@ -16,13 +18,16 @@ const SubscriptionComponentComponent = Ember.Component.extend({
     const subscription = this.get("subscription");
     const subscriptionId = this.get("subscription.id");
     const url = [ENV.endpoints.subscriptions, subscriptionId].join('/');
+    this.set("isCancellingSubscription", true);
     this.get("ajax").delete(url)
     .then(data => that.set("subscription.isCancelled", true))
     .then(function(data) {
+      that.set("isCancellingSubscription", false);
       that.get("notify").success(tSubscriptionCancelled);
       that.send("closeCancelSubscriptionConfirmBox");
     })
     .catch(function(error) {
+      that.set("isCancellingSubscription", false);
       that.get("notify").error(error.payload.message);
     });
   },
