@@ -1,6 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
 import { test, moduleForComponent } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 
@@ -11,10 +8,7 @@ moduleForComponent('analysis-settings', 'Integration | Component | analysis sett
 test('it renders', function(assert) {
   assert.expect(1);
 
-  // Set any properties with @set 'myProperty', 'value'
-  // Handle any actions with @on 'myAction', (val) ->
-
   this.render(hbs("{{analysis-settings}}"));
 
-  return assert.equal(this.$().text().trim(), 'SHOW/HIDE Unknown AnalysisDo you want us to show unknown analysis?');
+  assert.equal(this.$().text().trim(), 'SHOW/HIDE Unknown AnalysisDo you want us to show unknown analysis?');
 });
