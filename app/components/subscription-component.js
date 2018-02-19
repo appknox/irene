@@ -15,13 +15,12 @@ const SubscriptionComponentComponent = Ember.Component.extend({
   confirmCallback() {
     const tSubscriptionCancelled = this.get("tSubscriptionCancelled");
     const that = this;
-    const subscription = this.get("subscription");
     const subscriptionId = this.get("subscription.id");
     const url = [ENV.endpoints.subscriptions, subscriptionId].join('/');
     this.set("isCancellingSubscription", true);
     this.get("ajax").delete(url)
-    .then(data => that.set("subscription.isCancelled", true))
-    .then(function(data) {
+    .then(function() {
+      that.set("subscription.isCancelled", true);
       that.set("isCancellingSubscription", false);
       that.get("notify").success(tSubscriptionCancelled);
       that.send("closeCancelSubscriptionConfirmBox");

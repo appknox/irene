@@ -8,7 +8,7 @@ import ScrollTopMixin from 'irene/mixins/scroll-top';
 const AuthenticatedTeamsRoute = Ember.Route.extend(ScrollTopMixin, {
 
   title: `Teams${config.platform}`,
-  model(params) {
+  model() {
     return this.get('store').findAll('team');
   }
 }

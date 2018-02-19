@@ -1,6 +1,4 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
+// jshint ignore: start
 const triggerAnalytics = function(funct, data) {
   try {
     if (funct === "feature") {
@@ -12,7 +10,5 @@ const triggerAnalytics = function(funct, data) {
     }
   } catch (error) {}
 };
-
-
 
 export default triggerAnalytics;

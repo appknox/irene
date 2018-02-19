@@ -47,7 +47,7 @@ const CollaborationDetailsComponent = Ember.Component.extend({
     this.set("isRemovingCollaboration", true);
     const that = this;
     collaboration.destroyRecord()
-    .then(function(data){
+    .then(function(){
       that.set("isRemovingCollaboration", false);
       that.get("notify").success(`${tTeam} ${team} ${tCollaborationRemoved}`);
     })
@@ -61,7 +61,7 @@ const CollaborationDetailsComponent = Ember.Component.extend({
 
   actions: {
 
-    changeRole(value) {
+    changeRole() {
       const tPermissionChanged = this.get("tPermissionChanged");
       const currentRole = this.set("currentRole", parseInt(this.$('#role-preference').val()));
       const collaborationId = this.get("collaboration.id");
@@ -71,7 +71,7 @@ const CollaborationDetailsComponent = Ember.Component.extend({
       const that = this;
       this.set("isChangingRole", true);
       this.get("ajax").post(url , {data})
-      .then(function(data){
+      .then(function(){
         that.get("notify").success(tPermissionChanged);
         that.set("isChangingRole", false);
       })

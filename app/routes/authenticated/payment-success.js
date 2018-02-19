@@ -9,8 +9,10 @@ const AuthenticatedPaymentSuccessRoute = Ember.Route.extend({
     const queryParams = location.href.split('?')[1];
     const that = this;
     this.get("ajax").post(`${config.endpoints.chargebeeCallback}?${queryParams}`)
-    .then(data=> that.get("notify").success("Payment Successful"))
-    .catch(function(error) {
+    .then(function(){
+       that.get("notify").success("Payment Successful");
+     })
+    .catch(function() {
       that.get("notify").error("PAYMENT FAILED TO UPDATE!!!");
     });
   }

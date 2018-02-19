@@ -44,7 +44,7 @@ const PasswordSetupComponent = Ember.Component.extend({
       };
       this.set("isSettingPassword", true);
       this.get("ajax").post(ENV.endpoints.setup, {data})
-      .then(function(data){
+      .then(function(){
         that.set("isSettingPassword", false);
         that.container.lookup("route:setup").transitionTo("login");
         that.get("notify").success("Password is successfully set");

@@ -1,3 +1,4 @@
+// jshint ignore: start
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
@@ -99,7 +100,6 @@ const FileHeaderComponent = Ember.Component.extend({
   },
 
   confirmCallback() {
-    const deletedRole = this.get("deletedRole");
     const availableRoles = this.get("availableRoles");
     this.set("manualscan.userRoles", availableRoles);
     this.set("showRemoveRoleConfirmBox", false);
@@ -141,7 +141,7 @@ const FileHeaderComponent = Ember.Component.extend({
         window.location = result.url;
         that.set("isDownloadingReport", false);
       })
-      .catch(function(error) {
+      .catch(function() {
         that.set("isDownloadingReport", false);
         that.get("notify").error(tReportIsGettingGenerated);
       });
@@ -150,6 +150,7 @@ const FileHeaderComponent = Ember.Component.extend({
     dynamicScan() {
       const file = this.get("file");
       file.setBootingStatus();
+      const that = this;
       const file_id = this.get("file.id");
       const dynamicUrl = [ENV.endpoints.dynamic, file_id].join('/');
       this.get("ajax").request(dynamicUrl)
@@ -168,7 +169,7 @@ const FileHeaderComponent = Ember.Component.extend({
       const data =
         {isApiScanEnabled};
       this.get("ajax").post(apiScanOptions, {data})
-      .then(function(data){
+      .then(function(){
         that.send("closeModal");
         that.send("dynamicScan");
         that.get("notify").success(tStartingScan);
@@ -364,7 +365,7 @@ const FileHeaderComponent = Ember.Component.extend({
       const fileId = this.get("file.id");
       const url = [ENV.endpoints.manualscans, fileId].join('/');
       this.get("ajax").put(url, {data: JSON.stringify(data), contentType: 'application/json'})
-      .then(function(result) {
+      .then(function() {
         triggerAnalytics('feature', ENV.csb.requestManualScan);
         that.set("isRequestingManual", false);
         that.get("notify").info(tManualRequested);
@@ -441,6 +442,7 @@ const FileHeaderComponent = Ember.Component.extend({
 
     dynamicShutdown() {
       const file = this.get("file");
+      const that = this;
       file.setShuttingDown();
       this.set("isPoppedOut", false);
       const file_id = this.get("file.id");
@@ -461,7 +463,7 @@ const FileHeaderComponent = Ember.Component.extend({
         {file_id: fileId};
       this.set("isStartingRescan", true);
       this.get("ajax").post(ENV.endpoints.rescan, {data})
-      .then(function(result) {
+      .then(function() {
         that.set("isStartingRescan", false);
         that.get("notify").info(tRescanInitiated);
         that.set("showRescanModal", false);})

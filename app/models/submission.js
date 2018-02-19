@@ -1,10 +1,5 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- */
 import DS from 'ember-data';
 import BaseModeMixin from 'irene/mixins/base-model';
-import ENUMS from 'irene/enums';
 
 const Submission = DS.Model.extend(BaseModeMixin, {
 
@@ -15,7 +10,6 @@ const Submission = DS.Model.extend(BaseModeMixin, {
   source: DS.attr('number'),
   packageName: DS.attr('string'),
   statusHumanized: DS.attr('string'),
-
 
   hasReason: (function() {
     const reason = this.get("reason");

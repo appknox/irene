@@ -1,3 +1,4 @@
+// jshint ignore: start
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
@@ -72,7 +73,7 @@ const AuthMfaComponent = Ember.Component.extend({
         {otp: enableMFAOTP};
       this.set("isEnablingMFA", true);
       this.get("ajax").post(ENV.endpoints.enableMFA, {data})
-      .then(function(data){
+      .then(function(){
         that.get("notify").success(tMFAEnabled);
         that.set("enableMFAOTP", "");
         that.set("showMFAEnableModal", false);
@@ -96,7 +97,7 @@ const AuthMfaComponent = Ember.Component.extend({
         {otp: disableMFAOTP};
       this.set("isDisablingMFA", true);
       this.get("ajax").post(ENV.endpoints.disableMFA, {data})
-      .then(function(data){
+      .then(function(){
         that.get("notify").success(tMFADisabled);
         that.set("disableMFAOTP", "");
         that.set("showMFADisableModal", false);

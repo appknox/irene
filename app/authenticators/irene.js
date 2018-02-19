@@ -81,7 +81,7 @@ const IreneAuthenticator = Base.extend({
     });
   },
 
-  invalidate(data) {
+  invalidate() {
     const ajax = this.get("ajax");
     localStorage.clear();
     const that  = this;

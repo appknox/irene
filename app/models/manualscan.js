@@ -1,6 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
 import DS from 'ember-data';
 import ENUMS from 'irene/enums';
 
@@ -40,7 +37,6 @@ const Manualscan = DS.Model.extend({
   }).property("appAction"),
 
   loginStatus: (function() {
-    const loginRequired = this.get("loginRequired");
     if (this.get("loginRequired")) {
       return "yes";
     }
@@ -48,7 +44,6 @@ const Manualscan = DS.Model.extend({
   }).property("loginRequired"),
 
   vpnStatus: (function() {
-    const vpnRequired = this.get("vpnRequired");
     if (this.get("vpnRequired")) {
       return "yes";
     }

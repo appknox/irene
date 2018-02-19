@@ -22,7 +22,7 @@ const GithubProjectComponent = Ember.Component.extend({
     const that = this;
     this.set("isDeletingGithub", true);
     this.get("ajax").delete(deleteGithub)
-    .then(function(data) {
+    .then(function() {
       that.set("isDeletingGithub", false);
       that.get("notify").success(tProjectRemoved);
       that.send("closeDeleteGHConfirmBox");
@@ -43,7 +43,7 @@ const GithubProjectComponent = Ember.Component.extend({
     const that = this;
     this.get("ajax").request(ENV.endpoints.githubRepos)
     .then(data => that.set("githubRepos", data.repos))
-    .catch(function(error) {
+    .catch(function() {
       that.get("notify").error(tFetchGitHubRepoFailed);
     });
   }).on("init"),
@@ -60,7 +60,7 @@ const GithubProjectComponent = Ember.Component.extend({
         {repo};
       this.set("isChangingRepo", true);
       this.get("ajax").post(setGithub, {data})
-      .then(function(data) {
+      .then(function() {
         that.set("isChangingRepo", false);
         that.get("notify").success(tRepoIntegrated);
         that.set("project.githubRepo", repo);

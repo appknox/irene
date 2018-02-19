@@ -15,14 +15,13 @@ const PersonaltokenDetailComponent = Ember.Component.extend({
 
   confirmCallback() {
     const tTokenRevoked = this.get('tTokenRevoked');
-    const personaltoken = this.get('personaltoken');
     const personaltokenId = this.get('personaltoken.id');
 
     const that = this;
     const url = [ENV.endpoints.personaltokens, personaltokenId].join('/');
     this.set("isDeletingToken", true);
     this.get('ajax').delete(url)
-    .then(function(data) {
+    .then(function() {
       that.set('isNotRevoked', false);
       that.set("isDeletingToken", false);
       that.get('notify').success(tTokenRevoked);

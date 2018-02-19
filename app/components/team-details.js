@@ -49,7 +49,6 @@ const TeamDetailsComponent = Ember.Component.extend({
       this.set("isInvitingMember", true);
       this.get("ajax").post(url, {data})
       .then(function(data){
-        debugger
         that.set("isInvitingMember", false);
         if (__guard__(data != null ? data.data : undefined, x => x.type) === "team") {
           that.store.pushPayload(data);

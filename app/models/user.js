@@ -1,8 +1,5 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- */
 import DS from 'ember-data';
+import Ember from 'ember';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';

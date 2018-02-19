@@ -15,6 +15,7 @@
   "forin": false,
   "immed": false,
   "laxbreak": false,
+  "laxcomma": true,
   "newcap": true,
   "noarg": true,
   "noempty": false,
@@ -29,5 +30,6 @@
   "white": false,
   "eqnull": true,
   "esversion": 6,
-  "unused": true
+  "unused": true,
+  "jquery": true
 }

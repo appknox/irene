@@ -1,8 +1,6 @@
 import Ember from 'ember';
 import ENUMS from 'irene/enums';
 
-const { keys } = Object;
-
 const FileDetailsComponent = Ember.Component.extend({
 
   vulnerabilityType: ENUMS.VULNERABILITY_TYPE.UNKNOWN,

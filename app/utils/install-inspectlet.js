@@ -1,3 +1,4 @@
+// jshint ignore: start
 import ENV from 'irene/config/environment';
 
 const installInspectlet = function() {

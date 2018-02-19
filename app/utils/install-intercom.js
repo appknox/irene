@@ -1,6 +1,4 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
+// jshint ignore: start
 import ENV from 'irene/config/environment';
 
 const installIntercom = function() {
@@ -19,7 +17,7 @@ const installIntercom = function() {
     return x.parentNode.insertBefore(s, x);
   };
 
-  if (typeof ic == 'function') {
+  if (typeof ic === 'function') {
     ic('reattach_activator');
     return ic('update', intercomSettings);
   } else {

@@ -1,6 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
 import Ember from 'ember';
 
 const OverallReportComponent = Ember.Component.extend({
@@ -17,7 +14,6 @@ const OverallReportComponent = Ember.Component.extend({
   ).property(),
 
   barData: (function() {
-    const stat = this.get("stat");
     const totalCritical = this.get("stat.totalCritical");
     const totalHigh = this.get("stat.totalHigh");
     const totalMedium = this.get("stat.totalMedium");

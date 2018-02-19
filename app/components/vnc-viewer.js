@@ -1,13 +1,8 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
+// jshint ignore: start
 import Ember from 'ember';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
-
-const vncHeight = 512;
-const vncWidth = 385;
 
 const VncViewerComponent = Ember.Component.extend({
 
@@ -119,14 +114,14 @@ const VncViewerComponent = Ember.Component.extend({
 
   actions: {
     togglePop() {
-      return this.set("isPoppedOut", !this.get("isPoppedOut"));
+      this.set("isPoppedOut", !this.get("isPoppedOut"));
     },
 
     connect() {
       const rfb = this.get("rfb");
       const deviceToken = this.get("file.deviceToken");
       rfb.connect(ENV.deviceFarmHost, ENV.deviceFarmPort, '1234', `${ENV.deviceFarmPath}?token=${deviceToken}`);
-      return setTimeout(this.set_ratio.bind(this), 500);
+      setTimeout(this.set_ratio.bind(this), 500);
     },
 
     disconnect() {
@@ -136,7 +131,7 @@ const VncViewerComponent = Ember.Component.extend({
       }
       if (rfb._rfb_connection_state === 'disconnected') {
         this.set("rfb", null);
-        return this.setupRFB();
+        this.setupRFB();
       }
     }
   }

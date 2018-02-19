@@ -19,7 +19,7 @@ const JiraProjectComponent = Ember.Component.extend({
     const projectId = this.get("project.id");
     const deleteJIRA = [ENV.endpoints.deleteJIRAProject, projectId].join('/');
     this.get("ajax").delete(deleteJIRA)
-    .then(function(data) {
+    .then(function() {
       that.get("notify").success(tProjectRemoved);
       that.send("closeDeleteJIRAConfirmBox");
       that.set("project.jiraProject", "");})
@@ -37,7 +37,7 @@ const JiraProjectComponent = Ember.Component.extend({
     const that = this;
     this.get("ajax").request(ENV.endpoints.jiraProjects)
     .then(data => that.set("jiraProjects", data.projects))
-    .catch(function(error) {
+    .catch(function() {
       that.get("notify").error(tFetchJIRAProjectFailed);
     });
   }).on("init"),
@@ -54,10 +54,10 @@ const JiraProjectComponent = Ember.Component.extend({
       const data =
         {project};
       this.get("ajax").post(url, {data})
-      .then(function(data) {
+      .then(function() {
         that.get("notify").success(tIntegratedJIRA);
         that.set("project.jiraProject", project);})
-      .catch(function(error) {
+      .catch(function() {
         that.get("notify").error(tRepoNotIntegrated);
       });
     },

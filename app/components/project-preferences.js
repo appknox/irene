@@ -68,12 +68,12 @@ const ProjectPreferencesComponent = Ember.Component.extend({
       };
       this.set("isSavingPreference", true);
       this.get("ajax").post(devicePreferences, {data})
-      .then(function(data) {
+      .then(function() {
         that.set("isSavingPreference", false);
         that.get("notify").success(tDeviceSelected);
         that.set("projectPreferenceModal", false);
       })
-      .catch(function(error) {
+      .catch(function() {
         that.set("isSavingPreference", false);
         that.get("notify").error(tPleaseTryAgain);
       });

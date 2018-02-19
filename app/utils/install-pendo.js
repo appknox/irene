@@ -1,6 +1,4 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
+// jshint ignore: start
 import ENV from 'irene/config/environment';
 
 const installPendo = function() {

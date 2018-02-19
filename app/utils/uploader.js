@@ -3,7 +3,7 @@ import ENV from 'irene/config/environment';
 import EmberUploader from 'ember-uploader';
 import { translationMacro as t } from 'ember-i18n';
 
-const {inject: {service}, isEmpty, RSVP} = Ember;
+const {inject: {service}} = Ember;
 
 
 const Uploader = EmberUploader.Uploader.extend({
@@ -45,7 +45,7 @@ const Uploader = EmberUploader.Uploader.extend({
         that.didUpload(json.file_key, json.file_key_signed);
         that.get("notify").success(tFileUploadedSuccessfully);
       })
-      .catch(function(error) {
+      .catch(function() {
         delegate.set("isUploading", false);
         that.get("notify").error(tErrorWhileUploading);
       });
@@ -59,7 +59,7 @@ const Uploader = EmberUploader.Uploader.extend({
       $('input[type=file]').val('');
       signSuccess(json);
     })
-    .catch(function(error) {
+    .catch(function() {
       delegate.set("isUploading", false);
       $('input[type=file]').val('');
       that.get("notify").error(tErrorWhileFetching);

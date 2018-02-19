@@ -29,10 +29,10 @@ const LoginComponentComponent = Ember.Component.extend({
         }
       };
 
-      const loginStatus = function(data){
+      const loginStatus = function(){
         that.set("isLogingIn", false);
       };
-      
+
       return this.get('session').authenticate("authenticator:irene", identification, password, otp, errorCallback, loginStatus);
     }
   }

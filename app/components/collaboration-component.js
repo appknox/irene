@@ -23,7 +23,7 @@ const CollaborationComponentComponent = Ember.Component.extend({
 
   actions: {
 
-    teamChanged(value) {
+    teamChanged() {
       this.set("selectedTeam", parseInt(this.$('#team-preference').val()));
     },
 
@@ -43,7 +43,7 @@ const CollaborationComponentComponent = Ember.Component.extend({
       that = this;
       this.set("isAddingCollaboration", true);
       this.get("ajax").post(ENV.endpoints.collaborations, {data})
-      .then(function(data){
+      .then(function(){
         that.set("isAddingCollaboration", false);
         that.send("closeModal");
         that.get("notify").success(tCollaborationAdded);

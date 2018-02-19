@@ -15,12 +15,10 @@ const InvitationAcceptComponent = Ember.Component.extend({
         password: this.get("password")
       };
       this.get("ajax").post(ENV.endpoints.signup, {data})
-      .then(function(data){
+      .then(function(){
         // FIXME: This should be this.transitionTo`
         that.get("notify").success("User got created sucessfully", ENV.notifications);
-        setTimeout(() => window.location.href = "/"
-        ,
-          3 * 1000);})
+        setTimeout(() => window.location.href = "/", 3 * 1000);})
       .catch(function(error) {
         that.get("notify").error(error.payload.message, ENV.notifications);
       });

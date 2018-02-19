@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import Uploader from 'irene/utils/uploader';
+import EmberUploader from 'ember-uploader';
 import ENV from 'irene/config/environment';
 
 const UploadAppComponent = EmberUploader.FileField.extend({

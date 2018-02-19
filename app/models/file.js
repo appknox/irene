@@ -1,6 +1,4 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
+// jshint ignore: start
 import DS from 'ember-data';
 import BaseModelMixin from 'irene/mixins/base-model';
 import ENUMS from 'irene/enums';
@@ -176,19 +174,19 @@ const File = DS.Model.extend(BaseModelMixin, {
   }).property('dynamicStatus'),
 
   setBootingStatus() {
-    return this.set("dynamicStatus", ENUMS.DYNAMIC_STATUS.BOOTING);
+    this.set("dynamicStatus", ENUMS.DYNAMIC_STATUS.BOOTING);
   },
 
   setShuttingDown() {
-    return this.set("dynamicStatus", ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN);
+    this.set("dynamicStatus", ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN);
   },
 
   setNone() {
-    return this.set("dynamicStatus", ENUMS.DYNAMIC_STATUS.NONE);
+    this.set("dynamicStatus", ENUMS.DYNAMIC_STATUS.NONE);
   },
 
   setReady() {
-    return this.set("dynamicStatus", ENUMS.DYNAMIC_STATUS.READY);
+    this.set("dynamicStatus", ENUMS.DYNAMIC_STATUS.READY);
   }
 }
 );

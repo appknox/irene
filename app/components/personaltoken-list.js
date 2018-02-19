@@ -1,7 +1,4 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- */
+// jshint ignore: start
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import PaginateMixin from 'irene/mixins/paginate';

@@ -70,7 +70,7 @@ const ApiFilterComponent = Ember.Component.extend({
       this.set("isSavingFilter", true);
       const that = this;
       this.get("ajax").post(apiScanOptions, {data})
-      .then(function(data){
+      .then(function(){
         that.set("isSavingFilter", false);
         that.set("isDeletingURLFilter", false);
         that.get("notify").success(tUrlUpdated);

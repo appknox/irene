@@ -1,7 +1,5 @@
 import Ember from 'ember';
 import ENUMS from 'irene/enums';
-import ENV from 'irene/config/environment';
-import {isForbiddenError} from 'ember-ajax/errors';
 import { translationMacro as t } from 'ember-i18n';
 
 const PricingPlanComponent = Ember.Component.extend({
@@ -34,10 +32,6 @@ const PricingPlanComponent = Ember.Component.extend({
 
   totalPrice: (function() {
     let price;
-    const monthlyPrice = this.get("plan.monthlyPrice");
-    const quarterlyPrice = this.get("plan.quarterlyPrice");
-    const halfYearlyPrice = this.get("plan.halfYearlyPrice");
-    const yearlyPrice = this.get("plan.yearlyPrice");
     const duration = this.get("paymentDuration");
     switch (duration) {
       case ENUMS.PAYMENT_DURATION.MONTHLY:

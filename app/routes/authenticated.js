@@ -1,14 +1,9 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- */
+// jshint ignore: start
 import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import surveyMonkey from 'irene/utils/survey-monkey';
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
-import config from 'irene/config/environment';
 import { CSBMap } from 'irene/router';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 
@@ -98,14 +93,14 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
     const allEvents = {
 
       object(data) {
-        return store.pushPayload({data});
+        store.pushPayload({data});
       },
 
       newobject(data) {
         store.pushPayload({data});
         if (data.type === "files") {
           const fileId = data.id;
-          return that.get("notify").info(`New scan started <a class='click-here' href='/file/${fileId}'>Show</a>`, {htmlContent: true, autoClear: false});
+          that.get("notify").info(`New scan started <a class='click-here' href='/file/${fileId}'>Show</a>`, {htmlContent: true, autoClear: false});
         }
       },
 
@@ -121,19 +116,19 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
 
       logout() {
         localStorage.clear();
-        return location.reload();
+        location.reload();
       },
 
       reload() {
-        return location.reload();
+        location.reload();
       },
 
       counter(data) {
-        return realtime.incrementProperty(`${data.type}Counter`);
+        realtime.incrementProperty(`${data.type}Counter`);
       },
 
       namespace(data) {
-        return realtime.set("namespace", data.namespace);
+        realtime.set("namespace", data.namespace);
       }
     };
 
@@ -156,17 +151,17 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
       const currentRoute = transition.targetName;
       const csbDict = CSBMap[currentRoute];
       if (!Ember.isEmpty(csbDict)) {
-        return triggerAnalytics('feature', csbDict);
+        triggerAnalytics('feature', csbDict);
       }
     },
 
     invalidateSession() {
       triggerAnalytics('logout');
-      return this.get('session').invalidate();
+      this.get('session').invalidate();
     },
 
     giveFeeback() {
-      return surveyMonkey();
+      surveyMonkey();
     }
   }
 }

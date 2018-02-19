@@ -21,7 +21,7 @@ const AnalysisSettingsComponent = Ember.Component.extend({
       const that = this;
       this.set("isSavingStatus", true);
       this.get("ajax").post(unknownAnalysisStatus, {data})
-      .then(function(data){
+      .then(function(){
         that.set("isSavingStatus", false);
         that.set("project.showUnknownAnalysis", isChecked);
         that.get("notify").success(tSavedPreferences);

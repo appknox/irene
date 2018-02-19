@@ -1,7 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- */
 import DS from 'ember-data';
 import BaseModelMixin from 'irene/mixins/base-model';
 import ENUMS from 'irene/enums';

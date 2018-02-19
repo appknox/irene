@@ -1,7 +1,5 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
 import DS from 'ember-data';
+import Ember from 'ember';
 import BaseModeMixin from 'irene/mixins/base-model';
 import { translationMacro as t } from 'ember-i18n';
 
