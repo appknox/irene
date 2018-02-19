@@ -10,5 +10,5 @@ test('it renders', function(assert) {
 
   this.render(hbs("{{password-setup}}"));
 
-  assert.equal(this.$().text().trim(), 'Security fanatics at your serviceSet Your PasswordEnter PasswordConfirm PasswordSet Password');
+  assert.equal(this.$().text().trim(), 'Security fanatics at your serviceSet Your PasswordSet Password');
 });

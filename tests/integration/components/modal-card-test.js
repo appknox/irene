@@ -6,9 +6,9 @@ moduleForComponent('modal-card', 'Integration | Component | modal card', {
 });
 
 test('it renders', function(assert) {
-  assert.expect(2);
+  assert.expect(1);
 
   this.render(hbs("{{modal-card}}"));
 
-  assert.equal(this.$().text().trim(), 'template block text');
+  assert.equal(this.$().text().trim(), '');
 });

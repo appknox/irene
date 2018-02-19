@@ -6,7 +6,7 @@ moduleForComponent('img-logo', 'Integration | Component | img logo', {
 });
 
 test('it renders', function(assert) {
-  assert.expect(2);
+  assert.expect(1);
 
   this.render(hbs("{{img-logo}}"));
 

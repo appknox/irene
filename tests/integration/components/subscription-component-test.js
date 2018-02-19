@@ -10,5 +10,5 @@ test('it renders', function(assert) {
 
   this.render(hbs("{{subscription-component}}"));
 
-  assert.equal(this.$().text().trim(), 'Subscription DetailsCurrent PlanBilling Period You will be charged on   Cancel SubscriptionAre you sure you want to cancel Subscription?CancelOk');
+  assert.equal(this.$().text().trim(), 'Subscription DetailsCurrent PlanBilling Period  Are you sure you want to cancel Subscription?CancelOk');
 });
