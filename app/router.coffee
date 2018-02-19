@@ -5,6 +5,8 @@ Router = Ember.Router.extend
   location: ENV.locationType
   rootURL: ENV.rootURL
 
+Ember.$('body').addClass('theme-' + ENV.whitelabel.theme)
+
 Router.map ->
   @route 'freestyle'
   @route 'login'
