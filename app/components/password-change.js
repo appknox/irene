@@ -46,6 +46,7 @@ const PasswordChangeComponent = Ember.Component.extend({
           });
         that.get("notify").success(tPasswordChanged);
         triggerAnalytics('feature',ENV.csb.changePassword);
+        setTimeout(() => window.location.href = "/", 1 * 1000);
       })
       .catch(function(error) {
         that.set("isChangingPassword", false);

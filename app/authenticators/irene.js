@@ -73,10 +73,7 @@ const IreneAuthenticator = Base.extend({
         }})
       .catch(function(error) {
         localStorage.clear();
-        for (error of error.errors) {
-          that.get("notify").error(error.detail != null ? error.detail.message : undefined, ENV.notifications);
-        }
-        return reject(error);
+        location.reload();
       });
     });
   },
@@ -94,10 +91,6 @@ const IreneAuthenticator = Base.extend({
       })
       .catch(function(error) {
         location.reload();
-        for (error of error.errors) {
-          that.get("notify").error(error.detail != null ? error.detail.message : undefined, ENV.notifications);
-        }
-        return reject(error);
       });
     });
   }
