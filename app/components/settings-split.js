@@ -1,6 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
 import Ember from 'ember';
 
 const SettingsSplitComponent = Ember.Component.extend({
@@ -32,19 +29,19 @@ const SettingsSplitComponent = Ember.Component.extend({
     displayGeneral() {
       this.set('isGeneral', true);
       this.set('isSecurity', false);
-      return this.set('isDeveloperSettings', false);
+      this.set('isDeveloperSettings', false);
     },
 
     displaySecurity() {
       this.set('isGeneral', false);
       this.set('isSecurity', true);
-      return this.set('isDeveloperSettings', false);
+      this.set('isDeveloperSettings', false);
     },
 
     displayDeveloperSettings() {
       this.set('isGeneral', false);
       this.set('isSecurity', false);
-      return this.set('isDeveloperSettings', true);
+      this.set('isDeveloperSettings', true);
     }
   }
 });

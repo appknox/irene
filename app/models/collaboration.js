@@ -1,6 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
 import DS from 'ember-data';
 import BaseModelMixin from 'irene/mixins/base-model';
 import ENUMS from 'irene/enums';

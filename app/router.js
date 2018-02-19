@@ -1,6 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
 
@@ -24,18 +21,18 @@ Router.map(function() {
     this.route('projects', {path: '/projects'});
     this.route("project", {path: '/project/:projectId'}, function() {
       this.route('settings');
-      return this.route('files');
+      this.route('files');
     });
     this.route("file", {path: '/file/:fileId'});
     this.route("choose",{path: '/choose/:fileId'});
     this.route('compare', {path: '/compare/:files'});
     this.route('payment-success');
-    return this.route('payment-failure');
+    this.route('payment-failure');
   });
   this.route('invitation', {path: '/invitation/:uuid'});
 
   // 404 path -this should be at the last.
-  return this.route('not-found', {path: '/*path'});
+  this.route('not-found', {path: '/*path'});
 });
 
 const CSBMap = {

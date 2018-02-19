@@ -1,6 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import {isUnauthorizedError} from 'ember-ajax/errors';
@@ -33,7 +30,7 @@ const LoginComponentComponent = Ember.Component.extend({
         that.set("isLogingIn", false);
       };
 
-      return this.get('session').authenticate("authenticator:irene", identification, password, otp, errorCallback, loginStatus);
+      this.get('session').authenticate("authenticator:irene", identification, password, otp, errorCallback, loginStatus);
     }
   }
 });

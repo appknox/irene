@@ -1,6 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
 import Ember from 'ember';
 import ENUMS from 'irene/enums';
 import { translationMacro as t } from 'ember-i18n';

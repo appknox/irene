@@ -1,6 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
 import DS from 'ember-data';
 
 const Personaltoken = DS.Model.extend({

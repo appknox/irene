@@ -1,6 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit return
- */
 import Ember from 'ember';
 
 const PromptBoxComponent = Ember.Component.extend({
@@ -15,13 +12,13 @@ const PromptBoxComponent = Ember.Component.extend({
   actions: {
 
     clearModal() {
-      return this.set("isActive", false);
+      this.set("isActive", false);
     },
 
     sendCallback() {
       const inputValue = this.get("inputValue");
       const delegate = this.get("delegate");
-      return delegate.promptCallback(inputValue);
+      delegate.promptCallback(inputValue);
     }
   }
 });

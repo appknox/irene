@@ -1,6 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
 import Ember from 'ember';
 
 const ModalCardComponent = Ember.Component.extend({
@@ -12,7 +9,7 @@ const ModalCardComponent = Ember.Component.extend({
 
   actions: {
     clearModal() {
-      return this.set("isActive", false);
+      this.set("isActive", false);
     }
   }
 });

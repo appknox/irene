@@ -1,7 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
 
@@ -15,7 +11,7 @@ const PaginateMixin = Ember.Mixin.create({
   isJsonApiPagination: false,
 
   versionIncrementer() {
-    return this.incrementProperty("version");
+    this.incrementProperty("version");
   },
 
   versionTrigger: Ember.observer('limit', 'offset', "targetObject", "extraQueryStrings", function() {
@@ -142,29 +138,29 @@ const PaginateMixin = Ember.Mixin.create({
   }),
 
   setOffset(offset) {
-    return this.set("offset", offset);
+    this.set("offset", offset);
   },
 
   actions: {
 
     gotoPageFirst() {
-      return this.setOffset(0);
+      this.setOffset(0);
     },
 
     gotoPagePrevious() {
-      return this.decrementProperty("offset");
+      this.decrementProperty("offset");
     },
 
     gotoPage(offset) {
-      return this.setOffset(offset);
+      this.setOffset(offset);
     },
 
     gotoPageNext() {
-      return this.incrementProperty("offset");
+      this.incrementProperty("offset");
     },
 
     gotoPageLast() {
-      return this.setOffset(this.get("maxOffset"));
+      this.setOffset(this.get("maxOffset"));
     }
   }
 });

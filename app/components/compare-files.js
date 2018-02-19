@@ -1,6 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
 import Ember from 'ember';
 
 const CompareFilesComponent = Ember.Component.extend({
@@ -49,11 +46,11 @@ const CompareFilesComponent = Ember.Component.extend({
 
   actions: {
     displaySummary() {
-      return this.set("isSummary", true);
+      this.set("isSummary", true);
     },
 
     displayDetails() {
-      return this.set("isSummary", false);
+      this.set("isSummary", false);
     }
   }
 });

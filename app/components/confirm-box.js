@@ -1,6 +1,3 @@
-/*
- * DS102: Remove unnecessary code created because of implicit returns
- */
 import Ember from 'ember';
 
 const ConfirmBoxComponent = Ember.Component.extend({
@@ -14,12 +11,12 @@ const ConfirmBoxComponent = Ember.Component.extend({
   actions: {
 
     clearModal() {
-      return this.set("isActive", false);
+      this.set("isActive", false);
     },
 
     sendCallback() {
       const delegate = this.get("delegate");
-      return delegate.confirmCallback();
+      delegate.confirmCallback();
     }
   }
 });
