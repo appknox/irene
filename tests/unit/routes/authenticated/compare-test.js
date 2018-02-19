@@ -1,3 +1,4 @@
+import { moduleFor, test } from 'ember-qunit';
 
 moduleFor('route:authenticated/compare', 'Unit | Route | authenticated/compare', {
 });

@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import { initialize } from 'irene/initializers/irene';
 import { module, test } from 'qunit';
 
 let application = null;

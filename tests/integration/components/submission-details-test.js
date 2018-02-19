@@ -1,4 +1,5 @@
 import { test, moduleForComponent } from 'ember-qunit';
+import hbs from 'htmlbars-inline-precompile';
 
 moduleForComponent('submission-details', 'Integration | Component | submission details', {
   integration: true
