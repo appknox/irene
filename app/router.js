@@ -6,7 +6,7 @@ const Router = Ember.Router.extend({
   rootURL: ENV.rootURL
 });
 
-Ember.$('body').addClass('theme-' + ENV.whitelabel.theme)
+Ember.$('body').addClass('theme-' + ENV.whitelabel.theme);
 
 Router.map(function() {
   this.route('freestyle');

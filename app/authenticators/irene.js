@@ -1,3 +1,4 @@
+// jshint ignore: start
 import Ember from 'ember';
 import Base from 'ember-simple-auth/authenticators/base';
 import ENV from 'irene/config/environment';
