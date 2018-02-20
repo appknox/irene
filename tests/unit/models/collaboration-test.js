@@ -5,6 +5,6 @@ moduleForModel('collaboration', 'Unit | Model | collaboration', {
 });
 
 test('it exists', function(assert) {
-  const model = this.subject();
-  assert.ok(!!model);
+  const collaboration = this.subject();
+  assert.equal(collaboration.get('hasRole'), true);
 });
