@@ -1,7 +1,7 @@
 if isPoppedOut
   .modal-background
-.modal-card.device-modal class=isPoppedOut::margin-left-10
-  .modal-card-body.padding-10.margin-top
+.modal-card.device-modal
+  .modal-card-body.padding-10.margin-top.flex-center
     div class="marvel-device" class=deviceType
       if isNotTablet
         div class="top-bar"

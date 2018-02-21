@@ -38,9 +38,9 @@ VncViewerComponent = Ember.Component.extend
       'view_only': false
 
       'onUpdateState': ->
-        if ENUMS.PLATFORM.IOS isnt that.get "file.project.platform"
-          # Only resize iOS Devices
-          return true
+        # if ENUMS.PLATFORM.IOS isnt that.get "file.project.platform"
+        #   # Only resize iOS Devices
+        #   return true
         setTimeout(that.set_ratio.bind(that), 500)
         true
 
