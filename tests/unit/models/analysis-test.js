@@ -14,13 +14,3 @@ test('it exists', function(assert) {
   const analysis = this.subject();
   assert.equal(analysis.get('isRisky'), true, "Is Risky");
 });
-
-test('it exists', function(assert) {
-  const analysis = this.subject();
-  assert.equal(analysis.get('iconClass'), undefined, "Is Risky");
-});
-
-test('it exists', function(assert) {
-  const analysis = this.subject();
-  assert.equal(analysis.get('labelClass'), undefined, "Is Risky");
-});
