@@ -12,6 +12,4 @@ test('it exists', function(assert) {
 test('it exists', function(assert) {
   const collaboration = this.subject();
   assert.equal(collaboration.get('roleHumanized'), "noPreference", "No Preference");
-  collaboration.set('roleHumanized', "admin");
-  assert.equal(collaboration.get('roleHumanized'), "admin", "Admin");
 });
