@@ -11,7 +11,7 @@ if isPoppedOut
       if isIOSDevice
         if isNotTablet
           div class="speaker"
-      div class="screen"
+      div class=screenRequired:noscreen:screen
         canvas.canvas
         if file.isNotReady
           .vnc-text

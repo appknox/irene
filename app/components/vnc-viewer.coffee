@@ -53,6 +53,12 @@ VncViewerComponent = Ember.Component.extend
   didInsertElement: ->
     @setupRFB()
 
+  screenRequired: ( ->
+    platform = @get "file.project.platform"
+    deviceType = @get "file.project.deviceType"
+    platform is ENUMS.PLATFORM.ANDROID && deviceType is ENUMS.DEVICE_TYPE.TABLET_REQUIRED
+  ).property "file.project.platform", "file.project.deviceType"
+
   statusChange: ( ->
     if @get 'file.isReady'
       @send("connect")
@@ -64,7 +70,10 @@ VncViewerComponent = Ember.Component.extend
     platform = @get "file.project.platform"
     deviceType = @get "file.project.deviceType"
     if platform is ENUMS.PLATFORM.ANDROID
-      "nexus5"
+      if deviceType is ENUMS.DEVICE_TYPE.TABLET_REQUIRED
+        "tablet"
+      else
+        "nexus5"
     else if platform is ENUMS.PLATFORM.IOS
       if deviceType is ENUMS.DEVICE_TYPE.TABLET_REQUIRED
         "ipad black"
