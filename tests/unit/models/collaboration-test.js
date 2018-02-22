@@ -12,7 +12,15 @@ test('it exists', function(assert) {
   assert.equal(collaboration.get('hasRole'), true, "Has Role");
   Ember.run(function() {
     collaboration.set('role', ENUMS.COLLABORATION_ROLE.UNKNOWN);
+    assert.equal(collaboration.get('hasRole'), false, "No role");
   });
-  assert.equal(collaboration.get('hasRole'), false, "No role");
-  assert.equal(collaboration.get('roleHumanized'), "noPreference", "No Preference");
+  Ember.run(function() {
+    assert.equal(collaboration.get('roleHumanized'), "noPreference", "No Preference");
+    collaboration.set('role', ENUMS.COLLABORATION_ROLE.ADMIN);
+    assert.equal(collaboration.get('roleHumanized'), "admin", "Admin");
+    collaboration.set('role', ENUMS.COLLABORATION_ROLE.MANAGER);
+    assert.equal(collaboration.get('roleHumanized'), "manager", "Manager");
+    collaboration.set('role', ENUMS.COLLABORATION_ROLE.READ_ONLY);
+    assert.equal(collaboration.get('roleHumanized'), "developer", "Developer");
+  });
 });
