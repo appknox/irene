@@ -10,5 +10,9 @@ test('it renders', function(assert) {
 
   this.render(hbs("{{vnc-viewer}}"));
 
+  this.on('togglePop', function() {
+    this.set('isPoppedOut', true);
+  });
+
   assert.equal(this.$().text().trim(), '');
 });
