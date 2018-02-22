@@ -5,6 +5,6 @@ moduleForModel('team', 'Unit | Model | team', {
 });
 
 test('it exists', function(assert) {
-  const model = this.subject();
-  assert.ok(!!model);
+  const team = this.subject();
+  assert.equal(team.get('isDefaultTeam'), false, "Default Team");
 });

@@ -5,6 +5,11 @@ moduleForModel('user', 'Unit | Model | user', {
 });
 
 test('it exists', function(assert) {
-  const model = this.subject();
-  assert.ok(!!model);
+  const user = this.subject();
+  assert.equal(user.get('provisioningURL'), "otpauth://totp/Appknox:undefined?secret=undefined&issuer=Appknox", "ProvisioningURL");
+  assert.equal(user.get('mfaEnabled'), false, "MFA Enabled");
+  assert.equal(user.get('ifBillingIsNotHidden'), true, "Billing Hidden");
+  assert.equal(user.get('getExpiryDate'), undefined, "Expiry Date");
+  assert.equal(user.get('expiryText'), "subscriptionWillExpire", "Expiry Text");
+  assert.equal(user.get('namespaceItems'), undefined, "Namespace Items");
 });

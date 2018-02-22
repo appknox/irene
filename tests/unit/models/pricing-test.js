@@ -5,6 +5,6 @@ moduleForModel('pricing', 'Unit | Model | pricing', {
 });
 
 test('it exists', function(assert) {
-  const model = this.subject();
-  assert.ok(!!model);
+  const pricing = this.subject();
+  assert.equal(pricing.get('descriptionItems'), undefined, "Description");
 });

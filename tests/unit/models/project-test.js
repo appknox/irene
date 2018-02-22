@@ -5,6 +5,9 @@ moduleForModel('project', 'Unit | Model | project', {
 });
 
 test('it exists', function(assert) {
-  const model = this.subject();
-  assert.ok(!!model);
+  const project = this.subject();
+  assert.equal(project.get('apiUrlFilterItems'), undefined, "URL Filters");
+  assert.equal(project.get('pdfPassword'), "Unknown!", "PDF Password");
+  assert.equal(project.get('platformIconClass'), "mobile", "Platform Icon Class");
+  assert.equal(project.get('isAPIScanEnabled'), false, "API Scan Enabled");
 });

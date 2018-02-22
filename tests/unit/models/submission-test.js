@@ -5,6 +5,6 @@ moduleForModel('submission', 'Unit | Model | submission', {
 });
 
 test('it exists', function(assert) {
-  const model = this.subject();
-  assert.ok(!!model);
+  const submission = this.subject();
+  assert.equal(submission.get('hasReason'), false, "Reason");
 });

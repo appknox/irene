@@ -5,6 +5,6 @@ moduleForModel('plan', 'Unit | Model | plan', {
 });
 
 test('it exists', function(assert) {
-  const model = this.subject();
-  assert.ok(!!model);
+  const plan = this.subject();
+  assert.equal(plan.get('descriptionItems'), undefined, "Description");
 });
