@@ -18,3 +18,5 @@ testem.log
 *.DS_Store
 .env
 package-lock.json
+
+.env.deploy.whitelabel
