@@ -7,6 +7,7 @@ export default {
   "addNamespace": "名前空間の追加",
   "addNewTeam": "新しいチームの追加",
   "addTeam": "チームの追加",
+  "addMember" : "add member",
   "addNewNamespace": "以下に名前空間が追加できます",
   "admin": "管理者",
   "allPlatforms": "全プラットフォーム",
@@ -18,6 +19,7 @@ export default {
   "apiURLFilter": "API URLフィルタ",
   "app": "アプリ",
   "apps": "アプリ",
+  "assignTeam":	"Assign Team",
   "analyzing": "分析中",
   "billing": "料金プラン",
   "billingPeriod": "支払い請求周期",
@@ -28,6 +30,7 @@ export default {
   "changePassword": "パスワードの変更",
   "changeRole": "役割の変更",
   "chooseAFile": "比較するファイルを選択してください",
+  "clickingHere": "clicking here",
   "clickOnDynamicScan": "動的診断の開始をクリック",
   "closeModal": "全画面を終了",
   "collaborationAdded": "コラボレーションが追加されました",
@@ -200,6 +203,7 @@ export default {
   "personalTokenRevoke": "無効にする",
   "personalTokenRevoked": "パーソナルアクセストークンが無効になりました",
   "personalTokenGenerated": "パーソナルアクセストークンが生成されました",
+  "phone" : "Phone",	
   "plans": "プラン",
   "planName": "プラン名",
   "pleaseEnterAllDetails": "プラン名",
@@ -294,7 +298,7 @@ export default {
   "uploadApp": "アプリのアップロード",
   "uploading": "アップロード中",
   "uploadNewProject": "新しいプロジェクトをアップロードするには、ここをクリックしてください",
-  "urlAdded": "URLフィルタが正常に追加されました",
+  "urlUpdated": "Successfully updated the url filter",
   "usd": "米ドル",
   "userSetting": "ユーザ設定",
   "username": "ユーザ名",
@@ -308,6 +312,7 @@ export default {
   "year": "年",
   "yearly": "１年",
   "yes": "はい",
+  "youCanCreateTeam": "you can create a new team by",
   "youWillBeChargedOn": "次のとおり請求されます：",
   "confirmBox": {
     "removeURL": "URLフィルタから削除してもよろしいですか？",
@@ -316,7 +321,8 @@ export default {
     "revokeGithub": "Githubとの連携を解除してもよろしいですか？",
     "revokeJira": "JIRAとの連携を解除してもよろしいですか？",
     "cancelSubsciption": "サブスクリプションをキャンセルしてよろしいですか？",
-    "revokePersonalToken": "パーソナルアクセストークンを削除してよろしいですか？"
+    "revokePersonalToken": "パーソナルアクセストークンを削除してよろしいですか？",
+    "removeUserRole":	"Are you sure you want to remove this role?"
   },
   "promptBox": {
     "collaborationPrompt": {
