@@ -203,7 +203,7 @@ export default {
   "personalTokenRevoke": "無効にする",
   "personalTokenRevoked": "パーソナルアクセストークンが無効になりました",
   "personalTokenGenerated": "パーソナルアクセストークンが生成されました",
-  "phone" : "Phone",	
+  "phone" : "Phone",
   "plans": "プラン",
   "planName": "プラン名",
   "pleaseEnterAllDetails": "プラン名",
@@ -381,34 +381,34 @@ export default {
       "description": "まだ申し込みが完了していません。申し込みますか？"
     },
     "manual": {
-      "title": "手動診断をリクエストする"
-      "description": "手動診断をリクエストするには追加情報が必要となります"
-      "companyName": "会社名"
-      "appName": "アプリ名"
-      "appEnv": "アプリケーション環境"
-      "minOSVersion": "最小OSバージョン"
-      "enterMinOSVersion": "OSの最小バージョンを入力してください"
-      "appQuestion1": "一部の機能にアクセスできない、またはアプリケーションに公開されていない機能がある場合は、どうしたらいいですか？"
-      "appQuestion1Answer1": "再診断を実施しますので、診断を続行し、診断されなかった機能についてレポートで報告してください。"
-      "appQuestion1Answer2": "診断を停止して、サポートに連絡してください。"
-      "loginRequired": "あなたのアプリケーションは、ログインするためのアカウントが必要ですか？"
-      "enterLoginDetails": "アプリにログインするために必要な資格情報を入力してください<b class = 'bold'>（各役割に2つの資格情報が設定されています）</ b>"
-      "addUserRole": "ユーザの役割を追加する"
-      "userRoles": "ユーザの役割を追加する"
-      "actions": "アクション"
-      "poc": "手動診断に関する問い合わせ窓口"
-      "vpnRequired": "クライアントからアプリのサーバーにアクセスするにはVPN/プロキシが必要ですか？"
-      "enterVPNDetails": "VPNアドレスとポートを入力してください"
-      "vpnAddress": "VPNアドレス"
-      "vpnPort": "ポート"
-      "enterCredentails": "資格情報が必要な場合は、ユーザー名とパスワードを入力してください"
-      "additionalComments": "追加コメント"
-      "pleaseEnterAllValues": "すべての値を入力してください"
-      "roleAdded": "役割が追加されました"
-      "pleaseEnterUserRoles": "ユーザの役割を入力してください"
-      "pleaseEnterVPNDetails": "VPNの詳細を入力してください"
-      "basicAppInfo": "アプリの基本情報"
-      "loginDetails": "ログインの詳細"
+      "title": "手動診断をリクエストする",
+      "description": "手動診断をリクエストするには追加情報が必要となります",
+      "companyName": "会社名",
+      "appName": "アプリ名",
+      "appEnv": "アプリケーション環境",
+      "minOSVersion": "最小OSバージョン",
+      "enterMinOSVersion": "OSの最小バージョンを入力してください",
+      "appQuestion1": "一部の機能にアクセスできない、またはアプリケーションに公開されていない機能がある場合は、どうしたらいいですか？",
+      "appQuestion1Answer1": "再診断を実施しますので、診断を続行し、診断されなかった機能についてレポートで報告してください。",
+      "appQuestion1Answer2": "診断を停止して、サポートに連絡してください。",
+      "loginRequired": "あなたのアプリケーションは、ログインするためのアカウントが必要ですか？",
+      "enterLoginDetails": "アプリにログインするために必要な資格情報を入力してください<b class = 'bold'>（各役割に2つの資格情報が設定されています）</ b>",
+      "addUserRole": "ユーザの役割を追加する",
+      "userRoles": "ユーザの役割を追加する",
+      "actions": "アクション",
+      "poc": "手動診断に関する問い合わせ窓口",
+      "vpnRequired": "クライアントからアプリのサーバーにアクセスするにはVPN/プロキシが必要ですか？",
+      "enterVPNDetails": "VPNアドレスとポートを入力してください",
+      "vpnAddress": "VPNアドレス",
+      "vpnPort": "ポート",
+      "enterCredentails": "資格情報が必要な場合は、ユーザー名とパスワードを入力してください",
+      "additionalComments": "追加コメント",
+      "pleaseEnterAllValues": "すべての値を入力してください",
+      "roleAdded": "役割が追加されました",
+      "pleaseEnterUserRoles": "ユーザの役割を入力してください",
+      "pleaseEnterVPNDetails": "VPNの詳細を入力してください",
+      "basicAppInfo": "アプリの基本情報",
+      "loginDetails": "ログインの詳細",
       "vpnDetails": "VPNの詳細"
     },
     "rescan": {
