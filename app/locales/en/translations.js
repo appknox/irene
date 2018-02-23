@@ -7,7 +7,6 @@ export default {
   "addNamespace": "Add Namespace",
   "addNewTeam": "Add new team",
   "addTeam": "Add Team",
-  "addMember" : "add member",
   "addNewNamespace": "You can add a new namespace below",
   "admin": "Admin",
   "allPlatforms": "All Platforms",
@@ -20,7 +19,6 @@ export default {
   "app": "app(s)",
   "apps": " Apps",
   "analyzing": "Analyzing",
-  "assignTeam": "Assign Team",
   "billing": "Billing",
   "billingPeriod": "Billing Period",
   "businessImplication": "Business Implication",
@@ -30,7 +28,6 @@ export default {
   "changePassword": "Change Password",
   "changeRole": "Change Role",
   "chooseAFile": "Choose a file to compare",
-  "clickingHere": "clicking here",
   "clickOnDynamicScan": "Click on Start Dynamic Scan",
   "closeModal": "Exit Full Screen",
   "collaborationAdded": "Collaboration is added!",
@@ -203,7 +200,6 @@ export default {
   "personalTokenRevoke": "Revoke",
   "personalTokenRevoked": "Personal access token revoked successfully",
   "personalTokenGenerated": "Personal access token generated successfully.",
-  "phone" : "Phone",
   "plans": "Plans",
   "planName": "PLAN NAME",
   "pleaseEnterAllDetails": "Please enter all the details",
@@ -298,7 +294,7 @@ export default {
   "uploadApp": "Upload App",
   "uploading": "Uploading",
   "uploadNewProject": "You can upload a new project by clicking on <b class='bold'>Upload App</b> above and start scanning",
-  "urlUpdated": "Successfully updated the url filter",
+  "urlAdded": "Successfully updated the url filter",
   "usd": "USD for",
   "userSetting": " user's settings ",
   "username": "Username",
@@ -312,7 +308,6 @@ export default {
   "year": "Year",
   "yearly": "Yearly",
   "yes": "Yes",
-  "youCanCreateTeam": "you can create a new team by",
   "youWillBeChargedOn": "You will be charged on",
   "confirmBox": {
     "removeURL": "Are you sure you want to remove from url filters?",
@@ -322,7 +317,6 @@ export default {
     "revokeJira": "Are you sure you want to revoke JIRA Integration?",
     "cancelSubsciption": "Are you sure you want to cancel Subscription?",
     "revokePersonalToken": "Are you sure you want to delete this personal access token?",
-    "removeUserRole": "Are you sure you want to remove this role?"
   },
   "promptBox": {
     "collaborationPrompt": {
