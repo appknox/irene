@@ -86,7 +86,7 @@ AuthenticatedRoute = Ember.Route.extend AuthenticatedRouteMixin,
         store.pushPayload data: data
         if data.type is "files"
           fileId = data.id
-          that.get("notify").info "New scan started <a class='click-here' href='/file/#{fileId} onclick='return false;'>Show</a>", htmlContent: true, autoClear: false
+          that.get("notify").info "New scan started <a class='click-here' href='/file/#{fileId}>Show</a>", htmlContent: true, autoClear: false
 
       message: (data) ->
         message = data.message
