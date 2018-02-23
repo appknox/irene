@@ -26,7 +26,7 @@ UploadAppComponent = EmberUploader.FileField.extend
     uploader.on 'progress', (e) ->
       delegate.set "progress", parseInt e.percent
 
-    uploader.upload files[0]
+    uploader.upload(files[0], delegate)
     .catch ->
       $('input[type=file]').val('')
       delegate.set "isUploading", false

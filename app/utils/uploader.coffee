@@ -16,7 +16,7 @@ Uploader = EmberUploader.Uploader.extend
   tErrorWhileUploading: t("errorWhileUploading")
   tFileUploadedSuccessfully: t("fileUploadedSuccessfully")
 
-  upload: (file) ->
+  upload: (file, delegate) ->
 
     tErrorWhileFetching = @get "tErrorWhileFetching"
     tErrorWhileUploading = @get "tErrorWhileUploading"
@@ -43,6 +43,7 @@ Uploader = EmberUploader.Uploader.extend
         that.didUpload json.file_key, json.file_key_signed
         that.get("notify").success tFileUploadedSuccessfully
       .catch (error) ->
+        delegate.set "isUploading", false
         that.get("notify").error tErrorWhileUploading
         for error in error.errors
           that.get("notify").error error.detail?.message
@@ -55,6 +56,7 @@ Uploader = EmberUploader.Uploader.extend
       $('input[type=file]').val('')
       signSuccess json
     .catch (error) ->
+      delegate.set "isUploading", false
       $('input[type=file]').val('')
       that.get("notify").error tErrorWhileFetching
       for error in error.errors

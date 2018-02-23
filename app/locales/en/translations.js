@@ -19,8 +19,8 @@ export default {
   "apiURLFilter": "API URL Filter",
   "app": "app(s)",
   "apps": " Apps",
+  "assignTeam":	"Assign Team",
   "analyzing": "Analyzing",
-  "assignTeam": "Assign Team",
   "billing": "Billing",
   "billingPeriod": "Billing Period",
   "businessImplication": "Business Implication",
@@ -203,7 +203,7 @@ export default {
   "personalTokenRevoke": "Revoke",
   "personalTokenRevoked": "Personal access token revoked successfully",
   "personalTokenGenerated": "Personal access token generated successfully.",
-  "phone" : "Phone",
+  "phone" : "Phone",	
   "plans": "Plans",
   "planName": "PLAN NAME",
   "pleaseEnterAllDetails": "Please enter all the details",
@@ -234,7 +234,7 @@ export default {
   "undefined": "undefined",
   "unpaid": "Unpaid",
   "repoIntegrated": "Repo successfully integrated",
-  "repoNotIntegrated": "Something went wrong whe trying to update this repo",
+  "repoNotIntegrated": "Something went wrong when trying to update this repo",
   "revokeGithub": "Revoke Github",
   "revokeJira": "Revoke Jira",
   "risk": "The risk of",
@@ -322,7 +322,7 @@ export default {
     "revokeJira": "Are you sure you want to revoke JIRA Integration?",
     "cancelSubsciption": "Are you sure you want to cancel Subscription?",
     "revokePersonalToken": "Are you sure you want to delete this personal access token?",
-    "removeUserRole": "Are you sure you want to remove this role?"
+    "removeUserRole":	"Are you sure you want to remove this role?"
   },
   "promptBox": {
     "collaborationPrompt": {

@@ -44,9 +44,9 @@ VncViewerComponent = Ember.Component.extend
       'view_only': false
 
       'onUpdateState': ->
-        if ENUMS.PLATFORM.IOS isnt that.get "file.project.platform"
-          # Only resize iOS Devices
-          return true
+        # if ENUMS.PLATFORM.IOS isnt that.get "file.project.platform"
+        #   # Only resize iOS Devices
+        #   return true
         setTimeout(that.set_ratio.bind(that), 500)
         true
 
@@ -66,11 +66,20 @@ VncViewerComponent = Ember.Component.extend
       @send "disconnect"
   ).observes 'file.dynamicStatus'
 
+  screenRequired: ( ->
+    platform = @get "file.project.platform"
+    deviceType = @get "file.project.deviceType"
+    platform is ENUMS.PLATFORM.ANDROID && deviceType is ENUMS.DEVICE_TYPE.TABLET_REQUIRED
+  ).property "file.project.platform", "file.project.deviceType"
+
   deviceType: (->
     platform = @get "file.project.platform"
     deviceType = @get "file.project.deviceType"
     if platform is ENUMS.PLATFORM.ANDROID
-      "nexus5"
+      if deviceType is ENUMS.DEVICE_TYPE.TABLET_REQUIRED
+        "tablet"
+      else
+        "nexus5"
     else if platform is ENUMS.PLATFORM.IOS
       if deviceType is ENUMS.DEVICE_TYPE.TABLET_REQUIRED
         "ipad black"
