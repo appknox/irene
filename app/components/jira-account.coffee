@@ -53,10 +53,11 @@ JiraAccountComponent = Ember.Component.extend
       @get("ajax").post ENV.endpoints.integrateJira, data: data
       .then (data)->
         that.set "isIntegratingJIRA", false
+        that.set "user.hasJiraToken", true
         that.get("notify").success tJiraIntegrated
         triggerAnalytics('feature',ENV.csb.integrateJIRA)
       .catch (error) ->
-        that.set "isIntegratingJIRA", false 
+        that.set "isIntegratingJIRA", false
         that.get("notify").error error.payload.message
         for error in error.errors
           that.get("notify").error error.detail?.message

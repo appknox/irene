@@ -22,6 +22,7 @@ FileHeaderComponent = Ember.Component.extend
   isStartingRescan: false
   dynamicScanModal: false
   isRequestingManual: false
+  isDownloadingReport: false
   showManualScanFormModal: false
   showRemoveRoleConfirmBox: false
 
@@ -131,10 +132,13 @@ FileHeaderComponent = Ember.Component.extend
       that = @
       fileId = @get "file.id"
       url = [ENV.endpoints.signedPdfUrl, fileId].join '/'
+      @set "isDownloadingReport", true
       @get("ajax").request url
       .then (result) ->
         window.location = result.url
+        that.set "isDownloadingReport", false
       .catch (error) ->
+        that.set "isDownloadingReport", false
         that.get("notify").error tReportIsGettingGenerated
         for error in error.errors
           that.get("notify").error error.detail?.message
@@ -300,7 +304,7 @@ FileHeaderComponent = Ember.Component.extend
           return @get("notify").error tPleaseEnterVPNDetails if isEmpty inputValue
 
       vpnUsername =  @get "manualscan.vpnDetails.username"
-      vpnPassword =  @get "manualscan.vpnDetails.password"    
+      vpnPassword =  @get "manualscan.vpnDetails.password"
 
       vpnDetails =
         address: vpnAddress

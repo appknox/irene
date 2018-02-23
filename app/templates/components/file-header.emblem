@@ -141,8 +141,13 @@
                 = fa-icon "navicon"
                 | &nbsp; #{t "allUploads"}
           .column.card-button
-            button.mp-pdf-report click="getPDFReportLink"
-              = fa-icon "download"
+            button.mp-pdf-report click="getPDFReportLink" disabled=isDownloadingReport
+              if isDownloadingReport
+                .fa-font-size
+                  i.fa class="fa-spinner fa-spin"
+                  | &nbsp;
+              else
+                = fa-icon "download"
               | &nbsp; #{ t "pdfReport"}
   .card-content
     .columns
