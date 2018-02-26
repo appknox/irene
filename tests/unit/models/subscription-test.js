@@ -1,12 +1,38 @@
+import Ember from 'ember';
+import localeConfig from 'ember-i18n/config/en';
 import { moduleForModel, test } from 'ember-qunit';
 
 moduleForModel('subscription', 'Unit | Model | subscription', {
-  needs: []
+  needs: [
+    'service:i18n',
+    'locale:en/translations',
+    'locale:en/config',
+    'util:i18n/missing-message',
+    'util:i18n/compile-template',
+    'config:environment'
+  ],
+  beforeEach() {
+    // set the locale and the config
+    Ember.getOwner(this).lookup('service:i18n').set('locale', 'en');
+    this.register('locale:en/config', localeConfig);
+  }
 });
 
 test('it exists', function(assert) {
-  const model = this.subject();
-  assert.ok(!!model);
-  // subscription.set('expiryDateOnHumanized', new Date('2016-05-01'));
-  // assert.equal(subscription.get('expiryDateOnHumanized'), "Sun May 01 2016 05:30:00 GMT+0530 (IST)", "Date");
+  const subscription = this.subject();
+  Ember.run(function() {
+    subscription.set('expiryDate', new Date("25 March 2015"));
+    assert.equal(subscription.get('expiryDateOnHumanized'), "25 March 2015", "Expiry Date");
+
+    subscription.set('isTrial', true);
+    subscription.set('isCancelled', true);
+    assert.equal(subscription.get('subscriptionText.string'), "Your trial will expire on", "Expiry Text");
+    subscription.set('isCancelled', false);
+    assert.equal(subscription.get('subscriptionText.string'), "You will be charged on", "Expiry Text");
+    subscription.set('isTrial', false);
+    subscription.set('isCancelled', true);
+    assert.equal(subscription.get('subscriptionText.string'), "Your free trial will be converted into paid subscription on", "Expiry Text");
+    subscription.set('isCancelled', false);
+    assert.equal(subscription.get('subscriptionText.string'), "Subscription will expire on", "Expiry Text");
+  });
 });
