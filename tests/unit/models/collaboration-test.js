@@ -9,12 +9,12 @@ moduleForModel('collaboration', 'Unit | Model | collaboration', {
 
 test('it exists', function(assert) {
   const collaboration = this.subject();
-  assert.equal(collaboration.get('hasRole'), true, "Has Role");
   Ember.run(function() {
+    assert.equal(collaboration.get('hasRole'), true, "Has Role");
+
     collaboration.set('role', ENUMS.COLLABORATION_ROLE.UNKNOWN);
     assert.equal(collaboration.get('hasRole'), false, "No role");
-  });
-  Ember.run(function() {
+
     assert.equal(collaboration.get('roleHumanized'), "noPreference", "No Preference");
     collaboration.set('role', ENUMS.COLLABORATION_ROLE.ADMIN);
     assert.equal(collaboration.get('roleHumanized'), "admin", "Admin");
