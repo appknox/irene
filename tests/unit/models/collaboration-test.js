@@ -1,6 +1,6 @@
-import { moduleForModel, test} from 'ember-qunit';
-import ENUMS from 'irene/enums';
 import Ember from 'ember';
+import ENUMS from 'irene/enums';
+import { moduleForModel, test} from 'ember-qunit';
 
 
 moduleForModel('collaboration', 'Unit | Model | collaboration', {
