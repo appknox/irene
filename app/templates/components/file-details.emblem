@@ -1,11 +1,9 @@
-.box-container.reduce-padding
-  .columns
-    .column
-      = file-header file=file class="margin-top"
-    .column.is-one-third.margin-top-10.padding-bottom0
-      = vnc-viewer file=file
+.columns
+  .column
+    = file-header file=file class="margin-top"
 
-.columns.margin-left
+
+.columns.margin-left.margin-top
   .column
     h5.bold.black-text
       = t "vulnerabilityDetails"
@@ -16,7 +14,6 @@
       each vulnerabilityTypes as |vulnerabilityType|
         option value=vulnerabilityType.value
           | #{ t (vulnerability-type vulnerabilityType.value)}
-  .column.is-one-third
 
 .columns
   .column
@@ -28,4 +25,3 @@
         h4
           = fa-icon "exclamation-triangle"
           = t "noScansFound"
-  .column.is-one-third
