@@ -1,9 +1,12 @@
-import { planDuration } from 'irene/helpers/plan-duration';
+import ENUMS from 'irene/enums';
 import { module, test } from 'qunit';
+import { planDuration } from 'irene/helpers/plan-duration';
 
-module('Unit | Helper | plan duration');
+module('Unit | Helper | device type');
 
 test('it works', function(assert) {
-  const result = planDuration(42);
-  assert.ok(result);
+  assert.equal(planDuration([42]), "yearly", "Yearly");
+  assert.equal(planDuration([ENUMS.PAYMENT_DURATION.MONTHLY]), "monthly", "Monthly");
+  assert.equal(planDuration([ENUMS.PAYMENT_DURATION.QUARTERLY]), "quarterly", "Quarterly");
+  assert.equal(planDuration([ENUMS.PAYMENT_DURATION.HALFYEARLY]), "halfYearly", "Half Yearly");
 });

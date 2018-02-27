@@ -1,9 +1,9 @@
-import { paginateClass } from 'irene/helpers/paginate-class';
 import { module, test } from 'qunit';
+import { paginateClass } from 'irene/helpers/paginate-class';
 
 module('Unit | Helper | paginate class');
 
 test('it works', function(assert) {
-  const result = paginateClass([{offset:1,page:12}]);
-  assert.ok(result);
+  assert.equal(paginateClass([1,12]), "is-default", "Default");
+  assert.equal(paginateClass([1,1]), "is-primary", "Primary");
 });
