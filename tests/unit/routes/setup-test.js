@@ -5,5 +5,5 @@ moduleFor('route:setup', 'Unit | Route | setup', {
 
 test('it exists', function(assert) {
   const route = this.subject();
-  assert.ok(route);
+  assert.equal(route.model("test"), "test" , "Route");
 });

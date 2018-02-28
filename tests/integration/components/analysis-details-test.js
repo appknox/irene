@@ -12,3 +12,13 @@ test('it renders', function(assert) {
 
   assert.equal(this.$().text().trim(), '');
 });
+
+test('tapping button fires an external action', function(assert) {
+  assert.expect(1);
+
+  this.set('toggleVulnerability', () => assert.ok(true));
+
+  this.render(hbs("{{analysis-details click=(action toggleVulnerability)}}"));
+
+  this.$('.message-header').click();
+});
