@@ -1,10 +1,11 @@
 import { test, moduleForComponent } from 'ember-qunit';
 
 moduleForComponent('file-overview', 'Integration | Component | file overview', {
-  integration: true
+  unit: true
 });
 
-test('it renders', function(assert) {
-  assert.ok(true);
-  assert.equal(this.$().text().trim(), '');
+test('tapping button fires an external action', function(assert) {
+  assert.expect(1);
+  var component = this.subject();
+  assert.deepEqual(component.get('chartOptions'),{ "animation": { "animateRotate": false }, "legend": { "display": false } }, "Chart Options");
 });

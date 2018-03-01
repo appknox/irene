@@ -1,8 +1,10 @@
+import Ember from 'ember';
+import ENUMS from 'irene/enums';
 import { test, moduleForComponent } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 
 moduleForComponent('analysis-details', 'Integration | Component | analysis details', {
-  integration: true
+  unit: true
 });
 
 test('it renders', function(assert) {
@@ -16,9 +18,10 @@ test('it renders', function(assert) {
 test('tapping button fires an external action', function(assert) {
   assert.expect(1);
 
-  this.set('toggleVulnerability', () => assert.ok(true));
+  var component = this.subject();
 
-  this.render(hbs("{{analysis-details click=(action toggleVulnerability)}}"));
-
-  this.$('.message-header').click();
+  Ember.run(function() {
+    component.set('analysis', {risk:ENUMS.RISK.UNKNOWN});
+    assert.equal(component.get('progressClass'), "is-progress", "Progress");
+  });
 });
