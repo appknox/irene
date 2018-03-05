@@ -22,7 +22,7 @@ test('tapping button fires an external action', function(assert) {
         {
           id: 3,
           hasType: false
-        },
+        }
       ]
     });
   assert.deepEqual(component.get("analyses"), [{"hasType": false,"id": 1},{"hasType": false,"id": 2},{"hasType": false,"id": 3}] , "Analyses");
