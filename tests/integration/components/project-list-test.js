@@ -31,7 +31,7 @@ test('it renders', function(assert) {
 });
 
 test('tapping button fires an external action', function(assert) {
-  assert.expect(7);
+  assert.expect(6);
   var component = this.subject();
   Ember.run(function() {
     assert.equal(component.newProjectsObserver(), 1, "Project Observer");
