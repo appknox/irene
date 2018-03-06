@@ -2,7 +2,7 @@
 
 moduleForModel 'analysis', 'Unit | Model | analysis', {
   # Specify the other units that are required for this test.
-  needs: ['model:file', 'model:vulnerability']
+  needs: ['model:file', 'model:vulnerability', 'model:owasp']
 }
 
 test 'it exists', (assert) ->
