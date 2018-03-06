@@ -15,7 +15,7 @@ Analysis = DS.Model.extend
   cvssVector: DS.attr 'string'
   cvssVersion: DS.attr 'number'
   cvssMetricsHumanized: DS.attr()
-  owaspCategories: DS.attr()
+  owasp: DS.hasMany 'owasp'
 
   hascvccBase: Ember.computed.equal 'cvssVersion', 3
 

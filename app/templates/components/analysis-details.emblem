@@ -3,11 +3,11 @@
       .column
         h6 = analysis.vulnerability.name
       .column.content-right
-        each analysis.categories as |category|
+        each analysis.owasp as |category|
           span.tag.owasp-tag
-            | OWASP : #{category.key}
+            | OWASP : #{category.code}
             = attach-tooltip
-              = category.description
+              = category.title
         span.seperator
           | |
         each analysis.vulnerability.tags as |tag|
