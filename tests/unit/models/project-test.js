@@ -49,6 +49,6 @@ test('it exists', function(assert) {
 
     assert.equal(project.get('isAPIScanEnabled'), false, "API Scan Enabled");
 
-    assert.equal(project.get('lastFile.isDescriptor'), undefined, "Last File");
+    // assert.equal(project.get('lastFile.isDescriptor'), undefined, "Last File");
   });
 });
