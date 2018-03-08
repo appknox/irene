@@ -1,14 +1,18 @@
+import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
-import hbs from 'htmlbars-inline-precompile';
 
 moduleForComponent('jira-account', 'Integration | Component | jira account', {
-  integration: true
+  unit: true
 });
 
-test('it renders', function(assert) {
-  assert.expect(1);
 
-  this.render(hbs("{{jira-account}}"));
+test('tapping button fires an external action', function(assert) {
 
-  assert.equal(this.$().text().trim(), 'Integrate JIRAAre you sure you want to revoke JIRA Integration?CancelOk');
+  var component = this.subject();
+  Ember.run(function() {
+    component.send('openRevokeJIRAConfirmBox');
+    assert.equal(component.get('showRevokeJIRAConfirmBox'),true, "Open Modal");
+    component.send('closeRevokeJIRAConfirmBox');
+    assert.equal(component.get('showRevokeJIRAConfirmBox'),false, "Close Modal");
+  });
 });

@@ -1,14 +1,18 @@
+import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
-import hbs from 'htmlbars-inline-precompile';
 
 moduleForComponent('subscription-component', 'Integration | Component | subscription component', {
-  integration: true
+  unit: true
 });
 
-test('it renders', function(assert) {
-  assert.expect(1);
 
-  this.render(hbs("{{subscription-component}}"));
+test('tapping button fires an external action', function(assert) {
 
-  assert.equal(this.$().text().trim(), 'Subscription DetailsCurrent PlanBilling Period  Are you sure you want to cancel Subscription?CancelOk');
+  var component = this.subject();
+  Ember.run(function() {
+    component.send('openCancelSubscriptionConfirmBox');
+    assert.equal(component.get('showCancelSubscriptionConfirmBox'),true, "Open Modal");
+    component.send('closeCancelSubscriptionConfirmBox');
+    assert.equal(component.get('showCancelSubscriptionConfirmBox'),false, "Close Modal");
+  });
 });

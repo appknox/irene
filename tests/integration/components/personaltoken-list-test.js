@@ -1,10 +1,15 @@
+import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
 
 moduleForComponent('personaltoken-list', 'Integration | Component | personaltoken list', {
-  integration: true
+  unit: true
 });
 
-test('it renders', function(assert) {
-  assert.ok(true);
-  assert.equal(this.$().text().trim(), '');
+test('tapping button fires an external action', function(assert) {
+
+  var component = this.subject();
+  Ember.run(function() {
+    component.send('openGenerateTokenModal');
+    assert.equal(component.get('showGenerateTokenModal'),true, "Open Modal");
+  });
 });

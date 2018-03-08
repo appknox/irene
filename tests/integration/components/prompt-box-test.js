@@ -1,14 +1,17 @@
+import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
-import hbs from 'htmlbars-inline-precompile';
 
 moduleForComponent('prompt-box', 'Integration | Component | prompt box', {
-  integration: true
+  unit: true
 });
 
-test('it renders', function(assert) {
+test('tapping button fires an external action', function(assert) {
   assert.expect(1);
 
-  this.render(hbs("{{prompt-box}}"));
+  var component = this.subject();
 
-  assert.equal(this.$().text().trim(), 'undefined');
+  Ember.run(function() {
+    component.send('clearModal');
+    assert.equal(component.get('isActive'),false, "Clear Modal");
+  });
 });

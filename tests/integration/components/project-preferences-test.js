@@ -1,14 +1,24 @@
+import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
-import hbs from 'htmlbars-inline-precompile';
 
 moduleForComponent('project-preferences', 'Integration | Component | project preferences', {
-  integration: true
+  unit: true,
+  needs: [
+    'model:device'
+  ]
 });
 
-test('it renders', function(assert) {
-  assert.expect(1);
+test('tapping button fires an external action', function(assert) {
 
-  this.render(hbs("{{project-preferences}}"));
+  var component = this.subject();
+  Ember.run(function() {
+    assert.deepEqual(component.get('availableDevices'),[], "Available Devices");
 
-  assert.equal(this.$().text().trim(), 'Device PreferencesSelect the Preferred Device Type and OS Version for Dynamic ScanSelected Device TypeNo PreferenceSelected OS VersionChange DeviceChange Device PreferenceDevice TypeNo PreferencePhoneTabletOS VersionNo PreferenceSelect the device');
+    assert.deepEqual(component.get('filteredDevices'),[], "Filtered Devices");
+
+    component.send("openProjectPreferenceModal");
+    assert.equal(component.get('projectPreferenceModal'),true, "Open Modal");
+    component.send("closeProjectPreferenceModal");
+    assert.equal(component.get('projectPreferenceModal'),false, "Close Modal");
+  });
 });

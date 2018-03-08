@@ -1,14 +1,15 @@
+import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
-import hbs from 'htmlbars-inline-precompile';
 
 moduleForComponent('modal-card', 'Integration | Component | modal card', {
-  integration: true
+  unit: true
 });
 
-test('it renders', function(assert) {
-  assert.expect(1);
+test('tapping button fires an external action', function(assert) {
 
-  this.render(hbs("{{modal-card}}"));
-
-  assert.equal(this.$().text().trim(), '');
+  var component = this.subject();
+  Ember.run(function() {
+    component.send('clearModal');
+    assert.equal(component.get('isActive'),false, "Active/False");
+  });
 });

@@ -1,14 +1,19 @@
+import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
-import hbs from 'htmlbars-inline-precompile';
 
 moduleForComponent('collaboration-details', 'Integration | Component | collaboration details', {
-  integration: true
+  unit: true
 });
 
-test('it renders', function(assert) {
+
+test('tapping button fires an external action', function(assert) {
   assert.expect(1);
 
-  this.render(hbs("{{collaboration-details}}"));
+  var component = this.subject();
 
-  assert.equal(this.$().text().trim(), 'undefinedDeveloperManagerAdminremoveAre you sure you want to remove this team from collaboration?Please enter the team name which you want to remove from collaborationremove');
+  Ember.run(function() {
+    component.send('openAddCollaborationPrompt');
+    component.send('closeAddCollaborationPrompt');
+    assert.equal(component.get('showAddCollaborationPrompt'),false, "Collaboration Prompt");
+  });
 });

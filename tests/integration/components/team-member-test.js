@@ -1,14 +1,17 @@
+import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
-import hbs from 'htmlbars-inline-precompile';
 
 moduleForComponent('team-member', 'Integration | Component | team member', {
-  integration: true
+  unit: true
 });
 
-test('it renders', function(assert) {
-  assert.expect(1);
+test('tapping button fires an external action', function(assert) {
 
-  this.render(hbs("{{team-member}}"));
-
-  assert.equal(this.$().text().trim(), 'memberremoveAre you sure you want to remove this team member?Please enter the name of team member who you want to removeremove');
+  var component = this.subject();
+  Ember.run(function() {
+    component.send('openRemoveMemberPrompt');
+    assert.equal(component.get('showRemoveMemberPrompt'),true, "Open Modal");
+    component.send('closeRemoveMemberPrompt');
+    assert.equal(component.get('showRemoveMemberPrompt'),false, "Close Modal");
+  });
 });

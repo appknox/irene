@@ -70,4 +70,43 @@ test('it exists', function(assert) {
     });
   assert.deepEqual(component.get("allUserRoles"), [{"id": 1},{"id": 2},{"id": 3}], "User Roles");
   assert.equal(component.confirmCallback(), undefined, "User Roles");
+
+  component.send('displayAppInfo');
+  assert.equal(component.get("isBasicInfo"), true, "Basic Info");
+  component.send('displayLoginDetails');
+  assert.equal(component.get("isLoginDetails"), true, "Login Details");
+  component.send('displayVPNDetails');
+  assert.equal(component.get("isVPNDetails"), true, "VPN Details");
+
+  component.set("apiScanModal", true);
+  component.send('goBack');
+  component.set("dynamicScanModal", true);
+  component.send('goBack');
+  assert.equal(component.get("showAPIScanModal"), true, "API Scan Modal");
+  assert.equal(component.get("showRunDynamicScanModal"), true, "Dynamic Scan Modal");
+  component.send('closeModal');
+  assert.equal(component.get("showAPIScanModal"), false, "API Scan Modal");
+  assert.equal(component.get("showAPIURLFilterScanModal"), false, "API URL Modal");
+  assert.equal(component.get("showRunDynamicScanModal"), false, "Dynamic Scan Modal");
+
+  component.send('openSubscribeModal');
+  assert.equal(component.get("showSubscribeModal"), true, "Close Subscribe Modal");
+  component.send('closeSubscribeModal');
+  assert.equal(component.get("showSubscribeModal"), false, "Open Subscribe Modal");
+
+  component.send('openManualScanModal');
+  assert.equal(component.get("showManualScanModal"), true, "Close Manual Scan Modal");
+  component.send('closeManualScanModal');
+  assert.equal(component.get("showManualScanModal"), false, "Open Manual Scan Modal");
+
+  component.send('openRescanModal');
+  assert.equal(component.get("showRescanModal"), true, "Close Manual Scan Modal");
+  component.send('closeRescanModal');
+  assert.equal(component.get("showRescanModal"), false, "Open Manual Scan Modal");
+
+  component.send('openRunDynamicScanModal');
+  assert.equal(component.get("showRunDynamicScanModal"), true, "Close Dynamic Scan Modal");
+  component.send('closeRunDynamicScanModal');
+  assert.equal(component.get("showRunDynamicScanModal"), false, "Open Dynamic Scan Modal");
+
 });

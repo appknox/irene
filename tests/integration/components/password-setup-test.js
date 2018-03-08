@@ -1,14 +1,18 @@
+import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
-import hbs from 'htmlbars-inline-precompile';
 
 moduleForComponent('password-setup', 'Integration | Component | password setup', {
-  integration: true
+  unit: true
 });
 
-test('it renders', function(assert) {
-  assert.expect(1);
+test('tapping button fires an external action', function(assert) {
 
-  this.render(hbs("{{password-setup}}"));
-
-  assert.equal(this.$().text().trim(), 'Security fanatics at your serviceSet Your PasswordSet Password');
+  var component = this.subject();
+  Ember.run(function() {
+    component.set("password", "test");
+    assert.equal(component.validate()[0], "Password length must be greater than or equal to 6", "Validate Password");
+    component.set("password", "test233s");
+    component.set("confirmPassword", "test233s1");
+    assert.equal(component.validate()[0], "Passwords doesn't match", "Validate Password");
+  });
 });

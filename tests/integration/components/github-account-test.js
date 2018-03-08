@@ -1,14 +1,18 @@
+import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
-import hbs from 'htmlbars-inline-precompile';
 
 moduleForComponent('github-account', 'Integration | Component | github account', {
-  integration: true
+  unit: true
 });
 
-test('it renders', function(assert) {
-  assert.expect(1);
+test('tapping button fires an external action', function(assert) {
 
-  this.render(hbs("{{github-account}}"));
+  var component = this.subject();
 
-  assert.equal(this.$().text().trim(), 'Integrate GitHubAre you sure you want to revoke Github Integration?CancelOk');
+  Ember.run(function() {
+    component.send('openRevokeGithubConfirmBox');
+    assert.equal(component.get('showRevokeGithubConfirmBox'),true, "Open Modal");
+    component.send('closeRevokeGithubConfirmBox');
+    assert.equal(component.get('showRevokeGithubConfirmBox'),false, "Close Modal");
+  });
 });

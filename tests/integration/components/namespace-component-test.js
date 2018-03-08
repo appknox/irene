@@ -1,14 +1,15 @@
+import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
-import hbs from 'htmlbars-inline-precompile';
 
 moduleForComponent('namespace-component', 'Integration | Component | namespace component', {
-  integration: true
+  unit: true
 });
 
-test('it renders', function(assert) {
-  assert.expect(1);
+test('tapping button fires an external action', function(assert) {
 
-  this.render(hbs("{{namespace-component}}"));
-
-  assert.equal(this.$().text().trim(), 'no namespace+ Add NamespaceAdd NamespaceAdd Namespace');
+  var component = this.subject();
+  Ember.run(function() {
+    component.send('toggleNamespaceModal');
+    assert.equal(component.get('showNamespaceModal'),true, "Toggle Modal");
+  });
 });

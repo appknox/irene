@@ -17,13 +17,13 @@ const PasswordSetupComponent = Ember.Component.extend({
 
     if (password.length < 6) {
       this.validation_errors.push("Password length must be greater than or equal to 6");
-      return;
+      return this.validation_errors;
     }
     const confirmPassword = this.get("confirmPassword");
     if (password !== confirmPassword) {
       this.validation_errors.push("Passwords doesn't match");
+      return this.validation_errors;
     }
-    return this.validation_errors;
   },
 
   actions: {
