@@ -66,12 +66,12 @@ AuthMfaComponent = Ember.Component.extend
       @set "isEnablingMFA", true
       @get("ajax").post ENV.endpoints.enableMFA, data: data
       .then (data)->
-        that.get "isEnablingMFA", false
+        that.set "isEnablingMFA", false
         that.get("notify").success tMFAEnabled
         that.set "enableMFAOTP", ""
         that.set "showMFAEnableModal", false
       .catch (error) ->
-        that.get "isEnablingMFA", false
+        that.set "isEnablingMFA", false
         that.get("notify").error error.payload.message
         for error in error.errors
           that.get("notify").error error.detail?.message
@@ -85,15 +85,15 @@ AuthMfaComponent = Ember.Component.extend
         return @get("notify").error tEnterOTP if !isValidOTP otp
       data =
         otp: disableMFAOTP
-      @set "isDisablingMFA", true  
+      @set "isDisablingMFA", true
       @get("ajax").post ENV.endpoints.disableMFA, data: data
       .then (data)->
-        that.get "isDisablingMFA", false
+        that.set "isDisablingMFA", false
         that.get("notify").success tMFADisabled
         that.set "disableMFAOTP", ""
         that.set "showMFADisableModal", false
       .catch (error) ->
-        that.get "isDisablingMFA", false
+        that.set "isDisablingMFA", false
         that.get("notify").error error.payload.message
         for error in error.errors
           that.get("notify").error error.detail?.message
