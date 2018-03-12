@@ -11,6 +11,8 @@ const NamespaceComponentComponent = Ember.Component.extend({
   isAddingNamespace: false,
   showNamespaceModal: false,
   i18n: Ember.inject.service(),
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
   tRequestToAddNamespace: t("requestToAddNamespace"),
   tPleaseEnterAnyNamespace: t("pleaseEnterAnyNamespace"),
 
@@ -30,14 +32,18 @@ const NamespaceComponentComponent = Ember.Component.extend({
       this.set("isAddingNamespace", true);
       this.get("ajax").post(ENV.endpoints.namespaceAdd, {data})
       .then(function() {
-        that.set("isAddingNamespace", false);
-        that.set("namespace", "");
         that.get("notify").success(tRequestToAddNamespace);
-        that.set("showNamespaceModal", false);
+        if(!that.isDestroyed) {
+          that.set("isAddingNamespace", false);
+          that.set("namespace", "");
+          that.set("showNamespaceModal", false);
+        }
       })
       .catch(function(error) {
-        that.set("isAddingNamespace", false);
-        that.get("notify").error(error.payload.message);
+        if(!that.isDestroyed) {
+          that.set("isAddingNamespace", false);
+          that.get("notify").error(error.payload.message);
+        }
       });
     },
 

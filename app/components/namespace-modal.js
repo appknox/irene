@@ -5,6 +5,8 @@ import { translationMacro as t } from 'ember-i18n';
 const NamespaceModalComponent = Ember.Component.extend({
 
   i18n: Ember.inject.service(),
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
   showNamespaceModal: false,
 
   newNamespaceObserver: Ember.observer("realtime.namespace", function() {
@@ -29,7 +31,9 @@ const NamespaceModalComponent = Ember.Component.extend({
       this.get("ajax").post(ENV.endpoints.namespaceAdd, {data})
       .then(function() {
         that.get("notify").success(tRequestToAddNamespace);
-        that.set("showNamespaceModal", false);
+        if(!that.isDestroyed) {
+          that.set("showNamespaceModal", false);
+        }
       })
       .catch(function(error) {
         that.get("notify").error(error.payload.message);
