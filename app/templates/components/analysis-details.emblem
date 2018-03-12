@@ -1,15 +1,22 @@
-.message-header.vuln-header.hideOrShow class=progressClass click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus
+.message-header.vuln-header.hideOrShow click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus class=progressClass
     .columns
       .column
-        h5 = analysis.vulnerability.name
-      .column.is-one-third.content-right
+        h6 = analysis.vulnerability.name
+      .column.content-right
+        each analysis.owasp as |category|
+         span.tag.owasp-tag
+           | OWASP : #{category.code}
+           = attach-tooltip
+             = category.title
+         span.seperator
+           | |
         each analysis.vulnerability.tags as |tag|
           span.tag = tag
         div.margin-left.details
           if showVulnerability
-            i.fa.fa-minus
+            i.fa.fa-chevron-up
           else
-            i.fa.fa-plus
+            i.fa.fa-chevron-down
 
 if showVulnerability
   .message-body.vuln-body

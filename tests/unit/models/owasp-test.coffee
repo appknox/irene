@@ -1,8 +1,8 @@
 `import { moduleForModel, test } from 'ember-qunit'`
 
-moduleForModel 'analysis', 'Unit | Model | analysis', {
+moduleForModel 'owasp', 'Unit | Model | owasp', {
   # Specify the other units that are required for this test.
-  needs: ['model:file', 'model:vulnerability', 'model:owasp']
+  needs: []
 }
 
 test 'it exists', (assert) ->
