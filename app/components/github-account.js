@@ -6,6 +6,8 @@ import triggerAnalytics from 'irene/utils/trigger-analytics';
 const GithubAccountComponent = Ember.Component.extend({
 
   i18n: Ember.inject.service(),
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
 
   isRevokingGithub: false,
   isIntegratingGithub: false,
@@ -20,12 +22,16 @@ const GithubAccountComponent = Ember.Component.extend({
     .then(function() {
       that.get("notify").success(tGithubWillBeRevoked);
       that.send("closeRevokeGithubConfirmBox");
-      that.set("user.hasGithubToken", false);
-      that.set("isRevokingGithub", false);
+      if(!that.isDestroyed) {
+        that.set("user.hasGithubToken", false);
+        that.set("isRevokingGithub", false);
+      }
     })
     .catch(function(error) {
-      that.set("isRevokingGithub", false);
-      that.get("notify").error(error.payload.error);
+      if(!that.isDestroyed) {
+        that.set("isRevokingGithub", false);
+        that.get("notify").error(error.payload.error);
+      }
     });
   },
 

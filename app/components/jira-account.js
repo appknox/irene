@@ -6,7 +6,8 @@ import triggerAnalytics from 'irene/utils/trigger-analytics';
 const JiraAccountComponent = Ember.Component.extend({
 
   i18n: Ember.inject.service(),
-
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
   user: null,
   jiraHost: "",
   jiraUsername: "",
@@ -26,14 +27,18 @@ const JiraAccountComponent = Ember.Component.extend({
     this.set("isRevokingJIRA", true);
     this.get("ajax").post(ENV.endpoints.revokeJira)
     .then(function() {
-      that.set("isRevokingJIRA", false);
+      if(!that.isDestroyed) {
+        that.set("isRevokingJIRA", false);
+        that.set("user.hasJiraToken", false);
+      }
       that.get("notify").success(tJiraWillBeRevoked);
       that.send("closeRevokeJIRAConfirmBox");
-      that.set("user.hasJiraToken", false);
     })
     .catch(function(error) {
-      that.set("isRevokingJIRA", false);
-      that.get("notify").error(error.payload.error);
+      if(!that.isDestroyed) {
+        that.set("isRevokingJIRA", false);
+        that.get("notify").error(error.payload.error);
+      }
     });
   },
 
@@ -57,13 +62,17 @@ const JiraAccountComponent = Ember.Component.extend({
       this.set("isIntegratingJIRA", true);
       this.get("ajax").post(ENV.endpoints.integrateJira, {data})
       .then(function(){
-        that.set("isIntegratingJIRA", false);
-        that.set("user.hasJiraToken", true);
+        if(!that.isDestroyed) {
+          that.set("isIntegratingJIRA", false);
+          that.set("user.hasJiraToken", true);
+        }
         that.get("notify").success(tJiraIntegrated);
         triggerAnalytics('feature',ENV.csb.integrateJIRA);})
       .catch(function(error) {
-        that.set("isIntegratingJIRA", false);
-        that.get("notify").error(error.payload.message);
+        if(!that.isDestroyed) {
+          that.set("isIntegratingJIRA", false);
+          that.get("notify").error(error.payload.message);
+        }
       });
     },
 

@@ -4,6 +4,8 @@ import ENV from 'irene/config/environment';
 const InvoiceOverviewComponent = Ember.Component.extend({
 
   invoice: null,
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
   tagName:["tr"],
 
   isDownloadingInvoice: false,
@@ -16,12 +18,16 @@ const InvoiceOverviewComponent = Ember.Component.extend({
       this.set("isDownloadingInvoice", true);
       this.get("ajax").request(url)
       .then(function(result){
-        window.location = result.url;
-        that.set("isDownloadingInvoice", false);
+        if(!that.isDestroyed) {
+          window.location = result.url;
+          that.set("isDownloadingInvoice", false);
+        }
       })
       .catch(function(error) {
-        that.set("isDownloadingInvoice", false);
-        that.get("notify").error(error.payload.error);
+        if(!that.isDestroyed) {
+          that.set("isDownloadingInvoice", false);
+          that.get("notify").error(error.payload.error);
+        }
       });
     }
   }

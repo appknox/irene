@@ -136,6 +136,10 @@ export default function() {
     return {};
   });
 
+  this.get('/invoices/:id/download_url', () => {
+    return {};
+  });
+
   this.post('/mfa/enable', () => {
     return {};
   });

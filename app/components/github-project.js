@@ -4,6 +4,8 @@ import { translationMacro as t } from 'ember-i18n';
 
 const GithubProjectComponent = Ember.Component.extend({
   i18n: Ember.inject.service(),
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
   project: null,
 
   isChangingRepo: false,
@@ -23,14 +25,18 @@ const GithubProjectComponent = Ember.Component.extend({
     this.set("isDeletingGithub", true);
     this.get("ajax").delete(deleteGithub)
     .then(function() {
-      that.set("isDeletingGithub", false);
+      if(!that.isDestroyed) {
+        that.set("isDeletingGithub", false);
+        that.set("project.githubRepo", "");
+      }
       that.get("notify").success(tProjectRemoved);
       that.send("closeDeleteGHConfirmBox");
-      that.set("project.githubRepo", "");
     })
     .catch(function(error) {
-      that.set("isDeletingGithub", false);
-      that.get("notify").error(error.payload.error);
+      if(!that.isDestroyed) {
+        that.set("isDeletingGithub", false);
+        that.get("notify").error(error.payload.error);
+      }
     });
   },
 
@@ -42,9 +48,15 @@ const GithubProjectComponent = Ember.Component.extend({
     const tFetchGitHubRepoFailed = this.get("tFetchGitHubRepoFailed");
     const that = this;
     this.get("ajax").request(ENV.endpoints.githubRepos)
-    .then(data => that.set("githubRepos", data.repos))
+    .then(function(data) {
+      if(!that.isDestroyed) {
+        that.set("githubRepos", data.repos);
+      }
+    })
     .catch(function() {
-      that.get("notify").error(tFetchGitHubRepoFailed);
+      if(!that.isDestroyed) {
+        that.get("notify").error(tFetchGitHubRepoFailed);
+      }
     });
   }).on("init"),
 
@@ -61,13 +73,18 @@ const GithubProjectComponent = Ember.Component.extend({
       this.set("isChangingRepo", true);
       this.get("ajax").post(setGithub, {data})
       .then(function() {
-        that.set("isChangingRepo", false);
+        if(!that.isDestroyed) {
+          that.set("isChangingRepo", false);
+          that.set("project.githubRepo", repo);
+        }
         that.get("notify").success(tRepoIntegrated);
-        that.set("project.githubRepo", repo);
+
       })
       .catch(function(error) {
-        that.set("isChangingRepo", false);
-        that.get("notify").error(error.payload.error);
+        if(!that.isDestroyed) {
+          that.set("isChangingRepo", false);
+          that.get("notify").error(error.payload.error);
+        }
       });
     },
 

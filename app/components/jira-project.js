@@ -4,6 +4,8 @@ import { translationMacro as t } from 'ember-i18n';
 
 const JiraProjectComponent = Ember.Component.extend({
   i18n: Ember.inject.service(),
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
   project: null,
   jiraProjects: ["Loading..."],
 
@@ -21,10 +23,15 @@ const JiraProjectComponent = Ember.Component.extend({
     this.get("ajax").delete(deleteJIRA)
     .then(function() {
       that.get("notify").success(tProjectRemoved);
-      that.send("closeDeleteJIRAConfirmBox");
-      that.set("project.jiraProject", "");})
+      if(!that.isDestroyed) {
+        that.send("closeDeleteJIRAConfirmBox");
+        that.set("project.jiraProject", "");
+      }
+    })
     .catch(function(error) {
-      that.get("notify").error(error.payload.error);
+      if(!that.isDestroyed) {
+        that.get("notify").error(error.payload.error);
+      }
     });
   },
 

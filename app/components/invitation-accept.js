@@ -5,6 +5,8 @@ import ENV from 'irene/config/environment';
 const InvitationAcceptComponent = Ember.Component.extend({
 
   invitation: null,
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
 
   actions: {
     acceptInvite() {
@@ -18,7 +20,10 @@ const InvitationAcceptComponent = Ember.Component.extend({
       .then(function(){
         // FIXME: This should be this.transitionTo`
         that.get("notify").success("User got created sucessfully", ENV.notifications);
-        setTimeout(() => window.location.href = "/", 3 * 1000);})
+        if(!that.isDestroyed) {
+          setTimeout(() => window.location.href = "/", 3 * 1000);
+        }
+      })
       .catch(function(error) {
         that.get("notify").error(error.payload.message, ENV.notifications);
       });
