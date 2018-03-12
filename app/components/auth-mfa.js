@@ -8,6 +8,8 @@ const isValidOTP = otp => otp.length > 5;
 const AuthMfaComponent = Ember.Component.extend({
 
   i18n: Ember.inject.service(),
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
   user: null,
   showMFAIntro: true,
   showBarCode: false,
@@ -75,13 +77,17 @@ const AuthMfaComponent = Ember.Component.extend({
       this.get("ajax").post(ENV.endpoints.enableMFA, {data})
       .then(function(){
         that.get("notify").success(tMFAEnabled);
-        that.set("enableMFAOTP", "");
-        that.set("showMFAEnableModal", false);
-        that.set("isEnablingMFA", false);
+        if(!that.isDestroyed) {
+          that.set("enableMFAOTP", "");
+          that.set("showMFAEnableModal", false);
+          that.set("isEnablingMFA", false);
+        }
       })
       .catch(function(error) {
-        that.set("isEnablingMFA", false);
-        that.get("notify").error(error.payload.message);
+        if(!that.isDestroyed) {
+          that.set("isEnablingMFA", false);
+          that.get("notify").error(error.payload.message);
+        }
       });
     },
 
@@ -99,13 +105,17 @@ const AuthMfaComponent = Ember.Component.extend({
       this.get("ajax").post(ENV.endpoints.disableMFA, {data})
       .then(function(){
         that.get("notify").success(tMFADisabled);
-        that.set("disableMFAOTP", "");
-        that.set("showMFADisableModal", false);
-        that.set("isDisablingMFA", false);
+        if(!that.isDestroyed) {
+          that.set("disableMFAOTP", "");
+          that.set("showMFADisableModal", false);
+          that.set("isDisablingMFA", false);
+        }
       })
       .catch(function(error) {
-        that.set("isDisablingMFA", false);
-        that.get("notify").error(error.payload.message);
+        if(!that.isDestroyed) {
+          that.set("isDisablingMFA", false);
+          that.get("notify").error(error.payload.message);
+        }
       });
     }
   }

@@ -12,6 +12,9 @@ const isRegexFailed = function(url) {
 const ApiFilterComponent = Ember.Component.extend({
   project: null,
   i18n: Ember.inject.service(),
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
+
   newUrlFilter: null,
   deletedURL: "",
 
@@ -71,17 +74,21 @@ const ApiFilterComponent = Ember.Component.extend({
       const that = this;
       this.get("ajax").post(apiScanOptions, {data})
       .then(function(){
-        that.set("isSavingFilter", false);
-        that.set("isDeletingURLFilter", false);
         that.get("notify").success(tUrlUpdated);
-        that.set("project.apiUrlFilters", updatedURLFilters);
-        that.set("newUrlFilter", "");
+        if(!that.isDestroyed) {
+          that.set("project.apiUrlFilters", updatedURLFilters);
+          that.set("isSavingFilter", false);
+          that.set("isDeletingURLFilter", false);
+          that.set("newUrlFilter", "");
+        }
         that.send("closeRemoveURLConfirmBox");
       })
       .catch(function(error) {
-        that.set("isSavingFilter", false);
-        that.set("isDeletingURLFilter", false);
-        that.get("notify").error(error.payload.message);
+        if(!that.isDestroyed) {
+          that.set("isSavingFilter", false);
+          that.set("isDeletingURLFilter", false);
+          that.get("notify").error(error.payload.message);
+        }
       });
     },
 

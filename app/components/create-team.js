@@ -8,7 +8,8 @@ const isEmpty = inputValue=> Ember.isEmpty(inputValue);
 const CreateTeamComponent = Ember.Component.extend({
 
   i18n: Ember.inject.service(),
-
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
   teamName: "",
 
   isCreatingTeam: false,
@@ -36,14 +37,19 @@ const CreateTeamComponent = Ember.Component.extend({
       this.set("isCreatingTeam", true);
       this.get("ajax").post(ENV.endpoints.teams, {data})
       .then(function(data){
-        that.set("isCreatingTeam", false);
-        that.store.pushPayload(data);
+        if(!that.isDestroyed) {
+          that.set("isCreatingTeam", false);
+          that.store.pushPayload(data);
+          that.set("teamName", "");
+          that.set("showTeamModal", false);
+        }
         that.get("notify").success(tTeamCreated);
-        that.set("teamName", "");
-        that.set("showTeamModal", false);})
+      })
       .catch(function(error) {
-        that.set("isCreatingTeam", false);
-        that.get("notify").error(error.payload.error);
+        if(!that.isDestroyed) {
+          that.set("isCreatingTeam", false);
+          that.get("notify").error(error.payload.error);
+        }
       });
     }
   }

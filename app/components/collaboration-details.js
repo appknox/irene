@@ -8,7 +8,8 @@ let roles = ENUMS.COLLABORATION_ROLE.CHOICES.reverse().slice(1);
 const CollaborationDetailsComponent = Ember.Component.extend({
 
   i18n: Ember.inject.service(),
-
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
   collaboration: null,
   roles,
   currentRole: roles[0].value,
@@ -73,10 +74,14 @@ const CollaborationDetailsComponent = Ember.Component.extend({
       this.get("ajax").post(url , {data})
       .then(function(){
         that.get("notify").success(tPermissionChanged);
-        that.set("isChangingRole", false);
+        if(!that.isDestroyed) {
+          that.set("isChangingRole", false);
+        }
       })
       .catch(function(error) {
-        that.set("isChangingRole", false);
+        if(!that.isDestroyed) {
+          that.set("isChangingRole", false);
+        }
         that.get("notify").error(error.payload.message, ENV.notifications);
       });
     },

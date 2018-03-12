@@ -2,7 +2,7 @@ import ENUMS from 'irene/enums';
 import { test, moduleForComponent } from 'ember-qunit';
 
 moduleForComponent('file-details', 'Integration | Component | file details', {
-  unit: false
+  unit: true
 });
 
 test('tapping button fires an external action', function(assert) {

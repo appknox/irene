@@ -5,7 +5,8 @@ import { translationMacro as t } from 'ember-i18n';
 const CollaborationComponentComponent = Ember.Component.extend({
 
   i18n: Ember.inject.service(),
-
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
   project: null,
   selectedTeam: 0,
   isAddingCollaboration: false,
@@ -44,13 +45,17 @@ const CollaborationComponentComponent = Ember.Component.extend({
       this.set("isAddingCollaboration", true);
       this.get("ajax").post(ENV.endpoints.collaborations, {data})
       .then(function(){
-        that.set("isAddingCollaboration", false);
-        that.send("closeModal");
         that.get("notify").success(tCollaborationAdded);
+        if(!that.isDestroyed) {
+          that.set("isAddingCollaboration", false);
+        }
+        that.send("closeModal");
       })
       .catch(function(error) {
-        that.set("isAddingCollaboration", false);
-        that.get("notify").error(error.payload.message, ENV.notifications);
+        if(!that.isDestroyed) {
+          that.set("isAddingCollaboration", false);
+          that.get("notify").error(error.payload.message, ENV.notifications);
+        }
       });
     },
 
