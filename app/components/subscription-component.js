@@ -6,6 +6,8 @@ const SubscriptionComponentComponent = Ember.Component.extend({
 
   subscription: null,
   i18n: Ember.inject.service(),
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
   tSubscriptionCancelled: t("subscriptionCancelled"),
 
   isCancellingSubscription: false,
@@ -20,14 +22,18 @@ const SubscriptionComponentComponent = Ember.Component.extend({
     this.set("isCancellingSubscription", true);
     this.get("ajax").delete(url)
     .then(function() {
-      that.set("subscription.isCancelled", true);
-      that.set("isCancellingSubscription", false);
+      if(!that.isDestroyed) {
+        that.set("subscription.isCancelled", true);
+        that.set("isCancellingSubscription", false);
+      }
       that.get("notify").success(tSubscriptionCancelled);
       that.send("closeCancelSubscriptionConfirmBox");
     })
     .catch(function(error) {
-      that.set("isCancellingSubscription", false);
-      that.get("notify").error(error.payload.message);
+      if(!that.isDestroyed) {
+        that.set("isCancellingSubscription", false);
+        that.get("notify").error(error.payload.message);
+      }
     });
   },
 

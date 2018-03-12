@@ -4,6 +4,8 @@ import { translationMacro as t } from 'ember-i18n';
 
 const TeamMemberComponent = Ember.Component.extend({
   i18n: Ember.inject.service(),
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
   team: null,
   tagName: ["tr"],
 
@@ -27,9 +29,12 @@ const TeamMemberComponent = Ember.Component.extend({
     this.set("isRemovingMember", true);
     this.get("ajax").delete(url)
     .then(function(data){
-      that.set("isRemovingMember", false);
-      that.store.pushPayload(data);
-      that.get("notify").success(`${tTeamMember} ${teamMember} ${tTeamMemberRemoved}`);})
+      that.get("notify").success(`${tTeamMember} ${teamMember} ${tTeamMemberRemoved}`);
+      if(!that.isDestroyed) {
+        that.set("isRemovingMember", false);
+        that.store.pushPayload(data);    
+      }
+    })
     .catch(function(error) {
       that.set("isRemovingMember", false);
       that.get("notify").error(error.payload.message);

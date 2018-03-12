@@ -10,7 +10,8 @@ const isEmpty = inputValue=> Ember.isEmpty(inputValue);
 const TeamDetailsComponent = Ember.Component.extend({
 
   i18n: Ember.inject.service(),
-
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
   team: null,
   teamMember: "",
   isInvitingMember: false,
@@ -49,15 +50,18 @@ const TeamDetailsComponent = Ember.Component.extend({
       this.set("isInvitingMember", true);
       this.get("ajax").post(url, {data})
       .then(function(data){
-        that.set("isInvitingMember", false);
         if (__guard__(data != null ? data.data : undefined, x => x.type) === "team") {
           that.store.pushPayload(data);
           that.get("notify").success(tTeamMemberAdded);
         } else {
           that.get("notify").success(tTeamMemberInvited);
         }
-        that.set("teamMember", "");
-        that.set("showAddMemberModal", false);})
+        if(!that.isDestroyed) {
+          that.set("isInvitingMember", false);
+          that.set("teamMember", "");
+          that.set("showAddMemberModal", false);
+        }
+      })
       .catch(function(error) {
         that.set("isInvitingMember", false);
         that.get("notify").error(error.payload.message);

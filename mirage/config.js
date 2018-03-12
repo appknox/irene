@@ -135,7 +135,7 @@ export default function() {
   this.post('/reset', () => {
     return {};
   });
-  
+
   this.post('/setup', () => {
     return {};
   });
@@ -192,7 +192,7 @@ export default function() {
    return;
   });
 
-  this.delete('/teams/:id/members/Berniece', () => {
+  this.delete('/teams/:id/members/yash', () => {
    return;
   });
 

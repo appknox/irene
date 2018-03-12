@@ -10,6 +10,8 @@ const ProjectPreferencesComponent = Ember.Component.extend({
   isSavingPreference: false,
   i18n: Ember.inject.service(),
   store: Ember.inject.service(),
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
   selectedDeviceType: ENUMS.DEVICE_TYPE.NO_PREFERENCE,
   deviceTypes: ENUMS.DEVICE_TYPE.CHOICES.slice(1, -1),
 
@@ -69,13 +71,17 @@ const ProjectPreferencesComponent = Ember.Component.extend({
       this.set("isSavingPreference", true);
       this.get("ajax").post(devicePreferences, {data})
       .then(function() {
-        that.set("isSavingPreference", false);
         that.get("notify").success(tDeviceSelected);
-        that.set("projectPreferenceModal", false);
+        if(!that.isDestroyed) {
+          that.set("isSavingPreference", false);
+          that.set("projectPreferenceModal", false);
+        }
       })
       .catch(function() {
-        that.set("isSavingPreference", false);
-        that.get("notify").error(tPleaseTryAgain);
+        if(!that.isDestroyed) {
+          that.set("isSavingPreference", false);
+          that.get("notify").error(tPleaseTryAgain);
+        }
       });
     },
 
