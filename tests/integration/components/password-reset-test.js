@@ -2,11 +2,15 @@ import Ember from 'ember';
 import tHelper from 'ember-i18n/helper';
 import localeConfig from 'ember-i18n/config/en';
 import { test, moduleForComponent } from 'ember-qunit';
+import { startMirage } from 'irene/initializers/ember-cli-mirage';
 
 moduleForComponent('password-reset', 'Integration | Component | password reset', {
   unit: true,
   needs: [
     'service:i18n',
+    'service:ajax',
+    'service:notification-messages-service',
+    'service:session',
     'locale:en/translations',
     'locale:en/config',
     'util:i18n/missing-message',
@@ -20,6 +24,13 @@ moduleForComponent('password-reset', 'Integration | Component | password reset',
 
     // register t helper
     this.register('helper:t', tHelper);
+
+    // start Mirage
+    this.server = startMirage();
+  },
+  afterEach() {
+    // shutdown Mirage
+    this.server.shutdown();
   }
 });
 
@@ -32,5 +43,15 @@ test('tapping button fires an external action', function(assert) {
     component.set("password", "test233s");
     component.set("confirmPassword", "test233s1");
     assert.equal(component.validate()[0].string, "Passwords doesnt match", "Validate Password");
+
+    component.send("reset");
+
+    component.set("password", "test21234");
+    component.set("confirmPassword", "test21234");
+
+    assert.equal(component.validate(), undefined, "Validate Password");
+
+    component.send("reset");
+    assert.equal(component.get("isResettingPassword"), true, 'Resetting Password');
   });
 });

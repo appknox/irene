@@ -124,6 +124,22 @@ export default function() {
     return {};
   });
 
+  this.post('/change_password', () => {
+    return {};
+  });
+
+  this.post('/recover', () => {
+    return {};
+  });
+
+  this.post('/reset', () => {
+    return {};
+  });
+  
+  this.post('/setup', () => {
+    return {};
+  });
+
   this.delete('/delete_github_repo/:id', () => {
     return {};
   });

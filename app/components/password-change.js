@@ -7,6 +7,8 @@ const isValidPassword = password=> password.length > 5;
 
 const PasswordChangeComponent = Ember.Component.extend({
   i18n: Ember.inject.service(),
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
   passwordCurrent: "",
   passwordNew: "",
   passwordConfirm: "",
@@ -38,15 +40,17 @@ const PasswordChangeComponent = Ember.Component.extend({
       const ajax = this.get("ajax");
       ajax.post(ENV.endpoints.changePassword, {data})
       .then(function() {
-        that.set("isChangingPassword", false);
-        that.setProperties({
-          passwordCurrent: "",
-          passwordNew: "",
-          passwordConfirm: ""
-          });
         that.get("notify").success(tPasswordChanged);
         triggerAnalytics('feature',ENV.csb.changePassword);
-        setTimeout(() => window.location.href = "/", 1 * 1000);
+        if(!that.isDestroyed) {
+          that.set("isChangingPassword", false);
+          that.setProperties({
+            passwordCurrent: "",
+            passwordNew: "",
+            passwordConfirm: ""
+            });
+          setTimeout(() => window.location.href = "/", 1 * 1000);
+        }
       })
       .catch(function(error) {
         that.set("isChangingPassword", false);

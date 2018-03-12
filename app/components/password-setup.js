@@ -3,6 +3,9 @@ import ENV from 'irene/config/environment';
 
 const PasswordSetupComponent = Ember.Component.extend({
 
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
+
   uuid: "",
   token: "",
   password: "",
@@ -45,13 +48,17 @@ const PasswordSetupComponent = Ember.Component.extend({
       this.set("isSettingPassword", true);
       this.get("ajax").post(ENV.endpoints.setup, {data})
       .then(function(){
-        that.set("isSettingPassword", false);
-        that.container.lookup("route:setup").transitionTo("login");
+        if(!that.isDestroyed) {
+          that.set("isSettingPassword", false);
+          that.container.lookup("route:setup").transitionTo("login");
+        }
         that.get("notify").success("Password is successfully set");
       })
       .catch(function(error) {
-        that.set("isSettingPassword", false);
-        that.get("notify").error(error.payload.message);
+        if(!that.isDestroyed) {
+          that.set("isSettingPassword", false);
+          that.get("notify").error(error.payload.message);
+        }
       });
     }
   }

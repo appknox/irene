@@ -4,6 +4,8 @@ import { translationMacro as t } from 'ember-i18n';
 
 const PasswordResetComponent = Ember.Component.extend({
   i18n: Ember.inject.service(),
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
 
   uuid: "",
   token: "",
@@ -56,12 +58,16 @@ const PasswordResetComponent = Ember.Component.extend({
       this.set("isResettingPassword", true);
       this.get("ajax").post(ENV.endpoints.reset, {data})
       .then(function(){
-        that.container.lookup("route:reset").transitionTo("login");
+        if(!that.isDestroyed) {
+          that.container.lookup("route:reset").transitionTo("login");
+        }
         that.get("notify").success(tPasswordIsReset);
       })
       .catch(function(error) {
-        that.set("isResettingPassword", false);
-        that.get("notify").error(error.payload.message);
+        if(!that.isDestroyed) {
+          that.set("isResettingPassword", false);
+          that.get("notify").error(error.payload.message);
+        }
       });
     }
   }
