@@ -4,6 +4,8 @@ import { translationMacro as t } from 'ember-i18n';
 
 const PersonaltokenDetailComponent = Ember.Component.extend({
   i18n: Ember.inject.service(),
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
   tagName: '',
 
 
@@ -22,14 +24,18 @@ const PersonaltokenDetailComponent = Ember.Component.extend({
     this.set("isDeletingToken", true);
     this.get('ajax').delete(url)
     .then(function() {
-      that.set('isNotRevoked', false);
-      that.set("isDeletingToken", false);
+      if(!that.isDestroyed) {
+        that.set('isNotRevoked', false);
+        that.set("isDeletingToken", false);
+        that.send('closeRevokePersonalTokenConfirmBox');
+      }
       that.get('notify').success(tTokenRevoked);
-      that.send('closeRevokePersonalTokenConfirmBox');
     })
     .catch(function(error) {
-      that.set("isDeletingToken", false);
-      that.get("notify").error(error.payload.message);
+      if(!that.isDestroyed) {
+        that.set("isDeletingToken", false);
+        that.get("notify").error(error.payload.message);
+      }
     });
   },
 

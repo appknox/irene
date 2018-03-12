@@ -8,6 +8,8 @@ const isEmpty = inputValue=> Ember.isEmpty(inputValue);
 
 const PersonaltokenListComponent = Ember.Component.extend(PaginateMixin, {
   i18n: Ember.inject.service(),
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
 
 
   // list tokens
@@ -44,16 +46,20 @@ const PersonaltokenListComponent = Ember.Component.extend(PaginateMixin, {
       this.set('isGeneratingToken', true);
       this.get('ajax').post(ENV.endpoints.personaltokens, {data})
       .then(function(data){
-        that.set('isGeneratingToken', false);
-        that.store.pushPayload(data);
-        that.incrementProperty("version");
+        if(!that.isDestroyed) {
+          that.set('isGeneratingToken', false);
+          that.store.pushPayload(data);
+          that.incrementProperty("version");
+          that.set('tokenName', '');
+          that.set('showGenerateTokenModal', false);
+        }
         that.get('notify').success(tTokenCreated);
-        that.set('tokenName', '');
-        that.set('showGenerateTokenModal', false);
       })
       .catch(function(error) {
-        that.set('isGeneratingToken', false);
-        that.get("notify").error(error.payload.message);
+        if(!that.isDestroyed) {
+          that.set('isGeneratingToken', false);
+          that.get("notify").error(error.payload.message);
+        }
       });
     }
   },
