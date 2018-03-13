@@ -43,6 +43,10 @@ export default function() {
     return {};
   });
 
+  this.get('/signed_pdf_url/:id', () => {
+    return {};
+  });
+
   this.get('/dynamic/:id', () => {
     return {};
   });
@@ -141,6 +145,10 @@ export default function() {
   });
 
   this.delete('/delete_github_repo/:id', () => {
+    return {};
+  });
+
+  this.get('/dynamic_shutdown//:id', () => {
     return {};
   });
 

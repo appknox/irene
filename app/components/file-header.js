@@ -28,6 +28,8 @@ const FileHeaderComponent = Ember.Component.extend({
 
   i18n: Ember.inject.service(),
   trial: Ember.inject.service(),
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
 
   vpnStatuses: ["yes", "no"],
   loginStatuses: ["yes", "no"],
@@ -138,8 +140,10 @@ const FileHeaderComponent = Ember.Component.extend({
       this.set("isDownloadingReport", true);
       this.get("ajax").request(url)
       .then(function(result){
-        window.location = result.url;
-        that.set("isDownloadingReport", false);
+        if(!that.isDestroyed) {
+          window.location = result.url;
+          that.set("isDownloadingReport", false);
+        }
       })
       .catch(function() {
         that.set("isDownloadingReport", false);
@@ -170,9 +174,11 @@ const FileHeaderComponent = Ember.Component.extend({
         {isApiScanEnabled};
       this.get("ajax").post(apiScanOptions, {data})
       .then(function(){
-        that.send("closeModal");
-        that.send("dynamicScan");
         that.get("notify").success(tStartingScan);
+        if(!that.isDestroyed) {
+          that.send("closeModal");
+          that.send("dynamicScan");
+        }
       })
       .catch(function(error) {
         that.get("notify").error(error.payload.error);
@@ -367,11 +373,13 @@ const FileHeaderComponent = Ember.Component.extend({
       this.get("ajax").put(url, {data: JSON.stringify(data), contentType: 'application/json'})
       .then(function() {
         triggerAnalytics('feature', ENV.csb.requestManualScan);
-        that.set("isRequestingManual", false);
         that.get("notify").info(tManualRequested);
-        that.set("file.ifManualNotRequested", false);
-        that.set("showManualScanModal", false);
-        that.set("showManualScanFormModal", false);
+        if(!that.isDestroyed) {
+          that.set("isRequestingManual", false);
+          that.set("file.ifManualNotRequested", false);
+          that.set("showManualScanModal", false);
+          that.set("showManualScanFormModal", false);
+        }
       })
       .catch(function(error) {
         that.set("isRequestingManual", false);
@@ -448,7 +456,11 @@ const FileHeaderComponent = Ember.Component.extend({
       const file_id = this.get("file.id");
       const shutdownUrl = [ENV.endpoints.dynamicShutdown, file_id].join('/');
       this.get("ajax").request(shutdownUrl)
-      .then(() => file.setNone())
+      .then(function() {
+        if(!that.isDestroyed) {
+          file.setNone();
+        }
+      })
       .catch(function(error) {
         file.setNone();
         that.get("notify").error(error.payload.error);
@@ -464,9 +476,12 @@ const FileHeaderComponent = Ember.Component.extend({
       this.set("isStartingRescan", true);
       this.get("ajax").post(ENV.endpoints.rescan, {data})
       .then(function() {
-        that.set("isStartingRescan", false);
         that.get("notify").info(tRescanInitiated);
-        that.set("showRescanModal", false);})
+        if(!that.isDestroyed) {
+          that.set("isStartingRescan", false);
+          that.set("showRescanModal", false);
+        }
+      })
       .catch(function(error) {
         that.set("isStartingRescan", false);
         that.get("notify").error(error.payload.error);
