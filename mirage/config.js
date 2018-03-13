@@ -164,6 +164,10 @@ export default function() {
     return {};
   });
 
+  this.post('/chargebee/callback', () => {
+    return {};
+  });
+
   this.post('/mfa/enable', () => {
     return {};
   });
