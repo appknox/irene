@@ -1,11 +1,23 @@
 import Ember from 'ember';
-import ScrollTopMixin from '../../../mixins/scroll-top';
-import { module, test } from 'qunit';
+import DS from 'ember-data';
+import ScrollTopMixin from 'irene/mixins/scroll-top';
+import { moduleFor, test } from 'ember-qunit';
 
-module('Unit | Mixin | scroll top');
+moduleFor('mixin:scroll-top', 'Unit | Mixin | scroll top', {
+  subject() {
+    const ScrollTopObject = DS.Model.extend(ScrollTopMixin);
+    this.register('model:scroll-top-object', ScrollTopObject);
+    return Ember.run(() => {
+      let store = Ember.getOwner(this).lookup('service:store');
+      return store.createRecord('scroll-top-object', {});
+    });
+  }
+});
 
-test('it works', function(assert) {
-  const ScrollTopObject = Ember.Object.extend(ScrollTopMixin);
-  const subject = ScrollTopObject.create();
-  assert.ok(subject);
+test('the mixin does what it should', function(assert) {
+  const mixin = this.subject();
+
+  Ember.run(() => {
+    assert.notOk(mixin.activate());
+  });
 });
