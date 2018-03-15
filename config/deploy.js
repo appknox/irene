@@ -39,6 +39,16 @@ module.exports = function(deployTarget) {
       distribution: 'E1SR2PB8XTR9RC'
   };
   }
+  
+  if (deployTarget === 'whitelabel') {
+    ENV.build.environment = 'whitelabel';
+    // configure other plugins for production deploy target here
+
+    ENV.cloudfront = {
+      distribution: 'E1SR2PB8XTR9RC',
+      objectPaths: ['/*']
+  };
+  }
 
   if (deployTarget === 'whitelabel') {
     ENV.build.environment = 'whitelabel';

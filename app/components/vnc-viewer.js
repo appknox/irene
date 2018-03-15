@@ -44,10 +44,10 @@ const VncViewerComponent = Ember.Component.extend({
       'view_only': false,
 
       'onUpdateState'() {
-        if (ENUMS.PLATFORM.IOS !== that.get("file.project.platform")) {
-          // Only resize iOS Devices
-          return true;
-        }
+        // if (ENUMS.PLATFORM.IOS !== that.get("file.project.platform")) {
+        //   // Only resize iOS Devices
+        //   return true;
+        // }
         setTimeout(that.set_ratio.bind(that), 500);
         return true;
       },
@@ -75,12 +75,24 @@ const VncViewerComponent = Ember.Component.extend({
     }
   }).observes('file.dynamicStatus'),
 
+  screenRequired: ( function() {
+       const platform = this.get("file.project.platform");
+       const deviceType = this.get("file.project.deviceType");
+       return (platform === ENUMS.PLATFORM.ANDROID) && (deviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED);
+     }).property("file.project.platform", "file.project.deviceType"),
+
   deviceType: (function() {
     const platform = this.get("file.project.platform");
     const deviceType = this.get("file.project.deviceType");
     if (platform === ENUMS.PLATFORM.ANDROID) {
-      return "nexus5";
-    } else if (platform === ENUMS.PLATFORM.IOS) {
+      if (deviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED) {
+          return "tablet";
+      }
+      else {
+        return "nexus5";
+      }
+    }
+    else if (platform === ENUMS.PLATFORM.IOS) {
       if (deviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED) {
         return "ipad black";
       } else {

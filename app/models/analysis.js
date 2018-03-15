@@ -16,6 +16,7 @@ const Analysis = DS.Model.extend({
   cvssVector: DS.attr('string'),
   cvssVersion: DS.attr('number'),
   cvssMetricsHumanized: DS.attr(),
+  owasp: DS.hasMany('owasp'),
 
   hascvccBase: Ember.computed.equal('cvssVersion', 3),
 
@@ -80,7 +81,33 @@ const Analysis = DS.Model.extend({
       case ENUMS.RISK.HIGH: return tHigh;
       case ENUMS.RISK.CRITICAL: return tCritical;
     }
-  }).property("risk")
+  }).property("risk"),
+
+  categories: (function() {
+    const OWASPMap = {
+      "1_2013": "Improper Platform Usage", "2_2013": "Insecure Data Storage", "3_2013": "Insecure Communication", "4_2013": "Insecure Authentication",
+      "5_2013": "Insufficient Cryptography", "6_2013": "Insecure Authorization", "7_2013": "Client Code Quality", "8_2013": "Code Tampering",
+      "9_2013": "Reverse Engineering", "10_2013": "Extraneous Functionality", "11_2013": "Injection", "12_2013": "Broken Authentication and Session Management",
+      "13_2013": "Cross Site Scripting", "14_2013": "IDOR", "15_2013": "Security Misconfiguration", "16_2013": "Sensitive Data Exposure",
+      "17_2013": "Missing function ACL", "18_2013": "CSRF", "19_2013": "Using components with known vulns", "20_2013": "Unvalidated Redirects"
+    };
+    const owaspCategories = this.get("owasp");
+    if (owaspCategories === undefined) { return []; }
+    const categories = [];
+    for (let owaspCategory of owaspCategories) {
+      let initialKey = "M";
+      if (owaspCategory > ENUMS.OWASP_CATEGORIES.M10_2013) {
+        initialKey = "A";
+      }
+      const OWASPDict = {
+        key: `${initialKey}${owaspCategory.split("_")[0]}`,
+        description: OWASPMap[owaspCategory]
+      };
+      categories.push(OWASPDict);
+    }
+    return categories;
+  }).property("owasp")
+
 });
 
 export default Analysis;

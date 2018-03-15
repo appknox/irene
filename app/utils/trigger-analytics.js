@@ -2,7 +2,7 @@
 const triggerAnalytics = function(funct, data) {
   try {
     if (funct === "feature") {
-      return analytics.feature(data);
+      return analytics.feature(data.feature, data.module, data.product);
     } else if (funct === "logout") {
       return analytics.logout();
     } else if (funct === "login") {

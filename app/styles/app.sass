@@ -904,14 +904,45 @@ b.bold
     border: 1px solid #808080
 
 .message-header
-  padding: 0px 9px
+  padding: 4px 10px
+  h6
+    font-size: 16px
   .columns
     margin-top: 0px
 
 .message .message-header.is-progress
   border-color: rgb(255, 224, 221)
-  border-width: 2px 2px 2px 15px
+  border-width: 1px 1px 1px 5px
   border-style: solid
+
+.vuln-header
+  border-width: 1px 1px 1px 5px
+  .column
+    padding: 5px 10px
+  .tag
+    cursor: text
+    margin-top: 3px
+    font-size: 10px
+    border-radius: 5px
+    height: 20px
+  .seperator
+    font-size: 18px
+    margin-top: 0px
+    color: #CCC
+  small
+    margin-top: 5px
+
+.mp-minus + .message-meta-data
+  display: none
+
+.scan-tag
+  background-color: $default
+  color: #fff
+
+table.vuln-table
+  th, td
+    max-width: 130px
+    text-align: center
 
 .vulnerability-types
   text-align: center
@@ -1003,41 +1034,6 @@ ul.risk-table
         .progress-wrap
           margin-top: 50px
 
-.tooltip
-  &:hover
-    .tooltiptext
-      visibility: visible
-      transition-delay: 0s
-  .tooltiptext
-    text-transform: capitalize
-    visibility: hidden
-    width: 160px
-    background-color: $default
-    color: #fff
-    text-align: center
-    border-radius: 6px
-    position: absolute
-    top: 62px
-    right: 45px
-    z-index: 1
-    font-size: 12px
-    transition-delay: 1s
-    .read-more
-      padding-top: 10px
-      padding-bottom: 5px
-      a
-        padding: 2px 7px 2px 7px
-        background: rgba(255,255,255, 0.9)
-        border-radius: 3px
-  .tooltip-collapse
-    top: 95px
-    left: 20px
-    white-space: normal
-  .team-tooltip
-    top: 165px
-    left: 130px
-
-
 .mfa
   .fa-check
     color: $green
@@ -1075,8 +1071,10 @@ ul.risk-table
 
 .cvss-box
   border-radius: 5px
+  margin: 10px auto
   height: 100px
   display: block
+  padding-right: 30px
   h1
     padding-top: 30px
 
@@ -1218,16 +1216,6 @@ button.delete-button
   cursor: pointer
   width: 85px
   background-color: $white!important
-  .tooltiptext
-    box-shadow: 2px 2px 5px 2px #888888
-    position: relative
-    left: 100px
-    top: -140px
-    width: 200px
-    li
-      padding: 5px
-      list-style-type: none
-
   @each $name, $pair in $risk-names
     &.is-#{$name}
       color: nth($pair, 1)
@@ -1240,8 +1228,20 @@ button.delete-button
     color: #fff
 
 .vuln-body
-  border-width: 2px
+  border-width: 1px!important
   border-radius: 0px 0px 5px 5px!important
+  .risk-type-tag
+    margin: auto
+  .scan-category
+    font-size: 14px
+    margin-top: 5px
+    span
+      margin-top: -2px
+  .owasp-category
+    font-size: 14px
+    margin-top: 5px
+    span
+      margin-top: -2px
 
 .mp-minus
   border-radius: 5px 5px 0px 0px!important
@@ -1338,6 +1338,8 @@ button.delete-button
 .modal.is-active
   .marvel-device.ipad
     margin-left: 0px
+  .marvel-device.tablet
+    margin-left: 20px
 
 .marvel-device.ipad
   width: 282px!important
@@ -1346,6 +1348,17 @@ button.delete-button
   .screen canvas.canvas
     width: 282px!important
     height: auto!important
+
+.marvel-device.tablet
+  width: 320px!important
+  height: 480px!important
+  canvas.canvas
+    cursor: pointer!important
+    width: 300px!important
+    height: 480px!important
+  .vnc-text
+    display: none
+
 
 .marvel-device.iphone5s
   width: 245px!important
@@ -1920,3 +1933,6 @@ input:checked + .slider:before
     background-color: #FFFFFF
     .has-text-centered h6
       color: #6B6B6B
+
+.my-popper
+  display: none
