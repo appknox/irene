@@ -43,7 +43,9 @@ test('tapping button fires an external action', function(assert) {
   Ember.run(function() {
 
     component.set("project", {id:1});
-    assert.equal(component.confirmCallback(),undefined, "Confirm Callback");
+    assert.notOk(component.confirmCallback());
+
+    assert.notOk(component.fetchJiraProjects());
 
     component.send("openDeleteJIRAConfirmBox");
     assert.equal(component.get("showDeleteJIRAConfirmBox"),true, "Open");

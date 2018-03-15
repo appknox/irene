@@ -36,10 +36,6 @@ const JiraProjectComponent = Ember.Component.extend({
   },
 
   fetchJiraProjects: (function() {
-    if (ENV.environment === 'test') {
-      // FIXME: Fix this test properly
-      return;
-    }
     const tFetchJIRAProjectFailed = this.get("tFetchJIRAProjectFailed");
     const that = this;
     this.get("ajax").request(ENV.endpoints.jiraProjects)

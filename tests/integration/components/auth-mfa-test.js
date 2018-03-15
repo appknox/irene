@@ -9,6 +9,7 @@ moduleForComponent('auth-mfa', 'Integration | Component | auth mfa', {
   needs: [
     'service:i18n',
     'service:ajax',
+    'component:modal-card',
     'service:notification-messages-service',
     'service:session',
     'locale:en/translations',
@@ -36,6 +37,7 @@ moduleForComponent('auth-mfa', 'Integration | Component | auth mfa', {
 
 test('tapping button fires an external action', function(assert) {
   var component = this.subject();
+  this.render();
 
   Ember.run(function() {
 
@@ -46,6 +48,9 @@ test('tapping button fires an external action', function(assert) {
     component.send('showBarCode');
 
     assert.equal(component.get("showMFAIntro"), false, 'MFA Into');
+    component.set("user", {provisioningURL: "https://"});
+    assert.ok(component.didInsertElement());
+
     assert.equal(component.get("showBarCode"), true, 'Barcode');
 
     component.set("enableMFAOTP", "123456");

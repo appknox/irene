@@ -35,9 +35,23 @@ moduleForComponent('team-details', 'Integration | Component | team details', {
 });
 
 test('tapping button fires an external action', function(assert) {
-
   var component = this.subject();
+  var store = {
+    findAll: function() {
+      return [
+        {
+          id:1,
+          type: "invitation",
+          attributes: {
+            name: "test"
+          }
+        }
+      ];
+    }
+  };
+  component.set('store', store);
   Ember.run(function() {
+    assert.notOk(component.get("invitations"));
     component.send('openAddMemberModal');
     assert.equal(component.get('showAddMemberModal'),true, "Open Modal");
     component.send('closeAddMemberModal');
