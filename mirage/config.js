@@ -43,6 +43,10 @@ export default function() {
     return {};
   });
 
+  this.get('/signed_pdf_url/:id', () => {
+    return {};
+  });
+
   this.get('/dynamic/:id', () => {
     return {};
   });
@@ -99,6 +103,10 @@ export default function() {
     return {};
   });
 
+  this.post('/set_jira/:id', () => {
+    return {};
+  });
+
   this.post('/lang', () => {
     return {};
   });
@@ -124,7 +132,27 @@ export default function() {
     return {};
   });
 
+  this.post('/change_password', () => {
+    return {};
+  });
+
+  this.post('/recover', () => {
+    return {};
+  });
+
+  this.post('/reset', () => {
+    return {};
+  });
+
+  this.post('/setup', () => {
+    return {};
+  });
+
   this.delete('/delete_github_repo/:id', () => {
+    return {};
+  });
+
+  this.get('/dynamic_shutdown//:id', () => {
     return {};
   });
 
@@ -133,6 +161,14 @@ export default function() {
   });
 
   this.post('/api_scan_options/:id', () => {
+    return {};
+  });
+
+  this.get('/invoices/:id/download_url', () => {
+    return {};
+  });
+
+  this.post('/chargebee/callback', () => {
     return {};
   });
 
@@ -172,7 +208,7 @@ export default function() {
    return;
   });
 
-  this.delete('/teams/:id/members/Berniece', () => {
+  this.delete('/teams/:id/members/yash', () => {
    return;
   });
 

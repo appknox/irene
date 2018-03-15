@@ -25,7 +25,10 @@ module.exports = function(defaults) {
         whitelabel: '.env'
       }
     },
-    sourcemaps: {enabled: false}
+    sourcemaps: {enabled: false},
+    'ember-cli-babel': {
+     includePolyfill: true
+    }
   });
 
   // Custom hacks to get a similar build in staging and production
