@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import ENUMS from 'irene/enums';
 import tHelper from 'ember-i18n/helper';
 import localeConfig from 'ember-i18n/config/en';
 import { test, moduleForComponent } from 'ember-qunit';
@@ -7,7 +8,10 @@ import { startMirage } from 'irene/initializers/ember-cli-mirage';
 moduleForComponent('project-preferences', 'Integration | Component | project preferences', {
   unit: true,
   needs: [
+    'model:device',
     'service:i18n',
+    'helper:device-type',
+    'component:modal-card',
     'service:ajax',
     'service:notification-messages-service',
     'service:session',
@@ -37,9 +41,29 @@ moduleForComponent('project-preferences', 'Integration | Component | project pre
 test('tapping button fires an external action', function(assert) {
 
   var component = this.subject();
+  var store = {
+    findAll: function() {
+      return [
+        {
+          id:1,
+          type: "device",
+          attributes: {
+            name: "test",
+            platform: 1
+          }
+        }
+      ];
+    }
+  };
+  component.set('store', store);
+
+  this.render();
   Ember.run(function() {
     component.set("project", {id:1});
     component.send('versionSelected');
+
+    component.send('selectDeviceType');
+    component.send('selectVersion');
 
     assert.equal(component.get("isSavingPreference"), true, 'Saving Preference');
 
@@ -47,5 +71,14 @@ test('tapping button fires an external action', function(assert) {
     assert.equal(component.get("projectPreferenceModal"), true, 'Open Modal');
     component.send('closeProjectPreferenceModal');
     assert.equal(component.get("projectPreferenceModal"), false, 'Close Modal');
+
+    assert.deepEqual(component.get("availableDevices"), [], 'Available Devices');
+
+
+
+    component.set("selectedDeviceType", ENUMS.DEVICE_TYPE.NO_PREFERENCE);
+
+    assert.ok(component.get("filteredDevices"));
+
   });
 });

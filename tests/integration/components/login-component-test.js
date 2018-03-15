@@ -1,14 +1,14 @@
 import { test, moduleForComponent } from 'ember-qunit';
-import hbs from 'htmlbars-inline-precompile';
 
 moduleForComponent('login-component', 'Integration | Component | login component', {
-  integration: true
+  unit: true,
+  needs: [
+    'service:notification-messages-service'
+  ]
 });
 
-test('it renders', function(assert) {
-  assert.expect(1);
-
-  this.render(hbs("{{login-component}}"));
-
-  assert.equal(this.$().text().trim(), 'Security fanatics at your service Member LoginForgot Password?Login');
+test('tapping button fires an external action', function(assert) {
+  var component = this.subject();
+  component.send("authenticate");
+  assert.equal(component.get("MFAEnabled"), false, 'MFA Enabled');
 });

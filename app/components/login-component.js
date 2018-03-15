@@ -4,8 +4,12 @@ import {isUnauthorizedError} from 'ember-ajax/errors';
 
 const LoginComponentComponent = Ember.Component.extend({
   session: Ember.inject.service('session'),
+  notify: Ember.inject.service('notification-messages-service'),
   MFAEnabled: false,
   isLogingIn: false,
+  identification: "",
+  password: "",
+  otp: "",
   actions: {
     authenticate() {
       const that = this;
