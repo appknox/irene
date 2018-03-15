@@ -7,6 +7,7 @@ moduleForModel('analysis', 'Unit | Model | analysis', {
 
   needs: [
     'model:file',
+    'model:owasp',
     'model:vulnerability',
     'service:i18n',
     'locale:en/translations',
