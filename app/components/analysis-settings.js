@@ -6,6 +6,8 @@ const AnalysisSettingsComponent = Ember.Component.extend({
 
   project: null,
   i18n: Ember.inject.service(),
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
   isSavingStatus: false,
   tSavedPreferences: t("savedPreferences"),
 
@@ -22,9 +24,11 @@ const AnalysisSettingsComponent = Ember.Component.extend({
       this.set("isSavingStatus", true);
       this.get("ajax").post(unknownAnalysisStatus, {data})
       .then(function(){
-        that.set("isSavingStatus", false);
-        that.set("project.showUnknownAnalysis", isChecked);
         that.get("notify").success(tSavedPreferences);
+        if(!that.isDestroyed) {
+          that.set("isSavingStatus", false);
+          that.set("project.showUnknownAnalysis", isChecked);
+        }
       })
       .catch(function(error) {
         that.set("isSavingStatus", false);

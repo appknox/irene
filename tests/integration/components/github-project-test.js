@@ -9,6 +9,7 @@ moduleForComponent('github-project', 'Integration | Component | github project',
   unit: true,
   needs: [
     'service:i18n',
+    'component:confirm-box',
     'service:ajax',
     'service:notification-messages-service',
     'service:session',
@@ -38,7 +39,7 @@ moduleForComponent('github-project', 'Integration | Component | github project',
 test('tapping button fires an external action', function(assert) {
 
   var component = this.subject();
-
+  this.render();
   Ember.run(function() {
 
     component.set("project", {id:1});
@@ -48,6 +49,6 @@ test('tapping button fires an external action', function(assert) {
     assert.equal(component.get("showDeleteGHConfirmBox"),true, "Open");
     component.send("closeDeleteGHConfirmBox");
     assert.equal(component.get("showDeleteGHConfirmBox"),false, "Close");
-
+    component.send("selectRepo");
   });
 });

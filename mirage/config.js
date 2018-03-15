@@ -103,6 +103,10 @@ export default function() {
     return {};
   });
 
+  this.post('/set_jira/:id', () => {
+    return {};
+  });
+
   this.post('/lang', () => {
     return {};
   });

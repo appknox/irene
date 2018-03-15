@@ -4,11 +4,11 @@ import localeConfig from 'ember-i18n/config/en';
 import { test, moduleForComponent } from 'ember-qunit';
 import { startMirage } from 'irene/initializers/ember-cli-mirage';
 
-
 moduleForComponent('jira-project', 'Integration | Component | jira project', {
   unit: true,
   needs: [
     'service:i18n',
+    'component:confirm-box',
     'service:ajax',
     'service:notification-messages-service',
     'service:session',
@@ -38,6 +38,7 @@ moduleForComponent('jira-project', 'Integration | Component | jira project', {
 test('tapping button fires an external action', function(assert) {
 
   var component = this.subject();
+  this.render();
 
   Ember.run(function() {
 
@@ -48,6 +49,8 @@ test('tapping button fires an external action', function(assert) {
     assert.equal(component.get("showDeleteJIRAConfirmBox"),true, "Open");
     component.send("closeDeleteJIRAConfirmBox");
     assert.equal(component.get("showDeleteJIRAConfirmBox"),false, "Close");
+
+    component.send("selectProject");
 
   });
 });

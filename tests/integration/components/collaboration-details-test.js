@@ -7,6 +7,8 @@ import { startMirage } from 'irene/initializers/ember-cli-mirage';
 moduleForComponent('collaboration-details', 'Integration | Component | collaboration details', {
   unit: true,
   needs: [
+    'component:prompt-box',
+    'helper:role-humanized',
     'service:i18n',
     'service:ajax',
     'service:notification-messages-service',
@@ -38,7 +40,7 @@ moduleForComponent('collaboration-details', 'Integration | Component | collabora
 test('tapping button fires an external action', function(assert) {
 
   var component = this.subject();
-
+  this.render();
   Ember.run(function() {
     component.send('openAddCollaborationPrompt');
     component.send('closeAddCollaborationPrompt');
@@ -49,5 +51,8 @@ test('tapping button fires an external action', function(assert) {
     assert.deepEqual(component.get("otherRoles"), [{"value": "admin"}], 'Other Roles');
 
     assert.deepEqual(component.get("isDisabledSelectBox"), false, 'Default Team');
+
+    component.send("changeRole");
+
   });
 });
