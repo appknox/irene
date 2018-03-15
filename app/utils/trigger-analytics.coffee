@@ -1,7 +1,7 @@
 triggerAnalytics = (funct, data) ->
   try
     if funct is "feature"
-      analytics.feature(data)
+      analytics.feature(data.feature, data.module, data.product)
     else if funct is "logout"
       analytics.logout()
     else if funct is "login"
