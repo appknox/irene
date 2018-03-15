@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import ENUMS from 'irene/enums';
+import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
 
 const PricingPlanComponent = Ember.Component.extend({
@@ -71,7 +72,9 @@ const PricingPlanComponent = Ember.Component.extend({
           break;
       }
       const updatedUrl = [url, `subscription[plan_quantity]=${planQuantity}`].join('&');
-      window.location = updatedUrl;
+      if(ENV.environment === "production") {
+        window.location = updatedUrl;
+      }
     },
 
     incrementPlanQuantity() {

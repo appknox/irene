@@ -36,7 +36,6 @@ test('it renders', function(assert) {
 
 
 test('tapping button fires an external action', function(assert) {
-  assert.expect(6);
 
   var component = this.subject();
 
@@ -47,18 +46,22 @@ test('tapping button fires an external action', function(assert) {
 
     component.set('plan', {monthlyPrice: "120$"});
     assert.equal(component.get('totalPrice'), "120$", "Total Price/Monthly");
+    component.send("initiatePayment");
 
     component.set('plan', {quarterlyPrice: "240$"});
     component.set('paymentDuration', ENUMS.PAYMENT_DURATION.QUARTERLY);
     assert.equal(component.get('totalPrice'), "240$", "Total Price/Quarterly");
+    component.send("initiatePayment");
 
     component.set('plan', {halfYearlyPrice: "340$"});
     component.set('paymentDuration', ENUMS.PAYMENT_DURATION.HALFYEARLY);
     assert.equal(component.get('totalPrice'), "340$", "Total Price/Half Yearly");
+    component.send("initiatePayment");
 
     component.set('plan', {yearlyPrice: "640$"});
     component.set('paymentDuration', ENUMS.PAYMENT_DURATION.YEARLY);
     assert.equal(component.get('totalPrice'), "640$", "Total Price/Yearly");
+    component.send("initiatePayment");
 
   });
 });
