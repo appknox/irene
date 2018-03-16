@@ -29,6 +29,7 @@ export default function() {
   this.get('/devices', 'device');
   this.get('/invoices', 'invoice');
   this.get('/invoices/:id', 'invoice');
+  this.get('/attachments/:id', 'attachment');
   this.get('/invitations/', 'invitation');
   this.get('/subscriptions/', 'subscription');
   this.get('/stats/:id', 'stat');
@@ -165,6 +166,10 @@ export default function() {
   });
 
   this.get('/invoices/:id/download_url', () => {
+    return {};
+  });
+
+  this.get('/attachments/:id/download_url', () => {
     return {};
   });
 
