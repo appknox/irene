@@ -189,8 +189,10 @@ input
   .scan-text
     font-weight: lighter
     margin-top: 5px
-    margin-left: 20px
+    margin-left: 10px
     color: #FFF
+    padding: 10px 0px
+    font-size: 12px
   .project-count
     padding: 3px
     min-width: 120px
@@ -204,13 +206,16 @@ input
     margin-right: 15%
     margin-top: -5px
     a
+      max-width: 150px
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
       color: #e5e5e5
       margin: 10px 10px
       .sidebar-icons
         margin-top: 1px
       &:hover
         color: #FFF
-
 
 canvas.other-devices
   margin-top: 30px
@@ -1006,8 +1011,10 @@ ul.risk-table
 
 .button-width
   .column
-    margin-left: 5px
-    margin-right: 5px
+    text-align: center
+    button
+      padding: 5px
+      line-height: 0px
 
 .app-details-card
   .card-header
@@ -1628,6 +1635,10 @@ select:disabled
   margin-top: 0px
   border-radius: 5px
   color: #FFF
+  .user-name, .user-email
+    overflow: hidden
+    text-overflow: ellipsis
+    white-space: nowrap
   .user-name
     font-size: 16px
     text-align: center
