@@ -22,13 +22,14 @@ moduleForModel('invoice', 'Unit | Model | invoice', {
 test('it exists', function(assert) {
   const invoice = this.subject();
   Ember.run(function() {
-    invoice.set('paidOn', new Date("25 March 2015"));
-    assert.equal(invoice.get('paidOnHumanized'), "March 25, 2015", "Paid On");
+    const d = new Date("25 March 2015");
+    invoice.set('paidOn', d);
+    assert.equal(invoice.get('paidOnHumanized'), d.toLocaleDateString(), "Paid On");
 
     assert.equal(invoice.get('paidDate'), "Pending", "Paid Date Pending");
     assert.equal(invoice.get('paidStatus.string'), "Unpaid", "Unpaid");
     invoice.set('isPaid', true);
-    assert.equal(invoice.get('paidDate'), "March 25, 2015", "Paid Date");
+    assert.equal(invoice.get('paidDate'), d.toLocaleDateString(), "Paid Date");
     assert.equal(invoice.get('paidStatus.string'), "Paid", "Paid");
   });
 
