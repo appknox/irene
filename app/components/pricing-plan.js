@@ -72,7 +72,7 @@ const PricingPlanComponent = Ember.Component.extend({
           break;
       }
       const updatedUrl = [url, `subscription[plan_quantity]=${planQuantity}`].join('&');
-      if(ENV.environment === "production") {
+      if(ENV.environment === "production" || "staging") {
         window.location = updatedUrl;
       }
     },

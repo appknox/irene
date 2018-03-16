@@ -3,16 +3,16 @@
     footer.card-button
       .columns.button-width
         .column class=project.hasMultipleFiles::auto-adjust
-          = link-to 'authenticated.project.settings' project.id class="is-fullwidth mp-project-setting" tagName="button"
+          = link-to 'authenticated.project.settings' project.id class="mp-project-setting" tagName="button"
             = fa-icon "cog"
             | &nbsp; #{t "settings"}
         if project.hasMultipleFiles
           .column
-            = link-to 'authenticated.project.files' project.id class="is-fullwidth mp-all-scans" tagName="button"
+            = link-to 'authenticated.project.files' project.id class="mp-all-scans" tagName="button"
               = fa-icon "navicon"
               | &nbsp; #{t "allUploads"}
 
           .column
-            = link-to 'authenticated.choose' project.lastFile.id class="is-fullwidth mp-file-compare" tagName="button"
+            = link-to 'authenticated.choose' project.lastFile.id class="mp-file-compare" tagName="button"
               = fa-icon "exchange"
               | &nbsp; #{t "compare"}
