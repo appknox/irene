@@ -9,6 +9,7 @@ moduleForModel('analysis', 'Unit | Model | analysis', {
     'model:file',
     'model:owasp',
     'model:vulnerability',
+    'model:attachment',
     'service:i18n',
     'locale:en/translations',
     'locale:en/config',
