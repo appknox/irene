@@ -21,6 +21,7 @@ export default {
   "apps": "アプリ",
   "assignTeam":	"Assign Team",
   "analyzing": "分析中",
+  "attachments": "添付ファイル",
   "billing": "料金プラン",
   "billingPeriod": "支払い請求周期",
   "businessImplication": "ビジネスへの影響",

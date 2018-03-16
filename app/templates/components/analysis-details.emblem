@@ -70,7 +70,7 @@ if showVulnerability
 
         if analysis.attachments
           h5.margin-top20
-            | Attachments
+            = t "attachments"
 
           each analysis.attachments as |attachment|
             = attachment-detail attachment=attachment
