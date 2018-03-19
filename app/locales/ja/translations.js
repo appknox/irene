@@ -214,6 +214,7 @@ export default {
   "ok": "OK",
   "or": "または",
   "orginalRisk": "Orginal Risk",
+  "organization": "Organization",
   "osVersion": "OSバージョン",
   "overrideRisk": "Override Risk",
   "overriddenRisk": "Overridden Risk",

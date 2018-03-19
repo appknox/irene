@@ -20,6 +20,7 @@ export default function() {
   this.get('/plans', 'plan');
   this.get('/pricings/:id', 'pricing');
   this.get('/teams', 'team');
+  this.get('/organizations', 'organization');
   this.get('/teams/:id', 'team');
   this.get('/submissions/:id', 'submission');
   this.get('/submissions', 'submission');
