@@ -21,8 +21,9 @@ moduleForModel('subscription', 'Unit | Model | subscription', {
 test('it exists', function(assert) {
   const subscription = this.subject();
   Ember.run(function() {
-    subscription.set('expiryDate', new Date("25 March 2015"));
-    assert.equal(subscription.get('expiryDateOnHumanized'), "March 25, 2015", "Expiry Date");
+    const d = new Date("25 March 2015");
+    subscription.set('expiryDate', d);
+    assert.equal(subscription.get('expiryDateOnHumanized'), d.toLocaleDateString(), "Expiry Date");
 
     subscription.set('isTrial', true);
     subscription.set('isCancelled', true);

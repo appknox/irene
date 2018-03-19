@@ -67,3 +67,10 @@ if showVulnerability
             p.extra-desc = finding.title
             span.scrollable-box
               pre.pre-code = finding.description
+
+        if analysis.attachments
+          h5.margin-top20
+            = t "attachments"
+
+          each analysis.attachments as |attachment|
+            = attachment-detail attachment=attachment

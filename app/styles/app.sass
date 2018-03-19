@@ -5,6 +5,7 @@ $FreestyleGuide-color--secondary: $primary-darker
 $FreestyleGuide-color--foreground: $text
 $FreestyleGuide-color--background: $background
 @import 'ember-freestyle'
+@import 'vars'
 
 $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert), danger: ($danger, $danger-invert), critical: ($critical, $critical-invert)) !default
 
@@ -1947,3 +1948,46 @@ input:checked + .slider:before
 
 .my-popper
   display: none
+
+// attachments
+$attachment-icon-width: 4em
+.attachment
+  position: relative
+  display: flex
+  align-items: center
+  background: #f5f5f5
+  color: $text
+  margin-bottom: 1em
+  &:hover, &:focus, &:active
+    color: $primary
+  &::before
+    content: attr(data-type)
+    text-transform: uppercase
+    letter-spacing: 0.05em
+    font-size: 0.8em
+    font-weight: bold
+    display: block
+    width: $attachment-icon-width
+    height: $attachment-icon-width / 1.4
+    text-align: center
+    background: $grey
+    color: white
+    display: flex
+    align-items: center
+    justify-content: center
+
+  @each $extn, $color in $extensions-list
+    &[data-type=#{$extn}]
+      &::before
+        background: $color
+
+  &__label
+    max-width: 35em
+    display: inline-block
+    overflow: hidden
+    text-overflow: ellipsis
+    white-space: nowrap
+    margin-left: 0.5em
+  &-icon
+    position: absolute
+    right: 1em
