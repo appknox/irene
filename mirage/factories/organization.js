@@ -10,6 +10,6 @@ export default Base.extend({
     for (var i = 0; i < 5; i++) {
       desc.push(faker.name.firstName(2).split(" "));
     }
-    return desc.join(",");
+    return desc
   }
 });
