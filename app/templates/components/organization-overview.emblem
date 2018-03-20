@@ -10,7 +10,11 @@
       = link-to 'authenticated.organization.users'
         = fa-icon "user" class="sidebar-icons"
         | Users
+        span.count
+          | 4
     li class=teamClass click="displayTeam"
       = link-to 'authenticated.organization.teams'
-        = fa-icon "users" class="sidebar-icons"
+        = fa-icon "building" class="sidebar-icons"
         = t "teams"
+        span.count
+          | 3

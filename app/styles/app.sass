@@ -1485,12 +1485,24 @@ button.delete-button
       margin-top: 45px
 
 .tabs.is-boxed
-  li.is-active a
-    padding: 2px 10px
-    border-color: #f0f0f0
-    border-top: 3px solid #EF4836
+  li
+    min-width: 100px
+    &.is-active a
+      padding: 2px 10px
+      border-color: #f0f0f0
+      border-top: 3px solid #EF4836
+      color: #000
   a
     padding: 3px 10px
+    span.count
+      background-color: #e1e4e8
+      padding: 0px 5px
+      margin-left: 5px
+      border-radius: 60px
+      font-size: 11px
+    i
+      margin-top: -2px
+      font-size: 14px
     &:hover
       border-bottom-color: #f0f0f0
   ul
