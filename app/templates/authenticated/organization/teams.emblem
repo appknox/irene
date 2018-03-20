@@ -1,3 +1,5 @@
-= create-team
-.team-container
-  = team-list teams=model
+.org-container
+  = create-team
+  .columns
+    .column
+      = team-list teams=model

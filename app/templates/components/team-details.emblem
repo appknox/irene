@@ -7,7 +7,7 @@
       | + #{t "addMember"}
 .columns
   .column
-    table.team-details-table
+    table.org-table
       tr
         th
           = t "members"

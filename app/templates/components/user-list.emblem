@@ -1,1 +1,6 @@
-= user.id
+td
+  = user.username
+td
+  = user.email
+td
+  i.fa.risk-icons.fa-trash-o.removeUrl.remove click="" disabled=""
