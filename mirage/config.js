@@ -12,6 +12,7 @@ export default function() {
   this.namespace = config.host + "/" +  config.namespace;
 
   this.get('/users/:id', 'user');
+  this.get('/users', 'user');
   this.get('/collaborations/:id', 'collaboration');
   this.get('/collaborations', 'collaboration');
   this.get('/projects/:id', 'project');

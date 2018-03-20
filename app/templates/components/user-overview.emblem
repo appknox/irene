@@ -1,0 +1,2 @@
+each users as |user|
+  = user-list user=user

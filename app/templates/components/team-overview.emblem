@@ -1,5 +1,5 @@
 .card.team-overview-card.text-centre
-  = link-to "authenticated.team" team.id
+  = link-to "authenticated.organization.team" team.id
     header.card-header
       .column
         = team.name

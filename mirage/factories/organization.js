@@ -1,6 +1,5 @@
 import { faker } from 'ember-cli-mirage';
 import Base from './base';
-import ENUMS from 'irene/enums';
 
 export default Base.extend({
   name: faker.company.companyName,
@@ -10,6 +9,6 @@ export default Base.extend({
     for (var i = 0; i < 5; i++) {
       desc.push(faker.name.firstName(2).split(" "));
     }
-    return desc
+    return desc;
   }
 });

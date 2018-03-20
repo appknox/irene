@@ -1,14 +1,13 @@
 .columns
   .column
+    h5
+      = team.name
+  .column.is-one-sixth.content-right
+    button.is-primary.highlighted-button.uppercase-text click="openAddMemberModal"
+      | + #{t "addMember"}
+.columns
+  .column
     table.team-details-table
-      tr
-        th colspan="3"
-          .columns
-            .column
-              = team.name
-            .column.is-one-sixth
-              button.add-member.uppercase-text click="openAddMemberModal"
-                | + #{t "addMember"}
       tr
         th
           = t "members"

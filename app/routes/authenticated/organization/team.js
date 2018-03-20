@@ -2,7 +2,7 @@ import Ember from 'ember';
 import config from 'irene/config/environment';
 import ScrollTopMixin from 'irene/mixins/scroll-top';
 
-const AuthenticatedTeamRoute = Ember.Route.extend(ScrollTopMixin, {
+const AuthenticatedOrganizationTeamRoute = Ember.Route.extend(ScrollTopMixin, {
 
   title: `Team${config.platform}`,
   model(params) {
@@ -11,4 +11,4 @@ const AuthenticatedTeamRoute = Ember.Route.extend(ScrollTopMixin, {
 }
 );
 
-export default AuthenticatedTeamRoute;
+export default AuthenticatedOrganizationTeamRoute;
