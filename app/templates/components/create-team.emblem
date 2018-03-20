@@ -1,7 +1,4 @@
 .columns
-  .column.margin-left
-    h4.bold.black-text
-      = t "teams"
   .column.content-right.margin-right100
     button.is-primary.uppercase-text.margin-top5.ac-create-team click="openTeamModal"
       | + #{t "createTeam"}
@@ -16,5 +13,5 @@
           if isCreatingTeam
             .fa-font-size
               i.fa class="fa-spinner fa-spin"
-            | &nbsp;  
+            | &nbsp;
           = t 'createTeam'
