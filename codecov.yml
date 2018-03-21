@@ -13,6 +13,8 @@ coverage:
         target: auto
         threshold: null
         branches: null
+    changes:
+      enabled: false    
 
     patch:
       default:
