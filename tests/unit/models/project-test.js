@@ -24,6 +24,28 @@ moduleForModel('project', 'Unit | Model | project', {
 
 test('it exists', function(assert) {
   const project = this.subject();
+  var store = {
+    queryRecord: function() {
+      return [
+        {
+          id:1,
+          type: "file",
+          attributes: {
+            name: "test"
+          }
+        }
+      ];
+    }
+  };
+  project.set('store', store);
+  assert.deepEqual(project.get("lastFile"), [{
+      id:1,
+      type: "file",
+      attributes: {
+        name: "test"
+      }
+    }
+  ]);
   Ember.run(function() {
     assert.equal(project.get('apiUrlFilterItems'), undefined, "URL Filters/Empty");
     project.set('apiUrlFilters', "rest.com,test.com");
@@ -48,7 +70,5 @@ test('it exists', function(assert) {
 
 
     assert.equal(project.get('isAPIScanEnabled'), false, "API Scan Enabled");
-
-    // assert.equal(project.get('lastFile.isDescriptor'), undefined, "Last File");
   });
 });

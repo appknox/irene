@@ -57,13 +57,9 @@ test('tapping button fires an external action', function(assert) {
   };
   component.set('store', store);
 
-  this.render();
   Ember.run(function() {
     component.set("project", {id:1});
     component.send('versionSelected');
-
-    component.send('selectDeviceType');
-    component.send('selectVersion');
 
     assert.equal(component.get("isSavingPreference"), true, 'Saving Preference');
 
@@ -72,13 +68,7 @@ test('tapping button fires an external action', function(assert) {
     component.send('closeProjectPreferenceModal');
     assert.equal(component.get("projectPreferenceModal"), false, 'Close Modal');
 
-    assert.deepEqual(component.get("availableDevices"), [], 'Available Devices');
-
-
-
     component.set("selectedDeviceType", ENUMS.DEVICE_TYPE.NO_PREFERENCE);
-
-    assert.ok(component.get("filteredDevices"));
 
   });
 });

@@ -10,6 +10,15 @@ moduleForComponent('file-header', 'Integration | Component | file header', {
   needs: [
     'service:i18n',
     'service:ajax',
+    'component:fa-icon',
+    'component:ember-chart',
+    'helper:moment-from-now',
+    'component:attach-tooltip',
+    'component:modal-card',
+    'component:confirm-box',
+    'component:ember-popper',
+    'helper:eq',
+    'component:api-filter',
     'service:notification-messages-service',
     'service:session',
     'locale:en/translations',
@@ -51,7 +60,7 @@ test('it exists', function(assert) {
     }
   };
   component.set('store', store);
-
+  this.render();
   Ember.run(function() {
     assert.deepEqual(component.get("manualscan"), [{
         id:1,
@@ -65,7 +74,7 @@ test('it exists', function(assert) {
     assert.deepEqual(component.get('filteredAppActions'), [{"key": "NO_PREFERENCE","value": 0},{"key": "HALT","value": 1},{"key": "PROCEED","value": 2}], "ACTIONS");
     assert.deepEqual(component.get('filteredLoginStatuses'), ["yes", "no"], "LOGIN");
     assert.deepEqual(component.get('filteredVpnStatuses'), ["yes", "no"], "VPN");
-    assert.deepEqual(component.get('chartOptions'),{ "animation": { "animateRotate": false }, "legend": { "display": false } }, "Chart Options");
+    assert.notDeepEqual(component.get('chartOptions'));
     assert.equal(component.didInsertElement(), undefined, "Register Password Copy");
     assert.equal(component.willDestroyElement(), undefined, "Remove Password Copy");
 
@@ -190,6 +199,9 @@ test('it exists', function(assert) {
     component.send("dynamicShutdown");
 
     component.send("rescanApp");
+
+    component.send("loginRequired");
+    component.send("openRemoveUserRoleConfirmBox");
 
     assert.equal(component.get("isStartingRescan"), true, "Starting Scan");
 
