@@ -9,6 +9,8 @@ moduleForComponent('collaboration-component', 'Integration | Component | collabo
   needs: [
     'service:i18n',
     'service:ajax',
+    'component:modal-card',
+    'component:collaboration-details',
     'service:notification-messages-service',
     'service:session',
     'locale:en/translations',
@@ -61,6 +63,7 @@ test('it exists', function(assert) {
     }
   };
   component.set('store', store);
+  this.render();
   Ember.run(function() {
     assert.deepEqual(component.get("collaborations"), [{
         id:1,
@@ -85,5 +88,6 @@ test('it exists', function(assert) {
 
     component.set("selectedTeam", "test");
     component.send("addCollaboration");
+    component.send("teamChanged");
   });
 });

@@ -9,7 +9,6 @@ const ProjectPreferencesComponent = Ember.Component.extend({
   selectVersion: 0,
   isSavingPreference: false,
   i18n: Ember.inject.service(),
-  store: Ember.inject.service(),
   ajax: Ember.inject.service(),
   notify: Ember.inject.service('notification-messages-service'),
   selectedDeviceType: ENUMS.DEVICE_TYPE.NO_PREFERENCE,
@@ -19,8 +18,7 @@ const ProjectPreferencesComponent = Ember.Component.extend({
   tPleaseTryAgain: t("pleaseTryAgain"),
 
   devices: (function() {
-    const store = this.get("store");
-    store.findAll("device");
+    return this.get("store").findAll("device");
   }).property(),
 
   availableDevices: Ember.computed.filter('devices', function(device) {
