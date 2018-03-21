@@ -1,8 +1,11 @@
 .columns
   .column
+    = link-to 'authenticated.organization.teams'
+      | Back to Teams
+  .column.text-centre
     h5
       = team.name
-  .column.is-one-sixth.content-right
+  .column.content-right
     button.is-primary.highlighted-button.uppercase-text click="openAddMemberModal"
       | + #{t "addMember"}
 .columns

@@ -18,7 +18,7 @@ const OrganizationOverviewComponent = Ember.Component.extend({
   }),
 
   didInsertElement() {
-    if(window.location.pathname === "/organization/teams") {
+    if(window.location.pathname.startsWith("/organization/team/")) {
       this.set("isUsers", false);
       this.set("isTeams", true);
     }

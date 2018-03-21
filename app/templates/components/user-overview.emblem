@@ -3,4 +3,5 @@ td
 td
   = user.email
 td
-  i.fa.fa-trash-o.remove click="" disabled=""
+  button.is-primary click=""
+    | #{t "remove"}
