@@ -1,20 +1,21 @@
-.columns
-  .column
-    each orgs as |org|
-      h4.margin-left.text-centre
-        = org.name
+.org-view
+  .columns
+    .column
+      each orgs as |org|
+        h4.margin-left.text-centre
+          = org.name
 
-.tabs.is-medium.is-boxed.margin-top.is-centered
-  ul
-    li class=userClass click="displayUser"
-      = link-to 'authenticated.organization.users'
-        = fa-icon "user" class="sidebar-icons"
-        | Users
-        span.count
-          | 4
-    li class=teamClass click="displayTeam"
-      = link-to 'authenticated.organization.teams'
-        = fa-icon "building" class="sidebar-icons"
-        = t "teams"
-        span.count
-          | 3
+  .tabs.is-medium.is-boxed.margin-top.is-centered
+    ul
+      li class=userClass click="displayUser"
+        = link-to 'authenticated.organization.users'
+          = fa-icon "user" class="sidebar-icons"
+          | Users
+          span.count
+            | 4
+      li class=teamClass click="displayTeam"
+        = link-to 'authenticated.organization.teams'
+          = fa-icon "building" class="sidebar-icons"
+          = t "teams"
+          span.count
+            | 3

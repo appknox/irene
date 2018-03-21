@@ -1,6 +1,17 @@
-td
-  = user.username
-td
-  = user.email
-td
-  i.fa.risk-icons.fa-trash-o.removeUrl.remove click="" disabled=""
+.columns
+  .column.content-right
+    button.is-primary.highlighted-button.uppercase-text click="openAddMemberModal"
+      | + #{t "addMember"}
+
+.columns
+  .column
+    table.org-table
+      tr
+        th
+          | User
+        th
+          | Email
+        th.capitalize-text
+          =  t "remove"
+      each users as |user|
+        = user-overview user=user

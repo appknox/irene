@@ -12,6 +12,6 @@ td
   = attach-tooltip placement="top"
     = team.createdOnDateTime
 td
-  i.fa.risk-icons.fa-trash-o.removeUrl.remove click="openDeleteTeamPrompt" disabled=team.isDefaultTeam
+  i.fa.fa-trash-o.remove click="openDeleteTeamPrompt" disabled=team.isDefaultTeam
 
 = prompt-box isActive=showDeleteTeamPrompt title=(t 'promptBox.deleteTeamPrompt.title') description=(t 'promptBox.deleteTeamPrompt.description') button="deleteTeam" delegate=this disabled=isDeletingTeam

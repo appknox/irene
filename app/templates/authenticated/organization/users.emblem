@@ -1,2 +1,2 @@
 .org-container
-  = user-overview users=model
+  = user-list users=model

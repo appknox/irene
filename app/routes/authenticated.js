@@ -176,6 +176,14 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
       if (!Ember.isEmpty(csbDict)) {
         triggerAnalytics('feature', csbDict);
       }
+      if(currentRoute === "authenticated.organization.index") {
+        this.transitionTo('/organization/users');
+      }
+    },
+
+    invalidateSession() {
+      triggerAnalytics('logout');
+      this.get('session').invalidate();
     }
   }
 }

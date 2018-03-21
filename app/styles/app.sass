@@ -1296,8 +1296,33 @@ ul.risk-table
 .team-container.box-container
   padding-bottom: 20px
 
-.org-container
-  padding: 30px 400px
+.org
+  &-view
+    background-color: #fafbfc
+  &-container
+    padding: 30px 200px
+  &-table
+    .columns
+      .column
+        padding: 0px
+        margin-top: 15px
+    tr
+      border: 1px solid lighten(#eaecef, 2%)
+      th, td
+        text-align: center
+        border-width: 0px
+        padding: 10px 0px
+      td
+        font-size: 12px
+      th
+        background-color: darken(#f6f8fa, 1%)
+        color: darken(#586069, 1%)
+    .fa-times
+      color: #EF4836
+      cursor: pointer
+    .remove
+      font-size: 14px
+      color: $critical
 
 .team-overview-card
   header:nth-child(1)
@@ -1312,24 +1337,6 @@ ul.risk-table
     .column
       margin-top: 10px
       border-right: 1px solid rgba(107, 107, 107, 0.1)
-
-.org-table
-  .columns
-    .column
-      padding: 0px
-      margin-top: 15px
-  tr
-    border: 1px solid #eaecef
-    th, td
-      text-align: center
-      border-width: 0px
-      padding: 10px 0px
-    th
-      background-color: darken(#f6f8fa, 1%)
-      color: darken(#586069, 1%)
-  .fa-times
-    color: #EF4836
-    cursor: pointer
 
 .pending-invitation-table
   margin: auto
