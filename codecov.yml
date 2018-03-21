@@ -10,28 +10,13 @@ coverage:
   status:
     project:
       default:
-        target: auto
+        target: '70'
         threshold: null
         branches: null
-    changes:
-      enabled: false    
 
-    patch:
-      default:
-        target: auto
-        threshold: null
-        base: auto
-        branches: null
-        if_no_uploads: error
-        if_not_found: success
-        if_ci_failed: error
-        only_pulls: false
-        flags: null
-        paths: null
+    patch: off
 
-    changes:
-      default:
-        branches: null
+    changes: off
 
   ignore:
     - tests/.*
