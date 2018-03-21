@@ -15,6 +15,7 @@ const Team = DS.Model.extend(BaseModeMixin, {
   owner: DS.belongsTo('user', {inverse: 'ownedTeams'}),
   users: DS.hasMany('user', {inverse: 'teams'}),
   collaborations: DS.hasMany('collaboration', {inverse:'team'}),
+  organization: DS.belongsTo('organization', {inverse: 'teams'}),
 
   tMember: t("member"),
   tMembers: t("members"),

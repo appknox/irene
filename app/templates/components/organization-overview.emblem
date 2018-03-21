@@ -1,9 +1,9 @@
 .org-view
   .columns
     .column
-      each orgs as |org|
+      each organizations as |organization|
         h4.margin-left.text-centre
-          = org.name
+          = organization.name
 
   .tabs.is-medium.is-boxed.margin-top.is-centered
     ul
