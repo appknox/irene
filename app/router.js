@@ -28,7 +28,11 @@ Router.map(function() {
       this.route('teams');
       this.route('team', {path: '/team/:teamId'});
     });
-    this.route("settings", {path: '/settings'});
+    this.route("settings", {path: '/settings'}, function() {
+      this.route('general');
+      this.route('security');
+      this.route('developersettings');
+    });
     this.route("billing", {path: '/billing'});
     this.route('projects', {path: '/projects'});
     this.route("project", {path: '/project/:projectId'}, function() {
