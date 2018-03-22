@@ -1,7 +1,8 @@
 .columns
   .column
     = link-to 'authenticated.organization.teams'
-      | Back to Teams
+      = fa-icon "angle-left"
+      | &nbsp; Back to Teams
   .column.text-centre
     h5
       = team.name
