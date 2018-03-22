@@ -6,6 +6,12 @@ const AuthenticatedOrganizationRoute = Ember.Route.extend(ScrollTopMixin, {
   title: `Organization${config.platform}`,
   model(){
     return this.get('store').findAll('organization');
+  },
+  redirect(model, transition){
+    const currentRoute = transition.targetName;
+    if(currentRoute === "authenticated.organization.index") {
+        this.transitionTo('/organization/users');
+    }
   }
 });
 
