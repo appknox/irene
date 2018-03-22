@@ -56,4 +56,4 @@ h6
           h6
             = t "youCanCreateTeam"
             = link-to 'authenticated.teams' class="is-primary" tagName="a"
-              | &nbsp;#{t "clickingHere"}
+              | &nbsp; #{t "clickingHere"}
