@@ -157,6 +157,7 @@ module.exports = function(environment) {
       collaborations: 'collaborations',
       deleteCollaboration: 'collaboration/delete',
       invitation: 'invitation',
+      invitations: 'invitations',
       signup: 'signup',
       lang: 'lang',
       deleteGHRepo: 'delete_github_repo',

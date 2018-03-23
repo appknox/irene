@@ -37,7 +37,7 @@
     .card-wrapper
       form
         p.control
-          = input class="form-control input input-width" placeholder=( t 'email') type="text" value=teamMember autofocus="autofocus"
+          = input class="form-control input input-width" placeholder=( t 'email') type="text" value=identification autofocus="autofocus"
         button.margin-top10.is-primary click="addMember" disabled=isInvitingMember
           if isInvitingMember
             .fa-font-size

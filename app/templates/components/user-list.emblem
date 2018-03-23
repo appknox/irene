@@ -1,7 +1,7 @@
 .columns
   .column.content-right
-    button.is-primary.highlighted-button.uppercase-text click="openAddMemberModal"
-      | + #{t "addMember"}
+    button.is-primary.highlighted-button click="openAddMemberModal"
+      | Invite Member
 
 .columns
   .column
@@ -15,3 +15,16 @@
           =  t "remove"
       each users as |user|
         = user-overview user=user
+
+= modal-card class="input-modal" isActive=showAddMemberModal title="Invite Member"
+  .card-body
+    .card-wrapper
+      form
+        p.control
+          = input class="form-control input input-width" placeholder=( t 'email') type="text" value=identification autofocus="autofocus"
+        button.margin-top10.is-primary click="addMember" disabled=isInvitingMember
+          if isInvitingMember
+            .fa-font-size
+             i.fa class="fa-spinner fa-spin"
+            | &nbsp;
+          = t "invite"

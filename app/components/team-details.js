@@ -1,37 +1,28 @@
-/*
- * DS103: Rewrite code to no longer use __guard__
- */
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
-
-const isEmpty = inputValue=> Ember.isEmpty(inputValue);
 
 const TeamDetailsComponent = Ember.Component.extend({
 
   i18n: Ember.inject.service(),
   ajax: Ember.inject.service(),
   notify: Ember.inject.service('notification-messages-service'),
+
   team: null,
-  teamMember: "",
+  identification: "",
   isInvitingMember: false,
+
+  tEmptyEmailId: t("emptyEmailId"),
+  tTeamMemberInvited: t("teamMemberInvited"),
 
   invitations: (function() {
     this.get("store").findAll("invitation");
   }).property(),
 
-  tEmptyEmailId: t("emptyEmailId"),
-  tTeamMemberAdded: t("teamMemberAdded"),
-  tTeamMemberInvited: t("teamMemberInvited"),
-
   actions: {
 
     openAddMemberModal() {
       this.set("showAddMemberModal", true);
-    },
-
-    closeAddMemberModal() {
-      this.set("showAddMemberModal", false);
     },
 
     addMember() {
@@ -44,8 +35,10 @@ const TeamDetailsComponent = Ember.Component.extend({
       for (let inputValue of [teamMember]) {
         if (isEmpty(inputValue)) { return this.get("notify").error(tEmptyEmailId); }
       }
-      const data =
-        {identification: teamMember};
+      const data = {
+        identification: identification,
+        team_id: this.get("team.id")
+      };
       this.set("isInvitingMember", true);
       this.get("ajax").post(url, {data})
       .then((data) => {
@@ -70,7 +63,3 @@ const TeamDetailsComponent = Ember.Component.extend({
 
 
 export default TeamDetailsComponent;
-
-function __guard__(value, transform) {
-  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
-}
