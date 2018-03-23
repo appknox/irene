@@ -3,8 +3,6 @@ import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 
-const isEmpty = inputValue=> Ember.isEmpty(inputValue);
-
 const CreateTeamComponent = Ember.Component.extend({
 
   i18n: Ember.inject.service(),
@@ -24,16 +22,15 @@ const CreateTeamComponent = Ember.Component.extend({
 
     createTeam() {
       const teamName = this.get("teamName");
-      const tTeamCreated = this.get("tTeamCreated");
-      const tEnterTeamName = this.get("tEnterTeamName");
-
-      for (let inputValue of [teamName]) {
-        if (isEmpty(inputValue)) { return this.get("notify").error(tEnterTeamName); }
+      if (Ember.isEmpty(teamName)) {
+        const tEnterTeamName = this.get("tEnterTeamName");
+        return this.get("notify").error(tEnterTeamName);
       }
       triggerAnalytics('feature', ENV.csb.createTeam);
       const data =
         {name: teamName};
       this.set("isCreatingTeam", true);
+      const that = this;
       this.get("ajax").post(ENV.endpoints.teams, {data})
       .then((data) => {
         if(!this.isDestroyed) {
