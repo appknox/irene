@@ -11,6 +11,7 @@ const TeamDetailsComponent = Ember.Component.extend({
   team: null,
   identification: "",
   isInvitingMember: false,
+  isSearchingMember: false,
 
   tEmptyEmailId: t("emptyEmailId"),
   tTeamMemberInvited: t("teamMemberInvited"),
@@ -19,10 +20,38 @@ const TeamDetailsComponent = Ember.Component.extend({
     this.get("store").findAll("invitation");
   }).property(),
 
+  searchMember() {
+    this.set("isSearchingMember", true);
+    const searchText = this.get("searchText");
+    const searchQuery = `q=${searchText}`;
+    const url = [ENV.endpoints.userSearch, searchQuery].join('?');
+    const that = this;
+    this.get("ajax").request(url)
+    .then(function(response) {
+      if(!that.isDestroyed) {
+        that.set("isSearchingMember", false);
+      }
+      const allUsers = response.data;
+      const allUsersData = allUsers.map((user) => ({
+        username: user.attributes.username,
+        email: user.attributes.email
+      }));
+      const users = that.set("users", allUsersData);
+    })
+    .catch(function(error) {
+      that.set("isSearchingMember", false);
+      that.get("notify").error(error.payload.message);
+    });
+  },
+
   actions: {
 
     openAddMemberModal() {
       this.set("showAddMemberModal", true);
+    },
+
+    searchQuery() {
+      Ember.run.debounce(this, this.searchMember, 500);
     },
 
     addMember() {

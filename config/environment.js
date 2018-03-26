@@ -189,7 +189,9 @@ module.exports = function(environment) {
       downloadAttachment: 'download',
       purgeAPIAnalyses: 'purge_api',
       apps: 'apps',
-      reports: 'reports'
+      reports: 'reports',
+      setUnknownAnalysisStatus: "set_unknown_analysis_status",
+      userSearch: "user_search"
     },
     csb: {
       reportDownload: { feature: "Account Settings", module: "Setup", product: "Appknox" },
