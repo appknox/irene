@@ -32,7 +32,7 @@
         each team.teamMembers as |member|
           = team-member member=member team=team
 
-= modal-card class="input-modal" isActive=true title=(t "modalCard.addMember.title")
+= modal-card class="input-modal" isActive=showAddMemberModal title=(t "modalCard.addMember.title")
   .card-body
     .card-wrapper
       form
