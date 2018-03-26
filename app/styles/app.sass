@@ -1341,6 +1341,15 @@ ul.risk-table
       margin-top: 10px
       border-right: 1px solid rgba(107, 107, 107, 0.1)
 
+.invoice-table, .token-table
+  @extend .org-table
+  .fa
+    font-size: 16px
+  .fa-trash-o
+    color: $critical
+  .copy-token
+    color: $info
+
 .pending-invitation-table
   margin: auto
   width: 70%
