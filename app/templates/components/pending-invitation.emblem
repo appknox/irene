@@ -1,4 +1,11 @@
 td
   = invitation.email
 td
-  = invitation.team.name
+  if team
+    = link-to "authenticated.organization.team" invitation.team.id
+      = invitation.team.name
+  else
+    = t "organization"
+td
+  button.is-primary.lowercase-text click=""
+    = t "cancel"

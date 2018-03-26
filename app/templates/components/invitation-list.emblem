@@ -1,13 +1,20 @@
 if invitations
   .columns
     .column.margin-left
-      h4.bold.black-text
-        = t "pendingInvitations"
-      table.pending-invitation-table
+      table.org-table
         tr
           th
             = t "email"
           th
             = t "team"
+            | /
+            = t "organization"
+          th
+            = t "cancel"
         each invitations as |invitation|
           = pending-invitation invitation=invitation
+else
+  .not-found
+    h4
+      = fa-icon "exclamation-triangle"
+      | no invitations

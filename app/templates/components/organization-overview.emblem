@@ -19,3 +19,9 @@
           = t "teams"
           span.count
             | 3
+      li class=invitationClass click="displayInvitation"
+        = link-to 'authenticated.organization.invitations'
+          = fa-icon "user-plus" class="sidebar-icons"
+          | Invitations
+          span.count
+            | 5
