@@ -11,8 +11,6 @@
           | User
         th
           | Email
-        th.capitalize-text
-          =  t "remove"
       each users as |user|
         = user-overview user=user
 

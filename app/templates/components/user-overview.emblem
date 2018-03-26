@@ -2,6 +2,3 @@ td
   = user.username
 td
   = user.email
-td
-  button.is-primary click=""
-    | #{t "remove"}
