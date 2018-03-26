@@ -1,7 +1,7 @@
 td
   = invitation.email
 td
-  if team
+  if invitation.team
     = link-to "authenticated.organization.team" invitation.team.id
       = invitation.team.name
   else
