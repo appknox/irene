@@ -57,21 +57,21 @@ const TeamDetailsComponent = Ember.Component.extend({
     },
 
     addMember(userId) {
-      const identification = this.get("identification");
-      const teamId = this.get("team.id")
+      const teamId = this.get("team.id");
       const url = [ENV.endpoints.teams, teamId, "members", userId].join("/");
       const that = this;
       this.set("isAddingMember", true);
       this.get("ajax").put(url)
-      .then(function(){
+      .then(function(data){
         that.get("notify").success("Team member added");
         if(!that.isDestroyed) {
           that.set("isAddingMember", false);
           that.set("identification", "");
+          that.store.pushPayload(data);
           that.set("showAddMemberModal", false);
         }
       })
-      .catch(function(){
+      .catch(function(error){
         that.set("isAddingMember", false);
         that.get("notify").error(error.payload.message);
       });
