@@ -52,6 +52,7 @@ test('it exists', function(assert) {
     }
   };
   component.set('store', store);
+  this.render();
   Ember.run(function() {
     assert.deepEqual(component.get("collaborations"), [{
         id:1,
@@ -68,5 +69,6 @@ test('it exists', function(assert) {
 
     component.set("selectedTeam", "test");
     component.send("addCollaboration");
+    component.send("teamChanged");
   });
 });
