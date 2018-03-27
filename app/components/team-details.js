@@ -36,7 +36,7 @@ const TeamDetailsComponent = Ember.Component.extend({
         username: user.attributes.username,
         email: user.attributes.email
       }));
-      const users = that.set("users", allUsersData);
+      that.set("users", allUsersData);
     })
     .catch(function(error) {
       that.set("isSearchingMember", false);

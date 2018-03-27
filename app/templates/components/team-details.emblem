@@ -32,7 +32,7 @@
         each team.teamMembers as |member|
           = team-member member=member team=team
 
-= modal-card class="input-modal" isActive=showAddMemberModal title=(t "modalCard.addMember.title")
+= modal-card class="input-modal user-search-modal" isActive=true title=(t "modalCard.addMember.title")
   .card-body
     .card-wrapper
       form
@@ -46,5 +46,17 @@
         ul
           each users as |user|
             li
-              = user.username
-              = user.email
+              .columns
+                .column.is-one-sixth.align-center
+                  = fa-icon class="is-primary margin-top5" "user-circle"
+                .column
+                  .columns
+                    .column.user-name
+                      = user.username
+                  .columns
+                    .column.user-email
+                      = user.email
+                .column.is-one-sixth
+                  .show-button
+                    button.is-primary
+                      | +

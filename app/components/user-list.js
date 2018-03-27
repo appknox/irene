@@ -29,7 +29,7 @@ export default Ember.Component.extend({
       this.set("isInvitingMember", true);
       const that = this;
       this.get("ajax").post(ENV.endpoints.invitations, {data})
-      .then(function(data){
+      .then(function(){
         const tOrgMemberInvited = that.get("tOrgMemberInvited");
         that.get("notify").success(tOrgMemberInvited);
         if(!that.isDestroyed) {
