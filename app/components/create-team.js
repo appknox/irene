@@ -22,6 +22,7 @@ const CreateTeamComponent = Ember.Component.extend({
 
     createTeam() {
       const teamName = this.get("teamName");
+      const tTeamCreated = this.get("tTeamCreated");
       if (Ember.isEmpty(teamName)) {
         const tEnterTeamName = this.get("tEnterTeamName");
         return this.get("notify").error(tEnterTeamName);
