@@ -22,10 +22,10 @@ const TeamDetailsComponent = Ember.Component.extend({
   }).property(),
 
   searchMember() {
-    this.set("isSearchingMember", true);
     const searchText = this.get("identification");
     const searchQuery = `q=${searchText}`;
     const url = [ENV.endpoints.userSearch, searchQuery].join('?');
+    this.set("isSearchingMember", true);
     const that = this;
     this.get("ajax").request(url)
     .then(function(response) {
@@ -79,6 +79,7 @@ const TeamDetailsComponent = Ember.Component.extend({
 
     inviteMember() {
       const identification = this.get("identification");
+      const tTeamMemberInvited = this.get("tTeamMemberInvited");
       if(Ember.isEmpty(identification)) {
         const tEmptyEmailId = this.get("tEmptyEmailId");
         return this.get("notify").error(tEmptyEmailId);

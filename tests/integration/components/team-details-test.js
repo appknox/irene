@@ -53,13 +53,14 @@ test('tapping button fires an external action', function(assert) {
   Ember.run(function() {
     assert.notOk(component.get("invitations"));
     component.send('openAddMemberModal');
-    assert.equal(component.get('showAddMemberModal'),true, "Open Modal");
-    component.send('closeAddMemberModal');
-    assert.equal(component.get('showAddMemberModal'),false, "Close Modal");
-
-    component.send("addMember");
+    component.send('inviteMember');
+    component.set("identification", "yash");
+    // assert.notOk(component.searchMember());
     component.set("team", {id:1});
-    component.set("teamMember", "yash");
-    component.send("addMember");
+    component.send('inviteMember');
+    component.set("team", {id:1});
+    component.send('addMember');
+    assert.equal(component.get('showAddMemberModal'),true, "Open Modal");
+
   });
 });

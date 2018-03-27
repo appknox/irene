@@ -180,6 +180,10 @@ export default function() {
     return {};
   });
 
+  this.post('/invitations', () => {
+    return {};
+  });
+
   this.post('/reset', () => {
     return {};
   });
@@ -216,6 +220,10 @@ export default function() {
     return {};
   });
 
+  this.get('/user_search?q=yash', () => {
+    return {};
+  });
+
   this.post('/chargebee/callback', () => {
     return {};
   });
@@ -249,6 +257,10 @@ export default function() {
  });
 
   this.post('/teams/:id/members', () => {
+   return;
+  });
+
+  this.put('/teams/:id/members', () => {
    return;
   });
 

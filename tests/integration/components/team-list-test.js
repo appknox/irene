@@ -10,5 +10,5 @@ test('it renders', function(assert) {
 
   this.render(hbs("{{team-list}}"));
 
-  assert.equal(this.$().text().trim(), '');
+  assert.equal(this.$().text().trim(), 'TeamOwnerMembersProjectsCreatedremove');
 });

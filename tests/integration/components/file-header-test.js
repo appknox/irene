@@ -183,6 +183,16 @@ test('it exists', function(assert) {
     component.send("rescanApp");
 
     component.send("loginRequired");
+
+    component.send("selectAppEnvironment");
+
+    component.send("vpnRequired");
+
+    component.send("showURLFilter", "api");
+    component.send("showURLFilter", "dynamic");
+
+    component.send("requiredAppAction");
+
     component.send("openRemoveUserRoleConfirmBox");
 
     component.send("displayScanDetails");

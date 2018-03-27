@@ -12,14 +12,6 @@ test('it renders', function(assert) {
 
   this.render(hbs`{{user-list}}`);
 
-  assert.equal(this.$().text().trim(), '');
+  assert.equal(this.$().text().trim(), 'Invite MemberUserEmailInvite MemberInvite');
 
-  // Template block usage:
-  this.render(hbs`
-    {{#user-list}}
-      template block text
-    {{/user-list}}
-  `);
-
-  assert.equal(this.$().text().trim(), 'template block text');
 });

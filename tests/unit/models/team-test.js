@@ -7,6 +7,7 @@ moduleForModel('team', 'Unit | Model | team', {
     'model:team',
     'model:user',
     'model:collaboration',
+    'model:organization',
     'service:i18n',
     'locale:en/translations',
     'locale:en/config',

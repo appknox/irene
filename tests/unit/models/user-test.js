@@ -7,6 +7,7 @@ moduleForModel('user', 'Unit | Model | user', {
     'model:project',
     'model:submission',
     'model:collaboration',
+    'model:organization',
     'model:pricing',
     'model:team',
     'service:i18n',
