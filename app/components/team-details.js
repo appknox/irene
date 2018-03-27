@@ -10,6 +10,7 @@ const TeamDetailsComponent = Ember.Component.extend({
 
   team: null,
   identification: "",
+  isAddingMember: false,
   isInvitingMember: false,
   isSearchingMember: false,
 
@@ -22,7 +23,7 @@ const TeamDetailsComponent = Ember.Component.extend({
 
   searchMember() {
     this.set("isSearchingMember", true);
-    const searchText = this.get("searchText");
+    const searchText = this.get("identification");
     const searchQuery = `q=${searchText}`;
     const url = [ENV.endpoints.userSearch, searchQuery].join('?');
     const that = this;
@@ -33,6 +34,7 @@ const TeamDetailsComponent = Ember.Component.extend({
       }
       const allUsers = response.data;
       const allUsersData = allUsers.map((user) => ({
+        id: user.id,
         username: user.attributes.username,
         email: user.attributes.email
       }));
@@ -54,15 +56,32 @@ const TeamDetailsComponent = Ember.Component.extend({
       Ember.run.debounce(this, this.searchMember, 500);
     },
 
-    addMember() {
-      const teamMember = this.get("teamMember");
-      const tEmptyEmailId = this.get("tEmptyEmailId");
-      const tTeamMemberAdded = this.get("tTeamMemberAdded");
-      const tTeamMemberInvited = this.get("tTeamMemberInvited");
-      const teamId = this.get("team.id");
-      const url = [ENV.endpoints.teams, teamId, ENV.endpoints.members].join('/');
-      for (let inputValue of [teamMember]) {
-        if (isEmpty(inputValue)) { return this.get("notify").error(tEmptyEmailId); }
+    addMember(userId) {
+      const identification = this.get("identification");
+      const teamId = this.get("team.id")
+      const url = [ENV.endpoints.teams, teamId, "members", userId].join("/");
+      const that = this;
+      this.set("isAddingMember", true);
+      this.get("ajax").put(url)
+      .then(function(){
+        that.get("notify").success("Team member added");
+        if(!that.isDestroyed) {
+          that.set("isAddingMember", false);
+          that.set("identification", "");
+          that.set("showAddMemberModal", false);
+        }
+      })
+      .catch(function(){
+        that.set("isAddingMember", false);
+        that.get("notify").error(error.payload.message);
+      });
+    },
+
+    inviteMember() {
+      const identification = this.get("identification");
+      if(Ember.isEmpty(identification)) {
+        const tEmptyEmailId = this.get("tEmptyEmailId");
+        return this.get("notify").error(tEmptyEmailId);
       }
       const data = {
         identification: identification,

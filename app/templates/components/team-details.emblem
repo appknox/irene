@@ -32,7 +32,7 @@
         each team.teamMembers as |member|
           = team-member member=member team=team
 
-= modal-card class="input-modal user-search-modal" isActive=true title=(t "modalCard.addMember.title")
+= modal-card class="input-modal user-search-modal" isActive=showAddMemberModal title=(t "modalCard.addMember.title")
   .card-body
     .card-wrapper
       form
@@ -41,22 +41,28 @@
             i.fa class="fa-spinner fa-spin margin-top5"
           else
             = fa-icon class="is-primary margin-top5" "user"
-          = input class="form-control input input-width margin-left" placeholder="Username / Email" type="text" value=searchText autofocus="autofocus" key-up="searchQuery"
-      .user-list-container
-        ul
-          each users as |user|
-            li
-              .columns
-                .column.is-one-sixth.align-center
-                  = fa-icon class="is-primary margin-top5" "user-circle"
-                .column
-                  .columns
-                    .column.user-name
-                      = user.username
-                  .columns
-                    .column.user-email
-                      = user.email
-                .column.is-one-sixth
-                  .show-button
-                    button.is-primary
-                      | +
+          = input class="form-control input input-width margin-left" placeholder="Username / Email" type="text" value=identification autofocus="autofocus" key-up="searchQuery"
+      if users
+        .user-list-container
+          ul
+            each users as |user|
+              li
+                .columns
+                  .column.is-one-sixth.align-center
+                    = fa-icon class="is-primary margin-top5" "user-circle"
+                  .column
+                    .columns
+                      .column.user-name
+                        = user.username
+                    .columns
+                      .column.user-email
+                        = user.email
+                  .column.is-one-sixth
+                    .show-button
+                      button.is-primary click="'addMember' user.id" disabled=isAddingMember
+                        | +
+      else
+        .columns
+          .column
+            button.is-primary.margin-left30.margin-top10 click="inviteMember" disabled=isInvitingMember
+              = t "invite"
