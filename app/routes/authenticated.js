@@ -4,7 +4,6 @@ import ENUMS from 'irene/enums';
 import { CSBMap } from 'irene/router';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
-import surveyMonkey from 'irene/utils/survey-monkey';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
@@ -169,10 +168,6 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
     invalidateSession() {
       triggerAnalytics('logout');
       this.get('session').invalidate();
-    },
-
-    giveFeeback() {
-      surveyMonkey();
     }
   }
 }
