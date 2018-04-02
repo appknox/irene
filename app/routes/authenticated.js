@@ -107,7 +107,7 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
           const fileId = data.id;
           that.get("notify").info(tNewScanStarted, {
             htmlContent: true,
-            autoClear: false,
+            autoClear: true,
             onClick: () => {
               return callback(Ember.getOwner(that).lookup('route:authenticated').transitionTo("authenticated.file", fileId));
             }
