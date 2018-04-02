@@ -6,9 +6,8 @@
     = t "otherTemplates.specifyTheURL"
 
   form.columns
-    .column
-      div.filter-list
-        = input class="form-control input" type="text" placeholder=(t "templates.enterAPIEndpoint") value=newUrlFilter
+    div.filter-list
+      = input class="form-control input" type="text" placeholder=(t "templates.enterAPIEndpoint") value=newUrlFilter
     .column
       button.is-primary click="addApiUrlFilter" disabled=isSavingFilter
         if isSavingFilter
@@ -16,6 +15,7 @@
             i.fa class="fa-spinner fa-spin"
           | &nbsp;
         | + {{t "templates.addNewUrl"}}
+
   .condition-text-small
     | eg. api.appknox.com. Do not specify the scheme (http://...), port (:443/...) & path (.../users)
 

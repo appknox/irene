@@ -34,9 +34,9 @@
     .columns
       .column.top-nav
         .columns.top-columns
-          .column.is-one-third
+          .column
             .columns
-              .column.scan-text.is-one-third
+              div.scan-text
                 = t "startNewScan"
               .column
                 label.button.is-primary.ac-upload-app.highlighted-button disabled=isUploading

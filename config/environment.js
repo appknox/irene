@@ -86,7 +86,7 @@ module.exports = function(environment) {
     },
 
     emblemOptions: {
-      blueprints: false
+      blueprints: true
     },
 
     EmberENV: {

@@ -195,7 +195,7 @@
                   = t "unknown"
               .column
                 = file.countRiskUnknown
-      .column.package-desc.is-one-quarter
+      .column.package-desc
         table
           tr
             td
@@ -258,8 +258,11 @@
     .card-wrapper
       .api-scanning
         div.warning-band
-          = fa-icon 'exclamation-triangle'
-          = t "modalCard.apiScan.extraDescription"
+          .columns
+            .column.is-one-sixth
+              = fa-icon 'exclamation-triangle'
+            .column
+              = t "modalCard.apiScan.extraDescription"
         .margin-top20.add-filter-list
           = api-filter project=file.project
         div.margin-top20
