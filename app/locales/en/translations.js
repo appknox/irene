@@ -161,6 +161,7 @@ export default {
   "networkError": "A network error occured! Please try again later",
   "newPassword": "New Password",
   "newScan": "New Scan",
+  "newScanStarted": "New scan started, Click here to show",
   "next": "Next",
   "no": "No",
   "noDeviceAvailable": "No Device Available",

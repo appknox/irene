@@ -161,6 +161,7 @@ export default {
   "networkError": "ネットワークエラーが発生しました。再度お試しください。",
   "newPassword": "新しいパスワード",
   "newScan": "新規診断",
+  "newScanStarted": "New scan started, Click here to show",
   "next": "次",
   "no": "いいえ",
   "noDeviceAvailable": "使用可能なデバイスがありません",

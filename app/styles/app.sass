@@ -160,7 +160,6 @@ body
   padding: 0px
   text-align: center
   margin-top: 20px!important
-  margin-right: -2px
   a
     padding: 5px 0px
     font-weight: lighter
@@ -193,7 +192,6 @@ input
     margin-left: 10px
     color: #FFF
     padding: 10px 0px
-    font-size: 12px
   .project-count
     padding: 3px
     min-width: 120px
@@ -331,9 +329,6 @@ select
 .file-input
   position: fixed
   top: -100px
-
-.filter-input
-  width: 90%
 
 .not-found
   text-align: center
@@ -515,10 +510,19 @@ button, .button
 
 .api-scanning
   .warning-band
-    background-color: #F5D76E
-    padding: 10px
-    text-align: center
+    padding: 0px 10px
     color: #404040
+    .column
+      &:first-child
+        background-color: #F5D76E
+      &:nth-child(2)
+        border-width: 2px 2px 2px 0px
+        border-style: solid
+        border-color: lighten($default, 50%)
+  .fa-exclamation-triangle
+    margin-top: 20px
+    margin-left: 10px
+    font-size: 40px
   .fa.fa-trash-o
     color: $red
     margin-left: 10px
@@ -582,6 +586,7 @@ button, .button
   margin-right: 20px
   margin-top: 20px!important
   table
+    width: 80%
     font-size: 13px
     margin-top: 10px
     tr
@@ -1161,23 +1166,14 @@ ul.risk-table
     margin-top: -40px
 
 .filter-list
-  input
-    width: 70%
+  margin-left: 20px
+  margin-top: 10px
+  width: 250px
   .fa
     color: $red
     margin-left: 10px
     margin-top: 10px
     cursor: pointer
-
-.api-filter
-  input
-    height: 35px
-    width: 40%
-  .position-icons
-    margin-top: 20px!important
-  button
-    margin-top: 2px
-    margin-left: -350px
 
 .api-scanning
   .api-filter
@@ -1185,7 +1181,6 @@ ul.risk-table
       width: 100%
     button
       margin-left: 0px
-
 
 .new-input-box
   margin-top: -20px
@@ -1329,6 +1324,11 @@ button.delete-button
     margin-top: -15px
     margin-bottom: 25px
 
+.vnc-viewer
+  padding: 0px
+  .device-modal
+    margin: 0px
+
 .marvel-device
   .screen
     box-shadow: none
@@ -1452,8 +1452,8 @@ button.is-progress:hover
 
 .add-filter-list
   border: 2px solid lighten($default, 40%)
-  padding: 10px 10px 0px 10px
-  margin-bottom: 10px
+  padding: 10px
+  margin-bottom: 30px
 
 .js-duration-button.is-default:hover
   background-color: lighten($red, 10%)

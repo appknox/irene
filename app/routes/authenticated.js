@@ -1,11 +1,12 @@
 // jshint ignore: start
 import Ember from 'ember';
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
-import surveyMonkey from 'irene/utils/survey-monkey';
-import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
 import { CSBMap } from 'irene/router';
+import ENV from 'irene/config/environment';
+import { translationMacro as t } from 'ember-i18n';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
+import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+
 
 const { location } = window;
 
@@ -21,6 +22,8 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
   mixpanel: service(),
   trial: service(),
   socketIOService: service('socket-io'),
+
+  tNewScanStarted: t("newScanStarted"),
 
   beforeModel(transition){
     this.set("lastTransition", transition);
@@ -96,11 +99,18 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
         store.pushPayload({data});
       },
 
-      newobject(data) {
+      newobject(data, callback) {
+        const tNewScanStarted = that.get("tNewScanStarted")
         store.pushPayload({data});
         if (data.type === "files") {
           const fileId = data.id;
-          that.get("notify").info(`New scan started <a class='click-here' href='/file/${fileId}'>Show</a>`, {htmlContent: true, autoClear: false});
+          that.get("notify").info(tNewScanStarted, {
+            htmlContent: true,
+            autoClear: true,
+            onClick: () => {
+              return callback(Ember.getOwner(that).lookup('route:authenticated').transitionTo("authenticated.file", fileId));
+            }
+          });
         }
       },
 
@@ -158,10 +168,6 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
     invalidateSession() {
       triggerAnalytics('logout');
       this.get('session').invalidate();
-    },
-
-    giveFeeback() {
-      surveyMonkey();
     }
   }
 }
