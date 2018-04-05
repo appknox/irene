@@ -128,10 +128,15 @@
 
 .card.is-fullwidth.app-details-card
   header.card-header
-    .column.is-one-quarter
-      p.card-header-title
-        h5.bold.black-text
-          = t "scanDetails"
+    .column
+      .tabs.is-medium.is-boxed
+        ul
+          li class=scanDetailsClass
+            a click="displayScanDetails" class="uppercase-text"
+              = t "scanDetails"
+          li class=owaspDetailsClass
+            a click="displayOWASPDetails" class="uppercase-text"
+              | Owasp Details
     .column.content-right
       .card-button
         .columns
@@ -150,76 +155,79 @@
                 = fa-icon "download"
               | &nbsp; #{ t "pdfReport"}
   .card-content
-    .columns
-      .column.flex-center
-        = ember-chart type='doughnut' data=file.doughnutData width=200 height=200 options=chartOptions
-      .column.flex-center
-        ul.risk-table
-          h5.uppercase-text
-           = t "severityLevel"
-          .risk-values
-            .columns
-              .column
-                li.is-critical
-                  = t "critical"
-              .column.risk-value
-                = file.countRiskCritical
-            .columns
-              .column
-                li.is-danger
-                  = t "high"
-              .column
-                = file.countRiskHigh
-            .columns
-              .column
-                li.is-warning
-                  = t "medium"
-              .column
-                = file.countRiskMedium
-            .columns
-              .column
-                li.is-info
-                  = t "low"
-              .column
-                = file.countRiskLow
-            .columns
-              .column
-                li.is-success
-                  = t "none"
-              .column
-                = file.countRiskNone
+    if isScanDetails
+      .columns
+        .column.flex-center
+          = ember-chart type='doughnut' data=file.doughnutData width=200 height=200 options=chartOptions
+        .column.flex-center
+          ul.risk-table
+            h5.uppercase-text
+             = t "severityLevel"
+            .risk-values
+              .columns
+                .column
+                  li.is-critical
+                    = t "critical"
+                .column.risk-value
+                  = file.countRiskCritical
+              .columns
+                .column
+                  li.is-danger
+                    = t "high"
+                .column
+                  = file.countRiskHigh
+              .columns
+                .column
+                  li.is-warning
+                    = t "medium"
+                .column
+                  = file.countRiskMedium
+              .columns
+                .column
+                  li.is-info
+                    = t "low"
+                .column
+                  = file.countRiskLow
+              .columns
+                .column
+                  li.is-success
+                    = t "none"
+                .column
+                  = file.countRiskNone
 
-            .columns class=file.project.showUnknownAnalysis:visible:invisible
-              .column
-                li.is-default
-                  = t "unknown"
-              .column
-                = file.countRiskUnknown
-      .column.package-desc
-        table
-          tr
-            td
-              = t "started"
-              | &nbsp; #{moment-from-now file.createdOn}
-              = attach-tooltip placement="top"
-                = file.createdOnDateTime
-        table
-          tr
-            td.capitalize-text
-              = t "versionCode"
-            td.overflow-hidden
-              | #{file.versionCode}
-        table
-          tr
-            td colspan="2"
-              = t "reportPassword"
-          tr class="copy-password" data-clipboard-target="#copy-password"
-            td id="copy-password" value=file.project.pdfPassword
-              | #{file.project.pdfPassword}
-            td
-              = fa-icon "clipboard copy-icon"
-              | &nbsp;
-              = t "copy"
+              .columns class=file.project.showUnknownAnalysis:visible:invisible
+                .column
+                  li.is-default
+                    = t "unknown"
+                .column
+                  = file.countRiskUnknown
+        .column.package-desc
+          table
+            tr
+              td
+                = t "started"
+                | &nbsp; #{moment-from-now file.createdOn}
+                = attach-tooltip placement="top"
+                  = file.createdOnDateTime
+          table
+            tr
+              td.capitalize-text
+                = t "versionCode"
+              td.overflow-hidden
+                | #{file.versionCode}
+          table
+            tr
+              td colspan="2"
+                = t "reportPassword"
+            tr class="copy-password" data-clipboard-target="#copy-password"
+              td id="copy-password" value=file.project.pdfPassword
+                | #{file.project.pdfPassword}
+              td
+                = fa-icon "clipboard copy-icon"
+                | &nbsp;
+                = t "copy"
+    if isOWASPDetails
+      = ember-chart type='bar' data=owaspData width=200 height=200 options=barChartOptions
 
 = modal-card isActive=showRunDynamicScanModal title=(t "modalCard.runAPIScan.title")
   .card-body.warning-modal

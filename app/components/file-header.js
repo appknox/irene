@@ -17,8 +17,10 @@ const FileHeaderComponent = Ember.Component.extend({
 
   isBasicInfo: false,
   isVPNDetails: false,
+  isScanDetails: true,
   apiScanModal: false,
   isLoginDetails: false,
+  isOWASPDetails: false,
   isStartingRescan: false,
   dynamicScanModal: false,
   isRequestingManual: false,
@@ -52,6 +54,10 @@ const FileHeaderComponent = Ember.Component.extend({
     return this.get("store").findRecord("manualscan", fileId);
   }).property(),
 
+  analyses: (function() {
+    return this.get("file.sortedAnalyses");
+  }).property("file.sortedAnalyses"),
+
   filteredEnvironments: (function() {
     const environments = this.get("environments");
     const appEnv = parseInt(this.get("manualscan.filteredAppEnv"));
@@ -80,6 +86,12 @@ const FileHeaderComponent = Ember.Component.extend({
     ({
       legend: { display: false },
       animation: {animateRotate: false}
+    })
+  ).property(),
+
+  barChartOptions: (() =>
+    ({
+      scales: { yAxes: [{ ticks: { beginAtZero:true, stepSize: 5 } }]},
     })
   ).property(),
 
@@ -129,7 +141,114 @@ const FileHeaderComponent = Ember.Component.extend({
 
   hasUserRoles: Ember.computed.gt('userRoleCount', 0),
 
+  scanDetailsClass: Ember.computed('isScanDetails', function() {
+    if (this.get('isScanDetails')) {
+      return 'is-active';
+    }
+  }),
+
+  owaspDetailsClass: Ember.computed('isOWASPDetails', function() {
+    if (this.get('isOWASPDetails')) {
+      return 'is-active';
+    }
+  }),
+
+  owaspData: (function() {
+    const owasps = this.get("owasps");
+    var owaspA1Count = 0, owaspA2Count = 0, owaspA3Count = 0, owaspA4Count = 0,
+    owaspA5Count = 0, owaspA6Count = 0, owaspA7Count = 0, owaspA8Count = 0,
+    owaspA9Count = 0, owaspA10Count = 0, owaspM1Count = 0, owaspM2Count = 0,
+    owaspM3Count = 0, owaspM4Count = 0, owaspM5Count = 0, owaspM6Count = 0,
+    owaspM7Count = 0, owaspM8Count = 0, owaspM9Count = 0, owaspM10Count = 0;
+    owasps.forEach(function(owasp) {
+      switch (owasp) {
+        case "A1_2013":
+          return owaspA1Count = owaspA1Count + 1;
+        case "A2_2013":
+          return owaspA2Count = owaspA2Count + 1;
+        case "A3_2013":
+          return owaspA3Count = owaspA3Count + 1;
+        case "A4_2013":
+          return owaspA4Count = owaspA4Count + 1;
+        case "A5_2013":
+          return owaspA5Count = owaspA5Count + 1;
+        case "A6_2013":
+          return owaspA6Count = owaspA6Count + 1;
+        case "A7_2013":
+          return owaspA7Count = owaspA7Count + 1;
+        case "A8_2013":
+          return owaspA8Count = owaspA8Count + 1;
+        case "A9_2013":
+          return owaspA9Count = owaspA9Count + 1;
+        case "A10_2013":
+          return owaspA10Count = owaspA10Count + 1;
+        case "M1_2016":
+          return owaspM1Count = owaspM1Count + 1;
+        case "M2_2016":
+          return owaspM2Count = owaspM2Count + 1;
+        case "M3_2016":
+          return owaspM3Count = owaspM3Count + 1;
+        case "M4_2016":
+          return owaspM4Count = owaspM4Count + 1;
+        case "M5_2016":
+          return owaspM5Count = owaspM5Count + 1;
+        case "M6_2016":
+          return owaspM6Count = owaspM6Count + 1;
+        case "M7_2016":
+          return owaspM7Count = owaspM7Count + 1;
+        case "M8_2016":
+          return owaspM8Count = owaspM8Count + 1;
+        case "M9_2016":
+          return owaspM9Count = owaspM9Count + 1;
+        case "M10_2016":
+          return owaspM10Count = owaspM10Count + 1;
+      }
+    })
+    return {
+      labels: [
+        'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10',
+        'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10'
+      ],
+      datasets: [ {
+        label: 'TOTAL COUNT vs OWASP CATEGORIES',
+        data: [
+          owaspA1Count, owaspA2Count, owaspA3Count, owaspA4Count, owaspA5Count,
+          owaspA6Count, owaspA7Count, owaspA8Count, owaspA9Count, owaspA10Count,
+          owaspM1Count, owaspM2Count, owaspM3Count, owaspM4Count, owaspM5Count,
+          owaspM6Count, owaspM7Count, owaspM8Count, owaspM9Count, owaspM10Count
+        ],
+        backgroundColor: [
+         "#e6194b", "#3cb44b", "#ffe119", "#0082c8", "#f58231", 
+         "#e6194b", "#911eb4", "#46f0f0", "#f032e6", "#d2f53c",
+         "#fabebe", "#008080", "#e6beff", "#aa6e28", "#fffac8",
+         "#800000", "#aaffc3", "#808000", "#ffd8b1", "#000080",
+        ]
+      } ]
+    };
+  }).property("owasps", "owaspA5Count", "owaspA3Count"),
+
+  owasps: Ember.computed('analyses', function() {
+    const analyses = this.get("analyses");
+    var owasps = []
+    for(let analysis of analyses) {
+      analysis.get("owasp").forEach(function(owasp) {
+        owasps.push(owasp.id)
+      });
+    }
+    return owasps
+  }),
+
   actions: {
+
+    displayScanDetails() {
+      this.set('isScanDetails', true);
+      this.set('isOWASPDetails', false);
+    },
+
+    displayOWASPDetails() {
+      this.set('isScanDetails', false);
+      this.set('isOWASPDetails', true);
+    },
 
     getPDFReportLink() {
       triggerAnalytics('feature', ENV.csb.reportDownload);
