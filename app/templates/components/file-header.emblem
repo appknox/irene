@@ -227,7 +227,8 @@
                 | &nbsp;
                 = t "copy"
     if isOWASPDetails
-      = ember-chart type='bar' data=owaspData width=200 height=200 options=barChartOptions
+      .align-center
+        = ember-chart type='bar' data=owaspData width=640 height=200 options=barChartOptions
 
 = modal-card isActive=showRunDynamicScanModal title=(t "modalCard.runAPIScan.title")
   .card-body.warning-modal

@@ -910,16 +910,29 @@ b.bold
   border: 1px solid #80C081
   background-color: #80C081
 
+.card-content
+  .chartjs-render-monitor
+    max-width: 640px!important
+
 .is-progress
   .tag
     border: 1px solid #808080
 
+.message-body
+  border-color: #f6f8fa !important
+  border-width: 0px 2px 2px 2px!important
+
 .message-header
+  border-width: 0px!important
   padding: 4px 10px
+  .severity-tags
+    width: 80px
   h6
     font-size: 16px
   .columns
     margin-top: 0px
+  &:nth-child(odd)
+    background-color: #f6f8fa
 
 .message .message-header.is-progress
   border-color: rgb(255, 224, 221)
@@ -929,7 +942,7 @@ b.bold
 .vuln-header
   border-width: 1px 1px 1px 5px
   .column
-    padding: 5px 10px
+    padding: 1px 10px
   .tag
     cursor: text
     margin-top: 3px
@@ -1226,12 +1239,11 @@ button.delete-button
       box-shadow: 0 0 3px nth($pair, 1)
 
 .vuln-header
-  .tag
+  .scan-tag, .owasp-tag
     background-color: $grey
     color: #fff
 
 .vuln-body
-  border-width: 1px!important
   border-radius: 0px 0px 5px 5px!important
   .risk-type-tag
     margin: auto
