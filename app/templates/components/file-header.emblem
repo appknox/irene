@@ -10,16 +10,16 @@
     .column.os-icon
       = fa-icon file.project.platformIconClass class="card-icon"
     .column.content-right.file-buttons
-      = link-to 'authenticated.project.settings' file.project.id class="mp-detail-project-settings is-primary" tagName="button"
-        = fa-icon "cog"
-        | &nbsp; #{t "settings"}
       if file.project.hasMultipleFiles
-        = link-to 'authenticated.choose' file.id class="mp-detail-file-compare is-primary" tagName="button"
-          = fa-icon "exchange"
-          | &nbsp; #{t "compare"}
         = link-to 'authenticated.project.files' file.project.id class="mp-detail-all-scans is-primary" tagName="button"
           = fa-icon "navicon"
           | &nbsp; #{t "allUploads"}
+        = link-to 'authenticated.choose' file.id class="mp-detail-file-compare is-primary" tagName="button"
+          = fa-icon "exchange"
+          | &nbsp; #{t "compare"}
+      = link-to 'authenticated.project.settings' file.project.id class="mp-detail-project-settings is-primary" tagName="button"
+        = fa-icon "cog"
+        | &nbsp; #{t "settings"}
 
 .card.is-fullwidth.margin-bottom20.scan-status-card
   .card-content

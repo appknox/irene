@@ -7,13 +7,6 @@
       .column
         h6.vuln-name = analysis.vulnerability.name
       .column.content-right
-        each analysis.owasp as |category|
-         span.tag.owasp-tag
-           | OWASP : #{category.code}
-           = attach-tooltip
-             = category.title
-         span.seperator
-           | |
         each analysis.vulnerability.tags as |tag|
           span.tag.scan-tag = tag
         div.margin-left.details
@@ -53,6 +46,8 @@ if showVulnerability
           .columns
             .column.is-one-sixth
               | CVSSv3
+              a href="https://help.appknox.com/using-appknox/basic-usage/vulnerability-severity" target="_blank"
+                = fa-icon "info-circle" class="more-details"
             .column.black-text
               = analysis.cvssBase
           .columns
@@ -67,6 +62,18 @@ if showVulnerability
                         = metric.key
                       .column.black-text
                         = metric.value
+          .columns
+            .column.is-one-sixth
+              | OWASP
+            .column
+              ul
+                each analysis.owasp as |category|
+                  li
+                    .columns
+                      .column.is-one-third
+                        = category.code
+                      .column.black-text
+                        = category.title
 
     .columns
       .column
