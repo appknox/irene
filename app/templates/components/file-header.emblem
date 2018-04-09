@@ -1,33 +1,27 @@
-.card.is-fullwidth.margin-bottom40.margin-top20
-  header.card-header
-    a.card-header-icon
-      img src=file.iconUrl alt=file.name
-    p.card-header-title
-      ul.is-fullwidth
-        li
-          h5
-            .columns.project-specific
-              .column.hide-overflow
-                = file.name
-              .column.is-one-sixth.app-icon
-                = fa-icon file.project.platformIconClass class="card-icon"
-              .column.content-right
-                .columns
-                  .column.card-button
-                    = link-to 'authenticated.project.settings' file.project.id class="mp-detail-project-settings" tagName="button"
-                      = fa-icon "cog"
-                      | &nbsp; #{t "settings"}
-                  if file.project.hasMultipleFiles
-                    .column.card-button
-                      = link-to 'authenticated.choose' file.id class="mp-detail-file-compare" tagName="button"
-                        = fa-icon "exchange"
-                        | &nbsp; #{t "compare"}
+.card.is-fullwidth.margin-bottom20.scan-status-card
+  .columns
+    .column.file-icon
+      .card-header-icon
+        img src=file.iconUrl alt=file.name
+    .column.hide-overflow
+      = file.name
+      div
+        | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
+    .column.os-icon
+      = fa-icon file.project.platformIconClass class="card-icon"
+    .column.content-right.file-buttons
+      = link-to 'authenticated.project.settings' file.project.id class="mp-detail-project-settings is-primary" tagName="button"
+        = fa-icon "cog"
+        | &nbsp; #{t "settings"}
+      if file.project.hasMultipleFiles
+        = link-to 'authenticated.choose' file.id class="mp-detail-file-compare is-primary" tagName="button"
+          = fa-icon "exchange"
+          | &nbsp; #{t "compare"}
+        = link-to 'authenticated.project.files' file.project.id class="mp-detail-all-scans is-primary" tagName="button"
+          = fa-icon "navicon"
+          | &nbsp; #{t "allUploads"}
 
-
-        li.file-hide-overflow
-          | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
-
-.card.is-fullwidth.margin-bottom50.scan-status-card
+.card.is-fullwidth.margin-bottom20.scan-status-card
   .card-content
     .columns
       .column.flex-center
@@ -140,11 +134,6 @@
     .column.content-right
       .card-button
         .columns
-          .column.card-button
-            if file.project.hasMultipleFiles
-              = link-to 'authenticated.project.files' file.project.id class="mp-detail-all-scans" tagName="button"
-                = fa-icon "navicon"
-                | &nbsp; #{t "allUploads"}
           .column.card-button
             button.mp-pdf-report click="getPDFReportLink" disabled=isDownloadingReport
               if isDownloadingReport
