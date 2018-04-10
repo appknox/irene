@@ -203,6 +203,13 @@ test('it exists', function(assert) {
     component.send("loginRequired");
     component.send("openRemoveUserRoleConfirmBox");
 
+    component.send("displayScanDetails");
+
+    component.send("showURLFilter", "api");
+    component.send("showURLFilter", "dynamic");
+    component.send("vpnRequired");
+    component.send("selectAppEnvironment");
+
     assert.equal(component.get("isStartingRescan"), true, "Starting Scan");
 
   });

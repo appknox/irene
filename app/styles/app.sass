@@ -44,6 +44,9 @@ body
 .margin-left
   margin-left: 10px
 
+.margin-left5
+  margin-left: 5px
+
 .margin-left30
   margin-left: 30px
 
@@ -58,6 +61,9 @@ body
 
 .margin-right
   margin-right: 10px
+
+.margin-right20
+  margin-right: 40px
 
 .margin-left-10
   margin-left: -10px
@@ -128,6 +134,9 @@ body
 
 .black-text
   color: #323232
+
+.red-text
+  color: $red
 
 .default-text
   color: $default
@@ -558,8 +567,7 @@ button, .button
     overflow: visible
 
 .app-icon
-  z-index: 0
-  left: 27%
+  margin-top: 10px
 
 .overflow-hidden
   @extend .hide-overflow
@@ -719,6 +727,10 @@ button, .button
 .hideOrShow
   cursor: pointer
 
+.os-icon
+  margin-left: 20px
+  max-width: 20px
+
 .card-icon
   margin-top: 15px
 
@@ -753,7 +765,29 @@ button, .button
     margin-left: -20px
 
 .file-hide-overflow
-  margin-top: -20px
+  margin-top: -15px
+
+.more-details
+  margin-left: 10px
+  color: $info
+  font-size: 18px
+  margin-top: 1px
+
+.file-buttons
+  margin-top: 7px
+  button
+    &:nth-child(1)
+      margin-left: 20px
+    &:nth-child(2)
+      margin-left: 10px
+    &:last-child
+      margin-left: 10px
+      margin-right: 10px
+
+.file-icon
+  margin-top: -5px
+  margin-left: 5px
+  max-width: 70px
 
 .user-roles-table
   width: 520px
@@ -910,16 +944,29 @@ b.bold
   border: 1px solid #80C081
   background-color: #80C081
 
+.card-content
+  .chartjs-render-monitor
+    max-width: 640px!important
+
 .is-progress
   .tag
     border: 1px solid #808080
 
+.message-body
+  border-color: #f6f8fa !important
+  border-width: 0px 2px 2px 2px!important
+
 .message-header
+  border-width: 0px!important
   padding: 4px 10px
+  .severity-tags
+    width: 80px
   h6
     font-size: 16px
   .columns
     margin-top: 0px
+  &:nth-child(odd)
+    background-color: #f6f8fa
 
 .message .message-header.is-progress
   border-color: rgb(255, 224, 221)
@@ -929,7 +976,7 @@ b.bold
 .vuln-header
   border-width: 1px 1px 1px 5px
   .column
-    padding: 5px 10px
+    padding: 1px 10px
   .tag
     cursor: text
     margin-top: 3px
@@ -1068,6 +1115,9 @@ ul.risk-table
 
 .font-size-18
   font-size: 18px
+
+.font-size-16
+  font-size: 16px
 
 .font-size-14
   font-size: 14px
@@ -1226,12 +1276,11 @@ button.delete-button
       box-shadow: 0 0 3px nth($pair, 1)
 
 .vuln-header
-  .tag
+  .scan-tag, .owasp-tag
     background-color: $grey
     color: #fff
 
 .vuln-body
-  border-width: 1px!important
   border-radius: 0px 0px 5px 5px!important
   .risk-type-tag
     margin: auto
@@ -1926,6 +1975,22 @@ input:checked + .slider:before
   .fa-font-size
     i
       margin-top: 5px!important
+
+.analysis-header
+  .column
+    &:first-child
+      margin-top: 10px
+      margin-left: 10px
+    &:nth-child(2)
+      margin-top: 10px
+  .sort-icons
+    cursor: pointer
+    font-size: 14px
+    margin-left: 5px
+    &.fa-sort-up
+      margin-top: 5px
+    &.fa-sort-down
+      margin-top: 0px
 
 .theme-light
   .side-menu

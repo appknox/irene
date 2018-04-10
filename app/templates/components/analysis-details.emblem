@@ -1,17 +1,14 @@
 .message-header.vuln-header.hideOrShow click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus class=progressClass
     .columns
+      .column.is-one-sixth.severity-tags class=analysis.labelClass
+        i.fa.risk-icons class=analysis.iconClass
+        .uppercase-text
+          | &nbsp;{{analysis.riskText}}
       .column
-        h6 = analysis.vulnerability.name
+        h6.vuln-name = analysis.vulnerability.name
       .column.content-right
-        each analysis.owasp as |category|
-         span.tag.owasp-tag
-           | OWASP : #{category.code}
-           = attach-tooltip
-             = category.title
-         span.seperator
-           | |
         each analysis.vulnerability.tags as |tag|
-          span.tag = tag
+          span.tag.scan-tag = tag
         div.margin-left.details
           if showVulnerability
             i.fa.fa-chevron-up
@@ -22,46 +19,66 @@ if showVulnerability
   .message-body.vuln-body
     .columns
       .column
+        h5.black-text
+          = t "description"
         if analysis.isScanning
-          = analysis.vulnerability.question
+          .margin-top
+            = analysis.vulnerability.question
         else
           if analysis.isRisky
             p = analysis.vulnerability.descriptionUnescapedd
             if analysis.vulnerability.businessImplication
-              h5.margin-top30
+              h5.margin-top30.black-text
                 = t "businessImplication"
               span.bi-span
                 | {{{analysis.vulnerability.businessImplication}}}
           else
-            = analysis.vulnerability.successMessage
+            .margin-top
+              = analysis.vulnerability.successMessage
 
-      .column.is-one-sixth.content-right.text-centre
-        div
-          div class=analysis.labelClass
-            i.fa.risk-icons class=analysis.iconClass
-            .uppercase-text
-              | &nbsp;{{analysis.riskText}}
-
-          if analysis.isRisky
-            if analysis.hascvccBase
-              div.margin-top.cvss-box class=analysis.labelClass
-                h1
-                  = analysis.cvssBase
-                h6
-                  | CVSSv3
-                = attach-tooltip animation="fade" placement="right" hideDuration=300 interactive=true
-                  ul
-                    each analysis.cvssMetricsHumanized as |metric|
-                      li
+    .regulatary-section.margin-top
+      .columns
+        .column
+          h5.black-text
+            = t "regulatory"
+      if analysis.isRisky
+        if analysis.hascvccBase
+          .columns
+            .column.is-one-sixth
+              | CVSSv3
+              a href="https://help.appknox.com/using-appknox/basic-usage/vulnerability-severity" target="_blank"
+                = fa-icon "info-circle" class="more-details"
+            .column.black-text
+              = analysis.cvssBase
+          .columns
+            .column.is-one-sixth
+              = t "cvssMetrics"
+            .column
+              ul
+                each analysis.cvssMetricsHumanized as |metric|
+                  li
+                    .columns
+                      .column.is-one-third
                         = metric.key
-                        | &nbsp; : &nbsp; {{metric.value}}
-                  div.read-more
-                    a href="https://help.appknox.com/using-appknox/basic-usage/vulnerability-severity" target="_blank"
-                      | read more
+                      .column.black-text
+                        = metric.value
+      .columns
+        .column.is-one-sixth
+          | OWASP
+        .column
+          ul
+            each analysis.owasp as |category|
+              li
+                .columns
+                  .column.is-one-third
+                    = category.code
+                  .column.black-text
+                    = category.title
+
     .columns
       .column
         if analysis.isRisky
-          h5.margin-top
+          h5.margin-top.black-text
             = t "vulnerability"
           each analysis.findings as |finding|
             p.extra-desc = finding.title
@@ -69,7 +86,7 @@ if showVulnerability
               pre.pre-code = finding.description
 
         if analysis.attachments
-          h5.margin-top20
+          h5.margin-top20.black-text
             = t "attachments"
 
           each analysis.attachments as |attachment|

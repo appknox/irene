@@ -20,3 +20,4 @@ testem.log
 package-lock.json
 
 .env.deploy.whitelabel
+typings

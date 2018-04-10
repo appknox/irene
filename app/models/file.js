@@ -11,7 +11,7 @@ const _getComputedColor = function(selector) {
   return computedStyle.getPropertyValue("color");
 };
 
-const _getAnalysesCount = (analyses, risk)=> analyses.filterBy('risk', risk).get('length');
+const _getAnalysesCount = (analysis, risk)=> analysis.filterBy('risk', risk).get('length');
 
 const File = DS.Model.extend(BaseModelMixin, {
   i18n: Ember.inject.service(),
@@ -125,8 +125,7 @@ const File = DS.Model.extend(BaseModelMixin, {
         ]
       } ]
     };
-}),
-
+  }),
 
   isNoneStatus: (function() {
     const status = this.get('dynamicStatus');
