@@ -153,6 +153,17 @@ const FileHeaderComponent = Ember.Component.extend({
     }
   }),
 
+  owasps: Ember.computed('analyses', function() {
+    const analyses = this.get("analyses");
+    var owasps = []
+    for(let analysis of analyses) {
+      analysis.get("owasp").forEach(function(owasp) {
+        owasps.push(owasp.id)
+      });
+    }
+    return owasps
+  }),
+
   owaspData: (function() {
     const owasps = this.get("owasps");
     var owaspA1Count = 0, owaspA2Count = 0, owaspA3Count = 0, owaspA4Count = 0,
@@ -226,17 +237,6 @@ const FileHeaderComponent = Ember.Component.extend({
       } ]
     };
   }).property("owasps", "owaspA5Count", "owaspA3Count"),
-
-  owasps: Ember.computed('analyses', function() {
-    const analyses = this.get("analyses");
-    var owasps = []
-    for(let analysis of analyses) {
-      analysis.get("owasp").forEach(function(owasp) {
-        owasps.push(owasp.id)
-      });
-    }
-    return owasps
-  }),
 
   actions: {
 
