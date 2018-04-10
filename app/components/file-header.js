@@ -91,7 +91,7 @@ const FileHeaderComponent = Ember.Component.extend({
 
   barChartOptions: (() =>
     ({
-      scales: { yAxes: [{ ticks: { beginAtZero:true, stepSize: 5 } }]},
+      scales: { yAxes: [{ ticks: { beginAtZero:true, stepSize: 3 } }]},
     })
   ).property(),
 
@@ -155,10 +155,13 @@ const FileHeaderComponent = Ember.Component.extend({
 
   owasps: Ember.computed('analyses', function() {
     const analyses = this.get("analyses");
-    var owasps = []
+    var owasps = [];
+    const risks = [ENUMS.RISK.CRITICAL, ENUMS.RISK.HIGH, ENUMS.RISK.MEDIUM, ENUMS.RISK.LOW];
     for(let analysis of analyses) {
       analysis.get("owasp").forEach(function(owasp) {
-        owasps.push(owasp.id)
+        if(risks.includes(analysis.get("risk"))) {
+          owasps.push(owasp.id);
+        }
       });
     }
     return owasps
