@@ -65,6 +65,17 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
       });
     } catch (error3) {}
     try {
+      Rollbar.configure({
+        payload: {
+          person: {
+            id: user.get("id"),
+            username: user.get("username"),
+            email: user.get("email")
+          }
+        }
+      });
+    } catch (error1) { error = error1; }
+    try {
       pendo.initialize({
         visitor: {
           id: user.get("id"),
