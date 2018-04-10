@@ -36,12 +36,12 @@ if showVulnerability
             .margin-top
               = analysis.vulnerability.successMessage
 
-    if analysis.isRisky
-      .regulatary-section.margin-top
-        .columns
-          .column
-            h5.black-text
-              = t "regulatary"
+    .regulatary-section.margin-top
+      .columns
+        .column
+          h5.black-text
+            = t "regulatory"
+      if analysis.isRisky
         if analysis.hascvccBase
           .columns
             .column.is-one-sixth
@@ -62,18 +62,18 @@ if showVulnerability
                         = metric.key
                       .column.black-text
                         = metric.value
-        .columns
-          .column.is-one-sixth
-            | OWASP
-          .column
-            ul
-              each analysis.owasp as |category|
-                li
-                  .columns
-                    .column.is-one-third
-                      = category.code
-                    .column.black-text
-                      = category.title
+      .columns
+        .column.is-one-sixth
+          | OWASP
+        .column
+          ul
+            each analysis.owasp as |category|
+              li
+                .columns
+                  .column.is-one-third
+                    = category.code
+                  .column.black-text
+                    = category.title
 
     .columns
       .column

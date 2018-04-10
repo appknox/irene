@@ -50,6 +50,7 @@ export default {
   "critical": "クリティカル",
   "currentPassword": "現在のパスワード",
   "currentPlan": "現在のプラン",
+  "cvssMetrics": "CVSS Metrics",
   "dashboard": "ホーム",
   "date": "日付",
   "dateCreated": "作成日",

@@ -50,6 +50,7 @@ export default {
   "critical": "Critical",
   "currentPassword": "Current Password",
   "currentPlan": "Current Plan",
+  "cvssMetrics": "CVSS Metrics",
   "dashboard": "Home",
   "date": "DATE",
   "dateCreated": "Date Created",
