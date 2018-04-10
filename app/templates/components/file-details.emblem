@@ -1,25 +1,33 @@
 .columns
   .column
     = file-header file=file class="margin-top"
-
-
-.columns.margin-left.margin-top
+    
+.columns.margin-left5.margin-top
   .column
-    h5.bold.black-text
+    .bold.black-text.uppercase-text.font-size-16.red-text
       = t "vulnerabilityDetails"
-  .column.is-one-sixth.content-right
-    select{action 'filterVulnerabilityType' on='change'} id="filter-vulnerability-type" class="input filter-input"
-      option value="-1"
-        = t "allScans"
-      each vulnerabilityTypes as |vulnerabilityType|
-        option value=vulnerabilityType.value
-          | #{ t (vulnerability-type vulnerabilityType.value)}
-
 .columns
-  .column
+  .column.margin-left5
+    .columns.analysis-header
+      .column.is-one-sixth.uppercase-text
+        div.remove click="sortImpact"
+          = t "impact"
+          if sortImpactAscending
+            i.fa.fa-sort-down.sort-icons
+          else
+            i.fa.fa-sort-up.sort-icons
+      .column.uppercase-text
+        = t "title"
+      .column.content-right.is-one-sixth
+        select{action 'filterVulnerabilityType' on='change'} id="filter-vulnerability-type" class="input filter-input"
+          option value="-1"
+            = t "allScans"
+          each vulnerabilityTypes as |vulnerabilityType|
+            option value=vulnerabilityType.value
+              | #{ t (vulnerability-type vulnerabilityType.value)}
     if filteredAnalysis
       each filteredAnalysis as |analysis|
-        = analysis-details analysis=analysis class="margin-top"
+        = analysis-details analysis=analysis
     else
       .not-found
         h4
