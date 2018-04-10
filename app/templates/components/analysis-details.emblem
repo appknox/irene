@@ -36,32 +36,32 @@ if showVulnerability
             .margin-top
               = analysis.vulnerability.successMessage
 
-    .regulatary-section.margin-top
-      .columns
-        .column
-          h5.black-text
-            = t "regulatory"
-      if analysis.isRisky
-        if analysis.hascvccBase
-          .columns
-            .column.is-one-sixth
-              | CVSSv3
-              a href="https://help.appknox.com/using-appknox/basic-usage/vulnerability-severity" target="_blank"
-                = fa-icon "info-circle" class="more-details"
-            .column.black-text
-              = analysis.cvssBase
-          .columns
-            .column.is-one-sixth
-              = t "cvssMetrics"
-            .column
-              ul
-                each analysis.cvssMetricsHumanized as |metric|
-                  li
-                    .columns
-                      .column.is-one-third
-                        = metric.key
-                      .column.black-text
-                        = metric.value
+    if analysis.isRisky
+      .regulatary-section.margin-top
+        .columns
+          .column
+            h5.black-text
+              = t "regulatory"
+      if analysis.hascvccBase
+        .columns
+          .column.is-one-sixth
+            | CVSSv3
+            a href="https://help.appknox.com/using-appknox/basic-usage/vulnerability-severity" target="_blank"
+              = fa-icon "info-circle" class="more-details"
+          .column.black-text
+            = analysis.cvssBase
+        .columns
+          .column.is-one-sixth
+            = t "cvssMetrics"
+          .column
+            ul
+              each analysis.cvssMetricsHumanized as |metric|
+                li
+                  .columns
+                    .column.is-one-third
+                      = metric.key
+                    .column.black-text
+                      = metric.value
       .columns
         .column.is-one-sixth
           | OWASP
