@@ -91,6 +91,13 @@ const FileHeaderComponent = Ember.Component.extend({
 
   barChartOptions: (() =>
     ({
+      tooltips: {
+        callbacks: {
+          title: function(tooltipItem, data) {
+            return data['tooltips'][tooltipItem[0]['index']];
+          }
+        }
+      },
       scales: { yAxes: [{ ticks: { beginAtZero:true, stepSize: 3 } }]},
     })
   ).property(),
@@ -222,6 +229,13 @@ const FileHeaderComponent = Ember.Component.extend({
       labels: [
         'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10',
         'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10'
+      ],
+      tooltips: [
+        "Injection","Broken Authentication and Session Management","Cross Site Scripting",
+        "IDOR","Security Misconfiguration","Sensitive Data Exposure","Missing function ACL","CSRF",
+        "Using components with known vulnerabilities", "Unvalidated Redirects and Forwards", "Improper Platform Usage",
+        "Insecure Data Storage","Insecure Communication","Insecure Authentication","Insufficient Cryptography",
+        "Insecure Authorization","Client Code Quality","Code Tampering", "Reverse Engineering","Extraneous Functionality",
       ],
       datasets: [ {
         label: 'TOTAL COUNT vs OWASP CATEGORIES',
