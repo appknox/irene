@@ -14,7 +14,7 @@
                 span.count
                   = organization.userCount
             li class=teamClass click="displayTeam"
-              = link-to 'authenticated.organization.teams'
+              = link-to 'authenticated.organization.teams' organization.id
                 = fa-icon "building" class="sidebar-icons"
                 = t "teams"
                 span.count

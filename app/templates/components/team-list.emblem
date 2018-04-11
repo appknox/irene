@@ -12,5 +12,5 @@ table.org-table
        = t "created"
     th.capitalize-text
       =  t "remove"
-  each teams as |team|
+  each orgTeams as |team|
     = team-overview team=team

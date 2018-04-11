@@ -2,9 +2,9 @@ import Ember from 'ember';
 import localeConfig from 'ember-i18n/config/en';
 import { moduleForModel, test } from 'ember-qunit';
 
-moduleForModel('team', 'Unit | Model | team', {
+moduleForModel('organization-team', 'Unit | Model | organization team', {
   needs: [
-    'model:team',
+    'model:organization-team',
     'model:user',
     'model:collaboration',
     'model:organization',

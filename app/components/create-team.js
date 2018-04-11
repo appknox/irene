@@ -31,6 +31,8 @@ const CreateTeamComponent = Ember.Component.extend({
       const data =
         {name: teamName};
       this.set("isCreatingTeam", true);
+      const orgId = this.get("orgId");
+      const url = [ENV.endpoints.organizations, orgId, ENV.endpoints.teams].join('/');
       const that = this;
       this.get("ajax").post(ENV.endpoints.teams, {data})
       .then((data) => {

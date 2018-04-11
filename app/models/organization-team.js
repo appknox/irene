@@ -3,7 +3,7 @@ import Ember from 'ember';
 import BaseModeMixin from 'irene/mixins/base-model';
 import { translationMacro as t } from 'ember-i18n';
 
-const Team = DS.Model.extend(BaseModeMixin, {
+const OrganizationTeam = DS.Model.extend(BaseModeMixin, {
 
   i18n: Ember.inject.service(),
 
@@ -55,4 +55,4 @@ const Team = DS.Model.extend(BaseModeMixin, {
 }
 );
 
-export default Team;
+export default OrganizationTeam;
