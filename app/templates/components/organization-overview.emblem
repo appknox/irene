@@ -8,7 +8,7 @@
         .tabs.is-medium.is-boxed.margin-top.is-centered
           ul
             li class=userClass click="displayUser"
-              = link-to 'authenticated.organization.users'
+              = link-to 'authenticated.organization.users' organization.id
                 = fa-icon "user" class="sidebar-icons"
                 | Users
                 span.count

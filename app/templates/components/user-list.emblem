@@ -11,7 +11,7 @@
           | User
         th
           | Email
-      each users as |user|
+      each orgUsers as |user|
         = user-overview user=user
 
 = modal-card class="input-modal" isActive=showAddMemberModal title="Invite Member"
