@@ -3,7 +3,7 @@ import ENV from 'irene/config/environment';
 
 const installPendo = function() {
   if (!ENV.enablePendo) {
-    return console.log("Pendo Disabled");
+    return console.log("Pendo is disabled");
   }
   return (function(apiKey) {
     (function(p, e, n, d, o) {

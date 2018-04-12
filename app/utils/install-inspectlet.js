@@ -3,7 +3,7 @@ import ENV from 'irene/config/environment';
 
 const installInspectlet = function() {
   if (!ENV.enableInspectlet) {
-    return console.log("Inspectlet Disabled");
+    return console.log("Inspectlet is disabled");
   }
   (function() {})();
   window.__insp = window.__insp || [];

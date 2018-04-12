@@ -57,8 +57,7 @@ module.exports = function(environment) {
     locationType: 'auto',
     modulePrefix: 'irene',
     environment: environment,
-    intercomAppID: "mbkqc0o1",
-    enableIntercom: true,
+    enableHubspot: true,
     enablePendo: true,
     enableInspectlet: true,
     enableCSB: true,
@@ -187,7 +186,7 @@ module.exports = function(environment) {
       enabled:false
     };
     ENV['host'] = "http://0.0.0.0:8000";
-    ENV.enableIntercom = false;
+    ENV.enableHubspot = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
@@ -199,7 +198,7 @@ module.exports = function(environment) {
       enabled: true
     };
     ENV['host'] = "http://0.0.0.0:8000";
-    ENV.enableIntercom = false;
+    ENV.enableHubspot = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
@@ -212,7 +211,7 @@ module.exports = function(environment) {
   }
 
   if (environment === 'whitelabel') {
-    ENV.enableIntercom = false;
+    ENV.enableHubspot = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
@@ -224,7 +223,7 @@ module.exports = function(environment) {
       enabled: false
     };
     ENV['host'] = "http://localhost:8000";
-    ENV.enableIntercom = false;
+    ENV.enableHubspot = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
