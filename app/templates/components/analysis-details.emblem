@@ -46,8 +46,8 @@ if showVulnerability
         .columns
           .column.is-one-sixth
             | CVSSv3
-            a href="https://help.appknox.com/using-appknox/basic-usage/vulnerability-severity" target="_blank"
-              = fa-icon "info-circle" class="more-details"
+            / a href="https://help.appknox.com/using-appknox/basic-usage/vulnerability-severity" target="_blank"
+            /   = fa-icon "info-circle" class="more-details"
           .column.black-text
             = analysis.cvssBase
         .columns
