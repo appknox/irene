@@ -217,7 +217,9 @@
                 = t "copy"
     if isOWASPDetails
       .align-center
-        = ember-chart type='bar' data=owaspData width=640 height=200 options=barChartOptions
+        = ember-chart type='bar' data=owaspData.mobile width=320 height=200 options=barChartOptions
+
+        = ember-chart type='bar' data=owaspData.web width=320 height=200 options=barChartOptions
 
 = modal-card isActive=showRunDynamicScanModal title=(t "modalCard.runAPIScan.title")
   .card-body.warning-modal

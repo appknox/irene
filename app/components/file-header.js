@@ -226,32 +226,48 @@ const FileHeaderComponent = Ember.Component.extend({
       }
     })
     return {
-      labels: [
-        'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10',
-        'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10'
-      ],
-      tooltips: [
-        "Injection","Broken Authentication and Session Management","Cross Site Scripting",
-        "IDOR","Security Misconfiguration","Sensitive Data Exposure","Missing function ACL","CSRF",
-        "Using components with known vulnerabilities", "Unvalidated Redirects and Forwards", "Improper Platform Usage",
-        "Insecure Data Storage","Insecure Communication","Insecure Authentication","Insufficient Cryptography",
-        "Insecure Authorization","Client Code Quality","Code Tampering", "Reverse Engineering","Extraneous Functionality",
-      ],
-      datasets: [ {
-        label: 'TOTAL COUNT vs OWASP CATEGORIES',
-        data: [
-          owaspA1Count, owaspA2Count, owaspA3Count, owaspA4Count, owaspA5Count,
-          owaspA6Count, owaspA7Count, owaspA8Count, owaspA9Count, owaspA10Count,
-          owaspM1Count, owaspM2Count, owaspM3Count, owaspM4Count, owaspM5Count,
-          owaspM6Count, owaspM7Count, owaspM8Count, owaspM9Count, owaspM10Count
+      mobile: {
+        labels: [
+          'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10'
         ],
-        backgroundColor: [
-         "#36A2EB", "#36A2EB", "#36A2EB", "#36A2EB", "#36A2EB",
-         "#36A2EB", "#36A2EB", "#36A2EB", "#36A2EB", "#36A2EB",
-         "#00008b", "#00008b", "#00008b", "#00008b", "#00008b",
-         "#00008b", "#00008b", "#00008b", "#00008b", "#00008b",
-        ]
-      } ]
+        tooltips: [
+          "Improper Platform Usage", "Insecure Data Storage","Insecure Communication",
+          "Insecure Authentication","Insufficient Cryptography", "Insecure Authorization",
+          "Client Code Quality","Code Tampering", "Reverse Engineering","Extraneous Functionality"
+        ],
+        datasets: [ {
+          label: 'OWASP MOBILE CATEGORIES',
+          data: [
+            owaspM1Count, owaspM2Count, owaspM3Count, owaspM4Count, owaspM5Count,
+            owaspM6Count, owaspM7Count, owaspM8Count, owaspM9Count, owaspM10Count
+          ],
+          backgroundColor: [
+           "#00008b", "#00008b", "#00008b", "#00008b", "#00008b",
+           "#00008b", "#00008b", "#00008b", "#00008b", "#00008b",
+          ]
+        } ]
+      },
+      web: {
+        labels: [
+          'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10'
+        ],
+        tooltips: [
+          "Injection","Broken Authentication and Session Management","Cross Site Scripting",
+          "IDOR","Security Misconfiguration","Sensitive Data Exposure","Missing function ACL","CSRF",
+          "Using components with known vulnerabilities", "Unvalidated Redirects and Forwards"
+        ],
+        datasets: [ {
+          label: 'OWASP WEB CATEGORIES',
+          data: [
+            owaspA1Count, owaspA2Count, owaspA3Count, owaspA4Count, owaspA5Count,
+            owaspA6Count, owaspA7Count, owaspA8Count, owaspA9Count, owaspA10Count
+          ],
+          backgroundColor: [
+           "#36A2EB", "#36A2EB", "#36A2EB", "#36A2EB", "#36A2EB",
+           "#36A2EB", "#36A2EB", "#36A2EB", "#36A2EB", "#36A2EB",
+          ]
+        } ]
+      }
     };
   }).property("owasps", "owaspA5Count", "owaspA3Count"),
 
