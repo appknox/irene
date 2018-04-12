@@ -3,7 +3,7 @@ import ENV from 'irene/config/environment';
 var customerSuccessBox;
 customerSuccessBox = function() {
   if(!ENV.enableCSB) {
-    return(console.log("CSB Disabled"))
+    return(console.log("CSB is disabled"))
   }
   else {
     var analytics = window.analytics = window.analytics || [];
