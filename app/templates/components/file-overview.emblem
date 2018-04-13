@@ -15,13 +15,13 @@ header.card-header
         | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
 .card-content
   .content
-    .columns
+    .columns.app-information
       .column.flex-center.lowercase-text
         div.overflow.ellipse
           = t "started"
           | &nbsp; #{moment-from-now file.createdOn}
-          = attach-tooltip placement="bottom"
-            = file.createdOnDateTime
+        = attach-tooltip placement="bottom"
+          = file.createdOnDateTime
       .column.flex-center
         div.overflow.ellipse
           = t "versionCode"
