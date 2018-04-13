@@ -16,19 +16,21 @@ header.card-header
 .card-content
   .content
     .columns
-      .column.flex-center.nowrap-trim.lowercase-text
-        = t "started"
-        | &nbsp; #{moment-from-now file.createdOn}
-        = attach-tooltip placement="bottom"
-          = file.createdOnDateTime
-      .column.flex-center.nowrap-trim
-        = t "versionCode"
-        | {{#if file.versionCode}} - #{file.versionCode}{{/if}}
+      .column.flex-center.lowercase-text
+        div.overflow.ellipse
+          = t "started"
+          | &nbsp; #{moment-from-now file.createdOn}
+          = attach-tooltip placement="bottom"
+            = file.createdOnDateTime
+      .column.flex-center
+        div.overflow.ellipse
+          = t "versionCode"
+          | {{#if file.versionCode}} - #{file.versionCode}{{/if}}
 
     .columns class=isReverse:is-reverse
       .column.flex-center
         = ember-chart type='doughnut' data=file.doughnutData width=150 height=150 options=chartOptions
-      .file-details-class  
+      .file-details-class
       .column
         ul.risk-table
           .risk-values
