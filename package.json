@@ -11,7 +11,8 @@
     "build": "ember build",
     "start": "ember server",
     "test": "ember test",
-    "postinstall": "bower install"
+    "postinstall": "bower install",
+    "deploy": "ember deploy production --verbose=true --activate=true --show-progress=true"
   },
   "repository": "",
   "engines": {

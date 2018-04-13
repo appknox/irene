@@ -10,25 +10,24 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
             - v1-deps-{{ .Branch }}-
             - v1-deps-
       - run:
           name: NPM Install
           command: npm install
-      - run: npm install -g bower
       - save_cache:
-          key: v1-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - ./node_modules
       - run:
           name: Run Ember Test
-          command: COVERAGE=true npx ember test
+          command: COVERAGE=true npm test
       - deploy:
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
 
-              npx ember deploy production --verbose=true --activate=true --show-progress=true
+              npm deploy
 
               curl https://api.rollbar.com/api/1/deploy/ \
                 -F access_token=$ROLLBAR_ACCESS_TOKEN \
