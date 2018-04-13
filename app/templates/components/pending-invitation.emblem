@@ -7,5 +7,7 @@ td
   else
     = t "organization"
 td
-  button.is-primary.lowercase-text click=""
-    = t "cancel"
+  button.is-primary.lowercase-text click="openDeleteInvitationConfirmBox"
+    = t "deleteInvitation"
+
+= confirm-box isActive=showDeleteInvitationConfirmBox title=(t 'confirmBox.deleteInvitation') delegate=this disabled=isDeletetingInvitation

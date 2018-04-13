@@ -4,7 +4,6 @@ export default DRFSerializer.extend({
   normalizeResponse: function (store, primaryModelClass, payload, id, requestType) {
     return {
       data: payload.data.map((item)=> {
-        debugger
         return {
           id: item.id,
           type: 'organization-team',

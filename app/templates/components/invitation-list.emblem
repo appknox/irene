@@ -3,16 +3,16 @@ if invitations
     .column.margin-left
       table.org-table
         tr
-          th
+          th.uppercase-text
             = t "email"
-          th
+          th.uppercase-text
             = t "team"
             | /
             = t "organization"
           th
-            = t "cancel"
+            = t "actions"
         each invitations as |invitation|
-          = pending-invitation invitation=invitation
+          = pending-invitation invitation=invitation orgId=orgId
 else
   .not-found
     h4

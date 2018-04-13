@@ -27,7 +27,7 @@ Router.map(function() {
       this.route('users', {path: '/:orgId/users'});
       this.route('teams', {path: '/:orgId/teams'});
       this.route('team', {path: '/team/:teamId'});
-      this.route('invitations');
+      this.route('invitations',{path: '/:orgId/invitations'});
     });
     this.route("settings", {path: '/settings'}, function() {
       this.route('general');

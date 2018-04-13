@@ -71,6 +71,7 @@ export default {
   "dateCreated": "作成日",
   "dateUpdated": "更新日",
   "delete": "削除",
+  "deleteInvitation": "delete invitation",
   "deleteTeam": "チームを削除",
   "description": "説明",
   "details": "詳細",
@@ -154,6 +155,7 @@ export default {
   "invalidPassword": "パスワードが正しくありません",
   "invalidURL": "は無効なURLです",
   "invite": "招待",
+  "invitationDeleted": "Invitation is deleted successfully",
   "invoice": "請求書",
   "invoices": "請求書",
   "invoiceId": "請求書ID",
@@ -383,7 +385,8 @@ export default {
     "revokeJira": "JIRAとの連携を解除してもよろしいですか？",
     "cancelSubsciption": "サブスクリプションをキャンセルしてよろしいですか？",
     "revokePersonalToken": "パーソナルアクセストークンを削除してよろしいですか？",
-    "removeUserRole":	"Are you sure you want to remove this role?"
+    "removeUserRole":	"Are you sure you want to remove this role?",
+    "deleteInvitation": "Are you sure you want to delete this invitation?"
   },
   "promptBox": {
     "collaborationPrompt": {

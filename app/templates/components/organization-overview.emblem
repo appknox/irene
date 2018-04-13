@@ -20,7 +20,7 @@
                 span.count
                   = organization.teamCount
             li class=invitationClass click="displayInvitation"
-              = link-to 'authenticated.organization.invitations'
+              = link-to 'authenticated.organization.invitations' organization.id
                 = fa-icon "user-plus" class="sidebar-icons"
                 | Invitations
                 span.count

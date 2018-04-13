@@ -71,6 +71,7 @@ export default {
   "dateCreated": "Date Created",
   "dateUpdated": "Date Updated",
   "delete": "Delete",
+  "deleteInvitation": "delete invitation",
   "deleteTeam": "Delete Team",
   "description": "Description",
   "details": "Details",
@@ -154,6 +155,7 @@ export default {
   "invalidPassword": "Passwords did not match",
   "invalidURL": " is an invalid URL",
   "invite": "Invite",
+  "invitationDeleted": "Invitation is deleted successfully",
   "invoice": "INVOICE",
   "invoices": "Invoices",
   "invoiceId": "INVOICE ID",
@@ -383,7 +385,8 @@ export default {
     "revokeJira": "Are you sure you want to revoke JIRA Integration?",
     "cancelSubsciption": "Are you sure you want to cancel Subscription?",
     "revokePersonalToken": "Are you sure you want to delete this personal access token?",
-    "removeUserRole":	"Are you sure you want to remove this role?"
+    "removeUserRole":	"Are you sure you want to remove this role?",
+    "deleteInvitation": "Are you sure you want to delete this invitation?"
   },
   "promptBox": {
     "collaborationPrompt": {
