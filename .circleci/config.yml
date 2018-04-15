@@ -1,0 +1,42 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:6-browsers
+        environment:
+          JOBS: 2
+    working_directory: ~/appknox
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
+            - v1-deps-{{ .Branch }}-
+            - v1-deps-
+      - run:
+          name: NPM Install
+          command: npm install
+      - save_cache:
+          key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: Run Ember Test
+          command: COVERAGE=true npm test
+      - deploy:
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+
+              npm deploy
+
+              curl https://api.rollbar.com/api/1/deploy/ \
+                -F access_token=$ROLLBAR_ACCESS_TOKEN \
+                -F environment=$ENVIRONMENT \
+                -F revision=$REVISION \
+                -F local_username=$LOCAL_USERNAME
+              curl $OPBEAT_ENDPOINT \
+                -H "Authorization: Bearer $OPBEAT_TOKEN" \
+                -d rev=`git log -n 1 --pretty=format:%H` \
+                -d branch=$REVISION \
+                -d status=completed
+            fi

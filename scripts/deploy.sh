@@ -6,7 +6,7 @@
 # Distributed under terms of the MIT license.
 #
 
-ember deploy production --verbose=true --activate=true --show-progress=true
+npx ember deploy production --verbose=true --activate=true --show-progress=true
 
 ENVIRONMENT=production
 LOCAL_USERNAME=`whoami`
