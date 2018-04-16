@@ -3,6 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/node:6-browsers
+      - image: redis:2.8.19
         environment:
           JOBS: 2
     working_directory: ~/appknox
