@@ -27,7 +27,7 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
 
-              npm deploy
+              npm run deploy
 
               curl https://api.rollbar.com/api/1/deploy/ \
                 -F access_token=$ROLLBAR_ACCESS_TOKEN \
