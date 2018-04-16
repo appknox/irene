@@ -16,7 +16,8 @@ const PendingInvitationComponent = Ember.Component.extend({
     const tInvitationDeleted = this.get("tInvitationDeleted");
     const that = this;
     const orgId = this.get("orgId");
-    const url = [ENV.endpoints.organizations, orgId, ENV.endpoints.invitations].join('/');
+    const invitationId = this.get("invitation.id");
+    const url = [ENV.endpoints.organizations, orgId, ENV.endpoints.invitations, invitationId].join('/');
     this.set("isDeletingInvitation", true);
     this.get("ajax").delete(url)
     .then(function() {

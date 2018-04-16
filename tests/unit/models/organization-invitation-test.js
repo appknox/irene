@@ -1,7 +1,7 @@
 import { moduleForModel, test } from 'ember-qunit';
 
-moduleForModel('invitation', 'Unit | Model | invitation', {
-  needs: ['model:team', 'model:user']
+moduleForModel('organization-invitation', 'Unit | Model | organization invitation', {
+  needs: ['model:organization-team', 'model:organization-user']
 });
 
 test('it exists', function(assert) {

@@ -2,9 +2,9 @@ import Ember from 'ember';
 
 const InvitationListComponent = Ember.Component.extend({
 
-  invitations: (function() {
-    return this.get("store").findAll("invitation");
-  }).property()
+  orgInvitations: (function() {
+    return this.get("store").query('organization-invitation', {id: this.get("orgId")});
+  }).property(),
 });
 
 export default InvitationListComponent;

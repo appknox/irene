@@ -1,6 +1,6 @@
 import DS from 'ember-data';
 
-const Invitation = DS.Model.extend({
+const OrganizationInvitation = DS.Model.extend({
 
   role : DS.attr('number'),
   email: DS.attr('string'),
@@ -9,4 +9,4 @@ const Invitation = DS.Model.extend({
 });
 
 
-export default Invitation;
+export default OrganizationInvitation;
