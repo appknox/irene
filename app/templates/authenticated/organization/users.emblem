@@ -1,2 +1,2 @@
 .org-container
-  = user-list orgId=model.orgId
+  = user-list organization=model

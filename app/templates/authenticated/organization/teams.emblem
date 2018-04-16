@@ -1,5 +1,5 @@
 .org-container
-  = create-team orgId=model.orgId
+  = create-team organization=model
   .columns
     .column
-      = team-list orgId=model.orgId
+      = team-list organization=model

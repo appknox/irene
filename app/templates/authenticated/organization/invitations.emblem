@@ -1,2 +1,2 @@
 .org-container
-  = invitation-list orgId=model.orgId
+  = invitation-list organization=model

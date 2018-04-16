@@ -12,7 +12,7 @@ if orgInvitations
           th
             = t "actions"
         each orgInvitations as |invitation|
-          = pending-invitation invitation=invitation orgId=orgId
+          = pending-invitation invitation=invitation organization=organization
 else
   .not-found
     h4

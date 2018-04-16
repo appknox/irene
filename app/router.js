@@ -24,10 +24,10 @@ Router.map(function() {
   this.route('authenticated', {path: '/'}, function() {
     this.route("index", {path: '/'});
     this.route("organization", {path: '/organization'}, function() {
-      this.route('users', {path: '/:orgId/users'});
-      this.route('teams', {path: '/:orgId/teams'});
+      this.route('users', {path: '/:organization_id/users'});
+      this.route('teams', {path: '/:organization_id/teams'});
       this.route('team', {path: '/team/:teamId'});
-      this.route('invitations',{path: '/:orgId/invitations'});
+      this.route('invitations',{path: '/:organization_id/invitations'});
     });
     this.route("settings", {path: '/settings'}, function() {
       this.route('general');

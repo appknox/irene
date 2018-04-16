@@ -7,7 +7,7 @@ const Organization = DS.Model.extend(BaseModelMixin, {
   teamCount: DS.attr('number'),
   invitationCount: DS.attr('number'),
   users: DS.hasMany('user', {inverse: 'organization'}),
-  teams: DS.hasMany('team', {inverse: 'organization'})
+  organizationTeams: DS.hasMany('organizationTeam', {inverse: 'organization'})
 });
 
 export default Organization;

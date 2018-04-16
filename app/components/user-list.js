@@ -14,7 +14,7 @@ export default Ember.Component.extend({
   tOrgMemberInvited: t("orgMemberInvited"),
 
   orgUsers: (function() {
-    return this.get("store").query('organization-user', {id: this.get("orgId")});
+    return this.get("store").query('organization-user', {id: this.get("organization.id")});
   }).property(),
 
   actions: {
