@@ -12,6 +12,14 @@ export default DRFSerializer.extend({
             members: item.attributes.members,
             membersCount: item.attributes["members-count"],
             projectsCount: item.attributes["projects-count"]
+          },
+          relationships: {
+            "organization": {
+              "data": {
+                "type": "organization",
+                "id": item.relationships.organization.data.id
+              }
+            }
           }
         }
       })

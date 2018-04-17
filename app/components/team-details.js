@@ -8,9 +8,9 @@ const TeamDetailsComponent = Ember.Component.extend({
   ajax: Ember.inject.service(),
   notify: Ember.inject.service('notification-messages-service'),
 
-  team: null,
   identification: "",
   isAddingMember: false,
+  organizationTeam: null,
   isInvitingMember: false,
   isSearchingMember: false,
 
@@ -54,7 +54,8 @@ const TeamDetailsComponent = Ember.Component.extend({
 
     addMember(userId) {
       const teamId = this.get("organizationTeam.id");
-      const url = [ENV.endpoints.teams, teamId, "members", userId].join("/");
+      const orgId = this.get("organizationTeam.organization.id");
+      const url = [ENV.endpoints.organizations, orgId, ENV.endpoints.teams, teamId, "members", userId].join("/");
       const that = this;
       this.set("isAddingMember", true);
       this.get("ajax").put(url)
@@ -82,7 +83,7 @@ const TeamDetailsComponent = Ember.Component.extend({
       }
       const data = {
         identification: identification,
-        team_id: this.get("team.id")
+        team_id: this.get("organizationTeam.id")
       };
       this.set("isInvitingMember", true);
       this.get("ajax").post(url, {data})
