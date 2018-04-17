@@ -17,10 +17,6 @@ const TeamDetailsComponent = Ember.Component.extend({
   tEmptyEmailId: t("emptyEmailId"),
   tTeamMemberInvited: t("teamMemberInvited"),
 
-  invitations: (function() {
-    this.get("store").findAll("invitation");
-  }).property(),
-
   searchMember() {
     const searchText = this.get("identification");
     const searchQuery = `q=${searchText}`;
@@ -57,7 +53,7 @@ const TeamDetailsComponent = Ember.Component.extend({
     },
 
     addMember(userId) {
-      const teamId = this.get("team.id");
+      const teamId = this.get("organizationTeam.id");
       const url = [ENV.endpoints.teams, teamId, "members", userId].join("/");
       const that = this;
       this.set("isAddingMember", true);

@@ -13,4 +13,4 @@ table.org-table
     th.capitalize-text
       =  t "remove"
   each orgTeams as |team|
-    = team-overview team=team
+    = team-overview team=team organization=organization
