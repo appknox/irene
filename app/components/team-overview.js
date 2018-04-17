@@ -1,10 +1,12 @@
 import Ember from 'ember';
+import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
 
 const TeamOverviewComponent = Ember.Component.extend({
 
   i18n: Ember.inject.service(),
   team: null,
+  organization: null,
   tagName: ["tr"],
 
   isDeletingTeam: false,
@@ -25,12 +27,16 @@ const TeamOverviewComponent = Ember.Component.extend({
       return this.get("notify").error(tEnterRightTeamName);
     }
     this.set("isDeletingTeam", true);
-    team.destroyRecord()
-    .then(() => {
-      this.set("isDeletingTeam", false);
-      this.get("notify").success(`${tTeam} - ${deletedTeam} ${tTeamDeleted} `);
-    }, (error) => {
-      this.set("isDeletingTeam", false);
+    const orgId = this.get("organization.id");
+    const teamId = this.get("team.id");
+    const url = [ENV.endpoints.organizations, orgId, ENV.endpoints.teams, teamId].join('/');
+    const that = this;
+    this.get("ajax").delete(url)
+    .then(function(){
+      that.set("isDeletingTeam", false);
+      that.get("notify").success(`${tTeam} - ${deletedTeam} ${tTeamDeleted} `);})
+    .catch(function(error) {
+      that.set("isDeletingTeam", false);
       for (error of error.errors) {
         this.get("notify").error(error.title || undefined);
       }
