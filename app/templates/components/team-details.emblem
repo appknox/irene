@@ -21,7 +21,7 @@
           =  t "remove"
       if organizationTeam.hasMembers
         each organizationTeam.teamMembers as |member|
-          = team-member member=member team=team
+          = team-member member=member organizationTeam=organizationTeam
       else
         .not-found
           h4

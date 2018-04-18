@@ -55,7 +55,7 @@ const TeamDetailsComponent = Ember.Component.extend({
     addMember(userId) {
       const teamId = this.get("organizationTeam.id");
       const orgId = this.get("organizationTeam.organization.id");
-      const url = [ENV.endpoints.organizations, orgId, ENV.endpoints.teams, teamId, "members", userId].join("/");
+      const url = [ENV.endpoints.organizations, orgId, ENV.endpoints.teams, teamId, ENV.endpoints.members, userId].join("/");
       const that = this;
       this.set("isAddingMember", true);
       this.get("ajax").put(url)
