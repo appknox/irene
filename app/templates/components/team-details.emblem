@@ -1,11 +1,11 @@
 .columns
   .column
-    = link-to 'authenticated.organization.teams'
+    = link-to 'authenticated.organization.teams' organizationTeam
       = fa-icon "angle-left"
       | &nbsp; Back to Teams
   .column.text-centre
     h5
-      = team.name
+      = organizationTeam.name
   .column.content-right
     button.is-primary.highlighted-button.uppercase-text click="openAddMemberModal"
       | + #{t "addMember"}
@@ -19,18 +19,14 @@
           = t "role"
         th.capitalize-text
           =  t "remove"
-      tr
-        td
-          = team.owner.username
-
-        td.lowercase-text
-          = t "owner"
-        td
-          button.is-primary disabled="disabled"
-            = t "remove"
-      if team.hasMembers
-        each team.teamMembers as |member|
+      if organizationTeam.hasMembers
+        each organizationTeam.teamMembers as |member|
           = team-member member=member team=team
+      else
+        .not-found
+          h4
+            = fa-icon "exclamation-triangle"
+            | no members
 
 = modal-card class="input-modal user-search-modal" isActive=showAddMemberModal title=(t "modalCard.addMember.title")
   .card-body
