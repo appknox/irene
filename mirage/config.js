@@ -143,6 +143,10 @@ export default function() {
     return {};
   });
 
+  this.get('/organizations/:id', () => {
+    return {};
+  });
+
   this.post('/set_jira/:id', () => {
     return {};
   });

@@ -23,11 +23,12 @@ Router.map(function() {
   this.route('setup', {path: '/setup/:uuid/:token'});
   this.route('authenticated', {path: '/'}, function() {
     this.route("index", {path: '/'});
-    this.route("organization", {path: '/organization'}, function() {
-      this.route('users', {path: '/:organization_id/users'});
-      this.route('teams', {path: '/:organization_id/teams'});
+    this.route("organizations", {path: '/organizations'});
+    this.route("organization", {path: '/organization/:organization_id'}, function() {
+      this.route('users', {path: '/users'});
+      this.route('teams', {path: '/teams'});
       this.route('team', {path: '/team/:team_id'});
-      this.route('invitations',{path: '/:organization_id/invitations'});
+      this.route('invitations',{path: '/invitations'});
     });
     this.route("settings", {path: '/settings'}, function() {
       this.route('general');

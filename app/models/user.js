@@ -16,7 +16,7 @@ const User = DS.Model.extend({
   lastName: DS.attr('string'),
   ownedProjects: DS.hasMany('project', {inverse:'owner'}),
   projects: DS.hasMany('project'),
-  teams: DS.hasMany('team', {inverse: 'users'}),
+  organizationTeams: DS.hasMany('organizationTeam', {inverse: 'users'}),
   ownedTeams: DS.hasMany('team', {inverse: 'owner'}),
   pricings: DS.hasMany('pricing'),
   submissions: DS.hasMany('submission', {inverse:'user'}),
