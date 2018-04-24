@@ -173,6 +173,9 @@ module.exports = function(environment) {
     },
     whitelabel: {
       theme: 'dark'
+    },
+    gReCaptcha: {
+      siteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
     }
   };
 
@@ -284,6 +287,5 @@ module.exports = function(environment) {
     ENV.host = process.env.IRENE_API_HOST || 'https://api.appknox.com';
     ENV.socketPath = process.env.IRENE_API_SOCKET_PATH || 'https://socket.appknox.com';
   }
-
   return ENV;
 };
