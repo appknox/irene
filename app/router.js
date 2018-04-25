@@ -12,6 +12,7 @@ Router.map(function() {
   this.route('freestyle');
   this.route('login');
   this.route('register');
+  this.route('activate', {path: '/activate/:pk/:token'});
   this.route('recover');
   this.route('reset', {path: '/reset/:uuid/:token'});
   this.route('setup', {path: '/setup/:uuid/:token'});
