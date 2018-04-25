@@ -9,24 +9,24 @@
   .column.content-right
     button.is-primary.highlighted-button.uppercase-text click="openAddMemberModal"
       | + #{t "addMember"}
-.columns
-  .column
-    table.org-table
-      tr
-        th
-          = t "members"
-        th
-          = t "role"
-        th.capitalize-text
-          =  t "remove"
-      if organizationTeam.hasMembers
+if organizationTeam.hasMembers
+  .columns
+    .column
+      table.org-table
+        tr
+          th
+            = t "members"
+          th
+            = t "role"
+          th.capitalize-text
+            =  t "remove"
         each organizationTeam.teamMembers as |member|
           = team-member member=member organizationTeam=organizationTeam
-      else
-        .not-found
-          h4
-            = fa-icon "exclamation-triangle"
-            | no members
+else
+  .not-found
+    h4
+      = fa-icon "exclamation-triangle"
+      | no members
 
 = modal-card class="input-modal user-search-modal" isActive=showAddMemberModal title=(t "modalCard.addMember.title")
   .card-body

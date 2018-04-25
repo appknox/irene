@@ -1,22 +1,32 @@
 h4.margin-left.text-centre
-  = organization.name
+  div class=showHide:show:hide
+    = organization.name
+    span.edit-button click="editOrganization"
+      = fa-icon "pencil"
+  div class=editSave:edit:save
+    = input class="input edit-input" type="text" placeholder=organization.name value=organization.name
+    span.edit-button click="updateOrganization"
+      = fa-icon "check"
+    span.edit-button click="cancelEditing"
+      = fa-icon "times"
+
 .tabs.is-medium.is-boxed.margin-top.is-centered
-        ul
-          li class=userClass click="displayUser"
-            = link-to 'authenticated.organization.users' organization
-              = fa-icon "user" class="sidebar-icons"
-              | Users
-              span.count
-                = organization.userCount
-          li class=teamClass click="displayTeam"
-            = link-to 'authenticated.organization.teams' organization
-              = fa-icon "building" class="sidebar-icons"
-              = t "teams"
-              span.count
-                = organization.teamCount
-          li class=invitationClass click="displayInvitation"
-            = link-to 'authenticated.organization.invitations' organization
-              = fa-icon "user-plus" class="sidebar-icons"
-              | Invitations
-              span.count
-                = organization.invitationCount
+  ul
+    li class=userClass click="displayUser"
+      = link-to 'authenticated.organization.users' organization
+        = fa-icon "user" class="sidebar-icons"
+        | Users
+        span.count
+          = organization.userCount
+    li class=teamClass click="displayTeam"
+      = link-to 'authenticated.organization.teams' organization
+        = fa-icon "building" class="sidebar-icons"
+        = t "teams"
+        span.count
+          = organization.teamCount
+    li class=invitationClass click="displayInvitation"
+      = link-to 'authenticated.organization.invitations' organization
+        = fa-icon "user-plus" class="sidebar-icons"
+        | Invitations
+        span.count
+          = organization.invitationCount

@@ -217,6 +217,7 @@ export default {
   "or": "または",
   "orginalRisk": "Orginal Risk",
   "organization": "Organization",
+  "organizationNameUpdated": "Successfully updated the organization name",
   "osVersion": "OSバージョン",
   "overrideRisk": "Override Risk",
   "overriddenRisk": "Overridden Risk",
