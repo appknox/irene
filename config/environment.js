@@ -167,6 +167,7 @@ module.exports = function(environment) {
       disableMFA: 'mfa/disable',
       teams: 'teams',
       organizations: 'organizations',
+      users: 'users',
       members: 'members',
       signedInvoiceUrl: 'download_url',
       invoices: 'invoices',

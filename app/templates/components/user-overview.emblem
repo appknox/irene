@@ -2,3 +2,10 @@ td
   = user.username
 td
   = user.email
+td
+  select.select{action 'selectUserRole' on='change'} id="org-user-role" class="width100"
+    option selected="true" value=user.humanizedRole
+      | #{ t (user-role user.role)}
+    each filteredUserRoles as |userRole|
+      option value=userRole.value
+        | #{ t (user-role userRole.value)}

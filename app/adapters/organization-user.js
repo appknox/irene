@@ -1,10 +1,12 @@
 import DRFAdapter from './drf';
+import ENV from 'irene/config/environment';
 import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
 
 export default DRFAdapter.extend(DataAdapterMixin, {
-  authorizer: 'authorizer:irene',
+  host: ENV.host,
+  namespace: ENV.namespace,
   addTrailingSlashes: false,
-  namespace: 'api',
+  authorizer: 'authorizer:irene',
   query: function query(store, type, query) {
     let url = `${this.get('host')}/${this.get('namespace')}/organizations/${query.id}/users`;
     return this.ajax(url, 'GET');

@@ -60,6 +60,11 @@ const ENUMS = {
     READ_ONLY: 2
   },
 
+  ORGANIZATION_ROLES: {
+    MEMBER: 0,
+    OWNER: 1
+  },
+
   SUBMISSION_STATUS: {
     DOWNLOAD_PREPARE: 0,
     DOWNLOADING: 1,
