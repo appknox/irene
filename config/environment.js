@@ -156,7 +156,9 @@ module.exports = function(environment) {
       subscriptions: "subscriptions",
       rescan: "rescan",
       personaltokens: "personaltokens",
-      setUnknownAnalysisStatus: "set_unknown_analysis_status"
+      setUnknownAnalysisStatus: "set_unknown_analysis_status",
+      registration: "registration",
+      activate: "activate"
     },
     csb: {
       reportDownload: { feature: "Account Settings", module: "Setup", product: "Appknox" },
@@ -173,6 +175,9 @@ module.exports = function(environment) {
     },
     whitelabel: {
       theme: 'dark'
+    },
+    gReCaptcha: {
+      siteKey: '6LfDdlUUAAAAAE9Bz9-3FLjrNw_AEUk11zXDH-0_'
     }
   };
 
@@ -191,6 +196,9 @@ module.exports = function(environment) {
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
+    ENV.gReCaptcha = {
+      siteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+    }
   }
 
   if (environment === 'mirage') {
@@ -233,6 +241,9 @@ module.exports = function(environment) {
     };
     ENV.rollbar = {
       enabled: false
+    };
+    ENV.gReCaptcha = {
+      siteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
     };
   }
 
@@ -284,6 +295,5 @@ module.exports = function(environment) {
     ENV.host = process.env.IRENE_API_HOST || 'https://api.appknox.com';
     ENV.socketPath = process.env.IRENE_API_SOCKET_PATH || 'https://socket.appknox.com';
   }
-
   return ENV;
 };

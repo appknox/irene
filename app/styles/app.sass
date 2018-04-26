@@ -6,6 +6,7 @@ $FreestyleGuide-color--foreground: $text
 $FreestyleGuide-color--background: $background
 @import 'ember-freestyle'
 @import 'vars'
+@import 'form'
 
 $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert), danger: ($danger, $danger-invert), critical: ($critical, $critical-invert)) !default
 
@@ -2062,3 +2063,50 @@ $attachment-icon-width: 4em
   &-icon
     position: absolute
     right: 1em
+
+.signup-container, .activate-container
+  padding: 2em 0;
+  padding-bottom: 7em;
+  display: flex;
+  justify-content: center;
+  background-color: #424651;
+
+.activate-main
+  background-color: #FFF;
+  width: 40em;
+  border-radius: 5px;
+  padding: 25px 20px;
+  display: flex;
+  flex-direction: column;
+  &-icon
+    color: $success;
+    font-size: 5em;
+    margin: auto;
+  &-text
+    font-size: 1.2em;
+    padding: 1em 1em 0;
+
+.signup-form
+  background-color: #FFF;
+  width: 40em;
+  border-radius: 5px;
+  padding: 25px 20px;
+  &.success
+    .register-form
+      display: None;
+    .register-confirm
+      display: flex;
+  .register-confirm
+    display: None;
+    flex-direction: column;
+    &-icon
+      font-size: 8em;
+      margin: auto;
+    &-text
+      font-size: 1.2em;
+      padding: 1em 1em 0;
+  .is-success
+    color: $success;
+  .g-recaptcha
+    display: flex;
+    justify-content: center;
