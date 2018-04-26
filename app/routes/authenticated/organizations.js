@@ -9,7 +9,6 @@ export default Ember.Route.extend(ScrollTopMixin, {
   },
   redirect(model, transition){
     const currentRoute = transition.targetName;
-    debugger
     if(currentRoute === "authenticated.organizations") {
         this.transitionTo(`/organization/${model.content[0].id}/users`);
     }

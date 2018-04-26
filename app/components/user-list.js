@@ -30,9 +30,11 @@ export default Ember.Component.extend({
       const data = {
         identification
       };
+      const orgId = this.get("organization.id");
+      const url = [ENV.endpoints.organizations, orgId, ENV.endpoints.invitations].join('/');
       this.set("isInvitingMember", true);
       const that = this;
-      this.get("ajax").post(ENV.endpoints.invitations, {data})
+      this.get("ajax").post(url, {data})
       .then(function(){
         const tOrgMemberInvited = that.get("tOrgMemberInvited");
         that.get("notify").success(tOrgMemberInvited);
