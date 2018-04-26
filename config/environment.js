@@ -156,7 +156,9 @@ module.exports = function(environment) {
       subscriptions: "subscriptions",
       rescan: "rescan",
       personaltokens: "personaltokens",
-      setUnknownAnalysisStatus: "set_unknown_analysis_status"
+      setUnknownAnalysisStatus: "set_unknown_analysis_status",
+      registration: "registration",
+      activate: "activate"
     },
     csb: {
       reportDownload: { feature: "Account Settings", module: "Setup", product: "Appknox" },
@@ -239,6 +241,9 @@ module.exports = function(environment) {
     };
     ENV.rollbar = {
       enabled: false
+    };
+    ENV.gReCaptcha = {
+      siteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
     };
   }
 

@@ -82,11 +82,11 @@
     "ember-websockets": "7.0.2",
     "loader.js": "^4.0.1",
     "mock-socket": "6.0.4",
+    "node-sass": "^4.9.0",
     "phantomjs-prebuilt": "^2.1.14"
   },
   "dependencies": {
     "clipboard": "^1.7.1",
-    "ember-cli-document-title": "^0.3.3",
-    "node-sass": "^4.9.0"
+    "ember-cli-document-title": "^0.3.3"
   }
 }

@@ -2087,6 +2087,15 @@ $attachment-icon-width: 4em
     padding: 1em 1em 0;
 
 .signup-form
+  background-color: #FFF;
+  width: 40em;
+  border-radius: 5px;
+  padding: 25px 20px;
+  &.success
+    .register-form
+      display: None;
+    .register-confirm
+      display: flex;
   .register-confirm
     display: None;
     flex-direction: column;
@@ -2096,15 +2105,6 @@ $attachment-icon-width: 4em
     &-text
       font-size: 1.2em;
       padding: 1em 1em 0;
-  &.success
-    .register-form
-      display: None;
-    .register-confirm
-      display: flex;
-  background-color: #FFF;
-  width: 40em;
-  border-radius: 5px;
-  padding: 25px 20px;
   .is-success
     color: $success;
   .g-recaptcha

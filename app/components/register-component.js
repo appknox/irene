@@ -1,7 +1,8 @@
 import Ember from 'ember';
-import RegisterValidation from '../validations/register';
+import ENV from 'irene/config/environment';
 import lookupValidator from 'ember-changeset-validations';
 import Changeset from 'ember-changeset';
+import RegisterValidation from '../validations/register';
 
 export default Ember.Component.extend({
 
@@ -20,7 +21,7 @@ export default Ember.Component.extend({
   },
 
   registerWithServer (data) {
-    return this.get('ajax').request('/registration', {
+    return this.get('ajax').request(ENV.endpoints.registration, {
       method: 'POST',
       data: data
     }).then(() => {
