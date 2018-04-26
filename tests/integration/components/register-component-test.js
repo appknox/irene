@@ -1,12 +1,19 @@
+import Ember from 'ember';
 import { moduleForComponent, test } from 'ember-qunit';
 
 moduleForComponent('register-component', 'Integration | Component | register component', {
-  integration: true
+  unit: true,
+  needs: [
+    'component:g-recaptcha',
+    'component:fa-icon'
+  ],
 });
 
-test('it renders', function(assert) {
-  // Set any properties with this.set('myProperty', 'value');
-  // Handle any actions with this.on('myAction', function(val) { ... });
-  assert.ok(true);
-  assert.equal(this.$().text().trim(), '');
+test('tapping button fires an external action', function(assert) {
+
+  var component = this.subject();
+
+  Ember.run(function() {
+    assert.notOk(component.init());
+  });
 });
