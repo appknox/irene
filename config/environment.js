@@ -175,7 +175,7 @@ module.exports = function(environment) {
       theme: 'dark'
     },
     gReCaptcha: {
-      siteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+      siteKey: '6LfDdlUUAAAAAE9Bz9-3FLjrNw_AEUk11zXDH-0_'
     }
   };
 
@@ -194,6 +194,9 @@ module.exports = function(environment) {
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
+    ENV.gReCaptcha = {
+      siteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+    }
   }
 
   if (environment === 'mirage') {
