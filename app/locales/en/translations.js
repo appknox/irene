@@ -220,6 +220,7 @@ export default {
   "orginalRisk": "Orginal Risk",
   "organization": "Organization",
   "organizationNameUpdated": "Successfully updated the organization name",
+  "organizationTeamNameUpdated": "Successfully updated the team name",
   "osVersion": "OS Version",
   "overrideRisk": "Override Risk",
   "overriddenRisk": "Overridden Risk",

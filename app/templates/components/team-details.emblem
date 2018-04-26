@@ -5,7 +5,16 @@
       | &nbsp; Back to Teams
   .column.text-centre
     h5
-      = organizationTeam.name
+      div class=showHide:show:hide
+        = organizationTeam.name
+        span.edit-button.top0 click="editTeamName"
+          = fa-icon "pencil"
+      div class=editSave:edit:save
+        = input class="input edit-input maxwidth50" type="text" placeholder=organizationTeam.name value=organizationTeam.name
+        span.edit-button click="updateTeam"
+          = fa-icon "check"
+        span.edit-button click="cancelEditing"
+          = fa-icon "times"
   .column.content-right
     button.is-primary.highlighted-button.uppercase-text click="openAddMemberModal"
       | + #{t "addMember"}

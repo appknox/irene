@@ -7,7 +7,8 @@ const TeamDetailsComponent = Ember.Component.extend({
   i18n: Ember.inject.service(),
   ajax: Ember.inject.service(),
   notify: Ember.inject.service('notification-messages-service'),
-
+  showHide: true,
+  editSave: false,
   identification: "",
   isAddingMember: false,
   organizationTeam: null,
@@ -16,6 +17,7 @@ const TeamDetailsComponent = Ember.Component.extend({
 
   tEmptyEmailId: t("emptyEmailId"),
   tTeamMemberInvited: t("teamMemberInvited"),
+  tOrganizationTeamNameUpdated: t("organizationTeamNameUpdated"),
 
   searchMember() {
     const searchText = this.get("identification");
@@ -103,6 +105,36 @@ const TeamDetailsComponent = Ember.Component.extend({
         this.set("isInvitingMember", false);
         this.get("notify").error(error.payload.message);
       });
+    },
+
+    updateTeam() {
+      const teamId = this.get("organizationTeam.id");
+      const orgTeamName = this.get("organizationTeam.name");
+      const orgId = this.get("organizationTeam.organization.id");
+      const tOrganizationTeamNameUpdated = this.get("tOrganizationTeamNameUpdated");
+      const data = {
+        name: orgTeamName
+      };
+      const url = [ENV.endpoints.organizations, orgId, ENV.endpoints.teams, teamId].join("/");
+      const that = this;
+      this.get("ajax").put(url, {data})
+      .then(function() {
+        that.get("notify").success(tOrganizationTeamNameUpdated);
+        that.send("cancelEditing");
+      })
+      .catch(function(error) {
+        that.get("notify").error(error.payload.message);
+      })
+    },
+
+    editTeamName() {
+      this.set('showHide', false);
+      this.set('editSave', true);
+    },
+
+    cancelEditing() {
+      this.set('showHide', true);
+      this.set('editSave', false);
     }
   }
 });
