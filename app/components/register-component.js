@@ -6,11 +6,7 @@ import Changeset from 'ember-changeset';
 export default Ember.Component.extend({
 
   captcha: '',
-  registerPOJO: {
-    "username": "sharat",
-    "company": "appknox",
-    "email": "sharat@appknox.com"
-  },
+  registerPOJO: {},
   serverErrors: {},
   success: false,
 
@@ -42,6 +38,8 @@ export default Ember.Component.extend({
     register(changeset) {
       changeset.validate().then(() => {
         if (changeset.get('isValid')) {
+          const firstname = changeset.get('firstname');
+          const lastname = changeset.get('lastname');
           const username = changeset.get('username');
           const email = changeset.get('email');
           const password = changeset.get('password');
@@ -49,6 +47,8 @@ export default Ember.Component.extend({
           const companyName = changeset.get('company');
           const captcha = this.get('captcha');
           this.registerWithServer({
+            'first_name': firstname,
+            'last_name': lastname,
             'username': username,
             'email': email,
             'password': password,

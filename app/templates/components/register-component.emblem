@@ -5,6 +5,13 @@
       h4.has-text-centered
         |  Signup
 
+      .input-wrap
+        .label-error
+          label
+            | Name
+        .half-wrap
+          = input class="input-field" placeholder="First Name" value=changeset.firstname autocomplete="fname" autofocus="autofocus"
+          = input class="input-field" placeholder="Last Name" value=changeset.lastname autocomplete="lname"
       .input-wrap class={if changeset.error.username 'has-error'}
         .label-error
           label
@@ -13,7 +20,7 @@
             span.error-msg
               | #{changeset.error.username.validation}
 
-        = input class="input-field" placeholder="Username" value=changeset.username autofocus="autofocus" autocomplete="username"
+        = input class="input-field" placeholder="Username" value=changeset.username autocomplete="username"
 
       .input-wrap class={if changeset.error.email 'has-error'}
         .label-error
@@ -22,7 +29,7 @@
           if changeset.error.email
             span.error-msg
               | #{changeset.error.email.validation}
-        = input class="input-field" placeholder="Email" value=changeset.email autofocus="autofocus" autocomplete="email"
+        = input class="input-field" placeholder="Email" value=changeset.email autocomplete="email"
 
       .input-wrap class={if changeset.error.company 'has-error'}
         .label-error
@@ -31,7 +38,7 @@
           if changeset.error.company
             span.error-msg
               | #{changeset.error.company.validation}
-        = input class="input-field" placeholder="Company Name" value=changeset.company autofocus="autofocus" autocomplete="company"
+        = input class="input-field" placeholder="Company Name" value=changeset.company autocomplete="company"
 
       .input-wrap
         .label-error

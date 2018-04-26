@@ -15,7 +15,13 @@ $color-error: #FE4D3F;
       color: $color-error;
     }
   }
-
+  .half-wrap {
+    display: flex;
+    justify-content: space-between;
+    .input-field {
+      width: 49%;
+    }
+  }
   .input-field {
     margin: 0.2em 0;
     appearance: none;
