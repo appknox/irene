@@ -60,6 +60,11 @@
           button.button.is-primary.is-fullwidth.login-button.mp-login-button.highlighted-button{action "register" changeset}
             = t "register"
 
+      .register-form-footer
+        = t "alreadyHaveAccount"
+        = link-to "login"  class="register-form-footer-link"
+            = t "login"
+
     .register-confirm
       = fa-icon "check-circle" class="is-success register-confirm-icon"
       p.register-confirm-text

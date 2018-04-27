@@ -2065,48 +2065,65 @@ $attachment-icon-width: 4em
     right: 1em
 
 .signup-container, .activate-container
-  padding: 2em 0;
-  padding-bottom: 7em;
-  display: flex;
-  justify-content: center;
-  background-color: #424651;
+  padding: 2em 0
+  padding-bottom: 7em
+  display: flex
+  justify-content: center
+  background-color: #424651
 
 .activate-main
-  background-color: #FFF;
-  width: 40em;
-  border-radius: 5px;
-  padding: 25px 20px;
-  display: flex;
-  flex-direction: column;
+  background-color: #FFF
+  width: 40em
+  border-radius: 5px
+  padding: 2em 1em
+  display: flex
+  flex-direction: column
   &-icon
-    color: $success;
-    font-size: 5em;
-    margin: auto;
+    color: $success
+    font-size: 5em
+    margin: auto
   &-text
-    font-size: 1.2em;
-    padding: 1em 1em 0;
+    font-size: 1.2em
+    padding: 1em 1em 0
 
 .signup-form
-  background-color: #FFF;
-  width: 40em;
-  border-radius: 5px;
-  padding: 25px 20px;
+  background-color: #FFF
+  width: 40em
+  border-radius: 5px
+  overflow: hidden
   &.success
     .register-form
-      display: None;
+      display: None
     .register-confirm
-      display: flex;
+      display: flex
+
+  .register-form
+    padding-top: 0.6em
+    &-container
+      padding: 2em 1.6em
+    &-footer
+      display: flex
+      justify-content: center
+      padding: 1.5em 1em 1.6em
+      border-top: 1px solid #efefef
+      background: lighten(#424651, 68%)
+      &-link
+        margin-left: 0.5em
+
   .register-confirm
-    display: None;
-    flex-direction: column;
+    padding: 2em 1em
+    display: None
+    flex-direction: column
     &-icon
-      font-size: 8em;
-      margin: auto;
+      font-size: 8em
+      margin: auto
     &-text
-      font-size: 1.2em;
-      padding: 1em 1em 0;
+      font-size: 1.2em
+      padding: 1em 1em 0
+
   .is-success
-    color: $success;
+    color: $success
+
   .g-recaptcha
-    display: flex;
-    justify-content: center;
+    display: flex
+    justify-content: center
