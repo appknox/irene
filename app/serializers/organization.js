@@ -9,8 +9,8 @@ export default DRFSerializer.extend({
           type: 'organization',
           attributes: {
             name: item.name,
-            membersCount: item["members-count"],
-            projectsCount: item["projects_count"],
+            invitationCount: item["invitation_count"],
+            teamCount: item["team_count"],
             userCount: item["user_count"],
             owner: {
               username: item.username,
