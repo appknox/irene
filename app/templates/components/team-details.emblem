@@ -10,7 +10,7 @@
         span.edit-button.top0 click="editTeamName"
           = fa-icon "pencil"
       div class=editSave:edit:save
-        = input class="input edit-input maxwidth50" type="text" placeholder=organizationTeam.name value=organizationTeam.name
+        = input class="input edit-input maxwidth65" type="text" placeholder=organizationTeam.name value=organizationTeam.name
         span.edit-button click="updateTeam"
           = fa-icon "check"
         span.edit-button click="cancelEditing"
@@ -18,24 +18,25 @@
   .column.content-right
     button.is-primary.highlighted-button.uppercase-text click="openAddMemberModal"
       | + #{t "addMember"}
-if organizationTeam.hasMembers
-  .columns
-    .column
-      table.org-table
-        tr
-          th
-            = t "members"
-          th
-            = t "role"
-          th.capitalize-text
-            =  t "remove"
-        each organizationTeam.teamMembers as |member|
-          = team-member member=member organizationTeam=organizationTeam
-else
-  .not-found
-    h4
-      = fa-icon "exclamation-triangle"
-      | no members
+
+/ if organizationTeam.hasMembers
+.columns
+  .column
+    table.org-table
+      tr
+        th
+          = t "username"
+        th
+          = t "email"
+        th.capitalize-text
+          =  t "remove"
+      each teamMembers as |member|
+        = team-member member=member organizationTeam=organizationTeam
+/ else
+/   .not-found
+/     h4
+/       = fa-icon "exclamation-triangle"
+/       | no members
 
 = modal-card class="input-modal user-search-modal" isActive=showAddMemberModal title=(t "modalCard.addMember.title")
   .card-body

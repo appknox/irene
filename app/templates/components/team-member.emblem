@@ -1,8 +1,7 @@
 td
-  = member
-
+  = member.username
 td
-  = t "member"
+  = member.email
 td
   button.is-primary click="openRemoveMemberPrompt"
     = t "remove"

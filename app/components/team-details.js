@@ -19,6 +19,12 @@ const TeamDetailsComponent = Ember.Component.extend({
   tTeamMemberInvited: t("teamMemberInvited"),
   tOrganizationTeamNameUpdated: t("organizationTeamNameUpdated"),
 
+  teamMembers: (function() {
+    const teamId = this.get("organizationTeam.id");
+    const orgId = this.get("organizationTeam.organization.id");
+    return this.get("store").query('team-member', {orgId: orgId, teamId: teamId});
+  }).property(),
+
   searchMember() {
     const searchText = this.get("identification");
     const searchQuery = `q=${searchText}`;
