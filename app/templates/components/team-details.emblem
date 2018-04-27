@@ -32,6 +32,17 @@
           =  t "remove"
       each teamMembers as |member|
         = team-member member=member organizationTeam=organizationTeam
+.columns
+  .column
+    table.org-table
+      tr
+        th
+          | Project Name
+
+        th.capitalize-text
+          =  t "remove"
+      each teamProjects as |project|
+        = team-project project=project organizationTeam=organizationTeam
 / else
 /   .not-found
 /     h4
