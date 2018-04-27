@@ -16,6 +16,10 @@ export default Ember.Component.extend({
 
     tOrganizationNameUpdated: t("organizationNameUpdated"),
 
+    org: (function() {
+      return this.get("store").queryRecord('organization', {id: this.get("organization.id")});
+    }).property(),
+
     userClass: Ember.computed('isUsers', function() {
       if (this.get('isUsers')) {
         return 'is-active';
