@@ -3,13 +3,12 @@ import DRFSerializer from './drf';
 export default DRFSerializer.extend({
   normalizeResponse: function (store, primaryModelClass, payload) {
     return {
-      data: payload.data.map((item)=> {
+      data: payload.results.map((item)=> {
         return {
-          id: item.id,
+          id: item.uuid,
           type: 'organization-invitation',
           attributes: {
-            role: item.attributes.role,
-            email: item.attributes.email
+            email: item.email
           }
         };
       })
