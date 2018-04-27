@@ -9,10 +9,9 @@ const OrganizationTeam = DS.Model.extend(BaseModeMixin, {
 
   uuid: DS.attr('string'),
   name: DS.attr('string'),
-  members: DS.attr('string'),
   membersCount: DS.attr('number'),
   projectsCount: DS.attr('number'),
-  owner: DS.belongsTo('user', {inverse: 'ownedTeams'}),
+  owner: DS.attr('string'),
   users: DS.hasMany('user', {inverse: 'teams'}),
   collaborations: DS.hasMany('collaboration', {inverse:'team'}),
   organization: DS.belongsTo('organization', {inverse: 'organizationTeams'}),
@@ -25,8 +24,6 @@ const OrganizationTeam = DS.Model.extend(BaseModeMixin, {
   isDefaultTeam: (function() {
     return "Default" === this.get("name");
   }).property("name"),
-
-  hasMembers: Ember.computed.notEmpty("members"),
 
   totalMembers: (function() {
     const tMember = this.get("tMember");
@@ -46,12 +43,7 @@ const OrganizationTeam = DS.Model.extend(BaseModeMixin, {
       return `${projectsCount} ${tProject}`;
     }
     return `${projectsCount} ${tProjects}`;
-  }).property("projectsCount"),
-
-  teamMembers: (function() {
-    const members = this.get("members");
-    return members.split(",");
-  }).property("members")
+  }).property("projectsCount")
 }
 );
 

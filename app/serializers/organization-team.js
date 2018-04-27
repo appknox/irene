@@ -11,7 +11,9 @@ export default DRFSerializer.extend({
             name: item.name,
             members: item.members,
             membersCount: item["members_count"],
-            projectsCount: item["projects_count"]
+            projectsCount: item["projects_count"],
+            owner: item.owner.username,
+            createdOn: item["created_on"]
           },
           relationships: {
             "organization": {

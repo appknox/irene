@@ -3,5 +3,5 @@ import config from 'irene/config/environment';
 import ScrollTopMixin from 'irene/mixins/scroll-top';
 
 export default Ember.Route.extend(ScrollTopMixin, {
-  title: `Organization${config.platform}`
+  title: `Organizations${config.platform}`
 });

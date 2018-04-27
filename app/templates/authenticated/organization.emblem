@@ -1,4 +1,3 @@
 .org-container
   = organization-details organization=model
-
 = outlet

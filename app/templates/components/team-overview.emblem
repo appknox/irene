@@ -2,15 +2,13 @@ td
   = link-to "authenticated.organization.team" team
     = team.name
 td
-  = team.owner.username
+  = team.owner
 td
   | #{team.totalMembers}
 td
   | #{team.totalProjects}
 td
   = moment-from-now team.createdOn
-  = attach-tooltip placement="top"
-    = team.createdOnDateTime
 td
   i.fa.fa-trash-o.remove click="openDeleteTeamPrompt" disabled=team.isDefaultTeam
 

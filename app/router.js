@@ -24,7 +24,7 @@ Router.map(function() {
   this.route('authenticated', {path: '/'}, function() {
     this.route("index", {path: '/'});
     this.route("organizations", {path: '/organizations'});
-    this.route("organization", {path: '/organization/:organization_id'}, function() {
+    this.route("organization", {path: '/organization/:id'}, function() {
       this.route('users', {path: '/users'});
       this.route('teams', {path: '/teams'});
       this.route('team', {path: '/team/:team_id'});
