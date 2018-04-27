@@ -1,5 +1,5 @@
 td
-  = link-to "authenticated.organization.team" team
+  = link-to "authenticated.organization.team" team.id
     = team.name
 td
   = team.owner
