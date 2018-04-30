@@ -15,8 +15,6 @@ h6
       th
         = t "teams"
       th
-        = t "owner"
-      th
         = t "role"
       th.capitalize-text
         = t "remove"

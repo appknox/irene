@@ -5,6 +5,7 @@ import { translationMacro as t } from 'ember-i18n';
 export default Ember.Component.extend({
 
     i18n: Ember.inject.service(),
+    routing: Ember.inject.service('-routing'),
     ajax: Ember.inject.service(),
     notify: Ember.inject.service('notification-messages-service'),
 
@@ -20,20 +21,35 @@ export default Ember.Component.extend({
       return this.get("store").queryRecord('organization', {id: this.get("organization.id")});
     }).property(),
 
+    didInsertElement() {
+      const route = this.get('routing.currentRouteName');
+      const routeName = route.split(".")[2];
+      if(routeName === "teams" || routeName === "team") {
+        this.set('isUsers', false);
+        this.set('isTeams', true);
+        this.set('isInvitation', false);
+      }
+      else if(routeName === "invitations") {
+        this.set('isUsers', false);
+        this.set('isTeams', false);
+        this.set('isInvitation', true);
+      }
+    },
+
     userClass: Ember.computed('isUsers', function() {
-      if (this.get('isUsers')) {
+      if (this.get('isUsers')){
         return 'is-active';
       }
     }),
 
     teamClass: Ember.computed('isTeams', function() {
-      if (this.get('isTeams')) {
+      if (this.get('isTeams')){
         return 'is-active';
       }
     }),
 
     invitationClass: Ember.computed('isInvitation', function() {
-      if (this.get('isInvitation')) {
+      if (this.get('isInvitation')){
         return 'is-active';
       }
     }),
