@@ -6,11 +6,11 @@
   .column.text-centre
     h5
       div class=showHide:show:hide
-        = organizationTeam.name
+        = orgTeam.name
         span.edit-button.top0 click="editTeamName"
           = fa-icon "pencil"
       div class=editSave:edit:save
-        = input class="input edit-input maxwidth65" type="text" placeholder=organizationTeam.name value=organizationTeam.name
+        = input class="input edit-input maxwidth65" type="text" placeholder=orgTeam.name value=orgTeam.name
         span.edit-button click="updateTeam"
           = fa-icon "check"
         span.edit-button click="cancelEditing"

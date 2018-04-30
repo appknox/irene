@@ -10,5 +10,9 @@ export default DRFAdapter.extend(DataAdapterMixin, {
   query: function query(store, type, query) {
     let url = `${this.get('host')}/${this.get('namespace')}/organizations/${query.id}/teams`;
     return this.ajax(url, 'GET');
+  },
+  queryRecord: function queryRecord(store, type, query) {
+    let url = `${this.get('host')}/${this.get('namespace')}/organizations/${query.orgId}/teams/${query.teamId}`;
+    return this.ajax(url, 'GET');
   }
 });
