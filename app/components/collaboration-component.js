@@ -13,9 +13,13 @@ const CollaborationComponentComponent = Ember.Component.extend({
   tSelectAnyTeam: t("selectAnyTeam"),
   tCollaborationAdded: t("collaborationAdded"),
 
+
+
   orgTeams: (function() {
     const organizations = this.get("organizations");
-    return this.get("store").query('organization-team', {id: organizations.content[0].id});
+    const orgId = organizations.content[0].id;
+    this.set("orgId", orgId);
+    return this.get("store").query('organization-team', {id: orgId});
   }).property("organizations"),
 
   actions: {
