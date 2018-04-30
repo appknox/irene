@@ -8,22 +8,22 @@
 
 h6
   = t "otherTemplates.addATeam"
-
-.collaboration-container
-  table.collaboration-table.margin-top
-    tr
-      th
-        = t "teams"
-      th
-        = t "owner"
-      th
-        = t "role"
-      th.capitalize-text
-        = t "remove"
-    each collaborations as |collaboration|
-      = collaboration-details collaboration=collaboration
-
-= modal-card class="input-modal collaboration-modal" isActive=showCollaborationModal title=(t "modalCard.collaboration.title")
+/
+/ .collaboration-container
+/   table.collaboration-table.margin-top
+/     tr
+/       th
+/         = t "teams"
+/       th
+/         = t "owner"
+/       th
+/         = t "role"
+/       th.capitalize-text
+/         = t "remove"
+/     each collaborations as |collaboration|
+/       = collaboration-details collaboration=collaboration
+/
+= modal-card class="input-modal" isActive=showCollaborationModal title=(t "modalCard.collaboration.title")
   .card-body
     .card-wrapper
       form

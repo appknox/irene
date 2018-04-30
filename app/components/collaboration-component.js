@@ -13,18 +13,10 @@ const CollaborationComponentComponent = Ember.Component.extend({
   tSelectAnyTeam: t("selectAnyTeam"),
   tCollaborationAdded: t("collaborationAdded"),
 
-  collaborations: (function() {
-    const projectId = this.get("project.id");
-    return this.get("store").query("collaboration", {projectId});
-  }).property("project.id", "realtime.CollaborationCounter"),
-
-  teams: (function() {
-    return this.get("store").findAll("team")
-    .then((teams) => {
-      const teamsData = teams.filter(team => "Default" !== team.data.name);
-      this.set("teams", teamsData);
-    });
-  }).property(),
+  orgTeams: (function() {
+    const organizations = this.get("organizations");
+    return this.get("store").query('organization-team', {id: organizations.content[0].id});
+  }).property("organizations"),
 
   actions: {
 
