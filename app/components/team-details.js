@@ -20,14 +20,14 @@ const TeamDetailsComponent = Ember.Component.extend({
   tOrganizationTeamNameUpdated: t("organizationTeamNameUpdated"),
 
   teamMembers: (function() {
-    const teamId = this.get("organizationTeam.id");
-    const orgId = this.get("organizationTeam.organization.id");
+    const orgId = this.get("organization.id");
+    const teamId = this.get("team.teamId");
     return this.get("store").query('team-member', {orgId: orgId, teamId: teamId});
   }).property(),
 
   teamProjects: (function() {
-    const teamId = this.get("organizationTeam.id");
-    const orgId = this.get("organizationTeam.organization.id");
+    const orgId = this.get("organization.id");
+    const teamId = this.get("team.teamId");
     return this.get("store").query('team-project', {orgId: orgId, teamId: teamId});
   }).property(),
 
