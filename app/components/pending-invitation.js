@@ -15,7 +15,7 @@ const PendingInvitationComponent = Ember.Component.extend({
   confirmCallback() {
     const tInvitationDeleted = this.get("tInvitationDeleted");
     const that = this;
-    const orgId = this.get("orgId");
+    const orgId = this.get("organization.id");
     const invitationId = this.get("invitation.id");
     const url = [ENV.endpoints.organizations, orgId, ENV.endpoints.invitations, invitationId].join('/');
     this.set("isDeletingInvitation", true);
@@ -25,7 +25,7 @@ const PendingInvitationComponent = Ember.Component.extend({
         that.set("isDeletelingInvitation", false);
       }
       that.get("notify").success(tInvitationDeleted);
-      this.set("showDeleteInvitationConfirmBox", false);
+      that.set("showDeleteInvitationConfirmBox", false);
     })
     .catch(function(error) {
       if(!that.isDestroyed) {
