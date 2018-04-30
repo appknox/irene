@@ -126,9 +126,9 @@ const TeamDetailsComponent = Ember.Component.extend({
     },
 
     updateTeam() {
-      const teamId = this.get("organizationTeam.id");
-      const orgTeamName = this.get("organizationTeam.name");
-      const orgId = this.get("organizationTeam.organization.id");
+      const teamId = this.get("orgTeam.id");
+      const orgTeamName = this.get("orgTeam.name");
+      const orgId = this.get("orgTeam.organization.id");
       const tOrganizationTeamNameUpdated = this.get("tOrganizationTeamNameUpdated");
       const data = {
         name: orgTeamName
