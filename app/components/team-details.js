@@ -84,8 +84,8 @@ const TeamDetailsComponent = Ember.Component.extend({
         if(!that.isDestroyed) {
           that.set("isAddingMember", false);
           that.set("identification", "");
-          that.store.pushPayload(data);
           that.set("showAddMemberModal", false);
+          that.store.pushPayload(data);
         }
       })
       .catch(function(error){

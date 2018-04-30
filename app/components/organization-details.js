@@ -58,8 +58,8 @@ export default Ember.Component.extend({
       },
 
       updateOrganization() {
-        const orgId = this.get("organization.id");
-        const orgName = this.get("organization.name");
+        const orgId = this.get("org.id");
+        const orgName = this.get("org.name");
         const tOrganizationNameUpdated = this.get("tOrganizationNameUpdated");
         const data = {
           name: orgName

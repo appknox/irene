@@ -34,7 +34,9 @@ const TeamOverviewComponent = Ember.Component.extend({
     this.get("ajax").delete(url)
     .then(function(){
       that.set("isDeletingTeam", false);
-      that.get("notify").success(`${tTeam} - ${deletedTeam} ${tTeamDeleted} `);})
+      that.get("notify").success(`${tTeam} - ${deletedTeam} ${tTeamDeleted} `);
+      that.set("showDeleteTeamPrompt", false);
+    })
     .catch(function(error) {
       that.set("isDeletingTeam", false);
       for (error of error.errors) {
