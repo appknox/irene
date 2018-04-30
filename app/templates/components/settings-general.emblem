@@ -1,11 +1,3 @@
-.box-container.margin-top
-  .columns
-    .column
-      h5.bold.black-text
-        = t "namespace"
-      = t "addNewNamespace"
-      .namespace-list
-        = namespace-component user=user
 .box-container
   .columns
     .column.is-one-third
@@ -14,15 +6,3 @@
       = t "selectLanguage"
       .language-select
         = select-language
-.box-container
-  .columns
-    .column
-      h5.bold.black-text.is-fullwidth
-        = t "jiraIntegration"
-      = jira-account user=user class="column is-one-third"
-.margin-left
-  .columns
-    .column
-      h5.bold.black-text.is-fullwidth
-        = t "githubIntegration"
-      = github-account user=user class="column is-one-third"

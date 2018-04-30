@@ -13,7 +13,7 @@ export default Ember.Component.extend({
     isTeams: false,
     showHide: true,
     editSave: false,
-    isInvitation: false,
+    isSettings: false,
 
     tOrganizationNameUpdated: t("organizationNameUpdated"),
 
@@ -27,12 +27,12 @@ export default Ember.Component.extend({
       if(routeName === "teams" || routeName === "team") {
         this.set('isUsers', false);
         this.set('isTeams', true);
-        this.set('isInvitation', false);
+        this.set('isSettings', false);
       }
-      else if(routeName === "invitations") {
+      else if(routeName === "settings") {
         this.set('isUsers', false);
         this.set('isTeams', false);
-        this.set('isInvitation', true);
+        this.set('isSettings', true);
       }
     },
 
@@ -48,8 +48,8 @@ export default Ember.Component.extend({
       }
     }),
 
-    invitationClass: Ember.computed('isInvitation', function() {
-      if (this.get('isInvitation')){
+    settingsClass: Ember.computed('isSettings', function() {
+      if (this.get('isSettings')){
         return 'is-active';
       }
     }),
@@ -58,19 +58,19 @@ export default Ember.Component.extend({
       displayUser() {
         this.set('isUsers', true);
         this.set('isTeams', false);
-        this.set('isInvitation', false);
+        this.set('isSettings', false);
       },
 
       displayTeam() {
         this.set('isUsers', false);
         this.set('isTeams', true);
-        this.set('isInvitation', false);
+        this.set('isSettings', false);
       },
 
-      displayInvitation() {
+      displaySettings() {
         this.set('isUsers', false);
         this.set('isTeams', false);
-        this.set('isInvitation', true);
+        this.set('isSettings', true);
       },
 
       updateOrganization() {

@@ -24,9 +24,7 @@ h4.margin-left.text-centre
         = t "teams"
         span.count
           = org.teamCount
-    li class=invitationClass click="displayInvitation"
-      = link-to 'authenticated.organization.invitations' organization.id
-        = fa-icon "user-plus" class="sidebar-icons"
-        | Invitations
-        span.count
-          = org.invitationCount
+    li class=settingsClass click="displaySettings"
+      = link-to 'authenticated.organization.settings' organization.id
+        = fa-icon "cog" class="sidebar-icons"
+        = t "settings"
