@@ -17,6 +17,10 @@ export default Ember.Component.extend({
     return this.get("store").query('organization-user', {id: this.get("organization.id")});
   }).property(),
 
+  orgInvitations: (function() {
+    return this.get("store").query('organization-invitation', {id: this.get("organization.id")});
+  }).property(),
+
   actions: {
     openAddMemberModal() {
       this.set("showAddMemberModal", true);

@@ -1,0 +1,8 @@
+td
+  = invitation.email
+
+td
+  button.is-primary.lowercase-text click="openDeleteInvitationConfirmBox"
+    = t "deleteInvitation"
+
+= confirm-box isActive=showDeleteInvitationConfirmBox title=(t 'confirmBox.deleteInvitation') delegate=this disabled=isDeletetingInvitation
