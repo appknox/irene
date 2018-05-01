@@ -15,39 +15,60 @@
           = fa-icon "check"
         span.edit-button click="cancelEditing"
           = fa-icon "times"
-  .column.content-right
-    button.is-primary.highlighted-button.uppercase-text click="openAddMemberModal"
-      | + #{t "addMember"}
+  .column
 
-if teamMembers
+
+.margin-top
   .columns
     .column
-      table.org-table
-        tr
-          th
-            = t "username"
-          th
-            = t "email"
-          th.capitalize-text
-            =  t "remove"
-        each teamMembers as |member|
-          = team-member member=member organizationTeam=organizationTeam
+      h5.bold.black-text
+        | List of Members
+    .column.content-right
+      button.is-primary.highlighted-button.uppercase-text click="openAddMemberModal"
+        | + #{t "addMember"}
+  if teamMembers
+    .columns
+      .column
+        table.org-table
+          tr
+            th
+              = t "username"
+            th
+              = t "email"
+            th.capitalize-text
+              =  t "remove"
+          each teamMembers as |member|
+            = team-member member=member organizationTeam=organizationTeam
+  else
+    .not-found
+      h4
+        = fa-icon "exclamation-triangle"
+        | no members
+
+.margin-top
   .columns
     .column
-      table.org-table
-        tr
-          th
-            | Project Name
+      h5.bold.black-text
+        | List of Projects
+  if teamProjects
+    .columns
+      .column
+        table.org-table
+          tr
+            th
+              | Package Name
+            th
+              | Project Name
+            th.capitalize-text
+              =  t "remove"
+          each teamProjects as |project|
+            = team-project project=project organizationTeam=organizationTeam
+  else
+    .not-found
+      h4
+        = fa-icon "exclamation-triangle"
+        | no projects
 
-          th.capitalize-text
-            =  t "remove"
-        each teamProjects as |project|
-          = team-project project=project organizationTeam=organizationTeam
-else
-  .not-found
-    h4
-      = fa-icon "exclamation-triangle"
-      | no members
 
 = modal-card class="input-modal user-search-modal" isActive=showAddMemberModal title=(t "modalCard.addMember.title")
   .card-body
