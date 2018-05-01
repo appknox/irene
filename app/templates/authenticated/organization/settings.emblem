@@ -6,7 +6,7 @@
           = t "namespace"
         = t "addNewNamespace"
         .namespace-list
-          = namespace-component user=user
+          = namespace-component organizations=model
   .box-container
     .columns
       .column

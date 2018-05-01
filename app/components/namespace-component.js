@@ -15,6 +15,13 @@ const NamespaceComponentComponent = Ember.Component.extend({
   tRequestToAddNamespace: t("requestToAddNamespace"),
   tPleaseEnterAnyNamespace: t("pleaseEnterAnyNamespace"),
 
+  orgNamespaces: (function() {
+    const organizations = this.get("organizations");
+    const orgId = organizations.content[0].id;
+    return this.get("store").query('organization-namespace', {id: orgId});
+  }).property("organizations"),
+
+
   actions: {
 
     addNamespace() {
