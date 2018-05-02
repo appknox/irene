@@ -1,19 +1,24 @@
-.message-header.vuln-header.hideOrShow click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus class=progressClass
-    .columns
-      .column.is-one-sixth.severity-tags class=analysis.labelClass
-        i.fa.risk-icons class=analysis.iconClass
-        .uppercase-text
-          | &nbsp;{{analysis.riskText}}
-      .column
-        h6.vuln-name = analysis.vulnerability.name
-      .column.content-right
-        each analysis.vulnerability.tags as |tag|
-          span.tag.scan-tag = tag
-        div.margin-left.details
-          if showVulnerability
-            i.fa.fa-chevron-up
-          else
-            i.fa.fa-chevron-down
+.columns
+  .column
+    .message-header.vuln-header.hideOrShow click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus class=progressClass
+      .columns
+        .column.is-one-sixth.severity-tags class=analysis.labelClass
+          i.fa.risk-icons class=analysis.iconClass
+          .uppercase-text
+            | &nbsp;{{analysis.riskText}}
+        .column
+          h6.vuln-name = analysis.vulnerability.name
+        .column.content-right
+          each analysis.vulnerability.tags as |tag|
+            span.tag.scan-tag = tag
+          div.margin-left.details
+            if showVulnerability
+              i.fa.fa-chevron-up
+            else
+              i.fa.fa-chevron-down
+
+  .column.is-one-sixth.content-right.edit-analysis
+    i.fa.risk-icons.fa-pencil.removeUrl.remove click="openEditAnalysisModal"
 
 if showVulnerability
   .message-body.vuln-body
@@ -91,3 +96,51 @@ if showVulnerability
 
           each analysis.attachments as |attachment|
             = attachment-detail attachment=attachment
+
+= modal-card class="input-modal edit-analysis-modal" isActive=showEditAnalysisModal title="Edit Analysis"
+  .card-body
+    .card-wrapper
+      h5.vuln-name = analysis.vulnerability.name
+      .box-container
+        h6
+          | Is this analysis a false positive?
+        h5
+          | Mark it as
+        select{action 'selectMarkedAnalyis' on='change'} id="marked-analysis"
+          option selected="true"
+            = analysis.riskText
+          each filteredRisks as |risk|
+            option value=risk.value
+              = risk.key
+        if showChangeAnalysisSettings
+          h6.margin-top20
+            | Do you want to save this settings only for the current file or for all future analyses?
+          form
+            input type="radio" name="markanalysis" value="false"
+            label for="Current File Only"
+              | Current File Only
+            input type="radio" name="markanalysis" value="true"
+            label for="All Future Analyses"
+              | All Future Analyses
+          button.is-primary
+            | Save Changes
+      .box-container
+        h6
+          | Do you want to ignore this analysis?
+
+        form
+          input id="ignore-analysis" type="checkbox" checked=analysis.isIgnored click="ignoreAnalysis"
+          label for="Ignore Analysis"
+            | Ignore Analysis
+        if analysis.isIgnored
+          h6
+            | Do you want to save this settings for the current file only & for all future analyses?
+          form
+            input type="radio" name="ignoreanalysis" value="false"
+            label for="Current File Only"
+              | Current File Only
+            input type="radio" name="ignoreanalysis" value="true"
+            label for="All Future Analyses"
+              | All Future Analyses
+          button.is-primary
+            | Save Changes

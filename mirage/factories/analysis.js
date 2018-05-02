@@ -4,6 +4,8 @@ import ENUMS from 'irene/enums';
 
 export default Base.extend({
   analiserVersion: 1,
+  isIgnored: faker.random.boolean,
+  overridenRisk: faker.random.boolean,
 
   risk(){
     return faker.random.arrayElement(ENUMS.RISK.VALUES);
