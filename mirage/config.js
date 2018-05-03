@@ -88,6 +88,14 @@ export default function() {
     return {};
   });
 
+  this.put('/files/:id/vulnerability_preferences/:id/risk', () => {
+    return {};
+  });
+
+  this.put('/files/:id/vulnerability_preferences/:id/ignore', () => {
+    return {};
+  });
+
   this.post('/set_unknown_analysis_status/:id', () => {
     return {};
   });

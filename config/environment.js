@@ -158,7 +158,9 @@ module.exports = function(environment) {
       personaltokens: "personaltokens",
       setUnknownAnalysisStatus: "set_unknown_analysis_status",
       registration: "registration",
-      activate: "activate"
+      activate: "activate",
+      files: "files",
+      vulnerabilityPreferences: "vulnerability_preferences"
     },
     csb: {
       reportDownload: { feature: "Account Settings", module: "Setup", product: "Appknox" },

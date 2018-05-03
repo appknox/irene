@@ -2,10 +2,10 @@
   .column
     .message-header.vuln-header.hideOrShow click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus class=progressClass
       .columns
-        .column.is-one-sixth.severity-tags class=analysis.labelClass
+        .column.is-one-sixth.severity-tags class=analysis.riskLabelClass
           i.fa.risk-icons class=analysis.iconClass
           .uppercase-text
-            | &nbsp;{{analysis.riskText}}
+            | &nbsp; #{ t (risk-text analysis.risk)}
         .column
           h6.vuln-name = analysis.vulnerability.name
         .column.content-right
@@ -100,47 +100,72 @@ if showVulnerability
 = modal-card class="input-modal edit-analysis-modal" isActive=showEditAnalysisModal title="Edit Analysis"
   .card-body
     .card-wrapper
-      h5.vuln-name = analysis.vulnerability.name
       .box-container
-        h6
-          | Is this analysis a false positive?
-        h5
-          | Mark it as
-        select{action 'selectMarkedAnalyis' on='change'} id="marked-analysis"
-          option selected="true"
-            = analysis.riskText
-          each filteredRisks as |risk|
-            option value=risk.value
-              = risk.key
-        if showChangeAnalysisSettings
-          h6.margin-top20
-            | Do you want to save this settings only for the current file or for all future analyses?
-          form
-            input type="radio" name="markanalysis" value="false"
-            label for="Current File Only"
-              | Current File Only
-            input type="radio" name="markanalysis" value="true"
-            label for="All Future Analyses"
-              | All Future Analyses
-          button.is-primary
-            | Save Changes
+        h5.vuln-name = analysis.vulnerability.name
       .box-container
-        h6
-          | Do you want to ignore this analysis?
+        h5.bold.black-text
+          | OVERRIDE ANALYSIS
+        .columns
+          .column
+            h6
+              | Is this a false positive? you can override this analysis here
+        if analysis.isOverridenRisk
+          .columns.margin-top
+            .column
+              | You have overridden this analysis from &nbsp;
+              .tag class=analysis.riskLabelClass
+                i.fa.risk-icons class=analysis.riskIconClass
+                .uppercase-text
+                  |  &nbsp; #{ t (risk-text analysis.risk)}
+              |  &nbsp; to &nbsp;
+              .tag class=analysis.overridenRiskLabelClass
+                i.fa.risk-icons class=analysis.overridenRiskIconClass
+                .uppercase-text
+                  |  &nbsp; #{ t (risk-text analysis.overridenRisk)}
+        .columns.margin-top
+          .column.is-one-sixth
+            h5
+              | Mark it as
+          .column.is-one-sixth
+            select{action 'selectMarkedAnalyis' on='change'} id="marked-analysis"
+              each filteredRisks as |risk|
+                option value=risk.value
+                  | #{ t (risk-text risk.value)}
+          .column.is-one-sixth.marked-analysis-text
+            h5
+              | for
+          .column
+            select{action 'selectMarkedAnalyisType' on='change'} id="marked-analysis-all" class="mark-analysis-all"
+              option value="false"
+                | Current File Only
+              option value="true"
+                | All Future Analyses
+          .column
+            button.is-primary.highlighted-button click="markAnalysis" disabled=isMarkingAnalysis
+              if isMarkingAnalysis
+                .fa-font-size
+                  i.fa class="fa-spinner fa-spin"
+              | &nbsp; Mark Analysis
 
-        form
-          input id="ignore-analysis" type="checkbox" checked=analysis.isIgnored click="ignoreAnalysis"
-          label for="Ignore Analysis"
-            | Ignore Analysis
-        if analysis.isIgnored
+      h5.bold.black-text
+        | IGNORE ANALYSIS
+      .columns
+        .column
           h6
-            | Do you want to save this settings for the current file only & for all future analyses?
-          form
-            input type="radio" name="ignoreanalysis" value="false"
-            label for="Current File Only"
+            | You can also ignore this analysis here
+      .columns.margin-top
+        .column.is-one-third
+          h5
+            | Ignore this Analysis for
+        .column
+          select{action 'selectIgnoredAnalyisType' on='change'} id="ignored-analysis-all" class="ignore-analysis-all"
+            option value="false"
               | Current File Only
-            input type="radio" name="ignoreanalysis" value="true"
-            label for="All Future Analyses"
+            option value="true"
               | All Future Analyses
-          button.is-primary
-            | Save Changes
+        .column
+          button.is-primary.highlighted-button click="ignoreAnalysis" disabled=isIgnoringAnalysis
+            if isIgnoringAnalysis
+              .fa-font-size
+                i.fa class="fa-spinner fa-spin"
+            | &nbsp; Ignore Analysis
