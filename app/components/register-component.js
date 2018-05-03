@@ -46,6 +46,7 @@ export default Ember.Component.extend({
           const password = changeset.get('password');
           const passwordConfirmation = changeset.get('passwordConfirmation');
           const companyName = changeset.get('company');
+          const phoneNumber = changeset.get('phone');
           const captcha = this.get('captcha');
           this.registerWithServer({
             'first_name': firstname,
@@ -55,6 +56,7 @@ export default Ember.Component.extend({
             'password': password,
             'confirm_password': passwordConfirmation,
             'company': companyName,
+            'phone': phoneNumber,
             'recaptcha': captcha,
           });
         }

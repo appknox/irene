@@ -29,3 +29,6 @@
               i.fa class="fa-spinner fa-spin"
               | &nbsp;
           = t "login"
+      p.has-text-centered.margin-top
+        = link-to 'register'
+          | Create Account

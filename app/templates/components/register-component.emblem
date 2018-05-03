@@ -5,7 +5,6 @@
       .register-form-container
         h4.has-text-centered
           = t "register"
-
         .input-wrap
           .label-error
             label
@@ -26,11 +25,20 @@
         .input-wrap class={if changeset.error.email 'has-error'}
           .label-error
             label
-              = t "email"
+              | Official Email
             if changeset.error.email
               span.error-msg
                 | #{changeset.error.email.validation}
-          = input class="input-field" placeholder="Email" value=changeset.email autocomplete="email"
+          = input class="input-field" placeholder="Official Email" value=changeset.email autocomplete="email"
+
+        .input-wrap class={if changeset.error.phone 'has-error'}
+          .label-error
+            label
+              | Phone Number
+            if changeset.error.phone
+              span.error-msg
+                | #{changeset.error.phone.validation}
+          = input class="input-field" placeholder="Phone Number" value=changeset.phone autocomplete="phone"
 
         .input-wrap class={if changeset.error.company 'has-error'}
           .label-error
