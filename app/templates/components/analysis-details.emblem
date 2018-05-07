@@ -1,9 +1,9 @@
 .columns
   .column
-    .message-header.vuln-header.hideOrShow click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus class=progressClass
+    .message-header.vuln-header.hideOrShow click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus class=progressClass class=analysis.isIgnored:ignored-analysis
       .columns
         .column.is-one-sixth.severity-tags class=analysis.riskLabelClass
-          i.fa.risk-icons class=analysis.iconClass
+          i.fa.risk-icons class=analysis.riskIconClass
           .uppercase-text
             | &nbsp; #{ t (risk-text analysis.risk)}
         .column
@@ -122,6 +122,12 @@ if showVulnerability
                 i.fa.risk-icons class=analysis.overridenRiskIconClass
                 .uppercase-text
                   |  &nbsp; #{ t (risk-text analysis.overridenRisk)}
+            .column.is-one-sixth
+              button.is-primary click="removeMarkedAnalysis" disabled=isRemovingMarkedAnalysis
+                if isRemovingMarkedAnalysis
+                  .fa-font-size
+                    i.fa class="fa-spinner fa-spin"
+                | &nbsp; Remove
         .columns.margin-top
           .column.is-one-sixth
             h5

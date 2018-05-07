@@ -15,16 +15,33 @@ const FileDetailsComponent = Ember.Component.extend({
   filteredAnalysis: Ember.computed('analyses', 'vulnerabilityType',  function() {
     const vulnerabilityType = parseInt(this.get("vulnerabilityType"));
     const analyses = this.get("analyses");
+    const notIgnoredAnalyses = [];
     if (vulnerabilityType === ENUMS.VULNERABILITY_TYPE.UNKNOWN) {
-      return analyses;
+      for (let analysis of analyses) {
+        if (analysis.get("isNotIgnored")) {
+          notIgnoredAnalyses.push(analysis);
+        }
+      }
+      return notIgnoredAnalyses;
     }
     const filteredAnalysis = [];
     for (let analysis of analyses) {
-      if (analysis.hasType(vulnerabilityType)) {
+      if (analysis.hasType(vulnerabilityType) && analysis.get("isNotIgnored")) {
         filteredAnalysis.push(analysis);
       }
     }
-    return this.set("analyses", filteredAnalysis);
+    return filteredAnalysis;
+  }),
+
+  ignoredAnalyses: Ember.computed('analyses', function() {
+    const analyses = this.get("analyses");
+    const ignoredAnalyses = [];
+    for (let analysis of analyses) {
+      if (analysis.get("isIgnored")) {
+        ignoredAnalyses.push(analysis);
+      }
+    }
+    return ignoredAnalyses;
   }),
 
   sortedAnalyses: Ember.computed.sort('analyses', 'analysesSorting'),

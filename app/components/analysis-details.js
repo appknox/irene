@@ -18,6 +18,11 @@ const AnalysisDetailsComponent = Ember.Component.extend({
     return risks.filter(risk => analysisRisk !== risk.value);
   }).property("risks", "analysis.risk"),
 
+  markedRisk: (function() {
+    const filteredRisks = this.get("filteredRisks");
+    return filteredRisks[0].value;
+  }).property("filteredRisks"),
+
   riskClass: ( function() {
     const risk = this.get("analysis.risk");
     switch (risk) {
@@ -74,7 +79,9 @@ const AnalysisDetailsComponent = Ember.Component.extend({
       const ignoreAllAnalyses = Boolean(this.$('#ignored-analysis-all')[0].value);
       this.set("ignoreAllAnalyses", ignoreAllAnalyses);
     },
-
+    removeMarkedAnalysis() {
+      this.set("analysis.overridenRisk", null);
+    },
     markAnalysis() {
       const markedRisk = this.get("markedRisk");
       const markAllAnalyses = this.get("markAllAnalyses");
@@ -95,7 +102,6 @@ const AnalysisDetailsComponent = Ember.Component.extend({
         this.set("isMarkingAnalysis", false);
       });
     },
-
     ignoreAnalysis() {
       const ignoreAllAnalyses = this.get("ignoreAllAnalyses");
       const url = this.editAnalysisURL("ignore");

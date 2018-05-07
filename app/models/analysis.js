@@ -18,6 +18,8 @@ const Analysis = DS.Model.extend({
   vulnerability: DS.belongsTo('vulnerability'),
   file: DS.belongsTo('file', {inverse: 'analyses'}),
 
+  isNotIgnored: Ember.computed.not('isIgnored'),
+
   hascvccBase: Ember.computed.equal('cvssVersion', 3),
 
   isOverridenRisk: Ember.computed.notEmpty('overridenRisk'),
@@ -74,7 +76,13 @@ const Analysis = DS.Model.extend({
 
   overridenRiskLabelClass: (function() {
     return this.labelClass(this.get("overridenRisk"));
-  }).property("overridenRisk")
+  }).property("overridenRisk"),
+
+  ignoredAnalysisClass: (function() {
+    if(this.get("isIgnored")) {
+      return "is-ignored-analysis"
+    }
+  }).property("isIgnored")
 
 });
 

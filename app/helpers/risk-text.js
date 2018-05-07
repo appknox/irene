@@ -1,10 +1,10 @@
 import Ember from 'ember';
-import ENUMS from 'irene/enums'
+import ENUMS from 'irene/enums';
 
 export function riskText(params) {
 
   const risk = params[0];
-  
+
   switch (risk) {
     case ENUMS.RISK.UNKNOWN: return "scanning";
     case ENUMS.RISK.NONE: return "none";

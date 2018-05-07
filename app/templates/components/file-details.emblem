@@ -1,7 +1,7 @@
 .columns
   .column
     = file-header file=file class="margin-top"
-    
+
 .columns.margin-left5.margin-top
   .column
     .bold.black-text.uppercase-text.font-size-16.red-text
@@ -33,3 +33,8 @@
         h4
           = fa-icon "exclamation-triangle"
           = t "noScansFound"
+    if ignoredAnalyses
+      | IGNORED ANALYSIS
+      .margin-top
+        each ignoredAnalyses as |analysis|
+          = analysis-details analysis=analysis
