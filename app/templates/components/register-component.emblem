@@ -38,7 +38,7 @@
             if changeset.error.phone
               span.error-msg
                 | #{changeset.error.phone.validation}
-          = input class="input-field" placeholder="Phone Number" value=changeset.phone autocomplete="phone"
+          = intl-tel-input selectedCountryData=selectedCountryData value=changeset.phone class="input-field"  autocomplete="phone"
 
         .input-wrap class={if changeset.error.company 'has-error'}
           .label-error

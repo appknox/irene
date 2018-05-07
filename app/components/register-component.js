@@ -47,6 +47,8 @@ export default Ember.Component.extend({
           const passwordConfirmation = changeset.get('passwordConfirmation');
           const companyName = changeset.get('company');
           const phoneNumber = changeset.get('phone');
+          const selectedCountryData = this.get("selectedCountryData");
+          const fullNumber = selectedCountryData.dialCode + '-' +  phoneNumber;
           const captcha = this.get('captcha');
           this.registerWithServer({
             'first_name': firstname,
@@ -56,7 +58,7 @@ export default Ember.Component.extend({
             'password': password,
             'confirm_password': passwordConfirmation,
             'company': companyName,
-            'phone': phoneNumber,
+            'phone': fullNumber,
             'recaptcha': captcha,
           });
         }
