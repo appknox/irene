@@ -170,6 +170,20 @@ const FileHeaderComponent = Ember.Component.extend({
     return owasps
   }),
 
+  // pcidsss: Ember.computed('analyses', function() {
+  //   const analyses = this.get("analyses");
+  //   var pcidsss = [];
+  //   const risks = [ENUMS.RISK.CRITICAL, ENUMS.RISK.HIGH, ENUMS.RISK.MEDIUM, ENUMS.RISK.LOW];
+  //   for(let analysis of analyses) {
+  //     analysis.get("pcidss").forEach(function(pcidss) {
+  //       if(risks.includes(analysis.get("risk"))) {
+  //         pcidsss.push(pcidss.id);
+  //       }
+  //     });
+  //   }
+  //   return pcidsss
+  // }),
+
   owaspData: (function() {
     const owasps = this.get("owasps");
     var owaspA1Count = 0, owaspA2Count = 0, owaspA3Count = 0, owaspA4Count = 0,

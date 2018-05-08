@@ -74,6 +74,19 @@ if showVulnerability
                     = category.code
                   .column.black-text
                     = category.title
+            .columns
+
+        .column.is-one-sixth
+          | PCI
+        .column
+          ul
+            each analysis.pcidss as |category|
+              li
+                .columns
+                  .column.is-one-third
+                    = category.code
+                  .column.black-text
+                    = category.title
 
     .columns
       .column
