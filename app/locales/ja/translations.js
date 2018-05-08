@@ -1,5 +1,6 @@
 export default {
   "acceptInvite": "招待を受けてサインアップする",
+  "acceptTerms": "私は利用規約に同意します",
   "account": "アカウント",
   "accountOverview": "アカウントの概要",
   "actions": "アクション",
