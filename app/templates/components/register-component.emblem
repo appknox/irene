@@ -54,6 +54,18 @@
           = input class="input-field" classNameBindings="changeset.error.password:has-error" type="password" value=changeset.password placeholder='Mininum 6 characters'
           = input class="input-field" classNameBindings="changeset.error.passwordConfirmation:has-error" type="password" value=changeset.passwordConfirmation placeholder='Confirm Password'
 
+        .input-wrap class={if changeset.error.termsAccepted 'has-error'}
+          .label-error
+            label class="register-form-accept"
+              = input class="checkbox-field" id="terms-accepted" type="checkbox" checked=changeset.termsAccepted
+              span
+                = t "acceptTerms"
+                a href="https://appknox.com/in/privacy/" target="_blank"
+                  sup
+                    | *
+            if changeset.error.termsAccepted
+              span.error-msg
+                | #{changeset.error.termsAccepted.validation}
 
         = g-recaptcha onSuccess=(action "onCaptchaResolved") ref=(mut gRecaptcha)
         p.control.flex-center.margin-top

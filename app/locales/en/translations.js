@@ -1,5 +1,6 @@
 export default {
   "acceptInvite": "Signup & Accept Invite",
+  "acceptTerms": "I accept the terms and conditions",
   "account": "Account",
   "accountOverview": "Account Overview",
   "actions": "ACTIONS",
