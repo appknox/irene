@@ -18,7 +18,10 @@
               i.fa.fa-chevron-down
 
   .column.is-one-sixth.content-right.edit-analysis
-    i.fa.risk-icons.fa-pencil.removeUrl.remove click="openEditAnalysisModal"
+    i.fa.risk-icons.fa-edit.removeUrl.remove click="openEditAnalysisModal"
+    = attach-tooltip placement="top"
+      | Edit Analysis
+
 
 if showVulnerability
   .message-body.vuln-body
@@ -103,75 +106,123 @@ if showVulnerability
       .box-container
         h5.vuln-name = analysis.vulnerability.name
       .box-container
-        h5.bold.black-text
+        h6.bold.black-text
           | OVERRIDE ANALYSIS
+        if analysis.isOverriddenRisk
+          .columns.margin-top
+            .column
+              .columns
+                if isEditingOverriddenRisk
+                  .column.is-one-sixth.mark-text
+                    | Mark it as
+                  .column.is-one-sixth
+                    select{action 'selectMarkedAnalyis' on='change'} id="marked-analysis"
+                      each filteredRisks as |risk|
+                        option value=risk.value
+                          | #{ t (risk-text risk.value)}
+                  .column.is-one-sixth.marked-analysis-text.margin-top5
+                    | for
+                  .column.is-one-third
+                    select{action 'selectMarkedAnalyisType' on='change'} id="marked-analysis-all" class="mark-analysis-all"
+                      option value="false"
+                        | Current File Only
+                      option value="true"
+                        | All Future Analyses
+                else
+                  .column.is-one-third.margin-top5
+                    | Overridden Risk
+                    .tag class=analysis.overriddenRiskLabelClass
+                      i.fa.risk-icons class=analysis.overriddenRiskIconClass
+                      .uppercase-text
+                        | &nbsp; #{ t (risk-text analysis.overriddenRisk)}
+                .column.margin-top5
+                  | Orginal Risk
+                  .tag class=analysis.riskLabelClass
+                    i.fa.risk-icons class=analysis.riskIconClass
+                    .uppercase-text
+                      | &nbsp; #{ t (risk-text analysis.risk)}
+
+                if isEditingOverriddenRisk
+                  .column.is-one-third
+                    button.is-primary.highlighted-button.edit-marked-analysis click="markAnalysis" disabled=isMarkingAnalysis
+                      if isMarkingAnalysis
+                        .fa-font-size
+                          i.fa class="fa-spinner fa-spin"
+                      | &nbsp; Save
+                else
+                  .column
+                    button.is-primary.highlighted-button.edit-marked-analysis click="editMarkedAnalysis" disabled=isEditingMarkedAnalysis
+                      if isEditingMarkedAnalysis
+                        .fa-font-size
+                          i.fa class="fa-spinner fa-spin"
+                      | &nbsp; Edit
+                    button.is-primary.highlighted-button.edit-marked-analysis click="resetMarkedAnalysis" disabled=isResettingMarkedAnalysis
+                      if isResettingMarkedAnalysis
+                        .fa-font-size
+                          i.fa class="fa-spinner fa-spin"
+                      | &nbsp; Reset
+        else
+          .columns
+            .column
+              h6
+                | Is this a false positive? you can override this analysis here
+          .columns.margin-top
+            .column.is-one-sixth.mark-text
+              h6
+                | Mark it as
+            .column.is-one-sixth
+              select{action 'selectMarkedAnalyis' on='change'} id="marked-analysis"
+                each filteredRisks as |risk|
+                  option value=risk.value
+                    | #{ t (risk-text risk.value)}
+            .column.is-one-sixth.marked-analysis-text2
+              h6
+                | for
+            .column
+              select{action 'selectMarkedAnalyisType' on='change'} id="marked-analysis-all" class="mark-analysis-all"
+                option value="false"
+                  | Current File Only
+                option value="true"
+                  | All Future Analyses
+            .column
+              button.is-primary.highlighted-button click="markAnalysis" disabled=isMarkingAnalysis
+                if isMarkingAnalysis
+                  .fa-font-size
+                    i.fa class="fa-spinner fa-spin"
+                | &nbsp; Mark Analysis
+
+      h6.bold.black-text
+        | HIDE ANALYSIS
+      if analysis.isNotIgnored
         .columns
           .column
             h6
-              | Is this a false positive? you can override this analysis here
-        if analysis.isOverridenRisk
-          .columns.margin-top
-            .column
-              | You have overridden this analysis from &nbsp;
-              .tag class=analysis.riskLabelClass
-                i.fa.risk-icons class=analysis.riskIconClass
-                .uppercase-text
-                  |  &nbsp; #{ t (risk-text analysis.risk)}
-              |  &nbsp; to &nbsp;
-              .tag class=analysis.overridenRiskLabelClass
-                i.fa.risk-icons class=analysis.overridenRiskIconClass
-                .uppercase-text
-                  |  &nbsp; #{ t (risk-text analysis.overridenRisk)}
-            .column.is-one-sixth
-              button.is-primary click="removeMarkedAnalysis" disabled=isRemovingMarkedAnalysis
-                if isRemovingMarkedAnalysis
-                  .fa-font-size
-                    i.fa class="fa-spinner fa-spin"
-                | &nbsp; Remove
+              | You can also hide this analysis here
         .columns.margin-top
-          .column.is-one-sixth
+          .column.is-one-third
             h5
-              | Mark it as
-          .column.is-one-sixth
-            select{action 'selectMarkedAnalyis' on='change'} id="marked-analysis"
-              each filteredRisks as |risk|
-                option value=risk.value
-                  | #{ t (risk-text risk.value)}
-          .column.is-one-sixth.marked-analysis-text
-            h5
-              | for
+              | Hide this Analysis for
           .column
-            select{action 'selectMarkedAnalyisType' on='change'} id="marked-analysis-all" class="mark-analysis-all"
+            select{action 'selectIgnoredAnalyisType' on='change'} id="ignored-analysis-all" class="ignore-analysis-all"
               option value="false"
                 | Current File Only
               option value="true"
                 | All Future Analyses
           .column
-            button.is-primary.highlighted-button click="markAnalysis" disabled=isMarkingAnalysis
-              if isMarkingAnalysis
+            button.is-primary.highlighted-button click="ignoreAnalysis" disabled=isIgnoringAnalysis
+              if isIgnoringAnalysis
                 .fa-font-size
                   i.fa class="fa-spinner fa-spin"
-              | &nbsp; Mark Analysis
-
-      h5.bold.black-text
-        | IGNORE ANALYSIS
-      .columns
-        .column
-          h6
-            | You can also ignore this analysis here
-      .columns.margin-top
-        .column.is-one-third
-          h5
-            | Ignore this Analysis for
-        .column
-          select{action 'selectIgnoredAnalyisType' on='change'} id="ignored-analysis-all" class="ignore-analysis-all"
-            option value="false"
-              | Current File Only
-            option value="true"
-              | All Future Analyses
-        .column
-          button.is-primary.highlighted-button click="ignoreAnalysis" disabled=isIgnoringAnalysis
-            if isIgnoringAnalysis
-              .fa-font-size
-                i.fa class="fa-spinner fa-spin"
-            | &nbsp; Ignore Analysis
+              | &nbsp; Hide Analysis
+      if analysis.isIgnored
+        .columns
+          .column
+            h6
+              | You have hidden this analysis
+        .columns
+          .column
+            button.is-primary.highlighted-button click="doNotIgnoreAnalysis" disabled=isIgnoringAnalysis
+              if isIgnoringAnalysis
+                .fa-font-size
+                  i.fa class="fa-spinner fa-spin"
+              | &nbsp; Unhide Analysis

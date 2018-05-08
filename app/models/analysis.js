@@ -12,7 +12,7 @@ const Analysis = DS.Model.extend({
   isIgnored: DS.attr('boolean'),
   cvssVersion: DS.attr('number'),
   cvssMetricsHumanized: DS.attr(),
-  overridenRisk: DS.attr('number'),
+  overriddenRisk: DS.attr('number'),
   analiserVersion: DS.attr('number'),
   attachments: DS.hasMany('attachment'),
   vulnerability: DS.belongsTo('vulnerability'),
@@ -22,7 +22,7 @@ const Analysis = DS.Model.extend({
 
   hascvccBase: Ember.computed.equal('cvssVersion', 3),
 
-  isOverridenRisk: Ember.computed.notEmpty('overridenRisk'),
+  isOverriddenRisk: Ember.computed.notEmpty('overriddenRisk'),
 
   isScanning: ( function() {
     const risk = this.get("risk");
@@ -54,9 +54,9 @@ const Analysis = DS.Model.extend({
     return this.iconClass(this.get("risk"));
   }).property("risk"),
 
-  overridenRiskIconClass: (function() {
-    return this.iconClass(this.get("overridenRisk"));
-  }).property("overridenRisk"),
+  overriddenRiskIconClass: (function() {
+    return this.iconClass(this.get("overriddenRisk"));
+  }).property("overriddenRisk"),
 
   labelClass(risk) {
     const cls = 'tag';
@@ -74,9 +74,9 @@ const Analysis = DS.Model.extend({
     return this.labelClass(this.get("risk"));
   }).property("risk"),
 
-  overridenRiskLabelClass: (function() {
-    return this.labelClass(this.get("overridenRisk"));
-  }).property("overridenRisk"),
+  overriddenRiskLabelClass: (function() {
+    return this.labelClass(this.get("overriddenRisk"));
+  }).property("overriddenRisk"),
 
   ignoredAnalysisClass: (function() {
     if(this.get("isIgnored")) {

@@ -92,6 +92,10 @@ export default function() {
     return {};
   });
 
+  this.delete('/files/:id/vulnerability_preferences/:id/risk', () => {
+    return {};
+  });
+
   this.put('/files/:id/vulnerability_preferences/:id/ignore', () => {
     return {};
   });

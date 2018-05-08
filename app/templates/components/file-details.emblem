@@ -34,7 +34,7 @@
           = fa-icon "exclamation-triangle"
           = t "noScansFound"
     if ignoredAnalyses
-      | IGNORED ANALYSIS
+      | HIDDEN ANALYSIS
       .margin-top
         each ignoredAnalyses as |analysis|
           = analysis-details analysis=analysis

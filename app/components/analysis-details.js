@@ -80,7 +80,7 @@ const AnalysisDetailsComponent = Ember.Component.extend({
       this.set("ignoreAllAnalyses", ignoreAllAnalyses);
     },
     removeMarkedAnalysis() {
-      this.set("analysis.overridenRisk", null);
+      this.set("analysis.overriddenRisk", null);
     },
     markAnalysis() {
       const markedRisk = this.get("markedRisk");
@@ -96,17 +96,30 @@ const AnalysisDetailsComponent = Ember.Component.extend({
       }).then(() => {
         this.get("notify").success("Successfully marked the analysis");
         this.set("isMarkingAnalysis", false);
-        this.set("analysis.overridenRisk", markedRisk);
+        this.set("isEditingOverriddenRisk", false);
+        this.set("analysis.overriddenRisk", markedRisk);
+        this.set("analysis.isOverriddenRisk", true);
       }, (error) => {
         this.get("notify").error(error.payload.message);
         this.set("isMarkingAnalysis", false);
       });
     },
     ignoreAnalysis() {
+      this.set("ignoreAnalysis", true);
+      this.send("ignoreAnalysisRequest");
+    },
+    doNotIgnoreAnalysis() {
+      this.set("ignoreAnalysis", false);
+      this.send("ignoreAnalysisRequest");
+    },
+    editMarkedAnalysis() {
+      this.set("isEditingOverriddenRisk", true);
+    },
+    ignoreAnalysisRequest() {
       const ignoreAllAnalyses = this.get("ignoreAllAnalyses");
       const url = this.editAnalysisURL("ignore");
       const data = {
-        ignore: true,
+        ignore: this.get("ignoreAnalysis"),
         all: ignoreAllAnalyses
       };
       this.set("isIgnoringAnalysis", true);
@@ -118,6 +131,24 @@ const AnalysisDetailsComponent = Ember.Component.extend({
       }, (error) => {
         this.get("notify").error(error.payload.message);
         this.set("isIgnoringAnalysis", false);
+      });
+    },
+    resetMarkedAnalysis() {
+      const ignoreAllAnalyses = this.get("ignoreAllAnalyses");
+      const url = this.editAnalysisURL("risk");
+      const data = {
+        all: ignoreAllAnalyses
+      };
+      this.set("isResettingMarkedAnalysis", true);
+      this.get("ajax").delete(url, {
+        data
+      }).then(() => {
+        this.get("notify").success("Successful");
+        this.set("isResettingMarkedAnalysis", false);
+        this.set("analysis.isOverriddenRisk", false);
+      }, (error) => {
+        this.get("notify").error(error.payload.message);
+        this.set("isResettingMarkedAnalysis", false);
       });
     }
   }
