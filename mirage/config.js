@@ -100,7 +100,7 @@ export default function() {
     return {};
   });
 
-  this.post('/set_unknown_analysis_status/:id', () => {
+  this.post('profiles/:id/unknown_analysis_status', () => {
     return {};
   });
 
@@ -173,7 +173,7 @@ export default function() {
     return {};
   });
 
-  this.post('/api_scan_options/:id', () => {
+  this.post('/profiles/:id/api_scan_options', () => {
     return {};
   });
 
@@ -198,10 +198,6 @@ export default function() {
   });
 
   this.post('/teams', () => {
-   return;
-  });
-
-  this.post('/set_unknown_analysis_status', () => {
    return;
   });
 

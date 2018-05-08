@@ -65,10 +65,11 @@ const ApiFilterComponent = Ember.Component.extend({
     saveApiUrlFilter() {
       const tUrlUpdated = this.get("tUrlUpdated");
       const updatedURLFilters = this.get("updatedURLFilters");
-      const projectId = this.get("project.id");
-      const apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, projectId].join('/');
-      const data =
-        {apiUrlFilters: updatedURLFilters};
+      const profileId = this.get("project.activeProfileId");
+      const apiScanOptions = [ENV.endpoints.profiles, profileId, ENV.endpoints.apiScanOptions].join('/');
+      const data = {
+        api_url_filters: updatedURLFilters
+      };
       triggerAnalytics('feature', ENV.csb.addAPIEndpoints);
       this.set("isSavingFilter", true);
       const that = this;
