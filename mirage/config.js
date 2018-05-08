@@ -124,7 +124,7 @@ export default function() {
     return {};
   });
 
-  this.post('/device_preference/:id', (db, request) => {
+  this.post('/profiles/:id/device_preference', (db, request) => {
     console.log(request.requestBody);
     return {id: '1'};
   });

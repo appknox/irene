@@ -15,6 +15,7 @@ export default Base.extend({
   platformVersion: faker.random.number,
   fileCount: 2,
   showUnknownAnalysis: true,
+  activeProfileId: 2,
 
   platform(){
     return faker.random.arrayElement(ENUMS.PLATFORM.VALUES);

@@ -6,6 +6,7 @@ import { translationMacro as t } from 'ember-i18n';
 
 const Project = DS.Model.extend(BaseModelMixin, {
   i18n: Ember.inject.service(),
+  activeProfileId: DS.attr('number'),
   owner: DS.belongsTo('user', {inverse: 'ownedProjects'}),
   files: DS.hasMany('file', {inverse:'project'}),
   name: DS.attr('string'),

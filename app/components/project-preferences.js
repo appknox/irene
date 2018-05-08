@@ -59,12 +59,12 @@ const ProjectPreferencesComponent = Ember.Component.extend({
       const tPleaseTryAgain = this.get("tPleaseTryAgain");
       const selectedDeviceType = this.get("selectedDeviceType");
 
-      const projectId = this.get("project.id");
-      const devicePreferences = [ENV.endpoints.devicePreferences, projectId].join('/');
+      const profileId = this.get("project.activeProfileId");
+      const devicePreferences = [ENV.endpoints.profiles, profileId, ENV.endpoints.devicePreferences].join('/');
       const that = this;
       const data = {
-        deviceType: selectedDeviceType,
-        platformVersion: selectVersion
+        device_type: selectedDeviceType,
+        platform_version: selectVersion
       };
       this.set("isSavingPreference", true);
       this.get("ajax").post(devicePreferences, {data})

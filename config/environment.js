@@ -160,6 +160,7 @@ module.exports = function(environment) {
       registration: "registration",
       activate: "activate",
       files: "files",
+      profiles: "profiles",
       vulnerabilityPreferences: "vulnerability_preferences"
     },
     csb: {
