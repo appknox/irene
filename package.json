@@ -88,6 +88,8 @@
   },
   "dependencies": {
     "clipboard": "^1.7.1",
-    "ember-cli-document-title": "^0.3.3"
+    "ember-cli-document-title": "^0.3.3",
+    "intl-tel-input": "^12.1.15",
+    "jquery": "^3.3.1"
   }
 }
