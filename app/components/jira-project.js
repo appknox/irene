@@ -15,6 +15,10 @@ const JiraProjectComponent = Ember.Component.extend({
   tRepoNotIntegrated: t("repoNotIntegrated"),
   tFetchJIRAProjectFailed: t("fetchProjectFailed"),
 
+  jira: (function() {
+    return this.get("store").query('jira-integration', {id: this.get("project.activeProfileId")});
+  }).property(),
+
   confirmCallback() {
     const tProjectRemoved = this.get("tProjectRemoved");
     const that = this;

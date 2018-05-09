@@ -1,11 +1,11 @@
 h5.bold.black-text
   = t "jiraIntegration"
 
-if project.jiraProject
+if jira.jiraProject
   h6
     = t "integratedJIRA"
     code
-      | &nbsp; #{project.jiraProject}
+      | &nbsp; #{jira.jiraProject}
     .tag.delete-tag.remove click="openDeleteJIRAConfirmBox"
       i.fa.risk-icons.fa-trash-o
         | &nbsp; #{t "remove"}
