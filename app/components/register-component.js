@@ -49,6 +49,7 @@ export default Ember.Component.extend({
           const phoneNumber = changeset.get('phone');
           const selectedCountryData = this.get("selectedCountryData");
           const fullNumber = selectedCountryData.dialCode + '-' +  phoneNumber;
+          const termsAccepted = changeset.get('termsAccepted');
           const captcha = this.get('captcha');
           this.registerWithServer({
             'first_name': firstname,
@@ -59,6 +60,7 @@ export default Ember.Component.extend({
             'confirm_password': passwordConfirmation,
             'company': companyName,
             'phone': fullNumber,
+            'terms_accepted': termsAccepted,
             'recaptcha': captcha,
           });
         }
