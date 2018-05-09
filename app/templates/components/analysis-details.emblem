@@ -74,14 +74,14 @@ if showVulnerability
                       = category.code
                     .column.black-text
                       = category.title
-        .columns.section
-          .column.is-one-sixth
-            | PCI-DSS
-          .column
-            ul
-              each analysis.pcidss as |category|
-                = pcidss-details category=category
-
+        if analysis.pcidss
+          .columns.section
+            .column.is-one-sixth
+              | PCI-DSS
+            .column
+              ul
+                each analysis.pcidss as |category|
+                  = pcidss-details category=category
     .columns
       .column
         if analysis.isRisky
