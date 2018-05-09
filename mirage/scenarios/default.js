@@ -17,6 +17,7 @@ export default function(server) {
     personalTokenCount = getRandomInt(3,3),
     invitationCount = getRandomInt(1,1),
     teamCount = 3,
+    githubCount = 1,
     projectCount = 0, project = null, file = null, projectIds = [],
     team = null, manualscan=null, currentUserId = 1, deviceCount=30, invoiceCount=3;
   var users = server.createList('user', userCount);
@@ -30,6 +31,7 @@ export default function(server) {
   server.createList('stat', statCount);
   server.createList('personaltoken', personalTokenCount);
   server.createList('invitation', invitationCount);
+  server.createList('github-integration', githubCount);
   projectCount =  getRandomInt(4, 5);
   for (var teamId = 1; teamId <= teamCount; teamId++) {
     team = server.create('team', {users: users});

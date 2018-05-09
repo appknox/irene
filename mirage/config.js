@@ -32,6 +32,8 @@ export default function() {
   this.get('/attachments/:id', 'attachment');
   this.get('/invitations/', 'invitation');
   this.get('/subscriptions/', 'subscription');
+  this.get('/profiles/:id/github_integration');
+  this.get('/subscriptions/', 'subscription');
   this.get('/stats/:id', 'stat');
   this.get('/personaltokens', 'personaltoken');
   this.get('/manualscans/:id', 'manualscan');

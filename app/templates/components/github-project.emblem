@@ -1,11 +1,11 @@
 h5.bold.black-text
   = t "githubIntegration"
 
-if project.githubRepo
+if github.githubRepo
   h6
     = t "integratedGithub"
     code
-      | &nbsp; #{project.githubRepo}
+      | &nbsp; #{github.githubRepo}
     .tag.delete-tag.remove click="openDeleteGHConfirmBox"
       i.fa.risk-icons.fa-trash-o
         | &nbsp; #{t "remove"}
