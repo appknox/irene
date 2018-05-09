@@ -71,7 +71,7 @@
     "ember-freestyle": "0.2.14",
     "ember-g-recaptcha": "^0.6.0",
     "ember-i18n": "^5.0.1",
-    "ember-cli-intl-tel-input": "https://github.com/Socivo/ember-cli-intl-tel-input.git",
+    "ember-cli-intl-tel-input": "^1.0.14",
     "ember-lazy-image": "0.0.15",
     "ember-load-initializers": "^1.0.0",
     "ember-moment": "7.3.0",
