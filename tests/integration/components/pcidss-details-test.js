@@ -12,14 +12,5 @@ test('it renders', function(assert) {
 
   this.render(hbs`{{pcidss-details}}`);
 
-  assert.equal(this.$().text().trim(), '');
-
-  // Template block usage:
-  this.render(hbs`
-    {{#pcidss-details}}
-      template block text
-    {{/pcidss-details}}
-  `);
-
-  assert.equal(this.$().text().trim(), 'template block text');
+  assert.equal(this.$().text().trim(), 'more details');
 });
