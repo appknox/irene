@@ -5,7 +5,7 @@ export default DRFSerializer.extend({
     return {
       data: payload.results.map((item)=> {
         return {
-          id: item.uuid,
+          id: item.id,
           type: 'jira-integration',
           attributes: {
             jiraProject: item.jira_project

@@ -17,9 +17,9 @@
   = api-filter project=model
 .box-container
   = analysis-settings project=model
-/ .box-container
+.box-container
   = github-project project=model
-/ .box-container
+.box-container
   = jira-project project=model
 .margin-left
   = collaboration-component project=model
