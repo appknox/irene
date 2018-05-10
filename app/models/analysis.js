@@ -80,7 +80,7 @@ const Analysis = DS.Model.extend({
 
   ignoredAnalysisClass: (function() {
     if(this.get("isIgnored")) {
-      return "is-ignored-analysis"
+      return "is-ignored-analysis";
     }
   }).property("isIgnored")
 

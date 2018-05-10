@@ -10,14 +10,16 @@
         | &nbsp; #{t "allUploads"}
 
 .box-container
+  = vulnerability-list project=model
+.box-container
   = project-preferences project=model
 .box-container
   = api-filter project=model
 .box-container
   = analysis-settings project=model
-.box-container
+/ .box-container
   = github-project project=model
-.box-container
+/ .box-container
   = jira-project project=model
 .margin-left
   = collaboration-component project=model
