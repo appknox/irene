@@ -23,7 +23,7 @@ const AnalysisSettingsComponent = Ember.Component.extend({
       };
       const that = this;
       this.set("isSavingStatus", true);
-      this.get("ajax").post(url, {data})
+      this.get("ajax").put(url, {data})
       .then(function(){
         that.get("notify").success(tSavedPreferences);
         if(!that.isDestroyed) {

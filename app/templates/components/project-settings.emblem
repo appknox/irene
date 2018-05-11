@@ -32,6 +32,6 @@ if isGeneralSettings
 
 if isAnalysisSettings
   .box-container
-    = analysis-settings project=model
+    = analysis-settings project=project
   .margin-left
     = vulnerability-list project=project
