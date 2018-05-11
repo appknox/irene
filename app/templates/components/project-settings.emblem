@@ -5,7 +5,7 @@
         = t "settings"
         |  | #{project.packageName}
     .column
-      = link-to 'authenticated.project.files' model.id class="is-primary" tagName="button" class="mp-settings-all-scans"
+      = link-to 'authenticated.project.files' project.id class="is-primary" tagName="button" class="mp-settings-all-scans"
         = fa-icon "navicon"
         | &nbsp; #{t "allUploads"}
 
