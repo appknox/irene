@@ -67,7 +67,7 @@ const ProjectPreferencesComponent = Ember.Component.extend({
         platform_version: selectVersion
       };
       this.set("isSavingPreference", true);
-      this.get("ajax").post(devicePreferences, {data})
+      this.get("ajax").put(devicePreferences, {data})
       .then(function() {
         that.get("notify").success(tDeviceSelected);
         if(!that.isDestroyed) {

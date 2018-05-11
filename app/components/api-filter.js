@@ -73,7 +73,7 @@ const ApiFilterComponent = Ember.Component.extend({
       triggerAnalytics('feature', ENV.csb.addAPIEndpoints);
       this.set("isSavingFilter", true);
       const that = this;
-      this.get("ajax").post(apiScanOptions, {data})
+      this.get("ajax").put(apiScanOptions, {data})
       .then(function(){
         that.get("notify").success(tUrlUpdated);
         if(!that.isDestroyed) {
