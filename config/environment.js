@@ -276,7 +276,7 @@ module.exports = function(environment) {
     ENV.rollbar = {
       enabled: false
     };
-    ENV['host'] = "https://api.appknox.com";
+    ENV['host'] = "https://api.appknox.io";
   }
 
   if (environment === 'test') {
