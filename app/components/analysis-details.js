@@ -54,6 +54,10 @@ const AnalysisDetailsComponent = Ember.Component.extend({
     return url;
   },
 
+  confirmCallback() {
+    this.send("resetMarkedAnalysis");
+  },
+
   actions: {
 
     toggleVulnerability() {
@@ -145,11 +149,15 @@ const AnalysisDetailsComponent = Ember.Component.extend({
       }).then(() => {
         this.get("notify").success("Successful");
         this.set("isResettingMarkedAnalysis", false);
+        this.set("showResetAnalysisConfirmBox", false);
         this.set("analysis.isOverriddenRisk", false);
       }, (error) => {
         this.get("notify").error(error.payload.message);
         this.set("isResettingMarkedAnalysis", false);
       });
+    },
+    openResetMarkedAnalysisConfirmBox() {
+      this.set("showResetAnalysisConfirmBox", true);
     }
   }
 });

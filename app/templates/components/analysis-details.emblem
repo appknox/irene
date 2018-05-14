@@ -156,10 +156,7 @@ if showVulnerability
                         .fa-font-size
                           i.fa class="fa-spinner fa-spin"
                       | &nbsp; Edit
-                    button.is-primary.highlighted-button.edit-marked-analysis click="resetMarkedAnalysis" disabled=isResettingMarkedAnalysis
-                      if isResettingMarkedAnalysis
-                        .fa-font-size
-                          i.fa class="fa-spinner fa-spin"
+                    button.is-primary.highlighted-button.edit-marked-analysis click="openResetMarkedAnalysisConfirmBox"
                       | &nbsp; Reset
         else
           .columns
@@ -226,3 +223,5 @@ if showVulnerability
                 .fa-font-size
                   i.fa class="fa-spinner fa-spin"
               | &nbsp; Unhide Analysis
+
+= confirm-box isActive=showResetAnalysisConfirmBox title="Reset Overridden Analysis" delegate=this disabled=isResettingMarkedAnalysis
