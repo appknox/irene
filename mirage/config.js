@@ -132,7 +132,7 @@ export default function() {
     return {};
   });
 
-  this.post('/profiles/:id/device_preference', (db, request) => {
+  this.put('/profiles/:id/device_preference', (db, request) => {
     console.log(request.requestBody);
     return {id: '1'};
   });
@@ -181,7 +181,7 @@ export default function() {
     return {};
   });
 
-  this.post('/profiles/:id/api_scan_options', () => {
+  this.put('/profiles/:id/api_scan_options', () => {
     return {};
   });
 
