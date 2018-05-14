@@ -37,7 +37,7 @@ moduleForComponent('api-filter', 'Integration | Component | api filter', {
 test('tapping button fires an external action', function(assert) {
   var component = this.subject();
   Ember.run(function() {
-    component.set('project', {id: 1, apiUrlFilters:"yash.com"});
+    component.set('project', {id: 1, apiUrlFilters:"yash.com", activeProfileId:1});
     assert.equal(component.confirmCallback() ,undefined, "Show Vulnerability");
     component.set("isSavingFilter", true);
     component.send("addApiUrlFilter");
@@ -45,7 +45,7 @@ test('tapping button fires an external action', function(assert) {
     component.send("addApiUrlFilter");
     component.set("newUrlFilter", "test1.com");
     component.send("addApiUrlFilter");
-    component.set('project', {id: 1, apiUrlFilters:""});
+    component.set('project', {id: 1, apiUrlFilters:"", activeProfileId:1});
     component.send("addApiUrlFilter");
     component.send("closeRemoveURLConfirmBox");
   });

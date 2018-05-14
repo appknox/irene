@@ -36,10 +36,10 @@ moduleForComponent('analysis-settings', 'Integration | Component | analysis sett
 
 test('tapping button fires an external action', function(assert) {
   assert.expect(0);
-
   var component = this.subject();
   this.render();
   Ember.run(function() {
+    component.set('project', {activeProfileId:1});
     component.send('showUnknownAnalysis');
   });
 });
