@@ -2,10 +2,19 @@
   .column
     .message-header.vuln-header.hideOrShow click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus class=progressClass class=analysis.isIgnored:ignored-analysis
       .columns
-        .column.is-one-sixth.severity-tags class=analysis.riskLabelClass
-          i.fa.risk-icons class=analysis.riskIconClass
-          .uppercase-text
-            | &nbsp; #{ t (risk-text analysis.risk)}
+        if analysis.isOverriddenRisk
+          .column.is-one-sixth.severity-tags class=analysis.overriddenRiskLabelClass
+            i.fa.risk-icons class=analysis.overriddenRiskIconClass
+            .uppercase-text
+              | &nbsp; #{ t (risk-text analysis.overriddenRisk)}
+            img src="/images/user-edited.svg" class="user-edited-icon"
+            = attach-tooltip placement="top"
+              | Overridden Risk. Orginal Risk: #{t (risk-text analysis.risk)}
+        else
+          .column.is-one-sixth.severity-tags class=analysis.riskLabelClass
+            i.fa.risk-icons class=analysis.riskIconClass
+            .uppercase-text
+              | &nbsp; #{ t (risk-text analysis.risk)}
         .column
           h6.vuln-name = analysis.vulnerability.name
         .column.content-right
