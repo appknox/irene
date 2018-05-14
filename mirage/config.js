@@ -104,7 +104,11 @@ export default function() {
     return {};
   });
 
-  this.post('profiles/:id/unknown_analysis_status', () => {
+  this.put('/profiles/:id/unknown_analysis_status', () => {
+    return {};
+  });
+
+  this.put('/profiles/:id/ignored_analysis_status', () => {
     return {};
   });
 

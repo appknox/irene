@@ -157,6 +157,7 @@ module.exports = function(environment) {
       rescan: "rescan",
       personaltokens: "personaltokens",
       unknownAnalysisStatus: "unknown_analysis_status",
+      ignoredAnalysisStatus: "ignored_analysis_status",
       registration: "registration",
       activate: "activate",
       files: "files",

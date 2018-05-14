@@ -25,6 +25,7 @@ const Project = DS.Model.extend(BaseModelMixin, {
   platformVersion: DS.attr('string'),
   apiUrlFilters: DS.attr('string'),
   showUnknownAnalysis: DS.attr('boolean'),
+  showIgnoredAnalysis: DS.attr('boolean'),
 
   apiUrlFilterItems:(function() {
     const apiUrlFilters = this.get("apiUrlFilters");
