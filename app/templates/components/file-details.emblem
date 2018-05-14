@@ -10,7 +10,7 @@
   .column.margin-left5
     .columns.analysis-header
       .column.is-one-sixth.uppercase-text
-        div.remove click="sortImpact"
+        div.remove click="sortByImpact"
           = t "impact"
           if sortImpactAscending
             i.fa.fa-sort-down.sort-icons
