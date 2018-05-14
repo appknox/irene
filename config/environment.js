@@ -181,6 +181,7 @@ module.exports = function(environment) {
       theme: 'dark'
     },
     gReCaptcha: {
+      jsUrl: 'https://recaptcha.net/recaptcha/api.js?render=explicit',
       siteKey: '6LfDdlUUAAAAAE9Bz9-3FLjrNw_AEUk11zXDH-0_'
     }
   };
@@ -246,9 +247,7 @@ module.exports = function(environment) {
     ENV.rollbar = {
       enabled: false
     };
-    ENV.gReCaptcha = {
-      siteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
-    };
+    ENV.gReCaptcha['siteKey'] = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
   }
 
   if (environment === 'production') {
