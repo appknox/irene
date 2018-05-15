@@ -5,7 +5,6 @@
       .register-form-container
         h4.has-text-centered
           = t "register"
-
         .input-wrap
           .label-error
             label
@@ -26,11 +25,20 @@
         .input-wrap class={if changeset.error.email 'has-error'}
           .label-error
             label
-              = t "email"
+              | Official Email
             if changeset.error.email
               span.error-msg
                 | #{changeset.error.email.validation}
-          = input class="input-field" placeholder="Email" value=changeset.email autocomplete="email"
+          = input class="input-field" placeholder="Official Email" value=changeset.email autocomplete="email"
+
+        .input-wrap class={if changeset.error.phone 'has-error'}
+          .label-error
+            label
+              | Phone Number
+            if changeset.error.phone
+              span.error-msg
+                | #{changeset.error.phone.validation}
+          = intl-tel-input selectedCountryData=selectedCountryData value=changeset.phone class="input-field" autocomplete="phone"
 
         .input-wrap class={if changeset.error.company 'has-error'}
           .label-error
@@ -60,12 +68,13 @@
               = input class="checkbox-field" id="terms-accepted" type="checkbox" checked=changeset.termsAccepted
               span
                 = t "acceptTerms"
-                a href="https://appknox.com/in/privacy/" target="_blank"
+                a href="https://appknox.com/privacy" target="_blank"
                   sup
                     | *
             if changeset.error.termsAccepted
               span.error-msg
-                | #{changeset.error.termsAccepted.validation}
+                a href="https://appknox.com/privacy" target="_blank"
+                  | #{changeset.error.termsAccepted.validation}
 
         = g-recaptcha onSuccess=(action "onCaptchaResolved") ref=(mut gRecaptcha)
         p.control.flex-center.margin-top
