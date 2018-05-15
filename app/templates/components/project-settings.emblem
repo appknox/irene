@@ -1,13 +1,12 @@
-.padding-bottom0.box-container
-  .columns
-    .column
-      h4.bold.black-text
-        = t "settings"
-        |  | #{project.packageName}
-    .column
-      = link-to 'authenticated.project.files' project.id class="is-primary" tagName="button" class="mp-settings-all-scans"
-        = fa-icon "navicon"
-        | &nbsp; #{t "allUploads"}
+.columns.margin-bottom
+  .column
+    h4.bold.black-text
+      = t "settings"
+      |  | #{project.packageName}
+  .column
+    = link-to 'authenticated.project.files' project.id class="is-primary" tagName="button" class="mp-settings-all-scans"
+      = fa-icon "navicon"
+      | &nbsp; #{t "allUploads"}
 
 .tabs.is-medium.is-boxed
   ul

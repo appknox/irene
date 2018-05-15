@@ -82,6 +82,9 @@ body
 .margin-bottom0
   margin-bottom: 0px!important
 
+.margin-bottom
+  margin-bottom: 10px
+
 .margin-bottom20
   margin-bottom: 20px
 
@@ -1909,6 +1912,12 @@ input:checked + .slider:before
   content: "SHOW"
   transform: translateX(26px)
 
+.yes-no-slider:before
+  content: "NO"
+
+input:checked + .yes-no-slider:before
+  content: "YES"
+
 .slider.round
   border-radius: 34px
 
@@ -1938,6 +1947,10 @@ input:checked + .slider:before
       border-color: $critical
 
 #show-unkown-analysis[disabled] + .slider
+  opacity: 0.7
+  cursor: not-allowed
+
+#ignore-analysis-project[disabled] + .slider
   opacity: 0.7
   cursor: not-allowed
 
