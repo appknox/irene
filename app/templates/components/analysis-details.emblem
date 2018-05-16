@@ -9,7 +9,7 @@
               | &nbsp; #{ t (risk-text analysis.overriddenRisk)}
             img src="/images/user-edited.svg" class="user-edited-icon"
             = attach-tooltip placement="top"
-              | Overridden Risk. Orginal Risk: #{t (risk-text analysis.computedRisk)}
+              | Overridden Risk. Orginal Risk: #{t (risk-text analysis.risk)}
         else
           .column.is-one-sixth.severity-tags class=analysis.riskLabelClass
             i.fa.risk-icons class=analysis.riskIconClass
