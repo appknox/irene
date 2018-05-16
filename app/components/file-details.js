@@ -52,11 +52,11 @@ const FileDetailsComponent = Ember.Component.extend({
     sortByImpact() {
       const sortImpactAscending = this.get("sortImpactAscending");
       if(!sortImpactAscending) {
-        this.set("analysesSorting", ['risk:asc']);
+        this.set("analysesSorting", ['computedRisk:asc']);
         this.set("sortImpactAscending", true);
       }
       else {
-        this.set("analysesSorting", ['risk:desc']);
+        this.set("analysesSorting", ['computedRisk:desc']);
         this.set("sortImpactAscending", false);
       }
       const sortedAnalyses = this.get("sortedAnalyses");

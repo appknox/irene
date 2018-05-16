@@ -11,6 +11,9 @@ export default Base.extend({
   risk(){
     return faker.random.arrayElement(ENUMS.RISK.VALUES);
   },
+  computedRisk(){
+    return faker.random.arrayElement(ENUMS.RISK.VALUES);
+  },
   status(){
     return faker.random.arrayElement(ENUMS.ANALYSIS.VALUES);
   },

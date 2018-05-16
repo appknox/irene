@@ -9,12 +9,12 @@
               | &nbsp; #{ t (risk-text analysis.overriddenRisk)}
             img src="/images/user-edited.svg" class="user-edited-icon"
             = attach-tooltip placement="top"
-              | Overridden Risk. Orginal Risk: #{t (risk-text analysis.risk)}
+              | Overridden Risk. Orginal Risk: #{t (risk-text analysis.computedRisk)}
         else
           .column.is-one-sixth.severity-tags class=analysis.riskLabelClass
             i.fa.risk-icons class=analysis.riskIconClass
             .uppercase-text
-              | &nbsp; #{ t (risk-text analysis.risk)}
+              | &nbsp; #{ t (risk-text analysis.computedRisk)}
         .column
           h6.vuln-name = analysis.vulnerability.name
         .column.content-right
@@ -149,7 +149,7 @@ if showVulnerability
                   .tag class=analysis.riskLabelClass
                     i.fa.risk-icons class=analysis.riskIconClass
                     .uppercase-text
-                      | &nbsp; #{ t (risk-text analysis.risk)}
+                      | &nbsp; #{ t (risk-text analysis.computedRisk)}
 
                 if isEditingOverriddenRisk
                   .column.is-one-third
@@ -199,7 +199,20 @@ if showVulnerability
 
       h6.bold.black-text
         | HIDE ANALYSIS
-      if analysis.isNotIgnored
+
+      if analysis.isIgnored
+        .columns
+          .column
+            h6
+              | You have hidden this analysis
+        .columns
+          .column
+            button.is-primary.highlighted-button click="doNotIgnoreAnalysis" disabled=isIgnoringAnalysis
+              if isIgnoringAnalysis
+                .fa-font-size
+                  i.fa class="fa-spinner fa-spin"
+              | &nbsp; Unhide Analysis
+      else
         .columns
           .column
             h6
@@ -220,17 +233,5 @@ if showVulnerability
                 .fa-font-size
                   i.fa class="fa-spinner fa-spin"
               | &nbsp; Hide Analysis
-      if analysis.isIgnored
-        .columns
-          .column
-            h6
-              | You have hidden this analysis
-        .columns
-          .column
-            button.is-primary.highlighted-button click="doNotIgnoreAnalysis" disabled=isIgnoringAnalysis
-              if isIgnoringAnalysis
-                .fa-font-size
-                  i.fa class="fa-spinner fa-spin"
-              | &nbsp; Unhide Analysis
 
 = confirm-box isActive=showResetAnalysisConfirmBox title="Reset Overridden Analysis" delegate=this disabled=isResettingMarkedAnalysis

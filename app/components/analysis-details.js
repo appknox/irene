@@ -14,9 +14,9 @@ const AnalysisDetailsComponent = Ember.Component.extend({
 
   filteredRisks: (function() {
     const risks = this.get("risks");
-    const analysisRisk = this.get("analysis.risk");
+    const analysisRisk = this.get("analysis.computedRisk");
     return risks.filter(risk => analysisRisk !== risk.value);
-  }).property("risks", "analysis.risk"),
+  }).property("risks", "analysis.computedRisk"),
 
   markedRisk: (function() {
     const filteredRisks = this.get("filteredRisks");
@@ -24,7 +24,7 @@ const AnalysisDetailsComponent = Ember.Component.extend({
   }).property("filteredRisks"),
 
   riskClass: ( function() {
-    const risk = this.get("analysis.risk");
+    const risk = this.get("analysis.computedRisk");
     switch (risk) {
       case ENUMS.RISK.NONE:
         return "is-success";
@@ -37,15 +37,15 @@ const AnalysisDetailsComponent = Ember.Component.extend({
       case ENUMS.RISK.CRITICAL:
         return "is-critical";
     }
-  }).property("analysis.risk"),
+  }).property("analysis.computedRisk"),
 
   progressClass: ( function() {
-    const risk = this.get("analysis.risk");
+    const risk = this.get("analysis.computedRisk");
     switch (risk) {
       case ENUMS.RISK.UNKNOWN:
         return "is-progress";
     }
-  }).property("analysis.risk"),
+  }).property("analysis.computedRisk"),
 
   editAnalysisURL(type) {
     const fileId = this.get("analysis.file.id");
@@ -102,6 +102,7 @@ const AnalysisDetailsComponent = Ember.Component.extend({
         this.set("isMarkingAnalysis", false);
         this.set("isEditingOverriddenRisk", false);
         this.set("analysis.overriddenRisk", markedRisk);
+        this.set("analysis.computedRisk", markedRisk);
         this.set("analysis.isOverriddenRisk", true);
       }, (error) => {
         this.get("notify").error(error.payload.message);
@@ -132,6 +133,12 @@ const AnalysisDetailsComponent = Ember.Component.extend({
       }).then(() => {
         this.get("notify").success("Successfully ignored the analysis");
         this.set("isIgnoringAnalysis", false);
+        if(this.get("analysis.isIgnored")) {
+          this.set("analysis.isIgnored", false);
+        }
+        else {
+          this.set("analysis.isIgnored", true);
+        }
       }, (error) => {
         this.get("notify").error(error.payload.message);
         this.set("isIgnoringAnalysis", false);

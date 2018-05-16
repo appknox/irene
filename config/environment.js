@@ -236,7 +236,7 @@ module.exports = function(environment) {
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
-    ENV['host'] = "https://api.appknox.io";
+    ENV['host'] = "http://localhost:8000";
     ENV.enableIntercom = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
