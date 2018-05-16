@@ -25,16 +25,16 @@
           each vulnerabilityTypes as |vulnerabilityType|
             option value=vulnerabilityType.value
               | #{ t (vulnerability-type vulnerabilityType.value)}
-    if filteredAnalysis
-      each filteredAnalysis as |analysis|
+    if sortedUnhiddenAnalyses
+      each sortedUnhiddenAnalyses as |analysis|
         = analysis-details analysis=analysis
     else
       .not-found
         h4
           = fa-icon "exclamation-triangle"
           = t "noScansFound"
-    if ignoredAnalyses
+    if sortedHiddenAnalyses
       | HIDDEN ANALYSIS
       .margin-top
-        each ignoredAnalyses as |analysis|
+        each sortedHiddenAnalyses as |analysis|
           = analysis-details analysis=analysis
