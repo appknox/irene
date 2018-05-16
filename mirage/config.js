@@ -108,7 +108,7 @@ export default function() {
     return {};
   });
 
-  this.put('/profiles/:id/ignored_analysis_status', () => {
+  this.put('/profiles/:id/report_preference', () => {
     return {};
   });
 

@@ -1,9 +1,11 @@
-.columns
+.columns.report-preferences
   .column
     h5.bold.black-text
       | Report Customization
-    h6
-      | Do you want to show the hidden analysis in the Report?
-    label class="switch"
-      input id="show-ignored-analysis" type="checkbox" checked=project.showIgnoredAnalysis click="showIgnoredAnalysis" disabled=isSavingStatus
-      span class="slider round"
+    .columns.question
+      .column.is-one-third
+            | Do you want to show the hidden analysis in the Report?
+      .column
+        label class="switch"
+          input id="show-ignored-analysis" type="checkbox" checked=project.showIgnoredAnalysis click="showIgnoredAnalysis" disabled=isSavingStatus
+          span class="slider round"

@@ -9,9 +9,9 @@ export default Ember.Component.extend({
     showIgnoredAnalysis() {
       const isChecked = this.$('#show-ignored-analysis')[0].checked;
       const profileId = this.get("project.activeProfileId");
-      const url = [ENV.endpoints.profiles, profileId, ENV.endpoints.ignoredAnalysisStatus].join('/');
+      const url = [ENV.endpoints.profiles, profileId, ENV.endpoints.reportPreference].join('/');
       const data = {
-        status: isChecked
+        show_ignored_analyses: isChecked
       };
       const that = this;
       this.set("isSavingStatus", true);
