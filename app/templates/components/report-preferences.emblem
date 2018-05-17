@@ -1,10 +1,10 @@
 .columns.report-preferences
   .column
     h5.bold.black-text
-      | Report Customization
+      = t "reportCustomization"
     .columns.question
       .column.is-one-third
-            | Do you want to show the hidden analysis in the Report?
+        = t "showHiddenAnalysis"
       .column
         label class="switch"
           input id="show-ignored-analysis" type="checkbox" checked=project.showIgnoredAnalysis click="showIgnoredAnalysis" disabled=isSavingStatus

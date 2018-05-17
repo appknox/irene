@@ -9,7 +9,8 @@
               | &nbsp; #{ t (risk-text analysis.overriddenRisk)}
             img src="/images/user-edited.svg" class="user-edited-icon"
             = attach-tooltip placement="top"
-              | Overridden Risk. Orginal Risk: #{t (risk-text analysis.risk)}
+              | #{ t "overriddenRisk"},&nbsp;
+              | #{ t "orginalRisk"}: #{t (risk-text analysis.risk)}
         else
           .column.is-one-sixth.severity-tags class=analysis.riskLabelClass
             i.fa.risk-icons class=analysis.riskIconClass
@@ -29,7 +30,7 @@
   .column.is-one-sixth.content-right.edit-analysis
     i.fa.risk-icons.fa-edit.removeUrl.remove click="openEditAnalysisModal"
     = attach-tooltip placement="top"
-      | Edit Analysis
+      = t "editAnalysis"
 
 
 if showVulnerability
@@ -115,37 +116,37 @@ if showVulnerability
       .box-container
         h5.vuln-name = analysis.vulnerability.name
       .box-container
-        h6.bold.black-text
-          | OVERRIDE ANALYSIS
+        h6.bold.black-text.uppercase-text
+          =  t "overrideRisk"
         if analysis.isOverriddenRisk
           .columns.margin-top
             .column
               .columns
                 if isEditingOverriddenRisk
                   .column.is-one-sixth.mark-text
-                    | Mark it as
+                    = t "markItAs"
                   .column.is-one-sixth
                     select{action 'selectMarkedAnalyis' on='change'} id="marked-analysis"
                       each filteredRisks as |risk|
                         option value=risk.value
                           | #{ t (risk-text risk.value)}
                   .column.is-one-sixth.marked-analysis-text.margin-top5
-                    | for
+                    = t "for"
                   .column.is-one-third
                     select{action 'selectMarkedAnalyisType' on='change'} id="marked-analysis-all" class="mark-analysis-all"
                       option value="false"
-                        | Current File Only
+                        = t "currentFileOnly"
                       option value="true"
-                        | All Future Analyses
+                        =  t "allFutureAnalyses"
                 else
                   .column.is-one-third.margin-top5
-                    | Overridden Risk
+                    = t "overriddenRisk"
                     .tag class=analysis.overriddenRiskLabelClass
                       i.fa.risk-icons class=analysis.overriddenRiskIconClass
                       .uppercase-text
                         | &nbsp; #{ t (risk-text analysis.overriddenRisk)}
                 .column.margin-top5
-                  | Orginal Risk
+                  = t "orginalRisk"
                   .tag class=analysis.riskLabelClass
                     i.fa.risk-icons class=analysis.riskIconClass
                     .uppercase-text
@@ -157,25 +158,25 @@ if showVulnerability
                       if isMarkingAnalysis
                         .fa-font-size
                           i.fa class="fa-spinner fa-spin"
-                      | &nbsp; Save
+                      | &nbsp; #{ t "save"}
                 else
                   .column
                     button.is-primary.highlighted-button.edit-marked-analysis click="editMarkedAnalysis" disabled=isEditingMarkedAnalysis
                       if isEditingMarkedAnalysis
                         .fa-font-size
                           i.fa class="fa-spinner fa-spin"
-                      | &nbsp; Edit
+                      | &nbsp; #{ t "edit"}
                     button.is-primary.highlighted-button.edit-marked-analysis click="openResetMarkedAnalysisConfirmBox"
-                      | &nbsp; Reset
+                      | &nbsp; #{ t "reset"}
         else
           .columns
             .column
               h6
-                | Is this a false positive? you can override this analysis here
+                = t "falsePositive"
           .columns.margin-top
             .column.is-one-sixth.mark-text
               h6
-                | Mark it as
+                = t "markItAs"
             .column.is-one-sixth
               select{action 'selectMarkedAnalyis' on='change'} id="marked-analysis"
                 each filteredRisks as |risk|
@@ -183,55 +184,56 @@ if showVulnerability
                     | #{ t (risk-text risk.value)}
             .column.is-one-sixth.marked-analysis-text2
               h6
-                | for
+                = t "for"
             .column
               select{action 'selectMarkedAnalyisType' on='change'} id="marked-analysis-all" class="mark-analysis-all"
                 option value="false"
-                  | Current File Only
+                  = t "currentFileOnly"
                 option value="true"
-                  | All Future Analyses
+                  =  t "allFutureAnalyses"
             .column
               button.is-primary.highlighted-button click="markAnalysis" disabled=isMarkingAnalysis
                 if isMarkingAnalysis
                   .fa-font-size
                     i.fa class="fa-spinner fa-spin"
-                | &nbsp; Mark Analysis
+                | &nbsp; #{ t "markAnalysis"}
 
-      h6.bold.black-text
-        | HIDE ANALYSIS
+      h6.bold.black-text.uppercase-text
+        = t "hideAnalysis"
 
       if analysis.isIgnored
         .columns
           .column
             h6
-              | You have hidden this analysis
+              = t "hiddenThisAnalysis"
         .columns
           .column
             button.is-primary.highlighted-button click="doNotIgnoreAnalysis" disabled=isIgnoringAnalysis
               if isIgnoringAnalysis
                 .fa-font-size
                   i.fa class="fa-spinner fa-spin"
-              | &nbsp; Unhide Analysis
+              | &nbsp; #{ t "unhideAnalysis"}
       else
         .columns
           .column
             h6
-              | You can also hide this analysis here
+              = t "hideThisAnalysis"
         .columns.margin-top
           .column.is-one-third
             h5
-              | Hide this Analysis for
+              = t "hideThisAnalysisFor"
           .column
             select{action 'selectIgnoredAnalyisType' on='change'} id="ignored-analysis-all" class="ignore-analysis-all"
               option value="false"
-                | Current File Only
+                = t "currentFileOnly"
               option value="true"
-                | All Future Analyses
+                =  t "allFutureAnalyses"
           .column
             button.is-primary.highlighted-button click="ignoreAnalysis" disabled=isIgnoringAnalysis
               if isIgnoringAnalysis
                 .fa-font-size
                   i.fa class="fa-spinner fa-spin"
-              | &nbsp; Hide Analysis
+              .capitalize-text
+                | &nbsp; #{ t "hideAnalysis"}
 
 = confirm-box isActive=showResetAnalysisConfirmBox title="Reset Overridden Analysis" delegate=this disabled=isResettingMarkedAnalysis

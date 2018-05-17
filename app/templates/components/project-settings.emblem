@@ -12,10 +12,10 @@
   ul
     li class=generalSettingsClass
       a click="displayGeneralSettings" class="mp-display-general-settings"
-        | General Settings
+        = t "generalSettings"
     li class=analysisSettingsClass
       a click="displaAnalysisSettings" class="mp-display-analysis-settings"
-        | Analysis Settings
+        = t "analysisSettings"
 
 if isGeneralSettings
   .box-container
