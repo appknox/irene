@@ -185,6 +185,10 @@ export default function() {
     return {};
   });
 
+  this.post('/api_scan_options/:id', () => {
+    return {};
+  });
+
   this.get('/invoices/:id/download_url', () => {
     return {};
   });

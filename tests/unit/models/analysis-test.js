@@ -38,31 +38,25 @@ test('it exists', function(assert) {
     assert.equal(analysis.hasType(1), true, "Has Type");
 
     analysis.set('risk', ENUMS.RISK.UNKNOWN);
-    assert.equal(analysis.get('iconClass'), "fa-spinner fa-spin", "Loading");
+    assert.equal(analysis.iconClass(ENUMS.RISK.UNKNOWN), "fa-spinner fa-spin", "Loading");
     analysis.set('risk', ENUMS.RISK.NONE);
-    assert.equal(analysis.get('iconClass'), "fa-check", "Check");
+    assert.equal(analysis.iconClass(ENUMS.RISK.NONE), "fa-check", "Check");
     analysis.set('risk', ENUMS.RISK.CRITICAL);
-    assert.equal(analysis.get('iconClass'), "fa-warning", "Warning");
+    assert.equal(analysis.iconClass(ENUMS.RISK.CRITICAL), "fa-warning", "Warning");
 
     const cls = 'tag';
     analysis.set('risk', ENUMS.RISK.UNKNOWN);
-    assert.equal(analysis.get('labelClass'), cls + " " + "is-progress", "Progress");
-    assert.equal(analysis.get('riskText.string'), "Scanning", "Scanning");
+    assert.equal(analysis.labelClass(ENUMS.RISK.UNKNOWN), cls + " " + "is-progress", "Progress");
     analysis.set('risk', ENUMS.RISK.NONE);
-    assert.equal(analysis.get('labelClass'), cls + " " + "is-success", "Success");
-    assert.equal(analysis.get('riskText.string'), "Passed", "Passed");
+    assert.equal(analysis.labelClass(ENUMS.RISK.NONE), cls + " " + "is-success", "Success");
     analysis.set('risk', ENUMS.RISK.LOW);
-    assert.equal(analysis.get('labelClass'), cls + " " + "is-info", "Info");
-    assert.equal(analysis.get('riskText.string'), "Low", "Low");
+    assert.equal(analysis.labelClass(ENUMS.RISK.LOW), cls + " " + "is-info", "Info");
     analysis.set('risk', ENUMS.RISK.MEDIUM);
-    assert.equal(analysis.get('labelClass'), cls + " " + "is-warning", "Warning");
-    assert.equal(analysis.get('riskText.string'), "Medium", "Medium");
+    assert.equal(analysis.labelClass(ENUMS.RISK.MEDIUM), cls + " " + "is-warning", "Warning");
     analysis.set('risk', ENUMS.RISK.HIGH);
-    assert.equal(analysis.get('labelClass'), cls + " " + "is-danger", "Danger");
-    assert.equal(analysis.get('riskText.string'), "High", "High");
+    assert.equal(analysis.labelClass(ENUMS.RISK.HIGH), cls + " " + "is-danger", "Danger");
     analysis.set('risk', ENUMS.RISK.CRITICAL);
-    assert.equal(analysis.get('labelClass'), cls + " " + "is-critical", "Critical");
-    assert.equal(analysis.get('riskText.string'), "Critical", "Critical");
+    assert.equal(analysis.labelClass(ENUMS.RISK.CRITICAL), cls + " " + "is-critical", "Critical");
 
     assert.equal(analysis.get('isRisky'), true, "Is Risky");
 

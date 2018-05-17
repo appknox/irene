@@ -12,14 +12,6 @@ test('it renders', function(assert) {
 
   this.render(hbs`{{report-preferences}}`);
 
-  assert.equal(this.$().text().trim(), '');
+  assert.equal(this.$().text().trim(), 'Report CustomizationDo you want to show the hidden analysis in the Report?');
 
-  // Template block usage:
-  this.render(hbs`
-    {{#report-preferences}}
-      template block text
-    {{/report-preferences}}
-  `);
-
-  assert.equal(this.$().text().trim(), 'template block text');
 });

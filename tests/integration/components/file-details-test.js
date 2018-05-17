@@ -1,4 +1,3 @@
-import ENUMS from 'irene/enums';
 // import tHelper from 'ember-i18n/helper';
 // import localeConfig from 'ember-i18n/config/en';
 import { test, moduleForComponent } from 'ember-qunit';
@@ -47,30 +46,4 @@ test('tapping button fires an external action', function(assert) {
       ]
     });
   assert.deepEqual(component.get("analyses"), [{"hasType": false,"id": 1},{"hasType": false,"id": 2},{"hasType": false,"id": 3}] , "Analyses");
-  assert.deepEqual(component.get("filteredAnalysis"), [{"hasType": false,"id": 1},{"hasType": false,"id": 2},{"hasType": false,"id": 3}] , "Extra Query Strings");
-  component.set("file",
-    {
-      sortedAnalyses: [
-        {
-          id: 1,
-          hasType() {
-            return true;
-          }
-        },
-        {
-          id: 2,
-          hasType() {
-            return true;
-          }
-        },
-        {
-          id: 3,
-          hasType() {
-            return true;
-          }
-        }
-      ]
-    });
-  component.set("vulnerabilityType", ENUMS.VULNERABILITY_TYPE.STATIC);
-  assert.ok(component.get("filteredAnalysis"));
 });
