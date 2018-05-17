@@ -58,7 +58,7 @@ test('tapping button fires an external action', function(assert) {
   component.set('store', store);
 
   Ember.run(function() {
-    component.set("project", {id:1});
+    component.set("project", {activeProfileId:1});
     component.send('versionSelected');
 
     assert.equal(component.get("isSavingPreference"), true, 'Saving Preference');
