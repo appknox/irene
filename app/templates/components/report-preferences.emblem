@@ -7,5 +7,5 @@
         = t "showHiddenAnalysis"
       .column
         label class="switch"
-          input id="show-ignored-analysis" type="checkbox" checked=project.showIgnoredAnalysis click="showIgnoredAnalysis" disabled=isSavingStatus
+          input class="switch-input" id="show-ignored-analysis" type="checkbox" checked=project.showIgnoredAnalysis click="showIgnoredAnalysis" disabled=isSavingStatus
           span class="slider round"

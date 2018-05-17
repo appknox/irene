@@ -1906,11 +1906,9 @@ select:disabled
   background-color: white
   transition: .4s
 
-input:checked + .slider
-  background-color: $success
-
-input:focus + .slider
-  box-shadow: 0 0 1px $success
+input:checked, input:focus
+  & + .slider
+    background-color: $success
 
 input:checked + .slider:before
   content: "SHOW"
@@ -1950,11 +1948,7 @@ input:checked + .yes-no-slider:before
       color: #FFF
       border-color: $critical
 
-#show-unkown-analysis[disabled] + .slider
-  opacity: 0.7
-  cursor: not-allowed
-
-#ignore-analysis-project[disabled] + .slider
+.switch-input[disabled] + .slider
   opacity: 0.7
   cursor: not-allowed
 
