@@ -15,7 +15,7 @@
           .column.is-one-sixth.severity-tags class=analysis.riskLabelClass
             i.fa.risk-icons class=analysis.riskIconClass
             .uppercase-text
-              | &nbsp; #{ t (risk-text analysis.computedRisk)}
+              | &nbsp; #{ t (risk-text analysis.risk)}
         .column
           h6.vuln-name = analysis.vulnerability.name
         .column.content-right
@@ -150,7 +150,7 @@ if showVulnerability
                   .tag class=analysis.riskLabelClass
                     i.fa.risk-icons class=analysis.riskIconClass
                     .uppercase-text
-                      | &nbsp; #{ t (risk-text analysis.computedRisk)}
+                      | &nbsp; #{ t (risk-text analysis.risk)}
 
                 if isEditingOverriddenRisk
                   .column.is-one-third
