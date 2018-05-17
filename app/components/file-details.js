@@ -34,8 +34,8 @@ const FileDetailsComponent = Ember.Component.extend({
     return filteredAnalysis;
   }),
 
-  sortedHiddenAnalyses: Ember.computed('analyses', function() {
-    const analyses = this.get("analyses");
+  sortedHiddenAnalyses: Ember.computed('file.sortedAnalyses', function() {
+    const analyses = this.get("file.sortedAnalyses");
     const ignoredAnalyses = [];
     for (let analysis of analyses) {
       if (analysis.get("isIgnored")) {
@@ -66,7 +66,7 @@ const FileDetailsComponent = Ember.Component.extend({
         this.set("sortImpactAscending", false);
       }
       const sortedAnalyses = this.get("sortedAnalyses");
-      this.set("sortedUnhiddenAnalyses", sortedAnalyses);
+      this.set("analyses", sortedAnalyses);
     }
   }
 });
