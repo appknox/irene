@@ -1,17 +1,45 @@
-import { moduleForComponent, test } from 'ember-qunit';
-import hbs from 'htmlbars-inline-precompile';
+import Ember from 'ember';
+import tHelper from 'ember-i18n/helper';
+import localeConfig from 'ember-i18n/config/en';
+import { test, moduleForComponent } from 'ember-qunit';
+import { startMirage } from 'irene/initializers/ember-cli-mirage';
 
 moduleForComponent('report-preferences', 'Integration | Component | report preferences', {
-  integration: true
+  unit: true,
+  needs: [
+    'service:i18n',
+    'service:ajax',
+    'service:notification-messages-service',
+    'service:session',
+    'locale:en/translations',
+    'locale:en/config',
+    'util:i18n/missing-message',
+    'util:i18n/compile-template',
+    'config:environment'
+  ],
+  beforeEach() {
+    // set the locale and the config
+    Ember.getOwner(this).lookup('service:i18n').set('locale', 'en');
+    this.register('locale:en/config', localeConfig);
+
+    // register t helper
+    this.register('helper:t', tHelper);
+
+    // start Mirage
+    this.server = startMirage();
+  },
+  afterEach() {
+    // shutdown Mirage
+    this.server.shutdown();
+  }
 });
 
-test('it renders', function(assert) {
-
-  // Set any properties with this.set('myProperty', 'value');
-  // Handle any actions with this.on('myAction', function(val) { ... });
-
-  this.render(hbs`{{report-preferences}}`);
-
-  assert.equal(this.$().text().trim(), 'Report CustomizationDo you want to show the hidden analysis in the Report?');
-
+test('it exists', function(assert) {
+  assert.expect(0);
+  const component = this.subject();
+  this.render();
+  Ember.run(function() {
+    component.set("project", {activeProfileId:1});
+    component.send("showIgnoredAnalysis");
+  });
 });

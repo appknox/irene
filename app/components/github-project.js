@@ -45,10 +45,6 @@ const GithubProjectComponent = Ember.Component.extend({
   },
 
   fetchGithubRepos: (function() {
-    if (ENV.environment === 'test') {
-      // FIXME: Fix this test properly
-      return;
-    }
     const tFetchGitHubRepoFailed = this.get("tFetchGitHubRepoFailed");
     const that = this;
     this.get("ajax").request(ENV.endpoints.githubRepos)

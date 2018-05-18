@@ -104,6 +104,10 @@ export default function() {
     return {};
   });
 
+  this.put('/profiles/:id/vulnerability_preferences/:id', () => {
+    return {};
+  });
+
   this.put('/profiles/:id/unknown_analysis_status', () => {
     return {};
   });

@@ -108,12 +108,14 @@ const AnalysisDetailsComponent = Ember.Component.extend({
       this.get("ajax").put(url, {
         data
       }).then(() => {
-        this.get("notify").success(this.get("tSuccessfullyOverridden"));
-        this.set("isMarkingAnalysis", false);
-        this.set("isEditingOverriddenRisk", false);
-        this.set("analysis.overriddenRisk", markedRisk);
-        this.set("analysis.computedRisk", markedRisk);
-        this.set("analysis.isOverriddenRisk", true);
+        if(!this.isDestroyed) {
+          this.get("notify").success(this.get("tSuccessfullyOverridden"));
+          this.set("isMarkingAnalysis", false);
+          this.set("isEditingOverriddenRisk", false);
+          this.set("analysis.overriddenRisk", markedRisk);
+          this.set("analysis.computedRisk", markedRisk);
+          this.set("analysis.isOverriddenRisk", true);
+        }
       }, (error) => {
         this.get("notify").error(error.payload.message);
         this.set("isMarkingAnalysis", false);
@@ -145,13 +147,15 @@ const AnalysisDetailsComponent = Ember.Component.extend({
       this.get("ajax").put(url, {
         data
       }).then(() => {
-        this.get("notify").success(this.get("tSuccessfullyIgnored"));
-        this.set("isIgnoringAnalysis", false);
-        if(this.get("analysis.isIgnored")) {
-          this.set("analysis.isIgnored", false);
-        }
-        else {
-          this.set("analysis.isIgnored", true);
+        if(!this.isDestroyed) {
+          this.get("notify").success(this.get("tSuccessfullyIgnored"));
+          this.set("isIgnoringAnalysis", false);
+          if(this.get("analysis.isIgnored")) {
+            this.set("analysis.isIgnored", false);
+          }
+          else {
+            this.set("analysis.isIgnored", true);
+          }
         }
       }, (error) => {
         this.get("notify").error(error.payload.message);
@@ -169,10 +173,12 @@ const AnalysisDetailsComponent = Ember.Component.extend({
       this.get("ajax").delete(url, {
         data
       }).then(() => {
-        this.get("notify").success(this.get("tSuccessfullyReset"));
-        this.set("isResettingMarkedAnalysis", false);
-        this.set("showResetAnalysisConfirmBox", false);
-        this.set("analysis.isOverriddenRisk", false);
+        if(!this.isDestroyed) {
+          this.get("notify").success(this.get("tSuccessfullyReset"));
+          this.set("isResettingMarkedAnalysis", false);
+          this.set("showResetAnalysisConfirmBox", false);
+          this.set("analysis.isOverriddenRisk", false);
+        }
       }, (error) => {
         this.get("notify").error(error.payload.message);
         this.set("isResettingMarkedAnalysis", false);

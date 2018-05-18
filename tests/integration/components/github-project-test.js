@@ -37,16 +37,45 @@ moduleForComponent('github-project', 'Integration | Component | github project',
 });
 
 test('tapping button fires an external action', function(assert) {
-
   var component = this.subject();
   Ember.run(function() {
-
     component.set("project", {id:1});
     assert.equal(component.confirmCallback(),undefined, "Confirm Callback");
-
     component.send("openDeleteGHConfirmBox");
     assert.equal(component.get("showDeleteGHConfirmBox"),true, "Open");
     component.send("closeDeleteGHConfirmBox");
     assert.equal(component.get("showDeleteGHConfirmBox"),false, "Close");
+    assert.notOk(component.fetchGithubRepos());
+  });
+});
+
+test('tapping button fires an external action', function(assert) {
+  var component = this.subject();
+  var store = {
+    query: function() {
+      return [
+        {
+          id:1,
+          type: "github-integration",
+          attributes: {
+            name: "test"
+          }
+        }
+      ];
+    }
+  };
+  component.set('store', store);
+  this.render();
+  Ember.run(function() {
+    assert.deepEqual(component.get("github"), [{
+        id:1,
+        type: "github-integration",
+        attributes: {
+          name: "test"
+        }
+      }
+    ]);
+    component.set("project", {id:1});
+    component.send("selectRepo");
   });
 });
