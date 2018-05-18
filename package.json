@@ -72,6 +72,7 @@
     "ember-freestyle": "0.2.14",
     "ember-g-recaptcha": "0.7.0",
     "ember-i18n": "^5.0.1",
+    "ember-cli-intl-tel-input": "^1.0.14",
     "ember-lazy-image": "0.0.15",
     "ember-load-initializers": "^1.0.0",
     "ember-moment": "7.3.0",
@@ -88,6 +89,8 @@
   },
   "dependencies": {
     "clipboard": "^1.7.1",
-    "ember-cli-document-title": "^0.3.3"
+    "ember-cli-document-title": "^0.3.3",
+    "intl-tel-input": "^12.1.15",
+    "jquery": "^3.3.1"
   }
 }
