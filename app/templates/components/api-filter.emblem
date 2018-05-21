@@ -16,7 +16,7 @@
           | &nbsp;
         | + {{t "templates.addNewUrl"}}
 
-  .condition-text-small
+  small
     | eg. api.appknox.com. Do not specify the scheme (http://...), port (:443/...) & path (.../users)
 
 if project.hasApiUrlFilters
