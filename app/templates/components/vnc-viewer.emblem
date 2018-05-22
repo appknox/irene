@@ -1,7 +1,7 @@
 if isPoppedOut
   .modal-background
 .modal-card.device-modal
-  .modal-card-body.padding-10.margin-top.flex-center
+  .modal-card-body.vnc-modal-body.padding-10.margin-top.flex-center
     div class="marvel-device" class=deviceType
       if isNotTablet
         div class="top-bar"
@@ -13,18 +13,7 @@ if isPoppedOut
           div class="speaker"
       div class=screenRequired:noscreen:screen
         canvas.canvas
-        if file.isNotReady
-          .vnc-text
-            .vnc-box
-              div
-                if file.isNoneStatus
-                  div
-                    h6
-                      = t "clickOnDynamicScan"
-                else
-                  i.fa class="fa-spinner fa-spin"
-                  h6
-                    | #{file.statusText} &nbsp;
+
       if isIOSDevice
         div class="home"
         if isNotTablet
@@ -34,3 +23,6 @@ if isPoppedOut
     .modal-card-foot
       button.is-primary.mp-toggle-pop.margin-auto click="togglePop"
         = vncPopText
+  if file.isNotReady
+    .button-on-vnc
+      = dynamic-scan file=file notVNCViewer=false

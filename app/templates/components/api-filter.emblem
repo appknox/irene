@@ -20,22 +20,18 @@
     | eg. api.appknox.com. Do not specify the scheme (http://...), port (:443/...) & path (.../users)
 
 if project.hasApiUrlFilters
-  .columns
-    .column
-      table.api-filter-table
-        tr
-          th
-             = t "apiURLFilter"
-          th
-            = t "actions"
-        each project.apiUrlFilterItems as |item|
-          tr
-            td
-              = item
-            td
-              i.fa.risk-icons.fa-trash-o.removeUrl.remove click="openRemoveURLConfirmBox"
 
-
-
+  table.api-filter-table
+    tr
+      th
+         = t "apiURLFilter"
+      th
+        = t "actions"
+    each project.apiUrlFilterItems as |item|
+      tr
+        td
+          = item
+        td
+          i.fa.risk-icons.fa-trash-o.removeUrl.remove click="openRemoveURLConfirmBox"
 
 = confirm-box isActive=showRemoveURLConfirmBox title=(t 'confirmBox.removeURL') delegate=this disabled=isDeletingURLFilter

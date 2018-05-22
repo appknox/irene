@@ -1089,6 +1089,10 @@ ul.risk-table
     margin-top: -5px
 
 .scan-status-card
+  .warning-band
+    .columns .column
+      height: 100px!important
+
   .card-header
     height: 40px
     h5
@@ -1338,7 +1342,7 @@ button.delete-button
   max-height: calc(100vh - 10px)
   .modal-card-head
     border-bottom: 0px
-  .modal-card-body
+  .vnc-modal-body
     min-height: 582px
     button
       margin-top: 45px
@@ -2133,6 +2137,19 @@ $attachment-icon-width: 4em
 
   .intl-tel-input
     width: 100%
-    
+
   .checkbox-field
     display: inline-block
+
+.button-on-vnc
+  .vnc-box
+    position: relative
+    top: -400px
+    z-index: 10
+    background-color: #FFF
+    border-color: #FFF
+    padding: 10px 10px
+    border-radius: 5px
+    text-align: center
+    .vnc-button
+      margin-top: -10px
