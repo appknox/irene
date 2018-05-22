@@ -1,4 +1,4 @@
-.column.flex-center class=notVNCViewer:hide
+.column.flex-center
   if file.isNotReady
     div.vnc-box
       h6.margin-left class=notVNCViewer:hide:show
