@@ -26,8 +26,8 @@
     .columns
       .column.flex-center
         = t "staticScan"
-      .column.flex-center
-        = t "dynamicScan"
+      / .column.flex-center
+      /   = t "dynamicScan"
       if file.project.isAPIScanEnabled
         .column.flex-center
           = t "apiScan"
