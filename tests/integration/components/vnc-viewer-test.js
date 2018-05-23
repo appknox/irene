@@ -8,6 +8,7 @@ import { test, moduleForComponent } from 'ember-qunit';
 moduleForComponent('vnc-viewer', 'Integration | Component | vnc viewer', {
   unit: true,
   needs: [
+    'component:dynamic-scan',
     'service:i18n',
     'locale:en/translations',
     'locale:en/config',

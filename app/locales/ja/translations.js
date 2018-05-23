@@ -274,6 +274,7 @@ export default {
   "sortBy": "並び替え",
   "staging": "ステージング",
   "start": "開始",
+  "startDynamicScan": "Start Dynamic Scan",
   "startNewScan": "新しい診断を開始する",
   "started": "開始しました",
   "startingScan": "診断を開始しています",

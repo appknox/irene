@@ -598,8 +598,8 @@ button, .button
     font-size: 85px
 
 .package-desc
-  margin-right: 20px
-  margin-top: 20px!important
+  margin-right: 0px
+  margin-top: 0px!important
   table
     width: 80%
     font-size: 13px
@@ -1089,6 +1089,10 @@ ul.risk-table
     margin-top: -5px
 
 .scan-status-card
+  .warning-band
+    .columns .column
+      height: 100px!important
+
   .card-header
     height: 40px
     h5
@@ -1338,7 +1342,7 @@ button.delete-button
   max-height: calc(100vh - 10px)
   .modal-card-head
     border-bottom: 0px
-  .modal-card-body
+  .vnc-modal-body
     min-height: 582px
     button
       margin-top: 45px
@@ -2133,6 +2137,42 @@ $attachment-icon-width: 4em
 
   .intl-tel-input
     width: 100%
-    
+
   .checkbox-field
     display: inline-block
+
+.button-on-vnc
+  .vnc-box
+    position: relative
+    top: -400px
+    z-index: 10
+    text-align: center
+    .vnc-button
+      background-color: #FFF
+      border-color: #FFF
+      width: 160px
+      &:hover
+        background-color: $red
+        border-color: $red
+    .vnc-button[disabled]
+      opacity: 0.9
+      &:hover
+        opacity: 0.9
+        background-color: lighten(red, 50%)
+        border-color: lighten(red, 50%)
+    .vnc-button-repeat
+      width: 30px
+    .vnc-completed-button[disabled]:hover
+      background-color: #FFF
+      border-color: #FFF
+      color: $red
+      opacity: 0.8
+
+  .stop-dynamic-scan
+    position: relative
+    bottom: 82px
+    right: 50px
+
+.mp-toggle-pop
+  position: relative
+  left: 50px

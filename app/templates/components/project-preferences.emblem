@@ -49,11 +49,17 @@ table.device-table
             each uniqueDevices as |device|
               option value=device.version
                 = device.version
+
       .columns
         .column
           button.margin-top20.is-primary.mp-select-device click="versionSelected" disabled=isSavingPreference
             if isSavingPreference
               .fa-font-size
                 i.fa class="fa-spinner fa-spin"
-              | &nbsp; 
+              | &nbsp;
             = t "modalCard.devicePreference.selectDevice"
+      small
+        = fa-icon "lightbulb-o"
+        span.margin-left5
+          | Note: 
+          | changing the device preference won't affect the already running scan.

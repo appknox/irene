@@ -61,7 +61,19 @@ test('tapping button fires an external action', function(assert) {
     component.set("project", {id:1});
     component.send('versionSelected');
 
+    assert.deepEqual(component.get("devices"), [{
+      "attributes": {
+        "name": "test",
+        "platform": 1
+      },
+      "id": 1,
+      "type": "device"
+      }
+    ], 'devices');
+
     assert.equal(component.get("isSavingPreference"), true, 'Saving Preference');
+
+
 
     component.send('openProjectPreferenceModal');
     assert.equal(component.get("projectPreferenceModal"), true, 'Open Modal');
