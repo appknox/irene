@@ -274,6 +274,7 @@ export default {
   "sortBy": "Sort By",
   "staging": "Staging",
   "start": "Start",
+  "startDynamicScan": "Start Dynamic Scan",
   "startNewScan": "Start a new scan",
   "started": "Started",
   "startingScan": "Starting the scan",

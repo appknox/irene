@@ -1,10 +1,10 @@
 .columns
   .column
     = file-header file=file class="margin-top"
-    
+
 .columns.margin-left5.margin-top
   .column
-    .bold.black-text.uppercase-text.font-size-16.red-text
+    .uppercase-text.font-size-16.red-text
       = t "vulnerabilityDetails"
 .columns
   .column.margin-left5

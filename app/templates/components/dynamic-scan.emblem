@@ -1,8 +1,6 @@
 .column.flex-center
   if file.isNotReady
     div.vnc-box
-      h6.margin-left class=notVNCViewer:hide:show
-        | DYNAMIC SCANNER
       if file.isNeitherNoneNorReady
         button.vnc-button.is-primary.margin-top20.is-progress disabled="disabled"
           .fa-font-size
@@ -10,22 +8,22 @@
           | &nbsp; #{file.statusText}
       if file.isNoneStatus
         if file.isDynamicDone
-          button.vnc-button.is-primary.margin-top20 disabled="disabled"
+          button.vnc-button.vnc-completed-button.is-primary.margin-top20 disabled="disabled"
             = fa-icon "fa-check"
             | &nbsp; #{t "completed"}
           if trial.isTrial
-            button.vnc-button.is-primary.margin-top20.margin-left click="openSubscribeModal"
+            button.vnc-button.vnc-button-repeat.is-primary.margin-top20.margin-left click="openSubscribeModal"
               .fa-font-size-small
                 = fa-icon "fa-repeat"
           else
-            button.vnc-button.is-primary.margin-top20.margin-left.ac-dynamic-rescan click="openAPIScanModal"
+            button.vnc-button.vnc-button-repeat.is-primary.margin-top20.margin-left.ac-dynamic-rescan click="openAPIScanModal"
               .fa-font-size-small
                 = fa-icon "fa-repeat"
         else
           button.vnc-button.is-primary.margin-top20.ac-start-dynamic-scan click="openAPIScanModal"
             .fa-font-size
               = fa-icon "fa-play"
-            | &nbsp; #{t "start"}
+            | &nbsp; #{dynamicScanText}
   if file.isReady
     button.is-primary.margin-top20.stop-dynamic-scan click="dynamicShutdown"
       .fa-font-size-small

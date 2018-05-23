@@ -52,7 +52,7 @@
            button.is-primary.margin-top20.is-progress disabled="disabled"
             | #{t "scanning"} : #{file.staticScanProgress}
             | %
-      = dynamic-scan file=file notVNCViewer=true
+      = dynamic-scan file=file notVNCViewer=true dynamicScanText=(t 'start')
       .column.flex-center
         if file.ifManualNotRequested
           if trial.isTrial

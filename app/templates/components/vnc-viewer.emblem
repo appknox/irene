@@ -23,6 +23,6 @@ if isPoppedOut
     .modal-card-foot
       button.is-primary.mp-toggle-pop.margin-auto click="togglePop"
         = vncPopText
-        
+
   .button-on-vnc
-    = dynamic-scan file=file notVNCViewer=false
+    = dynamic-scan file=file notVNCViewer=false dynamicScanText=(t 'startDynamicScan')
