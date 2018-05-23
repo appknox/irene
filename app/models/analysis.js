@@ -18,6 +18,7 @@ const Analysis = DS.Model.extend({
   cvssVersion: DS.attr('number'),
   cvssMetricsHumanized: DS.attr(),
   owasp: DS.hasMany('owasp'),
+  pcidss: DS.hasMany('pcidss'),
 
   hascvccBase: Ember.computed.equal('cvssVersion', 3),
 
