@@ -19,7 +19,7 @@ if isPoppedOut
         if isNotTablet
           div class="bottom-bar"
 
-  if file.isReady
+  if showVNCControls
     .modal-card-foot
       button.is-primary.mp-toggle-pop.margin-auto click="togglePop"
         = vncPopText
