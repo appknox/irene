@@ -8,6 +8,7 @@ const Analysis = DS.Model.extend({
   status: DS.attr('number'),
   owasp: DS.hasMany('owasp'),
   cvssBase: DS.attr('number'),
+  pcidss: DS.hasMany('pcidss'),
   cvssVector: DS.attr('string'),
   isIgnored: DS.attr('boolean'),
   cvssVersion: DS.attr('number'),
@@ -19,8 +20,7 @@ const Analysis = DS.Model.extend({
   vulnerability: DS.belongsTo('vulnerability'),
   file: DS.belongsTo('file', {inverse: 'analyses'}),
   isNotIgnored: Ember.computed.not('isIgnored'),
-  owasp: DS.hasMany('owasp'),
-  pcidss: DS.hasMany('pcidss'),
+
 
   hascvccBase: Ember.computed.equal('cvssVersion', 3),
 
