@@ -18,8 +18,9 @@ const Analysis = DS.Model.extend({
   attachments: DS.hasMany('attachment'),
   vulnerability: DS.belongsTo('vulnerability'),
   file: DS.belongsTo('file', {inverse: 'analyses'}),
-
   isNotIgnored: Ember.computed.not('isIgnored'),
+  owasp: DS.hasMany('owasp'),
+  pcidss: DS.hasMany('pcidss'),
 
   hascvccBase: Ember.computed.equal('cvssVersion', 3),
 

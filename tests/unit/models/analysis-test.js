@@ -8,6 +8,7 @@ moduleForModel('analysis', 'Unit | Model | analysis', {
   needs: [
     'model:file',
     'model:owasp',
+    'model:pcidss',
     'model:vulnerability',
     'model:attachment',
     'service:i18n',

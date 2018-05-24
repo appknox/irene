@@ -1,0 +1,16 @@
+.columns
+  .column.is-one-third
+    = category.code
+  .column.black-text
+    = category.title
+    if readMoreDetails
+      div.margin-top
+        h6.black-text.bold
+          = t "description"
+      div.margin-top
+        = category.description
+        a click="hideMoreDetails"
+          | &nbsp; #{ t "lessDetails"}
+    else
+      a click="showMoreDetails"
+        | &nbsp; #{ t "moreDetails"}

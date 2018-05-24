@@ -12,6 +12,7 @@ moduleForComponent('file-header', 'Integration | Component | file header', {
     'service:ajax',
     'component:fa-icon',
     'component:ember-chart',
+    'component:dynamic-scan',
     'helper:moment-from-now',
     'component:attach-tooltip',
     'component:modal-card',
@@ -108,17 +109,6 @@ test('it exists', function(assert) {
     component.send('displayVPNDetails');
     assert.equal(component.get("isVPNDetails"), true, "VPN Details");
 
-    component.set("apiScanModal", true);
-    component.send('goBack');
-    component.set("dynamicScanModal", true);
-    component.send('goBack');
-    assert.equal(component.get("showAPIScanModal"), true, "API Scan Modal");
-    assert.equal(component.get("showRunDynamicScanModal"), true, "Dynamic Scan Modal");
-    component.send('closeModal');
-    assert.equal(component.get("showAPIScanModal"), false, "API Scan Modal");
-    assert.equal(component.get("showAPIURLFilterScanModal"), false, "API URL Modal");
-    assert.equal(component.get("showRunDynamicScanModal"), false, "Dynamic Scan Modal");
-
     component.send('openSubscribeModal');
     assert.equal(component.get("showSubscribeModal"), true, "Close Subscribe Modal");
     component.send('closeSubscribeModal');
@@ -134,10 +124,6 @@ test('it exists', function(assert) {
     component.send('closeRescanModal');
     assert.equal(component.get("showRescanModal"), false, "Open Manual Scan Modal");
 
-    component.send('openRunDynamicScanModal');
-    assert.equal(component.get("showRunDynamicScanModal"), true, "Close Dynamic Scan Modal");
-    component.send('closeRunDynamicScanModal');
-    assert.equal(component.get("showRunDynamicScanModal"), false, "Open Dynamic Scan Modal");
 
     component.set("file", {
       id:1,
@@ -154,22 +140,7 @@ test('it exists', function(assert) {
       }
     });
 
-    component.send("openAPIScanModal");
-    assert.equal(component.get("showAPIScanModal"), true, "API Scan Modal");
-    component.set("file.project.platform", ENUMS.PLATFORM.WINDOWS);
-    component.send("openAPIScanModal");
-
     component.send("getPDFReportLink");
-
-    component.send("dynamicScan");
-
-    component.send("setAPIScanOption");
-
-    component.send("doNotRunAPIScan");
-    assert.equal(component.get("isApiScanEnabled"), false, "API Scan Enabled");
-
-    component.send("runAPIScan");
-    assert.equal(component.get("isApiScanEnabled"), true, "API Scan Enabled");
 
     component.set("manualscan", {
       filteredAppEnv:"Staging",
@@ -196,8 +167,6 @@ test('it exists', function(assert) {
 
     component.send("saveManualScanForm");
 
-    component.send("dynamicShutdown");
-
     component.send("rescanApp");
 
     component.send("loginRequired");
@@ -205,10 +174,10 @@ test('it exists', function(assert) {
 
     component.send("displayScanDetails");
 
-    component.send("showURLFilter", "api");
-    component.send("showURLFilter", "dynamic");
     component.send("vpnRequired");
     component.send("selectAppEnvironment");
+
+    component.send("requiredAppAction");
 
     assert.equal(component.get("isStartingRescan"), true, "Starting Scan");
 

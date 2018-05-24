@@ -56,43 +56,50 @@ if showVulnerability
 
     if analysis.isRisky
       .regulatary-section.margin-top
-        .columns
+        .columns.section
           .column
             h5.black-text
               = t "regulatory"
-      if analysis.hascvccBase
-        .columns
+        if analysis.hascvccBase
+          .columns.section
+            .column.is-one-sixth
+              | CVSSv3
+              / a href="https://help.appknox.com/using-appknox/basic-usage/vulnerability-severity" target="_blank"
+              /   = fa-icon "info-circle" class="more-details"
+            .column.black-text
+              = analysis.cvssBase
+          .columns.section
+            .column.is-one-sixth
+              = t "cvssMetrics"
+            .column
+              ul
+                each analysis.cvssMetricsHumanized as |metric|
+                  li
+                    .columns
+                      .column.is-one-third
+                        = metric.key
+                      .column.black-text
+                        = metric.value
+        .columns.section
           .column.is-one-sixth
-            | CVSSv3
-            / a href="https://help.appknox.com/using-appknox/basic-usage/vulnerability-severity" target="_blank"
-            /   = fa-icon "info-circle" class="more-details"
-          .column.black-text
-            = analysis.cvssBase
-        .columns
-          .column.is-one-sixth
-            = t "cvssMetrics"
+            | OWASP
           .column
             ul
-              each analysis.cvssMetricsHumanized as |metric|
+              each analysis.owasp as |category|
                 li
                   .columns
                     .column.is-one-third
-                      = metric.key
+                      = category.code
                     .column.black-text
-                      = metric.value
-      .columns
-        .column.is-one-sixth
-          | OWASP
-        .column
-          ul
-            each analysis.owasp as |category|
-              li
-                .columns
-                  .column.is-one-third
-                    = category.code
-                  .column.black-text
-                    = category.title
-
+                      = category.title
+        if analysis.pcidss
+          .columns.section
+            .column.is-one-sixth
+              | PCI-DSS
+            .column
+              ul
+                each analysis.pcidss as |category|
+                  = pcidss-details category=category
     .columns
       .column
         if analysis.isRisky
