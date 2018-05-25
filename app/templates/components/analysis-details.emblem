@@ -166,6 +166,8 @@ if showVulnerability
                         .fa-font-size
                           i.fa class="fa-spinner fa-spin"
                       | &nbsp; #{ t "save"}
+                    button.is-primary.highlighted-button.edit-marked-analysis click="cancelEditMarkingAnalysis"
+                      | &nbsp; #{ t "cancel"}
                 else
                   .column
                     button.is-primary.highlighted-button.edit-marked-analysis click="editMarkedAnalysis" disabled=isEditingMarkedAnalysis

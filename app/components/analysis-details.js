@@ -136,6 +136,10 @@ const AnalysisDetailsComponent = Ember.Component.extend({
       this.set("isEditingOverriddenRisk", true);
     },
 
+    cancelEditMarkingAnalysis() {
+      this.set("isEditingOverriddenRisk", false);
+    },
+
     ignoreAnalysisRequest() {
       const ignoreAllAnalyses = this.get("ignoreAllAnalyses");
       const url = this.editAnalysisURL("ignore");
