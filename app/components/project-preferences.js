@@ -17,6 +17,10 @@ const ProjectPreferencesComponent = Ember.Component.extend({
   tDeviceSelected: t("deviceSelected"),
   tPleaseTryAgain: t("pleaseTryAgain"),
 
+  devicePreference: (function() {
+    return this.get("store").queryRecord('device-preference', {id: this.get("project.activeProfileId")})
+  }).property(),
+
   devices: (function() {
     return this.get("store").findAll("device");
   }).property(),

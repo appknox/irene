@@ -10,12 +10,12 @@ table.device-table
     td
       = t "selectedDevice"
     td
-      | #{ t (device-type project.deviceType)}
+      | #{ t (device-type devicePreference.deviceType)}
   tr
     td
       = t "selectedVersion"
     td
-      | #{project.versionText}
+      | #{devicePreference.versionText}
 
 .columns
   .column.margin-top
@@ -61,5 +61,5 @@ table.device-table
       small
         = fa-icon "lightbulb-o"
         span.margin-left5
-          | Note: 
+          | Note:
           | changing the device preference won't affect the already running scan.

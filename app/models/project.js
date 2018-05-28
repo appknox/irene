@@ -2,10 +2,8 @@ import DS from 'ember-data';
 import BaseModelMixin from 'irene/mixins/base-model';
 import ENUMS from 'irene/enums';
 import Ember from 'ember';
-import { translationMacro as t } from 'ember-i18n';
 
 const Project = DS.Model.extend(BaseModelMixin, {
-  i18n: Ember.inject.service(),
   activeProfileId: DS.attr('number'),
   owner: DS.belongsTo('user', {inverse: 'ownedProjects'}),
   files: DS.hasMany('file', {inverse:'project'}),
@@ -21,8 +19,6 @@ const Project = DS.Model.extend(BaseModelMixin, {
   url: DS.attr('string'),
   lastFileCreatedOn: DS.attr('date'),
   fileCount: DS.attr('number'),
-  deviceType: DS.attr('number'),
-  platformVersion: DS.attr('string'),
   apiUrlFilters: DS.attr('string'),
   showUnknownAnalysis: DS.attr('boolean'),
   showIgnoredAnalysis: DS.attr('boolean'),
@@ -36,7 +32,7 @@ const Project = DS.Model.extend(BaseModelMixin, {
 
   hasApiUrlFilters: Ember.computed.alias('apiUrlFilterItems.length'),
 
-  tNoPreference: t("noPreference"),
+
 
   pdfPassword: (function() {
     const uuid = this.get("uuid");
@@ -46,16 +42,6 @@ const Project = DS.Model.extend(BaseModelMixin, {
       return uuid.split("-")[4];
     }
   }).property("uuid"),
-
-  versionText: (function() {
-    const platformVersion = this.get("platformVersion");
-    const tNoPreference = this.get("tNoPreference");
-    if (platformVersion === "0") {
-      return tNoPreference;
-    } else {
-      return platformVersion;
-    }
-  }).property("platformVersion"),
 
   hasFiles: Ember.computed.gt('fileCount', 0),
   hasMultipleFiles: Ember.computed.gt('fileCount', 1),
