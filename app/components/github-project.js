@@ -13,10 +13,6 @@ const GithubProjectComponent = Ember.Component.extend({
 
   githubRepos: ["Loading..."],
 
-  github: (function() {
-    return this.get("store").query('github-integration', {id: this.get("project.activeProfileId")});
-  }).property(),
-
   tProjectRemoved: t("projectRemoved"),
   tRepoIntegrated: t("repoIntegrated"),
   tFetchGitHubRepoFailed: t("fetchGitHubRepoFailed"),
