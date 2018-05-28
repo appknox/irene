@@ -142,7 +142,7 @@
               .columns class=file.project.showUnknownAnalysis:visible:invisible
                 .column
                   li.is-default
-                    = t "unknown"
+                    = t "untested"
                 .column
                   = file.countRiskUnknown
         .column.package-desc

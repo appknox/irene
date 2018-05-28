@@ -271,7 +271,7 @@ export default {
   "settings": "設定",
   "severityLevel": "重大度レベル",
   "showVulnerability": "脆弱性を表示する",
-  "showUnknowAnalysis": "未知の分析の表示/非表示",
+  "showUntestedAnalysis": "SHOW/HIDE Untested Analysis",
   "signin": "サインイン",
   "sortBy": "並び替え",
   "staging": "ステージング",
@@ -310,6 +310,7 @@ export default {
   "undefined": "未定義",
   "unknown": "未知",
   "unpaid": "未払い",
+  "untested": "Untested",
   "uploadApp": "アプリのアップロード",
   "uploading": "アップロード中",
   "uploadNewProject": "新しいプロジェクトをアップロードするには、ここをクリックしてください",
@@ -439,7 +440,7 @@ export default {
     "addNewUrl": "新しいURLを追加する"
   },
   "otherTemplates": {
-    "showUnknowAnalysis": "未知の分析を表示しますか？",
+    "showUntestedAnalysis": "Do you want us to show untested analysis?",
     "specifyTheURL": "API診断を実行するURLを指定してください",
     "addATeam": "このプロジェクトにコラボレートするチームを追加する",
     "selectGHRepo": "プロジェクトで見つかったリスクに関するIssueを作成するGithub のリポジトリを選択してください",
