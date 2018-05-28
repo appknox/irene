@@ -19,20 +19,8 @@ const Project = DS.Model.extend(BaseModelMixin, {
   url: DS.attr('string'),
   lastFileCreatedOn: DS.attr('date'),
   fileCount: DS.attr('number'),
-  apiUrlFilters: DS.attr('string'),
   showUnknownAnalysis: DS.attr('boolean'),
   showIgnoredAnalysis: DS.attr('boolean'),
-
-  apiUrlFilterItems:(function() {
-    const apiUrlFilters = this.get("apiUrlFilters");
-    if (!Ember.isEmpty(apiUrlFilters)) {
-      return (apiUrlFilters != null ? apiUrlFilters.split(",") : undefined);
-    }
-  }).property("apiUrlFilters"),
-
-  hasApiUrlFilters: Ember.computed.alias('apiUrlFilterItems.length'),
-
-
 
   pdfPassword: (function() {
     const uuid = this.get("uuid");
