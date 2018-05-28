@@ -19,7 +19,6 @@ const Project = DS.Model.extend(BaseModelMixin, {
   url: DS.attr('string'),
   lastFileCreatedOn: DS.attr('date'),
   fileCount: DS.attr('number'),
-  showUnknownAnalysis: DS.attr('boolean'),
   showIgnoredAnalysis: DS.attr('boolean'),
 
   pdfPassword: (function() {
