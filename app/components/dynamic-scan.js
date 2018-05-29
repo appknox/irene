@@ -41,8 +41,8 @@ export default Ember.Component.extend({
       this.get("ajax").post(apiScanOptions, {data})
       .then(function(){
         that.get("notify").success(tStartingScan);
-        that.set("startingDynamicScan", false);
         if(!that.isDestroyed) {
+          that.set("startingDynamicScan", false);
           that.send("closeModal");
           that.send("dynamicScan");
         }
