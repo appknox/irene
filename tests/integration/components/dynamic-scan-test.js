@@ -5,6 +5,8 @@ import localeConfig from 'ember-i18n/config/en';
 import { test, moduleForComponent } from 'ember-qunit';
 import { startMirage } from 'irene/initializers/ember-cli-mirage';
 
+const { RSVP: { Promise } } = Ember;
+
 moduleForComponent('dynamic-scan', 'Integration | Component | dynamic scan', {
   unit: true,
   needs: [
@@ -67,10 +69,17 @@ test('it exists', function(assert) {
       setShuttingDown() {
         return true;
       },
+      dynamicStatus: 0,
       name: "appknox",
       project: {
         id: 1,
         platform: ENUMS.PLATFORM.ANDROID
+      }
+    });
+
+    component.set("store", {
+      find: function() {
+        return Promise.resolve();
       }
     });
 
