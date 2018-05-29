@@ -12,7 +12,22 @@ const FileDetailsComponent = Ember.Component.extend({
     return this.get("file.sortedAnalyses");
   }).property("file.sortedAnalyses"),
 
-  sortedUnhiddenAnalyses: Ember.computed('analyses', 'vulnerabilityType',  function() {
+  analysesObserver: Ember.observer('analyses.@each.isIgnored', function() {
+    this.updateHiddenAnalysis();
+    this.updateUnhiddenAnalysis();
+  }),
+
+  updateHiddenAnalysis() {
+    const hiddenAnalyses = this.sortHiddenAnalyses();
+    this.set("sortedHiddenAnalyses", hiddenAnalyses);
+  },
+
+  updateUnhiddenAnalysis() {
+    const unhiddenAnalyses = this.sortUnhiddenAnalyses();
+    this.set("sortedUnhiddenAnalyses", unhiddenAnalyses);
+  },
+
+  sortUnhiddenAnalyses() {
     const vulnerabilityType = parseInt(this.get("vulnerabilityType"));
     const notIgnoredAnalyses = [];
     const analyses = this.get("analyses");
@@ -32,9 +47,9 @@ const FileDetailsComponent = Ember.Component.extend({
       }
     }
     return filteredAnalysis;
-  }),
+  },
 
-  sortedHiddenAnalyses: Ember.computed('file.sortedAnalyses', function() {
+  sortHiddenAnalyses() {
     const analyses = this.get("file.sortedAnalyses");
     const ignoredAnalyses = [];
     for (let analysis of analyses) {
@@ -43,7 +58,15 @@ const FileDetailsComponent = Ember.Component.extend({
       }
     }
     return ignoredAnalyses;
-  }),
+  },
+
+  sortedUnhiddenAnalyses: (function() {
+    return this.sortUnhiddenAnalyses();
+  }).property(),
+
+  sortedHiddenAnalyses: (function() {
+    return this.sortHiddenAnalyses();
+  }).property(),
 
   sortedAnalyses: Ember.computed.sort('sortedUnhiddenAnalyses', 'analysesSorting'),
 
@@ -53,6 +76,7 @@ const FileDetailsComponent = Ember.Component.extend({
       this.set("sortImpactAscending", false);
       const select = $(this.element).find("#filter-vulnerability-type");
       this.set("vulnerabilityType", select.val());
+      this.updateUnhiddenAnalysis();
     },
 
     sortByImpact() {
@@ -66,7 +90,7 @@ const FileDetailsComponent = Ember.Component.extend({
         this.set("sortImpactAscending", false);
       }
       const sortedAnalyses = this.get("sortedAnalyses");
-      this.set("analyses", sortedAnalyses);
+      this.set("sortedUnhiddenAnalyses", sortedAnalyses);
     }
   }
 });
