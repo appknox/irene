@@ -29,7 +29,7 @@ const ApiFilterComponent = Ember.Component.extend({
   }).property(),
 
   confirmCallback() {
-    const apiUrlFilters = this.get("project.apiUrlFilters");
+    const apiUrlFilters = this.get("apiScanOptions.apiUrlFilters");
     const deletedURL = this.get("deletedURL");
     const splittedURLs = apiUrlFilters.split(",");
     const index = splittedURLs.indexOf(deletedURL);
@@ -46,7 +46,7 @@ const ApiFilterComponent = Ember.Component.extend({
       let combinedURLS;
       const tInvalidURL = this.get("tInvalidURL");
       const tEmptyURL = this.get("tEmptyURL");
-      const apiUrlFilters = this.get("project.apiUrlFilters");
+      const apiUrlFilters = this.get("apiScanOptions.apiUrlFilters");
       const newUrlFilter = this.get("newUrlFilter");
       if (Ember.isEmpty(newUrlFilter)) {
         return this.get("notify").error(tEmptyURL);
@@ -81,7 +81,7 @@ const ApiFilterComponent = Ember.Component.extend({
       .then(function(){
         that.get("notify").success(tUrlUpdated);
         if(!that.isDestroyed) {
-          that.set("project.apiUrlFilters", updatedURLFilters);
+          that.set("apiScanOptions.apiUrlFilters", updatedURLFilters);
           that.set("isSavingFilter", false);
           that.set("isDeletingURLFilter", false);
           that.set("newUrlFilter", "");
