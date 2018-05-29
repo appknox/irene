@@ -42,6 +42,7 @@ export default Ember.Component.extend({
       .then(function(){
         that.get("notify").success(tStartingScan);
         if(!that.isDestroyed) {
+          that.set("startingDynamicScan", false);
           that.send("closeModal");
           that.send("dynamicScan");
         }
@@ -54,11 +55,13 @@ export default Ember.Component.extend({
     doNotRunAPIScan() {
       triggerAnalytics('feature', ENV.csb.runDynamicScan);
       this.set("isApiScanEnabled", false);
+      this.set("startingDynamicScan", true);
       this.send("setAPIScanOption");
     },
 
     runAPIScan() {
       triggerAnalytics('feature', ENV.csb.runAPIScan);
+      this.set("startingDynamicScan", true);
       this.set("isApiScanEnabled", true);
       this.send("setAPIScanOption");
     },
