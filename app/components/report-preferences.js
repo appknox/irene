@@ -12,7 +12,7 @@ export default Ember.Component.extend({
   tSavedReportPreference: t("savedReportPreference"),
 
   reportPreference: (function() {
-    return this.get("store").queryRecord('report-preference', {id: this.get("project.activeProfileId")})
+    return this.get("store").queryRecord('report-preference', {id: this.get("project.activeProfileId")});
   }).property(),
 
 

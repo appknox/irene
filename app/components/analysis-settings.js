@@ -12,7 +12,7 @@ const AnalysisSettingsComponent = Ember.Component.extend({
   tSavedPreferences: t("savedPreferences"),
 
   unknownAnalysisStatus: (function() {
-    return this.get("store").queryRecord('unknown-analysis-status', {id: this.get("project.activeProfileId")})
+    return this.get("store").queryRecord('unknown-analysis-status', {id: this.get("project.activeProfileId")});
   }).property(),
 
   actions: {

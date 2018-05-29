@@ -1,8 +1,9 @@
+import Ember from 'ember';
 import DS from 'ember-data';
 import { translationMacro as t } from 'ember-i18n';
 
 export default DS.Model.extend({
-  
+
   i18n: Ember.inject.service(),
   deviceType: DS.attr('number'),
   platformVersion: DS.attr('string'),

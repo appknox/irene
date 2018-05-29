@@ -25,7 +25,7 @@ const ApiFilterComponent = Ember.Component.extend({
   isDeletingURLFilter: false,
 
   apiScanOptions: (function() {
-    return this.get("store").queryRecord('api-scan-options', {id: this.get("project.activeProfileId")})
+    return this.get("store").queryRecord('api-scan-options', {id: this.get("project.activeProfileId")});
   }).property(),
 
   confirmCallback() {

@@ -7,7 +7,7 @@ export default DRFAdapter.extend(DataAdapterMixin, {
   namespace: ENV.namespace,
   addTrailingSlashes: false,
   authorizer: 'authorizer:irene',
-  urlForQueryRecord: function (q, modelName) {
+  urlForQueryRecord: function (q) {
     let url = `${this.host}/${this.get('namespace')}/profiles/${q.id}/report_preference`;
     return url;
   }
