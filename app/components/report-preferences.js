@@ -11,6 +11,11 @@ export default Ember.Component.extend({
 
   tSavedReportPreference: t("savedReportPreference"),
 
+  reportPreference: (function() {
+    return this.get("store").queryRecord('report-preference', {id: this.get("project.activeProfileId")})
+  }).property(),
+
+
   actions: {
     showIgnoredAnalysis() {
       const isChecked = this.$('#show-ignored-analysis')[0].checked;
@@ -27,7 +32,7 @@ export default Ember.Component.extend({
         that.get("notify").success(tSavedReportPreference);
         if(!that.isDestroyed) {
           that.set("isSavingStatus", false);
-          that.set("project.showIgnoredAnalysis", isChecked);
+          that.set("reportPreference.showIgnoredAnalyses", isChecked);
         }
       })
       .catch(function(error) {
