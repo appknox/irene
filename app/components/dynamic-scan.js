@@ -3,6 +3,7 @@ import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
 import { translationMacro as t } from 'ember-i18n';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
+import poll from 'irene/services/poll';
 
 export default Ember.Component.extend({
   tagName: "",
@@ -13,21 +14,53 @@ export default Ember.Component.extend({
   trial: Ember.inject.service(),
   ajax: Ember.inject.service(),
   notify: Ember.inject.service('notification-messages-service'),
+  poll: Ember.inject.service(),
 
   tStartingScan: t("startingScan"),
+
+  didInsertElement() {
+    this.send('pollDynamicStatus');
+  },
 
   actions: {
     dynamicScan() {
       const file = this.get("file");
       file.setBootingStatus();
       const that = this;
-      const file_id = this.get("file.id");
-      const dynamicUrl = [ENV.endpoints.dynamic, file_id].join('/');
+      const fileId = this.get("file.id");
+      const dynamicUrl = [ENV.endpoints.dynamic, fileId].join('/');
       this.get("ajax").request(dynamicUrl)
-      .catch(function(error) {
-        file.setNone();
-        that.get("notify").error(error.payload.error);
-      });
+        .then(function() {
+          that.send('pollDynamicStatus');
+        })
+        .catch(function(error) {
+          file.setNone();
+          that.get("notify").error(error.payload.error);
+        });
+    },
+
+    pollDynamicStatus() {
+      const isDynamicReady = this.get('file.isReady');
+      const fileId = this.get('file.id');
+      const that = this;
+      if (isDynamicReady) {
+        return;
+      }
+      if(!fileId) {
+        return;
+      }
+      var stopPoll = poll(function() {
+        return that.get('store').find('file', fileId)
+          .then(function() {
+            const dynamicStatus = that.get('file.dynamicStatus');
+            if (dynamicStatus === ENUMS.DYNAMIC_STATUS.NONE || dynamicStatus === ENUMS.DYNAMIC_STATUS.READY) {
+              stopPoll();
+            }
+          })
+          .catch(function() {
+            stopPoll();
+          });
+      }, 5000);
     },
 
     setAPIScanOption() {
