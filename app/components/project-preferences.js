@@ -77,6 +77,8 @@ const ProjectPreferencesComponent = Ember.Component.extend({
         if(!that.isDestroyed) {
           that.set("isSavingPreference", false);
           that.set("projectPreferenceModal", false);
+          that.set("devicePreference.deviceType", selectedDeviceType);
+          that.set("devicePreference.platformVersion", selectVersion);
         }
       })
       .catch(function() {
