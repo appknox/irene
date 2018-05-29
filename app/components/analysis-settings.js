@@ -32,7 +32,7 @@ const AnalysisSettingsComponent = Ember.Component.extend({
         that.get("notify").success(tSavedPreferences);
         if(!that.isDestroyed) {
           that.set("isSavingStatus", false);
-          that.set("project.showUnknownAnalysis", isChecked);
+          that.set("unknownAnalysisStatus.status", isChecked);
         }
       })
       .catch(function(error) {
