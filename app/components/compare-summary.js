@@ -27,8 +27,8 @@ const CompareSummaryComponent = Ember.Component.extend({
 
   compareColor: (function() {
     const cls = 'tag';
-    const file1Risk = this.get("file1Analysis.risk");
-    const file2Risk = this.get("file2Analysis.risk");
+    const file1Risk = this.get("file1Analysis.computedRisk");
+    const file2Risk = this.get("file2Analysis.computedRisk");
     if ([file1Risk, file2Risk].includes(ENUMS.RISK.UNKNOWN)) {
       return `${cls} is-progress`;
     } else if (file1Risk === file2Risk) {
@@ -38,11 +38,11 @@ const CompareSummaryComponent = Ember.Component.extend({
     } else if (file1Risk < file2Risk) {
       return `${cls} is-danger`;
     }
-  }).property("file1Analysis.risk", "file2Analysis.risk"),
+  }).property("file1Analysis.computedRisk", "file2Analysis.computedRisk"),
 
   compareText: (function() {
-    const file1Risk = this.get("file1Analysis.risk");
-    const file2Risk = this.get("file2Analysis.risk");
+    const file1Risk = this.get("file1Analysis.computedRisk");
+    const file2Risk = this.get("file2Analysis.computedRisk");
 
     const tAnalyzing = this.get("tAnalyzing");
     const tUnchanged = this.get("tUnchanged");
@@ -58,7 +58,7 @@ const CompareSummaryComponent = Ember.Component.extend({
     } else if (file1Risk < file2Risk) {
       return tWorsened;
     }
-  }).property("file1Analysis.risk", "file2Analysis.risk")
+  }).property("file1Analysis.computedRisk", "file2Analysis.computedRisk")
 });
 
 
