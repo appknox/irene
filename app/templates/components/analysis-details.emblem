@@ -27,10 +27,11 @@
             else
               i.fa.fa-chevron-down
 
-  .column.is-one-sixth.content-right.edit-analysis
-    i.fa.risk-icons.fa-edit.removeUrl.remove click="openEditAnalysisModal"
-    = attach-tooltip placement="top"
-      = t "editAnalysis"
+  if showEditAnalysis
+    .column.is-one-sixth.content-right.edit-analysis
+      i.fa.risk-icons.fa-edit.removeUrl.remove click="openEditAnalysisModal"
+      = attach-tooltip placement="top"
+        = t "editAnalysis"
 
 
 if showVulnerability
