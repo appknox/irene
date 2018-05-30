@@ -31,6 +31,8 @@ const Analysis = DS.Model.extend({
     return risk === ENUMS.RISK.UNKNOWN;
   }).property("computedRisk"),
 
+  isNotScanning: Ember.computed.not('isScanning'),
+
   hasType(type) {
     const types = this.get("vulnerability.types");
     if (Ember.isEmpty(types)) {

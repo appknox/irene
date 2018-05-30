@@ -123,90 +123,91 @@ if showVulnerability
     .card-wrapper
       .box-container
         h5.vuln-name = analysis.vulnerability.name
-      .box-container
-        h6.bold.black-text.uppercase-text
-          =  t "overrideRisk"
-        if analysis.isOverriddenRisk
-          .columns.margin-top
-            .column
-              .columns
-                if isEditingOverriddenRisk
-                  .column.is-one-sixth.mark-text
-                    = t "markItAs"
-                  .column.is-one-sixth
-                    select{action 'selectMarkedAnalyis' on='change'} id="marked-analysis"
-                      each filteredRisks as |risk|
-                        option value=risk.value
-                          | #{ t (risk-text risk.value)}
-                  .column.is-one-sixth.marked-analysis-text.margin-top5
-                    = t "for"
-                  .column.is-one-third
-                    select{action 'selectMarkedAnalyisType' on='change'} id="marked-analysis-all" class="mark-analysis-all"
-                      option value="false"
-                        = t "currentFileOnly"
-                      option value="true"
-                        =  t "allFutureAnalyses"
-                else
-                  .column.is-one-third.margin-top5
-                    = t "overriddenRisk"
-                    .tag class=analysis.overriddenRiskLabelClass
-                      i.fa.risk-icons class=analysis.overriddenRiskIconClass
+      if analysis.isNotScanning
+        .box-container
+          h6.bold.black-text.uppercase-text
+            =  t "overrideRisk"
+          if analysis.isOverriddenRisk
+            .columns.margin-top
+              .column
+                .columns
+                  if isEditingOverriddenRisk
+                    .column.is-one-sixth.mark-text
+                      = t "markItAs"
+                    .column.is-one-sixth
+                      select{action 'selectMarkedAnalyis' on='change'} id="marked-analysis"
+                        each filteredRisks as |risk|
+                          option value=risk.value
+                            | #{ t (risk-text risk.value)}
+                    .column.is-one-sixth.marked-analysis-text.margin-top5
+                      = t "for"
+                    .column.is-one-third
+                      select{action 'selectMarkedAnalyisType' on='change'} id="marked-analysis-all" class="mark-analysis-all"
+                        option value="false"
+                          = t "currentFileOnly"
+                        option value="true"
+                          =  t "allFutureAnalyses"
+                  else
+                    .column.is-one-third.margin-top5
+                      = t "overriddenRisk"
+                      .tag class=analysis.overriddenRiskLabelClass
+                        i.fa.risk-icons class=analysis.overriddenRiskIconClass
+                        .uppercase-text
+                          | &nbsp; #{ t (risk-text analysis.overriddenRisk)}
+                  .column.margin-top5
+                    = t "orginalRisk"
+                    .tag class=analysis.riskLabelClass
+                      i.fa.risk-icons class=analysis.riskIconClass
                       .uppercase-text
-                        | &nbsp; #{ t (risk-text analysis.overriddenRisk)}
-                .column.margin-top5
-                  = t "orginalRisk"
-                  .tag class=analysis.riskLabelClass
-                    i.fa.risk-icons class=analysis.riskIconClass
-                    .uppercase-text
-                      | &nbsp; #{ t (risk-text analysis.risk)}
+                        | &nbsp; #{ t (risk-text analysis.risk)}
 
-                if isEditingOverriddenRisk
-                  .column.is-one-third
-                    button.is-primary.highlighted-button.edit-marked-analysis click="markAnalysis" disabled=isMarkingAnalysis
-                      if isMarkingAnalysis
-                        .fa-font-size
-                          i.fa class="fa-spinner fa-spin"
-                      | &nbsp; #{ t "save"}
-                    button.is-primary.highlighted-button.edit-marked-analysis click="cancelEditMarkingAnalysis"
-                      | &nbsp; #{ t "cancel"}
-                else
-                  .column
-                    button.is-primary.highlighted-button.edit-marked-analysis click="editMarkedAnalysis" disabled=isEditingMarkedAnalysis
-                      if isEditingMarkedAnalysis
-                        .fa-font-size
-                          i.fa class="fa-spinner fa-spin"
-                      | &nbsp; #{ t "edit"}
-                    button.is-primary.highlighted-button.edit-marked-analysis click="openResetMarkedAnalysisConfirmBox"
-                      | &nbsp; #{ t "reset"}
-        else
-          .columns
-            .column
-              h6
-                = t "falsePositive"
-          .columns.margin-top
-            .column.is-one-sixth.mark-text
-              h6
-                = t "markItAs"
-            .column.is-one-sixth
-              select{action 'selectMarkedAnalyis' on='change'} id="marked-analysis"
-                each filteredRisks as |risk|
-                  option value=risk.value
-                    | #{ t (risk-text risk.value)}
-            .column.is-one-sixth.marked-analysis-text2
-              h6
-                = t "for"
-            .column
-              select{action 'selectMarkedAnalyisType' on='change'} id="marked-analysis-all" class="mark-analysis-all"
-                option value="false"
-                  = t "currentFileOnly"
-                option value="true"
-                  =  t "allFutureAnalyses"
-            .column
-              button.is-primary.highlighted-button click="markAnalysis" disabled=isMarkingAnalysis
-                if isMarkingAnalysis
-                  .fa-font-size
-                    i.fa class="fa-spinner fa-spin"
-                | &nbsp; #{ t "markAnalysis"}
+                  if isEditingOverriddenRisk
+                    .column.is-one-third
+                      button.is-primary.highlighted-button.edit-marked-analysis click="markAnalysis" disabled=isMarkingAnalysis
+                        if isMarkingAnalysis
+                          .fa-font-size
+                            i.fa class="fa-spinner fa-spin"
+                        | &nbsp; #{ t "save"}
+                      button.is-primary.highlighted-button.edit-marked-analysis click="cancelEditMarkingAnalysis"
+                        | &nbsp; #{ t "cancel"}
+                  else
+                    .column
+                      button.is-primary.highlighted-button.edit-marked-analysis click="editMarkedAnalysis" disabled=isEditingMarkedAnalysis
+                        if isEditingMarkedAnalysis
+                          .fa-font-size
+                            i.fa class="fa-spinner fa-spin"
+                        | &nbsp; #{ t "edit"}
+                      button.is-primary.highlighted-button.edit-marked-analysis click="openResetMarkedAnalysisConfirmBox"
+                        | &nbsp; #{ t "reset"}
+          else
+            .columns
+              .column
+                h6
+                  = t "falsePositive"
+            .columns.margin-top
+              .column.is-one-sixth.mark-text
+                h6
+                  = t "markItAs"
+              .column.is-one-sixth
+                select{action 'selectMarkedAnalyis' on='change'} id="marked-analysis"
+                  each filteredRisks as |risk|
+                    option value=risk.value
+                      | #{ t (risk-text risk.value)}
+              .column.is-one-sixth.marked-analysis-text2
+                h6
+                  = t "for"
+              .column
+                select{action 'selectMarkedAnalyisType' on='change'} id="marked-analysis-all" class="mark-analysis-all"
+                  option value="false"
+                    = t "currentFileOnly"
+                  option value="true"
+                    =  t "allFutureAnalyses"
+              .column
+                button.is-primary.highlighted-button click="markAnalysis" disabled=isMarkingAnalysis
+                  if isMarkingAnalysis
+                    .fa-font-size
+                      i.fa class="fa-spinner fa-spin"
+                  | &nbsp; #{ t "markAnalysis"}
 
       h6.bold.black-text.uppercase-text
         = t "hideAnalysis"
