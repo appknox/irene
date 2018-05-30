@@ -11,6 +11,9 @@ export default Ember.Component.extend({
   serverErrors: {},
   success: false,
 
+  ajax: Ember.inject.service(),
+  notify: Ember.inject.service('notification-messages-service'),
+
   init() {
     this._super(...arguments);
     const registerPOJO = this.get('registerPOJO');

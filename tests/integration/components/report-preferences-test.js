@@ -35,10 +35,33 @@ moduleForComponent('report-preferences', 'Integration | Component | report prefe
 });
 
 test('it exists', function(assert) {
-  assert.expect(0);
   const component = this.subject();
+  var store = {
+    queryRecord: function() {
+      return [
+        {
+          id:1,
+          type: "report-preference",
+          attributes: {
+            deviceType: 1,
+            platformVersion: "8.2"
+          }
+        }
+      ];
+    }
+  };
+  component.set('store', store);
   this.render();
   Ember.run(function() {
+    assert.deepEqual(component.get("reportPreference"), [{
+        id:1,
+        type: "report-preference",
+        attributes: {
+          deviceType: 1,
+          platformVersion: "8.2"
+        }
+      }
+    ]);
     component.set("project", {activeProfileId:1});
     component.send("showIgnoredAnalysis");
   });

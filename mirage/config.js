@@ -92,6 +92,10 @@ export default function() {
     return {};
   });
 
+  this.post('/registration', () => {
+    return {};
+  });
+
   this.put('/files/:id/vulnerability_preferences/:id/risk', () => {
     return {};
   });

@@ -69,6 +69,7 @@ test('tapping button fires an external action', function(assert) {
     assert.equal(component.get('progressClass'), "is-progress", "Progress");
     component.send('toggleVulnerability');
     assert.equal(component.get('showVulnerability'),true, "Show Vulnerability");
+
     component.send('openEditAnalysisModal');
     component.send('selectMarkedAnalyis');
     component.send('selectMarkedAnalyisType');
@@ -79,8 +80,10 @@ test('tapping button fires an external action', function(assert) {
     component.send('ignoreAnalysis');
     component.send('doNotIgnoreAnalysis');
     component.send('editMarkedAnalysis');
+    component.send('cancelEditMarkingAnalysis');
     component.send('ignoreAnalysisRequest');
     component.send('resetMarkedAnalysis');
     component.send('openResetMarkedAnalysisConfirmBox');
+    assert.notOk(component.confirmCallback());
   });
 });

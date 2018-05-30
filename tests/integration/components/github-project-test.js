@@ -50,31 +50,10 @@ test('tapping button fires an external action', function(assert) {
 });
 
 test('tapping button fires an external action', function(assert) {
+  assert.expect(0);
   var component = this.subject();
-  var store = {
-    query: function() {
-      return [
-        {
-          id:1,
-          type: "github-integration",
-          attributes: {
-            name: "test"
-          }
-        }
-      ];
-    }
-  };
-  component.set('store', store);
   this.render();
   Ember.run(function() {
-    assert.deepEqual(component.get("github"), [{
-        id:1,
-        type: "github-integration",
-        attributes: {
-          name: "test"
-        }
-      }
-    ]);
     component.set("project", {id:1});
     component.send("selectRepo");
   });

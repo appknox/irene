@@ -9,6 +9,7 @@ moduleForComponent('api-filter', 'Integration | Component | api filter', {
   needs: [
     'service:i18n',
     'service:ajax',
+    'component:confirm-box',
     'service:notification-messages-service',
     'service:session',
     'locale:en/translations',
@@ -36,8 +37,32 @@ moduleForComponent('api-filter', 'Integration | Component | api filter', {
 
 test('tapping button fires an external action', function(assert) {
   var component = this.subject();
+  var store = {
+    queryRecord: function() {
+      return [
+        {
+          id:1,
+          type: "api-scan-options",
+          attributes: {
+            apiUrlFilters: "test"
+          }
+        }
+      ];
+    }
+  };
+  component.set('store', store);
+  this.render();
   Ember.run(function() {
-    component.set('project', {id: 1, apiUrlFilters:"yash.com", activeProfileId:1});
+    assert.deepEqual(component.get("apiScanOptions"), [{
+        id:1,
+        type: "api-scan-options",
+        attributes: {
+          apiUrlFilters: "test"
+        }
+      }
+    ]);
+    component.set('project', {id: 1, activeProfileId:1});
+    component.set('apiScanOptions', {id: 1, apiUrlFilters:"yash.com", activeProfileId:1});
     assert.equal(component.confirmCallback() ,undefined, "Show Vulnerability");
     component.set("isSavingFilter", true);
     component.send("addApiUrlFilter");
