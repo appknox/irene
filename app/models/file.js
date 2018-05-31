@@ -146,6 +146,11 @@ const File = DS.Model.extend(BaseModelMixin, {
     return ![ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE].includes(status);
   }).property('dynamicStatus'),
 
+  startingScanStatus: (function() {
+    const status = this.get('dynamicStatus');
+    return ![ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE, ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN].includes(status);
+  }).property('dynamicStatus'),
+
   statusText: (function() {
     const tDeviceBooting = this.get("tDeviceBooting");
     const tDeviceDownloading = this.get("tDeviceDownloading");

@@ -82,6 +82,7 @@ export default {
   "dynamicScan": "Dynamic Scan",
   "dynamicScanStart": "Start Dynamic Scan",
   "dynamicScanStop": "Stop Dynamic Scan",
+  "dynamicScanText": "Please refresh the page if the scan doesn't start in 1-2 mins",
   "dynamicShutDown": "Shutdown Device",
   "email": "Email",
   "emailOrUsername": "Email / Username",
