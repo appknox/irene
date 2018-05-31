@@ -1,9 +1,15 @@
 td
   span class=file1Analysis.labelClass
-    = file1Analysis.riskText
+    if file1Analysis.isScanning
+      | &nbsp;{{file1Analysis.scanningText}}
+    else
+      | &nbsp;{{file1Analysis.riskText}}
 td
   span class=file2Analysis.labelClass
-    = file2Analysis.riskText
+    if file2Analysis.isScanning
+      | &nbsp;{{file2Analysis.scanningText}}
+    else
+      | &nbsp;{{file2Analysis.riskText}}
 td
   = vulnerability.name
 td
