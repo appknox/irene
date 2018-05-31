@@ -3,7 +3,10 @@
       .column.is-one-sixth.severity-tags class=analysis.labelClass
         i.fa.risk-icons class=analysis.iconClass
         .uppercase-text
-          | &nbsp;{{analysis.riskText}}
+          if analysis.isScanning
+            | &nbsp;{{analysis.scanningText}}
+          else
+            | &nbsp;{{analysis.riskText}}
       .column
         h6.vuln-name = analysis.vulnerability.name
       .column.content-right
