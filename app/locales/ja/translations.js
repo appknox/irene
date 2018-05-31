@@ -82,6 +82,7 @@ export default {
   "dynamicScan": "動的診断",
   "dynamicScanStart": "動的診断を開始",
   "dynamicScanStop": "動的診断を停止",
+  "dynamicScanText": "Please refresh the page if the scan doesn't start in 1-2 mins",
   "dynamicShutDown": "動的診断を終了",
   "email": "Eメール",
   "emailOrUsername": "Eメール/ユーザ名",

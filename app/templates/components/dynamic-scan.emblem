@@ -29,6 +29,11 @@
       .fa-font-size-small
         = fa-icon "fa-stop"
       |  &nbsp; #{t "stop"}
+  if vncViewer
+    if file.startingScanStatus
+      div.note-text
+        = t "dynamicScanText"
+
 
 if notVNCViewer
   if file.project.isAPIScanEnabled
