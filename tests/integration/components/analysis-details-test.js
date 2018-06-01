@@ -71,8 +71,8 @@ test('tapping button fires an external action', function(assert) {
     assert.equal(component.get('showVulnerability'),true, "Show Vulnerability");
 
     component.send('openEditAnalysisModal');
-    component.send('selectMarkedAnalyis');
-    component.send('selectMarkedAnalyisType');
+    // component.send('selectMarkedAnalyis');
+    // component.send('selectMarkedAnalyisType');
     component.send('selectIgnoredAnalyisType');
     component.send('removeMarkedAnalysis');
     component.set('analysis', {file: {id: 1}, vulnerability: {id: 1}});

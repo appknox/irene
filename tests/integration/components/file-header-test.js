@@ -76,6 +76,7 @@ test('it exists', function(assert) {
     assert.deepEqual(component.get('filteredLoginStatuses'), ["yes", "no"], "LOGIN");
     assert.deepEqual(component.get('filteredVpnStatuses'), ["yes", "no"], "VPN");
     assert.notDeepEqual(component.get('chartOptions'));
+    assert.notDeepEqual(component.get('barChartOptions'));
     assert.equal(component.didInsertElement(), undefined, "Register Password Copy");
     assert.equal(component.willDestroyElement(), undefined, "Remove Password Copy");
 
