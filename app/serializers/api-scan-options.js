@@ -4,7 +4,7 @@ export default DRFSerializer.extend({
   normalizeResponse: function (store, primaryModelClass, payload) {
     return {
       data: {
-        id: 1,
+        id: payload.id,
         type: 'api-scan-options',
         attributes: {
           apiUrlFilters: payload.api_url_filters
