@@ -2,9 +2,6 @@
 
 [![CircleCI](https://circleci.com/gh/appknox/irene.svg?style=shield&circle-token=6c82b8d9cddf223dd01f7bffea864d19f0935107)](https://circleci.com/gh/appknox/irene)
 [![codecov](https://codecov.io/gh/appknox/irene/branch/develop/graph/badge.svg?token=9spv62CzBb)](https://codecov.io/gh/appknox/irene)
-[![bitHound Overall Score](https://www.bithound.io/github/appknox/irene/badges/score.svg)](https://www.bithound.io/github/appknox/irene)
-[![bitHound Code](https://www.bithound.io/github/appknox/irene/badges/code.svg)](https://www.bithound.io/github/appknox/irene)
-[![bitHound Dependencies](https://www.bithound.io/github/appknox/irene/badges/dependencies.svg)](https://www.bithound.io/github/appknox/irene/bithound-integration/dependencies/npm)
 
 
 I am SHERlocked. Irene is the front-end dashboards for Sherlock (Vulnerability Scanner) & Mycroft (API Server) that we wrote here at [@appknox](https://github.com/appknox).
