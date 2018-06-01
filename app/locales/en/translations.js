@@ -86,6 +86,7 @@ export default {
   "dynamicScan": "Dynamic Scan",
   "dynamicScanStart": "Start Dynamic Scan",
   "dynamicScanStop": "Stop Dynamic Scan",
+  "dynamicScanText": "Please refresh the page if the scan doesn't start in 1-2 mins",
   "dynamicShutDown": "Shutdown Device",
   "edit": "Edit",
   "editAnalysis": "Edit Analysis",
@@ -296,7 +297,7 @@ export default {
   "settings": "Settings",
   "severityLevel": "Severity Level",
   "showVulnerability": "Show Vulnerability ",
-  "showUnknowAnalysis": "SHOW/HIDE Unknown Analysis",
+  "showUntestedAnalysis": "SHOW/HIDE Untested Analysis",
   "signin": "Sign In",
   "sortBy": "Sort By",
   "staging": "Staging",
@@ -339,6 +340,7 @@ export default {
   "unhideAnalysis": "Unhide Analysis",
   "unknown": "Unknown",
   "unpaid": "Unpaid",
+  "untested": "Untested",
   "uploadApp": "Upload App",
   "uploading": "Uploading",
   "uploadNewProject": "You can upload a new project by clicking on <b class='bold'>Upload App</b> above and start scanning",
@@ -472,7 +474,7 @@ export default {
     "addNewUrl": "ADD NEW URL"
   },
   "otherTemplates": {
-    "showUnknowAnalysis": "Do you want us to show unknown analysis?",
+    "showUntestedAnalysis": "Do you want us to show untested analysis?",
     "specifyTheURL": "Specify the URL which you want the API Scan to be performed on",
     "addATeam": "Add a team which you want to collaborate with this project",
     "selectGHRepo": "Select the Github Repo where you want us to create issues for the risks we find in your project",

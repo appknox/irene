@@ -29,6 +29,11 @@
       .fa-font-size-small
         = fa-icon "fa-stop"
       |  &nbsp; #{t "stop"}
+  if vncViewer
+    if file.startingScanStatus
+      div.note-text
+        = t "dynamicScanText"
+
 
 if notVNCViewer
   if file.project.isAPIScanEnabled
@@ -76,7 +81,7 @@ if notVNCViewer
               button.modal-button.is-primary.mp-run-api-scan click="'showURLFilter' 'api'"
                 = t "modalCard.apiScan.runAPIScan"
             .column.flex-center
-              button.modal-button.is-primary.mp-dont-run-api-scan click="doNotRunAPIScan"
+              button.modal-button.is-primary.mp-dont-run-api-scan click="doNotRunAPIScan" disabled=startingDynamicScan
                 = t "modalCard.apiScan.dynamicScan"
 
 = modal-card isActive=showAPIURLFilterScanModal title=(t "modalCard.apiScan.title")
@@ -96,7 +101,7 @@ if notVNCViewer
             p.control
               .columns
                 .column
-                  button.modal-button.is-primary click="runAPIScan"
+                  button.modal-button.is-primary click="runAPIScan" disabled=startingDynamicScan
                     = t "modalCard.apiScan.startApiScan"
                 .column
                   button.modal-button.is-primary click="goBack"

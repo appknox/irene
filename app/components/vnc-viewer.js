@@ -67,6 +67,14 @@ const VncViewerComponent = Ember.Component.extend({
     return this.setupRFB();
   },
 
+  showVNCControls: (function() {
+    const isPoppedOut = this.get("isPoppedOut");
+    const isReady = this.get("file.isReady");
+    if(isPoppedOut || isReady) {
+      return true;
+    }
+  }).property("file.isReady", "isPoppedOut"),
+
   statusChange: ( function() {
     if (this.get('file.isReady')) {
       return this.send("connect");

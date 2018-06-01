@@ -19,10 +19,10 @@ if isPoppedOut
         if isNotTablet
           div class="bottom-bar"
 
-  if file.isReady
+  if showVNCControls
     .modal-card-foot
       button.is-primary.mp-toggle-pop.margin-auto click="togglePop"
         = vncPopText
 
   .button-on-vnc
-    = dynamic-scan file=file notVNCViewer=false dynamicScanText=(t 'startDynamicScan')
+    = dynamic-scan file=file vncViewer=true notVNCViewer=false dynamicScanText=(t 'startDynamicScan')

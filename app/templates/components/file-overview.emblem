@@ -67,7 +67,7 @@ header.card-header
             .columns class=file.project.showUnknownAnalysis:visible:invisible
               .column
                 li.is-default
-                  = t "unknown"
+                  = t "untested"
               .column
                 = file.countRiskUnknown
 = yield
