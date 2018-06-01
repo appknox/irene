@@ -11,18 +11,9 @@
         h6.vuln-name = analysis.vulnerability.name
       .column.content-right
         each analysis.vulnerability.tags as |tag|
-          span.tag.scan-tag class=analysis.isScanning:unfinished-scan:finished-scan
-            = tag
-
-            if analysis.isScanning
-              = fa-icon "times"
-              = attach-tooltip position="top"
-                | #{tag} #{t "scanNotCompleted"}
-            else
-              = fa-icon "check"
-              = attach-tooltip position="top"
-                | #{tag} #{t "scanCompleted"}
-
+          span.tag.scan-tag
+            | #{t tag}
+            | #{scan-type tag analysis.file}
         div.margin-left.details
           if showVulnerability
             i.fa.fa-chevron-up

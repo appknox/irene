@@ -88,6 +88,7 @@ const Analysis = DS.Model.extend({
     const tScanning = this.get("tScanning");
     const tUntested = this.get("tUntested");
     const vulnerability = this.get("vulnerability");
+    let scanningText;
     vulnerability.then(() => {
       const type = vulnerability.get('types');
       switch (type[0]) {
@@ -104,6 +105,7 @@ const Analysis = DS.Model.extend({
             this.set("scanningText", tUntested);
             break;
           }
+          break;
         case ENUMS.VULNERABILITY_TYPE.MANUAL:
           if(this.get("file.manual")) {
             this.set("scanningText", tScanning);
@@ -113,6 +115,7 @@ const Analysis = DS.Model.extend({
             this.set("scanningText", tUntested);
             break;
           }
+          break;
         case ENUMS.VULNERABILITY_TYPE.API:
           const apiStatus = this.get('file.dynamicStatus');
           if(apiStatus !== ENUMS.DYNAMIC_STATUS.NONE) {
@@ -123,6 +126,7 @@ const Analysis = DS.Model.extend({
             this.set("scanningText", tUntested);
             break;
           }
+          break;
       }
       return scanningText;
     });
