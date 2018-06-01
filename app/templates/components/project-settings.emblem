@@ -1,0 +1,38 @@
+.columns.margin-bottom
+  .column
+    h4.bold.black-text
+      = t "settings"
+      |  | #{project.packageName}
+  .column
+    = link-to 'authenticated.project.files' project.id class="is-primary" tagName="button" class="mp-settings-all-scans"
+      = fa-icon "navicon"
+      | &nbsp; #{t "allUploads"}
+
+.tabs.is-medium.is-boxed
+  ul
+    li class=generalSettingsClass
+      a click="displayGeneralSettings" class="mp-display-general-settings"
+        = t "generalSettings"
+    li class=analysisSettingsClass
+      a click="displaAnalysisSettings" class="mp-display-analysis-settings"
+        = t "analysisSettings"
+
+if isGeneralSettings
+  .box-container
+    = project-preferences project=project
+  .box-container
+    = api-filter project=project
+  .box-container
+    = github-project project=project
+  .box-container
+    = jira-project project=project
+  .box-container
+    = report-preferences project=project
+  .margin-left
+    = collaboration-component project=project
+
+if isAnalysisSettings
+  .box-container
+    = analysis-settings project=project
+  .margin-left
+    = vulnerability-list project=project

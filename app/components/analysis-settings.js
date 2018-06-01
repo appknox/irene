@@ -11,23 +11,28 @@ const AnalysisSettingsComponent = Ember.Component.extend({
   isSavingStatus: false,
   tSavedPreferences: t("savedPreferences"),
 
+  unknownAnalysisStatus: (function() {
+    return this.get("store").queryRecord('unknown-analysis-status', {id: this.get("project.activeProfileId")});
+  }).property(),
+
   actions: {
 
     showUnknownAnalysis() {
       const tSavedPreferences = this.get("tSavedPreferences");
       const isChecked = this.$('#show-unkown-analysis')[0].checked;
-      const projectId = this.get("project.id");
-      const unknownAnalysisStatus = [ENV.endpoints.setUnknownAnalysisStatus, projectId].join('/');
-      const data =
-        {status: isChecked};
+      const profileId = this.get("project.activeProfileId");
+      const url = [ENV.endpoints.profiles, profileId, ENV.endpoints.unknownAnalysisStatus].join('/');
+      const data = {
+        status: isChecked
+      };
       const that = this;
       this.set("isSavingStatus", true);
-      this.get("ajax").post(unknownAnalysisStatus, {data})
+      this.get("ajax").put(url, {data})
       .then(function(){
         that.get("notify").success(tSavedPreferences);
         if(!that.isDestroyed) {
           that.set("isSavingStatus", false);
-          that.set("project.showUnknownAnalysis", isChecked);
+          that.set("unknownAnalysisStatus.status", isChecked);
         }
       })
       .catch(function(error) {

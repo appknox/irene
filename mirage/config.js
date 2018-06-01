@@ -32,6 +32,10 @@ export default function() {
   this.get('/attachments/:id', 'attachment');
   this.get('/invitations/', 'invitation');
   this.get('/subscriptions/', 'subscription');
+  this.get('/profiles/:id/github_integration');
+  this.get('/profiles/:id/jira_integration');
+  this.get('/profiles/:id/vulnerability_preferences', 'vulnerability-preference');
+  this.get('/subscriptions/', 'subscription');
   this.get('/stats/:id', 'stat');
   this.get('/personaltokens', 'personaltoken');
   this.get('/manualscans/:id', 'manualscan');
@@ -88,7 +92,31 @@ export default function() {
     return {};
   });
 
-  this.post('/set_unknown_analysis_status/:id', () => {
+  this.post('/registration', () => {
+    return {};
+  });
+
+  this.put('/files/:id/vulnerability_preferences/:id/risk', () => {
+    return {};
+  });
+
+  this.delete('/files/:id/vulnerability_preferences/:id/risk', () => {
+    return {};
+  });
+
+  this.put('/files/:id/vulnerability_preferences/:id/ignore', () => {
+    return {};
+  });
+
+  this.put('/profiles/:id/vulnerability_preferences/:id', () => {
+    return {};
+  });
+
+  this.put('/profiles/:id/unknown_analysis_status', () => {
+    return {};
+  });
+
+  this.put('/profiles/:id/report_preference', () => {
     return {};
   });
 
@@ -112,7 +140,7 @@ export default function() {
     return {};
   });
 
-  this.post('/device_preference/:id', (db, request) => {
+  this.put('/profiles/:id/device_preference', (db, request) => {
     console.log(request.requestBody);
     return {id: '1'};
   });
@@ -161,6 +189,10 @@ export default function() {
     return {};
   });
 
+  this.put('/profiles/:id/api_scan_options', () => {
+    return {};
+  });
+
   this.post('/api_scan_options/:id', () => {
     return {};
   });
@@ -186,10 +218,6 @@ export default function() {
   });
 
   this.post('/teams', () => {
-   return;
-  });
-
-  this.post('/set_unknown_analysis_status', () => {
    return;
   });
 

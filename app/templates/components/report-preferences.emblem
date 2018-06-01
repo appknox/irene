@@ -1,0 +1,11 @@
+.columns.report-preferences
+  .column
+    h5.bold.black-text
+      = t "reportCustomization"
+    .columns.question
+      .column.is-one-third
+        = t "showHiddenAnalysis"
+      .column
+        label class="switch"
+          input class="switch-input" id="show-ignored-analysis" type="checkbox" checked=reportPreference.showIgnoredAnalyses click="showIgnoredAnalysis" disabled=isSavingStatus
+          span class="slider round"

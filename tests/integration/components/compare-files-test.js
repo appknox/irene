@@ -6,7 +6,7 @@ moduleForComponent('compare-files', 'Integration | Component | compare files', {
 });
 
 test('tapping button fires an external action', function(assert) {
-  assert.expect(3);
+  assert.expect(4);
 
   var component = this.subject();
 
@@ -18,10 +18,6 @@ test('tapping button fires an external action', function(assert) {
     component.send('displaySummary');
     component.send('displayDetails');
     assert.equal(component.get('isSummary'),false, "Display");
-    //
-    // component.set("file1", {analyses: [{id: 1, risk:2, vulnerability: {id: 1}},{id: 2, risk:3, vulnerability: {id: 2}},{id: 3, risk:4, vulnerability: {id: 3}}]});
-    // component.set("file2", {analyses: [{id: 1, risk:2, vulnerability: {id: 1}},{id: 2, risk:3, vulnerability: {id: 2}},{id: 3, risk:4, vulnerability: {id: 3}}]});
-    //
-    // assert.equal(component.get('comparisons'), "is-active", "Active");
+    assert.notOk(component.get('comparisons'));
   });
 });

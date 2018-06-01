@@ -48,19 +48,21 @@ test('tapping button fires an external action', function(assert) {
     assert.deepEqual(component.get('file2Analysis'), {"id": 2, "risk": -1}, "File 2 Analysis");
 
     const cls = 'tag';
+    component.set("comparison.analysis1.computedRisk", ENUMS.RISK.UNKNOWN);
+    component.set("comparison.analysis2.computedRisk", ENUMS.RISK.UNKNOWN);
     assert.equal(component.get('compareColor'), cls + " " + "is-progress", "Compare Color/Progress");
-    assert.equal(component.get('compareText'), "Analyzing", "Compare Text/Analyzing");
+    assert.equal(component.get('compareText').string, "Analyzing", "Compare Text/Analyzing");
 
-    component.set("comparison.analysis1.risk", ENUMS.RISK.MEDIUM);
-    component.set("comparison.analysis2.risk", ENUMS.RISK.MEDIUM);
+    component.set("comparison.analysis1.computedRisk", ENUMS.RISK.MEDIUM);
+    component.set("comparison.analysis2.computedRisk", ENUMS.RISK.MEDIUM);
     assert.equal(component.get('compareColor'), cls + " " + "is-default", "Compare Color/Default");
-    assert.equal(component.get('compareText'), "Unchanged", "Compare Text/Unchanged");
+    assert.equal(component.get('compareText').string, "Unchanged", "Compare Text/Unchanged");
 
-    component.set("comparison.analysis1.risk", ENUMS.RISK.HIGH);
+    component.set("comparison.analysis1.computedRisk", ENUMS.RISK.HIGH);
     assert.equal(component.get('compareColor'), cls + " " + "is-success", "Compare Color/Success");
     assert.equal(component.get('compareText'), "Improved", "Compare Text/Improved");
 
-    component.set("comparison.analysis1.risk", ENUMS.RISK.LOW);
+    component.set("comparison.analysis1.computedRisk", ENUMS.RISK.LOW);
     assert.equal(component.get('compareColor'), cls + " " + "is-danger", "Compare Color/Danger");
     assert.equal(component.get('compareText'), "Worsened", "Compare Text/Worsened");
   });

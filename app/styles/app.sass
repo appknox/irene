@@ -82,6 +82,9 @@ body
 .margin-bottom0
   margin-bottom: 0px!important
 
+.margin-bottom
+  margin-bottom: 10px
+
 .margin-bottom20
   margin-bottom: 20px
 
@@ -651,7 +654,11 @@ button, .button
       &:first-child
         color: #000
 
-
+.report-preferences
+  .question
+    .column:first-child
+      position: relative
+      top: 10px
 
 .token-table
   .fa
@@ -963,11 +970,26 @@ b.bold
   border-color: #f6f8fa !important
   border-width: 0px 2px 2px 2px!important
 
+.icon-effect
+  cursor: pointer
+  font-size: 18px
+  margin-top: 8px
+  margin-left: 10px
+  padding: 5px
+  width: 29px
+  &:hover
+    background-color: grey
+    color: #FFF
+    border-radius: 50%
+
+
+
 .message-header
+  border-radius: 5px 0px 0px 5px
   border-width: 0px!important
   padding: 4px 10px
   .severity-tags
-    width: 80px
+    width: 85px
   h6
     font-size: 16px
   .columns
@@ -1888,15 +1910,19 @@ select:disabled
   background-color: white
   transition: .4s
 
-input:checked + .slider
-  background-color: $success
-
-input:focus + .slider
-  box-shadow: 0 0 1px $success
+input:checked, input:focus
+  & + .slider
+    background-color: $success
 
 input:checked + .slider:before
   content: "SHOW"
   transform: translateX(26px)
+
+.yes-no-slider:before
+  content: "NO"
+
+input:checked + .yes-no-slider:before
+  content: "YES"
 
 .slider.round
   border-radius: 34px
@@ -1926,7 +1952,7 @@ input:checked + .slider:before
       color: #FFF
       border-color: $critical
 
-#show-unkown-analysis[disabled] + .slider
+.switch-input[disabled] + .slider
   opacity: 0.7
   cursor: not-allowed
 
@@ -2097,6 +2123,60 @@ $attachment-icon-width: 4em
     font-size: 1.2em
     padding: 1em 1em 0
 
+.edit-analysis
+  width: 30px!important
+  margin-top: 10px
+  margin-left: -10px
+  border-radius: 0px 5px 5px 0px
+  height: 35px
+  i
+    font-size: 18px
+    &:hover
+      color: $red
+
+.edit-analysis-modal
+  .box-container
+    margin-left: -20px
+    margin-right: -20px
+  .marked-analysis-text
+    width: 25px
+    margin-left: 5px
+  .marked-analysis-text2
+    width: 40px
+    margin-left: 10px
+    margin-top: 5px
+  .mark-text
+    width: 85px
+    margin-top: 5px
+  .modal-card
+    width: 700px
+  .mark-analysis-all
+    width: 200px
+  .ignore-analysis-all
+    width: 200px
+    margin-left: -30px
+  select
+    width: 110px
+    text-transform: uppercase
+  form
+    label
+      position: relative
+      top: -15px
+      left: 20px
+  .tag
+    margin-top: -2px
+    margin-left: 5px
+  .edit-marked-analysis
+    height: 25px
+    line-height: 17px
+    &:nth-child(2)
+      margin-left: 10px
+
+
+.device-modal
+  .modal-card-foot
+    border-top-width: 0px
+
 .signup-form
   background-color: #FFF
   width: 40em
@@ -2141,6 +2221,40 @@ $attachment-icon-width: 4em
   .g-recaptcha
     display: flex
     justify-content: center
+    
+  .checkbox-field
+    display: inline-block
+
+.ignored-analysis
+  opacity: 0.4
+
+.user-edited-icon
+  margin-left: 5px
+
+.vulnerability-container
+  margin-top: 30px
+  width: 70%
+  margin-left: 10px
+
+.vuln-warning-band
+  background-color: lighten($red, 20%)
+  padding: 10px
+  font-size: 16px
+  color: darken($red, 30%)
+  width: 70%
+  text-align: center
+  border-radius: 5px
+
+.select-box
+  max-width: 110px
+  margin-top: 5px
+
+.vuln-band
+  @extend .message-header
+  margin-top: 5px
+  .columns
+    .column
+      padding: 0px 10px
 
   .intl-tel-input
     width: 100%

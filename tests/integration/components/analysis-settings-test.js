@@ -35,11 +35,32 @@ moduleForComponent('analysis-settings', 'Integration | Component | analysis sett
 });
 
 test('tapping button fires an external action', function(assert) {
-  assert.expect(0);
-
   var component = this.subject();
+  var store = {
+    queryRecord: function() {
+      return [
+        {
+          id:1,
+          type: "unknown-analysis-status",
+          attributes: {
+            status: true
+          }
+        }
+      ];
+    }
+  };
+  component.set('store', store);
   this.render();
   Ember.run(function() {
+    assert.deepEqual(component.get("unknownAnalysisStatus"), [{
+        id:1,
+        type: "unknown-analysis-status",
+        attributes: {
+          status: true
+        }
+      }
+    ]);
+    component.set('project', {activeProfileId:1});
     component.send('showUnknownAnalysis');
   });
 });

@@ -24,8 +24,12 @@ const ApiFilterComponent = Ember.Component.extend({
   isSavingFilter: false,
   isDeletingURLFilter: false,
 
+  apiScanOptions: (function() {
+    return this.get("store").queryRecord('api-scan-options', {id: this.get("project.activeProfileId")});
+  }).property(),
+
   confirmCallback() {
-    const apiUrlFilters = this.get("project.apiUrlFilters");
+    const apiUrlFilters = this.get("apiScanOptions.apiUrlFilters");
     const deletedURL = this.get("deletedURL");
     const splittedURLs = apiUrlFilters.split(",");
     const index = splittedURLs.indexOf(deletedURL);
@@ -42,7 +46,7 @@ const ApiFilterComponent = Ember.Component.extend({
       let combinedURLS;
       const tInvalidURL = this.get("tInvalidURL");
       const tEmptyURL = this.get("tEmptyURL");
-      const apiUrlFilters = this.get("project.apiUrlFilters");
+      const apiUrlFilters = this.get("apiScanOptions.apiUrlFilters");
       const newUrlFilter = this.get("newUrlFilter");
       if (Ember.isEmpty(newUrlFilter)) {
         return this.get("notify").error(tEmptyURL);
@@ -65,18 +69,19 @@ const ApiFilterComponent = Ember.Component.extend({
     saveApiUrlFilter() {
       const tUrlUpdated = this.get("tUrlUpdated");
       const updatedURLFilters = this.get("updatedURLFilters");
-      const projectId = this.get("project.id");
-      const apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, projectId].join('/');
-      const data =
-        {apiUrlFilters: updatedURLFilters};
+      const profileId = this.get("project.activeProfileId");
+      const apiScanOptions = [ENV.endpoints.profiles, profileId, ENV.endpoints.apiScanOptions].join('/');
+      const data = {
+        api_url_filters: updatedURLFilters
+      };
       triggerAnalytics('feature', ENV.csb.addAPIEndpoints);
       this.set("isSavingFilter", true);
       const that = this;
-      this.get("ajax").post(apiScanOptions, {data})
+      this.get("ajax").put(apiScanOptions, {data})
       .then(function(){
         that.get("notify").success(tUrlUpdated);
         if(!that.isDestroyed) {
-          that.set("project.apiUrlFilters", updatedURLFilters);
+          that.set("apiScanOptions.apiUrlFilters", updatedURLFilters);
           that.set("isSavingFilter", false);
           that.set("isDeletingURLFilter", false);
           that.set("newUrlFilter", "");
