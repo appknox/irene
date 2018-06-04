@@ -123,7 +123,7 @@ if showVulnerability
     .card-wrapper
       .box-container
         h5.vuln-name = analysis.vulnerability.name
-      if analysis.isNotScanning
+      if analysis.isRisky
         .box-container
           h6.bold.black-text.uppercase-text
             =  t "overrideRisk"
