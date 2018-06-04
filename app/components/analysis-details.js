@@ -10,14 +10,13 @@ const AnalysisDetailsComponent = Ember.Component.extend({
   classNames: ["message"],
   showVulnerability: false,
   classNameBindings: ["riskClass"],
-  risks: ENUMS.RISK.CHOICES.slice(0, -1),
+  risks: ENUMS.RISK.CHOICES.slice(1, -1),
 
   i18n: Ember.inject.service(),
   ajax: Ember.inject.service(),
   notify: Ember.inject.service('notification-messages-service'),
 
   tSuccessfullyOverridden: t("successfullyOverridden"),
-  tSuccessfullyIgnored: t("successfullyIgnored"),
   tSuccessfullyReset: t("successfullyReset"),
 
   filteredRisks: (function() {
@@ -87,11 +86,6 @@ const AnalysisDetailsComponent = Ember.Component.extend({
       this.set("markAllAnalyses", markAllAnalyses);
     },
 
-    selectIgnoredAnalyisType() {
-      const ignoreAllAnalyses = Boolean(this.$('#ignored-analysis-all')[0].value);
-      this.set("ignoreAllAnalyses", ignoreAllAnalyses);
-    },
-
     removeMarkedAnalysis() {
       this.set("analysis.overriddenRisk", null);
     },
@@ -122,16 +116,6 @@ const AnalysisDetailsComponent = Ember.Component.extend({
       });
     },
 
-    ignoreAnalysis() {
-      this.set("ignoreAnalysis", true);
-      this.send("ignoreAnalysisRequest");
-    },
-
-    doNotIgnoreAnalysis() {
-      this.set("ignoreAnalysis", false);
-      this.send("ignoreAnalysisRequest");
-    },
-
     editMarkedAnalysis() {
       this.set("isEditingOverriddenRisk", true);
     },
@@ -140,38 +124,10 @@ const AnalysisDetailsComponent = Ember.Component.extend({
       this.set("isEditingOverriddenRisk", false);
     },
 
-    ignoreAnalysisRequest() {
-      const ignoreAllAnalyses = this.get("ignoreAllAnalyses");
-      const url = this.editAnalysisURL("ignore");
-      const data = {
-        ignore: this.get("ignoreAnalysis"),
-        all: ignoreAllAnalyses
-      };
-      this.set("isIgnoringAnalysis", true);
-      this.get("ajax").put(url, {
-        data
-      }).then(() => {
-        if(!this.isDestroyed) {
-          this.get("notify").success(this.get("tSuccessfullyIgnored"));
-          this.set("isIgnoringAnalysis", false);
-          if(this.get("analysis.isIgnored")) {
-            this.set("analysis.isIgnored", false);
-          }
-          else {
-            this.set("analysis.isIgnored", true);
-          }
-        }
-      }, (error) => {
-        this.get("notify").error(error.payload.message);
-        this.set("isIgnoringAnalysis", false);
-      });
-    },
-
     resetMarkedAnalysis() {
-      const ignoreAllAnalyses = this.get("ignoreAllAnalyses");
       const url = this.editAnalysisURL("risk");
       const data = {
-        all: ignoreAllAnalyses
+        all: true
       };
       this.set("isResettingMarkedAnalysis", true);
       this.get("ajax").delete(url, {
@@ -182,6 +138,7 @@ const AnalysisDetailsComponent = Ember.Component.extend({
           this.set("isResettingMarkedAnalysis", false);
           this.set("showResetAnalysisConfirmBox", false);
           this.set("analysis.isOverriddenRisk", false);
+          this.set("analysis.computedRisk", this.get("analysis.risk"));
         }
       }, (error) => {
         this.get("notify").error(error.payload.message);

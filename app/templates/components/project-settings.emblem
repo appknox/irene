@@ -26,8 +26,6 @@ if isGeneralSettings
     = github-project project=project
   .box-container
     = jira-project project=project
-  .box-container
-    = report-preferences project=project
   .margin-left
     = collaboration-component project=project
 

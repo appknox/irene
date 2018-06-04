@@ -12,15 +12,9 @@ const FileDetailsComponent = Ember.Component.extend({
     return this.get("file.sortedAnalyses");
   }).property("file.sortedAnalyses"),
 
-  analysesObserver: Ember.observer('analyses.@each.isIgnored', function() {
-    this.updateHiddenAnalysis();
+  analysesObserver: Ember.observer('analyses.@each', function() {
     this.updateUnhiddenAnalysis();
   }),
-
-  updateHiddenAnalysis() {
-    const hiddenAnalyses = this.sortHiddenAnalyses();
-    this.set("sortedHiddenAnalyses", hiddenAnalyses);
-  },
 
   updateUnhiddenAnalysis() {
     const unhiddenAnalyses = this.sortUnhiddenAnalyses();
@@ -32,47 +26,26 @@ const FileDetailsComponent = Ember.Component.extend({
     const notIgnoredAnalyses = [];
     const analyses = this.get("analyses");
     if (vulnerabilityType === ENUMS.VULNERABILITY_TYPE.UNKNOWN) {
-      for (let analysis of analyses) {
-        if (analysis.get("isNotIgnored")) {
-          notIgnoredAnalyses.push(analysis);
-          this.set("notIgnoredAnalyses", notIgnoredAnalyses);
-        }
-      }
-      return notIgnoredAnalyses;
+      return analyses;
     }
     const filteredAnalysis = [];
     for (let analysis of analyses) {
-      if (analysis.hasType(vulnerabilityType) && analysis.get("isNotIgnored")) {
+      if (analysis.hasType(vulnerabilityType)) {
         filteredAnalysis.push(analysis);
       }
     }
     return filteredAnalysis;
   },
 
-  sortHiddenAnalyses() {
-    const analyses = this.get("file.sortedAnalyses");
-    const ignoredAnalyses = [];
-    for (let analysis of analyses) {
-      if (analysis.get("isIgnored")) {
-        ignoredAnalyses.push(analysis);
-      }
-    }
-    return ignoredAnalyses;
-  },
-
   sortedUnhiddenAnalyses: (function() {
     return this.sortUnhiddenAnalyses();
-  }).property(),
-
-  sortedHiddenAnalyses: (function() {
-    return this.sortHiddenAnalyses();
   }).property(),
 
   sortedAnalyses: Ember.computed.sort('sortedUnhiddenAnalyses', 'analysesSorting'),
 
   actions: {
     filterVulnerabilityType() {
-      this.set("analyses", this.get("file.sortedAnalyses"));
+      this.set("sortedUnhiddenAnalyses", this.get("file.sortedAnalyses"));
       this.set("sortImpactAscending", false);
       const select = $(this.element).find("#filter-vulnerability-type");
       this.set("vulnerabilityType", select.val());

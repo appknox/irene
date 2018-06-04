@@ -10,7 +10,6 @@ const Analysis = DS.Model.extend({
   cvssBase: DS.attr('number'),
   pcidss: DS.hasMany('pcidss'),
   cvssVector: DS.attr('string'),
-  isIgnored: DS.attr('boolean'),
   cvssVersion: DS.attr('number'),
   cvssMetricsHumanized: DS.attr(),
   computedRisk: DS.attr('number'),
@@ -19,7 +18,6 @@ const Analysis = DS.Model.extend({
   attachments: DS.hasMany('attachment'),
   vulnerability: DS.belongsTo('vulnerability'),
   file: DS.belongsTo('file', {inverse: 'analyses'}),
-  isNotIgnored: Ember.computed.not('isIgnored'),
 
 
   hascvccBase: Ember.computed.equal('cvssVersion', 3),
@@ -78,13 +76,7 @@ const Analysis = DS.Model.extend({
 
   overriddenRiskLabelClass: (function() {
     return this.labelClass(this.get("overriddenRisk"));
-  }).property("overriddenRisk"),
-
-  ignoredAnalysisClass: (function() {
-    if(this.get("isIgnored")) {
-      return "is-ignored-analysis";
-    }
-  }).property("isIgnored")
+  }).property("overriddenRisk")
 
 });
 

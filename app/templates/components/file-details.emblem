@@ -33,8 +33,3 @@
         h4
           = fa-icon "exclamation-triangle"
           = t "noScansFound"
-    if sortedHiddenAnalyses
-      = t "hiddenAnalysis"
-      .margin-top
-        each sortedHiddenAnalyses as |analysis|
-          = analysis-details analysis=analysis showEditAnalysis=true
