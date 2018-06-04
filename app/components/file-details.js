@@ -23,7 +23,6 @@ const FileDetailsComponent = Ember.Component.extend({
 
   sortUnhiddenAnalyses() {
     const vulnerabilityType = parseInt(this.get("vulnerabilityType"));
-    const notIgnoredAnalyses = [];
     const analyses = this.get("analyses");
     if (vulnerabilityType === ENUMS.VULNERABILITY_TYPE.UNKNOWN) {
       return analyses;

@@ -73,15 +73,11 @@ test('tapping button fires an external action', function(assert) {
     component.send('openEditAnalysisModal');
     // component.send('selectMarkedAnalyis');
     // component.send('selectMarkedAnalyisType');
-    component.send('selectIgnoredAnalyisType');
     component.send('removeMarkedAnalysis');
     component.set('analysis', {file: {id: 1}, vulnerability: {id: 1}});
     component.send('markAnalysis');
-    component.send('ignoreAnalysis');
-    component.send('doNotIgnoreAnalysis');
     component.send('editMarkedAnalysis');
     component.send('cancelEditMarkingAnalysis');
-    component.send('ignoreAnalysisRequest');
     component.send('resetMarkedAnalysis');
     component.send('openResetMarkedAnalysisConfirmBox');
     assert.notOk(component.confirmCallback());
