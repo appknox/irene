@@ -1,24 +1,24 @@
 import DS from 'ember-data';
 import ENUMS from 'irene/enums';
 import Ember from 'ember';
-import { translationMacro as t } from 'ember-i18n';
-
 
 const Analysis = DS.Model.extend({
-  i18n: Ember.inject.service(),
-  file: DS.belongsTo('file', {inverse: 'analyses'}),
   findings: DS.attr(),
-  attachments: DS.hasMany('attachment'),
-  analiserVersion: DS.attr('number'),
   risk: DS.attr('number'),
   status: DS.attr('number'),
-  vulnerability: DS.belongsTo('vulnerability'),
+  owasp: DS.hasMany('owasp'),
   cvssBase: DS.attr('number'),
+  pcidss: DS.hasMany('pcidss'),
   cvssVector: DS.attr('string'),
   cvssVersion: DS.attr('number'),
   cvssMetricsHumanized: DS.attr(),
-  owasp: DS.hasMany('owasp'),
-  pcidss: DS.hasMany('pcidss'),
+  computedRisk: DS.attr('number'),
+  overriddenRisk: DS.attr('number'),
+  analiserVersion: DS.attr('number'),
+  attachments: DS.hasMany('attachment'),
+  vulnerability: DS.belongsTo('vulnerability'),
+  file: DS.belongsTo('file', {inverse: 'analyses'}),
+
 
   hascvccBase: Ember.computed.equal('cvssVersion', 3),
 
@@ -28,10 +28,12 @@ const Analysis = DS.Model.extend({
   tMedium: t("medium"),
   tCritical: t("critical"),
 
+  isOverriddenRisk: Ember.computed.notEmpty('overriddenRisk'),
+
   isScanning: ( function() {
-    const risk = this.get("risk");
+    const risk = this.get("computedRisk");
     return risk === ENUMS.RISK.UNKNOWN;
-  }).property("risk"),
+  }).property("computedRisk"),
 
   hasType(type) {
     const types = this.get("vulnerability.types");
@@ -42,21 +44,37 @@ const Analysis = DS.Model.extend({
   },
 
   isRisky: (function() {
-    const risk = this.get("risk");
+    const risk = this.get("computedRisk");
     return ![ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN].includes(risk);
-  }).property("risk"),
+  }).property("computedRisk"),
 
-  iconClass: (function() {
-    switch (this.get("risk")) {
+  iconClass(risk) {
+    switch (risk) {
       case ENUMS.RISK.UNKNOWN: return "fa-spinner fa-spin";
       case ENUMS.RISK.NONE: return "fa-check";
       case ENUMS.RISK.CRITICAL: case ENUMS.RISK.HIGH: case ENUMS.RISK.LOW: case ENUMS.RISK.MEDIUM:  return "fa-warning";
     }
+  },
+
+  riskIconClass: (function() {
+    return this.iconClass(this.get("risk"));
   }).property("risk"),
 
-  labelClass:( function() {
+  overriddenRiskIconClass: (function() {
+    return this.iconClass(this.get("overriddenRisk"));
+  }).property("overriddenRisk"),
+
+  riskLabelClass: (function() {
+    return this.labelClass(this.get("risk"));
+  }).property("risk"),
+
+  overriddenRiskLabelClass: (function() {
+    return this.labelClass(this.get("overriddenRisk"));
+  }).property("overriddenRisk"),
+
+  labelClass(risk) {
     const cls = 'tag';
-    switch (this.get("risk")) {
+    switch (risk) {
       case ENUMS.RISK.UNKNOWN: return `${cls} is-progress`;
       case ENUMS.RISK.NONE: return `${cls} is-success`;
       case ENUMS.RISK.LOW: return `${cls} is-info`;
@@ -64,7 +82,7 @@ const Analysis = DS.Model.extend({
       case ENUMS.RISK.HIGH: return `${cls} is-danger`;
       case ENUMS.RISK.CRITICAL: return `${cls} is-critical`;
     }
-  }).property("risk"),
+  },
 
   riskText:( function() {
     const tNone = this.get("tNone");

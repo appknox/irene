@@ -3,6 +3,8 @@ import ENUMS from 'irene/enums';
 
 const FileDetailsComponent = Ember.Component.extend({
 
+  sortImpactAscending: false,
+
   vulnerabilityType: ENUMS.VULNERABILITY_TYPE.UNKNOWN,
   vulnerabilityTypes: ENUMS.VULNERABILITY_TYPE.CHOICES.slice(0, -1),
 
@@ -10,9 +12,16 @@ const FileDetailsComponent = Ember.Component.extend({
     return this.get("file.sortedAnalyses");
   }).property("file.sortedAnalyses"),
 
-  sortImpactAscending: false,
+  analysesObserver: Ember.observer('analyses.@each', function() {
+    this.updateUnhiddenAnalysis();
+  }),
 
-  filteredAnalysis: Ember.computed('analyses', 'vulnerabilityType',  function() {
+  updateUnhiddenAnalysis() {
+    const unhiddenAnalyses = this.sortUnhiddenAnalyses();
+    this.set("sortedUnhiddenAnalyses", unhiddenAnalyses);
+  },
+
+  sortUnhiddenAnalyses() {
     const vulnerabilityType = parseInt(this.get("vulnerabilityType"));
     const analyses = this.get("analyses");
     if (vulnerabilityType === ENUMS.VULNERABILITY_TYPE.UNKNOWN) {
@@ -24,31 +33,36 @@ const FileDetailsComponent = Ember.Component.extend({
         filteredAnalysis.push(analysis);
       }
     }
-    return this.set("analyses", filteredAnalysis);
-  }),
+    return filteredAnalysis;
+  },
 
-  sortedAnalyses: Ember.computed.sort('analyses', 'analysesSorting'),
+  sortedUnhiddenAnalyses: (function() {
+    return this.sortUnhiddenAnalyses();
+  }).property(),
+
+  sortedAnalyses: Ember.computed.sort('sortedUnhiddenAnalyses', 'analysesSorting'),
 
   actions: {
     filterVulnerabilityType() {
-      this.set("analyses", this.get("file.sortedAnalyses"));
+      this.set("sortedUnhiddenAnalyses", this.get("file.sortedAnalyses"));
       this.set("sortImpactAscending", false);
       const select = $(this.element).find("#filter-vulnerability-type");
       this.set("vulnerabilityType", select.val());
+      this.updateUnhiddenAnalysis();
     },
 
-    sortImpact() {
+    sortByImpact() {
       const sortImpactAscending = this.get("sortImpactAscending");
       if(!sortImpactAscending) {
-        this.set("analysesSorting", ['risk:asc']);
+        this.set("analysesSorting", ['computedRisk:asc']);
         this.set("sortImpactAscending", true);
       }
       else {
-        this.set("analysesSorting", ['risk:desc']);
+        this.set("analysesSorting", ['computedRisk:desc']);
         this.set("sortImpactAscending", false);
       }
       const sortedAnalyses = this.get("sortedAnalyses");
-      this.set("analyses", sortedAnalyses);
+      this.set("sortedUnhiddenAnalyses", sortedAnalyses);
     }
   }
 });

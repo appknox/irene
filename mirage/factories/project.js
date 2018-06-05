@@ -14,7 +14,9 @@ export default Base.extend({
   url: faker.internet.domainName,
   platformVersion: faker.random.number,
   fileCount: 2,
-  showUnknownAnalysis: true,
+  showUnknownAnalysis: faker.random.boolean,
+  showIgnoredAnalysis: faker.random.boolean,
+  activeProfileId: 2,
 
   platform(){
     return faker.random.arrayElement(ENUMS.PLATFORM.VALUES);

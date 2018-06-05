@@ -10,7 +10,7 @@
   .column.margin-left5
     .columns.analysis-header
       .column.is-one-sixth.uppercase-text
-        div.remove click="sortImpact"
+        div.remove click="sortByImpact"
           = t "impact"
           if sortImpactAscending
             i.fa.fa-sort-down.sort-icons
@@ -25,9 +25,9 @@
           each vulnerabilityTypes as |vulnerabilityType|
             option value=vulnerabilityType.value
               | #{ t (vulnerability-type vulnerabilityType.value)}
-    if filteredAnalysis
-      each filteredAnalysis as |analysis|
-        = analysis-details analysis=analysis
+    if sortedUnhiddenAnalyses
+      each sortedUnhiddenAnalyses as |analysis|
+        = analysis-details analysis=analysis showEditAnalysis=true
     else
       .not-found
         h4

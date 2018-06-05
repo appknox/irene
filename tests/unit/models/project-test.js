@@ -47,18 +47,10 @@ test('it exists', function(assert) {
     }
   ]);
   Ember.run(function() {
-    assert.equal(project.get('apiUrlFilterItems'), undefined, "URL Filters/Empty");
-    project.set('apiUrlFilters', "rest.com,test.com");
-    assert.deepEqual(project.get('apiUrlFilterItems'), ["rest.com", "test.com"], "URL Filters");
 
     assert.equal(project.get('pdfPassword'), "Unknown!", "PDF Password/Unknown");
     project.set('uuid', "abceghi-jklm-opqr-stuv-wxyz100");
     assert.equal(project.get('pdfPassword'), "wxyz100", "PDF Password");
-
-    project.set('platformVersion', "1");
-    assert.equal(project.get('versionText'), "1", "Version Text");
-    project.set('platformVersion', "0");
-    assert.equal(project.get('versionText.string'), "No Preference", "Version Text");
 
     assert.equal(project.get('platformIconClass'), "mobile", "Platform Icon Class/mobile");
     project.set('platform', ENUMS.PLATFORM.ANDROID);

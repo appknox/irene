@@ -4,5 +4,5 @@
   h6
     = t "otherTemplates.showUntestedAnalysis"
   label class="switch"
-    input id="show-unkown-analysis" type="checkbox" checked=project.showUnknownAnalysis click="showUnknownAnalysis" disabled=isSavingStatus
+    input class="switch-input" id="show-unkown-analysis" type="checkbox" checked=unknownAnalysisStatus.status click="showUnknownAnalysis" disabled=isSavingStatus
     span class="slider round"

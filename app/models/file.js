@@ -69,7 +69,7 @@ const File = DS.Model.extend(BaseModelMixin, {
   tDeviceHooking: t("deviceHooking"),
   tDeviceShuttingDown: t("deviceShuttingDown"),
 
-  analysesSorting: ['risk:desc'],
+  analysesSorting: ['computedRisk:desc'],
   sortedAnalyses: Ember.computed.sort('analyses', 'analysesSorting'),
 
   countRiskCritical: 0,
@@ -79,7 +79,7 @@ const File = DS.Model.extend(BaseModelMixin, {
   countRiskNone: 0,
   countRiskUnknown: 0,
 
-  doughnutData: Ember.computed('analyses.@each.risk', function() {
+  doughnutData: Ember.computed('analyses.@each.computedRisk', function() {
     const analyses = this.get("analyses");
     const r = ENUMS.RISK;
     const countRiskCritical = _getAnalysesCount(analyses, r.CRITICAL);

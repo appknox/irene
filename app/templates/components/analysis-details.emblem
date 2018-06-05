@@ -1,32 +1,50 @@
-.message-header.vuln-header.hideOrShow click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus class=progressClass
-    .columns
-      .column.is-one-sixth.severity-tags class=analysis.labelClass
-        i.fa.risk-icons class=analysis.iconClass
-        .uppercase-text
-          if analysis.isScanning
-            | &nbsp;{{scanningText}}
-          else
-            | &nbsp;{{analysis.riskText}}
-      .column
-        h6.vuln-name = analysis.vulnerability.name
-      .column.content-right
-        each tags as |tag|
-          span.tag.scan-tag class=tag.status:finished-scan:unfinished-scan
-            | #{t tag.text}
-            if tag.status
-              = fa-icon "check"
-              = attach-tooltip position="top"
-                | #{tag.text} #{t "scanCompleted"}
+.columns
+  .column
+    .message-header.vuln-header.hideOrShow click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus class=progressClass
+      .columns
+      if analysis.isScanning
+        | &nbsp;{{scanningText}}
+      else
+        if analysis.isOverriddenRisk
+          .column.is-one-sixth.severity-tags class=analysis.overriddenRiskLabelClass
+            i.fa.risk-icons class=analysis.overriddenRiskIconClass
+            .uppercase-text
+              | &nbsp; #{ t (risk-text analysis.overriddenRisk)}
+            img src="/images/user-edited.svg" class="user-edited-icon"
+            = attach-tooltip placement="top"
+              | #{ t "overriddenRisk"},&nbsp;
+              | #{ t "orginalRisk"}: #{t (risk-text analysis.risk)}
+        else
+          .column.is-one-sixth.severity-tags class=analysis.riskLabelClass
+            i.fa.risk-icons class=analysis.riskIconClass
+            .uppercase-text
+              | &nbsp; #{ t (risk-text analysis.risk)}
+        .column
+          h6.vuln-name = analysis.vulnerability.name
+        .column.content-right
+          each tags as |tag|
+            span.tag.scan-tag class=tag.status:finished-scan:unfinished-scan
+              | #{t tag.text}
+              if tag.status
+                = fa-icon "check"
+                = attach-tooltip position="top"
+                  | #{tag.text} #{t "scanCompleted"}
+              else
+                = fa-icon "times"
+                = attach-tooltip position="top"
+                  | #{tag.text} #{t "scanNotCompleted"}
+          div.margin-left.details
+            if showVulnerability
+              i.fa.fa-chevron-up
             else
-              = fa-icon "times"
-              = attach-tooltip position="top"
-                | #{tag.text} #{t "scanNotCompleted"}
+              i.fa.fa-chevron-down
 
-        div.margin-left.details
-          if showVulnerability
-            i.fa.fa-chevron-up
-          else
-            i.fa.fa-chevron-down
+  if analysis.isRisky
+    .column.is-one-sixth.content-right.edit-analysis
+      i.fa.risk-icons.fa-edit.removeUrl.remove click="openEditAnalysisModal"
+      = attach-tooltip placement="top"
+        = t "editAnalysis"
+
 
 if showVulnerability
   .message-body.vuln-body
@@ -111,3 +129,96 @@ if showVulnerability
 
           each analysis.attachments as |attachment|
             = attachment-detail attachment=attachment
+
+= modal-card class="input-modal edit-analysis-modal" isActive=showEditAnalysisModal title="Edit Analysis"
+  .card-body
+    .card-wrapper
+      .box-container
+        h5.vuln-name = analysis.vulnerability.name
+      if analysis.isRisky
+        div
+          h6.bold.black-text.uppercase-text
+            =  t "overrideRisk"
+          if analysis.isOverriddenRisk
+            .columns.margin-top
+              .column
+                .columns
+                  if isEditingOverriddenRisk
+                    .column.is-one-sixth.mark-text
+                      = t "markItAs"
+                    .column.is-one-sixth
+                      select{action 'selectMarkedAnalyis' on='change'} id="marked-analysis"
+                        each filteredRisks as |risk|
+                          option value=risk.value
+                            | #{ t (risk-text risk.value)}
+                    .column.is-one-sixth.marked-analysis-text.margin-top5
+                      = t "for"
+                    .column.is-one-third
+                      select{action 'selectMarkedAnalyisType' on='change'} id="marked-analysis-all" class="mark-analysis-all"
+                        option value="false"
+                          = t "currentFileOnly"
+                        option value="true"
+                          =  t "allFutureAnalyses"
+                  else
+                    .column.is-one-third.margin-top5
+                      = t "overriddenRisk"
+                      .tag class=analysis.overriddenRiskLabelClass
+                        i.fa.risk-icons class=analysis.overriddenRiskIconClass
+                        .uppercase-text
+                          | &nbsp; #{ t (risk-text analysis.overriddenRisk)}
+                  .column.margin-top5
+                    = t "orginalRisk"
+                    .tag class=analysis.riskLabelClass
+                      i.fa.risk-icons class=analysis.riskIconClass
+                      .uppercase-text
+                        | &nbsp; #{ t (risk-text analysis.risk)}
+
+                  if isEditingOverriddenRisk
+                    .column.is-one-third
+                      button.is-primary.highlighted-button.edit-marked-analysis click="markAnalysis" disabled=isMarkingAnalysis
+                        if isMarkingAnalysis
+                          .fa-font-size
+                            i.fa class="fa-spinner fa-spin"
+                        | &nbsp; #{ t "save"}
+                      button.is-primary.highlighted-button.edit-marked-analysis click="cancelEditMarkingAnalysis"
+                        | &nbsp; #{ t "cancel"}
+                  else
+                    .column
+                      button.is-primary.highlighted-button.edit-marked-analysis click="editMarkedAnalysis" disabled=isEditingMarkedAnalysis
+                        if isEditingMarkedAnalysis
+                          .fa-font-size
+                            i.fa class="fa-spinner fa-spin"
+                        | &nbsp; #{ t "edit"}
+                      button.is-primary.highlighted-button.edit-marked-analysis click="openResetMarkedAnalysisConfirmBox"
+                        | &nbsp; #{ t "reset"}
+          else
+            .columns
+              .column
+                h6
+                  = t "falsePositive"
+            .columns.margin-top
+              .column.is-one-sixth.mark-text
+                h6
+                  = t "markItAs"
+              .column.is-one-sixth
+                select{action 'selectMarkedAnalyis' on='change'} id="marked-analysis"
+                  each filteredRisks as |risk|
+                    option value=risk.value
+                      | #{ t (risk-text risk.value)}
+              .column.is-one-sixth.marked-analysis-text2
+                h6
+                  = t "for"
+              .column
+                select{action 'selectMarkedAnalyisType' on='change'} id="marked-analysis-all" class="mark-analysis-all"
+                  option value="false"
+                    = t "currentFileOnly"
+                  option value="true"
+                    =  t "allFutureAnalyses"
+              .column
+                button.is-primary.highlighted-button click="markAnalysis" disabled=isMarkingAnalysis
+                  if isMarkingAnalysis
+                    .fa-font-size
+                      i.fa class="fa-spinner fa-spin"
+                  | &nbsp; #{ t "markAnalysis"}
+
+= confirm-box isActive=showResetAnalysisConfirmBox title="Reset Overridden Analysis" delegate=this disabled=isResettingMarkedAnalysis

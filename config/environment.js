@@ -156,9 +156,13 @@ module.exports = function(environment) {
       subscriptions: "subscriptions",
       rescan: "rescan",
       personaltokens: "personaltokens",
-      setUnknownAnalysisStatus: "set_unknown_analysis_status",
+      unknownAnalysisStatus: "unknown_analysis_status",
+      reportPreference: "report_preference",
       registration: "registration",
-      activate: "activate"
+      activate: "activate",
+      files: "files",
+      profiles: "profiles",
+      vulnerabilityPreferences: "vulnerability_preferences"
     },
     csb: {
       reportDownload: { feature: "Account Settings", module: "Setup", product: "Appknox" },

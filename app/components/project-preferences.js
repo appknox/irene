@@ -17,6 +17,10 @@ const ProjectPreferencesComponent = Ember.Component.extend({
   tDeviceSelected: t("deviceSelected"),
   tPleaseTryAgain: t("pleaseTryAgain"),
 
+  devicePreference: (function() {
+    return this.get("store").queryRecord('device-preference', {id: this.get("project.activeProfileId")});
+  }).property(),
+
   devices: (function() {
     return this.get("store").findAll("device");
   }).property(),
@@ -59,20 +63,22 @@ const ProjectPreferencesComponent = Ember.Component.extend({
       const tPleaseTryAgain = this.get("tPleaseTryAgain");
       const selectedDeviceType = this.get("selectedDeviceType");
 
-      const projectId = this.get("project.id");
-      const devicePreferences = [ENV.endpoints.devicePreferences, projectId].join('/');
+      const profileId = this.get("project.activeProfileId");
+      const devicePreferences = [ENV.endpoints.profiles, profileId, ENV.endpoints.devicePreferences].join('/');
       const that = this;
       const data = {
-        deviceType: selectedDeviceType,
-        platformVersion: selectVersion
+        device_type: selectedDeviceType,
+        platform_version: selectVersion
       };
       this.set("isSavingPreference", true);
-      this.get("ajax").post(devicePreferences, {data})
+      this.get("ajax").put(devicePreferences, {data})
       .then(function() {
         that.get("notify").success(tDeviceSelected);
         if(!that.isDestroyed) {
           that.set("isSavingPreference", false);
           that.set("projectPreferenceModal", false);
+          that.set("devicePreference.deviceType", selectedDeviceType);
+          that.set("devicePreference.platformVersion", selectVersion);
         }
       })
       .catch(function() {

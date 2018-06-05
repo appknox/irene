@@ -3,15 +3,17 @@ td
     if file1Analysis.isScanning
       | &nbsp;{{file1Analysis.scanningText}}
     else
-      | &nbsp;{{file1Analysis.riskText}}
+      = risk-tag analysis=file1Analysis
 td
   span class=file2Analysis.labelClass
     if file2Analysis.isScanning
       | &nbsp;{{file2Analysis.scanningText}}
     else
-      | &nbsp;{{file2Analysis.riskText}}
+      = risk-tag analysis=file2Analysis
 td
-  = vulnerability.name
+  .margin-top
+    = vulnerability.name
 td
-  span class=compareColor
-    = compareText
+  .margin-top
+    span class=compareColor
+      = compareText

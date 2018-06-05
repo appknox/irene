@@ -19,7 +19,7 @@
   small
     | eg. api.appknox.com. Do not specify the scheme (http://...), port (:443/...) & path (.../users)
 
-if project.hasApiUrlFilters
+if apiScanOptions.hasApiUrlFilters
 
   table.api-filter-table
     tr
@@ -27,7 +27,7 @@ if project.hasApiUrlFilters
          = t "apiURLFilter"
       th
         = t "actions"
-    each project.apiUrlFilterItems as |item|
+    each apiScanOptions.apiUrlFilterItems as |item|
       tr
         td
           = item

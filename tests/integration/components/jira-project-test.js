@@ -38,7 +38,6 @@ moduleForComponent('jira-project', 'Integration | Component | jira project', {
 test('tapping button fires an external action', function(assert) {
 
   var component = this.subject();
-  this.render();
 
   Ember.run(function() {
 
@@ -51,8 +50,15 @@ test('tapping button fires an external action', function(assert) {
     assert.equal(component.get("showDeleteJIRAConfirmBox"),true, "Open");
     component.send("closeDeleteJIRAConfirmBox");
     assert.equal(component.get("showDeleteJIRAConfirmBox"),false, "Close");
+  });
+});
 
+test('tapping button fires an external action', function(assert) {
+  assert.expect(0);
+  var component = this.subject();
+  this.render();
+  Ember.run(function() {
+    component.set("project", {id:1});
     component.send("selectProject");
-
   });
 });
