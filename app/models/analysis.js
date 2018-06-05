@@ -27,8 +27,6 @@ const Analysis = DS.Model.extend({
   tHigh: t("high"),
   tMedium: t("medium"),
   tCritical: t("critical"),
-  tScanning: t("scanning"),
-  tUntested: t("untested"),
 
   isScanning: ( function() {
     const risk = this.get("risk");
@@ -82,56 +80,7 @@ const Analysis = DS.Model.extend({
       case ENUMS.RISK.HIGH: return tHigh;
       case ENUMS.RISK.CRITICAL: return tCritical;
     }
-  }).property("risk"),
-
-  scanningText: (function() {
-    const tScanning = this.get("tScanning");
-    const tUntested = this.get("tUntested");
-    const vulnerability = this.get("vulnerability");
-    let scanningText;
-    vulnerability.then(() => {
-      const type = vulnerability.get('types');
-      switch (type[0]) {
-        case ENUMS.VULNERABILITY_TYPE.STATIC:
-          this.set("scanningText", tScanning);
-          break;
-        case ENUMS.VULNERABILITY_TYPE.DYNAMIC:
-          const dynamicStatus = this.get('file.dynamicStatus');
-          if(dynamicStatus !== ENUMS.DYNAMIC_STATUS.NONE) {
-            this.set("scanningText", tScanning);
-            break;
-          }
-          else {
-            this.set("scanningText", tUntested);
-            break;
-          }
-          break;
-        case ENUMS.VULNERABILITY_TYPE.MANUAL:
-          if(this.get("file.manual")) {
-            this.set("scanningText", tScanning);
-            break;
-          }
-          else {
-            this.set("scanningText", tUntested);
-            break;
-          }
-          break;
-        case ENUMS.VULNERABILITY_TYPE.API:
-          const apiStatus = this.get('file.dynamicStatus');
-          if(apiStatus !== ENUMS.DYNAMIC_STATUS.NONE) {
-            this.set("scanningText", tScanning);
-            break;
-          }
-          else {
-            this.set("scanningText", tUntested);
-            break;
-          }
-          break;
-      }
-      return scanningText;
-    });
-  }).property("vulnerability", "file.dynamicStatus")
-
+  }).property("risk")
 });
 
 export default Analysis;

@@ -4,16 +4,24 @@
         i.fa.risk-icons class=analysis.iconClass
         .uppercase-text
           if analysis.isScanning
-            | &nbsp;{{analysis.scanningText}}
+            | &nbsp;{{scanningText}}
           else
             | &nbsp;{{analysis.riskText}}
       .column
         h6.vuln-name = analysis.vulnerability.name
       .column.content-right
-        each analysis.vulnerability.tags as |tag|
-          span.tag.scan-tag
-            | #{t tag}
-            | #{scan-type tag analysis.file}
+        each tags as |tag|
+          span.tag.scan-tag class=tag.status:finished-scan:unfinished-scan
+            | #{t tag.text}
+            if tag.status
+              = fa-icon "check"
+              = attach-tooltip position="top"
+                | #{tag.text} #{t "scanCompleted"}
+            else
+              = fa-icon "times"
+              = attach-tooltip position="top"
+                | #{tag.text} #{t "scanNotCompleted"}
+
         div.margin-left.details
           if showVulnerability
             i.fa.fa-chevron-up
