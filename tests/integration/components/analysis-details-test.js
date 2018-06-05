@@ -8,10 +8,12 @@ import { startMirage } from 'irene/initializers/ember-cli-mirage';
 moduleForComponent('analysis-details', 'Integration | Component | analysis details', {
   unit: true,
   needs: [
+    'component:fa-icon',
     'component:attach-tooltip',
     'component:modal-card',
     'component:confirm-box',
     'component:ember-popper',
+    'component:risk-tag',
     'helper:eq',
     'helper:risk-text',
     'service:i18n',
@@ -82,5 +84,17 @@ test('tapping button fires an external action', function(assert) {
     component.send('resetMarkedAnalysis');
     component.send('openResetMarkedAnalysisConfirmBox');
     assert.notOk(component.confirmCallback());
+
+    component.set("analysis", {vulnerability: {types: []}});
+    assert.deepEqual(component.get("tags"), [], 'Empty Types');
+
+    component.set("analysis", {vulnerability: {types: [1]}, file: {isStaticDone:true}});
+    assert.deepEqual(component.get("tags")[0], {"status": true,"text": "static"}, 'Risk Type');
+    component.set("analysis", {vulnerability: {types: [2]}, file: {isDynamicDone:true}});
+    assert.deepEqual(component.get("tags")[0], {"status": true,"text": "dynamic"}, 'Risk Type');
+    component.set("analysis", {vulnerability: {types: [3]}, file: {isManualDone:true}});
+    assert.deepEqual(component.get("tags")[0], {"status": true,"text": "manual"}, 'Risk Type');
+    component.set("analysis", {vulnerability: {types: [4]}, file: {isApiDone:true}});
+    assert.deepEqual(component.get("tags")[0], {"status": true,"text": "api"}, 'Risk Type');
   });
 });
