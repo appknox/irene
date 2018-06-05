@@ -50,12 +50,13 @@ test('tapping button fires an external action', function(assert) {
     component.set('analysis', {computedRisk:ENUMS.RISK.NONE});
     assert.deepEqual(component.get("filteredRisks"),
       [
+        {"key": "NONE","value": 0},
         {"key": "LOW","value": 1},
         {"key": "MEDIUM","value": 2},
         {"key": "HIGH","value": 3},
         {"key": "CRITICAL","value": 4}
       ], 'Filtered Risks');
-    assert.equal(component.get("markedRisk"), 1, 'Marked Risk');
+    assert.equal(component.get("markedRisk"), 0, 'Marked Risk');
     assert.equal(component.get('riskClass'), "is-success", "Success");
     component.set('analysis', {computedRisk:ENUMS.RISK.LOW});
     assert.equal(component.get('riskClass'), "is-info", "Info");
