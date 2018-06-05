@@ -125,6 +125,9 @@ body
 .margin-side-auto
   margin: 0px auto
 
+.width-100
+  width: 100px
+
 /* Appknox specific */
 .appknox-logo
   margin-top: 13px
@@ -1022,9 +1025,20 @@ b.bold
 .mp-minus + .message-meta-data
   display: none
 
+.finished-scan
+  background-color: $green!important
+  border-color: $green!important
+.unfinished-scan
+  background-color: lighten($red, 3%)!important
+  border-color: lighten($red, 3%)!important
+
 .scan-tag
   background-color: $default
   color: #fff
+  .fa
+    font-size: 12px
+    margin-left: 4px
+    margin-right: -4px
 
 table.vuln-table
   th, td

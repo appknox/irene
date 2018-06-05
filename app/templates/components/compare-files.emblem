@@ -36,7 +36,7 @@ else
   .columns
     each comparisons as |comparison|
       .column.is-half
-        = analysis-details analysis=comparison.analysis1
+        = analysis-details analysis=comparison.analysis1 showEditAnalysis=false
       .column.is-half
-        = analysis-details analysis=comparison.analysis2
+        = analysis-details analysis=comparison.analysis2 showEditAnalysis=false
   hr

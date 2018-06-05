@@ -1,7 +1,7 @@
 td
-  = risk-tag analysis=file1Analysis
+  = risk-tag analysis=file1Analysis columnSize="width-100"
 td
-  = risk-tag analysis=file2Analysis
+  = risk-tag analysis=file2Analysis columnSize="width-100"
 td
   .margin-top
     = vulnerability.name

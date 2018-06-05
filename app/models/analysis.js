@@ -1,6 +1,7 @@
+import Ember from 'ember';
 import DS from 'ember-data';
 import ENUMS from 'irene/enums';
-import Ember from 'ember';
+import { translationMacro as t } from 'ember-i18n';
 
 const Analysis = DS.Model.extend({
   findings: DS.attr(),
@@ -21,6 +22,12 @@ const Analysis = DS.Model.extend({
 
 
   hascvccBase: Ember.computed.equal('cvssVersion', 3),
+
+  tLow: t("low"),
+  tNone: t("none"),
+  tHigh: t("high"),
+  tMedium: t("medium"),
+  tCritical: t("critical"),
 
   isOverriddenRisk: Ember.computed.notEmpty('overriddenRisk'),
 
@@ -58,6 +65,14 @@ const Analysis = DS.Model.extend({
     return this.iconClass(this.get("overriddenRisk"));
   }).property("overriddenRisk"),
 
+  riskLabelClass: (function() {
+    return this.labelClass(this.get("risk"));
+  }).property("risk"),
+
+  overriddenRiskLabelClass: (function() {
+    return this.labelClass(this.get("overriddenRisk"));
+  }).property("overriddenRisk"),
+
   labelClass(risk) {
     const cls = 'tag';
     switch (risk) {
@@ -70,14 +85,21 @@ const Analysis = DS.Model.extend({
     }
   },
 
-  riskLabelClass: (function() {
-    return this.labelClass(this.get("risk"));
-  }).property("risk"),
+  riskText:( function() {
+    const tNone = this.get("tNone");
+    const tLow = this.get("tLow");
+    const tMedium = this.get("tMedium");
+    const tHigh = this.get("tHigh");
+    const tCritical = this.get("tCritical");
 
-  overriddenRiskLabelClass: (function() {
-    return this.labelClass(this.get("overriddenRisk"));
-  }).property("overriddenRisk")
-
+    switch (this.get("risk")) {
+      case ENUMS.RISK.NONE: return tNone;
+      case ENUMS.RISK.LOW: return tLow;
+      case ENUMS.RISK.MEDIUM: return tMedium;
+      case ENUMS.RISK.HIGH: return tHigh;
+      case ENUMS.RISK.CRITICAL: return tCritical;
+    }
+  }).property("risk")
 });
 
 export default Analysis;
