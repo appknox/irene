@@ -2,23 +2,7 @@
   .column
     .message-header.vuln-header.hideOrShow click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus class=progressClass
       .columns
-      if analysis.isScanning
-        | &nbsp;{{scanningText}}
-      else
-        if analysis.isOverriddenRisk
-          .column.is-one-sixth.severity-tags class=analysis.overriddenRiskLabelClass
-            i.fa.risk-icons class=analysis.overriddenRiskIconClass
-            .uppercase-text
-              | &nbsp; #{ t (risk-text analysis.overriddenRisk)}
-            img src="/images/user-edited.svg" class="user-edited-icon"
-            = attach-tooltip placement="top"
-              | #{ t "overriddenRisk"},&nbsp;
-              | #{ t "orginalRisk"}: #{t (risk-text analysis.risk)}
-        else
-          .column.is-one-sixth.severity-tags class=analysis.riskLabelClass
-            i.fa.risk-icons class=analysis.riskIconClass
-            .uppercase-text
-              | &nbsp; #{ t (risk-text analysis.risk)}
+        = risk-tag analysis=analysis columnSize="is-one-sixth"
         .column
           h6.vuln-name = analysis.vulnerability.name
         .column.content-right
@@ -39,11 +23,12 @@
             else
               i.fa.fa-chevron-down
 
-  if analysis.isRisky
-    .column.is-one-sixth.content-right.edit-analysis
-      i.fa.risk-icons.fa-edit.removeUrl.remove click="openEditAnalysisModal"
-      = attach-tooltip placement="top"
-        = t "editAnalysis"
+  if showEditAnalysis
+    if analysis.isRisky
+      .column.is-one-sixth.content-right.edit-analysis
+        i.fa.risk-icons.fa-edit.removeUrl.remove click="openEditAnalysisModal"
+        = attach-tooltip placement="top"
+          = t "editAnalysis"
 
 
 if showVulnerability

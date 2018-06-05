@@ -1,15 +1,7 @@
 td
-  span class=file1Analysis.labelClass
-    if file1Analysis.isScanning
-      | &nbsp;{{file1Analysis.scanningText}}
-    else
-      = risk-tag analysis=file1Analysis
+  = risk-tag analysis=file1Analysis columnSize="width-100"
 td
-  span class=file2Analysis.labelClass
-    if file2Analysis.isScanning
-      | &nbsp;{{file2Analysis.scanningText}}
-    else
-      = risk-tag analysis=file2Analysis
+  = risk-tag analysis=file2Analysis columnSize="width-100"
 td
   .margin-top
     = vulnerability.name

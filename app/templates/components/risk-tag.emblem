@@ -1,15 +1,17 @@
-.margin-top
-  if analysis.isOverriddenRisk
-    span class=analysis.overriddenRiskLabelClass
-      i.fa.risk-icons class=analysis.overriddenRiskIconClass
-      .uppercase-text
-        | &nbsp; #{ t (risk-text analysis.overriddenRisk)}
-      img src="/images/user-edited.svg" class="user-edited-icon"
-      = attach-tooltip placement="top"
-        | #{ t "overriddenRisk"},&nbsp;
-        | #{ t "orginalRisk"}: #{t (risk-text analysis.risk)}
-  else
-    span class=analysis.riskLabelClass
-      i.fa.risk-icons class=analysis.riskIconClass
-      .uppercase-text
+if analysis.isOverriddenRisk
+  .column.severity-tags class=analysis.overriddenRiskLabelClass class=columnSize
+    i.fa.risk-icons class=analysis.overriddenRiskIconClass
+    .uppercase-text
+      | &nbsp; #{ t (risk-text analysis.overriddenRisk)}
+    img src="/images/user-edited.svg" class="user-edited-icon"
+    = attach-tooltip placement="top"
+      | #{ t "overriddenRisk"},&nbsp;
+      | #{ t "orginalRisk"}: #{t (risk-text analysis.risk)}
+else
+  .column.severity-tags class=analysis.riskLabelClass class=columnSize
+    i.fa.risk-icons class=analysis.riskIconClass
+    .uppercase-text
+      if analysis.isScanning
+        | &nbsp;{{scanningText}}
+      else
         | &nbsp; #{ t (risk-text analysis.risk)}
