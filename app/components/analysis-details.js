@@ -10,7 +10,6 @@ const AnalysisDetailsComponent = Ember.Component.extend({
   classNames: ["message"],
   showVulnerability: false,
   classNameBindings: ["riskClass"],
-  risks: ENUMS.RISK.CHOICES.slice(1, -1),
 
   i18n: Ember.inject.service(),
   ajax: Ember.inject.service(),
@@ -19,11 +18,17 @@ const AnalysisDetailsComponent = Ember.Component.extend({
   tSuccessfullyOverridden: t("successfullyOverridden"),
   tSuccessfullyReset: t("successfullyReset"),
 
+  risks: (function() {
+    const risks = ENUMS.RISK.CHOICES;
+    const riskFilter = [ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN];
+    return risks.filter(risk => !riskFilter.includes(risk.value));
+  }).property(),
+
   filteredRisks: (function() {
     const risks = this.get("risks");
-    const analysisRisk = this.get("analysis.computedRisk");
+    const analysisRisk = this.get("analysis.risk");
     return risks.filter(risk => analysisRisk !== risk.value);
-  }).property("risks", "analysis.computedRisk"),
+  }).property("risks", "analysis.risk"),
 
   markedRisk: (function() {
     const filteredRisks = this.get("filteredRisks");
