@@ -1,6 +1,6 @@
 .columns
   .column
-    .message-header.vuln-header.hideOrShow click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus class=progressClass class=analysis.isIgnored:ignored-analysis
+    .message-header.vuln-header.hideOrShow click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus class=progressClass
       .columns
         if analysis.isOverriddenRisk
           .column.is-one-sixth.severity-tags class=analysis.overriddenRiskLabelClass
@@ -27,7 +27,7 @@
             else
               i.fa.fa-chevron-down
 
-  if showEditAnalysis
+  if analysis.isRisky
     .column.is-one-sixth.content-right.edit-analysis
       i.fa.risk-icons.fa-edit.removeUrl.remove click="openEditAnalysisModal"
       = attach-tooltip placement="top"
@@ -123,8 +123,8 @@ if showVulnerability
     .card-wrapper
       .box-container
         h5.vuln-name = analysis.vulnerability.name
-      if analysis.isNotScanning
-        .box-container
+      if analysis.isRisky
+        div
           h6.bold.black-text.uppercase-text
             =  t "overrideRisk"
           if analysis.isOverriddenRisk
@@ -208,43 +208,5 @@ if showVulnerability
                     .fa-font-size
                       i.fa class="fa-spinner fa-spin"
                   | &nbsp; #{ t "markAnalysis"}
-
-      h6.bold.black-text.uppercase-text
-        = t "hideAnalysis"
-
-      if analysis.isIgnored
-        .columns
-          .column
-            h6
-              = t "hiddenThisAnalysis"
-        .columns
-          .column
-            button.is-primary.highlighted-button click="doNotIgnoreAnalysis" disabled=isIgnoringAnalysis
-              if isIgnoringAnalysis
-                .fa-font-size
-                  i.fa class="fa-spinner fa-spin"
-              | &nbsp; #{ t "unhideAnalysis"}
-      else
-        .columns
-          .column
-            h6
-              = t "hideThisAnalysis"
-        .columns.margin-top
-          .column.is-one-third
-            h5
-              = t "hideThisAnalysisFor"
-          .column
-            select{action 'selectIgnoredAnalyisType' on='change'} id="ignored-analysis-all" class="ignore-analysis-all"
-              option value="false"
-                = t "currentFileOnly"
-              option value="true"
-                =  t "allFutureAnalyses"
-          .column
-            button.is-primary.highlighted-button click="ignoreAnalysis" disabled=isIgnoringAnalysis
-              if isIgnoringAnalysis
-                .fa-font-size
-                  i.fa class="fa-spinner fa-spin"
-              .capitalize-text
-                | &nbsp; #{ t "hideAnalysis"}
 
 = confirm-box isActive=showResetAnalysisConfirmBox title="Reset Overridden Analysis" delegate=this disabled=isResettingMarkedAnalysis

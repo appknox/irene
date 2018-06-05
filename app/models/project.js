@@ -18,8 +18,7 @@ const Project = DS.Model.extend(BaseModelMixin, {
   testPassword: DS.attr('string'),
   url: DS.attr('string'),
   lastFileCreatedOn: DS.attr('date'),
-  fileCount: DS.attr('number'),
-  showIgnoredAnalysis: DS.attr('boolean'),
+  fileCount: DS.attr('number'), 
 
   pdfPassword: (function() {
     const uuid = this.get("uuid");

@@ -63,8 +63,5 @@ test('it exists', function(assert) {
     analysis.set('overriddenRisk', ENUMS.RISK.CRITICAL);
     assert.equal(analysis.get("overriddenRiskIconClass"), "fa-warning", "Overridden Risk Icon Class");
     assert.equal(analysis.get("overriddenRiskLabelClass"), cls + " " + "is-critical", "Overridden Risk Icon Class");
-    analysis.set('isIgnored', true);
-    assert.equal(analysis.get("ignoredAnalysisClass"), "is-ignored-analysis", "Ignored Analysis Class");
-
   });
 });

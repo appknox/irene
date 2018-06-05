@@ -50,12 +50,13 @@ test('tapping button fires an external action', function(assert) {
     component.set('analysis', {computedRisk:ENUMS.RISK.NONE});
     assert.deepEqual(component.get("filteredRisks"),
       [
+        {"key": "NONE","value": 0},
         {"key": "LOW","value": 1},
         {"key": "MEDIUM","value": 2},
         {"key": "HIGH","value": 3},
         {"key": "CRITICAL","value": 4}
       ], 'Filtered Risks');
-    assert.equal(component.get("markedRisk"), 1, 'Marked Risk');
+    assert.equal(component.get("markedRisk"), 0, 'Marked Risk');
     assert.equal(component.get('riskClass'), "is-success", "Success");
     component.set('analysis', {computedRisk:ENUMS.RISK.LOW});
     assert.equal(component.get('riskClass'), "is-info", "Info");
@@ -73,15 +74,11 @@ test('tapping button fires an external action', function(assert) {
     component.send('openEditAnalysisModal');
     // component.send('selectMarkedAnalyis');
     // component.send('selectMarkedAnalyisType');
-    component.send('selectIgnoredAnalyisType');
     component.send('removeMarkedAnalysis');
     component.set('analysis', {file: {id: 1}, vulnerability: {id: 1}});
     component.send('markAnalysis');
-    component.send('ignoreAnalysis');
-    component.send('doNotIgnoreAnalysis');
     component.send('editMarkedAnalysis');
     component.send('cancelEditMarkingAnalysis');
-    component.send('ignoreAnalysisRequest');
     component.send('resetMarkedAnalysis');
     component.send('openResetMarkedAnalysisConfirmBox');
     assert.notOk(component.confirmCallback());
