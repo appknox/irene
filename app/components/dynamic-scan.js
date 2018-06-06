@@ -66,9 +66,10 @@ export default Ember.Component.extend({
       const isApiScanEnabled = this.get("isApiScanEnabled");
       const that = this;
       const data = {
-        isApiScanEnabled: isApiScanEnabled == true
+        isApiScanEnabled: isApiScanEnabled === true
       };
-      const file_id = this.get("file.id");
+      const file = this.get('file');
+      const file_id = file.id;
       const dynamicUrl = [ENV.endpoints.dynamic, file_id].join('/');
       this.get("ajax").put(dynamicUrl, {data})
         .then(function() {
