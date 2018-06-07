@@ -64,11 +64,10 @@ header.card-header
                   = t "none"
               .column
                 = file.countRiskNone
-            if unknownAnalysisStatus.status
-              .columns
-                .column
-                  li.is-default
-                    = t "untested"
-                .column
-                  = file.countRiskUnknown
+            .columns class=unknownAnalysisStatus.status:visible:invisible
+              .column
+                li.is-default
+                  = t "untested"
+              .column
+                = file.countRiskUnknown
 = yield
