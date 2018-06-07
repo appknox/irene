@@ -21,7 +21,7 @@ if isGeneralSettings
   .box-container
     = project-preferences project=project
   .box-container
-    = api-filter project=project
+    = api-filter profileId=project.activeProfileId
   .box-container
     = github-project project=project
   .box-container
