@@ -4,7 +4,7 @@
       each sortedObjects as |file|
         .column.is-one-third
           = link-to "authenticated.file" file.id
-            = file-overview file=file
+            = file-overview file=file profileId=file.profile.id
     else
       .loading-container
         i.fa class="fa-spinner fa-spin"

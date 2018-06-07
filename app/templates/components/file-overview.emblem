@@ -64,7 +64,7 @@ header.card-header
                   = t "none"
               .column
                 = file.countRiskNone
-            .columns class=file.project.showUnknownAnalysis:visible:invisible
+            .columns class=unknownAnalysisStatus.status:visible:invisible
               .column
                 li.is-default
                   = t "untested"

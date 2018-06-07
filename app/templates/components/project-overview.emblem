@@ -1,5 +1,5 @@
 = link-to "authenticated.file" project.lastFile.id
-  = file-overview file=project.lastFile
+  = file-overview file=project.lastFile profileId=project.activeProfileId
     footer.card-button
       .columns.button-width
         .column class=project.hasMultipleFiles::auto-adjust

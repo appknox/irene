@@ -50,6 +50,10 @@ const FileHeaderComponent = Ember.Component.extend({
     return this.get("store").findRecord("manualscan", fileId);
   }).property(),
 
+  unknownAnalysisStatus: (function() {
+    return this.get("store").queryRecord('unknown-analysis-status', {id: this.get("file.profile.id")});
+  }).property(),
+
   analyses: (function() {
     return this.get("file.sortedAnalyses");
   }).property("file.sortedAnalyses"),

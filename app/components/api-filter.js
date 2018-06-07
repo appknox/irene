@@ -10,7 +10,6 @@ const isRegexFailed = function(url) {
 };
 
 const ApiFilterComponent = Ember.Component.extend({
-  project: null,
   i18n: Ember.inject.service(),
   ajax: Ember.inject.service(),
   notify: Ember.inject.service('notification-messages-service'),
@@ -25,7 +24,7 @@ const ApiFilterComponent = Ember.Component.extend({
   isDeletingURLFilter: false,
 
   apiScanOptions: (function() {
-    return this.get("store").queryRecord('api-scan-options', {id: this.get("project.activeProfileId")});
+    return this.get("store").queryRecord('api-scan-options', {id: this.get("profileId")});
   }).property(),
 
   confirmCallback() {
@@ -69,7 +68,7 @@ const ApiFilterComponent = Ember.Component.extend({
     saveApiUrlFilter() {
       const tUrlUpdated = this.get("tUrlUpdated");
       const updatedURLFilters = this.get("updatedURLFilters");
-      const profileId = this.get("project.activeProfileId");
+      const profileId = this.get("profileId");
       const apiScanOptions = [ENV.endpoints.profiles, profileId, ENV.endpoints.apiScanOptions].join('/');
       const data = {
         api_url_filters: updatedURLFilters

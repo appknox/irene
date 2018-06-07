@@ -4,7 +4,7 @@
       each otherFilesInTheProject as |file|
         .column.is-one-third
           = link-to "authenticated.compare" (concat file.id "..." fileOld.id)
-            = file-overview file=file fileOld=fileOld redirectTo="authenticated.compare"
+            = file-overview file=file fileOld=fileOld profileId=file.profile.id redirectTo="authenticated.compare"
     else
       .loading-container
         i.fa class="fa-spinner fa-spin"

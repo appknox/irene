@@ -6,6 +6,7 @@ import localeConfig from 'ember-i18n/config/en';
 moduleForModel('file', 'Unit | Model | file', {
   needs: [
     'model:project',
+    'model:profile',
     'model:file',
     'model:user',
     'model:analysis',

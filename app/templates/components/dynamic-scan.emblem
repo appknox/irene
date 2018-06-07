@@ -95,7 +95,7 @@ if notVNCViewer
             .column
               = t "modalCard.apiScan.extraDescription"
         .margin-top20.add-filter-list
-          = api-filter project=file.project
+          = api-filter profileId=file.profile.id
         div.margin-top20
           form
             p.control
