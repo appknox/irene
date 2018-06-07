@@ -58,6 +58,17 @@ test('it exists', function(assert) {
           }
         }
       ];
+    },
+    queryRecord: function() {
+      return [
+        {
+          id:1,
+          type: "unknown-analysis-status",
+          attributes: {
+            status: true
+          }
+        }
+      ];
     }
   };
   component.set('store', store);
@@ -181,7 +192,16 @@ test('it exists', function(assert) {
     component.send("requiredAppAction");
 
     assert.equal(component.get("isStartingRescan"), true, "Starting Scan");
+    
+    component.set("file", {profile: {id:1}});
+    assert.deepEqual(component.get("unknownAnalysisStatus"), [{
+        id:1,
+        type: "unknown-analysis-status",
+        attributes: {
+          status: true
+        }
+      }
+    ]);
 
   });
-
 });

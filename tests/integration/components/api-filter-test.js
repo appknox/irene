@@ -62,6 +62,7 @@ test('tapping button fires an external action', function(assert) {
       }
     ]);
     component.set('project', {id: 1, activeProfileId:1});
+    component.set('profileId', 1);
     component.set('apiScanOptions', {id: 1, apiUrlFilters:"yash.com", activeProfileId:1});
     assert.equal(component.confirmCallback() ,undefined, "Show Vulnerability");
     component.set("isSavingFilter", true);
