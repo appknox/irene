@@ -139,12 +139,13 @@
                 .column
                   = file.countRiskNone
 
-              .columns class=file.project.showUnknownAnalysis:visible:invisible
-                .column
-                  li.is-default
-                    = t "untested"
-                .column
-                  = file.countRiskUnknown
+              if unknownAnalysisStatus.status
+                .columns
+                  .column
+                    li.is-default
+                      = t "untested"
+                  .column
+                    = file.countRiskUnknown
         .column.package-desc
           table
             tr

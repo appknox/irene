@@ -16,6 +16,7 @@ const _getAnalysesCount = (analysis, risk)=> analysis.filterBy('risk', risk).get
 const File = DS.Model.extend(BaseModelMixin, {
   i18n: Ember.inject.service(),
   project: DS.belongsTo('project', {inverse:'files'}),
+  profile: DS.belongsTo('profile', {inverse:'files'}),
   uuid: DS.attr('string'),
   deviceToken: DS.attr('string'),
   version: DS.attr('string'),
