@@ -409,7 +409,8 @@ export default {
       "extraDescription": "API診断では複数の自動テストが行われ、<b class = 'bold'>サービスの妨害</ b>または<b class = 'bold'>データの損失</ b>が発生する可能性があります。 アプリが<b class = 'bold'>プロダクションAPIサーバ</ b>を使用するように設定されている場合や、<b class = 'bold'> SSLピン留め</ b>を採用している場合は[はい]を選択しないでください。",
       "runAPIScan": "API診断の実行",
       "dynamicScan": "動的診断を続行する",
-      "startApiScan": "API診断を開始しますか？"
+      "startApiScan": "API診断を開始しますか？",
+      "dynamicScanText": "Make sure you perform all the actions in the App, there are high chances that the scanner might mark the risk as passed"
     },
     "devicePreference": {
       "title": "デバイスの設定変更",

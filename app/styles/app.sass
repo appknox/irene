@@ -535,15 +535,20 @@ button, .button
         border-width: 2px 2px 2px 0px
         border-style: solid
         border-color: lighten($default, 50%)
-  .fa-exclamation-triangle
-    margin-top: 20px
-    margin-left: 10px
-    font-size: 40px
-  .fa.fa-trash-o
-    color: $red
-    margin-left: 10px
-    margin-top: 10px
-    cursor: pointer
+  .fa
+    &-exclamation-triangle
+      margin-top: 20px
+      margin-left: 10px
+      font-size: 40px
+    &-info-circle
+      margin-top: 5px
+      margin-left: 15px
+      font-size: 40px
+    &-trash-o
+      color: $red
+      margin-left: 10px
+      margin-top: 10px
+      cursor: pointer
   .position-icons
     margin-top: 18px!important
   .edit-filter
@@ -1128,6 +1133,9 @@ ul.risk-table
   .warning-band
     .columns .column
       height: 100px!important
+  .info-band
+    .columns .column
+      height: 65px!important
 
   .card-header
     height: 40px
