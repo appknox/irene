@@ -35,26 +35,24 @@ const PasswordChangeComponent = Ember.Component.extend({
         password: passwordCurrent,
         newPassword: passwordNew
       };
-      const that = this;
       this.set("isChangingPassword", true);
       const ajax = this.get("ajax");
       ajax.post(ENV.endpoints.changePassword, {data})
-      .then(function() {
-        that.get("notify").success(tPasswordChanged);
+      .then(() => {
+        this.get("notify").success(tPasswordChanged);
         triggerAnalytics('feature',ENV.csb.changePassword);
-        if(!that.isDestroyed) {
-          that.set("isChangingPassword", false);
-          that.setProperties({
+        if(!this.isDestroyed) {
+          this.set("isChangingPassword", false);
+          this.setProperties({
             passwordCurrent: "",
             passwordNew: "",
             passwordConfirm: ""
             });
           setTimeout(() => window.location.href = "/", 1 * 1000);
         }
-      })
-      .catch(function(error) {
-        that.set("isChangingPassword", false);
-        that.get("notify").error(error.payload.message);
+      }, (error) => {
+        this.set("isChangingPassword", false);
+        this.get("notify").error(error.payload.message);
       });
     }
   }

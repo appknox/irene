@@ -7,7 +7,7 @@ const ChooseListComponent = FileListComponent.extend({
 
   hasObjects: Ember.computed.gt('objectCount', 1),
 
-  otherFilesInTheProject: Ember.computed.filter('sortedObjects', function(file) {
+  otherFilesInTheProject: Ember.computed.filter('sortedObjects', (file) => {
     const file_id = this.get("fileOld.id");
     return file_id !== file.get("id");
   })

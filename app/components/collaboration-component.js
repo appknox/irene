@@ -36,25 +36,22 @@ const CollaborationComponentComponent = Ember.Component.extend({
       if (selectedTeam === 0) {
         return this.get("notify").error(tSelectAnyTeam);
       }
-      let that = this;
       const data = {
         projectId: this.get("project.id"),
         teamId: selectedTeam
       };
-      that = this;
       this.set("isAddingCollaboration", true);
       this.get("ajax").post(ENV.endpoints.collaborations, {data})
-      .then(function(){
-        that.get("notify").success(tCollaborationAdded);
-        if(!that.isDestroyed) {
-          that.set("isAddingCollaboration", false);
+      .then(() => {
+        this.get("notify").success(tCollaborationAdded);
+        if(!this.isDestroyed) {
+          this.set("isAddingCollaboration", false);
         }
-        that.send("closeModal");
-      })
-      .catch(function(error) {
-        if(!that.isDestroyed) {
-          that.set("isAddingCollaboration", false);
-          that.get("notify").error(error.payload.message, ENV.notifications);
+        this.send("closeModal");
+      }, (error) => {
+        if(!this.isDestroyed) {
+          this.set("isAddingCollaboration", false);
+          this.get("notify").error(error.payload.message, ENV.notifications);
         }
       });
     },

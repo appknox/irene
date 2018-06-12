@@ -12,26 +12,25 @@ const LoginComponentComponent = Ember.Component.extend({
   otp: "",
   actions: {
     authenticate() {
-      const that = this;
       let identification = this.get('identification');
       let password = this.get('password');
       const otp = this.get("otp");
 
       if (!identification || !password) {
-        return that.get("notify").error("Please enter username and password", ENV.notifications);
+        return this.get("notify").error("Please enter username and password", ENV.notifications);
       }
       identification = identification.trim();
       password = password.trim();
-      that.set("isLogingIn", true);
+      this.set("isLogingIn", true);
 
-      const errorCallback = function(error){
+      const errorCallback = (error) => {
         if (isUnauthorizedError(error)) {
-          that.set("MFAEnabled", true);
+          this.set("MFAEnabled", true);
         }
       };
 
-      const loginStatus = function(){
-        that.set("isLogingIn", false);
+      const loginStatus = () => {
+        this.set("isLogingIn", false);
       };
 
       this.get('session').authenticate("authenticator:irene", identification, password, otp, errorCallback, loginStatus);

@@ -39,26 +39,24 @@ const PersonaltokenListComponent = Ember.Component.extend(PaginateMixin, {
         if (isEmpty(inputValue)) { return this.get('notify').error(tEnterTokenName); }
       }
 
-      const that = this;
       const data =
         {name: tokenName};
 
       this.set('isGeneratingToken', true);
       this.get('ajax').post(ENV.endpoints.personaltokens, {data})
-      .then(function(data){
-        if(!that.isDestroyed) {
-          that.set('isGeneratingToken', false);
-          that.store.pushPayload(data);
-          that.incrementProperty("version");
-          that.set('tokenName', '');
-          that.set('showGenerateTokenModal', false);
+      .then((data) => {
+        if(!this.isDestroyed) {
+          this.set('isGeneratingToken', false);
+          this.store.pushPayload(data);
+          this.incrementProperty("version");
+          this.set('tokenName', '');
+          this.set('showGenerateTokenModal', false);
         }
-        that.get('notify').success(tTokenCreated);
-      })
-      .catch(function(error) {
-        if(!that.isDestroyed) {
-          that.set('isGeneratingToken', false);
-          that.get("notify").error(error.payload.message);
+        this.get('notify').success(tTokenCreated);
+      }, (error) => {
+        if(!this.isDestroyed) {
+          this.set('isGeneratingToken', false);
+          this.get("notify").error(error.payload.message);
         }
       });
     }
@@ -77,13 +75,11 @@ const PersonaltokenListComponent = Ember.Component.extend(PaginateMixin, {
     const clipboard = new Clipboard('.copy-token');
     this.set('clipboard', clipboard);
 
-    const that = this;
-
-    clipboard.on('success', function(e) {
-      that.get('notify').info(tTokenCopied);
+    clipboard.on('success', (e) => {
+      this.get('notify').info(tTokenCopied);
       e.clearSelection();
     });
-    clipboard.on('error', () => that.get('notify').error(tPleaseTryAgain));
+    clipboard.on('error', () => this.get('notify').error(tPleaseTryAgain));
   },
 
   willDestroyElement() {

@@ -44,10 +44,6 @@ const VncViewerComponent = Ember.Component.extend({
       'view_only': false,
 
       'onUpdateState'() {
-        // if (ENUMS.PLATFORM.IOS !== that.get("file.project.platform")) {
-        //   // Only resize iOS Devices
-        //   return true;
-        // }
         setTimeout(that.set_ratio.bind(that), 500);
         return true;
       },

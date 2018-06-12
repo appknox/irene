@@ -8,14 +8,14 @@ const PricingListComponent = Ember.Component.extend({
 
   subscriptions: (function() {
     let subscriptions;
-    const that = this;
     subscriptions = this.get("store").findAll("subscription")
-      .then(function(data){
-        that.set("subscriptions", data);
-        if (data.isLoaded === true) {
-          const plans = that.get("store").findAll("plan");
-          that.set("plans", plans);
-        }});
+    .then((data) => {
+      this.set("subscriptions", data);
+      if (data.isLoaded === true) {
+        const plans = this.get("store").findAll("plan");
+        this.set("plans", plans);
+      }
+    });
   }).property(),
 
   subscription: Ember.computed.alias('subscriptions.firstObject'),

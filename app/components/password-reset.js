@@ -42,10 +42,9 @@ const PasswordResetComponent = Ember.Component.extend({
 
     reset() {
       const tPasswordIsReset = this.get("tPasswordIsReset");
-      const that = this;
       this.validate();
       if (this.validation_errors.length > 0) {
-        return that.get("notify").error(`${this.validation_errors.join(" & ")}`);
+        return this.get("notify").error(`${this.validation_errors.join(" & ")}`);
       }
       const password = this.get("password");
       const uuid = this.get("uuid");
@@ -57,16 +56,15 @@ const PasswordResetComponent = Ember.Component.extend({
       };
       this.set("isResettingPassword", true);
       this.get("ajax").post(ENV.endpoints.reset, {data})
-      .then(function(){
-        if(!that.isDestroyed) {
-          that.container.lookup("route:reset").transitionTo("login");
+      .then(() => {
+        if(!this.isDestroyed) {
+          this.container.lookup("route:reset").transitionTo("login");
         }
-        that.get("notify").success(tPasswordIsReset);
-      })
-      .catch(function(error) {
-        if(!that.isDestroyed) {
-          that.set("isResettingPassword", false);
-          that.get("notify").error(error.payload.message);
+        this.get("notify").success(tPasswordIsReset);
+      }, (error) => {
+        if(!this.isDestroyed) {
+          this.set("isResettingPassword", false);
+          this.get("notify").error(error.payload.message);
         }
       });
     }

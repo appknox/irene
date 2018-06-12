@@ -25,19 +25,17 @@ const TeamMemberComponent = Ember.Component.extend({
     }
     const teamId = this.get("team.id");
     const url = [ENV.endpoints.teams, teamId, ENV.endpoints.members, teamMember].join('/');
-    const that = this;
     this.set("isRemovingMember", true);
     this.get("ajax").delete(url)
-    .then(function(data){
-      that.get("notify").success(`${tTeamMember} ${teamMember} ${tTeamMemberRemoved}`);
-      if(!that.isDestroyed) {
-        that.set("isRemovingMember", false);
-        that.store.pushPayload(data);    
+    .then((data) => {
+      this.get("notify").success(`${tTeamMember} ${teamMember} ${tTeamMemberRemoved}`);
+      if(!this.isDestroyed) {
+        this.set("isRemovingMember", false);
+        this.store.pushPayload(data);
       }
-    })
-    .catch(function(error) {
-      that.set("isRemovingMember", false);
-      that.get("notify").error(error.payload.message);
+    }, (error) => {
+      this.set("isRemovingMember", false);
+      this.get("notify").error(error.payload.message);
     });
   },
 

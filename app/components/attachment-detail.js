@@ -12,19 +12,18 @@ const AttachmentDetailComponent = Ember.Component.extend({
     downloadAttachment() {
       const url = ENV.host + this.get("attachment.downloadUrl");
       this.set("isDownloadingAttachment", true);
-      const that = this;
       this.get("ajax").request(url)
-        .then(function(result) {
-          window.open(result.data.url);
-          if(!that.isDestroyed) {
-            that.set("isDownloadingAttachment", false);
-          }
-        }).catch(function(error) {
-          if(!that.isDestroyed) {
-            that.set("isDownloadingAttachment", false);
-            that.get("notify").error(error.payload.message);
-          }
-        });
+      .then((result) => {
+        window.open(result.data.url);
+        if(!this.isDestroyed) {
+          this.set("isDownloadingAttachment", false);
+        }
+      }, (error) => {
+        if(!this.isDestroyed) {
+          this.set("isDownloadingAttachment", false);
+          this.get("notify").error(error.payload.message);
+        }
+      });
     }
   }
 });

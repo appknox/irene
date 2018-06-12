@@ -14,20 +14,16 @@ const InvoiceOverviewComponent = Ember.Component.extend({
     getInvoiceLink() {
       const invoiceId = this.get("invoice.invoiceId");
       const url = [ENV.endpoints.invoices, invoiceId, ENV.endpoints.signedInvoiceUrl].join('/');
-      const that = this;
       this.set("isDownloadingInvoice", true);
       this.get("ajax").request(url)
-      .then(function(result){
-        if(!that.isDestroyed) {
+      .then((result) => {
+        if(!this.isDestroyed) {
           window.location = result.url;
-          that.set("isDownloadingInvoice", false);
+          this.set("isDownloadingInvoice", false);
         }
-      })
-      .catch(function(error) {
-        if(!that.isDestroyed) {
-          that.set("isDownloadingInvoice", false);
-          that.get("notify").error(error.payload.error);
-        }
+      }, (error) => {
+        this.set("isSavingStatus", false);
+        this.get("notify").error(error.payload.message);
       });
     }
   }

@@ -31,24 +31,22 @@ const CreateTeamComponent = Ember.Component.extend({
         if (isEmpty(inputValue)) { return this.get("notify").error(tEnterTeamName); }
       }
       triggerAnalytics('feature', ENV.csb.createTeam);
-      const that = this;
       const data =
         {name: teamName};
       this.set("isCreatingTeam", true);
       this.get("ajax").post(ENV.endpoints.teams, {data})
-      .then(function(data){
-        if(!that.isDestroyed) {
-          that.set("isCreatingTeam", false);
-          that.store.pushPayload(data);
-          that.set("teamName", "");
-          that.set("showTeamModal", false);
+      .then((data) => {
+        if(!this.isDestroyed) {
+          this.set("isCreatingTeam", false);
+          this.store.pushPayload(data);
+          this.set("teamName", "");
+          this.set("showTeamModal", false);
         }
-        that.get("notify").success(tTeamCreated);
-      })
-      .catch(function(error) {
-        if(!that.isDestroyed) {
-          that.set("isCreatingTeam", false);
-          that.get("notify").error(error.payload.error);
+        this.get("notify").success(tTeamCreated);
+      }, (error) => {
+        if(!this.isDestroyed) {
+          this.set("isCreatingTeam", false);
+          this.get("notify").error(error.payload.error);
         }
       });
     }

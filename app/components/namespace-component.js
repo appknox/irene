@@ -28,21 +28,19 @@ const NamespaceComponentComponent = Ember.Component.extend({
       const data =
         {namespace};
       triggerAnalytics('feature',ENV.csb.namespaceAdded);
-      const that = this;
       this.set("isAddingNamespace", true);
       this.get("ajax").post(ENV.endpoints.namespaceAdd, {data})
-      .then(function() {
-        that.get("notify").success(tRequestToAddNamespace);
-        if(!that.isDestroyed) {
-          that.set("isAddingNamespace", false);
-          that.set("namespace", "");
-          that.set("showNamespaceModal", false);
+      .then(() => {
+        this.get("notify").success(tRequestToAddNamespace);
+        if(!this.isDestroyed) {
+          this.set("isAddingNamespace", false);
+          this.set("namespace", "");
+          this.set("showNamespaceModal", false);
         }
-      })
-      .catch(function(error) {
-        if(!that.isDestroyed) {
-          that.set("isAddingNamespace", false);
-          that.get("notify").error(error.payload.message);
+      }, (error) => {
+        if(!this.isDestroyed) {
+          this.set("isAddingNamespace", false);
+          this.get("notify").error(error.payload.message);
         }
       });
     },

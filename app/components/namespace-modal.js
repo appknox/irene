@@ -27,16 +27,14 @@ const NamespaceModalComponent = Ember.Component.extend({
       }
       const data =
         {namespace};
-      const that = this;
       this.get("ajax").post(ENV.endpoints.namespaceAdd, {data})
-      .then(function() {
-        that.get("notify").success(tRequestToAddNamespace);
-        if(!that.isDestroyed) {
-          that.set("showNamespaceModal", false);
+      .then(() => {
+        this.get("notify").success(tRequestToAddNamespace);
+        if(!this.isDestroyed) {
+          this.set("showNamespaceModal", false);
         }
-      })
-      .catch(function(error) {
-        that.get("notify").error(error.payload.message);
+      }, (error) => {
+        this.get("notify").error(error.payload.message);
       });
     }
   }

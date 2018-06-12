@@ -17,31 +17,29 @@ const JiraProjectComponent = Ember.Component.extend({
 
   confirmCallback() {
     const tProjectRemoved = this.get("tProjectRemoved");
-    const that = this;
     const projectId = this.get("project.id");
     const deleteJIRA = [ENV.endpoints.deleteJIRAProject, projectId].join('/');
     this.get("ajax").delete(deleteJIRA)
-    .then(function() {
-      that.get("notify").success(tProjectRemoved);
-      if(!that.isDestroyed) {
-        that.send("closeDeleteJIRAConfirmBox");
-        that.set("project.jiraProject", "");
+    .then(() => {
+      this.get("notify").success(tProjectRemoved);
+      if(!this.isDestroyed) {
+        this.send("closeDeleteJIRAConfirmBox");
+        this.set("project.jiraProject", "");
       }
-    })
-    .catch(function(error) {
-      if(!that.isDestroyed) {
-        that.get("notify").error(error.payload.error);
+    }, (error) => {
+      if(!this.isDestroyed) {
+        this.get("notify").error(error.payload.error);
       }
     });
   },
 
   fetchJiraProjects: (function() {
     const tFetchJIRAProjectFailed = this.get("tFetchJIRAProjectFailed");
-    const that = this;
     this.get("ajax").request(ENV.endpoints.jiraProjects)
-    .then(data => that.set("jiraProjects", data.projects))
-    .catch(function() {
-      that.get("notify").error(tFetchJIRAProjectFailed);
+    .then((data) => {
+      this.set("jiraProjects", data.projects);
+    }, () => {
+      this.get("notify").error(tFetchJIRAProjectFailed);
     });
   }).on("init"),
 
@@ -53,15 +51,15 @@ const JiraProjectComponent = Ember.Component.extend({
       const tRepoNotIntegrated = this.get("tRepoNotIntegrated");
       const projectId = this.get("project.id");
       const url = [ENV.endpoints.setJira, projectId].join('/');
-      const that = this;
+
       const data =
         {project};
       this.get("ajax").post(url, {data})
-      .then(function() {
-        that.get("notify").success(tIntegratedJIRA);
-        that.set("project.jiraProject", project);})
-      .catch(function() {
-        that.get("notify").error(tRepoNotIntegrated);
+      .then(() => {
+        this.get("notify").success(tIntegratedJIRA);
+        this.set("project.jiraProject", project);
+      }, () => {
+        this.get("notify").error(tRepoNotIntegrated);
       });
     },
 

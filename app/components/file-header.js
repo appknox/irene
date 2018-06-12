@@ -106,13 +106,12 @@ const FileHeaderComponent = Ember.Component.extend({
     const tPasswordCopied = this.get("tPasswordCopied");
     const tPleaseTryAgain = this.get("tPleaseTryAgain");
     const clipboard = new Clipboard('.copy-password');
-    this.set("clipboard", clipboard);
-    const that = this;
-    clipboard.on('success', function(e) {
-      that.get("notify").info(tPasswordCopied);
+    this.set("clipboard", clipboard)
+    clipboard.on('success', (e) => {
+      this.get("notify").info(tPasswordCopied);
       e.clearSelection();
     });
-    clipboard.on('error', () => that.get("notify").error(tPleaseTryAgain));
+    clipboard.on('error', () => this.get("notify").error(tPleaseTryAgain));
   },
 
   willDestroyElement() {
@@ -128,12 +127,11 @@ const FileHeaderComponent = Ember.Component.extend({
 
   allUserRoles: (function() {
     const userRoles = this.get("manualscan.userRoles");
-    let roleId = this.get("roleId");
-    const that = this;
-    userRoles.forEach(function(role) {
+    let roleId = this.get("roleId")
+    userRoles.forEach((role) => {
       roleId = roleId + 1;
       role.id = roleId;
-      return that.set("roleId", roleId);
+      return this.set("roleId", roleId);
     });
     return userRoles;
   }).property("manualscan.userRoles"),
@@ -165,7 +163,7 @@ const FileHeaderComponent = Ember.Component.extend({
     var owasps = [];
     const risks = [ENUMS.RISK.CRITICAL, ENUMS.RISK.HIGH, ENUMS.RISK.MEDIUM, ENUMS.RISK.LOW];
     for(let analysis of analyses) {
-      analysis.get("owasp").forEach(function(owasp) {
+      analysis.get("owasp").forEach((owasp) => {
         if(risks.includes(analysis.get("risk"))) {
           owasps.push(owasp.id);
         }
@@ -181,7 +179,7 @@ const FileHeaderComponent = Ember.Component.extend({
     owaspA9Count = 0, owaspA10Count = 0, owaspM1Count = 0, owaspM2Count = 0,
     owaspM3Count = 0, owaspM4Count = 0, owaspM5Count = 0, owaspM6Count = 0,
     owaspM7Count = 0, owaspM8Count = 0, owaspM9Count = 0, owaspM10Count = 0;
-    owasps.forEach(function(owasp) {
+    owasps.forEach((owasp) => {
       switch (owasp) {
         case "A1_2013":
           return owaspA1Count = owaspA1Count + 1;
@@ -286,20 +284,18 @@ const FileHeaderComponent = Ember.Component.extend({
     getPDFReportLink() {
       triggerAnalytics('feature', ENV.csb.reportDownload);
       const tReportIsGettingGenerated = this.get("tReportIsGettingGenerated");
-      const that = this;
       const fileId = this.get("file.id");
       const url = [ENV.endpoints.signedPdfUrl, fileId].join('/');
       this.set("isDownloadingReport", true);
       this.get("ajax").request(url)
-      .then(function(result){
-        if(!that.isDestroyed) {
+      .then(() => {
+        if(!this.isDestroyed) {
           window.location = result.url;
-          that.set("isDownloadingReport", false);
+          this.set("isDownloadingReport", false);
         }
-      })
-      .catch(function() {
-        that.set("isDownloadingReport", false);
-        that.get("notify").error(tReportIsGettingGenerated);
+      }, (error) => {
+        this.set("isDownloadingReport", false);
+        this.get("notify").error(tReportIsGettingGenerated);
       });
     },
 
@@ -457,26 +453,24 @@ const FileHeaderComponent = Ember.Component.extend({
         additional_comments: additionalComments
       };
 
-      const that = this;
       const tManualRequested = this.get("tManualRequested");
       this.set("isRequestingManual", true);
       const fileId = this.get("file.id");
       const url = [ENV.endpoints.manualscans, fileId].join('/');
       this.get("ajax").put(url, {data: JSON.stringify(data), contentType: 'application/json'})
-      .then(function() {
+      .then(() => {
         triggerAnalytics('feature', ENV.csb.requestManualScan);
-        that.get("notify").info(tManualRequested);
-        if(!that.isDestroyed) {
-          that.set("isRequestingManual", false);
-          that.set("file.ifManualNotRequested", false);
-          that.set("showManualScanModal", false);
-          that.set("showManualScanFormModal", false);
+        this.get("notify").info(tManualRequested);
+        if(!this.isDestroyed) {
+          this.set("isRequestingManual", false);
+          this.set("file.ifManualNotRequested", false);
+          this.set("showManualScanModal", false);
+          this.set("showManualScanFormModal", false);
         }
+      }, (error) => {
+        this.set("isRequestingManual", false);
+        this.get("notify").error(error.payload.error);
       })
-      .catch(function(error) {
-        that.set("isRequestingManual", false);
-        that.get("notify").error(error.payload.error);
-      });
     },
 
     closeSubscribeModal() {
@@ -509,22 +503,20 @@ const FileHeaderComponent = Ember.Component.extend({
 
     rescanApp() {
       const tRescanInitiated = this.get("tRescanInitiated");
-      const that = this;
       const fileId = this.get("file.id");
       const data =
         {file_id: fileId};
       this.set("isStartingRescan", true);
       this.get("ajax").post(ENV.endpoints.rescan, {data})
-      .then(function() {
-        that.get("notify").info(tRescanInitiated);
-        if(!that.isDestroyed) {
-          that.set("isStartingRescan", false);
-          that.set("showRescanModal", false);
+      .then(() => {
+        this.get("notify").info(tRescanInitiated);
+        if(!this.isDestroyed) {
+          this.set("isStartingRescan", false);
+          this.set("showRescanModal", false);
         }
-      })
-      .catch(function(error) {
-        that.set("isStartingRescan", false);
-        that.get("notify").error(error.payload.error);
+      }, (error) => {
+        this.set("isStartingRescan", false);
+        this.get("notify").error(error.payload.error);
       });
     }
   }

@@ -16,21 +16,19 @@ const GithubAccountComponent = Ember.Component.extend({
 
   confirmCallback() {
     const tGithubWillBeRevoked = this.get("tGithubWillBeRevoked");
-    const that = this;
     this.set("isRevokingGithub", true);
     this.get("ajax").post(ENV.endpoints.revokeGitHub)
-    .then(function() {
-      that.get("notify").success(tGithubWillBeRevoked);
-      that.send("closeRevokeGithubConfirmBox");
-      if(!that.isDestroyed) {
-        that.set("user.hasGithubToken", false);
-        that.set("isRevokingGithub", false);
+    .then(() => {
+      this.get("notify").success(tGithubWillBeRevoked);
+      this.send("closeRevokeGithubConfirmBox");
+      if(!this.isDestroyed) {
+        this.set("user.hasGithubToken", false);
+        this.set("isRevokingGithub", false);
       }
-    })
-    .catch(function(error) {
-      if(!that.isDestroyed) {
-        that.set("isRevokingGithub", false);
-        that.get("notify").error(error.payload.error);
+    }, (error) => {
+      if(!this.isDestroyed) {
+        this.set("isRevokingGithub", false);
+        this.get("notify").error(error.payload.error);
       }
     });
   },
