@@ -288,13 +288,13 @@ const FileHeaderComponent = Ember.Component.extend({
       const url = [ENV.endpoints.signedPdfUrl, fileId].join('/');
       this.set("isDownloadingReport", true);
       this.get("ajax").request(url)
-      .then(() => {
+      .then((result) => {
         if(!this.isDestroyed) {
           window.location = result.url;
           this.set("isDownloadingReport", false);
           setTimeout(() => {
             this.set("showCopyPasswordModal", true);
-          }, 1000);
+          }, 3000);
         }
       }, (error) => {
         this.set("isDownloadingReport", false);
