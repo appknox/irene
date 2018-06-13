@@ -6,7 +6,7 @@ export function riskText(params) {
   const risk = params[0];
 
   switch (risk) {
-    case ENUMS.RISK.UNKNOWN: return "scanning";
+    case ENUMS.RISK.UNKNOWN: return "untested";
     case ENUMS.RISK.NONE: return "none";
     case ENUMS.RISK.LOW: return "low";
     case ENUMS.RISK.MEDIUM: return "medium";
