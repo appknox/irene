@@ -37,7 +37,9 @@ const JiraProjectComponent = Ember.Component.extend({
     const tFetchJIRAProjectFailed = this.get("tFetchJIRAProjectFailed");
     this.get("ajax").request(ENV.endpoints.jiraProjects)
     .then((data) => {
-      this.set("jiraProjects", data.projects);
+      if(!this.isDestroyed) {
+        this.set("jiraProjects", data.projects);
+      }
     }, () => {
       this.get("notify").error(tFetchJIRAProjectFailed);
     });
@@ -57,7 +59,9 @@ const JiraProjectComponent = Ember.Component.extend({
       this.get("ajax").post(url, {data})
       .then(() => {
         this.get("notify").success(tIntegratedJIRA);
-        this.set("project.jiraProject", project);
+        if(!this.isDestroyed) {
+          this.set("project.jiraProject", project);
+        }
       }, () => {
         this.get("notify").error(tRepoNotIntegrated);
       });

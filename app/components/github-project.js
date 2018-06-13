@@ -41,15 +41,15 @@ const GithubProjectComponent = Ember.Component.extend({
   fetchGithubRepos: (function() {
     const tFetchGitHubRepoFailed = this.get("tFetchGitHubRepoFailed");
     this.get("ajax").request(ENV.endpoints.githubRepos)
-    .then(() => {
+    .then((data) => {
       if(!this.isDestroyed) {
         this.set("githubRepos", data.repos);
       }
-    }, (error) => {
+    }, () => {
       if(!this.isDestroyed) {
         this.get("notify").error(tFetchGitHubRepoFailed);
       }
-    })
+    });
   }).on("init"),
 
   actions: {
@@ -72,7 +72,7 @@ const GithubProjectComponent = Ember.Component.extend({
       }, (error) => {
         this.set("isChangingRepo", false);
         this.get("notify").error(error.payload.error);
-      })
+      });
     },
 
     openDeleteGHConfirmBox() {
