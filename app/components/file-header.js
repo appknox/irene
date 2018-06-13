@@ -292,6 +292,9 @@ const FileHeaderComponent = Ember.Component.extend({
         if(!this.isDestroyed) {
           window.location = result.url;
           this.set("isDownloadingReport", false);
+          setTimeout(() => {
+            this.set("showCopyPasswordModal", true);
+          }, 1000);
         }
       }, (error) => {
         this.set("isDownloadingReport", false);

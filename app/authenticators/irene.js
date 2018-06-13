@@ -32,7 +32,7 @@ const IreneAuthenticator = Base.extend({
 
   authenticate(identification, password, otp, errorCallback, loginStatus) {
     const ajax = this.get("ajax");
-    return new Ember.RSVP.Promise(function(resolve, reject) {
+    return new Ember.RSVP.Promise((resolve, reject) => {
       const data = {
         username: identification,
         password,
@@ -61,7 +61,7 @@ const IreneAuthenticator = Base.extend({
 
   restore(data) {
     const ajax = this.get("ajax");
-    return new Ember.RSVP.Promise(function(resolve, reject) {
+    return new Ember.RSVP.Promise((resolve, reject) => {
       const url = ENV['ember-simple-auth']['checkEndPoint'];
       ajax.post(url, {data})
       .then((data) => {
@@ -80,7 +80,7 @@ const IreneAuthenticator = Base.extend({
   invalidate() {
     const ajax = this.get("ajax");
     localStorage.clear();
-    return new Ember.RSVP.Promise(function(resolve, reject) {
+    return new Ember.RSVP.Promise((resolve, reject) => {
       const url = ENV['ember-simple-auth']['logoutEndPoint'];
       ajax.post(url)
       .then((data) => {

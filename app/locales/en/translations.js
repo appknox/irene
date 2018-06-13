@@ -459,6 +459,9 @@ export default {
     "rescan": {
       "title": "Re-scan Static Scan",
       "description": "Do you want to do the static scan again?"
+    },
+    "copyPassword": {
+      "title": "Copy PDF Report Password"
     }
   },
   "templates": {
