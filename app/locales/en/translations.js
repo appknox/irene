@@ -219,7 +219,7 @@ export default {
   "trialWillExpireOn": "Your trial will expire on",
   "pasteYourUrl": "Paste Android / Windows store URL",
   "pay": "Pay",
-  "pdfReport": "PDF Report",
+  "pdfReport": "Download Report",
   "pending": "Pending",
   "pendingInvitations": "Pending Invitations",
   "personalAccessTokens": "Personal access tokens",

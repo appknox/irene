@@ -219,7 +219,7 @@ export default {
   "trialWillExpireOn": "トライアル期限： ",
   "pasteYourUrl": "Android / WindowsのストアURLを貼り付けてください",
   "pay": "支払い請求周期",
-  "pdfReport": "PDFレポート",
+  "pdfReport": "Download Report",
   "pending": "ペンディング中",
   "pendingInvitations": "ペンディング中の招待",
   "personalAccessTokens": "パーソナルアクセストークン",
