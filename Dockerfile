@@ -1,10 +1,11 @@
-FROM quay.io/appknox/ak-ubuntu:v0.0.1
+FROM quay.io/appknox/ak-ubuntu:2.0.0
 
 LABEL maintainer "Appknox <engineering@appknox.com>"
 
 RUN adduser --disabled-password --gecos '' irene
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs nginx
+RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
+  apt-get install -y nodejs nginx
 
 ENTRYPOINT ["./entrypoint.sh"]
 
