@@ -124,6 +124,7 @@ export default {
   "githubIntegration": "GitHub連携",
   "githubWillBeRevoked": "GitHub認証は直ちに取り消されます",
   "gotoHome": "ホームに戻る",
+  "gotoSettings": "is not integrated, you can go to settings &amp; integrate by",
   "greet": "サービスのセキュリティファナティック",
   "halfYearly": "６か月",
   "halt": "診断を停止して、サポートに連絡してください",

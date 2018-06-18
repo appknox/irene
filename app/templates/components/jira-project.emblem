@@ -11,15 +11,22 @@ if project.jiraProject
         | &nbsp; #{t "remove"}
 
 else
-  h6
-    = t "otherTemplates.selectJIRAAccount"
-  .columns
-    .column.is-one-third
-      select.select{action 'selectProject' on='change'} class="mp-jira-select-project"
-        option value=0
-          = t "noPreference"
-        each jiraProjects as |project|
-          option value=project
-            = project
+  if jiraProjects
+    h6
+      = t "otherTemplates.selectJIRAAccount"
+    .columns
+      .column.is-one-third
+        select.select{action 'selectProject' on='change'} class="mp-jira-select-project"
+          option value=0
+            = t "noPreference"
+          each jiraProjects as |project|
+            option value=project
+              = project
+  else
+    h6
+      | JIRA
+      | &nbsp;#{t "gotoSettings"}
+      = link-to 'authenticated.settings' class="is-primary" tagName="a"
+        | &nbsp;#{t "clickingHere"}
 
 = confirm-box isActive=showDeleteJIRAConfirmBox title=(t 'confirmBox.removeJIRA') delegate=this

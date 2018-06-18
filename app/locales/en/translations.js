@@ -124,6 +124,7 @@ export default {
   "githubIntegration": "GitHub Integration",
   "githubWillBeRevoked": "Your GitHub authorization will be revoked in a moment",
   "gotoHome": "Go Back To Home",
+  "gotoSettings": "is not integrated, you can go to settings &amp; integrate by",
   "greet": "Security fanatics at your service",
   "halfYearly": "Half Yearly",
   "halt": "Halt the scan, contact us",
