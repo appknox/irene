@@ -6,7 +6,7 @@ import { translationMacro as t } from 'ember-i18n';
 const ProjectPreferencesComponent = Ember.Component.extend({
 
   project: null,
-  selectVersion: 0,
+  selectVersion: "0",
   isSavingPreference: false,
   i18n: Ember.inject.service(),
   ajax: Ember.inject.service(),
