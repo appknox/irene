@@ -196,6 +196,7 @@ export default {
   "noProject": "プロジェクトがありません",
   "noProjectUploaded": "プロジェクトがアップロードされていません",
   "noScansFound": "診断が見つかりません",
+  "note": "Note",
   "noTeams": "No Teams",
   "noTeamsMessage": "You haven't created any team except <b class='bold'>Default Team</b> which is added to the project by default",
   "notifications": "通知",
@@ -417,7 +418,8 @@ export default {
     },
     "devicePreference": {
       "title": "デバイスの設定変更",
-      "selectDevice": "デバイスの選択"
+      "selectDevice": "デバイスの選択",
+      "note": "changing the device preference won't affect the already running scan."
     },
     "runAPIScan": {
       "title": "API診断の実行",

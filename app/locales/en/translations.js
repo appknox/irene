@@ -196,6 +196,7 @@ export default {
   "noProject": "no project",
   "noProjectUploaded": "You haven't uploaded any project yet",
   "noScansFound": "no scans found",
+  "note": "Note",
   "noTeams": "No Teams",
   "noTeamsMessage": "You haven't created any team except <b class='bold'>Default Team</b> which is added to the project by default",
   "notifications": "Notifications",
@@ -417,7 +418,8 @@ export default {
     },
     "devicePreference": {
       "title": "Change Device Preference",
-      "selectDevice": "Select the device"
+      "selectDevice": "Select the device",
+      "note": "changing the device preference won't affect the already running scan."
     },
     "runAPIScan": {
       "title": "Run API Scan",
