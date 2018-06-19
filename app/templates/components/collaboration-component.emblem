@@ -49,9 +49,9 @@ h6
                 .not-found
                   h5
                     = fa-icon "exclamation-triangle"
-                    | No Teams
+                    = t "noTeams"
                   h6
-                    | You haven't created any team except <b class="bold">Default Team</b> which is added to the project by default      
+                    = t "noTeamsMessage"
         .card-button.margin-top20.font-size12
           h6
             = t "youCanCreateTeam"

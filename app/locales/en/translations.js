@@ -196,6 +196,8 @@ export default {
   "noProject": "no project",
   "noProjectUploaded": "You haven't uploaded any project yet",
   "noScansFound": "no scans found",
+  "noTeams": "No Teams",
+  "noTeamsMessage": "You haven't created any team except <b class='bold'>Default Team</b> which is added to the project by default",
   "notifications": "Notifications",
   "ok": "Ok",
   "or": "or",

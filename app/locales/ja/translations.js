@@ -196,6 +196,8 @@ export default {
   "noProject": "プロジェクトがありません",
   "noProjectUploaded": "プロジェクトがアップロードされていません",
   "noScansFound": "診断が見つかりません",
+  "noTeams": "No Teams",
+  "noTeamsMessage": "You haven't created any team except <b class='bold'>Default Team</b> which is added to the project by default",
   "notifications": "通知",
   "ok": "OK",
   "or": "または",
