@@ -19,7 +19,11 @@ const CollaborationComponentComponent = Ember.Component.extend({
   }).property("project.id", "realtime.CollaborationCounter"),
 
   teams: (function() {
-    return this.get("store").findAll("team");
+    return this.get("store").findAll("team")
+    .then((teams) => {
+      const teamsData = teams.filter(team => "Default" !== team.data.name);
+      this.set("teams", teamsData);
+    });
   }).property(),
 
   actions: {
