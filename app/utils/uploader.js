@@ -21,7 +21,7 @@ const Uploader = EmberUploader.Uploader.extend({
     const tErrorWhileFetching = this.get("tErrorWhileFetching");
     const tErrorWhileUploading = this.get("tErrorWhileUploading");
     const tFileUploadedSuccessfully = this.get("tFileUploadedSuccessfully");
-
+    const that = this;
     const signSuccess = (json) => {
       const settings = {
         dataType: "text",
@@ -32,8 +32,8 @@ const Uploader = EmberUploader.Uploader.extend({
         },
         xhr() {
           const xhr = Ember.$.ajaxSettings.xhr();
-          xhr.upload.onprogress = e => this.didProgress(e);
-          this.one('isAborting', () => xhr.abort());
+          xhr.upload.onprogress = e => that.didProgress(e);
+          that.one('isAborting', () => xhr.abort());
           return xhr;
         },
         data: file
