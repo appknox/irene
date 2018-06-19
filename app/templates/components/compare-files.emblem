@@ -9,10 +9,10 @@
 .columns.flex-center.compare-container
   .column.is-half
       = link-to "authenticated.file" file1.id
-        = file-overview file=file1 isReverse=true
+        = file-overview file=file1 isReverse=true profileId=file1.profile.id
   .column.is-half
       = link-to "authenticated.file" file2.id
-        = file-overview file=file2
+        = file-overview file=file2 profileId=file2.profile.id
 
 if isSummary
   table.compare-table
