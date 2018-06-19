@@ -44,7 +44,7 @@ table.device-table
       .columns
         .column.is-one-third
           select.input.mp-version-preference{action 'selectVersion' on='change'} id="project-version-preference"
-            option value=0
+            option value="0"
               = t "noPreference"
             each uniqueDevices as |device|
               option value=device.version
