@@ -22,12 +22,12 @@ const SubscriptionComponentComponent = Ember.Component.extend({
     this.set("isCancellingSubscription", true);
     this.get("ajax").delete(url)
     .then(() => {
+      this.get("notify").success(tSubscriptionCancelled);
       if(!this.isDestroyed) {
         this.set("subscription.isCancelled", true);
         this.set("isCancellingSubscription", false);
-      }
-      this.get("notify").success(tSubscriptionCancelled);
-      this.send("closeCancelSubscriptionConfirmBox");
+        this.send("closeCancelSubscriptionConfirmBox");
+      }  
     }, (error) => {
       if(!this.isDestroyed) {
         this.set("isCancellingSubscription", false);

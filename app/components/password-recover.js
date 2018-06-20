@@ -23,9 +23,9 @@ const PasswordRecoverComponent = Ember.Component.extend({
         {identification};
       this.set("isSendingRecoveryEmail", true);
       this.get("ajax").post(ENV.endpoints.recover, {data})
-      .then((data) => {
-        this.get("notify").success(data.message);
+      .then((data) => {  
         if(!this.isDestroyed) {
+         this.get("notify").success(data.message);
          this.set("mailSent", true);
          this.set("isSendingRecoveryEmail", false);
         }

@@ -49,33 +49,13 @@ test('it exists', function(assert) {
           }
         }
       ];
-    },
-    findAll: function() {
-      return [
-        {
-          id:1,
-          type: "team",
-          attributes: {
-            name: "test"
-          }
-        }
-      ];
     }
   };
   component.set('store', store);
-  this.render();
   Ember.run(function() {
     assert.deepEqual(component.get("collaborations"), [{
         id:1,
         type: "collaboration",
-        attributes: {
-          name: "test"
-        }
-      }
-    ]);
-    assert.deepEqual(component.get("teams"), [{
-        id:1,
-        type: "team",
         attributes: {
           name: "test"
         }
@@ -88,6 +68,5 @@ test('it exists', function(assert) {
 
     component.set("selectedTeam", "test");
     component.send("addCollaboration");
-    component.send("teamChanged");
   });
 });

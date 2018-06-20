@@ -26,12 +26,12 @@ const JiraAccountComponent = Ember.Component.extend({
     this.set("isRevokingJIRA", true);
     this.get("ajax").post(ENV.endpoints.revokeJira)
     .then(() => {
+      this.get("notify").success(tJiraWillBeRevoked);
       if(!this.isDestroyed) {
         this.set("isRevokingJIRA", false);
         this.set("user.hasJiraToken", false);
+        this.send("closeRevokeJIRAConfirmBox");
       }
-      this.get("notify").success(tJiraWillBeRevoked);
-      this.send("closeRevokeJIRAConfirmBox");
     }, (error) => {
       if(!this.isDestroyed) {
         this.set("isRevokingJIRA", false);

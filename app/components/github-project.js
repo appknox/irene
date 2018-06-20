@@ -24,12 +24,12 @@ const GithubProjectComponent = Ember.Component.extend({
     this.set("isDeletingGithub", true);
     this.get("ajax").delete(deleteGithub)
     .then(() => {
+      this.get("notify").success(tProjectRemoved);
       if(!this.isDestroyed) {
         this.set("isDeletingGithub", false);
         this.set("project.githubRepo", "");
-      }
-      this.get("notify").success(tProjectRemoved);
-      this.send("closeDeleteGHConfirmBox");
+        this.send("closeDeleteGHConfirmBox");
+      }    
     }, (error) => {
       if(!this.isDestroyed) {
         this.set("isDeletingGithub", false);

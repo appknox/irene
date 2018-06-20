@@ -49,9 +49,9 @@ const CollaborationComponentComponent = Ember.Component.extend({
       .then(() => {
         this.get("notify").success(tCollaborationAdded);
         if(!this.isDestroyed) {
+          this.send("closeModal");
           this.set("isAddingCollaboration", false);
         }
-        this.send("closeModal");
       }, (error) => {
         if(!this.isDestroyed) {
           this.set("isAddingCollaboration", false);

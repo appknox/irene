@@ -20,8 +20,8 @@ const GithubAccountComponent = Ember.Component.extend({
     this.get("ajax").post(ENV.endpoints.revokeGitHub)
     .then(() => {
       this.get("notify").success(tGithubWillBeRevoked);
-      this.send("closeRevokeGithubConfirmBox");
       if(!this.isDestroyed) {
+        this.send("closeRevokeGithubConfirmBox");
         this.set("user.hasGithubToken", false);
         this.set("isRevokingGithub", false);
       }

@@ -79,12 +79,12 @@ const ApiFilterComponent = Ember.Component.extend({
       .then(() => {
         this.get("notify").success(tUrlUpdated);
         if(!this.isDestroyed) {
+          this.send("closeRemoveURLConfirmBox");
           this.set("apiScanOptions.apiUrlFilters", updatedURLFilters);
           this.set("isSavingFilter", false);
           this.set("isDeletingURLFilter", false);
           this.set("newUrlFilter", "");
         }
-        this.send("closeRemoveURLConfirmBox");
       }, (error) => {
         if(!this.isDestroyed) {
           this.set("isSavingFilter", false);
