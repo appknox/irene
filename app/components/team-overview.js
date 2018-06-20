@@ -25,15 +25,14 @@ const TeamOverviewComponent = Ember.Component.extend({
       return this.get("notify").error(tEnterRightTeamName);
     }
     this.set("isDeletingTeam", true);
-    const that = this;
     team.destroyRecord()
-    .then(function(){
-      that.set("isDeletingTeam", false);
-      that.get("notify").success(`${tTeam} - ${deletedTeam} ${tTeamDeleted} `);})
-    .catch(function(error) {
-      that.set("isDeletingTeam", false);
+    .then(() => {
+      this.set("isDeletingTeam", false);
+      this.get("notify").success(`${tTeam} - ${deletedTeam} ${tTeamDeleted} `);
+    }, (error) => {
+      this.set("isDeletingTeam", false);
       for (error of error.errors) {
-        that.get("notify").error(error.title || undefined);
+        this.get("notify").error(error.title || undefined);
       }
     });
   },

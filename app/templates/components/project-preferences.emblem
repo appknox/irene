@@ -44,7 +44,7 @@ table.device-table
       .columns
         .column.is-one-third
           select.input.mp-version-preference{action 'selectVersion' on='change'} id="project-version-preference"
-            option value=0
+            option value="0"
               = t "noPreference"
             each uniqueDevices as |device|
               option value=device.version
@@ -61,5 +61,5 @@ table.device-table
       small
         = fa-icon "lightbulb-o"
         span.margin-left5
-          | Note:
-          | changing the device preference won't affect the already running scan.
+          | #{t "note"}:
+          | &nbsp;#{t "modalCard.devicePreference.note"}

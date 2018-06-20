@@ -116,9 +116,11 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
         if (data.type === "files") {
           const fileId = data.id;
           that.get("notify").info(tNewScanStarted, {
-            htmlContent: true,
-            autoClear: true,
-            onClick: () => {
+            autoClear: false,
+            cssClasses: 'notification-position',
+            onClick: (notification) => {
+              notification.set("autoClear", true);
+              notification.set("clearDuration", 0);
               return callback(Ember.getOwner(that).lookup('route:authenticated').transitionTo("authenticated.file", fileId));
             }
           });
@@ -132,7 +134,7 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
         if (notifyType === ENUMS.NOTIFY.SUCCESS) { that.get("notify").success(message, ENV.notifications); }
         if (notifyType === ENUMS.NOTIFY.WARNING) { that.get("notify").warning(message, ENV.notifications); }
         if (notifyType === ENUMS.NOTIFY.ALERT) { that.get("notify").alert(message, ENV.notifications); }
-        if (notifyType === ENUMS.NOTIFY.ERROR) { return that.get("notify").error(message, ENV.notifications); }
+        if (notifyType === ENUMS.NOTIFY.ERROR) { that.get("notify").error(message, ENV.notifications); }
       },
 
       logout() {

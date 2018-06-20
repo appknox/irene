@@ -69,29 +69,27 @@ const ApiFilterComponent = Ember.Component.extend({
       const tUrlUpdated = this.get("tUrlUpdated");
       const updatedURLFilters = this.get("updatedURLFilters");
       const profileId = this.get("profileId");
-      const apiScanOptions = [ENV.endpoints.profiles, profileId, ENV.endpoints.apiScanOptions].join('/');
+      const url = [ENV.endpoints.profiles, profileId, ENV.endpoints.apiScanOptions].join('/');
       const data = {
         api_url_filters: updatedURLFilters
       };
       triggerAnalytics('feature', ENV.csb.addAPIEndpoints);
       this.set("isSavingFilter", true);
-      const that = this;
-      this.get("ajax").put(apiScanOptions, {data})
-      .then(function(){
-        that.get("notify").success(tUrlUpdated);
-        if(!that.isDestroyed) {
-          that.set("apiScanOptions.apiUrlFilters", updatedURLFilters);
-          that.set("isSavingFilter", false);
-          that.set("isDeletingURLFilter", false);
-          that.set("newUrlFilter", "");
+      this.get("ajax").put(url, {data})
+      .then(() => {
+        this.get("notify").success(tUrlUpdated);
+        if(!this.isDestroyed) {
+          this.send("closeRemoveURLConfirmBox");
+          this.set("apiScanOptions.apiUrlFilters", updatedURLFilters);
+          this.set("isSavingFilter", false);
+          this.set("isDeletingURLFilter", false);
+          this.set("newUrlFilter", "");
         }
-        that.send("closeRemoveURLConfirmBox");
-      })
-      .catch(function(error) {
-        if(!that.isDestroyed) {
-          that.set("isSavingFilter", false);
-          that.set("isDeletingURLFilter", false);
-          that.get("notify").error(error.payload.message);
+      }, (error) => {
+        if(!this.isDestroyed) {
+          this.set("isSavingFilter", false);
+          this.set("isDeletingURLFilter", false);
+          this.get("notify").error(error.payload.message);
         }
       });
     },

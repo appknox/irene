@@ -10,22 +10,20 @@ const InvitationAcceptComponent = Ember.Component.extend({
 
   actions: {
     acceptInvite() {
-      const that = this;
       const data = {
         invitationUuid: this.get("invitation.id"),
         username: this.get("username"),
         password: this.get("password")
       };
       this.get("ajax").post(ENV.endpoints.signup, {data})
-      .then(function(){
+      .then(() => {
         // FIXME: This should be this.transitionTo`
-        that.get("notify").success("User got created sucessfully", ENV.notifications);
-        if(!that.isDestroyed) {
+        this.get("notify").success("User got created sucessfully", ENV.notifications);
+        if(!this.isDestroyed) {
           setTimeout(() => window.location.href = "/", 3 * 1000);
         }
-      })
-      .catch(function(error) {
-        that.get("notify").error(error.payload.message, ENV.notifications);
+      }, (error) => {
+        this.get("notify").error(error.payload.message, ENV.notifications);
       });
     }
   }

@@ -6,7 +6,7 @@ import { translationMacro as t } from 'ember-i18n';
 const ProjectPreferencesComponent = Ember.Component.extend({
 
   project: null,
-  selectVersion: 0,
+  selectVersion: "0",
   isSavingPreference: false,
   i18n: Ember.inject.service(),
   ajax: Ember.inject.service(),
@@ -65,26 +65,24 @@ const ProjectPreferencesComponent = Ember.Component.extend({
 
       const profileId = this.get("project.activeProfileId");
       const devicePreferences = [ENV.endpoints.profiles, profileId, ENV.endpoints.devicePreferences].join('/');
-      const that = this;
       const data = {
         device_type: selectedDeviceType,
         platform_version: selectVersion
       };
       this.set("isSavingPreference", true);
       this.get("ajax").put(devicePreferences, {data})
-      .then(function() {
-        that.get("notify").success(tDeviceSelected);
-        if(!that.isDestroyed) {
-          that.set("isSavingPreference", false);
-          that.set("projectPreferenceModal", false);
-          that.set("devicePreference.deviceType", selectedDeviceType);
-          that.set("devicePreference.platformVersion", selectVersion);
+      .then(() => {
+        this.get("notify").success(tDeviceSelected);
+        if(!this.isDestroyed) {
+          this.set("isSavingPreference", false);
+          this.set("projectPreferenceModal", false);
+          this.set("devicePreference.deviceType", selectedDeviceType);
+          this.set("devicePreference.platformVersion", selectVersion);
         }
-      })
-      .catch(function() {
-        if(!that.isDestroyed) {
-          that.set("isSavingPreference", false);
-          that.get("notify").error(tPleaseTryAgain);
+      }, () => {
+        if(!this.isDestroyed) {
+          this.set("isSavingPreference", false);
+          this.get("notify").error(tPleaseTryAgain);
         }
       });
     },

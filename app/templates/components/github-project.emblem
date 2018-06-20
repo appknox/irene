@@ -11,15 +11,22 @@ if project.githubRepo
         | &nbsp; #{t "remove"}
 
 else
-  h6
-    = t "otherTemplates.selectGHRepo"
-  .columns
-    .column.is-one-third
-      select.select.mp-github-select-project{action 'selectRepo' on='change'} disabled=isChangingRepo
-        option value=0
-          = t "noPreference"
-        each githubRepos as |repo|
-          option value=repo
-            = repo
+  if githubRepos
+    h6
+      = t "otherTemplates.selectGHRepo"
+    .columns
+      .column.is-one-third
+        select.select.mp-github-select-project{action 'selectRepo' on='change'} disabled=isChangingRepo
+          option value=0
+            = t "noPreference"
+          each githubRepos as |repo|
+            option value=repo
+              = repo
+  else
+    h6
+      | Github
+      | &nbsp;#{t "gotoSettings"}
+      = link-to 'authenticated.settings' class="is-primary" tagName="a"
+        | &nbsp;#{t "clickingHere"}
 
 = confirm-box isActive=showDeleteGHConfirmBox title=(t 'confirmBox.removeProject') delegate=this disabled=isDeletingGithub

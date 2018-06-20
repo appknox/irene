@@ -25,20 +25,19 @@ const AnalysisSettingsComponent = Ember.Component.extend({
       const data = {
         status: isChecked
       };
-      const that = this;
       this.set("isSavingStatus", true);
       this.get("ajax").put(url, {data})
-      .then(function(){
-        that.get("notify").success(tSavedPreferences);
-        if(!that.isDestroyed) {
-          that.set("isSavingStatus", false);
-          that.set("unknownAnalysisStatus.status", isChecked);
+      .then(() => {
+        this.get("notify").success(tSavedPreferences);
+        if(!this.isDestroyed) {
+          this.set("isSavingStatus", false);
+          this.set("unknownAnalysisStatus.status", isChecked);
         }
-      })
-      .catch(function(error) {
-        that.set("isSavingStatus", false);
-        that.get("notify").error(error.payload.message);
+      }, (error) => {
+        this.set("isSavingStatus", false);
+        this.get("notify").error(error.payload.message);
       });
+
     }
   }
 });

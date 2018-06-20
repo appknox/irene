@@ -13,6 +13,7 @@ moduleForComponent('file-header', 'Integration | Component | file header', {
     'component:fa-icon',
     'component:ember-chart',
     'component:dynamic-scan',
+    'component:copy-password',
     'helper:moment-from-now',
     'component:attach-tooltip',
     'component:modal-card',
@@ -192,7 +193,7 @@ test('it exists', function(assert) {
     component.send("requiredAppAction");
 
     assert.equal(component.get("isStartingRescan"), true, "Starting Scan");
-    
+
     component.set("file", {profile: {id:1}});
     assert.deepEqual(component.get("unknownAnalysisStatus"), [{
         id:1,

@@ -19,22 +19,20 @@ const PasswordRecoverComponent = Ember.Component.extend({
       if (!identification) {
         return this.get("notify").error("Please enter your Username/Email", ENV.notifications);
       }
-      const that = this;
       const data =
         {identification};
       this.set("isSendingRecoveryEmail", true);
       this.get("ajax").post(ENV.endpoints.recover, {data})
-      .then(function(data) {
-        that.get("notify").success(data.message);
-        if(!that.isDestroyed) {
-         that.set("mailSent", true);
-         that.set("isSendingRecoveryEmail", false);
+      .then((data) => {  
+        if(!this.isDestroyed) {
+         this.get("notify").success(data.message);
+         this.set("mailSent", true);
+         this.set("isSendingRecoveryEmail", false);
         }
-       })
-      .catch(function(error) {
-        if(!that.isDestroyed) {
-          that.set("isSendingRecoveryEmail", false);
-          that.get("notify").error(error.payload.message);
+      }, (error) => {
+        if(!this.isDestroyed) {
+          this.set("isSendingRecoveryEmail", false);
+          this.get("notify").error(error.payload.message);
         }
       });
     }

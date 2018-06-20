@@ -124,6 +124,7 @@ export default {
   "githubIntegration": "GitHub連携",
   "githubWillBeRevoked": "GitHub認証は直ちに取り消されます",
   "gotoHome": "ホームに戻る",
+  "gotoSettings": "is not integrated, you can go to settings &amp; integrate by",
   "greet": "サービスのセキュリティファナティック",
   "halfYearly": "６か月",
   "halt": "診断を停止して、サポートに連絡してください",
@@ -195,6 +196,9 @@ export default {
   "noProject": "プロジェクトがありません",
   "noProjectUploaded": "プロジェクトがアップロードされていません",
   "noScansFound": "診断が見つかりません",
+  "note": "Note",
+  "noTeams": "No Teams",
+  "noTeamsMessage": "You haven't created any team except <b class='bold'>Default Team</b> which is added to the project by default",
   "notifications": "通知",
   "ok": "OK",
   "or": "または",
@@ -219,7 +223,7 @@ export default {
   "trialWillExpireOn": "トライアル期限： ",
   "pasteYourUrl": "Android / WindowsのストアURLを貼り付けてください",
   "pay": "支払い請求周期",
-  "pdfReport": "PDFレポート",
+  "pdfReport": "Download Report",
   "pending": "ペンディング中",
   "pendingInvitations": "ペンディング中の招待",
   "personalAccessTokens": "パーソナルアクセストークン",
@@ -409,11 +413,13 @@ export default {
       "extraDescription": "API診断では複数の自動テストが行われ、<b class = 'bold'>サービスの妨害</ b>または<b class = 'bold'>データの損失</ b>が発生する可能性があります。 アプリが<b class = 'bold'>プロダクションAPIサーバ</ b>を使用するように設定されている場合や、<b class = 'bold'> SSLピン留め</ b>を採用している場合は[はい]を選択しないでください。",
       "runAPIScan": "API診断の実行",
       "dynamicScan": "動的診断を続行する",
-      "startApiScan": "API診断を開始しますか？"
+      "startApiScan": "API診断を開始しますか？",
+      "dynamicScanText": "Make sure you perform all the actions in the App, there are high chances that the scanner might mark the risk as passed"
     },
     "devicePreference": {
       "title": "デバイスの設定変更",
-      "selectDevice": "デバイスの選択"
+      "selectDevice": "デバイスの選択",
+      "note": "changing the device preference won't affect the already running scan."
     },
     "runAPIScan": {
       "title": "API診断の実行",
@@ -458,6 +464,9 @@ export default {
     "rescan": {
       "title": "Re-scan Static Scan",
       "description": "Do you want to do the static scan again?"
+    },
+    "copyPassword": {
+      "title": "Copy PDF Report Password"
     }
   },
   "templates": {

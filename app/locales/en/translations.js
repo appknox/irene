@@ -124,6 +124,7 @@ export default {
   "githubIntegration": "GitHub Integration",
   "githubWillBeRevoked": "Your GitHub authorization will be revoked in a moment",
   "gotoHome": "Go Back To Home",
+  "gotoSettings": "is not integrated, you can go to settings &amp; integrate by",
   "greet": "Security fanatics at your service",
   "halfYearly": "Half Yearly",
   "halt": "Halt the scan, contact us",
@@ -195,6 +196,9 @@ export default {
   "noProject": "no project",
   "noProjectUploaded": "You haven't uploaded any project yet",
   "noScansFound": "no scans found",
+  "note": "Note",
+  "noTeams": "No Teams",
+  "noTeamsMessage": "You haven't created any team except <b class='bold'>Default Team</b> which is added to the project by default",
   "notifications": "Notifications",
   "ok": "Ok",
   "or": "or",
@@ -219,7 +223,7 @@ export default {
   "trialWillExpireOn": "Your trial will expire on",
   "pasteYourUrl": "Paste Android / Windows store URL",
   "pay": "Pay",
-  "pdfReport": "PDF Report",
+  "pdfReport": "Download Report",
   "pending": "Pending",
   "pendingInvitations": "Pending Invitations",
   "personalAccessTokens": "Personal access tokens",
@@ -409,11 +413,13 @@ export default {
       "extraDescription": " API scan performs multiple automated tests that may result in <b class='bold'>denial of service</b> or <b class='bold'>loss of data</b>. Do not select YES if the app is configured to use a <b class='bold'>production API server</b> or if the app employs <b class='bold'>SSL pinning</b>.",
       "runAPIScan": "Run API Scan",
       "dynamicScan": "Continue with Dynamic Scan",
-      "startApiScan": "Start API Scan"
+      "startApiScan": "Start API Scan",
+      "dynamicScanText": "Make sure you perform all the actions in the App, there are high chances that the scanner might mark the risk as passed"
     },
     "devicePreference": {
       "title": "Change Device Preference",
-      "selectDevice": "Select the device"
+      "selectDevice": "Select the device",
+      "note": "changing the device preference won't affect the already running scan."
     },
     "runAPIScan": {
       "title": "Run API Scan",
@@ -458,6 +464,9 @@ export default {
     "rescan": {
       "title": "Re-scan Static Scan",
       "description": "Do you want to do the static scan again?"
+    },
+    "copyPassword": {
+      "title": "Copy PDF Report Password"
     }
   },
   "templates": {

@@ -67,7 +67,6 @@ const AuthMfaComponent = Ember.Component.extend({
       const tEnterOTP = this.get("tEnterOTP");
       const tMFAEnabled = this.get("tMFAEnabled");
       const enableMFAOTP = this.get("enableMFAOTP");
-      const that = this;
       for (let otp of [enableMFAOTP]) {
         if (!isValidOTP(otp)) { return this.get("notify").error(tEnterOTP); }
       }
@@ -75,18 +74,17 @@ const AuthMfaComponent = Ember.Component.extend({
         {otp: enableMFAOTP};
       this.set("isEnablingMFA", true);
       this.get("ajax").post(ENV.endpoints.enableMFA, {data})
-      .then(function(){
-        that.get("notify").success(tMFAEnabled);
-        if(!that.isDestroyed) {
-          that.set("enableMFAOTP", "");
-          that.set("showMFAEnableModal", false);
-          that.set("isEnablingMFA", false);
+      .then(() => {
+        this.get("notify").success(tMFAEnabled);
+        if(!this.isDestroyed) {
+          this.set("enableMFAOTP", "");
+          this.set("showMFAEnableModal", false);
+          this.set("isEnablingMFA", false);
         }
-      })
-      .catch(function(error) {
-        if(!that.isDestroyed) {
-          that.set("isEnablingMFA", false);
-          that.get("notify").error(error.payload.message);
+      }, (error) => {
+        if(!this.isDestroyed) {
+          this.set("isEnablingMFA", false);
+          this.get("notify").error(error.payload.message);
         }
       });
     },
@@ -95,7 +93,6 @@ const AuthMfaComponent = Ember.Component.extend({
       const tEnterOTP = this.get("tEnterOTP");
       const tMFADisabled = this.get("tMFADisabled");
       const disableMFAOTP = this.get("disableMFAOTP");
-      const that = this;
       for (let otp of [disableMFAOTP]) {
         if (!isValidOTP(otp)) { return this.get("notify").error(tEnterOTP); }
       }
@@ -103,18 +100,17 @@ const AuthMfaComponent = Ember.Component.extend({
         {otp: disableMFAOTP};
       this.set("isDisablingMFA", true);
       this.get("ajax").post(ENV.endpoints.disableMFA, {data})
-      .then(function(){
-        that.get("notify").success(tMFADisabled);
-        if(!that.isDestroyed) {
-          that.set("disableMFAOTP", "");
-          that.set("showMFADisableModal", false);
-          that.set("isDisablingMFA", false);
+      .then(() => {
+        this.get("notify").success(tMFADisabled);
+        if(!this.isDestroyed) {
+          this.set("disableMFAOTP", "");
+          this.set("showMFADisableModal", false);
+          this.set("isDisablingMFA", false);
         }
-      })
-      .catch(function(error) {
-        if(!that.isDestroyed) {
-          that.set("isDisablingMFA", false);
-          that.get("notify").error(error.payload.message);
+      }, (error) => {
+        if(!this.isDestroyed) {
+          this.set("isDisablingMFA", false);
+          this.get("notify").error(error.payload.message);
         }
       });
     }

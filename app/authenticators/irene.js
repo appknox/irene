@@ -32,8 +32,7 @@ const IreneAuthenticator = Base.extend({
 
   authenticate(identification, password, otp, errorCallback, loginStatus) {
     const ajax = this.get("ajax");
-    const that  = this;
-    return new Ember.RSVP.Promise(function(resolve, reject) {
+    return new Ember.RSVP.Promise((resolve, reject) => {
       const data = {
         username: identification,
         password,
@@ -41,19 +40,19 @@ const IreneAuthenticator = Base.extend({
       };
       const url = ENV['ember-simple-auth']['loginEndPoint'];
       ajax.post(url, {data})
-      .then(function(data) {
+      .then((data) => {
         data = processData(data);
         resolve(data);
-        that.resumeTransistion();})
-      .catch(function(error) {
+        this.resumeTransistion();
+      }, (error) => {
         loginStatus(false);
         errorCallback(error);
-        that.get("notify").error(error.payload.message, ENV.notifications);
+        this.get("notify").error(error.payload.message, ENV.notifications);
         for (error of error.errors) {
           if (error.status === "0") {
-            that.get("notify").error("Unable to reach server. Please try after sometime", ENV.notifications);
+            this.get("notify").error("Unable to reach server. Please try after sometime", ENV.notifications);
           }
-          that.get("notify").error("Please enter valid account details", ENV.notifications);
+          this.get("notify").error("Please enter valid account details", ENV.notifications);
         }
         return reject(error);
       });
@@ -62,17 +61,16 @@ const IreneAuthenticator = Base.extend({
 
   restore(data) {
     const ajax = this.get("ajax");
-    const that  = this;
-    return new Ember.RSVP.Promise(function(resolve, reject) {
+    return new Ember.RSVP.Promise((resolve, reject) => {
       const url = ENV['ember-simple-auth']['checkEndPoint'];
       ajax.post(url, {data})
-      .then(function(data) {
+      .then((data) => {
         data = processData(data);
         resolve(data);
         if (location.pathname === '/login') {
-          that.resumeTransistion();
-        }})
-      .catch(function(error) {
+          this.resumeTransistion();
+        }
+      }, (error) => {
         localStorage.clear();
         location.reload();
       });
@@ -82,15 +80,13 @@ const IreneAuthenticator = Base.extend({
   invalidate() {
     const ajax = this.get("ajax");
     localStorage.clear();
-    const that  = this;
-    return new Ember.RSVP.Promise(function(resolve, reject) {
+    return new Ember.RSVP.Promise((resolve, reject) => {
       const url = ENV['ember-simple-auth']['logoutEndPoint'];
       ajax.post(url)
-      .then(function(data){
+      .then((data) => {
         resolve(data);
         location.reload();
-      })
-      .catch(function(error) {
+      }, (error) => {
         location.reload();
       });
     });

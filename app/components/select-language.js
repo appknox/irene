@@ -41,17 +41,15 @@ const SelectLanguageComponent = Ember.Component.extend({
       this.get('moment').changeLocale(lang);
       const data =
         {lang};
-      const that = this;
       this.set("isSelectingLanguage", true);
       this.get("ajax").post(ENV.endpoints.lang, {data})
-      .then(function() {
-        if(!that.isDestroyed) {
+      .then(() =>  {
+        if(!this.isDestroyed) {
           window.location.reload();
         }
-      })
-      .catch(function(error) {
-        that.set("isSelectingLanguage", false);
-        that.get("notify").error(error.payload.message);
+      }, (error) => {
+        this.set("isSelectingLanguage", false);
+        this.get("notify").error(error.payload.message);
       });
     }
   }

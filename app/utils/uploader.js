@@ -21,10 +21,8 @@ const Uploader = EmberUploader.Uploader.extend({
     const tErrorWhileFetching = this.get("tErrorWhileFetching");
     const tErrorWhileUploading = this.get("tErrorWhileUploading");
     const tFileUploadedSuccessfully = this.get("tFileUploadedSuccessfully");
-
     const that = this;
-
-    const signSuccess = function(json){
+    const signSuccess = (json) => {
       const settings = {
         dataType: "text",
         contentType: "application/octet-stream",
@@ -40,29 +38,27 @@ const Uploader = EmberUploader.Uploader.extend({
         },
         data: file
       };
-      that.get("ajax").put(json.url, settings)
-      .then(function() {
-        that.didUpload(json.file_key, json.file_key_signed);
-        that.get("notify").success(tFileUploadedSuccessfully);
-      })
-      .catch(function() {
+      this.get("ajax").put(json.url, settings)
+      .then(() => {
+        this.didUpload(json.file_key, json.file_key_signed);
+        this.get("notify").success(tFileUploadedSuccessfully);
+      }, () => {
         delegate.set("isUploading", false);
-        that.get("notify").error(tErrorWhileUploading);
+        this.get("notify").error(tErrorWhileUploading);
       });
     };
 
     const data =
       {content_type: "application/octet-stream"};
 
-    that.get("ajax").request(ENV.endpoints.signedUrl, {data})
-    .then(function(json){
+    this.get("ajax").request(ENV.endpoints.signedUrl, {data})
+    .then((json) => {
       $('input[type=file]').val('');
       signSuccess(json);
-    })
-    .catch(function() {
+    }, () => {
       delegate.set("isUploading", false);
       $('input[type=file]').val('');
-      that.get("notify").error(tErrorWhileFetching);
+      this.get("notify").error(tErrorWhileFetching);
     });
   }
 });

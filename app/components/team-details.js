@@ -41,7 +41,6 @@ const TeamDetailsComponent = Ember.Component.extend({
       const tTeamMemberInvited = this.get("tTeamMemberInvited");
       const teamId = this.get("team.id");
       const url = [ENV.endpoints.teams, teamId, ENV.endpoints.members].join('/');
-      const that = this;
       for (let inputValue of [teamMember]) {
         if (isEmpty(inputValue)) { return this.get("notify").error(tEmptyEmailId); }
       }
@@ -49,22 +48,21 @@ const TeamDetailsComponent = Ember.Component.extend({
         {identification: teamMember};
       this.set("isInvitingMember", true);
       this.get("ajax").post(url, {data})
-      .then(function(data){
+      .then((data) => {
         if (__guard__(data != null ? data.data : undefined, x => x.type) === "team") {
-          that.store.pushPayload(data);
-          that.get("notify").success(tTeamMemberAdded);
+          this.store.pushPayload(data);
+          this.get("notify").success(tTeamMemberAdded);
         } else {
-          that.get("notify").success(tTeamMemberInvited);
+          this.get("notify").success(tTeamMemberInvited);
         }
-        if(!that.isDestroyed) {
-          that.set("isInvitingMember", false);
-          that.set("teamMember", "");
-          that.set("showAddMemberModal", false);
+        if(!this.isDestroyed) {
+          this.set("isInvitingMember", false);
+          this.set("teamMember", "");
+          this.set("showAddMemberModal", false);
         }
-      })
-      .catch(function(error) {
-        that.set("isInvitingMember", false);
-        that.get("notify").error(error.payload.message);
+      }, (error) => {
+        this.set("isInvitingMember", false);
+        this.get("notify").error(error.payload.message);
       });
     }
   }

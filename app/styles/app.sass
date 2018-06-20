@@ -88,6 +88,9 @@ body
 .margin-bottom20
   margin-bottom: 20px
 
+.margin-bottom-20
+  margin-bottom: -20px
+
 .margin-bottom40
   margin-bottom: 40px
 
@@ -535,15 +538,20 @@ button, .button
         border-width: 2px 2px 2px 0px
         border-style: solid
         border-color: lighten($default, 50%)
-  .fa-exclamation-triangle
-    margin-top: 20px
-    margin-left: 10px
-    font-size: 40px
-  .fa.fa-trash-o
-    color: $red
-    margin-left: 10px
-    margin-top: 10px
-    cursor: pointer
+  .fa
+    &-exclamation-triangle
+      margin-top: 20px
+      margin-left: 10px
+      font-size: 40px
+    &-info-circle
+      margin-top: 5px
+      margin-left: 15px
+      font-size: 40px
+    &-trash-o
+      color: $red
+      margin-left: 10px
+      margin-top: 10px
+      cursor: pointer
   .position-icons
     margin-top: 18px!important
   .edit-filter
@@ -1128,6 +1136,9 @@ ul.risk-table
   .warning-band
     .columns .column
       height: 100px!important
+  .info-band
+    .columns .column
+      height: 65px!important
 
   .card-header
     height: 40px
@@ -1374,7 +1385,7 @@ button.delete-button
   color: $red
   cursor: pointer
 
-.modal-card.device-modal
+.device-modal
   max-height: calc(100vh - 10px)
   .modal-card-head
     border-bottom: 0px
@@ -2185,6 +2196,7 @@ $attachment-icon-width: 4em
 
 
 .device-modal
+  overflow: scroll
   .modal-card-foot
     border-top-width: 0px
 
@@ -2313,3 +2325,41 @@ $attachment-icon-width: 4em
 .mp-toggle-pop
   position: relative
   left: 50px
+
+.notification-position
+  margin-left: -35vw
+  width: 400px
+  margin-bottom: 45vw
+  height: 50px
+  border-radius: 50px
+  background-color: $green
+  box-shadow: 0px 0px 10px lighten($green, 20%)
+  ._c-notification__content_of6y9q
+    margin-top: 5px
+    font-size: 18px
+    color: #FFF
+  ._c-notification__icon_of6y9q
+    background-color: $green
+  .fa-times
+    position: relative
+    top: 3px
+  .fa-info-circle
+    position: relative
+    top: 7px
+    left: 8px
+
+.collaboration-modal
+  .not-found
+    margin-top: 0px
+    i
+      margin-top: 2px
+    h6
+      max-width: 350px
+      text-align: left
+
+.copy-password-modal
+  .modal-card
+    table td
+      text-align: center
+      border: 2px solid lighten($default, 45%)!important
+      vertical-align: middle

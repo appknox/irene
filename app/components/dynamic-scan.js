@@ -26,40 +26,36 @@ export default Ember.Component.extend({
     dynamicScan() {
       const file = this.get("file");
       file.setBootingStatus();
-      const that = this;
       const fileId = this.get("file.id");
       const dynamicUrl = [ENV.endpoints.dynamic, fileId].join('/');
       this.get("ajax").request(dynamicUrl)
-        .then(function() {
-          that.send('pollDynamicStatus');
-        })
-        .catch(function(error) {
-          file.setNone();
-          that.get("notify").error(error.payload.error);
-        });
+      .then(() => {
+        this.send('pollDynamicStatus');
+      }, (error) => {
+        file.setNone();
+        this.get("notify").error(error.payload.error);
+      });
     },
 
     pollDynamicStatus() {
       const isDynamicReady = this.get('file.isReady');
       const fileId = this.get('file.id');
-      const that = this;
       if (isDynamicReady) {
         return;
       }
       if(!fileId) {
         return;
       }
-      var stopPoll = poll(function() {
-        return that.get('store').find('file', fileId)
-          .then(function() {
-            const dynamicStatus = that.get('file.dynamicStatus');
-            if (dynamicStatus === ENUMS.DYNAMIC_STATUS.NONE || dynamicStatus === ENUMS.DYNAMIC_STATUS.READY) {
-              stopPoll();
-            }
-          })
-          .catch(function() {
+      var stopPoll = poll(() => {
+        return this.get('store').find('file', fileId)
+        .then(() => {
+          const dynamicStatus = this.get('file.dynamicStatus');
+          if (dynamicStatus === ENUMS.DYNAMIC_STATUS.NONE || dynamicStatus === ENUMS.DYNAMIC_STATUS.READY) {
             stopPoll();
-          });
+          }
+        }, () => {
+          stopPoll();
+        });
       }, 5000);
     },
 
@@ -68,20 +64,18 @@ export default Ember.Component.extend({
       const isApiScanEnabled = this.get("isApiScanEnabled");
       const project_id = this.get("file.project.id");
       const apiScanOptions = [ENV.host,ENV.namespace, ENV.endpoints.apiScanOptions, project_id].join('/');
-      const that = this;
       const data =
         {isApiScanEnabled};
       this.get("ajax").post(apiScanOptions, {data})
-      .then(function(){
-        that.get("notify").success(tStartingScan);
-        if(!that.isDestroyed) {
-          that.set("startingDynamicScan", false);
-          that.send("closeModal");
-          that.send("dynamicScan");
+      .then(() => {
+        this.get("notify").success(tStartingScan);
+        if(!this.isDestroyed) {
+          this.set("startingDynamicScan", false);
+          this.send("closeModal");
+          this.send("dynamicScan");
         }
-      })
-      .catch(function(error) {
-        that.get("notify").error(error.payload.error);
+      }, (error) => {
+        this.get("notify").error(error.payload.error);
       });
     },
 
@@ -148,20 +142,18 @@ export default Ember.Component.extend({
 
     dynamicShutdown() {
       const file = this.get("file");
-      const that = this;
       file.setShuttingDown();
       this.set("isPoppedOut", false);
       const file_id = this.get("file.id");
       const shutdownUrl = [ENV.endpoints.dynamicShutdown, file_id].join('/');
       this.get("ajax").request(shutdownUrl)
-      .then(function() {
-        if(!that.isDestroyed) {
+      .then(() => {
+        if(!this.isDestroyed) {
           file.setNone();
         }
-      })
-      .catch(function(error) {
+      }, (error) => {
         file.setNone();
-        that.get("notify").error(error.payload.error);
+        this.get("notify").error(error.payload.error);
       });
     },
 

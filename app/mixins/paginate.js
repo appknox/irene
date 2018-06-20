@@ -36,8 +36,7 @@ const PaginateMixin = Ember.Mixin.create({
   objects: ( function() {
     let query;
     window.scrollTo(0, 0);
-    const that = this;
-    if (that.get('isJsonApiPagination')) {
+    if (this.get('isJsonApiPagination')) {
       const query_limit = this.get("limit");
       const query_offset = this.get("offset");
       query = {
@@ -60,15 +59,14 @@ const PaginateMixin = Ember.Mixin.create({
     }
     const targetObject = this.get("targetObject");
     const objects = this.get('store').query(targetObject, query);
-    objects.then(function(result) {
+    objects.then((result) => {
       const { meta } = result;
       if (result.links && result.meta.pagination) {
         meta.total = result.meta.pagination.count;
-        that.set('isJsonApiPagination', true);
+        this.set('isJsonApiPagination', true);
       }
-      return that.set("meta", meta);
+      return this.set("meta", meta);
     });
-      // that.set "meta", total: 200
     return objects;
   }).property("version"),
 

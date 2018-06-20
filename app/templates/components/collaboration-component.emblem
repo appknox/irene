@@ -23,27 +23,37 @@ h6
     each collaborations as |collaboration|
       = collaboration-details collaboration=collaboration
 
-= modal-card class="input-modal" isActive=showCollaborationModal title=(t "modalCard.collaboration.title")
+= modal-card class="input-modal collaboration-modal" isActive=showCollaborationModal title=(t "modalCard.collaboration.title")
   .card-body
     .card-wrapper
       form
         p.control
           .columns
-            .column
-              select.select onchange={action "teamChanged" value="target.value"} id="team-preference"
-                option value=0
-                  = t "selectTeam"
-                each teams as |team|
-                  option value=team.id
-                    = team.name
-            .column
-              button.mp-add-collaboration.is-primary click="addCollaboration" disabled=isAddingCollaboration
-                if isAddingCollaboration
-                  .fa-font-size
-                    i.fa class="fa-spinner fa-spin"
-                  | &nbsp;
-                = t "assignTeam"
+            if teams
+              .column
+                select.select onchange={action "teamChanged" value="target.value"} id="team-preference"
+                  option value=0
+                    = t "selectTeam"
+                  each teams as |team|
+                    option value=team.id
+                      = team.name
+              .column
+                button.mp-add-collaboration.is-primary click="addCollaboration" disabled=isAddingCollaboration
+                  if isAddingCollaboration
+                    .fa-font-size
+                      i.fa class="fa-spinner fa-spin"
+                    | &nbsp;
+                  = t "assignTeam"
+            else
+              .column.margin-bottom-20
+                .not-found
+                  h5
+                    = fa-icon "exclamation-triangle"
+                    = t "noTeams"
+                  h6
+                    = t "noTeamsMessage"
         .card-button.margin-top20.font-size12
-          = t "youCanCreateTeam"
-          = link-to 'authenticated.teams' class="is-primary" tagName="a"
-            | &nbsp; #{t "clickingHere"}
+          h6
+            = t "youCanCreateTeam"
+            = link-to 'authenticated.teams' class="is-primary" tagName="a"
+              | &nbsp;#{t "clickingHere"}

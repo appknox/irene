@@ -33,9 +33,8 @@ const PasswordSetupComponent = Ember.Component.extend({
 
     setup() {
       this.validate();
-      const that = this;
       if (this.validation_errors.length > 0) {
-        return that.get("notify").error(`${this.validation_errors.join(" & ")}`);
+        return this.get("notify").error(`${this.validation_errors.join(" & ")}`);
       }
       const password = this.get("password");
       const uuid = this.get("uuid");
@@ -47,17 +46,16 @@ const PasswordSetupComponent = Ember.Component.extend({
       };
       this.set("isSettingPassword", true);
       this.get("ajax").post(ENV.endpoints.setup, {data})
-      .then(function(){
-        if(!that.isDestroyed) {
-          that.set("isSettingPassword", false);
-          that.container.lookup("route:setup").transitionTo("login");
+      .then(() => {
+        if(!this.isDestroyed) {
+          this.set("isSettingPassword", false);
+          this.container.lookup("route:setup").transitionTo("login");
         }
-        that.get("notify").success("Password is successfully set");
-      })
-      .catch(function(error) {
-        if(!that.isDestroyed) {
-          that.set("isSettingPassword", false);
-          that.get("notify").error(error.payload.message);
+        this.get("notify").success("Password is successfully set");
+      }, (error) => {
+        if(!this.isDestroyed) {
+          this.set("isSettingPassword", false);
+          this.get("notify").error(error.payload.message);
         }
       });
     }

@@ -72,9 +72,13 @@ if notVNCViewer
   .card-body.warning-modal
     .card-wrapper
       .api-scanning
-        h6
-          = t "modalCard.apiScan.description"
-        form.margin-top20
+        div.warning-band.info-band
+          .columns
+            .column.is-one-sixth
+              = fa-icon 'info-circle'
+            .column
+              = t "modalCard.apiScan.dynamicScanText"
+        form.margin-top30
           p.control
           .columns
             .column.flex-center
@@ -88,6 +92,8 @@ if notVNCViewer
   .card-body.warning-modal
     .card-wrapper
       .api-scanning
+        h6
+          = t "modalCard.apiScan.description"
         div.warning-band
           .columns
             .column.is-one-sixth

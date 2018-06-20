@@ -23,21 +23,19 @@ const JiraAccountComponent = Ember.Component.extend({
 
   confirmCallback() {
     const tJiraWillBeRevoked = this.get("tJiraWillBeRevoked");
-    const that = this;
     this.set("isRevokingJIRA", true);
     this.get("ajax").post(ENV.endpoints.revokeJira)
-    .then(function() {
-      if(!that.isDestroyed) {
-        that.set("isRevokingJIRA", false);
-        that.set("user.hasJiraToken", false);
+    .then(() => {
+      this.get("notify").success(tJiraWillBeRevoked);
+      if(!this.isDestroyed) {
+        this.set("isRevokingJIRA", false);
+        this.set("user.hasJiraToken", false);
+        this.send("closeRevokeJIRAConfirmBox");
       }
-      that.get("notify").success(tJiraWillBeRevoked);
-      that.send("closeRevokeJIRAConfirmBox");
-    })
-    .catch(function(error) {
-      if(!that.isDestroyed) {
-        that.set("isRevokingJIRA", false);
-        that.get("notify").error(error.payload.error);
+    }, (error) => {
+      if(!this.isDestroyed) {
+        this.set("isRevokingJIRA", false);
+        this.get("notify").error(error.payload.error);
       }
     });
   },
@@ -53,7 +51,6 @@ const JiraAccountComponent = Ember.Component.extend({
       if (!host || !username || !password) {
         return this.get("notify").error(tPleaseEnterAllDetails, ENV.notifications);
       }
-      const that = this;
       const data = {
         host,
         username,
@@ -61,19 +58,20 @@ const JiraAccountComponent = Ember.Component.extend({
       };
       this.set("isIntegratingJIRA", true);
       this.get("ajax").post(ENV.endpoints.integrateJira, {data})
-      .then(function(){
-        if(!that.isDestroyed) {
-          that.set("isIntegratingJIRA", false);
-          that.set("user.hasJiraToken", true);
+      .then(() => {
+        if(!this.isDestroyed) {
+          this.set("isIntegratingJIRA", false);
+          this.set("user.hasJiraToken", true);
         }
-        that.get("notify").success(tJiraIntegrated);
-        triggerAnalytics('feature',ENV.csb.integrateJIRA);})
-      .catch(function(error) {
-        if(!that.isDestroyed) {
-          that.set("isIntegratingJIRA", false);
-          that.get("notify").error(error.payload.message);
+        this.get("notify").success(tJiraIntegrated);
+        triggerAnalytics('feature',ENV.csb.integrateJIRA);
+      }, (error) => {
+        if(!this.isDestroyed) {
+          this.set("isIntegratingJIRA", false);
+          this.get("notify").error(error.payload.message);
         }
       });
+
     },
 
     openRevokeJIRAConfirmBox() {

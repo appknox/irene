@@ -21,37 +21,33 @@ const GithubProjectComponent = Ember.Component.extend({
     const tProjectRemoved = this.get("tProjectRemoved");
     const projectId = this.get("project.id");
     const deleteGithub = [ENV.endpoints.deleteGHRepo, projectId].join('/');
-    const that = this;
     this.set("isDeletingGithub", true);
     this.get("ajax").delete(deleteGithub)
-    .then(function() {
-      if(!that.isDestroyed) {
-        that.set("isDeletingGithub", false);
-        that.set("project.githubRepo", "");
-      }
-      that.get("notify").success(tProjectRemoved);
-      that.send("closeDeleteGHConfirmBox");
-    })
-    .catch(function(error) {
-      if(!that.isDestroyed) {
-        that.set("isDeletingGithub", false);
-        that.get("notify").error(error.payload.error);
+    .then(() => {
+      this.get("notify").success(tProjectRemoved);
+      if(!this.isDestroyed) {
+        this.set("isDeletingGithub", false);
+        this.set("project.githubRepo", "");
+        this.send("closeDeleteGHConfirmBox");
+      }    
+    }, (error) => {
+      if(!this.isDestroyed) {
+        this.set("isDeletingGithub", false);
+        this.get("notify").error(error.payload.error);
       }
     });
   },
 
   fetchGithubRepos: (function() {
     const tFetchGitHubRepoFailed = this.get("tFetchGitHubRepoFailed");
-    const that = this;
     this.get("ajax").request(ENV.endpoints.githubRepos)
-    .then(function(data) {
-      if(!that.isDestroyed) {
-        that.set("githubRepos", data.repos);
+    .then((data) => {
+      if(!this.isDestroyed) {
+        this.set("githubRepos", data.repos);
       }
-    })
-    .catch(function() {
-      if(!that.isDestroyed) {
-        that.get("notify").error(tFetchGitHubRepoFailed);
+    }, () => {
+      if(!this.isDestroyed) {
+        this.get("notify").error(tFetchGitHubRepoFailed);
       }
     });
   }).on("init"),
@@ -63,24 +59,19 @@ const GithubProjectComponent = Ember.Component.extend({
       const tRepoIntegrated = this.get("tRepoIntegrated");
       const projectId = this.get("project.id");
       const setGithub = [ENV.endpoints.setGithub, projectId].join('/');
-      const that = this;
       const data =
         {repo};
       this.set("isChangingRepo", true);
       this.get("ajax").post(setGithub, {data})
-      .then(function() {
-        if(!that.isDestroyed) {
-          that.set("isChangingRepo", false);
-          that.set("project.githubRepo", repo);
+      .then(() => {
+        if(!this.isDestroyed) {
+          this.set("isChangingRepo", false);
+          this.set("project.githubRepo", repo);
         }
-        that.get("notify").success(tRepoIntegrated);
-
-      })
-      .catch(function(error) {
-        if(!that.isDestroyed) {
-          that.set("isChangingRepo", false);
-          that.get("notify").error(error.payload.error);
-        }
+        this.get("notify").success(tRepoIntegrated);
+      }, (error) => {
+        this.set("isChangingRepo", false);
+        this.get("notify").error(error.payload.error);
       });
     },
 

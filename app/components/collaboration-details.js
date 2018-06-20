@@ -46,16 +46,14 @@ const CollaborationDetailsComponent = Ember.Component.extend({
       return this.get("notify").error(tEnterRightTeamName);
     }
     this.set("isRemovingCollaboration", true);
-    const that = this;
     collaboration.destroyRecord()
-    .then(function(){
-      that.set("isRemovingCollaboration", false);
-      that.get("notify").success(`${tTeam} ${team} ${tCollaborationRemoved}`);
-    })
-    .catch(function(error) {
-      that.set("isRemovingCollaboration", false);
+    .then(() => {
+      this.set("isRemovingCollaboration", false);
+      this.get("notify").success(`${tTeam} ${team} ${tCollaborationRemoved}`);
+    }, (error) => {
+      this.set("isRemovingCollaboration", false);
       for (error of error.errors) {
-        that.get("notify").error(error.title || undefined);
+        this.get("notify").error(error.title || undefined);
       }
     });
   },
@@ -69,20 +67,18 @@ const CollaborationDetailsComponent = Ember.Component.extend({
       const url = [ENV.endpoints.collaborations, collaborationId ].join('/');
       const data =
         {role: currentRole};
-      const that = this;
       this.set("isChangingRole", true);
       this.get("ajax").post(url , {data})
-      .then(function(){
-        that.get("notify").success(tPermissionChanged);
-        if(!that.isDestroyed) {
-          that.set("isChangingRole", false);
+      .then(() => {
+        this.get("notify").success(tPermissionChanged);
+        if(!this.isDestroyed) {
+          this.set("isChangingRole", false);
         }
-      })
-      .catch(function(error) {
-        if(!that.isDestroyed) {
-          that.set("isChangingRole", false);
+      }, (error) => {
+        if(!this.isDestroyed) {
+          this.set("isChangingRole", false);
         }
-        that.get("notify").error(error.payload.message, ENV.notifications);
+        this.get("notify").error(error.payload.message, ENV.notifications);
       });
     },
 
