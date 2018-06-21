@@ -39,6 +39,7 @@ export default Ember.Component.extend({
           if(!this.isDestroyed) {
             this.send('pollDynamicStatus');
             this.send("closeModal");
+            this.set("startingDynamicScan", true);
           }
         })
         .catch(function(error) {
