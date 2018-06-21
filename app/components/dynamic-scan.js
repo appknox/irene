@@ -41,9 +41,9 @@ export default Ember.Component.extend({
             this.send("closeModal");
             this.set("startingDynamicScan", true);
           }
-        })
-        .catch(function(error) {
+        }, (error) => {
           file.setNone();
+          this.set("startingDynamicScan", true);
           this.get("notify").error(error.payload.error);
         });
     },
@@ -59,9 +59,12 @@ export default Ember.Component.extend({
       }
       var stopPoll = poll(() => {
         return this.get('store').find('file', fileId)
-        .then(() => {
-          const dynamicStatus = this.get('file.dynamicStatus');
-          if (dynamicStatus === ENUMS.DYNAMIC_STATUS.NONE || dynamicStatus === ENUMS.DYNAMIC_STATUS.READY) {
+          .then(() => {
+            const dynamicStatus = this.get('file.dynamicStatus');
+            if (dynamicStatus === ENUMS.DYNAMIC_STATUS.NONE || dynamicStatus === ENUMS.DYNAMIC_STATUS.READY) {
+              stopPoll();
+            }
+          }, () => {
             stopPoll();
           }
         }, () => {
@@ -138,12 +141,14 @@ export default Ember.Component.extend({
       const fileId = this.get("file.id");
       const dynamicUrl = [ENV.endpoints.dynamic, fileId].join('/');
       this.get("ajax").delete(dynamicUrl)
-      .then(function() {
-        if(!that.isDestroyed) {
+      .then(() => {
+        if(!this.isDestroyed) {
           file.setNone();
+          this.set("startingDynamicScan", true);
         }
-      }, (error) => {
+      },(error) => {
         file.setNone();
+        this.set("startingDynamicScan", true);
         this.get("notify").error(error.payload.error);
       });
     },
