@@ -21,6 +21,9 @@ body
 .margin-top-10
   margin-top: -10px
 
+.margin-top-20
+  margin-top: -20px
+
 .margin-top-5
   margin-top: -5px
 
@@ -629,6 +632,14 @@ button, .button
       td
         padding: 7px
 
+.personal-token-component
+  @extend .namespace-component
+  table.token-table tr
+    td
+      font-size: 13px
+    td, th
+      text-align: center!important
+
 .namespace-component
   .input-column
     max-width: 250px
@@ -690,16 +701,7 @@ button, .button
       position: relative
       top: 10px
 
-.token-table
-  .fa
-    font-size: 16px
-  .fa-trash-o
-    color: $critical
-  .copy-token
-    color: $info
-
-
-.invoice-table, .token-table
+.invoice-table
   table
     tr
       th
