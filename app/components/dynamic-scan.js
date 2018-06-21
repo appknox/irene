@@ -23,20 +23,28 @@ export default Ember.Component.extend({
   },
 
   actions: {
-    dynamicScan() {
-      const file = this.get("file");
-      file.setBootingStatus();
-      const that = this;
-      const file_id = this.get("file.id");
-      const dynamicUrl = [ENV.endpoints.dynamic, file_id].join('/');
-      this.get("ajax").put(dynamicUrl, {})
-      .then(function() {
-        that.send('pollDynamicStatus');
-      })
-      .catch(function(error) {
-        file.setNone();
-        that.get("notify").error(error.payload.error);
-      });
+
+    setAPIScanOption() {
+      const tStartingScan = this.get("tStartingScan");
+      const isApiScanEnabled = this.get("isApiScanEnabled");
+      const data = {
+        isApiScanEnabled: isApiScanEnabled === true
+      };
+      const file = this.get('file');
+      const fileId = file.id;
+      const dynamicUrl = [ENV.endpoints.dynamic, fileId].join('/');
+      this.get("ajax").put(dynamicUrl, {data})
+        .then(() => {
+          this.get("notify").success(tStartingScan);
+          if(!this.isDestroyed) {
+            this.send('pollDynamicStatus');
+            this.send("closeModal");
+          }
+        })
+        .catch(function(error) {
+          file.setNone();
+          this.get("notify").error(error.payload.error);
+        });
     },
 
     pollDynamicStatus() {
@@ -59,30 +67,6 @@ export default Ember.Component.extend({
           stopPoll();
         });
       }, 5000);
-    },
-
-    setAPIScanOption() {
-      const tStartingScan = this.get("tStartingScan");
-      const isApiScanEnabled = this.get("isApiScanEnabled");
-      const that = this;
-      const data = {
-        isApiScanEnabled: isApiScanEnabled === true
-      };
-      const file = this.get('file');
-      const file_id = file.id;
-      const dynamicUrl = [ENV.endpoints.dynamic, file_id].join('/');
-      this.get("ajax").put(dynamicUrl, {data})
-        .then(function() {
-          that.send('pollDynamicStatus');
-          that.get("notify").success(tStartingScan);
-          if(!that.isDestroyed) {
-            that.send("closeModal");
-          }
-        })
-        .catch(function(error) {
-          file.setNone();
-          that.get("notify").error(error.payload.error);
-        });
     },
 
     doNotRunAPIScan() {
@@ -150,8 +134,8 @@ export default Ember.Component.extend({
       const file = this.get("file");
       file.setShuttingDown();
       this.set("isPoppedOut", false);
-      const file_id = this.get("file.id");
-      const dynamicUrl = [ENV.endpoints.dynamic, file_id].join('/');
+      const fileId = this.get("file.id");
+      const dynamicUrl = [ENV.endpoints.dynamic, fileId].join('/');
       this.get("ajax").delete(dynamicUrl)
       .then(function() {
         if(!that.isDestroyed) {
