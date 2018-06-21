@@ -23,13 +23,6 @@
             else
               i.fa.fa-chevron-down
 
-  if showEditAnalysis
-    if analysis.isRisky
-      .column.is-one-sixth.content-right.edit-analysis
-        i.fa.risk-icons.fa-edit.removeUrl.remove click="openEditAnalysisModal"
-        = attach-tooltip placement="top"
-          = t "editAnalysis"
-
 
 if showVulnerability
   .message-body.vuln-body
@@ -51,6 +44,12 @@ if showVulnerability
           else
             .margin-top
               = analysis.vulnerability.successMessage
+      if showEditAnalysis
+        if analysis.isRisky
+          .column.is-one-sixth.content-right
+            button.is-primary click="openEditAnalysisModal"
+              i.fa.risk-icons.fa-pencil
+              | &nbsp;#{t "editAnalysis"}
 
     if analysis.isRisky
       .regulatary-section.margin-top

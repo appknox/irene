@@ -1,18 +1,15 @@
 if isNotRevoked
   tr
     td
-      strong
-        = personaltoken.name
+      = personaltoken.name
     td
-      small
-        = personaltoken.createdDateOnHumanized
+      = personaltoken.createdDateOnHumanized
     td
-      code id="copy-#{personaltoken.id}" value=personaltoken.key
+      div id="copy-#{personaltoken.id}" value=personaltoken.key
         | #{personaltoken.key}
     td
       .align-middle
         i.fa.fa-clipboard.remove.copy-token data-clipboard-target="#copy-#{personaltoken.id}"
-
     td
       .align-middle
         i.fa.fa-trash-o.remove click="openRevokePersonalTokenConfirmBox"

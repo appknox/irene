@@ -21,6 +21,9 @@ body
 .margin-top-10
   margin-top: -10px
 
+.margin-top-20
+  margin-top: -20px
+
 .margin-top-5
   margin-top: -5px
 
@@ -629,6 +632,33 @@ button, .button
       td
         padding: 7px
 
+.personal-token-component
+  @extend .namespace-component
+  table.token-table tr
+    td
+      font-size: 13px
+    td, th
+      text-align: center!important
+
+.namespace-component
+  .input-column
+    max-width: 250px
+  input.input
+    width: 300px
+    margin-left: -10px
+    margin-top: 10px
+  button
+    margin-top: 10px
+  table
+    @extend .api-filter-table
+    width: 230px!important
+    margin-top: 10px!important
+    max-width: auto
+    margin-left: -10px
+    tr
+      td, th
+        text-align: left!important
+
 .api-filter-table
   width: 370px
   margin-top: 20px
@@ -671,16 +701,7 @@ button, .button
       position: relative
       top: 10px
 
-.token-table
-  .fa
-    font-size: 16px
-  .fa-trash-o
-    color: $critical
-  .copy-token
-    color: $info
-
-
-.invoice-table, .token-table
+.invoice-table
   table
     tr
       th
@@ -1606,14 +1627,6 @@ button.is-progress:hover
   margin-top: 20px
   select
     width: 50%
-
-.namespace-list
-  margin-top: 20px
-  li
-    font-size: 15px
-    margin-left: 10px
-  button
-    margin-top: 20px
 
 .input-modal .modal-card
   min-width: 25%

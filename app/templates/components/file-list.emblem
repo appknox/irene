@@ -11,4 +11,5 @@
         div
           | #{t "loading"}...
 
-  = partial "paginate"
+  if hasObjects
+    = partial "paginate"

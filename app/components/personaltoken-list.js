@@ -7,6 +7,8 @@ import { translationMacro as t } from 'ember-i18n';
 const isEmpty = inputValue=> Ember.isEmpty(inputValue);
 
 const PersonaltokenListComponent = Ember.Component.extend(PaginateMixin, {
+
+  classNames: ["column","personal-token-component"],
   i18n: Ember.inject.service(),
   ajax: Ember.inject.service(),
   notify: Ember.inject.service('notification-messages-service'),

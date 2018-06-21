@@ -28,10 +28,14 @@ if user.hasProject
         each sortedObjects as |project|
           = project-overview project=project
       else
-        h3.capitalize-text.margin-left
-          | #{t "noProject"}!!
+        .loading-container-home
+          i.fa class="fa-spinner fa-spin"
+          div
+            | Loading...
 
-    = partial "paginate"
+
+    if hasObjects
+      = partial "paginate"
 
 else
   .column.is-fullwidth.no-project-container

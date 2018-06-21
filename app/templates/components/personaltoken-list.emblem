@@ -1,52 +1,36 @@
-.column
-  .columns.margin-bottom20
-    .column
-      h5.bold.black-text
-        = t "personalAccessTokens"
-      h6
-        = t "personalAccessTokenDesc"
-    .column.is-one-third.content-right
-      button.is-primary click="openGenerateTokenModal"
-        | + #{t "personalAccessTokenCreate"}
+.columns.margin-bottom20
+  .column
+    h5.bold.black-text
+      = t "personalAccessTokens"
+    h6
+      = t "personalAccessTokenDesc"
+form.columns.margin-left
+  .column.input-column
+    = input class="form-control input" placeholder=(t 'name') type="text" value=tokenName
+  .column.margin
+    button.margin-top10.is-primary click="generateToken" disabled=isGeneratingToken
+      if isGeneratingToken
+        .fa-font-size
+          i.fa class="fa-spinner fa-spin"
+        | &nbsp;
+      | + #{t "personalAccessTokenCreate"}
 
-  if hasObjects
-    .token-table
-      table
-        thead
-          tr
-            th
-              = t "name"
-            th
-              = t "created"
-            th
-              = t "personalTokenKey"
-            th
-              = t "copy"
-            th
-              = t "delete"
-        tbody
-          each sortedObjects as |personaltoken|
-            = personaltoken-detail personaltoken=personaltoken
-    .margin-top20
-      = partial "paginate"
-
-  else
-    .not-found
-      h4
-        = fa-icon "exclamation-triangle"
-        =  t "noPersonalToken"
-
-.column.is-one-third
-
-= modal-card class="input-modal" isActive=showGenerateTokenModal title=(t 'personalAccessTokenCreate')
-  .card-body
-    .card-wrapper
-      form
-        p.control
-          = input class="form-control input" placeholder=(t 'name') type="text" value=tokenName autofocus="autofocus"
-        button.margin-top10.is-primary click="generateToken" disabled=isGeneratingToken
-          if isGeneratingToken
-            .fa-font-size
-              i.fa class="fa-spinner fa-spin"
-            | &nbsp;
-          = t 'personalAccessTokenCreate'
+if hasObjects
+  .margin-left
+    table.token-table
+      thead
+        tr
+          th
+            = t "name"
+          th
+            = t "created"
+          th
+            = t "personalTokenKey"
+          th
+            = t "copy"
+          th
+            = t "delete"
+      each sortedObjects as |personaltoken|
+        = personaltoken-detail personaltoken=personaltoken
+  .margin-top20
+    = partial "paginate"
