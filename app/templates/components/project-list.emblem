@@ -34,7 +34,8 @@ if user.hasProject
             | Loading...
 
 
-    = partial "paginate"
+    if hasObjects
+      = partial "paginate"
 
 else
   .column.is-fullwidth.no-project-container
