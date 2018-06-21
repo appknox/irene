@@ -1,20 +1,21 @@
-if user.hasNamespace
-  each user.namespaceItems as |item|
-    li
-      = item
-else
-  h5
-    = fa-icon "exclamation-triangle"
-    | &nbsp; #{ t "noNamespace"}
-button.is-primary.margin-top.mp-namespace-modal click="toggleNamespaceModal"
-  | + #{t "addNamespace"}
+.namespace-component
+  form.columns
+    .column.input-column
+      = input class="control input mp-namespaces" value=namespace placeholder=(t "enterNamespace")
+    .column.margin
+      button.is-primary click="addNamespace" disabled=isAddingNamespace
+        if isAddingNamespace
+          .fa-font-size
+            i.fa class="fa-spinner fa-spin"
+          | &nbsp;
+        | + {{t "addNamespace"}}
 
-= modal-card isActive=showNamespaceModal title=(t "addNamespace")
-  form
-    = input class="control input mp-namespaces" value=namespace autofocus="autofocus" placeholder="Enter the namespace"
-    button.is-primary.margin-top.mp-add-namespace click="addNamespace" disabled=isAddingNamespace
-      if isAddingNamespace
-        .fa-font-size
-          i.fa class="fa-spinner fa-spin"
-        | &nbsp;
-      = t "addNamespace"
+  if user.hasNamespace
+    table
+      tr
+        th
+           = t "addedNamespaces"
+      each user.namespaceItems as |item|
+        tr
+          td
+            = item
