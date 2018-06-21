@@ -39,11 +39,11 @@ export default Ember.Component.extend({
           if(!this.isDestroyed) {
             this.send('pollDynamicStatus');
             this.send("closeModal");
-            this.set("startingDynamicScan", true);
+            this.set("startingDynamicScan", false);
           }
         }, (error) => {
           file.setNone();
-          this.set("startingDynamicScan", true);
+          this.set("startingDynamicScan", false);
           this.get("notify").error(error.payload.error);
         });
     },
@@ -66,10 +66,7 @@ export default Ember.Component.extend({
             }
           }, () => {
             stopPoll();
-          }
-        }, () => {
-          stopPoll();
-        });
+          });
       }, 5000);
     },
 
@@ -144,11 +141,11 @@ export default Ember.Component.extend({
       .then(() => {
         if(!this.isDestroyed) {
           file.setNone();
-          this.set("startingDynamicScan", true);
+          this.set("startingDynamicScan", false);
         }
       },(error) => {
         file.setNone();
-        this.set("startingDynamicScan", true);
+        this.set("startingDynamicScan", false);
         this.get("notify").error(error.payload.error);
       });
     },
