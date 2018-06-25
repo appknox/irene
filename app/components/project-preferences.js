@@ -22,7 +22,7 @@ const ProjectPreferencesComponent = Ember.Component.extend({
   }).property(),
 
   devices: (function() {
-    return this.get("store").findAll("device");
+    return this.get("store").findAll("AvailableDevice");
   }).property(),
 
   availableDevices: Ember.computed.filter('devices', function(device) {
@@ -44,7 +44,7 @@ const ProjectPreferencesComponent = Ember.Component.extend({
     });
   }),
 
-  uniqueDevices: Ember.computed.uniqBy("filteredDevices", 'version'),
+  uniqueDevices: Ember.computed.uniqBy("filteredDevices", 'platformVersion'),
 
   actions: {
 

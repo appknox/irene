@@ -302,6 +302,7 @@ const FileHeaderComponent = Ember.Component.extend({
       });
     },
 
+
     loginRequired() {
       const loginRequiredText = this.$('#app-login-required').val();
       this.set("manualscan.loginRequired", false);
@@ -503,6 +504,7 @@ const FileHeaderComponent = Ember.Component.extend({
     subscribePlan() {
       window.location.href = "/billing";
     },
+
 
     rescanApp() {
       const tRescanInitiated = this.get("tRescanInitiated");

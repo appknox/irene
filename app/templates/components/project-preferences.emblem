@@ -47,8 +47,8 @@ table.device-table
             option value="0"
               = t "noPreference"
             each uniqueDevices as |device|
-              option value=device.version
-                = device.version
+              option value=device.platformVersion
+                = device.platformVersion
 
       .columns
         .column
