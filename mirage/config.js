@@ -124,6 +124,14 @@ export default function() {
     return {};
   });
 
+  this.put('/dynamicscan/:id', () => {
+    return {};
+  });
+
+  this.delete('/dynamicscan/:id', () => {
+    return {};
+  });
+
   this.post('/integrate_jira', () => {
     return {};
   });

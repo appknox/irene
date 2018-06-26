@@ -88,8 +88,6 @@ test('it exists', function(assert) {
     component.set("file.project.platform", ENUMS.PLATFORM.WINDOWS);
     component.send("openAPIScanModal");
 
-    component.send("dynamicScan");
-
     component.send("setAPIScanOption");
 
     component.send("doNotRunAPIScan");
