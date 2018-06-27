@@ -302,9 +302,12 @@ module.exports = function(environment) {
 
   if (environment === 'whitelabel') {
     ENV.isEnterprise = process.env.ENTERPRISE;
-    ENV.whitelabel.name = process.env.WHITELABEL_NAME;
-    ENV.whitelabel.logo = process.env.WHITELABEL_LOGO;
-    ENV.whitelabel.theme = process.env.WHITELABEL_THEME; // 'light' or 'dark'
+    ENV.whitelabel.enabled = process.env.WHITELABEL_ENABLED.toString().toLowerCase() === 'true';
+    if (ENV.whitelabel.enabled) {
+      ENV.whitelabel.name = process.env.WHITELABEL_NAME;
+      ENV.whitelabel.logo = process.env.WHITELABEL_LOGO;
+      ENV.whitelabel.theme = process.env.WHITELABEL_THEME; // 'light' or 'dark'
+    }
     ENV.host = process.env.IRENE_API_HOST || 'https://api.appknox.com';
     ENV.socketPath = process.env.IRENE_API_SOCKET_PATH || 'https://socket.appknox.com';
   }
