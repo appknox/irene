@@ -83,23 +83,7 @@ const Analysis = DS.Model.extend({
       case ENUMS.RISK.HIGH: return `${cls} is-danger`;
       case ENUMS.RISK.CRITICAL: return `${cls} is-critical`;
     }
-  },
-
-  riskText:( function() {
-    const tNone = this.get("tNone");
-    const tLow = this.get("tLow");
-    const tMedium = this.get("tMedium");
-    const tHigh = this.get("tHigh");
-    const tCritical = this.get("tCritical");
-
-    switch (this.get("risk")) {
-      case ENUMS.RISK.NONE: return tNone;
-      case ENUMS.RISK.LOW: return tLow;
-      case ENUMS.RISK.MEDIUM: return tMedium;
-      case ENUMS.RISK.HIGH: return tHigh;
-      case ENUMS.RISK.CRITICAL: return tCritical;
-    }
-  }).property("risk")
+  }
 });
 
 export default Analysis;
