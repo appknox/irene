@@ -10,6 +10,7 @@ const LoginComponentComponent = Ember.Component.extend({
   identification: "",
   password: "",
   otp: "",
+  isNotEnterprise: !ENV.isEnterprise,
   actions: {
     authenticate() {
       let identification = this.get('identification');
