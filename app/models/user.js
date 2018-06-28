@@ -69,6 +69,9 @@ const User = DS.Model.extend({
   }).property("projectCount"),
 
   ifBillingIsNotHidden: (function() {
+    if (ENV.isEnterprise) {
+      return false;
+    }
     const billingHidden = this.get('billingHidden');
     return !billingHidden;
   }).property('billingHidden'),
