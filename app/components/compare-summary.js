@@ -57,6 +57,8 @@ const CompareSummaryComponent = Ember.Component.extend({
       return tImproved;
     } else if (file1Risk < file2Risk) {
       return tWorsened;
+    } else {
+      return "-";
     }
   }).property("file1Analysis.computedRisk", "file2Analysis.computedRisk")
 });
