@@ -33,6 +33,17 @@ const CompareFilesComponent = Ember.Component.extend({
     });
   }).property("file1.project.id", "file1.id", "file2.id"),
 
+  compareText: (function() {
+    const file1Id = this.get("file1.id");
+    const file2Id = this.get("file2.id");
+    if(file1Id === file2Id) {
+      return "You are comparing 2 same files";
+    }
+    else if(file1Id < file2Id) {
+      return "You are comparing an old file with the new file, the status below will not be accurate."
+    }
+  }).property("file1.id", "file2.id"),
+
   allBaseFiles: Ember.computed.filter('allFiles', function(file) {
     return file !== this.get("file1.id");
   }).property("file1.id", "allFiles"),

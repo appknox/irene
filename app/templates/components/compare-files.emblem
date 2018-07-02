@@ -30,6 +30,10 @@
       each allCompareFiles as |file|
         option value=file
           = file
+if compareText
+  .columns
+    .column.compare-text
+      | #{fa-icon 'exclamation-triangle'} #{compareText}
 if isSummary
   table.compare-table
     tr.table-head
@@ -54,7 +58,7 @@ if isSummary
           | #{file2.version}
 
     each comparisons as |comparison|
-      = compare-summary comparison=comparison file1ID=file1.id file2ID=file2.id
+      = compare-summary comparison=comparison
 else
   .columns
     each comparisons as |comparison|
