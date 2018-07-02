@@ -40,7 +40,7 @@ const CompareFilesComponent = Ember.Component.extend({
       return "You are comparing 2 same files";
     }
     else if(file1Id < file2Id) {
-      return "You are comparing an old file with the new file, the status below will not be accurate."
+      return "You are comparing a new file with an old file, the status below will not be accurate."
     }
   }).property("file1.id", "file2.id"),
 
