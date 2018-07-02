@@ -39,8 +39,8 @@ const CompareFilesComponent = Ember.Component.extend({
   }).property("file1.project.id", "file1.id", "file2.id"),
 
   compareText: (function() {
-    const file1Id = this.get("file1.id");
-    const file2Id = this.get("file2.id");
+    const file1Id = parseInt(this.get("file1.id"));
+    const file2Id = parseInt(this.get("file2.id"));
     const tCompareWarningOldFile = this.get("tCompareWarningOldFile");
     const tCompareWarningSameFiles = this.get("tCompareWarningSameFiles");
     if(file1Id === file2Id) {
