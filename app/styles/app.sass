@@ -530,6 +530,25 @@ button, .button
 .remove, .copy-password
   cursor: pointer
 
+.warning-band
+  width: 600px
+  margin: auto
+  margin-top: 10px
+  .columns
+    .column
+      display: flex
+      align-items: center
+      justify-content: center
+      height: 70px
+      &:first-child
+        background-color: #F5D76E
+      &:nth-child(2)
+        border-width: 2px 2px 2px 0px
+        border-style: solid
+        border-color: lighten($default, 50%)
+      i
+        font-size: 30px
+
 .api-scanning
   .warning-band
     padding: 0px 10px
@@ -2376,3 +2395,34 @@ $attachment-icon-width: 4em
       text-align: center
       border: 2px solid lighten($default, 45%)!important
       vertical-align: middle
+
+.compare-details
+  select
+    margin-left: 10px
+    margin-top: -7px
+    width: 100px
+
+.file-id-container
+  padding-bottom: 10px
+  text-align: center
+  .file-id-text
+    width: 100px
+    margin: -5px auto 5px auto
+    text-align: center
+    font-weight: 900
+    font-size: 12px
+    background-color: lighten($grey, 50%)
+    color: lighten(#000, 30%)
+    border-radius: 5px
+
+.app-details-card
+  .file-id-container
+    margin-left: -30px
+    .file-id-text
+      margin-top: 20px
+
+
+
+
+.app-risk-info
+  margin-top: -25px

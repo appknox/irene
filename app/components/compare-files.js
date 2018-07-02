@@ -19,7 +19,28 @@ const CompareFilesComponent = Ember.Component.extend({
     }
   }),
 
+  allFiles: (function() {
+    const projectId = this.get("file1.project.id");
+    this.set("selectedBaseFile", this.get("file1.id"));
+    this.set("selectedCompareFile", this.get("file2.id"));
+    const allFiles = [];
+    this.get("store").query("file", {projectId:projectId, limit: 1000})
+    .then((data) => {
+      data.content.forEach((item) => {
+        allFiles.push(item.id);
+        this.set("allFiles", allFiles)
+      });
+    });
+  }).property("file1.project.id", "file1.id", "file2.id"),
 
+  allBaseFiles: Ember.computed.filter('allFiles', function(file) {
+    return file !== this.get("file1.id");
+  }).property("file1.id", "allFiles"),
+
+  allCompareFiles: Ember.computed.filter('allFiles', function(file) {
+    return file !== this.get("file2.id");
+  }).property("file2.id", "allFiles"),
+  
   comparisons: (function() {
     const comparisons = [];
     const file1Analyses = this.get("file1.analyses");
@@ -51,6 +72,23 @@ const CompareFilesComponent = Ember.Component.extend({
 
     displayDetails() {
       this.set("isSummary", false);
+    },
+
+    compareFiles() {
+      const selectedBaseFile = this.get("selectedBaseFile");
+      const selectedCompareFile = this.get("selectedCompareFile");
+      const comparePath = `${selectedBaseFile}...${selectedCompareFile}`;
+      Ember.getOwner(this).lookup('route:authenticated').transitionTo("authenticated.compare", comparePath)
+    },
+
+    selectBaseFile() {
+      this.set("selectedBaseFile", parseInt(this.$('#base-file-id').val()));
+      this.send("compareFiles");
+    },
+
+    selectCompareFile() {
+      this.set("selectedCompareFile", parseInt(this.$('#compare-file-id').val()));
+      this.send("compareFiles");
     }
   }
 });

@@ -6,6 +6,7 @@
     li class=detailsClass
       a click="displayDetails" class="mp-display-details"
         = t "details"
+
 .columns.flex-center.compare-container
   .column.is-half
       = link-to "authenticated.file" file1.id
@@ -13,7 +14,22 @@
   .column.is-half
       = link-to "authenticated.file" file2.id
         = file-overview file=file2 profileId=file2.profile.id
-
+.columns.compare-details
+  .column.text-centre
+    | You are comparing file of ID
+    select.select{action 'selectBaseFile' on='change'} disabled=isChangingFile id="base-file-id"
+      option value=file1.id
+        = file1.id
+      each allBaseFiles as |file|
+        option value=file
+          = file
+    | &nbsp; with file of ID
+    select.select{action 'selectCompareFile' on='change'} disabled=isChangingFile id="compare-file-id"
+      option value=file2.id
+        = file2.id
+      each allCompareFiles as |file|
+        option value=file
+          = file
 if isSummary
   table.compare-table
     tr.table-head
@@ -25,13 +41,20 @@ if isSummary
         = t "status"
     tr.table-head
       td
-        | #{t "version"} &nbsp;
-        | #{file1.version}
+        div
+          | File ID #{file1.id}
+        div
+          | #{t "version"} &nbsp;
+          | #{file1.version}
       td
-        | #{t "version"} &nbsp;
-        | #{file2.version}
+        div
+          | File ID #{file2.id}
+        div
+          | #{t "version"} &nbsp;
+          | #{file2.version}
+
     each comparisons as |comparison|
-      = compare-summary comparison=comparison
+      = compare-summary comparison=comparison file1ID=file1.id file2ID=file2.id
 else
   .columns
     each comparisons as |comparison|
