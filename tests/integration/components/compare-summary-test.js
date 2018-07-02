@@ -59,11 +59,11 @@ test('tapping button fires an external action', function(assert) {
     assert.equal(component.get('compareText').string, "Unchanged", "Compare Text/Unchanged");
 
     component.set("comparison.analysis1.computedRisk", ENUMS.RISK.HIGH);
-    assert.equal(component.get('compareColor'), cls + " " + "is-success", "Compare Color/Success");
-    assert.equal(component.get('compareText'), "Improved", "Compare Text/Improved");
+    assert.equal(component.get('compareColor'), cls + " " + "is-critical", "Compare Color/Success");
+    assert.equal(component.get('compareText').string, "Worsened", "Compare Text/Improved");
 
     component.set("comparison.analysis1.computedRisk", ENUMS.RISK.LOW);
-    assert.equal(component.get('compareColor'), cls + " " + "is-danger", "Compare Color/Danger");
-    assert.equal(component.get('compareText'), "Worsened", "Compare Text/Worsened");
+    assert.equal(component.get('compareColor'), cls + " " + "is-success", "Compare Color/Danger");
+    assert.equal(component.get('compareText').string, "Improved", "Compare Text/Worsened");
   });
 });
