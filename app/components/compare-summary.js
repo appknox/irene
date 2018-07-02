@@ -33,9 +33,9 @@ const CompareSummaryComponent = Ember.Component.extend({
       return `${cls} is-progress`;
     } else if (file1Risk === file2Risk) {
       return `${cls} is-default`;
-    } else if (file1Risk > file2Risk) {
-      return `${cls} is-success`;
     } else if (file1Risk < file2Risk) {
+      return `${cls} is-success`;
+    } else if (file1Risk > file2Risk) {
       return `${cls} is-critical`;
     }
   }).property("file1Analysis.computedRisk", "file2Analysis.computedRisk"),
@@ -52,9 +52,9 @@ const CompareSummaryComponent = Ember.Component.extend({
       return tAnalyzing;
     } else if (file1Risk === file2Risk) {
       return tUnchanged;
-    } else if (file1Risk > file2Risk) {
-      return tImproved;
     } else if (file1Risk < file2Risk) {
+      return tImproved;
+    } else if (file1Risk > file2Risk) {
       return tWorsened;
     } else {
       return "-";

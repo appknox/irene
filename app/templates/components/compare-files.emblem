@@ -51,7 +51,7 @@ if isSummary
           | #{t "version"} &nbsp;
           | #{file1.version}
         span.arrow-left
-          = fa-icon "long-arrow-right"
+          = fa-icon "long-arrow-left"
       td
         div
           | File ID #{file2.id}
