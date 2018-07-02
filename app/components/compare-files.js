@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import { translationMacro as t } from 'ember-i18n';
 
 const CompareFilesComponent = Ember.Component.extend({
 
@@ -6,6 +7,10 @@ const CompareFilesComponent = Ember.Component.extend({
   file2: null,
   isSummary: true,
   isReverse: false,
+
+  i18n: Ember.inject.service(),
+  tCompareWarningOldFile: t("compareWarningOldFile"),
+  tCompareWarningSameFiles: t("compareWarningSameFiles"),
 
   summaryClass: Ember.computed("isSummary", function() {
     if (this.get("isSummary")) {
@@ -36,11 +41,13 @@ const CompareFilesComponent = Ember.Component.extend({
   compareText: (function() {
     const file1Id = this.get("file1.id");
     const file2Id = this.get("file2.id");
+    const tCompareWarningOldFile = this.get("tCompareWarningOldFile");
+    const tCompareWarningSameFiles = this.get("tCompareWarningSameFiles");
     if(file1Id === file2Id) {
-      return "You are comparing 2 same files";
+      return tCompareWarningSameFiles;
     }
     else if(file1Id > file2Id) {
-      return "You are comparing an old file with new file, the status below will not be accurate.";
+      return tCompareWarningOldFile;
     }
   }).property("file1.id", "file2.id"),
 
