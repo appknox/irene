@@ -159,7 +159,10 @@
               td.overflow-hidden
                 | #{file.versionCode}
           = copy-password pdfPassword=file.project.pdfPassword
-          
+          .file-id-container
+            div.file-id-text
+              | FILE ID - #{file.id} 
+
     if isOWASPDetails
       .align-center
         = ember-chart type='bar' data=owaspData.mobile width=320 height=200 options=barChartOptions

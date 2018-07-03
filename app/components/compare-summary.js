@@ -33,17 +33,16 @@ const CompareSummaryComponent = Ember.Component.extend({
       return `${cls} is-progress`;
     } else if (file1Risk === file2Risk) {
       return `${cls} is-default`;
-    } else if (file1Risk > file2Risk) {
-      return `${cls} is-success`;
     } else if (file1Risk < file2Risk) {
-      return `${cls} is-danger`;
+      return `${cls} is-success`;
+    } else if (file1Risk > file2Risk) {
+      return `${cls} is-critical`;
     }
   }).property("file1Analysis.computedRisk", "file2Analysis.computedRisk"),
 
   compareText: (function() {
-    const file1Risk = this.get("file1Analysis.computedRisk");
-    const file2Risk = this.get("file2Analysis.computedRisk");
-
+    let file1Risk = this.get("file1Analysis.computedRisk");
+    let file2Risk = this.get("file2Analysis.computedRisk");
     const tAnalyzing = this.get("tAnalyzing");
     const tUnchanged = this.get("tUnchanged");
     const tImproved = this.get("tImproved");
@@ -53,9 +52,9 @@ const CompareSummaryComponent = Ember.Component.extend({
       return tAnalyzing;
     } else if (file1Risk === file2Risk) {
       return tUnchanged;
-    } else if (file1Risk > file2Risk) {
-      return tImproved;
     } else if (file1Risk < file2Risk) {
+      return tImproved;
+    } else if (file1Risk > file2Risk) {
       return tWorsened;
     } else {
       return "-";

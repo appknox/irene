@@ -27,7 +27,7 @@ header.card-header
           = t "versionCode"
           | {{#if file.versionCode}} - #{file.versionCode}{{/if}}
 
-    .columns class=isReverse:is-reverse
+    .columns.app-risk-info class=isReverse:is-reverse
       .column.flex-center
         = ember-chart type='doughnut' data=file.doughnutData width=150 height=150 options=chartOptions
       .file-details-class
@@ -70,4 +70,8 @@ header.card-header
                   = t "untested"
               .column
                 = file.countRiskUnknown
+
+    .file-id-container
+      div.file-id-text
+        | FILE ID - #{file.id}
 = yield
