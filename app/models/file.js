@@ -37,6 +37,7 @@ const File = DS.Model.extend(BaseModelMixin, {
   isDynamicDone: DS.attr('boolean'),
   isManualDone: DS.attr('boolean'),
   isApiDone: DS.attr('boolean'),
+  // rating: DS.attr('string'),
 
   ifManualNotRequested: (function() {
     const manual = this.get('manual');

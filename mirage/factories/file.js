@@ -18,6 +18,7 @@ export default Base.extend({
   isDynamicDone: faker.random.boolean,
   isManualDone: faker.random.boolean,
   isApiDone: faker.random.boolean,
+  // rating: "99.9",
 
   dynamicStatus(){
     return faker.random.arrayElement(ENUMS.DYNAMIC_STATUS.VALUES);

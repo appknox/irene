@@ -5,6 +5,7 @@
         img src=file.iconUrl alt=file.name
     .column.hide-overflow
       = file.name
+      | sdjhsdbbhfbhdbfhbdhfhdfhdbfdhfbdhfbhd
       div
         | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
     .column.os-icon
@@ -159,9 +160,10 @@
               td.overflow-hidden
                 | #{file.versionCode}
           = copy-password pdfPassword=file.project.pdfPassword
-          .file-id-container
-            div.file-id-text
-              | FILE ID - #{file.id} 
+          .file-details-card-info
+            .file-rating
+              div
+                | FILE ID - #{file.id}
 
     if isOWASPDetails
       .align-center
