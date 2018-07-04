@@ -289,7 +289,7 @@ module.exports = function(environment) {
 
   if (environment === 'whitelabel') {
     ENV.isEnterprise = process.env.ENTERPRISE;
-    ENV.whitelabel.enabled = process.env.WHITELABEL_ENABLED.toString().toLowerCase() === 'true';
+    ENV.whitelabel.enabled = (process.env.WHITELABEL_ENABLED || '').toString().toLowerCase() === 'true';
     if (ENV.whitelabel.enabled) {
       ENV.whitelabel.name = process.env.WHITELABEL_NAME;
       ENV.whitelabel.logo = process.env.WHITELABEL_LOGO;
