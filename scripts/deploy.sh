@@ -27,11 +27,5 @@ curl https://api.rollbar.com/api/1/deploy/ \
   -F revision=$REVISION \
   -F local_username=$LOCAL_USERNAME
 
-curl $OPBEAT_ENDPOINT \
-  -H "Authorization: Bearer $OPBEAT_TOKEN" \
-  -d rev=`git log -n 1 --pretty=format:%H` \
-  -d branch=$REVISION \
-  -d status=completed
-
 
 # Also Slack post from here

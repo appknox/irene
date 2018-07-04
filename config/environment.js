@@ -226,9 +226,6 @@ module.exports = function(environment) {
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
-    ENV['APP'].opbeat = {
-        DEBUG: true
-    };
     ENV.rollbar = {
       enabled: false
     };
@@ -251,9 +248,6 @@ module.exports = function(environment) {
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
-    ENV['APP'].opbeat = {
-        DEBUG: true
-    };
     ENV.rollbar = {
       enabled: false
     };
@@ -270,10 +264,6 @@ module.exports = function(environment) {
     };
     ENV.mixpanel.enabled = true;
     ENV['host'] = "https://api.appknox.com";
-    ENV['APP'].opbeat = {
-        appId: '61501c19d2',
-        orgId: '1ff25e9c6a1d40bbad1293635d201fcb'
-      };
   }
 
   if (environment === 'staging') {
@@ -283,9 +273,6 @@ module.exports = function(environment) {
     ENV.enableCSB = false;
     ENV['ember-cli-mirage'] = {
       enabled: false
-    };
-    ENV['APP'].opbeat = {
-        DEBUG: true
     };
     ENV.rollbar = {
       enabled: false
