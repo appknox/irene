@@ -20,6 +20,8 @@ export default {
   "alreadyHaveAccount": "すでにアカウントをお持ちですか？",
   "amountPaid": "支払い金額",
   "analysisSettings": "Analysis Settings",
+  "anyDevice": "Any Device",
+  "anyVersion": "Any Version",
   "api": "API",
   "apiScan": "API診断",
   "apiURLFilter": "API URLフィルタ",

@@ -5,61 +5,29 @@
 
 h6.margin-top
   = t "otherTemplates.selectPreferredDevice"
-table.device-table
-  tr
-    td
-      = t "selectedDevice"
-    td
-      | #{ t (device-type devicePreference.deviceType)}
-  tr
-    td
-      = t "selectedVersion"
-    td
-      | #{devicePreference.versionText}
 
 .columns
-  .column.margin-top
-    button.is-primary click="openProjectPreferenceModal"
-     = t "changeDevice"
-
-
-= modal-card isActive=projectPreferenceModal title=(t "modalCard.devicePreference.title")
-  .card-body.warning-modal
-    .card-wrapper
-    form
-      .columns
-        .column
-          = t "deviceType"
-      .columns
-        .column.is-one-third
-          select.input.mp-device-preference{action 'selectDeviceType' on='change'} id="project-device-preference"
-            option value=0
-              = t "noPreference"
-            each deviceTypes as |deviceType|
-              option value=deviceType.value
-                | #{ t (device-type deviceType.value)}
-      .columns
-        .column
-          = t "osVersion"
-      .columns
-        .column.is-one-third
-          select.input.mp-version-preference{action 'selectVersion' on='change'} id="project-version-preference"
-            option value="0"
-              = t "noPreference"
-            each uniqueDevices as |device|
-              option value=device.platformVersion
-                = device.platformVersion
-
-      .columns
-        .column
-          button.margin-top20.is-primary.mp-select-device click="versionSelected" disabled=isSavingPreference
-            if isSavingPreference
-              .fa-font-size
-                i.fa class="fa-spinner fa-spin"
-              | &nbsp;
-            = t "modalCard.devicePreference.selectDevice"
-      small
-        = fa-icon "lightbulb-o"
-        span.margin-left5
-          | #{t "note"}:
-          | &nbsp;#{t "modalCard.devicePreference.note"}
+  .column
+    = t "deviceType"
+.columns
+  .column.is-one-third
+    select.input.mp-device-preference{action 'selectDeviceType' on='change'} id="project-device-preference"
+      option selected="true" value=devicePreference.deviceType
+        | #{ t (device-type devicePreference.deviceType)}
+      each filteredDeviceTypes as |deviceType|
+        option value=deviceType.value
+          | #{ t (device-type deviceType.value)}
+.columns
+  .column
+    = t "osVersion"
+.columns
+  .column.is-one-third
+    select.input.mp-version-preference{action 'selectVersion' on='change'} id="project-version-preference"
+      option selected="true" value=devicePreference.platformVersion
+        | #{devicePreference.versionText}
+      if devicePreference.isAnyVersion
+        option value="0"
+          = t "anyVersion"
+      each filteredUniqueDevices as |device|
+        option value=device.platformVersion
+          = device.platformVersion

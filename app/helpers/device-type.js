@@ -7,13 +7,13 @@ const deviceType = function(params) {
   const currentDevice = params[0];
 
   if (currentDevice === ENUMS.DEVICE_TYPE.NO_PREFERENCE) {
-    return "noPreference";
+    return "anyDevice";
   } else if (currentDevice === ENUMS.DEVICE_TYPE.PHONE_REQUIRED) {
     return "phone";
   } else if (currentDevice === ENUMS.DEVICE_TYPE.TABLET_REQUIRED) {
     return "tablet";
   } else {
-    return "noPreference";
+    return "anyDevice";
   }
 };
 

@@ -20,6 +20,8 @@ export default {
   "alreadyHaveAccount": "Already have an account?",
   "amountPaid": "AMOUNT PAID",
   "analysisSettings": "Analysis Settings",
+  "anyDevice": "Any Device",
+  "anyVersion": "Any Version",
   "api": "API",
   "apiScan": "API Scan",
   "apiURLFilter": "API URL Filter",

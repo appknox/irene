@@ -11,19 +11,31 @@ const ProjectPreferencesComponent = Ember.Component.extend({
   i18n: Ember.inject.service(),
   ajax: Ember.inject.service(),
   notify: Ember.inject.service('notification-messages-service'),
-  selectedDeviceType: ENUMS.DEVICE_TYPE.NO_PREFERENCE,
-  deviceTypes: ENUMS.DEVICE_TYPE.CHOICES.slice(1, -1),
+  deviceTypes: ENUMS.DEVICE_TYPE.CHOICES,
 
   tDeviceSelected: t("deviceSelected"),
   tPleaseTryAgain: t("pleaseTryAgain"),
+  tAnyVersion: t("anyVersion"),
 
   devicePreference: (function() {
     return this.get("store").queryRecord('device-preference', {id: this.get("project.activeProfileId")});
   }).property(),
 
   devices: (function() {
-    return this.get("store").findAll("AvailableDevice");
+    return this.get("store").findAll("available-device");
   }).property(),
+
+  selectedDeviceType: (function() {
+    return this.get("devicePreference.deviceType");
+  }).property("devicePreference.deviceType"),
+
+  filteredDeviceTypes: (function() {
+    const deviceTypes = this.get("deviceTypes");
+    const deviceType = this.get("devicePreference.deviceType");
+    const unknown = ENUMS.DEVICE_TYPE.UNKNOWN;
+    const allDeviceTypes = deviceTypes.filter(type => unknown !== type.value);
+    return allDeviceTypes.filter(type => deviceType !== type.value);
+  }).property("deviceTypes", "devicePreference.deviceType"),
 
   availableDevices: Ember.computed.filter('devices', function(device) {
     return device.get("platform") === this.get("project.platform");
@@ -32,7 +44,7 @@ const ProjectPreferencesComponent = Ember.Component.extend({
   filteredDevices: Ember.computed("availableDevices", "selectedDeviceType", function() {
     const availableDevices = this.get("availableDevices");
     const selectedDeviceType = this.get("selectedDeviceType");
-    return availableDevices.filter(function(device) {
+    return availableDevices.filter((device) => {
       switch (selectedDeviceType) {
         case ENUMS.DEVICE_TYPE.NO_PREFERENCE:
           return true;
@@ -40,21 +52,31 @@ const ProjectPreferencesComponent = Ember.Component.extend({
           return device.get("isTablet");
         case ENUMS.DEVICE_TYPE.PHONE_REQUIRED:
           return !device.get("isTablet");
+        default:
+          return true;
       }
     });
   }),
 
   uniqueDevices: Ember.computed.uniqBy("filteredDevices", 'platformVersion'),
 
+  filteredUniqueDevices: (function() {
+    const uniqueDevices = this.get("uniqueDevices");
+    const platformVersion = this.get("devicePreference.platformVersion");
+    return uniqueDevices.filter(device => platformVersion !== device.get("platformVersion"));
+  }).property("uniqueDevices", "devicePreference.platformVersion"),
+
   actions: {
 
     selectDeviceType() {
       this.set("selectedDeviceType", parseInt(this.$('#project-device-preference').val()));
-      this.set("selectVersion", 0);
+      this.set("selectVersion", "0");
+      this.send("versionSelected");
     },
 
     selectVersion() {
       this.set("selectVersion", this.$('#project-version-preference').val());
+      this.send("versionSelected");
     },
 
     versionSelected() {
