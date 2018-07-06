@@ -199,6 +199,9 @@ body
 input
   display: block
 
+button:hover, button:active, button:focus
+  transition: all 0.4s!important
+
 .top-nav
   width: 100%
   margin-top: -10px
@@ -2421,6 +2424,7 @@ $attachment-icon-width: 4em
     font-size: 26px
 
 .project-preference, .project-preference-component
+  padding-bottom: 0px!important
   select
     width: 170px
   .fa-font-size
@@ -2441,4 +2445,8 @@ $attachment-icon-width: 4em
     height: auto!important
 
 .request-status
+  margin-top: -10px
+  padding: 0px 10px
   min-height: 45px
+  position: relative
+  top: 12px
