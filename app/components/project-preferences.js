@@ -15,7 +15,7 @@ const ProjectPreferencesComponent = Ember.Component.extend({
   tAnyVersion: t("anyVersion"),
 
   devicePreference: (function() {
-    return this.get("store").queryRecord('device-preference', {id: this.get("project.activeProfileId")});
+    return this.get("store").queryRecord('device-preference', {id: this.get("profileId")});
   }).property(),
 
   devices: (function() {
@@ -35,7 +35,7 @@ const ProjectPreferencesComponent = Ember.Component.extend({
   }).property("deviceTypes", "devicePreference.deviceType"),
 
   availableDevices: Ember.computed.filter('devices', function(device) {
-    return device.get("platform") === this.get("project.platform");
+    return device.get("platform") === this.get("platform");
   }),
 
   filteredDevices: Ember.computed("availableDevices", "selectedDeviceType", function() {
@@ -80,7 +80,7 @@ const ProjectPreferencesComponent = Ember.Component.extend({
       const selectVersion = this.get("selectVersion");
       const selectedDeviceType = this.get("selectedDeviceType");
 
-      const profileId = this.get("project.activeProfileId");
+      const profileId = this.get("profileId");
       const devicePreferences = [ENV.endpoints.profiles, profileId, ENV.endpoints.devicePreferences].join('/');
       const data = {
         device_type: selectedDeviceType,
@@ -97,6 +97,8 @@ const ProjectPreferencesComponent = Ember.Component.extend({
           setTimeout(() => {
             this.set("isSuccessful", false);
           }, 2000);
+          this.set("devicePreference.deviceType", selectedDeviceType);
+          this.set("devicePreference.platformVersion", selectVersion);
         }
       }, () => {
         if(!this.isDestroyed) {
