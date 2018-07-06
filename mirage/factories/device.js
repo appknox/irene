@@ -1,5 +1,4 @@
-import { Factory } from 'ember-cli-mirage';
-import { faker } from 'ember-cli-mirage';
+import { Factory, faker } from 'ember-cli-mirage';
 import ENUMS from 'irene/enums';
 
 export default Factory.extend({

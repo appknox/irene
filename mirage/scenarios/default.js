@@ -16,6 +16,7 @@ export default function(server) {
     submissionCount = getRandomInt(3,3),
     personalTokenCount = getRandomInt(3,3),
     invitationCount = getRandomInt(1,1),
+    availableDeviceCount = getRandomInt(3,3),
     teamCount = 3,
     githubCount = 1,
     jiraCount = 1,
@@ -36,6 +37,7 @@ export default function(server) {
   server.createList('github-integration', githubCount);
   server.createList('jira-integration', jiraCount);
   server.createList('vulnerability-preference', vulnerabilityPreferenceCount);
+  server.createList('available-device', availableDeviceCount);
   projectCount =  getRandomInt(4, 5);
   for (var teamId = 1; teamId <= teamCount; teamId++) {
     team = server.create('team', {users: users});
