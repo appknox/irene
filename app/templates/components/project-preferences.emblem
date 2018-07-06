@@ -10,7 +10,7 @@ h6.margin-top
   .column
     = t "deviceType"
 .columns
-  .column.is-one-sixth
+  .column
     select.input.mp-device-preference{action 'selectDeviceType' on='change'} id="project-device-preference" disabled=isSavingPreference
       option selected="true" value=devicePreference.deviceType
         | #{ t (device-type devicePreference.deviceType)}
@@ -22,7 +22,7 @@ h6.margin-top
  .column
     = t "osVersion"
 .columns
-  .column.is-one-third
+  .column
     select.input.mp-version-preference{action 'selectVersion' on='change'} id="project-version-preference" disabled=isSavingPreference
       option selected="true" value=devicePreference.platformVersion
         | #{devicePreference.versionText}

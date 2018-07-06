@@ -540,7 +540,7 @@ button, .button
       &:nth-child(2)
         border-width: 2px 2px 2px 0px
         border-style: solid
-        border-color: lighten($default, 50%)
+        border-color: lighten($default, 40%)
   .fa
     &-exclamation-triangle
       margin-top: 20px
@@ -2420,7 +2420,7 @@ $attachment-icon-width: 4em
   i.fa
     font-size: 26px
 
-.project-preference
+.project-preference, .project-preference-component
   select
     width: 170px
   .fa-font-size
@@ -2430,4 +2430,12 @@ $attachment-icon-width: 4em
   .fa-check
     color: $green
   .fa-times
-    color: $red     
+    color: $red
+
+.project-preference-component
+  margin-top: 10px
+  border: 2px solid lighten($grey, 40%)
+  padding: 10px
+  margin-bottom: 30px
+  .columns .column
+    height: auto!important
