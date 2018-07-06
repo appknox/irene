@@ -11,7 +11,7 @@ h6.margin-top
     = t "deviceType"
 .columns
   .column.is-one-third
-    select.input.mp-device-preference{action 'selectDeviceType' on='change'} id="project-device-preference"
+    select.input.mp-device-preference{action 'selectDeviceType' on='change'} id="project-device-preference" disabled=isChangingDevice
       option selected="true" value=devicePreference.deviceType
         | #{ t (device-type devicePreference.deviceType)}
       each filteredDeviceTypes as |deviceType|
@@ -22,7 +22,7 @@ h6.margin-top
     = t "osVersion"
 .columns
   .column.is-one-third
-    select.input.mp-version-preference{action 'selectVersion' on='change'} id="project-version-preference"
+    select.input.mp-version-preference{action 'selectVersion' on='change'} id="project-version-preference" disabled=isChangingVersion
       option selected="true" value=devicePreference.platformVersion
         | #{devicePreference.versionText}
       if devicePreference.isAnyVersion

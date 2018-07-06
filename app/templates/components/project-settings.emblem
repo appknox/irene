@@ -18,7 +18,7 @@
         = t "analysisSettings"
 
 if isGeneralSettings
-  .box-container
+  .box-container.project-preference
     = project-preferences project=project
   .box-container
     = api-filter profileId=project.activeProfileId

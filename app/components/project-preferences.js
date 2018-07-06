@@ -71,12 +71,16 @@ const ProjectPreferencesComponent = Ember.Component.extend({
     selectDeviceType() {
       this.set("selectedDeviceType", parseInt(this.$('#project-device-preference').val()));
       this.set("selectVersion", "0");
+      this.set("isChangingDevice", true);
       this.send("versionSelected");
+      this.set("isChangingDevice", false);
     },
 
     selectVersion() {
       this.set("selectVersion", this.$('#project-version-preference').val());
+      this.set("isChangingVersion", true);
       this.send("versionSelected");
+      this.set("isChangingVersion", false);
     },
 
     versionSelected() {
