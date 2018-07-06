@@ -34,15 +34,15 @@ h6.margin-top
           = device.platformVersion
 
 .columns
-  .column
+  .column.request-status
     if showStatus
       .fa-font-size
         if isSavingPreference
           i.fa class="fa-spinner fa-spin"
-          | &nbsp; Please Wait
+          | &nbsp; #{t "pleaseWait"}
         if isSuccessful
           i.fa class="fa-check"
-          | &nbsp; Successfully saved the preference
+          | &nbsp; #{t "savedPreferences"}
         if isNotSuccessful
           i.fa class="fa-times"
-          | &nbsp; Something went wrong, please try again
+          | &nbsp; #{t "somethingWentWrong"}

@@ -308,6 +308,7 @@ export default {
   "showUntestedAnalysis": "SHOW/HIDE Untested Analysis",
   "signin": "サインイン",
   "sortBy": "並び替え",
+  "somethingWentWrong": "Something went wrong, please try again",
   "staging": "ステージング",
   "start": "開始",
   "startDynamicScan": "Start Dynamic Scan",

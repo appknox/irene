@@ -308,6 +308,7 @@ export default {
   "showUntestedAnalysis": "SHOW/HIDE Untested Analysis",
   "signin": "Sign In",
   "sortBy": "Sort By",
+  "somethingWentWrong": "Something went wrong, please try again",
   "staging": "Staging",
   "start": "Start",
   "startDynamicScan": "Start Dynamic Scan",
