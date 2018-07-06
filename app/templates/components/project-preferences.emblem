@@ -10,19 +10,20 @@ h6.margin-top
   .column
     = t "deviceType"
 .columns
-  .column.is-one-third
-    select.input.mp-device-preference{action 'selectDeviceType' on='change'} id="project-device-preference" disabled=isChangingDevice
+  .column.is-one-sixth
+    select.input.mp-device-preference{action 'selectDeviceType' on='change'} id="project-device-preference" disabled=isSavingPreference
       option selected="true" value=devicePreference.deviceType
         | #{ t (device-type devicePreference.deviceType)}
       each filteredDeviceTypes as |deviceType|
         option value=deviceType.value
           | #{ t (device-type deviceType.value)}
+
 .columns
-  .column
+ .column
     = t "osVersion"
 .columns
   .column.is-one-third
-    select.input.mp-version-preference{action 'selectVersion' on='change'} id="project-version-preference" disabled=isChangingVersion
+    select.input.mp-version-preference{action 'selectVersion' on='change'} id="project-version-preference" disabled=isSavingPreference
       option selected="true" value=devicePreference.platformVersion
         | #{devicePreference.versionText}
       if devicePreference.isAnyVersion
@@ -31,3 +32,17 @@ h6.margin-top
       each filteredUniqueDevices as |device|
         option value=device.platformVersion
           = device.platformVersion
+
+.columns
+  .column
+    if showStatus
+      .fa-font-size
+        if isSavingPreference
+          i.fa class="fa-spinner fa-spin"
+          | &nbsp; Please Wait
+        if isSuccessful
+          i.fa class="fa-check"
+          | &nbsp; Successfully saved the preference
+        if isNotSuccessful
+          i.fa class="fa-times"
+          | &nbsp; Something went wrong, please try again

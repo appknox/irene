@@ -7,14 +7,11 @@ const ProjectPreferencesComponent = Ember.Component.extend({
 
   project: null,
   selectVersion: "0",
-  isSavingPreference: false,
   i18n: Ember.inject.service(),
   ajax: Ember.inject.service(),
   notify: Ember.inject.service('notification-messages-service'),
   deviceTypes: ENUMS.DEVICE_TYPE.CHOICES,
 
-  tDeviceSelected: t("deviceSelected"),
-  tPleaseTryAgain: t("pleaseTryAgain"),
   tAnyVersion: t("anyVersion"),
 
   devicePreference: (function() {
@@ -71,22 +68,16 @@ const ProjectPreferencesComponent = Ember.Component.extend({
     selectDeviceType() {
       this.set("selectedDeviceType", parseInt(this.$('#project-device-preference').val()));
       this.set("selectVersion", "0");
-      this.set("isChangingDevice", true);
       this.send("versionSelected");
-      this.set("isChangingDevice", false);
     },
 
     selectVersion() {
       this.set("selectVersion", this.$('#project-version-preference').val());
-      this.set("isChangingVersion", true);
       this.send("versionSelected");
-      this.set("isChangingVersion", false);
     },
 
     versionSelected() {
       const selectVersion = this.get("selectVersion");
-      const tDeviceSelected = this.get("tDeviceSelected");
-      const tPleaseTryAgain = this.get("tPleaseTryAgain");
       const selectedDeviceType = this.get("selectedDeviceType");
 
       const profileId = this.get("project.activeProfileId");
@@ -95,30 +86,26 @@ const ProjectPreferencesComponent = Ember.Component.extend({
         device_type: selectedDeviceType,
         platform_version: selectVersion
       };
+      this.set("showStatus", true);
       this.set("isSavingPreference", true);
       this.get("ajax").put(devicePreferences, {data})
       .then(() => {
-        this.get("notify").success(tDeviceSelected);
         if(!this.isDestroyed) {
           this.set("isSavingPreference", false);
-          this.set("projectPreferenceModal", false);
-          this.set("devicePreference.deviceType", selectedDeviceType);
-          this.set("devicePreference.platformVersion", selectVersion);
+          this.set("isNotSuccessful", false);
+          this.set("isSuccessful", true);
+          setTimeout(() => {
+            this.set("isSuccessful", false);
+          }, 2000);
         }
       }, () => {
         if(!this.isDestroyed) {
           this.set("isSavingPreference", false);
-          this.get("notify").error(tPleaseTryAgain);
+          this.set("isNotSuccessful", true);
+          this.set("devicePreference.deviceType", this.get("devicePreference.deviceType"));
+          this.set("devicePreference.platformVersion", this.get("devicePreference.platformVersion"));
         }
       });
-    },
-
-    openProjectPreferenceModal() {
-      this.set("projectPreferenceModal", true);
-    },
-
-    closeProjectPreferenceModal() {
-      this.set("projectPreferenceModal", false);
     }
   }
 });
