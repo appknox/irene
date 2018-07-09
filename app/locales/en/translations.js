@@ -274,7 +274,6 @@ export default {
   "resetPassword": "Reset your password",
   "repoIntegrated": "Repo successfully integrated",
   "repoNotIntegrated": "Something went wrong when trying to update this repo",
-  "reportCustomization": "Report Customization",
   "revokeGithub": "Revoke Github",
   "revokeJira": "Revoke Jira",
   "risk": "The risk of",

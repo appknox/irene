@@ -274,7 +274,6 @@ export default {
   "resetPassword": "パスワードのリセット",
   "repoIntegrated": "リポジトリの連携に成功しました",
   "repoNotIntegrated": "リポジトリの更新時に問題が発生しました",
-  "reportCustomization": "Report Customization",
   "revokeGithub": "Githubを取り消す",
   "revokeJira": "JIRAを取り消す",
   "risk": "リスク",
