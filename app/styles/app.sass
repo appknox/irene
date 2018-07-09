@@ -199,6 +199,9 @@ body
 input
   display: block
 
+button:hover, button:active, button:focus
+  transition: all 0.4s!important
+
 .top-nav
   width: 100%
   margin-top: -10px
@@ -540,7 +543,7 @@ button, .button
       &:nth-child(2)
         border-width: 2px 2px 2px 0px
         border-style: solid
-        border-color: lighten($default, 50%)
+        border-color: lighten($default, 40%)
   .fa
     &-exclamation-triangle
       margin-top: 20px
@@ -2419,3 +2422,31 @@ $attachment-icon-width: 4em
   margin-top: -30px
   i.fa
     font-size: 26px
+
+.project-preference, .project-preference-component
+  padding-bottom: 0px!important
+  select
+    width: 170px
+  .fa-font-size
+    margin-top: 5px
+    i
+      margin-top: 2px
+  .fa-check
+    color: $green
+  .fa-times
+    color: $red
+
+.project-preference-component
+  margin-top: 10px
+  border: 2px solid lighten($grey, 40%)
+  padding: 10px
+  margin-bottom: 30px
+  .columns .column
+    height: auto!important
+
+.request-status
+  margin-top: -10px
+  padding: 0px 10px
+  min-height: 45px
+  position: relative
+  top: 12px

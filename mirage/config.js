@@ -35,6 +35,7 @@ export default function() {
   this.get('/profiles/:id/github_integration');
   this.get('/profiles/:id/jira_integration');
   this.get('/profiles/:id/vulnerability_preferences', 'vulnerability-preference');
+  this.get('/available_devices/', 'available-device');
   this.get('/subscriptions/', 'subscription');
   this.get('/stats/:id', 'stat');
   this.get('/personaltokens', 'personaltoken');

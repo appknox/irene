@@ -5,8 +5,8 @@ import { deviceType } from 'irene/helpers/device-type';
 module('Unit | Helper | device type');
 
 test('it works', function(assert) {
-  assert.equal(deviceType([42]), "noPreference", "No Preference");
-  assert.equal(deviceType([ENUMS.DEVICE_TYPE.NO_PREFERENCE]), "noPreference", "No Preference");
+  assert.equal(deviceType([42]), "anyDevice", "No Preference");
+  assert.equal(deviceType([ENUMS.DEVICE_TYPE.NO_PREFERENCE]), "anyDevice", "No Preference");
   assert.equal(deviceType([ENUMS.DEVICE_TYPE.PHONE_REQUIRED]), "phone", "Phone");
   assert.equal(deviceType([ENUMS.DEVICE_TYPE.TABLET_REQUIRED]), "tablet", "Tablet");
 });

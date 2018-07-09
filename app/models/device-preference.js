@@ -8,16 +8,22 @@ export default DS.Model.extend({
   deviceType: DS.attr('number'),
   platformVersion: DS.attr('string'),
 
-  tNoPreference: t("noPreference"),
+  tAnyVersion: t("anyVersion"),
 
   versionText: (function() {
     const platformVersion = this.get("platformVersion");
-    const tNoPreference = this.get("tNoPreference");
+    const tAnyVersion = this.get("tAnyVersion");
     if (platformVersion === "0") {
-      return tNoPreference;
+      this.set("isAnyDevice", true);
+      return tAnyVersion;
     } else {
       return platformVersion;
     }
+  }).property("platformVersion"),
+
+  isAnyVersion: (function() {
+    const platformVersion = this.get("platformVersion");
+    return platformVersion !== "0";
   }).property("platformVersion")
 
 });

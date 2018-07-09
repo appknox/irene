@@ -58,6 +58,8 @@ if notVNCViewer
       .api-scanning
         h6
           = t "modalCard.runAPIScan.description"
+        .project-preference-component
+          = project-preferences profileId=file.profile.id platform=file.project.platform
         form.margin-top20
           p.control
           .columns
@@ -78,6 +80,8 @@ if notVNCViewer
               = fa-icon 'info-circle'
             .column
               = t "modalCard.apiScan.dynamicScanText"
+        .project-preference-component
+          = project-preferences profileId=file.profile.id platform=file.project.platform
         form.margin-top30
           p.control
           .columns

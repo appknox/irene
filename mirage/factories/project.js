@@ -18,9 +18,7 @@ export default Base.extend({
   showIgnoredAnalysis: faker.random.boolean,
   activeProfileId: 2,
 
-  platform(){
-    return faker.random.arrayElement(ENUMS.PLATFORM.VALUES);
-  },
+  platform: 1,
 
   deviceType() {
     return faker.random.arrayElement(ENUMS.DEVICE_TYPE.VALUES);
