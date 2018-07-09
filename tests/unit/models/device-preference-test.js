@@ -24,6 +24,6 @@ test('it exists', function(assert) {
     devicePreference.set('platformVersion', "1");
     assert.equal(devicePreference.get('versionText'), "1", "Version Text");
     devicePreference.set('platformVersion', "0");
-    assert.equal(devicePreference.get('versionText.string'), "No Preference", "Version Text");
+    assert.equal(devicePreference.get('versionText.string'), "Any Version", "Version Text");
   });
 });

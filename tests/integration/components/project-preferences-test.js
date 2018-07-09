@@ -52,33 +52,7 @@ test('tapping button fires an external action', function(assert) {
           }
         }
       ];
-    }
-  };
-  component.set('store', store);
-  Ember.run(function() {
-    component.set("project", {activeProfileId:1});
-    component.send('versionSelected');
-    assert.deepEqual(component.get("devices"), [{
-      "attributes": {
-        "name": "test",
-        "platform": 1
-      },
-      "id": 1,
-      "type": "device"
-      }
-    ], 'devices');
-    assert.equal(component.get("isSavingPreference"), true, 'Saving Preference');
-    component.send('openProjectPreferenceModal');
-    assert.equal(component.get("projectPreferenceModal"), true, 'Open Modal');
-    component.send('closeProjectPreferenceModal');
-    assert.equal(component.get("projectPreferenceModal"), false, 'Close Modal');
-    component.set("selectedDeviceType", ENUMS.DEVICE_TYPE.NO_PREFERENCE);
-  });
-});
-
-test('tapping button fires an external action', function(assert) {
-  var component = this.subject();
-  var store = {
+    },
     queryRecord: function() {
       return [
         {
@@ -94,7 +68,17 @@ test('tapping button fires an external action', function(assert) {
   };
   component.set('store', store);
   Ember.run(function() {
-    component.set("project", {activeProfileId:1});
+    component.set("profileId", 1);
+    component.send('versionSelected');
+    assert.deepEqual(component.get("devices"), [{
+      "attributes": {
+        "name": "test",
+        "platform": 1
+      },
+      "id": 1,
+      "type": "device"
+      }
+    ], 'devices');
     assert.deepEqual(component.get("devicePreference"), [{
       "attributes": {
         "deviceType": 1,
@@ -104,5 +88,7 @@ test('tapping button fires an external action', function(assert) {
       "type": "device-preference"
       }
     ], 'device preference');
+    assert.equal(component.get("isSavingPreference"), true, 'Saving Preference');
+    component.set("selectedDeviceType", ENUMS.DEVICE_TYPE.NO_PREFERENCE);
   });
 });
