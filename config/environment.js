@@ -233,7 +233,7 @@ module.exports = function(environment) {
 
   if (environment === 'whitelabel') {
     ENV.enableIntercom = false;
-    ENV.enablePendo = false;
+    ENV.enablePendo = true;  //TODO: fix this.
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
   }
