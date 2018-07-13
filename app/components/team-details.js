@@ -142,7 +142,7 @@ const TeamDetailsComponent = Ember.Component.extend({
       })
       .catch(function(error) {
         that.get("notify").error(error.payload.message);
-      })
+      });
     },
 
     editTeamName() {

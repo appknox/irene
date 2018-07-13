@@ -7,12 +7,12 @@ export default DRFAdapter.extend(DataAdapterMixin, {
   namespace: ENV.namespace,
   addTrailingSlashes: false,
   authorizer: 'authorizer:irene',
-  query: function query(store, type, query) {
+  query: function query() {
     let url = `${this.get('host')}/${this.get('namespace')}/organizations`;
     return this.ajax(url, 'GET');
   },
-  queryRecord: function queryRecord(store, type, query) {
-    let url = `${this.get('host')}/${this.get('namespace')}/organizations/${query.id}`;
+  queryRecord: function queryRecord(store, type, q) {
+    let url = `${this.get('host')}/${this.get('namespace')}/organizations/${q.id}`;
     return this.ajax(url, 'GET');
   }
 });
