@@ -5,7 +5,6 @@
         img src=file.iconUrl alt=file.name
     .column.hide-overflow
       = file.name
-      | sdjhsdbbhfbhdbfhbdhfhdfhdbfdhfbdhfbhd
       div
         | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
     .column.os-icon
