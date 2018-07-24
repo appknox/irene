@@ -1,0 +1,15 @@
+.columns
+  .column.table-container
+    table.users-list-table
+      tr
+        th
+          | Project ID
+        th
+          | Project Name
+        th
+          | View All Files
+      if hasObjects
+        each sortedObjects as |project|
+          = project-search-overview project=project
+
+= partial "paginate"

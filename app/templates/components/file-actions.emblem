@@ -1,0 +1,22 @@
+.columns
+  .column.is-half.margin-auto
+    .file-action-container
+      .columns
+        .column
+          h3
+            | #{fileDetails.name} | #{fileDetails.id}
+
+        .column.content-right
+          button.is-primary click="generateReport"
+            | Generate Report
+          a.margin-left href=ireneFilePath target="_blank" class="button is-primary"
+            | Visit Dashboard
+
+      .box
+        .columns
+          .column
+            h3
+              | List of Analyses
+        .columns
+          .column
+            = analysis-list fileDetails=fileDetails

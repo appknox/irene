@@ -1,0 +1,17 @@
+.columns
+  .column.table-container
+    table.users-list-table
+      tr
+        th
+          | File ID
+        th
+          | File Name
+        th
+          | View
+        th
+          | Action
+      if hasObjects
+        each sortedObjects as |file|
+          = file-search-overview file=file
+
+= partial "paginate"

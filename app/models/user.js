@@ -36,6 +36,7 @@ const User = DS.Model.extend({
   mfaSecret: DS.attr('string'),
   isTrial: DS.attr('boolean'),
   intercomHash: DS.attr('string'),
+  isSecurity: true, // FIXME:
 
   tProject: t("project"),
   tProjects: t("projects"),

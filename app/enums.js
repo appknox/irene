@@ -117,7 +117,66 @@ const ENUMS = {
     NO_PREFERENCE: 0,
     STAGING: 1,
     PRODUCTION: 2
-  }
+  },
+
+  ATTACK_VECTOR: {
+    NETWORK: "N",
+    ADJACENT: "A",
+    LOCAL: "L",
+    PHYSICAL: "P"
+  },
+
+  ATTACK_COMPLEXITY: {
+    LOW: "L",
+    HIGH: "H"
+  },
+
+  PRIVILEGES_REQUIRED: {
+    NONE: "N",
+    LOW: "L",
+    HIGH: "H"
+  },
+
+  IMPACTS: {
+    NONE: "N",
+    LOW: "L",
+    HIGH: "H"
+  },
+
+  USER_INTERACTION: {
+    NOT_REQUIRED: "N",
+    REQUIRED: "R"
+  },
+
+  SCOPE: {
+    UNCHANGED: "U",
+    CHANGED: "C"
+  },
+
+  CONFIDENTIALITY_IMPACT: {
+    NONE: "N",
+    LOW: "L",
+    HIGH: "H"
+  },
+
+  INTEGRITY_IMPACT: {
+    NONE: "N",
+    LOW: "L",
+    HIGH: "H"
+  },
+
+  AVAILABILITY_IMPACT: {
+    NONE: "N",
+    LOW: "L",
+    HIGH: "H"
+  },
+
+  ANALYSIS_STATUS: {
+     ERROR: 0,
+     WAITING: 1,
+     RUNNING: 2,
+     COMPLETED: 3
+   }
 
 };
 

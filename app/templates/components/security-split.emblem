@@ -1,0 +1,14 @@
+.tabs.is-medium.is-boxed.is-centered
+  ul
+    li class=searchClass click="displaySearch"
+      = link-to 'authenticated.security.projects'
+        | Search
+    li class=downloadAppClass click="displayDownloadApp"
+      = link-to 'authenticated.security.downloadapp'
+        | Download App
+    li class=purgeAnalysisClass click="displayPurgeAnalysis"
+      = link-to 'authenticated.security.purgeanalysis'
+        | Purge API Analyses
+
+
+= outlet

@@ -1,0 +1,11 @@
+.columns
+  .column.is-half.margin-auto
+    .box.margin-top10
+      .margin-auto
+        h3
+          | Download App
+        form.input-form
+          p.control
+            = input class="form-control input" id="file-number" placeholder="Enter the file number" type="text" value=fileNumber
+          button.is-primary click="downloadApp"
+            | Download App
