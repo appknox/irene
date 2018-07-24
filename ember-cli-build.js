@@ -9,6 +9,14 @@ module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
     // Add options here
     storeConfigInMeta: false,
+    minifyJS: {
+      options: {
+        exclude: ['runtimeconfig.js']
+      }
+    },
+    fingerprint: {
+      exclude: ['runtimeconfig.js']
+    },
     sassOptions: {
       extension: 'sass',
       includePaths: [
