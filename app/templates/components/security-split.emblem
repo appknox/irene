@@ -1,4 +1,4 @@
-.tabs.is-medium.is-boxed.is-centered
+.tabs.is-medium.is-boxed.is-centered.margin-top
   ul
     li class=searchClass click="displaySearch"
       = link-to 'authenticated.security.projects'

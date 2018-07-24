@@ -1227,6 +1227,23 @@ ul.risk-table
 .team-container
   padding: 0px 100px
 
+.table-container
+  @extend .align-center
+  .security-list-table
+    min-width: 600px
+    @extend .api-filter-table
+    tr
+      td
+        text-align: center
+        min-width: 100px
+        vertical-align: middle
+        &:last-child
+          text-align: center
+      th
+        text-align: center
+        &:last-child
+          text-align: center
+
 .team-container.box-container
   padding-bottom: 20px
 

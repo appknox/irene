@@ -1,6 +1,6 @@
 .columns
   .column.table-container
-    table.users-list-table
+    table.security-list-table
       tr
         th
           | File ID
