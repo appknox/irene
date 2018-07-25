@@ -7,8 +7,9 @@ export default DRFAdapter.extend(DataAdapterMixin, {
   host: ENV.host,
   namespace: "hudson-api",
 
-  findRecord: function findRecord(store, type, q) {
-    let url = `${this.get('host')}/${this.get('namespace')}/analyses/${q}`;
-    return this.ajax(url, 'GET');
+  _buildURL: function _buildURL(modelName, id) {
+    if(id) {
+      return `${this.get('host')}/${this.get('namespace')}/analyses/${id}`;
+    }
   }
 });

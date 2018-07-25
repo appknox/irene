@@ -3,7 +3,6 @@
     .column.is-one-sixth.side-menu
       .appknox-logo
         = img-logo
-
         ul.menu-list.text-center
           li
             = link-to 'authenticated.projects' class="mp-auth-projects"
@@ -56,9 +55,10 @@
               .appknox-logo
                 = img-logo
           .column.content-right.top-icons
-            a href='' id='intercom_support' class="mp-auth-support"
-              = fa-icon "support" class="sidebar-icons"
-              = t "support"
+            if model.isNotSecurity
+              a href='' id='intercom_support' class="mp-auth-support"
+                = fa-icon "support" class="sidebar-icons"
+                = t "support"
             a
               = fa-icon "user" class="sidebar-icons"
               | #{model.username} &nbsp;

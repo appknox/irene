@@ -22,5 +22,5 @@ export default DS.Model.extend({
   owasp: DS.hasMany('owasp'),
   pcidss: DS.hasMany('pcidss'),
   file: DS.belongsTo('file'),
-  attachments: DS.hasMany('attachment')
+  attachments: DS.hasMany('security/attachment')
 });

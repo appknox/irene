@@ -121,7 +121,7 @@ export default Ember.Component.extend({
         this.set("isUploading", false);
         this.get("store").findRecord('analysis', this.get("analysis.analysisId"));
         this.get("notify").success("File Uploaded Successfully");
-        const analysisObj = this.get("store").findRecord('analysis', this.get("analysis.analysisId"));
+        const analysisObj = this.get("store").findRecord('security/analysis', this.get("analysis.analysisId"));
         this.set('analysisDetails', analysisObj);
       } catch(error) {
         this.set("isUploading", false);
@@ -239,20 +239,20 @@ export default Ember.Component.extend({
       const status = this.get("analysisDetails.status");
       const analysisId= this.get("analysis.analysisId");
       const findings = this.get("analysisDetails.findings");
-      const overriddenRisk = this.get("analysisDetails.overridden_risk");
-      const overriddenRiskToProfile = this.get("analysisDetails.overridden_risk_to_profile");
+      const overriddenRisk = this.get("analysisDetails.overriddenRisk");
+      const overriddenRiskToProfile = this.get("analysisDetails.overriddenRiskToProfile");
       if (findings) {
         findings.forEach(finding => delete finding.id);
       }
-      const attackVector = this.get("analysisDetails.attack_vector");
-      const attackComplexity = this.get("analysisDetails.attack_complexity");
-      const privilegesRequired = this.get("analysisDetails.privileges_required");
-      const userInteraction = this.get("analysisDetails.user_interaction");
+      const attackVector = this.get("analysisDetails.attackVector");
+      const attackComplexity = this.get("analysisDetails.attackComplexity");
+      const privilegesRequired = this.get("analysisDetails.privilegesRequired");
+      const userInteraction = this.get("analysisDetails.userInteraction");
       const scope = this.get("analysisDetails.scope");
-      const confidentialityImpact = this.get("analysisDetails.confidentiality_impact");
-      const integrityImpact = this.get("analysisDetails.integrity_impact");
-      const availabilityImpact = this.get("analysisDetails.availability_impact");
-      const cvssVector = this.get("analysisDetails.cvss_vector");
+      const confidentialityImpact = this.get("analysisDetails.confidentialityImpact");
+      const integrityImpact = this.get("analysisDetails.integrityImpact");
+      const availabilityImpact = this.get("analysisDetails.availabilityImpact");
+      const cvssVector = this.get("analysisDetails.cvssVector");
       const data = {
         risk,
         status,

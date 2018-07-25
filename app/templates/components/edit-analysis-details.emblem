@@ -163,38 +163,35 @@
                     | Uploading...
                   else
                     | Upload file
-      h6.bold-font.margin-top10.margin-bottom0
+
+      h5.bold-font.margin-top10.margin-bottom0
         | List of Attachments
       .columns.border-bottom-container
         .column
-          table.attachments-list-table
-            tr
-              th
-                | File Key
-              th
-                | Upload Date
-              th
-                | Owner
-              th
-                | Attachment ID
-              th colspan="2"
-                | Actions
-            each analysisDetails.attachments as |attachment|
+          if analysisDetails.attachments
+            table.attachments-list-table
               tr
-                td
-                  = attachment.name
-                td
-                  = attachment.createdOn
-                td
-                  = attachment.user
-                td
-                  = attachment.id
-                td
-                  div.pointed-cursor click="'deleteFile' attachment.id"
-                    = fa-icon "trash-o"
-                td
-                  div.pointed-cursor click="'downloadAttachment' attachment.id"
-                    = fa-icon "download"
+                th
+                  | File Key
+                th
+                  | Delete
+                th
+                  | Download
+              each analysisDetails.attachments as |attachment|
+                tr
+                  td
+                    a.attachment data-type="{{ file-extension attachment.name }}" title="{{ attachment.name }}"
+                      span.margin-left
+                        | #{attachment.name}
+                  td
+                    span click="'deleteFile' attachment.id"
+                      = fa-icon "trash-o"
+                  td
+                    span click="'downloadAttachment' attachment.id"
+                      = fa-icon "download"
+          else
+            h6.margin-left
+              | No Files Uploaded
 
       .columns
         .column

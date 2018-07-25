@@ -3,7 +3,11 @@ import ENUMS from 'irene/enums';
 
 export function riskText(params) {
 
-  const risk = params[0];
+  let risk = params[0];
+
+  if(typeof risk === "object") {
+    risk = risk.value;
+  }
 
   switch (risk) {
     case ENUMS.RISK.UNKNOWN: return "untested";
