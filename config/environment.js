@@ -178,7 +178,10 @@ module.exports = function(environment) {
       uploadFile: 'attachments',
       uploadedAttachment: 'attachments/upload_finished',
       deleteAttachment: 'delete_attachment',
-      downloadAttachment: 'download'
+      downloadAttachment: 'download',
+      purgeAPIAnalyses: 'purge_api',
+      apps: 'apps',
+      reports: 'reports'
     },
     csb: {
       reportDownload: { feature: "Account Settings", module: "Setup", product: "Appknox" },
