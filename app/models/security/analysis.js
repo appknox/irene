@@ -21,6 +21,6 @@ export default DS.Model.extend({
   vulnerability: DS.belongsTo('vulnerability'),
   owasp: DS.hasMany('owasp'),
   pcidss: DS.hasMany('pcidss'),
-  file: DS.belongsTo('file', {inverse: 'analyses'}),
+  file: DS.belongsTo('file'),
   attachments: DS.hasMany('attachment')
 });

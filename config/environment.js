@@ -173,7 +173,10 @@ module.exports = function(environment) {
       activate: "activate",
       files: "files",
       profiles: "profiles",
-      vulnerabilityPreferences: "vulnerability_preferences"
+      vulnerabilityPreferences: "vulnerability_preferences",
+      uploadFile: 'attachments',
+      uploadedAttachment: 'attachments/upload_finished',
+      deleteAttachment: 'delete_attachment'
     },
     csb: {
       reportDownload: { feature: "Account Settings", module: "Setup", product: "Appknox" },

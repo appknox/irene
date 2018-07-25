@@ -2,8 +2,8 @@
   .column.is-half.margin-auto
     h3
       | #{analysisDetails.file.id} | #{analysisDetails.file.name}
-    .box
-      .columns.border-botton-container
+    .box.analysis-box
+      .columns.border-bottom-container
         .column
           h4
             = analysisDetails.vulnerability.name
@@ -11,11 +11,11 @@
         .column.is-one-third
           h5.bold-font
             | Status
-      .columns.border-botton-container
+      .columns.border-bottom-container
         .column.is-one-third.margin-bottom20
           = power-select placeholder="Select Status" selected=analysisDetails.status options=statuses onchange=(action "selectStatus") as |status|
             | #{analysis-status status}
-      .columns.border-botton-container
+      .columns.border-bottom-container
         h5.bold-font.margin-left20
           | CVSS Metrics
         .column.is-one-third.cvss-score-section
@@ -27,7 +27,7 @@
             .column
               h3
                 | #{risk-text analysisDetails.risk}
-        .column.is-one-third
+        .column
           .columns
             .column
               | Attack Vector
@@ -80,7 +80,7 @@
         .column.is-one-third
           h5.bold-font
             | OWASP Category
-      .columns.border-botton-container
+      .columns.border-bottom-container
         .column.margin-bottom20
           = power-select-multiple placeholder="Select OWASP Categories" selected=analysisDetails.owasp options=owasps onchange=(action "selectOwaspCategory") as |key|
             | #{key.code} - #{key.year} - #{key.title}
@@ -88,7 +88,7 @@
         .column.is-one-third
           h5.bold-font
             | PCI-DSS Risk Category
-      .columns.border-botton-container
+      .columns.border-bottom-container
         .column.margin-bottom20
           = power-select-multiple placeholder="Select PCI-DSS Risk Category" selected=analysisDetails.pcidss options=pcidsses onchange=(action "selectPcidssCategory") as |key|
             | #{key.code} - #{key.title}
@@ -96,31 +96,32 @@
         .column.is-one-third
           h5.bold-font
             | Override Risk
-      .columns.border-botton-container
+      .columns.border-bottom-container
         .column.margin-bottom20.is-one-third
           = power-select placeholder="Select Risk" selected=analysisDetails.overriddenRisk options=risks onchange=(action "selectOverriddenRisk") as |key|
             | #{risk-text key}
-        .column
-          = input type="checkbox" checked=analysisDetails.overriddenRiskToProfile
-          | &nbsp; Save to profile &nbsp;
+        .column.input-checkbox
+          = input class="checkbox" type="checkbox" checked=analysisDetails.overriddenRiskToProfile
+          span
+            | &nbsp; Save to profile &nbsp;
       .columns
         .column.is-one-third
           h5.bold-font
             | Findings
-      .border-botton-container
+      .border-bottom-container
         form.form.margin-left20
           .columns
-            .column.is-one-third
+            .column
               p.control.is-fullwidth
                 | Title
               p.control.is-fullwidth
                 = textarea class="form-control input" type="text" value=findingTitle
-            .column.is-one-third
+            .column
               p.control.is-fullwidth
                 | Description
               p.control.is-fullwidth
                 = textarea class="form-control input" type="text" value=findingDescription
-            .column.is-one-third
+            .column.is-one-sixth.margin-right
               p.control.is-fullwidth
                 button.is-primary.margin-top30 click="addFinding"
                   | Add Finding
@@ -152,16 +153,16 @@
         .column
           h5.bold-font
             | Attachments
-      / .columns
-      /   .column
-      /     form
-      /       p.control.is-fullwidth
-      /         = file-upload name="files" accept="*/*" onfileadd=(action "uploadFile") as |queue|
-      /           a class="button is-primary" disabled=isUploading
-      /             if isUploading
-      /               | Uploading...
-      /             else
-      /               | Upload file
+      .columns
+        .column
+          form
+            p.control.is-fullwidth
+              = file-upload name="files" accept="*/*" onfileadd=(action "uploadFile") as |queue|
+                a class="button is-primary" disabled=isUploading
+                  if isUploading
+                    | Uploading...
+                  else
+                    | Upload file
       h6.bold-font.margin-top10.margin-bottom0
         | List of Attachments
       .columns.border-bottom-container

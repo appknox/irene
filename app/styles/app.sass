@@ -1229,20 +1229,31 @@ ul.risk-table
 
 .table-container
   @extend .align-center
-  .security-list-table
-    min-width: 600px
-    @extend .api-filter-table
-    tr
-      td
+
+.security-list-table, .finding-list-table, .attachments-list-table
+  min-width: 600px
+  @extend .api-filter-table
+  tr
+    td
+      text-align: center
+      min-width: 100px
+      vertical-align: middle
+      &:last-child
         text-align: center
-        min-width: 100px
-        vertical-align: middle
-        &:last-child
-          text-align: center
-      th
+    th
+      text-align: center
+      &:last-child
         text-align: center
-        &:last-child
-          text-align: center
+
+.attachments-list-table
+  width: 690px
+  margin-left: 0px!important
+
+.finding-list-table, .attachments-list-table
+  margin-left: 27px
+  margin-top: 0px
+  i
+    cursor: pointer
 
 .team-container.box-container
   padding-bottom: 20px
@@ -2468,3 +2479,31 @@ $attachment-icon-width: 4em
   min-height: 45px
   position: relative
   top: 12px
+
+.back-link
+  width: 600px
+
+.list-heading
+  margin-left: -100px
+
+.border-bottom-container
+  border-bottom: 2px solid #f0f0f0
+  margin: 10px -20px 20px -20px
+
+.analysis-box
+  padding-top: 0px
+  textarea
+    height: 100px
+
+.cvss-score-section
+  margin-top: 70px
+  .column
+    margin: auto
+
+.input-checkbox
+  margin-top: 2px
+  .checkbox
+    font-size: 16px
+  span
+    position: relative
+    top: 1px

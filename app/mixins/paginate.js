@@ -65,6 +65,9 @@ const PaginateMixin = Ember.Mixin.create({
         meta.total = result.meta.pagination.count;
         this.set('isJsonApiPagination', true);
       }
+      if(result.meta.count) {
+        meta.total = result.meta.count;
+      }
       return this.set("meta", meta);
     });
     return objects;

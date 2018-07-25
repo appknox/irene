@@ -1,16 +1,30 @@
-.columns
-  .column
-    .table-container
-      table.security-list-table
-        tr
-          th
-            | Project ID
-          th
-            | Project Name
-          th
-            | View All Files
-        if hasObjects
-          each sortedObjects as |project|
-            = project-search-overview project=project
+if user.hasProject
+  .text-centre
+    | LIST OF PROJECTS
+  if hasObjects
+    .columns
+      .column
+        .table-container
+          table.security-list-table
+            tr
+              th
+                | Project ID
+              th
+                | Project Name
+              th
+                | View All Files
 
-= partial "paginate"
+            each sortedObjects as |project|
+              = project-search-overview project=project
+
+    = partial "paginate"
+
+  else
+    .loading-container-home
+      i.fa class="fa-spinner fa-spin"
+      div
+        | Loading...
+else
+  .column.is-fullwidth.no-project-container
+    h4.capitalize-text.text-centre
+      | #{t "noProject"}!!
