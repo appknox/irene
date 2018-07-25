@@ -12,6 +12,7 @@ module.exports = function(environment) {
   var socketPath = process.env.IRENE_API_SOCKET_PATH || 'https://socket.appknox.com';
 
   var ENV = {
+    version: Date.now(),
     isDevknox: false,
     isAppknox: false,
     isEnterprise: false,
