@@ -1,0 +1,99 @@
+if isLoaded
+  if isSecurityDashboard
+    .columns.security-dashboard
+      .column.top-nav
+        .columns.top-columns
+          .column
+            .appknox-logo
+              = img-logo
+          .column.content-right.top-icons
+            a
+              = fa-icon "user" class="sidebar-icons"
+              | #{user.username} &nbsp;
+              = fa-icon "angle-down" class="sidebar-icons"
+              = attach-popover interactive=true placement="bottom" showOn="click" hideOn="clickout"
+                .user-info-popover
+                  .user-name
+                    = user.username
+                  .user-email
+                    = user.email
+                  .content-right
+                    a click="invalidateSession" class="mp-auth-logout highlighted-button"
+                      = fa-icon "power-off" class="sidebar-icons"
+                      = t "logout"
+    = security-split
+  else
+    .columns.columns-main-container
+      .column.is-one-sixth.side-menu
+        .appknox-logo
+          = img-logo
+          ul.menu-list.text-center
+            li
+              = link-to 'authenticated.projects' class="mp-auth-projects"
+                = fa-icon "tasks" class="sidebar-icons"
+                = t "projects"
+            li
+              = link-to 'authenticated.teams' class="mp-auth-teams"
+                = fa-icon "user" class="sidebar-icons"
+                = t "teams"
+            li
+              = link-to 'authenticated.settings' class="mp-auth-setting"
+                = fa-icon "cog" class="sidebar-icons"
+                = t "settings"
+
+            if user.ifBillingIsNotHidden
+              li
+                = link-to 'authenticated.billing' class="mp-auth-billing"
+                  = fa-icon "tag" class="sidebar-icons"
+                  = t "billing"
+
+          .status-updates
+            = submission-list
+
+      .column.margin-right.margin-top
+        .columns
+          .column.top-nav
+            .columns.top-columns
+              .column
+                .columns
+                  div.scan-text
+                    = t "startNewScan"
+                  .column
+                    label.button.is-primary.ac-upload-app.highlighted-button disabled=isUploading
+                      = upload-app delegate=this class="mp-upload-app"
+                      = fa-icon "upload"
+                      | &nbsp;
+                      if isUploading
+                        | #{t "uploading"}
+                        if progress
+                          | &nbsp;:#{progress}%
+                      else
+                        = t "uploadApp"
+              .column.is-one-quarter
+                .project-count
+                  = link-to 'authenticated.projects' class="mp-auth-settings highlighted-button"
+                    | #{user.totalProjects}
+              .column.content-right.top-icons
+                if isSecurityEnabled
+                  a href="/security/projects" target="_blank" class="button security-link"
+                    | Security Dashboard
+                a href='' id='intercom_support' class="mp-auth-support"
+                  = fa-icon "support" class="sidebar-icons"
+                  = t "support"
+                a
+                  = fa-icon "user" class="sidebar-icons"
+                  | #{user.username} &nbsp;
+                  = fa-icon "angle-down" class="sidebar-icons"
+                  = attach-popover interactive=true placement="bottom" showOn="click" hideOn="clickout"
+                    .user-info-popover
+                      .user-name
+                        = user.username
+                      .user-email
+                        = user.email
+                      .content-right
+                        a click="invalidateSession" class="mp-auth-logout highlighted-button"
+                          = fa-icon "power-off" class="sidebar-icons"
+                          = t "logout"
+
+        .margin-top50
+          = outlet

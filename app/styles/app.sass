@@ -2512,8 +2512,17 @@ $attachment-icon-width: 4em
     position: relative
     top: 1px
 
-.security-top-nav
-  margin-left: 10px
-  border-left-width: 0px
+.security-link
+  margin-top: 4px!important
+  &:hover, &:focus
+    border-color: #FFF
+
+.security-dashboard
   .appknox-logo
-    margin-top: 5px
+    margin-top: 18px
+  .top-nav
+    height: 60px
+    .top-icons
+      margin-top: 10px
+  & + div .tabs
+    margin-top: 60px!important
