@@ -38,6 +38,8 @@ const User = DS.Model.extend({
   intercomHash: DS.attr('string'),
   isSecurity: true, // FIXME:
 
+  isNotSecurity: Ember.computed.not('isSecurity'),
+
   tProject: t("project"),
   tProjects: t("projects"),
   tNoProject: t("noProject"),
