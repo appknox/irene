@@ -21,9 +21,10 @@
         .column.is-one-third.margin-bottom20
           = power-select placeholder="Select Status" selected=analysisDetails.status options=statuses onchange=(action "selectStatus") as |status|
             | #{analysis-status status}
-      .columns.border-bottom-container
+      .columns
         h5.bold-font.margin-left20
           | CVSS Metrics
+      .columns.border-bottom-container
         .column.is-one-third.cvss-score-section
           .columns
             .column
@@ -31,7 +32,7 @@
                 = analysisDetails.cvssBase
           .columns
             .column
-              h3
+              h3.uppercase-text
                 | #{risk-text analysisDetails.risk}
         .column
           .columns
@@ -105,7 +106,8 @@
       .columns.border-bottom-container
         .column.margin-bottom20.is-one-third
           = power-select placeholder="Select Risk" selected=analysisDetails.overriddenRisk options=risks onchange=(action "selectOverriddenRisk") as |key|
-            | #{risk-text key}
+            span.uppercase-text
+              | #{risk-text key}
         .column.input-checkbox
           = input class="checkbox" type="checkbox" checked=analysisDetails.overriddenRiskToProfile
           span

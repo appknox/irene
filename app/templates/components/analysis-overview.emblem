@@ -3,5 +3,5 @@ td
 td
   = link-to 'authenticated.security.analysis' analysis.id
      = analysis.vulnerability.name
-td
+td.uppercase-text
   | #{risk-text analysis.risk}
