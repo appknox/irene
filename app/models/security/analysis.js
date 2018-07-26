@@ -28,6 +28,21 @@ export default DS.Model.extend({
   isPassed: (function() {
     const risk = this.get("risk");
     return risk !== ENUMS.RISK.NONE;
-  }).property("risk")
+  }).property("risk"),
+
+  riskLabelClass: (function() {
+    return this.labelClass(this.get("risk"));
+  }).property("risk"),
+
+  labelClass(risk) {
+    switch (risk) {
+      case ENUMS.RISK.UNKNOWN: return `is-progress`;
+      case ENUMS.RISK.NONE: return `is-success`;
+      case ENUMS.RISK.LOW: return `is-info`;
+      case ENUMS.RISK.MEDIUM: return `is-warning`;
+      case ENUMS.RISK.HIGH: return `is-danger`;
+      case ENUMS.RISK.CRITICAL: return `is-critical`;
+    }
+  }
 
 });
