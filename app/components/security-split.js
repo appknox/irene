@@ -13,7 +13,7 @@ const SecuritySplitComponent = Ember.Component.extend({
   activeTab() {
     const path = window.location.pathname;
     switch (path) {
-      case "/security/project-list": return this.set("isSearchClass", true);
+      case "/security/projects": return this.set("isSearchClass", true);
       case "/security/downloadapp": return this.set("isDownloadAppClass", true);
       case "/security/purgeanalysis": return this.set("isPurgeAnalysisClass", true);
     }
