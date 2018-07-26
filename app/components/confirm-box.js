@@ -16,7 +16,7 @@ const ConfirmBoxComponent = Ember.Component.extend({
 
     sendCallback() {
       const delegate = this.get("delegate");
-      delegate.confirmCallback();
+      delegate.confirmCallback(this.get("key"));
     }
   }
 });

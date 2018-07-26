@@ -56,16 +56,34 @@ export default Ember.Component.extend({
   }).property("analysisDetails.findings"),
 
 
-  confirmCallback() {
-    const availableFindings = this.get("availableFindings");
-    this.set("analysisDetails.findings", availableFindings);
-    return this.set("showRemoveFindingConfirmBox", false);
+  confirmCallback(key) {
+    if(key === "findings") {
+      this.set("analysisDetails.findings", "");
+      return this.set("showClearAllFindingsConfirmBox", false);
+    }
+    if(key === "attachment") {
+      this.deleteFile(this.get("deletedFile"));
+      return this.set("showRemoveFileConfirmBox", false);
+    }
+    if(key === "finding") {
+      const availableFindings = this.get("availableFindings");
+      this.set("analysisDetails.findings", availableFindings);
+      return this.set("showRemoveFindingConfirmBox", false);
+    }
   },
 
   availableFindings: Ember.computed.filter('allFindings', function(allFinding) {
     const deletedFinding = this.get("deletedFinding");
     return allFinding.id !== deletedFinding;
   }),
+
+  deleteFile(id) {
+    const attachment = this.get("store").peekRecord('security/attachment', id);
+    if(attachment) {
+      attachment.deleteRecord();
+      attachment.save();
+    }
+  },
 
   updateCVSSScore() {
     const attackVector = this.get("analysisDetails.attackVector");
@@ -88,13 +106,6 @@ export default Ember.Component.extend({
   },
 
   actions: {
-    deleteFile(id) {
-      const attachment = this.get("store").peekRecord('security/attachment', id);
-      if(attachment) {
-        attachment.deleteRecord();
-        attachment.save();
-      }
-    },
 
     async uploadFile(file) {
       this.set("isUploading", true);
@@ -210,6 +221,11 @@ export default Ember.Component.extend({
         findingTitle: "",
         findingDescription: ""
       });
+    },
+
+    openClearAllFindingConfirmBox(param) {
+      this.set("clearAllFindings", true);
+      this.set("showClearAllFindingsConfirmBox", true);
     },
 
     openRemoveFindingConfirmBox(param) {
