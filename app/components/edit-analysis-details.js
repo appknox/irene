@@ -75,6 +75,7 @@ export default Ember.Component.extend({
       this.set("analysisDetails.integrityImpact", ENUMS.INTEGRITY_IMPACT.NONE);
       this.set("analysisDetails.availabilityImpact", ENUMS.AVAILABILITY_IMPACT.NONE);
       this.updateCVSSScore();
+      this.send("saveAnalysis");
       return this.set("showMarkPassedConfirmBox", false);
     }
   },
