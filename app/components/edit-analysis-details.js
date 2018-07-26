@@ -300,11 +300,14 @@ export default Ember.Component.extend({
         integrity_impact: integrityImpact,
         availability_impact: availabilityImpact
       };
+      this.set("isSavingAnalyses", true);
       const url = [ENV.endpoints.analyses, analysisId].join('/');
       this.get("ajax").put(url,{ namespace: '/hudson-api', data: JSON.stringify(data), contentType: 'application/json' })
       .then(() => {
+        this.set("isSavingAnalyses", false);
         this.get("notify").success("Analyses Updated");
       }, () => {
+        this.set("isSavingAnalyses", false);
         this.get("notify").error("Sorry something went wrong, please try again");
       })
     }

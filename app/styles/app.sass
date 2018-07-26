@@ -2526,11 +2526,17 @@ $attachment-icon-width: 4em
 .security-dashboard
   .appknox-logo
     margin-top: 18px
+    a
+      pointer-events: none
   .top-nav
     height: 60px
     margin-left: 10px
     border-left-width: 0px
     .top-icons
       margin-top: 10px
-  & + div .tabs
-    margin-top: 60px!important
+  & + div
+    .tabs
+      margin-top: 60px!important
+    .pagination
+      padding: 10px 200px
+      .pagination-list

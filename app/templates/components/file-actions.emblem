@@ -2,7 +2,7 @@
   .column.is-half.margin-auto
     .file-action-container
       .columns
-        / .column.is-one-sixth
+        / .column.is-one-sixth.margin-top
         /   = link-to 'authenticated.security.files' fileDetails.project.id
         /     = fa-icon "caret-left"
         /     | &nbsp; View All Files
@@ -33,5 +33,9 @@
           = input class="form-control input" placeholder="Enter the file number" type="text" value=file.fileId disabled=true
         p.control
           = input class="form-control input" placeholder="Enter the Email IDs(comma separated)" type="email" value=emailIds
-        button.is-primary click="generateReport"
+        button.is-primary click="generateReport" disabled=isGeneratingReport
+          if isGeneratingReport
+            .fa-font-size
+              i.fa class="fa-spinner fa-spin"
+            | &nbsp;
           | Generate Report

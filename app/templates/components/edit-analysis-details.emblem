@@ -1,6 +1,10 @@
 .columns
   .column.is-half.margin-auto
     .columns
+      .column.margin-top.is-one-third
+        = link-to 'authenticated.security.file' analysisDetails.file.id
+          = fa-icon "caret-left"
+          | &nbsp; View All Analyses
       .column
         h3
           | #{analysisDetails.file.id} | #{analysisDetails.file.name}
@@ -208,7 +212,11 @@
 
       .columns
         .column
-          button.is-primary.margin-top30 click="saveAnalysis"
+          button.is-primary.margin-top30.highlighted-button click="saveAnalysis" disabled=isSavingAnalyses
+            if isSavingAnalyses
+              .fa-font-size
+                i.fa class="fa-spinner fa-spin"
+              | &nbsp;
             | SAVE CHANGES
 
 

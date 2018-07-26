@@ -20,12 +20,15 @@ export default Ember.Component.extend({
       const data = {
         email: email
       };
+      this.set("isGeneratingReport", true);
       const url = [ENV.endpoints.reports, fileId].join('/');
       return this.get("ajax").put(url, { namespace: '/hudson-api', data, dataType: "text"})
       .then(() => {
         this.get("notify").success("Report Generated and sent to the Email ID(s)");
+        this.set("isGeneratingReport", false);
         this.set("showGenerateReportModal", false);
       }, (error) => {
+        this.set("isGeneratingReport", false);
         for (error of error.errors) {
           this.get("notify").error(error.detail.error);
         }

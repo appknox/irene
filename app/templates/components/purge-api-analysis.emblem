@@ -8,5 +8,9 @@
       form.input-form
         p.control
           = input class="form-control input" placeholder="Enter the file ID" type="text" value=fileNumber
-        button.is-primary click="purgeAPIAnalyses"
+        button.is-primary click="purgeAPIAnalyses" disabled=isPurgingAPIAnalyses
+          if isPurgingAPIAnalyses
+            .fa-font-size
+              i.fa class="fa-spinner fa-spin"
+            | &nbsp;
           | SUBMIT
