@@ -1,5 +1,5 @@
 .columns
-  .column.is-half.margin-auto
+  .column.is-one-third.margin-auto
     .box.margin-top10
       h3
         | Purge API Analyses

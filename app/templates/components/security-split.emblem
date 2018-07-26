@@ -2,7 +2,7 @@
   ul
     li class=searchClass click="displaySearch"
       = link-to 'authenticated.security.projects'
-        | Search
+        | Projects
     li class=downloadAppClass click="displayDownloadApp"
       = link-to 'authenticated.security.downloadapp'
         | Download App

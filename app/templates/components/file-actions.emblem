@@ -11,7 +11,7 @@
             | #{fileDetails.name} | #{fileDetails.id}
 
         .column.content-right
-          button.is-primary click="generateReport"
+          button.is-primary click="openGenerateReportModal"
             | Generate Report
           a.margin-left href=ireneFilePath target="_blank" class="button is-primary"
             | Visit Dashboard
@@ -24,3 +24,14 @@
         .columns
           .column
             = analysis-list fileDetails=fileDetails
+
+= modal-card class="input-modal" isActive=showGenerateReportModal title="Generate Report"
+  .card-body
+    .card-wrapper
+      form.input-form
+        p.control
+          = input class="form-control input" placeholder="Enter the file number" type="text" value=file.fileId disabled=true
+        p.control
+          = input class="form-control input" placeholder="Enter the Email IDs(comma separated)" type="email" value=emailIds
+        button.is-primary click="generateReport"
+          | Generate Report
