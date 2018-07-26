@@ -1,7 +1,13 @@
 .columns
   .column.is-half.margin-auto
-    h3
-      | #{analysisDetails.file.id} | #{analysisDetails.file.name}
+    .columns
+      .column
+        h3
+          | #{analysisDetails.file.id} | #{analysisDetails.file.name}
+      if analysisDetails.isPassed
+        .column.content-right
+          button.is-success.success-button click="openMarkPassedConfirmBox"
+            | Mark as Passed
     .box.analysis-box
       .columns.border-bottom-container
         .column
@@ -209,3 +215,5 @@
 = confirm-box isActive=showRemoveFileConfirmBox title="Are you sure you want to remove this file" delegate=this key="attachment"
 
 = confirm-box isActive=showClearAllFindingsConfirmBox title="Are you sure you want to clear all findings" delegate=this key="findings"
+
+= confirm-box isActive=showMarkPassedConfirmBox title="Are you sure you want to mark this analysis as passed" delegate=this key="passed"

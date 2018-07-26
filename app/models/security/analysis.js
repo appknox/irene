@@ -1,4 +1,5 @@
 import DS from 'ember-data';
+import ENUMS from 'irene/enums';
 
 export default DS.Model.extend({
   findings: DS.attr(),
@@ -22,5 +23,11 @@ export default DS.Model.extend({
   owasp: DS.hasMany('security/owasp'),
   pcidss: DS.hasMany('security/pcidss'),
   attachments: DS.hasMany('security/attachment'),
-  vulnerability: DS.belongsTo('security/vulnerability')
+  vulnerability: DS.belongsTo('security/vulnerability'),
+
+  isPassed: (function() {
+    const risk = this.get("risk");
+    return risk !== ENUMS.RISK.NONE;
+  }).property("risk")
+
 });

@@ -70,6 +70,13 @@ export default Ember.Component.extend({
       this.set("analysisDetails.findings", availableFindings);
       return this.set("showRemoveFindingConfirmBox", false);
     }
+    if(key === "passed") {
+      this.set("analysisDetails.confidentialityImpact", ENUMS.CONFIDENTIALITY_IMPACT.NONE);
+      this.set("analysisDetails.integrityImpact", ENUMS.INTEGRITY_IMPACT.NONE);
+      this.set("analysisDetails.availabilityImpact", ENUMS.AVAILABILITY_IMPACT.NONE);
+      this.updateCVSSScore();
+      return this.set("showMarkPassedConfirmBox", false);
+    }
   },
 
   availableFindings: Ember.computed.filter('allFindings', function(allFinding) {
@@ -223,8 +230,7 @@ export default Ember.Component.extend({
       });
     },
 
-    openClearAllFindingConfirmBox(param) {
-      this.set("clearAllFindings", true);
+    openClearAllFindingConfirmBox() {
       this.set("showClearAllFindingsConfirmBox", true);
     },
 
@@ -236,6 +242,10 @@ export default Ember.Component.extend({
     openRemoveFileConfirmBox(param) {
       this.set("deletedFile", param);
       this.set("showRemoveFileConfirmBox", true);
+    },
+
+    openMarkPassedConfirmBox() {
+      this.set("showMarkPassedConfirmBox", true);
     },
 
     downloadAttachment(id) {
