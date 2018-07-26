@@ -10,14 +10,14 @@ export default Ember.Component.extend({
       }
       const url = [ENV.endpoints.files,fileId, ENV.endpoints.purgeAPIAnalyses].join('/');
       return this.get("ajax").post(url, { namespace: '/hudson-api'})
-      .then((data) => {
+      .then(() => {
         this.get("notify").success("Successfully Purged the Analysis");
         this.set("fileNumber", "");
       }, (error) => {
         for (error of error.errors) {
           this.get("notify").error(error.detail.error);
         }
-      })
+      });
     }
   }
 });

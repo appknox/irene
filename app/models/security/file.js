@@ -1,6 +1,5 @@
 import DS from 'ember-data';
 import ENUMS from 'irene/enums';
-import BaseModelMixin from 'irene/mixins/base-model';
 
 export default DS.Model.extend({
   uuid: DS.attr('string'),

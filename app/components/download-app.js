@@ -16,7 +16,7 @@ export default Ember.Component.extend({
         for (error of error.errors) {
           this.get("notify").error(error.detail.error);
         }
-      })
+      });
     }
   }
 });

@@ -1,3 +1,5 @@
+/* jshint ignore:start */
+
 import Ember from 'ember';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
@@ -282,3 +284,5 @@ export default Ember.Component.extend({
 
   }
 });
+
+/* jshint ignore:end */
