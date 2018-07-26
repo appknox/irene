@@ -2,6 +2,10 @@
   .column.is-half.margin-auto
     .file-action-container
       .columns
+        / .column.is-one-sixth
+        /   = link-to 'authenticated.security.files' fileDetails.project.id
+        /     = fa-icon "caret-left"
+        /     | &nbsp; View All Files
         .column
           h3
             | #{fileDetails.name} | #{fileDetails.id}
