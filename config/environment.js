@@ -215,7 +215,6 @@ module.exports = function(environment) {
     ENV['ember-cli-mirage'] = {
       enabled:false
     };
-    ENV['host'] = "http://0.0.0.0:8000";
     ENV.enableIntercom = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
@@ -226,7 +225,6 @@ module.exports = function(environment) {
   }
 
   if (environment === 'mirage') {
-    ENV.socketPath = "https://socket.appknox.com";
     ENV['ember-cli-mirage'] = {
       enabled: true
     };
@@ -248,11 +246,9 @@ module.exports = function(environment) {
   }
 
   if (environment === 'testing') {
-    ENV.socketPath = "https://socket.appknox.com";
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
-    ENV['host'] = "https://api.appknox.com";
     ENV.enableIntercom = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
@@ -267,16 +263,13 @@ module.exports = function(environment) {
     ENV.rollbar = {
       accessToken: '4381303f93734918966ff4e1b028cee5'
     };
-    ENV.socketPath = "https://socket.appknox.com";
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
     ENV.mixpanel.enabled = true;
-    ENV['host'] = "https://api.appknox.com";
   }
 
   if (environment === 'staging') {
-    ENV.socketPath = "https://socket.appknox.com";
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
@@ -286,7 +279,6 @@ module.exports = function(environment) {
     ENV.rollbar = {
       enabled: false
     };
-    ENV['host'] = "https://api.appknox.com";
   }
 
   if (environment === 'test') {
@@ -304,8 +296,6 @@ module.exports = function(environment) {
       ENV.whitelabel.logo = process.env.WHITELABEL_LOGO;
       ENV.whitelabel.theme = process.env.WHITELABEL_THEME; // 'light' or 'dark'
     }
-    ENV.host = process.env.IRENE_API_HOST || 'https://api.appknox.com';
-    ENV.socketPath = process.env.IRENE_API_SOCKET_PATH || 'https://socket.appknox.com';
   }
   return ENV;
 };

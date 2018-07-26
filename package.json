@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "ember build",
-    "start": "ember server",
+    "start": "cross-env IRENE_API_HOST=http://localhost:8000 IRENE_API_SOCKET_PATH=http://lcoalhost:8008 ember server",
     "test": "ember test",
     "postinstall": "bower install",
     "deploy": "ember deploy production --verbose=true --activate=true --show-progress=true"
@@ -23,6 +23,7 @@
   "devDependencies": {
     "bower": "^1.8.2",
     "broccoli-asset-rev": "^2.4.2",
+    "cross-env": "^5.2.0",
     "ember-ajax": "3.0.0",
     "ember-attacher": "https://github.com/yashwin/ember-attacher.git",
     "ember-changeset": "^1.5.0-beta.0",
