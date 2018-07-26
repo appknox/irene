@@ -18,9 +18,9 @@ export default DS.Model.extend({
   analiserVersion: DS.attr('number'),
   overriddenRisk: DS.attr('number'),
   overriddenRiskToProfile: DS.attr('boolean'),
-  vulnerability: DS.belongsTo('vulnerability'),
-  owasp: DS.hasMany('owasp'),
-  pcidss: DS.hasMany('pcidss'),
-  file: DS.belongsTo('file'),
-  attachments: DS.hasMany('security/attachment')
+  file: DS.belongsTo('security/file'),
+  owasp: DS.hasMany('security/owasp'),
+  pcidss: DS.hasMany('security/pcidss'),
+  attachments: DS.hasMany('security/attachment'),
+  vulnerability: DS.belongsTo('security/vulnerability')
 });

@@ -6,9 +6,13 @@ export default DS.JSONAPIAdapter.extend(DataAdapterMixin, {
   authorizer: 'authorizer:irene',
   host: ENV.host,
   namespace: "api",
+  addTrailingSlashes: false,
 
-  findAll: function findAll() {
-    let url = `${this.get('host')}/${this.get('namespace')}/pcidsses`;
-    return this.ajax(url, 'GET');
+  _buildURL: function _buildURL(modelName, id) {
+    if(id) {
+      return `${this.get('host')}/${this.get('namespace')}/pcidsses/${id}`;
+    }
+    return `${this.get('host')}/${this.get('namespace')}/pcidsses`;
   }
+
 });

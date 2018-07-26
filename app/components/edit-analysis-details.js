@@ -35,11 +35,11 @@ export default Ember.Component.extend({
   }).property(),
 
   owasps: (function() {
-    return this.get("store").findAll("owasp");
+    return this.get("store").findAll("security/owasp");
   }).property(),
 
   pcidsses: (function() {
-    return this.get("store").findAll("pcidss");
+    return this.get("store").findAll("security/pcidss");
   }).property(),
 
   allFindings: (function() {

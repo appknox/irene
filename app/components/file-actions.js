@@ -4,7 +4,7 @@ import ENV from 'irene/config/environment';
 export default Ember.Component.extend({
   fileDetails: (function() {
     const fileId = this.get("file.fileId");
-    return this.get("store").findRecord("file", fileId);
+    return this.get("store").findRecord("security/file", fileId);
   }).property(),
 
   ireneFilePath: (function() {
