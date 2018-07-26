@@ -7,19 +7,9 @@ moduleForComponent('download-app', 'Integration | Component | download app', {
 
 test('it renders', function(assert) {
 
-  // Set any properties with this.set('myProperty', 'value');
-  // Handle any actions with this.on('myAction', function(val) { ... });
 
   this.render(hbs`{{download-app}}`);
 
-  assert.equal(this.$().text().trim(), '');
+  assert.equal(this.$().text().trim(), 'Download AppDownload App');
 
-  // Template block usage:
-  this.render(hbs`
-    {{#download-app}}
-      template block text
-    {{/download-app}}
-  `);
-
-  assert.equal(this.$().text().trim(), 'template block text');
 });

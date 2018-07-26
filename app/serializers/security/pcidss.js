@@ -19,7 +19,7 @@ export default DS.JSONAPISerializer.extend({
     if(payload.data.id) {
       return {
         data: this.payloadData(payload.data)
-      }
+      };
     }
     else {
       return {

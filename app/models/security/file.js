@@ -1,5 +1,4 @@
-  import DS from 'ember-data';
-import ENUMS from 'irene/enums';
+import DS from 'ember-data';
 
 export default DS.Model.extend({
   name: DS.attr('string'),

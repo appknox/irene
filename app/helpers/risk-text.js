@@ -11,7 +11,7 @@ export function riskText(params) {
 
   switch (risk) {
     case ENUMS.RISK.UNKNOWN: return "untested";
-    case ENUMS.RISK.NONE: return "none";
+    case ENUMS.RISK.NONE: return "passed";
     case ENUMS.RISK.LOW: return "low";
     case ENUMS.RISK.MEDIUM: return "medium";
     case ENUMS.RISK.HIGH: return "high";

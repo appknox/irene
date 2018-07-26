@@ -7,19 +7,8 @@ moduleForComponent('project-search-overview', 'Integration | Component | project
 
 test('it renders', function(assert) {
 
-  // Set any properties with this.set('myProperty', 'value');
-  // Handle any actions with this.on('myAction', function(val) { ... });
-
   this.render(hbs`{{project-search-overview}}`);
 
-  assert.equal(this.$().text().trim(), '');
+  assert.equal(this.$().text().trim(), 'View Files');
 
-  // Template block usage:
-  this.render(hbs`
-    {{#project-search-overview}}
-      template block text
-    {{/project-search-overview}}
-  `);
-
-  assert.equal(this.$().text().trim(), 'template block text');
 });
