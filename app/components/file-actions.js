@@ -16,9 +16,9 @@ export default Ember.Component.extend({
   actions: {
     generateReport() {
       const fileId = this.get("file.fileId");
-      const email = this.get("email");
+      const emails = this.get("emails");
       const data = {
-        email: email
+        emails: emails.split(",")
       };
       this.set("isGeneratingReport", true);
       const url = [ENV.endpoints.reports, fileId].join('/');

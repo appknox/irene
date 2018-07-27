@@ -32,7 +32,7 @@
         p.control
           = input class="form-control input" placeholder="Enter the file number" type="text" value=file.fileId disabled=true
         p.control
-          = input class="form-control input" placeholder="Enter the Email IDs(comma separated)" type="email" value=emailIds
+          = input class="form-control input" placeholder="Enter the Email IDs(comma separated)" type="email" value=emails
         button.is-primary click="generateReport" disabled=isGeneratingReport
           if isGeneratingReport
             .fa-font-size
