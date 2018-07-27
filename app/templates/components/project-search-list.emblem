@@ -1,6 +1,9 @@
 if user.hasProject
   .text-centre
     | LIST OF PROJECTS
+  / .columns.margin-top
+  /   .column.is-one-sixth.margin-auto
+  /     = input class="input search-input" placeholder="Search" value=query
   if hasObjects
     .columns
       .column
