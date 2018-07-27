@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "ember build",
-    "start": "cross-env IRENE_API_HOST=http://localhost:8000 IRENE_API_SOCKET_PATH=http://lcoalhost:8008 ember server",
+    "start": "cross-env IRENE_API_HOST=http://localhost:8000 IRENE_API_SOCKET_PATH=http://localhost:8008 ember server",
     "test": "ember test",
     "postinstall": "bower install",
     "deploy": "ember deploy production --verbose=true --activate=true --show-progress=true"
