@@ -9,7 +9,7 @@ export default DRFAdapter.extend(DataAdapterMixin, {
   addTrailingSlashes: false,
 
   query: function query(store, type, q) {
-    let url = `${this.get('host')}/${this.get('namespace')}/projects/${q.projectId}/files`;
+    let url = `${this.get('host')}/${this.get('namespace')}/projects/${q.projectId}/files?limit=${q.limit}&offset=${q.offset * 9}`;
     return this.ajax(url, 'GET');
   },
 
