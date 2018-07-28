@@ -26,6 +26,7 @@ module.exports = function(environment) {
     'ember-websockets': {
       socketIO: true
     },
+    paginationMultiplier: 9,
     mixpanel: {
       enabled: false,
       LOG_EVENT_TRACKING: false,
@@ -249,6 +250,7 @@ module.exports = function(environment) {
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
+    ENV['host'] = "http://localhost:8000";
     ENV.enableIntercom = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
