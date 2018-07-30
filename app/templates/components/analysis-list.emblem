@@ -1,0 +1,11 @@
+.table-container
+  table.security-list-table
+    tr
+      th
+        | Analysis ID
+      th
+        |	Vulterability
+      th
+        |	Risk Type
+    each fileDetails.analyses as |analysis|
+      = analysis-overview analysis=analysis fileDetails=fileDetails

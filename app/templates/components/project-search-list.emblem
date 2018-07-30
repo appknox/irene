@@ -1,0 +1,33 @@
+if user.hasProject
+  .text-centre
+    | LIST OF PROJECTS
+  / .columns.margin-top
+  /   .column.is-one-sixth.margin-auto
+  /     = input class="input search-input" placeholder="Search" value=query
+  if hasObjects
+    .columns
+      .column
+        .table-container
+          table.security-list-table
+            tr
+              th
+                | Project ID
+              th
+                | Project Name
+              th
+                | View All Files
+
+            each sortedObjects as |project|
+              = project-search-overview project=project
+
+    = partial "paginate"
+
+  else
+    .loading-container-home
+      i.fa class="fa-spinner fa-spin"
+      div
+        | Loading...
+else
+  .column.is-fullwidth.no-project-container
+    h4.capitalize-text.text-centre
+      | #{t "noProject"}!!

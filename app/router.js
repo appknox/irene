@@ -34,6 +34,14 @@ Router.map(function() {
     this.route('compare', {path: '/compare/:files'});
     this.route('payment-success');
     this.route('payment-failure');
+    this.route('security', function() {
+      this.route('projects');
+      this.route('downloadapp');
+      this.route('purgeanalysis');
+      this.route('files', {path: '/:projectId/files'});
+      this.route('file', {path: '/file/:fileId'});
+      this.route('analysis', {path: '/analysis/:analysisId'});
+    });
   });
   this.route('invitation', {path: '/invitation/:uuid'});
 

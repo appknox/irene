@@ -9,6 +9,8 @@ const PaginateMixin = Ember.Mixin.create({
   extraQueryStrings: "",
   limit: ENV.paginate.perPageLimit,
   isJsonApiPagination: false,
+  isDRFPagination: false,
+  offsetMultiplier: ENV.paginate.offsetMultiplier,
 
   versionIncrementer() {
     this.incrementProperty("version");
@@ -58,12 +60,23 @@ const PaginateMixin = Ember.Mixin.create({
       }
     }
     const targetObject = this.get("targetObject");
+    if(this.get('isDRFPagination')) {
+      query.offset = query.offset * (this.get("offsetMultiplier") || 1);
+    }
     const objects = this.get('store').query(targetObject, query);
     objects.then((result) => {
       const { meta } = result;
       if (result.links && result.meta.pagination) {
         meta.total = result.meta.pagination.count;
         this.set('isJsonApiPagination', true);
+      }
+      if("count" in result.meta) {
+        meta.total = result.meta.count || 0 ;
+        /*
+        count is only defined for DRF
+        JSONAPI has total
+        */
+        this.set('isDRFPagination', true);
       }
       return this.set("meta", meta);
     });
@@ -142,11 +155,12 @@ const PaginateMixin = Ember.Mixin.create({
   actions: {
 
     gotoPageFirst() {
-      this.setOffset(0);
+      this.send("gotoPage", 0);
     },
 
     gotoPagePrevious() {
       this.decrementProperty("offset");
+      this.send("gotoPage", this.get("offset"));
     },
 
     gotoPage(offset) {
@@ -155,10 +169,11 @@ const PaginateMixin = Ember.Mixin.create({
 
     gotoPageNext() {
       this.incrementProperty("offset");
+      this.send("gotoPage", this.get("offset"));
     },
 
     gotoPageLast() {
-      this.setOffset(this.get("maxOffset"));
+      this.send("gotoPage", this.get("maxOffset"));
     }
   }
 });

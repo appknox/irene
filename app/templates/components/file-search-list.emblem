@@ -1,0 +1,33 @@
+.columns
+  .column.table-container
+    .columns
+      .column.back-link
+        = link-to 'authenticated.security.projects'
+          = fa-icon "caret-left"
+          | &nbsp; Back to Projects
+      .column.list-heading
+        | LIST OF FILES
+if hasObjects
+  .columns
+    .column.table-container
+      table.security-list-table
+        tr
+          th
+            | File ID
+          th
+            | File Name
+          th
+            | View
+          th
+            | Action
+
+        each sortedObjects as |file|
+          = file-search-overview file=file
+
+  = partial "paginate"
+
+else
+  .loading-container-home
+    i.fa class="fa-spinner fa-spin"
+    div
+      | Loading...

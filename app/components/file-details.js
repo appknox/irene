@@ -5,6 +5,8 @@ const FileDetailsComponent = Ember.Component.extend({
 
   sortImpactAscending: false,
 
+  isSecurityEnabled: false,
+
   vulnerabilityType: ENUMS.VULNERABILITY_TYPE.UNKNOWN,
   vulnerabilityTypes: ENUMS.VULNERABILITY_TYPE.CHOICES.slice(0, -1),
 
@@ -15,6 +17,19 @@ const FileDetailsComponent = Ember.Component.extend({
   analysesObserver: Ember.observer('analyses.@each', function() {
     this.updateUnhiddenAnalysis();
   }),
+
+  didInsertElement() {
+    this.securityEnabled();
+  },
+
+  securityEnabled() {
+    this.get("ajax").request("projects", {namespace: 'hudson-api'})
+    .then(() => {
+      this.set("isSecurityEnabled", true);
+    }, () => {
+      this.set("isSecurityEnabled", false);
+    });
+  },
 
   updateUnhiddenAnalysis() {
     const unhiddenAnalyses = this.sortUnhiddenAnalyses();

@@ -176,11 +176,6 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
       if (!Ember.isEmpty(csbDict)) {
         triggerAnalytics('feature', csbDict);
       }
-    },
-
-    invalidateSession() {
-      triggerAnalytics('logout');
-      this.get('session').invalidate();
     }
   }
 }

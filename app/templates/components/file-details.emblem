@@ -6,6 +6,10 @@
   .column
     .uppercase-text.font-size-16.red-text
       = t "vulnerabilityDetails"
+  if isSecurityEnabled
+    .column.content-right
+      a href="/security/file/#{file.id}" target="_blank" class="button is-primary"
+        | Edit Analyses
 .columns
   .column.margin-left5
     .columns.analysis-header

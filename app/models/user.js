@@ -36,6 +36,9 @@ const User = DS.Model.extend({
   mfaSecret: DS.attr('string'),
   isTrial: DS.attr('boolean'),
   intercomHash: DS.attr('string'),
+  isSecurity: true, // FIXME:
+
+  isNotSecurity: Ember.computed.not('isSecurity'),
 
   tProject: t("project"),
   tProjects: t("projects"),
