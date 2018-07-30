@@ -7,8 +7,7 @@ export default DRFAdapter.extend(DataAdapterMixin, {
   host: ENV.host,
   namespace: "hudson-api",
   addTrailingSlashes: false,
-  query: function query(store, type, q) {
-    let url = `${this.get('host')}/${this.get('namespace')}/projects?limit=${q.limit}&offset=${q.offset * ENV.paginationMultiplier}`;
-    return this.ajax(url, 'GET');
+  pathForType() {
+    return 'projects';
   }
 });

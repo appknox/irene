@@ -21,12 +21,12 @@ module.exports = function(environment) {
     platform: -1,
     paginate: {
       perPageLimit: 9,
-      pagePadding: 5
+      pagePadding: 5,
+      offsetMultiplier: 9,
     },
     'ember-websockets': {
       socketIO: true
     },
-    paginationMultiplier: 9,
     mixpanel: {
       enabled: false,
       LOG_EVENT_TRACKING: false,
