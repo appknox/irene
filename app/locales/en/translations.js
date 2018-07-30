@@ -198,6 +198,7 @@ export default {
   "noFiles": "No Files",
   "noNamespace": "no namespace",
   "none": "Passed",
+  "passed": "Passed",
   "noOfProjects": "No of projects",
   "noPersonalToken": "no tokens found",
   "noPreference": "No Preference",

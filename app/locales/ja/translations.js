@@ -198,6 +198,7 @@ export default {
   "noFiles": "ファイルがありません",
   "noNamespace": "名前空間がありません",
   "none": "合格",
+  "passed": "合格",
   "noOfProjects": "プロジェクト数",
   "noPersonalToken": "トークンが見つかりません",
   "noPreference": "指定なし",
