@@ -20,8 +20,8 @@ export default DS.Model.extend({
   overriddenRisk: DS.attr('number'),
   overriddenRiskToProfile: DS.attr('boolean'),
   file: DS.belongsTo('security/file'),
-  owasp: DS.hasMany('security/owasp'),
-  pcidss: DS.hasMany('security/pcidss'),
+  owasp: DS.hasMany('owasp'),
+  pcidss: DS.hasMany('pcidss'),
   attachments: DS.hasMany('security/attachment'),
   vulnerability: DS.belongsTo('security/vulnerability'),
 

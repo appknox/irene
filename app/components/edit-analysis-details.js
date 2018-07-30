@@ -35,11 +35,11 @@ export default Ember.Component.extend({
   }).property(),
 
   owasps: (function() {
-    return this.get("store").findAll("security/owasp");
+    return this.get("store").findAll("owasp");
   }).property(),
 
   pcidsses: (function() {
-    return this.get("store").findAll("security/pcidss");
+    return this.get("store").findAll("pcidss");
   }).property(),
 
   allFindings: (function() {
@@ -108,6 +108,7 @@ export default Ember.Component.extend({
     .then((data) => {
       this.set("analysisDetails.cvssBase", data.cvss_base);
       this.set("analysisDetails.risk", data.risk);
+      this.set("analysisDetails.cvssVector", vector);
     }, () => {
       this.get("notify").error("Sorry something went wrong, please try again");
     });
