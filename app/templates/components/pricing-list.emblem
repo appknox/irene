@@ -1,25 +1,22 @@
 if hasSubscription
-  .box-container
-    .columns.plan-durations
-      h4.bold.black-text
-        = t "activeSubscription"
-    .columns.plan-list.flex-center
-        = subscription-component subscription=subscription
+  .columns.plan-durations
+    h4.bold.black-text
+      = t "activeSubscription"
+  .columns.plan-list.flex-center
+      = subscription-component subscription=subscription
 
 if hasNoSubscription
   if env.isAppknox
-    .box-container
-      .columns.plan-durations
-        h4.bold.black-text
-          = t "plans"
-        .column.flex-center.margin-left-80
-          each durations as |duration|
-            button.js-duration-button.is-primary.margin-left.mp-pricing-duration click="selectDuration" data-value=duration.value
-                | #{ t (plan-duration duration.value)}
-      .columns.plan-list.flex-center
-      .columns.plan-list.flex-center
-        each sortedPlans as |plan|
-          = pricing-plan plan=plan paymentDuration=paymentDuration
+    .columns.plan-durations
+      h4.bold.black-text
+        = t "plans"
+      .column.flex-center.margin-left-80
+        each durations as |duration|
+          button.js-duration-button.is-primary.margin-left.mp-pricing-duration click="selectDuration" data-value=duration.value
+              | #{ t (plan-duration duration.value)}
+    .columns.plan-list.flex-center
+      each sortedPlans as |plan|
+        = pricing-plan plan=plan paymentDuration=paymentDuration
 
   else
     .columns

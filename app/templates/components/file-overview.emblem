@@ -6,9 +6,8 @@ header.card-header
       li
         h5
           .columns.project-specific
-            .column.hide-overflow
+            .column.hide-overflow.file-name
               = file.name
-
             .column.file-card-info
               .columns
                 .column.file-rating
@@ -17,7 +16,7 @@ header.card-header
                 .column.app-icon.fixed-icon
                   = fa-icon file.project.platformIconClass
 
-      li.hide-overflow
+      li.hide-overflow.package-name
         | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
 .card-content
   .content
@@ -37,7 +36,6 @@ header.card-header
       .column.flex-center
         = ember-chart type='doughnut' data=file.doughnutData width=150 height=150 options=chartOptions
 
-      .file-details-class
       .column
         ul.risk-table
           .risk-values
@@ -77,11 +75,9 @@ header.card-header
                   = t "untested"
               .column
                 = file.countRiskUnknown
-
     / .columns.file-details-band
     /   .column
-    /     span
+    /     span.is-success
     /       | &nbsp; #{file.rating}% Secure &nbsp;
     /   .column
-
 = yield
