@@ -20,14 +20,14 @@ body
 .columns:not(canvas)
   .card,
     border-radius: 2px!important
-  button, .button:not(.highlighted-button)
+  button:not(.highlighted-button), .button:not(.highlighted-button)
     border-width: 0px!important
-    background-color: #F8F8F8!important
-    border-radius: 2px!important
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,.26)
+    background-color: #F0F0F0!important
+    border-radius: 3px!important
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.26)
     color: darken($default, 5%)!important
     &:hover
-      background-color: #F0F0F0!important
+      background-color: #E8E8E8!important
       color: darken($default, 20%)!important
     &.is-progress
       border-width: 0px
@@ -1151,8 +1151,7 @@ ul.risk-table
     margin-left: 15px
     margin-top: -20px
   .risk-values
-    // margin-top: 50px
-    margin-top: 15px
+    margin-top: 50px
     margin-left: -10px
     .columns
       .column
@@ -2473,8 +2472,7 @@ $attachment-icon-width: 4em
     width: 100px
 
 .app-risk-info
-  // margin-top: -40px
-  margin-top: -20px
+  margin-top: -40px
 
 .compare-text
   margin: auto
@@ -2530,21 +2528,29 @@ $attachment-icon-width: 4em
     display: flex
     justify-content: center
 
-// .file-details-band
-//   margin: 0px
-//   margin-top: -30px
-//   margin-bottom: 10px
-//   text-align: center
-//   .column
-//     padding: 0px
-//     span
-//       font-size: 15px
-//       color: #FFF
-//       border-radius: 3px
-//       margin-right: 5px
-//       @each $name, $pair in $risk-names
-//         &.is-#{$name}
-//           background-color: nth($pair, 1)
+.app-details-card
+  .file-details-band
+    margin-top: 0px
+    span
+      padding: 3px
+  ul.risk-table .risk-values
+    margin-top: 25px
+
+.file-details-band
+  margin: 0px
+  margin-top: -30px
+  padding-bottom: 10px
+  text-align: center
+  .column
+    padding: 0px
+  span
+    font-size: 15px
+    color: #FFF
+    border-radius: 3px
+    margin-right: 5px
+    @each $name, $pair in $risk-names
+      &.is-#{$name}
+        background-color: nth($pair, 1)
 
 .project-preference, .project-preference-component
   padding-bottom: 0px!important

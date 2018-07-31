@@ -37,7 +37,17 @@ const File = DS.Model.extend(BaseModelMixin, {
   isDynamicDone: DS.attr('boolean'),
   isManualDone: DS.attr('boolean'),
   isApiDone: DS.attr('boolean'),
-  // rating: DS.attr('string'),
+  rating: DS.attr('string'),
+
+
+  fileRatingClass: (function() {
+    const rating = parseFloat(this.get("rating"));
+    if(rating >=0 && rating <= 20) return "is-success"
+    else if(rating > 20 && rating <= 40) return "is-info"
+    else if(rating > 40 && rating <= 60) return "is-danger"
+    else if(rating > 60 && rating <= 80) return "is-warning"
+    else if(rating > 80 && rating <= 100) return "is-critical"
+  }).property('rating'),
 
   ifManualNotRequested: (function() {
     const manual = this.get('manual');

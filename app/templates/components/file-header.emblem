@@ -86,6 +86,9 @@
           li class=owaspDetailsClass
             a click="displayOWASPDetails" class="uppercase-text"
               | Owasp Details
+    .column.file-details-band
+      span class=file.fileRatingClass
+        | &nbsp; #{file.rating}% insecure &nbsp;
     .column.content-right
       .card-button
         .columns

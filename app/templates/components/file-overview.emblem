@@ -75,9 +75,9 @@ header.card-header
                   = t "untested"
               .column
                 = file.countRiskUnknown
-    / .columns.file-details-band
-    /   .column
-    /     span.is-success
-    /       | &nbsp; #{file.rating}% Secure &nbsp;
-    /   .column
+    .columns.file-details-band
+      .column
+        span class=file.fileRatingClass
+          | &nbsp; #{file.rating}% insecure &nbsp;
+      .column
 = yield
