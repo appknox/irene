@@ -174,8 +174,7 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
       const fileId = this.get("fileId");
       Ember.getOwner(this).lookup('route:authenticated').transitionTo("authenticated.file", fileId);
       this.send("closeNotification");
-    },
-
+    }
   }
 }
 );
