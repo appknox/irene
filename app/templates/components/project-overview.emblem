@@ -10,7 +10,9 @@
           .column
             = link-to 'authenticated.project.files' project.id class="mp-all-scans" tagName="button"
               = fa-icon "navicon"
-              | &nbsp; #{t "allUploads"}(#{project.fileCount})
+              | &nbsp; #{t "allUploads"}
+              span.badge
+                | #{project.fileCount}
 
           .column
             = link-to 'authenticated.choose' project.lastFile.id class="mp-file-compare" tagName="button"
