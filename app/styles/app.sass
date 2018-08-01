@@ -20,7 +20,8 @@ body
 .columns:not(canvas)
   .card,
     border-radius: 2px!important
-  button:not(.highlighted-button), .button:not(.highlighted-button)
+  button:not(.highlighted-button):not(.primary-button),
+  .button:not(.highlighted-button):not(.primary-button)
     border-width: 0px!important
     background-color: #F0F0F0!important
     border-radius: 3px!important
@@ -828,6 +829,15 @@ button, .button
 
 .compare-container
   padding: 0px 5px
+  .file-card-info
+    display: flex
+    justify-content: flex-end
+    max-width: none
+    .file-rating
+      margin-right: 10px
+      padding: 5px
+      div
+        top: -3px
 
 .file-card, .box-section, .team-overview-card
   box-shadow: 0px 0px 6px #ccc
@@ -2627,7 +2637,7 @@ $attachment-icon-width: 4em
       margin-top: 10px
   & + div
     .tabs
-      margin-top: 60px!important
+      margin-top: 70px!important
     .pagination
       padding: 10px 200px
       .pagination-list

@@ -17,5 +17,5 @@
     .column
       i.fa.fa-plus click="incrementPlanQuantity"
   .flex-center
-    button.is-primary click="initiatePayment"
+    button.is-primary.primary-button click="initiatePayment"
       = updatedPrice

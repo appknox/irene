@@ -10,7 +10,7 @@
           | #{analysisDetails.file.id} | #{analysisDetails.file.name}
       if analysisDetails.isPassed
         .column.content-right
-          button.is-success.success-button click="openMarkPassedConfirmBox"
+          button.is-success.success-button.primary-button click="openMarkPassedConfirmBox"
             | Mark as Passed
     .box.analysis-box
       .columns.border-bottom-container
