@@ -1,1 +1,8 @@
+.columns
+  .column.top-notification
+    span.remove click="openFileDetails"
+      | New scan started, Click here to show &nbsp;
+    i.fa.fa-times click="closeNotification"
+
+    
 = home-page user=model
