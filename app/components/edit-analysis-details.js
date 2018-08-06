@@ -71,10 +71,16 @@ export default Ember.Component.extend({
       return this.set("showRemoveFindingConfirmBox", false);
     }
     if(key === "passed") {
+      this.set("analysisDetails.attackVector", ENUMS.ATTACK_VECTOR.PHYSICAL);
+      this.set("analysisDetails.attackComplexity", ENUMS.ATTACK_COMPLEXITY.HIGH);
+      this.set("analysisDetails.privilegesRequired", ENUMS.PRIVILEGES_REQUIRED.HIGH);
+      this.set("analysisDetails.userInteraction", ENUMS.USER_INTERACTION.REQUIRED);
+      this.set("analysisDetails.scope", ENUMS.SCOPE.UNCHANGED);
       this.set("analysisDetails.confidentialityImpact", ENUMS.CONFIDENTIALITY_IMPACT.NONE);
       this.set("analysisDetails.integrityImpact", ENUMS.INTEGRITY_IMPACT.NONE);
       this.set("analysisDetails.availabilityImpact", ENUMS.AVAILABILITY_IMPACT.NONE);
-      this.updateCVSSScore();
+      this.set("analysisDetails.cvssVector", "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N");
+      this.updateCVSSScore()
       this.send("saveAnalysis");
       return this.set("showMarkPassedConfirmBox", false);
     }
@@ -94,14 +100,14 @@ export default Ember.Component.extend({
   },
 
   updateCVSSScore() {
-    const attackVector = this.get("analysisDetails.attackVector");
-    const attackComplexity = this.get("analysisDetails.attackComplexity");
-    const privilegesRequired = this.get("analysisDetails.privilegesRequired");
-    const userInteraction = this.get("analysisDetails.userInteraction");
-    const scope = this.get("analysisDetails.scope");
-    const confidentialityImpact = this.get("analysisDetails.confidentialityImpact");
-    const integrityImpact = this.get("analysisDetails.integrityImpact");
-    const availabilityImpact = this.get("analysisDetails.availabilityImpact");
+    const attackVector = this.get("analysisDetails.attackVector") || ENUMS.ATTACK_VECTOR.PHYSICAL;
+    const attackComplexity = this.get("analysisDetails.attackComplexity") || ENUMS.ATTACK_COMPLEXITY.HIGH;
+    const privilegesRequired = this.get("analysisDetails.privilegesRequired") || ENUMS.PRIVILEGES_REQUIRED.HIGH ;
+    const userInteraction = this.get("analysisDetails.userInteraction") || ENUMS.USER_INTERACTION.REQUIRED ;
+    const scope = this.get("analysisDetails.scope") || ENUMS.SCOPE.UNCHANGED ;
+    const confidentialityImpact = this.get("analysisDetails.confidentialityImpact") || ENUMS.CONFIDENTIALITY_IMPACT.NONE;
+    const integrityImpact = this.get("analysisDetails.integrityImpact") || ENUMS.INTEGRITY_IMPACT.NONE;
+    const availabilityImpact = this.get("analysisDetails.availabilityImpact") || ENUMS.AVAILABILITY_IMPACT.NONE;
     const vector =`CVSS:3.0/AV:${attackVector}/AC:${attackComplexity}/PR:${privilegesRequired}/UI:${userInteraction}/S:${scope}/C:${confidentialityImpact}/I:${integrityImpact}/A:${availabilityImpact}`;
     const url = `cvss?vector=${vector}`;
     this.get("ajax").request(url)
@@ -282,6 +288,11 @@ export default Ember.Component.extend({
       const confidentialityImpact = this.get("analysisDetails.confidentialityImpact");
       const integrityImpact = this.get("analysisDetails.integrityImpact");
       const availabilityImpact = this.get("analysisDetails.availabilityImpact");
+
+      for (let inputValue of [attackVector, attackComplexity, privilegesRequired, userInteraction, scope, confidentialityImpact, integrityImpact, availabilityImpact]) {
+        if (isEmpty(inputValue)) { return this.get("notify").error("Please select all the CVSS Metrics"); }
+      }
+
       const cvssVector = this.get("analysisDetails.cvssVector");
       const data = {
         risk,
