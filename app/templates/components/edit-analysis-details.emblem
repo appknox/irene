@@ -1,5 +1,5 @@
 .columns
-  .column.is-half.margin-auto
+  .column.margin-auto.edit-analysis-box
     .columns
       .column.margin-top.is-one-third
         = link-to 'authenticated.security.file' analysisDetails.file.id
