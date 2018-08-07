@@ -3,5 +3,5 @@ td
 td
   = project.packageName
 td.table-button
-  = link-to 'authenticated.security.files' project.id class="is-primary" tagName="button"
+  = link-to 'authenticated.security.files' project.id class="is-primary primary-button" tagName="button"
     | View Files

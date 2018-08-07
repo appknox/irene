@@ -16,6 +16,33 @@ body
 
 /* Margin Defines*/
 
+
+.columns:not(canvas)
+  .card,
+    border-radius: 2px!important
+  button:not(.highlighted-button):not(.primary-button),
+  .button:not(.highlighted-button):not(.primary-button)
+    border-width: 0px!important
+    background-color: #F0F0F0!important
+    border-radius: 3px!important
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.26)
+    color: darken($default, 5%)!important
+    &:hover
+      background-color: #E8E8E8!important
+      color: darken($default, 20%)!important
+    &.is-progress
+      border-width: 0px
+      background-image: none
+    &.js-duration-button.is-active
+      background-color: $default!important
+      color: #FFF!important
+  .plan-list
+    .is-primary
+      background-color: $green!important
+      color: #FFF!important
+      &:hover
+        background-color: darken($green, 10%)!important
+
 .margin-top30
   margin-top: 30px
 
@@ -30,6 +57,9 @@ body
 
 .margin-top50
   margin-top: 50px
+
+.margin-top60
+  margin-top: 60px
 
 .margin-top
   margin-top: 10px
@@ -205,7 +235,7 @@ button:hover, button:active, button:focus
 
 .top-nav
   width: 100%
-  margin-top: -10px
+  margin-top: 10px
   height: 50px
   background-color: #424651
   margin-left: 0px
@@ -241,6 +271,7 @@ button:hover, button:active, button:focus
         margin-top: 1px
       &:hover
         color: #FFF
+
 
 canvas.other-devices
   margin-top: 30px
@@ -586,13 +617,16 @@ button, .button
   max-width: 155px
 
 .hide-overflow
-  max-width: 300px
+  max-width: 280px
   overflow: hidden
   text-overflow: ellipsis
   white-space: nowrap
-  &:hover
-    z-index: 1
-    overflow: visible
+
+.scan-status-card
+  .hide-overflow
+    &:hover
+      z-index: 1
+      overflow: visible
 
 .app-icon
   margin-top: 10px
@@ -789,12 +823,21 @@ button, .button
     padding: 0px
     .content
       .columns:nth-child(1)
-        margin-top: 10px
+        margin-top: 0px
       .columns.is-reverse
         margin-left: 40px
 
 .compare-container
   padding: 0px 5px
+  .file-card-info
+    display: flex
+    justify-content: flex-end
+    max-width: none
+    .file-rating
+      margin-right: 10px
+      padding: 5px
+      div
+        top: -3px
 
 .file-card, .box-section, .team-overview-card
   box-shadow: 0px 0px 6px #ccc
@@ -1118,7 +1161,7 @@ ul.risk-table
     margin-left: 15px
     margin-top: -20px
   .risk-values
-    margin-top: 20px
+    margin-top: 50px
     margin-left: -10px
     .columns
       .column
@@ -2135,7 +2178,7 @@ input:checked + .yes-no-slider:before
 .regulatary-section
   .section
     border-bottom: 1px solid #f5f5f5
-    margin: 10px -15px
+    margin: 10px -10px
   a:hover
     color: darken($red, 20%)
 
@@ -2382,10 +2425,24 @@ $attachment-icon-width: 4em
   position: relative
   left: 50px
 
+.top-notification
+  visibility: hidden
+  text-align: center
+  background-color: $green
+  max-width: 300px
+  margin: auto
+  margin-top: -30px
+  color: #FFF
+  border-radius: 5px
+  position: fixed
+  top: 35px
+  left: 40%
+  z-index: 10000
+
 .notification-position
   margin-left: -35vw
   width: 400px
-  margin-bottom: 45vw
+  // margin-bottom: 45vw
   height: 50px
   border-radius: 50px
   background-color: $green
@@ -2426,27 +2483,8 @@ $attachment-icon-width: 4em
     margin-top: -7px
     width: 100px
 
-.file-id-container
-  padding-bottom: 10px
-  text-align: center
-  .file-id-text
-    width: 100px
-    margin: -5px auto 5px auto
-    text-align: center
-    font-weight: 900
-    font-size: 12px
-    background-color: lighten($grey, 50%)
-    color: lighten(#000, 30%)
-    border-radius: 5px
-
-.app-details-card
-  .file-id-container
-    margin-left: -30px
-    .file-id-text
-      margin-top: 20px
-
 .app-risk-info
-  margin-top: -25px
+  margin-top: -40px
 
 .compare-text
   margin: auto
@@ -2462,6 +2500,69 @@ $attachment-icon-width: 4em
   margin-top: -30px
   i.fa
     font-size: 26px
+
+.file-details-card-info
+  padding-top: 10px
+  position: relative
+  right: 25px
+  margin-top: 10px
+  .file-rating
+    margin: auto
+    font-size: 16px
+    padding: 10px 10px
+    max-width: 150px
+    border-radius: 3px
+    div
+      top: -10px
+
+.file-card-info
+  max-width: 90px
+.file-rating
+  font-size: 11px
+  background-color: lighten($grey, 50%)
+  padding: 3px 0px
+  text-align: center
+  max-width: 80px
+  margin-top: 10px
+  height: 20px
+  div
+    top: -6px
+    position: relative
+    left: -0px
+.app-icon
+  left: 87%
+  top: 15px
+  height: 25px
+  width: 50px
+  color: lighten(#000, 20%)
+  i
+    margin-top: -9px
+    display: flex
+    justify-content: center
+
+.app-details-card
+  .file-details-band
+    margin-top: 0px
+    span
+      padding: 3px
+  ul.risk-table .risk-values
+    margin-top: 25px
+
+.file-details-band
+  margin: 0px
+  margin-top: -30px
+  padding-bottom: 10px
+  text-align: center
+  .column
+    padding: 0px
+  span
+    font-size: 15px
+    color: #FFF
+    border-radius: 3px
+    margin-right: 5px
+    @each $name, $pair in $risk-names
+      &.is-#{$name}
+        background-color: nth($pair, 1)
 
 .project-preference, .project-preference-component
   padding-bottom: 0px!important
@@ -2538,7 +2639,15 @@ $attachment-icon-width: 4em
       margin-top: 10px
   & + div
     .tabs
-      margin-top: 60px!important
+      margin-top: 80px!important
     .pagination
       padding: 10px 200px
-      .pagination-list
+
+.badge
+  padding: 7px
+  height: 15px
+  margin-left: 5px
+  background-color: #FFF
+  color: #444d56
+  border-radius: 10px
+  line-height: 1px

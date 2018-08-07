@@ -56,7 +56,7 @@ if showVulnerability
         .columns.section
           .column
             h5.black-text
-              = t "regulatory"
+               =  t "securityStandards"
         if analysis.hascvccBase
           .columns.section
             .column.is-one-sixth
@@ -159,21 +159,21 @@ if showVulnerability
 
                   if isEditingOverriddenRisk
                     .column.is-one-third
-                      button.is-primary.highlighted-button.edit-marked-analysis click="markAnalysis" disabled=isMarkingAnalysis
+                      button.is-primary.edit-marked-analysis click="markAnalysis" disabled=isMarkingAnalysis
                         if isMarkingAnalysis
                           .fa-font-size
                             i.fa class="fa-spinner fa-spin"
                         | &nbsp; #{ t "save"}
-                      button.is-primary.highlighted-button.edit-marked-analysis click="cancelEditMarkingAnalysis"
+                      button.is-primary.edit-marked-analysis click="cancelEditMarkingAnalysis"
                         | &nbsp; #{ t "cancel"}
                   else
                     .column
-                      button.is-primary.highlighted-button.edit-marked-analysis click="editMarkedAnalysis" disabled=isEditingMarkedAnalysis
+                      button.is-primary.edit-marked-analysis click="editMarkedAnalysis" disabled=isEditingMarkedAnalysis
                         if isEditingMarkedAnalysis
                           .fa-font-size
                             i.fa class="fa-spinner fa-spin"
                         | &nbsp; #{ t "edit"}
-                      button.is-primary.highlighted-button.edit-marked-analysis click="openResetMarkedAnalysisConfirmBox"
+                      button.is-primary.edit-marked-analysis click="openResetMarkedAnalysisConfirmBox"
                         | &nbsp; #{ t "reset"}
           else
             .columns
@@ -199,7 +199,7 @@ if showVulnerability
                   option value="true"
                     =  t "allFutureAnalyses"
               .column
-                button.is-primary.highlighted-button click="markAnalysis" disabled=isMarkingAnalysis
+                button.is-primary click="markAnalysis" disabled=isMarkingAnalysis
                   if isMarkingAnalysis
                     .fa-font-size
                       i.fa class="fa-spinner fa-spin"

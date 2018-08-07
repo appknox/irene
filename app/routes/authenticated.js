@@ -3,7 +3,6 @@ import Ember from 'ember';
 import ENUMS from 'irene/enums';
 import { CSBMap } from 'irene/router';
 import ENV from 'irene/config/environment';
-import { translationMacro as t } from 'ember-i18n';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
@@ -22,8 +21,6 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
   mixpanel: service(),
   trial: service(),
   socketIOService: service('socket-io'),
-
-  tNewScanStarted: t("newScanStarted"),
 
   beforeModel(transition){
     this.set("lastTransition", transition);
@@ -111,19 +108,10 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
       },
 
       newobject(data, callback) {
-        const tNewScanStarted = that.get("tNewScanStarted")
         store.pushPayload({data});
         if (data.type === "files") {
-          const fileId = data.id;
-          that.get("notify").info(tNewScanStarted, {
-            autoClear: false,
-            cssClasses: 'notification-position',
-            onClick: (notification) => {
-              notification.set("autoClear", true);
-              notification.set("clearDuration", 0);
-              return callback(Ember.getOwner(that).lookup('route:authenticated').transitionTo("authenticated.file", fileId));
-            }
-          });
+          document.getElementsByClassName('top-notification')[0].style.visibility = "visible";
+          that.set("fileId", data.id);
         }
       },
 
@@ -176,6 +164,16 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
       if (!Ember.isEmpty(csbDict)) {
         triggerAnalytics('feature', csbDict);
       }
+    },
+
+    closeNotification() {
+      document.getElementsByClassName('top-notification')[0].style.visibility = "hidden"
+    },
+
+    openFileDetails() {
+      const fileId = this.get("fileId");
+      Ember.getOwner(this).lookup('route:authenticated').transitionTo("authenticated.file", fileId);
+      this.send("closeNotification");
     }
   }
 }

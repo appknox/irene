@@ -14,6 +14,8 @@
         = link-to 'authenticated.project.files' file.project.id class="mp-detail-all-scans is-primary" tagName="button"
           = fa-icon "navicon"
           | &nbsp; #{t "allUploads"}
+          span.badge
+            | #{file.project.fileCount}
         = link-to 'authenticated.choose' file.id class="mp-detail-file-compare is-primary" tagName="button"
           = fa-icon "exchange"
           | &nbsp; #{t "compare"}
@@ -86,6 +88,9 @@
           li class=owaspDetailsClass
             a click="displayOWASPDetails" class="uppercase-text"
               | Owasp Details
+    .column.file-details-band
+      span class=file.fileRatingClass
+        | &nbsp; #{file.rating}% insecure &nbsp;
     .column.content-right
       .card-button
         .columns
@@ -159,9 +164,10 @@
               td.overflow-hidden
                 | #{file.versionCode}
           = copy-password pdfPassword=file.project.pdfPassword
-          .file-id-container
-            div.file-id-text
-              | FILE ID - #{file.id} 
+          .file-details-card-info
+            .file-rating
+              div
+                | FILE ID - #{file.id}
 
     if isOWASPDetails
       .align-center

@@ -6,12 +6,17 @@ header.card-header
       li
         h5
           .columns.project-specific
-            .column.hide-overflow
+            .column.hide-overflow.file-name
               = file.name
-            .column.is-one-sixth.fixed-icon
-              = fa-icon file.project.platformIconClass class="card-icon"
+            .column.file-card-info
+              .columns
+                .column.file-rating
+                   div
+                    | FILE ID - #{file.id}
+                .column.app-icon.fixed-icon
+                  = fa-icon file.project.platformIconClass
 
-      li.hide-overflow
+      li.hide-overflow.package-name
         | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
 .card-content
   .content
@@ -30,7 +35,7 @@ header.card-header
     .columns.app-risk-info class=isReverse:is-reverse
       .column.flex-center
         = ember-chart type='doughnut' data=file.doughnutData width=150 height=150 options=chartOptions
-      .file-details-class
+
       .column
         ul.risk-table
           .risk-values
@@ -70,8 +75,9 @@ header.card-header
                   = t "untested"
               .column
                 = file.countRiskUnknown
-
-    .file-id-container
-      div.file-id-text
-        | FILE ID - #{file.id}
+    .columns.file-details-band
+      .column
+        span class=file.fileRatingClass
+          | &nbsp; #{file.rating}% insecure &nbsp;
+      .column
 = yield
