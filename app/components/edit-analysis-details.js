@@ -30,6 +30,12 @@ export default Ember.Component.extend({
   availabilityImpacts: ENUMS.AVAILABILITY_IMPACT.CHOICES.slice(0, 3),
   confidentialityImpacts: ENUMS.CONFIDENTIALITY_IMPACT.CHOICES.slice(0, 3),
 
+  ireneFilePath: (function() {
+    const fileId = this.get("analysisDetails.file.id");
+    const ireneHost = ENV.ireneHost;
+    return [ireneHost, "file", fileId].join('/');
+  }).property(),
+
   analysisDetails: (function() {
     return this.get("store").findRecord('security/analysis', this.get("analysis.analysisId"));
   }).property(),

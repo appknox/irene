@@ -12,6 +12,8 @@
         .column.content-right
           button.is-success.success-button click="openMarkPassedConfirmBox"
             | Mark as Passed
+          a.margin-left href=ireneFilePath target="_blank" class="button is-primary"
+            | Visit Dashboard
     .box.analysis-box
       .columns.border-bottom-container
         .column
