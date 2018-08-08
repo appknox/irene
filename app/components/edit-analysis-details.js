@@ -217,9 +217,7 @@ export default Ember.Component.extend({
     addFinding() {
       const findingTitle = this.get("findingTitle");
       const findingDescription = this.get("findingDescription");
-      for (let inputValue of [findingTitle, findingDescription ]) {
-        if (isEmpty(inputValue)) { return this.get("notify").error("Please fill all the details"); }
-      }
+      if (isEmpty(findingDescription)) return this.get("notify").error("Please fill the description");
       let findingId = this.get("findingId");
       findingId = findingId + 1;
       const findings = this.get("analysisDetails.findings");
