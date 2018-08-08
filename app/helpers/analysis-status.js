@@ -6,6 +6,7 @@ export function analysisStatus(params) {
   if(typeof risk === "object") {
     risk = risk.value;
   }
+  risk = parseInt(risk);
   switch (risk) {
     case ENUMS.ANALYSIS_STATUS.ERROR: return "ERROR";
     case ENUMS.ANALYSIS_STATUS.WAITING: return "WAITING";

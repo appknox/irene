@@ -211,7 +211,7 @@ export default Ember.Component.extend({
     },
 
     selectOverriddenRisk(param) {
-      this.set('analysisDetails.overriddenRisk', param.value);
+      this.set('analysisDetails.overriddenRisk', param);
     },
 
     addFinding() {
@@ -272,10 +272,16 @@ export default Ember.Component.extend({
       const risk = this.get("analysisDetails.risk");
       const owasp = this.get("analysisDetails.owasp");
       const pcidss = this.get("analysisDetails.pcidss");
-      const status = this.get("analysisDetails.status");
+      let status = this.get("analysisDetails.status");
+      if(typeof status === "object") {
+        status = status.value;
+      }
       const analysisId= this.get("analysis.analysisId");
       const findings = this.get("analysisDetails.findings");
-      const overriddenRisk = this.get("analysisDetails.overriddenRisk");
+      let overriddenRisk = this.get("analysisDetails.overriddenRisk");
+      if(typeof overriddenRisk === "object" && !Ember.isEmpty(overriddenRisk)) {
+        overriddenRisk = overriddenRisk.value;
+      }
       const overriddenRiskToProfile = this.get("analysisDetails.overriddenRiskToProfile");
       if (findings) {
         findings.forEach(finding => delete finding.id);

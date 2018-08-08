@@ -4,7 +4,7 @@ import ENUMS from 'irene/enums';
 export default DS.Model.extend({
   findings: DS.attr(),
   risk: DS.attr('number'),
-  status: DS.attr('number'),
+  status: DS.attr('string'),
   attackVector: DS.attr('string'),
   attackComplexity: DS.attr('string'),
   privilegesRequired: DS.attr('string'),
@@ -17,7 +17,7 @@ export default DS.Model.extend({
   cvssVector: DS.attr('string'),
   cvssVersion: DS.attr('string'),
   analiserVersion: DS.attr('number'),
-  overriddenRisk: DS.attr('number'),
+  overriddenRisk: DS.attr('string'),
   overriddenRiskToProfile: DS.attr('boolean'),
   file: DS.belongsTo('security/file'),
   owasp: DS.hasMany('owasp'),
