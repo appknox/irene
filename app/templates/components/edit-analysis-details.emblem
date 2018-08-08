@@ -154,8 +154,8 @@
                   td
                     = textarea class="form-control input" type="text" value=findingDescription placeholder="DESCRIPTION"
                   td
-                    button.is-primary.margin-top30 click="addFinding"
-                      | Add Finding
+                    button.is-primary.margin-top30.highlighted-button click="addFinding"
+                      = fa-icon "plus"
 
           .columns
             .column
@@ -214,8 +214,6 @@
                 i.fa class="fa-spinner fa-spin"
               | &nbsp;
             | SAVE CHANGES
-
-
 
 = confirm-box isActive=showRemoveFindingConfirmBox title="Are you sure you want to remove this finding" delegate=this key="finding"
 
