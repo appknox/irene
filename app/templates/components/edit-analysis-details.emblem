@@ -159,9 +159,9 @@
                 each allFindings as |finding|
                   tr
                     td
-                      = finding.title
+                      = textarea class="form-control input" type="text" value=finding.title
                     td
-                      = finding.description
+                      = textarea class="form-control input" type="text" value=finding.description
                     td
                       div.pointed-cursor click="'openRemoveFindingConfirmBox' finding.id"
                         = fa-icon "trash-o"

@@ -55,7 +55,6 @@ export default Ember.Component.extend({
     }
   }).property("analysisDetails.findings"),
 
-
   confirmCallback(key) {
     if(key === "findings") {
       this.set("analysisDetails.findings", "");
@@ -128,9 +127,7 @@ export default Ember.Component.extend({
       const data = {
         name: fileName
       };
-
       const analysisId= this.get("analysis.analysisId");
-
       try {
         var fileData = await this.get("ajax").post(ENV.endpoints.uploadFile,{namespace: 'hudson-api', data});
         await file.uploadBinary(fileData.url, {
@@ -266,7 +263,6 @@ export default Ember.Component.extend({
       })
     },
 
-
     resetOverriddenAnalysis() {
       this.set("analysisDetails.overriddenRisk", null);
     },
@@ -286,9 +282,6 @@ export default Ember.Component.extend({
         overriddenRisk = overriddenRisk.value;
       }
       const overriddenRiskToProfile = this.get("analysisDetails.overriddenRiskToProfile");
-      if (findings) {
-        findings.forEach(finding => delete finding.id);
-      }
       const attackVector = this.get("analysisDetails.attackVector");
       const attackComplexity = this.get("analysisDetails.attackComplexity");
       const privilegesRequired = this.get("analysisDetails.privilegesRequired");
@@ -332,7 +325,6 @@ export default Ember.Component.extend({
         this.get("notify").error("Sorry something went wrong, please try again");
       })
     }
-
   }
 });
 
