@@ -113,6 +113,10 @@
           = power-select placeholder="Select Risk" selected=analysisDetails.overriddenRisk options=risks onchange=(action "selectOverriddenRisk") as |key|
             span.uppercase-text
               | #{risk-text key}
+        if analysisDetails.overriddenRisk
+          .column.is-one-sixth.marked-analysis
+            button.is-primary.highlighted-button.edit-marked-analysis click="resetOverriddenAnalysis"
+              | reset
         .column.input-checkbox
           = input class="checkbox" type="checkbox" checked=analysisDetails.overriddenRiskToProfile
           span

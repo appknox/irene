@@ -266,6 +266,11 @@ export default Ember.Component.extend({
       })
     },
 
+
+    resetOverriddenAnalysis() {
+      this.set("analysisDetails.overriddenRisk", null);
+    },
+
     saveAnalysis() {
       const risk = this.get("analysisDetails.risk");
       const owasp = this.get("analysisDetails.owasp");
