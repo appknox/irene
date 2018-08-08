@@ -128,26 +128,7 @@
           h5.bold-font
             | Findings
       .border-bottom-container
-        form.form.margin-left20
-          .columns
-            .column
-              p.control.is-fullwidth
-                | Title
-              p.control.is-fullwidth
-                = textarea class="form-control input" type="text" value=findingTitle
-            .column
-              p.control.is-fullwidth
-                | Description
-              p.control.is-fullwidth
-                = textarea class="form-control input" type="text" value=findingDescription
-            .column.is-one-sixth.margin-right
-              p.control.is-fullwidth
-                button.is-primary.margin-top30 click="addFinding"
-                  | Add Finding
-
         if allFindings
-          h6.bold-font.margin-top10.margin-left20
-            | List of Findings
           .columns
             .column
               table.finding-list-table
@@ -167,6 +148,15 @@
                     td
                       div.pointed-cursor click="'openRemoveFindingConfirmBox' finding.id"
                         = fa-icon "trash-o"
+                tr
+                  td
+                    = textarea class="form-control input" type="text" value=findingTitle placeholder="TITLE"
+                  td
+                    = textarea class="form-control input" type="text" value=findingDescription placeholder="DESCRIPTION"
+                  td
+                    button.is-primary.margin-top30 click="addFinding"
+                      | Add Finding
+
           .columns
             .column
               button.is-primary.margin-top30.margin-left30 click="openClearAllFindingConfirmBox"
