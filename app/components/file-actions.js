@@ -22,7 +22,7 @@ export default Ember.Component.extend({
       if(!Ember.isEmpty(emails)) {
         data = {
           emails: emails.split(",")
-        }
+        };
       }
       this.set("isGeneratingReport", true);
       const url = [ENV.endpoints.reports, fileId].join('/');
@@ -41,7 +41,7 @@ export default Ember.Component.extend({
     },
 
     openGenerateReportModal() {
-      this.set("reportGenerated", false)
+      this.set("reportGenerated", false);
       this.set("showGenerateReportModal", true);
     }
   }
