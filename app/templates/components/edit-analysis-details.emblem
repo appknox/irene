@@ -1,5 +1,5 @@
 .columns
-  .column.is-half.margin-auto
+  .column.margin-auto.edit-analysis-box
     .columns
       .column.margin-top.is-one-third
         = link-to 'authenticated.security.file' analysisDetails.file.id
@@ -12,6 +12,8 @@
         .column.content-right
           button.is-success.success-button click="openMarkPassedConfirmBox"
             | Mark as Passed
+          a.margin-left href=ireneFilePath target="_blank" class="button is-primary"
+            | Visit Dashboard
     .box.analysis-box
       .columns.border-bottom-container
         .column
@@ -113,6 +115,10 @@
           = power-select placeholder="Select Risk" selected=analysisDetails.overriddenRisk options=risks onchange=(action "selectOverriddenRisk") as |key|
             span.uppercase-text
               | #{risk-text key}
+        if analysisDetails.overriddenRisk
+          .column.is-one-sixth.marked-analysis
+            button.is-primary.highlighted-button.edit-marked-analysis click="resetOverriddenAnalysis"
+              | reset
         .column.input-checkbox
           = input class="checkbox" type="checkbox" checked=analysisDetails.overriddenRiskToProfile
           span
@@ -122,45 +128,35 @@
           h5.bold-font
             | Findings
       .border-bottom-container
-        form.form.margin-left20
-          .columns
-            .column
-              p.control.is-fullwidth
-                | Title
-              p.control.is-fullwidth
-                = textarea class="form-control input" type="text" value=findingTitle
-            .column
-              p.control.is-fullwidth
-                | Description
-              p.control.is-fullwidth
-                = textarea class="form-control input" type="text" value=findingDescription
-            .column.is-one-sixth.margin-right
-              p.control.is-fullwidth
-                button.is-primary.margin-top30 click="addFinding"
-                  | Add Finding
+        .columns
+          .column
+            table.finding-list-table
+              tr
+                th
+                  | Title
+                th
+                  | Description
+                th
+                  | Delete
+              each allFindings as |finding|
+                tr
+                  td
+                    = textarea class="form-control input" type="text" value=finding.title
+                  td
+                    = textarea class="form-control input" type="text" value=finding.description
+                  td
+                    div.pointed-cursor click="'openRemoveFindingConfirmBox' finding.id"
+                      = fa-icon "trash-o"
+              tr
+                td
+                  = textarea class="form-control input" type="text" value=findingTitle placeholder="TITLE"
+                td
+                  = textarea class="form-control input" type="text" value=findingDescription placeholder="DESCRIPTION"
+                td
+                  button.is-primary.margin-top30.highlighted-button click="addFinding"
+                    = fa-icon "plus"
 
         if allFindings
-          h6.bold-font.margin-top10.margin-left20
-            | List of Findings
-          .columns
-            .column
-              table.finding-list-table
-                tr
-                  th
-                    | Title
-                  th
-                    | Description
-                  th
-                    | Delete
-                each allFindings as |finding|
-                  tr
-                    td
-                      = finding.title
-                    td
-                      = finding.description
-                    td
-                      div.pointed-cursor click="'openRemoveFindingConfirmBox' finding.id"
-                        = fa-icon "trash-o"
           .columns
             .column
               button.is-primary.margin-top30.margin-left30 click="openClearAllFindingConfirmBox"
@@ -212,14 +208,11 @@
 
       .columns
         .column
-          button.is-primary.margin-top30.highlighted-button click="saveAnalysis" disabled=isSavingAnalyses
-            if isSavingAnalyses
-              .fa-font-size
-                i.fa class="fa-spinner fa-spin"
-              | &nbsp;
-            | SAVE CHANGES
-
-
+          button.is-primary.margin-top30.highlighted-button click="saveAndContinue" disabled=isSavingAnalyses
+            | SAVE & CONTINUE EDITING
+            
+          button.is-primary.margin-top30.highlighted-button.margin-left click="saveAndGoBack" disabled=isSavingAnalyses
+            | SAVE & GO BACK
 
 = confirm-box isActive=showRemoveFindingConfirmBox title="Are you sure you want to remove this finding" delegate=this key="finding"
 

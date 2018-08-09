@@ -2,13 +2,11 @@ import Ember from 'ember';
 import ENUMS from 'irene/enums';
 
 export function riskText(params) {
-
   let risk = params[0];
-
   if(typeof risk === "object") {
     risk = risk.value;
   }
-
+  risk = parseInt(risk);
   switch (risk) {
     case ENUMS.RISK.UNKNOWN: return "untested";
     case ENUMS.RISK.NONE: return "passed";

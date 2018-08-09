@@ -28,14 +28,22 @@
 = modal-card class="input-modal" isActive=showGenerateReportModal title="Generate Report"
   .card-body
     .card-wrapper
-      form.input-form
-        p.control
-          = input class="form-control input" placeholder="Enter the file number" type="text" value=file.fileId disabled=true
-        p.control
-          = input class="form-control input" placeholder="Enter the Email IDs(comma separated)" type="email" value=emails
-        button.is-primary click="generateReport" disabled=isGeneratingReport
-          if isGeneratingReport
-            .fa-font-size
-              i.fa class="fa-spinner fa-spin"
-            | &nbsp;
-          | Generate Report
+      if reportGenerated
+        | Report generated successfully
+        if emailIDs
+          | &nbsp;and sent to following Email IDS:
+          ul.email-list
+            each emailIDs as |email|
+              li = email
+      else
+        form.input-form
+          p.control
+            = input class="form-control input" placeholder="Enter the file number" type="text" value=file.fileId disabled=true
+          p.control
+            = input class="form-control input" placeholder="Enter the Email IDs(comma separated)" type="email" value=emails
+          button.is-primary click="generateReport" disabled=isGeneratingReport
+            if isGeneratingReport
+              .fa-font-size
+                i.fa class="fa-spinner fa-spin"
+              | &nbsp;
+            | Generate Report

@@ -1228,6 +1228,13 @@ ul.risk-table
 .table-container
   @extend .align-center
 
+.security-list-table
+  min-width: 670px!important
+  tr
+    td:nth-child(2)
+      min-width: 300px
+      max-width: 300px
+
 .security-list-table, .finding-list-table, .attachments-list-table
   min-width: 600px
   @extend .api-filter-table
@@ -1251,11 +1258,40 @@ ul.risk-table
       max-width: 400px
       word-wrap: break-word
 
-.finding-list-table, .attachments-list-table
-  margin-left: 27px
+.finding-list-table
+  min-width: 98%
+  margin-left: 10px
   margin-top: 0px
+  tr
+    td:nth-child(1)
+      text-align: left
+    td:nth-child(2)
+      max-width: 500px
+      text-align: left
+      padding: 10px 5px
+      word-wrap: break-word
+    td:nth-child(3)
+      padding: 5px
+      button
+        margin-top: -10px
+    textarea::placeholder
+      color: lighten($default, 30%)
   i
     cursor: pointer
+
+.edit-analysis-box
+  flex: none
+  width: 70%
+  .marked-analysis
+    width: 90px
+    .edit-marked-analysis
+      height: 25px
+      line-height: 18px
+
+.attachments-list-table
+  margin-left: 27px
+  margin-top: 0px
+
 
 .team-container.box-container
   padding-bottom: 20px
@@ -2542,3 +2578,15 @@ $attachment-icon-width: 4em
     .pagination
       padding: 10px 200px
       .pagination-list
+
+ul.email-list
+  margin-top: 10px
+  li
+    color: #000
+    &:before
+      content: "• "
+      font-size: 30px
+      color: $green
+      position: relative
+      left: 2px
+      top: 7px

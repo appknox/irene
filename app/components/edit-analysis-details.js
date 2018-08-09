@@ -30,6 +30,12 @@ export default Ember.Component.extend({
   availabilityImpacts: ENUMS.AVAILABILITY_IMPACT.CHOICES.slice(0, 3),
   confidentialityImpacts: ENUMS.CONFIDENTIALITY_IMPACT.CHOICES.slice(0, 3),
 
+  ireneFilePath: (function() {
+    const fileId = this.get("analysisDetails.file.id");
+    const ireneHost = ENV.ireneHost;
+    return [ireneHost, "file", fileId].join('/');
+  }).property(),
+
   analysisDetails: (function() {
     return this.get("store").findRecord('security/analysis', this.get("analysis.analysisId"));
   }).property(),
@@ -54,7 +60,6 @@ export default Ember.Component.extend({
       return findings;
     }
   }).property("analysisDetails.findings"),
-
 
   confirmCallback(key) {
     if(key === "findings") {
@@ -128,9 +133,7 @@ export default Ember.Component.extend({
       const data = {
         name: fileName
       };
-
       const analysisId= this.get("analysis.analysisId");
-
       try {
         var fileData = await this.get("ajax").post(ENV.endpoints.uploadFile,{namespace: 'hudson-api', data});
         await file.uploadBinary(fileData.url, {
@@ -211,15 +214,13 @@ export default Ember.Component.extend({
     },
 
     selectOverriddenRisk(param) {
-      this.set('analysisDetails.overriddenRisk', param.value);
+      this.set('analysisDetails.overriddenRisk', param);
     },
 
     addFinding() {
       const findingTitle = this.get("findingTitle");
       const findingDescription = this.get("findingDescription");
-      for (let inputValue of [findingTitle, findingDescription ]) {
-        if (isEmpty(inputValue)) { return this.get("notify").error("Please fill all the details"); }
-      }
+      if (isEmpty(findingDescription)) return this.get("notify").error("Please fill the description");
       let findingId = this.get("findingId");
       findingId = findingId + 1;
       const findings = this.get("analysisDetails.findings");
@@ -268,18 +269,34 @@ export default Ember.Component.extend({
       })
     },
 
-    saveAnalysis() {
+    resetOverriddenAnalysis() {
+      this.set("analysisDetails.overriddenRisk", null);
+    },
+
+    saveAndContinue() {
+      this.send("saveAnalysis");
+    },
+
+    saveAndGoBack() {
+      this.send("saveAnalysis", 'back');
+    },
+
+    saveAnalysis(param) {
+      const key = param;
       const risk = this.get("analysisDetails.risk");
       const owasp = this.get("analysisDetails.owasp");
       const pcidss = this.get("analysisDetails.pcidss");
-      const status = this.get("analysisDetails.status");
+      let status = this.get("analysisDetails.status");
+      if(typeof status === "object") {
+        status = status.value;
+      }
       const analysisId= this.get("analysis.analysisId");
       const findings = this.get("analysisDetails.findings");
-      const overriddenRisk = this.get("analysisDetails.overriddenRisk");
-      const overriddenRiskToProfile = this.get("analysisDetails.overriddenRiskToProfile");
-      if (findings) {
-        findings.forEach(finding => delete finding.id);
+      let overriddenRisk = this.get("analysisDetails.overriddenRisk");
+      if(typeof overriddenRisk === "object" && !Ember.isEmpty(overriddenRisk)) {
+        overriddenRisk = overriddenRisk.value;
       }
+      const overriddenRiskToProfile = this.get("analysisDetails.overriddenRiskToProfile");
       const attackVector = this.get("analysisDetails.attackVector");
       const attackComplexity = this.get("analysisDetails.attackComplexity");
       const privilegesRequired = this.get("analysisDetails.privilegesRequired");
@@ -318,12 +335,14 @@ export default Ember.Component.extend({
       .then(() => {
         this.set("isSavingAnalyses", false);
         this.get("notify").success("Analyses Updated");
+        if(key) {
+          Ember.getOwner(this).lookup('route:authenticated').transitionTo("authenticated.security.file", this.get("analysisDetails.file.id"));
+        }
       }, () => {
         this.set("isSavingAnalyses", false);
         this.get("notify").error("Sorry something went wrong, please try again");
       })
     }
-
   }
 });
 
