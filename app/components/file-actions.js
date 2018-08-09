@@ -17,16 +17,21 @@ export default Ember.Component.extend({
     generateReport() {
       const fileId = this.get("file.fileId");
       const emails = this.get("emails");
-      const data = {
-        emails: emails.split(",")
+      let data = {
       };
+      if(!Ember.isEmpty(emails)) {
+        data = {
+          emails: emails.split(",")
+        }
+      }
       this.set("isGeneratingReport", true);
       const url = [ENV.endpoints.reports, fileId].join('/');
       return this.get("ajax").put(url, { namespace: '/hudson-api', data, dataType: "text"})
       .then(() => {
-        this.get("notify").success("Report Generated and sent to the Email ID(s)");
         this.set("isGeneratingReport", false);
-        this.set("showGenerateReportModal", false);
+        this.set("reportGenerated", true);
+        this.set("emailIDs", emails.split(','));
+        this.set("emails", "");
       }, (error) => {
         this.set("isGeneratingReport", false);
         for (error of error.errors) {
@@ -36,6 +41,7 @@ export default Ember.Component.extend({
     },
 
     openGenerateReportModal() {
+      this.set("reportGenerated", false)
       this.set("showGenerateReportModal", true);
     }
   }
