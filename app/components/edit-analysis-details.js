@@ -273,7 +273,16 @@ export default Ember.Component.extend({
       this.set("analysisDetails.overriddenRisk", null);
     },
 
-    saveAnalysis() {
+    saveAndContinue() {
+      this.send("saveAnalysis");
+    },
+
+    saveAndGoBack() {
+      this.send("saveAnalysis", 'back');
+    },
+
+    saveAnalysis(param) {
+      const key = param;
       const risk = this.get("analysisDetails.risk");
       const owasp = this.get("analysisDetails.owasp");
       const pcidss = this.get("analysisDetails.pcidss");
@@ -326,6 +335,9 @@ export default Ember.Component.extend({
       .then(() => {
         this.set("isSavingAnalyses", false);
         this.get("notify").success("Analyses Updated");
+        if(key) {
+          Ember.getOwner(this).lookup('route:authenticated').transitionTo("authenticated.security.file", this.get("analysisDetails.file.id"));
+        }
       }, () => {
         this.set("isSavingAnalyses", false);
         this.get("notify").error("Sorry something went wrong, please try again");

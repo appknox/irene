@@ -160,7 +160,7 @@
           .columns
             .column
               button.is-primary.margin-top30.margin-left30 click="openClearAllFindingConfirmBox"
-                | Clear All Findings  
+                | Clear All Findings
         .column.is-one-third
       .columns
         .column
@@ -208,12 +208,11 @@
 
       .columns
         .column
-          button.is-primary.margin-top30.highlighted-button click="saveAnalysis" disabled=isSavingAnalyses
-            if isSavingAnalyses
-              .fa-font-size
-                i.fa class="fa-spinner fa-spin"
-              | &nbsp;
-            | SAVE CHANGES
+          button.is-primary.margin-top30.highlighted-button click="saveAndContinue" disabled=isSavingAnalyses
+            | SAVE & CONTINUE EDITING
+            
+          button.is-primary.margin-top30.highlighted-button.margin-left click="saveAndGoBack" disabled=isSavingAnalyses
+            | SAVE & GO BACK
 
 = confirm-box isActive=showRemoveFindingConfirmBox title="Are you sure you want to remove this finding" delegate=this key="finding"
 
