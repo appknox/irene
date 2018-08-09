@@ -25,8 +25,12 @@ moduleForModel('file', 'Unit | Model | file', {
 });
 
 test('it passes', function(assert) {
-  const file = this.subject();
-  Ember.run(function() {
+  Ember.run(() => {
+    const file = Ember.getOwner(this).lookup(
+      'service:store'
+    ).createRecord('file', {
+      'id': 1
+    });
     assert.equal(file.get('ifManualNotRequested'), true, "Manual Requested");
 
     assert.equal(file.get('isRunningApiScan'), true, "API Scan");
