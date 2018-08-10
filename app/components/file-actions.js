@@ -21,12 +21,12 @@ export default Ember.Component.extend({
       };
       if(!Ember.isEmpty(emails)) {
         data = {
-          emails: emails.split(",")
+          emails: emails.split(",").map(item => item.trim())
         };
       }
       this.set("isGeneratingReport", true);
       const url = [ENV.endpoints.reports, fileId].join('/');
-      return this.get("ajax").put(url, { namespace: '/hudson-api', data, dataType: "text"})
+      return this.get("ajax").put(url, { namespace: '/hudson-api', data, contentType: 'application/json'})
       .then(() => {
         this.set("isGeneratingReport", false);
         this.set("reportGenerated", true);
