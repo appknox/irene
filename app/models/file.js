@@ -180,20 +180,32 @@ const File = DS.Model.extend(BaseModelMixin, {
     }
   }).property('dynamicStatus'),
 
+  setDynamicStatus(status) {
+    this.store.push({
+      data: {
+        id: this.id,
+        type: this.constructor.modelName,
+        attributes: {
+            'dynamicStatus': status
+        }
+      }
+    });
+  },
+
   setBootingStatus() {
-    this.set("dynamicStatus", ENUMS.DYNAMIC_STATUS.BOOTING);
+    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.BOOTING);
   },
 
   setShuttingDown() {
-    this.set("dynamicStatus", ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN);
+    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN);
   },
 
   setNone() {
-    this.set("dynamicStatus", ENUMS.DYNAMIC_STATUS.NONE);
+    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.NONE);
   },
 
   setReady() {
-    this.set("dynamicStatus", ENUMS.DYNAMIC_STATUS.READY);
+    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.READY);
   }
 }
 );

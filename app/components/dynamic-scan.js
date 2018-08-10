@@ -36,6 +36,7 @@ export default Ember.Component.extend({
       this.get("ajax").put(dynamicUrl, {data})
         .then(() => {
           this.get("notify").success(tStartingScan);
+          file.setBootingStatus();
           if(!this.isDestroyed) {
             this.send('pollDynamicStatus');
             this.send("closeModal");
@@ -140,7 +141,7 @@ export default Ember.Component.extend({
       this.get("ajax").delete(dynamicUrl)
       .then(() => {
         if(!this.isDestroyed) {
-          file.setNone();
+          this.send('pollDynamicStatus');
           this.set("startingDynamicScan", false);
         }
       },(error) => {
