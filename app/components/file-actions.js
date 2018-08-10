@@ -26,7 +26,7 @@ export default Ember.Component.extend({
       }
       this.set("isGeneratingReport", true);
       const url = [ENV.endpoints.reports, fileId].join('/');
-      return this.get("ajax").put(url, { namespace: '/hudson-api', data: JSON.stringify(data), contentType: 'application/json'})
+      return this.get("ajax").put(url, { namespace: '/hudson-api', data, contentType: 'application/json'})
       .then(() => {
         this.set("isGeneratingReport", false);
         this.set("reportGenerated", true);
