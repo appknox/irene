@@ -21,6 +21,7 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
   realtime: service(),
   mixpanel: service(),
   trial: service(),
+  network: service(),
   socketIOService: service('socket-io'),
 
   tNewScanStarted: t("newScanStarted"),
@@ -156,6 +157,17 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
     };
 
     const socket = this.get('socketIOService').socketFor(ENV.socketPath);
+
+    const network = this.get('network');
+
+    network.on('change', (state) => {
+      if(state === "OFFLINE") {
+        document.getElementsByClassName('network-state')[0].style.visibility = "visible";
+      }
+      else {
+        document.getElementsByClassName('network-state')[0].style.visibility = "hidden";
+      }
+    });
 
     socket.emit("subscribe", {room: socketId});
     return (() => {
