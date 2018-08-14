@@ -4,7 +4,7 @@
   .column.is-one-quarter.margin-side-auto
     form.login-form
       h4.has-text-centered
-        |  Member Login
+        = t "loginTitle"
       if MFAEnabled
         p.control.has-icon.has-icon-left
           = input class="input" type="text" placeholder="OTP" value=otp id="otp"

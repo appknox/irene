@@ -1,0 +1,2 @@
+.auth-main-container
+  = sso-login-component

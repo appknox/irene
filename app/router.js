@@ -11,6 +11,7 @@ Ember.$('body').addClass('theme-' + ENV.whitelabel.theme);
 Router.map(function() {
   this.route('freestyle');
   this.route('login');
+  this.route('sso-login');
   if (!ENV.isEnterprise) {
     this.route('register');
     this.route('activate', {path: '/activate/:pk/:token'});
