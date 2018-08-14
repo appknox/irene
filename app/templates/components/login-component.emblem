@@ -4,7 +4,7 @@
   .column.is-one-quarter.margin-side-auto
     form.login-form
       h4.has-text-centered
-        |  Member Login
+        = t "loginTitle"
       if MFAEnabled
         p.control.has-icon.has-icon-left
           = input class="input" type="text" placeholder="OTP" value=otp id="otp"
@@ -32,4 +32,15 @@
       if isNotEnterprise
         p.has-text-centered.margin-top
           = link-to 'register'
-            | Create Account
+            = t "createAccount"
+      if env.enableSSO
+        div.login-form-sso
+          div.login-form-sso-separator
+          div.login-form-sso-or
+            = t "or"
+          button.button.login-form-sso-button click="SSOAuthenticate" disabled=isSSOLogingIn
+              if isSSOLogingIn
+                span.fa-font-size
+                  i.fa class="fa-spinner fa-spin"
+                  | &nbsp;
+              = t "ssoLogin"

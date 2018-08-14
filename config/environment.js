@@ -10,6 +10,7 @@ module.exports = function(environment) {
   var deviceFarmHost = deviceFarmWebsockifyHost.hostname;
   var host = process.env.IRENE_API_HOST || 'https://api.appknox.com';
   var socketPath = process.env.IRENE_API_SOCKET_PATH || 'https://socket.appknox.com';
+  var enableSSO = process.env.IRENE_ENABLE_SSO || false;
 
   var ENV = {
     version: Date.now(),
@@ -74,6 +75,7 @@ module.exports = function(environment) {
     enablePendo: true,
     enableInspectlet: true,
     enableCSB: true,
+    enableSSO: enableSSO,
 
     notifications: {
       autoClear: true,
@@ -112,6 +114,7 @@ module.exports = function(environment) {
       // when it is created
     },
     'ember-simple-auth': {
+      authenticationRoute: '/login',
       loginEndPoint: '/login',
       checkEndPoint: '/check',
       logoutEndPoint: '/logout',
@@ -172,6 +175,8 @@ module.exports = function(environment) {
       reportPreference: "report_preference",
       registration: "registration",
       activate: "activate",
+      saml2: "sso/saml2",
+      saml2Login: "sso/saml2/login",
       files: "files",
       profiles: "profiles",
       analyses: "analyses",

@@ -7,6 +7,7 @@ const LoginComponentComponent = Ember.Component.extend({
   notify: Ember.inject.service('notification-messages-service'),
   MFAEnabled: false,
   isLogingIn: false,
+  isSSOLogingIn: false,
   identification: "",
   password: "",
   otp: "",
@@ -35,6 +36,19 @@ const LoginComponentComponent = Ember.Component.extend({
       };
 
       this.get('session').authenticate("authenticator:irene", identification, password, otp, errorCallback, loginStatus);
+    },
+
+    SSOAuthenticate() {
+      this.set("isSSOLogingIn", true);
+      const url = `${ENV.endpoints.saml2}?return_to=${window.location.origin}/saml2/redirect`;
+
+      this.get("ajax").request(url)
+        .then(function(data) {
+          window.location.href = data.url;
+        })
+        .catch(function(err) {
+          this.get("notify").error(err.payload.message);
+        });
     }
   }
 });

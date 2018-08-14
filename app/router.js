@@ -11,6 +11,9 @@ Ember.$('body').addClass('theme-' + ENV.whitelabel.theme);
 Router.map(function() {
   this.route('freestyle');
   this.route('login');
+  this.route('saml2', {path: '/saml2'}, function() {
+    this.route('redirect', {path: '/redirect'});
+  });
   if (!ENV.isEnterprise) {
     this.route('register');
     this.route('activate', {path: '/activate/:pk/:token'});
