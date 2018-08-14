@@ -1,5 +1,1 @@
-.columns
-  .column.network-state
-    | No Internet, Please check your internet connection
-
 = home-page user=model

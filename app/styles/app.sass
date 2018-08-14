@@ -2591,7 +2591,7 @@ ul.email-list
       top: 7px
 
 .network-state
-  visibility: hidden
+  visibility: visible
   text-align: center
   background-color: $red
   margin: auto
@@ -2599,7 +2599,11 @@ ul.email-list
   color: #FFF
   border-radius: 5px
   position: fixed
-  top: 35px
+  top: 36px
   left: 40%
   z-index: 10000
   font-size: 12px
+  padding: 10px
+  &.green
+    background-color: $green
+    left: 43%

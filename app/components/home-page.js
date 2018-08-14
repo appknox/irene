@@ -7,10 +7,11 @@ export default Ember.Component.extend({
 
   session: service(),
 
+  onlineStatus: service(),
+
   isLoaded: false,
   isSecurityEnabled: false,
   isSecurityDashboard: false,
-
 
   securityEnabled() {
     this.get("ajax").request("projects", {namespace: 'hudson-api'})

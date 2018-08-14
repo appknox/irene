@@ -1,3 +1,12 @@
+if onlineStatus.isCheckingConnection
+  .network-state.green
+    | Connecting, Please wait...
+else
+  if onlineStatus.isOnline
+    .dummy-element
+  else
+    .network-state
+      | No Internet, Please check your internet connection
 if isLoaded
   if isSecurityDashboard
     .columns.security-dashboard
@@ -50,7 +59,7 @@ if isLoaded
           .status-updates
             = submission-list
 
-      .column.margin-right.margin-top
+      .column.margin-right
         .columns
           .column.top-nav
             .columns.top-columns
