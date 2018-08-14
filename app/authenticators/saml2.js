@@ -22,13 +22,15 @@ export default IreneAuth.extend({
         resolve(data);
         this.resumeTransistion();
       }, (error) => {
-        this.get("notify").error(error.payload.message, ENV.notifications);
-        for (error of error.errors) {
-          if (error.status === "0") {
-            this.get("notify").error("Unable to reach server. Please try after sometime", ENV.notifications);
-          }
+        let msg = "Login failed";
+        if(error.payload.message) {
+          msg = "Login failed: " + error.payload.message;
         }
-        return reject(error);
+        this.get("notify").error(msg);
+
+        const authenticatedRoute = Ember.getOwner(this).lookup("route:authenticated");
+        authenticatedRoute.transitionTo('login');
+        return reject(msg);
       });
     });
   }
