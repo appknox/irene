@@ -172,6 +172,8 @@ module.exports = function(environment) {
       reportPreference: "report_preference",
       registration: "registration",
       activate: "activate",
+      saml2: "sso/saml2",
+      saml2Login: "sso/saml2/login",
       files: "files",
       profiles: "profiles",
       analyses: "analyses",
