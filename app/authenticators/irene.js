@@ -50,7 +50,7 @@ const IreneAuthenticator = Base.extend({
         this.get("notify").error(error.payload.message, ENV.notifications);
         for (error of error.errors) {
           if (error.status === "0") {
-            this.get("notify").error("Unable to reach server. Please try after sometime", ENV.notifications);
+            return this.get("notify").error("Unable to reach server. Please try after sometime", ENV.notifications);
           }
           this.get("notify").error("Please enter valid account details", ENV.notifications);
         }

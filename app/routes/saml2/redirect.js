@@ -5,10 +5,7 @@ import ENV from 'irene/config/environment';
 export default Ember.Route.extend({
   title: `Redirect${config.platform}`,
   model(params) {
-    const data = {
-      token: params.sso_token
-    };
-    return this.get("ajax").post(ENV.endpoints.saml2Login, {data});
+    this.get('session').authenticate("authenticator:saml2", params.sso_token);
   },
   queryParams: {
     sso_token: {
