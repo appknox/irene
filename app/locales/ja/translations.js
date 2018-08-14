@@ -55,6 +55,7 @@ export default {
   "confirmPassword": "新しいパスワード(確認)",
   "continue": "続ける",
   "copy": "コピー",
+  "createAccount": "Create Account",
   "created": "作成されました",
   "createdOn": "作成日",
   "createTeam": "チームの作成",

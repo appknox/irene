@@ -55,6 +55,7 @@ export default {
   "confirmPassword": "Confirm Password",
   "continue": "Continue",
   "copy": "Copy",
+  "createAccount": "Create Account",
   "created": "Created",
   "createdOn": "created on",
   "createTeam": "Create Team",

@@ -2088,6 +2088,7 @@ input:checked + .yes-no-slider:before
     i
       margin-top: -3px
 
+$login-button-width: 80%
 .auth-main-container
   height: 100vh
   background-color: #424651
@@ -2117,7 +2118,28 @@ input:checked + .yes-no-slider:before
         margin: auto
       button
         margin-top: 10px
-        max-width: 200px!important
+        width: $login-button-width !important
+    &-sso
+      &-separator
+        height: 0.06em
+        width: 100%
+        background: lighten($default, 50%)
+        margin-top: 3em
+      &-or
+        text-align: center
+        background: white
+        width: 2.3em
+        margin: -0.8em auto 2.3em
+      &-button
+        width: $login-button-width
+        display: block
+        margin: auto
+        background: #ececec
+        border-color: #ececec
+        &:hover, &:focus, &:active
+          background: darken(#ececec, 5%)
+          border-color: darken(#ececec, 5%)
+
   .signin-text, .greet-text
     padding-top: 30px
     color: #fff
@@ -2577,7 +2599,6 @@ $attachment-icon-width: 4em
       margin-top: 60px!important
     .pagination
       padding: 10px 200px
-      .pagination-list
 
 ul.email-list
   margin-top: 10px

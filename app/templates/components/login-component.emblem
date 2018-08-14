@@ -32,4 +32,15 @@
       if isNotEnterprise
         p.has-text-centered.margin-top
           = link-to 'register'
-            | Create Account
+            = t "createAccount"
+      if env.enableSSO
+        div.login-form-sso
+          div.login-form-sso-separator
+          div.login-form-sso-or
+            = t "or"
+          button.button.login-form-sso-button click="SSOAuthenticate" disabled=isSSOLogingIn
+              if isSSOLogingIn
+                span.fa-font-size
+                  i.fa class="fa-spinner fa-spin"
+                  | &nbsp;
+              = t "ssoLogin"
