@@ -27,7 +27,6 @@ h6
       form
         p.control
           .columns
-<<<<<<< HEAD
             if teams
               .column
                 select.select onchange={action "teamChanged" value="target.value"} id="team-preference"
@@ -56,23 +55,3 @@ h6
             = t "youCanCreateTeam"
             = link-to 'authenticated.teams' class="is-primary" tagName="a"
               | &nbsp; #{t "clickingHere"}
-=======
-            .column
-              select.select onchange={action "teamChanged" value="target.value"} id="team-preference"
-                option value=0
-                  = t "selectTeam"
-                each orgTeams as |team|
-                  option value=team.id
-                    = team.name
-            .column
-              button.mp-add-collaboration.is-primary click="addCollaboration" disabled=isAddingCollaboration
-                if isAddingCollaboration
-                  .fa-font-size
-                    i.fa class="fa-spinner fa-spin"
-                  | &nbsp;
-                = t "assignTeam"
-    .card-button.margin-top20.font-size12
-      = t "youCanCreateTeam"
-      = link-to 'authenticated.organization.teams' orgId class="is-primary" tagName="a"
-        | &nbsp; #{t "clickingHere"}
->>>>>>> fix: redirect to teams from settings
