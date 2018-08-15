@@ -21,6 +21,7 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
   realtime: service(),
   mixpanel: service(),
   trial: service(),
+  org: service('organization'),
   socketIOService: service('socket-io'),
 
   tNewScanStarted: t("newScanStarted"),
@@ -30,8 +31,9 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
     return this._super(transition);
   },
 
-  model() {
+  async model() {
     const userId = this.get("session.data.authenticated.user_id");
+    await this.get('org').load();
     return this.get('store').find('user', userId);
   },
 
