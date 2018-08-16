@@ -33,9 +33,9 @@ if isLoaded
                 = fa-icon "tasks" class="sidebar-icons"
                 = t "projects"
             li
-              = link-to 'authenticated.teams' class="mp-auth-teams"
-                = fa-icon "user" class="sidebar-icons"
-                = t "teams"
+              = link-to 'authenticated.organization.teams' 1 class="mp-auth-teams"
+                = fa-icon "users" class="sidebar-icons"
+                = t "organization"
             li
               = link-to 'authenticated.settings' class="mp-auth-setting"
                 = fa-icon "cog" class="sidebar-icons"
