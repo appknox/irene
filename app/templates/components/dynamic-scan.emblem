@@ -12,11 +12,11 @@
             = fa-icon "fa-check"
             | &nbsp; #{t "completed"}
           if trial.isTrial
-            button.vnc-button.vnc-button-repeat.is-primary.margin-top20.margin-left click="openSubscribeModal"
+            button.vnc-button.vnc-button-repeat.is-primary.margin-top20.margin-left5 click="openSubscribeModal"
               .fa-font-size-small
                 = fa-icon "fa-repeat"
           else
-            button.vnc-button.vnc-button-repeat.is-primary.margin-top20.margin-left.ac-dynamic-rescan click="openAPIScanModal"
+            button.vnc-button.vnc-button-repeat.is-primary.margin-top20.margin-left5.ac-dynamic-rescan click="openAPIScanModal"
               .fa-font-size-small
                 = fa-icon "fa-repeat"
         else

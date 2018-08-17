@@ -21,7 +21,7 @@
         = fa-icon "cog"
         | &nbsp; #{t "settings"}
 
-.card.is-fullwidth.margin-bottom20.scan-status-card
+.card.is-fullwidth.margin-bottom20.scan-status-card.all-scan-status
   .card-content
     .columns
       .column.flex-center
@@ -45,7 +45,7 @@
              .fa-font-size-small
                = fa-icon "fa-repeat"
           else
-            button.is-primary.margin-top20.margin-left.ac-static-rescan click="openRescanModal"
+            button.is-primary.margin-top20.margin-left5.ac-static-rescan click="openRescanModal"
               .fa-font-size-small
                 = fa-icon "fa-repeat"
         else
@@ -161,7 +161,7 @@
           = copy-password pdfPassword=file.project.pdfPassword
           .file-id-container
             div.file-id-text
-              | FILE ID - #{file.id} 
+              | FILE ID - #{file.id}
 
     if isOWASPDetails
       .align-center
