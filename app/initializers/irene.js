@@ -16,6 +16,40 @@ const initialize = function(application) {
   // Inject Store
   application.inject('component', 'store', 'service:store');
 
+  let runtimeConfig = window.runtimeGlobalConfig;
+
+  function parseUrl(url) {
+    let parser = document.createElement('a'), searchObject = {}, queries, split, i;
+    parser.href = url;
+    queries = parser.search.replace(/^\?/, '').split('&');
+    for(i = 0; i < queries.length; i++ ) {
+        split = queries[i].split('=');
+        searchObject[split[0]] = split[1];
+    }
+    return parser;
+  }
+
+  if(runtimeConfig) {
+    ENV.host = runtimeConfig.IRENE_API_HOST || ENV.host;
+    var devicefarmEnv = runtimeConfig.IRENE_DEVICEFARM_URL;
+    if(devicefarmEnv) {
+      let deviceFarmWebsockifyHost = parseUrl(devicefarmEnv);
+      let deviceFarmSsl = deviceFarmWebsockifyHost.protocol === "wss:";
+      ENV.deviceFarmSsl = deviceFarmSsl;
+      ENV.deviceFarmPort = deviceFarmWebsockifyHost.port || (deviceFarmSsl ? 443:80);
+      ENV.deviceFarmHost = deviceFarmWebsockifyHost.hostname;
+    }
+    ENV.socketPath = runtimeConfig.IRENE_API_SOCKET_PATH || ENV.socketPath;
+    ENV.enableSSO = runtimeConfig.IRENE_ENABLE_SSO || ENV.enableSSO;
+    ENV.isEnterprise = runtimeConfig.ENTERPRISE || ENV.isEnterprise;
+    ENV.whitelabel = {
+      enabled: runtimeConfig.WHITELABEL_ENABLED || ENV.whitelabel.enabled,
+      name: runtimeConfig.WHITELABEL_ENABLED || ENV.whitelabel.name,
+      logo: runtimeConfig.WHITELABEL_ENABLED || ENV.whitelabel.logo,
+      theme: runtimeConfig.WHITELABEL_ENABLED || ENV.whitelabel.theme
+    };
+  }
+
   // Inject ENV
   if (ENV.environment !== 'test') {
     // FIXME: Fix this test properly
