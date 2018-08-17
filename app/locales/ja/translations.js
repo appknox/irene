@@ -454,7 +454,7 @@ export default {
       "appQuestion1Answer1": "再診断を実施しますので、診断を続行し、診断されなかった機能についてレポートで報告してください。",
       "appQuestion1Answer2": "診断を停止して、サポートに連絡してください。",
       "loginRequired": "あなたのアプリケーションは、ログインするためのアカウントが必要ですか？",
-      "enterLoginDetails": "アプリにログインするために必要な資格情報を入力してください<b class = 'bold'>（各役割に2つの資格情報が設定されています）</ b>",
+      "enterLoginDetails": "アプリにログインするために必要な資格情報を入力してください<b class = 'bold'>（各役割に4つの資格情報が設定されています）</ b>",
       "addUserRole": "ユーザの役割を追加する",
       "userRoles": "ユーザの役割を追加する",
       "actions": "アクション",
