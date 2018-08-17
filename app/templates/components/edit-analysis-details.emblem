@@ -127,7 +127,8 @@
         .column.is-one-third
           h5.bold-font
             | Findings
-      .border-bottom-container
+
+      if allFindings
         .columns
           .column
             table.finding-list-table
@@ -147,14 +148,20 @@
                   td
                     div.pointed-cursor click="'openRemoveFindingConfirmBox' finding.id"
                       = fa-icon "trash-o"
-              tr
-                td
-                  = textarea class="form-control input" type="text" value=findingTitle placeholder="TITLE"
-                td
-                  = textarea class="form-control input" type="text" value=findingDescription placeholder="DESCRIPTION"
-                td
-                  button.is-primary.margin-top30.highlighted-button click="addFinding"
-                    = fa-icon "plus"
+      .border-bottom-container
+        form.form.margin-left30
+          .columns
+            .column
+              p.control.is-fullwidth
+                = textarea class="form-control input" type="text" value=findingTitle placeholder="TITLE"
+            .column
+              p.control.is-fullwidth
+                = textarea class="form-control input" type="text" value=findingDescription placeholder="DESCRIPTION"
+            .column.is-one-sixth.margin-right
+              p.control.is-fullwidth
+                button.is-primary.margin-top30.highlighted-button click="addFinding"
+                  | Add Finding
+
 
         if allFindings
           .columns
@@ -210,7 +217,7 @@
         .column
           button.is-primary.margin-top30.highlighted-button click="saveAndContinue" disabled=isSavingAnalyses
             | SAVE & CONTINUE EDITING
-            
+
           button.is-primary.margin-top30.highlighted-button.margin-left click="saveAndGoBack" disabled=isSavingAnalyses
             | SAVE & GO BACK
 
