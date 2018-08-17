@@ -25,6 +25,7 @@ const AuthMfaComponent = Ember.Component.extend({
 
   didInsertElement() {
     const provisioningURL = this.get("user.provisioningURL");
+    // eslint-disable-next-line no-undef
     return new QRious({
       element: this.element.querySelector("canvas"),
       background: 'white',

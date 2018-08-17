@@ -95,8 +95,7 @@
         | &nbsp;
         if isUploading
           | #{t "uploading"}
-          if progress
-            | &nbsp;:#{progress}%
+          | &nbsp;:#{progress}%
         else
           | Upload File
     .column.content-right.is-one-sixth

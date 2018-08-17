@@ -73,7 +73,7 @@ const PersonaltokenListComponent = Ember.Component.extend(PaginateMixin, {
   didInsertElement() {
     const tTokenCopied = this.get('tTokenCopied');
     const tPleaseTryAgain = this.get('tPleaseTryAgain');
-
+    // eslint-disable-next-line no-undef
     const clipboard = new Clipboard('.copy-token');
     this.set('clipboard', clipboard);
 

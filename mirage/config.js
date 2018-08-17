@@ -155,8 +155,7 @@ export default function() {
     return {};
   });
 
-  this.put('/profiles/:id/device_preference', (db, request) => {
-    console.log(request.requestBody);
+  this.put('/profiles/:id/device_preference', () => {
     return {id: '1'};
   });
 

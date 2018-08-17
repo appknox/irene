@@ -61,6 +61,7 @@ const FileDetailsComponent = Ember.Component.extend({
     filterVulnerabilityType() {
       this.set("sortedUnhiddenAnalyses", this.get("file.sortedAnalyses"));
       this.set("sortImpactAscending", false);
+      // eslint-disable-next-line no-undef
       const select = $(this.element).find("#filter-vulnerability-type");
       this.set("vulnerabilityType", select.val());
       this.updateUnhiddenAnalysis();

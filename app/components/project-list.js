@@ -113,6 +113,7 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
   platformObjects: ENUMS.PLATFORM.CHOICES.slice(0, +-4 + 1 || undefined),
   actions: {
     sortProjects() {
+      // eslint-disable-next-line no-undef
       const select = $(this.element).find("#project-sort-property");
       const [sortingKey, sortingReversed] = filterPlatformValues(select.val());
       this.set("sortingKey", sortingKey);
@@ -120,6 +121,7 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
     },
 
     filterPlatform() {
+      // eslint-disable-next-line no-undef
       const select = $(this.element).find("#project-filter-platform");
       this.set("platformType", select.val());
     }

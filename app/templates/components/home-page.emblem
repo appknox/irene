@@ -65,8 +65,7 @@ if isLoaded
                       | &nbsp;
                       if isUploading
                         | #{t "uploading"}
-                        if progress
-                          | &nbsp;:#{progress}%
+                        | &nbsp;:#{progress}%
                       else
                         = t "uploadApp"
               .column.is-one-quarter

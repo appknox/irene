@@ -26,7 +26,6 @@ const TeamMemberComponent = Ember.Component.extend({
     const teamId = this.get("organizationTeam.id");
     const orgId = this.get("organizationTeam.organization.id");
     const url = [ENV.endpoints.organizations, orgId, ENV.endpoints.teams, teamId, ENV.endpoints.members, teamMember].join('/');
-    const that = this;
     this.set("isRemovingMember", true);
     this.get("ajax").delete(url)
     .then((data) => {

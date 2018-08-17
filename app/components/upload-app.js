@@ -1,39 +1,42 @@
 import Ember from 'ember';
 import Uploader from 'irene/utils/uploader';
 import EmberUploader from 'ember-uploader';
-import ENV from 'irene/config/environment';
+import { translationMacro as t } from 'ember-i18n';
 
 const UploadAppComponent = EmberUploader.FileField.extend({
-
+  store: Ember.inject.service('store'),
   delegate: null,
+  i18n: Ember.inject.service("i18n"),
+
+  tErrorWhileFetching: t("errorWhileFetching"),
+  tErrorWhileUploading: t("errorWhileUploading"),
+  tFileUploadedSuccessfully: t("fileUploadedSuccessfully"),
+  notify: Ember.inject.service("notification-messages"),
+
   classNames: ["file-input"],
-
-  filesDidChange(files) {
-
+  async filesDidChange(files) {
     const delegate = this.get("delegate");
-    delegate.set("isUploading", true);
     if (Ember.isEmpty(files)) {
       return;
     }
+    delegate.set("isUploading", true);
+    delegate.set("progress", 0);
     const uploader = Uploader.create({container: this.container});
-
-    uploader.didUpload = (file_key, file_key_signed) => {
-      delegate.set("isUploading", false);
-      const data = {
-        file_key,
-        file_key_signed
-      };
-      this.get("ajax").post(ENV.endpoints.uploadedFile, {data});
-    };
-
     uploader.on('progress', e => delegate.set("progress", parseInt(e.percent)));
-
-    return uploader.upload(files[0], delegate)
-    .catch(function() {
-      $('input[type=file]').val('');
-      delegate.set("isUploading", false);
-    });
-  }
+    try {
+      const uploadItem = await this.get("store").queryRecord('uploadApp', {});
+      await uploader.uploadFile(files[0], uploadItem.get('url'));
+      await uploadItem.save()
+      this.get("notify").success(this.get('tFileUploadedSuccessfully'));
+    } catch(e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+      this.get("notify").error(this.get('tErrorWhileUploading'));
+    }
+    // eslint-disable-next-line no-undef
+    $('input[type=file]').val('');
+    delegate.set("isUploading", false);
+  },
 });
 
 

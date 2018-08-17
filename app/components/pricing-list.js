@@ -7,8 +7,7 @@ const PricingListComponent = Ember.Component.extend({
   paymentDuration: ENUMS.PAYMENT_DURATION.MONTHLY,
 
   subscriptions: (function() {
-    let subscriptions;
-    subscriptions = this.get("store").findAll("subscription")
+    this.get("store").findAll("subscription")
     .then((data) => {
       this.set("subscriptions", data);
       if (data.isLoaded === true) {
@@ -35,14 +34,19 @@ const PricingListComponent = Ember.Component.extend({
   }).property(),
 
   activateDuration(element) {
+    // eslint-disable-next-line no-undef
     $(".js-duration-button").removeClass("is-primary is-active");
+    // eslint-disable-next-line no-undef
     $(".js-duration-button").addClass("is-default");
+    // eslint-disable-next-line no-undef
     $(element).removeClass("is-default");
+    // eslint-disable-next-line no-undef
     $(element).addClass("is-primary is-active");
   },
 
   didRender() {
     const paymentDuration = this.get("paymentDuration");
+    // eslint-disable-next-line no-undef
     const element = $(this.element).find(`[data-value='${paymentDuration}']`);
     this.activateDuration(element);
   },
@@ -60,6 +64,7 @@ const PricingListComponent = Ember.Component.extend({
 
   actions: {
     selectDuration() {
+      // eslint-disable-next-line no-undef
       this.set("paymentDuration", $(event.srcElement).data("value"));
       this.activateDuration(event.srcElement);
     }

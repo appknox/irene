@@ -73,6 +73,7 @@ const IreneAuthenticator = Base.extend({
       }, (error) => {
         localStorage.clear();
         location.reload();
+        reject(error);
       });
     });
   },
@@ -88,6 +89,7 @@ const IreneAuthenticator = Base.extend({
         location.reload();
       }, (error) => {
         location.reload();
+        reject(error);
       });
     });
   }

@@ -4,8 +4,6 @@ import Ember from 'ember';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
 
-const { get, set } = Ember;
-
 const isEmpty = inputValue => Ember.isEmpty(inputValue);
 
 const {inject: {service}} = Ember;

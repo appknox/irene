@@ -81,11 +81,10 @@ const User = DS.Model.extend({
   }).property('billingHidden'),
 
   getExpiryDate: (function() {
-    let expiryDate;
     if (ENV.isAppknox) {
-      return expiryDate = this.get("expiryDate");
+      return this.get("expiryDate");
     } else {
-      return expiryDate = this.get("devknoxExpiry");
+      return this.get("devknoxExpiry");
     }
   }).property("expiryDate"),
 
