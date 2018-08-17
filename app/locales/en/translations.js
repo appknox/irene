@@ -454,7 +454,7 @@ export default {
       "appQuestion1Answer1": "Proceed with the scan & mention the features that were not scanned in the report. We will rescan it later.",
       "appQuestion1Answer2": "Halt the scan, contact us & then proceed with the complete application scan.",
       "loginRequired": "Does your application require an account to login?",
-      "enterLoginDetails": "Please enter the credentails required to login into the app <b class='bold'>(4 sets of credentials for each role)</b>",
+      "enterLoginDetails": "Please enter the credentials required to login into the app <b class='bold'>(4 sets of credentials for each role)</b>",
       "addUserRole": "Add user role",
       "userRoles": "User roles",
       "actions": "Actions",
