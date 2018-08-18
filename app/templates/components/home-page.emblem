@@ -33,7 +33,7 @@ if isLoaded
                 = fa-icon "tasks" class="sidebar-icons"
                 = t "projects"
             li
-              = link-to 'authenticated.organization.teams' 1 class="mp-auth-teams"
+              = link-to 'authenticated.organization.members' org.id class="mp-auth-teams"
                 = fa-icon "users" class="sidebar-icons"
                 = t "organization"
             li

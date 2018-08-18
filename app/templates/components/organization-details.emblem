@@ -13,7 +13,7 @@ h4.margin-left.text-centre
 .tabs.is-medium.is-boxed.margin-top.is-centered
   ul
     li class=userClass click="displayUser"
-      = link-to 'authenticated.organization.users' organization.id
+      = link-to 'authenticated.organization.members' org.id
         = fa-icon "user" class="sidebar-icons"
         | Users
         span.count

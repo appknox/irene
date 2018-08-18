@@ -15,7 +15,6 @@ export default Ember.Component.extend({
 
   actions: {
     openAddMemberModal() {
-      debugger
       this.set("showAddMemberModal", true);
     },
     addMember() {

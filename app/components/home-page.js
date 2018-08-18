@@ -11,6 +11,9 @@ export default Ember.Component.extend({
   isSecurityEnabled: false,
   isSecurityDashboard: false,
 
+  org: (function() {
+    return this.get('store').queryRecord('organization', {id: this.get('organization.id')})
+  }).property(),
 
   securityEnabled() {
     this.get("ajax").request("projects", {namespace: 'hudson-api'})
