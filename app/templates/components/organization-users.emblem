@@ -3,32 +3,8 @@
     button.is-primary.highlighted-button click="openAddMemberModal"
       = t "inviteMember"
 
-.columns
-  .column
-    table.org-table
-      tr
-        th
-          = t "user"
-        th
-          = t "email"
-        th
-          =  t "role"
-      each orgUsers as |user|
-        = user-overview user=user organization=organization
-.columns
-  .column.margin-top20
-    h5.bold.black-text
-      = t "pendingInvitations"
-.columns
-  .column
-    table.org-table
-      tr
-        th
-          = t "email"
-        th
-          =  t "actions"
-      each orgInvitations as |invitation|
-        = org-invitation invitation=invitation organization=organization
+= organization-member-list organization=organization
+= organization-invitation-list organization=organization
 
 = modal-card class="input-modal" isActive=showAddMemberModal title="Invite Member"
   .card-body

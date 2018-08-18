@@ -13,16 +13,9 @@ export default Ember.Component.extend({
   tEmptyEmailId: t("emptyEmailId"),
   tOrgMemberInvited: t("orgMemberInvited"),
 
-  orgUsers: (function() {
-    return this.get("store").query('organization-user', {id: this.get('organization.id')});
-  }).property(),
-
-  orgInvitations: (function() {
-    return this.get("store").query('organization-invitation', {id: this.get("organization.id")});
-  }).property(),
-
   actions: {
     openAddMemberModal() {
+      debugger
       this.set("showAddMemberModal", true);
     },
     addMember() {
