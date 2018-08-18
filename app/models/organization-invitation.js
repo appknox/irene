@@ -1,12 +1,20 @@
 import DS from 'ember-data';
+import dateTime from 'irene/utils/date-time';
 
 const OrganizationInvitation = DS.Model.extend({
-
-  role : DS.attr('number'),
   email: DS.attr('string'),
-  'organization-user' : DS.belongsTo('organization-user'),
-  'organization-team' : DS.belongsTo('organization-team')
-});
+  createdOn: DS.attr('date'),
+  updatedOn: DS.attr('date'),
+  team: DS.belongsTo('organization-team'),
+  organization: DS.belongsTo('organization'),
 
+  createdOnHumanized: Ember.computed("createdOn", function() {
+    return dateTime(this.get("createdOn"));
+  }),
+
+  updatedOnHumanized: Ember.computed("updatedOn", function() {
+    return dateTime(this.get("updatedOn"));
+  }),
+});
 
 export default OrganizationInvitation;

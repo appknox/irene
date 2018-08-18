@@ -157,6 +157,7 @@ export default {
   "invite": "招待",
   "inviteMember": "Invite Member",
   "invitationDeleted": "Invitation is deleted successfully",
+  "invitedOn": "Invited on",
   "invoice": "請求書",
   "invoices": "請求書",
   "invoiceId": "請求書ID",
@@ -280,6 +281,7 @@ export default {
   "requested": "リクエストしました",
   "requestToAddNamespace": "新しい名前空間の追加をリクエストしました",
   "rescanInitiated": "再診断を開始しました",
+  "resend": "Resend",
   "reset": "リセット",
   "resetPassword": "パスワードのリセット",
   "repoIntegrated": "リポジトリの連携に成功しました",
@@ -392,7 +394,8 @@ export default {
     "cancelSubsciption": "サブスクリプションをキャンセルしてよろしいですか？",
     "revokePersonalToken": "パーソナルアクセストークンを削除してよろしいですか？",
     "removeUserRole":	"Are you sure you want to remove this role?",
-    "deleteInvitation": "Are you sure you want to delete this invitation?"
+    "deleteInvitation": "Are you sure you want to delete this invitation?",
+    "resendInvitation": "Are you sure you want to resend this invitation?"
   },
   "promptBox": {
     "collaborationPrompt": {

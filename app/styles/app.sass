@@ -153,6 +153,14 @@ body
 .font-size12
   font-size: 12px
 
+button
+  &.no-border
+    border: none
+    &.is-icon
+      font-size: 16px
+      padding: 0.3em 0.6em
+      .fa
+        font-size: inherit
 .width100
   width: 100px
 
@@ -1332,28 +1340,23 @@ ul.risk-table
   &-container
     padding: 30px 200px
   &-table
-    .columns
-      .column
-        padding: 0px
-        margin-top: 15px
     tr
       border: 1px solid lighten(#eaecef, 2%)
-      th, td
-        text-align: center
-        border-width: 0px
-        padding: 10px 0px
-        vertical-align: middle
-      td
-        font-size: 12px
-      th
-        background-color: darken(#f6f8fa, 1%)
-        color: darken(#586069, 1%)
-      th, td
-        &:last-child
-          text-align: right
-          padding-right: 30px
-      button
-        font-size: 12px
+    td
+      font-size: 12px
+    th
+      background-color: darken(#f6f8fa, 1%)
+      color: darken(#586069, 1%)
+      // padding: 10px 0px
+    th, td
+      border-width: 0px
+      vertical-align: middle
+      &:first-child
+        text-align: left
+        padding-left: 1em
+      // &:last-child
+      //   text-align: right
+      //   padding-right: 30px
     .fa-times
       color: #EF4836
       cursor: pointer
@@ -1376,7 +1379,6 @@ ul.risk-table
       border-right: 1px solid rgba(107, 107, 107, 0.1)
 
 .invoice-table, .token-table
-  @extend .org-table
   .fa
     font-size: 16px
   .fa-trash-o
@@ -1387,7 +1389,6 @@ ul.risk-table
 .pending-invitation-table
   margin: auto
   width: 70%
-  @extend .org-table
 
 .team-card
   min-height: 260px

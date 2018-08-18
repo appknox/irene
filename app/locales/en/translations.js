@@ -157,6 +157,7 @@ export default {
   "invite": "Invite",
   "inviteMember": "Invite Member",
   "invitationDeleted": "Invitation is deleted successfully",
+  "invitedOn": "Invited on",
   "invoice": "INVOICE",
   "invoices": "Invoices",
   "invoiceId": "INVOICE ID",
@@ -280,6 +281,7 @@ export default {
   "requested": "Requested",
   "requestToAddNamespace": "We have received your request to add a new namespace",
   "rescanInitiated": "Re-scan initiated",
+  "resend": "Resend",
   "reset": "Reset",
   "resetPassword": "Reset your password",
   "repoIntegrated": "Repo successfully integrated",
@@ -392,7 +394,8 @@ export default {
     "cancelSubsciption": "Are you sure you want to cancel Subscription?",
     "revokePersonalToken": "Are you sure you want to delete this personal access token?",
     "removeUserRole":	"Are you sure you want to remove this role?",
-    "deleteInvitation": "Are you sure you want to delete this invitation?"
+    "deleteInvitation": "Are you sure you want to delete this invitation?",
+    "resendInvitation": "Are you sure you want to resend this invitation?"
   },
   "promptBox": {
     "collaborationPrompt": {
