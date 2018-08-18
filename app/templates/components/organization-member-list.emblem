@@ -1,0 +1,18 @@
+.columns
+  .column
+    if hasObjects
+      table.org-table
+        tr
+          th
+            = t "user"
+          th
+            = t "email"
+          th
+            = t "role"
+        each sortedObjects as |member|
+          = organization-member-detail member=member organization=organization
+.columns
+  .column
+    if hasObjects
+      .margin-top20
+        = partial "paginate"
