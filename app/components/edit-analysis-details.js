@@ -63,7 +63,7 @@ export default Ember.Component.extend({
 
   confirmCallback(key) {
     if(key === "findings") {
-      this.set("analysisDetails.findings", "");
+      this.set("analysisDetails.findings", []);
       return this.set("showClearAllFindingsConfirmBox", false);
     }
     if(key === "attachment") {
