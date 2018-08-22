@@ -18,22 +18,11 @@ const initialize = function(application) {
 
   let runtimeConfig = window.runtimeGlobalConfig;
 
-  function parseUrl(url) {
-    let parser = document.createElement('a'), searchObject = {}, queries, split, i;
-    parser.href = url;
-    queries = parser.search.replace(/^\?/, '').split('&');
-    for(i = 0; i < queries.length; i++ ) {
-        split = queries[i].split('=');
-        searchObject[split[0]] = split[1];
-    }
-    return parser;
-  }
-
   if(runtimeConfig) {
     ENV.host = runtimeConfig.IRENE_API_HOST || ENV.host;
     var devicefarmEnv = runtimeConfig.IRENE_DEVICEFARM_URL;
     if(devicefarmEnv) {
-      let deviceFarmWebsockifyHost = parseUrl(devicefarmEnv);
+      let deviceFarmWebsockifyHost = new URL(devicefarmEnv);
       let deviceFarmSsl = deviceFarmWebsockifyHost.protocol === "wss:";
       ENV.deviceFarmSsl = deviceFarmSsl;
       ENV.deviceFarmPort = deviceFarmWebsockifyHost.port || (deviceFarmSsl ? 443:80);
