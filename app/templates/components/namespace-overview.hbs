@@ -1,0 +1,22 @@
+<td class="bold text-darkgray">{{namespace.value}}</td>
+<td class="text-lightgray">{{moment-from-now namespace.createdOn}}</td>
+<td class="td-with-btn">
+  {{#if namespace.isApproved}}
+    <span class="text-lightgray">{{moment-from-now namespace.approvedOn}}</span>
+  {{else}}
+    <button class="is-success btn-table" title="{{t 'approve'}}" onclick={{perform approveNamespace}}>
+      <i class="fa fa-check"></i>
+      {{#if approveNamespace.isRunning}}
+        {{loading-spinner}}
+      {{/if}}
+    </button>
+    <button class="is-primary btn-table margin-left" title="{{t 'reject'}}" onclick={{perform rejectNamespaceConfirm}}>
+      <i class="fa fa-times"></i>
+      {{#if rejectNamespace.isRunning}}
+        {{loading-spinner}}
+      {{/if}}
+    </button>
+  {{/if}}
+</td>
+
+{{confirm-box isActive=showRejectNamespaceConfirm title=(t "confirmBox.rejectNamespace") delegate=this confirmAction=(action "confirmRejectProxy") disabled=isRejectingNamespace}}

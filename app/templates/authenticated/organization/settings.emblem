@@ -2,11 +2,10 @@
   .box-container.margin-top
     .columns
       .column
-        h5.bold.black-text
-          = t "namespace"
-        = t "addNewNamespace"
+        h3.bold.black-text
+          = t "namespaces"
         .namespace-list
-          = namespace-component organizations=model
+          = namespace-component organization=model
   .box-container
     .columns
       .column

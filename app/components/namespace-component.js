@@ -2,8 +2,9 @@ import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
+import PaginateMixin from 'irene/mixins/paginate';
 
-const NamespaceComponentComponent = Ember.Component.extend({
+const NamespaceComponentComponent = Ember.Component.extend(PaginateMixin, {
 
   namespace: "",
   added: false,
@@ -15,15 +16,18 @@ const NamespaceComponentComponent = Ember.Component.extend({
   tRequestToAddNamespace: t("requestToAddNamespace"),
   tPleaseEnterAnyNamespace: t("pleaseEnterAnyNamespace"),
 
-  orgNamespaces: (function() {
-    const organizations = this.get("organizations");
-    const orgId = organizations.content[0].id;
-    return this.get("store").query('organization-namespace', {id: orgId});
-  }).property("organizations"),
+  targetObject: 'organization-namespace',
+  sortProperties: ['created:desc'],
+
+  extraQueryStrings: Ember.computed('organization.id', function() {
+    const query = {
+      id: this.get("organization.id")
+    };
+    return JSON.stringify(query, Object.keys(query).sort());
+  }),
 
 
   actions: {
-
     addNamespace() {
       const tRequestToAddNamespace = this.get("tRequestToAddNamespace");
       const tPleaseEnterAnyNamespace = this.get("tPleaseEnterAnyNamespace");
