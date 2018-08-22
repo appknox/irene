@@ -10,7 +10,7 @@
           th
             = t "role"
         each sortedObjects as |member|
-          = organization-member-detail member=member organization=organization
+          = organization-member-overview member=member organization=organization
 .columns
   .column
     if hasObjects

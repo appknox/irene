@@ -4,7 +4,7 @@ td
   // = invitation.team.name
   = invitation.hasReSent
 td
-  = invitation.createdOnHumanized
+  = moment-from-now invitation.createdOn
 td
   button.is-default.is-icon.no-border
     i.fa.fa-repeat click="openResendInvitationConfirmBox"

@@ -7,14 +7,8 @@ export default DRFAdapter.extend(DataAdapterMixin, {
   namespace: ENV.namespace,
   addTrailingSlashes: false,
   authorizer: 'authorizer:irene',
-  query: function (store, type, query) {
-    let url = `${this.get('host')}/${this.get('namespace')}/organizations/${query.id}/members`;
-    let queryParams = Object.assign({}, query);
-    delete queryParams.id;
-    return this.ajax(url, 'GET', {data: queryParams});
-  },
   queryRecord: function (store, type, query) {
-    let url = `${this.get('host')}/${this.get('namespace')}/organizations/${query.orgId}/members/${query.id}`;
+    let url = `${this.get('host')}/${this.get('namespace')}/projects/${query.id}`;
     return this.ajax(url, 'GET');
   }
 });

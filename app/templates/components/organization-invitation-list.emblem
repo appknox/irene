@@ -18,7 +18,7 @@
           th
             = t "delete"
         each sortedObjects as |invitation|
-          = organization-invitation-detail invitation=invitation organization=organization
+          = organization-invitation-overview invitation=invitation organization=organization
 .columns
   .column
     if hasObjects
