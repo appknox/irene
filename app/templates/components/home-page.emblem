@@ -27,28 +27,28 @@ if isLoaded
       .column.is-one-sixth.side-menu
         .appknox-logo
           = img-logo
-          ul.menu-list.text-center
-            li
-              = link-to 'authenticated.projects' class="mp-auth-projects"
-                = fa-icon "tasks" class="sidebar-icons"
-                = t "projects"
-            li
-              = link-to 'authenticated.organization.members' org.id class="mp-auth-teams"
-                = fa-icon "users" class="sidebar-icons"
-                = t "organization"
-            li
-              = link-to 'authenticated.settings' class="mp-auth-setting"
-                = fa-icon "cog" class="sidebar-icons"
-                = t "settings"
+        ul.menu-list.text-center.margin-top20
+          li
+            = link-to 'authenticated.projects' class="mp-auth-projects"
+              = fa-icon "tasks" class="sidebar-icons"
+              = t "projects"
+          li
+            = link-to 'authenticated.organization.namespaces' org.id class="mp-auth-teams"
+              = fa-icon "users" class="sidebar-icons"
+              = t "organization"
+          li
+            = link-to 'authenticated.settings' class="mp-auth-setting"
+              = fa-icon "cog" class="sidebar-icons"
+              = t "accountSettings"
 
-            if user.ifBillingIsNotHidden
-              li
-                = link-to 'authenticated.billing' class="mp-auth-billing"
-                  = fa-icon "tag" class="sidebar-icons"
-                  = t "billing"
+          if user.ifBillingIsNotHidden
+            li
+              = link-to 'authenticated.billing' class="mp-auth-billing"
+                = fa-icon "tag" class="sidebar-icons"
+                = t "billing"
 
-          .status-updates
-            = submission-list
+        .status-updates
+          = submission-list
 
       .column.margin-right.margin-top
         .columns

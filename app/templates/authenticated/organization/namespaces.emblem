@@ -1,0 +1,8 @@
+.org-container
+  .margin-top
+    .columns
+      .column
+        h3.bold.black-text
+          = t "namespaces"
+    .columns
+      = namespace-component organization=model

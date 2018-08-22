@@ -9,7 +9,8 @@ export default Ember.Component.extend({
     ajax: Ember.inject.service(),
     notify: Ember.inject.service('notification-messages-service'),
 
-    isUsers: true,
+    isNamespaces: true,
+    isMembers: false,
     isTeams: false,
     showHide: true,
     editSave: false,
@@ -25,19 +26,27 @@ export default Ember.Component.extend({
       const route = this.get('routing.currentRouteName');
       const routeName = route.split(".")[2];
       if(routeName === "teams" || routeName === "team") {
-        this.set('isUsers', false);
+        this.set('isNamespaces', false);
+        this.set('isMembers', false);
         this.set('isTeams', true);
         this.set('isSettings', false);
       }
       else if(routeName === "settings") {
-        this.set('isUsers', false);
+        this.set('isNamespaces', false);
+        this.set('isMembers', false);
         this.set('isTeams', false);
         this.set('isSettings', true);
       }
     },
 
-    userClass: Ember.computed('isUsers', function() {
-      if (this.get('isUsers')){
+    namespaceClass: Ember.computed('isNamespaces', function() {
+      if (this.get('isNamespaces')){
+        return 'is-active';
+      }
+    }),
+
+    memberClass: Ember.computed('isMembers', function() {
+      if (this.get('isMembers')){
         return 'is-active';
       }
     }),
@@ -55,20 +64,30 @@ export default Ember.Component.extend({
     }),
 
     actions: {
-      displayUser() {
-        this.set('isUsers', true);
+      displayNamespaces() {
+        this.set('isNamespaces', true);
+        this.set('isMembers', false);
         this.set('isTeams', false);
         this.set('isSettings', false);
       },
 
-      displayTeam() {
-        this.set('isUsers', false);
+      displayMembers() {
+        this.set('isNamespaces', false);
+        this.set('isMembers', true);
+        this.set('isTeams', false);
+        this.set('isSettings', false);
+      },
+
+      displayTeams() {
+        this.set('isNamespaces', false);
+        this.set('isMembers', false);
         this.set('isTeams', true);
         this.set('isSettings', false);
       },
 
       displaySettings() {
-        this.set('isUsers', false);
+        this.set('isNamespaces', false);
+        this.set('isMembers', false);
         this.set('isTeams', false);
         this.set('isSettings', true);
       },

@@ -1,4 +1,4 @@
-h4.margin-left.text-centre
+h4.org-header-name.margin-left.text-centre
   div class=showHide:show:hide
     = org.name
     span.edit-button click="editOrganization"
@@ -12,13 +12,19 @@ h4.margin-left.text-centre
 
 .tabs.is-medium.is-boxed.margin-top.is-centered
   ul
-    li class=userClass click="displayUser"
-      = link-to 'authenticated.organization.members' org.id
-        = fa-icon "user" class="sidebar-icons"
-        | Users
+    li class=namespaceClass click="displayNamespaces"
+      = link-to 'authenticated.organization.namespaces' organization.id
+        = fa-icon "check" class="sidebar-icons"
+        = t "namespaces"
         span.count
-          = org.userCount
-    li class=teamClass click="displayTeam"
+          = org.namespaceCount
+    li class=memberClass click="displayMembers"
+      = link-to 'authenticated.organization.members' organization.id
+        = fa-icon "user" class="sidebar-icons"
+        = t "members"
+        span.count
+          = org.memberCount
+    li class=teamClass click="displayTeams"
       = link-to 'authenticated.organization.teams' organization.id
         = fa-icon "building" class="sidebar-icons"
         = t "teams"

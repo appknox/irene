@@ -3,6 +3,7 @@ export default {
   "acceptTerms": "I accept the terms and conditions",
   "account": "Account",
   "accountOverview": "Account Overview",
+  "accountSettings": "Account Settings",
   "actions": "ACTIONS",
   "activationSuccess": "Your account has been activated, you will be redirected to login page.",
   "activeSubscription": "Active Subscription",

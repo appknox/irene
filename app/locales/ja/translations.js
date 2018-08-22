@@ -3,6 +3,7 @@ export default {
   "acceptTerms": "私は利用規約に同意します",
   "account": "アカウント",
   "accountOverview": "アカウントの概要",
+  "accountSettings": "Account Settings",
   "actions": "アクション",
   "activationSuccess": "アカウントが有効化されていると、ログインページにリダイレクトされます。",
   "activeSubscription": "有効なサブスクリプション",

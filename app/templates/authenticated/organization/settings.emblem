@@ -1,19 +1,10 @@
 .org-container
-  .box-container.margin-top
-    .columns
-      .column
-        h3.bold.black-text
-          = t "namespaces"
-    .columns
-      = namespace-component organization=model
-
   .box-container
     .columns
       .column
         h5.bold.black-text.is-fullwidth
           = t "jiraIntegration"
         = jira-account user=user class="column is-one-third"
-
   .margin-left
     .columns
       .column
