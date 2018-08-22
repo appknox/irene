@@ -1,17 +1,18 @@
-.columns
-  .column
-    table.table-lightgray
-      tr
-        th
-          = t "namespace"
-        th
-          = t "addedOn"
-        th
-          = t "approvalStatus"
-      each sortedObjects as |namespace|
-        = namespace-overview namespace=namespace
-.columns
-  .column
-    if hasObjects
-      .margin-top20
-        = partial "paginate"
+if hasObjects
+  table.table-lightgray.margin-top
+    tr
+      th
+        = t "namespace"
+      th
+        = t "addedOn"
+      th
+        = t "approvalStatus"
+
+    each sortedObjects as |namespace|
+      = namespace-overview namespace=namespace
+  .margin-top20
+    = partial "paginate"
+
+else
+  div.empty-state
+    = t "noNamespace"

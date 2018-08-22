@@ -4,8 +4,9 @@
       .column
         h3.bold.black-text
           = t "namespaces"
-        .namespace-list
-          = namespace-component organization=model
+    .columns
+      = namespace-component organization=model
+
   .box-container
     .columns
       .column

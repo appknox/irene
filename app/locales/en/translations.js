@@ -208,7 +208,7 @@ export default {
   "no": "No",
   "noDeviceAvailable": "No Device Available",
   "noFiles": "No Files",
-  "noNamespace": "no namespace",
+  "noNamespace": "No namespaces",
   "none": "Passed",
   "passed": "Passed",
   "noOfProjects": "No of projects",
