@@ -15,15 +15,15 @@ const OrgInvitationComponent = Ember.Component.extend({
 
   confirmCallback(key) {
     if(key === "delete") {
-      const tInvitationDeleted = this.get("tInvitationDeleted");
+      // const tInvitationDeleted = this.get("tInvitationDeleted");
       this.set("isDeletingInvitation", true);
-      const that = this;
-      const url = [
-        ENV.endpoints.organizations,
-        this.get("organization.id"),
-        ENV.endpoints.invitations,
-        this.get("invitation.id")
-      ].join('/');
+      // const that = this;
+      // const url = [
+      //   ENV.endpoints.organizations,
+      //   this.get("organization.id"),
+      //   ENV.endpoints.invitations,
+      //   this.get("invitation.id")
+      // ].join('/');
       const orgId = this.get('organization.id');
       const invId = this.get('invitation.id');
       return this.get("store").queryRecord('organization-invitation', {orgId: orgId, id: invId})
@@ -34,6 +34,7 @@ const OrgInvitationComponent = Ember.Component.extend({
           }
         })
         .catch(function(err) {
+          // eslint-disable-next-line no-console
           console.log(err)
         });
     }

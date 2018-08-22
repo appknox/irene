@@ -9,9 +9,10 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
   i18n: Ember.inject.service(),
 
   classNames: ["columns"],
-
+  projects: null,
+  hasProjects: Ember.computed.gt('projects.meta.count', 0),
   query: "",
-  targetObject: "project",
+  targetObject: "OrganizationProject",
 
   sortingKey: "lastFileCreatedOn",
   sortingReversed: true,
