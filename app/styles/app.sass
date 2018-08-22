@@ -16,6 +16,43 @@ body
 
 /* Margin Defines*/
 
+$color-text: #6B6B6B
+$color-table: #565d66
+
+h2
+  font-size: 1.65em
+
+h3
+  font-size: 1.5em
+
+.text-lightgray
+  color: lighten($color-table, 28%)
+.text-darkgray
+  color: $color-table
+
+.table-lightgray
+  tr
+    border: 1px solid lighten(#eaecef, 2%)
+    min-height: 3em
+  th
+    background-color: darken(#f6f8fa, 1%)
+    color: darken(#586069, 1%)
+  td
+    font-size: 0.9em
+  th, td
+    border-width: 0px
+    vertical-align: middle
+    &:first-child
+      text-align: left
+      padding-left: 1em
+  .btn-table
+    height: auto
+    i
+      padding-right: 0.15em
+  .td-with-btn
+    height: 3.5em
+    display: flex
+    align-items: center
 
 .margin-top30
   margin-top: 30px
