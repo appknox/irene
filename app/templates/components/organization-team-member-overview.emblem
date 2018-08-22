@@ -1,0 +1,9 @@
+td
+  = teamMember.username
+td
+  = teamMember.email
+td
+  button.is-primary.is-icon.no-border
+    i.fa.fa-trash-o click="openRemoveMemberPrompt"
+
+= prompt-box isActive=showRemoveMemberPrompt title=(t 'promptBox.removeMemberPrompt.title') description=(t 'promptBox.removeMemberPrompt.description') button="remove" delegate=this disabled=isRemovingMember

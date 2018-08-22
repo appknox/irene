@@ -2,4 +2,4 @@
   = create-team organization=model
   .columns
     .column
-      = team-list organization=model
+      = organization-team-list organization=model

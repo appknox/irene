@@ -1,0 +1,13 @@
+td
+  = link-to "authenticated.organization.team" team.id
+    = team.name
+td
+  = team.membersCount
+td
+  = team.projectsCount
+td
+  = moment-from-now team.createdOn
+td
+  i.fa.fa-trash-o.remove click="openDeleteTeamPrompt" disabled=team.isDefaultTeam
+
+= prompt-box isActive=showDeleteTeamPrompt title=(t 'promptBox.deleteTeamPrompt.title') description=(t 'promptBox.deleteTeamPrompt.description') button="deleteTeam" delegate=this disabled=isDeletingTeam
