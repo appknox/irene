@@ -1,0 +1,15 @@
+table.org-table
+  tr
+    th
+      = t "teamName"
+    th
+      = t "memberCount"
+    th
+      = t "projectCount"
+    th
+       = t "createdOn"
+    th
+      =  t "delete"
+
+  each orgTeams as |team|
+    = organization-team-overview team=team organization=organization
