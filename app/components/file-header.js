@@ -525,7 +525,8 @@ const FileHeaderComponent = Ember.Component.extend({
         }
       }, (error) => {
         this.set("isStartingRescan", false);
-        this.get("notify").error(error.payload.error);
+        this.get("notify").error(error.payload.detail);
+        this.set("showRescanModal", false);
       });
     }
   }
