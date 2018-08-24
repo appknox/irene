@@ -1,23 +1,2 @@
-.columns
-  .column.margin-t-1h.margin-b-1
-    h5.bold.black-text
-      = t "organizationMembers"
-  .column.content-right.margin-t-1
-    button.is-primary.highlighted-button click="openAddMemberModal"
-      = t "inviteMember"
-
 = organization-member-list organization=organization
 = organization-invitation-list organization=organization
-
-= modal-card class="input-modal" isActive=showAddMemberModal title="Invite Member"
-  .card-body
-    .card-wrapper
-      form
-        p.control
-          = input class="form-control input input-width" placeholder=(t 'email') type="text" value=email autofocus="autofocus"
-        button.margin-top10.is-primary click="addMember" disabled=isInvitingMember
-          if isInvitingMember
-            .fa-font-size
-             i.fa class="fa-spinner fa-spin"
-            | &nbsp;
-          = t "invite"

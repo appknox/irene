@@ -7,8 +7,7 @@ const OrgInvitationComponent = Ember.Component.extend({
   i18n: Ember.inject.service(),
   ajax: Ember.inject.service(),
   tagName: ['tr'],
-  tInvitation: t('invitation'),
-  tDeleted: t('deleted'),
+
   tInvitationDeleted: t('invitationDeleted'),
   tInvitationReSent: t('invitationReSent'),
 
