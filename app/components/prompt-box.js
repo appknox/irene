@@ -9,16 +9,23 @@ const PromptBoxComponent = Ember.Component.extend({
   inputValue: "",
   delegate: null,
 
+  confirmAction(){},
+  cancelAction(){},
+
   actions: {
 
     clearModal() {
       this.set("isActive", false);
+      this.get("cancelAction")();
     },
 
     sendCallback() {
       const inputValue = this.get("inputValue");
       const delegate = this.get("delegate");
-      delegate.promptCallback(inputValue);
+      this.get("confirmAction")(inputValue);
+      if (delegate && delegate.promptCallback) {
+        delegate.promptCallback(inputValue);
+      }
     }
   }
 });
