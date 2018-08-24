@@ -33,9 +33,20 @@ const NamespaceComponentComponent = Ember.Component.extend({
   }).evented(),
   confirmRejectSucceeded: on('confirmReject:succeeded', function() {
     this.get('notify').success(this.get('tNamespaceRejected'));
+    this.set('showRejectNamespaceConfirm', false);
+    this.set('isRejectingNamespace', false);
   }),
   confirmRejectErrored: on('confirmReject:errored', function(_, error) {
     this.get("notify").error(error.message);
+    let errMsg = t('pleaseTryAgain');
+    if (error.errors && error.errors.length) {
+      errMsg = error.errors[0].detail || errMsg;
+    } else if(error.message) {
+      errMsg = error.message
+    }
+    this.get("notify").error(errMsg);
+    this.set('showRejectNamespaceConfirm', false);
+    this.set('isRejectingNamespace', false);
   }),
 
   actions: {

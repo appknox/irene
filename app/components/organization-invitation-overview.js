@@ -30,9 +30,19 @@ const OrgInvitationComponent = Ember.Component.extend({
   }).evented(),
   confirmResendSucceeded: on('confirmResend:succeeded', function() {
     this.get('notify').success(this.get('tInvitationReSent'));
+    this.set('showResendInvitationConfirmBox', false);
+    this.set('isResendingInvitation', false);
   }),
   confirmResendErrored: on('confirmResend:errored', function(_, error) {
-    this.get("notify").error(error.message);
+    let errMsg = t('pleaseTryAgain');
+    if (error.errors && error.errors.length) {
+      errMsg = error.errors[0].detail || errMsg;
+    } else if(error.message) {
+      errMsg = error.message
+    }
+    this.get("notify").error(errMsg);
+    this.set('showResendInvitationConfirmBox', false);
+    this.set('isResendingInvitation', false);
   }),
 
   openDeleteInvitationConfirmBox: task(function * () {
@@ -47,9 +57,19 @@ const OrgInvitationComponent = Ember.Component.extend({
   }).evented(),
   confirmDeleteSucceeded: on('confirmDelete:succeeded', function() {
     this.get('notify').success(this.get('tInvitationDeleted'));
+    this.set('showDeleteInvitationConfirmBox', false);
+    this.set('isDeletingInvitation', false);
   }),
   confirmDeleteErrored: on('confirmDelete:errored', function(_, error) {
-    this.get("notify").error(error.message);
+    let errMsg = t('pleaseTryAgain');
+    if (error.errors && error.errors.length) {
+      errMsg = error.errors[0].detail || errMsg;
+    } else if(error.message) {
+      errMsg = error.message
+    }
+    this.get("notify").error(errMsg);
+    this.set('showDeleteInvitationConfirmBox', false);
+    this.set('isDeletingInvitation', false);
   }),
 
   actions: {

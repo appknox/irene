@@ -30,19 +30,25 @@ export default Ember.Component.extend(PaginateMixin, {
     const invite = this.get('store').createRecord('organization-invitation', {email});
     yield invite.save();
 
-    this.set("email", '');
-    this.set('showInviteMemberModal', false);
-    this.set('isInvitingMember', false);
-
     this.get('realtime').incrementProperty('InvitationCounter');
   }).evented(),
 
   inviteMemberSucceeded: on('inviteMember:succeeded', function() {
     this.get('notify').success(this.get('tOrgMemberInvited'));
+    this.set("email", '');
+    this.set('showInviteMemberModal', false);
+    this.set('isInvitingMember', false);
   }),
-
   inviteMemberErrored: on('inviteMember:errored', function(_, error) {
-    this.get("notify").error(error.message);
-  }),
-
+    let errMsg = t('pleaseTryAgain');
+    if (error.errors && error.errors.length) {
+      errMsg = error.errors[0].detail || errMsg;
+    } else if(error.message) {
+      errMsg = error.message
+    }
+    this.get("notify").error(errMsg);
+    this.set("email", '');
+    this.set('showInviteMemberModal', false);
+    this.set('isInvitingMember', false);
+  })
 });
