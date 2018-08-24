@@ -1,54 +1,51 @@
 import Ember from 'ember';
 import { translationMacro as t } from 'ember-i18n';
+import { task } from 'ember-concurrency';
 
 const OrgInvitationComponent = Ember.Component.extend({
-
-  tagName: ["tr"],
   i18n: Ember.inject.service(),
   ajax: Ember.inject.service(),
+  tagName: ['tr'],
+  tInvitation: t('invitation'),
+  tDeleted: t('deleted'),
+  tInvitationDeleted: t('invitationDeleted'),
+
   isDeletingInvitation: false,
-  openDeleteInvitationConfirmBox: false,
-  openResendInvitationConfirmBox: false,
-  tInvitationDeleted: t("invitationDeleted"),
+  isResendingInvitation: false,
+
+  showDeleteInvitationConfirmBox: false,
+  showResendInvitationConfirmBox: false,
+
   notify: Ember.inject.service('notification-messages-service'),
 
-  confirmCallback(key) {
-    if(key === "delete") {
-      // const tInvitationDeleted = this.get("tInvitationDeleted");
-      this.set("isDeletingInvitation", true);
-      // const that = this;
-      // const url = [
-      //   ENV.endpoints.organizations,
-      //   this.get("organization.id"),
-      //   ENV.endpoints.invitations,
-      //   this.get("invitation.id")
-      // ].join('/');
-      const orgId = this.get('organization.id');
-      const invId = this.get('invitation.id');
-      return this.get("store").queryRecord('organization-invitation', {orgId: orgId, id: invId})
-        .then(function(invite) {
-          if (invite) {
-            invite.deleteRecord();
-            invite.save();
-          }
-        })
-        .catch(function(err) {
-          // eslint-disable-next-line no-console
-          console.log(err)
-        });
-    }
-    if(key === "resend") {
-      // TODO: implement resend invitation
-    }
-  },
+  openResendInvitationConfirmBox: task(function * () {
+    yield this.set('showResendInvitationConfirmBox', true);
+  }),
+  openDeleteInvitationConfirmBox: task(function * () {
+    yield this.set('showDeleteInvitationConfirmBox', true);
+  }),
+
+  confirmResend: task(function * () {
+    this.set('isResendingInvitation', true);
+    const invite = this.get('invitation');
+    // TODO: hit /resend endpoint
+    yield invite.save();
+  }),
+  confirmDelete: task(function * () {
+    this.set('isDeletingInvitation', true);
+    const invite = this.get('invitation');
+    invite.deleteRecord();
+    yield invite.save();
+    this.get('notify').success(this.get('tInvitationDeleted'));
+  }),
 
   actions: {
-    openDeleteInvitationConfirmBox() {
-      this.set("showDeleteInvitationConfirmBox", true);
+    confirmResendProxy() {
+      this.get('confirmResend').perform();
     },
-    openResendInvitationConfirmBox() {
-      this.set('showResendInvitationConfirmBox', true)
-    }
+    confirmDeleteProxy() {
+      this.get('confirmDelete').perform();
+    },
   }
 });
 

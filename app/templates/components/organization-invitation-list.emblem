@@ -1,16 +1,16 @@
-.columns
-  .column.margin-top20
-    h5.bold.black-text
-      = t "pendingInvitations"
-.columns
-  .column
-    if hasObjects
+if hasObjects
+  .columns
+    .column.margin-t-3.margin-b-1
+      h5.bold.black-text
+        = t "pendingInvitations"
+  .columns
+    .column
       table.org-table
         tr
           th
             = t "email"
           th
-            = t "team"
+            = t "inviteType"
           th
             = t "invitedOn"
           th
@@ -19,8 +19,7 @@
             = t "delete"
         each sortedObjects as |invitation|
           = organization-invitation-overview invitation=invitation organization=organization
-.columns
-  .column
-    if hasObjects
-      .margin-top20
+  .columns
+    .column
+      .margin-t-h
         = partial "paginate"
