@@ -30,22 +30,28 @@ if isLoaded
         ul.menu-list.text-center.margin-top20
           li
             = link-to 'authenticated.projects' class="mp-auth-projects"
-              = fa-icon "tasks" class="sidebar-icons"
-              = t "projects"
+              div
+                = fa-icon "tasks" class="sidebar-icons"
+                = t "projects"
+              span.badge-square.is-sidebar.content-right
+                | #{org.projectsCount}
           li
             = link-to 'authenticated.organization.namespaces' org.id class="mp-auth-teams"
-              = fa-icon "users" class="sidebar-icons"
-              = t "organization"
+              div
+                = fa-icon "users" class="sidebar-icons"
+                = t "organization"
           li
             = link-to 'authenticated.settings' class="mp-auth-setting"
-              = fa-icon "cog" class="sidebar-icons"
-              = t "accountSettings"
+              div
+                = fa-icon "cog" class="sidebar-icons"
+                = t "accountSettings"
 
           if user.ifBillingIsNotHidden
             li
               = link-to 'authenticated.billing' class="mp-auth-billing"
-                = fa-icon "tag" class="sidebar-icons"
-                = t "billing"
+                div
+                  = fa-icon "tag" class="sidebar-icons"
+                  = t "billing"
 
         .status-updates
           = submission-list

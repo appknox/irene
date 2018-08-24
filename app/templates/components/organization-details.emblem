@@ -14,22 +14,22 @@ h4.org-header-name.margin-left.text-centre
   ul
     li class=namespaceClass click="displayNamespaces"
       = link-to 'authenticated.organization.namespaces' organization.id
-        = fa-icon "check" class="sidebar-icons"
+        = fa-icon "check-square" class="sidebar-icons"
         = t "namespaces"
-        span.count
-          = org.namespaceCount
+        span.badge-square.is-default.margin-l-1.content-right
+          = org.namespacesCount
     li class=memberClass click="displayMembers"
       = link-to 'authenticated.organization.members' organization.id
-        = fa-icon "user" class="sidebar-icons"
+        = fa-icon "user-circle-o" class="sidebar-icons"
         = t "members"
-        span.count
-          = org.memberCount
+        span.badge-square.is-default.margin-l-1.content-right
+          = org.membersCount
     li class=teamClass click="displayTeams"
       = link-to 'authenticated.organization.teams' organization.id
-        = fa-icon "building" class="sidebar-icons"
+        = fa-icon "sitemap" class="sidebar-icons"
         = t "teams"
-        span.count
-          = org.teamCount
+        span.badge-square.is-default.margin-l-1.content-right
+          = org.teamsCount
     li class=settingsClass click="displaySettings"
       = link-to 'authenticated.organization.settings' organization.id
         = fa-icon "cog" class="sidebar-icons"

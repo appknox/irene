@@ -1,2 +1,2 @@
 .org-container
-  = organization-users organization=model
+  = organization-members organization=model

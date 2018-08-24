@@ -18,12 +18,18 @@ body
 
 $color-text: #6B6B6B
 $color-table: #565d66
+$sidebar-bg: #424651
 
 h2
   font-size: 1.65em
 
 h3
   font-size: 1.5em
+
+.font-medium
+  font-size: 1.2em
+.font-legible
+  font-size: 1.1em
 
 .text-lightgray
   color: lighten($color-table, 28%)
@@ -61,6 +67,59 @@ h3
   border: 0.1em solid lighten($color-table, 58%)
   border-radius: 0.2em
   padding: 1em
+
+.fill-primary
+  background: $primary
+  color: $light
+
+$badge-small-size: 1.5em
+.badge-square
+  min-width: $badge-small-size * 1.3
+  height: $badge-small-size
+  border-radius: 0.3em
+  display: flex
+  align-items: center
+  justify-content: center
+  font-size: 0.82em
+  font-weight: bold
+  &.is-default
+    background: lighten($color-table, 51%)
+  &.is-sidebar
+    background: darken($sidebar-bg, 5%)
+    color: lighten($sidebar-bg, 65%)
+
+$spacers: margin padding
+$fractional-pts: q 0.25, h 0.5, 3q 0.75
+
+@each $spacer in $spacers
+  @each $fp in $fractional-pts
+    .#{$spacer}-t-#{nth($fp, 1)}, .#{$spacer}-v-#{nth($fp, 1)}
+      #{$spacer}-top: #{nth($fp, 2)}em
+    .#{$spacer}-b-#{nth($fp, 1)}, .#{$spacer}-v-#{nth($fp, 1)}
+      #{$spacer}-bottom: #{nth($fp, 2)}em
+    .#{$spacer}-l-#{nth($fp, 1)}, .#{$spacer}-h-#{nth($fp, 1)}
+      #{$spacer}-left: #{nth($fp, 2)}em
+    .#{$spacer}-r-#{nth($fp, 1)}, .#{$spacer}-h-#{nth($fp, 1)}
+      #{$spacer}-right: #{nth($fp, 2)}em
+
+@each $spacer in $spacers
+  @for $i from 1 through 4
+    .#{$spacer}-t-#{$i}, .#{$spacer}-v-#{$i}
+      #{$spacer}-top: #{$i}em
+    .#{$spacer}-b-#{$i}, .#{$spacer}-v-#{$i}
+      #{$spacer}-bottom: #{$i}em
+    .#{$spacer}-l-#{$i}, .#{$spacer}-h-#{$i}
+      #{$spacer}-left: #{$i}em
+    .#{$spacer}-r-#{$i}, .#{$spacer}-h-#{$i}
+      #{$spacer}-right: #{$i}em
+    .#{$spacer}-t-#{$i}h, .#{$spacer}-v-#{$i}h
+      #{$spacer}-top: #{$i + 0.5}em
+    .#{$spacer}-b-#{$i}h, .#{$spacer}-v-#{$i}h
+      #{$spacer}-bottom: #{$i + 0.5}em
+    .#{$spacer}-l-#{$i}h, .#{$spacer}-h-#{$i}h
+      #{$spacer}-left: #{$i + 0.5}em
+    .#{$spacer}-r-#{$i}h, .#{$spacer}-h-#{$i}h
+      #{$spacer}-right: #{$i + 0.5}em
 
 .margin-top30
   margin-top: 30px
@@ -263,11 +322,12 @@ button:hover, button:active, button:focus
   width: 100%
   margin-top: -10px
   height: 50px
-  background-color: #424651
+  // background-color: #424651
+  background: darken($sidebar-bg, 3%)
   margin-left: 0px
-  border-left: 1px solid #ccc
+  // border-left: 1px solid #ccc
   position: fixed
-  z-index: 100
+  z-index: 9
   .scan-text
     font-weight: lighter
     margin-top: 5px
@@ -541,9 +601,9 @@ div[class^="_c-notification__container"]
 .project-container
   margin-top: 10px
 
-$sidebar-bg: #424651
 .side-menu
   background-color: $sidebar-bg
+  z-index: 10
   .box
     background-color: #f0f0f0
     box-shadow: none
@@ -573,10 +633,12 @@ $sidebar-bg: #424651
     min-width: 2.1em
     color: lighten($sidebar-bg, 25%)
   a
-    padding: 5px 0px
+    padding: 0.4em 1em
     color: lighten($sidebar-bg, 45%)
-    padding-left: 1em
     font-weight: 500
+    display: flex
+    justify-content: space-between
+    align-items: center
     &:hover
       color: lighten($sidebar-bg, 65%)
       background-color: lighten(#424651, 3%)
@@ -1394,10 +1456,20 @@ ul.risk-table
 
 .org
   &-header
-    margin: -10px
+    margin: -10px -10px 10px -10px
     background: darken(#f6f8fa, 1%)
     &-name
       padding: 2em 0 1em
+    .tabs.is-boxed
+      li.is-active a
+        padding-top: 5px
+        padding-bottom: 3px
+      a
+        padding-top: 5px
+        border-top-width: 3px
+        i
+          margin-right: 0.5em
+          margin-left: 0.2em
   &-container
     max-width: 50em
     margin: auto
