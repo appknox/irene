@@ -1,6 +1,7 @@
 import Ember from 'ember';
-import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
+import { task } from 'ember-concurrency';
+import { on } from '@ember/object/evented';
 
 const TeamOverviewComponent = Ember.Component.extend({
 
@@ -10,49 +11,51 @@ const TeamOverviewComponent = Ember.Component.extend({
   tagName: ["tr"],
 
   isDeletingTeam: false,
+  showDeleteTeamPrompt: false,
 
-  tTeam: t("team"),
   tTeamDeleted: t("teamDeleted"),
   tEnterRightTeamName: t("enterRightTeamName"),
 
-  promptCallback(promptedItem) {
-    const tTeam = this.get("tTeam");
-    const tTeamDeleted = this.get("tTeamDeleted");
-    const tEnterRightTeamName = this.get("tEnterRightTeamName");
-    const team = this.get("team");
-    const deletedTeam = team.get("name");
-    const teamName = deletedTeam.toLowerCase();
-    const promptedTeam = promptedItem.toLowerCase();
+  openDeleteTeamConfirmBox: task(function * () {
+    yield this.set('showDeleteTeamPrompt', true);
+  }),
+
+  confirmDelete: task(function * (inputValue) {
+    this.set('isDeletingTeam', true);
+    const t = this.get('team');
+    const teamName = t.get("name").toLowerCase();
+    const promptedTeam = inputValue.toLowerCase();
     if (promptedTeam !== teamName) {
-      return this.get("notify").error(tEnterRightTeamName);
+      throw new Error(this.get("tEnterRightTeamName"));
     }
-    this.set("isDeletingTeam", true);
-    const orgId = this.get("organization.id");
-    const teamId = this.get("team.id");
-    const url = [ENV.endpoints.organizations, orgId, ENV.endpoints.teams, teamId].join('/');
-    const that = this;
-    this.get("ajax").delete(url)
-    .then(function(){
-      that.set("isDeletingTeam", false);
-      that.get("notify").success(`${tTeam} - ${deletedTeam} ${tTeamDeleted} `);
-      that.set("showDeleteTeamPrompt", false);
-    })
-    .catch(function(error) {
-      that.set("isDeletingTeam", false);
-      for (error of error.errors) {
-        this.get("notify").error(error.title || undefined);
-      }
-    });
-  },
+
+    t.deleteRecord();
+    yield t.save();
+
+  }).evented(),
+
+  confirmDeleteSucceeded: on('confirmDelete:succeeded', function() {
+    this.get('notify').success(`${this.get('team.name')} ${this.get('tTeamDeleted')}`);
+    this.set('showDeleteTeamPrompt', false);
+    this.set('isDeletingTeam', false);
+  }),
+
+  confirmDeleteErrored: on('confirmDelete:errored', function(_, error) {
+    let errMsg = t('pleaseTryAgain');
+    if (error.errors && error.errors.length) {
+      errMsg = error.errors[0].detail || errMsg;
+    } else if(error.message) {
+      errMsg = error.message
+    }
+    this.get("notify").error(errMsg);
+    this.set('showDeleteTeamPrompt', false);
+    this.set('isDeletingTeam', false);
+  }),
 
   actions: {
-    openDeleteTeamPrompt() {
-      this.set("showDeleteTeamPrompt", true);
+    confirmDeleteProxy(inputValue) {
+      this.get('confirmDelete').perform(inputValue);
     },
-
-    closeDeleteTeamPrompt() {
-      this.set("showDeleteTeamPrompt", false);
-    }
   }
 });
 

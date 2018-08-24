@@ -1,0 +1,27 @@
+<div class="columns">
+  <div class="column content-right margin-t-1" onclick={{perform openTeamModal}}>
+    <button class="is-primary highlighted-button">
+      {{{t "createTeam"}}}
+    </button>
+  </div>
+</div>
+
+{{#modal-card class="input-modal" isActive=showTeamModal title=(t 'createTeam')}}
+  <div class="card-body">
+    <div class="card-wrapper">
+      <form {{action (perform createTeam) on="submit"}}>
+        <p class="control">
+          {{input class="form-control input" placeholder=(t 'teamName') type="text" value=teamName autofocus="autofocus"}}
+        </p>
+        <button class="margin-top10 is-primary" type="submit" disabled={{isCreatingTeam}}>
+          {{#if isCreatingTeam}}
+            <div class="fa-font-size">
+              <i class="fa fa-spinner fa-spin"></i>&nbsp;
+            </div>
+          {{/if}}
+          {{t "createTeam"}}
+        </button>
+      </form>
+    </div>
+  </div>
+{{/modal-card}}

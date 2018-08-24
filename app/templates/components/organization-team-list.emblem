@@ -1,15 +1,22 @@
-table.org-table
-  tr
-    th
-      = t "teamName"
-    th
-      = t "memberCount"
-    th
-      = t "projectCount"
-    th
-       = t "createdOn"
-    th
-      =  t "delete"
+if hasObjects
+  table.table-lightgray.margin-t-1
+    tr
+      th
+        = t "teamName"
+      th
+        = t "memberCount"
+      th
+        = t "projectCount"
+      th
+        = t "createdOn"
+      th
+        =  t "delete"
 
-  each orgTeams as |team|
-    = organization-team-overview team=team organization=organization
+    each sortedObjects as |team|
+      = organization-team-overview team=team organization=organization
+  .margin-top20
+    = partial "paginate"
+
+else
+  div.empty-state
+    = t "noTeams"

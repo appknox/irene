@@ -1,0 +1,21 @@
+<td>
+  {{#link-to "authenticated.organization.team" team.id}}
+    {{team.name}}
+  {{/link-to}}
+</td>
+<td>
+  {{team.membersCount}}
+</td>
+<td>
+  {{team.projectsCount}}
+</td>
+<td>
+  {{moment-from-now team.createdOn}}
+</td>
+<td>
+  <button class="is-primary is-icon no-border" title="{{t 'deleteTeam'}}" onclick={{perform openDeleteTeamConfirmBox}} disabled={{team.isDefaultTeam}}>
+    <i class="fa fa-trash-o"></i>
+  </button>
+</td>
+
+{{prompt-box isActive=showDeleteTeamPrompt title=(t 'promptBox.deleteTeamPrompt.title') description=(t 'promptBox.deleteTeamPrompt.description') button="deleteTeam" delegate=this confirmAction=(action "confirmDeleteProxy") disabled=isDeletingTeam}}

@@ -1,21 +1,12 @@
 import Ember from 'ember';
-// import { translationMacro as t } from 'ember-i18n';
-// import PaginateMixin from 'irene/mixins/paginate';
+import PaginateMixin from 'irene/mixins/paginate';
 
-export default Ember.Component.extend({
+export default Ember.Component.extend(PaginateMixin, {
   i18n: Ember.inject.service(),
+  targetObject: 'organization-team',
+  sortProperties: ['createdOn:desc'],
 
-  orgTeams: (function() {
-    return this.get("store").query('organization-team', {id: this.get("organization.id")});
-  }).property(),
-
-  // targetObject: 'organization-member',
-  // sortProperties: ['created:desc'],
-
-  // extraQueryStrings: Ember.computed('organization.id', function() {
-  //   const query = {
-  //     id: this.get("organization.id")
-  //   };
-  //   return JSON.stringify(query, Object.keys(query).sort());
-  // }),
+  newInvitationsObserver: Ember.observer("realtime.OrganizationTeamCounter", function() {
+    return this.incrementProperty("version");
+  })
 });
