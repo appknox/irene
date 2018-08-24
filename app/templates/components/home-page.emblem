@@ -25,36 +25,37 @@ if isLoaded
   else
     .columns.columns-main-container
       .column.is-one-sixth.side-menu
-        .appknox-logo
-          = img-logo
-        ul.menu-list.text-center.margin-top20
-          li
-            = link-to 'authenticated.projects' class="mp-auth-projects"
-              div
-                = fa-icon "tasks" class="sidebar-icons"
-                = t "projects"
-              span.badge-square.is-sidebar.content-right
-                | #{org.projectsCount}
-          li
-            = link-to 'authenticated.organization.namespaces' org.id class="mp-auth-teams"
-              div
-                = fa-icon "users" class="sidebar-icons"
-                = t "organization"
-          li
-            = link-to 'authenticated.settings' class="mp-auth-setting"
-              div
-                = fa-icon "cog" class="sidebar-icons"
-                = t "accountSettings"
-
-          if user.ifBillingIsNotHidden
+        .side-menu-fixed
+          .appknox-logo
+            = img-logo
+          ul.menu-list.text-center.margin-top20
             li
-              = link-to 'authenticated.billing' class="mp-auth-billing"
+              = link-to 'authenticated.projects' class="mp-auth-projects"
                 div
-                  = fa-icon "tag" class="sidebar-icons"
-                  = t "billing"
+                  = fa-icon "tasks" class="sidebar-icons"
+                  = t "projects"
+                span.badge-square.is-sidebar.content-right
+                  | #{org.projectsCount}
+            li
+              = link-to 'authenticated.organization.namespaces' org.id class="mp-auth-teams"
+                div
+                  = fa-icon "users" class="sidebar-icons"
+                  = t "organization"
+            li
+              = link-to 'authenticated.settings' class="mp-auth-setting"
+                div
+                  = fa-icon "cog" class="sidebar-icons"
+                  = t "accountSettings"
 
-        .status-updates
-          = submission-list
+            if user.ifBillingIsNotHidden
+              li
+                = link-to 'authenticated.billing' class="mp-auth-billing"
+                  div
+                    = fa-icon "tag" class="sidebar-icons"
+                    = t "billing"
+
+          .status-updates
+            = submission-list
 
       .column.margin-right.margin-top
         .columns
