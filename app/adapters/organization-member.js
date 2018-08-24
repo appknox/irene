@@ -1,20 +1,20 @@
 import DRFAdapter from './drf';
 import ENV from 'irene/config/environment';
 import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
+import Ember from 'ember';
+const {inject: {service}} = Ember;
 
 export default DRFAdapter.extend(DataAdapterMixin, {
   host: ENV.host,
   namespace: ENV.namespace,
   addTrailingSlashes: false,
   authorizer: 'authorizer:irene',
-  query: function (store, type, query) {
-    let url = `${this.get('host')}/${this.get('namespace')}/organizations/${query.id}/members`;
-    let queryParams = Object.assign({}, query);
-    delete queryParams.id;
-    return this.ajax(url, 'GET', {data: queryParams});
+  organization: service('organization'),
+  _buildURL: function(modelName, id) {
+    const baseurl = `${this.get('host')}/${this.get('namespace')}/organizations/${this.get('organization').selected.id}/members`;
+    if (id) {
+      return `${baseurl}/${encodeURIComponent(id)}`;
+    }
+    return baseurl;
   },
-  queryRecord: function (store, type, query) {
-    let url = `${this.get('host')}/${this.get('namespace')}/organizations/${query.orgId}/members/${query.id}`;
-    return this.ajax(url, 'GET');
-  }
 });

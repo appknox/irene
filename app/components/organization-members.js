@@ -18,13 +18,13 @@ export default Ember.Component.extend({
       this.set("showAddMemberModal", true);
     },
     addMember() {
-      const identification = this.get("identification");
-      if(Ember.isEmpty(identification)) {
+      const email = this.get("email");
+      if(Ember.isEmpty(email)) {
         const tEmptyEmailId = this.get("tEmptyEmailId");
         return this.get("notify").error(tEmptyEmailId);
       }
       const data = {
-        identification
+        email
       };
       const orgId = this.get("organization.id");
       const url = [ENV.endpoints.organizations, orgId, ENV.endpoints.invitations].join('/');
@@ -35,7 +35,7 @@ export default Ember.Component.extend({
         const tOrgMemberInvited = that.get("tOrgMemberInvited");
         that.get("notify").success(tOrgMemberInvited);
         if(!that.isDestroyed) {
-          that.set("identification", "");
+          that.set("email", "");
           that.set("isInvitingMember", false);
           that.set("showAddMemberModal", false);
         }

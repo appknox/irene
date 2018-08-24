@@ -1,7 +1,8 @@
 td
-  = member.username
-td
-  = member.email
+  div.bold.black-text.font-medium
+    = member.username
+  div.text-lightgray.margin-t-h
+    = member.email
 td
   select.select{action 'selectUserRole' on='change'} id="org-user-role" class="width100"
     option selected="true" value=member.roleDisplay
@@ -9,3 +10,8 @@ td
     each filteredUserRoles as |userRole|
       option value=userRole.value
         | #{ t (user-role userRole.value)}
+td
+  each member.teams as |team|
+    div
+      = link-to "authenticated.organization.team" team.id
+        = team.name

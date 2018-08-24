@@ -8,4 +8,5 @@ export default DS.Model.extend({
   roleDisplay: DS.attr('string'),
   isAdmin: DS.attr('boolean'),
   createdOn: DS.attr('date'),
+  teams: DS.hasMany('organization-team')
 });

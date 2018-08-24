@@ -31,6 +31,12 @@ export default Ember.Component.extend({
         this.set('isTeams', true);
         this.set('isSettings', false);
       }
+      else if(routeName === "members") {
+        this.set('isNamespaces', false);
+        this.set('isMembers', true);
+        this.set('isTeams', false);
+        this.set('isSettings', false);
+      }
       else if(routeName === "settings") {
         this.set('isNamespaces', false);
         this.set('isMembers', false);

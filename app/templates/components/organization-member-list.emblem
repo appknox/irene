@@ -6,9 +6,9 @@
           th
             = t "user"
           th
-            = t "email"
-          th
             = t "role"
+          th
+            = t "teams"
         each sortedObjects as |member|
           = organization-member-overview member=member organization=organization
 .columns
