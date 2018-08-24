@@ -74,10 +74,6 @@ if isLoaded
                         | &nbsp;:#{progress}%
                       else
                         = t "uploadApp"
-              .column.is-one-quarter
-                .project-count
-                  = link-to 'authenticated.projects' class="mp-auth-settings highlighted-button"
-                    | #{user.totalProjects}
               .column.content-right.top-icons
                 if isSecurityEnabled
                   a href="/security/projects" target="_blank" class="button security-link"
