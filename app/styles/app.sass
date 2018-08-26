@@ -103,7 +103,7 @@ $fractional-pts: q 0.25, h 0.5, 3q 0.75
       #{$spacer}-right: #{nth($fp, 2)}em
 
 @each $spacer in $spacers
-  @for $i from 1 through 4
+  @for $i from 0 through 4
     .#{$spacer}-t-#{$i}, .#{$spacer}-v-#{$i}
       #{$spacer}-top: #{$i}em
     .#{$spacer}-b-#{$i}, .#{$spacer}-v-#{$i}
@@ -2851,3 +2851,24 @@ ul.email-list
         display: flex
         align-items: center
         color: $info
+.teamcard
+  width: 100%
+  display: block
+  border: 1px solid lighten($color-table, 57%)
+  background: lighten($color-table, 62%)
+  &:hover
+    background: lighten($color-table, 60%)
+    color: #000
+  h6
+    margin-bottom: 0
+  &-name
+    color: $primary
+    font-size: 1.1em
+  &-stats
+    display: flex
+  &-count
+    color: lighten($color-table, 10%)
+    &-label
+      font-size: 0.8em
+    &-value
+      font-size: 0.95em

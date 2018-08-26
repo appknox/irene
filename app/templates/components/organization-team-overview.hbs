@@ -1,21 +1,28 @@
-<td>
-  {{#link-to "authenticated.organization.team" team.id}}
-    {{team.name}}
-  {{/link-to}}
-</td>
-<td>
-  {{team.membersCount}}
-</td>
-<td>
-  {{team.projectsCount}}
-</td>
-<td>
-  {{moment-from-now team.createdOn}}
-</td>
-<td>
-  <button class="is-primary is-icon no-border" title="{{t 'deleteTeam'}}" onclick={{perform openDeleteTeamConfirmBox}} disabled={{team.isDefaultTeam}}>
-    <i class="fa fa-trash-o"></i>
-  </button>
-</td>
+<div class="teamcard margin-b-1h">
+  <div class="columns">
+    {{#link-to "authenticated.organization.team" team.id class="column padding-b-0"}}
+      <div class="padding-h-1 padding-t-3q padding-b-h">
+        <h6 class="teamcard-name">
+          {{team.name}}
+        </h6>
+        <div class="teamcard-stats margin-t-q margin-b-q">
+          <div class="teamcard-count">
+            <span class="teamcard-count-label uppercase-text margin-r-q">Members</span>
+            <span class="teamcard-count-value bold">{{team.membersCount}}</span>
+          </div>
+          <div class="teamcard-count margin-l-1">
+            <span class="teamcard-count-label uppercase-text margin-r-q">Projects</span>
+            <span class="teamcard-count-value bold">{{team.projectsCount}}</span>
+          </div>
+        </div>
+      </div>
+    {{/link-to}}
+    <div class="column is-one-sixth flex-center padding-b-0">
+      <button class="is-primary is-icon no-border" title="{{t 'deleteTeam'}}" onclick={{perform openDeleteTeamConfirmBox}} disabled={{team.isDefaultTeam}}>
+        <i class="fa fa-trash-o"></i>
+      </button>
+    </div>
+  </div>
+</div>
 
 {{prompt-box isActive=showDeleteTeamPrompt title=(t 'promptBox.deleteTeamPrompt.title') description=(t 'promptBox.deleteTeamPrompt.description') button="deleteTeam" delegate=this confirmAction=(action "confirmDeleteProxy") disabled=isDeletingTeam}}
