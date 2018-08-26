@@ -5,4 +5,4 @@
         h3.bold.black-text.padding-t-1
           = t "namespaces"
     .columns
-      = namespace-component organization=model
+      = organization-namespace-list organization=model

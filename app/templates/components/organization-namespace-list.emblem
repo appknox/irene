@@ -9,7 +9,7 @@ if hasObjects
         = t "approvalStatus"
 
     each sortedObjects as |namespace|
-      = namespace-overview namespace=namespace
+      = organization-namespace-overview namespace=namespace
   .margin-top20
     = partial "paginate"
 

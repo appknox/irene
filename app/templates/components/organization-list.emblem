@@ -1,5 +1,0 @@
-.org-view
-  .columns
-    .column
-      each organizations as |organization|
-        = organization-overview organization=organization
