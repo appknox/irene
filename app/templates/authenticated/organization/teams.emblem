@@ -1,5 +1,8 @@
 .org-container
-  = create-team organization=model
   .columns
+    .column.margin-t-1h.margin-b-1
+      h5.bold.black-text
+        = t "teams"
     .column
-      = organization-team-list organization=model
+      = create-team organization=model
+  = organization-team-list organization=model

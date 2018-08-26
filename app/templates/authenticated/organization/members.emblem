@@ -1,2 +1,10 @@
 .org-container
-  = organization-members organization=model
+  .columns
+    .column.margin-t-1h.margin-b-1
+      h5.bold.black-text
+        = t "organizationMembers"
+    .column
+      = invite-member organization=model
+  = organization-member-list organization=model
+  = organization-invitation-list organization=model
+
