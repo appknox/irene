@@ -3,7 +3,6 @@ import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
 
 export default Ember.Component.extend({
-
     i18n: Ember.inject.service(),
     routing: Ember.inject.service('-routing'),
     ajax: Ember.inject.service(),

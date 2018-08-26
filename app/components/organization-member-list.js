@@ -10,45 +10,54 @@ export default Ember.Component.extend(PaginateMixin, {
 
   targetObject: 'organization-member',
   sortProperties: ['createdOn:desc'],
-  tEmptyEmailId: t("emptyEmailId"),
-  tOrgMemberInvited: t("orgMemberInvited"),
   email: '',
   isInvitingMember: false,
   showInviteMemberModal: false,
 
+
+  /* Open invite-member modal */
   openInviteMemberModal: task(function * () {
     yield this.set('showInviteMemberModal', true);
   }),
 
+
+  /* Send invitation */
   inviteMember: task(function * () {
     const email = this.get("email");
     if(Ember.isEmpty(email)) {
-      throw new Error(this.get("tEmptyEmailId"));
+      throw new Error(t("emptyEmailId"));
     }
 
     this.set('isInvitingMember', true);
+
     const invite = this.get('store').createRecord('organization-invitation', {email});
     yield invite.save();
 
+    // signal to update invitation list
     this.get('realtime').incrementProperty('InvitationCounter');
   }).evented(),
 
   inviteMemberSucceeded: on('inviteMember:succeeded', function() {
-    this.get('notify').success(this.get('tOrgMemberInvited'));
+    this.get('notify').success(t("orgMemberInvited"));
+
     this.set("email", '');
     this.set('showInviteMemberModal', false);
     this.set('isInvitingMember', false);
   }),
-  inviteMemberErrored: on('inviteMember:errored', function(_, error) {
+
+  inviteMemberErrored: on('inviteMember:errored', function(_, err) {
     let errMsg = t('pleaseTryAgain');
-    if (error.errors && error.errors.length) {
-      errMsg = error.errors[0].detail || errMsg;
-    } else if(error.message) {
-      errMsg = error.message
+    if (err.errors && err.errors.length) {
+      errMsg = err.errors[0].detail || errMsg;
+    } else if(err.message) {
+      errMsg = err.message;
     }
+
     this.get("notify").error(errMsg);
+
     this.set("email", '');
     this.set('showInviteMemberModal', false);
     this.set('isInvitingMember', false);
   })
+
 });

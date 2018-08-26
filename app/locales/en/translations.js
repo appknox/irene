@@ -202,6 +202,7 @@ export default {
   "multiFactorAuth": "Multi Factor Authentication",
   "name": "Name",
   "namespace": "Namespace",
+  "namespaceApproved": "Namespace approved successfully",
   "namespaceRejected": "Namespace rejected successfully",
   "namespaces": "Namespaces",
   "networkError": "A network error occured! Please try again later",

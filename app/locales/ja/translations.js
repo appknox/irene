@@ -202,6 +202,7 @@ export default {
   "multiFactorAuth": "マルチファクタ認証",
   "name": "名前",
   "namespace": "名前空間",
+  "namespaceApproved": "Namespace approved successfully",
   "namespaceRejected": "Namespace rejected successfully",
   "namespaces": "名前空間",
   "networkError": "ネットワークエラーが発生しました。再度お試しください。",

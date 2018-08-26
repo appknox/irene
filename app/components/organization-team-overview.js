@@ -4,17 +4,12 @@ import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 
 const TeamOverviewComponent = Ember.Component.extend({
-
   i18n: Ember.inject.service(),
-  team: null,
-  organization: null,
-  tagName: ["tr"],
 
+  tagName: ["tr"],
+  team: null,
   isDeletingTeam: false,
   showDeleteTeamPrompt: false,
-
-  tTeamDeleted: t("teamDeleted"),
-  tEnterRightTeamName: t("enterRightTeamName"),
 
   openDeleteTeamConfirmBox: task(function * () {
     yield this.set('showDeleteTeamPrompt', true);
@@ -26,26 +21,23 @@ const TeamOverviewComponent = Ember.Component.extend({
     const teamName = t.get("name").toLowerCase();
     const promptedTeam = inputValue.toLowerCase();
     if (promptedTeam !== teamName) {
-      throw new Error(this.get("tEnterRightTeamName"));
+      throw new Error(t("enterRightTeamName"));
     }
-
     t.deleteRecord();
     yield t.save();
 
   }).evented(),
-
   confirmDeleteSucceeded: on('confirmDelete:succeeded', function() {
-    this.get('notify').success(`${this.get('team.name')} ${this.get('tTeamDeleted')}`);
+    this.get('notify').success(`${this.get('team.name')} ${t("teamDeleted")}`);
     this.set('showDeleteTeamPrompt', false);
     this.set('isDeletingTeam', false);
   }),
-
-  confirmDeleteErrored: on('confirmDelete:errored', function(_, error) {
+  confirmDeleteErrored: on('confirmDelete:errored', function(_, err) {
     let errMsg = t('pleaseTryAgain');
-    if (error.errors && error.errors.length) {
-      errMsg = error.errors[0].detail || errMsg;
-    } else if(error.message) {
-      errMsg = error.message
+    if (err.errors && err.errors.length) {
+      errMsg = err.errors[0].detail || errMsg;
+    } else if(err.message) {
+      errMsg = err.message;
     }
     this.get("notify").error(errMsg);
     this.set('showDeleteTeamPrompt', false);
