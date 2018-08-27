@@ -6,6 +6,10 @@ const OrganizationInvitation = DS.Model.extend({
   updatedOn: DS.attr('date'),
   team: DS.belongsTo('organization-team'),
   organization: DS.belongsTo('organization'),
+  resend: function resend() {
+    var adapter = this.store.adapterFor(this.constructor.modelName);
+    return adapter.resend(this.store, this.constructor.modelName, this);
+  }
 });
 
 export default OrganizationInvitation;

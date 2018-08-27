@@ -26,15 +26,11 @@ export default Ember.Component.extend({
     yield this.set('showResendInvitationConfirmBox', true);
   }),
 
-
   /* Resend invitation */
   confirmResend: task(function * () {
     this.set('isResendingInvitation', true);
-
     const invite = this.get('invitation');
-    // TODO: hit /resend endpoint
-    yield invite.save();
-
+    yield invite.resend();
   }).evented(),
 
   confirmResendSucceeded: on('confirmResend:succeeded', function() {

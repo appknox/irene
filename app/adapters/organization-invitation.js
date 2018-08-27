@@ -11,10 +11,19 @@ export default DRFAdapter.extend(DataAdapterMixin, {
   authorizer: 'authorizer:irene',
   organization: service('organization'),
   _buildURL: function(modelName, id) {
-    const baseurl = `${this.get('host')}/${this.get('namespace')}/organizations/${this.get('organization').selected.id}/invitations`;
+    const baseURL = `${this.get('host')}/${this.get('namespace')}/organizations/${this.get('organization').selected.id}/invitations`;
     if (id) {
-      return `${baseurl}/${encodeURIComponent(id)}`;
+      return `${baseURL}/${encodeURIComponent(id)}`;
     }
-    return baseurl;
+    return baseURL;
   },
+  resend(store, type, snapshot) {
+    let id = snapshot.id;
+    const url = this.urlForResend(id, type.modelName, snapshot);
+    return this.ajax(url, 'POST', { data: {} });
+  },
+  urlForResend(id, modelName) {
+    const baseURL = this._buildURL(modelName, id);
+    return [baseURL, "resend"].join('/')
+  }
 });
