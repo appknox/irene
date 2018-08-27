@@ -2,14 +2,13 @@ import Ember from 'ember';
 import config from 'irene/config/environment';
 import ScrollTopMixin from 'irene/mixins/scroll-top';
 
-const AuthenticatedOrganizationTeamRoute = Ember.Route.extend(ScrollTopMixin, {
+export default Ember.Route.extend(ScrollTopMixin, {
   title: `Team${config.platform}`,
-  model: function(params, transition){
-    return Ember.RSVP.hash({
-      team: params,
-      organization: transition.params["authenticated.organization"]
-    });
+
+  async model(params, transition){
+    return {
+      team: await this.get('store').find('organization-team', params.teamId),
+      organization: await this.get('store').find('organization', transition.params['authenticated.organization'].id)
+    }
   }
 });
-
-export default AuthenticatedOrganizationTeamRoute;

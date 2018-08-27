@@ -213,6 +213,7 @@ export default {
   "no": "No",
   "noDeviceAvailable": "No Device Available",
   "noFiles": "No Files",
+  "noMembers": "No members",
   "noNamespace": "No namespaces",
   "none": "Passed",
   "passed": "Passed",

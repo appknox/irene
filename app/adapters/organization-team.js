@@ -17,4 +17,14 @@ export default DRFAdapter.extend(DataAdapterMixin, {
     }
     return baseurl;
   },
+  deleteMember(store, type, snapshot, member) {
+    let id = snapshot.id;
+    let memberId = member.id;
+    const url = this.urlForDeleteMember(id, type.modelName, snapshot, memberId);
+    return this.ajax(url, 'DELETE');
+  },
+  urlForDeleteMember(id, modelName, snapshot, memberId) {
+    const baseURL = this._buildURL(modelName, id);
+    return [baseURL, "members", memberId].join('/')
+  }
 });

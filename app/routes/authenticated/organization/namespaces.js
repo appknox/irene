@@ -1,7 +1,6 @@
 import Ember from 'ember';
+import config from 'irene/config/environment';
 
 export default Ember.Route.extend({
-  model: function(){
-    return this.get("store").query('organization', {id: null});
-  }
+  title: `Namespaces${config.platform}`
 });

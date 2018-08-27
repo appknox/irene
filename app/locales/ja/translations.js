@@ -213,6 +213,7 @@ export default {
   "no": "いいえ",
   "noDeviceAvailable": "使用可能なデバイスがありません",
   "noFiles": "ファイルがありません",
+  "noMembers": "No members",
   "noNamespace": "名前空間がありません",
   "none": "合格",
   "passed": "合格",

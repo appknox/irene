@@ -1,0 +1,58 @@
+.margin-t-1
+  .columns
+    .column
+      h6.bold.black-text.uppercase-text
+        = t "members"
+    .column
+      = add-team-member team=team organization=organization
+  if members
+    .columns
+      table.org-table
+        tr
+          th
+            = t "user"
+          th.capitalize-text
+            = t "removeFromTeam"
+        each members as |member|
+          = organization-team-member-overview member=member organization=organization team=team
+  else
+    .not-found
+      p
+        = fa-icon "exclamation-triangle"
+        = t "noMembers"
+
+
+// = modal-card class="input-modal user-search-modal" isActive=showAddMemberModal title=(t "modalCard.addMember.title")
+//   .card-body
+//     .card-wrapper
+//       form
+//         p.control
+//           if isSearchingMember
+//             i.fa class="fa-spinner fa-spin margin-top5"
+//           else
+//             = fa-icon class="is-primary margin-top5" "user"
+//           = input class="form-control input input-width margin-left" placeholder="Username / Email" type="text" value=identification autofocus="autofocus" key-up="searchQuery"
+//       if users
+//         .user-list-container
+//           ul
+//             each users as |user|
+//               li
+//                 .columns
+//                   .column.is-one-sixth.align-center
+//                     = fa-icon class="is-primary margin-top5" "user-circle"
+//                   .column
+//                     .columns
+//                       .column.user-name
+//                         = user.username
+//                     .columns
+//                       .column.user-email
+//                         = user.email
+//                   .column.is-one-sixth
+//                     .show-button
+//                       button.is-primary click="'addMember' user.id" disabled=isAddingMember
+//                         | +
+//       else
+//         .columns
+//           .column
+//             button.is-primary.margin-left30.margin-top10 click="inviteMember" disabled=isInvitingMember
+//               = t "invite"
