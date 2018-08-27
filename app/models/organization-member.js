@@ -1,9 +1,7 @@
 import DS from 'ember-data';
 
 export default DS.Model.extend({
-  member: DS.attr('number'),
-  username: DS.attr('string'),
-  email: DS.attr('string'),
+  member: DS.belongsTo('organization-user'),
   role: DS.attr('number'),
   roleDisplay: DS.attr('string'),
   isAdmin: DS.attr('boolean'),
