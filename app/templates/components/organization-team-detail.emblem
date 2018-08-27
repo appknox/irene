@@ -17,6 +17,6 @@
           = fa-icon "check"
         span.edit-button click="cancelEditing"
           = fa-icon "times"
-
+hr.margin-v-0
 = organization-team-member-list members=team.members organization=organization team=team
 = organization-team-project-list members=teamProjects organization=organization team=team

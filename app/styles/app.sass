@@ -35,7 +35,8 @@ h3
   color: lighten($color-table, 28%)
 .text-darkgray
   color: $color-table
-
+.text-success
+  color: $success
 .table-lightgray
   tr
     border: 1px solid lighten(#eaecef, 2%)
@@ -62,11 +63,18 @@ h3
 
 .empty-state
   font-style: italic
-  color: lighten($color-table, 28%)
+  color: lighten($color-table, 30%)
   background: lighten($color-table, 61%)
-  border: 0.1em solid lighten($color-table, 58%)
+  border: 0.1em solid lighten($color-table, 59%)
   border-radius: 0.2em
-  padding: 1em
+  padding: 1.5em
+  display: flex
+  align-items: center
+  justify-content: center
+  .fa
+    font-size: 0.9em
+    margin-right: 0.5em
+    color: lighten($color-table, 45%)
 
 .fill-primary
   background: $primary

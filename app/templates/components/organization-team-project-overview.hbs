@@ -1,0 +1,22 @@
+<td>
+  {{#link-to "authenticated.project.files" project.id}}
+    {{teamProject.packageName}}
+  {{/link-to}}
+</td>
+<td>
+  {{teamProject.platformDisplay}}
+</td>
+<td>
+  {{#if project.write}}
+    {{fa-icon "check" class="text-success"}}
+  {{else}}
+    <em class="text-lightgray">No</em>
+  {{/if}}
+</td>
+<td>
+  <button class="is-primary is-icon no-border" title="{{t 'removeFromTeam'}}" onclick={{perform openRemoveProjectConfirm}}>
+    <i class="fa fa-trash-o"></i>
+  </button>
+</td>
+
+{{confirm-box isActive=showRemoveProjectConfirm title=(t "confirmBox.removeTeamProject") delegate=this confirmAction=(action "removeProjectProxy") disabled=isRemovingProject}}

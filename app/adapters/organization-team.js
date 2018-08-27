@@ -25,6 +25,6 @@ export default DRFAdapter.extend(DataAdapterMixin, {
   },
   urlForDeleteMember(id, modelName, snapshot, memberId) {
     const baseURL = this._buildURL(modelName, id);
-    return [baseURL, "members", memberId].join('/')
+    return [baseURL, 'members', memberId].join('/');
   }
 });

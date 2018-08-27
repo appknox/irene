@@ -10,8 +10,37 @@ export default DRFAdapter.extend(DataAdapterMixin, {
   addTrailingSlashes: false,
   authorizer: 'authorizer:irene',
   organization: service('organization'),
-  query: function(store, type, query) {
-    let url = `${this.get('host')}/${this.get('namespace')}/organizations/${this.get('organization').selected.id}/teams/${query.teamId}/projects`;
-    return this.ajax(url, 'GET');
-  }
+  _buildURL(modelName, id) {
+    const baseURL = `${this.get('host')}/${this.get('namespace')}/organizations/${this.get('organization').selected.id}/teams`;
+    if (id) {
+      return `${baseURL}/${encodeURIComponent(id)}`;
+    }
+    return baseURL;
+  },
+  _buildNestedURL(modelName, teamId, id) {
+    const teamURL = this._buildURL(modelName, teamId);
+    const projectURL = [teamURL, 'projects'].join('/');
+    if (id) {
+      return `${projectURL}/${encodeURIComponent(id)}`;
+    }
+    return projectURL;
+  },
+
+  urlForQuery(query, modelName) {
+    return this._buildNestedURL(modelName, query.teamId);
+  },
+
+  urlForQueryRecord(query, modelName) {
+    return this._buildNestedURL(modelName, query.teamId, query.id);
+  },
+
+  urlForDeleteProject(query, modelName) {
+    return this._buildNestedURL(modelName, query.teamId, query.id);
+  },
+
+  deleteProject(store, type, snapshot, teamId) {
+    const id = snapshot.id;
+    const url = this.urlForDeleteProject({teamId, id}, type.modelName);
+    return this.ajax(url, 'DELETE');
+  },
 });

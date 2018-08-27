@@ -1,24 +1,26 @@
-br
-.margin-top
+.columns.margin-t-3.margin-b-h
+  .column
+    h6.bold.black-text.uppercase-text
+      = t "projects"
+
+if hasObjects
   .columns
     .column
-      h6.bold.black-text.uppercase-text
-        = t "projects"
-  if projects
-    .columns
-      .column
-        table.org-table
-          tr
-            th
-              = t "packageName"
-            th
-              = t "platform"
-            th.capitalize-text
-              = t "removeFromTeam"
-          each projects as |project|
-            = organization-team-project-overview project=project organization=organization team=team
-  else
-    .not-found
-      h4
-        = fa-icon "exclamation-triangle"
-        = t "noProject"
+      table.org-table
+        tr
+          th
+            = t "packageName"
+          th
+            = t "platform"
+          th
+            = t "writeAccess"
+          th
+            = t "removeFromTeam"
+        each sortedObjects as |project|
+          = organization-team-project-overview project=project organization=organization team=team
+    .margin-top20
+      = partial "paginate"
+else
+  div.empty-state
+    = fa-icon "exclamation-triangle"
+    = t "noProject"

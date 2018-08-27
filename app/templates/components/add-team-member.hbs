@@ -1,10 +1,6 @@
-<div class="columns">
-  <div class="column content-right margin-t-1">
-    <button class="is-primary highlighted-button" onclick={{perform openAddMemberModal}}>
-      {{t "addMember"}}
-    </button>
-  </div>
-</div>
+<button class="is-primary highlighted-button" onclick={{perform openAddMemberModal}}>
+  {{t "addMember"}}
+</button>
 
 {{#modal-card class="input-modal" isActive=showInviteMemberModal title=(t 'inviteMember')}}
   <div class="card-body">

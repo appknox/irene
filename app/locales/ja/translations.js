@@ -240,6 +240,7 @@ export default {
   "overriddenRisk": "Overridden Risk",
   "owner": "オーナー",
   "permissionChanged": "権限が変更されました",
+  "writeAccess": "Write access",
   "package": "パッケージ",
   "packageName": "パッケージ名",
   "pageNotFound": "ページが見つかりません",
@@ -406,6 +407,7 @@ export default {
   "confirmBox": {
     "removeURL": "URLフィルタから削除してもよろしいですか？",
     "removeProject": "Githubプロジェクトを削除してもよろしいですか？",
+    "removeTeamProject": "Are you sure you want to remove this project from team?",
     "removeJIRA": "JIRAプロジェクトを削除してもよろしいですか？",
     "revokeGithub": "Githubとの連携を解除してもよろしいですか？",
     "revokeJira": "JIRAとの連携を解除してもよろしいですか？",
