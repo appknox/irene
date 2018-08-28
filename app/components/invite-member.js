@@ -32,8 +32,14 @@ export default Ember.Component.extend(PaginateMixin, {
 
     this.set('isInvitingMember', true);
 
-    const invite = this.get('store').createRecord('organization-invitation', {email});
-    yield invite.save();
+    const t = this.get('team');
+    if (t) {
+      const teamInvite = yield this.get('store').createRecord('organization-team-invitation', {email});
+      yield teamInvite.createInvitation(t.get('id'));
+    } else {
+      const orgInvite = yield this.get('store').createRecord('organization-invitation', {email});
+      yield orgInvite.save();
+    }
 
     // signal to update invitation list
     this.get('realtime').incrementProperty('InvitationCounter');

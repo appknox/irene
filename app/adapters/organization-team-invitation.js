@@ -10,8 +10,32 @@ export default DRFAdapter.extend(DataAdapterMixin, {
   addTrailingSlashes: false,
   authorizer: 'authorizer:irene',
   organization: service('organization'),
-  query: function query(store, type, query) {
-    let url = `${this.get('host')}/${this.get('namespace')}/organizations/${this.get('organization').selected.id}/teams/${query.teamId}/invitations`;
-    return this.ajax(url, 'GET');
-  }
+  _buildURL(modelName, id) {
+    const baseURL = `${this.get('host')}/${this.get('namespace')}/organizations/${this.get('organization').selected.id}/teams`;
+    if (id) {
+      return `${baseURL}/${encodeURIComponent(id)}`;
+    }
+    return baseURL;
+  },
+  _buildNestedURL(modelName, teamId, id) {
+    const teamURL = this._buildURL(modelName, teamId);
+    const inviteURL = [teamURL, 'invitations'].join('/');
+    if (id) {
+      return `${inviteURL}/${encodeURIComponent(id)}`;
+    }
+    return inviteURL;
+  },
+
+  urlForQuery(query, modelName) {
+    return this._buildNestedURL(modelName, query.teamId);
+  },
+
+  createInvitation(store, type, snapshot, teamId) {
+    const data = {
+      email: snapshot.get('email'),
+    };
+    const url = this.urlForQuery({teamId}, type.modelName);
+    return this.ajax(url, 'POST', {data});
+  },
+
 });

@@ -9,6 +9,7 @@ export default Ember.Component.extend({
   i18n: Ember.inject.service(),
   ajax: Ember.inject.service(),
   notify: Ember.inject.service('notification-messages-service'),
+  realtime: Ember.inject.service(),
 
   tagName: ['tr'],
   isDeletingInvitation: false,
@@ -71,6 +72,9 @@ export default Ember.Component.extend({
     const orgInvite = yield this.get('store').find('organization-invitation', invite.get('id'));
     yield orgInvite.deleteRecord();
     yield orgInvite.save();
+
+    // signal to update invitation list
+    this.get('realtime').decrementProperty('InvitationCounter');
 
   }).evented(),
 
