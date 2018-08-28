@@ -2,4 +2,4 @@
   .column
     = file-details file=model
   .column.is-one-third.vnc-viewer
-    = vnc-viewer file=model
+    = vnc-viewer file=model profileId=model.project.activeProfileId

@@ -79,15 +79,22 @@ const VncViewerComponent = Ember.Component.extend({
     }
   }).observes('file.dynamicStatus'),
 
+  devicePreference: (function() {
+    const profileId = this.get("profileId");
+    if(profileId) {
+      return this.get("store").queryRecord("device-preference", {id: profileId});
+    }
+  }).property("profileId"),
+
   screenRequired: ( function() {
-       const platform = this.get("file.project.platform");
-       const deviceType = this.get("file.project.deviceType");
-       return (platform === ENUMS.PLATFORM.ANDROID) && (deviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED);
-     }).property("file.project.platform", "file.project.deviceType"),
+     const platform = this.get("file.project.platform");
+     const deviceType = this.get("devicePreference.deviceType");
+     return (platform === ENUMS.PLATFORM.ANDROID) && (deviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED);
+   }).property("file.project.platform", "devicePreference.deviceType"),
 
   deviceType: (function() {
     const platform = this.get("file.project.platform");
-    const deviceType = this.get("file.project.deviceType");
+    const deviceType = this.get("devicePreference.deviceType");
     if (platform === ENUMS.PLATFORM.ANDROID) {
       if (deviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED) {
           return "tablet";
@@ -103,14 +110,14 @@ const VncViewerComponent = Ember.Component.extend({
         return "iphone5s black";
       }
     }
-  }).property("file.project.platform", "file.project.deviceType"),
+  }).property("file.project.platform", "devicePreference.deviceType"),
 
   isNotTablet: (function() {
-    const deviceType = this.get("file.project.deviceType");
+    const deviceType = this.get("devicePreference.deviceType");
     if (![ENUMS.DEVICE_TYPE.NO_PREFERENCE, ENUMS.DEVICE_TYPE.PHONE_REQUIRED].includes(deviceType)) {
       return true;
     }
-  }).property("file.project.deviceType"),
+  }).property("devicePreference.deviceType"),
 
   isIOSDevice: (function() {
     const platform = this.get("file.project.platform");
