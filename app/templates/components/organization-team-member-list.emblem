@@ -3,7 +3,9 @@
     h6.bold.black-text.uppercase-text.margin-t-h
       = t "members"
   .column.content-right
-    = add-team-member team=team organization=organization
+    = invite-member team=team organization=organization
+    span.margin-l-1
+      = add-team-member team=team organization=organization
 
 if members
   .columns
@@ -17,7 +19,6 @@ if members
         each members as |member|
           = organization-team-member-overview member=member organization=organization team=team
 else
-  .not-found
-    p
-      = fa-icon "exclamation-triangle"
-      = t "noMembers"
+  div.empty-state
+    = fa-icon "exclamation-triangle"
+    = t "noMembers"

@@ -12,7 +12,7 @@ export default {
   "addedOn": "Added on",
   "addNewTeam": "新しいチームの追加",
   "addTeam": "チームの追加",
-  "addMember" : "add member",
+  "addMember" : "Add Member",
   "addNewNamespace": "以下に名前空間が追加できます",
   "admin": "管理者",
   "allFutureAnalyses": "All Future Analyses",

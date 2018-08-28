@@ -1,25 +1,28 @@
+{{#if hasObjects}}
 <div class="columns">
   <div class="column">
-    {{#if hasObjects}}
-      <table class="org-table">
-        <tr>
-          <th>{{t "user"}}</th>
-          <th>{{t "role"}}</th>
-          {{!-- <th>{{t "teams"}}</th> --}}
-        </tr>
-        {{#each sortedObjects as |member|}}
-          {{organization-member-overview member=member.member organization=organization}}
-        {{/each}}
-      </table>
-    {{/if}}
+    <table class="org-table">
+      <tr>
+        <th>{{t "user"}}</th>
+        <th>{{t "role"}}</th>
+        {{!-- <th>{{t "teams"}}</th> --}}
+      </tr>
+      {{#each sortedObjects as |member|}}
+        {{organization-member-overview member=member.member organization=organization}}
+      {{/each}}
+    </table>
   </div>
 </div>
 <div class="columns">
   <div class="column">
-    {{#if hasObjects}}
-      <div class="margin-t-h">
-        {{partial "paginate"}}
-      </div>
-    {{/if}}
+    <div class="margin-t-h">
+      {{partial "paginate"}}
+    </div>
   </div>
 </div>
+{{else}}
+  <div class="empty-state">
+    {{fa-icon "exclamation-triangle"}}
+    {{t "noMembers"}}
+  </div>
+{{/if}}

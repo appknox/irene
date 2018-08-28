@@ -12,7 +12,7 @@ export default {
   "addNamespace": "Add Namespace",
   "addNewTeam": "Add new team",
   "addTeam": "Add Team",
-  "addMember" : "add member",
+  "addMember" : "Add Member",
   "addNewNamespace": "You can add a new namespace below",
   "admin": "Admin",
   "allFutureAnalyses": "All Future Analyses",

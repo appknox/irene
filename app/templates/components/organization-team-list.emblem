@@ -6,4 +6,5 @@ if hasObjects
 
 else
   div.empty-state
+    = fa-icon "exclamation-triangle"
     = t "noTeams"
