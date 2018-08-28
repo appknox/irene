@@ -293,6 +293,7 @@ export default {
   "recoverPassword": "パスワードの復元",
   "register": "登録",
   "registerConfirmation": "Appknoxに登録していただきありがとうございます。提供された電子メールにアクティベーションリンクが送信されました。",
+  "invitationRegisterConfirmation": "Thank you for registering with Appknox. Please login to continue.",
   "regulatory": "Regulatory",
   "reject": "Reject",
   "remove": "削除",

@@ -56,6 +56,7 @@ Router.map(function() {
     });
   });
   this.route('invitation', {path: '/invitation/:uuid'});
+  this.route('invite', {path: '/invite/:token'});
 
   // 404 path -this should be at the last.
   this.route('not-found', {path: '/*path'});

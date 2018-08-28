@@ -156,6 +156,7 @@ module.exports = function(environment) {
       saveCredentials: 'projects/save_credentials',
       collaborations: 'collaborations',
       deleteCollaboration: 'collaboration/delete',
+      invite: 'invite',
       invitation: 'invitation',
       invitations: 'invitations',
       signup: 'signup',
