@@ -62,7 +62,8 @@ const ENUMS = {
 
   ORGANIZATION_ROLES: {
     MEMBER: 0,
-    OWNER: 1
+    OWNER: 1,
+    ADMIN: 2
   },
 
   SUBMISSION_STATUS: {

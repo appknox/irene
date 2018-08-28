@@ -9,6 +9,8 @@ export function userRole(params) {
     return "memberRole";
   } else if (currentRole === ENUMS.ORGANIZATION_ROLES.OWNER) {
     return "owner";
+  } else if (currentRole === ENUMS.ORGANIZATION_ROLES.ADMIN) {
+    return "admin";
   }
 }
 
