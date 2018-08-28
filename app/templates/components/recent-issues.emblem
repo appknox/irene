@@ -1,23 +1,23 @@
 .main-box-container
   h5.box-main-heading
-    | RECENTLY FIXED ISSUES
-  if hasIssues
-    .box-content
-      .box-list
-        .columns
-          .column
-            .box-heading-issues
-              | XML-external-entity Injection Vulnerabilities in HTTP Body
-        .columns
-          .column.is-one-third
-            .tag.is-danger
-              i.fa.risk-icons.fa-warning
-              | &nbsp; HIGH
-          .column.content-right
-            .app-name
-              = fa-icon "mobile" class="font-size-18"
-              | &nbsp; MVFA
-  else
-    .not-found
-      = fa-icon "exclamation-triangle"
-      | No issues found
+    | Recently fixed issues
+  / if hasIssues
+  .box-content
+    .box-list
+      .columns
+        .column
+          .box-heading-issues
+            | XML-external-entity Injection Vulnerabilities in HTTP Body
+      .columns
+        .column.is-one-third
+          .tag.is-danger
+            i.fa.risk-icons.fa-warning
+            | &nbsp; HIGH
+        .column.content-right
+          .app-name
+            = fa-icon "mobile" class="font-size-18"
+            | &nbsp; MVFA
+  / else
+  /   .not-found
+  /     = fa-icon "exclamation-triangle"
+  /     | No issues found

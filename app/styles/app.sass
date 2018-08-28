@@ -1950,55 +1950,58 @@ select:disabled
   width: 50vw
   margin: -10px 10px
 
+.stat-home-page
+  background-color: #efefef
+  margin: -10px
+
 .main-box-container
-  margin: 0px 20px 0px 0px
+  margin: 20px 20px 0px 40px
   box-shadow: 0px 0px 10px #ccc
-  border-radius: 5px
+  border-radius: 10px
+  background-color: #FFF
+  .box-content.scrolling-box
+    height: 300px
+    .box-lists
+      overflow: scroll
+      height: 300px
+      .box-list-items
+        min-height: 80px
+        margin: 10px
+        padding: 10px
+        border-radius: 5px
+        box-shadow: 0px 0px 10px #ccc
+        .highlighted-text
+          color: blue
+        i
+          color: $blue
+        .desc
+          font-size: 16px
+          margin-left: 22px
+          margin-top: -22px
+        .date
+          margin-top: 5px
+          margin-right: 10px
+          text-align: right
+          color: #BEBEBE
   .box-content
-    height: 190px
-    overflow: scroll
-    .box-list
-      padding: 0px 20px
-      border-bottom: 2px solid #ccc
-      margin-top: 3px
+    margin-top: 20px
+    height: 300px
+    h3
+      margin-left: 20px
+      margin-bottom: 0px
+    .tag
+      margin-left: 20px
+    .chart
+      margin-top: -50px
+    .chart-2
+      margin-top: 10px
+
   .box-main-heading
     text-align: center
-    background-color: $default
-    color: #FFF
+    background-color: #efefef
     border-radius: 5px 5px 0px 0px
     margin-bottom: 10px
     padding: 5px
-  .box-heading
-    color: #000
-    font-size: 16px
-  .box-heading-issues
-    color: #000
-    font-size: 12px
-  .box-desc
-    font-size: 12px
-  .stat-desc
-    margin-top: 5px
-  .content-right
-    .tag
-      background-color: $default
-      color: #FFF
-      font-size: 9px
-      border-radius: 5px
-      height: 20px
-    .app-name
-      background-color: $default
-      color: #FFF
-      border-radius: 3px
-      padding: 3px 10px
-      font-size: 12px
-  .not-found
-    font-size: 20px
-    margin-top: 90px
-    height: 110px
-    vertical-align: middle
-    i
-      margin-top: 4px
-      margin-right: 6px
 
 .switch
   position: relative
@@ -2640,6 +2643,52 @@ $attachment-icon-width: 4em
       margin-top: 80px!important
     .pagination
       padding: 10px 200px
+      .pagination-list
+
+.app-scanned
+  margin: 10px 80px
+  .rounded-graph
+    background-color: #FFF
+    width: 80px
+    height: 80px
+    border-radius: 50px
+    display: flex
+    justify-content: center
+    align-items: center
+    border-width: 10px
+    border-style: solid
+    font-size: 20px
+    &.total-apps
+      border-color: $green
+      color: $green
+    &.android-apps
+      border-color: $blue
+      color: $blue
+    &.ios-apps
+      border-color: $yellow
+      color: $yellow
+
+.home-page
+  background-color: #FFF
+  padding: 30px 0px
+  margin: 10px
+  position: relative
+  top: 10px
+  border-radius: 5px
+.scan-counts
+  margin-top: 30px
+  margin-bottom: 20px
+  .columns
+    background-color: #FFF
+    padding: 10px
+    min-width: 200px
+    border-radius: 10px
+    i
+      margin-top: 25px
+    h3, h5
+      margin-left: 20px
+    h5
+      margin-top: -20px
 
 .badge
   padding: 7px
@@ -2649,3 +2698,14 @@ $attachment-icon-width: 4em
   color: #444d56
   border-radius: 10px
   line-height: 1px
+
+.stat-table-container
+  padding: 0px 10px
+  table
+    @extend .api-filter-table
+    width: 495px
+    tr
+      th, td
+        text-align: center!important
+    .tag
+      margin-left: 0px!important
