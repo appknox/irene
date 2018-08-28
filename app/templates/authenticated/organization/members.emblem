@@ -1,9 +1,9 @@
 .org-container
-  .columns
-    .column.margin-t-1h.margin-b-1
-      h5.bold.black-text
-        = t "organizationMembers"
+  .columns.margin-v-h
     .column
+      h3.bold.black-text
+        = t "organizationMembers"
+    .column.content-right
       = invite-member organization=model
   = organization-member-list organization=model
   = organization-invitation-list organization=model

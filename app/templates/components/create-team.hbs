@@ -1,10 +1,6 @@
-<div class="columns">
-  <div class="column content-right margin-t-1">
-    <button class="is-primary highlighted-button" onclick={{perform openTeamModal}}>
-      {{{t "createTeam"}}}
-    </button>
-  </div>
-</div>
+<button class="is-primary" onclick={{perform openTeamModal}}>
+  <i class="fa fa-group margin-r-h"></i>&nbsp;{{t "createTeam"}}
+</button>
 
 {{#modal-card class="input-modal" isActive=showTeamModal title=(t 'createTeam')}}
   <div class="card-body">
