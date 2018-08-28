@@ -34,13 +34,18 @@ export default DRFAdapter.extend(DataAdapterMixin, {
     return this._buildNestedURL(modelName, query.teamId, query.id);
   },
 
-  urlForDeleteProject(query, modelName) {
-    return this._buildNestedURL(modelName, query.teamId, query.id);
-  },
-
   deleteProject(store, type, snapshot, teamId) {
     const id = snapshot.id;
-    const url = this.urlForDeleteProject({teamId, id}, type.modelName);
+    const url = this.urlForQueryRecord({teamId, id}, type.modelName);
     return this.ajax(url, 'DELETE');
+  },
+
+  updateProject(store, type, snapshot, teamId) {
+    const id = snapshot.id;
+    const data = {
+      write: snapshot.get('write'),
+    };
+    const url = this.urlForQueryRecord({teamId, id}, type.modelName);
+    return this.ajax(url, 'PUT', {data});
   },
 });

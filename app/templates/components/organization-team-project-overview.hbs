@@ -1,17 +1,15 @@
 <td>
-  {{#link-to "authenticated.project.files" project.id}}
-    {{teamProject.packageName}}
-  {{/link-to}}
+  <div class="font-medium">
+    {{#link-to "authenticated.project.files" project.id}}
+      {{teamProject.packageName}}
+    {{/link-to}}
+  </div>
+  <div class="text-lightgray">{{teamProject.platformDisplay}}</div>
 </td>
 <td>
-  {{teamProject.platformDisplay}}
-</td>
-<td>
-  {{#if project.write}}
-    {{fa-icon "check" class="text-success"}}
-  {{else}}
-    <em class="text-lightgray">No</em>
-  {{/if}}
+  <label class="vertical-align-center">
+    {{input type="checkbox" name="can-write-{{project.id}}" checked=project.write}}&nbsp;{{t "allowEdit"}}
+  </label>
 </td>
 <td>
   <button class="is-primary is-icon no-border" title="{{t 'removeFromTeam'}}" onclick={{perform openRemoveProjectConfirm}}>

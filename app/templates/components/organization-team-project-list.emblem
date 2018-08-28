@@ -9,11 +9,9 @@ if hasObjects
       table.org-table
         tr
           th
-            = t "packageName"
+            = t "project"
           th
-            = t "platform"
-          th
-            = t "writeAccess"
+            = t "accessPermissions"
           th
             = t "removeFromTeam"
         each sortedObjects as |project|

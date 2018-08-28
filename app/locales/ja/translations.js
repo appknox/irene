@@ -1,6 +1,7 @@
 export default {
   "acceptInvite": "招待を受けてサインアップする",
   "acceptTerms": "私は利用規約に同意します",
+  "accessPermissions": "Access permissions",
   "account": "アカウント",
   "accountOverview": "アカウントの概要",
   "accountSettings": "Account Settings",
@@ -16,6 +17,7 @@ export default {
   "addNewNamespace": "以下に名前空間が追加できます",
   "admin": "管理者",
   "allFutureAnalyses": "All Future Analyses",
+  "allowEdit": "Allow Edit",
   "allPlatforms": "全プラットフォーム",
   "allScans": "全診断",
   "allUploads": "全アップロード",
@@ -240,7 +242,6 @@ export default {
   "overriddenRisk": "Overridden Risk",
   "owner": "オーナー",
   "permissionChanged": "権限が変更されました",
-  "writeAccess": "Write access",
   "package": "パッケージ",
   "packageName": "パッケージ名",
   "pageNotFound": "ページが見つかりません",

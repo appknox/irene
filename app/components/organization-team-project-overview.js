@@ -14,11 +14,42 @@ export default Ember.Component.extend({
 
   tProjectRemoved: t('projectRemoved'),
   tPleaseTryAgain: t('pleaseTryAgain'),
+  tPermissionChanged: t('permissionChanged'),
 
+
+  /* Fetch project for the given id */
   teamProject: (function() {
     const id = this.get('project.id');
     return this.get('store').queryRecord('project', {id});
   }).property('project.id'),
+
+
+  /* Watch for allowEdit input */
+  watchProjectWrite: (function(){
+    this.get('changeProjectWrite').perform();
+  }).observes('project.write'),
+
+
+  /* Save project-write value */
+  changeProjectWrite: task(function * () {
+    const prj = this.get('project');
+    yield prj.updateProject(this.get('team.id'));
+  }).evented(),
+
+  changeProjectWriteSucceeded: on('changeProjectWrite:succeeded', function() {
+    this.get('notify').success(this.get('tPermissionChanged'));
+  }),
+
+  changeProjectWriteErrored: on('changeProjectWrite:errored', function(_, err) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (err.errors && err.errors.length) {
+      errMsg = err.errors[0].detail || errMsg;
+    } else if(err.message) {
+      errMsg = err.message;
+    }
+
+    this.get("notify").error(errMsg);
+  }),
 
 
   /* Open remove-project confirmation */

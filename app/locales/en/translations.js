@@ -1,6 +1,7 @@
 export default {
   "acceptInvite": "Signup & Accept Invite",
   "acceptTerms": "I accept the terms and conditions",
+  "accessPermissions": "Access permissions",
   "account": "Account",
   "accountOverview": "Account Overview",
   "accountSettings": "Account Settings",
@@ -16,6 +17,7 @@ export default {
   "addNewNamespace": "You can add a new namespace below",
   "admin": "Admin",
   "allFutureAnalyses": "All Future Analyses",
+  "allowEdit": "Allow Edit",
   "allPlatforms": "All Platforms",
   "allScans": "All Scans",
   "allUploads": "All Uploads",
@@ -240,7 +242,6 @@ export default {
   "overriddenRisk": "Overridden Risk",
   "owner": "Owner",
   "permissionChanged": "Permission changed successfully!",
-  "writeAccess": "Write access",
   "package": "Package",
   "packageName": "Package Name",
   "pageNotFound": "The Page cannot be found",
