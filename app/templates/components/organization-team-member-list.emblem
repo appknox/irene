@@ -1,11 +1,9 @@
 .columns.margin-v-h
   .column
-    h6.bold.black-text.uppercase-text.margin-t-h
+    h5.bold.black-text.margin-t-h
       = t "members"
   .column.content-right
-    = invite-member team=team organization=organization
-    span.margin-l-1
-      = add-team-member team=team organization=organization
+    = add-team-member team=team organization=organization
 
 if members
   .columns

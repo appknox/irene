@@ -1,6 +1,6 @@
 .columns.margin-t-3.margin-b-h
   .column
-    h6.bold.black-text.uppercase-text
+    h5.bold.black-text.margin-t-h
       = t "projects"
 
 if hasObjects

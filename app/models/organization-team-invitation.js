@@ -1,6 +1,8 @@
 import DS from 'ember-data';
 
 export default DS.Model.extend({
-  role : DS.attr('number'),
   email: DS.attr('string'),
+  createdOn: DS.attr('date'),
+  updatedOn: DS.attr('date'),
+  organization: DS.belongsTo('organization'),
 });

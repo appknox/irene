@@ -20,3 +20,4 @@
 hr.margin-v-0
 = organization-team-member-list members=team.members organization=organization team=team
 = organization-team-project-list organization=organization team=team
+= organization-team-invitation-list organization=organization team=team
