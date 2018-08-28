@@ -51,7 +51,7 @@ test('tapping button fires an external action', function(assert) {
     component.set('file.project', {platform: ENUMS.PLATFORM.ANDROID});
     assert.equal(component.get('deviceType'), "nexus5", "Nexus 5");
     component.set('file.project', {platform: ENUMS.PLATFORM.IOS});
-    assert.equal(component.get('deviceType'), "iphone5s black", "iPhone");
+    assert.equal(component.get('deviceType'), "ipad black", "iPhone");
     assert.equal(component.get('isIOSDevice'), true, "IOS");
     component.set('file.project', {deviceType: ENUMS.DEVICE_TYPE.TABLET_REQUIRED, platform: ENUMS.PLATFORM.IOS});
     assert.equal(component.get('deviceType'), "ipad black", "iPad");
