@@ -54,7 +54,7 @@ test('tapping button fires an external action', function(assert) {
     assert.equal(component.get('deviceType'), "iphone5s black", "iPhone");
     assert.equal(component.get('isIOSDevice'), true, "IOS");
     component.set('file.project', {deviceType: ENUMS.DEVICE_TYPE.TABLET_REQUIRED, platform: ENUMS.PLATFORM.IOS});
-    assert.equal(component.get('deviceType'), "iphone5s black", "iPad");
+    assert.equal(component.get("deviceType"), "iphone5s black", "iPad");
     component.send("togglePop");
   });
 });

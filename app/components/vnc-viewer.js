@@ -82,7 +82,7 @@ const VncViewerComponent = Ember.Component.extend({
   devicePreference: (function() {
     const profileId = this.get("profileId");
     if(profileId) {
-      return this.get("store").queryRecord('device-preference', {id: profileId});
+      return this.get("store").queryRecord("device-preference", {id: profileId});
     }
   }).property("profileId"),
 
