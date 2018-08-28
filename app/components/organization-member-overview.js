@@ -22,7 +22,7 @@ export default Ember.Component.extend({
   selectMemberRole: task(function * () {
     const role = parseInt(this.$('#org-user-role').val());
 
-    const member = this.get('member');
+    const member = yield this.get('member');
     member.set('role', role);
     yield member.save();
 
