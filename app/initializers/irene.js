@@ -31,12 +31,7 @@ const initialize = function(application) {
     ENV.socketPath = runtimeConfig.IRENE_API_SOCKET_PATH || ENV.socketPath;
     ENV.enableSSO = runtimeConfig.IRENE_ENABLE_SSO || ENV.enableSSO;
     ENV.isEnterprise = runtimeConfig.ENTERPRISE || ENV.isEnterprise;
-    ENV.whitelabel = {
-      enabled: runtimeConfig.WHITELABEL_ENABLED || ENV.whitelabel.enabled,
-      name: runtimeConfig.WHITELABEL_ENABLED || ENV.whitelabel.name,
-      logo: runtimeConfig.WHITELABEL_ENABLED || ENV.whitelabel.logo,
-      theme: runtimeConfig.WHITELABEL_ENABLED || ENV.whitelabel.theme
-    };
+    ENV.whitelabel = Object.assign({}, ENV.whitelabel, runtimeConfig.whitelabel);
   }
 
   // Inject ENV
