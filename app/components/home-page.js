@@ -14,6 +14,7 @@ export default Ember.Component.extend({
   organization: service(),
 
   isLoaded: false,
+  networkError: false,
   isSecurityEnabled: false,
   isSecurityDashboard: false,
 
