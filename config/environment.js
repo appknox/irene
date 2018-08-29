@@ -204,10 +204,15 @@ module.exports = function(environment) {
       addAPIEndpoints: { feature: "Add API Endpoints", module: "Security", product: "Appknox" },
       createTeam: { feature: "Create Team", module: "Security", product: "Appknox" },
       namespaceAdded: { feature: "Namespace Add", module: "Security", product: "Appknox" },
+      namespaceRejected: { feature: "Namespace Reject", module: "Security", product: "Appknox" },
       applicationUpload: { feature: "Application Upload", module: "Security", product: "Appknox" },
       integrateGithub: { feature: "Integrate Github", module: "Report", product: "Appknox" },
       integrateJIRA: { feature: "Integrate JIRA", module: "Report", product: "Appknox" },
-      changePassword: { feature: "Change Password", module: "Setup", product: "Appknox" }
+      changePassword: { feature: "Change Password", module: "Setup", product: "Appknox" },
+      inviteResend: { feature: "Invitation Resend", module: "Security", product: "Appknox" },
+      inviteDelete: { feature: "Invitation Delete", module: "Security", product: "Appknox" },
+      teamProjectAdd: { feature: "Add Team Project", module: "Security", product: "Appknox" },
+      teamProjectRemove: { feature: "Remove Team Project", module: "Security", product: "Appknox" },
     },
     whitelabel: {
       theme: 'dark'
