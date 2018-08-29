@@ -6,7 +6,7 @@ import ENUMS from 'irene/enums';
 
 export default Ember.Component.extend({
   i18n: Ember.inject.service(),
-  ajax: Ember.inject.service(),
+  me: Ember.inject.service(),
   notify: Ember.inject.service('notification-messages-service'),
 
   tagName: ["tr"],

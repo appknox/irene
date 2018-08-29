@@ -4,17 +4,13 @@ import triggerAnalytics from 'irene/utils/trigger-analytics';
 const {inject: {service}} = Ember;
 
 export default Ember.Component.extend({
-
   session: service(),
+  organization: service(),
+  me: service(),
 
   isLoaded: false,
   isSecurityEnabled: false,
   isSecurityDashboard: false,
-  organization: service('organization'),
-
-  org: (function() {
-    return this.get('organization.selected');
-  }).property('organization.selected'),
 
   securityEnabled() {
     this.get("ajax").request("projects", {namespace: 'hudson-api'})

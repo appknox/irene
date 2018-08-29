@@ -2,8 +2,9 @@
   .column
     h5.bold.black-text.margin-t-q
       = t "members"
-  .column.content-right
-    = add-team-member team=team organization=organization
+  if me.org.is_admin
+    .column.content-right
+      = add-team-member team=team organization=organization
 
 if hasObjects
   .columns
@@ -12,8 +13,9 @@ if hasObjects
         tr
           th
             = t "user"
-          th.capitalize-text
-            = t "removeFromTeam"
+          if me.org.is_admin
+            th.capitalize-text
+              = t "removeFromTeam"
         each sortedObjects as |member|
           = organization-team-member-overview member=member organization=organization team=team
   .margin-t-q

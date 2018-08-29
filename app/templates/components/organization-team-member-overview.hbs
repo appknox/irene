@@ -6,10 +6,12 @@
     {{member.user.email}}
   </div>
 </td>
-<td>
-  <button class="is-primary is-icon no-border" title="{{t 'removeFromTeam'}}" onclick={{perform openRemoveMemberPrompt}}>
-    <i class="fa fa-user-times"></i>
-  </button>
-</td>
+{{#if me.org.is_admin}}
+  <td>
+    <button class="is-primary is-icon no-border" title="{{t 'removeFromTeam'}}" onclick={{perform openRemoveMemberPrompt}}>
+      <i class="fa fa-user-times"></i>
+    </button>
+  </td>
+{{/if}}
 
 {{prompt-box isActive=showRemoveMemberPrompt title=(t 'promptBox.removeMemberPrompt.title') description=(t 'promptBox.removeMemberPrompt.description') button="remove" delegate=this confirmAction=(action "confirmRemoveMemberProxy") disabled=isRemovingMember}}

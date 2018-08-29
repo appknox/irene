@@ -3,5 +3,6 @@ import config from 'irene/config/environment';
 import ScrollTopMixin from 'irene/mixins/scroll-top';
 
 export default Ember.Route.extend(ScrollTopMixin, {
-  title: `Users${config.platform}`
+  me: Ember.inject.service(),
+  title: `Users${config.platform}`,
 });

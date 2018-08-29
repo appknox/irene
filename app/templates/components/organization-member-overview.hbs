@@ -7,13 +7,17 @@
   </div>
 </td>
 <td>
-  <select onchange={{action (perform selectMemberRole) value="target.value"}} id="org-user-role" class="width-100">
-    {{#each roles as |role|}}
-      <option value="{{role.value}}" selected={{eq role.value member.role}}>
-        {{t (user-role role.value)}}
-      </option>
-    {{/each}}
-  </select>
+  {{#if me.org.is_admin}}
+    <select onchange={{action (perform selectMemberRole) value="target.value"}} id="org-user-role" class="width-100">
+      {{#each roles as |role|}}
+        <option value="{{role.value}}" selected={{eq role.value member.role}}>
+          {{t (user-role role.value)}}
+        </option>
+      {{/each}}
+    </select>
+  {{else}}
+    <span>{{t (user-role member.role)}}</span>
+  {{/if}}
 </td>
 {{!-- <td>
   {{#each member.teams as |team|}}

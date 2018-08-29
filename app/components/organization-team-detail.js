@@ -5,6 +5,7 @@ import { on } from '@ember/object/evented';
 
 export default Ember.Component.extend({
   i18n: Ember.inject.service(),
+  me: Ember.inject.service(),
 
   showEdit: false,
   saveEdit: false,

@@ -3,6 +3,7 @@
     .column
       h3.bold.black-text
         = t "teams"
-    .column.content-right
-      = create-team organization=model
+    if me.org.is_admin
+      .column.content-right
+        = create-team organization=model
   = organization-team-list organization=model

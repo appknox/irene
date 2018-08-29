@@ -17,11 +17,13 @@
         </div>
       </div>
     {{/link-to}}
-    <div class="column is-one-sixth flex-center padding-b-0">
-      <button class="is-primary is-icon no-border" title="{{t 'deleteTeam'}}" onclick={{perform openDeleteTeamConfirmBox}} disabled={{team.isDefaultTeam}}>
-        <i class="fa fa-trash-o"></i>
-      </button>
-    </div>
+    {{#if me.org.is_admin}}
+      <div class="column is-one-sixth flex-center padding-b-0">
+        <button class="is-primary is-icon no-border" title="{{t 'deleteTeam'}}" onclick={{perform openDeleteTeamConfirmBox}} disabled={{team.isDefaultTeam}}>
+          <i class="fa fa-trash-o"></i>
+        </button>
+      </div>
+    {{/if}}
   </div>
 </div>
 

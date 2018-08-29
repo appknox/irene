@@ -2,8 +2,9 @@
   .column
     h5.bold.black-text.margin-t-q
       = t "projects"
-  .column.content-right
-    = add-team-project team=team organization=organization
+  if me.org.is_admin
+    .column.content-right
+      = add-team-project team=team organization=organization
 
 if hasObjects
   .columns
@@ -12,10 +13,11 @@ if hasObjects
         tr
           th
             = t "project"
-          th
-            = t "accessPermissions"
-          th
-            = t "removeFromTeam"
+          if me.org.is_admin
+            th
+              = t "accessPermissions"
+            th
+              = t "removeFromTeam"
         each sortedObjects as |project|
           = organization-team-project-overview project=project organization=organization team=team
   .margin-t-q

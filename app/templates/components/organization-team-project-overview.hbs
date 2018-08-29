@@ -8,15 +8,17 @@
     </span>
   </div>
 </td>
-<td>
-  <label class="vertical-align-center">
-    {{input type="checkbox" name="can-write-{{project.id}}" checked=project.write}}&nbsp;{{t "allowEdit"}}
-  </label>
-</td>
-<td>
-  <button class="is-primary is-icon no-border" title="{{t 'removeFromTeam'}}" onclick={{perform openRemoveProjectConfirm}}>
-    <i class="fa fa-trash-o"></i>
-  </button>
-</td>
+{{#if me.org.is_admin}}
+  <td>
+    <label class="vertical-align-center">
+      {{input type="checkbox" name="can-write-{{project.id}}" checked=project.write}}&nbsp;{{t "allowEdit"}}
+    </label>
+  </td>
+  <td>
+    <button class="is-primary is-icon no-border" title="{{t 'removeFromTeam'}}" onclick={{perform openRemoveProjectConfirm}}>
+      <i class="fa fa-trash-o"></i>
+    </button>
+  </td>
+{{/if}}
 
 {{confirm-box isActive=showRemoveProjectConfirm title=(t "confirmBox.removeTeamProject") delegate=this confirmAction=(action "removeProjectProxy") disabled=isRemovingProject}}

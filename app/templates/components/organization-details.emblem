@@ -1,14 +1,17 @@
 h4.org-header-name.margin-left.text-centre
-  div class=showHide:show:hide
+  if me.org.is_admin
+    div class=showHide:show:hide
+      = org.name
+      span.edit-button click="editOrganization"
+        = fa-icon "pencil"
+    div class=editSave:edit:save
+      = input class="input edit-input" type="text" placeholder=org.name value=org.name
+      span.edit-button click="updateOrganization"
+        = fa-icon "check"
+      span.edit-button click="cancelEditing"
+        = fa-icon "times"
+  else
     = org.name
-    span.edit-button click="editOrganization"
-      = fa-icon "pencil"
-  div class=editSave:edit:save
-    = input class="input edit-input" type="text" placeholder=org.name value=org.name
-    span.edit-button click="updateOrganization"
-      = fa-icon "check"
-    span.edit-button click="cancelEditing"
-      = fa-icon "times"
 
 .tabs.is-medium.is-boxed.margin-top.is-centered
   ul
@@ -30,7 +33,8 @@ h4.org-header-name.margin-left.text-centre
         = t "teams"
         span.badge-square.is-default.margin-l-1.content-right
           = org.teamsCount
-    li class=settingsClass click="displaySettings"
-      = link-to 'authenticated.organization.settings' organization.id
-        = fa-icon "cog" class="sidebar-icons"
-        = t "settings"
+    if me.org.is_admin
+      li class=settingsClass click="displaySettings"
+        = link-to 'authenticated.organization.settings'
+          = fa-icon "cog" class="sidebar-icons"
+          = t "settings"

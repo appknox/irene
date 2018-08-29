@@ -7,6 +7,7 @@ export default Ember.Component.extend({
     routing: Ember.inject.service('-routing'),
     ajax: Ember.inject.service(),
     notify: Ember.inject.service('notification-messages-service'),
+    me: Ember.inject.service(),
 
     isNamespaces: true,
     isMembers: false,
