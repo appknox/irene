@@ -34,8 +34,7 @@ export default Ember.Component.extend(PaginateMixin, {
 
     const t = this.get('team');
     if (t) {
-      const teamInvite = yield this.get('store').createRecord('organization-team-invitation', {email});
-      yield teamInvite.createInvitation(t.get('id'));
+      yield t.createInvitation({email});
     } else {
       const orgInvite = yield this.get('store').createRecord('organization-invitation', {email});
       yield orgInvite.save();

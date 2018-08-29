@@ -17,6 +17,7 @@ export default DRFAdapter.extend(DataAdapterMixin, {
     }
     return baseurl;
   },
+
   deleteMember(store, type, snapshot, member) {
     let id = snapshot.id;
     let memberId = member.id;
@@ -36,5 +37,15 @@ export default DRFAdapter.extend(DataAdapterMixin, {
   urlForAddProject(id, modelName, snapshot, projectId) {
     const baseURL = this._buildURL(modelName, id);
     return [baseURL, 'projects', projectId].join('/');
+  },
+
+  createInvitation(store, type, snapshot, data) {
+    let id = snapshot.id;
+    const url = this.urlForCreateInvitation(id, type.modelName);
+    return this.ajax(url, 'POST', {data});
+  },
+  urlForCreateInvitation(id, modelName) {
+    const baseURL = this._buildURL(modelName, id);
+    return [baseURL, 'invitations'].join('/');
   },
 });

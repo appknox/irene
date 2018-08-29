@@ -25,17 +25,7 @@ export default DRFAdapter.extend(DataAdapterMixin, {
     }
     return inviteURL;
   },
-
   urlForQuery(query, modelName) {
     return this._buildNestedURL(modelName, query.teamId);
   },
-
-  createInvitation(store, type, snapshot, teamId) {
-    const data = {
-      email: snapshot.get('email'),
-    };
-    const url = this.urlForQuery({teamId}, type.modelName);
-    return this.ajax(url, 'POST', {data});
-  },
-
 });

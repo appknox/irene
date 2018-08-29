@@ -21,4 +21,9 @@ export default DS.Model.extend({
     var adapter = this.store.adapterFor(this.constructor.modelName);
     return await adapter.addProject(this.store, this.constructor.modelName, this, data, id);
   },
+
+  async createInvitation(data) {
+    var adapter = this.store.adapterFor(this.constructor.modelName);
+    await adapter.createInvitation(this.store, this.constructor.modelName, this, data);
+  },
 });
