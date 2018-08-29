@@ -376,7 +376,7 @@ export default {
   "teamMember": "Team member",
   "teamMemberAdded": "Team member added",
   "teamMemberInvited": "Team member invited",
-  "teamMemberRemoved": "is removed from the team",
+  "teamMemberRemoved": "Removed member from the team",
   "teamProjectAdded": "Project added to team",
   "testCredentials": "Test Credentials",
   "title": "Title",

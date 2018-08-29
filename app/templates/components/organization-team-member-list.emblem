@@ -1,11 +1,11 @@
 .columns
   .column
-    h5.bold.black-text.margin-t-h
+    h5.bold.black-text.margin-t-q
       = t "members"
   .column.content-right
     = add-team-member team=team organization=organization
 
-if members
+if hasObjects
   .columns
     .column
       table.org-table
@@ -14,8 +14,10 @@ if members
             = t "user"
           th.capitalize-text
             = t "removeFromTeam"
-        each members as |member|
+        each sortedObjects as |member|
           = organization-team-member-overview member=member organization=organization team=team
+  .margin-t-q
+    = partial "paginate"
 else
   div.empty-state
     = fa-icon "exclamation-triangle"
