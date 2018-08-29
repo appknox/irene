@@ -17,6 +17,7 @@ module.exports = function(environment) {
     isDevknox: false,
     isAppknox: false,
     isEnterprise: false,
+    exportApplicationGlobal: true,
     devknoxPrice: 9,  // This should also change in `mycroft/settings.py`
     socketPath: socketPath,
     platform: -1,
