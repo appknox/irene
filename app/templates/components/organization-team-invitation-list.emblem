@@ -1,4 +1,4 @@
-.columns.margin-t-3.margin-b-h
+.columns
   .column
     h5.bold.black-text.margin-t-h
       = t "teamInvitations"

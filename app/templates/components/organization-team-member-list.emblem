@@ -1,4 +1,4 @@
-.columns.margin-v-h
+.columns
   .column
     h5.bold.black-text.margin-t-h
       = t "members"

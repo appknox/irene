@@ -1,7 +1,9 @@
-.columns.margin-t-3.margin-b-h
+.columns
   .column
-    h5.bold.black-text.margin-t-h
+    h5.bold.black-text.margin-t-q
       = t "projects"
+  .column.content-right
+    = add-team-project team=team organization=organization
 
 if hasObjects
   .columns
@@ -16,8 +18,8 @@ if hasObjects
             = t "removeFromTeam"
         each sortedObjects as |project|
           = organization-team-project-overview project=project organization=organization team=team
-    .margin-top20
-      = partial "paginate"
+  .margin-t-q
+    = partial "paginate"
 else
   div.empty-state
     = fa-icon "exclamation-triangle"

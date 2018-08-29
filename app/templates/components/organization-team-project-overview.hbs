@@ -1,10 +1,12 @@
 <td>
-  <div class="font-medium">
-    {{#link-to "authenticated.project.files" project.id}}
-      {{teamProject.packageName}}
-    {{/link-to}}
+  <div class="vertical-align-center">
+    <span class="team-project-icon team-project-icon-{{teamProject.platformIconClass}} text-lightgray">{{fa-icon teamProject.platformIconClass}}</span>
+    <span class="team-project-name black-text">
+      {{#link-to "authenticated.project.files" project.id}}
+        {{teamProject.packageName}}
+      {{/link-to}}
+    </span>
   </div>
-  <div class="text-lightgray">{{teamProject.platformDisplay}}</div>
 </td>
 <td>
   <label class="vertical-align-center">
