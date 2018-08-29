@@ -1,157 +1,54 @@
 import Ember from 'ember';
-import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
+import { task } from 'ember-concurrency';
+import { on } from '@ember/object/evented';
 
-const TeamDetailsComponent = Ember.Component.extend({
-
+export default Ember.Component.extend({
   i18n: Ember.inject.service(),
-  ajax: Ember.inject.service(),
-  notify: Ember.inject.service('notification-messages-service'),
-  organization: Ember.inject.service('organization'),
 
+  showEdit: false,
+  saveEdit: false,
 
-
-  showHide: true,
-  editSave: false,
-  identification: "",
-  isAddingMember: false,
-  organizationTeam: null,
-  isInvitingMember: false,
-  isSearchingMember: false,
-
-  tEmptyEmailId: t("emptyEmailId"),
-  tTeamMemberInvited: t("teamMemberInvited"),
+  tPleaseTryAgain: t("pleaseTryAgain"),
   tOrganizationTeamNameUpdated: t("organizationTeamNameUpdated"),
 
-  // teamMembers: (function() {
-  //   const teamId = this.get("team.id");
-  //   return this.get("store").query('organization-team-member', {teamId: teamId});
-  // }).property(),
 
-  teamProjects: (function() {
-    const teamId = this.get("team.teamId");
-    return this.get("store").query('organization-team-project', {teamId: teamId});
-  }).property(),
+  /* Update team name */
+  updateTeamName: task(function * () {
+    const t = this.get('team');
+    t.set('name', t.get('name'));
+    yield t.save();
+  }).evented(),
 
-  // searchMember() {
-  //   const searchText = this.get("identification");
-  //   const searchQuery = `q=${searchText}`;
-  //   const url = [ENV.endpoints.userSearch, searchQuery].join('?');
-  //   this.set("isSearchingMember", true);
-  //   const that = this;
-  //   this.get("ajax").request(url)
-  //   .then(function(response) {
-  //     if(!that.isDestroyed) {
-  //       that.set("isSearchingMember", false);
-  //     }
-  //     const allUsers = response.data;
-  //     const allUsersData = allUsers.map((user) => ({
-  //       id: user.id,
-  //       username: user.attributes.username,
-  //       email: user.attributes.email
-  //     }));
-  //     that.set("users", allUsersData);
-  //   })
-  //   .catch(function(error) {
-  //     that.set("isSearchingMember", false);
-  //     that.get("notify").error(error.payload.message);
-  //   });
-  // },
+  updateTeamNameSucceeded: on('updateTeamName:succeeded', function() {
+    this.get('notify').success(this.get('tOrganizationTeamNameUpdated'));
+    this.send("cancelEditing");
+  }),
 
-  // actions: {
+  updateTeamNameErrored: on('updateTeamName:errored', function(_, err) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (err.errors && err.errors.length) {
+      errMsg = err.errors[0].detail || errMsg;
+    } else if(err.message) {
+      errMsg = err.message;
+    }
 
-  //   openAddMemberModal() {
-  //     this.set("showAddMemberModal", true);
-  //   },
+    this.get("notify").error(errMsg);
+  }),
 
-  //   searchQuery() {
-  //     Ember.run.debounce(this, this.searchMember, 500);
-  //   },
 
-  //   addMember(userId) {
-  //     const orgId = this.get("organization.id");
-  //     const teamId = this.get("team.teamId");
-  //     const url = [ENV.endpoints.organizations, orgId, ENV.endpoints.teams, teamId, ENV.endpoints.members, userId].join("/");
-  //     const that = this;
-  //     this.set("isAddingMember", true);
-  //     this.get("ajax").put(url)
-  //     .then(function(data){
-  //       that.get("notify").success("Team member added");
-  //       if(!that.isDestroyed) {
-  //         that.set("isAddingMember", false);
-  //         that.set("identification", "");
-  //         that.set("showAddMemberModal", false);
-  //         that.store.pushPayload(data);
-  //       }
-  //     })
-  //     .catch(function(error){
-  //       that.set("isAddingMember", false);
-  //       that.get("notify").error(error.payload.message);
-  //     });
-  //   },
+  actions: {
+    updateTeam() {
+      this.get('updateTeamName').perform();
+    },
+    editTeamName() {
+      this.set('showEdit', true);
+      this.set('saveEdit', true);
+    },
+    cancelEditing() {
+      this.set('showEdit', false);
+      this.set('saveEdit', false);
+    }
+  }
 
-  //   inviteMember() {
-  //     const identification = this.get("identification");
-  //     // const tTeamMemberInvited = this.get("tTeamMemberInvited");
-  //     if(Ember.isEmpty(identification)) {
-  //       const tEmptyEmailId = this.get("tEmptyEmailId");
-  //       return this.get("notify").error(tEmptyEmailId);
-  //     }
-  //     // const data = {
-  //     //   identification: identification,
-  //     //   team_id: this.get("team.teamId")
-  //     // };
-  //     this.set("isInvitingMember", true);
-  //     // this.get("ajax").post(url, {data});
-  //     // .then((data) => {
-  //     //   if (__guard__(data != null ? data.data : undefined, x => x.type) === "team") {
-  //     //     this.store.pushPayload(data);
-  //     //     this.get("notify").success(tTeamMemberAdded);
-  //     //   } else {
-  //     //     this.get("notify").success(tTeamMemberInvited);
-  //     //   }
-  //     //   if(!this.isDestroyed) {
-  //     //     this.set("isInvitingMember", false);
-  //     //     this.set("teamMember", "");
-  //     //     this.set("showAddMemberModal", false);
-  //     //   }
-  //     // }, (error) => {
-  //     //   this.set("isInvitingMember", false);
-  //     //   this.get("notify").error(error.payload.message);
-  //     // });
-  //   },
-
-  //   updateTeam() {
-  //     const teamId = this.get("orgTeam.id");
-  //     const orgTeamName = this.get("orgTeam.name");
-  //     const orgId = this.get("orgTeam.organization.id");
-  //     const tOrganizationTeamNameUpdated = this.get("tOrganizationTeamNameUpdated");
-  //     const data = {
-  //       name: orgTeamName
-  //     };
-  //     const url = [ENV.endpoints.organizations, orgId, ENV.endpoints.teams, teamId].join("/");
-  //     const that = this;
-  //     this.get("ajax").put(url, {data})
-  //     .then(function() {
-  //       that.get("notify").success(tOrganizationTeamNameUpdated);
-  //       that.send("cancelEditing");
-  //     })
-  //     .catch(function(error) {
-  //       that.get("notify").error(error.payload.message);
-  //     });
-  //   },
-
-  //   editTeamName() {
-  //     this.set('showHide', false);
-  //     this.set('editSave', true);
-  //   },
-
-  //   cancelEditing() {
-  //     this.set('showHide', true);
-  //     this.set('editSave', false);
-  //   }
-  // }
 });
-
-
-export default TeamDetailsComponent;
