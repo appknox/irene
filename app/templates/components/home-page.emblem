@@ -35,9 +35,9 @@ if isLoaded
                   = fa-icon "tasks" class="sidebar-icons"
                   = t "projects"
                 span.badge-square.is-sidebar.content-right
-                  | #{org.projectsCount}
+                  | #{organization.selected.projectsCount}
             li
-              = link-to 'authenticated.organization.namespaces' org.id class="mp-auth-teams"
+              = link-to 'authenticated.organization.namespaces' class="mp-auth-teams"
                 div
                   = fa-icon "users" class="sidebar-icons"
                   = t "organization"

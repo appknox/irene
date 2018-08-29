@@ -1,6 +1,6 @@
 .columns
   .column
-    = link-to 'authenticated.organization.teams' organization.id
+    = link-to 'authenticated.organization.teams'
       = fa-icon "angle-left"
       | &nbsp; back to teams
 

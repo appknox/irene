@@ -23,7 +23,7 @@ Router.map(function() {
   this.route('setup', {path: '/setup/:uuid/:token'});
   this.route('authenticated', {path: '/'}, function() {
     this.route("index", {path: '/'});
-    this.route("organization", {path: '/organization/:id'}, function() {
+    this.route("organization", {path: '/organization'}, function() {
       this.route('namespaces', {path: '/namespaces'});
       this.route('members', {path: '/members'});
       this.route('teams', {path: '/teams'});
