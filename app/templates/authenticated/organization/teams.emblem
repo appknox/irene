@@ -1,9 +1,2 @@
 .org-container
-  .columns.margin-v-h
-    .column
-      h3.bold.black-text
-        = t "teams"
-    if me.org.is_admin
-      .column.content-right
-        = create-team organization=model
   = organization-team-list organization=model

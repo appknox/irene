@@ -7,7 +7,7 @@
   </div>
 </td>
 <td>
-  {{#if me.org.is_admin}}
+  {{#if me.org.is_owner}}
     <select onchange={{action (perform selectMemberRole) value="target.value"}} id="org-user-role" class="width-100">
       {{#each roles as |role|}}
         <option value="{{role.value}}" selected={{eq role.value member.role}}>

@@ -3,6 +3,7 @@ import PaginateMixin from 'irene/mixins/paginate';
 
 export default Ember.Component.extend(PaginateMixin, {
   i18n: Ember.inject.service(),
+  me: Ember.inject.service(),
 
   targetObject: 'organization-team',
   sortProperties: ['createdOn:desc'],

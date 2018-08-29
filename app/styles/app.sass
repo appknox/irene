@@ -265,14 +265,17 @@ $fractional-pts: q 0.25, h 0.5, 3q 0.75
 .font-size12
   font-size: 12px
 
+button, .button
+  border-radius: 5px
+  .fa
+    font-size: inherit
+
 button
   &.no-border
     border: none
-    &.is-icon
-      font-size: 16px
-      padding: 0.3em 0.6em
-      .fa
-        font-size: inherit
+  &.is-icon
+    font-size: 16px
+    padding: 0.3em 0.6em
 .width100
   width: 100px
 
@@ -690,11 +693,6 @@ div[class^="_c-notification__container"]
 .input:hover
     border-color: #b3b3b3!important
     box-shadow: 0 0 1px #808080
-
-button, .button
-  border-radius: 5px
-  .fa
-    font-size: inherit
 
 .card-form
   width: 40%

@@ -4,7 +4,7 @@
   {{#if namespace.isApproved}}
     <span class="text-lightgray">{{moment-from-now namespace.approvedOn}}</span>
   {{else}}
-    {{#if me.org.is_admin}}
+    {{#if me.org.is_owner}}
       <button class="is-success is-icon btn-table" title="{{t 'approve'}}" onclick={{perform approveNamespace}}>
         <i class="fa fa-check"></i>
         {{#if approveNamespace.isRunning}}

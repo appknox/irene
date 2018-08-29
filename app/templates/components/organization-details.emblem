@@ -1,5 +1,5 @@
 h4.org-header-name.margin-left.text-centre
-  if me.org.is_admin
+  if me.org.is_owner
     div class=showHide:show:hide
       = org.name
       span.edit-button click="editOrganization"

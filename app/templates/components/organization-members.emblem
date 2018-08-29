@@ -1,0 +1,12 @@
+.columns.margin-v-h
+  .column
+    h3.bold.black-text
+      = t "organizationMembers"
+  if me.org.is_admin
+    .column.content-right
+      = invite-member organization=model
+= organization-member-list organization=model
+
+if me.org.is_admin
+  = organization-invitation-list organization=model
+
