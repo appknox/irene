@@ -5,7 +5,7 @@ import { translationMacro as t } from 'ember-i18n';
 
 export default Ember.Component.extend({
   i18n: Ember.inject.service(),
-  ajax: Ember.inject.service(),
+  realtime: Ember.inject.service(),
   notify: Ember.inject.service('notification-messages-service'),
 
   team: null,
@@ -45,6 +45,8 @@ export default Ember.Component.extend({
 
     this.set('showRemoveMemberPrompt', false);
     this.set('isRemovingMember', false);
+
+    this.get('realtime').incrementProperty('OrganizationNonTeamMemberCounter');
   }),
 
   removeMemberErrored: on('removeMember:errored', function(_, err) {

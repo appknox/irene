@@ -17,7 +17,7 @@
               <tbody>
                 {{#each sortedObjects as |project|}}
                   <tr class="team-project">
-                    <td>
+                    <td class="team-project-action">
                       <button class="is-default is-icon no-border" onclick={{perform addTeamProject project}} disabled={{isAddingProject}}>
                         {{fa-icon "plus"}}
                       </button>

@@ -11,6 +11,7 @@ const RealtimeService = Ember.Service.extend({
   TeamProjectCounter: 0,
   TeamMemberCounter: 0,
   OrganizationNonTeamProjectCounter: 0,
+  OrganizationNonTeamMemberCounter: 0,
   namespace: ''
 });
 

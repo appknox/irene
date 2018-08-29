@@ -7,6 +7,7 @@ import { on } from '@ember/object/evented';
 export default Ember.Component.extend(PaginateMixin, {
   i18n: Ember.inject.service(),
   realtime: Ember.inject.service(),
+  notify: Ember.inject.service(),
 
   query: '',
   isAddingProject: false,
@@ -27,12 +28,6 @@ export default Ember.Component.extend(PaginateMixin, {
   newOrganizationNonTeamProjectsObserver: Ember.observer("realtime.OrganizationNonTeamProjectCounter", function() {
     return this.incrementProperty("version");
   }),
-
-
-  /* Fetch organization-projects which are not included in team */
-  orgNonTeamProjects: Ember.computed(function() {
-    return this.get('store').query('organization-project', {exclude_team: this.get('team.id')});
-  }).property(),
 
 
   /* Open add-team-project modal */

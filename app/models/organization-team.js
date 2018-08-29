@@ -17,6 +17,11 @@ export default DS.Model.extend({
     await this.get('store').unloadRecord(member);
   },
 
+  async addMember(data, id) {
+    var adapter = this.store.adapterFor(this.constructor.modelName);
+    return await adapter.addMember(this.store, this.constructor.modelName, this, data, id);
+  },
+
   async addProject(data, id) {
     var adapter = this.store.adapterFor(this.constructor.modelName);
     return await adapter.addProject(this.store, this.constructor.modelName, this, data, id);

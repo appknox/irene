@@ -1,46 +1,43 @@
-<button class="is-default" onclick={{perform openAddMemberModal}}>
-  <i class="fa fa-user-plus margin-r-h"></i>&nbsp;{{t "addMember"}}
+<button class="is-primary" onclick={{perform openAddMemberModal}}>
+  {{fa-icon "user-plus" class="margin-r-h"}}&nbsp;{{t "addMember"}}
 </button>
 
 {{#modal-card class="input-modal user-search-modal" isActive=showAddTeamMemberModal title=(t 'modalCard.addMember.title')}}
   <div class="card-body">
     <div class="card-wrapper">
-      <form action="">
-        <p class="control vertical-align-center">
-          {{#if isSearchingMember}}
-            <i class="fa fa-spinner fa-spin margin-top5"></i>
-          {{else}}
-            {{fa-icon "user"}}
-          {{/if}}
-          {{input class="form-control input input-width margin-left" placeholder="Username" type="text" value=query autofocus="autofocus" key-up="searchQuery"}}
-        </p>
-      </form>
-      {{#if users}}
-        <div class="user-list-container">
-          <ul>
-            {{#each users as |user|}}
-              <li>
-                <div class="columns">
-                  <div class="column is-one-sixth align-center">
-                    {{fa-icon "user-circle"}}
-                  </div>
-                  <div class="column">
-                    <div class="black-text bold font-medium">
-                      {{user.username}}
-                    </div>
-                    <div class="text-lightgray">
-                      {{user.email}}
-                    </div>
-                  </div>
-                  <div class="column is-one-sixth">
-                    <div class="show-button">
-                      <button class="is-primary" onclick={{perform addTeamMember user.id}} disabled={{isAddingMember}}>+</button>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            {{/each}}
-          </ul>
+      {{!-- <form action="">
+        <div class="control vertical-align-center margin-b-1">
+          {{fa-icon "search"}} {{input class="form-control input input-width margin-left" placeholder="Search project" type="text" value=query autofocus="autofocus" key-up="searchQuery"}}
+        </div>
+      </form> --}}
+      {{#if hasObjects}}
+        <div>
+          <div class="add-team-objects-scroll">
+            <table class="org-table">
+              <tbody>
+                {{#each sortedObjects as |member|}}
+                  <tr class="team-project">
+                    <td class="team-project-action">
+                      <button class="is-default is-icon no-border" onclick={{perform addTeamMember member}} disabled={{isAddingMember}}>
+                        {{fa-icon "plus"}}
+                      </button>
+                    </td>
+                    <td>
+                      <div class="black-text bold font-medium">{{member.username}}</div>
+                      <div class="text-lightgray">{{member.email}}</div>
+                    </td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+            <div class="margin-t-q">
+              {{partial "paginate"}}
+            </div>
+          </div>
+        </div>
+      {{else}}
+        <div class="empty-state">
+          {{fa-icon "exclamation-triangle"}} {{t "noMembers"}}
         </div>
       {{/if}}
     </div>

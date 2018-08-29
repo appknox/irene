@@ -7,14 +7,27 @@ import { on } from '@ember/object/evented';
 export default Ember.Component.extend(PaginateMixin, {
   i18n: Ember.inject.service(),
   realtime: Ember.inject.service(),
+  notify: Ember.inject.service(),
 
-  email: '',
-  users: [],
+  query: '',
   isAddingMember: false,
   showAddTeamMemberModal: false,
 
   tTeamMemberAdded: t('teamMemberAdded'),
   tPleaseTryAgain: t('pleaseTryAgain'),
+
+  targetObject: 'organization-user',
+  sortProperties: ['created:desc'],
+  extraQueryStrings: Ember.computed('team.id', function() {
+    const query = {
+      exclude_team: this.get('team.id')
+    };
+    return JSON.stringify(query, Object.keys(query).sort());
+  }),
+
+  newOrganizationNonTeamMembersObserver: Ember.observer("realtime.OrganizationNonTeamMemberCounter", function() {
+    return this.incrementProperty("version");
+  }),
 
 
   /* Open add-team-member modal */
@@ -24,20 +37,23 @@ export default Ember.Component.extend(PaginateMixin, {
 
 
   /* Add member to team */
-  addTeamMember: task(function * (userId) {
-    const id = userId;
-    const teamId = this.get('team.id');
+  addTeamMember: task(function * (member) {
     this.set('isAddingMember', true);
+    const data = {
+      write: false
+    };
+    const team = this.get('team');
+    yield team.addMember(data, member.id);
 
-    const m = yield this.get('store').createRecord('organization-team-member', {id, teamId});
-    yield m.save();
+    this.get('realtime').incrementProperty('TeamMemberCounter');
+    this.get('sortedObjects').removeObject(member);
   }).evented(),
 
   addTeamMemberSucceeded: on('addTeamMember:succeeded', function() {
     this.get('notify').success(this.get("tTeamMemberAdded"));
 
-    this.set('showAddTeamMemberModal', false);
     this.set('isAddingMember', false);
+    this.set('query', '');
   }),
 
   addTeamMemberErrored: on('addTeamMember:errored', function(_, err) {
@@ -50,32 +66,36 @@ export default Ember.Component.extend(PaginateMixin, {
 
     this.get("notify").error(errMsg);
 
-    this.set('showAddTeamMemberModal', false);
     this.set('isAddingMember', false);
+    this.set('query', '');
   }),
 
+  // /* Search member */
+  // searchMember() {
+  //   const searchText = this.get("query");
+  //   const that = this;
 
-  /* Search member */
-  searchMember() {
-    const searchText = this.get("query");
-    const that = this;
-    this.set("isSearchingMember", true);
-    return this.get('store').query('organization-user', {q: searchText})
-    .then(function(response) {
-      if(!that.isDestroyed) {
-        that.set("isSearchingMember", false);
-      }
-      that.set("users", response);
-    })
-    .catch(function() {
-      that.set("isSearchingMember", false);
-    });
-  },
+  //   this.set("isSearchingMember", true);
 
-  actions: {
-    searchQuery() {
-      Ember.run.debounce(this, this.searchMember, 500);
-    },
-  }
+  //   return this.get('store').query('organization-member', {
+  //     q: searchText,
+  //     exclude_team: this.get('team.id')
+  //   })
+  //     .then(function(response) {
+  //       if(!that.isDestroyed) {
+  //         that.set("isSearchingMember", false);
+  //       }
+  //       that.set("sortedObjects", response);
+  //     })
+  //     .catch(function() {
+  //       that.set("isSearchingMember", false);
+  //     });
+  // },
+
+  // actions: {
+  //   searchQuery() {
+  //     Ember.run.debounce(this, this.searchMember, 500);
+  //   },
+  // }
 
 });

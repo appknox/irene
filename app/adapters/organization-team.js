@@ -29,6 +29,16 @@ export default DRFAdapter.extend(DataAdapterMixin, {
     return [baseURL, 'members', memberId].join('/');
   },
 
+  addMember(store, type, snapshot, data, memberId) {
+    let id = snapshot.id;
+    const url = this.urlForAddMember(id, type.modelName, snapshot, memberId);
+    return this.ajax(url, 'PUT', {data});
+  },
+  urlForAddMember(id, modelName, snapshot, memberId) {
+    const baseURL = this._buildURL(modelName, id);
+    return [baseURL, 'members', memberId].join('/');
+  },
+
   addProject(store, type, snapshot, data, projectId) {
     let id = snapshot.id;
     const url = this.urlForAddProject(id, type.modelName, snapshot, projectId);
