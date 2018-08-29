@@ -1,4 +1,5 @@
 import DS from 'ember-data';
+import ENUMS from 'irene/enums';
 
 export default DS.Model.extend({
   activeProfileId: DS.attr('number'),
@@ -20,6 +21,14 @@ export default DS.Model.extend({
       lastFileOnly: true
     };
     return this.store.queryRecord("file", params);
-  }).property("fileCount")
+  }).property("fileCount"),
 
+  platformIconClass:( function() {
+    switch (this.get("platform")) {
+      case ENUMS.PLATFORM.ANDROID: return "android";
+      case ENUMS.PLATFORM.IOS: return "apple";
+      case ENUMS.PLATFORM.WINDOWS: return "windows";
+      default: return "mobile";
+    }
+  }).property("platform"),
 });

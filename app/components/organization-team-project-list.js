@@ -14,4 +14,7 @@ export default Ember.Component.extend(PaginateMixin, {
     return JSON.stringify(query, Object.keys(query).sort());
   }),
 
+  newOrganizationTeamProjectsObserver: Ember.observer("realtime.TeamProjectCounter", function() {
+    return this.incrementProperty("version");
+  }),
 });

@@ -7,6 +7,7 @@ import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 export default Ember.Component.extend({
   i18n: Ember.inject.service(),
+  realtime: Ember.inject.service(),
 
   tagName: ['tr'],
   showRemoveProjectConfirm: false,
@@ -75,6 +76,8 @@ export default Ember.Component.extend({
 
     this.set('showRemoveProjectConfirm', false);
     this.set('isRemovingProject', false);
+
+    this.get('realtime').incrementProperty('OrganizationNonTeamProjectCounter');
   }),
 
   removeProjectErrored: on('removeProject:errored', function(_, err) {

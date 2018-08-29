@@ -10,9 +10,9 @@ export default DRFAdapter.extend(DataAdapterMixin, {
   authorizer: 'authorizer:irene',
   organization: Ember.inject.service('organization'),
   _buildURL: function(modelName, id) {
-    const baseurl = `${this.get('host')}/${this.get('namespace')}/organizations/${this.get('organization').selected.id}/projects/`;
+    const baseurl = `${this.get('host')}/${this.get('namespace')}/organizations/${this.get('organization').selected.id}/projects`;
     if (id) {
-      return baseurl + encodeURIComponent(id) + '/';
+      return `${baseurl}/${encodeURIComponent(id)}`;
     }
     return baseurl;
   }

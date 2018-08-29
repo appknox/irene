@@ -10,11 +10,12 @@ export default {
   "activeSubscription": "Active Subscription",
   "addedNamespaces": "Added Namespaces",
   "addedOn": "Added on",
-  "addNamespace": "Add Namespace",
-  "addNewTeam": "Add new team",
-  "addTeam": "Add Team",
   "addMember" : "Add Member",
+  "addNamespace": "Add Namespace",
   "addNewNamespace": "You can add a new namespace below",
+  "addNewTeam": "Add new team",
+  "addProject" : "Add Project",
+  "addTeam": "Add Team",
   "admin": "Admin",
   "allFutureAnalyses": "All Future Analyses",
   "allowEdit": "Allow Edit",
@@ -376,6 +377,7 @@ export default {
   "teamMemberAdded": "Team member added",
   "teamMemberInvited": "Team member invited",
   "teamMemberRemoved": "is removed from the team",
+  "teamProjectAdded": "Project added to team",
   "testCredentials": "Test Credentials",
   "title": "Title",
   "unchanged": "Unchanged",
@@ -456,6 +458,9 @@ export default {
     },
     "addMember": {
       "title": "Add Member"
+    },
+    "addProject": {
+      "title": "Add project to team"
     },
     "apiScan": {
       "title": "Do you also want to run API Scan?",

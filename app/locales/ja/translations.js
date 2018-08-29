@@ -8,13 +8,14 @@ export default {
   "actions": "アクション",
   "activationSuccess": "アカウントが有効化されていると、ログインページにリダイレクトされます。",
   "activeSubscription": "有効なサブスクリプション",
-  "addNamespace": "名前空間の追加",
   "addedNamespaces": "Added Namespaces",
   "addedOn": "Added on",
-  "addNewTeam": "新しいチームの追加",
-  "addTeam": "チームの追加",
   "addMember" : "Add Member",
+  "addNamespace": "名前空間の追加",
   "addNewNamespace": "以下に名前空間が追加できます",
+  "addNewTeam": "新しいチームの追加",
+  "addProject" : "Add Project",
+  "addTeam": "チームの追加",
   "admin": "管理者",
   "allFutureAnalyses": "All Future Analyses",
   "allowEdit": "Allow Edit",
@@ -377,6 +378,7 @@ export default {
   "teamMemberAdded": "チームメンバーが追加されました",
   "teamMemberInvited": "チームメンバーが招待されました",
   "teamMemberRemoved": "がチームから削除されました",
+  "teamProjectAdded": "Project added to team",
   "testCredentials": "テスト資格情報",
   "title": "Title",
   "unchanged": "変更なし",
@@ -457,6 +459,9 @@ export default {
     },
     "addMember": {
       "title": "メンバーを追加"
+    },
+    "addProject": {
+      "title": "Add project to team"
     },
     "apiScan": {
       "title": "API診断も実行しますか？",
