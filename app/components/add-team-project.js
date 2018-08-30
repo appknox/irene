@@ -10,6 +10,7 @@ export default Ember.Component.extend(PaginateMixin, {
   notify: Ember.inject.service(),
 
   query: '',
+  searchQuery: '',
   isAddingProject: false,
   showAddTeamProjectModal: false,
 
@@ -18,15 +19,16 @@ export default Ember.Component.extend(PaginateMixin, {
 
   targetObject: 'organization-project',
   sortProperties: ['created:desc'],
-  extraQueryStrings: Ember.computed('team.id', function() {
+  extraQueryStrings: Ember.computed('team.id', 'searchQuery', function() {
     const query = {
+      q: this.get('searchQuery'),
       exclude_team: this.get('team.id')
     };
     return JSON.stringify(query, Object.keys(query).sort());
   }),
 
-  newOrganizationNonTeamProjectsObserver: Ember.observer("realtime.OrganizationNonTeamProjectCounter", function() {
-    return this.incrementProperty("version");
+  newOrganizationNonTeamProjectsObserver: Ember.observer('realtime.OrganizationNonTeamProjectCounter', function() {
+    return this.incrementProperty('version');
   }),
 
 
@@ -50,7 +52,7 @@ export default Ember.Component.extend(PaginateMixin, {
   }).evented(),
 
   addTeamProjectSucceeded: on('addTeamProject:succeeded', function() {
-    this.get('notify').success(this.get("tTeamProjectAdded"));
+    this.get('notify').success(this.get('tTeamProjectAdded'));
 
     this.set('isAddingProject', false);
     this.set('query', '');
@@ -64,38 +66,21 @@ export default Ember.Component.extend(PaginateMixin, {
       errMsg = err.message;
     }
 
-    this.get("notify").error(errMsg);
+    this.get('notify').error(errMsg);
 
     this.set('isAddingProject', false);
     this.set('query', '');
   }),
 
-  // /* Search member */
-  // searchProject() {
-  //   const searchText = this.get("query");
-  //   const that = this;
+  /* Set debounced searchQuery */
+  setSearchQuery() {
+    this.set('searchQuery', this.get('query'));
+  },
 
-  //   this.set("isSearchingProject", true);
-
-  //   return this.get('store').query('organization-project', {
-  //     q: searchText,
-  //     exclude_team: this.get('team.id')
-  //   })
-  //     .then(function(response) {
-  //       if(!that.isDestroyed) {
-  //         that.set("isSearchingProject", false);
-  //       }
-  //       that.set("sortedObjects", response);
-  //     })
-  //     .catch(function() {
-  //       that.set("isSearchingProject", false);
-  //     });
-  // },
-
-  // actions: {
-  //   searchQuery() {
-  //     Ember.run.debounce(this, this.searchProject, 500);
-  //   },
-  // }
+  actions: {
+    searchQuery() {
+      Ember.run.debounce(this, this.setSearchQuery, 500);
+    },
+  }
 
 });
