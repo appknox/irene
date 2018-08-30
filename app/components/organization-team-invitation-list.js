@@ -11,7 +11,8 @@ export default Ember.Component.extend(PaginateMixin, {
 
   extraQueryStrings: Ember.computed('team.id', function() {
     const query = {
-      teamId: this.get('team.id')
+      'teamId': this.get('team.id'),
+      'is_accepted': false
     };
     return JSON.stringify(query, Object.keys(query).sort());
   }),
