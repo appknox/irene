@@ -10,6 +10,7 @@ export default Ember.Component.extend(PaginateMixin, {
   notify: Ember.inject.service(),
 
   query: '',
+  searchQuery: '',
   isAddingMember: false,
   showAddTeamMemberModal: false,
 
@@ -18,15 +19,16 @@ export default Ember.Component.extend(PaginateMixin, {
 
   targetObject: 'organization-user',
   sortProperties: ['created:desc'],
-  extraQueryStrings: Ember.computed('team.id', function() {
+  extraQueryStrings: Ember.computed('team.id', 'searchQuery', function() {
     const query = {
+      q: this.get('searchQuery'),
       exclude_team: this.get('team.id')
     };
     return JSON.stringify(query, Object.keys(query).sort());
   }),
 
-  newOrganizationNonTeamMembersObserver: Ember.observer("realtime.OrganizationNonTeamMemberCounter", function() {
-    return this.incrementProperty("version");
+  newOrganizationNonTeamMembersObserver: Ember.observer('realtime.OrganizationNonTeamMemberCounter', function() {
+    return this.incrementProperty('version');
   }),
 
 
@@ -50,7 +52,7 @@ export default Ember.Component.extend(PaginateMixin, {
   }).evented(),
 
   addTeamMemberSucceeded: on('addTeamMember:succeeded', function() {
-    this.get('notify').success(this.get("tTeamMemberAdded"));
+    this.get('notify').success(this.get('tTeamMemberAdded'));
 
     this.set('isAddingMember', false);
     this.set('query', '');
@@ -64,38 +66,21 @@ export default Ember.Component.extend(PaginateMixin, {
       errMsg = err.message;
     }
 
-    this.get("notify").error(errMsg);
+    this.get('notify').error(errMsg);
 
     this.set('isAddingMember', false);
     this.set('query', '');
   }),
 
-  // /* Search member */
-  // searchMember() {
-  //   const searchText = this.get("query");
-  //   const that = this;
+  /* Set debounced searchQuery */
+  setSearchQuery() {
+    this.set('searchQuery', this.get('query'));
+  },
 
-  //   this.set("isSearchingMember", true);
-
-  //   return this.get('store').query('organization-member', {
-  //     q: searchText,
-  //     exclude_team: this.get('team.id')
-  //   })
-  //     .then(function(response) {
-  //       if(!that.isDestroyed) {
-  //         that.set("isSearchingMember", false);
-  //       }
-  //       that.set("sortedObjects", response);
-  //     })
-  //     .catch(function() {
-  //       that.set("isSearchingMember", false);
-  //     });
-  // },
-
-  // actions: {
-  //   searchQuery() {
-  //     Ember.run.debounce(this, this.searchMember, 500);
-  //   },
-  // }
+  actions: {
+    searchQuery() {
+      Ember.run.debounce(this, this.setSearchQuery, 500);
+    },
+  }
 
 });

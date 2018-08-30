@@ -5,11 +5,11 @@
 {{#modal-card class="input-modal user-search-modal" isActive=showAddTeamMemberModal title=(t 'modalCard.addMember.title')}}
   <div class="card-body">
     <div class="card-wrapper">
-      {{!-- <form action="">
+      <form>
         <div class="control vertical-align-center margin-b-1">
-          {{fa-icon "search"}} {{input class="form-control input input-width margin-left" placeholder="Search project" type="text" value=query autofocus="autofocus" key-up="searchQuery"}}
+          {{fa-icon "search"}} {{input class="form-control input input-width margin-left" placeholder="Search member" type="text" value=query autofocus="autofocus" key-up="searchQuery"}}
         </div>
-      </form> --}}
+      </form>
       {{#if hasObjects}}
         <div>
           <div class="add-team-objects-scroll">
