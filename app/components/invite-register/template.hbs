@@ -76,7 +76,13 @@
       </div>
     </form>
     <div class="register-confirm">{{fa-icon "check-circle" class="is-success register-confirm-icon"}}
-      <p class="register-confirm-text">{{t "invitationRegisterConfirmation"}}</p>
+      <p class="register-confirm-text text-centre margin-t-1">{{t "invitationRegisterConfirmation"}}</p>
+      <div class="align-center margin-t-1h">
+        {{#link-to "login" class="button is-default font-medium padding-v-1 padding-h-1h"}}
+          {{t "login"}}
+          {{fa-icon "arrow-right" class="margin-l-h"}}
+        {{/link-to}}
+      </div>
     </div>
   </div>
 </div>
