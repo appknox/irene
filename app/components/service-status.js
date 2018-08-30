@@ -4,11 +4,26 @@ import {isNotFoundError} from 'ember-ajax/errors';
 
 export default Ember.Component.extend({
 
-  async didInsertElement() {
+  isStorageWorking: false,
+  isDeviceFarmWorking: false,
+
+  didInsertElement() {
+    this.storageStatus();
+    this.deviceFarmStatus();
+  },
+
+  deviceFarmStatus() {
+    this.get("ajax").request(ENV.endpoints.ping)
+    .then(() => {
+      this.set("isDeviceFarmWorking", true);
+    });
+  },
+
+  async storageStatus() {
     try {
       let connection = await this.get("ajax").request(ENV.endpoints.connection);
       let storage = await this.storageCheck(connection.storage);
-      this.set("storageWorking", storage);
+      this.set("isStorageWorking", storage);
     }
     catch(error) {
       return this.get("notify").error("Sorry something went wrong, please try again");
