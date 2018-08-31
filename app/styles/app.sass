@@ -30,6 +30,10 @@ h3
   font-size: 1.2em
 .font-legible
   font-size: 1.1em
+.font-regular
+  font-size: 1em
+.font-small
+  font-size: 0.95em
 
 .text-lightgray
   color: lighten($color-table, 28%)
@@ -482,6 +486,29 @@ select
 .file-input
   position: fixed
   top: -100px
+
+.input-file
+  padding: 0.45em
+
+.or
+  display: flex
+  align-items: center
+  justify-content: center
+  position: relative
+  &::before
+    content: ''
+    height: 0.1em
+    background: lighten($color-table, 58%)
+    width: 47%
+    position: absolute
+    left: 0
+  &::after
+    content: ''
+    height: 0.1em
+    background: lighten($color-table, 58%)
+    width: 47%
+    position: absolute
+    right: 0
 
 .not-found
   text-align: center
