@@ -51,6 +51,7 @@ export default {
   "chooseAFile": "Choose a file to compare",
   "clickingHere": "clicking here",
   "clickOnDynamicScan": "Click on Start Dynamic Scan",
+  "clickToAddOrgName": "Click to add organization name",
   "closeModal": "Exit Full Screen",
   "companyName": "Company Name",
   "compare": "Compare",

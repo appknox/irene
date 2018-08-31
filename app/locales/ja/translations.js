@@ -51,6 +51,7 @@ export default {
   "chooseAFile": "比較するファイルを選択してください",
   "clickingHere": "clicking here",
   "clickOnDynamicScan": "動的診断の開始をクリック",
+  "clickToAddOrgName": "Click to add organization name",
   "closeModal": "全画面を終了",
   "companyName": "会社名",
   "compare": "比較",
