@@ -87,18 +87,6 @@
             a click="displayOWASPDetails" class="uppercase-text"
               | Owasp Details
     .column.content-right
-      h6
-        | Upload a new version of this app &nbsp;
-      label.button.is-primary.ac-upload-app.highlighted-button.margin-top-5 disabled=isUploading
-        = upload-app delegate=this class="mp-upload-app"
-        = fa-icon "upload"
-        | &nbsp;
-        if isUploading
-          | #{t "uploading"}
-          | &nbsp;:#{progress}%
-        else
-          | Upload File
-    .column.content-right.is-one-sixth
       .card-button
         .columns
           .column.card-button
