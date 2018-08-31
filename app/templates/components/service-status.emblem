@@ -1,7 +1,0 @@
-h1
-  | Storage: &nbsp;
-  = isStorageWorking
-
-h1
-  | Devicefarm: &nbsp;
-  = isDeviceFarmWorking
