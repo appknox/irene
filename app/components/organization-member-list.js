@@ -6,4 +6,8 @@ export default Ember.Component.extend(PaginateMixin, {
 
   targetObject: 'organization-member',
   sortProperties: ['createdOn:desc'],
+
+  newMembersObserver: Ember.observer("realtime.OrganizationMemberCounter", function() {
+    return this.incrementProperty("version");
+  })
 });

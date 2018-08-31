@@ -41,6 +41,9 @@ export default Ember.Component.extend(PaginateMixin, {
       emails
     };
     yield this.get('ajax').post(url, {data, contentType: 'application/json'});
+
+    // signal to update members list
+    this.get('realtime').incrementProperty('OrganizationMemberCounter');
   }).evented(),
 
   addSSOMembersSucceeded: on('addSSOMembers:succeeded', function() {
