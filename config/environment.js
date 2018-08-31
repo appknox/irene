@@ -154,8 +154,6 @@ module.exports = function(environment) {
       namespaceAdd: 'namespace_add',
       applyCoupon: 'apply_coupon',
       saveCredentials: 'projects/save_credentials',
-      collaborations: 'collaborations',
-      deleteCollaboration: 'collaboration/delete',
       invite: 'invite',
       invitation: 'invitation',
       invitations: 'invitations',

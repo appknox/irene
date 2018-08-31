@@ -26,11 +26,9 @@ if isGeneralSettings
     = github-project project=project
   .box-container
     = jira-project project=project
-  .margin-left
-    = collaboration-component project=project
 
 if isAnalysisSettings
   .box-container
     = analysis-settings project=project
-  .margin-left
+  .margin-left.margin-b-4
     = vulnerability-list project=project

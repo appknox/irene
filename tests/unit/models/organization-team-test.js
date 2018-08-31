@@ -6,7 +6,6 @@ moduleForModel('organization-team', 'Unit | Model | organization team', {
   needs: [
     'model:organization-team',
     'model:user',
-    'model:collaboration',
     'model:organization',
     'service:i18n',
     'locale:en/translations',

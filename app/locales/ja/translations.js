@@ -52,9 +52,6 @@ export default {
   "clickingHere": "clicking here",
   "clickOnDynamicScan": "動的診断の開始をクリック",
   "closeModal": "全画面を終了",
-  "collaborationAdded": "コラボレーションが追加されました",
-  "collaborationRemoved": "はコラボレーションから削除されました",
-  "collaborations": "コラボレーション",
   "companyName": "会社名",
   "compare": "比較",
   "compareWarningSameFiles": "You are comparing 2 same files",
@@ -429,10 +426,6 @@ export default {
     "resendInvitation": "Are you sure you want to resend this invitation?"
   },
   "promptBox": {
-    "collaborationPrompt": {
-      "title": "このチームをコラボレーションから削除してもよろしいですか？",
-      "description": "コラボレーションから削除するチーム名を入力してください"
-    },
     "removeMemberPrompt": {
       "title": "このチームメンバーを削除してもよろしいですか？",
       "description": "削除したいチームメンバーの名前を入力してください"
@@ -456,9 +449,6 @@ export default {
       "title": "マルチファクタ認証を無効にする",
       "description": "マルチファクタ認証を無効にすると、アカウントはパスワードでのみ保護されます。",
       "enterOTP": "確認するには、OTPを入力してください"
-    },
-    "collaboration": {
-      "title": "チームをプロジェクトに追加する"
     },
     "addMember": {
       "title": "メンバーを追加"

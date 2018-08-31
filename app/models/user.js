@@ -21,7 +21,6 @@ const User = DS.Model.extend({
   pricings: DS.hasMany('pricing'),
   submissions: DS.hasMany('submission', {inverse:'user'}),
   namespaces: DS.attr('string'),
-  collaborations: DS.hasMany('collaboration', {inverse:'user'}),
   organization: DS.belongsTo('organization', {inverse: 'users'}),
   expiryDate: DS.attr('date'),
   devknoxExpiry: DS.attr('date'),

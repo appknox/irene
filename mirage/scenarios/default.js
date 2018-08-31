@@ -59,14 +59,6 @@ export default function(server) {
       }
     }
     project.fileIds = fileIds;
-    var collaborationCount = getRandomInt(0, userCount);
-    var collaborationIds = [];
-    for (var i = 0; i < collaborationCount; i++) {
-      teamId = getRandomInt(1, teamCount);
-      var collaboration = server.create('collaboration', {projectId: projectId, teamId: teamId});
-      collaborationIds.push(collaboration.id);
-    }
-    project.collaborationIds = collaborationIds;
   }
   var currentUser = server.db.users.get(currentUserId);
   currentUser.projectIds = projectIds;

@@ -13,8 +13,6 @@ export default function() {
 
   this.get('/users/:id', 'user');
   this.get('/users', 'user');
-  this.get('/collaborations/:id', 'collaboration');
-  this.get('/collaborations', 'collaboration');
   this.get('/projects/:id', 'project');
   this.get('/projects', 'project');
   this.get('/pricings', 'pricing');
@@ -243,14 +241,6 @@ export default function() {
    return;
   });
 
-  this.post('/collaborations', () => {
-   return;
-  });
-
-  this.post('/collaborations/:id', () => {
-   return;
-  });
-
   this.post('/rescan', () => {
    return;
   });
@@ -276,10 +266,6 @@ export default function() {
   });
 
   this.delete('/teams', () => {
-   return;
-  });
-
-  this.delete('/collaborations/:id', () => {
    return;
   });
 

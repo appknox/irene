@@ -52,9 +52,6 @@ export default {
   "clickingHere": "clicking here",
   "clickOnDynamicScan": "Click on Start Dynamic Scan",
   "closeModal": "Exit Full Screen",
-  "collaborationAdded": "Collaboration is added!",
-  "collaborationRemoved": "is removed from the collaboration",
-  "collaborations": "Collaborations",
   "companyName": "Company Name",
   "compare": "Compare",
   "compareWarningSameFiles": "You are comparing 2 same files",
@@ -428,10 +425,6 @@ export default {
     "resendInvitation": "Are you sure you want to resend this invitation?"
   },
   "promptBox": {
-    "collaborationPrompt": {
-      "title": "Are you sure you want to remove this team from collaboration?",
-      "description": "Please enter the team name which you want to remove from collaboration"
-    },
     "removeMemberPrompt": {
       "title": "Are you sure you want to remove this team member?",
       "description": "Please enter the name of team member who you want to remove"
@@ -455,9 +448,6 @@ export default {
       "title": "Disable Multi Factor Authentication",
       "description": "If you turn off Multi Factor Authentication, your account will only be protected by your password.",
       "enterOTP": "To confirm, please enter the OTP"
-    },
-    "collaboration": {
-      "title": "Add Team to project"
     },
     "addMember": {
       "title": "Add Member"

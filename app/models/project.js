@@ -11,7 +11,6 @@ const Project = DS.Model.extend(BaseModelMixin, {
   packageName: DS.attr('string'),
   platform: DS.attr('number'),
   source: DS.attr('number'),
-  collaborations: DS.hasMany('collaboration', {inverse: 'project'}),
   githubRepo: DS.attr('string'),
   jiraProject: DS.attr('string'),
   testUser:DS.attr('string'),
