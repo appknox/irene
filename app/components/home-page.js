@@ -4,6 +4,7 @@ import triggerAnalytics from 'irene/utils/trigger-analytics';
 const {inject: {service}} = Ember;
 
 export default Ember.Component.extend({
+  ajax: service(),
   session: service(),
   organization: service(),
   me: service(),

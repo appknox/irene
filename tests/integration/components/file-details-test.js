@@ -7,6 +7,7 @@ import { test, moduleForComponent } from 'ember-qunit';
 moduleForComponent('file-details', 'Integration | Component | file details', {
   unit: true,
   needs: [
+    'service:ajax',
     'service:i18n',
     'helper:vulnerability-type',
     'component:fa-icon',

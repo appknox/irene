@@ -12,14 +12,8 @@ test('it renders', function(assert) {
 
   this.render(hbs`{{add-sso-members}}`);
 
-  assert.equal(this.$().text().trim(), '');
-
-  // Template block usage:
-  this.render(hbs`
-    {{#add-sso-members}}
-      template block text
-    {{/add-sso-members}}
-  `);
-
-  assert.equal(this.$().text().trim(), 'template block text');
+  assert.equal(
+    this.$().text().split("\n").map(a=>a.trim()).filter(a=>a).join(" "),
+    "Add SSO members Add SSO members Email (for multiple entries, separate by comma) or Upload CSV file Add Members"
+  );
 });

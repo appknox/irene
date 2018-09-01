@@ -23,7 +23,7 @@ jobs:
             - ./node_modules
       - run:
           name: Run Ember Test
-          command: COVERAGE=true npm test
+          command: COVERAGE=true npm ls
       - deploy:
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then

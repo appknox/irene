@@ -2,6 +2,7 @@ import Ember from 'ember';
 import ENUMS from 'irene/enums';
 
 const FileDetailsComponent = Ember.Component.extend({
+  ajax: Ember.inject.service(),
 
   sortImpactAscending: false,
 
