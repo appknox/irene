@@ -263,8 +263,9 @@ $fractional-pts: q 0.25, h 0.5, 3q 0.75
   margin-top: 13px
 
 .appknox-logo img
-  width: 100px
-  margin-left: auto
+  max-width: 56%
+  max-height: 9em
+  margin: auto
 
 .font-size12
   font-size: 12px
@@ -332,46 +333,6 @@ input
 
 button:hover, button:active, button:focus
   transition: all 0.4s!important
-
-.top-nav
-  width: 100%
-  margin-top: -10px
-  height: 50px
-  // background-color: #424651
-  background: darken($sidebar-bg, 3%)
-  margin-left: 0px
-  // border-left: 1px solid #ccc
-  position: fixed
-  z-index: 9
-  .scan-text
-    font-weight: lighter
-    margin-top: 5px
-    margin-left: 10px
-    color: #FFF
-    padding: 10px 0px
-  .project-count
-    padding: 3px
-    min-width: 120px
-    margin-top: 3px
-    a
-      font-size: 14px
-      border-radius: 5px
-      padding: 3px 10px
-      color: #FFF
-  .top-icons
-    margin-right: 15%
-    margin-top: -5px
-    a
-      max-width: 150px
-      overflow: hidden
-      text-overflow: ellipsis
-      white-space: nowrap
-      color: #e5e5e5
-      margin: 10px 10px
-      .sidebar-icons
-        margin-top: 1px
-      &:hover
-        color: #FFF
 
 canvas.other-devices
   margin-top: 30px
@@ -639,6 +600,46 @@ div[class^="_c-notification__container"]
 .project-container
   margin-top: 10px
 
+.top-nav
+  width: 100%
+  margin-top: -10px
+  height: 50px
+  // background-color: #424651
+  background: darken($sidebar-bg, 3%)
+  margin-left: 0px
+  // border-left: 1px solid #ccc
+  position: fixed
+  z-index: 9
+  .scan-text
+    font-weight: lighter
+    margin-top: 5px
+    margin-left: 1.5em
+    color: #FFF
+    padding: 10px 0px
+  .project-count
+    padding: 3px
+    min-width: 120px
+    margin-top: 3px
+    a
+      font-size: 14px
+      border-radius: 5px
+      padding: 3px 10px
+      color: #FFF
+  .top-icons
+    margin-right: 15%
+    margin-top: -5px
+    a
+      max-width: 150px
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
+      color: #e5e5e5
+      margin: 10px 10px
+      .sidebar-icons
+        margin-top: 1px
+      &:hover
+        color: #FFF
+
 .side-menu
   background-color: $sidebar-bg
   z-index: 10
@@ -667,7 +668,6 @@ div[class^="_c-notification__container"]
   .appknox-logo
     width: 100%
     margin-bottom: 1em
-
 
 .menu-list
   i
@@ -706,6 +706,22 @@ div[class^="_c-notification__container"]
     background-color: #FFFFFF
     .has-text-centered h6
       color: #6B6B6B
+  .badge-square.is-sidebar
+    background: #9a9fab
+    color: #ffffff
+  .top-nav
+    background: #f3f3f3
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)
+    .scan-text
+      color: #7c7f88
+    .top-icons a
+      color: #7c7f88
+      &:hover
+        color: #28282b
+      &.button
+        border-color: #7c7f88
+        &:hover
+          border-color: #28282b
 
 .scroll-down
   width: 14%
@@ -2781,14 +2797,18 @@ $attachment-icon-width: 4em
 .security-dashboard
   .appknox-logo
     margin-top: 18px
+    width: 12em
     a
       pointer-events: none
+  .top-columns
+    margin-right: 0
   .top-nav
     height: 60px
     margin-left: 10px
     border-left-width: 0px
     .top-icons
       margin-top: 10px
+      margin-right: 0
   & + div
     .tabs
       margin-top: 60px!important
