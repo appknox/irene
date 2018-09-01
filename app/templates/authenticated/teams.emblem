@@ -1,4 +1,0 @@
-= create-team
-.team-container.box-container
-  = team-list teams=model
-= invitation-list

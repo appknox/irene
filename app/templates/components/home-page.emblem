@@ -25,27 +25,34 @@ if isLoaded
   else
     .columns.columns-main-container
       .column.is-one-sixth.side-menu
-        .appknox-logo
-          = img-logo
-          ul.menu-list.text-center
+        .side-menu-fixed
+          .appknox-logo
+            = img-logo
+          ul.menu-list.text-center.margin-top20
             li
               = link-to 'authenticated.projects' class="mp-auth-projects"
-                = fa-icon "tasks" class="sidebar-icons"
-                = t "projects"
+                div
+                  = fa-icon "tasks" class="sidebar-icons"
+                  = t "projects"
+                span.badge-square.is-sidebar.content-right
+                  | #{organization.selected.projectsCount}
             li
-              = link-to 'authenticated.teams' class="mp-auth-teams"
-                = fa-icon "user" class="sidebar-icons"
-                = t "teams"
+              = link-to 'authenticated.organization.namespaces' class="mp-auth-teams"
+                div
+                  = fa-icon "users" class="sidebar-icons"
+                  = t "organization"
             li
               = link-to 'authenticated.settings' class="mp-auth-setting"
-                = fa-icon "cog" class="sidebar-icons"
-                = t "settings"
-
-            if user.ifBillingIsNotHidden
-              li
-                = link-to 'authenticated.billing' class="mp-auth-billing"
-                  = fa-icon "tag" class="sidebar-icons"
-                  = t "billing"
+                div
+                  = fa-icon "cog" class="sidebar-icons"
+                  = t "accountSettings"
+            if me.org.is_owner
+              if user.ifBillingIsNotHidden
+                li
+                  = link-to 'authenticated.billing' class="mp-auth-billing"
+                    div
+                      = fa-icon "tag" class="sidebar-icons"
+                      = t "billing"
 
           .status-updates
             = submission-list
@@ -65,14 +72,9 @@ if isLoaded
                       | &nbsp;
                       if isUploading
                         | #{t "uploading"}
-                        if progress
-                          | &nbsp;:#{progress}%
+                        | &nbsp;:#{progress}%
                       else
                         = t "uploadApp"
-              .column.is-one-quarter
-                .project-count
-                  = link-to 'authenticated.projects' class="mp-auth-settings highlighted-button"
-                    | #{user.totalProjects}
               .column.content-right.top-icons
                 if isSecurityEnabled
                   a href="/security/projects" target="_blank" class="button security-link"

@@ -10,7 +10,7 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 
 const { location } = window;
 
-const {inject: {service}, isEmpty, RSVP} = Ember;
+const {inject: {service}} = Ember;
 
 const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
 
@@ -21,6 +21,7 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
   realtime: service(),
   mixpanel: service(),
   trial: service(),
+  org: service('organization'),
   socketIOService: service('socket-io'),
 
   tNewScanStarted: t("newScanStarted"),
@@ -30,12 +31,13 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
     return this._super(transition);
   },
 
-  model() {
+  async model() {
     const userId = this.get("session.data.authenticated.user_id");
+    await this.get('org').load();
     return this.get('store').find('user', userId);
   },
 
-  afterModel(user, transition){
+  afterModel(user){
     let error;
     const data = {
       userId: user.get("email"),
@@ -55,7 +57,7 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
       }
       );
       window.Intercom('trackEvent', 'logged-in');
-    } catch (error2) {}
+    } catch (e) {error = e;}
     try {
       const mixpanel = this.get("mixpanel");
       mixpanel.identify(user.get("id"));
@@ -63,8 +65,9 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
         "$name": user.get("username"),
         "$email": user.get("email")
       });
-    } catch (error3) {}
+    } catch (e) {error = e;}
     try {
+      // eslint-disable-next-line no-undef
       Rollbar.configure({
         payload: {
           person: {
@@ -74,8 +77,9 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
           }
         }
       });
-    } catch (error1) { error = error1; }
+    } catch (e) { error = e; }
     try {
+      // eslint-disable-next-line no-undef
       pendo.initialize({
         visitor: {
           id: user.get("id"),
@@ -86,7 +90,9 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
         }
       });
 
-    } catch (error1) { error = error1; }
+    } catch (e) { error = e; }
+    // eslint-disable-next-line no-console
+    console.log(error);
 
     const trial = this.get("trial");
     trial.set("isTrial", user.get("isTrial"));
@@ -176,6 +182,11 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
       if (!Ember.isEmpty(csbDict)) {
         triggerAnalytics('feature', csbDict);
       }
+    },
+
+    invalidateSession() {
+      triggerAnalytics('logout');
+      this.get('session').invalidate();
     }
   }
 }

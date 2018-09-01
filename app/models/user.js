@@ -16,12 +16,12 @@ const User = DS.Model.extend({
   lastName: DS.attr('string'),
   ownedProjects: DS.hasMany('project', {inverse:'owner'}),
   projects: DS.hasMany('project'),
-  teams: DS.hasMany('team', {inverse: 'users'}),
+  organizationTeams: DS.hasMany('organizationTeam', {inverse: 'users'}),
   ownedTeams: DS.hasMany('team', {inverse: 'owner'}),
   pricings: DS.hasMany('pricing'),
   submissions: DS.hasMany('submission', {inverse:'user'}),
   namespaces: DS.attr('string'),
-  collaborations: DS.hasMany('collaboration', {inverse:'user'}),
+  organization: DS.belongsTo('organization', {inverse: 'users'}),
   expiryDate: DS.attr('date'),
   devknoxExpiry: DS.attr('date'),
   projectCount: DS.attr('number'),
@@ -80,11 +80,10 @@ const User = DS.Model.extend({
   }).property('billingHidden'),
 
   getExpiryDate: (function() {
-    let expiryDate;
     if (ENV.isAppknox) {
-      return expiryDate = this.get("expiryDate");
+      return this.get("expiryDate");
     } else {
-      return expiryDate = this.get("devknoxExpiry");
+      return this.get("devknoxExpiry");
     }
   }).property("expiryDate"),
 

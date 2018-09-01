@@ -1,0 +1,23 @@
+<button class="is-primary" onclick={{perform openInviteMemberModal}}>
+  <i class="fa fa-envelope margin-r-h"></i>&nbsp;{{t "inviteMember"}}
+</button>
+
+{{#modal-card class="input-modal" isActive=showInviteMemberModal title=(t 'inviteMember')}}
+  <div class="card-body">
+    <div class="card-wrapper">
+      <form {{action (perform inviteMember) on="submit"}}>
+        <p class="control">
+          {{input class="form-control input input-width" placeholder=(t 'email') type="text" value=email autofocus="autofocus"}}
+        </p>
+        <button class="margin-t-1 is-primary" type="submit" disabled={{isInvitingMember}}>
+          {{#if isInvitingMember}}
+            <div class="fa-font-size">
+              <i class="fa fa-spinner fa-spin"></i>&nbsp;
+            </div>
+          {{/if}}
+          {{t "invite"}}
+        </button>
+      </form>
+    </div>
+  </div>
+{{/modal-card}}

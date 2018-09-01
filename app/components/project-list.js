@@ -9,9 +9,10 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
   i18n: Ember.inject.service(),
 
   classNames: ["columns"],
-
+  projects: null,
+  hasProjects: Ember.computed.gt('projects.meta.count', 0),
   query: "",
-  targetObject: "project",
+  targetObject: "OrganizationProject",
 
   sortingKey: "lastFileCreatedOn",
   sortingReversed: true,
@@ -62,26 +63,32 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
 
 
   extraQueryStrings: Ember.computed("query", "sortingKey", "sortingReversed", "platformType", function() {
+    const platform = this.get("platformType")
+    const reverse = this.get("sortingReversed")
+    const sorting = Ember.String.underscore(this.get("sortingKey"))
+
     const query = {
-      query: this.get("query"),
-      sortingKey: this.get("sortingKey"),
-      reverse: this.get("sortingReversed"),
-      platform: this.get("platformType")
+      q: this.get("query"),
+      sorting: sorting
     };
+    if(platform != null && platform != -1) {
+      query["platform"] = platform;
+    }
+    if (reverse) {
+      query["sorting"] = '-' + sorting;
+    }
     return JSON.stringify(query, Object.keys(query).sort());
   }),
 
   sortingKeyObjects: (function() {
     const tDateUpdated = this.get("tDateUpdated");
     const tDateCreated = this.get("tDateCreated");
-    const tProjectName = this.get("tProjectName");
     const tPackageName = this.get("tPackageName");
     const tLeastRecent = this.get("tLeastRecent");
     const tMostRecent = this.get("tMostRecent");
     const keyObjects = [
       { key: "lastFileCreatedOn", text: tDateUpdated },
-      { key: "createdOn", text: tDateCreated },
-      { key: "name", text: tProjectName },
+      { key: "id", text: tDateCreated },
       { key: "packageName", text: tPackageName }
     ];
     const keyObjectsWithReverse = [];
@@ -92,13 +99,13 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
         keyObjectFull.key = keyObject.key;
         keyObjectFull.text = keyObject.text;
         if (reverse) {
-          if (["lastFileCreatedOn", "createdOn"].includes(keyObject.key)) {
+          if (["lastFileCreatedOn", "id"].includes(keyObject.key)) {
             keyObjectFull.text += tMostRecent;
           } else {
             keyObjectFull.text += "(Z -> A)";
           }
         } else {
-          if (["lastFileCreatedOn", "createdOn"].includes(keyObject.key)) {
+          if (["lastFileCreatedOn", "id"].includes(keyObject.key)) {
             keyObjectFull.text += tLeastRecent;
           } else {
             keyObjectFull.text += "(A -> Z)";
@@ -113,6 +120,7 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
   platformObjects: ENUMS.PLATFORM.CHOICES.slice(0, +-4 + 1 || undefined),
   actions: {
     sortProjects() {
+      // eslint-disable-next-line no-undef
       const select = $(this.element).find("#project-sort-property");
       const [sortingKey, sortingReversed] = filterPlatformValues(select.val());
       this.set("sortingKey", sortingKey);
@@ -120,6 +128,7 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
     },
 
     filterPlatform() {
+      // eslint-disable-next-line no-undef
       const select = $(this.element).find("#project-filter-platform");
       this.set("platformType", select.val());
     }

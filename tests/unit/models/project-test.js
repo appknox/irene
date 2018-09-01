@@ -7,7 +7,6 @@ moduleForModel('project', 'Unit | Model | project', {
   needs: [
     "model:user",
     "model:file",
-    "model:collaboration",
     'service:i18n',
     'locale:en/translations',
     'locale:en/config',

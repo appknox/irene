@@ -54,10 +54,10 @@ const ENUMS = {
     DONE: 3
   },
 
-  COLLABORATION_ROLE: {
-    ADMIN: 0,
-    MANAGER: 1,
-    READ_ONLY: 2
+  ORGANIZATION_ROLES: {
+    MEMBER: 0,
+    OWNER: 1,
+    ADMIN: 2
   },
 
   SUBMISSION_STATUS: {

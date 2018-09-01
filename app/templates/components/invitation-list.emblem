@@ -1,13 +1,20 @@
-if invitations
+if orgInvitations
   .columns
     .column.margin-left
-      h4.bold.black-text
-        = t "pendingInvitations"
-      table.pending-invitation-table
+      table.org-table
         tr
-          th
+          th.uppercase-text
             = t "email"
-          th
+          th.uppercase-text
             = t "team"
-        each invitations as |invitation|
-          = pending-invitation invitation=invitation
+            | /
+            = t "organization"
+          th
+            = t "actions"
+        each orgInvitations as |invitation|
+          = pending-invitation invitation=invitation organization=organization
+else
+  .not-found
+    h4
+      = fa-icon "exclamation-triangle"
+      | no invitations

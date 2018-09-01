@@ -6,7 +6,7 @@ const TeamMemberComponent = Ember.Component.extend({
   i18n: Ember.inject.service(),
   ajax: Ember.inject.service(),
   notify: Ember.inject.service('notification-messages-service'),
-  team: null,
+  organizationTeam: null,
   tagName: ["tr"],
 
   isRemovingMember: false,
@@ -23,8 +23,9 @@ const TeamMemberComponent = Ember.Component.extend({
     if (promptedItem !== teamMember) {
       return this.get("notify").error(tEnterRightUserName);
     }
-    const teamId = this.get("team.id");
-    const url = [ENV.endpoints.teams, teamId, ENV.endpoints.members, teamMember].join('/');
+    const teamId = this.get("organizationTeam.id");
+    const orgId = this.get("organizationTeam.organization.id");
+    const url = [ENV.endpoints.organizations, orgId, ENV.endpoints.teams, teamId, ENV.endpoints.members, teamMember].join('/');
     this.set("isRemovingMember", true);
     this.get("ajax").delete(url)
     .then((data) => {

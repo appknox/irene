@@ -8,15 +8,22 @@ const ConfirmBoxComponent = Ember.Component.extend({
   layoutName: "components/confirm-box",
   delegate: null,
 
+  confirmAction(){},
+  cancelAction(){},
+
   actions: {
 
     clearModal() {
       this.set("isActive", false);
+      this.get("cancelAction")();
     },
 
     sendCallback() {
       const delegate = this.get("delegate");
-      delegate.confirmCallback(this.get("key"));
+      this.get("confirmAction")();
+      if (delegate && delegate.confirmCallback) {
+        delegate.confirmCallback(this.get("key"));
+      }
     }
   }
 });

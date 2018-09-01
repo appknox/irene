@@ -1,0 +1,2 @@
+.org-container
+  = organization-team-detail team=model.team organization=model.organization

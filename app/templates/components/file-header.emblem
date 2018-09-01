@@ -77,7 +77,7 @@
 
 .card.is-fullwidth.app-details-card
   header.card-header
-    .column
+    .column.is-one-third
       .tabs.is-medium.is-boxed
         ul
           li class=scanDetailsClass

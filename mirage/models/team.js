@@ -4,7 +4,5 @@ export default Model.extend({
 
   owner: belongsTo('user'),
   users: hasMany('user'),
-  collaborations: hasMany('collaboration')
-
 
 });

@@ -34,6 +34,7 @@ const VncViewerComponent = Ember.Component.extend({
     }
     const canvasEl = this.element.getElementsByClassName("canvas")[0];
     const that = this;
+    // eslint-disable-next-line no-undef
     this.set("rfb", new RFB({
       'target': canvasEl,
       'encrypt': ENV.deviceFarmSsl,

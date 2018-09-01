@@ -1,0 +1,21 @@
+<td>
+  <div class="bold font-legible black-text">
+    {{invitation.email}}
+  </div>
+</td>
+<td class="text-lightgray">
+  {{moment-from-now invitation.createdOn}}
+</td>
+<td>
+  <button class="is-default is-icon no-border" title="{{t 'resendInvitation'}}" onclick={{perform openResendInvitationConfirmBox}}>
+    <i class="fa fa-repeat"></i>
+  </button>
+</td>
+<td>
+  <button class="is-primary is-icon no-border" title="{{t 'deleteInvitation'}}" onclick={{perform openDeleteInvitationConfirmBox}}>
+    <i class="fa fa-trash-o"></i>
+  </button>
+</td>
+
+{{confirm-box isActive=showResendInvitationConfirmBox title=(t 'confirmBox.resendInvitation') delegate=this confirmAction=(action "confirmResendProxy") disabled=isResendtingInvitation key="resend"}}
+{{confirm-box isActive=showDeleteInvitationConfirmBox title=(t 'confirmBox.deleteInvitation') delegate=this confirmAction=(action "confirmDeleteProxy") disabled=isDeletetingInvitation key="delete"}}

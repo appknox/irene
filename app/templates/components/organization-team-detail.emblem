@@ -1,0 +1,33 @@
+.columns
+  .column
+    = link-to 'authenticated.organization.teams'
+      = fa-icon "angle-left"
+      | &nbsp; back to teams
+
+.columns
+  .column
+    h3.margin-t-2.margin-b-1.bold.black-text
+      if me.org.is_admin
+        div class=showEdit:hide:show
+          = team.name
+          small.text-lightgray.edit-button.top0 click="editTeamName"
+            = fa-icon "pencil"
+        div class=saveEdit:edit:save
+          .vertical-align-center
+            = input class="input edit-input maxwidth65" type="text" placeholder=team.name value=team.name
+            button.is-success.no-border.margin-l-q click="updateTeam"
+              = fa-icon "check"
+            button.is-primary.no-border.margin-l-q click="cancelEditing"
+              = fa-icon "times"
+      else
+        = team.name
+
+hr.margin-v-0
+
+.margin-v-3q
+  = organization-team-project-list organization=organization team=team
+.margin-t-3.margin-b-h
+  = organization-team-member-list members=team.members organization=organization team=team
+if me.org.is_admin
+  .margin-t-3.margin-b-h
+    = organization-team-invitation-list organization=organization team=team

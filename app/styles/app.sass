@@ -16,6 +16,123 @@ body
 
 /* Margin Defines*/
 
+$color-text: #6B6B6B
+$color-table: #565d66
+$sidebar-bg: #424651
+
+h2
+  font-size: 1.65em
+
+h3
+  font-size: 1.5em
+
+.font-medium
+  font-size: 1.2em
+.font-legible
+  font-size: 1.1em
+.font-regular
+  font-size: 1em
+.font-small
+  font-size: 0.95em
+
+.text-lightgray
+  color: lighten($color-table, 28%)
+.text-darkgray
+  color: $color-table
+.text-success
+  color: $success
+.table-lightgray
+  tr
+    border: 1px solid lighten(#eaecef, 2%)
+    min-height: 3em
+  th
+    background-color: darken(#f6f8fa, 1%)
+    color: darken(#586069, 1%)
+  td
+    font-size: 0.9em
+  th, td
+    border-width: 0px
+    vertical-align: middle
+    &:first-child
+      text-align: left
+      padding-left: 1em
+  .btn-table
+    height: auto
+    i
+      padding-right: 0.15em
+  .td-with-btn
+    height: 3.5em
+    display: flex
+    align-items: center
+
+.empty-state
+  font-style: italic
+  color: lighten($color-table, 30%)
+  background: lighten($color-table, 61%)
+  border: 0.1em solid lighten($color-table, 59%)
+  border-radius: 0.2em
+  padding: 1.5em
+  display: flex
+  align-items: center
+  justify-content: center
+  .fa
+    font-size: 0.9em
+    margin-right: 0.5em
+    color: lighten($color-table, 45%)
+
+.fill-primary
+  background: $primary
+  color: $light
+
+$badge-small-size: 1.5em
+.badge-square
+  min-width: $badge-small-size * 1.3
+  height: $badge-small-size
+  border-radius: 0.3em
+  display: flex
+  align-items: center
+  justify-content: center
+  font-size: 0.82em
+  font-weight: bold
+  &.is-default
+    background: lighten($color-table, 51%)
+  &.is-sidebar
+    background: darken($sidebar-bg, 5%)
+    color: lighten($sidebar-bg, 65%)
+
+$spacers: margin padding
+$fractional-pts: q 0.25, h 0.5, 3q 0.75
+
+@each $spacer in $spacers
+  @each $fp in $fractional-pts
+    .#{$spacer}-t-#{nth($fp, 1)}, .#{$spacer}-v-#{nth($fp, 1)}
+      #{$spacer}-top: #{nth($fp, 2)}em
+    .#{$spacer}-b-#{nth($fp, 1)}, .#{$spacer}-v-#{nth($fp, 1)}
+      #{$spacer}-bottom: #{nth($fp, 2)}em
+    .#{$spacer}-l-#{nth($fp, 1)}, .#{$spacer}-h-#{nth($fp, 1)}
+      #{$spacer}-left: #{nth($fp, 2)}em
+    .#{$spacer}-r-#{nth($fp, 1)}, .#{$spacer}-h-#{nth($fp, 1)}
+      #{$spacer}-right: #{nth($fp, 2)}em
+
+@each $spacer in $spacers
+  @for $i from 0 through 4
+    .#{$spacer}-t-#{$i}, .#{$spacer}-v-#{$i}
+      #{$spacer}-top: #{$i}em
+    .#{$spacer}-b-#{$i}, .#{$spacer}-v-#{$i}
+      #{$spacer}-bottom: #{$i}em
+    .#{$spacer}-l-#{$i}, .#{$spacer}-h-#{$i}
+      #{$spacer}-left: #{$i}em
+    .#{$spacer}-r-#{$i}, .#{$spacer}-h-#{$i}
+      #{$spacer}-right: #{$i}em
+    .#{$spacer}-t-#{$i}h, .#{$spacer}-v-#{$i}h
+      #{$spacer}-top: #{$i + 0.5}em
+    .#{$spacer}-b-#{$i}h, .#{$spacer}-v-#{$i}h
+      #{$spacer}-bottom: #{$i + 0.5}em
+    .#{$spacer}-l-#{$i}h, .#{$spacer}-h-#{$i}h
+      #{$spacer}-left: #{$i + 0.5}em
+    .#{$spacer}-r-#{$i}h, .#{$spacer}-h-#{$i}h
+      #{$spacer}-right: #{$i + 0.5}em
+
 .margin-top30
   margin-top: 30px
 
@@ -104,6 +221,12 @@ body
 .padding-bottom0
   padding-bottom: 0px!important
 
+.top0
+  top: 0px!important
+
+.maxwidth65
+  max-width: 65%!important
+
 .margin-both
   margin-left: 10px
   margin-right: 10px
@@ -140,11 +263,26 @@ body
   margin-top: 13px
 
 .appknox-logo img
-  width: 100px
-  margin-left: auto
+  max-width: 56%
+  max-height: 9em
+  margin: auto
 
 .font-size12
   font-size: 12px
+
+button, .button
+  border-radius: 5px
+  .fa
+    font-size: inherit
+
+button
+  &.no-border
+    border: none
+  &.is-icon
+    font-size: 16px
+    padding: 0.3em 0.6em
+.width100
+  width: 100px
 
 .black-text
   color: #323232
@@ -178,69 +316,23 @@ body
   margin: 0 auto
   width: 100%
 
-// FIXME: Remove this after updating bohemia
-.menu-list
-  padding: 0px
-  text-align: center
-  margin-top: 20px!important
-  a
-    padding: 5px 0px
-    font-weight: lighter
-    color: #e5e5e5
-    margin-left: -40px
-    &:hover
-      font-weight: bolder
-      color: #e5e5e5
-      background-color: lighten(#424651, 3%)
-  a.active
-    color: #FFF
-    font-weight: 900
-    background-color: lighten(#424651, 5%)
+.edit-button
+  margin-left: 20px
+  position: relative
+  top: 5px
+  .fa-check
+    color: $green
+  .fa-times
+    color: $red
+
+.edit-input
+  max-width: 30%
 
 input
   display: block
 
 button:hover, button:active, button:focus
   transition: all 0.4s!important
-
-.top-nav
-  width: 100%
-  margin-top: -10px
-  height: 50px
-  background-color: #424651
-  margin-left: 0px
-  border-left: 1px solid #ccc
-  position: fixed
-  z-index: 100
-  .scan-text
-    font-weight: lighter
-    margin-top: 5px
-    margin-left: 10px
-    color: #FFF
-    padding: 10px 0px
-  .project-count
-    padding: 3px
-    min-width: 120px
-    margin-top: 3px
-    a
-      font-size: 14px
-      border-radius: 5px
-      padding: 3px 10px
-      color: #FFF
-  .top-icons
-    margin-right: 15%
-    margin-top: -5px
-    a
-      max-width: 150px
-      overflow: hidden
-      text-overflow: ellipsis
-      white-space: nowrap
-      color: #e5e5e5
-      margin: 10px 10px
-      .sidebar-icons
-        margin-top: 1px
-      &:hover
-        color: #FFF
 
 canvas.other-devices
   margin-top: 30px
@@ -355,6 +447,29 @@ select
 .file-input
   position: fixed
   top: -100px
+
+.input-file
+  padding: 0.45em
+
+.or
+  display: flex
+  align-items: center
+  justify-content: center
+  position: relative
+  &::before
+    content: ''
+    height: 0.1em
+    background: lighten($color-table, 58%)
+    width: 47%
+    position: absolute
+    left: 0
+  &::after
+    content: ''
+    height: 0.1em
+    background: lighten($color-table, 58%)
+    width: 47%
+    position: absolute
+    right: 0
 
 .not-found
   text-align: center
@@ -485,8 +600,52 @@ div[class^="_c-notification__container"]
 .project-container
   margin-top: 10px
 
+.top-nav
+  width: 100%
+  margin-top: -10px
+  height: 50px
+  // background-color: #424651
+  background: darken($sidebar-bg, 3%)
+  margin-left: 0px
+  // border-left: 1px solid #ccc
+  position: fixed
+  z-index: 9
+  .scan-text
+    font-weight: lighter
+    margin-top: 5px
+    margin-left: 1.5em
+    color: #FFF
+    padding: 10px 0px
+  .project-count
+    padding: 3px
+    min-width: 120px
+    margin-top: 3px
+    a
+      font-size: 14px
+      border-radius: 5px
+      padding: 3px 10px
+      color: #FFF
+  .top-icons
+    margin-right: 15%
+    margin-top: -5px
+    a
+      max-width: 150px
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
+      color: #e5e5e5
+      margin: 10px 10px
+      .sidebar-icons
+        margin-top: 1px
+      &:hover
+        color: #FFF
+
 .side-menu
-  background-color: #424651
+  background-color: $sidebar-bg
+  z-index: 10
+  &-fixed
+    position: fixed
+    width: 16.2%
   .box
     background-color: #f0f0f0
     box-shadow: none
@@ -507,8 +666,62 @@ div[class^="_c-notification__container"]
     .container
       margin: 0px 5px !important
   .appknox-logo
-    position: fixed
-    width: 16%
+    width: 100%
+    margin-bottom: 1em
+
+.menu-list
+  i
+    min-width: 2.1em
+    color: lighten($sidebar-bg, 25%)
+  a
+    padding: 0.4em 1em
+    color: lighten($sidebar-bg, 45%)
+    font-weight: 500
+    display: flex
+    justify-content: space-between
+    align-items: center
+    &:hover
+      color: lighten($sidebar-bg, 65%)
+      background-color: lighten(#424651, 3%)
+      font-weight: 500
+  a.active
+    color: lighten($sidebar-bg, 65%)
+    background-color: lighten($sidebar-bg, 5%)
+
+.theme-light
+  .side-menu
+    background-color: #FFFFFF
+    .menu-list a
+      color: #6B6B6B
+      &:hover, &:active, &:focus
+        color: #414651
+        background-color: lighten(#ededed, 3%)
+      &.active, &.active:hover, &.active:active, &.active:focus
+        background-color: #ededed
+        color: #414651
+    .menu-label
+      background-color: lighten(#ededed, 3%)
+      color: #6b6b6b
+  .auth-main-container
+    background-color: #FFFFFF
+    .has-text-centered h6
+      color: #6B6B6B
+  .badge-square.is-sidebar
+    background: #9a9fab
+    color: #ffffff
+  .top-nav
+    background: #f3f3f3
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)
+    .scan-text
+      color: #7c7f88
+    .top-icons a
+      color: #7c7f88
+      &:hover
+        color: #28282b
+      &.button
+        border-color: #7c7f88
+        &:hover
+          border-color: #28282b
 
 .scroll-down
   width: 14%
@@ -524,9 +737,6 @@ div[class^="_c-notification__container"]
     border-color: #b3b3b3!important
     box-shadow: 0 0 1px #808080
 
-button, .button
-  border-radius: 5px
-
 .card-form
   width: 40%
   margin-left: 30%
@@ -536,6 +746,7 @@ button, .button
 
 .api-scanning
   .warning-band
+    // background-color: #F5D76E
     padding: 0px 10px
     color: #404040
     .column
@@ -544,21 +755,16 @@ button, .button
       &:nth-child(2)
         border-width: 2px 2px 2px 0px
         border-style: solid
-        border-color: lighten($default, 40%)
-  .fa
-    &-exclamation-triangle
-      margin-top: 20px
-      margin-left: 10px
-      font-size: 40px
-    &-info-circle
-      margin-top: 5px
-      margin-left: 15px
-      font-size: 40px
-    &-trash-o
-      color: $red
-      margin-left: 10px
-      margin-top: 10px
-      cursor: pointer
+        border-color: lighten($default, 50%)
+  .fa-exclamation-triangle
+    margin-top: 20px
+    margin-left: 10px
+    font-size: 40px
+  .fa.fa-trash-o
+    color: $red
+    margin-left: 10px
+    margin-top: 10px
+    cursor: pointer
   .position-icons
     margin-top: 18px!important
   .edit-filter
@@ -976,6 +1182,12 @@ b.bold
 .show
   display: block
 
+.edit
+  display: block
+
+.save
+  display: none
+
 .visible
   visibility: visible
 
@@ -1296,8 +1508,57 @@ ul.risk-table
 .team-container.box-container
   padding-bottom: 20px
 
-.team-details-container
-  padding: 30px 150px
+.org
+  &-header
+    margin: -10px -10px 10px -10px
+    background: darken(#f6f8fa, 1%)
+    &-name
+      padding: 2em 0 1em
+    .tabs.is-boxed
+      li.is-active a
+        padding-top: 5px
+        padding-bottom: 3px
+      a
+        padding-top: 5px
+        border-top-width: 3px
+        i
+          margin-right: 0.5em
+          margin-left: 0.2em
+  &-container
+    max-width: 50em
+    margin: auto
+    padding-bottom: 5em
+  &-view
+    background-color: #fafbfc
+    margin-left: -10px
+    margin-right: -10px
+    .column
+      padding-bottom: 0px
+
+  &-table
+    tr
+      border: 1px solid lighten(#eaecef, 2%)
+    td
+      font-size: 12px
+    th
+      background-color: darken(#f6f8fa, 1%)
+      color: darken(#586069, 1%)
+      // padding: 10px 0px
+    th, td
+      border-width: 0px
+      vertical-align: middle
+      &:first-child
+        text-align: left
+        padding-left: 1em
+      // &:last-child
+      //   text-align: right
+      //   padding-right: 30px
+    .fa-times
+      color: #EF4836
+      cursor: pointer
+    .remove
+      font-size: 14px
+      color: $critical
 
 .team-overview-card
   header:nth-child(1)
@@ -1313,32 +1574,17 @@ ul.risk-table
       margin-top: 10px
       border-right: 1px solid rgba(107, 107, 107, 0.1)
 
-.team-details-table
-  .columns
-    .column
-      padding: 0px
-      margin-top: 15px
-  tr
-    th, td
-      text-align: center
-      border: 1px solid #b8b8b8
-      padding: 10px 0px
-    th
-      background-color: lighten(#424651, 5%)
-      color: #fff
-  button.add-member
-    color: $white
-    margin-right: 10px
-    &:hover
-      border-color: $white
-  .fa-times
-    color: #EF4836
-    cursor: pointer
+.invoice-table, .token-table
+  .fa
+    font-size: 16px
+  .fa-trash-o
+    color: $critical
+  .copy-token
+    color: $info
 
 .pending-invitation-table
   margin: auto
   width: 70%
-  @extend .team-details-table
 
 .team-card
   min-height: 260px
@@ -1391,24 +1637,6 @@ button.delete-button
   ul
     list-style: disc
     margin-left: 20px
-
-.collaboration-container
-  padding: 10px 100px
-  .collaboration-table
-    th, td
-      text-align: center
-      border: 1px solid #b8b8b8
-      padding: 10px 0px
-    th
-      background-color: lighten(#424651, 5%)
-      color: #fff
-  select
-    width: 150px
-  table
-    tr
-      th,td
-        vertical-align: middle
-        text-align: center
 
 .tag.delete-tag
   background-color: $red
@@ -1489,12 +1717,24 @@ button.delete-button
       margin-top: 45px
 
 .tabs.is-boxed
-  li.is-active a
-    padding: 2px 10px
-    border-color: #f0f0f0
-    border-top: 3px solid #EF4836
+  li
+    min-width: 100px
+    &.is-active a
+      padding: 2px 10px
+      border-color: #f0f0f0
+      border-top: 3px solid #EF4836
+      color: #000
   a
     padding: 3px 10px
+    span.count
+      background-color: #e1e4e8
+      padding: 0px 5px
+      margin-left: 5px
+      border-radius: 60px
+      font-size: 11px
+    i
+      margin-top: -2px
+      font-size: 14px
     &:hover
       border-bottom-color: #f0f0f0
   ul
@@ -2168,25 +2408,6 @@ $login-button-width: 80%
     &.fa-sort-down
       margin-top: 0px
 
-.theme-light
-  .side-menu
-    background-color: #FFFFFF
-    .menu-list a
-      color: #6B6B6B
-      &:hover, &:active, &:focus
-        color: #414651
-        background-color: lighten(#ededed, 3%)
-      &.active, &.active:hover, &.active:active, &.active:focus
-        background-color: #ededed
-        color: #414651
-    .menu-label
-      background-color: lighten(#ededed, 3%)
-      color: #6b6b6b
-  .auth-main-container
-    background-color: #FFFFFF
-    .has-text-centered h6
-      color: #6B6B6B
-
 .my-popper
   display: none
 
@@ -2340,6 +2561,8 @@ $attachment-icon-width: 4em
     &-accept
       span
         margin-left: 0.7em
+  .intl-tel-input
+    width: 100%
 
   .register-confirm
     padding: 2em 1em
@@ -2389,9 +2612,6 @@ $attachment-icon-width: 4em
   .columns
     .column
       padding: 0px 10px
-
-  .intl-tel-input
-    width: 100%
 
   .checkbox-field
     display: inline-block
@@ -2461,15 +2681,6 @@ $attachment-icon-width: 4em
     position: relative
     top: 7px
     left: 8px
-
-.collaboration-modal
-  .not-found
-    margin-top: 0px
-    i
-      margin-top: 2px
-    h6
-      max-width: 350px
-      text-align: left
 
 .copy-password-modal
   .modal-card
@@ -2586,14 +2797,18 @@ $attachment-icon-width: 4em
 .security-dashboard
   .appknox-logo
     margin-top: 18px
+    width: 12em
     a
       pointer-events: none
+  .top-columns
+    margin-right: 0
   .top-nav
     height: 60px
     margin-left: 10px
     border-left-width: 0px
     .top-icons
       margin-top: 10px
+      margin-right: 0
   & + div
     .tabs
       margin-top: 60px!important
@@ -2618,3 +2833,89 @@ ul.email-list
     padding-right: 8px
   .column.flex-center
     padding: 4px
+.user
+  &-search-modal
+    .modal-card
+      max-width: 400px
+      min-width: 400px
+      .input
+        border-radius: 0px
+        width: 93%
+
+  &-list-container
+    margin: 0px 1px 0px 25px
+    border-width: 0px 1px 1px 1px
+    border-style: solid
+    border-color: #e5e5e5
+    overflow: scroll
+    max-height: 160px
+    background-color: #fafbfc
+    li
+      padding-top: 10px
+      border-bottom: 1px solid #e5e5e5
+      max-height: 60px
+      .show-button
+        text-align: right
+        margin-right: 5px
+        button
+          font-size: 20px
+          color: $default
+          border: none
+          margin-top: 10px
+          &:hover
+            background-color: #F0F0F0
+
+      .columns
+        margin-left: 0px
+        margin-right: 0px
+        .column
+          padding: 5px
+      .user-name
+        margin-top: 15px
+      .user-email
+        font-size: 10px
+      .fa-user-circle
+        display: flex
+        align-items: center
+        color: $info
+.teamcard
+  width: 100%
+  display: block
+  border: 1px solid lighten($color-table, 57%)
+  background: lighten($color-table, 62%)
+  &:hover
+    background: lighten($color-table, 60%)
+    color: #000
+  h6
+    margin-bottom: 0
+  &-name
+    color: $primary
+    font-size: 1.1em
+  &-stats
+    display: flex
+  &-count
+    color: lighten($color-table, 10%)
+    &-label
+      font-size: 0.8em
+    &-value
+      font-size: 0.95em
+
+.add-team-objects-scroll
+  overflow-y: scroll
+  max-height: 27.5em
+  max-height: 50vh
+  min-height: 4.6em
+.team-project
+  &-action
+    width: 3em
+  &-icon
+    display: inline-block
+    width: 2.3em
+    &-android
+      color: #7BB054
+    &-apple
+      color: #8D9096
+    &-windows
+      color: #46ADE9
+  &-name
+    font-size: 1.15em

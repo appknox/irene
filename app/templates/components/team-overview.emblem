@@ -1,31 +1,15 @@
-.card.team-overview-card.text-centre
-  = link-to "authenticated.team" team.id
-    header.card-header
-      .column
-        = team.name
-    header.card-header.columns
-      .column
-        | #{team.totalMembers}
-      .column
-        | #{team.totalProjects}
-    .card-content
-      .columns
-        .column
-          h6
-            = t "owner"
-        .column
-          h6
-           = t "created"
-      .columns
-        .column
-          = team.owner.username
-        .column
-          = moment-from-now team.createdOn
-          = attach-tooltip placement="top"
-            = team.createdOnDateTime
-  footer.card-button.align-center
-    button.ac-delete-team click="openDeleteTeamPrompt" disabled=team.isDefaultTeam
-      = fa-icon "trash-o"
-      | &nbsp; #{t "deleteTeam"}
+td
+  = link-to "authenticated.organization.team" team.id
+    = team.name
+td
+  = team.owner
+td
+  | #{team.totalMembers}
+td
+  | #{team.totalProjects}
+td
+  = moment-from-now team.createdOn
+td
+  i.fa.fa-trash-o.remove click="openDeleteTeamPrompt" disabled=team.isDefaultTeam
 
 = prompt-box isActive=showDeleteTeamPrompt title=(t 'promptBox.deleteTeamPrompt.title') description=(t 'promptBox.deleteTeamPrompt.description') button="deleteTeam" delegate=this disabled=isDeletingTeam

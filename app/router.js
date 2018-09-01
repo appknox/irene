@@ -23,9 +23,18 @@ Router.map(function() {
   this.route('setup', {path: '/setup/:uuid/:token'});
   this.route('authenticated', {path: '/'}, function() {
     this.route("index", {path: '/'});
-    this.route("teams", {path: '/teams'});
-    this.route("team", {path: '/team/:teamId'});
-    this.route("settings", {path: '/settings'});
+    this.route("organization", {path: '/organization'}, function() {
+      this.route('namespaces', {path: '/namespaces'});
+      this.route('members', {path: '/members'});
+      this.route('teams', {path: '/teams'});
+      this.route('team', {path: '/team/:teamId'});
+      this.route('settings');
+    });
+    this.route("settings", {path: '/settings'}, function() {
+      this.route('general');
+      this.route('security');
+      this.route('developersettings');
+    });
     this.route("billing", {path: '/billing'});
     this.route('projects', {path: '/projects'});
     this.route("project", {path: '/project/:projectId'}, function() {
@@ -47,6 +56,7 @@ Router.map(function() {
     });
   });
   this.route('invitation', {path: '/invitation/:uuid'});
+  this.route('invite', {path: '/invite/:token'});
 
   // 404 path -this should be at the last.
   this.route('not-found', {path: '/*path'});

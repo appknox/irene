@@ -1,4 +1,13 @@
 td
   = invitation.email
 td
-  = invitation.team.name
+  if invitation.team
+    = link-to "authenticated.organization.team" invitation.team.id
+      = invitation.team.name
+  else
+    = t "organization"
+td
+  button.is-primary.lowercase-text click="openDeleteInvitationConfirmBox"
+    = t "deleteInvitation"
+
+= confirm-box isActive=showDeleteInvitationConfirmBox title=(t 'confirmBox.deleteInvitation') delegate=this disabled=isDeletetingInvitation

@@ -17,12 +17,13 @@ export default function(server) {
     personalTokenCount = getRandomInt(3,3),
     invitationCount = getRandomInt(1,1),
     availableDeviceCount = getRandomInt(3,3),
+    organizationCount = getRandomInt(1,1),
     teamCount = 3,
     githubCount = 1,
     jiraCount = 1,
     vulnerabilityPreferenceCount = 10,
     projectCount = 0, project = null, file = null, projectIds = [],
-    team = null, manualscan=null, currentUserId = 1, deviceCount=30, invoiceCount=3;
+    currentUserId = 1, deviceCount=30, invoiceCount=3;
   var users = server.createList('user', userCount);
   server.createList('pricing', pricingCount);
   server.createList('plan', planCount);
@@ -38,9 +39,10 @@ export default function(server) {
   server.createList('jira-integration', jiraCount);
   server.createList('vulnerability-preference', vulnerabilityPreferenceCount);
   server.createList('available-device', availableDeviceCount);
+  server.createList('organization', organizationCount);
   projectCount =  getRandomInt(4, 5);
   for (var teamId = 1; teamId <= teamCount; teamId++) {
-    team = server.create('team', {users: users});
+    server.create('team', {users: users});
   }
   for (var projectId = 1; projectId <= projectCount; projectId++) {
     projectIds.push(projectId);
@@ -50,21 +52,13 @@ export default function(server) {
     var fileIds = [];
     for (var fileId = 1; fileId <= fileCount; fileId++) {
       file = server.create('file', {projectId: projectId});
-      manualscan = server.create('manualscan', {projectId: projectId});
+      server.create('manualscan', {projectId: projectId});
       fileIds.push(file.id);
       for (var vulnerabilityId = 1; vulnerabilityId <= vulnerabilityCount; vulnerabilityId++) {
         server.create('analysis', {file: file, vulnerabilityId: vulnerabilityId});
       }
     }
     project.fileIds = fileIds;
-    var collaborationCount = getRandomInt(0, userCount);
-    var collaborationIds = [];
-    for (var i = 0; i < collaborationCount; i++) {
-      teamId = getRandomInt(1, teamCount);
-      var collaboration = server.create('collaboration', {projectId: projectId, teamId: teamId});
-      collaborationIds.push(collaboration.id);
-    }
-    project.collaborationIds = collaborationIds;
   }
   var currentUser = server.db.users.get(currentUserId);
   currentUser.projectIds = projectIds;

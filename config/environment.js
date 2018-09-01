@@ -154,9 +154,9 @@ module.exports = function(environment) {
       namespaceAdd: 'namespace_add',
       applyCoupon: 'apply_coupon',
       saveCredentials: 'projects/save_credentials',
-      collaborations: 'collaborations',
-      deleteCollaboration: 'collaboration/delete',
+      invite: 'invite',
       invitation: 'invitation',
+      invitations: 'invitations',
       signup: 'signup',
       lang: 'lang',
       deleteGHRepo: 'delete_github_repo',
@@ -165,6 +165,8 @@ module.exports = function(environment) {
       enableMFA: 'mfa/enable',
       disableMFA: 'mfa/disable',
       teams: 'teams',
+      organizations: 'organizations',
+      users: 'users',
       members: 'members',
       signedInvoiceUrl: 'download_url',
       invoices: 'invoices',
@@ -188,7 +190,9 @@ module.exports = function(environment) {
       downloadAttachment: 'download',
       purgeAPIAnalyses: 'purge_api',
       apps: 'apps',
-      reports: 'reports'
+      reports: 'reports',
+      setUnknownAnalysisStatus: "set_unknown_analysis_status",
+      userSearch: "user_search"
     },
     csb: {
       reportDownload: { feature: "Account Settings", module: "Setup", product: "Appknox" },
@@ -198,10 +202,15 @@ module.exports = function(environment) {
       addAPIEndpoints: { feature: "Add API Endpoints", module: "Security", product: "Appknox" },
       createTeam: { feature: "Create Team", module: "Security", product: "Appknox" },
       namespaceAdded: { feature: "Namespace Add", module: "Security", product: "Appknox" },
+      namespaceRejected: { feature: "Namespace Reject", module: "Security", product: "Appknox" },
       applicationUpload: { feature: "Application Upload", module: "Security", product: "Appknox" },
       integrateGithub: { feature: "Integrate Github", module: "Report", product: "Appknox" },
       integrateJIRA: { feature: "Integrate JIRA", module: "Report", product: "Appknox" },
-      changePassword: { feature: "Change Password", module: "Setup", product: "Appknox" }
+      changePassword: { feature: "Change Password", module: "Setup", product: "Appknox" },
+      inviteResend: { feature: "Invitation Resend", module: "Security", product: "Appknox" },
+      inviteDelete: { feature: "Invitation Delete", module: "Security", product: "Appknox" },
+      teamProjectAdd: { feature: "Add Team Project", module: "Security", product: "Appknox" },
+      teamProjectRemove: { feature: "Remove Team Project", module: "Security", product: "Appknox" },
     },
     whitelabel: {
       theme: 'dark'

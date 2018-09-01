@@ -24,6 +24,7 @@ const FileHeaderComponent = Ember.Component.extend({
   isDownloadingReport: false,
   showManualScanFormModal: false,
   showRemoveRoleConfirmBox: false,
+  progress: 0,
 
   i18n: Ember.inject.service(),
   trial: Ember.inject.service(),
@@ -105,6 +106,7 @@ const FileHeaderComponent = Ember.Component.extend({
   didInsertElement() {
     const tPasswordCopied = this.get("tPasswordCopied");
     const tPleaseTryAgain = this.get("tPleaseTryAgain");
+    // eslint-disable-next-line no-undef
     const clipboard = new Clipboard('.copy-password');
     this.set("clipboard", clipboard)
     clipboard.on('success', (e) => {
@@ -297,6 +299,8 @@ const FileHeaderComponent = Ember.Component.extend({
           }, 3000);
         }
       }, (error) => {
+        // eslint-disable-next-line no-console
+        console.log(error);
         this.set("isDownloadingReport", false);
         this.get("notify").error(tReportIsGettingGenerated);
       });
@@ -521,7 +525,8 @@ const FileHeaderComponent = Ember.Component.extend({
         }
       }, (error) => {
         this.set("isStartingRescan", false);
-        this.get("notify").error(error.payload.error);
+        this.get("notify").error(error.payload.detail);
+        this.set("showRescanModal", false);
       });
     }
   }

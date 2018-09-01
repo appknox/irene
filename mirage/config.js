@@ -12,14 +12,14 @@ export default function() {
   this.namespace = config.host + "/" +  config.namespace;
 
   this.get('/users/:id', 'user');
-  this.get('/collaborations/:id', 'collaboration');
-  this.get('/collaborations', 'collaboration');
+  this.get('/users', 'user');
   this.get('/projects/:id', 'project');
   this.get('/projects', 'project');
   this.get('/pricings', 'pricing');
   this.get('/plans', 'plan');
   this.get('/pricings/:id', 'pricing');
   this.get('/teams', 'team');
+  this.get('/organizations', 'organization');
   this.get('/teams/:id', 'team');
   this.get('/submissions/:id', 'submission');
   this.get('/submissions', 'submission');
@@ -141,6 +141,10 @@ export default function() {
     return {};
   });
 
+  this.get('/organizations/:id', () => {
+    return {};
+  });
+
   this.post('/set_jira/:id', () => {
     return {};
   });
@@ -149,8 +153,7 @@ export default function() {
     return {};
   });
 
-  this.put('/profiles/:id/device_preference', (db, request) => {
-    console.log(request.requestBody);
+  this.put('/profiles/:id/device_preference', () => {
     return {id: '1'};
   });
 
@@ -175,6 +178,10 @@ export default function() {
   });
 
   this.post('/recover', () => {
+    return {};
+  });
+
+  this.post('/invitations', () => {
     return {};
   });
 
@@ -214,6 +221,10 @@ export default function() {
     return {};
   });
 
+  this.get('/user_search?q=yash', () => {
+    return {};
+  });
+
   this.post('/chargebee/callback', () => {
     return {};
   });
@@ -230,14 +241,6 @@ export default function() {
    return;
   });
 
-  this.post('/collaborations', () => {
-   return;
-  });
-
-  this.post('/collaborations/:id', () => {
-   return;
-  });
-
   this.post('/rescan', () => {
    return;
   });
@@ -250,6 +253,10 @@ export default function() {
    return;
   });
 
+  this.put('/teams/:id/members', () => {
+   return;
+  });
+
   this.delete('/teams/:id/members/yash', () => {
    return;
   });
@@ -259,10 +266,6 @@ export default function() {
   });
 
   this.delete('/teams', () => {
-   return;
-  });
-
-  this.delete('/collaborations/:id', () => {
    return;
   });
 

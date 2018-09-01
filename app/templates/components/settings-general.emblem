@@ -1,0 +1,8 @@
+.box-container
+  .columns
+    .column.is-one-third
+      h5.bold.black-text
+        = t "language"
+      = t "selectLanguage"
+      .language-select
+        = select-language

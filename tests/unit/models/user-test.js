@@ -6,7 +6,7 @@ moduleForModel('user', 'Unit | Model | user', {
   needs: [
     'model:project',
     'model:submission',
-    'model:collaboration',
+    'model:organization',
     'model:pricing',
     'model:team',
     'service:i18n',

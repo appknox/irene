@@ -1,0 +1,47 @@
+<button class="is-primary" onclick={{perform openAddProjectModal}}>
+  <i class="fa fa-folder-open-o margin-r-h"></i>&nbsp;{{t "addProject"}}
+</button>
+
+{{#modal-card class="input-modal user-search-modal" isActive=showAddTeamProjectModal title=(t 'modalCard.addProject.title')}}
+  <div class="card-body">
+    <div class="card-wrapper">
+      <form>
+        <div class="control vertical-align-center margin-b-1">
+          {{fa-icon "search"}} {{input class="form-control input input-width margin-left" placeholder="Search project" type="text" value=query autofocus="autofocus" key-up="searchQuery"}}
+        </div>
+      </form>
+      {{#if hasObjects}}
+        <div>
+          <div class="add-team-projects-scroll">
+            <table class="org-table">
+              <tbody>
+                {{#each sortedObjects as |project|}}
+                  <tr class="team-project">
+                    <td class="team-project-action">
+                      <button class="is-default is-icon no-border" onclick={{perform addTeamProject project}} disabled={{isAddingProject}}>
+                        {{fa-icon "plus"}}
+                      </button>
+                    </td>
+                    <td>
+                      <div class="vertical-align-center">
+                        <span class="team-project-icon team-project-icon-{{project.platformIconClass}} text-lightgray">{{fa-icon project.platformIconClass}}</span>
+                        <span class="team-project-name black-text">{{project.packageName}}</span>
+                      </div>
+                    </td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+            <div class="margin-t-q">
+              {{partial "paginate"}}
+            </div>
+          </div>
+        </div>
+      {{else}}
+        <div class="empty-state">
+          {{fa-icon "exclamation-triangle"}} {{t "noProject"}}
+        </div>
+      {{/if}}
+    </div>
+  </div>
+{{/modal-card}}

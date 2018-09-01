@@ -1,0 +1,13 @@
+.org-container
+  .box-container
+    .columns
+      .column
+        h5.bold.black-text.is-fullwidth
+          = t "jiraIntegration"
+        = jira-account user=user class="column is-one-third"
+  .margin-left
+    .columns
+      .column
+        h5.bold.black-text.is-fullwidth
+          = t "githubIntegration"
+        = github-account user=user class="column is-one-third"

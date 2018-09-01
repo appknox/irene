@@ -3,11 +3,13 @@ import ENV from 'irene/config/environment';
 var customerSuccessBox;
 customerSuccessBox = function() {
   if(!ENV.enableCSB) {
+    // eslint-disable-next-line no-console
     return(console.log("CSB Disabled"))
   }
   else {
     var analytics = window.analytics = window.analytics || [];
-    if (!analytics.initialize)if (analytics.invoked) window.console && console.error && console.error("CustomerSuccess snippet included twice.");
+    // eslint-disable-next-line no-console
+    if (!analytics.initialize)if (analytics.invoked) console.error("CustomerSuccess snippet included twice.");
     else {
       analytics.invoked = !0;
       analytics.methods = ["trackSubmit", "trackClick", "trackLink", "trackForm", "pageview", "identify", "reset", "group", "track", "ready", "alias", "debug", "page", "once", "off", "on"];

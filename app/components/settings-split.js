@@ -18,12 +18,25 @@ const SettingsSplitComponent = Ember.Component.extend({
     }
   }),
 
-
   developerSettingsClass: Ember.computed('isDeveloperSettings', function() {
     if (this.get('isDeveloperSettings')) {
       return 'is-active';
     }
   }),
+
+  didInsertElement() {
+    const path = window.location.pathname;
+    if(path === "/settings/security") {
+      this.set("isGeneral", false);
+      this.set("isSecurity", true);
+      this.set("isDeveloperSettings", false);
+    }
+    else if(path === "/settings/developersettings") {
+      this.set("isGeneral", false);
+      this.set("isSecurity", false);
+      this.set("isDeveloperSettings", true);
+    }
+  },
 
   actions: {
     displayGeneral() {

@@ -1,0 +1,3 @@
+.box-container.margin-top
+  .columns
+    = personaltoken-list

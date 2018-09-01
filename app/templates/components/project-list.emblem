@@ -1,4 +1,4 @@
-if user.hasProject
+if hasProjects
   .column
     .box-container.home-page.all-inputs
       .columns

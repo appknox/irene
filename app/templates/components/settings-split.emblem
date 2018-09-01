@@ -1,62 +1,11 @@
 .tabs.is-medium.is-boxed
   ul
-    li class=generalClass
-      a click="displayGeneral" class="mp-display-general"
+    li class=generalClass click="displayGeneral" class="mp-display-general"
+      = link-to 'authenticated.settings.general'
         = t "general"
-    li class=securityClass
-      a click="displaySecurity" class="mp-display-security"
+    li class=securityClass click="displaySecurity" class="mp-display-security"
+      = link-to 'authenticated.settings.security'
         = t "security"
-    li class=developerSettingsClass
-      a click="displayDeveloperSettings" class="mp-display-developer-settings"
+    li class=developerSettingsClass click="displayDeveloperSettings" class="mp-display-developer-settings"
+      = link-to 'authenticated.settings.developersettings'
         = t "developerSettings"
-
-if isGeneral
-  .box-container
-    .columns
-      .column
-        h5.bold.black-text
-          = t "namespace"
-        = t "addNewNamespace"
-        .namespace-list
-          = namespace-component user=user
-  .box-container
-    .columns
-      .column.is-one-third
-        h5.bold.black-text
-          = t "language"
-        = t "selectLanguage"
-        .language-select
-          = select-language
-  .box-container
-    .columns
-      .column
-        h5.bold.black-text.is-fullwidth
-          = t "jiraIntegration"
-        = jira-account user=user class="column is-one-third"
-  .margin-left
-    .columns
-      .column
-        h5.bold.black-text.is-fullwidth
-          = t "githubIntegration"
-        = github-account user=user class="column is-one-third"
-
-if isSecurity
-  .box-container
-    .columns
-      .column.is-half
-        h5.bold.black-text.is-fullwidth
-          = t "changePassword"
-        = password-change
-  .box-container
-    .columns
-      .column.is-half
-        h5.bold.black-text.is-fullwidth
-          = t "multiFactorAuth"
-        = t "mfaDescription"
-        .margin-top20
-          = auth-mfa user=user
-
-if isDeveloperSettings
-  .box-container
-    .columns
-      = personaltoken-list

@@ -3,6 +3,7 @@ import ENV from 'irene/config/environment';
 
 const installIntercom = function() {
   if (!ENV.enableIntercom) {
+    // eslint-disable-next-line no-console
     return console.log("Intercom Disabled");
   }
   const w = window;
@@ -19,6 +20,7 @@ const installIntercom = function() {
 
   if (typeof ic === 'function') {
     ic('reattach_activator');
+    // eslint-disable-next-line no-undef
     return ic('update', intercomSettings);
   } else {
     var d = document;

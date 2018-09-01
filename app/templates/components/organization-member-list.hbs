@@ -1,0 +1,34 @@
+<form class="margin-t-1">
+  <div class="control vertical-align-center margin-b-1">
+    {{fa-icon "search"}} {{input class="form-control input input-width margin-left" placeholder="Search member" type="text" value=query autofocus="autofocus" key-up="searchQuery"}}
+  </div>
+</form>
+
+{{#if hasObjects}}
+<div class="columns">
+  <div class="column">
+    <table class="org-table">
+      <tr>
+        <th>{{t "user"}}</th>
+        <th>{{t "role"}}</th>
+        {{!-- <th>{{t "teams"}}</th> --}}
+      </tr>
+      {{#each sortedObjects as |member|}}
+        {{organization-member-overview member=member organization=organization}}
+      {{/each}}
+    </table>
+  </div>
+</div>
+<div class="columns">
+  <div class="column">
+    <div class="margin-t-h">
+      {{partial "paginate"}}
+    </div>
+  </div>
+</div>
+{{else}}
+  <div class="empty-state">
+    {{fa-icon "exclamation-triangle"}}
+    {{t "noMembers"}}
+  </div>
+{{/if}}

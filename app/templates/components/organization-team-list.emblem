@@ -1,0 +1,18 @@
+.columns.margin-v-h
+    .column
+      h3.bold.black-text
+        = t "teams"
+    if me.org.is_admin
+      .column.content-right
+        = create-team organization=model
+
+if hasObjects
+  each sortedObjects as |team|
+    = organization-team-overview team=team organization=organization
+  .margin-top20
+    = partial "paginate"
+
+else
+  div.empty-state
+    = fa-icon "exclamation-triangle"
+    = t "noTeams"

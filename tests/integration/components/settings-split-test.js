@@ -32,5 +32,7 @@ test('tapping button fires an external action', function(assert) {
     assert.equal(component.get('isSecurity'),false, "Security");
     assert.equal(component.get('isDeveloperSettings'),true, "Developer Settings");
 
+    assert.notOk(component.didInsertElement());
+
   });
 });

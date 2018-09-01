@@ -5,7 +5,8 @@ import ScrollTopMixin from 'irene/mixins/scroll-top';
 const AuthenticatedFileRoute = Ember.Route.extend(ScrollTopMixin, {
 
   title: `File Details${config.platform}`,
-  model(params){
+  async model(params){
+    await this.get('store').findAll('Vulnerability');
     return this.get('store').find('file', params.fileId);
   }
 }

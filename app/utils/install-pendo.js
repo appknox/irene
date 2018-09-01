@@ -3,6 +3,7 @@ import ENV from 'irene/config/environment';
 
 const installPendo = function() {
   if (!ENV.enablePendo) {
+    // eslint-disable-next-line no-console
     return console.log("Pendo Disabled");
   }
   return (function(apiKey) {
