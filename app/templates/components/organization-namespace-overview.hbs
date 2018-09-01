@@ -1,18 +1,39 @@
-<td class="bold text-darkgray">{{namespace.value}}</td>
-<td class="text-lightgray">{{moment-from-now namespace.createdOn}}</td>
-<td class="td-with-btn">
+<td>
+  <div class="vertical-align-center">
+    <span class="team-project-icon team-project-icon-{{namespace.platformIconClass}} text-lightgray">{{fa-icon namespace.platformIconClass}}</span>
+    <span class="team-project-name black-text">
+      {{namespace.value}}
+    </span>
+  </div>
+</td>
+<td>
+  <div class="text-lightgray">{{moment-from-now namespace.createdOn}}</div>
+  {{#if namespace.requestedBy}}
+    <div>
+      <span class="text-lightgray">by</span>
+      <span>{{namespace.requestedBy.username}}</span>
+    </div>
+  {{/if}}
+</td>
+<td>
   {{#if namespace.isApproved}}
-    <span class="text-lightgray">{{moment-from-now namespace.approvedOn}}</span>
+    <div class="text-lightgray">{{moment-from-now namespace.approvedOn}}</div>
+    {{#if namespace.approvedBy}}
+      <div>
+        <span class="text-lightgray">by</span>
+        <span>{{namespace.approvedBy.username}}</span>
+      </div>
+    {{/if}}
   {{else}}
     {{#if me.org.is_owner}}
       <button class="is-success is-icon btn-table" title="{{t 'approve'}}" onclick={{perform approveNamespace}}>
-        <i class="fa fa-check"></i>
+        {{fa-icon "check"}}
         {{#if approveNamespace.isRunning}}
           {{loading-spinner}}
         {{/if}}
       </button>
       <button class="is-primary is-icon btn-table margin-left" title="{{t 'reject'}}" onclick={{perform rejectNamespaceConfirm}}>
-        <i class="fa fa-times"></i>
+        {{fa-icon "times"}}
         {{#if rejectNamespace.isRunning}}
           {{loading-spinner}}
         {{/if}}
