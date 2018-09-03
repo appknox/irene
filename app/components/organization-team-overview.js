@@ -49,7 +49,6 @@ const TeamOverviewComponent = Ember.Component.extend({
       errMsg = err.message;
     }
     this.get("notify").error(errMsg);
-    this.set('showDeleteTeamPrompt', false);
     this.set('isDeletingTeam', false);
   }),
 
