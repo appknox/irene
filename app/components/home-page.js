@@ -29,14 +29,17 @@ export default Ember.Component.extend({
     });
   },
 
-  checkEmptyOrganization() {
+  isEmptyOrganization: (function() {
     const organization = this.get("organization");
-    const org = this.get("store").peekRecord("organization", organization.selected.id);
-    const orgName = org.data.name;
-    if(!orgName) {
-      this.set("showUpdateOrgModal", true);
+    const isOwner = this.get("me.org.is_owner")
+    if(isOwner) {
+      const org = this.get("store").peekRecord("organization", organization.selected.id);
+      const orgName = org.data.name;
+      if(!orgName) {
+        return true;
+      }
     }
-  },
+  }).property("me.org.is_owner"),
 
   securityDashboard() {
     if(window.location.pathname.startsWith("/security")) {
@@ -56,7 +59,6 @@ export default Ember.Component.extend({
 
   didInsertElement() {
     this.securityEnabled();
-    this.checkEmptyOrganization();
   },
 
   actions: {
@@ -73,7 +75,7 @@ export default Ember.Component.extend({
       org.set('name', this.get("organizationName"));
       org.save().then(() => {
         this.get("notify").success(tOrganizationNameUpdated);
-        this.set("showUpdateOrgModal", true);
+        this.set("isEmptyOrganization", false);
         this.set("isUpdatingOrg", false);
       }, () => {
         this.get("notify").error(tSomethingWentWrong);
