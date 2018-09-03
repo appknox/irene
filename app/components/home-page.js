@@ -8,10 +8,10 @@ const {inject: {service}} = Ember;
 
 export default Ember.Component.extend({
   me: service(),
+  i18n: service(),
   ajax: service(),
   session: service(),
   organization: service(),
-  i18n: Ember.inject.service(),
 
   isLoaded: false,
   isSecurityEnabled: false,
@@ -70,7 +70,7 @@ export default Ember.Component.extend({
   }).evented(),
 
   updateOrgNameSucceeded: on('updateOrgName:succeeded', function() {
-    this.get('notify').success(this.get('tOrganizationOrgNameUpdated'));
+    this.get('notify').success(this.get('tOrganizationNameUpdated'));
     this.set("isEmptyOrganization", false);
     this.set("isUpdatingOrg", false);
   }),
