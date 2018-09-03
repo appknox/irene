@@ -387,6 +387,7 @@ export default {
   "unknown": "Unknown",
   "unpaid": "Unpaid",
   "untested": "Untested",
+  "update": "Update",
   "uploadApp": "Upload App",
   "uploading": "Uploading",
   "uploadNewProject": "You can upload a new project by clicking on <b class='bold'>Upload App</b> above and start scanning",
@@ -517,6 +518,9 @@ export default {
     },
     "copyPassword": {
       "title": "Copy PDF Report Password"
+    },
+    "orgModal": {
+      "title": "Please enter organization name"
     }
   },
   "templates": {

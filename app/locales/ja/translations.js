@@ -388,6 +388,7 @@ export default {
   "unknown": "未知",
   "unpaid": "未払い",
   "untested": "Untested",
+  "update": "Update",
   "uploadApp": "アプリのアップロード",
   "uploading": "アップロード中",
   "uploadNewProject": "新しいプロジェクトをアップロードするには、ここをクリックしてください",
@@ -518,6 +519,9 @@ export default {
     },
     "copyPassword": {
       "title": "Copy PDF Report Password"
+    },
+    "orgModal": {
+      "title": "Please enter organization name"
     }
   },
   "templates": {
