@@ -1,4 +1,6 @@
 import Ember from 'ember';
+import { task } from 'ember-concurrency';
+import { on } from '@ember/object/evented';
 import { translationMacro as t } from 'ember-i18n';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 
@@ -35,7 +37,7 @@ export default Ember.Component.extend({
     if(isOwner) {
       const org = this.get("store").peekRecord("organization", organization.selected.id);
       const orgName = org.data.name;
-      if(!orgName) {
+      if(orgName) {
         return true;
       }
     }
@@ -61,26 +63,34 @@ export default Ember.Component.extend({
     this.securityEnabled();
   },
 
+  /* Update org name */
+  updateOrgName: task(function * () {
+    const org = this.get('organization').selected;
+    org.set('name', this.get("organizationName"));
+    yield org.save();
+  }).evented(),
+
+  updateOrgNameSucceeded: on('updateOrgName:succeeded', function() {
+    this.get('notify').success(this.get('tOrganizationOrgNameUpdated'));
+    this.set("isEmptyOrganization", false);
+    this.set("isUpdatingOrg", false);
+  }),
+
+  updateOrgNameErrored: on('updateOrgName:errored', function(_, err) {
+    let errMsg = this.get('tSomethingWentWrong');
+    if (err.errors && err.errors.length) {
+      errMsg = err.errors[0].detail || errMsg;
+    } else if(err.message) {
+      errMsg = err.message;
+    }
+    this.set("isUpdatingOrg", false);
+    this.get("notify").error(errMsg);
+  }),
+
   actions: {
     invalidateSession() {
       triggerAnalytics('logout');
       this.get('session').invalidate();
-    },
-
-    updateOrg() {
-      this.set("isUpdatingOrg", true);
-      const tSomethingWentWrong = this.get("tSomethingWentWrong");
-      const tOrganizationNameUpdated = this.get("tOrganizationNameUpdated");
-      const org = this.get('organization').selected;
-      org.set('name', this.get("organizationName"));
-      org.save().then(() => {
-        this.get("notify").success(tOrganizationNameUpdated);
-        this.set("isEmptyOrganization", false);
-        this.set("isUpdatingOrg", false);
-      }, () => {
-        this.get("notify").error(tSomethingWentWrong);
-        this.set("isUpdatingOrg", false);
-      })
     }
   }
 

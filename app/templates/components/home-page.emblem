@@ -108,7 +108,7 @@ if isEmptyOrganization
           p.control
             = input class="form-control input input-width margin-left" placeholder=(t "modalCard.orgModal.title") type="text" value=organizationName autofocus="autofocus"
 
-          button.is-primary.margin-left.margin-top10 click="updateOrg" disabled=isUpdatingOrg
+          button.is-primary.margin-left.margin-top10 disabled=isUpdatingOrg click={(perform updateOrgName)}
             if isUpdatingOrg
               .fa-font-size
                 i.fa class="fa-spinner fa-spin"
