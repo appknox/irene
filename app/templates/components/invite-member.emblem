@@ -1,0 +1,17 @@
+button.is-primary click={(perform openInviteMemberModal)}
+  i.fa.fa-envelope.margin-r-h
+  = t "inviteMember"
+
+= modal-card class="input-modal" isActive=showInviteMemberModal title=(t 'inviteMember')
+  .card-body
+    .card-wrapper
+      form submit={(perform inviteMember)}
+        p.control
+          = input class="form-control input input-width" placeholder=(t 'email') type="text" value=email autofocus="autofocus"
+
+        button.margin-t-1.is-primary type="submit" disabled=isInvitingMember
+          if isInvitingMember
+            .fa-font-size
+              i.fa.fa-spinner.fa-spin
+              | &nbsp;
+          = t "invite"
