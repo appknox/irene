@@ -31,7 +31,7 @@ export default Ember.Component.extend({
     });
   },
 
-  isEmptyOrganization: (function() {
+  isEmptyOrganization: Ember.computed("me.org.is_owner", function() {
     const organization = this.get("organization");
     const isOwner = this.get("me.org.is_owner")
     if(isOwner) {
@@ -40,7 +40,7 @@ export default Ember.Component.extend({
         return true;
       }
     }
-  }).property("me.org.is_owner"),
+  }),
 
   securityDashboard() {
     if(window.location.pathname.startsWith("/security")) {
