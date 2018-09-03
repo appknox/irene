@@ -3,7 +3,6 @@ import Ember from 'ember';
 import ENUMS from 'irene/enums';
 import { CSBMap } from 'irene/router';
 import ENV from 'irene/config/environment';
-import { translationMacro as t } from 'ember-i18n';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
@@ -23,8 +22,6 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
   trial: service(),
   org: service('organization'),
   socketIOService: service('socket-io'),
-
-  tNewScanStarted: t("newScanStarted"),
 
   beforeModel(transition){
     this.set("lastTransition", transition);
@@ -117,20 +114,7 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
       },
 
       newobject(data, callback) {
-        const tNewScanStarted = that.get("tNewScanStarted")
         store.pushPayload({data});
-        if (data.type === "files") {
-          const fileId = data.id;
-          that.get("notify").info(tNewScanStarted, {
-            autoClear: false,
-            cssClasses: 'notification-position',
-            onClick: (notification) => {
-              notification.set("autoClear", true);
-              notification.set("clearDuration", 0);
-              return callback(Ember.getOwner(that).lookup('route:authenticated').transitionTo("authenticated.file", fileId));
-            }
-          });
-        }
       },
 
       message(data) {
