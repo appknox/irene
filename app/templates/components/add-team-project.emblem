@@ -16,15 +16,15 @@ button.is-primary click={(perform openAddProjectModal)}
             tbody
               each sortedObjects as |project|
                 tr.team-project
-                  td.team-project-action
-                    button.is-default.is-icon.no-border click={(perform addTeamProject project)} disabled=isAddingProject
-                      = fa-icon "plus"
                   td
                     .vertical-align-center
                       span.team-project-icon.text-lightgray class="team-project-icon-{{project.platformIconClass}}"
                         = fa-icon project.platformIconClass
                       span.team-project-name.black-text
                        = project.packageName
+                  td.team-project-action
+                    button.is-default.is-icon.no-border click={(perform addTeamProject project)} disabled=isAddingProject
+                      = fa-icon "plus"   
           .margin-t-q
             = partial "paginate"
       else
