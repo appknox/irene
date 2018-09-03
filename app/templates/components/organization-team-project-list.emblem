@@ -11,7 +11,7 @@ if hasObjects
     .column
       table.org-table
         tr
-          th
+          th.capitalize-text
             = t "project"
           if me.org.is_admin
             th
