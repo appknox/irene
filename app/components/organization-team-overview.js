@@ -5,6 +5,7 @@ import { on } from '@ember/object/evented';
 
 const TeamOverviewComponent = Ember.Component.extend({
   i18n: Ember.inject.service(),
+  me: Ember.inject.service(),
 
   team: null,
   isDeletingTeam: false,
