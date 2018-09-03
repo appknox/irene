@@ -35,9 +35,8 @@ export default Ember.Component.extend({
     const organization = this.get("organization");
     const isOwner = this.get("me.org.is_owner")
     if(isOwner) {
-      const org = this.get("store").peekRecord("organization", organization.selected.id);
-      const orgName = org.data.name;
-      if(orgName) {
+      const orgName = organization.selected.get("name");
+      if(!orgName) {
         return true;
       }
     }
