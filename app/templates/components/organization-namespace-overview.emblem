@@ -10,7 +10,7 @@ td
   if namespace.requestedBy
     div
       span.text-lightgray
-        | by &nbsp;
+        | #{t "by"} &nbsp;
       span
         = namespace.requestedBy.username
 td
@@ -20,7 +20,7 @@ td
     if namespace.approvedBy
       div
         span.text-lightgray
-          | by &nbsp;
+          | #{t "by"} &nbsp;
         span
           = namespace.approvedBy.username
     else
@@ -37,6 +37,6 @@ td
             = loading-spinner
       else
         span.black-text.bold
-          | Pending
+          = t "pending"
 
 = confirm-box isActive=showRejectNamespaceConfirm title=(t "confirmBox.rejectNamespace") delegate=this confirmAction=(action "confirmRejectProxy") disabled=isRejectingNamespace

@@ -8,13 +8,13 @@ div.teamcard.margin-b-1h
         .teamcard-stats.margin-t-q.margin-b-q
           .teamcard-count
             span.teamcard-count-label.uppercase-text.margin-r-q
-              | Members
+              = t "members"
             span.teamcard-count-value.bold
              = team.membersCount
 
           .teamcard-count.margin-l-1
             span.teamcard-count-label.uppercase-text.margin-r-q
-              | Projects
+              = t "projects"
             span.teamcard-count-value.bold
               = team.projectsCount
 

@@ -1,8 +1,8 @@
 .columns
-  .column
+  .column.margin-top
     = link-to 'authenticated.organization.teams'
       = fa-icon "angle-left"
-      | &nbsp; back to teams
+      | &nbsp; #{ t "backToTeams"}
 
 .columns
   .column
