@@ -149,6 +149,10 @@ export default function() {
     return {};
   });
 
+  this.delete('/organizations/:id/teams/:id/members/:member', () => {
+    return {};
+  });
+
   this.post('/set_jira/:id', () => {
     return {};
   });
