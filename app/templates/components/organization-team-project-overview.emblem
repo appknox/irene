@@ -9,11 +9,11 @@ td
 if me.org.is_admin
   td
     label.align-center
-      = input type="checkbox" name="can-write-{{project.id}}" checked=project.write
+      = input type="checkbox" class="input-checkbox" name="can-write-{{project.id}}" checked=project.write
       | &nbsp; #{t "allowEdit"}
 
   td
-    button.is-primary.is-icon.no-border click={(perform openRemoveProjectConfirm)}
+    button.is-primary.is-icon.no-border.no-hover-button click={(perform openRemoveProjectConfirm)}
       i.fa.fa-trash-o
 
 = confirm-box isActive=showRemoveProjectConfirm title=(t "confirmBox.removeTeamProject") delegate=this confirmAction=(action "removeProjectProxy") disabled=isRemovingProject

@@ -1434,6 +1434,11 @@ ul.risk-table
   h1
     padding-top: 30px
 
+button.no-hover-button
+  &:hover
+    background: none
+    color: darken($red, 20%)
+
 .team-container
   padding: 0px 100px
 
@@ -1560,7 +1565,7 @@ ul.risk-table
     .remove
       font-size: 14px
       color: $critical
-    input[type="checkbox"]
+    .input-checkbox
       margin-top: 2px
 
 .team-overview-card
@@ -1740,6 +1745,7 @@ button.delete-button
       font-size: 14px
     &:hover
       border-bottom-color: #f0f0f0
+      background: none
   ul
     border-color: #f0f0f0
 
