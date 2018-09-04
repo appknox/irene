@@ -1,19 +1,25 @@
-if hasObjects
-  table.table-lightgray.margin-top
-    tr
-      th
-        = t "namespace"
-      th
-        = t "requestStatus"
-      th
-        = t "approvalStatus"
+if hasNamespace
+  if hasObjects
+    table.table-lightgray.margin-top
+      tr
+        th
+          = t "namespace"
+        th
+          = t "requestStatus"
+        th
+          = t "approvalStatus"
 
-    each sortedObjects as |namespace|
-      = organization-namespace-overview namespace=namespace
-  .margin-top20
-    = partial "paginate"
+      each sortedObjects as |namespace|
+        = organization-namespace-overview namespace=namespace
+    .margin-top20
+      = partial "paginate"
 
+  else
+    .empty-state
+      = fa-icon "fa-spinner fa-spin"
+      | #{t "loading"}...
+      
 else
-  div.empty-state
+  .empty-state
     = fa-icon "exclamation-triangle"
     = t "noNamespace"
