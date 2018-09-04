@@ -1,13 +1,13 @@
 .org-container
   .box-container
-    .columns
+    .columns.margin-v-h
       .column
-        h5.bold.black-text.is-fullwidth
+        h3.bold.black-text.is-fullwidth
           = t "jiraIntegration"
-        = jira-account user=user class="column is-one-third"
+        = jira-account user=user class="column is-half"
   .margin-left
     .columns
       .column
-        h5.bold.black-text.is-fullwidth
+        h3.bold.black-text.is-fullwidth
           = t "githubIntegration"
-        = github-account user=user class="column is-one-third"
+        = github-account user=user class="column is-half"
