@@ -145,6 +145,10 @@ export default function() {
     return {};
   });
 
+  this.put('/organizations/:id/teams/:id/members', () => {
+    return {};
+  });
+
   this.post('/set_jira/:id', () => {
     return {};
   });

@@ -4,20 +4,6 @@ moduleFor('route:authenticated/organization/team', 'Unit | Route | authenticated
 });
 
 test('it exists', function(assert) {
-  const route = this.subject();
-  var store = {
-    find: function() {
-      return [
-        {
-          id:1,
-          type: "team",
-          attributes: {
-            name: "test"
-          }
-        }
-      ];
-    }
-  };
-  route.set('store', store);
-  assert.ok(route.model(1));
+  let route = this.subject();
+  assert.ok(route);
 });

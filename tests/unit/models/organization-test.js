@@ -3,8 +3,11 @@ import { moduleForModel, test } from 'ember-qunit';
 moduleForModel('organization', 'Unit | Model | organization', {
   // Specify the other units that are required for this test.
   needs: [
-    'model:team',
-    'model:user'
+    'model:user',
+    'model:organization-team',
+    'model:organization-member',
+    'model:organization-project',
+    'model:organization-namespace'
   ]
 });
 

@@ -12,6 +12,6 @@ test('it renders', function(assert) {
 
   this.render(hbs`{{user-list}}`);
 
-  assert.equal(this.$().text().trim(), 'Invite MemberUserEmailInvite MemberInvite');
+  assert.equal(this.$().text().trim(), '');
 
 });

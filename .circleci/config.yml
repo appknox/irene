@@ -21,6 +21,9 @@ jobs:
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - ./node_modules
+      - run:
+          name: Run Ember Test
+          command: COVERAGE=true npm test      
       - deploy:
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then

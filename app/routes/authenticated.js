@@ -113,7 +113,7 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
         store.pushPayload({data});
       },
 
-      newobject(data, callback) {
+      newobject(data) {
         store.pushPayload({data});
       },
 

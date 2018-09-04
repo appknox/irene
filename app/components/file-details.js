@@ -26,9 +26,13 @@ const FileDetailsComponent = Ember.Component.extend({
   securityEnabled() {
     this.get("ajax").request("projects", {namespace: 'hudson-api'})
     .then(() => {
-      this.set("isSecurityEnabled", true);
+      if(!this.isDestroyed) {
+        this.set("isSecurityEnabled", true);
+      }
     }, () => {
-      this.set("isSecurityEnabled", false);
+      if(!this.isDestroyed) {
+        this.set("isSecurityEnabled", false);
+      }
     });
   },
 

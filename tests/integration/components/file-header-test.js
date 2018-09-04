@@ -8,6 +8,7 @@ import { startMirage } from 'irene/initializers/ember-cli-mirage';
 moduleForComponent('file-header', 'Integration | Component | file header', {
   unit: true,
   needs: [
+    'service:moment',
     'service:i18n',
     'service:ajax',
     'component:fa-icon',
@@ -187,9 +188,6 @@ test('it exists', function(assert) {
     component.send("selectAppEnvironment");
 
     component.send("vpnRequired");
-
-    component.send("showURLFilter", "api");
-    component.send("showURLFilter", "dynamic");
 
     component.send("requiredAppAction");
 

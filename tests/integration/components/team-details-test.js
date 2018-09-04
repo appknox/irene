@@ -58,7 +58,8 @@ test('tapping button fires an external action', function(assert) {
     // assert.notOk(component.searchMember());
     component.set("team", {id:1});
     component.send('inviteMember');
-    component.set("team", {id:1});
+    component.set("team", {teamId:1});
+    component.set("organization", {id:1});
     component.send('addMember');
     assert.equal(component.get('showAddMemberModal'),true, "Open Modal");
 
