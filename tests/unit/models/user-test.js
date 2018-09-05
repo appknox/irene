@@ -6,9 +6,6 @@ moduleForModel('user', 'Unit | Model | user', {
   needs: [
     'model:project',
     'model:submission',
-    'model:organization',
-    'model:organization-user',
-    'model:organization-team',
     'model:pricing',
     'service:i18n',
     'locale:en/translations',

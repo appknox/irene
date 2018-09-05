@@ -1,11 +1,10 @@
 import { moduleForModel, test } from 'ember-qunit';
 
 moduleForModel('organization-user', 'Unit | Model | organization user', {
-  needs: ['model:organization-user']
+  needs: []
 });
 
 test('it exists', function(assert) {
-  let model = this.subject();
-  // let store = this.store();
+  const model = this.subject();
   assert.ok(!!model);
 });
