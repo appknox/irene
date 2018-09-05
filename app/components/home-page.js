@@ -12,14 +12,27 @@ export default Ember.Component.extend({
   ajax: service(),
   session: service(),
   organization: service(),
+  socketIOService: service('socket-io'),
 
   isLoaded: false,
   networkError: false,
   isSecurityEnabled: false,
   isSecurityDashboard: false,
 
+
   tSomethingWentWrong: t("somethingWentWrong"),
   tOrganizationNameUpdated: t("organizationNameUpdated"),
+
+  checkConnectivity() {
+    const socket = this.get('socketIOService').socketFor(ENV.socketPath);
+    const offlineMessage = "No Internet, Please check your internet connection";
+    socket.on('connect', () => {
+      this.set("networkError", "");
+    });
+    socket.on('disconnect', () => {
+      this.set("networkError", offlineMessage);
+    });
+  },
 
   securityEnabled() {
     this.get("ajax").request("projects", {namespace: 'hudson-api'})
@@ -70,6 +83,7 @@ export default Ember.Component.extend({
 
   didInsertElement() {
     this.securityEnabled();
+    this.checkConnectivity();
   },
 
   /* Update org name */
