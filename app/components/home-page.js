@@ -26,6 +26,12 @@ export default Ember.Component.extend({
   checkConnectivity() {
     const socket = this.get('socketIOService').socketFor(ENV.socketPath);
     const offlineMessage = "No Internet, Please check your internet connection";
+    window.addEventListener('offline', () => {
+      this.set("networkError", offlineMessage);
+    });
+    window.addEventListener('online', () => {
+      this.set("networkError", "");
+    });
     socket.on('connect', () => {
       this.set("networkError", "");
     });

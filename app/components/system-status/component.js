@@ -1,3 +1,5 @@
+/* jshint ignore:start */
+
 import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import {isNotFoundError} from 'ember-ajax/errors';
@@ -40,3 +42,5 @@ export default Ember.Component.extend({
     })
   }
 });
+
+/* jshint ignore:end */
