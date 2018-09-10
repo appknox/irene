@@ -35,7 +35,7 @@ Router.map(function() {
       this.route('security');
       this.route('developersettings');
     });
-    this.route("billing", {path: '/billing'});
+    // this.route("billing", {path: '/billing'});
     this.route('projects', {path: '/projects'});
     this.route("project", {path: '/project/:projectId'}, function() {
       this.route('settings');
