@@ -6,7 +6,7 @@ td
 
 if me.org.is_admin
   td
-    button.is-primary.is-icon.no-border.no-hover-button click={(perform openRemoveMemberPrompt)}
+    button.is-primary.is-icon.no-border.no-hover-button title=(t 'removeFromTeam') click={(perform openRemoveMemberPrompt)}
       i.fa.fa-user-times
 
 = prompt-box isActive=showRemoveMemberPrompt title=(t 'promptBox.removeMemberPrompt.title') description=(t 'promptBox.removeMemberPrompt.description') button="remove" delegate=this confirmAction=(action "confirmRemoveMemberProxy") disabled=isRemovingMember
