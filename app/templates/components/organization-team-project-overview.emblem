@@ -13,7 +13,7 @@ if me.org.is_admin
       | &nbsp; #{t "allowEdit"}
 
   td
-    button.is-primary.is-icon.no-border.no-hover-button title=(t 'removeFromTeam') click={(perform openRemoveProjectConfirm)}
+    button.is-primary.is-icon.no-border.no-hover-button title="{{t 'removeFromTeam'}}" click={(perform openRemoveProjectConfirm)}
       i.fa.fa-trash-o
 
 = confirm-box isActive=showRemoveProjectConfirm title=(t "confirmBox.removeTeamProject") delegate=this confirmAction=(action "removeProjectProxy") disabled=isRemovingProject

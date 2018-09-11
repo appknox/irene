@@ -20,7 +20,7 @@ div.teamcard.margin-b-1h
 
     if me.org.is_admin
       .column.is-one-sixth.flex-center.padding-b-0
-        button.is-primary.is-icon.no-border.no-hover-button title=(t 'deleteTeam') click={(perform openDeleteTeamConfirmBox)} disabled=team.isDefaultTeam
+        button.is-primary.is-icon.no-border.no-hover-button title="{{t 'deleteTeam'}}" click={(perform openDeleteTeamConfirmBox)} disabled=team.isDefaultTeam
           i.fa.fa-trash-o
 
 = prompt-box isActive=showDeleteTeamPrompt title=(t 'promptBox.deleteTeamPrompt.title') description=(t 'promptBox.deleteTeamPrompt.description') button="deleteTeam" delegate=this confirmAction=(action "confirmDeleteProxy") disabled=isDeletingTeam
