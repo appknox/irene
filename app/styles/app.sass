@@ -1434,11 +1434,6 @@ ul.risk-table
   h1
     padding-top: 30px
 
-.no-hover-button
-  &:hover
-    background: none
-    color: darken($red, 20%)
-
 .team-container
   padding: 0px 100px
 
@@ -1533,6 +1528,10 @@ ul.risk-table
     max-width: 50em
     margin: auto
     padding-bottom: 5em
+    .no-hover-button
+      &:hover
+        background: none
+        color: darken($red, 20%)
   &-view
     background-color: #fafbfc
     margin-left: -10px

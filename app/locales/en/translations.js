@@ -241,7 +241,7 @@ export default {
   "organizationMembers": "Organization Members",
   "organizationNameUpdated": "Successfully updated the organization name",
   "organizationTeamNameUpdated": "Successfully updated the team name",
-  "orgMemberInvited": "Invitation email send!",
+  "orgMemberInvited": "Invitation email sent!",
   "osVersion": "OS Version",
   "overrideRisk": "Override Risk",
   "overriddenRisk": "Overridden Risk",

@@ -8,11 +8,11 @@ export default Ember.Route.extend(ScrollTopMixin, {
 
   title: `Team${config.platform}`,
 
-  model(params){
+  async model(params){
     const orgId = this.get('organization').selected.id;
     return {
-      team: this.get('store').find('organization-team', params.teamId),
-      organization: this.get('store').find('organization', orgId)
+      team: await this.get('store').find('organization-team', params.teamId),
+      organization: await this.get('store').find('organization', orgId)
     }
   }
 });

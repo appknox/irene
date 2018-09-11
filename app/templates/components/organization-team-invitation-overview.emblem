@@ -6,11 +6,11 @@ td.text-lightgray
   = moment-from-now invitation.createdOn
 
 td
-  button.is-default.is-icon.no-border title=(t 'resendInvitation') click={(perform openResendInvitationConfirmBox)}
+  button.is-default.is-icon.no-border title="{{t 'resendInvitation'}}" click={(perform openResendInvitationConfirmBox)}
     i.fa.fa-repeat
 
 td
-  button.is-primary.is-icon.no-border.no-hover-button title=(t 'deleteInvitation' click={(perform openDeleteInvitationConfirmBox)}
+  button.is-primary.is-icon.no-border.no-hover-button title="{{t 'deleteInvitation'}}" click={(perform openDeleteInvitationConfirmBox)}
     i.fa.fa-trash-o
 
 = confirm-box isActive=showResendInvitationConfirmBox title=(t 'confirmBox.resendInvitation') delegate=this confirmAction=(action "confirmResendProxy") disabled=isResendtingInvitation key="resend"

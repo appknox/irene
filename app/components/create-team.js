@@ -59,9 +59,6 @@ const CreateTeamComponent = Ember.Component.extend({
     }
 
     this.get("notify").error(errMsg);
-
-    this.set("teamName", '');
-    this.set('showTeamModal', false);
     this.set('isCreatingTeam', false);
   }),
 
