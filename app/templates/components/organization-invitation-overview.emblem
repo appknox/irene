@@ -3,7 +3,7 @@ td
     = invitation.email
 td
   if invitation.team
-    = t "team"
+    | #{t "team"} -&nbsp;
     = link-to "authenticated.organization.team" invitation.team.id
       = invitation.team.name
   else
