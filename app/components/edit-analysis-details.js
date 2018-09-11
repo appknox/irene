@@ -48,7 +48,7 @@ export default Ember.Component.extend({
 
   allFindings: (function() {
     let findingId = this.get("findingId");
-    const findings = this.get("analysisDetails.findings");
+    const findings = this.get("addedFindings") || this.get("analysisDetails.findings");
     if(findings) {
       findings.forEach((finding) => {
         findingId = findingId + 1;
@@ -57,11 +57,12 @@ export default Ember.Component.extend({
       });
       return findings;
     }
-  }).property("analysisDetails.findings"),
+  }).property("analysisDetails.findings", "addedFindings"),
 
   confirmCallback(key) {
     if(key === "findings") {
       this.set("analysisDetails.findings", []);
+      this.set("addedFindings", []);
       return this.set("showClearAllFindingsConfirmBox", false);
     }
     if(key === "attachment") {
@@ -70,6 +71,7 @@ export default Ember.Component.extend({
     }
     if(key === "finding") {
       const availableFindings = this.get("availableFindings");
+      this.set("addedFindings", availableFindings);
       this.set("analysisDetails.findings", availableFindings);
       return this.set("showRemoveFindingConfirmBox", false);
     }
@@ -148,7 +150,6 @@ export default Ember.Component.extend({
         await this.get("ajax").post(ENV.endpoints.uploadedAttachment,{namespace: 'hudson-api', data: fileDetailsData});
 
         this.set("isUploading", false);
-        this.get("store").findRecord('analysis', this.get("analysis.analysisId"));
         this.get("notify").success("File Uploaded Successfully");
         const analysisObj = this.get("store").findRecord('security/analysis', this.get("analysis.analysisId"));
         this.set('analysisDetails', analysisObj);
@@ -229,7 +230,7 @@ export default Ember.Component.extend({
       };
       findings.addObject(newFinding);
       this.set("findingId", findingId);
-      this.set("analysisDetails.findings", findings);
+      this.set("addedFindings", findings);
       this.get("notify").success("Finding Added");
       this.setProperties({
         findingTitle: "",

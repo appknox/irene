@@ -162,7 +162,6 @@
                 button.is-primary.margin-top30.highlighted-button click="addFinding"
                   | Add Finding
 
-
         if allFindings
           .columns
             .column
