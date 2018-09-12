@@ -40,9 +40,11 @@ export default {
   "assignTeam":	"Assign Team",
   "analyzing": "Analyzing",
   "attachments": "Attachments",
+  "backToTeams": "Back to teams",
   "billing": "Billing",
   "billingPeriod": "Billing Period",
   "businessImplication": "Business Implication",
+  "by": "by",
   "cancel": "Cancel",
   "cancelSubsciption": "Cancel Subscription",
   "changeDevice": "Change Device",
@@ -239,7 +241,7 @@ export default {
   "organizationMembers": "Organization Members",
   "organizationNameUpdated": "Successfully updated the organization name",
   "organizationTeamNameUpdated": "Successfully updated the team name",
-  "orgMemberInvited": "Invitation email send!",
+  "orgMemberInvited": "Invitation email sent!",
   "osVersion": "OS Version",
   "overrideRisk": "Override Risk",
   "overriddenRisk": "Overridden Risk",
@@ -387,6 +389,7 @@ export default {
   "unknown": "Unknown",
   "unpaid": "Unpaid",
   "untested": "Untested",
+  "update": "Update",
   "uploadApp": "Upload App",
   "uploading": "Uploading",
   "uploadNewProject": "You can upload a new project by clicking on <b class='bold'>Upload App</b> above and start scanning",
@@ -517,6 +520,9 @@ export default {
     },
     "copyPassword": {
       "title": "Copy PDF Report Password"
+    },
+    "orgModal": {
+      "title": "Please enter organization name"
     }
   },
   "templates": {

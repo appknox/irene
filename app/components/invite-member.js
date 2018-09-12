@@ -60,9 +60,6 @@ export default Ember.Component.extend(PaginateMixin, {
       errMsg = err.message;
     }
     this.get("notify").error(errMsg);
-
-    this.set("email", '');
-    this.set('showInviteMemberModal', false);
     this.set('isInvitingMember', false);
   })
 

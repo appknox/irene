@@ -1528,6 +1528,10 @@ ul.risk-table
     max-width: 50em
     margin: auto
     padding-bottom: 5em
+    .no-hover-button
+      &:hover
+        background: none
+        color: darken($red, 20%)
   &-view
     background-color: #fafbfc
     margin-left: -10px
@@ -1559,6 +1563,8 @@ ul.risk-table
     .remove
       font-size: 14px
       color: $critical
+    .input-checkbox
+      margin-top: 2px
 
 .team-overview-card
   header:nth-child(1)
@@ -1737,6 +1743,7 @@ button.delete-button
       font-size: 14px
     &:hover
       border-bottom-color: #f0f0f0
+      background: none
   ul
     border-color: #f0f0f0
 

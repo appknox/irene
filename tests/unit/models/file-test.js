@@ -7,6 +7,7 @@ moduleForModel('file', 'Unit | Model | file', {
   needs: [
     'model:project',
     'model:profile',
+    'model:organization-project',
     'model:file',
     'model:user',
     'model:analysis',

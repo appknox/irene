@@ -14,8 +14,7 @@ if hasObjects
           th
             = t "user"
           if me.org.is_admin
-            th.capitalize-text
-              = t "removeFromTeam"
+            th
         each sortedObjects as |member|
           = organization-team-member-overview member=member organization=organization team=team
   .margin-t-q

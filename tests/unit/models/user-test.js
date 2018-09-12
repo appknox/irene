@@ -6,9 +6,7 @@ moduleForModel('user', 'Unit | Model | user', {
   needs: [
     'model:project',
     'model:submission',
-    'model:organization',
     'model:pricing',
-    'model:team',
     'service:i18n',
     'locale:en/translations',
     'locale:en/config',
@@ -38,7 +36,7 @@ test('it exists', function(assert) {
     user.set('projectCount', 1);
     assert.equal(user.get('totalProjects'), "1 project", "1 Project");
     user.set('projectCount', 0);
-    assert.equal(user.get('totalProjects'), "no project", "1 Project");
+    assert.equal(user.get('totalProjects').string, "No projects", "No Project");
 
     assert.equal(user.get('ifBillingIsNotHidden'), true, "Billing Hidden");
 

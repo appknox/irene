@@ -12,14 +12,5 @@ test('it renders', function(assert) {
 
   this.render(hbs`{{team-project}}`);
 
-  assert.equal(this.$().text().trim(), '');
-
-  // Template block usage:
-  this.render(hbs`
-    {{#team-project}}
-      template block text
-    {{/team-project}}
-  `);
-
-  assert.equal(this.$().text().trim(), 'template block text');
+  assert.equal(this.$().text().trim(), 'removeAre you sure you want to remove this team member?Please enter the name of team member who you want to removeremove');
 });

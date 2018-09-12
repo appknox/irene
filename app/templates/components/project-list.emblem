@@ -31,7 +31,7 @@ if hasProjects
         .loading-container-home
           i.fa class="fa-spinner fa-spin"
           div
-            | Loading...
+            | #{t "loading"}...
 
 
     if hasObjects

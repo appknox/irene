@@ -90,7 +90,6 @@ export default Ember.Component.extend({
 
     this.get("notify").error(errMsg);
 
-    this.set('showDeleteInvitationConfirmBox', false);
     this.set('isDeletingInvitation', false);
   }),
 

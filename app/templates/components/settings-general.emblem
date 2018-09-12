@@ -1,4 +1,4 @@
-.box-container
+.box-container.margin-top
   .columns
     .column.is-one-third
       h5.bold.black-text

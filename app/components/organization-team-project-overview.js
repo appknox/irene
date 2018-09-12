@@ -91,8 +91,6 @@ export default Ember.Component.extend({
     }
 
     this.get("notify").error(errMsg);
-
-    this.set('showRemoveProjectConfirm', false);
     this.set('isRemovingProject', false);
   }),
 

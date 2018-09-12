@@ -84,7 +84,6 @@ export default Ember.Component.extend({
 
     this.get("notify").error(errMsg);
 
-    this.set('showRejectNamespaceConfirm', false);
     this.set('isRejectingNamespace', false);
   }),
 

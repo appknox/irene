@@ -1,0 +1,3 @@
+.auth-main-container
+  = auth-assets
+  = invite-register email=model.email company=model.company token=model.token

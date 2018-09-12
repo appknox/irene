@@ -1,12 +1,13 @@
 import { moduleForModel, test } from 'ember-qunit';
 
 moduleForModel('organization-namespace', 'Unit | Model | organization namespace', {
-  // Specify the other units that are required for this test.
-  needs: []
+  needs: [
+    'model:organization',
+    'model:organization-user'
+  ]
 });
 
 test('it exists', function(assert) {
-  let model = this.subject();
-  // let store = this.store();
+  const model = this.subject();
   assert.ok(!!model);
 });

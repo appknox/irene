@@ -5,6 +5,7 @@ import { on } from '@ember/object/evented';
 
 const TeamOverviewComponent = Ember.Component.extend({
   i18n: Ember.inject.service(),
+  me: Ember.inject.service(),
 
   team: null,
   isDeletingTeam: false,
@@ -49,7 +50,6 @@ const TeamOverviewComponent = Ember.Component.extend({
       errMsg = err.message;
     }
     this.get("notify").error(errMsg);
-    this.set('showDeleteTeamPrompt', false);
     this.set('isDeletingTeam', false);
   }),
 

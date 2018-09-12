@@ -59,8 +59,6 @@ export default Ember.Component.extend({
     }
 
     this.get("notify").error(errMsg);
-
-    this.set('showRemoveMemberPrompt', false);
     this.set('isRemovingMember', false);
   }),
 

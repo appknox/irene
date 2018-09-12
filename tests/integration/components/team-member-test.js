@@ -42,6 +42,7 @@ test('tapping button fires an external action', function(assert) {
   Ember.run(function() {
     assert.equal(component.promptCallback("yash"),undefined, "Confirm Callback");
     component.set("team", {id:1});
+    component.set("organizationTeam", {id:1, organization:{id:1}});
     component.set("member", "yash");
     assert.equal(component.promptCallback("yash"),undefined, "Confirm Callback");
 

@@ -40,9 +40,11 @@ export default {
   "assignTeam":	"Assign Team",
   "analyzing": "分析中",
   "attachments": "添付ファイル",
+  "backToTeams": "Back to teams",
   "billing": "料金プラン",
   "billingPeriod": "支払い請求周期",
   "businessImplication": "ビジネスへの影響",
+  "by": "by",
   "cancel": "キャンセル",
   "cancelSubsciption": "サブスクリプションのキャンセル",
   "changeDevice": "デバイスの変更",
@@ -239,7 +241,7 @@ export default {
   "organizationMembers": "Organization Members",
   "organizationNameUpdated": "Successfully updated the organization name",
   "organizationTeamNameUpdated": "Successfully updated the team name",
-  "orgMemberInvited": "Invitation email send!",
+  "orgMemberInvited": "Invitation email sent!",
   "osVersion": "OSバージョン",
   "overrideRisk": "Override Risk",
   "overriddenRisk": "Overridden Risk",
@@ -388,6 +390,7 @@ export default {
   "unknown": "未知",
   "unpaid": "未払い",
   "untested": "Untested",
+  "update": "Update",
   "uploadApp": "アプリのアップロード",
   "uploading": "アップロード中",
   "uploadNewProject": "新しいプロジェクトをアップロードするには、ここをクリックしてください",
@@ -518,6 +521,9 @@ export default {
     },
     "copyPassword": {
       "title": "Copy PDF Report Password"
+    },
+    "orgModal": {
+      "title": "Please enter organization name"
     }
   },
   "templates": {

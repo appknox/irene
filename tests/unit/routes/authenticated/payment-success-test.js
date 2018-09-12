@@ -3,7 +3,6 @@ import { startMirage } from 'irene/initializers/ember-cli-mirage';
 
 moduleFor('route:authenticated/payment-success', 'Unit | Route | authenticated/payment success', {
   needs: [
-    'model:team',
     'service:ajax',
     'service:notification-messages-service',
     'service:session'
