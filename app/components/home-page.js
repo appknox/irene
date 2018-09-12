@@ -64,6 +64,7 @@ export default Ember.Component.extend({
 
   /* Update org name */
   updateOrgName: task(function * () {
+    this.set("isUpdatingOrg", true);
     const org = this.get('organization').selected;
     org.set('name', this.get("organizationName"));
     yield org.save();
