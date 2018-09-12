@@ -5,7 +5,7 @@ td
     = member.user.email
 
 if me.org.is_admin
-  td
+  td.content-right.margin-right20
     button.is-primary.is-icon.no-border.no-hover-button title="{{t 'removeFromTeam'}}" click={(perform openRemoveMemberPrompt)}
       i.fa.fa-user-times
 

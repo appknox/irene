@@ -14,10 +14,9 @@ if hasObjects
           th.capitalize-text
             = t "project"
           if me.org.is_admin
-            th
+            th.text-centre
               = t "accessPermissions"
             th
-              = t "removeFromTeam"
         each sortedObjects as |project|
           = organization-team-project-overview project=project organization=organization team=team
   .margin-t-q

@@ -3,7 +3,7 @@ td
     = member.member.username
   div.text-lightgray.margin-t-h
     = member.member.email
-td
+td.text-centre
   if me.org.is_owner
     select{action (perform selectMemberRole) on='change'} value="target.value" id="org-user-role" class="width-100"
       each roles as |role|

@@ -10,7 +10,7 @@ if hasObjects
         tr
           th
             = t "user"
-          th
+          th.text-centre
             = t "role"
 
         each sortedObjects as |member|
