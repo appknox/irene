@@ -16,10 +16,9 @@ export default Ember.Component.extend({
   socketIOService: service('socket-io'),
 
   isLoaded: false,
-  networkError: false,
+  networkError: "",
   isSecurityEnabled: false,
   isSecurityDashboard: false,
-
 
   tSomethingWentWrong: t("somethingWentWrong"),
   tOrganizationNameUpdated: t("organizationNameUpdated"),
@@ -88,7 +87,7 @@ export default Ember.Component.extend({
     }
   },
 
-  didInsertElement() {
+  didRender() {
     this.securityEnabled();
     this.checkConnectivity();
   },

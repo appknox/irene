@@ -61,6 +61,7 @@ Router.map(function() {
 
   // 404 path -this should be at the last.
   this.route('not-found', {path: '/*path'});
+  this.route('status');
 });
 
 const CSBMap = {

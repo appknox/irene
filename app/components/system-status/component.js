@@ -1,6 +1,8 @@
 /* jshint ignore:start */
 
 import Ember from 'ember';
+import { task } from 'ember-concurrency';
+import { on } from '@ember/object/evented';
 import ENV from 'irene/config/environment';
 import {isNotFoundError} from 'ember-ajax/errors';
 
@@ -9,38 +11,34 @@ export default Ember.Component.extend({
   isStorageWorking: false,
   isDeviceFarmWorking: false,
 
-  didInsertElement() {
-    this.storageStatus();
-    this.deviceFarmStatus();
+  didRender() {
+    this.get("getStorageStatus").perform();
+    this.get('getDeviceFarmStatus').perform();
   },
 
-  deviceFarmStatus() {
-    this.get("ajax").request(ENV.endpoints.ping)
-    .then(() => {
-      this.set("isDeviceFarmWorking", true);
-    });
-  },
+  getDeviceFarmStatus: task(function *() {
+    yield this.get("ajax").request(ENV.endpoints.ping);
+  }).evented(),
 
-  async storageStatus() {
+  getDeviceFarmStatusSucceeded: on('getDeviceFarmStatus:succeeded', function() {
+    this.set("isDeviceFarmWorking", true);
+  }),
+
+  getStorageStatus: task(function *() {
     try {
-      let connection = await this.get("ajax").request(ENV.endpoints.connection);
-      let storage = await this.storageCheck(connection.storage);
-      this.set("isStorageWorking", storage);
+      let connection = yield this.get("ajax").request(ENV.endpoints.connection);
+      yield this.get('ajax').request(connection.storage, { headers:{ 'Authorization': "Basic"}});
     }
     catch(error) {
-      return this.get("notify").error("Sorry something went wrong, please try again");
-    }
-  },
-
-  storageCheck(url) {
-    return this.get('ajax').request(url, {
-      headers:{
-        'Authorization': "Basic"
+      if(isNotFoundError(error)) {
+        this.set("isStorageWorking", true);
       }
-    }).catch((error) => {
-      return isNotFoundError(error)
-    })
-  }
+      else {
+        this.set("isStorageWorking", false);
+      }
+    }
+  })
+
 });
 
 /* jshint ignore:end */
