@@ -3,6 +3,9 @@ jobs:
   build:
     docker:
       - image: circleci/node:10-browsers-legacy
+      - image: redis:2.8.19
+        environment:
+          JOBS: 2
     working_directory: ~/appknox
     steps:
       - checkout
