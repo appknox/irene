@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import DS from 'ember-data';
 import ENUMS from 'irene/enums';
 
@@ -23,7 +24,6 @@ export default DS.Model.extend({
     return this.store.queryRecord("file", params);
   }).property("fileCount"),
 
-  hasFiles: Ember.computed.gt('fileCount', 0),
   hasMultipleFiles: Ember.computed.gt('fileCount', 1),
 
   platformIconClass:( function() {
