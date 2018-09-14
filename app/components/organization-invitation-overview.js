@@ -23,7 +23,7 @@ export default Ember.Component.extend({
 
   /* Open resend-invitation confirmation */
   openResendInvitationConfirmBox: task(function * () {
-    yield this.set('showResendInvitationConfirmBox', true);
+    this.set('showResendInvitationConfirmBox', true);
   }),
 
   /* Resend invitation */

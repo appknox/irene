@@ -21,6 +21,10 @@
           .column
             h3
               | List of Analyses
+          .column.content-right
+            button.is-primary click={(perform openAddAnalysisModal)}
+              | Add Analysis
+
         .columns
           .column
             = analysis-list fileDetails=fileDetails
@@ -47,3 +51,18 @@
                 i.fa class="fa-spinner fa-spin"
               | &nbsp;
             | Generate Report
+
+= modal-card class="input-modal vuln-modal" isActive=showAddAnalysisModal title="Add Analysis"
+  .card-body
+    .card-wrapper
+      .columns
+        .column
+          | Vulnerability
+      .columns
+       .column.margin-top20
+          = power-select placeholder="Select the Vulnerability" renderInPlace=true selected=selectedVulnerability options=vulnerabilities onchange=(perform selectVulnerabilty) as |key|
+            = key.name
+      .columns
+        .column.margin-top20
+          button.is-primary click={(perform addAnalysis)}
+            | Add Analysis
