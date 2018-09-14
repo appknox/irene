@@ -249,7 +249,7 @@ export default {
   "permissionChanged": "Permission changed successfully!",
   "package": "Package",
   "packageName": "Package Name",
-  "pageNotFound": "The Page cannot be found",
+  "pageNotFound": "The page cannot be found",
   "paid": "Paid",
   "password": "Password",
   "passwordLengthError": "Passwords must be greater than or equal to 6",
