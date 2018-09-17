@@ -2,11 +2,20 @@ import Ember from 'ember';
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 import ENV from 'irene/config/environment';
+import { translationMacro as t } from 'ember-i18n';
 
 export default Ember.Component.extend({
 
+  i18n: Ember.inject.service(),
+
+  tPleaseTryAgain: t('pleaseTryAgain'),
+
   vulnerabilities: (function() {
-    return this.get("store").findAll("security/vulnerability")
+    const store = this.get("store");
+    return store.query("security/vulnerability", {'limit':0})
+    .then(
+      data => store.query("security/vulnerability", {'limit':data.meta.count})
+    )
   }).property(),
 
   fileDetails: (function() {
@@ -29,24 +38,41 @@ export default Ember.Component.extend({
   }).evented(),
 
   addAnalysis: task(function *() {
-    const vulnerabilityId = this.get("selectedVulnerability.id");
-    const fileId = this.get("file.fileId");
+    const vulnerability = this.get("selectedVulnerability");
+    const file = this.get("fileDetails");
 
-    const analyses = this.get("store").createRecord('security/analysis',
+    if(Ember.isEmpty(vulnerability)) {
+      return this.get("notify").error("Please select a vulnerability");
+    }
+
+    const analysis = yield this.get("store").createRecord('security/analysis',
       {
-        vulnerability: {id:vulnerabilityId},
-        file: {id:fileId}
+        vulnerability: vulnerability,
+        file: file
       }
     );
-    analyses.save();
+    try {
+      yield analysis.save();
+    }
+    catch(e) {
+      analysis.unloadRecord();
+      throw e;
+    }
   }).evented(),
 
   addAnalysisSucceeded: on('addAnalysis:succeeded', function() {
-
+    this.set("showAddAnalysisModal", false);
+    this.get("notify").success("Analysis Added Successfully");
   }),
 
-  addAnalysisErrored: on('addAnalysis:errored', function() {
-
+  addAnalysisErrored: on('addAnalysis:errored', function(_, error) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (error.errors && error.errors.length) {
+      errMsg = error.errors[0].detail || errMsg;
+    } else if(error.message) {
+      errMsg = error.message;
+    }
+    this.get("notify").error(errMsg);
   }),
 
   actions: {

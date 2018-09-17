@@ -61,7 +61,7 @@
       .columns
        .column.margin-top20
           = power-select placeholder="Select the Vulnerability" renderInPlace=true selected=selectedVulnerability options=vulnerabilities onchange=(perform selectVulnerabilty) as |key|
-            = key.name
+            | #{key.id} - #{key.name}
       .columns
         .column.margin-top20
           button.is-primary click={(perform addAnalysis)}
