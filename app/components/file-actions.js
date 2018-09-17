@@ -29,6 +29,38 @@ export default Ember.Component.extend({
     return [ireneHost, "file", fileId].join('/');
   }).property(),
 
+  openPurgeAPIAnalysisConfirmBox: task(function * () {
+    yield this.set('showPurgeAPIAnalysisConfirmBox', true);
+  }),
+
+  confirmPurge: task(function * () {
+    this.set('isPurgingAPIAnalysis', true);
+    const fileId = this.get("file.fileId");
+    const url = [ENV.endpoints.files,fileId, ENV.endpoints.purgeAPIAnalyses].join('/');
+    return this.get("ajax").post(url, { namespace: '/hudson-api'})
+  }).evented(),
+
+  confirmPurgeSucceeded: on('confirmPurge:succeeded', function() {
+    const fileId = this.get("file.fileId");
+    this.get("store").findRecord("security/file", fileId);
+    this.get('notify').success('Successfully Purged the Analysis');
+    this.set('isPurgingAPIAnalysis', false);
+    this.set('showPurgeAPIAnalysisConfirmBox', false);
+  }),
+
+  confirmPurgeErrored: on('confirmPurge:errored', function(_, error) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (error.errors && error.errors.length) {
+      errMsg = error.errors[0].detail || errMsg;
+    } else if(error.message) {
+      errMsg = error.message;
+    }
+
+    this.get("notify").error(errMsg);
+
+    this.set('isPurgingAPIAnalysis', false);
+  }),
+
   openAddAnalysisModal: task(function *() {
     this.set("showAddAnalysisModal", true);
   }),
@@ -36,6 +68,28 @@ export default Ember.Component.extend({
   selectVulnerabilty: task(function *(value) {
     this.set("selectedVulnerability", value);
   }).evented(),
+
+  downloadApp: task(function *() {
+    const fileId = this.get("file.fileId");
+    const url = [ENV.endpoints.apps, fileId].join('/');
+    const data = yield this.get("ajax").request(url, { namespace: '/hudson-api'})
+    try {
+      window.location = data.url;
+    }
+    catch(e) {
+      throw e;
+    }
+  }),
+
+  downloadAppErrored: on('downloadApp:errored', function(_, error) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (error.errors && error.errors.length) {
+      errMsg = error.errors[0].detail || errMsg;
+    } else if(error.message) {
+      errMsg = error.message;
+    }
+    this.get("notify").error(errMsg);
+  }),
 
   addAnalysis: task(function *() {
     const vulnerability = this.get("selectedVulnerability");
@@ -105,6 +159,10 @@ export default Ember.Component.extend({
     openGenerateReportModal() {
       this.set("reportGenerated", false);
       this.set("showGenerateReportModal", true);
+    },
+
+    confirmPurgeAPIAnalysisConfirmBox() {
+      this.get('confirmPurge').perform();
     }
   }
 
