@@ -37,7 +37,7 @@ export default Ember.Component.extend({
     this.set('isPurgingAPIAnalysis', true);
     const fileId = this.get("file.fileId");
     const url = [ENV.endpoints.files,fileId, ENV.endpoints.purgeAPIAnalyses].join('/');
-    return this.get("ajax").post(url, { namespace: '/hudson-api'})
+    return yield this.get("ajax").post(url, { namespace: '/hudson-api'})
   }).evented(),
 
   confirmPurgeSucceeded: on('confirmPurge:succeeded', function() {
@@ -62,11 +62,11 @@ export default Ember.Component.extend({
   }),
 
   openAddAnalysisModal: task(function *() {
-    this.set("showAddAnalysisModal", true);
+    yield this.set("showAddAnalysisModal", true);
   }),
 
   selectVulnerabilty: task(function *(value) {
-    this.set("selectedVulnerability", value);
+    yield this.set("selectedVulnerability", value);
   }).evented(),
 
   downloadApp: task(function *() {
