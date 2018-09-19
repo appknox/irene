@@ -11,16 +11,25 @@
             | #{fileDetails.name} | #{fileDetails.id}
 
         .column.content-right
-          button.is-primary click="openGenerateReportModal"
+          button.is-primary click={(perform downloadApp)}
+            | Download App
+          button.margin-left.is-primary click="openGenerateReportModal"
             | Generate Report
           a.margin-left href=ireneFilePath target="_blank" class="button is-primary"
             | Visit Dashboard
 
-      .box
+      .box.margin-top
         .columns
           .column
             h3
               | List of Analyses
+          .column.content-right
+
+            button.is-primary.highlighted-button click={(perform openPurgeAPIAnalysisConfirmBox)}
+              | Purge API Analyses
+            button.is-primary.margin-left.highlighted-button click={(perform openAddAnalysisModal)}
+              | Add Analysis
+
         .columns
           .column
             = analysis-list fileDetails=fileDetails
@@ -47,3 +56,20 @@
                 i.fa class="fa-spinner fa-spin"
               | &nbsp;
             | Generate Report
+
+= modal-card class="input-modal vuln-modal" isActive=showAddAnalysisModal title="Add Analysis"
+  .card-body
+    .card-wrapper
+      .columns
+        .column
+          | Vulnerability
+      .columns
+       .column.margin-top20
+          = power-select placeholder="Select the Vulnerability" renderInPlace=true selected=selectedVulnerability options=vulnerabilities onchange=(perform selectVulnerabilty) as |key|
+            | #{key.id} - #{key.name}
+      .columns
+        .column.margin-top20
+          button.is-primary click={(perform addAnalysis)}
+            | Add Analysis
+
+= confirm-box isActive=showPurgeAPIAnalysisConfirmBox title="Are you sure of Purging API Analyses" delegate=this confirmAction=(action "confirmPurgeAPIAnalysisConfirmBox") disabled=isPurgingAPIAnalysis key="purge"

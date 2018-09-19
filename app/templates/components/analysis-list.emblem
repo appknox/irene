@@ -7,5 +7,5 @@
         |	Vulterability
       th
         |	Risk Type
-    each fileDetails.analyses as |analysis|
+    each fileDetails.sortedAnalyses as |analysis|
       = analysis-overview analysis=analysis fileDetails=fileDetails

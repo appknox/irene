@@ -2,7 +2,7 @@ td
   = analysis.id
 td
   = link-to 'authenticated.security.analysis' analysis.id
-     = analysis.vulnerability.name
+     | #{analysis.vulnerability.name}
 td.uppercase-text
   .tag class=analysis.riskLabelClass
     | #{risk-text analysis.risk}

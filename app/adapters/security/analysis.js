@@ -12,5 +12,8 @@ export default DRFAdapter.extend(DataAdapterMixin, {
     if(id) {
       return `${this.get('host')}/${this.get('namespace')}/analyses/${id}`;
     }
+    else {
+      return `${this.get('host')}/${this.get('namespace')}/analyses`
+    }
   }
 });
