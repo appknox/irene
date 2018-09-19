@@ -17,6 +17,7 @@ Router.map(function() {
   if (!ENV.isEnterprise) {
     this.route('register');
     this.route('activate', {path: '/activate/:pk/:token'});
+    this.route('reactivate');
   }
   this.route('recover');
   this.route('reset', {path: '/reset/:uuid/:token'});

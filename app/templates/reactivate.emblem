@@ -1,0 +1,4 @@
+.auth-main-container
+  = auth-assets
+  
+  = reactivate-component

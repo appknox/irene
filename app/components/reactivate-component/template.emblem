@@ -1,0 +1,15 @@
+.activate-container
+  .activate-main
+    h6
+      | Hey, looks like the activation token is expired or invalid
+    h6
+      | Do you want to recieve the activation email again? If yes, please enter the registered email id below
+
+    .column.is-half
+      form
+        p.control.has-icon.has-icon-left
+            = input class="input" placeholder="Email" value=email autofocus="autofocus" autocomplete="username"
+            = fa-icon class="is-primary" "user"
+        p.control.margin-top20
+           button.button.is-primary.highlighted-button click={(perform reactivate)}
+              | Resend Email

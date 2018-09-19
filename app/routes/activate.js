@@ -6,10 +6,13 @@ export default Ember.Route.extend({
   title: `Activate${config.platform}`,
   model(params) {
     const url = [ENV.endpoints.activate, params.pk, params.token].join('/');
-    return this.get('ajax').request(url);
+    return this.get('ajax').request(url)
+    .then(() => {
+      this.get("notify").info("Your account has been activated. Please login to continue");
+      this.transitionTo('login');
+    })
+    .catch(() => {
+      this.transitionTo('reactivate');
+    });
   },
-  redirect() {
-    this.get("notify").info("Your account has been activated. Please login to continue");
-    this.transitionTo('login');
-  }
 });

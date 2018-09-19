@@ -57,6 +57,10 @@ export default function() {
     return {};
   });
 
+  this.get('/activate/:id/1', () => {
+    return {};
+  });
+
   this.get('/manual/:id', () => {
     return {};
   });
@@ -94,6 +98,10 @@ export default function() {
   });
 
   this.post('/registration', () => {
+    return {};
+  });
+
+  this.post('/reactivate', () => {
     return {};
   });
 
