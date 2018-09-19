@@ -26,8 +26,8 @@ export default Ember.Component.extend({
 
   getStorageStatus: task(function *() {
     try {
-      let connection = yield this.get("ajax").request(ENV.endpoints.connection);
-      yield this.get('ajax').request(connection.storage, { headers:{ 'Authorization': "Basic"}});
+      let status = yield this.get("ajax").request(ENV.endpoints.status);
+      yield this.get('ajax').request(status.storage, { headers:{ 'Authorization': "Basic"}});
     }
     catch(error) {
       if(isNotFoundError(error)) {

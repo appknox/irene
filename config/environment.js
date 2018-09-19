@@ -193,7 +193,7 @@ module.exports = function(environment) {
       reports: 'reports',
       setUnknownAnalysisStatus: "set_unknown_analysis_status",
       userSearch: "user_search",
-      connection: 'urls',
+      status: 'status',
       ping: 'ping'
     },
     csb: {
