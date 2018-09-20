@@ -295,7 +295,7 @@ export default {
   "recover": "Recover",
   "recoverPassword": "Recover your password",
   "register": "Register",
-  "registerConfirmation": "Thank you for registering with Appknox. An activation link has been send to the email provided.",
+  "registerConfirmation": "Thank you for registering with Appknox. An activation link has been sent to the email provided.",
   "invitationRegisterConfirmation": "Thank you for registering with Appknox. Please login to continue.",
   "regulatory": "Regulatory",
   "reject": "Reject",
