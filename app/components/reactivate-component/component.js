@@ -19,10 +19,9 @@ export default Ember.Component.extend({
 
   reactivateErrored: on('reactivate:errored', function(_, error) {
     let errMsg = this.get('tPleaseTryAgain');
-    if (error.errors && error.errors.length) {
-      errMsg = error.errors[0].detail || errMsg;
-    } else if(error.message) {
-      errMsg = error.message;
+
+    if(error.payload) {
+      errMsg = error.payload[Object.keys(error.payload)][0]
     }
 
     this.get("notify").error(errMsg);

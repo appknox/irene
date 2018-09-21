@@ -12,14 +12,5 @@ test('it renders', function(assert) {
 
   this.render(hbs`{{reactivate-component}}`);
 
-  assert.equal(this.$().text().trim(), '');
-
-  // Template block usage:
-  this.render(hbs`
-    {{#reactivate-component}}
-      template block text
-    {{/reactivate-component}}
-  `);
-
-  assert.equal(this.$().text().trim(), 'template block text');
+  assert.equal(this.$().text().trim(), 'Hey, looks like the activation token is expired or invalidDo you want to recieve the activation email again? If yes, please enter the registered email id belowResend EmailThank you for registering with Appknox. An activation link has been sent to the email provided.');
 });
