@@ -23,6 +23,9 @@ module.exports = function(defaults) {
         'bower_components/bohemia/'
       ]
     },
+    cssModules: {
+      intermediateOutputPath: 'app/styles/_modules.scss'
+    },
     dotEnv: {
       clientAllowedKeys: ['AWS_BUCKET', 'AWS_REGION', 'WEBHOOK_URL'],
       path: {

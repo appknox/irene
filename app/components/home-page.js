@@ -87,7 +87,7 @@ export default Ember.Component.extend({
     }
   },
 
-  didRender() {
+  didInsertElement() {
     this.securityEnabled();
     this.checkConnectivity();
   },
