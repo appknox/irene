@@ -1,9 +1,13 @@
 import DS from 'ember-data';
 import Ember from 'ember';
+import { not } from '@ember/object/computed';
 
 const Organization = DS.Model.extend({
   name: DS.attr('string'),
   logo: DS.attr('string'),
+  billingHidden: DS.attr('boolean'),
+  showBilling: not('billingHidden'),
+  isTrial: DS.attr('boolean'),
   members: DS.hasMany('organization-member'),
   namespaces: DS.hasMany('organization-namespace'),
   projects: DS.hasMany('organization-project'),

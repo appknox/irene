@@ -42,6 +42,15 @@ export default Ember.Component.extend({
     }
   }),
 
+  showBilling: Ember.computed(
+    'me.org.is_owner', 'organization.selected.showBilling',
+    function() {
+      const orgShowBilling = this.get('organization.selected.showBilling');
+      const isOwner = this.get('me.org.is_owner');
+      return orgShowBilling && isOwner;
+    }
+  ),
+
   securityDashboard() {
     if(window.location.pathname.startsWith("/security")) {
       const isSecurityEnabled = this.get("isSecurityEnabled");
