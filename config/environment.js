@@ -213,6 +213,9 @@ module.exports = function(environment) {
       inviteDelete: { feature: "Invitation Delete", module: "Security", product: "Appknox" },
       teamProjectAdd: { feature: "Add Team Project", module: "Security", product: "Appknox" },
       teamProjectRemove: { feature: "Remove Team Project", module: "Security", product: "Appknox" },
+      updateOrgName: { feature: "Update Organization Name", module: "Setup", product: "Appknox" },
+      addTeamMember: { feature: "Add Team Member", module: "Security", product: "Appknox" },
+      inviteMember: { feature: "Invite Member", module: "Security", product: "Appknox" },
     },
     whitelabel: {
       theme: 'dark'
