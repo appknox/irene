@@ -1,7 +1,9 @@
 import Ember from 'ember';
 import { on } from '@ember/object/evented';
 import { task } from 'ember-concurrency';
+import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
+import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 export default Ember.Component.extend({
     i18n: Ember.inject.service(),
@@ -60,9 +62,9 @@ export default Ember.Component.extend({
 
     updateOrgNameSucceeded: on('updateOrgName:succeeded', function() {
       this.get('notify').success(this.get('tOrganizationNameUpdated'));
-
       this.send("cancelEditing");
       this.set('orgNameDoesNotExist', false);
+      triggerAnalytics('feature', ENV.csb.updateOrgName);
     }),
 
     updateOrgNameErrored: on('updateOrgName:errored', function(_, err) {

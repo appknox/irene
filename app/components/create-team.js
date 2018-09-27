@@ -43,11 +43,10 @@ const CreateTeamComponent = Ember.Component.extend({
 
   createTeamSucceeded: on('createTeam:succeeded', function() {
     this.get('notify').success(this.get('tTeamCreated'));
-    triggerAnalytics('feature', ENV.csb.createTeam);
-
     this.set("teamName", '');
     this.set('showTeamModal', false);
     this.set('isCreatingTeam', false);
+    triggerAnalytics('feature', ENV.csb.createTeam);
   }),
 
   createTeamErrored: on('createTeam:errored', function(_, err) {
