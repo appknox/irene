@@ -30,8 +30,5 @@ test('tapping button fires an external action', function(assert) {
     "Durations");
     assert.notOk(component.activateDuration());
     assert.notOk(component.didRender());
-    assert.deepEqual(component.get("devknoxPricing"),
-      [{"description": "Dashboard Upload, Manual Scan","id": "devknox","name": "Devknox","price": 9,"projectsLimit": 0}],
-    'Devknox Pricing');
   });
 });

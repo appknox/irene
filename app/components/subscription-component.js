@@ -27,7 +27,7 @@ const SubscriptionComponentComponent = Ember.Component.extend({
         this.set("subscription.isCancelled", true);
         this.set("isCancellingSubscription", false);
         this.send("closeCancelSubscriptionConfirmBox");
-      }  
+      }
     }, (error) => {
       if(!this.isDestroyed) {
         this.set("isCancellingSubscription", false);

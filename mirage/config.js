@@ -280,4 +280,8 @@ export default function() {
   this.delete('/subscriptions/:id', () => {
     return {};
   });
+
+  this.get('/example/download_url', () => {
+    return {};
+  });
 }

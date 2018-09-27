@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import ENUMS from 'irene/enums';
-import ENV from 'irene/config/environment';
 
 const PricingListComponent = Ember.Component.extend({
 
@@ -50,17 +49,6 @@ const PricingListComponent = Ember.Component.extend({
     const element = $(this.element).find(`[data-value='${paymentDuration}']`);
     this.activateDuration(element);
   },
-
-  devknoxPricing: (function() {
-    const store = this.get("store");
-    return store.createRecord("pricing", {
-      id: "devknox",
-      name: "Devknox",
-      description: "Dashboard Upload, Manual Scan",
-      price: ENV.devknoxPrice,
-      projectsLimit: 0,
-    });
-  }).property(),
 
   actions: {
     selectDuration() {
