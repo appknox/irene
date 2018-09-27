@@ -1,2 +1,2 @@
-if model.ifBillingIsNotHidden
+if model.showBilling
   = pricing-list
