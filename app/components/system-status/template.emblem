@@ -1,0 +1,38 @@
+.auth-main-container
+  = auth-assets
+  .columns
+    .column.is-half.margin-auto
+      div local-class="system-status-container"
+        div local-class="system-status-box"
+          h4
+            = t "systemStatus"
+          table local-class="system-status-table"
+            thead
+              tr
+                th
+                  =  t "system"
+                th
+                  = t "status"
+            tbody
+              tr
+                td
+                  = t "storage"
+                td
+                  ul
+                    li local-class="operational-status storage-status"
+                      span local-class="operational-text"
+                        = t "operational"
+                      span local-class="unavailable-text"
+                        = t "unavailable"
+                        small
+                          =  t "proxyWarning"
+              tr
+                td
+                  = t "devicefarm"
+                td
+                  ul
+                    li local-class="operational-status devicefarm-status"
+                      span local-class="operational-text"
+                        = t "operational"
+                      span local-class="unavailable-text"
+                        = t "unavailable"

@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
+import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 
@@ -12,13 +13,32 @@ export default Ember.Component.extend({
   ajax: service(),
   session: service(),
   organization: service(),
+  socketIOService: service('socket-io'),
 
   isLoaded: false,
+  networkError: "",
   isSecurityEnabled: false,
   isSecurityDashboard: false,
 
   tSomethingWentWrong: t("somethingWentWrong"),
   tOrganizationNameUpdated: t("organizationNameUpdated"),
+
+  checkConnectivity() {
+    const socket = this.get('socketIOService').socketFor(ENV.socketPath);
+    const offlineMessage = "No Internet, Please check your internet connection";
+    window.addEventListener('offline', () => {
+      this.set("networkError", offlineMessage);
+    });
+    window.addEventListener('online', () => {
+      this.set("networkError", "");
+    });
+    socket.on('connect', () => {
+      this.set("networkError", "");
+    });
+    socket.on('disconnect', () => {
+      this.set("networkError", offlineMessage);
+    });
+  },
 
   securityEnabled() {
     this.get("ajax").request("projects", {namespace: 'hudson-api'})
@@ -69,6 +89,7 @@ export default Ember.Component.extend({
 
   didInsertElement() {
     this.securityEnabled();
+    this.checkConnectivity();
   },
 
   /* Update org name */

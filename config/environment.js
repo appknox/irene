@@ -192,7 +192,9 @@ module.exports = function(environment) {
       apps: 'apps',
       reports: 'reports',
       setUnknownAnalysisStatus: "set_unknown_analysis_status",
-      userSearch: "user_search"
+      userSearch: "user_search",
+      status: 'status',
+      ping: 'ping'
     },
     csb: {
       reportDownload: { feature: "Account Settings", module: "Setup", product: "Appknox" },

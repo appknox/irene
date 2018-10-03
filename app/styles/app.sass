@@ -8,6 +8,7 @@ $FreestyleGuide-color--background: $background
 @import 'ember-freestyle'
 @import 'vars'
 @import 'form'
+@import 'modules'
 
 $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert), danger: ($danger, $danger-invert), critical: ($critical, $critical-invert), success: ($success, $success-invert)) !default
 
@@ -2840,6 +2841,7 @@ ul.email-list
     padding-right: 8px
   .column.flex-center
     padding: 4px
+
 .user
   &-search-modal
     .modal-card
@@ -2931,3 +2933,21 @@ ul.email-list
   .modal-card
     width: 50%
     min-height: 300px
+
+.network-state
+  visibility: visible
+  text-align: center
+  background-color: $red
+  margin: auto
+  margin-top: -30px
+  color: #FFF
+  border-radius: 5px
+  position: fixed
+  top: 36px
+  left: 40%
+  z-index: 10000
+  font-size: 12px
+  padding: 10px
+  &.green
+    background-color: $green
+    left: 43%

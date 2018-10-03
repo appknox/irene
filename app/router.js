@@ -54,12 +54,14 @@ Router.map(function() {
       this.route('file', {path: '/file/:fileId'});
       this.route('analysis', {path: '/analysis/:analysisId'});
     });
+    this.route('status');
   });
   this.route('invitation', {path: '/invitation/:uuid'});
   this.route('invite', {path: '/invite/:token'});
 
   // 404 path -this should be at the last.
   this.route('not-found', {path: '/*path'});
+  this.route('status');
 });
 
 const CSBMap = {

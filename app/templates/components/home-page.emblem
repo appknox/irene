@@ -1,3 +1,7 @@
+if networkError
+  .network-state
+    = networkError
+
 if isLoaded
   if isSecurityDashboard
     .columns.security-dashboard
