@@ -10,7 +10,7 @@ export default Ember.Component.extend({
       }
       this.set("isPurgingAPIAnalyses", true);
       const url = [ENV.endpoints.files,fileId, ENV.endpoints.purgeAPIAnalyses].join('/');
-      return this.get("ajax").post(url, { namespace: '/hudson-api'})
+      return this.get("ajax").post(url, { namespace: 'api/hudson-api'})
       .then(() => {
         this.set("isPurgingAPIAnalyses", false);
         this.get("notify").success("Successfully Purged the Analysis");

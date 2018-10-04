@@ -41,7 +41,7 @@ export default Ember.Component.extend({
   },
 
   securityEnabled() {
-    this.get("ajax").request("projects", {namespace: 'hudson-api'})
+    this.get("ajax").request("projects", {namespace: 'api/hudson-api'})
     .then(() => {
       this.set("isSecurityEnabled", true);
       this.securityDashboard();
