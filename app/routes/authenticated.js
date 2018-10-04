@@ -37,8 +37,8 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
   afterModel(user){
     let error;
     const data = {
-      userId: user.get("email"),
-      accountId: user.get("email").split("@").pop().trim()
+      userId: user.get("id"),
+      accountId: this.get("org.selected.id")
     };
     triggerAnalytics('login', data);
     try {

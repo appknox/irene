@@ -2,7 +2,9 @@ import Ember from 'ember';
 import PaginateMixin from 'irene/mixins/paginate';
 import { translationMacro as t } from 'ember-i18n';
 import { task } from 'ember-concurrency';
+import ENV from 'irene/config/environment';
 import { on } from '@ember/object/evented';
+import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 export default Ember.Component.extend(PaginateMixin, {
   i18n: Ember.inject.service(),
@@ -46,10 +48,10 @@ export default Ember.Component.extend(PaginateMixin, {
 
   inviteMemberSucceeded: on('inviteMember:succeeded', function() {
     this.get('notify').success(this.get("tOrgMemberInvited"));
-
     this.set("email", '');
     this.set('showInviteMemberModal', false);
     this.set('isInvitingMember', false);
+    triggerAnalytics('feature', ENV.csb.inviteMember);
   }),
 
   inviteMemberErrored: on('inviteMember:errored', function(_, err) {

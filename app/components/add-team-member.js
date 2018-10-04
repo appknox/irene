@@ -2,7 +2,9 @@ import Ember from 'ember';
 import PaginateMixin from 'irene/mixins/paginate';
 import { translationMacro as t } from 'ember-i18n';
 import { task } from 'ember-concurrency';
+import ENV from 'irene/config/environment';
 import { on } from '@ember/object/evented';
+import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 export default Ember.Component.extend(PaginateMixin, {
   i18n: Ember.inject.service(),
@@ -53,9 +55,9 @@ export default Ember.Component.extend(PaginateMixin, {
 
   addTeamMemberSucceeded: on('addTeamMember:succeeded', function() {
     this.get('notify').success(this.get('tTeamMemberAdded'));
-
     this.set('isAddingMember', false);
     this.set('query', '');
+    triggerAnalytics('feature', ENV.csb.addTeamMember);
   }),
 
   addTeamMemberErrored: on('addTeamMember:errored', function(_, err) {
