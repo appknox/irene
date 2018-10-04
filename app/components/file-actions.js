@@ -37,7 +37,7 @@ export default Ember.Component.extend({
     this.set('isPurgingAPIAnalysis', true);
     const fileId = this.get("file.fileId");
     const url = [ENV.endpoints.files,fileId, ENV.endpoints.purgeAPIAnalyses].join('/');
-    return yield this.get("ajax").post(url, { namespace: '/hudson-api'})
+    return yield this.get("ajax").post(url, { namespace: 'api/hudson-api'})
   }).evented(),
 
   confirmPurgeSucceeded: on('confirmPurge:succeeded', function() {
@@ -72,7 +72,7 @@ export default Ember.Component.extend({
   downloadApp: task(function *() {
     const fileId = this.get("file.fileId");
     const url = [ENV.endpoints.apps, fileId].join('/');
-    const data = yield this.get("ajax").request(url, { namespace: '/hudson-api'})
+    const data = yield this.get("ajax").request(url, { namespace: 'api/hudson-api'})
     try {
       window.location = data.url;
     }
@@ -142,7 +142,7 @@ export default Ember.Component.extend({
       }
       this.set("isGeneratingReport", true);
       const url = [ENV.endpoints.reports, fileId].join('/');
-      return this.get("ajax").put(url, { namespace: '/hudson-api', data, contentType: 'application/json'})
+      return this.get("ajax").put(url, { namespace: 'api/hudson-api', data, contentType: 'application/json'})
       .then(() => {
         this.set("isGeneratingReport", false);
         this.set("reportGenerated", true);

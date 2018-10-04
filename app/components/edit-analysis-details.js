@@ -135,7 +135,7 @@ export default Ember.Component.extend({
       };
       const analysisId= this.get("analysis.analysisId");
       try {
-        var fileData = await this.get("ajax").post(ENV.endpoints.uploadFile,{namespace: 'hudson-api', data});
+        var fileData = await this.get("ajax").post(ENV.endpoints.uploadFile,{namespace: 'api/hudson-api', data});
         await file.uploadBinary(fileData.url, {
           method: 'PUT'
         });
@@ -147,7 +147,7 @@ export default Ember.Component.extend({
           analysis: analysisId,
           content_type: "ANALYSIS"
         };
-        await this.get("ajax").post(ENV.endpoints.uploadedAttachment,{namespace: 'hudson-api', data: fileDetailsData});
+        await this.get("ajax").post(ENV.endpoints.uploadedAttachment,{namespace: 'api/hudson-api', data: fileDetailsData});
 
         this.set("isUploading", false);
         this.get("notify").success("File Uploaded Successfully");
@@ -258,7 +258,7 @@ export default Ember.Component.extend({
 
     downloadAttachment(id) {
       const url = [ENV.endpoints.uploadFile, id, ENV.endpoints.downloadAttachment].join('/');
-      return this.get("ajax").request(url, {namespace: 'hudson-api'})
+      return this.get("ajax").request(url, {namespace: 'api/hudson-api'})
       .then((data) => {
         window.open(data.url, '_blank');
       }, (error) => {
@@ -330,7 +330,7 @@ export default Ember.Component.extend({
       };
       this.set("isSavingAnalyses", true);
       const url = [ENV.endpoints.analyses, analysisId].join('/');
-      this.get("ajax").put(url,{ namespace: '/hudson-api', data: JSON.stringify(data), contentType: 'application/json' })
+      this.get("ajax").put(url,{ namespace: 'api/hudson-api', data: JSON.stringify(data), contentType: 'application/json' })
       .then(() => {
         this.set("isSavingAnalyses", false);
         this.get("notify").success("Analyses Updated");
