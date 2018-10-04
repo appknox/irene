@@ -1,9 +1,8 @@
+.columns.margin-top
+  .column.is-one-sixth.margin-auto
+    = input class="input search-input" placeholder="Search for project" value=query
+
 if hasObjects
-  .text-centre
-    | LIST OF PROJECTS
-  / .columns.margin-top
-  /   .column.is-one-sixth.margin-auto
-  /     = input class="input search-input" placeholder="Search" value=query
   .columns
     .column
       .table-container

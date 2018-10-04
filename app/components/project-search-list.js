@@ -37,7 +37,7 @@ export default Ember.Component.extend(PaginateMixin, {
 
   extraQueryStrings: Ember.computed("query", function() {
     const query =
-      {query: this.get("query")};
+      {q: this.get("query")};
     return JSON.stringify(query, Object.keys(query).sort());
   })
 }
