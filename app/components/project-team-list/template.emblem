@@ -1,0 +1,24 @@
+if me.org.is_admin
+  .columns
+    .column.content-right
+      = add-project-team project=project
+
+if hasObjects
+  .columns
+    .column
+      table.org-table
+        tr
+          th.capitalize-text
+            = t "team"
+          if me.org.is_admin
+            th.text-centre
+              = t "accessPermissions"
+            th
+        each sortedObjects as |team|
+          = project-team-overview project=project team=team
+  .margin-t-q
+    = partial "paginate"
+else
+  div.empty-state
+    = fa-icon "exclamation-triangle"
+    = t "noTeams"
