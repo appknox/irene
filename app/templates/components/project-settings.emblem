@@ -26,9 +26,10 @@ if isGeneralSettings
     .collaboration-settings
       .columns
         .column
-          h5.bold.black-text.margin-t-q
+          h5.bold.black-text.margin-t-q.margin-b-1
             = t "teamsAndCollaborators"
       = project-team-list project=project
+      = project-collaborator-list project=project
   .box-container
     = github-project project=project
   .box-container
