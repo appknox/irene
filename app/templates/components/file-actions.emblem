@@ -18,21 +18,23 @@
           a.margin-left href=ireneFilePath target="_blank" class="button is-primary"
             | Visit Dashboard
 
-      .box.margin-top
-        .columns
-          .column
-            h3
-              | List of Analyses
-          .column.content-right
+      .columns
+        .column
+          .box.margin-top
+            .columns
+              .column
+                h3
+                  | List of Analyses
+              .column.content-right
 
-            button.is-primary.highlighted-button click={(perform openPurgeAPIAnalysisConfirmBox)}
-              | Purge API Analyses
-            button.is-primary.margin-left.highlighted-button click={(perform openAddAnalysisModal)}
-              | Add Analysis
+                button.is-primary.highlighted-button click={(perform openPurgeAPIAnalysisConfirmBox)}
+                  | Purge API Analyses
+                button.is-primary.margin-left.highlighted-button click={(perform openAddAnalysisModal)}
+                  | Add Analysis
 
-        .columns
-          .column
-            = analysis-list fileDetails=fileDetails
+            .columns
+              .column
+                = analysis-list fileDetails=fileDetails
 
 = modal-card class="input-modal" isActive=showGenerateReportModal title="Generate Report"
   .card-body
