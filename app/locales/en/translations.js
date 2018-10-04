@@ -293,6 +293,7 @@ export default {
   "projects": "Projects",
   "projectName": "Project Name",
   "projectRemoved": "Project has been removed",
+  "projectTeamAdded": "Added team to project",
   "proxyWarning": "Please check if you have enabled proxy",
   "quarterly": "Quarterly",
   "recover": "Recover",
@@ -379,6 +380,7 @@ export default {
   "tablet": "Tablet",
   "team": "Team",
   "teams": "Teams",
+  "teamsAndCollaborators": "Teams & Collaborators",
   "teamCreated": "Team Created Successfully",
   "teamDeleted": "has been deleted successfully",
   "teamInvitations": "Team Invitations",
@@ -388,6 +390,7 @@ export default {
   "teamMemberInvited": "Team member invited",
   "teamMemberRemoved": "Removed member from the team",
   "teamProjectAdded": "Project added to team",
+  "teamRemoved": "Team removed from accessing this project",
   "testCredentials": "Test Credentials",
   "title": "Title",
   "unavailable": "unavailable",
@@ -425,6 +428,7 @@ export default {
   "confirmBox": {
     "removeURL": "Are you sure you want to remove from url filters?",
     "removeProject": "Are you sure you want to remove Github Project?",
+    "removeProjectTeam": "Are you sure you want to remove this team from project?",
     "removeTeamProject": "Are you sure you want to remove this project from team?",
     "removeJIRA": "Are you sure you want to remove JIRA Project?",
     "revokeGithub": "Are you sure you want to revoke Github Integration?",
@@ -466,6 +470,9 @@ export default {
     },
     "addProject": {
       "title": "Add project to team"
+    },
+    "addTeam": {
+      "title": "Allow teams to access this project"
     },
     "apiScan": {
       "title": "Do you also want to run API Scan?",

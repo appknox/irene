@@ -294,6 +294,7 @@ export default {
   "projects": "プロジェクト",
   "projectName": "プロジェクト名",
   "projectRemoved": "プロジェクトが削除されました",
+  "projectTeamAdded": "Added team to project",
   "quarterly": "３か月",
   "recover": "復元",
   "recoverPassword": "パスワードの復元",
@@ -379,6 +380,7 @@ export default {
   "tablet": "タブレット",
   "team": "チーム",
   "teams": "チーム",
+  "teamsAndCollaborators": "Teams & Collaborators",
   "teamCreated": "チームが作成されました",
   "teamDeleted": "削除されました",
   "teamInvitations": "Team Invitations",
@@ -388,6 +390,7 @@ export default {
   "teamMemberInvited": "チームメンバーが招待されました",
   "teamMemberRemoved": "がチームから削除されました",
   "teamProjectAdded": "Project added to team",
+  "teamRemoved": "Team removed from accessing this project",
   "testCredentials": "テスト資格情報",
   "title": "Title",
   "unavailable": "unavailable",
@@ -425,6 +428,7 @@ export default {
   "confirmBox": {
     "removeURL": "URLフィルタから削除してもよろしいですか？",
     "removeProject": "Githubプロジェクトを削除してもよろしいですか？",
+    "removeProjectTeam": "Are you sure you want to remove this team from project?",
     "removeTeamProject": "Are you sure you want to remove this project from team?",
     "removeJIRA": "JIRAプロジェクトを削除してもよろしいですか？",
     "revokeGithub": "Githubとの連携を解除してもよろしいですか？",
@@ -466,6 +470,9 @@ export default {
     },
     "addProject": {
       "title": "Add project to team"
+    },
+    "addTeam": {
+      "title": "Allow teams to access this project"
     },
     "apiScan": {
       "title": "API診断も実行しますか？",
