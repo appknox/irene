@@ -8,6 +8,7 @@ export default {
   "actions": "ACTIONS",
   "activationSuccess": "Your account has been activated, you will be redirected to login page.",
   "activeSubscription": "Active Subscription",
+  "addCollaborator": "Add Collaorator",
   "addedNamespaces": "Added Namespaces",
   "addedOn": "Added on",
   "addedSSOMembersToOrg": "Created members from SSO emails",
@@ -55,6 +56,8 @@ export default {
   "clickOnDynamicScan": "Click on Start Dynamic Scan",
   "clickToAddOrgName": "Click to add organization name",
   "closeModal": "Exit Full Screen",
+  "collaboratorRemoved": "Removed Collaborator",
+  "collaborators": "Collaborators",
   "companyName": "Company Name",
   "compare": "Compare",
   "compareWarningSameFiles": "You are comparing 2 same files",
@@ -218,6 +221,7 @@ export default {
   "newScanStarted": "New scan started, Click here to show",
   "next": "Next",
   "no": "No",
+  "noCollaborators": "No Collaborators",
   "noDeviceAvailable": "No Device Available",
   "noFiles": "No Files",
   "noMembers": "No members",
@@ -289,6 +293,7 @@ export default {
   "proceed": "Proceed with the scan",
   "production": "Production",
   "project": "project",
+  "projectCollaboratorAdded": "Added collaborator to project",
   "projectCount": "Projects count",
   "projects": "Projects",
   "projectName": "Project Name",
@@ -428,6 +433,7 @@ export default {
   "confirmBox": {
     "removeURL": "Are you sure you want to remove from url filters?",
     "removeProject": "Are you sure you want to remove Github Project?",
+    "removeProjectCollaborator": "Are you sure you want to remove this collaborator?",
     "removeProjectTeam": "Are you sure you want to remove this team from project?",
     "removeTeamProject": "Are you sure you want to remove this project from team?",
     "removeJIRA": "Are you sure you want to remove JIRA Project?",
@@ -464,6 +470,9 @@ export default {
       "title": "Disable Multi Factor Authentication",
       "description": "If you turn off Multi Factor Authentication, your account will only be protected by your password.",
       "enterOTP": "To confirm, please enter the OTP"
+    },
+    "addCollaborator": {
+      "title": "Add collaborator to project"
     },
     "addMember": {
       "title": "Add Member"
