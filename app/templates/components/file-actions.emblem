@@ -24,6 +24,19 @@
             .columns
               .column
                 h3
+                  | Scan Status
+            .columns
+              .column.margin-top
+                = input id="api-scan-status" class="checkbox" checked=fileDetails.isApiDone type="checkbox" click=(perform setApiScanStatus) class="display-inline"
+                | &nbsp; Is API done
+
+
+      .columns
+        .column
+          .box.margin-top
+            .columns
+              .column
+                h3
                   | List of Analyses
               .column.content-right
 

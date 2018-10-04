@@ -176,8 +176,14 @@ const ENUMS = {
      WAITING: 1,
      RUNNING: 2,
      COMPLETED: 3
-   }
+   },
 
+  SCAN_STATUS: {
+     ERROR: 0,
+     WAITING: 1,
+     RUNNING: 2,
+     COMPLETED: 3
+   },
 };
 
 // Populate `CHOICES`
