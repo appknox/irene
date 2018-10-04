@@ -216,6 +216,7 @@ module.exports = function(environment) {
       updateOrgName: { feature: "Update Organization Name", module: "Setup", product: "Appknox" },
       addTeamMember: { feature: "Add Team Member", module: "Security", product: "Appknox" },
       inviteMember: { feature: "Invite Member", module: "Security", product: "Appknox" },
+      projectTeamRemove: { feature: "Remove Project Team", module: "Security", product: "Appknox" },
     },
     whitelabel: {
       theme: 'dark'
