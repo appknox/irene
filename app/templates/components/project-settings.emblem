@@ -23,11 +23,12 @@ if isGeneralSettings
   .box-container
     = api-filter profileId=project.activeProfileId
   .box-container
-    .columns
-      .column
-        h5.bold.black-text.margin-t-q
-          = t "teamsAndCollaborators"
-    = project-team-list project=project
+    .collaboration-settings
+      .columns
+        .column
+          h5.bold.black-text.margin-t-q
+            = t "teamsAndCollaborators"
+      = project-team-list project=project
   .box-container
     = github-project project=project
   .box-container
