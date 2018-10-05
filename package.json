@@ -12,7 +12,9 @@
     "start": "cross-env IRENE_API_HOST=http://localhost:8000 IRENE_API_SOCKET_PATH=http://localhost:8008 ember server",
     "test": "ember test",
     "postinstall": "bower install",
-    "deploy": "ember deploy production --verbose=true --activate=true --show-progress=true"
+    "deploy": "ember deploy production --verbose=true --activate=true --show-progress=true",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": "",
   "engines": {
@@ -93,8 +95,10 @@
   },
   "dependencies": {
     "clipboard": "^1.7.1",
-    "ember-cli-document-title": "^0.3.3",
+    "ember-cli-document-title": "^0.4.0",
     "intl-tel-input": "^12.1.15",
-    "jquery": "^3.3.1"
-  }
+    "jquery": "^3.3.1",
+    "snyk": "^1.100.1"
+  },
+  "snyk": true
 }
