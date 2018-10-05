@@ -34,4 +34,9 @@ export default DS.Model.extend({
       default: return "mobile";
     }
   }).property("platform"),
+
+  addCollaborator(data, id) {
+    var adapter = this.store.adapterFor(this.constructor.modelName);
+    return adapter.addCollaborator(this.store, this.constructor.modelName, this, data, id);
+  },
 });

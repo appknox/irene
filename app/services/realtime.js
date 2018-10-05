@@ -4,6 +4,8 @@ const RealtimeService = Ember.Service.extend({
 
   FileCounter: 0,
   ProjectCounter: 0,
+  ProjectCollaboratorCounter: 0,
+  ProjectNonCollaboratorCounter: 0,
   ProjectTeamCounter: 0,
   ProjectNonTeamCounter: 0,
   SubmissionCounter: 0,

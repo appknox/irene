@@ -15,5 +15,15 @@ export default DRFAdapter.extend(DataAdapterMixin, {
       return `${baseurl}/${encodeURIComponent(id)}`;
     }
     return baseurl;
-  }
+  },
+
+  addCollaborator(store, type, snapshot, data, collaboratorId) {
+    let id = snapshot.id;
+    const url = this.urlForAddCollaborator(id, type.modelName, snapshot, collaboratorId);
+    return this.ajax(url, 'PUT', {data});
+  },
+  urlForAddCollaborator(id, modelName, snapshot, collaboratorId) {
+    const baseURL = this._buildURL(modelName, id);
+    return [baseURL, 'collaborators', collaboratorId].join('/');
+  },
 });

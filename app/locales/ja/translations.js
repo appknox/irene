@@ -8,6 +8,7 @@ export default {
   "actions": "アクション",
   "activationSuccess": "アカウントが有効化されていると、ログインページにリダイレクトされます。",
   "activeSubscription": "有効なサブスクリプション",
+  "addCollaborator": "Add Collaorator",
   "addedNamespaces": "Added Namespaces",
   "addedOn": "Added on",
   "addedSSOMembersToOrg": "Created members from SSO emails",
@@ -55,6 +56,8 @@ export default {
   "clickOnDynamicScan": "動的診断の開始をクリック",
   "clickToAddOrgName": "Click to add organization name",
   "closeModal": "全画面を終了",
+  "collaboratorRemoved": "Removed Collaborator",
+  "collaborators": "Collaborators",
   "companyName": "会社名",
   "compare": "比較",
   "compareWarningSameFiles": "You are comparing 2 same files",
@@ -218,6 +221,7 @@ export default {
   "newScanStarted": "New scan started, Click here to show",
   "next": "次",
   "no": "いいえ",
+  "noCollaborators": "No Collaborators",
   "noDeviceAvailable": "使用可能なデバイスがありません",
   "noFiles": "ファイルがありません",
   "noMembers": "No members",
@@ -290,6 +294,7 @@ export default {
   "proceed": "診断を続行する",
   "production": "プロダクション",
   "project": "プロジェクト",
+  "projectCollaboratorAdded": "Added collaborator to project",
   "projectCount": "Projects count",
   "projects": "プロジェクト",
   "projectName": "プロジェクト名",
@@ -428,6 +433,7 @@ export default {
   "confirmBox": {
     "removeURL": "URLフィルタから削除してもよろしいですか？",
     "removeProject": "Githubプロジェクトを削除してもよろしいですか？",
+    "removeProjectCollaborator": "Are you sure you want to remove this collaborator?",
     "removeProjectTeam": "Are you sure you want to remove this team from project?",
     "removeTeamProject": "Are you sure you want to remove this project from team?",
     "removeJIRA": "JIRAプロジェクトを削除してもよろしいですか？",
@@ -464,6 +470,9 @@ export default {
       "title": "マルチファクタ認証を無効にする",
       "description": "マルチファクタ認証を無効にすると、アカウントはパスワードでのみ保護されます。",
       "enterOTP": "確認するには、OTPを入力してください"
+    },
+    "addCollaborator": {
+      "title": "Add collaborator to project"
     },
     "addMember": {
       "title": "メンバーを追加"
