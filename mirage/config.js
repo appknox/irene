@@ -37,7 +37,7 @@ export default function() {
   this.get('/profiles/:id/vulnerability_preferences', 'vulnerability-preference');
   this.get('/available_devices/', 'available-device');
   this.get('/subscriptions/', 'subscription');
-  this.get('/stats/:id', 'stat');
+  this.get('/organization/:id/analytics', 'analytics');
   this.get('/personaltokens', 'personaltoken');
   this.get('/manualscans/:id', 'manualscan');
 

@@ -1,6 +1,6 @@
 import { moduleForModel, test } from 'ember-qunit';
 
-moduleForModel('stat', 'Unit | Model | stat', {
+moduleForModel('analytics/scancount', 'Unit | Model | analytics/scancount', {
   needs: []
 });
 

@@ -1,6 +1,6 @@
 .main-box-container
   h5.box-main-heading
-    | RECENTLY FIXED ISSUES
+    | Recently fixed issues
   if hasIssues
     .box-content
       .box-list
