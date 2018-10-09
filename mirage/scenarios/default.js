@@ -11,7 +11,7 @@ export default function(server) {
     pricingCount = getRandomInt(3, 3),
     planCount = getRandomInt(3, 3),
     subscriptionCount = getRandomInt(1, 1),
-    statCount = getRandomInt(1, 1),
+    analyticsCount = getRandomInt(1, 1),
     vulnerabilityCount = getRandomInt(5, 15),
     submissionCount = getRandomInt(3,3),
     personalTokenCount = getRandomInt(3,3),
@@ -32,7 +32,7 @@ export default function(server) {
   server.createList('submission', submissionCount);
   server.createList('device', deviceCount);
   server.createList('invoice', invoiceCount);
-  server.createList('stat', statCount);
+  server.createList('analytics', analyticsCount);
   server.createList('personaltoken', personalTokenCount);
   server.createList('invitation', invitationCount);
   server.createList('github-integration', githubCount);

@@ -30,6 +30,11 @@ if isLoaded
             = img-logo
           ul.menu-list.text-center.margin-top20
             li
+              = link-to 'authenticated.index' class="mp-auth-index"
+                div
+                  = fa-icon "home" class="sidebar-icons"
+                  = t "dashboard"
+            li
               = link-to 'authenticated.projects' class="mp-auth-projects"
                 div
                   = fa-icon "tasks" class="sidebar-icons"
