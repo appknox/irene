@@ -2960,3 +2960,52 @@ ul.email-list
 
 .collaboration-settings
   width: 70%
+
+.dropdown
+  position: relative
+  &-content
+    z-index: 10
+    .dropdown
+      &-pointer
+        height: 0
+        width: 0
+        border-bottom: 0.6em solid
+        border-top: none
+        border-left: 0.5em solid transparent
+        border-right: 0.5em solid transparent
+        right: 0.4em
+        position: absolute
+      &-container
+        border: 1px solid
+        border-radius: 5px
+        overflow: hidden
+        margin-top: 0.5em
+      &-item
+        padding: 0.5em 1em
+        display: block
+        margin-left: 0
+        width: 100%
+        &-icon
+          display: inline-block
+          width: 2em
+          padding-right: 0.7em
+          .fa
+            font-size: 16px
+            line-height: 1.25
+
+$dropdown-default-theme: $color-table
+.dropdown--default
+  &-content
+    background: transparent
+    .dropdown
+      &-pointer
+        border-bottom-color: lighten($dropdown-default-theme, 55%)
+      &-container
+        background: lighten($dropdown-default-theme, 60%)
+        border-color: lighten($dropdown-default-theme, 55%)
+      &-item
+        color: darken($dropdown-default-theme, 5%)
+        &:hover
+          background: lighten($dropdown-default-theme, 53%)
+        &-icon
+          color: lighten($dropdown-default-theme, 25%)

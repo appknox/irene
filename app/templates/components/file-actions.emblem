@@ -17,6 +17,17 @@
             | Generate Report
           a.margin-left href=ireneFilePath target="_blank" class="button is-primary"
             | Visit Dashboard
+          span.dropdown.dropdown--default.margin-left
+            = basic-dropdown horizontalPosition='right' as |dropdown|
+              = dropdown.trigger class="button is-primary"
+                = fa-icon "ellipsis-v"
+              = dropdown.content class="dropdown-content dropdown--default-content"
+                .dropdown-pointer
+                .dropdown-container
+                  a.dropdown-item click={(perform downloadReportExcel)}
+                    span.dropdown-item-icon
+                      = fa-icon "file-excel-o"
+                    | Download Excel Report
 
       .columns
         .column

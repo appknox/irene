@@ -97,15 +97,27 @@ export default Ember.Component.extend({
     const fileId = this.get("file.fileId");
     const url = [ENV.endpoints.apps, fileId].join('/');
     const data = yield this.get("ajax").request(url, { namespace: 'api/hudson-api'})
-    try {
-      window.location = data.url;
-    }
-    catch(e) {
-      throw e;
-    }
+    window.location = data.url;
   }),
 
   downloadAppErrored: on('downloadApp:errored', function(_, error) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (error.errors && error.errors.length) {
+      errMsg = error.errors[0].detail || errMsg;
+    } else if(error.message) {
+      errMsg = error.message;
+    }
+    this.get("notify").error(errMsg);
+  }),
+
+  downloadReportExcel: task(function *() {
+    const fileId = this.get("file.fileId");
+    const url = [ENV.endpoints.reports, fileId, 'download_url'].join('/');
+    const data = yield this.get("ajax").request(url, { namespace: 'api/hudson-api'});
+    window.location.href = data.xlsx;
+  }),
+
+  downloadReportExcelErrored: on('downloadReportExcel:errored', function(_, error) {
     let errMsg = this.get('tPleaseTryAgain');
     if (error.errors && error.errors.length) {
       errMsg = error.errors[0].detail || errMsg;
