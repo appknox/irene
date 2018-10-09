@@ -13,7 +13,7 @@ button.is-primary click={(perform openAddSSOMembersModal)}
             small.text-lightgray
               | (for multiple entries, separate by comma)
             br
-            textarea.form-control.input.margin-t-q placeholder=(t 'email') type="text" value=emailsFromText autofocus="autofocus"
+            = textarea class="form-control input margin-t-q" placeholder=(t "email") value=emailsFromText autofocus="autofocus"
 
         div.or.margin-t-1.margin-b-h
           | or
