@@ -31,11 +31,11 @@ export default Ember.Component.extend({
   }).property(),
 
   setApiScanStatus: task(function * () {
-    let isApiDone = this.$("#api-scan-status").is(":checked");
+    let isApiDone = this.$("#api-scan-status").prop('checked');
     let apiScanStatus = ENUMS.SCAN_STATUS.UNKNOWN;
     if(isApiDone) apiScanStatus = ENUMS.SCAN_STATUS.COMPLETED;
     const file = yield this.get("fileDetails")
-    yield file.set('apiScanStatus', apiScanStatus);
+    file.set('apiScanStatus', apiScanStatus);
     yield file.save();
   }).evented(),
 
@@ -123,8 +123,8 @@ export default Ember.Component.extend({
       return this.get("notify").error("Please select a vulnerability");
     }
 
-    const analysis = yield this.get("store").createRecord('security/analysis',
-      {
+    const analysis = yield this.get("store").createRecord(
+      'security/analysis', {
         vulnerability: vulnerability,
         file: file
       }
