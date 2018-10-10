@@ -17,6 +17,7 @@ const AnalysisDetailsComponent = Ember.Component.extend({
 
   tSuccessfullyOverridden: t("successfullyOverridden"),
   tSuccessfullyReset: t("successfullyReset"),
+  tRiskAndCommentRequired: t("riskAndCommentRequired"),
 
   risks: (function() {
     const risks = ENUMS.RISK.CHOICES;
@@ -132,14 +133,21 @@ const AnalysisDetailsComponent = Ember.Component.extend({
 
     removeMarkedAnalysis() {
       this.set("analysis.overriddenRisk", null);
+      this.set("analysis.overriddenRiskComment", null);
     },
 
     markAnalysis() {
       const markedRisk = this.get("markedRisk");
+      const comment = this.get("analysis.overriddenRiskComment");
+      if (!markedRisk || !comment) {
+        this.get("notify").error(this.get("tRiskAndCommentRequired"));
+        return;
+      }
       const markAllAnalyses = this.get("markAllAnalyses");
       const url = this.editAnalysisURL("risk");
       const data = {
         risk: markedRisk,
+        comment: comment,
         all: markAllAnalyses
       };
       this.set("isMarkingAnalysis", true);
@@ -183,6 +191,7 @@ const AnalysisDetailsComponent = Ember.Component.extend({
           this.set("showResetAnalysisConfirmBox", false);
           this.set("analysis.isOverriddenRisk", false);
           this.set("analysis.computedRisk", this.get("analysis.risk"));
+          this.set("analysis.overriddenRiskComment", null);
         }
       }, (error) => {
         this.get("notify").error(error.payload.message);
