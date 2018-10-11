@@ -24,7 +24,7 @@ jobs:
           command: COVERAGE=true npm test
       - deploy:
           command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
 
               npm run deploy
 
