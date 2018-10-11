@@ -34,3 +34,7 @@ jobs:
                 -F revision=$REVISION \
                 -F local_username=$LOCAL_USERNAME
             fi
+
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              npm run deploy:staging
+            fi
