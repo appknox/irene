@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import ENUMS from 'irene/enums';
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 import ENV from 'irene/config/environment';
@@ -28,6 +29,29 @@ export default Ember.Component.extend({
     const ireneHost = ENV.ireneHost;
     return [ireneHost, "file", fileId].join('/');
   }).property(),
+
+  setApiScanStatus: task(function * () {
+    let isApiDone = this.$("#api-scan-status").prop('checked');
+    let apiScanStatus = ENUMS.SCAN_STATUS.UNKNOWN;
+    if(isApiDone) apiScanStatus = ENUMS.SCAN_STATUS.COMPLETED;
+    const file = yield this.get("fileDetails")
+    file.set('apiScanStatus', apiScanStatus);
+    yield file.save();
+  }).evented(),
+
+  setApiScanStatusSucceeded: on('setApiScanStatus:succeeded', function() {
+    this.get('notify').success('Successfully saved the API scan status');
+  }),
+
+  setApiScanStatusErrored: on('setApiScanStatus:errored', function(_, error) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (error.errors && error.errors.length) {
+      errMsg = error.errors[0].detail || errMsg;
+    } else if(error.message) {
+      errMsg = error.message;
+    }
+    this.get("notify").error(errMsg);
+  }),
 
   openPurgeAPIAnalysisConfirmBox: task(function * () {
     yield this.set('showPurgeAPIAnalysisConfirmBox', true);
@@ -99,8 +123,8 @@ export default Ember.Component.extend({
       return this.get("notify").error("Please select a vulnerability");
     }
 
-    const analysis = yield this.get("store").createRecord('security/analysis',
-      {
+    const analysis = yield this.get("store").createRecord(
+      'security/analysis', {
         vulnerability: vulnerability,
         file: file
       }
