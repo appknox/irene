@@ -329,6 +329,7 @@ export default {
   "risk": "リスク",
   "riskOf": "リスク",
   "riskType": "リスクタイプ",
+  "riskAndCommentRequired": "Risk and comment are required fields",
   "role": "役割",
   "save": "Save",
   "saveCredentials": "資格情報の保存",

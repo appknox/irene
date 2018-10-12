@@ -329,6 +329,7 @@ export default {
   "risk": "The risk of",
   "riskOf": "Risk Of",
   "riskType": "Risk Type",
+  "riskAndCommentRequired": "Risk and comment are required fields",
   "role": "Role",
   "save": "Save",
   "saveCredentials": "Save Credentials",
