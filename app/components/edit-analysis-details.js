@@ -270,6 +270,7 @@ export default Ember.Component.extend({
 
     resetOverriddenAnalysis() {
       this.set("analysisDetails.overriddenRisk", null);
+      this.set("analysisDetails.overriddenRiskComment", null);
     },
 
     saveAndContinue() {
@@ -295,6 +296,7 @@ export default Ember.Component.extend({
       if(typeof overriddenRisk === "object" && !Ember.isEmpty(overriddenRisk)) {
         overriddenRisk = overriddenRisk.value;
       }
+      const overriddenRiskComment = this.get("analysisDetails.overriddenRiskComment");
       const overriddenRiskToProfile = this.get("analysisDetails.overriddenRiskToProfile");
       const attackVector = this.get("analysisDetails.attackVector");
       const attackComplexity = this.get("analysisDetails.attackComplexity");
@@ -317,6 +319,7 @@ export default Ember.Component.extend({
         pcidss: pcidss.map(a=>a.get('id')),
         findings,
         overridden_risk: overriddenRisk,
+        overridden_risk_comment: overriddenRiskComment,
         overridden_risk_to_profile: overriddenRiskToProfile,
         cvss_vector: cvssVector,
         attack_vector: attackVector,

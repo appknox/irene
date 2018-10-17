@@ -15,6 +15,7 @@ const Analysis = DS.Model.extend({
   cvssMetricsHumanized: DS.attr(),
   computedRisk: DS.attr('number'),
   overriddenRisk: DS.attr('number'),
+  overriddenRiskComment: DS.attr('string'),
   analiserVersion: DS.attr('number'),
   attachments: DS.hasMany('attachment'),
   vulnerability: DS.belongsTo('vulnerability'),

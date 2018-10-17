@@ -262,6 +262,9 @@ $fractional-pts: q 0.25, h 0.5, 3q 0.75
 .display-inline
   display: inline
 
+.contain-width
+  width: 100%
+
 /* Appknox specific */
 .appknox-logo
   margin-top: 13px
@@ -334,6 +337,20 @@ button
 
 input
   display: block
+
+.textarea-input
+  align-items: center
+  border: 1px solid #e6e6e6
+  border-radius: 3px
+  color: $color-table
+  display: inline-flex
+  justify-content: flex-start
+  padding: 0.3em 0.6em
+  box-shadow: inset 0 1px 2px rgba(107, 107, 107, 0.1)
+  max-width: 100%
+  width: 100%
+  &::placeholder
+    color: lighten($color-table, 30%)
 
 button:hover, button:active, button:focus
   transition: all 0.4s!important
@@ -529,6 +546,17 @@ select
 .vertical-align-center
   display: flex
   align-items: center
+
+.vertical-align-top
+  display: flex
+  align-items: flex-start
+
+.vertical-align-stretch
+  display: flex
+  flex-direction: row
+  align-items: flex-start
+  align-items: stretch
+  height: 100%
 
 .align-middle
   display: flex
@@ -1228,8 +1256,6 @@ b.bold
 .icon-effect
   cursor: pointer
   font-size: 18px
-  margin-top: 8px
-  margin-left: 10px
   padding: 5px
   width: 29px
   &:hover
@@ -2618,7 +2644,6 @@ $attachment-icon-width: 4em
 
 .select-box
   max-width: 110px
-  margin-top: 5px
 
 .vuln-band
   @extend .message-header
@@ -2629,6 +2654,15 @@ $attachment-icon-width: 4em
 
   .checkbox-field
     display: inline-block
+
+  .risk-comment
+    margin-left: 0
+    background: darken(#f6f8fa, 3%)
+    border: 1px solid darken(#f6f8fa, 6%)
+    &-label
+      background: darken(#f6f8fa, 6%)
+      color: $color-table
+      padding: 0 0.5em
 
 .vnc-box
   min-width: 165px
