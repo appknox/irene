@@ -23,7 +23,7 @@
                       span local-class="operational-text"
                         = t "operational"
                       span local-class="unavailable-text"
-                        = t "unavailable"
+                        = t "unreachable"
                         small
                           =  t "proxyWarning"
               tr
@@ -35,4 +35,4 @@
                       span local-class="operational-text"
                         = t "operational"
                       span local-class="unavailable-text"
-                        = t "unavailable"
+                        = t "unreachable"

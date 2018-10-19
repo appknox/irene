@@ -402,6 +402,7 @@ export default {
   "testCredentials": "Test Credentials",
   "title": "Title",
   "unavailable": "unavailable",
+  "unreachable": "Unreachable",
   "unchanged": "Unchanged",
   "undefined": "undefined",
   "unknown": "Unknown",
