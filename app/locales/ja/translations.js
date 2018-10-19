@@ -402,6 +402,7 @@ export default {
   "testCredentials": "テスト資格情報",
   "title": "Title",
   "unavailable": "unavailable",
+  "unreachable": "Unreachable",
   "unchanged": "変更なし",
   "undefined": "未定義",
   "unknown": "未知",
