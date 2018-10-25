@@ -158,6 +158,7 @@ export default {
   "hideVulnerability": "Hide Vulnerability",
   "high": "High",
   "howAndWhat": "How and What?",
+  "host": "Host",
   "identification": "Username / Email",
   "impact": "Impact",
   "improved": "Improved",

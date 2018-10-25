@@ -158,6 +158,7 @@ export default {
   "hideVulnerability": "脆弱性を非表示にする",
   "high": "高",
   "howAndWhat": "どのように？",
+  "host": "Host",
   "identification": "ユーザ名/Eメール",
   "impact": "Impact",
   "improved": "改善",

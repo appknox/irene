@@ -15,6 +15,10 @@ const JiraProjectComponent = Ember.Component.extend({
   tRepoNotIntegrated: t("repoNotIntegrated"),
   tFetchJIRAProjectFailed: t("fetchProjectFailed"),
 
+  didInsertElement() {
+    window.test = this;
+    this.get('checkJIRA').perform();
+  },
   confirmCallback() {
     const tProjectRemoved = this.get("tProjectRemoved");
     const projectId = this.get("project.id");
