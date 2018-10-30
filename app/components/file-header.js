@@ -4,12 +4,15 @@ import { computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
+import { task } from 'ember-concurrency';
+import { on } from '@ember/object/evented';
 import { translationMacro as t } from 'ember-i18n';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 const FileHeaderComponent = Component.extend({
 
   roleId: 0,
+  progress: 0,
   userRoles: [],
   globalAlpha:0.4,
   radiusRatio:0.9,
@@ -23,11 +26,11 @@ const FileHeaderComponent = Component.extend({
   isDownloadingReport: false,
   showManualScanFormModal: false,
   showRemoveRoleConfirmBox: false,
-  progress: 0,
 
   i18n: service(),
   trial: service(),
   ajax: service(),
+  organization: service(),
   notify: service('notification-messages-service'),
 
   vpnStatuses: ["yes", "no"],
@@ -39,6 +42,7 @@ const FileHeaderComponent = Component.extend({
   tPleaseTryAgain: t("pleaseTryAgain"),
   tManualRequested: t("manualRequested"),
   tRescanInitiated: t("rescanInitiated"),
+  tAccessRequested: t("accessRequested"),
   tRoleAdded: t("modalCard.manual.roleAdded"),
   tReportIsGettingGenerated: t("reportIsGettingGenerated"),
   tPleaseEnterAllValues: t("modalCard.manual.pleaseEnterAllValues"),
@@ -270,6 +274,37 @@ const FileHeaderComponent = Component.extend({
     };
   }),
 
+  openRequestAccessModal: task(function * () {
+    yield this.set("showRequestAccessModal", true);
+  }),
+
+  closeRequestAccessModal: task(function * () {
+    yield this.set("showRequestAccessModal", false);
+  }),
+
+  requestAccess: task(function *() {
+    const orgId = this.get("organization.selected.id");
+    const url = [ENV.endpoints.organizations, orgId, ENV.endpoints.requestAccess].join('/');
+    yield this.get("ajax").post(url);
+  }).evented(),
+
+  requestAccessSucceeded: on('requestAccess:succeeded', function() {
+    const tAccessRequested = this.get("tAccessRequested");
+    this.get("notify").success(tAccessRequested);
+    this.set("showRequestAccessModal", false);
+  }),
+
+  requestAccessErrored: on('requestAccess:errored', function(_, err) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (err.errors && err.errors.length) {
+      errMsg = err.errors[0].detail || errMsg;
+    } else if(err.message) {
+      errMsg = err.message;
+    }
+    this.get('notify').error(errMsg);
+  }),
+
+
   actions: {
 
     displayScanDetails() {
@@ -480,14 +515,6 @@ const FileHeaderComponent = Component.extend({
       })
     },
 
-    closeSubscribeModal() {
-      this.set("showSubscribeModal", false);
-    },
-
-    openSubscribeModal() {
-      this.set("showSubscribeModal", true);
-    },
-
     openManualScanModal() {
       this.set("showManualScanModal", true);
     },
@@ -503,11 +530,6 @@ const FileHeaderComponent = Component.extend({
     closeRescanModal() {
       this.set("showRescanModal", false);
     },
-
-    subscribePlan() {
-      window.location.href = "/billing";
-    },
-
 
     rescanApp() {
       const tRescanInitiated = this.get("tRescanInitiated");

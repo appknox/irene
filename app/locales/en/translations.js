@@ -2,6 +2,7 @@ export default {
   "acceptInvite": "Signup & Accept Invite",
   "acceptTerms": "I accept the terms and conditions",
   "accessPermissions": "Access permissions",
+  "accessRequested": "Removal for the restriction has been requested, please wait for our team to revert",
   "account": "Account",
   "accountOverview": "Account Overview",
   "accountSettings": "Account Settings",
@@ -509,9 +510,10 @@ export default {
       "description": "You need to also run Dynamic Scan to initiate the API Scan",
       "runScan": "Run Dynamic & API Scan"
     },
-    "subscription": {
-      "title": "Subscribe to continue",
-      "description": "You haven't subscribed yet, do you want to Subscribe?"
+    "requestAccess": {
+      "title": "Request Access",
+      "description": "Trial account does not have access to this feature",
+      "button": "Request Access"
     },
     "manual": {
       "title": "Request Manual Scan",
