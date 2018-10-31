@@ -1,12 +1,11 @@
-/*jshint node:true*/
-/* global require, module */
+'use strict';
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 var environment = EmberApp.env();
 var minifyEnabled = environment === "production" || environment === "staging" || environment === "whitelabel";
 
 module.exports = function(defaults) {
-  var app = new EmberApp(defaults, {
+  let app = new EmberApp(defaults, {
     // Add options here
     storeConfigInMeta: false,
     minifyJS: {

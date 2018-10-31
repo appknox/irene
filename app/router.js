@@ -1,9 +1,10 @@
 import Ember from 'ember';
-import ENV from 'irene/config/environment';
+import EmberRouter from '@ember/routing/router';
+import config from './config/environment';
 
-const Router = Ember.Router.extend({
-  location: ENV.locationType,
-  rootURL: ENV.rootURL
+const Router = EmberRouter.extend({
+  location: config.locationType,
+  rootURL: config.rootURL
 });
 
 Ember.$('body').addClass('theme-' + ENV.whitelabel.theme);
