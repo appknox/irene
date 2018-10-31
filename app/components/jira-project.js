@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
 
@@ -7,18 +8,42 @@ const JiraProjectComponent = Ember.Component.extend({
   ajax: Ember.inject.service(),
   notify: Ember.inject.service('notification-messages-service'),
   project: null,
-  jiraProjects: ["Loading..."],
-
-
+  jiraProjects: null,
   tIntegratedJIRA: t("integratedJIRA"),
   tProjectRemoved: t("projectRemoved"),
   tRepoNotIntegrated: t("repoNotIntegrated"),
   tFetchJIRAProjectFailed: t("fetchProjectFailed"),
-
+  noIntegration: false,
+  noAccess: false,
+  hasJIRAProject: Ember.computed('jiraProjects.length', function(){
+    return this.get('jiraProjects.length') > 0
+  }),
   didInsertElement() {
-    window.test = this;
-    this.get('checkJIRA').perform();
+    this.get('fetchJIRAProjects').perform();
   },
+  fetchJIRAProjects: task(function* (){
+    this.set('noAccess', false);
+    this.set('noIntegration', false);
+    this.set('jiraProjects', null);
+    try{
+      const jiraprojects = yield this.get('store').query(
+        'organizationJiraproject', {}
+      );
+      this.set('jiraProjects', jiraprojects);
+    } catch (error) {
+      if(error.errors) {
+        const status = error.errors[0].status;
+        if(status == 403) {
+          this.set('noAccess', true);
+          return
+        } else if(status == 404) {
+          this.set('noIntegration', true);
+          return
+        }
+        throw error;
+      }
+    }
+  }),
   confirmCallback() {
     const tProjectRemoved = this.get("tProjectRemoved");
     const projectId = this.get("project.id");
@@ -36,18 +61,6 @@ const JiraProjectComponent = Ember.Component.extend({
       }
     });
   },
-
-  fetchJiraProjects: (function() {
-    const tFetchJIRAProjectFailed = this.get("tFetchJIRAProjectFailed");
-    this.get("ajax").request(ENV.endpoints.jiraProjects)
-    .then((data) => {
-      if(!this.isDestroyed) {
-        this.set("jiraProjects", data.projects);
-      }
-    }, () => {
-      this.get("notify").error(tFetchJIRAProjectFailed);
-    });
-  }).on("init"),
 
   actions: {
 

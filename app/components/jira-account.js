@@ -37,7 +37,6 @@ const JiraAccountComponent = Ember.Component.extend({
     this.set('changeset', changeset);
   },
   didInsertElement() {
-    window.test = this;
     this.get('checkJIRA').perform();
   },
   baseURL: Ember.computed('organization.selected.id', '', function(){
