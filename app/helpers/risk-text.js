@@ -1,4 +1,4 @@
-import { helper } from '@ember/component/helper'
+import { helper } from '@ember/component/helper';
 import ENUMS from 'irene/enums';
 
 export function riskText(params) {

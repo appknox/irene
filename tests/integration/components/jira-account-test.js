@@ -46,14 +46,5 @@ test('tapping button fires an external action', function(assert) {
     assert.equal(component.get('showRevokeJIRAConfirmBox'),false, "Close Modal");
 
     assert.equal(component.confirmCallback(),undefined, "Confirm Callback");
-
-    component.send('integrateJira');
-
-    component.set("jiraHost", "yashwin.atlassian.com");
-    component.set("jiraUsername", "yashwin");
-    component.set("jiraPassword", "passwordtest");
-
-    component.send('integrateJira');
-
   });
 });

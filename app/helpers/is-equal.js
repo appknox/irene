@@ -1,4 +1,4 @@
-import { helper } from '@ember/component/helper'
+import { helper } from '@ember/component/helper';
 
 export function isEqualTo([leftSide, rightSide]) {
   return leftSide === rightSide;

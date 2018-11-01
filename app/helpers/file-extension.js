@@ -1,4 +1,4 @@
-import { helper } from '@ember/component/helper'
+import { helper } from '@ember/component/helper';
 
 const fileExtension = params => {
   const filename = params[0];

@@ -1,4 +1,4 @@
-import { helper } from '@ember/component/helper'
+import { helper } from '@ember/component/helper';
 
 const SEPERATOR = "-";
 // This function receives the params `params, hash`
