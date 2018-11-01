@@ -1,5 +1,5 @@
-import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
+import { run } from '@ember/runloop';
 
 moduleForComponent('compare-files', 'Integration | Component | compare files', {
   unit: true
@@ -10,7 +10,7 @@ test('tapping button fires an external action', function(assert) {
 
   var component = this.subject();
 
-  Ember.run(function() {
+  run(function() {
     assert.equal(component.get('summaryClass'), "is-active", "Summary Class");
     component.set("isReverse", true);
     component.set("isSummary", false);

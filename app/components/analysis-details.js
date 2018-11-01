@@ -1,9 +1,11 @@
-import Ember from 'ember';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
 
-const AnalysisDetailsComponent = Ember.Component.extend({
+const AnalysisDetailsComponent = Component.extend({
   analysis: null,
   tagName: "article",
   mpClassSelector: true,
@@ -11,32 +13,32 @@ const AnalysisDetailsComponent = Ember.Component.extend({
   showVulnerability: false,
   classNameBindings: ["riskClass"],
 
-  i18n: Ember.inject.service(),
-  ajax: Ember.inject.service(),
-  notify: Ember.inject.service('notification-messages-service'),
+  i18n: service(),
+  ajax: service(),
+  notify: service('notification-messages-service'),
 
   tSuccessfullyOverridden: t("successfullyOverridden"),
   tSuccessfullyReset: t("successfullyReset"),
   tRiskAndCommentRequired: t("riskAndCommentRequired"),
 
-  risks: (function() {
+  risks: computed(function() {
     const risks = ENUMS.RISK.CHOICES;
     const riskFilter = [ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN];
     return risks.filter(risk => !riskFilter.includes(risk.value));
-  }).property(),
+  }),
 
-  filteredRisks: (function() {
+  filteredRisks: computed("risks", "analysis.risk", function() {
     const risks = this.get("risks");
     const analysisRisk = this.get("analysis.risk");
     return risks.filter(risk => analysisRisk !== risk.value);
-  }).property("risks", "analysis.risk"),
+  }),
 
-  markedRisk: (function() {
+  markedRisk: computed("filteredRisks", function() {
     const filteredRisks = this.get("filteredRisks");
     return filteredRisks[0].value;
-  }).property("filteredRisks"),
+  }),
 
-  riskClass: ( function() {
+  riskClass: computed("analysis.computedRisk", function() {
     const risk = this.get("analysis.computedRisk");
     switch (risk) {
       case ENUMS.RISK.NONE:
@@ -50,15 +52,15 @@ const AnalysisDetailsComponent = Ember.Component.extend({
       case ENUMS.RISK.CRITICAL:
         return "is-critical";
     }
-  }).property("analysis.computedRisk"),
+  }),
 
-  progressClass: ( function() {
+  progressClass: computed("analysis.computedRisk", function() {
     const risk = this.get("analysis.computedRisk");
     switch (risk) {
       case ENUMS.RISK.UNKNOWN:
         return "is-progress";
     }
-  }).property("analysis.computedRisk"),
+  }),
 
   editAnalysisURL(type) {
     const fileId = this.get("analysis.file.id");
@@ -71,43 +73,41 @@ const AnalysisDetailsComponent = Ember.Component.extend({
     this.send("resetMarkedAnalysis");
   },
 
-  tags: (function() {
-    const types = this.get("analysis.vulnerability.types");
-    if (types === undefined) { return []; }
-    const tags = [];
-    for (let type of Array.from(types)) {
-      if (type === ENUMS.VULNERABILITY_TYPE.STATIC) {
-        tags.push({
-          status: this.get("analysis.file.isStaticDone"),
-          text: "static"
-        });
-      }
-      if (type === ENUMS.VULNERABILITY_TYPE.DYNAMIC) {
-        tags.push({
-          status: this.get("analysis.file.isDynamicDone"),
-          text: "dynamic"
-        });
-      }
-      if (type === ENUMS.VULNERABILITY_TYPE.MANUAL) {
-        tags.push({
-          status: this.get("analysis.file.isManualDone"),
-          text: "manual"
-        });
-      }
-      if (type === ENUMS.VULNERABILITY_TYPE.API) {
-        tags.push({
-          status: this.get("analysis.file.isApiDone"),
-          text: "api"
-        });
-      }
-    }
-    return tags;
-  }).property(
+  tags: computed(
     "analysis.vulnerability.types",
-    "analysis.file.isStaticDone",
-    "analysis.file.isDynamicDone",
-    "analysis.file.isManualDone",
-    "analysis.file.isApiDone"
+    "analysis.file.{isStaticDone,isDynamicDone,isManualDone,isApiDone}",
+    function() {
+      const types = this.get("analysis.vulnerability.types");
+      if (types === undefined) { return []; }
+      const tags = [];
+      for (let type of Array.from(types)) {
+        if (type === ENUMS.VULNERABILITY_TYPE.STATIC) {
+          tags.push({
+            status: this.get("analysis.file.isStaticDone"),
+            text: "static"
+          });
+        }
+        if (type === ENUMS.VULNERABILITY_TYPE.DYNAMIC) {
+          tags.push({
+            status: this.get("analysis.file.isDynamicDone"),
+            text: "dynamic"
+          });
+        }
+        if (type === ENUMS.VULNERABILITY_TYPE.MANUAL) {
+          tags.push({
+            status: this.get("analysis.file.isManualDone"),
+            text: "manual"
+          });
+        }
+        if (type === ENUMS.VULNERABILITY_TYPE.API) {
+          tags.push({
+            status: this.get("analysis.file.isApiDone"),
+            text: "api"
+          });
+        }
+      }
+      return tags;
+    }
   ),
 
   actions: {

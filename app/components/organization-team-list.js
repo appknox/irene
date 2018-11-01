@@ -1,9 +1,10 @@
-import Ember from 'ember';
 import PaginateMixin from 'irene/mixins/paginate';
 
-const {inject: {service}} = Ember;
+import { inject as service } from '@ember/service';
+import { observer, computed } from '@ember/object';
+import Component from '@ember/component';
 
-export default Ember.Component.extend(PaginateMixin, {
+export default Component.extend(PaginateMixin, {
   me: service(),
   i18n: service(),
   org: service('organization'),
@@ -11,10 +12,10 @@ export default Ember.Component.extend(PaginateMixin, {
   targetObject: 'organization-team',
   sortProperties: ['createdOn:desc'],
 
-  newInvitationsObserver: Ember.observer("realtime.OrganizationTeamCounter", function() {
+  newInvitationsObserver: observer("realtime.OrganizationTeamCounter", function() {
     return this.incrementProperty("version");
   }),
 
-  hasMember: Ember.computed.gt('org.selected.membersCount', 0)
+  hasMember: computed.gt('org.selected.membersCount', 0)
 
 });

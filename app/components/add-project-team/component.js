@@ -1,13 +1,17 @@
-import Ember from 'ember';
 import PaginateMixin from 'irene/mixins/paginate';
 import { translationMacro as t } from 'ember-i18n';
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
+import { inject as service } from '@ember/service';
+import Component from '@ember/component';
+import { computed } from '@ember/object';
+import { observer } from '@ember/object';
+import { debounce } from '@ember/runloop';
 
-export default Ember.Component.extend(PaginateMixin, {
-  i18n: Ember.inject.service(),
-  realtime: Ember.inject.service(),
-  notify: Ember.inject.service(),
+export default Component.extend(PaginateMixin, {
+  i18n: service(),
+  realtime: service(),
+  notify: service(),
 
   query: '',
   searchQuery: '',
@@ -19,7 +23,7 @@ export default Ember.Component.extend(PaginateMixin, {
 
   targetObject: 'organization-team',
   sortProperties: ['created:desc'],
-  extraQueryStrings: Ember.computed('team.id', 'searchQuery', function() {
+  extraQueryStrings: computed('team.id', 'searchQuery', function() {
     const query = {
       q: this.get('searchQuery'),
       exclude_project: this.get('project.id')
@@ -27,7 +31,7 @@ export default Ember.Component.extend(PaginateMixin, {
     return JSON.stringify(query, Object.keys(query).sort());
   }),
 
-  newProjectNonTeamCountersObserver: Ember.observer('realtime.ProjectNonTeamCounter', function() {
+  newProjectNonTeamCountersObserver: observer('realtime.ProjectNonTeamCounter', function() {
     return this.incrementProperty('version');
   }),
 
@@ -78,7 +82,7 @@ export default Ember.Component.extend(PaginateMixin, {
 
   actions: {
     searchQuery() {
-      Ember.run.debounce(this, this.setSearchQuery, 500);
+      debounce(this, this.setSearchQuery, 500);
     },
   }
 

@@ -1,14 +1,15 @@
-import Ember from 'ember';
+import Service from '@ember/service';
+import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
 
-const OrganizationService = Ember.Service.extend({
+const OrganizationService = Service.extend({
   selected: null,
   // host: ENV.host,
   // namespace: ENV.namespace,
 
-  store: Ember.inject.service('store'),
-  // ajax: Ember.inject.service('ajax'),
-  notify: Ember.inject.service('notification-messages'),
+  store: service('store'),
+  // ajax: service('ajax'),
+  notify: service('notification-messages'),
 
   async load() {
     const orgs = await this.get('store').findAll('organization');

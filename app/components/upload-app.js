@@ -1,22 +1,24 @@
-import Ember from 'ember';
+import { inject as service } from '@ember/service';
+import { isEmpty } from '@ember/utils';
 import Uploader from 'irene/utils/uploader';
 import EmberUploader from 'ember-uploader';
 import { translationMacro as t } from 'ember-i18n';
+import $ from 'jquery';
 
 const UploadAppComponent = EmberUploader.FileField.extend({
-  store: Ember.inject.service('store'),
+  store: service('store'),
   delegate: null,
-  i18n: Ember.inject.service("i18n"),
+  i18n: service("i18n"),
 
   tErrorWhileFetching: t("errorWhileFetching"),
   tErrorWhileUploading: t("errorWhileUploading"),
   tFileUploadedSuccessfully: t("fileUploadedSuccessfully"),
-  notify: Ember.inject.service("notification-messages"),
+  notify: service("notification-messages"),
 
   classNames: ["file-input"],
   async filesDidChange(files) {
     const delegate = this.get("delegate");
-    if (Ember.isEmpty(files)) {
+    if (isEmpty(files)) {
       return;
     }
     delegate.set("isUploading", true);
@@ -33,7 +35,6 @@ const UploadAppComponent = EmberUploader.FileField.extend({
       console.log(e);
       this.get("notify").error(this.get('tErrorWhileUploading'));
     }
-    // eslint-disable-next-line no-undef
     $('input[type=file]').val('');
     delegate.set("isUploading", false);
   },

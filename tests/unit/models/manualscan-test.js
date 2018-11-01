@@ -1,5 +1,5 @@
-import Ember from 'ember';
 import { moduleForModel, test } from 'ember-qunit';
+import { run } from '@ember/runloop';
 
 moduleForModel('manualscan', 'Unit | Model | manualscan', {
   needs: []
@@ -7,7 +7,7 @@ moduleForModel('manualscan', 'Unit | Model | manualscan', {
 
 test('it exists', function(assert) {
   const manualscan = this.subject();
-  Ember.run(function() {
+  run(function() {
     assert.equal(manualscan.get('filteredAppEnv'), 0, "App Env/0");
     manualscan.set('appEnv', 1);
     assert.equal(manualscan.get('filteredAppEnv'), 1, "App Env/1");

@@ -1,11 +1,11 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
 import ENUMS from 'irene/enums';
 import tHelper from 'ember-i18n/helper';
 import localeConfig from 'ember-i18n/config/en';
 import { test, moduleForComponent } from 'ember-qunit';
 import { startMirage } from 'irene/initializers/ember-cli-mirage';
-
-const { RSVP: { Promise } } = Ember;
+import { run } from '@ember/runloop';
+import { Promise } from 'rsvp';
 
 moduleForComponent('dynamic-scan', 'Integration | Component | dynamic scan', {
   unit: true,
@@ -26,7 +26,7 @@ moduleForComponent('dynamic-scan', 'Integration | Component | dynamic scan', {
   ],
   beforeEach() {
     // set the locale and the config
-    Ember.getOwner(this).lookup('service:i18n').set('locale', 'en');
+    getOwner(this).lookup('service:i18n').set('locale', 'en');
     this.register('locale:en/config', localeConfig);
 
     // register t helper
@@ -45,7 +45,7 @@ test('it exists', function(assert) {
   const component = this.subject();
 
   this.render();
-  Ember.run(function() {
+  run(function() {
     component.set("apiScanModal", true);
     component.send('goBack');
     component.set("dynamicScanModal", true);

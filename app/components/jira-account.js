@@ -1,4 +1,6 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
@@ -7,12 +9,12 @@ import lookupValidator from 'ember-changeset-validations';
 import Changeset from 'ember-changeset';
 import JIRAValidation from '../validations/jiraintegrate';
 
-const JiraAccountComponent = Ember.Component.extend({
+const JiraAccountComponent = Component.extend({
 
-  i18n: Ember.inject.service(),
-  ajax: Ember.inject.service(),
-  organization: Ember.inject.service(),
-  notify: Ember.inject.service('notification-messages-service'),
+  i18n: service(),
+  ajax: service(),
+  organization: service(),
+  notify: service('notification-messages-service'),
   user: null,
   jiraHost: "",
   jiraUsername: "",
@@ -39,7 +41,7 @@ const JiraAccountComponent = Ember.Component.extend({
   didInsertElement() {
     this.get('checkJIRA').perform();
   },
-  baseURL: Ember.computed('organization.selected.id', '', function(){
+  baseURL: computed('organization.selected.id', '', function(){
     return [
       '/api/organizations',
       this.get('organization.selected.id'), ENV.endpoints.integrateJira

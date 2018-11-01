@@ -1,18 +1,20 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
 
-const SubscriptionComponentComponent = Ember.Component.extend({
+const SubscriptionComponentComponent = Component.extend({
 
   subscription: null,
-  i18n: Ember.inject.service(),
-  ajax: Ember.inject.service(),
-  notify: Ember.inject.service('notification-messages-service'),
+  i18n: service(),
+  ajax: service(),
+  notify: service('notification-messages-service'),
   tSubscriptionCancelled: t("subscriptionCancelled"),
 
   isCancellingSubscription: false,
 
-  isNotPerScan: Ember.computed.not('subscription.isPerScan'),
+  isNotPerScan: computed.not('subscription.isPerScan'),
 
   confirmCallback() {
     const tSubscriptionCancelled = this.get("tSubscriptionCancelled");

@@ -1,20 +1,22 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
 
-const PricingPlanComponent = Ember.Component.extend({
+const PricingPlanComponent = Component.extend({
 
   plan: null,
   paymentDuration: ENUMS.PAYMENT_DURATION.MONTHLY,
   classNames: ["column", "is-one-third"],
   planQuantity: 1,
-  i18n: Ember.inject.service(),
+  i18n: service(),
 
   tApp: t("app"),
   tScan: t("scan"),
 
-  planText: (function() {
+  planText: computed('plan', function() {
     const tApp = this.get("tApp");
     const tScan = this.get("tScan");
     const planId = this.get("plan.planId");
@@ -22,16 +24,16 @@ const PricingPlanComponent = Ember.Component.extend({
       return tScan;
     }
     return tApp;
-  }).property("plan"),
+  }),
 
-  updatedPrice: (function() {
+  updatedPrice: computed('totalPrice', 'planQuantity', function() {
     const totalPrice = this.get("totalPrice");
     const planQuantity = this.get("planQuantity");
     const updatedPrice = totalPrice * planQuantity;
     return `Pay $${updatedPrice} USD`;
-  }).property("totalPrice", "planQuantity"),
+  }),
 
-  totalPrice: (function() {
+  totalPrice: computed("paymentDuration", "plan.{monthlyPrice,quarterlyPrice,halfYearlyPrice,yearlyPrice}", function() {
     let price;
     const duration = this.get("paymentDuration");
     switch (duration) {
@@ -49,7 +51,7 @@ const PricingPlanComponent = Ember.Component.extend({
         break;
     }
     return price;
-  }).property("paymentDuration", "plan.monthlyPrice", "plan.quarterlyPrice", "plan.halfYearlyPrice", "plan.yearlyPrice"),
+  }),
 
   actions: {
 

@@ -1,6 +1,6 @@
-import Ember from 'ember';
+import Service from '@ember/service';
 
-const RealtimeService = Ember.Service.extend({
+const RealtimeService = Service.extend({
 
   FileCounter: 0,
   ProjectCounter: 0,

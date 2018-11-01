@@ -1,6 +1,6 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 
-const ModalCardComponent = Ember.Component.extend({
+const ModalCardComponent = Component.extend({
 
   isActive: false,
   classNames: ["modal"],

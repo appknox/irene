@@ -1,6 +1,7 @@
-import Ember from 'ember';
 import IreneAuth from './irene';
 import ENV from 'irene/config/environment';
+import { Promise } from 'rsvp';
+import { getOwner } from '@ember/application';
 
 const b64EncodeUnicode = str => btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode(`0x${p1}`)));
 
@@ -13,7 +14,7 @@ const processData = data => {
 
 export default IreneAuth.extend({
   authenticate(ssotoken) {
-    return new Ember.RSVP.Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const url = ENV['endpoints']['saml2Login'];
       this.get("ajax").post(
         url, { data: {token: ssotoken}}
@@ -28,7 +29,7 @@ export default IreneAuth.extend({
         }
         this.get("notify").error(msg);
 
-        const authenticatedRoute = Ember.getOwner(this).lookup("route:authenticated");
+        const authenticatedRoute = getOwner(this).lookup("route:authenticated");
         authenticatedRoute.transitionTo('login');
         return reject(msg);
       });

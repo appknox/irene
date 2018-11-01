@@ -1,5 +1,5 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 
-const ActivityLogComponent = Ember.Component.extend();
+const ActivityLogComponent = Component.extend();
 
 export default ActivityLogComponent;

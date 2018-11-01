@@ -1,8 +1,7 @@
-import Ember from 'ember';
 import DRFAdapter from './drf';
 import ENV from 'irene/config/environment';
 import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
-const {inject: {service}} = Ember;
+import { inject as service } from '@ember/service';
 
 export default DRFAdapter.extend(DataAdapterMixin, {
   host: ENV.host,

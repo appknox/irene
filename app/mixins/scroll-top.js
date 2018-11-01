@@ -1,6 +1,6 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
 
-const ScrollTopMixin = Ember.Mixin.create({
+const ScrollTopMixin = Mixin.create({
   activate() {
     this._super();
     window.scrollTo(0,0);

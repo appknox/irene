@@ -1,17 +1,19 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
 import { on } from '@ember/object/evented';
 import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 
-export default Ember.Component.extend({
-    i18n: Ember.inject.service(),
-    ajax: Ember.inject.service(),
-    me: Ember.inject.service(),
-    organization: Ember.inject.service('organization'),
-    routing: Ember.inject.service('-routing'),
-    notify: Ember.inject.service('notification-messages-service'),
+export default Component.extend({
+    i18n: service(),
+    ajax: service(),
+    me: service(),
+    organization: service('organization'),
+    routing: service('-routing'),
+    notify: service('notification-messages-service'),
 
     isNamespaces: true,
     isMembers: false,
@@ -48,7 +50,7 @@ export default Ember.Component.extend({
     },
 
     /* Check if org name is empty */
-    orgNameDoesNotExist: Ember.computed('organization', function() {
+    orgNameDoesNotExist: computed('organization', function() {
       return this.get('organization').selected.get('name') === '';
     }),
 
@@ -80,22 +82,22 @@ export default Ember.Component.extend({
 
 
     /* Set active tab */
-    namespaceClass: Ember.computed('isNamespaces', function() {
+    namespaceClass: computed('isNamespaces', function() {
       if (this.get('isNamespaces')){
         return 'is-active';
       }
     }),
-    memberClass: Ember.computed('isMembers', function() {
+    memberClass: computed('isMembers', function() {
       if (this.get('isMembers')){
         return 'is-active';
       }
     }),
-    teamClass: Ember.computed('isTeams', function() {
+    teamClass: computed('isTeams', function() {
       if (this.get('isTeams')){
         return 'is-active';
       }
     }),
-    settingsClass: Ember.computed('isSettings', function() {
+    settingsClass: computed('isSettings', function() {
       if (this.get('isSettings')){
         return 'is-active';
       }

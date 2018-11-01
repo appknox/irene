@@ -1,6 +1,7 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
 import { moduleForModel, test } from 'ember-qunit';
 import localeConfig from 'ember-i18n/config/en';
+import { run } from '@ember/runloop';
 
 moduleForModel('invoice', 'Unit | Model | invoice', {
   needs: [
@@ -14,14 +15,14 @@ moduleForModel('invoice', 'Unit | Model | invoice', {
   ],
   beforeEach() {
     // set the locale and the config
-    Ember.getOwner(this).lookup('service:i18n').set('locale', 'en');
+    getOwner(this).lookup('service:i18n').set('locale', 'en');
     this.register('locale:en/config', localeConfig);
   }
 });
 
 test('it exists', function(assert) {
   const invoice = this.subject();
-  Ember.run(function() {
+  run(function() {
     const d = new Date("25 March 2015");
     invoice.set('paidOn', d);
     assert.equal(invoice.get('paidOnHumanized'), d.toLocaleDateString(), "Paid On");

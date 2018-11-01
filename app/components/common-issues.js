@@ -1,6 +1,6 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 
-const CommonIssuesComponent = Ember.Component.extend({
+const CommonIssuesComponent = Component.extend({
   // stat: (function() {
   //   return this.get('store').find('stat', 1);
   // }).property()

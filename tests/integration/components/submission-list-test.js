@@ -1,5 +1,5 @@
-import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
+import { run } from '@ember/runloop';
 
 moduleForComponent('submission-list', 'Integration | Component | submission list', {
   unit: true
@@ -21,7 +21,7 @@ test('it exists', function(assert) {
     }
   };
   component.set('store', store);
-  Ember.run(function() {
+  run(function() {
     assert.deepEqual(component.get("submissions"), [{
         id:1,
         type: "submission",

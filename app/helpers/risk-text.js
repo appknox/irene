@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import { helper } from '@ember/component/helper'
 import ENUMS from 'irene/enums';
 
 export function riskText(params) {
@@ -17,4 +17,4 @@ export function riskText(params) {
   }
 }
 
-export default Ember.Helper.helper(riskText);
+export default helper(riskText);

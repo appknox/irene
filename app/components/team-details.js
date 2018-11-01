@@ -1,12 +1,16 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
+import { isEmpty } from '@ember/utils';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
+import { debounce } from '@ember/runloop';
 
-const TeamDetailsComponent = Ember.Component.extend({
+const TeamDetailsComponent = Component.extend({
 
-  i18n: Ember.inject.service(),
-  ajax: Ember.inject.service(),
-  notify: Ember.inject.service('notification-messages-service'),
+  i18n: service(),
+  ajax: service(),
+  notify: service('notification-messages-service'),
   showHide: true,
   editSave: false,
   identification: "",
@@ -19,23 +23,23 @@ const TeamDetailsComponent = Ember.Component.extend({
   tTeamMemberInvited: t("teamMemberInvited"),
   tOrganizationTeamNameUpdated: t("organizationTeamNameUpdated"),
 
-  orgTeam: (function() {
+  orgTeam: computed(function() {
     const orgId = this.get("organization.id");
     const teamId = this.get("team.teamId");
     return this.get("store").queryRecord('organization-team', {orgId: orgId, teamId: teamId});
-  }).property(),
+  }),
 
-  teamMembers: (function() {
+  teamMembers: computed(function() {
     const orgId = this.get("organization.id");
     const teamId = this.get("team.teamId");
     return this.get("store").query('team-member', {orgId: orgId, teamId: teamId});
-  }).property(),
+  }),
 
-  teamProjects: (function() {
+  teamProjects: computed(function() {
     const orgId = this.get("organization.id");
     const teamId = this.get("team.teamId");
     return this.get("store").query('team-project', {orgId: orgId, teamId: teamId});
-  }).property(),
+  }),
 
   searchMember() {
     const searchText = this.get("identification");
@@ -69,7 +73,7 @@ const TeamDetailsComponent = Ember.Component.extend({
     },
 
     searchQuery() {
-      Ember.run.debounce(this, this.searchMember, 500);
+      debounce(this, this.searchMember, 500);
     },
 
     addMember(userId) {
@@ -97,7 +101,7 @@ const TeamDetailsComponent = Ember.Component.extend({
     inviteMember() {
       const identification = this.get("identification");
       // const tTeamMemberInvited = this.get("tTeamMemberInvited");
-      if(Ember.isEmpty(identification)) {
+      if(isEmpty(identification)) {
         const tEmptyEmailId = this.get("tEmptyEmailId");
         return this.get("notify").error(tEmptyEmailId);
       }

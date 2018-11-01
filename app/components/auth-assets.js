@@ -1,5 +1,5 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 
-const AuthAssetsComponent = Ember.Component.extend();
+const AuthAssetsComponent = Component.extend();
 
 export default AuthAssetsComponent;

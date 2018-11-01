@@ -1,4 +1,6 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
 import ENV from 'irene/config/environment';
 
 const localeStrings = {
@@ -8,21 +10,21 @@ const localeStrings = {
 
 const getLocaleString = locale=> localeStrings[locale];
 
-const SelectLanguageComponent = Ember.Component.extend({
+const SelectLanguageComponent = Component.extend({
 
   classNames: ["control"],
   isSelectingLanguage: false,
-  i18n: Ember.inject.service(),
-  ajax: Ember.inject.service(),
-  moment: Ember.inject.service(),
+  i18n: service(),
+  ajax: service(),
+  moment: service(),
 
-  currentLocale: ( function() {
+  currentLocale: computed("i18n.locale", function() {
     const locale = this.get("i18n.locale");
     const localeString = getLocaleString(locale);
     return {locale, localeString};
-  }).property("i18n.locale"),
+  }),
 
-  otherLocales: ( function() {
+  otherLocales: computed("i18n.locale", function() {
     const locales = [];
     let locale = this.get("i18n.locale");
     const otherLocales = this.get("i18n.locales").slice();
@@ -32,7 +34,7 @@ const SelectLanguageComponent = Ember.Component.extend({
       locales.push({locale, localeString});
     }
     return locales;
-  }).property("i18n.locale"),
+  }),
 
   actions: {
     setLocale() {

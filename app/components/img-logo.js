@@ -1,6 +1,6 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 
-const ImgLogoComponent = Ember.Component.extend({
+const ImgLogoComponent = Component.extend({
   classNames: ["has-text-centered"]});
 
 export default ImgLogoComponent;

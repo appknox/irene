@@ -1,16 +1,17 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
 
-const PendingInvitationComponent = Ember.Component.extend({
+const PendingInvitationComponent = Component.extend({
 
   tagName: ["tr"],
-  i18n: Ember.inject.service(),
-  ajax: Ember.inject.service(),
+  i18n: service(),
+  ajax: service(),
   isDeletingInvitation: false,
   openDeleteInvitationConfirmBox: false,
   tInvitationDeleted: t("invitationDeleted"),
-  notify: Ember.inject.service('notification-messages-service'),
+  notify: service('notification-messages-service'),
 
   confirmCallback() {
     const tInvitationDeleted = this.get("tInvitationDeleted");

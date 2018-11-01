@@ -1,6 +1,7 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { computed } from '@ember/object';
 
-const SecuritySplitComponent = Ember.Component.extend({
+const SecuritySplitComponent = Component.extend({
 
   isSearchClass: false,
   isDownloadAppClass: false,
@@ -19,19 +20,19 @@ const SecuritySplitComponent = Ember.Component.extend({
     }
   },
 
-  searchClass: Ember.computed("isSearchClass", function() {
+  searchClass: computed("isSearchClass", function() {
     if (this.get('isSearchClass')) {
       return 'is-active';
     }
   }),
 
-  downloadAppClass: Ember.computed("isDownloadAppClass", function() {
+  downloadAppClass: computed("isDownloadAppClass", function() {
     if (this.get('isDownloadAppClass')) {
       return 'is-active';
     }
   }),
 
-  purgeAnalysisClass: Ember.computed("isPurgeAnalysisClass", function() {
+  purgeAnalysisClass: computed("isPurgeAnalysisClass", function() {
     if (this.get('isPurgeAnalysisClass')) {
       return 'is-active';
     }

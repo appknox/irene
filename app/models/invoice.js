@@ -1,9 +1,10 @@
 import DS from 'ember-data';
-import Ember from 'ember';
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
 import { translationMacro as t } from 'ember-i18n';
 
 const Invoice = DS.Model.extend({
-  i18n: Ember.inject.service(),
+  i18n: service(),
   invoiceId: DS.attr('number'),
   amount: DS.attr('string'),
   paidOn: DS.attr('date'),
@@ -15,27 +16,27 @@ const Invoice = DS.Model.extend({
   tPaid: t("paid"),
   tUnpaid: t("unpaid"),
 
-  paidOnHumanized: (function() {
+  paidOnHumanized: computed('paidOn', function() {
     const paidOn = this.get("paidOn");
     return paidOn.toLocaleDateString();
-  }).property("paidOn"),
+  }),
 
-  paidDate: (function() {
+  paidDate: computed("paidOnHumanized", "isPaid", function() {
     const tPending = this.get("tPending");
     if (this.get("isPaid")) {
       return this.get("paidOnHumanized");
     }
     return tPending;
-  }).property("paidOnHumanized", "isPaid"),
+  }),
 
-  paidStatus: (function() {
+  paidStatus: computed("isPaid", function() {
     const tPaid = this.get("tPaid");
     const tUnpaid = this.get("tUnpaid");
     if (this.get("isPaid")) {
       return tPaid;
     }
     return tUnpaid;
-  }).property("isPaid")
+  })
 });
 
 export default Invoice;

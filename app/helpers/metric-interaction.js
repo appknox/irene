@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import { helper } from '@ember/component/helper'
 import ENUMS from 'irene/enums';
 
 export function metricInteraction(params) {
@@ -14,4 +14,4 @@ export function metricInteraction(params) {
   }
 }
 
-export default Ember.Helper.helper(metricInteraction);
+export default helper(metricInteraction);

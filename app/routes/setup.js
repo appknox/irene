@@ -1,7 +1,7 @@
-import Ember from 'ember';
 import config from 'irene/config/environment';
+import Route from '@ember/routing/route';
 
-const SetupRoute = Ember.Route.extend({
+const SetupRoute = Route.extend({
   title: `Set Your Password${config.platform}`,
   model(params) {
     return params;

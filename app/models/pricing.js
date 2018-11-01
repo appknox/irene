@@ -1,4 +1,5 @@
 import DS from 'ember-data';
+import { computed } from '@ember/object';
 
 const Pricing = DS.Model.extend({
   name: DS.attr('string'),
@@ -6,10 +7,10 @@ const Pricing = DS.Model.extend({
   price: DS.attr('number'),
   projectsLimit: DS.attr("number"),
 
-  descriptionItems:(function() {
+  descriptionItems: computed('description', function() {
     const description = this.get("description");
     return (description != null ? description.split(",") : undefined);
-  }).property("description")
+  })
 });
 
 export default Pricing;

@@ -1,5 +1,3 @@
-// jshint ignore: start
-import Ember from 'ember';
 import ENUMS from 'irene/enums';
 import { CSBMap } from 'irene/router';
 import ENV from 'irene/config/environment';
@@ -9,9 +7,11 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 
 const { location } = window;
 
-const {inject: {service}} = Ember;
+import { inject as service } from '@ember/service';
+import { isEmpty } from '@ember/utils';
+import Route from '@ember/routing/route';
 
-const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
+const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
 
   lastTransition: null,
   i18n: service(),
@@ -97,7 +97,7 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
     this.get('notify').setDefaultAutoClear(ENV.notifications.autoClear);
 
     const socketId = user != null ? user.get("socketId") : undefined;
-    if (Ember.isEmpty(socketId)) {
+    if (isEmpty(socketId)) {
       return;
     }
     this.set('i18n.locale', user.get("lang"));
@@ -163,7 +163,7 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
     willTransition(transition) {
       const currentRoute = transition.targetName;
       const csbDict = CSBMap[currentRoute];
-      if (!Ember.isEmpty(csbDict)) {
+      if (!isEmpty(csbDict)) {
         triggerAnalytics('feature', csbDict);
       }
     },

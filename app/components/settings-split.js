@@ -1,24 +1,25 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { computed } from '@ember/object';
 
-const SettingsSplitComponent = Ember.Component.extend({
+const SettingsSplitComponent = Component.extend({
 
   isGeneral: true,
   isSecurity: false,
   isDeveloperSettings: false,
 
-  generalClass: Ember.computed('isGeneral', function() {
+  generalClass: computed('isGeneral', function() {
     if (this.get('isGeneral')) {
       return 'is-active';
     }
   }),
 
-  securityClass: Ember.computed('isSecurity', function() {
+  securityClass: computed('isSecurity', function() {
     if (this.get('isSecurity')) {
       return 'is-active';
     }
   }),
 
-  developerSettingsClass: Ember.computed('isDeveloperSettings', function() {
+  developerSettingsClass: computed('isDeveloperSettings', function() {
     if (this.get('isDeveloperSettings')) {
       return 'is-active';
     }

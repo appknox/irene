@@ -1,5 +1,5 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 
-const RecentIssuesComponent = Ember.Component.extend();
+const RecentIssuesComponent = Component.extend();
 
 export default RecentIssuesComponent;

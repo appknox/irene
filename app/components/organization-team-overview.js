@@ -1,11 +1,12 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
 import { translationMacro as t } from 'ember-i18n';
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 
-const TeamOverviewComponent = Ember.Component.extend({
-  i18n: Ember.inject.service(),
-  me: Ember.inject.service(),
+const TeamOverviewComponent = Component.extend({
+  i18n: service(),
+  me: service(),
 
   team: null,
   isDeletingTeam: false,

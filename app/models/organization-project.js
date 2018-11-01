@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import { computed } from '@ember/object';
 import DS from 'ember-data';
 import ENUMS from 'irene/enums';
 
@@ -16,24 +16,24 @@ export default DS.Model.extend({
   lastFileCreatedOn: DS.attr('date'),
   fileCount: DS.attr('number'),
 
-  lastFile: (function() {
+  lastFile: computed('fileCount', function() {
     const params = {
       projectId: this.get("id"),
       lastFileOnly: true
     };
     return this.store.queryRecord("file", params);
-  }).property("fileCount"),
+  }),
 
-  hasMultipleFiles: Ember.computed.gt('fileCount', 1),
+  hasMultipleFiles: computed.gt('fileCount', 1),
 
-  platformIconClass:( function() {
+  platformIconClass:computed('platform', function() {
     switch (this.get("platform")) {
       case ENUMS.PLATFORM.ANDROID: return "android";
       case ENUMS.PLATFORM.IOS: return "apple";
       case ENUMS.PLATFORM.WINDOWS: return "windows";
       default: return "mobile";
     }
-  }).property("platform"),
+  }),
 
   addCollaborator(data, id) {
     var adapter = this.store.adapterFor(this.constructor.modelName);

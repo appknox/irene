@@ -1,7 +1,8 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
 import ENUMS from 'irene/enums';
 import { moduleForModel, test} from 'ember-qunit';
 import localeConfig from 'ember-i18n/config/en';
+import { run } from '@ember/runloop';
 
 moduleForModel('analysis', 'Unit | Model | analysis', {
 
@@ -20,7 +21,7 @@ moduleForModel('analysis', 'Unit | Model | analysis', {
   ],
   beforeEach() {
     // set the locale and the config
-    Ember.getOwner(this).lookup('service:i18n').set('locale', 'en');
+    getOwner(this).lookup('service:i18n').set('locale', 'en');
     this.register('locale:en/config', localeConfig);
   }
 });
@@ -28,7 +29,7 @@ moduleForModel('analysis', 'Unit | Model | analysis', {
 test('it exists', function(assert) {
   const analysis = this.subject();
   let store = this.store();
-  Ember.run(function() {
+  run(function() {
     assert.equal(analysis.get('isScanning'), 0, "Unknown");
 
     assert.equal(analysis.hasType(), false, "No type");

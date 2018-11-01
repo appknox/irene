@@ -1,5 +1,5 @@
-import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
+import { run } from '@ember/runloop';
 
 moduleForComponent('settings-split', 'Integration | Component | settings split', {
   unit: true
@@ -13,7 +13,7 @@ test('tapping button fires an external action', function(assert) {
 
   var component = this.subject();
 
-  Ember.run(function() {
+  run(function() {
     assert.equal(component.get('generalClass'),"is-active", "General");
     component.set("isSecurity", true);
     assert.equal(component.get('securityClass'),"is-active", "Security");
