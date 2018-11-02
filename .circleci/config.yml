@@ -3,6 +3,8 @@ jobs:
   build:
     docker:
       - image: circleci/node:10-browsers-legacy
+        environment:
+          JOBS: 2
       - image: redis:2.8.19
         environment:
           JOBS: 2
