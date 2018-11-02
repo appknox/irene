@@ -3,30 +3,43 @@ h5.bold.black-text
 
 if project.jiraProject
   h6
-    = t "integratedJIRA"
-    code
-      | &nbsp; #{project.jiraProject}
+    span.margin-r-h
+      = t "integratedJIRA"
+    code.margin-r-h
+      | #{project.jiraProject}
     .tag.delete-tag.remove click="openDeleteJIRAConfirmBox"
       i.fa.risk-icons.fa-trash-o
         | &nbsp; #{t "remove"}
-
 else
-  if jiraProjects
-    h6
-      = t "otherTemplates.selectJIRAAccount"
-    .columns
-      .column.is-one-third
-        select.select{action 'selectProject' on='change'} class="mp-jira-select-project"
-          option value=0
-            = t "noPreference"
-          each jiraProjects as |project|
-            option value=project
-              = project
-  else
-    h6
-      | JIRA
-      | &nbsp;#{t "gotoSettings"}
-      = link-to 'authenticated.settings' class="is-primary" tagName="a"
-        | &nbsp;#{t "clickingHere"}
+  div.padding-v-h
+    if fetchJIRAProjects.isRunning
+      .fa-font-size
+        i.fa class="fa-spinner fa-spin"
+        | &nbsp;
+    if noAccess
+      i.fa.fa-warning.margin-r-h
+      span
+        = t "adminPermissionProject"
+    if noIntegration
+      h6
+        | JIRA
+        | &nbsp;#{t "gotoSettings"}
+        = link-to 'authenticated.organization.settings' class="is-primary" tagName="a"
+          | &nbsp;#{t "clickingHere"}
+  if fetchJIRAProjects.isIdle
+    if hasJIRAProject
+      h6
+        = t "otherTemplates.selectJIRAAccount"
+      .columns
+        .column.is-one-third
+          select.select{action 'selectProject' on='change'} class="mp-jira-select-project"
+            option value=0
+              = t "noPreference"
+            each jiraProjects as |project|
+              option value=project.key
+                | #{project.key} - #{project.name}
+    else
+        h6
+          = t "jiraNoProject"
 
 = confirm-box isActive=showDeleteJIRAConfirmBox title=(t 'confirmBox.removeJIRA') delegate=this

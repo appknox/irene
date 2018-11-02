@@ -2,16 +2,22 @@ import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
+import { task } from 'ember-concurrency';
+import lookupValidator from 'ember-changeset-validations';
+import Changeset from 'ember-changeset';
+import JIRAValidation from '../validations/jiraintegrate';
 
 const JiraAccountComponent = Ember.Component.extend({
 
   i18n: Ember.inject.service(),
   ajax: Ember.inject.service(),
+  organization: Ember.inject.service(),
   notify: Ember.inject.service('notification-messages-service'),
   user: null,
   jiraHost: "",
   jiraUsername: "",
   jiraPassword: "",
+  jiraPOJO: {},
 
   isRevokingJIRA: false,
   isIntegratingJIRA: false,
@@ -19,61 +25,90 @@ const JiraAccountComponent = Ember.Component.extend({
   tJiraIntegrated: t("jiraIntegrated"),
   tJiraWillBeRevoked: t("jiraWillBeRevoked"),
   tPleaseEnterAllDetails: t("pleaseEnterAllDetails"),
-
-
+  isJIRAConnected: false,
+  connectedHost: "",
+  connectedUsername: "",
+  init() {
+    this._super(...arguments);
+    const jiraPOJO = this.get('jiraPOJO');
+    const changeset = new Changeset(
+      jiraPOJO, lookupValidator(JIRAValidation), JIRAValidation
+    );
+    this.set('changeset', changeset);
+  },
+  didInsertElement() {
+    this.get('checkJIRA').perform();
+  },
+  baseURL: Ember.computed('organization.selected.id', '', function(){
+    return [
+      '/api/organizations',
+      this.get('organization.selected.id'), ENV.endpoints.integrateJira
+    ].join('/')
+  }),
   confirmCallback() {
-    const tJiraWillBeRevoked = this.get("tJiraWillBeRevoked");
-    this.set("isRevokingJIRA", true);
-    this.get("ajax").post(ENV.endpoints.revokeJira)
-    .then(() => {
-      this.get("notify").success(tJiraWillBeRevoked);
-      if(!this.isDestroyed) {
-        this.set("isRevokingJIRA", false);
-        this.set("user.hasJiraToken", false);
-        this.send("closeRevokeJIRAConfirmBox");
-      }
-    }, (error) => {
-      if(!this.isDestroyed) {
-        this.set("isRevokingJIRA", false);
-        this.get("notify").error(error.payload.error);
-      }
-    });
+    this.get('revokeJIRA').perform();
   },
 
-  actions: {
-
-    integrateJira() {
-      const tJiraIntegrated = this.get("tJiraIntegrated");
-      const tPleaseEnterAllDetails = this.get("tPleaseEnterAllDetails");
-      const host =  this.get("jiraHost").trim();
-      const username =  this.get("jiraUsername").trim();
-      const password =  this.get("jiraPassword");
-      if (!host || !username || !password) {
-        return this.get("notify").error(tPleaseEnterAllDetails, ENV.notifications);
+  checkJIRA: task(function *() {
+    try {
+      const data = yield this.get("ajax").request(this.get('baseURL'));
+      this.set("isJIRAConnected", true);
+      this.set("connectedHost", data.host);
+      this.set("connectedUsername", data.username);
+    } catch(error) {
+      if(error.status == 404) {
+        this.set("isJIRAConnected", false);
       }
-      const data = {
-        host,
-        username,
-        password
-      };
-      this.set("isIntegratingJIRA", true);
-      this.get("ajax").post(ENV.endpoints.integrateJira, {data})
-      .then(() => {
-        if(!this.isDestroyed) {
-          this.set("isIntegratingJIRA", false);
-          this.set("user.hasJiraToken", true);
+    }
+  }).drop(),
+  revokeJIRA: task(function*(){
+    try {
+      this.send("closeRevokeJIRAConfirmBox");
+      yield this.get("ajax").delete(this.get('baseURL'));
+      const tJiraWillBeRevoked = this.get("tJiraWillBeRevoked");
+      this.get("notify").success(tJiraWillBeRevoked);
+      this.get('checkJIRA').perform();
+    } catch(error) {
+      this.get("notify").error("Sorry something went wrong, please try again");
+    }
+  }).drop(),
+  integrateJIRA: task(function *(changeset){
+    const tJiraIntegrated = this.get("tJiraIntegrated");
+    yield changeset.validate()
+    if(!changeset.get('isValid')) {
+      if(changeset.get('errors') && changeset.get('errors')[0].validation) {
+        this.get("notify").error(
+          changeset.get('errors')[0].validation[0],
+          ENV.notifications
+        );
+      }
+      return;
+    }
+    const host = changeset.get('host').trim();
+    const username =  changeset.get('username').trim();
+    const password =  changeset.get('password');
+    const data = {
+      host,
+      username,
+      password
+    };
+    try {
+      yield this.get("ajax").post(this.get('baseURL'), {data})
+      this.get('checkJIRA').perform();
+      this.get("notify").success(tJiraIntegrated);
+      triggerAnalytics('feature',ENV.csb.integrateJIRA);
+    } catch(error) {
+      if(error.payload) {
+        if(error.payload.host) {
+          this.get("notify").error(error.payload.host[0], ENV.notifications)
         }
-        this.get("notify").success(tJiraIntegrated);
-        triggerAnalytics('feature',ENV.csb.integrateJIRA);
-      }, (error) => {
-        if(!this.isDestroyed) {
-          this.set("isIntegratingJIRA", false);
-          this.get("notify").error(error.payload.message);
+        if(error.payload.non_field_errors) {
+          this.get("notify").error(error.payload.non_field_errors[0], ENV.notifications)
         }
-      });
-
-    },
-
+      }
+    }
+  }).drop(),
+  actions: {
     openRevokeJIRAConfirmBox() {
       this.set("showRevokeJIRAConfirmBox", true);
     },

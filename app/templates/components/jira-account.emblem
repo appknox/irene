@@ -1,26 +1,42 @@
-if user.hasJiraToken
-  h6
-    = t "integrationCompleted"
+if isJIRAConnected
+  .columns
+    .column
+      .columns
+        span.column.is-one-quarter
+          = t "host"
+          | :
+        span.column.bold
+          | #{connectedHost}
+      .columns
+        span.column.is-one-quarter
+          = t "username"
+          | :
+        span.column.bold
+          | #{connectedUsername}
   button.is-primary.mp-jira-revoke click="openRevokeJIRAConfirmBox"
+    if revokeJIRA.isRunning
+      .fa-font-size
+        i.fa class="fa-spinner fa-spin"
+        | &nbsp;
     = t "revokeJira"
 else
-  form
-    .control
-      .columns
-        .column.is-fullwidth
-          = input class="input mp-jira-host" placeholder=(t "jiraHost") type="text" value=jiraHost
-    .control.is-grouped
-      .columns
-        .column
-          = input class="input mp-jira-username" placeholder=(t "username") type="text" value=jiraUsername
-        .column.margin-left20
-          = input class="input mp-jira-password" placeholder=(t "password") type="password" value=jiraPassword autocomplete="jira-password"
+  if checkJIRA.isRunning
+    i.fa class="fa-spinner fa-spin margin-r-h"
+    | #{t "loading"}...
+  else
+    form
+      .input-wrap
+        = input class="input-field" classNameBindings="changeset.error.host:has-error" placeholder=(t "jiraHost") type="text" value=changeset.host
+      .input-wrap
+        .half-wrap
+          = input class="input-field" classNameBindings="changeset.error.username:has-error" placeholder=(t "username") type="text" value=changeset.username
+          = input class="input-field" classNameBindings="changeset.error.password:has-error" placeholder=(t "password") type="password" value=changeset.password autocomplete="jira-password"
 
-    button.is-primary click="integrateJira" class="mp-jira-integrate" disabled=isIntegratingJIRA
-      if isIntegratingJIRA
-        .fa-font-size
-          i.fa class="fa-spinner fa-spin"
-          | &nbsp; 
-      = t "integrateJIRA"
+      button.is-primary click={(perform integrateJIRA changeset)} class="mp-jira-integrate" disabled=isIntegratingJIRA
+        if integrateJIRA.isRunning
+          .fa-font-size
+            i.fa class="fa-spinner fa-spin"
+            | &nbsp;
+        = t "integrateJIRA"
 
 = confirm-box isActive=showRevokeJIRAConfirmBox title=(t 'confirmBox.revokeJira') delegate=this disabled=isRevokingJIRA
