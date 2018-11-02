@@ -2,6 +2,7 @@ export default {
   "acceptInvite": "招待を受けてサインアップする",
   "acceptTerms": "私は利用規約に同意します",
   "accessPermissions": "Access permissions",
+  "accessRequested": "Removal for the restriction has been requested, please wait for our team to revert",
   "account": "アカウント",
   "accountOverview": "アカウントの概要",
   "accountSettings": "Account Settings",
@@ -509,9 +510,10 @@ export default {
       "description": "API診断を開始するには、動的診断も実行する必要があります",
       "runScan": "動的＆API診断の実行"
     },
-    "subscription": {
-      "title": "継続申し込み",
-      "description": "まだ申し込みが完了していません。申し込みますか？"
+    "requestAccess": {
+      "title": "Request Access",
+      "description": "Trial account does not have access to this feature",
+      "button": "Request Access"
     },
     "manual": {
       "title": "手動診断をリクエストする",
