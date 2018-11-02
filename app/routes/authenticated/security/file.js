@@ -1,6 +1,6 @@
 import config from 'irene/config/environment';
-import Ember from 'ember';
+import Route from '@ember/routing/route';
 
-export default Ember.Route.extend({
+export default Route.extend({
   title: `File Details${config.platform}`,
 });

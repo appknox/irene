@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import { helper } from '@ember/component/helper';
 import ENUMS from 'irene/enums';
 
 export function userRole(params) {
@@ -14,4 +14,4 @@ export function userRole(params) {
   }
 }
 
-export default Ember.Helper.helper(userRole);
+export default helper(userRole);

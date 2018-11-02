@@ -1,7 +1,8 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
 import DS from 'ember-data';
 import BaseModelMixin from 'irene/mixins/base-model';
 import { moduleFor, test } from 'ember-qunit';
+import { run } from '@ember/runloop';
 
 moduleFor('mixin:base-model', 'Unit | Mixin | base model', {
   needs: [
@@ -11,8 +12,8 @@ moduleFor('mixin:base-model', 'Unit | Mixin | base model', {
   subject() {
     const BaseModelObject = DS.Model.extend(BaseModelMixin);
     this.register('model:base-model-object', BaseModelObject);
-    return Ember.run(() => {
-      let store = Ember.getOwner(this).lookup('service:store');
+    return run(() => {
+      let store = getOwner(this).lookup('service:store');
       return store.createRecord('base-model-object', {});
     });
   }
@@ -21,7 +22,7 @@ moduleFor('mixin:base-model', 'Unit | Mixin | base model', {
 test('the mixin does what it should', function(assert) {
   const mixin = this.subject();
 
-  Ember.run(() => {
+  run(() => {
     const d = new Date("25 March 2015");
     assert.notOk(mixin.get('createdOnHumanized'));
     assert.notOk(mixin.get('createdOnDateTime'));

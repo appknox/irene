@@ -1,4 +1,5 @@
-import Ember from 'ember';
+import { computed } from '@ember/object';
+import { isEmpty } from '@ember/utils';
 import DS from 'ember-data';
 import ENUMS from 'irene/enums';
 import { translationMacro as t } from 'ember-i18n';
@@ -22,7 +23,7 @@ const Analysis = DS.Model.extend({
   file: DS.belongsTo('file', {inverse: 'analyses'}),
 
 
-  hascvccBase: Ember.computed.equal('cvssVersion', 3),
+  hascvccBase: computed.equal('cvssVersion', 3),
 
   tLow: t("low"),
   tNone: t("none"),
@@ -30,25 +31,25 @@ const Analysis = DS.Model.extend({
   tMedium: t("medium"),
   tCritical: t("critical"),
 
-  isOverriddenRisk: Ember.computed.notEmpty('overriddenRisk'),
+  isOverriddenRisk: computed.notEmpty('overriddenRisk'),
 
-  isScanning: ( function() {
+  isScanning: computed('computedRisk', function() {
     const risk = this.get("computedRisk");
     return risk === ENUMS.RISK.UNKNOWN;
-  }).property("computedRisk"),
+  }),
 
   hasType(type) {
     const types = this.get("vulnerability.types");
-    if (Ember.isEmpty(types)) {
+    if (isEmpty(types)) {
       return false;
     }
     return types.includes(type);
   },
 
-  isRisky: (function() {
+  isRisky: computed('computedRisk', function() {
     const risk = this.get("computedRisk");
     return ![ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN].includes(risk);
-  }).property("computedRisk"),
+  }),
 
   iconClass(risk) {
     switch (risk) {
@@ -58,21 +59,21 @@ const Analysis = DS.Model.extend({
     }
   },
 
-  riskIconClass: (function() {
+  riskIconClass: computed('risk', function() {
     return this.iconClass(this.get("risk"));
-  }).property("risk"),
+  }),
 
-  overriddenRiskIconClass: (function() {
+  overriddenRiskIconClass: computed('overriddenRisk', function() {
     return this.iconClass(this.get("overriddenRisk"));
-  }).property("overriddenRisk"),
+  }),
 
-  riskLabelClass: (function() {
+  riskLabelClass: computed('risk', function() {
     return this.labelClass(this.get("risk"));
-  }).property("risk"),
+  }),
 
-  overriddenRiskLabelClass: (function() {
+  overriddenRiskLabelClass: computed('overriddenRisk', function() {
     return this.labelClass(this.get("overriddenRisk"));
-  }).property("overriddenRisk"),
+  }),
 
   labelClass(risk) {
     const cls = 'tag';

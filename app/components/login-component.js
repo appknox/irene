@@ -1,10 +1,11 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
 import {isUnauthorizedError} from 'ember-ajax/errors';
 
-const LoginComponentComponent = Ember.Component.extend({
-  session: Ember.inject.service('session'),
-  notify: Ember.inject.service('notification-messages-service'),
+const LoginComponentComponent = Component.extend({
+  session: service('session'),
+  notify: service('notification-messages-service'),
   MFAEnabled: false,
   isLogingIn: false,
   isSSOLogingIn: false,

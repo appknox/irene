@@ -1,9 +1,9 @@
-import Ember from 'ember';
+import { helper } from '@ember/component/helper';
 
 // This function receives the params `params, hash`
 const pageNumber = params => params[0] + 1;
 
-const PageNumberHelper = Ember.Helper.helper(pageNumber);
+const PageNumberHelper = helper(pageNumber);
 
 export { pageNumber };
 

@@ -1,7 +1,8 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
 import ENUMS from 'irene/enums';
 import { moduleForModel, test } from 'ember-qunit';
 import localeConfig from 'ember-i18n/config/en';
+import { run } from '@ember/runloop';
 
 moduleForModel('file', 'Unit | Model | file', {
   needs: [
@@ -20,14 +21,14 @@ moduleForModel('file', 'Unit | Model | file', {
   ],
   beforeEach() {
     // set the locale and the config
-    Ember.getOwner(this).lookup('service:i18n').set('locale', 'en');
+    getOwner(this).lookup('service:i18n').set('locale', 'en');
     this.register('locale:en/config', localeConfig);
   }
 });
 
 test('it passes', function(assert) {
-  Ember.run(() => {
-    const file = Ember.getOwner(this).lookup(
+  run(() => {
+    const file = getOwner(this).lookup(
       'service:store'
     ).createRecord('file', {
       'id': 1

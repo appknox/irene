@@ -1,5 +1,6 @@
 import DS from 'ember-data';
 import ENUMS from 'irene/enums';
+import { computed } from '@ember/object';
 
 export default DS.Model.extend({
   value: DS.attr('string'),
@@ -11,12 +12,12 @@ export default DS.Model.extend({
   approvedBy: DS.belongsTo('organization-user'),
   platform: DS.attr('number'),
 
-  platformIconClass:( function() {
+  platformIconClass: computed('platform', function() {
     switch (this.get("platform")) {
       case ENUMS.PLATFORM.ANDROID: return "android";
       case ENUMS.PLATFORM.IOS: return "apple";
       case ENUMS.PLATFORM.WINDOWS: return "windows";
       default: return "mobile";
     }
-  }).property("platform"),
+  }),
 });

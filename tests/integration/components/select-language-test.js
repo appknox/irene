@@ -1,6 +1,6 @@
-import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
 import { startMirage } from 'irene/initializers/ember-cli-mirage';
+import { run } from '@ember/runloop';
 
 moduleForComponent('select-language', 'Integration | Component | select language', {
   unit: true,
@@ -29,7 +29,7 @@ test('it renders', function(assert) {
   });
   this.render();
 
-  Ember.run(function() {
+  run(function() {
 
     assert.deepEqual(component.get("currentLocale"), {"locale": "en","localeString": "English"}, 'message');
     assert.deepEqual(component.get("otherLocales"), [{"locale": "ja","localeString": "日本語"}], 'message');

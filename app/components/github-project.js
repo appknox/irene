@@ -1,11 +1,12 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
 
-const GithubProjectComponent = Ember.Component.extend({
-  i18n: Ember.inject.service(),
-  ajax: Ember.inject.service(),
-  notify: Ember.inject.service('notification-messages-service'),
+const GithubProjectComponent = Component.extend({
+  i18n: service(),
+  ajax: service(),
+  notify: service('notification-messages-service'),
   project: null,
 
   isChangingRepo: false,
@@ -29,7 +30,7 @@ const GithubProjectComponent = Ember.Component.extend({
         this.set("isDeletingGithub", false);
         this.set("project.githubRepo", "");
         this.send("closeDeleteGHConfirmBox");
-      }    
+      }
     }, (error) => {
       if(!this.isDestroyed) {
         this.set("isDeletingGithub", false);
@@ -37,8 +38,10 @@ const GithubProjectComponent = Ember.Component.extend({
       }
     });
   },
-
-  fetchGithubRepos: (function() {
+  didInsertElement() {
+    this.fetchGithubRepos();
+  },
+  fetchGithubRepos: function() {
     const tFetchGitHubRepoFailed = this.get("tFetchGitHubRepoFailed");
     this.get("ajax").request(ENV.endpoints.githubRepos)
     .then((data) => {
@@ -50,7 +53,7 @@ const GithubProjectComponent = Ember.Component.extend({
         this.get("notify").error(tFetchGitHubRepoFailed);
       }
     });
-  }).on("init"),
+  },
 
   actions: {
 

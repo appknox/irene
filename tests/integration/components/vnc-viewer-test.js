@@ -1,9 +1,10 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
 import ENUMS from 'irene/enums';
 import tHelper from 'ember-i18n/helper';
 import localeConfig from 'ember-i18n/config/en';
 import hbs from 'htmlbars-inline-precompile';
 import { test, moduleForComponent } from 'ember-qunit';
+import { run } from '@ember/runloop';
 
 moduleForComponent('vnc-viewer', 'Integration | Component | vnc viewer', {
   unit: true,
@@ -18,7 +19,7 @@ moduleForComponent('vnc-viewer', 'Integration | Component | vnc viewer', {
   ],
   beforeEach() {
     // set the locale and the config
-    Ember.getOwner(this).lookup('service:i18n').set('locale', 'en');
+    getOwner(this).lookup('service:i18n').set('locale', 'en');
     this.register('locale:en/config', localeConfig);
 
     // register t helper
@@ -39,7 +40,7 @@ test('tapping button fires an external action', function(assert) {
 
   var component = this.subject();
 
-  Ember.run(function() {
+  run(function() {
     assert.equal(component.get('vncPopText.string'), "Full Screen", "Full Screen");
     component.set('isPoppedOut', true);
     assert.equal(component.get('vncPopText.string'), "Exit Full Screen", "Exit Full Screen");

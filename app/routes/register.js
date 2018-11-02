@@ -1,8 +1,8 @@
-import Ember from 'ember';
 import config from 'irene/config/environment';
 import RSVP from 'rsvp';
+import Route from '@ember/routing/route';
 
-const RegisterRoute = Ember.Route.extend({
+const RegisterRoute = Route.extend({
   title: `Register${config.platform}`,
   model() {
     return new RSVP.Promise(function(resolve){

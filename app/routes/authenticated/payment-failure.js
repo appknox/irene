@@ -1,5 +1,5 @@
-import Ember from 'ember';
+import Route from '@ember/routing/route';
 
-const AuthenticatedPaymentFailureRoute = Ember.Route.extend();
+const AuthenticatedPaymentFailureRoute = Route.extend();
 
 export default AuthenticatedPaymentFailureRoute;

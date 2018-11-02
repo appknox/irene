@@ -1,11 +1,9 @@
-/* jshint ignore:start */
-
-import Ember from 'ember';
+import Component from '@ember/component';
 import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import {isNotFoundError} from 'ember-ajax/errors';
 
-export default Ember.Component.extend({
+export default Component.extend({
 
   isStorageWorking: false,
   isDeviceFarmWorking: false,
@@ -38,5 +36,3 @@ export default Ember.Component.extend({
   }).drop(),
 
 });
-
-/* jshint ignore:end */

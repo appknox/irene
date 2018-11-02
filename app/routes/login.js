@@ -1,7 +1,7 @@
-import Ember from 'ember';
 import config from 'irene/config/environment';
+import Route from '@ember/routing/route';
 
-const LoginRoute = Ember.Route.extend({
+const LoginRoute = Route.extend({
 
   title: `Login${config.platform}`});
 

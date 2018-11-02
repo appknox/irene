@@ -1,8 +1,8 @@
-import Ember from 'ember';
+import Route from '@ember/routing/route';
 import config from 'irene/config/environment';
 import ScrollTopMixin from 'irene/mixins/scroll-top';
 
-export default Ember.Route.extend(ScrollTopMixin, {
+export default Route.extend(ScrollTopMixin, {
   title: `Organizations${config.platform}`,
   model() {
     return this.get("store").query('organization', {id: null});

@@ -1,20 +1,21 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
 import { translationMacro as t } from 'ember-i18n';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import poll from 'irene/services/poll';
 
-export default Ember.Component.extend({
+export default Component.extend({
   tagName: "",
   apiScanModal: false,
   dynamicScanModal: false,
 
-  i18n: Ember.inject.service(),
-  trial: Ember.inject.service(),
-  ajax: Ember.inject.service(),
-  notify: Ember.inject.service('notification-messages-service'),
-  poll: Ember.inject.service(),
+  i18n: service(),
+  trial: service(),
+  ajax: service(),
+  notify: service('notification-messages-service'),
+  poll: service(),
 
   tStartingScan: t("startingScan"),
 

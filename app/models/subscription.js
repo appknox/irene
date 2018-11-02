@@ -1,9 +1,10 @@
 import DS from 'ember-data';
-import Ember from 'ember';
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
 import { translationMacro as t } from 'ember-i18n';
 
 const Subscription = DS.Model.extend({
-  i18n: Ember.inject.service(),
+  i18n: service(),
   subscriptionId: DS.attr('string'),
   billingPeriod: DS.attr('number'),
   billingPeriodUnit: DS.attr('string'),
@@ -16,9 +17,9 @@ const Subscription = DS.Model.extend({
   isPerScan: DS.attr('boolean'),
   planName: DS.attr('string'),
 
-  isNotCancelled: Ember.computed.not('isCancelled'),
+  isNotCancelled: computed.not('isCancelled'),
 
-  expiryDateOnHumanized: (function() {
+  expiryDateOnHumanized: computed("expiryDate", function() {
     const expiryDate = this.get("expiryDate");
     return expiryDate.toLocaleDateString();
   }).property("expiryDate"),
@@ -28,7 +29,7 @@ const Subscription = DS.Model.extend({
   tTrialWillBeConverted: t("trialWillBeConverted"),
   tSubscriptionWillExpireOn: t("subscriptionWillExpireOn"),
 
-  subscriptionText: (function() {
+  subscriptionText: computed("isTrial", "isCancelled", function() {
     const isTrial = this.get("isTrial");
     const isCancelled = this.get("isCancelled");
     const tTrialWillExpireOn = this.get("tTrialWillExpireOn");
@@ -47,7 +48,7 @@ const Subscription = DS.Model.extend({
     else if (!isTrial && !isCancelled) {
       return tSubscriptionWillExpireOn;
     }
-  }).property("isTrial", "isCancelled")
+  })
 
 });
 

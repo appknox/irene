@@ -1,12 +1,14 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
 import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
 
-const JiraProjectComponent = Ember.Component.extend({
-  i18n: Ember.inject.service(),
-  ajax: Ember.inject.service(),
-  notify: Ember.inject.service('notification-messages-service'),
+const JiraProjectComponent = Component.extend({
+  i18n: service(),
+  ajax: service(),
+  notify: service('notification-messages-service'),
   project: null,
   jiraProjects: null,
   tIntegratedJIRA: t("integratedJIRA"),
@@ -15,7 +17,7 @@ const JiraProjectComponent = Ember.Component.extend({
   tFetchJIRAProjectFailed: t("fetchProjectFailed"),
   noIntegration: false,
   noAccess: false,
-  hasJIRAProject: Ember.computed('jiraProjects.length', function(){
+  hasJIRAProject: computed('jiraProjects.length', function(){
     return this.get('jiraProjects.length') > 0
   }),
   didInsertElement() {

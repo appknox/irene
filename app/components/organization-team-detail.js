@@ -1,11 +1,12 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
 import { translationMacro as t } from 'ember-i18n';
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 
-export default Ember.Component.extend({
-  i18n: Ember.inject.service(),
-  me: Ember.inject.service(),
+export default Component.extend({
+  i18n: service(),
+  me: service(),
 
   showEdit: false,
   saveEdit: false,

@@ -1,4 +1,6 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { isEmpty } from '@ember/utils';
 import PaginateMixin from 'irene/mixins/paginate';
 import { translationMacro as t } from 'ember-i18n';
 import { task } from 'ember-concurrency';
@@ -6,9 +8,9 @@ import ENV from 'irene/config/environment';
 import { on } from '@ember/object/evented';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 
-export default Ember.Component.extend(PaginateMixin, {
-  i18n: Ember.inject.service(),
-  realtime: Ember.inject.service(),
+export default Component.extend(PaginateMixin, {
+  i18n: service(),
+  realtime: service(),
 
   email: '',
   isInvitingMember: false,
@@ -28,7 +30,7 @@ export default Ember.Component.extend(PaginateMixin, {
   /* Send invitation */
   inviteMember: task(function * () {
     const email = this.get("email");
-    if(Ember.isEmpty(email)) {
+    if(isEmpty(email)) {
       throw new Error(this.get('tEmptyEmailId'));
     }
 

@@ -1,8 +1,9 @@
-import Ember from 'ember';
 import tHelper from 'ember-i18n/helper';
 import localeConfig from 'ember-i18n/config/en';
 import { test, moduleForComponent } from 'ember-qunit';
 import { startMirage } from 'irene/initializers/ember-cli-mirage';
+import { run } from '@ember/runloop';
+import { getOwner } from '@ember/application';
 
 moduleForComponent('analysis-settings', 'Integration | Component | analysis settings', {
   unit: true,
@@ -19,7 +20,7 @@ moduleForComponent('analysis-settings', 'Integration | Component | analysis sett
   ],
   beforeEach() {
     // set the locale and the config
-    Ember.getOwner(this).lookup('service:i18n').set('locale', 'en');
+    getOwner(this).lookup('service:i18n').set('locale', 'en');
     this.register('locale:en/config', localeConfig);
 
     // register t helper
@@ -51,7 +52,7 @@ test('tapping button fires an external action', function(assert) {
   };
   component.set('store', store);
   this.render();
-  Ember.run(function() {
+  run(function() {
     assert.deepEqual(component.get("unknownAnalysisStatus"), [{
         id:1,
         type: "unknown-analysis-status",

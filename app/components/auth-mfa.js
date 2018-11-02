@@ -1,15 +1,15 @@
-// jshint ignore: start
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
 
 const isValidOTP = otp => otp.length > 5;
 
-const AuthMfaComponent = Ember.Component.extend({
+const AuthMfaComponent = Component.extend({
 
-  i18n: Ember.inject.service(),
-  ajax: Ember.inject.service(),
-  notify: Ember.inject.service('notification-messages-service'),
+  i18n: service(),
+  ajax: service(),
+  notify: service('notification-messages-service'),
   user: null,
   showMFAIntro: true,
   showBarCode: false,

@@ -1,11 +1,12 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { isEmpty } from '@ember/utils';
 import ENV from 'irene/config/environment';
 
-export default Ember.Component.extend({
+export default Component.extend({
   actions: {
     purgeAPIAnalyses() {
       const fileId = this.get("fileNumber");
-      if (Ember.isEmpty(fileId)) {
+      if (isEmpty(fileId)) {
         return this.get("notify").error("Please enter any File ID");
       }
       this.set("isPurgingAPIAnalyses", true);

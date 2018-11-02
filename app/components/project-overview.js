@@ -1,6 +1,6 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 
-const ProjectOverviewComponent = Ember.Component.extend({
+const ProjectOverviewComponent = Component.extend({
   project: null,
   classNames: ["column" , "is-one-third"]});
 export default ProjectOverviewComponent;

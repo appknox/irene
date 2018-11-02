@@ -1,11 +1,12 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { isEmpty } from '@ember/utils';
 import ENV from 'irene/config/environment';
 
-export default Ember.Component.extend({
+export default Component.extend({
   actions: {
     downloadApp() {
       const fileId = this.$('#file-number').val();
-      if (Ember.isEmpty(fileId)) {
+      if (isEmpty(fileId)) {
         return this.get("notify").error("Please enter the File ID");
       }
       this.set("isDownloadingApp", true);

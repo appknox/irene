@@ -1,9 +1,10 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { computed } from '@ember/object';
 
-const TeamListComponent = Ember.Component.extend({
-  orgTeams: (function() {
+const TeamListComponent = Component.extend({
+  orgTeams: computed(function() {
     return this.get("store").query('organization-team', {id: this.get("organization.id")});
-  }).property(),
+  }),
 });
 
 export default TeamListComponent;

@@ -29,7 +29,7 @@
 //
 // test('it exists', function(assert) {
 //   const authenticator = this.subject();
-//   Ember.run(function() {
+//   run(function() {
 //     assert.ok(authenticator.restore());
 //   });
 // });

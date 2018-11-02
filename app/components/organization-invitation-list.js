@@ -1,20 +1,22 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { computed, observer } from '@ember/object';
 import PaginateMixin from 'irene/mixins/paginate';
 
 
-export default Ember.Component.extend(PaginateMixin, {
-  i18n: Ember.inject.service(),
+export default Component.extend(PaginateMixin, {
+  i18n: service(),
 
   targetObject: 'organization-invitation',
   sortProperties: ['createdOn:desc'],
-  extraQueryStrings: Ember.computed(function() {
+  extraQueryStrings: computed(function() {
     const query = {
       'is_accepted': false
     };
     return JSON.stringify(query, Object.keys(query).sort());
   }),
 
-  newInvitationsObserver: Ember.observer("realtime.InvitationCounter", function() {
+  newInvitationsObserver: observer("realtime.InvitationCounter", function() {
     return this.incrementProperty("version");
   })
 });

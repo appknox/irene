@@ -1,8 +1,9 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
 import tHelper from 'ember-i18n/helper';
 import localeConfig from 'ember-i18n/config/en';
 import { test, moduleForComponent } from 'ember-qunit';
 import { startMirage } from 'irene/initializers/ember-cli-mirage';
+import { run } from '@ember/runloop';
 
 moduleForComponent('personaltoken-list', 'Integration | Component | personaltoken list', {
   unit: true,
@@ -19,7 +20,7 @@ moduleForComponent('personaltoken-list', 'Integration | Component | personaltoke
   ],
   beforeEach() {
     // set the locale and the config
-    Ember.getOwner(this).lookup('service:i18n').set('locale', 'en');
+    getOwner(this).lookup('service:i18n').set('locale', 'en');
     this.register('locale:en/config', localeConfig);
 
     // register t helper
@@ -37,7 +38,7 @@ moduleForComponent('personaltoken-list', 'Integration | Component | personaltoke
 test('tapping button fires an external action', function(assert) {
 
   var component = this.subject();
-  Ember.run(function() {
+  run(function() {
     component.send('openGenerateTokenModal');
     assert.equal(component.get('showGenerateTokenModal'),true, "Open Modal");
 

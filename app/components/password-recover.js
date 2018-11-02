@@ -1,13 +1,14 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
 
 
-const PasswordRecoverComponent = Ember.Component.extend({
+const PasswordRecoverComponent = Component.extend({
 
   identification: "",
 
-  ajax: Ember.inject.service(),
-  notify: Ember.inject.service('notification-messages-service'),
+  ajax: service(),
+  notify: service('notification-messages-service'),
 
   mailSent: false,
   isSendingRecoveryEmail: false,
@@ -23,7 +24,7 @@ const PasswordRecoverComponent = Ember.Component.extend({
         {identification};
       this.set("isSendingRecoveryEmail", true);
       this.get("ajax").post(ENV.endpoints.recover, {data})
-      .then((data) => {  
+      .then((data) => {
         if(!this.isDestroyed) {
          this.get("notify").success(data.message);
          this.set("mailSent", true);

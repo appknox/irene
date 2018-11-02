@@ -1,6 +1,7 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
 import localeConfig from 'ember-i18n/config/en';
 import { moduleForModel, test } from 'ember-qunit';
+import { run } from '@ember/runloop';
 
 moduleForModel('user', 'Unit | Model | user', {
   needs: [
@@ -16,7 +17,7 @@ moduleForModel('user', 'Unit | Model | user', {
   ],
   beforeEach() {
     // set the locale and the config
-    Ember.getOwner(this).lookup('service:i18n').set('locale', 'en');
+    getOwner(this).lookup('service:i18n').set('locale', 'en');
     this.register('locale:en/config', localeConfig);
   }
 });
@@ -24,7 +25,7 @@ moduleForModel('user', 'Unit | Model | user', {
 test('it exists', function(assert) {
   const user = this.subject();
 
-  Ember.run(function() {
+  run(function() {
     assert.equal(user.get('provisioningURL'), "otpauth://totp/Appknox:undefined?secret=undefined&issuer=Appknox", "ProvisioningURL");
 
     assert.equal(user.get('mfaEnabled'), false, "MFA Disabled");

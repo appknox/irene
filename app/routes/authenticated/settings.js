@@ -1,8 +1,8 @@
-import Ember from 'ember';
 import config from 'irene/config/environment';
 import ScrollTopMixin from 'irene/mixins/scroll-top';
+import Route from '@ember/routing/route';
 
-const AuthenticatedSettingsRoute = Ember.Route.extend(ScrollTopMixin, {
+const AuthenticatedSettingsRoute = Route.extend(ScrollTopMixin, {
 
   title: `Settings${config.platform}`,
   model() {

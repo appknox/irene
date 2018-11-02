@@ -1,17 +1,16 @@
-// jshint ignore: start
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { isEmpty } from '@ember/utils';
 import ENV from 'irene/config/environment';
 import PaginateMixin from 'irene/mixins/paginate';
 import { translationMacro as t } from 'ember-i18n';
 
-const isEmpty = inputValue=> Ember.isEmpty(inputValue);
-
-const PersonaltokenListComponent = Ember.Component.extend(PaginateMixin, {
+const PersonaltokenListComponent = Component.extend(PaginateMixin, {
 
   classNames: ["column","personal-token-component"],
-  i18n: Ember.inject.service(),
-  ajax: Ember.inject.service(),
-  notify: Ember.inject.service('notification-messages-service'),
+  i18n: service(),
+  ajax: service(),
+  notify: service('notification-messages-service'),
 
 
   // list tokens

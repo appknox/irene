@@ -1,7 +1,9 @@
-// jshint ignore: start
-import Ember from 'ember';
 import Base from 'ember-simple-auth/authenticators/base';
 import ENV from 'irene/config/environment';
+import { inject as service } from '@ember/service';
+import { getOwner } from '@ember/application';
+import { Promise } from 'rsvp';
+
 
 const b64EncodeUnicode = str =>
   btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode(`0x${p1}`))
@@ -17,22 +19,22 @@ const processData = (data) => {
 
 const IreneAuthenticator = Base.extend({
 
-  ajax: Ember.inject.service(),
+  ajax: service(),
 
   resumeTransistion() {
-    const authenticatedRoute = Ember.getOwner(this).lookup("route:authenticated");
+    const authenticatedRoute = getOwner(this).lookup("route:authenticated");
     const lastTransition = authenticatedRoute.get("lastTransition");
     if (lastTransition !== null) {
       return lastTransition.retry();
     } else {
-      const applicationRoute = Ember.getOwner(this).lookup("route:application");
+      const applicationRoute = getOwner(this).lookup("route:application");
       return applicationRoute.transitionTo(ENV['ember-simple-auth']["routeAfterAuthentication"]);
     }
   },
 
   authenticate(identification, password, otp, errorCallback, loginStatus) {
     const ajax = this.get("ajax");
-    return new Ember.RSVP.Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const data = {
         username: identification,
         password,
@@ -61,7 +63,7 @@ const IreneAuthenticator = Base.extend({
 
   restore(data) {
     const ajax = this.get("ajax");
-    return new Ember.RSVP.Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const url = ENV['ember-simple-auth']['checkEndPoint'];
       ajax.post(url, {data})
       .then((data) => {
@@ -81,7 +83,7 @@ const IreneAuthenticator = Base.extend({
   invalidate() {
     const ajax = this.get("ajax");
     localStorage.clear();
-    return new Ember.RSVP.Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const url = ENV['ember-simple-auth']['logoutEndPoint'];
       ajax.post(url)
       .then((data) => {

@@ -1,15 +1,13 @@
-/* jshint ignore:start */
-
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
+import { isEmpty } from '@ember/utils';
+import { getOwner } from '@ember/application';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
 
-const isEmpty = inputValue => Ember.isEmpty(inputValue);
 
-const {inject: {service}} = Ember;
-
-
-export default Ember.Component.extend({
+export default Component.extend({
   findingId: 0,
   findings: [],
   findingTitle: "",
@@ -28,36 +26,36 @@ export default Ember.Component.extend({
   availabilityImpacts: ENUMS.AVAILABILITY_IMPACT.CHOICES.slice(0, 3),
   confidentialityImpacts: ENUMS.CONFIDENTIALITY_IMPACT.CHOICES.slice(0, 3),
 
-  ireneFilePath: (function() {
+  ireneFilePath: computed(function() {
     const fileId = this.get("analysisDetails.file.id");
     const ireneHost = ENV.ireneHost;
     return [ireneHost, "file", fileId].join('/');
-  }).property(),
+  }),
 
-  analysisDetails: (function() {
-    return this.get("store").findRecord('security/analysis', this.get("analysis.analysisId"));
-  }).property(),
+  analysisDetails: computed(function() {
+    return this.get("store").findRecord('security/analysis', this.get("analysis.analysisid"));
+  }),
 
-  owasps: (function() {
+  owasps: computed(function() {
     return this.get("store").findAll("owasp");
-  }).property(),
+  }),
 
-  pcidsses: (function() {
+  pcidsses: computed(function() {
     return this.get("store").findAll("pcidss");
-  }).property(),
+  }),
 
-  allFindings: (function() {
+  allFindings: computed("analysisDetails.findings", "addedFindings", function() {
     let findingId = this.get("findingId");
     const findings = this.get("addedFindings") || this.get("analysisDetails.findings");
     if(findings) {
       findings.forEach((finding) => {
         findingId = findingId + 1;
         finding.id = findingId;
-        this.set("findingId", findingId);
+        this.set("findingId", findingId); // eslint-disable-line
       });
       return findings;
     }
-  }).property("analysisDetails.findings", "addedFindings"),
+  }),
 
   confirmCallback(key) {
     if(key === "findings") {
@@ -91,7 +89,7 @@ export default Ember.Component.extend({
     }
   },
 
-  availableFindings: Ember.computed.filter('allFindings', function(allFinding) {
+  availableFindings: computed.filter('allFindings', function(allFinding) {
     const deletedFinding = this.get("deletedFinding");
     return allFinding.id !== deletedFinding;
   }),
@@ -133,7 +131,7 @@ export default Ember.Component.extend({
       const data = {
         name: fileName
       };
-      const analysisId= this.get("analysis.analysisId");
+      const analysisid= this.get("analysis.analysisid");
       try {
         var fileData = await this.get("ajax").post(ENV.endpoints.uploadFile,{namespace: 'api/hudson-api', data});
         await file.uploadBinary(fileData.url, {
@@ -144,14 +142,14 @@ export default Ember.Component.extend({
           file_key: fileData.file_key,
           file_key_signed: fileData.file_key_signed,
           name: fileName,
-          analysis: analysisId,
+          analysis: analysisid,
           content_type: "ANALYSIS"
         };
         await this.get("ajax").post(ENV.endpoints.uploadedAttachment,{namespace: 'api/hudson-api', data: fileDetailsData});
 
         this.set("isUploading", false);
         this.get("notify").success("File Uploaded Successfully");
-        const analysisObj = this.get("store").findRecord('security/analysis', this.get("analysis.analysisId"));
+        const analysisObj = this.get("store").findRecord('security/analysis', this.get("analysis.analysisid"));
         this.set('analysisDetails', analysisObj);
       } catch(error) {
         this.set("isUploading", false);
@@ -290,10 +288,10 @@ export default Ember.Component.extend({
       if(typeof status === "object") {
         status = status.value;
       }
-      const analysisId= this.get("analysis.analysisId");
+      const analysisid= this.get("analysis.analysisid");
       const findings = this.get("analysisDetails.findings");
       let overriddenRisk = this.get("analysisDetails.overriddenRisk");
-      if(typeof overriddenRisk === "object" && !Ember.isEmpty(overriddenRisk)) {
+      if(typeof overriddenRisk === "object" && !isEmpty(overriddenRisk)) {
         overriddenRisk = overriddenRisk.value;
       }
       const overriddenRiskComment = this.get("analysisDetails.overriddenRiskComment");
@@ -332,13 +330,13 @@ export default Ember.Component.extend({
         availability_impact: availabilityImpact
       };
       this.set("isSavingAnalyses", true);
-      const url = [ENV.endpoints.analyses, analysisId].join('/');
+      const url = [ENV.endpoints.analyses, analysisid].join('/');
       this.get("ajax").put(url,{ namespace: 'api/hudson-api', data: JSON.stringify(data), contentType: 'application/json' })
       .then(() => {
         this.set("isSavingAnalyses", false);
         this.get("notify").success("Analyses Updated");
         if(key) {
-          Ember.getOwner(this).lookup('route:authenticated').transitionTo("authenticated.security.file", this.get("analysisDetails.file.id"));
+          getOwner(this).lookup('route:authenticated').transitionTo("authenticated.security.file", this.get("analysisDetails.file.id"));
         }
       }, () => {
         this.set("isSavingAnalyses", false);
@@ -347,5 +345,3 @@ export default Ember.Component.extend({
     }
   }
 });
-
-/* jshint ignore:end */

@@ -1,6 +1,6 @@
-import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import { test, moduleForComponent } from 'ember-qunit';
+import { run } from '@ember/runloop';
 
 moduleForComponent('pricing-list', 'Integration | Component | pricing list', {
   unit: true
@@ -24,7 +24,7 @@ test('tapping button fires an external action', function(assert) {
   };
   component.set('store', store);
 
-  Ember.run(function() {
+  run(function() {
     assert.deepEqual(component.get('durations'),
       [{"key": "MONTHLY","value": 1},{"key": "QUARTERLY","value": 3},{"key": "HALFYEARLY","value": 6},{"key": "YEARLY","value": 10}],
     "Durations");

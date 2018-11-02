@@ -1,7 +1,7 @@
-import Ember from 'ember';
 import config from 'irene/config/environment';
+import Route from '@ember/routing/route';
 
-const ResetRoute = Ember.Route.extend({
+const ResetRoute = Route.extend({
   title: `Reset Password${config.platform}`,
   model(params) {
     return params;

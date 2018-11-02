@@ -1,16 +1,22 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
+import { observer } from '@ember/object';
+import { underscore } from '@ember/string';
+import { run } from '@ember/runloop';
 import PaginateMixin from 'irene/mixins/paginate';
 import ENUMS from 'irene/enums';
 import {filterPlatformValues} from 'irene/helpers/filter-platform';
 import { translationMacro as t } from 'ember-i18n';
+import $ from 'jquery';
 
-const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
+const ProjectListComponent = Component.extend(PaginateMixin, {
 
-  i18n: Ember.inject.service(),
+  i18n: service(),
 
   classNames: ["columns"],
   projects: null,
-  hasProjects: Ember.computed.gt('projects.meta.count', 0),
+  hasProjects: computed.gt('projects.meta.count', 0),
   query: "",
   targetObject: "OrganizationProject",
 
@@ -25,24 +31,24 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
   tMostRecent: t("mostRecent"),
   tLeastRecent: t("leastRecent"),
 
-  newProjectsObserver: Ember.observer("realtime.ProjectCounter", function() {
+  newProjectsObserver: observer("realtime.ProjectCounter", function() {
     return this.incrementProperty("version");
   }),
 
-  sortProperties: (function() {
+  sortProperties: computed("sortingKey", "sortingReversed", function() {
     let sortingKey = this.get("sortingKey");
     const sortingReversed = this.get("sortingReversed");
     if (sortingReversed) {
       sortingKey = `${sortingKey}:desc`;
     }
     return [sortingKey];
-  }).property("sortingKey", "sortingReversed"),
+  }),
 
   resetOffset() {
     return this.set("offset", 0);
   },
 
-  offsetResetter: Ember.observer("query", "sortingKey", "sortingReversed", "platformType", function() {
+  offsetResetter: observer("query", "sortingKey", "sortingReversed", "platformType", function() {
     return (() => {
       const result = [];
       for (let property of ["query", "sortingKey", "sortingReversed", "platformType"]) {
@@ -52,7 +58,7 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
         const propertyChanged = propertyOldValue !== propertyNewValue;
         if (propertyChanged) {
           this.set(propertyOldName, propertyNewValue);
-          result.push(Ember.run.once(this, 'resetOffset'));
+          result.push(run.once(this, 'resetOffset'));
         } else {
           result.push(undefined);
         }
@@ -62,10 +68,10 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
   }),
 
 
-  extraQueryStrings: Ember.computed("query", "sortingKey", "sortingReversed", "platformType", function() {
+  extraQueryStrings: computed("query", "sortingKey", "sortingReversed", "platformType", function() {
     const platform = this.get("platformType")
     const reverse = this.get("sortingReversed")
-    const sorting = Ember.String.underscore(this.get("sortingKey"))
+    const sorting = underscore(this.get("sortingKey"))
 
     const query = {
       q: this.get("query"),
@@ -80,7 +86,7 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
     return JSON.stringify(query, Object.keys(query).sort());
   }),
 
-  sortingKeyObjects: (function() {
+  sortingKeyObjects: computed(function() {
     const tDateUpdated = this.get("tDateUpdated");
     const tDateCreated = this.get("tDateCreated");
     const tPackageName = this.get("tPackageName");
@@ -115,12 +121,11 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
       }
     }
     return keyObjectsWithReverse;
-  }).property(),
+  }),
 
   platformObjects: ENUMS.PLATFORM.CHOICES.slice(0, +-4 + 1 || undefined),
   actions: {
     sortProjects() {
-      // eslint-disable-next-line no-undef
       const select = $(this.element).find("#project-sort-property");
       const [sortingKey, sortingReversed] = filterPlatformValues(select.val());
       this.set("sortingKey", sortingKey);
@@ -128,7 +133,6 @@ const ProjectListComponent = Ember.Component.extend(PaginateMixin, {
     },
 
     filterPlatform() {
-      // eslint-disable-next-line no-undef
       const select = $(this.element).find("#project-filter-platform");
       this.set("platformType", select.val());
     }

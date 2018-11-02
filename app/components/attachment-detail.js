@@ -1,9 +1,10 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
 
-const AttachmentDetailComponent = Ember.Component.extend({
-  ajax: Ember.inject.service(),
-  notify: Ember.inject.service('notification-messages-service'),
+const AttachmentDetailComponent = Component.extend({
+  ajax: service(),
+  notify: service('notification-messages-service'),
 
   attachment: null,
   isDownloadingAttachment: false,

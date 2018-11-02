@@ -1,8 +1,8 @@
 import DS from 'ember-data';
-import Ember from 'ember';
+import { computed } from '@ember/object';
 
 export default DS.Model.extend({
-  user: Ember.computed('id', function() {
+  user: computed('id', function() {
     return this.store.findRecord('organization-user', this.get('id'));
   }),
 });

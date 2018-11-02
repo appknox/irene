@@ -1,9 +1,11 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
 import ENUMS from 'irene/enums';
 import tHelper from 'ember-i18n/helper';
 import localeConfig from 'ember-i18n/config/en';
 import { test, moduleForComponent } from 'ember-qunit';
 import { startMirage } from 'irene/initializers/ember-cli-mirage';
+import { run } from '@ember/runloop';
+
 
 moduleForComponent('file-header', 'Integration | Component | file header', {
   unit: true,
@@ -32,7 +34,7 @@ moduleForComponent('file-header', 'Integration | Component | file header', {
   ],
   beforeEach() {
     // set the locale and the config
-    Ember.getOwner(this).lookup('service:i18n').set('locale', 'en');
+    getOwner(this).lookup('service:i18n').set('locale', 'en');
     this.register('locale:en/config', localeConfig);
 
     // register t helper
@@ -75,7 +77,7 @@ test('it exists', function(assert) {
   };
   component.set('store', store);
   this.render();
-  Ember.run(function() {
+  run(function() {
     assert.deepEqual(component.get("manualscan"), [{
         id:1,
         type: "manualscan",

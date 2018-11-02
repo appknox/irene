@@ -1,6 +1,7 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
 import localeConfig from 'ember-i18n/config/en';
 import { moduleForModel, test} from 'ember-qunit';
+import { run } from '@ember/runloop';
 
 moduleForModel('device-preference', 'Unit | Model | device preference', {
   needs: [
@@ -13,14 +14,14 @@ moduleForModel('device-preference', 'Unit | Model | device preference', {
   ],
   beforeEach() {
     // set the locale and the config
-    Ember.getOwner(this).lookup('service:i18n').set('locale', 'en');
+    getOwner(this).lookup('service:i18n').set('locale', 'en');
     this.register('locale:en/config', localeConfig);
   }
 });
 
 test('it exists', function(assert) {
   const devicePreference = this.subject();
-  Ember.run(function() {
+  run(function() {
     devicePreference.set('platformVersion', "1");
     assert.equal(devicePreference.get('versionText'), "1", "Version Text");
     devicePreference.set('platformVersion', "0");

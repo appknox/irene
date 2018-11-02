@@ -1,9 +1,9 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
 import tHelper from 'ember-i18n/helper';
 import localeConfig from 'ember-i18n/config/en';
 import { test, moduleForComponent } from 'ember-qunit';
 import { startMirage } from 'irene/initializers/ember-cli-mirage';
-
+import { run } from '@ember/runloop';
 
 moduleForComponent('github-project', 'Integration | Component | github project', {
   unit: true,
@@ -21,7 +21,7 @@ moduleForComponent('github-project', 'Integration | Component | github project',
   ],
   beforeEach() {
     // set the locale and the config
-    Ember.getOwner(this).lookup('service:i18n').set('locale', 'en');
+    getOwner(this).lookup('service:i18n').set('locale', 'en');
     this.register('locale:en/config', localeConfig);
 
     // register t helper
@@ -38,7 +38,7 @@ moduleForComponent('github-project', 'Integration | Component | github project',
 
 test('tapping button fires an external action', function(assert) {
   var component = this.subject();
-  Ember.run(function() {
+  run(function() {
     component.set("project", {id:1});
     assert.equal(component.confirmCallback(),undefined, "Confirm Callback");
     component.send("openDeleteGHConfirmBox");
@@ -53,7 +53,7 @@ test('tapping button fires an external action', function(assert) {
   assert.expect(0);
   var component = this.subject();
   this.render();
-  Ember.run(function() {
+  run(function() {
     component.set("project", {id:1});
     component.send("selectRepo");
   });

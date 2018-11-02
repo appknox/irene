@@ -1,6 +1,6 @@
-import Ember from 'ember';
+import Service from '@ember/service';
 
-const TrialService = Ember.Service.extend({
+const TrialService = Service.extend({
   isTrial: true});
 
 export default TrialService;

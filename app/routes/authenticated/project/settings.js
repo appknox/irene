@@ -1,8 +1,8 @@
-import Ember from 'ember';
+import Route from '@ember/routing/route';
 import config from 'irene/config/environment';
 import ScrollTopMixin from 'irene/mixins/scroll-top';
 
-const AuthenticatedProjectSettingsRoute = Ember.Route.extend(ScrollTopMixin, {
+const AuthenticatedProjectSettingsRoute = Route.extend(ScrollTopMixin, {
   title: `Project Setting${config.platform}`,
   model: function(){
     return this.modelFor("authenticated.project");

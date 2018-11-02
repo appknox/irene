@@ -1,6 +1,7 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
 import { moduleForComponent, test } from 'ember-qunit';
 import { startMirage } from 'irene/initializers/ember-cli-mirage';
+import { run } from '@ember/runloop';
 
 moduleForComponent('register-component', 'Integration | Component | register component', {
   unit: true,
@@ -19,7 +20,7 @@ moduleForComponent('register-component', 'Integration | Component | register com
   ],
   beforeEach() {
     // set the locale and the config
-    Ember.getOwner(this).lookup('service:i18n').set('locale', 'en');
+    getOwner(this).lookup('service:i18n').set('locale', 'en');
 
     // start Mirage
     this.server = startMirage();
@@ -34,7 +35,7 @@ test('tapping button fires an external action', function(assert) {
 
   var component = this.subject();
 
-  Ember.run(function() {
+  run(function() {
     assert.notOk(component.init());
     component.send("onCaptchaResolved");
   });

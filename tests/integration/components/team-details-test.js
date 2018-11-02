@@ -1,8 +1,9 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
 import tHelper from 'ember-i18n/helper';
 import localeConfig from 'ember-i18n/config/en';
 import { test, moduleForComponent } from 'ember-qunit';
 import { startMirage } from 'irene/initializers/ember-cli-mirage';
+import { run } from '@ember/runloop';
 
 moduleForComponent('team-details', 'Integration | Component | team details', {
   unit: true,
@@ -19,7 +20,7 @@ moduleForComponent('team-details', 'Integration | Component | team details', {
   ],
   beforeEach() {
     // set the locale and the config
-    Ember.getOwner(this).lookup('service:i18n').set('locale', 'en');
+    getOwner(this).lookup('service:i18n').set('locale', 'en');
     this.register('locale:en/config', localeConfig);
 
     // register t helper
@@ -50,7 +51,7 @@ test('tapping button fires an external action', function(assert) {
     }
   };
   component.set('store', store);
-  Ember.run(function() {
+  run(function() {
     assert.notOk(component.get("invitations"));
     component.send('openAddMemberModal');
     component.send('inviteMember');
