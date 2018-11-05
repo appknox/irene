@@ -73,7 +73,7 @@
       else
         form.input-form
           p.control
-            = input class="form-control input" placeholder="Enter the file number" type="text" value=file.fileId disabled=true
+            = input class="form-control input" placeholder="Enter the file number" type="text" value=file.fileid disabled=true
           p.control
             = input class="form-control input" placeholder="Enter the Email IDs(comma separated)" type="email" value=emails
           button.is-primary click="generateReport" disabled=isGeneratingReport
