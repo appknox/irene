@@ -22,6 +22,7 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
   mixpanel: service(),
   trial: service(),
   org: service('organization'),
+  analytics: service('analytics'),
   socketIOService: service('socket-io'),
 
   beforeModel(transition){
@@ -32,6 +33,7 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
   async model() {
     const userId = this.get("session.data.authenticated.user_id");
     await this.get('org').load();
+    await this.get('analytics').load();
     return this.get('store').find('user', userId);
   },
 

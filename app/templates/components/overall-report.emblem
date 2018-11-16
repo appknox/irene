@@ -5,7 +5,7 @@
     .columns
       .column.flex-center
         .rounded-graph.total-apps
-          = analytics.totalScanCount
+          = scancount.total_scan_count
     .columns
       .column.flex-center
         = fa-icon "android"
@@ -14,20 +14,20 @@
     .columns
       .column.is-half
         .rounded-graph.android-apps
-          = analytics.totalAndroidScanCount
+          = scancount.total_android_scan_count
       .column.is-half
         .rounded-graph.ios-apps
-          = analytics.totalIosScanCount
+          = scancount.total_ios_scan_count
     .columns
       .column.is-half.flex-center
         = fa-icon "android"
       .column.is-half.flex-center
         = fa-icon "apple"
 
-/
-/   .column
-/     div class="chart-container"
-/       = ember-chart type='bar' data=stat.scanChartData width=350 height=350 options=chartOptions
+
+  .column
+    div class="chart-container"
+      = ember-chart type='bar' data=appscanChartData width=350 height=350 options=chartOptions
 
 .columns.scan-counts
   .column.flex-center
@@ -36,7 +36,7 @@
         = fa-icon "tasks"
       .column
         h3
-          = analytics.staticScanCount
+          = scancount.static_scan_count
         h5
           | Static Scan
 
@@ -46,7 +46,7 @@
         = fa-icon "tasks"
       .column
         h3
-          = analytics.dynamicScanCount
+          = scancount.dynamic_scan_count
         h5
           | Dynamic Scan
 
@@ -56,7 +56,7 @@
         = fa-icon "tasks"
       .column
         h3
-          = analytics.apiScanCount
+          = scancount.api_scan_count
         h5
           | API Scan
 
@@ -66,100 +66,6 @@
         = fa-icon "tasks"
       .column
         h3
-          = analytics.manualScanCount
+          = scancount.manual_scan_count
         h5
           | Manual Scan
-
-
-/ .columns.home-page
-/   .column.is-one-third
-/     .main-box-container
-/       h5.box-main-heading
-/         | Overall CVSS Score
-/       .box-content
-/         .columns
-/           .column.flex-center
-/             h3
-/               | #{stat.overallCVSSSCore}/10
-/             .tag.is-critical
-/               | Critical
-/         .columns
-/           .column.flex-center
-/             div class="chart"
-/               = ember-chart type='doughnut' data=stat.guageData width=250 height=250 options=guageOptions
-/
-/   .column.is-one-third
-/     .main-box-container
-/       h5.box-main-heading
-/         | Overall Issues
-/       .box-content
-/         .columns
-/           .column.flex-center
-/             div class="chart-2"
-/               = ember-chart type='bar' data=stat.barData width=300 height=250 options=chartOptions
-/
-/   .column.is-one-third
-/     .main-box-container
-/       h5.box-main-heading
-/         | Test Case Scenario
-/       .box-content
-/         .columns
-/           .column.flex-center
-/             div class="chart-2"
-/               = ember-chart type='line' data=stat.areaData width=300 height=250 options=areaChartOptions
-/
-/ .columns.home-page
-/   .column.is-half
-/     .main-box-container
-/       h5.box-main-heading
-/         | Recently Fixed Issues
-/       .box-content
-/         .stat-table-container
-/           table.stat-table
-/             thead
-/               tr
-/                 th
-/                   | Risk
-/                 th
-/                   | File ID
-/                 th
-/                   | Issue
-/               each stat.recentlyFixedIssues as |issue|
-/                 tr
-/                   td
-/                     .tag
-/                       = issue.risk
-/                   td
-/                     = issue.fileId
-/                   td
-/                     = issue.issue
-/
-/   .column
-/     .main-box-container
-/       h5.box-main-heading
-/         | Issues Fixed
-/       .box-content
-/         .columns
-/           .column.flex-center
-/             div class="chart-2"
-/               = ember-chart type='line' data=stat.recentIssuesData width=300 height=250 options=areaChartOptions
-/
-/ .columns.home-page
-/   .column
-/     .main-box-container
-/       h5.box-main-heading
-/         | Latest Activities
-/       .box-content.scrolling-box
-/         .box-lists
-/           each stat.activities as |activity|
-/             .box-list-items
-/               div
-/                 = fa-icon "history"
-/                 div.desc
-/                   | &nbsp;A new #{activity.type}(#{activity.platform}) for the file
-/                   span.highlighted-text
-/                     | &nbsp;#{activity.file.name}(#{activity.file.id})[by #{activity.user.name}]&nbsp;
-/                   | has started
-/               div.date
-/                 = activity.date
-/   .column.is-one-third
