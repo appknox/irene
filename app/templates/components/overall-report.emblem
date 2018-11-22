@@ -1,71 +1,41 @@
 .columns.home-page
-  .column.is-one-sixth.app-scanned
-    h5.text-centre
-      | App Scanned
-    .columns
-      .column.flex-center
-        .rounded-graph.total-apps
-          = scancount.total_scan_count
-    .columns
-      .column.flex-center
-        = fa-icon "android"
-        | &nbsp; + &nbsp;
-        = fa-icon "apple"
-    .columns
-      .column.is-half
-        .rounded-graph.android-apps
-          = scancount.total_android_scan_count
-      .column.is-half
-        .rounded-graph.ios-apps
-          = scancount.total_ios_scan_count
-    .columns
-      .column.is-half.flex-center
-        = fa-icon "android"
-      .column.is-half.flex-center
-        = fa-icon "apple"
+  .column.is-one-quarter.app-scanned
+      .columns
+        .column
+          div id="scan-count-chart"
 
 
   .column
-    div class="chart-container"
-      = ember-chart type='bar' data=appscanChartData width=350 height=350 options=chartOptions
-
-.columns.scan-counts
-  .column.flex-center
     .columns
-      .column.is-one-sixth
-        = fa-icon "tasks"
-      .column
-        h3
-          = scancount.static_scan_count
-        h5
-          | Static Scan
+      .column.content-right
+        = power-datepicker selected=selectedStartDate onSelect=(perform updateStartDate value="date") as |dp|
+          = dp.trigger tabindex="-1"
+            = input type="text" class="date-input-class" placeholder="START DATE" value=selectedStartDate autocomplete="off" disabled="disabled"
+          = dp.content class="demo-datepicker-small"
+            = dp.nav
+            = dp.days
 
-  .column.flex-center
+        = power-datepicker selected=selectedEndDate onSelect=(perform updateEndDate value="date") as |dp|
+          = dp.trigger tabindex="-1"
+            = input type="text" class="date-input-class" placeholder="END DATE" value=selectedEndDate autocomplete="off" disabled="disabled"
+          = dp.content class="demo-datepicker-small"
+            = dp.nav
+            = dp.days
     .columns
-      .column.is-one-sixth
-        = fa-icon "tasks"
       .column
-        h3
-          = scancount.dynamic_scan_count
-        h5
-          | Dynamic Scan
+        div id="app-scan-chart"
 
-  .column.flex-center
-    .columns
-      .column.is-one-sixth
-        = fa-icon "tasks"
-      .column
-        h3
-          = scancount.api_scan_count
-        h5
-          | API Scan
+.columns.project-container
+  if projects
+    each projects as |project|
+      = project-overview project=project
+  else
+    .loading-container-home
+      i.fa class="fa-spinner fa-spin"
+      div
+        | #{t "loading"}...
 
-  .column.flex-center
-    .columns
-      .column.is-one-sixth
-        = fa-icon "tasks"
-      .column
-        h3
-          = scancount.manual_scan_count
-        h5
-          | Manual Scan
+.columns
+  .column.content-right.margin-right
+    a href="/projects" class="button highlighted-button"
+      | view all projects

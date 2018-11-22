@@ -1,5 +1,6 @@
 @import "bohemia"
 @import "ember-power-select"
+@import "ember-power-datepicker"
 $FreestyleGuide-color--primary: $primary
 $FreestyleGuide-color--accent: $primary
 $FreestyleGuide-color--secondary: $primary-darker
@@ -2229,7 +2230,6 @@ select:disabled
   margin: -10px 10px
 
 .stat-home-page
-  background-color: #efefef
   margin: -10px
 
 .main-box-container
@@ -2283,26 +2283,6 @@ select:disabled
 
 .app-scanned
   margin: 10px 80px
-  .rounded-graph
-    background-color: #FFF
-    width: 80px
-    height: 80px
-    border-radius: 50px
-    display: flex
-    justify-content: center
-    align-items: center
-    border-width: 10px
-    border-style: solid
-    font-size: 20px
-    &.total-apps
-      border-color: $green
-      color: $green
-    &.android-apps
-      border-color: $blue
-      color: $blue
-    &.ios-apps
-      border-color: $yellow
-      color: $yellow
 
 .home-page
   background-color: #FFF
@@ -3106,3 +3086,17 @@ $dropdown-default-theme: $color-table
           background: lighten($dropdown-default-theme, 53%)
         &-icon
           color: lighten($dropdown-default-theme, 25%)
+
+.date-input-class
+  width: 7em
+  margin-left: 8px
+  padding: 2px
+  text-align: center
+  background-color: #000
+  color: #FFF
+  font-weight: 900
+  border: 0px
+  cursor: pointer
+
+*:focus
+  outline: none
