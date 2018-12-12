@@ -1,4 +1,4 @@
-.columns.home-page
+.columns.home-page.box-container
   .column.is-one-quarter.app-scanned
       .columns
         .column
@@ -8,24 +8,34 @@
   .column
     .columns
       .column.content-right
-        = power-datepicker selected=selectedStartDate onSelect=(perform updateStartDate value="date") as |dp|
-          = dp.trigger tabindex="-1"
-            = input type="text" class="date-input-class" placeholder="START DATE" value=selectedStartDate autocomplete="off" disabled="disabled"
-          = dp.content class="demo-datepicker-small"
-            = dp.nav
-            = dp.days
+        if showDatePicker
+          = power-datepicker selected=selectedStartDate onSelect=(perform updateStartDate value="date") as |dp|
+            = dp.trigger tabindex="-1"
+              = input type="text" class="date-input-class" placeholder="START DATE" value=selectedStartDate autocomplete="off" disabled="disabled"
+            = dp.content class="demo-datepicker-small"
+              = dp.nav
+              = dp.days
+          | &nbsp; to
+          = power-datepicker selected=selectedEndDate onSelect=(perform updateEndDate value="date") as |dp|
+            = dp.trigger tabindex="-1"
+              = input type="text" class="date-input-class" placeholder="END DATE" value=selectedEndDate autocomplete="off" disabled="disabled"
+            = dp.content class="demo-datepicker-small"
+              = dp.nav
+              = dp.days
+        else
+          | Last 30 Days
+          span.margin-left click={(perform showHideDuration)}
+             = fa-icon "pencil"
 
-        = power-datepicker selected=selectedEndDate onSelect=(perform updateEndDate value="date") as |dp|
-          = dp.trigger tabindex="-1"
-            = input type="text" class="date-input-class" placeholder="END DATE" value=selectedEndDate autocomplete="off" disabled="disabled"
-          = dp.content class="demo-datepicker-small"
-            = dp.nav
-            = dp.days
+
     .columns
       .column
         div id="app-scan-chart"
 
-.columns.project-container
+h5.margin-left20.margin-top30.bold.black-text
+  | Most recent projects
+
+.columns.project-container.padding-10
   if projects
     each projects as |project|
       = project-overview project=project
@@ -37,5 +47,5 @@
 
 .columns
   .column.content-right.margin-right
-    a href="/projects" class="button highlighted-button"
+    = link-to 'authenticated.projects' class="button highlighted-button"
       | view all projects

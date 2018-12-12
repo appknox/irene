@@ -162,6 +162,12 @@ const OverallReportComponent = Component.extend({
           chartData.getProjects()
         ]
       },
+      legend: {
+        show: false
+      },
+      tooltip: {
+        grouped: false
+      },
       bindto: "#app-scan-chart",
       axis: {
         x: {
@@ -210,19 +216,27 @@ const OverallReportComponent = Component.extend({
 
   updateEndDate: task(function * ({date}) {
     this.set("selectedEndDate", date.toLocaleDateString());
-    this.set("endDate", date.toISOString())
+    this.set("endDate", date.toISOString());
     yield this.get('updateAppScan').perform();
   }),
 
   updateAppScan: task(function *() {
     const startDate = this.get("startDate");
     const endDate = this.get("endDate");
+    if(!startDate || !endDate) {
+      return;
+    }
     const orgId = this.get("organization.selected.id");
     let url = [ENV.endpoints.organizations, orgId, ENV.endpoints.appscan].join('/');
     url += `?start_date=${startDate}&end_date=${endDate}`;
     const appscan = yield this.get('ajax').request(url);
     this.set("analytics.appscan", appscan);
+  }),
+
+  showHideDuration: task(function *() {
+    yield this.set("showDatePicker", true);
   })
+
 });
 
 export default OverallReportComponent;
