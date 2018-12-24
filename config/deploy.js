@@ -77,9 +77,9 @@ module.exports = function(deployTarget) {
     };
 
     ENV['s3-index'] = {
-      // bucket: process.env.SEQUELSTRING_AWS_BUCKET,
-      // region: process.env.AWS_REGION,
-      // allowOverwrite: true
+      bucket: process.env.SEQUELSTRING_AWS_BUCKET,
+      region: process.env.AWS_REGION,
+      allowOverwrite: true
     };
 
     // configure other plugins for production deploy target here
