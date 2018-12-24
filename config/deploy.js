@@ -48,7 +48,7 @@ module.exports = function(deployTarget) {
     // configure other plugins for production deploy target here
 
     ENV.cloudfront = {
-      distribution: 'E1SR2PB8XTR9RC'
+      distribution: 'E17GXVYW7G712O'
     };
   }
 
@@ -85,7 +85,7 @@ module.exports = function(deployTarget) {
     // configure other plugins for production deploy target here
 
     ENV.cloudfront = {
-      distribution: 'E1SR2PB8XTR9RC'
+      distribution: 'E1R9ZLGFEM1TTU'
     };
   }
 
