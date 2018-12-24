@@ -62,13 +62,30 @@ module.exports = function(deployTarget) {
     };
   }
 
-  if (deployTarget === 'whitelabel') {
-    ENV.build.environment = 'whitelabel';
+  if (deployTarget === 'sequelstring') {
+    ENV.build.environment = 'sequelstring';
+
+    process.env["ENTERPRISE"] = true
+    process.env["WHITELABEL_ENABLED"] = true
+    process.env["WHITELABEL_LOGO"] = "https://s3.amazonaws.com/appknox-production-public/sequelstring_logo.jpg"
+    process.env["WHITELABEL_NAME"] = "Sequelstring Solutions"
+    process.env["WHITELABEL_THEME"] = "light"
+
+    ENV.s3 = {
+      bucket: process.env.SEQUELSTRING_AWS_BUCKET,
+      region: process.env.AWS_REGION
+    };
+
+    ENV['s3-index'] = {
+      // bucket: process.env.SEQUELSTRING_AWS_BUCKET,
+      // region: process.env.AWS_REGION,
+      // allowOverwrite: true
+    };
+
     // configure other plugins for production deploy target here
 
     ENV.cloudfront = {
-      distribution: 'E1SR2PB8XTR9RC',
-      objectPaths: ['/*']
+      distribution: 'E1SR2PB8XTR9RC'
     };
   }
 

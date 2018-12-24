@@ -29,6 +29,7 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
 
               npm run deploy
+              npm run deploy:sequelstring
 
               curl https://api.rollbar.com/api/1/deploy/ \
                 -F access_token=$ROLLBAR_ACCESS_TOKEN \

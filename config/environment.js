@@ -9,7 +9,6 @@ module.exports = function(environment) {
   var host = process.env.IRENE_API_HOST || 'https://api.appknox.com';
   var socketPath = process.env.IRENE_API_SOCKET_PATH || 'https://socket.appknox.com';
   var enableSSO = process.env.IRENE_ENABLE_SSO || false;
-
   var ENV = {
     version: Date.now(),
     isDevknox: false,
@@ -260,12 +259,6 @@ module.exports = function(environment) {
     };
   }
 
-  if (environment === 'whitelabel') {
-    ENV.enableIntercom = false;
-    ENV.enablePendo = true;  //TODO: fix this.
-    ENV.enableInspectlet = false;
-    ENV.enableCSB = false;
-  }
 
   if (environment === 'testing') {
     ENV['ember-cli-mirage'] = {
@@ -312,7 +305,14 @@ module.exports = function(environment) {
     ENV.APP.autoboot = false;
   }
 
-  if (environment === 'whitelabel') {
+  if (
+    environment === 'whitelabel' ||
+    environment === 'sequelstring'
+  ) {
+    ENV.enableIntercom = false;
+    ENV.enablePendo = true;  //TODO: fix this.
+    ENV.enableInspectlet = false;
+    ENV.enableCSB = false;
     ENV.isEnterprise = process.env.ENTERPRISE;
     ENV.whitelabel.enabled = (process.env.WHITELABEL_ENABLED || '').toString().toLowerCase() === 'true';
     if (ENV.whitelabel.enabled) {
