@@ -30,7 +30,7 @@ const File = DS.Model.extend(BaseModelMixin, {
   dynamicStatus: DS.attr('number'),
   analyses: DS.hasMany('analysis', {inverse: 'file'}),
   report: DS.attr('string'),
-  manual: DS.attr('boolean'),
+  manual: DS.attr('number'),
   apiScanProgress: DS.attr('number'),
   staticScanProgress: DS.attr('number'),
   isStaticDone: DS.attr('boolean'),
@@ -38,9 +38,8 @@ const File = DS.Model.extend(BaseModelMixin, {
   isManualDone: DS.attr('boolean'),
   isApiDone: DS.attr('boolean'),
 
-  ifManualNotRequested: computed('manual', function() {
-    const manual = this.get('manual');
-    return !manual;
+  isManualRequested: computed('manual', function() {
+    return this.get("manual") !== ENUMS.MANUAL.NONE
   }),
 
   isRunningApiScan: computed('apiScanProgress', function() {

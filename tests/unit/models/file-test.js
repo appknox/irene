@@ -33,7 +33,7 @@ test('it passes', function(assert) {
     ).createRecord('file', {
       'id': 1
     });
-    assert.equal(file.get('ifManualNotRequested'), true, "Manual Requested");
+    assert.equal(file.get('isManualRequested'), true, "Manual Requested");
 
     assert.equal(file.get('isRunningApiScan'), true, "API Scan");
     file.set('apiScanProgress', 100);
