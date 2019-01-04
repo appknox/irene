@@ -50,19 +50,8 @@
             | %
       = dynamic-scan file=file notVNCViewer=true dynamicScanText=(t 'start')
       .column.flex-center
-        if file.ifManualNotRequested
-          if organization.selected.isTrial
-            button.is-primary.margin-top20 click={(perform openRequestAccessModal)}
-              .fa-font-size
-                = fa-icon "fa-play"
-              | &nbsp; #{t "start"}
-          else
-            button.is-primary.margin-top20.ac-request-manual-scan click="openManualScanModal"
-              .fa-font-size
-                = fa-icon "fa-play"
-              | &nbsp; #{t "start"}
-        else
-          button.is-primary.margin-top20 disabled="disabled"
+        if file.isManualRequested
+           button.is-primary.margin-top20 disabled="disabled"
             if file.isManualDone
               = fa-icon "fa-check"
               | &nbsp; #{t "completed"}
@@ -70,6 +59,19 @@
             else
               = fa-icon "fa-clock-o"
               | &nbsp; #{t "requested"}
+
+        else
+          if organization.selected.isTrial
+              button.is-primary.margin-top20 click={(perform openRequestAccessModal)}
+                .fa-font-size
+                  = fa-icon "fa-play"
+                | &nbsp; #{t "start"}
+          else
+            button.is-primary.margin-top20.ac-request-manual-scan click="openManualScanModal"
+              .fa-font-size
+                = fa-icon "fa-play"
+              | &nbsp; #{t "start"}
+
 
 .card.is-fullwidth.app-details-card
   header.card-header
