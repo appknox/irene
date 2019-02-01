@@ -42,19 +42,9 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
     };
     triggerAnalytics('login', data);
     try {
-      window.Intercom("boot", {
-        app_id: ENV.intercomAppID,
-        name: user.get("username"),
-        email: user.get("email"),
-        alignment: 'left',
-        horizontal_padding: 20,
-        vertical_padding: 20,
-        custom_launcher_selector: '#intercom_support',
-        user_hash: user.get("intercomHash")
-      }
-      );
-      window.Intercom('trackEvent', 'logged-in');
-    } catch (e) {error = e;}
+       // eslint-disable-next-line no-undef
+      $crisp.push([ "set", "user:email", user.get("email")]);
+    } catch (e) { error = e; }
     try {
       const mixpanel = this.get("mixpanel");
       mixpanel.identify(user.get("id"));

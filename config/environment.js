@@ -68,8 +68,7 @@ module.exports = function(environment) {
     locationType: 'auto',
     modulePrefix: 'irene',
     environment: environment,
-    intercomAppID: "mbkqc0o1",
-    enableIntercom: true,
+    enableCrisp: true,
     enablePendo: true,
     enableInspectlet: true,
     enableCSB: true,
@@ -236,7 +235,7 @@ module.exports = function(environment) {
     ENV['ember-cli-mirage'] = {
       enabled:false
     };
-    ENV.enableIntercom = false;
+    ENV.enableCrisp = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
@@ -250,7 +249,7 @@ module.exports = function(environment) {
       enabled: true
     };
     ENV['host'] = "http://0.0.0.0:8000";
-    ENV.enableIntercom = false;
+    ENV.enableCrisp = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
@@ -265,7 +264,7 @@ module.exports = function(environment) {
       enabled: false
     };
     ENV['host'] = "http://localhost:8000";
-    ENV.enableIntercom = false;
+    ENV.enableCrisp = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
@@ -309,7 +308,7 @@ module.exports = function(environment) {
     environment === 'whitelabel' ||
     environment === 'sequelstring'
   ) {
-    ENV.enableIntercom = false;
+    ENV.enableCrisp = false;
     ENV.enablePendo = true;  //TODO: fix this.
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
