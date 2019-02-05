@@ -44,12 +44,12 @@ if showVulnerability
           else
             .margin-top
               = analysis.vulnerability.successMessage
-      // if showEditAnalysis
-      //   if analysis.isRisky
-      //     .column.is-one-sixth.content-right
-      //       button.is-primary click="openEditAnalysisModal"
-      //         i.fa.risk-icons.fa-pencil
-      //         | &nbsp;#{t "editAnalysis"}
+      if showEditAnalysis
+        if analysis.isRisky
+          .column.is-one-sixth.content-right
+            button.is-primary click="openEditAnalysisModal"
+              i.fa.risk-icons.fa-pencil
+              | &nbsp;#{t "editAnalysis"}
 
     if analysis.isRisky
       .regulatary-section.margin-top
