@@ -256,6 +256,9 @@ $fractional-pts: q 0.25, h 0.5, 3q 0.75
 
 .flex-grow-1
   flex-grow: 1
+  
+.no-padding
+  padding: 0
 
 .margin-side-auto
   margin: 0px auto
@@ -437,8 +440,7 @@ canvas.other-devices
   border: 1px solid #A9A9A9
 
 .horizontal-seperator
-  margin: 30px 0px
-  border-top-color: #DCDCDC
+  border-bottom: 1px solid #e1e4e8
 
 .is-reverse
   display: flex
@@ -547,6 +549,9 @@ select
 .text-right
   text-align: right
 
+.text-left
+  text-align: left
+
 .vertical-align-center
   display: flex
   align-items: center
@@ -635,9 +640,6 @@ div[class^="_c-notification__container"]
   margin-left: -9px
   margin-right: -9px
   margin-bottom: 10px
-
-.project-container
-  margin-top: 10px
 
 .top-nav
   width: 100%
@@ -1192,6 +1194,22 @@ div[class^="_c-notification__container"]
     background-color: #FE4D3F
     color: #fff
 
+.max-width
+  max-width: 70px
+
+.max-width-6m
+  max-width: 6.1em
+
+
+.file-icon-style
+  img
+    height: 50px
+    width: 50px
+    height: 50px
+    width: 50px
+    background-image: none
+    overflow: hidden
+
 .card-header-icon
   cursor: default
   img
@@ -1370,32 +1388,6 @@ ul.scan-table
     padding: 11px 5px
   h5
     margin-left: 10px
-
-ul.risk-table
-  h5
-    margin-left: 15px
-    margin-bottom: -5px
-    margin-top: 5px
-  li
-    font-size: 13px
-    padding: 1px
-    width: 120px
-    margin-left: 15px
-    margin-top: -20px
-  .risk-values
-    margin-top: 20px
-    margin-left: -10px
-    .columns
-      .column
-        margin-top: 5px
-        padding: 3px
-      .column:nth-child(2)
-        text-align: center
-        margin-left: -20px
-  li:before
-    font-size: 30px
-    position: relative
-    top: 4px
 
 .progress-wrap
   width: 60%
@@ -2831,7 +2823,7 @@ $attachment-icon-width: 4em
   padding-bottom: 10px
   text-align: center
   .file-id-text
-    width: 100px
+    width: 110px
     margin: -5px auto 5px auto
     text-align: center
     font-weight: 900
@@ -3149,3 +3141,157 @@ $dropdown-default-theme: $color-table
   i
     margin-top: 0
   padding-bottom: 1em
+.file-tag
+  background: lighten($sidebar-bg, 20%)
+  color: $light
+  font-weight: 900
+  border-radius: 0.3em
+  padding: 0.1em
+  margin: 1em
+  font-size: 12px
+  width: 7em
+  text-align: center
+
+
+.file-tag2
+  width: auto
+  margin: 0.5em 0.5em 0 0
+  display: inline-block
+  padding: 0.1em 0.7em
+
+.file-tag-heading
+  display: inline-block
+  text-align: center
+  background: $success
+  width: 4em
+  color: $light
+  border-radius: 0.3em
+  margin-left: 2em
+  margin-right: 0.3em
+
+.file-tag-container
+  display: inline-block
+
+.file-tag-icon
+  font-size: 12px
+  margin-top: 0.2em
+  margin-left: 0.5em
+
+.button-column
+  padding: 5px
+  margin-top: 20px
+  margin-left: 10px
+
+.file-id
+  margin-top: 0.8em
+  background: lighten($sidebar-bg, 20%)
+  color: $light
+  padding: 1px
+  width: 8em
+  text-align: center
+  font-size: 12px
+  border-radius: 0.2em
+
+.card-buttons
+  border: none
+
+
+.project-table
+  tr
+    border: 1px solid lighten(#eaecef, 2%)
+    min-height: 3em
+  th
+    background-color: darken(#f6f8fa, 1%)
+    color: darken(#586069, 1%)
+  td
+    font-size: 0.9em
+  th, td
+    border-width: 0px
+    vertical-align: middle
+    text-align: center
+  .btn-table
+    height: auto
+    i
+      padding-right: 0.15em
+  .td-with-btn
+    height: 3.5em
+    display: flex
+    align-items: center
+
+.project-details
+  background: darken($light, 1%)
+
+.project-button-container
+  margin-left: 5em
+
+.all-files-container
+  padding: 0 20em
+
+.project-button
+  margin: 0em 0.5em
+  height: 28px
+  // color: $critical
+  // border: none
+  // background: #FFF
+
+.project-container
+  padding: 0 10em
+
+.file-heading
+  font-size: 14px
+  opacity: 0.6
+  margin-left: 1em
+
+.file-info
+  font-size: 14px
+  margin-left: 0.2em
+
+.input-radio
+  font-size: 20px
+
+.radio-container
+  display: block
+  position: relative
+  margin-bottom: 12px
+  cursor: pointer
+  font-size: 22px
+  user-select: none
+  top: 2.5em
+  left: 0.5em
+
+.input-radio
+  position: absolute
+  opacity: 0
+  cursor: pointer
+
+.radio-mark
+  position: absolute
+  top: 0
+  left: 0
+  height: 25px
+  width: 25px
+  background-color: lighten($default, 50%)
+  border-radius: 50%
+
+.radio-container:hover .input-radio ~ .radio-mark
+  background-color: lighten($default, 40%)
+
+.radio-container .input-radio:checked ~ .radio-mark
+  background-color: $info
+
+.radio-mark:after
+  content: ""
+  position: absolute
+  display: none
+
+.radio-container .input-radio:checked ~ .radio-mark:after
+  display: block
+
+.radio-container .radio-mark
+  &:after
+    top: 9px
+    left: 9px
+    width: 8px
+    height: 8px
+    border-radius: 50%
+    background: $light

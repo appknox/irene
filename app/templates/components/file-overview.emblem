@@ -1,5 +1,5 @@
-header.card-header
-  .card-header-icon
+td
+  .file-icon-style
     img src=file.iconUrl alt=file.name
   p.card-header-title
     ul.is-fullwidth

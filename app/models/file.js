@@ -41,6 +41,7 @@ const File = DS.Model.extend(BaseModelMixin, {
 
   analyses: DS.hasMany('analysis', { inverse: 'file' }),
 
+  tags: DS.attr(),
 
   isManualRequested: computed('manual', function() {
     return this.get("manual") !== ENUMS.MANUAL.NONE
@@ -75,7 +76,48 @@ const File = DS.Model.extend(BaseModelMixin, {
   analysesSorting: ['computedRisk:desc'],
   sortedAnalyses: computed.sort('analyses', 'analysesSorting'),
 
-  doughnutData: computed(function() {
+  scanStatusIcon(status) {
+    if(status === true) {
+      return "check"
+    }
+    return "times"
+  },
+
+  scanStatusData: computed(
+    'isStaticDone', 'isDynamicDone', 'isManualDone', 'isApiDone',
+    function() {
+      const staticScanStatus = this.get("isStaticDone");
+      const dynamicScanStatus = this.get("isDynamicDone");
+      const manualScanStatus = this.get("isManualDone");
+      const apiScanStatus = this.get("isApiDone");
+      return {
+        scans: [
+          {
+            'text': 'Static',
+            'status': staticScanStatus,
+            'icon': this.scanStatusIcon(staticScanStatus)
+          },
+          {
+            'text': 'Dynamic',
+            'status': dynamicScanStatus,
+            'icon': this.scanStatusIcon(dynamicScanStatus)
+          },
+          {
+            'text': 'Manual',
+            'status': manualScanStatus,
+            'icon': this.scanStatusIcon(manualScanStatus)
+          },
+          {
+            'text': 'API',
+            'status': apiScanStatus,
+            'icon': this.scanStatusIcon(apiScanStatus)
+          },
+        ]
+      }
+    }
+  ),
+
+  doughnutData: computed('analyses.@each.computedRisk', function() {
 
     const riskCountCritical = this.get("riskCountCritical");
     const riskCountHigh = this.get("riskCountHigh");

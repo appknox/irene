@@ -9,7 +9,10 @@ const FileListComponent = Component.extend(PaginateMixin, {
   targetObject: "file",
   sortProperties: ["createdOn:desc"],
 
-  classNames: ["columns", "margin-top"],
+  projectClassSelector: false,
+  showMoreDetails: false,
+
+  classNames: ['columns', 'margin-top', 'projectClassSelector:mp-plus:mp-minus'],
 
   extraQueryStrings: computed("project.id", function() {
     const query =
@@ -17,10 +20,17 @@ const FileListComponent = Component.extend(PaginateMixin, {
     return JSON.stringify(query, Object.keys(query).sort());
   }),
 
-
   newFilesObserver: observer("realtime.FileCounter", function() {
     return this.incrementProperty("version");
-  })
+  }),
+
+  actions: {
+    toggleFileDetails() {
+      this.set("projectClassSelector", this.get("showMoreDetails"));
+      this.set("showMoreDetails", !this.get("showMoreDetails"));
+    },
+
+  },
 }
 );
 

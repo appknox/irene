@@ -1,0 +1,44 @@
+td
+  .columns
+    // .column.flex-center.is-one-sixth
+    //   label class="radio-container"
+    //     = input type="radio" name="compare-file" class="input-radio" checked="checked"
+    //     span.radio-mark
+    .column
+      .file-icon-style
+        img src=file.iconUrl alt=file.name
+      .columns
+        .column.margin-top
+          span.file-heading
+            | FILE ID &nbsp;
+          span.black-text
+            = file.id
+td
+  .columns
+    .column
+      .file-info
+        = link-to "authenticated.file" file.id
+          = file.name
+
+  .columns
+    .column
+      span.file-heading
+        | version
+      span.file-info
+        = file.version
+      span.file-heading
+        | version code
+      span.file-info
+        = file.versionCode
+  .columns
+    .column
+      | started #{moment-from-now file.createdOn}
+      = attach-tooltip placement="bottom"
+        = file.createdOnDateTime
+
+td
+  div.margin-left.details
+    if showMoreDetails
+      i.fa.fa-chevron-up
+    else
+      i.fa.fa-chevron-down

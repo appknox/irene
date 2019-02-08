@@ -1,18 +1,15 @@
-= link-to "authenticated.file" project.lastFile.id
-  = file-overview file=project.lastFile profileId=project.activeProfileId
-    footer.card-button
-      .columns.button-width
-        .column class=project.hasMultipleFiles::auto-adjust
-          = link-to 'authenticated.project.settings' project.id class="mp-project-setting" tagName="button"
-            = fa-icon "cog"
-            | &nbsp; #{t "settings"}
-        if project.hasMultipleFiles
-          .column
-            = link-to 'authenticated.project.files' project.id class="mp-all-scans" tagName="button"
-              = fa-icon "navicon"
-              | &nbsp; #{t "allUploads"}
+= file-overview [
+  file=project.lastFile
+  profileId=project.activeProfileId
+  showMoreDetails=showMoreDetails
+  click=(action "toggleFileDetails")
+]
 
-          .column
-            = link-to 'authenticated.choose' project.lastFile.id class="mp-file-compare" tagName="button"
-              = fa-icon "exchange"
-              | &nbsp; #{t "compare"}
+if showMoreDetails
+  = file-extra-details [
+    file=project.lastFile
+    project=project
+    showInfo=true
+    colspan="9"
+  ]
+

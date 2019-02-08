@@ -1,6 +1,1 @@
-.columns
-  .column.margin-left
-    h4.bold.black-text
-      = t "allScans"
-
 = file-list project=model

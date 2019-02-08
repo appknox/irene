@@ -1,41 +1,56 @@
 if hasProjects
   .column
-    .box-container.home-page.all-inputs
+    .project-container
       .columns
-        .column
-          = t "search"
+        .column.is-one-quarter
+          h5.margin-top.margin-bottom0
+            | PROJECTS (#{projects.meta.count})
+        .column.is-one-quarter
           .margin-top
             = input class="input mp-search-query" placeholder=(t 'searchQuery') value=query
         .column
-          = t "sortBy"
-          .margin-top
-            select{action 'sortProjects' on='change'} id="project-sort-property" class="input"
-              each sortingKeyObjects as |sortingKeyObject|
-                option action="foo" value="{{filter-platform sortingKeyObject}}"
-                  = sortingKeyObject.text
-        .column
-          = t "filterBy"
-          .margin-top
-            select{action 'filterPlatform' on='change'} id="project-filter-platform" class="input"
-              option value="-1"
-                = t "allPlatforms"
-              each platformObjects as |platformObject|
-                option value=platformObject.value
-                  = platformObject.key
+        .column.is-one-sixth.margin-top
+          select{action 'filterPlatform' on='change'} id="project-filter-platform" class="input"
+            option value="-1"
+              = t "allPlatforms"
+            each platformObjects as |platformObject|
+              option value=platformObject.value
+                = platformObject.key
 
-    .columns.project-container
+      table.project-table
+        tr
+          th.margin-top5 colspan="2" click="sortByFileName"
+            | File &nbsp;
+            if sortFileAscending
+                i.fa.fa-sort-down.sort-icons.margin-top5
+            else
+              i.fa.fa-sort-up.sort-icons.margin-top5
+          th
+            | Package Name
+          th click="sortByStartDate"
+            | Start Date &nbsp;
+            if sortStartDateAscending
+              i.fa.fa-sort-down.sort-icons.margin-top5
+            else
+              i.fa.fa-sort-up.sort-icons.margin-top5
+          // th
+          //   | Version
+          // th
+          //   | Version Code
+          th
+            | Platform
+          th
+
+          // th colspan="2"
+          //   | File ID
+
+        if hasObjects
+          each sortedObjects as |project|
+            = project-overview project=project
+
       if hasObjects
-        each sortedObjects as |project|
-          = project-overview project=project
-      else
-        .loading-container-home
-          i.fa class="fa-spinner fa-spin"
-          div
-            | #{t "loading"}...
-
-
-    if hasObjects
-      = partial "paginate"
+        .margin-top20
+          = partial "paginate"
 
 else
   .column.is-fullwidth.no-project-container

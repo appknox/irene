@@ -1,7 +1,6 @@
 import Component from '@ember/component';
 
-const ProjectOverviewComponent = Component.extend({
-  project: null,
+export default Component.extend({
   tagName: '',
   classNames: ['projectClassSelector:mp-plus:mp-minus'],
   projectClassSelector: false,
@@ -13,6 +12,4 @@ const ProjectOverviewComponent = Component.extend({
     },
 
   }
-  // classNames: ["column" , "is-half"]
 });
-export default ProjectOverviewComponent;
