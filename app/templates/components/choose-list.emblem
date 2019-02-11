@@ -10,10 +10,7 @@
         = fa-icon project.platformIconClass
     table.project-table
       each otherFilesInTheProject as |file|
-        label class="radio-container"
-          = input type="radio" name="compare-file" class="input-radio" checked="checked"
-          span.radio-mark
-        = file-list-overview file=file showSelectBox=true
+        = file-list-overview file=file showCompare=true fileOld=fileOld
   if hasObjects
     .margin-top
       = partial "paginate"

@@ -2,8 +2,10 @@
   file=file
   profileId=file.project.activeProfileId
   showMoreDetails=showMoreDetails
+  showIcons=true
   click=(action "toggleFileDetails")
-  showSelectBox=showSelectBox
+  showCompare=showCompare
+  fileOld=fileOld
 ]
 
 if showMoreDetails

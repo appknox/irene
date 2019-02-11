@@ -1,0 +1,13 @@
+= file-overview2 [
+  file=file
+  profileId=file.project.activeProfileId
+  showMoreDetails=showMoreDetails
+  showIcons=false
+]
+
+= file-extra-details [
+  file=file
+  project=file.project
+  showInfo=false
+  colspan="3"
+]

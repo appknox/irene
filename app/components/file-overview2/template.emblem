@@ -1,18 +1,12 @@
 td
+  .file-icon-style
+    img src=file.iconUrl alt=file.name
   .columns
-    // .column.flex-center.is-one-sixth
-    //   label class="radio-container"
-    //     = input type="radio" name="compare-file" class="input-radio" checked="checked"
-    //     span.radio-mark
-    .column
-      .file-icon-style
-        img src=file.iconUrl alt=file.name
-      .columns
-        .column.margin-top
-          span.file-heading
-            | FILE ID &nbsp;
-          span.black-text
-            = file.id
+    .column.margin-top
+      span.file-heading
+        | FILE ID &nbsp;
+      span.black-text
+        = file.id
 td
   .columns
     .column
@@ -36,9 +30,15 @@ td
       = attach-tooltip placement="bottom"
         = file.createdOnDateTime
 
-td
-  div.margin-left.details
-    if showMoreDetails
-      i.fa.fa-chevron-up
-    else
-      i.fa.fa-chevron-down
+if showIcons
+  td
+    div.margin-left.details
+      if showMoreDetails
+        i.fa.fa-chevron-up
+      else
+        i.fa.fa-chevron-down
+    if showCompare
+      .margin-top20
+        = link-to "authenticated.compare" (concat fileOld.id "..." file.id) class="project-button highlighted-button" tagName="button"
+          = fa-icon "exchange"
+          | &nbsp; #{t "compare"}
