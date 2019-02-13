@@ -3178,7 +3178,6 @@ $dropdown-default-theme: $color-table
   width: 7em
   text-align: center
 
-
 .file-tag2
   width: auto
   margin: 0.5em 0.5em 0 0
@@ -3192,11 +3191,11 @@ $dropdown-default-theme: $color-table
   width: 4em
   color: $light
   border-radius: 0.3em
-  margin-left: 2em
   margin-right: 0.3em
 
 .file-tag-container
   display: inline-block
+  margin-left: 0.5em
 
 .file-tag-icon
   font-size: 12px
@@ -3246,9 +3245,6 @@ $dropdown-default-theme: $color-table
 
 .project-details
   background: darken($light, 1%)
-
-.project-button-container
-  margin-left: 5em
 
 .all-files-container
   padding: 0 20em
@@ -3321,3 +3317,18 @@ $dropdown-default-theme: $color-table
     height: 8px
     border-radius: 50%
     background: $light
+
+.scan-status-box
+  border-radius: 0.2em
+  background: $light
+  margin: 0em
+  border-bottom: 1px solid lighten(#eaecef, 2%)
+  &:last-child
+    border-bottom: none
+
+.border-card
+  border-bottom: 1px solid lighten(#eaecef, 2%)
+
+.footer-card
+  margin-top: 1em
+  border-top: 1px solid lighten(#eaecef, 2%)

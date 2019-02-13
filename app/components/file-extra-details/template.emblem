@@ -58,14 +58,13 @@ td.project-details colspan=colspan
                     | #{t "scanNotCompleted"}
   .columns
     .column.text-left
-      // if file.tags
-      .file-tag-heading
-        | TAGS
-      .file-tag-container
-        // each file.tags as |tag|
-        .file-tag.file-tag2
-          // = tag.name
-          | Production Build
+      if file.tags
+        .file-tag-heading
+          | TAGS
+        .file-tag-container
+          each file.tags as |tag|
+            .file-tag.file-tag2
+              = tag.name
 
     if showInfo
       .column.no-padding.content-right

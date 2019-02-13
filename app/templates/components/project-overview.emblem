@@ -2,6 +2,7 @@
   file=project.lastFile
   profileId=project.activeProfileId
   showMoreDetails=showMoreDetails
+  showIcons=true
   click=(action "toggleFileDetails")
 ]
 

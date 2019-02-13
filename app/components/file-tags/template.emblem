@@ -1,0 +1,30 @@
+.margin-top.text-left
+  h5
+    | You can add/remove tags for this particular file
+
+  form.columns
+    div.filter-list
+      = input class="form-control input" type="text" placeholder="Enter tag name" value=newFileTag
+    .column
+      button.is-primary click={(perform addFileTag)} disabled=isAddingFileTag
+        if isAddingFileTag
+          .fa-font-size
+            i.fa class="fa-spinner fa-spin"
+          | &nbsp;
+        | + ADD FILE TAG
+
+  if file.tags
+    table.api-filter-table
+      tr
+        th
+          | FILE TAGS
+        th
+          = t "actions"
+      each file.tags as |tag|
+        tr
+          td
+            = tag.name
+          td
+            i.fa.risk-icons.fa-trash-o.removeUrl.remove click={(perform openRemoveFileTagConfirmBox)}
+
+= confirm-box isActive=showRemoveFileTagConfirmBox title="Are you sure you want to remove this file tag" delegate=this disabled=isDeletingFileTag

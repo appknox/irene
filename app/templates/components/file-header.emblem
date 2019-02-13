@@ -1,103 +1,115 @@
-.card.is-fullwidth.margin-bottom20.scan-status-card
-  .columns
-    .column.file-icon
-      .card-header-icon
-        img src=file.iconUrl alt=file.name
-    .column.hide-overflow
-      = file.name
-      div
-        | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
-    .column.os-icon
-      = fa-icon file.project.platformIconClass class="card-icon"
-    .column.content-right.file-buttons
-      if file.project.hasMultipleFiles
-        = link-to 'authenticated.project.files' file.project.id class="mp-detail-all-scans is-primary" tagName="button"
-          = fa-icon "navicon"
-          | &nbsp; #{t "allUploads"}
-        = link-to 'authenticated.choose' file.id class="mp-detail-file-compare is-primary" tagName="button"
-          = fa-icon "exchange"
-          | &nbsp; #{t "compare"}
-      = link-to 'authenticated.project.settings' file.project.id class="mp-detail-project-settings is-primary" tagName="button"
-        = fa-icon "cog"
-        | &nbsp; #{t "settings"}
-
-.card.is-fullwidth.margin-bottom20.scan-status-card.all-scan-status
-  .card-content
-    .columns
-      .column.flex-center
-        = t "staticScan"
-      .column.flex-center
-        = t "dynamicScan"
-      if file.project.isAPIScanEnabled
-        .column.flex-center
-          = t "apiScan"
-      .column.flex-center
-        = t "manualScan"
-
-    .columns
-      .column.flex-center
-        if file.isStaticCompleted
-          button.is-primary.margin-top20 disabled="disabled"
-            | #{t "completed"} &nbsp;
-            = fa-icon "fa-check"
-
-          button.is-primary.margin-top20.margin-left5.ac-static-rescan click="openRescanModal"
-            .fa-font-size-small
-              = fa-icon "fa-repeat"
-        else
-           button.is-primary.margin-top20.is-progress disabled="disabled"
-            | #{t "scanning"} : #{file.staticScanProgress}
-            | %
-      = dynamic-scan file=file notVNCViewer=true dynamicScanText=(t 'start')
-      .column.flex-center
-        if file.isManualRequested
-           button.is-primary.margin-top20 disabled="disabled"
-            if file.isManualDone
-              = fa-icon "fa-check"
-              | &nbsp; #{t "completed"}
-
-            else
-              = fa-icon "fa-clock-o"
-              | &nbsp; #{t "requested"}
-
-        else
+table.project-table
+  = file-overview file=file profileId=file.project.activeProfileId showIcons=false
+  tr
+    td.project-details colspan=6
+      .columns.border-card
+        .column
+          .tabs.is-medium.is-boxed
+            ul
+              li class=scanDetailsClass
+                a click="displayScanDetails" class="uppercase-text"
+                  = t "scanDetails"
+              li class=owaspDetailsClass
+                a click="displayOWASPDetails" class="uppercase-text"
+                  | Owasp Details
+              li class=fileTagsClass
+                a click="displayFileTags" class="uppercase-text"
+                  | File Tags
+        .column.margin-top3.text-right
           if organization.selected.isTrial
-              button.is-primary.margin-top20 click={(perform openRequestAccessModal)}
-                .fa-font-size
-                  = fa-icon "fa-play"
-                | &nbsp; #{t "start"}
-          else
-            button.is-primary.margin-top20.ac-request-manual-scan click="openManualScanModal"
-              .fa-font-size
-                = fa-icon "fa-play"
-              | &nbsp; #{t "start"}
-
-
-.card.is-fullwidth.app-details-card
-  header.card-header
-    .column.is-one-third
-      .tabs.is-medium.is-boxed
-        ul
-          li class=scanDetailsClass
-            a click="displayScanDetails" class="uppercase-text"
-              = t "scanDetails"
-          li class=owaspDetailsClass
-            a click="displayOWASPDetails" class="uppercase-text"
-              | Owasp Details
-    .column.content-right
-      .card-button
-        .columns
-          .column.card-button
-            if organization.selected.isTrial
-              button.is-primary.margin-top20 click={(perform openRequestAccessModal)}
+              button.is-primary.margin-top20.project-button.highlighted-button click={(perform openRequestAccessModal)}
                 = fa-icon "download"
                 | &nbsp; #{ t "pdfReport"}
-            else
-              button.mp-pdf-report click="getPDFReportLink" disabled=isDownloadingReport
-                if isDownloadingReport
-                  .fa-font-size
-                    i.fa class="fa-spinner fa-spin"
-                    | &nbsp;
+          else
+            button.mp-pdf-report.project-button.highlighted-button click="getPDFReportLink" disabled=isDownloadingReport
+              if isDownloadingReport
+                .fa-font-size
+                  i.fa class="fa-spinner fa-spin"
+                  | &nbsp;
+              else
+                = fa-icon "download"
+              | &nbsp; #{ t "pdfReport"}
+        .margin-top.margin-right
+          = copy-password pdfPassword=file.project.pdfPassword
+
+      if isScanDetails
+        .columns.flex-center
+          .column.is-one-quarter
+            = ember-chart type='doughnut' data=file.doughnutData width=150 height=150 options=chartOptions
+          .column.is-one-quarter.card-content
+            ul.risk-table
+              .risk-values.text-left
+                .columns
+                  .column
+                    li.is-critical
+                      = t "critical"
+                  .column
+                    = file.countRiskCritical
+                .columns
+                  .column
+                    li.is-danger
+                      = t "high"
+                  .column
+                    = file.countRiskHigh
+                .columns
+                  .column
+                    li.is-warning
+                      = t "medium"
+                  .column
+                    = file.countRiskMedium
+                .columns
+                  .column
+                    li.is-info
+                      = t "low"
+                  .column
+                    = file.countRiskLow
+                .columns
+                  .column
+                    li.is-success
+                      = t "none"
+                  .column
+                    = file.countRiskNone
+                .columns class=unknownAnalysisStatus.status:visible:invisible
+                  .column
+                    li.is-default
+                      = t "untested"
+                  .column
+                    = file.countRiskUnknown
+          .column.margin-top
+            .columns.scan-status-box
+              .column
+                h6.margin-top5 = t "staticScan"
+              .column
+                if file.isStaticCompleted
+                  button.is-primary disabled="disabled"
+                    | #{t "completed"} &nbsp;
+                    = fa-icon "fa-check"
+
+                  button.is-primary.margin-left5.ac-static-rescan click="openRescanModal"
+                    .fa-font-size-small
+                      = fa-icon "fa-repeat"
+                else
+                  button.is-primary.is-progress disabled="disabled"
+                    | #{t "scanning"} : #{file.staticScanProgress}
+                    | %
+
+            = dynamic-scan file=file notVNCViewer=true dynamicScanText=(t 'start')
+
+            .columns.scan-status-box
+              .column
+                h6.margin-top5 = t "manualScan"
+
+              .column
+                if file.isManualRequested
+                  button.is-primary disabled="disabled"
+                    if file.isManualDone
+                      = fa-icon "fa-check"
+                      | &nbsp; #{t "completed"}
+
+                    else
+                      = fa-icon "fa-clock-o"
+                      | &nbsp; #{t "requested"}
+
                 else
                   = fa-icon "download"
                 | &nbsp; #{ t "pdfReport"}
@@ -166,12 +178,28 @@
             div.file-id-text
               | FILE ID - #{file.id}
 
-    if isOWASPDetails
-      .align-center
-        = ember-chart type='bar' data=owaspData.mobile width=320 height=200 options=barChartOptions
 
-        = ember-chart type='bar' data=owaspData.web width=320 height=200 options=barChartOptions
 
+
+      if isOWASPDetails
+        .align-center
+          = ember-chart type='bar' data=owaspData.mobile width=320 height=200 options=barChartOptions
+
+          = ember-chart type='bar' data=owaspData.web width=320 height=200 options=barChartOptions
+      if isFileTags
+        if file.tags
+          = file-tags file=file
+      .columns.footer-card
+        .column.text-left.no-padding.margin-top5
+          if file.tags
+            .file-tag-container
+              .file-tag-heading
+                | TAGS
+              each file.tags as |tag|
+                .file-tag.file-tag2
+                  = tag.name
+        .column.content-right.no-padding.margin-top5
+          = project-actions project=file.project
 = modal-card isActive=showRequestAccessModal title=(t "modalCard.requestAccess.title")
   h5
    = t "modalCard.requestAccess.description"
@@ -182,7 +210,6 @@
     .column
       button.modal-button.is-primary click={(perform closeRequestAccessModal)}
         = t "cancel"
-
 = modal-card isActive=showManualScanModal title=(t "modalCard.manual.title") class="manual-scan-modal"
   h5
    = t "modalCard.manual.description"

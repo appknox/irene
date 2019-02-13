@@ -16,6 +16,7 @@ const FileHeaderComponent = Component.extend({
   userRoles: [],
   globalAlpha:0.4,
   radiusRatio:0.9,
+  isFileTags: false,
   isBasicInfo: false,
   isVPNDetails: false,
   isScanDetails: true,
@@ -159,6 +160,12 @@ const FileHeaderComponent = Component.extend({
 
   owaspDetailsClass: computed('isOWASPDetails', function() {
     if (this.get('isOWASPDetails')) {
+      return 'is-active';
+    }
+  }),
+
+  fileTagsClass: computed('isFileTags', function() {
+    if (this.get('isFileTags')) {
       return 'is-active';
     }
   }),
@@ -310,11 +317,19 @@ const FileHeaderComponent = Component.extend({
     displayScanDetails() {
       this.set('isScanDetails', true);
       this.set('isOWASPDetails', false);
+      this.set('isFileTags', false);
     },
 
     displayOWASPDetails() {
       this.set('isScanDetails', false);
       this.set('isOWASPDetails', true);
+      this.set('isFileTags', false);
+    },
+
+    displayFileTags() {
+      this.set('isScanDetails', false);
+      this.set('isOWASPDetails', false);
+      this.set('isFileTags', true);
     },
 
     getPDFReportLink() {
