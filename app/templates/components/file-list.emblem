@@ -1,19 +1,15 @@
 .column
-  .all-files-container
-    .columns
-      .column.margin-left
-        h5.margin-top.margin-bottom0
-          | All Uploads &nbsp;
-          span.black-text.bold
-            | #{project.packageName} &nbsp;
-      .column.content-right.is-one-sixth.margin-top.margin-right
-        = fa-icon project.platformIconClass
-    table.project-table
-
+  .columns
+    if hasObjects
       each sortedObjects as |file|
-        = file-list-overview file=file
-
+        .column.is-one-third
+          = link-to "authenticated.file" file.id
+            = file-overview file=file profileId=file.profile.id
+    else
+      .loading-container
+        i.fa class="fa-spinner fa-spin"
+        div
+          | #{t "loading"}...
 
   if hasObjects
-    .margin-top20
-      = partial "paginate"
+    = partial "paginate"

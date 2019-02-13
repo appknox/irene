@@ -32,6 +32,7 @@ const File = DS.Model.extend(BaseModelMixin, {
   rating: DS.attr('string'),
   isManualDone: DS.attr('boolean'),
   isApiDone: DS.attr('boolean'),
+<<<<<<< HEAD
   riskCountCritical: DS.attr('number'),
   riskCountHigh: DS.attr('number'),
   riskCountMedium: DS.attr('number'),
@@ -42,6 +43,8 @@ const File = DS.Model.extend(BaseModelMixin, {
   analyses: DS.hasMany('analysis', { inverse: 'file' }),
 
   tags: DS.attr(),
+=======
+>>>>>>> refactor: revert back the changes
 
   isManualRequested: computed('manual', function() {
     return this.get("manual") !== ENUMS.MANUAL.NONE

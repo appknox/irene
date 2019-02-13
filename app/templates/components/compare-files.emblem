@@ -9,12 +9,12 @@
 
 .columns.flex-center.compare-container
   .column.is-half
-    table.project-table
-      = file-compare-overview file=file1
+      = link-to "authenticated.file" file1.id
+        = file-overview file=file1 isReverse=true profileId=file1.profile.id
   .column.is-half
-    table.project-table
-       = file-compare-overview file=file2
-.columns.compare-details.margin-top
+      = link-to "authenticated.file" file2.id
+        = file-overview file=file2 profileId=file2.profile.id
+.columns.compare-details
   .column.text-centre
     | #{t "compareSummary1"}
     select.select{action 'selectBaseFile' on='change'} disabled=isChangingFile id="base-file-id"

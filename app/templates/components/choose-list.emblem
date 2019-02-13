@@ -1,16 +1,15 @@
 .column
-  .all-files-container
-    .columns
-      .column.margin-left
-        h5.margin-top.margin-bottom0
-          | #{t "chooseAFile"} &nbsp;
-          span.black-text.bold
-            | #{project.packageName} &nbsp;
-      .column.content-right.is-one-sixth.margin-top.margin-right
-        = fa-icon project.platformIconClass
-    table.project-table
+  .columns
+    if hasObjects
       each otherFilesInTheProject as |file|
-        = file-list-overview file=file showCompare=true fileOld=fileOld
+        .column.is-one-third
+          = link-to "authenticated.compare" (concat fileOld.id "..." file.id)
+            = file-overview file=file fileOld=fileOld profileId=file.profile.id redirectTo="authenticated.compare"
+    else
+      .loading-container
+        i.fa class="fa-spinner fa-spin"
+        div
+          | #{t "loading"}...
+
   if hasObjects
-    .margin-top
-      = partial "paginate"
+    = partial "paginate"

@@ -1,37 +1,18 @@
-= file-overview [
-  file=project.lastFile
-  profileId=project.activeProfileId
-  // showMoreDetails=showMoreDetails
-  showIcons=true
-  // click=(action "toggleFileDetails")
-]
+= link-to "authenticated.file" project.lastFile.id
+  = file-overview file=project.lastFile profileId=project.activeProfileId
+    footer.card-button
+      .columns.button-width
+        .column class=project.hasMultipleFiles::auto-adjust
+          = link-to 'authenticated.project.settings' project.id class="mp-project-setting" tagName="button"
+            = fa-icon "cog"
+            | &nbsp; #{t "settings"}
+        if project.hasMultipleFiles
+          .column
+            = link-to 'authenticated.project.files' project.id class="mp-all-scans" tagName="button"
+              = fa-icon "navicon"
+              | &nbsp; #{t "allUploads"}
 
-tr.border-top-none
-  td colspan="9"
-    .columns
-      .column.text-left.no-padding.margin-top.margin-left
-        .file-tag-container
-          if project.lastFile.tags
-            .file-tag-heading
-              | TAGS
-            each project.lastFile.tags as |tag|
-              .file-tag.file-tag2
-                = tag.name
-
-      .column.no-padding.content-right.margin-top
-        = project-actions project=project
-      .column.no-padding.margin-top.margin-right.max-width
-        div.margin-left.details click="toggleFileDetails"
-          if showMoreDetails
-            i.fa.fa-chevron-up
-          else
-            i.fa.fa-chevron-down
-
-if showMoreDetails
-  = file-extra-details [
-    file=project.lastFile
-    project=project
-    showInfo=true
-    colspan="9"
-  ]
-
+          .column
+            = link-to 'authenticated.choose' project.lastFile.id class="mp-file-compare" tagName="button"
+              = fa-icon "exchange"
+              | &nbsp; #{t "compare"}

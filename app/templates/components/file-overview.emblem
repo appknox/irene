@@ -1,5 +1,5 @@
-td
-  .file-icon-style
+header.card-header
+  .card-header-icon
     img src=file.iconUrl alt=file.name
   p.card-header-title
     ul.is-fullwidth
@@ -39,37 +39,37 @@ td
                 li.is-critical
                   = t "critical"
               .column
-                = file.riskCountCritical
+                = file.countRiskCritical
             .columns
               .column
                 li.is-danger
                   = t "high"
               .column
-                = file.riskCountHigh
+                = file.countRiskHigh
             .columns
               .column
                 li.is-warning
                   = t "medium"
               .column
-                = file.riskCountMedium
+                = file.countRiskMedium
             .columns
               .column
                 li.is-info
                   = t "low"
               .column
-                = file.riskCountLow
+                = file.countRiskLow
             .columns
               .column
                 li.is-success
                   = t "none"
               .column
-                = file.riskCountPassed
+                = file.countRiskNone
             .columns class=unknownAnalysisStatus.status:visible:invisible
               .column
                 li.is-default
                   = t "untested"
               .column
-                = file.riskCountUnknown
+                = file.countRiskUnknown
 
     .file-id-container
       div.file-id-text
