@@ -5,6 +5,7 @@ const FileOverviewComponent = Component.extend({
   file: null,
   fileOld: null,
   tagName: 'tr',
+  classNames: ['border-bottom-none'],
   unknownAnalysisStatus: computed(function() {
     return this.get("store").queryRecord('unknown-analysis-status', {id: this.get("profileId")});
   })

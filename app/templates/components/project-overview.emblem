@@ -1,10 +1,31 @@
 = file-overview [
   file=project.lastFile
   profileId=project.activeProfileId
-  showMoreDetails=showMoreDetails
+  // showMoreDetails=showMoreDetails
   showIcons=true
-  click=(action "toggleFileDetails")
+  // click=(action "toggleFileDetails")
 ]
+
+tr.border-top-none
+  td colspan="9"
+    .columns
+      .column.text-left.no-padding.margin-top.margin-left
+        .file-tag-container
+          if project.lastFile.tags
+            .file-tag-heading
+              | TAGS
+            each project.lastFile.tags as |tag|
+              .file-tag.file-tag2
+                = tag.name
+
+      .column.no-padding.content-right.margin-top
+        = project-actions project=project
+      .column.no-padding.margin-top.margin-right.max-width
+        div.margin-left.details click="toggleFileDetails"
+          if showMoreDetails
+            i.fa.fa-chevron-up
+          else
+            i.fa.fa-chevron-down
 
 if showMoreDetails
   = file-extra-details [

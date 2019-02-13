@@ -1,13 +1,13 @@
 .project-button-container
-  = link-to 'authenticated.project.settings' project.id class="mp-project-setting" class="project-button highlighted-button" tagName="button"
+  = link-to 'authenticated.project.settings' project.id class="mp-project-setting" class="project-button" tagName="button"
     = fa-icon "cog"
     | &nbsp; #{t "settings"}
 
   if project.hasMultipleFiles
-    = link-to 'authenticated.project.files' project.id class="mp-all-scans" class="project-button highlighted-button" tagName="button"
+    = link-to 'authenticated.project.files' project.id class="mp-all-scans" class="project-button" tagName="button"
       = fa-icon "navicon"
       | &nbsp; #{t "allUploads"}
 
-    = link-to 'authenticated.choose' project.lastFile.id class="mp-file-compare" class="project-button highlighted-button" tagName="button"
+    = link-to 'authenticated.choose' project.lastFile.id class="mp-file-compare" class="project-button" tagName="button"
       = fa-icon "exchange"
       | &nbsp; #{t "compare"}

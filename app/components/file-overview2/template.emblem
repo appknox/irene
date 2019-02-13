@@ -39,6 +39,6 @@ if showIcons
         i.fa.fa-chevron-down
     if showCompare
       .margin-top20
-        = link-to "authenticated.compare" (concat fileOld.id "..." file.id) class="project-button highlighted-button" tagName="button"
+        = link-to "authenticated.compare" (concat fileOld.id "..." file.id) class="project-button" tagName="button"
           = fa-icon "exchange"
           | &nbsp; #{t "compare"}

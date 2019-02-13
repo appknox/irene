@@ -33,16 +33,8 @@ if hasProjects
               i.fa.fa-sort-down.sort-icons.margin-top5
             else
               i.fa.fa-sort-up.sort-icons.margin-top5
-          // th
-          //   | Version
-          // th
-          //   | Version Code
           th
             | Platform
-          th
-
-          // th colspan="2"
-          //   | File ID
 
         if hasObjects
           each sortedObjects as |project|
