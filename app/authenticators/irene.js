@@ -32,20 +32,19 @@ const IreneAuthenticator = Base.extend({
     }
   },
 
-  authenticate(identification, password, otp, errorCallback, loginStatus) {
+  authenticate(identification, password, otp) {
     const ajax = this.get("ajax");
-    return new Promise((resolve, reject) => {
-      const data = {
-        username: identification,
-        password,
-        otp
-      };
-      const url = ENV['ember-simple-auth']['loginEndPoint'];
-      ajax.post(url, {data})
-      .then((data) => {
+    const data = {
+      username: identification,
+      password,
+      otp
+    }
+    const url = ENV['ember-simple-auth']['loginEndPoint'];
+    return ajax.post(url, {data})
+      .then(data => {
         data = processData(data);
-        resolve(data);
         this.resumeTransistion();
+        return data
       }, (error) => {
         loginStatus(false);
         errorCallback(error);
@@ -58,7 +57,6 @@ const IreneAuthenticator = Base.extend({
         }
         return reject(error);
       });
-    });
   },
 
   async restore(data) {

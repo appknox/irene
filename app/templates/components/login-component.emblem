@@ -6,8 +6,16 @@
       h4.has-text-centered
         = t "loginTitle"
       if MFAEnabled
-        p.control.has-icon.has-icon-left
-          = input class="input" type="text" placeholder="OTP" value=otp id="otp"
+        if MFAForced
+          p
+            = t "organizationMandatory2FA"
+        if MFAIsEmail
+          p
+            = t "emailOTP"
+          p
+            = t "emailCode"
+        p.control.has-icon.has-icon-left.margin-top
+          = input class="input" type="text" placeholder="OTP Code" value=otp id="otp"
           = fa-icon class="is-primary" "key"
       else
         p.control.has-icon.has-icon-left

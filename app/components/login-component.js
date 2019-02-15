@@ -16,6 +16,7 @@ const LoginComponentComponent = Component.extend({
   otp: "",
   isNotEnterprise: !ENV.isEnterprise,
   isRegistrationEnabled: ENV.isRegistrationEnabled,
+
   registrationLink: computed(function() {
     if(ENV.registrationLink) {
       return ENV.registrationLink;
@@ -31,8 +32,32 @@ const LoginComponentComponent = Component.extend({
   hasRegistrationLink: computed('registrationLink', function() {
     return !!this.get('registrationLink');
   }),
+
+  handleOTP(error) {
+    if (!isUnauthorizedError(error)) {
+      return false;
+    }
+    if(error.payload) {
+      this.set("MFAEnabled", true)
+      this.set("MFAIsEmail", error.payload.type == "HOTP")
+      this.set("MFAForced", this.isTrue(error.payload.forced))
+      return true;
+    }
+    return false;
+  },
+  isTrue(value) {
+    if (value == undefined) {
+      return false;
+    }
+    if(value.toLowerCase) {
+      return value.toLowerCase() == "true"
+    }
+    return !!value
+  },
+
   actions: {
     authenticate() {
+      window.test = this;
       let identification = this.get('identification');
       let password = this.get('password');
       const otp = this.get("otp");
@@ -44,17 +69,21 @@ const LoginComponentComponent = Component.extend({
       password = password.trim();
       this.set("isLogingIn", true);
 
-      const errorCallback = (error) => {
-        if (isUnauthorizedError(error)) {
-          this.set("MFAEnabled", true);
-        }
-      };
-
-      const loginStatus = () => {
-        this.set("isLogingIn", false);
-      };
-
-      this.get('session').authenticate("authenticator:irene", identification, password, otp, errorCallback, loginStatus);
+      this.get('session').authenticate("authenticator:irene", identification, password, otp)
+        .then()
+        .catch(error => {
+          this.set("isLogingIn", false);
+          if(this.handleOTP(error)) {
+            return
+          }
+          this.get("notify").error(error.payload.message, ENV.notifications);
+          for (error of error.errors) {
+            if (error.status === "0") {
+              return this.get("notify").error("Unable to reach server. Please try after sometime", ENV.notifications);
+            }
+            this.get("notify").error("Please enter valid account details", ENV.notifications);
+          }
+        })
     },
 
     SSOAuthenticate() {
