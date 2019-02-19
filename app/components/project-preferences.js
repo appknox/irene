@@ -21,7 +21,7 @@ const ProjectPreferencesComponent = Component.extend({
   }),
 
   devices: computed(function() {
-    return this.get("store").findAll("available-device");
+    return this.get("store").query('project-available-device', {projectId: this.get("project.id")});
   }),
 
   selectedDeviceType: computed("devicePreference.deviceType", function() {
@@ -37,7 +37,7 @@ const ProjectPreferencesComponent = Component.extend({
   }),
 
   availableDevices: computed.filter('devices', function(device) {
-    return device.get("platform") === this.get("platform");
+    return device.get("platform") === this.get("project.platform");
   }),
 
   filteredDevices: computed("availableDevices", "selectedDeviceType", function() {

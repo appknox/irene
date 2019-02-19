@@ -19,7 +19,7 @@
 
 if isGeneralSettings
   .box-container.project-preference
-    = project-preferences profileId=project.activeProfileId platform=project.platform
+    = project-preferences profileId=project.activeProfileId platform=project.platform project=project
   .box-container
     = api-filter profileId=project.activeProfileId
   .box-container

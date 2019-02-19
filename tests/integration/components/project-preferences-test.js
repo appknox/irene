@@ -42,7 +42,7 @@ moduleForComponent('project-preferences', 'Integration | Component | project pre
 test('tapping button fires an external action', function(assert) {
   var component = this.subject();
   var store = {
-    findAll: function() {
+    query: function() {
       return [
         {
           id:1,
