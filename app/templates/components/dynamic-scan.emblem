@@ -1,6 +1,6 @@
 .columns.scan-status-box
   if notVNCViewer
-    .column
+    .column.is-one-third
       h6.margin-top5 = t "dynamicScan"
   .column.flex-center
     if file.isNotReady
@@ -36,7 +36,7 @@
 if notVNCViewer
   if file.project.isAPIScanEnabled
     .columns.scan-status-box
-      .column
+      .column.is-one-third
         h6.margin-top5 = t "apiScan"
 
       .column.flex-center
@@ -55,7 +55,7 @@ if notVNCViewer
             | &nbsp; #{t "start"}
 
 = modal-card isActive=showRunDynamicScanModal title=(t "modalCard.runAPIScan.title")
-  .card-body.warning-modal
+  .card-body.warning-modal.text-left
     .card-wrapper
       .api-scanning
         h6
@@ -74,7 +74,7 @@ if notVNCViewer
                 = t "cancel"
 
 = modal-card isActive=showAPIScanModal title=(t "modalCard.apiScan.title")
-  .card-body.warning-modal
+  .card-body.warning-modal.text-left
     .card-wrapper
       .api-scanning
         div.warning-band.info-band
@@ -97,7 +97,7 @@ if notVNCViewer
                 = t "modalCard.apiScan.dynamicScan"
 
 = modal-card isActive=showAPIURLFilterScanModal title=(t "modalCard.apiScan.title")
-  .card-body.warning-modal
+  .card-body.warning-modal.text-left
     .card-wrapper
       .api-scanning
         h6

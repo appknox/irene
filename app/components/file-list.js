@@ -11,14 +11,15 @@ const FileListComponent = Component.extend(PaginateMixin, {
 
   classNames: ["columns", "margin-top"],
 
-  extraQueryStrings: computed("project.id", function () {
-    const query =
-      { projectId: this.get("project.id") };
+  extraQueryStrings: computed("project.id", function() {
+    const query = {
+      projectId: this.get("project.id")
+    };
     return JSON.stringify(query, Object.keys(query).sort());
   }),
 
 
-  newFilesObserver: observer("realtime.FileCounter", function () {
+  newFilesObserver: observer("realtime.FileCounter", function() {
     return this.incrementProperty("version");
   })
 }

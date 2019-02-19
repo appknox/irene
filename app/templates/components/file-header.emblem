@@ -1,10 +1,50 @@
-table.project-table
-  = file-overview file=file profileId=file.project.activeProfileId showIcons=false
+table.project-table.margin-top20
   tr
-    td.project-details colspan=6
-      .columns.border-card
+    td.border-right-width.text-left
+      .columns
+        .column.file-icon.no-padding.file-icon-bigger
+          img src=file.iconUrl alt=file.name
         .column
-          .tabs.is-medium.is-boxed
+          ul.file-header-details
+            li
+              h4
+                = file.name
+            li
+              h5
+                = file.project.packageName
+            li
+              if file.version
+                span.file-heading
+                  | version &nbsp;
+                span.file-info.hidden-overflow
+                  | #{file.version}
+              if file.versionCode
+                span.file-seperator
+                span.file-heading
+                  | version code &nbsp;
+                span.file-info.hidden-overflow
+                  | #{file.versionCode}
+                span.file-seperator
+                span.file-info.hidden-overflow
+                  | #{moment-from-now file.createdOn}
+                  small
+                    | &nbsp; #{file.createdOnDateTime}
+
+        .column.is-one-sixth
+          .columns
+            .column.content-right.no-padding
+              .file-id-text.file-id-text2
+                | FILE ID - #{file.id}
+          .columns
+            .column
+              .text-right.margin-right
+                = fa-icon file.project.platformIconClass class="platform-icon"
+
+  tr
+    td.project-details.padding-bottom0 colspan=6
+      .columns.border-card
+        .column.no-padding.is-half
+          .tabs.is-medium.is-boxed.file-details-tab
             ul
               li class=scanDetailsClass
                 a click="displayScanDetails" class="uppercase-text"
@@ -15,21 +55,21 @@ table.project-table
               li class=fileTagsClass
                 a click="displayFileTags" class="uppercase-text"
                   | File Tags
-        .column.margin-top3.text-right
+        .column.margin-top3.text-right.no-padding.is-one-sixth
           if organization.selected.isTrial
-              button.is-primary.margin-top20.project-button.highlighted-button click={(perform openRequestAccessModal)}
+              button.is-primary.margin-top20.project-button click={(perform openRequestAccessModal)}
                 = fa-icon "download"
-                | &nbsp; #{ t "pdfReport"}
+                | &nbsp; Report
           else
-            button.mp-pdf-report.project-button.highlighted-button click="getPDFReportLink" disabled=isDownloadingReport
+            button.mp-pdf-report.project-button click="getPDFReportLink" disabled=isDownloadingReport
               if isDownloadingReport
                 .fa-font-size
                   i.fa class="fa-spinner fa-spin"
                   | &nbsp;
               else
                 = fa-icon "download"
-              | &nbsp; #{ t "pdfReport"}
-        .margin-top.margin-right
+              | &nbsp; Report
+        .column.is-one-third.no-padding.margin-top3
           = copy-password pdfPassword=file.project.pdfPassword
 
       if isScanDetails
@@ -77,7 +117,7 @@ table.project-table
                     = file.countRiskUnknown
           .column.margin-top
             .columns.scan-status-box
-              .column
+              .column.is-one-third
                 h6.margin-top5 = t "staticScan"
               .column
                 if file.isStaticCompleted
@@ -96,7 +136,7 @@ table.project-table
             = dynamic-scan file=file notVNCViewer=true dynamicScanText=(t 'start')
 
             .columns.scan-status-box
-              .column
+              .column.is-one-third
                 h6.margin-top5 = t "manualScan"
 
               .column
@@ -178,27 +218,21 @@ table.project-table
             div.file-id-text
               | FILE ID - #{file.id}
 
-
-
-
       if isOWASPDetails
-        .align-center
+        .align-center.margin-bottom
           = ember-chart type='bar' data=owaspData.mobile width=320 height=200 options=barChartOptions
 
           = ember-chart type='bar' data=owaspData.web width=320 height=200 options=barChartOptions
       if isFileTags
-        if file.tags
-          = file-tags file=file
+        = file-tags file=file
       .columns.footer-card
-        .column.text-left.no-padding.margin-top5
+        .column.text-left.no-padding.margin-top
           if file.tags
             .file-tag-container
-              .file-tag-heading
-                | TAGS
               each file.tags as |tag|
                 .file-tag.file-tag2
                   = tag.name
-        .column.content-right.no-padding.margin-top5
+        .column.content-right.no-padding.margin-top.margin-bottom
           = project-actions project=file.project
 = modal-card isActive=showRequestAccessModal title=(t "modalCard.requestAccess.title")
   h5

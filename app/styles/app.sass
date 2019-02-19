@@ -153,11 +153,20 @@ $fractional-pts: q 0.25, h 0.5, 3q 0.75
 .margin-top
   margin-top: 10px
 
-.margin-top5
-  margin-top: 5px
+
+.margin-top1
+  margin-top: 1px
 
 .margin-top3
   margin-top: 3px
+
+.margin-top4
+  margin-top: 4px
+
+.margin-top5
+  margin-top: 5px
+
+
 
 .margin-top20
   margin-top: 20px
@@ -259,6 +268,10 @@ $fractional-pts: q 0.25, h 0.5, 3q 0.75
   
 .no-padding
   padding: 0
+
+.margin-x-0
+  margin-left: 0px
+  margin-right: 0px
 
 .margin-side-auto
   margin: 0px auto
@@ -641,6 +654,9 @@ div[class^="_c-notification__container"]
   margin-right: -9px
   margin-bottom: 10px
 
+.project-container
+  margin-top: 10px
+
 .top-nav
   width: 100%
   margin-top: -10px
@@ -856,6 +872,9 @@ div[class^="_c-notification__container"]
   text-overflow: ellipsis
   white-space: nowrap
 
+.max-width18em
+  max-width: 18em
+
 .fixed-icon
   position: absolute
   left: 85%
@@ -1035,11 +1054,14 @@ div[class^="_c-notification__container"]
   margin-top: 15px
 
 .file-card
+  .card-header
+    height: 70px
   .card-content
     padding: 0px
+    background:
     .content
       .columns:nth-child(1)
-        margin-top: 10px
+        margin-top: -10px
       .columns.is-reverse
         margin-left: 40px
 
@@ -1083,11 +1105,6 @@ div[class^="_c-notification__container"]
     &:last-child
       margin-left: 10px
       margin-right: 10px
-
-.file-icon
-  margin-top: -5px
-  margin-left: 5px
-  max-width: 70px
 
 .user-roles-table
   width: 520px
@@ -1212,6 +1229,8 @@ div[class^="_c-notification__container"]
 
 .card-header-icon
   cursor: default
+  display: inline
+  max-width: 55px
   img
     height: 50px
     width: 50px
@@ -1425,18 +1444,6 @@ ul.risk-table
     button
       padding: 5px
       line-height: 0px
-
-.app-details-card
-  .card-header
-    height: 40px
-  .card-content
-    height: 220px
-    .columns
-      .column
-        padding-top: 10px
-        margin-top: -10px
-  .card-button button
-    margin-top: -5px
 
 .scan-status-card
   .warning-band
@@ -1846,6 +1853,11 @@ button.delete-button
       background: none
   ul
     border-color: #f0f0f0
+
+.tabs.is-boxed.file-details-tab
+  line-height: 30px
+  ul
+    border-bottom: none
 
 .loading-container-home
   justify-content: center
@@ -2767,7 +2779,6 @@ $attachment-icon-width: 4em
       padding: 0 0.5em
 
 .vnc-box
-  min-width: 165px
   text-align: center
 
 .button-on-vnc
@@ -2805,6 +2816,7 @@ $attachment-icon-width: 4em
     position: relative
     bottom: 82px
     right: 50px
+    margin-top: 20px
 
 .mp-toggle-pop
   position: relative
@@ -2845,24 +2857,20 @@ $attachment-icon-width: 4em
     margin-top: -7px
     width: 100px
 
-.file-id-container
-  padding-bottom: 10px
+.file-id-text
   text-align: center
-  .file-id-text
-    width: 110px
-    margin: -5px auto 5px auto
-    text-align: center
-    font-weight: 900
-    font-size: 12px
-    background-color: lighten($grey, 50%)
-    color: lighten(#000, 30%)
-    border-radius: 5px
+  font-weight: 900
+  font-size: 12px
+  background-color: darken($light, 10%)
+  color: lighten(#000, 30%)
+  padding: 0 0.2em
+  min-width: 4em
 
-.app-details-card
-  .file-id-container
-    margin-left: -30px
-    .file-id-text
-      margin-top: 20px
+.file-id-text2
+  margin-top: 10px
+  position: relative
+  top: -1.9em
+  font-size: 16px
 
 .app-risk-info
   margin-top: -25px
@@ -3172,54 +3180,21 @@ $dropdown-default-theme: $color-table
   color: $light
   font-weight: 900
   border-radius: 0.3em
-  padding: 0.1em
-  margin: 1em
-  font-size: 12px
-  width: 7em
+  padding: 0.2em 0.4em
+  margin: 0em 0.5em 0 0
+  font-size: 10px
   text-align: center
-
-.file-tag2
-  width: auto
-  margin: 0.5em 0.5em 0 0
   display: inline-block
-  padding: 0.1em 0.7em
-
-.file-tag-heading
-  display: inline-block
-  text-align: center
-  background: $success
-  width: 4em
-  color: $light
-  border-radius: 0.3em
-  margin-right: 0.3em
 
 .file-tag-container
   display: inline-block
-  margin-left: 0.5em
-
-.file-tag-icon
-  font-size: 12px
-  margin-top: 0.2em
-  margin-left: 0.5em
-
-.button-column
-  padding: 5px
-  margin-top: 20px
-  margin-left: 10px
-
-.file-id
-  margin-top: 0.8em
-  background: lighten($sidebar-bg, 20%)
-  color: $light
-  padding: 1px
-  width: 8em
-  text-align: center
-  font-size: 12px
-  border-radius: 0.2em
-
-.card-buttons
-  border: none
-
+  margin: 0 0 0em 0.5em
+  position: relative
+  top: 0.1em
+  overflow-x: scroll
+  width: 26em
+  white-space: nowrap
+  height: 35px
 
 .project-table
   tr
@@ -3243,6 +3218,8 @@ $dropdown-default-theme: $color-table
     &.border-right-width
       border-right-width: 1px
       border-color: lighten(#eaecef, 2%)
+    &.text-left
+      @extend .text-left
   .btn-table
     height: auto
     i
@@ -3253,78 +3230,45 @@ $dropdown-default-theme: $color-table
     align-items: center
 
 .project-details
+  margin-top: 10px
   background: darken($light, 1%)
 
-.all-files-container
-  padding: 0 20em
-
-.project-button
-  margin: 0em 0.5em
+button.project-button
+  margin: 0.2em 0.5em
   height: 28px
-  color: lighten($critical, 5%)
+  color: darken($default, 5%)
+  background: lighten($default, 50%)
   border: none
+  border-radius: 0.2em
+  box-shadow: 1px 1px 1px 1px #ccc
+  &:hover
+    color: darken($default, 10%)
+    background: lighten($default, 45%)
+    border-color: lighten($default, 45%)
+
 
 .project-container
-  padding: 0 10em
+  margin-top: 10px
 
 .file-heading
-  font-size: 14px
+  font-size: 12px
   opacity: 0.6
-  margin-left: 1em
+
+.file-extra-info
+  margin-top: -2.1em
+  padding-left: 0.4em
 
 .file-info
-  font-size: 14px
-  margin-left: 0.2em
-
-.input-radio
-  font-size: 20px
-
-.radio-container
-  display: block
+  font-size: 12px
+  display: inline-block
   position: relative
-  margin-bottom: 12px
-  cursor: pointer
-  font-size: 22px
-  user-select: none
-  top: 2.5em
-  left: 0.5em
+  top: 0.3em
 
-.input-radio
-  position: absolute
-  opacity: 0
-  cursor: pointer
+.max-width5em
+  max-width: 5em
 
-.radio-mark
-  position: absolute
-  top: 0
-  left: 0
-  height: 25px
-  width: 25px
-  background-color: lighten($default, 50%)
-  border-radius: 50%
-
-.radio-container:hover .input-radio ~ .radio-mark
-  background-color: lighten($default, 40%)
-
-.radio-container .input-radio:checked ~ .radio-mark
-  background-color: $info
-
-.radio-mark:after
-  content: ""
-  position: absolute
-  display: none
-
-.radio-container .input-radio:checked ~ .radio-mark:after
-  display: block
-
-.radio-container .radio-mark
-  &:after
-    top: 9px
-    left: 9px
-    width: 8px
-    height: 8px
-    border-radius: 50%
-    background: $light
+.info-date
+  max-width: 7em
 
 .scan-status-box
   border-radius: 0.2em
@@ -3338,5 +3282,41 @@ $dropdown-default-theme: $color-table
   border-bottom: 1px solid lighten(#eaecef, 2%)
 
 .footer-card
-  margin-top: 1em
   border-top: 1px solid lighten(#eaecef, 2%)
+
+.file-icon
+  margin-top: 2px
+  margin-left: 5px
+  max-width: 55px
+  img
+    height: 40px
+    width: 40px
+    max-height: 40px
+    margin-top: 0.1em
+    background-image: none
+    overflow: hidden
+    &:before
+      content: "."
+      font-size: 1000px
+
+.file-icon-bigger
+  max-width: 75px
+  margin-left: 1.5em
+  margin-top: 1.2em
+  img
+    height: 70px
+    width: 70px
+    max-height: 70px
+
+.file-seperator
+  margin-left: 0.2em
+  font-size: 24px
+  position: relative
+  top: 0.2em
+  &:before
+    content: "• "
+
+.file-header-details
+  .file-heading, .file-info
+    font-size: 1em
+    display: inline-block

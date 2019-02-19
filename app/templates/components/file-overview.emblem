@@ -1,36 +1,48 @@
-header.card-header
-  .card-header-icon
-    img src=file.iconUrl alt=file.name
-  p.card-header-title
-    ul.is-fullwidth
-      li
-        h5
-          .columns.project-specific
-            .column.hide-overflow
+.columns.card-header.margin-x-0
+  .column
+    .columns
+      .column.file-icon.no-padding
+        img src=file.iconUrl alt=file.name
+      .column.no-padding
+        ul
+          li.hidden-overflow.max-width18em
+            h5
               = file.name
-            .column.is-one-sixth.fixed-icon
-              = fa-icon file.project.platformIconClass class="card-icon"
+          li.hidden-overflow.max-width18em
+            = file.project.packageName
 
-      li.hide-overflow
-        | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
-.card-content
+      .column.is-one-sixth
+        .columns
+          .column.content-right.no-padding
+            .file-id-text
+              = file.id
+        .columns
+          .column
+            .text-right.margin-top
+              = fa-icon file.project.platformIconClass class="platform-icon"
+
+    .columns.file-extra-info
+      .column.no-padding
+        if file.version
+          span.file-heading
+            | version &nbsp;
+          span.file-info.hidden-overflow.max-width5em
+            | #{file.version}
+        if file.versionCode
+          span.file-seperator
+          span.file-heading
+            | version code &nbsp;
+          span.file-info.hidden-overflow.max-width5em
+            | #{file.versionCode}
+          span.file-seperator
+          span.file-info.info-date.hidden-overflow
+            | #{moment-from-now file.createdOn}
+
+.card-content.project-details
   .content
-    .columns.app-information
-      .column.flex-center.lowercase-text
-        div.overflow.ellipse
-          = t "started"
-          | &nbsp; #{moment-from-now file.createdOn}
-        = attach-tooltip placement="bottom"
-          = file.createdOnDateTime
-      .column.flex-center
-        div.overflow.ellipse
-          = t "versionCode"
-          | {{#if file.versionCode}} - #{file.versionCode}{{/if}}
-
     .columns.app-risk-info class=isReverse:is-reverse
       .column.flex-center
         = ember-chart type='doughnut' data=file.doughnutData width=150 height=150 options=chartOptions
-      .file-details-class
       .column
         ul.risk-table
           .risk-values
@@ -71,7 +83,11 @@ header.card-header
               .column
                 = file.countRiskUnknown
 
-    .file-id-container
-      div.file-id-text
-        | FILE ID - #{file.id}
-= yield
+    .columns.margin-x-0
+      .column.no-padding
+        .file-tag-container
+          each file.tags as |tag|
+            .file-tag
+              = tag.name
+
+  = yield
