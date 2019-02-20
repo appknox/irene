@@ -35,7 +35,7 @@ test('it passes', function(assert) {
     });
     assert.equal(file.get('isManualRequested'), true, "Manual Requested");
 
-    assert.equal(file.get('isRunningApiScan'), true, "API Scan");
+    assert.equal(file.get('isRunningApiScan'), false, "API Scan");
     file.set('apiScanProgress', 100);
     assert.equal(file.get('isRunningApiScan'), false, "API Scan not done");
 
