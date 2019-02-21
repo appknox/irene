@@ -78,7 +78,7 @@ if isLoaded
                 if isSecurityEnabled
                   a href="/security/projects" target="_blank" class="button security-link"
                     | Security Dashboard
-                a href='' id='intercom_support' class="mp-auth-support"
+                a click="openChatBox"
                   = fa-icon "support" class="sidebar-icons"
                   = t "support"
                 a

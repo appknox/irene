@@ -2,6 +2,7 @@ import ENUMS from 'irene/enums';
 import { CSBMap } from 'irene/router';
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
+import * as chat from 'irene/utils/chat';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
 
@@ -41,20 +42,7 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
       accountId: this.get("org.selected.id")
     };
     triggerAnalytics('login', data);
-    try {
-      window.Intercom("boot", {
-        app_id: ENV.intercomAppID,
-        name: user.get("username"),
-        email: user.get("email"),
-        alignment: 'left',
-        horizontal_padding: 20,
-        vertical_padding: 20,
-        custom_launcher_selector: '#intercom_support',
-        user_hash: user.get("intercomHash")
-      }
-      );
-      window.Intercom('trackEvent', 'logged-in');
-    } catch (e) {error = e;}
+    chat.setUser(user.get("email"), user.get("crispHash"))
     try {
       const mixpanel = this.get("mixpanel");
       mixpanel.identify(user.get("id"));
