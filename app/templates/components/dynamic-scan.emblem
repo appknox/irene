@@ -55,7 +55,7 @@ if notVNCViewer
           = t "modalCard.runAPIScan.description"
         .project-preference-component
           if showRunDynamicScanModal
-            = project-preferences profileId=file.profile.id platform=file.project.platform
+            = project-preferences profileId=file.profile.id platform=file.project.platform project=file.project
         form.margin-top20
           p.control
           .columns
@@ -78,7 +78,7 @@ if notVNCViewer
               = t "modalCard.apiScan.dynamicScanText"
         .project-preference-component
           if showAPIScanModal
-            = project-preferences profileId=file.profile.id platform=file.project.platform
+            = project-preferences profileId=file.profile.id platform=file.project.platform project=file.project
         form.margin-top30
           p.control
           .columns
