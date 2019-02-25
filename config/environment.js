@@ -1,5 +1,10 @@
 var url = require('url');
 
+function isTrue(value) {
+  value = String(value).toLowerCase();
+  return value === 'true';
+}
+
 module.exports = function(environment) {
   var devicefarmEnv = process.env.IRENE_DEVICEFARM_URL || "wss://devicefarm.appknox.com";
   var deviceFarmWebsockifyHost = url.parse(devicefarmEnv);
@@ -8,12 +13,16 @@ module.exports = function(environment) {
   var deviceFarmHost = deviceFarmWebsockifyHost.hostname;
   var host = process.env.IRENE_API_HOST || 'https://api.appknox.com';
   var socketPath = process.env.IRENE_API_SOCKET_PATH || 'https://socket.appknox.com';
-  var enableSSO = process.env.IRENE_ENABLE_SSO || false;
+  var enableSSO = isTrue(process.env.IRENE_ENABLE_SSO || false);
+  var enableRegistration = isTrue(process.env.IRENE_ENABLE_REGISTRATION || false);
+  var registrationLink = process.env.IRENE_REGISTRATION_LINK || '';
   var ENV = {
     version: Date.now(),
     isDevknox: false,
     isAppknox: false,
     isEnterprise: false,
+    isRegistrationEnabled: enableRegistration,
+    registrationLink: registrationLink,
     exportApplicationGlobal: true,
     devknoxPrice: 9,  // This should also change in `mycroft/settings.py`
     socketPath: socketPath,
@@ -239,6 +248,7 @@ module.exports = function(environment) {
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
+    ENV.isRegistrationEnabled = true;
     ENV.gReCaptcha = {
       siteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
     }
@@ -253,6 +263,7 @@ module.exports = function(environment) {
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
+    ENV.isRegistrationEnabled = true;
     ENV.rollbar = {
       enabled: false
     };
@@ -268,6 +279,7 @@ module.exports = function(environment) {
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
+    ENV.isRegistrationEnabled = true;
     ENV.rollbar = {
       enabled: false
     };
@@ -312,8 +324,8 @@ module.exports = function(environment) {
     ENV.enablePendo = true;  //TODO: fix this.
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
-    ENV.isEnterprise = process.env.ENTERPRISE;
-    ENV.whitelabel.enabled = (process.env.WHITELABEL_ENABLED || '').toString().toLowerCase() === 'true';
+    ENV.isEnterprise = isTrue(process.env.ENTERPRISE);
+    ENV.whitelabel.enabled = isTrue(process.env.WHITELABEL_ENABLED);
     if (ENV.whitelabel.enabled) {
       ENV.whitelabel.name = process.env.WHITELABEL_NAME;
       ENV.whitelabel.logo = process.env.WHITELABEL_LOGO;

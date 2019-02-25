@@ -16,10 +16,10 @@ Router.map(function() {
   this.route('saml2', {path: '/saml2'}, function() {
     this.route('redirect', {path: '/redirect'});
   });
-  if (!ENV.isEnterprise) {
+  if(ENV.isRegistrationEnabled) {
     this.route('register');
-    this.route('activate', {path: '/activate/:pk/:token'});
   }
+  this.route('activate', {path: '/activate/:pk/:token'});
   this.route('recover');
   this.route('reset', {path: '/reset/:uuid/:token'});
   this.route('setup', {path: '/setup/:uuid/:token'});
