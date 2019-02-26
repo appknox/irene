@@ -1,5 +1,7 @@
 import Component from '@ember/component';
+import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { getOwner } from '@ember/application';
 import ENV from 'irene/config/environment';
 import {isUnauthorizedError} from 'ember-ajax/errors';
 
@@ -13,6 +15,22 @@ const LoginComponentComponent = Component.extend({
   password: "",
   otp: "",
   isNotEnterprise: !ENV.isEnterprise,
+  isRegistrationEnabled: ENV.isRegistrationEnabled,
+  registrationLink: computed(function() {
+    if(ENV.registrationLink) {
+      return ENV.registrationLink;
+    }
+    try {
+      var router = getOwner(this).lookup('router:main')
+      var link = router.generate('register');
+      return link;
+    } catch(err) {
+      return ENV.registrationLink;
+    }
+  }),
+  hasRegistrationLink: computed('registrationLink', function() {
+    return !!this.get('registrationLink');
+  }),
   actions: {
     authenticate() {
       let identification = this.get('identification');

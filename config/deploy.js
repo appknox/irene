@@ -47,6 +47,8 @@ module.exports = function(deployTarget) {
     ENV.build.environment = 'production';
     // configure other plugins for production deploy target here
 
+    process.env["IRENE_ENABLE_REGISTRATION"] = "https://appknox.com/register"
+
     ENV.cloudfront = {
       distribution: 'E17GXVYW7G712O'
     };
