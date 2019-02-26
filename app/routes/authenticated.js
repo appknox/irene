@@ -42,7 +42,11 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
       accountId: this.get("org.selected.id")
     };
     triggerAnalytics('login', data);
-    chat.setUser(user.get("email"), user.get("crispHash"))
+    chat.setUserEmail(user.get("email"), user.get("crispHash"))
+    const company =
+        this.get("org.selected.data.name") ||
+        user.get("email").replace(/.*@/, "").split('.')[0];
+    chat.setUserCompany(company);
     try {
       const mixpanel = this.get("mixpanel");
       mixpanel.identify(user.get("id"));
