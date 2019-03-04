@@ -12,7 +12,7 @@ if isPoppedOut
         if isNotTablet
           div class="speaker"
       div class=screenRequired:noscreen:screen
-        canvas.canvas onMouseEnter={action "focusKeyboard"} onMouseLeave={action "blurKeyboard"}
+        div.canvas-container
 
       if isIOSDevice
         div class="home"

@@ -355,9 +355,6 @@ input
 button:hover, button:active, button:focus
   transition: all 0.4s!important
 
-canvas.other-devices
-  margin-top: 30px
-
 .title-tag
   background-color: #5bc0de
   border-radius: 0px
@@ -1816,8 +1813,8 @@ button.delete-button
 .marvel-device
   .screen
     box-shadow: none
-    .canvas
-      cursor: pointer!important
+    .canvas-container canvas
+      cursor: default!important
     .vnc-box
       display: none
   .top-bar
@@ -1850,7 +1847,6 @@ button.delete-button
     height: 480px!important
   .vnc-text
     display: none
-
 
 .marvel-device.iphone5s
   width: 245px!important

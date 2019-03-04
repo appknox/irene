@@ -6,7 +6,7 @@ function isTrue(value) {
 }
 
 module.exports = function(environment) {
-  var devicefarmEnv = process.env.IRENE_DEVICEFARM_URL || "wss://devicefarm.appknox.com";
+  var devicefarmEnv = process.env.IRENE_DEVICEFARM_URL || "wss://devicefarm2.appknox.com";
   var deviceFarmWebsockifyHost = url.parse(devicefarmEnv);
   var deviceFarmSsl = deviceFarmWebsockifyHost.protocol == "wss:";
   var deviceFarmPort = deviceFarmWebsockifyHost.port || (deviceFarmSsl ? 443:80);
@@ -96,6 +96,7 @@ module.exports = function(environment) {
     deviceFarmPort: deviceFarmPort,
     deviceFarmPath: "websockify",
     deviceFarmHost: deviceFarmHost,
+    deviceFarmPassword: '1234',
     namespace: "api",
     host: host,
     'ember-cli-mirage': {

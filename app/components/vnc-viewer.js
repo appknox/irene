@@ -1,10 +1,10 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { computed, observer } from '@ember/object';
-import { isEmpty } from '@ember/utils';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
+import RFB from '@novnc/novnc/core/rfb';
 
 const VncViewerComponent = Component.extend({
 
@@ -30,42 +30,32 @@ const VncViewerComponent = Component.extend({
   }),
 
   setupRFB() {
-    const rfb = this.get("rfb");
-    if (!isEmpty(rfb)) {
-      return;
-    }
-    const canvasEl = this.element.getElementsByClassName("canvas")[0];
-    const that = this;
-    // eslint-disable-next-line no-undef
-    this.set("rfb", new RFB({
-      'target': canvasEl,
-      'encrypt': ENV.deviceFarmSsl,
-      'repeaterID': '',
-      'true_color': true,
-      'local_cursor': false,
-      'shared': true,
-      'view_only': false,
+    const canvasEl = this.element.getElementsByClassName("canvas-container")[0];
+    const deviceToken = this.get("file.deviceToken");
+    const deviceFarmURL =
+      `wss://${ENV.deviceFarmHost}/${ENV.deviceFarmPath}?token=${deviceToken}`
 
-      'onUpdateState'() {
-        setTimeout(that.set_ratio.bind(that), 500);
-        return true;
-      },
-
-      'onXvpInit'() {
-        return true;
+    const rfb = new RFB(
+      canvasEl,
+      deviceFarmURL, {
+        'credentials': {
+            'password': ENV.deviceFarmPassword
+        }
       }
-    })
     );
-
-    this.send("blurKeyboard");
-
-    if (this.get('file.isReady')) {
-      return this.send("connect");
-    }
+    rfb.addEventListener('connect', () => {
+      const platform = this.get("file.project.platform");
+      if (platform === ENUMS.PLATFORM.IOS) {
+        rfb.scaleViewport = true;
+      }
+    });
+    this.set("rfb", rfb);
   },
 
   didInsertElement() {
-    return this.setupRFB();
+    if (this.get("file.isReady")) {
+      return this.setupRFB();
+    }
   },
 
   showVNCControls: computed("file.isReady", "isPoppedOut", function() {
@@ -77,10 +67,12 @@ const VncViewerComponent = Component.extend({
   }),
 
   statusChange: observer('file.dynamicStatus', function() {
-    if (this.get('file.isReady')) {
-      return this.send("connect");
-    } else {
+    const dynamicStatus = this.get("file.dynamicStatus");
+    if (dynamicStatus === ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN) {
       return this.send("disconnect");
+    }
+    if (this.get("file.isReady")) {
+      return this.setupRFB();
     }
   }),
 
@@ -131,49 +123,15 @@ const VncViewerComponent = Component.extend({
     }
   }),
 
-  set_ratio() {
-    const rfb = this.get("rfb");
-    const display = rfb.get_display();
-    const canvasEl = display.get_context().canvas;
-    const bounding_rect = canvasEl.getBoundingClientRect();
-    const scaleRatio = display.autoscale(bounding_rect.width, bounding_rect.height);
-    return rfb.get_mouse().set_scale(scaleRatio);
-  },
-
   actions: {
     togglePop() {
       this.set("isPoppedOut", !this.get("isPoppedOut"));
-    },
-
-    setFocus(focus) {
-      const rfb = this.get("rfb");
-      const keyboard = rfb.get_keyboard();
-      keyboard.set_focused(focus);
-    },
-
-    focusKeyboard() {
-      this.send('setFocus', true);
-    },
-
-    blurKeyboard() {
-      this.send('setFocus', false);
-    },
-
-    connect() {
-      const rfb = this.get("rfb");
-      const deviceToken = this.get("file.deviceToken");
-      rfb.connect(ENV.deviceFarmHost, ENV.deviceFarmPort, '1234', `${ENV.deviceFarmPath}?token=${deviceToken}`);
-      setTimeout(this.set_ratio.bind(this), 500);
     },
 
     disconnect() {
       const rfb = this.get("rfb");
       if (rfb._rfb_connection_state === 'connected') {
         rfb.disconnect();
-      }
-      if (rfb._rfb_connection_state === 'disconnected') {
-        this.set("rfb", null);
-        this.setupRFB();
       }
     }
   }

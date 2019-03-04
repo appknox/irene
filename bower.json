@@ -13,7 +13,6 @@
     "Faker": "~4.1.0",
     "card": "^2.0.3",
     "pace": "^1.0.2",
-    "noVNC": "https://github.com/appknox/noVNC.git#^0.6.2",
     "urijs": "^1.18.4",
     "socket.io-client": "^1.7.2",
     "qrious": "^4.0.2",
