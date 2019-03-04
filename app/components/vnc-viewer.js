@@ -143,6 +143,20 @@ const VncViewerComponent = Component.extend({
       this.set("isPoppedOut", !this.get("isPoppedOut"));
     },
 
+    setFocus(focus) {
+      const rfb = this.get("rfb");
+      const keyboard = rfb.get_keyboard();
+      keyboard.set_focused(focus);
+    },
+
+    focusKeyboard() {
+      this.send('setFocus', true);
+    },
+
+    blurKeyboard() {
+      this.send('setFocus', false);
+    },
+
     connect() {
       const rfb = this.get("rfb");
       const deviceToken = this.get("file.deviceToken");
