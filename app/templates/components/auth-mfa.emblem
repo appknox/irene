@@ -72,3 +72,7 @@
           = t "continue"
          button.is-primary.margin-left click="closeMFADisableModal"
           = t "cancel"
+
+= modal-card isActive="True" title="Two Factor Authentication"
+  = mfa-select
+

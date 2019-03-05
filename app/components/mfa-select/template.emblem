@@ -1,0 +1,26 @@
+.card-body.warning-modal
+  .card-wrapper
+    div
+      span
+        | Select Method
+      span.margin-h-0h
+        | >
+      span
+        | Verify
+
+    div.select-method
+      h5.margin-top
+        | Use an App
+      p.control
+        | Retrieve codes from an authentication app on your device, like Google Authenticator, Duo Mobile, Authy etc.
+      button.is-primary.highlighted-button
+        | Enable using app
+      h5.margin-top
+        | Email Authentication
+      p.control
+        | Use a security code that will be sent ot the email address associated with your account when you sign in.
+      button.is-primary.highlighted-button
+        | Enable Email authentication
+
+    div.verification
+      | test
