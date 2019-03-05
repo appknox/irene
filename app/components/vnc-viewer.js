@@ -57,6 +57,8 @@ const VncViewerComponent = Component.extend({
     })
     );
 
+    this.send("blurKeyboard");
+
     if (this.get('file.isReady')) {
       return this.send("connect");
     }
