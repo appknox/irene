@@ -11,47 +11,11 @@
       = t "status"
       | : {{t "disabled"}}
       i.fa.fa-times.margin-left
-    button.is-primary.margin-top20 click="openMFAEnableModal"
+    button.is-primary.margin-top20 click="openMFASelectMethodModal"
       = t "enableMFA"
 
-= modal-card isActive=showMFAEnableModal title=(t "modalCard.enableMFA.title")
-
-  .card-body.warning-modal class=showMFAIntro:show:hide
-    .card-wrapper
-      p
-       = t "modalCard.enableMFA.description"
-      button.is-primary.margin-top20 click="showBarCode"
-       = t "modalCard.enableMFA.setUp"
-      p.otp-apps.margin-top20
-       = t "modalCard.enableMFA.downloadAppOTP"
-       ul
-        li
-          | For Android, iOS, and Blackberry: <a href="https://support.google.com/accounts/answer/1066447?hl=en" target="_blank">Google Authenticator</a>
-        li
-          | For Android & iOS: <a href="https://guide.duo.com/third-party-accounts" target="_blank">Duo Mobile</a>
-        li
-          | For Windows Phone: <a href="https://www.microsoft.com/en-us/store/p/authenticator/9wzdncrfj3rj" target="_blank">Authenticator</a>
-  .card-body.warning-modal class=showBarCode:show:hide
-    .card-wrapper
-      p
-        = t "modalCard.enableMFA.extraDescription"
-      h3.margin-top
-        = t "modalCard.enableMFA.scanBarcode"
-      canvas.qr-code
-      p.margin-top
-        = t "modalCard.enableMFA.enterCode"
-      form.margin-top
-        p.control
-          = input class="form-control input" type="text" value=enableMFAOTP
-        p.control
-         button.is-primary click="enableMFA" disabled=isEnablingMFA
-          if isEnablingMFA
-            .fa-font-size
-              i.fa class="fa-spinner fa-spin"
-            | &nbsp;
-          = t "continue"
-         button.is-primary.margin-left click="closeMFAEnableModal"
-          = t "cancel"
+= modal-card isActive=showMFASelectMethodModal title="Multi Factor Authentication"
+  = mfa-select user=user
 
 = modal-card isActive=showMFADisableModal title=(t "modalCard.disableMFA.title")
   .card-body.warning-modal
@@ -72,7 +36,3 @@
           = t "continue"
          button.is-primary.margin-left click="closeMFADisableModal"
           = t "cancel"
-
-= modal-card isActive="True" title="Two Factor Authentication"
-  = mfa-select
-

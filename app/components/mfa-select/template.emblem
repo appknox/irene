@@ -1,26 +1,83 @@
-.card-body.warning-modal
-  .card-wrapper
-    div
-      span
-        | Select Method
-      span.margin-h-0h
-        | >
-      span
-        | Verify
-
+.card-body.warning-modal class=showEnableMFAModal:show:hide
+  .card-wrapper class=showMethodSelect:show:hide
     div.select-method
-      h5.margin-top
-        | Use an App
       p.control
-        | Retrieve codes from an authentication app on your device, like Google Authenticator, Duo Mobile, Authy etc.
-      button.is-primary.highlighted-button
-        | Enable using app
-      h5.margin-top
-        | Email Authentication
-      p.control
-        | Use a security code that will be sent ot the email address associated with your account when you sign in.
-      button.is-primary.highlighted-button
-        | Enable Email authentication
+        = t "modalCard.selectMFAMethod.description"
 
-    div.verification
-      | test
+      div.margin-t-3
+        h3
+          = t "modalCard.enableMFAEmail.title"
+        p.control
+          = t "modalCard.enableMFAEmail.intro"
+        button.is-primary.highlighted-button.margin-t-h click="setMethodEmail"
+          = t "modalCard.enableMFAEmail.setup"
+
+      div.margin-t-3
+        h3.margin-b-h
+          = t "modalCard.enableMFAApp.title"
+        p
+          = t "modalCard.enableMFAApp.intro"
+        p.otp-apps.margin-top20
+          = t "modalCard.enableMFAApp.downloadAppOTP"
+        ul
+          li
+            | For Android, iOS, and Blackberry: <a href="https://support.google.com/accounts/answer/1066447?hl=en" target="_blank">Google Authenticator</a>
+          li
+            | For Android & iOS: <a href="https://guide.duo.com/third-party-accounts" target="_blank">Duo Mobile</a>
+          li
+            | For Windows Phone: <a href="https://www.microsoft.com/en-us/store/p/authenticator/9wzdncrfj3rj" target="_blank">Authenticator</a>
+
+        button.is-primary.highlighted-button.margin-t-1 click="setMethodApp"
+          = t "modalCard.enableMFAApp.setUp"
+
+
+  .card-wrapper class=showMethodApp:show:hide
+    div.margin-b-1h
+      small
+        a click="setMethodSelect"
+          = t "modalCard.selectMFAMethod.selectMethod"
+        span.margin-h-0h
+          | >
+        span
+          = t "modalCard.enableMFAApp.title"
+    h3.margin-top.text-center
+      = t "modalCard.enableMFAApp.scanBarcode"
+    canvas.qr-code
+    p.margin-top
+      = t "modalCard.enableMFAApp.enterCode"
+    form.margin-top
+      p.control
+        = input class="form-control input" type="text" value=enableAppMFAOTP
+      div
+        button.is-primary.highlighted-button click="enableAppMFA" disabled=isEnablingAppMFA
+          if isEnablingAppMFA
+            .fa-font-size
+              i.fa class="fa-spinner fa-spin"
+            | &nbsp;
+          = t "continue"
+        button.is-primary.margin-left click="setMethodSelect"
+          = t "cancel"
+
+
+  .card-wrapper class=showMethodEmail:show:hide
+    div.select-method-app
+      small
+        a click="setMethodSelect"
+          = t "modalCard.selectMFAMethod.selectMethod"
+        span.margin-h-0h
+          | >
+        span
+          = t "modalCard.enableMFAEmail.title"
+    p.margin-t-1h.margin-b-2
+      = t "modalCard.enableMFAEmail.description"
+      span.bold
+        | {{ user.email }}
+    div
+      button.is-primary.highlighted-button click="enableEmailMFA" disabled=isEnablingEmailMFA
+        if isEnablingEmailMFA
+          .fa-font-size
+            i.fa class="fa-spinner fa-spin"
+          | &nbsp;
+        = t "confirm"
+      button.is-primary.margin-left click="setMethodSelect"
+        = t "cancel"
