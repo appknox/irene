@@ -76,7 +76,7 @@
       = t "modalCard.enableMFAEmail.enterCode"
     form.margin-t-1h
       p.control
-        = input class="form-control input" type="text" value=enableAppMFAOTP
+        = input class="form-control input" type="text" value=enableEmailMFAOTP
       div.margin-t-2
         button.is-primary.highlighted-button click="enableEmailMFA" disabled=isEnablingEmailMFA
           if isEnablingEmailMFA

@@ -113,7 +113,8 @@ const ENUMS = {
 
   MFA_METHOD: {
     NONE: 0,
-    TOTP: 1
+    TOTP: 1,
+    HOTP: 2,
   },
 
   APP_ACTION: {

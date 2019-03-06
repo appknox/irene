@@ -171,6 +171,8 @@ module.exports = function(environment) {
       apiScanOptions: 'api_scan_options',
       enableMFA: 'mfa/enable',
       disableMFA: 'mfa/disable',
+      mfa: 'mfa',
+      mfaSendOTPMail: 'mfa/send_otp_mail',
       teams: 'teams',
       organizations: 'organizations',
       users: 'users',

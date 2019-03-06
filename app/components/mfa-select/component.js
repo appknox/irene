@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
+import ENUMS from 'irene/enums';
 import { translationMacro as t } from 'ember-i18n';
 
 const isValidOTP = otp => otp && otp.length > 5;
@@ -53,9 +54,17 @@ export default Component.extend({
       this.set("showMethodEmail", false);
     },
     setMethodEmail() {
-      this.set("showMethodSelect", false);
-      this.set("showMethodApp", false);
-      this.set("showMethodEmail", true);
+      this.get("ajax").post(ENV.endpoints.mfaSendOTPMail)
+        .then(() => {
+          this.get("notify").success('Sending mail...');
+          if(!this.isDestroyed) {
+            this.set("showMethodSelect", false);
+            this.set("showMethodApp", false);
+            this.set("showMethodEmail", true);
+          }
+        }, (error) => {
+          this.get("notify").error(error.payload.message);
+        });
     },
 
     closeMFASelectModal() {
@@ -63,7 +72,33 @@ export default Component.extend({
     },
 
     enableEmailMFA() {
+      const tEnterOTP = this.get("tEnterOTP");
+      const tMFAEnabled = this.get("tMFAEnabled");
+      const enableEmailMFAOTP = this.get("enableEmailMFAOTP");
 
+      for (let otp of [enableEmailMFAOTP]) {
+        if (!isValidOTP(otp)) { return this.get("notify").error(tEnterOTP); }
+      }
+      const data = {
+        otp: enableEmailMFAOTP,
+        method: ENUMS.MFA_METHOD.HOTP,
+      };
+      this.set("isEnablingEmailMFA", true);
+
+      this.get("ajax").post(ENV.endpoints.mfa, {data})
+        .then(() => {
+          this.get("notify").success(tMFAEnabled);
+          if(!this.isDestroyed) {
+            this.set("enableEmailMFAOTP", "");
+            this.set("showEnableMFAModal", false);
+            this.set("isEnablingEmailMFA", false);
+          }
+        }, (error) => {
+          if(!this.isDestroyed) {
+            this.set("isEnablingEmailMFA", false);
+            this.get("notify").error(error.payload.message);
+          }
+        });
     },
 
     enableAppMFA() {
@@ -74,23 +109,26 @@ export default Component.extend({
       for (let otp of [enableAppMFAOTP]) {
         if (!isValidOTP(otp)) { return this.get("notify").error(tEnterOTP); }
       }
-      const data = {otp: enableAppMFAOTP};
+      const data = {
+        otp: enableAppMFAOTP,
+        method: ENUMS.MFA_METHOD.TOTP,
+      };
       this.set("isEnablingAppMFA", true);
 
-      this.get("ajax").post(ENV.endpoints.enableMFA, {data})
-      .then(() => {
-        this.get("notify").success(tMFAEnabled);
-        if(!this.isDestroyed) {
-          this.set("enableAppMFAOTP", "");
-          this.set("showMFAEnableModal", false);
-          this.set("isEnablingAppMFA", false);
-        }
-      }, (error) => {
-        if(!this.isDestroyed) {
-          this.set("isEnablingAppMFA", false);
-          this.get("notify").error(error.payload.message);
-        }
-      });
+      this.get("ajax").post(ENV.endpoints.mfa, {data})
+        .then(() => {
+          this.get("notify").success(tMFAEnabled);
+          if(!this.isDestroyed) {
+            this.set("enableAppMFAOTP", "");
+            this.set("showEnableMFAModal", false);
+            this.set("isEnablingAppMFA", false);
+          }
+        }, (error) => {
+          if(!this.isDestroyed) {
+            this.set("isEnablingAppMFA", false);
+            this.get("notify").error(error.payload.message);
+          }
+        });
     },
 
   }
