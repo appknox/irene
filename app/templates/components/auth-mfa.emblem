@@ -14,7 +14,7 @@
     button.is-primary.margin-top20 click="openMFASelectMethodModal"
       = t "enableMFA"
 
-= modal-card isActive=showMFASelectMethodModal title="Multi Factor Authentication"
+= modal-card isActive=showMFASelectMethodModal title=(t "modalCard.selectMFAMethod.title")
   = mfa-select user=user
 
 = modal-card isActive=showMFADisableModal title=(t "modalCard.disableMFA.title")

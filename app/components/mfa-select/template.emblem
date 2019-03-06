@@ -68,16 +68,21 @@
           | >
         span
           = t "modalCard.enableMFAEmail.title"
-    p.margin-t-1h.margin-b-2
+    p.margin-t-1h
       = t "modalCard.enableMFAEmail.description"
       span.bold
         | {{ user.email }}
-    div
-      button.is-primary.highlighted-button click="enableEmailMFA" disabled=isEnablingEmailMFA
-        if isEnablingEmailMFA
-          .fa-font-size
-            i.fa class="fa-spinner fa-spin"
-          | &nbsp;
-        = t "confirm"
-      button.is-primary.margin-left click="setMethodSelect"
-        = t "cancel"
+    p.margin-t-h
+      = t "modalCard.enableMFAEmail.enterCode"
+    form.margin-t-1h
+      p.control
+        = input class="form-control input" type="text" value=enableAppMFAOTP
+      div.margin-t-2
+        button.is-primary.highlighted-button click="enableEmailMFA" disabled=isEnablingEmailMFA
+          if isEnablingEmailMFA
+            .fa-font-size
+              i.fa class="fa-spinner fa-spin"
+            | &nbsp;
+          = t "continue"
+        button.is-primary.margin-left click="setMethodSelect"
+          = t "cancel"

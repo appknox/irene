@@ -518,7 +518,7 @@
   },
   "modalCard": {
     "selectMFAMethod": {
-      "title": "Multi Factor Authentication",
+      "title": "Enble Multi Factor Authentication",
       "description": "Multi Factor Authentication adds an extra layer of security to your account. During login, in addition to your username and password, you’ll need to enter an OTP. Select any of the following methods to activate MFA",
       "selectMethod": "Select MFA Method",
     },
@@ -534,7 +534,8 @@
       "title": "Using Email",
       "intro": "During sign in, a security code will be sent to the email address associated with your appknox account.",
       "setup": "Enable email authentication",
-      "description": "A security code will be send to email address ",
+      "description": "A security code has been send to email ",
+      "enterCode": "Please enter the code below."
     },
     "disableMFA": {
       "title": "Disable Multi Factor Authentication",
