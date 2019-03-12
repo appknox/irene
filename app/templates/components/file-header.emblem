@@ -116,37 +116,37 @@
                   li.is-critical
                     = t "critical"
                 .column.risk-value
-                  = file.countRiskCritical
+                  = file.riskCountCritical
               .columns
                 .column
                   li.is-danger
                     = t "high"
                 .column
-                  = file.countRiskHigh
+                  = file.riskCountHigh
               .columns
                 .column
                   li.is-warning
                     = t "medium"
                 .column
-                  = file.countRiskMedium
+                  = file.riskCountMedium
               .columns
                 .column
                   li.is-info
                     = t "low"
                 .column
-                  = file.countRiskLow
+                  = file.riskCountLow
               .columns
                 .column
                   li.is-success
                     = t "none"
                 .column
-                  = file.countRiskNone
+                  = file.riskCountPassed
               .columns class=unknownAnalysisStatus.status:visible:invisible
                 .column
                   li.is-default
                     = t "untested"
                 .column
-                  = file.countRiskUnknown
+                  = file.riskCountUnknown
         .column.package-desc
           table
             tr

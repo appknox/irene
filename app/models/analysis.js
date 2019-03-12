@@ -2,7 +2,6 @@ import { computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import DS from 'ember-data';
 import ENUMS from 'irene/enums';
-import { translationMacro as t } from 'ember-i18n';
 
 const Analysis = DS.Model.extend({
   findings: DS.attr(),
@@ -20,16 +19,10 @@ const Analysis = DS.Model.extend({
   analiserVersion: DS.attr('number'),
   attachments: DS.hasMany('attachment'),
   vulnerability: DS.belongsTo('vulnerability'),
-  file: DS.belongsTo('file', {inverse: 'analyses'}),
+  file: DS.belongsTo('file'),
 
 
   hascvccBase: computed.equal('cvssVersion', 3),
-
-  tLow: t("low"),
-  tNone: t("none"),
-  tHigh: t("high"),
-  tMedium: t("medium"),
-  tCritical: t("critical"),
 
   isOverriddenRisk: computed.notEmpty('overriddenRisk'),
 

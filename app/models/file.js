@@ -11,33 +11,36 @@ const _getComputedColor = function(selector) {
   return computedStyle.getPropertyValue("color");
 };
 
-const _getAnalysesCount = (analysis, risk)=> {
-  return analysis.filterBy('computedRisk', risk).get('length')
-};
-
 const File = DS.Model.extend(BaseModelMixin, {
   i18n: service(),
   project: DS.belongsTo('OrganizationProject', {inverse:'files'}),
   profile: DS.belongsTo('profile', {inverse:'files'}),
-  uuid: DS.attr('string'),
-  deviceToken: DS.attr('string'),
+  name: DS.attr('string'),
   version: DS.attr('string'),
   versionCode: DS.attr('string'),
-  iconUrl: DS.attr('string'),
   md5hash: DS.attr('string'),
   sha1hash: DS.attr('string'),
-  name: DS.attr('string'),
   dynamicStatus: DS.attr('number'),
-  analyses: DS.hasMany('analysis', {inverse: 'file'}),
-  report: DS.attr('string'),
-  manual: DS.attr('number'),
   apiScanProgress: DS.attr('number'),
-  staticScanProgress: DS.attr('number'),
+  deviceToken: DS.attr('string'),
+  manual: DS.attr('number'),
   isStaticDone: DS.attr('boolean'),
   isDynamicDone: DS.attr('boolean'),
+  staticScanProgress: DS.attr('number'),
+  apiScanStatus: DS.attr('number'),
+  iconUrl: DS.attr('string'),
+  rating: DS.attr('string'),
   isManualDone: DS.attr('boolean'),
   isApiDone: DS.attr('boolean'),
-  apiScanStatus: DS.attr('number'),
+  riskCountCritical: DS.attr('number'),
+  riskCountHigh: DS.attr('number'),
+  riskCountMedium: DS.attr('number'),
+  riskCountLow: DS.attr('number'),
+  riskCountPassed: DS.attr('number'),
+  riskCountUnknown: DS.attr('number'),
+
+  analyses: DS.hasMany('analysis', { inverse: 'file' }),
+
 
   isManualRequested: computed('manual', function() {
     return this.get("manual") !== ENUMS.MANUAL.NONE
@@ -72,29 +75,21 @@ const File = DS.Model.extend(BaseModelMixin, {
   analysesSorting: ['computedRisk:desc'],
   sortedAnalyses: computed.sort('analyses', 'analysesSorting'),
 
-  countRiskCritical: 0,
-  countRiskHigh: 0,
-  countRiskMedium: 0,
-  countRiskLow: 0,
-  countRiskNone: 0,
-  countRiskUnknown: 0,
+  doughnutData: computed(function() {
 
-  doughnutData: computed('analyses.@each.computedRisk', function() {
-    const analyses = this.get("analyses");
-    const r = ENUMS.RISK;
-    const countRiskCritical = _getAnalysesCount(analyses, r.CRITICAL);
-    const countRiskHigh = _getAnalysesCount(analyses, r.HIGH);
-    const countRiskMedium = _getAnalysesCount(analyses, r.MEDIUM);
-    const countRiskLow = _getAnalysesCount(analyses, r.LOW);
-    const countRiskNone = _getAnalysesCount(analyses, r.NONE);
-    const countRiskUnknown = _getAnalysesCount(analyses, r.UNKNOWN);
+    const riskCountCritical = this.get("riskCountCritical");
+    const riskCountHigh = this.get("riskCountHigh");
+    const riskCountMedium = this.get("riskCountMedium");
+    const riskCountLow = this.get("riskCountLow");
+    const riskCountPassed = this.get("riskCountPassed");
+    const riskCountUnknown = this.get("riskCountUnknown");
 
-    this.set("countRiskCritical", countRiskCritical); // eslint-disable-line
-    this.set("countRiskHigh", countRiskHigh); // eslint-disable-line
-    this.set("countRiskMedium", countRiskMedium); // eslint-disable-line
-    this.set("countRiskLow", countRiskLow); // eslint-disable-line
-    this.set("countRiskNone", countRiskNone); // eslint-disable-line
-    this.set("countRiskUnknown", countRiskUnknown); // eslint-disable-line
+    this.set("riskCountCritical", riskCountCritical); // eslint-disable-line
+    this.set("riskCountHigh", riskCountHigh); // eslint-disable-line
+    this.set("riskCountMedium", riskCountMedium); // eslint-disable-line
+    this.set("riskCountLow", riskCountLow); // eslint-disable-line
+    this.set("riskCountPassed", riskCountPassed); // eslint-disable-line
+    this.set("riskCountUnknown", riskCountUnknown); // eslint-disable-line
 
     return {
       labels: [
@@ -108,12 +103,12 @@ const File = DS.Model.extend(BaseModelMixin, {
       datasets: [ {
         label: 'Risks',
         data: [
-          countRiskCritical,
-          countRiskHigh,
-          countRiskMedium,
-          countRiskLow,
-          countRiskNone,
-          countRiskUnknown
+          riskCountCritical,
+          riskCountHigh,
+          riskCountMedium,
+          riskCountLow,
+          riskCountPassed,
+          riskCountUnknown
         ],
         backgroundColor: [
          _getComputedColor("critical"),
