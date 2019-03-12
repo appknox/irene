@@ -78,6 +78,7 @@ module.exports = function(environment) {
     modulePrefix: 'irene',
     environment: environment,
     enableCrisp: true,
+    enableHotjar: true,
     enablePendo: true,
     enableInspectlet: true,
     enableCSB: true,
@@ -245,6 +246,7 @@ module.exports = function(environment) {
       enabled:false
     };
     ENV.enableCrisp = false;
+    ENV.enableHotjar = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
@@ -260,6 +262,7 @@ module.exports = function(environment) {
     };
     ENV['host'] = "http://0.0.0.0:8000";
     ENV.enableCrisp = false;
+    ENV.enableHotjar = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
@@ -276,6 +279,7 @@ module.exports = function(environment) {
     };
     ENV['host'] = "http://localhost:8000";
     ENV.enableCrisp = false;
+    ENV.enableHotjar = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
@@ -321,6 +325,7 @@ module.exports = function(environment) {
     environment === 'sequelstring'
   ) {
     ENV.enableCrisp = false;
+    ENV.enableHotjar = false;
     ENV.enablePendo = true;  //TODO: fix this.
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
