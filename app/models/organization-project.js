@@ -1,8 +1,10 @@
 import { computed } from '@ember/object';
 import DS from 'ember-data';
 import ENUMS from 'irene/enums';
+import { isEmpty } from '@ember/utils';
+import BaseModelMixin from 'irene/mixins/base-model';
 
-export default DS.Model.extend({
+export default DS.Model.extend(BaseModelMixin, {
   activeProfileId: DS.attr('number'),
   organization: DS.belongsTo('organization'),
   files: DS.hasMany('file', {inverse:'project'}),
@@ -14,14 +16,17 @@ export default DS.Model.extend({
   jiraProject: DS.attr('string'),
   url: DS.attr('string'),
   lastFileCreatedOn: DS.attr('date'),
+  lastFileId: DS.attr('number'),
   fileCount: DS.attr('number'),
+  lastFile: DS.belongsTo('file'),
 
-  lastFile: computed('fileCount', function() {
-    const params = {
-      projectId: this.get("id"),
-      lastFileOnly: true
-    };
-    return this.store.queryRecord("file", params);
+  pdfPassword: computed('uuid', function () {
+    const uuid = this.get("uuid");
+    if (isEmpty(uuid)) {
+      return "Unknown!";
+    } else {
+      return uuid.split("-")[4];
+    }
   }),
 
   hasMultipleFiles: computed.gt('fileCount', 1),
@@ -33,6 +38,11 @@ export default DS.Model.extend({
       case ENUMS.PLATFORM.WINDOWS: return "windows";
       default: return "mobile";
     }
+  }),
+
+  isAPIScanEnabled: computed('platform', function () {
+    const platform = this.get("platform");
+    return [ENUMS.PLATFORM.ANDROID, ENUMS.PLATFORM.IOS].includes(platform);
   }),
 
   addCollaborator(data, id) {

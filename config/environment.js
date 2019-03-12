@@ -97,6 +97,7 @@ module.exports = function(environment) {
     deviceFarmPath: "websockify",
     deviceFarmHost: deviceFarmHost,
     namespace: "api",
+    namespace_v2: "api/v2",
     host: host,
     'ember-cli-mirage': {
       enabled: false
