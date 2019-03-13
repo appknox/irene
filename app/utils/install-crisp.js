@@ -7,6 +7,7 @@ const installCrisp = function() {
     return console.log("Crisp Disabled");
   }
   window.$crisp = [];
+  window.$crisp.push(['do', 'chat:hide']);
   window.CRISP_WEBSITE_ID = "806bf0a8-c022-4a1f-ae9b-ecb859c001b4";
   (function () {
     let d = document;

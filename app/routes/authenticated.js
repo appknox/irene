@@ -42,7 +42,7 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
       accountId: this.get("org.selected.id")
     };
     triggerAnalytics('login', data);
-    chat.setUserEmail(user.get("email"), user.get("crispHash"))
+    chat.setUserEmail(user.get("email"), user.get("crispHash"));
     const company =
         this.get("org.selected.data.name") ||
         user.get("email").replace(/.*@/, "").split('.')[0];
