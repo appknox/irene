@@ -39,9 +39,8 @@ const File = DS.Model.extend(BaseModelMixin, {
   riskCountPassed: DS.attr('number'),
   riskCountUnknown: DS.attr('number'),
 
-  analyses: DS.hasMany('analysis', { inverse: 'file' }),
-
-  tags: DS.attr(),
+  analyses: DS.hasMany('analysis', { inverse: 'file'}),
+  tags: DS.hasMany('tag', { inverse: 'ownedFile' }),
 
   isManualRequested: computed('manual', function() {
     return this.get("manual") !== ENUMS.MANUAL.NONE

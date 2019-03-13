@@ -1,0 +1,8 @@
+tr.plain-background
+  td
+    .file-tag.file-tag2 style="background-color:{{tag.color}};color:{{tag.invertedColor}}"
+      = tag.name
+  td
+    i.fa.risk-icons.fa-trash-o.removeUrl.remove click={(perform openRemoveFileTagConfirmBox)}
+
+= confirm-box isActive=showRemoveFileTagConfirmBox title="Are you sure you want to remove this file tag" delegate=this disabled=isDeletingFileTag

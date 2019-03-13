@@ -3,6 +3,7 @@ import DS from 'ember-data';
 
 export default DRFSerializer.extend(DS.EmbeddedRecordsMixin, {
   attrs: {
-    analyses: { embedded: 'always' }
+    analyses: { embedded: 'always' },
+    tags: { embedded: 'always'}
   }
 });

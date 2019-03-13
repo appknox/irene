@@ -5,13 +5,22 @@
   form.columns
     div.filter-list
       = input class="form-control input" type="text" placeholder="Enter tag name" value=newFileTag
+    .column.max-width
+      = spectrum-color-picker [
+        color=labelColor
+        showInput=true
+        preferredFormat="hex"
+        containerClassName="color-picker-container"
+        replacerClassName="color-picker"
+        onChange=(action "colorChanged")
+      ]
     .column
-      button.is-primary click={(perform addFileTag)} disabled=isAddingFileTag
+      button.is-primary.highlighted-button click={(perform addFileTag)} disabled=isAddingFileTag
         if isAddingFileTag
           .fa-font-size
             i.fa class="fa-spinner fa-spin"
           | &nbsp;
-        | + ADD FILE TAG
+        | CREATE TAG
 
   if file.tags
     table.api-filter-table
@@ -21,10 +30,4 @@
         th
           = t "actions"
       each file.tags as |tag|
-        tr
-          td
-            = tag.name
-          td
-            i.fa.risk-icons.fa-trash-o.removeUrl.remove click={(perform openRemoveFileTagConfirmBox)}
-
-= confirm-box isActive=showRemoveFileTagConfirmBox title="Are you sure you want to remove this file tag" delegate=this disabled=isDeletingFileTag
+        = file-tag-detail tag=tag

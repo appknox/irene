@@ -87,7 +87,7 @@
       .column.no-padding
         .file-tag-container
           each file.tags as |tag|
-            .file-tag
+            .file-tag style="background-color:{{tag.color}};color:{{tag.invertedColor}}"
               = tag.name
 
   = yield

@@ -84,37 +84,37 @@ table.project-table.margin-top20
                     li.is-critical
                       = t "critical"
                   .column
-                    = file.countRiskCritical
+                    = file.riskCountCritical
                 .columns
                   .column
                     li.is-danger
                       = t "high"
                   .column
-                    = file.countRiskHigh
+                    = file.riskCountHigh
                 .columns
                   .column
                     li.is-warning
                       = t "medium"
                   .column
-                    = file.countRiskMedium
+                    = file.riskCountMedium
                 .columns
                   .column
                     li.is-info
                       = t "low"
                   .column
-                    = file.countRiskLow
+                    = file.riskCountLow
                 .columns
                   .column
                     li.is-success
                       = t "none"
                   .column
-                    = file.countRiskNone
+                    = file.riskCountPassed
                 .columns class=unknownAnalysisStatus.status:visible:invisible
                   .column
                     li.is-default
                       = t "untested"
                   .column
-                    = file.countRiskUnknown
+                    = file.riskCountUnknown
           .column.margin-top
             .columns.scan-status-box
               .column.is-one-third
@@ -151,72 +151,16 @@ table.project-table.margin-top20
                       | &nbsp; #{t "requested"}
 
                 else
-                  = fa-icon "download"
-                | &nbsp; #{ t "pdfReport"}
-  .card-content
-    if isScanDetails
-      .columns
-        .column.flex-center
-          = ember-chart type='doughnut' data=file.doughnutData width=200 height=200 options=chartOptions
-        .column.flex-center
-          ul.risk-table
-            h5.uppercase-text
-             = t "severityLevel"
-            .risk-values
-              .columns
-                .column
-                  li.is-critical
-                    = t "critical"
-                .column.risk-value
-                  = file.riskCountCritical
-              .columns
-                .column
-                  li.is-danger
-                    = t "high"
-                .column
-                  = file.riskCountHigh
-              .columns
-                .column
-                  li.is-warning
-                    = t "medium"
-                .column
-                  = file.riskCountMedium
-              .columns
-                .column
-                  li.is-info
-                    = t "low"
-                .column
-                  = file.riskCountLow
-              .columns
-                .column
-                  li.is-success
-                    = t "none"
-                .column
-                  = file.riskCountPassed
-              .columns class=unknownAnalysisStatus.status:visible:invisible
-                .column
-                  li.is-default
-                    = t "untested"
-                .column
-                  = file.riskCountUnknown
-        .column.package-desc
-          table
-            tr
-              td
-                = t "started"
-                | &nbsp; #{moment-from-now file.createdOn}
-                = attach-tooltip placement="top"
-                  = file.createdOnDateTime
-          table
-            tr
-              td.capitalize-text
-                = t "versionCode"
-              td.overflow-hidden
-                | #{file.versionCode}
-          = copy-password pdfPassword=file.project.pdfPassword
-          .file-id-container
-            div.file-id-text
-              | FILE ID - #{file.id}
+                  if organization.selected.isTrial
+                      button.is-primary click={(perform openRequestAccessModal)}
+                        .fa-font-size
+                          = fa-icon "fa-play"
+                        | &nbsp; #{t "start"}
+                  else
+                    button.is-primary.ac-request-manual-scan click="openManualScanModal"
+                      .fa-font-size
+                        = fa-icon "fa-play"
+                      | &nbsp; #{t "start"}
 
       if isOWASPDetails
         .align-center.margin-bottom
@@ -230,7 +174,7 @@ table.project-table.margin-top20
           if file.tags
             .file-tag-container
               each file.tags as |tag|
-                .file-tag.file-tag2
+                .file-tag style="background-color:{{tag.color}};color:{{tag.invertedColor}}"
                   = tag.name
         .column.content-right.no-padding.margin-top.margin-bottom
           = project-actions project=file.project
