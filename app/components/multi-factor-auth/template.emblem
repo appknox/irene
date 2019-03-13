@@ -1,0 +1,188 @@
+.mfa
+  h5.bold.black-text.is-fullwidth
+    = t "multiFactorAuth"
+  = t "mfaDescription"
+  .margin-top20
+    if user.mfaEnabled
+      h5
+        = t "status"
+        | : {{t "enabled"}}
+        i.fa.fa-check.margin-left
+      div.vertical-align-center
+        .bold.padding-r-1
+          | Receive OTP via:&nbsp;&nbsp;
+          span.black-text
+            | {{ user.mfaMethodDisplay }}
+        button.is-default.is-small click={(perform openMFAEnableModal)}
+          = t "changeMFAMethod"
+      button.is-primary.margin-t-2 click={(perform openMFADisableModal)}
+        = t "disableMFA"
+    else
+      h5
+        = t "status"
+        | : {{t "disabled"}}
+        i.fa.fa-times
+      button.is-primary.margin-top20 click={(perform openMFAEnableModal)}
+        = t "enableMFA"
+
+
+= modal-card isActive=showMFAEnableModal title=(t "modalCard.selectMFAMethod.title")
+  .card-body.warning-modal
+    .card-wrapper class=showMethodSelect:show:hide
+      div.select-method
+        p.control.is-half
+          = t "modalCard.selectMFAMethod.description"
+
+        div.margin-t-1h
+          div local-class="mfa__method" class={isMFAEmailActive:fill-success-box}
+            div.vertical-align-center
+              h3
+                = t "modalCard.enableMFAEmail.title"
+              if isMFAEmailActive
+                label.margin-l-1 local-class="mfa__method__enabled"
+                  | Enabled
+            p.control.margin-t-1
+              = t "modalCard.enableMFAEmail.intro"
+            if not isMFAEmailActive
+              button.is-primary.highlighted-button.margin-t-h click="setMethodEmail"
+                = t "modalCard.enableMFAEmail.setup"
+
+        div.margin-t-1h
+          div local-class="mfa__method" class={isMFAAppActive:fill-success-box}
+            div.vertical-align-center
+              h3
+                = t "modalCard.enableMFAApp.title"
+              if isMFAAppActive
+                label.margin-l-1 local-class="mfa__method__enabled"
+                  | Enabled
+            p.margin-t-1
+              = t "modalCard.enableMFAApp.intro"
+            p.otp-apps.margin-top20
+              = t "modalCard.enableMFAApp.downloadAppOTP"
+            ul
+              li
+                | For Android, iOS, and Blackberry: <a href="https://support.google.com/accounts/answer/1066447?hl=en" target="_blank">Google Authenticator</a>
+              li
+                | For Android & iOS: <a href="https://guide.duo.com/third-party-accounts" target="_blank">Duo Mobile</a>
+              li
+                | For Windows Phone: <a href="https://www.microsoft.com/en-us/store/p/authenticator/9wzdncrfj3rj" target="_blank">Authenticator</a>
+
+            button.is-primary.highlighted-button.margin-t-1 click="setMethodApp"
+              = t "modalCard.enableMFAApp.setUp"
+
+    .card-wrapper class=showMethodEmail:show:hide
+      div.select-method-app
+        small
+          a click="setMethodSelect"
+            = t "modalCard.selectMFAMethod.selectMethod"
+          span.margin-h-0h
+            | >
+          span
+            = t "modalCard.enableMFAEmail.title"
+      p.margin-t-1h
+        = t "modalCard.enableMFAEmail.sendMailMsg"
+        span.bold
+          | {{ user.email }}
+      div.margin-t-2
+        button.is-primary.highlighted-button click="sendOTPEmailMFA" disabled=isSendingEmailMFA
+          if isSendingEmailMFA
+            .fa-font-size
+              i.fa class="fa-spinner fa-spin"
+            | &nbsp;
+          = t "continue"
+        button.is-primary.margin-left click="setMethodSelect"
+          = t "cancel"
+
+    .card-wrapper class=showMethodEmailOTP:show:hide
+      div.select-method-app
+        small
+          a click="setMethodSelect"
+            = t "modalCard.selectMFAMethod.selectMethod"
+          span.margin-h-0h
+            | >
+          span
+            = t "modalCard.enableMFAEmail.title"
+          span
+            | &nbsp;> OTP
+      p.margin-t-1h
+        = t "modalCard.enableMFAEmail.description"
+        span.bold
+          | {{ user.email }}
+      p.margin-t-h
+        = t "modalCard.enableMFAEmail.enterCode"
+      form.margin-t-1h
+        p.control
+          = input class="form-control input" type="text" value=enableEmailMFAOTP
+        div.margin-t-2
+          button.is-primary.highlighted-button click="enableEmailMFA" disabled=isEnablingEmailMFA
+            if isEnablingEmailMFA
+              .fa-font-size
+                i.fa class="fa-spinner fa-spin"
+              | &nbsp;
+            = t "confirm"
+          // button.is-primary.margin-left click="setMethodSelect"
+          //   = t "cancel"
+
+    .card-wrapper class=showMethodApp:show:hide
+      div.margin-b-1h
+        small
+          a click="setMethodSelect"
+            = t "modalCard.selectMFAMethod.selectMethod"
+          span.margin-h-0h
+            | >
+          span
+            = t "modalCard.enableMFAApp.title"
+      h3.margin-top.text-center
+        = t "modalCard.enableMFAApp.scanBarcode"
+      canvas.qr-code
+      p.margin-top
+        = t "modalCard.enableMFAApp.enterCode"
+      form.margin-top
+        p.control
+          = input class="form-control input" type="text" value=enableAppMFAOTP
+        div
+          button.is-primary.highlighted-button click="enableAppMFA" disabled=isEnablingAppMFA
+            if isEnablingAppMFA
+              .fa-font-size
+                i.fa class="fa-spinner fa-spin"
+              | &nbsp;
+            = t "continue"
+          button.is-primary.margin-left click="setMethodSelect"
+            = t "cancel"
+
+
+= modal-card isActive=showMFADisableModal title=(t "modalCard.disableMFA.title")
+  .card-body.warning-modal class=showConfirmDisableMFA:show:hide
+    .card-wrapper
+      p
+        = t "modalCard.disableMFA.description"
+      p.control.margin-t-1
+        button.is-primary.highlighted-button click="confirmDisableMFA" disabled=isConfirmingDisableMFA
+          if isConfirmingDisableMFA
+            .fa-font-size
+              i.fa class="fa-spinner fa-spin"
+            | &nbsp;
+          = t "continue"
+        button.is-primary.margin-left click={(perform closeMFADisableModal)}
+          = t "cancel"
+
+  .card-body.warning-modal class=showDisableMFA:show:hide
+    .card-wrapper
+      p
+        = t "modalCard.disableMFA.enterOTP"
+        if user.mfaMethod is 2
+          | &nbsp;(sent via email)
+        else
+          | &nbsp;(from MFA app)
+      form.margin-t-1
+        p.control
+          = input class="form-control input" type="text" value=disableMFAOTP
+        p.control.margin-t-1
+          button.is-primary.highlighted-button click="disableMFA" disabled=isDisablingMFA
+            if isDisablingMFA
+              .fa-font-size
+                i.fa class="fa-spinner fa-spin"
+              | &nbsp;
+            = t "confirm"
+          button.is-primary.margin-left click={(perform closeMFADisableModal)}
+            = t "cancel"

@@ -7,8 +7,4 @@
 .box-container
   .columns
     .column.is-half
-      h5.bold.black-text.is-fullwidth
-        = t "multiFactorAuth"
-      = t "mfaDescription"
-      .margin-top20
-        = auth-mfa user=user
+      = multi-factor-auth user=user

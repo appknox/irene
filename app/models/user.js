@@ -51,10 +51,19 @@ const User = DS.Model.extend({
 
   mfaEnabled: computed("mfaMethod", function() {
     const mfaMethod = this.get("mfaMethod");
-    if (mfaMethod === ENUMS.MFA_METHOD.TOTP) {
+    if (mfaMethod === ENUMS.MFA_METHOD.TOTP || mfaMethod === ENUMS.MFA_METHOD.HOTP) {
       return true;
     }
     return false;
+  }),
+
+  mfaMethodDisplay: computed("mfaMethod", function() {
+    const mfaMethod = this.get("mfaMethod");
+    const MFA_METHODS = {
+      [ENUMS.MFA_METHOD.TOTP]: 'App',
+      [ENUMS.MFA_METHOD.HOTP]: 'Email',
+    }
+    return MFA_METHODS[mfaMethod] || '';
   }),
 
   totalProjects: computed("projectCount", function() {
