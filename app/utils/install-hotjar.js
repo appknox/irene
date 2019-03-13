@@ -1,4 +1,10 @@
+import ENV from 'irene/config/environment';
+
 export default function installHotjar() {
+  if (!ENV.enableHotjar) {
+    // eslint-disable-next-line no-console
+    return console.log("Hotjar Disabled");
+  }
   (function(h,o,t,j,a,r){
       h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments);};
       h._hjSettings={hjid:225284,hjsv:6};
