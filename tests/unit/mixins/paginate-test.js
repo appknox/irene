@@ -1,14 +1,15 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
 import DS from 'ember-data';
 import PaginateMixin from 'irene/mixins/paginate';
 import { moduleFor, test } from 'ember-qunit';
+import { run } from '@ember/runloop';
 
 moduleFor('mixin:paginate', 'Unit | Mixin | paginate', {
   subject() {
     const PaginateObject = DS.Model.extend(PaginateMixin);
     this.register('model:paginate-object', PaginateObject);
-    return Ember.run(() => {
-      let store = Ember.getOwner(this).lookup('service:store');
+    return run(() => {
+      let store = getOwner(this).lookup('service:store');
       return store.createRecord('paginate-object', {});
     });
   }
@@ -32,7 +33,7 @@ test('the mixin does what it should', function(assert) {
   };
   mixin.set('store', store);
 
-  Ember.run(() => {
+  run(() => {
 
     assert.notOk(mixin.versionIncrementer());
     assert.notDeepEqual(mixin.versionTrigger(), "", "Version Trigger");

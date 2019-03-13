@@ -1,18 +1,19 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { computed } from '@ember/object';
 
-const InvoiceListComponent = Ember.Component.extend({
+const InvoiceListComponent = Component.extend({
 
   classNames:["invoice-table"],
 
-  invoices: (function() {
+  invoices: computed(function() {
     return this.get("store").findAll("invoice");
-  }).property(),
+  }),
 
 
-  hasInvoices: (function() {
+  hasInvoices: computed("invoices.@each.id", function() {
     const invoices = this.get("invoices");
     return invoices.get("length") > 0;
-  }).property("invoices.@each.id")
+  })
 });
 
 export default InvoiceListComponent;

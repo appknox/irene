@@ -1,7 +1,8 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
 import ENUMS from 'irene/enums';
 import { moduleForModel, test } from 'ember-qunit';
 import localeConfig from 'ember-i18n/config/en';
+import { run } from '@ember/runloop';
 
 moduleForModel('project', 'Unit | Model | project', {
   needs: [
@@ -16,7 +17,7 @@ moduleForModel('project', 'Unit | Model | project', {
   ],
   beforeEach() {
     // set the locale and the config
-    Ember.getOwner(this).lookup('service:i18n').set('locale', 'en');
+    getOwner(this).lookup('service:i18n').set('locale', 'en');
     this.register('locale:en/config', localeConfig);
   }
 });
@@ -45,7 +46,7 @@ test('it exists', function(assert) {
       }
     }
   ]);
-  Ember.run(function() {
+  run(function() {
 
     assert.equal(project.get('pdfPassword'), "Unknown!", "PDF Password/Unknown");
     project.set('uuid', "abceghi-jklm-opqr-stuv-wxyz100");

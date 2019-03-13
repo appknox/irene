@@ -44,12 +44,12 @@ if showVulnerability
           else
             .margin-top
               = analysis.vulnerability.successMessage
-      if showEditAnalysis
-        if analysis.isRisky
-          .column.is-one-sixth.content-right
-            button.is-primary click="openEditAnalysisModal"
-              i.fa.risk-icons.fa-pencil
-              | &nbsp;#{t "editAnalysis"}
+      // if showEditAnalysis
+      //   if analysis.isRisky
+      //     .column.is-one-sixth.content-right
+      //       button.is-primary click="openEditAnalysisModal"
+      //         i.fa.risk-icons.fa-pencil
+      //         | &nbsp;#{t "editAnalysis"}
 
     if analysis.isRisky
       .regulatary-section.margin-top
@@ -129,14 +129,16 @@ if showVulnerability
                 .columns
                   if isEditingOverriddenRisk
                     .column.is-one-sixth.mark-text
-                      = t "markItAs"
+                      span.bold
+                        = t "markItAs"
                     .column.is-one-sixth
                       select{action 'selectMarkedAnalyis' on='change'} id="marked-analysis"
                         each filteredRisks as |risk|
                           option value=risk.value
                             | #{ t (risk-text risk.value)}
                     .column.is-one-sixth.marked-analysis-text.margin-top5
-                      = t "for"
+                      span.bold
+                        = t "for"
                     .column.is-one-third
                       select{action 'selectMarkedAnalyisType' on='change'} id="marked-analysis-all" class="mark-analysis-all"
                         option value="false"
@@ -145,18 +147,37 @@ if showVulnerability
                           =  t "allFutureAnalyses"
                   else
                     .column.is-one-third.margin-top5
-                      = t "overriddenRisk"
+                      span.bold
+                        = t "overriddenRisk"
                       .tag class=analysis.overriddenRiskLabelClass
                         i.fa.risk-icons class=analysis.overriddenRiskIconClass
                         .uppercase-text
                           | &nbsp; #{ t (risk-text analysis.overriddenRisk)}
                   .column.margin-top5
-                    = t "orginalRisk"
+                    span.bold
+                      = t "orginalRisk"
                     .tag class=analysis.riskLabelClass
                       i.fa.risk-icons class=analysis.riskIconClass
                       .uppercase-text
                         | &nbsp; #{ t (risk-text analysis.risk)}
+                .columns
+                  .column
+                    .vertical-align-top
+                      .margin-r-1.padding-t-h
+                        label.bold
+                          = t "comment"
+                      if isEditingOverriddenRisk
+                        div.contain-width
+                          = textarea class="form-control textarea-input margin-t-q" rows="2" placeholder=(t "reasonForOverride") value=analysis.overriddenRiskComment
+                      else
+                        span.padding-t-h.padding-b-1h
+                          if analysis.overriddenRiskComment
+                            | #{analysis.overriddenRiskComment}
+                          else
+                            em.text-lightgray
+                              = t "none"
 
+                .columns
                   if isEditingOverriddenRisk
                     .column.is-one-third
                       button.is-primary.highlighted-button.edit-marked-analysis click="markAnalysis" disabled=isMarkingAnalysis
@@ -175,6 +196,7 @@ if showVulnerability
                         | &nbsp; #{ t "edit"}
                       button.is-primary.highlighted-button.edit-marked-analysis click="openResetMarkedAnalysisConfirmBox"
                         | &nbsp; #{ t "reset"}
+
           else
             .columns
               .column
@@ -182,7 +204,7 @@ if showVulnerability
                   = t "falsePositive"
             .columns.margin-top
               .column.is-one-sixth.mark-text
-                h6
+                h6.bold
                   = t "markItAs"
               .column.is-one-sixth
                 select{action 'selectMarkedAnalyis' on='change'} id="marked-analysis"
@@ -190,7 +212,7 @@ if showVulnerability
                     option value=risk.value
                       | #{ t (risk-text risk.value)}
               .column.is-one-sixth.marked-analysis-text2
-                h6
+                h6.bold
                   = t "for"
               .column
                 select{action 'selectMarkedAnalyisType' on='change'} id="marked-analysis-all" class="mark-analysis-all"
@@ -198,11 +220,20 @@ if showVulnerability
                     = t "currentFileOnly"
                   option value="true"
                     =  t "allFutureAnalyses"
+            .columns
+              .column
+                .vertical-align-top
+                  .margin-r-1.padding-t-h
+                    label.bold
+                      = t "comment"
+                  div.contain-width
+                    = textarea class="form-control textarea-input margin-t-q" rows="2" placeholder=(t "reasonForOverride") value=analysis.overriddenRiskComment
+            .columns
               .column
                 button.is-primary.highlighted-button click="markAnalysis" disabled=isMarkingAnalysis
                   if isMarkingAnalysis
                     .fa-font-size
                       i.fa class="fa-spinner fa-spin"
-                  | &nbsp; #{ t "markAnalysis"}
+                  | &nbsp; #{ t "save"}
 
 = confirm-box isActive=showResetAnalysisConfirmBox title="Reset Overridden Analysis" delegate=this disabled=isResettingMarkedAnalysis

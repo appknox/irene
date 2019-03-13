@@ -1,5 +1,5 @@
-import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
+import { run } from '@ember/runloop';
 
 moduleForComponent('confirm-box', 'Integration | Component | confirm box', {
   unit: true
@@ -10,7 +10,7 @@ test('tapping button fires an external action', function(assert) {
 
   var component = this.subject();
 
-  Ember.run(function() {
+  run(function() {
     component.send('clearModal');
     assert.equal(component.get('isActive'),false, "Clear Modal");
   });

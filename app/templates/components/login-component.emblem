@@ -29,9 +29,9 @@
               i.fa class="fa-spinner fa-spin"
               | &nbsp;
           = t "login"
-      if isNotEnterprise
+      if hasRegistrationLink
         p.has-text-centered.margin-top
-          = link-to 'register'
+          a href=registrationLink
             = t "createAccount"
       if env.enableSSO
         div.login-form-sso

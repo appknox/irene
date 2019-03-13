@@ -1,8 +1,8 @@
-import Ember from 'ember';
 import config from 'irene/config/environment';
 import ENV from 'irene/config/environment';
+import Route from '@ember/routing/route';
 
-export default Ember.Route.extend({
+export default Route.extend({
   title: `Activate${config.platform}`,
   model(params) {
     const url = [ENV.endpoints.activate, params.pk, params.token].join('/');

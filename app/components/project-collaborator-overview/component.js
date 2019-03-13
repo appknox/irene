@@ -1,15 +1,17 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { computed, observer } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 import { translationMacro as t } from 'ember-i18n';
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 
-export default Ember.Component.extend({
-  i18n: Ember.inject.service(),
-  realtime: Ember.inject.service(),
-  me: Ember.inject.service(),
-  notify: Ember.inject.service('notification-messages-service'),
+export default Component.extend({
+  i18n: service(),
+  realtime: service(),
+  me: service(),
+  notify: service('notification-messages-service'),
 
   tagName: ['tr'],
   showRemoveCollaboratorConfirm: false,
@@ -19,15 +21,15 @@ export default Ember.Component.extend({
   tPleaseTryAgain: t('pleaseTryAgain'),
   tPermissionChanged: t('permissionChanged'),
 
-  orgMember: Ember.computed(function() {
+  orgMember: computed(function() {
     return this.store.findRecord('organization-user', this.get('collaborator.id'));
   }),
 
 
   /* Watch for allowEdit input */
-  watchProjectWrite: (function(){
+  watchProjectWrite: observer('collaborator.write', function(){
     this.get('changeCollaboratorWrite').perform();
-  }).observes('collaborator.write'),
+  }),
 
 
   /* Save collaborator-write value */

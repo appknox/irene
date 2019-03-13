@@ -1,7 +1,7 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 import ENV from 'irene/config/environment';
 
-export default Ember.Component.extend({
+export default Component.extend({
   tagName: ['tr'],
 
   actions: {

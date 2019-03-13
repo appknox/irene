@@ -1,16 +1,18 @@
-// jshint ignore: start
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
+import { isEmpty } from '@ember/utils';
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
+import { task } from 'ember-concurrency';
+import { on } from '@ember/object/evented';
 import { translationMacro as t } from 'ember-i18n';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 
-
-const isEmpty = inputValue=> Ember.isEmpty(inputValue);
-
-const FileHeaderComponent = Ember.Component.extend({
+const FileHeaderComponent = Component.extend({
 
   roleId: 0,
+  progress: 0,
   userRoles: [],
   globalAlpha:0.4,
   radiusRatio:0.9,
@@ -24,12 +26,12 @@ const FileHeaderComponent = Ember.Component.extend({
   isDownloadingReport: false,
   showManualScanFormModal: false,
   showRemoveRoleConfirmBox: false,
-  progress: 0,
 
-  i18n: Ember.inject.service(),
-  trial: Ember.inject.service(),
-  ajax: Ember.inject.service(),
-  notify: Ember.inject.service('notification-messages-service'),
+  i18n: service(),
+  trial: service(),
+  ajax: service(),
+  organization: service(),
+  notify: service('notification-messages-service'),
 
   vpnStatuses: ["yes", "no"],
   loginStatuses: ["yes", "no"],
@@ -40,48 +42,49 @@ const FileHeaderComponent = Ember.Component.extend({
   tPleaseTryAgain: t("pleaseTryAgain"),
   tManualRequested: t("manualRequested"),
   tRescanInitiated: t("rescanInitiated"),
+  tAccessRequested: t("accessRequested"),
   tRoleAdded: t("modalCard.manual.roleAdded"),
   tReportIsGettingGenerated: t("reportIsGettingGenerated"),
   tPleaseEnterAllValues: t("modalCard.manual.pleaseEnterAllValues"),
   tPleaseEnterUserRoles: t("modalCard.manual.pleaseEnterUserRoles"),
   tPleaseEnterVPNDetails: t("modalCard.manual.pleaseEnterVPNDetails"),
 
-  manualscan: (function() {
+  manualscan: computed(function() {
     const fileId = this.get("file.id");
     return this.get("store").findRecord("manualscan", fileId);
-  }).property(),
+  }),
 
-  unknownAnalysisStatus: (function() {
+  unknownAnalysisStatus: computed(function() {
     return this.get("store").queryRecord('unknown-analysis-status', {id: this.get("file.profile.id")});
-  }).property(),
+  }),
 
-  analyses: (function() {
+  analyses: computed("file.sortedAnalyses", function() {
     return this.get("file.sortedAnalyses");
-  }).property("file.sortedAnalyses"),
+  }),
 
-  filteredEnvironments: (function() {
+  filteredEnvironments: computed("environments", "manualscan.filteredAppEnv", function() {
     const environments = this.get("environments");
     const appEnv = parseInt(this.get("manualscan.filteredAppEnv"));
     return environments.filter(env => appEnv !== env.value);
-  }).property("environments", "manualscan.filteredAppEnv"),
+  }),
 
-  filteredAppActions: (function() {
+  filteredAppActions: computed("appActions", "manualscan.filteredAppAction", function() {
     const appActions = this.get("appActions");
     const appAction =  parseInt(this.get("manualscan.filteredAppAction"));
     return appActions.filter(action => appAction !== action.value);
-  }).property("appActions", "manualscan.filteredAppAction"),
+  }),
 
-  filteredLoginStatuses: (function() {
+  filteredLoginStatuses: computed("loginStatuses", "manualscan.loginStatus", function() {
     const loginStatuses = this.get("loginStatuses");
     const loginStatus = this.get("manualscan.loginStatus");
     return loginStatuses.filter(status => loginStatus !== status);
-  }).property("loginStatuses", "manualscan.loginStatus"),
+  }),
 
-  filteredVpnStatuses: (function() {
+  filteredVpnStatuses: computed("vpnStatuses", "manualscan.vpnStatus", function() {
     const vpnStatuses = this.get("vpnStatuses");
     const vpnStatus = this.get("manualscan.vpnStatus");
     return vpnStatuses.filter(status => vpnStatus !== status);
-  }).property("vpnStatuses", "manualscan.vpnStatus"),
+  }),
 
   chartOptions: (() =>
     ({
@@ -127,40 +130,40 @@ const FileHeaderComponent = Ember.Component.extend({
     this.set("showRemoveRoleConfirmBox", false);
   },
 
-  allUserRoles: (function() {
+  allUserRoles: computed("manualscan.userRoles", function() {
     const userRoles = this.get("manualscan.userRoles");
     let roleId = this.get("roleId")
     userRoles.forEach((role) => {
       roleId = roleId + 1;
       role.id = roleId;
-      return this.set("roleId", roleId);
+      return this.set("roleId", roleId); // eslint-disable-line
     });
     return userRoles;
-  }).property("manualscan.userRoles"),
+  }),
 
-  availableRoles: Ember.computed.filter('allUserRoles', function(userRole) {
+  availableRoles: computed.filter('allUserRoles', function(userRole) {
     const { id } = userRole;
     const deletedRole = this.get("deletedRole");
     return id !== deletedRole;
   }),
 
-  userRoleCount: Ember.computed.alias('manualscan.userRoles.length'),
+  userRoleCount: computed.alias('manualscan.userRoles.length'),
 
-  hasUserRoles: Ember.computed.gt('userRoleCount', 0),
+  hasUserRoles: computed.gt('userRoleCount', 0),
 
-  scanDetailsClass: Ember.computed('isScanDetails', function() {
+  scanDetailsClass: computed('isScanDetails', function() {
     if (this.get('isScanDetails')) {
       return 'is-active';
     }
   }),
 
-  owaspDetailsClass: Ember.computed('isOWASPDetails', function() {
+  owaspDetailsClass: computed('isOWASPDetails', function() {
     if (this.get('isOWASPDetails')) {
       return 'is-active';
     }
   }),
 
-  owasps: Ember.computed('analyses', function() {
+  owasps: computed('analyses', function() {
     const analyses = this.get("analyses");
     var owasps = [];
     const risks = [ENUMS.RISK.CRITICAL, ENUMS.RISK.HIGH, ENUMS.RISK.MEDIUM, ENUMS.RISK.LOW];
@@ -174,7 +177,7 @@ const FileHeaderComponent = Ember.Component.extend({
     return owasps
   }),
 
-  owaspData: (function() {
+  owaspData: computed("owasps", "owaspA5Count", "owaspA3Count", function() {
     const owasps = this.get("owasps");
     var owaspA1Count = 0, owaspA2Count = 0, owaspA3Count = 0, owaspA4Count = 0,
     owaspA5Count = 0, owaspA6Count = 0, owaspA7Count = 0, owaspA8Count = 0,
@@ -269,7 +272,38 @@ const FileHeaderComponent = Ember.Component.extend({
         } ]
       }
     };
-  }).property("owasps", "owaspA5Count", "owaspA3Count"),
+  }),
+
+  openRequestAccessModal: task(function * () {
+    yield this.set("showRequestAccessModal", true);
+  }),
+
+  closeRequestAccessModal: task(function * () {
+    yield this.set("showRequestAccessModal", false);
+  }),
+
+  requestAccess: task(function *() {
+    const orgId = this.get("organization.selected.id");
+    const url = [ENV.endpoints.organizations, orgId, ENV.endpoints.requestAccess].join('/');
+    yield this.get("ajax").post(url);
+  }).evented(),
+
+  requestAccessSucceeded: on('requestAccess:succeeded', function() {
+    const tAccessRequested = this.get("tAccessRequested");
+    this.get("notify").success(tAccessRequested);
+    this.set("showRequestAccessModal", false);
+  }),
+
+  requestAccessErrored: on('requestAccess:errored', function(_, err) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (err.errors && err.errors.length) {
+      errMsg = err.errors[0].detail || errMsg;
+    } else if(err.message) {
+      errMsg = err.message;
+    }
+    this.get('notify').error(errMsg);
+  }),
+
 
   actions: {
 
@@ -382,7 +416,7 @@ const FileHeaderComponent = Ember.Component.extend({
         "username": username,
         "password": password
       };
-      if (Ember.isEmpty(userRoles)) {
+      if (isEmpty(userRoles)) {
         userRoles = [];
       }
       userRoles.addObject(userRole);
@@ -481,14 +515,6 @@ const FileHeaderComponent = Ember.Component.extend({
       })
     },
 
-    closeSubscribeModal() {
-      this.set("showSubscribeModal", false);
-    },
-
-    openSubscribeModal() {
-      this.set("showSubscribeModal", true);
-    },
-
     openManualScanModal() {
       this.set("showManualScanModal", true);
     },
@@ -504,11 +530,6 @@ const FileHeaderComponent = Ember.Component.extend({
     closeRescanModal() {
       this.set("showRescanModal", false);
     },
-
-    subscribePlan() {
-      window.location.href = "/billing";
-    },
-
 
     rescanApp() {
       const tRescanInitiated = this.get("tRescanInitiated");

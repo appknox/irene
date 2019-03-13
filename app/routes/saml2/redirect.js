@@ -1,9 +1,11 @@
-import Ember from 'ember';
 import config from 'irene/config/environment';
+import Route from '@ember/routing/route';
 
-export default Ember.Route.extend({
+import { inject as service } from '@ember/service';
+
+export default Route.extend({
   title: `Redirect${config.platform}`,
-  session: Ember.inject.service('session'),
+  session: service('session'),
   model(params) {
     this.get('session').authenticate("authenticator:saml2", params.sso_token);
   },

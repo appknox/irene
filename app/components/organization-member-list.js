@@ -1,8 +1,11 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { computed, observer } from '@ember/object';
 import PaginateMixin from 'irene/mixins/paginate';
+import { debounce } from '@ember/runloop';
 
-export default Ember.Component.extend(PaginateMixin, {
-  i18n: Ember.inject.service(),
+export default Component.extend(PaginateMixin, {
+  i18n: service(),
 
   query: '',
   searchQuery: '',
@@ -10,14 +13,14 @@ export default Ember.Component.extend(PaginateMixin, {
   targetObject: 'organization-member',
   sortProperties: ['createdOn:desc'],
 
-  extraQueryStrings: Ember.computed('searchQuery', function() {
+  extraQueryStrings: computed('searchQuery', function() {
     const query = {
       q: this.get('searchQuery')
     };
     return JSON.stringify(query, Object.keys(query).sort());
   }),
 
-  newMembersObserver: Ember.observer("realtime.OrganizationMemberCounter", function() {
+  newMembersObserver: observer("realtime.OrganizationMemberCounter", function() {
     return this.incrementProperty("version");
   }),
 
@@ -28,7 +31,7 @@ export default Ember.Component.extend(PaginateMixin, {
 
   actions: {
     searchQuery() {
-      Ember.run.debounce(this, this.setSearchQuery, 500);
+      debounce(this, this.setSearchQuery, 500);
     },
   }
 });

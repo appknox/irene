@@ -1,11 +1,9 @@
-/* jshint ignore:start */
-
-import Ember from 'ember';
+import Component from '@ember/component';
 import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import {isNotFoundError} from 'ember-ajax/errors';
 
-export default Ember.Component.extend({
+export default Component.extend({
 
   isStorageWorking: false,
   isDeviceFarmWorking: false,
@@ -22,7 +20,7 @@ export default Ember.Component.extend({
   getStorageStatus: task(function *() {
     try {
       let status = yield this.get("ajax").request(ENV.endpoints.status);
-      yield this.get('ajax').request(status.data.storage, { headers:{ 'Authorization': "Basic"}});
+      yield this.get('ajax').request(status.data.storage, { headers:{}});
     } catch(error) {
       this.set("isStorageWorking", !!isNotFoundError(error));
     }
@@ -38,5 +36,3 @@ export default Ember.Component.extend({
   }).drop(),
 
 });
-
-/* jshint ignore:end */

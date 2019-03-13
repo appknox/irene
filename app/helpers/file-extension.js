@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import { helper } from '@ember/component/helper';
 
 const fileExtension = params => {
   const filename = params[0];
@@ -15,5 +15,5 @@ const fileExtension = params => {
 };
 export { fileExtension };
 
-const FileExtensionHelper = Ember.Helper.helper(fileExtension);
+const FileExtensionHelper = helper(fileExtension);
 export default FileExtensionHelper;

@@ -106,28 +106,39 @@
         .column.margin-bottom20
           = power-select-multiple placeholder="Select PCI-DSS Risk Category" selected=analysisDetails.pcidss options=pcidsses onchange=(action "selectPcidssCategory") as |key|
             | #{key.code} - #{key.title}
-      .columns
-        .column.is-one-third
-          h5.bold-font
-            | Override Risk
       .columns.border-bottom-container
-        .column.margin-bottom20.is-one-third
-          = power-select placeholder="Select Risk" selected=analysisDetails.overriddenRisk options=risks onchange=(action "selectOverriddenRisk") as |key|
-            span.uppercase-text
-              | #{risk-text key}
-        if analysisDetails.overriddenRisk
-          .column.is-one-sixth.marked-analysis
-            button.is-primary.highlighted-button.edit-marked-analysis click="resetOverriddenAnalysis"
-              | reset
-        .column.input-checkbox
-          = input class="checkbox" type="checkbox" checked=analysisDetails.overriddenRiskToProfile
-          span
-            | &nbsp; Save to profile &nbsp;
+        .column
+          .columns
+            .column.is-one-third
+              h5.bold-font
+                | Override Risk
+          .columns
+            .column.is-one-third
+              = power-select placeholder="Select Risk" selected=analysisDetails.overriddenRisk options=risks onchange=(action "selectOverriddenRisk") as |key|
+                span.uppercase-text
+                  | #{risk-text key}
+            .column.input-checkbox
+              = input class="checkbox" type="checkbox" checked=analysisDetails.overriddenRiskToProfile
+              span
+                | &nbsp; Save to profile &nbsp;
+            .column.contain-width.text-right
+              if analysisDetails.overriddenRisk
+                button.is-primary.highlighted-button.edit-marked-analysis click="resetOverriddenAnalysis"
+                  | reset
+          if analysisDetails.overriddenRisk
+            .columns
+              .column
+                .vertical-align-top
+                  .margin-r-1.padding-t-h
+                    label.bold
+                      = t "comment"
+                  div.contain-width
+                    = textarea class="form-control textarea-input margin-t-q" rows="2" placeholder=(t "reasonForOverride") value=analysisDetails.overriddenRiskComment
+
       .columns
         .column.is-one-third
           h5.bold-font
             | Findings
-
       if allFindings
         .columns
           .column

@@ -1,18 +1,19 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
 import lookupValidator from 'ember-changeset-validations';
 import Changeset from 'ember-changeset';
 import RegisterValidation from '../validations/register';
 
-export default Ember.Component.extend({
+export default Component.extend({
 
   captcha: '',
   registerPOJO: {},
   serverErrors: {},
   success: false,
 
-  ajax: Ember.inject.service(),
-  notify: Ember.inject.service('notification-messages-service'),
+  ajax: service(),
+  notify: service('notification-messages-service'),
 
   init() {
     this._super(...arguments);

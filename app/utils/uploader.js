@@ -1,7 +1,7 @@
-import Ember from 'ember';
 import EmberUploader from 'ember-uploader';
 
-const {inject: {service}} = Ember;
+import { inject as service } from '@ember/service';
+import $ from 'jquery';
 
 
 const Uploader = EmberUploader.Uploader.extend({
@@ -16,7 +16,7 @@ const Uploader = EmberUploader.Uploader.extend({
         withCredentials: false
       },
       xhr() {
-        const xhr = Ember.$.ajaxSettings.xhr();
+        const xhr = $.ajaxSettings.xhr();
         xhr.upload.onprogress = e => that.didProgress(e);
         that.one('isAborting', () => xhr.abort());
         return xhr;

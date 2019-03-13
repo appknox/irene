@@ -1,19 +1,21 @@
-import Ember from 'ember';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
 
-const AnalysisSettingsComponent = Ember.Component.extend({
+const AnalysisSettingsComponent = Component.extend({
 
   project: null,
-  i18n: Ember.inject.service(),
-  ajax: Ember.inject.service(),
-  notify: Ember.inject.service('notification-messages-service'),
+  i18n: service(),
+  ajax: service(),
+  notify: service('notification-messages-service'),
   isSavingStatus: false,
   tSavedPreferences: t("savedPreferences"),
 
-  unknownAnalysisStatus: (function() {
+  unknownAnalysisStatus: computed(function() {
     return this.get("store").queryRecord('unknown-analysis-status', {id: this.get("project.activeProfileId")});
-  }).property(),
+  }),
 
   actions: {
 

@@ -1,23 +1,25 @@
-// jshint ignore: start
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { computed, observer } from '@ember/object';
+import { isEmpty } from '@ember/utils';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
 
-const VncViewerComponent = Ember.Component.extend({
+const VncViewerComponent = Component.extend({
 
   rfb: null,
   file: null,
 
-  i18n: Ember.inject.service(),
-  onboard: Ember.inject.service(),
+  i18n: service(),
+  onboard: service(),
 
   tCloseModal: t("closeModal"),
   tPopOutModal: t("popOutModal"),
 
   classNameBindings: ["isPoppedOut:modal", "isPoppedOut:is-active"],
 
-  vncPopText: (function() {
+  vncPopText: computed('isPoppedOut', function() {
     const tCloseModal = this.get("tCloseModal");
     const tPopOutModal = this.get("tPopOutModal");
     if (this.get("isPoppedOut")) {
@@ -25,11 +27,11 @@ const VncViewerComponent = Ember.Component.extend({
     } else {
       return tPopOutModal;
     }
-  }).property("isPoppedOut"),
+  }),
 
   setupRFB() {
     const rfb = this.get("rfb");
-    if (!Ember.isEmpty(rfb)) {
+    if (!isEmpty(rfb)) {
       return;
     }
     const canvasEl = this.element.getElementsByClassName("canvas")[0];
@@ -55,6 +57,8 @@ const VncViewerComponent = Ember.Component.extend({
     })
     );
 
+    this.send("blurKeyboard");
+
     if (this.get('file.isReady')) {
       return this.send("connect");
     }
@@ -64,36 +68,36 @@ const VncViewerComponent = Ember.Component.extend({
     return this.setupRFB();
   },
 
-  showVNCControls: (function() {
+  showVNCControls: computed("file.isReady", "isPoppedOut", function() {
     const isPoppedOut = this.get("isPoppedOut");
     const isReady = this.get("file.isReady");
     if(isPoppedOut || isReady) {
       return true;
     }
-  }).property("file.isReady", "isPoppedOut"),
+  }),
 
-  statusChange: ( function() {
+  statusChange: observer('file.dynamicStatus', function() {
     if (this.get('file.isReady')) {
       return this.send("connect");
     } else {
       return this.send("disconnect");
     }
-  }).observes('file.dynamicStatus'),
+  }),
 
-  devicePreference: (function() {
+  devicePreference: computed('profileId', function() {
     const profileId = this.get("profileId");
     if(profileId) {
       return this.get("store").queryRecord("device-preference", {id: profileId});
     }
-  }).property("profileId"),
+  }),
 
-  screenRequired: ( function() {
+  screenRequired: computed("file.project.platform", "devicePreference.deviceType", function() {
      const platform = this.get("file.project.platform");
      const deviceType = this.get("devicePreference.deviceType");
      return (platform === ENUMS.PLATFORM.ANDROID) && (deviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED);
-   }).property("file.project.platform", "devicePreference.deviceType"),
+   }),
 
-  deviceType: (function() {
+  deviceType: computed("file.project.platform", "devicePreference.deviceType", function() {
     const platform = this.get("file.project.platform");
     const deviceType = this.get("devicePreference.deviceType");
     if (platform === ENUMS.PLATFORM.ANDROID) {
@@ -111,21 +115,21 @@ const VncViewerComponent = Ember.Component.extend({
         return "iphone5s black";
       }
     }
-  }).property("file.project.platform", "devicePreference.deviceType"),
+  }),
 
-  isNotTablet: (function() {
+  isNotTablet: computed("devicePreference.deviceType", function() {
     const deviceType = this.get("devicePreference.deviceType");
     if (![ENUMS.DEVICE_TYPE.NO_PREFERENCE, ENUMS.DEVICE_TYPE.PHONE_REQUIRED].includes(deviceType)) {
       return true;
     }
-  }).property("devicePreference.deviceType"),
+  }),
 
-  isIOSDevice: (function() {
+  isIOSDevice: computed("file.project.platform", function() {
     const platform = this.get("file.project.platform");
     if (platform === ENUMS.PLATFORM.IOS) {
       return true;
     }
-  }).property("file.project.platform"),
+  }),
 
   set_ratio() {
     const rfb = this.get("rfb");
@@ -139,6 +143,20 @@ const VncViewerComponent = Ember.Component.extend({
   actions: {
     togglePop() {
       this.set("isPoppedOut", !this.get("isPoppedOut"));
+    },
+
+    setFocus(focus) {
+      const rfb = this.get("rfb");
+      const keyboard = rfb.get_keyboard();
+      keyboard.set_focused(focus);
+    },
+
+    focusKeyboard() {
+      this.send('setFocus', true);
+    },
+
+    blurKeyboard() {
+      this.send('setFocus', false);
     },
 
     connect() {

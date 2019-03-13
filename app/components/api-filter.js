@@ -1,4 +1,7 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
+import { isEmpty } from '@ember/utils';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
@@ -8,10 +11,10 @@ const isRegexFailed = function(url) {
   return reg.test(url);
 };
 
-const ApiFilterComponent = Ember.Component.extend({
-  i18n: Ember.inject.service(),
-  ajax: Ember.inject.service(),
-  notify: Ember.inject.service('notification-messages-service'),
+const ApiFilterComponent = Component.extend({
+  i18n: service(),
+  ajax: service(),
+  notify: service('notification-messages-service'),
 
   newUrlFilter: null,
   deletedURL: "",
@@ -22,9 +25,9 @@ const ApiFilterComponent = Ember.Component.extend({
   isSavingFilter: false,
   isDeletingURLFilter: false,
 
-  apiScanOptions: (function() {
+  apiScanOptions: computed(function() {
     return this.get("store").queryRecord('api-scan-options', {id: this.get("profileId")});
-  }).property(),
+  }),
 
   confirmCallback() {
     const apiUrlFilters = this.get("apiScanOptions.apiUrlFilters");
@@ -46,7 +49,7 @@ const ApiFilterComponent = Ember.Component.extend({
       const tEmptyURL = this.get("tEmptyURL");
       const apiUrlFilters = this.get("apiScanOptions.apiUrlFilters");
       const newUrlFilter = this.get("newUrlFilter");
-      if (Ember.isEmpty(newUrlFilter)) {
+      if (isEmpty(newUrlFilter)) {
         return this.get("notify").error(tEmptyURL);
       }
       else {
@@ -54,7 +57,7 @@ const ApiFilterComponent = Ember.Component.extend({
           return this.get("notify").error(`${newUrlFilter} ${tInvalidURL}`);
         }
       }
-      if (!Ember.isEmpty(apiUrlFilters)) {
+      if (!isEmpty(apiUrlFilters)) {
         combinedURLS = apiUrlFilters.concat("," , newUrlFilter);
       }
       else {

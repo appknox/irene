@@ -1,5 +1,6 @@
 import DS from 'ember-data';
 import ENUMS from 'irene/enums';
+import { computed } from '@ember/object';
 
 export default DS.Model.extend({
   findings: DS.attr(),
@@ -18,6 +19,7 @@ export default DS.Model.extend({
   cvssVersion: DS.attr('string'),
   analiserVersion: DS.attr('number'),
   overriddenRisk: DS.attr('string'), // this is made as string because ember power select considers 0 as null value. ref: https://github.com/cibernox/ember-power-select/issues/962
+  overriddenRiskComment: DS.attr('string'),
   overriddenRiskToProfile: DS.attr('boolean'),
   file: DS.belongsTo('security/file'),
   owasp: DS.hasMany('owasp'),
@@ -25,14 +27,14 @@ export default DS.Model.extend({
   attachments: DS.hasMany('security/attachment'),
   vulnerability: DS.belongsTo('security/vulnerability'),
 
-  isPassed: (function() {
+  isPassed: computed('risk', function() {
     const risk = this.get("risk");
     return risk !== ENUMS.RISK.NONE;
-  }).property("risk"),
+  }),
 
-  riskLabelClass: (function() {
+  riskLabelClass: computed('risk', function() {
     return this.labelClass(this.get("risk"));
-  }).property("risk"),
+  }),
 
   labelClass(risk) {
     switch (risk) {

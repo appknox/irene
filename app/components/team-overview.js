@@ -1,10 +1,11 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
 
-const TeamOverviewComponent = Ember.Component.extend({
+const TeamOverviewComponent = Component.extend({
 
-  i18n: Ember.inject.service(),
+  i18n: service(),
   team: null,
   organization: null,
   tagName: ["tr"],

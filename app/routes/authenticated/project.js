@@ -1,10 +1,9 @@
-import Ember from 'ember';
+import Route from '@ember/routing/route';
 
-
-const AuthenticatedProjectRoute = Ember.Route.extend({
+const AuthenticatedProjectRoute = Route.extend({
 
   model(params){
-    return this.store.findRecord("project", params.projectId);
+    return this.store.findRecord("project", params.projectid);
   }
 });
 

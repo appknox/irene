@@ -1,17 +1,18 @@
-// jshint ignore: start
-import Ember from 'ember';
 import ENUMS from 'irene/enums';
 import { CSBMap } from 'irene/router';
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
+import * as chat from 'irene/utils/chat';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
 
 const { location } = window;
 
-const {inject: {service}} = Ember;
+import { inject as service } from '@ember/service';
+import { isEmpty } from '@ember/utils';
+import Route from '@ember/routing/route';
 
-const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
+const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
 
   lastTransition: null,
   i18n: service(),
@@ -41,20 +42,11 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
       accountId: this.get("org.selected.id")
     };
     triggerAnalytics('login', data);
-    try {
-      window.Intercom("boot", {
-        app_id: ENV.intercomAppID,
-        name: user.get("username"),
-        email: user.get("email"),
-        alignment: 'left',
-        horizontal_padding: 20,
-        vertical_padding: 20,
-        custom_launcher_selector: '#intercom_support',
-        user_hash: user.get("intercomHash")
-      }
-      );
-      window.Intercom('trackEvent', 'logged-in');
-    } catch (e) {error = e;}
+    chat.setUserEmail(user.get("email"), user.get("crispHash"))
+    const company =
+        this.get("org.selected.data.name") ||
+        user.get("email").replace(/.*@/, "").split('.')[0];
+    chat.setUserCompany(company);
     try {
       const mixpanel = this.get("mixpanel");
       mixpanel.identify(user.get("id"));
@@ -97,7 +89,7 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
     this.get('notify').setDefaultAutoClear(ENV.notifications.autoClear);
 
     const socketId = user != null ? user.get("socketId") : undefined;
-    if (Ember.isEmpty(socketId)) {
+    if (isEmpty(socketId)) {
       return;
     }
     this.set('i18n.locale', user.get("lang"));
@@ -163,7 +155,7 @@ const AuthenticatedRoute = Ember.Route.extend(AuthenticatedRouteMixin, {
     willTransition(transition) {
       const currentRoute = transition.targetName;
       const csbDict = CSBMap[currentRoute];
-      if (!Ember.isEmpty(csbDict)) {
+      if (!isEmpty(csbDict)) {
         triggerAnalytics('feature', csbDict);
       }
     },

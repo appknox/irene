@@ -11,14 +11,9 @@
           button.vnc-button.vnc-completed-button.is-primary.margin-top20 disabled="disabled"
             = fa-icon "fa-check"
             | &nbsp; #{t "completed"}
-          if trial.isTrial
-            button.vnc-button.vnc-button-repeat.is-primary.margin-top20.margin-left5 click="openSubscribeModal"
-              .fa-font-size-small
-                = fa-icon "fa-repeat"
-          else
-            button.vnc-button.vnc-button-repeat.is-primary.margin-top20.margin-left5.ac-dynamic-rescan click="openAPIScanModal"
-              .fa-font-size-small
-                = fa-icon "fa-repeat"
+          button.vnc-button.vnc-button-repeat.is-primary.margin-top20.margin-left5.ac-dynamic-rescan click="openAPIScanModal"
+            .fa-font-size-small
+              = fa-icon "fa-repeat"
         else
           button.vnc-button.is-primary.margin-top20.ac-start-dynamic-scan click="openAPIScanModal"
             .fa-font-size
@@ -59,7 +54,8 @@ if notVNCViewer
         h6
           = t "modalCard.runAPIScan.description"
         .project-preference-component
-          = project-preferences profileId=file.profile.id platform=file.project.platform
+          if showRunDynamicScanModal
+            = project-preferences profileId=file.profile.id platform=file.project.platform project=file.project
         form.margin-top20
           p.control
           .columns
@@ -81,7 +77,8 @@ if notVNCViewer
             .column
               = t "modalCard.apiScan.dynamicScanText"
         .project-preference-component
-          = project-preferences profileId=file.profile.id platform=file.project.platform
+          if showAPIScanModal
+            = project-preferences profileId=file.profile.id platform=file.project.platform project=file.project
         form.margin-top30
           p.control
           .columns

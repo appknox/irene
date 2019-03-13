@@ -1,10 +1,10 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 import ENV from 'irene/config/environment';
 import lookupValidator from 'ember-changeset-validations';
 import Changeset from 'ember-changeset';
 import InviteRegisterValidation from '../../validations/invite-register';
 
-export default Ember.Component.extend({
+export default Component.extend({
   inviteRegisterPOJO: {},
   init() {
     this._super(...arguments);

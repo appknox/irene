@@ -1,9 +1,11 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
 import ENUMS from 'irene/enums';
 import { translationMacro as t } from 'ember-i18n';
 
-const CompareSummaryComponent = Ember.Component.extend({
-  i18n: Ember.inject.service(),
+const CompareSummaryComponent = Component.extend({
+  i18n: service(),
   comparison: null,
 
   tagName: ["tr"],
@@ -13,19 +15,19 @@ const CompareSummaryComponent = Ember.Component.extend({
   tImproved: t("improved"),
   tWorsened: t("worsened"),
 
-  vulnerability: (function() {
+  vulnerability: computed("comparison", function() {
     return this.get("comparison")["vulnerability"];
-  }).property("comparison"),
+  }),
 
-  file1Analysis: (function() {
+  file1Analysis: computed("comparison", function() {
     return this.get("comparison")['analysis1'];
-  }).property("comparison"),
+  }),
 
-  file2Analysis: (function() {
+  file2Analysis: computed("comparison", function() {
     return this.get("comparison")['analysis2'];
-  }).property("comparison"),
+  }),
 
-  compareColor: (function() {
+  compareColor: computed("file1Analysis.computedRisk", "file2Analysis.computedRisk", function() {
     const cls = 'tag';
     const file1Risk = this.get("file1Analysis.computedRisk");
     const file2Risk = this.get("file2Analysis.computedRisk");
@@ -38,9 +40,9 @@ const CompareSummaryComponent = Ember.Component.extend({
     } else if (file1Risk > file2Risk) {
       return `${cls} is-critical`;
     }
-  }).property("file1Analysis.computedRisk", "file2Analysis.computedRisk"),
+  }),
 
-  compareText: (function() {
+  compareText: computed("file1Analysis.computedRisk", "file2Analysis.computedRisk", function() {
     let file1Risk = this.get("file1Analysis.computedRisk");
     let file2Risk = this.get("file2Analysis.computedRisk");
     const tAnalyzing = this.get("tAnalyzing");
@@ -59,7 +61,7 @@ const CompareSummaryComponent = Ember.Component.extend({
     } else {
       return "-";
     }
-  }).property("file1Analysis.computedRisk", "file2Analysis.computedRisk")
+  })
 });
 
 

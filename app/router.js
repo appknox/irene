@@ -1,12 +1,14 @@
-import Ember from 'ember';
+import EmberRouter from '@ember/routing/router';
+import config from './config/environment';
 import ENV from 'irene/config/environment';
+import $ from 'jquery';
 
-const Router = Ember.Router.extend({
-  location: ENV.locationType,
-  rootURL: ENV.rootURL
+const Router = EmberRouter.extend({
+  location: config.locationType,
+  rootURL: config.rootURL
 });
 
-Ember.$('body').addClass('theme-' + ENV.whitelabel.theme);
+$('body').addClass('theme-' + ENV.whitelabel.theme);
 
 Router.map(function() {
   this.route('freestyle');
@@ -14,10 +16,10 @@ Router.map(function() {
   this.route('saml2', {path: '/saml2'}, function() {
     this.route('redirect', {path: '/redirect'});
   });
-  if (!ENV.isEnterprise) {
+  if(ENV.isRegistrationEnabled) {
     this.route('register');
-    this.route('activate', {path: '/activate/:pk/:token'});
   }
+  this.route('activate', {path: '/activate/:pk/:token'});
   this.route('recover');
   this.route('reset', {path: '/reset/:uuid/:token'});
   this.route('setup', {path: '/setup/:uuid/:token'});
@@ -27,7 +29,7 @@ Router.map(function() {
       this.route('namespaces', {path: '/namespaces'});
       this.route('members', {path: '/members'});
       this.route('teams', {path: '/teams'});
-      this.route('team', {path: '/team/:teamId'});
+      this.route('team', {path: '/team/:teamid'});
       this.route('settings');
     });
     this.route("settings", {path: '/settings'}, function() {
@@ -37,12 +39,12 @@ Router.map(function() {
     });
     this.route("billing", {path: '/billing'});
     this.route('projects', {path: '/projects'});
-    this.route("project", {path: '/project/:projectId'}, function() {
+    this.route("project", {path: '/project/:projectid'}, function() {
       this.route('settings');
       this.route('files');
     });
-    this.route("file", {path: '/file/:fileId'});
-    this.route("choose",{path: '/choose/:fileId'});
+    this.route("file", {path: '/file/:fileid'});
+    this.route("choose",{path: '/choose/:fileid'});
     this.route('compare', {path: '/compare/:files'});
     this.route('payment-success');
     this.route('payment-failure');
@@ -50,9 +52,9 @@ Router.map(function() {
       this.route('projects');
       this.route('downloadapp');
       this.route('purgeanalysis');
-      this.route('files', {path: '/:projectId/files'});
-      this.route('file', {path: '/file/:fileId'});
-      this.route('analysis', {path: '/analysis/:analysisId'});
+      this.route('files', {path: '/:projectid/files'});
+      this.route('file', {path: '/file/:fileid'});
+      this.route('analysis', {path: '/analysis/:analysisid'});
     });
     this.route('status');
   });

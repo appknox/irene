@@ -22,32 +22,36 @@ module.exports = function(deployTarget) {
   }
 
   if (deployTarget === 'staging') {
+    ENV.s3 = {
+      bucket: process.env.STAGING_AWS_BUCKET,
+      region: process.env.AWS_REGION
+    };
+
+    ENV['s3-index'] = {
+      bucket: process.env.STAGING_AWS_BUCKET,
+      region: process.env.AWS_REGION,
+      allowOverwrite: true
+    };
+
     ENV.build.environment = 'staging';
+
     // configure other plugins for staging deploy target here
 
     ENV.cloudfront = {
       distribution: 'E2YVUU4RPYNUI2',
       objectPaths: ['/*']
-  };
+    };
   }
 
   if (deployTarget === 'production') {
     ENV.build.environment = 'production';
     // configure other plugins for production deploy target here
 
-    ENV.cloudfront = {
-      distribution: 'E1SR2PB8XTR9RC'
-  };
-  }
-  
-  if (deployTarget === 'whitelabel') {
-    ENV.build.environment = 'whitelabel';
-    // configure other plugins for production deploy target here
+    process.env["IRENE_REGISTRATION_LINK"] = "https://appknox.com/register";
 
     ENV.cloudfront = {
-      distribution: 'E1SR2PB8XTR9RC',
-      objectPaths: ['/*']
-  };
+      distribution: 'E17GXVYW7G712O'
+    };
   }
 
   if (deployTarget === 'whitelabel') {
@@ -57,7 +61,34 @@ module.exports = function(deployTarget) {
     ENV.cloudfront = {
       distribution: 'E1SR2PB8XTR9RC',
       objectPaths: ['/*']
-  };
+    };
+  }
+
+  if (deployTarget === 'sequelstring') {
+    ENV.build.environment = 'sequelstring';
+
+    process.env["ENTERPRISE"] = true
+    process.env["WHITELABEL_ENABLED"] = true
+    process.env["WHITELABEL_LOGO"] = "https://s3.amazonaws.com/appknox-production-public/sequelstring_logo.jpg"
+    process.env["WHITELABEL_NAME"] = "Sequelstring Solutions"
+    process.env["WHITELABEL_THEME"] = "light"
+
+    ENV.s3 = {
+      bucket: process.env.SEQUELSTRING_AWS_BUCKET,
+      region: process.env.AWS_REGION
+    };
+
+    ENV['s3-index'] = {
+      bucket: process.env.SEQUELSTRING_AWS_BUCKET,
+      region: process.env.AWS_REGION,
+      allowOverwrite: true
+    };
+
+    // configure other plugins for production deploy target here
+
+    ENV.cloudfront = {
+      distribution: 'E1R9ZLGFEM1TTU'
+    };
   }
 
   // Note: if you need to build some configuration asynchronously, you can return

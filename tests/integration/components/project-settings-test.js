@@ -1,5 +1,5 @@
-import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
+import { run } from '@ember/runloop';
 
 moduleForComponent('project-settings', 'Integration | Component | project settings', {
   unit: true
@@ -7,7 +7,7 @@ moduleForComponent('project-settings', 'Integration | Component | project settin
 
 test('it exists', function(assert) {
   const component = this.subject();
-  Ember.run(function() {
+  run(function() {
     component.set("isGeneralSettings", true);
     component.set("isAnalysisSettings", true);
     assert.equal(component.get("generalSettingsClass"), "is-active", 'General Settings Class');

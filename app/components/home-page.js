@@ -1,12 +1,14 @@
-import Ember from 'ember';
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 import { translationMacro as t } from 'ember-i18n';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
+import * as chat from 'irene/utils/chat';
+import { inject as service } from '@ember/service';
+import Component from '@ember/component';
+import { computed } from '@ember/object';
+import { getOwner } from '@ember/application';
 
-const {inject: {service}} = Ember;
-
-export default Ember.Component.extend({
+export default Component.extend({
   me: service(),
   i18n: service(),
   ajax: service(),
@@ -31,7 +33,7 @@ export default Ember.Component.extend({
     });
   },
 
-  isEmptyOrganization: Ember.computed("me.org.is_owner", function() {
+  isEmptyOrganization: computed("me.org.is_owner", function() {
     const organization = this.get("organization");
     const isOwner = this.get("me.org.is_owner")
     if(isOwner) {
@@ -42,7 +44,7 @@ export default Ember.Component.extend({
     }
   }),
 
-  showBilling: Ember.computed(
+  showBilling: computed(
     'me.org.is_owner', 'organization.selected.showBilling',
     function() {
       const orgShowBilling = this.get('organization.selected.showBilling');
@@ -58,7 +60,7 @@ export default Ember.Component.extend({
         this.set("isSecurityDashboard", true);
       }
       else {
-        Ember.getOwner(this).lookup('route:authenticated').transitionTo("authenticated.projects");
+        getOwner(this).lookup('route:authenticated').transitionTo("authenticated.projects");
       }
       this.set("isLoaded", true);
     }
@@ -100,6 +102,10 @@ export default Ember.Component.extend({
     invalidateSession() {
       triggerAnalytics('logout');
       this.get('session').invalidate();
+    },
+
+    openChatBox() {
+      chat.openChatBox();
     }
   }
 

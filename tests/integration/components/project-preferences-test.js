@@ -1,9 +1,10 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
 import ENUMS from 'irene/enums';
 import tHelper from 'ember-i18n/helper';
 import localeConfig from 'ember-i18n/config/en';
 import { test, moduleForComponent } from 'ember-qunit';
 import { startMirage } from 'irene/initializers/ember-cli-mirage';
+import { run } from '@ember/runloop';
 
 moduleForComponent('project-preferences', 'Integration | Component | project preferences', {
   unit: true,
@@ -23,7 +24,7 @@ moduleForComponent('project-preferences', 'Integration | Component | project pre
   ],
   beforeEach() {
     // set the locale and the config
-    Ember.getOwner(this).lookup('service:i18n').set('locale', 'en');
+    getOwner(this).lookup('service:i18n').set('locale', 'en');
     this.register('locale:en/config', localeConfig);
 
     // register t helper
@@ -41,7 +42,7 @@ moduleForComponent('project-preferences', 'Integration | Component | project pre
 test('tapping button fires an external action', function(assert) {
   var component = this.subject();
   var store = {
-    findAll: function() {
+    query: function() {
       return [
         {
           id:1,
@@ -67,7 +68,7 @@ test('tapping button fires an external action', function(assert) {
     }
   };
   component.set('store', store);
-  Ember.run(function() {
+  run(function() {
     component.set("profileId", 1);
     component.send('versionSelected');
     assert.deepEqual(component.get("devices"), [{

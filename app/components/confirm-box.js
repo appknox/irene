@@ -1,6 +1,6 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 
-const ConfirmBoxComponent = Ember.Component.extend({
+const ConfirmBoxComponent = Component.extend({
 
   isActive: false,
   classNames: ["modal"],

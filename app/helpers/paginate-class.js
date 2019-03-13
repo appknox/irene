@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import { helper } from '@ember/component/helper';
 
 // This function receives the params `params, hash`
 const paginateClass = function(params) {
@@ -11,7 +11,7 @@ const paginateClass = function(params) {
   }
 };
 
-const PaginateClassHelper = Ember.Helper.helper(paginateClass);
+const PaginateClassHelper = helper(paginateClass);
 
 export { paginateClass };
 

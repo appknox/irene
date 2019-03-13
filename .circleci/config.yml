@@ -3,6 +3,8 @@ jobs:
   build:
     docker:
       - image: circleci/node:10-browsers-legacy
+        environment:
+          JOBS: 2
       - image: redis:2.8.19
         environment:
           JOBS: 2
@@ -24,13 +26,18 @@ jobs:
           command: COVERAGE=true npm test
       - deploy:
           command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
 
               npm run deploy
+              npm run deploy:sequelstring
 
               curl https://api.rollbar.com/api/1/deploy/ \
                 -F access_token=$ROLLBAR_ACCESS_TOKEN \
                 -F environment=$ENVIRONMENT \
                 -F revision=$REVISION \
                 -F local_username=$LOCAL_USERNAME
+            fi
+
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              npm run deploy:staging
             fi

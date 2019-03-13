@@ -1,45 +1,43 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { computed } from '@ember/object';
 import ENUMS from 'irene/enums';
+import $ from 'jquery';
 
-const PricingListComponent = Ember.Component.extend({
+const PricingListComponent = Component.extend({
 
   paymentDuration: ENUMS.PAYMENT_DURATION.MONTHLY,
 
-  subscriptions: (function() {
+  subscriptions: computed(function() {
     this.get("store").findAll("subscription")
     .then((data) => {
-      this.set("subscriptions", data);
+      this.set("subscriptions", data); // eslint-disable-line
       if (data.isLoaded === true) {
         const plans = this.get("store").findAll("plan");
-        this.set("plans", plans);
+        this.set("plans", plans); // eslint-disable-line
       }
     });
-  }).property(),
+  }),
 
-  subscription: Ember.computed.alias('subscriptions.firstObject'),
+  subscription: computed.alias('subscriptions.firstObject'),
 
-  subscriptionCount: Ember.computed.alias('subscriptions.length'),
+  subscriptionCount: computed.alias('subscriptions.length'),
 
-  hasSubscription: Ember.computed.gt('subscriptionCount', 0),
+  hasSubscription: computed.gt('subscriptionCount', 0),
 
-  hasNoSubscription: Ember.computed.equal('subscriptionCount', 0),
+  hasNoSubscription: computed.equal('subscriptionCount', 0),
 
   sortPlanProperties: ['id'],
-  sortedPlans: Ember.computed.sort('plans', 'sortPlanProperties'),
+  sortedPlans: computed.sort('plans', 'sortPlanProperties'),
 
-  durations: (function() {
+  durations: computed(function() {
     const durations = ENUMS.PAYMENT_DURATION.CHOICES;
     return durations.slice(0, +(durations.length-2) + 1 || undefined);
-  }).property(),
+  }),
 
   activateDuration(element) {
-    // eslint-disable-next-line no-undef
     $(".js-duration-button").removeClass("is-primary is-active");
-    // eslint-disable-next-line no-undef
     $(".js-duration-button").addClass("is-default");
-    // eslint-disable-next-line no-undef
     $(element).removeClass("is-default");
-    // eslint-disable-next-line no-undef
     $(element).addClass("is-primary is-active");
   },
 

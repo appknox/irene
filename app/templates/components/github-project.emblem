@@ -26,7 +26,7 @@ else
     h6
       | Github
       | &nbsp;#{t "gotoSettings"}
-      = link-to 'authenticated.settings' class="is-primary" tagName="a"
+      = link-to 'authenticated.organization.settings' class="is-primary" tagName="a"
         | &nbsp;#{t "clickingHere"}
 
 = confirm-box isActive=showDeleteGHConfirmBox title=(t 'confirmBox.removeProject') delegate=this disabled=isDeletingGithub

@@ -1,5 +1,5 @@
-import Ember from 'ember';
+import Route from '@ember/routing/route';
 
-const AuthenticatedFileCompareRoute = Ember.Route.extend();
+const AuthenticatedFileCompareRoute = Route.extend();
 
 export default AuthenticatedFileCompareRoute;

@@ -19,7 +19,7 @@
 
 if isGeneralSettings
   .box-container.project-preference
-    = project-preferences profileId=project.activeProfileId platform=project.platform
+    = project-preferences profileId=project.activeProfileId platform=project.platform project=project
   .box-container
     = api-filter profileId=project.activeProfileId
   .box-container
@@ -32,11 +32,12 @@ if isGeneralSettings
       = project-collaborator-list project=project
   .box-container
     = github-project project=project
-  .box-container
+
+  .margin-l-1.margin-b-4
     = jira-project project=project
 
 if isAnalysisSettings
   .box-container
     = analysis-settings project=project
-  .margin-left.margin-b-4
-    = vulnerability-list project=project
+  // .margin-left.margin-b-4
+  //   = vulnerability-list project=project

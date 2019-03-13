@@ -19,7 +19,7 @@ And another thing...
 ```
 import Ember from 'ember';
 
-export default Ember.Component.extend({
+export default Component.extend({
   // ...
   colorPalette: {
     'primary': {

@@ -1,12 +1,13 @@
-import Ember from 'ember';
 import { module, test } from 'qunit';
+import { run } from '@ember/runloop';
+import Application from '@ember/application'
 
 let application = null;
 
 module('Unit | Initializer | irene', {
   beforeEach() {
-    return Ember.run(function() {
-      application = Ember.Application.create();
+    return run(function() {
+      application = Application.create();
       return application.deferReadiness();
     });
   }

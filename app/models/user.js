@@ -1,12 +1,14 @@
 import DS from 'ember-data';
-import Ember from 'ember';
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
+import { isEmpty } from '@ember/utils';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
 
 const User = DS.Model.extend({
 
-  i18n: Ember.inject.service(),
+  i18n: service(),
 
   uuid: DS.attr('string'),
   lang: DS.attr('string'),
@@ -32,30 +34,30 @@ const User = DS.Model.extend({
   mfaMethod: DS.attr('number'),
   mfaSecret: DS.attr('string'),
   isTrial: DS.attr('boolean'),
-  intercomHash: DS.attr('string'),
+  crispHash: DS.attr('string'),
   isSecurity: true, // FIXME:
 
-  isNotSecurity: Ember.computed.not('isSecurity'),
+  isNotSecurity: computed.not('isSecurity'),
 
   tProject: t("project"),
   tProjects: t("projects"),
   tNoProject: t("noProject"),
 
-  provisioningURL: (function() {
+  provisioningURL: computed("mfaSecret", "email", function() {
     const mfaSecret = this.get("mfaSecret");
     const email = this.get("email");
     return `otpauth://totp/Appknox:${email}?secret=${mfaSecret}&issuer=Appknox`;
-  }).property("mfaSecret", "email"),
+  }),
 
-  mfaEnabled: (function() {
+  mfaEnabled: computed("mfaMethod", function() {
     const mfaMethod = this.get("mfaMethod");
     if (mfaMethod === ENUMS.MFA_METHOD.TOTP) {
       return true;
     }
     return false;
-  }).property("mfaMethod"),
+  }),
 
-  totalProjects: (function() {
+  totalProjects: computed("projectCount", function() {
     const tProject = this.get("tProject");
     const tNoProject = this.get("tNoProject");
     const projectCount = this.get("projectCount");
@@ -66,34 +68,34 @@ const User = DS.Model.extend({
       return `${projectCount} ${tProject}`;
     }
     return `${projectCount} ${tProjects}`;
-  }).property("projectCount"),
+  }),
 
-  ifBillingIsNotHidden: (function() {
+  ifBillingIsNotHidden: computed('billingHidden', function() {
     if (ENV.isEnterprise) {
       return false;
     }
     const billingHidden = this.get('billingHidden');
     return !billingHidden;
-  }).property('billingHidden'),
+  }),
 
-  getExpiryDate: (function() {
+  getExpiryDate: computed("expiryDate", function() {
     if (ENV.isAppknox) {
       return this.get("expiryDate");
     } else {
       return this.get("devknoxExpiry");
     }
-  }).property("expiryDate"),
+  }),
 
-  hasExpiryDate: (function() {
+  hasExpiryDate: computed("getExpiryDate", function() {
     const getExpiryDate = this.get("getExpiryDate");
-    if (Ember.isEmpty(getExpiryDate)) {
+    if (isEmpty(getExpiryDate)) {
       return false;
     } else {
       return true;
     }
-  }).property("getExpiryDate"),
+  }),
 
-  expiryText: (function() {
+  expiryText: computed("expiryDate", function() {
     const currentDate = new Date();
     const expiryDate = this.get("expiryDate");
     let prefix = "subscriptionWillExpire";
@@ -101,18 +103,18 @@ const User = DS.Model.extend({
       prefix = "subscriptionExpired";
     }
     return prefix;
-  }).property("expiryDate"),
+  }),
 
-  namespaceItems:(function() {
+  namespaceItems: computed("namespaces", function() {
     const namespaces = this.get("namespaces");
     return (namespaces != null ? namespaces.split(",") : undefined);
-  }).property("namespaces"),
+  }),
 
-  namespacesCount: Ember.computed.alias('namespaces.length'),
+  namespacesCount: computed.alias('namespaces.length'),
 
-  hasNamespace: Ember.computed.gt('namespacesCount', 0),
+  hasNamespace: computed.gt('namespacesCount', 0),
 
-  hasProject: Ember.computed.gt('projectCount', 0)
+  hasProject: computed.gt('projectCount', 0)
 });
 
 export default User;

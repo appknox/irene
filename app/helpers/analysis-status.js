@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import { helper } from '@ember/component/helper';
 import ENUMS from 'irene/enums';
 
 export function analysisStatus(params) {
@@ -17,4 +17,4 @@ export function analysisStatus(params) {
   }
 }
 
-export default Ember.Helper.helper(analysisStatus);
+export default helper(analysisStatus);

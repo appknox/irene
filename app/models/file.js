@@ -1,8 +1,8 @@
-// jshint ignore: start
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
 import DS from 'ember-data';
 import BaseModelMixin from 'irene/mixins/base-model';
 import ENUMS from 'irene/enums';
-import Ember from 'ember';
 import { translationMacro as t } from 'ember-i18n';
 
 const _getComputedColor = function(selector) {
@@ -16,7 +16,7 @@ const _getAnalysesCount = (analysis, risk)=> {
 };
 
 const File = DS.Model.extend(BaseModelMixin, {
-  i18n: Ember.inject.service(),
+  i18n: service(),
   project: DS.belongsTo('OrganizationProject', {inverse:'files'}),
   profile: DS.belongsTo('profile', {inverse:'files'}),
   uuid: DS.attr('string'),
@@ -30,28 +30,25 @@ const File = DS.Model.extend(BaseModelMixin, {
   dynamicStatus: DS.attr('number'),
   analyses: DS.hasMany('analysis', {inverse: 'file'}),
   report: DS.attr('string'),
-  manual: DS.attr('boolean'),
+  manual: DS.attr('number'),
   apiScanProgress: DS.attr('number'),
   staticScanProgress: DS.attr('number'),
   isStaticDone: DS.attr('boolean'),
   isDynamicDone: DS.attr('boolean'),
   isManualDone: DS.attr('boolean'),
   isApiDone: DS.attr('boolean'),
+  apiScanStatus: DS.attr('number'),
 
-  ifManualNotRequested: (function() {
-    const manual = this.get('manual');
-    return !manual;
-  }).property('manual'),
+  isManualRequested: computed('manual', function() {
+    return this.get("manual") !== ENUMS.MANUAL.NONE
+  }),
 
-  isRunningApiScan: (function() {
-    const apiScanProgress = this.get("apiScanProgress");
-    if ([0,100].includes(apiScanProgress)) {
-      return false;
-    }
-    return true;
-  }).property("apiScanProgress"),
+  isRunningApiScan: computed('apiScanStatus', function() {
+    const apiScanStatus = this.get("apiScanStatus");
+    return apiScanStatus == ENUMS.SCAN_STATUS.RUNNING;
+  }),
 
-  isApiNotDone: Ember.computed.not('isApiDone'),
+  isApiNotDone: computed.not('isApiDone'),
 
   scanProgressClass(type){
     if (type === true) {
@@ -60,10 +57,10 @@ const File = DS.Model.extend(BaseModelMixin, {
     return false;
   },
 
-  isStaticCompleted: (function() {
+  isStaticCompleted: computed('isStaticDone', function() {
     const isStaticDone = this.get("isStaticDone");
     return this.scanProgressClass(isStaticDone);
-  }).property("isStaticDone"),
+  }),
 
   tDeviceBooting: t("deviceBooting"),
   tDeviceDownloading: t("deviceDownloading"),
@@ -73,7 +70,7 @@ const File = DS.Model.extend(BaseModelMixin, {
   tDeviceShuttingDown: t("deviceShuttingDown"),
 
   analysesSorting: ['computedRisk:desc'],
-  sortedAnalyses: Ember.computed.sort('analyses', 'analysesSorting'),
+  sortedAnalyses: computed.sort('analyses', 'analysesSorting'),
 
   countRiskCritical: 0,
   countRiskHigh: 0,
@@ -82,7 +79,7 @@ const File = DS.Model.extend(BaseModelMixin, {
   countRiskNone: 0,
   countRiskUnknown: 0,
 
-  doughnutData: Ember.computed('analyses.@each.computedRisk', function() {
+  doughnutData: computed('analyses.@each.computedRisk', function() {
     const analyses = this.get("analyses");
     const r = ENUMS.RISK;
     const countRiskCritical = _getAnalysesCount(analyses, r.CRITICAL);
@@ -92,12 +89,12 @@ const File = DS.Model.extend(BaseModelMixin, {
     const countRiskNone = _getAnalysesCount(analyses, r.NONE);
     const countRiskUnknown = _getAnalysesCount(analyses, r.UNKNOWN);
 
-    this.set("countRiskCritical", countRiskCritical);
-    this.set("countRiskHigh", countRiskHigh);
-    this.set("countRiskMedium", countRiskMedium);
-    this.set("countRiskLow", countRiskLow);
-    this.set("countRiskNone", countRiskNone);
-    this.set("countRiskUnknown", countRiskUnknown);
+    this.set("countRiskCritical", countRiskCritical); // eslint-disable-line
+    this.set("countRiskHigh", countRiskHigh); // eslint-disable-line
+    this.set("countRiskMedium", countRiskMedium); // eslint-disable-line
+    this.set("countRiskLow", countRiskLow); // eslint-disable-line
+    this.set("countRiskNone", countRiskNone); // eslint-disable-line
+    this.set("countRiskUnknown", countRiskUnknown); // eslint-disable-line
 
     return {
       labels: [
@@ -130,31 +127,31 @@ const File = DS.Model.extend(BaseModelMixin, {
     };
   }),
 
-  isNoneStatus: (function() {
+  isNoneStatus: computed('dynamicStatus', function() {
     const status = this.get('dynamicStatus');
     return status === ENUMS.DYNAMIC_STATUS.NONE;
-  }).property('dynamicStatus'),
+  }),
 
-  isNotNoneStatus: Ember.computed.not('isNoneStatus'),
+  isNotNoneStatus: computed.not('isNoneStatus'),
 
-  isReady: (function() {
+  isReady: computed('dynamicStatus', function() {
     const status = this.get('dynamicStatus');
     return status === ENUMS.DYNAMIC_STATUS.READY;
-  }).property('dynamicStatus'),
+  }),
 
-  isNotReady: Ember.computed.not('isReady'),
+  isNotReady: computed.not('isReady'),
 
-  isNeitherNoneNorReady: (function() {
+  isNeitherNoneNorReady: computed('dynamicStatus', function() {
     const status = this.get('dynamicStatus');
     return ![ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE].includes(status);
-  }).property('dynamicStatus'),
+  }),
 
-  startingScanStatus: (function() {
+  startingScanStatus: computed('dynamicStatus', function() {
     const status = this.get('dynamicStatus');
     return ![ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE, ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN].includes(status);
-  }).property('dynamicStatus'),
+  }),
 
-  statusText: (function() {
+  statusText: computed('dynamicStatus', function() {
     const tDeviceBooting = this.get("tDeviceBooting");
     const tDeviceDownloading = this.get("tDeviceDownloading");
     const tDeviceInstalling = this.get("tDeviceInstalling");
@@ -178,7 +175,7 @@ const File = DS.Model.extend(BaseModelMixin, {
       default:
         return "Unknown Status";
     }
-  }).property('dynamicStatus'),
+  }),
 
   setDynamicStatus(status) {
     this.store.push({

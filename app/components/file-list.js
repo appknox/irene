@@ -1,7 +1,8 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { computed, observer } from '@ember/object';
 import PaginateMixin from 'irene/mixins/paginate';
 
-const FileListComponent = Ember.Component.extend(PaginateMixin, {
+const FileListComponent = Component.extend(PaginateMixin, {
 
   project: null,
 
@@ -10,14 +11,14 @@ const FileListComponent = Ember.Component.extend(PaginateMixin, {
 
   classNames: ["columns", "margin-top"],
 
-  extraQueryStrings: Ember.computed("project.id", function() {
+  extraQueryStrings: computed("project.id", function() {
     const query =
       {projectId: this.get("project.id")};
     return JSON.stringify(query, Object.keys(query).sort());
   }),
 
 
-  newFilesObserver: Ember.observer("realtime.FileCounter", function() {
+  newFilesObserver: observer("realtime.FileCounter", function() {
     return this.incrementProperty("version");
   })
 }

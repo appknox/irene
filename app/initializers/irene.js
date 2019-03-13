@@ -1,5 +1,10 @@
 import ENV from 'irene/config/environment';
 
+function isTrue(value) {
+  value = String(value).toLowerCase();
+  return value === 'true';
+}
+
 const initialize = function(application) {
   // inject Ajax
   application.inject('route', 'ajax', 'service:ajax');
@@ -29,8 +34,10 @@ const initialize = function(application) {
       ENV.deviceFarmHost = deviceFarmWebsockifyHost.hostname;
     }
     ENV.socketPath = runtimeConfig.IRENE_API_SOCKET_PATH || ENV.socketPath;
-    ENV.enableSSO = runtimeConfig.IRENE_ENABLE_SSO || ENV.enableSSO;
-    ENV.isEnterprise = runtimeConfig.ENTERPRISE || ENV.isEnterprise;
+    ENV.enableSSO = isTrue(runtimeConfig.IRENE_ENABLE_SSO || ENV.enableSSO);
+    ENV.isEnterprise = isTrue(runtimeConfig.ENTERPRISE || ENV.isEnterprise);
+    ENV.isRegistrationEnabled = isTrue(runtimeConfig.IRENE_ENABLE_REGISTRATION || ENV.isRegistrationEnabled);
+    ENV.registrationLink = runtimeConfig.registrationLink || ENV.registrationLink;
     ENV.whitelabel = Object.assign({}, ENV.whitelabel, runtimeConfig.whitelabel);
   }
 

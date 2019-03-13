@@ -1,6 +1,6 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 
-const OverallReportComponent = Ember.Component.extend({
+const OverallReportComponent = Component.extend({
 
   // stat: (function() {
   //   return this.get('store').find('stat', 1);

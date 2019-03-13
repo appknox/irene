@@ -1,6 +1,9 @@
-/* jshint node: true */
-
 var url = require('url');
+
+function isTrue(value) {
+  value = String(value).toLowerCase();
+  return value === 'true';
+}
 
 module.exports = function(environment) {
   var devicefarmEnv = process.env.IRENE_DEVICEFARM_URL || "wss://devicefarm.appknox.com";
@@ -10,13 +13,16 @@ module.exports = function(environment) {
   var deviceFarmHost = deviceFarmWebsockifyHost.hostname;
   var host = process.env.IRENE_API_HOST || 'https://api.appknox.com';
   var socketPath = process.env.IRENE_API_SOCKET_PATH || 'https://socket.appknox.com';
-  var enableSSO = process.env.IRENE_ENABLE_SSO || false;
-
+  var enableSSO = isTrue(process.env.IRENE_ENABLE_SSO || false);
+  var enableRegistration = isTrue(process.env.IRENE_ENABLE_REGISTRATION || false);
+  var registrationLink = process.env.IRENE_REGISTRATION_LINK || '';
   var ENV = {
     version: Date.now(),
     isDevknox: false,
     isAppknox: false,
     isEnterprise: false,
+    isRegistrationEnabled: enableRegistration,
+    registrationLink: registrationLink,
     exportApplicationGlobal: true,
     devknoxPrice: 9,  // This should also change in `mycroft/settings.py`
     socketPath: socketPath,
@@ -71,8 +77,8 @@ module.exports = function(environment) {
     locationType: 'auto',
     modulePrefix: 'irene',
     environment: environment,
-    intercomAppID: "mbkqc0o1",
-    enableIntercom: true,
+    enableCrisp: true,
+    enableHotjar: true,
     enablePendo: true,
     enableInspectlet: true,
     enableCSB: true,
@@ -194,7 +200,8 @@ module.exports = function(environment) {
       setUnknownAnalysisStatus: "set_unknown_analysis_status",
       userSearch: "user_search",
       status: 'status',
-      ping: 'ping'
+      ping: 'ping',
+      requestAccess: 'request_access'
     },
     csb: {
       reportDownload: { feature: "Account Settings", module: "Setup", product: "Appknox" },
@@ -238,10 +245,12 @@ module.exports = function(environment) {
     ENV['ember-cli-mirage'] = {
       enabled:false
     };
-    ENV.enableIntercom = false;
+    ENV.enableCrisp = false;
+    ENV.enableHotjar = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
+    ENV.isRegistrationEnabled = true;
     ENV.gReCaptcha = {
       siteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
     }
@@ -252,31 +261,29 @@ module.exports = function(environment) {
       enabled: true
     };
     ENV['host'] = "http://0.0.0.0:8000";
-    ENV.enableIntercom = false;
+    ENV.enableCrisp = false;
+    ENV.enableHotjar = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
+    ENV.isRegistrationEnabled = true;
     ENV.rollbar = {
       enabled: false
     };
   }
 
-  if (environment === 'whitelabel') {
-    ENV.enableIntercom = false;
-    ENV.enablePendo = true;  //TODO: fix this.
-    ENV.enableInspectlet = false;
-    ENV.enableCSB = false;
-  }
 
   if (environment === 'testing') {
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
-    ENV['host'] = "https://api.appknox.com";
-    ENV.enableIntercom = false;
+    ENV['host'] = "http://localhost:8000";
+    ENV.enableCrisp = false;
+    ENV.enableHotjar = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
+    ENV.isRegistrationEnabled = true;
     ENV.rollbar = {
       enabled: false
     };
@@ -310,11 +317,20 @@ module.exports = function(environment) {
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
     ENV.APP.rootElement = '#ember-testing';
+    ENV.APP.autoboot = false;
   }
 
-  if (environment === 'whitelabel') {
-    ENV.isEnterprise = process.env.ENTERPRISE;
-    ENV.whitelabel.enabled = (process.env.WHITELABEL_ENABLED || '').toString().toLowerCase() === 'true';
+  if (
+    environment === 'whitelabel' ||
+    environment === 'sequelstring'
+  ) {
+    ENV.enableCrisp = false;
+    ENV.enableHotjar = false;
+    ENV.enablePendo = true;  //TODO: fix this.
+    ENV.enableInspectlet = false;
+    ENV.enableCSB = false;
+    ENV.isEnterprise = isTrue(process.env.ENTERPRISE);
+    ENV.whitelabel.enabled = isTrue(process.env.WHITELABEL_ENABLED);
     if (ENV.whitelabel.enabled) {
       ENV.whitelabel.name = process.env.WHITELABEL_NAME;
       ENV.whitelabel.logo = process.env.WHITELABEL_LOGO;

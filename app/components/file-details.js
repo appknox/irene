@@ -1,8 +1,12 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
+import { observer } from '@ember/object';
 import ENUMS from 'irene/enums';
+import $ from 'jquery';
 
-const FileDetailsComponent = Ember.Component.extend({
-  ajax: Ember.inject.service(),
+const FileDetailsComponent = Component.extend({
+  ajax: service(),
 
   sortImpactAscending: false,
 
@@ -11,11 +15,11 @@ const FileDetailsComponent = Ember.Component.extend({
   vulnerabilityType: ENUMS.VULNERABILITY_TYPE.UNKNOWN,
   vulnerabilityTypes: ENUMS.VULNERABILITY_TYPE.CHOICES.slice(0, -1),
 
-  analyses: (function() {
+  analyses: computed("file.sortedAnalyses", function() {
     return this.get("file.sortedAnalyses");
-  }).property("file.sortedAnalyses"),
+  }),
 
-  analysesObserver: Ember.observer('analyses.@each', function() {
+  analysesObserver: observer('analyses.@each', function() {
     this.updateUnhiddenAnalysis();
   }),
 
@@ -56,11 +60,11 @@ const FileDetailsComponent = Ember.Component.extend({
     return filteredAnalysis;
   },
 
-  sortedUnhiddenAnalyses: (function() {
+  sortedUnhiddenAnalyses: computed(function() {
     return this.sortUnhiddenAnalyses();
-  }).property(),
+  }),
 
-  sortedAnalyses: Ember.computed.sort('sortedUnhiddenAnalyses', 'analysesSorting'),
+  sortedAnalyses: computed.sort('sortedUnhiddenAnalyses', 'analysesSorting'),
 
   actions: {
     filterVulnerabilityType() {

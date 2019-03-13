@@ -1,6 +1,6 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 
-const PromptBoxComponent = Ember.Component.extend({
+const PromptBoxComponent = Component.extend({
 
   isActive: false,
   classNames: ["modal"],

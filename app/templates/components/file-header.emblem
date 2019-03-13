@@ -40,33 +40,18 @@
           button.is-primary.margin-top20 disabled="disabled"
             | #{t "completed"} &nbsp;
             = fa-icon "fa-check"
-          if trial.isTrial
-            button.is-primary.margin-top20.margin-left click="openSubscribeModal"
-             .fa-font-size-small
-               = fa-icon "fa-repeat"
-          else
-            button.is-primary.margin-top20.margin-left5.ac-static-rescan click="openRescanModal"
-              .fa-font-size-small
-                = fa-icon "fa-repeat"
+
+          button.is-primary.margin-top20.margin-left5.ac-static-rescan click="openRescanModal"
+            .fa-font-size-small
+              = fa-icon "fa-repeat"
         else
            button.is-primary.margin-top20.is-progress disabled="disabled"
             | #{t "scanning"} : #{file.staticScanProgress}
             | %
       = dynamic-scan file=file notVNCViewer=true dynamicScanText=(t 'start')
       .column.flex-center
-        if file.ifManualNotRequested
-          if trial.isTrial
-            button.is-primary.margin-top20 click="openSubscribeModal"
-              .fa-font-size
-                = fa-icon "fa-play"
-              | &nbsp; #{t "start"}
-          else
-            button.is-primary.margin-top20.ac-request-manual-scan click="openManualScanModal"
-              .fa-font-size
-                = fa-icon "fa-play"
-              | &nbsp; #{t "start"}
-        else
-          button.is-primary.margin-top20 disabled="disabled"
+        if file.isManualRequested
+           button.is-primary.margin-top20 disabled="disabled"
             if file.isManualDone
               = fa-icon "fa-check"
               | &nbsp; #{t "completed"}
@@ -74,6 +59,19 @@
             else
               = fa-icon "fa-clock-o"
               | &nbsp; #{t "requested"}
+
+        else
+          if organization.selected.isTrial
+              button.is-primary.margin-top20 click={(perform openRequestAccessModal)}
+                .fa-font-size
+                  = fa-icon "fa-play"
+                | &nbsp; #{t "start"}
+          else
+            button.is-primary.margin-top20.ac-request-manual-scan click="openManualScanModal"
+              .fa-font-size
+                = fa-icon "fa-play"
+              | &nbsp; #{t "start"}
+
 
 .card.is-fullwidth.app-details-card
   header.card-header
@@ -90,14 +88,19 @@
       .card-button
         .columns
           .column.card-button
-            button.mp-pdf-report click="getPDFReportLink" disabled=isDownloadingReport
-              if isDownloadingReport
-                .fa-font-size
-                  i.fa class="fa-spinner fa-spin"
-                  | &nbsp;
-              else
+            if organization.selected.isTrial
+              button.is-primary.margin-top20 click={(perform openRequestAccessModal)}
                 = fa-icon "download"
-              | &nbsp; #{ t "pdfReport"}
+                | &nbsp; #{ t "pdfReport"}
+            else
+              button.mp-pdf-report click="getPDFReportLink" disabled=isDownloadingReport
+                if isDownloadingReport
+                  .fa-font-size
+                    i.fa class="fa-spinner fa-spin"
+                    | &nbsp;
+                else
+                  = fa-icon "download"
+                | &nbsp; #{ t "pdfReport"}
   .card-content
     if isScanDetails
       .columns
@@ -169,16 +172,16 @@
 
         = ember-chart type='bar' data=owaspData.web width=320 height=200 options=barChartOptions
 
-= modal-card isActive=showSubscribeModal title=(t "modalCard.subscription.title")
+= modal-card isActive=showRequestAccessModal title=(t "modalCard.requestAccess.title")
   h5
-   = t "modalCard.subscription.description"
+   = t "modalCard.requestAccess.description"
   .columns
-    .column.is-one-sixth
-      button.modal-button.is-primary click="subscribePlan"
-        =  t "yes"
+    .column.is-one-third
+      button.modal-button.is-primary click={(perform requestAccess)}
+        =  t "modalCard.requestAccess.button"
     .column
-      button.modal-button.is-primary click="closeSubscribeModal"
-        = t "no"
+      button.modal-button.is-primary click={(perform closeRequestAccessModal)}
+        = t "cancel"
 
 = modal-card isActive=showManualScanModal title=(t "modalCard.manual.title") class="manual-scan-modal"
   h5

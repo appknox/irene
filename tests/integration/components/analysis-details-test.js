@@ -1,9 +1,10 @@
-import Ember from 'ember';
 import ENUMS from 'irene/enums';
 import tHelper from 'ember-i18n/helper';
 import localeConfig from 'ember-i18n/config/en';
 import { test, moduleForComponent } from 'ember-qunit';
 import { startMirage } from 'irene/initializers/ember-cli-mirage';
+import { run } from '@ember/runloop';
+import { getOwner } from '@ember/application';
 
 moduleForComponent('analysis-details', 'Integration | Component | analysis details', {
   unit: true,
@@ -28,7 +29,7 @@ moduleForComponent('analysis-details', 'Integration | Component | analysis detai
   ],
   beforeEach() {
     // set the locale and the config
-    Ember.getOwner(this).lookup('service:i18n').set('locale', 'en');
+    getOwner(this).lookup('service:i18n').set('locale', 'en');
     this.register('locale:en/config', localeConfig);
 
     // register t helper
@@ -47,7 +48,7 @@ test('tapping button fires an external action', function(assert) {
 
   var component = this.subject();
   this.render();
-  Ember.run(function() {
+  run(function() {
     component.set("risks", ENUMS.RISK.CHOICES.slice(0, -1));
     component.set('analysis', {computedRisk:ENUMS.RISK.NONE});
     assert.deepEqual(component.get("filteredRisks"),

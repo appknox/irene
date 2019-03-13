@@ -1,11 +1,12 @@
 import Ember from 'ember';
 import ENUMS from 'irene/enums';
-import Resolver from 'irene/resolver';
 import config from 'irene/config/environment';
 import installPendo from 'irene/utils/install-pendo';
+import Application from '@ember/application';
+import Resolver from './resolver';
 import loadInitializers from 'ember-load-initializers';
+import installCrisp from 'irene/utils/install-crisp';
 import installHotjar from 'irene/utils/install-hotjar';
-import installIntercom from 'irene/utils/install-intercom';
 import customerSuccessBox from 'irene/utils/customer-success-box';
 
 config.isDevknox = 'secure.devknox.io' === location.hostname;
@@ -20,13 +21,13 @@ if (config.isAppknox) {
 }
 
 installPendo();
+installCrisp();
 installHotjar();
-installIntercom();
 customerSuccessBox();
 
 Ember.MODEL_FACTORY_INJECTIONS = true;
 
-const App = Ember.Application.extend({
+const App = Application.extend({
   modulePrefix: config.modulePrefix,
   podModulePrefix: config.podModulePrefix,
   Resolver

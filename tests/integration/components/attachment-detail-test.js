@@ -1,8 +1,9 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
 import tHelper from 'ember-i18n/helper';
 import localeConfig from 'ember-i18n/config/en';
 import { test, moduleForComponent } from 'ember-qunit';
 import { startMirage } from 'irene/initializers/ember-cli-mirage';
+import { run } from '@ember/runloop';
 
 moduleForComponent('attachment-detail', 'Integration | Component | attachment detail', {
   unit: true,
@@ -19,7 +20,7 @@ moduleForComponent('attachment-detail', 'Integration | Component | attachment de
   ],
   beforeEach() {
     // set the locale and the config
-    Ember.getOwner(this).lookup('service:i18n').set('locale', 'en');
+    getOwner(this).lookup('service:i18n').set('locale', 'en');
     this.register('locale:en/config', localeConfig);
 
     // register t helper
@@ -37,7 +38,7 @@ moduleForComponent('attachment-detail', 'Integration | Component | attachment de
 test('clicking download link fires an external action', function(assert) {
   var component = this.subject();
 
-  Ember.run(function() {
+  run(function() {
     component.set("attachment", {downloadUrl: '/api/attachments/20'});
     component.send('downloadAttachment');
     assert.equal(component.get('isDownloadingAttachment'),true);

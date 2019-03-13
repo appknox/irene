@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import { helper } from '@ember/component/helper';
 import ENUMS from 'irene/enums';
 
 export function metricImpact(params) {
@@ -15,4 +15,4 @@ export function metricImpact(params) {
   }
 }
 
-export default Ember.Helper.helper(metricImpact);
+export default helper(metricImpact);
