@@ -12,5 +12,5 @@ test('it renders', function(assert) {
 
   this.render(hbs`{{file-tags}}`);
 
-  assert.equal(this.$().text().trim(), 'You can add/remove tags for this particular file+ ADD FILE TAGAre you sure you want to remove this file tagCancelOk');
+  assert.equal(this.$().text().trim(), 'You can add/remove tags for this particular file▼CREATE TAG');
 });

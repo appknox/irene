@@ -10,6 +10,7 @@
         color=labelColor
         showInput=true
         preferredFormat="hex"
+        clickoutFiresChange=true
         containerClassName="color-picker-container"
         replacerClassName="color-picker"
         onChange=(action "colorChanged")

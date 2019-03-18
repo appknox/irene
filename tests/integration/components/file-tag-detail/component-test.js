@@ -12,14 +12,5 @@ test('it renders', function(assert) {
 
   this.render(hbs`{{file-tag-detail}}`);
 
-  assert.equal(this.$().text().trim(), '');
-
-  // Template block usage:
-  this.render(hbs`
-    {{#file-tag-detail}}
-      template block text
-    {{/file-tag-detail}}
-  `);
-
-  assert.equal(this.$().text().trim(), 'template block text');
+  assert.equal(this.$().text().trim(), 'Are you sure you want to remove this file tagCancelOk');
 });
