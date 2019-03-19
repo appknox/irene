@@ -12,18 +12,19 @@ export default Service.extend({
   appscan: {},
 
   async load() {
-    const orgId = this.get("organization.selected.id");
-    this.get_scancount(orgId);
-    this.get_appscan(orgId);
+    this.get_scancount();
+    this.get_appscan();
   },
 
-  async get_scancount(orgId) {
+  async get_scancount() {
+    const orgId = this.get("organization.selected.id");
     const scancountUrl = [ENV.endpoints.organizations, orgId, ENV.endpoints.scancount].join('/');
     const scancount = await this.get('ajax').request(scancountUrl)
     this.set("scancount", scancount);
   },
 
-  async get_appscan(orgId) {
+  async get_appscan() {
+    const orgId = this.get("organization.selected.id");
     const endDate = new Date().toISOString();
     const startDate = moment(endDate).subtract('30', 'days').toISOString();
     let appscanUrl = [ENV.endpoints.organizations, orgId, ENV.endpoints.appscan].join('/');

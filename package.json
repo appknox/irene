@@ -82,6 +82,7 @@
     "ember-moment": "^7.7.0",
     "ember-netlify": "0.0.1",
     "ember-onboarding": "0.0.7",
+    "ember-power-calendar-moment": "^0.1.4",
     "ember-power-datepicker": "^0.5.2",
     "ember-power-select": "^2.0.4",
     "ember-resolver": "^4.1.0",

@@ -200,7 +200,7 @@ const OverallReportComponent = Component.extend({
     });
   },
 
-  projects: computed('realtime.ProjectCounter', function() {
+  projects: computed('realtime.FileCounter', function() {
     return this.get("store").query("organization-project", {limit:3});
   }),
 
@@ -209,32 +209,39 @@ const OverallReportComponent = Component.extend({
   }),
 
   updateStartDate: task(function * ({date}) {
-    this.set("selectedStartDate", date.toLocaleDateString());
-    this.set("startDate", date.toISOString());
+    this.set("selectedStartDate", date);
     yield this.get('updateAppScan').perform();
   }),
 
   updateEndDate: task(function * ({date}) {
-    this.set("selectedEndDate", date.toLocaleDateString());
-    this.set("endDate", date.toISOString());
+    this.set("selectedEndDate", date);
     yield this.get('updateAppScan').perform();
   }),
 
   updateAppScan: task(function *() {
-    const startDate = this.get("startDate");
-    const endDate = this.get("endDate");
+    const startDate = this.get("selectedStartDate");
+    const endDate = this.get("selectedEndDate");
     if(!startDate || !endDate) {
       return;
     }
     const orgId = this.get("organization.selected.id");
     let url = [ENV.endpoints.organizations, orgId, ENV.endpoints.appscan].join('/');
-    url += `?start_date=${startDate}&end_date=${endDate}`;
+    url += `?start_date=${startDate.toISOString()}&end_date=${endDate.toISOString()}`;
     const appscan = yield this.get('ajax').request(url);
     this.set("analytics.appscan", appscan);
   }),
 
   showHideDuration: task(function *() {
     yield this.set("showDatePicker", true);
+  }),
+
+  resetDuration: task(function *() {
+    this.set("showDatePicker", false);
+    this.setProperties({
+      selectedStartDate: null,
+      selectedEndDate: null
+    });
+    yield this.get("analytics").get_appscan()
   })
 
 });
