@@ -343,14 +343,17 @@ button
   margin: 0 auto
   width: 100%
 
-.edit-button
-  margin-left: 20px
-  position: relative
-  top: 5px
+.edit-buttons
   .fa-check
     color: $green
   .fa-times
     color: $red
+
+.edit-button
+  margin-left: 20px
+  position: relative
+  top: 5px
+  @extend .edit-buttons
 
 .edit-input
   max-width: 30%

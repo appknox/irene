@@ -1,8 +1,33 @@
 tr.plain-background
-  td
-    .file-tag.file-tag2 style="background-color:{{tag.color}};color:{{tag.invertedColor}}"
-      = tag.name
-  td
-    i.fa.risk-icons.fa-trash-o.removeUrl.remove click={(perform openRemoveFileTagConfirmBox)}
+  if showEditTagTemplate
+    td
+      .columns
+        .column.margin-top
+          = input class="form-control input" type="text" placeholder="Enter tag name" value=tagName
+        .column.max-width.margin-top
+          = spectrum-color-picker [
+            color=tagColor
+            showInput=true
+            preferredFormat="hex"
+            moveFiresChange=true
+            clickoutFiresChange=true
+            containerClassName="color-picker-container"
+            replacerClassName="color-picker"
+            onChange=(action "colorChanged")
+          ]
+    td.edit-buttons
+      i.fa.risk-icons.fa-check.removeUrl.remove click={(perform saveFileTag)}
+      i.fa.risk-icons.fa-times.removeUrl.remove.margin-left20 click={(perform cancelEditing)}
+
+  else
+    td
+      .file-tag.file-tag2 style="background-color:{{tag.color}};color:{{tag.invertedColor}}"
+        = tag.name
+    td
+      i.fa.risk-icons.fa-pencil.removeUrl.remove.red-text click={(perform editFileTag)}
+      i.fa.risk-icons.fa-trash-o.removeUrl.remove.margin-left20 click={(perform openRemoveFileTagConfirmBox)}
+
+
+
 
 = confirm-box isActive=showRemoveFileTagConfirmBox title="Are you sure you want to remove this file tag" delegate=this disabled=isDeletingFileTag
