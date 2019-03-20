@@ -329,6 +329,9 @@ module.exports = function(environment) {
     ENV.enablePendo = true;  //TODO: fix this.
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
+    ENV.rollbar = {
+      enabled: false
+    };
     ENV.isEnterprise = isTrue(process.env.ENTERPRISE);
     ENV.whitelabel.enabled = isTrue(process.env.WHITELABEL_ENABLED);
     if (ENV.whitelabel.enabled) {
