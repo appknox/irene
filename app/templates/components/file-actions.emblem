@@ -38,8 +38,12 @@
                   | Scan Status
             .columns
               .column.margin-top
-                = input id="api-scan-status" class="checkbox" checked=fileDetails.isApiDone type="checkbox" click=(perform setApiScanStatus) class="display-inline"
-                | &nbsp; Is API done
+                div
+                  = input id="api-scan-status" class="checkbox" checked=fileDetails.isApiDone type="checkbox" click=(perform setApiScanStatus) class="display-inline"
+                  | &nbsp; Is API done
+                div
+                  = input type="checkbox" class="checkbox" name="dynamic-scan-status" checked=fileDetails.isDynamicDone
+                  | &nbsp; Is Dynamic done
 
 
       .columns
