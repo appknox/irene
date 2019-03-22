@@ -23,8 +23,7 @@ export default Component.extend({
   }),
 
   fileDetails: computed(function() {
-    const fileid = this.get("file.fileid");
-    return this.get("store").findRecord("security/file", fileid);
+    return this.get('file');
   }),
 
   ireneFilePath: computed(function() {
