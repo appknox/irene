@@ -49,7 +49,7 @@ test('it exists', function(assert) {
     assert.equal(user.get('hasExpiryDate'), false, "No Expiry Date");
 
     assert.equal(user.get('expiryText'), "subscriptionExpired", "Expiry Text");
-    user.set('expiryDate', new Date("25 March 2019"));
+    user.set('expiryDate', new Date("25 March 2050"));
     assert.equal(user.get('expiryText'), "subscriptionWillExpire", "Expiry Text");
 
     assert.equal(user.get('namespaceItems'), undefined, "Namespace Items");
