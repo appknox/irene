@@ -10,19 +10,62 @@ import { observer } from '@ember/object';
 class ChartData {
   constructor() {
     this.dates =  [];
+    this.months = [];
+    this.years = [];
     this.dates_obj = {};
     this.projects_order = [];
     this.projects_mapping = {};
+    this.showMonthlyData = false;
   }
 
   getChartX() {
     const dates = this.dates.map(d=>d.toDate());
+    if (this.showMonthlyData) {
+      const group_dates = dates.reduce(function (obj, item) {
+        const key = `${item.getMonth()}${item.getYear()}`
+        obj[key] = obj[key] || [];
+        obj[key].push(item);
+        return obj;
+      }, {});
+
+      const humanized_months = moment.months();
+      const all_months = [];
+      const months_obj = [];
+
+      Object.keys(group_dates).map(function (key) {
+        months_obj.push({
+          'date': group_dates[key][0]
+        });
+        return months_obj;
+      });
+
+      months_obj.sort((a, b) => new moment(a.date).format('YYYYMMDD') - new moment(b.date).format('YYYYMMDD'));
+
+      const months = Object.keys(months_obj).map(function (key) {
+        all_months.push(months_obj[key].date);
+        return humanized_months[months_obj[key].date.getMonth()];
+      });
+      this.months = all_months;
+      if(this.months.length > 12) {
+        const years = []
+        const startYear = this.months[0].getFullYear()
+        const endYear = this.months[this.months.length - 1].getFullYear()
+        for (let i = startYear; i <= endYear; i++) years.push(i);
+        this.years = years;
+        return ['x', ...years]
+      }
+      return ['x', ...months]
+    }
     return ['x', ...dates];
   }
 
   getChartProject(project) {
-    const yarray = Array.from(new Array(this.dates.length), () => 0);
+    const yarray_dates = Array.from(new Array(this.dates.length), () => 0);
+    const yarray_months = Array.from(new Array(this.months.length), () => 0);
+    const yarray_years = Array.from(new Array(this.years.length), () => 0);
     const project_mapping = this.projects_mapping[project];
+    let yarray = []
+
 
     if (!project_mapping){
       return []
@@ -32,15 +75,40 @@ class ChartData {
       if(obj.package_name != project) {
         return;
       }
-      const index = this.find_date_index(moment(obj.created_on_date));
-      yarray[index] = yarray[index] + obj.file_count;
-    })
-
+      let index;
+      if (this.showMonthlyData) {
+        if (yarray_months.length > 12) {
+          index = this.find_year_index(moment(obj.created_on_date));
+          yarray_years[index] = yarray_years[index] + parseInt(obj.file_count);
+          yarray = yarray_years
+        }
+        else {
+          index = this.find_month_index(moment(obj.created_on_date));
+          yarray_months[index] = yarray_months[index] + parseInt(obj.file_count);
+          yarray = yarray_months
+        }
+      }
+      else {
+        index = this.find_date_index(moment(obj.created_on_date));
+        yarray_dates[index] = yarray_dates[index] + obj.file_count;
+        yarray = yarray_dates
+      }
+    });
     return [project, ...yarray];
   }
 
+  getChartProjects() {
+    return this.projects_order.map(
+      project => this.getChartProject(project)
+    )
+  }
+
   getProjects() {
-    return this.projects_order;
+    return this.projects_order
+  }
+
+  showGroupedData(value) {
+    this.showMonthlyData = value;
   }
 
   push(obj) {
@@ -102,6 +170,29 @@ class ChartData {
     }
     return -1;
   }
+
+  find_month_index(incoming_date) {
+    const yarray_months = Array.from(new Array(this.months.length), () => 0);
+    let index;
+    Object.keys(yarray_months).find(key => {
+      if (this.months[key].getMonth() == incoming_date.month()) {
+        index = key
+      }
+    });
+    return index
+  }
+
+  find_year_index(incoming_date) {
+    const yarray_years = Array.from(new Array(this.years.length), () => 0);
+    let index;
+    Object.keys(yarray_years).find(key => {
+      if (this.years[key] == incoming_date.year()) {
+        index = key
+      }
+    });
+    return index
+  }
+
 }
 const OverallReportComponent = Component.extend({
 
@@ -109,6 +200,9 @@ const OverallReportComponent = Component.extend({
   realtime: service('realtime'),
   analytics: service('analytics'),
   organization: service('organization'),
+
+  showMonthlyData: false,
+
 
   didInsertElement() {
     this.appscanData();
@@ -146,16 +240,62 @@ const OverallReportComponent = Component.extend({
     const appscanData = this.get("analytics.appscan");
     const sortedData = appscanData.results.sortBy('created_on_date');
     const chartData = new ChartData();
+    chartData.showGroupedData(this.get("showMonthlyData"));
     sortedData.forEach(data => chartData.push(data));
-    window.charttest = chartData;
-    window.test = bb.generate({
+    if (this.get("showMonthlyData")) {
+      bb.generate({
+        data: {
+          x: "x",
+          columns: [
+            chartData.getChartX(),
+            ...chartData.getChartProjects()
+          ],
+          type: "bar",
+          groups: [
+            chartData.getProjects()
+          ]
+        },
+        legend: {
+          show: false
+        },
+        tooltip: {
+          grouped: false
+        },
+        bindto: "#app-scan-chart",
+        axis: {
+          x: {
+            type: 'category',
+            label: {
+              text: 'month',
+              position: 'outer-right'
+            },
+          },
+          y: {
+            padding: 0,
+            default: [0, 5],
+            min: 0,
+            type: 'number',
+            label: {
+              text: 'no. of scans',
+              position: 'outer-center'
+            },
+            tick: {
+              fit: false,
+              format: function (x) {
+                return Math.floor(x);
+              }
+            }
+          }
+        },
+      });
+    }
+    else {
+      bb.generate({
       data: {
         x: "x",
         columns: [
           chartData.getChartX(),
-          ...chartData.getProjects().map(
-            project => chartData.getChartProject(project)
-          )
+          ...chartData.getChartProjects()
         ],
         type: "bar",
         groups: [
@@ -196,16 +336,13 @@ const OverallReportComponent = Component.extend({
             }
           }
         }
-    },
-    });
+       },
+      });
+    }
   },
 
   projects: computed('realtime.FileCounter', function() {
     return this.get("store").query("organization-project", {limit:3});
-  }),
-
-  scancount: computed(function() {
-    return this.get("analytics.scancount");
   }),
 
   updateStartDate: task(function * ({date}) {
@@ -224,6 +361,8 @@ const OverallReportComponent = Component.extend({
     if(!startDate || !endDate) {
       return;
     }
+    const monthDiff = Math.abs(moment(startDate).diff(moment(endDate), 'month'));
+    this.set("showMonthlyData", monthDiff > 0);
     const orgId = this.get("organization.selected.id");
     let url = [ENV.endpoints.organizations, orgId, ENV.endpoints.appscan].join('/');
     url += `?start_date=${startDate.toISOString()}&end_date=${endDate.toISOString()}`;
@@ -237,6 +376,7 @@ const OverallReportComponent = Component.extend({
 
   resetDuration: task(function *() {
     this.set("showDatePicker", false);
+    this.set("showMonthlyData", false);
     this.setProperties({
       selectedStartDate: null,
       selectedEndDate: null
