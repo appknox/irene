@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import { computed, observer } from '@ember/object';
+import { computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import ENUMS from 'irene/enums';
 import { task } from 'ember-concurrency';
@@ -22,10 +22,6 @@ export default Component.extend({
     )
   }),
 
-  fileDetails: computed(function() {
-    return this.get('file');
-  }),
-
   ireneFilePath: computed(function() {
     const fileid = this.get("file.id");
     const ireneHost = ENV.ireneHost;
@@ -36,7 +32,7 @@ export default Component.extend({
     let isApiDone = this.$("#api-scan-status").prop('checked');
     let apiScanStatus = ENUMS.SCAN_STATUS.UNKNOWN;
     if(isApiDone) apiScanStatus = ENUMS.SCAN_STATUS.COMPLETED;
-    const file = yield this.get("fileDetails")
+    const file = yield this.get("file")
     file.set('apiScanStatus', apiScanStatus);
     yield file.save();
   }).evented(),
@@ -55,13 +51,8 @@ export default Component.extend({
     this.get("notify").error(errMsg);
   }),
 
-  /* Watch for isDynamicDone input */
-  watchDynamicDone: observer('fileDetails.isDynamicDone', function(){
-    this.get('setDynamicDone').perform();
-  }),
-
   setDynamicDone: task(function * () {
-    const file = yield this.get("fileDetails");
+    const file = yield this.get("file");
     yield file.save();
   }).evented(),
 
@@ -155,7 +146,7 @@ export default Component.extend({
 
   addAnalysis: task(function *() {
     const vulnerability = this.get("selectedVulnerability");
-    const file = this.get("fileDetails");
+    const file = this.get("file");
 
     if(isEmpty(vulnerability)) {
       return this.get("notify").error("Please select a vulnerability");

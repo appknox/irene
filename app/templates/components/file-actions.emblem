@@ -3,12 +3,12 @@
     .file-action-container
       .columns
         / .column.is-one-sixth.margin-top
-        /   = link-to 'authenticated.security.files' fileDetails.project.id
+        /   = link-to 'authenticated.security.files' file.project.id
         /     = fa-icon "caret-left"
         /     | &nbsp; View All Files
         .column
           h3
-            | #{fileDetails.name} | #{fileDetails.id}
+            | #{file.name} | #{file.id}
 
         .column.content-right
           button.is-primary click={(perform downloadApp)}
@@ -39,10 +39,10 @@
             .columns
               .column.margin-top
                 div
-                  = input id="api-scan-status" class="checkbox" checked=fileDetails.isApiDone type="checkbox" click=(perform setApiScanStatus) class="display-inline"
+                  = input id="api-scan-status" class="checkbox" checked=file.isApiDone type="checkbox" click=(perform setApiScanStatus) class="display-inline"
                   | &nbsp; Is API done
                 div
-                  = input type="checkbox" class="checkbox" name="dynamic-scan-status" checked=fileDetails.isDynamicDone
+                  = input type="checkbox" class="checkbox" name="dynamic-scan-status" checked=file.isDynamicDone click=(perform setDynamicDone)
                   | &nbsp; Is Dynamic done
 
 
@@ -62,7 +62,7 @@
 
             .columns
               .column
-                = analysis-list fileDetails=fileDetails
+                = analysis-list fileDetails=file
 
 = modal-card class="input-modal" isActive=showGenerateReportModal title="Generate Report"
   .card-body
