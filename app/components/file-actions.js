@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
+import { computed, observer } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import ENUMS from 'irene/enums';
 import { task } from 'ember-concurrency';
@@ -23,8 +23,7 @@ export default Component.extend({
   }),
 
   fileDetails: computed(function() {
-    const fileid = this.get("file.fileid");
-    return this.get("store").findRecord("security/file", fileid);
+    return this.get('file');
   }),
 
   ireneFilePath: computed(function() {
@@ -47,6 +46,30 @@ export default Component.extend({
   }),
 
   setApiScanStatusErrored: on('setApiScanStatus:errored', function(_, error) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (error.errors && error.errors.length) {
+      errMsg = error.errors[0].detail || errMsg;
+    } else if(error.message) {
+      errMsg = error.message;
+    }
+    this.get("notify").error(errMsg);
+  }),
+
+  /* Watch for isDynamicDone input */
+  watchDynamicDone: observer('fileDetails.isDynamicDone', function(){
+    this.get('setDynamicDone').perform();
+  }),
+
+  setDynamicDone: task(function * () {
+    const file = yield this.get("fileDetails");
+    yield file.save();
+  }).evented(),
+
+  setDynamicDoneSucceeded: on('setDynamicDone:succeeded', function() {
+    this.get('notify').success('Dynamic scan status updated');
+  }),
+
+  setDynamicDoneErrored: on('setDynamicDone:errored', function(_, error) {
     let errMsg = this.get('tPleaseTryAgain');
     if (error.errors && error.errors.length) {
       errMsg = error.errors[0].detail || errMsg;

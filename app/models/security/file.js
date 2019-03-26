@@ -14,7 +14,8 @@ export default DS.Model.extend({
 
   isApiDone: computed('apiScanStatus', function() {
     const apiScanStatus = this.get("apiScanStatus");
-    if(apiScanStatus === ENUMS.SCAN_STATUS.COMPLETED) return true
-  })
+    if(apiScanStatus === ENUMS.SCAN_STATUS.COMPLETED) return true;
+  }),
+  isDynamicDone: DS.attr('boolean'),
 
 });
