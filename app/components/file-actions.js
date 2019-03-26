@@ -27,7 +27,7 @@ export default Component.extend({
   }),
 
   ireneFilePath: computed(function() {
-    const fileid = this.get("file.fileid");
+    const fileid = this.get("file.id");
     const ireneHost = ENV.ireneHost;
     return [ireneHost, "file", fileid].join('/');
   }),
@@ -85,13 +85,13 @@ export default Component.extend({
 
   confirmPurge: task(function * () {
     this.set('isPurgingAPIAnalysis', true);
-    const fileid = this.get("file.fileid");
+    const fileid = this.get("file.id");
     const url = [ENV.endpoints.files,fileid, ENV.endpoints.purgeAPIAnalyses].join('/');
     return yield this.get("ajax").post(url, { namespace: 'api/hudson-api'})
   }).evented(),
 
   confirmPurgeSucceeded: on('confirmPurge:succeeded', function() {
-    const fileid = this.get("file.fileid");
+    const fileid = this.get("file.id");
     this.get("store").findRecord("security/file", fileid);
     this.get('notify').success('Successfully Purged the Analysis');
     this.set('isPurgingAPIAnalysis', false);
@@ -120,7 +120,7 @@ export default Component.extend({
   }).evented(),
 
   downloadApp: task(function *() {
-    const fileid = this.get("file.fileid");
+    const fileid = this.get("file.id");
     const url = [ENV.endpoints.apps, fileid].join('/');
     const data = yield this.get("ajax").request(url, { namespace: 'api/hudson-api'})
     window.location = data.url;
@@ -137,7 +137,7 @@ export default Component.extend({
   }),
 
   downloadReportExcel: task(function *() {
-    const fileid = this.get("file.fileid");
+    const fileid = this.get("file.id");
     const url = [ENV.endpoints.reports, fileid, 'download_url'].join('/');
     const data = yield this.get("ajax").request(url, { namespace: 'api/hudson-api'});
     window.location.href = data.xlsx;
@@ -193,7 +193,7 @@ export default Component.extend({
 
   actions: {
     generateReport() {
-      const fileid = this.get("file.fileid");
+      const fileid = this.get("file.id");
       const emails = this.get("emails");
       let data = {
       };
