@@ -16,6 +16,7 @@ class ChartData {
     this.projects_order = [];
     this.projects_mapping = {};
     this.showMonthlyData = false;
+    this.showYearlyData = false;
   }
 
   getChartX() {
@@ -52,6 +53,7 @@ class ChartData {
         const endYear = this.months[this.months.length - 1].getFullYear()
         for (let i = startYear; i <= endYear; i++) years.push(i);
         this.years = years;
+        this.showYearlyData = true;
         return ['x', ...years]
       }
       return ['x', ...months]
@@ -109,6 +111,10 @@ class ChartData {
 
   showGroupedData(value) {
     this.showMonthlyData = value;
+  }
+
+  showGroupedYearlyData() {
+    return this.showYearlyData;
   }
 
   push(obj) {
@@ -202,16 +208,43 @@ const OverallReportComponent = Component.extend({
   organization: service('organization'),
 
   showMonthlyData: false,
+  showYearlyData: false,
+  axisXType: 'timeseries',
+  axisXTickFormat: '%d/%m',
+  axisXLabelText: 'days',
+  axisYType: 'timeseries',
 
 
   didInsertElement() {
-    this.appscanData();
+    this.get('resetDuration').perform();
     this.scanCountData();
   },
 
   analyticsObserver: observer('analytics.appscan', 'analytics.scancount', function () {
     this.appscanData();
     this.scanCountData();
+  }),
+
+  showMonthlyDataObserver: observer('showMonthlyData', 'showYearlyData', function() {
+    if (this.get("showMonthlyData")) {
+      this.setProperties({
+        axisXType: 'category',
+        axisXTickFormat: '',
+        axisXLabelText: 'months',
+        axisYType: 'number'
+      });
+      if (this.get("showYearlyData"))
+        {
+        return this.set("axisXLabelText", 'years')
+        }
+      return this.set("axisXLabelText", 'months')
+    }
+    this.setProperties({
+      axisXType: 'timeseries',
+      axisXTickFormat: '%d/%m',
+      axisXLabelText: 'days',
+      axisYType: 'timeseries'
+    });
   }),
 
   scanCountData() {
@@ -236,70 +269,28 @@ const OverallReportComponent = Component.extend({
     });
   },
 
+
+
   appscanData() {
     const appscanData = this.get("analytics.appscan");
     const sortedData = appscanData.results.sortBy('created_on_date');
     const chartData = new ChartData();
     chartData.showGroupedData(this.get("showMonthlyData"));
     sortedData.forEach(data => chartData.push(data));
-    if (this.get("showMonthlyData")) {
-      bb.generate({
-        data: {
-          x: "x",
-          columns: [
-            chartData.getChartX(),
-            ...chartData.getChartProjects()
-          ],
-          type: "bar",
-          groups: [
-            chartData.getProjects()
-          ]
-        },
-        legend: {
-          show: false
-        },
-        tooltip: {
-          grouped: false
-        },
-        bindto: "#app-scan-chart",
-        axis: {
-          x: {
-            type: 'category',
-            label: {
-              text: 'month',
-              position: 'outer-right'
-            },
-          },
-          y: {
-            padding: 0,
-            default: [0, 5],
-            min: 0,
-            type: 'number',
-            label: {
-              text: 'no. of scans',
-              position: 'outer-center'
-            },
-            tick: {
-              fit: false,
-              format: function (x) {
-                return Math.floor(x);
-              }
-            }
-          }
-        },
-      });
-    }
-    else {
-      bb.generate({
+    const xData = chartData.getChartX();
+    const yData = chartData.getChartProjects()
+    const projects = chartData.getProjects()
+    this.set("showYearlyData", chartData.showGroupedYearlyData());
+    bb.generate({
       data: {
         x: "x",
         columns: [
-          chartData.getChartX(),
-          ...chartData.getChartProjects()
+          xData,
+          ...yData
         ],
         type: "bar",
         groups: [
-          chartData.getProjects()
+          projects
         ]
       },
       legend: {
@@ -311,12 +302,12 @@ const OverallReportComponent = Component.extend({
       bindto: "#app-scan-chart",
       axis: {
         x: {
-            type: 'timeseries',
-            tick: {
-                format: '%d/%m'
-            },
+          type: this.get("axisXType"),
+          tick: {
+            format: this.get("axisXTickFormat")
+          },
           label: {
-            text: 'day',
+            text: this.get("axisXLabelText"),
             position: 'outer-right'
           },
         },
@@ -324,21 +315,20 @@ const OverallReportComponent = Component.extend({
           padding: 0,
           default: [0, 5],
           min: 0,
-          type: 'timeseries',
+          type: this.get("axisYType"),
           label: {
             text: 'no. of scans',
             position: 'outer-center'
           },
           tick: {
             fit: false,
-            format: function(x){
+            format: function (x) {
               return Math.floor(x);
             }
           }
         }
-       },
-      });
-    }
+      },
+    });
   },
 
   projects: computed('realtime.FileCounter', function() {
