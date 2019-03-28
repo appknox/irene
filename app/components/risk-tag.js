@@ -12,6 +12,10 @@ export default Component.extend({
   tUntested: t("untested"),
   tRequested: t("requested"),
 
+  isNonPassedRiskOverridden: computed('analysis.{risk,overriddenRisk}', function() {
+    return this.get('analysis.overriddenRisk') != null && this.get('analysis.risk') != ENUMS.RISK.NONE;
+  }),
+
   scanningText: computed(
     "analysis.vulnerability.types",
     "analysis.file.{dynamicStatus,manual,apiScanProgress}", function() {
