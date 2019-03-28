@@ -67,6 +67,10 @@ const Analysis = DS.Model.extend({
     return this.iconClass(this.get("overriddenRisk"));
   }),
 
+  computedRiskIconClass: computed('computedRisk', function() {
+    return this.iconClass(this.get("computedRisk"));
+  }),
+
   riskLabelClass: computed('risk', function() {
     return this.labelClass(this.get("risk"));
   }),
