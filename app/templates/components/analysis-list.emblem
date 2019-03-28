@@ -4,8 +4,8 @@
       th
         | Analysis ID
       th
-        |	Vulterability
+        |	Vulnerability
       th
-        |	Risk Type
+        |	Risk
     each fileDetails.sortedAnalyses as |analysis|
       = analysis-overview analysis=analysis fileDetails=fileDetails
