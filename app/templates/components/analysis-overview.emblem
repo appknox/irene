@@ -4,7 +4,7 @@ td
   = link-to 'authenticated.security.analysis' analysis.id
     | #{analysis.vulnerability.name}
 td.uppercase-text
-  .align-middle
+  .vertical-align-center
     .tag class="{{risk-label-class analysis.risk}}"
       | #{risk-text analysis.risk}
     if analysis.overriddenRisk
