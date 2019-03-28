@@ -18,9 +18,10 @@ export default DS.Model.extend({
   cvssVector: DS.attr('string'),
   cvssVersion: DS.attr('string'),
   analiserVersion: DS.attr('number'),
-  overriddenRisk: DS.attr('string'), // this is made as string because ember power select considers 0 as null value. ref: https://github.com/cibernox/ember-power-select/issues/962
+  overriddenRisk: DS.attr('number'), // this is made as string because ember power select considers 0 as null value. ref: https://github.com/cibernox/ember-power-select/issues/962
   overriddenRiskComment: DS.attr('string'),
   overriddenRiskToProfile: DS.attr('boolean'),
+  computedRisk: DS.attr('number'),
   file: DS.belongsTo('security/file'),
   owasp: DS.hasMany('owasp'),
   pcidss: DS.hasMany('pcidss'),
