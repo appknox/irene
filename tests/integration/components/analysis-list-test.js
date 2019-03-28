@@ -9,5 +9,5 @@ test('it renders', function(assert) {
 
   this.render(hbs`{{analysis-list}}`);
 
-  assert.equal(this.$().text().trim(), 'Analysis ID	Vulterability	Risk Type');
+  assert.equal(this.$().text().trim(), 'Analysis ID	Vulnerability	Risk');
 });
