@@ -6,7 +6,7 @@ module('Unit | Helper | risk label class');
 
 // Replace this with your real tests.
 test('it works', function(assert) {
-  let result = riskLabelClass([42]);
+  let result = riskLabelClass([1]);
   assert.ok(result);
+  assert.equal(result, `is-info`);
 });
-
