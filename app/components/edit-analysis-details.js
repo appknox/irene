@@ -57,6 +57,10 @@ export default Component.extend({
     }
   }),
 
+  isPassedRisk: computed('analysisDetails.risk', function() {
+    return this.get('analysisDetails.risk') == ENUMS.RISK.NONE;
+  }),
+
   confirmCallback(key) {
     if(key === "findings") {
       this.set("analysisDetails.findings", []);
