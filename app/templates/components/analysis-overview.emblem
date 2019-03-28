@@ -2,7 +2,12 @@ td
   = analysis.id
 td
   = link-to 'authenticated.security.analysis' analysis.id
-     | #{analysis.vulnerability.name}
+    | #{analysis.vulnerability.name}
 td.uppercase-text
-  .tag class=analysis.riskLabelClass
-    | #{risk-text analysis.risk}
+  .align-middle
+    .tag class="{{risk-label-class analysis.risk}}"
+      | #{risk-text analysis.risk}
+    if analysis.overriddenRisk
+      = fa-icon "long-arrow-right"
+      .tag class="{{risk-label-class analysis.overriddenRisk}}"
+        | #{risk-text analysis.overriddenRisk}
