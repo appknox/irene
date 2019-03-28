@@ -1,21 +1,17 @@
 if analysis
-  if analysis.isOverriddenRisk
-    .column.severity-tags class=analysis.overriddenRiskLabelClass class=columnSize
-      i.fa.risk-icons class=analysis.overriddenRiskIconClass
+  .column.severity-tags class="tag {{risk-label-class analysis.computedRisk}}" class=columnSize
+    i.fa.risk-icons class=analysis.computedRiskIconClass
+    if analysis.isScanning
       .uppercase-text
-        | &nbsp; #{ t (risk-text analysis.overriddenRisk)}
-      img src="/images/user-edited.svg" class="user-edited-icon"
-      = attach-tooltip placement="top"
-        | #{ t "overriddenRisk"},&nbsp;
-        | #{ t "orginalRisk"}: #{t (risk-text analysis.risk)}
-  else
-    .column.severity-tags class=analysis.riskLabelClass class=columnSize
-      i.fa.risk-icons class=analysis.riskIconClass
+        | &nbsp;{{scanningText}}
+    else
       .uppercase-text
-        if analysis.isScanning
-          | &nbsp;{{scanningText}}
-        else
-          | &nbsp; #{ t (risk-text analysis.risk)}
+        | &nbsp; #{ t (risk-text analysis.computedRisk)}
+      if isNonPassedRiskOverridden
+        img src="/images/user-edited.svg" class="user-edited-icon"
+        = attach-tooltip placement="top"
+          | #{ t "overriddenRisk"},&nbsp;
+          | #{ t "orginalRisk"}: #{t (risk-text analysis.risk)}
 else
   .column.severity-tags.tag.is-progress class=columnSize
     i.fa.risk-icons.fa-spinner.fa-spin
