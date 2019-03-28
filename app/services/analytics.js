@@ -10,10 +10,12 @@ export default Service.extend({
 
   scancount: {},
   appscan: {},
+  recentIssues: {},
 
   async load() {
     this.get_scancount();
     this.get_appscan();
+    this.get_recent_issues();
   },
 
   async get_scancount() {
@@ -26,10 +28,18 @@ export default Service.extend({
   async get_appscan() {
     const orgId = this.get("organization.selected.id");
     const endDate = new Date().toISOString();
-    const startDate = moment(endDate).subtract('30', 'days').toISOString();
+    const startDate = moment(endDate).subtract('180', 'days').toISOString();
     let appscanUrl = [ENV.endpoints.organizations, orgId, ENV.endpoints.appscan].join('/');
     appscanUrl += `?start_date=${startDate}&end_date=${endDate}`;
     const appscan = await this.get('ajax').request(appscanUrl);
     this.set("appscan", appscan);
+  },
+
+  async get_recent_issues() {
+    const orgId = this.get("organization.selected.id");
+    let url = [ENV.endpoints.organizations, orgId, ENV.endpoints.recentIssues].join('/');
+    const recentIssues = await this.get('ajax').request(url);
+    this.set("recentIssues", recentIssues);
   }
+
 });

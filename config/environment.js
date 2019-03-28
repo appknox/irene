@@ -203,7 +203,8 @@ module.exports = function(environment) {
       ping: 'ping',
       requestAccess: 'request_access',
       appscan: 'appscan',
-      scancount: 'scancount'
+      scancount: 'scancount',
+      recentIssues: 'recent_issues'
     },
     csb: {
       reportDownload: { feature: "Account Settings", module: "Setup", product: "Appknox" },

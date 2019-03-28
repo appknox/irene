@@ -1,5 +1,4 @@
 import Component from '@ember/component';
-import { computed } from '@ember/object';
 import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import { inject as service } from '@ember/service';
@@ -206,13 +205,13 @@ const OverallReportComponent = Component.extend({
   realtime: service('realtime'),
   analytics: service('analytics'),
   organization: service('organization'),
-
-  showMonthlyData: false,
+  showMonthlyData: true,
   showYearlyData: false,
-  axisXType: 'timeseries',
-  axisXTickFormat: '%d/%m',
-  axisXLabelText: 'days',
-  axisYType: 'timeseries',
+  axisXType: 'category',
+  axisXTickFormat: '',
+  axisXLabelText: 'months',
+  axisYType: 'number',
+  scanCount: null,
 
 
   didInsertElement() {
@@ -249,6 +248,7 @@ const OverallReportComponent = Component.extend({
 
   scanCountData() {
     const scanCountData = this.get("analytics.scancount");
+    this.set("scanCount", scanCountData);
     bb.generate({
       data: {
         columns: [
@@ -268,8 +268,6 @@ const OverallReportComponent = Component.extend({
       }
     });
   },
-
-
 
   appscanData() {
     const appscanData = this.get("analytics.appscan");
@@ -331,10 +329,6 @@ const OverallReportComponent = Component.extend({
     });
   },
 
-  projects: computed('realtime.FileCounter', function() {
-    return this.get("store").query("organization-project", {limit:3});
-  }),
-
   updateStartDate: task(function * ({date}) {
     this.set("selectedStartDate", date);
     yield this.get('updateAppScan').perform();
@@ -366,7 +360,7 @@ const OverallReportComponent = Component.extend({
 
   resetDuration: task(function *() {
     this.set("showDatePicker", false);
-    this.set("showMonthlyData", false);
+    this.set("showMonthlyData", true);
     this.setProperties({
       selectedStartDate: null,
       selectedEndDate: null

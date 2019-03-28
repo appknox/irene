@@ -24,7 +24,7 @@
           span.margin-left click={(perform resetDuration)}
             = fa-icon "repeat"
         else
-          | Last 30 Days
+          | Last 6 Months
           span.margin-left click={(perform showHideDuration)}
              = fa-icon "pencil"
 
@@ -32,20 +32,40 @@
       .column
         div id="app-scan-chart"
 
-h5.margin-left20.margin-top30.bold.black-text
-  | Most recent projects
-
-.columns.project-container.padding-10
-  if projects
-    each projects as |project|
-      = project-overview project=project
-  else
-    .loading-container-home
-      i.fa class="fa-spinner fa-spin"
-      div
-        | #{t "loading"}...
-
 .columns
-  .column.content-right.margin-right
-    = link-to 'authenticated.projects' class="button highlighted-button"
-      | view all projects
+  .column
+    .main-box-container
+      h5.box-main-heading
+        | Overall Scan Count
+
+      .columns.scan-list
+        .column
+          h5
+            | Total Static Scans
+        .column
+          h5
+            = scanCount.static_scan_count
+      .columns.scan-list
+        .column
+          h5
+            | Total Dynamic Scans
+        .column
+          h5
+            = scanCount.dynamic_scan_count
+      .columns.scan-list
+        .column
+          h5
+            | Total API Scans
+        .column
+          h5
+            = scanCount.api_scan_count
+      .columns.scan-list
+        .column
+          h5
+            | Total Manual Scans
+        .column
+          h5
+            = scanCount.manual_scan_count
+
+  .column
+    = recent-issues

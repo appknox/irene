@@ -2232,35 +2232,32 @@ select:disabled
 .stat-home-page
   margin: -10px
 
+.scan-list
+  text-align: center
+  padding: 0.5em
+  margin: 0
+  border-bottom: 1px solid lighten($default, 50%)
+  &:last-child
+    border-bottom: none
+
+
 .main-box-container
   margin: 20px 20px 0px 40px
   box-shadow: 0px 0px 10px #ccc
   border-radius: 10px
   background-color: #FFF
   .box-content.scrolling-box
-    height: 300px
+    height: 16.5em
     .box-lists
-      overflow: scroll
-      height: 300px
+      overflow: hidden
+      height: 16.5em
       .box-list-items
-        min-height: 80px
-        margin: 10px
-        padding: 10px
-        border-radius: 5px
-        box-shadow: 0px 0px 10px #ccc
-        .highlighted-text
-          color: blue
-        i
-          color: $blue
-        .desc
-          font-size: 16px
-          margin-left: 22px
-          margin-top: -22px
-        .date
-          margin-top: 5px
-          margin-right: 10px
-          text-align: right
-          color: #BEBEBE
+        border-bottom: 1px solid lighten($default, 50%)
+        padding: 0.3em 0.8em
+      &:hover
+        overflow-y: scroll
+
+
   .box-content
     margin-top: 20px
     height: 300px
@@ -3105,3 +3102,8 @@ $dropdown-default-theme: $color-table
 
 *:focus
   outline: none
+
+.no-issues
+  i
+    margin-top: 0
+  padding-bottom: 1em
