@@ -1,5 +1,6 @@
 @import "bohemia"
 @import "ember-power-select"
+@import "ember-power-datepicker"
 $FreestyleGuide-color--primary: $primary
 $FreestyleGuide-color--accent: $primary
 $FreestyleGuide-color--secondary: $primary-darker
@@ -2228,55 +2229,90 @@ select:disabled
   width: 50vw
   margin: -10px 10px
 
+.stat-home-page
+  margin: -10px
+
+.scan-list
+  text-align: center
+  padding: 0.5em
+  margin: 0
+  border-bottom: 1px solid lighten($default, 50%)
+  &:last-child
+    border-bottom: none
+
+
 .main-box-container
-  margin: 0px 20px 0px 0px
+  margin: 20px 20px 0px 40px
   box-shadow: 0px 0px 10px #ccc
-  border-radius: 5px
+  border-radius: 10px
+  background-color: #FFF
+  .box-content.scrolling-box
+    height: 16.5em
+    .box-lists
+      overflow: hidden
+      height: 16.5em
+      .box-list-items
+        border-bottom: 1px solid lighten($default, 50%)
+        padding: 0.3em 0.8em
+      &:hover
+        overflow-y: scroll
+
+
   .box-content
-    height: 190px
-    overflow: scroll
-    .box-list
-      padding: 0px 20px
-      border-bottom: 2px solid #ccc
-      margin-top: 3px
+    margin-top: 20px
+    height: 300px
+    h3
+      margin-left: 20px
+      margin-bottom: 0px
+    .tag
+      margin-left: 20px
+    .chart
+      margin-top: -50px
+    .chart-2
+      margin-top: 10px
+
   .box-main-heading
     text-align: center
-    background-color: $default
-    color: #FFF
+    background-color: #efefef
     border-radius: 5px 5px 0px 0px
     margin-bottom: 10px
     padding: 5px
-  .box-heading
-    color: #000
-    font-size: 16px
-  .box-heading-issues
-    color: #000
-    font-size: 12px
-  .box-desc
-    font-size: 12px
-  .stat-desc
-    margin-top: 5px
-  .content-right
+
+.app-scanned
+  margin: 10px 80px
+
+.home-page
+  background-color: #FFF
+  margin: 10px
+  position: relative
+  top: 10px
+  border-radius: 5px
+
+.stat-table-container
+  padding: 0px 10px
+  table
+    @extend .api-filter-table
+    width: 495px
+    tr
+      th, td
+        text-align: center!important
     .tag
-      background-color: $default
-      color: #FFF
-      font-size: 9px
-      border-radius: 5px
-      height: 20px
-    .app-name
-      background-color: $default
-      color: #FFF
-      border-radius: 3px
-      padding: 3px 10px
-      font-size: 12px
-  .not-found
-    font-size: 20px
-    margin-top: 90px
-    height: 110px
-    vertical-align: middle
+      margin-left: 0px!important
+
+.scan-counts
+  margin-top: 30px
+  margin-bottom: 20px
+  .columns
+    background-color: #FFF
+    padding: 10px
+    min-width: 200px
+    border-radius: 10px
     i
-      margin-top: 4px
-      margin-right: 6px
+      margin-top: 25px
+    h3, h5
+      margin-left: 20px
+    h5
+      margin-top: -20px
 
 .switch
   position: relative
@@ -3046,3 +3082,28 @@ $dropdown-default-theme: $color-table
           background: lighten($dropdown-default-theme, 53%)
         &-icon
           color: lighten($dropdown-default-theme, 25%)
+
+.date-input-class
+  width: 7em
+  margin-left: 8px
+  padding: 2px
+  text-align: center
+  background-color: #efefef
+  font-weight: 900
+  border: 0px
+  cursor: pointer
+  border-radius: 3px
+
+.ember-basic-dropdown-content
+  width: 16em
+  background-color: #000
+  margin-top: 10px
+  color: #FFF
+
+*:focus
+  outline: none
+
+.no-issues
+  i
+    margin-top: 0
+  padding-bottom: 1em

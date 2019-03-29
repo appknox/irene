@@ -1,23 +1,26 @@
 .main-box-container
   h5.box-main-heading
-    | RECENTLY FIXED ISSUES
-  if hasIssues
-    .box-content
-      .box-list
-        .columns
-          .column
-            .box-heading-issues
-              | XML-external-entity Injection Vulnerabilities in HTTP Body
-        .columns
-          .column.is-one-third
-            .tag.is-danger
-              i.fa.risk-icons.fa-warning
-              | &nbsp; HIGH
-          .column.content-right
-            .app-name
-              = fa-icon "mobile" class="font-size-18"
-              | &nbsp; MVFA
+    | Recently fixed issues
+  if recentIssues
+    .box-content.scrolling-box
+      .box-lists
+        each recentIssues as |issue|
+          .box-list-items
+            .columns
+              .column
+                .box-heading-issues
+                  h5
+                    = issue.vulnerability.name
+            .columns
+              .column
+                small
+                  | Found in #{issue.count} file(s)
+              .column.content-right
+                each issue.vulnerability.types as |tag|
+                  .tag.is-default
+                    | #{ t (vulnerability-type tag)}
   else
-    .not-found
+    .not-found.no-issues
       = fa-icon "exclamation-triangle"
+
       | No issues found

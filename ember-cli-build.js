@@ -100,14 +100,13 @@ module.exports = function(defaults) {
     * including devices.css
     */
     app.import('bower_components/devices.css/assets/devices.min.css');
+    app.import('node_modules/billboard.js/dist/billboard.css');
 
 
   /*
    * including chart.js
    */
    app.import('bower_components/chart.js/dist/Chart.js');
-
-
 
   return app.toTree();
 };
