@@ -9,7 +9,8 @@ const IndexRoute = Route.extend(ScrollTopMixin, {
 
   title: `Home${config.platform}`,
 
-  model() {
+  async model() {
+    await this.get('store').findAll('vulnerability');
     this.modelFor("authenticated");
   }
 }
