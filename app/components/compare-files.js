@@ -54,11 +54,11 @@ const CompareFilesComponent = Component.extend({
     }
   }),
 
-  allBaseFiles: computed.filter('allFiles', "file1.id", function(file) {
+  allBaseFiles: computed.filter('allFiles', function(file) {
     return file !== this.get("file1.id");
   }),
 
-  allCompareFiles: computed.filter('allFiles', "file2.id", function(file) {
+  allCompareFiles: computed.filter('allFiles', function(file) {
     return file !== this.get("file2.id");
   }),
 
