@@ -3,6 +3,6 @@ import DS from 'ember-data';
 
 export default DRFSerializer.extend(DS.EmbeddedRecordsMixin, {
   attrs: {
-    analyses: { serialize: 'ids' }
+    analyses: { embedded: 'always' }
   }
 });
