@@ -13,7 +13,7 @@ const _getComputedColor = function(selector) {
 
 const File = DS.Model.extend(BaseModelMixin, {
   i18n: service(),
-  project: DS.belongsTo('OrganizationProject', {inverse:'files'}),
+  project: DS.belongsTo('project', {inverse:'files'}),
   profile: DS.belongsTo('profile', {inverse:'files'}),
   name: DS.attr('string'),
   version: DS.attr('string'),
