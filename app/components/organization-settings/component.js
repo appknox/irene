@@ -6,6 +6,7 @@ import { on } from '@ember/object/evented';
 import { translationMacro as t } from 'ember-i18n';
 
 export default Component.extend({
+  me: service(),
   i18n: service(),
   ajax: service(),
   notify: service('notification-messages-service'),

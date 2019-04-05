@@ -1,10 +1,5 @@
 .org-container
-  .box-container
-    .columns
-      .column
-        h3.bold.black-text.is-fullwidth
-          = t "organizationSettings"
-        = organization-settings organization=model
+  = organization-settings organization=model
   .box-container
     .columns.margin-v-h
       .column

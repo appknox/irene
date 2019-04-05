@@ -1,10 +1,16 @@
-.vertical-align-center
-  .div
-    label class="switch"
-      = input class="switch-input" type="checkbox" id="mandate-mfa" checked=organization.mandatoryMfa disabled=isSavingStatus
-      span class="slider slider-nolabel round"
-  .padding-l-1h
-    label for="mandate-mfa"
-      | #{t "enableMandatoryMFATitle"}
-    div.text-lightgray.small local-class="checkbox-desc"
-      | #{t "enableMandatoryMFADescription"}
+if me.org.is_owner
+  .box-container
+    .columns
+      .column
+        h3.bold.black-text.is-fullwidth.margin-t-3q.margin-b-q
+          = t "organizationSettings"
+        .vertical-align-center
+          .div
+            label class="switch"
+              = input class="switch-input" type="checkbox" id="mandate-mfa" checked=organization.mandatoryMfa disabled=isSavingStatus
+              span class="slider slider-nolabel round"
+          .padding-l-1h
+            label for="mandate-mfa"
+              | #{t "enableMandatoryMFATitle"}
+            div.text-lightgray.small local-class="checkbox-desc"
+              | #{t "enableMandatoryMFADescription"}
