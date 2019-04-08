@@ -28,10 +28,8 @@ export default Component.extend({
     return [ireneHost, "file", fileid].join('/');
   }),
 
-  setApiScanStatus: task(function * () {
-    let isApiDone = this.$("#api-scan-status").prop('checked');
-    let apiScanStatus = ENUMS.SCAN_STATUS.UNKNOWN;
-    if(isApiDone) apiScanStatus = ENUMS.SCAN_STATUS.COMPLETED;
+  setApiScanStatus: task(function * (isApiDone) {
+    const apiScanStatus = isApiDone ? ENUMS.SCAN_STATUS.COMPLETED : ENUMS.SCAN_STATUS.UNKNOWN;
     const file = yield this.get("file")
     file.set('apiScanStatus', apiScanStatus);
     yield file.save();
@@ -51,8 +49,9 @@ export default Component.extend({
     this.get("notify").error(errMsg);
   }),
 
-  setDynamicDone: task(function * () {
+  setDynamicDone: task(function * (isDynamicDone) {
     const file = yield this.get("file");
+    file.set('isDynamicDone', isDynamicDone);
     yield file.save();
   }).evented(),
 

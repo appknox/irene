@@ -39,11 +39,13 @@
             .columns
               .column.margin-top
                 div
-                  = input id="api-scan-status" class="checkbox" checked=file.isApiDone type="checkbox" click=(perform setApiScanStatus) class="display-inline"
-                  | &nbsp; Is API done
+                  label
+                    = input type="checkbox" class="checkbox" checked=file.isApiDone click=(perform setApiScanStatus value="target.checked")
+                    | &nbsp; Is API done
                 div
-                  = input type="checkbox" class="checkbox" name="dynamic-scan-status" checked=file.isDynamicDone click=(perform setDynamicDone)
-                  | &nbsp; Is Dynamic done
+                  label
+                    = input type="checkbox" class="checkbox" checked=file.isDynamicDone click=(perform setDynamicDone value="target.checked")
+                    | &nbsp; Is Dynamic done
 
 
       .columns
