@@ -34,6 +34,7 @@ export default Component.extend({
   didInsertElement() {
     this.send('pollDynamicStatus');
   },
+
   getCurrentProxy: task(function * (){
     let record = yield this.get("store").findRecord("proxy-setting", this.get('file.profile.id'), { reload: true });
     return record;
@@ -122,6 +123,11 @@ export default Component.extend({
       }
     }
   }),
+
+  openCapturedApiModal: task(function * (){
+    yield this.set('showCapturedApiModal', true);
+  }),
+
   actions: {
     setAPIScanOption() {
       const tStartingScan = this.get("tStartingScan");
@@ -219,6 +225,14 @@ export default Component.extend({
     openRunDynamicScanModal() {
       this.set("showRunDynamicScanModal", true);
     },
+
+    closeCapturedApiModal(){
+      this.set("showAPIScanModal", false);
+      this.set("showAPIURLFilterScanModal", false);
+      this.set("showRunDynamicScanModal", false);
+      this.set('showCapturedApiModal', false)
+    },
+
 
     closeRunDynamicScanModal() {
       this.set("showRunDynamicScanModal", false);

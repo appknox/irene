@@ -527,7 +527,7 @@ export default {
     },
     "runAPIScan": {
       "title": "Run API Scan",
-      "description": "You need to also run Dynamic Scan to initiate the API Scan",
+      "description": "Run Captured Api Scan",
       "runScan": "Run Dynamic & API Scan"
     },
     "requestAccess": {

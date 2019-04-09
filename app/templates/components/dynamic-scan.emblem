@@ -42,12 +42,12 @@ if notVNCViewer
            = fa-icon "check"
            | &nbsp; #{t "completed"}
       else if file.isApiNotDone
-        button.is-primary.margin-top20.ac-start-api-scan click="openRunDynamicScanModal" disabled=file.isNotNoneStatus
+        button.is-primary.margin-top20.ac-start-api-scan click={(perform openCapturedApiModal)} disabled=file.isNotNoneStatus
           .fa-font-size
             = fa-icon "play"
           | &nbsp; #{t "start"}
 
-= modal-card isActive=showRunDynamicScanModal title=(t "modalCard.runAPIScan.title")
+= modal-card isActive=showCapturedApiModal title=(t "modalCard.runAPIScan.title")
   .card-body.warning-modal
     .card-wrapper
       .api-scanning
@@ -55,15 +55,15 @@ if notVNCViewer
           = t "modalCard.runAPIScan.description"
         .margin-t-1
           = proxy-settings-view profile=file.profile project=file.project
-        .project-preference-component.margin-v-1
-          if showRunDynamicScanModal
-            = project-preferences profileId=file.profile.id platform=file.project.platform project=file.project
+        .project-preference-component
+          if showCapturedApiModal
+            = captured-apis file=file
         form.margin-top20
-          .align-both
-            button.modal-button.is-default click="closeRunDynamicScanModal"
-              = t "cancel"
-            button.modal-button.is-primary.highlighted-button click="'showURLFilter' 'dynamic'"
-              = t "modalCard.runAPIScan.runScan"
+          p.control
+          .columns
+            .column
+              button.modal-button.is-primary click="closeCapturedApiModal"
+                = t "cancel"
 
 = modal-card isActive=showAPIScanModal title=(t "modalCard.dynamicScan.title")
   .card-body.warning-modal

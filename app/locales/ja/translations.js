@@ -528,7 +528,7 @@ export default {
     },
     "runAPIScan": {
       "title": "API診断の実行",
-      "description": "API診断を開始するには、動的診断も実行する必要があります",
+      "description": "キャプチャしたAPIスキャンを実行する",
       "runScan": "動的＆API診断の実行"
     },
     "requestAccess": {

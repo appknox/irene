@@ -1,0 +1,11 @@
+if hasObjects
+  each sortedObjects as |capturedapi|
+    = capturedapis-overview file=file capturedapi=capturedapi
+  .margin-top20
+    = partial "paginate"
+
+else
+  .empty-state
+    = fa-icon "fa-spinner fa-spin"
+    | #{t "loading"}...
+
