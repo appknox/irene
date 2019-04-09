@@ -38,28 +38,22 @@ const AnalysisDetailsComponent = Component.extend({
     return filteredRisks[0].value;
   }),
 
-  riskClass: computed("analysis.computedRisk", function() {
-    const risk = this.get("analysis.computedRisk");
-    switch (risk) {
-      case ENUMS.RISK.NONE:
-        return "is-success";
-      case ENUMS.RISK.LOW:
-        return "is-info";
-      case ENUMS.RISK.MEDIUM:
-        return "is-warning";
-      case ENUMS.RISK.HIGH:
-        return "is-danger";
-      case ENUMS.RISK.CRITICAL:
-        return "is-critical";
+  statusClass: computed("analysis.{status,computedRisk}", function() {
+    const status = this.get("analysis.status");
+    if (status === ENUMS.ANALYSIS.WAITING) {
+      return "is-waiting"
     }
-  }),
-
-  progressClass: computed("analysis.computedRisk", function() {
-    const risk = this.get("analysis.computedRisk");
-    switch (risk) {
-      case ENUMS.RISK.UNKNOWN:
-        return "is-progress";
+    if (status === ENUMS.ANALYSIS.RUNNING) {
+      return "is-progress"
     }
+    if (status === ENUMS.ANALYSIS.ERROR) {
+      return "is-errored"
+    }
+    const risk = this.get("analysis.computedRisk");
+    if (risk === ENUMS.RISK.UNKNOWN) {
+      return "is-untested"
+    }
+    return "is-completed";
   }),
 
   editAnalysisURL(type) {

@@ -50,7 +50,7 @@ test('tapping button fires an external action', function(assert) {
   this.render();
   run(function() {
     component.set("risks", ENUMS.RISK.CHOICES.slice(0, -1));
-    component.set('analysis', {computedRisk:ENUMS.RISK.NONE});
+    component.set('analysis', {computedRisk: ENUMS.RISK.NONE, status: ENUMS.ANALYSIS.COMPLETED});
     assert.deepEqual(component.get("filteredRisks"),
       [
         {"key": "NONE","value": 0},
@@ -60,17 +60,6 @@ test('tapping button fires an external action', function(assert) {
         {"key": "CRITICAL","value": 4}
       ], 'Filtered Risks');
     assert.equal(component.get("markedRisk"), 0, 'Marked Risk');
-    assert.equal(component.get('riskClass'), "is-success", "Success");
-    component.set('analysis', {computedRisk:ENUMS.RISK.LOW});
-    assert.equal(component.get('riskClass'), "is-info", "Info");
-    component.set('analysis', {computedRisk:ENUMS.RISK.MEDIUM});
-    assert.equal(component.get('riskClass'), "is-warning", "Warning");
-    component.set('analysis', {computedRisk:ENUMS.RISK.HIGH});
-    assert.equal(component.get('riskClass'), "is-danger", "Danger");
-    component.set('analysis', {computedRisk:ENUMS.RISK.CRITICAL});
-    assert.equal(component.get('riskClass'), "is-critical", "Critical");
-    component.set('analysis', {computedRisk:ENUMS.RISK.UNKNOWN});
-    assert.equal(component.get('progressClass'), "is-progress", "Progress");
     component.send('toggleVulnerability');
     assert.equal(component.get('showVulnerability'),true, "Show Vulnerability");
 
@@ -98,4 +87,29 @@ test('tapping button fires an external action', function(assert) {
     component.set("analysis", {vulnerability: {types: [4]}, file: {isApiDone:true}});
     assert.deepEqual(component.get("tags")[0], {"status": true,"text": "api"}, 'Risk Type');
   });
+});
+
+test('statusClass is computed correctly', function(assert) {
+  var component = this.subject();
+  this.render();
+
+  run(function() {
+    component.set('analysis', {status: ENUMS.ANALYSIS.COMPLETED, computedRisk: ENUMS.RISK.NONE});
+    assert.equal(component.get('statusClass'), 'is-completed');
+
+    component.set('analysis', {status: ENUMS.ANALYSIS.WAITING});
+    assert.equal(component.get('statusClass'), 'is-waiting');
+
+    component.set('analysis', {status: ENUMS.ANALYSIS.RUNNING});
+    assert.equal(component.get('statusClass'), 'is-progress');
+
+    component.set('analysis', {status: ENUMS.ANALYSIS.ERROR});
+    assert.equal(component.get('statusClass'), 'is-errored');
+
+    component.set('analysis', {status: ENUMS.ANALYSIS.COMPLETED, computedRisk: ENUMS.RISK.UNKNOWN});
+    assert.equal(component.get('statusClass'), 'is-untested');
+
+    component.set('analysis', {status: ENUMS.ANALYSIS.RUNNING, computedRisk: ENUMS.RISK.UNKNOWN});
+    assert.equal(component.get('statusClass'), 'is-progress');
+  })
 });
