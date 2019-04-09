@@ -1,5 +1,5 @@
 .columns
-  .column.is-half.margin-auto
+  .column
     .file-action-container
       .columns
         / .column.is-one-sixth.margin-top
