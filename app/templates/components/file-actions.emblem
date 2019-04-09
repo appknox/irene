@@ -97,7 +97,7 @@
           | Vulnerability
       .columns
        .column.margin-top20
-          = power-select placeholder="Select the Vulnerability" renderInPlace=true selected=selectedVulnerability options=vulnerabilities onchange=(perform selectVulnerabilty) as |key|
+          = power-select searchField="name" placeholder="Select the Vulnerability" renderInPlace=true selected=selectedVulnerability options=vulnerabilities onchange=(perform selectVulnerabilty) as |key|
             | #{key.id} - #{key.name}
       .columns
         .column.margin-top20
