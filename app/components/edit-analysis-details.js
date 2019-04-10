@@ -5,6 +5,7 @@ import { isEmpty } from '@ember/utils';
 import { getOwner } from '@ember/application';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
+import { task } from 'ember-concurrency';
 
 
 export default Component.extend({
@@ -127,18 +128,82 @@ export default Component.extend({
     });
   },
 
-  actions: {
 
-    async uploadFile(file) {
-      this.set("isUploading", true);
+
+  detailSaveUtil: task(function * (param){
+    try{
+      yield this.get('detailSaveAjaxCallUtil').perform(param);
+      this.get("notify").success("Analyses Updated");
+      if(param==="back") {
+        yield getOwner(this).lookup('route:authenticated').transitionTo("authenticated.security.file", this.get("analysisDetails.file.id"));
+      }
+    }catch(error){
+      this.get("notify").error("Sorry something went wrong, please try again");
+    }
+  }),
+
+  detailSaveAjaxCallUtil: task(function * () {
+    const risk = this.get("analysisDetails.risk");
+    const owasp = this.get("analysisDetails.owasp");
+    const pcidss = this.get("analysisDetails.pcidss");
+    let status = this.get("analysisDetails.status");
+    if(typeof status === "object") {
+      status = status.value;
+    }
+    const analysisid= this.get("analysis.analysisid");
+    const findings = this.get("analysisDetails.findings");
+    let overriddenRisk = this.get("analysisDetails.overriddenRisk");
+    if(typeof overriddenRisk === "object" && !isEmpty(overriddenRisk)) {
+      overriddenRisk = overriddenRisk.value;
+    }
+    const overriddenRiskComment = this.get("analysisDetails.overriddenRiskComment");
+    const overriddenRiskToProfile = this.get("analysisDetails.overriddenRiskToProfile");
+    const attackVector = this.get("analysisDetails.attackVector");
+    const attackComplexity = this.get("analysisDetails.attackComplexity");
+    const privilegesRequired = this.get("analysisDetails.privilegesRequired");
+    const userInteraction = this.get("analysisDetails.userInteraction");
+    const scope = this.get("analysisDetails.scope");
+    const confidentialityImpact = this.get("analysisDetails.confidentialityImpact");
+    const integrityImpact = this.get("analysisDetails.integrityImpact");
+    const availabilityImpact = this.get("analysisDetails.availabilityImpact");
+
+    for (let inputValue of [attackVector, attackComplexity, privilegesRequired, userInteraction, scope, confidentialityImpact, integrityImpact, availabilityImpact]) {
+      if (isEmpty(inputValue)) { return this.get("notify").error("Please select all the CVSS Metrics"); }
+    }
+
+    const cvssVector = this.get("analysisDetails.cvssVector");
+    const data = {
+      risk,
+      status,
+      owasp: owasp.map(a=>a.get('id')),
+      pcidss: pcidss.map(a=>a.get('id')),
+      findings,
+      overridden_risk: overriddenRisk,
+      overridden_risk_comment: overriddenRiskComment,
+      overridden_risk_to_profile: overriddenRiskToProfile,
+      cvss_vector: cvssVector,
+      attack_vector: attackVector,
+      attack_complexity: attackComplexity,
+      privileges_required: privilegesRequired,
+      user_interaction: userInteraction,
+      scope,
+      confidentiality_impact: confidentialityImpact,
+      integrity_impact: integrityImpact,
+      availability_impact: availabilityImpact
+    };
+    const url = [ENV.endpoints.analyses, analysisid].join('/');
+    yield this.get("ajax").put(url,{ namespace: 'api/hudson-api', data: JSON.stringify(data), contentType: 'application/json' })
+  }),
+
+  uploadFile: task(function * (file) {
       const fileName = file.blob.name;
       const data = {
         name: fileName
       };
       const analysisid= this.get("analysis.analysisid");
       try {
-        var fileData = await this.get("ajax").post(ENV.endpoints.uploadFile,{namespace: 'api/hudson-api', data});
-        await file.uploadBinary(fileData.url, {
+        var fileData = yield this.get("ajax").post(ENV.endpoints.uploadFile,{namespace: 'api/hudson-api', data});
+        yield file.uploadBinary(fileData.url, {
           method: 'PUT'
         });
         const fileDetailsData = {
@@ -149,19 +214,25 @@ export default Component.extend({
           analysis: analysisid,
           content_type: "ANALYSIS"
         };
-        await this.get("ajax").post(ENV.endpoints.uploadedAttachment,{namespace: 'api/hudson-api', data: fileDetailsData});
-
+        yield this.get("ajax").post(ENV.endpoints.uploadedAttachment,{namespace: 'api/hudson-api', data: fileDetailsData});
+        yield this.get('detailSaveAjaxCallUtil').perform()
         this.set("isUploading", false);
         this.get("notify").success("File Uploaded Successfully");
-        const analysisObj = this.get("store").findRecord('security/analysis', this.get("analysis.analysisid"));
+        const analysisObj = yield this.get("store").findRecord('security/analysis', this.get("analysis.analysisid"));
         this.set('analysisDetails', analysisObj);
       } catch(error) {
         this.set("isUploading", false);
         this.get("notify").error("Sorry something went wrong, please try again");
         return;
       }
-    },
+    }),
 
+
+  actions: {
+
+    uploadFileWrapper(file){
+      this.get('uploadFile').perform(file)
+    },
     selectStatus(param) {
       this.set('analysisDetails.status', param);
     },
@@ -274,78 +345,5 @@ export default Component.extend({
       this.set("analysisDetails.overriddenRisk", null);
       this.set("analysisDetails.overriddenRiskComment", null);
     },
-
-    saveAndContinue() {
-      this.send("saveAnalysis");
-    },
-
-    saveAndGoBack() {
-      this.send("saveAnalysis", 'back');
-    },
-
-    saveAnalysis(param) {
-      const key = param;
-      const risk = this.get("analysisDetails.risk");
-      const owasp = this.get("analysisDetails.owasp");
-      const pcidss = this.get("analysisDetails.pcidss");
-      let status = this.get("analysisDetails.status");
-      if(typeof status === "object") {
-        status = status.value;
-      }
-      const analysisid= this.get("analysis.analysisid");
-      const findings = this.get("analysisDetails.findings");
-      let overriddenRisk = this.get("analysisDetails.overriddenRisk");
-      if(typeof overriddenRisk === "object" && !isEmpty(overriddenRisk)) {
-        overriddenRisk = overriddenRisk.value;
-      }
-      const overriddenRiskComment = this.get("analysisDetails.overriddenRiskComment");
-      const overriddenRiskToProfile = this.get("analysisDetails.overriddenRiskToProfile");
-      const attackVector = this.get("analysisDetails.attackVector");
-      const attackComplexity = this.get("analysisDetails.attackComplexity");
-      const privilegesRequired = this.get("analysisDetails.privilegesRequired");
-      const userInteraction = this.get("analysisDetails.userInteraction");
-      const scope = this.get("analysisDetails.scope");
-      const confidentialityImpact = this.get("analysisDetails.confidentialityImpact");
-      const integrityImpact = this.get("analysisDetails.integrityImpact");
-      const availabilityImpact = this.get("analysisDetails.availabilityImpact");
-
-      for (let inputValue of [attackVector, attackComplexity, privilegesRequired, userInteraction, scope, confidentialityImpact, integrityImpact, availabilityImpact]) {
-        if (isEmpty(inputValue)) { return this.get("notify").error("Please select all the CVSS Metrics"); }
-      }
-
-      const cvssVector = this.get("analysisDetails.cvssVector");
-      const data = {
-        risk,
-        status,
-        owasp: owasp.map(a=>a.get('id')),
-        pcidss: pcidss.map(a=>a.get('id')),
-        findings,
-        overridden_risk: overriddenRisk,
-        overridden_risk_comment: overriddenRiskComment,
-        overridden_risk_to_profile: overriddenRiskToProfile,
-        cvss_vector: cvssVector,
-        attack_vector: attackVector,
-        attack_complexity: attackComplexity,
-        privileges_required: privilegesRequired,
-        user_interaction: userInteraction,
-        scope,
-        confidentiality_impact: confidentialityImpact,
-        integrity_impact: integrityImpact,
-        availability_impact: availabilityImpact
-      };
-      this.set("isSavingAnalyses", true);
-      const url = [ENV.endpoints.analyses, analysisid].join('/');
-      this.get("ajax").put(url,{ namespace: 'api/hudson-api', data: JSON.stringify(data), contentType: 'application/json' })
-      .then(() => {
-        this.set("isSavingAnalyses", false);
-        this.get("notify").success("Analyses Updated");
-        if(key) {
-          getOwner(this).lookup('route:authenticated').transitionTo("authenticated.security.file", this.get("analysisDetails.file.id"));
-        }
-      }, () => {
-        this.set("isSavingAnalyses", false);
-        this.get("notify").error("Sorry something went wrong, please try again");
-      })
-    }
   }
 });
