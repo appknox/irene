@@ -1,22 +1,20 @@
 module.exports = {
   root: true,
   parserOptions: {
-    ecmaVersion: 2017,
+    ecmaVersion: 2018,
     sourceType: 'module'
   },
-  plugins: [
-    'ember'
-  ],
+  env: {
+    browser: true,
+    es6: true,
+    node: true
+  },
   extends: [
     'eslint:recommended',
     'plugin:ember/recommended'
   ],
-  env: {
-    browser: true,
-    node: true
-  },
   rules: {
-    "ember/avoid-leaking-state-in-ember-objects": 0,
+    "ember/avoid-leaking-state-in-ember-objects": 0
   },
   overrides: [
     // node files

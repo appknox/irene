@@ -192,7 +192,6 @@ export default Component.extend({
       availability_impact: availabilityImpact
     };
     const url = [ENV.endpoints.analyses, analysisid].join('/');
-    
     yield this.get("ajax").put(url,{ namespace: 'api/hudson-api', data: JSON.stringify(data), contentType: 'application/json' })
   }),
 

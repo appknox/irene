@@ -12,7 +12,7 @@
   "repository": "https://github.com/appknox/irene",
   "scripts": {
     "build": "ember build",
-    "lint:js": "eslint ./*.js app config lib server tests",
+    "lint:js": "eslint  . --cache --ext=js app config tests",
     "start": "cross-env IRENE_API_HOST=http://localhost:8000 IRENE_API_SOCKET_PATH=http://localhost:8008 ember server",
     "test": "ember test",
     "postinstall": "bower install",
@@ -51,7 +51,7 @@
     "ember-cli-deploy-s3-index": "1.0.0",
     "ember-cli-dotenv": "1.2.0",
     "ember-cli-emblem": "0.10.0",
-    "ember-cli-eslint": "^4.2.3",
+    "ember-cli-eslint": "^5.0.0",
     "ember-cli-htmlbars": "^2.0.1",
     "ember-cli-htmlbars-inline-precompile": "^1.0.0",
     "ember-cli-inject-live-reload": "^1.4.0",
