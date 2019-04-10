@@ -9,7 +9,7 @@
         | LIST OF FILES
 if hasObjects
   .columns
-    .column.table-container
+    .column.table-container.is-half.margin-auto
       table.security-list-table
         tr
           th
