@@ -6,7 +6,7 @@ module('Unit | Helper | risk label class');
 
 test('it return correct class for valid risks', function(assert) {
   let unknown = riskLabelClass([-1]);
-  assert.equal(unknown, 'is-progress');
+  assert.equal(unknown, 'is-default');
 
   let passed = riskLabelClass([0]);
   assert.equal(passed, 'is-success');
