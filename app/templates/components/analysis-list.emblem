@@ -7,5 +7,7 @@
         |	Vulnerability
       th
         |	Risk
+      th
+        | Scan Type
     each fileDetails.sortedAnalyses as |analysis|
       = analysis-overview analysis=analysis fileDetails=fileDetails

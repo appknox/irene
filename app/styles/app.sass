@@ -1477,13 +1477,6 @@ ul.risk-table
 .table-container
   @extend .align-center
 
-.security-list-table
-  min-width: 670px!important
-  tr
-    td:nth-child(2)
-      min-width: 300px
-      max-width: 300px
-
 .security-list-table, .finding-list-table, .attachments-list-table
   min-width: 600px
   @extend .api-filter-table
@@ -1498,6 +1491,17 @@ ul.risk-table
       text-align: center
       &:last-child
         text-align: center
+
+.security-list-table
+  min-width: 100%
+  tr
+    td:nth-child(2)
+      min-width: 300px
+      max-width: 300px
+
+.file-action-container
+  width: 60%
+  margin: auto
 
 .attachments-list-table
   margin-left: 0px!important
