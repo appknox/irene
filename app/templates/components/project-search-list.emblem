@@ -4,7 +4,7 @@
 
 if hasObjects
   .columns
-    .column
+    .column.is-half.margin-auto
       .table-container
         table.security-list-table
           tr
