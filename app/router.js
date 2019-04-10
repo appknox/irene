@@ -57,6 +57,7 @@ Router.map(function() {
       this.route('analysis', {path: '/analysis/:analysisid'});
     });
     this.route('status');
+    this.route('analytics');
   });
   this.route('invitation', {path: '/invitation/:uuid'});
   this.route('invite', {path: '/invite/:token'});

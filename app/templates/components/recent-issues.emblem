@@ -1,6 +1,6 @@
 .main-box-container
   h5.box-main-heading
-    | Recently fixed issues
+    | Top Issues
   if recentIssues
     .box-content.scrolling-box
       .box-lists
