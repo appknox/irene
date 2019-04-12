@@ -1,6 +1,7 @@
 if hasObjects
+  | Selected APIs #{count}/#{meta.count}
   each sortedObjects as |capturedapi|
-    = capturedapis-overview file=file capturedapi=capturedapi
+    = captured-api-overview file=file capturedapi=capturedapi someAction=someAction
   .margin-top20
     = partial "paginate"
 

@@ -16,6 +16,8 @@ export default Component.extend({
   dynamicScanModal: false,
   proxyPOJO: {},
   serverErrors: {},
+  count: 0,
+
   i18n: service(),
   trial: service(),
   ajax: service(),
@@ -31,9 +33,20 @@ export default Component.extend({
   },
   currentProxy:null,
   tStartingScan: t("startingScan"),
+
   didInsertElement() {
     this.send('pollDynamicStatus');
   },
+  closeCapturedApiModal: task(function * (){
+    yield this.set('showCapturedApiModal', false)
+  }),
+  setCpaturedAPIScanOption: task(function *() {
+
+    const file = this.get('file');
+    const fileId = file.id;
+    const dynamicUrl = [ENV.endpoints.files, fileId,ENV.endpoints.capturedApiScanStart].join('/');
+    return yield this.get("ajax").post(dynamicUrl,{namespace: ENV.namespace_v2})
+  }),
 
   getCurrentProxy: task(function * (){
     let record = yield this.get("store").findRecord("proxy-setting", this.get('file.profile.id'), { reload: true });
@@ -123,9 +136,32 @@ export default Component.extend({
       }
     }
   }),
+  countCapturedAPI: task(function * (){
+    let data = {fileId: this.get('file.id'), is_active:true};
+    const url = [ENV.endpoints.files, this.get('file.id'), "capturedapis"].join('/');
+    return yield this.get("ajax").request(url,{namespace: ENV.namespace_v2, data});
 
+  }),
+  runCapturedAPIScan: task(function * () {
+    try{
+      yield this.get('setCpaturedAPIScanOption').perform()
+      yield this.get("notify").success("Starting captured API Scan");
+      if(!this.isDestroyed) {
+        this.set('showCapturedApiModal', false)
+      }
+    }catch(error){
+        this.get("notify").error(error.toString());
+    }
+  }),
   openCapturedApiModal: task(function * (){
-    yield this.set('showCapturedApiModal', true);
+    // yield this.set('showCapturedApiModal', true);
+    try{
+      let filterCapturedAPIData = yield this.get('countCapturedAPI').perform();
+      yield this.set('count', filterCapturedAPIData.count)
+      yield this.set('showCapturedApiModal', true);
+    }catch(error){
+      this.notify(error.toString())
+    }
   }),
 
   actions: {
@@ -232,7 +268,6 @@ export default Component.extend({
       this.set("showRunDynamicScanModal", false);
       this.set('showCapturedApiModal', false)
     },
-
 
     closeRunDynamicScanModal() {
       this.set("showRunDynamicScanModal", false);

@@ -5,10 +5,16 @@ import { on } from '@ember/object/evented';
 export default Component.extend({    
 
 setApiScanStatus: task(function * () {
-    let isActive = this.get('capturedapi.is_active')
+  
+    let isActive = this.get('capturedapi.isActive')
     const capturedapi = yield this.get("capturedapi")
-    capturedapi.set('is_active', !(isActive));
-    yield capturedapi.save();
+    try{
+      yield this.get('someAction').perform(capturedapi, isActive);
+
+    }catch(error){
+      this.get("notify").error(error.toString());
+    }
+
   }).evented(),
   setApiScanStatusSucceeded: on('setApiScanStatus:succeeded', function() {
     this.get('notify').success('Successfully saved the captured api status');

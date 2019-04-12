@@ -57,13 +57,16 @@ if notVNCViewer
           = proxy-settings-view profile=file.profile project=file.project
         .project-preference-component
           if showCapturedApiModal
-            = captured-apis file=file
+            = captured-apis file=file count=count
         form.margin-top20
           p.control
           .columns
-            .column
-              button.modal-button.is-primary click="closeCapturedApiModal"
+            .column.flex-center
+              button.modal-button.is-primary click={(perform closeCapturedApiModal)}
                 = t "cancel"
+            .column.flex-center
+              button.modal-button.is-primary click={(perform runCapturedAPIScan)} disabled=runCapturedAPIScan.isRunning
+                = t "modalCard.apiScan.startApiScan"
 
 = modal-card isActive=showAPIScanModal title=(t "modalCard.dynamicScan.title")
   .card-body.warning-modal
