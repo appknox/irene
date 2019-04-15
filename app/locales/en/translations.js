@@ -516,6 +516,7 @@ export default {
       "description": "We will record all network traffic made by the app and run the API scan for web vulnerabilities. API scan currently does not support apps that employ SSL pinning.",
       "extraDescription": " API scan performs multiple automated tests that may result in <b class='bold'>denial of service</b> or <b class='bold'>loss of data</b>. Do not select YES if the app is configured to use a <b class='bold'>production API server</b> or if the app employs <b class='bold'>SSL pinning</b>.",
       "runAPIScan": "Run API Scan",
+      
       "dynamicScan": "Continue with Dynamic Scan",
       "startApiScan": "Start API Scan",
       "dynamicScanText": "Make sure you perform all the actions in the App, there are high chances that the scanner might mark the risk as passed"
@@ -528,7 +529,9 @@ export default {
     "runAPIScan": {
       "title": "Run API Scan",
       "description": "Run Captured Api Scan",
-      "runScan": "Run Dynamic & API Scan"
+      "runScan": "Run Dynamic & API Scan",
+      "noCapturedAPIsData": "Oops, no captured API's found during dynamic scan",
+      "capturedWarning": "Run Dynamic Scan first",
     },
     "requestAccess": {
       "title": "Request Access",

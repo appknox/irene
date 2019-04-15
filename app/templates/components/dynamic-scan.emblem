@@ -55,18 +55,34 @@ if notVNCViewer
           = t "modalCard.runAPIScan.description"
         .margin-t-1
           = proxy-settings-view profile=file.profile project=file.project
-        .project-preference-component
-          if showCapturedApiModal
-            = captured-apis file=file count=count
-        form.margin-top20
-          p.control
-          .columns
-            .column.flex-center
-              button.modal-button.is-primary click={(perform closeCapturedApiModal)}
-                = t "cancel"
-            .column.flex-center
-              button.modal-button.is-primary click={(perform runCapturedAPIScan)} disabled=runCapturedAPIScan.isRunning
-                = t "modalCard.apiScan.startApiScan"
+        if file.isDynamicDone
+          .project-preference-component.margin-t-0
+            if showCapturedApiModal
+              = captured-apis file=file count=count totalCount=totalCount
+          form.margin-top20
+            p.control
+            .columns
+              .column.flex-center
+                button.modal-button.is-primary click={(perform closeCapturedApiModal)}
+                  = t "cancel"
+              if totalCount
+                .column.flex-center
+                  button.modal-button.is-primary click={(perform runCapturedAPIScan)} disabled=runCapturedAPIScan.isRunning
+                    = t "modalCard.apiScan.startApiScan"
+
+        else
+          div.warning-band.info-band
+            .columns
+              .column.is-one-sixth
+                = fa-icon 'info-circle'
+              .column
+                = t "modalCard.runAPIScan.capturedWarning"
+          form.margin-top20
+            p.control
+            .columns
+              .column.flex-center
+                button.modal-button.is-primary click={(perform closeCapturedApiModal)}
+                  = t "cancel"
 
 = modal-card isActive=showAPIScanModal title=(t "modalCard.dynamicScan.title")
   .card-body.warning-modal

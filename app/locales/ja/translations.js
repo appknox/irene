@@ -529,7 +529,9 @@ export default {
     "runAPIScan": {
       "title": "API診断の実行",
       "description": "キャプチャしたAPIスキャンを実行する",
-      "runScan": "動的＆API診断の実行"
+      "runScan": "動的＆API診断の実行",
+      "noCapturedAPIsData": "Oops, no captured API's found during dynamic scan",
+      "capturedWarning": "Run Dynamic Scan first",
     },
     "requestAccess": {
       "title": "Request Access",

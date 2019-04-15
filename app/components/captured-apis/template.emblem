@@ -1,12 +1,27 @@
 if hasObjects
-  | Selected APIs #{count}/#{meta.count}
+  .div.margin-bottom
+    h6.captured-heading
+      = t "modalCard.runAPIScan.description"
+    .div.float-right
+      .div.display-inline
+        | Selected
+      .div.captured-prop
+        | #{count}/#{totalCount}
   each sortedObjects as |capturedapi|
     = captured-api-overview file=file capturedapi=capturedapi someAction=someAction
   .margin-top20
     = partial "paginate"
 
 else
-  .empty-state
-    = fa-icon "fa-spinner fa-spin"
-    | #{t "loading"}...
+  if hasNoObject
+    div.no-data
+      .columns
+        .column.is-one-sixth
+          = fa-icon 'info-circle'
+        .column
+          = t "modalCard.runAPIScan.noCapturedAPIsData"
+  else
+    .empty-state
+      = fa-icon "fa-spinner fa-spin"
+      | #{t "loading"}...
 
