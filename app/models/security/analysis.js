@@ -26,7 +26,7 @@ export default DS.Model.extend({
   owasp: DS.hasMany('owasp'),
   pcidss: DS.hasMany('pcidss'),
   attachments: DS.hasMany('security/attachment'),
-  vulnerability: DS.belongsTo('security/vulnerability'),
+  vulnerability: DS.belongsTo('vulnerability'),
 
   isPassed: computed('risk', function() {
     const risk = this.get("risk");

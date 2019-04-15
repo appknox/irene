@@ -15,11 +15,12 @@ export default Component.extend({
   tPleaseTryAgain: t('pleaseTryAgain'),
 
   vulnerabilities: computed(function() {
+    const projectId = this.get("file.project.id");
     const store = this.get("store");
-    return store.query("security/vulnerability", {'limit':0})
-    .then(
-      data => store.query("security/vulnerability", {'limit':data.meta.count})
-    )
+    return store.query("security/vulnerability", {projectId, limit: 0})
+      .then(
+        data => store.query("security/vulnerability", {projectId, limit: data.meta.count})
+      )
   }),
 
   ireneFilePath: computed(function() {
