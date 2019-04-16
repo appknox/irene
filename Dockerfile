@@ -7,11 +7,14 @@ RUN adduser --disabled-password --gecos '' irene
 RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
   apt-get install -y nodejs nginx
 
-ENTRYPOINT ["./entrypoint.sh"]
-
 WORKDIR /code
 COPY . /code/
 RUN chown -R irene:irene /code/
 COPY nginx.conf /etc/nginx/nginx.conf
 
 RUN gosu irene npm install
+
+RUN npx ember build --environment whitelabel
+RUN cp -r dist/* /usr/share/nginx/html/
+
+ENTRYPOINT ["./entrypoint.sh"]
