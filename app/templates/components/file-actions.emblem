@@ -48,7 +48,7 @@
                       = input type="checkbox" class="checkbox" checked=file.isDynamicDone click=(perform setDynamicDone value="target.checked")
                       | &nbsp; Is Dynamic done
                   div.flex-grow-1
-                    | Manual Scan Status 
+                    | Manual Scan 
                     select{action (perform selectManualScan) on='change'} value="target.value" id="manual-scan-status"
                       each roles as |role|
                         option value=role.value selected={eq role.value file.manual}

@@ -6,13 +6,13 @@ export function manualScanStatus(params) {
   const currentRole = params[0];
 
   if (currentRole === ENUMS.MANUAL.NONE) {
-    return "None";
+    return "Not started";
   } else if (currentRole === ENUMS.MANUAL.REQUESTED) {
     return "Requested";
   } else if (currentRole === ENUMS.MANUAL.ASSESSING) {
-    return "Assessing";
+    return "In progress";
   }else if (currentRole === ENUMS.MANUAL.DONE) {
-    return "Done";
+    return "Completed";
   }
 }
 
