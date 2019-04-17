@@ -11,8 +11,32 @@ import { translationMacro as t } from 'ember-i18n';
 export default Component.extend({
 
   i18n: service(),
-
+  roles: ENUMS.MANUAL.CHOICES.slice(0, -1),
   tPleaseTryAgain: t('pleaseTryAgain'),
+
+  selectManualScan: task(function * () {
+    const status = parseInt(this.$('#manual-scan-status').val());
+
+    const file = yield this.get('file');
+    file.set('manual', status);
+    yield file.save();
+
+  }).evented(),
+
+  selectManualScanSucceeded: on('selectManualScan:succeeded', function() {
+    this.get('notify').success('Manual Scan Status Updated');
+  }),
+
+  selectManualScanErrored: on('selectManualScan:errored', function(_, err) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (err.errors && err.errors.length) {
+      errMsg = err.errors[0].detail || errMsg;
+    } else if(err.message) {
+      errMsg = err.message;
+    }
+
+    this.get("notify").error(errMsg);
+  }),
 
   vulnerabilities: computed(function() {
     const projectId = this.get("file.project.id");

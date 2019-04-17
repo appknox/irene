@@ -38,14 +38,21 @@
                   | Scan Status
             .columns
               .column.margin-top
-                div
-                  label
-                    = input type="checkbox" class="checkbox" checked=file.isApiDone click=(perform setApiScanStatus value="target.checked")
-                    | &nbsp; Is API done
-                div
-                  label
-                    = input type="checkbox" class="checkbox" checked=file.isDynamicDone click=(perform setDynamicDone value="target.checked")
-                    | &nbsp; Is Dynamic done
+                div.vertical-align-center
+                  div.flex-grow-1
+                    label
+                      = input type="checkbox" class="checkbox" checked=file.isApiDone click=(perform setApiScanStatus value="target.checked")
+                      | &nbsp; Is API done
+                  div.flex-grow-1
+                    label
+                      = input type="checkbox" class="checkbox" checked=file.isDynamicDone click=(perform setDynamicDone value="target.checked")
+                      | &nbsp; Is Dynamic done
+                  div.flex-grow-1
+                    | Manual Scan Status 
+                    select{action (perform selectManualScan) on='change'} value="target.value" id="manual-scan-status"
+                      each roles as |role|
+                        option value=role.value selected={eq role.value file.manual}
+                          | #{ manual-scan-status role.value}
 
 
       .columns
