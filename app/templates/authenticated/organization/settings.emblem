@@ -1,5 +1,5 @@
 .org-container
-  = organization-settings organization=model
+  = organization-settings organization=model.organization user=model.user
   .box-container
     .columns.margin-v-h
       .column

@@ -2,15 +2,31 @@ if me.org.is_owner
   .box-container
     .columns
       .column
-        h3.bold.black-text.is-fullwidth.margin-t-3q.margin-b-q
+        h3.bold.black-text.is-fullwidth.margin-t-1.margin-b-h
           = t "organizationSettings"
-        .vertical-align-center
-          .div
-            label class="switch"
-              = input class="switch-input" type="checkbox" id="mandate-mfa" checked=organization.mandatoryMfa disabled=isSavingStatus
-              span class="slider slider-nolabel round"
-          .padding-l-1h
-            label for="mandate-mfa"
-              | #{t "enableMandatoryMFATitle"}
-            div.text-lightgray.small local-class="checkbox-desc"
-              | #{t "enableMandatoryMFADescription"}
+
+        // MFA
+        .org-setting-mfa
+          .vertical-align-top
+            .div
+              label class="switch"
+                = input class="switch-input" type="checkbox" id="mandate-mfa" checked=organization.mandatoryMfa disabled=isMfaMandateDisabled
+                span class="slider slider-nolabel round"
+            .padding-l-1h
+              label.black-text local-class="org-setting-title" for="mandate-mfa"
+                | #{t "enableMandatoryMFATitle"}
+              div local-class="org-setting-desc" local-class="checkbox-desc"
+                | #{t "enableMandatoryMFADescription"}
+              .alert.alert-critical.alert-small.margin-t-1
+                .vertical-align-center
+                  = fa-icon "warning"
+                  .margin-l-h
+                    span.bold
+                      | Caution!
+                    | &nbsp;This setting will affect login process of every member of this organization.
+              if isUserMfaDisabled
+                .margin-t-1
+                  .alert.alert-small
+                    | For enabling mandatory MFA for organization, you need to have MFA enabled for your user account. Enable it from here:&nbsp;
+                    = link-to 'authenticated.settings.security' class="alert-link"
+                      | Account Settings > Security > Multi Factor Authentication

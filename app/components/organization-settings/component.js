@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import { observer } from '@ember/object';
+import { observer, computed } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 import { translationMacro as t } from 'ember-i18n';
@@ -15,6 +15,13 @@ export default Component.extend({
   tChangedMandatoryMFA: t('changedMandatoryMFA'),
   tPleaseTryAgain: t('pleaseTryAgain'),
 
+  isMfaMandateDisabled: computed('user.mfaEnabled', function() {
+    return !this.get('user.mfaEnabled') || this.get('isSavingStatus');
+  }),
+
+  isUserMfaDisabled: computed('user.mfaEnabled', function() {
+    return !this.get('user.mfaEnabled');
+  }),
 
   watchMandatoryMFA: observer('organization.mandatoryMfa', function(){
     this.get('setMandatoryMFA').perform();
