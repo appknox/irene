@@ -35,6 +35,7 @@ const User = DS.Model.extend({
   mfaSecret: DS.attr('string'),
   isTrial: DS.attr('boolean'),
   crispHash: DS.attr('string'),
+  canDisableMfa: DS.attr('boolean'),
   isSecurity: true, // FIXME:
 
   isNotSecurity: computed.not('isSecurity'),
@@ -55,15 +56,6 @@ const User = DS.Model.extend({
       return true;
     }
     return false;
-  }),
-
-  mfaMethodDisplay: computed("mfaMethod", function() {
-    const mfaMethod = this.get("mfaMethod");
-    const MFA_METHODS = {
-      [ENUMS.MFA_METHOD.TOTP]: 'App',
-      [ENUMS.MFA_METHOD.HOTP]: 'Email',
-    }
-    return MFA_METHODS[mfaMethod] || '';
   }),
 
   totalProjects: computed("projectCount", function() {
