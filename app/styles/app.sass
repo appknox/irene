@@ -225,8 +225,70 @@ h3
         border-color: rgba($success, 0.35)
 
 .fill-success-box
-  border-color: rgba($success, 0.5);
-  background: rgba($success, 0.15);
+  border-color: rgba($success, 0.5)
+  background: rgba($success, 0.15)
+  &:hover
+    background: rgba($success, 0.15)
+
+.alert
+  background: $color-lightgray
+  border: 1px solid darken($color-lightgray, 3%)
+  color: darken($color-lightgray, 37%)
+  border-radius: 0.2em
+  padding: 0.75em 1.1em 0.65em
+
+  &-link
+    font-weight: bold
+
+  &-small
+    font-size: 0.93em
+    line-height: 1.5
+
+  &-critical
+    background: rgba($critical, 0.11)
+    border-color: rgba($critical, 0.2)
+    color: mix($color-table, $critical, 30%)
+    .alert-link
+      color: mix($color-table, $critical, 55%)
+      &:hover
+        text-decoration: underline
+
+  &-danger
+    background: rgba($danger, 0.11)
+    border-color: rgba($danger, 0.2)
+    color: mix($color-table, $danger, 30%)
+    .alert-link
+      color: mix($color-table, $danger, 55%)
+      &:hover
+        text-decoration: underline
+
+  &-warning
+    background: rgba($warning, 0.11)
+    border-color: rgba($warning, 0.3)
+    color: mix($color-table, mix($primary, $warning, 15%), 30%)
+    .alert-link
+      color: mix($color-table, mix($primary, $warning, 25%), 60%)
+      &:hover
+        text-decoration: underline
+
+  &-info
+    background: rgba($info, 0.11)
+    border-color: rgba($info, 0.2)
+    color: mix($color-table, $info, 30%)
+    .alert-link
+      color: mix($color-table, $info, 55%)
+      &:hover
+        text-decoration: underline
+
+  &-success
+    background: rgba($success, 0.11)
+    border-color: rgba($success, 0.2)
+    color: mix($color-table, $success, 30%)
+    .alert-link
+      color: mix($color-table, $success, 55%)
+      &:hover
+        text-decoration: underline
+
 
 $badge-small-size: 1.5em
 .badge-square
@@ -806,6 +868,9 @@ div[class^="_c-notification__container"]
 
 .columns-main-container
   margin-top: 0px!important
+
+.is-two-third
+  width: 66.67%
 
 .box-container
   padding: 5px 20px 20px 20px
