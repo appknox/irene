@@ -14,19 +14,23 @@ if me.org.is_owner
                 span class="slider slider-nolabel round"
             .padding-l-1h
               label.black-text local-class="org-setting-title" for="mandate-mfa"
-                | #{t "enableMandatoryMFATitle"}
+                = t "enableMandatoryMFATitle"
               div local-class="org-setting-desc" local-class="checkbox-desc"
-                | #{t "enableMandatoryMFADescription"}
+                = t "enableMandatoryMFADescription"
               .alert.alert-critical.alert-small.margin-t-1
                 .vertical-align-center
                   = fa-icon "warning"
                   .margin-l-h
                     span.bold
-                      | Caution!
-                    | &nbsp;This setting will affect login process of every member of this organization.
+                      | #{t "warning"}!&nbsp;
+                    = t "enableMandatoryMFAWarning"
               if isUserMfaDisabled
                 .margin-t-1
                   .alert.alert-small
-                    | For enabling mandatory MFA for organization, you need to have MFA enabled for your user account. Enable it from here:&nbsp;
-                    = link-to 'authenticated.settings.security' class="alert-link"
-                      | Account Settings > Security > Multi Factor Authentication
+                    .vertical-align-center
+                      = fa-icon "shield"
+                      .margin-l-1
+                        = t "enableMandatoryMFARequirement"
+                        | &nbsp;
+                        = link-to 'authenticated.settings.security' class="alert-link"
+                          | #{t "accountSettings"} > #{t "security"} > #{t "multiFactorAuth"}
