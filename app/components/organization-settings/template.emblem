@@ -26,7 +26,7 @@ if me.org.is_owner
                     = t "enableMandatoryMFAWarning"
               if isUserMfaDisabled
                 .margin-t-1
-                  .alert.alert-small
+                  .alert.alert-danger.alert-small
                     .vertical-align-center
                       = fa-icon "shield"
                       .margin-l-1
