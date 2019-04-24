@@ -11,8 +11,15 @@ import { translationMacro as t } from 'ember-i18n';
 export default Component.extend({
 
   i18n: service(),
-
   tPleaseTryAgain: t('pleaseTryAgain'),
+
+  manualStatuses: ENUMS.MANUAL.CHOICES.filter(c => c.key !== 'UNKNOWN').map(c => String(c.value)),
+  // to String because power-select has issues with 0
+  // https://github.com/cibernox/ember-power-select/issues/962
+  manualToString: computed("file.manual", function() {
+    const manual = this.get("file.manual");
+    return String(manual);
+  }),
 
   vulnerabilities: computed(function() {
     const projectId = this.get("file.project.id");
@@ -22,6 +29,7 @@ export default Component.extend({
         data => store.query("security/vulnerability", {projectId, limit: data.meta.count})
       )
   }),
+
 
   ireneFilePath: computed(function() {
     const fileid = this.get("file.id");
@@ -66,6 +74,26 @@ export default Component.extend({
       errMsg = error.errors[0].detail || errMsg;
     } else if(error.message) {
       errMsg = error.message;
+    }
+    this.get("notify").error(errMsg);
+  }),
+
+  selectManualScan: task(function * (status) {
+    const file = yield this.get('file');
+    file.set('manual', status);
+    yield file.save();
+  }).evented(),
+
+  selectManualScanSucceeded: on('selectManualScan:succeeded', function() {
+    this.get('notify').success('Manual Scan Status Updated');
+  }),
+
+  selectManualScanErrored: on('selectManualScan:errored', function(_, err) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (err.errors && err.errors.length) {
+      errMsg = err.errors[0].detail || errMsg;
+    } else if(err.message) {
+      errMsg = err.message;
     }
     this.get("notify").error(errMsg);
   }),

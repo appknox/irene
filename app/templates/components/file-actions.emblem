@@ -36,17 +36,22 @@
               .column
                 h3
                   | Scan Status
-            .columns
-              .column.margin-top
-                div
-                  label
-                    = input type="checkbox" class="checkbox" checked=file.isApiDone click=(perform setApiScanStatus value="target.checked")
-                    | &nbsp; Is API done
-                div
-                  label
-                    = input type="checkbox" class="checkbox" checked=file.isDynamicDone click=(perform setDynamicDone value="target.checked")
-                    | &nbsp; Is Dynamic done
-
+            .columns.margin-t-h.vertical-align-center
+              .column
+                label
+                  = input type="checkbox" class="checkbox" checked=file.isApiDone click=(perform setApiScanStatus value="target.checked")
+                  | &nbsp; Is API done
+              .column
+                label
+                  = input type="checkbox" class="checkbox" checked=file.isDynamicDone click=(perform setDynamicDone value="target.checked")
+                  | &nbsp; Is Dynamic done
+              .column
+                .vertical-align-center
+                  .padding-r-h
+                    | Manual Scan
+                  .flex-grow-1
+                    = power-select searchEnabled=false selected=manualToString onchange=(perform selectManualScan value="target.value") options=manualStatuses as |status|
+                      | #{manual-scan-status status}
 
       .columns
         .column
