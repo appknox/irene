@@ -4,6 +4,7 @@ import ENUMS from 'irene/enums';
 export function analysisRiskStatus(params) {
   let risk = null;
   let status = null;
+  let isOverriddenRisk = false;
 
   try {
     risk = parseInt(params[0])
@@ -15,6 +16,12 @@ export function analysisRiskStatus(params) {
     status = parseInt(params[1])
   } catch(_) {
     // null status
+  }
+
+  try {
+    isOverriddenRisk = !!params[2]
+  } catch(_) {
+    // null isOverriddenRisk
   }
 
   const classes = {
@@ -66,6 +73,13 @@ export function analysisRiskStatus(params) {
   }
 
   if ((status || status == 0) && status !== ENUMS.ANALYSIS.COMPLETED) {
+    if (isOverriddenRisk && risk !== null) {
+      return {
+        cssclass: classes.risk[risk] || classes.status[status] || '',
+        icon: icons.status[status] || '',
+        label: labels.status[status] || '',
+      };
+    }
     return {
       cssclass: classes.status[status] || '',
       icon: icons.status[status] || '',

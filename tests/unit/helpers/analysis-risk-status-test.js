@@ -186,3 +186,17 @@ test('it works for empty input', function(assert) {
   assert.equal(emptyInput.icon, '');
   assert.equal(emptyInput.label, '');
 });
+
+test('it return status for overriddenRisk with risk class & status label', function(assert) {
+  let overriddenCriticalWaiting = analysisRiskStatus([ENUMS.RISK.CRITICAL, ENUMS.ANALYSIS.WAITING, true]);
+  assert.equal(overriddenCriticalWaiting.cssclass, 'is-critical');
+  assert.equal(overriddenCriticalWaiting.icon, 'fa-minus-circle');
+  assert.equal(overriddenCriticalWaiting.label, 'Not started');
+});
+
+test('it return status for overriddenRisk with status class & label if risk is invalid', function(assert) {
+  let overriddenInvalidWaiting = analysisRiskStatus([-2, ENUMS.ANALYSIS.WAITING, true]);
+  assert.equal(overriddenInvalidWaiting.cssclass, 'is-waiting');
+  assert.equal(overriddenInvalidWaiting.icon, 'fa-minus-circle');
+  assert.equal(overriddenInvalidWaiting.label, 'Not started');
+});
