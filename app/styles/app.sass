@@ -1274,19 +1274,30 @@ b.bold
   border-radius: 5px 0px 0px 5px
   border-width: 0px!important
   padding: 4px 10px
+  background-color: #f6f8fa
+  border-color: #f6f8fa
   .severity-tags
-    width: 90px
+    width: 9.8em
   h6
     font-size: 16px
   .columns
     margin-top: 0px
-  &:nth-child(odd)
-    background-color: #f6f8fa
 
-.message .message-header.is-progress
-  border-color: rgb(255, 224, 221)
-  border-width: 1px 1px 1px 5px
-  border-style: solid
+.message .message-header
+  &.is-progress
+    border-color: rgb(255, 224, 221)
+    border-width: 1px 1px 1px 5px
+    border-style: solid
+  &.is-untested
+    border-color: #f5f5f5
+    border-width: 1px 1px 1px 5px
+    border-style: solid
+    background-color: #f5f5f5
+  &.is-errored
+    border-color: rgb(255, 224, 221)
+    border-width: 1px 1px 1px 5px
+    border-style: solid
+    background-color: lighten(rgb(255, 224, 221), 2%)
 
 .vuln-header
   border-width: 1px 1px 1px 5px
@@ -1688,9 +1699,17 @@ button.delete-button
     list-style: disc
     margin-left: 20px
 
-.tag.delete-tag
-  background-color: $red
-  color: #fff
+.tag
+  border: 1px solid transparent
+  &.delete-tag
+    background-color: $red
+    color: #fff
+  &.is-errored
+    color: $red
+    border-color: rgba($red, 0.4)
+  &.is-waiting
+    color: rgba($color-table, 0.9)
+    border-color: rgba($color-table, 0.2)
 
 .colored-box
   margin: auto

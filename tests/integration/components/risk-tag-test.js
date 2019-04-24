@@ -3,6 +3,7 @@ import tHelper from 'ember-i18n/helper';
 import localeConfig from 'ember-i18n/config/en';
 import { test, moduleForComponent } from 'ember-qunit';
 import { run } from '@ember/runloop';
+import ENUMS from 'irene/enums';
 
 moduleForComponent('risk-tag', 'Integration | Component | risk tag', {
   unit: true,
@@ -24,58 +25,19 @@ moduleForComponent('risk-tag', 'Integration | Component | risk tag', {
   }
 });
 
-test('tapping button fires an external action', function(assert) {
-
+test('analysisRiskStatus is computed correctly', function(assert) {
   var component = this.subject();
-
   run(function() {
-    assert.equal(component.get("scanningText"), "", "Scanning Text");
-    component.set("analysis", {vulnerability: {types: [1]}});
-    assert.equal(component.get("scanningText").string, "Scanning", "Scanning Text");
-    component.set("analysis", {
-      vulnerability: {
-        types: [2]
-      },
-      file: {
-        dynamicStatus: 0
-      }
-    });
-    assert.equal(component.get("scanningText").string, "Untested", "Scanning Text");
-    component.set("analysis", {
-      vulnerability: {
-        types: [2]
-      }
-    });
-    assert.equal(component.get("scanningText").string, "Scanning", "Scanning Text");
-    component.set("analysis", {
-      vulnerability: {
-        types: [3]
-      }
-    });
-    assert.equal(component.get("scanningText").string, "Untested", "Scanning Text");
-    component.set("analysis", {
-      vulnerability: {
-        types: [3]
-      },
-      file: {
-        manual: true
-      }
-    });
-    assert.equal(component.get("scanningText").string, "Requested", "Scanning Text");
-    component.set("analysis", {
-      vulnerability: {
-        types: [4]
-      }
-    });
-    assert.equal(component.get("scanningText").string, "Untested", "Scanning Text");
-    component.set("analysis", {
-      vulnerability: {
-        types: [4]
-      },
-      file: {
-        apiScanProgress: 1
-      }
-    });
-    assert.equal(component.get("scanningText").string, "Scanning", "Scanning Text");
+    component.set('analysis', {computedRisk: 3, status: ENUMS.ANALYSIS.COMPLETED});
+    const analysisRiskStatus1 = component.get('analysisRiskStatus');
+    assert.equal(analysisRiskStatus1.cssclass, 'is-danger');
+    assert.equal(analysisRiskStatus1.icon, 'fa-warning');
+    assert.equal(analysisRiskStatus1.label, 'High');
+
+    component.set('analysis', {computedRisk: -1, status: ENUMS.ANALYSIS.WAITING});
+    const analysisRiskStatus2 = component.get('analysisRiskStatus');
+    assert.equal(analysisRiskStatus2.cssclass, 'is-waiting');
+    assert.equal(analysisRiskStatus2.icon, 'fa-minus-circle');
+    assert.equal(analysisRiskStatus2.label, 'Not started');
   });
 });

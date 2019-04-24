@@ -1,6 +1,6 @@
 .columns
   .column
-    .message-header.vuln-header.hideOrShow click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus class=progressClass
+    .message-header.vuln-header.hideOrShow click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus class=statusClass
       .columns
         = risk-tag analysis=analysis columnSize="is-one-sixth"
         .column

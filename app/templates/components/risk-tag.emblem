@@ -1,19 +1,9 @@
-if analysis
-  .column.severity-tags class="tag {{risk-label-class analysis.computedRisk}}" class=columnSize
-    i.fa.risk-icons class=analysis.computedRiskIconClass
-    if analysis.isScanning
-      .uppercase-text
-        | &nbsp;{{scanningText}}
-    else
-      .uppercase-text
-        | &nbsp; #{ t (risk-text analysis.computedRisk)}
-      if isNonPassedRiskOverridden
-        img src="/images/user-edited.svg" class="user-edited-icon"
-        = attach-tooltip placement="top"
-          | #{ t "overriddenRisk"},&nbsp;
-          | #{ t "orginalRisk"}: #{t (risk-text analysis.risk)}
-else
-  .column.severity-tags.tag.is-progress class=columnSize
-    i.fa.risk-icons.fa-spinner.fa-spin
-    .uppercase-text
-      | &nbsp; #{t "untested"}
+.column.severity-tags class="tag {{analysisRiskStatus.cssclass}}" class=columnSize
+  i.fa.risk-icons class="{{analysisRiskStatus.icon}}"
+  .uppercase-text.padding-l-h
+    | {{analysisRiskStatus.label}}
+  if isNonPassedRiskOverridden
+    img src="/images/user-edited.svg" class="user-edited-icon"
+    = attach-tooltip placement="top"
+      | #{ t "overriddenRisk"},&nbsp;
+      | #{ t "orginalRisk"}: #{t (risk-text analysis.risk)}
