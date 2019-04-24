@@ -17,7 +17,6 @@ export default DS.Model.extend({
     if(apiScanStatus === ENUMS.SCAN_STATUS.COMPLETED) return true;
   }),
   isDynamicDone: DS.attr('boolean'),
-  isManualDone: DS.attr('boolean'),
   isStaticDone: DS.attr('boolean'),
   manual: DS.attr('number'),
 
