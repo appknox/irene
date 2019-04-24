@@ -12,7 +12,11 @@ export default Component.extend({
     return this.get('analysis.overriddenRisk') != null && this.get('analysis.risk') != ENUMS.RISK.NONE;
   }),
 
-  analysisRiskStatus: computed('analysis.{computedRisk,status}', function() {
-    return analysisRiskStatus([this.get('analysis.computedRisk'), this.get('analysis.status')]);
+  analysisRiskStatus: computed('analysis.{computedRisk,status,isOverriddenRisk}', function() {
+    return analysisRiskStatus([
+      this.get('analysis.computedRisk'),
+      this.get('analysis.status'),
+      this.get('analysis.isOverriddenRisk'),
+    ]);
   }),
 });
