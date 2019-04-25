@@ -1333,6 +1333,8 @@ b.bold
     font-size: 12px
     margin-left: 4px
     margin-right: -4px
+.status-tag
+  color: $default
 
 table.vuln-table
   th, td
@@ -1710,6 +1712,17 @@ button.delete-button
   &.is-waiting
     color: rgba($color-table, 0.9)
     border-color: rgba($color-table, 0.2)
+
+  &.status-tag-0
+    background-color: $red
+    color: #fff
+  &.status-tag-1
+    background-color: $default
+    color: #fff
+  &.status-tag-2
+    @extend .is-progress
+  &.status-tag-3
+    color: $success
 
 .colored-box
   margin: auto
