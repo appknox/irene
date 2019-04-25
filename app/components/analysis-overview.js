@@ -7,7 +7,7 @@ export default Component.extend({
 
   tags: computed(
     "analysis.vulnerability.types",
-    "analysis.file.{isStaticDone,isDynamicDone,isManualDone,isApiDone}",
+    "analysis.file.{isStaticDone,isDynamicDone,isApiDone,manual}",
     function () {
       const types = this.get("analysis.vulnerability.types");
       if (types === undefined) { return []; }
@@ -27,7 +27,7 @@ export default Component.extend({
         }
         if (type === ENUMS.VULNERABILITY_TYPE.MANUAL) {
           tags.push({
-            status: this.get("analysis.file.isManualDone"),
+            status: this.get("analysis.file.manual") == ENUMS.MANUAL.DONE,
             text: "manual"
           });
         }
