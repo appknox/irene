@@ -1333,6 +1333,8 @@ b.bold
     font-size: 12px
     margin-left: 4px
     margin-right: -4px
+.status-tag
+  color: $default
 
 table.vuln-table
   th, td
@@ -1491,7 +1493,7 @@ ul.risk-table
 .table-container
   @extend .align-center
 
-.security-list-table, .finding-list-table, .attachments-list-table
+.finding-list-table, .attachments-list-table
   min-width: 600px
   @extend .api-filter-table
   tr
@@ -1507,15 +1509,21 @@ ul.risk-table
         text-align: center
 
 .security-list-table
-  min-width: 100%
+  @extend .api-filter-table
+  width: 100%
+  th
+    text-align: center
   tr
-    td:nth-child(2)
-      min-width: 300px
-      max-width: 300px
+    td:nth-child(3), td:nth-child(4), td:nth-child(5)
+      white-space: nowrap
+    td:nth-child(2n - 1)
+      background: #ececec
 
 .file-action-container
-  width: 60%
   margin: auto
+  width: 90%
+  @media (min-width: 1200px)
+    width: 70%
 
 .attachments-list-table
   margin-left: 0px!important
@@ -1710,6 +1718,17 @@ button.delete-button
   &.is-waiting
     color: rgba($color-table, 0.9)
     border-color: rgba($color-table, 0.2)
+
+  &.status-tag-0
+    background-color: $red
+    color: #fff
+  &.status-tag-1
+    background-color: $default
+    color: #fff
+  &.status-tag-2
+    @extend .is-progress
+  &.status-tag-3
+    color: $success
 
 .colored-box
   margin: auto

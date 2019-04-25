@@ -23,3 +23,6 @@ td
         = fa-icon "times"
         = attach-tooltip position="top"
           | #{tag.text} #{t "scanNotCompleted"}
+td
+  .tag.status-tag class="status-tag-{{ analysis.status }}"
+    | #{analysis-status analysis.status}
