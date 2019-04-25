@@ -129,15 +129,15 @@
                 if analysisDetails.overriddenRisk
                   button.is-primary.highlighted-button.edit-marked-analysis click="resetOverriddenAnalysis"
                     | reset
-              if analysisDetails.overriddenRisk
-                .columns
-                  .column
-                    .vertical-align-top
-                      .margin-r-1.padding-t-h
-                        label.bold
-                          = t "comment"
-                      div.contain-width
-                        = textarea class="form-control textarea-input margin-t-q" rows="2" placeholder=(t "reasonForOverride") value=analysisDetails.overriddenRiskComment
+          if analysisDetails.overriddenRisk
+            .columns
+              .column
+                .vertical-align-top
+                  .margin-r-1.padding-t-h
+                    label.bold
+                      = t "comment"
+                  div.contain-width
+                    = textarea class="form-control textarea-input margin-t-q" rows="2" placeholder=(t "reasonForOverride") value=analysisDetails.overriddenRiskComment
 
       .columns
         .column.is-one-third
