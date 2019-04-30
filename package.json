@@ -63,7 +63,7 @@
     "ember-cli-pace": "0.1.0",
     "ember-cli-qunit": "^4.1.1",
     "ember-cli-rollbar": "0.3.1",
-    "ember-cli-sass": "^7.0.0",
+    "ember-cli-sass": "^10.0.0",
     "ember-cli-test-loader": "^2.1.0",
     "ember-cli-uglify": "^2.0.0",
     "ember-concurrency": "^0.8.19",
@@ -92,7 +92,7 @@
     "eslint-plugin-ember": "github:ember-cli/eslint-plugin-ember#4291e84bb07d4ea399dec4e17ba611ce8fec0f20",
     "loader.js": "^4.0.1",
     "mock-socket": "6.0.4",
-    "node-sass": "^4.9.0",
+    "node-sass": "^4.12.0",
     "phantomjs-prebuilt": "^2.1.14"
   },
   "engines": {
