@@ -8,7 +8,18 @@ moduleForComponent('submission-list', 'Integration | Component | submission list
 test('it exists', function(assert) {
   const component = this.subject();
   var store = {
-    findAll: function() {
+    peekAll: function() {
+      return [
+        {
+          id:1,
+          type: "submission",
+          attributes: {
+            name: "test"
+          }
+        }
+      ];
+    },
+    query: function() {
       return [
         {
           id:1,
