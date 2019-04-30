@@ -17,6 +17,7 @@ module.exports = function(defaults) {
       exclude: ['runtimeconfig.js']
     },
     sassOptions: {
+      implementation: require("node-sass"),
       extension: 'sass',
       includePaths: [
         'bower_components/bohemia/'

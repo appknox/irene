@@ -9,7 +9,10 @@ const SubmissionListComponent = Component.extend({
   hasSubmissions: computed.gt('submissionCount', 0),
 
   submissions: computed("realtime.SubmissionCounter", function() {
-    return this.get("store").findAll("submission");
+    this.get("store").query("submission", {
+      'status': ENUMS.SUBMISSION_STATUS.VALIDATING
+    });
+    return this.get("store").peekAll("submission");
   }),
 
   submissionStatusObserver: observer("submissions.@each.status", function() {
@@ -18,7 +21,7 @@ const SubmissionListComponent = Component.extend({
     return this.set("filteredSubmissions", filteredSubmissions);
   }),
 
-  submissionSorting: ['id:desc'],
+  submissionSorting: ['createdOn:desc'],
   sortedSubmissions: computed.sort('filteredSubmissions', 'submissionSorting'),
 
   sortedSubmissionsCount: computed.alias('filteredSubmissions.length'),
