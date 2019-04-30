@@ -3,7 +3,6 @@ import BaseModeMixin from 'irene/mixins/base-model';
 import { computed } from '@ember/object';
 
 const Submission = DS.Model.extend(BaseModeMixin, {
-
   user: DS.belongsTo('user', {inverse: 'submissions'}),
   metaData: DS.attr('string'),
   status: DS.attr('number'),
@@ -16,7 +15,6 @@ const Submission = DS.Model.extend(BaseModeMixin, {
     const reason = this.get("reason");
     return (reason != null ? reason.length : undefined) > 0;
   })
-}
-);
+});
 
 export default Submission;

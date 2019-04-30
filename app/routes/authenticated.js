@@ -1,3 +1,6 @@
+import { singularize } from 'ember-inflector';
+import { debug } from '@ember/debug';
+
 import ENUMS from 'irene/enums';
 import { CSBMap } from 'irene/router';
 import ENV from 'irene/config/environment';
@@ -102,15 +105,30 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
     const realtime = this.get("realtime");
 
     const allEvents = {
-
       object(data) {
+        if(data.id && data.type) {
+          try {
+            var modelName = singularize(data.type);
+            store.findRecord(modelName, data.id);
+          } catch (e) {
+            debug(e);
+          }
+        }
+        debug(data);
         store.pushPayload({data});
       },
-
       newobject(data) {
+        if(data.id && data.type) {
+          try {
+            var modelName = singularize(data.type);
+            store.findRecord(modelName, data.id);
+          } catch (e) {
+            debug(e);
+          }
+        }
+        debug(data);
         store.pushPayload({data});
       },
-
       message(data) {
         const { message } = data;
         const { notifyType } = data;
