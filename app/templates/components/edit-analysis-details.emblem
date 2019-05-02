@@ -28,8 +28,14 @@
           = power-select placeholder="Select Status" selected=analysisDetails.status options=statuses onchange=(action "selectStatus") as |status|
             | #{analysis-status status}
       .columns
-        h5.bold-font.margin-left20
-          | CVSS Metrics
+        .column
+          h5.bold-font.margin-left20
+            | CVSS Metrics
+        .column.text-right
+          button.is-primary.highlighted-button click={(perform clearCvss)}
+            = fa-icon "window-close"
+            .margin-l-h
+              | Set to Untested
       .columns.border-bottom-container
         .column.is-one-third.cvss-score-section
           .colored-box class=analysisDetails.riskLabelClass
