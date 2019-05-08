@@ -18,7 +18,8 @@
     "postinstall": "bower install",
     "deploy": "ember deploy production --verbose=true --activate=true --show-progress=true",
     "deploy:staging": "ember deploy staging --verbose=true --activate=true --show-progress=true",
-    "deploy:sequelstring": "ember deploy sequelstring --verbose=true --activate=true --show-progress=true"
+    "deploy:sequelstring": "ember deploy sequelstring --verbose=true --activate=true --show-progress=true",
+    "deploy:gbm": "ember deploy gbm --verbose=true --activate=true --show-progress=true"
   },
   "devDependencies": {
     "bower": "^1.8.2",

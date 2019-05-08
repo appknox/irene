@@ -325,7 +325,8 @@ module.exports = function(environment) {
 
   if (
     environment === 'whitelabel' ||
-    environment === 'sequelstring'
+    environment === 'sequelstring' ||
+    environment === 'gbm'
   ) {
     ENV.enableCrisp = false;
     ENV.enableHotjar = false;
