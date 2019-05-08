@@ -18,7 +18,6 @@ yarn-error.log
 testem.log
 *.DS_Store
 .env
-package-lock.json
 
 .env.deploy.whitelabel
 typings
