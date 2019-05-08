@@ -30,6 +30,7 @@ jobs:
 
               npm run deploy
               npm run deploy:sequelstring
+              npm run deploy:gbm
 
               curl https://api.rollbar.com/api/1/deploy/ \
                 -F access_token=$ROLLBAR_ACCESS_TOKEN \

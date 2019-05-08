@@ -91,6 +91,33 @@ module.exports = function(deployTarget) {
     };
   }
 
+  if (deployTarget === 'gbm') {
+    ENV.build.environment = 'gbm';
+
+    process.env["ENTERPRISE"] = true
+    process.env["WHITELABEL_ENABLED"] = true
+    process.env["WHITELABEL_LOGO"] = "https://appknox-production-public.s3.amazonaws.com/gbm_logo1.png"
+    process.env["WHITELABEL_NAME"] = "GBM"
+    process.env["WHITELABEL_THEME"] = "light"
+
+    ENV.s3 = {
+      bucket: process.env.GBM_AWS_BUCKET,
+      region: process.env.AWS_REGION
+    };
+
+    ENV['s3-index'] = {
+      bucket: process.env.GBM_AWS_BUCKET,
+      region: process.env.AWS_REGION,
+      allowOverwrite: true
+    };
+
+    // configure other plugins for production deploy target here
+
+    ENV.cloudfront = {
+      distribution: 'E1R9ZLGFEM1TTU'
+    };
+  }
+
   // Note: if you need to build some configuration asynchronously, you can return
   // a promise that resolves with the ENV object instead of returning the
   // ENV object synchronously.
