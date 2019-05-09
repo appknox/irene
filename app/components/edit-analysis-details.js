@@ -128,7 +128,19 @@ export default Component.extend({
     });
   },
 
-
+  clearCvss: task(function * () {
+    this.set('analysisDetails.cvssBase', -1.0);
+    this.set('analysisDetails.cvssVector', '');
+    this.set('analysisDetails.attackVector', ENUMS.ATTACK_VECTOR.UNKNOWN);
+    this.set('analysisDetails.attackComplexity', ENUMS.ATTACK_COMPLEXITY.UNKNOWN);
+    this.set('analysisDetails.privilegesRequired', ENUMS.PRIVILEGES_REQUIRED.UNKNOWN);
+    this.set('analysisDetails.userInteraction', ENUMS.USER_INTERACTION.UNKNOWN);
+    this.set('analysisDetails.scope', ENUMS.SCOPE.UNKNOWN);
+    this.set('analysisDetails.confidentialityImpact', ENUMS.CONFIDENTIALITY_IMPACT.UNKNOWN);
+    this.set('analysisDetails.integrityImpact', ENUMS.INTEGRITY_IMPACT.UNKNOWN);
+    this.set('analysisDetails.availabilityImpact', ENUMS.AVAILABILITY_IMPACT.UNKNOWN);
+    yield this.set('analysisDetails.risk', ENUMS.RISK.UNKNOWN);
+  }),
 
   detailSaveUtil: task(function * (param){
     try{
