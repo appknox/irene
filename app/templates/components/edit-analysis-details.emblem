@@ -38,11 +38,19 @@
               | Set to Untested
       .columns.border-bottom-container
         .column.is-one-third.cvss-score-section
-          .colored-box class=analysisDetails.riskLabelClass
-            .columns
-              .column
-                h1
-                  = analysisDetails.cvssBase
+          .colored-box class=analysisDetails.riskLabelClass class=isInValidCvssBase:is-error
+            if isInValidCvssBase
+              .font-legible.padding-t-2.padding-b-1h
+                = fa-icon "warning"
+                div.padding-t-h
+                  | Invalid
+                div
+                  | vector
+            else
+              .columns
+                .column
+                  h1
+                    = analysisDetails.cvssBase
             .columns
               .column
                 h6.uppercase-text

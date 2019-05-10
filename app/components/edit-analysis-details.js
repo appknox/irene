@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
+import { on } from '@ember/object/evented';
 import { isEmpty } from '@ember/utils';
 import { getOwner } from '@ember/application';
 import ENUMS from 'irene/enums';
@@ -13,19 +14,20 @@ export default Component.extend({
   findings: [],
   findingTitle: "",
   findingDescription: "",
+  isInValidCvssBase: false,
 
   session: service(),
 
-  risks: ENUMS.RISK.CHOICES,
-  scopes: ENUMS.SCOPE.CHOICES.slice(0, 2),
-  statuses: ENUMS.ANALYSIS_STATUS.CHOICES.slice(0),
-  attackVectors: ENUMS.ATTACK_VECTOR.CHOICES.slice(0, 4),
-  integrityImpacts: ENUMS.INTEGRITY_IMPACT.CHOICES.slice(0, 3),
-  userInteractions: ENUMS.USER_INTERACTION.CHOICES.slice(0, 2),
-  attackComplexities: ENUMS.ATTACK_COMPLEXITY.CHOICES.slice(0, 2),
-  requiredPrevileges: ENUMS.PRIVILEGES_REQUIRED.CHOICES.slice(0, 3),
-  availabilityImpacts: ENUMS.AVAILABILITY_IMPACT.CHOICES.slice(0, 3),
-  confidentialityImpacts: ENUMS.CONFIDENTIALITY_IMPACT.CHOICES.slice(0, 3),
+  risks: ENUMS.RISK.BASE_CHOICES,
+  scopes: ENUMS.SCOPE.BASE_CHOICES,
+  statuses: ENUMS.ANALYSIS_STATUS.BASE_CHOICES,
+  attackVectors: ENUMS.ATTACK_VECTOR.BASE_CHOICES,
+  integrityImpacts: ENUMS.INTEGRITY_IMPACT.BASE_CHOICES,
+  userInteractions: ENUMS.USER_INTERACTION.BASE_CHOICES,
+  attackComplexities: ENUMS.ATTACK_COMPLEXITY.BASE_CHOICES,
+  requiredPrevileges: ENUMS.PRIVILEGES_REQUIRED.BASE_CHOICES,
+  availabilityImpacts: ENUMS.AVAILABILITY_IMPACT.BASE_CHOICES,
+  confidentialityImpacts: ENUMS.CONFIDENTIALITY_IMPACT.BASE_CHOICES,
 
   ireneFilePath: computed(function() {
     const fileId = this.get("analysisDetails.file.id");
@@ -107,6 +109,34 @@ export default Component.extend({
     }
   },
 
+  isValidCvssVector() {
+    const av = this.get("analysisDetails.attackVector");
+    const ac = this.get("analysisDetails.attackComplexity");
+    const pr = this.get("analysisDetails.privilegesRequired");
+    const ui = this.get("analysisDetails.userInteraction");
+    const s = this.get("analysisDetails.scope");
+    const ci = this.get("analysisDetails.confidentialityImpact");
+    const ii = this.get("analysisDetails.integrityImpact");
+    const ai = this.get("analysisDetails.availabilityImpact");
+
+    if (!av && !ac && !pr && !ui && !s && !ci && !ii && !ai) {
+      return true;
+    }
+    if (
+      ENUMS.ATTACK_VECTOR.BASE_VALUES.includes(av) &&
+      ENUMS.ATTACK_COMPLEXITY.BASE_VALUES.includes(ac) &&
+      ENUMS.PRIVILEGES_REQUIRED.BASE_VALUES.includes(pr) &&
+      ENUMS.USER_INTERACTION.BASE_VALUES.includes(ui) &&
+      ENUMS.SCOPE.BASE_VALUES.includes(s) &&
+      ENUMS.CONFIDENTIALITY_IMPACT.BASE_VALUES.includes(ci) &&
+      ENUMS.INTEGRITY_IMPACT.BASE_VALUES.includes(ii) &&
+      ENUMS.AVAILABILITY_IMPACT.BASE_VALUES.includes(ai)
+    ) {
+      return true;
+    }
+    return false;
+  },
+
   updateCVSSScore() {
     const attackVector = this.get("analysisDetails.attackVector") || ENUMS.ATTACK_VECTOR.PHYSICAL;
     const attackComplexity = this.get("analysisDetails.attackComplexity") || ENUMS.ATTACK_COMPLEXITY.HIGH;
@@ -116,45 +146,69 @@ export default Component.extend({
     const confidentialityImpact = this.get("analysisDetails.confidentialityImpact") || ENUMS.CONFIDENTIALITY_IMPACT.NONE;
     const integrityImpact = this.get("analysisDetails.integrityImpact") || ENUMS.INTEGRITY_IMPACT.NONE;
     const availabilityImpact = this.get("analysisDetails.availabilityImpact") || ENUMS.AVAILABILITY_IMPACT.NONE;
-    const vector =`CVSS:3.0/AV:${attackVector}/AC:${attackComplexity}/PR:${privilegesRequired}/UI:${userInteraction}/S:${scope}/C:${confidentialityImpact}/I:${integrityImpact}/A:${availabilityImpact}`;
-    const url = `cvss?vector=${vector}`;
-    this.get("ajax").request(url)
-    .then((data) => {
-      this.set("analysisDetails.cvssBase", data.cvss_base);
-      this.set("analysisDetails.risk", data.risk);
-      this.set("analysisDetails.cvssVector", vector);
-    }, () => {
-      this.get("notify").error("Sorry something went wrong, please try again");
-    });
+
+    const isValidCvssVector = this.isValidCvssVector();
+    if (isValidCvssVector) {
+      const vector =`CVSS:3.0/AV:${attackVector}/AC:${attackComplexity}/PR:${privilegesRequired}/UI:${userInteraction}/S:${scope}/C:${confidentialityImpact}/I:${integrityImpact}/A:${availabilityImpact}`;
+      const url = `cvss?vector=${vector}`;
+      this.get("ajax").request(url)
+        .then((data) => {
+          this.set("analysisDetails.cvssBase", data.cvss_base);
+          this.set("analysisDetails.risk", data.risk);
+          this.set("analysisDetails.cvssVector", vector);
+          this.set("isInValidCvssBase", false);
+        }, () => {
+          this.get("notify").error("Sorry something went wrong, please try again");
+        });
+    } else {
+      this.set("isInValidCvssBase", true);
+    }
   },
 
   clearCvss: task(function * () {
     this.set('analysisDetails.cvssBase', -1.0);
     this.set('analysisDetails.cvssVector', '');
-    this.set('analysisDetails.attackVector', ENUMS.ATTACK_VECTOR.UNKNOWN);
-    this.set('analysisDetails.attackComplexity', ENUMS.ATTACK_COMPLEXITY.UNKNOWN);
-    this.set('analysisDetails.privilegesRequired', ENUMS.PRIVILEGES_REQUIRED.UNKNOWN);
-    this.set('analysisDetails.userInteraction', ENUMS.USER_INTERACTION.UNKNOWN);
-    this.set('analysisDetails.scope', ENUMS.SCOPE.UNKNOWN);
-    this.set('analysisDetails.confidentialityImpact', ENUMS.CONFIDENTIALITY_IMPACT.UNKNOWN);
-    this.set('analysisDetails.integrityImpact', ENUMS.INTEGRITY_IMPACT.UNKNOWN);
-    this.set('analysisDetails.availabilityImpact', ENUMS.AVAILABILITY_IMPACT.UNKNOWN);
+
+    this.set('analysisDetails.attackVector', '');
+    this.set('analysisDetails.attackComplexity', '');
+    this.set('analysisDetails.privilegesRequired', '');
+    this.set('analysisDetails.userInteraction', '');
+    this.set('analysisDetails.scope', '');
+    this.set('analysisDetails.confidentialityImpact', '');
+    this.set('analysisDetails.integrityImpact', '');
+    this.set('analysisDetails.availabilityImpact', '')
+
+    this.set("isInValidCvssBase", false);
     yield this.set('analysisDetails.risk', ENUMS.RISK.UNKNOWN);
   }),
 
   detailSaveUtil: task(function * (param){
-    try{
-      yield this.get('detailSaveAjaxCallUtil').perform(param);
-      this.get("notify").success("Analyses Updated");
-      if(param==="back") {
-        yield getOwner(this).lookup('route:authenticated').transitionTo("authenticated.security.file", this.get("analysisDetails.file.id"));
-      }
-    }catch(error){
-      this.get("notify").error("Sorry something went wrong, please try again");
+    yield this.get('detailSaveAjaxCallUtil').perform(param);
+    if(param==="back") {
+      yield getOwner(this).lookup('route:authenticated').transitionTo("authenticated.security.file", this.get("analysis.file.id"));
     }
+  }).evented(),
+
+  detailSaveUtilSucceeded: on('detailSaveUtil:succeeded', function() {
+    this.get('notify').success('Analysis Updated');
+  }),
+
+  detailSaveUtilErrored: on('detailSaveUtil:errored', function(_, error) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (error.errors && error.errors.length) {
+      errMsg = error.errors[0].detail || errMsg;
+    } else if(error.message) {
+      errMsg = error.message;
+    }
+    this.get("notify").error(errMsg);
   }),
 
   detailSaveAjaxCallUtil: task(function * () {
+    const isValidCvssVector = yield this.isValidCvssVector();
+    if (!isValidCvssVector) {
+      throw new Error("Invalid CVSS metrics");
+    }
+
     const risk = this.get("analysisDetails.risk");
     const owasp = this.get("analysisDetails.owasp");
     const pcidss = this.get("analysisDetails.pcidss");
@@ -178,10 +232,6 @@ export default Component.extend({
     const confidentialityImpact = this.get("analysisDetails.confidentialityImpact");
     const integrityImpact = this.get("analysisDetails.integrityImpact");
     const availabilityImpact = this.get("analysisDetails.availabilityImpact");
-
-    for (let inputValue of [attackVector, attackComplexity, privilegesRequired, userInteraction, scope, confidentialityImpact, integrityImpact, availabilityImpact]) {
-      if (isEmpty(inputValue)) { return this.get("notify").error("Please select all the CVSS Metrics"); }
-    }
 
     const cvssVector = this.get("analysisDetails.cvssVector");
     const data = {
