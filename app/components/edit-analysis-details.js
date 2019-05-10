@@ -90,8 +90,8 @@ export default Component.extend({
       this.set("analysisDetails.integrityImpact", ENUMS.INTEGRITY_IMPACT.NONE);
       this.set("analysisDetails.availabilityImpact", ENUMS.AVAILABILITY_IMPACT.NONE);
       this.set("analysisDetails.cvssVector", "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N");
-      this.updateCVSSScore()
-      this.send("saveAnalysis");
+      this.updateCVSSScore();
+      this.get('detailSaveAjaxCallUtil').perform();
       return this.set("showMarkPassedConfirmBox", false);
     }
   },
