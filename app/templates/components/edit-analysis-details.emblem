@@ -51,10 +51,10 @@
                 .column
                   h1
                     = analysisDetails.cvssBase
-            .columns
-              .column
-                h6.uppercase-text
-                  | #{risk-text analysisDetails.risk}
+              .columns
+                .column
+                  h6.uppercase-text
+                    | #{risk-text analysisDetails.risk}
         .column
           .columns
             .column
