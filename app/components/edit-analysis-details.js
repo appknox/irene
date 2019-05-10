@@ -91,7 +91,9 @@ export default Component.extend({
       this.set("analysisDetails.availabilityImpact", ENUMS.AVAILABILITY_IMPACT.NONE);
       this.set("analysisDetails.cvssVector", "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N");
       this.updateCVSSScore();
-      this.get('detailSaveAjaxCallUtil').perform();
+      this.set("analysisDetails.status", ENUMS.ANALYSIS_STATUS.COMPLETED);
+      this.get("updateAnalysis").perform();
+      this.get("notify").success("Analysis Updated");
       return this.set("showMarkPassedConfirmBox", false);
     }
   },
@@ -186,24 +188,24 @@ export default Component.extend({
     this.set('analysisDetails.scope', ENUMS.SCOPE.UNKNOWN);
     this.set('analysisDetails.confidentialityImpact', ENUMS.CONFIDENTIALITY_IMPACT.UNKNOWN);
     this.set('analysisDetails.integrityImpact', ENUMS.INTEGRITY_IMPACT.UNKNOWN);
-    this.set('analysisDetails.availabilityImpact', ENUMS.AVAILABILITY_IMPACT.UNKNOWN)
+    this.set('analysisDetails.availabilityImpact', ENUMS.AVAILABILITY_IMPACT.UNKNOWN);
 
     this.set("isInValidCvssBase", false);
     yield this.set('analysisDetails.risk', ENUMS.RISK.UNKNOWN);
   }),
 
-  detailSaveUtil: task(function * (param){
-    yield this.get('detailSaveAjaxCallUtil').perform(param);
+  saveAnalysis: task(function * (param){
+    yield this.get('updateAnalysis').perform(param);
     if(param==="back") {
       yield getOwner(this).lookup('route:authenticated').transitionTo("authenticated.security.file", this.get("analysis.file.id"));
     }
   }).evented(),
 
-  detailSaveUtilSucceeded: on('detailSaveUtil:succeeded', function() {
+  saveAnalysisSucceeded: on('saveAnalysis:succeeded', function() {
     this.get('notify').success('Analysis Updated');
   }),
 
-  detailSaveUtilErrored: on('detailSaveUtil:errored', function(_, error) {
+  saveAnalysisErrored: on('saveAnalysis:errored', function(_, error) {
     let errMsg = this.get('tPleaseTryAgain');
     if (error.errors && error.errors.length) {
       errMsg = error.errors[0].detail || errMsg;
@@ -213,7 +215,7 @@ export default Component.extend({
     this.get("notify").error(errMsg);
   }),
 
-  detailSaveAjaxCallUtil: task(function * () {
+  updateAnalysis: task(function * () {
     const isValidCvssVector = yield this.isValidCvssVector();
     if (!isValidCvssVector) {
       throw new Error("Invalid CVSS metrics");
@@ -287,7 +289,7 @@ export default Component.extend({
           content_type: "ANALYSIS"
         };
         yield this.get("ajax").post(ENV.endpoints.uploadedAttachment,{namespace: 'api/hudson-api', data: fileDetailsData});
-        yield this.get('detailSaveAjaxCallUtil').perform()
+        yield this.get('updateAnalysis').perform()
         this.set("isUploading", false);
         this.get("notify").success("File Uploaded Successfully");
         const analysisObj = yield this.get("store").findRecord('security/analysis', this.get("analysis.analysisid"));
