@@ -72,10 +72,15 @@ if notVNCViewer
       .api-scanning
         div.warning-band.info-band
           .columns
-            .column.is-one-sixth
+            .column.is-one-sixth.align-middle
               = fa-icon 'info-circle'
             .column
               = t "modalCard.apiScan.dynamicScanText"
+        if file.minOsVersion
+          .alert.alert-info.margin-t-3q
+            | App requires minimum OS version
+            span.bold.padding-l-q
+              | #{file.project.platformDisplay} #{file.minOsVersion}
         .project-preference-component
           if showAPIScanModal
             = project-preferences profileId=file.profile.id platform=file.project.platform project=file.project
