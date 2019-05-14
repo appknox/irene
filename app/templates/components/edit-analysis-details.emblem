@@ -8,12 +8,12 @@
       .column
         h3
           | #{analysisDetails.file.id} | #{analysisDetails.file.name}
-      if analysisDetails.isPassed
-        .column.content-right
+      .column.content-right
+        if analysisDetails.isPassed
           button.is-success.success-button click="openMarkPassedConfirmBox"
             | Mark as Passed
-          a.margin-left href=ireneFilePath target="_blank" class="button is-primary"
-            | Visit Dashboard
+        a.margin-left href=ireneFilePath target="_blank" class="button is-primary"
+          | Visit Dashboard
     .box.analysis-box
       .columns.border-bottom-container
         .column
@@ -38,15 +38,23 @@
               | Set to Untested
       .columns.border-bottom-container
         .column.is-one-third.cvss-score-section
-          .colored-box class=analysisDetails.riskLabelClass
-            .columns
-              .column
-                h1
-                  = analysisDetails.cvssBase
-            .columns
-              .column
-                h6.uppercase-text
-                  | #{risk-text analysisDetails.risk}
+          .colored-box class=analysisDetails.riskLabelClass class=isInValidCvssBase:is-error
+            if isInValidCvssBase
+              .font-legible.padding-t-2.padding-b-1h
+                = fa-icon "warning"
+                div.padding-t-h
+                  | Invalid
+                div
+                  | vector
+            else
+              .columns
+                .column
+                  h1
+                    = analysisDetails.cvssBase
+              .columns
+                .column
+                  h6.uppercase-text
+                    | #{risk-text analysisDetails.risk}
         .column
           .columns
             .column
@@ -235,10 +243,10 @@
 
       .columns
         .column
-          button.is-primary.margin-top30.highlighted-button click={(perform detailSaveUtil )} disabled=detailSaveUtil.isRunning
+          button.is-primary.margin-top30.highlighted-button click={(perform saveAnalysis)} disabled=saveAnalysis.isRunning
             | SAVE & CONTINUE EDITING
 
-          button.is-primary.margin-top30.highlighted-button.margin-left click={(perform detailSaveUtil 'back')} disabled=detailSaveUtil.isRunning
+          button.is-primary.margin-top30.highlighted-button.margin-left click={(perform saveAnalysis 'back')} disabled=saveAnalysis.isRunning
             | SAVE & GO BACK
 
 = confirm-box isActive=showRemoveFindingConfirmBox title="Are you sure you want to remove this finding" delegate=this key="finding"

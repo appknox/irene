@@ -189,14 +189,22 @@ const ENUMS = {
 // Populate `CHOICES`
 for (let enumName in ENUMS) {
   const enumValues = ENUMS[enumName];
+  const base_choices = [];
+  const base_values = [];
   const choices = [];
   const values = [];
-  enumValues['UNKNOWN'] = -1;
   for (let key in enumValues) {
     const value = enumValues[key];
+    base_choices.push({key, value});
+    base_values.push(value);
     choices.push({key, value});
     values.push(value);
   }
+  enumValues['UNKNOWN'] = -1;
+  choices.push({key: 'UNKNOWN',value: enumValues['UNKNOWN']});
+  values.push(enumValues['UNKNOWN']);
+  ENUMS[enumName]['BASE_CHOICES'] = base_choices;
+  ENUMS[enumName]['BASE_VALUES'] = base_values;
   ENUMS[enumName]['CHOICES'] = choices;
   ENUMS[enumName]['VALUES'] = values;
 }
