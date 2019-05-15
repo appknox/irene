@@ -495,6 +495,11 @@ export default {
     },
     "dynamicScan": {
       "title": "Dynamic Scan",
+      "deviceRequirements": "App's device requirements",
+      "osVersion": "OS version",
+      "orAbove": "or above",
+      "processorArchitecture": "Processor architecture",
+      "deviceTypes": "Device types",
     },
     "apiScan": {
       "title": "Do you also want to run API Scan?",

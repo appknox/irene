@@ -495,6 +495,11 @@ export default {
     },
     "dynamicScan": {
       "title": "Dynamic Scan",
+      "deviceRequirements": "App's device requirements",
+      "osVersion": "OS version",
+      "orAbove": "or above",
+      "processorArchitecture": "Processor architecture",
+      "deviceTypes": "Device types",
     },
     "apiScan": {
       "title": "API診断も実行しますか？",

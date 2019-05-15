@@ -77,29 +77,29 @@ if notVNCViewer
 
         if file.minOsVersion
           .alert.alert-info.margin-t-1h
-            | App's device requirements:
+            = t "modalCard.dynamicScan.deviceRequirements"
             table.alert-table.font-small.margin-t-3q.margin-b-q
               tr.font-small
                 td
-                  | OS version
+                  = t "modalCard.dynamicScan.osVersion"
                 td
                   span.display-inline-block.bold.margin-h-q
                     | #{file.project.platformDisplay}&nbsp;#{file.minOsVersion}&nbsp;
-                  | or above
+                  = t "modalCard.dynamicScan.orAbove"
               if file.supportedCpuArchitectures
                 tr.font-small
                   td
-                    | Processor architecture
+                    = t "modalCard.dynamicScan.processorArchitecture"
                   td
                     span.display-inline-block.bold.margin-h-q
                       | #{file.supportedCpuArchitectures}
               if file.supportedDeviceTypes
                 tr.font-small
                   td
-                    | Device types
+                    = t "modalCard.dynamicScan.deviceTypes"
                   td
                     span.display-inline-block.bold.margin-h-q
-                      |#{file.supportedDeviceTypes}
+                      | #{file.supportedDeviceTypes}
 
         .project-preference-component.margin-v-1h
           if showAPIScanModal
