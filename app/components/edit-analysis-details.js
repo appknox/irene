@@ -197,7 +197,7 @@ export default Component.extend({
   saveAnalysis: task(function * (param){
     yield this.get('updateAnalysis').perform(param);
     if(param==="back") {
-      yield getOwner(this).lookup('route:authenticated').transitionTo("authenticated.security.file", this.get("analysis.file.id"));
+      yield getOwner(this).lookup('route:authenticated').transitionTo("authenticated.security.file", this.get("analysisDetails.file.id"));
     }
   }).evented(),
 
