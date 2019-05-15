@@ -45,6 +45,7 @@ export default {
   "assignTeam":	"Assign Team",
   "analyzing": "分析中",
   "attachments": "添付ファイル",
+  "back": "Back",
   "backToTeams": "Back to teams",
   "billing": "料金プラン",
   "billingPeriod": "支払い請求周期",
@@ -491,6 +492,9 @@ export default {
     },
     "addTeam": {
       "title": "Allow teams to access this project"
+    },
+    "dynamicScan": {
+      "title": "Dynamic Scan",
     },
     "apiScan": {
       "title": "API診断も実行しますか？",

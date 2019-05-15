@@ -45,6 +45,7 @@ export default {
   "assignTeam":	"Assign Team",
   "analyzing": "Analyzing",
   "attachments": "Attachments",
+  "back": "Back",
   "backToTeams": "Back to teams",
   "billing": "Billing",
   "billingPeriod": "Billing Period",
@@ -491,6 +492,9 @@ export default {
     },
     "addTeam": {
       "title": "Allow teams to access this project"
+    },
+    "dynamicScan": {
+      "title": "Dynamic Scan",
     },
     "apiScan": {
       "title": "Do you also want to run API Scan?",
