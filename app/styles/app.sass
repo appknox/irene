@@ -86,6 +86,30 @@ h3
   background: $primary
   color: $light
 
+.btn
+  &-default
+    background: $default
+    border-color: $default
+    color: white
+    &:hover, &:active, &:focus
+      background: darken($default, 12%)
+      border-color: darken($default, 12%)
+      color: white
+    &[disabled]
+      background: $default
+      border-color: $default
+  &-success
+    background: $success
+    border-color: $success
+    color: white
+    &:hover, &:active, &:focus
+      background: darken($success, 12%)
+      border-color: darken($success, 12%)
+      color: white
+    &[disabled]
+      background: $success
+      border-color: $success
+
 $badge-small-size: 1.5em
 .badge-square
   min-width: $badge-small-size * 1.3
@@ -541,6 +565,10 @@ select
   display: flex
   justify-content: center
 
+.align-both
+  display: flex
+  justify-content: space-between
+
 .text-centre
   text-align: center
 
@@ -684,7 +712,6 @@ div[class^="_c-notification__container"]
 
 .side-menu
   background-color: $sidebar-bg
-  z-index: 10
   &-fixed
     position: fixed
     width: 16.2%
@@ -2831,17 +2858,15 @@ $attachment-icon-width: 4em
     width: 100px
 
 .file-id-container
-  padding-bottom: 10px
   text-align: center
   .file-id-text
-    width: 100px
-    margin: -5px auto 5px auto
+    padding: 0.1em 0.5em 0.12em
     text-align: center
     font-weight: 900
     font-size: 12px
     background-color: lighten($grey, 50%)
     color: lighten(#000, 30%)
-    border-radius: 5px
+    border-radius: 2px
 
 .app-details-card
   .file-id-container
@@ -3159,15 +3184,29 @@ $dropdown-default-theme: $color-table
   overflow: scroll
   height: 3em;
 
+$filetag-bg: #f3f5f8
 .filetag
-  margin-right: 0.5em
-  margin-top: 0.5em
-  border: 1px solid #ebebeb
-  background: #ebebeb54
-  padding: 0 0.5em .1em
-  border-radius: 0.2em
   &-container
     display: flex
     flex-wrap: wrap
+    align-items: center
   &-btn
-    height: auto
+    padding-left: 0.4em
+    padding-right: 0.4em
+  &-btn-default
+    background: white
+    border-color: darken($filetag-bg, 5%)
+    color: mix(darken($filetag-bg, 20%), rgba($default, 0.7), 10%)
+    &:hover, &:active, &:focus
+      // background: lighten($primary, 30%)
+      // border-color: darken($filetag-bg, 10%)
+      color: $primary
+  &-form
+    background: $filetag-bg
+    border-radius: 0.2em
+    padding: 0.2em
+  &-input
+    width: 10em
+  &-item
+    height: 1.6em
+    border-radius: 0.2em

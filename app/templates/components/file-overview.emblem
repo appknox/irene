@@ -1,7 +1,7 @@
 header.card-header
-  .card-header-icon
+  .card-header-icon.padding-h-h
     img src=file.iconUrl alt=file.name
-  p.card-header-title
+  p.card-header-title.padding-v-q
     ul.is-fullwidth
       li
         h5
@@ -10,22 +10,26 @@ header.card-header
               = file.name
             .column.is-one-sixth.fixed-icon
               = fa-icon file.project.platformIconClass class="card-icon"
-
       li.hide-overflow
-        | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
+        | #{file.project.packageName}
+      li.hide-overflow.font-small.text-lightgray
+        if file.version
+          | version: #{file.version}
+        if file.versionCode
+          span.margin-l-1
+          | version code: #{file.versionCode}
 .card-content
   .content
-    .columns.app-information
-      .column.flex-center.lowercase-text
-        div.overflow.ellipse
+    .app-information.align-both.vertical-align-center.padding-h-1.padding-v-3q
+      .lowercase-text
+        .overflow.ellipse
           = t "started"
           | &nbsp; #{moment-from-now file.createdOn}
         = attach-tooltip placement="bottom"
           = file.createdOnDateTime
-      .column.flex-center
-        div.overflow.ellipse
-          = t "versionCode"
-          | {{#if file.versionCode}} - #{file.versionCode}{{/if}}
+      .file-id-container
+        .file-id-text
+          | FILE ID - #{file.id}
 
     .columns.app-risk-info class=isReverse:is-reverse
       .column.flex-center
@@ -70,11 +74,7 @@ header.card-header
                   = t "untested"
               .column
                 = file.countRiskUnknown
-
-    .file-id-container
-      div.file-id-text
-        | FILE ID - #{file.id}
-    .file-tags
+    .file-tags.align-center
       each file.tags as |tag|
         = ak-tag tag=tag
 = yield

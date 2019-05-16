@@ -1,2 +1,7 @@
-span
+span.vertical-align-center
   | #{tag.name}
+  if editable
+    button.margin-l-h local-class="filetag-btn-delete" click={(perform onclick tag.id)}
+      = fa-icon "times"
+      = attach-tooltip placement="top"
+        = t "delete"
