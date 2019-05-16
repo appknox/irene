@@ -11,10 +11,10 @@ export default DRFAdapter.extend(DataAdapterMixin, {
   authorizer: 'authorizer:irene',
   organization: service('organization'),
   _buildURL: function (modelName, id) {
+    const baseurl = `${this.get('host')}/${this.get('namespace')}/organizations/${this.get('organization').selected.id}/tags`;
     if(id) {
-      const baseurl = `${this.get('host')}/${this.get('namespace_v2')}/projects`;
       return `${baseurl}/${encodeURIComponent(id)}`;
     }
-    return `${this.get('host')}/${this.get('namespace')}/organizations/${this.get('organization').selected.id}/projects`;
+    return baseurl;
   },
 });

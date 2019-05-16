@@ -74,4 +74,7 @@ header.card-header
     .file-id-container
       div.file-id-text
         | FILE ID - #{file.id}
+    .file-tags
+      each file.tags as |tag|
+        = ak-tag tag=tag
 = yield

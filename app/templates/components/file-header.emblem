@@ -3,23 +3,46 @@
     .column.file-icon
       .card-header-icon
         img src=file.iconUrl alt=file.name
-    .column.hide-overflow
-      = file.name
-      div
-        | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
-    .column.os-icon
-      = fa-icon file.project.platformIconClass class="card-icon"
-    .column.content-right.file-buttons
-      if file.project.hasMultipleFiles
-        = link-to 'authenticated.project.files' file.project.id class="mp-detail-all-scans is-primary" tagName="button"
-          = fa-icon "navicon"
-          | &nbsp; #{t "allUploads"}
-        = link-to 'authenticated.choose' file.id class="mp-detail-file-compare is-primary" tagName="button"
-          = fa-icon "exchange"
-          | &nbsp; #{t "compare"}
-      = link-to 'authenticated.project.settings' file.project.id class="mp-detail-project-settings is-primary" tagName="button"
-        = fa-icon "cog"
-        | &nbsp; #{t "settings"}
+    .column
+      .columns
+        .column.hide-overflow
+          = file.name
+          div
+            | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
+        .column.os-icon
+          = fa-icon file.project.platformIconClass class="card-icon"
+        .column.content-right.file-buttons
+          if file.project.hasMultipleFiles
+            = link-to 'authenticated.project.files' file.project.id class="mp-detail-all-scans is-primary" tagName="button"
+              = fa-icon "navicon"
+              | &nbsp; #{t "allUploads"}
+            = link-to 'authenticated.choose' file.id class="mp-detail-file-compare is-primary" tagName="button"
+              = fa-icon "exchange"
+              | &nbsp; #{t "compare"}
+          = link-to 'authenticated.project.settings' file.project.id class="mp-detail-project-settings is-primary" tagName="button"
+            = fa-icon "cog"
+            | &nbsp; #{t "settings"}
+      .columns
+        .column.padding-b-0
+          .filetag-container
+
+            // if me.org.is_owner
+            button.filetag.filetag-btn.vertical-align-center
+              = fa-icon "plus"
+            span.dropdown.dropdown--default.margin-left
+            = basic-dropdown as |dropdown|
+              = dropdown.trigger.filetag.filetag-btn.vertical-align-center
+                = fa-icon "plus"
+              = dropdown.content class="dropdown-content dropdown--default-content"
+                .dropdown-pointer
+                .dropdown-container
+                  a.dropdown-item click={(perform downloadReportExcel)}
+                    span.dropdown-item-icon
+                      = fa-icon "file-excel-o"
+                    | Download Excel Report
+            each file.tags as |tag|
+              .filetag
+                | #{tag.name}
 
 .card.is-fullwidth.margin-bottom20.scan-status-card.all-scan-status
   .card-content

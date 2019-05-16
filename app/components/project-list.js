@@ -18,7 +18,7 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
   projects: null,
   hasProjects: computed.gt('projects.meta.count', 0),
   query: "",
-  targetObject: "OrganizationProject",
+  targetObject: "Project",
 
   sortingKey: "lastFileCreatedOn",
   sortingReversed: true,

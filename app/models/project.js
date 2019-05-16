@@ -19,6 +19,8 @@ const Project = DS.Model.extend(BaseModelMixin, {
   url: DS.attr('string'),
   lastFileCreatedOn: DS.attr('date'),
   fileCount: DS.attr('number'),
+  lastFileId: DS.attr('number'),
+  // lastFile: DS.belongsTo('file'),
 
   pdfPassword: computed('uuid', function() {
     const uuid = this.get("uuid");
@@ -56,14 +58,9 @@ const Project = DS.Model.extend(BaseModelMixin, {
   }),
 
   lastFile:computed('fileCount', function() {
-    const params = {
-      projectId: this.get("id"),
-      lastFileOnly: true
-    };
-    return this.store.queryRecord("file", params);
+    return this.store.findRecord("file", this.get('lastFileId'));
   })
-}
-);
+});
 
 
 export default Project;
