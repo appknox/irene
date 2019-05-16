@@ -20,6 +20,7 @@ export default {
   "addNewTeam": "新しいチームの追加",
   "addProject" : "Add Project",
   "addSSOMembers": "Add SSO members",
+  "addTags": "Add tags",
   "addTeam": "チームの追加",
   "admin": "管理者",
   "adminPermissionProject": "Admin permission is required to connect project to JIRA",

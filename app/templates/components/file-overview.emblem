@@ -1,5 +1,5 @@
 header.card-header
-  .card-header-icon.padding-h-h
+  .card-header-icon.padding-l-3q
     img src=file.iconUrl alt=file.name
   p.card-header-title.padding-v-q
     ul.is-fullwidth

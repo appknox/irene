@@ -36,8 +36,14 @@
             if showAddTagBtn
               button.filetag-btn.filetag-btn-default.filetag-item.vertical-align-center.margin-r-h click="displayAddTagForm"
                 = fa-icon "plus"
-            each file.tags as |tag|
-              = ak-tag tag=tag editable=true onclick=deleteTag
+                = attach-tooltip placement="top"
+                  = t "addTags"
+            if file.tags
+              each file.tags as |tag|
+                = ak-tag tag=tag editable=true onclick=deleteTag
+            else
+              .font-small.text-lightgray
+                = t "addTags"
 
 .card.is-fullwidth.margin-bottom20.scan-status-card.all-scan-status
   .card-content
