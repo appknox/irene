@@ -340,7 +340,16 @@ const FileHeaderComponent = Component.extend({
 
   addTagErrored: on('addTag:errored', function(_, err) {
     let errMsg = this.get('tPleaseTryAgain');
-    if (err.errors && err.errors.length) {
+    if (err.payload) {
+      Object.keys(err.payload).forEach(p => {
+        errMsg = err.payload[p]
+        if (typeof(errMsg) !== "string") {
+          errMsg = err.payload[p][0];
+        }
+        this.get('notify').error(errMsg);
+      });
+      return;
+    } else if (err.errors && err.errors.length) {
       errMsg = err.errors[0].detail || errMsg;
     } else if(err.message) {
       errMsg = err.message;
