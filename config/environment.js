@@ -97,6 +97,7 @@ module.exports = function(environment) {
     deviceFarmPath: "websockify",
     deviceFarmHost: deviceFarmHost,
     namespace: "api",
+    namespace_v2: "api/v2",
     host: host,
     'ember-cli-mirage': {
       enabled: false
@@ -204,7 +205,8 @@ module.exports = function(environment) {
       requestAccess: 'request_access',
       appscan: 'appscan',
       scancount: 'scancount',
-      recentIssues: 'recent_issues'
+      recentIssues: 'recent_issues',
+      tags: 'tags',
     },
     csb: {
       reportDownload: { feature: "Account Settings", module: "Setup", product: "Appknox" },

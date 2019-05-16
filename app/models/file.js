@@ -17,7 +17,7 @@ const _getAnalysesCount = (analysis, risk)=> {
 
 const File = DS.Model.extend(BaseModelMixin, {
   i18n: service(),
-  project: DS.belongsTo('OrganizationProject', {inverse:'files'}),
+  project: DS.belongsTo('project', {inverse:'files'}),
   profile: DS.belongsTo('profile', {inverse:'files'}),
   uuid: DS.attr('string'),
   deviceToken: DS.attr('string'),
@@ -38,6 +38,7 @@ const File = DS.Model.extend(BaseModelMixin, {
   isManualDone: DS.attr('boolean'),
   isApiDone: DS.attr('boolean'),
   apiScanStatus: DS.attr('number'),
+  tags: DS.hasMany('tag'),
 
   isManualRequested: computed('manual', function() {
     return this.get("manual") !== ENUMS.MANUAL.NONE

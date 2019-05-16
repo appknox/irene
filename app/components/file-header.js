@@ -26,6 +26,8 @@ const FileHeaderComponent = Component.extend({
   isDownloadingReport: false,
   showManualScanFormModal: false,
   showRemoveRoleConfirmBox: false,
+  showAddTagBtn: true,
+  showAddTagForm: false,
 
   i18n: service(),
   trial: service(),
@@ -37,6 +39,7 @@ const FileHeaderComponent = Component.extend({
   loginStatuses: ["yes", "no"],
   appActions: ENUMS.APP_ACTION.CHOICES.slice(0, -1),
   environments: ENUMS.APP_ENV.CHOICES.slice(0, -1),
+  newTag: '',
 
   tPasswordCopied: t("passwordCopied"),
   tPleaseTryAgain: t("pleaseTryAgain"),
@@ -48,6 +51,14 @@ const FileHeaderComponent = Component.extend({
   tPleaseEnterAllValues: t("modalCard.manual.pleaseEnterAllValues"),
   tPleaseEnterUserRoles: t("modalCard.manual.pleaseEnterUserRoles"),
   tPleaseEnterVPNDetails: t("modalCard.manual.pleaseEnterVPNDetails"),
+
+  invalidNewTag: computed('newTag', function() {
+    const tag = this.get('newTag');
+    if (tag && tag.length > 1) {
+      return false;
+    }
+    return true;
+  }),
 
   manualscan: computed(function() {
     const fileId = this.get("file.id");
@@ -305,8 +316,72 @@ const FileHeaderComponent = Component.extend({
   }),
 
 
-  actions: {
+  addTag: task(function *(tag) {
+    if (tag) {
+      const url = [ENV.endpoints.files, this.get('file.id'), ENV.endpoints.tags].join('/');
+      yield this.get('ajax').post(url, {
+        namespace: 'api/v2',
+        data: {
+          'name': tag,
+        }
+      });
+      yield this.get('store').findRecord('file', this.get('file.id'));
+    } else {
+      throw Error('tag value cannot be blank');
+    }
+  }).evented(),
 
+  addTagSucceeded: on('addTag:succeeded', function() {
+    this.get('notify').success('Tag added');
+    this.set('newTag', '');
+    this.set('showAddTagBtn', true);
+    this.set('showAddTagForm', false);
+  }),
+
+  addTagErrored: on('addTag:errored', function(_, err) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (err.payload) {
+      Object.keys(err.payload).forEach(p => {
+        errMsg = err.payload[p]
+        if (typeof(errMsg) !== "string") {
+          errMsg = err.payload[p][0];
+        }
+        this.get('notify').error(errMsg);
+      });
+      return;
+    } else if (err.errors && err.errors.length) {
+      errMsg = err.errors[0].detail || errMsg;
+    } else if(err.message) {
+      errMsg = err.message;
+    }
+    this.get('notify').error(errMsg);
+  }),
+
+
+  deleteTag: task(function *(tagId) {
+    const url = [ENV.endpoints.files, this.get('file.id'), ENV.endpoints.tags, tagId].join('/');
+    yield this.get('ajax').delete(url, {
+      namespace: 'api/v2'
+    });
+    yield this.get('store').findRecord('file', this.get('file.id'));
+  }).evented(),
+
+  deleteTagSucceeded: on('deleteTag:succeeded', function() {
+    this.get('notify').success('Tag deleted');
+  }),
+
+  deleteTagErrored: on('deleteTag:errored', function(_, err) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (err.errors && err.errors.length) {
+      errMsg = err.errors[0].detail || errMsg;
+    } else if(err.message) {
+      errMsg = err.message;
+    }
+    this.get('notify').error(errMsg);
+  }),
+
+
+  actions: {
     displayScanDetails() {
       this.set('isScanDetails', true);
       this.set('isOWASPDetails', false);
@@ -315,6 +390,16 @@ const FileHeaderComponent = Component.extend({
     displayOWASPDetails() {
       this.set('isScanDetails', false);
       this.set('isOWASPDetails', true);
+    },
+
+    displayAddTagForm() {
+      this.set('showAddTagBtn', false);
+      this.set('showAddTagForm', true);
+    },
+
+    hideAddTagForm() {
+      this.set('showAddTagBtn', true);
+      this.set('showAddTagForm', false);
     },
 
     getPDFReportLink() {
