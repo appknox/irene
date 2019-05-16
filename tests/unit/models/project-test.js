@@ -25,7 +25,7 @@ moduleForModel('project', 'Unit | Model | project', {
 test('it exists', function(assert) {
   const project = this.subject();
   var store = {
-    queryRecord: function() {
+    findRecord: function() {
       return [
         {
           id:1,
