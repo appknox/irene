@@ -39,6 +39,9 @@ const File = DS.Model.extend(BaseModelMixin, {
   isApiDone: DS.attr('boolean'),
   apiScanStatus: DS.attr('number'),
   tags: DS.hasMany('tag'),
+  minOsVersion: DS.attr('string'),
+  supportedCpuArchitectures: DS.attr('string'),
+  supportedDeviceTypes: DS.attr('string'),
 
   isManualRequested: computed('manual', function() {
     return this.get("manual") !== ENUMS.MANUAL.NONE
