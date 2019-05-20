@@ -136,7 +136,9 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
         if (notifyType === ENUMS.NOTIFY.SUCCESS) { that.get("notify").success(message, ENV.notifications); }
         if (notifyType === ENUMS.NOTIFY.WARNING) { that.get("notify").warning(message, ENV.notifications); }
         if (notifyType === ENUMS.NOTIFY.ALERT) { that.get("notify").alert(message, ENV.notifications); }
-        if (notifyType === ENUMS.NOTIFY.ERROR) { that.get("notify").error(message, ENV.notifications); }
+        if (notifyType === ENUMS.NOTIFY.ERROR) { that.get("notify").error(message, {
+          autoClear: false
+        }); }
       },
 
       logout() {
