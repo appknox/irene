@@ -4,6 +4,7 @@ import ENV from 'irene/config/environment';
 import lookupValidator from 'ember-changeset-validations';
 import Changeset from 'ember-changeset';
 import RegisterValidation from '../validations/register';
+import { computed } from '@ember/object';
 
 export default Component.extend({
 
@@ -23,7 +24,9 @@ export default Component.extend({
     );
     this.set('changeset', changeset);
   },
-
+  shouldEnableRecaptcha: computed(function(){
+    return !ENV.shouldDisableReCaptcha;
+  }),
   registerWithServer (data) {
     return this.get('ajax').request(ENV.endpoints.registration, {
       method: 'POST',
@@ -31,7 +34,9 @@ export default Component.extend({
     }).then(() => {
       this.set('success', true);
     }, (errors) => {
-      this.get('gRecaptcha').resetReCaptcha();
+      if(this.get('shouldEnableRecaptcha')) {
+        this.get('gRecaptcha').resetReCaptcha();
+      }
       const changeset = this.get('changeset');
       Object.keys(errors.payload).forEach(key => {
         changeset.addError(key, errors.payload[key]);
@@ -54,7 +59,10 @@ export default Component.extend({
           const selectedCountryData = this.get("selectedCountryData");
           const fullNumber = selectedCountryData.dialCode + '-' +  phoneNumber;
           const termsAccepted = changeset.get('termsAccepted');
-          const captcha = this.get('captcha');
+          let captcha = this.get('captcha');
+          if(!this.get('shouldEnableRecaptcha')) {
+            captcha = 'notenabled'
+          }
           this.registerWithServer({
             'first_name': firstname,
             'last_name': lastname,

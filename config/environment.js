@@ -16,12 +16,15 @@ module.exports = function(environment) {
   var enableSSO = isTrue(process.env.IRENE_ENABLE_SSO || false);
   var enableRegistration = isTrue(process.env.IRENE_ENABLE_REGISTRATION || false);
   var registrationLink = process.env.IRENE_REGISTRATION_LINK || '';
+  var isEnterprise = isTrue(process.env.ENTERPRISE || false);
+  var shouldDisableReCaptcha = enableRegistration && isEnterprise;
   var ENV = {
     version: Date.now(),
     isDevknox: false,
     isAppknox: false,
-    isEnterprise: false,
+    isEnterprise: isEnterprise,
     isRegistrationEnabled: enableRegistration,
+    shouldDisableReCaptcha: shouldDisableReCaptcha,
     registrationLink: registrationLink,
     exportApplicationGlobal: true,
     devknoxPrice: 9,  // This should also change in `mycroft/settings.py`
@@ -257,6 +260,7 @@ module.exports = function(environment) {
     ENV.enableCSB = false;
     ENV.isRegistrationEnabled = true;
     ENV.gReCaptcha = {
+      jsUrl: 'https://recaptcha.net/recaptcha/api.js?render=explicit',
       siteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
     }
   }
