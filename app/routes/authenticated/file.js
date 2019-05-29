@@ -6,7 +6,6 @@ const AuthenticatedFileRoute = Route.extend(ScrollTopMixin, {
 
   title: `File Details${config.platform}`,
   async model(params){
-    await this.get('store').findAll('Vulnerability');
     return this.get('store').find('file', params.fileid);
   }
 }
