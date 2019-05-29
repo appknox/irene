@@ -35,6 +35,7 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
 
   async model() {
     const userId = this.get("session.data.authenticated.user_id");
+    await this.get('store').findAll('Vulnerability');
     await this.get('org').load();
     await this.get('analytics').load();
     return this.get('store').find('user', userId);
