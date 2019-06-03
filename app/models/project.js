@@ -2,6 +2,7 @@ import DS from 'ember-data';
 import BaseModelMixin from 'irene/mixins/base-model';
 import ENUMS from 'irene/enums';
 import { computed } from '@ember/object';
+import { alias } from '@ember/object/computed';
 import { isEmpty } from '@ember/utils';
 
 const Project = DS.Model.extend(BaseModelMixin, {
@@ -19,7 +20,7 @@ const Project = DS.Model.extend(BaseModelMixin, {
   url: DS.attr('string'),
   lastFileCreatedOn: DS.attr('date'),
   fileCount: DS.attr('number'),
-  lastFileId: DS.attr('number'),
+  lastFileId: DS.belongsTo('file'),
   // lastFile: DS.belongsTo('file'),
 
   pdfPassword: computed('uuid', function() {
@@ -57,9 +58,7 @@ const Project = DS.Model.extend(BaseModelMixin, {
     return [ENUMS.PLATFORM.ANDROID , ENUMS.PLATFORM.IOS].includes(platform);
   }),
 
-  lastFile:computed('fileCount', function() {
-    return this.store.findRecord("file", this.get('lastFileId'));
-  })
+  lastFile: alias('lastFileId')
 });
 
 

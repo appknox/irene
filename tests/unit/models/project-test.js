@@ -24,28 +24,6 @@ moduleForModel('project', 'Unit | Model | project', {
 
 test('it exists', function(assert) {
   const project = this.subject();
-  var store = {
-    findRecord: function() {
-      return [
-        {
-          id:1,
-          type: "file",
-          attributes: {
-            name: "test"
-          }
-        }
-      ];
-    }
-  };
-  project.set('store', store);
-  assert.deepEqual(project.get("lastFile"), [{
-      id:1,
-      type: "file",
-      attributes: {
-        name: "test"
-      }
-    }
-  ]);
   run(function() {
 
     assert.equal(project.get('pdfPassword'), "Unknown!", "PDF Password/Unknown");
