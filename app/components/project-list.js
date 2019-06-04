@@ -31,7 +31,7 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
   tMostRecent: t("mostRecent"),
   tLeastRecent: t("leastRecent"),
 
-  newProjectsObserver: observer("realtime.ProjectCounter", function() {
+  newProjectsObserver: observer("realtime.ProjectCounter", "realtime.FileCounter", function() {
     return this.incrementProperty("version");
   }),
 
