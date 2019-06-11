@@ -66,12 +66,14 @@ const File = DS.Model.extend(BaseModelMixin, {
     return this.scanProgressClass(isStaticDone);
   }),
 
+  tDeviceInQueue: t("deviceInQueue"),
   tDeviceBooting: t("deviceBooting"),
   tDeviceDownloading: t("deviceDownloading"),
   tDeviceInstalling: t("deviceInstalling"),
   tDeviceLaunching: t("deviceLaunching"),
   tDeviceHooking: t("deviceHooking"),
   tDeviceShuttingDown: t("deviceShuttingDown"),
+  tDeviceCompleted: t("deviceCompleted"),
 
   analysesSorting: ['computedRisk:desc'],
   sortedAnalyses: computed.sort('analyses', 'analysesSorting'),
@@ -156,14 +158,18 @@ const File = DS.Model.extend(BaseModelMixin, {
   }),
 
   statusText: computed('dynamicStatus', function() {
+    const tDeviceInQueue = this.get("tdeviceInQueue");
     const tDeviceBooting = this.get("tDeviceBooting");
     const tDeviceDownloading = this.get("tDeviceDownloading");
     const tDeviceInstalling = this.get("tDeviceInstalling");
     const tDeviceLaunching = this.get("tDeviceLaunching");
     const tDeviceHooking = this.get("tDeviceHooking");
     const tDeviceShuttingDown = this.get("tDeviceShuttingDown");
+    const tDeviceCompleted = this.get("tdeviceCompleted");
 
     switch (this.get("dynamicStatus")) {
+      case ENUMS.DYNAMIC_STATUS.INQUEUE:
+        return tDeviceInQueue;
       case ENUMS.DYNAMIC_STATUS.BOOTING:
         return tDeviceBooting;
       case ENUMS.DYNAMIC_STATUS.DOWNLOADING:
@@ -176,6 +182,8 @@ const File = DS.Model.extend(BaseModelMixin, {
         return tDeviceHooking;
       case ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN:
         return tDeviceShuttingDown;
+      case ENUMS.DYNAMIC_STATUS.COMPLETED:
+        return tDeviceCompleted;
       default:
         return "Unknown Status";
     }

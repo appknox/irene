@@ -37,14 +37,17 @@ const ENUMS = {
   },
 
   DYNAMIC_STATUS: {
+    ERROR: -1,
     NONE: 0,
-    BOOTING: 1,
-    READY: 2,
-    SHUTTING_DOWN: 3,
-    DOWNLOADING: 4,
-    INSTALLING: 5,
-    LAUNCHING: 6,
-    HOOKING: 7
+    INQUEUE: 1,
+    BOOTING: 2,
+    DOWNLOADING: 3,
+    INSTALLING: 4,
+    LAUNCHING: 5,
+    HOOKING: 6,
+    READY: 7,
+    SHUTTING_DOWN: 8,
+    COMPLETED: 9
   },
 
   MANUAL: {
