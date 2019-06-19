@@ -5,26 +5,93 @@ import ENUMS from 'irene/enums';
 import { translationMacro as t } from 'ember-i18n';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import poll from 'irene/services/poll';
+import lookupValidator from 'ember-changeset-validations';
+import Changeset from 'ember-changeset';
+import ProxySettingValidation from '../validations/proxy-setting';
+import { task } from 'ember-concurrency';
+import { computed, observer } from '@ember/object';
 
 export default Component.extend({
   tagName: "",
   apiScanModal: false,
   dynamicScanModal: false,
-
+  proxyPOJO: {},
+  serverErrors: {},
   i18n: service(),
   trial: service(),
   ajax: service(),
   notify: service('notification-messages-service'),
   poll: service(),
-
+  init() {
+    this._super(...arguments);
+    const proxyPOJO = this.get('proxyPOJO');
+    const changeset = new Changeset(
+      proxyPOJO, lookupValidator(ProxySettingValidation), ProxySettingValidation
+    );
+    this.set('changeset', changeset);
+  },
+  currentProxy:null,
   tStartingScan: t("startingScan"),
-
   didInsertElement() {
     this.send('pollDynamicStatus');
   },
+  getCurrentProxy: task(function * (){
+    let record = yield this.get("store").findRecord("proxy-setting", this.get('file.profile.id'), { reload: true });
+    return record;
+  }),
 
+  openAPIScanModal: task(function * () {
+    let changeset = this.get('changeset');
+    let currentProxy = yield this.get('getCurrentProxy').perform();
+    yield this.set('currentProxy', currentProxy);
+    yield changeset.set('host', currentProxy.get('host'));
+    yield changeset.set('port', parseInt(currentProxy.get('port')));
+
+    this.set('changeset', changeset);
+    const platform = this.get("file.project.platform");
+    if ([ENUMS.PLATFORM.ANDROID,ENUMS.PLATFORM.IOS].includes(platform)) { // TEMPIOSDYKEY
+      this.set("showAPIScanModal", true);
+    } else {
+      this.send("doNotRunAPIScan");
+    }
+  }),
+  saveProxyAPI: task(function *(changeset){
+      yield changeset.validate().then(async() => {
+        if (changeset.get('isValid')) {
+          let currentProxy = await this.get('currentProxy');
+          const enabled = !currentProxy.get('enabled');
+          const host = changeset.get('host');
+          const port = changeset.get('port');
+          try{
+            currentProxy.setProperties({
+              'enabled': enabled,
+              'host': host,
+              'port': port,
+            })
+            await currentProxy.save()
+            this.set('currentProxy', currentProxy);
+          }catch(error){
+            if(error.payload) {
+              if(error.payload.host) {
+                this.get("notify").error(error.payload.host[0], ENV.notifications)
+              }
+              if(error.payload.port) {
+                this.get("notify").error(error.payload.port[0], ENV.notifications)
+              }
+            }
+          }
+        }else{
+          if(changeset.get('errors') && changeset.get('errors')[0].validation) {
+            this.get("notify").error(
+              changeset.get('errors')[0].validation[0],
+              ENV.notifications
+            );
+          }
+          return;
+        }
+      });
+  }),
   actions: {
-
     setAPIScanOption() {
       const tStartingScan = this.get("tStartingScan");
       const isApiScanEnabled = this.get("isApiScanEnabled");
@@ -100,14 +167,7 @@ export default Component.extend({
       }
     },
 
-    openAPIScanModal() {
-      const platform = this.get("file.project.platform");
-      if ([ENUMS.PLATFORM.ANDROID,ENUMS.PLATFORM.IOS].includes(platform)) { // TEMPIOSDYKEY
-        this.set("showAPIScanModal", true);
-      } else {
-        this.send("doNotRunAPIScan");
-      }
-    },
+
 
     goBack() {
       this.set("showAPIURLFilterScanModal", false);

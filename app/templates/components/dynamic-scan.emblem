@@ -11,11 +11,11 @@
           button.vnc-button.vnc-completed-button.is-primary.margin-top20 disabled="disabled"
             = fa-icon "fa-check"
             | &nbsp; #{t "completed"}
-          button.vnc-button.vnc-button-repeat.is-primary.margin-top20.margin-left5.ac-dynamic-rescan click="openAPIScanModal"
+          button.vnc-button.vnc-button-repeat.is-primary.margin-top20.margin-left5.ac-dynamic-rescan click={(perform openAPIScanModal)}
             .fa-font-size-small
               = fa-icon "fa-repeat"
         else
-          button.vnc-button.is-primary.margin-top20.ac-start-dynamic-scan click="openAPIScanModal"
+          button.vnc-button.is-primary.margin-top20.ac-start-dynamic-scan click={(perform openAPIScanModal)}
             .fa-font-size
               = fa-icon "fa-play"
             | &nbsp; #{dynamicScanText}
@@ -124,6 +124,33 @@ if notVNCViewer
               = fa-icon 'exclamation-triangle'
             .column
               = t "modalCard.apiScan.extraDescription"
+        .margin-top20.add-filter-list
+          .columns
+            .column.bold.black-text.margin-bottom-5
+              | Proxy Settings
+            .column.warning-msg.flex-2
+              if currentProxy.enabled
+                span.fa-font-size
+                  i.fa class="fa-exclamation-triangle exclamation-warning"
+                  | &nbsp; All the Request will go by this proxy
+          form.columns
+            .column.flex-2
+              div
+                = input class="form-control input" value=changeset.host placeholder="Host" autofocus="autofocus"
+            .column
+              div
+                = input class="form-control input" type="number" value=changeset.port placeholder="Port"
+            .column
+              a.button.is-primary click={(perform saveProxyAPI changeset)}
+                if currentProxy.enabled
+                  | Disable
+                else
+                  | Enable
+              | &nbsp;
+              if saveProxyAPI.isRunning
+                span.fa-font-size
+                  i.fa class="fa-spinner fa-spin"
+                  | &nbsp;
         .margin-top20.add-filter-list
           = api-filter profileId=file.profile.id
         div.margin-top20
