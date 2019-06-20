@@ -158,7 +158,7 @@ const File = DS.Model.extend(BaseModelMixin, {
   }),
 
   statusText: computed('dynamicStatus', function() {
-    const tDeviceInQueue = this.get("tdeviceInQueue");
+    const tDeviceInQueue = this.get("tDeviceInQueue");
     const tDeviceBooting = this.get("tDeviceBooting");
     const tDeviceDownloading = this.get("tDeviceDownloading");
     const tDeviceInstalling = this.get("tDeviceInstalling");
