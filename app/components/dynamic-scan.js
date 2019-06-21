@@ -54,6 +54,40 @@ export default Component.extend({
       this.send("doNotRunAPIScan");
     }
   }),
+  applyProxyAPI: task(function *(changeset){
+    yield changeset.validate()
+    if (!changeset.get('isValid')) {
+      if(changeset.get('errors') && changeset.get('errors')[0].validation) {
+        this.get("notify").error(
+          changeset.get('errors')[0].validation[0],
+          ENV.notifications
+        );
+      }
+      return;
+    }
+    let currentProxy = yield this.get('currentProxy');
+    const enabled = currentProxy.get('enabled');
+    const host = changeset.get('host');
+    const port = changeset.get('port');
+    try{
+      currentProxy.setProperties({
+        'enabled': enabled,
+        'host': host,
+        'port': port,
+      })
+      yield currentProxy.save()
+      this.set('currentProxy', currentProxy);
+    }catch(error){
+      if(error.payload) {
+        if(error.payload.host) {
+          this.get("notify").error(error.payload.host[0], ENV.notifications)
+        }
+        if(error.payload.port) {
+          this.get("notify").error(error.payload.port[0], ENV.notifications)
+        }
+      }
+    }
+  }),
   saveProxyAPI: task(function *(changeset){
     yield changeset.validate()
     if (!changeset.get('isValid')) {

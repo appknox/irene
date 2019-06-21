@@ -111,12 +111,15 @@ if notVNCViewer
                   i.fa class="fa-exclamation-triangle exclamation-warning"
                   | &nbsp; All the Request will go by this proxy
           form.columns
-            .column.flex-2
+            .column.flex-3
               div
                 = input class="form-control input" value=changeset.host placeholder="Host" autofocus="autofocus"
-            .column
+            .column.flex-2
               div
                 = input class="form-control input" type="number" value=changeset.port placeholder="Port"
+            .column
+              a.button.is-primary click={(perform applyProxyAPI changeset)}
+                | Apply
             .column
               a.button.is-primary click={(perform saveProxyAPI changeset)}
                 if currentProxy.enabled
@@ -124,7 +127,12 @@ if notVNCViewer
                 else
                   | Enable
               | &nbsp;
+            .span-proxy-loading
               if saveProxyAPI.isRunning
+                span.fa-font-size
+                  i.fa class="fa-spinner fa-spin"
+                  | &nbsp;
+              if applyProxyAPI.isRunning
                 span.fa-font-size
                   i.fa class="fa-spinner fa-spin"
                   | &nbsp;
