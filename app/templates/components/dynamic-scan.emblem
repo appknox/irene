@@ -101,6 +101,34 @@ if notVNCViewer
                     span.display-inline-block.bold.margin-h-q
                       | #{file.supportedDeviceTypes}
 
+        .margin-top20.add-filter-list
+          .columns
+            .column.bold.black-text.margin-bottom-5
+              | Proxy Settings
+            .column.warning-msg.flex-2
+              if currentProxy.enabled
+                span.fa-font-size
+                  i.fa class="fa-exclamation-triangle exclamation-warning"
+                  | &nbsp; All the Request will go by this proxy
+          form.columns
+            .column.flex-2
+              div
+                = input class="form-control input" value=changeset.host placeholder="Host" autofocus="autofocus"
+            .column
+              div
+                = input class="form-control input" type="number" value=changeset.port placeholder="Port"
+            .column
+              a.button.is-primary click={(perform saveProxyAPI changeset)}
+                if currentProxy.enabled
+                  | Disable
+                else
+                  | Enable
+              | &nbsp;
+              if saveProxyAPI.isRunning
+                span.fa-font-size
+                  i.fa class="fa-spinner fa-spin"
+                  | &nbsp;
+
         .project-preference-component.margin-v-1h
           if showAPIScanModal
             = project-preferences profileId=file.profile.id platform=file.project.platform project=file.project
