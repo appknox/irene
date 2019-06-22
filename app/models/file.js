@@ -216,8 +216,7 @@ const File = DS.Model.extend(BaseModelMixin, {
   setReady() {
     this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.READY);
   }
-}
-);
+});
 
 
 export default File;
