@@ -7,7 +7,7 @@ export default DRFAdapter.extend(DataAdapterMixin, {
   namespace: ENV.namespace,
   addTrailingSlashes: false,
   authorizer: 'authorizer:irene',
-  buildURL(modelName, id, snapshot, requestType) {
+  buildURL(modelName, id) {
     let url = `${this.host}/${this.get('namespace')}/profiles/${id}/proxy_settings`;
     return url;
   }

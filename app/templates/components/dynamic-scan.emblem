@@ -162,7 +162,7 @@ if notVNCViewer
               = t "modalCard.apiScan.extraDescription"
         .margin-top20.add-filter-list
           .columns
-            .column.bold.black-text.margin-bottom-5
+            .column.bold.black-text
               | Proxy Settings
             .column.warning-msg.flex-2
               if currentProxy.enabled

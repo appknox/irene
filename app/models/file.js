@@ -215,13 +215,8 @@ const File = DS.Model.extend(BaseModelMixin, {
 
   setReady() {
     this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.READY);
-  },
-  postProxySetting(data, profileId) {
-    var adapter = this.store.adapterFor(this.constructor.modelName);
-    return adapter.postProxySetting(this.store, this.constructor.modelName, this, data, profileId);
-  },
-}
-);
+  }
+});
 
 
 export default File;
