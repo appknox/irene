@@ -1,0 +1,11 @@
+.columns
+  .column
+    nav.pagination.float-left
+      if hasNext
+        a.button.is-default click="gotoPageNext"
+          | Load More &nbsp;
+          = fa-icon "chevron-down"
+        if isLoading
+          span.fa-font-size
+            i.fa class="fa-spinner fa-spin"
+            | &nbsp;

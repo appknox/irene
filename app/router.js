@@ -43,7 +43,11 @@ Router.map(function() {
       this.route('settings');
       this.route('files');
     });
-    this.route("file", {path: '/file/:fileid'});
+    this.route("file",{path: '/file/:fileid'},function() {
+      this.route('dynamicscans',{path: '/dynamicscans'});
+      this.route('overview',{path: '/overview'});
+      this.route('dynamicscandetail', {path:'/dynamicscans/:dynamicscanid'});
+    });
     this.route("choose",{path: '/choose/:fileid'});
     this.route('compare', {path: '/compare/:files'});
     this.route('payment-success');

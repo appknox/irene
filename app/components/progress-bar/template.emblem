@@ -1,0 +1,7 @@
+.progressbar class="progressbar-{{color}}"
+  .progressbar-fill style="width: {{value}}%"
+    if show-label
+      .progress-text
+        | #{value}
+    else
+      .progress-text local-class="height-20"

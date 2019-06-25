@@ -187,6 +187,11 @@ const ENUMS = {
      RUNNING: 2,
      COMPLETED: 3
    },
+  TIMELINE :{
+    EVENT: 0,
+    DYNAMIC: 1,
+    API: 2
+  }
 };
 
 // Populate `CHOICES`

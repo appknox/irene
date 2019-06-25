@@ -1,0 +1,28 @@
+.columns.padding-top-10
+  .column local-class="flex-grow-2"
+    .card.is-fullwidth.margin-bottom20.scan-status-card
+      .columns
+        .column.file-icon
+          = link-to 'authenticated.file.overview'
+            .card-header-icon
+              img src=file.iconUrl alt=file.name class="hideOrShow"
+        .column.hide-overflow
+          = file.name
+          div
+            | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
+        .column.os-icon
+          = fa-icon file.project.platformIconClass class="card-icon"
+        .column.content-right.file-buttons
+          if file.project.hasMultipleFiles
+            = link-to 'authenticated.project.files' file.project.id class="mp-detail-all-scans is-primary" tagName="button"
+              = fa-icon "navicon"
+              | &nbsp; #{t "allUploads"}
+            = link-to 'authenticated.choose' file.id class="mp-detail-file-compare is-primary" tagName="button"
+              = fa-icon "exchange"
+              | &nbsp; #{t "compare"}
+          = link-to 'authenticated.project.settings' file.project.id class="mp-detail-project-settings is-primary" tagName="button"
+            = fa-icon "cog"
+            | &nbsp; #{t "settings"}
+    = dynamicscan-timeline-scrollable file=file dynamicscan=dynamicscan
+  .column.vnc-viewer local-class="flex-grow-1"
+    = vnc-viewer file=file profileId=file.project.activeProfileId dynamicscan=dynamicscan

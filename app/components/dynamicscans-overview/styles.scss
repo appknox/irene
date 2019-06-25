@@ -1,0 +1,55 @@
+.font-color{
+  color: black;
+}
+.font-weight{
+  font-weight: 600;
+}
+.somediv{
+  position: relative;
+}
+.somediv:before {
+  content: "";
+  width: 0;
+  border-right: 2px dashed #cccc;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 12.3%;
+}
+.header-background-ebeaea{
+  border-radius: inherit;
+  background: #ebeaea;
+  cursor: pointer;
+}
+@media screen and (max-width: 1080px) {
+  .somediv:before{
+    left: 11.3%;
+  }
+}
+.cursor-pointer{
+  cursor: pointer;
+}
+.child-one{
+  display: flex;
+  padding: 10px;
+  cursor: default;
+}
+.child-two {
+  flex-grow: 1;
+  padding: 10px;
+}
+.button-set{
+  margin-right: 5px;
+  margin-top: 5px;
+}
+
+.ac-dynamic-rescan{
+  border: none;
+}
+.ac-dynamic-rescan:hover{
+  background: grey;
+  color: white;
+}
+.flex-item{
+  display: flex;
+}

@@ -102,8 +102,15 @@ export default {
   "deviceInstalling": "Installing",
   "deviceLaunching": "Launching",
   "deviceHooking": "Starting",
-  "deviceShuttingDown": "Stopping",
   "deviceCompleted": "Completed",
+  "deviceShuttingDown": "Stopping",
+  "deviceReady": "Ready",
+  "deviceError": "Error",
+  "scanApi":"App:",
+  "scanDynamic": "Dynamicscan:",
+  "scanCaptured": "Captured API:",
+  "scanInvoked": "Invoked",
+  "deviceErrorMessage": "Some error occured Please contact support",
   "deviceIsReady": "The Device is ready to be connected",
   "deviceNotFound": "Hard time for us to find the device",
   "deviceSelected": "You have successfully selected the device",
@@ -196,6 +203,7 @@ export default {
   "leastRecent": " (Oldest First)",
   "lessDetails": "less details",
   "loading": "Loading",
+  "progress": "In progress",
   "login": "Login",
   "loginTitle": "Member Login",
   "logout": "Logout",
@@ -507,9 +515,9 @@ export default {
       "title": "Do you also want to run API Scan?",
       "description": "We will record all network traffic made by the app and run the API scan for web vulnerabilities. API scan currently does not support apps that employ SSL pinning.",
       "extraDescription": " API scan performs multiple automated tests that may result in <b class='bold'>denial of service</b> or <b class='bold'>loss of data</b>. Do not select YES if the app is configured to use a <b class='bold'>production API server</b> or if the app employs <b class='bold'>SSL pinning</b>.",
-      "runAPIScan": "Run API Scan",
+      "runAPIScan": "Run Dynamicscan & API Scan",
       "dynamicScan": "Continue with Dynamic Scan",
-      "startApiScan": "Start API Scan",
+      "startApiScan": "Start Dynamicscan & API Scan",
       "dynamicScanText": "Make sure you perform all the actions in the App, there are high chances that the scanner might mark the risk as passed"
     },
     "devicePreference": {
@@ -519,8 +527,10 @@ export default {
     },
     "runAPIScan": {
       "title": "Run API Scan",
-      "description": "You need to also run Dynamic Scan to initiate the API Scan",
-      "runScan": "Run Dynamic & API Scan"
+      "description": "Run Captured Api Scan",
+      "runScan": "Run API Scan",
+      "noCapturedAPIsData": "Oops, no captured API's found during dynamic scan",
+      "capturedWarning": "Run Dynamic Scan first"
     },
     "requestAccess": {
       "title": "Request Access",

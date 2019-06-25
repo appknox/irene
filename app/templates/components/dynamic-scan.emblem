@@ -1,67 +1,121 @@
-.column.flex-center
-  if file.isNotReady
-    div.vnc-box
-      if file.isNeitherNoneNorReady
-        button.vnc-button.is-primary.margin-top20.is-progress disabled="disabled"
-          .fa-font-size
-            i.fa class="fa-spinner fa-spin"
-          | &nbsp; #{file.statusText}
-      if file.isNoneStatus
-        if file.isDynamicDone
-          button.vnc-button.vnc-completed-button.is-primary.margin-top20 disabled="disabled"
-            = fa-icon "fa-check"
-            | &nbsp; #{t "completed"}
-          button.vnc-button.vnc-button-repeat.is-primary.margin-top20.margin-left5.ac-dynamic-rescan click={(perform openAPIScanModal)}
-            .fa-font-size-small
-              = fa-icon "fa-repeat"
+if showSideDynamic
+  if currentDynamicScan
+      if currentDynamicScan.isNotReady
+        if currentDynamicScan.isError
+          if vncViewer
+            button.vnc-button.is-primary.margin-top20 disabled="disabled"
+              | &nbsp; #{currentDynamicScan.statusText}
+          else
+            if file.isDynamicDone
+              button.is-primary.margin-top20 disabled="disabled"
+                | #{t "completed"} &nbsp;
+                = fa-icon "fa-check"
+              button.is-primary.margin-top20.margin-left5.ac-static-rescan click={(perform openAPIScanModal)}
+                .fa-font-size-small
+                  = fa-icon "fa-repeat"
+            else
+              button.vnc-button.is-primary.margin-top20.ac-start-dynamic-scan click={(perform openAPIScanModal)}
+                .fa-font-size
+                  = fa-icon "fa-play"
+                | &nbsp; #{dynamicScanText}
         else
-          button.vnc-button.is-primary.margin-top20.ac-start-dynamic-scan click={(perform openAPIScanModal)}
-            .fa-font-size
-              = fa-icon "fa-play"
-            | &nbsp; #{dynamicScanText}
-  if file.isReady
-    button.is-primary.margin-top20.stop-dynamic-scan click="dynamicShutdown"
-      .fa-font-size-small
-        = fa-icon "fa-stop"
-      |  &nbsp; #{t "stop"}
-  if vncViewer
-    if file.startingScanStatus
-      div.note-text
-        = t "dynamicScanText"
+          if currentDynamicScan.isNotCompleted
+            button.vnc-button.is-primary.margin-top20.is-progress disabled="disabled"
+              .fa-font-size
+                i.fa class="fa-spinner fa-spin"
+              | &nbsp; #{currentDynamicScan.statusText}
+            if notVNCViewer
+              = link-to 'authenticated.file.dynamicscandetail' currentDynamicScan.id tagName="button" class="vnc-button vnc-button-repeat is-primary margin-top20 margin-left5 ac-dynamic-rescan"
+                .fa-font-size-small
+                  = fa-icon "fa-arrow-right"
+          if currentDynamicScan.isCompleted
+            if vncViewer
+              button.vnc-button.is-primary.margin-top20 disabled="disabled"
+                | &nbsp; #{currentDynamicScan.statusText}
+            else
+              if file.isDynamicDone
+                button.is-primary.margin-top20 disabled="disabled"
+                  | #{t "completed"} &nbsp;
+                  = fa-icon "fa-check"
+                button.is-primary.margin-top20.margin-left5.ac-static-rescan click={(perform openAPIScanModal)}
+                  .fa-font-size-small
+                    = fa-icon "fa-repeat"
+              else
+                button.vnc-button.is-primary.margin-top20.ac-start-dynamic-scan click={(perform openAPIScanModal)}
+                  .fa-font-size
+                    = fa-icon "fa-play"
+                  | &nbsp; #{dynamicScanText}
+      if currentDynamicScan.isReady
+        button.is-primary.margin-top20.stop-dynamic-scan click="dynamicShutdown"
+          .fa-font-size-small
+            = fa-icon "fa-stop"
+          |  &nbsp; #{t "stop"}
+        if notVNCViewer
+          = link-to 'authenticated.file.dynamicscandetail' currentDynamicScan.id tagName="button" class="vnc-button vnc-button-repeat is-primary margin-top20 margin-left5 ac-dynamic-rescan"
+            .fa-font-size-small
+              = fa-icon "fa-arrow-right"
+      if vncViewer
+        if currentDynamicScan.startingScanStatus
+          div.note-text
+            = t "dynamicScanText"
+  else
+    if file.isDynamicDone
+      button.is-primary.margin-top20 disabled="disabled"
+        | #{t "completed"} &nbsp;
+        = fa-icon "fa-check"
+      button.is-primary.margin-top20.margin-left5.ac-static-rescan click={(perform openAPIScanModal)}
+        .fa-font-size-small
+          = fa-icon "fa-repeat"
+    else
+      button.vnc-button.is-primary.margin-top20.ac-start-dynamic-scan click={(perform openAPIScanModal)}
+        .fa-font-size
+          = fa-icon "fa-play"
+        | &nbsp; #{dynamicScanText}
 
+      // button.vnc-button.is-primary.margin-top20.ac-start-dynamic-scan click={(perform openAPIScanModal)}
+      //   .fa-font-size
+      //     = fa-icon "fa-play"
+      //   | &nbsp; #{dynamicScanText}
 
-if notVNCViewer
-  if file.project.isAPIScanEnabled
-    .column.flex-center
-      if file.isRunningApiScan
-        button.is-primary.margin-top20.is-progress disabled="disabled"
-         | #{t "scanning"} : #{file.apiScanProgress}
-         | %
-      else if file.isApiDone
-         button.is-primary.margin-top20 disabled="disabled"
-           = fa-icon "fa-check"
-           | &nbsp; #{t "completed"}
-      else if file.isApiNotDone
-        button.is-primary.margin-top20.ac-start-api-scan click="openRunDynamicScanModal" disabled=file.isNotNoneStatus
-          .fa-font-size
-            = fa-icon "fa-play"
-          | &nbsp; #{t "start"}
-
-= modal-card isActive=showRunDynamicScanModal title=(t "modalCard.runAPIScan.title")
+if showSideAPI
+  if notVNCViewer
+    if file.project.isAPIScanEnabled
+      button.is-primary.margin-top20.ac-start-api-scan click={(perform openCapturedApiModal)} disabled=file.isNotNoneStatus
+        .fa-font-size
+          = fa-icon "fa-play"
+        | &nbsp; #{t "start"}
+= modal-card isActive=showCapturedApiModal title=(t "modalCard.runAPIScan.title")
   .card-body.warning-modal
     .card-wrapper
       .api-scanning
-        h6
-          = t "modalCard.runAPIScan.description"
-        .project-preference-component.margin-v-1
-          if showRunDynamicScanModal
-            = project-preferences profileId=file.profile.id platform=file.project.platform project=file.project
-        form.margin-top20
-          .align-both
-            button.modal-button.is-default click="closeRunDynamicScanModal"
-              = t "cancel"
-            button.modal-button.is-primary.highlighted-button click="'showURLFilter' 'dynamic'"
-              = t "modalCard.runAPIScan.runScan"
+        if file.isDynamicDone
+          .project-preference-component.margin-t-0
+            if showCapturedApiModal
+              = captured-apis file=file count=count totalCount=totalCount
+          form.margin-top20
+            p.control
+            .columns
+              .column.flex-center
+                button.modal-button.is-primary click={(perform closeCapturedApiModal)}
+                  = t "cancel"
+              if totalCount
+                .column.flex-center
+                  button.modal-button.is-primary click={(perform runCapturedAPIScan)} disabled=runCapturedAPIScan.isRunning
+                    = t "modalCard.runAPIScan.runScan"
+
+        else
+          div.warning-band.info-band
+            .columns
+              .column.is-one-sixth
+                = fa-icon 'info-circle'
+              .column
+                = t "modalCard.runAPIScan.capturedWarning"
+          form.margin-top20
+            p.control
+            .columns
+              .column.flex-center
+                button.modal-button.is-primary click={(perform closeCapturedApiModal)}
+                  = t "cancel"
 
 = modal-card isActive=showAPIScanModal title=(t "modalCard.dynamicScan.title")
   .card-body.warning-modal
@@ -145,7 +199,7 @@ if notVNCViewer
           .align-end
             button.modal-button.is-primary.mp-run-api-scan.margin-r-1 click="'showURLFilter' 'api'"
               = t "modalCard.apiScan.runAPIScan"
-            button.modal-button.is-primary.highlighted-button.mp-dont-run-api-scan click="doNotRunAPIScan" disabled=startingDynamicScan
+            button.modal-button.is-primary.highlighted-button.mp-dont-run-api-scan click={(perform doNotRunAPIScan)} disabled=startingDynamicScan
               = t "modalCard.apiScan.dynamicScan"
 
 = modal-card isActive=showAPIURLFilterScanModal title=(t "modalCard.apiScan.title")
@@ -194,5 +248,5 @@ if notVNCViewer
             .align-both
               button.modal-button.is-default click="goBack"
                 =  t "back"
-              button.modal-button.is-primary.highlighted-button click="runAPIScan" disabled=startingDynamicScan
+              button.modal-button.is-primary.highlighted-button click={(perform runAPIScan)} disabled=startingDynamicScan
                 = t "modalCard.apiScan.startApiScan"

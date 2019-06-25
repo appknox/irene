@@ -25,4 +25,9 @@ if isPoppedOut
         = vncPopText
 
   .button-on-vnc
-    = dynamic-scan file=file vncViewer=true notVNCViewer=false dynamicScanText=(t 'startDynamicScan')
+    if dynamicscan.isNotReady
+      .vnc-box
+        = dynamic-scan currentDynamicScan=dynamicscan file=file vncViewer=true notVNCViewer=false showSideDynamic=true showSideAPI=true dynamicScanText=(t 'startDynamicScan')
+    else
+      = dynamic-scan currentDynamicScan=dynamicscan file=file vncViewer=true notVNCViewer=false showSideDynamic=true showSideAPI=true dynamicScanText=(t 'startDynamicScan')
+

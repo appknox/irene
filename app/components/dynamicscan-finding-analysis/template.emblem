@@ -1,0 +1,20 @@
+ = link-to 'authenticated.file.overview' (scroll-to selectorid)
+  .columns
+    .column
+      .message-header.border-width-none.vuln-header.extra-padding class=progressClass
+        .columns
+          = risk-tag analysis=analysis columnSize="is-one-sixth"
+          .column
+            h6.vuln-name = analysis.vulnerability.name
+          .column.content-right
+            each tags as |tag|
+              span.tag.scan-tag class=tag.status:finished-scan:unfinished-scan
+                | #{t tag.text}
+                if tag.status
+                  = fa-icon "check"
+                  = attach-tooltip position="top"
+                    | #{tag.text} #{t "scanCompleted"}
+                else
+                  = fa-icon "times"
+                  = attach-tooltip position="top"
+                    | #{tag.text} #{t "scanNotCompleted"}

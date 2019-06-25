@@ -1,0 +1,4 @@
+
+label
+  = input checked=capturedapi.shouldProcess type="checkbox" click=(perform setApiScanStatus) class="input-checkbox display-inline"
+  |  #{capturedapi.request.host}#{capturedapi.request.path}

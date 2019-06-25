@@ -16,7 +16,8 @@ const RealtimeService = Service.extend({
   TeamMemberCounter: 0,
   OrganizationNonTeamProjectCounter: 0,
   OrganizationNonTeamMemberCounter: 0,
-  namespace: ''
+  namespace: '',
+  dynamicScanCount: 0
 });
 
 export default RealtimeService;

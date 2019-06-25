@@ -1,0 +1,24 @@
+.flex-grow-1{
+  overflow: unset;
+  flex-grow: 1;
+  // width: 35%;
+}
+.flex-grow-2{
+  height: calc(100vh - 1px);
+  overflow: scroll;
+  overflow-x:hidden;
+  flex-grow:2;
+  // width: 64%;
+}
+@media screen and (max-width: 980px){
+  .flex-grow-1{
+    overflow: unset;
+    flex-basis: 100%;
+    order: 0;
+  }
+  .flex-grow-2{
+    overflow: unset;
+    flex-basis: 100%;
+    order: 1;
+  }
+}

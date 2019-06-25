@@ -1,0 +1,3 @@
+.columns
+  div.column local-class="font-style"
+    | #{timeline.getType} #{timeline.getContext}

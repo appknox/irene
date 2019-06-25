@@ -1,0 +1,50 @@
+.somediv{
+  position: relative;
+}
+.somediv:before {
+  content: "";
+  width: 0;
+  border-right: 2px dashed #cccc;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 47%;
+}
+.dot{
+  height: 19px;
+  width: 19px;
+  background-color: #fffefe;
+  border-radius: 50%;
+  display: inline-block;
+//   border: 2px solid yellow;
+}
+
+.div-display{
+    position:relative;
+    padding-top: 9px;
+    color: #524e4e;
+    width: 14%;
+    display: flex;
+    justify-content: space-between;
+    margin-right: 1em;
+}
+
+.message-bottom-pad {
+    width: 86%;
+    padding-bottom: 10px;
+}
+.pos-relative{
+    position: relative;
+    display: flex;
+}
+
+.additional-settings {
+  border-style: none;
+  &:nth-child(odd) {
+    background-color: white;
+  }
+}
+.set-padding{
+    border: unset;
+    padding: 7px 10px;
+}

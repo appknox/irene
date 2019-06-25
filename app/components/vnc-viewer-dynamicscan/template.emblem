@@ -1,0 +1,25 @@
+if isPoppedOut
+  .modal-background
+div class=isPoppedOut:modal-card
+  .modal-card-body.vnc-modal-body.padding-10.margin-top.flex-center
+    div class="marvel-device" class=deviceType
+      if isNotTablet
+        div class="top-bar"
+        div class="sleep"
+        div class="volume"
+      div class="camera"
+      if isIOSDevice
+        if isNotTablet
+          div class="speaker"
+      div class=screenRequired:noscreen:screen
+        canvas.canvas onMouseEnter={action "focusKeyboard"} onMouseLeave={action "blurKeyboard"}
+      if isIOSDevice
+        div class="home"
+        if isNotTablet
+          div class="bottom-bar"
+  if showVNCControls
+    .modal-card-foot
+      button.is-primary.mp-toggle-pop.margin-auto click="togglePop"
+        = vncPopText
+  .button-on-vnc
+    = dynamic-scan file=file vncViewer=true notVNCViewer=false showSideDynamic=true showSideAPI=true dynamicScanText=(t 'startDynamicScan')

@@ -200,7 +200,14 @@ const File = DS.Model.extend(BaseModelMixin, {
       }
     });
   },
-
+  createDynamicScan(isApiScanEnabled) {
+    var adapter = this.store.adapterFor(this.constructor.modelName);
+    return adapter.createDynamicScan(this.store, this.constructor.modelName, this, isApiScanEnabled);
+  },
+  currentDynamicScan() {
+    var adapter = this.store.adapterFor(this.constructor.modelName);
+    return adapter.currentDynamicScan(this.store, this.constructor.modelName, this);
+  },
   setBootingStatus() {
     this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.BOOTING);
   },

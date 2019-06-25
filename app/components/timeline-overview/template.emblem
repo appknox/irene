@@ -1,0 +1,16 @@
+div
+  div local-class="pos-relative"
+    div local-class="div-display"
+      div
+        = timeline.createdOnDateTime
+      div local-class="somediv"
+          span title=getType local-class="dot pos-relative" class=getType
+    div local-class="message-bottom-pad"
+      .message-header.vuln-header.additional-settings
+        = timeline-text timeline=timeline
+      if timeline.findings
+        .message-body.vuln-body local-class="set-padding"
+          | Vulnerability Detected
+          each timeline.findings as |finding|
+            = dynamicscan-finding-analysis analysis=finding.analysis dynamicscan=dynamicscan
+

@@ -1,5 +1,8 @@
-.columns
-  .column
-    = file-details file=model
-  .column.is-one-third.vnc-viewer
-    = vnc-viewer file=model profileId=model.project.activeProfileId
+// .columns
+//   .column
+//     = file-details file=model
+//   .column.is-one-third.vnc-viewer
+//     = vnc-viewer file=model profileId=model.project.activeProfileId
+
+
+= outlet

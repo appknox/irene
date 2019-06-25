@@ -1,27 +1,21 @@
-.columns
-  .column
-    .message-header.vuln-header.hideOrShow click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus class=statusClass
-      .columns
-        = risk-tag analysis=analysis columnSize="is-one-sixth"
-        .column
-          h6.vuln-name = analysis.vulnerability.name
-        .column.content-right
-          each tags as |tag|
-            span.tag.scan-tag class=tag.status:finished-scan:unfinished-scan
-              | #{t tag.text}
-              if tag.status
-                = fa-icon "check"
-                = attach-tooltip position="top"
-                  | #{tag.text} #{t "scanCompleted"}
-              else
-                = fa-icon "times"
-                = attach-tooltip position="top"
-                  | #{tag.text} #{t "scanNotCompleted"}
-          div.margin-left.details
-            if showVulnerability
-              i.fa.fa-chevron-up
-            else
-              i.fa.fa-chevron-down
+div id="analysis-{{analysis.id}}"
+  .columns
+    .column
+      .message-header.vuln-header.hideOrShow click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus class=statusClass
+        .columns
+          = risk-tag analysis=analysis columnSize="is-one-sixth"
+          .column
+            h6.vuln-name = analysis.vulnerability.name
+          .column.content-right
+            each tags as |tag|
+              span.tag.scan-tag class=tag.status:finished-scan:unfinished-scan
+                | #{t tag.text}
+                if tag.status
+                  = fa-icon "check"
+                  = attach-tooltip position="top"
+                    | #{tag.text} #{t "scanCompleted"}
+                else
+                  i.fa.fa-chevron-down
 
 
 if showVulnerability

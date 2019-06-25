@@ -59,7 +59,7 @@ const VncViewerComponent = Component.extend({
 
     this.send("blurKeyboard");
 
-    if (this.get('file.isReady')) {
+    if (this.get('dynamicscan.isReady')) {
       return this.send("connect");
     }
   },
@@ -68,16 +68,16 @@ const VncViewerComponent = Component.extend({
     return this.setupRFB();
   },
 
-  showVNCControls: computed("file.isReady", "isPoppedOut", function() {
+  showVNCControls: computed("dynamicscan.isReady", "isPoppedOut", function() {
     const isPoppedOut = this.get("isPoppedOut");
-    const isReady = this.get("file.isReady");
+    const isReady = this.get("dynamicscan.isReady");
     if(isPoppedOut || isReady) {
       return true;
     }
   }),
 
-  statusChange: observer('file.dynamicStatus', function() {
-    if (this.get('file.isReady')) {
+  statusChange: observer('dynamicscan.status', function() {
+    if (this.get('dynamicscan.isReady')) {
       return this.send("connect");
     } else {
       return this.send("disconnect");
@@ -161,7 +161,7 @@ const VncViewerComponent = Component.extend({
 
     connect() {
       const rfb = this.get("rfb");
-      const deviceToken = this.get("file.deviceToken");
+      const deviceToken = this.get("dynamicscan.deviceToken");
       rfb.connect(ENV.deviceFarmHost, ENV.deviceFarmPort, '1234', `${ENV.deviceFarmPath}?token=${deviceToken}`);
       setTimeout(this.set_ratio.bind(this), 500);
     },

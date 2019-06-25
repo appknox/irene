@@ -41,7 +41,7 @@ module.exports = function(environment) {
     mixpanel: {
       enabled: false,
       LOG_EVENT_TRACKING: false,
-      token: 'baf97efda8bb7c89401cf455d33bcd29'
+      token: 'baf97efda8bb7c89401cf455d3random'
     },
     pace: {
       // addon-specific options to configure theme
@@ -142,6 +142,7 @@ module.exports = function(environment) {
       devices: 'devices',
       devicePreferences: 'device_preference',
       dynamic: 'dynamicscan',
+      dynamicscans: 'dynamicscans',
       dynamicShutdown: 'dynamic_shutdown',
       signedPdfUrl: 'signed_pdf_url',
       storeUrl: 'store_url',
@@ -209,6 +210,7 @@ module.exports = function(environment) {
       appscan: 'appscan',
       scancount: 'scancount',
       recentIssues: 'recent_issues',
+      capturedApiScanStart: 'start_apiscan',
       tags: 'tags',
     },
     csb: {
@@ -240,7 +242,8 @@ module.exports = function(environment) {
     gReCaptcha: {
       jsUrl: 'https://recaptcha.net/recaptcha/api.js?render=explicit',
       siteKey: '6LfDdlUUAAAAAE9Bz9-3FLjrNw_AEUk11zXDH-0_'
-    }
+    },
+    namespace_v2: "api/v2"
   };
 
   if (environment === 'development') {

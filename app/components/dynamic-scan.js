@@ -8,14 +8,17 @@ import poll from 'irene/services/poll';
 import lookupValidator from 'ember-changeset-validations';
 import Changeset from 'ember-changeset';
 import ProxySettingValidation from '../validations/proxy-setting';
+import { getOwner } from '@ember/application';
 import { task } from 'ember-concurrency';
 
 export default Component.extend({
-  tagName: "",
+  tagName: "div",
+  classNames: ["column","flex-center"],
   apiScanModal: false,
   dynamicScanModal: false,
   proxyPOJO: {},
   serverErrors: {},
+  routing: service('-routing'),
   i18n: service(),
   trial: service(),
   ajax: service(),
@@ -31,9 +34,6 @@ export default Component.extend({
   },
   currentProxy:null,
   tStartingScan: t("startingScan"),
-  didInsertElement() {
-    this.send('pollDynamicStatus');
-  },
   getCurrentProxy: task(function * (){
     let record = yield this.get("store").findRecord("proxy-setting", this.get('file.profile.id'), { reload: true });
     return record;
@@ -122,67 +122,101 @@ export default Component.extend({
       }
     }
   }),
+
+  count: 0,
+  totalCount: 0,
+
+  tStartingScan: t("startingScan"),
+  createDynamicScan: task(function *(isApiScanEnabled){
+    let file = this.get('file');
+    yield file.createDynamicScan(isApiScanEnabled);
+  }),
+  getCurrentDynamicScan: task(function *(){
+    let file = this.get('file')
+    return yield file.currentDynamicScan();
+  }),
+  setAPIScanOption: task(function *(isApiScanEnabled){
+    const tStartingScan = this.get("tStartingScan");
+    let currentDynamicScan = null;
+    try{
+      yield this.get('createDynamicScan').perform(isApiScanEnabled);
+      try{
+        currentDynamicScan = yield this.get('getCurrentDynamicScan').perform();
+        yield this.set('currentDynamicScan', currentDynamicScan)
+      }catch(error){
+        yield this.set('currentDynamicScan', currentDynamicScan)
+      }
+      this.set('currentDynamicScan', currentDynamicScan)
+      this.get('realtime').incrementProperty('dynamicScanCount');
+      this.get("notify").success(tStartingScan);
+      if(!this.isDestroyed) {
+        this.send("closeModal");
+        this.set("startingDynamicScan", false);
+        getOwner(this).lookup('route:authenticated').transitionTo("authenticated.file.dynamicscandetail", currentDynamicScan.id);
+      }
+    }catch(error){
+      this.set("startingDynamicScan", false);
+      this.get("notify").error(error.payload.error);
+    }
+  }),
+  closeCapturedApiModal: task(function * (){
+    yield this.set('showCapturedApiModal', false)
+  }),
+  setCpaturedAPIScanOption: task(function *() {
+
+    const file = this.get('file');
+    const fileId = file.id;
+    const dynamicUrl = [ENV.endpoints.files, fileId,ENV.endpoints.capturedApiScanStart].join('/');
+    return yield this.get("ajax").post(dynamicUrl,{namespace: ENV.namespace_v2})
+  }),
+
+  countCapturedAPI: task(function * (){
+    let data = {fileId: this.get('file.id'), should_process:true};
+    const url = [ENV.endpoints.files, this.get('file.id'), "capturedapis"].join('/');
+    return yield this.get("ajax").request(url,{namespace: ENV.namespace_v2, data});
+
+  }),
+  countTotalCapturedAPI: task(function * (){
+    let data = {fileId: this.get('file.id')};
+    const url = [ENV.endpoints.files, this.get('file.id'), "capturedapis"].join('/');
+    return yield this.get("ajax").request(url,{namespace: ENV.namespace_v2, data});
+
+  }),
+  runCapturedAPIScan: task(function * () {
+    try{
+      yield this.get('setCpaturedAPIScanOption').perform()
+      yield this.get("notify").success("Starting captured API Scan");
+      if(!this.isDestroyed) {
+        this.set('showCapturedApiModal', false)
+      }
+    }catch(error){
+        this.get("notify").error(error.toString());
+    }
+  }),
+  openCapturedApiModal: task(function * (){
+    try{
+      let filterCapturedAPIData = yield this.get('countCapturedAPI').perform();
+      yield this.set('count', filterCapturedAPIData.count);
+      let totalCapturedAPIData = yield this.get('countTotalCapturedAPI').perform();
+      yield this.set('totalCount', totalCapturedAPIData.count);
+      yield this.set('showCapturedApiModal', true);
+    }catch(error){
+      this.notify(error.toString())
+    }
+  }),
+  doNotRunAPIScan: task(function *(){
+    triggerAnalytics('feature', ENV.csb.runDynamicScan);
+    yield this.set("isApiScanEnabled", false);
+    yield this.set("startingDynamicScan", true);
+    yield this.get('setAPIScanOption').perform();
+  }),
+  runAPIScan: task(function  *(){
+    triggerAnalytics('feature', ENV.csb.runAPIScan);
+    this.set("startingDynamicScan", true);
+    this.set("isApiScanEnabled", true);
+    yield this.get('setAPIScanOption').perform(true);
+  }),
   actions: {
-    setAPIScanOption() {
-      const tStartingScan = this.get("tStartingScan");
-      const isApiScanEnabled = this.get("isApiScanEnabled");
-      const data = {
-        isApiScanEnabled: isApiScanEnabled === true
-      };
-      const file = this.get('file');
-      const fileId = file.id;
-      const dynamicUrl = [ENV.endpoints.dynamic, fileId].join('/');
-      this.get("ajax").put(dynamicUrl, {data})
-        .then(() => {
-          this.get("notify").success(tStartingScan);
-          file.setBootingStatus();
-          if(!this.isDestroyed) {
-            this.send('pollDynamicStatus');
-            this.send("closeModal");
-            this.set("startingDynamicScan", false);
-          }
-        }, (error) => {
-          file.setNone();
-          this.set("startingDynamicScan", false);
-          this.get("notify").error(error.payload.error);
-        });
-    },
-
-    pollDynamicStatus() {
-      const isDynamicReady = this.get('file.isReady');
-      const fileId = this.get('file.id');
-      if (isDynamicReady) {
-        return;
-      }
-      if(!fileId) {
-        return;
-      }
-      var stopPoll = poll(() => {
-        return this.get('store').find('file', fileId)
-          .then(() => {
-            const dynamicStatus = this.get('file.dynamicStatus');
-            if (dynamicStatus === ENUMS.DYNAMIC_STATUS.NONE || dynamicStatus === ENUMS.DYNAMIC_STATUS.READY) {
-              stopPoll();
-            }
-          }, () => {
-            stopPoll();
-          });
-      }, 5000);
-    },
-
-    doNotRunAPIScan() {
-      triggerAnalytics('feature', ENV.csb.runDynamicScan);
-      this.set("isApiScanEnabled", false);
-      this.set("startingDynamicScan", true);
-      this.send("setAPIScanOption");
-    },
-
-    runAPIScan() {
-      triggerAnalytics('feature', ENV.csb.runAPIScan);
-      this.set("startingDynamicScan", true);
-      this.set("isApiScanEnabled", true);
-      this.send("setAPIScanOption");
-    },
 
     showURLFilter(param){
       this.set("showAPIURLFilterScanModal", true);
@@ -225,19 +259,15 @@ export default Component.extend({
     },
 
     dynamicShutdown() {
-      const file = this.get("file");
-      file.setShuttingDown();
+      const currentDynamicScan = this.get('currentDynamicScan')
       this.set("isPoppedOut", false);
-      const fileId = this.get("file.id");
-      const dynamicUrl = [ENV.endpoints.dynamic, fileId].join('/');
+      const dynamicUrl = [ENV.endpoints.dynamicscans, currentDynamicScan.id].join('/');
       this.get("ajax").delete(dynamicUrl)
       .then(() => {
         if(!this.isDestroyed) {
-          this.send('pollDynamicStatus');
           this.set("startingDynamicScan", false);
         }
       },(error) => {
-        file.setNone();
         this.set("startingDynamicScan", false);
         this.get("notify").error(error.payload.error);
       });

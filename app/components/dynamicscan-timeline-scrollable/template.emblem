@@ -1,0 +1,30 @@
+.card.is-fullwidth.margin-top-10.dynamic-header-border
+  header.card-header local-class="header-background-ebeaea"
+    div local-class="child-one"
+      div local-class="button-set"
+        = link-to 'authenticated.file.dynamicscans' tagName="button" class="margin-left5" local-class="ac-dynamic-rescan"
+          .fa-font-size-small
+            = fa-icon "fa-arrow-left"
+      div.float-left local-class="font-color"
+        div
+          | Dynamic Scan
+        div local-class="flex-item"
+          div.padding-r-h
+            | API Count:
+          div local-class="font-weight"
+            | #{dynamicscan.capturedapis}
+    div local-class="child-two"
+      .is-medium.float-right.vertical-align-center local-class="font-color"
+        div local-class="font-weight"
+          | #{dynamicscan.startedAt}
+  .card-content
+    if hasObjects
+      each objects as |timeline|
+        = timeline-overview timeline=timeline dynamicscan=dynamicscan
+      .margin-top20
+        = partial "loadmore-pagination"
+    else
+      .columns
+        .column
+          = fa-icon "fa-clock-o"
+          |  Dynamic Scan is in progress

@@ -7,14 +7,17 @@ import $ from 'jquery';
 
 const FileDetailsComponent = Component.extend({
   ajax: service(),
-
+  routing: service('-routing'),
+  scrollTo: service('scroll-to'),
   sortImpactAscending: false,
+  // currentAnalysis: null,
 
   isSecurityEnabled: false,
 
   vulnerabilityType: ENUMS.VULNERABILITY_TYPE.UNKNOWN,
   vulnerabilityTypes: ENUMS.VULNERABILITY_TYPE.CHOICES.slice(0, -1),
-
+  isAnalysisDetails: true,
+  isDynamicScanDetails: false,
   analyses: computed("file.sortedAnalyses", function() {
     return this.get("file.sortedAnalyses");
   }),
@@ -25,6 +28,19 @@ const FileDetailsComponent = Component.extend({
 
   didInsertElement() {
     this.securityEnabled();
+    const route = this.get('routing.currentRouteName');
+    const routeName = route.split(".")[2];
+
+    if(routeName === "dynamicscans") {
+      this.set('isDynamicScanDetails', true);
+      this.set('isAnalysisDetails', false);
+    }
+    if(routeName === "index"){
+      this.set('isDynamicScanDetails', false);
+    }
+    // }else{
+
+    // }
   },
 
   securityEnabled() {
@@ -66,6 +82,18 @@ const FileDetailsComponent = Component.extend({
 
   sortedAnalyses: computed.sort('sortedUnhiddenAnalyses', 'analysesSorting'),
 
+  analysisDetailsClass: computed('isAnalysisDetails', function() {
+    if (this.get('isAnalysisDetails')) {
+
+      return 'is-active';
+    }
+  }),
+  dynamicScanDetailsClass: computed('isDynamicScanDetails', function() {
+    if (this.get('isDynamicScanDetails')) {
+      return 'is-active';
+    }
+  }),
+
   actions: {
     filterVulnerabilityType() {
       this.set("sortedUnhiddenAnalyses", this.get("file.sortedAnalyses"));
@@ -88,7 +116,16 @@ const FileDetailsComponent = Component.extend({
       }
       const sortedAnalyses = this.get("sortedAnalyses");
       this.set("sortedUnhiddenAnalyses", sortedAnalyses);
-    }
+    },
+    displayAnalysisDetails() {
+      this.set('isAnalysisDetails', true);
+      this.set('isDynamicScanDetails', false);
+    },
+
+    displayDynamicScanDetails() {
+      this.set('isDynamicScanDetails', true);
+      this.set('isAnalysisDetails', false);
+    },
   }
 });
 

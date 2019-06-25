@@ -1,0 +1,11 @@
+// .columns
+//   .column
+//     = file-details isDynamicScanDetails=true
+
+.columns
+  .column
+    = file-details file=model.file currentDynamicScan=model.currentDynamicScan
+  // .column.is-one-third.vnc-viewer
+  //   = file-header file=model.file currentDynamicScan=model.currentDynamicScan showSidebar=true class="margin-top"
+  //   // = vnc-viewer file=model profileId=model.project.activeProfileId
+

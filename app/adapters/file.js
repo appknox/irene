@@ -22,4 +22,14 @@ export default DRFAdapter.extend(DataAdapterMixin, {
   urlForQuery(query, modelName) {
     return this._buildNestedURL(modelName, query.projectId);
   },
+  async createDynamicScan(store, type, snapshot, isApiScanEnabled) {
+    const dynamicUrl = `${this.get('host')}/${this.get('namespace_v2')}/files/${snapshot.id}/dynamicscans?isApiScanEnabled=${isApiScanEnabled}`;
+    let createDynamicScan = await this.ajax(dynamicUrl,'POST');
+    return this.store.findRecord("dynamicscan",createDynamicScan.id)
+  },
+  async currentDynamicScan(store, type, snapshot) {
+    const dynamicUrl = `${this.get('host')}/${this.get('namespace_v2')}/files/${snapshot.id}/active_dynamicscan`;
+    let currentDynamicScan = await this.ajax(dynamicUrl,'GET');
+    return this.store.findRecord("dynamicscan",currentDynamicScan.id)
+  },
 });

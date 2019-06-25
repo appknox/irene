@@ -1,0 +1,18 @@
+
+if hasObjects
+  each sortedObjects as |dynamicscan index|
+    = dynamicscans-overview file=file isDynamicDetails=(eq index 0) dynamicscan=dynamicscan isScroll=false
+  .margin-top20
+    = partial "paginate"
+else
+  if hasNoObject
+    div.no-data
+      .columns
+        .column.is-one-sixth
+          = fa-icon 'info-circle'
+        .column
+          | No data found
+  else
+    .empty-state
+      = fa-icon "fa-spinner fa-spin"
+      | #{t "loading"}...

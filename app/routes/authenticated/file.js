@@ -6,7 +6,12 @@ const AuthenticatedFileRoute = Route.extend(ScrollTopMixin, {
 
   title: `File Details${config.platform}`,
   async model(params){
-    return this.get('store').find('file', params.fileid);
+    return this.get('store').findRecord('file', params.fileid, { reload: true });
+  },
+  afterModel(model, transition){
+    if (transition.targetName==='authenticated.file.index'){
+      this.transitionTo('authenticated.file.overview');
+    }
   }
 }
 );

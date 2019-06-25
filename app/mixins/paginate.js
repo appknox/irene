@@ -14,7 +14,6 @@ const PaginateMixin = Mixin.create({
   isJsonApiPagination: false,
   isDRFPagination: false,
   offsetMultiplier: ENV.paginate.offsetMultiplier,
-
   versionIncrementer() {
     this.incrementProperty("version");
   },
@@ -40,7 +39,9 @@ const PaginateMixin = Mixin.create({
 
   objects: computed('version', function() {
     let query;
-    window.scrollTo(0, 0);
+    if (!this.disableScroll){
+      window.scrollTo(0, 0);
+    }
     if (this.get('isJsonApiPagination')) {
       const query_limit = this.get("limit");
       const query_offset = this.get("offset");
@@ -89,6 +90,7 @@ const PaginateMixin = Mixin.create({
   sortedObjects: computed.sort('objects', 'sortProperties'),
   objectCount: computed.alias('objects.length'),
   hasObjects: computed.gt('objectCount', 0),
+  hasNoObject: computed.equal('meta.count', 0),
 
   maxOffset: computed("meta.total", "limit", function() {
     const limit = this.get("limit");
