@@ -3,7 +3,7 @@ import DS from 'ember-data';
 
 export default DRFSerializer.extend(DS.EmbeddedRecordsMixin, {
   attrs: {
-    // vulnerability: { embedded: 'always' },
-    attachments: { embedded: 'always' }
+    attachments: { embedded: 'always' },
+    findingsV2: { embedded: 'always' }
   }
 });

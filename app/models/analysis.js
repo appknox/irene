@@ -6,6 +6,7 @@ import { translationMacro as t } from 'ember-i18n';
 
 const Analysis = DS.Model.extend({
   findings: DS.attr(),
+  findingsV2: DS.hasMany('finding'),
   risk: DS.attr('number'),
   status: DS.attr('number'),
   owasp: DS.hasMany('owasp'),
@@ -23,6 +24,26 @@ const Analysis = DS.Model.extend({
   file: DS.belongsTo('file', {inverse: 'analyses'}),
 
 
+  allAnalysis: computed('findings', 'findingsV2', function(){
+    if (this.get('findings').length!==0){
+      let analysisdata = this.get('findings');
+      return analysisdata.map(finding => ({
+        title: finding['title'],
+        createdOn: finding['createdOn'],
+        description: finding['description'],
+        updatedOn:finding['updatedOn'],
+        analysis: finding['analysis']
+      }));
+    }
+    let analysisdataV2 = this.get('findingsV2');
+    return analysisdataV2.map(finding => ({
+      title: finding.get('title'),
+      createdOn: finding.get('createdOn'),
+      description: finding.get('description'),
+      updatedOn:finding.get('updatedOn'),
+      analysis: finding.get('analysis')
+    }));
+  }),
   hascvccBase: computed.equal('cvssVersion', 3),
 
   tLow: t("low"),
