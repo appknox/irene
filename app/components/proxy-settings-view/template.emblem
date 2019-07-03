@@ -1,0 +1,23 @@
+div local-class="proxy-settings {{if currentProxy.enabled 'proxy-settings--active'}}"
+  .columns
+    .column.bold.black-text.margin-bottom-5
+      | Proxy Settings
+    .column.warning-msg.flex-2
+      if currentProxy.enabled
+        span.fa-font-size
+          i.fa class="fa-exclamation-triangle exclamation-warning"
+          | &nbsp; All the Request will go by this proxy
+  form.columns
+    .column.flex-3
+      | #{currentProxy.host}:#{currentProxy.port}
+    .column
+      a.button.is-primary class="{{if currentProxy.enabled 'is-primary' 'is-success'}}" click={(perform saveProxyAPI changeset)}
+        if applyProxyAPI.isRunning
+          span.fa-font-size
+            i.fa class="fa-spinner fa-spin"
+            | &nbsp;
+        else
+          if currentProxy.enabled
+            | Disable
+          else
+            | Enable
