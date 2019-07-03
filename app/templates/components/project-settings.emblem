@@ -21,6 +21,14 @@ if isGeneralSettings
   .box-container.project-preference
     = project-preferences profileId=project.activeProfileId platform=project.platform project=project
   .box-container
+    .collaboration-settings
+      .columns
+        .column
+          h5.bold.black-text.margin-t-q.margin-b-1
+            | Proxy
+          | Route dynamic scan and API scan requests via your proxy server.
+    = proxy-settings profile=profile
+  .box-container
     = api-filter profileId=project.activeProfileId
   .box-container
     .collaboration-settings
