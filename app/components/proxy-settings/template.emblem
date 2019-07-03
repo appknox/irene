@@ -1,0 +1,27 @@
+div local-class="proxy-settings {{if currentProxy.enabled 'proxy-settings--active'}}"
+  form.columns
+    .column.flex-3
+      div
+        = input class="form-control input" value=changeset.host placeholder="Host" autofocus="autofocus"
+    .column.flex-2
+      div
+        = input class="form-control input" type="number" value=changeset.port placeholder="Port"
+    .column
+      a.button.is-default click={(perform applyProxyAPI changeset)}
+        if saveProxyAPI.isRunning
+          span.fa-font-size
+            i.fa class="fa-spinner fa-spin"
+            | &nbsp;
+        else
+          | Apply
+    .column
+      a.button.is-primary class="{{if currentProxy.enabled 'is-primary' 'is-success'}}" click={(perform saveProxyAPI changeset)}
+        if applyProxyAPI.isRunning
+          span.fa-font-size
+            i.fa class="fa-spinner fa-spin"
+            | &nbsp;
+        else
+          if currentProxy.enabled
+            | Disable
+          else
+            | Enable
