@@ -25,9 +25,9 @@ if isGeneralSettings
       .columns
         .column
           h5.bold.black-text.margin-t-q.margin-b-1
-            | Proxy
-          | Route dynamic scan and API scan requests via your proxy server.
-    = proxy-settings profile=profile
+            | API Proxy
+          | Route dynamic scan and API scan requests via proxy server
+      = proxy-settings profile=profile
   .box-container
     = api-filter profileId=project.activeProfileId
   .box-container

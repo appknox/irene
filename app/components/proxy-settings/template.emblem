@@ -1,27 +1,29 @@
-div local-class="proxy-settings {{if currentProxy.enabled 'proxy-settings--active'}}"
-  form.columns
-    .column.flex-3
-      div
-        = input class="form-control input" value=changeset.host placeholder="Host" autofocus="autofocus"
-    .column.flex-2
-      div
-        = input class="form-control input" type="number" value=changeset.port placeholder="Port"
-    .column
-      a.button.is-default click={(perform applyProxyAPI changeset)}
-        if saveProxyAPI.isRunning
-          span.fa-font-size
-            i.fa class="fa-spinner fa-spin"
-            | &nbsp;
-        else
-          | Apply
-    .column
-      a.button.is-primary class="{{if currentProxy.enabled 'is-primary' 'is-success'}}" click={(perform saveProxyAPI changeset)}
-        if applyProxyAPI.isRunning
-          span.fa-font-size
-            i.fa class="fa-spinner fa-spin"
-            | &nbsp;
-        else
+.proxy-settings
+  .vertical-align-center
+    .margin-r-1
+      = input class="form-control input" value=changeset.host placeholder="Host" autofocus="autofocus"
+    .margin-r-1
+      = input class="form-control input" type="number" value=changeset.port placeholder="Port"
+    button.button.is-default click={(perform applyProxyAPI changeset)}
+      if saveProxyAPI.isRunning
+        span.fa-font-size
+          i.fa class="fa-spinner fa-spin"
+          | &nbsp;
+      else
+        = t "save"
+
+  // if hasProxyValues
+  .vertical-align-center.margin-t-1
+    .div
+      label class="switch"
+        = input class="switch-input" type="checkbox" id="mandate-mfa" checked=currentProxy.enabled type="checkbox" click=(perform saveProxyAPI value="target.checked")
+        span class="slider slider-nolabel round"
+    .padding-l-h
+      label.black-text local-class="org-setting-title" for="mandate-mfa"
+        | Enable proxy:
+        span.padding-l-q
           if currentProxy.enabled
-            | Disable
+            | ON
           else
-            | Enable
+            | OFF
+
