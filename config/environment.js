@@ -233,6 +233,9 @@ module.exports = function(environment) {
       inviteMember: { feature: "Invite Member", module: "Security", product: "Appknox" },
       projectCollaboratorRemove: { feature: "Remove Project Collaborator", module: "Security", product: "Appknox" },
       projectTeamRemove: { feature: "Remove Project Team", module: "Security", product: "Appknox" },
+      enableProxy: { feature: "Enable Proxy", module: "Setup", product: "Appknox" },
+      disableProxy: { feature: "Disable Proxy", module: "Setup", product: "Appknox" },
+      changeProxySettings: { feature: "Change Proxy Settings", module: "Setup", product: "Appknox" },
     },
     whitelabel: {
       theme: 'dark'

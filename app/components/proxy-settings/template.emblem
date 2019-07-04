@@ -4,11 +4,10 @@
       = input class="form-control input" value=changeset.host placeholder="Host" autofocus="autofocus"
     .margin-r-1
       = input class="form-control input" type="number" value=changeset.port placeholder="Port"
-    button.button.is-default click={(perform saveProxy)}
-      if saveProxyAPI.isRunning
+    button.button.is-default click={(perform saveProxy)} disabled=saveProxy.isRunning
+      if saveProxy.isRunning
         span.fa-font-size
           i.fa class="fa-spinner fa-spin"
-          | &nbsp;
       else
         = t "save"
 
@@ -16,7 +15,8 @@
     .margin-t-1h.vertical-align-center
       label for="proxy-settings-input"
         .padding-r-1.bold
-          | Enable Proxy:
+          = t "proxyEnable"
+          | :
       label class="toggle-switch-on-off"
-        = input class="switch-input" type="checkbox" id="proxy-settings-input" checked=(readonly changeset.enabled) type="checkbox" click=(perform enableProxy)
+        = input class="switch-input" type="checkbox" id="proxy-settings-input" checked=(readonly changeset.enabled) type="checkbox" click=(perform enableProxy) disabled=enableProxy.isRunning
         span class="knob"

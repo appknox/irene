@@ -2536,6 +2536,9 @@ select:disabled
     &:checked + .knob:before
       content: $on
       transform: translateX($size * 0.86)
+    &[disabled] + .knob
+      opacity: 0.7
+      cursor: not-allowed
 
 .toggle-switch
   @include toggle-knob(2.6em, "", "")

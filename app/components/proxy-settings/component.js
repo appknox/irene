@@ -1,19 +1,22 @@
 import Component from '@ember/component';
-import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
-import ENV from 'irene/config/environment';
-// import ENUMS from 'irene/enums';
-// import { translationMacro as t } from 'ember-i18n';
-// import triggerAnalytics from 'irene/utils/trigger-analytics';
-// import poll from 'irene/services/poll';
+import { inject as service } from '@ember/service';
+import { task, waitForProperty } from 'ember-concurrency';
+import { translationMacro as t } from 'ember-i18n';
 import lookupValidator from 'ember-changeset-validations';
 import Changeset from 'ember-changeset';
+import ENV from 'irene/config/environment';
 import ProxySettingValidation from 'irene/validations/proxy-settings';
-import { task, waitForProperty } from 'ember-concurrency';
+import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 export default Component.extend({
   i18n: service(),
   notify: service('notification-messages-service'),
+
+  tProxySettingsSaved: t('proxySettingsSaved'),
+  tProxyTurned: t('proxyTurned'),
+  tOn: t('on'),
+  tOff: t('off'),
 
   currentProxy:null,
   proxyPOJO: {},
@@ -61,7 +64,8 @@ export default Component.extend({
   saveProxy: task(function *() {
     const status = yield this.get('saveChanges').perform();
     if (status) {
-      this.get('notify').success('Proxy settings saved');
+      this.get('notify').success(this.get('tProxySettingsSaved'));
+      triggerAnalytics('feature', ENV.csb.changeProxySettings);
     }
   }),
 
@@ -101,14 +105,20 @@ export default Component.extend({
 
   enableProxy: task(function *(event) {
     const changeset = this.get('changeset');
-    changeset.set('enabled', event.target.checked);
+    let enabled = event.target.checked;
+    changeset.set('enabled', enabled);
     const status = yield this.get('saveChanges').perform();
-    const statusText = changeset.get('enabled') ? 'ON' : 'OFF';
+    const statusText = changeset.get('enabled') ? this.get('tOn') : this.get('tOff');
     if (status) {
-      this.get('notify').info('Proxy turned ' + statusText);
+      this.get('notify').info(this.get('tProxyTurned') + statusText.string.toUpperCase());
+      if (enabled) {
+        triggerAnalytics('feature', ENV.csb.enableProxy);
+      } else {
+        triggerAnalytics('feature', ENV.csb.disableProxy);
+      }
     } else {
-      if(event.target.checked) {
-        this.get('notify').error(changeset.get('errors')[0].validation[0])
+      if (enabled) {
+        this.get('notify').error(changeset.get('errors')[0].validation[0]);
       }
       event.preventDefault();
     }
