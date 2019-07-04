@@ -53,6 +53,8 @@ if notVNCViewer
       .api-scanning
         h6
           = t "modalCard.runAPIScan.description"
+        .margin-t-1
+          = proxy-settings-view profile=file.profile project=file.project
         .project-preference-component.margin-v-1
           if showRunDynamicScanModal
             = project-preferences profileId=file.profile.id platform=file.project.platform project=file.project
@@ -126,8 +128,8 @@ if notVNCViewer
               = fa-icon 'exclamation-triangle'
             .column
               = t "modalCard.apiScan.extraDescription"
-        .margin-t-1h.add-filter-list
-          = proxy-settings-view profile=profile
+        .margin-t-1h
+          = proxy-settings-view profile=file.profile project=file.project
         .margin-top20.add-filter-list
           = api-filter profileId=file.profile.id
         div.margin-top20
