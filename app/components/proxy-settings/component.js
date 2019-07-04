@@ -36,17 +36,17 @@ export default Component.extend({
   }),
 
   getCurrentProxy: task(function * (){
-    yield waitForProperty(this, 'profile.id', function(pid){
+    yield waitForProperty(this, 'profile.id', function(pid) {
       return !!pid
     });
     const proxyId = this.get('proxyId');
-    let record = yield this.get("store").findRecord("proxy-setting", proxyId);
+    let record = yield this.get('store').findRecord('proxy-setting', proxyId);
     return record;
   }),
 
   syncSettings: task(function * () {
     let currentProxy = yield this.get('getCurrentProxy').perform();
-    if(!currentProxy) {
+    if (!currentProxy) {
       return;
     }
     yield this.set('currentProxy', currentProxy);
@@ -58,7 +58,7 @@ export default Component.extend({
     this.set('changeset', changeset);
   }).on('init'),
 
-  saveProxy: task(function *(){
+  saveProxy: task(function *() {
     const status = yield this.get('saveChanges').perform();
     if (status) {
       this.get('notify').success('Proxy settings saved');
@@ -72,6 +72,7 @@ export default Component.extend({
     yield this.get('syncSettings').perform();
     return false;
   }),
+
   saveChanges: task(function *() {
     const changeset = this.get('changeset');
     yield changeset.validate();
@@ -80,7 +81,7 @@ export default Component.extend({
       if (!(changeset.get('host') || changeset.get('port'))) {
         return yield this.get('clearProxy').perform();
       }
-      if(changeset.get('errors') && changeset.get('errors')[0].validation) {
+      if (changeset.get('errors') && changeset.get('errors')[0].validation) {
         this.get('notify').error(
           changeset.get('errors')[0].validation[0],
           ENV.notifications
