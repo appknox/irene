@@ -63,11 +63,11 @@
         if file.isStaticCompleted
           button.is-primary.margin-top20 disabled="disabled"
             | #{t "completed"} &nbsp;
-            = fa-icon "fa-check"
+            = fa-icon "check"
 
           button.is-primary.margin-top20.margin-left5.ac-static-rescan click="openRescanModal"
             .fa-font-size-small
-              = fa-icon "fa-repeat"
+              = fa-icon "repeat"
         else
            button.is-primary.margin-top20.is-progress disabled="disabled"
             | #{t "scanning"} : #{file.staticScanProgress}
@@ -77,23 +77,23 @@
         if file.isManualRequested
            button.is-primary.margin-top20 disabled="disabled"
             if file.isManualDone
-              = fa-icon "fa-check"
+              = fa-icon "check"
               | &nbsp; #{t "completed"}
 
             else
-              = fa-icon "fa-clock-o"
+              = fa-icon "clock-o"
               | &nbsp; #{t "requested"}
 
         else
           if organization.selected.isTrial
               button.is-primary.margin-top20 click={(perform openRequestAccessModal)}
                 .fa-font-size
-                  = fa-icon "fa-play"
+                  = fa-icon "play"
                 | &nbsp; #{t "start"}
           else
             button.is-primary.margin-top20.ac-request-manual-scan click="openManualScanModal"
               .fa-font-size
-                = fa-icon "fa-play"
+                = fa-icon "play"
               | &nbsp; #{t "start"}
 
 

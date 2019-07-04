@@ -9,20 +9,20 @@
       if file.isNoneStatus
         if file.isDynamicDone
           button.vnc-button.vnc-completed-button.is-primary.margin-top20 disabled="disabled"
-            = fa-icon "fa-check"
+            = fa-icon "check"
             | &nbsp; #{t "completed"}
           button.vnc-button.vnc-button-repeat.is-primary.margin-top20.margin-left5.ac-dynamic-rescan click={(perform openAPIScanModal)}
             .fa-font-size-small
-              = fa-icon "fa-repeat"
+              = fa-icon "repeat"
         else
           button.vnc-button.is-primary.margin-top20.ac-start-dynamic-scan click={(perform openAPIScanModal)}
             .fa-font-size
-              = fa-icon "fa-play"
+              = fa-icon "play"
             | &nbsp; #{dynamicScanText}
   if file.isReady
     button.is-primary.margin-top20.stop-dynamic-scan click="dynamicShutdown"
       .fa-font-size-small
-        = fa-icon "fa-stop"
+        = fa-icon "stop"
       |  &nbsp; #{t "stop"}
   if vncViewer
     if file.startingScanStatus
@@ -39,12 +39,12 @@ if notVNCViewer
          | %
       else if file.isApiDone
          button.is-primary.margin-top20 disabled="disabled"
-           = fa-icon "fa-check"
+           = fa-icon "check"
            | &nbsp; #{t "completed"}
       else if file.isApiNotDone
         button.is-primary.margin-top20.ac-start-api-scan click="openRunDynamicScanModal" disabled=file.isNotNoneStatus
           .fa-font-size
-            = fa-icon "fa-play"
+            = fa-icon "play"
           | &nbsp; #{t "start"}
 
 = modal-card isActive=showRunDynamicScanModal title=(t "modalCard.runAPIScan.title")
