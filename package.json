@@ -19,7 +19,9 @@
     "deploy": "ember deploy production --verbose=true --activate=true --show-progress=true",
     "deploy:staging": "ember deploy staging --verbose=true --activate=true --show-progress=true",
     "deploy:sequelstring": "ember deploy sequelstring --verbose=true --activate=true --show-progress=true",
-    "deploy:gbm": "ember deploy gbm --verbose=true --activate=true --show-progress=true"
+    "deploy:gbm": "ember deploy gbm --verbose=true --activate=true --show-progress=true",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "devDependencies": {
     "bower": "^1.8.2",
@@ -104,6 +106,8 @@
     "clipboard": "^1.7.1",
     "ember-cli-document-title": "^0.3.3",
     "intl-tel-input": "^12.1.15",
-    "jquery": "^3.4.0"
-  }
+    "jquery": "^3.4.0",
+    "snyk": "^1.189.0"
+  },
+  "snyk": true
 }
