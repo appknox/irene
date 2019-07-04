@@ -16,7 +16,11 @@ $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert),
 body
   font-family: 'Open Sans', sans-serif
 
-/* Margin Defines*/
+.bold
+  font-weight: bold
+
+.semi-bold
+  font-weight: 700
 
 $color-text: #6B6B6B
 $color-table: #565d66
@@ -1339,11 +1343,11 @@ div[class^="_c-notification__container"]
       font-size: 1000px
 
 b.bold
-  font-weight: 900
+  font-weight: bold
   color: black
 
 .condition-text-small
-  font-weight: 900
+  font-weight: bold
   color: black
   font-size: 12px
   margin-left: 5px
@@ -2975,7 +2979,7 @@ $attachment-icon-width: 4em
   .file-id-text
     padding: 0.1em 0.5em 0.12em
     text-align: center
-    font-weight: 900
+    font-weight: bold
     font-size: 12px
     background-color: lighten($grey, 50%)
     color: lighten(#000, 30%)
@@ -3273,7 +3277,7 @@ $dropdown-default-theme: $color-table
   padding: 2px
   text-align: center
   background-color: #efefef
-  font-weight: 900
+  font-weight: bold
   border: 0px
   cursor: pointer
   border-radius: 3px
