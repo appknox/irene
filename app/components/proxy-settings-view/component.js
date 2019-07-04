@@ -8,7 +8,7 @@ import ENV from 'irene/config/environment';
 // import poll from 'irene/services/poll';
 import lookupValidator from 'ember-changeset-validations';
 import Changeset from 'ember-changeset';
-import ProxySettingValidation from 'irene/validations/proxy-setting';
+import ProxySettingValidation from 'irene/validations/proxy-settings';
 import { task } from 'ember-concurrency';
 
 export default Component.extend({

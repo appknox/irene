@@ -15,7 +15,7 @@
   if hasProxyValues
     .vertical-align-center.margin-t-1
       label class="switch"
-        = input class="switch-input" type="checkbox" id="enable-proxy" checked=changeset.enabled type="checkbox" click=(perform enableProxy)
+        = input class="switch-input" type="checkbox" id="enable-proxy" checked=(readonly changeset.enabled) type="checkbox" click=(perform enableProxy)
         span class="slider slider-nolabel round"
       .padding-l-h
         label.black-text local-class="proxy-toggle" for="enable-proxy"

@@ -59,15 +59,34 @@ export default Component.extend({
   }).on('init'),
 
   saveProxy: task(function *(){
-    var changeset = yield this.get('changeset');
-    yield changeset.validate();
-    if (!changeset.get('isValid')) {
-      if (changeset.get('errors') && changeset.get('errors')[0].validation) {
-        this.get('notify').error(changeset.get('errors')[0].validation[0], ENV.notifications);
-      }
-      event.preventDefault();
-      return;
+    const status = yield this.get('saveChanges').perform();
+    if (status) {
+      this.get('notify').success('Proxy settings saved');
+    }
+  }),
 
+  clearProxy: task(function *() {
+    const currentProxy = yield this.get('currentProxy');
+    yield currentProxy.destroyRecord();
+    yield currentProxy.unloadRecord();
+    yield this.get('syncSettings').perform();
+    return false;
+  }),
+  saveChanges: task(function *() {
+    const changeset = this.get('changeset');
+    yield changeset.validate();
+    const isValid = changeset.get('isValid');
+    if(!isValid) {
+      if (!(changeset.get('host') || changeset.get('port'))) {
+        return yield this.get('clearProxy').perform();
+      }
+      if(changeset.get('errors') && changeset.get('errors')[0].validation) {
+        this.get('notify').error(
+          changeset.get('errors')[0].validation[0],
+          ENV.notifications
+        );
+      }
+      return false;
     }
     var currentProxy = yield this.get('currentProxy');
     yield currentProxy.setProperties({
@@ -76,28 +95,21 @@ export default Component.extend({
       'enabled': changeset.get('enabled'),
     });
     yield currentProxy.save();
-    this.get('notify').success('Proxy settings saved');
+    return true;
   }),
 
   enableProxy: task(function *(event) {
-    var changeset = yield this.get('changeset');
-    yield changeset.validate();
-    if (!changeset.get('isValid')) {
-      if (changeset.get('errors') && changeset.get('errors')[0].validation) {
-        this.get('notify').error(changeset.get('errors')[0].validation[0], ENV.notifications);
+    const changeset = this.get('changeset');
+    changeset.set('enabled', event.target.checked);
+    const status = yield this.get('saveChanges').perform();
+    const statusText = changeset.get('enabled') ? 'ON' : 'OFF';
+    if (status) {
+      this.get('notify').info('Proxy turned ' + statusText);
+    } else {
+      if(event.target.checked) {
+        this.get('notify').error(changeset.get('errors')[0].validation[0])
       }
       event.preventDefault();
-      return;
     }
-    var currentProxy = yield this.get('currentProxy');
-    yield currentProxy.setProperties({
-      'host': changeset.get('host'),
-      'port': changeset.get('port'),
-      'enabled': changeset.get('enabled'),
-    });
-    yield currentProxy.save();
-    const status = changeset.get('enabled') ? 'ON' : 'OFF';
-    this.get('notify').info('Proxy turned ' + status);
   }),
-
 });
