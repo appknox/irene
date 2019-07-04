@@ -9,13 +9,13 @@ import ENV from 'irene/config/environment';
 import lookupValidator from 'ember-changeset-validations';
 import Changeset from 'ember-changeset';
 import ProxySettingValidation from 'irene/validations/proxy-settings';
-import { task } from 'ember-concurrency';
+import { task, waitForProperty } from 'ember-concurrency';
 
 export default Component.extend({
   i18n: service(),
   notify: service('notification-messages-service'),
 
-  // currentProxy:null,
+  currentProxy:null,
   proxyPOJO: {},
 
   init() {
@@ -31,92 +31,56 @@ export default Component.extend({
     return this.get('profile.id');
   }),
 
+  isEnabled: computed('changeset.enabled', function() {
+    return this.get('changeset.enabled');
+  }),
+
+  hasProxyValues: computed('currentProxy.{host,port}', function() {
+    return !!this.get('currentProxy.host') && !!this.get('currentProxy.port');
+  }),
+
   getCurrentProxy: task(function * (){
+    yield waitForProperty(this, 'profile.id', function(pid){
+      return !!pid
+    });
     const proxyId = this.get('proxyId');
-    if(!proxyId) {
-      return null;
-    }
     let record = yield this.get("store").findRecord("proxy-setting", proxyId);
     return record;
   }),
 
   syncSettings: task(function * () {
-    let changeset = this.get('changeset');
     let currentProxy = yield this.get('getCurrentProxy').perform();
     if(!currentProxy) {
       return;
     }
     yield this.set('currentProxy', currentProxy);
+
+    let changeset = yield this.get('changeset');
     yield changeset.set('host', currentProxy.get('host'));
     yield changeset.set('port', parseInt(currentProxy.get('port')));
-  }).on('didRender'),
+    yield changeset.set('enabled', currentProxy.get('enabled'));
+    this.set('changeset', changeset);
+  }).on('init'),
 
-  applyProxyAPI: task(function *(changeset){
-    yield changeset.validate()
+  enableProxy: task(function *(event) {
+    var changeset = yield this.get('changeset');
+    yield changeset.validate();
     if (!changeset.get('isValid')) {
-      if(changeset.get('errors') && changeset.get('errors')[0].validation) {
-        this.get('notify').error(
-          changeset.get('errors')[0].validation[0],
-          ENV.notifications
-        );
+      if (changeset.get('errors') && changeset.get('errors')[0].validation) {
+        this.get('notify').error(changeset.get('errors')[0].validation[0], ENV.notifications);
       }
+      event.preventDefault();
       return;
     }
-    let currentProxy = yield this.get('currentProxy');
-    const enabled = currentProxy.get('enabled');
-    const host = changeset.get('host');
-    const port = changeset.get('port');
-    try{
-      currentProxy.setProperties({
-        'enabled': enabled,
-        'host': host,
-        'port': port,
-      })
-      yield currentProxy.save()
-      this.set('currentProxy', currentProxy);
-    }catch(error){
-      if(error.payload) {
-        if(error.payload.host) {
-          this.get('notify').error(error.payload.host[0], ENV.notifications)
-        }
-        if(error.payload.port) {
-          this.get('notify').error(error.payload.port[0], ENV.notifications)
-        }
-      }
-    }
+    var currentProxy = yield this.get('currentProxy');
+    yield currentProxy.setProperties({
+      'host': changeset.get('host'),
+      'port': changeset.get('port'),
+      'enabled': changeset.get('enabled'),
+    });
+    yield currentProxy.save();
+    const status = changeset.get('enabled') ? 'ON' : 'OFF';
+    this.get('notify').info('Proxy turned ' + status);
   }),
-  saveProxyAPI: task(function *(changeset){
-    yield changeset.validate()
-    if (!changeset.get('isValid')) {
-      if(changeset.get('errors') && changeset.get('errors')[0].validation) {
-        this.get('notify').error(
-          changeset.get('errors')[0].validation[0],
-          ENV.notifications
-        );
-      }
-      return;
-    }
-    let currentProxy = yield this.get('currentProxy');
-    const enabled = !currentProxy.get('enabled');
-    const host = changeset.get('host');
-    const port = changeset.get('port');
-    try{
-      currentProxy.setProperties({
-        'enabled': enabled,
-        'host': host,
-        'port': port,
-      })
-      yield currentProxy.save()
-      this.set('currentProxy', currentProxy);
-    } catch(error){
-      if(error.payload) {
-        if(error.payload.host) {
-          this.get('notify').error(error.payload.host[0], ENV.notifications)
-        }
-        if(error.payload.port) {
-          this.get('notify').error(error.payload.port[0], ENV.notifications)
-        }
-      }
-    }
-  }),
+
 });

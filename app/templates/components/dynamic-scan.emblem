@@ -101,7 +101,7 @@ if notVNCViewer
                     span.display-inline-block.bold.margin-h-q
                       | #{file.supportedDeviceTypes}
         .margin-t-1h
-          = proxy-settings-view profile=file.profile
+          = proxy-settings-view profile=file.profile project=file.project
 
         .project-preference-component.margin-v-1h
           if showAPIScanModal
@@ -126,33 +126,8 @@ if notVNCViewer
               = fa-icon 'exclamation-triangle'
             .column
               = t "modalCard.apiScan.extraDescription"
-        .margin-top20.add-filter-list
-          .columns
-            .column.bold.black-text
-              | Proxy Settings
-            .column.warning-msg.flex-2
-              if currentProxy.enabled
-                span.fa-font-size
-                  i.fa class="fa-exclamation-triangle exclamation-warning"
-                  | &nbsp; All the Request will go by this proxy
-          form.columns
-            .column.flex-2
-              div
-                = input class="form-control input" value=changeset.host placeholder="Host" autofocus="autofocus"
-            .column
-              div
-                = input class="form-control input" type="number" value=changeset.port placeholder="Port"
-            .column
-              a.button.is-primary click={(perform saveProxyAPI changeset)}
-                if currentProxy.enabled
-                  | Disable
-                else
-                  | Enable
-              | &nbsp;
-              if saveProxyAPI.isRunning
-                span.fa-font-size
-                  i.fa class="fa-spinner fa-spin"
-                  | &nbsp;
+        .margin-t-1h.add-filter-list
+          = proxy-settings-view profile=profile
         .margin-top20.add-filter-list
           = api-filter profileId=file.profile.id
         div.margin-top20

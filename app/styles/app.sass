@@ -2500,6 +2500,52 @@ select:disabled
     h5
       margin-top: -20px
 
+
+@mixin toggle-knob($size, $on, $off)
+  position: relative
+  display: flex
+  align-items: center
+  height: $size
+  width: $size * 1.7
+  .knob
+    height: 100%
+    width: 100%
+    background: $default
+    border-radius: $size
+    &:before
+      position: absolute
+      content: $off
+      height: $size - ($size * 0.01)
+      width: $size - ($size * 0.01)
+      border-radius: 50%
+      top: $size/9
+      left: $size/9
+      background-color: white
+      transition: .4s
+      font-size: 0.8em
+      font-weight: bold
+      display: flex
+      align-items: center
+      justify-content: center
+
+  input
+    display: none
+    &:checked, &:focus
+      & + .knob
+        background-color: $success
+    &:checked + .knob:before
+      content: $on
+      transform: translateX($size * 0.86)
+
+.toggle-switch
+  @include toggle-knob(2.6em, "", "")
+.toggle-switch-small
+  @include toggle-knob(1.8em, "", "")
+.toggle-switch-on-off
+  @include toggle-knob(2.6em, "ON", "OFF")
+.toggle-switch-small-on-off
+  @include toggle-knob(1.8em, "ON", "OFF")
+
 .switch
   position: relative
   display: inline-block
