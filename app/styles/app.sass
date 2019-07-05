@@ -2515,11 +2515,14 @@ select:disabled
     &:before
       position: absolute
       content: $off
-      height: $size - ($size * 0.01)
-      width: $size - ($size * 0.01)
+      width: $size + 0.15em
+      height: $size
+      height: calc(100% - 0.6em)
+      margin: 0.3em
       border-radius: 50%
-      top: $size/9
-      left: $size/9
+      top: 0
+      bottom: 0
+      left: 0
       background-color: white
       transition: .4s
       font-size: 0.8em
