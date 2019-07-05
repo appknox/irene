@@ -13,10 +13,10 @@ moduleForComponent('dynamic-scan', 'Integration | Component | dynamic scan', {
   needs: [
     'service:i18n',
     'service:ajax',
-    'component:fa-icon',
     'component:modal-card',
     'component:api-filter',
     'component:project-preferences',
+    'component:proxy-settings-view',
     'service:notification-messages-service',
     'service:session',
     'locale:en/translations',
