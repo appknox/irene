@@ -7,7 +7,6 @@ moduleForComponent('register-component', 'Integration | Component | register com
   unit: true,
   needs: [
     'component:g-recaptcha',
-    'component:fa-icon',
     'service:i18n',
     'service:ajax',
     'service:notification-messages-service',
