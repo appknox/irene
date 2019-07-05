@@ -16,7 +16,7 @@
         label.vertical-align-center
           .padding-r-1.bold
             = t "proxyEnable"
-            | : #{currentProxy.enabled} | #{changeset.enabled}
+            | :
           label class="toggle-switch-on-off"
             = input class="switch-input" type="checkbox" checked=(readonly changeset.enabled) disabled=enableProxy.isRunning click=(perform enableProxy)
             span class="knob"
