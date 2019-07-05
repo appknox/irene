@@ -16,9 +16,9 @@ if hasNamespace
 
   else
     .empty-state
-      = fa-icon "fa-spinner fa-spin"
+      = fa-icon "spinner spin"
       | #{t "loading"}...
-      
+
 else
   .empty-state
     = fa-icon "exclamation-triangle"

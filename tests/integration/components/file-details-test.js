@@ -11,7 +11,6 @@ moduleForComponent('file-details', 'Integration | Component | file details', {
     'service:ajax',
     'service:i18n',
     'helper:vulnerability-type',
-    'component:fa-icon',
     'component:file-header',
     'component:analysis-details',
     'component:vnc-viewer',

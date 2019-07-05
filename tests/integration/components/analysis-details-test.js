@@ -9,7 +9,6 @@ import { getOwner } from '@ember/application';
 moduleForComponent('analysis-details', 'Integration | Component | analysis details', {
   unit: true,
   needs: [
-    'component:fa-icon',
     'component:attach-tooltip',
     'component:modal-card',
     'component:confirm-box',

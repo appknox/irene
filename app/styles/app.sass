@@ -16,7 +16,11 @@ $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert),
 body
   font-family: 'Open Sans', sans-serif
 
-/* Margin Defines*/
+.bold
+  font-weight: bold
+
+.semi-bold
+  font-weight: 700
 
 $color-text: #6B6B6B
 $color-table: #565d66
@@ -1339,11 +1343,11 @@ div[class^="_c-notification__container"]
       font-size: 1000px
 
 b.bold
-  font-weight: 900
+  font-weight: bold
   color: black
 
 .condition-text-small
-  font-weight: 900
+  font-weight: bold
   color: black
   font-size: 12px
   margin-left: 5px
@@ -2496,6 +2500,58 @@ select:disabled
     h5
       margin-top: -20px
 
+
+@mixin toggle-knob($size, $on, $off)
+  position: relative
+  display: flex
+  align-items: center
+  height: $size
+  width: $size * 1.7
+  .knob
+    height: 100%
+    width: 100%
+    background: $default
+    border-radius: $size
+    &:before
+      position: absolute
+      content: $off
+      width: $size + 0.15em
+      height: $size
+      height: calc(100% - 0.6em)
+      margin: 0.3em
+      border-radius: 50%
+      top: 0
+      bottom: 0
+      left: 0
+      background-color: white
+      transition: .4s
+      font-size: 0.8em
+      font-weight: bold
+      display: flex
+      align-items: center
+      justify-content: center
+
+  input
+    display: none
+    &:checked, &:focus
+      & + .knob
+        background-color: $success
+    &:checked + .knob:before
+      content: $on
+      transform: translateX($size * 0.86)
+    &[disabled] + .knob
+      opacity: 0.7
+      cursor: not-allowed
+
+.toggle-switch
+  @include toggle-knob(2.6em, "", "")
+.toggle-switch-small
+  @include toggle-knob(1.8em, "", "")
+.toggle-switch-on-off
+  @include toggle-knob(2.6em, "ON", "OFF")
+.toggle-switch-small-on-off
+  @include toggle-knob(1.8em, "ON", "OFF")
+
 .switch
   position: relative
   display: inline-block
@@ -2541,6 +2597,12 @@ input:checked + .slider:before
 
 input:checked + .yes-no-slider:before
   content: "YES"
+
+.slider-nolabel:before
+  content: ""
+
+input:checked + .slider-nolabel:before
+  content: ""
 
 .slider.round
   border-radius: 34px
@@ -2969,7 +3031,7 @@ $attachment-icon-width: 4em
   .file-id-text
     padding: 0.1em 0.5em 0.12em
     text-align: center
-    font-weight: 900
+    font-weight: bold
     font-size: 12px
     background-color: lighten($grey, 50%)
     color: lighten(#000, 30%)
@@ -3267,7 +3329,7 @@ $dropdown-default-theme: $color-table
   padding: 2px
   text-align: center
   background-color: #efefef
-  font-weight: 900
+  font-weight: bold
   border: 0px
   cursor: pointer
   border-radius: 3px

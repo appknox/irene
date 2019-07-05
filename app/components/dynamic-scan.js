@@ -7,7 +7,7 @@ import triggerAnalytics from 'irene/utils/trigger-analytics';
 import poll from 'irene/services/poll';
 import lookupValidator from 'ember-changeset-validations';
 import Changeset from 'ember-changeset';
-import ProxySettingValidation from '../validations/proxy-setting';
+import ProxySettingValidation from '../validations/proxy-settings';
 import { task } from 'ember-concurrency';
 
 export default Component.extend({
