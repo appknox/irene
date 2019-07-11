@@ -102,7 +102,7 @@
   "dependencies": {
     "billboard.js": "^1.9.5",
     "clipboard": "^1.7.1",
-    "ember-cli-document-title": "^0.3.3",
+    "ember-cli-document-title": "^0.4.0",
     "intl-tel-input": "^12.1.15",
     "jquery": "^3.4.0"
   }
