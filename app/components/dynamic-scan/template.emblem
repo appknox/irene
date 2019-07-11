@@ -1,0 +1,98 @@
+if file.isDynamicStatusNotReady
+  div.vnc-box
+    if file.isDynamicStatusNeitherNoneNorReady
+      button.vnc-button.is-primary.margin-top20.is-progress disabled="disabled"
+        .fa-font-size
+          i.fa class="fa-spinner fa-spin"
+        | &nbsp; #{file.statusText}
+    if file.isDynamicStatusNone
+      if file.isDynamicDone
+        button.vnc-button.vnc-completed-button.is-primary.margin-top20 disabled="disabled"
+          = fa-icon "check"
+          | &nbsp; #{t "completed"}
+        button.vnc-button.vnc-button-repeat.is-primary.margin-top20.margin-left5.ac-dynamic-rescan click={(perform openDynamicScanModal)}
+          .fa-font-size-small
+            = fa-icon "repeat"
+      else
+        button.vnc-button.is-primary.margin-top20.ac-start-dynamic-scan click={(perform openDynamicScanModal)}
+          .fa-font-size
+            = fa-icon "play"
+          | &nbsp; #{dynamicScanText}
+if file.isDynamicStatusReady
+  button.is-primary.margin-top20.stop-dynamic-scan click="dynamicShutdown"
+    .fa-font-size-small
+      = fa-icon "stop"
+    |  &nbsp; #{t "stop"}
+if vncViewer
+  if file.isDynamicStatusStarting
+    div.note-text
+      = t "dynamicScanText"
+
+= modal-card isActive=showDynamicScanModal title=startingDynamicScan
+  .card-body.modal-small
+    .card-wrapper
+      div
+        .alert.alert-danger.alert-small
+          .vertical-align-center
+            = fa-icon "info-circle"
+            .margin-l-1
+              = t "modalCard.apiScan.dynamicScanText"
+
+        if file.minOsVersion
+          .margin-t-1h
+            = t "modalCard.dynamicScan.deviceRequirements"
+            table.table-compact.table-lightgray.font-small.margin-t-3q.margin-b-q
+              tr.font-small
+                td
+                  = t "modalCard.dynamicScan.osVersion"
+                td
+                  span.display-inline-block.bold.margin-h-q
+                    | #{file.project.platformDisplay}&nbsp;#{file.minOsVersion}&nbsp;
+                  = t "modalCard.dynamicScan.orAbove"
+              if file.supportedCpuArchitectures
+                tr.font-small
+                  td
+                    = t "modalCard.dynamicScan.processorArchitecture"
+                  td
+                    span.display-inline-block.bold.margin-h-q
+                      | #{file.supportedCpuArchitectures}
+              if file.supportedDeviceTypes
+                tr.font-small
+                  td
+                    = t "modalCard.dynamicScan.deviceTypes"
+                  td
+                    span.display-inline-block.bold.margin-h-q
+                      | #{file.supportedDeviceTypes}
+
+        .margin-t-1h
+          if showDynamicScanModal
+            = project-preferences profileId=file.profile.id platform=file.project.platform project=file.project
+
+        .margin-t-1h
+          = proxy-settings-view profile=file.profile project=file.project
+
+        .padding-b-1.padding-t-1h
+          .margin-h-neg-20.fill-lightgray
+            .padding-h-1h.padding-v-1
+              label.vertical-align-center
+                = input type="checkbox" click=(perform enableApiScan value="target.checked")
+                .padding-l-h.semi-bold
+                  = t "modalCard.apiScan.title"
+
+            if showApiScanSettings
+              .padding-h-1h.padding-v-1h
+                .font-small.margin-b-1h
+                  = t "modalCard.apiScan.description"
+                .alert.alert-danger.alert-small
+                  .vertical-align-center
+                    = fa-icon "exclamation-triangle"
+                    .margin-l-1
+                      = t "modalCard.apiScan.extraDescription"
+                .margin-t-1h
+                  .bordered-box.fill-white.padding-b-1
+                    = api-filter profileId=file.profile.id
+
+        .margin-t-h
+          .align-end
+            button.modal-button.is-primary.highlighted-button.mp-dont-run-api-scan click="runDynamicScan" disabled=startingDynamicScan
+              = t "modalCard.apiScan.dynamicScan"
