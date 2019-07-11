@@ -20,7 +20,7 @@ body
   font-weight: bold
 
 .semi-bold
-  font-weight: 700
+  font-weight: 600
 
 $color-text: #6B6B6B
 $color-table: #565d66
@@ -72,6 +72,9 @@ h3
     display: flex
     align-items: center
 
+.table-compact td
+  padding: 0.4em
+
 .empty-state
   font-style: italic
   color: lighten($color-table, 30%)
@@ -90,6 +93,15 @@ h3
 .fill-primary
   background: $primary
   color: $light
+
+.fill-silver
+  background: darken(#f6f8fa, 1%)
+
+.fill-lightgray
+  background: #f7f7f7
+
+.fill-white
+  background: white
 
 .btn
   &-default
@@ -115,6 +127,11 @@ h3
       background: $success
       border-color: $success
 
+.bordered-box
+  border: 1px solid darken($color-lightgray, 5%)
+  border-radius: 0.2em
+  padding: 0.75em 1.1em 0.65em
+
 .alert
   background: $color-lightgray
   border: 1px solid darken($color-lightgray, 3%)
@@ -138,6 +155,9 @@ h3
   &-small
     font-size: 0.93em
     line-height: 1.5
+
+  strong
+    color: inherit
 
   &-critical
     background: rgba($critical, 0.11)
@@ -338,6 +358,10 @@ $fractional-pts: q 0.25, h 0.5, 3q 0.75
 
 .margin-bottom50
   margin-bottom: 50px
+
+.margin-h-neg-20
+  margin-left: -20px
+  margin-right: -20px
 
 .padding-bottom0
   padding-bottom: 0px!important
@@ -665,14 +689,6 @@ select
   border: 2px solid #888
   padding: 3px
 
-.align-center
-  display: flex
-  justify-content: center
-
-.align-both
-  display: flex
-  justify-content: space-between
-
 .text-centre
   text-align: center
 
@@ -694,6 +710,10 @@ select
   align-items: stretch
   height: 100%
 
+.flex-column
+  display: flex
+  flex-direction: column
+
 .align-middle
   display: flex
   justify-content: center
@@ -707,7 +727,10 @@ select
 .align-both
   display: flex
   justify-content: space-between
-  align-items: center
+
+.align-center
+  display: flex
+  justify-content: center
 
 .strip
   margin: -25px -25px 10px -25px
@@ -953,10 +976,6 @@ div[class^="_c-notification__container"]
         border-width: 2px 2px 2px 0px
         border-style: solid
         border-color: lighten($default, 50%)
-  .fa-exclamation-triangle
-    margin-top: 20px
-    margin-left: 10px
-    font-size: 40px
   .fa.fa-trash-o
     color: $red
     margin-left: 10px
@@ -1371,6 +1390,11 @@ b.bold
 
 .warning-modal
   width: 500px
+
+.modal-small
+  width: 80%
+  @media (min-width: 500px)
+    width: 36em
 
 .condition-text
   margin-top: -7px
@@ -3077,8 +3101,7 @@ $attachment-icon-width: 4em
   i.fa
     font-size: 26px
 
-.project-preference, .project-preference-component
-  padding-bottom: 0px!important
+.device-preferences
   select
     width: 170px
   .fa-font-size
@@ -3090,11 +3113,21 @@ $attachment-icon-width: 4em
   .fa-times
     color: $red
 
-.project-preference-component
-  border: 2px solid lighten($grey, 40%)
-  padding: 10px
-  .columns .column
-    height: auto!important
+// .project-preference, .project-preference-component
+//   padding-bottom: 0px!important
+//   select
+//     width: 170px
+//
+//   .fa-check
+//     color: $green
+//   .fa-times
+//     color: $red
+
+// .project-preference-component
+//   border: 2px solid lighten($grey, 40%)
+//   padding: 10px
+//   .columns .column
+//     height: auto!important
 
 .request-status
   margin-top: -10px
