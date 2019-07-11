@@ -10,6 +10,7 @@ const VncViewerComponent = Component.extend({
 
   rfb: null,
   file: null,
+  sizing_element: null,
 
   i18n: service(),
   onboard: service(),
@@ -18,7 +19,6 @@ const VncViewerComponent = Component.extend({
   tPopOutModal: t("popOutModal"),
 
   classNameBindings: ["isPoppedOut:modal", "isPoppedOut:is-active"],
-
   vncPopText: computed('isPoppedOut', function() {
     const tCloseModal = this.get("tCloseModal");
     const tPopOutModal = this.get("tPopOutModal");
@@ -65,7 +65,9 @@ const VncViewerComponent = Component.extend({
   },
 
   didInsertElement() {
-    return this.setupRFB();
+    this.setupRFB();
+    this.set('sizing_element', this.$('.marvel-device .screen'));
+    return
   },
 
   showVNCControls: computed("file.isReady", "isPoppedOut", function() {
@@ -134,10 +136,13 @@ const VncViewerComponent = Component.extend({
   set_ratio() {
     const rfb = this.get("rfb");
     const display = rfb.get_display();
-    const canvasEl = display.get_context().canvas;
-    const bounding_rect = canvasEl.getBoundingClientRect();
-    const scaleRatio = display.autoscale(bounding_rect.width, bounding_rect.height);
-    return rfb.get_mouse().set_scale(scaleRatio);
+    const sizing_element = this.get('sizing_element');
+    const width = sizing_element.width();
+    const height = sizing_element.height();
+    const scaleRatio = display.autoscale(width, height);
+    rfb.get_mouse().set_scale(scaleRatio);
+    return
+
   },
 
   actions: {
