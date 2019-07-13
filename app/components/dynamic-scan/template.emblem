@@ -82,12 +82,7 @@ if vncViewer
             if showApiScanSettings
               .padding-h-1h.padding-v-1h
                 .font-small.margin-b-1h
-                  = t "modalCard.apiScan.description"
-                .alert.alert-danger.alert-small
-                  .vertical-align-center
-                    = fa-icon "exclamation-triangle"
-                    .margin-l-1
-                      = t "modalCard.apiScan.extraDescription"
+                  = t "modalCard.dynamicScan.apiScanDescription"
                 .margin-t-1h
                   .bordered-box.fill-white.padding-b-1
                     = api-filter profileId=file.profile.id
