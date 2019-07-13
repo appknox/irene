@@ -16,8 +16,9 @@ $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert),
 body
   font-family: 'Open Sans', sans-serif
 
-.bold
+.bold, strong
   font-weight: bold
+  color: currentcolor
 
 .semi-bold
   font-weight: 600
@@ -362,6 +363,9 @@ $fractional-pts: q 0.25, h 0.5, 3q 0.75
 .margin-h-neg-20
   margin-left: -20px
   margin-right: -20px
+
+.margin-t-neg-20
+  margin-top: -20px
 
 .padding-bottom0
   padding-bottom: 0px!important
@@ -1395,6 +1399,11 @@ b.bold
   width: 80%
   @media (min-width: 500px)
     width: 36em
+
+.modal-medium
+  width: 80%
+  @media (min-width: 500px)
+    width: 40em
 
 .condition-text
   margin-top: -7px
@@ -2540,6 +2549,45 @@ select:disabled
     h5
       margin-top: -20px
 
+$check-circle-size: 1.5em
+$check-circle-false-color: lighten($color-text, 30%)
+$check-circle-true-color: $success
+.check-circle
+  position: relative
+  display: flex
+  align-items: center
+  height: $check-circle-size + 1em
+  &-text
+    padding-left: $check-circle-size + $check-circle-size/2.5
+  &-check
+    position: absolute
+    left: 0
+    height: $check-circle-size
+    width: $check-circle-size
+    border-radius: 0.3em
+    border: 2px solid $check-circle-false-color
+    &::after
+      content: ''
+      position: absolute
+      background: transparent
+      width: $check-circle-size/2
+      height: $check-circle-size/3
+      left: $check-circle-size/5.5
+      top: $check-circle-size/5.5
+      border-width: 0 0 2px 2px
+      border-color: transparent
+      border-style: solid
+      transform: rotate(-46deg)
+  &-input
+    position: absolute
+    opacity: 0
+    cursor: pointer
+    &:checked + .check-circle-check
+      background-color: $check-circle-true-color
+      border-color: $check-circle-true-color
+      &::after
+        border-color: white
+
 
 @mixin toggle-knob($size, $on, $off)
   position: relative
@@ -2993,9 +3041,9 @@ $attachment-icon-width: 4em
 
 .button-on-vnc
   .note-text
-    position: absolute
     max-width: 170px
     font-size: 12px
+    margin: auto
   .vnc-box
     position: relative
     top: -400px
