@@ -1,27 +1,30 @@
 if hasObjects
-  .div.margin-bottom
-    h6.captured-heading
-      = t "modalCard.runAPIScan.description"
-    .div.float-right
-      .div.display-inline
-        | Selected
-      .div.captured-prop
-        | #{count}/#{totalCount}
-  each sortedObjects as |capturedapi|
-    = captured-api-overview file=file capturedapi=capturedapi someAction=someAction
-  .margin-top20
-    = partial "paginate"
+  .align-both.margin-t-q
+    .font-legible.bold
+      = t "capturedApiTitle"
+    if totalCount
+      .vertical-align-center
+        = t "selected"
+        .margin-l-h local-class="captured-api-count"
+          | #{selectedCount}/#{totalCount}
+  .margin-t-1
+    each sortedObjects as |capturedapi|
+      = captured-api-overview file=file capturedapi=capturedapi toggleApi=toggleApi
+    .margin-t-1h
+      = partial "paginate"
 
 else
   if hasNoObject
-    div.no-data
-      .columns
-        .column.is-one-sixth
-          = fa-icon 'info-circle'
-        .column
-          = t "modalCard.runAPIScan.noCapturedAPIsData"
-  else
-    .empty-state
-      = fa-icon "fa-spinner fa-spin"
-      | #{t "loading"}...
+    .no-data.vertical-align-top.padding-v-h
+      = fa-icon 'info-circle'
+      .margin-l-1
+        strong
+          = t "capturedApiEmptyTitle"
+        .font-small.margin-t-1
+          = t "capturedApiEmptyDesc"
 
+  else
+    .align-middle
+      = fa-icon "spinner fa-spin"
+      .margin-l-q
+        | #{t "loading"}...
