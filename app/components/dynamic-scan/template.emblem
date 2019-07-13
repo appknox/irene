@@ -1,28 +1,29 @@
 if file.isDynamicStatusNotReady
   div.vnc-box
     if file.isDynamicStatusNeitherNoneNorReady
-      button.vnc-button.is-primary.margin-top20.is-progress disabled="disabled"
+      button.vnc-button.is-primary.is-progress disabled="disabled"
         .fa-font-size
           i.fa class="fa-spinner fa-spin"
         | &nbsp; #{file.statusText}
     if file.isDynamicStatusNone
       if file.isDynamicDone
-        button.vnc-button.vnc-completed-button.is-primary.margin-top20 disabled="disabled"
+        button.vnc-button.vnc-completed-button.is-primary disabled="disabled"
           = fa-icon "check"
           | &nbsp; #{t "completed"}
-        button.vnc-button.vnc-button-repeat.is-primary.margin-top20.margin-left5.ac-dynamic-rescan click={(perform openDynamicScanModal)}
+        button.vnc-button.vnc-button-repeat.is-primary.margin-left5.ac-dynamic-rescan click={(perform openDynamicScanModal)}
           .fa-font-size-small
             = fa-icon "repeat"
       else
-        button.vnc-button.is-primary.margin-top20.ac-start-dynamic-scan click={(perform openDynamicScanModal)}
+        button.vnc-button.is-primary.ac-start-dynamic-scan click={(perform openDynamicScanModal)}
           .fa-font-size
             = fa-icon "play"
           | &nbsp; #{dynamicScanText}
 if file.isDynamicStatusReady
-  button.is-primary.margin-top20.stop-dynamic-scan click="dynamicShutdown"
+  button.is-primary.stop-dynamic-scan click="dynamicShutdown"
     .fa-font-size-small
       = fa-icon "stop"
     |  &nbsp; #{t "stop"}
+
 if vncViewer
   if file.isDynamicStatusStarting
     div.note-text
@@ -42,8 +43,8 @@ if vncViewer
         if file.minOsVersion
           .margin-t-1h
             = t "modalCard.dynamicScan.deviceRequirements"
-            table.table-compact.table-lightgray.font-small.margin-t-3q.margin-b-q
-              tr.font-small
+            table.table-compact.table-lightgray.margin-t-3q.margin-b-q
+              tr
                 td
                   = t "modalCard.dynamicScan.osVersion"
                 td
@@ -51,14 +52,14 @@ if vncViewer
                     | #{file.project.platformDisplay}&nbsp;#{file.minOsVersion}&nbsp;
                   = t "modalCard.dynamicScan.orAbove"
               if file.supportedCpuArchitectures
-                tr.font-small
+                tr
                   td
                     = t "modalCard.dynamicScan.processorArchitecture"
                   td
                     span.display-inline-block.bold.margin-h-q
                       | #{file.supportedCpuArchitectures}
               if file.supportedDeviceTypes
-                tr.font-small
+                tr
                   td
                     = t "modalCard.dynamicScan.deviceTypes"
                   td
@@ -81,7 +82,7 @@ if vncViewer
                   = t "modalCard.dynamicScan.runApiScan"
 
             if showApiScanSettings
-              .padding-h-1h.padding-v-1h
+              .padding-h-1h.padding-t-h.padding-b-1h
                 .font-small.margin-b-1h
                   = t "modalCard.dynamicScan.apiScanDescription"
                 .margin-t-1h
