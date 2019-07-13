@@ -8,12 +8,16 @@ if proxy.hasProxyUrl
               = input type="checkbox" checked=proxy.enabled type="checkbox" click=(perform toggleProxy) disabled=toggleProxy.isRunning
               span class="knob"
         .padding-l-1
-          div local-class="proxy-settings-title"
-            = t "proxySettingsTitle"
-          .padding-t-h local-class="proxy-settings-value"
-            | #{proxy.host}:#{proxy.port}
-      .padding-r-h
-        = link-to "authenticated.project.settings" project.id
-          = t "edit"
-          = attach-tooltip position="top"
-            = t "proxyEdit"
+          .align-both
+            div local-class="proxy-settings-title"
+              = t "proxySettingsTitle"
+            .padding-r-h
+              small
+                = link-to "authenticated.project.settings" project.id
+                  = t "edit"
+                  = attach-tooltip position="top"
+                    = t "proxyEdit"
+          .padding-t-q local-class="proxy-settings-value"
+            = t "proxySettingsRouteVia"
+            span.padding-l-q.semi-bold
+              | #{proxy.host}:#{proxy.port}
