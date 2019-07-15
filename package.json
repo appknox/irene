@@ -69,7 +69,7 @@
     "ember-concurrency": "^1.0.0",
     "ember-css-modules": "^1.0.1",
     "ember-css-modules-sass": "^1.0.1",
-    "ember-data": "~3.11.0",
+    "ember-data": "~3.9.3",
     "ember-django-adapter": "^2.1.0",
     "ember-export-application-global": "^2.0.0",
     "ember-file-upload": "^2.5.0",
