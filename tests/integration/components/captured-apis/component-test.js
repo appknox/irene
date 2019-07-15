@@ -20,6 +20,5 @@ test('it renders', function(assert) {
       template block text
     {{/captured-apis}}
   `);
-
   assert.equal(this.$().text().trim(), 'template block text');
 });
