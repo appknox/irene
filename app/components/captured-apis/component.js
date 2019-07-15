@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import { computed } from '@ember/object';
+import { computed, observer } from '@ember/object';
 import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import PaginateMixin from 'irene/mixins/paginate';
@@ -13,6 +13,11 @@ export default Component.extend(PaginateMixin, {
   extraQueryStrings: computed('file.id', function() {
     const query ={fileId: this.get('file.id')};
     return JSON.stringify(query, Object.keys(query).sort());
+  }),
+
+  newCapturedApiCounterObserver: observer('realtime.CapturedApiCounter', function() {
+    this.get('setSelectedCount').perform();
+    return this.incrementProperty('version');
   }),
 
   didInsertElement() {

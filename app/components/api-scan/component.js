@@ -12,6 +12,7 @@ export default Component.extend({
   trial: service(),
   ajax: service(),
   notify: service(),
+  realtime: service(),
 
   capturedApisCount: 0,
   showApiScanModal: false,
@@ -27,6 +28,7 @@ export default Component.extend({
     const url = [ENV.endpoints.files, this.get('file.id'), "capturedapis"].join('/');
     let data = {fileId: this.get('file.id')};
     let apis = yield this.get("ajax").request(url, {namespace: ENV.namespace_v2, data});
+    this.get('realtime').incrementProperty('CapturedApiCounter');
     try {
       this.set('capturedApisCount', apis.count);
     } catch(error){
