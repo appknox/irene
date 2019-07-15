@@ -1,33 +1,36 @@
-if file.isDynamicStatusNotReady
-  div.vnc-box
-    if file.isDynamicStatusNeitherNoneNorReady
-      button.vnc-button.is-primary.is-progress disabled="disabled"
-        .fa-font-size
-          i.fa class="fa-spinner fa-spin"
-        | &nbsp; #{file.statusText}
-    if file.isDynamicStatusNone
-      if file.isDynamicDone
-        button.vnc-button.vnc-completed-button.is-primary disabled="disabled"
-          = fa-icon "check"
-          | &nbsp; #{t "completed"}
-        button.vnc-button.vnc-button-repeat.is-primary.margin-left5.ac-dynamic-rescan click={(perform openDynamicScanModal)}
-          .fa-font-size-small
-            = fa-icon "repeat"
-      else
-        button.vnc-button.is-primary.ac-start-dynamic-scan click={(perform openDynamicScanModal)}
-          .fa-font-size
-            = fa-icon "play"
-          | &nbsp; #{dynamicScanText}
-if file.isDynamicStatusReady
-  button.is-primary.stop-dynamic-scan click="dynamicShutdown"
-    .fa-font-size-small
-      = fa-icon "stop"
-    |  &nbsp; #{t "stop"}
 
-if vncViewer
-  if file.isDynamicStatusStarting
-    div.note-text
-      = t "dynamicScanText"
+div class="{{if vncViewer 'dynamic-scan-on-vnc' 'dynamic-scan'}}"
+  if file.isDynamicStatusNotReady
+    div.dynamic-scan-buttons.vnc-box
+      if file.isDynamicStatusNeitherNoneNorReady
+        button.vnc-button.is-primary.is-progress disabled="disabled"
+          .fa-font-size
+            i.fa class="fa-spinner fa-spin"
+          | &nbsp; #{file.statusText}
+      if file.isDynamicStatusNone
+        if file.isDynamicDone
+          button.vnc-button.vnc-completed-button.is-primary disabled="disabled"
+            = fa-icon "check"
+            | &nbsp; #{t "completed"}
+          button.vnc-button.vnc-button-repeat.is-primary.margin-left5.ac-dynamic-rescan click={(perform openDynamicScanModal)}
+            .fa-font-size-small
+              = fa-icon "repeat"
+        else
+          button.vnc-button.is-primary.ac-start-dynamic-scan click={(perform openDynamicScanModal)}
+            .fa-font-size
+              = fa-icon "play"
+            | &nbsp; #{dynamicScanText}
+  if file.isDynamicStatusReady
+    .margin-h-q
+      button.is-primary click="dynamicShutdown"
+        .fa-font-size-small
+          = fa-icon "stop"
+        |  &nbsp; #{t "stop"}
+
+  if vncViewer
+    if file.isDynamicStatusStarting
+      div.dynamic-scan-note
+        = t "dynamicScanText"
 
 
 = modal-card isActive=showDynamicScanModal title=(t "modalCard.dynamicScan.title")

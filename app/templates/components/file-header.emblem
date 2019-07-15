@@ -84,18 +84,18 @@
         .align-middle
           if file.isManualRequested
             button.is-primary disabled="disabled"
-            if file.isManualDone
-              = fa-icon "check"
-              | &nbsp; #{t "completed"}
-            else
-              = fa-icon "clock-o"
-              | &nbsp; #{t "requested"}
+              if file.isManualDone
+                = fa-icon "check"
+                | &nbsp; #{t "completed"}
+              else
+                = fa-icon "clock-o"
+                | &nbsp; #{t "requested"}
           else
             if organization.selected.isTrial
-                button.is-primary click={(perform openRequestAccessModal)}
-                  .fa-font-size
-                    = fa-icon "play"
-                  | &nbsp; #{t "start"}
+              button.is-primary click={(perform openRequestAccessModal)}
+                .fa-font-size
+                  = fa-icon "play"
+                | &nbsp; #{t "start"}
             else
               button.is-primary.ac-request-manual-scan click="openManualScanModal"
                 .fa-font-size

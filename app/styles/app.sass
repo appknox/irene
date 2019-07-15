@@ -1988,6 +1988,7 @@ button.delete-button
 
 .device-modal
   max-height: calc(100vh - 10px)
+  position: relative
   .modal-card-head
     border-bottom: 0px
   .vnc-modal-body
@@ -3035,19 +3036,20 @@ $attachment-icon-width: 4em
       color: $color-table
       padding: 0 0.5em
 
-.vnc-box
-  min-width: 165px
-  text-align: center
+.device-modal-body
+  position: relative
 
-.button-on-vnc
-  .note-text
+.dynamic-scan-on-vnc
+  .dynamic-scan-note
     max-width: 170px
     font-size: 12px
     margin: auto
-  .vnc-box
-    position: relative
-    top: -400px
-    z-index: 10
+  .dynamic-scan-buttons
+    position: absolute
+    top: 16em
+    left: 0
+    right: 0
+    z-index: 3
     text-align: center
     .vnc-button
       background-color: #FFF
@@ -3069,15 +3071,6 @@ $attachment-icon-width: 4em
       border-color: #FFF
       color: $red
       opacity: 0.8
-
-  .stop-dynamic-scan
-    position: relative
-    bottom: 82px
-    right: 50px
-
-.mp-toggle-pop
-  position: relative
-  left: 50px
 
 .notification-position
   margin-left: -35vw
