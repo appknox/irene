@@ -31,7 +31,7 @@
               | #{ t (vulnerability-type vulnerabilityType.value)}
     if sortedUnhiddenAnalyses
       each sortedUnhiddenAnalyses as |analysis|
-        = analysis-details analysis=analysis showEditAnalysis=true
+        = analysis-details analysis=analysis
     else
       .not-found
         h4
