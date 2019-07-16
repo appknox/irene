@@ -89,6 +89,7 @@ const PaginateMixin = Mixin.create({
   sortedObjects: computed.sort('objects', 'sortProperties'),
   objectCount: computed.alias('objects.length'),
   hasObjects: computed.gt('objectCount', 0),
+  hasNoObject: computed.equal('meta.count', 0),
 
   maxOffset: computed("meta.total", "limit", function() {
     const limit = this.get("limit");

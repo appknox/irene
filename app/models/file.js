@@ -147,6 +147,34 @@ const File = DS.Model.extend(BaseModelMixin, {
 
   isNotReady: computed.not('isReady'),
 
+  isDynamicStatusNone: computed('dynamicStatus', function() {
+    const status = this.get('dynamicStatus');
+    return status === ENUMS.DYNAMIC_STATUS.NONE;
+  }),
+
+  isDynamicStatusReady: computed('dynamicStatus', function() {
+    const status = this.get('dynamicStatus');
+    return status === ENUMS.DYNAMIC_STATUS.READY;
+  }),
+
+  isDynamicStatusNotReady: computed.not('isDynamicStatusReady'),
+  isDynamicStatusNotNone: computed.not('isDynamicStatusNone'),
+
+  isDynamicStatusNeitherNoneNorReady: computed('dynamicStatus', function() {
+    const status = this.get('dynamicStatus');
+    return ![ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE].includes(status);
+  }),
+
+  isDynamicStatusNoneOrReady: computed('dynamicStatus', function() {
+    const status = this.get('dynamicStatus');
+    return [ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE].includes(status);
+  }),
+
+  isDynamicStatusStarting: computed('dynamicStatus', function() {
+    const status = this.get('dynamicStatus');
+    return ![ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE, ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN].includes(status);
+  }),
+
   isNeitherNoneNorReady: computed('dynamicStatus', function() {
     const status = this.get('dynamicStatus');
     return ![ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE].includes(status);
@@ -210,6 +238,10 @@ const File = DS.Model.extend(BaseModelMixin, {
   },
 
   setNone() {
+    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.NONE);
+  },
+
+  setDynamicStatusNone() {
     this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.NONE);
   },
 

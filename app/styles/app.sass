@@ -16,11 +16,12 @@ $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert),
 body
   font-family: 'Open Sans', sans-serif
 
-.bold
+.bold, strong
   font-weight: bold
+  color: currentcolor
 
 .semi-bold
-  font-weight: 700
+  font-weight: 600
 
 $color-text: #6B6B6B
 $color-table: #565d66
@@ -72,6 +73,9 @@ h3
     display: flex
     align-items: center
 
+.table-compact td
+  padding: 0.4em
+
 .empty-state
   font-style: italic
   color: lighten($color-table, 30%)
@@ -90,6 +94,15 @@ h3
 .fill-primary
   background: $primary
   color: $light
+
+.fill-silver
+  background: darken(#f6f8fa, 1%)
+
+.fill-lightgray
+  background: #f7f7f7
+
+.fill-white
+  background: white
 
 .btn
   &-default
@@ -115,6 +128,11 @@ h3
       background: $success
       border-color: $success
 
+.bordered-box
+  border: 1px solid darken($color-lightgray, 5%)
+  border-radius: 0.2em
+  padding: 0.75em 1.1em 0.65em
+
 .alert
   background: $color-lightgray
   border: 1px solid darken($color-lightgray, 3%)
@@ -138,6 +156,9 @@ h3
   &-small
     font-size: 0.93em
     line-height: 1.5
+
+  strong
+    color: inherit
 
   &-critical
     background: rgba($critical, 0.11)
@@ -339,6 +360,13 @@ $fractional-pts: q 0.25, h 0.5, 3q 0.75
 .margin-bottom50
   margin-bottom: 50px
 
+.margin-h-neg-20
+  margin-left: -20px
+  margin-right: -20px
+
+.margin-t-neg-20
+  margin-top: -20px
+
 .padding-bottom0
   padding-bottom: 0px!important
 
@@ -440,6 +468,9 @@ button
       color: #80C081
     .fa-times
       color: #EF4836
+
+.float-right
+  float: right
 
 .current-user
   float: right
@@ -662,14 +693,6 @@ select
   border: 2px solid #888
   padding: 3px
 
-.align-center
-  display: flex
-  justify-content: center
-
-.align-both
-  display: flex
-  justify-content: space-between
-
 .text-centre
   text-align: center
 
@@ -691,6 +714,10 @@ select
   align-items: stretch
   height: 100%
 
+.flex-column
+  display: flex
+  flex-direction: column
+
 .align-middle
   display: flex
   justify-content: center
@@ -704,7 +731,10 @@ select
 .align-both
   display: flex
   justify-content: space-between
-  align-items: center
+
+.align-center
+  display: flex
+  justify-content: center
 
 .strip
   margin: -25px -25px 10px -25px
@@ -929,6 +959,16 @@ div[class^="_c-notification__container"]
     vertical-align: baseline
     color: #F5D76E
 .api-scanning
+  .no-data
+    color: #404040
+    .column
+      &:first-child
+        background-color: #F5D76E
+      &:nth-child(2)
+        border-width: 2px 2px 2px 0px
+        border-style: solid
+        border-color: lighten($default, 50%)
+.api-scanning
   .warning-band
     // background-color: #F5D76E
     padding: 0px 10px
@@ -940,10 +980,6 @@ div[class^="_c-notification__container"]
         border-width: 2px 2px 2px 0px
         border-style: solid
         border-color: lighten($default, 50%)
-  .fa-exclamation-triangle
-    margin-top: 20px
-    margin-left: 10px
-    font-size: 40px
   .fa.fa-trash-o
     color: $red
     margin-left: 10px
@@ -1358,6 +1394,16 @@ b.bold
 
 .warning-modal
   width: 500px
+
+.modal-small
+  width: 80%
+  @media (min-width: 500px)
+    width: 36em
+
+.modal-medium
+  width: 80%
+  @media (min-width: 500px)
+    width: 40em
 
 .condition-text
   margin-top: -7px
@@ -1942,6 +1988,7 @@ button.delete-button
 
 .device-modal
   max-height: calc(100vh - 10px)
+  position: relative
   .modal-card-head
     border-bottom: 0px
   .vnc-modal-body
@@ -2503,6 +2550,45 @@ select:disabled
     h5
       margin-top: -20px
 
+$check-circle-size: 1.5em
+$check-circle-false-color: lighten($color-text, 30%)
+$check-circle-true-color: $success
+.check-circle
+  position: relative
+  display: flex
+  align-items: center
+  height: $check-circle-size + 1em
+  &-text
+    padding-left: $check-circle-size + $check-circle-size/2.5
+  &-check
+    position: absolute
+    left: 0
+    height: $check-circle-size
+    width: $check-circle-size
+    border-radius: 0.3em
+    border: 2px solid $check-circle-false-color
+    &::after
+      content: ''
+      position: absolute
+      background: transparent
+      width: $check-circle-size/2
+      height: $check-circle-size/3
+      left: $check-circle-size/5.5
+      top: $check-circle-size/5.5
+      border-width: 0 0 2px 2px
+      border-color: transparent
+      border-style: solid
+      transform: rotate(-46deg)
+  &-input
+    position: absolute
+    opacity: 0
+    cursor: pointer
+    &:checked + .check-circle-check
+      background-color: $check-circle-true-color
+      border-color: $check-circle-true-color
+      &::after
+        border-color: white
+
 
 @mixin toggle-knob($size, $on, $off)
   position: relative
@@ -2950,19 +3036,20 @@ $attachment-icon-width: 4em
       color: $color-table
       padding: 0 0.5em
 
-.vnc-box
-  min-width: 165px
-  text-align: center
+.device-modal-body
+  position: relative
 
-.button-on-vnc
-  .note-text
-    position: absolute
+.dynamic-scan-on-vnc
+  .dynamic-scan-note
     max-width: 170px
     font-size: 12px
-  .vnc-box
-    position: relative
-    top: -400px
-    z-index: 10
+    margin: auto
+  .dynamic-scan-buttons
+    position: absolute
+    top: 16em
+    left: 0
+    right: 0
+    z-index: 3
     text-align: center
     .vnc-button
       background-color: #FFF
@@ -2984,15 +3071,6 @@ $attachment-icon-width: 4em
       border-color: #FFF
       color: $red
       opacity: 0.8
-
-  .stop-dynamic-scan
-    position: relative
-    bottom: 82px
-    right: 50px
-
-.mp-toggle-pop
-  position: relative
-  left: 50px
 
 .notification-position
   margin-left: -35vw
@@ -3064,8 +3142,7 @@ $attachment-icon-width: 4em
   i.fa
     font-size: 26px
 
-.project-preference, .project-preference-component
-  padding-bottom: 0px!important
+.device-preferences
   select
     width: 170px
   .fa-font-size
@@ -3077,11 +3154,21 @@ $attachment-icon-width: 4em
   .fa-times
     color: $red
 
-.project-preference-component
-  border: 2px solid lighten($grey, 40%)
-  padding: 10px
-  .columns .column
-    height: auto!important
+// .project-preference, .project-preference-component
+//   padding-bottom: 0px!important
+//   select
+//     width: 170px
+//
+//   .fa-check
+//     color: $green
+//   .fa-times
+//     color: $red
+
+// .project-preference-component
+//   border: 2px solid lighten($grey, 40%)
+//   padding: 10px
+//   .columns .column
+//     height: auto!important
 
 .request-status
   margin-top: -10px
@@ -3391,3 +3478,17 @@ $filetag-bg: #f3f5f8
 .span-proxy-loading
   display: flex
   align-items: center
+.captured-prop
+  font-weight: bold;
+  display: inline;
+  float: right;
+  border: 0px solid #959393;
+  padding: 0px 4px 0px 4px;
+  border-radius: 4px;
+  color: white;
+  background: #908b8b;
+  margin-left: 3px;
+
+.captured-heading
+  display: inline;
+  font-weight: bold;

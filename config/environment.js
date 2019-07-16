@@ -210,6 +210,7 @@ module.exports = function(environment) {
       scancount: 'scancount',
       recentIssues: 'recent_issues',
       tags: 'tags',
+      capturedApiScanStart: 'start_apiscan',
     },
     csb: {
       reportDownload: { feature: "Account Settings", module: "Setup", product: "Appknox" },
@@ -243,7 +244,8 @@ module.exports = function(environment) {
     gReCaptcha: {
       jsUrl: 'https://recaptcha.net/recaptcha/api.js?render=explicit',
       siteKey: '6LfDdlUUAAAAAE9Bz9-3FLjrNw_AEUk11zXDH-0_'
-    }
+    },
+    namespace_v2: "api/v2"
   };
 
   if (environment === 'development') {
