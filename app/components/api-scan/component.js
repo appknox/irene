@@ -71,7 +71,9 @@ export default Component.extend({
     let errMsg = this.get('tPleaseTryAgain');
     if (err.errors && err.errors.length) {
       errMsg = err.errors[0].detail || errMsg;
-    } else if(err.message) {
+    } else if (err.payload && err.payload.detail) {
+      errMsg = err.payload.detail;
+    } else if (err.message) {
       errMsg = err.message;
     }
     this.get('notify').error(errMsg);
