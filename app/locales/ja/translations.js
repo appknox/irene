@@ -127,7 +127,7 @@ export default {
   "email": "Eメール",
   "emailOrUsername": "Eメール/ユーザ名",
   "emptyEmailId": "メールIDを入力してください",
-  "emptyURL": "URLフィルタを入力してください",
+  "emptyURLFilter": "Enter host name",
   "enabled": "有効",
   "enableMFA": "MFAの有効化",
   "enterNamespace": "Enter the namespace",
@@ -592,13 +592,13 @@ export default {
   "templates": {
     "apiScanURLFilter": "API診断のURLフィルタ",
     "enterEndpoint": "診断するAPIエンドポイントを入力してください。 api.appknox.com. スキーム（http：// ...）、ポート（：443 / ...）、パス（... / users）は指定しないでください。",
-    "enterAPIEndpoint": "APIエンドポイントを入力",
+    "enterAPIEndpoint": "Enter host",
     "saveFilter": "フィルタを保存する",
-    "addNewUrl": "新しいURLを追加する"
+    "addNewUrlFilter": "Add Filter"
   },
   "otherTemplates": {
     "showUntestedAnalysis": "Do you want us to show untested analysis?",
-    "specifyTheURL": "API診断を実行するURLを指定してください",
+    "specifyTheURL": "Specify host names for filtering network requests during the dynamic scan. If left empty, all requests will be captured",
     "addATeam": "このプロジェクトにコラボレートするチームを追加する",
     "selectGHRepo": "プロジェクトで見つかったリスクに関するIssueを作成するGithub のリポジトリを選択してください",
     "selectJIRAAccount": "プロジェクトで見つかったリスクに関するIssueを作成するJIRAアカウントを選択してください",

@@ -1868,8 +1868,6 @@ ul.risk-table
     margin-top: -40px
 
 .filter-list
-  margin-left: 20px
-  margin-top: 10px
   width: 250px
   .fa
     color: $red
@@ -2557,9 +2555,11 @@ $check-circle-true-color: $success
   position: relative
   display: flex
   align-items: center
-  height: $check-circle-size + 1em
   &-text
     padding-left: $check-circle-size + $check-circle-size/2.5
+    word-wrap: break-word
+    width: 100%
+    font-size: 0.95em
   &-check
     position: absolute
     left: 0
@@ -2588,6 +2588,10 @@ $check-circle-true-color: $success
       border-color: $check-circle-true-color
       &::after
         border-color: white
+  &-align-top
+    align-items: flex-start
+    .check-circle-text
+      padding-top: 0.1em
 
 
 @mixin toggle-knob($size, $on, $off)
