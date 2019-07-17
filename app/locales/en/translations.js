@@ -127,7 +127,7 @@ export default {
   "email": "Email",
   "emailOrUsername": "Email / Username",
   "emptyEmailId": "Please enter the email id",
-  "emptyURL": "Please enter any url filter",
+  "emptyURLFilter": "Enter host name",
   "enabled": "Enabled",
   "enableMFA": "Enable MFA",
   "enterNamespace": "Enter the namespace",
@@ -591,13 +591,13 @@ export default {
   "templates": {
     "apiScanURLFilter": "API Scanner URL Filter",
     "enterEndpoint": "Enter the API endpoint to scan: eg. api.appknox.com. Do not specify the scheme (http://...), port (:443/...) & path (.../users)",
-    "enterAPIEndpoint": "Enter API endpoint",
+    "enterAPIEndpoint": "Enter host",
     "saveFilter": "Save Filter",
-    "addNewUrl": "ADD NEW URL"
+    "addNewUrlFilter": "Add Filter"
   },
   "otherTemplates": {
     "showUntestedAnalysis": "Do you want us to show untested analysis?",
-    "specifyTheURL": "Specify the URL which you want the API Scan to be performed on",
+    "specifyTheURL": "Specify host names for filtering network requests during the dynamic scan. If left empty, all requests will be captured",
     "addATeam": "Add a team which you want to collaborate with this project",
     "selectGHRepo": "Select the Github Repo where you want us to create issues for the risks we find in your project",
     "selectJIRAAccount": "Select the JIRA account where you want us to create issues for the risks we find in your project",

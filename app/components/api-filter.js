@@ -19,7 +19,7 @@ const ApiFilterComponent = Component.extend({
   newUrlFilter: null,
   deletedURL: "",
 
-  tEmptyURL: t("emptyURL"),
+  tEmptyURL: t("emptyURLFilter"),
   tInvalidURL: t("invalidURL"),
   tUrlUpdated: t("urlUpdated"),
   isSavingFilter: false,

@@ -1,21 +1,17 @@
 .api-filter
-  h5.bold.black-text
+  .legible.bold.black-text.padding-b-h
     = t "templates.apiScanURLFilter"
-
-  h6
+  .font-small
     = t "otherTemplates.specifyTheURL"
-
-  form.columns
-    div.filter-list
+  form.vertical-align-center.margin-t-1.margin-b-h
+    .filter-list.margin-r-1
       = input class="form-control input" type="text" placeholder=(t "templates.enterAPIEndpoint") value=newUrlFilter
-    .column
-      button.is-primary click="addApiUrlFilter" disabled=isSavingFilter
-        if isSavingFilter
-          .fa-font-size
-            i.fa class="fa-spinner fa-spin"
-          | &nbsp;
-        | + {{t "templates.addNewUrl"}}
-
+    button.is-primary click="addApiUrlFilter" disabled=isSavingFilter
+      if isSavingFilter
+        .fa-font-size
+          i.fa class="fa-spinner fa-spin"
+        | &nbsp;
+      | + {{t "templates.addNewUrlFilter"}}
   small
     | eg. api.appknox.com. Do not specify the scheme (http://...), port (:443/...) & path (.../users)
 
