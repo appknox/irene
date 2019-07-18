@@ -52,15 +52,15 @@ export default Component.extend({
     const file = this.get('file');
     const fileId = file.id;
     const dynamicUrl = [ENV.endpoints.dynamic, fileId].join('/');
-    return yield this.get('ajax').put(dynamicUrl, {data});
+    yield this.get('ajax').put(dynamicUrl, {data});
+    file.setBootingStatus();
+    this.send('pollDynamicStatus');
   }).evented(),
 
   startDynamicScanSucceeded: on('startDynamicScan:succeeded', function() {
     const tStartingScan = this.get('tStartingScan');
     this.get('notify').success(tStartingScan);
-
     this.set('startingDynamicScan', false);
-    this.send('pollDynamicStatus');
   }),
 
   startDynamicScanErrored: on('startDynamicScan:errored', function(_, err) {
