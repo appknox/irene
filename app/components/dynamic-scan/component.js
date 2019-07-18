@@ -79,7 +79,7 @@ export default Component.extend({
 
   actions: {
     pollDynamicStatus() {
-      const isDynamicReady = this.get('file.isDynamicStatusNotReady');
+      const isDynamicReady = this.get('file.isDynamicStatusReady');
       const fileId = this.get('file.id');
       if (isDynamicReady) {
         return;
