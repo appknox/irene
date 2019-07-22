@@ -1,9 +1,11 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default Component.extend({
   isGeneralSettings: true,
   isAnalysisSettings: false,
+  me: service('me'),
 
   profile: computed('project.activeProfileId', function() {
     var profileId = this.get('project.activeProfileId');

@@ -48,7 +48,6 @@ if isGeneralSettings
 if isAnalysisSettings
   .box-container
     = analysis-settings project=project
-  .box-container
+  div class=me.org.is_admin:box-container:box-container-w-b
     = report-preference project=project
-  .margin-left.margin-b-4
-    = vulnerability-list project=project
+  = vulnerability-list project=project
