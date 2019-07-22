@@ -1,5 +1,6 @@
 if me.org.is_admin
   if analysis.isRisky
     button.is-primary click="openEditAnalysisModal"
-      i.fa.risk-icons.fa-pencil
-      | &nbsp;#{t "editAnalysis"}
+      = fa-icon "pencil"
+      span.padding-l-h
+      = t "editAnalysis"
