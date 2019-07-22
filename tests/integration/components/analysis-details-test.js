@@ -14,6 +14,7 @@ moduleForComponent('analysis-details', 'Integration | Component | analysis detai
     'component:confirm-box',
     'component:ember-popper',
     'component:risk-tag',
+    'component:edit-analysis-button',
     'helper:eq',
     'helper:risk-text',
     'service:i18n',
