@@ -1,15 +1,19 @@
 h5.bold.black-text
   = t "jiraIntegration"
 
-if project.jiraProject
+if currentJiraProject
   h6
     span.margin-r-h
       = t "integratedJIRA"
     code.margin-r-h
-      | #{project.jiraProject}
+      | #{currentJiraProject.project_key}-#{currentJiraProject.project_name}
+    .tag.threshold-tag.remove
+      | #{threshold-status currentJiraProject.risk_threshold}
     .tag.delete-tag.remove click="openDeleteJIRAConfirmBox"
       i.fa.risk-icons.fa-trash-o
-        | &nbsp; #{t "remove"}
+    .tag.edit-tag.remove click={(perform editJiraRepoModal)}
+      i.fa.risk-icons.fa-pencil
+
 else
   div.padding-v-h
 
@@ -36,15 +40,45 @@ else
         h6
           = t "otherTemplates.selectJIRAAccount"
         .columns
-          .column.is-one-third
-            select.select{action 'selectProject' on='change'} class="mp-jira-select-project"
-              option value=0
-                = t "noPreference"
-              each jiraProjects as |project|
-                option value=project.key
-                  | #{project.key} - #{project.name}
+          .column
+            button.is-primary click={(perform editJiraRepoModal)}
+              = t "selectProject"
       else
           h6
             = t "jiraNoProject"
+= modal-card isActive=showEditJiraModal title=(t "editProjectSettings")
+  .card-body.warning-modal
+    .card-wrapper
+      .api-scanning
+        h6
+          = t "otherTemplates.selectJIRAAccount"
+        .project-preference-component.margin-v-1
+          if jiraProjects
+            .columns
+              .column
+                h5.black-text
+                  | Repo
+            .columns
+              .column
+                = power-select searchEnabled=true searchField="name" dropdownClass="power-select-custom-repo" searchPlaceholder="Type repository name" placeholder="Select Repo" selected=selectedRepo renderInPlace=true options=jiraProjects onchange=(perform selectRepo value="target.value") as |repo|
+                  | #{repo.key}-#{repo.name}
+            .columns
+              .column
+                h5.black-text
+                  | Threshold
+            .columns
+              .column
+                = power-select tagName="div" class="power-select-custom-width" dropdownClass="power-select-custom-threshold" searchEnabled=false placeholder="Select Repo" selected=selectedThreshold renderInPlace=true options=thresholds onchange=(perform selectThreshold value="target.value") as |threshold|
+                  | #{threshold-status threshold}
 
-= confirm-box isActive=showDeleteJIRAConfirmBox title=(t 'confirmBox.removeJIRA') delegate=this
+        form.margin-top20
+          .align-both
+            button.modal-button.is-default click={(perform closeJiraRepoModal)}
+              = t "cancel"
+            button.modal-button.is-primary.highlighted-button click={(perform selectProject)} disabled=selectProject.isRunning
+              if selectProject.isRunning
+                .fa-font-size
+                  i.fa class="fa-spinner fa-spin"
+                  | &nbsp;
+              | Save
+= confirm-box isActive=showDeleteJIRAConfirmBox title=(t 'confirmBox.removeJIRA') delegate=this disabled=deleteRepo.isRunning

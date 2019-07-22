@@ -10,4 +10,4 @@
       .column
         h3.bold.black-text.is-fullwidth
           = t "githubIntegration"
-        = github-account user=user class="column is-half"
+        = github-account integratedUser=model.integratedUser reconnect=model.reconnect user=user class="column is-half"
