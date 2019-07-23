@@ -60,6 +60,10 @@ if isLoaded
 
           .status-updates
             = submission-list
+        .side-menu-fixed.headway-prop
+          ul
+            li
+              = headway-popup
 
       .column.margin-right.margin-top
         .columns

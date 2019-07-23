@@ -1,0 +1,3 @@
+label id="headway"
+  // = input type="checkbox" checked=showHeadway click=(perform headwayPopupModal value="target.checked")
+

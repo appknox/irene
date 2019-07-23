@@ -258,7 +258,7 @@ module.exports = function(environment) {
     ENV['ember-cli-mirage'] = {
       enabled:false
     };
-    ENV.enableCrisp = false;
+    ENV.enableCrisp = true;
     ENV.enableHotjar = false;
     ENV.enablePendo = false;
     ENV.enableInspectlet = false;
@@ -267,7 +267,9 @@ module.exports = function(environment) {
     ENV.gReCaptcha = {
       jsUrl: 'https://recaptcha.net/recaptcha/api.js?render=explicit',
       siteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
-    }
+    },
+    ENV.enableHeadwayApp = true;
+    ENV.appVersion = "1.0";
   }
 
   if (environment === 'mirage') {
@@ -312,6 +314,8 @@ module.exports = function(environment) {
       enabled: false
     };
     ENV.mixpanel.enabled = true;
+    ENV.enableHeadwayApp = true;
+    ENV.appVersion = "1.0";
   }
 
   if (environment === 'staging') {

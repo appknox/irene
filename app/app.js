@@ -8,6 +8,7 @@ import loadInitializers from 'ember-load-initializers';
 import installCrisp from 'irene/utils/install-crisp';
 import installHotjar from 'irene/utils/install-hotjar';
 import customerSuccessBox from 'irene/utils/customer-success-box';
+import installHeadWayApp from 'irene/utils/trigger-headwayapp'
 
 config.isDevknox = 'secure.devknox.io' === location.hostname;
 config.isAppknox = !config.isDevknox;
@@ -24,6 +25,7 @@ installPendo();
 installCrisp();
 installHotjar();
 customerSuccessBox();
+installHeadWayApp();
 
 Ember.MODEL_FACTORY_INJECTIONS = true;
 
