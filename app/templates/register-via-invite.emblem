@@ -1,0 +1,3 @@
+.auth-main-container
+  = register-via-invite token=model.token
+

@@ -19,6 +19,7 @@ Router.map(function() {
   if(ENV.isRegistrationEnabled) {
     this.route('register');
   }
+  this.route('register-via-invite', {path: 'register-via-invite/:token'});
   this.route('activate', {path: '/activate/:pk/:token'});
   this.route('recover');
   this.route('reset', {path: '/reset/:uuid/:token'});
