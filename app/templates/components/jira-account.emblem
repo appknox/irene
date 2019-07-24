@@ -30,7 +30,7 @@ else
       .input-wrap
         .half-wrap
           = input class="input-field" classNameBindings="changeset.error.username:has-error" placeholder=(t "username") type="text" value=changeset.username
-          = input class="input-field" classNameBindings="changeset.error.password:has-error" placeholder=(t "password") type="password" value=changeset.password autocomplete="jira-password"
+          = input class="input-field" classNameBindings="changeset.error.password:has-error" placeholder=(t "apiKey") type="password" value=changeset.password autocomplete="jira-password"
 
       button.is-primary click={(perform integrateJIRA changeset)} class="mp-jira-integrate" disabled=isIntegratingJIRA
         if integrateJIRA.isRunning

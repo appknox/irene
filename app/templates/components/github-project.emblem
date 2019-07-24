@@ -24,12 +24,16 @@ else
 
     else
       if githubRepos
-        h6
-          = t "otherTemplates.selectGHRepo"
-        .columns
-          .column
-            button.is-primary click={(perform editGithubRepoModal)}
-              = t "selectProject"
+        if hasGitHubProject
+          h6
+            = t "otherTemplates.selectGHRepo"
+          .columns
+            .column
+              button.is-primary click={(perform editGithubRepoModal)}
+                = t "selectProject"
+        else
+          h6
+            = t "githubNoProject"
       else
         if reconnect
           h6

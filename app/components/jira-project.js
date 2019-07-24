@@ -4,6 +4,8 @@ import { computed } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { translationMacro as t } from 'ember-i18n';
 import ENUMS from 'irene/enums';
+import { on } from '@ember/object/evented';
+
 
 const JiraProjectComponent = Component.extend({
   i18n: service(),
@@ -15,7 +17,9 @@ const JiraProjectComponent = Component.extend({
   tProjectRemoved: t("projectRemoved"),
   tRepoNotIntegrated: t("repoNotIntegrated"),
   tFetchJIRAProjectFailed: t("fetchProjectFailed"),
-  thresholds: ENUMS.THRESHOLD.CHOICES.filter(c => c.key !== 'UNKNOWN').map(c => c.value),
+  thresholds: computed(function(){
+    return ENUMS.THRESHOLD.CHOICES.filter(c => c.key !== 'UNKNOWN').map(c => c.value)
+  }),
   selectedThreshold: ENUMS.THRESHOLD.LOW,
   noIntegration: false,
   noAccess: false,
@@ -23,27 +27,33 @@ const JiraProjectComponent = Component.extend({
   selectedRepo: null,
   tInvalidRepo: t("invalidProject"),
   tInvalidRisk: t("tInvalidRisk"),
+
   hasJIRAProject: computed('jiraProjects.length', function(){
     return this.get('jiraProjects.length') > 0
   }),
+
   setCurrentJiraRepo: task(function *(){
-    try{
-      let currentJiraProject = yield this.get("store").findRecord(
-        'jira-repo', this.get('project.id'));
-      this.set('currentJiraProject', currentJiraProject)
-      this.set('selectedRepo',{
-        key: currentJiraProject.get('project_key'),
-        name: currentJiraProject.get('project_name')
-      })
-    }catch(err){
-      const status = err.errors[0].status
-      if (status==="404" && err.errors[0].detail==="Not found."){
-        this.set('currentGithubRepo', null)
-      }else{
-        this.get("notify").error(this.get('tFetchJIRAProjectFailed'));
-      }
+    return yield this.get("store").findRecord(
+      'jira-repo', this.get('project.id'));
+  }).evented(),
+
+  setCurrentJiraRepoErrored: on('setCurrentJiraRepo:errored', function(_, err){
+    const status = err.errors[0].status
+    if (status==="404" && err.errors[0].detail==="Not found."){
+      this.set('currentGithubRepo', null)
+    }else{
+      this.get("notify").error(this.get('tFetchJIRAProjectFailed'));
     }
   }),
+
+  setCurrentJiraRepoSucceded: on('setCurrentJiraRepo:succeeded', function(instance){
+      this.set('currentJiraProject', instance.value)
+      this.set('selectedRepo',{
+        key: instance.value.get('project_key'),
+        name: instance.value.get('project_name')
+      })
+  }),
+
   didInsertElement() {
     this.get('fetchJIRAProjects').perform();
     this.get('setCurrentJiraRepo').perform();
@@ -71,21 +81,26 @@ const JiraProjectComponent = Component.extend({
       }
     }
   }),
+
   deleteRepo: task(function *(){
-    const tProjectRemoved = this.get("tProjectRemoved");
     return yield this.get('currentJiraProject').destroyRecord()
-      .then((data)=>{
-        this.get('store')._removeFromIdMap(data._internalModel)
-        this.get('currentJiraProject').unloadRecord();
-        this.get("notify").success(tProjectRemoved);
-        this.send("closeDeleteJIRAConfirmBox");
-        this.set('currentJiraProject', null);
-        this.set('selectedRepo', null);
-        this.set('selectedThreshold', 1);
-      },(error)=>{
-        this.get("notify").error(error.payload.error);
-    })
+  }).evented(),
+
+  deleteRepoErrored: on('deleteRepo:errored', function(_, err){
+    this.get("notify").error(err.payload.detail);
+    this.send("closeDeleteJIRAConfirmBox");
   }),
+  deleteRepoSucceded: on('deleteRepo:succeeded', function(instance){
+    const tProjectRemoved = this.get("tProjectRemoved");
+    this.get('store')._removeFromIdMap(instance.value._internalModel)
+    this.get('currentJiraProject').unloadRecord();
+    this.get("notify").success(tProjectRemoved);
+    this.send("closeDeleteJIRAConfirmBox");
+    this.set('currentJiraProject', null);
+    this.set('selectedRepo', null);
+    this.set('selectedThreshold', 1);
+  }),
+
   confirmCallback(){
     this.get('deleteRepo').perform();
   },
@@ -118,19 +133,31 @@ const JiraProjectComponent = Component.extend({
     }catch(error){
       yield jiraProject.rollbackAttributes();
       yield this.get('store')._removeFromIdMap(jiraProject._internalModel)
-      this.set("isChangingRepo", false)
-      if (error.errors[0].source.pointer==="/data/attributes/project_key" ||
-        error.errors[0].source.pointer==="/data/attributes/project_key"){
-          this.get("notify").error(this.get('tInvalidRepo'))
-          return
-        }
-      if (error.errors[0].source.pointer==="/data/attributes/risk_threshold"){
-        this.get("notify").error(this.get('tInvalidRisk'))
+      throw error
+    }
+  }).evented(),
+
+  selectProjectErrored: on('selectProject:errored', function(_, error){
+    if (error.errors[0].detail==="Jira not integrated"){
+      this.set("showEditJiraModal", false )
+      this.set('jiraProjects', null);
+      this.set('noIntegration', true);
+      this.set("currentJiraProject", null);
+      this.get("notify").error(error.errors[0].detail);
+      return
+    }
+    if (error.errors[0].source.pointer==="/data/attributes/project_key" ||
+      error.errors[0].source.pointer==="/data/attributes/project_key"){
+        this.get("notify").error(this.get('tInvalidRepo'))
         return
       }
-      this.get("notify").error(error.errors[0].detail)
+    if (error.errors[0].source.pointer==="/data/attributes/risk_threshold"){
+      this.get("notify").error(this.get('tInvalidRisk'))
+      return
     }
+    this.get("notify").error(error.errors[0].detail)
   }),
+
   editJiraRepoModal: task(function *(){
     yield this.set("showEditJiraModal", true )
   }),
@@ -146,6 +173,7 @@ const JiraProjectComponent = Component.extend({
   selectThreshold: task(function *(threshold){
     yield this.set('selectedThreshold', threshold);
   }),
+
   actions: {
     openDeleteJIRAConfirmBox() {
       this.set("showDeleteJIRAConfirmBox", true);

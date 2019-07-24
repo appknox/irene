@@ -1,20 +1,22 @@
 if integratedUser
   h6
-    | Integrated User: #{integratedUser.name}
+    | Integrated User: &nbsp;
+    a href=integratedUser.html_url target="_blank"
+      code.code-link.font-size-unset
+        | #{integratedUser.login}
   button.is-primary.mp-github-revoke click="openRevokeGithubConfirmBox"
     = t "revokeGithub"
 else
-  .columns
-    if reconnect
-      h6
-        = t "integrationFailed"
-      a.button.is-primary.mp-github-integrate click={( perform integrateGithub)} disabled=integrateGithub.isRunning
-        = t "reconnect"
-    else
-      a.button.is-primary.mp-github-integrate click={( perform integrateGithub)} disabled=integrateGithub.isRunning
-        = t "integrateGithub"
-    if integrateGithub.isRunning
-      = fa-icon "fa-spinner fa-spin"
-    = yield
+  if reconnect
+    h6
+      = t "integrationFailed"
+    a.button.is-primary.mp-github-integrate click={( perform integrateGithub)} disabled=integrateGithub.isRunning
+      = t "reconnect"
+  else
+    a.button.is-primary.mp-github-integrate click={( perform integrateGithub)} disabled=integrateGithub.isRunning
+      = t "integrateGithub"
+  if integrateGithub.isRunning
+    = fa-icon "fa-spinner fa-spin"
+  = yield
 
-= confirm-box isActive=showRevokeGithubConfirmBox title=(t 'confirmBox.revokeGithub') delegate=this disabled=isRevokingGithub
+= confirm-box isActive=showRevokeGithubConfirmBox title=(t 'confirmBox.revokeGithub') delegate=this disabled=removeIntegration.isRunning
