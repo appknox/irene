@@ -518,7 +518,7 @@ export default {
       "orAbove": "or above",
       "processorArchitecture": "Processor architecture",
       "deviceTypes": "Device types",
-      "runApiScan": "Do you also want to run API Scan?",
+      "runApiScan": "Enable API Capture",
       "apiScanDescription": "During dynamic scan <strong>network traffic made by the app, filtered by the below provided API endpoints</strong> will be recorded. Currently traffic capturing is <strong>not supported for the apps that employ SSL pinning.</strong>",
       "start": "Start Dynamic Scan",
     },
