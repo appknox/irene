@@ -49,7 +49,7 @@ const IreneAuthenticator = Base.extend({
       }, (error) => {
         loginStatus(false);
         errorCallback(error);
-        this.get("notify").error(error.payload.message, ENV.notifications);
+        this.get("notify").error(error.payload.message, {autoClear: false});
         for (error of error.errors) {
           if (error.status === "0") {
             return this.get("notify").error("Unable to reach server. Please try after sometime", ENV.notifications);
