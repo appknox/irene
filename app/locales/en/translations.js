@@ -117,6 +117,7 @@ export default {
   "devicePreferences": "Device Preferences",
   "disabled": "Disabled",
   "disableMFA": "Disable MFA",
+  "disconnect": "Disconnect",
   "download": "Download",
   "dynamic": "Dynamic",
   "dynamicScan": "Dynamic Scan",

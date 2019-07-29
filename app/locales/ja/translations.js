@@ -115,6 +115,7 @@ export default {
   "devicePreferences": "デバイスの設定",
   "disabled": "無効",
   "disableMFA": "MFAの無効化",
+  "disconnect": "Disconnect",
   "download": "ダウンロード",
   "dynamic": "動的",
   "dynamicScan": "動的診断",

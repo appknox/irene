@@ -1,13 +1,13 @@
 .org-container
-  .box-container
+  div
     .columns.margin-v-h
       .column
         h3.bold.black-text.is-fullwidth
           = t "jiraIntegration"
-        = jira-account user=user class="column is-half"
-  .margin-left
+        = jira-account user=user
+  .margin-t-2
     .columns
       .column
         h3.bold.black-text.is-fullwidth
           = t "githubIntegration"
-        = github-account integratedUser=model.integratedUser reconnect=model.reconnect user=user class="column is-half"
+        = github-account integratedUser=model.integratedUser reconnect=model.reconnect user=user

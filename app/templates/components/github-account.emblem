@@ -1,11 +1,16 @@
 if integratedUser
-  h6
-    | Integrated User: &nbsp;
-    a href=integratedUser.html_url target="_blank"
-      code.code-link.font-size-unset
-        | #{integratedUser.login}
-  button.is-primary.mp-github-revoke click="openRevokeGithubConfirmBox"
-    = t "revokeGithub"
+  .integration.integration-github
+    .integration-logo-container
+      img.integration-logo src="/images/github-icon.png"
+    .integration-account-container
+      .integration-account
+        div
+          .text-lightgray.padding-b-q
+            | https://github.com
+          .black-text
+            | #{integratedUser.login}
+        button.is-primary.mp-github-revoke click="openRevokeGithubConfirmBox"
+          = t "disconnect"
 else
   if reconnect
     h6
