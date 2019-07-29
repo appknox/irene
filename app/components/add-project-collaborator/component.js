@@ -45,8 +45,7 @@ export default Component.extend(PaginateMixin, {
   /* Add collaborator to project */
   addProjectCollaborator: task(function * (member) {
     this.set('isAddingCollaborator', true);
-
-    const prj = yield this.get('store').queryRecord('organization-project', {id: this.get('project.id')});
+    const prj = yield this.get('store').findRecord('organization-project', this.get('project.id'));
     const data = {
       write: false
     };
