@@ -59,6 +59,10 @@ Router.map(function() {
     });
     this.route('status');
     this.route('analytics');
+
+    this.route('github-cloud', function() {
+      this.route('redirect');
+    });
   });
   this.route('invitation', {path: '/invitation/:uuid'});
   this.route('invite', {path: '/invite/:token'});

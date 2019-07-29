@@ -1,11 +1,27 @@
-if user.hasGithubToken
-  h6
-    = t "integrationCompleted"
-  button.is-primary.mp-github-revoke click="openRevokeGithubConfirmBox"
-    = t "revokeGithub"
+if integratedUser
+  .integration.integration-github
+    .integration-logo-container
+      img.integration-logo src="/images/github-icon.png"
+    .integration-account-container
+      .integration-account
+        div
+          .text-lightgray.padding-b-q
+            | https://github.com
+          .black-text
+            | #{integratedUser.login}
+        button.is-primary.mp-github-revoke click="openRevokeGithubConfirmBox"
+          = t "disconnect"
 else
-  a.button.is-primary.mp-github-integrate click="integrateGithub"
-    = t "integrateGithub"
+  if reconnect
+    h6
+      = t "integrationFailed"
+    a.button.is-primary.mp-github-integrate click={( perform integrateGithub)} disabled=integrateGithub.isRunning
+      = t "reconnect"
+  else
+    a.button.is-primary.mp-github-integrate click={( perform integrateGithub)} disabled=integrateGithub.isRunning
+      = t "integrateGithub"
+  if integrateGithub.isRunning
+    = fa-icon "fa-spinner fa-spin"
   = yield
 
-= confirm-box isActive=showRevokeGithubConfirmBox title=(t 'confirmBox.revokeGithub') delegate=this disabled=isRevokingGithub
+= confirm-box isActive=showRevokeGithubConfirmBox title=(t 'confirmBox.revokeGithub') delegate=this disabled=removeIntegration.isRunning

@@ -23,7 +23,7 @@ const JiraAccountComponent = Component.extend({
 
   isRevokingJIRA: false,
   isIntegratingJIRA: false,
-
+  tInValidCredentials: t("tInValidCredentials"),
   tJiraIntegrated: t("jiraIntegrated"),
   tJiraWillBeRevoked: t("jiraWillBeRevoked"),
   tPleaseEnterAllDetails: t("pleaseEnterAllDetails"),
@@ -104,8 +104,8 @@ const JiraAccountComponent = Component.extend({
         if(error.payload.host) {
           this.get("notify").error(error.payload.host[0], ENV.notifications)
         }
-        if(error.payload.non_field_errors) {
-          this.get("notify").error(error.payload.non_field_errors[0], ENV.notifications)
+        if(error.payload.username || error.payload.password) {
+          this.get("notify").error(this.get('tInValidCredentials'))
         }
       }
     }

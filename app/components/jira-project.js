@@ -2,8 +2,10 @@ import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import { task } from 'ember-concurrency';
-import ENV from 'irene/config/environment';
 import { translationMacro as t } from 'ember-i18n';
+import ENUMS from 'irene/enums';
+import { on } from '@ember/object/evented';
+
 
 const JiraProjectComponent = Component.extend({
   i18n: service(),
@@ -15,13 +17,46 @@ const JiraProjectComponent = Component.extend({
   tProjectRemoved: t("projectRemoved"),
   tRepoNotIntegrated: t("repoNotIntegrated"),
   tFetchJIRAProjectFailed: t("fetchProjectFailed"),
+  thresholds: computed(function(){
+    return ENUMS.THRESHOLD.CHOICES.filter(c => c.key !== 'UNKNOWN').map(c => c.value)
+  }),
+  selectedThreshold: ENUMS.THRESHOLD.LOW,
   noIntegration: false,
   noAccess: false,
+  currentJiraProject: null,
+  selectedRepo: null,
+  tInvalidRepo: t("invalidProject"),
+  tInvalidRisk: t("tInvalidRisk"),
+
   hasJIRAProject: computed('jiraProjects.length', function(){
     return this.get('jiraProjects.length') > 0
   }),
+
+  setCurrentJiraRepo: task(function *(){
+    return yield this.get("store").findRecord(
+      'jira-repo', this.get('project.id'));
+  }).evented(),
+
+  setCurrentJiraRepoErrored: on('setCurrentJiraRepo:errored', function(_, err){
+    const status = err.errors[0].status
+    if (status==="404" && err.errors[0].detail==="Not found."){
+      this.set('currentGithubRepo', null)
+    }else{
+      this.get("notify").error(this.get('tFetchJIRAProjectFailed'));
+    }
+  }),
+
+  setCurrentJiraRepoSucceded: on('setCurrentJiraRepo:succeeded', function(instance){
+      this.set('currentJiraProject', instance.value)
+      this.set('selectedRepo',{
+        key: instance.value.get('project_key'),
+        name: instance.value.get('project_name')
+      })
+  }),
+
   didInsertElement() {
     this.get('fetchJIRAProjects').perform();
+    this.get('setCurrentJiraRepo').perform();
   },
   fetchJIRAProjects: task(function* (){
     this.set('noAccess', false);
@@ -29,7 +64,7 @@ const JiraProjectComponent = Component.extend({
     this.set('jiraProjects', null);
     try{
       const jiraprojects = yield this.get('store').query(
-        'organizationJiraproject', {}
+          'organizationJiraproject', {}
       );
       this.set('jiraProjects', jiraprojects);
     } catch (error) {
@@ -46,46 +81,100 @@ const JiraProjectComponent = Component.extend({
       }
     }
   }),
-  confirmCallback() {
+
+  deleteRepo: task(function *(){
+    return yield this.get('currentJiraProject').destroyRecord()
+  }).evented(),
+
+  deleteRepoErrored: on('deleteRepo:errored', function(_, err){
+    this.get("notify").error(err.payload.detail);
+    this.send("closeDeleteJIRAConfirmBox");
+  }),
+  deleteRepoSucceded: on('deleteRepo:succeeded', function(instance){
     const tProjectRemoved = this.get("tProjectRemoved");
-    const projectId = this.get("project.id");
-    const deleteJIRA = [ENV.endpoints.deleteJIRAProject, projectId].join('/');
-    this.get("ajax").delete(deleteJIRA)
-    .then(() => {
-      this.get("notify").success(tProjectRemoved);
-      if(!this.isDestroyed) {
-        this.send("closeDeleteJIRAConfirmBox");
-        this.set("project.jiraProject", "");
-      }
-    }, (error) => {
-      if(!this.isDestroyed) {
-        this.get("notify").error(error.payload.error);
-      }
-    });
+    this.get('store')._removeFromIdMap(instance.value._internalModel)
+    this.get('currentJiraProject').unloadRecord();
+    this.get("notify").success(tProjectRemoved);
+    this.send("closeDeleteJIRAConfirmBox");
+    this.set('currentJiraProject', null);
+    this.set('selectedRepo', null);
+    this.set('selectedThreshold', 1);
+  }),
+
+  confirmCallback(){
+    this.get('deleteRepo').perform();
   },
+  selectProject: task( function *(){
+    let jiraProject = this.get('currentJiraProject');
+    if (jiraProject){
+      jiraProject.setProperties(
+        {
+          project_key: this.get('selectedRepo.key'),
+          project_name: this.get('selectedRepo.name'),
+          risk_threshold: this.get('selectedThreshold')
+        }
+      );
+    }else{
+      jiraProject = this.get('store').createRecord(
+        'jira-repo',{
+          id: this.get('project.id'),
+          project_key: this.get('selectedRepo.key'),
+          project_name:this.get('selectedRepo.name'),
+          risk_threshold: this.get('selectedThreshold'),
+          project: this.get('project')
+        }
+      )
+    }
+    try{
+      yield jiraProject.save();
+      this.set("currentJiraProject",jiraProject);
+      this.get("notify").success(this.get('tIntegratedJIRA'));
+      yield this.set("showEditJiraModal", false )
+    }catch(error){
+      yield jiraProject.rollbackAttributes();
+      yield this.get('store')._removeFromIdMap(jiraProject._internalModel)
+      throw error
+    }
+  }).evented(),
+
+  selectProjectErrored: on('selectProject:errored', function(_, error){
+    if (error.errors[0].detail==="Jira not integrated"){
+      this.set("showEditJiraModal", false )
+      this.set('jiraProjects', null);
+      this.set('noIntegration', true);
+      this.set("currentJiraProject", null);
+      this.get("notify").error(error.errors[0].detail);
+      return
+    }
+    if (error.errors[0].source.pointer==="/data/attributes/project_key" ||
+      error.errors[0].source.pointer==="/data/attributes/project_key"){
+        this.get("notify").error(this.get('tInvalidRepo'))
+        return
+      }
+    if (error.errors[0].source.pointer==="/data/attributes/risk_threshold"){
+      this.get("notify").error(this.get('tInvalidRisk'))
+      return
+    }
+    this.get("notify").error(error.errors[0].detail)
+  }),
+
+  editJiraRepoModal: task(function *(){
+    yield this.set("showEditJiraModal", true )
+  }),
+
+  closeJiraRepoModal: task(function *(){
+    yield this.set("showEditJiraModal", false )
+  }),
+
+  selectRepo: task(function *(repo){
+    yield this.set('selectedRepo', repo.toJSON());
+  }),
+
+  selectThreshold: task(function *(threshold){
+    yield this.set('selectedThreshold', threshold);
+  }),
 
   actions: {
-
-    selectProject() {
-      const project= this.$('select').val();
-      const tIntegratedJIRA = this.get("tIntegratedJIRA");
-      const tRepoNotIntegrated = this.get("tRepoNotIntegrated");
-      const projectId = this.get("project.id");
-      const url = [ENV.endpoints.setJira, projectId].join('/');
-
-      const data =
-        {project};
-      this.get("ajax").post(url, {data})
-      .then(() => {
-        this.get("notify").success(tIntegratedJIRA);
-        if(!this.isDestroyed) {
-          this.set("project.jiraProject", project);
-        }
-      }, () => {
-        this.get("notify").error(tRepoNotIntegrated);
-      });
-    },
-
     openDeleteJIRAConfirmBox() {
       this.set("showDeleteJIRAConfirmBox", true);
     },
