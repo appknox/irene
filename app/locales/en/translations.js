@@ -332,6 +332,7 @@ export default {
   "regulatory": "Regulatory",
   "reject": "Reject",
   "remove": "remove",
+  "removeCollaborator": "Remove Collaborator",
   "removeFromTeam": "Remove from team",
   "reportIsGettingGenerated": "Please wait while the report is getting generated",
   "reportPassword": "Report Password",

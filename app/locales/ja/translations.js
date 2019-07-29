@@ -333,6 +333,7 @@ export default {
   "regulatory": "Regulatory",
   "reject": "Reject",
   "remove": "削除",
+  "removeCollaborator": "Remove Collaborator",
   "removeFromTeam": "Remove from team",
   "reportIsGettingGenerated": "レポートが生成されている間お待ちください",
   "reportPassword": "レポートのパスワード",
