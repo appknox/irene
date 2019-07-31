@@ -61,39 +61,23 @@ const IreneAuthenticator = Base.extend({
     });
   },
 
-  restore(data) {
+  async restore(data) {
     const ajax = this.get("ajax");
-    return new Promise((resolve, reject) => {
-      const url = ENV['ember-simple-auth']['checkEndPoint'];
-      ajax.post(url, {data})
-      .then((data) => {
-        data = processData(data);
-        resolve(data);
-        if (location.pathname === '/login') {
-          this.resumeTransistion();
-        }
-      }, (error) => {
-        localStorage.clear();
-        location.reload();
-        reject(error);
-      });
-    });
+    const url = ENV['ember-simple-auth']['checkEndPoint'];
+    await ajax.post(url, {
+      data:{},
+      headers: {
+        'Authorization': `Basic ${data.b64token}`
+      }
+    })
+    return data;
   },
 
-  invalidate() {
+  async invalidate() {
     const ajax = this.get("ajax");
-    localStorage.clear();
-    return new Promise((resolve, reject) => {
-      const url = ENV['ember-simple-auth']['logoutEndPoint'];
-      ajax.post(url)
-      .then((data) => {
-        resolve(data);
-        location.reload();
-      }, (error) => {
-        location.reload();
-        reject(error);
-      });
-    });
+    const url = ENV['ember-simple-auth']['logoutEndPoint'];
+    await ajax.post(url);
+    location.reload();
   }
 });
 

@@ -5,7 +5,9 @@ import ENV from 'irene/config/environment';
 const IreneAuthorizer = Base.extend({
 
   authorize(data, block) {
-    block('Authorization', `Basic ${data.b64token}`);
+    if(data && data.b64token) {
+      block('Authorization', `Basic ${data.b64token}`);
+    }
     block('X-Product', ENV.product);
   }
 });

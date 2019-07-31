@@ -143,8 +143,8 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
       },
 
       logout() {
-        localStorage.clear();
-        location.reload();
+        triggerAnalytics('logout');
+        this.get('session').invalidate();
       },
 
       reload() {
