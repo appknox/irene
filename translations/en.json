@@ -542,9 +542,9 @@
       "enterCode": "After scanning the barcode image, the app will display a six-digit code, enter that code below."
     },
     "enableMFAEmail": {
-      "sendMailMsg": "Click continue to send OTP code to email ",
+      "sendMailMsg": "An OTP code will be send to email ",
       "description": "We have sent a security code to email ",
-      "enterCode": "Please enter the code below."
+      "enterCode": "Enter OTP"
     },
     "disableMFA": {
       "description": "If you turn off Multi Factor Authentication, your account will only be protected by your password.",

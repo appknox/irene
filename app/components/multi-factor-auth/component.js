@@ -79,7 +79,6 @@ export default Component.extend({
     yield this.set('showAppOTPEnter', true);
   }),
 
-
   openMFAEnableModal: task(function * (method) {
     if (method == ENUMS.MFA_METHOD.TOTP) {
       this.get('setAppOTPEnter').perform();
@@ -94,27 +93,25 @@ export default Component.extend({
   }),
 
 
-  sendOTPEmailMFA: task(function * () {
-    this.get('notify').success('Sending mail...');
-    // yield this.set('isSendingEmail', true);
-    yield this.get('ajax').post(ENV.endpoints.mfaSendOTPMail);
-  }).evented(),
-
-  sendOTPEmailMFASucceeded: on('sendOTPEmailMFA:succeeded', function() {
-    // this.set('isSendingEmail', false);
-    this.get('setEmailOTPEnter').perform();
-  }),
-
-  sendOTPEmailMFAErrored: on('sendOTPEmailMFA:errored', function(_, err) {
-    // this.set('isSendingEmail', false);
-
-    let errMsg = this.get('tPleaseTryAgain');
-    if (err.errors && err.errors.length) {
-      errMsg = err.errors[0].detail || errMsg;
-    } else if(err.message) {
-      errMsg = err.message;
+  verifyEmailMFA: task(function * () {
+    try {
+      let data = {
+        method: ENUMS.MFA_METHOD.HOTP,
+      }
+      yield this.get('ajax').post(ENV.endpoints.mfaVerify, {data});
+      this.get('notify').success('OTP sent to ' + this.get('user.email'));
+      yield this.get('setEmailOTPEnter').perform();
+    } catch (err) {
+      let errMsg = this.get('tPleaseTryAgain');
+      if (err.errors && err.errors.length) {
+        errMsg = err.errors[0].detail || errMsg;
+      } else if (err.payload && err.payload.detail) {
+        errMsg = err.payload.detail;
+      } else if (err.message) {
+        errMsg = err.message;
+      }
+      this.get('notify').error(errMsg);
     }
-    this.get('notify').error(errMsg);
   }),
 
 
@@ -126,34 +123,58 @@ export default Component.extend({
 
 
   enableEmailMFA: task(function * () {
-    yield this.set('isEnablingEmailMFA', true);
-    const tEnterOTP = this.get('tEnterOTP');
-    const emailOTP = this.get('emailOTP');
-    for (let o of [emailOTP]) {
-      if (!isValidOTP(o)) { return this.get('notify').error(tEnterOTP); }
-    }
-    yield this.get('updateMFA').perform(emailOTP, ENUMS.MFA_METHOD.HOTP);
-  }).evented(),
+    try {
+      yield this.set('isEnablingEmailMFA', true);
+      const tEnterOTP = this.get('tEnterOTP');
+      const emailOTP = this.get('emailOTP');
+      for (let o of [emailOTP]) {
+        if (!isValidOTP(o)) {
+          yield this.set('isEnablingEmailMFA', false);
+          return this.get('notify').error(tEnterOTP);
+        }
+      }
+      yield this.get('updateMFA').perform(emailOTP, ENUMS.MFA_METHOD.HOTP);
 
-  enableEmailMFASucceeded: on('enableEmailMFA:succeeded', function () {
-    this.set('isEnablingEmailMFA', false);
-    this.set('showMFAEnableModal', false);
-    this.set('emailOTP', '');
-    this.get('setAppOTPEnter').perform();
-    this.get('notify').success('MFA method set to email');
+      this.set('isEnablingEmailMFA', false);
+      this.set('showMFAEnableModal', false);
+      this.set('emailOTP', '');
+      this.get('setAppOTPEnter').perform();
+      this.get('notify').success('MFA method set to email');
+
+    } catch (err) {
+      this.set('isEnablingEmailMFA', false);
+      this.set('emailOTP', '');
+      let errMsg = this.get('tPleaseTryAgain');
+      if (err.errors && err.errors.length) {
+        errMsg = err.errors[0].detail || errMsg;
+      } else if (err.payload && err.payload.detail) {
+        errMsg = err.payload.detail;
+      } else if (err.message) {
+        errMsg = err.message;
+      }
+      this.get('notify').error(errMsg);
+    }
   }),
 
-  enableEmailMFAErrored: on('enableEmailMFA:errored', function(_, err) {
-    this.set('isEnablingEmailMFA', false);
+  // enableEmailMFASucceeded: on('enableEmailMFA:succeeded', function () {
+  //   this.set('isEnablingEmailMFA', false);
+  //   this.set('showMFAEnableModal', false);
+  //   this.set('emailOTP', '');
+  //   this.get('setAppOTPEnter').perform();
+  //   this.get('notify').success('MFA method set to email');
+  // }),
 
-    let errMsg = this.get('tPleaseTryAgain');
-    if (err.errors && err.errors.length) {
-      errMsg = err.errors[0].detail || errMsg;
-    } else if(err.message) {
-      errMsg = err.message;
-    }
-    this.get('notify').error(errMsg);
-  }),
+  // enableEmailMFAErrored: on('enableEmailMFA:errored', function(_, err) {
+  //   this.set('isEnablingEmailMFA', false);
+
+  //   let errMsg = this.get('tPleaseTryAgain');
+  //   if (err.errors && err.errors.length) {
+  //     errMsg = err.errors[0].detail || errMsg;
+  //   } else if(err.message) {
+  //     errMsg = err.message;
+  //   }
+  //   this.get('notify').error(errMsg);
+  // }),
 
 
   enableAppMFA: task(function * () {
@@ -198,13 +219,29 @@ export default Component.extend({
 
 
   openMFADisableModal: task(function * (method) {
-    if (method == ENUMS.MFA_METHOD.HOTP) {
-      this.set('mfaEnabledStatus.email', true);
-    } else if (method == ENUMS.MFA_METHOD.TOTP) {
-      this.set('mfaEnabledStatus.app', true);
+    try {
+      let data = {
+        method: method,
+      }
+      yield this.get('ajax').post(ENV.endpoints.mfaVerify, {data});
+      if (method == ENUMS.MFA_METHOD.HOTP) {
+        this.set('mfaEnabledStatus.email', true);
+      } else if (method == ENUMS.MFA_METHOD.TOTP) {
+        this.set('mfaEnabledStatus.app', true);
+      }
+      this.get('setConfirmDisableMFA').perform();
+      yield this.set('showMFADisableModal', true);
+    } catch (err) {
+      let errMsg = this.get('tPleaseTryAgain');
+      if (err.errors && err.errors.length) {
+        errMsg = err.errors[0].detail || errMsg;
+      } else if (err.payload && err.payload.detail) {
+        errMsg = err.payload.detail;
+      } else if (err.message) {
+        errMsg = err.message;
+      }
+      this.get('notify').error(errMsg);
     }
-    this.get('setConfirmDisableMFA').perform();
-    yield this.set('showMFADisableModal', true);
   }),
 
   closeMFADisableModal: task(function * () {
