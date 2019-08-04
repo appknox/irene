@@ -1,6 +1,6 @@
-import { test, moduleForComponent } from 'ember-qunit';
+import { moduleForComponent, test } from 'ember-qunit';
 
-moduleForComponent('vnc-viewer', 'Integration | Component | vnc viewer', {
+moduleForComponent('novnc-rfb', 'Integration | Component | novnc rfb', {
   integration: true
 });
 

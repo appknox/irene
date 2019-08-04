@@ -99,6 +99,7 @@ module.exports = function(environment) {
     deviceFarmPort: deviceFarmPort,
     deviceFarmPath: "websockify",
     deviceFarmHost: deviceFarmHost,
+    deviceFarmPassword: '1234',
     namespace: "api",
     namespace_v2: "api/v2",
     host: host,
