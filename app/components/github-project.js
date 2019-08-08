@@ -60,12 +60,15 @@ const GithubProjectComponent = Component.extend({
   }).evented(),
 
   setCurrentGithubRepoErrored: on('setCurrentGithubRepo:errored', function(_, err){
-    const status = err.errors[0].status
-    if (status==="404" && err.errors[0].detail==="Not found."){
+    if (err.errors[0].detail && err.errors[0].detail==="Github not integrated"){
       this.set('currentGithubRepo', null)
-    }else{
-      this.get("notify").error(this.get('tFailedGitHubProject'));
+      return
     }
+    if(err.errors[0].detail && err.errors[0].detail==="Github integration failed"){
+      this.set('reconnect', true);
+      return
+    }
+    this.get("notify").error(this.get('tFailedGitHubProject'));
   }),
 
   setCurrentGithubRepoSucceeded: on('setCurrentGithubRepo:succeeded', function(instance){
