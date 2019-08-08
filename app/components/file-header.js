@@ -51,6 +51,10 @@ const FileHeaderComponent = Component.extend({
   tPleaseEnterAllValues: t("modalCard.manual.pleaseEnterAllValues"),
   tPleaseEnterUserRoles: t("modalCard.manual.pleaseEnterUserRoles"),
   tPleaseEnterVPNDetails: t("modalCard.manual.pleaseEnterVPNDetails"),
+  tTagAdded: t("tagAdded"),
+  tTagDeleted: t("tagDeleted"),
+  tOwaspMobileCategory: t("owaspMobileCategory"),
+  tOwaspWebCategory: t("owaspWebCategory"),
 
   invalidNewTag: computed('newTag', function() {
     const tag = this.get('newTag');
@@ -250,7 +254,7 @@ const FileHeaderComponent = Component.extend({
           "Client Code Quality","Code Tampering", "Reverse Engineering","Extraneous Functionality"
         ],
         datasets: [ {
-          label: 'OWASP MOBILE CATEGORIES',
+          label: `${this.get('tOwaspMobileCategory')}`,
           data: [
             owaspM1Count, owaspM2Count, owaspM3Count, owaspM4Count, owaspM5Count,
             owaspM6Count, owaspM7Count, owaspM8Count, owaspM9Count, owaspM10Count
@@ -271,7 +275,7 @@ const FileHeaderComponent = Component.extend({
           "Using components with known vulnerabilities", "Unvalidated Redirects and Forwards"
         ],
         datasets: [ {
-          label: 'OWASP WEB CATEGORIES',
+          label: `${this.get('tOwaspWebCategory')}`,
           data: [
             owaspA1Count, owaspA2Count, owaspA3Count, owaspA4Count, owaspA5Count,
             owaspA6Count, owaspA7Count, owaspA8Count, owaspA9Count, owaspA10Count
@@ -332,7 +336,7 @@ const FileHeaderComponent = Component.extend({
   }).evented(),
 
   addTagSucceeded: on('addTag:succeeded', function() {
-    this.get('notify').success('Tag added');
+    this.get('notify').success(this.get("tTagAdded"));
     this.set('newTag', '');
     this.set('showAddTagBtn', true);
     this.set('showAddTagForm', false);
@@ -367,7 +371,7 @@ const FileHeaderComponent = Component.extend({
   }).evented(),
 
   deleteTagSucceeded: on('deleteTag:succeeded', function() {
-    this.get('notify').success('Tag deleted');
+    this.get('notify').success(this.get("tTagDeleted"));
   }),
 
   deleteTagErrored: on('deleteTag:errored', function(_, err) {

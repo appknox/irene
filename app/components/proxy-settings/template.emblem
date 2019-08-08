@@ -2,9 +2,9 @@
   form submit={(perform saveProxy)}
     .vertical-align-center
       .margin-r-1
-        = input class="form-control input" value=changeset.host placeholder="Host" autofocus="autofocus"
+        = input class="form-control input" value=changeset.host placeholder=(t "host") autofocus="autofocus"
       .margin-r-1
-        = input class="form-control input" type="number" value=changeset.port placeholder="Port"
+        = input class="form-control input" type="number" value=changeset.port placeholder=(t "port")
       button.button.is-default type="submit" disabled=saveProxy.isRunning
         if saveProxy.isRunning
           span.fa-font-size

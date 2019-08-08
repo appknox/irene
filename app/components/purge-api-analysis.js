@@ -1,8 +1,13 @@
 import Component from '@ember/component';
 import { isEmpty } from '@ember/utils';
+import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
+import { translationMacro as t } from 'ember-i18n';
 
 export default Component.extend({
+
+  i18n: service(),
+  tSuccessfullyPurgeAnalysis:t("successfullyPurgeAnalysis"),
   actions: {
     purgeAPIAnalyses() {
       const fileId = this.get("fileNumber");
@@ -14,7 +19,7 @@ export default Component.extend({
       return this.get("ajax").post(url, { namespace: 'api/hudson-api'})
       .then(() => {
         this.set("isPurgingAPIAnalyses", false);
-        this.get("notify").success("Successfully Purged the Analysis");
+        this.get("notify").success(this.get('tSuccessfullyPurgeAnalysis'));
         this.set("fileNumber", "");
       }, (error) => {
         this.set("isPurgingAPIAnalyses", false);

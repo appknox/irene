@@ -1,10 +1,10 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
-
+import { translationMacro as t } from 'ember-i18n';
 
 const PasswordRecoverComponent = Component.extend({
-
+  i18n: service(),
   identification: "",
 
   ajax: service(),
@@ -12,13 +12,14 @@ const PasswordRecoverComponent = Component.extend({
 
   mailSent: false,
   isSendingRecoveryEmail: false,
+  tInvalidUsernameOrEmail: t("invalidUsernameOrEmail"),
 
   actions: {
 
     recover() {
       const identification = this.get('identification').trim();
       if (!identification) {
-        return this.get("notify").error("Please enter your Username/Email", ENV.notifications);
+        return this.get("notify").error(this.get("tInvalidUsernameOrEmail"), ENV.notifications);
       }
       const data =
         {identification};

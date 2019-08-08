@@ -113,7 +113,7 @@
               = t "scanDetails"
           li class=owaspDetailsClass
             a click="displayOWASPDetails" class="uppercase-text"
-              | Owasp Details
+              | #{t "owaspDetails"}
     .column.content-right
       .card-button
         .columns

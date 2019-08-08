@@ -23,10 +23,11 @@ const JiraAccountComponent = Component.extend({
 
   isRevokingJIRA: false,
   isIntegratingJIRA: false,
-  tInValidCredentials: t("tInValidCredentials"),
+  tInValidCredentials: t("inValidCredentials"),
   tJiraIntegrated: t("jiraIntegrated"),
   tJiraWillBeRevoked: t("jiraWillBeRevoked"),
   tPleaseEnterAllDetails: t("pleaseEnterAllDetails"),
+  tSomethingWentWrong: t("somethingWentWrong"),
   isJIRAConnected: false,
   connectedHost: "",
   connectedUsername: "",
@@ -71,7 +72,7 @@ const JiraAccountComponent = Component.extend({
       this.get("notify").success(tJiraWillBeRevoked);
       this.get('checkJIRA').perform();
     } catch(error) {
-      this.get("notify").error("Sorry something went wrong, please try again");
+      this.get("notify").error(this.get('tSomethingWentWrong'));
     }
   }).drop(),
   integrateJIRA: task(function *(changeset){

@@ -8,7 +8,7 @@ button.is-primary click={(perform openAddTeamModal)}
       form
         .control.vertical-align-center.margin-b-1
           = fa-icon "search"
-          = input class="form-control input input-width margin-left" placeholder="Search team" type="text" value=query autofocus="autofocus" key-up="searchQuery"
+          = input class="form-control input input-width margin-left" placeholder=(t "searchTeam") type="text" value=query autofocus="autofocus" key-up="searchQuery"
 
       if hasObjects
         .add-team-projects-scroll

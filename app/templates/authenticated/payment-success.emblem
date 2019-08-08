@@ -2,9 +2,9 @@
   h2
     = fa-icon "check"
   h2
-    | THANK YOU!
+    | #{ "paymentThank"}
   h5
-    | Your payment is successful
+    | #{t "paymentSuccessful"}
   div
     = link-to "authenticated.index" class="button is-primary"
       = fa-icon "home"

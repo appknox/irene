@@ -1,6 +1,6 @@
 .main-box-container
   h5.box-main-heading
-    | Top Issues
+    | #{t "topIssues"}
   if recentIssues
     .box-content.scrolling-box
       .box-lists
@@ -23,4 +23,4 @@
     .not-found.no-issues
       = fa-icon "exclamation-triangle"
 
-      | No issues found
+      | #{t "noIssuesFound"}

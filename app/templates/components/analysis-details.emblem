@@ -12,11 +12,11 @@
               if tag.status
                 = fa-icon "check"
                 = attach-tooltip position="top"
-                  | #{tag.text} #{t "scanCompleted"}
+                  | #{t tag.text} #{t "scanCompleted"}
               else
                 = fa-icon "times"
                 = attach-tooltip position="top"
-                  | #{tag.text} #{t "scanNotCompleted"}
+                  | #{t tag.text} #{t "scanNotCompleted"}
           div.margin-left.details
             if showVulnerability
               i.fa.fa-chevron-up

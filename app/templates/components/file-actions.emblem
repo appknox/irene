@@ -12,7 +12,7 @@
 
         .column.content-right
           button.is-primary click={(perform downloadApp)}
-            | Download App
+            | #{t "downloadAppTitle"}
           button.margin-left.is-primary click="openGenerateReportModal"
             | Generate Report
           a.margin-left href=ireneFilePath target="_blank" class="button is-primary"
@@ -63,7 +63,7 @@
               .column.content-right
 
                 button.is-primary.highlighted-button click={(perform openPurgeAPIAnalysisConfirmBox)}
-                  | Purge API Analyses
+                  | #{t "purgeAPIheading"}
                 button.is-primary.margin-left.highlighted-button click={(perform openAddAnalysisModal)}
                   | Add Analysis
 

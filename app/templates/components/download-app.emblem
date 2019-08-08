@@ -3,13 +3,13 @@
     .box.margin-top10
       .margin-auto
         h3
-          | Download App
+          | #{t "downloadAppTitle"}
         form.input-form
           p.control
-            = input class="form-control input" id="file-number" placeholder="Enter the file number" type="text" value=fileNumber
+            = input class="form-control input" id="file-number" placeholder=(t "enterFileID") type="text" value=fileNumber
           button.is-primary click="downloadApp" disabled=isDownloadingApp
             if isDownloadingApp
               .fa-font-size
                 i.fa class="fa-spinner fa-spin"
               | &nbsp;
-            | Download App
+            | #{t "downloadAppTitle"}

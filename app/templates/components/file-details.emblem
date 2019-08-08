@@ -9,7 +9,7 @@
   if isSecurityEnabled
     .column.content-right
       a href="/security/file/#{file.id}" target="_blank" class="button is-primary"
-        | Edit Analyses
+        | #{t "editAnalyses"}
 .columns
   .column.margin-left5
     .columns.analysis-header

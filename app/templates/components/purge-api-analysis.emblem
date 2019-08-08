@@ -2,15 +2,15 @@
   .column.is-one-third.margin-auto
     .box.margin-top10
       h3
-        | Purge API Analyses
+        | #{t "purgeAPIheading"}
       h6
-        | Please enter the id of the file you want to purge off API Analyses
+        | #{t "purgeAPIDescription"}
       form.input-form
         p.control
-          = input class="form-control input" placeholder="Enter the file ID" type="text" value=fileNumber
+          = input class="form-control input" placeholder=(t "enterFileID") type="text" value=fileNumber
         button.is-primary click="purgeAPIAnalyses" disabled=isPurgingAPIAnalyses
           if isPurgingAPIAnalyses
             .fa-font-size
               i.fa class="fa-spinner fa-spin"
             | &nbsp;
-          | SUBMIT
+          | #{t "submit"}

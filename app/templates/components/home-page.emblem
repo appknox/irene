@@ -82,7 +82,7 @@ if isLoaded
               .column.content-right.top-icons
                 if isSecurityEnabled
                   a href="/security/projects" target="_blank" class="button security-link"
-                    | Security Dashboard
+                    | #{t "securityDashboard"}
                 a click="openChatBox"
                   = fa-icon "support" class="sidebar-icons"
                   = t "support"

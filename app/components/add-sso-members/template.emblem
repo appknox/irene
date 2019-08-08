@@ -9,9 +9,9 @@ button.is-primary click={(perform openAddSSOMembersModal)}
         p.control
           label
             span.black-text.margin-b-h.margin-t-1.bold
-              | Email &nbsp;
+              | #{t "email"} &nbsp;
             small.text-lightgray
-              | (for multiple entries, separate by comma)
+              | #{ "commaSeparatedEntries"}
             br
             = textarea class="form-control input margin-t-q" placeholder=(t "email") value=emailsFromText autofocus="autofocus"
 
@@ -19,7 +19,7 @@ button.is-primary click={(perform openAddSSOMembersModal)}
           | or
         div
           label.black-text.margin-b-h.margin-t-1.bold
-            | Upload CSV file
+            | #{t "uploadCsv"}
           = input type="file" multiple="true" accept="text/csv" class="form-control input input-file margin-t-q" onChange="uploadCsv"
 
         button.margin-t-2.is-primary type="submit" disabled=isAddingSSOMember

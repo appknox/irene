@@ -3,8 +3,10 @@ import { isEmpty } from '@ember/utils';
 import DS from 'ember-data';
 import ENUMS from 'irene/enums';
 import { translationMacro as t } from 'ember-i18n';
+import { inject as service } from '@ember/service';
 
 const Analysis = DS.Model.extend({
+  i18n: service(),
   findings: DS.attr(),
   risk: DS.attr('number'),
   status: DS.attr('number'),

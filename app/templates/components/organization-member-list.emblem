@@ -1,7 +1,7 @@
 form.margin-t-1
   .control.vertical-align-center.margin-b-1
     = fa-icon "search"
-    = input class="form-control input input-width margin-left" placeholder="Search member" type="text" value=query autofocus="autofocus" key-up="searchQuery"
+    = input class="form-control input input-width margin-left" placeholder=(t "searchMembers") type="text" value=query autofocus="autofocus" key-up="searchQuery"
 
 if hasObjects
   .columns

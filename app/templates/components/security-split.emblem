@@ -2,13 +2,13 @@
   ul
     li class=searchClass click="displaySearch"
       = link-to 'authenticated.security.projects'
-        | Projects
+        | #{t "projects"}
     li class=downloadAppClass click="displayDownloadApp"
       = link-to 'authenticated.security.downloadapp'
-        | Download App
+        | #{t "downloadAppTitle"}
     li class=purgeAnalysisClass click="displayPurgeAnalysis"
       = link-to 'authenticated.security.purgeanalysis'
-        | Purge API Analyses
+        | #{t "purgeAPIheading"}
 
 
 = outlet

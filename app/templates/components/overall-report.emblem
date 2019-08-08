@@ -24,7 +24,7 @@
           span.margin-left click={(perform resetDuration)}
             = fa-icon "repeat"
         else
-          | Last 6 Months
+          | #{t "lastSixMonths"}
           span.margin-left click={(perform showHideDuration)}
              = fa-icon "pencil"
 
@@ -36,33 +36,33 @@
   .column
     .main-box-container
       h5.box-main-heading
-        | Overall Scan Count
+        | #{t "overallScanCount"}
 
       .columns.scan-list
         .column
           h5
-            | Total Static Scans
+            | #{t "totalStaticScan"}
         .column
           h5
             = scanCount.static_scan_count
       .columns.scan-list
         .column
           h5
-            | Total Dynamic Scans
+            | #{t "modalCard.dynamicScan.totalScan"}
         .column
           h5
             = scanCount.dynamic_scan_count
       .columns.scan-list
         .column
           h5
-            | Total API Scans
+            | #{t "modalCard.apiScan.totalScan"}
         .column
           h5
             = scanCount.api_scan_count
       .columns.scan-list
         .column
           h5
-            | Total Manual Scans
+            | #{t "modalCard.manual.totalScan"}
         .column
           h5
             = scanCount.manual_scan_count

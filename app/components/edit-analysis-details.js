@@ -7,7 +7,7 @@ import { getOwner } from '@ember/application';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
 import { task } from 'ember-concurrency';
-
+import { translationMacro as t } from 'ember-i18n';
 
 export default Component.extend({
   findingId: 0,
@@ -17,6 +17,7 @@ export default Component.extend({
   isInValidCvssBase: false,
 
   session: service(),
+  i18n: service(),
 
   risks: ENUMS.RISK.CHOICES,
   scopes: ENUMS.SCOPE.CHOICES,
@@ -28,7 +29,12 @@ export default Component.extend({
   requiredPrevileges: ENUMS.PRIVILEGES_REQUIRED.CHOICES,
   availabilityImpacts: ENUMS.AVAILABILITY_IMPACT.CHOICES,
   confidentialityImpacts: ENUMS.CONFIDENTIALITY_IMPACT.CHOICES,
-
+  tSomethingWentWrong: t("somethingWentWrong"),
+  tPleaseTryAgain: t("pleaseTryAgain"),
+  tEmptyDescription: t("emptyDescription"),
+  tFileUploadedSuccessfully: t("fileUploadedSuccessfully"),
+  tAnalysisUpdated: t("analysisUpdated"),
+  tFindingAdded: t("findingAdded"),
   ireneFilePath: computed(function() {
     const fileId = this.get("analysisDetails.file.id");
     const ireneHost = ENV.ireneHost;
@@ -93,7 +99,7 @@ export default Component.extend({
       this.updateCVSSScore();
       this.set("analysisDetails.status", ENUMS.ANALYSIS_STATUS.COMPLETED);
       this.get("updateAnalysis").perform();
-      this.get("notify").success("Analysis Updated");
+      this.get("notify").success(this.get("tAnalysisUpdated"));
       return this.set("showMarkPassedConfirmBox", false);
     }
   },
@@ -170,7 +176,7 @@ export default Component.extend({
           this.set("analysisDetails.cvssVector", vector);
           this.set("isInValidCvssBase", false);
         }, () => {
-          this.get("notify").error("Sorry something went wrong, please try again");
+          this.get("notify").error(this.get('tSomethingWentWrong'));
         });
       return;
     }
@@ -202,7 +208,7 @@ export default Component.extend({
   }).evented(),
 
   saveAnalysisSucceeded: on('saveAnalysis:succeeded', function() {
-    this.get('notify').success('Analysis Updated');
+    this.get('notify').success(this.get("tAnalysisUpdated"));
   }),
 
   saveAnalysisErrored: on('saveAnalysis:errored', function(_, error) {
@@ -291,12 +297,12 @@ export default Component.extend({
         yield this.get("ajax").post(ENV.endpoints.uploadedAttachment,{namespace: 'api/hudson-api', data: fileDetailsData});
         yield this.get('updateAnalysis').perform()
         this.set("isUploading", false);
-        this.get("notify").success("File Uploaded Successfully");
+        this.get("notify").success(this.get('tFileUploadedSuccessfully'));
         const analysisObj = yield this.get("store").findRecord('security/analysis', this.get("analysis.analysisid"));
         this.set('analysisDetails', analysisObj);
       } catch(error) {
         this.set("isUploading", false);
-        this.get("notify").error("Sorry something went wrong, please try again");
+        this.get("notify").error(this.get('tSomethingWentWrong'));
         return;
       }
     }),
@@ -366,7 +372,7 @@ export default Component.extend({
     addFinding() {
       const findingTitle = this.get("findingTitle");
       const findingDescription = this.get("findingDescription");
-      if (isEmpty(findingDescription)) return this.get("notify").error("Please fill the description");
+      if (isEmpty(findingDescription)) return this.get("notify").error(this.get("tEmptyDescription"));
       let findingId = this.get("findingId");
       findingId = findingId + 1;
       const findings = this.get("analysisDetails.findings");
@@ -378,7 +384,7 @@ export default Component.extend({
       findings.addObject(newFinding);
       this.set("findingId", findingId);
       this.set("addedFindings", findings);
-      this.get("notify").success("Finding Added");
+      this.get("notify").success(this.get("tFindingAdded"));
       this.setProperties({
         findingTitle: "",
         findingDescription: ""

@@ -59,18 +59,18 @@ else
             .columns
               .column
                 h5.black-text
-                  | Repo
+                  | #{t "repo"}
             .columns
               .column
-                = power-select searchEnabled=true searchField="name" dropdownClass="power-select-custom-repo" searchPlaceholder="Type repository name" placeholder="Select Repo" selected=selectedRepo renderInPlace=true options=githubRepos onchange=(perform selectRepo value="target.value") as |repo|
+                = power-select searchEnabled=true searchField="name" dropdownClass="power-select-custom-repo" searchPlaceholder=(t "typeRepoName") placeholder=(t "selectProject") selected=selectedRepo renderInPlace=true options=githubRepos onchange=(perform selectRepo value="target.value") as |repo|
                   | #{repo.full_name}
             .columns
               .column
                 h5.black-text
-                  | Threshold
+                  | #{t "threshold"}
             .columns
               .column
-                = power-select tagName="div" class="power-select-custom-width" dropdownClass="power-select-custom-threshold" searchEnabled=false placeholder="Select Repo" selected=selectedThreshold renderInPlace=true options=thresholds onchange=(perform selectThreshold value="target.value") as |threshold|
+                = power-select tagName="div" class="power-select-custom-width" dropdownClass="power-select-custom-threshold" searchEnabled=false placeholder=(t "selectThreshold") selected=selectedThreshold renderInPlace=true options=thresholds onchange=(perform selectThreshold value="target.value") as |threshold|
                   | #{threshold-status threshold}
 
         form.margin-top20
@@ -82,5 +82,5 @@ else
                 .fa-font-size
                   i.fa class="fa-spinner fa-spin"
                   | &nbsp;
-              | Save
+              | #{t "save"}
 = confirm-box isActive=showDeleteGHConfirmBox title=(t 'confirmBox.removeProject') delegate=this disabled=deleteRepo.isRunning

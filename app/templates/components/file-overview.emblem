@@ -14,10 +14,10 @@ header.card-header
         | #{file.project.packageName}
       li.hide-overflow.font-small.text-lightgray
         if file.version
-          | version: #{file.version}
+          | #{t "version"}: #{file.version}
         if file.versionCode
           span.margin-l-1
-          | version code: #{file.versionCode}
+          | #{t "versionCode"}: #{file.versionCode}
 .card-content
   .content
     .app-information.align-both.vertical-align-center.padding-h-1.padding-v-3q

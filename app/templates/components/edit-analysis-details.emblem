@@ -30,7 +30,7 @@
       .columns
         .column
           h5.bold-font.margin-left20
-            | CVSS Metrics
+            | #{t "cvssMetrics"}
         .column.text-right
           button.is-primary.highlighted-button click={(perform clearCvss)}
             = fa-icon "window-close"
@@ -58,52 +58,52 @@
         .column
           .columns
             .column
-              | Attack Vector
+              | #{t "cvssMetricsData.metricAttackVector"}
             .column
               = power-select selected=analysisDetails.attackVector options=attackVectors onchange=(action "selectAttackVector") as |key|
-                | #{metric-vector key}
+                | #{t (concat "cvssMetricsData.cvssMetricsVector." (metric-vector key))}
           .columns
             .column
-              | Attack Complexity
+              | #{t "cvssMetricsData.metricAttackComplexity"}
             .column
               = power-select selected=analysisDetails.attackComplexity options=attackComplexities onchange=(action "selectAttackComplexity") as |key|
-                | #{metric-impact key}
+                | #{t (concat "cvssMetricsData.cvssMetricsImpact." (metric-impact key))}
           .columns
             .column
-              | Privileges Required
+              | #{t "cvssMetricsData.metricPrivileges"}
             .column
               = power-select selected=analysisDetails.privilegesRequired options=requiredPrevileges onchange=(action "selectRequiredPrevilege") as |key|
-                | #{metric-impact key}
+                | #{t (concat "cvssMetricsData.cvssMetricsImpact." (metric-impact key))}
           .columns
             .column
-              | User Interaction
+              | #{t "cvssMetricsData.metricInteraction"}
             .column
               = power-select selected=analysisDetails.userInteraction options=userInteractions onchange=(action "selectUserInteraction") as |key|
-                | #{metric-interaction key}
+                | #{t (concat "cvssMetricsData.cvssMetricsInteraction." (metric-interaction key))}
           .columns
             .column
-              | Scope
+              | #{t "cvssMetricsData.metricScope"}
             .column
               = power-select selected=analysisDetails.scope options=scopes onchange=(action "selectScope") as |key|
-                | #{metric-scope key}
+                | #{t (concat "cvssMetricsData.cvssMetricsScope." (metric-scope key))}
           .columns
             .column
-              | Confidentiality Impact
+              | #{t "cvssMetricsData.metricConfImpact"}
             .column
               = power-select selected=analysisDetails.confidentialityImpact options=confidentialityImpacts onchange=(action "selectConfidentialityImpact") as |key|
-                | #{metric-impact key}
+                | #{t (concat "cvssMetricsData.cvssMetricsImpact." (metric-impact key))}
           .columns
             .column
-              | Integrity Impact
+              | #{t "cvssMetricsData.metricIntegrityImpact"}
             .column
               = power-select selected=analysisDetails.integrityImpact options=integrityImpacts onchange=(action "selectIntegrityImpact") as |key|
-                | #{metric-impact key}
+                | #{t (concat "cvssMetricsData.cvssMetricsImpact." (metric-impact key))}
           .columns
             .column
-              | Availability Impact
+              | #{t "cvssMetricsData.metricAvailImpact"}
             .column
               = power-select selected=analysisDetails.availabilityImpact options=availabilityImpacts onchange=(action "selectAvailabilityImpact") as |key|
-                | #{metric-impact key}
+                | #{t (concat "cvssMetricsData.cvssMetricsImpact." (metric-impact key))}
       .columns
         .column.is-one-third
           h5.bold-font
@@ -123,7 +123,7 @@
       .columns
         .column.is-one-third
           h5.bold-font
-            | Override Risk
+            | #{t "overrideRisk"}
       .columns.border-bottom-container
         .column.padding-h-1h
           .columns
@@ -208,9 +208,9 @@
               = file-upload name="files" accept="*/*" onfileadd=( action 'uploadFileWrapper' ) as |queue|
                 a class="button is-primary" disabled=uploadFile.isRunning
                   if uploadFile.isRunning
-                    | Uploading...
+                    | #{t "uploading"}
                   else
-                    | Upload file
+                    | #{t "uploadFile"}
 
       h5.bold-font.margin-top10.margin-bottom0
         | List of Attachments

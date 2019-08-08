@@ -1,13 +1,15 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
+import { translationMacro as t } from 'ember-i18n';
 
 const InvoiceOverviewComponent = Component.extend({
-
+  i18n: service(),
   invoice: null,
   ajax: service(),
   notify: service('notification-messages-service'),
   tagName:["tr"],
+  tSomethingWentWrong: t("somethingWentWrong"),
 
   isDownloadingInvoice: false,
 
@@ -24,7 +26,7 @@ const InvoiceOverviewComponent = Component.extend({
         }
       }, () => {
         this.set("isSavingStatus", false);
-        this.get("notify").error("Sorry something went wrong, please try again");
+        this.get("notify").error(this.get("tSomethingWentWrong"));
       });
     }
   }

@@ -12,6 +12,13 @@ export default Component.extend({
 
   i18n: service(),
   tPleaseTryAgain: t('pleaseTryAgain'),
+  tSuccessfullyAddedAnalysis:t("successfullyAddedAnalysis"),
+  tSuccessfullyPurgeAnalysis:t("successfullyPurgeAnalysis"),
+  tManualScanStatusUpdated: t("manual.statusUpdate"),
+  tSelectVulnerabilty: t("selectVulnerabilty"),
+  tApiScanStatusUpdate:t("apiScan.statusUpdate"),
+  tDyanamicStatusUpdate: t("statusUpdate"),
+
 
   manualStatuses: ENUMS.MANUAL.CHOICES.filter(c => c.key !== 'UNKNOWN').map(c => String(c.value)),
   // to String because power-select has issues with 0
@@ -45,7 +52,7 @@ export default Component.extend({
   }).evented(),
 
   setApiScanStatusSucceeded: on('setApiScanStatus:succeeded', function() {
-    this.get('notify').success('Successfully saved the API scan status');
+    this.get('notify').success(this.get('tApiScanStatusUpdate'));
   }),
 
   setApiScanStatusErrored: on('setApiScanStatus:errored', function(_, error) {
@@ -65,7 +72,7 @@ export default Component.extend({
   }).evented(),
 
   setDynamicDoneSucceeded: on('setDynamicDone:succeeded', function() {
-    this.get('notify').success('Dynamic scan status updated');
+    this.get('notify').success(this.get('tDyanamicStatusUpdate'));
   }),
 
   setDynamicDoneErrored: on('setDynamicDone:errored', function(_, error) {
@@ -85,7 +92,7 @@ export default Component.extend({
   }).evented(),
 
   selectManualScanSucceeded: on('selectManualScan:succeeded', function() {
-    this.get('notify').success('Manual Scan Status Updated');
+    this.get('notify').success(this.get('tManualScanStatusUpdated'));
   }),
 
   selectManualScanErrored: on('selectManualScan:errored', function(_, err) {
@@ -112,7 +119,7 @@ export default Component.extend({
   confirmPurgeSucceeded: on('confirmPurge:succeeded', function() {
     const fileid = this.get("file.id");
     this.get("store").findRecord("security/file", fileid);
-    this.get('notify').success('Successfully Purged the Analysis');
+    this.get('notify').success(this.get('tSuccessfullyPurgeAnalysis'));
     this.set('isPurgingAPIAnalysis', false);
     this.set('showPurgeAPIAnalysisConfirmBox', false);
   }),
@@ -177,7 +184,7 @@ export default Component.extend({
     const file = this.get("file");
 
     if(isEmpty(vulnerability)) {
-      return this.get("notify").error("Please select a vulnerability");
+      return this.get("notify").error(this.get("tSelectVulnerabilty"));
     }
 
     const analysis = yield this.get("store").createRecord(
@@ -197,7 +204,7 @@ export default Component.extend({
 
   addAnalysisSucceeded: on('addAnalysis:succeeded', function() {
     this.set("showAddAnalysisModal", false);
-    this.get("notify").success("Analysis Added Successfully");
+    this.get("notify").success(this.get('tSuccessfullyAddedAnalysis'));
   }),
 
   addAnalysisErrored: on('addAnalysis:errored', function(_, error) {

@@ -1,11 +1,13 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { translationMacro as t } from 'ember-i18n';
 import { getOwner } from '@ember/application';
 import ENV from 'irene/config/environment';
 import {isUnauthorizedError} from 'ember-ajax/errors';
 
 const LoginComponentComponent = Component.extend({
+  i18n: service(),
   session: service('session'),
   notify: service('notification-messages-service'),
   MFAEnabled: false,
@@ -16,6 +18,7 @@ const LoginComponentComponent = Component.extend({
   otp: "",
   isNotEnterprise: !ENV.isEnterprise,
   isRegistrationEnabled: ENV.isRegistrationEnabled,
+  tInvalidUsernameOrPassword:t("invalidUsernameOrPassword"),
   registrationLink: computed(function() {
     if(ENV.registrationLink) {
       return ENV.registrationLink;
@@ -38,7 +41,7 @@ const LoginComponentComponent = Component.extend({
       const otp = this.get("otp");
 
       if (!identification || !password) {
-        return this.get("notify").error("Please enter username and password", ENV.notifications);
+        return this.get("notify").error(this.get("tInvalidUsernameOrPassword"), ENV.notifications);
       }
       identification = identification.trim();
       password = password.trim();

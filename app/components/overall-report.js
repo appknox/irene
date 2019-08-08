@@ -5,6 +5,7 @@ import { inject as service } from '@ember/service';
 import {bb} from 'billboard.js';
 import moment from 'moment';
 import { observer } from '@ember/object';
+import { translationMacro as t } from 'ember-i18n';
 
 class ChartData {
   constructor() {
@@ -202,6 +203,7 @@ class ChartData {
 const OverallReportComponent = Component.extend({
 
   ajax: service('ajax'),
+  i18n: service(),
   realtime: service('realtime'),
   analytics: service('analytics'),
   organization: service('organization'),
@@ -212,7 +214,8 @@ const OverallReportComponent = Component.extend({
   axisXLabelText: 'months',
   axisYType: 'number',
   scanCount: null,
-
+  tTotalAppScans: t("totalAppScans"),
+  tNoOfScans:t("noOfScans"),
 
   didInsertElement() {
     this.get('resetDuration').perform();
@@ -259,7 +262,7 @@ const OverallReportComponent = Component.extend({
       },
       bindto: "#scan-count-chart",
       donut: {
-        title: `Total App Scans: ${scanCountData.total_scan_count}`,
+        title: `${this.get('tTotalAppScans')}: ${scanCountData.total_scan_count}`,
         label: {
           format: function (value) {
             return value;
@@ -315,7 +318,7 @@ const OverallReportComponent = Component.extend({
           min: 0,
           type: this.get("axisYType"),
           label: {
-            text: 'no. of scans',
+            text: `${this.get('tNoOfScans')}`,
             position: 'outer-center'
           },
           tick: {

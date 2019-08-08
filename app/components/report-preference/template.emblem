@@ -1,10 +1,9 @@
 .columns
   .column
     h5.bold.black-text
-      | Report Preferences
-      // = t "vulnerabilityPreferences"
+      | #{t "reportPreference"}
     p
-      | Choose types of scans to be included in the report
+      | #{t "reportScanType"}
 
 div
   span
