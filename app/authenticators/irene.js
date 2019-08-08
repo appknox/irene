@@ -3,7 +3,7 @@ import ENV from 'irene/config/environment';
 import { inject as service } from '@ember/service';
 import { getOwner } from '@ember/application';
 import { Promise } from 'rsvp';
-
+import { translationMacro as t } from 'ember-i18n';
 
 const b64EncodeUnicode = str =>
   btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode(`0x${p1}`))
@@ -19,7 +19,10 @@ const processData = (data) => {
 
 const IreneAuthenticator = Base.extend({
 
+  i18n: service(),
   ajax: service(),
+  tServerReachFailed: t('serverReachFailed'),
+  tInvalidAccountDetails: t('invalidAccountDetails'),
 
   resumeTransistion() {
     const authenticatedRoute = getOwner(this).lookup("route:authenticated");
@@ -52,9 +55,9 @@ const IreneAuthenticator = Base.extend({
         this.get("notify").error(error.payload.message, {autoClear: false});
         for (error of error.errors) {
           if (error.status === "0") {
-            return this.get("notify").error("Unable to reach server. Please try after sometime", ENV.notifications);
+            return this.get("notify").error(this.get('tServerReachFailed'), ENV.notifications);
           }
-          this.get("notify").error("Please enter valid account details", ENV.notifications);
+          this.get("notify").error(this.get('tInvalidAccountDetails'), ENV.notifications);
         }
         return reject(error);
       });

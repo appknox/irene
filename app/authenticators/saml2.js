@@ -2,6 +2,7 @@ import IreneAuth from './irene';
 import ENV from 'irene/config/environment';
 import { Promise } from 'rsvp';
 import { getOwner } from '@ember/application';
+import { translationMacro as t } from 'ember-i18n';
 
 const b64EncodeUnicode = str => btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode(`0x${p1}`)));
 
@@ -13,6 +14,7 @@ const processData = data => {
 };
 
 export default IreneAuth.extend({
+  tLoginFailed: t('loginFailed'),
   authenticate(ssotoken) {
     return new Promise((resolve, reject) => {
       const url = ENV['endpoints']['saml2Login'];
@@ -23,9 +25,9 @@ export default IreneAuth.extend({
         resolve(data);
         this.resumeTransistion();
       }, (error) => {
-        let msg = "Login failed";
+        let msg = this.get('tLoginFailed');
         if(error.payload.message) {
-          msg = "Login failed: " + error.payload.message;
+          msg = this.get('tLoginFailed').toString()+": "+error.payload.message;
         }
         this.get("notify").error(msg);
 
