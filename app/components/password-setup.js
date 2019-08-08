@@ -25,12 +25,12 @@ const PasswordSetupComponent = Component.extend({
     const password = this.get("password");
 
     if (password.length < 6) {
-      this.validation_errors.push(this.get("tPasswordLengthError"));
+      this.validation_errors.push(this.get("tPasswordLengthError").toString());
       return this.validation_errors;
     }
     const confirmPassword = this.get("confirmPassword");
     if (password !== confirmPassword) {
-      this.validation_errors.push(this.get('tInvalidPassword'));
+      this.validation_errors.push(this.get('tInvalidPassword').toString());
       return this.validation_errors;
     }
   },

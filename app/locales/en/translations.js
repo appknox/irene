@@ -195,7 +195,7 @@ export default {
   "integrationCompleted": "Integration Completed",
   "invalidUsernameOrEmail": "Please enter valid Username or Email",
   "invalidUsernameOrPassword": "Please enter valid Username or Password",
-  "invalidPassword": "Passwords did not match",
+  "invalidPassword": "Passwords doesn't match",
   "invalidURL": " is an invalid URL",
   "inValidCredentials": "Invalid credentails",
   "invalidCVSS": "Invalid CVSS metrics",
