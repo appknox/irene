@@ -38,12 +38,15 @@ const JiraProjectComponent = Component.extend({
   }).evented(),
 
   setCurrentJiraRepoErrored: on('setCurrentJiraRepo:errored', function(_, err){
-    const status = err.errors[0].status
-    if (status==="404" && err.errors[0].detail==="Not found."){
-      this.set('currentGithubRepo', null)
-    }else{
-      this.get("notify").error(this.get('tFetchJIRAProjectFailed'));
+    if (err.errors[0].detail && err.errors[0].detail==="Jira not integrated"){
+      this.set('noIntegration', true);
+      return
     }
+    if (err.errors[0].detail && err.errors[0].detail==="Jira integration failed"){
+      this.set('reconnect', true);
+      return
+    }
+    this.get("notify").error(this.get('tFetchJIRAProjectFailed'));
   }),
 
   setCurrentJiraRepoSucceded: on('setCurrentJiraRepo:succeeded', function(instance){

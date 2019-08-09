@@ -37,13 +37,13 @@ else
       else
         if reconnect
           h6
-            | GitHub
+            | #{t "github"}
             | &nbsp;#{t "reconnectGotoSettings"}
             = link-to 'authenticated.organization.settings' class="is-primary" tagName="a"
               | &nbsp;#{t "clickingHere"}
         else
           h6
-            | GitHub
+            | #{t "github"}
             | &nbsp;#{t "gotoSettings"}
             = link-to 'authenticated.organization.settings' class="is-primary" tagName="a"
               | &nbsp;#{t "clickingHere"}

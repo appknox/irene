@@ -31,7 +31,7 @@ else
 
       else if noIntegration
         h6
-          | JIRA
+          | #{t "jira"}
           | &nbsp;#{t "gotoSettings"}
           = link-to 'authenticated.organization.settings' class="is-primary" tagName="a"
             | &nbsp;#{t "clickingHere"}
@@ -44,6 +44,13 @@ else
             button.is-primary click={(perform editJiraRepoModal)}
               = t "selectProject"
       else
+        if reconnect
+          h6
+            | #{t "jira"}
+            | &nbsp;#{t "reconnectGotoSettings"}
+            = link-to 'authenticated.organization.settings' class="is-primary" tagName="a"
+              | &nbsp;#{t "clickingHere"}
+        else
           h6
             = t "jiraNoProject"
 = modal-card isActive=showEditJiraModal title=(t "editProjectSettings")
