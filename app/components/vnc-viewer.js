@@ -12,6 +12,7 @@ const VncViewerComponent = Component.extend({
   deviceFarmPassword: ENV.deviceFarmPassword,
   i18n: service(),
   onboard: service(),
+  deviceFarmURL: ENV.deviceFarmURL,
   tCloseModal: t("closeModal"),
   tPopOutModal: t("popOutModal"),
 

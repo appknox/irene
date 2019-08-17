@@ -61,23 +61,6 @@ module.exports = function(defaults) {
   // along with the exports of each module as its value.
 
   /*
-   * No VNC includes
-   */
-
-   // app.import('bower_components/noVNC/core/base64.js');
-   // app.import('bower_components/noVNC/core/websock.js');
-   // app.import('bower_components/noVNC/core/des.js');
-   // app.import('bower_components/noVNC/core/input/keysymdef.js');
-   // app.import('bower_components/noVNC/core/input/xtscancodes.js');
-   // app.import('bower_components/noVNC/core/input/util.js');
-   // app.import('bower_components/noVNC/core/util.js');
-   // app.import('bower_components/noVNC/core/input/devices.js');
-   // app.import('bower_components/noVNC/core/display.js');
-   // app.import('bower_components/noVNC/core/inflator.js');
-   // app.import('bower_components/noVNC/core/rfb.js');
-   // app.import('bower_components/noVNC/core/input/keysym.js');
-
-  /*
    * card includes
    */
   app.import('bower_components/card/dist/card.js');

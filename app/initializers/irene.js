@@ -26,12 +26,10 @@ const initialize = function(application) {
   if(runtimeConfig) {
     ENV.host = runtimeConfig.IRENE_API_HOST || ENV.host;
     var devicefarmEnv = runtimeConfig.IRENE_DEVICEFARM_URL;
+    var deviceFarmPath = "websockify";
     if(devicefarmEnv) {
-      let deviceFarmWebsockifyHost = new URL(devicefarmEnv);
-      let deviceFarmSsl = deviceFarmWebsockifyHost.protocol === "wss:";
-      ENV.deviceFarmSsl = deviceFarmSsl;
-      ENV.deviceFarmPort = deviceFarmWebsockifyHost.port || (deviceFarmSsl ? 443:80);
-      ENV.deviceFarmHost = deviceFarmWebsockifyHost.hostname;
+      const deviceFarmURL = new URL(deviceFarmPath, devicefarmEnv).href;
+      ENV.deviceFarmURL = deviceFarmURL
     }
     ENV.socketPath = runtimeConfig.IRENE_API_SOCKET_PATH || ENV.socketPath;
     ENV.enableSSO = isTrue(runtimeConfig.IRENE_ENABLE_SSO || ENV.enableSSO);
