@@ -1,20 +1,18 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import { computed, observer } from '@ember/object';
-import { isEmpty } from '@ember/utils';
-import ENUMS from 'irene/enums';
+import { computed } from '@ember/object';
 import ENV from 'irene/config/environment';
+import ENUMS from 'irene/enums';
 import { translationMacro as t } from 'ember-i18n';
 
 const VncViewerComponent = Component.extend({
 
   rfb: null,
   file: null,
-  sizing_element: null,
-
+  deviceFarmPassword: ENV.deviceFarmPassword,
   i18n: service(),
   onboard: service(),
-
+  deviceFarmURL: ENV.deviceFarmURL,
   tCloseModal: t("closeModal"),
   tPopOutModal: t("popOutModal"),
 
@@ -29,47 +27,6 @@ const VncViewerComponent = Component.extend({
     }
   }),
 
-  setupRFB() {
-    const rfb = this.get("rfb");
-    if (!isEmpty(rfb)) {
-      return;
-    }
-    const canvasEl = this.element.getElementsByClassName("canvas")[0];
-    const that = this;
-    // eslint-disable-next-line no-undef
-    this.set("rfb", new RFB({
-      'target': canvasEl,
-      'encrypt': ENV.deviceFarmSsl,
-      'repeaterID': '',
-      'true_color': true,
-      'local_cursor': false,
-      'shared': true,
-      'view_only': false,
-
-      'onUpdateState'() {
-        setTimeout(that.set_ratio.bind(that), 500);
-        return true;
-      },
-
-      'onXvpInit'() {
-        return true;
-      }
-    })
-    );
-
-    this.send("blurKeyboard");
-
-    if (this.get('file.isReady')) {
-      return this.send("connect");
-    }
-  },
-
-  didInsertElement() {
-    this.setupRFB();
-    this.set('sizing_element', this.$('.marvel-device .screen'));
-    return
-  },
-
   showVNCControls: computed("file.isReady", "isPoppedOut", function() {
     const isPoppedOut = this.get("isPoppedOut");
     const isReady = this.get("file.isReady");
@@ -78,13 +35,6 @@ const VncViewerComponent = Component.extend({
     }
   }),
 
-  statusChange: observer('file.dynamicStatus', function() {
-    if (this.get('file.isReady')) {
-      return this.send("connect");
-    } else {
-      return this.send("disconnect");
-    }
-  }),
 
   devicePreference: computed('profileId', function() {
     const profileId = this.get("profileId");
@@ -133,18 +83,6 @@ const VncViewerComponent = Component.extend({
     }
   }),
 
-  set_ratio() {
-    const rfb = this.get("rfb");
-    const display = rfb.get_display();
-    const sizing_element = this.get('sizing_element');
-    const width = sizing_element.width();
-    const height = sizing_element.height();
-    const scaleRatio = display.autoscale(width, height);
-    rfb.get_mouse().set_scale(scaleRatio);
-    return
-
-  },
-
   actions: {
     togglePop() {
       this.set("isPoppedOut", !this.get("isPoppedOut"));
@@ -163,24 +101,6 @@ const VncViewerComponent = Component.extend({
     blurKeyboard() {
       this.send('setFocus', false);
     },
-
-    connect() {
-      const rfb = this.get("rfb");
-      const deviceToken = this.get("file.deviceToken");
-      rfb.connect(ENV.deviceFarmHost, ENV.deviceFarmPort, '1234', `${ENV.deviceFarmPath}?token=${deviceToken}`);
-      setTimeout(this.set_ratio.bind(this), 500);
-    },
-
-    disconnect() {
-      const rfb = this.get("rfb");
-      if (rfb._rfb_connection_state === 'connected') {
-        rfb.disconnect();
-      }
-      if (rfb._rfb_connection_state === 'disconnected') {
-        this.set("rfb", null);
-        this.setupRFB();
-      }
-    }
   }
 });
 

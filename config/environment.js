@@ -7,10 +7,18 @@ function isTrue(value) {
 
 module.exports = function(environment) {
   var devicefarmEnv = process.env.IRENE_DEVICEFARM_URL || "wss://devicefarm.appknox.com";
+  var deviceFarmPath = "/websockify";
   var deviceFarmWebsockifyHost = url.parse(devicefarmEnv);
   var deviceFarmSsl = deviceFarmWebsockifyHost.protocol == "wss:";
   var deviceFarmPort = deviceFarmWebsockifyHost.port || (deviceFarmSsl ? 443:80);
   var deviceFarmHost = deviceFarmWebsockifyHost.hostname;
+  var deviceFarmURL = url.format(
+    {
+      protocol: deviceFarmWebsockifyHost.protocol,
+      hostname: deviceFarmHost,
+      port: deviceFarmPort,
+      pathname: deviceFarmPath
+    });
   var host = process.env.IRENE_API_HOST || 'https://api.appknox.com';
   var socketPath = process.env.IRENE_API_SOCKET_PATH || 'https://socket.appknox.com';
   var enableSSO = isTrue(process.env.IRENE_ENABLE_SSO || false);
@@ -95,10 +103,8 @@ module.exports = function(environment) {
       allowEmpty: true, // default: false
       includeLocales: ['en', 'ja']
     },
-    deviceFarmSsl: deviceFarmSsl,
-    deviceFarmPort: deviceFarmPort,
-    deviceFarmPath: "websockify",
-    deviceFarmHost: deviceFarmHost,
+    deviceFarmURL: deviceFarmURL,
+    deviceFarmPassword: '1234',
     namespace: "api",
     namespace_v2: "api/v2",
     host: host,
