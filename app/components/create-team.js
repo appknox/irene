@@ -3,12 +3,12 @@ import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import { on } from '@ember/object/evented';
 import { task } from 'ember-concurrency';
-import { translationMacro as t } from 'ember-i18n';
+import { translationMacro as t } from 'ember-intl';
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 const CreateTeamComponent = Component.extend({
-  i18n: service(),
+  intl: service(),
   ajax: service(),
   notify: service('notification-messages-service'),
 

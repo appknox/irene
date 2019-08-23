@@ -112,7 +112,7 @@ module.exports = function(environment) {
       enabled: false
     },
 
-    i18n: {
+    intl: {
       defaultLocale: 'en',
     },
 

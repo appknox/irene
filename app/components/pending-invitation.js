@@ -1,12 +1,12 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
-import { translationMacro as t } from 'ember-i18n';
+import { translationMacro as t } from 'ember-intl';
 
 const PendingInvitationComponent = Component.extend({
 
   tagName: ["tr"],
-  i18n: service(),
+  intl: service(),
   ajax: service(),
   isDeletingInvitation: false,
   openDeleteInvitationConfirmBox: false,

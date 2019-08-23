@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import ENV from 'irene/config/environment';
-import { translationMacro as t } from 'ember-i18n';
+import { translationMacro as t } from 'ember-intl';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import { task } from 'ember-concurrency';
 import lookupValidator from 'ember-changeset-validations';
@@ -11,7 +11,7 @@ import JIRAValidation from '../validations/jiraintegrate';
 
 const JiraAccountComponent = Component.extend({
 
-  i18n: service(),
+  intl: service(),
   ajax: service(),
   organization: service(),
   notify: service('notification-messages-service'),
@@ -23,7 +23,7 @@ const JiraAccountComponent = Component.extend({
 
   isRevokingJIRA: false,
   isIntegratingJIRA: false,
-  tInValidCredentials: t("tInValidCredentials"),
+  tInValidCredentials: t("inValidCredentials"),
   tJiraIntegrated: t("jiraIntegrated"),
   tJiraWillBeRevoked: t("jiraWillBeRevoked"),
   tPleaseEnterAllDetails: t("pleaseEnterAllDetails"),

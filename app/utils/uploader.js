@@ -1,10 +1,10 @@
-import EmberUploader from 'ember-uploader';
+import Uploader from 'ember-uploader/uploaders/uploader';
 
 import { inject as service } from '@ember/service';
 import $ from 'jquery';
 
 
-const Uploader = EmberUploader.Uploader.extend({
+const FileUploader = Uploader.extend({
   ajax: service("ajax"),
   async uploadFile(file, url) {
     const that = this;
@@ -27,4 +27,4 @@ const Uploader = EmberUploader.Uploader.extend({
   },
 });
 
-export default Uploader;
+export default FileUploader;

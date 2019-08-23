@@ -1,11 +1,11 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import { translationMacro as t } from 'ember-i18n';
+import { translationMacro as t } from 'ember-intl';
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 
 const TeamOverviewComponent = Component.extend({
-  i18n: service(),
+  intl: service(),
   me: service(),
 
   team: null,

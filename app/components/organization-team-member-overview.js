@@ -2,10 +2,10 @@ import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { on } from '@ember/object/evented';
 import { task } from 'ember-concurrency';
-import { translationMacro as t } from 'ember-i18n';
+import { translationMacro as t } from 'ember-intl';
 
 export default Component.extend({
-  i18n: service(),
+  intl: service(),
   realtime: service(),
   me: service(),
   notify: service('notification-messages-service'),

@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import Component from '@ember/component';
 
 export default Component.extend(PaginateMixin, {
-  i18n: service(),
+  intl: service(),
   org: service('organization'),
 
   classNames: ['column'],

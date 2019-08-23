@@ -3,14 +3,14 @@ import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
-import { translationMacro as t } from 'ember-i18n';
+import { translationMacro as t } from 'ember-intl';
 
 const VncViewerComponent = Component.extend({
 
   rfb: null,
   file: null,
   deviceFarmPassword: ENV.deviceFarmPassword,
-  i18n: service(),
+  intl: service(),
   onboard: service(),
   deviceFarmURL: ENV.deviceFarmURL,
   tCloseModal: t("closeModal"),

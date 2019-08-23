@@ -1,5 +1,5 @@
 import PaginateMixin from 'irene/mixins/paginate';
-import { translationMacro as t } from 'ember-i18n';
+import { translationMacro as t } from 'ember-intl';
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 import parseEmails from 'irene/utils/parse-emails';
@@ -7,7 +7,7 @@ import { inject as service } from '@ember/service';
 import Component from '@ember/component';
 
 export default Component.extend(PaginateMixin, {
-  i18n: service(),
+  intl: service(),
   realtime: service(),
   organization: service(),
 

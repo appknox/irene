@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import ENV from 'irene/config/environment';
-import { translationMacro as t } from 'ember-i18n';
+import { translationMacro as t } from 'ember-intl';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 const isRegexFailed = function(url) {
@@ -12,7 +12,7 @@ const isRegexFailed = function(url) {
 };
 
 const ApiFilterComponent = Component.extend({
-  i18n: service(),
+  intl: service(),
   ajax: service(),
   notify: service('notification-messages-service'),
 

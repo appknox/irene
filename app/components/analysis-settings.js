@@ -1,5 +1,5 @@
 import ENV from 'irene/config/environment';
-import { translationMacro as t } from 'ember-i18n';
+import { translationMacro as t } from 'ember-intl';
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
@@ -7,7 +7,7 @@ import { computed } from '@ember/object';
 const AnalysisSettingsComponent = Component.extend({
 
   project: null,
-  i18n: service(),
+  intl: service(),
   ajax: service(),
   notify: service('notification-messages-service'),
   isSavingStatus: false,

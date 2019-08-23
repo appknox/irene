@@ -3,12 +3,12 @@ import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import ENV from 'irene/config/environment';
 import PaginateMixin from 'irene/mixins/paginate';
-import { translationMacro as t } from 'ember-i18n';
+import { translationMacro as t } from 'ember-intl';
 
 const PersonaltokenListComponent = Component.extend(PaginateMixin, {
 
   classNames: ["column","personal-token-component"],
-  i18n: service(),
+  intl: service(),
   ajax: service(),
   notify: service('notification-messages-service'),
 

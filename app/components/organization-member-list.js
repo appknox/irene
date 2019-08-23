@@ -5,7 +5,7 @@ import PaginateMixin from 'irene/mixins/paginate';
 import { debounce } from '@ember/runloop';
 
 export default Component.extend(PaginateMixin, {
-  i18n: service(),
+  intl: service(),
 
   query: '',
   searchQuery: '',

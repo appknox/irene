@@ -6,7 +6,7 @@ import PaginateMixin from 'irene/mixins/paginate';
 
 
 export default Component.extend(PaginateMixin, {
-  i18n: service(),
+  intl: service(),
   me: service(),
 
   targetObject: 'organization-team-invitation',

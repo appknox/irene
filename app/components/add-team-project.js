@@ -1,5 +1,5 @@
 import PaginateMixin from 'irene/mixins/paginate';
-import { translationMacro as t } from 'ember-i18n';
+import { translationMacro as t } from 'ember-intl';
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 import Component from '@ember/component';
@@ -9,7 +9,7 @@ import { observer } from '@ember/object';
 import { debounce } from '@ember/runloop';
 
 export default Component.extend(PaginateMixin, {
-  i18n: service(),
+  intl: service(),
   realtime: service(),
   notify: service(),
 

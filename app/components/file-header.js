@@ -6,7 +6,7 @@ import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
-import { translationMacro as t } from 'ember-i18n';
+import { translationMacro as t } from 'ember-intl';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 const FileHeaderComponent = Component.extend({
@@ -29,7 +29,7 @@ const FileHeaderComponent = Component.extend({
   showAddTagBtn: true,
   showAddTagForm: false,
 
-  i18n: service(),
+  intl: service(),
   trial: service(),
   ajax: service(),
   organization: service(),

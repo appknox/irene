@@ -6,7 +6,7 @@ import Component from '@ember/component';
 
 export default Component.extend(PaginateMixin, {
   me: service(),
-  i18n: service(),
+  intl: service(),
   org: service('organization'),
 
   targetObject: 'organization-team',

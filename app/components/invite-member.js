@@ -2,14 +2,14 @@ import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import PaginateMixin from 'irene/mixins/paginate';
-import { translationMacro as t } from 'ember-i18n';
+import { translationMacro as t } from 'ember-intl';
 import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import { on } from '@ember/object/evented';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 export default Component.extend(PaginateMixin, {
-  i18n: service(),
+  intl: service(),
   realtime: service(),
 
   email: '',

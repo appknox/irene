@@ -18,7 +18,7 @@ import Route from '@ember/routing/route';
 const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
 
   lastTransition: null,
-  i18n: service(),
+  intl: service(),
   moment: service(),
   session: service(),
   realtime: service(),
@@ -98,7 +98,7 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
     if (isEmpty(socketId)) {
       return;
     }
-    this.set('i18n.locale', user.get("lang"));
+    this.set('intl.locale', user.get("lang"));
     this.get('moment').changeLocale(user.get("lang"));
 
     const that = this;

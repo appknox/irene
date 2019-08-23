@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
-import { translationMacro as t } from 'ember-i18n';
+import { translationMacro as t } from 'ember-intl';
 import { getOwner } from '@ember/application';
 
 const CompareFilesComponent = Component.extend({
@@ -11,7 +11,7 @@ const CompareFilesComponent = Component.extend({
   isSummary: true,
   isReverse: false,
 
-  i18n: service(),
+  intl: service(),
   tCompareWarningOldFile: t("compareWarningOldFile"),
   tCompareWarningSameFiles: t("compareWarningSameFiles"),
 

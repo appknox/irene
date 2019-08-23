@@ -4,11 +4,11 @@ import { computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
-import { translationMacro as t } from 'ember-i18n';
+import { translationMacro as t } from 'ember-intl';
 
 const User = DS.Model.extend({
 
-  i18n: service(),
+  intl: service(),
 
   uuid: DS.attr('string'),
   lang: DS.attr('string'),

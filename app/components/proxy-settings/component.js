@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task, waitForProperty } from 'ember-concurrency';
-import { translationMacro as t } from 'ember-i18n';
+import { translationMacro as t } from 'ember-intl';
 import lookupValidator from 'ember-changeset-validations';
 import Changeset from 'ember-changeset';
 import ENV from 'irene/config/environment';
@@ -10,7 +10,7 @@ import ProxySettingValidation from 'irene/validations/proxy-settings';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 export default Component.extend({
-  i18n: service(),
+  intl: service(),
   notify: service('notification-messages-service'),
 
   tProxySettingsSaved: t('proxySettingsSaved'),

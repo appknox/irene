@@ -14,21 +14,21 @@ const SelectLanguageComponent = Component.extend({
 
   classNames: ["control"],
   isSelectingLanguage: false,
-  i18n: service(),
+  intl: service(),
   ajax: service(),
   moment: service(),
 
-  currentLocale: computed("i18n.locale", function() {
-    const locale = this.get("i18n.locale");
+  currentLocale: computed("intl.locale", function() {
+    const locale = this.get("intl.locale");
     const localeString = getLocaleString(locale);
     return {locale, localeString};
   }),
 
-  otherLocales: computed("i18n.locale", function() {
+  otherLocales: computed("intl.locale", function() {
     const locales = [];
-    let locale = this.get("i18n.locale");
-    const otherLocales = this.get("i18n.locales").slice();
-    otherLocales.removeObject(locale);
+    let locale = this.get("intl.locale");
+    const otherLocales = this.get("intl.locales").slice();
+    otherLocales.removeObjects(locale);
     for (locale of otherLocales) {
       const localeString = getLocaleString(locale);
       locales.push({locale, localeString});
@@ -39,7 +39,7 @@ const SelectLanguageComponent = Component.extend({
   actions: {
     setLocale() {
       const lang = this.$('select').val();
-      this.set('i18n.locale', lang);
+      this.set('intl.locale', lang);
       this.get('moment').changeLocale(lang);
       const data =
         {lang};

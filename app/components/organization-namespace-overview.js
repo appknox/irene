@@ -4,10 +4,10 @@ import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
-import { translationMacro as t } from 'ember-i18n';
+import { translationMacro as t } from 'ember-intl';
 
 export default Component.extend({
-  i18n: service(),
+  intl: service(),
   me: service(),
   notify: service('notification-messages-service'),
 
