@@ -16,7 +16,7 @@ Router.map(function() {
   this.route('saml2', {path: '/saml2'}, function() {
     this.route('redirect', {path: '/redirect'});
   });
-  if(ENV.isRegistrationEnabled) {
+  if(ENV.isRegistrationEnabled || ENV.registrationLink) {
     this.route('register');
   }
   this.route('register-via-invite', {path: 'register-via-invite/:token'});
