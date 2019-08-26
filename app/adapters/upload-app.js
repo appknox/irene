@@ -1,14 +1,13 @@
 import DRFAdapter from './drf';
 import ENV from 'irene/config/environment';
-import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
+import IreneAdapterMixin from 'irene/mixins/data-adapter-mixin';
 import { underscore } from '@ember/string';
 import { inject as service } from '@ember/service';
 
-export default DRFAdapter.extend(DataAdapterMixin, {
+export default DRFAdapter.extend(IreneAdapterMixin, {
   host: ENV.host,
   namespace: ENV.namespace,
   addTrailingSlashes: false,
-  authorizer: 'authorizer:irene',
   organization: service('organization'),
   pathForType: function(type) {
     return underscore(type);

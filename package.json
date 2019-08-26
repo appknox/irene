@@ -82,7 +82,7 @@
     "ember-power-select": "^2.0.4",
     "ember-resolver": "^4.1.0",
     "ember-rollbar-client": "^0.9.0",
-    "ember-simple-auth": "1.2.2",
+    "ember-simple-auth": "^1.9.2",
     "ember-template-lint": "^1.1.0",
     "ember-uploader": "1.2.3",
     "ember-websockets": "7.2.0",
