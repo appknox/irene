@@ -287,7 +287,7 @@ module.exports = function(environment) {
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
     ENV.isRegistrationEnabled = true;
-    ENV.rollbar = {
+    ENV.emberRollbarClient = {
       enabled: false
     };
   }
@@ -304,14 +304,14 @@ module.exports = function(environment) {
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
     ENV.isRegistrationEnabled = true;
-    ENV.rollbar = {
+    ENV.emberRollbarClient = {
       enabled: false
     };
     ENV.gReCaptcha['siteKey'] = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
   }
 
   if (environment === 'production') {
-    ENV.rollbar = {
+    ENV.emberRollbarClient = {
       accessToken: '4381303f93734918966ff4e1b028cee5'
     };
     ENV['ember-cli-mirage'] = {
@@ -327,7 +327,7 @@ module.exports = function(environment) {
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
-    ENV.rollbar = {
+    ENV.emberRollbarClient = {
       enabled: false
     };
   }
@@ -350,7 +350,7 @@ module.exports = function(environment) {
     ENV.enablePendo = true;  //TODO: fix this.
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
-    ENV.rollbar = {
+    ENV.emberRollbarClient = {
       enabled: false
     };
     ENV.isEnterprise = isTrue(process.env.ENTERPRISE);

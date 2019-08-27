@@ -27,6 +27,7 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
   org: service('organization'),
   analytics: service('analytics'),
   socketIOService: service('socket-io'),
+  rollbar: service('rollbar'),
 
   beforeModel(transition){
     this.set("lastTransition", transition);
@@ -63,7 +64,7 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
     } catch (e) {error = e;}
     try {
       // eslint-disable-next-line no-undef
-      Rollbar.configure({
+      this.get('rollbar.notifier').configure({
         payload: {
           person: {
             id: user.get("id"),
