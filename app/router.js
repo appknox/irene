@@ -11,7 +11,6 @@ const Router = EmberRouter.extend({
 $('body').addClass('theme-' + ENV.whitelabel.theme);
 
 Router.map(function() {
-  this.route('freestyle');
   this.route('login');
   this.route('saml2', {path: '/saml2'}, function() {
     this.route('redirect', {path: '/redirect'});
