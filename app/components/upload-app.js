@@ -4,12 +4,13 @@ import Uploader from 'irene/utils/uploader';
 import EmberUploader from 'ember-uploader';
 import { translationMacro as t } from 'ember-i18n';
 import $ from 'jquery';
-import rollbar from 'rollbar';
 
 const UploadAppComponent = EmberUploader.FileField.extend({
   store: service('store'),
   delegate: null,
   i18n: service("i18n"),
+  rollbar: service('rollbar'),
+
 
   tErrorWhileFetching: t("errorWhileFetching"),
   tErrorWhileUploading: t("errorWhileUploading"),
@@ -35,7 +36,7 @@ const UploadAppComponent = EmberUploader.FileField.extend({
       // eslint-disable-next-line no-console
       const err = this.get('tErrorWhileUploading');
       this.get("notify").error(err);
-      rollbar.critical(err, e);
+      this.get('rollbar').critical(err, e);
     }
     $('input[type=file]').val('');
     delegate.set("isUploading", false);
