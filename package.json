@@ -72,7 +72,7 @@
     "ember-export-application-global": "^2.0.0",
     "ember-file-upload": "^2.5.0",
     "ember-font-awesome": "4.0.0-rc.4",
-    "ember-g-recaptcha": "0.7.0",
+    "ember-g-recaptcha": "^1.0.0",
     "ember-i18n": "^5.0.1",
     "ember-load-initializers": "^1.0.0",
     "ember-moment": "^7.7.0",
