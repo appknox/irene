@@ -22,7 +22,8 @@ const TeamMemberComponent = Component.extend({
     const tEnterRightUserName = this.get("tEnterRightUserName");
     const teamMember = this.get("member");
     if (promptedItem !== teamMember) {
-      return this.get("notify").error(tEnterRightUserName);
+      this.get("notify").error(tEnterRightUserName);
+      return;
     }
     const teamId = this.get("organizationTeam.id");
     const orgId = this.get("organizationTeam.organization.id");
