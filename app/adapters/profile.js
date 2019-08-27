@@ -1,12 +1,11 @@
 import DRFAdapter from './drf';
 import ENV from 'irene/config/environment';
-import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
+import IreneAdapterMixin from 'irene/mixins/data-adapter-mixin';
 
-export default DRFAdapter.extend(DataAdapterMixin, {
+export default DRFAdapter.extend(IreneAdapterMixin, {
   host: ENV.host,
   namespace: ENV.namespace,
   addTrailingSlashes: false,
-  authorizer: 'authorizer:irene',
   async saveReportPreference(modelInstance, data) {
     const modelId = modelInstance.get('id');
     const url = this.buildURL('profile', modelId) + '/report_preference';
