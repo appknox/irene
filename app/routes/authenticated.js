@@ -22,7 +22,6 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
   moment: service(),
   session: service(),
   realtime: service(),
-  mixpanel: service(),
   trial: service(),
   org: service('organization'),
   analytics: service('analytics'),
@@ -54,14 +53,7 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
         this.get("org.selected.data.name") ||
         user.get("email").replace(/.*@/, "").split('.')[0];
     chat.setUserCompany(company);
-    try {
-      const mixpanel = this.get("mixpanel");
-      mixpanel.identify(user.get("id"));
-      mixpanel.peopleSet({
-        "$name": user.get("username"),
-        "$email": user.get("email")
-      });
-    } catch (e) {error = e;}
+
     try {
       // eslint-disable-next-line no-undef
       this.get('rollbar.notifier').configure({
