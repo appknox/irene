@@ -46,11 +46,6 @@ module.exports = function(environment) {
     'ember-websockets': {
       socketIO: true
     },
-    mixpanel: {
-      enabled: false,
-      LOG_EVENT_TRACKING: false,
-      token: 'baf97efda8bb7c89401cf455d33bcd29'
-    },
     pace: {
       // addon-specific options to configure theme
       theme: 'minimal',
@@ -81,7 +76,7 @@ module.exports = function(environment) {
       ajax: {
         trackMethods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
         trackWebSockets: false,
-        ignoreURLs: ['api.mixpanel.com', 'socket.appknox.com', 'appknox-production.s3.amazonaws.com']
+        ignoreURLs: ['socket.appknox.com', 'appknox-production.s3.amazonaws.com']
       }
     },
     rootURL: '/',
@@ -317,7 +312,6 @@ module.exports = function(environment) {
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
-    ENV.mixpanel.enabled = true;
   }
 
   if (environment === 'staging') {
