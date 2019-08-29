@@ -54,7 +54,7 @@
     "ember-cli-htmlbars": "^2.0.1",
     "ember-cli-htmlbars-inline-precompile": "^1.0.0",
     "ember-cli-inject-live-reload": "^1.4.0",
-    "ember-cli-intl-tel-input": "^1.0.14",
+    "@appknox/ember-cli-intl-tel-input": "^1.0.14",
     "ember-cli-mirage": "0.2.4",
     "ember-cli-moment-shim": "^3.7.1",
     "ember-cli-notifications": "4.3.3",
@@ -99,7 +99,7 @@
     "billboard.js": "^1.9.5",
     "clipboard": "^1.7.1",
     "ember-cli-document-title": "^0.4.0",
-    "intl-tel-input": "^12.1.15",
-    "jquery": "^3.4.0"
+    "intl-tel-input": "^14.0.2",
+    "jquery": "^3.4.1"
   }
 }
