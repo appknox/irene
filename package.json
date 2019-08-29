@@ -23,6 +23,7 @@
     "deploy:gbm": "ember deploy gbm --verbose=true --activate=true --show-progress=true"
   },
   "devDependencies": {
+    "@appknox/ember-cli-intl-tel-input": "^1.0.14",
     "bower": "^1.8.8",
     "broccoli-asset-rev": "^3.0.0",
     "cross-env": "^5.2.0",
@@ -55,9 +56,9 @@
     "ember-cli-htmlbars": "^2.0.1",
     "ember-cli-htmlbars-inline-precompile": "^1.0.0",
     "ember-cli-inject-live-reload": "^1.4.0",
-    "@appknox/ember-cli-intl-tel-input": "^1.0.14",
     "ember-cli-mirage": "0.2.4",
     "ember-cli-moment-shim": "^3.7.1",
+    "ember-cli-netlify": "^0.3.1",
     "ember-cli-notifications": "4.3.3",
     "ember-cli-pace": "0.1.0",
     "ember-cli-qunit": "^4.1.1",
@@ -76,7 +77,6 @@
     "ember-i18n": "^5.0.1",
     "ember-load-initializers": "^1.0.0",
     "ember-moment": "^7.7.0",
-    "ember-netlify": "0.0.1",
     "ember-power-calendar-moment": "^0.1.4",
     "ember-power-datepicker": "^0.5.2",
     "ember-power-select": "^2.0.4",
