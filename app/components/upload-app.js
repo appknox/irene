@@ -1,11 +1,11 @@
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
-import Uploader from 'irene/utils/uploader';
-import EmberUploader from 'ember-uploader';
+import FileUploader from 'irene/utils/uploader';
+import FileField from 'ember-uploader/components/file-field';
 import { translationMacro as t } from 'ember-i18n';
 import $ from 'jquery';
 
-const UploadAppComponent = EmberUploader.FileField.extend({
+const UploadAppComponent = FileField.extend({
   store: service('store'),
   delegate: null,
   i18n: service("i18n"),
@@ -25,7 +25,7 @@ const UploadAppComponent = EmberUploader.FileField.extend({
     }
     delegate.set("isUploading", true);
     delegate.set("progress", 0);
-    const uploader = Uploader.create({container: this.container});
+    const uploader = FileUploader.create({container: this.container});
     uploader.on('progress', e => delegate.set("progress", parseInt(e.percent)));
     try {
       const uploadItem = await this.get("store").queryRecord('uploadApp', {});
