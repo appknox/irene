@@ -16,7 +16,7 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
 
   classNames: ["columns"],
   projects: null,
-  hasProjects: computed.gt('projects.meta.count', 0),
+  hasProjects: computed.gt('projects.length', 0),
   query: "",
   targetObject: "Project",
 
