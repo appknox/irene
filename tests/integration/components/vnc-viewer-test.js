@@ -20,7 +20,11 @@ moduleForComponent('vnc-viewer', 'Integration | Component | vnc viewer', {
     'locale:en/config',
     'util:i18n/missing-message',
     'util:i18n/compile-template',
-    'config:environment'
+    'config:environment',
+    'service:trial',
+    'service:ajax',
+    'service:notification-messages-service',
+    'service:me',
   ],
   beforeEach() {
     // set the locale and the config
@@ -35,7 +39,7 @@ moduleForComponent('vnc-viewer', 'Integration | Component | vnc viewer', {
   }
 });
 
-test('it renders', function(assert) {
+test('it renders', function (assert) {
   assert.expect(1);
 
   this.render(hbs("{{vnc-viewer}}"));
@@ -43,25 +47,25 @@ test('it renders', function(assert) {
   assert.equal(this.$().text().trim(), '');
 });
 
-test('tapping button fires an external action', function(assert) {
+test('tapping button fires an external action', function (assert) {
   var component = this.subject();
 
-  run(function() {
-    component.set('file', {isReady: false});
-    component.set('file.project', {platform: ENUMS.PLATFORM.ANDROID});
+  run(function () {
+    component.set('file', { isReady: false });
+    component.set('file.project', { platform: ENUMS.PLATFORM.ANDROID });
     assert.equal(component.get('deviceType'), "nexus5", "Nexus 5");
-    component.set('file.project', {platform: ENUMS.PLATFORM.IOS});
+    component.set('file.project', { platform: ENUMS.PLATFORM.IOS });
     assert.equal(component.get('deviceType'), "iphone5s black", "iPhone");
     assert.equal(component.get('isIOSDevice'), true, "IOS");
-    component.set('file.project', {deviceType: ENUMS.DEVICE_TYPE.TABLET_REQUIRED, platform: ENUMS.PLATFORM.IOS});
+    component.set('file.project', { deviceType: ENUMS.DEVICE_TYPE.TABLET_REQUIRED, platform: ENUMS.PLATFORM.IOS });
     assert.equal(component.get("deviceType"), "iphone5s black", "iPad");
     component.send("togglePop");
   });
 });
-test('novnc renders andriod', function(assert){
+test('novnc renders andriod', function (assert) {
   var component = this.subject()
-  run(function() {
-    component.set('file', {isReady: true});
+  run(function () {
+    component.set('file', { isReady: true });
     component.set('deviceType', 'nexus5');
   });
   this.render();
@@ -69,20 +73,20 @@ test('novnc renders andriod', function(assert){
   assert.equal(component.$('.canvas-container').length, 1);
 });
 
-test('novnc renders iphone5s black', function(assert){
+test('novnc renders iphone5s black', function (assert) {
   var component = this.subject()
-  run(function() {
-    component.set('file', {isReady: true});
+  run(function () {
+    component.set('file', { isReady: true });
     component.set('deviceType', 'iphone5s black');
   });
   this.render();
   assert.equal(component.$('.marvel-device.iphone5s.black').length, 1);
   assert.equal(component.$('.canvas-container').length, 1);
 });
-test('novnc-rfb component rendering', function(assert){
+test('novnc-rfb component rendering', function (assert) {
   var component = this.subject();
-  run(function() {
-    component.set('file', {isReady: true, deviceToken: "testToken"});
+  run(function () {
+    component.set('file', { isReady: true, deviceToken: "testToken" });
     component.set('deviceType', 'nexus5');
   });
 
@@ -92,8 +96,8 @@ test('novnc-rfb component rendering', function(assert){
   assert.equal(rfb._url, `${ENV.deviceFarmURL}?token=testToken`);
   assert.equal(rfb._rfb_credentials.password, "1234");
   //
-  run(function() {
-    component.set('file', {isReady: false});
+  run(function () {
+    component.set('file', { isReady: false });
   });
   this.render();
   assert.equal(component.$('.canvas-container').length, 0);

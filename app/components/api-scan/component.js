@@ -11,7 +11,7 @@ export default Component.extend({
   i18n: service(),
   trial: service(),
   ajax: service(),
-  notify: service(),
+  notify: service('notification-messages-service'),
   realtime: service(),
 
   capturedApisCount: 0,
@@ -24,50 +24,50 @@ export default Component.extend({
   }),
 
   /* fetch captured apis count */
-  setCapturedApisCount: task(function * (){
+  setCapturedApisCount: task(function* () {
     const url = [ENV.endpoints.files, this.get('file.id'), "capturedapis"].join('/');
-    let data = {fileId: this.get('file.id')};
-    let apis = yield this.get("ajax").request(url, {namespace: ENV.namespace_v2, data});
+    let data = { fileId: this.get('file.id') };
+    let apis = yield this.get("ajax").request(url, { namespace: ENV.namespace_v2, data });
     this.get('realtime').incrementProperty('CapturedApiCounter');
     try {
       this.set('capturedApisCount', apis.count);
-    } catch(error){
+    } catch (error) {
       this.get("notify").error(error.toString());
     }
   }),
 
 
   /* API scan modal actions */
-  openApiScanModal: task(function * () {
+  openApiScanModal: task(function* () {
     if (this.get('hasDynamicScanDone')) {
       yield this.get('setCapturedApisCount').perform();
     }
     yield this.set('showApiScanModal', true);
   }),
 
-  closeApiScanModal: task(function * (){
+  closeApiScanModal: task(function* () {
     yield this.set('showApiScanModal', false);
   }),
 
 
   /* init API scan */
-  startApiScan: task(function *() {
+  startApiScan: task(function* () {
     const fileId = this.get('file.id');
     const dynamicUrl = [ENV.endpoints.files, fileId, ENV.endpoints.capturedApiScanStart].join('/');
-    return yield this.get("ajax").post(dynamicUrl, {namespace: ENV.namespace_v2});
+    return yield this.get("ajax").post(dynamicUrl, { namespace: ENV.namespace_v2 });
   }),
 
-  runApiScan: task(function * (){
+  runApiScan: task(function* () {
     yield this.set('showApiScanModal', false);
     yield this.get('startApiScan').perform();
   }).evented(),
 
-  runApiScanSucceeded: on('runApiScan:succeeded', function() {
+  runApiScanSucceeded: on('runApiScan:succeeded', function () {
     triggerAnalytics('feature', ENV.csb.runAPIScan);
     this.get('notify').success(this.get('tStartingApiScan'));
   }),
 
-  runApiScanErrored: on('runApiScan:errored', function(_, err) {
+  runApiScanErrored: on('runApiScan:errored', function (_, err) {
     let errMsg = this.get('tPleaseTryAgain');
     if (err.errors && err.errors.length) {
       errMsg = err.errors[0].detail || errMsg;

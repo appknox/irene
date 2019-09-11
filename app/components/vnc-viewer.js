@@ -11,13 +11,12 @@ const VncViewerComponent = Component.extend({
   file: null,
   deviceFarmPassword: ENV.deviceFarmPassword,
   i18n: service(),
-  onboard: service(),
   deviceFarmURL: ENV.deviceFarmURL,
   tCloseModal: t("closeModal"),
   tPopOutModal: t("popOutModal"),
 
   classNameBindings: ["isPoppedOut:modal", "isPoppedOut:is-active"],
-  vncPopText: computed('isPoppedOut', function() {
+  vncPopText: computed('isPoppedOut', function () {
     const tCloseModal = this.get("tCloseModal");
     const tPopOutModal = this.get("tPopOutModal");
     if (this.get("isPoppedOut")) {
@@ -27,34 +26,34 @@ const VncViewerComponent = Component.extend({
     }
   }),
 
-  showVNCControls: computed("file.isReady", "isPoppedOut", function() {
+  showVNCControls: computed("file.isReady", "isPoppedOut", function () {
     const isPoppedOut = this.get("isPoppedOut");
     const isReady = this.get("file.isReady");
-    if(isPoppedOut || isReady) {
+    if (isPoppedOut || isReady) {
       return true;
     }
   }),
 
 
-  devicePreference: computed('profileId', function() {
+  devicePreference: computed('profileId', function () {
     const profileId = this.get("profileId");
-    if(profileId) {
-      return this.get("store").queryRecord("device-preference", {id: profileId});
+    if (profileId) {
+      return this.get("store").queryRecord("device-preference", { id: profileId });
     }
   }),
 
-  screenRequired: computed("file.project.platform", "devicePreference.deviceType", function() {
-     const platform = this.get("file.project.platform");
-     const deviceType = this.get("devicePreference.deviceType");
-     return (platform === ENUMS.PLATFORM.ANDROID) && (deviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED);
-   }),
+  screenRequired: computed("file.project.platform", "devicePreference.deviceType", function () {
+    const platform = this.get("file.project.platform");
+    const deviceType = this.get("devicePreference.deviceType");
+    return (platform === ENUMS.PLATFORM.ANDROID) && (deviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED);
+  }),
 
-  deviceType: computed("file.project.platform", "devicePreference.deviceType", function() {
+  deviceType: computed("file.project.platform", "devicePreference.deviceType", function () {
     const platform = this.get("file.project.platform");
     const deviceType = this.get("devicePreference.deviceType");
     if (platform === ENUMS.PLATFORM.ANDROID) {
       if (deviceType === ENUMS.DEVICE_TYPE.TABLET_REQUIRED) {
-          return "tablet";
+        return "tablet";
       }
       else {
         return "nexus5";
@@ -69,14 +68,14 @@ const VncViewerComponent = Component.extend({
     }
   }),
 
-  isNotTablet: computed("devicePreference.deviceType", function() {
+  isNotTablet: computed("devicePreference.deviceType", function () {
     const deviceType = this.get("devicePreference.deviceType");
     if (![ENUMS.DEVICE_TYPE.NO_PREFERENCE, ENUMS.DEVICE_TYPE.PHONE_REQUIRED].includes(deviceType)) {
       return true;
     }
   }),
 
-  isIOSDevice: computed("file.project.platform", function() {
+  isIOSDevice: computed("file.project.platform", function () {
     const platform = this.get("file.project.platform");
     if (platform === ENUMS.PLATFORM.IOS) {
       return true;

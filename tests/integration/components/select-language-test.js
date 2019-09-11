@@ -4,10 +4,11 @@ import { run } from '@ember/runloop';
 
 moduleForComponent('select-language', 'Integration | Component | select language', {
   unit: true,
-  needs:[
+  needs: [
     'service:ajax',
     'service:session',
-    'service:moment'
+    'service:moment',
+    'service:i18n'
   ],
   beforeEach() {
     // start Mirage
@@ -19,7 +20,7 @@ moduleForComponent('select-language', 'Integration | Component | select language
   }
 });
 
-test('it renders', function(assert) {
+test('it renders', function (assert) {
   var component = this.subject();
   component.set("i18n", {
     locale: "en",
@@ -29,10 +30,10 @@ test('it renders', function(assert) {
   });
   this.render();
 
-  run(function() {
+  run(function () {
 
-    assert.deepEqual(component.get("currentLocale"), {"locale": "en","localeString": "English"}, 'message');
-    assert.deepEqual(component.get("otherLocales"), [{"locale": "ja","localeString": "日本語"}], 'message');
+    assert.deepEqual(component.get("currentLocale"), { "locale": "en", "localeString": "English" }, 'message');
+    assert.deepEqual(component.get("otherLocales"), [{ "locale": "ja", "localeString": "日本語" }], 'message');
 
     component.send("setLocale");
 

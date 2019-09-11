@@ -13,6 +13,7 @@ moduleForComponent('dynamic-scan', 'Integration | Component | dynamic scan', {
   needs: [
     'service:i18n',
     'service:ajax',
+    'service:trial',
     'component:modal-card',
     'component:api-filter',
     'component:project-preferences',
@@ -43,11 +44,11 @@ moduleForComponent('dynamic-scan', 'Integration | Component | dynamic scan', {
   }
 });
 
-test('it exists', function(assert) {
+test('it exists', function (assert) {
   const component = this.subject();
 
   this.render();
-  run(function() {
+  run(function () {
     // component.set("apiScanModal", true);
     // component.send('goBack');
     // component.set("dynamicScanModal", true);
@@ -65,7 +66,7 @@ test('it exists', function(assert) {
     // assert.equal(component.get("showRunDynamicScanModal"), false, "Open Dynamic Scan Modal");
 
     component.set("file", {
-      id:1,
+      id: 1,
       setBootingStatus() {
         return true;
       },
@@ -81,12 +82,12 @@ test('it exists', function(assert) {
     });
 
     component.set("store", {
-      find: function() {
+      find: function () {
         return Promise.resolve();
       },
-      findRecord: function() {
+      findRecord: function () {
         return Promise.resolve({
-          get: function() {}
+          get: function () { }
         });
       }
     });
