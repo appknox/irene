@@ -13,7 +13,7 @@ import { debounce } from '@ember/runloop';
 export default Component.extend(PaginateMixin, {
   i18n: service(),
   realtime: service(),
-  notify: service(),
+  notify: service('notification-messages-service'),
 
   query: '',
   searchQuery: '',
@@ -25,7 +25,7 @@ export default Component.extend(PaginateMixin, {
 
   targetObject: 'organization-user',
   sortProperties: ['created:desc'],
-  extraQueryStrings: computed('team.id', 'searchQuery', function() {
+  extraQueryStrings: computed('team.id', 'searchQuery', function () {
     const query = {
       q: this.get('searchQuery'),
       exclude_team: this.get('team.id')
@@ -33,19 +33,19 @@ export default Component.extend(PaginateMixin, {
     return JSON.stringify(query, Object.keys(query).sort());
   }),
 
-  newOrganizationNonTeamMembersObserver: observer('realtime.OrganizationNonTeamMemberCounter', function() {
+  newOrganizationNonTeamMembersObserver: observer('realtime.OrganizationNonTeamMemberCounter', function () {
     return this.incrementProperty('version');
   }),
 
 
   /* Open add-team-member modal */
-  openAddMemberModal: task(function * () {
+  openAddMemberModal: task(function* () {
     yield this.set('showAddTeamMemberModal', true);
   }),
 
 
   /* Add member to team */
-  addTeamMember: task(function * (member) {
+  addTeamMember: task(function* (member) {
     this.set('isAddingMember', true);
     const data = {
       write: false
@@ -57,18 +57,18 @@ export default Component.extend(PaginateMixin, {
     this.get('sortedObjects').removeObject(member);
   }).evented(),
 
-  addTeamMemberSucceeded: on('addTeamMember:succeeded', function() {
+  addTeamMemberSucceeded: on('addTeamMember:succeeded', function () {
     this.get('notify').success(this.get('tTeamMemberAdded'));
     this.set('isAddingMember', false);
     this.set('query', '');
     triggerAnalytics('feature', ENV.csb.addTeamMember);
   }),
 
-  addTeamMemberErrored: on('addTeamMember:errored', function(_, err) {
+  addTeamMemberErrored: on('addTeamMember:errored', function (_, err) {
     let errMsg = this.get('tPleaseTryAgain');
     if (err.errors && err.errors.length) {
       errMsg = err.errors[0].detail || errMsg;
-    } else if(err.message) {
+    } else if (err.message) {
       errMsg = err.message;
     }
 

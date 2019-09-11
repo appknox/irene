@@ -11,7 +11,7 @@ import { debounce } from '@ember/runloop';
 export default Component.extend(PaginateMixin, {
   i18n: service(),
   realtime: service(),
-  notify: service(),
+  notify: service('notification-messages-service'),
 
   query: '',
   searchQuery: '',
@@ -23,7 +23,7 @@ export default Component.extend(PaginateMixin, {
 
   targetObject: 'organization-member',
   sortProperties: ['created:desc'],
-  extraQueryStrings: computed('collaborator.id', 'searchQuery', function() {
+  extraQueryStrings: computed('collaborator.id', 'searchQuery', function () {
     const query = {
       q: this.get('searchQuery'),
       exclude_project: this.get('project.id')
@@ -31,19 +31,19 @@ export default Component.extend(PaginateMixin, {
     return JSON.stringify(query, Object.keys(query).sort());
   }),
 
-  newProjectNonCollaboratorCountersObserver: observer('realtime.ProjectNonCollaboratorCounter', function() {
+  newProjectNonCollaboratorCountersObserver: observer('realtime.ProjectNonCollaboratorCounter', function () {
     return this.incrementProperty('version');
   }),
 
 
   /* Open add-project-collaborator modal */
-  openAddCollaboratorModal: task(function * () {
+  openAddCollaboratorModal: task(function* () {
     yield this.set('showAddProjectCollaboratorModal', true);
   }),
 
 
   /* Add collaborator to project */
-  addProjectCollaborator: task(function * (member) {
+  addProjectCollaborator: task(function* (member) {
     this.set('isAddingCollaborator', true);
     const prj = yield this.get('store').findRecord('organization-project', this.get('project.id'));
     const data = {
@@ -55,18 +55,18 @@ export default Component.extend(PaginateMixin, {
     this.get('sortedObjects').removeObject(member);
   }).evented(),
 
-  addProjectCollaboratorSucceeded: on('addProjectCollaborator:succeeded', function() {
+  addProjectCollaboratorSucceeded: on('addProjectCollaborator:succeeded', function () {
     this.get('notify').success(this.get('tProjectCollaboratorAdded'));
 
     this.set('isAddingCollaborator', false);
     this.set('query', '');
   }),
 
-  addProjectCollaboratorErrored: on('addProjectCollaborator:errored', function(_, err) {
+  addProjectCollaboratorErrored: on('addProjectCollaborator:errored', function (_, err) {
     let errMsg = this.get('tPleaseTryAgain');
     if (err.errors && err.errors.length) {
       errMsg = err.errors[0].detail || errMsg;
-    } else if(err.message) {
+    } else if (err.message) {
       errMsg = err.message;
     }
 

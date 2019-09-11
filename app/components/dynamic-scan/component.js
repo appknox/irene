@@ -14,7 +14,6 @@ export default Component.extend({
   trial: service(),
   ajax: service(),
   notify: service('notification-messages-service'),
-  poll: service(),
 
   tagName: '',
   showDynamicScanModal: false,
@@ -26,17 +25,17 @@ export default Component.extend({
     this.send('pollDynamicStatus');
   },
 
-  watchStatusChange: observer('file.dynamicStatus', function() {
+  watchStatusChange: observer('file.dynamicStatus', function () {
     if (this.get('file.isDynamicStatusNoneOrReady')) {
       this.set('startingDynamicScan', false);
     }
   }),
 
-  openDynamicScanModal: task(function * () {
+  openDynamicScanModal: task(function* () {
     yield this.set('showDynamicScanModal', true);
   }),
 
-  enableApiScan: task(function * (checked) {
+  enableApiScan: task(function* (checked) {
     if (checked === true) {
       yield this.set('showApiScanSettings', true);
     } else {
@@ -45,29 +44,29 @@ export default Component.extend({
     this.set('isApiScanEnabled', !!checked);
   }),
 
-  startDynamicScan: task(function * () {
+  startDynamicScan: task(function* () {
     const data = {
       isApiScanEnabled: this.get('isApiScanEnabled') === true
     };
     const file = this.get('file');
     const fileId = file.id;
     const dynamicUrl = [ENV.endpoints.dynamic, fileId].join('/');
-    yield this.get('ajax').put(dynamicUrl, {data});
+    yield this.get('ajax').put(dynamicUrl, { data });
     file.setBootingStatus();
     this.send('pollDynamicStatus');
   }).evented(),
 
-  startDynamicScanSucceeded: on('startDynamicScan:succeeded', function() {
+  startDynamicScanSucceeded: on('startDynamicScan:succeeded', function () {
     const tStartingScan = this.get('tStartingScan');
     this.get('notify').success(tStartingScan);
     this.set('startingDynamicScan', false);
   }),
 
-  startDynamicScanErrored: on('startDynamicScan:errored', function(_, err) {
+  startDynamicScanErrored: on('startDynamicScan:errored', function (_, err) {
     let errMsg = this.get('tPleaseTryAgain');
     if (err.errors && err.errors.length) {
       errMsg = err.errors[0].detail || errMsg;
-    } else if(err.message) {
+    } else if (err.message) {
       errMsg = err.message;
     }
     this.get('notify').error(errMsg);
@@ -84,7 +83,7 @@ export default Component.extend({
       if (isDynamicReady) {
         return;
       }
-      if(!fileId) {
+      if (!fileId) {
         return;
       }
       var stopPoll = poll(() => {
@@ -114,16 +113,16 @@ export default Component.extend({
       const fileId = this.get('file.id');
       const dynamicUrl = [ENV.endpoints.dynamic, fileId].join('/');
       this.get('ajax').delete(dynamicUrl)
-      .then(() => {
-        if(!this.isDestroyed) {
-          this.send('pollDynamicStatus');
+        .then(() => {
+          if (!this.isDestroyed) {
+            this.send('pollDynamicStatus');
+            this.set('startingDynamicScan', false);
+          }
+        }, (error) => {
+          file.setNone();
           this.set('startingDynamicScan', false);
-        }
-      },(error) => {
-        file.setNone();
-        this.set('startingDynamicScan', false);
-        this.get('notify').error(error.payload.error);
-      });
+          this.get('notify').error(error.payload.error);
+        });
     },
 
   }

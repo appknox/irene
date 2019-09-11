@@ -11,7 +11,7 @@ import { debounce } from '@ember/runloop';
 export default Component.extend(PaginateMixin, {
   i18n: service(),
   realtime: service(),
-  notify: service(),
+  notify: service('notification-messages-service'),
 
   query: '',
   searchQuery: '',
@@ -23,7 +23,7 @@ export default Component.extend(PaginateMixin, {
 
   targetObject: 'organization-team',
   sortProperties: ['created:desc'],
-  extraQueryStrings: computed('team.id', 'searchQuery', function() {
+  extraQueryStrings: computed('team.id', 'searchQuery', function () {
     const query = {
       q: this.get('searchQuery'),
       exclude_project: this.get('project.id')
@@ -31,19 +31,19 @@ export default Component.extend(PaginateMixin, {
     return JSON.stringify(query, Object.keys(query).sort());
   }),
 
-  newProjectNonTeamCountersObserver: observer('realtime.ProjectNonTeamCounter', function() {
+  newProjectNonTeamCountersObserver: observer('realtime.ProjectNonTeamCounter', function () {
     return this.incrementProperty('version');
   }),
 
 
   /* Open add-project-team modal */
-  openAddTeamModal: task(function * () {
+  openAddTeamModal: task(function* () {
     yield this.set('showAddProjectTeamModal', true);
   }),
 
 
   /* Add team to project */
-  addProjectTeam: task(function * (project, team) {
+  addProjectTeam: task(function* (project, team) {
     this.set('isAddingTeam', true);
     const data = {
       write: false
@@ -54,18 +54,18 @@ export default Component.extend(PaginateMixin, {
     this.get('sortedObjects').removeObject(team);
   }).evented(),
 
-  addProjectTeamSucceeded: on('addProjectTeam:succeeded', function() {
+  addProjectTeamSucceeded: on('addProjectTeam:succeeded', function () {
     this.get('notify').success(this.get('tProjectTeamAdded'));
 
     this.set('isAddingTeam', false);
     this.set('query', '');
   }),
 
-  addProjectTeamErrored: on('addProjectTeam:errored', function(_, err) {
+  addProjectTeamErrored: on('addProjectTeam:errored', function (_, err) {
     let errMsg = this.get('tPleaseTryAgain');
     if (err.errors && err.errors.length) {
       errMsg = err.errors[0].detail || errMsg;
-    } else if(err.message) {
+    } else if (err.message) {
       errMsg = err.message;
     }
 
