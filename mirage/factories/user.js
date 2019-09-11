@@ -1,4 +1,5 @@
-import { Factory, faker } from 'ember-cli-mirage';
+import { Factory } from 'ember-cli-mirage';
+import faker from 'faker';
 import ENUMS from 'irene/enums';
 
 export default Factory.extend({
@@ -6,18 +7,18 @@ export default Factory.extend({
     return i+1;
   },
 
-  username: faker.name.firstName,
-  email: faker.internet.email,
-  firstName: faker.name.firstName,
-  lastName: faker.name.lastName,
-  expiryDate: faker.date.future,
+  username: faker.name.firstName(),
+  email: faker.internet.email(),
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+  expiryDate: faker.date.future(),
 
-  hasGithubToken: faker.random.boolean,
-  hasJiraToken: faker.random.boolean,
+  hasGithubToken: faker.random.boolean(),
+  hasJiraToken: faker.random.boolean(),
   limitedScans: false,
-  scansLeft: faker.random.number,
-  uuid: faker.random.number,
-  socketId: faker.random.number,
+  scansLeft: faker.random.number(),
+  uuid: faker.random.number(),
+  socketId: faker.random.number(),
   mfaMethod(){
     return faker.random.arrayElement(ENUMS.MFA_METHOD.VALUES);
   },

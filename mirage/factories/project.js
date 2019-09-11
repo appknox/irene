@@ -1,21 +1,21 @@
-import { faker } from 'ember-cli-mirage';
+import faker from 'faker';
 import Base from './base';
 import ENUMS from 'irene/enums';
 
 export default Base.extend({
 
-  name: faker.company.companyName,
-  packageName:  faker.internet.domainName,
-  version : faker.random.number,
-  githubRepo: faker.company.companyName,
-  jiraProject: faker.company.companyName,
-  testUser: faker.random.firstName,
-  testPassword: faker.internet.password,
-  url: faker.internet.domainName,
-  platformVersion: faker.random.number,
+  name: faker.company.companyName(),
+  packageName:  faker.internet.domainName(),
+  version : faker.random.number(),
+  githubRepo: faker.company.companyName(),
+  jiraProject: faker.company.companyName(),
+  testUser: faker.name.firstName(),
+  testPassword: faker.internet.password(),
+  url: faker.internet.domainName(),
+  platformVersion: faker.random.number(),
   fileCount: 2,
-  showUnknownAnalysis: faker.random.boolean,
-  showIgnoredAnalysis: faker.random.boolean,
+  showUnknownAnalysis: faker.random.boolean(),
+  showIgnoredAnalysis: faker.random.boolean(),
   activeProfileId: 2,
 
   platform: 1,

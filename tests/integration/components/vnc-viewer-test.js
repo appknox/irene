@@ -64,7 +64,7 @@ test('novnc renders andriod', function(assert){
     component.set('file', {isReady: true});
     component.set('deviceType', 'nexus5');
   });
-  this.append();
+  this.render();
   assert.equal(component.$('.marvel-device.nexus5').length, 1);
   assert.equal(component.$('.canvas-container').length, 1);
 });
@@ -75,7 +75,7 @@ test('novnc renders iphone5s black', function(assert){
     component.set('file', {isReady: true});
     component.set('deviceType', 'iphone5s black');
   });
-  this.append();
+  this.render();
   assert.equal(component.$('.marvel-device.iphone5s.black').length, 1);
   assert.equal(component.$('.canvas-container').length, 1);
 });
@@ -86,7 +86,7 @@ test('novnc-rfb component rendering', function(assert){
     component.set('deviceType', 'nexus5');
   });
 
-  this.append();
+  this.render();
   const rfb = component.childViews[0].get('rfb');
   assert.equal(rfb._target.classList['value'].includes("canvas-container _novnc-rfb"), true);
   assert.equal(rfb._url, `${ENV.deviceFarmURL}?token=testToken`);
@@ -95,6 +95,6 @@ test('novnc-rfb component rendering', function(assert){
   run(function() {
     component.set('file', {isReady: false});
   });
-  this.append();
+  this.render();
   assert.equal(component.$('.canvas-container').length, 0);
 });

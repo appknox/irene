@@ -1,4 +1,4 @@
-import { faker } from 'ember-cli-mirage';
+import faker from 'faker';
 import Base from './base';
 
 export default Base.extend({

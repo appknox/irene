@@ -1,7 +1,9 @@
-import { Factory, faker } from 'ember-cli-mirage';
+import { Factory } from 'ember-cli-mirage';
+
+import faker from 'faker';
 
 export default Factory.extend({
-  uuid: faker.random.uuid,
-  name: faker.system.fileName,
-  downloadUrl: faker.internet.url
+  uuid: faker.random.uuid(),
+  name: faker.system.fileName(),
+  downloadUrl: faker.internet.url()
 });
