@@ -4,13 +4,12 @@ import config from 'irene/config/environment';
 export default function() {
 
   this.passthrough('/write-coverage');
-  this.passthrough('https://api.rollbar.com/api/1/item/');
-  this.passthrough('https://socket.appknox.com/socket.io/');
-  this.passthrough('https://appknox.customersuccessbox.com/api_js/v1_1/page');
-  this.passthrough('https://appknox.customersuccessbox.com/api_js/v1_1/track');
+  this.passthrough('https://api.rollbar.com/**');
+  this.passthrough('https://socket.appknox.com/**');
+  this.passthrough('https://appknox.customersuccessbox.com/**');
 
-  this.namespace = config.host + "/" +  config.namespace;
-
+  this.urlPrefix = config.host;
+  this.namespace = config.namespace;
   this.get('/users/:id', 'user');
   this.get('/users', 'user');
   this.get('/projects/:id', 'project');

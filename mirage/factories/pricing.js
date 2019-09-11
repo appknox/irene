@@ -1,10 +1,10 @@
-import { faker } from 'ember-cli-mirage';
+import faker from 'faker';
 import Base from './base';
 
 export default Base.extend({
-  name: faker.name.firstName,
-  price: faker.commerce.price,
-  projectsLimit: faker.random.number,
+  name: faker.name.firstName(),
+  price: faker.commerce.price(),
+  projectsLimit: faker.random.number(),
 
   description(){
     var desc = [];
