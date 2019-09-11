@@ -5,7 +5,7 @@ import { once } from '@ember/runloop';
 
 export default Component.extend(PaginateMixin, {
   query: "",
-  targetObject: "security/file",
+  targetModel: "security/file",
 
   sortProperties: ["-id"],
 

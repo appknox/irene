@@ -8,7 +8,7 @@ export default Component.extend(PaginateMixin, {
   me: service(),
 
   classNames: [''],
-  targetObject: 'project-collaborator',
+  targetModel: 'project-collaborator',
   sortProperties: ['created:desc'],
   extraQueryStrings: computed('project.id', function() {
     const query = {

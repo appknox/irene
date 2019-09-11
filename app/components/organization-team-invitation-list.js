@@ -9,7 +9,7 @@ export default Component.extend(PaginateMixin, {
   i18n: service(),
   me: service(),
 
-  targetObject: 'organization-team-invitation',
+  targetModel: 'organization-team-invitation',
   sortProperties: ['createdOn:desc'],
 
   extraQueryStrings: computed('team.id', function() {

@@ -6,7 +6,7 @@ const FileListComponent = Component.extend(PaginateMixin, {
 
   project: null,
 
-  targetObject: "file",
+  targetModel: "file",
   sortProperties: ["createdOn:desc"],
 
   classNames: ["columns", "margin-top"],

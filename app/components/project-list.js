@@ -6,7 +6,7 @@ import { underscore } from '@ember/string';
 import { run } from '@ember/runloop';
 import PaginateMixin from 'irene/mixins/paginate';
 import ENUMS from 'irene/enums';
-import {filterPlatformValues} from 'irene/helpers/filter-platform';
+import { filterPlatformValues } from 'irene/helpers/filter-platform';
 import { translationMacro as t } from 'ember-i18n';
 import $ from 'jquery';
 
@@ -18,7 +18,7 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
   projects: null,
   hasProjects: computed.gt('projects.length', 0),
   query: "",
-  targetObject: "Project",
+  targetModel: "Project",
 
   sortingKey: "lastFileCreatedOn",
   sortingReversed: true,
@@ -31,11 +31,11 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
   tMostRecent: t("mostRecent"),
   tLeastRecent: t("leastRecent"),
 
-  newProjectsObserver: observer("realtime.ProjectCounter", "realtime.FileCounter", function() {
+  newProjectsObserver: observer("realtime.ProjectCounter", "realtime.FileCounter", function () {
     return this.incrementProperty("version");
   }),
 
-  sortProperties: computed("sortingKey", "sortingReversed", function() {
+  sortProperties: computed("sortingKey", "sortingReversed", function () {
     let sortingKey = this.get("sortingKey");
     const sortingReversed = this.get("sortingReversed");
     if (sortingReversed) {
@@ -48,7 +48,7 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
     return this.set("offset", 0);
   },
 
-  offsetResetter: observer("query", "sortingKey", "sortingReversed", "platformType", function() {
+  offsetResetter: observer("query", "sortingKey", "sortingReversed", "platformType", function () {
     return (() => {
       const result = [];
       for (let property of ["query", "sortingKey", "sortingReversed", "platformType"]) {
@@ -68,7 +68,7 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
   }),
 
 
-  extraQueryStrings: computed("query", "sortingKey", "sortingReversed", "platformType", function() {
+  extraQueryStrings: computed("query", "sortingKey", "sortingReversed", "platformType", function () {
     const platform = this.get("platformType")
     const reverse = this.get("sortingReversed")
     const sorting = underscore(this.get("sortingKey"))
@@ -77,7 +77,7 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
       q: this.get("query"),
       sorting: sorting
     };
-    if(platform != null && platform != -1) {
+    if (platform != null && platform != -1) {
       query["platform"] = platform;
     }
     if (reverse) {
@@ -86,7 +86,7 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
     return JSON.stringify(query, Object.keys(query).sort());
   }),
 
-  sortingKeyObjects: computed(function() {
+  sortingKeyObjects: computed(function () {
     const tDateUpdated = this.get("tDateUpdated");
     const tDateCreated = this.get("tDateCreated");
     const tPackageName = this.get("tPackageName");

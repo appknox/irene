@@ -8,7 +8,7 @@ export default Component.extend(PaginateMixin, {
   org: service('organization'),
 
   classNames: ['column'],
-  targetObject: 'organization-namespace',
+  targetModel: 'organization-namespace',
   sortProperties: ['created:desc'],
 
   hasNamespace: computed.gt('org.selected.namespacesCount', 0)

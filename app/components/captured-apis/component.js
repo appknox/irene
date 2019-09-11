@@ -7,7 +7,7 @@ import PaginateMixin from 'irene/mixins/paginate';
 export default Component.extend(PaginateMixin, {
   selectedCount: 0,
 
-  targetObject: 'capturedapi',
+  targetModel: 'capturedapi',
   sortProperties: ['id:asc'],
 
   extraQueryStrings: computed('file.id', function() {

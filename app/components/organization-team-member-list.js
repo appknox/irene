@@ -8,7 +8,7 @@ export default Component.extend(PaginateMixin, {
   me: service(),
 
   classNames: [''],
-  targetObject: 'organization-team-member',
+  targetModel: 'organization-team-member',
   sortProperties: ['created:desc'],
   extraQueryStrings: computed('team.id', function() {
     const query = {

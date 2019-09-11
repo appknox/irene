@@ -15,7 +15,7 @@ const PersonaltokenListComponent = Component.extend(PaginateMixin, {
 
   // list tokens
 
-  targetObject: 'personaltoken',
+  targetModel: 'personaltoken',
   sortProperties: ['created:desc'],
 
 

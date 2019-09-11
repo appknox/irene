@@ -19,10 +19,10 @@ const PaginateMixin = Mixin.create({
     this.incrementProperty("version");
   },
 
-  versionTrigger: observer('limit', 'offset', "targetObject", "extraQueryStrings", function() {
+  versionTrigger: observer('limit', 'offset', "targetModel", "extraQueryStrings", function () {
     return (() => {
       const result = [];
-      for (let property of ['limit', 'offset', "targetObject", "extraQueryStrings"]) {
+      for (let property of ['limit', 'offset', "targetModel", "extraQueryStrings"]) {
         const propertyOldName = `_${property}`;
         const propertyNewValue = this.get(property);
         const propertyOldValue = this.get(propertyOldName);
@@ -38,7 +38,7 @@ const PaginateMixin = Mixin.create({
     })();
   }),
 
-  objects: computed('version', function() {
+  objects: computed('version', function () {
     let query;
     window.scrollTo(0, 0);
     if (this.get('isJsonApiPagination')) {
@@ -62,19 +62,19 @@ const PaginateMixin = Mixin.create({
         query[key] = value;
       }
     }
-    const targetObject = this.get("targetObject");
-    if(this.get('isDRFPagination')) {
+    const targetModel = this.get("targetModel");
+    if (this.get('isDRFPagination')) {
       query.offset = query.offset * (this.get("offsetMultiplier") || 1);
     }
-    const objects = this.get('store').query(targetObject, query);
+    const objects = this.get('store').query(targetModel, query);
     objects.then((result) => {
       const { meta } = result;
       if (result.links && result.meta.pagination) {
         meta.total = result.meta.pagination.count;
         this.set('isJsonApiPagination', true); // eslint-disable-line
       }
-      if("count" in result.meta) {
-        meta.total = result.meta.count || 0 ;
+      if ("count" in result.meta) {
+        meta.total = result.meta.count || 0;
         /*
         count is only defined for DRF
         JSONAPI has total
@@ -91,16 +91,16 @@ const PaginateMixin = Mixin.create({
   hasObjects: computed.gt('objectCount', 0),
   hasNoObject: computed.equal('meta.count', 0),
 
-  maxOffset: computed("meta.total", "limit", function() {
+  maxOffset: computed("meta.total", "limit", function () {
     const limit = this.get("limit");
     const total = this.get("meta.total" || 0);
     if (total === 0) {
       return 0;
     }
-    return Math.ceil(total/limit) - 1;
+    return Math.ceil(total / limit) - 1;
   }),  // `-1` because offset starts from 0
 
-  pages: computed("maxOffset", "offset", function() {
+  pages: computed("maxOffset", "offset", function () {
     const offset = this.get("offset");
     const maxOffset = this.get("maxOffset");
     let startPage = 0;
@@ -124,21 +124,21 @@ const PaginateMixin = Mixin.create({
     if (maxOffset >= (ENV.paginate.pagePadding + offset)) {
       stopPage = ENV.paginate.pagePadding + offset;
     } else {
-      offsetDiffStop =  (ENV.paginate.pagePadding + offset) - maxOffset;
+      offsetDiffStop = (ENV.paginate.pagePadding + offset) - maxOffset;
     }
 
     startPage -= offsetDiffStop;
     stopPage += offsetDiffStart;
 
     return __range__(startPage, stopPage, true);
-}),
+  }),
 
-  preDot: computed("offset", function() {
+  preDot: computed("offset", function () {
     const offset = this.get("offset");
     return (offset - ENV.paginate.pagePadding) > 0;
   }),
 
-  postDot: computed("offset", "maxOffset", function() {
+  postDot: computed("offset", "maxOffset", function () {
     const offset = this.get("offset");
     const maxOffset = this.get("maxOffset");
     return (offset + ENV.paginate.pagePadding) < maxOffset;
@@ -146,7 +146,7 @@ const PaginateMixin = Mixin.create({
 
   hasPrevious: computed.gt("offset", 0),
 
-  hasNext: computed('offset', 'maxOffset', function() {
+  hasNext: computed('offset', 'maxOffset', function () {
     const offset = this.get("offset");
     const maxOffset = this.get("maxOffset");
     return offset < maxOffset;

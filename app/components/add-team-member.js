@@ -23,7 +23,7 @@ export default Component.extend(PaginateMixin, {
   tTeamMemberAdded: t('teamMemberAdded'),
   tPleaseTryAgain: t('pleaseTryAgain'),
 
-  targetObject: 'organization-user',
+  targetModel: 'organization-user',
   sortProperties: ['created:desc'],
   extraQueryStrings: computed('team.id', 'searchQuery', function () {
     const query = {

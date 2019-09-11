@@ -10,7 +10,7 @@ export default Component.extend(PaginateMixin, {
   query: '',
   searchQuery: '',
 
-  targetObject: 'organization-member',
+  targetModel: 'organization-member',
   sortProperties: ['createdOn:desc'],
 
   extraQueryStrings: computed('searchQuery', function() {

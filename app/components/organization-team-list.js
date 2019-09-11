@@ -9,7 +9,7 @@ export default Component.extend(PaginateMixin, {
   i18n: service(),
   org: service('organization'),
 
-  targetObject: 'organization-team',
+  targetModel: 'organization-team',
   sortProperties: ['createdOn:desc'],
 
   newInvitationsObserver: observer("realtime.OrganizationTeamCounter", function() {

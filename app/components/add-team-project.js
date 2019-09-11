@@ -21,7 +21,7 @@ export default Component.extend(PaginateMixin, {
   tTeamProjectAdded: t('teamProjectAdded'),
   tPleaseTryAgain: t('pleaseTryAgain'),
 
-  targetObject: 'organization-project',
+  targetModel: 'organization-project',
   sortProperties: ['created:desc'],
   extraQueryStrings: computed('team.id', 'searchQuery', function () {
     const query = {
