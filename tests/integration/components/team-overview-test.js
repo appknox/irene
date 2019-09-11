@@ -2,16 +2,19 @@ import { test, moduleForComponent } from 'ember-qunit';
 import { run } from '@ember/runloop';
 
 moduleForComponent('team-overview', 'Integration | Component | team overview', {
-  unit: true
+  unit: true,
+  needs: [
+    'service:i18n',
+  ]
 });
 
-test('tapping button fires an external action', function(assert) {
+test('tapping button fires an external action', function (assert) {
 
   var component = this.subject();
-  run(function() {
+  run(function () {
     component.send('openDeleteTeamPrompt');
-    assert.equal(component.get('showDeleteTeamPrompt'),true, "Open Modal");
+    assert.equal(component.get('showDeleteTeamPrompt'), true, "Open Modal");
     component.send('closeDeleteTeamPrompt');
-    assert.equal(component.get('showDeleteTeamPrompt'),false, "Close Modal");
+    assert.equal(component.get('showDeleteTeamPrompt'), false, "Close Modal");
   });
 });

@@ -10,6 +10,9 @@ moduleForComponent('file-details', 'Integration | Component | file details', {
     'service:session',
     'service:ajax',
     'service:i18n',
+    'service:trial',
+    'service:organization',
+    'service:notification-messages-service',
     'helper:vulnerability-type',
     'component:file-header',
     'component:analysis-details',
@@ -30,10 +33,10 @@ moduleForComponent('file-details', 'Integration | Component | file details', {
   }
 });
 
-test('tapping button fires an external action', function(assert) {
+test('tapping button fires an external action', function (assert) {
   var component = this.subject();
   this.render();
-  run(function() {
+  run(function () {
     component.set("file",
       {
         sortedAnalyses: [
@@ -51,7 +54,7 @@ test('tapping button fires an external action', function(assert) {
           }
         ]
       });
-    assert.deepEqual(component.get("analyses"), [{"hasType": false,"id": 1},{"hasType": false,"id": 2},{"hasType": false,"id": 3}] , "Analyses");
+    assert.deepEqual(component.get("analyses"), [{ "hasType": false, "id": 1 }, { "hasType": false, "id": 2 }, { "hasType": false, "id": 3 }], "Analyses");
 
     component.set("file",
       {
