@@ -4,6 +4,7 @@ import FileUploader from 'irene/utils/uploader';
 import FileField from 'ember-uploader/components/file-field';
 import { translationMacro as t } from 'ember-i18n';
 import $ from 'jquery';
+import { getOwner } from '@ember/application';
 
 const UploadAppComponent = FileField.extend({
   store: service('store'),
@@ -25,14 +26,14 @@ const UploadAppComponent = FileField.extend({
     }
     delegate.set("isUploading", true);
     delegate.set("progress", 0);
-    const uploader = FileUploader.create({container: this.container});
+    const uploader = FileUploader.create({ container: getOwner(this) });
     uploader.on('progress', e => delegate.set("progress", parseInt(e.percent)));
     try {
       const uploadItem = await this.get("store").queryRecord('uploadApp', {});
       await uploader.uploadFile(files[0], uploadItem.get('url'));
       await uploadItem.save()
       this.get("notify").success(this.get('tFileUploadedSuccessfully'));
-    } catch(e) {
+    } catch (e) {
       // eslint-disable-next-line no-console
       const err = this.get('tErrorWhileUploading');
       this.get("notify").error(err);
