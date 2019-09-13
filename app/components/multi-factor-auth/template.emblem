@@ -8,7 +8,7 @@
     .columns
       .column
         table.org-table
-          each mfaMethods as |mfa|
+          each mfas as |mfa|
             tr class={mfa.enabled:fill-success-box}
               td
                 .vertical-align-top.padding-v-h.padding-h-h
@@ -35,10 +35,10 @@
                 .div
                   if mfa.enabled
                     if user.canDisableMfa
-                      button.is-primary click={(perform openMFADisableModal mfa.method)} disabled={not user.canDisableMfa}
+                      button.is-primary click={(perform disableMFA mfa.method)} disabled={not user.canDisableMfa}
                         = t "disable"
                   else
-                    button.is-default.is-small click={(perform openMFAEnableModal mfa.method)}
+                    button.is-default.is-small click={(perform enableMFA mfa.method)}
                       = t "enable"
 
         unless user.canDisableMfa
@@ -54,8 +54,7 @@
                     = link-to 'authenticated.organization.settings' class="alert-link"
                       = t "organizationSettings"
 
-
-= modal-card isActive=showMFAEnableModal title=(if user.mfaEnabled (t "modalCard.mfaTitle.change") (t "modalCard.mfaTitle.enable"))
+= modal-card isActive=showEmailEnableModal title=(t "modalCard.mfaTitle.enable") onCancel=(perform cancelEmailEnable)
   .card-body.warning-modal
     .card-wrapper class=showEmailSendConfirm:show:hide
       div
@@ -63,15 +62,14 @@
         span.bold
           | {{ user.email }}
       .margin-t-1h.align-end
-        button.is-primary.highlighted-button click={(perform verifyEmailMFA)} disabled=isSendingEmail
-          if isSendingEmail
+        button.is-primary.highlighted-button click={(perform sendEmailMFA)} disabled=getMFAEnableEmailToken.isRunning
+          if getMFAEnableEmailToken.isRunning
             .fa-font-size
               i.fa class="fa-spinner fa-spin"
             | &nbsp;
           = t "continue"
-        button.is-primary.margin-left click={(perform closeMFAEnableModal)}
+        button.is-primary.margin-left click={(perform cancelEmailEnable)}
           = t "cancel"
-
     .card-wrapper class=showEmailOTPEnter:show:hide
       .fill-silver.margin-h-neg-20.margin-t-neg-20
         .padding-h-1h.padding-v-1
@@ -79,81 +77,34 @@
             = t "modalCard.enableMFAEmail.description"
             span.bold
               | {{ user.email }}
-          div.font-small
-            | Did not receive email?
-            a.text-darkgray click={(perform verifyEmailMFA)}
-              | &nbsp; resend
       form.margin-t-1h
         p.control
            = t "modalCard.enableMFAEmail.enterCode"
         = input class="form-control input" type="text" value=emailOTP
         .margin-t-1.align-both.vertical-slign-center
-          button.is-primary.highlighted-button click={(perform enableEmailMFA)} disabled=isEnablingEmailMFA
-            if isEnablingEmailMFA
+          button.is-primary.highlighted-button click={(perform confirmEmailOTP)} disabled=verifyEmailOTP.isRunning
+            if verifyEmailOTP.isRunning
               .fa-font-size
                 i.fa class="fa-spinner fa-spin"
               | &nbsp;
             = t "confirm"
 
-    .card-wrapper class=showAppOTPEnter:show:hide
-      h3.text-centre
-        = t "modalCard.enableMFAApp.scanBarcode"
-      canvas.qr-code
-      p.margin-top
-        = t "modalCard.enableMFAApp.enterCode"
-      form.margin-top
-        p.control
-          = input class="form-control input" type="text" value=appOTP
-        div
-          button.is-primary.highlighted-button click={(perform enableAppMFA)} disabled=isEnablingAppMFA
-            if isEnablingAppMFA
-              .fa-font-size
-                i.fa class="fa-spinner fa-spin"
-              | &nbsp;
-            = t "continue"
-          button.is-primary.margin-left click="setMethodSelect"
-            = t "cancel"
-
-
-= modal-card isActive=showMFADisableModal title=(t "modalCard.mfaTitle.disable")
-  .card-body.warning-modal class=showConfirmDisableMFA:show:hide
-    .card-wrapper
-      if user.canDisableMfa
-        p
-          = t "modalCard.disableMFA.description"
-        p.control.margin-t-1
-          button.is-primary.highlighted-button click={(perform confirmDisableMFA)} disabled=isConfirmingDisableMFA
-            if isConfirmingDisableMFA
-              .fa-font-size
-                i.fa class="fa-spinner fa-spin"
-              | &nbsp;
-            = t "continue"
-          button.is-primary.margin-left click={(perform closeMFADisableModal)}
-            = t "cancel"
-      else
-        .alert.alert-success.alert-small
-          .vertical-align-center
-            = fa-icon "shield"
-            .margin-l-1
-              = t "disableMFADenied"
-
-  .card-body.warning-modal class=showDisableMFA:show:hide
-    .card-wrapper
-      p
-        = t "modalCard.disableMFA.enterOTP"
-        if mfaEnabledStatus.email
-          | &nbsp;(#{t "modalCard.disableMFA.viaEmail"})
-        if mfaEnabledStatus.app
-          | &nbsp;#{t "modalCard.disableMFA.viaApp"}
-      form.margin-t-1
-        p.control
-          = input class="form-control input" type="text" value=disableOTP
-        p.control.margin-t-1
-          button.is-primary.highlighted-button click={(perform disableMFA)} disabled=isDisablingMFA
-            if isDisablingMFA
-              .fa-font-size
-                i.fa class="fa-spinner fa-spin"
-              | &nbsp;
-            = t "confirm"
-          button.is-primary.margin-left click={(perform closeMFADisableModal)}
-            = t "cancel"
+= modal-card isActive=showAppEnableModal title=(t "modalCard.mfaTitle.enable") onCancel=(perform cancelAppEnable)
+  .card-body.warning-modal
+    h3.text-centre
+      = t "modalCard.enableMFAApp.scanBarcode"
+    canvas.qr-code.nomfatotp
+    p.margin-top
+      = t "modalCard.enableMFAApp.enterCode"
+    form.margin-top
+      p.control
+        = input class="form-control input" type="text" value=appOTP
+      div
+        button.is-primary.highlighted-button click={(perform confirmAppOTP)} disabled=verifyAppOTP.isRunning
+          if verifyAppOTP.isRunning
+            .fa-font-size
+              i.fa class="fa-spinner fa-spin"
+            | &nbsp;
+          = t "continue"
+        button.is-primary.margin-left click={(perform cancelAppEnable)}
+          = t "cancel"

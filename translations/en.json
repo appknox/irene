@@ -208,6 +208,7 @@
   "integratedJIRA": "This project is integrated with JIRA project",
   "integration": "Integrations",
   "integrationCompleted": "Integration Completed",
+  "invalidOTP": "Please enter a valid OTP",
   "invalidPassword": "Passwords did not match",
   "invalidURL": " is an invalid URL",
   "invite": "Invite",
@@ -534,7 +535,7 @@
   "modalCard": {
     "mfaTitle": {
       "change": "Change Multi Factor Authentication",
-      "enable": "Enble Multi Factor Authentication",
+      "enable": "Enable Multi Factor Authentication",
       "disable": "Disable Multi Factor Authentication",
     },
     "enableMFAApp": {
