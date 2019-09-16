@@ -1,5 +1,4 @@
 import { getOwner } from '@ember/application';
-import localeConfig from 'ember-i18n/config/en';
 import { moduleForModel, test } from 'ember-qunit';
 import { run } from '@ember/runloop';
 
@@ -8,17 +7,17 @@ moduleForModel('user', 'Unit | Model | user', {
     'model:project',
     'model:submission',
     'model:pricing',
-    'service:i18n',
-    'locale:en/translations',
-    'locale:en/config',
-    'util:i18n/missing-message',
-    'util:i18n/compile-template',
-    'config:environment'
+    'config:environment',
+    'service:intl',
+    'ember-intl@adapter:default',
+    'cldr:en',
+    'cldr:ja',
+    'translation:en',
+    'util:intl/missing-message'
   ],
   beforeEach() {
     // set the locale and the config
-    getOwner(this).lookup('service:i18n').set('locale', 'en');
-    this.register('locale:en/config', localeConfig);
+    getOwner(this).lookup('service:intl').setLocale('en');
   }
 });
 
@@ -37,7 +36,7 @@ test('it exists', function(assert) {
     user.set('projectCount', 1);
     assert.equal(user.get('totalProjects'), "1 project", "1 Project");
     user.set('projectCount', 0);
-    assert.equal(user.get('totalProjects').string, "No projects", "No Project");
+    assert.equal(user.get('totalProjects'), "No projects", "No Project");
 
     assert.equal(user.get('ifBillingIsNotHidden'), true, "Billing Hidden");
 

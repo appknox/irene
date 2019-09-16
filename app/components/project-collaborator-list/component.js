@@ -4,7 +4,7 @@ import { computed, observer } from '@ember/object';
 import PaginateMixin from 'irene/mixins/paginate';
 
 export default Component.extend(PaginateMixin, {
-  i18n: service(),
+  intl: service(),
   me: service(),
 
   classNames: [''],

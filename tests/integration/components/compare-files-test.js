@@ -1,15 +1,17 @@
 import { test, moduleForComponent } from 'ember-qunit';
 import { run } from '@ember/runloop';
 
+
 moduleForComponent('compare-files', 'Integration | Component | compare files', {
   unit: true,
   needs: [
-    'service:i18n',
-    'locale:en/translations',
-    'locale:en/config',
-    'util:i18n/missing-message',
-    'util:i18n/compile-template',
-    'config:environment'
+    'config:environment',
+    'service:intl',
+    'ember-intl@adapter:default',
+    'cldr:en',
+    'cldr:ja',
+    'translation:en',
+    'util:intl/missing-message'
   ],
 });
 

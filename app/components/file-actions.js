@@ -6,11 +6,11 @@ import ENUMS from 'irene/enums';
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 import ENV from 'irene/config/environment';
-import { translationMacro as t } from 'ember-i18n';
+import { t } from 'ember-intl';
 
 export default Component.extend({
 
-  i18n: service(),
+  intl: service(),
   tPleaseTryAgain: t('pleaseTryAgain'),
 
   manualStatuses: ENUMS.MANUAL.CHOICES.filter(c => c.key !== 'UNKNOWN').map(c => String(c.value)),

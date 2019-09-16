@@ -2,7 +2,7 @@ import { computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import DS from 'ember-data';
 import ENUMS from 'irene/enums';
-import { translationMacro as t } from 'ember-i18n';
+import { t } from 'ember-intl';
 
 const Analysis = DS.Model.extend({
   findings: DS.attr(),

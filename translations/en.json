@@ -1,4 +1,4 @@
-export default {
+{
   "acceptInvite": "Signup & Accept Invite",
   "acceptTerms": "I accept the terms and conditions",
   "accessPermissions": "Access permissions",
@@ -13,12 +13,12 @@ export default {
   "addedNamespaces": "Added Namespaces",
   "addedOn": "Added on",
   "addedSSOMembersToOrg": "Created members from SSO emails",
-  "addMember" : "Add Member",
-  "addMembers" : "Add Members",
+  "addMember": "Add Member",
+  "addMembers": "Add Members",
   "addNamespace": "Add Namespace",
   "addNewNamespace": "You can add a new namespace below",
   "addNewTeam": "Add new team",
-  "addProject" : "Add Project",
+  "addProject": "Add Project",
   "addSSOMembers": "Add SSO members",
   "addTags": "Add tags",
   "addTeam": "Add Team",
@@ -42,7 +42,7 @@ export default {
   "approvalStatus": "Approval",
   "approve": "Approve",
   "apps": " Apps",
-  "assignTeam":	"Assign Team",
+  "assignTeam": "Assign Team",
   "analyzing": "Analyzing",
   "attachments": "Attachments",
   "back": "Back",
@@ -298,6 +298,7 @@ export default {
   "pdfReport": "Download Report",
   "pending": "Pending",
   "pendingInvitations": "Pending Invitations",
+  "pendingInvitationsTeam": "Pending Team Invitations",
   "personalAccessTokens": "Personal access tokens",
   "personalAccessTokenCreate": "Generate token",
   "personalAccessTokenDesc": "Tokens you have generated that can be used to access the Appknox API",
@@ -305,7 +306,7 @@ export default {
   "personalTokenRevoke": "Revoke",
   "personalTokenRevoked": "Personal access token revoked successfully",
   "personalTokenGenerated": "Personal access token generated successfully.",
-  "phone" : "Phone",
+  "phone": "Phone",
   "plans": "Plans",
   "planName": "PLAN NAME",
   "platform": "Platform",
@@ -486,7 +487,7 @@ export default {
     "cancelSubsciption": "Are you sure you want to cancel Subscription?",
     "rejectNamespace": "Are you sure you want to delete this namespace?",
     "revokePersonalToken": "Are you sure you want to delete this personal access token?",
-    "removeUserRole":	"Are you sure you want to remove this role?",
+    "removeUserRole": "Are you sure you want to remove this role?",
     "deleteInvitation": "Are you sure you want to delete this invitation?",
     "resendInvitation": "Are you sure you want to resend this invitation?"
   },
@@ -537,14 +538,14 @@ export default {
       "deviceTypes": "Device types",
       "runApiScan": "Enable API Capture",
       "apiScanDescription": "During dynamic scan <strong>network traffic made by the app, filtered by the below provided API endpoints</strong> will be recorded. Currently traffic capturing is <strong>not supported for the apps that employ SSL pinning.</strong>",
-      "start": "Start Dynamic Scan",
+      "start": "Start Dynamic Scan"
     },
     "apiScan": {
       "title": "API Scan",
       "description": "We will run API scan for web vulnerabilities on the below list of requests captured during the dynamic scan.",
       "warning": "API scan performs multiple automated tests that may result in <strong>denial of service</strong> or <strong>loss of data</strong>. Do not proceed if the app is configured to use a <strong>production API server</strong>.",
       "noDynamicScan": "Please run dynamic scan with API URL filters set. That will capture APIs required for the API scan",
-      "start": "Start API Scan",
+      "start": "Start API Scan"
     },
     "devicePreference": {
       "title": "Change Device Preference",
@@ -556,7 +557,7 @@ export default {
       "description": "Run Captured Api Scan",
       "runScan": "Run Dynamic & API Scan",
       "noCapturedAPIsData": "Oops, no captured API's found during dynamic scan",
-      "capturedWarning": "Run Dynamic Scan first",
+      "capturedWarning": "Run Dynamic Scan first"
     },
     "requestAccess": {
       "title": "Request Access",
@@ -620,4 +621,4 @@ export default {
     "selectJIRAAccount": "Select the JIRA account where you want us to create issues for the risks we find in your project",
     "selectPreferredDevice": "Select the Preferred Device Type and OS Version for Dynamic Scan"
   }
-};
+}

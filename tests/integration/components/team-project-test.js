@@ -2,7 +2,11 @@ import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 
 moduleForComponent('team-project', 'Integration | Component | team project', {
-  integration: true
+  integration: true,
+  beforeEach(){
+    this.inject.service('intl');
+    this.container.owner.lookup('service:intl').setLocale('en');
+  }
 });
 
 test('it renders', function(assert) {

@@ -1,10 +1,10 @@
 import DS from 'ember-data';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
-import { translationMacro as t } from 'ember-i18n';
+import { t } from 'ember-intl';
 
 const Subscription = DS.Model.extend({
-  i18n: service(),
+  intl: service(),
   subscriptionId: DS.attr('string'),
   billingPeriod: DS.attr('number'),
   billingPeriodUnit: DS.attr('string'),

@@ -1,7 +1,6 @@
 import { getOwner } from '@ember/application';
 import ENUMS from 'irene/enums';
 import { moduleForModel, test} from 'ember-qunit';
-import localeConfig from 'ember-i18n/config/en';
 import { run } from '@ember/runloop';
 
 moduleForModel('analysis', 'Unit | Model | analysis', {
@@ -12,17 +11,17 @@ moduleForModel('analysis', 'Unit | Model | analysis', {
     'model:pcidss',
     'model:vulnerability',
     'model:attachment',
-    'service:i18n',
-    'locale:en/translations',
-    'locale:en/config',
-    'util:i18n/missing-message',
-    'util:i18n/compile-template',
+    'config:environment',
+    'service:intl',
+    'ember-intl@adapter:default',
+    'cldr:en',
+    'cldr:ja',
+    'util:intl/missing-message',
     'config:environment'
   ],
   beforeEach() {
     // set the locale and the config
-    getOwner(this).lookup('service:i18n').set('locale', 'en');
-    this.register('locale:en/config', localeConfig);
+    getOwner(this).lookup('service:intl').setLocale('en');
   }
 });
 

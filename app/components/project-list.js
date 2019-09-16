@@ -7,12 +7,12 @@ import { run } from '@ember/runloop';
 import PaginateMixin from 'irene/mixins/paginate';
 import ENUMS from 'irene/enums';
 import { filterPlatformValues } from 'irene/helpers/filter-platform';
-import { translationMacro as t } from 'ember-i18n';
+import { t } from 'ember-intl';
 import $ from 'jquery';
 
 const ProjectListComponent = Component.extend(PaginateMixin, {
 
-  i18n: service(),
+  intl: service(),
 
   classNames: ["columns"],
   projects: null,

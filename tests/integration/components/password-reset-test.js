@@ -1,31 +1,29 @@
 import { getOwner } from '@ember/application';
-import tHelper from 'ember-i18n/helper';
-import localeConfig from 'ember-i18n/config/en';
 import { test, moduleForComponent } from 'ember-qunit';
 import { startMirage } from 'irene/initializers/ember-cli-mirage';
 import { run } from '@ember/runloop';
+import tHelper from 'ember-intl/helpers/t';
+
 
 moduleForComponent('password-reset', 'Integration | Component | password reset', {
   unit: true,
   needs: [
-    'service:i18n',
     'service:ajax',
     'service:notification-messages-service',
     'service:session',
-    'locale:en/translations',
-    'locale:en/config',
-    'util:i18n/missing-message',
-    'util:i18n/compile-template',
-    'config:environment'
+    'config:environment',
+    'service:intl',
+    'ember-intl@adapter:default',
+    'cldr:en',
+    'cldr:ja',
+    'translation:en',
+    'util:intl/missing-message'
   ],
   beforeEach() {
     // set the locale and the config
-    getOwner(this).lookup('service:i18n').set('locale', 'en');
-    this.register('locale:en/config', localeConfig);
+    getOwner(this).lookup('service:intl').setLocale('en');
 
-    // register t helper
-    this.register('helper:t', tHelper);
-
+    this.registry.register('helper:t', tHelper);
     // start Mirage
     this.server = startMirage();
   },
@@ -40,10 +38,10 @@ test('tapping button fires an external action', function(assert) {
   var component = this.subject();
   run(function() {
     component.set("password", "test");
-    assert.equal(component.validate()[0].string, "Passwords must be greater than or equal to 6", "Validate Password");
+    assert.equal(component.validate()[0], "Passwords must be greater than or equal to 6", "Validate Password");
     component.set("password", "test233s");
     component.set("confirmPassword", "test233s1");
-    assert.equal(component.validate()[0].string, "Passwords doesnt match", "Validate Password");
+    assert.equal(component.validate()[0], "Passwords doesnt match", "Validate Password");
 
     component.send("reset");
 

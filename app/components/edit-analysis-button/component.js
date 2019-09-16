@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 
 export default Component.extend({
   me: service('me'),
-  i18n: service(),
+  intl: service(),
 
   actions: {
     openEditAnalysisModal() {

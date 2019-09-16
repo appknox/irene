@@ -1,10 +1,10 @@
 import DS from 'ember-data';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
-import { translationMacro as t } from 'ember-i18n';
+import { t } from 'ember-intl';
 
 const Invoice = DS.Model.extend({
-  i18n: service(),
+  intl: service(),
   invoiceId: DS.attr('number'),
   amount: DS.attr('string'),
   paidOn: DS.attr('date'),

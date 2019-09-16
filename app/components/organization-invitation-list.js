@@ -5,7 +5,7 @@ import PaginateMixin from 'irene/mixins/paginate';
 
 
 export default Component.extend(PaginateMixin, {
-  i18n: service(),
+  intl: service(),
 
   targetModel: 'organization-invitation',
   sortProperties: ['createdOn:desc'],

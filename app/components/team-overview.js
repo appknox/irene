@@ -1,11 +1,11 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
-import { translationMacro as t } from 'ember-i18n';
+import { t } from 'ember-intl';
 
 const TeamOverviewComponent = Component.extend({
 
-  i18n: service(),
+  intl: service(),
   team: null,
   organization: null,
   tagName: ["tr"],

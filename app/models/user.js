@@ -4,11 +4,11 @@ import { computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
-import { translationMacro as t } from 'ember-i18n';
+import { t } from 'ember-intl';
 
 const User = DS.Model.extend({
 
-  i18n: service(),
+  intl: service(),
 
   uuid: DS.attr('string'),
   lang: DS.attr('string'),
@@ -61,7 +61,7 @@ const User = DS.Model.extend({
     const tProject = this.get("tProject");
     const tNoProject = this.get("tNoProject");
     const projectCount = this.get("projectCount");
-    const tProjects = this.get("tProjects").string.toLowerCase();
+    const tProjects = this.get("tProjects").toLowerCase();
     if (projectCount === 0) {
       return tNoProject;
     } else if (projectCount === 1) {

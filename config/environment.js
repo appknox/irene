@@ -107,10 +107,6 @@ module.exports = function(environment) {
       enabled: false
     },
 
-    i18n: {
-      defaultLocale: 'en',
-    },
-
     emblemOptions: {
       blueprints: true
     },

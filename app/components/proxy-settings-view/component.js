@@ -3,12 +3,12 @@ import { computed } from '@ember/object';
 import { on } from '@ember/object/evented';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import { translationMacro as t } from 'ember-i18n';
+import { t } from 'ember-intl';
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 export default Component.extend({
-  i18n: service(),
+  intl: service(),
   notify: service('notification-messages-service'),
 
   tProxyTurned: t('proxyTurned'),
@@ -33,7 +33,7 @@ export default Component.extend({
   toggleProxySucceeded: on('toggleProxy:succeeded', function() {
     let enabled = this.get('proxy.enabled');
     const statusText = enabled ? this.get('tOn') : this.get('tOff');
-    this.get('notify').info(this.get('tProxyTurned') + statusText.string.toUpperCase());
+    this.get('notify').info(this.get('tProxyTurned') + statusText.toUpperCase());
     if (enabled) {
       triggerAnalytics('feature', ENV.csb.enableProxy);
     } else {

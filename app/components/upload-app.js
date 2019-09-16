@@ -2,14 +2,14 @@ import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import FileUploader from 'irene/utils/uploader';
 import FileField from 'ember-uploader/components/file-field';
-import { translationMacro as t } from 'ember-i18n';
+import { t } from 'ember-intl';
 import $ from 'jquery';
 import { getOwner } from '@ember/application';
 
 const UploadAppComponent = FileField.extend({
   store: service('store'),
   delegate: null,
-  i18n: service("i18n"),
+  intl: service('intl'),
   rollbar: service('rollbar'),
 
 
