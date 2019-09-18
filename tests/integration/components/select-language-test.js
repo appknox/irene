@@ -8,7 +8,7 @@ moduleForComponent('select-language', 'Integration | Component | select language
     'service:ajax',
     'service:session',
     'service:moment',
-    'service:i18n'
+    'service:intl',
   ],
   beforeEach() {
     // start Mirage
@@ -22,8 +22,8 @@ moduleForComponent('select-language', 'Integration | Component | select language
 
 test('it renders', function (assert) {
   var component = this.subject();
-  component.set("i18n", {
-    locale: "en",
+  component.set("intl", {
+    locale: ["en"],
     locales: [
       "en", "ja"
     ]
@@ -32,7 +32,7 @@ test('it renders', function (assert) {
 
   run(function () {
 
-    assert.deepEqual(component.get("currentLocale"), { "locale": "en", "localeString": "English" }, 'message');
+    assert.deepEqual(component.get("currentLocale"), { "locale": ["en"], "localeString": "English" }, 'message');
     assert.deepEqual(component.get("otherLocales"), [{ "locale": "ja", "localeString": "日本語" }], 'message');
 
     component.send("setLocale");

@@ -1,13 +1,13 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import { translationMacro as t } from 'ember-i18n';
+import { t } from 'ember-intl';
 import { task } from 'ember-concurrency';
 import ENUMS from 'irene/enums';
 import { on } from '@ember/object/evented';
 import { computed } from '@ember/object';
 
 const GithubProjectComponent = Component.extend({
-  i18n: service(),
+  intl: service(),
   ajax: service(),
   notify: service('notification-messages-service'),
   project: null,

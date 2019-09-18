@@ -1,26 +1,25 @@
 import { getOwner } from '@ember/application';
-import tHelper from 'ember-i18n/helper';
-import localeConfig from 'ember-i18n/config/en';
 import { test, moduleForComponent } from 'ember-qunit';
 import { run } from '@ember/runloop';
+import tHelper from 'ember-intl/helpers/t';
+
 
 moduleForComponent('project-list', 'Integration | Component | project list', {
   unit: true,
   needs: [
-    'service:i18n',
-    'locale:en/translations',
-    'locale:en/config',
-    'util:i18n/missing-message',
-    'util:i18n/compile-template',
-    'config:environment'
+    'config:environment',
+    'service:intl',
+    'ember-intl@adapter:default',
+    'cldr:en',
+    'cldr:ja',
+    'translation:en',
+    'util:intl/missing-message'
   ],
   beforeEach() {
     // set the locale and the config
-    getOwner(this).lookup('service:i18n').set('locale', 'en');
-    this.register('locale:en/config', localeConfig);
+    getOwner(this).lookup('service:intl').setLocale('en');
 
-    // register t helper
-    this.register('helper:t', tHelper);
+    this.registry.register('helper:t', tHelper);
   }
 });
 

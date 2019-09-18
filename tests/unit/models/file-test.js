@@ -1,7 +1,6 @@
 import { getOwner } from '@ember/application';
 import ENUMS from 'irene/enums';
 import { moduleForModel, test } from 'ember-qunit';
-import localeConfig from 'ember-i18n/config/en';
 import { run } from '@ember/runloop';
 
 moduleForModel('file', 'Unit | Model | file', {
@@ -12,17 +11,17 @@ moduleForModel('file', 'Unit | Model | file', {
     'model:file',
     'model:user',
     'model:analysis',
-    'service:i18n',
-    'locale:en/translations',
-    'locale:en/config',
-    'util:i18n/missing-message',
-    'util:i18n/compile-template',
-    'config:environment'
+    'config:environment',
+    'service:intl',
+    'ember-intl@adapter:default',
+    'cldr:en',
+    'cldr:ja',
+    'translation:en',
+    'util:intl/missing-message'
   ],
   beforeEach() {
     // set the locale and the config
-    getOwner(this).lookup('service:i18n').set('locale', 'en');
-    this.register('locale:en/config', localeConfig);
+    getOwner(this).lookup('service:intl').setLocale('en');
   }
 });
 
@@ -52,17 +51,17 @@ test('it passes', function(assert) {
 
     assert.equal(file.get('statusText'), "Unknown Status", 'Unknown Status');
     file.set('dynamicStatus', ENUMS.DYNAMIC_STATUS.BOOTING);
-    assert.equal(file.get('statusText.string'), "Booting", 'Booting');
+    assert.equal(file.get('statusText'), "Booting", 'Booting');
     file.set('dynamicStatus', ENUMS.DYNAMIC_STATUS.DOWNLOADING);
-    assert.equal(file.get('statusText.string'), "Downloading", 'Downloading');
+    assert.equal(file.get('statusText'), "Downloading", 'Downloading');
     file.set('dynamicStatus', ENUMS.DYNAMIC_STATUS.INSTALLING);
-    assert.equal(file.get('statusText.string'), "Installing", 'Installing');
+    assert.equal(file.get('statusText'), "Installing", 'Installing');
     file.set('dynamicStatus', ENUMS.DYNAMIC_STATUS.LAUNCHING);
-    assert.equal(file.get('statusText.string'), "Launching", 'Launching');
+    assert.equal(file.get('statusText'), "Launching", 'Launching');
     file.set('dynamicStatus', ENUMS.DYNAMIC_STATUS.HOOKING);
-    assert.equal(file.get('statusText.string'), "Starting", 'Hooking');
+    assert.equal(file.get('statusText'), "Starting", 'Hooking');
     file.set('dynamicStatus', ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN);
-    assert.equal(file.get('statusText.string'), "Stopping", 'Shutting Down');
+    assert.equal(file.get('statusText'), "Stopping", 'Shutting Down');
 
     assert.equal(file.setBootingStatus(), undefined, "Set Booting Status");
 

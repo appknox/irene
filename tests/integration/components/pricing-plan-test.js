@@ -1,29 +1,26 @@
 import { getOwner } from '@ember/application';
 import ENUMS from 'irene/enums';
-import tHelper from 'ember-i18n/helper';
-import localeConfig from 'ember-i18n/config/en';
 import hbs from 'htmlbars-inline-precompile';
 import { test, moduleForComponent } from 'ember-qunit';
 import { run } from '@ember/runloop';
-
+import tHelper from 'ember-intl/helpers/t';
 
 moduleForComponent('pricing-plan', 'Integration | Component | pricing plan', {
   unit: true,
   needs: [
-    'service:i18n',
-    'locale:en/translations',
-    'locale:en/config',
-    'util:i18n/missing-message',
-    'util:i18n/compile-template',
-    'config:environment'
+    'config:environment',
+    'service:intl',
+    'ember-intl@adapter:default',
+    'cldr:en',
+    'cldr:ja',
+    'translation:en',
+    'util:intl/missing-message'
   ],
   beforeEach() {
     // set the locale and the config
-    getOwner(this).lookup('service:i18n').set('locale', 'en');
-    this.register('locale:en/config', localeConfig);
+    getOwner(this).lookup('service:intl').setLocale('en');
 
-    // register t helper
-    this.register('helper:t', tHelper);
+    this.registry.register('helper:t', tHelper);
   }
 });
 
@@ -41,9 +38,9 @@ test('tapping button fires an external action', function(assert) {
   var component = this.subject();
 
   run(function() {
-    assert.equal(component.get('planText.string'), "app(s)", "Plan Text/Apps");
+    assert.equal(component.get('planText'), "app(s)", "Plan Text/Apps");
     component.set('plan', {planId: "default_per_scan"});
-    assert.equal(component.get('planText.string'), "scan(s)", "Plan Text/Scans");
+    assert.equal(component.get('planText'), "scan(s)", "Plan Text/Scans");
 
     component.set('plan', {monthlyPrice: "120$"});
     assert.equal(component.get('totalPrice'), "120$", "Total Price/Monthly");

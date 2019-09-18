@@ -3,12 +3,12 @@ import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import ENV from 'irene/config/environment';
-import { translationMacro as t } from 'ember-i18n';
+import { t } from 'ember-intl';
 import { debounce } from '@ember/runloop';
 
 const TeamDetailsComponent = Component.extend({
 
-  i18n: service(),
+  intl: service(),
   ajax: service(),
   notify: service('notification-messages-service'),
   showHide: true,

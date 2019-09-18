@@ -6,7 +6,7 @@ import { analysisRiskStatus } from 'irene/helpers/analysis-risk-status';
 
 export default Component.extend({
   analysis: null,
-  i18n: service(),
+  intl: service(),
 
   isNonPassedRiskOverridden: computed('analysis.{risk,overriddenRisk}', function() {
     return this.get('analysis.overriddenRisk') != null && this.get('analysis.risk') != ENUMS.RISK.NONE;

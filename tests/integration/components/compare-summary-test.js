@@ -1,27 +1,25 @@
+import tHelper from 'ember-intl/helpers/t';
 import { getOwner } from '@ember/application';
 import ENUMS from 'irene/enums';
-import tHelper from 'ember-i18n/helper';
-import localeConfig from 'ember-i18n/config/en';
 import { test, moduleForComponent } from 'ember-qunit';
 import { run } from '@ember/runloop';
 
 moduleForComponent('compare-summary', 'Integration | Component | compare summary', {
   unit: true,
   needs: [
-    'service:i18n',
-    'locale:en/translations',
-    'locale:en/config',
-    'util:i18n/missing-message',
-    'util:i18n/compile-template',
-    'config:environment'
+    'config:environment',
+    'service:intl',
+    'ember-intl@adapter:default',
+    'cldr:en',
+    'cldr:ja',
+    'translation:en',
+    'util:intl/missing-message'
   ],
   beforeEach() {
     // set the locale and the config
-    getOwner(this).lookup('service:i18n').set('locale', 'en');
-    this.register('locale:en/config', localeConfig);
+    getOwner(this).lookup('service:intl').setLocale('en');
 
-    // register t helper
-    this.register('helper:t', tHelper);
+    this.registry.register('helper:t', tHelper);
   }
 });
 
@@ -52,19 +50,19 @@ test('tapping button fires an external action', function(assert) {
     component.set("comparison.analysis1.computedRisk", ENUMS.RISK.UNKNOWN);
     component.set("comparison.analysis2.computedRisk", ENUMS.RISK.UNKNOWN);
     assert.equal(component.get('compareColor'), cls + " " + "is-progress", "Compare Color/Progress");
-    assert.equal(component.get('compareText').string, "Analyzing", "Compare Text/Analyzing");
+    assert.equal(component.get('compareText'), "Analyzing", "Compare Text/Analyzing");
 
     component.set("comparison.analysis1.computedRisk", ENUMS.RISK.MEDIUM);
     component.set("comparison.analysis2.computedRisk", ENUMS.RISK.MEDIUM);
     assert.equal(component.get('compareColor'), cls + " " + "is-default", "Compare Color/Default");
-    assert.equal(component.get('compareText').string, "Unchanged", "Compare Text/Unchanged");
+    assert.equal(component.get('compareText'), "Unchanged", "Compare Text/Unchanged");
 
     component.set("comparison.analysis1.computedRisk", ENUMS.RISK.HIGH);
     assert.equal(component.get('compareColor'), cls + " " + "is-critical", "Compare Color/Success");
-    assert.equal(component.get('compareText').string, "Worsened", "Compare Text/Improved");
+    assert.equal(component.get('compareText'), "Worsened", "Compare Text/Improved");
 
     component.set("comparison.analysis1.computedRisk", ENUMS.RISK.LOW);
     assert.equal(component.get('compareColor'), cls + " " + "is-success", "Compare Color/Danger");
-    assert.equal(component.get('compareText').string, "Improved", "Compare Text/Worsened");
+    assert.equal(component.get('compareText'), "Improved", "Compare Text/Worsened");
   });
 });

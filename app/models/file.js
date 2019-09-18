@@ -3,7 +3,7 @@ import { computed } from '@ember/object';
 import DS from 'ember-data';
 import BaseModelMixin from 'irene/mixins/base-model';
 import ENUMS from 'irene/enums';
-import { translationMacro as t } from 'ember-i18n';
+import { t } from 'ember-intl';
 
 const _getComputedColor = function(selector) {
   const el = document.querySelector(`#hiddencolorholder .is-${selector}`);
@@ -16,7 +16,7 @@ const _getAnalysesCount = (analysis, risk)=> {
 };
 
 const File = DS.Model.extend(BaseModelMixin, {
-  i18n: service(),
+  intl: service(),
   project: DS.belongsTo('project', {inverse:'files'}),
   profile: DS.belongsTo('profile', {inverse:'files'}),
   uuid: DS.attr('string'),

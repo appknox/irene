@@ -3,14 +3,14 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 import { observer } from '@ember/object';
-import { translationMacro as t } from 'ember-i18n';
+import { t } from 'ember-intl';
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
 import poll from 'irene/services/poll';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 export default Component.extend({
-  i18n: service(),
+  intl: service(),
   trial: service(),
   ajax: service(),
   notify: service('notification-messages-service'),

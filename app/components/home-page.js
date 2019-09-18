@@ -1,6 +1,6 @@
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
-import { translationMacro as t } from 'ember-i18n';
+import { t } from 'ember-intl';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import * as chat from 'irene/utils/chat';
 import { inject as service } from '@ember/service';
@@ -10,7 +10,7 @@ import { getOwner } from '@ember/application';
 
 export default Component.extend({
   me: service(),
-  i18n: service(),
+  intl: service(),
   ajax: service(),
   session: service(),
   organization: service(),

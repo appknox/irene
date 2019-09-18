@@ -1,22 +1,21 @@
 import { getOwner } from '@ember/application';
 import { moduleForModel, test } from 'ember-qunit';
-import localeConfig from 'ember-i18n/config/en';
 import { run } from '@ember/runloop';
 
 moduleForModel('invoice', 'Unit | Model | invoice', {
   needs: [
     'model:plan',
-    'service:i18n',
-    'locale:en/translations',
-    'locale:en/config',
-    'util:i18n/missing-message',
-    'util:i18n/compile-template',
-    'config:environment'
+    'config:environment',
+    'service:intl',
+    'ember-intl@adapter:default',
+    'cldr:en',
+    'cldr:ja',
+    'translation:en',
+    'util:intl/missing-message'
   ],
   beforeEach() {
     // set the locale and the config
-    getOwner(this).lookup('service:i18n').set('locale', 'en');
-    this.register('locale:en/config', localeConfig);
+    getOwner(this).lookup('service:intl').setLocale('en');
   }
 });
 
@@ -28,10 +27,10 @@ test('it exists', function(assert) {
     assert.equal(invoice.get('paidOnHumanized'), d.toLocaleDateString(), "Paid On");
 
     assert.equal(invoice.get('paidDate'), "Pending", "Paid Date Pending");
-    assert.equal(invoice.get('paidStatus.string'), "Unpaid", "Unpaid");
+    assert.equal(invoice.get('paidStatus'), "Unpaid", "Unpaid");
     invoice.set('isPaid', true);
     assert.equal(invoice.get('paidDate'), d.toLocaleDateString(), "Paid Date");
-    assert.equal(invoice.get('paidStatus.string'), "Paid", "Paid");
+    assert.equal(invoice.get('paidStatus'), "Paid", "Paid");
   });
 
 });

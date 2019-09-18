@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
-import { translationMacro as t } from 'ember-i18n';
+import { t } from 'ember-intl';
 
 const PricingPlanComponent = Component.extend({
 
@@ -11,7 +11,7 @@ const PricingPlanComponent = Component.extend({
   paymentDuration: ENUMS.PAYMENT_DURATION.MONTHLY,
   classNames: ["column", "is-one-third"],
   planQuantity: 1,
-  i18n: service(),
+  intl: service(),
 
   tApp: t("app"),
   tScan: t("scan"),

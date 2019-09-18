@@ -1,6 +1,6 @@
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
-import { translationMacro as t } from 'ember-i18n';
+import { t } from 'ember-intl';
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
@@ -13,7 +13,7 @@ const AnalysisDetailsComponent = Component.extend({
   showVulnerability: false,
   classNameBindings: ["riskClass"],
 
-  i18n: service(),
+  intl: service(),
   ajax: service(),
   notify: service('notification-messages-service'),
 

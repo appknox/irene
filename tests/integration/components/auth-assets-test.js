@@ -1,8 +1,26 @@
+import tHelper from 'ember-intl/helpers/t';
+import { getOwner } from '@ember/application';
 import { test, moduleForComponent } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 
 moduleForComponent('auth-assets', 'Integration | Component | auth assets', {
-  integration: true
+  unit: true,
+  needs:[
+    'config:environment',
+    'service:intl',
+    'ember-intl@adapter:default',
+    'cldr:en',
+    'cldr:ja',
+    'translation:en',
+    'util:intl/missing-message'
+  ],
+  beforeEach() {
+    // set the locale and the config
+    getOwner(this).lookup('service:intl').setLocale('en');
+
+    // register t helper
+    this.register('helper:t', tHelper);
+  },
 });
 
 test('it renders', function(assert) {

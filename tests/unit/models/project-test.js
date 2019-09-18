@@ -1,24 +1,23 @@
 import { getOwner } from '@ember/application';
 import ENUMS from 'irene/enums';
 import { moduleForModel, test } from 'ember-qunit';
-import localeConfig from 'ember-i18n/config/en';
 import { run } from '@ember/runloop';
 
 moduleForModel('project', 'Unit | Model | project', {
   needs: [
     "model:user",
     "model:file",
-    'service:i18n',
-    'locale:en/translations',
-    'locale:en/config',
-    'util:i18n/missing-message',
-    'util:i18n/compile-template',
-    'config:environment'
+    'config:environment',
+    'service:intl',
+    'ember-intl@adapter:default',
+    'cldr:en',
+    'cldr:ja',
+    'translation:en',
+    'util:intl/missing-message'
   ],
   beforeEach() {
     // set the locale and the config
-    getOwner(this).lookup('service:i18n').set('locale', 'en');
-    this.register('locale:en/config', localeConfig);
+    getOwner(this).lookup('service:intl').setLocale('en');
   }
 });
 

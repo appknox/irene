@@ -1,21 +1,20 @@
 import { getOwner } from '@ember/application';
-import localeConfig from 'ember-i18n/config/en';
 import { moduleForModel, test } from 'ember-qunit';
 import { run } from '@ember/runloop';
 
 moduleForModel('subscription', 'Unit | Model | subscription', {
   needs: [
-    'service:i18n',
-    'locale:en/translations',
-    'locale:en/config',
-    'util:i18n/missing-message',
-    'util:i18n/compile-template',
-    'config:environment'
+    'config:environment',
+    'service:intl',
+    'ember-intl@adapter:default',
+    'cldr:en',
+    'cldr:ja',
+    'translation:en',
+    'util:intl/missing-message'
   ],
   beforeEach() {
     // set the locale and the config
-    getOwner(this).lookup('service:i18n').set('locale', 'en');
-    this.register('locale:en/config', localeConfig);
+    getOwner(this).lookup('service:intl').setLocale('en');
   }
 });
 
@@ -28,13 +27,13 @@ test('it exists', function(assert) {
 
     subscription.set('isTrial', true);
     subscription.set('isCancelled', true);
-    assert.equal(subscription.get('subscriptionText.string'), "Your trial will expire on", "Expiry Text");
+    assert.equal(subscription.get('subscriptionText'), "Your trial will expire on", "Expiry Text");
     subscription.set('isCancelled', false);
-    assert.equal(subscription.get('subscriptionText.string'), "You will be charged on", "Expiry Text");
+    assert.equal(subscription.get('subscriptionText'), "You will be charged on", "Expiry Text");
     subscription.set('isTrial', false);
     subscription.set('isCancelled', true);
-    assert.equal(subscription.get('subscriptionText.string'), "Your free trial will be converted into paid subscription on", "Expiry Text");
+    assert.equal(subscription.get('subscriptionText'), "Your free trial will be converted into paid subscription on", "Expiry Text");
     subscription.set('isCancelled', false);
-    assert.equal(subscription.get('subscriptionText.string'), "Subscription will expire on", "Expiry Text");
+    assert.equal(subscription.get('subscriptionText'), "Subscription will expire on", "Expiry Text");
   });
 });
