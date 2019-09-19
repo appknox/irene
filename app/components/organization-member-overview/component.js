@@ -17,9 +17,7 @@ export default Component.extend({
     Workaround: as it should never first grey the background
     then make it white (blinking).
   */
-  userDisabled: computed('member.member.isActive', function(){
-    return this.get('member.member.isActive')===false?true:false;
-  }),
+  userDisabled: computed.not('member.member.isActive'),
   tagName: ["tr"],
   roles: ENUMS.ORGANIZATION_ROLES.CHOICES.slice(0, -1),
   member: null,
@@ -33,7 +31,7 @@ export default Component.extend({
   tUserDeactivateTitle: t('userDeactivateTitle'),
 
   /* Change member role */
-  selectMemberRole: task(function * () {
+  selectMemberRole: task(function* () {
     const role = parseInt(this.$('#org-user-role').val());
 
     const member = yield this.get('member');
@@ -42,39 +40,39 @@ export default Component.extend({
 
   }).evented(),
 
-  selectMemberRoleSucceeded: on('selectMemberRole:succeeded', function() {
+  selectMemberRoleSucceeded: on('selectMemberRole:succeeded', function () {
     this.get('notify').success(this.get('tUserRoleUpdated'));
   }),
 
-  selectMemberRoleErrored: on('selectMemberRole:errored', function(_, err) {
+  selectMemberRoleErrored: on('selectMemberRole:errored', function (_, err) {
     let errMsg = this.get('tPleaseTryAgain');
     if (err.errors && err.errors.length) {
       errMsg = err.errors[0].detail || errMsg;
-    } else if(err.message) {
+    } else if (err.message) {
       errMsg = err.message;
     }
     this.get("notify").error(errMsg);
   }),
-  
-  editMemberSetting: task(function* (attacher){
+
+  editMemberSetting: task(function* (attacher) {
     yield attacher.hide();
     let modaltitle = null;
     modaltitle = this.get('tUserActivateTitle')
-    if (this.get('member.member.isActive')){
+    if (this.get('member.member.isActive')) {
       modaltitle = this.get('tUserDeactivateTitle')
     }
     yield this.set('modaltitle', modaltitle);
     yield this.set('showEditModal', true);
   }),
 
-  changeSetting: task(function *(){
+  changeSetting: task(function* () {
     const member = yield this.get('member.member');
     yield member.set('isActive', !member.get('isActive'));
     yield member.save()
     yield this.set('showEditModal', false)
   }).evented(),
 
-  changeSettingErrored: on('changeSetting:errored', function(_, err){
+  changeSettingErrored: on('changeSetting:errored', function (_, err) {
     let errMsg = this.get('tPleaseTryAgain');
     if (err.errors && err.errors.length) {
       errMsg = err.errors[0].detail || errMsg;
@@ -85,15 +83,15 @@ export default Component.extend({
     this.set('showEditModal', false)
   }),
 
-  changeSettingSucceeded: on('changeSetting:succeeded',function (){
+  changeSettingSucceeded: on('changeSetting:succeeded', function () {
     const member = this.get('member.member');
-    let message = member.get('isActive')?this.get('tActivated'): this.get('tDeactivated');
+    let message = member.get('isActive') ? this.get('tActivated') : this.get('tDeactivated');
     this.get('notify').success(`${message} ${member.get('username')}`);
     this.set('showEditModal', false);
   }),
-  actions:{
-    closeModal(){
-        this.set('showEditModal', false);
+  actions: {
+    closeModal() {
+      this.set('showEditModal', false);
     }
   }
 });

@@ -23,12 +23,8 @@ $disable-bg: #f7f7f7;
 }
 
 .user-pop-setting{
-  padding: 10px;
+  padding: 0.8em;;
   background-color: #424651;
-  margin-right: 20px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  margin-top: 0px;
   border-radius: 5px;
   color: #FFF;
 }
@@ -36,21 +32,13 @@ $disable-bg: #f7f7f7;
   color: #949292;
   width: fit-content;
   border-radius: 4px;
-  transition: all 80ms linear;
-  background: rgba(var(--sk_primary_background,255,255,255),1);
-  --saf-0: rgba(var(--sk_primary_foreground,29,28,29),0.3);
-  border: 1px solid var(--saf-0);
-  background-clip: padding-box;
-  font-weight: 700;
-  padding: 2px 7px 3px;
+  border: 1px solid rgba(29, 28, 29, 0.4);
+  padding: 0.3em 0.8em;
 }
 .pop-over-entry:hover{
-  background: rgba(var(--sk_foreground_min,29,28,29),.04);
+  background: rgba(29,28,29,.04);
 }
-.a-color{
-  color: inherit;
-}
-.a-color:hover{
+.a-color, .a-color:hover{
   color: inherit;
 }
 .m-l-1-b-1 {
