@@ -28,7 +28,7 @@
     "broccoli-asset-rev": "^3.0.0",
     "cross-env": "^5.2.0",
     "ember-ajax": "^5.0.0",
-    "ember-attacher": "https://github.com/yashwin/ember-attacher.git",
+    "ember-attacher": "^0.15.1",
     "ember-auto-import": "^1.5.2",
     "ember-awesome-macros": "^5.0.0",
     "ember-changeset": "^2.1.2",

@@ -1,0 +1,34 @@
+form.margin-t-1
+  .columns
+    .column
+      .control.vertical-align-center.margin-b-1
+        = fa-icon "search"
+        = input class="form-control input margin-left" placeholder="Search member" type="text" value=query autofocus="autofocus" key-up="searchQuery"
+    .column
+      .align-end
+        .padding-t-h
+          label
+            = input type="checkbox" checked=showDeactivated class="checkbox" click=(perform showDeactivatedMembers)
+            | &nbsp; #{t "includeInactiveMembers"}
+if hasObjects
+  .columns
+    .column
+      table.org-table
+        tr
+          th
+            = t "user"
+          th.text-centre
+            = t "role"
+          th
+        each sortedObjects as |member|
+          = organization-member-overview member=member organization=organization
+
+  .columns
+    .column
+      .margin-t-h
+        = partial "paginate"
+
+else
+  div class="empty-state"
+    = fa-icon "exclamation-triangle"
+    = t "noMembers"
