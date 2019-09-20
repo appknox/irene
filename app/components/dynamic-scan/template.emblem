@@ -87,7 +87,7 @@ div class="{{if vncViewer 'dynamic-scan-on-vnc' 'dynamic-scan'}}"
             if showApiScanSettings
               .padding-h-1h.padding-t-h.padding-b-1h
                 .font-small.margin-b-1h
-                  = t "modalCard.dynamicScan.apiScanDescription"
+                  = t "modalCard.dynamicScan.apiScanDescription" htmlSafe=true
                 .margin-t-1h
                   .bordered-box.fill-white.padding-b-1
                     = api-filter profileId=file.profile.id

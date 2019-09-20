@@ -24,7 +24,7 @@ if file.project.isAPIScanEnabled
             .vertical-align-top
               = fa-icon "exclamation-triangle"
               .margin-l-1
-                = t "modalCard.apiScan.warning"
+                = t "modalCard.apiScan.warning" htmlSafe=true
 
           .font-small.margin-v-1h
             = t "modalCard.apiScan.description"
