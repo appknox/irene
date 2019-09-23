@@ -3,11 +3,12 @@ import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import { task, waitForEvent } from 'ember-concurrency';
 import ENUMS from 'irene/enums';
-import { translationMacro as t } from 'ember-i18n';
+import { t } from 'ember-intl';
+import { debug } from '@ember/debug';
 
 export default Component.extend({
 
-  i18n: service(),
+  intl: service(),
   ajax: service(),
   notify: service('notification-messages-service'),
   me: service(),
@@ -16,10 +17,23 @@ export default Component.extend({
   mfas: computed(function () {
     return this.get('store').findAll('mfa');
   }),
-  mfaEnabledStatus: {
-    email: false,
-    app: false,
-  },
+  isMFAEnabled: computed('mfas.@each.enabled', function () {
+    return !!this.get('mfas').findBy('enabled', true);
+  }),
+  isEmailMFAEnabled: computed('mfas.@each.enabled', function () {
+    const email = this.get('mfas').findBy('isEmail', true)
+    if (email) {
+      return email.get('enabled');
+    }
+    return false;
+  }),
+  isAppMFAEnabled: computed('mfas.@each.enabled', function () {
+    const app = this.get('mfas').findBy('isApp', true)
+    if (app) {
+      return app.get('enabled');
+    }
+    return false;
+  }),
   mfaEndpoint: '/v2/mfa',
 
   tEnterOTP: t('enterOTP'),
@@ -122,6 +136,7 @@ export default Component.extend({
   }),
   //------No MFA Enable Email end------
   //------No MFA Enable App start------
+  appOTP: "",
   showAppEnableModal: false,
   showAppOTPModel: task(function* () {
     yield this.set('showAppEnableModal', true)
@@ -141,19 +156,8 @@ export default Component.extend({
   noMFAEnableApp: task(function* () {
     try {
       const tokenData = yield this.get('getMFAEnableAppToken').perform();
+      this.set('mfaAppSecret', tokenData.secret);
       this.get('showAppOTPModel').perform();
-      // eslint-disable-next-line no-undef
-      new QRious({
-        element: this.element.querySelector('canvas.nomfatotp'),
-        background: 'white',
-        backgroundAlpha: 0.8,
-        foreground: 'black',
-        foregroundAlpha: 0.8,
-        level: 'H',
-        padding: 25,
-        size: 300,
-        value: getQRURL(this.get('user.email'), tokenData.secret)
-      });
       while (true) {
         const otpData = yield this.get('getAppOTP').perform();
         if (otpData.cancel) {
@@ -194,7 +198,7 @@ export default Component.extend({
       yield this.get('ajax').post(mfaEndpoint, {
         data: {
           method: ENUMS.MFA_METHOD.TOTP,
-          otp: otp,
+          otp: otp || "",
           token: token
         }
       });
@@ -210,7 +214,33 @@ export default Component.extend({
     }
     return true
   }),
-  //------No MFA Enable App start------
+  //------No MFA Enable App end------
+  //------Email MFA Enable App start------
+  showSwitchToEmailModal: false,
+  showSwitchToEmail: task(function* () {
+    yield this.set('showSwitchToEmailModal', true);
+  }),
+  continueSwitchToEmail: task(function* () {
+    yield this.set('showSwitchToEmailModal', false);
+    yield this.get('showConfirmEmailOTP').perform();
+  }),
+  cancelSwitchToEmail: task(function* () {
+    yield this.set('showSwitchToEmailModal', false);
+  }),
+  //------Email MFA Enable App end------
+  //------Email MFA Enable App start------
+  showSwitchToAppModal: false,
+  showSwitchToApp: task(function* () {
+    yield this.set('showSwitchToAppModal', true);
+  }),
+  continueSwitchToApp: task(function* () {
+    yield this.set('showSwitchToAppModal', false);
+    yield this.get('showAppOTPModel').perform();
+  }),
+  cancelSwitchToApp: task(function* () {
+    yield this.set('showSwitchToAppModal', false);
+  }),
+  //------Email MFA Enable App end------
   //------Disable MFA Start ------
   showMFADisableModal: false,
   showConfirmDisableMFA: false,
@@ -243,9 +273,11 @@ export default Component.extend({
     });
   }),
   disableMFA: task(function* (method) {
+    debug('MFA disable called');
     yield this.get('showMFADisable').perform()
     const shouldContinue = yield waitForEvent(this, 'continueDisableMFA');
     if (shouldContinue.cancel) {
+      debug('MFA disable cancelled');
       return;
     }
     try {
@@ -321,20 +353,29 @@ export default Component.extend({
   }),
   //------Disable MFA End ------
   enableMFA: task(function* (method) {
-    switch (+method) {
-      case ENUMS.MFA_METHOD.HOTP:
-        yield this.get('noMFAEnableEmail').perform();
-        break;
-      case ENUMS.MFA_METHOD.TOTP:
-        yield this.get('noMFAEnableApp').perform();
-        break;
-      default:
-        break;
+    if (this.get('isMFAEnabled')) {
+      switch (+method) {
+        case ENUMS.MFA_METHOD.HOTP:
+          yield this.get('showSwitchToEmail').perform();
+          break;
+        case ENUMS.MFA_METHOD.TOTP:
+          yield this.get('showSwitchToApp').perform();
+          break;
+        default:
+          break;
+      }
+    } else {
+      switch (+method) {
+        case ENUMS.MFA_METHOD.HOTP:
+          yield this.get('noMFAEnableEmail').perform();
+          break;
+        case ENUMS.MFA_METHOD.TOTP:
+          yield this.get('noMFAEnableApp').perform();
+          break;
+        default:
+          break;
+      }
     }
     yield this.get('store').findAll('mfa');
   })
 });
-
-function getQRURL(email, mfaSecret) {
-  return `otpauth://totp/Appknox:${email}?secret=${mfaSecret}&issuer=Appknox`;
-}

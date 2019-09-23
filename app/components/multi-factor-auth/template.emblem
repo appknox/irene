@@ -54,6 +54,49 @@
                     = link-to 'authenticated.organization.settings' class="alert-link"
                       = t "organizationSettings"
 
+= modal-card isActive=showMFADisableModal title=(t "modalCard.mfaTitle.disable") onCancel=(perform cancelMFADisable)
+  .card-body.warning-modal class=showConfirmDisableMFA:show:hide
+    .card-wrapper
+      if user.canDisableMfa
+        p
+          = t "modalCard.disableMFA.description"
+        p.control.margin-t-1
+          button.is-primary.highlighted-button click={(perform continueDisableMFA)} disabled=sendDisableMFAOTPEmail.isRunning
+            if sendDisableMFAOTPEmail.isRunning
+              .fa-font-size
+                i.fa class="fa-spinner fa-spin"
+              | &nbsp;
+            = t "continue"
+          button.is-primary.margin-left click={(perform cancelMFADisable)}
+            = t "cancel"
+      else
+        .alert.alert-success.alert-small
+          .vertical-align-center
+            = fa-icon "shield"
+            .margin-l-1
+              = t "disableMFADenied"
+
+  .card-body.warning-modal class=showDisableMFA:show:hide
+    .card-wrapper
+      p
+        = t "modalCard.disableMFA.enterOTP"
+        if isEmailMFAEnabled
+          | &nbsp;(#{t "modalCard.disableMFA.viaEmail"})
+        if isAppMFAEnabled
+          | &nbsp;#{t "modalCard.disableMFA.viaApp"}
+      form.margin-t-1
+        p.control
+          = input class="form-control input" type="text" value=disableOTP
+        p.control.margin-t-1
+          button.is-primary.highlighted-button click={(perform confirmDisableOTP)} disabled=isDisablingMFA
+            if isDisablingMFA
+              .fa-font-size
+                i.fa class="fa-spinner fa-spin"
+              | &nbsp;
+            = t "confirm"
+          button.is-primary.margin-left click={(perform closeMFADisableModal)}
+            = t "cancel"
+
 = modal-card isActive=showEmailEnableModal title=(t "modalCard.mfaTitle.enable") onCancel=(perform cancelEmailEnable)
   .card-body.warning-modal
     .card-wrapper class=showEmailSendConfirm:show:hide
@@ -91,20 +134,32 @@
 
 = modal-card isActive=showAppEnableModal title=(t "modalCard.mfaTitle.enable") onCancel=(perform cancelAppEnable)
   .card-body.warning-modal
-    h3.text-centre
-      = t "modalCard.enableMFAApp.scanBarcode"
-    canvas.qr-code.nomfatotp
-    p.margin-top
-      = t "modalCard.enableMFAApp.enterCode"
-    form.margin-top
-      p.control
-        = input class="form-control input" type="text" value=appOTP
-      div
-        button.is-primary.highlighted-button click={(perform confirmAppOTP)} disabled=verifyAppOTP.isRunning
-          if verifyAppOTP.isRunning
-            .fa-font-size
-              i.fa class="fa-spinner fa-spin"
-            | &nbsp;
-          = t "continue"
-        button.is-primary.margin-left click={(perform cancelAppEnable)}
-          = t "cancel"
+    = mfa-appverify secret=mfaAppSecret email=user.email otp=appOTP onContinue=(perform confirmAppOTP) onCancel=(perform cancelAppEnable) waiting=verifyAppOTP.isRunning
+
+= modal-card isActive=showSwitchToAppModal title=(t "mfaSwitchToAppTitle") onCancel=(perform cancelSwitchToApp)
+  .card-body.warning-modal
+    p
+      = t "mfaSwitchToAppDescription" htmlSafe=true
+    .margin-t-1h.align-end
+      button.is-primary.highlighted-button click={(perform continueSwitchToApp)} disabled=continueSwitchToApp.isRunning
+        if continueSwitchToApp.isRunning
+          .fa-font-size
+            i.fa class="fa-spinner fa-spin"
+          | &nbsp;
+        = t "continue"
+      button.is-primary.margin-left click={(perform cancelSwitchToApp)}
+        = t "cancel"
+
+= modal-card isActive=showSwitchToEmailModal title=(t "mfaSwitchToEmailTitle") onCancel=(perform cancelSwitchToEmail)
+  .card-body.warning-modal
+    p
+      = t "mfaSwitchToEmailDescription" htmlSafe=true
+    .margin-t-1h.align-end
+      button.is-primary.highlighted-button click={(perform continueSwitchToEmail)} disabled=continueSwitchToEmail.isRunning
+        if continueSwitchToEmail.isRunning
+          .fa-font-size
+            i.fa class="fa-spinner fa-spin"
+          | &nbsp;
+        = t "continue"
+      button.is-primary.margin-left click={(perform cancelSwitchToEmail)}
+        = t "cancel"

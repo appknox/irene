@@ -1,0 +1,17 @@
+h3.text-centre
+  = t "modalCard.enableMFAApp.scanBarcode"
+canvas.qr-code.nomfatotp
+p.margin-top
+  = t "modalCard.enableMFAApp.enterCode"
+form.margin-top
+  p.control
+    = input class="form-control input" type="text" value=otp
+  div
+    button.is-primary.highlighted-button click={action "continue"} disabled=waiting
+      if waiting
+        .fa-font-size
+          i.fa class="fa-spinner fa-spin"
+        | &nbsp;
+      = t "continue"
+    button.is-primary.margin-left click={action "cancel"}
+      = t "cancel"

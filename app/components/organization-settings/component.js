@@ -3,11 +3,11 @@ import { inject as service } from '@ember/service';
 import { observer, computed } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
-import { translationMacro as t } from 'ember-i18n';
+import { t } from 'ember-intl';
 
 export default Component.extend({
   me: service(),
-  i18n: service(),
+  intl: service(),
   ajax: service(),
   notify: service('notification-messages-service'),
 
@@ -15,37 +15,37 @@ export default Component.extend({
   tChangedMandatoryMFA: t('changedMandatoryMFA'),
   tPleaseTryAgain: t('pleaseTryAgain'),
 
-  isMfaMandateDisabled: computed('user.mfaEnabled', function() {
+  isMfaMandateDisabled: computed('user.mfaEnabled', function () {
     return !this.get('user.mfaEnabled') || this.get('isSavingStatus');
   }),
 
-  isUserMfaDisabled: computed('user.mfaEnabled', function() {
+  isUserMfaDisabled: computed('user.mfaEnabled', function () {
     return !this.get('user.mfaEnabled');
   }),
 
-  watchMandatoryMFA: observer('organization.mandatoryMfa', function(){
+  watchMandatoryMFA: observer('organization.mandatoryMfa', function () {
     this.get('setMandatoryMFA').perform();
   }),
 
   /* Set mandatory MFA value */
-  setMandatoryMFA: task(function * () {
+  setMandatoryMFA: task(function* () {
     this.set('isSavingStatus', true);
     const org = this.get('organization');
     yield org.set('mandatoryMfa', this.get('organization.mandatoryMfa'));
     yield org.save();
   }).evented(),
 
-  setMandatoryMFASucceeded: on('setMandatoryMFA:succeeded', function() {
+  setMandatoryMFASucceeded: on('setMandatoryMFA:succeeded', function () {
     this.set('isSavingStatus', false);
     this.get('notify').success(this.get('tChangedMandatoryMFA'));
   }),
 
-  setMandatoryMFAErrored: on('setMandatoryMFA:errored', function(_, err) {
+  setMandatoryMFAErrored: on('setMandatoryMFA:errored', function (_, err) {
     this.set('isSavingStatus', false);
     let errMsg = this.get('tPleaseTryAgain');
     if (err.errors && err.errors.length) {
       errMsg = err.errors[0].detail || errMsg;
-    } else if(err.message) {
+    } else if (err.message) {
       errMsg = err.message;
     }
 

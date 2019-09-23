@@ -254,6 +254,10 @@
   "mfaEmailDesc": "OTP will be sent to the email address associated with your appknox account.",
   "mfaEnabled": "Multi Factor Authentication is now enabled",
   "mfaSelect": "Choose one option from the following methods to receive your one-time password",
+  "mfaSwitchToAppTitle": "Switch to Authenticator app MFA",
+  "mfaSwitchToAppDescription": "Are you sure you want to switch to Authenticator app MFA? <br>You will no longer be receiving OTP via email.",
+  "mfaSwitchToEmailTitle": "Switch to email MFA",
+  "mfaSwitchToEmailDescription": "Are you sure you want to switch to email MFA? <br>OTP from authenticator app will no longer work.",
   "month": "Month",
   "monthly": "Monthly",
   "mostRecent": " (Most Recent First)",
@@ -536,7 +540,7 @@
     "mfaTitle": {
       "change": "Change Multi Factor Authentication",
       "enable": "Enable Multi Factor Authentication",
-      "disable": "Disable Multi Factor Authentication",
+      "disable": "Disable Multi Factor Authentication"
     },
     "enableMFAApp": {
       "scanBarcode": "Scan this barcode with your 2FA app",
@@ -551,7 +555,7 @@
       "description": "If you turn off Multi Factor Authentication, your account will only be protected by your password.",
       "enterOTP": "To confirm, please enter the OTP",
       "viaEmail": "sent via email",
-      "viaApp": "from Authenticator app",
+      "viaApp": "from Authenticator app"
     },
     "addCollaborator": {
       "title": "Add collaborator to project"

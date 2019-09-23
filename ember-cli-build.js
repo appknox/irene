@@ -4,7 +4,7 @@ var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 var environment = EmberApp.env();
 var minifyEnabled = environment === "production" || environment === "staging" || environment === "whitelabel";
 
-module.exports = function(defaults) {
+module.exports = function (defaults) {
   let app = new EmberApp(defaults, {
     // Add options here
     storeConfigInMeta: false,
@@ -36,7 +36,7 @@ module.exports = function(defaults) {
         whitelabel: '.env'
       }
     },
-    sourcemaps: {enabled: false},
+    sourcemaps: { enabled: false },
     'ember-cli-babel': {
       includePolyfill: true
     }
@@ -69,28 +69,22 @@ module.exports = function(defaults) {
    * including pace
    */
   app.import('bower_components/pace/pace.js');
+  /*
+   * including clipboard
+   */
+  app.import('bower_components/clipboard/dist/clipboard.min.js');
 
   /*
-   * including QRious
+   * including devices.css
    */
-   app.import('bower_components/qrious/dist/qrious.min.js');
-
-   /*
-    * including clipboard
-    */
-   app.import('bower_components/clipboard/dist/clipboard.min.js');
-
-   /*
-    * including devices.css
-    */
-    app.import('bower_components/devices.css/assets/devices.min.css');
-    app.import('node_modules/billboard.js/dist/billboard.css');
+  app.import('bower_components/devices.css/assets/devices.min.css');
+  app.import('node_modules/billboard.js/dist/billboard.css');
 
 
   /*
    * including chart.js
    */
-   app.import('bower_components/chart.js/dist/Chart.js');
+  app.import('bower_components/chart.js/dist/Chart.js');
 
   return app.toTree();
 };

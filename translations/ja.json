@@ -255,6 +255,10 @@
   "mfaEmailDesc": "OTP will be sent to the email address associated with your appknox account.",
   "mfaEnabled": "マルチファクタ認証が有効になりました",
   "mfaSelect": "Choose one option from the following methods to receive your one-time password",
+  "mfaSwitchToAppTitle": "Switch to Authenticator app MFA",
+  "mfaSwitchToAppDescription": "Are you sure you want to switch to Authenticator app MFA? <br>You will no longer be receiving OTP via email.",
+  "mfaSwitchToEmailTitle": "Switch to email MFA",
+  "mfaSwitchToEmailDescription": "Are you sure you want to switch to email MFA? <br>OTP from authenticator app will no longer work.",
   "month": "月",
   "monthly": "１か月",
   "mostRecent": " (新しい順)",
@@ -536,7 +540,7 @@
     "mfaTitle": {
       "change": "Change Multi Factor Authentication",
       "enable": "Enable Multi Factor Authentication",
-      "disable": "Disable Multi Factor Authentication",
+      "disable": "Disable Multi Factor Authentication"
     },
     "enableMFAApp": {
       "scanBarcode": "あなたのアプリでこのバーコードをスキャンする",
@@ -551,7 +555,7 @@
       "description": "マルチファクタ認証を無効にすると、アカウントはパスワードでのみ保護されます。",
       "enterOTP": "確認するには、OTPを入力してください",
       "viaEmail": "sent via email",
-      "viaApp": "from Authenticator app",
+      "viaApp": "from Authenticator app"
     },
     "addCollaborator": {
       "title": "Add collaborator to project"
