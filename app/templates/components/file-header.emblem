@@ -294,7 +294,7 @@
         if manualscan.loginRequired
           .user-roles
             h6.margin-top
-               = t "modalCard.manual.enterLoginDetails"
+               = t "modalCard.manual.enterLoginDetails" htmlSafe=true
             .columns.no-border-column
               .column
                 form.columns.no-border-column
