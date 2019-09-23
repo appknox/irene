@@ -136,7 +136,6 @@ export default Component.extend({
   }),
   //------No MFA Enable Email end------
   //------No MFA Enable App start------
-  appOTP: "",
   showAppEnableModal: false,
   showAppOTPModel: task(function* () {
     yield this.set('showAppEnableModal', true)
@@ -215,7 +214,7 @@ export default Component.extend({
     return true
   }),
   //------No MFA Enable App end------
-  //------Email MFA Enable App start------
+  //------Switch To Email MFA start------
   showSwitchToEmailModal: false,
   showSwitchToEmail: task(function* () {
     yield this.set('showSwitchToEmailModal', true);
@@ -364,20 +363,177 @@ export default Component.extend({
       }
     }
   }),
-  //------Email MFA Enable App end------
-  //------Email MFA Enable App start------
-  showSwitchToAppModal: false,
-  showSwitchToApp: task(function* () {
-    yield this.set('showSwitchToAppModal', true);
+  //------Switch To Email MFA end------
+  //------Switch To App MFA start------
+  staModalActive: false,
+  staShow: task(function* () {
+    yield this.set('staModalActive', true);
+    yield this.set('staAppConfirmActive', true);
+    yield this.set('staEmailVerifyActive', false);
+    yield this.set('staAppVerifyActive', false);
+    this.set('appOTP', "");
+    this.set('emailOTP', "");
   }),
-  continueSwitchToApp: task(function* () {
-    yield this.set('showSwitchToAppModal', false);
-    yield this.get('showAppOTPModel').perform();
+  staClose: task(function* () {
+    yield this.set('staModalActive', false);
+    yield this.set('staAppConfirmActive', false);
+    yield this.set('staEmailVerifyActive', false);
+    yield this.set('staAppVerifyActive', false);
+    this.set('appOTP', "");
+    this.set('emailOTP', "");
   }),
-  cancelSwitchToApp: task(function* () {
-    yield this.set('showSwitchToAppModal', false);
+  staCancel: task(function* () {
+    yield this.get('staClose').perform();
+    yield this.trigger('staConfirm', {
+      cancel: true
+    })
+    yield this.trigger('staConfirmEmailOTP', {
+      cancel: true
+    });
+    yield this.trigger('staConfirmAppOTP', {
+      cancel: true
+    });
   }),
-  //------Email MFA Enable App end------
+  staConfirm: task(function* () {
+    yield this.get('staShow').perform();
+    return yield waitForEvent(this, 'staConfirm');
+  }),
+  staShowVerifyEmail: task(function* () {
+    yield this.set('staAppConfirmActive', false);
+    yield this.set('staEmailVerifyActive', true);
+    yield this.set('staAppVerifyActive', false);
+  }),
+  staShowVerifyApp: task(function* () {
+    yield this.set('staAppConfirmActive', false);
+    yield this.set('staEmailVerifyActive', false);
+    yield this.set('staAppVerifyActive', true);
+  }),
+  staConfirmEmailOTP: task(function* () {
+    yield this.get('staShowVerifyEmail').perform();
+    return yield waitForEvent(this, 'staConfirmEmailOTP');
+  }),
+  staConfirmAppOTP: task(function* () {
+    yield this.get('staShowVerifyApp').perform();
+    return yield waitForEvent(this, 'staConfirmAppOTP');
+  }),
+  staOnConfirm: task(function* () {
+    yield this.trigger('staConfirm', {
+      cancel: false
+    });
+  }),
+  staOnConfirmEmailOTP: task(function* () {
+    const emailOTP = this.get('emailOTP');
+    yield this.trigger('staConfirmEmailOTP', {
+      otp: emailOTP,
+      cancel: false
+    });
+  }),
+  staOnConfirmAppOTP: task(function* () {
+    const appOTP = this.get('appOTP');
+    yield this.trigger('staConfirmAppOTP', {
+      otp: appOTP,
+      cancel: false
+    });
+  }),
+  staInitialEmail: task(function* () {
+    const mfaEndpoint = this.get('mfaEndpoint');
+    try {
+      yield this.get('ajax').post(mfaEndpoint, {
+        data: {
+          method: ENUMS.MFA_METHOD.TOTP
+        }
+      });
+    } catch (error) {
+      const errorObj = error.payload || {}
+      const otpMsg = errorObj.otp && errorObj.otp[0];
+      if (otpMsg) {
+        return
+      }
+      this.get('notify').error(this.get('tsomethingWentWrong'));
+    }
+  }),
+  staVerifyEmailOTP: task(function* (otp) {
+    const mfaEndpoint = this.get('mfaEndpoint');
+    try {
+      const tokenData = yield this.get('ajax').post(mfaEndpoint, {
+        data: {
+          method: ENUMS.MFA_METHOD.TOTP,
+          otp: otp || ""
+        }
+      });
+      return tokenData;
+    } catch (error) {
+      const errorObj = error.payload || {}
+      const otpMsg = errorObj.otp && errorObj.otp[0];
+      if (otpMsg) {
+        this.get('notify').error(this.get('tInvalidOTP'));
+        return
+      }
+      this.get('notify').error(this.get('tsomethingWentWrong'));
+    }
+  }),
+  staVerifyAppOTP: task(function* (otp, token) {
+    const mfaEndpoint = this.get('mfaEndpoint');
+    try {
+      yield this.get('ajax').post(mfaEndpoint, {
+        data: {
+          method: ENUMS.MFA_METHOD.TOTP,
+          otp: otp || "",
+          token: token
+        }
+      });
+    } catch (error) {
+      const errorObj = error.payload || {}
+      const otpMsg = errorObj.otp && errorObj.otp[0];
+      if (otpMsg) {
+        this.get('notify').error(this.get('tInvalidOTP'));
+        return false;
+      }
+      this.get('notify').error(this.get('tsomethingWentWrong'));
+      return false;
+    }
+    return true
+  }),
+  sta: task(function* () {
+    const confirmSwitch = yield this.get('staConfirm').perform();
+    if (confirmSwitch.cancel) {
+      return;
+    }
+    var emailOTPNotConfirmed = true;
+    var tokenData;
+    yield this.get('staInitialEmail').perform();
+    do {
+      debug('sta: In Email OTP Loop');
+      const emailOTPData = yield this.get('staConfirmEmailOTP').perform();
+      if (emailOTPData.cancel) {
+        return;
+      }
+      tokenData = yield this.get('staVerifyEmailOTP').perform(
+        emailOTPData.otp
+      );
+      emailOTPNotConfirmed = !(tokenData || {}).token;
+    } while (emailOTPNotConfirmed);
+
+    debug('sta: Email OTP Token Data ' + tokenData.token);
+
+    this.set('mfaAppSecret', tokenData.secret);
+
+    while (true) {
+      debug('sta: In App OTP Loop');
+      const appOTPData = yield this.get('staConfirmAppOTP').perform();
+      if (appOTPData.cancel) {
+        return;
+      }
+      const confirmed = yield this.get('staVerifyAppOTP').perform(
+        appOTPData.otp, tokenData.token
+      );
+      if (confirmed) {
+        yield this.get('staClose').perform();
+        return;
+      }
+    }
+  }),
+  //------Switch To App MFA end------
   //------Disable MFA Start ------
   showMFADisableModal: false,
   showConfirmDisableMFA: false,
@@ -496,7 +652,7 @@ export default Component.extend({
           yield this.get('switchToEmail').perform();
           break;
         case ENUMS.MFA_METHOD.TOTP:
-          yield this.get('switchToApp').perform();
+          yield this.get('sta').perform();
           break;
         default:
           break;
