@@ -1,8 +1,10 @@
 import Component from '@ember/component';
+import { inject as service } from '@ember/service';
 import { computed, observer } from '@ember/object';
 import QRious from 'qrious';
 
 export default Component.extend({
+  intl: service(),
   secret: null,
   email: null,
   otp: "",

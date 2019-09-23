@@ -41,10 +41,6 @@ export default Component.extend({
   tInvalidOTP: t('invalidOTP'),
   tsomethingWentWrong: t('somethingWentWrong'),
 
-  didInsertElement() {
-    window.test = this;
-  },
-
   //------No MFA Enable Email start------
   showEmailEnableModal: false,
   closeEmailEnable: task(function* () {
