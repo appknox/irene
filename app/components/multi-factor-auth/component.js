@@ -219,13 +219,150 @@ export default Component.extend({
   showSwitchToEmailModal: false,
   showSwitchToEmail: task(function* () {
     yield this.set('showSwitchToEmailModal', true);
+    yield this.set('showSwitchToEmailConfirm', true);
+    yield this.set('showSwitchTOEmailAppVerify', false);
+    yield this.set('showSwitchTOEmailEmailVerify', false);
+    this.set('appOTP', "");
+    this.set('emailOTP', "");
   }),
-  continueSwitchToEmail: task(function* () {
+  closeSwitchToEmail: task(function* () {
     yield this.set('showSwitchToEmailModal', false);
-    yield this.get('showConfirmEmailOTP').perform();
+    yield this.set('showSwitchToEmailConfirm', false);
+    yield this.set('showSwitchTOEmailAppVerify', false);
+    yield this.set('showSwitchTOEmailEmailVerify', false);
+    this.set('appOTP', "");
+    this.set('emailOTP', "");
   }),
   cancelSwitchToEmail: task(function* () {
-    yield this.set('showSwitchToEmailModal', false);
+    yield this.get('closeSwitchToEmail').perform();
+    yield this.trigger('confirmSwitchToEmail', {
+      cancel: true
+    })
+    yield this.trigger('confirmSwitchToEmailAppOTP', {
+      cancel: true
+    });
+    yield this.trigger('confirmSwitchToEmailEmailOTP', {
+      cancel: true
+    });
+  }),
+  confirmSwitchToEmail: task(function* () {
+    yield this.get('showSwitchToEmail').perform();
+    return yield waitForEvent(this, 'confirmSwitchToEmail');
+  }),
+  showSwitchToEmailVerifyApp: task(function* () {
+    yield this.set('showSwitchToEmailConfirm', false);
+    yield this.set('showSwitchTOEmailAppVerify', true);
+    yield this.set('showSwitchTOEmailEmailVerify', false);
+  }),
+  showSwitchToEmailVerifyEmail: task(function* () {
+    yield this.set('showSwitchToEmailConfirm', false);
+    yield this.set('showSwitchTOEmailAppVerify', false);
+    yield this.set('showSwitchTOEmailEmailVerify', true);
+  }),
+  confirmSwitchToEmailAppOTP: task(function* () {
+    yield this.get('showSwitchToEmailVerifyApp').perform();
+    return yield waitForEvent(this, 'confirmSwitchToEmailAppOTP');
+  }),
+  confirmSwitchToEmailEmailOTP: task(function* () {
+    yield this.get('showSwitchToEmailVerifyEmail').perform();
+    return yield waitForEvent(this, 'confirmSwitchToEmailEmailOTP');
+  }),
+  onConfirmSwitchToEmail: task(function* () {
+    yield this.trigger('confirmSwitchToEmail', {
+      cancel: false
+    });
+  }),
+  onConfirmSwitchToEmailAppOTP: task(function* () {
+    const appOTP = this.get('appOTP');
+    yield this.trigger('confirmSwitchToEmailAppOTP', {
+      otp: appOTP,
+      cancel: false
+    });
+  }),
+  onConfirmSwitchToEmailEmailOTP: task(function* () {
+    const emailOTP = this.get('emailOTP');
+    yield this.trigger('confirmSwitchToEmailEmailOTP', {
+      otp: emailOTP,
+      cancel: false
+    });
+  }),
+  verifySwitchToEmailAppOTP: task(function* (otp) {
+    const mfaEndpoint = this.get('mfaEndpoint');
+    try {
+      const tokenData = yield this.get('ajax').post(mfaEndpoint, {
+        data: {
+          method: ENUMS.MFA_METHOD.HOTP,
+          otp: otp || ""
+        }
+      });
+      return tokenData;
+    } catch (error) {
+      const errorObj = error.payload || {}
+      const otpMsg = errorObj.otp && errorObj.otp[0];
+      if (otpMsg) {
+        this.get('notify').error(this.get('tInvalidOTP'));
+        return
+      }
+      this.get('notify').error(this.get('tsomethingWentWrong'));
+    }
+  }),
+  verifySwitchToEmailEmailOTP: task(function* (otp, token) {
+    const mfaEndpoint = this.get('mfaEndpoint');
+    try {
+      yield this.get('ajax').post(mfaEndpoint, {
+        data: {
+          method: ENUMS.MFA_METHOD.HOTP,
+          otp: otp || "",
+          token: token
+        }
+      });
+    } catch (error) {
+      const errorObj = error.payload || {}
+      const otpMsg = errorObj.otp && errorObj.otp[0];
+      if (otpMsg) {
+        this.get('notify').error(this.get('tInvalidOTP'));
+        return false;
+      }
+      this.get('notify').error(this.get('tsomethingWentWrong'));
+      return false;
+    }
+    return true
+  }),
+  switchToEmail: task(function* () {
+    const confirmSwitch = yield this.get('confirmSwitchToEmail').perform();
+    if (confirmSwitch.cancel) {
+      return;
+    }
+    var appOTPNotConfirmed = true;
+    var tokenData;
+    do {
+      debug('SwitchTOEmail: In App OTP Loop');
+      const appOTPData = yield this.get('confirmSwitchToEmailAppOTP').perform();
+      if (appOTPData.cancel) {
+        return;
+      }
+      tokenData = yield this.get('verifySwitchToEmailAppOTP').perform(
+        appOTPData.otp
+      );
+      appOTPNotConfirmed = !(tokenData || {}).token;
+    } while (appOTPNotConfirmed);
+
+    debug('SwitchTOEmail: App OTP Token Data ' + tokenData.token);
+
+    while (true) {
+      debug('SwitchTOEmail: In Email OTP Loop');
+      const emailOTPData = yield this.get('confirmSwitchToEmailEmailOTP').perform();
+      if (emailOTPData.cancel) {
+        return;
+      }
+      const confirmed = yield this.get('verifySwitchToEmailEmailOTP').perform(
+        emailOTPData.otp, tokenData.token
+      );
+      if (confirmed) {
+        yield this.get('closeSwitchToEmail').perform();
+        return;
+      }
+    }
   }),
   //------Email MFA Enable App end------
   //------Email MFA Enable App start------
@@ -356,10 +493,10 @@ export default Component.extend({
     if (this.get('isMFAEnabled')) {
       switch (+method) {
         case ENUMS.MFA_METHOD.HOTP:
-          yield this.get('showSwitchToEmail').perform();
+          yield this.get('switchToEmail').perform();
           break;
         case ENUMS.MFA_METHOD.TOTP:
-          yield this.get('showSwitchToApp').perform();
+          yield this.get('switchToApp').perform();
           break;
         default:
           break;
