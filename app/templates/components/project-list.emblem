@@ -45,4 +45,4 @@ else
       h5
         = t "noProjectUploaded"
       h6
-        = t "uploadNewProject"
+        = t "uploadNewProject" htmlSafe=true
