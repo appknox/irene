@@ -6,7 +6,7 @@ p.margin-top
 form.margin-top
   p.control
     = input class="form-control input" type="text" value=otp
-  div
+  .align-end
     button.is-primary.highlighted-button click={action "continue"} disabled=waiting
       if waiting
         .fa-font-size

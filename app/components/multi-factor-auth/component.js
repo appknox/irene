@@ -21,14 +21,14 @@ export default Component.extend({
     return !!this.get('mfas').findBy('enabled', true);
   }),
   isEmailMFAEnabled: computed('mfas.@each.enabled', function () {
-    const email = this.get('mfas').findBy('isEmail', true)
+    const email = this.get('mfas').findBy('isEmail', true);
     if (email) {
       return email.get('enabled');
     }
     return false;
   }),
   isAppMFAEnabled: computed('mfas.@each.enabled', function () {
-    const app = this.get('mfas').findBy('isApp', true)
+    const app = this.get('mfas').findBy('isApp', true);
     if (app) {
       return app.get('enabled');
     }
@@ -46,24 +46,30 @@ export default Component.extend({
   closeEmailEnable: task(function* () {
     this.set('showEmailSendConfirm', false);
     this.set('showEmailOTPEnter', false);
-    yield this.set('showEmailEnableModal', false)
+    yield this.set('showEmailEnableModal', false);
   }),
   cancelEmailEnable: task(function* () {
     yield this.get('closeEmailEnable').perform();
     yield this.trigger('confirmSendEmail', {
       cancel: true
     });
+    yield this.trigger('confirmEmailOTP', {
+      cancel: true
+    });
   }),
   noMFAEnableEmail: task(function* () {
-    const confirmEmailSend = yield this.get('showConfirmEmailOTP').perform()
+    yield this.set('emailOTP', "");
+    const confirmEmailSend = yield this.get('showConfirmEmailOTP').perform();
     if (confirmEmailSend.cancel) {
       return;
     }
     const tokenData = yield this.get('getMFAEnableEmailToken').perform();
     this.get('notify').success('OTP sent to ' + this.get('user.email'));
     while (true) {
+      debug('noMFAEnableEmail: In side otp loop');
       let otpData = yield this.get('showEmailOTP').perform();
       if (otpData.cancel) {
+        debug('noMFAEnableEmail: otp cancel called');
         return;
       }
       const confirmed = yield this.get('verifyEmailOTP').perform(
@@ -95,7 +101,7 @@ export default Component.extend({
         }
       });
     } catch (error) {
-      const errorObj = error.payload || {}
+      const errorObj = error.payload || {};
       const otpMsg = errorObj.otp && errorObj.otp[0];
       if (otpMsg) {
         this.get('notify').error(this.get('tInvalidOTP'));
@@ -104,12 +110,12 @@ export default Component.extend({
       this.get('notify').error(this.get('tsomethingWentWrong'));
       return false;
     }
-    return true
+    return true;
   }),
   showConfirmEmailOTP: task(function* () {
     this.set('showEmailSendConfirm', true);
     this.set('showEmailOTPEnter', false);
-    yield this.set('showEmailEnableModal', true)
+    yield this.set('showEmailEnableModal', true);
     return yield waitForEvent(this, 'confirmSendEmail');
   }),
 
@@ -128,13 +134,13 @@ export default Component.extend({
     yield this.trigger('confirmEmailOTP', {
       otp: emailOTP,
       cancel: false
-    })
+    });
   }),
   //------No MFA Enable Email end------
   //------No MFA Enable App start------
   showAppEnableModal: false,
   showAppOTPModel: task(function* () {
-    yield this.set('showAppEnableModal', true)
+    yield this.set('showAppEnableModal', true);
   }),
   cancelAppEnable: task(function* () {
     yield this.get('closeAppEnable').perform();
@@ -149,6 +155,7 @@ export default Component.extend({
     return yield waitForEvent(this, 'confirmAppOTP');
   }),
   noMFAEnableApp: task(function* () {
+    yield this.set('appOTP', "");
     try {
       const tokenData = yield this.get('getMFAEnableAppToken').perform();
       this.set('mfaAppSecret', tokenData.secret);
@@ -188,6 +195,7 @@ export default Component.extend({
     });
   }),
   verifyAppOTP: task(function* (otp, token) {
+    yield this.set('appOTP', "");
     const mfaEndpoint = this.get('mfaEndpoint');
     try {
       yield this.get('ajax').post(mfaEndpoint, {
@@ -198,7 +206,7 @@ export default Component.extend({
         }
       });
     } catch (error) {
-      const errorObj = error.payload || {}
+      const errorObj = error.payload || {};
       const otpMsg = errorObj.otp && errorObj.otp[0];
       if (otpMsg) {
         this.get('notify').error(this.get('tInvalidOTP'));
@@ -207,7 +215,7 @@ export default Component.extend({
       this.get('notify').error(this.get('tsomethingWentWrong'));
       return false;
     }
-    return true
+    return true;
   }),
   //------No MFA Enable App end------
   //------Switch To Email MFA start------
@@ -292,16 +300,17 @@ export default Component.extend({
       });
       return tokenData;
     } catch (error) {
-      const errorObj = error.payload || {}
+      const errorObj = error.payload || {};
       const otpMsg = errorObj.otp && errorObj.otp[0];
       if (otpMsg) {
         this.get('notify').error(this.get('tInvalidOTP'));
-        return
+        return;
       }
       this.get('notify').error(this.get('tsomethingWentWrong'));
     }
   }),
   verifySwitchToEmailEmailOTP: task(function* (otp, token) {
+    yield this.set('emailOTP', "");
     const mfaEndpoint = this.get('mfaEndpoint');
     try {
       yield this.get('ajax').post(mfaEndpoint, {
@@ -312,7 +321,7 @@ export default Component.extend({
         }
       });
     } catch (error) {
-      const errorObj = error.payload || {}
+      const errorObj = error.payload || {};
       const otpMsg = errorObj.otp && errorObj.otp[0];
       if (otpMsg) {
         this.get('notify').error(this.get('tInvalidOTP'));
@@ -321,7 +330,7 @@ export default Component.extend({
       this.get('notify').error(this.get('tsomethingWentWrong'));
       return false;
     }
-    return true
+    return true;
   }),
   switchToEmail: task(function* () {
     const confirmSwitch = yield this.get('confirmSwitchToEmail').perform();
@@ -440,16 +449,21 @@ export default Component.extend({
         }
       });
     } catch (error) {
-      const errorObj = error.payload || {}
+      const errorObj = error.payload || {};
       const otpMsg = errorObj.otp && errorObj.otp[0];
       if (otpMsg) {
-        return
+        return;
       }
       this.get('notify').error(this.get('tsomethingWentWrong'));
     }
   }),
   staVerifyEmailOTP: task(function* (otp) {
+    yield this.set('emailOTP', "");
     const mfaEndpoint = this.get('mfaEndpoint');
+    if (!otp) {
+      this.get('notify').error(this.get('tEnterOTP'));
+      return false;
+    }
     try {
       const tokenData = yield this.get('ajax').post(mfaEndpoint, {
         data: {
@@ -459,17 +473,22 @@ export default Component.extend({
       });
       return tokenData;
     } catch (error) {
-      const errorObj = error.payload || {}
+      const errorObj = error.payload || {};
       const otpMsg = errorObj.otp && errorObj.otp[0];
       if (otpMsg) {
         this.get('notify').error(this.get('tInvalidOTP'));
-        return
+        return;
       }
       this.get('notify').error(this.get('tsomethingWentWrong'));
     }
   }),
   staVerifyAppOTP: task(function* (otp, token) {
+    yield this.set('appOTP', "");
     const mfaEndpoint = this.get('mfaEndpoint');
+    if (!otp) {
+      this.get('notify').error(this.get('tEnterOTP'));
+      return false;
+    }
     try {
       yield this.get('ajax').post(mfaEndpoint, {
         data: {
@@ -479,7 +498,7 @@ export default Component.extend({
         }
       });
     } catch (error) {
-      const errorObj = error.payload || {}
+      const errorObj = error.payload || {};
       const otpMsg = errorObj.otp && errorObj.otp[0];
       if (otpMsg) {
         this.get('notify').error(this.get('tInvalidOTP'));
@@ -488,7 +507,7 @@ export default Component.extend({
       this.get('notify').error(this.get('tsomethingWentWrong'));
       return false;
     }
-    return true
+    return true;
   }),
   sta: task(function* () {
     const confirmSwitch = yield this.get('staConfirm').perform();
@@ -563,7 +582,8 @@ export default Component.extend({
   }),
   disableMFA: task(function* (method) {
     debug('MFA disable called');
-    yield this.get('showMFADisable').perform()
+    this.set('disableOTP', '');
+    yield this.get('showMFADisable').perform();
     const shouldContinue = yield waitForEvent(this, 'continueDisableMFA');
     if (shouldContinue.cancel) {
       debug('MFA disable cancelled');
@@ -571,9 +591,9 @@ export default Component.extend({
     }
     try {
       if (method == ENUMS.MFA_METHOD.HOTP) {
-        yield this.get('sendDisableMFAOTPEmail').perform()
+        yield this.get('sendDisableMFAOTPEmail').perform();
       }
-      yield this.get('showMFADisableOTP').perform()
+      yield this.get('showMFADisableOTP').perform();
       while (true) {
         const otpData = yield this.get('getDisableOTP').perform();
         if (otpData.cancel) {
@@ -604,7 +624,7 @@ export default Component.extend({
     } catch (error) {
       const payload = error.payload || {};
       if (payload.otp && payload.otp.length) {
-        return
+        return;
       }
       throw error;
     }
@@ -619,7 +639,7 @@ export default Component.extend({
         data: data,
       });
     } catch (error) {
-      const errorObj = error.payload || {}
+      const errorObj = error.payload || {};
       const otpMsg = errorObj.otp && errorObj.otp[0];
       if (otpMsg) {
         this.get('notify').error(this.get('tInvalidOTP'));
@@ -638,7 +658,7 @@ export default Component.extend({
     yield this.trigger('confirmDisableOTP', {
       otp: disableOTP,
       cancel: false
-    })
+    });
   }),
   //------Disable MFA End ------
   enableMFA: task(function* (method) {

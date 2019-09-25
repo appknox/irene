@@ -60,7 +60,7 @@
       if user.canDisableMfa
         p
           = t "modalCard.disableMFA.description"
-        p.control.margin-t-1
+        .margin-t-1.align-end
           button.is-primary.highlighted-button click={(perform continueDisableMFA)} disabled=sendDisableMFAOTPEmail.isRunning
             if sendDisableMFAOTPEmail.isRunning
               .fa-font-size
@@ -87,14 +87,14 @@
       form.margin-t-1
         p.control
           = input class="form-control input" type="text" value=disableOTP
-        p.control.margin-t-1
+        .margin-t-1.align-end
           button.is-primary.highlighted-button click={(perform confirmDisableOTP)} disabled=isDisablingMFA
             if isDisablingMFA
               .fa-font-size
                 i.fa class="fa-spinner fa-spin"
               | &nbsp;
             = t "confirm"
-          button.is-primary.margin-left click={(perform closeMFADisableModal)}
+          button.is-primary.margin-left click={(perform cancelMFADisable)}
             = t "cancel"
 
 = modal-card isActive=showEmailEnableModal title=(t "modalCard.mfaTitle.enable") onCancel=(perform cancelEmailEnable)
@@ -104,7 +104,7 @@
         = t "modalCard.enableMFAEmail.sendMailMsg"
         span.bold
           | {{ user.email }}
-      .margin-t-1h.align-end
+      .margin-t-1h.align-end.align-end
         button.is-primary.highlighted-button click={(perform sendEmailMFA)} disabled=getMFAEnableEmailToken.isRunning
           if getMFAEnableEmailToken.isRunning
             .fa-font-size
@@ -124,7 +124,7 @@
         p.control
            = t "modalCard.enableMFAEmail.enterCode"
         = input class="form-control input" type="text" value=emailOTP
-        .margin-t-1.align-both.vertical-slign-center
+        .margin-t-1.align-end.vertical-align-center
           button.is-primary.highlighted-button click={(perform confirmEmailOTP)} disabled=verifyEmailOTP.isRunning
             if verifyEmailOTP.isRunning
               .fa-font-size
@@ -162,7 +162,7 @@
         p.control
            = t "modalCard.enableMFAEmail.enterCode"
         = input class="form-control input" type="text" value=emailOTP
-        .margin-t-1.align-both.vertical-slign-center
+        .margin-t-1.align-end.vertical-align-center
           button.is-primary.highlighted-button click={(perform staOnConfirmEmailOTP)} disabled=staVerifyEmailOTP.isRunning
             if staVerifyEmailOTP.isRunning
               .fa-font-size
@@ -195,7 +195,7 @@
       form.margin-t-1
         p.control
           = input class="form-control input" type="text" value=appOTP
-        p.control.margin-t-1
+        .margin-t-1.align-end
           button.is-primary.highlighted-button click={(perform onConfirmSwitchToEmailAppOTP)} disabled=verifySwitchToEmailAppOTP.isRunning
             if verifySwitchToEmailAppOTP.isRunning
               .fa-font-size
@@ -216,7 +216,7 @@
         p.control
            = t "modalCard.enableMFAEmail.enterCode"
         = input class="form-control input" type="text" value=emailOTP
-        .margin-t-1.align-both.vertical-slign-center
+        .margin-t-1.align-end.vertical-align-center
           button.is-primary.highlighted-button click={(perform onConfirmSwitchToEmailEmailOTP)} disabled=verifyEmailOTP.isRunning
             if verifyEmailOTP.isRunning
               .fa-font-size

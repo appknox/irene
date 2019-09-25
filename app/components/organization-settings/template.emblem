@@ -21,8 +21,6 @@ if me.org.is_owner
                 .vertical-align-center
                   = fa-icon "warning"
                   .margin-l-h
-                    span.bold
-                      | #{t "warning"}!&nbsp;
                     = t "enableMandatoryMFAWarning"
               if isUserMfaDisabled
                 .margin-t-1
