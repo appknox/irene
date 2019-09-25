@@ -337,7 +337,7 @@ export default Component.extend({
     if (confirmSwitch.cancel) {
       return;
     }
-    var appOTPNotConfirmed = true;
+    var appOTPNotConfirmed;
     var tokenData;
     do {
       debug('SwitchTOEmail: In App OTP Loop');
@@ -468,7 +468,7 @@ export default Component.extend({
       const tokenData = yield this.get('ajax').post(mfaEndpoint, {
         data: {
           method: ENUMS.MFA_METHOD.TOTP,
-          otp: otp || ""
+          otp: otp
         }
       });
       return tokenData;
@@ -493,7 +493,7 @@ export default Component.extend({
       yield this.get('ajax').post(mfaEndpoint, {
         data: {
           method: ENUMS.MFA_METHOD.TOTP,
-          otp: otp || "",
+          otp: otp,
           token: token
         }
       });
@@ -514,7 +514,7 @@ export default Component.extend({
     if (confirmSwitch.cancel) {
       return;
     }
-    var emailOTPNotConfirmed = true;
+    var emailOTPNotConfirmed;
     var tokenData;
     yield this.get('staInitialEmail').perform();
     do {
