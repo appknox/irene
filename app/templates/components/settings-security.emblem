@@ -4,11 +4,7 @@
       h5.bold.black-text.is-fullwidth
         = t "changePassword"
       = password-change
-.box-container
+.padding-h-1.padding-t-1.padding-b-3
   .columns
-    .column.is-half
-      h5.bold.black-text.is-fullwidth
-        = t "multiFactorAuth"
-      = t "mfaDescription"
-      .margin-top20
-        = auth-mfa user=user
+    .column
+      = multi-factor-auth user=user

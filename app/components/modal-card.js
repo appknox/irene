@@ -3,6 +3,7 @@ import Component from '@ember/component';
 const ModalCardComponent = Component.extend({
 
   isActive: false,
+  onCancel: null,
   classNames: ["modal"],
   classNameBindings: ['isActive:is-active'],
   layoutName: "components/modal-card",
@@ -10,6 +11,9 @@ const ModalCardComponent = Component.extend({
   actions: {
     clearModal() {
       this.set("isActive", false);
+      if (this.onCancel instanceof Function) {
+        this.onCancel()
+      }
     }
   }
 });

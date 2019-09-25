@@ -1,5 +1,6 @@
 .org-container
-  div
+  = organization-settings organization=model.organization user=model.user
+  .box-container
     .columns.margin-v-h
       .column
         h3.bold.black-text.is-fullwidth

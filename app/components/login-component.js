@@ -3,7 +3,7 @@ import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { getOwner } from '@ember/application';
 import ENV from 'irene/config/environment';
-import {isUnauthorizedError} from 'ember-ajax/errors';
+import { isUnauthorizedError } from 'ember-ajax/errors';
 
 const LoginComponentComponent = Component.extend({
   session: service('session'),
@@ -16,21 +16,45 @@ const LoginComponentComponent = Component.extend({
   otp: "",
   isNotEnterprise: !ENV.isEnterprise,
   isRegistrationEnabled: ENV.isRegistrationEnabled,
-  registrationLink: computed(function() {
-    if(ENV.registrationLink) {
+
+  registrationLink: computed(function () {
+    if (ENV.registrationLink) {
       return ENV.registrationLink;
     }
     try {
       var router = getOwner(this).lookup('router:main')
       var link = router.generate('register');
       return link;
-    } catch(err) {
+    } catch (err) {
       return ENV.registrationLink;
     }
   }),
-  hasRegistrationLink: computed('registrationLink', function() {
+  hasRegistrationLink: computed('registrationLink', function () {
     return !!this.get('registrationLink');
   }),
+
+  handleOTP(error) {
+    if (!isUnauthorizedError(error)) {
+      return false;
+    }
+    if (error.payload) {
+      this.set("MFAEnabled", true)
+      this.set("MFAIsEmail", error.payload.type == "HOTP")
+      this.set("MFAForced", this.isTrue(error.payload.forced))
+      return true;
+    }
+    return false;
+  },
+  isTrue(value) {
+    if (value == undefined) {
+      return false;
+    }
+    if (value.toLowerCase) {
+      return value.toLowerCase() == "true"
+    }
+    return !!value
+  },
+
   actions: {
     authenticate() {
       let identification = this.get('identification');
@@ -44,17 +68,27 @@ const LoginComponentComponent = Component.extend({
       password = password.trim();
       this.set("isLogingIn", true);
 
-      const errorCallback = (error) => {
-        if (isUnauthorizedError(error)) {
-          this.set("MFAEnabled", true);
-        }
-      };
+      this.get('session').authenticate("authenticator:irene", identification, password, otp)
+        .then()
+        .catch(error => {
+          this.set("isLogingIn", false);
+          if (this.handleOTP(error)) {
+            return
+          }
+          if (error.payload && error.payload.message) {
+            this.get("notify").error(error.payload.message, ENV.notifications);
+            return
+          }
 
-      const loginStatus = () => {
-        this.set("isLogingIn", false);
-      };
-
-      this.get('session').authenticate("authenticator:irene", identification, password, otp, errorCallback, loginStatus);
+          if (error.errors) {
+            for (error of error.errors) {
+              if (error.status === "0") {
+                return this.get("notify").error("Unable to reach server. Please try after sometime", ENV.notifications);
+              }
+            }
+          }
+          this.get("notify").error("Please enter valid account details", ENV.notifications);
+        })
     },
 
     SSOAuthenticate() {
@@ -62,10 +96,10 @@ const LoginComponentComponent = Component.extend({
       const url = `${ENV.endpoints.saml2}?return_to=${window.location.origin}/saml2/redirect`;
 
       this.get("ajax").request(url)
-        .then(function(data) {
+        .then(function (data) {
           window.location.href = data.url;
         })
-        .catch(function(err) {
+        .catch(function (err) {
           this.get("notify").error(err.payload.message);
         });
     }

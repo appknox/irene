@@ -20,6 +20,11 @@ export default Route.extend({
         }
     }
     await this.get("store").query('organization', {id: null});
-    return {integratedUser: integratedUser, reconnect: reconnect};
+    return {
+      integratedUser: integratedUser,
+      reconnect: reconnect,
+      user: await this.modelFor("authenticated"),
+      organization: await this.get('organization.selected'),
+    };
   }
 });

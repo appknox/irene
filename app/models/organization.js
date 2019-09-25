@@ -8,6 +8,7 @@ const Organization = DS.Model.extend({
   billingHidden: DS.attr('boolean'),
   showBilling: not('billingHidden'),
   isTrial: DS.attr('boolean'),
+  mandatoryMfa: DS.attr('boolean'),
   members: DS.hasMany('organization-member'),
   namespaces: DS.hasMany('organization-namespace'),
   projects: DS.hasMany('organization-project'),

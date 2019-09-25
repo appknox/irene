@@ -35,6 +35,7 @@ const User = DS.Model.extend({
   mfaSecret: DS.attr('string'),
   isTrial: DS.attr('boolean'),
   crispHash: DS.attr('string'),
+  canDisableMfa: DS.attr('boolean'),
   isSecurity: true, // FIXME:
 
   isNotSecurity: computed.not('isSecurity'),
@@ -51,7 +52,7 @@ const User = DS.Model.extend({
 
   mfaEnabled: computed("mfaMethod", function() {
     const mfaMethod = this.get("mfaMethod");
-    if (mfaMethod === ENUMS.MFA_METHOD.TOTP) {
+    if (mfaMethod === ENUMS.MFA_METHOD.TOTP || mfaMethod === ENUMS.MFA_METHOD.HOTP) {
       return true;
     }
     return false;
