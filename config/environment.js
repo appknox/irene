@@ -355,5 +355,14 @@ module.exports = function(environment) {
       ENV.whitelabel.theme = process.env.WHITELABEL_THEME; // 'light' or 'dark'
     }
   }
+
+  if (process.env.IRENE_PENDO_ENABLE){
+    ENV.enablePendo = process.env.IRENE_PENDO_ENABLE;
+  }else if(process.env.ENTERPRISE){
+    ENV.enablePendo = !process.env.ENTERPRISE;
+  }else{
+    ENV.enablePendo = false;
+  }
+
   return ENV;
 };
