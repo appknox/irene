@@ -1294,13 +1294,44 @@ div[class^="_c-notification__container"]
   margin-top: 15px
 
 .file-card
+  .card-header
+    background: darken($color-lightgray, 0.5%)
+    padding: 0.4em 0 0.5em 0.4em
+    box-shadow: none
   .card-content
     padding: 0px
     .content
-      .columns:nth-child(1)
-        margin-top: 10px
       .columns.is-reverse
         margin-left: 40px
+
+.app-information
+  background: lighten($color-lightgray, 2%)
+  border-bottom: 1px solid lighten($color-lightgray, 0.5%)
+  padding: 0.2em 0.2em 0.15em 0.8em
+
+.file-overview-scan-status
+  display: flex
+  justify-content: space-evenly
+  align-items: center
+  .scan-status-tag
+    display: flex
+    justify-content: center
+    align-items: center
+    margin-right: 0.8em
+    &-label
+      padding-left: 0.3em
+      font-size: 0.83em
+      line-height: 1.6
+      display: flex
+      align-items: center
+    &-icon
+      display: flex
+      align-items: center
+      &-done
+        color: $success
+      .fa
+        font-size: 0.83em
+        line-height: 1.4
 
 .compare-container
   padding: 0px 5px
@@ -1654,8 +1685,9 @@ ul.risk-table
     margin-left: 15px
     margin-top: -20px
   .risk-values
-    margin-top: 20px
+    margin-top: 1em
     margin-left: -10px
+    line-height: 1.2
     .columns
       .column
         margin-top: 5px
@@ -3206,8 +3238,9 @@ $attachment-icon-width: 4em
     padding: 0.1em 0.5em 0.12em
     text-align: center
     font-weight: bold
-    font-size: 12px
-    background-color: lighten($grey, 50%)
+    font-size: 0.75em
+    line-height: 1.4
+    background-color: darken($color-lightgray, 2%)
     color: lighten(#000, 30%)
     border-radius: 2px
 
@@ -3218,7 +3251,7 @@ $attachment-icon-width: 4em
       margin-top: 20px
 
 .app-risk-info
-  margin-top: -25px
+  margin-top: 0
 
 .compare-text
   margin: auto

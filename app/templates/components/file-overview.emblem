@@ -18,24 +18,66 @@ header.card-header
         if file.versionCode
           span.margin-l-1
           | version code: #{file.versionCode}
+
+.app-information.align-both.vertical-align-center
+  .file-id-container
+    .file-id-text
+      | FILE ID - 123567#{file.id}
+
+  .file-overview-scan-status
+    .scan-status-tag
+      if file.isStaticDone
+        .scan-status-tag-icon.scan-status-tag-icon-done
+          = fa-icon "check-circle"
+      else
+        .scan-status-tag-icon
+          = fa-icon "circle-o"
+      .scan-status-tag-label
+        = t "static"
+    .scan-status-tag
+      if file.isDynamicDone
+        .scan-status-tag-icon.scan-status-tag-icon-done
+          = fa-icon "check-circle"
+      else
+        .scan-status-tag-icon
+          = fa-icon "circle-o"
+      .scan-status-tag-label
+        = t "dynamic"
+    .scan-status-tag
+      if file.isApiDone
+        .scan-status-tag-icon.scan-status-tag-icon-done
+          = fa-icon "check-circle"
+      else
+        .scan-status-tag-icon
+          = fa-icon "circle-o"
+      .scan-status-tag-label
+        = t "api"
+    .scan-status-tag
+      if file.isManualDone
+        .scan-status-tag-icon.scan-status-tag-icon-done
+          = fa-icon "check-circle"
+      else if file.isManualRequested
+        .scan-status-tag-icon.scan-status-tag-icon-done
+          = fa-icon "clock-o"
+      else
+        .scan-status-tag-icon
+          = fa-icon "circle-o"
+      .scan-status-tag-label
+        = t "manual"
+
 .card-content
   .content
-    .app-information.align-both.vertical-align-center.padding-h-1.padding-v-3q
-      .lowercase-text
-        .overflow.ellipse
-          = t "started"
-          | &nbsp; #{moment-from-now file.createdOn}
-        = attach-tooltip placement="bottom"
-          = file.createdOnDateTime
-      .file-id-container
-        .file-id-text
-          | FILE ID - #{file.id}
-
     .columns.app-risk-info class=isReverse:is-reverse
       .column.flex-center
         = ember-chart type='doughnut' data=file.doughnutData width=150 height=150 options=chartOptions
       .file-details-class
       .column
+        .lowercase-text.text-centre
+          .overflow.ellipse
+            = t "started"
+            | &nbsp; #{moment-from-now file.createdOn}
+          = attach-tooltip placement="bottom"
+            = file.createdOnDateTime
         ul.risk-table
           .risk-values
             .columns
