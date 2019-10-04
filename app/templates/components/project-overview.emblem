@@ -2,17 +2,17 @@
   = file-overview file=project.lastFile profileId=project.activeProfileId
     footer.card-button
       .columns.button-width
-        .column class=project.hasMultipleFiles::auto-adjust
+        .column.padding-t-q class=project.hasMultipleFiles::auto-adjust
           = link-to 'authenticated.project.settings' project.id class="mp-project-setting" tagName="button"
             = fa-icon "cog"
             | &nbsp; #{t "settings"}
         if project.hasMultipleFiles
-          .column
+          .column.padding-t-q
             = link-to 'authenticated.project.files' project.id class="mp-all-scans" tagName="button"
               = fa-icon "navicon"
               | &nbsp; #{t "allUploads"}
 
-          .column
+          .column.padding-t-q
             = link-to 'authenticated.choose' project.lastFile.id class="mp-file-compare" tagName="button"
               = fa-icon "exchange"
               | &nbsp; #{t "compare"}
