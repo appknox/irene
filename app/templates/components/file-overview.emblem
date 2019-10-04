@@ -22,7 +22,7 @@ header.card-header
 .app-information.align-both.vertical-align-center
   .file-id-container
     .file-id-text
-      | FILE ID - 123567#{file.id}
+      | FILE ID - #{file.id}
 
   .file-overview-scan-status
     .scan-status-tag
