@@ -1,18 +1,18 @@
 export function setUserEmail(email, hash) {
   if (crispExists()) {
     window.$crisp.push(['do', 'chat:show']);
-    window.$crisp.push(["set", "user:email", [ email,hash ]]);
+    window.$crisp.push(["set", "user:email", [email, hash]]);
   }
 }
 
 export function setUserCompany(company) {
   if (crispExists()) {
-    window.$crisp.push(["set", "user:company", [company]]);
+    window.$crisp.push(["set", "user:company", [company, {}]]);
   }
 }
 
 export function openChatBox() {
-  if(crispExists()) {
+  if (crispExists()) {
     window.$crisp.push(['do', 'chat:open']);
   }
 }
