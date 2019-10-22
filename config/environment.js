@@ -144,7 +144,7 @@ module.exports = function(environment) {
       storeUrl: 'store_url',
       deleteProject: 'projects/delete',
       recover: 'v2/forgot_password',
-      reset: 'reset',
+      reset: 'v2/forgot_password',
       setup: 'setup',
       init: 'init',
       manual: 'manual',
@@ -267,7 +267,7 @@ module.exports = function(environment) {
     ENV.gReCaptcha = {
       jsUrl: 'https://recaptcha.net/recaptcha/api.js?render=explicit',
       siteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
-    }
+    };
   }
 
   if (environment === 'mirage') {

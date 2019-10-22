@@ -31,7 +31,7 @@ const UploadAppComponent = FileField.extend({
     try {
       const uploadItem = await this.get("store").queryRecord('uploadApp', {});
       await uploader.uploadFile(files[0], uploadItem.get('url'));
-      await uploadItem.save()
+      await uploadItem.save();
       this.get("notify").success(this.get('tFileUploadedSuccessfully'));
     } catch (e) {
       // eslint-disable-next-line no-console

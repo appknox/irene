@@ -597,7 +597,7 @@ const FileHeaderComponent = Component.extend({
       }, (error) => {
         this.set("isRequestingManual", false);
         this.get("notify").error(error.payload.error);
-      })
+      });
     },
 
     openManualScanModal() {
