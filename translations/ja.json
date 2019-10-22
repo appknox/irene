@@ -423,6 +423,7 @@
   "selectLanguage": "以下より言語を選択してください",
   "selectRisk": "Select Risk",
   "selectTeam": "チームを選択してください",
+  "sendPasswordResetMail": "Send password reset email",
   "settings": "設定",
   "severityLevel": "重大度レベル",
   "showVulnerability": "脆弱性を表示する",

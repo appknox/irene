@@ -143,7 +143,7 @@ module.exports = function(environment) {
       signedPdfUrl: 'signed_pdf_url',
       storeUrl: 'store_url',
       deleteProject: 'projects/delete',
-      recover: 'recover',
+      recover: 'v2/forgot_password',
       reset: 'reset',
       setup: 'setup',
       init: 'init',
@@ -245,8 +245,7 @@ module.exports = function(environment) {
     gReCaptcha: {
       jsUrl: 'https://recaptcha.net/recaptcha/api.js?render=explicit',
       siteKey: '6LfDdlUUAAAAAE9Bz9-3FLjrNw_AEUk11zXDH-0_'
-    },
-    namespace_v2: "api/v2"
+    }
   };
 
   if (environment === 'development') {

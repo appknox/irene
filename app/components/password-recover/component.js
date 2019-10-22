@@ -1,43 +1,66 @@
+import { task } from 'ember-concurrency';
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
+import lookupValidator from 'ember-changeset-validations';
+import Changeset from 'ember-changeset';
+import {
+  validatePresence
+} from 'ember-changeset-validations/validators';
+import { t } from 'ember-intl';
 
+const ResetValidator = {
+  username: [
+    validatePresence(true)
+  ]
+};
 
 const PasswordRecoverComponent = Component.extend({
-
-  identification: "",
+  recoverURL: ENV.endpoints.recover,
 
   ajax: service(),
   notify: service('notification-messages-service'),
+  tSomethingWentWrong: t("somethingWentWrong"),
+  logger: service('rollbar'),
 
   mailSent: false,
   isSendingRecoveryEmail: false,
+  model: {},
 
-  actions: {
+  init() {
+    this._super(...arguments);
+    const model = this.get('model');
+    const changeset = new Changeset(
+      model, lookupValidator(ResetValidator), ResetValidator
+    );
+    this.set('changeset', changeset);
+  },
 
-    recover() {
-      const identification = this.get('identification').trim();
-      if (!identification) {
-        return this.get("notify").error("Please enter your Username/Email", ENV.notifications);
-      }
-      const data =
-        {identification};
-      this.set("isSendingRecoveryEmail", true);
-      this.get("ajax").post(ENV.endpoints.recover, {data})
-      .then((data) => {
-        if(!this.isDestroyed) {
-         this.get("notify").success(data.message);
-         this.set("mailSent", true);
-         this.set("isSendingRecoveryEmail", false);
-        }
-      }, (error) => {
-        if(!this.isDestroyed) {
-          this.set("isSendingRecoveryEmail", false);
-          this.get("notify").error(error.payload.message);
-        }
-      });
+  recover: task(function*(){
+    const changeset = this.get('changeset');
+    yield changeset.validate();
+    if(!changeset.get('isValid')) {
+      return;
     }
-  }
+    const username = changeset.get('username');
+    try {
+      yield this.get("ajax").post(this.get('recoverURL'), {
+        data: {
+          username: username
+        }
+      })
+      this.set('mailSent', true);
+    } catch(errors) {
+      if(errors.payload) {
+        Object.keys(errors.payload).forEach(key => {
+          changeset.addError(key, errors.payload[key]);
+        });
+        return;
+      }
+      this.get("notify").error(this.get('tSomethingWentWrong'));
+      this.get("logger").error("Reset password error", errors);
+    }
+  })
 });
 
 export default PasswordRecoverComponent;
