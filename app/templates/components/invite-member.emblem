@@ -1,13 +1,17 @@
 button.is-primary click={(perform openInviteMemberModal)}
   i.fa.fa-envelope.margin-r-h
-  = t "inviteMember"
+  = t "inviteMembers"
 
-= modal-card class="input-modal" isActive=showInviteMemberModal title=(t 'inviteMember')
+= modal-card class="input-modal" isActive=showInviteMemberModal title=(t 'inviteMembers')
   .card-body
     .card-wrapper
-      form submit={(perform inviteMember)}
-        p.control
-          = input class="form-control input input-width" placeholder=(t 'email') type="text" value=email autofocus="autofocus"
+      form submit={(perform inviteMembers)}
+        span.black-text.margin-b-h.margin-t-1.bold
+          | Email &nbsp;
+        small.text-lightgray
+          | (for multiple entries, separate by comma)
+        br
+        = textarea class="form-control input margin-t-q" placeholder=(t "email") value=emailsFromText autofocus="autofocus"
 
         button.margin-t-1.is-primary type="submit" disabled=isInvitingMember
           if isInvitingMember
