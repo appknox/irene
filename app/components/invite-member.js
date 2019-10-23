@@ -1,12 +1,12 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import { isEmpty } from '@ember/utils';
 import PaginateMixin from 'irene/mixins/paginate';
 import { t } from 'ember-intl';
 import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import { on } from '@ember/object/evented';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
+import parseEmails from 'irene/utils/parse-emails';
 
 export default Component.extend(PaginateMixin, {
   intl: service(),
@@ -26,16 +26,7 @@ export default Component.extend(PaginateMixin, {
     yield this.set('showInviteMemberModal', true);
   }),
 
-
-  /* Send invitation */
-  inviteMember: task(function * () {
-    const email = this.get("email");
-    if(isEmpty(email)) {
-      throw new Error(this.get('tEmptyEmailId'));
-    }
-
-    this.set('isInvitingMember', true);
-
+  inviteMember: task(function *(email){
     const t = this.get('team');
     if (t) {
       yield t.createInvitation({email});
@@ -46,9 +37,22 @@ export default Component.extend(PaginateMixin, {
 
     // signal to update invitation list
     this.get('realtime').incrementProperty('InvitationCounter');
+  }).enqueue().maxConcurrency(3),
+  
+  /* Send invitation */
+  inviteMembers: task(function * () {
+    const emails = yield parseEmails(this.get('emailsFromText'));
+    if(!emails.length) {
+      throw new Error(this.get('tEmptyEmailId'));
+    }
+    this.set('isInvitingMember', true);
+    
+    for (let i=0;i<emails.length;i++){
+      yield this.get('inviteMember').perform(emails[i]);
+    }
   }).evented(),
 
-  inviteMemberSucceeded: on('inviteMember:succeeded', function() {
+  inviteMembersSucceeded: on('inviteMembers:succeeded', function() {
     this.get('notify').success(this.get("tOrgMemberInvited"));
     this.set("email", '');
     this.set('showInviteMemberModal', false);
@@ -56,7 +60,7 @@ export default Component.extend(PaginateMixin, {
     triggerAnalytics('feature', ENV.csb.inviteMember);
   }),
 
-  inviteMemberErrored: on('inviteMember:errored', function(_, err) {
+  inviteMembersErrored: on('inviteMembers:errored', function(_, err) {
     let errMsg = this.get('tPleaseTryAgain');
     if (err.errors && err.errors.length) {
       errMsg = err.errors[0].detail || errMsg;

@@ -3,15 +3,23 @@ import ENV from 'irene/config/environment';
 import lookupValidator from 'ember-changeset-validations';
 import Changeset from 'ember-changeset';
 import InviteRegisterValidation from '../../validations/invite-register';
+import SSOInviteRegisterValidation from '../../validations/sso-invite-register';
 
 export default Component.extend({
   inviteRegisterPOJO: {},
   init() {
     this._super(...arguments);
     const inviteRegisterPOJO = this.get('inviteRegisterPOJO');
-    const changeset = new Changeset(
-      inviteRegisterPOJO, lookupValidator(InviteRegisterValidation), InviteRegisterValidation
-    );
+    var changeset = null
+    if (this.get('isSSOEnforced')){
+      changeset = new Changeset(
+        inviteRegisterPOJO, lookupValidator(SSOInviteRegisterValidation), SSOInviteRegisterValidation
+      );
+    }else{
+      changeset = new Changeset(
+        inviteRegisterPOJO, lookupValidator(InviteRegisterValidation), InviteRegisterValidation
+      );
+    }
     this.set('changeset', changeset);
   },
 
@@ -34,15 +42,22 @@ export default Component.extend({
     register(changeset) {
       changeset.validate().then(() => {
         if (changeset.get('isValid')) {
+          const username = changeset.get('username');
+          const termsAccepted = changeset.get('termsAccepted');
+          if (this.get('isSSOEnforced')){
+            this.registerWithServer({
+              'username': username,
+              'terms_accepted': termsAccepted
+            });
+          return;
+          }
           const firstname = changeset.get('firstname');
           const lastname = changeset.get('lastname');
-          const username = changeset.get('username');
           const password = changeset.get('password');
           const passwordConfirmation = changeset.get('passwordConfirmation');
           const phoneNumber = changeset.get('phone');
           const selectedCountryData = this.get("selectedCountryData");
           const fullNumber = selectedCountryData.dialCode + '-' +  phoneNumber;
-          const termsAccepted = changeset.get('termsAccepted');
           this.registerWithServer({
             'first_name': firstname,
             'last_name': lastname,

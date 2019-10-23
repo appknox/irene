@@ -12,3 +12,6 @@
       .org-settings-subtitle.black-text.is-fullwidth
         = t "githubIntegration"
       = github-account integratedUser=model.integratedUser reconnect=model.reconnect user=user
+
+  .divider.margin-t-1.margin-b-1
+    = multisso-account

@@ -1772,6 +1772,9 @@ ul.risk-table
 .font-size-14
   font-size: 14px
 
+.font-size-25
+  font-size: 25px
+
 .card-button
   .fa-download, .fa-cog, .fa-trash-o
     font-size: 14px
@@ -2911,6 +2914,11 @@ $login-button-width: 80%
       button
         margin-top: 10px
         width: $login-button-width !important
+      .sso-button
+        margin-left: -32px
+        margin-top: unset
+        width: unset !important
+
     &-sso
       &-separator
         height: 0.06em
@@ -3688,3 +3696,8 @@ $filetag-bg: #f3f5f8
   &--active
     border: 1px solid rgba($success, 0.6)
     background: rgba($success, 0.1)
+
+.bottom-change
+  border-top-right-radius: 10px
+  box-shadow: 3px 0 3px -2px #888
+  width: 90%
