@@ -1,27 +1,36 @@
 form
   .control
-    label for="currentPassword"
-      = t "currentPassword"
     .columns
       .column.is-half
-        = input class="input mp-current-password" type="password" value=passwordCurrent autocomplete="current-password"
-
-    label for="newPassword"
-      = t "newPassword"
-    .columns
-      .column.is-half
-        = input class="input mp-new-password" type="password" value=passwordNew autocomplete="new-password"
-
-    label for="confirmPassword"
-      = t "confirmPassword"
-    .columns
-      .column.is-half
-        = input class="input mp-confirm-password" type="password" value=passwordConfirm autocomplete="new-password"
+        .input-wrap class={if changeset.error.old_password 'has-error'}
+          .label-error
+            label
+              t "currentPassword"
+            if changeset.error.old_password
+              span.error-msg
+                | #{changeset.error.old_password.validation}
+          = input class="input-field" type="password" value=changeset.old_password  autocomplete="password"
+        .input-wrap class={if changeset.error.password 'has-error'}
+          .label-error
+            label
+              t "newPassword"
+            if changeset.error.password
+              span.error-msg
+                | #{changeset.error.password.validation}
+          = input class="input-field" type="password" value=changeset.password  autocomplete="new-password"
+        .input-wrap class={if changeset.error.confirm_password 'has-error'}
+          .label-error
+            label
+              = t "confirmPassword"
+            if changeset.error.confirm_password
+              span.error-msg
+                | #{changeset.error.confirm_password.validation}
+          = input class="input-field" type="password" value=changeset.confirm_password  autocomplete="new-password"
 
     .columns
       .column.is-one-third
-        button.is-primary.margin-top20.mp-change-password click="changePassword" disabled=isChangingPassword
-          if isChangingPassword
+        button.is-primary.margin-top20.mp-change-password click={(perform changePassword)} disabled=changePassword.IsRunning
+          if changePassword.IsRunning
             .fa-font-size
               i.fa class="fa-spinner fa-spin"
               | &nbsp;

@@ -3,60 +3,77 @@ import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
 import { t } from 'ember-intl';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
+import { task } from 'ember-concurrency';
+import lookupValidator from 'ember-changeset-validations';
+import Changeset from 'ember-changeset';
+import {
+  validatePresence,
+  validateConfirmation
+} from 'ember-changeset-validations/validators';
 
-const isValidPassword = password=> password.length > 5;
+const ChangeValidator = {
+  old_password: [
+    validatePresence(true)
+  ],
+  password: [
+    validatePresence(true)
+  ],
+  confirm_password: validateConfirmation({ on: 'password' }),
+};
+
 
 const PasswordChangeComponent = Component.extend({
   intl: service(),
   ajax: service(),
+  router: service(),
   notify: service('notification-messages-service'),
-  passwordCurrent: "",
-  passwordNew: "",
-  passwordConfirm: "",
-  isChangingPassword: false,
   tEnterValidPassword: t("enterValidPassword"),
   tInvalidPassword: t("invalidPassword"),
   tPasswordChanged: t("passwordChanged"),
-
-  actions: {
-    changePassword() {
-      const tEnterValidPassword = this.get("tEnterValidPassword");
-      const tInvalidPassword = this.get("tInvalidPassword");
-      const tPasswordChanged = this.get("tPasswordChanged");
-      const passwordCurrent = this.get("passwordCurrent");
-      const passwordNew = this.get("passwordNew");
-      const passwordConfirm = this.get("passwordConfirm");
-      for (let password of [passwordCurrent, passwordNew, passwordConfirm]) {
-        if (!isValidPassword(password)) { return this.get("notify").error(tEnterValidPassword); }
-      }
-      if (passwordNew !== passwordConfirm) {
-        return this.get("notify").error(tInvalidPassword);
-      }
-      const data = {
-        password: passwordCurrent,
-        newPassword: passwordNew
-      };
-      this.set("isChangingPassword", true);
-      const ajax = this.get("ajax");
-      ajax.post(ENV.endpoints.changePassword, {data})
-      .then(() => {
-        this.get("notify").success(tPasswordChanged);
-        triggerAnalytics('feature',ENV.csb.changePassword);
-        if(!this.isDestroyed) {
-          this.set("isChangingPassword", false);
-          this.setProperties({
-            passwordCurrent: "",
-            passwordNew: "",
-            passwordConfirm: ""
-            });
-          setTimeout(() => window.location.href = "/", 1 * 1000);
-        }
-      }, (error) => {
-        this.set("isChangingPassword", false);
-        this.get("notify").error(error.payload.message);
-      });
+  tSomethingWentWrong: t("tSomethingWentWrong"),
+  changePasswordURL: ENV.endpoints.changePassword,
+  model: {},
+  init() {
+    this._super(...arguments);
+    const model = this.get('model');
+    const changeset = new Changeset(
+      model, lookupValidator(ChangeValidator), ChangeValidator
+    );
+    this.set('changeset', changeset);
+  },
+  changePassword: task(function*(){
+    const changeset = this.get('changeset');
+    yield changeset.validate();
+    if(!changeset.get('isValid')) {
+      return;
     }
-  }
+    const old_password = changeset.get('old_password');
+    const password = changeset.get('password');
+    const confirm_password = changeset.get('confirm_password');
+    const url = this.get('changePasswordURL');
+    try {
+      yield this.get("ajax").post(url, {
+        data: {
+          old_password: old_password,
+          password: password,
+          confirm_password: confirm_password
+        }
+      })
+      triggerAnalytics('feature',ENV.csb.changePassword);
+      this.get('router').transitionTo("login");
+      this.get("notify").success(this.get("tPasswordChanged"));
+    } catch(errors) {
+      if(errors.payload) {
+        Object.keys(errors.payload).forEach(key => {
+          changeset.addError(key, errors.payload[key]);
+        });
+        return;
+      }
+      this.get("notify").error(this.get('tSomethingWentWrong'));
+      this.get("logger").error("Change password error", errors);
+      throw errors;
+    }
+  })
 });
 
 export default PasswordChangeComponent;

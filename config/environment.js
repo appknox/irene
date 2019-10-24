@@ -157,7 +157,7 @@ module.exports = function(environment) {
       revokeGitHub: 'unauthorize_github',
       revokeJira: 'unauthorize_jira',
       integrateJira: 'integrate_jira',
-      changePassword: 'change_password',
+      changePassword: 'v2/change_password',
       namespaceAdd: 'namespace_add',
       applyCoupon: 'apply_coupon',
       saveCredentials: 'projects/save_credentials',

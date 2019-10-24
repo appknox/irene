@@ -24,7 +24,6 @@ const PasswordRecoverComponent = Component.extend({
   logger: service('rollbar'),
 
   mailSent: false,
-  isSendingRecoveryEmail: false,
   model: {},
 
   init() {
