@@ -61,7 +61,7 @@ export default Component.extend({
           const termsAccepted = changeset.get('termsAccepted');
           let captcha = this.get('captcha');
           if(!this.get('shouldEnableRecaptcha')) {
-            captcha = 'notenabled'
+            captcha = 'notenabled';
           }
           this.registerWithServer({
             'first_name': firstname,

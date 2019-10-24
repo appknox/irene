@@ -143,8 +143,8 @@ module.exports = function(environment) {
       signedPdfUrl: 'signed_pdf_url',
       storeUrl: 'store_url',
       deleteProject: 'projects/delete',
-      recover: 'recover',
-      reset: 'reset',
+      recover: 'v2/forgot_password',
+      reset: 'v2/forgot_password',
       setup: 'setup',
       init: 'init',
       manual: 'manual',
@@ -157,7 +157,7 @@ module.exports = function(environment) {
       revokeGitHub: 'unauthorize_github',
       revokeJira: 'unauthorize_jira',
       integrateJira: 'integrate_jira',
-      changePassword: 'change_password',
+      changePassword: 'v2/change_password',
       namespaceAdd: 'namespace_add',
       applyCoupon: 'apply_coupon',
       saveCredentials: 'projects/save_credentials',
@@ -245,8 +245,7 @@ module.exports = function(environment) {
     gReCaptcha: {
       jsUrl: 'https://recaptcha.net/recaptcha/api.js?render=explicit',
       siteKey: '6LfDdlUUAAAAAE9Bz9-3FLjrNw_AEUk11zXDH-0_'
-    },
-    namespace_v2: "api/v2"
+    }
   };
 
   if (environment === 'development') {
@@ -268,7 +267,7 @@ module.exports = function(environment) {
     ENV.gReCaptcha = {
       jsUrl: 'https://recaptcha.net/recaptcha/api.js?render=explicit',
       siteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
-    }
+    };
   }
 
   if (environment === 'mirage') {

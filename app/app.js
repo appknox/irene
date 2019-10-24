@@ -1,4 +1,3 @@
-import Ember from 'ember';
 import ENUMS from 'irene/enums';
 import config from 'irene/config/environment';
 import installPendo from 'irene/utils/install-pendo';
@@ -24,8 +23,6 @@ installPendo();
 installCrisp();
 installHotjar();
 customerSuccessBox();
-
-Ember.MODEL_FACTORY_INJECTIONS = true;
 
 const App = Application.extend({
   modulePrefix: config.modulePrefix,

@@ -1,2 +1,2 @@
 .auth-main-container
-  = password-reset uuid=model.uuid token=model.token
+  = password-reset token=model.token

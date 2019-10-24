@@ -1,5 +1,15 @@
 $color-error: #FE4D3F;
 
+.form {
+  background-color: #FFF;
+  border-radius: 5px;
+  overflow: hidden;
+  padding: 2em 1.6em;
+  .checkbox-field {
+    display: inline-block
+  }
+}
+
 .input-wrap {
   margin: 1em 0;
   label {
@@ -7,6 +17,7 @@ $color-error: #FE4D3F;
     font-weight: bold;
   }
   .label-error {
+    height: 1.2em;
     display: flex;
     align-items: baseline;
     justify-content: space-between;

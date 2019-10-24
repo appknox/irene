@@ -29,7 +29,7 @@ const initialize = function(application) {
     var deviceFarmPath = "websockify";
     if(devicefarmEnv) {
       const deviceFarmURL = new URL(deviceFarmPath, devicefarmEnv).href;
-      ENV.deviceFarmURL = deviceFarmURL
+      ENV.deviceFarmURL = deviceFarmURL;
     }
     ENV.socketPath = runtimeConfig.IRENE_API_SOCKET_PATH || ENV.socketPath;
     ENV.enableSSO = isTrue(runtimeConfig.IRENE_ENABLE_SSO || ENV.enableSSO);

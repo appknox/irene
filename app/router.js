@@ -21,7 +21,7 @@ Router.map(function() {
   this.route('register-via-invite', {path: 'register-via-invite/:token'});
   this.route('activate', {path: '/activate/:pk/:token'});
   this.route('recover');
-  this.route('reset', {path: '/reset/:uuid/:token'});
+  this.route('reset', {path: '/reset/:token'});
   this.route('setup', {path: '/setup/:uuid/:token'});
   this.route('authenticated', {path: '/'}, function() {
     this.route("index", {path: '/'});
