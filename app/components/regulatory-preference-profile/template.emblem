@@ -1,0 +1,18 @@
+.columns
+  .column
+    h5.bold.black-text
+      = t "regulatoryPreferences"
+    p
+      = t "regulatoryPreferencesChooseForProfile"
+
+div
+  span
+    = input checked=reportPreference.show_pcidss local-class="report__preference__checkbox" type="checkbox" click=(perform savePcidss value="target.checked")
+    | PCI-DSS
+    = task-spin task=savePcidss
+
+div
+  span
+    = input checked=reportPreference.show_hipaa local-class="report__preference__checkbox" type="checkbox" click=(perform saveHipaa value="target.checked")
+    | HIPAA
+    = task-spin task=saveHipaa
