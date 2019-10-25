@@ -1,0 +1,19 @@
+.columns
+  .column
+    .org-settings-subtitle
+      = t "regulatoryPreferences"
+    p
+      = t "regulatoryPreferencesChooseForAll"
+      | #{organization.reportPreference}
+
+div
+  span
+    = input checked=organization.reportPreference.show_pcidss local-class="report__preference__checkbox" type="checkbox" click=(perform savePcidss value="target.checked")
+    | PCI-DSS
+    = task-spin task=savePcidss
+
+div
+  span
+    = input checked=organization.reportPreference.show_hipaa local-class="report__preference__checkbox" type="checkbox" click=(perform saveHipaa value="target.checked")
+    | HIPAA
+    = task-spin task=saveHipaa
