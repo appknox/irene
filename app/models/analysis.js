@@ -9,6 +9,7 @@ const Analysis = DS.Model.extend({
   risk: DS.attr('number'),
   status: DS.attr('number'),
   owasp: DS.hasMany('owasp'),
+  hipaa: DS.hasMany('hipaa'),
   cvssBase: DS.attr('number'),
   pcidss: DS.hasMany('pcidss'),
   cvssVector: DS.attr('string'),

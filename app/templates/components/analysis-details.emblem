@@ -92,6 +92,15 @@ if showVulnerability
               ul
                 each analysis.pcidss as |category|
                   = pcidss-details category=category
+
+        if analysis.hipaa
+          .columns.section
+            .column.is-one-sixth
+              | HIPAA
+            .column
+              ul
+                each analysis.hipaa as |hipaa|
+                  = hipaa-details hipaa=hipaa
     .columns
       .column
         if analysis.isRisky
