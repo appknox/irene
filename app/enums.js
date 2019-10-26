@@ -194,6 +194,12 @@ const ENUMS = {
      RUNNING: 2,
      COMPLETED: 3
    },
+
+  REGULATORY_STATUS: {
+    NONE: 0,
+    SHOW: 1,
+    HIDE: 2,
+  },
 };
 
 // Populate `CHOICES`
