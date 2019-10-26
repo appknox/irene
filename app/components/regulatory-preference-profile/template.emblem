@@ -1,18 +1,34 @@
-.columns
-  .column
-    h5.bold.black-text
-      = t "regulatoryPreferences"
-    p
-      = t "regulatoryPreferencesChooseForProfile"
+div local-class="regulatory__wrapper"
+  .columns
+    .column
+      h5.bold.black-text
+        = t "regulatoryPreferences"
+      .margin-b-h
+        = t "regulatoryPreferencesChooseForProfile"
+        span.padding-l-h
+          = t "regulatoryPreferencesWarning"
+      .margin-b-1h
+        em.text-lightgray
+          | (
+          = t "regulatoryPreferencesProfileNote"
+          | )
 
-div
-  span
-    = input checked=reportPreference.show_pcidss local-class="report__preference__checkbox" type="checkbox" click=(perform savePcidss value="target.checked")
-    | PCI-DSS
-    = task-spin task=savePcidss
+  .columns
+    .column
+      .vertical-align-center
+        .black-text.bold local-class="regulatory__label"
+          | PCI-DSS
+        div local-class="regulatory__select"
+          = power-select searchEnabled=false selected=pcidssToString onchange=(perform savePcidss value="target.value") options=regulatoryVisibilityOptions as |status|
+            | #{regulatory-status status}
+        = task-spin task=savePcidss
 
-div
-  span
-    = input checked=reportPreference.show_hipaa local-class="report__preference__checkbox" type="checkbox" click=(perform saveHipaa value="target.checked")
-    | HIPAA
-    = task-spin task=saveHipaa
+  .columns
+    .column
+      .vertical-align-center
+        .black-text.bold local-class="regulatory__label"
+          | HIPAA
+        div local-class="regulatory__select"
+          = power-select searchEnabled=false selected=hipaaToString onchange=(perform saveHipaa value="target.value") options=regulatoryVisibilityOptions as |status|
+            | #{regulatory-status status}
+        = task-spin task=saveHipaa
