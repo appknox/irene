@@ -19,11 +19,6 @@ const Organization = DS.Model.extend({
   membersCount: computed('members', function() {
     return this.get('members.meta.count');
   }),
-  reportPreference: DS.attr(),
-  saveReportPreference(data) {
-    const adapter = this.store.adapterFor(this.constructor.modelName);
-    return adapter.saveReportPreference(this, data);
-  }
 });
 
 export default Organization;
