@@ -3667,3 +3667,15 @@ $filetag-bg: #f3f5f8
     align-items: center
     justify-content: space-between
     width: 100%
+
+.regulatory__item
+  padding: 0.5em 1em
+  border-radius: 0.3em
+  margin-bottom: 0.5em
+  &--inherited
+    background-color: #f6f8fa
+    color: lighten($color-table, 28%)
+    border: 1px solid darken(#f6f8fa, 1%)
+  &--active
+    border: 1px solid rgba($success, 0.6)
+    background: rgba($success, 0.1)
