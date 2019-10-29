@@ -16,19 +16,37 @@ div local-class="regulatory__wrapper"
   .columns
     .column
       .vertical-align-center
-        .black-text.bold local-class="regulatory__label"
-          | PCI-DSS
-        div local-class="regulatory__select"
-          = power-select searchEnabled=false selected=pcidssToString onchange=(perform savePcidss value="target.value") options=regulatoryVisibilityOptions as |status|
-            | #{regulatory-status status}
+        label.vertical-align-center
+          = input checked=profile.reportPreference.show_pcidss.value local-class="report__preference__checkbox" type="checkbox" click=(perform savePcidss value="target.checked")
+          span.margin-l-h
+            | PCI-DSS
         = task-spin task=savePcidss
+        if profile.reportPreference.show_pcidss.is_inherited
+          div local-class="tag-inherited"
+            | inherited
+            = attach-tooltip position="right"
+              | inherited from organization settings
+        else
+          button.btn local-class="remove-button" click={(perform deletePcidss)}
+            = fa-icon "times"
+            = attach-tooltip position="right"
+              | remove from profile
 
   .columns
     .column
       .vertical-align-center
-        .black-text.bold local-class="regulatory__label"
-          | HIPAA
-        div local-class="regulatory__select"
-          = power-select searchEnabled=false selected=hipaaToString onchange=(perform saveHipaa value="target.value") options=regulatoryVisibilityOptions as |status|
-            | #{regulatory-status status}
+        label.vertical-align-center
+          = input checked=profile.reportPreference.show_hipaa.value local-class="report__preference__checkbox" type="checkbox" click=(perform saveHipaa value="target.checked")
+          span.margin-l-h
+            | HIPAA
         = task-spin task=saveHipaa
+        if profile.reportPreference.show_hipaa.is_inherited
+          div local-class="tag-inherited"
+            | inherited
+            = attach-tooltip position="right"
+              | inherited from organization settings
+        else
+          button.btn local-class="remove-button" click={(perform deleteHipaa)}
+            = fa-icon "times"
+            = attach-tooltip position="right"
+              | remove from profile

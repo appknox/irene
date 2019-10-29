@@ -380,7 +380,7 @@
   "regulatoryPreferences": "Regulatory Preferences",
   "regulatoryPreferencesChooseForProfile": "Choose regulatories applicable for this project",
   "regulatoryPreferencesChooseForAll": "Choose regulatories applicable for all projects",
-  "regulatoryPreferencesProfileNote": "If not set, preference from organization settings is opted",
+  "regulatoryPreferencesProfileNote": "Preference from organization settings is inherited by default",
   "regulatoryPreferencesWarning": "If you hide a regulatory, respective section from analysis will be hidden from the dashboard & report",
   "reject": "Reject",
   "remove": "削除",
