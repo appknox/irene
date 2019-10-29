@@ -80,6 +80,14 @@ const Analysis = DS.Model.extend({
     return this.labelClass(this.get("overriddenRisk"));
   }),
 
+  showPcidss: computed('file.profile.reportPreference', function() {
+    return this.get('file.profile.reportPreference.show_pcidss.value');
+  }),
+
+  showHipaa: computed('file.profile.reportPreference', function() {
+    return this.get('file.profile.reportPreference.show_hipaa.value');
+  }),
+
   labelClass(risk) {
     const cls = 'tag';
     switch (risk) {
