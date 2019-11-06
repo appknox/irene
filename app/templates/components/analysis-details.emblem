@@ -84,14 +84,27 @@ if showVulnerability
                       = category.code
                     .column.black-text
                       = category.title
-        if analysis.pcidss
-          .columns.section
-            .column.is-one-sixth
-              | PCI-DSS
-            .column
-              ul
-                each analysis.pcidss as |category|
-                  = pcidss-details category=category
+
+        if analysis.showPcidss
+          if analysis.pcidss
+            .columns.section
+              .column.is-one-sixth
+                | PCI-DSS
+              .column
+                ul
+                  each analysis.pcidss as |category|
+                    = pcidss-details category=category
+
+        if analysis.showHipaa
+          if analysis.hipaa
+            .columns.section
+              .column.is-one-sixth
+                | HIPAA
+              .column
+                ul
+                  each analysis.hipaa as |hipaa|
+                    = hipaa-details hipaa=hipaa
+
     .columns
       .column
         if analysis.isRisky

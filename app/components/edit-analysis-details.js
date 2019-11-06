@@ -47,6 +47,10 @@ export default Component.extend({
     return this.get("store").findAll("pcidss");
   }),
 
+  hipaas: computed(function() {
+    return this.get("store").findAll("hipaa");
+  }),
+
   allFindings: computed("analysisDetails.findings", "addedFindings", function() {
     let findingId = this.get("findingId");
     const findings = this.get("addedFindings") || this.get("analysisDetails.findings");
@@ -224,6 +228,7 @@ export default Component.extend({
     const risk = this.get("analysisDetails.risk");
     const owasp = this.get("analysisDetails.owasp");
     const pcidss = this.get("analysisDetails.pcidss");
+    const hipaa = this.get("analysisDetails.hipaa");
     let status = this.get("analysisDetails.status");
     if(typeof status === "object") {
       status = status.value;
@@ -251,6 +256,7 @@ export default Component.extend({
       status,
       owasp: owasp.map(a=>a.get('id')),
       pcidss: pcidss.map(a=>a.get('id')),
+      hipaa: hipaa.map(a=>a.get('id')),
       findings,
       overridden_risk: overriddenRisk,
       overridden_risk_comment: overriddenRiskComment,
@@ -357,6 +363,10 @@ export default Component.extend({
 
     selectPcidssCategory(param) {
       this.set('analysisDetails.pcidss', param);
+    },
+
+    selectHipaaCategory(param) {
+      this.set('analysisDetails.hipaa', param);
     },
 
     selectOverriddenRisk(param) {

@@ -49,4 +49,4 @@ h4.org-header-name.margin-left.text-centre
       li class=settingsClass click="displaySettings"
         = link-to 'authenticated.organization.settings'
            = fa-icon "cog" class="sidebar-icons"
-           = t "settings"
+           = t "organizationSettings"

@@ -14,7 +14,14 @@ module.exports = {
     'plugin:ember/recommended'
   ],
   rules: {
-    "ember/avoid-leaking-state-in-ember-objects": 0
+    "ember/avoid-leaking-state-in-ember-objects": 0,
+    "ember/no-observers": 0,
+    "ember/no-restricted-resolver-tests": 0,
+    "ember/no-new-mixins": 0,
+    "ember/require-return-from-computed": 0,
+    "ember/no-unnecessary-route-path-option": 0,
+    "ember/no-arrow-function-computed-properties": 0,
+    "ember/no-unnecessary-route-path-option": 0,
   },
   overrides: [
     // node files

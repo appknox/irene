@@ -9,6 +9,7 @@ const Analysis = DS.Model.extend({
   risk: DS.attr('number'),
   status: DS.attr('number'),
   owasp: DS.hasMany('owasp'),
+  hipaa: DS.hasMany('hipaa'),
   cvssBase: DS.attr('number'),
   pcidss: DS.hasMany('pcidss'),
   cvssVector: DS.attr('string'),
@@ -77,6 +78,14 @@ const Analysis = DS.Model.extend({
 
   overriddenRiskLabelClass: computed('overriddenRisk', function() {
     return this.labelClass(this.get("overriddenRisk"));
+  }),
+
+  showPcidss: computed('file.profile.reportPreference', function() {
+    return this.get('file.profile.reportPreference.show_pcidss.value');
+  }),
+
+  showHipaa: computed('file.profile.reportPreference', function() {
+    return this.get('file.profile.reportPreference.show_hipaa.value');
   }),
 
   labelClass(risk) {

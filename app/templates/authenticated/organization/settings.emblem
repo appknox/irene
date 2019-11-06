@@ -1,14 +1,14 @@
 .org-container
   = organization-settings organization=model.organization user=model.user
-  .box-container
-    .columns.margin-v-h
-      .column
-        h3.bold.black-text.is-fullwidth
-          = t "jiraIntegration"
-        = jira-account user=user
-  .margin-t-2
-    .columns
-      .column
-        h3.bold.black-text.is-fullwidth
-          = t "githubIntegration"
-        = github-account integratedUser=model.integratedUser reconnect=model.reconnect user=user
+
+  .columns
+    .column
+      .org-settings-subtitle.black-text.is-fullwidth
+        = t "jiraIntegration"
+      = jira-account user=user
+  .divider.margin-t-1.margin-b-1
+  .columns
+    .column
+      .org-settings-subtitle.black-text.is-fullwidth
+        = t "githubIntegration"
+      = github-account integratedUser=model.integratedUser reconnect=model.reconnect user=user

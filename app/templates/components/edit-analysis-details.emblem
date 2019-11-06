@@ -104,6 +104,7 @@
             .column
               = power-select selected=analysisDetails.availabilityImpact options=availabilityImpacts onchange=(action "selectAvailabilityImpact") as |key|
                 | #{metric-impact key}
+
       .columns
         .column.is-one-third
           h5.bold-font
@@ -112,6 +113,7 @@
         .column.margin-bottom20
           = power-select-multiple placeholder="Select OWASP Categories" selected=analysisDetails.owasp options=owasps onchange=(action "selectOwaspCategory") as |key|
             | #{key.code} - #{key.year} - #{key.title}
+
       .columns
         .column.is-one-third
           h5.bold-font
@@ -120,6 +122,16 @@
         .column.margin-bottom20
           = power-select-multiple placeholder="Select PCI-DSS Risk Category" selected=analysisDetails.pcidss options=pcidsses onchange=(action "selectPcidssCategory") as |key|
             | #{key.code} - #{key.title}
+
+      .columns
+        .column.is-one-third
+          h5.bold-font
+            | HIPAA Sections
+      .columns.border-bottom-container
+        .column.margin-bottom20
+          = power-select-multiple placeholder="Select HIPAA Risk Section" selected=analysisDetails.hipaa options=hipaas onchange=(action "selectHipaaCategory") as |key|
+            | #{key.code} - #{key.safeguard} - #{key.title}
+
       .columns
         .column.is-one-third
           h5.bold-font
