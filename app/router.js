@@ -38,6 +38,7 @@ Router.map(function() {
       this.route('developersettings');
     });
     this.route("billing", {path: '/billing'});
+    this.route("marketplace", {path: '/marketplace'});
     this.route('projects', {path: '/projects'});
     this.route("project", {path: '/project/:projectid'}, function() {
       this.route('settings');

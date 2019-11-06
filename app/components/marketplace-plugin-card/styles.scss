@@ -1,0 +1,22 @@
+.marketplace-card {
+    border: 1px solid #efefef;
+    text-align: center;
+    display: block;
+    box-shadow: 0px 0px 6px #ccc;
+    padding: 1em;
+    color: #6B6B6B;
+}
+.marketplace-card:hover {
+    box-shadow: 1px 1px 20px #999;
+}
+.marketplace-card-logo {
+    hight: 50%;
+    width: 50%;
+    margin: auto;
+    padding: 1em 0;
+}
+
+.marketplace-card-logo img {
+    hight: 100%;
+    width: 100%;
+}
