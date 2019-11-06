@@ -36,3 +36,5 @@ if me.org.is_owner
                       | &nbsp;
                       = link-to 'authenticated.settings.security' class="alert-link"
                         | #{t "accountSettings"} > #{t "security"} > #{t "multiFactorAuth"}
+
+  .divider.margin-t-1.margin-b-1

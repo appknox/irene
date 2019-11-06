@@ -1,6 +1,6 @@
 .org-container
   = organization-settings organization=model.organization user=model.user
-  .divider.margin-t-1.margin-b-1
+
   .columns
     .column
       .org-settings-subtitle.black-text.is-fullwidth
