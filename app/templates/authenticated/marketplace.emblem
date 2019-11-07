@@ -1,16 +1,16 @@
 h2.black-text.bold.padding-t-3q.padding-l-h
   = t "marketplace"
-div.padding-t-2.padding-l-1
+.padding-t-2.padding-l-1
   h3.black-text.bold
     = t "plugins"
-  div.padding-b-h
+  .padding-b-h
     = t "marketplacePluginDesc"
-div
+.padding-b-2
   = marketplace-plugin-list
-div.padding-t-2.padding-l-1
+.padding-l-1
   h3.black-text.bold
     = t "integration"
-  div.padding-b-h
+  .padding-b-h
     = t "marketplaceIntegrationDesc"
-div
+.padding-b-2
   = marketplace-integration-list
