@@ -23,7 +23,7 @@ export default Component.extend({
       "title": this.get("tAzurePipeline"),
       "description": this.get("tInstallAppknoxPluginTo") + this.get("tAzurePipeline"),
       "logo": "images/azure-icon.png",
-      "link": "https://marketplace.visualstudio.com/items?itemName=appknox.appknox-security-test",
+      "link": "https://marketplace.visualstudio.com/items?itemName=appknox.appknox",
       "published": true,
       "instructions": ""
     },
