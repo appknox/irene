@@ -9,25 +9,10 @@
 .marketplace-card:hover {
   box-shadow: 1px 1px 20px #999;
 }
-.marketplace-card-logo {
-  height: 50%;
-  width: 50%;
-  margin: auto;
-  padding: 1em 0;
-}
-.marketplace-card-logo img {
-  height: 100%;
-  width: 100%;
-}
 .marketplace-card-disabled {
   opacity: 0.5;
 }
 .marketplace-card-disabled .marketplace-card:hover {
   box-shadow: 0px 0px 6px #ccc;
 }
-.marketplace-card-desc {
-  height: 3em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+

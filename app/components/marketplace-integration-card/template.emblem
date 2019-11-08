@@ -1,17 +1,11 @@
 if data.link
-  a local-class="marketplace-card" href={data.link} target="_blank"
-    .black-text.bold.font-medium
-      | #{data.title}
-    div local-class="marketplace-card-logo"
-      img src={data.logo}
-    div local-class="marketplace-card-desc"
-      | #{data.description}
+  if me.org.is_admin
+    = link-to data.link local-class="marketplace-card"
+      = marketplace-card-content title=data.title logo=data.logo text=data.description
+  else
+    a local-class="marketplace-card" click={(perform showIntegrationsPermissionDenied)}
+      = marketplace-card-content title=data.title logo=data.logo text=data.description
 else
   div local-class="marketplace-card-disabled"
     div local-class="marketplace-card"
-      .black-text.bold.font-medium
-        | #{data.title}
-      div local-class="marketplace-card-logo"
-        img src={data.logo}
-      div local-class="marketplace-card-desc"
-        | #{data.description}
+      = marketplace-card-content title=data.title logo=data.logo text=data.description
