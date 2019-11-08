@@ -1,0 +1,17 @@
+if data.link
+  a local-class="marketplace-card" href={data.link} target="_blank"
+    .black-text.bold.font-medium
+      | #{data.title}
+    div local-class="marketplace-card-logo"
+      img src={data.logo}
+    div local-class="marketplace-card-desc"
+      | #{data.description}
+else
+  div local-class="marketplace-card-disabled"
+    div local-class="marketplace-card"
+      .black-text.bold.font-medium
+        | #{data.title}
+      div local-class="marketplace-card-logo"
+        img src={data.logo}
+      div local-class="marketplace-card-desc"
+        | #{data.description}
