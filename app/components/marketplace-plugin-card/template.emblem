@@ -1,19 +1,9 @@
 if data.published
   a local-class="marketplace-card" href={data.link} target="_blank"
-    .black-text.bold.font-medium
-       | #{data.title}
-    div local-class="marketplace-card-logo"
-      img src={data.logo}
-    div
-      | #{data.description}
+    = marketplace-card-content title=data.title logo=data.logo text=data.description
 else
   a local-class="marketplace-card" click={(perform openInstructionsModal)}
-    .black-text.bold.font-medium
-      | #{data.title}
-    div local-class="marketplace-card-logo"
-      img src={data.logo}
-    div
-      | #{data.description}
+    = marketplace-card-content title=data.title logo=data.logo text=data.description
 
 = modal-card class="input-modal modal-l" isActive=showInstructionsModal title=(t 'integrateAppknoxToCICDPipeline')
   .card-body
