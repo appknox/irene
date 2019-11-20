@@ -101,6 +101,7 @@
     "billboard.js": "^1.9.5",
     "clipboard": "^1.7.1",
     "ember-cli-document-title": "^0.4.0",
+    "ember-radio-button": "^2.0.1",
     "intl-tel-input": "^14.0.2",
     "jquery": "^3.4.1",
     "qrious": "^4.0.2"
