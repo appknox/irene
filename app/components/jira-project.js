@@ -38,11 +38,11 @@ const JiraProjectComponent = Component.extend({
   }).evented(),
 
   setCurrentJiraRepoErrored: on('setCurrentJiraRepo:errored', function(_, err){
-    if (err.errors[0].detail && err.errors[0].detail==="Jira not integrated"){
+    if (err.errors[0].detail && err.errors[0].detail==="JIRA not integrated"){
       this.set('noIntegration', true);
       return
     }
-    if (err.errors[0].detail && err.errors[0].detail==="Jira integration failed"){
+    if (err.errors[0].detail && err.errors[0].detail==="JIRA integration failed"){
       this.set('reconnect', true);
       return
     }
@@ -141,7 +141,7 @@ const JiraProjectComponent = Component.extend({
   }).evented(),
 
   selectProjectErrored: on('selectProject:errored', function(_, error){
-    if (error.errors[0].detail==="Jira not integrated"){
+    if (error.errors[0].detail==="JIRA not integrated"){
       this.set("showEditJiraModal", false )
       this.set('jiraProjects', null);
       this.set('noIntegration', true);
