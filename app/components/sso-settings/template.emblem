@@ -24,7 +24,7 @@
             | XML Metadata
 
       if spConfigIsManual
-        table.margin-t-1.margin-b-h.table-h-bordered-gray
+        table.margin-t-1.margin-b-h.table-h-bordered-gray local-class="sso-table"
           tr
             td.black-text.bold.font-small
               = t "entityID"
@@ -109,7 +109,7 @@
               = attach-tooltip position="top"
                 | Delete IdP Metadata Config
 
-        table.margin-t-1.margin-b-h.table-h-bordered-gray
+        table.margin-t-1.margin-b-h.table-h-bordered-gray local-class="sso-table"
           tr
             td.black-text.bold.font-small
               | Entity ID
