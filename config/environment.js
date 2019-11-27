@@ -190,6 +190,7 @@ module.exports = function(environment) {
       registration: 'registration',
       activate: 'activate',
       saml2: 'sso/saml2',
+      saml2SPMetadata: 'sso/saml2/metadata',
       saml2Login: 'sso/saml2/login',
       files: 'files',
       profiles: 'profiles',

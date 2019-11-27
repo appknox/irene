@@ -4,15 +4,18 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 import { t } from 'ember-intl';
+import ENV from 'irene/config/environment';
 
 export default Component.extend({
   intl: service(),
   ajax: service(),
   notify: service('notification-messages-service'),
 
-  ssoSettings: null,
+
+  // sso: null,
+  organization: null,
   showAddSSOModal: false,
-  serviceProvider: null,
+  // spMetadata: null,
   tPleaseTryAgain: t("pleaseTryAgain"),
   xmlData: null,
   showDeleteIdpMetadataConfirm: false,
@@ -22,47 +25,56 @@ export default Component.extend({
   spConfig: 'manual',
 
   didInsertElement(){
-    this.get('checkMultiSSO').perform()
+    this.get('getSPMetadata').perform();
+    // this.get('getIdPMetadata').perform();
   },
 
+  // Fetch SP Metadata
+  getSPMetadata: task(function *(){
+    const spMetadata = yield this.get('ajax').request(ENV.endpoints.saml2SPMetadata);
+    this.set('spMetadata', spMetadata);
+  }),
+
+
+  // Switch SP config format
   spConfigIsManual: computed('spConfig', function() {
     return this.get('spConfig') == 'manual'
   }),
-
   spConfigIsXml: computed('spConfig', function() {
     return this.get('spConfig') == 'xml'
   }),
 
-  checkMultiSSO: task(function *(){
-    try{
-      const url = `organizations/${this.get('organization.id')}/integrate_saml/`;
-      const ssoSettings = yield this.get('ajax').request(url);
-      yield this.set('ssoSettings', ssoSettings);
-      yield this.get('getServiceProviderDetail').perform();
-    }catch(error){
-      throw error;
-    }
-
-  }).evented(),
-
-  checkMultiSSOErrored: on('checkMultiSSO:errored', function(_, err){
-    if (err.status!==404){
-      this.get('notify').error(err.message);
-    }
+  // Fetch IdP Metadata
+  idpMetadata: computed('organization.id', function() {
+    return this.get('store').queryRecord('saml2-idp-metadata', {});
   }),
 
-  openMultiSSOModal: task(function *(){
-    yield this.set('showAddSSOModal', true);
-  }),
+  // // Fetch IdP Metadata
+  // getIdPMetadata: task(function *(){
+  //   // try {
+  //   //   const url = `organizations/${this.get('organization.id')}/sso/saml2/idp_metadata`;
+  //   //   const sso = yield this.get('ajax').request(url);
+  //   //   yield this.set('sso', sso);
+  //   // } catch(error) {
+  //   //   throw error;
+  //   // }
+  // }).evented(),
 
-  getServiceProviderDetail: task(function *(){
-    const serviceProvider = yield this.get('ajax').request(`organizations/${this.get('organization.id')}/sp_info`);
-    this.set('serviceProvider', serviceProvider);
-  }).evented(),
+  // getIdPMetadataErrored: on('getIdPMetadata:errored', function(_, err){
+  //   if (err.status!==404) {
+  //     this.get('notify').error(err.message);
+  //   }
+  // }),
 
-  getServiceProviderDetailErrored: on('getServiceProviderDetail:errored', function(){
-    this.get('notify').error(this.get('tSomethingWentWrongContactSupport'));
-  }),
+  // openMultiSSOModal: task(function *(){
+  //   yield this.set('showAddSSOModal', true);
+  // }),
+
+
+
+  // getSPMetadataErrored: on('getSPMetadata:errored', function(){
+  //   this.get('notify').error(this.get('tSomethingWentWrongContactSupport'));
+  // }),
 
   enableSSO: task(function * () {
     try{
@@ -82,8 +94,8 @@ export default Component.extend({
       contentType: false,
       mimeType: "multipart/form-data",
     })
-    yield this.set('ssoSettings', data);
-    yield this.get('getServiceProviderDetail').perform();
+    yield this.set('sso', data);
+    // yield this.get('getSPMetadata').perform();
     yield this.set('showAddSSOModal',false)
   }).evented(),
 
@@ -105,7 +117,7 @@ export default Component.extend({
   deleteIdpConfig: task(function *(){
     const url = `organizations/${this.get('organization.id')}/integrate_saml/`;
     yield this.get('ajax').delete(url);
-    yield this.set('ssoSettings', null);
+    yield this.set('sso', null);
   }).evented(),
 
   deleteIdpConfigSucceeded: on('deleteIdpConfig:succeeded', function() {
@@ -117,32 +129,32 @@ export default Component.extend({
     const url = `organizations/${this.get('organization.id')}/integrate_saml/`;
     let updateFormData = new FormData();
     if (selectedOption==="disable-enable"){
-      updateFormData.append('enabled', !this.get('ssoSettings.enabled'))
+      updateFormData.append('enabled', !this.get('sso.enabled'))
       const data = yield this.get('ajax').put(url,{
         data: updateFormData,
         processData: false,
         contentType: false,
         mimeType: "multipart/form-data",
       });
-      yield this.set('ssoSettings', data);
+      yield this.set('sso', data);
       return;
     }
     if (selectedOption==="enforce"){
-      this.set('ssoSettings.enabled', true);
-      updateFormData.append('enforced', !this.get('ssoSettings.enforced'));
-      updateFormData.append('enabled', this.get('ssoSettings.enabled'));
+      this.set('sso.enabled', true);
+      updateFormData.append('enforced', !this.get('sso.enforced'));
+      updateFormData.append('enabled', this.get('sso.enabled'));
       const data = yield this.get('ajax').put(url,{
         data: updateFormData,
         processData: false,
         contentType: false,
         mimeType: "multipart/form-data",
       });
-      yield this.set('ssoSettings', data);
+      yield this.set('sso', data);
       return;
     }
     yield this.get('ajax').delete(url);
     yield this.get('notify').success(this.get('tRemovedSSOSuccessfully'))
-    yield this.set('ssoSettings', null);
+    yield this.set('sso', null);
     yield this.set('xmlData', null);
   }).evented(),
 
@@ -150,17 +162,17 @@ export default Component.extend({
     const status = err.status;
     if(status===400){
       if (err.payload.filename) {
-        this.set('ssoSettings', null)
+        this.set('sso', null)
         this.get('notify').error(err.payload.filename[0])
         return;
       }
       if (err.payload.enabled) {
-        this.set('ssoSettings.enabled', null)
+        this.set('sso.enabled', null)
         this.get('notify').error(err.payload.enabled[0])
         return;
       }
       if (err.payload.enforced) {
-        this.set('ssoSettings.enforced', null)
+        this.set('sso.enforced', null)
         this.get('notify').error(err.payload.enforced[0])
         return;
       }

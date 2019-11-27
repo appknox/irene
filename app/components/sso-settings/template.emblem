@@ -30,25 +30,21 @@
               = t "entityID"
             td
               .text-gray
-                = serviceProvider.entity_id
+                = spMetadata.entity_id
           tr
             td.black-text.bold.font-small
               = t "acsURL"
             td
-              = serviceProvider.acs_url
+              = spMetadata.acs_url
           tr
             td.black-text.bold.font-small
               = t "nameIDFormat"
             td
-              = serviceProvider.named_id_format
-          tr
-            td.black-text.bold.font-small
-              | Enable Response Signing
-            td
-              | Yes
+              = spMetadata.named_id_format
+
       else if spConfigIsXml
         .margin-t-1
-          = textarea class="form-control textarea-input margin-b-q" rows="8" value=serviceProvider.metadata
+          = textarea class="form-control textarea-input margin-b-q" rows="8" value=spMetadata.metadata
 
 .columns.margin-t-h
   .column
@@ -56,7 +52,7 @@
       .black-text local-class="org-setting-subtitle"
         | Identity Provider (IdP)
 
-      unless ssoSettings
+      unless idpMetadata
         if checkMultiSSO.isRunning
           .align-middle
             = fa-icon "spinner fa-spin"
@@ -83,7 +79,7 @@
             if dropzone.supported
               div local-class="dropzone {{ if dropzone.active 'dropzone-upload-active'}}"
                 div local-class="dropzone-logo"
-                  img local-class="integration-logo" src="/images/xml.svg"
+                  img local-class="xml-logo" src="/images/xml.svg"
                 div local-class="dropzone-upload"
                   = fa-icon "upload"
                   | &nbsp;
@@ -99,47 +95,74 @@
                       | &nbsp;
                       = fa-icon "spinner fa-spin"
       else
-        .align-both
-          .margin-b-1 local-class="org-setting-desc"
-            | Your SSO provider's IdP Metadata XML
-
-          unless ssoSettings.enabled
-            button.button.is-default click={(perform openDeleteIdpMetadataConfirm)}
-              = fa-icon "trash-o"
-              = attach-tooltip position="top"
-                | Delete IdP Metadata Config
-
         table.margin-t-1.margin-b-h.table-h-bordered-gray local-class="sso-table"
           tr
-            td.black-text.bold.font-small
-              | Entity ID
-            td
-              .text-gray
-                = ssoSettings.sso_service_url
+            th
+              .align-both
+                .vertical-align-center
+                  = fa-icon "file-code-o"
+                  .margin-l-h.bold.black-text
+                    | IdP Metadata
+                unless sso.enabled
+                  button.button.is-default click={(perform openDeleteIdpMetadataConfirm)}
+                    = fa-icon "trash-o"
+                    = attach-tooltip position="top"
+                      | Delete IdP Metadata Config
           tr
-            td.black-text.bold.font-small
-              | HTTP-POST Endpoint
             td
-              .text-gray
-                = ssoSettings.sso_service_url
-          tr
-            td.black-text.bold.font-small
-              | Valid Until
-            td
-              = format-date ssoSettings.created_on
-          tr
-            td.black-text.bold.font-small
-              | Certificate
-            td
-              | cert
+              .black-text.bold.font-small
+                | Entity ID
+              .text-gray.margin-b-1
+                = idpMetadata.entityId
 
-if ssoSettings
+              .black-text.bold.font-small
+                | SSO Service URL
+              .text-gray.margin-b-1
+                = idpMetadata.ssoServiceUrl
+              .margin-t-3q.margin-b-q
+                table.table-h-bordered-gray.font-small.fill-white
+                  tr
+                    th colspan="2"
+                      .vertical-align-center
+                        = fa-icon "certificate" local-class="idp-cert-icon"
+                        .margin-l-h.black-text.bold
+                          | Certificate
+                  tr
+                    td.bold.black-text colspan="2"
+                      | Issuer
+                      .text-gray
+                        = idpMetadata.certificate.issuer
+                  tr
+                    td.bold.black-text
+                      | Issued On
+                      .text-gray
+                        = moment-format idpMetadata.certificate.issued_on 'DD MMM YYYY HH:mm:ss A'
+                    td.bold.black-text
+                      | Expiry
+                      .text-gray
+                        = moment-format idpMetadata.certificate.expires_on 'DD MMM YYYY HH:mm:ss A'
+                  tr
+                    td.bold.black-text colspan="2"
+                      | Fingerprints
+                      .text-gray.uppercase-text.padding-t-q
+                        div
+                          span.bold.black-text.padding-r-3q
+                            | SHA256
+                          span local-class="fingerprint"
+                            = idpMetadata.certificate.fingerprint_sha256
+                        div
+                          span.bold.black-text.padding-r-3q
+                            | SHA1
+                          span local-class="fingerprint"
+                            = idpMetadata.certificate.fingerprint_sha1
+
+if sso
   .columns.margin-t-h
     .column
       .vertical-align-top
         .div
           label class="toggle-switch-on-off"
-            = input class="switch-input" type="checkbox" id="enable-sso" checked=(readonly ssoSettings.enabled) disabled=disableDeleteEnforceSSO.isRunning click=(perform disableDeleteEnforceSSO 'disable-enable')
+            = input class="switch-input" type="checkbox" id="enable-sso" checked=(readonly sso.enabled) disabled=disableDeleteEnforceSSO.isRunning click=(perform disableDeleteEnforceSSO 'disable-enable')
             span class="knob"
         .padding-l-1h
           label.black-text local-class="org-setting-title" for="enable-sso"
@@ -151,12 +174,12 @@ if ssoSettings
       .vertical-align-top
         .div
           label class="toggle-switch-on-off"
-            = input class="switch-input" type="checkbox" id="enforce-sso" checked=ssoSettings.enforced disabled=disableDeleteEnforceSSO.isRunning click=(perform disableDeleteEnforceSSO 'enforce')
+            = input class="switch-input" type="checkbox" id="enforce-sso" checked=sso.enforced disabled=disableDeleteEnforceSSO.isRunning click=(perform disableDeleteEnforceSSO 'enforce')
             span class="knob"
         .padding-l-1h
           label.black-text local-class="org-setting-title" for="enforce-sso"
             | Enforce SSO
           div local-class="org-setting-desc" local-class="checkbox-desc"
-            | Disable password based login, show only SSO login button
+            | Disable password based login for all users, show only SSO login button
 
 = confirm-box isActive=showDeleteIdpMetadataConfirm title="Are you sure you want to delete IdP configuration?" delegate=this confirmAction=(perform deleteIdpConfig) disabled=deleteIdpConfig.isRunning
