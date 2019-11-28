@@ -15,7 +15,6 @@
     "urijs": "^1.18.4",
     "socket.io-client": "^1.7.2",
     "clipboard": "^1.7.1",
-    "devices.css": "*",
     "chart.js": "^2.7.1",
     "chartjs": "2.1.6"
   },

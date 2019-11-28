@@ -74,10 +74,6 @@ module.exports = function (defaults) {
    */
   app.import('bower_components/clipboard/dist/clipboard.min.js');
 
-  /*
-   * including devices.css
-   */
-  app.import('bower_components/devices.css/assets/devices.min.css');
   app.import('node_modules/billboard.js/dist/billboard.css');
 
 
