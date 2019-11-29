@@ -3,25 +3,26 @@
     .org-settings-subtitle
       = t "singleSignOn"
     div local-class="org-setting-title"
-      | SAML Authentication
+      = t "samlAuth"
     .margin-b-h local-class="org-setting-desc"
-      | SAML-based single sign-on (SSO) gives members access to Appknox through an identity provider (IdP) of your choice. Get set up with ADFS, G Suite, Auth0, OneLogin, or your custom SAML 2.0 solution.
+      = t "samlDesc"
 
 .columns
   .column
     .bordered-box
       .black-text local-class="org-setting-subtitle"
-        | Service Provider (SP)
+        = t "serviceProvider"
+        | &nbsp;(SP)
       .margin-b-1 local-class="org-setting-desc"
-        | Configure your identity provider based of the following Appknox SP Metadata:
+        = t "spMetadataDesc"
 
       .vertical-align-center
         = radio-button value="manual" groupValue=spConfig classNames="vertical-align-center"
           span.padding-l-h.margin-r-1
-            | Manual Settings
+            = t "manualSettings"
         = radio-button value="xml" groupValue=spConfig classNames="vertical-align-center"
           span.padding-l-h
-            | XML Metadata
+            = t "xmlMetadata"
 
       if spConfigIsManual
         table.margin-t-1.margin-b-h.table-h-bordered-gray local-class="sso-table"
@@ -50,7 +51,8 @@
   .column
     .bordered-box.padding-b-1
       .black-text local-class="org-setting-subtitle"
-        | Identity Provider (IdP)
+        = t "identityProvider"
+        | &nbsp;(IdP)
 
       if idpMetadata
         table.margin-t-1.margin-b-h.table-h-bordered-gray local-class="sso-table"
@@ -60,21 +62,21 @@
                 .vertical-align-center
                   = fa-icon "file-code-o"
                   .margin-l-h.bold.black-text
-                    | IdP Metadata
+                    = t "idpMetadata"
                 unless sso.enabled
                   button.button.is-default click={(perform openDeleteIdpMetadataConfirm)}
                     = fa-icon "trash-o"
                     = attach-tooltip position="top"
-                      | Delete IdP Metadata Config
+                      = t "idpMetadataDelete"
           tr
             td
               .black-text.bold.font-small
-                | Entity ID
+                = t "entityID"
               .text-gray.margin-b-1
                 = idpMetadata.entityId
 
               .black-text.bold.font-small
-                | SSO Service URL
+                = t "ssoServiceURL"
               .text-gray.margin-b-1
                 = idpMetadata.ssoServiceUrl
 
@@ -85,33 +87,33 @@
                       .vertical-align-center
                         = fa-icon "certificate" local-class="idp-cert-icon"
                         .margin-l-h.black-text.bold
-                          | Certificate
+                          = t "certificate"
                   tr
                     td.bold.black-text colspan="2"
-                      | Issuer
+                      = t "issuer"
                       .text-gray
                         = idpMetadata.certificate.issuer
                   tr
                     td.bold.black-text
-                      | Issued On
+                      = t "issuedOn"
                       .text-gray
                         = moment-format idpMetadata.certificate.issued_on 'DD MMM YYYY HH:mm:ss A'
                     td.bold.black-text
-                      | Expiry
+                      = t "expiry"
                       .text-gray
                         = moment-format idpMetadata.certificate.expires_on 'DD MMM YYYY HH:mm:ss A'
                   tr
                     td.bold.black-text colspan="2"
-                      | Fingerprints
+                      = t "fingerprints"
                       .text-gray.uppercase-text.padding-t-q
                         div
                           span.bold.black-text.padding-r-3q
-                            | SHA256
+                            = t "sha256"
                           span local-class="fingerprint"
                             = idpMetadata.certificate.fingerprint_sha256
                         div
                           span.bold.black-text.padding-r-3q
-                            | SHA1
+                            = t "sha1"
                           span local-class="fingerprint"
                             = idpMetadata.certificate.fingerprint_sha1
       else
@@ -122,20 +124,19 @@
               | #{t "loading"}...
         else if idpMetadataXml
           .margin-b-1 local-class="org-setting-desc"
-            | Edit IdP Metadata XML if any change is required before uploading:
+            = t "idpMetadataEdit"
 
           form submit={(perform uploadIdPMetadata)}
             = textarea class="form-control textarea-input margin-t-q" rows="10" placeholder="IdP Metadata XML Content" value=idpMetadataXml
             .margin-t-h
               button.button.is-primary type="submit" disabled=uploadIdPMetadata.isRunning
                 if uploadIdPMetadata.isRunning
-                  .fa-font-size
+                  .fa-font-size.margin-r-1
                     =fa-icon "spinner fa-spin"
-                    | &nbsp;
                 = t "upload"
         else
           .margin-b-1 local-class="org-setting-desc"
-            | Upload your IdP Metadata XML file
+            = t "idpMetadataUpload"
 
           = file-dropzone name="files" as |dropzone queue|
             if dropzone.supported
@@ -152,7 +153,7 @@
 
                   = file-upload name="files" accept="text/xml" onfileadd=(perform parseIdpMetadataXml)
                     a
-                      | browse files
+                      = t "browseFiles"
                     if parseIdpMetadataXml.isRunning
                       | &nbsp;
                       = fa-icon "spinner fa-spin"
@@ -167,9 +168,11 @@ if idpMetadata
             span class="knob"
         .padding-l-1h
           label.black-text local-class="org-setting-title" for="enable-sso"
-            | Enable SSO Authentication
+            = t "enable"
+            | &nbsp;
+            = t "ssoAuthentication"
           div local-class="org-setting-desc" local-class="checkbox-desc"
-            | Show Single Sign-On option in login form
+            = t "ssoEnableDesc"
 
           if sso.enabled
             .columns.margin-t-q
@@ -179,8 +182,8 @@ if idpMetadata
                     = input type="checkbox" id="enforce-sso" checked=sso.enforced disabled=toggleSSOEnforce.isRunning click=(perform toggleSSOEnforce value="target.checked")
                   .padding-l-h
                     label.black-text local-class="org-setting-subtitle" for="enforce-sso"
-                      | Enforce SSO
+                      = t "ssoEnforce"
                     div local-class="org-setting-desc" local-class="checkbox-desc"
-                      | Disable password based login for all users, show only SSO login button
+                      = t "ssoEnforceDesc"
 
 = confirm-box isActive=showDeleteIdpMetadataConfirm title="Are you sure you want to delete IdP configuration?" delegate=this confirmAction=(perform deleteIdpConfig) disabled=deleteIdpConfig.isRunning
