@@ -11,6 +11,7 @@ import tHelper from 'ember-intl/helpers/t';
 moduleForComponent('vnc-viewer', 'Integration | Component | vnc viewer', {
   unit: true,
   needs: [
+    'component:dynamic-scan-expiry',
     'component:dynamic-scan',
     'component:novnc-rfb',
     'template:components/novnc-rfb',

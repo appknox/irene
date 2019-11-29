@@ -68,8 +68,8 @@
     "ember-concurrency": "^1.0.0",
     "ember-css-modules": "^1.0.1",
     "ember-css-modules-sass": "^1.0.1",
-    "ember-data": "3.9.3",
-    "ember-django-adapter": "^2.1.0",
+    "ember-data": "3.14.0",
+    "ember-django-adapter": "^2.1.1",
     "ember-export-application-global": "^2.0.0",
     "ember-file-upload": "^2.5.0",
     "ember-font-awesome": "4.0.0-rc.4",
@@ -79,7 +79,7 @@
     "ember-moment": "^7.7.0",
     "ember-power-calendar-moment": "^0.1.4",
     "ember-power-datepicker": "^0.5.2",
-    "ember-power-select": "^2.0.4",
+    "ember-power-select": "^2.3.5",
     "ember-resolver": "^4.1.0",
     "ember-rollbar-client": "^0.9.0",
     "ember-simple-auth": "^1.9.2",
@@ -90,7 +90,7 @@
     "faker": "^4.1.0",
     "loader.js": "^4.0.1",
     "mock-socket": "6.0.4",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.13.0",
     "phantomjs-prebuilt": "^2.1.14"
   },
   "engines": {
