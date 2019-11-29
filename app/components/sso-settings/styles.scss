@@ -5,11 +5,12 @@
 
 .org-setting-subtitle {
   font-weight: bold;
-  font-size: 1.15em;
+  font-size: 1em;
 }
 
 .org-setting-desc {
-  padding-top: 0.5em;
+  padding-top: 0.1em;
+  font-size: 0.95em;
 }
 
 .dropzone {
@@ -50,4 +51,8 @@
 .idp-cert-icon {
   font-size: 1em;
   line-height: 1.5;
+}
+
+.checkbox {
+  margin-top: 0.3em;
 }

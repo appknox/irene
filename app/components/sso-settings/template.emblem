@@ -52,49 +52,7 @@
       .black-text local-class="org-setting-subtitle"
         | Identity Provider (IdP)
 
-      unless idpMetadata
-        if checkMultiSSO.isRunning
-          .align-middle
-            = fa-icon "spinner fa-spin"
-            .padding-l-h.padding-v-1
-              | #{t "loading"}...
-        else if xmlData
-          .margin-b-1 local-class="org-setting-desc"
-            | Edit IdP Metadata XML if any change is required before uploading:
-
-          form submit={(perform enableSSO)}
-            = textarea class="form-control textarea-input margin-t-q" rows="10" placeholder=(t "reasonForOverride") value=xmlData
-            .margin-t-h
-              button.button.is-primary type="submit" disabled=enableSSO.isRunning
-                if enableSSO.isRunning
-                  .fa-font-size
-                    =fa-icon "spinner fa-spin"
-                    | &nbsp;
-                = t "upload"
-        else
-          .margin-b-1 local-class="org-setting-desc"
-            | Upload your IdP Metadata XML file
-
-          = file-dropzone name="files" as |dropzone queue|
-            if dropzone.supported
-              div local-class="dropzone {{ if dropzone.active 'dropzone-upload-active'}}"
-                div local-class="dropzone-logo"
-                  img local-class="xml-logo" src="/images/xml.svg"
-                div local-class="dropzone-upload"
-                  = fa-icon "upload"
-                  | &nbsp;
-                  .black-text
-                    = t "dragDropFile"
-                  .padding-h-q
-                    = t "or"
-
-                  = file-upload name="files" accept="text/xml" onfileadd=(perform uploadFileWrapper)
-                    a
-                      | browse files
-                    if uploadFileWrapper.isRunning
-                      | &nbsp;
-                      = fa-icon "spinner fa-spin"
-      else
+      if idpMetadata
         table.margin-t-1.margin-b-h.table-h-bordered-gray local-class="sso-table"
           tr
             th
@@ -119,6 +77,7 @@
                 | SSO Service URL
               .text-gray.margin-b-1
                 = idpMetadata.ssoServiceUrl
+
               .margin-t-3q.margin-b-q
                 table.table-h-bordered-gray.font-small.fill-white
                   tr
@@ -155,31 +114,73 @@
                             | SHA1
                           span local-class="fingerprint"
                             = idpMetadata.certificate.fingerprint_sha1
+      else
+        if getIdPMetadata.isRunning
+          .align-middle
+            = fa-icon "spinner fa-spin"
+            .padding-l-h.padding-v-1
+              | #{t "loading"}...
+        else if idpMetadataXml
+          .margin-b-1 local-class="org-setting-desc"
+            | Edit IdP Metadata XML if any change is required before uploading:
 
-if sso
+          form submit={(perform uploadIdPMetadata)}
+            = textarea class="form-control textarea-input margin-t-q" rows="10" placeholder="IdP Metadata XML Content" value=idpMetadataXml
+            .margin-t-h
+              button.button.is-primary type="submit" disabled=uploadIdPMetadata.isRunning
+                if uploadIdPMetadata.isRunning
+                  .fa-font-size
+                    =fa-icon "spinner fa-spin"
+                    | &nbsp;
+                = t "upload"
+        else
+          .margin-b-1 local-class="org-setting-desc"
+            | Upload your IdP Metadata XML file
+
+          = file-dropzone name="files" as |dropzone queue|
+            if dropzone.supported
+              div local-class="dropzone {{ if dropzone.active 'dropzone-upload-active'}}"
+                div local-class="dropzone-logo"
+                  img local-class="xml-logo" src="/images/xml.svg"
+                div local-class="dropzone-upload"
+                  = fa-icon "upload"
+                  | &nbsp;
+                  .black-text
+                    = t "dragDropFile"
+                  .padding-h-q
+                    = t "or"
+
+                  = file-upload name="files" accept="text/xml" onfileadd=(perform parseIdpMetadataXml)
+                    a
+                      | browse files
+                    if parseIdpMetadataXml.isRunning
+                      | &nbsp;
+                      = fa-icon "spinner fa-spin"
+
+if idpMetadata
   .columns.margin-t-h
     .column
       .vertical-align-top
         .div
           label class="toggle-switch-on-off"
-            = input class="switch-input" type="checkbox" id="enable-sso" checked=(readonly sso.enabled) disabled=disableDeleteEnforceSSO.isRunning click=(perform disableDeleteEnforceSSO 'disable-enable')
+            = input class="switch-input" type="checkbox" id="enable-sso" checked=sso.enabled disabled=toggleSSOEnable.isRunning click=(perform toggleSSOEnable value="target.checked")
             span class="knob"
         .padding-l-1h
           label.black-text local-class="org-setting-title" for="enable-sso"
             | Enable SSO Authentication
           div local-class="org-setting-desc" local-class="checkbox-desc"
             | Show Single Sign-On option in login form
-  .columns
-    .column
-      .vertical-align-top
-        .div
-          label class="toggle-switch-on-off"
-            = input class="switch-input" type="checkbox" id="enforce-sso" checked=sso.enforced disabled=disableDeleteEnforceSSO.isRunning click=(perform disableDeleteEnforceSSO 'enforce')
-            span class="knob"
-        .padding-l-1h
-          label.black-text local-class="org-setting-title" for="enforce-sso"
-            | Enforce SSO
-          div local-class="org-setting-desc" local-class="checkbox-desc"
-            | Disable password based login for all users, show only SSO login button
+
+          if sso.enabled
+            .columns.margin-t-q
+              .column
+                .vertical-align-top
+                  div local-class="checkbox"
+                    = input type="checkbox" id="enforce-sso" checked=sso.enforced disabled=toggleSSOEnforce.isRunning click=(perform toggleSSOEnforce value="target.checked")
+                  .padding-l-h
+                    label.black-text local-class="org-setting-subtitle" for="enforce-sso"
+                      | Enforce SSO
+                    div local-class="org-setting-desc" local-class="checkbox-desc"
+                      | Disable password based login for all users, show only SSO login button
 
 = confirm-box isActive=showDeleteIdpMetadataConfirm title="Are you sure you want to delete IdP configuration?" delegate=this confirmAction=(perform deleteIdpConfig) disabled=deleteIdpConfig.isRunning

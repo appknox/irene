@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
@@ -5,34 +6,33 @@ import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 import { t } from 'ember-intl';
 import ENV from 'irene/config/environment';
+import parseError from 'irene/utils/parse-error';
 
 export default Component.extend({
   intl: service(),
   ajax: service(),
   notify: service('notification-messages-service'),
 
-
-  // sso: null,
   organization: null,
-  showAddSSOModal: false,
-  // spMetadata: null,
-  tPleaseTryAgain: t("pleaseTryAgain"),
-  xmlData: null,
   showDeleteIdpMetadataConfirm: false,
+  spMetadata: null,
+  idpMetadata: null,
+  idpMetadataXml: null,
+  spConfig: 'manual',
+
+  tPleaseTryAgain: t("pleaseTryAgain"),
   tSomethingWentWrongContactSupport: t("somethingWentWrongContactSupport"),
   tRemovedSSOSuccessfully: t('removedSSOSuccessfully'),
 
-  spConfig: 'manual',
 
   didInsertElement(){
-    this.get('getSPMetadata').perform();
-    // this.get('getIdPMetadata').perform();
+    this.get('SPMetadata').perform();
+    this.get('getIdPMetadata').perform();
   },
 
-  // Fetch SP Metadata
-  getSPMetadata: task(function *(){
-    const spMetadata = yield this.get('ajax').request(ENV.endpoints.saml2SPMetadata);
-    this.set('spMetadata', spMetadata);
+
+  sso: computed(function() {
+    return this.get('store').queryRecord('organization-sso', {});
   }),
 
 
@@ -44,143 +44,119 @@ export default Component.extend({
     return this.get('spConfig') == 'xml'
   }),
 
+
+  // Fetch SP Metadata
+  SPMetadata: task(function *(){
+    const spMetadata = yield this.get('ajax').request(ENV.endpoints.saml2SPMetadata);
+    this.set('spMetadata', spMetadata);
+  }).restartable(),
+
+
   // Fetch IdP Metadata
-  idpMetadata: computed('organization.id', function() {
-    return this.get('store').queryRecord('saml2-idp-metadata', {});
+  getIdPMetadata: task(function *() {
+    const idpMetadata = yield this.get('store').queryRecord('saml2-idp-metadata', {});
+    this.set('idpMetadata', idpMetadata);
+  }).restartable(),
+
+
+  // Parse & upload IdP metadata
+  parseIdpMetadataXml: task(function *(file){
+    let idpMetadataXml = yield file.readAsText();
+    yield this.set('idpMetadataXml', idpMetadataXml);
   }),
 
-  // // Fetch IdP Metadata
-  // getIdPMetadata: task(function *(){
-  //   // try {
-  //   //   const url = `organizations/${this.get('organization.id')}/sso/saml2/idp_metadata`;
-  //   //   const sso = yield this.get('ajax').request(url);
-  //   //   yield this.set('sso', sso);
-  //   // } catch(error) {
-  //   //   throw error;
-  //   // }
-  // }).evented(),
-
-  // getIdPMetadataErrored: on('getIdPMetadata:errored', function(_, err){
-  //   if (err.status!==404) {
-  //     this.get('notify').error(err.message);
-  //   }
-  // }),
-
-  // openMultiSSOModal: task(function *(){
-  //   yield this.set('showAddSSOModal', true);
-  // }),
-
-
-
-  // getSPMetadataErrored: on('getSPMetadata:errored', function(){
-  //   this.get('notify').error(this.get('tSomethingWentWrongContactSupport'));
-  // }),
-
-  enableSSO: task(function * () {
-    try{
-      // eslint-disable-next-line no-undef
-      $.parseXML(this.$('textarea').val());
-    }catch(err){
-      this.get('notify').error("Please enter a valid XML file.")
-      return;
+  uploadIdPMetadata: task(function * () {
+    try {
+      $.parseXML(this.get('idpMetadataXml'));
+    } catch(err){
+      throw new Error('Please enter a valid XML file');
     }
-    const blob = new Blob([this.$('textarea').val()], { type: "text/xml"});
+
+    const blob = new Blob([this.get('idpMetadataXml')], { type: "text/xml"});
     let idpFormData = new FormData();
     idpFormData.append('filename', blob);
-    const url = `organizations/${this.get('organization.id')}/integrate_saml/`;
-    const data = yield this.get('ajax').post(url,{
+
+    const url = [ENV.endpoints.organizations, this.get('organization.id'), ENV.endpoints.saml2IdPMetadata].join('/');
+    yield this.get('ajax').post(url, {
       data: idpFormData,
       processData: false,
       contentType: false,
       mimeType: "multipart/form-data",
-    })
-    yield this.set('sso', data);
-    // yield this.get('getSPMetadata').perform();
-    yield this.set('showAddSSOModal',false)
-  }).evented(),
+    });
 
-  enableSSOErrored: on('enableSSO:errored', function(_, err){
-    const status = err.status;
-    if(status===400){
-      if (err.payload.filename) {
-        this.get('notify').error(err.payload.filename[0])
-        return;
-      }
-    }
-    this.get('notify').error(this.get('tSomethingWentWrongContactSupport'));
+    yield this.set('idpMetadataXml', null);
+  }).evented().restartable(),
+
+  uploadIdPMetadataSucceeded: on('uploadIdPMetadata:succeeded', function() {
+    this.get('notify').success('Uploaded IdP Metadata Config successfully');
+    this.get('getIdPMetadata').perform();
   }),
 
+  uploadIdPMetadataErrored: on('uploadIdPMetadata:errored', function(_, err){
+    this.get('notify').error(parseError(err, this.get('tPleaseTryAgain')));
+  }),
+
+
+  // Delete IdP Metadata
   openDeleteIdpMetadataConfirm: task(function * () {
     yield this.set('showDeleteIdpMetadataConfirm', true);
   }),
 
-  deleteIdpConfig: task(function *(){
-    const url = `organizations/${this.get('organization.id')}/integrate_saml/`;
-    yield this.get('ajax').delete(url);
-    yield this.set('sso', null);
-  }).evented(),
+  deleteIdpConfig: task(function *() {
+    const ssoObj = this.store.peekRecord('saml2-idp-metadata', this.get('organization.id'));
+    yield ssoObj.deleteIdPMetadata();
+  }).evented().restartable(),
 
   deleteIdpConfigSucceeded: on('deleteIdpConfig:succeeded', function() {
     this.get('notify').success('Deleted IdP Metadata Config successfully');
     this.set('showDeleteIdpMetadataConfirm', false);
+    this.set('idpMetadata', null);
   }),
 
-  disableDeleteEnforceSSO: task(function *(selectedOption){
-    const url = `organizations/${this.get('organization.id')}/integrate_saml/`;
-    let updateFormData = new FormData();
-    if (selectedOption==="disable-enable"){
-      updateFormData.append('enabled', !this.get('sso.enabled'))
-      const data = yield this.get('ajax').put(url,{
-        data: updateFormData,
-        processData: false,
-        contentType: false,
-        mimeType: "multipart/form-data",
-      });
-      yield this.set('sso', data);
-      return;
-    }
-    if (selectedOption==="enforce"){
-      this.set('sso.enabled', true);
-      updateFormData.append('enforced', !this.get('sso.enforced'));
-      updateFormData.append('enabled', this.get('sso.enabled'));
-      const data = yield this.get('ajax').put(url,{
-        data: updateFormData,
-        processData: false,
-        contentType: false,
-        mimeType: "multipart/form-data",
-      });
-      yield this.set('sso', data);
-      return;
-    }
-    yield this.get('ajax').delete(url);
-    yield this.get('notify').success(this.get('tRemovedSSOSuccessfully'))
-    yield this.set('sso', null);
-    yield this.set('xmlData', null);
-  }).evented(),
-
-  disableDeleteEnforceSSOErrored: on('disableDeleteEnforceSSO:errored', function(_, err){
-    const status = err.status;
-    if(status===400){
-      if (err.payload.filename) {
-        this.set('sso', null)
-        this.get('notify').error(err.payload.filename[0])
-        return;
-      }
-      if (err.payload.enabled) {
-        this.set('sso.enabled', null)
-        this.get('notify').error(err.payload.enabled[0])
-        return;
-      }
-      if (err.payload.enforced) {
-        this.set('sso.enforced', null)
-        this.get('notify').error(err.payload.enforced[0])
-        return;
-      }
-    }
-    this.get('notify').error(this.get('tPleaseTryAgain'));
+  deleteIdpConfigErrored: on('deleteIdpConfig:errored', function(_, err){
+    this.get('notify').error(parseError(err, this.get('tPleaseTryAgain')));
   }),
-  uploadFileWrapper: task(function *(file){
-    let xmlData = yield file.readAsText();
-    yield this.set('xmlData', xmlData)
-  })
+
+
+  // Enable SSO
+  toggleSSOEnable: task(function *(value) {
+    const ssoObj = this.store.peekRecord('organization-sso', this.get('organization.id'));
+    ssoObj.set('enabled', value);
+    yield ssoObj.save();
+  }).evented().restartable(),
+
+  toggleSSOEnableSucceeded: on('toggleSSOEnable:succeeded', function(taskInstance) {
+    const [toggleValue] = taskInstance.args;
+    if (toggleValue) {
+      this.get('notify').success('SSO authentication enabled');
+    } else {
+      this.get('notify').success('SSO authentication disabled');
+    }
+  }),
+
+  toggleSSOEnableErrored: on('toggleSSOEnable:errored', function(_, err){
+    this.get('notify').error(parseError(err, this.get('tPleaseTryAgain')));
+  }),
+
+
+  // Enforce SSO
+  toggleSSOEnforce: task(function *(value) {
+    const ssoObj = this.store.peekRecord('organization-sso', this.get('organization.id'));
+    ssoObj.set('enforced', value);
+    yield ssoObj.save();
+  }).evented().restartable(),
+
+  toggleSSOEnforceSucceeded: on('toggleSSOEnforce:succeeded', function(taskInstance) {
+    const [toggleValue] = taskInstance.args;
+    if (toggleValue) {
+      this.get('notify').success('SSO enforce turned ON');
+    } else {
+      this.get('notify').success('SSO enforce turned OFF');
+    }
+  }),
+
+  toggleSSOEnforceErrored: on('toggleSSOEnforce:errored', function(_, err){
+    this.get('notify').error(parseError(err, this.get('tPleaseTryAgain')));
+  }),
+
 });

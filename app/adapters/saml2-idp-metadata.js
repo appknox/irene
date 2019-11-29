@@ -9,8 +9,15 @@ export default DRFAdapter.extend(IreneAdapterMixin, {
   addTrailingSlashes: false,
   organization: service('organization'),
 
-  urlForQueryRecord: function () {
-    const url = `${this.get('host')}/${this.get('namespace')}/organizations/${this.get('organization').selected.id}/sso/saml2/idp_metadata`;
-    return url;
-  }
+  _buildURL() {
+    const baseUrl = `${this.get('host')}/${this.get('namespace')}/organizations/${this.get('organization').selected.id}/sso/saml2/idp_metadata`;
+    return baseUrl;
+  },
+
+  async deleteIdPMetadata(modelInstance) {
+    const modelId = modelInstance.get('id');
+    const url = this.buildURL();
+    await this.ajax(url, 'DELETE');
+    return this.store.peekRecord('saml2-idp-metadata', modelId);
+  },
 });
