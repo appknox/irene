@@ -2897,11 +2897,10 @@ input:checked + .slider-nolabel:before
     i
       margin-top: -3px
 
-$login-button-width: 80%
+$login-button-width: 100%
 .auth-main-container
   height: 100vh
   background-color: #424651
-  margin-top: 10px
   a img
     margin-top: 50px
     width: 250px
@@ -2913,15 +2912,13 @@ $login-button-width: 80%
     width: 100%
     border-radius: 5px
     h4
-      padding-bottom: 20px
+      padding-bottom: 0.5em
     h6
       margin-left: 25px
     p
       text-align: center
       i
         margin: auto
-      &:first-child
-        margin-top: 30px
       .input
         max-width: 80%
         margin: auto
@@ -2938,12 +2935,16 @@ $login-button-width: 80%
         height: 0.06em
         width: 100%
         background: lighten($default, 50%)
-        margin-top: 3em
+        margin-top: 0.7em
+        margin-bottom: 0.7em
+        position: relative
       &-or
         text-align: center
         background: white
         width: 2.3em
-        margin: -0.8em auto 2.3em
+        position: absolute
+        left: 50%
+        transform: translateX(-50%) translateY(-50%)
       &-button
         width: $login-button-width
         display: block

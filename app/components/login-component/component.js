@@ -8,10 +8,14 @@ import { isUnauthorizedError } from 'ember-ajax/errors';
 import { isEmpty } from '@ember/utils';
 import { on } from '@ember/object/evented';
 import { t } from 'ember-intl';
+import parseError from 'irene/utils/parse-error';
 
 const LoginComponentComponent = Component.extend({
   session: service('session'),
   notify: service('notification-messages-service'),
+
+  classNames: ['vertical-align-stretch'],
+
   MFAEnabled: false,
   isLogingIn: false,
   identification: "",
@@ -21,13 +25,14 @@ const LoginComponentComponent = Component.extend({
   isRegistrationEnabled: ENV.isRegistrationEnabled,
   isSS0Enabled: null,
   isisSS0Enforced: null,
+
   tPleaseTryAgain: t("pleaseTryAgain"),
   tSomethingWentWrongContactSupport: t("somethingWentWrongContactSupport"),
   tPleaseEnterValidEmail: t("pleaseEnterValidEmail"),
   tPleaseEnterValidAccountDetail: t("pleaseEnterValidAccountDetail"),
 
-  ssoNotverified: computed('isSS0Enabled', function(){
-    return isEmpty(this.get('isSS0Enabled'))
+  ssoCheckDone: computed('isSS0Enabled', function(){
+    return !isEmpty(this.get('isSS0Enabled'))
   }),
 
   registrationLink: computed(function () {
@@ -52,9 +57,9 @@ const LoginComponentComponent = Component.extend({
       return false;
     }
     if (error.payload) {
-      this.set("MFAEnabled", true)
-      this.set("MFAIsEmail", error.payload.type == "HOTP")
-      this.set("MFAForced", this.isTrue(error.payload.forced))
+      this.set("MFAEnabled", true);
+      this.set("MFAIsEmail", error.payload.type == "HOTP");
+      this.set("MFAForced", this.isTrue(error.payload.forced));
       return true;
     }
     return false;
@@ -65,7 +70,7 @@ const LoginComponentComponent = Component.extend({
       return false;
     }
     if (value.toLowerCase) {
-      return value.toLowerCase() == "true"
+      return value.toLowerCase() == "true";
     }
     return !!value
   },
@@ -80,11 +85,12 @@ const LoginComponentComponent = Component.extend({
     const status = err.status
     this.set('token', null)
     this.set('isSS0Enabled', null);
+
     if (status===400 && (err.payload.token || err.payload.return_to)) {
-      this.get('notify').error(this.get('tSomethingWentWrongContactSupport'), ENV.notifications);
+      this.get('notify').error(parseError(err, this.get('tSomethingWentWrongContactSupport')));
       return;
     }
-    this.get('notify').error(this.get('tPleaseTryAgain'));
+    this.get('notify').error(parseError(err, this.get('tPleaseTryAgain')));
   }),
 
   verifySSO: task(function *(){
@@ -148,7 +154,7 @@ const LoginComponentComponent = Component.extend({
         })
     },
     inputChange(){
-      if (!this.get('ssoNotverified')) {
+      if (this.get('ssoCheckDone')) {
         this.set('isSS0Enabled', null);
       }
     }
