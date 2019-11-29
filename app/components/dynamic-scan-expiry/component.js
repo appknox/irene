@@ -8,6 +8,7 @@ import moment from 'moment';
 
 export default Component.extend({
   notify: service('notification-messages-service'),
+  store: service('store'),
   file: null,
   dynamicscan: null,
   durationRemaining: null,
@@ -24,7 +25,7 @@ export default Component.extend({
   },
   fetchDynaminscan: task(function* () {
     const id = this.get('file.id');
-    const dynamicscan = yield this.store.find('dynamicscan', id);
+    const dynamicscan = yield this.get('store').find('dynamicscan', id);
     this.set('dynamicscan', dynamicscan);
     return dynamicscan;
   }),
