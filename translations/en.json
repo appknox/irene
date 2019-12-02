@@ -136,6 +136,7 @@
   "download": "Download",
   "dynamic": "Dynamic",
   "dynamicScan": "Dynamic Scan",
+  "dynamicScanExtentionLimit": "Scan duration can be extended once 15 mins are remaining",
   "dynamicScanStart": "Start Dynamic Scan",
   "dynamicScanStop": "Stop Dynamic Scan",
   "dynamicScanText": "Please refresh the page if the scan doesn't start in 1-2 mins",

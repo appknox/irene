@@ -42,7 +42,10 @@ export default Component.extend({
   timeRemaining: computed('durationRemaining', function() {
     const duration = this.get('durationRemaining')
     if(!duration) {
-      return null;
+      return {
+        seconds: "00",
+        minutes: "00"
+      };
     }
     return {
       seconds: ("0" + duration.seconds()).slice(-2),
