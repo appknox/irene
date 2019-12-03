@@ -12,9 +12,9 @@
 
     {{#dd.content class="dropdown-content dropdown--default-content" local-class="dropdown"}}
       <div class="dropdown-container">
-        <a class="dropdown-item" onclick={{perform extendtime 5}}>5 mins</a>
-        <a class="dropdown-item" onclick={{perform extendtime 15}}>15 mins</a>
-        <a class="dropdown-item" onclick={{perform extendtime 30}}>30 mins</a>
+        <a class="dropdown-item" onclick={{perform extendtime 5 dd.actions.close}}>5 mins</a>
+        <a class="dropdown-item" onclick={{perform extendtime 15 dd.actions.close}}>15 mins</a>
+        <a class="dropdown-item" onclick={{perform extendtime 30 dd.actions.close}}>30 mins</a>
       </div>
     {{/dd.content}}
   {{/basic-dropdown}}

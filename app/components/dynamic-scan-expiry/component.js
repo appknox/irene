@@ -66,7 +66,7 @@ export default Component.extend({
     this.set('durationRemaining', duration);
     later(this, this.clock, 1000);
   },
-  extendtime: task(function* (time) {
+  extendtime: task(function* (time, close) {
     const dynamicscan = this.get('dynamicscan');
     if(!dynamicscan) {
       return;
@@ -81,5 +81,6 @@ export default Component.extend({
       throw error
     }
     yield this.get('fetchDynaminscan').perform();
+    close();
   })
 });
