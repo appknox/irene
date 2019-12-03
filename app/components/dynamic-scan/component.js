@@ -13,6 +13,7 @@ export default Component.extend({
   intl: service(),
   trial: service(),
   ajax: service(),
+  store: service(),
   notify: service('notification-messages-service'),
 
   tagName: '',

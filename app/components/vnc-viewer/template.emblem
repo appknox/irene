@@ -28,3 +28,6 @@ if isPoppedOut
         .margin-h-q
           button.is-default click="togglePop"
             = vncPopText
+    .flex-center
+      if file.isReady
+        = dynamic-scan-expiry file=file

@@ -9,7 +9,7 @@ const triggerAnalytics = function(funct, data) {
       return analytics.logout();
     } else if (funct === "login") {
       // eslint-disable-next-line
-      return analytics.login(data.userId,data.accountId);
+      return analytics.login(data.userId, data.accountId);
     }
     // eslint-disable-next-line
   } catch (error) {

@@ -135,6 +135,7 @@
   "download": "ダウンロード",
   "dynamic": "動的",
   "dynamicScan": "動的診断",
+  "dynamicScanExtentionLimit": "Scan duration can be extended once 15 mins are remaining",
   "dynamicScanStart": "動的診断を開始",
   "dynamicScanStop": "動的診断を停止",
   "dynamicScanText": "Please refresh the page if the scan doesn't start in 1-2 mins",

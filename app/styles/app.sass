@@ -1,13 +1,9 @@
 @import "bohemia"
 @import "ember-power-select"
 @import "ember-power-datepicker"
-$FreestyleGuide-color--primary: $primary
-$FreestyleGuide-color--accent: $primary
-$FreestyleGuide-color--secondary: $primary-darker
-$FreestyleGuide-color--foreground: $text
-$FreestyleGuide-color--background: $background
 @import 'vars'
 @import 'form'
+@import 'devices'
 @import 'modules'
 
 $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert), danger: ($danger, $danger-invert), critical: ($critical, $critical-invert), success: ($success, $success-invert)) !default
@@ -2126,7 +2122,6 @@ button.delete-button
   cursor: pointer
 
 .device-modal
-  max-height: calc(100vh - 10px)
   position: relative
   .modal-card-head
     border-bottom: 0px
