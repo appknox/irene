@@ -1,8 +1,9 @@
 .org-container
   = organization-settings organization=model.organization user=model.user
 
-  = sso-settings organization=model.organization user=model.user
-  .divider.margin-t-1.margin-b-1
+  if model.organization.features.sso
+    = sso-settings organization=model.organization user=model.user
+    .divider.margin-t-1.margin-b-1
 
   .columns
     .column
