@@ -20,7 +20,8 @@ const SubmissionDetailsComponent = Component.extend({
   statusObserver: observer("submission.status", function() {
     const status = this.get("submission.status");
     if (status === ENUMS.SUBMISSION_STATUS.ANALYZING) {
-      return triggerAnalytics('feature',ENV.csb.applicationUpload);
+      triggerAnalytics('feature',ENV.csb.applicationUpload);
+      triggerAnalytics('feature', ENV.csb.runStaticScan);
     }
   })
 });

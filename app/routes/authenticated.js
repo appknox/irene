@@ -45,6 +45,8 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
     let error;
     const data = {
       userId: user.get("id"),
+      userName: user.get("username"),
+      userEmail: user.get("email"),
       accountId: this.get("org.selected.id")
     };
     triggerAnalytics('login', data);
