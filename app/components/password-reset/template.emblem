@@ -1,6 +1,6 @@
 = auth-assets
 
-.columns
+.columns.margin-t-3
   .column.is-one-quarter.margin-side-auto
     form.form
       if isVerified

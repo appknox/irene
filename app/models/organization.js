@@ -13,6 +13,7 @@ const Organization = DS.Model.extend({
   namespaces: DS.hasMany('organization-namespace'),
   projects: DS.hasMany('organization-project'),
   teams: DS.hasMany('organization-team'),
+  features: DS.attr(),
   projectsCount: DS.attr('number'),
   namespacesCount: DS.attr('number'),
   teamsCount: DS.attr('number'),

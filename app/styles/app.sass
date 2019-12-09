@@ -1772,6 +1772,9 @@ ul.risk-table
 .font-size-14
   font-size: 14px
 
+.font-size-25
+  font-size: 25px
+
 .card-button
   .fa-download, .fa-cog, .fa-trash-o
     font-size: 14px
@@ -1937,6 +1940,20 @@ ul.risk-table
       color: $critical
     .input-checkbox
       margin-top: 2px
+
+.table-h-bordered-gray
+  td, th
+    border-color: lighten(#eaecef, 2%)
+  th
+    color: darken(#586069, 1%)
+
+.table-bordered-gray
+  border-radius: 0.3em
+  tr, th, td
+    border-color: lighten(#eaecef, 2%)
+  th
+    background-color: darken(#f6f8fa, 1%)
+    color: darken(#586069, 1%)
 
 .team-overview-card
   header:nth-child(1)
@@ -2880,11 +2897,10 @@ input:checked + .slider-nolabel:before
     i
       margin-top: -3px
 
-$login-button-width: 80%
+$login-button-width: 100%
 .auth-main-container
   height: 100vh
   background-color: #424651
-  margin-top: 10px
   a img
     margin-top: 50px
     width: 250px
@@ -2896,32 +2912,39 @@ $login-button-width: 80%
     width: 100%
     border-radius: 5px
     h4
-      padding-bottom: 20px
+      padding-bottom: 0.5em
     h6
       margin-left: 25px
     p
       text-align: center
       i
         margin: auto
-      &:first-child
-        margin-top: 30px
       .input
         max-width: 80%
         margin: auto
       button
         margin-top: 10px
         width: $login-button-width !important
+      .sso-button
+        margin-left: -32px
+        margin-top: unset
+        width: unset !important
+
     &-sso
       &-separator
         height: 0.06em
         width: 100%
         background: lighten($default, 50%)
-        margin-top: 3em
+        margin-top: 0.7em
+        margin-bottom: 0.7em
+        position: relative
       &-or
         text-align: center
         background: white
         width: 2.3em
-        margin: -0.8em auto 2.3em
+        position: absolute
+        left: 50%
+        transform: translateX(-50%) translateY(-50%)
       &-button
         width: $login-button-width
         display: block
@@ -3688,3 +3711,8 @@ $filetag-bg: #f3f5f8
   &--active
     border: 1px solid rgba($success, 0.6)
     background: rgba($success, 0.1)
+
+.bottom-change
+  border-top-right-radius: 10px
+  box-shadow: 3px 0 3px -2px #888
+  width: 90%

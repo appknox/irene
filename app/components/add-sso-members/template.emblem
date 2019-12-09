@@ -20,7 +20,7 @@ button.is-primary click={(perform openAddSSOMembersModal)}
         div
           label.black-text.margin-b-h.margin-t-1.bold
             | Upload CSV file
-          = input type="file" multiple="true" accept="text/csv" class="form-control input input-file margin-t-q" onChange="uploadCsv"
+          = input type="file" multiple="true" accept="text/csv" class="form-control input input-file margin-t-q" input=(action "uploadCsv")
 
         button.margin-t-2.is-primary type="submit" disabled=isAddingSSOMember
           if isAddingSSOMember
