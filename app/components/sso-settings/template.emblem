@@ -108,12 +108,12 @@
                       .text-gray.uppercase-text.padding-t-q
                         div
                           span.bold.black-text.padding-r-3q
-                            = t "sha256"
+                            | SHA256
                           span local-class="fingerprint"
                             = idpMetadata.certificate.fingerprint_sha256
                         div
                           span.bold.black-text.padding-r-3q
-                            = t "sha1"
+                            | SHA1
                           span local-class="fingerprint"
                             = idpMetadata.certificate.fingerprint_sha1
       else

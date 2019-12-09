@@ -24,7 +24,7 @@ const LoginComponentComponent = Component.extend({
   isNotEnterprise: !ENV.isEnterprise,
   isRegistrationEnabled: ENV.isRegistrationEnabled,
   isSS0Enabled: null,
-  isisSS0Enforced: null,
+  isSS0Enforced: null,
 
   tPleaseTryAgain: t("pleaseTryAgain"),
   tSomethingWentWrongContactSupport: t("somethingWentWrongContactSupport"),

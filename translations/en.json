@@ -476,8 +476,6 @@
   "sendPasswordResetMail": "Send password reset email",
   "settings": "Settings",
   "severityLevel": "Severity Level",
-  "sha1": "SHA1",
-  "sha256": "SHA256",
   "showVulnerability": "Show Vulnerability ",
   "showUntestedAnalysis": "SHOW/HIDE Untested Analysis",
   "signin": "Sign In",

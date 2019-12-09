@@ -103,8 +103,10 @@ export default Component.extend({
   }),
 
   deleteIdpConfig: task(function *() {
-    const ssoObj = this.store.peekRecord('saml2-idp-metadata', this.get('organization.id'));
-    yield ssoObj.deleteIdPMetadata();
+    const ssoObj = yield this.store.queryRecord('saml2-idp-metadata', {});
+    yield ssoObj.deleteRecord();
+    yield ssoObj.save();
+    yield this.store.unloadAll('saml2-idp-metadata');
   }).evented().restartable(),
 
   deleteIdpConfigSucceeded: on('deleteIdpConfig:succeeded', function() {
