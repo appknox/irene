@@ -42,6 +42,7 @@ export default Component.extend({
     if (this.get('hasDynamicScanDone')) {
       yield this.get('setCapturedApisCount').perform();
     }
+    triggerAnalytics('feature',ENV.csb.apiScanBtnClick);
     yield this.set('showApiScanModal', true);
   }),
 

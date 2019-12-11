@@ -601,6 +601,7 @@ const FileHeaderComponent = Component.extend({
     },
 
     openManualScanModal() {
+      triggerAnalytics('feature', ENV.csb.manualScanBtnClick);
       this.set("showManualScanModal", true);
     },
 

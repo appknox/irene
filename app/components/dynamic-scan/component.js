@@ -33,6 +33,7 @@ export default Component.extend({
   }),
 
   openDynamicScanModal: task(function* () {
+    triggerAnalytics('feature',ENV.csb.dynamicScanBtnClick);
     yield this.set('showDynamicScanModal', true);
   }),
 
