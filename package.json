@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@appknox/ember-cli-intl-tel-input": "^1.0.14",
+    "@appknox/ember-pace": "^1.0.0",
     "bower": "^1.8.8",
     "broccoli-asset-rev": "^3.0.0",
     "cross-env": "^6.0.3",
@@ -59,7 +60,6 @@
     "ember-cli-moment-shim": "^3.7.1",
     "ember-cli-netlify": "^0.3.1",
     "ember-cli-notifications": "4.3.3",
-    "ember-cli-pace": "0.1.0",
     "ember-cli-qunit": "^4.1.1",
     "ember-cli-sass": "^10.0.1",
     "ember-cli-test-loader": "^2.1.0",

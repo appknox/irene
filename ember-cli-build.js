@@ -64,11 +64,6 @@ module.exports = function (defaults) {
    * card includes
    */
   app.import('bower_components/card/dist/card.js');
-
-  /*
-   * including pace
-   */
-  app.import('bower_components/pace/pace.js');
   /*
    * including clipboard
    */
