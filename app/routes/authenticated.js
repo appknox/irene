@@ -43,17 +43,19 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
 
   afterModel(user){
     let error;
+    const company =
+        this.get("org.selected.data.name") ||
+        user.get("email").replace(/.*@/, "").split('.')[0];
     const data = {
       userId: user.get("id"),
       userName: user.get("username"),
       userEmail: user.get("email"),
-      accountId: this.get("org.selected.id")
+      accountId: this.get("org.selected.id"),
+      accountName: company
     };
     triggerAnalytics('login', data);
     chat.setUserEmail(user.get("email"), user.get("crispHash"));
-    const company =
-        this.get("org.selected.data.name") ||
-        user.get("email").replace(/.*@/, "").split('.')[0];
+    
     chat.setUserCompany(company);
 
     try {

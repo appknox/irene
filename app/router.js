@@ -80,6 +80,7 @@ const CSBMap = {
   "authenticated.project.files": ENV.csb.navigateToAllScans,
   "authenticated.choose": ENV.csb.naigateToCompareScans,
   "authenticated.organization.namespaces": ENV.csb.navigateToOrganization,
+  "authenticated.organization.settings": ENV.csb.navigateToOrgSettings,
   "authenticated.settings.index": ENV.csb.navigateToAccountSettings,
   "authenticated.marketplace": ENV.csb.navigateToMarketPlace,
   "authenticated.billing": ENV.csb.navigateToBilling
