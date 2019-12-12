@@ -4,6 +4,7 @@ import { t } from 'ember-intl';
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
+import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 const AnalysisDetailsComponent = Component.extend({
   analysis: null,
@@ -148,6 +149,7 @@ const AnalysisDetailsComponent = Component.extend({
       this.get("ajax").put(url, {
         data
       }).then(() => {
+        triggerAnalytics('feature',ENV.csb.editAnalysis);
         if(!this.isDestroyed) {
           this.get("notify").success(this.get("tSuccessfullyOverridden"));
           this.set("isMarkingAnalysis", false);

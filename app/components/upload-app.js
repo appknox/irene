@@ -5,6 +5,8 @@ import FileField from 'ember-uploader/components/file-field';
 import { t } from 'ember-intl';
 import $ from 'jquery';
 import { getOwner } from '@ember/application';
+import triggerAnalytics from 'irene/utils/trigger-analytics';
+import ENV from 'irene/config/environment';
 
 const UploadAppComponent = FileField.extend({
   store: service('store'),
@@ -32,6 +34,7 @@ const UploadAppComponent = FileField.extend({
       const uploadItem = await this.get("store").queryRecord('uploadApp', {});
       await uploader.uploadFile(files[0], uploadItem.get('url'));
       await uploadItem.save();
+      triggerAnalytics('feature',ENV.csb.applicationUpload);
       this.get("notify").success(this.get('tFileUploadedSuccessfully'));
     } catch (e) {
       // eslint-disable-next-line no-console

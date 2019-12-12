@@ -73,9 +73,17 @@ Router.map(function() {
 });
 
 const CSBMap = {
-  "authenticated.settings": {feature: "Account Settings", module: "Setup", product: "Appknox" },
-  "authenticated.project.files": { feature: "All Scans", module: "Security", product: "Appknox" },
-  "authenticated.choose": { feature: "Compare Scans", module: "Security", product: "Appknox" }
+  "authenticated.projects": ENV.csb.navigateToProjects,
+  "authenticated.analytics": ENV.csb.navigateToAnalytics,
+  "authenticated.file": ENV.csb.clickProjectCard,
+  "authenticated.settings": ENV.csb.navigateToSettings,
+  "authenticated.project.files": ENV.csb.navigateToAllScans,
+  "authenticated.choose": ENV.csb.naigateToCompareScans,
+  "authenticated.organization.namespaces": ENV.csb.navigateToOrganization,
+  "authenticated.organization.settings": ENV.csb.navigateToOrgSettings,
+  "authenticated.settings.index": ENV.csb.navigateToAccountSettings,
+  "authenticated.marketplace": ENV.csb.navigateToMarketPlace,
+  "authenticated.billing": ENV.csb.navigateToBilling
 };
 
 
