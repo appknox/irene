@@ -5,7 +5,7 @@ $custom-picker-padding: 5px 20px;
 $custom-picker-radius: 0 0 11px 11px;
 
 .custom-styled-picker{
-    
+
     &.ember-basic-dropdown-content{
         box-shadow: $custom-picker-shadow;
         background: $custom-picker-background;
@@ -48,39 +48,16 @@ $custom-picker-radius: 0 0 11px 11px;
                         color: #fefefe;
                     }
                 }
-                
+
             }
         }
     }
 
-    &.input-wrapper{
-        position: relative;
-        .date-input-class{
-            user-select: none;
-            width: 100%;
-            padding: 8px;
-            display: inline-block;
-            background: transparent;
-            border: 1px solid #333;
-            border-radius: 11px;
-        }
-        i{
-            position: absolute;
-            width: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            &.input-icon{
-                left: 20px;
-            }
-            &.clear-icon{
-                right: 2px;
-                cursor: pointer;
-                color: #ccc;
-                font-size: 16px;
-                top: 45%;
-            }
-        }
+    &.date-input-class{
+        width: 100%;
+        padding: 8px;
+        display: inline-block;
     }
+
 }
 
-    
