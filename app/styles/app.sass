@@ -1,6 +1,7 @@
 @import "bohemia"
 @import "ember-power-select"
 @import "ember-power-datepicker"
+@import "datepicker-custom"
 @import 'vars'
 @import 'form'
 @import 'devices'
@@ -3716,3 +3717,8 @@ $filetag-bg: #f3f5f8
   border-top-right-radius: 10px
   box-shadow: 3px 0 3px -2px #888
   width: 90%
+
+.columns
+    &.unset-child-basis
+      .column
+        flex-basis: unset

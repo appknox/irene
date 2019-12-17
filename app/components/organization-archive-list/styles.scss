@@ -1,0 +1,37 @@
+.org-archive-list__heading{
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.org-archive-list__table-head{
+    background: #ccc;
+    padding: 4px;
+}
+
+.org-archive-list__table-head th{
+    vertical-align: middle;
+    text-align: center;
+}
+
+.org-archive-list__table-head th:not(:last-child){
+    border-right: 1px solid #fffdfd;;
+}
+
+.org-archive-list__date-format{
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.no-data{
+    text-align: center;
+}
+
+.no-data,
+.org-archive-list__table{
+    margin-top: 25px;
+}
+
+.org-archive-list__table-head th{
+  border: none;
+}
+

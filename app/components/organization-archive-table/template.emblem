@@ -1,0 +1,21 @@
+tr local-class="archive-row"
+    td
+      | #{moment-format archive.createdOn 'DD/MM/YYYY'}
+    td
+      | #{archive.generatedBy.username}
+
+    td.text-lightgray
+      | #{moment-format archive.fromDate 'DD/MM/YYYY' } ~ #{moment-format archive.toDate 'DD/MM/YYYY'}
+
+    td.text-lightgray
+      if archive.isAvailable
+        i.fa class="fa-download" local-class="status-available" title="Download"
+        span local-class="word-margin" Expires
+        moment-from-now archive.availableUntil
+      if archive.isExpired
+        | Expired
+      if archive.isInProgress
+        span local-class="status-inprogress"
+          i.fa class="fa-spinner fa-spin"
+          span local-class="progress-percent"
+          | #{archive.progressPercent}%

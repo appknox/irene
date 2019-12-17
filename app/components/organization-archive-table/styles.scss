@@ -1,0 +1,36 @@
+.archive-row:nth-child(even){
+    background: rgba(204, 204, 204,0.3);
+}
+.archive-row td{
+  border: 1px solid #fffdfd;
+}
+
+.archive-row td:last-child{
+    text-align: center;
+}
+
+.archive-row td:nth-child(4){
+    text-align: center;
+}
+
+.status-available {
+    // color:#80C081;
+    cursor: pointer;
+}
+
+.status-inprogess {
+    color: #333;;
+}
+
+.status-expired{
+    color: #ccc;
+    user-select: none;
+}
+
+.progress-percent{
+    margin: 0 4px;
+}
+
+.word-margin{
+  margin: 0 5px 0 8px;
+}
