@@ -35,5 +35,55 @@ $ appknox upload &lt;path to apk/ipa file&gt; | xargs appknox cicheck --risk-thr
 </pre>
       </li>
     </ul>
-  `
+  `,
+appCenterInstructions:`
+  <ul class="bullet-list margin-r-1 margin-l-1h">
+    <li class="margin-b-1">
+      Generate a personal access token from <a href="/settings/developersettings" target="_blank">Developer Settings</a>
+    </li>
+    <li class="margin-b-1">
+      Create a file <code class="black-text">appcenter-post-build.sh</code> in your source code repository and add the content given below:
+      <h6 class="margin-t-1">
+        <strong>Android:</strong>
+      </h6>
+      <p><em>/app/appcenter-post-build.sh</em></p>
+      <pre class="code-block">
+if [ "$AGENT_JOBSTATUS" == "Succeeded" ]; then
+  if [ "$APPCENTER_BRANCH" == "master" ];
+    then
+        curl -L https://github.com/appknox/appknox-go/releases/download/1.1.0/appknox-\`uname -s\`-x86_64 > appknox && chmod +x appknox
+        ./appknox upload $APPCENTER_OUTPUT_DIRECTORY/app-release.apk
+        rm appknox
+  else
+      echo "Current branch is $APPCENTER_BRANCH"
+  fi
+fi</pre>
+      <h6 class="margin-t-1h">
+        <strong>iOS:</strong>
+      </h6>
+      <p><em>/appcenter-post-build.sh</em></p>
+      <pre class="code-block">
+if [ "$AGENT_JOBSTATUS" == "Succeeded" ]; then
+  if [ "$APPCENTER_BRANCH" == "master" ];
+    then
+      curl -L https://github.com/appknox/appknox-go/releases/download/1.1.0/appknox-\`uname -s\`-x86_64 > appknox && chmod +x appknox
+      ./appknox upload $APPCENTER_OUTPUT_DIRECTORY/appname.ipa
+      rm appknox
+    else
+      echo "Current branch is $APPCENTER_BRANCH"
+  fi
+fi</pre>
+      <small>(More info: <a href="https://aka.ms/docs/build/custom/scripts" target="_blank">https://aka.ms/docs/build/custom/scripts)</a></small>
+    </li>
+    <li class="margin-b-1">
+      Once you add this file in the repo and go to <strong>Build Configuration</strong> of the app in App Center, <strong>Build Scripts</strong> in the <strong>Build App</strong> section will show <strong>post-build</strong> as checked.
+      <img  class="margin-t-1" src="images/appcenter_build_configuration__build_script.png" alt="appcenter build config"/>
+    </li>
+    <li class="margin-b-1">
+      Go to <strong>Build Configuration > Environment variables</strong> and add <code class="black-text">APPKNOX_ACCESS_TOKEN</code> environment variable with the value generated in step 1.
+      <img class="margin-t-1" src="images/appcenter_build_configuration__environment.png" alt="appcenter environment config"/>
+     </li>
+  </ul>
+`
+
 }
