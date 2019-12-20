@@ -59,7 +59,6 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
     };
     triggerAnalytics('login', data);
     chat.setUserEmail(user.get("email"), user.get("crispHash"));
-
     chat.setUserCompany(company);
 
     try {
