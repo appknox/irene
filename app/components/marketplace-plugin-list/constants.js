@@ -73,7 +73,7 @@ if [ "$AGENT_JOBSTATUS" == "Succeeded" ]; then
       echo "Current branch is $APPCENTER_BRANCH"
   fi
 fi</pre>
-      <small>(More info: <a href="https://aka.ms/docs/build/custom/scripts" target="_blank">https://aka.ms/docs/build/custom/scripts)</a></small>
+      <small>(More info: <a href="https://aka.ms/docs/build/custom/scripts" target="_blank">https://aka.ms/docs/build/custom/scripts</a>)</small>
     </li>
     <li class="margin-b-1">
       Once you add this file in the repo and go to <strong>Build Configuration</strong> of the app in App Center, <strong>Build Scripts</strong> in the <strong>Build App</strong> section will show <strong>post-build</strong> as checked.
