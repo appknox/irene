@@ -1,8 +1,22 @@
 import ENV from 'irene/config/environment';
 
+const runtimeConfig = window.runtimeGlobalConfig;
+
 function isTrue(value) {
   value = String(value).toLowerCase();
   return value === 'true';
+}
+
+
+function getPluginActivationStatus(pluginName){
+  const pluginEnvVariable = ENV.thirdPartyPluginEnvMap[pluginName];
+  if(runtimeConfig.hasOwnProperty(pluginEnvVariable.env) || ENV.hasOwnProperty(pluginEnvVariable.env)){
+    return isTrue(runtimeConfig[pluginEnvVariable.env] || ENV[pluginEnvVariable.env]);
+  }
+  if(runtimeConfig.hasOwnProperty('ENTERPRISE') || ENV.hasOwnProperty('ENTERPRISE')){
+    return !isTrue(runtimeConfig.ENTERPRISE || ENV.isEnterprise);
+  }
+  return pluginEnvVariable.default;
 }
 
 const initialize = function(application) {
@@ -21,8 +35,6 @@ const initialize = function(application) {
   // Inject Store
   application.inject('component', 'store', 'service:store');
 
-  let runtimeConfig = window.runtimeGlobalConfig;
-
   if(runtimeConfig) {
     ENV.host = runtimeConfig.IRENE_API_HOST || ENV.host;
     var devicefarmEnv = runtimeConfig.IRENE_DEVICEFARM_URL;
@@ -37,6 +49,15 @@ const initialize = function(application) {
     ENV.isRegistrationEnabled = isTrue(runtimeConfig.IRENE_ENABLE_REGISTRATION || ENV.isRegistrationEnabled);
     ENV.registrationLink = runtimeConfig.registrationLink || ENV.registrationLink;
     ENV.whitelabel = Object.assign({}, ENV.whitelabel, runtimeConfig.whitelabel);
+    ENV.enableCrisp= getPluginActivationStatus('crisp') || ENV.enableCrisp;
+    ENV.enableHotjar= getPluginActivationStatus('hotjar') || ENV.enableHotjar;
+    ENV.enablePendo= getPluginActivationStatus('pendo') || ENV.enablePendo;
+    ENV.enableInspectlet= getPluginActivationStatus('inspectlet') || ENV.enableInspectlet;
+    ENV.enableCSB= getPluginActivationStatus('csb') || ENV.enableCSB;
+    ENV.enableMarketplace= getPluginActivationStatus('marketplace') || ENV.enableMarketplace;
+    ENV.emberRollbarClient= {
+      enabled: getPluginActivationStatus('rollbar') || ENV.emberRollbarClient.enabled
+    };
   }
 
   // Inject ENV

@@ -5,6 +5,49 @@ function isTrue(value) {
   return value === 'true';
 }
 
+const thirdPartyPluginEnvMap = {
+  'crisp': {
+    'env': 'IRENE_ENABLE_CRISP',
+    'default': false
+  },
+  'hotjar': {
+    'env' :'IRENE_ENABLE_HOTJAR',
+    'default': false
+  },
+  'inspectlet': {
+    'env': 'IRENE_ENABLE_INSPECTLET',
+    'default': false
+  },
+  'pendo': {
+    'env' : 'IRENE_ENABLE_PENDO',
+    'default': false
+  },
+  'csb':{
+    'env': 'IRENE_ENABLE_CSB',
+    'default': false
+  }, 
+  'marketplace': {
+    'env': 'IRENE_ENABLE_MARKETPLACE',
+    'default': false
+  },
+  'rollbar': {
+    'env': 'IRENE_ENABLE_ROLLBAR',
+    'default': false
+  }
+};
+
+function getPluginActivationStatus(pluginName){
+  const pluginEnvVariable = thirdPartyPluginEnvMap[pluginName];
+  if(process.env.hasOwnProperty(pluginEnvVariable.env)){
+    return isTrue(process.env[pluginEnvVariable.env]);
+  }
+  if(process.env.hasOwnProperty('ENTERPRISE')){
+    const isEnterprise = process.env.ENTERPRISE
+    return !isTrue(isEnterprise || false);
+  }
+  return pluginEnvVariable.default;
+}
+
 module.exports = function(environment) {
   var devicefarmEnv = process.env.IRENE_DEVICEFARM_URL || "wss://devicefarm.appknox.com";
   var deviceFarmPath = "/websockify";
@@ -83,11 +126,15 @@ module.exports = function(environment) {
     locationType: 'auto',
     modulePrefix: 'irene',
     environment: environment,
-    enableCrisp: true,
-    enableHotjar: true,
-    enablePendo: true,
-    enableInspectlet: true,
-    enableCSB: true,
+    enableCrisp: getPluginActivationStatus('crisp'),
+    enableHotjar: getPluginActivationStatus('hotjar'),
+    enablePendo: getPluginActivationStatus('pendo'),
+    enableInspectlet: getPluginActivationStatus('inspectlet'),
+    enableCSB: getPluginActivationStatus('csb'),
+    enableMarketplace: getPluginActivationStatus('marketplace'),
+    emberRollbarClient: {
+      enabled: getPluginActivationStatus('rollbar')
+    },
     enableSSO: enableSSO,
 
     notifications: {
@@ -276,11 +323,6 @@ module.exports = function(environment) {
     ENV['ember-cli-mirage'] = {
       enabled:false
     };
-    ENV.enableCrisp = false;
-    ENV.enableHotjar = false;
-    ENV.enablePendo = false;
-    ENV.enableInspectlet = false;
-    ENV.enableCSB = false;
     ENV.isRegistrationEnabled = true;
     ENV.gReCaptcha = {
       jsUrl: 'https://recaptcha.net/recaptcha/api.js?render=explicit',
@@ -293,15 +335,7 @@ module.exports = function(environment) {
       enabled: true
     };
     ENV['host'] = "http://0.0.0.0:8000";
-    ENV.enableCrisp = false;
-    ENV.enableHotjar = false;
-    ENV.enablePendo = false;
-    ENV.enableInspectlet = false;
-    ENV.enableCSB = false;
     ENV.isRegistrationEnabled = true;
-    ENV.emberRollbarClient = {
-      enabled: false
-    };
   }
 
 
@@ -310,22 +344,12 @@ module.exports = function(environment) {
       enabled: false
     };
     ENV['host'] = "http://localhost:8000";
-    ENV.enableCrisp = false;
-    ENV.enableHotjar = false;
-    ENV.enablePendo = false;
-    ENV.enableInspectlet = false;
-    ENV.enableCSB = false;
     ENV.isRegistrationEnabled = true;
-    ENV.emberRollbarClient = {
-      enabled: false
-    };
     ENV.gReCaptcha['siteKey'] = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
   }
 
   if (environment === 'production') {
-    ENV.emberRollbarClient = {
-      accessToken: '4381303f93734918966ff4e1b028cee5'
-    };
+    ENV.emberRollbarClient.accessToken = '4381303f93734918966ff4e1b028cee5';
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
@@ -336,9 +360,6 @@ module.exports = function(environment) {
     ENV.enableInspectlet = false;
     ENV.enableCSB = false;
     ENV['ember-cli-mirage'] = {
-      enabled: false
-    };
-    ENV.emberRollbarClient = {
       enabled: false
     };
   }
@@ -356,14 +377,6 @@ module.exports = function(environment) {
     environment === 'sequelstring' ||
     environment === 'gbm'
   ) {
-    ENV.enableCrisp = false;
-    ENV.enableHotjar = false;
-    ENV.enablePendo = true;  //TODO: fix this.
-    ENV.enableInspectlet = false;
-    ENV.enableCSB = false;
-    ENV.emberRollbarClient = {
-      enabled: false
-    };
     ENV.isEnterprise = isTrue(process.env.ENTERPRISE);
     ENV.whitelabel.enabled = isTrue(process.env.WHITELABEL_ENABLED);
     if (ENV.whitelabel.enabled) {
@@ -372,5 +385,8 @@ module.exports = function(environment) {
       ENV.whitelabel.theme = process.env.WHITELABEL_THEME; // 'light' or 'dark'
     }
   }
+
+  ENV.thirdPartyPluginEnvMap = thirdPartyPluginEnvMap;
+
   return ENV;
 };

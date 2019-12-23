@@ -7,6 +7,7 @@ import { inject as service } from '@ember/service';
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { getOwner } from '@ember/application';
+import ENV from 'irene/config/environment';
 
 export default Component.extend({
   me: service(),
@@ -18,6 +19,7 @@ export default Component.extend({
   isLoaded: false,
   isSecurityEnabled: false,
   isSecurityDashboard: false,
+  showMarketplace: ENV.enableMarketplace,
 
   tSomethingWentWrong: t("somethingWentWrong"),
   tOrganizationNameUpdated: t("organizationNameUpdated"),

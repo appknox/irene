@@ -51,11 +51,12 @@ if isLoaded
                 div
                   = fa-icon "cog" class="sidebar-icons"
                   = t "accountSettings"
-            li
-              = link-to 'authenticated.marketplace' class="mp-auth-marketplace"
-                div
-                  = fa-icon "cubes" class="sidebar-icons"
-                  = t "marketplace"
+            if showMarketplace
+              li
+                = link-to 'authenticated.marketplace' class="mp-auth-marketplace"
+                  div
+                    = fa-icon "cubes" class="sidebar-icons"
+                    = t "marketplace"
             if showBilling
               li
                 = link-to 'authenticated.billing' class="mp-auth-billing"
