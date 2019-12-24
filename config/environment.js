@@ -43,7 +43,7 @@ function getPluginActivationStatus(pluginName){
   }
   if(process.env.hasOwnProperty('ENTERPRISE')){
     const isEnterprise = process.env.ENTERPRISE
-    return !isTrue(isEnterprise || false);
+    return !isTrue(isEnterprise);
   }
   return pluginEnvVariable.default;
 }
@@ -126,6 +126,7 @@ module.exports = function(environment) {
     locationType: 'auto',
     modulePrefix: 'irene',
     environment: environment,
+    thirdPartyPluginEnvMap: thirdPartyPluginEnvMap,
     enableCrisp: getPluginActivationStatus('crisp'),
     enableHotjar: getPluginActivationStatus('hotjar'),
     enablePendo: getPluginActivationStatus('pendo'),
@@ -385,8 +386,6 @@ module.exports = function(environment) {
       ENV.whitelabel.theme = process.env.WHITELABEL_THEME; // 'light' or 'dark'
     }
   }
-
-  ENV.thirdPartyPluginEnvMap = thirdPartyPluginEnvMap;
 
   return ENV;
 };

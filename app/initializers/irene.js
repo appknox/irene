@@ -10,11 +10,12 @@ function isTrue(value) {
 
 function getPluginActivationStatus(pluginName){
   const pluginEnvVariable = ENV.thirdPartyPluginEnvMap[pluginName];
+  
   if(runtimeConfig.hasOwnProperty(pluginEnvVariable.env)){
     return isTrue(runtimeConfig[pluginEnvVariable.env]);
   }
-  if(runtimeConfig.hasOwnProperty('ENTERPRISE') || ENV.hasOwnProperty('isEnterprise')){
-    return !isTrue(runtimeConfig.ENTERPRISE || ENV.isEnterprise);
+  if(runtimeConfig.hasOwnProperty('ENTERPRISE')){
+    return !isTrue(runtimeConfig.ENTERPRISE);
   }
   return pluginEnvVariable.default;
 }
@@ -36,6 +37,8 @@ const initialize = function(application) {
   application.inject('component', 'store', 'service:store');
 
   if(runtimeConfig) {
+    const envKeys = Object.keys(ENV);
+
     ENV.host = runtimeConfig.IRENE_API_HOST || ENV.host;
     var devicefarmEnv = runtimeConfig.IRENE_DEVICEFARM_URL;
     var deviceFarmPath = "websockify";
@@ -43,21 +46,23 @@ const initialize = function(application) {
       const deviceFarmURL = new URL(deviceFarmPath, devicefarmEnv).href;
       ENV.deviceFarmURL = deviceFarmURL;
     }
+    
     ENV.socketPath = runtimeConfig.IRENE_API_SOCKET_PATH || ENV.socketPath;
-    ENV.enableSSO = isTrue(runtimeConfig.IRENE_ENABLE_SSO || ENV.enableSSO);
-    ENV.isEnterprise = isTrue(runtimeConfig.ENTERPRISE || ENV.isEnterprise);
-    ENV.isRegistrationEnabled = isTrue(runtimeConfig.IRENE_ENABLE_REGISTRATION || ENV.isRegistrationEnabled);
+    ENV.enableSSO = envKeys.indexOf('enableSSO') > -1 ? isTrue(runtimeConfig.IRENE_ENABLE_SSO) : ENV.enableSSO;
+    ENV.isEnterprise = envKeys.indexOf('isEnterprise') > -1 ? isTrue(runtimeConfig.ENTERPRISE) : ENV.isEnterprise;
+    ENV.isRegistrationEnabled = envKeys.indexOf('isRegistrationEnabled') > -1 ? isTrue(runtimeConfig.IRENE_ENABLE_REGISTRATION) : ENV.isRegistrationEnabled;
     ENV.registrationLink = runtimeConfig.registrationLink || ENV.registrationLink;
     ENV.whitelabel = Object.assign({}, ENV.whitelabel, runtimeConfig.whitelabel);
-    ENV.enableCrisp= getPluginActivationStatus('crisp') || ENV.enableCrisp;
-    ENV.enableHotjar= getPluginActivationStatus('hotjar') || ENV.enableHotjar;
-    ENV.enablePendo= getPluginActivationStatus('pendo') || ENV.enablePendo;
-    ENV.enableInspectlet= getPluginActivationStatus('inspectlet') || ENV.enableInspectlet;
-    ENV.enableCSB= getPluginActivationStatus('csb') || ENV.enableCSB;
-    ENV.enableMarketplace= getPluginActivationStatus('marketplace') || ENV.enableMarketplace;
-    ENV.emberRollbarClient= {
-      enabled: getPluginActivationStatus('rollbar') || ENV.emberRollbarClient.enabled
-    };
+    
+    
+    ENV.enableCrisp = envKeys.indexOf('enableCrisp') > -1 ? getPluginActivationStatus('crisp') : ENV.enableCrisp;
+    ENV.enableHotjar= envKeys.indexOf('enableHotjar') > -1 ? getPluginActivationStatus('hotjar') : ENV.enableHotjar;
+    ENV.enablePendo= envKeys.indexOf('enablePendo') > -1 ? getPluginActivationStatus('pendo') : ENV.enablePendo;
+    ENV.enableInspectlet= envKeys.indexOf('enableInspectlet') > -1 ? getPluginActivationStatus('inspectlet') : ENV.enableInspectlet;
+    ENV.enableCSB= envKeys.indexOf('enableCSB') > -1 ? getPluginActivationStatus('csb') : ENV.enableCSB;
+    ENV.enableMarketplace= envKeys.indexOf('enableMarketplace') > -1 ? getPluginActivationStatus('marketplace') : ENV.enableMarketplace;
+    ENV.emberRollbarClient= envKeys.indexOf('emberRollbarClient') > -1 ? {...ENV.emberRollbarClient,enabled: getPluginActivationStatus('rollbar')} : ENV.emberRollbarClient;
+    
   }
 
   // Inject ENV
