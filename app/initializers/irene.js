@@ -10,10 +10,10 @@ function isTrue(value) {
 
 function getPluginActivationStatus(pluginName){
   const pluginEnvVariable = ENV.thirdPartyPluginEnvMap[pluginName];
-  if(runtimeConfig.hasOwnProperty(pluginEnvVariable.env) || ENV.hasOwnProperty(pluginEnvVariable.env)){
-    return isTrue(runtimeConfig[pluginEnvVariable.env] || ENV[pluginEnvVariable.env]);
+  if(runtimeConfig.hasOwnProperty(pluginEnvVariable.env)){
+    return isTrue(runtimeConfig[pluginEnvVariable.env]);
   }
-  if(runtimeConfig.hasOwnProperty('ENTERPRISE') || ENV.hasOwnProperty('ENTERPRISE')){
+  if(runtimeConfig.hasOwnProperty('ENTERPRISE') || ENV.hasOwnProperty('isEnterprise')){
     return !isTrue(runtimeConfig.ENTERPRISE || ENV.isEnterprise);
   }
   return pluginEnvVariable.default;
