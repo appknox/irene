@@ -51,7 +51,7 @@ export default Component.extend(PaginateMixin, {
 
         const archiveRecord = yield this.store.createRecord('organization-archive', {fromDate:requestParams["from_date"] , toDate:requestParams["to_date"]});
         yield archiveRecord.save();
-
+        this.incrementProperty("version");
     }).evented(),
 
     onGenerateArchiveSuccess: on('tiggerGenerateArchive:succeeded', function() {
