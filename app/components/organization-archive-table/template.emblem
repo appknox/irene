@@ -9,7 +9,10 @@ tr local-class="archive-row"
 
     td.text-lightgray
       if archive.isAvailable
-        i.fa class="fa-download" local-class="status-available" title="Download"
+        if downloadArchive.isRunning
+          i.fa class="fa-spinner fa-spin" local-class="status-available" title="Download"
+        else
+          i.fa class="fa-download" local-class="status-available" title="Download" click={(perform downloadArchive)}
         span local-class="word-margin" Expires
         moment-from-now archive.availableUntil
       if archive.isExpired

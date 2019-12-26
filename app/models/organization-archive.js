@@ -1,9 +1,10 @@
 import DS from 'ember-data';
 const { Model } = DS;
 import {computed} from "@ember/object";
+import { debug } from '@ember/debug';
 
 export default Model.extend({
-    
+
     EXPIRED: 'Expired',
     INPROGRESS: 'In Progress',
     AVAILABLE: 'Available',
@@ -29,7 +30,7 @@ export default Model.extend({
         return this.get('status') === this.get('ERRORED')
     }),
 
-    status: computed('availableUntil','progressPercent','downloadUrl',function() {
+    status: computed('availableUntil','progressPercent',function() {
         const expiryDate = this.get('availableUntil');
         const progressPercent = this.get('progressPercent');
 
@@ -47,7 +48,22 @@ export default Model.extend({
 
         return this.ERRORED;
 
-    })
+    }),
+
+    async downloadURL() {
+      const adapter = this.store.adapterFor(this.constructor.modelName);
+      let URL = null;
+      try{
+        const response = await adapter.getDownloadURL(this.get('id'));
+        if(response && response.url && response.url.length > 0){
+          URL =  response.url;
+        }
+        return URL;
+      }catch(err){
+        debug('Download organization archive URL network call failed');
+        return URL;
+      }
+    }
 });
 
 

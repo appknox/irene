@@ -15,5 +15,11 @@ export default DRFAdapter.extend(IreneAdapterMixin,{
             return `${baseurl}/${encodeURIComponent(id)}`;
         }
         return baseurl;
+    },
+
+    getDownloadURL(id) {
+      const archiveIdBaseURL = this._buildURL(null,id);
+      const downloadURL =  `${archiveIdBaseURL}/download_url`;
+      return this.ajax(downloadURL);
     }
 });

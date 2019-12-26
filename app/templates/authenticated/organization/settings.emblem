@@ -6,7 +6,7 @@
     .divider.margin-t-1.margin-b-1
 
   = organization-archive
-  .divider.margin-t-1.margin-b-1    
+  .divider.margin-t-1.margin-b-1
 
   .columns
     .column
