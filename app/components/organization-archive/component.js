@@ -19,10 +19,13 @@ export default Component.extend(PaginateMixin, {
         const requestParams = {};
 
         if(startDateObj) {
-            requestParams["from_date"]  = startDateObj.toISOString();
+          startDateObj.set({h: 0, m: 0, s: 0});
+          requestParams["from_date"]  = startDateObj.toISOString();
         }
         if(endDateObj) {
-            requestParams["to_date"] = endDateObj.toISOString();
+          const now = moment(Date.now());
+          endDateObj.set({h: now.hour(), m: now.minutes(), s: 0});
+          requestParams["to_date"] = endDateObj.toISOString();
         }
 
         const archiveRecord = yield this.store.createRecord('organization-archive', {fromDate:requestParams["from_date"] , toDate:requestParams["to_date"]});

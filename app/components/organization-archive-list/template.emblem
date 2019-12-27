@@ -10,4 +10,4 @@ if archives.length
                 = organization-archive-table archive=archive
 else
     h6.text-ligthgray local-class="no-data"
-        | No Archive Generated Yet...
+        =t "noArchive"

@@ -1,6 +1,6 @@
 tr local-class="archive-row"
     td
-      | #{moment-format archive.createdOn 'DD/MM/YYYY'}
+      | #{moment-format archive.createdOn 'DD MMM YYYY'}
     td
       | #{archive.generatedBy.username}
 
@@ -16,7 +16,7 @@ tr local-class="archive-row"
         span local-class="word-margin" Expires
         moment-from-now archive.availableUntil
       if archive.isExpired
-        | Expired
+        =t "expired"
       if archive.isInProgress
         span local-class="status-inprogress"
           i.fa class="fa-spinner fa-spin"

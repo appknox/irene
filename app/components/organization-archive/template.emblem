@@ -12,7 +12,7 @@
     if tiggerGenerateArchive.isRunning
       button class='is-primary'
         i class="fa fa-spinner fa-spin"
-        | &nbsp; Processing...
+        = t "processing"
     else
       button class='is-primary' click={(perform tiggerGenerateArchive)} Generate Archive
 .columns
