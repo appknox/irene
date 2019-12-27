@@ -5,25 +5,9 @@
 .columns
   .column
     p Generate organization's activity data as an excel file. Please select the start date and end date between which you would like to generate the data.
-.columns class="unset-child-basis"
+.columns class="unset-child-basis margin-top10"
   .column
-    = power-datepicker selected=selectedStartDate onSelect=(action 'setStartDate' value="date") as |dp|
-      = dp.trigger class="custom-styled-picker input-wrapper" tabindex="-1"
-        = input type="text" class="date-input-class" placeholder="Start Date" value=(moment-format startDate 'DD/MM/YYYY') autocomplete="off" disabled="disabled"
-        i class="fa fa-calendar input-icon"
-        i class="fa fa-remove clear-icon" title="clear date" click={action 'resetStartDate'}
-      = dp.content class="demo-datepicker-small custom-styled-picker"
-        = dp.nav
-        = dp.days
-  .column
-    = power-datepicker selected=selectedStartDate onSelect=(action 'setEndDate' value="date") as |dp|
-      = dp.trigger class="custom-styled-picker input-wrapper" tabindex="-1"
-        = input type="text" class="date-input-class" placeholder="End Date" value=(moment-format endDate 'DD/MM/YYYY') autocomplete="off" disabled="disabled"
-        i class="fa fa-calendar input-icon"
-        i class="fa fa-remove clear-icon" title="clear date" click={action 'resetEndDate'}
-      = dp.content class="demo-datepicker-small custom-styled-picker"
-        = dp.nav
-        = dp.days
+    = date-picker class="custom-styled-picker"  buttonDateFormat='DD/MM/YYYY' maxDate=maxDate range=true options=true action=(action 'setDuration')
   .column
     if tiggerGenerateArchive.isRunning
       button class='is-primary'

@@ -68,6 +68,7 @@
     "ember-css-modules": "^1.0.1",
     "ember-css-modules-sass": "^1.0.1",
     "ember-data": "3.14.0",
+    "ember-date-components": "^2.0.6",
     "ember-django-adapter": "^2.1.1",
     "ember-export-application-global": "^2.0.0",
     "ember-file-upload": "^2.5.0",

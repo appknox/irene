@@ -1,4 +1,5 @@
 import Component from '@ember/component';
+import moment from 'moment';
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 import { inject as service } from '@ember/service';
@@ -8,39 +9,14 @@ export default Component.extend(PaginateMixin, {
     organization: service('organization'),
     startDate: null,
     endDate: null,
+    maxDate: moment(Date.now()),
     targetModel: 'organization-archive',
     sortProperties: ['id:desc'],
-
-    validateDates(){
-        let vaildationObject = {isValid: true, message: ''};
-        const startDateObj = this.get('startDate');
-        const endDateObj = this.get('endDate');
-        if(startDateObj && endDateObj && endDateObj < startDateObj){
-            vaildationObject.isValid = false;
-            vaildationObject.message = 'end date cannot be lesser than start date';
-        }
-
-        if(startDateObj > Date.now()){
-            vaildationObject.isValid = false;
-            vaildationObject.message ='start date cannot be in future';
-        }
-
-        if(endDateObj > Date.now()){
-            vaildationObject.isValid = false;
-            vaildationObject.message= 'end date cannot be in future';
-        }
-        return vaildationObject;
-    },
 
     tiggerGenerateArchive: task(function * () {
         const startDateObj = this.get('startDate');
         const endDateObj = this.get('endDate');
         const requestParams = {};
-
-        const {isValid,message} = this.validateDates();
-        if(!isValid){
-            throw new Error(message);
-        }
 
         if(startDateObj) {
             requestParams["from_date"]  = startDateObj.toISOString();
@@ -65,20 +41,9 @@ export default Component.extend(PaginateMixin, {
 
 
     actions: {
-        setStartDate(date){
-            this.set('startDate',date);
-        },
-
-        setEndDate(date){
-            this.set('endDate',date);
-        },
-
-        resetStartDate(){
-            this.set('startDate', null);
-        },
-
-        resetEndDate(){
-            this.set('endDate',null);
+        setDuration(dates){
+            this.set('startDate',dates[0]);
+            this.set('endDate',dates[1]);
         }
     }
 

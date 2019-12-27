@@ -1,11 +1,15 @@
 @import "bohemia"
 @import "ember-power-select"
 @import "ember-power-datepicker"
+@import "ember-basic-dropdown";
 @import "datepicker-custom"
 @import 'vars'
 @import 'form'
 @import 'devices'
 @import 'modules'
+
+$date-picker-color-primary: #FE4D3F !default
+@import "ember-date-components/addon";
 
 $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert), danger: ($danger, $danger-invert), critical: ($critical, $critical-invert), success: ($success, $success-invert)) !default
 
@@ -3722,3 +3726,4 @@ $filetag-bg: #f3f5f8
     &.unset-child-basis
       .column
         flex-basis: unset
+        text-align: right
