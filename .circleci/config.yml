@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:10-browsers-legacy
+      - image: circleci/node:13.5.0-stretch-browsers
         environment:
           JOBS: 2
     working_directory: ~/appknox
@@ -10,12 +10,12 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v2-deps-{{ .Branch }}-{{ checksum "package.json" }}
+            - v3-deps-{{ .Branch }}-{{ checksum "package.json" }}
       - run:
           name: NPM Install
           command: npm install
       - save_cache:
-          key: v2-deps-{{ .Branch }}-{{ checksum "package.json" }}
+          key: v3-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - ./node_modules
       - run:
