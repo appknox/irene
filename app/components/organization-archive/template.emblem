@@ -5,16 +5,25 @@
 .columns
   .column
     p Generate organization's activity data as an excel file. Please select the start date and end date between which you would like to generate the data.
-.columns class="unset-child-basis margin-top10"
-  .column
-    = date-picker class="custom-styled-picker"  buttonDateFormat='DD/MM/YYYY' maxDate=maxDate range=true options=true action=(action 'setDuration')
-  .column
+.columns class="margin-top10"
+  .column class="bordered-box text-centre padding-v-1 fill-lightgray"
+    = date-picker class="custom-styled-picker"  maxDate=maxDate range=true options=datepickerOptions action=(action 'setDuration') as |selectedDates|
+        if showPlaceholders.startDate
+          span local-class="mid-aligned" From Date
+        else
+          button local-class="date-btn" {{moment-format selectedDates.firstObject 'DD/MM/YYYY'}}
+        span local-class='date-split'
+         | ~
+        if showPlaceholders.endDate
+          span local-class="mid-aligned" To Date
+        else
+          button local-class="date-btn" {{moment-format selectedDates.lastObject 'DD/MM/YYYY'}}
     if tiggerGenerateArchive.isRunning
       button class='is-primary'
         i class="fa fa-spinner fa-spin"
         = t "processing"
     else
-      button class='is-primary' click={(perform tiggerGenerateArchive)} Generate Archive
+      button class='is-primary highlighted-button' local-class="generate-btn" click={(perform tiggerGenerateArchive)} Export Excel
 .columns
   .column
     = organization-archive-list archives=sortedObjects

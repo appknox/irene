@@ -10,7 +10,7 @@ tr local-class="archive-row"
     td.text-lightgray
       if archive.isAvailable
         if downloadArchive.isRunning
-          i.fa class="fa-spinner fa-spin" local-class="status-available" title="Download"
+          i.fa class="fa-spinner fa-spin" local-class="status-inprogess" title="processing..."
         else
           i.fa class="fa-download" local-class="status-available" title="Download" click={(perform downloadArchive)}
         span local-class="word-margin" Expires

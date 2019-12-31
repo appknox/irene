@@ -3,15 +3,29 @@ import moment from 'moment';
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 import { inject as service } from '@ember/service';
+import { t } from 'ember-intl';
 import PaginateMixin from 'irene/mixins/paginate';
 
 export default Component.extend(PaginateMixin, {
     organization: service('organization'),
+    tArchiveSuccess: t('organizationArchiveSuccess'),
+    tArchiveError: t('organizationArchiveFailed'),
     startDate: null,
     endDate: null,
     maxDate: moment(Date.now()),
     targetModel: 'organization-archive',
     sortProperties: ['id:desc'],
+    datepickerOptions: [
+      'clear',
+      'today',
+      'last3Months',
+      'last6Months',
+      'lastYear'
+    ],
+    showPlaceholders: {
+      startDate: true,
+      endDate: true
+    },
 
     tiggerGenerateArchive: task(function * () {
         const startDateObj = this.get('startDate');
@@ -34,11 +48,11 @@ export default Component.extend(PaginateMixin, {
     }).evented(),
 
     onGenerateArchiveSuccess: on('tiggerGenerateArchive:succeeded', function() {
-        this.get('notify').success('Archive Generation has been started.');
+        this.get('notify').success(this.get('tArchiveSuccess'));
     }),
 
-    onGenerateArchiveError: on('tiggerGenerateArchive:errored',function(_,err){
-        this.get('notify').error(err.message);
+    onGenerateArchiveError: on('tiggerGenerateArchive:errored',function(){
+        this.get('notify').error(this.get('tArchiveError'));
     }),
 
 
@@ -46,7 +60,9 @@ export default Component.extend(PaginateMixin, {
     actions: {
         setDuration(dates){
             this.set('startDate',dates[0]);
+            this.set('showPlaceholders.startDate', !dates[0]);
             this.set('endDate',dates[1]);
+            this.set('showPlaceholders.endDate', !dates[1]);
         }
     }
 

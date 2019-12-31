@@ -5,19 +5,11 @@ $custom-picker-radius: 0 0 11px 11px;
 
 .custom-styled-picker{
   &.date-picker__wrapper{
+    background: #fff;
     .date-picker__trigger {
       &.ember-basic-dropdown-trigger{
         border: 1px solid #ccc;
-        position: relative;
-        &::before{
-          content: 'Duration: ';
-          position: absolute;
-          left: 50%;
-          top: -25px;
-          transform: translateX(-50%);
-          font-size: 13px;
-          font-weight: bold;
-        }
+        min-width: 230px;
         button{
           &.date-picker__button{
             border: none;

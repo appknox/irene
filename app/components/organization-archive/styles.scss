@@ -1,0 +1,24 @@
+.generate-btn{
+  margin-left: 1em;
+}
+.date-btn{
+  border-radius: 0;
+  border: none;
+}
+.date-split{
+  vertical-align: sub;
+  margin-top: 0.5rem;
+  display: inline-block;
+  padding: 0 10px;
+}
+.mid-aligned{
+  vertical-align: middle;
+  display: inline-block;
+  padding: 5px;
+}
+.date-btn,
+.date-split,
+.mid-aligned{
+  cursor: pointer;
+  user-select: none;
+}

@@ -1,4 +1,6 @@
 if archives.length
+    h6 local-class="org-archive-list__head" class="bold"
+      t "organizationArchiveTableHeading"
     table local-class="org-archive-list__table"
         thead local-class="org-archive-list__table-head"
             th Created On
