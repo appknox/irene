@@ -5,12 +5,14 @@
   border: 1px solid #fffdfd;
 }
 
-.archive-row td:last-child{
-    text-align: center;
-}
-
-.archive-row td:nth-child(4){
-    text-align: center;
+.archive-row{
+  td{
+    &:nth-child(2),
+    &:nth-child(3),
+    &:last-child{
+      text-align: center;
+    }
+  }
 }
 
 .status-available {

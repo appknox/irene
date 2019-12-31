@@ -19,13 +19,13 @@
         else
           button local-class="date-btn" {{moment-format selectedDates.lastObject 'DD/MM/YYYY'}}
     if tiggerGenerateArchive.isRunning
-      button class='is-primary'
+      button class='is-primary highlighted-button' local-class="generate-btn"
         i class="fa fa-spinner fa-spin"
         = t "processing"
     else
       button class='is-primary highlighted-button' local-class="generate-btn" click={(perform tiggerGenerateArchive)} Export Excel
 .columns
-  .column
+  .column local-class="padding-horizontal-0"
     = organization-archive-list archives=sortedObjects
 .columns
   .column
