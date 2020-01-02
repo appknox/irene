@@ -59,10 +59,10 @@ export default Component.extend(PaginateMixin, {
 
     actions: {
         setDuration(dates){
-            this.set('startDate',dates[0]);
-            this.set('showPlaceholders.startDate', !dates[0]);
-            this.set('endDate',dates[1]);
-            this.set('showPlaceholders.endDate', !dates[1]);
+          this.set('startDate',dates[0]);
+          this.set('showPlaceholders.startDate', !dates[0]);
+          this.set('endDate',dates[1]);
+          this.set('showPlaceholders.endDate', !dates[1]);
         }
     }
 

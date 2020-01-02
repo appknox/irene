@@ -5,7 +5,7 @@ tr local-class="archive-row"
       | #{archive.generatedBy.username}
 
     td.text-lightgray
-      | #{moment-format archive.fromDate 'DD/MM/YYYY' } - #{moment-format archive.toDate 'DD/MM/YYYY'}
+      | #{moment-format archive.fromDate 'DD MMM YYYY' } ~ #{moment-format archive.toDate 'DD MMM YYYY'}
 
     td.text-lightgray
       if archive.isAvailable

@@ -8,16 +8,10 @@
 .columns class="margin-top10"
   .column class="bordered-box text-centre padding-v-1 fill-lightgray"
     = date-picker class="custom-styled-picker"  maxDate=maxDate range=true options=datepickerOptions action=(action 'setDuration') as |selectedDates|
-        if showPlaceholders.startDate
-          span local-class="mid-aligned" From Date
-        else
-          button local-class="date-btn" {{moment-format selectedDates.firstObject 'DD/MM/YYYY'}}
+        button local-class="date-btn" {{if showPlaceholders.startDate 'From Date'}} {{moment-format selectedDates.firstObject 'DD MMM YYYY'}}
         span local-class='date-split'
          | ~
-        if showPlaceholders.endDate
-          span local-class="mid-aligned" To Date
-        else
-          button local-class="date-btn" {{moment-format selectedDates.lastObject 'DD/MM/YYYY'}}
+        button local-class="date-btn" {{if showPlaceholders.endDate 'To Date'}} {{moment-format selectedDates.lastObject 'DD MMM YYYY'}}
     if tiggerGenerateArchive.isRunning
       button class='is-primary highlighted-button' local-class="generate-btn"
         i class="fa fa-spinner fa-spin"
