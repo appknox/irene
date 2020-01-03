@@ -59,7 +59,6 @@ module.exports = function(environment) {
   });
   var host = process.env.IRENE_API_HOST || 'https://api.appknox.com';
   var socketPath = process.env.IRENE_API_SOCKET_PATH || 'https://socket.appknox.com';
-  var enableSSO = isTrue(process.env.IRENE_ENABLE_SSO || false);
   var enableRegistration = isTrue(process.env.IRENE_ENABLE_REGISTRATION || false);
   var registrationLink = process.env.IRENE_REGISTRATION_LINK || '';
   var isEnterprise = isTrue(process.env.ENTERPRISE || false);
@@ -130,7 +129,6 @@ module.exports = function(environment) {
     emberRollbarClient: {
       enabled: getPluginActivationStatus('rollbar')
     },
-    enableSSO: enableSSO,
 
     notifications: {
       autoClear: true,

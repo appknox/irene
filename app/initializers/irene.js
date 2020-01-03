@@ -48,7 +48,6 @@ const initialize = function(application) {
     }
 
     ENV.socketPath = runtimeConfig.IRENE_API_SOCKET_PATH || ENV.socketPath;
-    ENV.enableSSO = envKeys.indexOf('enableSSO') > -1 ? isTrue(runtimeConfig.IRENE_ENABLE_SSO) : ENV.enableSSO;
     ENV.isEnterprise = envKeys.indexOf('isEnterprise') > -1 ? isTrue(runtimeConfig.ENTERPRISE) : ENV.isEnterprise;
     ENV.isRegistrationEnabled = envKeys.indexOf('isRegistrationEnabled') > -1 ? isTrue(runtimeConfig.IRENE_ENABLE_REGISTRATION) : ENV.isRegistrationEnabled;
     ENV.registrationLink = runtimeConfig.registrationLink || ENV.registrationLink;
