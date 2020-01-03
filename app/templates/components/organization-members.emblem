@@ -5,10 +5,8 @@ if me.org.is_admin
         = t "organizationMembers"
     .column.content-right
       if me.org.is_owner
-        if env.enableSSO
-          = add-sso-members
-        else
-          = invite-member organization=organization
+        = invite-member organization=organization
+
 
   = organization-member-list organization=organization
   = organization-invitation-list organization=organization
