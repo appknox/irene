@@ -34,10 +34,10 @@ const thirdPartyPluginEnvMap = {
 
 function getPluginActivationStatus(pluginName){
   const pluginEnvVariable = thirdPartyPluginEnvMap[pluginName];
-  if(process.env.hasOwnProperty(pluginEnvVariable.env)){
+  if(pluginEnvVariable.env in process.env){
     return isTrue(process.env[pluginEnvVariable.env]);
   }
-  if(process.env.hasOwnProperty('ENTERPRISE')){
+  if('ENTERPRISE' in process.env){
     const isEnterprise = process.env.ENTERPRISE
     return !isTrue(isEnterprise);
   }

@@ -11,10 +11,10 @@ function isTrue(value) {
 function getPluginActivationStatus(pluginName){
   const pluginEnvVariable = ENV.thirdPartyPluginEnvMap[pluginName];
 
-  if(runtimeConfig.hasOwnProperty(pluginEnvVariable.env)){
+  if(pluginEnvVariable.env in runtimeConfig){
     return isTrue(runtimeConfig[pluginEnvVariable.env]);
   }
-  if(runtimeConfig.hasOwnProperty('ENTERPRISE')){
+  if('ENTERPRISE' in runtimeConfig){
     return !isTrue(runtimeConfig.ENTERPRISE);
   }
   return pluginEnvVariable.default;
