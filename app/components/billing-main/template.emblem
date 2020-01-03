@@ -1,0 +1,46 @@
+.columns local-class="mid-aligned"
+  .column local-class="box-wrapper"
+    .box local-class="pricing-box card-left"
+      .content
+        header
+          h3
+            | Per App
+          h5
+            | Monthly
+        ul
+          li feature 1
+          li feature 2
+          li feature 3
+          li feature 4
+        footer
+          button Subscribe
+  .column local-class="box-wrapper"
+    .box local-class="pricing-box" class="card-focussed" id="default-up"
+      .content
+        header
+          h3
+            | Per App
+          h5
+            | Yearly
+        ul
+          li feature 1
+          li feature 2
+          li feature 3
+          li feature 4
+        footer
+          button Subscribe
+  .column local-class="box-wrapper"
+    .box local-class="pricing-box card-right z-zero"
+      .content
+        header
+          h3 local-class="per-scan"
+            | Per scan
+        ul
+          li feature 1
+          li feature 2
+          li feature 3
+          li feature 4
+        footer
+          button Buy
+
+
