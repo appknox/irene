@@ -63,7 +63,7 @@ module.exports = function(deployTarget) {
   }
 
   if (deployTarget === 'sequelstring') {
-    ENV.build.environment = 'sequelstring';
+    ENV.build.environment = 'production';
 
     process.env["ENTERPRISE"] = true
     process.env["WHITELABEL_ENABLED"] = true
@@ -90,7 +90,7 @@ module.exports = function(deployTarget) {
   }
 
   if (deployTarget === 'gbm') {
-    ENV.build.environment = 'gbm';
+    ENV.build.environment = 'production';
 
     process.env["ENTERPRISE"] = true
     process.env["WHITELABEL_ENABLED"] = true

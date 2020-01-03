@@ -14,10 +14,6 @@ const thirdPartyPluginEnvMap = {
     'env' :'IRENE_ENABLE_HOTJAR',
     'default': false
   },
-  'inspectlet': {
-    'env': 'IRENE_ENABLE_INSPECTLET',
-    'default': false
-  },
   'pendo': {
     'env' : 'IRENE_ENABLE_PENDO',
     'default': false
@@ -25,7 +21,7 @@ const thirdPartyPluginEnvMap = {
   'csb':{
     'env': 'IRENE_ENABLE_CSB',
     'default': false
-  }, 
+  },
   'marketplace': {
     'env': 'IRENE_ENABLE_MARKETPLACE',
     'default': false
@@ -55,13 +51,12 @@ module.exports = function(environment) {
   var deviceFarmSsl = deviceFarmWebsockifyHost.protocol == "wss:";
   var deviceFarmPort = deviceFarmWebsockifyHost.port || (deviceFarmSsl ? 443:80);
   var deviceFarmHost = deviceFarmWebsockifyHost.hostname;
-  var deviceFarmURL = url.format(
-    {
+  var deviceFarmURL = url.format({
       protocol: deviceFarmWebsockifyHost.protocol,
       hostname: deviceFarmHost,
       port: deviceFarmPort,
       pathname: deviceFarmPath
-    });
+  });
   var host = process.env.IRENE_API_HOST || 'https://api.appknox.com';
   var socketPath = process.env.IRENE_API_SOCKET_PATH || 'https://socket.appknox.com';
   var enableSSO = isTrue(process.env.IRENE_ENABLE_SSO || false);
@@ -130,7 +125,6 @@ module.exports = function(environment) {
     enableCrisp: getPluginActivationStatus('crisp'),
     enableHotjar: getPluginActivationStatus('hotjar'),
     enablePendo: getPluginActivationStatus('pendo'),
-    enableInspectlet: getPluginActivationStatus('inspectlet'),
     enableCSB: getPluginActivationStatus('csb'),
     enableMarketplace: getPluginActivationStatus('marketplace'),
     emberRollbarClient: {
@@ -306,7 +300,8 @@ module.exports = function(environment) {
       changeProxySettings: { feature: "Change Proxy Settings", module: "Setup", product: "Appknox" },
     },
     whitelabel: {
-      theme: 'dark'
+      theme: 'dark',
+      enabled: isTrue(process.env.WHITELABEL_ENABLED),
     },
     gReCaptcha: {
       jsUrl: 'https://recaptcha.net/recaptcha/api.js?render=explicit',
@@ -314,13 +309,13 @@ module.exports = function(environment) {
     }
   };
 
-  if (environment === 'development') {
-    // ENV.APP.LOG_RESOLVER = true;
-    // ENV.APP.LOG_ACTIVE_GENERATION = true;
-    // ENV.APP.LOG_TRANSITIONS = true;
-    // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
-    // ENV.APP.LOG_VIEW_LOOKUPS = true;
+  if (ENV.whitelabel.enabled) {
+    ENV.whitelabel.name = process.env.WHITELABEL_NAME;
+    ENV.whitelabel.logo = process.env.WHITELABEL_LOGO;
+    ENV.whitelabel.theme = process.env.WHITELABEL_THEME; // 'light' or 'dark'
+  }
 
+  if (environment === 'development') {
     ENV['ember-cli-mirage'] = {
       enabled:false
     };
@@ -357,9 +352,6 @@ module.exports = function(environment) {
   }
 
   if (environment === 'staging') {
-    ENV.enablePendo = false;
-    ENV.enableInspectlet = false;
-    ENV.enableCSB = false;
     ENV['ember-cli-mirage'] = {
       enabled: false
     };
@@ -371,20 +363,6 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
-  }
-
-  if (
-    environment === 'whitelabel' ||
-    environment === 'sequelstring' ||
-    environment === 'gbm'
-  ) {
-    ENV.isEnterprise = isTrue(process.env.ENTERPRISE);
-    ENV.whitelabel.enabled = isTrue(process.env.WHITELABEL_ENABLED);
-    if (ENV.whitelabel.enabled) {
-      ENV.whitelabel.name = process.env.WHITELABEL_NAME;
-      ENV.whitelabel.logo = process.env.WHITELABEL_LOGO;
-      ENV.whitelabel.theme = process.env.WHITELABEL_THEME; // 'light' or 'dark'
-    }
   }
 
   return ENV;

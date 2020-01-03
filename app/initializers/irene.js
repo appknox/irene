@@ -10,7 +10,7 @@ function isTrue(value) {
 
 function getPluginActivationStatus(pluginName){
   const pluginEnvVariable = ENV.thirdPartyPluginEnvMap[pluginName];
-  
+
   if(runtimeConfig.hasOwnProperty(pluginEnvVariable.env)){
     return isTrue(runtimeConfig[pluginEnvVariable.env]);
   }
@@ -46,23 +46,21 @@ const initialize = function(application) {
       const deviceFarmURL = new URL(deviceFarmPath, devicefarmEnv).href;
       ENV.deviceFarmURL = deviceFarmURL;
     }
-    
+
     ENV.socketPath = runtimeConfig.IRENE_API_SOCKET_PATH || ENV.socketPath;
     ENV.enableSSO = envKeys.indexOf('enableSSO') > -1 ? isTrue(runtimeConfig.IRENE_ENABLE_SSO) : ENV.enableSSO;
     ENV.isEnterprise = envKeys.indexOf('isEnterprise') > -1 ? isTrue(runtimeConfig.ENTERPRISE) : ENV.isEnterprise;
     ENV.isRegistrationEnabled = envKeys.indexOf('isRegistrationEnabled') > -1 ? isTrue(runtimeConfig.IRENE_ENABLE_REGISTRATION) : ENV.isRegistrationEnabled;
     ENV.registrationLink = runtimeConfig.registrationLink || ENV.registrationLink;
     ENV.whitelabel = Object.assign({}, ENV.whitelabel, runtimeConfig.whitelabel);
-    
-    
+
+
     ENV.enableCrisp = envKeys.indexOf('enableCrisp') > -1 ? getPluginActivationStatus('crisp') : ENV.enableCrisp;
     ENV.enableHotjar= envKeys.indexOf('enableHotjar') > -1 ? getPluginActivationStatus('hotjar') : ENV.enableHotjar;
     ENV.enablePendo= envKeys.indexOf('enablePendo') > -1 ? getPluginActivationStatus('pendo') : ENV.enablePendo;
-    ENV.enableInspectlet= envKeys.indexOf('enableInspectlet') > -1 ? getPluginActivationStatus('inspectlet') : ENV.enableInspectlet;
     ENV.enableCSB= envKeys.indexOf('enableCSB') > -1 ? getPluginActivationStatus('csb') : ENV.enableCSB;
     ENV.enableMarketplace= envKeys.indexOf('enableMarketplace') > -1 ? getPluginActivationStatus('marketplace') : ENV.enableMarketplace;
     ENV.emberRollbarClient= envKeys.indexOf('emberRollbarClient') > -1 ? {...ENV.emberRollbarClient,enabled: getPluginActivationStatus('rollbar')} : ENV.emberRollbarClient;
-    
   }
 
   // Inject ENV
