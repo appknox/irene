@@ -27,6 +27,16 @@ export default Component.extend(PaginateMixin, {
       endDate: true
     },
 
+    setDatePlaceholderStates(dates){
+      this.set('showPlaceholders.startDate', !dates[0]);
+      this.set('showPlaceholders.endDate', !dates[1]);
+    },
+
+    didInsertElement(){
+      const dates = [this.get('startDate'),this.get('endDate')];
+      this.setDatePlaceholderStates(dates);
+    },
+
     tiggerGenerateArchive: task(function * () {
         const startDateObj = this.get('startDate');
         const endDateObj = this.get('endDate');
@@ -60,9 +70,8 @@ export default Component.extend(PaginateMixin, {
     actions: {
         setDuration(dates){
           this.set('startDate',dates[0]);
-          this.set('showPlaceholders.startDate', !dates[0]);
           this.set('endDate',dates[1]);
-          this.set('showPlaceholders.endDate', !dates[1]);
+          this.setDatePlaceholderStates(dates);
         }
     }
 

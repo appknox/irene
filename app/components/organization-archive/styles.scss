@@ -6,10 +6,8 @@
   border: none;
 }
 .date-split{
-  vertical-align: sub;
-  margin-top: 0.5rem;
+  margin-top: 1.5rem;
   display: inline-block;
-  padding: 0 10px;
 }
 .mid-aligned{
   vertical-align: middle;
@@ -21,7 +19,4 @@
 .mid-aligned{
   cursor: pointer;
   user-select: none;
-}
-.padding-horizontal-0{
-  padding: 10px 0;
 }
