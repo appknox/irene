@@ -291,7 +291,6 @@ h3
       &:hover
         text-decoration: underline
 
-
 $badge-small-size: 1.5em
 .badge-square
   min-width: $badge-small-size * 1.3
@@ -495,7 +494,7 @@ $fractional-pts: q 0.25, h 0.5, 3q 0.75
 .contain-width
   width: 100%
 
-/* Appknox specific */
+ /* Appknox specific */
 .appknox-logo
   margin-top: 13px
 
@@ -842,7 +841,7 @@ select
     margin-top: 10px
 
 div[class^="_c-notification__container"]
-  z-index: 2000!important
+    z-index: 2000!important
 
 .is-progress
   border: 1px solid #ffe0dd
@@ -888,7 +887,7 @@ div[class^="_c-notification__container"]
 
 .box-container-w-b
   @extend .box-container
-  border-bottom: unset
+    border-bottom: unset
 
 .divider
   height: 0
@@ -914,9 +913,9 @@ div[class^="_c-notification__container"]
     margin-left: 1.5em
     color: #FFF
     padding: 10px 0px
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+    text-overflow: ellipsis
+    white-space: nowrap
+    overflow: hidden
   .project-count
     padding: 3px
     min-width: 120px
@@ -1034,8 +1033,8 @@ div[class^="_c-notification__container"]
 .input
   border-color: #e6e6e6!important
 .input:hover
-    border-color: #b3b3b3!important
-    box-shadow: 0 0 1px #808080
+  border-color: #b3b3b3!important
+  box-shadow: 0 0 1px #808080
 
 .card-form
   width: 40%
@@ -1115,7 +1114,7 @@ div[class^="_c-notification__container"]
 
 .overflow-hidden
   @extend .hide-overflow
-  max-width: 100px
+    max-width: 100px
 
 .hidden-overflow
   overflow: hidden
@@ -1171,10 +1170,10 @@ div[class^="_c-notification__container"]
     margin-top: 10px
   table
     @extend .api-filter-table
-    width: 230px!important
-    margin-top: 10px!important
-    max-width: auto
-    margin-left: -10px
+      width: 230px!important
+      margin-top: 10px!important
+      max-width: auto
+      margin-left: -10px
     tr
       td, th
         text-align: left!important
@@ -1259,8 +1258,8 @@ div[class^="_c-notification__container"]
     .card-form-header
       @extend .strip
       @extend .align-middle
-      margin: 0px
-      background-color: #A9A9A9
+        margin: 0px
+        background-color: #A9A9A9
     .columns
       margin-left: -1px
       .column:first-child
@@ -1790,7 +1789,6 @@ ul.risk-table
   font-size: 12px
   vertical-align: middle
 
-
 .cvss-box
   border-radius: 5px
   margin: 10px auto
@@ -1823,7 +1821,7 @@ ul.risk-table
 
 .security-list-table
   @extend .api-filter-table
-  width: 100%
+    width: 100%
   th
     text-align: center
   tr
@@ -1879,7 +1877,6 @@ ul.risk-table
 .attachments-list-table
   margin-left: 27px
   margin-top: 0px
-
 
 .team-container.box-container
   padding-bottom: 20px
@@ -2218,8 +2215,6 @@ button.delete-button
   .top-bar
     background: none
 
-
-
 .modal.is-active
   .marvel-device.ipad
     margin-left: 0px
@@ -2243,7 +2238,6 @@ button.delete-button
     height: 480px!important
   .vnc-text
     display: none
-
 
 .marvel-device.iphone5s
   width: 245px!important
@@ -2311,8 +2305,8 @@ button.delete-button
           padding-top: 18px
 
 button[disabled], .input[disabled]
-  cursor: not-allowed
-  pointer-events: auto
+          cursor: not-allowed
+          pointer-events: auto
 
 .button[disabled].ac-upload-app
   opacity: 0.8
@@ -2633,7 +2627,6 @@ select:disabled
   &:last-child
     border-bottom: none
 
-
 .main-box-container
   margin: 20px 20px 0px 40px
   box-shadow: 0px 0px 10px #ccc
@@ -2649,7 +2642,6 @@ select:disabled
         padding: 0.3em 0.8em
       &:hover
         overflow-y: scroll
-
 
   .box-content
     margin-top: 20px
@@ -2685,7 +2677,7 @@ select:disabled
   padding: 0px 10px
   table
     @extend .api-filter-table
-    width: 495px
+      width: 495px
     tr
       th, td
         text-align: center!important
@@ -2751,7 +2743,6 @@ $check-circle-true-color: $success
     align-items: flex-start
     .check-circle-text
       padding-top: 0.1em
-
 
 @mixin toggle-knob($size, $on, $off)
   position: relative
@@ -3110,7 +3101,6 @@ $attachment-icon-width: 4em
     &:nth-child(2)
       margin-left: 10px
 
-
 .device-modal
   overflow: scroll
   .modal-card-foot
@@ -3188,7 +3178,7 @@ $attachment-icon-width: 4em
 
 .vuln-band
   @extend .message-header
-  margin-top: 5px
+    margin-top: 5px
   .columns
     .column
       padding: 0px 10px
@@ -3603,7 +3593,7 @@ $dropdown-default-theme: $color-table
 .no-issues
   i
     margin-top: 0
-  padding-bottom: 1em
+    padding-bottom: 1em
 
 .file-tags
   display: flex
@@ -3649,19 +3639,19 @@ $filetag-bg: #f3f5f8
   display: flex
   align-items: center
 .captured-prop
-  font-weight: bold;
-  display: inline;
-  float: right;
-  border: 0px solid #959393;
-  padding: 0px 4px 0px 4px;
-  border-radius: 4px;
-  color: white;
-  background: #908b8b;
-  margin-left: 3px;
+  font-weight: bold
+  display: inline
+  float: right
+  border: 0px solid #959393
+  padding: 0px 4px 0px 4px
+  border-radius: 4px
+  color: white
+  background: #908b8b
+  margin-left: 3px
 
 .captured-heading
-  display: inline;
-  font-weight: bold;
+  display: inline
+  font-weight: bold
 
 .code-link
   padding: 1px 1px 2px 5px
@@ -3693,18 +3683,18 @@ $filetag-bg: #f3f5f8
       display: flex
       align-items: center
       justify-content: center
-    padding: 0.5em
+      padding: 0.5em
   &-account
     &-container
       border-left: 1px solid #efefef
       width: 100%
       display: flex
       align-items: center
-    padding: 0.5em 1em
-    display: flex
-    align-items: center
-    justify-content: space-between
-    width: 100%
+      padding: 0.5em 1em
+      display: flex
+      align-items: center
+      justify-content: space-between
+      width: 100%
 
 .regulatory__item
   padding: 0.5em 1em
@@ -3728,3 +3718,9 @@ $filetag-bg: #f3f5f8
     &, &:hover
       background: lighten($color-lightgray, 2%)
       color: lighten($color-table, 43%)
+.card-focussed
+  opacity: 1
+  z-index: 2
+  box-shadow: 0px 4px 20px rgba(0,0,0,0.2), -2px -2px 20px 0px rgba(0,0,0,0.1)
+  transition: all ease-in-out 0.4s
+  transform: scale(1.1)

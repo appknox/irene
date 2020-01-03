@@ -1,0 +1,4 @@
+if model.hasPaymentHistory
+  = payment-details
+else
+  = pricing-cards pricingPlans=model.plans

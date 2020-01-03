@@ -1,0 +1,104 @@
+.pricing-box{
+  opacity: 0.8;
+  min-height: 350px;
+  width: calc(33.33333% - 2rem);
+  margin: 1rem;
+  text-align: center;
+  user-select: none;
+  cursor: pointer;
+  transition: all ease-in-out 0.4s;
+  position: relative;
+  &:first-of-type{
+    left: 2.5%;
+  }
+  &:last-of-type{
+    right: 2.5%;
+  }
+  header,footer{
+    color: #fff;
+  }
+  header{
+
+    .badge{
+      background: #00ad9f;
+      border-radius: 4px;
+      color: #fff;
+      display: inline-block;
+      font-size: 1.2rem;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-weight: 600;
+      line-height: 1rem;
+      padding: 0.45em;
+      position: absolute;
+      top: -1.45rem;
+      vertical-align: middle;
+      margin: 1.618em auto 0;
+      left: -0.3rem;
+      box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.2);
+    }
+
+    .bold-price{
+      color: #0e1e25;
+      font-size: 2.618em;
+      font-weight: 500;
+      margin: 1.7rem 0;;
+      small{
+        color: rgba(14, 30, 37, 0.38);
+        font-size: .55em;
+        font-weight: 400;
+        margin: 0 0 0 0.3em;
+      }
+    }
+  }
+
+  .plan-description{
+    color: rgba(14,30,37,.54);
+    margin-bottom: 1em;
+  }
+
+  .plan-features{
+    text-align: left;
+    margin-top: 1em;
+    li{
+      margin-bottom:0.5em;
+      color: rgba(14, 30, 37, 0.87);
+      &::before{
+        background-color: #00ad9f;
+        border-radius: 50%;
+        color: #fff;
+        content: "✓";
+        display: block;
+        font-size: .618em;
+        font-weight: 900;
+        height: 1.618em;
+        left: 0;
+        line-height: 1.75;
+        text-align: center;
+        top: .382em;
+        width: 1.618em;
+        display: inline-block;
+        margin-right: 0.8em;
+      }
+    }
+  }
+
+  footer{
+    padding: 1.2em;
+    button{
+      line-height: 0.1em;
+      padding: 1em;
+      width: 100%;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #fff;
+      background: #41bdb2;
+      &:hover{
+        border: 1px solid #26b6aa;
+        outline: none;
+      }
+    }
+  }
+
+
+}

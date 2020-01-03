@@ -1,2 +1,9 @@
 if model.showBilling
-  = pricing-list
+  if model.showNotification
+    .notification class="is-success has-text-centered"
+      button class="delete"
+      p
+        i class="fa fa-check-circle margin-right"
+        | Payment was processed successfully
+  = billing-main model=model
+
