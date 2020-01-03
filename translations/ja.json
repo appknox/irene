@@ -338,6 +338,8 @@
   "orginalRisk": "Original Risk",
   "organization": "組織",
   "organizationArchive": "Organization Data Exports",
+  "organizationArchiveExport": "Export Excel",
+  "organizationArchiveDescription": "Generate organization's activity data as an excel file. Please select the start date and end date between which you would like to generate the data.",
   "organizationArchiveTableHeading" : "Recent Exports",
   "organizationArchiveSuccess": "File Generation Has Started",
   "organizationArchiveFailed": "Failed to Generate File",

@@ -7,72 +7,58 @@ import { t } from 'ember-intl';
 import PaginateMixin from 'irene/mixins/paginate';
 
 export default Component.extend(PaginateMixin, {
-    organization: service('organization'),
-    tArchiveSuccess: t('organizationArchiveSuccess'),
-    tArchiveError: t('organizationArchiveFailed'),
-    startDate: null,
-    endDate: null,
-    maxDate: moment(Date.now()),
-    targetModel: 'organization-archive',
-    sortProperties: ['id:desc'],
-    datepickerOptions: [
-      'clear',
-      'today',
-      'last3Months',
-      'last6Months',
-      'lastYear'
-    ],
-    showPlaceholders: {
-      startDate: true,
-      endDate: true
-    },
+  organization: service('organization'),
+  tArchiveSuccess: t('organizationArchiveSuccess'),
+  tArchiveError: t('organizationArchiveFailed'),
+  startDate: null,
+  endDate: null,
+  maxDate: moment(Date.now()),
+  targetModel: 'organization-archive',
+  sortProperties: ['id:desc'],
+  datepickerOptions: [
+    'clear',
+    'today',
+    'last3Months',
+    'last6Months',
+    'lastYear'
+  ],
 
-    setDatePlaceholderStates(dates){
-      this.set('showPlaceholders.startDate', !dates[0]);
-      this.set('showPlaceholders.endDate', !dates[1]);
-    },
+  tiggerGenerateArchive: task(function * () {
+    const startDateObj = this.get('startDate');
+    const endDateObj = this.get('endDate');
+    const requestParams = {};
 
-    didInsertElement(){
-      const dates = [this.get('startDate'),this.get('endDate')];
-      this.setDatePlaceholderStates(dates);
-    },
-
-    tiggerGenerateArchive: task(function * () {
-        const startDateObj = this.get('startDate');
-        const endDateObj = this.get('endDate');
-        const requestParams = {};
-
-        if(startDateObj) {
-          startDateObj.set({h: 0, m: 0, s: 0});
-          requestParams["from_date"]  = startDateObj.toISOString();
-        }
-        if(endDateObj) {
-          const now = moment(Date.now());
-          endDateObj.set({h: now.hour(), m: now.minutes(), s: 0});
-          requestParams["to_date"] = endDateObj.toISOString();
-        }
-
-        const archiveRecord = yield this.store.createRecord('organization-archive', {fromDate:requestParams["from_date"] , toDate:requestParams["to_date"]});
-        yield archiveRecord.save();
-        this.incrementProperty("version");
-    }).evented(),
-
-    onGenerateArchiveSuccess: on('tiggerGenerateArchive:succeeded', function() {
-        this.get('notify').success(this.get('tArchiveSuccess'));
-    }),
-
-    onGenerateArchiveError: on('tiggerGenerateArchive:errored',function(){
-        this.get('notify').error(this.get('tArchiveError'));
-    }),
-
-
-
-    actions: {
-        setDuration(dates){
-          this.set('startDate',dates[0]);
-          this.set('endDate',dates[1]);
-          this.setDatePlaceholderStates(dates);
-        }
+    if(startDateObj) {
+      startDateObj.set({h: 0, m: 0, s: 0});
+      requestParams["from_date"]  = startDateObj.toISOString();
+    }
+    if(endDateObj) {
+      const now = moment();
+      if (endDateObj.isBefore(now,'day')) {
+        endDateObj.set({h: 23, m: 59, s: 59});
+      }else{
+        endDateObj.set({h: now.hour(), m: now.minutes(), s: 0});
+      }
+      requestParams["to_date"] = endDateObj.toISOString();
     }
 
+    const archiveRecord = yield this.store.createRecord('organization-archive', {fromDate:requestParams["from_date"] , toDate:requestParams["to_date"]});
+    yield archiveRecord.save();
+    this.incrementProperty("version");
+  }).evented(),
+
+  onGenerateArchiveSuccess: on('tiggerGenerateArchive:succeeded', function() {
+    this.get('notify').success(this.get('tArchiveSuccess'));
+  }),
+
+  onGenerateArchiveError: on('tiggerGenerateArchive:errored',function(){
+    this.get('notify').error(this.get('tArchiveError'));
+  }),
+
+  actions: {
+    setDuration(dates){
+      this.set('startDate', dates[0]);
+      this.set('endDate', dates[1]);
+    }
+  }
 });
