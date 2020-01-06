@@ -37,7 +37,7 @@ const initialize = function(application) {
   application.inject('component', 'store', 'service:store');
 
   if(runtimeConfig) {
-    const envKeys = Object.keys(ENV);
+    const envKeys = Object.keys(runtimeConfig);
 
     ENV.host = runtimeConfig.IRENE_API_HOST || ENV.host;
     var devicefarmEnv = runtimeConfig.IRENE_DEVICEFARM_URL;
