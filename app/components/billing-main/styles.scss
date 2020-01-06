@@ -12,13 +12,18 @@
     text-align: center;
     user-select: none;
     cursor: pointer;
+    transition: all ease-in-out 0.4s;
 
-    &.card-left{
-      left:10rem;
+    &.card-first{
+      left: 10rem;
     }
 
-    &.card-right{
-      right:10rem;
+    &.card-mid{
+      left: -28rem;
+    }
+
+    &.card-last{
+      right: -20rem;
     }
 
     header{
