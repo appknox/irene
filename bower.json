@@ -1,7 +1,6 @@
 {
   "name": "irene",
   "dependencies": {
-    "ember": "2.18.2",
     "ember-cli-shims": "0.1.3",
     "ember-qunit-notifications": "0.1.0",
     "bourbon": "4.3.4",
