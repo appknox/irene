@@ -13,7 +13,8 @@ tr local-class="archive-row"
           i.fa class="fa-spinner fa-spin" local-class="status-inprogess" title="processing..."
         else
           i.fa class="fa-download" local-class="status-available" title="Download" click={(perform downloadArchive)}
-        span local-class="word-margin" Expires
+        span local-class="word-margin"
+          t "expires"
         moment-from-now archive.availableUntil
       if archive.isExpired
         =t "expired"
