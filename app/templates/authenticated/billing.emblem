@@ -1,2 +1,3 @@
 if model.showBilling
-  = billing-main
+  = billing-main model=model
+

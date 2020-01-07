@@ -1,0 +1,16 @@
+.tabs.is-medium.is-boxed.margin-top.is-centered
+  ul
+    li
+      = link-to 'authenticated.organization.namespaces'
+        = fa-icon "reorder" class="sidebar-icons"
+        | Plans
+
+    li
+      = link-to 'authenticated.organization.members'
+        = fa-icon "credit-card-alt" class="sidebar-icons"
+        | Payment Methods
+
+    li
+      = link-to 'authenticated.organization.teams'
+        = fa-icon "list-alt" class="sidebar-icons"
+        | Invoices

@@ -7,7 +7,11 @@ const AuthenticatedBillingRoute = Route.extend(ScrollTopMixin, {
   title: `Billing${config.platform}`,
   organization: service('organization'),
   model() {
-    return this.get('organization.selected');
+    const {showBilling} = this.get('organization.selected');
+    return {
+      showBilling,
+      hasPaymentHistory: false
+    }
   }
 });
 
