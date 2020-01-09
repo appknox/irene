@@ -21,5 +21,7 @@ export default Component.extend({
 
   didInsertElement(){
     this.attachCardHoverListener();
+    const midBOx = $('.box').get(1);
+    $(midBOx).addClass('card-focussed').attr('id','default-up');
   }
 });
