@@ -4,6 +4,7 @@ import installPendo from 'irene/utils/install-pendo';
 import Application from '@ember/application';
 import Resolver from './resolver';
 import loadInitializers from 'ember-load-initializers';
+import installStripe from 'irene/utils/install-stripe';
 import installCrisp from 'irene/utils/install-crisp';
 import installHotjar from 'irene/utils/install-hotjar';
 import customerSuccessBox from 'irene/utils/customer-success-box';
@@ -19,6 +20,7 @@ if (config.isAppknox) {
   config.product = ENUMS.PRODUCT.DEVKNOX;
 }
 
+installStripe();
 installPendo();
 installCrisp();
 installHotjar();

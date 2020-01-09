@@ -1,0 +1,29 @@
+.box local-class="pricing-box" click={action "openCheckoutModal"}
+  .content
+    header
+      h3
+        | Per App
+      h5
+        | #{plan.interval}ly
+    h5
+      | #{plan.currency} #{plan.amountDecimal}
+    p
+      | #{plan.metadata.description}
+    footer
+      button Subscribe
+
+= modal-card class="input-modal user-search-modal" isActive=showCheckoutModal title="Plan Details"
+  .card-body
+    .card-wrapper
+      form submit={(perform getStripeSessionId)}
+        .columns
+          .column
+            h3
+              | Per App
+            h5
+              | #{plan.interval}ly
+          .column
+            = input type="number" value=quantity focus-out='logQuantity'
+        .columns
+          .column
+            input class="is-primary" type="submit" value="Checkout"

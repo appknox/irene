@@ -7,40 +7,8 @@
 .pricing-wrapper{
   display:flex;
   flex-wrap: wrap;
-  .pricing-box{
-    min-height: 350px;
-    width: calc(33.33333% - 2rem);
-    margin: 1rem;
-    text-align: center;
-    user-select: none;
-    cursor: pointer;
-    transition: all ease-in-out 0.4s;
-    position: relative;
-    &:first-of-type{
-      left: 2.5%;
-    }
-    &:last-of-type{
-      right: 2.5%;
-    }
-    header{
-      background: #ccc;
-      border-radius: 6px 6px 0 0;
-      color: #fff;
-      padding: 8px;
-      margin: -20px -20px 20px -20px;
-      min-height: 92px;
-      position: relative;
-      h3{
-        margin-bottom: 2px;
-        &.per-scan{
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%,-50%);
-        }
-      }
-    }
-  }
+  justify-content: center;
+  align-items: center;
 }
 
 // .box-wrapper{
