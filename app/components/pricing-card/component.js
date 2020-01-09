@@ -22,13 +22,6 @@ export default Component.extend({
     openCheckoutModal(){
       this.set('planId',this.get('plan.id'));
       this.set('showCheckoutModal',true);
-    },
-    logQuantity(){
-      console.log(this.get('quantity'));
-    },
-    submitCheckout(data){
-
     }
-
   }
 });

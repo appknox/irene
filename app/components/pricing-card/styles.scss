@@ -1,4 +1,5 @@
 .pricing-box{
+  opacity: 0.8;
   min-height: 350px;
   width: calc(33.33333% - 2rem);
   margin: 1rem;
@@ -13,10 +14,12 @@
   &:last-of-type{
     right: 2.5%;
   }
-  header{
-    background: #ccc;
-    border-radius: 6px 6px 0 0;
+  header,footer{
     color: #fff;
+  }
+  header{
+    background: #f15d4d;
+    border-radius: 6px 6px 0 0;
     padding: 8px;
     margin: -20px -20px 20px -20px;
     min-height: 92px;
@@ -29,6 +32,20 @@
         left: 50%;
         transform: translate(-50%,-50%);
       }
+    }
+  }
+
+  footer{
+    position: absolute;
+    background: #fa7668;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    padding: 18px;
+    button{
+      border: none;
+      outline: none;
+      color: inherit;
     }
   }
 }
