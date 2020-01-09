@@ -7,12 +7,6 @@ export default Component.extend({
   planId: null,
   quantity: 1,
 
-  formatCurrencyName(currencyName){
-    return (!!currencyName && typeof currencyName === 'string'
-      && currencyName.trim().length > 0) ?
-      currencyName.toUpperCase() : "";
-  },
-
   getStripeSessionId: task(function * () {
     const stripeCheckoutSessionId = yield this.get('plan.stripeSessionId').call(this,{plan:this.get('planId'),quantity:this.get('quantity')});
     if(stripeCheckoutSessionId){

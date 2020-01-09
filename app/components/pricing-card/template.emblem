@@ -6,7 +6,7 @@
       h5
         | #{plan.interval}ly
     h5
-      | #{plan.currency} #{plan.amountDecimal}
+      | {{format-currency plan.currency plan.amountDecimal}}
     p
       | #{plan.metadata.description}
     footer
