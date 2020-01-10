@@ -27,7 +27,7 @@
             p local-class="price-plan"
               | Per App #{plan.interval}ly
             p local-class="price-text"
-              | {{format-currency plan.currency plan.amountDecimal}}
+              | {{format-currency plan.currency plan.amountDecimal quantity}}
           .column
             div local-class="quantity-wrapper"
               button local-class="checkout-dec" click={action "decrementQuantity"} -

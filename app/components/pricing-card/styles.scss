@@ -134,7 +134,7 @@
       vertical-align: middle;
     }
     input{
-      width: 35px;
+      width: 40px;
       user-select: none;
       border: none;
       text-align: right;
@@ -147,11 +147,11 @@
       font-weight: bold;
       font-size: 1.25em;
       &:first-of-type{
-        margin-right: 0.5em;
+        margin-right: 0.25em;
         background: #FE4D3F;
       }
       &:last-of-type{
-        margin-left: 0.5em;
+        margin-left: 0.25em;
         background: #41bdb2;
         &:hover,&:active,&:focus{
           border-color: #41bdb2;
