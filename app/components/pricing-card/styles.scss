@@ -1,18 +1,16 @@
 .pricing-box{
   opacity: 0.8;
   min-height: 350px;
-  width: calc(33.33333% - 2rem);
-  margin: 1rem;
+  flex: 0 0 calc(33.33333% - 1.2rem);
+  margin: 1rem 0;
   text-align: center;
   user-select: none;
   cursor: pointer;
-  transition: all ease-in-out 0.4s;
   position: relative;
-  &:first-of-type{
-    left: 2.5%;
-  }
-  &:last-of-type{
-    right: 2.5%;
+  &.card-focussed {
+    opacity: 1;
+    z-index: 2;
+    box-shadow: 0px 4px 20px rgba(0,0,0,0.2), -2px -2px 20px 0px rgba(0,0,0,0.1);
   }
   header,footer{
     color: #fff;
@@ -93,12 +91,78 @@
       font-weight: bold;
       color: #fff;
       background: #41bdb2;
-      &:hover{
+      &:hover,&:active,&:focus{
         border: 1px solid #26b6aa;
         outline: none;
       }
     }
   }
 
+}
 
+.modal{
+  .price-text{
+    font-weight: bold;
+    color: rgba(14, 30, 37, 0.54);
+    padding: 0 2em;
+  }
+  .price-plan{
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+    color: rgb(14, 30, 37);
+  }
+  .checkout-wrapper{
+    margin-top:1em;
+    input{
+      width:100%;
+      border-color: #41bdb2;
+      color: #41bdb2;
+      &:hover,&:active,&:focus{
+        background: #41bdb2;
+        color: #fff;
+      }
+    }
+  }
+  .quantity-wrapper{
+    border: 1px solid rgba(14, 30, 37, 0.4);
+    padding: 2px;
+    user-select: none;
+    &.disabled{
+      opacity: 0.5;
+    }
+    *{
+      display:inline-block;
+      vertical-align: middle;
+    }
+    input{
+      width: 40px;
+      pointer-events: none;
+      border: none;
+      text-align: right;
+    }
+    button{
+      border-radius: 50px;
+      color: #fff;
+      padding: 1em;
+      line-height: 0.2em;
+      font-weight: bold;
+      font-size: 1.25em;
+      &.disabled{
+        pointer-events: none;
+      }
+      &:first-of-type{
+        margin-right: 0.25em;
+        background: #FE4D3F;
+      }
+      &:last-of-type{
+        margin-left: 0.25em;
+        background: #41bdb2;
+        &:hover,&:active,&:focus{
+          border-color: #41bdb2;
+          outline: none;
+        }
+      }
+    }
+  }
 }

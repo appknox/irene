@@ -1,4 +1,4 @@
-.box local-class="pricing-box" click={action "openCheckoutModal"}
+.box local-class="pricing-box {{if plan.isHighlighted 'card-focussed'}}" click={action "openCheckoutModal"}
   .content
     header
       h3 local-class="badge"
@@ -18,18 +18,28 @@
     footer
       button Subscribe
 
-= modal-card class="input-modal user-search-modal" isActive=showCheckoutModal title="Plan Details"
+= modal-card class="input-modal" local-class="modal" isActive=showCheckoutModal title="Plan Details"
   .card-body
     .card-wrapper
       form submit={(perform getStripeSessionId)}
         .columns
           .column
-            h3
-              | Per App
-            h5
-              | #{plan.interval}ly
+            p local-class="price-plan"
+              | Per App #{plan.interval}ly
+            p local-class="price-text"
+              if plan.quantity
+                | {{format-currency plan.currency plan.amountDecimal plan.quantity}}
+              else
+                | {{format-currency plan.currency plan.amountDecimal quantity}}
           .column
-            = input type="number" value=quantity focus-out='logQuantity'
+            div local-class="quantity-wrapper {{if plan.quantity 'disabled'}}"
+              button local-class="{{if plan.quantity 'disabled'}}" click={action "decrementQuantity"} -
+              if plan.quantity
+                = input type="number" value=plan.quantity readonly=true
+              else
+                = input type="number" value=quantity readonly=true
+              button local-class="{{if plan.quantity 'disabled'}}" click={action "incrementQuantity"} +
         .columns
-          .column
-            input class="is-primary" type="submit" value="Checkout"
+          .column local-class="checkout-wrapper"
+            input class="is-success" type="submit" value="Checkout"
+

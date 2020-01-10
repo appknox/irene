@@ -14,14 +14,17 @@ const AuthenticatedBillingRoute = Route.extend(ScrollTopMixin, {
   },
 
   async model() {
-    const {showBilling} = this.get('organization.selected');
+    const organization = this.get('organization.selected');
     const plans = await this.get('store').findAll('pricing-plan');
     const showNotification = this.get('showNotification');
+    const isJustifiedCenter = plans.get('length') <= 3;
     return {
-      showBilling,
+      showBilling: organization.get('showBilling'),
+      showPayment: organization.get('showPayment'),
       showNotification,
       hasPaymentHistory: false,
-      plans
+      plans,
+      isJustifiedCenter
     }
   }
 });

@@ -7,6 +7,7 @@ const Organization = DS.Model.extend({
   logo: DS.attr('string'),
   billingHidden: DS.attr('boolean'),
   showBilling: not('billingHidden'),
+  showPayment: DS.attr('boolean',{defaultValue: false}),
   isTrial: DS.attr('boolean'),
   mandatoryMfa: DS.attr('boolean'),
   members: DS.hasMany('organization-member'),

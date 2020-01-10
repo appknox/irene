@@ -1,4 +1,4 @@
-if model.hasPaymentHistory
+if model.showPayment
   = payment-details
 else
-  = pricing-cards pricingPlans=model.plans
+  = pricing-cards pricingPlans=model.plans isJustifiedCenter=model.isJustifiedCenter
