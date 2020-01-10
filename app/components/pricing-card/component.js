@@ -22,6 +22,16 @@ export default Component.extend({
     openCheckoutModal(){
       this.set('planId',this.get('plan.id'));
       this.set('showCheckoutModal',true);
+    },
+    incrementQuantity(){
+      this.set('quantity',this.get('quantity')+1);
+    },
+    decrementQuantity(){
+      const currentQuantity = this.get('quantity');
+      if(currentQuantity > 1){
+        this.set('quantity',currentQuantity-1);
+      }
+      return;
     }
   }
 });
