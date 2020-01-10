@@ -1,14 +1,20 @@
 .box local-class="pricing-box" click={action "openCheckoutModal"}
   .content
     header
-      h3
+      h3 local-class="badge"
         | Per App
-      h5
-        | #{plan.interval}ly
-    h5
-      | {{format-currency plan.currency plan.amountDecimal}}
-    p
+      p local-class="bold-price"
+        | {{format-currency plan.currency plan.amountDecimal}}
+        small
+          | /#{plan.interval}
+    p local-class="plan-description"
       | #{plan.metadata.description}
+      ul local-class="plan-features"
+        li Scan some random App
+        li Get sparked by joy
+        li Go to a hill top
+        li Do a dope test
+        li Bahamas may be?
     footer
       button Subscribe
 
