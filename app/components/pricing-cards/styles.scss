@@ -6,66 +6,13 @@
 
 .pricing-wrapper{
   display:flex;
-  flex-wrap: wrap;
-  justify-content: center;
   align-items: center;
+  overflow-x: auto;
+  width: calc(100vw - 20rem);
+  margin-left: 1rem;
+  height: calc(100vh - 62px);
 }
 
-// .box-wrapper{
-//   .pricing-box{
-//     min-height: 350px;
-//     position: relative;
-//     margin: 0 1rem;
-//     text-align: center;
-//     user-select: none;
-//     cursor: pointer;
-//     transition: all ease-in-out 0.4s;
-
-//     &.card-first{
-//       left: 10rem;
-//     }
-
-//     &.card-mid{
-//       left: -28rem;
-//     }
-
-//     &.card-last{
-//       right: -20rem;
-//     }
-
-//     header{
-//       background: #ccc;
-//       border-radius: 6px 6px 0 0;
-//       color: #fff;
-//       padding: 8px;
-//       margin: -20px -20px 20px -20px;
-//       min-height: 92px;
-//       position: relative;
-//       h3{
-//         margin-bottom: 2px;
-//         &.per-scan{
-//           position: absolute;
-//           top: 50%;
-//           left: 50%;
-//           transform: translate(-50%,-50%);
-//         }
-//       }
-//     }
-
-//     footer{
-//       position: absolute;
-//       bottom:0;
-//       left:0;
-//       right: 0;
-//       text-align: center;
-//       background: #ccc;;
-//       button{
-//         border: 0;
-//         width: 80%;
-//         padding: 8px 16px;
-//         margin-bottom: 8px;
-//       }
-//     }
-
-//   }
-// }
+.center-justified{
+  justify-content: center;
+}

@@ -1,4 +1,4 @@
-.box local-class="pricing-box" click={action "openCheckoutModal"}
+.box local-class="pricing-box {{if plan.isHighlighted 'card-focussed'}}" click={action "openCheckoutModal"}
   .content
     header
       h3 local-class="badge"
