@@ -19,6 +19,7 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
 
   lastTransition: null,
   intl: service(),
+  me: service('me'),
   moment: service(),
   session: service(),
   realtime: service(),
@@ -41,21 +42,23 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
     return this.get('store').find('user', userId);
   },
 
-  afterModel(user){
+  async afterModel(user){
     let error;
     const company =
         this.get("org.selected.data.name") ||
         user.get("email").replace(/.*@/, "").split('.')[0];
+    const membership = await this.get('me.membership');
     const data = {
       userId: user.get("id"),
       userName: user.get("username"),
       userEmail: user.get("email"),
+      userRole: membership.get('roleDisplay'),
       accountId: this.get("org.selected.id"),
       accountName: company
     };
     triggerAnalytics('login', data);
     chat.setUserEmail(user.get("email"), user.get("crispHash"));
-    
+
     chat.setUserCompany(company);
 
     try {

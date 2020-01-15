@@ -11,6 +11,11 @@ const MeService = Service.extend({
   org: promise.object(computed('organization.selected.id', function(){
     return this.get('store').queryRecord('organization-me', {});
   })),
+  membership: promise.object(computed('org.id', async function () {
+    await this.get('org');
+    const user_id = this.get('org.id');
+    return this.get('store').findRecord('organization-member', user_id);
+  }))
 });
 
 export default MeService;
