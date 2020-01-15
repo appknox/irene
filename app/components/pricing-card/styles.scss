@@ -127,13 +127,17 @@
   .quantity-wrapper{
     border: 1px solid rgba(14, 30, 37, 0.4);
     padding: 2px;
+    user-select: none;
+    &.disabled{
+      opacity: 0.5;
+    }
     *{
       display:inline-block;
       vertical-align: middle;
     }
     input{
       width: 40px;
-      user-select: none;
+      pointer-events: none;
       border: none;
       text-align: right;
     }
@@ -144,6 +148,9 @@
       line-height: 0.2em;
       font-weight: bold;
       font-size: 1.25em;
+      &.disabled{
+        pointer-events: none;
+      }
       &:first-of-type{
         margin-right: 0.25em;
         background: #FE4D3F;

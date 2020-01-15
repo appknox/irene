@@ -27,12 +27,18 @@
             p local-class="price-plan"
               | Per App #{plan.interval}ly
             p local-class="price-text"
-              | {{format-currency plan.currency plan.amountDecimal quantity}}
+              if plan.quantity
+                | {{format-currency plan.currency plan.amountDecimal plan.quantity}}
+              else
+                | {{format-currency plan.currency plan.amountDecimal quantity}}
           .column
-            div local-class="quantity-wrapper"
-              button local-class="checkout-dec" click={action "decrementQuantity"} -
-              = input type="number" value=quantity readonly=true
-              button local-class="checkout-inc" click={action "incrementQuantity"} +
+            div local-class="quantity-wrapper {{if plan.quantity 'disabled'}}"
+              button local-class="{{if plan.quantity 'disabled'}}" click={action "decrementQuantity"} -
+              if plan.quantity
+                = input type="number" value=plan.quantity readonly=true
+              else
+                = input type="number" value=quantity readonly=true
+              button local-class="{{if plan.quantity 'disabled'}}" click={action "incrementQuantity"} +
         .columns
           .column local-class="checkout-wrapper"
             input class="is-success" type="submit" value="Checkout"
