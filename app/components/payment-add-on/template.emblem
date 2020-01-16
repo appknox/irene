@@ -1,0 +1,13 @@
+.card class="full-width margin-top-bottom"
+  header class="card-header"
+    p class="card-header-title"
+      | Add ons
+  .card-content
+    .content
+      | Exercitation pariatur velit dolore aliqua.
+      | Exercitation pariatur velit dolore aliqua.
+      | Ex aliqua culpa pariatur ea est. Ipsum id dolor aliquip ex do in adipisicing ut. Non Lorem ut pariatur minim minim cupidatat deserunt commodo anim.
+  footer class="card-footer"
+    button class="card-footer-item" Text 1
+    button class="card-footer-item" Text 2
+    button class="card-footer-item" Text 3
