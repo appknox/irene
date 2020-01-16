@@ -1,7 +1,7 @@
 .card class="full-width margin-top-bottom"
   header class="card-header"
     p class="card-header-title"
-      | Per App
+      | Per Scan
   .card-content
     .content
       | Exercitation pariatur velit dolore aliqua.
@@ -11,4 +11,5 @@
     button class="card-footer-item" Text 1
     button class="card-footer-item" Text 2
     button class="card-footer-item" Text 3
+
 
