@@ -6,12 +6,12 @@
         | Plans
 
     li
-      = link-to 'authenticated.organization.members'
+      = link-to 'authenticated.billing.payment-methods'
         = fa-icon "credit-card-alt" class="sidebar-icons"
         | Payment Methods
 
     li
-      = link-to 'authenticated.organization.teams'
+      = link-to 'authenticated.billing.invoices'
         = fa-icon "list-alt" class="sidebar-icons"
         | Invoices
 = outlet

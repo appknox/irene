@@ -39,6 +39,8 @@ Router.map(function() {
     });
     this.route("billing", {path: '/billing'}, function() {
       this.route('plan',{path:'/plans'});
+      this.route('payment-methods');
+      this.route('invoices');
     });
     this.route("marketplace", {path: '/marketplace'});
     this.route('projects', {path: '/projects'});
