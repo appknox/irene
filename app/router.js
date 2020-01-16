@@ -37,10 +37,8 @@ Router.map(function() {
       this.route('security');
       this.route('developersettings');
     });
-    this.route("billing", {path: '/billing'}, function(){
-      this.route('plans');
-      this.route('paymentmethods');
-      this.route('invoices');
+    this.route("billing", {path: '/billing'}, function() {
+      this.route('plan',{path:'/plans'});
     });
     this.route("marketplace", {path: '/marketplace'});
     this.route('projects', {path: '/projects'});
