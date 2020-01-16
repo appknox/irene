@@ -1,14 +1,21 @@
 import DS from 'ember-data';
 
 export default DS.Model.extend({
-  planId: DS.attr('string'),
-  amountDecimal: DS.attr('number'),
-  active: DS.attr('boolean'),
+  name: DS.attr('string'),
+  description: DS.attr('string'),
+  isHighlighted: DS.attr('boolean'),
+  isActive: DS.attr('boolean'),
+  price: DS.attr('string'),
   currency: DS.attr('string'),
-  interval: DS.attr('string'),
-  intervalCount: DS.attr('number'),
   quantity: DS.attr('number'),
-  metadata: DS.attr(),
+  type: DS.attr('number'),
+  expiryDuration: DS.attr('string'),
+  billingCycle: DS.attr('string'),
+  features: DS.attr(),
+  isManualscanIncluded: DS.attr('boolean'),
+  manualscanCount: DS.attr('number'),
+
+
   async stripeSessionId(data){
     const adapter = this.store.adapterFor('pricing-plan');
     let sessionId = null;

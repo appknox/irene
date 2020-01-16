@@ -1,17 +1,17 @@
 .tabs.is-medium.is-boxed.margin-top.is-centered local-class="billing-nav tabs is-boxed"
   ul
-    li
+    li local-class="{{if isplanTab 'active'}}"
       = link-to 'authenticated.billing.plan'
         = fa-icon "reorder" class="sidebar-icons"
         | Plans
 
-    li
-      = link-to 'authenticated.organization.members'
+    li local-class="{{if isMethodTab 'active'}}"
+      = link-to 'authenticated.billing.payment-methods'
         = fa-icon "credit-card-alt" class="sidebar-icons"
         | Payment Methods
 
-    li
-      = link-to 'authenticated.organization.teams'
+    li local-class="{{if isInvoicesTab 'active'}}"
+      = link-to 'authenticated.billing.invoices'
         = fa-icon "list-alt" class="sidebar-icons"
         | Invoices
 = outlet

@@ -9,8 +9,12 @@ const AuthenticatedBillingRoute = Route.extend(ScrollTopMixin, {
   store: service('store'),
   showNotification: false,
 
-  beforeModel: function(transition){
+  beforeModel(transition) {
     this.set('showNotification',!!transition.queryParams.success);
+    const showPayment = this.get('organization.selected.showPayment');
+    if(showPayment){
+      this.transitionTo('authenticated.billing.plan');
+    }
   },
 
   async model() {
