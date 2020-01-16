@@ -1,4 +1,4 @@
-.tabs.is-medium.is-boxed.margin-top.is-centered
+.tabs.is-medium.is-boxed.margin-top.is-centered local-class="billing-nav tabs is-boxed"
   ul
     li
       = link-to 'authenticated.billing.plan'
