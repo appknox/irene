@@ -1,0 +1,15 @@
+.billing-nav{
+  margin: 0 -10px;
+  padding: 20px 0;
+  background: #e4e2e2;
+  position: relative;
+  top: -10px;
+  &.tabs{
+    &.is-boxed{
+      ul{
+        border-bottom: none;
+        justify-content: unset;
+      }
+    }
+  }
+}

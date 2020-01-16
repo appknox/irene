@@ -1,12 +1,17 @@
 .pricing-box{
   opacity: 0.8;
   min-height: 350px;
-  flex: 0 0 calc(33.33333% - 1.2rem);
+  flex: 0 0 25rem;
   margin: 1rem 0;
   text-align: center;
   user-select: none;
   cursor: pointer;
   position: relative;
+
+  @media screen and  (max-width:1120px) {
+    flex: 0 0 calc(33.33333% - 1.2rem);
+  }
+
   &.card-focussed {
     opacity: 1;
     z-index: 2;
