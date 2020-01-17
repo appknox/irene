@@ -12,10 +12,10 @@ const formatCurrency = params => {
   const value = amount ? amount : 0;
 
   if(quantity){
-    return `${currency} ${(value/100)*quantity}`;
+    return `${currency} ${(value)*quantity}`;
   }
 
-  return `${currency} ${(value/100)}`;
+  return `${currency} ${(value)}`;
 
 };
 

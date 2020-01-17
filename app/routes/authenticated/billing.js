@@ -10,24 +10,33 @@ const AuthenticatedBillingRoute = Route.extend(ScrollTopMixin, {
   showNotification: false,
 
   beforeModel(transition) {
-    this.set('showNotification',!!transition.queryParams.success);
+    const hasSuccessParameter = !!transition.queryParams.success;
+    this.set('showNotification',hasSuccessParameter);
     const showPayment = this.get('organization.selected.showPayment');
-    if(showPayment){
+
+    if(hasSuccessParameter){
+      this.set('organization.selected.showPayment', true);
+    }
+
+    if(showPayment || hasSuccessParameter){
       this.transitionTo('authenticated.billing.plan');
     }
   },
 
   async model() {
     const organization = this.get('organization.selected');
-    const plans = await this.get('store').findAll('pricing-plan');
+    await this.get('store').findAll('pricing-plan');
+    const activePlans = await this.get('store').peekAll('pricing-plan').filter((plan)=>{
+      return plan.get('active') === true;
+    });
     const showNotification = this.get('showNotification');
-    const isJustifiedCenter = plans.get('length') <= 3;
+    const isJustifiedCenter = activePlans.get('length') <= 3;
     return {
       showBilling: organization.get('showBilling'),
       showPayment: organization.get('showPayment'),
       showNotification,
       hasPaymentHistory: false,
-      plans,
+      plans: activePlans,
       isJustifiedCenter
     }
   }

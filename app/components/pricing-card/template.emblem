@@ -2,21 +2,27 @@
   .content
     header
       h3 local-class="badge"
-        | Per App
+        | {{title-case plan.name}}
       p local-class="bold-price"
-        | {{format-currency plan.currency plan.amountDecimal}}
-        small
-          | /#{plan.interval}
+        | {{format-currency plan.currency plan.price}}
+        if plan.billingCycle
+          small
+            | /#{plan.billingCycle}
     p local-class="plan-description"
-      | #{plan.metadata.description}
-      ul local-class="plan-features"
-        li Scan some random App
-        li Get sparked by joy
-        li Go to a hill top
-        li Do a dope test
-        li Bahamas may be?
+      | #{plan.description}
+      div local-class="plan-features"
+        each plan.features as |feature|
+          div local-class="feature"
+            div local-class="list-indicator"
+              | ✓
+            div
+              | #{feature.text}
     footer
-      button Subscribe
+      button
+        if plan.billingCycle
+          | Subscribe
+        else
+          | Buy
 
 = modal-card class="input-modal" local-class="modal" isActive=showCheckoutModal title="Plan Details"
   .card-body
@@ -25,20 +31,20 @@
         .columns
           .column
             p local-class="price-plan"
-              | Per App #{plan.interval}ly
+              | Per App #{plan.billingCycle}ly
             p local-class="price-text"
               if plan.quantity
-                | {{format-currency plan.currency plan.amountDecimal plan.quantity}}
+                | {{format-currency plan.currency plan.price plan.quantity}}
               else
-                | {{format-currency plan.currency plan.amountDecimal quantity}}
+                | {{format-currency plan.currency plan.price quantity}}
           .column
             div local-class="quantity-wrapper {{if plan.quantity 'disabled'}}"
-              button local-class="{{if plan.quantity 'disabled'}}" click={action "decrementQuantity"} -
-              if plan.quantity
-                = input type="number" value=plan.quantity readonly=true
-              else
+              button local-class="{{unless plan.allowQuantityInput 'disabled'}}" click={action "decrementQuantity"} -
+              if plan.allowQuantityInput
                 = input type="number" value=quantity readonly=true
-              button local-class="{{if plan.quantity 'disabled'}}" click={action "incrementQuantity"} +
+              else
+                = input type="number" value=plan.quantity readonly=true
+              button local-class="{{unless plan.allowQuantityInput 'disabled'}}" click={action "incrementQuantity"} +
         .columns
           .column local-class="checkout-wrapper"
             input class="is-success" type="submit" value="Checkout"

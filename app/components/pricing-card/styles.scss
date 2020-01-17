@@ -23,7 +23,7 @@
   header{
 
     .badge{
-      background: #00ad9f;
+      background: #80C081;
       border-radius: 4px;
       color: #fff;
       display: inline-block;
@@ -63,14 +63,14 @@
   .plan-features{
     text-align: left;
     margin-top: 1em;
-    li{
-      margin-bottom:0.5em;
-      color: rgba(14, 30, 37, 0.87);
-      &::before{
-        background-color: #00ad9f;
+    .feature{
+      display: flex;
+      margin: 8px 0;
+      align-items: center;
+      .list-indicator{
+        background-color: #80C081;
         border-radius: 50%;
         color: #fff;
-        content: "✓";
         display: block;
         font-size: .618em;
         font-weight: 900;
@@ -82,6 +82,10 @@
         width: 1.618em;
         display: inline-block;
         margin-right: 0.8em;
+      }
+      li{
+        margin-bottom:0.5em;
+        color: rgba(14, 30, 37, 0.87);
       }
     }
   }
@@ -95,9 +99,9 @@
       font-size: 1.2em;
       font-weight: bold;
       color: #fff;
-      background: #41bdb2;
+      background: #80C081;
       &:hover,&:active,&:focus{
-        border: 1px solid #26b6aa;
+        border: 1px solid rgb(150, 199, 151);
         outline: none;
       }
     }
@@ -133,6 +137,8 @@
     border: 1px solid rgba(14, 30, 37, 0.4);
     padding: 2px;
     user-select: none;
+    display: flex;
+    justify-content: space-between;
     &.disabled{
       opacity: 0.5;
     }
