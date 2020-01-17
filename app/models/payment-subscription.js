@@ -10,9 +10,9 @@ export default DS.Model.extend({
   statusTextList : ['Active','Cancelled','Expired','Invalid Card','Errored'],
 
   plan: DS.attr(),
-  period: DS.attr(),
+  billingCycle: DS.attr('number'),
   createdOn: DS.attr('date'),
-  expiry: DS.attr('date'),
+  expiryDate: DS.attr('date'),
   nextBillingDate: DS.attr('date'),
   lastPaidOn: DS.attr('date'),
   quantityBought: DS.attr('number'),

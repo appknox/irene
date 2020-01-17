@@ -1,14 +1,40 @@
-.card class="full-width margin-top-bottom"
-  header class="card-header"
-    p class="card-header-title"
-      | Per App
-  .card-content
-    .content
-      | Exercitation pariatur velit dolore aliqua.
-      | Exercitation pariatur velit dolore aliqua.
-      | Ex aliqua culpa pariatur ea est. Ipsum id dolor aliquip ex do in adipisicing ut. Non Lorem ut pariatur minim minim cupidatat deserunt commodo anim.
-  footer class="card-footer"
-    button class="card-footer-item" Text 1
-    button class="card-footer-item" Text 2
-    button class="card-footer-item" Text 3
+if isLoading
+  = skeletal-loader
+else
+  each subscriptions as |subscription|
+    .card class="full-width margin-top-bottom" local-class="separated-cards card-section"
+      header class="card-header" local-class="card-head"
+        p class="card-header-title"
+          | #{subscription.plan.name}
+          span class="tag {{subscription.cssClass}}" local-class="status-tag"
+            | #{subscription.statusText}
+        p local-class="billing-cycle-info"
+          strong Billing Cycle :&nbsp;
+          | #{subscription.createdOn}
+          em &nbsp; To &nbsp;
+          | #{subscription.expiryDate}
+      .card-content
+        .content
+          div local-class="card-content"
+            div local-class="cost-info"
+              | #{subscription.plan.currency} #{subscription.plan.price} for #{subscription.plan.quantity} app(s) / #{subscription.billingCycle}
+            div local-class="usage-info"
+              div local-class="usage-meter"
+                div local-class="usage-fill" style="width:{{subscription.fillPercent}}"
+              div
+                | #{subscription.quantityUsed} / #{subscription.quantityBought} Used
+          div local-class="card-content"
+            div
+              strong Next Billing On : &nbsp;
+              | #{subscription.nextBillingDate}
+            div
+              strong Last Paid On : &nbsp;
+              | #{subscription.lastPaidOn}
+            div
+              strong Expires On : &nbsp;
+              | #{subscription.expiryDate}
+      footer class="card-footer"
+        button class="card-footer-item is-primary" local-class="card-footer-button" Cancel
+        button class="card-footer-item is-info" local-class="card-footer-button" Switch to Monthly
+        button class="card-footer-item is-success" local-class="card-footer-button" Add More
 
