@@ -19,15 +19,18 @@ const AuthenticatedBillingRoute = Route.extend(ScrollTopMixin, {
 
   async model() {
     const organization = this.get('organization.selected');
-    const plans = await this.get('store').findAll('pricing-plan');
+    await this.get('store').findAll('pricing-plan');
+    const activePlans = await this.get('store').peekAll('pricing-plan').filter((plan)=>{
+      return plan.get('active') === true;
+    });
     const showNotification = this.get('showNotification');
-    const isJustifiedCenter = plans.get('length') <= 3;
+    const isJustifiedCenter = activePlans.get('length') <= 3;
     return {
       showBilling: organization.get('showBilling'),
       showPayment: organization.get('showPayment'),
       showNotification,
       hasPaymentHistory: false,
-      plans,
+      plans: activePlans,
       isJustifiedCenter
     }
   }
