@@ -1,3 +1,8 @@
+h3 Subscription(s)
 = payment-subscription
+hr
+h3 One Time Purchase(s)
 = payment-onetime
+hr
+h3 Addon(s)
 = payment-add-on

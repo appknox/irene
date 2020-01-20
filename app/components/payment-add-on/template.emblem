@@ -1,13 +1,32 @@
-.card class="full-width margin-top-bottom"
-  header class="card-header"
-    p class="card-header-title"
-      | Add ons
-  .card-content
-    .content
-      | Exercitation pariatur velit dolore aliqua.
-      | Exercitation pariatur velit dolore aliqua.
-      | Ex aliqua culpa pariatur ea est. Ipsum id dolor aliquip ex do in adipisicing ut. Non Lorem ut pariatur minim minim cupidatat deserunt commodo anim.
-  footer class="card-footer"
-    button class="card-footer-item" Text 1
-    button class="card-footer-item" Text 2
-    button class="card-footer-item" Text 3
+if isLoading
+  = skeletal-loader
+else
+  each addons as |item|
+    .card class="full-width margin-top-bottom" local-class="separated-cards card-section"
+      header class="card-header" local-class="card-head"
+        p class="card-header-title"
+          | #{item.addon.name}
+          span class="tag {{item.cssClass}}" local-class="status-tag"
+            | #{item.statusText}
+      .card-content
+        .content local-class="card-content"
+          div
+            div local-class="cost-info"
+              | #{item.addon.currency} #{item.addon.price} / Scan
+          div
+            div class="margin-bottom20" local-class="scan-count-info"
+              p
+                strong Scans Left:&nbsp;
+                | #{item.scansRemaining}
+              p
+                strong Rescans Left:&nbsp;
+                | #{item.rescansRemaining}
+            div class="margin-bottom20" local-class="add-more-wrapper"
+                button class="is-success"
+                  i class="fa fa-plus"
+                  | &nbsp;add more
+            div local-class="expiry-wrapper"
+              div
+                strong Expires On : &nbsp;
+                | #{item.expiryDate}
+
