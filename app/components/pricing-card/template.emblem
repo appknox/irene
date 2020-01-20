@@ -2,7 +2,7 @@
   .content
     header
       h3 local-class="badge"
-        | #{plan.name}
+        | {{title-case plan.name}}
       p local-class="bold-price"
         | {{format-currency plan.currency plan.price}}
         if plan.billingCycle
