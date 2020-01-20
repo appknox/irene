@@ -1,15 +1,27 @@
-.card class="full-width margin-top-bottom"
-  header class="card-header"
-    p class="card-header-title"
-      | Per Scan
-  .card-content
-    .content
-      | Exercitation pariatur velit dolore aliqua.
-      | Exercitation pariatur velit dolore aliqua.
-      | Ex aliqua culpa pariatur ea est. Ipsum id dolor aliquip ex do in adipisicing ut. Non Lorem ut pariatur minim minim cupidatat deserunt commodo anim.
-  footer class="card-footer"
-    button class="card-footer-item" Text 1
-    button class="card-footer-item" Text 2
-    button class="card-footer-item" Text 3
-
+if isLoading
+  = skeletal-loader
+else
+  each oneTimes as |oneTime|
+    .card class="full-width margin-top-bottom" local-class="separated-cards card-section"
+      header class="card-header" local-class="card-head"
+        p class="card-header-title"
+          | #{oneTime.plan.name}
+          span class="tag {{oneTime.cssClass}}" local-class="status-tag"
+            | #{oneTime.statusText}
+        p local-class="billing-cycle-info"
+          strong Scans Left:&nbsp;
+          | #{oneTime.scansLeft}
+      .card-content
+        .content
+          div local-class="card-content"
+            div local-class="cost-info"
+              | #{oneTime.plan.currency} #{oneTime.plan.price} / Scan
+            div local-class="add-more-wrapper"
+              button class="is-success"
+                i class="fa fa-plus"
+                | &nbsp;add more
+          div local-class="card-content"
+            div
+              strong Expires On : &nbsp;
+              | #{oneTime.expiryDate}
 
