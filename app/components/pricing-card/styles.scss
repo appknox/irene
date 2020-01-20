@@ -23,7 +23,7 @@
   header{
 
     .badge{
-      background: #00ad9f;
+      background: #80C081;
       border-radius: 4px;
       color: #fff;
       display: inline-block;
@@ -68,7 +68,7 @@
       margin: 8px 0;
       align-items: center;
       .list-indicator{
-        background-color: #00ad9f;
+        background-color: #80C081;
         border-radius: 50%;
         color: #fff;
         display: block;
@@ -99,9 +99,9 @@
       font-size: 1.2em;
       font-weight: bold;
       color: #fff;
-      background: #41bdb2;
+      background: #80C081;
       &:hover,&:active,&:focus{
-        border: 1px solid #26b6aa;
+        border: 1px solid rgb(150, 199, 151);
         outline: none;
       }
     }
