@@ -1,0 +1,23 @@
+if isLoading
+  = skeletal-loader
+else
+  table local-class="card-table"
+    thead
+      th Card
+      th Added On
+      th Expiry
+      th Status
+      th
+    tbody
+      each cards as |card|
+        tr
+          td
+            i class="fa  fa-credit-card"
+            | &nbsp;&nbsp;#{card.cardCompany} ends in #{card.lastFour}
+          td #{card.createdOn}
+          td #{card.expirationMonth}/#{card.expirationYear}
+          td #{card.statusText}
+          td class="has-text-centered"
+            button
+              i class="fa fa-trash" title="Remove Card"
+
