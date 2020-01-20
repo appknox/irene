@@ -1,4 +1,6 @@
-if model.showPayment
-  = payment-details
-else
-  = pricing-cards pricingPlans=model.plans isJustifiedCenter=model.isJustifiedCenter
+// if model.isPaymentDone
+//   = payment-details
+// else
+//   = pricing-cards pricingPlans=model.plans isJustifiedCenter=model.isJustifiedCenter
+
+= pricing-cards pricingPlans=model.plans isJustifiedCenter=model.isJustifiedCenter

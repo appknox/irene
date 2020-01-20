@@ -14,15 +14,15 @@
         each plan.features as |feature|
           div local-class="feature"
             div local-class="list-indicator"
-              | ✓
+              t "billingCardTick"
             div
               | #{feature.text}
     footer
       button
         if plan.billingCycle
-          | Subscribe
+          t "billingSubscribe"
         else
-          | Buy
+          t "billingBuy"
 
 = modal-card class="input-modal" local-class="modal" isActive=showCheckoutModal title="Plan Details"
   .card-body
@@ -31,7 +31,12 @@
         .columns
           .column
             p local-class="price-plan"
-              | Per App #{plan.billingCycle}ly
+              if plan.billingCycle
+                t "perApp"
+                span
+                  | &nbsp;/&nbsp;#{plan.billingCycle}
+              else
+                t "perScan"
             p local-class="price-text"
               if plan.quantity
                 | {{format-currency plan.currency plan.price plan.quantity}}
@@ -47,5 +52,5 @@
               button local-class="{{unless plan.allowQuantityInput 'disabled'}}" click={action "incrementQuantity"} +
         .columns
           .column local-class="checkout-wrapper"
-            input class="is-success" type="submit" value="Checkout"
+            input class="is-success" type="submit" value="Checkout" disabled=getStripeSessionId.isRunning
 

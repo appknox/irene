@@ -1,3 +1,10 @@
+.card-head{
+  background: #424651;
+  color: #fff;
+  .title{
+    color:#fff;
+  }
+}
 .card-section{
   &.separated-cards{
     margin-bottom: 3rem;

@@ -1,0 +1,23 @@
+if isLoading
+  = skeletal-loader
+else
+  table local-class="card-table"
+    thead
+      th Invoice Id
+      th Created On
+      th
+    tbody
+      each invoices as |item|
+        tr
+          td #{item.invoiceId}
+          td #{item.createdOn}
+          // #{item. createdOn}
+          td class="has-text-centered"
+            button class="is-primary"
+              i class="fa fa-download" title="Download Invoice"
+              | &nbsp;&nbsp;Download
+            button class="is-info"
+              i class="fa fa-eye" title="View Invoice"
+              | &nbsp;&nbsp;View
+
+

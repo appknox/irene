@@ -4,7 +4,7 @@ else
   each oneTimes as |oneTime|
     .card class="full-width margin-top-bottom" local-class="separated-cards card-section"
       header class="card-header" local-class="card-head"
-        p class="card-header-title"
+        p class="card-header-title" local-class="title"
           | #{oneTime.plan.name}
           span class="tag {{oneTime.cssClass}}" local-class="status-tag"
             | #{oneTime.statusText}
