@@ -1,0 +1,23 @@
+.card-table{
+  td,tr{
+    border: none;
+  }
+  th{
+    border-color: #e4e2e2;
+    background: #424651;
+    color: #fff;
+    &:first-of-type{
+      border-radius: 9px 0 0 0;
+    }
+    &:last-of-type{
+      border-radius: 0 9px 0 0;
+    }
+  }
+  tr{
+    &:nth-child(even){
+      td{
+        background: #f5f5f5;
+      }
+    }
+  }
+}
