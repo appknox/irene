@@ -9,7 +9,7 @@ export default DS.Model.extend({
   DEFAULT_STATUS: 4,
   statusTextList : ['Active','Cancelled','Expired','Invalid Card','Errored'],
 
-  plan: DS.belongsTo('pricing-plan'),
+  plan: DS.attr(),
   billingCycle: DS.attr('number'),
   createdOn: DS.attr('date'),
   expiryDate: DS.attr('date'),

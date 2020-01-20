@@ -6,12 +6,14 @@ export default DS.Model.extend({
   DEFAULT_STATUS: 2,
   statusTextList : ['Active','Expired','Errored'],
 
-  plan: DS.attr(),
+  addon: DS.attr(),
   createdOn: DS.attr('date'),
   expiryDate: DS.attr('date'),
   lastPaidOn: DS.attr('date'),
-  quantityPurchased: DS.attr('number'),
-  quantityRemaining: DS.attr('date'),
+  scansPurchased: DS.attr('number'),
+  scansRemaining: DS.attr('number'),
+  rescansPurchased: DS.attr('number'),
+  rescansRemaining: DS.attr('number'),
   status: DS.attr('number'),
 
   statusText: computed('status',function(){
