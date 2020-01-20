@@ -4,7 +4,7 @@ else
   each subscriptions as |subscription|
     .card class="full-width margin-top-bottom" local-class="separated-cards card-section"
       header class="card-header" local-class="card-head"
-        p class="card-header-title"
+        p class="card-header-title" local-class="title"
           | #{subscription.plan.name}
           span class="tag {{subscription.cssClass}}" local-class="status-tag"
             | #{subscription.statusText}

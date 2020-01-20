@@ -4,7 +4,7 @@ else
   each addons as |item|
     .card class="full-width margin-top-bottom" local-class="separated-cards card-section"
       header class="card-header" local-class="card-head"
-        p class="card-header-title"
+        p class="card-header-title" local-class="title"
           | #{item.addon.name}
           span class="tag {{item.cssClass}}" local-class="status-tag"
             | #{item.statusText}
