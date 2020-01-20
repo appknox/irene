@@ -1,0 +1,12 @@
+if isLoading
+  = skeletal-loader
+else
+  div local-class="org-credit-wrapper"
+    div
+      h5 Organization Credit
+      p
+        | you have a credit of &nbsp;
+        strong #{orgCredit.currency} #{orgCredit.credits}
+      p
+        | Awarded on &nbsp;
+        strong #{orgCredit.updatedOn}
