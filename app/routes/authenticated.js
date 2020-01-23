@@ -1,5 +1,6 @@
 import { singularize } from 'ember-inflector';
 import { debug } from '@ember/debug';
+import { getOwner } from '@ember/application';
 
 import ENUMS from 'irene/enums';
 import { CSBMap } from 'irene/router';
@@ -104,12 +105,15 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
     const that = this;
     const store = this.get("store");
     const realtime = this.get("realtime");
-
+    const owner = getOwner(store);
     const allEvents = {
       object(data) {
         if(data.id && data.type) {
           try {
             var modelName = singularize(data.type);
+            if(!owner.factoryFor(`model:${modelName}`)) {
+              return
+            }
             store.findRecord(modelName, data.id);
           } catch (e) {
             debug(e);
@@ -122,6 +126,9 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
         if(data.id && data.type) {
           try {
             var modelName = singularize(data.type);
+            if(!owner.factoryFor(`model:${modelName}`)) {
+              return
+            }
             store.findRecord(modelName, data.id);
           } catch (e) {
             debug(e);
