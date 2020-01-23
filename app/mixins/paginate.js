@@ -40,7 +40,6 @@ const PaginateMixin = Mixin.create({
 
   objects: computed('version', function () {
     let query;
-    window.scrollTo(0, 0);
     if (this.get('isJsonApiPagination')) {
       const query_limit = this.get("limit");
       const query_offset = this.get("offset");

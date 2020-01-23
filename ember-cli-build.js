@@ -39,6 +39,9 @@ module.exports = function (defaults) {
     sourcemaps: { enabled: false },
     'ember-cli-babel': {
       includePolyfill: true
+    },
+    'ember-date-components': {
+      'includeCSS': false
     }
   });
 
