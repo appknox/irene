@@ -8,8 +8,8 @@ $custom-picker-radius: 0 0 11px 11px;
     background: #fff;
     .date-picker__trigger {
       &.ember-basic-dropdown-trigger{
-        border: 1px solid #ccc;
-        min-width: 230px;
+        border: 1px solid #f0f1f3;
+        min-width: 17.5rem;
         button{
           &.date-picker__button{
             border: none;

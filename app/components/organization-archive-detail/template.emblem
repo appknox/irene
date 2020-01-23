@@ -1,25 +1,29 @@
-tr local-class="archive-row"
-    td
-      | #{moment-format archive.createdOn 'DD MMM YYYY'}
-    td
-      | #{archive.generatedBy.username}
+tr class="archive-row-{{status}}"
+  td
+    = moment-format archive.createdOn 'DD MMM YYYY'
 
-    td.text-lightgray
-      | #{moment-format archive.fromDate 'DD MMM YYYY' } ~ #{moment-format archive.toDate 'DD MMM YYYY'}
+  td
+    | #{archive.generatedBy.username}
 
-    td.text-lightgray
-      if archive.isAvailable
-        if downloadArchive.isRunning
-          i.fa class="fa-spinner fa-spin" local-class="status-inprogess" title="processing..."
-        else
-          i.fa class="fa-download" local-class="status-available" title="Download" click={(perform downloadArchive)}
-        span local-class="word-margin"
-          t "expires"
-        moment-from-now archive.availableUntil
-      if archive.isExpired
-        =t "expired"
-      if archive.isInProgress
-        span local-class="status-inprogress"
-          i.fa class="fa-spinner fa-spin"
-          span local-class="progress-percent"
+  td
+    | #{moment-format archive.fromDate 'DD MMM YYYY' } ~ #{moment-format archive.toDate 'DD MMM YYYY'}
+
+  td.align-middle
+    if archive.isAvailable
+      if downloadArchive.isRunning
+        = fa-icon "spinner fa-spin" title="processing..."
+      else
+        a.black-text title="Download" click={(perform downloadArchive)}
+          = fa-icon "download"
+        em.font-small.text-lightgray.margin-l-3q
+          span.margin-r-q
+            = t "expires"
+          = moment-from-now archive.availableUntil
+    if archive.isExpired
+      em.font-small
+        = t "expired"
+    if archive.isInProgress
+      span local-class="status-inprogress"
+        = fa-icon "spinner fa-spin"
+        span.margin-l-h
           | #{archive.progressPercent}%

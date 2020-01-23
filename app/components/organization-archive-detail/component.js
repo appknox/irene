@@ -4,19 +4,19 @@ import { t } from 'ember-intl';
 import { inject as service } from '@ember/service';
 
 export default Component.extend({
-  tagName: '',
   notify: service('notification-messages-service'),
   tdownloadFailed: t('organizationArchiveDownloadErrored'),
+  tagName: '',
+
+  archive: null,
+  status: '',
 
   downloadArchive: task(function * () {
     const downloadURL = yield this.get('archive').downloadURL();
-
-    if(downloadURL){
+    if (downloadURL) {
       window.open(downloadURL);
       return;
     }
     this.get('notify').error(this.get('tdownloadFailed'));
-
-  }).evented()
-
+  }),
 });

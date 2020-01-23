@@ -1,18 +1,13 @@
-if archives.length
-    h5 class="bold black-text" local-class="org-archive-list__head"
-      t "organizationArchiveTableHeading"
-    table class="org-table"
-        thead local-class="org-archive-list__table-head"
-            th
-              t "organizationTableCreatedOn"
-            th
-              t "organizationTableGeneratedBy"
-            th
-              t "organizationTableDuration"
-            th
-        tbody
-            each archives as |archive|
-                = organization-archive-detail archive=archive
-else
-    h6.text-ligthgray local-class="no-data"
-        =t "noArchive"
+table.org-table
+  thead local-class="org-archive-list__table-head"
+    th
+      = t "organizationTableCreatedOn"
+    th
+      = t "organizationTableGeneratedBy"
+    th
+      = t "organizationTableDuration"
+    th.text-centre
+      = t "download"
+  tbody
+    each archives as |archive|
+      = organization-archive-detail archive=archive status=(if archive.isExpired 'expired' 'available')
