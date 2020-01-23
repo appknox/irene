@@ -1,6 +1,6 @@
 import { moduleForComponent, test } from 'ember-qunit';
 
-moduleForComponent('organization-archive-table', 'Integration | Component | organization archive table', {
+moduleForComponent('organization-archive-detail', 'Integration | Component | organization archive table', {
   integration: true
 });
 

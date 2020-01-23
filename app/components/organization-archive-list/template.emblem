@@ -12,7 +12,7 @@ if archives.length
             th
         tbody
             each archives as |archive|
-                = organization-archive-table archive=archive
+                = organization-archive-detail archive=archive
 else
     h6.text-ligthgray local-class="no-data"
         =t "noArchive"
