@@ -2,29 +2,26 @@
   .column
     .org-settings-subtitle.black-text.is-fullwidth
       = t "organizationArchive"
-.columns
-  .column
     p
       = t "organizationArchiveDescription"
-.columns class="margin-top10"
+.columns.margin-t-q
   .column
-    div class="bordered-box text-centre padding-v-1 fill-lightgray"
-      = date-picker class="custom-styled-picker"  maxDate=maxDate range=true options=datepickerOptions action=(action 'setDuration') as |selectedDates|
-        button local-class="date-btn" {{unless selectedDates.firstObject 'From Date'}} {{moment-format selectedDates.firstObject 'DD MMM YYYY'}}
-        span local-class='date-split'
-        | ~
-        button local-class="date-btn" {{unless selectedDates.lastObject 'To Date'}} {{moment-format selectedDates.lastObject 'DD MMM YYYY'}}
-      if tiggerGenerateArchive.isRunning
-        button class='is-primary highlighted-button' local-class="generate-btn"
-          i class="fa fa-spinner fa-spin"
+    .padding-v-1.text-centre local-class="generate-box"
+      = date-picker class="custom-styled-picker"  maxDate=maxDate range=true options=datepickerOptions action=(action "setDuration") as |selectedDates|
+        .align-middle
+          = fa-icon "calendar" class="font-small" title="Select date range"
+          button local-class="date-btn" {{unless selectedDates.firstObject "From Date"}} {{moment-format selectedDates.firstObject "DD MMM YYYY"}}
+          span
+            | ~
+          button local-class="date-btn" {{unless selectedDates.lastObject "To Date"}} {{moment-format selectedDates.lastObject "DD MMM YYYY"}}
+
+      button.is-primary.highlighted-button.margin-l-1 click={(perform tiggerGenerateArchive)} disabled=tiggerGenerateArchive.isRunning
+        if tiggerGenerateArchive.isRunning
+          .fa-font-size
+            = fa-icon "spinner fa-spin"
+          | &nbsp;
           = t "processing"
-      else
-        button class='is-primary highlighted-button' local-class="generate-btn" click={(perform tiggerGenerateArchive)}
+        else
           = t "organizationArchiveExport"
-.columns
-  .column
-    = organization-archive-list archives=sortedObjects
-.columns
-  .column
-    .margin-t-q
-      = partial "paginate"
+
+= organization-archive-table

@@ -1,22 +1,10 @@
-.generate-btn{
-  margin-left: 1em;
+.generate-box {
+  background: #f9f9f9;
+  border: 1px solid #f0f1f3;
 }
-.date-btn{
+.date-btn {
   border-radius: 0;
   border: none;
-}
-.date-split{
-  margin-top: 1.5rem;
-  display: inline-block;
-}
-.mid-aligned{
-  vertical-align: middle;
-  display: inline-block;
-  padding: 5px;
-}
-.date-btn,
-.date-split,
-.mid-aligned{
   cursor: pointer;
   user-select: none;
 }
