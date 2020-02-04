@@ -12,9 +12,7 @@
     "card": "^2.0.3",
     "urijs": "^1.18.4",
     "socket.io-client": "^1.7.2",
-    "clipboard": "^1.7.1",
-    "chart.js": "^2.7.1",
-    "chartjs": "2.1.6"
+    "clipboard": "^1.7.1"
   },
   "resolutions": {
     "bohemia": "^0.8.15",

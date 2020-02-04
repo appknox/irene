@@ -70,7 +70,6 @@ header.card-header
     .columns.app-risk-info class=isReverse:is-reverse
       .column.flex-center
         = ember-chart type='doughnut' data=file.doughnutData width=150 height=150 options=chartOptions
-      .file-details-class
       .column
         .lowercase-text.text-centre
           .overflow.ellipse

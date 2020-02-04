@@ -13,7 +13,8 @@ const FileOverviewComponent = Component.extend({
   chartOptions: computed(() =>
     ({
       legend: { display: false },
-      animation: {animateRotate: false}
+      animation: {animateRotate: false},
+      responsive: false
     })
   )
 });

@@ -100,7 +100,8 @@ const FileHeaderComponent = Component.extend({
   chartOptions: (() =>
     ({
       legend: { display: false },
-      animation: {animateRotate: false}
+      animation: {animateRotate: false},
+      responsive: false,
     })
   ).property(),
 
@@ -114,6 +115,7 @@ const FileHeaderComponent = Component.extend({
         }
       },
       scales: { yAxes: [{ ticks: { beginAtZero:true, stepSize: 3 } }]},
+      responsive: false,
     })
   ).property(),
 

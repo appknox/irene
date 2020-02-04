@@ -74,11 +74,5 @@ module.exports = function (defaults) {
 
   app.import('node_modules/billboard.js/dist/billboard.css');
 
-
-  /*
-   * including chart.js
-   */
-  app.import('bower_components/chart.js/dist/Chart.js');
-
   return app.toTree();
 };
