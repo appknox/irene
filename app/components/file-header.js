@@ -8,6 +8,7 @@ import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 import { t } from 'ember-intl';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
+import ClipboardJS from 'clipboard';
 
 const FileHeaderComponent = Component.extend({
 
@@ -123,7 +124,7 @@ const FileHeaderComponent = Component.extend({
     const tPasswordCopied = this.get("tPasswordCopied");
     const tPleaseTryAgain = this.get("tPleaseTryAgain");
     // eslint-disable-next-line no-undef
-    const clipboard = new Clipboard('.copy-password');
+    const clipboard = new ClipboardJS('.copy-password');
     this.set("clipboard", clipboard)
     clipboard.on('success', (e) => {
       this.get("notify").info(tPasswordCopied);

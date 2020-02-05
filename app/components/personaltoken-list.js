@@ -4,6 +4,7 @@ import { isEmpty } from '@ember/utils';
 import ENV from 'irene/config/environment';
 import PaginateMixin from 'irene/mixins/paginate';
 import { t } from 'ember-intl';
+import ClipboardJS from 'clipboard';
 
 const PersonaltokenListComponent = Component.extend(PaginateMixin, {
 
@@ -73,7 +74,7 @@ const PersonaltokenListComponent = Component.extend(PaginateMixin, {
     const tTokenCopied = this.get('tTokenCopied');
     const tPleaseTryAgain = this.get('tPleaseTryAgain');
     // eslint-disable-next-line no-undef
-    const clipboard = new Clipboard('.copy-token');
+    const clipboard = new ClipboardJS('.copy-token');
     this.set('clipboard', clipboard);
 
     clipboard.on('success', (e) => {
@@ -87,8 +88,7 @@ const PersonaltokenListComponent = Component.extend(PaginateMixin, {
     const clipboard = this.get('clipboard');
     clipboard.destroy();
   }
-}
-);
+});
 
 
 export default PersonaltokenListComponent;

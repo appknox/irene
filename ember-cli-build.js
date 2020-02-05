@@ -67,10 +67,6 @@ module.exports = function (defaults) {
    * card includes
    */
   app.import('bower_components/card/dist/card.js');
-  /*
-   * including clipboard
-   */
-  app.import('bower_components/clipboard/dist/clipboard.min.js');
 
   app.import('node_modules/billboard.js/dist/billboard.css');
 
