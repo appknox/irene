@@ -16,7 +16,6 @@
     "start": "cross-env IRENE_API_HOST=http://localhost:8000 IRENE_API_SOCKET_PATH=http://localhost:8008 ember server",
     "startprod": "cross-env IRENE_API_HOST=https://api.appknox.com IRENE_API_SOCKET_PATH=https://socket.appknox.com IRENE_DEVICEFARM_URL=wss://devicefarm.appknox.com ember server",
     "test": "ember test",
-    "postinstall": "bower install",
     "deploy": "ember deploy production --verbose=true --activate=true --show-progress=true",
     "deploy:staging": "ember deploy staging --verbose=true --activate=true --show-progress=true",
     "deploy:sequelstring": "ember deploy sequelstring --verbose=true --activate=true --show-progress=true",
@@ -25,7 +24,6 @@
   "devDependencies": {
     "@appknox/ember-cli-intl-tel-input": "^1.0.14",
     "@appknox/ember-pace": "^1.0.1",
-    "bower": "^1.8.8",
     "broccoli-asset-rev": "^3.0.0",
     "cross-env": "^6.0.3",
     "ember-ajax": "^5.0.0",
@@ -92,6 +90,7 @@
     "loader.js": "^4.0.1",
     "mock-socket": "9.0.2",
     "node-sass": "^4.13.0",
+    "node-sass-tilde-importer": "^1.0.2",
     "phantomjs-prebuilt": "^2.1.14"
   },
   "engines": {
