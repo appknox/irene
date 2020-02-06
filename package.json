@@ -16,7 +16,6 @@
     "start": "cross-env IRENE_API_HOST=http://localhost:8000 IRENE_API_SOCKET_PATH=http://localhost:8008 ember server",
     "startprod": "cross-env IRENE_API_HOST=https://api.appknox.com IRENE_API_SOCKET_PATH=https://socket.appknox.com IRENE_DEVICEFARM_URL=wss://devicefarm.appknox.com ember server",
     "test": "ember test",
-    "postinstall": "bower install",
     "deploy": "ember deploy production --verbose=true --activate=true --show-progress=true",
     "deploy:staging": "ember deploy staging --verbose=true --activate=true --show-progress=true",
     "deploy:sequelstring": "ember deploy sequelstring --verbose=true --activate=true --show-progress=true",
@@ -25,7 +24,7 @@
   "devDependencies": {
     "@appknox/ember-cli-intl-tel-input": "^1.0.14",
     "@appknox/ember-pace": "^1.0.1",
-    "bower": "^1.8.8",
+    "bohemia": "^0.9.0",
     "broccoli-asset-rev": "^3.0.0",
     "cross-env": "^6.0.3",
     "ember-ajax": "^5.0.0",
@@ -39,7 +38,7 @@
     "ember-cli-autoprefixer": "0.8.1",
     "ember-cli-babel": "^7.8.0",
     "ember-cli-bourbon": "2.0.1",
-    "ember-cli-chartjs": "^2.4.0",
+    "ember-cli-chart": "^3.6.0",
     "ember-cli-code-coverage": "v1.0.0-beta.8",
     "ember-cli-dependency-checker": "^3.2.0",
     "ember-cli-deploy": "1.0.2",
@@ -92,6 +91,7 @@
     "loader.js": "^4.0.1",
     "mock-socket": "9.0.2",
     "node-sass": "^4.13.0",
+    "node-sass-tilde-importer": "^1.0.2",
     "phantomjs-prebuilt": "^2.1.14"
   },
   "engines": {
@@ -100,7 +100,7 @@
   "dependencies": {
     "@novnc/novnc": "^1.1.0",
     "billboard.js": "^1.9.5",
-    "clipboard": "^1.7.1",
+    "clipboard": "^2.0.4",
     "ember-cli-document-title": "^0.4.0",
     "ember-radio-button": "^2.0.1",
     "intl-tel-input": "^14.0.2",

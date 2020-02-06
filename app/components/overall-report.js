@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import { inject as service } from '@ember/service';
-import {bb} from 'billboard.js';
+import {bb} from 'billboard.js/dist/billboard.min.js';
 import moment from 'moment';
 import { observer } from '@ember/object';
 

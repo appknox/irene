@@ -1,5 +1,6 @@
 'use strict';
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+var tildeImporter = require('node-sass-tilde-importer');
 
 var environment = EmberApp.env();
 var minifyEnabled = environment === "production" || environment === "staging" || environment === "whitelabel";
@@ -17,11 +18,9 @@ module.exports = function (defaults) {
       exclude: ['runtimeconfig.js']
     },
     sassOptions: {
+      importer: tildeImporter,
       implementation: require("node-sass"),
-      extension: 'sass',
-      includePaths: [
-        'bower_components/bohemia/'
-      ]
+      extension: 'sass'
     },
     cssModules: {
       intermediateOutputPath: 'app/styles/_modules.scss'
@@ -62,23 +61,6 @@ module.exports = function (defaults) {
   // modules that you would like to import into your application
   // please specify an object with the list of modules as keys
   // along with the exports of each module as its value.
-
-  /*
-   * card includes
-   */
-  app.import('bower_components/card/dist/card.js');
-  /*
-   * including clipboard
-   */
-  app.import('bower_components/clipboard/dist/clipboard.min.js');
-
-  app.import('node_modules/billboard.js/dist/billboard.css');
-
-
-  /*
-   * including chart.js
-   */
-  app.import('bower_components/chart.js/dist/Chart.js');
 
   return app.toTree();
 };
