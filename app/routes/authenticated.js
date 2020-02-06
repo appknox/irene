@@ -44,7 +44,6 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
   },
 
   async afterModel(user){
-    let error;
     const company =
         this.get("org.selected.data.name") ||
         user.get("email").replace(/.*@/, "").split('.')[0];
@@ -59,11 +58,22 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
     };
     triggerAnalytics('login', data);
     chat.setUserEmail(user.get("email"), user.get("crispHash"));
-
     chat.setUserCompany(company);
+    await this.configureRollBar(user);
+    await this.configurePendo(user);
 
+    const trial = this.get("trial");
+    trial.set("isTrial", user.get("isTrial"));
+
+    this.get('notify').setDefaultAutoClear(ENV.notifications.autoClear);
+    this.set('intl.locale', user.get("lang"));
+    this.get('moment').changeLocale(user.get("lang"));
+
+    await this.configureSocket(user);
+  },
+
+  async configureRollBar (user) {
     try {
-      // eslint-disable-next-line no-undef
       this.get('rollbar.notifier').configure({
         payload: {
           person: {
@@ -73,7 +83,13 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
           }
         }
       });
-    } catch (e) { error = e; }
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+    }
+  },
+
+  async configurePendo(user) {
     try {
       // eslint-disable-next-line no-undef
       pendo.initialize({
@@ -86,22 +102,16 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
         }
       });
 
-    } catch (e) { error = e; }
-    // eslint-disable-next-line no-console
-    console.log(error);
-
-    const trial = this.get("trial");
-    trial.set("isTrial", user.get("isTrial"));
-
-    this.get('notify').setDefaultAutoClear(ENV.notifications.autoClear);
-
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+    }
+  },
+  async configureSocket(user) {
     const socketId = user != null ? user.get("socketId") : undefined;
     if (isEmpty(socketId)) {
       return;
     }
-    this.set('intl.locale', user.get("lang"));
-    this.get('moment').changeLocale(user.get("lang"));
-
     const that = this;
     const store = this.get("store");
     const realtime = this.get("realtime");
@@ -119,7 +129,7 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
             debug(e);
           }
         }
-        debug(data);
+        debug(JSON.stringify(data));
         store.pushPayload({data});
       },
       newobject(data) {
@@ -134,7 +144,7 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
             debug(e);
           }
         }
-        debug(data);
+        debug(JSON.stringify(data));
         store.pushPayload({data});
       },
       message(data) {
@@ -166,20 +176,18 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
         realtime.set("namespace", data.namespace);
       }
     };
-
-    const socket = this.get('socketIOService').socketFor(ENV.socketPath);
-
-    socket.emit("subscribe", {room: socketId});
-    return (() => {
-      const result = [];
-      for (let key in allEvents) {
-        const value = allEvents[key];
-        result.push(socket.on(key, value));
-      }
-      return result;
-    })();
+    const socket = this.get('socketIOService').socketFor(ENV.socketPath, {
+      path: '/websocket'
+    });
+    for (let key in allEvents) {
+      const value = allEvents[key];
+      socket.on(key, value);
+    }
+    socket.on('connect', () => {
+      debug("Connecting to room: " + socketId);
+      socket.emit("subscribe", {room: socketId});
+    });
   },
-
   actions: {
 
     willTransition(transition) {
