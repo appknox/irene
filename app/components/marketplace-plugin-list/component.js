@@ -12,6 +12,7 @@ export default Component.extend({
   tJenkinsPipeline: t("jenkinsPipeline"),
   tCircleCIPipeline: t("circleCIPipeline"),
   tBitbucketPipeline: t("bitbucketPipeline"),
+  tBitriseWorkflow: t("bitriseWorkflow"),
   tAppCenterPipeline: t("appCenterPipeline"),
   tViewIntegrationInstructions: t("viewIntegrationInstructions"),
   tInstallAppknoxPluginTo: t("installAppknoxPluginTo"),
@@ -59,7 +60,15 @@ export default Component.extend({
         "link": "",
         "published": false,
         "instructions": htmlSafe(constants.appCenterInstructions)
-      }
+      },
+      {
+        "title": this.get("tBitriseWorkflow"),
+        "description": this.get("tViewIntegrationInstructions"),
+        "logo": "images/bitrise-icon.png",
+        "link": "",
+        "published": false,
+        "instructions": htmlSafe(constants.bitriseInstructions)
+      },
     ]
   }),
 });
