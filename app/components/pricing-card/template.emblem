@@ -52,5 +52,5 @@
               button local-class="{{unless plan.allowQuantityInput 'disabled'}}" click={action "incrementQuantity"} +
         .columns
           .column local-class="checkout-wrapper"
-            input class="is-success" type="submit" value="Checkout"
+            input class="is-success" type="submit" value="Checkout" disabled=getStripeSessionId.isRunning
 
