@@ -10,7 +10,9 @@ const AuthenticatedBillingRoute = Route.extend(ScrollTopMixin, {
   showNotification: false,
 
   beforeModel(transition) {
-    const hasSuccessParameter = !!transition.queryParams.success;
+    const hasSuccessParameter =
+      transition.queryParams.success &&
+      transition.queryParams.success === "true";
     this.set("showNotification", hasSuccessParameter);
     const isPaymentDone = this.get("organization.selected.isPaymentDone");
 
@@ -18,9 +20,9 @@ const AuthenticatedBillingRoute = Route.extend(ScrollTopMixin, {
       this.set("organization.selected.isPaymentDone", true);
     }
 
-    if (isPaymentDone || hasSuccessParameter) {
-      this.transitionTo("authenticated.billing.plan");
-    }
+    // if (isPaymentDone || hasSuccessParameter) {
+    //   this.transitionTo("authenticated.billing.plan");
+    // }
   },
 
   async model() {
