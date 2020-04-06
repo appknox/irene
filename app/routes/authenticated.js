@@ -1,62 +1,63 @@
-import { singularize } from 'ember-inflector';
-import { debug } from '@ember/debug';
-import { getOwner } from '@ember/application';
+import { singularize } from "ember-inflector";
+import { debug } from "@ember/debug";
+import { getOwner } from "@ember/application";
 
-import ENUMS from 'irene/enums';
-import { CSBMap } from 'irene/router';
-import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
-import * as chat from 'irene/utils/chat';
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
-
+import ENUMS from "irene/enums";
+import { CSBMap } from "irene/router";
+import ENV from "irene/config/environment";
+import triggerAnalytics from "irene/utils/trigger-analytics";
+import * as chat from "irene/utils/chat";
+import AuthenticatedRouteMixin from "ember-simple-auth/mixins/authenticated-route-mixin";
 
 const { location } = window;
 
-import { inject as service } from '@ember/service';
-import { isEmpty } from '@ember/utils';
-import Route from '@ember/routing/route';
+import { inject as service } from "@ember/service";
+import { isEmpty } from "@ember/utils";
+import Route from "@ember/routing/route";
 
 const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
-
   lastTransition: null,
   intl: service(),
-  me: service('me'),
+  me: service("me"),
   moment: service(),
   session: service(),
   realtime: service(),
   trial: service(),
-  org: service('organization'),
-  analytics: service('analytics'),
-  socketIOService: service('socket-io'),
-  rollbar: service('rollbar'),
+  org: service("organization"),
+  analytics: service("analytics"),
+  socketIOService: service("socket-io"),
+  rollbar: service("rollbar"),
 
-  beforeModel(transition){
+  beforeModel(transition) {
     this.set("lastTransition", transition);
     return this._super(transition);
   },
 
   async model() {
     const userId = this.get("session.data.authenticated.user_id");
-    await this.get('store').findAll('Vulnerability');
-    await this.get('org').load();
-    await this.get('analytics').load();
-    return this.get('store').find('user', userId);
+    await this.get("store").findAll("Vulnerability");
+    await this.get("org").load();
+    await this.get("analytics").load();
+    return this.get("store").find("user", userId);
   },
 
-  async afterModel(user){
+  async afterModel(user) {
     const company =
-        this.get("org.selected.data.name") ||
-        user.get("email").replace(/.*@/, "").split('.')[0];
-    const membership = await this.get('me.membership');
+      this.get("org.selected.data.name") ||
+      user
+        .get("email")
+        .replace(/.*@/, "")
+        .split(".")[0];
+    const membership = await this.get("me.membership");
     const data = {
       userId: user.get("id"),
       userName: user.get("username"),
       userEmail: user.get("email"),
-      userRole: membership.get('roleDisplay'),
+      userRole: membership.get("roleDisplay"),
       accountId: this.get("org.selected.id"),
       accountName: company
     };
-    triggerAnalytics('login', data);
+    triggerAnalytics("login", data);
     chat.setUserEmail(user.get("email"), user.get("crispHash"));
     chat.setUserCompany(company);
     await this.configureRollBar(user);
@@ -65,16 +66,16 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
     const trial = this.get("trial");
     trial.set("isTrial", user.get("isTrial"));
 
-    this.get('notify').setDefaultAutoClear(ENV.notifications.autoClear);
-    this.set('intl.locale', user.get("lang"));
-    this.get('moment').changeLocale(user.get("lang"));
+    this.get("notify").setDefaultAutoClear(ENV.notifications.autoClear);
+    this.set("intl.locale", user.get("lang"));
+    this.get("moment").changeLocale(user.get("lang"));
 
     await this.configureSocket(user);
   },
 
-  async configureRollBar (user) {
+  async configureRollBar(user) {
     try {
-      this.get('rollbar.notifier').configure({
+      this.get("rollbar.notifier").configure({
         payload: {
           person: {
             id: user.get("id"),
@@ -98,10 +99,13 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
           email: user.get("email")
         },
         account: {
-          id: user.get("email").split("@").pop().trim()
+          id: user
+            .get("email")
+            .split("@")
+            .pop()
+            .trim()
         }
       });
-
     } catch (e) {
       // eslint-disable-next-line no-console
       console.log(e);
@@ -118,11 +122,11 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
     const owner = getOwner(store);
     const allEvents = {
       object(data) {
-        if(data.id && data.type) {
+        if (data.id && data.type) {
           try {
             var modelName = singularize(data.type);
-            if(!owner.factoryFor(`model:${modelName}`)) {
-              return
+            if (!owner.factoryFor(`model:${modelName}`)) {
+              return;
             }
             store.findRecord(modelName, data.id);
           } catch (e) {
@@ -130,14 +134,14 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
           }
         }
         debug(JSON.stringify(data));
-        store.pushPayload({data});
+        store.pushPayload({ data });
       },
       newobject(data) {
-        if(data.id && data.type) {
+        if (data.id && data.type) {
           try {
             var modelName = singularize(data.type);
-            if(!owner.factoryFor(`model:${modelName}`)) {
-              return
+            if (!owner.factoryFor(`model:${modelName}`)) {
+              return;
             }
             store.findRecord(modelName, data.id);
           } catch (e) {
@@ -145,23 +149,33 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
           }
         }
         debug(JSON.stringify(data));
-        store.pushPayload({data});
+        store.pushPayload({ data });
       },
       message(data) {
         const { message } = data;
         const { notifyType } = data;
-        if (notifyType === ENUMS.NOTIFY.INFO) { that.get("notify").info(message, ENV.notifications); }
-        if (notifyType === ENUMS.NOTIFY.SUCCESS) { that.get("notify").success(message, ENV.notifications); }
-        if (notifyType === ENUMS.NOTIFY.WARNING) { that.get("notify").warning(message, ENV.notifications); }
-        if (notifyType === ENUMS.NOTIFY.ALERT) { that.get("notify").alert(message, ENV.notifications); }
-        if (notifyType === ENUMS.NOTIFY.ERROR) { that.get("notify").error(message, {
-          autoClear: false
-        }); }
+        if (notifyType === ENUMS.NOTIFY.INFO) {
+          that.get("notify").info(message, ENV.notifications);
+        }
+        if (notifyType === ENUMS.NOTIFY.SUCCESS) {
+          that.get("notify").success(message, ENV.notifications);
+        }
+        if (notifyType === ENUMS.NOTIFY.WARNING) {
+          that.get("notify").warning(message, ENV.notifications);
+        }
+        if (notifyType === ENUMS.NOTIFY.ALERT) {
+          that.get("notify").alert(message, ENV.notifications);
+        }
+        if (notifyType === ENUMS.NOTIFY.ERROR) {
+          that.get("notify").error(message, {
+            autoClear: false
+          });
+        }
       },
 
       logout() {
-        triggerAnalytics('logout');
-        this.get('session').invalidate();
+        triggerAnalytics("logout");
+        this.get("session").invalidate();
       },
 
       reload() {
@@ -176,34 +190,32 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
         realtime.set("namespace", data.namespace);
       }
     };
-    const socket = this.get('socketIOService').socketFor(ENV.socketPath, {
-      path: '/websocket'
+    const socket = this.get("socketIOService").socketFor(ENV.socketPath, {
+      path: "/websocket"
     });
     for (let key in allEvents) {
       const value = allEvents[key];
       socket.on(key, value);
     }
-    socket.on('connect', () => {
+    socket.on("connect", () => {
       debug("Connecting to room: " + socketId);
-      socket.emit("subscribe", {room: socketId});
+      socket.emit("subscribe", { room: socketId });
     });
   },
   actions: {
-
     willTransition(transition) {
       const currentRoute = transition.targetName;
       const csbDict = CSBMap[currentRoute];
       if (!isEmpty(csbDict)) {
-        triggerAnalytics('feature', csbDict);
+        triggerAnalytics("feature", csbDict);
       }
     },
 
     invalidateSession() {
-      triggerAnalytics('logout');
-      this.get('session').invalidate();
+      triggerAnalytics("logout");
+      this.get("session").invalidate();
     }
   }
-}
-);
+});
 
 export default AuthenticatedRoute;
