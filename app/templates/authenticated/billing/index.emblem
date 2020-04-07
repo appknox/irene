@@ -1,9 +1,4 @@
 if model.showBilling
-  if model.showNotification
-    .notification class="is-success has-text-centered"
-      button class="delete"
-      p
-        i class="fa fa-check-circle margin-right"
-        | Payment was processed successfully
+  = payment-notification isSuccess=model.showSuccessNotification isError=model.showFailureNotification showNotification=model.showNotification
   = billing-main model=model
 

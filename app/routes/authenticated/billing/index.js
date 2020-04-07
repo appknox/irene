@@ -8,15 +8,26 @@ const AuthenticatedBillingRoute = Route.extend(ScrollTopMixin, {
   organization: service("organization"),
   store: service("store"),
   showNotification: false,
+  showSuccessNotification: false,
+  showFailureNotification: false,
 
   beforeModel(transition) {
-    const hasSuccessParameter =
+    const isPaymentSuccessful =
       transition.queryParams.success &&
       transition.queryParams.success === "true";
-    this.set("showNotification", hasSuccessParameter);
-    const isPaymentDone = this.get("organization.selected.isPaymentDone");
 
-    if (hasSuccessParameter) {
+    const hasPaymentFailed =
+      transition.queryParams.success &&
+      transition.queryParams.success === "false";
+
+    const canShowNotification = isPaymentSuccessful || hasPaymentFailed;
+
+    this.set("showNotification", canShowNotification);
+    this.set("showSuccessNotification", isPaymentSuccessful);
+    this.set("showFailureNotification", hasPaymentFailed);
+    // const isPaymentDone = this.get("organization.selected.isPaymentDone");
+
+    if (isPaymentSuccessful) {
       this.set("organization.selected.isPaymentDone", true);
     }
 
@@ -39,7 +50,9 @@ const AuthenticatedBillingRoute = Route.extend(ScrollTopMixin, {
       showBilling: organization.get("showBilling"),
       isPaymentDone: organization.get("isPaymentDone"),
       showNotification,
-      hasPaymentHistory: false,
+      showSuccessNotification: this.get("showSuccessNotification"),
+      showFailureNotification: this.get("showFailureNotification"),
+      //hasPaymentHistory: false,
       plans: activePlans,
       isJustifiedCenter
     };
