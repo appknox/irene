@@ -31,7 +31,7 @@ const AuthenticatedBillingRoute = Route.extend(ScrollTopMixin, {
       this.set("organization.selected.isPaymentDone", true);
     }
 
-    // if (isPaymentDone || hasSuccessParameter) {
+    // if (isPaymentDone || isPaymentSuccessful) {
     //   this.transitionTo("authenticated.billing.plan");
     // }
   },

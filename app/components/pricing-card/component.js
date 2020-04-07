@@ -28,7 +28,7 @@ export default Component.extend({
       stripe.redirectToCheckout({ sessionId: stripeCheckoutSessionId });
     }
     return null;
-  }).evented(),
+  }),
 
   actions: {
     openCheckoutModal() {
