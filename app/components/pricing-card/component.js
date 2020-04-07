@@ -17,10 +17,9 @@ export default Component.extend({
       quantity: this.get("quantity")
     };
 
-    const stripeCheckoutSessionId = yield this.get("plan.stripeSessionId").call(
-      this,
-      planCheckoutParams
-    );
+    const stripeCheckoutSessionId = yield this.get(
+      "plan.getStripeSessionId"
+    ).call(this.get("plan"), planCheckoutParams);
     if (stripeCheckoutSessionId) {
       const stripe = window.Stripe(
         "pk_test_IMZbFpQo6Uavs7Q77Udp7E8u00c1dRKOsd"
@@ -28,11 +27,15 @@ export default Component.extend({
       stripe.redirectToCheckout({ sessionId: stripeCheckoutSessionId });
     }
     return null;
-  }).evented(),
+  }),
 
   actions: {
     openCheckoutModal() {
       this.set("planId", this.get("plan.id"));
+      if (!this.get("plan").get("isRecurring")) {
+        this.get("getStripeSessionId").perform();
+        return;
+      }
       this.set("showCheckoutModal", true);
     },
     incrementQuantity() {

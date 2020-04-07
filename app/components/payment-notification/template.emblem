@@ -1,0 +1,9 @@
+if showNotification
+  .notification class="{{if isSuccess 'is-success'}} {{if isError 'is-primary'}} has-text-centered" local-class="payment_notification"
+    button class="delete" local-class="payment_notification-hide_btn" click={action "hideNotification"}
+    p
+      i class="fa {{if isSuccess 'fa-check-circle'}} {{if isError 'fa-times-circle'}} margin-right"
+      if isSuccess
+        t "paymentSuccess"
+      else
+        t "paymentFailed"
