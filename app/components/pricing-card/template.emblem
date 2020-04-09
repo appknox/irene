@@ -1,4 +1,4 @@
-.box local-class="pricing-box {{if plan.isHighlighted 'card-focussed'}}" click={action "openCheckoutModal"}
+.box local-class="pricing-box {{if plan.isHighlighted 'card-focussed'}} {{if getStripeSessionId.isRunning 'disabled'}}" click={action "openCheckoutModal"}
   .content
     header
       h3 local-class="badge"
@@ -19,10 +19,10 @@
               | #{feature.text}
     footer
       button
-        if plan.billingCycle
+        if plan.isRecurring
           t "billingSubscribe"
         else
-          t "billingBuy"
+          t "billingAddCard"
 
 = modal-card class="input-modal" local-class="modal" isActive=showCheckoutModal title="Plan Details"
   .card-body
@@ -43,13 +43,13 @@
               else
                 | {{format-currency plan.currency plan.price quantity}}
           .column
-            div local-class="quantity-wrapper {{if plan.quantity 'disabled'}}"
-              button local-class="{{unless plan.allowQuantityInput 'disabled'}}" click={action "decrementQuantity"} -
+            div local-class="quantity-wrapper {{if plan.quantity 'disabled'}} {{if getStripeSessionId.isRunning 'disabled'}}"
+              button local-class="{{unless plan.allowQuantityInput 'disabled'}} {{if getStripeSessionId.isRunning 'disabled'}}" click={action "decrementQuantity"} -
               if plan.allowQuantityInput
                 = input type="number" value=quantity readonly=true
               else
                 = input type="number" value=plan.quantity readonly=true
-              button local-class="{{unless plan.allowQuantityInput 'disabled'}}" click={action "incrementQuantity"} +
+              button local-class="{{unless plan.allowQuantityInput 'disabled'}} {{if getStripeSessionId.isRunning 'disabled'}}" click={action "incrementQuantity"} +
         .columns
           .column local-class="checkout-wrapper"
             input class="is-success" type="submit" value="Checkout" disabled=getStripeSessionId.isRunning
