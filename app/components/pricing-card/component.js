@@ -7,6 +7,7 @@ export default Component.extend({
   showCheckoutModal: false,
   planId: null,
   quantity: 1,
+  tempStoreKeyPrefix: "ajs_bill_oneTime",
 
   tempStore: service("local-storage"),
   notify: service("notification-messages"),
@@ -28,17 +29,23 @@ export default Component.extend({
       const stripe = window.Stripe(
         "pk_test_IMZbFpQo6Uavs7Q77Udp7E8u00c1dRKOsd"
       );
-      if (!this.get("plan.isRecurring")) {
-        const paymentData = {
-          timestamp: Date.now()
-        };
-        try {
-          yield this.get("tempStore").setData("ajs_bill_oneTime", paymentData);
-        } catch (err) {
-          this.get("notify").error(err.message);
-          return null;
+      try {
+        if (!this.get("plan.isRecurring")) {
+          const paymentData = {
+            timestamp: Date.now()
+          };
+          yield this.get("tempStore").setData(
+            this.get("tempStoreKeyPrefix"),
+            paymentData
+          );
+        } else {
+          yield this.get("tempStore").clearData(this.get("tempStoreKeyPrefix"));
         }
+      } catch (err) {
+        this.get("notify").error(err.message);
+        return null;
       }
+
       stripe.redirectToCheckout({ sessionId: stripeCheckoutSessionId });
     }
     return null;
