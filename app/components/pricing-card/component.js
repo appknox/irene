@@ -1,11 +1,15 @@
 import Component from "@ember/component";
 import { task } from "ember-concurrency";
+import { inject as service } from "@ember/service";
 
 export default Component.extend({
   tagName: "",
   showCheckoutModal: false,
   planId: null,
   quantity: 1,
+
+  tempStore: service("local-storage"),
+  notify: service("notification-messages"),
 
   getStripeSessionId: task(function*() {
     const defaultPlanQuantity = this.get("plan.quantity");
@@ -24,6 +28,17 @@ export default Component.extend({
       const stripe = window.Stripe(
         "pk_test_IMZbFpQo6Uavs7Q77Udp7E8u00c1dRKOsd"
       );
+      if (!this.get("plan.isRecurring")) {
+        const paymentData = {
+          timestamp: Date.now()
+        };
+        try {
+          yield this.get("tempStore").setData("ajs_bill_oneTime", paymentData);
+        } catch (err) {
+          this.get("notify").error(err.message);
+          return null;
+        }
+      }
       stripe.redirectToCheckout({ sessionId: stripeCheckoutSessionId });
     }
     return null;
