@@ -10,29 +10,30 @@ export default Component.extend({
   tempStoreKeyPrefix: "ajs_bill_oneTime",
 
   tempStore: service("local-storage"),
+  stripeService: service("stripe-instance"),
   notify: service("notification-messages"),
 
-  getStripeSessionId: task(function*() {
+  getStripeSessionId: task(function* () {
     const defaultPlanQuantity = this.get("plan.quantity");
     if (defaultPlanQuantity) {
       this.set("quantity", defaultPlanQuantity);
     }
     const planCheckoutParams = {
       plan: this.get("planId"),
-      quantity: this.get("quantity")
+      quantity: this.get("quantity"),
     };
 
-    const stripeCheckoutSessionId = yield this.get(
-      "plan.getStripeSessionId"
-    ).call(this.get("plan"), planCheckoutParams);
+    const sessionIDGetter = this.get("stripeService").getSessionId.bind(
+      this.get("plan"),
+      planCheckoutParams
+    );
+    const stripeCheckoutSessionId = yield sessionIDGetter();
+
     if (stripeCheckoutSessionId) {
-      const stripe = window.Stripe(
-        "pk_test_IMZbFpQo6Uavs7Q77Udp7E8u00c1dRKOsd"
-      );
       try {
         if (!this.get("plan.isRecurring")) {
           const paymentData = {
-            timestamp: Date.now()
+            timestamp: Date.now(),
           };
           yield this.get("tempStore").setData(
             this.get("tempStoreKeyPrefix"),
@@ -46,7 +47,7 @@ export default Component.extend({
         return null;
       }
 
-      stripe.redirectToCheckout({ sessionId: stripeCheckoutSessionId });
+      this.get("stripeService").redirectToCheckout(stripeCheckoutSessionId);
     }
     return null;
   }),
@@ -69,6 +70,6 @@ export default Component.extend({
         this.set("quantity", currentQuantity - 1);
       }
       return;
-    }
-  }
+    },
+  },
 });
