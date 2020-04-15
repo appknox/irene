@@ -1,4 +1,3 @@
 if model.showBilling
   = payment-notification isSuccess=model.showSuccessNotification isError=model.showFailureNotification showNotification=model.showNotification
   = billing-main model=model
-

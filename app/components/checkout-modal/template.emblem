@@ -1,0 +1,50 @@
+= modal-card class="input-modal" local-class="modal" isActive=plan.showCheckoutModal title=(t "billigPlanModalTitle") isbillingModal=true
+  .card-body
+    .card-wrapper
+      form submit={action "redirectToPayment"}
+        .columns
+          .column
+            p local-class="dark-text"
+              if plan.billingCycle
+                t "perApp"
+                span
+                  | &nbsp;/&nbsp;#{plan.billingCycle}
+              else
+                t "perScan"
+            p local-class="light-text"
+              | {{format-currency plan.currency plan.price}}
+          .column
+            div local-class="quantity-wrapper {{if plan.quantity 'disabled'}} {{if redirectToPayment.isRunning 'disabled'}}"
+              button local-class="{{unless plan.allowQuantityInput 'disabled'}} {{if redirectToPayment.isRunning 'disabled'}}" click={action "decrementQuantity"} -
+              if plan.allowQuantityInput
+                = input type="number" value=billingHelper.selectedQuantity readonly=true
+              else
+                = input type="number" value=plan.quantity readonly=true
+              button local-class="{{unless plan.allowQuantityInput 'disabled'}} {{if redirectToPayment.isRunning 'disabled'}}" click={action "incrementQuantity"} +
+        .columns
+          .column
+            p local-class="dark-text"
+              span
+                | {{t "billingTotalQuantity"}}
+              span local-class="light-text"
+                if plan.quantity
+                  | #{plan.quantity}
+                else
+                  | #{billingHelper.selectedQuantity}
+        .columns
+          .column
+            p local-class="dark-text"
+              span
+                | {{t "billingTotalAmount"}}
+              span local-class="light-text"
+                if plan.quantity
+                  | {{format-currency plan.currency plan.price plan.quantity}}
+                else
+                  | {{format-currency plan.currency plan.price billingHelper.selectedQuantity}}
+        .columns
+          .column local-class="checkout-wrapper"
+            input class="is-success" type="submit" value={t "billibgCheckout"} disabled=redirectToPayment.isRunning
+        if redirectToPayment.isRunning
+          .columns
+            .column class="has-text-centered"
+              .fa class="fa-spinner fa-spin" local-class="progress-spinner"

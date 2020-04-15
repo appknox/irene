@@ -1,5 +1,3 @@
 div local-class="pricing-wrapper {{if isJustifiedCenter 'center-justified'}}"
   each pricingPlans as |plan|
     = pricing-card plan=plan
-
-

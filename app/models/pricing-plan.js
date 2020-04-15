@@ -19,11 +19,13 @@ export default DS.Model.extend({
   isManualscanIncluded: DS.attr("boolean"),
   manualscanCount: DS.attr("number"),
 
-  allowQuantityInput: computed("quantity", function() {
+  showCheckoutModal: false,
+
+  allowQuantityInput: computed("quantity", function () {
     return !this.get("quantity");
   }),
 
-  isRecurring: computed("billingCycle", function() {
+  isRecurring: computed("billingCycle", function () {
     return !!this.get("billingCycle");
   }),
 
@@ -44,5 +46,5 @@ export default DS.Model.extend({
     } catch (err) {
       return sessionId;
     }
-  }
+  },
 });

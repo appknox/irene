@@ -5,8 +5,9 @@ import ScrollTopMixin from "irene/mixins/scroll-top";
 
 const AuthenticatedBillingRoute = Route.extend(ScrollTopMixin, {
   title: `Billing${config.platform}`,
+
   organization: service("organization"),
-  store: service("store"),
+
   showNotification: false,
   showSuccessNotification: false,
   showFailureNotification: false,
@@ -37,26 +38,27 @@ const AuthenticatedBillingRoute = Route.extend(ScrollTopMixin, {
   },
 
   async model() {
-    const organization = this.get("organization.selected");
+    const organization = await this.get("organization.selected");
     await this.get("store").findAll("pricing-plan");
     const activePlans = await this.get("store")
       .peekAll("pricing-plan")
-      .filter(plan => {
+      .filter((plan) => {
         return plan.get("active") === true;
       });
     const showNotification = this.get("showNotification");
     const isJustifiedCenter = activePlans.get("length") <= 3;
+
     return {
-      showBilling: organization.get("showBilling"),
-      isPaymentDone: organization.get("isPaymentDone"),
+      showBilling: await organization.get("showBilling"),
+      isPaymentDone: await organization.get("isPaymentDone"),
       showNotification,
       showSuccessNotification: this.get("showSuccessNotification"),
       showFailureNotification: this.get("showFailureNotification"),
       //hasPaymentHistory: false,
       plans: activePlans,
-      isJustifiedCenter
+      isJustifiedCenter,
     };
-  }
+  },
 });
 
 export default AuthenticatedBillingRoute;

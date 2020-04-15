@@ -1,0 +1,75 @@
+.modal {
+  .light-text {
+    font-weight: bold;
+    color: rgba(14, 30, 37, 0.54);
+    padding: 0 2em;
+  }
+  .dark-text {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+    color: rgb(14, 30, 37);
+  }
+  .checkout-wrapper {
+    margin-top: 1em;
+    input {
+      width: 100%;
+      border-color: darken($success, 5%);
+      color: darken($success, 5%);
+      &:hover,
+      &:active,
+      &:focus {
+        background: darken($success, 6%);
+        color: #fff;
+      }
+    }
+  }
+  .quantity-wrapper {
+    border: 1px solid rgba(14, 30, 37, 0.4);
+    padding: 2px;
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    &.disabled {
+      opacity: 0.5;
+    }
+    * {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    input {
+      width: 40px;
+      pointer-events: none;
+      border: none;
+      text-align: right;
+    }
+    button {
+      border-radius: 50px;
+      color: #fff;
+      padding: 1em;
+      line-height: 0.2em;
+      font-weight: bold;
+      font-size: 1.25em;
+      &.disabled {
+        pointer-events: none;
+      }
+      &:first-of-type {
+        margin-right: 0.25em;
+        background: lighten($primary, 5%);
+      }
+      &:last-of-type {
+        margin-left: 0.25em;
+        background: darken($success, 2%);
+        &:hover,
+        &:active,
+        &:focus {
+          border-color: darken($success, 2%);
+          outline: none;
+        }
+      }
+    }
+  }
+  .progress-spinner {
+    color: lighten($success, 0.2%);
+  }
+}
