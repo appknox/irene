@@ -4,6 +4,6 @@ if showNotification
     p
       i class="fa {{if isSuccess 'fa-check-circle'}} {{if isError 'fa-times-circle'}} margin-right"
       if isSuccess
-        t "paymentSuccess"
+        | #{message.success}
       else
-        t "paymentFailed"
+        | #{message.error}
