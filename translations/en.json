@@ -377,6 +377,8 @@
   "passwordIsReset": "Password is successfully reset!",
   "passwordChanged": "Your password has been changed",
   "passwordCopied": "Password Copied!",
+  "paymentAddCardSuccess": "Your card has been added sucessfully. Please continue with the one time purchase",
+  "paymentAddCardFailed": "Failed to add your card. Please try again. If problem persists, please contact support",
   "paymentSuccess": "Payment has been processed successfully",
   "paymentFailed": "Payment Failed. Please contact supprot in case of any query",
   "tokenCopied": "Token Copied!",

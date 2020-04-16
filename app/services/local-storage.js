@@ -48,7 +48,9 @@ export default Service.extend({
   async getData(keyPrefix) {
     try {
       await this.setDataUID();
-      localStorage.getItem(`${keyPrefix}_${this.get("localStorageUID")}`);
+      return localStorage.getItem(
+        `${keyPrefix}_${this.get("localStorageUID")}`
+      );
     } catch (err) {
       throw new Error("Failed to get data from temp storage");
     }
@@ -61,5 +63,5 @@ export default Service.extend({
     } catch (err) {
       throw new Error("Failed to clear data in temp storage");
     }
-  }
+  },
 });

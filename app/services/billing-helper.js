@@ -102,4 +102,11 @@ export default Service.extend({
   async clearDataInLocalStore() {
     await this.get("tempStore").clearData(this.get("tempStoreKeyPrefix"));
   },
+
+  async checkLocalStoreHasData() {
+    const data = await this.get("tempStore").getData(
+      this.get("tempStoreKeyPrefix")
+    );
+    return !!data;
+  },
 });

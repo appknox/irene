@@ -1,13 +1,45 @@
 import Component from "@ember/component";
+import { t } from "ember-intl";
+import { inject as service } from "@ember/service";
 
 export default Component.extend({
-  message: "",
   isSuccess: false,
   isError: false,
   showNotification: false,
+  message: {
+    success: null,
+    error: null,
+  },
+
+  addCardSuccess: t("paymentAddCardSuccess"),
+  addCardError: t("paymentAddCardFailed"),
+  paymentSuccess: t("paymentSuccess"),
+  paymentError: t("paymentFailed"),
+
+  billingHelper: service("billing-helper"),
+
+  async didInsertElement() {
+    if (this.showNotification) {
+      const hasLocalData = await this.get(
+        "billingHelper"
+      ).checkLocalStoreHasData();
+      if (hasLocalData) {
+        this.set("message", {
+          success: this.get("addCardSuccess"),
+          error: this.get("addCardError"),
+        });
+        return;
+      }
+      this.set("message", {
+        success: this.get("paymentSuccess"),
+        error: this.get("paymentError"),
+      });
+    }
+  },
+
   actions: {
     hideNotification() {
       this.set("showNotification", false);
-    }
-  }
+    },
+  },
 });
