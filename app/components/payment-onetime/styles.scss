@@ -1,36 +1,43 @@
-.card-head{
+.card-head {
   background: #424651;
   color: #fff;
-  .title{
-    color:#fff;
+  .title {
+    color: #fff;
   }
 }
-.card-section{
-  &.separated-cards{
+.card-section {
+  &.separated-cards {
     margin-bottom: 3rem;
   }
-  .card-head{
+  &.highlighted {
+    transform: scale(1.019);
+    box-shadow: 1px 15px 12px 1px rgba(0, 0, 0, 0.5);
+    background: lighten($warning, 25%);
+  }
+  .card-head {
     padding: 8px 15px;
   }
-  .status-tag{
+  .status-tag {
     margin-left: 20px;
   }
-  .card-content{
+  .card-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    & > div{
+    & > div {
       display: inline-block;
       padding: 0.5rem 0;
       margin: 0.5rem 0;
     }
-    .cost-info{
+    .cost-info {
       font-weight: bold;
       color: #8a8989;
       font-size: 1rem;
     }
-    &:last-child{
-      justify-content: flex-end;
+    &:last-child {
+      &:not(.buy-option) {
+        justify-content: flex-end;
+      }
     }
   }
 }

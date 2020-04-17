@@ -1,4 +1,4 @@
-= modal-card class="input-modal" local-class="modal" isActive=plan.showCheckoutModal title=(t "billigPlanModalTitle") isbillingModal=true
+= modal-card class="input-modal" local-class="modal" isActive=plan.showCheckoutModal title=title isbillingModal=true
   .card-body
     .card-wrapper
       form submit={action "redirectToPayment"}
@@ -13,34 +13,57 @@
                 t "perScan"
             p local-class="light-text"
               | {{format-currency plan.currency plan.price}}
-          .column
-            div local-class="quantity-wrapper {{if plan.quantity 'disabled'}} {{if redirectToPayment.isRunning 'disabled'}}"
-              button local-class="{{unless plan.allowQuantityInput 'disabled'}} {{if redirectToPayment.isRunning 'disabled'}}" click={action "decrementQuantity"} -
-              if plan.allowQuantityInput
+          if plan.isPaidUser
+            .column
+              div local-class="quantity-wrapper {{if redirectToPayment.isRunning 'disabled'}}"
+                button local-class="{{if redirectToPayment.isRunning 'disabled'}}" click={action "decrementQuantity"} -
                 = input type="number" value=billingHelper.selectedQuantity readonly=true
-              else
-                = input type="number" value=plan.quantity readonly=true
-              button local-class="{{unless plan.allowQuantityInput 'disabled'}} {{if redirectToPayment.isRunning 'disabled'}}" click={action "incrementQuantity"} +
-        .columns
-          .column
-            p local-class="dark-text"
-              span
-                | {{t "billingTotalQuantity"}}
-              span local-class="light-text"
-                if plan.quantity
-                  | #{plan.quantity}
+                button local-class="{{if redirectToPayment.isRunning 'disabled'}}" click={action "incrementQuantity"} +
+          else
+            .column
+              div local-class="quantity-wrapper {{if plan.quantity 'disabled'}} {{if redirectToPayment.isRunning 'disabled'}}"
+                button local-class="{{unless plan.allowQuantityInput 'disabled'}} {{if redirectToPayment.isRunning 'disabled'}}" click={action "decrementQuantity"} -
+                if plan.allowQuantityInput
+                  = input type="number" value=billingHelper.selectedQuantity readonly=true
                 else
+                  = input type="number" value=plan.quantity readonly=true
+                button local-class="{{unless plan.allowQuantityInput 'disabled'}} {{if redirectToPayment.isRunning 'disabled'}}" click={action "incrementQuantity"} +
+        .columns
+          if plan.isPaidUser
+            .column
+              p local-class="dark-text"
+                span
+                  | {{t "billingTotalQuantity"}}
+                span local-class="light-text"
                   | #{billingHelper.selectedQuantity}
+          else
+            .column
+              p local-class="dark-text"
+                span
+                  | {{t "billingTotalQuantity"}}
+                span local-class="light-text"
+                  if plan.quantity
+                    | #{plan.quantity}
+                  else
+                    | #{billingHelper.selectedQuantity}
         .columns
-          .column
-            p local-class="dark-text"
-              span
-                | {{t "billingTotalAmount"}}
-              span local-class="light-text"
-                if plan.quantity
-                  | {{format-currency plan.currency plan.price plan.quantity}}
-                else
+          if plan.isPaidUser
+            .column
+              p local-class="dark-text"
+                span
+                  | {{t "billingTotalAmount"}}
+                span local-class="light-text"
                   | {{format-currency plan.currency plan.price billingHelper.selectedQuantity}}
+          else
+            .column
+              p local-class="dark-text"
+                span
+                  | {{t "billingTotalAmount"}}
+                span local-class="light-text"
+                  if plan.quantity
+                    | {{format-currency plan.currency plan.price plan.quantity}}
+                  else
+                    | {{format-currency plan.currency plan.price billingHelper.selectedQuantity}}
         .columns
           .column local-class="checkout-wrapper"
             input class="is-success" type="submit" value={t "billibgCheckout"} disabled=redirectToPayment.isRunning

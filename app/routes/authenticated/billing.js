@@ -54,7 +54,6 @@ const AuthenticatedBillingRoute = Route.extend(ScrollTopMixin, {
       showNotification,
       showSuccessNotification: this.get("showSuccessNotification"),
       showFailureNotification: this.get("showFailureNotification"),
-      //hasPaymentHistory: false,
       plans: activePlans,
       isJustifiedCenter,
     };
