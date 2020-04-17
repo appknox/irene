@@ -1,5 +1,9 @@
 .payment_notification {
   border-radius: 9px;
+  position: fixed;
+  z-index: 10;
+  left: calc(16.66% + 10px);
+  width: calc(100% - 16.66% - 20px);
   .payment_notification-hide_btn {
     border-radius: 50%;
   }

@@ -1,5 +1,7 @@
 import Service from "@ember/service";
+import { t } from "ember-intl";
 import { inject as service } from "@ember/service";
+import { getOwner } from "@ember/application";
 
 export default Service.extend({
   selectedQuantity: 1,
@@ -7,9 +9,13 @@ export default Service.extend({
   tempStoreKeyPrefix: "ajs_bill_oneTime",
 
   store: service(),
+  router: service(),
   tempStore: service("local-storage"),
   stripeService: service("stripe-instance"),
   notify: service("notification-messages"),
+
+  paymentSuccess: t("paymentSuccess"),
+  paymentError: t("paymentFailed"),
 
   async setSelectedPlanModel(planId) {
     const planModel = await this.get("store").peekRecord(
@@ -38,8 +44,11 @@ export default Service.extend({
 
   closeCheckoutModal() {
     const planModel = this.get("selectedPlanModel");
-    planModel.set("showCheckoutModal", false);
-    this.set("selectedQuantity", 1);
+    if (planModel) {
+      planModel.set("showCheckoutModal", false);
+      this.set("selectedQuantity", 1);
+      return;
+    }
   },
 
   async generateCheckoutSessionId(planId, checkoutParams) {
@@ -89,6 +98,25 @@ export default Service.extend({
     }
   },
 
+  async buyOneTimeScan() {
+    const oneTimeModal = await this.get("store").queryRecord(
+      "payment-onetime",
+      {}
+    );
+    if (oneTimeModal) {
+      try {
+        await oneTimeModal
+          .get("buyScan")
+          .call(oneTimeModal, this.get("selectedQuantity"));
+        this.get("notify").success(this.get("paymentSuccess"));
+        await this.clearDataInLocalStore();
+        setTimeout(() => window.location.reload(), 1500);
+      } catch (err) {
+        this.get("notify").error(this.get("paymentError"));
+      }
+    }
+  },
+
   async setDataInLocalStore() {
     const paymentData = {
       timestamp: Date.now(),
@@ -108,5 +136,13 @@ export default Service.extend({
       this.get("tempStoreKeyPrefix")
     );
     return !!data;
+  },
+
+  refreshRoute() {
+    const currentRouteName = this.get("router.currentRouteName");
+    const currentRouteInstance = getOwner(this).lookup(
+      `route:${currentRouteName}`
+    );
+    currentRouteInstance.refresh();
   },
 });

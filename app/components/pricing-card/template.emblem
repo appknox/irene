@@ -24,4 +24,4 @@
         else
           t "billingAddCard"
 
-= checkout-modal plan=plan
+= checkout-modal plan=plan title=(t "billigPlanModalTitle")

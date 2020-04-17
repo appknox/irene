@@ -1,27 +1,46 @@
 if isLoading
   = skeletal-loader
 else
-  each oneTimes as |oneTime|
-    .card class="full-width margin-top-bottom" local-class="separated-cards card-section"
-      header class="card-header" local-class="card-head"
-        p class="card-header-title" local-class="title"
-          | #{oneTime.plan.name}
-          span class="tag {{oneTime.cssClass}}" local-class="status-tag"
+  .card class="full-width margin-top-bottom" local-class="separated-cards card-section {{if highlightOneTimeCard 'highlighted'}}"
+    header class="card-header" local-class="card-head"
+      p class="card-header-title" local-class="title"
+        t "perScan"
+        unless oneTime.showBuyOption
+          span class="tag {{oneTime.statusCSSClass}}" local-class="status-tag"
             | #{oneTime.statusText}
-        p local-class="billing-cycle-info"
-          strong Scans Left:&nbsp;
-          | #{oneTime.scansLeft}
-      .card-content
-        .content
+      p local-class="billing-cycle-info"
+        unless oneTime.showBuyOption
+          strong
+            t"scansPurchased"
+          | &nbsp;#{oneTime.quantity}
+    .card-content
+      .content
+        if oneTime.showBuyOption
+          div local-class="card-content buy-option"
+            div local-class="cost-info"
+              | {{format-currency oneTime.currency oneTime.price}}&nbsp;
+              t "perScan"
+            div local-class="add-more-wrapper"
+              button class="is-primary highlighted-button" click={action 'openPaymentModal'}
+                i class="fa fa-cart-plus" &nbsp;
+                t"scanBuy"
+        else
           div local-class="card-content"
             div local-class="cost-info"
-              | #{oneTime.plan.currency} #{oneTime.plan.price} / Scan
+              | {{format-currency oneTime.currency oneTime.price}}&nbsp;
+              t "perScan"
             div local-class="add-more-wrapper"
-              button class="is-success"
-                i class="fa fa-plus"
-                | &nbsp;add more
+              button class="is-success" click={action 'openPaymentModal'}
+                i class="fa fa-plus" &nbsp;
+                t"addMore"
           div local-class="card-content"
             div
-              strong Expires On : &nbsp;
-              | #{oneTime.expiryDate}
+              strong
+                t "expiresOn"
+                |: &nbsp;
+              if oneTime.expiryDate
+                | {{moment-format oneTime.expiryDate "DD MMM YYYY"}}
+              else
+                t"notApplicable"
+  = checkout-modal plan=oneTime title=(t "buyScan")
 
