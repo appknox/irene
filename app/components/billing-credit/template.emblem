@@ -1,12 +1,15 @@
 if isLoading
-  = skeletal-loader
-else
+    = skeletal-loader
+if orgCredit.credits
   div local-class="org-credit-wrapper"
     div
-      h5 Organization Credit
+      h5
+        t "organizationCreditsHeading"
       p
-        | you have a credit of &nbsp;
-        strong #{orgCredit.currency} #{orgCredit.credits}
+        t "organizationCreditAmountText"
+        | &nbsp;
+        strong {{format-currency orgCredit.currency orgCredit.credits}}
       p
-        | Awarded on &nbsp;
-        strong #{orgCredit.updatedOn}
+        t "organizationCreditDateText"
+        | &nbsp;
+        strong {{moment-format orgCredit.updatedOn "DD MMM YYYY"}}

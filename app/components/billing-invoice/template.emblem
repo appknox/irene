@@ -1,23 +1,35 @@
-if isLoading
+unless hasObjects
   = skeletal-loader
 else
   table local-class="card-table"
     thead
-      th Invoice Id
-      th Created On
+      th
+        t "invoiceTable.header.invoiceId"
+      th
+        t "invoiceTable.header.createdOn"
+      th
+        t "invoiceTable.header.amount"
+      th
+        t "invoiceTable.header.status"
       th
     tbody
-      each invoices as |item|
+      each sortedObjects as |item|
         tr
-          td #{item.invoiceId}
-          td #{item.createdOn}
-          // #{item. createdOn}
+          td #{item.id}
+          td {{moment-format item.created "DD MMM YYYY"}}
+          td {{format-currency item.currency item.amount}}
+          td #{item.status}
           td class="has-text-centered"
-            button class="is-primary"
-              i class="fa fa-download" title="Download Invoice"
-              | &nbsp;&nbsp;Download
-            button class="is-info"
-              i class="fa fa-eye" title="View Invoice"
-              | &nbsp;&nbsp;View
+            button class="is-primary" click={(perform downloadInvoice item)} disabled=downloadInvoice.isRunning
+              if downloadInvoice.isRunning
+                i class="fa fa-spin fa-spinner"
+              else
+                i class="fa fa-download"
+              | &nbsp;&nbsp;
+              t "invoiceTable.actionButton.download"
+.columns
+    .column
+      .margin-t-q
+        = partial "paginate"
 
 

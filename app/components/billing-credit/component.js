@@ -1,23 +1,17 @@
-import Component from '@ember/component';
+import Component from "@ember/component";
 
 export default Component.extend({
-  tagName: '',
+  tagName: "",
   isLoading: true,
   orgCredit: null,
 
-  fetchCredits(){
-    return{
-      credits: 680,
-      currency: "USD",
-      updatedOn: "10 Jan 2020"
-    };
+  async fetchCredits() {
+    const orgCreditData = await this.get("store").findAll("billing-credit");
+    this.set("orgCredit", orgCreditData);
+    this.set("isLoading", false);
   },
 
-  didInsertElement(){
-    setTimeout(()=>{
-      this.set('orgCredit',this.fetchCredits());
-      this.set('isLoading', false);
-    },400);
-  }
+  didInsertElement() {
+    this.fetchCredits();
+  },
 });
-

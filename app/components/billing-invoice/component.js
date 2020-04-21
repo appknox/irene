@@ -1,41 +1,25 @@
-import Component from '@ember/component';
+import Component from "@ember/component";
+import PaginateMixin from "irene/mixins/paginate";
+import { task } from "ember-concurrency";
+import { t } from "ember-intl";
+import { inject as service } from "@ember/service";
 
-export default Component.extend({
-  tagName: '',
-  isLoading: true,
-  invoices: null,
+export default Component.extend(PaginateMixin, {
+  tagName: "",
+  targetModel: "billing-invoice",
+  sortProperties: ["created:desc"],
 
-  fetchInvoices(){
-    return [
-      {
-        id:1,
-        invoiceId: "AB12345",
-        createdOn: "10 JAN 2008"
-      },
-      {
-        id:1,
-        invoiceId: "Qw34567",
-        createdOn: "12 FEB 2009"
-      },
-      {
-        id:1,
-        invoiceId: "SFG123345",
-        createdOn: "13 MAR 2019"
-      },
-      {
-        id:1,
-        invoiceId: "ANT02345",
-        createdOn: "25 JUL 2019"
-      }
+  notify: service("notification-messages-service"),
+  tdownloadFailed: t("invoiceTable.notification.error"),
 
-    ];
-  },
-
-  didInsertElement(){
-    setTimeout(()=>{
-      this.set('invoices',this.fetchInvoices());
-      this.set('isLoading',false);
-    },500);
-  }
-
+  downloadInvoice: task(function* (invoiceObject) {
+    const downloadURL = yield invoiceObject
+      .get("downloadUrl")
+      .call(invoiceObject);
+    if (downloadURL) {
+      window.open(downloadURL);
+      return;
+    }
+    this.get("notify").error(this.get("tdownloadFailed"));
+  }),
 });
