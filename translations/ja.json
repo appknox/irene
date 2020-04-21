@@ -760,5 +760,19 @@
     "selectGHRepo": "プロジェクトで見つかったリスクに関するIssueを作成するGithub のリポジトリを選択してください",
     "selectJIRAAccount": "プロジェクトで見つかったリスクに関するIssueを作成するJIRAアカウントを選択してください",
     "selectPreferredDevice": "動的診断のデバイスタイプとOSバージョンを選択してください"
+  },
+  "invoiceTable": {
+    "header": {
+      "invoiceId": "Invoice Id",
+      "createdOn": "Created On",
+      "amount": "Amount",
+      "status": "Status"
+    },
+    "actionButton": {
+      "download": "Download"
+    },
+    "notification": {
+      "error": "Failed to downlaod Invoice"
+    }
   }
 }

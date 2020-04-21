@@ -760,5 +760,19 @@
     "selectGHRepo": "Select the Github Repo where you want us to create issues for the risks we find in your project",
     "selectJIRAAccount": "Select the JIRA account where you want us to create issues for the risks we find in your project",
     "selectPreferredDevice": "Select the Preferred Device Type and OS Version for Dynamic Scan"
+  },
+  "invoiceTable": {
+    "header": {
+      "invoiceId": "Invoice Id",
+      "createdOn": "Created On",
+      "amount": "Amount",
+      "status": "Status"
+    },
+    "actionButton": {
+      "download": "Download"
+    },
+    "notification": {
+      "error": "Failed to downlaod Invoice"
+    }
   }
 }
