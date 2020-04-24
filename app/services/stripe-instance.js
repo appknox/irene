@@ -1,10 +1,11 @@
+import ENV from "irene/config/environment";
 import Service from "@ember/service";
 import { inject as service } from "@ember/service";
 
 export default Service.extend({
   notify: service("notification-messages"),
 
-  token: "pk_test_IMZbFpQo6Uavs7Q77Udp7E8u00c1dRKOsd",
+  token: ENV.stripePublicKey,
   instance: null,
 
   init() {
