@@ -3,8 +3,11 @@ unless hasObjects
 else
   .columns
     .column local-class="buttons-wrapper"
-      button class="is-success"
-        i class="fa fa-plus" &nbsp;
+      button class="is-success" click={action "initAddCard"} disabled=redirectToAddCard.isRunning
+        if redirectToAddCard.isRunning
+          i class="fa fa-spinner fa-spin"
+        else
+          i class="fa fa-plus" &nbsp;
         t "creditCards.actions.addCard"
   .columns
     .column
@@ -30,7 +33,7 @@ else
                 |#{card.lastFour}
                 if card.isDefault
                   span class="tag is-info" local-class="badge"
-                    | Default
+                    t "creditCards.content.default"
               td {{moment-format card.addedOn "DD MMM YYYY"}}
               td #{card.expirationMonth}/#{card.expirationYear}
               td class="has-text-centered" local-class="buttons-wrapper action-wrapper"

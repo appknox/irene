@@ -15,6 +15,7 @@ export default Component.extend({
   addCardError: t("paymentAddCardFailed"),
   paymentSuccess: t("paymentSuccess"),
   paymentError: t("paymentFailed"),
+  simpleAddCardSuccess: t("creditCards.notifications.addCard.success"),
 
   billingHelper: service("billing-helper"),
 
@@ -23,7 +24,13 @@ export default Component.extend({
       const hasLocalData = await this.get(
         "billingHelper"
       ).checkLocalStoreHasData();
-      if (hasLocalData) {
+      if (this.get("isPaymentMethodsAction")) {
+        this.set("message", {
+          success: this.get("simpleAddCardSuccess"),
+          error: this.get("addCardError"),
+        });
+        return;
+      } else if (hasLocalData) {
         this.set("message", {
           success: this.get("addCardSuccess"),
           error: this.get("addCardError"),

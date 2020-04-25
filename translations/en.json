@@ -785,12 +785,19 @@
       "expiry": "Expiry"
     },
     "content": {
-      "endsIn": "ends in"
+      "endsIn": "ends in",
+      "default": "Default"
     },
     "actions": {
       "addCard": "Add Card",
       "removeCard": "Remove Card",
       "markAsDefault": "Mark As Default"
+    },
+    "notifications": {
+      "addCard": {
+        "success": "Your new card has been added successfully",
+        "error": "Failed to add card. Please try again"
+      }
     }
   }
 }

@@ -7,6 +7,7 @@ export default Service.extend({
   selectedQuantity: 1,
   selectedPlanModel: null,
   tempStoreKeyPrefix: "ajs_bill_oneTime",
+  cardStoreKeyPrefix: "ajs_bill_addCard",
 
   store: service(),
   router: service(),
@@ -68,11 +69,11 @@ export default Service.extend({
     if (stripeCheckoutSessionId) {
       try {
         await this.setDataInLocalStore();
+        this.get("stripeService").redirectToCheckout(stripeCheckoutSessionId);
       } catch (err) {
         this.get("notify").error(err.message);
       }
     }
-    this.get("stripeService").redirectToCheckout(stripeCheckoutSessionId);
   },
 
   async redirectToSubscriptionPayment(planId) {
@@ -117,24 +118,40 @@ export default Service.extend({
     }
   },
 
-  async setDataInLocalStore() {
+  async addCreditCard() {
+    const firstCardRecord = await this.get("store").queryRecord(
+      "credit-card",
+      {}
+    );
+    const redirectToken = await firstCardRecord
+      .get("sessionId")
+      .call(firstCardRecord);
+    if (redirectToken) {
+      try {
+        await this.setDataInLocalStore(this.get("cardStoreKeyPrefix"));
+        this.get("stripeService").redirectToCheckout(redirectToken);
+      } catch (err) {
+        this.get("notify").error(err.message);
+      }
+    }
+  },
+
+  async setDataInLocalStore(prefixKey) {
+    const storePrefixKey = prefixKey || this.get("tempStoreKeyPrefix");
     const paymentData = {
       timestamp: Date.now(),
     };
-    await this.get("tempStore").setData(
-      this.get("tempStoreKeyPrefix"),
-      paymentData
-    );
+    await this.get("tempStore").setData(storePrefixKey, paymentData);
   },
 
-  async clearDataInLocalStore() {
-    await this.get("tempStore").clearData(this.get("tempStoreKeyPrefix"));
+  async clearDataInLocalStore(prefixKey) {
+    const storePrefixKey = prefixKey || this.get("tempStoreKeyPrefix");
+    await this.get("tempStore").clearData(storePrefixKey);
   },
 
-  async checkLocalStoreHasData() {
-    const data = await this.get("tempStore").getData(
-      this.get("tempStoreKeyPrefix")
-    );
+  async checkLocalStoreHasData(prefixKey) {
+    const storePrefixKey = prefixKey || this.get("tempStoreKeyPrefix");
+    const data = await this.get("tempStore").getData(storePrefixKey);
     return !!data;
   },
 
