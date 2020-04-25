@@ -777,5 +777,20 @@
     "notification": {
       "error": "Failed to downlaod Invoice"
     }
+  },
+  "creditCards": {
+    "header": {
+      "card": "Card",
+      "addedOn": "Added On",
+      "expiry": "Expiry"
+    },
+    "content": {
+      "endsIn": "ends in"
+    },
+    "actions": {
+      "addCard": "Add Card",
+      "removeCard": "Remove Card",
+      "markAsDefault": "Mark As Default"
+    }
   }
 }
