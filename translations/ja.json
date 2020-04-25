@@ -797,7 +797,15 @@
       "addCard": {
         "success": "Your new card has been added successfully",
         "error": "Failed to add card. Please try again"
+      },
+      "removeCard": {
+        "success": "The card has been removed succesfully",
+        "error": "Failed to remove the card. Please try again"
       }
+    },
+    "confirmation": {
+      "removeCard": "Are you sure you want to remove this card?",
+      "markAsDefault": "Are you sure you want to make this card as the deafult card?"
     }
   }
 }

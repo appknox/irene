@@ -18,7 +18,7 @@ export default DS.Model.extend({
         return token;
       }
     } catch (err) {
-      // TODO: write to logger
+      throw new Error(err.message);
     }
     return token;
   },

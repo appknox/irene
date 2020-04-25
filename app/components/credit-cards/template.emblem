@@ -38,14 +38,15 @@ else
               td #{card.expirationMonth}/#{card.expirationYear}
               td class="has-text-centered" local-class="buttons-wrapper action-wrapper"
                 unless card.isDefault
-                  button class="is-primary"
+                  button class="is-primary" click={action 'showRemoveConfirmation' card.id} disabled=disableActions
                     i class="fa fa-trash" &nbsp;
                     t "creditCards.actions.removeCard"
-                  button class="is-info"
+                  button class="is-info" disabled=disableActions
                     i class="fa fa-check" &nbsp;
                     t "creditCards.actions.markAsDefault"
 .columns
     .column
       .margin-t-q
         = partial "paginate"
+= confirm-box isActive=showRemoveConfirmation title=(t "creditCards.confirmation.removeCard") delegate=this confirmAction=(action "removeCard") disabled=removeCard.isRunning
 
