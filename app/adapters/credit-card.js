@@ -21,8 +21,14 @@ export default DRFAdapter.extend(IreneAdapterMixin, {
     return baseurl;
   },
 
-  getStripeSessionId: function() {
+  getStripeSessionId: function () {
     const creditCardSessionUrl = this._buildURL();
     return this.ajax(creditCardSessionUrl, "POST", {});
-  }
+  },
+
+  markAsDefault: function (id) {
+    const baseUrl = this._buildURL(null, id);
+    const endpoint = `${baseUrl}/mark_as_default`;
+    return this.ajax(endpoint, "POST", {});
+  },
 });

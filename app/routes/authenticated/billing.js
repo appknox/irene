@@ -7,12 +7,14 @@ const AuthenticatedBillingRoute = Route.extend(ScrollTopMixin, {
   title: `Billing${config.platform}`,
 
   organization: service("organization"),
+  billingHelper: service("billing-helper"),
 
   showNotification: false,
   showSuccessNotification: false,
   showFailureNotification: false,
+  isPaymentMehodsRoute: false,
 
-  beforeModel(transition) {
+  async beforeModel(transition) {
     const isPaymentSuccessful =
       transition.queryParams.success &&
       transition.queryParams.success === "true";
@@ -32,8 +34,20 @@ const AuthenticatedBillingRoute = Route.extend(ScrollTopMixin, {
       this.set("organization.selected.isPaymentDone", true);
     }
 
-    if (isPaymentDone || isPaymentSuccessful) {
+    const isAddCreditCardAction = await this.get(
+      "billingHelper"
+    ).checkLocalStoreHasData.call(
+      this.get("billingHelper"),
+      this.get("billingHelper").cardStoreKeyPrefix
+    );
+
+    if (isAddCreditCardAction) {
+      this.set("isPaymentMehodsRoute", isAddCreditCardAction);
+      this.transitionTo("authenticated.billing.payment-methods");
+      return;
+    } else if (isPaymentDone || isPaymentSuccessful) {
       this.transitionTo("authenticated.billing.plan");
+      return;
     }
   },
 
@@ -51,6 +65,7 @@ const AuthenticatedBillingRoute = Route.extend(ScrollTopMixin, {
     return {
       showBilling: await organization.get("showBilling"),
       isPaymentDone: await organization.get("isPaymentDone"),
+      isCreditCardAction: this.get("isPaymentMehodsRoute"),
       showNotification,
       showSuccessNotification: this.get("showSuccessNotification"),
       showFailureNotification: this.get("showFailureNotification"),

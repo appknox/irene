@@ -1,21 +1,30 @@
-import DS from 'ember-data';
-import {computed} from "@ember/object";
+import DS from "ember-data";
 
 export default DS.Model.extend({
+  brand: DS.attr("string"),
+  addedOn: DS.attr("date"),
+  lastFour: DS.attr("number"),
+  expirationMonth: DS.attr("number"),
+  expirationYear: DS.attr("number"),
+  isDefault: DS.attr("boolean"),
 
-  DEFAULT_STATUS: 3,
-  statusTextList : ['Active','Expired','Blocked', "Errored"],
+  async sessionId() {
+    const adapter = this.store.adapterFor(this.constructor.modelName);
+    let token = null;
+    try {
+      const response = await adapter.getStripeSessionId();
+      if (response && response.id && response.id.length) {
+        token = response.id;
+        return token;
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+    return token;
+  },
 
-  createdOn: DS.attr('date'),
-  lastFour: DS.attr('string'),
-  cardCompany: DS.attr('string'),
-  expirationMonth: DS.attr('string'),
-  expirationYear: DS.attr('string'),
-  status: DS.attr('number'),
-
-  statusText: computed('status',function(){
-    const subscriptionStatusValue = this.get('status');
-    const subscriptionText = this.get('statusTextList')[subscriptionStatusValue];
-    return subscriptionText ? subscriptionText : this.get('statusTextList')[this.get('DEFAULT_STATUS')];
-  })
+  async markDefault() {
+    const adapter = this.store.adapterFor(this.constructor.modelName);
+    return await adapter.markAsDefault(this.get("id"));
+  },
 });

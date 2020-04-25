@@ -777,5 +777,39 @@
     "notification": {
       "error": "Failed to downlaod Invoice"
     }
+  },
+  "creditCards": {
+    "header": {
+      "card": "Card",
+      "addedOn": "Added On",
+      "expiry": "Expiry"
+    },
+    "content": {
+      "endsIn": "ends in",
+      "default": "Default"
+    },
+    "actions": {
+      "addCard": "Add Card",
+      "removeCard": "Remove Card",
+      "markAsDefault": "Mark As Default"
+    },
+    "notifications": {
+      "addCard": {
+        "success": "Your new card has been added successfully",
+        "error": "Failed to add card. Please try again"
+      },
+      "removeCard": {
+        "success": "The card has been removed succesfully",
+        "error": "Failed to remove the card. Please try again"
+      },
+      "markAsDefault": {
+        "success": "The selected card has been marked as the default payment option",
+        "error": "Failed to mark the selected card as the defsult card. Please try again"
+      }
+    },
+    "confirmation": {
+      "removeCard": "Are you sure you want to remove this card?",
+      "markAsDefault": "Are you sure you want to make this card as the deafult card?"
+    }
   }
 }

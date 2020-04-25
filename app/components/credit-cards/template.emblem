@@ -1,23 +1,53 @@
-if isLoading
+unless hasObjects
   = skeletal-loader
 else
-  table local-class="card-table"
-    thead
-      th Card
-      th Added On
-      th Expiry
-      th Status
-      th
-    tbody
-      each cards as |card|
-        tr
-          td
-            i class="fa  fa-credit-card"
-            | &nbsp;&nbsp;#{card.cardCompany} ends in #{card.lastFour}
-          td #{card.createdOn}
-          td #{card.expirationMonth}/#{card.expirationYear}
-          td #{card.statusText}
-          td class="has-text-centered"
-            button
-              i class="fa fa-trash" title="Remove Card"
+  .columns
+    .column local-class="buttons-wrapper"
+      button class="is-success" click={action "initAddCard"} disabled=redirectToAddCard.isRunning
+        if redirectToAddCard.isRunning
+          i class="fa fa-spinner fa-spin"
+        else
+          i class="fa fa-plus" &nbsp;
+        t "creditCards.actions.addCard"
+  .columns
+    .column
+      table local-class="card-table"
+        thead
+          th
+            t "creditCards.header.card"
+          th
+            t "creditCards.header.addedOn"
+          th
+            t "creditCards.header.expiry"
+          th
+        tbody
+          each sortedObjects as |card|
+            tr
+              td
+                i class="fa  fa-credit-card"
+                | &nbsp;&nbsp;
+                |#{card.brand}
+                | &nbsp;&nbsp;
+                t "creditCards.content.endsIn"
+                | &nbsp;&nbsp;
+                |#{card.lastFour}
+                if card.isDefault
+                  span class="tag is-info" local-class="badge"
+                    t "creditCards.content.default"
+              td {{moment-format card.addedOn "DD MMM YYYY"}}
+              td #{card.expirationMonth}/#{card.expirationYear}
+              td class="has-text-centered" local-class="buttons-wrapper action-wrapper"
+                unless card.isDefault
+                  button class="is-primary" click={action 'showRemoveConfirmation' card.id} disabled=disableActions
+                    i class="fa fa-trash" &nbsp;
+                    t "creditCards.actions.removeCard"
+                  button class="is-info" click={action 'showMarkDefaultConfirmation' card.id} disabled=disableActions
+                    i class="fa fa-check" &nbsp;
+                    t "creditCards.actions.markAsDefault"
+.columns
+    .column
+      .margin-t-q
+        = partial "paginate"
+= confirm-box isActive=showRemoveConfirmation title=(t "creditCards.confirmation.removeCard") delegate=this confirmAction=(action "removeCard") disabled=removeCard.isRunning
+= confirm-box isActive=showMarkDefaultConfirmation title=(t "creditCards.confirmation.markAsDefault") delegate=this confirmAction=(action "markDefault") disabled=markDefault.isRunning
 

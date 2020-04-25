@@ -1,46 +1,102 @@
-import Component from '@ember/component';
+import Component from "@ember/component";
+import PaginateMixin from "irene/mixins/paginate";
+import { t } from "ember-intl";
+import { task } from "ember-concurrency";
+import { inject as service } from "@ember/service";
 
-export default Component.extend({
-  tagName: '',
-  isLoading: true,
-  cards: null,
+export default Component.extend(PaginateMixin, {
+  tagName: "",
+  targetModel: "credit-card",
+  sortProperties: ["addedOn:desc"],
 
-  fetchCreditCards(){
-    return [
-      {
-        id: 1,
-        createdOn: "10 Jan 2017",
-        lastFour: "4242",
-        cardCompany: "Visa",
-        expirationMonth: "02",
-        expirationYear: "2021",
-        statusText: "Active",
-      },
-      {
-        id: 2,
-        createdOn: "14 Mar 2017",
-        lastFour: "5287",
-        cardCompany: "Master",
-        expirationMonth: "04",
-        expirationYear: "2019",
-        statusText: "Expired",
-      },
-      {
-        id: 3,
-        createdOn: "17 Jan 2017",
-        lastFour: "3242",
-        cardCompany: "Visa",
-        expirationMonth: "09",
-        expirationYear: "2028",
-        statusText: "Blocked",
-      }
-    ];
+  disableActions: false,
+  showRemoveConfirmation: false,
+  showMarkDefaultConfirmation: false,
+  selectedCardId: null,
+  upperLimit: 8,
+  lowerLimit: 0,
+
+  addCardError: t("creditCards.notifications.addCard.error"),
+  removeCardError: t("creditCards.notifications.removeCard.error"),
+  removeCardSuceess: t("creditCards.notifications.removeCard.success"),
+  markDefaultSuccess: t("creditCards.notifications.markAsDefault.success"),
+  markDefaultError: t("creditCards.notifications.markAsDefault.success"),
+
+  billingHelper: service("billing-helper"),
+  notify: service("notification-messages"),
+
+  redirectToAddCard: task(function* () {
+    yield this.get("billingHelper").addCreditCard.call(
+      this.get("billingHelper")
+    );
+  }),
+
+  refetchRecords() {
+    const refetchRequired =
+      this.get("sortedObjects.length") === this.get("lowerLimit") ||
+      this.get("sortedObjects.length") === this.get("upperLimit");
+    if (refetchRequired) {
+      this.incrementProperty("version");
+    }
   },
 
-  didInsertElement(){
-    setTimeout(()=>{
-      this.set('cards', this.fetchCreditCards());
-      this.set('isLoading', false);
-    },500)
-  }
+  removeCard: task(function* () {
+    try {
+      const cardRecord = yield this.get("store").peekRecord(
+        "credit-card",
+        this.get("selectedCardId")
+      );
+      yield cardRecord.destroyRecord();
+      this.refetchRecords();
+      this.get("notify").success(this.get("removeCardSuceess"));
+      this.set("showRemoveConfirmation", false);
+    } catch (err) {
+      this.get("notify").error(this.get("removeCardError"));
+    } finally {
+      this.set("disableActions", false);
+    }
+  }),
+
+  markDefault: task(function* () {
+    try {
+      const cardRecord = yield this.get("store").peekRecord(
+        "credit-card",
+        this.get("selectedCardId")
+      );
+      yield cardRecord.get("markDefault").call(cardRecord);
+      this.incrementProperty("version");
+      this.get("notify").success(this.get("markDefaultSuccess"));
+      this.set("showMarkDefaultConfirmation", false);
+    } catch (err) {
+      this.get("notify").error(this.get("markDefaultError"));
+    } finally {
+      this.set("disableActions", false);
+    }
+  }),
+
+  actions: {
+    initAddCard() {
+      try {
+        this.get("redirectToAddCard").perform();
+      } catch (err) {
+        this.get("notify").error(this.get("addCardError"));
+      }
+    },
+    removeCard() {
+      this.set("disableActions", true);
+      this.get("removeCard").perform();
+    },
+    showRemoveConfirmation(cardId) {
+      this.set("selectedCardId", cardId);
+      this.set("showRemoveConfirmation", true);
+    },
+    showMarkDefaultConfirmation(cardId) {
+      this.set("selectedCardId", cardId);
+      this.set("showMarkDefaultConfirmation", true);
+    },
+    markDefault() {
+      this.set("disableActions", true);
+      this.get("markDefault").perform();
+    },
+  },
 });

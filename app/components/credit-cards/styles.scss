@@ -1,21 +1,36 @@
-.card-table{
-  td,tr{
+.buttons-wrapper {
+  text-align: right;
+}
+.card-table {
+  td,
+  tr {
     border: none;
   }
-  th{
+  th {
     border-color: #e4e2e2;
     background: #424651;
     color: #fff;
-    &:first-of-type{
+    &:first-of-type {
       border-radius: 9px 0 0 0;
     }
-    &:last-of-type{
+    &:last-of-type {
       border-radius: 0 9px 0 0;
     }
   }
-  tr{
-    &:nth-child(even){
-      td{
+  tr {
+    td {
+      &.action-wrapper {
+        button {
+          margin: 0 0.5rem;
+          border-radius: 11px;
+        }
+      }
+      .badge {
+        margin: 0 0.5rem;
+      }
+    }
+    &:nth-child(even) {
+      td {
         background: #f5f5f5;
       }
     }
