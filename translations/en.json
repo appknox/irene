@@ -801,6 +801,10 @@
       "removeCard": {
         "success": "The card has been removed succesfully",
         "error": "Failed to remove the card. Please try again"
+      },
+      "markAsDefault": {
+        "success": "The selected card has been marked as the default payment option",
+        "error": "Failed to mark the selected card as the defsult card. Please try again"
       }
     },
     "confirmation": {

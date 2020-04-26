@@ -22,4 +22,9 @@ export default DS.Model.extend({
     }
     return token;
   },
+
+  async markDefault() {
+    const adapter = this.store.adapterFor(this.constructor.modelName);
+    return await adapter.markAsDefault(this.get("id"));
+  },
 });

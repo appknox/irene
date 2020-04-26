@@ -41,7 +41,7 @@ else
                   button class="is-primary" click={action 'showRemoveConfirmation' card.id} disabled=disableActions
                     i class="fa fa-trash" &nbsp;
                     t "creditCards.actions.removeCard"
-                  button class="is-info" disabled=disableActions
+                  button class="is-info" click={action 'showMarkDefaultConfirmation' card.id} disabled=disableActions
                     i class="fa fa-check" &nbsp;
                     t "creditCards.actions.markAsDefault"
 .columns
@@ -49,4 +49,5 @@ else
       .margin-t-q
         = partial "paginate"
 = confirm-box isActive=showRemoveConfirmation title=(t "creditCards.confirmation.removeCard") delegate=this confirmAction=(action "removeCard") disabled=removeCard.isRunning
+= confirm-box isActive=showMarkDefaultConfirmation title=(t "creditCards.confirmation.markAsDefault") delegate=this confirmAction=(action "markDefault") disabled=markDefault.isRunning
 

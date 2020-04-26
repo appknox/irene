@@ -11,6 +11,7 @@ export default Component.extend(PaginateMixin, {
 
   disableActions: false,
   showRemoveConfirmation: false,
+  showMarkDefaultConfirmation: false,
   selectedCardId: null,
   upperLimit: 8,
   lowerLimit: 0,
@@ -18,6 +19,8 @@ export default Component.extend(PaginateMixin, {
   addCardError: t("creditCards.notifications.addCard.error"),
   removeCardError: t("creditCards.notifications.removeCard.error"),
   removeCardSuceess: t("creditCards.notifications.removeCard.success"),
+  markDefaultSuccess: t("creditCards.notifications.markAsDefault.success"),
+  markDefaultError: t("creditCards.notifications.markAsDefault.success"),
 
   billingHelper: service("billing-helper"),
   notify: service("notification-messages"),
@@ -54,6 +57,23 @@ export default Component.extend(PaginateMixin, {
     }
   }),
 
+  markDefault: task(function* () {
+    try {
+      const cardRecord = yield this.get("store").peekRecord(
+        "credit-card",
+        this.get("selectedCardId")
+      );
+      yield cardRecord.get("markDefault").call(cardRecord);
+      this.incrementProperty("version");
+      this.get("notify").success(this.get("markDefaultSuccess"));
+      this.set("showMarkDefaultConfirmation", false);
+    } catch (err) {
+      this.get("notify").error(this.get("markDefaultError"));
+    } finally {
+      this.set("disableActions", false);
+    }
+  }),
+
   actions: {
     initAddCard() {
       try {
@@ -69,6 +89,14 @@ export default Component.extend(PaginateMixin, {
     showRemoveConfirmation(cardId) {
       this.set("selectedCardId", cardId);
       this.set("showRemoveConfirmation", true);
+    },
+    showMarkDefaultConfirmation(cardId) {
+      this.set("selectedCardId", cardId);
+      this.set("showMarkDefaultConfirmation", true);
+    },
+    markDefault() {
+      this.set("disableActions", true);
+      this.get("markDefault").perform();
     },
   },
 });
