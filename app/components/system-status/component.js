@@ -8,11 +8,6 @@ export default Component.extend({
   isDeviceFarmWorking: false,
   isAPIHostWorking: false,
 
-  localClassNameBindings: [
-    "isStorageWorking:storage-operational",
-    "isDeviceFarmWorking:devicefarm-operational",
-  ],
-
   didInsertElement() {
     this.get("getStorageStatus").perform();
     this.get("getDeviceFarmStatus").perform();
@@ -39,7 +34,7 @@ export default Component.extend({
 
   getAPIHostStatus: task(function* () {
     try {
-      yield this.get("ajax").request(`${ENV.host}/api/check`);
+      yield this.get("ajax").request(ENV.endpoints.pingAPIHost);
       this.set("isAPIHostWorking", true);
     } catch (error) {
       this.set("isAPIHostWorking", false);
