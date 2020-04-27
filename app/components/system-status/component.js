@@ -1,38 +1,43 @@
-import Component from '@ember/component';
-import { task } from 'ember-concurrency';
-import ENV from 'irene/config/environment';
-import {isNotFoundError} from 'ember-ajax/errors';
+import Component from "@ember/component";
+import { task } from "ember-concurrency";
+import ENV from "irene/config/environment";
+import { isNotFoundError } from "ember-ajax/errors";
 
 export default Component.extend({
-
   isStorageWorking: false,
   isDeviceFarmWorking: false,
-
-  localClassNameBindings: [
-    'isStorageWorking:storage-operational',
-    'isDeviceFarmWorking:devicefarm-operational'],
+  isAPIHostWorking: false,
 
   didInsertElement() {
     this.get("getStorageStatus").perform();
-    this.get('getDeviceFarmStatus').perform();
+    this.get("getDeviceFarmStatus").perform();
+    this.get("getAPIHostStatus").perform();
   },
 
-  getStorageStatus: task(function *() {
+  getStorageStatus: task(function* () {
     try {
       let status = yield this.get("ajax").request(ENV.endpoints.status);
-      yield this.get('ajax').request(status.data.storage, { headers:{}});
-    } catch(error) {
+      yield this.get("ajax").request(status.data.storage, { headers: {} });
+    } catch (error) {
       this.set("isStorageWorking", !!isNotFoundError(error));
     }
   }).drop(),
 
-  getDeviceFarmStatus: task(function *() {
+  getDeviceFarmStatus: task(function* () {
     try {
       yield this.get("ajax").request(ENV.endpoints.ping);
       this.set("isDeviceFarmWorking", true);
-    } catch(error) {
+    } catch (error) {
       this.set("isDeviceFarmWorking", false);
     }
   }).drop(),
 
+  getAPIHostStatus: task(function* () {
+    try {
+      yield this.get("ajax").request(ENV.endpoints.pingAPIHost);
+      this.set("isAPIHostWorking", true);
+    } catch (error) {
+      this.set("isAPIHostWorking", false);
+    }
+  }).drop(),
 });

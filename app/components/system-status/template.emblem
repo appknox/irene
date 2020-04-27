@@ -18,21 +18,48 @@
                 td
                   = t "storage"
                 td
-                  ul
-                    li local-class="operational-status storage-status"
-                      span local-class="operational-text"
-                        = t "operational"
-                      span local-class="unavailable-text"
-                        = t "unreachable"
-                        small
-                          =  t "proxyWarning"
+                  if getStorageStatus.isRunning
+                    span class="has-text-grey-lighter" local-class="loading-indicator"
+                      i class="fa fa-spin fa-spinner"
+                      t"checking"
+                  else
+                    ul
+                      li local-class="operational-status {{if isStorageWorking 'online'}}"
+                        span local-class="operational-text"
+                          =t "operational"
+                        span local-class="unavailable-text"
+                          =t "unreachable"
+                          small
+                            =t "proxyWarning"
               tr
                 td
                   = t "devicefarm"
                 td
-                  ul
-                    li local-class="operational-status devicefarm-status"
-                      span local-class="operational-text"
-                        = t "operational"
-                      span local-class="unavailable-text"
-                        = t "unreachable"
+                  if getDeviceFarmStatus.isRunning
+                    span class="has-text-grey-lighter" local-class="loading-indicator"
+                      i class="fa fa-spin fa-spinner"
+                      t"checking"
+                  else
+                    ul
+                      li local-class="operational-status {{if isDeviceFarmWorking 'online'}}"
+                        span local-class="operational-text"
+                          = t "operational"
+                        span local-class="unavailable-text"
+                          = t "unreachable"
+              tr
+                td
+                  t "api"
+                  |&nbsp;
+                  t "host"
+                td
+                  if getAPIHostStatus.isRunning
+                    span class="has-text-grey-lighter" local-class="loading-indicator"
+                      i class="fa fa-spin fa-spinner"
+                      t"checking"
+                  else
+                    ul
+                      li local-class="operational-status {{if isAPIHostWorking 'online'}}"
+                        span local-class="operational-text"
+                          = t "operational"
+                        span local-class="unavailable-text"
+                          = t "unreachable"
