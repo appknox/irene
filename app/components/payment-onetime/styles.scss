@@ -34,9 +34,12 @@
       color: #8a8989;
       font-size: 1rem;
     }
-    &:last-child {
-      &:not(.buy-option) {
-        justify-content: flex-end;
+    .inner-flex {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      .add-more-wrapper {
+        margin: 0 0 1rem 0;
       }
     }
   }

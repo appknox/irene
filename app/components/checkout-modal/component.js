@@ -10,9 +10,24 @@ export default Component.extend({
   redirectToPayment: task(function* () {
     const isPaidUser = this.get("plan.isPaidUser");
     if (isPaidUser) {
-      yield this.get("billingHelper").buyOneTimeScan();
+      const type = this.get("plan.requestType");
+      let response = null;
+      switch (type) {
+        case this.get("billingHelper.purchaseType.addOn"):
+          response = yield this.get("billingHelper").buyAddOn();
+          break;
+        case this.get("billingHelper.purchaseType.oneTime"):
+          response = yield this.get("billingHelper").buyOneTimeScan();
+          break;
+        default:
+        // TODO: handle subscription payment
+      }
       this.set("plan.showCheckoutModal", false);
-      this.set("plan.refreshCount", this.get("plan.refreshCount") + 1);
+      const context = this.get("context");
+      if (context && response) {
+        context.set("response", response);
+        context.incrementProperty("refreshCount");
+      }
       return;
     }
     const planId = this.get("plan.id");

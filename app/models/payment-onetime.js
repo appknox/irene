@@ -22,8 +22,16 @@ export default DS.Model.extend({
       : this.get("statusTextList")[this.get("DEFAULT_STATUS")];
   }),
 
-  showBuyOption: computed("quantity", function () {
-    return this.get("quantity") === 0;
+  showBuyOption: computed("quantity", "expiryDate", function () {
+    return this.get("quantity") === 0 && this.get("expiryDate") === null;
+  }),
+
+  showReActivateOption: computed("quantity", "expiryDate", function () {
+    return (
+      this.get("quantity") > 0 &&
+      this.get("expiryDate") !== null &&
+      this.get("expiryDate") < Date.now()
+    );
   }),
 
   statusCSSClass: computed("status", function () {
@@ -37,6 +45,7 @@ export default DS.Model.extend({
       quantity,
     };
     const adapter = this.store.adapterFor(this.constructor.modelName);
-    await adapter.buyOneTimeScan(data);
+    const response = await adapter.buyOneTimeScan(data);
+    return response;
   },
 });

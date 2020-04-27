@@ -1,55 +1,59 @@
-import Component from '@ember/component';
+import Component from "@ember/component";
+import { observer } from "@ember/object";
+import { inject as service } from "@ember/service";
 
 export default Component.extend({
-  tagName: '',
+  tagName: "",
   isLoading: true,
-  addons: null,
+  addon: null,
+  refreshCount: 0,
+  response: null,
 
-  fetchAddons(){
-    return [
-      {
-        id: 1,
-        addon: {
-          name: 'Manual Scan',
-          description: 'Consectetur ad est laborum consequat ex dolore amet exercitation nulla cupidatat labore ut. Officia sint proident laboris incididunt dolore esse cillum. Id commodo est dolor veniam aliquip.',
-          price: '720',
-          currency: 'USD',
-        },
-        createdOn: '10 Jan 2020',
-        lastPaidOn: '10 Jan 2020',
-        expiryDate: '10 Jan 2021',
-        scansPurchased: 5,
-        scansRemaining: 2,
-        rescansPurchased: 2,
-        rescansRemaining: 2,
-        statusText: 'Active',
-        cssClass: 'is-success',
-      },
-      {
-        id: 2,
-        addon: {
-          name: 'Manual Scan',
-          description: 'Consectetur ad est laborum consequat ex dolore amet exercitation nulla cupidatat labore ut. Officia sint proident laboris incididunt dolore esse cillum. Id commodo est dolor veniam aliquip.',
-          price: '520',
-          currency: 'USD',
-        },
-        createdOn: '10 Jan 2020',
-        lastPaidOn: '10 Jan 2020',
-        expiryDate: '10 Jan 2021',
-        scansPurchased: 4,
-        scansRemaining: 1,
-        rescansPurchased: 0,
-        rescansRemaining: 0,
-        statusText: 'Expired',
-        cssClass: 'is-light',
-      },
-    ]
+  billingHelper: service("billing-helper"),
+
+  refreshCountChanged: observer("refreshCount", function () {
+    this.updateAddonValues();
+  }),
+
+  updateAddonValues() {
+    const {
+      expiry_date: expiryDate,
+      quantity,
+      rescan_count: rescanCount,
+      rescan_factor: rescanFactor,
+      status,
+      currency,
+      price,
+    } = this.get("response");
+    this.set("addon.expiryDate", expiryDate);
+    this.set("addon.quantity", quantity);
+    this.set("addon.rescanCount", rescanCount);
+    this.set("addon.rescanFactor", rescanFactor);
+    this.set("addon.status", status);
+    this.set("addon.currency", currency);
+    this.set("addon.price", price);
   },
 
-  didInsertElement(){
-    setTimeout(()=> {
-      this.set('addons',this.fetchAddons());
-      this.set('isLoading',false);
-    },1500);
-  }
+  async fetchAddons() {
+    this.set("isLoading", true);
+    const addonData = await this.get("store").findAll("payment-addon");
+    this.set("addon", addonData.get("firstObject"));
+    this.set("isLoading", false);
+  },
+
+  didInsertElement() {
+    this.fetchAddons();
+  },
+
+  actions: {
+    showCheckoutModal() {
+      this.set("billingHelper.selectedQuantity", 1);
+      this.set("addon.isPaidUser", true);
+      this.set(
+        "addon.requestType",
+        this.get("billingHelper.purchaseType.addOn")
+      );
+      this.set("addon.showCheckoutModal", true);
+    },
+  },
 });

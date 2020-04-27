@@ -15,32 +15,31 @@ else
           | &nbsp;#{oneTime.quantity}
     .card-content
       .content
-        if oneTime.showBuyOption
-          div local-class="card-content buy-option"
-            div local-class="cost-info"
-              | {{format-currency oneTime.currency oneTime.price}}&nbsp;
-              t "perScan"
+        div local-class="card-content"
+          div local-class="cost-info"
+            | {{format-currency oneTime.currency oneTime.price}}&nbsp;
+            t "perScan"
+          div local-class="inner-flex"
             div local-class="add-more-wrapper"
-              button class="is-primary highlighted-button" click={action 'openPaymentModal'}
-                i class="fa fa-cart-plus" &nbsp;
-                t"scanBuy"
-        else
-          div local-class="card-content"
-            div local-class="cost-info"
-              | {{format-currency oneTime.currency oneTime.price}}&nbsp;
-              t "perScan"
-            div local-class="add-more-wrapper"
-              button class="is-success" click={action 'openPaymentModal'}
-                i class="fa fa-plus" &nbsp;
-                t"addMore"
-          div local-class="card-content"
-            div
-              strong
-                t "expiresOn"
-                |: &nbsp;
-              if oneTime.expiryDate
-                | {{moment-format oneTime.expiryDate "DD MMM YYYY"}}
-              else
-                t"notApplicable"
-  = checkout-modal plan=oneTime title=(t "buyScan")
+              button class="{{if oneTime.showBuyOption 'is-primary highlighted-button' 'is-success'}}" click={action 'openPaymentModal'}
+                if oneTime.showBuyOption
+                  i class="fa fa-cart-plus" &nbsp;
+                  t"scanBuy"
+                else
+                  if oneTime.showReActivateOption
+                    i class="fa fa-repeat" &nbsp;
+                    t "reActivate"
+                  else
+                    i class="fa fa-plus" &nbsp;
+                    t"addMore"
+            unless oneTime.showBuyOption
+              div
+                strong
+                  t "expiresOn"
+                  |: &nbsp;
+                if oneTime.expiryDate
+                  | {{moment-format oneTime.expiryDate "DD MMM YYYY"}}
+                else
+                  t"notApplicable"
+  = checkout-modal plan=oneTime title=(t "buyScan") context=this
 

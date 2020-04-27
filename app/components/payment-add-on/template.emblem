@@ -1,32 +1,58 @@
 if isLoading
   = skeletal-loader
 else
-  each addons as |item|
+  if addon.showNoData
+    h6 class="has-text-centered has-text-grey-lighter"
+      t "noAddonsAvailable"
+  else
     .card class="full-width margin-top-bottom" local-class="separated-cards card-section"
       header class="card-header" local-class="card-head"
         p class="card-header-title" local-class="title"
-          | #{item.addon.name}
-          span class="tag {{item.cssClass}}" local-class="status-tag"
-            | #{item.statusText}
+          t "manualScan"
+          unless addon.showBuyOption
+            span class="tag {{addon.statusCSSClass}}" local-class="status-tag"
+              | #{addon.statusText}
       .card-content
         .content local-class="card-content"
           div
             div local-class="cost-info"
-              | #{item.addon.currency} #{item.addon.price} / Scan
+              | {{format-currency addon.currency addon.price}} &nbsp;
+              t "perScan"
           div
             div class="margin-bottom20" local-class="scan-count-info"
               p
-                strong Scans Left:&nbsp;
-                | #{item.scansRemaining}
+                strong
+                  t "scansPurchased"
+                  | &nbsp;
+                | #{addon.quantity}
               p
-                strong Rescans Left:&nbsp;
-                | #{item.rescansRemaining}
+                strong
+                  t "reScansPurchased"
+                  |:&nbsp;
+                | #{addon.rescanCount}
             div class="margin-bottom20" local-class="add-more-wrapper"
-                button class="is-success"
-                  i class="fa fa-plus"
-                  | &nbsp;add more
+                button class="is-success" click={action 'showCheckoutModal'}
+                  if addon.showBuyOption
+                    i class="fa fa-cart-plus"
+                    | &nbsp;
+                    t"scanBuy"
+                  else
+                    if addon.showReActivateOption
+                      i class="fa fa-repeat"
+                      | &nbsp;
+                      t "reActivate"
+                    else
+                      i class="fa fa-plus"
+                      | &nbsp;
+                      t"addMore"
             div local-class="expiry-wrapper"
               div
-                strong Expires On : &nbsp;
-                | #{item.expiryDate}
+                strong
+                  t "expiresOn"
+                  | : &nbsp;
+                if addon.expiryDate
+                  | {{moment-format addon.expiryDate "DD MMM YYYY"}}
+                else
+                  t "notApplicable"
+    = checkout-modal plan=addon title=(t "buyScan") context=this
 
