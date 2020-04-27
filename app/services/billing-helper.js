@@ -9,6 +9,12 @@ export default Service.extend({
   tempStoreKeyPrefix: "ajs_bill_oneTime",
   cardStoreKeyPrefix: "ajs_bill_addCard",
 
+  purchaseType: {
+    addOn: "ADD_ON",
+    oneTime: "ONE_TIME",
+    subscription: "SUBSCRIPTION",
+  },
+
   store: service(),
   router: service(),
   tempStore: service("local-storage"),
@@ -89,13 +95,13 @@ export default Service.extend({
   },
 
   incrementSelectedQuantity() {
-    this.set("selectedQuantity", this.get("selectedQuantity") + 1);
+    this.incrementProperty("selectedQuantity");
   },
 
   decrementSelectedQuantity() {
     const currentQuantity = this.get("selectedQuantity");
     if (currentQuantity > 1) {
-      this.set("selectedQuantity", currentQuantity - 1);
+      this.decrementProperty("selectedQuantity");
     }
   },
 
@@ -112,6 +118,21 @@ export default Service.extend({
         this.get("notify").success(this.get("paymentSuccess"));
         await this.clearDataInLocalStore();
         setTimeout(() => window.location.reload(), 1500);
+      } catch (err) {
+        this.get("notify").error(this.get("paymentError"));
+      }
+    }
+  },
+
+  async buyAddOn() {
+    const addonModal = await this.get("store").queryRecord("payment-addon", {});
+    if (addonModal) {
+      try {
+        const response = await addonModal
+          .get("buyAddon")
+          .call(addonModal, this.get("selectedQuantity"));
+        this.get("notify").success(this.get("paymentSuccess"));
+        return response;
       } catch (err) {
         this.get("notify").error(this.get("paymentError"));
       }
