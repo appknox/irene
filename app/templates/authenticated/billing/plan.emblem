@@ -1,0 +1,18 @@
+if model.highlightOneTimeCard
+  h3 One Time Purchase(s)
+  = payment-onetime highlightOneTimeCard=model.highlightOneTimeCard
+  hr
+  h3 Subscription(s)
+  = payment-subscription
+else
+  h3 Subscription(s)
+  = payment-subscription
+  hr
+  h3 One Time Purchase(s)
+  = payment-onetime
+hr
+h3 Addon(s)
+= payment-add-on
+
+
+

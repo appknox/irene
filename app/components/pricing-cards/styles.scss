@@ -1,0 +1,19 @@
+.mid-aligned{
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 62px);
+}
+
+.pricing-wrapper{
+  display:flex;
+  align-items: center;
+  overflow-x: auto;
+  margin-left: 1rem;
+  height: calc(100vh - 62px);
+  margin-left:-20px;
+  padding-left:20px;
+}
+
+.center-justified{
+  justify-content: center;
+}

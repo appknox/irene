@@ -1,0 +1,36 @@
+.card-head{
+  background: #424651;
+  color: #fff;
+  .title{
+    color:#fff;
+  }
+}
+.card-section{
+  &.separated-cards{
+    margin-bottom: 3rem;
+  }
+  .card-head{
+    padding: 8px 15px;
+  }
+  .status-tag{
+    margin-left: 20px;
+  }
+  .card-content{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    & > div{
+      display: inline-block;
+      padding: 0.5rem 0;
+      margin: 0.5rem 0;
+    }
+    .cost-info{
+      font-weight: bold;
+      color: #8a8989;
+      font-size: 1rem;
+    }
+    &:last-child{
+      text-align: right;
+    }
+  }
+}

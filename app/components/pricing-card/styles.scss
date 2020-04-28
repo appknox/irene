@@ -1,0 +1,145 @@
+.pricing-box {
+  opacity: 0.8;
+  min-height: 350px;
+  flex: 0 0 25rem;
+  margin: 1rem 0;
+  text-align: center;
+  user-select: none;
+  cursor: pointer;
+  position: relative;
+
+  &.disabled {
+    pointer-events: none;
+    &::before {
+      content: " ";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.4);
+    }
+    &::after {
+      content: "\f110";
+      font-family: FontAwesome;
+      color: #fff;
+      font-size: 5rem;
+      position: absolute;
+      top: calc(5rem * 2.5);
+      left: 0;
+      right: 0;
+      animation: load-spin 2s infinite linear;
+    }
+  }
+
+  @media screen and (max-width: 1120px) {
+    flex: 0 0 calc(33.33333% - 1.2rem);
+  }
+
+  &.card-focussed {
+    opacity: 1;
+    z-index: 2;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2),
+      -2px -2px 20px 0px rgba(0, 0, 0, 0.1);
+  }
+  header,
+  footer {
+    color: #fff;
+  }
+  header {
+    .badge {
+      background: $success;
+      border-radius: 4px;
+      color: #fff;
+      display: inline-block;
+      font-size: 1.2rem;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-weight: 600;
+      line-height: 1rem;
+      padding: 0.45em;
+      position: absolute;
+      top: -1.45rem;
+      vertical-align: middle;
+      margin: 1.618em auto 0;
+      left: -0.3rem;
+      box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.2);
+    }
+
+    .bold-price {
+      color: #0e1e25;
+      font-size: 2.618em;
+      font-weight: 500;
+      margin: 1.7rem 0;
+      small {
+        color: rgba(14, 30, 37, 0.38);
+        font-size: 0.55em;
+        font-weight: 400;
+        margin: 0 0 0 0.3em;
+      }
+    }
+  }
+
+  .plan-description {
+    color: rgba(14, 30, 37, 0.54);
+    margin-bottom: 1em;
+  }
+
+  .plan-features {
+    text-align: left;
+    margin-top: 1em;
+    .feature {
+      display: flex;
+      margin: 8px 0;
+      align-items: center;
+      .list-indicator {
+        background-color: $success;
+        border-radius: 50%;
+        color: #fff;
+        display: block;
+        font-size: 0.618em;
+        font-weight: 900;
+        height: 1.618em;
+        left: 0;
+        line-height: 1.75;
+        text-align: center;
+        top: 0.382em;
+        width: 1.618em;
+        display: inline-block;
+        margin-right: 0.8em;
+      }
+      li {
+        margin-bottom: 0.5em;
+        color: rgba(14, 30, 37, 0.87);
+      }
+    }
+  }
+
+  footer {
+    padding: 1.2em;
+    button {
+      line-height: 0.1em;
+      padding: 1em;
+      width: 100%;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #fff;
+      background: $success;
+      &:hover,
+      &:active,
+      &:focus {
+        border: 1px solid rgb(150, 199, 151);
+        outline: none;
+      }
+    }
+  }
+}
+
+@keyframes load-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

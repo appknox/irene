@@ -291,7 +291,6 @@ h3
       &:hover
         text-decoration: underline
 
-
 $badge-small-size: 1.5em
 .badge-square
   min-width: $badge-small-size * 1.3
@@ -495,7 +494,6 @@ $fractional-pts: q 0.25, h 0.5, 3q 0.75
 .contain-width
   width: 100%
 
-/* Appknox specific */
 .appknox-logo
   margin-top: 13px
 
@@ -842,7 +840,7 @@ select
     margin-top: 10px
 
 div[class^="_c-notification__container"]
-  z-index: 2000!important
+    z-index: 2000!important
 
 .is-progress
   border: 1px solid #ffe0dd
@@ -914,9 +912,9 @@ div[class^="_c-notification__container"]
     margin-left: 1.5em
     color: #FFF
     padding: 10px 0px
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+    text-overflow: ellipsis
+    white-space: nowrap
+    overflow: hidden
   .project-count
     padding: 3px
     min-width: 120px
@@ -1034,8 +1032,8 @@ div[class^="_c-notification__container"]
 .input
   border-color: #e6e6e6!important
 .input:hover
-    border-color: #b3b3b3!important
-    box-shadow: 0 0 1px #808080
+  border-color: #b3b3b3!important
+  box-shadow: 0 0 1px #808080
 
 .card-form
   width: 40%
@@ -1790,7 +1788,6 @@ ul.risk-table
   font-size: 12px
   vertical-align: middle
 
-
 .cvss-box
   border-radius: 5px
   margin: 10px auto
@@ -1879,7 +1876,6 @@ ul.risk-table
 .attachments-list-table
   margin-left: 27px
   margin-top: 0px
-
 
 .team-container.box-container
   padding-bottom: 20px
@@ -2218,8 +2214,6 @@ button.delete-button
   .top-bar
     background: none
 
-
-
 .modal.is-active
   .marvel-device.ipad
     margin-left: 0px
@@ -2243,7 +2237,6 @@ button.delete-button
     height: 480px!important
   .vnc-text
     display: none
-
 
 .marvel-device.iphone5s
   width: 245px!important
@@ -2311,8 +2304,8 @@ button.delete-button
           padding-top: 18px
 
 button[disabled], .input[disabled]
-  cursor: not-allowed
-  pointer-events: auto
+          cursor: not-allowed
+          pointer-events: auto
 
 .button[disabled].ac-upload-app
   opacity: 0.8
@@ -2633,7 +2626,6 @@ select:disabled
   &:last-child
     border-bottom: none
 
-
 .main-box-container
   margin: 20px 20px 0px 40px
   box-shadow: 0px 0px 10px #ccc
@@ -2649,7 +2641,6 @@ select:disabled
         padding: 0.3em 0.8em
       &:hover
         overflow-y: scroll
-
 
   .box-content
     margin-top: 20px
@@ -2751,7 +2742,6 @@ $check-circle-true-color: $success
     align-items: flex-start
     .check-circle-text
       padding-top: 0.1em
-
 
 @mixin toggle-knob($size, $on, $off)
   position: relative
@@ -3109,7 +3099,6 @@ $attachment-icon-width: 4em
     line-height: 17px
     &:nth-child(2)
       margin-left: 10px
-
 
 .device-modal
   overflow: scroll
@@ -3603,7 +3592,7 @@ $dropdown-default-theme: $color-table
 .no-issues
   i
     margin-top: 0
-  padding-bottom: 1em
+    padding-bottom: 1em
 
 .file-tags
   display: flex
@@ -3649,19 +3638,19 @@ $filetag-bg: #f3f5f8
   display: flex
   align-items: center
 .captured-prop
-  font-weight: bold;
-  display: inline;
-  float: right;
-  border: 0px solid #959393;
-  padding: 0px 4px 0px 4px;
-  border-radius: 4px;
-  color: white;
-  background: #908b8b;
-  margin-left: 3px;
+  font-weight: bold
+  display: inline
+  float: right
+  border: 0px solid #959393
+  padding: 0px 4px 0px 4px
+  border-radius: 4px
+  color: white
+  background: #908b8b
+  margin-left: 3px
 
 .captured-heading
-  display: inline;
-  font-weight: bold;
+  display: inline
+  font-weight: bold
 
 .code-link
   padding: 1px 1px 2px 5px
@@ -3693,18 +3682,18 @@ $filetag-bg: #f3f5f8
       display: flex
       align-items: center
       justify-content: center
-    padding: 0.5em
+      padding: 0.5em
   &-account
     &-container
       border-left: 1px solid #efefef
       width: 100%
       display: flex
       align-items: center
-    padding: 0.5em 1em
-    display: flex
-    align-items: center
-    justify-content: space-between
-    width: 100%
+      padding: 0.5em 1em
+      display: flex
+      align-items: center
+      justify-content: space-between
+      width: 100%
 
 .regulatory__item
   padding: 0.5em 1em
@@ -3728,3 +3717,6 @@ $filetag-bg: #f3f5f8
     &, &:hover
       background: lighten($color-lightgray, 2%)
       color: lighten($color-table, 43%)
+.full-width
+  width: calc(100% - 20px)
+  margin-left: 10px

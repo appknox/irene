@@ -1,0 +1,27 @@
+.box local-class="pricing-box {{if plan.isHighlighted 'card-focussed'}} {{if redirectToAddCard.isRunning 'disabled'}} {{if redirectToPayment.isRunning 'disabled'}}" click={action "initCheckout"}
+  .content
+    header
+      h3 local-class="badge"
+        | {{title-case plan.name}}
+      p local-class="bold-price"
+        | {{format-currency plan.currency plan.price}}
+        if plan.billingCycle
+          small
+            | /#{plan.billingCycle}
+    p local-class="plan-description"
+      | #{plan.description}
+      div local-class="plan-features"
+        each plan.features as |feature|
+          div local-class="feature"
+            div local-class="list-indicator"
+              t "billingCardTick"
+            div
+              | #{feature.text}
+    footer
+      button
+        if plan.isRecurring
+          t "billingSubscribe"
+        else
+          t "billingAddCard"
+
+= checkout-modal plan=plan title=(t "billigPlanModalTitle")
