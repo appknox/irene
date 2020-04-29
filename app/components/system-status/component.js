@@ -25,7 +25,8 @@ export default Component.extend({
 
   getDeviceFarmStatus: task(function* () {
     try {
-      yield this.get('ajax').request(ENV.endpoints.ping);
+      const url = [ENV.devicefarmHost, ENV.endpoints.ping].join('/');
+      yield this.get('ajax').request(url);
       this.set('isDeviceFarmWorking', true);
     } catch (_) {
       this.set('isDeviceFarmWorking', false);
