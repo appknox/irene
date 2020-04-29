@@ -1,42 +1,44 @@
 .operational-status {
-  color: $red
+  color: $red;
+  padding-top: 0.2em;
 }
 
 .operational-text {
   display: none;
 }
 
-.storage-operational .storage-status {
-    color: $green;
-    .operational-text {
-      display: inline;
-    }
-    .unavailable-text {
-      display: none;
-    }
+.operational-status.online {
+  color: $green;
+  .operational-text {
+    display: inline;
+  }
+  .unavailable-text {
+    display: none;
+  }
 }
 
-.devicefarm-operational .devicefarm-status {
-    color: $green;
-    .operational-text {
-      display: inline;
-    }
-    .unavailable-text {
-      display: none;
-    }
+.status-label, .operational-status {
+  font-size: 1.2em;
 }
 
 .system-status-container {
-  margin-top: 100px;
+  margin: 50px 0;
   background: lighten($default, 50%);
   padding-bottom: 10px;
   padding-top: 20px;
   border-radius: 10px;
   .system-status-box {
+    .loading-indicator {
+      font-size: 1rem;
+      text-transform: none;
+      i {
+        margin: 0 0.5rem;
+      }
+    }
     li {
       text-transform: capitalize;
       position: relative;
-      top: -18px;
+      top: -0.4em;
     }
     li:before {
       position: relative;
@@ -57,18 +59,22 @@
     .system-status-table {
       width: 97%;
       margin: 9px;
+      padding-bottom: 0.3em;
       th {
         color: #000;
         padding: 20px;
         border-color: lighten($default, 50%);
       }
       td {
-        padding: 30px;
-        border-width: 0px;
+        padding: 0.5em;
+        border: none;
+        vertical-align: middle;
+      }
+      th {
+        text-transform: uppercase;
+        font-size: 1.1em;
       }
       td, th {
-        text-transform: uppercase;
-        font-size: 16px;
         text-align: center;
       }
     }

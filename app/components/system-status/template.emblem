@@ -1,5 +1,8 @@
 .auth-main-container
-  = auth-assets
+  .align-middle.contain-width local-class="login-wrapper"
+    div
+      = auth-assets
+
   .columns
     .column.is-half.margin-auto
       div local-class="system-status-container"
@@ -10,29 +13,59 @@
             thead
               tr
                 th
-                  =  t "system"
+                  = t "system"
                 th
                   = t "status"
             tbody
               tr
                 td
-                  = t "storage"
+                  div local-class="status-label"
+                    = t "storage"
                 td
-                  ul
-                    li local-class="operational-status storage-status"
-                      span local-class="operational-text"
-                        = t "operational"
-                      span local-class="unavailable-text"
-                        = t "unreachable"
-                        small
-                          =  t "proxyWarning"
+                  if getStorageStatus.isRunning
+                    span class="has-text-grey-lighter" local-class="loading-indicator"
+                      i class="fa fa-spin fa-spinner"
+                      t"checking"
+                  else
+                    ul
+                      li local-class="operational-status {{if isStorageWorking 'online'}}"
+                        span local-class="operational-text"
+                          =t "operational"
+                        span local-class="unavailable-text"
+                          =t "unreachable"
+                          small
+                            =t "proxyWarning"
               tr
                 td
-                  = t "devicefarm"
+                  div local-class="status-label"
+                    = t "devicefarm"
                 td
-                  ul
-                    li local-class="operational-status devicefarm-status"
-                      span local-class="operational-text"
-                        = t "operational"
-                      span local-class="unavailable-text"
-                        = t "unreachable"
+                  if getDeviceFarmStatus.isRunning
+                    span class="has-text-grey-lighter" local-class="loading-indicator"
+                      i class="fa fa-spin fa-spinner"
+                      t"checking"
+                  else
+                    ul
+                      li local-class="operational-status {{if isDeviceFarmWorking 'online'}}"
+                        span local-class="operational-text"
+                          = t "operational"
+                        span local-class="unavailable-text"
+                          = t "unreachable"
+              tr
+                td
+                  div local-class="status-label"
+                    = t "api"
+                    |&nbsp;
+                    = t "server"
+                td
+                  if getAPIHostStatus.isRunning
+                    span class="has-text-grey-lighter" local-class="loading-indicator"
+                      i class="fa fa-spin fa-spinner"
+                      t"checking"
+                  else
+                    ul
+                      li local-class="operational-status {{if isAPIHostWorking 'online'}}"
+                        span local-class="operational-text"
+                          = t "operational"
+                        span local-class="unavailable-text"
+                          = t "unreachable"
