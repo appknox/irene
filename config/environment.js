@@ -50,14 +50,15 @@ module.exports = function(environment) {
   var deviceFarmWebsockifyHost = url.parse(devicefarmEnv);
   var deviceFarmSsl = deviceFarmWebsockifyHost.protocol == "wss:";
   var deviceFarmPort = deviceFarmWebsockifyHost.port || (deviceFarmSsl ? 443:80);
-  var deviceFarmHost = deviceFarmWebsockifyHost.hostname;
+  var deviceFarmHostname = deviceFarmWebsockifyHost.hostname;
   var deviceFarmURL = url.format({
-      protocol: deviceFarmWebsockifyHost.protocol,
-      hostname: deviceFarmHost,
-      port: deviceFarmPort,
-      pathname: deviceFarmPath
+    protocol: deviceFarmWebsockifyHost.protocol,
+    hostname: deviceFarmHostname,
+    port: deviceFarmPort,
+    pathname: deviceFarmPath
   });
   var host = process.env.IRENE_API_HOST || 'https://api.appknox.com';
+  var devicefarmHost = process.env.IRENE_DEVICEFARM_HOST || 'https://devicefarm2.appknox.com';
   var socketPath = process.env.IRENE_API_SOCKET_PATH || 'https://socket.appknox.com';
   var enableRegistration = isTrue(process.env.IRENE_ENABLE_REGISTRATION || false);
   var registrationLink = process.env.IRENE_REGISTRATION_LINK || '';
@@ -143,6 +144,7 @@ module.exports = function(environment) {
     namespace: "api",
     namespace_v2: "api/v2",
     host: host,
+    devicefarmHost: devicefarmHost,
     'ember-cli-mirage': {
       enabled: false
     },
