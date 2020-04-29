@@ -40,6 +40,7 @@ const initialize = function(application) {
     const envKeys = Object.keys(runtimeConfig);
 
     ENV.host = runtimeConfig.IRENE_API_HOST || ENV.host;
+    ENV.devicefarmHost = runtimeConfig.IRENE_DEVICEFARM_HOST || ENV.devicefarmHost;
     var devicefarmEnv = runtimeConfig.IRENE_DEVICEFARM_URL;
     var deviceFarmPath = "websockify";
     if(devicefarmEnv) {
