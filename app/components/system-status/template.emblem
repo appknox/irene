@@ -64,7 +64,7 @@
                       t"checking"
                   else
                     ul
-                      li local-class="operational-status {{if isAPIHostWorking 'online'}}"
+                      li local-class="operational-status {{if isAPIServerWorking 'online'}}"
                         span local-class="operational-text"
                           = t "operational"
                         span local-class="unavailable-text"
