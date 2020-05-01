@@ -19,7 +19,9 @@
     "deploy": "ember deploy production --verbose=true --activate=true --show-progress=true",
     "deploy:staging": "ember deploy staging --verbose=true --activate=true --show-progress=true",
     "deploy:sequelstring": "ember deploy sequelstring --verbose=true --activate=true --show-progress=true",
-    "deploy:gbm": "ember deploy gbm --verbose=true --activate=true --show-progress=true"
+    "deploy:gbm": "ember deploy gbm --verbose=true --activate=true --show-progress=true",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "devDependencies": {
     "@appknox/ember-cli-intl-tel-input": "^1.0.14",
@@ -104,7 +106,9 @@
     "ember-cli-document-title": "^0.4.0",
     "ember-radio-button": "^2.0.1",
     "intl-tel-input": "^14.0.2",
-    "jquery": "^3.4.1",
-    "qrious": "^4.0.2"
-  }
+    "jquery": "^3.5.0",
+    "qrious": "^4.0.2",
+    "snyk": "^1.316.1"
+  },
+  "snyk": true
 }
