@@ -1,27 +1,73 @@
-import DS from 'ember-data';
-import {computed} from "@ember/object";
+import DS from "ember-data";
+import { computed } from "@ember/object";
 
 export default DS.Model.extend({
   // STATUS_ACTIVE: 0,
   // STATUS_CANCELLED: 1,
   // STATUS_EXPIRED: 2,
   // STATUS_INVALID_CARD: 3,
-  DEFAULT_STATUS: 4,
-  statusTextList : ['Active','Cancelled','Expired','Invalid Card','Errored'],
+  // DEFAULT_STATUS: 4,
+  statusTextList: ["Active", "Cancelled", "Expired", "Invalid Card", "Errored"],
+  statusCSSClasses: {
+    active: "is-success",
+    canceled: "is-light",
+    expired: "is-primary",
+  },
 
-  plan: DS.attr(),
-  billingCycle: DS.attr('number'),
-  createdOn: DS.attr('date'),
-  expiryDate: DS.attr('date'),
-  nextBillingDate: DS.attr('date'),
-  lastPaidOn: DS.attr('date'),
-  quantityBought: DS.attr('number'),
-  quantityUsed: DS.attr('date'),
-  status: DS.attr('number'),
+  name: DS.attr("string"),
+  description: DS.attr("string"),
+  price: DS.attr("number"),
+  currency: DS.attr("string"),
+  createdOn: DS.attr("date"),
+  canceledAt: DS.attr("date"),
+  nextBillingDate: DS.attr("date"),
+  lastPaidOn: DS.attr("date"),
+  expiryDate: DS.attr("date"),
+  billingCycle: DS.attr("string"),
+  quantityRemaining: DS.attr("number"),
+  quantityPurchased: DS.attr("number"),
+  status: DS.attr("string"),
 
-  statusText: computed('status',function(){
-    const subscriptionStatusValue = this.get('status');
-    const subscriptionText = this.get('statusTextList')[subscriptionStatusValue];
-    return subscriptionText ? subscriptionText : this.get('statusTextList')[this.get('DEFAULT_STATUS')];
-  })
+  isMonthlySubscription: computed("billingCycle", function () {
+    return this.get("billingCycle") === "month";
+  }),
+
+  quantityUsed: computed("quantityPurchased", "quantityRemaining", function () {
+    return this.get("quantityPurchased") - this.get("quantityRemaining");
+  }),
+
+  fillPercent: computed("quantityPurchased", "quantityUsed", function () {
+    return `${
+      (this.get("quantityUsed") / this.get("quantityPurchased")) * 100
+    }%`;
+  }),
+
+  statusText: computed("status", function () {
+    let status = this.get("status");
+    if (status === "canceled") {
+      status = "cancelled";
+    }
+    const charArr = status.split("");
+    const firstChar = charArr.shift();
+    return `${firstChar.toUpperCase()}${charArr.join("")}`;
+  }),
+
+  statusCSSClass: computed("status", function () {
+    let className = this.get("statusCSSClasses")[this.get("status")];
+    if (!className) {
+      className = this.get("statusCSSClasses")["expired"];
+    }
+    return className;
+  }),
+
+  isCancelled: computed("statusText", function () {
+    return this.get("statusText") === this.get("statusTextList")[1];
+  }),
+
+  async cancel() {
+    const adapter = this.store.adapterFor(this.constructor.modelName);
+    if (adapter) {
+      await adapter.cancelSubscription(this.get("id"));
+    }
+  },
 });

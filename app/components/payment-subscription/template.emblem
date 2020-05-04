@@ -5,36 +5,79 @@ else
     .card class="full-width margin-top-bottom" local-class="separated-cards card-section"
       header class="card-header" local-class="card-head"
         p class="card-header-title" local-class="title"
-          | #{subscription.plan.name}
-          span class="tag {{subscription.cssClass}}" local-class="status-tag"
+          | #{subscription.name}
+          span class="tag {{subscription.statusCSSClass}}" local-class="status-tag"
             | #{subscription.statusText}
         p local-class="billing-cycle-info"
-          strong Billing Cycle :&nbsp;
-          | #{subscription.createdOn}
-          em &nbsp; To &nbsp;
-          | #{subscription.expiryDate}
+          if subscription.isCancelled
+            strong
+              t "subscriptionCard.cancelledOn"
+              | :&nbsp;
+            | {{moment-format subscription.expiryDate "DD MMM YYYY"}}
+          else
+            if subscription.expiryDate
+              strong
+                t "subscriptionCard.billingCycle"
+                | :&nbsp;
+              | {{moment-format subscription.createdOn "DD MMM YYYY"}}
+              em
+                | &nbsp;
+                t "subscriptionCard.to"
+                | &nbsp;
+              | {{moment-format subscription.expiryDate "DD MMM YYYY"}}
+            else
+              strong
+                t "subscriptionCard.createdOn"
+                | :&nbsp;
+              | {{moment-format subscription.createdOn "DD MMM YYYY"}}
       .card-content
         .content
           div local-class="card-content"
             div local-class="cost-info"
-              | #{subscription.plan.currency} #{subscription.plan.price} for #{subscription.plan.quantity} app(s) / #{subscription.billingCycle}
+              | {{format-currency subscription.currency subscription.price}}
+              | &nbsp;
+              t "perApp"
+              | &nbsp;
+              | / #{subscription.billingCycle}
             div local-class="usage-info"
               div local-class="usage-meter"
                 div local-class="usage-fill" style="width:{{subscription.fillPercent}}"
               div
-                | #{subscription.quantityUsed} / #{subscription.quantityBought} Used
+                | #{subscription.quantityUsed} / #{subscription.quantityPurchased}&nbsp;
+                t "subscriptionCard.used"
           div local-class="card-content"
             div
-              strong Next Billing On : &nbsp;
-              | #{subscription.nextBillingDate}
+              strong
+                t "subscriptionCard.nextBilling"
+                | : &nbsp;
+              | {{moment-format subscription.nextBillingDate "DD MMM YYYY"}}
             div
-              strong Last Paid On : &nbsp;
-              | #{subscription.lastPaidOn}
+              strong
+                t "subscriptionCard.lastPaid"
+                | : &nbsp;
+              | {{moment-format subscription.lastPaidOn "DD MMM YYYY"}}
             div
-              strong Expires On : &nbsp;
-              | #{subscription.expiryDate}
-      footer class="card-footer"
-        button class="card-footer-item is-primary" local-class="card-footer-button" Cancel
-        button class="card-footer-item is-info" local-class="card-footer-button" Switch to Monthly
-        button class="card-footer-item is-success" local-class="card-footer-button" Add More
+              strong
+                t "subscriptionCard.expiry"
+                | : &nbsp;
+              if subscription.expiryDate
+                | {{moment-format subscription.expiryDate "DD MMM YYYY"}}
+              else
+                t "notApplicable"
+      footer class="card-footer" local-class="footer-btns-wrapper"
+        unless subscription.isCancelled
+          button class="card-footer-item is-primary" local-class="card-footer-button" disabled=disableButtons click={action 'showCancelConfirmation' subscription.id}
+            i class="fa fa-trash" &nbsp;
+            t "subscriptionCard.actions.cancel.text"
+        unless subscription.isCancelled
+          button class="card-footer-item is-info" local-class="card-footer-button" disabled=disableButtons
+            i class="fa fa-exchange" &nbsp;
+            if subscription.isMonthlySubscription
+              t "subscriptionCard.actions.switchToMonthly.text"
+            else
+              t "subscriptionCard.actions.switchToYearly.text"
+        button class="card-footer-item is-success" local-class="card-footer-button" disabled=disableButtons
+          i class="fa fa-plus" &nbsp;
+          t "subscriptionCard.actions.addMore.text"
+  = confirm-box isActive=showCancelConfirmation title=(t "subscriptionCard.actions.cancel.confirmation") delegate=this confirmAction=(action "cancelSubscription") disabled=cancelSubscription.isRunning
 

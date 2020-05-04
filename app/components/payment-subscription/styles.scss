@@ -1,54 +1,64 @@
-.card-head{
+.card-head {
   background: #424651;
   color: #fff;
-  .title{
-    color:#fff;
+  .title {
+    color: #fff;
   }
 }
-.card-section{
-  &.separated-cards{
+.card-section {
+  &.separated-cards {
     margin-bottom: 3rem;
   }
-  .card-head{
+  .card-head {
     padding: 8px 15px;
   }
-  .status-tag{
+  .status-tag {
     margin-left: 20px;
   }
-  .card-content{
+  .card-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    & > div{
+    & > div {
       display: inline-block;
       padding: 0.5rem 0;
       margin: 0.5rem 0;
     }
-    .cost-info{
+    .cost-info {
       font-weight: bold;
       color: #8a8989;
       font-size: 1rem;
     }
-    .usage-info{
-      .usage-meter{
+    .usage-info {
+      .usage-meter {
         width: 100%;
         height: 20px;
         background: #ccc;
         // box-shadow: inset 0 0 10px #3a3939;
-        position:relative;
+        position: relative;
         border-radius: 9px;
         border: 1px solid rgb(158, 158, 158);
-        .usage-fill{
-          position:absolute;
-          top:0;
+        .usage-fill {
+          position: absolute;
+          top: 0;
           bottom: 0;
-          left:0;
-          background: #80C081;
+          left: 0;
+          background: #80c081;
           border-radius: 11px;
           box-shadow: inset 0 0 10px rgb(80, 179, 80);
         }
       }
     }
   }
+  .footer-btns-wrapper {
+    padding: 0.5rem;
+    .card-footer-button {
+      &:first-child {
+        margin: 0 0.5rem 0 0;
+      }
+      &:last-child {
+        margin: 0 0 0 0.5rem;
+      }
+    }
+  }
 }
-

@@ -814,5 +814,32 @@
       "removeCard": "Are you sure you want to remove this card?",
       "markAsDefault": "Are you sure you want to make this card as the deafult card?"
     }
+  },
+  "subscriptionCard": {
+    "createdOn": "Created On",
+    "billingCycle": "Billing Cycle",
+    "to": "To",
+    "used": "used",
+    "nextBilling": "Next Billing On",
+    "lastPaid": "Last Paid On",
+    "expiry": "Expires On",
+    "cancelledOn": "Cancelled on",
+    "actions": {
+      "cancel": {
+        "text": "Cancel",
+        "confirmation": "Are you sure you want to cancel this subscription?",
+        "success": "Subscription has been cancelled succesfully",
+        "error": "Failed to cancel subscription"
+      },
+      "switchToMonthly": {
+        "text": "Switch To Monthly"
+      },
+      "switchToYearly": {
+        "text": "Switch To Yearly"
+      },
+      "addMore": {
+        "text": "Add More"
+      }
+    }
   }
 }

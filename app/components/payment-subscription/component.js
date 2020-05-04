@@ -1,101 +1,57 @@
-import Component from '@ember/component';
+import Component from "@ember/component";
+import { t } from "ember-intl";
+import { task } from "ember-concurrency";
+import { inject as service } from "@ember/service";
 
 export default Component.extend({
-  tagName: '',
+  tagName: "",
   isLoading: true,
   subscriptions: null,
+  disableButtons: false,
+  selectedId: null,
+  showCancelConfirmation: false,
 
-  fetchSubscriptions(){
-    return [
-      {
-        id: 1,
-        plan: {
-          name: 'Per App',
-          description: 'Consectetur ad est laborum consequat ex dolore amet exercitation nulla cupidatat labore ut. Officia sint proident laboris incididunt dolore esse cillum. Id commodo est dolor veniam aliquip.',
-          isHighlighted: false,
-          isActive: true,
-          price: '720',
-          currency: 'USD',
-          quantity: 1,
-          type: 0,
-          expiryDuration: "1 Year",
-          billingCycle: "Year",
-          features: [
-            {
-              text: 'feature description <span class="highlighted"> one of many </span> in description',
-              is_highlighted: false
-            },
-            {
-              text: 'feature description <span class="highlighted"> one of many </span> in description',
-              is_highlighted: true
-            },
-            {
-              text: 'feature description <span class="highlighted"> one of many </span> in description',
-              is_highlighted: false
-            }
-          ],
-          isManualscanIncluded: false,
-          manualscanCount: 0,
-        },
-        billingCycle: "Year",
-        createdOn: '10 Jan 2020',
-        nextBillingDate: '09 Jan 2021',
-        lastPaidOn: '10 Jan 2020',
-        expiryDate: '10 Jan 2021',
-        quantityBought: 5,
-        quantityUsed: 2,
-        statusText: 'Active',
-        cssClass: 'is-success',
-        fillPercent: '40%'
-      },
-      {
-        id: 2,
-        plan: {
-          name: 'Per App',
-          description: 'Consectetur ad est laborum consequat ex dolore amet exercitation nulla cupidatat labore ut. Officia sint proident laboris incididunt dolore esse cillum. Id commodo est dolor veniam aliquip.',
-          isHighlighted: false,
-          isActive: true,
-          price: '156',
-          currency: 'USD',
-          quantity: 2,
-          type: 0,
-          expiryDuration: "1 Year",
-          billingCycle: "1 Year",
-          features: [
-            {
-              text: 'feature description <span class="highlighted"> one of many </span> in description',
-              is_highlighted: false
-            },
-            {
-              text: 'feature description <span class="highlighted"> one of many </span> in description',
-              is_highlighted: true
-            },
-            {
-              text: 'feature description <span class="highlighted"> one of many </span> in description',
-              is_highlighted: false
-            }
-          ],
-          isManualscanIncluded: false,
-          manualscanCount: 0,
-        },
-        billingCycle: "month",
-        createdOn: '10 Jan 2020',
-        nextBillingDate: '09 Jan 2021',
-        lastPaidOn: '10 Jan 2020',
-        expiryDate: '10 Jan 2021',
-        quantityBought: 1,
-        quantityUsed: 1,
-        statusText: 'Cancelled',
-        cssClass: 'is-light',
-        fillPercent: '100%'
-      }
-    ]
+  notify: service("notification-messages"),
+
+  cancelSuccess: t("subscriptionCard.actions.cancel.success"),
+  cancelError: t("subscriptionCard.actions.cancel.error"),
+
+  async fetchSubscriptions() {
+    this.set("isLoading", true);
+    const data = await this.get("store").findAll("payment-subscription");
+    this.set("subscriptions", data);
+    this.set("isLoading", false);
   },
 
-  didInsertElement(){
-    setTimeout(()=> {
-      this.set('subscriptions',this.fetchSubscriptions());
-      this.set('isLoading',false);
-    },500);
-  }
+  didInsertElement() {
+    this.fetchSubscriptions();
+  },
+
+  cancelSubscription: task(function* () {
+    try {
+      const subscription = yield this.get("store").peekRecord(
+        "payment-subscription",
+        this.get("selectedId")
+      );
+      yield subscription.cancel.call(subscription);
+      this.get("notify").success(this.get("cancelSuccess"));
+      this.set("showCancelConfirmation", false);
+      this.fetchSubscriptions();
+    } catch (err) {
+      this.get("notify").error(this.get("cancelError"));
+    } finally {
+      this.set("disableButtons", false);
+    }
+  }),
+
+  actions: {
+    showCancelConfirmation(id) {
+      this.set("selectedId", id);
+      this.set("showCancelConfirmation", true);
+    },
+    cancelSubscription() {
+      this.set("disableButtons", true);
+      this.get("cancelSubscription").perform();
+    },
+  },
 });
