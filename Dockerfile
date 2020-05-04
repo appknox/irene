@@ -1,4 +1,4 @@
-FROM quay.io/appknox/ak-ubuntu:2.0.2
+FROM quay.io/appknox/ak-ubuntu:3.0.0
 
 LABEL maintainer "Appknox <engineering@appknox.com>"
 

@@ -1,9 +1,12 @@
-/* jshint node: true */
+const path = require('path');
 
 module.exports = function(deployTarget) {
   var ENV = {
     build: {}
     // include other plugin configuration that applies to all deploy targets here
+  };
+  ENV.gzip = {
+    keep: true
   };
   ENV.s3 = {
     bucket: process.env.AWS_BUCKET,
@@ -53,7 +56,7 @@ module.exports = function(deployTarget) {
   }
 
   if (deployTarget === 'whitelabel') {
-    ENV.build.environment = 'whitelabel';
+    ENV.build.environment = 'production';
     // configure other plugins for production deploy target here
 
     ENV.cloudfront = {
@@ -113,6 +116,45 @@ module.exports = function(deployTarget) {
 
     ENV.cloudfront = {
       distribution: 'E1R9ZLGFEM1TTU'
+    };
+  }
+
+  if (deployTarget === 'local') {
+    const destdirParent = path.resolve(__dirname, '..');
+    ENV.build.environment = 'production';
+    ENV.pipeline =  {
+      disabled: {
+        allExcept: [
+          'build',
+          'gzip',
+          'manifest',
+          'display-revisions',
+          'cp',
+          'revision-data'
+        ]
+      },
+    };
+    ENV.cp = {
+      destDir: path.join(destdirParent, 'local')
+    };
+  }
+
+  if (deployTarget === 'docker') {
+    ENV.build.environment = 'production';
+    ENV.pipeline =  {
+      disabled: {
+        allExcept: [
+          'build',
+          'gzip',
+          'manifest',
+          'display-revisions',
+          'cp',
+          'revision-data'
+        ]
+      },
+    };
+    ENV.cp = {
+      destDir: '/usr/share/nginx/html/'
     };
   }
 
