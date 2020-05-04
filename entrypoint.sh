@@ -2,8 +2,8 @@
 
 set -e
 
-npx ember build --environment whitelabel
-cp -r dist/* /usr/share/nginx/html/
+rm -rf /usr/share/nginx/html/*
+npx ember deploy docker
 
 if [ -z "$1" ] || [ "$1" = "server" ]; then
   echo "Starting nginx..."
