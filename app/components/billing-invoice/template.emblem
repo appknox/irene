@@ -14,19 +14,7 @@ else
       th
     tbody
       each sortedObjects as |item|
-        tr
-          td #{item.id}
-          td {{moment-format item.created "DD MMM YYYY"}}
-          td {{format-currency item.currency item.amount}}
-          td #{item.status}
-          td class="has-text-centered"
-            button class="is-primary" click={(perform downloadInvoice item)} disabled=downloadInvoice.isRunning
-              if downloadInvoice.isRunning
-                i class="fa fa-spin fa-spinner"
-              else
-                i class="fa fa-download"
-              | &nbsp;&nbsp;
-              t "invoiceTable.actionButton.download"
+        =billing-invoice-list item=item
 .columns
     .column
       .margin-t-q
