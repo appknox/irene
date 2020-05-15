@@ -586,6 +586,14 @@
   "upload": "Upload",
   "uploadApp": "Upload App",
   "uploadIdpFile": "Upload Idp File",
+  "uploadInterception": {
+    "title": "Select A Plan",
+    "description": "Please select the plan with which you would like to associate the uploaded project",
+    "subscription": "Per App (Subscription Plan)",
+    "oneTime": "Per Scan (One-time Plan)",
+    "actionText": "Confirm",
+    "errorMessage": "Failed to select plan. Please try again."
+  },
   "uploading": "Uploading",
   "uploadNewProject": "You can upload a new project by clicking on <b class='bold'>Upload App</b> above and start scanning",
   "urlUpdated": "Successfully updated the url filter",

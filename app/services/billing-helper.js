@@ -6,6 +6,9 @@ import { getOwner } from "@ember/application";
 export default Service.extend({
   selectedQuantity: 1,
   selectedPlanModel: null,
+  submissionId: null,
+  showUploadPlanSelectionModal: false,
+
   tempStoreKeyPrefix: "ajs_bill_oneTime",
   cardStoreKeyPrefix: "ajs_bill_addCard",
 

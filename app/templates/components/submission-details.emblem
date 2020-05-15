@@ -3,6 +3,8 @@ if submission.hasReason
     = submission.statusHumanized
   .status-reason
     = submission.reason
+  .is-hidden
+    |#{showPlanSelectionModal}
 else
 
   div.no-reason class=messageClass

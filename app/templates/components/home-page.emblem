@@ -123,3 +123,28 @@ if isLoaded
               i.fa class="fa-spinner fa-spin"
             | &nbsp;
           = t "update"
+
+= modal-card class="input-modal" isActive=showPlanSelectionModal title=(t "uploadInterception.title") nonClosable=true
+  .card-body
+    .card-wrapper
+      form.margin-left.margin-top10 submit={action 'setPlanOption'}
+        p.has-text-grey-dark
+          t "uploadInterception.description"
+          |&nbsp;:
+        div.margin-top10
+          input.display-inline type="radio" name="planSelection" value="perApp" checked=true change={action 'togglePlanOption' planTypes.perApp}
+          label.display-inline.margin-left for="perApp"
+            strong
+              t "uploadInterception.subscription"
+        div.margin-top10
+          input.display-inline type="radio" name="planSelection" value="perScan" change={action 'togglePlanOption' planTypes.perScan}
+          label.display-inline.margin-left for="perScan"
+            strong
+              t "uploadInterception.oneTime"
+        div.margin-top10.has-text-centered
+          button.is-primary type="submit"
+            if reprocessFileSubmission.isRunning
+              .fa-font-size
+                i.fa.fa-spinner.fa-spin
+              | $nbsp;
+            t "uploadInterception.actionText"
