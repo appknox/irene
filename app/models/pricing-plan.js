@@ -47,4 +47,15 @@ export default DS.Model.extend({
       return sessionId;
     }
   },
+
+  async buySubscription(quantity) {
+    const adapter = this.store.adapterFor("payment-subscription");
+    if (adapter) {
+      const params = {
+        plan_id: this.get("id"),
+        quantity,
+      };
+      return await adapter.buy(params);
+    }
+  },
 });

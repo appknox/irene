@@ -1,7 +1,33 @@
 if isLoading
   = skeletal-loader
 else
-  each subscriptions as |subscription|
+  unless hasActiveSubscription
+    each availableRecurringPlans as |plan|
+      .card.full-width.margin-top-bottom local-class="separated-cards card-section"
+        header class="card-header" local-class="card-head"
+          p class="card-header-title" local-class="title"
+            | #{plan.name}
+        .card-content
+          if plan.description
+            .content.has-text-centered.margin-bottom
+              p
+                | #{plan.description}
+          .content.has-text-centered.margin-bottom20
+            p.has-text-black-bis
+              strong
+                | {{format-currency plan.currency plan.price}}
+            p.has-text-grey-light
+              small
+                em
+                  t "perApp"
+                  | &nbsp;
+                  | / #{plan.billingCycle}
+          div local-class="subscribe-btn-wrapper"
+            button.card-footer-item.is-success local-class="subscribe-btn" click={action 'initCheckout' plan}
+              i class="fa fa-cart-plus" &nbsp;
+              t "billingSubscribe"
+      = checkout-modal plan=plan title=(t "billigPlanModalTitle") context=this
+  each sortedSubscriptions as |subscription|
     .card class="full-width margin-top-bottom" local-class="separated-cards card-section"
       header class="card-header" local-class="card-head"
         p class="card-header-title" local-class="title"
@@ -64,20 +90,19 @@ else
                 | {{moment-format subscription.expiryDate "DD MMM YYYY"}}
               else
                 t "notApplicable"
-      footer class="card-footer" local-class="footer-btns-wrapper"
-        unless subscription.isCancelled
+      unless subscription.isCancelled
+        footer class="card-footer" local-class="footer-btns-wrapper"
           button class="card-footer-item is-primary" local-class="card-footer-button" disabled=disableButtons click={action 'showCancelConfirmation' subscription.id}
             i class="fa fa-trash" &nbsp;
             t "subscriptionCard.actions.cancel.text"
-        unless subscription.isCancelled
           button class="card-footer-item is-info" local-class="card-footer-button" disabled=disableButtons
             i class="fa fa-exchange" &nbsp;
             if subscription.isMonthlySubscription
               t "subscriptionCard.actions.switchToMonthly.text"
             else
               t "subscriptionCard.actions.switchToYearly.text"
-        button class="card-footer-item is-success" local-class="card-footer-button" disabled=disableButtons
-          i class="fa fa-plus" &nbsp;
-          t "subscriptionCard.actions.addMore.text"
+          button class="card-footer-item is-success" local-class="card-footer-button" disabled=disableButtons
+            i class="fa fa-plus" &nbsp;
+            t "subscriptionCard.actions.addMore.text"
   = confirm-box isActive=showCancelConfirmation title=(t "subscriptionCard.actions.cancel.confirmation") delegate=this confirmAction=(action "cancelSubscription") disabled=cancelSubscription.isRunning
 

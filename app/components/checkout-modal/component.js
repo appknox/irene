@@ -20,11 +20,17 @@ export default Component.extend({
           response = yield this.get("billingHelper").buyOneTimeScan();
           break;
         default:
-        // TODO: handle subscription payment
+          response = yield this.get("billingHelper").buySubscription(
+            this.get("plan.id")
+          );
       }
       this.set("plan.showCheckoutModal", false);
       const context = this.get("context");
       if (context && response) {
+        if (typeof type === "undefined") {
+          // subscription flow for a paid customer
+          yield context.get("fetchSubscriptions").call(context);
+        }
         context.set("response", response);
         context.incrementProperty("refreshCount");
       }

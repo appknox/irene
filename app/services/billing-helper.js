@@ -142,6 +142,21 @@ export default Service.extend({
     }
   },
 
+  async buySubscription(planId) {
+    const planObj = await this.get("store").peekRecord("pricing-plan", planId);
+    if (planObj) {
+      try {
+        const response = await planObj
+          .get("buySubscription")
+          .call(planObj, this.get("selectedQuantity"));
+        this.get("notify").success(this.get("paymentSuccess"));
+        return response;
+      } catch (err) {
+        this.get("notify").error(this.get("paymentError"));
+      }
+    }
+  },
+
   async addCreditCard() {
     const firstCardRecord = await this.get("store").queryRecord(
       "credit-card",
