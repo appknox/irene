@@ -63,12 +63,14 @@ module.exports = function(environment) {
   var enableRegistration = isTrue(process.env.IRENE_ENABLE_REGISTRATION || false);
   var registrationLink = process.env.IRENE_REGISTRATION_LINK || '';
   var isEnterprise = isTrue(process.env.ENTERPRISE || false);
+  var showLicense = isTrue(process.env.IRENE_SHOW_LICENSE || false);
   var shouldDisableReCaptcha = enableRegistration && isEnterprise;
   var ENV = {
     version: Date.now(),
     isDevknox: false,
     isAppknox: false,
     isEnterprise: isEnterprise,
+    showLicense: showLicense,
     isRegistrationEnabled: enableRegistration,
     shouldDisableReCaptcha: shouldDisableReCaptcha,
     registrationLink: registrationLink,

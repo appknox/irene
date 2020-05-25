@@ -50,6 +50,7 @@ const initialize = function(application) {
 
     ENV.socketPath = runtimeConfig.IRENE_API_SOCKET_PATH || ENV.socketPath;
     ENV.isEnterprise = envKeys.indexOf('isEnterprise') > -1 ? isTrue(runtimeConfig.ENTERPRISE) : ENV.isEnterprise;
+    ENV.showLicense = envKeys.indexOf('showLicense') > -1 ? isTrue(runtimeConfig.IRENE_SHOW_LICENSE) : ENV.showLicense;
     ENV.isRegistrationEnabled = envKeys.indexOf('isRegistrationEnabled') > -1 ? isTrue(runtimeConfig.IRENE_ENABLE_REGISTRATION) : ENV.isRegistrationEnabled;
     ENV.registrationLink = runtimeConfig.registrationLink || ENV.registrationLink;
     ENV.whitelabel = Object.assign({}, ENV.whitelabel, runtimeConfig.whitelabel);
