@@ -1,0 +1,78 @@
+.license-detail.margin-h-1h.padding-t-1
+  h4.bold.black-text
+    | License
+  table.org-table
+    tr
+      th colspan="3" class={if license.isActive 'success' 'critical'} local-class="header"
+        .align-both-centered
+          .font-legible.bold
+            if license.isLimitedScans
+              = license.perAppName
+            else
+              = license.perScanName
+          .text-right
+            if license.isActive
+              = fa-icon "check" class="text-success"
+            else
+              = fa-icon "times" class="text-danger"
+            span.padding-l-q
+              = license.status
+    tr
+      td
+        .font-legible.black-text
+          = fa-icon "cube" class="padding-r-h"
+          span
+            | Features
+      td
+        if license.isLimitedScans
+          .uppercase-text.margin-b-h.font-small
+            | No. of Scans
+          .semi-bold.font-legible.black-text
+            = license.perScanQuantity
+        else
+          .uppercase-text.margin-b-h.font-small
+            | No. of Apps
+          .semi-bold.font-legible.black-text
+            = license.perAppQuantity
+      td
+        em.font-legible.text-lightgray
+          if license.isLimitedScans
+            = license.perScanDescription
+          else
+            = license.perAppDescription
+    tr
+      td
+        .font-legible.black-text
+          = fa-icon "calendar" class="padding-r-h"
+          span
+            | Validity
+      td
+        .uppercase-text.margin-b-h.font-small
+          | Start Date
+        .semi-bold.font-legible.black-text
+          = moment-format license.startDate "DD MMM YYYY"
+      td
+        .uppercase-text.margin-b-h.font-small
+          | Expiry Date
+        .semi-bold.font-legible.black-text
+          = moment-format license.expiryDate "DD MMM YYYY"
+    tr
+      td
+        .font-legible.black-text
+          = fa-icon "user" class="padding-r-h"
+          span
+            | Registration
+      td
+        .uppercase-text.margin-b-h.font-small
+          | License Key
+        .semi-bold.font-legible.black-text
+          = license.key
+      td
+        .uppercase-text.margin-b-h.font-small
+          | Licensed to
+        .vertical-align-center.semi-bold.font-legible.black-text
+          = license.name
+          div.margin-l-h.semi-bold.black-text
+            | &lt;
+            = license.email
+            | &gt;
