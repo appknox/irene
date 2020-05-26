@@ -30,4 +30,10 @@ export default DRFAdapter.extend(IreneAdapterMixin, {
     const endpoint = this._buildURL(null);
     return this.ajax(endpoint, "POST", { data });
   },
+
+  switchBillingCycle(data) {
+    const endpoint = this._buildURL(null, data.id);
+    delete data.id;
+    return this.ajax(endpoint, "PATCH", { data });
+  },
 });

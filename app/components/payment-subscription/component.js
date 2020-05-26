@@ -12,6 +12,8 @@ export default Component.extend({
   disableButtons: false,
   selectedId: null,
   showCancelConfirmation: false,
+  showMonthlySwitchConfirmation: false,
+  showYearlySwitchConfirmation: false,
 
   _subscriptionSorting: ["createdOn:desc"],
   sortedSubscriptions: computed.sort("subscriptions", "_subscriptionSorting"),
@@ -32,6 +34,10 @@ export default Component.extend({
 
   cancelSuccess: t("subscriptionCard.actions.cancel.success"),
   cancelError: t("subscriptionCard.actions.cancel.error"),
+  switchMonthlySuccess: t("subscriptionCard.actions.switchToMonthly.success"),
+  switchMonthlyError: t("subscriptionCard.actions.switchToMonthly.error"),
+  switchYearlySuccess: t("subscriptionCard.actions.switchToYearly.success"),
+  switchYearlyError: t("subscriptionCard.actions.switchToYearly.error"),
 
   activeSubscriptionReducer: (accumulator, currentObj) => {
     if (
@@ -83,6 +89,32 @@ export default Component.extend({
     }
   }),
 
+  switchBillingCycle: task(function* (switchTo) {
+    try {
+      const subscription = yield this.get("store").peekRecord(
+        "payment-subscription",
+        this.get("selectedId")
+      );
+      yield subscription.switch.call(subscription);
+      if (switchTo === "monthly") {
+        this.get("notify").success(this.get("switchMonthlySuccess"));
+        this.set("showMonthlySwitchConfirmation", false);
+      } else {
+        this.get("notify").success(this.get("switchYearlySuccess"));
+        this.set("showYearlySwitchConfirmation", false);
+      }
+      this.fetchSubscriptions();
+    } catch (err) {
+      if (switchTo === "monthly") {
+        this.get("notify").error(this.get("switchMonthlyError"));
+      } else {
+        this.get("notify").error(this.get("switchYearlyError"));
+      }
+    } finally {
+      this.set("disableButtons", false);
+    }
+  }),
+
   actions: {
     initCheckout(plan) {
       this.set("billingHelper.selectedQuantity", 1);
@@ -93,9 +125,25 @@ export default Component.extend({
       this.set("selectedId", id);
       this.set("showCancelConfirmation", true);
     },
+    showMonthlySwitchConfirmation(id) {
+      this.set("selectedId", id);
+      this.set("showMonthlySwitchConfirmation", true);
+    },
+    showYearlySwitchConfirmation(id) {
+      this.set("selectedId", id);
+      this.set("showYearlySwitchConfirmation", true);
+    },
     cancelSubscription() {
       this.set("disableButtons", true);
       this.get("cancelSubscription").perform();
+    },
+    switchToMonthly() {
+      this.set("disableButtons", true);
+      this.get("switchBillingCycle").perform("monthly");
+    },
+    switchToYearly() {
+      this.set("disableButtons", true);
+      this.get("switchBillingCycle").perform("yearly");
     },
   },
 });

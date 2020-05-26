@@ -27,6 +27,8 @@ export default DS.Model.extend({
   quantityRemaining: DS.attr("number"),
   quantityPurchased: DS.attr("number"),
   status: DS.attr("string"),
+  plan: DS.attr(),
+  availablePlans: DS.attr(),
 
   isMonthlySubscription: computed("billingCycle", function () {
     return this.get("billingCycle") === "month";
@@ -68,6 +70,17 @@ export default DS.Model.extend({
     const adapter = this.store.adapterFor(this.constructor.modelName);
     if (adapter) {
       await adapter.cancelSubscription(this.get("id"));
+    }
+  },
+
+  async switch() {
+    const adapter = this.store.adapterFor(this.constructor.modelName);
+    if (adapter) {
+      await adapter.switchBillingCycle({
+        id: this.get("id"),
+        plan_id: this.get("plan"),
+        quantity: this.get("quantityPurchased"),
+      });
     }
   },
 });

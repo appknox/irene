@@ -95,14 +95,18 @@ else
           button class="card-footer-item is-primary" local-class="card-footer-button" disabled=disableButtons click={action 'showCancelConfirmation' subscription.id}
             i class="fa fa-trash" &nbsp;
             t "subscriptionCard.actions.cancel.text"
-          button class="card-footer-item is-info" local-class="card-footer-button" disabled=disableButtons
-            i class="fa fa-exchange" &nbsp;
-            if subscription.isMonthlySubscription
-              t "subscriptionCard.actions.switchToMonthly.text"
-            else
+          if subscription.isMonthlySubscription
+            button class="card-footer-item is-info" local-class="card-footer-button" disabled=disableButtons click={action 'showYearlySwitchConfirmation' subscription.id}
+              i class="fa fa-exchange" &nbsp;
               t "subscriptionCard.actions.switchToYearly.text"
+          else
+            button class="card-footer-item is-info" local-class="card-footer-button" disabled=disableButtons click={action 'showMonthlySwitchConfirmation' subscription.id}
+              i class="fa fa-exchange" &nbsp;
+              t "subscriptionCard.actions.switchToMonthly.text"
           button class="card-footer-item is-success" local-class="card-footer-button" disabled=disableButtons
             i class="fa fa-plus" &nbsp;
             t "subscriptionCard.actions.addMore.text"
   = confirm-box isActive=showCancelConfirmation title=(t "subscriptionCard.actions.cancel.confirmation") delegate=this confirmAction=(action "cancelSubscription") disabled=cancelSubscription.isRunning
+  = confirm-box isActive=showMonthlySwitchConfirmation title=(t "subscriptionCard.actions.switchToMonthly.confirmation") delegate=this confirmAction=(action "switchToMonthly") disabled=switchBillingCycle.isRunning
+  = confirm-box isActive=showYearlySwitchConfirmation title=(t "subscriptionCard.actions.switchToYearly.confirmation") delegate=this confirmAction=(action "switchToYearly") disabled=switchBillingCycle.isRunning
 

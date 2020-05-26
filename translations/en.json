@@ -840,10 +840,16 @@
         "error": "Failed to cancel subscription"
       },
       "switchToMonthly": {
-        "text": "Switch To Monthly"
+        "text": "Switch To Monthly",
+        "confirmation": "Are you sure you want to switch to monthly subscription?",
+        "success": "Subscription has been switched to monthly billing",
+        "error": "Failed to switch subscription to monthly"
       },
       "switchToYearly": {
-        "text": "Switch To Yearly"
+        "text": "Switch To Yearly",
+        "confirmation": "Are you sure you want to switch to yearly subscription?",
+        "success": "Subscription has been switched to yearly billing",
+        "error": "Failed to switch subscription to yearly"
       },
       "addMore": {
         "text": "Add More"
