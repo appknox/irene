@@ -810,6 +810,11 @@ select
   display: flex
   justify-content: space-between
 
+.align-both-centered
+  display: flex
+  justify-content: space-between
+  align-items: center
+
 .align-center
   display: flex
   justify-content: center
@@ -1928,6 +1933,12 @@ ul.risk-table
     th
       background-color: darken(#f6f8fa, 1%)
       color: darken(#586069, 1%)
+      &.success
+        border-color: rgba($success, 0.5)
+        background: rgba($success, 0.15)
+      &.critical
+        border-color: rgba($critical, 0.5)
+        background: rgba($critical, 0.15)
       // padding: 10px 0px
     th, td
       border-width: 0px
@@ -3728,3 +3739,7 @@ $filetag-bg: #f3f5f8
     &, &:hover
       background: lighten($color-lightgray, 2%)
       color: lighten($color-table, 43%)
+.license-detail
+  .fa
+    font-size: 1.2em
+    line-height: 1.2
