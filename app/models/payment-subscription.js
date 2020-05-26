@@ -78,7 +78,7 @@ export default DS.Model.extend({
     if (adapter) {
       await adapter.switchBillingCycle({
         id: this.get("id"),
-        plan_id: this.get("plan"),
+        plan_id: this.get("availablePlans")[0]["id"],
         quantity: this.get("quantityPurchased"),
       });
     }
