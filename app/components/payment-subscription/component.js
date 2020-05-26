@@ -2,6 +2,7 @@ import Component from "@ember/component";
 import { t } from "ember-intl";
 import { task } from "ember-concurrency";
 import { computed } from "@ember/object";
+import { observer } from "@ember/object";
 import { inject as service } from "@ember/service";
 
 export default Component.extend({
@@ -11,6 +12,10 @@ export default Component.extend({
   availableRecurringPlans: null,
   disableButtons: false,
   selectedId: null,
+  refreshCount: 0,
+  selectedSubscriptionObject: {
+    showCheckoutModal: false,
+  },
   showCancelConfirmation: false,
   showMonthlySwitchConfirmation: false,
   showYearlySwitchConfirmation: false,
@@ -38,6 +43,10 @@ export default Component.extend({
   switchMonthlyError: t("subscriptionCard.actions.switchToMonthly.error"),
   switchYearlySuccess: t("subscriptionCard.actions.switchToYearly.success"),
   switchYearlyError: t("subscriptionCard.actions.switchToYearly.error"),
+
+  refreshCountChanged: observer("refreshCount", function () {
+    this.fetchSubscriptions();
+  }),
 
   activeSubscriptionReducer: (accumulator, currentObj) => {
     if (
@@ -81,7 +90,7 @@ export default Component.extend({
       this.get("notify").success(this.get("cancelSuccess"));
       this.set("showCancelConfirmation", false);
       subscription.set("status", "canceled");
-      yield this.fetchSubscriptions();
+      this.incrementProperty("refreshCount");
     } catch (err) {
       this.get("notify").error(this.get("cancelError"));
     } finally {
@@ -103,7 +112,7 @@ export default Component.extend({
         this.get("notify").success(this.get("switchYearlySuccess"));
         this.set("showYearlySwitchConfirmation", false);
       }
-      this.fetchSubscriptions();
+      this.incrementProperty("refreshCount");
     } catch (err) {
       if (switchTo === "monthly") {
         this.get("notify").error(this.get("switchMonthlyError"));
@@ -144,6 +153,16 @@ export default Component.extend({
     switchToYearly() {
       this.set("disableButtons", true);
       this.get("switchBillingCycle").perform("yearly");
+    },
+    openAddMoreModal(subscription) {
+      this.set("billingHelper.selectedQuantity", 1);
+      subscription.set("isPaidUser", true);
+      subscription.set(
+        "requestType",
+        this.get("billingHelper.purchaseType.subscriptionAddon")
+      );
+      subscription.set("showCheckoutModal", true);
+      this.set("selectedSubscriptionObject", subscription);
     },
   },
 });

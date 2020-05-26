@@ -83,4 +83,13 @@ export default DS.Model.extend({
       });
     }
   },
+
+  async addMore(quantity) {
+    const adapter = this.store.adapterFor(this.constructor.modelName);
+    if (adapter) {
+      return await adapter.increaseQuantity(this.get("id"), {
+        quantity,
+      });
+    }
+  },
 });

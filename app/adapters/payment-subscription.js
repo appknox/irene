@@ -36,4 +36,9 @@ export default DRFAdapter.extend(IreneAdapterMixin, {
     delete data.id;
     return this.ajax(endpoint, "PATCH", { data });
   },
+
+  increaseQuantity(id, data) {
+    const endpoint = `${this._buildURL(null, id)}/add_more`;
+    return this.ajax(endpoint, "PUT", { data });
+  },
 });

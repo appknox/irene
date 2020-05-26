@@ -2,6 +2,7 @@ import Service from "@ember/service";
 import { t } from "ember-intl";
 import { inject as service } from "@ember/service";
 import { getOwner } from "@ember/application";
+import Subscription from "../models/subscription";
 
 export default Service.extend({
   selectedQuantity: 1,
@@ -15,6 +16,7 @@ export default Service.extend({
   purchaseType: {
     addOn: "ADD_ON",
     oneTime: "ONE_TIME",
+    subscriptionAddon: "SUBSCRIPTION_ADDON",
   },
 
   store: service(),
@@ -25,6 +27,8 @@ export default Service.extend({
 
   paymentSuccess: t("paymentSuccess"),
   paymentError: t("paymentFailed"),
+  addMoreSuccess: t("subscriptionCard.actions.addMore.success"),
+  addMoreError: t("subscriptionCard.actions.addMore.error"),
 
   async setSelectedPlanModel(planId) {
     const planModel = await this.get("store").peekRecord(
@@ -153,6 +157,28 @@ export default Service.extend({
         return response;
       } catch (err) {
         this.get("notify").error(this.get("paymentError"));
+      }
+    }
+  },
+
+  async addMoreToSubscription(subscriptionId) {
+    const subscriptionObj = await this.get("store").peekRecord(
+      "payment-subscription",
+      subscriptionId
+    );
+    if (subscriptionObj) {
+      const totalQuantity =
+        subscriptionObj.get("quantityPurchased") + this.get("selectedQuantity");
+      try {
+        const response = await subscriptionObj
+          .get("addMore")
+          .call(subscriptionObj, this.get("selectedQuantity"));
+        this.get("notify").success(
+          `${this.get("addMoreSuccess")}${totalQuantity}`
+        );
+        return response;
+      } catch (err) {
+        this.get("notify").error(this.get("addMoreError"));
       }
     }
   },

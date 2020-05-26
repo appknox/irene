@@ -103,10 +103,11 @@ else
             button class="card-footer-item is-info" local-class="card-footer-button" disabled=disableButtons click={action 'showMonthlySwitchConfirmation' subscription.id}
               i class="fa fa-exchange" &nbsp;
               t "subscriptionCard.actions.switchToMonthly.text"
-          button class="card-footer-item is-success" local-class="card-footer-button" disabled=disableButtons
+          button class="card-footer-item is-success" local-class="card-footer-button" disabled=disableButtons click={action 'openAddMoreModal' subscription}
             i class="fa fa-plus" &nbsp;
             t "subscriptionCard.actions.addMore.text"
   = confirm-box isActive=showCancelConfirmation title=(t "subscriptionCard.actions.cancel.confirmation") delegate=this confirmAction=(action "cancelSubscription") disabled=cancelSubscription.isRunning
   = confirm-box isActive=showMonthlySwitchConfirmation title=(t "subscriptionCard.actions.switchToMonthly.confirmation") delegate=this confirmAction=(action "switchToMonthly") disabled=switchBillingCycle.isRunning
   = confirm-box isActive=showYearlySwitchConfirmation title=(t "subscriptionCard.actions.switchToYearly.confirmation") delegate=this confirmAction=(action "switchToYearly") disabled=switchBillingCycle.isRunning
+  = checkout-modal plan=selectedSubscriptionObject title=(t "buyScan") context=this
 

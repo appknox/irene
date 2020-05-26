@@ -9,6 +9,7 @@ export default Component.extend({
 
   redirectToPayment: task(function* () {
     const isPaidUser = this.get("plan.isPaidUser");
+    const context = this.get("context");
     if (isPaidUser) {
       const type = this.get("plan.requestType");
       let response = null;
@@ -19,18 +20,18 @@ export default Component.extend({
         case this.get("billingHelper.purchaseType.oneTime"):
           response = yield this.get("billingHelper").buyOneTimeScan();
           break;
+        case this.get("billingHelper.purchaseType.subscriptionAddon"):
+          response = yield this.get("billingHelper").addMoreToSubscription(
+            this.get("plan.id")
+          );
+          break;
         default:
           response = yield this.get("billingHelper").buySubscription(
             this.get("plan.id")
           );
       }
       this.set("plan.showCheckoutModal", false);
-      const context = this.get("context");
       if (context && response) {
-        if (typeof type === "undefined") {
-          // subscription flow for a paid customer
-          yield context.get("fetchSubscriptions").call(context);
-        }
         context.set("response", response);
         context.incrementProperty("refreshCount");
       }

@@ -852,7 +852,9 @@
         "error": "Failed to switch subscription to yearly"
       },
       "addMore": {
-        "text": "Add More"
+        "text": "Add More",
+        "success": "Subscription quantity has been successfully increased to ",
+        "error": "Failed to add more apps to your subscription"
       }
     }
   }
