@@ -2,7 +2,6 @@ import Service from "@ember/service";
 import { t } from "ember-intl";
 import { inject as service } from "@ember/service";
 import { getOwner } from "@ember/application";
-import Subscription from "../models/subscription";
 
 export default Service.extend({
   selectedQuantity: 1,
