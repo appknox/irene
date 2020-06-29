@@ -28,3 +28,6 @@ bower.json.ember-try
 package.json.ember-try
 .vscode
 .eslintcache
+
+# Local Netlify folder
+.netlify
