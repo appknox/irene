@@ -1,6 +1,5 @@
 'use strict';
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
-var tildeImporter = require('node-sass-tilde-importer');
 
 var environment = EmberApp.env();
 var minifyEnabled = environment === "production" || environment === "staging";
@@ -18,7 +17,9 @@ module.exports = function (defaults) {
       exclude: ['runtimeconfig.js']
     },
     sassOptions: {
-      importer: tildeImporter,
+      includePaths: [
+        'node_modules',
+      ],
       implementation: require("node-sass"),
       extension: 'sass'
     },
