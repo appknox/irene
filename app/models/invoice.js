@@ -21,7 +21,7 @@ const Invoice = DS.Model.extend({
     return paidOn.toLocaleDateString();
   }),
 
-  paidDate: computed("paidOnHumanized", "isPaid", function() {
+  paidDate: computed('isPaid', 'paidOnHumanized', 'tPending', function() {
     const tPending = this.get("tPending");
     if (this.get("isPaid")) {
       return this.get("paidOnHumanized");
@@ -29,7 +29,7 @@ const Invoice = DS.Model.extend({
     return tPending;
   }),
 
-  paidStatus: computed("isPaid", function() {
+  paidStatus: computed('isPaid', 'tPaid', 'tUnpaid', function() {
     const tPaid = this.get("tPaid");
     const tUnpaid = this.get("tUnpaid");
     if (this.get("isPaid")) {

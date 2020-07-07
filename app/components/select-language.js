@@ -24,7 +24,7 @@ const SelectLanguageComponent = Component.extend({
     return {locale, localeString};
   }),
 
-  otherLocales: computed("intl.locale", function() {
+  otherLocales: computed('intl.{locale,locales}', function() {
     const locales = [];
     let locale = this.get("intl.locale");
     const otherLocales = this.get("intl.locales").slice();

@@ -27,7 +27,7 @@ const CompareFilesComponent = Component.extend({
     }
   }),
 
-  allFiles: computed("file1.{project.id,id}", "file2.id", function() {
+  allFiles: computed('file1.id', 'file1.project.id', 'file2.id', 'store', function() {
     const projectId = this.get("file1.project.id");
     this.set("selectedBaseFile", this.get("file1.id")); // eslint-disable-line
     this.set("selectedCompareFile", this.get("file2.id")); // eslint-disable-line
@@ -41,7 +41,7 @@ const CompareFilesComponent = Component.extend({
     });
   }),
 
-  compareText: computed("file1.id", "file2.id", function() {
+  compareText: computed('file1.id', 'file2.id', 'tCompareWarningOldFile', 'tCompareWarningSameFiles', function() {
     const file1Id = parseInt(this.get("file1.id"));
     const file2Id = parseInt(this.get("file2.id"));
     const tCompareWarningOldFile = this.get("tCompareWarningOldFile");

@@ -21,9 +21,7 @@ export default Component.extend({
   currentProxy: null,
   changeset: null,
 
-  proxyId: computed('profile.id', function() {
-    return this.get('profile.id');
-  }),
+  proxyId: computed.reads('profile.id'),
 
   hasProxyValues: computed('changeset.{host,port}', function() {
     return !!this.get('changeset.host') && !!this.get('changeset.port');

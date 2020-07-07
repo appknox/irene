@@ -15,13 +15,11 @@ export default Component.extend({
   tChangedMandatoryMFA: t('changedMandatoryMFA'),
   tPleaseTryAgain: t('pleaseTryAgain'),
 
-  isMfaMandateDisabled: computed('user.mfaEnabled', function () {
+  isMfaMandateDisabled: computed('isSavingStatus', 'user.mfaEnabled', function () {
     return !this.get('user.mfaEnabled') || this.get('isSavingStatus');
   }),
 
-  isUserMfaDisabled: computed('user.mfaEnabled', function () {
-    return !this.get('user.mfaEnabled');
-  }),
+  isUserMfaDisabled: computed.not('user.mfaEnabled'),
 
   watchMandatoryMFA: observer('organization.mandatoryMfa', function () {
     this.get('setMandatoryMFA').perform();

@@ -8,7 +8,7 @@ const SubmissionListComponent = Component.extend({
   submissionCount: computed.alias('submissions.length'),
   hasSubmissions: computed.gt('submissionCount', 0),
 
-  submissions: computed("realtime.SubmissionCounter", function() {
+  submissions: computed('realtime.SubmissionCounter', 'store', function() {
     this.get("store").query("submission", {
       'status': ENUMS.SUBMISSION_STATUS.VALIDATING
     });

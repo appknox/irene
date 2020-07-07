@@ -6,7 +6,7 @@ export default DS.Model.extend({
   host: DS.attr('string'),
   port: DS.attr('string'),
 
-  hasProxyUrl: computed('host,port', function() {
+  hasProxyUrl: computed('host', 'port', function() {
     const host = this.get('host');
     const port = this.get('port');
     return !!host && !!port;

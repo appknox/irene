@@ -86,7 +86,7 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
     return JSON.stringify(query, Object.keys(query).sort());
   }),
 
-  sortingKeyObjects: computed(function () {
+  sortingKeyObjects: computed('tDateCreated', 'tDateUpdated', 'tLeastRecent', 'tMostRecent', 'tPackageName', function () {
     const tDateUpdated = this.get("tDateUpdated");
     const tDateCreated = this.get("tDateCreated");
     const tPackageName = this.get("tPackageName");

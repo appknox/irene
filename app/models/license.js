@@ -20,11 +20,7 @@ export default DS.Model.extend({
   perScanQuantity: DS.attr('number'),
 
 
-  isActive: computed('status', function(){
-    return this.get('status') === 'Active';
-  }),
+  isActive: computed.equal('status', 'Active'),
 
-  isExpired: computed('status', function(){
-    return this.get('status') === 'Expired';
-  }),
+  isExpired: computed.equal('status', 'Expired'),
 });

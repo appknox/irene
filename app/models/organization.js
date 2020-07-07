@@ -17,9 +17,7 @@ const Organization = DS.Model.extend({
   projectsCount: DS.attr('number'),
   namespacesCount: DS.attr('number'),
   teamsCount: DS.attr('number'),
-  membersCount: computed('members', function() {
-    return this.get('members.meta.count');
-  }),
+  membersCount: computed.reads('members.meta.count'),
 });
 
 export default Organization;

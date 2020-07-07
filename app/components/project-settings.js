@@ -7,7 +7,7 @@ export default Component.extend({
   isAnalysisSettings: false,
   me: service('me'),
 
-  profile: computed('project.activeProfileId', function() {
+  profile: computed('project.activeProfileId', 'store', function() {
     var profileId = this.get('project.activeProfileId');
     return this.get('store').findRecord('profile', profileId);
   }),

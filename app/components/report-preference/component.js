@@ -4,16 +4,14 @@ import { computed } from '@ember/object';
 
 export default Component.extend({
   project: null,
-  profile: computed('project.activeProfileId', function(){
+  profile: computed('project.activeProfileId', 'store', function(){
     const profileId = this.get('project.activeProfileId');
     if(!profileId){
       return null;
     }
     return this.get("store").findRecord('profile', profileId);
   }),
-  reportPreference: computed('profile.id', function() {
-    return this.get('profile.reportPreference');
-  }),
+  reportPreference: computed.reads('profile.reportPreference'),
   saveDynamic: task(function *(value){
     const dynamicScan = value
     const apiScan = this.get('reportPreference.show_api_scan');

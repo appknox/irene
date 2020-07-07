@@ -13,7 +13,7 @@ const AnalysisSettingsComponent = Component.extend({
   isSavingStatus: false,
   tSavedPreferences: t("savedPreferences"),
 
-  unknownAnalysisStatus: computed(function() {
+  unknownAnalysisStatus: computed('project.activeProfileId', 'store', function() {
     return this.get("store").queryRecord('unknown-analysis-status', {id: this.get("project.activeProfileId")});
   }),
 

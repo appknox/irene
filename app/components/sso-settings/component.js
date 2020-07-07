@@ -31,7 +31,7 @@ export default Component.extend({
   },
 
 
-  sso: computed(function() {
+  sso: computed('store', function() {
     return this.get('store').queryRecord('organization-sso', {});
   }),
 

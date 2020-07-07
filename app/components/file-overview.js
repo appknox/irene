@@ -6,7 +6,7 @@ const FileOverviewComponent = Component.extend({
   fileOld: null,
   classNames: ["card","file-card", "is-fullwidth", "margin-bottom20"],
 
-  unknownAnalysisStatus: computed(function() {
+  unknownAnalysisStatus: computed('profileId', 'store', function() {
     return this.get("store").queryRecord('unknown-analysis-status', {id: this.get("profileId")});
   }),
 

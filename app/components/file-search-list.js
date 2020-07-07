@@ -36,7 +36,7 @@ export default Component.extend(PaginateMixin, {
     })();
   }),
 
-  extraQueryStrings: computed("query", function() {
+  extraQueryStrings: computed('project.projectid', 'query', function() {
     const query = {
       query: this.get("query"),
       projectId: this.get("project.projectid")

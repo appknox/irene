@@ -18,20 +18,20 @@ export default Model.extend({
   toDate: DS.attr(),
   progressPercent: DS.attr('number'),
 
-  isAvailable: computed('status',function() {
+  isAvailable: computed('AVAILABLE', 'status',function() {
     return this.get('status') === this.get('AVAILABLE')
   }),
-  isInProgress: computed('status',function() {
+  isInProgress: computed('INPROGRESS', 'status',function() {
     return this.get('status') === this.get('INPROGRESS')
   }),
-  isExpired: computed('status',function() {
+  isExpired: computed('EXPIRED', 'status',function() {
     return this.get('status') === this.get('EXPIRED')
   }),
-  isErrrored: computed('status',function() {
+  isErrrored: computed('ERRORED', 'status',function() {
     return this.get('status') === this.get('ERRORED')
   }),
 
-  status: computed('availableUntil','progressPercent',function() {
+  status: computed('AVAILABLE', 'ERRORED', 'EXPIRED', 'INPROGRESS', 'availableUntil', 'progressPercent',function() {
     const expiryDate = this.get('availableUntil');
     const progressPercent = this.get('progressPercent');
 

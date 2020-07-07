@@ -23,7 +23,7 @@ export default Component.extend(PaginateMixin, {
 
   targetModel: 'organization-member',
   sortProperties: ['created:desc'],
-  extraQueryStrings: computed('collaborator.id', 'searchQuery', function () {
+  extraQueryStrings: computed('collaborator.id', 'project.id', 'searchQuery', function () {
     const query = {
       q: this.get('searchQuery'),
       exclude_project: this.get('project.id')

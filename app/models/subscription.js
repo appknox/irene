@@ -29,7 +29,7 @@ const Subscription = DS.Model.extend({
   tTrialWillBeConverted: t("trialWillBeConverted"),
   tSubscriptionWillExpireOn: t("subscriptionWillExpireOn"),
 
-  subscriptionText: computed("isTrial", "isCancelled", function() {
+  subscriptionText: computed('isCancelled', 'isTrial', 'tSubscriptionWillExpireOn', 'tTrialWillBeConverted', 'tTrialWillExpireOn', 'tYouWillBeChargedOn', function() {
     const isTrial = this.get("isTrial");
     const isCancelled = this.get("isCancelled");
     const tTrialWillExpireOn = this.get("tTrialWillExpireOn");

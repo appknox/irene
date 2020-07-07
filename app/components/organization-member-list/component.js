@@ -21,9 +21,7 @@ export default Component.extend(PaginateMixin, {
     if it's not change same value will return everytime */
 
   // sortProperties: [], 
-  sortedObjects: computed('objects.length', function(){
-    return this.get('objects');
-  }),
+  sortedObjects: computed.reads('objects'),
 
   tPleaseTryAgain: t('pleaseTryAgain'),
   

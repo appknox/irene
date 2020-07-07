@@ -5,7 +5,7 @@ const InvoiceListComponent = Component.extend({
 
   classNames:["invoice-table"],
 
-  invoices: computed(function() {
+  invoices: computed('store', function() {
     return this.get("store").findAll("invoice");
   }),
 

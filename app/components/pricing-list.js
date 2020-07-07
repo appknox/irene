@@ -7,7 +7,7 @@ const PricingListComponent = Component.extend({
 
   paymentDuration: ENUMS.PAYMENT_DURATION.MONTHLY,
 
-  subscriptions: computed(function() {
+  subscriptions: computed('store', function() {
     this.get("store").findAll("subscription")
     .then((data) => {
       this.set("subscriptions", data); // eslint-disable-line

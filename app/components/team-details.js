@@ -23,19 +23,19 @@ const TeamDetailsComponent = Component.extend({
   tTeamMemberInvited: t("teamMemberInvited"),
   tOrganizationTeamNameUpdated: t("organizationTeamNameUpdated"),
 
-  orgTeam: computed(function() {
+  orgTeam: computed('organization.id', 'store', 'team.teamId', function() {
     const orgId = this.get("organization.id");
     const teamId = this.get("team.teamId");
     return this.get("store").queryRecord('organization-team', {orgId: orgId, teamId: teamId});
   }),
 
-  teamMembers: computed(function() {
+  teamMembers: computed('organization.id', 'store', 'team.teamId', function() {
     const orgId = this.get("organization.id");
     const teamId = this.get("team.teamId");
     return this.get("store").query('team-member', {orgId: orgId, teamId: teamId});
   }),
 
-  teamProjects: computed(function() {
+  teamProjects: computed('organization.id', 'store', 'team.teamId', function() {
     const orgId = this.get("organization.id");
     const teamId = this.get("team.teamId");
     return this.get("store").query('team-project', {orgId: orgId, teamId: teamId});
