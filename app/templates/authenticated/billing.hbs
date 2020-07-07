@@ -1,0 +1,8 @@
+{{page-title "Billing"}}
+{{#if model.organization.showBilling}}
+  {{#unless model.showLicense}}
+    {{pricing-list}}
+  {{else}}
+    {{license-detail license=model.license}}
+  {{/unless}}
+{{/if}}

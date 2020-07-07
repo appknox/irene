@@ -1,6 +1,3 @@
-import config from 'irene/config/environment';
 import Route from '@ember/routing/route';
 
-export default Route.extend({
-  title: `Download App${config.platform}`,
-});
+export default class AuthenticatedSecurityDownloadAppRoute extends Route {}

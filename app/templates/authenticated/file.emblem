@@ -1,5 +1,0 @@
-.columns
-  .column.flex-grow-2
-    = file-details file=model
-  .column.flex-grow-1.vnc-viewer
-    = vnc-viewer file=model profileId=model.project.activeProfileId

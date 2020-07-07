@@ -1,13 +1,10 @@
 import Route from '@ember/routing/route';
-import config from 'irene/config/environment';
-import ScrollTopMixin from 'irene/mixins/scroll-top';
+import { ScrollTopMixin } from '../../../mixins/scroll-top';
 import { inject as service } from '@ember/service';
 
-export default Route.extend(ScrollTopMixin, {
-  me: service(),
-  organization: service(),
-
-  title: `Team${config.platform}`,
+export default class AuthenticatedOrganizationTeamRoute extends ScrollTopMixin(Route) {
+  @service me;
+  @service organization;
 
   async model(params){
     const orgId = this.get('organization').selected.id;
@@ -16,4 +13,4 @@ export default Route.extend(ScrollTopMixin, {
       organization: await this.get('store').find('organization', orgId)
     }
   }
-});
+}

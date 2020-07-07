@@ -10,6 +10,6 @@ export default class ApplicationRoute extends Route {
   }
 
   afterModel() {
-    this.headData.title = "Appknox Security Dashboard";
+    this.headData.title = "Appknox";
   }
 }

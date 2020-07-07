@@ -1,10 +1,7 @@
 import Route from '@ember/routing/route';
 
-const AuthenticatedProjectRoute = Route.extend({
-
+export default class AuthenticatedProjectRoute extends Route {
   model(params){
     return this.store.findRecord("project", params.projectid);
   }
-});
-
-export default AuthenticatedProjectRoute;
+}

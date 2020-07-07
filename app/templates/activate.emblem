@@ -1,7 +1,0 @@
-.auth-main-container
-  = auth-assets
-  .activate-container
-    .activate-main
-      = fa-icon "check-circle" class="is-success activate-main-icon"
-      p.activate-main-text
-        = t "activationSuccess"

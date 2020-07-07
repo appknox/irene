@@ -1676,6 +1676,7 @@ table.vuln-table
     color: #fff
     font-weight: 100
     td
+      position: relative
       vertical-align: middle
 
 ul.scan-table
@@ -3315,10 +3316,11 @@ $attachment-icon-width: 4em
   font-size: 16px
 
 .arrow-left
-  display: inline
-  position: absolute
-  left: 39%
-  margin-top: -30px
+  display: inline;
+  position: absolute;
+  left: 100%;
+  transform: translate3d(-50%, -50%, 0);
+  top: 50%;
   i.fa
     font-size: 26px
 

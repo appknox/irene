@@ -1,17 +1,16 @@
 import Route from '@ember/routing/route';
-import config from 'irene/config/environment';
-import ScrollTopMixin from 'irene/mixins/scroll-top';
+import { ScrollTopMixin } from '../../mixins/scroll-top';
+import { debug } from '@ember/debug';
 
-const AuthenticatedCompareRoute = Route.extend(ScrollTopMixin, {
-
-  title: `File Compare${config.platform}`,
-  model(data){
+export default class AuthenticatedCompareRoute extends ScrollTopMixin(Route) {
+  async model(data){
     const files = data.files.split("...");
+    debug(`Comparing files ${files[0]} and ${files[1]}`)
+    const file1 = await this.get('store').find('file', parseInt(files[0]));
+    const file2 = await this.get('store').find('file', parseInt(files[1]));
     return {
-      file: this.get('store').find('file', parseInt(files[0])),
-      fileOld: this.get('store').find('file', parseInt(files[1]))
+      file: file1,
+      fileOld: file2
     };
   }
-});
-
-export default AuthenticatedCompareRoute;
+}

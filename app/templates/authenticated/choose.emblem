@@ -1,6 +1,0 @@
-.columns
-  .column.margin-left
-    h4.bold.black-text
-      = t "chooseAFile"
-
-= choose-list project=model.project fileOld=model

@@ -1,2 +1,0 @@
-.auth-main-container
-  = password-setup uuid=model.uuid token=model.token

@@ -1,10 +1,9 @@
 import Route from '@ember/routing/route';
 
-export default Route.extend({
-  title: 'Registration',
+export default class RegisterViaInviteRoute extends Route {
   model(params) {
     return {
       'token': params.token
     };
   }
-});
+}

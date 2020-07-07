@@ -1,7 +1,0 @@
-.org-container
-  .columns.margin-v-h
-    .column
-      h3.bold.black-text
-        = t "namespaces"
-  .columns
-    = organization-namespace-list organization=model

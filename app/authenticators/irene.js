@@ -23,7 +23,7 @@ const IreneAuthenticator = Base.extend({
   resumeTransistion() {
     const authenticatedRoute = getOwner(this).lookup("route:authenticated");
     const lastTransition = authenticatedRoute.get("lastTransition");
-    if (lastTransition !== null) {
+    if (lastTransition) {
       return lastTransition.retry();
     } else {
       const applicationRoute = getOwner(this).lookup("route:application");

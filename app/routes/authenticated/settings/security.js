@@ -1,10 +1,8 @@
 import Route from '@ember/routing/route';
-import config from 'irene/config/environment';
-import ScrollTopMixin from 'irene/mixins/scroll-top';
+import { ScrollTopMixin } from '../../../mixins/scroll-top';
 
-export default Route.extend(ScrollTopMixin, {
-  title: `Security Settings${config.platform}`,
-  model: function(){
+export default class AuthenticatedSettingsSecurityRoute extends ScrollTopMixin(Route) {
+  model () {
     return this.modelFor('authenticated.settings');
   }
-});
+}

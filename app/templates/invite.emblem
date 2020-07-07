@@ -1,3 +1,0 @@
-.auth-main-container
-  = auth-assets
-  = invite-register email=model.email company=model.company token=model.token isSSOEnforced=model.is_sso_enforced
