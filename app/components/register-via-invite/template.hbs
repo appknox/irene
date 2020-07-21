@@ -52,7 +52,7 @@
       </div>
     </div>
     <p class="control flex-center margin-top">
-      <button {{action "register" changeset}} class="button is-primary is-fullwidth login-button mp-login-button highlighted-button">{{t "register"}}{{task-spin task=registerTask}}</button>
+      <button {{action "register" changeset}} class="button is-primary is-fullwidth login-button mp-login-button highlighted-button" type="button">{{t "register"}}{{task-spin task=registerTask}}</button>
     </p>
   {{else}}
     <p> You seems to have landed in a wrong location. If this seems like a mistake please contact <a href="mailto:support@appknox.com?subject=Invalid%20Invitation">support</a> </p>
