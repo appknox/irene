@@ -1,9 +1,9 @@
 {{page-title "File Details"}}
 <div class="columns">
   <div class="column flex-grow-2">
-    {{file-details file=model}}
+    <FileDetails @file={{@model}}></FileDetails>
   </div>
   <div class="column flex-grow-1 vnc-viewer">
-    {{vnc-viewer file=model profileId=model.project.activeProfileId}}
+    <VncViewer @file={{@model}} @profileId={{@model.project.activeProfileId}} ></VncViewer>
   </div>
 </div>

@@ -22,7 +22,7 @@ const Subscription = DS.Model.extend({
   expiryDateOnHumanized: computed("expiryDate", function() {
     const expiryDate = this.get("expiryDate");
     return expiryDate.toLocaleDateString();
-  }).property("expiryDate"),
+  }),
 
   tTrialWillExpireOn: t("trialWillExpireOn"),
   tYouWillBeChargedOn: t("youWillBeChargedOn"),
