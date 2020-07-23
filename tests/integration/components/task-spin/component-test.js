@@ -1,26 +1,28 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForComponent('task-spin', 'Integration | Component | task spin', {
-  integration: true
-});
+module('Integration | Component | task spin', function(hooks) {
+  setupRenderingTest(hooks);
 
-test('it renders', function(assert) {
+  test('it renders', async function(assert) {
 
-  // Set any properties with this.set('myProperty', 'value');
-  // Handle any actions with this.on('myAction', function(val) { ... });
+    // Set any properties with this.set('myProperty', 'value');
+    // Handle any actions with this.on('myAction', function(val) { ... });
 
-  this.render(hbs`{{task-spin}}`);
+    await render(hbs`{{task-spin}}`);
 
-  // assert.equal(this.$().text().trim(), '');
+    // assert.equal(this.$().text().trim(), '');
 
-  // // Template block usage:
-  // this.render(hbs`
-  //   {{#task-spin}}
-  //     template block text
-  //   {{/task-spin}}
-  // `);
+    // // Template block usage:
+    // this.render(hbs`
+    //   {{#task-spin}}
+    //     template block text
+    //   {{/task-spin}}
+    // `);
 
-  // assert.equal(this.$().text().trim(), 'template block text');
-  assert.equal(true, true)
+    // assert.equal(this.$().text().trim(), 'template block text');
+    assert.equal(true, true)
+  });
 });

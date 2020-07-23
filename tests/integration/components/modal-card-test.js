@@ -1,15 +1,16 @@
-import { test, moduleForComponent } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 import { run } from '@ember/runloop';
 
-moduleForComponent('modal-card', 'Integration | Component | modal card', {
-  unit: true
-});
+module('Integration | Component | modal card', function(hooks) {
+  setupTest(hooks);
 
-test('tapping button fires an external action', function(assert) {
+  test('tapping button fires an external action', function(assert) {
 
-  var component = this.subject();
-  run(function() {
-    component.send('clearModal');
-    assert.equal(component.get('isActive'),false, "Active/False");
+    var component = this.owner.factoryFor('component:modal-card').create();
+    run(function() {
+      component.send('clearModal');
+      assert.equal(component.get('isActive'),false, "Active/False");
+    });
   });
 });

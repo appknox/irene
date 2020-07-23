@@ -1,9 +1,11 @@
-import { moduleFor, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 
-moduleFor('route:reset', 'Unit | Route | reset', {
-});
+module('Unit | Route | reset', function(hooks) {
+  setupTest(hooks);
 
-test('it exists', function(assert) {
-  const route = this.subject();
-  assert.equal(route.model("test"), "test" , "Route");
+  test('it exists', function(assert) {
+    const route = this.owner.lookup('route:reset');
+    assert.equal(route.model("test"), "test" , "Route");
+  });
 });

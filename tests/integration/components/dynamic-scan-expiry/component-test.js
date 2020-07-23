@@ -1,15 +1,18 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
 
-moduleForComponent('dynamic-scan-expiry', 'Integration | Component | dynamic scan expiry', {
-  integration: true
-});
+import '@ember/test-helpers';
 
-test('it renders', function(assert) {
+module('Integration | Component | dynamic scan expiry', function(hooks) {
+  setupRenderingTest(hooks);
 
-  // Set any properties with this.set('myProperty', 'value');
-  // Handle any actions with this.on('myAction', function(val) { ... });
+  test('it renders', function(assert) {
+
+    // Set any properties with this.set('myProperty', 'value');
+    // Handle any actions with this.on('myAction', function(val) { ... });
 
 
 
-  assert.equal(true, true);
+    assert.equal(true, true);
+  });
 });

@@ -1,9 +1,12 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
 
-moduleForComponent('settings-developersettings', 'Integration | Component | settings developersettings', {
-  integration: true
-});
+import '@ember/test-helpers';
 
-test('it renders', function(assert) {
-  assert.ok(true);
+module('Integration | Component | settings developersettings', function(hooks) {
+  setupRenderingTest(hooks);
+
+  test('it renders', function(assert) {
+    assert.ok(true);
+  });
 });

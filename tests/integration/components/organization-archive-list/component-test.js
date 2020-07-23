@@ -1,9 +1,12 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
 
-moduleForComponent('organization-archive-list', 'Integration | Component | organization archive list', {
-  integration: true
-});
+import '@ember/test-helpers';
 
-test('it renders', function(assert) {
-  assert.ok(true);
+module('Integration | Component | organization archive list', function(hooks) {
+  setupRenderingTest(hooks);
+
+  test('it renders', function(assert) {
+    assert.ok(true);
+  });
 });

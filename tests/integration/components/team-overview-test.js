@@ -1,33 +1,26 @@
-import { test, moduleForComponent } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 import { run } from '@ember/runloop';
 import tHelper from 'ember-intl/helpers/t';
-import { getOwner } from '@ember/application';
 
-moduleForComponent('team-overview', 'Integration | Component | team overview', {
-  unit: true,
-  needs: [
-    'config:environment',
-    'service:intl',
-    'ember-intl@adapter:default',
-    'cldr:en',
-    'cldr:ja',
-    'util:intl/missing-message'
-  ],
-  beforeEach() {
+module('Integration | Component | team overview', function(hooks) {
+  setupTest(hooks);
+
+  hooks.beforeEach(function() {
     // set the locale and the config
-    getOwner(this).lookup('service:intl').setLocale('en');
+    this.owner.lookup('service:intl').setLocale('en');
 
-    this.registry.register('helper:t', tHelper);
-  },
-});
+    this.owner.register('helper:t', tHelper);
+  });
 
-test('tapping button fires an external action', function (assert) {
+  test('tapping button fires an external action', function (assert) {
 
-  var component = this.subject();
-  run(function () {
-    component.send('openDeleteTeamPrompt');
-    assert.equal(component.get('showDeleteTeamPrompt'), true, "Open Modal");
-    component.send('closeDeleteTeamPrompt');
-    assert.equal(component.get('showDeleteTeamPrompt'), false, "Close Modal");
+    var component = this.owner.factoryFor('component:team-overview').create();
+    run(function () {
+      component.send('openDeleteTeamPrompt');
+      assert.equal(component.get('showDeleteTeamPrompt'), true, "Open Modal");
+      component.send('closeDeleteTeamPrompt');
+      assert.equal(component.get('showDeleteTeamPrompt'), false, "Close Modal");
+    });
   });
 });

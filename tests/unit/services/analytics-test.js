@@ -1,9 +1,11 @@
-import { moduleFor, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 
-moduleFor('service:realtime', 'Unit | Service | realtime', {
-});
+module('Unit | Service | realtime', function(hooks) {
+  setupTest(hooks);
 
-test('it exists', function (assert) {
-  const service = this.subject();
-  assert.ok(service);
+  test('it exists', function (assert) {
+    const service = this.owner.lookup('service:realtime');
+    assert.ok(service);
+  });
 });

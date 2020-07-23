@@ -1,9 +1,12 @@
-import { test, moduleForComponent } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
 
-moduleForComponent('pending-invitation', 'Integration | Component | pending invitation', {
-  integration: true
-});
+import '@ember/test-helpers';
 
-test('it renders', function(assert) {
-  assert.ok(true);
+module('Integration | Component | pending invitation', function(hooks) {
+  setupRenderingTest(hooks);
+
+  test('it renders', function(assert) {
+    assert.ok(true);
+  });
 });

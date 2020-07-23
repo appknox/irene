@@ -1,15 +1,17 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForComponent('download-app', 'Integration | Component | download app', {
-  integration: true
-});
+module('Integration | Component | download app', function(hooks) {
+  setupRenderingTest(hooks);
 
-test('it renders', function(assert) {
+  test('it renders', async function(assert) {
 
 
-  this.render(hbs`{{download-app}}`);
+    await render(hbs`{{download-app}}`);
 
-  assert.equal(this.$().text().trim(), 'Download AppDownload App');
+    assert.equal(this.$().text().trim(), 'Download AppDownload App');
 
+  });
 });

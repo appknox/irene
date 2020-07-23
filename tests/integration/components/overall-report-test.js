@@ -1,10 +1,13 @@
-import { test, moduleForComponent } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
 
-moduleForComponent('overall-report', 'Integration | Component | overall report', {
-  integration: true
-});
+import '@ember/test-helpers';
 
-test('it renders', function(assert) {
-  assert.ok(true);
-  assert.equal(this.$().text().trim(), '');
+module('Integration | Component | overall report', function(hooks) {
+  setupRenderingTest(hooks);
+
+  test('it renders', function(assert) {
+    assert.ok(true);
+    assert.equal(this.$().text().trim(), '');
+  });
 });

@@ -1,14 +1,16 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForComponent('project-search-overview', 'Integration | Component | project search overview', {
-  integration: true
-});
+module('Integration | Component | project search overview', function(hooks) {
+  setupRenderingTest(hooks);
 
-test('it renders', function(assert) {
+  test('it renders', async function(assert) {
 
-  this.render(hbs`{{project-search-overview}}`);
+    await render(hbs`{{project-search-overview}}`);
 
-  assert.equal(this.$().text().trim(), 'View Files');
+    assert.equal(this.$().text().trim(), 'View Files');
 
+  });
 });

@@ -1,11 +1,14 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
 
-moduleForComponent('api-scan', 'Integration | Component | api scan', {
-  integration: true
-});
+import '@ember/test-helpers';
 
-test('dummy test', function(assert) {
-  assert.ok(true);
-  assert.equal(this.$().text().trim(), '');
+module('Integration | Component | api scan', function(hooks) {
+  setupRenderingTest(hooks);
+
+  test('dummy test', function(assert) {
+    assert.ok(true);
+    assert.equal(this.$().text().trim(), '');
+  });
 });
 

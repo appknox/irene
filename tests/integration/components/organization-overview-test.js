@@ -1,9 +1,10 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 
-moduleForComponent('organization-overview', 'Integration | Component | organization overview', {
-  unit: true
-});
+module('Integration | Component | organization overview', function(hooks) {
+  setupTest(hooks);
 
-test('it renders', function(assert) {
-  assert.ok(true);
+  test('it renders', function(assert) {
+    assert.ok(true);
+  });
 });

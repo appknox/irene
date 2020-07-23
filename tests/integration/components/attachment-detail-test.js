@@ -1,46 +1,36 @@
 import tHelper from 'ember-intl/helpers/t';
-import { getOwner } from '@ember/application';
-import { test, moduleForComponent } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 import { startMirage } from 'irene/initializers/ember-cli-mirage';
 import { run } from '@ember/runloop';
 
-moduleForComponent('attachment-detail', 'Integration | Component | attachment detail', {
-  unit: true,
-  needs: [
-    'service:ajax',
-    'service:notification-messages-service',
-    'service:session',
-    'config:environment',
-    'service:intl',
-    'ember-intl@adapter:default',
-    'cldr:en',
-    'cldr:ja',
-    'translation:en',
-    'util:intl/missing-message'
-  ],
-  beforeEach() {
+module('Integration | Component | attachment detail', function(hooks) {
+  setupTest(hooks);
+
+  hooks.beforeEach(function() {
     // set the locale and the config
-    getOwner(this).lookup('service:intl').setLocale('en');
+    this.owner.lookup('service:intl').setLocale('en');
 
     // register t helper
-    this.register('helper:t', tHelper);
+    this.owner.register('helper:t', tHelper);
 
     // start Mirage
     this.server = startMirage();
-  },
-  afterEach() {
+  });
+
+  hooks.afterEach(function() {
     // shutdown Mirage
     this.server.shutdown();
-  }
-});
+  });
 
-test('clicking download link fires an external action', function(assert) {
-  var component = this.subject();
+  test('clicking download link fires an external action', function(assert) {
+    var component = this.owner.factoryFor('component:attachment-detail').create();
 
-  run(function() {
-    component.set("attachment", {downloadUrl: '/api/attachments/20'});
-    component.send('downloadAttachment');
-    assert.equal(component.get('isDownloadingAttachment'),true);
+    run(function() {
+      component.set("attachment", {downloadUrl: '/api/attachments/20'});
+      component.send('downloadAttachment');
+      assert.equal(component.get('isDownloadingAttachment'),true);
+    });
   });
 });
 

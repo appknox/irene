@@ -1,17 +1,18 @@
-import { test, moduleForComponent } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 import { run } from '@ember/runloop';
 
-moduleForComponent('confirm-box', 'Integration | Component | confirm box', {
-  unit: true
-});
+module('Integration | Component | confirm box', function(hooks) {
+  setupTest(hooks);
 
-test('tapping button fires an external action', function(assert) {
-  assert.expect(1);
+  test('tapping button fires an external action', function(assert) {
+    assert.expect(1);
 
-  var component = this.subject();
+    var component = this.owner.factoryFor('component:confirm-box').create();
 
-  run(function() {
-    component.send('clearModal');
-    assert.equal(component.get('isActive'),false, "Clear Modal");
+    run(function() {
+      component.send('clearModal');
+      assert.equal(component.get('isActive'),false, "Clear Modal");
+    });
   });
 });

@@ -47,7 +47,7 @@ function getPluginActivationStatus(pluginName){
 module.exports = function(environment) {
   var devicefarmEnv = process.env.IRENE_DEVICEFARM_URL || "wss://devicefarm.appknox.com";
   var deviceFarmPath = "/websockify";
-  var deviceFarmWebsockifyHost = url.parse(devicefarmEnv);
+  var deviceFarmWebsockifyHost = new url.URL(devicefarmEnv);
   var deviceFarmSsl = deviceFarmWebsockifyHost.protocol == "wss:";
   var deviceFarmPort = deviceFarmWebsockifyHost.port || (deviceFarmSsl ? 443:80);
   var deviceFarmHostname = deviceFarmWebsockifyHost.hostname;

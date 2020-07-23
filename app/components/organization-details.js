@@ -12,7 +12,7 @@ export default Component.extend({
     ajax: service(),
     me: service(),
     organization: service('organization'),
-    routing: service('-routing'),
+    router: service('router'),
     notify: service('notification-messages-service'),
 
     isNamespaces: true,
@@ -27,7 +27,7 @@ export default Component.extend({
 
     /* Initialise tabs state */
     didInsertElement() {
-      const route = this.get('routing.currentRouteName');
+      const route = this.get('router.currentRouteName');
       const routeName = route.split(".")[2];
       if(routeName === "teams" || routeName === "team") {
         this.set('isNamespaces', false);

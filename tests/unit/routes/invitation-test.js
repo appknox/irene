@@ -1,23 +1,25 @@
-import { moduleFor, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 
-moduleFor('route:invitation', 'Unit | Route | invitation', {
-});
+module('Unit | Route | invitation', function(hooks) {
+  setupTest(hooks);
 
-test('it exists', function(assert) {
-  const route = this.subject();
-  var store = {
-    findRecord: function() {
-      return [
-        {
-          id:1,
-          type: "invitation",
-          attributes: {
-            name: "test"
+  test('it exists', function(assert) {
+    const route = this.owner.lookup('route:invitation');
+    var store = {
+      findRecord: function() {
+        return [
+          {
+            id:1,
+            type: "invitation",
+            attributes: {
+              name: "test"
+            }
           }
-        }
-      ];
-    }
-  };
-  route.set('store', store);
-  assert.ok(route.model(1));
+        ];
+      }
+    };
+    route.set('store', store);
+    assert.ok(route.model(1));
+  });
 });

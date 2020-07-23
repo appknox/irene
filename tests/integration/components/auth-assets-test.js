@@ -1,32 +1,24 @@
 import tHelper from 'ember-intl/helpers/t';
-import { getOwner } from '@ember/application';
-import { test, moduleForComponent } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForComponent('auth-assets', 'Integration | Component | auth assets', {
-  unit: true,
-  needs:[
-    'config:environment',
-    'service:intl',
-    'ember-intl@adapter:default',
-    'cldr:en',
-    'cldr:ja',
-    'translation:en',
-    'util:intl/missing-message'
-  ],
-  beforeEach() {
+module('Integration | Component | auth assets', function(hooks) {
+  setupTest(hooks);
+
+  hooks.beforeEach(function() {
     // set the locale and the config
-    getOwner(this).lookup('service:intl').setLocale('en');
+    this.owner.lookup('service:intl').setLocale('en');
 
     // register t helper
-    this.register('helper:t', tHelper);
-  },
-});
+    this.owner.register('helper:t', tHelper);
+  });
 
-test('it renders', function(assert) {
-  assert.expect(1);
+  test('it renders', function(assert) {
+    assert.expect(1);
 
-  this.render(hbs("{{auth-assets}}"));
+    this.render(hbs("{{auth-assets}}"));
 
-  assert.equal(this.$().text().trim(), 'Security fanatics at your service');
+    assert.equal(this.$().text().trim(), 'Security fanatics at your service');
+  });
 });
