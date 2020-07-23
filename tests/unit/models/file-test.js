@@ -1,4 +1,3 @@
-import { getOwner } from '@ember/application';
 import ENUMS from 'irene/enums';
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
@@ -14,7 +13,7 @@ module('Unit | Model | file', function(hooks) {
 
   test('it passes', function(assert) {
     run(() => {
-      const file = getOwner(this).lookup(
+      const file = this.owner.lookup(
         'service:store'
       ).createRecord('file', {
         'id': 1
