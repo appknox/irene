@@ -20,7 +20,7 @@ jobs:
             - ./node_modules
       - run:
           name: Run Ember Test
-          command: COVERAGE=true npm test
+          command: npm test
       - deploy:
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then

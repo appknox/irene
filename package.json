@@ -115,7 +115,6 @@
     "@novnc/novnc": "^1.1.0",
     "billboard.js": "^1.12.7",
     "clipboard": "^2.0.6",
-    "ember-cli-document-title": "^0.4.0",
     "ember-radio-button": "^2.0.1",
     "intl-tel-input": "^14.0.2",
     "qrious": "^4.0.2"
