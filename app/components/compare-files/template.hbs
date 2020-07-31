@@ -1,0 +1,102 @@
+<div class="tabs is-centered is-medium is-boxed">
+  <ul>
+    <li class={{if this.isSummary "is-active"}}>
+      <a class="mp-display-summary" href="#" {{on "click" this.displaySummary}} >
+        {{t "summary"}}
+      </a>
+    </li>
+    <li class={{unless this.isSummary "is-active"}}>
+      <a class="mp-display-details" href="#" {{on "click" this.displayDetails}}>
+        {{t "details"}}
+      </a>
+    </li>
+  </ul>
+</div>
+
+<div class="columns flex-center compare-container">
+  <div class="column is-half">
+    <LinkTo @route="authenticated.file" @model={{@file1.id}}>
+      <FileOverview @file={{@file1}} @isReverse={{true}} @profileId={{@file1.profile.id}}></FileOverview>
+    </LinkTo>
+  </div>
+  <div class="column is-half">
+    <LinkTo @route="authenticated.file" @model={{@file2.id}}>
+      <FileOverview @file={{@file2}} @profileId={{@file2.profile.id}}></FileOverview>
+    </LinkTo>
+  </div>
+</div>
+
+<div {{did-insert (fn this.fetchdata)}} class="columns compare-details">
+  <div class="column text-centre">
+    {{t "compareSummary1"}}
+    <select name="base-file-id" id="base-file-id" {{on "change" this.selectBaseFile}}>
+      <option value={{@file1.id}}>{{@file1.id}}</option>
+      {{#each this.allBaseFiles as |file|}}
+        <option value={{file.id}}>{{file.id}}</option>
+      {{/each}}
+    </select>
+    &nbsp; {{t "compareSummary2"}}
+    <select name="compare-file-id" id="compare-file-id" {{on "change" this.selectCompareFile}}>
+      <option value={{@file2.id}}>{{@file2.id}}</option>
+      {{#each this.allCompareFiles as |file|}}
+        <option value={{file.id}}>{{file.id}}</option>
+      {{/each}}
+    </select>
+  </div>
+</div>
+
+{{#if this.compareText}}
+  <div class="columns">
+    <div class="column compare-text">
+      {{fa-icon "exclamation-triangle"}} {{this.compareText}}
+    </div>
+  </div>
+{{/if}}
+
+{{#if this.isSummary}}
+  <table local-class="compare-table">
+    <thead>
+      <tr local-class="table-head">
+        <td colspan="2">
+          {{t "riskType"}}
+        </td>
+        <td rowspan="2">
+          {{t "riskOf"}}
+        </td>
+        <td rowspan="2">
+          {{t "status"}}
+        </td>
+      </tr>
+      <tr local-class="table-head">
+        <td>
+          <div>File ID {{@file1.id}}</div>
+          <div>{{t "version"}} &nbsp; {{@file1.version}}</div>
+          <span class="arrow-left">
+            {{fa-icon "long-arrow-left"}}
+          </span>
+        </td>
+        <td>
+          <div>File ID {{@file2.id}}</div>
+          <div>{{t "version"}} &nbsp; {{@file2.version}}</div>
+        </td>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each this.comparisons as |comparison|}}
+        <CompareSummary @comparison={{comparison}}></CompareSummary>
+      {{/each}}
+    </tbody>
+  </table>
+{{else}}
+  <div class="columns">
+    {{#each this.comparisons as |comparison|}}
+      <div class="column is-half">
+        <AnalysisDetails @analysis={{comparison.analysis1}} @showEditAnalysis={{false}}></AnalysisDetails>
+      </div>
+      <div class="column is-half">
+        <AnalysisDetails @analysis={{comparison.analysis2}} @showEditAnalysis={{false}}></AnalysisDetails>
+      </div>
+    {{/each}}
+  </div>
+  <hr>
+{{/if}}

@@ -58,7 +58,7 @@ const User = DS.Model.extend({
     return false;
   }),
 
-  totalProjects: computed("projectCount", function() {
+  totalProjects: computed('projectCount', 'tNoProject', 'tProject', 'tProjects', function() {
     const tProject = this.get("tProject");
     const tNoProject = this.get("tNoProject");
     const projectCount = this.get("projectCount");
@@ -79,7 +79,7 @@ const User = DS.Model.extend({
     return !billingHidden;
   }),
 
-  getExpiryDate: computed("expiryDate", function() {
+  getExpiryDate: computed('devknoxExpiry', 'expiryDate', function() {
     if (ENV.isAppknox) {
       return this.get("expiryDate");
     } else {

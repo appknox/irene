@@ -42,7 +42,7 @@ const CompareSummaryComponent = Component.extend({
     }
   }),
 
-  compareText: computed("file1Analysis.computedRisk", "file2Analysis.computedRisk", function() {
+  compareText: computed('file1Analysis.computedRisk', 'file2Analysis.computedRisk', 'tAnalyzing', 'tImproved', 'tUnchanged', 'tWorsened', function() {
     let file1Risk = this.get("file1Analysis.computedRisk");
     let file2Risk = this.get("file2Analysis.computedRisk");
     const tAnalyzing = this.get("tAnalyzing");

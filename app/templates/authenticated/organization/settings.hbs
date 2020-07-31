@@ -1,0 +1,27 @@
+{{page-title "Settings"}}
+<div class="org-container">
+  <OrganizationSettings @organization={{@model.organization}} @user={{@model.user}}></OrganizationSettings>
+  {{#if @model.organization.features.sso}}
+    <SsoSettings @organization={{@model.organization}} @user={{@model.user}}></SsoSettings>
+    <div class="divider margin-t-1 margin-b-1"></div>
+  {{/if}}
+  <OrganizationArchive></OrganizationArchive>
+  <div class="divider margin-t-1 margin-b-1"></div>
+  <div class="columns">
+    <div class="column">
+      <div class="org-settings-subtitle black-text is-fullwidth">
+        {{t "jiraIntegration"}}
+      </div>
+      <JiraAccount @user={{@model.user}}></JiraAccount>
+    </div>
+  </div>
+  <div class="divider margin-t-1 margin-b-1"></div>
+  <div class="columns">
+    <div class="column">
+      <div class="org-settings-subtitle black-text is-fullwidth">
+        {{t "githubIntegration"}}
+      </div>
+      <GithubAccount @integratedUser={{@model.integratedUser}} @reconnect={{@model.reconnect}} @user={{@model.user}}></GithubAccount>
+    </div>
+  </div>
+</div>

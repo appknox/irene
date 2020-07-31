@@ -1,5 +1,3 @@
 import Route from '@ember/routing/route';
 
-const AuthenticatedPaymentFailureRoute = Route.extend();
-
-export default AuthenticatedPaymentFailureRoute;
+export default class AuthenticatedPaymentFailureRoute extends Route {}

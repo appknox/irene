@@ -16,17 +16,15 @@ const ProjectPreferencesComponent = Component.extend({
 
   tAnyVersion: t("anyVersion"),
 
-  devicePreference: computed(function() {
+  devicePreference: computed('profileId', 'store', function() {
     return this.get("store").queryRecord('device-preference', {id: this.get("profileId")});
   }),
 
-  devices: computed(function() {
+  devices: computed('project.id', 'store', function() {
     return this.get("store").query('project-available-device', {projectId: this.get("project.id")});
   }),
 
-  selectedDeviceType: computed("devicePreference.deviceType", function() {
-    return this.get("devicePreference.deviceType");
-  }),
+  selectedDeviceType: computed.reads('devicePreference.deviceType'),
 
   filteredDeviceTypes: computed("deviceTypes", "devicePreference.deviceType", function() {
     const deviceTypes = this.get("deviceTypes");

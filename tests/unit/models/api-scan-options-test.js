@@ -1,15 +1,15 @@
-import { moduleForModel, test} from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 import { run } from '@ember/runloop';
 
-moduleForModel('api-scan-options', 'Unit | Model | api scan options', {
-  // Specify the other units that are required for this test.
-  needs: []
-});
+module('Unit | Model | api scan options', function(hooks) {
+  setupTest(hooks);
 
-test('it exists', function(assert) {
-  const apiScanOptions = this.subject();
-  run(function() {
-    apiScanOptions.set('apiUrlFilters', "test.com");
-    assert.equal(apiScanOptions.get('apiUrlFilterItems'), "test.com", "No role");
+  test('it exists', function(assert) {
+    const apiScanOptions = run(() => this.owner.lookup('service:store').createRecord('api-scan-options'));
+    run(function() {
+      apiScanOptions.set('apiUrlFilters', "test.com");
+      assert.equal(apiScanOptions.get('apiUrlFilterItems'), "test.com", "No role");
+    });
   });
 });

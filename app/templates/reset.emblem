@@ -1,2 +1,0 @@
-.auth-main-container
-  = password-reset token=model.token

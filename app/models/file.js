@@ -185,7 +185,7 @@ const File = DS.Model.extend(BaseModelMixin, {
     return ![ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE, ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN].includes(status);
   }),
 
-  statusText: computed('dynamicStatus', function() {
+  statusText: computed('dynamicStatus', 'tDeviceBooting', 'tDeviceDownloading', 'tDeviceHooking', 'tDeviceInQueue', 'tDeviceInstalling', 'tDeviceLaunching', 'tDeviceShuttingDown', 'tdeviceCompleted', function() {
     const tDeviceInQueue = this.get("tDeviceInQueue");
     const tDeviceBooting = this.get("tDeviceBooting");
     const tDeviceDownloading = this.get("tDeviceDownloading");

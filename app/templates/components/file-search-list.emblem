@@ -27,7 +27,4 @@ if hasObjects
   = partial "paginate"
 
 else
-  .loading-container-home
-    i.fa class="fa-spinner fa-spin"
-    div
-      | Loading...
+  = loading-spinner

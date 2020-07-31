@@ -16,7 +16,7 @@ export default DS.Model.extend({
   lastFileCreatedOn: DS.attr('date'),
   fileCount: DS.attr('number'),
 
-  lastFile: computed('fileCount', function() {
+  lastFile: computed('fileCount', 'id', 'store', function() {
     const params = {
       projectId: this.get("id"),
       lastFileOnly: true

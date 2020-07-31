@@ -19,7 +19,7 @@ export default Component.extend({
 
   showInstructionsModal: false,
 
-  data: computed(function() {
+  data: computed('tAppCenterPipeline', 'tAzurePipeline', 'tBitbucketPipeline', 'tBitriseWorkflow', 'tCircleCIPipeline', 'tInstallAppknoxPluginTo', 'tJenkinsPipeline', 'tViewIntegrationInstructions', function() {
     return [
       {
         "title": this.get("tAzurePipeline"),

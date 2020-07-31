@@ -1,7 +1,4 @@
 import Route from '@ember/routing/route';
-import config from 'irene/config/environment';
-import ScrollTopMixin from 'irene/mixins/scroll-top';
+import { ScrollTopMixin } from '../../../mixins/scroll-top';
 
-export default Route.extend(ScrollTopMixin, {
-  title: `Users${config.platform}`,
-});
+export default class AuthenticatedOrganizationMembersRoute extends ScrollTopMixin(Route) {}

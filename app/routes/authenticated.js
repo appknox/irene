@@ -1,3 +1,7 @@
+import { inject as service } from '@ember/service';
+import { isEmpty } from '@ember/utils';
+import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 import { singularize } from 'ember-inflector';
 import { debug } from '@ember/debug';
 import { getOwner } from '@ember/application';
@@ -7,41 +11,34 @@ import { CSBMap } from 'irene/router';
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import * as chat from 'irene/utils/chat';
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
-
 
 const { location } = window;
 
-import { inject as service } from '@ember/service';
-import { isEmpty } from '@ember/utils';
-import Route from '@ember/routing/route';
+export default class AuthenticatedRoute extends Route {
+  @service session;
+  @service intl;
+  @service me;
+  @service moment;
+  @service session;
+  @service realtime;
+  @service trial;
+  @service analytics;
+  @service rollbar;
+  @service('organization') org;
+  @service('socket-io') socketIOService;
 
-const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
-
-  lastTransition: null,
-  intl: service(),
-  me: service('me'),
-  moment: service(),
-  session: service(),
-  realtime: service(),
-  trial: service(),
-  org: service('organization'),
-  analytics: service('analytics'),
-  socketIOService: service('socket-io'),
-  rollbar: service('rollbar'),
-
-  beforeModel(transition){
+  beforeModel(transition) {
+    this.get('session').requireAuthentication(transition, 'login');
     this.set("lastTransition", transition);
-    return this._super(transition);
-  },
+  }
 
   async model() {
     const userId = this.get("session.data.authenticated.user_id");
-    await this.get('store').findAll('Vulnerability');
-    await this.get('org').load();
-    await this.get('analytics').load();
-    return this.get('store').find('user', userId);
-  },
+    await this.store.findAll('Vulnerability');
+    await this.org.load();
+    await this.analytics.load();
+    return this.store.find('user', userId);
+  }
 
   async afterModel(user){
     const company =
@@ -70,43 +67,8 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
     this.get('moment').changeLocale(user.get("lang"));
 
     await this.configureSocket(user);
-  },
+  }
 
-  async configureRollBar (user) {
-    try {
-      this.get('rollbar.notifier').configure({
-        payload: {
-          person: {
-            id: user.get("id"),
-            username: user.get("username"),
-            email: user.get("email")
-          }
-        }
-      });
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log(e);
-    }
-  },
-
-  async configurePendo(user) {
-    try {
-      // eslint-disable-next-line no-undef
-      pendo.initialize({
-        visitor: {
-          id: user.get("id"),
-          email: user.get("email")
-        },
-        account: {
-          id: user.get("email").split("@").pop().trim()
-        }
-      });
-
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log(e);
-    }
-  },
   async configureSocket(user) {
     const socketId = user != null ? user.get("socketId") : undefined;
     if (isEmpty(socketId)) {
@@ -187,23 +149,56 @@ const AuthenticatedRoute = Route.extend(AuthenticatedRouteMixin, {
       debug("Connecting to room: " + socketId);
       socket.emit("subscribe", {room: socketId});
     });
-  },
-  actions: {
+  }
 
-    willTransition(transition) {
-      const currentRoute = transition.targetName;
-      const csbDict = CSBMap[currentRoute];
-      if (!isEmpty(csbDict)) {
-        triggerAnalytics('feature', csbDict);
-      }
-    },
-
-    invalidateSession() {
-      triggerAnalytics('logout');
-      this.get('session').invalidate();
+  async configureRollBar (user) {
+    try {
+      this.get('rollbar.notifier').configure({
+        payload: {
+          person: {
+            id: user.get("id"),
+            username: user.get("username"),
+            email: user.get("email")
+          }
+        }
+      });
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
     }
   }
-}
-);
 
-export default AuthenticatedRoute;
+  async configurePendo(user) {
+    try {
+      // eslint-disable-next-line no-undef
+      pendo.initialize({
+        visitor: {
+          id: user.get("id"),
+          email: user.get("email")
+        },
+        account: {
+          id: user.get("email").split("@").pop().trim()
+        }
+      });
+
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+    }
+  }
+
+  @action
+  willTransition(transition) {
+    const currentRoute = transition.targetName;
+    const csbDict = CSBMap[currentRoute];
+    if (!isEmpty(csbDict)) {
+      triggerAnalytics('feature', csbDict);
+    }
+  }
+
+  @action
+  invalidateSession() {
+    triggerAnalytics('logout');
+    this.get('session').invalidate();
+  }
+}

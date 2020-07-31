@@ -902,6 +902,8 @@ div[class^="_c-notification__container"]
 
 .project-container
   margin-top: 10px
+  .project-loading-container
+    margin: 10% auto 0 auto
 
 .top-nav
   width: 100%
@@ -1660,24 +1662,6 @@ table.vuln-table
   h4
     background-color: rgb(239, 72, 54)
 
-.compare-table
-  width: 70%
-  margin: auto
-  tr
-    td
-      text-align: center
-      border: 1px solid lighten(rgb(107, 107, 107), 30%)
-    td:nth-child(1), td:nth-child(2)
-      width: 20%
-    td:nth-child(3)
-      width: 80%
-  tr.table-head
-    background-color: lighten(#424651, 5%)
-    color: #fff
-    font-weight: 100
-    td
-      vertical-align: middle
-
 ul.scan-table
   li
     width: 130px
@@ -2188,16 +2172,6 @@ button.delete-button
       background: none
   ul
     border-color: #f0f0f0
-
-.loading-container-home
-  justify-content: center
-  margin-top: 20%
-  margin-left: 48%
-  i
-    font-size: 80px
-  div
-    margin-top: 10px
-    font-size: 20px
 
 .loading-container
   margin: 20% auto
@@ -3315,10 +3289,11 @@ $attachment-icon-width: 4em
   font-size: 16px
 
 .arrow-left
-  display: inline
-  position: absolute
-  left: 39%
-  margin-top: -30px
+  display: inline;
+  position: absolute;
+  left: 100%;
+  transform: translate3d(-50%, -50%, 0);
+  top: 50%;
   i.fa
     font-size: 26px
 
@@ -3743,3 +3718,6 @@ $filetag-bg: #f3f5f8
   .fa
     font-size: 1.2em
     line-height: 1.2
+
+.full-height
+  height: 100vh;

@@ -22,7 +22,6 @@ Router.map(function() {
   this.route('activate', {path: '/activate/:pk/:token'});
   this.route('recover');
   this.route('reset', {path: '/reset/:token'});
-  this.route('setup', {path: '/setup/:uuid/:token'});
   this.route('authenticated', {path: '/'}, function() {
     this.route("index", {path: '/'});
     this.route("organization", {path: '/organization'}, function() {

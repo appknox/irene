@@ -1,15 +1,14 @@
-import { moduleForModel, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 
-moduleForModel('security/project', 'Unit | Model | security/project', {
-  // Specify the other units that are required for this test.
-  needs: [
-    'model:user',
-    'model:security/file'
-  ]
-});
+import { run } from '@ember/runloop';
 
-test('it exists', function(assert) {
-  let model = this.subject();
-  // let store = this.store();
-  assert.ok(!!model);
+module('Unit | Model | security/project', function(hooks) {
+  setupTest(hooks);
+
+  test('it exists', function(assert) {
+    let model = run(() => this.owner.lookup('service:store').createRecord('security/project'));
+    // let store = this.store();
+    assert.ok(!!model);
+  });
 });

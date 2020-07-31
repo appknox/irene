@@ -1,13 +1,8 @@
 import Route from '@ember/routing/route';
-import config from 'irene/config/environment';
-import ScrollTopMixin from 'irene/mixins/scroll-top';
+import { ScrollTopMixin } from '../../../mixins/scroll-top';
 
-const AuthenticatedProjectSettingsRoute = Route.extend(ScrollTopMixin, {
-  title: `Project Setting${config.platform}`,
-  model: function(){
+export default class AuthenticatedProjectSettingsRoute extends ScrollTopMixin(Route) {
+  model (){
     return this.modelFor("authenticated.project");
   }
-});
-
-
-export default AuthenticatedProjectSettingsRoute;
+}

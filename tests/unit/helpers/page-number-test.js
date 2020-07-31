@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 
-module('Unit | Helper | page number');
-
-test('it works', assert =>
-  assert.ok(true)
-);
+module('Unit | Helper | page number', function() {
+  test('it works', assert =>
+    assert.ok(true)
+  );
+});

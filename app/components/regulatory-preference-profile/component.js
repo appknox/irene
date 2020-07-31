@@ -18,7 +18,7 @@ export default Component.extend({
 
   project: null,
 
-  profile: computed('project.activeProfileId', function(){
+  profile: computed('project.activeProfileId', 'store', function(){
     const profileId = this.get('project.activeProfileId');
     if(!profileId){
       return null;

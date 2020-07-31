@@ -61,18 +61,16 @@ const FileHeaderComponent = Component.extend({
     return true;
   }),
 
-  manualscan: computed(function() {
+  manualscan: computed('file.id', 'store', function() {
     const fileId = this.get("file.id");
     return this.get("store").findRecord("manualscan", fileId);
   }),
 
-  unknownAnalysisStatus: computed(function() {
+  unknownAnalysisStatus: computed('file.profile.id', 'store', function() {
     return this.get("store").queryRecord('unknown-analysis-status', {id: this.get("file.profile.id")});
   }),
 
-  analyses: computed("file.sortedAnalyses", function() {
-    return this.get("file.sortedAnalyses");
-  }),
+  analyses: computed.reads('file.sortedAnalyses'),
 
   filteredEnvironments: computed("environments", "manualscan.filteredAppEnv", function() {
     const environments = this.get("environments");
@@ -144,7 +142,7 @@ const FileHeaderComponent = Component.extend({
     this.set("showRemoveRoleConfirmBox", false);
   },
 
-  allUserRoles: computed("manualscan.userRoles", function() {
+  allUserRoles: computed('manualscan.userRoles', 'roleId', function() {
     const userRoles = this.get("manualscan.userRoles");
     let roleId = this.get("roleId")
     userRoles.forEach((role) => {

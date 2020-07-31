@@ -28,9 +28,7 @@ const JiraProjectComponent = Component.extend({
   tInvalidRepo: t("invalidProject"),
   tInvalidRisk: t("tInvalidRisk"),
 
-  hasJIRAProject: computed('jiraProjects.length', function(){
-    return this.get('jiraProjects.length') > 0
-  }),
+  hasJIRAProject: computed.gt('jiraProjects.length', 0),
 
   setCurrentJiraRepo: task(function *(){
     return yield this.get("store").findRecord(

@@ -38,7 +38,7 @@ const PaginateMixin = Mixin.create({
     })();
   }),
 
-  objects: computed('version', function () {
+  objects: computed('extraQueryStrings', 'isDRFPagination', 'isJsonApiPagination', 'limit', 'offset', 'offsetMultiplier', 'store', 'targetModel', 'version', function () {
     let query;
     if (this.get('isJsonApiPagination')) {
       const query_limit = this.get("limit");

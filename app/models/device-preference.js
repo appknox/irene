@@ -11,7 +11,7 @@ export default DS.Model.extend({
 
   tAnyVersion: t("anyVersion"),
 
-  versionText: computed("platformVersion", function() {
+  versionText: computed('platformVersion', 'tAnyVersion', function() {
     const platformVersion = this.get("platformVersion");
     const tAnyVersion = this.get("tAnyVersion");
     if (platformVersion === "0") {

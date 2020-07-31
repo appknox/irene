@@ -21,7 +21,7 @@ export default Component.extend({
   tPleaseTryAgain: t('pleaseTryAgain'),
   tPermissionChanged: t('permissionChanged'),
 
-  orgMember: computed(function() {
+  orgMember: computed('collaborator.id', 'store', function() {
     return this.store.findRecord('organization-user', this.get('collaborator.id'));
   }),
 

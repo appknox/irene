@@ -15,9 +15,7 @@ const FileDetailsComponent = Component.extend({
   vulnerabilityType: ENUMS.VULNERABILITY_TYPE.UNKNOWN,
   vulnerabilityTypes: ENUMS.VULNERABILITY_TYPE.CHOICES.slice(0, -1),
 
-  analyses: computed("file.sortedAnalyses", function() {
-    return this.get("file.sortedAnalyses");
-  }),
+  analyses: computed.reads('file.sortedAnalyses'),
 
   analysesObserver: observer('analyses.@each', function() {
     this.updateUnhiddenAnalysis();

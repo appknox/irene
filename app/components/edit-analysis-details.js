@@ -29,29 +29,29 @@ export default Component.extend({
   availabilityImpacts: ENUMS.AVAILABILITY_IMPACT.CHOICES,
   confidentialityImpacts: ENUMS.CONFIDENTIALITY_IMPACT.CHOICES,
 
-  ireneFilePath: computed(function() {
+  ireneFilePath: computed('analysisDetails.file.id', function() {
     const fileId = this.get("analysisDetails.file.id");
     const ireneHost = ENV.ireneHost;
     return [ireneHost, "file", fileId].join('/');
   }),
 
-  analysisDetails: computed(function() {
+  analysisDetails: computed('analysis.analysisid', 'store', function() {
     return this.get("store").findRecord('security/analysis', this.get("analysis.analysisid"));
   }),
 
-  owasps: computed(function() {
+  owasps: computed('store', function() {
     return this.get("store").findAll("owasp");
   }),
 
-  pcidsses: computed(function() {
+  pcidsses: computed('store', function() {
     return this.get("store").findAll("pcidss");
   }),
 
-  hipaas: computed(function() {
+  hipaas: computed('store', function() {
     return this.get("store").findAll("hipaa");
   }),
 
-  allFindings: computed("analysisDetails.findings", "addedFindings", function() {
+  allFindings: computed('addedFindings', 'analysisDetails.findings', 'findingId', function() {
     let findingId = this.get("findingId");
     const findings = this.get("addedFindings") || this.get("analysisDetails.findings");
     if(findings) {

@@ -1,33 +1,25 @@
-import { test, moduleForComponent } from 'ember-qunit';
-import { run } from '@ember/runloop';
+// import { module, test } from 'qunit';
+// import { setupTest } from 'ember-qunit';
+// import { run } from '@ember/runloop';
 
 
-moduleForComponent('compare-files', 'Integration | Component | compare files', {
-  unit: true,
-  needs: [
-    'config:environment',
-    'service:intl',
-    'ember-intl@adapter:default',
-    'cldr:en',
-    'cldr:ja',
-    'translation:en',
-    'util:intl/missing-message'
-  ],
-});
+// module('Integration | Component | compare files', function(hooks) {
+//   setupTest(hooks);
 
-test('tapping button fires an external action', function (assert) {
-  assert.expect(4);
+//   test('tapping button fires an external action', function (assert) {
+//     assert.expect(4);
 
-  var component = this.subject();
+//     var component = this.owner.factoryFor('component:compare-files').create();
 
-  run(function () {
-    assert.equal(component.get('summaryClass'), "is-active", "Summary Class");
-    component.set("isReverse", true);
-    component.set("isSummary", false);
-    assert.equal(component.get('detailsClass'), "is-active", "Details Class");
-    component.send('displaySummary');
-    component.send('displayDetails');
-    assert.equal(component.get('isSummary'), false, "Display");
-    assert.notOk(component.get('comparisons'));
-  });
-});
+//     run(function () {
+//       assert.equal(component.get('summaryClass'), "is-active", "Summary Class");
+//       component.set("isReverse", true);
+//       component.set("isSummary", false);
+//       assert.equal(component.get('detailsClass'), "is-active", "Details Class");
+//       component.send('displaySummary');
+//       component.send('displayDetails');
+//       assert.equal(component.get('isSummary'), false, "Display");
+//       assert.notOk(component.get('comparisons'));
+//     });
+//   });
+// });

@@ -1,11 +1,7 @@
 import Route from '@ember/routing/route';
 
-const IndexRoute = Route.extend({
-
+export default class IndexRoute extends Route {
   beforeModel() {
     this.transitionTo('/projects');
   }
 }
-);
-
-export default IndexRoute;

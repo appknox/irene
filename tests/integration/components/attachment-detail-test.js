@@ -1,46 +1,36 @@
-import tHelper from 'ember-intl/helpers/t';
-import { getOwner } from '@ember/application';
-import { test, moduleForComponent } from 'ember-qunit';
-import { startMirage } from 'irene/initializers/ember-cli-mirage';
-import { run } from '@ember/runloop';
+// import tHelper from 'ember-intl/helpers/t';
+// import { module, test } from 'qunit';
+// import { setupTest } from 'ember-qunit';
+// import { startMirage } from 'irene/initializers/ember-cli-mirage';
+// import { run } from '@ember/runloop';
 
-moduleForComponent('attachment-detail', 'Integration | Component | attachment detail', {
-  unit: true,
-  needs: [
-    'service:ajax',
-    'service:notification-messages-service',
-    'service:session',
-    'config:environment',
-    'service:intl',
-    'ember-intl@adapter:default',
-    'cldr:en',
-    'cldr:ja',
-    'translation:en',
-    'util:intl/missing-message'
-  ],
-  beforeEach() {
-    // set the locale and the config
-    getOwner(this).lookup('service:intl').setLocale('en');
+// module('Integration | Component | attachment detail', function(hooks) {
+//   setupTest(hooks);
 
-    // register t helper
-    this.register('helper:t', tHelper);
+//   hooks.beforeEach(function() {
+//     // set the locale and the config
+//     this.owner.lookup('service:intl').setLocale('en');
 
-    // start Mirage
-    this.server = startMirage();
-  },
-  afterEach() {
-    // shutdown Mirage
-    this.server.shutdown();
-  }
-});
+//     // register t helper
+//     this.owner.register('helper:t', tHelper);
 
-test('clicking download link fires an external action', function(assert) {
-  var component = this.subject();
+//     // start Mirage
+//     this.server = startMirage();
+//   });
 
-  run(function() {
-    component.set("attachment", {downloadUrl: '/api/attachments/20'});
-    component.send('downloadAttachment');
-    assert.equal(component.get('isDownloadingAttachment'),true);
-  });
-});
+//   hooks.afterEach(function() {
+//     // shutdown Mirage
+//     this.server.shutdown();
+//   });
+
+//   test('clicking download link fires an external action', function(assert) {
+//     var component = this.owner.factoryFor('component:attachment-detail').create();
+
+//     run(function() {
+//       component.set("attachment", {downloadUrl: '/api/attachments/20'});
+//       component.send('downloadAttachment');
+//       assert.equal(component.get('isDownloadingAttachment'),true);
+//     });
+//   });
+// });
 

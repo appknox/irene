@@ -1,15 +1,15 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
-const InvitationRoute = Route.extend({
+export default class ApplicationRoute extends Route {
+  @service headData;
+  @service intl;
 
-  title: `Application Entry point`,
-  intl: service(),
   beforeModel() {
-    this._super(...arguments)
-    /* NOTE: if you lazily load translations, here is also where you would load them via `intl.addTranslations` */
-    return this.get('intl').setLocale(['en']); /* array optional */
+    return this.get('intl').setLocale(['en']);
   }
-});
 
-export default InvitationRoute;
+  afterModel() {
+    this.headData.title = "Appknox";
+  }
+}

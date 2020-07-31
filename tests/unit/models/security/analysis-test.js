@@ -1,18 +1,14 @@
-import { moduleForModel, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 
-moduleForModel('security/analysis', 'Unit | Model | security/analysis', {
-  // Specify the other units that are required for this test.
-  needs: [
-    'model:security/file',
-    'model:owasp',
-    'model:pcidss',
-    'model:security/attachment',
-    'model:security/vulnerability'
-  ]
-});
+import { run } from '@ember/runloop';
 
-test('it exists', function(assert) {
-  let model = this.subject();
-  // let store = this.store();
-  assert.ok(!!model);
+module('Unit | Model | security/analysis', function(hooks) {
+  setupTest(hooks);
+
+  test('it exists', function(assert) {
+    let model = run(() => this.owner.lookup('service:store').createRecord('security/analysis'));
+    // let store = this.store();
+    assert.ok(!!model);
+  });
 });

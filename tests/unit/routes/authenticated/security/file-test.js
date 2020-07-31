@@ -1,12 +1,14 @@
 import { run } from '@ember/runloop';
-import { moduleFor, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 
-moduleFor('route:authenticated/security/file', 'Unit | Route | authenticated/security/file', {
-});
+module('Unit | Route | authenticated/security/file', function(hooks) {
+  setupTest(hooks);
 
-test('it exists', function(assert) {
-  let route = this.subject();
-  run(function() {
-    assert.ok(route);
+  test('it exists', function(assert) {
+    let route = this.owner.lookup('route:authenticated/security/file');
+    run(function() {
+      assert.ok(route);
+    });
   });
 });

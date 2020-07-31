@@ -21,7 +21,7 @@ export default Component.extend({
     return String(manual);
   }),
 
-  vulnerabilities: computed(function() {
+  vulnerabilities: computed('file.project.id', 'store', function() {
     const projectId = this.get("file.project.id");
     const store = this.get("store");
     return store.query("security/vulnerability", {projectId, limit: 0})
@@ -31,7 +31,7 @@ export default Component.extend({
   }),
 
 
-  ireneFilePath: computed(function() {
+  ireneFilePath: computed('file.id', function() {
     const fileid = this.get("file.id");
     const ireneHost = ENV.ireneHost;
     return [ireneHost, "file", fileid].join('/');

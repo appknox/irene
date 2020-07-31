@@ -28,10 +28,8 @@ if hasProjects
         each sortedObjects as |project|
           = project-overview project=project
       else
-        .loading-container-home
-          i.fa class="fa-spinner fa-spin"
-          div
-            | #{t "loading"}...
+        .project-loading-container
+          = loading-spinner
 
 
     if hasObjects

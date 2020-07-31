@@ -4,16 +4,15 @@ import Application from '@ember/application'
 
 let application = null;
 
-module('Unit | Initializer | irene', {
-  beforeEach() {
+module('Unit | Initializer | irene', function(hooks) {
+  hooks.beforeEach(function() {
     return run(function() {
       application = Application.create();
       return application.deferReadiness();
     });
-  }
-}
-);
+  });
 
-test('it works', assert =>
-  assert.ok(true)
-);
+  test('it works', assert =>
+    assert.ok(true)
+  );
+});

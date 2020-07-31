@@ -1,12 +1,10 @@
 import Route from '@ember/routing/route';
-import config from 'irene/config/environment';
 import { inject as service } from '@ember/service';
-import ScrollTopMixin from 'irene/mixins/scroll-top';
+import { ScrollTopMixin } from '../../mixins/scroll-top';
 import ENV from 'irene/config/environment';
 
-const AuthenticatedBillingRoute = Route.extend(ScrollTopMixin, {
-  title: `Billing${config.platform}`,
-  organization: service('organization'),
+export default class AuthenticatedBillingRoute extends ScrollTopMixin(Route) {
+  @service organization
   async model() {
     var org = await this.get('organization.selected');
 
@@ -32,6 +30,4 @@ const AuthenticatedBillingRoute = Route.extend(ScrollTopMixin, {
       showLicense: showLicense,
     };
   }
-});
-
-export default AuthenticatedBillingRoute;
+}

@@ -1,49 +1,39 @@
-import { getOwner } from '@ember/application';
-import { test, moduleForComponent } from 'ember-qunit';
-import { startMirage } from 'irene/initializers/ember-cli-mirage';
-import { run } from '@ember/runloop';
-import tHelper from 'ember-intl/helpers/t';
+// import { module, test } from 'qunit';
+// import { setupTest } from 'ember-qunit';
+// import { startMirage } from 'irene/initializers/ember-cli-mirage';
+// import { run } from '@ember/runloop';
+// import tHelper from 'ember-intl/helpers/t';
 
 
-moduleForComponent('personaltoken-detail', 'Integration | Component | personaltoken detail', {
-  unit: true,
-  needs: [
-    'service:ajax',
-    'service:notification-messages-service',
-    'service:session',
-    'config:environment',
-    'service:intl',
-    'ember-intl@adapter:default',
-    'cldr:en',
-    'cldr:ja',
-    'translation:en',
-    'util:intl/missing-message'
-  ],
-  beforeEach() {
-    // set the locale and the config
-    getOwner(this).lookup('service:intl').setLocale('en');
+// module('Integration | Component | personaltoken detail', function(hooks) {
+//   setupTest(hooks);
 
-    this.registry.register('helper:t', tHelper);
-    // start Mirage
-    this.server = startMirage();
-  },
-  afterEach() {
-    // shutdown Mirage
-    this.server.shutdown();
-  }
-});
+//   hooks.beforeEach(function() {
+//     // set the locale and the config
+//     this.owner.lookup('service:intl').setLocale('en');
 
-test('tapping button fires an external action', function(assert) {
+//     this.owner.register('helper:t', tHelper);
+//     // start Mirage
+//     this.server = startMirage();
+//   });
 
-  var component = this.subject();
-  run(function() {
-    component.send('openRevokePersonalTokenConfirmBox');
-    assert.equal(component.get('showRevokePersonalTokenConfirmBox'),true, "Open Modal");
-    component.send('closeRevokePersonalTokenConfirmBox');
-    assert.equal(component.get('showRevokePersonalTokenConfirmBox'),false, "Close Modal");
+//   hooks.afterEach(function() {
+//     // shutdown Mirage
+//     this.server.shutdown();
+//   });
 
-    component.set("personaltoken", {id: 1});
-    assert.equal(component.confirmCallback(), undefined, "Confirm Callback");
+//   test('tapping button fires an external action', function(assert) {
 
-  });
-});
+//     var component = this.owner.factoryFor('component:personaltoken-detail').create();
+//     run(function() {
+//       component.send('openRevokePersonalTokenConfirmBox');
+//       assert.equal(component.get('showRevokePersonalTokenConfirmBox'),true, "Open Modal");
+//       component.send('closeRevokePersonalTokenConfirmBox');
+//       assert.equal(component.get('showRevokePersonalTokenConfirmBox'),false, "Close Modal");
+
+//       component.set("personaltoken", {id: 1});
+//       assert.equal(component.confirmCallback(), undefined, "Confirm Callback");
+
+//     });
+//   });
+// });

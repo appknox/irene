@@ -5,7 +5,7 @@ import { task } from 'ember-concurrency';
 export default Component.extend({
   organization: null,
 
-  orgPreference: computed(function() {
+  orgPreference: computed('store', function() {
     return this.get('store').queryRecord('organization-preference', {});
   }),
 

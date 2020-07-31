@@ -25,7 +25,7 @@ const ApiFilterComponent = Component.extend({
   isSavingFilter: false,
   isDeletingURLFilter: false,
 
-  apiScanOptions: computed(function() {
+  apiScanOptions: computed('profileId', 'store', function() {
     return this.get("store").queryRecord('api-scan-options', {id: this.get("profileId")});
   }),
 

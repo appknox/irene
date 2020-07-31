@@ -1,10 +1,13 @@
-import { moduleForModel, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 
-moduleForModel('submission', 'Unit | Model | submission', {
-  needs: ["model:user"]
-});
+import { run } from '@ember/runloop';
 
-test('it exists', function(assert) {
-  const submission = this.subject();
-  assert.equal(submission.get('hasReason'), false, "Reason");
+module('Unit | Model | submission', function(hooks) {
+  setupTest(hooks);
+
+  test('it exists', function(assert) {
+    const submission = run(() => this.owner.lookup('service:store').createRecord('submission'));
+    assert.equal(submission.get('hasReason'), false, "Reason");
+  });
 });

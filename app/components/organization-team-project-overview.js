@@ -23,7 +23,7 @@ export default Component.extend({
 
 
   /* Fetch project for the given id */
-  teamProject: computed('project.id', function() {
+  teamProject: computed('project.id', 'store', function() {
     return this.get('store').findRecord('project', this.get('project.id'));
   }),
 

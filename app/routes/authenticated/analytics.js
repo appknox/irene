@@ -1,11 +1,8 @@
 import Route from '@ember/routing/route';
-import config from 'irene/config/environment';
-import ScrollTopMixin from 'irene/mixins/scroll-top';
+import { ScrollTopMixin } from '../../mixins/scroll-top';
 
-export default Route.extend(ScrollTopMixin, {
-  title: `Analytics${config.platform}`,
+export default class AuthenticatedAnalyticsRoute extends ScrollTopMixin(Route) {
   model() {
-    this.modelFor("authenticated");
-  },
-
-});
+    return this.modelFor("authenticated");
+  }
+}

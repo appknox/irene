@@ -16,7 +16,7 @@ export default Component.extend({
   tOn: t('on'),
   tOff: t('off'),
 
-  proxy: computed('profile.id', function() {
+  proxy: computed('profile.id', 'store', function() {
     let profileId = this.get('profile.id');
     return this.get('store').findRecord('proxy-setting', profileId);
   }),

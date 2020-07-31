@@ -27,9 +27,7 @@ const GithubProjectComponent = Component.extend({
   currentGithubRepo: null,
   selectedRepo: null,
 
-  hasGitHubProject: computed('githubRepos.length', function(){
-    return this.get('githubRepos.length') > 0
-  }),
+  hasGitHubProject: computed.gt('githubRepos.length', 0),
 
   deleteRepo: task(function *(){
     return yield this.get('currentGithubRepo').destroyRecord()

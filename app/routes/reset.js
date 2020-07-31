@@ -1,11 +1,7 @@
-import config from 'irene/config/environment';
 import Route from '@ember/routing/route';
 
-const ResetRoute = Route.extend({
-  title: `Reset Password${config.platform}`,
+export default class ResetRoute extends Route {
   model(params) {
     return params;
   }
-});
-
-export default ResetRoute;
+}

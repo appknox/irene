@@ -3,19 +3,17 @@ import config from 'irene/config/environment';
 
 import { inject as service } from '@ember/service';
 
-const AuthenticatedPaymentSuccessRoute = Route.extend({
-  ajax: service(),
-  notify: service('notification-messages-service'),
+export default class AuthenticatedPaymentSuccessRoute extends Route {
+  @service ajax;
+  @service('notification-messages-service') notify;
 
   beforeModel(){
     const queryParams = location.href.split('?')[1];
-    this.get("ajax").post(`${config.endpoints.chargebeeCallback}?${queryParams}`)
+    this.ajax.post(`${config.endpoints.chargebeeCallback}?${queryParams}`)
     .then(() => {
-       this.get("notify").success("Payment Successful");
+       this.notify.success("Payment Successful");
      }, () => {
-      this.get("notify").error("PAYMENT FAILED TO UPDATE!!!");
+      this.notify.error("Payment failed to update!");
     });
   }
-});
-
-export default AuthenticatedPaymentSuccessRoute;
+}

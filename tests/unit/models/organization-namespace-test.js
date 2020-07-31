@@ -1,13 +1,13 @@
-import { moduleForModel, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 
-moduleForModel('organization-namespace', 'Unit | Model | organization namespace', {
-  needs: [
-    'model:organization',
-    'model:organization-user'
-  ]
-});
+import { run } from '@ember/runloop';
 
-test('it exists', function(assert) {
-  const model = this.subject();
-  assert.ok(!!model);
+module('Unit | Model | organization namespace', function(hooks) {
+  setupTest(hooks);
+
+  test('it exists', function(assert) {
+    const model = run(() => this.owner.lookup('service:store').createRecord('organization-namespace'));
+    assert.ok(!!model);
+  });
 });

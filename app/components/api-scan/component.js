@@ -19,9 +19,7 @@ export default Component.extend({
 
   tStartingApiScan: t("startingApiScan"),
 
-  hasDynamicScanDone: computed('file.{isDynamicDone}', function () {
-    return this.get('file.isDynamicDone');
-  }),
+  hasDynamicScanDone: computed.reads('file.isDynamicDone'),
 
   /* fetch captured apis count */
   setCapturedApisCount: task(function* () {

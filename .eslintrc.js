@@ -1,18 +1,25 @@
 module.exports = {
   root: true,
+  parser: 'babel-eslint',
   parserOptions: {
     ecmaVersion: 2018,
-    sourceType: 'module'
+    sourceType: 'module',
+    ecmaFeatures: {
+      legacyDecorators: true
+    }
   },
+  plugins: [
+    'ember'
+  ],
+  extends: [
+    'eslint:recommended',
+    'plugin:ember/recommended'
+  ],
   env: {
     browser: true,
     es6: true,
     node: true
   },
-  extends: [
-    'eslint:recommended',
-    'plugin:ember/recommended'
-  ],
   rules: {
     "ember/avoid-leaking-state-in-ember-objects": 0,
     "ember/no-observers": 0,
@@ -21,33 +28,37 @@ module.exports = {
     "ember/require-return-from-computed": 0,
     "ember/no-unnecessary-route-path-option": 0,
     "ember/no-arrow-function-computed-properties": 0,
-    "ember/no-unnecessary-route-path-option": 0,
+    "ember/no-get": 0,
+    "ember/no-jquery": 0,
+    "ember/use-ember-data-rfc-395-imports": 0,
+    "ember/no-mixins": 0,
   },
   overrides: [
     // node files
     {
       files: [
-        'testem.js',
+        '.eslintrc.js',
+        '.template-lintrc.js',
         'ember-cli-build.js',
+        'testem.js',
+        'blueprints/*/index.js',
         'config/**/*.js',
-        'lib/*/index.js'
+        'lib/*/index.js',
+        'server/**/*.js'
       ],
       parserOptions: {
-        sourceType: 'script',
-        ecmaVersion: 2015
+        sourceType: 'script'
       },
       env: {
         browser: false,
         node: true
-      }
-    },
-
-    // test files
-    {
-      files: ['tests/**/*.js'],
-      excludedFiles: ['tests/dummy/**/*.js'],
-      env: {
-        embertest: true
+      },
+      plugins: ['node'],
+      extends: ['plugin:node/recommended'],
+      rules: {
+        // this can be removed once the following is fixed
+        // https://github.com/mysticatea/eslint-plugin-node/issues/77
+        'node/no-unpublished-require': 'off'
       }
     }
   ]

@@ -1,11 +1,10 @@
 import Route from '@ember/routing/route';
-
 import { inject as service } from '@ember/service';
 
-const AuthenticatedGithubRedirectRoute = Route.extend({
-  ajax: service(),
-  notify: service('notification-messages-service'),
-  organization: service('organization'),
+export default class AuthenticatedGithubRedirectRoute extends Route {
+  @service ajax;
+  @service('notification-messages-service') notify;
+  @service organization;
 
   async beforeModel(transition){
     const token = encodeURIComponent(transition.queryParams.token);
@@ -16,10 +15,9 @@ const AuthenticatedGithubRedirectRoute = Route.extend({
     }catch(err){
       this.get("notify").error(`Error Occured: ${err.payload.message}`);
     }
-  },
-  afterModel(){
-    this.transitionTo('authenticated.organization.settings');
   }
-});
 
-export default AuthenticatedGithubRedirectRoute;
+  afterModel(){
+    return this.transitionTo('authenticated.organization.settings');
+  }
+}

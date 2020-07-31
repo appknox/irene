@@ -16,7 +16,7 @@ const VncViewerComponent = Component.extend({
   tPopOutModal: t("popOutModal"),
 
   classNameBindings: ["isPoppedOut:modal", "isPoppedOut:is-active"],
-  vncPopText: computed('isPoppedOut', function () {
+  vncPopText: computed('isPoppedOut', 'tCloseModal', 'tPopOutModal', function () {
     const tCloseModal = this.get("tCloseModal");
     const tPopOutModal = this.get("tPopOutModal");
     if (this.get("isPoppedOut")) {
@@ -35,7 +35,7 @@ const VncViewerComponent = Component.extend({
   }),
 
 
-  devicePreference: computed('profileId', function () {
+  devicePreference: computed('profileId', 'store', function () {
     const profileId = this.get("profileId");
     if (profileId) {
       return this.get("store").queryRecord("device-preference", { id: profileId });

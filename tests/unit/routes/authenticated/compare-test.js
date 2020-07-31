@@ -1,9 +1,11 @@
-import { moduleFor, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 
-moduleFor('route:authenticated/compare', 'Unit | Route | authenticated/compare', {
-});
+module('Unit | Route | authenticated/compare', function(hooks) {
+  setupTest(hooks);
 
-test('it exists', function(assert) {
-  const route = this.subject();
-  assert.ok(route);
+  test('it exists', function(assert) {
+    const route = this.owner.lookup('route:authenticated/compare');
+    assert.ok(route);
+  });
 });

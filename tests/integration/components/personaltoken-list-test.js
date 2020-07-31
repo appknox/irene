@@ -1,49 +1,39 @@
-import { getOwner } from '@ember/application';
-import { test, moduleForComponent } from 'ember-qunit';
-import { startMirage } from 'irene/initializers/ember-cli-mirage';
-import { run } from '@ember/runloop';
-import tHelper from 'ember-intl/helpers/t';
+// import { module, test } from 'qunit';
+// import { setupTest } from 'ember-qunit';
+// import { startMirage } from 'irene/initializers/ember-cli-mirage';
+// import { run } from '@ember/runloop';
+// import tHelper from 'ember-intl/helpers/t';
 
-moduleForComponent('personaltoken-list', 'Integration | Component | personaltoken list', {
-  unit: true,
-  needs: [
-    'service:ajax',
-    'service:notification-messages-service',
-    'service:session',
-    'config:environment',
-    'service:intl',
-    'ember-intl@adapter:default',
-    'cldr:en',
-    'cldr:ja',
-    'translation:en',
-    'util:intl/missing-message'
-  ],
-  beforeEach() {
-    // set the locale and the config
-    getOwner(this).lookup('service:intl').setLocale('en');
+// module('Integration | Component | personaltoken list', function(hooks) {
+//   setupTest(hooks);
 
-    this.registry.register('helper:t', tHelper);
-    // start Mirage
-    this.server = startMirage();
-  },
-  afterEach() {
-    // shutdown Mirage
-    this.server.shutdown();
-  }
-});
+//   hooks.beforeEach(function() {
+//     // set the locale and the config
+//     this.owner.lookup('service:intl').setLocale('en');
 
-test('tapping button fires an external action', function(assert) {
+//     this.owner.register('helper:t', tHelper);
+//     // start Mirage
+//     this.server = startMirage();
+//   });
 
-  var component = this.subject();
-  run(function() {
-    component.send('openGenerateTokenModal');
-    assert.equal(component.get('showGenerateTokenModal'),true, "Open Modal");
+//   hooks.afterEach(function() {
+//     // shutdown Mirage
+//     this.server.shutdown();
+//   });
 
-    component.send('generateToken');
-    component.set("tokenName", "test");
-    component.send('generateToken');
-    assert.equal(component.get('isGeneratingToken'),true, "Generating Token");
-    assert.equal(component.didInsertElement(), undefined, "Register Password Copy");
-    assert.equal(component.willDestroyElement(), undefined, "Destroy Password Copy");
-  });
-});
+//   test('tapping button fires an external action', function(assert) {
+
+//     var component = this.owner.factoryFor('component:personaltoken-list').create();
+//     run(function() {
+//       component.send('openGenerateTokenModal');
+//       assert.equal(component.get('showGenerateTokenModal'),true, "Open Modal");
+
+//       component.send('generateToken');
+//       component.set("tokenName", "test");
+//       component.send('generateToken');
+//       assert.equal(component.get('isGeneratingToken'),true, "Generating Token");
+//       assert.equal(component.didInsertElement(), undefined, "Register Password Copy");
+//       assert.equal(component.willDestroyElement(), undefined, "Destroy Password Copy");
+//     });
+//   });
+// });

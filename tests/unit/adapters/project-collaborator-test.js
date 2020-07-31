@@ -1,15 +1,12 @@
-import { moduleFor, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 
-moduleFor('adapter:project-collaborator', 'Unit | Adapter | project collaborator', {
-  // Specify the other units that are required for this test.
-  needs: [
-    'service:session',
-    'service:organization',
-  ]
-});
+module('Unit | Adapter | project collaborator', function(hooks) {
+  setupTest(hooks);
 
-// Replace this with your real tests.
-test('it exists', function (assert) {
-  let adapter = this.subject();
-  assert.ok(adapter);
+  // Replace this with your real tests.
+  test('it exists', function (assert) {
+    let adapter = this.owner.lookup('adapter:project-collaborator');
+    assert.ok(adapter);
+  });
 });

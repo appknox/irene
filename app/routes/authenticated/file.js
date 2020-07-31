@@ -1,14 +1,8 @@
 import Route from '@ember/routing/route';
-import config from 'irene/config/environment';
-import ScrollTopMixin from 'irene/mixins/scroll-top';
+import { ScrollTopMixin } from '../../mixins/scroll-top';
 
-const AuthenticatedFileRoute = Route.extend(ScrollTopMixin, {
-
-  title: `File Details${config.platform}`,
+export default class AuthenticatedFileRoute extends ScrollTopMixin(Route) {
   async model(params){
     return this.get('store').find('file', params.fileid);
   }
 }
-);
-
-export default AuthenticatedFileRoute;

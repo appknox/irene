@@ -1,10 +1,11 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
-export default Route.extend({
-  me: service(),
-  organization: service(),
-  notify: service('notification-messages-service'),
+export default class AuthenticatedOrganizationSettingsRoute extends Route {
+  @service me;
+  @service organization;
+  @service('notification-messages-service') notify;
+
   async model(){
     const url = `/api/organizations/${this.get('organization.selected.id')}/github`
     let integratedUser = null;
@@ -27,4 +28,4 @@ export default Route.extend({
       organization: await this.get('organization.selected'),
     };
   }
-});
+}

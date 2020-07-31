@@ -1,10 +1,16 @@
-import { test, moduleForComponent } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
+import hbs from 'htmlbars-inline-precompile';
 
-moduleForComponent('activity-log', 'Integration | Component | activity log', {
-  integration: true
-});
+import { find } from '@ember/test-helpers';
 
-test('it renders', function(assert) {
-  assert.ok(true);
-  assert.equal(this.$().text().trim(), '');
+module('Integration | Component | activity log', function(hooks) {
+  setupRenderingTest(hooks);
+
+  test('it renders', async function(assert) {
+    await render(hbs`<ActivityLog></ActivityLog>`);
+    assert.ok(true);
+    assert.equal(find('*').textContent.trim(), 'ACTIVITY LOGNo activity found');
+  });
 });

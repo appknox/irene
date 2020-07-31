@@ -10,17 +10,17 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v3-deps-{{ .Branch }}-{{ checksum "package.json" }}
+            - v4-deps-{{ .Branch }}-{{ checksum "package.json" }}
       - run:
           name: NPM Install
           command: npm install
       - save_cache:
-          key: v3-deps-{{ .Branch }}-{{ checksum "package.json" }}
+          key: v4-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - ./node_modules
       - run:
           name: Run Ember Test
-          command: COVERAGE=true npm test
+          command: npm test
       - deploy:
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then

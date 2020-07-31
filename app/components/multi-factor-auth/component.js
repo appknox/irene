@@ -14,7 +14,7 @@ export default Component.extend({
   me: service(),
 
   user: null,
-  mfas: computed(function () {
+  mfas: computed('store', function () {
     return this.get('store').findAll('mfa');
   }),
   isMFAEnabled: computed('mfas.@each.enabled', function () {

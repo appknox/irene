@@ -52,7 +52,7 @@ const PasswordResetComponent = Component.extend({
     }
     return true;
   }),
-  isVerified: promise.object(computed('token', function(){
+  isVerified: promise.object(computed('token', 'verify_token', function(){
     return this.get('verify_token').perform();
   })),
   isNotVerified: promise.object(computed('isVerified', async function(){

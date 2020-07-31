@@ -13,7 +13,7 @@ export default Component.extend({
   tIntegrateAppknoxTo: t("integrateAppknoxTo"),
   tComingSoon: t("comingSoon"),
 
-  data: computed(function() {
+  data: computed('tComingSoon', 'tGithub', 'tGitlab', 'tIntegrateAppknoxTo', 'tJira', 'tSlack', function() {
     return [
       {
         "title": this.get("tGithub"),

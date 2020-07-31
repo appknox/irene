@@ -16,7 +16,7 @@ const PricingPlanComponent = Component.extend({
   tApp: t("app"),
   tScan: t("scan"),
 
-  planText: computed('plan', function() {
+  planText: computed('plan.planId', 'tApp', 'tScan', function() {
     const tApp = this.get("tApp");
     const tScan = this.get("tScan");
     const planId = this.get("plan.planId");

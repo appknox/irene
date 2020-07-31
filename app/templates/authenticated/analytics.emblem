@@ -1,2 +1,0 @@
-.stat-home-page
-  = overall-report user=model
