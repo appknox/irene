@@ -1,60 +1,62 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import lookupValidator from 'ember-changeset-validations';
 import Changeset from 'ember-changeset';
 import InviteOnlyRegisterValidation from '../../validations/register-invite';
 
-export default Component.extend({
-  token: null,
-  session: service('session'),
-  ajax: service('ajax'),
-  inviteEndpoint: 'registration-via-invite',
-  initialData: {},
-  toBeSubmittedData: {},
-  init() {
-    this._super(...arguments);
-    const toBeSubmittedData = this.get('toBeSubmittedData');
-    const changeset = new Changeset(
-      toBeSubmittedData, lookupValidator(InviteOnlyRegisterValidation), InviteOnlyRegisterValidation
+export default class RegisterViaInvite extends Component {
+  @service session;
+  @service ajax;
+  @tracked toBeSubmittedData = {};
+  @tracked initialData = {};
+  inviteEndpoint = 'registration-via-invite'
+
+  constructor () {
+    super(...arguments)
+    this.changeset = new Changeset(
+      this.toBeSubmittedData, lookupValidator(InviteOnlyRegisterValidation), InviteOnlyRegisterValidation
     );
-    this.set('changeset', changeset);
-  },
-  didInsertElement() {
-    this.get('loadTokenData').perform();
-  },
-  loadTokenData: task(function * (){
-    const url = this.get('inviteEndpoint') + '?token=' + this.get('token');
-    const data = yield this.get('ajax').request(url, {
+  }
+
+  @task(function * (){
+    const url = this.inviteEndpoint + '?token=' + this.args.token;
+    const data = yield this.ajax.request(url, {
       namespace: 'api/v2'
     })
-    this.set('initialData', data);
+    this.initialData = data;
     return data;
-  }),
-  registerWithServer: task(function * (data) {
-    const url = this.get('inviteEndpoint')
+  })
+  loadTokenData
+
+  @task(function * (data) {
+    const url = this.inviteEndpoint
     try {
-      const logininfo = yield this.get('ajax').post(url, {
+      const logininfo = yield this.ajax.post(url, {
         data: data,
         namespace: 'api/v2'
       })
       this.authenticate(logininfo);
     } catch(errors) {
-      const changeset = this.get('changeset');
+      const changeset = this.changeset;
       Object.keys(errors.payload).forEach(key => {
         changeset.addError(key, errors.payload[key]);
       });
     }
-  }),
-  registerTask: task(function * (changeset){
+  })
+  registerWithServer
+
+  @task(function * (changeset){
     yield changeset.validate();
     if (changeset.get('isValid')) {
       const username = changeset.get('username');
       const password = changeset.get('password');
       const passwordConfirmation = changeset.get('passwordConfirmation');
       const termsAccepted = changeset.get('termsAccepted');
-      const token = this.get('token');
-      yield this.get('registerWithServer').perform({
+      const token = this.args.token;
+      yield this.registerWithServer.perform({
         'token': token,
         'username': username,
         'password': password,
@@ -62,13 +64,20 @@ export default Component.extend({
         'terms_accepted': termsAccepted
       });
     }
-  }),
+  })
+  registerTask
+
   authenticate(data) {
-    this.get('session').authenticate("authenticator:login", data);
-  },
-  actions: {
-    register(changeset) {
-      this.get('registerTask').perform(changeset);
-    }
+    this.session.authenticate("authenticator:login", data);
   }
-});
+
+  @action
+  fetchdata() {
+    this.loadTokenData.perform();
+  }
+
+  @action
+  register(changeset) {
+    this.registerTask.perform(changeset);
+  }
+}

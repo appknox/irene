@@ -1,5 +1,5 @@
 <AuthAssets></AuthAssets>
-<div local-class="registration-container">
+<div {{did-insert (fn this.fetchdata)}} local-class="registration-container">
   <form local-class="register-form">
 {{#if this.loadTokenData.isRunning}}
   <div>
@@ -38,7 +38,7 @@
     <div class="input-wrap {{if this.changeset.error.termsAccepted 'has-error'}}">
       <div class="label-error">
         <label local-class="register-form-accept">
-          <Input id="terms-accepted" type="checkbox" @checked={{this.changeset.termsAccepted}} local-class="checkbox-field" />
+          <Input id="terms-accepted" @type="checkbox" @checked={{this.changeset.termsAccepted}} local-class="checkbox-field" />
           <span>{{t "acceptTerms"}}
             <a href="https://appknox.com/privacy" target="_blank" rel="noopener noreferrer">
               <sup>*</sup>
