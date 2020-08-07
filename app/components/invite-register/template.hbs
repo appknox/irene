@@ -36,15 +36,6 @@
             <Input placeholder="Username" @value={{this.changeset.username}} autocomplete="username" class="input-field"/>
           </div>
         {{#unless @isSSOEnforced}}
-          <div class="input-wrap {{if this.changeset.error.phone 'has-error'}}">
-            <div class="label-error">
-              <label>Phone Number</label>
-              {{#if this.changeset.error.phone}}
-                <span class="error-msg">{{this.changeset.error.phone.validation}}</span>
-              {{/if}}
-            </div>
-            <IntlTelInput @geoIpLookup={{fn "geoIpLookupFunc"}} @initialCountry="auto" @selectedCountryData={{this.selectedCountryData}} @value={{this.changeset.phone}} autocomplete="phone" class="input-field"></IntlTelInput>
-          </div>
           <div class="input-wrap">
             <div class="label-error">
               <label>{{t "password"}}</label>
@@ -54,14 +45,14 @@
                 <span class="error-msg">{{this.changeset.error.passwordConfirmation.validation}}</span>
               {{/if}}
             </div>
-            <Input type="password" @value={{this.changeset.password}} placeholder='Mininum 6 characters' class="input-field {{if this.changeset.error.password "has-error"}}"/>
-            <Input type="password" @value={{this.changeset.passwordConfirmation}} placeholder='Confirm Password' class="input-field {{if this.changeset.error.passwordConfirmation "has-error"}}"/>
+            <Input type="password" autocomplete="new-password" @value={{this.changeset.password}} placeholder='Mininum 6 characters' class="input-field {{if this.changeset.error.password "has-error"}}"/>
+            <Input type="password" autocomplete="new-password" @value={{this.changeset.passwordConfirmation}} placeholder='Confirm Password' class="input-field {{if this.changeset.error.passwordConfirmation "has-error"}}"/>
           </div>
         {{/unless}}
         <div class="input-wrap {{if this.changeset.error.termsAccepted 'has-error'}}">
           <div class="label-error">
             <label class="register-form-accept">
-              <Input id="terms-accepted" type="checkbox" @checked={{this.changeset.termsAccepted}} class="checkbox-field"/>
+              <Input id="terms-accepted" @type="checkbox" @checked={{this.changeset.termsAccepted}} class="checkbox-field"/>
               <span>
                 {{t "acceptTerms"}}
                 <a href="https://appknox.com/privacy" target="_blank" rel="noopener noreferrer">
@@ -77,7 +68,10 @@
           </div>
         </div>
         <p class="control flex-center margin-top">
-          <button {{on "click" (fn this.register this.changeset)}} class="button is-primary is-fullwidth login-button mp-login-button highlighted-button" type="button">{{t "register"}}</button>
+          <button {{on "click" (fn this.register this.changeset)}} class="button is-primary is-fullwidth login-button mp-login-button highlighted-button" type="button">
+            {{t "register"}}
+            <TaskSpin @task={{this.registerTask}}></TaskSpin>
+          </button>
         </p>
       </div>
     </form>

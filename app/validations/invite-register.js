@@ -8,7 +8,6 @@ import validateEquality from './validators/value-equality';
 
 export default {
   username: validatePresence(true),
-  phone: validatePresence(true),
   password: [
     validatePresence(true),
     validateLength({ min: 6 })

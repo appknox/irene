@@ -11,7 +11,6 @@ export default {
   username: validatePresence(true),
   email: validateFormat({ type: 'email' }),
   company: validatePresence(true),
-  phone: validatePresence(true),
   password: [
     validatePresence(true),
     validateLength({ min: 6 })
