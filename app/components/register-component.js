@@ -55,9 +55,6 @@ export default Component.extend({
           const password = changeset.get('password');
           const passwordConfirmation = changeset.get('passwordConfirmation');
           const companyName = changeset.get('company');
-          const phoneNumber = changeset.get('phone');
-          const selectedCountryData = this.get("selectedCountryData");
-          const fullNumber = selectedCountryData.dialCode + '-' +  phoneNumber;
           const termsAccepted = changeset.get('termsAccepted');
           let captcha = this.get('captcha');
           if(!this.get('shouldEnableRecaptcha')) {
@@ -71,7 +68,6 @@ export default Component.extend({
             'password': password,
             'confirm_password': passwordConfirmation,
             'company': companyName,
-            'phone': fullNumber,
             'terms_accepted': termsAccepted,
             'recaptcha': captcha,
           });
