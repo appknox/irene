@@ -12,7 +12,11 @@
 
         .column.content-right
           button.is-primary click={(perform downloadApp)}
-            | Download App
+            = fa-icon "download"
+            | &nbsp; Original
+          button.margin-left.is-primary click={(perform downloadAppModified)}
+            = fa-icon "download"
+            | &nbsp; Resigned
           button.margin-left.is-primary click="openGenerateReportModal"
             | Generate Report
           a.margin-left href=ireneFilePath target="_blank" class="button is-primary"
