@@ -145,6 +145,12 @@ export default Component.extend({
     window.location = data.url;
   }),
 
+  downloadAppModified: task(function *() {
+    const fileid = this.get("file.id");
+    const url = [ENV.endpoints.apps, fileid, "modified"].join("/");
+    const data = yield this.get("ajax").request(url, { namespace: 'api/hudson-api'})
+    window.location = data.url;
+  }),
   downloadAppErrored: on('downloadApp:errored', function(_, error) {
     let errMsg = this.get('tPleaseTryAgain');
     if (error.errors && error.errors.length) {
