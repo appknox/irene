@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 
 export default class AuthenticatedGithubRedirectRoute extends Route {
   @service ajax;
-  @service('notification-messages-service') notify;
+  @service('notifications') notify;
   @service organization;
 
   async beforeModel(transition){

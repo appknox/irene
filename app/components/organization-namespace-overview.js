@@ -9,7 +9,7 @@ import { t } from 'ember-intl';
 export default Component.extend({
   intl: service(),
   me: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
 
   tagName: ['tr'],
   showRejectNamespaceConfirm: false,

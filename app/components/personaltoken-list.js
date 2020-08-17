@@ -11,7 +11,7 @@ const PersonaltokenListComponent = Component.extend(PaginateMixin, {
   classNames: ["column","personal-token-component"],
   intl: service(),
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
 
 
   // list tokens

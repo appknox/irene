@@ -6,7 +6,7 @@ const InvoiceOverviewComponent = Component.extend({
 
   invoice: null,
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   tagName:["tr"],
 
   isDownloadingInvoice: false,

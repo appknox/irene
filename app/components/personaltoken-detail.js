@@ -6,7 +6,7 @@ import { t } from 'ember-intl';
 const PersonaltokenDetailComponent = Component.extend({
   intl: service(),
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   tagName: '',
 
 

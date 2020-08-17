@@ -13,7 +13,7 @@
 //     'service:mixpanel',
 //     'service:trial',
 //     'service:socket-io',
-//     'service:notification-messages-service',
+//     'service:notifications',
 //     'service:session'
 //   ],
 //   beforeEach() {

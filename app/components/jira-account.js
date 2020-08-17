@@ -14,7 +14,7 @@ const JiraAccountComponent = Component.extend({
   intl: service(),
   ajax: service(),
   organization: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   user: null,
   jiraHost: "",
   jiraUsername: "",

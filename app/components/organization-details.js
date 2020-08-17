@@ -13,7 +13,7 @@ export default Component.extend({
     me: service(),
     organization: service('organization'),
     router: service('router'),
-    notify: service('notification-messages-service'),
+    notify: service('notifications'),
 
     isNamespaces: true,
     isMembers: false,

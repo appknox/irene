@@ -14,7 +14,7 @@ export default Component.extend({
   success: false,
 
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
 
   init() {
     this._super(...arguments);

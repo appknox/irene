@@ -10,7 +10,7 @@ const TeamDetailsComponent = Component.extend({
 
   intl: service(),
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   showHide: true,
   editSave: false,
   identification: "",

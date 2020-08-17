@@ -10,7 +10,7 @@ const GithubAccountComponent = Component.extend({
 
   intl: service(),
   ajax: service('ajax'),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   organization: service('organization'),
   isRevokingGithub: false,
   isIntegratingGithub: false,

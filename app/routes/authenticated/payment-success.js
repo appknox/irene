@@ -5,7 +5,7 @@ import { inject as service } from '@ember/service';
 
 export default class AuthenticatedPaymentSuccessRoute extends Route {
   @service ajax;
-  @service('notification-messages-service') notify;
+  @service('notifications') notify;
 
   beforeModel(){
     const queryParams = location.href.split('?')[1];

@@ -19,7 +19,7 @@ const PasswordRecoverComponent = Component.extend({
   recoverURL: ENV.endpoints.recover,
 
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   tSomethingWentWrong: t("somethingWentWrong"),
   logger: service('rollbar'),
 

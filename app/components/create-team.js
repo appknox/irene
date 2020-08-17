@@ -10,7 +10,7 @@ import triggerAnalytics from 'irene/utils/trigger-analytics';
 const CreateTeamComponent = Component.extend({
   intl: service(),
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
 
   teamName: "",
   isCreatingTeam: false,

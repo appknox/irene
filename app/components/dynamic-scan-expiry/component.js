@@ -7,7 +7,7 @@ import moment from 'moment';
 
 
 export default Component.extend({
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   store: service('store'),
   file: null,
   dynamicscan: null,

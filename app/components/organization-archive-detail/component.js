@@ -4,7 +4,7 @@ import { t } from 'ember-intl';
 import { inject as service } from '@ember/service';
 
 export default Component.extend({
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   tdownloadFailed: t('organizationArchiveDownloadErrored'),
   tagName: '',
 

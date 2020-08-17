@@ -16,7 +16,7 @@ const AnalysisDetailsComponent = Component.extend({
 
   intl: service(),
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
 
   tSuccessfullyOverridden: t("successfullyOverridden"),
   tSuccessfullyReset: t("successfullyReset"),

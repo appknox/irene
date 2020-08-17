@@ -14,7 +14,7 @@ const isRegexFailed = function(url) {
 const ApiFilterComponent = Component.extend({
   intl: service(),
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
 
   newUrlFilter: null,
   deletedURL: "",

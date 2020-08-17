@@ -26,9 +26,9 @@ const initialize = function(application) {
   application.inject('component', 'ajax', 'service:ajax');
 
   // Inject notify
-  application.inject('route', 'notify', 'service:notification-messages');
-  application.inject('component', 'notify', 'service:notification-messages');
-  application.inject('authenticator', 'notify', 'service:notification-messages');
+  application.inject('route', 'notify', 'service:notifications');
+  application.inject('component', 'notify', 'service:notifications');
+  application.inject('authenticator', 'notify', 'service:notifications');
 
   // Inject realtime
   application.inject('component', 'realtime', 'service:realtime');

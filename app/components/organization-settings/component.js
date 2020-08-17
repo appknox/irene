@@ -9,7 +9,7 @@ export default Component.extend({
   me: service(),
   intl: service(),
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
 
   isSavingStatus: false,
   tChangedMandatoryMFA: t('changedMandatoryMFA'),

@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 export default class AuthenticatedOrganizationSettingsRoute extends Route {
   @service me;
   @service organization;
-  @service('notification-messages-service') notify;
+  @service('notifications') notify;
 
   async model(){
     const url = `/api/organizations/${this.get('organization.selected.id')}/github`

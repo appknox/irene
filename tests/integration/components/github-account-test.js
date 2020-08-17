@@ -11,7 +11,7 @@
 //   needs: [
 //     'service:i18n',
 //     'service:ajax',
-//     'service:notification-messages-service',
+//     'service:notifications',
 //     'service:session',
 //     'locale:en/translations',
 //     'locale:en/config',

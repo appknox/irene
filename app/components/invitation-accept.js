@@ -7,7 +7,7 @@ const InvitationAcceptComponent = Component.extend({
 
   invitation: null,
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
 
   actions: {
     acceptInvite() {

@@ -12,7 +12,7 @@ import parseError from 'irene/utils/parse-error';
 
 const LoginComponentComponent = Component.extend({
   session: service('session'),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
 
   classNames: ['vertical-align-stretch'],
 

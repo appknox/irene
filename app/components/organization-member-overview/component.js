@@ -9,7 +9,7 @@ import { computed } from '@ember/object';
 export default Component.extend({
   intl: service(),
   me: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   modaltitle: null,
   showEditModal: false,
   localClassNameBindings: ['userDisabled:user-disabled:'], // css class - 'user-disabled'

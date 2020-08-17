@@ -5,7 +5,7 @@ import { promise } from 'ember-awesome-macros';
 
 const MeService = Service.extend({
   store: service('store'),
-  notify: service('notification-messages'),
+  notify: service('notifications'),
   ajax: service('ajax'),
   organization: service('organization'),
   org: promise.object(computed('organization.selected.id', function(){

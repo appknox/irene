@@ -11,7 +11,7 @@ import parseError from 'irene/utils/parse-error';
 export default Component.extend({
   intl: service(),
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
 
   organization: null,
   showDeleteIdpMetadataConfirm: false,

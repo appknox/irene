@@ -34,7 +34,7 @@ const FileHeaderComponent = Component.extend({
   trial: service(),
   ajax: service(),
   organization: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
 
   vpnStatuses: ["yes", "no"],
   loginStatuses: ["yes", "no"],

@@ -8,7 +8,7 @@ import ENUMS from 'irene/enums';
 
 export default Component.extend({
   intl: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
 
   tPleaseTryAgain: t('pleaseTryAgain'),
   tRegulatoryPreferenceReset: t('regulatoryPreferenceReset'),
