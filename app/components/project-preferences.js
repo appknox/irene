@@ -11,7 +11,7 @@ const ProjectPreferencesComponent = Component.extend({
   selectVersion: "0",
   intl: service(),
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   deviceTypes: ENUMS.DEVICE_TYPE.CHOICES,
 
   tAnyVersion: t("anyVersion"),

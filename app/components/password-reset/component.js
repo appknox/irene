@@ -24,7 +24,7 @@ const PasswordResetComponent = Component.extend({
   intl: service(),
   ajax: service(),
   router: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   token: "",
   tPasswordLengthError: t("passwordLengthError"),
   tPasswordMatchError: t("passwordMatchError"),

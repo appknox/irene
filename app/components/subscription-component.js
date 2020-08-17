@@ -9,7 +9,7 @@ const SubscriptionComponentComponent = Component.extend({
   subscription: null,
   intl: service(),
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   tSubscriptionCancelled: t("subscriptionCancelled"),
 
   isCancellingSubscription: false,

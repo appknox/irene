@@ -11,7 +11,7 @@ import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 export default Component.extend({
   intl: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
 
   tProxySettingsSaved: t('proxySettingsSaved'),
   tProxyTurned: t('proxyTurned'),

@@ -4,7 +4,7 @@ import ENV from 'irene/config/environment';
 
 const AttachmentDetailComponent = Component.extend({
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
 
   attachment: null,
   isDownloadingAttachment: false,

@@ -11,7 +11,7 @@ export default Component.extend(PaginateMixin, {
   intl: service(),
   organization: service('organization'),
   me: service('me'),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   query: '',
   searchQuery: '',
   showDeactivated: false,
@@ -20,11 +20,11 @@ export default Component.extend(PaginateMixin, {
   /* computed.sort compares the values with previous value,
     if it's not change same value will return everytime */
 
-  // sortProperties: [], 
+  // sortProperties: [],
   sortedObjects: computed.reads('objects'),
 
   tPleaseTryAgain: t('pleaseTryAgain'),
-  
+
   extraQueryStrings: computed('showDeactivated', 'searchQuery', function() {
     const query = {
       q: this.get('searchQuery'),

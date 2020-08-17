@@ -10,7 +10,7 @@ import { on } from '@ember/object/evented';
 const JiraProjectComponent = Component.extend({
   intl: service(),
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   project: null,
   jiraProjects: null,
   tIntegratedJIRA: t("integratedJIRA"),

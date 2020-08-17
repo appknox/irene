@@ -9,7 +9,7 @@ import { computed } from '@ember/object';
 const GithubProjectComponent = Component.extend({
   intl: service(),
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   project: null,
 
   thresholds: computed(function(){

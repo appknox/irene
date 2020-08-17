@@ -9,7 +9,7 @@ import triggerAnalytics from 'irene/utils/trigger-analytics';
 export default Component.extend({
   intl: service(),
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   realtime: service(),
 
   tagName: ['tr'],

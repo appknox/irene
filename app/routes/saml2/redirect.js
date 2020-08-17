@@ -8,7 +8,7 @@ import { inject as service } from '@ember/service';
 export default Route.extend({
   title: `Redirect${config.platform}`,
   session: service('session'),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   model(params) {
     if (params.err){
       const authenticatedRoute = getOwner(this).lookup("route:authenticated");

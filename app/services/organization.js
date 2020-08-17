@@ -6,7 +6,7 @@ const OrganizationService = Service.extend({
   selected: null,
 
   store: service('store'),
-  notify: service('notification-messages'),
+  notify: service('notifications'),
 
   async load() {
     const orgs = await this.get('store').findAll('organization');

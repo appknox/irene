@@ -14,7 +14,7 @@ export default Component.extend({
   trial: service(),
   ajax: service(),
   store: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
 
   tagName: '',
   showDynamicScanModal: false,

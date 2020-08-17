@@ -11,7 +11,7 @@ export default Component.extend({
   intl: service(),
   trial: service(),
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   realtime: service(),
 
   capturedApisCount: 0,

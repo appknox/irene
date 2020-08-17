@@ -22,7 +22,7 @@
 //     'component:ember-popper',
 //     'helper:eq',
 //     'component:api-filter',
-//     'service:notification-messages-service',
+//     'service:notifications',
 //     'service:session',
 //     'locale:en/translations',
 //     'locale:en/config',

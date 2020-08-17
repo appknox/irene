@@ -10,7 +10,7 @@ export default Component.extend({
 
   intl: service(),
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   me: service(),
 
   user: null,

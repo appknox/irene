@@ -26,7 +26,7 @@ const PasswordChangeComponent = Component.extend({
   intl: service(),
   ajax: service(),
   router: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   tEnterValidPassword: t("enterValidPassword"),
   tInvalidPassword: t("invalidPassword"),
   tPasswordChanged: t("passwordChanged"),

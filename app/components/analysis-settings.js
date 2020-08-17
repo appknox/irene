@@ -9,7 +9,7 @@ const AnalysisSettingsComponent = Component.extend({
   project: null,
   intl: service(),
   ajax: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
   isSavingStatus: false,
   tSavedPreferences: t("savedPreferences"),
 

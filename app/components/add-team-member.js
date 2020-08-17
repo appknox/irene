@@ -13,7 +13,7 @@ import { debounce } from '@ember/runloop';
 export default Component.extend(PaginateMixin, {
   intl: service(),
   realtime: service(),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
 
   query: '',
   searchQuery: '',

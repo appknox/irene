@@ -18,7 +18,7 @@ const UploadAppComponent = FileField.extend({
   tErrorWhileFetching: t("errorWhileFetching"),
   tErrorWhileUploading: t("errorWhileUploading"),
   tFileUploadedSuccessfully: t("fileUploadedSuccessfully"),
-  notify: service("notification-messages"),
+  notify: service("notifications"),
 
   classNames: ["file-input"],
   async filesDidChange(files) {

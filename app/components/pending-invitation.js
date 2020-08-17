@@ -11,7 +11,7 @@ const PendingInvitationComponent = Component.extend({
   isDeletingInvitation: false,
   openDeleteInvitationConfirmBox: false,
   tInvitationDeleted: t("invitationDeleted"),
-  notify: service('notification-messages-service'),
+  notify: service('notifications'),
 
   confirmCallback() {
     const tInvitationDeleted = this.get("tInvitationDeleted");
