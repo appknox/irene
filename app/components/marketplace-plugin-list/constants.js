@@ -13,7 +13,7 @@ $ export APPKNOX_ACCESS_TOKEN=&lt;personal access token&gt;
       <li class="margin-b-1">
         Download the appknox binary:<br>
 <pre class="code-block">
-$ curl -L https://github.com/appknox/appknox-go/releases/download/1.0.1/appknox-\`uname -s\`-x86_64 &gt; /usr/local/bin/appknox && chmod +x /usr/local/bin/appknox
+$ curl -L https://github.com/appknox/appknox-go/releases/download/1.2.0/appknox-\`uname -s\`-x86_64 &gt; /usr/local/bin/appknox && chmod +x /usr/local/bin/appknox
 </pre>
       </li>
       <li class="margin-b-1">
