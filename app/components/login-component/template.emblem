@@ -6,7 +6,7 @@
       .column
         form.login-form local-class="login-form"
           div local-class="login-header"
-            h4.has-text-centered
+            h1.has-text-centered local-class="login-title"
               = t "login"
 
             unless MFAEnabled
