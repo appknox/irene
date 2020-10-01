@@ -29,7 +29,7 @@ if hasProjects
           = project-overview project=project
       else
         .project-loading-container
-          = loading-spinner
+          = three-bounce-spinner
 
 
     if hasObjects
