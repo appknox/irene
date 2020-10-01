@@ -32,7 +32,7 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
   intl: service(),
   organization: service(),
 
-  classNames: ["columns"],
+  classNames: ["columns", "project-list"],
   projects: null,
   hasProjects: computed.gt('organization.selected.projectsCount', 0),
   query: "",
