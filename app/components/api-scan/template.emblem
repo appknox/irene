@@ -9,7 +9,7 @@ if file.project.isAPIScanEnabled
           = fa-icon "check"
           | &nbsp; #{t "completed"}
     else if file.isApiNotDone
-      button.is-primary click={(perform openApiScanModal)} disabled=file.isDynamicStatusNotNone
+      button.is-primary click={(perform openApiScanModal)} disabled={if (and file.isActive file.isDynamicDone) false "disabled"}
         .fa-font-size
           = fa-icon "play"
         | &nbsp; #{t "start"}
