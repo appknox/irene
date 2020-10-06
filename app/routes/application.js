@@ -1,11 +1,9 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import ENV from 'irene/config/environment';
-import CONSTANTS from 'irene/utils/constants';
-
 export default class ApplicationRoute extends Route {
   @service headData;
   @service intl;
+  @service whitelabel;
 
   beforeModel() {
     return this.get('intl').setLocale(['en']);
@@ -23,7 +21,7 @@ export default class ApplicationRoute extends Route {
    */
   model() {
     return {
-      whitelabelName: ENV.whitelabel.enabled ? ENV.whitelabel.name || CONSTANTS.WHITELABEL.DEFAULT_NAME : CONSTANTS.WHITELABEL.DEFAULT_NAME
+      whitelabelName: this.whitelabel.activeWhiltelabelName
     }
   }
 }
