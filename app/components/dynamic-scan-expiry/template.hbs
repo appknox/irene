@@ -1,22 +1,22 @@
 <div local-class="device-timeout">
   <span local-class="time-display">{{this.timeRemaining.minutes}}:{{this.timeRemaining.seconds}}</span>
   <BasicDropdown @disabled={{not this.canExtend}} @horizontalPosition="auto-right" as |dd|>
-    <dd.Trigger class="button is-default" local-class="extend-btn">
+    <dd.trigger class="button is-default" local-class="extend-btn">
       {{fa-icon "plus"}}
       {{#unless this.canExtend}}
         <AttachTooltip @placemnet="top">
           {{t "dynamicScanExtentionLimit"}}
         </AttachTooltip>
       {{/unless}}
-    </dd.Trigger>
+    </dd.trigger>
 
-    <dd.Content class="dropdown-content dropdown--default-content" local-class="dropdown">
+    <dd.content class="dropdown-content dropdown--default-content" local-class="dropdown">
       <div class="dropdown-container">
         <a href="#" class="dropdown-item" onclick={{perform this.extendtime 5 dd.actions.close}}>5 mins</a>
         <a href="#" class="dropdown-item" onclick={{perform this.extendtime 15 dd.actions.close}}>15 mins</a>
         <a href="#" class="dropdown-item" onclick={{perform this.extendtime 30 dd.actions.close}}>30 mins</a>
       </div>
-    </dd.Content>
+    </dd.content>
   </BasicDropdown>
   <span local-class="spinner" class="{{if this.extendtime.isRunning (local-class 'show')}}"> {{fa-icon "spinner fa-spin"}}</span>
 </div>

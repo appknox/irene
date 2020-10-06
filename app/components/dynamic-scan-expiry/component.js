@@ -1,46 +1,61 @@
-import Component from '@ember/component'
-import { computed, observer } from '@ember/object';
+import Component from '@glimmer/component';
+import { computed, set } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { later } from '@ember/runloop';
 import { task } from 'ember-concurrency';
 import moment from 'moment';
+import { addObserver, removeObserver } from '@ember/object/observers';
 
 
-export default Component.extend({
-  notify: service('notifications'),
-  store: service('store'),
-  file: null,
-  dynamicscan: null,
-  durationRemaining: null,
-  clockStop: false,
+export default class DyanmicScanExpiryComponent extends Component {
+  @service ('notify') notification;
 
-  didInsertElement() {
-    this._super(...arguments);
+  @service store;
+
+  @tracked file = null;
+  @tracked dynamicscan = null;
+
+  @tracked durationRemaining = null;
+
+  @tracked clockStop = false;
+
+  constructor() {
+    super(...arguments);
+    this.fetchDynaminscan.perform();
     this.clock();
-    this.get('fetchDynaminscan').perform();
-  },
-  willDestroyElement() {
-    this._super(...arguments);
-    this.set('clockStop', true);
-  },
-  fetchDynaminscan: task(function* () {
-    const id = this.get('file.id');
-    const dynamicscan = yield this.get('store').find('dynamicscan', id);
-    this.set('dynamicscan', dynamicscan);
+    addObserver(this.args.file, 'isReady', this.observeDeviceState);
+  }
+
+  willDestroy() {
+    this.clockStop = true;
+    removeObserver(this.args.file, 'isReady', this.observeDeviceState);
+  }
+
+  @task(function* () {
+    const id = this.args.file.id;
+    const dynamicscan = yield this.store.find('dynamicscan', id);
+    set(this, 'dynamicscan', dynamicscan);
     return dynamicscan;
-  }),
-  dynamicscanObserver: observer('file.isReady',  function() {
-    this.get('fetchDynaminscan').perform();
-  }),
-  canExtend: computed('durationRemaining', function() {
-    const duration = this.get('durationRemaining');
+  })
+  fetchDynaminscan;
+
+  observeDeviceState () {
+    this.fetchDynaminscan.perform();
+  }
+
+  @computed('durationRemaining')
+  get canExtend() {
+    const duration = this.durationRemaining;
     if(!duration) {
       return false;
     }
     return duration.asMinutes() < 15;
-  }),
-  timeRemaining: computed('durationRemaining', function() {
-    const duration = this.get('durationRemaining')
+  }
+
+  @computed('durationRemaining')
+  get timeRemaining() {
+    const duration = this.durationRemaining;
     if(!duration) {
       return {
         seconds: "00",
@@ -51,23 +66,27 @@ export default Component.extend({
       seconds: ("0" + duration.seconds()).slice(-2),
       minutes: ("0" + Math.floor(duration.asMinutes())).slice(-2),
     }
-  }),
+  }
+
+
   clock () {
-    if(this.get('clockStop')) {
+    if(this.clockStop) {
       return;
     }
-    const expiresOn = this.get('dynamicscan.expiresOn');
+    const expiresOn = this.dynamicscan ? this.dynamicscan.expiresOn : null;
     if(!expiresOn){
       return later(this, this.clock, 1000);
     }
     const mExpiresOn =  moment(expiresOn);
     const mNow = moment();
     const duration = moment.duration(mExpiresOn.diff(mNow));
-    this.set('durationRemaining', duration);
+    set(this, 'durationRemaining', duration);
     later(this, this.clock, 1000);
-  },
-  extendtime: task(function* (time, close) {
-    const dynamicscan = this.get('dynamicscan');
+  }
+
+
+  @task(function* (time, close) {
+    const dynamicscan = this.dynamicscan;
     if(!dynamicscan) {
       return;
     }
@@ -75,12 +94,13 @@ export default Component.extend({
       yield dynamicscan.extendTime(time);
     } catch(error) {
       if(error.errors && error.errors[0].detail) {
-        this.get('notify').error(error.errors[0].detail);
+        this.notify.error(error.errors[0].detail);
         return
       }
       throw error
     }
-    yield this.get('fetchDynaminscan').perform();
+    yield this.fetchDynaminscan.perform();
     close();
   })
-});
+  extendtime;
+}
