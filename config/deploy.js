@@ -1,12 +1,19 @@
-const path = require('path');
-
 module.exports = function(deployTarget) {
+  const local_plugins = [
+    'build',
+    'gzip',
+    'manifest',
+    'display-revisions',
+    'revision-data'
+  ]
   var ENV = {
-    build: {}
-    // include other plugin configuration that applies to all deploy targets here
-  };
-  ENV.gzip = {
-    keep: true
+    build: {
+      outputPath: 'build',
+      environment: 'production'
+    },
+    gzip: {
+      keep: true
+    }
   };
   ENV.s3 = {
     bucket: process.env.AWS_BUCKET,
@@ -21,10 +28,11 @@ module.exports = function(deployTarget) {
 
   if (deployTarget === 'development') {
     ENV.build.environment = 'development';
-    // configure other plugins for development deploy target here
+
   }
 
   if (deployTarget === 'staging') {
+    ENV.build.environment = 'staging';
     ENV.s3 = {
       bucket: process.env.STAGING_AWS_BUCKET,
       region: process.env.AWS_REGION
@@ -36,10 +44,6 @@ module.exports = function(deployTarget) {
       allowOverwrite: true
     };
 
-    ENV.build.environment = 'staging';
-
-    // configure other plugins for staging deploy target here
-
     ENV.cloudfront = {
       distribution: 'E2YVUU4RPYNUI2',
       objectPaths: ['/*']
@@ -47,27 +51,23 @@ module.exports = function(deployTarget) {
   }
 
   if (deployTarget === 'production') {
-    ENV.build.environment = 'production';
-    // configure other plugins for production deploy target here
+    ENV.s3 = {
+      bucket: process.env.AWS_BUCKET,
+      region: process.env.AWS_REGION
+    };
+
+    ENV['s3-index'] = {
+      bucket: process.env.AWS_BUCKET,
+      region: process.env.AWS_REGION,
+      allowOverwrite: true
+    };
 
     ENV.cloudfront = {
       distribution: 'E17GXVYW7G712O'
     };
   }
 
-  if (deployTarget === 'whitelabel') {
-    ENV.build.environment = 'production';
-    // configure other plugins for production deploy target here
-
-    ENV.cloudfront = {
-      distribution: 'E1SR2PB8XTR9RC',
-      objectPaths: ['/*']
-    };
-  }
-
   if (deployTarget === 'sequelstring') {
-    ENV.build.environment = 'production';
-
     process.env["ENTERPRISE"] = true
     process.env["WHITELABEL_ENABLED"] = true
     process.env["WHITELABEL_LOGO"] = "https://s3.amazonaws.com/appknox-production-public/sequelstring_logo.jpg"
@@ -85,16 +85,12 @@ module.exports = function(deployTarget) {
       allowOverwrite: true
     };
 
-    // configure other plugins for production deploy target here
-
     ENV.cloudfront = {
       distribution: 'E1R9ZLGFEM1TTU'
     };
   }
 
   if (deployTarget === 'gbm') {
-    ENV.build.environment = 'production';
-
     process.env["ENTERPRISE"] = true
     process.env["WHITELABEL_ENABLED"] = true
     process.env["WHITELABEL_LOGO"] = "https://appknox-production-public.s3.amazonaws.com/gbm_logo1.png"
@@ -112,54 +108,25 @@ module.exports = function(deployTarget) {
       allowOverwrite: true
     };
 
-    // configure other plugins for production deploy target here
-
     ENV.cloudfront = {
       distribution: 'E1R9ZLGFEM1TTU'
     };
   }
 
   if (deployTarget === 'local') {
-    const destdirParent = path.resolve(__dirname, '..');
-    ENV.build.environment = 'production';
     ENV.pipeline =  {
       disabled: {
-        allExcept: [
-          'build',
-          'gzip',
-          'manifest',
-          'display-revisions',
-          'cp',
-          'revision-data'
-        ]
+        allExcept: local_plugins
       },
     };
-    ENV.cp = {
-      destDir: path.join(destdirParent, 'local')
-    };
   }
-
-  if (deployTarget === 'docker') {
-    ENV.build.environment = 'production';
+  if (deployTarget === 'server') {
+    ENV.build.outputPath = 'server/dist';
     ENV.pipeline =  {
       disabled: {
-        allExcept: [
-          'build',
-          'gzip',
-          'manifest',
-          'display-revisions',
-          'cp',
-          'revision-data'
-        ]
+        allExcept: local_plugins
       },
     };
-    ENV.cp = {
-      destDir: '/usr/share/nginx/html/'
-    };
   }
-
-  // Note: if you need to build some configuration asynchronously, you can return
-  // a promise that resolves with the ENV object instead of returning the
-  // ENV object synchronously.
   return ENV;
 };

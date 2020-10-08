@@ -16,9 +16,7 @@ module.exports = {
     'plugin:ember/recommended'
   ],
   env: {
-    browser: true,
-    es6: true,
-    node: true
+    browser: true
   },
   rules: {
     "ember/avoid-leaking-state-in-ember-objects": 0,
