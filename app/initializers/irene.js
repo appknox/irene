@@ -1,81 +1,152 @@
-import ENV from 'irene/config/environment';
+import ENV from "irene/config/environment";
 
-const runtimeConfig = window.runtimeGlobalConfig;
-
-function isTrue(value) {
-  value = String(value).toLowerCase();
-  return value === 'true';
-}
-
-
-function getPluginActivationStatus(pluginName){
-  const pluginEnvVariable = ENV.thirdPartyPluginEnvMap[pluginName];
-
-  if(pluginEnvVariable.env in runtimeConfig){
-    return isTrue(runtimeConfig[pluginEnvVariable.env]);
+class ENVHandler {
+  constructor(envHandlerConst) {
+    this.envHandlerConst = envHandlerConst;
   }
-  if('ENTERPRISE' in runtimeConfig){
-    return !isTrue(runtimeConfig.ENTERPRISE);
+
+  isRuntimeAvailable() {
+    return !(typeof runtimeGlobalConfig == "undefined");
   }
-  return pluginEnvVariable.default;
-}
 
-const initialize = function(application) {
-  // inject Ajax
-  application.inject('route', 'ajax', 'service:ajax');
-  application.inject('component', 'ajax', 'service:ajax');
+  getEnv(env_key) {
+    this.assertEnvKey(env_key);
+    if (this.isAvailableInRuntimeENV(env_key)) {
+      return this.getRuntimeObject()[env_key];
+    }
+    if (this.isAvailableInProcessENV(env_key)) {
+      return this.envHandlerConst.processENV[env_key];
+    }
+    return this.getDefault(env_key);
+  }
 
-  // Inject notify
-  application.inject('route', 'notify', 'service:notifications');
-  application.inject('component', 'notify', 'service:notifications');
-  application.inject('authenticator', 'notify', 'service:notifications');
+  isRegisteredEnv(env_key) {
+    return this.envHandlerConst.possibleENVS.indexOf(env_key) > -1;
+  }
 
-  // Inject realtime
-  application.inject('component', 'realtime', 'service:realtime');
+  isAvailableInENV(env_key) {
+    return (
+      this.isAvailableInRuntimeENV(env_key) ||
+      this.isAvailableInProcessENV(env_key)
+    );
+  }
 
-  // Inject Store
-  application.inject('component', 'store', 'service:store');
+  getRuntimeObject() {
+    if (this.isRuntimeAvailable()) {
+      return runtimeGlobalConfig; // eslint-disable-line
+    }
+    return {};
+  }
 
-  if(runtimeConfig) {
-    const envKeys = Object.keys(runtimeConfig);
+  isAvailableInRuntimeENV(env_key) {
+    const runtimeObj = this.getRuntimeObject();
+    return env_key in runtimeObj;
+  }
 
-    ENV.host = runtimeConfig.IRENE_API_HOST || ENV.host;
-    ENV.devicefarmHost = runtimeConfig.IRENE_DEVICEFARM_HOST || ENV.devicefarmHost;
-    var devicefarmEnv = runtimeConfig.IRENE_DEVICEFARM_URL;
-    var deviceFarmPath = "websockify";
-    if(devicefarmEnv) {
-      const deviceFarmURL = new URL(deviceFarmPath, devicefarmEnv).href;
-      ENV.deviceFarmURL = deviceFarmURL;
+  isAvailableInProcessENV(env_key) {
+    return env_key in this.envHandlerConst.processENV;
+  }
+
+  assertEnvKey(env_key) {
+    if (!this.isRegisteredEnv(env_key)) {
+      throw new Error(`ENV: ${env_key} not registered`);
+    }
+  }
+
+  isTrue(value) {
+    value = String(value).toLowerCase();
+    return value === "true";
+  }
+
+  getBoolean(env_key) {
+    return this.isTrue(this.getEnv(env_key));
+  }
+
+  getDefault(env_key) {
+    this.assertEnvKey(env_key);
+    return this.envHandlerConst.defaults[env_key];
+  }
+
+  getValueForPlugin(env_key) {
+    const enterpriseKey = "ENTERPRISE";
+    this.assertEnvKey(enterpriseKey);
+    this.assertEnvKey(env_key);
+
+    if (this.isAvailableInENV(env_key)) {
+      return this.getBoolean(env_key);
     }
 
-    ENV.socketPath = runtimeConfig.IRENE_API_SOCKET_PATH || ENV.socketPath;
-    ENV.isEnterprise = envKeys.indexOf('isEnterprise') > -1 ? isTrue(runtimeConfig.ENTERPRISE) : ENV.isEnterprise;
-    ENV.showLicense = envKeys.indexOf('showLicense') > -1 ? isTrue(runtimeConfig.IRENE_SHOW_LICENSE) : ENV.showLicense;
-    ENV.isRegistrationEnabled = envKeys.indexOf('isRegistrationEnabled') > -1 ? isTrue(runtimeConfig.IRENE_ENABLE_REGISTRATION) : ENV.isRegistrationEnabled;
-    ENV.registrationLink = runtimeConfig.registrationLink || ENV.registrationLink;
-    ENV.whitelabel = Object.assign({}, ENV.whitelabel, runtimeConfig.whitelabel);
+    if (this.isAvailableInENV(enterpriseKey)) {
+      return !this.getBoolean(enterpriseKey);
+    }
 
+    return this.getDefault(env_key);
+  }
+}
 
-    ENV.enableCrisp = envKeys.indexOf('enableCrisp') > -1 ? getPluginActivationStatus('crisp') : ENV.enableCrisp;
-    ENV.enableHotjar= envKeys.indexOf('enableHotjar') > -1 ? getPluginActivationStatus('hotjar') : ENV.enableHotjar;
-    ENV.enablePendo= envKeys.indexOf('enablePendo') > -1 ? getPluginActivationStatus('pendo') : ENV.enablePendo;
-    ENV.enableCSB= envKeys.indexOf('enableCSB') > -1 ? getPluginActivationStatus('csb') : ENV.enableCSB;
-    ENV.enableMarketplace= envKeys.indexOf('enableMarketplace') > -1 ? getPluginActivationStatus('marketplace') : ENV.enableMarketplace;
-    ENV.emberRollbarClient= envKeys.indexOf('emberRollbarClient') > -1 ? {...ENV.emberRollbarClient,enabled: getPluginActivationStatus('rollbar')} : ENV.emberRollbarClient;
+const handler = new ENVHandler(ENV.ENVHandlerCONST);
+
+const initialize = function (application) {
+  // inject Ajax
+  application.inject("route", "ajax", "service:ajax");
+  application.inject("component", "ajax", "service:ajax");
+
+  // Inject notify
+  application.inject("route", "notify", "service:notifications");
+  application.inject("component", "notify", "service:notifications");
+  application.inject("authenticator", "notify", "service:notifications");
+
+  // Inject realtime
+  application.inject("component", "realtime", "service:realtime");
+
+  // Inject Store
+  application.inject("component", "store", "service:store");
+
+  ENV.host = handler.getEnv("IRENE_API_HOST");
+  ENV.devicefarmHost = handler.getEnv("IRENE_DEVICEFARM_HOST");
+  var devicefarmEnv = handler.getEnv("IRENE_DEVICEFARM_URL");
+  var deviceFarmPath = "websockify";
+  if (devicefarmEnv) {
+    const deviceFarmURL = new URL(deviceFarmPath, devicefarmEnv).href;
+    ENV.deviceFarmURL = deviceFarmURL;
   }
 
+  ENV.socketPath = handler.getEnv("IRENE_API_SOCKET_PATH");
+  ENV.isEnterprise = handler.getBoolean("ENTERPRISE");
+  ENV.showLicense = handler.getBoolean("IRENE_SHOW_LICENSE");
+  ENV.isRegistrationEnabled = handler.getBoolean("IRENE_ENABLE_REGISTRATION");
+  ENV.registrationLink = handler.getEnv("IRENE_REGISTRATION_LINK");
+  ENV.whitelabel = Object.assign({}, ENV.whitelabel, {
+    enabled: handler.getBoolean("WHITELABEL_ENABLED"),
+    name: handler.getEnv("WHITELABEL_NAME"),
+    logo: handler.getEnv("WHITELABEL_LOGO"),
+    theme: handler.getEnv("WHITELABEL_THEME"),
+  });
+
+  ENV.enableCrisp = handler.getValueForPlugin("IRENE_ENABLE_CRISP");
+  ENV.enableHotjar = handler.getValueForPlugin("IRENE_ENABLE_HOTJAR");
+  ENV.enablePendo = handler.getValueForPlugin("IRENE_ENABLE_PENDO");
+  ENV.enableCSB = handler.getValueForPlugin("IRENE_ENABLE_CSB");
+  ENV.enableMarketplace = handler.getValueForPlugin("IRENE_ENABLE_MARKETPLACE");
+  ENV.emberRollbarClient = {
+    enabled: handler.getValueForPlugin("IRENE_ENABLE_ROLLBAR"),
+  };
+
   // Inject ENV
-  if (ENV.environment !== 'test') {
+  if (ENV.environment !== "test") {
     // FIXME: Fix this test properly
-    application.register('env:main', ENV, {singleton: true, instantiate: false});
-    return application.inject('component', 'env', 'env:main');
+    application.register("env:main", ENV, {
+      singleton: true,
+      instantiate: false,
+    });
+    return application.inject("component", "env", "env:main");
   }
 };
 
 const IreneInitializer = {
-  name: 'irene',
-  initialize
+  name: "irene",
+  initialize,
 };
 
-export {initialize};
+export { initialize };
 export default IreneInitializer;
