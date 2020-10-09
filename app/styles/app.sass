@@ -8,6 +8,8 @@
 @import 'form'
 @import 'devices'
 @import 'modules'
+@import "ember-modal-dialog/ember-modal-structure"
+@import "ember-modal-dialog/ember-modal-appearance"
 
 $date-picker-color-primary: #FE4D3F !default
 @import "ember-date-components/addon"
@@ -3269,6 +3271,8 @@ $attachment-icon-width: 4em
     line-height: 1.4
     color: lighten(#000, 30%)
     border-radius: 2px
+    .file-in-active-icon
+      font-size: 14px
 
 .app-details-card
   .file-id-container

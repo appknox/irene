@@ -1,0 +1,39 @@
+<div>
+  <form>
+    <div local-class="toggle-check" class="vertical-align-center margin-right20">
+      <label class="switch margin-right">
+        <Input class="switch-input" @type="checkbox" id="auto-cleanup" {{on "change" (fn this.onChangePref)}} @checked={{this.cleanupPref.isEnabled}}/>
+        <span class="slider slider-nolabel round"></span>
+      </label>
+      <label class="black-text" for="auto-cleanup">
+        {{t 'fileCleanup.enable'}}
+      </label>
+    </div>
+    <div class="input-wrap vertical-align-center margin-right20">
+      <label for="active-file-limit">
+        {{t 'fileCleanup.activeCount'}}
+      </label>
+      <Input class="input-field" type="number" @value={{this.cleanupPref.filesToKeep}} min="0" {{on "change" (fn this.onChangePref)}} id="active-file-limit" @disabled={{if this.cleanupPref.isEnabled "disabled" false}}/>
+    </div>
+  </form>
+  <div class="last-cleanup vertical-align-center">
+    <label class="margin-right">
+      {{t 'fileCleanup.lastActivity'}}
+    </label>
+    <span class="margin-right">{{moment-format this.cleanupPref.lastCleanedAt "DD MMM YYYY"}}</span>
+    <button class="view-all-cleanup button is-primary" {{on "click" this.onViewAllCleanup}} type="button">
+      {{t 'fileCleanup.viewList'}}
+    </button>
+    <div class="trigger-cleanup-btn align-end">
+      <button type="button" class="is-primary highlighted-button margin-l-1" {{on "click" this.onTriggerCleanup}} disabled={{if this.cleanupPref.isEnabled "disabled" false}}>{{t 'fileCleanup.run'}}</button>
+    </div>
+  </div>
+
+
+</div>
+
+{{#if this.isShowAllCelanup}}
+  <AkModal @onClose={{this.onCloseModal}} @showHeader={{true}} @headerTitle={{t 'fileCleanup.listTitle'}}>
+    <Modals::OrgFileCleanupList></Modals::OrgFileCleanupList>
+  </AkModal>
+{{/if}}

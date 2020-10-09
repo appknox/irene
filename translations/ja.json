@@ -745,5 +745,14 @@
     "selectGHRepo": "プロジェクトで見つかったリスクに関するIssueを作成するGithub のリポジトリを選択してください",
     "selectJIRAAccount": "プロジェクトで見つかったリスクに関するIssueを作成するJIRAアカウントを選択してください",
     "selectPreferredDevice": "動的診断のデバイスタイプとOSバージョンを選択してください"
+  },
+  "fileCleanup": {
+    "title": "File CleanUp",
+    "enable": "Enable File CleanUp",
+    "activeCount": "Files to keep active",
+    "lastActivity": "Last Activity",
+    "run": "Run CleanUp",
+    "viewList": "View All",
+    "listTitle": "File Cleanup Activities"
   }
 }

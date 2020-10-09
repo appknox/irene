@@ -12,6 +12,7 @@ import ClipboardJS from 'clipboard/src/clipboard';
 
 const FileHeaderComponent = Component.extend({
 
+  localClassNames: ['file-header'],
   roleId: 0,
   progress: 0,
   userRoles: [],

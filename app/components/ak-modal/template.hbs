@@ -1,0 +1,13 @@
+<Modal-Dialog
+  @onClose={{fn this.onClose}}
+  @translucentOverlay={{true}}>
+  {{#if @showHeader}}
+    <div local-class="modal-header">
+      <h3>{{@headerTitle}}</h3>
+      <span {{on "click" (fn this.onClose)}} role="button">{{fa-icon "close"}}</span>
+    </div>
+  {{/if}}
+  <div class="modal-body">
+    {{yield}}
+  </div>
+</Modal-Dialog>

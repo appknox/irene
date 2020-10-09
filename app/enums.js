@@ -200,6 +200,8 @@ const ENUMS = {
     SHOW: 1,
     HIDE: 2,
   },
+
+  CLEANUP_TYPE: ["Automated", "Manual"],
 };
 
 // Populate `CHOICES`

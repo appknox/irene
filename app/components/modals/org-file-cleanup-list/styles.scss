@@ -1,0 +1,27 @@
+.file-cleanup-list-container {
+  .list-head, .list-body {
+    display: grid;
+    grid-template-columns: 100px 100px 1fr;
+    align-items: center;
+  }
+  .list-head {
+    height: 40px;
+    font-weight: bold;
+    box-shadow: 0px 2px 4px -2px #000;
+    padding: 0 8px;
+  }
+  .list-body {
+    height: 200px;
+    overflow: auto;
+    padding: 0 8px;
+    &__row {
+      display: grid;
+      grid-template-columns: 100px 100px 1fr;
+      height: 35px;
+      align-items: center;
+      &-item {
+
+      }
+    }
+  }
+}

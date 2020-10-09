@@ -1,0 +1,14 @@
+.modal-header {
+  display: grid;
+  grid-template-columns: 1fr 30px;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.77);
+  h3 {
+    margin: 0;
+  }
+  i {
+    cursor: pointer;
+  }
+}

@@ -44,12 +44,6 @@
             else
               .font-small.text-lightgray
                 = t "addTags"
-        if (not file.isActive)
-          .column.content-right.margin-r-h
-            .file-inactive
-              = fa-icon "ban"
-              = attach-tooltip placement="left"
-                = t "fileInactive"
 
 .card.is-fullwidth.margin-bottom20
   .card-content
@@ -107,6 +101,11 @@
                 .fa-font-size
                   = fa-icon "play"
                 | &nbsp; #{t "start"}
+    if (not file.isActive)
+      span local-class="file-in-active"
+        = fa-icon "exclamation-circle"
+        = attach-tooltip placement="top"
+          = t "fileInactive"
 
 
 .card.is-fullwidth.app-details-card
