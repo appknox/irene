@@ -181,8 +181,6 @@ const PaginateMixin = Mixin.create({
   }
 });
 
-export default PaginateMixin;
-
 function __range__(left, right, inclusive) {
   let range = [];
   let ascending = left < right;
@@ -192,3 +190,215 @@ function __range__(left, right, inclusive) {
   }
   return range;
 }
+
+// Class basaed mixin support for glimmer components
+import { action, set } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { gt, equal, alias } from '@ember/object/computed';
+import { addObserver } from '@ember/object/observers';
+
+export const PaginationService = superclass => class extends superclass {
+
+  constructor() {
+    super(...arguments);
+    addObserver(this, 'limit', 'offset', "targetModel", "extraQueryStrings", this.versionTrigger);
+  }
+
+  @tracked offset = 0;
+  @tracked meta = null;
+  @tracked version = 0;
+  @tracked extraQueryStrings = "";
+  @tracked limit = ENV.paginate.perPageLimit;
+  @tracked isJsonApiPagination = false;
+  @tracked isDRFPagination = false;
+  @tracked offsetMultiplier = ENV.paginate.offsetMultiplier;
+
+  @action
+  gotoPage(offset) {
+    this.setOffset(offset);
+  }
+
+  @action
+  gotoPageFirst() {
+    this.gotoPage(0)
+  }
+
+  @action
+  gotoPagePrevious() {
+    this.offset = this.offset - 1;
+    this.gotoPage(this.offset)
+  }
+
+  @action
+  gotoPageNext() {
+    this.offset = this.offset + 1;
+    this.gotoPage(this.offset);
+  }
+
+  @action
+  gotoPageLast() {
+    this.gotoPage(this.maxOffset)
+  }
+
+  @computed('extraQueryStrings', 'isDRFPagination', 'isJsonApiPagination', 'limit', 'offset', 'offsetMultiplier', 'store', 'targetModel', 'version')
+  get objects() {
+    console.log(this.extraQueryStrings, this.isDRFPagination, this.isDRFPagination, this.limit, this.offset, this.offsetMultiplier, this.targetModel, this.version)
+    let query;
+    if (this.isJsonApiPagination) {
+      const query_limit = this.limit;
+      const query_offset = this.offset;
+      query = {
+        'page[limit]': this.limit,
+        'page[offset]': query_limit * query_offset
+      };
+    } else {
+      query = {
+        limit: this.limit,
+        offset: this.offset
+      };
+    }
+    const extraQueryStrings = this.extraQueryStrings;
+    if (!isEmpty(extraQueryStrings)) {
+      const extraQueries = JSON.parse(extraQueryStrings);
+      for (let key in extraQueries) {
+        const value = extraQueries[key];
+        query[key] = value;
+      }
+    }
+    const targetModel = this.targetModel;
+    if (this.isDRFPagination) {
+      query.offset = query.offset * (this.offsetMultiplier || 1);
+    }
+    const objects = this.store.query(targetModel, query);
+    console.log('objects in serv', objects)
+    objects.then((result) => {
+      const { meta } = result;
+      if (result.links && result.meta.pagination) {
+        meta.total = result.meta.pagination.count;
+        this.isJsonApiPagination = true; // eslint-disable-line
+      }
+      if ("count" in result.meta) {
+        meta.total = result.meta.count || 0;
+        /*
+        count is only defined for DRF
+        JSONAPI has total
+        */
+        this.isDRFPagination = true; // eslint-disable-line
+      }
+      return this.meta = meta; // eslint-disable-line
+    });
+    return objects;
+  }
+
+  @alias('objects.length') objectCount
+
+  @gt('objectCount', 0) hasObjects;
+
+  @equal('meta.count', 0) hasNoObject;
+
+  @computed('meta.total', 'limit')
+  get maxOffset() {
+    const limit = this.limit;
+    const total = this.meta ?  this.meta.total : 0|| 0;
+    if (total === 0) {
+      return 0;
+    }
+    return Math.ceil(total / limit) - 1;
+  } // `-1` because offset starts from 0
+
+  @computed("maxOffset", "offset")
+  get pages () {
+    const offset = this.offset;
+    const maxOffset = this.maxOffset;
+    let startPage = 0;
+    let stopPage = maxOffset;
+    let offsetDiffStart = 0;
+    let offsetDiffStop = 0;
+
+    if ([NaN, 0, 1].includes(maxOffset)) {
+      return [];
+    }
+    if (maxOffset <= (ENV.paginate.pagePadding * 2)) {
+      return this.__range__(startPage, stopPage, true);
+    }
+
+    if (offset > ENV.paginate.pagePadding) {
+      startPage = offset - ENV.paginate.pagePadding;
+    } else {
+      offsetDiffStart = ENV.paginate.pagePadding - offset;
+    }
+
+    if (maxOffset >= (ENV.paginate.pagePadding + offset)) {
+      stopPage = ENV.paginate.pagePadding + offset;
+    } else {
+      offsetDiffStop = (ENV.paginate.pagePadding + offset) - maxOffset;
+    }
+
+    startPage -= offsetDiffStop;
+    stopPage += offsetDiffStart;
+
+    return this.__range__(startPage, stopPage, true);
+  }
+
+  @computed("offset")
+  get preDot () {
+    const offset = this.offset;
+    return (offset - ENV.paginate.pagePadding) > 0;
+  }
+
+  @computed("offset", "maxOffset",)
+  get postDot () {
+    const offset = this.offset;
+    const maxOffset = this.maxOffset;
+    return (offset + ENV.paginate.pagePadding) < maxOffset;
+  }
+
+  @gt("offset", 0) hasPrevious
+
+  @computed('offset', 'maxOffset',)
+  get hasNext () {
+    const offset = this.offset;
+    const maxOffset = this.maxOffset;
+    return offset < maxOffset;
+  }
+
+  versionIncrementer() {
+    this.version = this.version++;
+  }
+
+  versionTrigger() {
+    return (() => {
+      const result = [];
+      for (let property of ['limit', 'offset', "targetModel", "extraQueryStrings"]) {
+        const propertyOldName = `_${property}`;
+        const propertyNewValue = this.property;
+        const propertyOldValue = this.propertyOldName;
+        const propertyChanged = propertyOldValue !== propertyNewValue;
+        if (propertyChanged) {
+          set(this, `${propertyOldName}`, propertyNewValue);
+          result.push(run.once(this, 'versionIncrementer'));
+        } else {
+          result.push(undefined);
+        }
+      }
+      return result;
+    })();
+  }
+
+  setOffset(offset) {
+    this.offset = offset;
+  }
+
+  __range__(left, right, inclusive) {
+    let range = [];
+    let ascending = left < right;
+    let end = !inclusive ? right : ascending ? right + 1 : right - 1;
+    for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
+      range.push(i);
+    }
+    return range;
+  }
+}
+
+
+export default PaginateMixin;

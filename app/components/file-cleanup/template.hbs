@@ -13,7 +13,7 @@
       <label for="active-file-limit">
         {{t 'fileCleanup.activeCount'}}
       </label>
-      <Input class="input-field" type="number" @value={{this.cleanupPref.filesToKeep}} min="0" {{on "change" (fn this.onChangePref)}} id="active-file-limit" @disabled={{if this.cleanupPref.isEnabled "disabled" false}}/>
+      <Input class="input-field" type="number" @value={{this.cleanupPref.filesToKeep}} min="0" {{on "change" (fn this.onChangePref)}} id="active-file-limit" @disabled={{unless this.cleanupPref.isEnabled "disabled"}}/>
     </div>
   </form>
   <div class="last-cleanup vertical-align-center">
@@ -25,7 +25,7 @@
       {{t 'fileCleanup.viewList'}}
     </button>
     <div class="trigger-cleanup-btn align-end">
-      <button type="button" class="is-primary highlighted-button margin-l-1" {{on "click" this.onTriggerCleanup}} disabled={{if this.cleanupPref.isEnabled "disabled" false}}>{{t 'fileCleanup.run'}}</button>
+      <button type="button" class="is-primary highlighted-button margin-l-1" {{on "click" this.onTriggerCleanup}} disabled={{unless this.cleanupPref.isEnabled "disabled"}}>{{t 'fileCleanup.run'}}</button>
     </div>
   </div>
 

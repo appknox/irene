@@ -1,9 +1,9 @@
 <div local-class="file-cleanup-list-container">
   <div local-class="list-table">
     <div local-class="list-head">
-      <div>Date</div>
-      <div>Type</div>
-      <div>File cleanup status</div>
+      <span>Date</span>
+      <span>Type</span>
+      <span>File cleanup status</span>
     </div>
     <div local-class="list-body">
       {{#if this.isLoading}}
@@ -13,13 +13,13 @@
       {{else}}
         {{#each this.fileCleanupList as |cleanup|}}
             <div local-class="list-body__row">
-              <div local-class="list-body__row-item">{{moment-format cleanup.createdOn 'DD MMM YYYY'}}</div>
-              <div local-class="list-body__row-item">{{cleanup.typeValue}}</div>
-              <div local-class="list-body__row-item">
+              <span local-class="list-body__row-item">{{moment-format cleanup.createdOn 'DD MMM YYYY'}}</span>
+              <span local-class="list-body__row-item">{{cleanup.typeValue}}</span>
+              <span local-class="list-body__row-item">
                 {{#each cleanup.projects as |project index|}}
                   <span>{{#if index}},{{/if}} {{project.package_name}} ({{project.cleaned_files_count}} Files)</span>
                 {{/each}}
-              </div>
+              </span>
             </div>
         {{else}}
           <div local-class="no-result">--</div>
@@ -27,4 +27,5 @@
       {{/if}}
     </div>
   </div>
+  {{partial "paginate"}}
 </div>

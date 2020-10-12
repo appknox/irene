@@ -2,8 +2,9 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
+import { PaginationService } from '../../../mixins/paginate';
 
-export default class OrgFileCleanupListComponent extends Component {
+export default class OrgFileCleanupListComponent extends PaginationService(Component) {
 
   @service store;
   @service('notifications') notify;
@@ -12,11 +13,12 @@ export default class OrgFileCleanupListComponent extends Component {
 
   @tracked isLoading = false;
 
+  @tracked targetModel = 'organization-cleanup';
+
   constructor() {
     super(...arguments);
-    this.loadCleanupList.perform();
+    this.fileCleanupList = this.objects;
   }
-
 
   @task(function* () {
     this.isLoading = true;

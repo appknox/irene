@@ -1,5 +1,5 @@
 .file-cleanup-list-container {
-  .list-head, .list-body {
+  .list-head {
     display: grid;
     grid-template-columns: 100px 100px 1fr;
     align-items: center;
@@ -7,20 +7,23 @@
   .list-head {
     height: 40px;
     font-weight: bold;
-    box-shadow: 0px 2px 4px -2px #000;
+    box-shadow: 0px 2px 4px -4px #000;
     padding: 0 8px;
+    font-weight: bold;
   }
   .list-body {
-    height: 200px;
+    margin-bottom: 15px;
+    max-height: 200px;
     overflow: auto;
     padding: 0 8px;
-    &__row {
+    .list-body__row {
       display: grid;
       grid-template-columns: 100px 100px 1fr;
-      height: 35px;
+      height: 40px;
       align-items: center;
-      &-item {
-
+      border-bottom: 1px solid;
+      .list-body__row-item {
+        font-size: 13px;
       }
     }
   }

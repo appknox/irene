@@ -24,6 +24,7 @@ export default class FileCleanupComponent extends Component {
 
   @action
   onChangePref() {
+    this.cleanupPref.isEnabled = !this.cleanupPref.isEnabled;
     this.saveCleanupPref.perform();
   }
 
