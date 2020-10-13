@@ -22,7 +22,8 @@
     "deploy": "ember deploy production --verbose=true --activate=true --show-progress=true",
     "deploy:staging": "ember deploy staging --verbose=true --activate=true --show-progress=true",
     "deploy:sequelstring": "ember deploy sequelstring --verbose=true --activate=true --show-progress=true",
-    "deploy:gbm": "ember deploy gbm --verbose=true --activate=true --show-progress=true"
+    "deploy:gbm": "ember deploy gbm --verbose=true --activate=true --show-progress=true",
+    "deploy:server": "ember deploy server"
   },
   "devDependencies": {
     "@appknox/ember-pace": "^1.0.1",

@@ -121,7 +121,7 @@ module.exports = function(deployTarget) {
     };
   }
   if (deployTarget === 'server') {
-    ENV.build.outputPath = 'server/dist';
+    ENV.build.outputPath = 'staticserver/dist';
     ENV.pipeline =  {
       disabled: {
         allExcept: local_plugins
