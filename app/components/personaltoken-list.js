@@ -4,7 +4,7 @@ import { isEmpty } from '@ember/utils';
 import ENV from 'irene/config/environment';
 import PaginateMixin from 'irene/mixins/paginate';
 import { t } from 'ember-intl';
-import ClipboardJS from 'clipboard';
+import ClipboardJS from 'clipboard/src/clipboard';
 
 const PersonaltokenListComponent = Component.extend(PaginateMixin, {
 

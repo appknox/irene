@@ -8,7 +8,7 @@ import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 import { t } from 'ember-intl';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
-import ClipboardJS from 'clipboard';
+import ClipboardJS from 'clipboard/src/clipboard';
 
 const FileHeaderComponent = Component.extend({
 

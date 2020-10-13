@@ -38,6 +38,7 @@
     "cross-env": "^7.0.2",
     "ember-ajax": "^5.0.0",
     "ember-attacher": "^0.15.1",
+    "ember-auto-import": "^1.6.0",
     "ember-awesome-macros": "^6.0.0",
     "ember-changeset": "^2.1.2",
     "ember-changeset-validations": "^2.1.0",
