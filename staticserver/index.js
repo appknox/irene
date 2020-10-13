@@ -42,7 +42,7 @@ app.use(
     },
   })
 );
-app.use(function (req, res) {
+app.use(function (req, res) { // lgtm [js/missing-rate-limiting]
   res.sendFile(path.join(staticDir, "index.html"));
 });
 app.listen(4200, function () {
