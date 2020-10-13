@@ -1,20 +1,35 @@
 # unconventional js
-/blueprints/*/files/
-/vendor/
-
 # compiled output
-/dist/
-/tmp/
+/dist
+/tmp
 
 # dependencies
-/bower_components/
-/node_modules/
+/node_modules
+/bower_components
 
 # misc
-/coverage/
-!.*
+/.sass-cache
+/connect.lock
+/coverage/*
+/libpeerconnection.log
+npm-debug.log*
+yarn-error.log
+testem.log
+*.DS_Store
+.env
+
+.env.deploy.whitelabel
+typings
 
 # ember-try
-/.node_modules.ember-try/
-/bower.json.ember-try
-/package.json.ember-try
+.node_modules.ember-try/
+bower.json.ember-try
+package.json.ember-try
+.vscode
+.eslintcache
+
+# Local Netlify folder
+.netlify
+/build
+/staticserver/dist
+/staticserver/node_modules

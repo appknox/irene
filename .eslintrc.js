@@ -16,9 +16,7 @@ module.exports = {
     'plugin:ember/recommended'
   ],
   env: {
-    browser: true,
-    es6: true,
-    node: true
+    browser: true
   },
   rules: {
     "ember/avoid-leaking-state-in-ember-objects": 0,
@@ -59,6 +57,26 @@ module.exports = {
         // this can be removed once the following is fixed
         // https://github.com/mysticatea/eslint-plugin-node/issues/77
         'node/no-unpublished-require': 'off'
+      }
+    },
+    {
+      files: [
+        'staticserver/**/*.js'
+      ],
+      parserOptions: {
+        sourceType: 'script'
+      },
+      env: {
+        browser: false,
+        node: true
+      },
+      plugins: ['node'],
+      extends: ['plugin:node/recommended'],
+      rules: {
+        // this can be removed once the following is fixed
+        // https://github.com/mysticatea/eslint-plugin-node/issues/77
+        'node/no-unpublished-require': 'off',
+        'node/no-missing-require': 'off'
       }
     }
   ]

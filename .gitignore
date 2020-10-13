@@ -31,3 +31,6 @@ package.json.ember-try
 
 # Local Netlify folder
 .netlify
+/build
+/staticserver/dist
+/staticserver/node_modules

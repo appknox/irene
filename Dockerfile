@@ -1,17 +1,27 @@
-FROM quay.io/appknox/ak-ubuntu:3.0.0
+FROM node:14.13.1-stretch AS builder
 
 LABEL maintainer "Appknox <engineering@appknox.com>"
 
-RUN adduser --disabled-password --gecos '' irene
+WORKDIR /code/
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
-  apt-get install -y nodejs nginx
+COPY package*.json ./
 
-ENTRYPOINT ["./entrypoint.sh"]
+RUN npm ci
 
-WORKDIR /code
-COPY . /code/
-RUN chown -R irene:irene /code/
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY . ./
 
-RUN gosu irene npm install
+RUN npm run deploy:server
+
+
+FROM node:14.13.1-alpine
+
+LABEL maintainer "Appknox <engineering@appknox.com>"
+
+RUN mkdir /app && chown node -R /app
+USER node
+WORKDIR /app/
+COPY --chown=node --from=builder /code/staticserver/package*.json ./
+RUN npm ci
+COPY --chown=node --from=builder /code/staticserver/. ./
+
+CMD ["node", "/app/index.js"]
