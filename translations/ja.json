@@ -51,6 +51,7 @@
   "analyzing": "分析中",
   "appCenterPipeline": "App Center Build",
   "attachments": "添付ファイル",
+  "automated": "Automated",
   "azurePipeline": "Azure Pipeline",
   "back": "Back",
   "backToTeams": "Back to teams",
@@ -554,6 +555,7 @@
   "teamRemoved": "Team removed from accessing this project",
   "testCredentials": "テスト資格情報",
   "title": "Title",
+  "type": "Type",
   "unavailable": "unavailable",
   "unreachable": "Unreachable",
   "unchanged": "変更なし",
@@ -753,6 +755,7 @@
     "lastActivity": "Last Activity",
     "run": "Run CleanUp",
     "viewList": "View All",
-    "listTitle": "File Cleanup Activities"
+    "listTitle": "File Cleanup Activities",
+    "status": "File cleaned status"
   }
 }

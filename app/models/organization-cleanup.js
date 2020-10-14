@@ -1,18 +1,14 @@
-import DS from 'ember-data';
 import ENUMS from 'irene/enums';
 import { computed } from '@ember/object';
+import Model, { belongsTo, attr } from '@ember-data/model';
 
-export default DS.Model.extend({
-  type: DS.attr('string'),
-  user: DS.belongsTo('organization-user'),
-  createdOn: DS.attr('date'),
-  projects: DS.attr(),
-  typeValue: computed('type', function() {
+export default class OrganizationCleanupModel extends Model {
+  @belongsTo('organization-user', {async: true}) user;
+  @attr('date') createdOn;
+  @attr() projects;
+  @attr('number') type;
+  @computed('type')
+  get typeValue() {
     return ENUMS.CLEANUP_TYPE[this.get('type')] || "NIL";
-  }),
-
-  triggerCleanup: function () {
-    var adapter = this.store.adapterFor(this.constructor.modelName);
-    return adapter._triggerCleanup(this.store, this.constructor.modelName, this);
   }
-});
+}

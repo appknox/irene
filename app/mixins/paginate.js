@@ -3,7 +3,10 @@ import ENV from 'irene/config/environment';
 import { observer, computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import { run } from '@ember/runloop';
+import { __range__ } from 'irene/utils/utils';
 
+// Classic Mixin object
+// Should be deprecated once all the pagination is replaced with class based
 const PaginateMixin = Mixin.create({
 
   offset: 0,
@@ -181,27 +184,15 @@ const PaginateMixin = Mixin.create({
   }
 });
 
-function __range__(left, right, inclusive) {
-  let range = [];
-  let ascending = left < right;
-  let end = !inclusive ? right : ascending ? right + 1 : right - 1;
-  for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
-    range.push(i);
-  }
-  return range;
-}
-
 // Class basaed mixin support for glimmer components
-import { action, set } from '@ember/object';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { gt, equal, alias } from '@ember/object/computed';
-import { addObserver } from '@ember/object/observers';
 
 export const PaginationService = superclass => class extends superclass {
 
   constructor() {
     super(...arguments);
-    addObserver(this, 'limit', 'offset', "targetModel", "extraQueryStrings", this.versionTrigger);
   }
 
   @tracked offset = 0;
@@ -212,10 +203,13 @@ export const PaginationService = superclass => class extends superclass {
   @tracked isJsonApiPagination = false;
   @tracked isDRFPagination = false;
   @tracked offsetMultiplier = ENV.paginate.offsetMultiplier;
+  @tracked isLoading = false;
+  @tracked error = null;
 
   @action
   gotoPage(offset) {
     this.setOffset(offset);
+    console.log('set offset', offset)
   }
 
   @action
@@ -225,14 +219,12 @@ export const PaginationService = superclass => class extends superclass {
 
   @action
   gotoPagePrevious() {
-    this.offset = this.offset - 1;
-    this.gotoPage(this.offset)
+    this.gotoPage(this.offset - 1)
   }
 
   @action
   gotoPageNext() {
-    this.offset = this.offset + 1;
-    this.gotoPage(this.offset);
+    this.gotoPage(this.offset + 1);
   }
 
   @action
@@ -240,11 +232,10 @@ export const PaginationService = superclass => class extends superclass {
     this.gotoPage(this.maxOffset)
   }
 
-  @computed('extraQueryStrings', 'isDRFPagination', 'isJsonApiPagination', 'limit', 'offset', 'offsetMultiplier', 'store', 'targetModel', 'version')
+  @computed('extraQueryStrings','limit', 'offset', 'offsetMultiplier', 'targetModel') //eslint-disable-line
   get objects() {
-    console.log(this.extraQueryStrings, this.isDRFPagination, this.isDRFPagination, this.limit, this.offset, this.offsetMultiplier, this.targetModel, this.version)
     let query;
-    if (this.isJsonApiPagination) {
+    if (this.isJsonApiPagination) { // eslint-disable-line
       const query_limit = this.limit;
       const query_offset = this.offset;
       query = {
@@ -257,7 +248,7 @@ export const PaginationService = superclass => class extends superclass {
         offset: this.offset
       };
     }
-    const extraQueryStrings = this.extraQueryStrings;
+    const extraQueryStrings = this.extraQueryStrings; // eslint-disable-line
     if (!isEmpty(extraQueryStrings)) {
       const extraQueries = JSON.parse(extraQueryStrings);
       for (let key in extraQueries) {
@@ -266,28 +257,28 @@ export const PaginationService = superclass => class extends superclass {
       }
     }
     const targetModel = this.targetModel;
-    if (this.isDRFPagination) {
+    if (this.isDRFPagination) { // eslint-disable-line
       query.offset = query.offset * (this.offsetMultiplier || 1);
     }
-    const objects = this.store.query(targetModel, query);
-    console.log('objects in serv', objects)
-    objects.then((result) => {
-      const { meta } = result;
-      if (result.links && result.meta.pagination) {
-        meta.total = result.meta.pagination.count;
-        this.isJsonApiPagination = true; // eslint-disable-line
-      }
-      if ("count" in result.meta) {
-        meta.total = result.meta.count || 0;
-        /*
-        count is only defined for DRF
-        JSONAPI has total
-        */
-        this.isDRFPagination = true; // eslint-disable-line
-      }
-      return this.meta = meta; // eslint-disable-line
-    });
-    return objects;
+      const objects = this.store.query(targetModel, query); // eslint-disable-line
+      objects.then((result) => {
+        const meta = result.meta;
+        console.log('result', result)
+        if (result.links && result.meta.pagination) {
+          meta.total = result.meta.pagination.count;
+          this.isJsonApiPagination = true; // eslint-disable-line
+        }
+        if ("count" in result.meta) {
+          meta.total = result.meta.count || 0;
+          /*
+          count is only defined for DRF
+          JSONAPI has total
+          */
+          this.isDRFPagination = true; // eslint-disable-line
+        }
+        return this.meta = meta; // eslint-disable-line
+      })
+      return objects;
   }
 
   @alias('objects.length') objectCount
@@ -319,7 +310,7 @@ export const PaginationService = superclass => class extends superclass {
       return [];
     }
     if (maxOffset <= (ENV.paginate.pagePadding * 2)) {
-      return this.__range__(startPage, stopPage, true);
+      return __range__(startPage, stopPage, true);
     }
 
     if (offset > ENV.paginate.pagePadding) {
@@ -337,66 +328,28 @@ export const PaginationService = superclass => class extends superclass {
     startPage -= offsetDiffStop;
     stopPage += offsetDiffStart;
 
-    return this.__range__(startPage, stopPage, true);
+    return __range__(startPage, stopPage, true);
   }
 
   @computed("offset")
   get preDot () {
-    const offset = this.offset;
-    return (offset - ENV.paginate.pagePadding) > 0;
+    return (this.offset - ENV.paginate.pagePadding) > 0;
   }
 
   @computed("offset", "maxOffset",)
   get postDot () {
-    const offset = this.offset;
-    const maxOffset = this.maxOffset;
-    return (offset + ENV.paginate.pagePadding) < maxOffset;
+    return (this.offset + ENV.paginate.pagePadding) < this.maxOffset;
   }
 
   @gt("offset", 0) hasPrevious
 
   @computed('offset', 'maxOffset',)
   get hasNext () {
-    const offset = this.offset;
-    const maxOffset = this.maxOffset;
-    return offset < maxOffset;
-  }
-
-  versionIncrementer() {
-    this.version = this.version++;
-  }
-
-  versionTrigger() {
-    return (() => {
-      const result = [];
-      for (let property of ['limit', 'offset', "targetModel", "extraQueryStrings"]) {
-        const propertyOldName = `_${property}`;
-        const propertyNewValue = this.property;
-        const propertyOldValue = this.propertyOldName;
-        const propertyChanged = propertyOldValue !== propertyNewValue;
-        if (propertyChanged) {
-          set(this, `${propertyOldName}`, propertyNewValue);
-          result.push(run.once(this, 'versionIncrementer'));
-        } else {
-          result.push(undefined);
-        }
-      }
-      return result;
-    })();
+    return this.offset < this.maxOffset;
   }
 
   setOffset(offset) {
     this.offset = offset;
-  }
-
-  __range__(left, right, inclusive) {
-    let range = [];
-    let ascending = left < right;
-    let end = !inclusive ? right : ascending ? right + 1 : right - 1;
-    for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
-      range.push(i);
-    }
-    return range;
   }
 }
 

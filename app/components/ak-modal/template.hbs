@@ -7,7 +7,7 @@
       <span {{on "click" (fn this.onClose)}} role="button">{{fa-icon "close"}}</span>
     </div>
   {{/if}}
-  <div class="modal-body">
+  <div local-class="modal-body">
     {{yield}}
   </div>
 </Modal-Dialog>

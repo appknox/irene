@@ -14,12 +14,11 @@ export default class FileCleanupComponent extends Component {
 
   @tracked isShowAllCelanup = false;
 
+  @tracked is404Error = false;
+
   constructor() {
     super(...arguments);
-
-    this.store.queryRecord('organization-cleanup-preference', {}).then((cleanupPref) => {
-      this.cleanupPref = cleanupPref;
-    })
+    this.loadCleanupPref.perform();
   }
 
   @action
@@ -47,6 +46,18 @@ export default class FileCleanupComponent extends Component {
     yield this.cleanupPref.save();
   })
   saveCleanupPref;
+
+  @task(function* () {
+    yield this.store.queryRecord('organization-cleanup-preference', {})
+    .then((cleanupPref) => {
+      this.cleanupPref = cleanupPref;
+    })
+    .catch((err) => {
+      console.log('err', err);
+      this.is404Error = err.errors[0].status === '404';
+    })
+  })
+  loadCleanupPref;
 
   @task(function* () {
     yield this.store.createRecord('organization-cleanup', {}).save();

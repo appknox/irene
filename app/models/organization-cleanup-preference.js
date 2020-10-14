@@ -1,7 +1,7 @@
-import DS from 'ember-data';
+import Model, { attr } from '@ember-data/model';
 
-export default DS.Model.extend({
-  isEnabled: DS.attr('boolean'),
-  filesToKeep: DS.attr('number'),
-  lastCleanedAt: DS.attr('date')
-});
+export default class OrgCleanupPreferenceModel extends Model {
+  @attr('boolean') isEnabled;
+  @attr('number') filesToKeep;
+  @attr('date') lastCleanedAt;
+}

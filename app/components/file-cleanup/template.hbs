@@ -1,3 +1,7 @@
+{{#unless this.is404Error}}
+<div class="org-settings-subtitle black-text is-fullwidth">
+  {{t 'fileCleanup.title'}}
+</div>
 <div>
   <form>
     <div local-class="toggle-check" class="vertical-align-center margin-right20">
@@ -28,9 +32,8 @@
       <button type="button" class="is-primary highlighted-button margin-l-1" {{on "click" this.onTriggerCleanup}} disabled={{unless this.cleanupPref.isEnabled "disabled"}}>{{t 'fileCleanup.run'}}</button>
     </div>
   </div>
-
-
 </div>
+{{/unless}}
 
 {{#if this.isShowAllCelanup}}
   <AkModal @onClose={{this.onCloseModal}} @showHeader={{true}} @headerTitle={{t 'fileCleanup.listTitle'}}>

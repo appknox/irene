@@ -50,6 +50,7 @@
   "analyzing": "Analyzing",
   "appCenterPipeline": "App Center Build",
   "attachments": "Attachments",
+  "automated": "Automated",
   "azurePipeline": "Azure Pipeline",
   "back": "Back",
   "backToTeams": "Back to teams",
@@ -554,6 +555,7 @@
   "teamRemoved": "Team removed from accessing this project",
   "testCredentials": "Test Credentials",
   "title": "Title",
+  "type": "Type",
   "unavailable": "unavailable",
   "unreachable": "Unreachable",
   "unchanged": "Unchanged",
@@ -753,6 +755,7 @@
     "lastActivity": "Last Activity",
     "run": "Run CleanUp",
     "viewList": "View All",
-    "listTitle": "File Cleanup Activities"
+    "listTitle": "File Cleanup Activities",
+    "status": "File cleaned status"
   }
 }
