@@ -8,17 +8,10 @@ import ENV from 'irene/config/environment';
 export default class WhitelabelService extends Service {
 
   /**
-   * @property {Boolean} isWhitelabelEnabled
+   * @property {String} name
+   * Whitelabel name will be returned or fallback default to Appknox.
    */
-  isWhitelabelEnabled = ENV.whitelabel.enabled;
-
-  /**
-   * @property {String | NULL} whitelabelName
-   */
-  whitelabelName = ENV.whitelabel.name || null;
-
-  /**
-   * @property {String} activeWhiltelabelName
-   */
-  activeWhiltelabelName = this.isWhitelabelEnabled ? this.whitelabelName || CONSTANTS.WHITELABEL.DEFAULT_NAME : CONSTANTS.WHITELABEL.DEFAULT_NAME;
+  get name() {
+    return ENV.whitelabel.enabled ? ENV.whitelabel.name || CONSTANTS.WHITELABEL.DEFAULT_NAME : CONSTANTS.WHITELABEL.DEFAULT_NAME;
+  }
 }

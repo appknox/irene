@@ -13,15 +13,7 @@ export default class ApplicationRoute extends Route {
     this.headData.title = "Appknox";
   }
 
-  /**
-   * Returns model include following
-   * {
-   *  whitelabelName => Active whitelable name
-   * }
-   */
-  model() {
-    return {
-      whitelabelName: this.whitelabel.activeWhiltelabelName
-    }
+  setupController(controller) {
+    controller.set('whitelabelName', this.whitelabel.name);
   }
 }
