@@ -26,6 +26,9 @@ import $ from 'jquery';
 import {
   task
 } from 'ember-concurrency';
+import {
+  INPUT
+} from 'irene/utils/constants';
 
 const ProjectListComponent = Component.extend(PaginateMixin, {
 
@@ -36,6 +39,7 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
   projects: null,
   hasProjects: computed.gt('organization.selected.projectsCount', 0),
   query: "",
+  tempQuery: "",
   targetModel: "Project",
 
   sortingKey: "lastFileCreatedOn",
@@ -209,6 +213,13 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
           q: teamName
         }
         this.queryTeams.perform(query);
+      }
+    },
+
+    //Action triggered when typing on the search query input
+    onQueryChange() {
+      if (this.get('tempQuery.length') >= INPUT.MIN_LENGTH) {
+        this.set('query', this.get('tempQuery'));
       }
     }
   },
