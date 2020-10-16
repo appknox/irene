@@ -5,7 +5,7 @@ if (or hasProjects hasObjects)
         div local-class="filter__item"
           = t "search"
           .margin-top
-            = input class="input mp-search-query" key-up=(action "onQueryChange") placeholder=(t 'searchQuery') value=tempQuery
+            = input type="search" class="input mp-search-query"  placeholder=(t 'searchQuery') value=tempQuery input=(action "onQueryChange")
 
         div local-class="filter__item"
           = concat (t "filterBy") ' ' (t "team")

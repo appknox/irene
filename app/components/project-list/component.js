@@ -218,7 +218,7 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
 
     //Action triggered when typing on the search query input
     onQueryChange() {
-      if (this.get('tempQuery.length') >= INPUT.MIN_LENGTH) {
+      if (this.get('tempQuery.length') >= INPUT.MIN_LENGTH || this.get('tempQuery') === '') {
         this.set('query', this.get('tempQuery'));
       }
     }
