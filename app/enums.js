@@ -199,9 +199,7 @@ const ENUMS = {
     NONE: 0,
     SHOW: 1,
     HIDE: 2,
-  },
-
-  CLEANUP_TYPE: ["Automated", "Manual"],
+  }
 };
 
 // Populate `CHOICES`
