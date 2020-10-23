@@ -69,12 +69,25 @@ class ENVHandler {
   }
 
   getEnv(env_key) {
+    const host_key = 'IRENE_API_HOST';
     this.assertEnvKey(env_key);
     if(this.isAvailableInRuntimeENV(env_key)) {
-      return this.getRuntimeObject()[env_key];
+      const runtimeValue = this.getRuntimeObject()[env_key];
+      if(env_key === host_key) {
+        if (runtimeValue === '/') {
+          return '';
+        }
+      }
+      return runtimeValue;
     }
     if(this.isAvailableInProcessENV(env_key)) {
-      return this.envHandlerConst.processENV[env_key];
+      const processValue = this.envHandlerConst.processENV[env_key];
+      if(env_key === host_key) {
+        if (processValue === '/') {
+          return '';
+        }
+      }
+      return processValue;
     }
     return this.getDefault(env_key);
   }
@@ -276,8 +289,8 @@ module.exports = function (environment) {
     },
     deviceFarmURL: deviceFarmURL,
     deviceFarmPassword: "1234",
-    namespace: "api",
-    namespace_v2: "api/v2",
+    namespace: "/api",
+    namespace_v2: "/api/v2",
     host: host,
     devicefarmHost: devicefarmHost,
     "ember-cli-mirage": {

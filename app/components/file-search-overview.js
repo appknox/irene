@@ -9,7 +9,7 @@ export default Component.extend({
       const fileId = this.get("file.id");
       const url = [ENV.endpoints.apps, fileId].join('/');
       this.set("isDownloadingApp", true);
-      return this.get("ajax").request(url, { namespace: 'api/hudson-api'})
+      return this.get("ajax").request(url, { namespace: '/api/hudson-api'})
       .then((data) => {
         window.location = data.url;
         this.set("isDownloadingApp", false);

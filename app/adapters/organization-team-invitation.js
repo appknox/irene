@@ -1,20 +1,15 @@
-import DRFAdapter from './drf';
-import ENV from 'irene/config/environment';
-import IreneAdapterMixin from 'irene/mixins/data-adapter-mixin';
-import { inject as service } from '@ember/service';
+import commondrf from './commondrf';
 
-export default DRFAdapter.extend(IreneAdapterMixin, {
-  host: ENV.host,
-  namespace: ENV.namespace,
-  addTrailingSlashes: false,
-  organization: service('organization'),
+export default class OrganizationTeamInvitation extends commondrf {
+
   _buildURL(modelName, id) {
-    const baseURL = `${this.get('host')}/${this.get('namespace')}/organizations/${this.get('organization').selected.id}/teams`;
+    const baseURL = `${this.get('namespace')}/organizations/${this.get('organization').selected.id}/teams`;
     if (id) {
-      return `${baseURL}/${encodeURIComponent(id)}`;
+      return this.buildURLFromBase(`${baseURL}/${encodeURIComponent(id)}`);
     }
-    return baseURL;
-  },
+    return this.buildURLFromBase(baseURL);
+  }
+
   _buildNestedURL(modelName, teamId, id) {
     const teamURL = this._buildURL(modelName, teamId);
     const inviteURL = [teamURL, 'invitations'].join('/');
@@ -22,8 +17,9 @@ export default DRFAdapter.extend(IreneAdapterMixin, {
       return `${inviteURL}/${encodeURIComponent(id)}`;
     }
     return inviteURL;
-  },
+  }
+
   urlForQuery(query, modelName) {
     return this._buildNestedURL(modelName, query.teamId);
-  },
-});
+  }
+}

@@ -106,7 +106,7 @@ export default Component.extend({
     this.set('isPurgingAPIAnalysis', true);
     const fileid = this.get("file.id");
     const url = [ENV.endpoints.files,fileid, ENV.endpoints.purgeAPIAnalyses].join('/');
-    return yield this.get("ajax").post(url, { namespace: 'api/hudson-api'})
+    return yield this.get("ajax").post(url, { namespace: '/api/hudson-api'})
   }).evented(),
 
   confirmPurgeSucceeded: on('confirmPurge:succeeded', function() {
@@ -141,14 +141,14 @@ export default Component.extend({
   downloadApp: task(function *() {
     const fileid = this.get("file.id");
     const url = [ENV.endpoints.apps, fileid].join('/');
-    const data = yield this.get("ajax").request(url, { namespace: 'api/hudson-api'})
+    const data = yield this.get("ajax").request(url, { namespace: '/api/hudson-api'})
     window.location = data.url;
   }),
 
   downloadAppModified: task(function *() {
     const fileid = this.get("file.id");
     const url = [ENV.endpoints.apps, fileid, "modified"].join("/");
-    const data = yield this.get("ajax").request(url, { namespace: 'api/hudson-api'})
+    const data = yield this.get("ajax").request(url, { namespace: '/api/hudson-api'})
     window.location = data.url;
   }),
   downloadAppErrored: on('downloadApp:errored', function(_, error) {
@@ -164,7 +164,7 @@ export default Component.extend({
   downloadReportExcel: task(function *() {
     const fileid = this.get("file.id");
     const url = [ENV.endpoints.reports, fileid, 'download_url'].join('/');
-    const data = yield this.get("ajax").request(url, { namespace: 'api/hudson-api'});
+    const data = yield this.get("ajax").request(url, { namespace: '/api/hudson-api'});
     window.location.href = data.xlsx;
   }),
 
@@ -229,7 +229,7 @@ export default Component.extend({
       }
       this.set("isGeneratingReport", true);
       const url = [ENV.endpoints.reports, fileid].join('/');
-      return this.get("ajax").put(url, { namespace: 'api/hudson-api', data, contentType: 'application/json'})
+      return this.get("ajax").put(url, { namespace: '/api/hudson-api', data, contentType: 'application/json'})
       .then(() => {
         this.set("isGeneratingReport", false);
         this.set("reportGenerated", true);

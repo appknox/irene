@@ -1,14 +1,8 @@
-import DRFAdapter from './drf';
-import ENV from 'irene/config/environment';
-import IreneAdapterMixin from 'irene/mixins/data-adapter-mixin';
+import commondrf from './commondrf';
 
-export default DRFAdapter.extend(IreneAdapterMixin, {
-  host: ENV.host,
-  namespace: ENV.namespace,
-  addTrailingSlashes: false,
-
-  _buildURL: function () {
-    const baseURL = `${this.get('host')}/${this.get('namespace')}/v2/mfa`;
-    return baseURL;
-  },
-});
+export default class Mfa extends commondrf {
+  _buildURL() {
+    const baseURL = `${this.get('namespace')}/v2/mfa`;
+    return this.buildURLFromBase(baseURL);
+  }
+}

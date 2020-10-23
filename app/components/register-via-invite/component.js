@@ -5,6 +5,7 @@ import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import lookupValidator from 'ember-changeset-validations';
 import Changeset from 'ember-changeset';
+import ENV from 'irene/config/environment';
 import InviteOnlyRegisterValidation from '../../validations/register-invite';
 
 export default class RegisterViaInvite extends Component {
@@ -24,7 +25,7 @@ export default class RegisterViaInvite extends Component {
   @task(function * (){
     const url = this.inviteEndpoint + '?token=' + this.args.token;
     const data = yield this.ajax.request(url, {
-      namespace: 'api/v2'
+      namespace: ENV.namespace_v2
     })
     this.initialData = data;
     return data;
@@ -36,7 +37,7 @@ export default class RegisterViaInvite extends Component {
     try {
       const logininfo = yield this.ajax.post(url, {
         data: data,
-        namespace: 'api/v2'
+        namespace: ENV.namespace_v2
       })
       this.authenticate(logininfo);
     } catch(errors) {

@@ -1,13 +1,8 @@
-import DRFAdapter from './drf';
-import ENV from 'irene/config/environment';
-import IreneAdapterMixin from 'irene/mixins/data-adapter-mixin';
+import commondrf from './commondrf';
 
-export default DRFAdapter.extend(IreneAdapterMixin, {
-  host: ENV.host,
-  namespace: ENV.namespace,
-  addTrailingSlashes: false,
-  urlForQueryRecord: function (q) {
-    let url = `${this.host}/${this.get('namespace')}/profiles/${q.id}/device_preference`;
-    return url;
+export default class DevicePreference extends commondrf {
+  urlForQueryRecord(q) {
+    const url = `${this.get('namespace')}/profiles/${q.id}/device_preference`;
+    return this.buildURLFromBase(url);
   }
-});
+}

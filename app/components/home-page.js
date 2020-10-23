@@ -25,7 +25,7 @@ export default Component.extend({
   tOrganizationNameUpdated: t("organizationNameUpdated"),
 
   securityEnabled() {
-    this.get("ajax").request("projects", {namespace: 'api/hudson-api'})
+    this.get("ajax").request("projects", {namespace: '/api/hudson-api'})
     .then(() => {
       this.set("isSecurityEnabled", true);
       this.securityDashboard();

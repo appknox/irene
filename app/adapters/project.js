@@ -1,19 +1,12 @@
-import DRFAdapter from './drf';
-import ENV from 'irene/config/environment';
-import IreneAdapterMixin from 'irene/mixins/data-adapter-mixin';
-import { inject as service } from '@ember/service';
+import commondrf from './commondrf';
 
-export default DRFAdapter.extend(IreneAdapterMixin, {
-  host: ENV.host,
-  namespace: ENV.namespace,
-  namespace_v2: ENV.namespace_v2,
-  addTrailingSlashes: false,
-  organization: service('organization'),
-  _buildURL: function (modelName, id) {
-    if(id) {
-      const baseurl = `${this.get('host')}/${this.get('namespace_v2')}/projects`;
-      return `${baseurl}/${encodeURIComponent(id)}`;
+export default class OrganizationMember extends commondrf {
+  _buildURL (modelName, id) {
+    const baseurl = `${this.get('namespace_v2')}/projects`;
+
+    if (id) {
+      return this.buildURLFromBase(`${baseurl}/${encodeURIComponent(id)}`);
     }
-    return `${this.get('host')}/${this.get('namespace')}/organizations/${this.get('organization').selected.id}/projects`;
-  },
-});
+    return this.buildURLFromBase(`${this.get('namespace')}/organizations/${this.get('organization').selected.id}/projects`);
+  }
+}

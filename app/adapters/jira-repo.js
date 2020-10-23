@@ -1,16 +1,12 @@
-import DRFAdapter from './drf';
-import ENV from 'irene/config/environment';
-import IreneAdapterMixin from 'irene/mixins/data-adapter-mixin';
+import commondrf from './commondrf';
 
-export default DRFAdapter.extend(IreneAdapterMixin, {
-  host: ENV.host,
-  namespace: ENV.namespace,
-  addTrailingSlashes: false,
-  _buildURL: function (modelName, id) {
-    const baseurl = `${this.get('host')}/${this.get('namespace')}/projects/${id}/jira`;
-    return baseurl;
-  },
-  urlForCreateRecord: function(modelName, snapshot) {
+export default class JiraRepo extends commondrf {
+  _buildURL(modelName, id) {
+    const baseurl = `${this.get('namespace')}/projects/${id}/jira`;
+    return this.buildURLFromBase(baseurl);
+  }
+
+  urlForCreateRecord(modelName, snapshot) {
     return this._buildURL(modelName, snapshot.id, snapshot);
   }
-});
+}
