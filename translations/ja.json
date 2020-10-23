@@ -748,14 +748,23 @@
     "selectJIRAAccount": "プロジェクトで見つかったリスクに関するIssueを作成するJIRAアカウントを選択してください",
     "selectPreferredDevice": "動的診断のデバイスタイプとOSバージョンを選択してください"
   },
+  "storageManagement": "Storage Management",
   "fileCleanup": {
-    "title": "File CleanUp",
-    "enable": "Enable File CleanUp",
+    "title": "Automated file cleanup",
+    "autoCleanup": "Auto cleanup",
     "activeCount": "Files to keep active",
     "lastActivity": "Last Activity",
     "run": "Run CleanUp",
     "viewList": "View All",
     "listTitle": "File Cleanup Activities",
-    "status": "File cleaned status"
+    "status": "File cleaned status",
+    "description": "Enabling this will delete application binaries for files which are not in the <n> recent uploads per project. Files for which the deletion is processed will be marked as inactive. Files marked as inactive will not allow future scans to be performed on it.",
+    "noCleanup": "No Cleanups found",
+    "msg": {
+      "saveSuccess": "Cleanup preference updated!",
+      "saveError": "Problem while updating",
+      "triggerSuccess": "Cleanup initiated!",
+      "triggerError": "Problem with trigger"
+    }
   }
 }

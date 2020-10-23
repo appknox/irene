@@ -1,20 +1,34 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
-import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
+import {
+  tracked
+} from '@glimmer/tracking';
+import {
+  task
+} from 'ember-concurrency';
+import {
+  inject as service
+} from '@ember/service';
+import {
+  action
+} from '@ember/object';
+import Changeset from 'ember-changeset';
+import lookupValidator from 'ember-changeset-validations';
+import FileCleanup from 'irene/validations/file-cleanup';
 
 export default class FileCleanupComponent extends Component {
 
   @service store;
   @service ajax;
-  @service ('notifications') notify;
+  @service('notifications') notify;
+  @service intl;
 
   @tracked cleanupPref;
 
-  @tracked isShowAllCelanup = false;
+  @tracked isShowAllCleanup = false;
 
-  @tracked is404Error = false;
+  @tracked isHideSettings = false;
+
+  @tracked changeset = {};
 
   constructor() {
     super(...arguments);
@@ -22,47 +36,62 @@ export default class FileCleanupComponent extends Component {
   }
 
   @action
-  onChangePref() {
-    this.cleanupPref.isEnabled = !this.cleanupPref.isEnabled;
-    this.saveCleanupPref.perform();
+  onChangePref(changeset, inType) {
+    if (inType === 'checkbox') {
+      changeset.set('isEnabled', !changeset.get('isEnabled'))
+    }
+    changeset.validate().then(() => {
+      if (changeset.get('isValid')) {
+        this.saveCleanupPref.perform();
+      }
+    })
   }
 
   @action
   onTriggerCleanup() {
-    this.triggerFileCleanup.perform();
+    this.triggerFileCleanup.perform()
   }
 
   @action
   onViewAllCleanup() {
-    this.isShowAllCelanup = !this.isShowAllCelanup;
+    this.isShowAllCleanup = !this.isShowAllCleanup;
   }
 
   @action
   onCloseModal() {
-    this.isShowAllCelanup = false;
+    this.isShowAllCleanup = false;
   }
 
+  /**
+   * @function saveCleanupPref
+   * Method to update cleanup setting changes
+   */
   @task(function* () {
-    yield this.cleanupPref.save();
-  })
-  saveCleanupPref;
+    yield this.changeset
+      .save()
+      .then(() => this.notify.success(this.intl.t('fileCleanup.msg.saveSuccess')))
+      .catch((err) => this.notify.error(err[0].detail))
+  }).restartable() saveCleanupPref;
 
+  /**
+   * @function loadCleanupPref
+   * Method to load cleanup preference for the active organization
+   */
   @task(function* () {
     yield this.store.queryRecord('organization-cleanup-preference', {})
-    .then((cleanupPref) => {
-      this.cleanupPref = cleanupPref;
-    })
-    .catch((err) => {
-      console.log('err', err);
-      this.is404Error = err.errors[0].status === '404';
-    })
-  })
-  loadCleanupPref;
+      .then((cleanupPref) => this.changeset = new Changeset(cleanupPref, lookupValidator(FileCleanup), FileCleanup))
+      .catch((err) => this.isHideSettings = err.errors[0].status == '404')
+  }) loadCleanupPref;
 
+  /**
+   * @function triggerFileCleanup
+   * Method to trigger a new file cleanup activity
+   */
   @task(function* () {
-    yield this.store.createRecord('organization-cleanup', {}).save();
-    this.notify.success('Success')
-  })
-  triggerFileCleanup;
+    yield this.store.createRecord('organization-cleanup', {})
+      .save()
+      .then(() => this.notify.success(this.intl.t('fileCleanup.msg.triggerSuccess')))
+      .catch((err) => this.notify.error(err[0].detail))
+  }).restartable() triggerFileCleanup;
 
 }

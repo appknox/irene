@@ -12,21 +12,23 @@
         </div>
       {{else}}
         {{#each this.fileCleanupList as |cleanup|}}
-            <div local-class="list-body__row">
-              <span local-class="list-body__row-item">{{moment-format cleanup.createdOn 'DD MMM YYYY'}}</span>
-                {{#if (eq cleanup.type 1)}}
-                  <span local-class="list-body__row-item">{{cleanup.typeValue}} <span local-class="username">({{cleanup.user.username}})</span></span>
-                {{else}}
-                  <span local-class="list-body__row-item">{{cleanup.typeValue}}</span>
-                {{/if}}
-              <span local-class="list-body__row-item">
-                {{#each cleanup.projects as |project index|}}
-                  <span>{{#if index}},{{/if}} {{project.package_name}} ({{project.cleaned_files_count}} {{t 'files'}})</span>
-                {{/each}}
-              </span>
-            </div>
+          <div local-class="list-body__row">
+            <span local-class="list-body__row-item">{{moment-format cleanup.createdOn 'DD MMM YYYY'}}</span>
+            {{#if cleanup.isManual}}
+              <span local-class="list-body__row-item">{{cleanup.typeValue}} <span
+                  local-class="username">({{cleanup.user.username}})</span></span>
+            {{else}}
+              <span local-class="list-body__row-item">{{cleanup.typeValue}}</span>
+            {{/if}}
+            <span local-class="list-body__row-item">
+              {{#each cleanup.projects as |project index|}}
+                <span>{{#if index}},{{/if}} {{project.package_name}} ({{project.cleaned_files_count}}
+                  {{t 'files'}})</span>
+              {{/each}}
+            </span>
+          </div>
         {{else}}
-          <div local-class="no-result">--</div>
+          <div local-class="no-result">{{t 'fileCleanup.noCleanup'}}</div>
         {{/each}}
       {{/if}}
     </div>

@@ -4,6 +4,7 @@
     grid-template-columns: 100px 1fr 1fr;
     align-items: center;
   }
+
   .list-head {
     height: 40px;
     font-weight: bold;
@@ -11,23 +12,32 @@
     padding: 0 8px;
     font-weight: bold;
   }
+
   .list-body {
     margin-bottom: 15px;
     max-height: 320px;
     overflow: auto;
     padding: 0 8px;
+
     .list-body__row {
       display: grid;
       grid-template-columns: 100px 1fr 1fr;
       height: 40px;
       align-items: center;
       border-bottom: 1px solid;
+
       .list-body__row-item {
         font-size: 13px;
+
         .username {
           text-transform: capitalize;
         }
       }
+    }
+
+    .no-result {
+      text-align: center;
+      padding-top: 8px;
     }
   }
 }

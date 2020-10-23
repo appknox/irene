@@ -6,11 +6,14 @@ export default class OrganizationCleanupModel extends Model {
 
   @service intl;
 
-  @belongsTo('organization-user', {async: true}) user;
+  @belongsTo('organization-user') user;
   @attr('date') createdOn;
   @attr() projects;
   @attr('string') type;
   @computed('type')
+  get isManual() {
+    return this.type === 'Manual';
+  }
   get typeValue() {
     return this.intl.t(this.type.toLowerCase());
   }
