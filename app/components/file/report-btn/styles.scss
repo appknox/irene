@@ -1,0 +1,93 @@
+.file-report-btn {
+  display: flex;
+  column-gap: 12px;
+
+  .btn-container {
+    column-gap: 8px;
+    position: relative;
+    border-radius: 4px;
+
+    .progress-loader {
+      position: absolute;
+      width: 0%;
+      height: 100%;
+      background-color: #fe4d3f;
+      bottom: 0;
+      left: 0;
+      opacity: 0.2;
+    }
+  }
+
+  .report-list-dropdown {
+    .dd-trigger {
+      height: 32px;
+      // margin-top: -5px;
+      border-radius: 5px;
+      margin-bottom: 5px;
+      border: 1px solid #fe4d3f;
+      color: #fe4d3f;
+      padding: 0 8px;
+      cursor: pointer;
+
+      .toggle-icon {
+        height: inherit;
+        line-height: inherit;
+      }
+    }
+
+    .prev-report {
+      border-radius: 4px;
+      display: grid;
+      width: max-content;
+      align-items: center;
+      justify-content: left;
+      padding: 4px 8px;
+      box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+
+      .download-pre-report {
+        color: #000;
+      }
+
+      .generated-label {
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.4);
+      }
+    }
+  }
+
+  .external-download {
+    cursor: pointer;
+
+    .dd-trigger {
+      .trigger-item {
+        i {
+          vertical-align: middle;
+        }
+      }
+    }
+
+    .dd-content {
+      margin-top: 3px;
+
+      .excel-report {
+        color: #000;
+        border-radius: 4px;
+        width: max-content;
+        align-items: center;
+        padding: 4px 8px;
+        box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.4);
+        cursor: pointer;
+        display: grid;
+        grid-template-columns: auto auto;
+        align-items: center;
+        column-gap: 8px;
+        height: 32px;
+
+        i {
+          font-size: 13px;
+        }
+      }
+    }
+  }
+}

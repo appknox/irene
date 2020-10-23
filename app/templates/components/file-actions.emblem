@@ -17,8 +17,8 @@
           button.margin-left.is-primary click={(perform downloadAppModified)}
             = fa-icon "download"
             | &nbsp; Resigned
-          button.margin-left.is-primary click="openGenerateReportModal"
-            | Generate Report
+          // button.margin-left.is-primary click="openGenerateReportModal"
+          //   | Generate Report
           a.margin-left href=ireneFilePath target="_blank" class="button is-primary"
             | Visit Dashboard
           span.dropdown.dropdown--default.margin-left
@@ -40,6 +40,8 @@
                     span.dropdown-item-icon
                       = fa-icon "file-excel-o"
                     | Download JA HTML Report
+          .margin-left
+            = file/report-btn file=file isSecurityDashboard=true
 
       .columns
         .column

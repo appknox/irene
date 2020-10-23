@@ -26,7 +26,10 @@ export default Component.extend({
     const projectId = this.get('file.project.id');
     const store = this.get('store');
     return store
-      .query('security/vulnerability', { projectId, limit: 0 })
+      .query('security/vulnerability', {
+        projectId,
+        limit: 0,
+      })
       .then((data) =>
         store.query('security/vulnerability', {
           projectId,
