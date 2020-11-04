@@ -272,7 +272,7 @@ export default Component.extend({
       availability_impact: availabilityImpact
     };
     const url = [ENV.endpoints.analyses, analysisid].join('/');
-    yield this.get("ajax").put(url,{ namespace: '/api/hudson-api', data: JSON.stringify(data), contentType: 'application/json' });
+    yield this.get("ajax").put(url,{ namespace: 'api/hudson-api', data: JSON.stringify(data), contentType: 'application/json' });
   }),
 
   uploadFile: task(function * (file) {
@@ -282,7 +282,7 @@ export default Component.extend({
       };
       const analysisid= this.get("analysis.analysisid");
       try {
-        var fileData = yield this.get("ajax").post(ENV.endpoints.uploadFile,{namespace: '/api/hudson-api', data});
+        var fileData = yield this.get("ajax").post(ENV.endpoints.uploadFile,{namespace: 'api/hudson-api', data});
         yield file.uploadBinary(fileData.url, {
           method: 'PUT'
         });
@@ -294,7 +294,7 @@ export default Component.extend({
           analysis: analysisid,
           content_type: "ANALYSIS"
         };
-        yield this.get("ajax").post(ENV.endpoints.uploadedAttachment,{namespace: '/api/hudson-api', data: fileDetailsData});
+        yield this.get("ajax").post(ENV.endpoints.uploadedAttachment,{namespace: 'api/hudson-api', data: fileDetailsData});
         yield this.get('updateAnalysis').perform()
         this.set("isUploading", false);
         this.get("notify").success("File Uploaded Successfully");
@@ -415,7 +415,7 @@ export default Component.extend({
 
     downloadAttachment(id) {
       const url = [ENV.endpoints.uploadFile, id, ENV.endpoints.downloadAttachment].join('/');
-      return this.get("ajax").request(url, {namespace: '/api/hudson-api'})
+      return this.get("ajax").request(url, {namespace: 'api/hudson-api'})
       .then((data) => {
         window.open(data.url, '_blank');
       }, (error) => {

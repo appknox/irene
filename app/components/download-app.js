@@ -11,7 +11,7 @@ export default Component.extend({
       }
       this.set("isDownloadingApp", true);
       const url = [ENV.endpoints.apps, fileId].join('/');
-      return this.get("ajax").request(url, { namespace: '/api/hudson-api'})
+      return this.get("ajax").request(url, { namespace: 'api/hudson-api'})
       .then((data) => {
         this.set("isDownloadingApp", false);
         window.location = data.url;

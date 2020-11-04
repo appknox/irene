@@ -16,6 +16,9 @@ export default DRFAdapter.extend(IreneAdapterMixin, {
       return new URL(resource_url, hostURL).href;
     } catch(e){
       if(hostURLstr === '/' || hostURLstr === "") {
+        if (resource_url[0] !== "/") {
+          return "/" + resource_url;
+        }
         return resource_url;
       }
       throw e;

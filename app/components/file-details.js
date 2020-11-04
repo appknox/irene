@@ -26,7 +26,7 @@ const FileDetailsComponent = Component.extend({
   },
 
   securityEnabled() {
-    this.get("ajax").request("projects", {namespace: '/api/hudson-api'})
+    this.get("ajax").request("projects", {namespace: 'api/hudson-api'})
     .then(() => {
       if(!this.isDestroyed) {
         this.set("isSecurityEnabled", true);
