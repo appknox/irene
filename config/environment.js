@@ -8,7 +8,7 @@ const possibleENVS = [
   "IRENE_ENABLE_REGISTRATION",
   "IRENE_REGISTRATION_LINK",
   "IRENE_SHOW_LICENSE",
-  "IRENE_ENABLE_CRISP",
+  "IRENE_CRISP_WEBSITE_ID",
   "IRENE_ENABLE_HOTJAR",
   "IRENE_ENABLE_PENDO",
   "IRENE_ENABLE_CSB",
@@ -31,7 +31,7 @@ const ENVHandlerCONST = {
     IRENE_ENABLE_REGISTRATION: false,
     IRENE_REGISTRATION_LINK: "",
     IRENE_SHOW_LICENSE: false,
-    IRENE_ENABLE_CRISP: false,
+    IRENE_CRISP_WEBSITE_ID: "",
     IRENE_ENABLE_HOTJAR: false,
     IRENE_ENABLE_PENDO: false,
     IRENE_ENABLE_CSB: false,
@@ -43,14 +43,7 @@ const ENVHandlerCONST = {
     WHITELABEL_LOGO: "",
     WHITELABEL_THEME: "dark",
   },
-  pluginENVS: [
-    "IRENE_ENABLE_CRISP",
-    "IRENE_ENABLE_HOTJAR",
-    "IRENE_ENABLE_PENDO",
-    "IRENE_ENABLE_CSB",
-    "IRENE_ENABLE_MARKETPLACE",
-    "IRENE_ENABLE_ROLLBAR",
-  ],
+
   processENV: Object.keys(process.env).reduce((acc, key) => {
     if (possibleENVS.indexOf(key) > -1) {
       acc[key] = process.env[key];
@@ -104,7 +97,7 @@ class ENVHandler {
   }
 
   getRuntimeObject() {
-    if(this.isRuntimeAvailable()) {
+    if (this.isRuntimeAvailable()) {
       return runtimeGlobalConfig; // eslint-disable-line
     }
     return {};
@@ -156,32 +149,6 @@ class ENVHandler {
   }
 }
 
-const thirdPartyPluginEnvMap = {
-  crisp: {
-    env: "IRENE_ENABLE_CRISP",
-    default: false,
-  },
-  hotjar: {
-    env: "IRENE_ENABLE_HOTJAR",
-    default: false,
-  },
-  pendo: {
-    env: "IRENE_ENABLE_PENDO",
-    default: false,
-  },
-  csb: {
-    env: "IRENE_ENABLE_CSB",
-    default: false,
-  },
-  marketplace: {
-    env: "IRENE_ENABLE_MARKETPLACE",
-    default: false,
-  },
-  rollbar: {
-    env: "IRENE_ENABLE_ROLLBAR",
-    default: false,
-  },
-};
 
 module.exports = function (environment) {
   const handler = new ENVHandler(ENVHandlerCONST);
@@ -269,8 +236,7 @@ module.exports = function (environment) {
     locationType: "auto",
     modulePrefix: "irene",
     environment: environment,
-    thirdPartyPluginEnvMap: thirdPartyPluginEnvMap,
-    enableCrisp: handler.getValueForPlugin('IRENE_ENABLE_CRISP'),
+    crispWebsiteId: handler.getEnv('IRENE_CRISP_WEBSITE_ID'),
     enableHotjar: handler.getValueForPlugin('IRENE_ENABLE_HOTJAR'),
     enablePendo: handler.getValueForPlugin('IRENE_ENABLE_PENDO'),
     enableCSB: handler.getValueForPlugin('IRENE_ENABLE_CSB'),

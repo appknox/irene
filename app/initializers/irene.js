@@ -136,7 +136,8 @@ const initialize = function (application) {
     theme: handler.getEnv("WHITELABEL_THEME"),
   });
 
-  ENV.enableCrisp = handler.getValueForPlugin("IRENE_ENABLE_CRISP");
+  ENV.crispWebsiteId = handler.getEnv("IRENE_CRISP_WEBSITE_ID");
+
   ENV.enableHotjar = handler.getValueForPlugin("IRENE_ENABLE_HOTJAR");
   ENV.enablePendo = handler.getValueForPlugin("IRENE_ENABLE_PENDO");
   ENV.enableCSB = handler.getValueForPlugin("IRENE_ENABLE_CSB");
@@ -161,5 +162,7 @@ const IreneInitializer = {
   initialize,
 };
 
-export { initialize };
+export {
+  initialize
+};
 export default IreneInitializer;
