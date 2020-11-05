@@ -4,7 +4,7 @@ import IreneAdapterMixin from 'irene/mixins/data-adapter-mixin';
 
 export default DRFAdapter.extend(IreneAdapterMixin, {
   host: ENV.host,
-  namespace: "api/hudson-api",
+  namespace: 'api/hudson-api',
   addTrailingSlashes: false,
   pathForType() {
     return 'projects';

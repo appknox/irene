@@ -1,14 +1,10 @@
-import DRFAdapter from './drf';
-import ENV from 'irene/config/environment';
-import IreneAdapterMixin from 'irene/mixins/data-adapter-mixin';
+import commondrf from './commondrf';
 
-export default DRFAdapter.extend(IreneAdapterMixin, {
-  host: ENV.host,
-  namespace: ENV.namespace,
-  addTrailingSlashes: false,
+export default class Dynamicscan extends commondrf {
   pathForType(type) {
     return type;
-  },
+  }
+
   extendTime(snapshot, time) {
     const id = snapshot.id;
     const modelName = snapshot.constructor.modelName;
@@ -16,5 +12,5 @@ export default DRFAdapter.extend(IreneAdapterMixin, {
     return this.ajax(url, 'POST', {
       data: {time}
     });
-  },
-});
+  }
+}

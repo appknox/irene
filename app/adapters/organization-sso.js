@@ -1,16 +1,7 @@
-import DRFAdapter from './drf';
-import ENV from 'irene/config/environment';
-import IreneAdapterMixin from 'irene/mixins/data-adapter-mixin';
-import { inject as service } from '@ember/service';
+import commondrf from './commondrf';
 
-export default DRFAdapter.extend(IreneAdapterMixin, {
-  host: ENV.host,
-  namespace: ENV.namespace,
-  addTrailingSlashes: false,
-  organization: service('organization'),
-
+export default class OrganizationSSO extends commondrf {
   _buildURL() {
-    const baseurl = `${this.get('host')}/${this.get('namespace')}/organizations/${this.get('organization').selected.id}/sso/saml2`;
-    return baseurl;
-  },
-});
+    return this.buildURLFromBase(`${this.get('namespace')}/organizations/${this.get('organization').selected.id}/sso/saml2`);
+  }
+}

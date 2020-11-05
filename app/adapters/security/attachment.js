@@ -1,17 +1,13 @@
-import ENV from 'irene/config/environment';
-import DRFAdapter from 'irene/adapters/drf';
-import IreneAdapterMixin from 'irene/mixins/data-adapter-mixin';
+import commondrf from '../commondrf';
 
-export default DRFAdapter.extend(IreneAdapterMixin, {
-  host: ENV.host,
-  namespace: "api/hudson-api",
-  addTrailingSlashes: false,
+export default class Attachment extends commondrf {
 
-  _buildURL: function _buildURL(modelName, id) {
-    if(id) {
-      return `${this.get('host')}/${this.get('namespace')}/attachments/${id}`;
+
+  _buildURL(modelName, id) {
+    if (id) {
+      return this.buildURLFromBase(`${this.get('namespace')}/attachments/${id}`);
     }
-    return `${this.get('host')}/${this.get('namespace')}/attachments`;
+    return this.buildURLFromBase(`${this.get('namespace')}/attachments`);
   }
 
-});
+}

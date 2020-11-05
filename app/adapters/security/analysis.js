@@ -1,18 +1,13 @@
-import ENV from 'irene/config/environment';
-import DRFAdapter from 'irene/adapters/drf';
-import IreneAdapterMixin from 'irene/mixins/data-adapter-mixin';
+import commondrf from '../commondrf';
 
-export default DRFAdapter.extend(IreneAdapterMixin, {
-  host: ENV.host,
-  namespace: "api/hudson-api",
-  addTrailingSlashes: false,
+export default class analysis extends commondrf {
 
-  _buildURL: function _buildURL(modelName, id) {
-    if(id) {
-      return `${this.get('host')}/${this.get('namespace')}/analyses/${id}`;
-    }
-    else {
-      return `${this.get('host')}/${this.get('namespace')}/analyses`
+
+  _buildURL(modelName, id) {
+    if (id) {
+      return this.buildURLFromBase(`${this.get('namespace')}/analyses/${id}`);
+    } else {
+      return this.buildURLFromBase(`${this.get('namespace')}/analyses`);
     }
   }
-});
+}

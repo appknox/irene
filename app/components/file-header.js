@@ -321,7 +321,7 @@ const FileHeaderComponent = Component.extend({
     if (tag) {
       const url = [ENV.endpoints.files, this.get('file.id'), ENV.endpoints.tags].join('/');
       yield this.get('ajax').post(url, {
-        namespace: 'api/v2',
+        namespace: ENV.namespace_v2,
         data: {
           'name': tag,
         }
@@ -362,7 +362,7 @@ const FileHeaderComponent = Component.extend({
   deleteTag: task(function *(tagId) {
     const url = [ENV.endpoints.files, this.get('file.id'), ENV.endpoints.tags, tagId].join('/');
     yield this.get('ajax').delete(url, {
-      namespace: 'api/v2'
+      namespace: ENV.namespace_v2
     });
     yield this.get('store').findRecord('file', this.get('file.id'));
   }).evented(),

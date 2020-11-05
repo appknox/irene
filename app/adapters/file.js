@@ -1,24 +1,17 @@
-import DRFAdapter from './drf';
-import ENV from 'irene/config/environment';
-import IreneAdapterMixin from 'irene/mixins/data-adapter-mixin';
+import commondrf from './commondrf';
 
-export default DRFAdapter.extend(IreneAdapterMixin, {
-  host: ENV.host,
-  namespace: ENV.namespace,
-  namespace_v2: ENV.namespace_v2,
-  addTrailingSlashes: false,
-  _buildURL: function (modelName, id) {
+export default class File extends commondrf {
+  _buildURL(modelName, id) {
     if(id) {
-      const baseurl = `${this.get('host')}/${this.get('namespace_v2')}/files`;
-      return `${baseurl}/${encodeURIComponent(id)}`;
+      const baseurl = `${this.get('namespace_v2')}/files`;
+      return this.buildURLFromBase(`${baseurl}/${encodeURIComponent(id)}`);
     }
-  },
+  }
   _buildNestedURL(modelName, projectId) {
-    const projectURL = `${this.get('host')}/${this.get('namespace')}/projects/${projectId}`;
-    const fileURL = [projectURL, 'files'].join('/');
-    return fileURL;
-  },
+    const filesURL = `${this.get('namespace')}/projects/${projectId}/files`;
+    return this.buildURLFromBase(filesURL);
+  }
   urlForQuery(query, modelName) {
     return this._buildNestedURL(modelName, query.projectId);
-  },
-});
+  }
+}

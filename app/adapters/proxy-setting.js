@@ -1,13 +1,8 @@
-import DRFAdapter from './drf';
-import ENV from 'irene/config/environment';
-import IreneAdapterMixin from 'irene/mixins/data-adapter-mixin';
+import commondrf from './commondrf';
 
-export default DRFAdapter.extend(IreneAdapterMixin, {
-  host: ENV.host,
-  namespace: ENV.namespace,
-  addTrailingSlashes: false,
+export default class ProxySetting extends commondrf {
+
   buildURL(modelName, id) {
-    let url = `${this.host}/${this.get('namespace')}/profiles/${id}/proxy_settings`;
-    return url;
+    return this.buildURLFromBase(`${this.get('namespace')}/profiles/${id}/proxy_settings`);
   }
-});
+}
