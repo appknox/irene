@@ -1,6 +1,7 @@
 import commondrf from '../commondrf';
 
 export default class File extends commondrf {
+  namespace = "api/hudson-api"
   query(store, type, q) {
     let url = this.buildURLFromBase(`${this.get('namespace')}/projects/${q.projectId}/files?limit=${q.limit}&offset=${q.offset}`);
     return this.ajax(url, 'GET');
