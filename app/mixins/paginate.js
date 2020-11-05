@@ -208,7 +208,7 @@ import {
   alias
 } from '@ember/object/computed';
 
-export const PaginationService = superclass => class extends superclass {
+export const PaginationMixin = superclass => class extends superclass {
 
   constructor() {
     super(...arguments);

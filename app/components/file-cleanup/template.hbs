@@ -1,5 +1,5 @@
 {{#unless this.isHideSettings}}
-  <div class="org-settings-subtitle black-text is-fullwidth">
+  <div class="org-settings-subtitle black-text is-fullwidth" {{did-insert (perform this.loadCleanupPref)}}>
     {{t 'storageManagement'}}
   </div>
   <div>

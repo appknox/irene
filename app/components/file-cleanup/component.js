@@ -30,14 +30,9 @@ export default class FileCleanupComponent extends Component {
 
   @tracked changeset = {};
 
-  constructor() {
-    super(...arguments);
-    this.loadCleanupPref.perform();
-  }
-
   @action
   onChangePref(changeset, inType) {
-    if (inType === 'checkbox') {
+    if (inType == 'checkbox') {
       changeset.set('isEnabled', !changeset.get('isEnabled'))
     }
     changeset.validate().then(() => {
@@ -67,10 +62,12 @@ export default class FileCleanupComponent extends Component {
    * Method to update cleanup setting changes
    */
   @task(function* () {
-    yield this.changeset
-      .save()
-      .then(() => this.notify.success(this.intl.t('fileCleanup.msg.saveSuccess')))
-      .catch((err) => this.notify.error(err[0].detail))
+    try {
+      yield this.changeset.save();
+      this.notify.success(this.intl.t('fileCleanup.msg.saveSuccess'))
+    } catch (error) {
+      this.notify.error(error[0].detail)
+    }
   }).restartable() saveCleanupPref;
 
   /**
@@ -78,20 +75,26 @@ export default class FileCleanupComponent extends Component {
    * Method to load cleanup preference for the active organization
    */
   @task(function* () {
-    yield this.store.queryRecord('organization-cleanup-preference', {})
-      .then((cleanupPref) => this.changeset = new Changeset(cleanupPref, lookupValidator(FileCleanup), FileCleanup))
-      .catch((err) => this.isHideSettings = err.errors[0].status == '404')
-  }) loadCleanupPref;
+    try {
+      const cleanupPref = yield this.store.queryRecord('organization-cleanup-preference', {})
+      this.changeset = new Changeset(cleanupPref, lookupValidator(FileCleanup), FileCleanup)
+    } catch (error) {
+      this.isHideSettings = error.errors[0].status == '404';
+    }
+  })
+  loadCleanupPref;
 
   /**
    * @function triggerFileCleanup
    * Method to trigger a new file cleanup activity
    */
   @task(function* () {
-    yield this.store.createRecord('organization-cleanup', {})
-      .save()
-      .then(() => this.notify.success(this.intl.t('fileCleanup.msg.triggerSuccess')))
-      .catch((err) => this.notify.error(err[0].detail))
+    try {
+      yield this.store.createRecord('organization-cleanup', {}).save();
+      this.notify.success(this.intl.t('fileCleanup.msg.triggerSuccess'))
+    } catch (error) {
+      this.notify.error(error[0].detail)
+    }
   }).restartable() triggerFileCleanup;
 
 }
