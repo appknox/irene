@@ -15,7 +15,7 @@ if isPoppedOut
             div class="speaker"
         div class=screenRequired:noscreen:screen
           if (and file.isReady deviceType)
-            = novnc-rfb deviceToken=file.deviceToken deviceFarmURL=deviceFarmURL deviceFarmPassword=deviceFarmPassword
+            = novnc-rfb deviceFarmURL=deviceFarmURL deviceFarmPassword=deviceFarmPassword
         if isIOSDevice
           div class="home"
           if isNotTablet
