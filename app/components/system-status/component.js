@@ -2,8 +2,10 @@ import Component from '@ember/component';
 import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import { isNotFoundError } from 'ember-ajax/errors';
+import { inject as service } from '@ember/service';
 
 export default Component.extend({
+  devicefarm: service('devicefarm'),
   isStorageWorking: false,
   isDeviceFarmWorking: false,
   isAPIServerWorking: false,
@@ -25,9 +27,8 @@ export default Component.extend({
 
   getDeviceFarmStatus: task(function* () {
     try {
-      const url = [ENV.devicefarmHost, ENV.endpoints.ping].join('/');
-      yield this.get('ajax').request(url);
-      this.set('isDeviceFarmWorking', true);
+      const isWorking = yield this.devicefarm.testPing();
+      this.set('isDeviceFarmWorking', isWorking);
     } catch (_) {
       this.set('isDeviceFarmWorking', false);
     }

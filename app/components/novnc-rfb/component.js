@@ -6,10 +6,7 @@ export default Component.extend({
   rfb: null,
   didInsertElement(){
     const canvasEl = this.element.getElementsByClassName("canvas-container")[0];
-    const deviceToken = this.get("deviceToken");
-    const deviceFarmURL =
-      `${this.get('deviceFarmURL')}?token=${deviceToken}`
-
+    const deviceFarmURL = this.get('deviceFarmURL');
     const rfb = new RFB(
       canvasEl,
       deviceFarmURL, {

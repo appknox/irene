@@ -11,11 +11,15 @@ const VncViewerComponent = Component.extend({
   file: null,
   deviceFarmPassword: ENV.deviceFarmPassword,
   intl: service(),
-  deviceFarmURL: ENV.deviceFarmURL,
+  devicefarm: service('devicefarm'),
   tCloseModal: t("closeModal"),
   tPopOutModal: t("popOutModal"),
-
   classNameBindings: ["isPoppedOut:modal", "isPoppedOut:is-active"],
+  deviceFarmURL: computed('file.deviceToken', function() {
+    const token = this.get('file.deviceToken');
+    const deviceSRV = this.get('devicefarm');
+    return deviceSRV.getTokenizedWSURL(token);
+  }),
   vncPopText: computed('isPoppedOut', 'tCloseModal', 'tPopOutModal', function () {
     const tCloseModal = this.get("tCloseModal");
     const tPopOutModal = this.get("tPopOutModal");
