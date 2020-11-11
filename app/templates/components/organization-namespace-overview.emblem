@@ -6,7 +6,7 @@ td
       = namespace.value
 td
   .text-lightgray
-    = moment-from-now namespace.createdOn
+    = dayjs-from-now namespace.createdOn
   if namespace.requestedBy
     div
       span.text-lightgray
@@ -16,7 +16,7 @@ td
 td
   if namespace.isApproved
     .text-lightgray
-      = moment-from-now namespace.approvedOn
+      = dayjs-from-now namespace.approvedOn
     if namespace.approvedBy
       div
         span.text-lightgray

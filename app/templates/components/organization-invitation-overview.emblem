@@ -9,7 +9,7 @@ td
   else
     = t "organization"
 td.text-lightgray
-  = moment-from-now invitation.createdOn
+  = dayjs-from-now invitation.createdOn
 td
   button.is-default.is-icon.no-border.no-hover-button title="{{t 'resendInvitation'}}" click={(perform openResendInvitationConfirmBox)}
     i.fa.fa-repeat
