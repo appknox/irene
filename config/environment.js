@@ -1,8 +1,5 @@
-const url = require("url");
-
 const possibleENVS = [
   "IRENE_API_HOST",
-  "IRENE_DEVICEFARM_URL",
   "IRENE_DEVICEFARM_HOST",
   "IRENE_API_SOCKET_PATH",
   "IRENE_ENABLE_REGISTRATION",
@@ -25,7 +22,6 @@ const ENVHandlerCONST = {
   possibleENVS: possibleENVS,
   defaults: {
     IRENE_API_HOST: "https://api.appknox.com",
-    IRENE_DEVICEFARM_URL: "wss://devicefarm.appknox.com",
     IRENE_DEVICEFARM_HOST: "https://devicefarm.appknox.com",
     IRENE_API_SOCKET_PATH: "https://socket.appknox.com",
     IRENE_ENABLE_REGISTRATION: false,
@@ -152,20 +148,6 @@ class ENVHandler {
 
 module.exports = function (environment) {
   const handler = new ENVHandler(ENVHandlerCONST);
-  var devicefarmEnv = handler.getEnv('IRENE_DEVICEFARM_URL');
-
-  var deviceFarmPath = "/websockify";
-  var deviceFarmWebsockifyHost = new url.URL(devicefarmEnv);
-  var deviceFarmSsl = deviceFarmWebsockifyHost.protocol == "wss:";
-  var deviceFarmPort =
-    deviceFarmWebsockifyHost.port || (deviceFarmSsl ? 443 : 80);
-  var deviceFarmHostname = deviceFarmWebsockifyHost.hostname;
-  var deviceFarmURL = url.format({
-    protocol: deviceFarmWebsockifyHost.protocol,
-    hostname: deviceFarmHostname,
-    port: deviceFarmPort,
-    pathname: deviceFarmPath,
-  });
   var host = handler.getEnv('IRENE_API_HOST');
   var devicefarmHost = handler.getEnv('IRENE_DEVICEFARM_HOST');
   var socketPath = handler.getEnv('IRENE_API_SOCKET_PATH');
@@ -249,7 +231,6 @@ module.exports = function (environment) {
       autoClear: true,
       duration: 7000, // Milliseconds
     },
-    deviceFarmURL: deviceFarmURL,
     deviceFarmPassword: "1234",
     namespace: "api",
     namespace_v2: "api/v2",

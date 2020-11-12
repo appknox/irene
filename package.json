@@ -17,7 +17,7 @@
     "lint:hbs": "ember-template-lint .",
     "lint:js": "eslint .",
     "start": "cross-env IRENE_API_HOST=http://localhost:8000 IRENE_API_SOCKET_PATH=http://localhost:8008 ember server",
-    "startprod": "cross-env IRENE_API_HOST=https://api.appknox.com IRENE_API_SOCKET_PATH=https://socket.appknox.com IRENE_DEVICEFARM_URL=wss://devicefarm.appknox.com ember server",
+    "startprod": "cross-env IRENE_API_HOST=https://api.appknox.com IRENE_API_SOCKET_PATH=https://socket.appknox.com IRENE_DEVICEFARM_HOST=https://devicefarm.appknox.com ember server",
     "test:ember": "ember test",
     "deploy": "ember deploy production --verbose=true --activate=true --show-progress=true",
     "deploy:staging": "ember deploy staging --verbose=true --activate=true --show-progress=true",
@@ -104,7 +104,7 @@
     "faker": "^4.1.0",
     "loader.js": "^4.7.0",
     "mock-socket": "9.0.3",
-    "node-sass": "^4.14.0",
+    "node-sass": "^5.0.0",
     "npm-run-all": "^4.1.5",
     "qunit-dom": "^1.4.0"
   },

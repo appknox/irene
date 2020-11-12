@@ -117,13 +117,6 @@ const initialize = function (application) {
 
   ENV.host = handler.getEnv("IRENE_API_HOST");
   ENV.devicefarmHost = handler.getEnv("IRENE_DEVICEFARM_HOST");
-  var devicefarmEnv = handler.getEnv("IRENE_DEVICEFARM_URL");
-  var deviceFarmPath = "websockify";
-  if (devicefarmEnv) {
-    const deviceFarmURL = new URL(deviceFarmPath, devicefarmEnv).href;
-    ENV.deviceFarmURL = deviceFarmURL;
-  }
-
   ENV.socketPath = handler.getEnv("IRENE_API_SOCKET_PATH");
   ENV.isEnterprise = handler.getBoolean("ENTERPRISE");
   ENV.showLicense = handler.getBoolean("IRENE_SHOW_LICENSE");

@@ -59,8 +59,6 @@ class ChartData {
         return humanized_months[months_obj[key].date.getMonth()];
       });
       this.months = all_months;
-      console.log('months_obj', months_obj)
-      console.log('locale', dayjs().locale())
       if (this.months.length > 12) {
         const years = []
         const startYear = this.months[0].getFullYear()
