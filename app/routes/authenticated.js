@@ -1,24 +1,40 @@
-import { inject as service } from '@ember/service';
-import { isEmpty } from '@ember/utils';
+import {
+  inject as service
+} from '@ember/service';
+import {
+  isEmpty
+} from '@ember/utils';
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
-import { singularize } from 'ember-inflector';
-import { debug } from '@ember/debug';
-import { getOwner } from '@ember/application';
+import {
+  action
+} from '@ember/object';
+import {
+  singularize
+} from 'ember-inflector';
+import {
+  debug
+} from '@ember/debug';
+import {
+  getOwner
+} from '@ember/application';
 
 import ENUMS from 'irene/enums';
-import { CSBMap } from 'irene/router';
+import {
+  CSBMap
+} from 'irene/router';
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import * as chat from 'irene/utils/chat';
 
-const { location } = window;
+const {
+  location
+} = window;
 
 export default class AuthenticatedRoute extends Route {
   @service session;
   @service intl;
   @service me;
-  @service moment;
+  @service datetime;
   @service session;
   @service realtime;
   @service trial;
@@ -40,10 +56,10 @@ export default class AuthenticatedRoute extends Route {
     return this.store.find('user', userId);
   }
 
-  async afterModel(user){
+  async afterModel(user) {
     const company =
-        this.get("org.selected.data.name") ||
-        user.get("email").replace(/.*@/, "").split('.')[0];
+      this.get("org.selected.data.name") ||
+      user.get("email").replace(/.*@/, "").split('.')[0];
     const membership = await this.get('me.membership');
     const data = {
       userId: user.get("id"),
@@ -64,7 +80,7 @@ export default class AuthenticatedRoute extends Route {
 
     this.get('notify').setDefaultAutoClear(ENV.notifications.autoClear);
     this.set('intl.locale', user.get("lang"));
-    this.get('moment').changeLocale(user.get("lang"));
+    this.get('datetime').setLocale(user.get("lang"));
 
     await this.configureSocket(user);
   }
@@ -80,10 +96,10 @@ export default class AuthenticatedRoute extends Route {
     const owner = getOwner(store);
     const allEvents = {
       object(data) {
-        if(data.id && data.type) {
+        if (data.id && data.type) {
           try {
             var modelName = singularize(data.type);
-            if(!owner.factoryFor(`model:${modelName}`)) {
+            if (!owner.factoryFor(`model:${modelName}`)) {
               return
             }
             store.findRecord(modelName, data.id);
@@ -92,13 +108,15 @@ export default class AuthenticatedRoute extends Route {
           }
         }
         debug(JSON.stringify(data));
-        store.pushPayload({data});
+        store.pushPayload({
+          data
+        });
       },
       newobject(data) {
-        if(data.id && data.type) {
+        if (data.id && data.type) {
           try {
             var modelName = singularize(data.type);
-            if(!owner.factoryFor(`model:${modelName}`)) {
+            if (!owner.factoryFor(`model:${modelName}`)) {
               return
             }
             store.findRecord(modelName, data.id);
@@ -107,18 +125,34 @@ export default class AuthenticatedRoute extends Route {
           }
         }
         debug(JSON.stringify(data));
-        store.pushPayload({data});
+        store.pushPayload({
+          data
+        });
       },
       message(data) {
-        const { message } = data;
-        const { notifyType } = data;
-        if (notifyType === ENUMS.NOTIFY.INFO) { that.get("notify").info(message, ENV.notifications); }
-        if (notifyType === ENUMS.NOTIFY.SUCCESS) { that.get("notify").success(message, ENV.notifications); }
-        if (notifyType === ENUMS.NOTIFY.WARNING) { that.get("notify").warning(message, ENV.notifications); }
-        if (notifyType === ENUMS.NOTIFY.ALERT) { that.get("notify").alert(message, ENV.notifications); }
-        if (notifyType === ENUMS.NOTIFY.ERROR) { that.get("notify").error(message, {
-          autoClear: false
-        }); }
+        const {
+          message
+        } = data;
+        const {
+          notifyType
+        } = data;
+        if (notifyType === ENUMS.NOTIFY.INFO) {
+          that.get("notify").info(message, ENV.notifications);
+        }
+        if (notifyType === ENUMS.NOTIFY.SUCCESS) {
+          that.get("notify").success(message, ENV.notifications);
+        }
+        if (notifyType === ENUMS.NOTIFY.WARNING) {
+          that.get("notify").warning(message, ENV.notifications);
+        }
+        if (notifyType === ENUMS.NOTIFY.ALERT) {
+          that.get("notify").alert(message, ENV.notifications);
+        }
+        if (notifyType === ENUMS.NOTIFY.ERROR) {
+          that.get("notify").error(message, {
+            autoClear: false
+          });
+        }
       },
 
       logout() {
@@ -147,11 +181,13 @@ export default class AuthenticatedRoute extends Route {
     }
     socket.on('connect', () => {
       debug("Connecting to room: " + socketId);
-      socket.emit("subscribe", {room: socketId});
+      socket.emit("subscribe", {
+        room: socketId
+      });
     });
   }
 
-  async configureRollBar (user) {
+  async configureRollBar(user) {
     try {
       this.get('rollbar.notifier').configure({
         payload: {

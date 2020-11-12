@@ -1,7 +1,9 @@
-import moment from 'moment';
 import Service from '@ember/service';
 import ENV from 'irene/config/environment';
-import { inject as service } from '@ember/service';
+import {
+  inject as service
+} from '@ember/service';
+import dayjs from 'dayjs';
 
 
 export default Service.extend({
@@ -26,7 +28,7 @@ export default Service.extend({
   async get_appscan() {
     const orgId = this.get("organization.selected.id");
     const endDate = new Date().toISOString();
-    const startDate = moment(endDate).subtract('180', 'days').toISOString();
+    const startDate = dayjs(endDate).subtract(180, 'day').toISOString();
     let appscanUrl = [ENV.endpoints.organizations, orgId, ENV.endpoints.appscan].join('/');
     appscanUrl += `?start_date=${startDate}&end_date=${endDate}`;
     const appscan = await this.get('ajax').request(appscanUrl);

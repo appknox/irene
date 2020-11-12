@@ -8,14 +8,12 @@
 // moduleForComponent('file-header', 'Integration | Component | file header', {
 //   unit: true,
 //   needs: [
-//     'service:moment',
 //     'service:i18n',
 //     'service:ajax',
 //     'component:fa-icon',
 //     'component:ember-chart',
 //     'component:dynamic-scan',
 //     'component:copy-password',
-//     'helper:moment-from-now',
 //     'component:attach-tooltip',
 //     'component:modal-card',
 //     'component:confirm-box',

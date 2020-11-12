@@ -1,17 +1,33 @@
 import Component from '@glimmer/component';
-import { computed, set } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
-import { later } from '@ember/runloop';
-import { task } from 'ember-concurrency';
-import moment from 'moment';
-import { addObserver, removeObserver } from '@ember/object/observers';
+import {
+  computed,
+  set
+} from '@ember/object';
+import {
+  tracked
+} from '@glimmer/tracking';
+import {
+  inject as service
+} from '@ember/service';
+import {
+  later
+} from '@ember/runloop';
+import {
+  task
+} from 'ember-concurrency';
+import dayjs from 'dayjs';
+import {
+  addObserver,
+  removeObserver
+} from '@ember/object/observers';
 
 
 export default class DyanmicScanExpiryComponent extends Component {
-  @service ('notify') notification;
+  @service('notify') notification;
 
   @service store;
+
+  @service datetime;
 
   @tracked file = null;
   @tracked dynamicscan = null;
@@ -40,14 +56,14 @@ export default class DyanmicScanExpiryComponent extends Component {
   })
   fetchDynaminscan;
 
-  observeDeviceState () {
+  observeDeviceState() {
     this.fetchDynaminscan.perform();
   }
 
   @computed('durationRemaining')
   get canExtend() {
     const duration = this.durationRemaining;
-    if(!duration) {
+    if (!duration) {
       return false;
     }
     return duration.asMinutes() < 15;
@@ -56,7 +72,7 @@ export default class DyanmicScanExpiryComponent extends Component {
   @computed('durationRemaining')
   get timeRemaining() {
     const duration = this.durationRemaining;
-    if(!duration) {
+    if (!duration) {
       return {
         seconds: "00",
         minutes: "00"
@@ -69,17 +85,17 @@ export default class DyanmicScanExpiryComponent extends Component {
   }
 
 
-  clock () {
-    if(this.clockStop) {
+  clock() {
+    if (this.clockStop) {
       return;
     }
     const expiresOn = this.dynamicscan ? this.dynamicscan.expiresOn : null;
-    if(!expiresOn){
+    if (!expiresOn) {
       return later(this, this.clock, 1000);
     }
-    const mExpiresOn =  moment(expiresOn);
-    const mNow = moment();
-    const duration = moment.duration(mExpiresOn.diff(mNow));
+    const mExpiresOn = dayjs(expiresOn);
+    const mNow = dayjs();
+    const duration = this.datetime.duration(mExpiresOn.diff(mNow));
     set(this, 'durationRemaining', duration);
     later(this, this.clock, 1000);
   }
@@ -87,13 +103,13 @@ export default class DyanmicScanExpiryComponent extends Component {
 
   @task(function* (time, close) {
     const dynamicscan = this.dynamicscan;
-    if(!dynamicscan) {
+    if (!dynamicscan) {
       return;
     }
     try {
       yield dynamicscan.extendTime(time);
-    } catch(error) {
-      if(error.errors && error.errors[0].detail) {
+    } catch (error) {
+      if (error.errors && error.errors[0].detail) {
         this.notify.error(error.errors[0].detail);
         return
       }

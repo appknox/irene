@@ -1,14 +1,26 @@
 import Component from '@ember/component';
-import { task } from 'ember-concurrency';
+import {
+  task
+} from 'ember-concurrency';
 import ENV from 'irene/config/environment';
-import { inject as service } from '@ember/service';
-import {bb} from 'billboard.js/dist/billboard.min.js';
-import moment from 'moment';
-import { observer } from '@ember/object';
+import {
+  inject as service
+} from '@ember/service';
+import {
+  bb
+} from 'billboard.js/dist/billboard.min.js';
+import {
+  observer
+} from '@ember/object';
+import dayjs from 'dayjs';
+import {
+  humanizeMonths
+} from 'irene/utils/date-time';
 
 class ChartData {
+  @service() datetime;
   constructor() {
-    this.dates =  [];
+    this.dates = [];
     this.months = [];
     this.years = [];
     this.dates_obj = {};
@@ -19,7 +31,7 @@ class ChartData {
   }
 
   getChartX() {
-    const dates = this.dates.map(d=>d.toDate());
+    const dates = this.dates.map(d => d.toDate());
     if (this.showMonthlyData) {
       const group_dates = dates.reduce(function (obj, item) {
         const key = `${item.getMonth()}${item.getYear()}`
@@ -28,7 +40,8 @@ class ChartData {
         return obj;
       }, {});
 
-      const humanized_months = moment.months();
+      const humanized_months = humanizeMonths();
+
       const all_months = [];
       const months_obj = [];
 
@@ -39,14 +52,16 @@ class ChartData {
         return months_obj;
       });
 
-      months_obj.sort((a, b) => new moment(a.date).format('YYYYMMDD') - new moment(b.date).format('YYYYMMDD'));
+      months_obj.sort((a, b) => new dayjs(a.date).format('YYYYMMDD') - new dayjs(b.date).format('YYYYMMDD'));
 
       const months = Object.keys(months_obj).map(function (key) {
         all_months.push(months_obj[key].date);
         return humanized_months[months_obj[key].date.getMonth()];
       });
       this.months = all_months;
-      if(this.months.length > 12) {
+      console.log('months_obj', months_obj)
+      console.log('locale', dayjs().locale())
+      if (this.months.length > 12) {
         const years = []
         const startYear = this.months[0].getFullYear()
         const endYear = this.months[this.months.length - 1].getFullYear()
@@ -68,29 +83,27 @@ class ChartData {
     let yarray = []
 
 
-    if (!project_mapping){
+    if (!project_mapping) {
       return []
     }
 
     project_mapping.forEach(obj => {
-      if(obj.package_name != project) {
+      if (obj.package_name != project) {
         return;
       }
       let index;
       if (this.showMonthlyData) {
         if (yarray_months.length > 12) {
-          index = this.find_year_index(moment(obj.created_on_date));
+          index = this.find_year_index(dayjs(obj.created_on_date));
           yarray_years[index] = yarray_years[index] + parseInt(obj.file_count);
           yarray = yarray_years
-        }
-        else {
-          index = this.find_month_index(moment(obj.created_on_date));
+        } else {
+          index = this.find_month_index(dayjs(obj.created_on_date));
           yarray_months[index] = yarray_months[index] + parseInt(obj.file_count);
           yarray = yarray_months
         }
-      }
-      else {
-        index = this.find_date_index(moment(obj.created_on_date));
+      } else {
+        index = this.find_date_index(dayjs(obj.created_on_date));
         yarray_dates[index] = yarray_dates[index] + obj.file_count;
         yarray = yarray_dates
       }
@@ -117,11 +130,11 @@ class ChartData {
   }
 
   push(obj) {
-    const incoming_date = moment(obj.created_on_date);
+    const incoming_date = dayjs(obj.created_on_date);
     this.push_date(incoming_date);
     this.dates_obj[incoming_date].push(obj)
     this.projects_order.push()
-    if(!this.projects_mapping[obj.package_name]) {
+    if (!this.projects_mapping[obj.package_name]) {
       this.projects_order.push(obj.package_name)
       this.projects_mapping[obj.package_name] = []
     }
@@ -137,14 +150,14 @@ class ChartData {
     let index = 0;
     let dates_to_push = [incoming_date];
     const first_date = this.dates[0];
-    if(first_date && first_date.isAfter(incoming_date)) {
+    if (first_date && first_date.isAfter(incoming_date)) {
       const days = first_date.diff(incoming_date, 'days')
       dates_to_push = Array.from(
         new Array(days)
       ).map((d, i) => incoming_date.clone().add(i, 'days'))
     }
     const last_date = this.dates[this.dates.length - 1];
-    if(last_date && last_date.isBefore(incoming_date)) {
+    if (last_date && last_date.isBefore(incoming_date)) {
       index = this.dates.length;
       const days = incoming_date.diff(last_date, 'days');
       dates_to_push = Array.from(
@@ -165,9 +178,9 @@ class ChartData {
     while (startIndex <= endIndex) {
       let index = Math.floor((endIndex + startIndex) / 2);
       let current_date = this.dates[index];
-      if(current_date.isBefore(incoming_date, 'day')) {
+      if (current_date.isBefore(incoming_date, 'day')) {
         startIndex = index + 1;
-      } else if(current_date.isAfter(incoming_date, 'day')) {
+      } else if (current_date.isAfter(incoming_date, 'day')) {
         endIndex = index - 1;
       } else {
         return index;
@@ -205,6 +218,7 @@ const OverallReportComponent = Component.extend({
   realtime: service('realtime'),
   analytics: service('analytics'),
   organization: service('organization'),
+  datetime: service('datetime'),
   showMonthlyData: true,
   showYearlyData: false,
   axisXType: 'category',
@@ -224,7 +238,7 @@ const OverallReportComponent = Component.extend({
     this.scanCountData();
   }),
 
-  showMonthlyDataObserver: observer('showMonthlyData', 'showYearlyData', function() {
+  showMonthlyDataObserver: observer('showMonthlyData', 'showYearlyData', function () {
     if (this.get("showMonthlyData")) {
       this.setProperties({
         axisXType: 'category',
@@ -232,10 +246,9 @@ const OverallReportComponent = Component.extend({
         axisXLabelText: 'months',
         axisYType: 'number'
       });
-      if (this.get("showYearlyData"))
-        {
+      if (this.get("showYearlyData")) {
         return this.set("axisXLabelText", 'years')
-        }
+      }
       return this.set("axisXLabelText", 'months')
     }
     this.setProperties({
@@ -329,23 +342,27 @@ const OverallReportComponent = Component.extend({
     });
   },
 
-  updateStartDate: task(function * ({date}) {
+  updateStartDate: task(function* ({
+    date
+  }) {
     this.set("selectedStartDate", date);
     yield this.get('updateAppScan').perform();
   }),
 
-  updateEndDate: task(function * ({date}) {
+  updateEndDate: task(function* ({
+    date
+  }) {
     this.set("selectedEndDate", date);
     yield this.get('updateAppScan').perform();
   }),
 
-  updateAppScan: task(function *() {
+  updateAppScan: task(function* () {
     const startDate = this.get("selectedStartDate");
     const endDate = this.get("selectedEndDate");
-    if(!startDate || !endDate) {
+    if (!startDate || !endDate) {
       return;
     }
-    const monthDiff = Math.abs(moment(startDate).diff(moment(endDate), 'month'));
+    const monthDiff = Math.abs(dayjs(startDate).diff(dayjs(endDate), 'month'));
     this.set("showMonthlyData", monthDiff > 0);
     const orgId = this.get("organization.selected.id");
     let url = [ENV.endpoints.organizations, orgId, ENV.endpoints.appscan].join('/');
@@ -354,11 +371,11 @@ const OverallReportComponent = Component.extend({
     this.set("analytics.appscan", appscan);
   }),
 
-  showHideDuration: task(function *() {
+  showHideDuration: task(function* () {
     yield this.set("showDatePicker", true);
   }),
 
-  resetDuration: task(function *() {
+  resetDuration: task(function* () {
     this.set("showDatePicker", false);
     this.set("showMonthlyData", true);
     this.setProperties({
