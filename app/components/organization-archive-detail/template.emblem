@@ -1,12 +1,12 @@
 tr class="archive-row-{{status}}"
   td
-    = moment-format archive.createdOn 'DD MMM YYYY'
+    = day-js date=archive.createdOn format='DD MMM YYYY'
 
   td
     | #{archive.generatedBy.username}
 
   td
-    | #{moment-format archive.fromDate 'DD MMM YYYY' } ~ #{moment-format archive.toDate 'DD MMM YYYY'}
+    | #{day-js date=archive.fromDate format='DD MMM YYYY' } ~ #{day-js date=archive.toDate format='DD MMM YYYY'}
 
   td.align-middle
     if archive.isAvailable
@@ -18,7 +18,7 @@ tr class="archive-row-{{status}}"
         em.font-small.text-lightgray.margin-l-3q
           span.margin-r-q
             = t "expires"
-          = moment-from-now archive.availableUntil
+          = dayjs-from-now archive.availableUntil
     if archive.isExpired
       em.font-small
         = t "expired"

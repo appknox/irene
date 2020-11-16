@@ -8,7 +8,6 @@
 //     'route:application',
 //     'service:i18n',
 //     'service:ajax',
-//     'service:moment',
 //     'service:realtime',
 //     'service:mixpanel',
 //     'service:trial',

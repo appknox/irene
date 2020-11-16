@@ -8,7 +8,7 @@ td
 td
   | #{team.totalProjects}
 td
-  = moment-from-now team.createdOn
+  = dayjs-from-now team.createdOn
 td
   i.fa.fa-trash-o.remove click="openDeleteTeamPrompt" disabled=team.isDefaultTeam
 

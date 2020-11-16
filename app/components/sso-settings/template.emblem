@@ -97,11 +97,11 @@
                     td.bold.black-text
                       = t "issuedOn"
                       .text-gray
-                        = moment-format idpMetadata.certificate.issued_on 'DD MMM YYYY HH:mm:ss A'
+                        = day-js date=idpMetadata.certificate.issued_on format='DD MMM YYYY HH:mm:ss A'
                     td.bold.black-text
                       = t "expiry"
                       .text-gray
-                        = moment-format idpMetadata.certificate.expires_on 'DD MMM YYYY HH:mm:ss A'
+                        = day-js date=idpMetadata.certificate.expires_on format='DD MMM YYYY HH:mm:ss A'
                   tr
                     td.bold.black-text colspan="2"
                       = t "fingerprints"

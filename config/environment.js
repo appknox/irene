@@ -60,18 +60,18 @@ class ENVHandler {
   getEnv(env_key) {
     const host_key = 'IRENE_API_HOST';
     this.assertEnvKey(env_key);
-    if(this.isAvailableInRuntimeENV(env_key)) {
+    if (this.isAvailableInRuntimeENV(env_key)) {
       const runtimeValue = this.getRuntimeObject()[env_key];
-      if(env_key === host_key) {
+      if (env_key === host_key) {
         if (runtimeValue === '/') {
           return '';
         }
       }
       return runtimeValue;
     }
-    if(this.isAvailableInProcessENV(env_key)) {
+    if (this.isAvailableInProcessENV(env_key)) {
       const processValue = this.envHandlerConst.processENV[env_key];
-      if(env_key === host_key) {
+      if (env_key === host_key) {
         if (processValue === '/') {
           return '';
         }
@@ -230,10 +230,6 @@ module.exports = function (environment) {
     notifications: {
       autoClear: true,
       duration: 7000, // Milliseconds
-    },
-    moment: {
-      allowEmpty: true, // default: false
-      includeLocales: ["en", "ja"],
     },
     deviceFarmPassword: "1234",
     namespace: "api",

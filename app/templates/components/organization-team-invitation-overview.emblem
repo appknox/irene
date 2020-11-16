@@ -3,7 +3,7 @@ td
     = invitation.email
 
 td.text-lightgray
-  = moment-from-now invitation.createdOn
+  = dayjs-from-now invitation.createdOn
 
 td
   button.is-default.is-icon.no-border title="{{t 'resendInvitation'}}" click={(perform openResendInvitationConfirmBox)}

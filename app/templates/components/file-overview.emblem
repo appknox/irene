@@ -74,7 +74,7 @@ header.card-header
         .lowercase-text.text-centre
           .overflow.ellipse
             = t "started"
-            | &nbsp; #{moment-from-now file.createdOn}
+            | &nbsp; #{dayjs-from-now file.createdOn}
           = attach-tooltip placement="bottom"
             = file.createdOnDateTime
         ul.risk-table

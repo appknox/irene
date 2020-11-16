@@ -50,12 +50,12 @@
         .uppercase-text.margin-b-h.font-small
           | Start Date
         .semi-bold.font-legible.black-text
-          = moment-format license.startDate "DD MMM YYYY"
+          = day-js date=license.startDate format="DD MMM YYYY"
       td
         .uppercase-text.margin-b-h.font-small
           | Expiry Date
         .semi-bold.font-legible.black-text
-          = moment-format license.expiryDate "DD MMM YYYY"
+          = day-js date=license.expiryDate format="DD MMM YYYY"
     tr
       td
         .font-legible.black-text

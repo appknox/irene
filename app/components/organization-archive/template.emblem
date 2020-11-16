@@ -10,10 +10,10 @@
       = date-picker class="custom-styled-picker"  maxDate=maxDate range=true options=datepickerOptions action=(action "setDuration") as |selectedDates|
         .align-middle
           = fa-icon "calendar" class="font-small" title="Select date range"
-          button local-class="date-btn" {{unless selectedDates.firstObject "From Date"}} {{moment-format selectedDates.firstObject "DD MMM YYYY"}}
+          button local-class="date-btn" {{unless selectedDates.firstObject "From Date"}} {{day-js date=selectedDates.firstObject format="DD MMM YYYY"}}
           span
             | ~
-          button local-class="date-btn" {{unless selectedDates.lastObject "To Date"}} {{moment-format selectedDates.lastObject "DD MMM YYYY"}}
+          button local-class="date-btn" {{unless selectedDates.lastObject "To Date"}} {{day-js date=selectedDates.lastObject format="DD MMM YYYY"}}
 
       button.is-primary.highlighted-button.margin-l-1 click={(perform tiggerGenerateArchive)} disabled=tiggerGenerateArchive.isRunning
         if tiggerGenerateArchive.isRunning
