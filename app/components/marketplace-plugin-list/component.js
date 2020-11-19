@@ -79,7 +79,7 @@ export default Component.extend({
       {
         "title": this.get('intl').t("githubAction"),
         "description": this.get("tViewIntegrationInstructions"),
-        "logo": "images/github-action-icon.png",
+        "logo": "images/octocat.png",
         "link": "https://github.com/marketplace/actions/appknox-github-action",
         "published": true,
         "instructions": ""
