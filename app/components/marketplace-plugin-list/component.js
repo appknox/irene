@@ -1,9 +1,17 @@
 import Component from '@ember/component';
-import { computed } from '@ember/object';
+import {
+  computed
+} from '@ember/object';
 import constants from 'irene/components/marketplace-plugin-list/constants';
-import { htmlSafe } from '@ember/template';
-import { inject as service } from '@ember/service';
-import { t } from 'ember-intl';
+import {
+  htmlSafe
+} from '@ember/template';
+import {
+  inject as service
+} from '@ember/service';
+import {
+  t
+} from 'ember-intl';
 
 export default Component.extend({
   intl: service(),
@@ -19,9 +27,8 @@ export default Component.extend({
 
   showInstructionsModal: false,
 
-  data: computed('tAppCenterPipeline', 'tAzurePipeline', 'tBitbucketPipeline', 'tBitriseWorkflow', 'tCircleCIPipeline', 'tInstallAppknoxPluginTo', 'tJenkinsPipeline', 'tViewIntegrationInstructions', function() {
-    return [
-      {
+  data: computed('tAppCenterPipeline', 'tAzurePipeline', 'tBitbucketPipeline', 'tBitriseWorkflow', 'tCircleCIPipeline', 'tInstallAppknoxPluginTo', 'tJenkinsPipeline', 'tViewIntegrationInstructions', function () {
+    return [{
         "title": this.get("tAzurePipeline"),
         "description": this.get("tInstallAppknoxPluginTo") + this.get("tAzurePipeline"),
         "logo": "images/azure-icon.png",
@@ -68,6 +75,14 @@ export default Component.extend({
         "link": "",
         "published": false,
         "instructions": htmlSafe(constants.bitriseInstructions)
+      },
+      {
+        "title": this.get('intl').t("githubAction"),
+        "description": this.get("tViewIntegrationInstructions"),
+        "logo": "images/octocat.png",
+        "link": "https://github.com/marketplace/actions/appknox-github-action",
+        "published": true,
+        "instructions": ""
       },
     ]
   }),
