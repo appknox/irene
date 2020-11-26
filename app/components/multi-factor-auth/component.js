@@ -1,10 +1,21 @@
 import Component from '@ember/component';
-import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
-import { task, waitForEvent } from 'ember-concurrency';
+import {
+  inject as service
+} from '@ember/service';
+import {
+  computed
+} from '@ember/object';
+import {
+  task,
+  waitForEvent
+} from 'ember-concurrency';
 import ENUMS from 'irene/enums';
-import { t } from 'ember-intl';
-import { debug } from '@ember/debug';
+import {
+  t
+} from 'ember-intl';
+import {
+  debug
+} from '@ember/debug';
 
 export default Component.extend({
 
@@ -620,7 +631,9 @@ export default Component.extend({
       const data = {
         method: ENUMS.MFA_METHOD.HOTP
       };
-      yield this.get('ajax').delete(this.get('mfaEndpoint'), { data });
+      yield this.get('ajax').delete(this.get('mfaEndpoint'), {
+        data
+      });
     } catch (error) {
       const payload = error.payload || {};
       if (payload.otp && payload.otp.length) {

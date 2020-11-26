@@ -1,14 +1,20 @@
 import Component from '@ember/component';
-import { inject as service } from '@ember/service';
-import { isEmpty } from '@ember/utils';
+import {
+  inject as service
+} from '@ember/service';
+import {
+  isEmpty
+} from '@ember/utils';
 import ENV from 'irene/config/environment';
 import PaginateMixin from 'irene/mixins/paginate';
-import { t } from 'ember-intl';
+import {
+  t
+} from 'ember-intl';
 import ClipboardJS from 'clipboard/src/clipboard';
 
 const PersonaltokenListComponent = Component.extend(PaginateMixin, {
 
-  classNames: ["column","personal-token-component"],
+  classNames: ["column", "personal-token-component"],
   intl: service(),
   ajax: service(),
   notify: service('notifications'),
@@ -38,29 +44,34 @@ const PersonaltokenListComponent = Component.extend(PaginateMixin, {
       const tEnterTokenName = this.get('tEnterTokenName');
 
       for (let inputValue of [tokenName]) {
-        if (isEmpty(inputValue)) { return this.get('notify').error(tEnterTokenName); }
+        if (isEmpty(inputValue)) {
+          return this.get('notify').error(tEnterTokenName);
+        }
       }
 
-      const data =
-        {name: tokenName};
+      const data = {
+        name: tokenName
+      };
 
       this.set('isGeneratingToken', true);
-      this.get('ajax').post(ENV.endpoints.personaltokens, {data})
-      .then((data) => {
-        if(!this.isDestroyed) {
-          this.set('isGeneratingToken', false);
-          this.store.pushPayload(data);
-          this.incrementProperty("version");
-          this.set('tokenName', '');
-          this.set('showGenerateTokenModal', false);
-        }
-        this.get('notify').success(tTokenCreated);
-      }, (error) => {
-        if(!this.isDestroyed) {
-          this.set('isGeneratingToken', false);
-          this.get("notify").error(error.payload.message);
-        }
-      });
+      this.get('ajax').post(ENV.endpoints.personaltokens, {
+          data
+        })
+        .then((data) => {
+          if (!this.isDestroyed) {
+            this.set('isGeneratingToken', false);
+            this.store.pushPayload(data);
+            this.incrementProperty("version");
+            this.set('tokenName', '');
+            this.set('showGenerateTokenModal', false);
+          }
+          this.get('notify').success(tTokenCreated);
+        }, (error) => {
+          if (!this.isDestroyed) {
+            this.set('isGeneratingToken', false);
+            this.get("notify").error(error.payload.message);
+          }
+        });
     }
   },
 
