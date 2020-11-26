@@ -1,12 +1,24 @@
 import Component from '@ember/component';
-import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
-import { isEmpty } from '@ember/utils';
+import {
+  inject as service
+} from '@ember/service';
+import {
+  computed
+} from '@ember/object';
+import {
+  isEmpty
+} from '@ember/utils';
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
-import { task } from 'ember-concurrency';
-import { on } from '@ember/object/evented';
-import { t } from 'ember-intl';
+import {
+  task
+} from 'ember-concurrency';
+import {
+  on
+} from '@ember/object/evented';
+import {
+  t
+} from 'ember-intl';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import ClipboardJS from 'clipboard/src/clipboard';
 
@@ -16,8 +28,8 @@ const FileHeaderComponent = Component.extend({
   roleId: 0,
   progress: 0,
   userRoles: [],
-  globalAlpha:0.4,
-  radiusRatio:0.9,
+  globalAlpha: 0.4,
+  radiusRatio: 0.9,
   isBasicInfo: false,
   isVPNDetails: false,
   isScanDetails: true,
@@ -54,7 +66,7 @@ const FileHeaderComponent = Component.extend({
   tPleaseEnterUserRoles: t("modalCard.manual.pleaseEnterUserRoles"),
   tPleaseEnterVPNDetails: t("modalCard.manual.pleaseEnterVPNDetails"),
 
-  invalidNewTag: computed('newTag', function() {
+  invalidNewTag: computed('newTag', function () {
     const tag = this.get('newTag');
     if (tag && tag.length > 1) {
       return false;
@@ -62,36 +74,39 @@ const FileHeaderComponent = Component.extend({
     return true;
   }),
 
-  manualscan: computed('file.id', 'store', function() {
+  manualscan: computed('file.id', 'store', function () {
     const fileId = this.get("file.id");
     return this.get("store").findRecord("manualscan", fileId);
   }),
 
-  unknownAnalysisStatus: computed('file.profile.id', 'store', function() {
-    return this.get("store").queryRecord('unknown-analysis-status', {id: this.get("file.profile.id")});
+  unknownAnalysisStatus: computed('file.profile.id', 'store', function () {
+    console.log('file header', this.get('file'))
+    return this.get("store").queryRecord('unknown-analysis-status', {
+      id: this.get("file.profile.id")
+    });
   }),
 
   analyses: computed.reads('file.sortedAnalyses'),
 
-  filteredEnvironments: computed("environments", "manualscan.filteredAppEnv", function() {
+  filteredEnvironments: computed("environments", "manualscan.filteredAppEnv", function () {
     const environments = this.get("environments");
     const appEnv = parseInt(this.get("manualscan.filteredAppEnv"));
     return environments.filter(env => appEnv !== env.value);
   }),
 
-  filteredAppActions: computed("appActions", "manualscan.filteredAppAction", function() {
+  filteredAppActions: computed("appActions", "manualscan.filteredAppAction", function () {
     const appActions = this.get("appActions");
-    const appAction =  parseInt(this.get("manualscan.filteredAppAction"));
+    const appAction = parseInt(this.get("manualscan.filteredAppAction"));
     return appActions.filter(action => appAction !== action.value);
   }),
 
-  filteredLoginStatuses: computed("loginStatuses", "manualscan.loginStatus", function() {
+  filteredLoginStatuses: computed("loginStatuses", "manualscan.loginStatus", function () {
     const loginStatuses = this.get("loginStatuses");
     const loginStatus = this.get("manualscan.loginStatus");
     return loginStatuses.filter(status => loginStatus !== status);
   }),
 
-  filteredVpnStatuses: computed("vpnStatuses", "manualscan.vpnStatus", function() {
+  filteredVpnStatuses: computed("vpnStatuses", "manualscan.vpnStatus", function () {
     const vpnStatuses = this.get("vpnStatuses");
     const vpnStatus = this.get("manualscan.vpnStatus");
     return vpnStatuses.filter(status => vpnStatus !== status);
@@ -99,8 +114,12 @@ const FileHeaderComponent = Component.extend({
 
   chartOptions: (() =>
     ({
-      legend: { display: false },
-      animation: {animateRotate: false},
+      legend: {
+        display: false
+      },
+      animation: {
+        animateRotate: false
+      },
       responsive: false,
     })
   ).property(),
@@ -109,12 +128,19 @@ const FileHeaderComponent = Component.extend({
     ({
       tooltips: {
         callbacks: {
-          title: function(tooltipItem, data) {
+          title: function (tooltipItem, data) {
             return data['tooltips'][tooltipItem[0]['index']];
           }
         }
       },
-      scales: { yAxes: [{ ticks: { beginAtZero:true, stepSize: 3 } }]},
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+            stepSize: 3
+          }
+        }]
+      },
       responsive: false,
     })
   ).property(),
@@ -143,7 +169,7 @@ const FileHeaderComponent = Component.extend({
     this.set("showRemoveRoleConfirmBox", false);
   },
 
-  allUserRoles: computed('manualscan.userRoles', 'roleId', function() {
+  allUserRoles: computed('manualscan.userRoles', 'roleId', function () {
     const userRoles = this.get("manualscan.userRoles");
     let roleId = this.get("roleId")
     userRoles.forEach((role) => {
@@ -154,8 +180,10 @@ const FileHeaderComponent = Component.extend({
     return userRoles;
   }),
 
-  availableRoles: computed.filter('allUserRoles', function(userRole) {
-    const { id } = userRole;
+  availableRoles: computed.filter('allUserRoles', function (userRole) {
+    const {
+      id
+    } = userRole;
     const deletedRole = this.get("deletedRole");
     return id !== deletedRole;
   }),
@@ -164,25 +192,25 @@ const FileHeaderComponent = Component.extend({
 
   hasUserRoles: computed.gt('userRoleCount', 0),
 
-  scanDetailsClass: computed('isScanDetails', function() {
+  scanDetailsClass: computed('isScanDetails', function () {
     if (this.get('isScanDetails')) {
       return 'is-active';
     }
   }),
 
-  owaspDetailsClass: computed('isOWASPDetails', function() {
+  owaspDetailsClass: computed('isOWASPDetails', function () {
     if (this.get('isOWASPDetails')) {
       return 'is-active';
     }
   }),
 
-  owasps: computed('analyses', function() {
+  owasps: computed('analyses', function () {
     const analyses = this.get("analyses");
     var owasps = [];
     const risks = [ENUMS.RISK.CRITICAL, ENUMS.RISK.HIGH, ENUMS.RISK.MEDIUM, ENUMS.RISK.LOW];
-    for(let analysis of analyses) {
+    for (let analysis of analyses) {
       analysis.get("owasp").forEach((owasp) => {
-        if(risks.includes(analysis.get("risk"))) {
+        if (risks.includes(analysis.get("risk"))) {
           owasps.push(owasp.id);
         }
       });
@@ -190,13 +218,28 @@ const FileHeaderComponent = Component.extend({
     return owasps
   }),
 
-  owaspData: computed("owasps", "owaspA5Count", "owaspA3Count", function() {
+  owaspData: computed("owasps", "owaspA5Count", "owaspA3Count", function () {
     const owasps = this.get("owasps");
-    var owaspA1Count = 0, owaspA2Count = 0, owaspA3Count = 0, owaspA4Count = 0,
-    owaspA5Count = 0, owaspA6Count = 0, owaspA7Count = 0, owaspA8Count = 0,
-    owaspA9Count = 0, owaspA10Count = 0, owaspM1Count = 0, owaspM2Count = 0,
-    owaspM3Count = 0, owaspM4Count = 0, owaspM5Count = 0, owaspM6Count = 0,
-    owaspM7Count = 0, owaspM8Count = 0, owaspM9Count = 0, owaspM10Count = 0;
+    var owaspA1Count = 0,
+      owaspA2Count = 0,
+      owaspA3Count = 0,
+      owaspA4Count = 0,
+      owaspA5Count = 0,
+      owaspA6Count = 0,
+      owaspA7Count = 0,
+      owaspA8Count = 0,
+      owaspA9Count = 0,
+      owaspA10Count = 0,
+      owaspM1Count = 0,
+      owaspM2Count = 0,
+      owaspM3Count = 0,
+      owaspM4Count = 0,
+      owaspM5Count = 0,
+      owaspM6Count = 0,
+      owaspM7Count = 0,
+      owaspM8Count = 0,
+      owaspM9Count = 0,
+      owaspM10Count = 0;
     owasps.forEach((owasp) => {
       switch (owasp) {
         case "A1_2013":
@@ -247,78 +290,78 @@ const FileHeaderComponent = Component.extend({
           'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10'
         ],
         tooltips: [
-          "Improper Platform Usage", "Insecure Data Storage","Insecure Communication",
-          "Insecure Authentication","Insufficient Cryptography", "Insecure Authorization",
-          "Client Code Quality","Code Tampering", "Reverse Engineering","Extraneous Functionality"
+          "Improper Platform Usage", "Insecure Data Storage", "Insecure Communication",
+          "Insecure Authentication", "Insufficient Cryptography", "Insecure Authorization",
+          "Client Code Quality", "Code Tampering", "Reverse Engineering", "Extraneous Functionality"
         ],
-        datasets: [ {
+        datasets: [{
           label: 'OWASP MOBILE CATEGORIES',
           data: [
             owaspM1Count, owaspM2Count, owaspM3Count, owaspM4Count, owaspM5Count,
             owaspM6Count, owaspM7Count, owaspM8Count, owaspM9Count, owaspM10Count
           ],
           backgroundColor: [
-           "#00008b", "#00008b", "#00008b", "#00008b", "#00008b",
-           "#00008b", "#00008b", "#00008b", "#00008b", "#00008b",
+            "#00008b", "#00008b", "#00008b", "#00008b", "#00008b",
+            "#00008b", "#00008b", "#00008b", "#00008b", "#00008b",
           ]
-        } ]
+        }]
       },
       web: {
         labels: [
           'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10'
         ],
         tooltips: [
-          "Injection","Broken Authentication and Session Management","Cross Site Scripting",
-          "IDOR","Security Misconfiguration","Sensitive Data Exposure","Missing function ACL","CSRF",
+          "Injection", "Broken Authentication and Session Management", "Cross Site Scripting",
+          "IDOR", "Security Misconfiguration", "Sensitive Data Exposure", "Missing function ACL", "CSRF",
           "Using components with known vulnerabilities", "Unvalidated Redirects and Forwards"
         ],
-        datasets: [ {
+        datasets: [{
           label: 'OWASP WEB CATEGORIES',
           data: [
             owaspA1Count, owaspA2Count, owaspA3Count, owaspA4Count, owaspA5Count,
             owaspA6Count, owaspA7Count, owaspA8Count, owaspA9Count, owaspA10Count
           ],
           backgroundColor: [
-           "#36A2EB", "#36A2EB", "#36A2EB", "#36A2EB", "#36A2EB",
-           "#36A2EB", "#36A2EB", "#36A2EB", "#36A2EB", "#36A2EB",
+            "#36A2EB", "#36A2EB", "#36A2EB", "#36A2EB", "#36A2EB",
+            "#36A2EB", "#36A2EB", "#36A2EB", "#36A2EB", "#36A2EB",
           ]
-        } ]
+        }]
       }
     };
   }),
 
-  openRequestAccessModal: task(function * () {
+  openRequestAccessModal: task(function* () {
     yield this.set("showRequestAccessModal", true);
   }),
 
-  closeRequestAccessModal: task(function * () {
+  closeRequestAccessModal: task(function* () {
     yield this.set("showRequestAccessModal", false);
   }),
 
-  requestAccess: task(function *() {
+  requestAccess: task(function* () {
     const orgId = this.get("organization.selected.id");
     const url = [ENV.endpoints.organizations, orgId, ENV.endpoints.requestAccess].join('/');
     yield this.get("ajax").post(url);
   }).evented(),
 
-  requestAccessSucceeded: on('requestAccess:succeeded', function() {
+  requestAccessSucceeded: on('requestAccess:succeeded', function () {
     const tAccessRequested = this.get("tAccessRequested");
     this.get("notify").success(tAccessRequested);
     this.set("showRequestAccessModal", false);
   }),
 
-  requestAccessErrored: on('requestAccess:errored', function(_, err) {
+  requestAccessErrored: on('requestAccess:errored', function (_, err) {
     let errMsg = this.get('tPleaseTryAgain');
     if (err.errors && err.errors.length) {
       errMsg = err.errors[0].detail || errMsg;
-    } else if(err.message) {
+    } else if (err.message) {
       errMsg = err.message;
     }
     this.get('notify').error(errMsg);
   }),
 
 
-  addTag: task(function *(tag) {
+  addTag: task(function* (tag) {
     if (tag) {
       const url = [ENV.endpoints.files, this.get('file.id'), ENV.endpoints.tags].join('/');
       yield this.get('ajax').post(url, {
@@ -333,19 +376,19 @@ const FileHeaderComponent = Component.extend({
     }
   }).evented(),
 
-  addTagSucceeded: on('addTag:succeeded', function() {
+  addTagSucceeded: on('addTag:succeeded', function () {
     this.get('notify').success('Tag added');
     this.set('newTag', '');
     this.set('showAddTagBtn', true);
     this.set('showAddTagForm', false);
   }),
 
-  addTagErrored: on('addTag:errored', function(_, err) {
+  addTagErrored: on('addTag:errored', function (_, err) {
     let errMsg = this.get('tPleaseTryAgain');
     if (err.payload) {
       Object.keys(err.payload).forEach(p => {
         errMsg = err.payload[p]
-        if (typeof(errMsg) !== "string") {
+        if (typeof (errMsg) !== "string") {
           errMsg = err.payload[p][0];
         }
         this.get('notify').error(errMsg);
@@ -353,14 +396,14 @@ const FileHeaderComponent = Component.extend({
       return;
     } else if (err.errors && err.errors.length) {
       errMsg = err.errors[0].detail || errMsg;
-    } else if(err.message) {
+    } else if (err.message) {
       errMsg = err.message;
     }
     this.get('notify').error(errMsg);
   }),
 
 
-  deleteTag: task(function *(tagId) {
+  deleteTag: task(function* (tagId) {
     const url = [ENV.endpoints.files, this.get('file.id'), ENV.endpoints.tags, tagId].join('/');
     yield this.get('ajax').delete(url, {
       namespace: ENV.namespace_v2
@@ -368,15 +411,15 @@ const FileHeaderComponent = Component.extend({
     yield this.get('store').findRecord('file', this.get('file.id'));
   }).evented(),
 
-  deleteTagSucceeded: on('deleteTag:succeeded', function() {
+  deleteTagSucceeded: on('deleteTag:succeeded', function () {
     this.get('notify').success('Tag deleted');
   }),
 
-  deleteTagErrored: on('deleteTag:errored', function(_, err) {
+  deleteTagErrored: on('deleteTag:errored', function (_, err) {
     let errMsg = this.get('tPleaseTryAgain');
     if (err.errors && err.errors.length) {
       errMsg = err.errors[0].detail || errMsg;
-    } else if(err.message) {
+    } else if (err.message) {
       errMsg = err.message;
     }
     this.get('notify').error(errMsg);
@@ -411,20 +454,20 @@ const FileHeaderComponent = Component.extend({
       const url = [ENV.endpoints.signedPdfUrl, fileId].join('/');
       this.set("isDownloadingReport", true);
       this.get("ajax").request(url)
-      .then((result) => {
-        if(!this.isDestroyed) {
-          window.location = result.url;
+        .then((result) => {
+          if (!this.isDestroyed) {
+            window.location = result.url;
+            this.set("isDownloadingReport", false);
+            setTimeout(() => {
+              this.set("showCopyPasswordModal", true);
+            }, 3000);
+          }
+        }, (error) => {
+          // eslint-disable-next-line no-console
+          console.log(error);
           this.set("isDownloadingReport", false);
-          setTimeout(() => {
-            this.set("showCopyPasswordModal", true);
-          }, 3000);
-        }
-      }, (error) => {
-        // eslint-disable-next-line no-console
-        console.log(error);
-        this.set("isDownloadingReport", false);
-        this.get("notify").error(tReportIsGettingGenerated);
-      });
+          this.get("notify").error(tReportIsGettingGenerated);
+        });
     },
 
 
@@ -462,7 +505,7 @@ const FileHeaderComponent = Component.extend({
       this.set("manualscan.filteredAppEnv", appEnv);
     },
 
-    openRemoveUserRoleConfirmBox(param){
+    openRemoveUserRoleConfirmBox(param) {
       this.set("deletedRole", param);
       this.set("showRemoveRoleConfirmBox", true);
     },
@@ -492,7 +535,9 @@ const FileHeaderComponent = Component.extend({
       const tRoleAdded = this.get("tRoleAdded");
       const tPleaseEnterAllValues = this.get("tPleaseEnterAllValues");
       for (let inputValue of [newUserRole, username, password]) {
-        if (isEmpty(inputValue)) { return this.get("notify").error(tPleaseEnterAllValues); }
+        if (isEmpty(inputValue)) {
+          return this.get("notify").error(tPleaseEnterAllValues);
+        }
       }
       let userRoles = this.get("manualscan.userRoles");
       let roleId = this.get("roleId");
@@ -514,13 +559,13 @@ const FileHeaderComponent = Component.extend({
         newUserRole: "",
         username: "",
         password: ""
-        });
+      });
     },
 
     saveManualScanForm() {
       const appName = this.get("file.name");
-      const appEnv =  this.get("manualscan.filteredAppEnv");
-      const appAction =  this.get("manualscan.filteredAppAction");
+      const appEnv = this.get("manualscan.filteredAppEnv");
+      const appAction = this.get("manualscan.filteredAppAction");
       const minOsVersion = this.get("manualscan.minOsVersion");
 
       const contactName = this.get("manualscan.contact.name");
@@ -533,11 +578,13 @@ const FileHeaderComponent = Component.extend({
 
       const tPleaseEnterUserRoles = this.get("tPleaseEnterUserRoles");
 
-      const loginRequired =  this.get("manualscan.loginRequired");
+      const loginRequired = this.get("manualscan.loginRequired");
       const userRoles = this.get("manualscan.userRoles");
 
       if (loginRequired) {
-        if (isEmpty(userRoles)) { return this.get("notify").error(tPleaseEnterUserRoles); }
+        if (isEmpty(userRoles)) {
+          return this.get("notify").error(tPleaseEnterUserRoles);
+        }
       }
 
       if (userRoles) {
@@ -548,17 +595,19 @@ const FileHeaderComponent = Component.extend({
 
       const vpnRequired = this.get("manualscan.vpnRequired");
 
-      const vpnAddress =  this.get("manualscan.vpnDetails.address");
-      const vpnPort =  this.get("manualscan.vpnDetails.port");
+      const vpnAddress = this.get("manualscan.vpnDetails.address");
+      const vpnPort = this.get("manualscan.vpnDetails.port");
 
       if (vpnRequired) {
         for (let inputValue of [vpnAddress, vpnPort]) {
-          if (isEmpty(inputValue)) { return this.get("notify").error(tPleaseEnterVPNDetails); }
+          if (isEmpty(inputValue)) {
+            return this.get("notify").error(tPleaseEnterVPNDetails);
+          }
         }
       }
 
-      const vpnUsername =  this.get("manualscan.vpnDetails.username");
-      const vpnPassword =  this.get("manualscan.vpnDetails.password");
+      const vpnUsername = this.get("manualscan.vpnDetails.username");
+      const vpnPassword = this.get("manualscan.vpnDetails.password");
 
       const vpnDetails = {
         address: vpnAddress,
@@ -586,20 +635,23 @@ const FileHeaderComponent = Component.extend({
       this.set("isRequestingManual", true);
       const fileId = this.get("file.id");
       const url = [ENV.endpoints.manualscans, fileId].join('/');
-      this.get("ajax").put(url, {data: JSON.stringify(data), contentType: 'application/json'})
-      .then(() => {
-        triggerAnalytics('feature', ENV.csb.requestManualScan);
-        this.get("notify").info(tManualRequested);
-        if(!this.isDestroyed) {
+      this.get("ajax").put(url, {
+          data: JSON.stringify(data),
+          contentType: 'application/json'
+        })
+        .then(() => {
+          triggerAnalytics('feature', ENV.csb.requestManualScan);
+          this.get("notify").info(tManualRequested);
+          if (!this.isDestroyed) {
+            this.set("isRequestingManual", false);
+            this.set("file.ifManualNotRequested", false);
+            this.set("showManualScanModal", false);
+            this.set("showManualScanFormModal", false);
+          }
+        }, (error) => {
           this.set("isRequestingManual", false);
-          this.set("file.ifManualNotRequested", false);
-          this.set("showManualScanModal", false);
-          this.set("showManualScanFormModal", false);
-        }
-      }, (error) => {
-        this.set("isRequestingManual", false);
-        this.get("notify").error(error.payload.error);
-      });
+          this.get("notify").error(error.payload.error);
+        });
     },
 
     openManualScanModal() {
@@ -622,21 +674,24 @@ const FileHeaderComponent = Component.extend({
     rescanApp() {
       const tRescanInitiated = this.get("tRescanInitiated");
       const fileId = this.get("file.id");
-      const data =
-        {file_id: fileId};
+      const data = {
+        file_id: fileId
+      };
       this.set("isStartingRescan", true);
-      this.get("ajax").post(ENV.endpoints.rescan, {data})
-      .then(() => {
-        this.get("notify").info(tRescanInitiated);
-        if(!this.isDestroyed) {
+      this.get("ajax").post(ENV.endpoints.rescan, {
+          data
+        })
+        .then(() => {
+          this.get("notify").info(tRescanInitiated);
+          if (!this.isDestroyed) {
+            this.set("isStartingRescan", false);
+            this.set("showRescanModal", false);
+          }
+        }, (error) => {
           this.set("isStartingRescan", false);
+          this.get("notify").error(error.payload.detail);
           this.set("showRescanModal", false);
-        }
-      }, (error) => {
-        this.set("isStartingRescan", false);
-        this.get("notify").error(error.payload.detail);
-        this.set("showRescanModal", false);
-      });
+        });
     }
   }
 });

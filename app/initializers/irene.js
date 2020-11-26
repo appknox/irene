@@ -109,6 +109,9 @@ const initialize = function (application) {
   application.inject("component", "notify", "service:notifications");
   application.inject("authenticator", "notify", "service:notifications");
 
+  application.inject("component", "organization", "service:organization");
+  application.inject("adapter", "organization", "service:organization");
+
   // Inject realtime
   application.inject("component", "realtime", "service:realtime");
 

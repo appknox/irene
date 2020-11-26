@@ -1,39 +1,26 @@
-// import { module, test } from 'qunit';
-// import { setupTest } from 'ember-qunit';
-// import { startMirage } from 'irene/initializers/ember-cli-mirage';
-// import { run } from '@ember/runloop';
-// import tHelper from 'ember-intl/helpers/t';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
+import { hbs } from 'ember-cli-htmlbars';
 
+module('Integration | Component | personaltoken-detail', function(hooks) {
+  setupRenderingTest(hooks);
 
-// module('Integration | Component | personaltoken detail', function(hooks) {
-//   setupTest(hooks);
+  test('it renders', async function(assert) {
+    // Set any properties with this.set('myProperty', 'value');
+    // Handle any actions with this.set('myAction', function(val) { ... });
 
-//   hooks.beforeEach(function() {
-//     // set the locale and the config
-//     this.owner.lookup('service:intl').setLocale('en');
+    await render(hbs`<PersonaltokenDetail />`);
 
-//     this.owner.register('helper:t', tHelper);
-//     // start Mirage
-//     this.server = startMirage();
-//   });
+    assert.equal(this.element.textContent.trim(), '');
 
-//   hooks.afterEach(function() {
-//     // shutdown Mirage
-//     this.server.shutdown();
-//   });
+    // Template block usage:
+    await render(hbs`
+      <PersonaltokenDetail>
+        template block text
+      </PersonaltokenDetail>
+    `);
 
-//   test('tapping button fires an external action', function(assert) {
-
-//     var component = this.owner.factoryFor('component:personaltoken-detail').create();
-//     run(function() {
-//       component.send('openRevokePersonalTokenConfirmBox');
-//       assert.equal(component.get('showRevokePersonalTokenConfirmBox'),true, "Open Modal");
-//       component.send('closeRevokePersonalTokenConfirmBox');
-//       assert.equal(component.get('showRevokePersonalTokenConfirmBox'),false, "Close Modal");
-
-//       component.set("personaltoken", {id: 1});
-//       assert.equal(component.confirmCallback(), undefined, "Confirm Callback");
-
-//     });
-//   });
-// });
+    assert.equal(this.element.textContent.trim(), 'template block text');
+  });
+});

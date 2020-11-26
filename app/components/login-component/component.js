@@ -1,13 +1,29 @@
 import Component from '@ember/component';
-import { computed } from '@ember/object';
-import { task } from 'ember-concurrency';
-import { inject as service } from '@ember/service';
-import { getOwner } from '@ember/application';
+import {
+  computed
+} from '@ember/object';
+import {
+  task
+} from 'ember-concurrency';
+import {
+  inject as service
+} from '@ember/service';
+import {
+  getOwner
+} from '@ember/application';
 import ENV from 'irene/config/environment';
-import { isUnauthorizedError } from 'ember-ajax/errors';
-import { isEmpty } from '@ember/utils';
-import { on } from '@ember/object/evented';
-import { t } from 'ember-intl';
+import {
+  isUnauthorizedError
+} from 'ember-ajax/errors';
+import {
+  isEmpty
+} from '@ember/utils';
+import {
+  on
+} from '@ember/object/evented';
+import {
+  t
+} from 'ember-intl';
 import parseError from 'irene/utils/parse-error';
 
 const LoginComponentComponent = Component.extend({
@@ -31,7 +47,7 @@ const LoginComponentComponent = Component.extend({
   tPleaseEnterValidEmail: t("pleaseEnterValidEmail"),
   tPleaseEnterValidAccountDetail: t("pleaseEnterValidAccountDetail"),
 
-  ssoCheckDone: computed('isSS0Enabled', function(){
+  ssoCheckDone: computed('isSS0Enabled', function () {
     return !isEmpty(this.get('isSS0Enabled'))
   }),
 
@@ -75,30 +91,31 @@ const LoginComponentComponent = Component.extend({
     return !!value
   },
 
-  SSOAuthenticate: task(function*(){
+  SSOAuthenticate: task(function* () {
     const url = `${ENV.endpoints.saml2}?token=${this.get('token')}&return_to=${window.location.origin}/saml2/redirect`;
     const data = yield this.get('ajax').request(url);
     yield window.location.href = data.url;
   }).evented(),
 
-  SSOAuthenticateErrored: on('SSOAuthenticate:errored', function(_, err){
+  SSOAuthenticateErrored: on('SSOAuthenticate:errored', function (_, err) {
     const status = err.status
     this.set('token', null)
     this.set('isSS0Enabled', null);
 
-    if (status===400 && (err.payload.token || err.payload.return_to)) {
+    if (status === 400 && (err.payload.token || err.payload.return_to)) {
       this.get('notify').error(parseError(err, this.get('tSomethingWentWrongContactSupport')));
       return;
     }
     this.get('notify').error(parseError(err, this.get('tPleaseTryAgain')));
   }),
 
-  verifySSO: task(function *(){
+  verifySSO: task(function* () {
     let identification = this.get('identification');
+    console.log('identification in verify', identification)
     if (!identification) {
       return yield this.get("notify").error(this.get('tPleaseEnterValidEmail'), ENV.notifications);
     }
-    const data = yield this.get('ajax').post('sso/check',{
+    const data = yield this.get('ajax').post('sso/check', {
       namespace: ENV.namespace_v2,
       data: {
         username: identification
@@ -109,18 +126,19 @@ const LoginComponentComponent = Component.extend({
     yield this.set('token', data.token)
   }).evented(),
 
-  verifySSOErrored: on('verifySSO:errored', function(){
+  verifySSOErrored: on('verifySSO:errored', function () {
     this.set('isSS0Enabled', null);
     this.set('isSS0Enforced', null);
   }),
 
-  verifySSOSucceded: on('verifySSO:succeded', async function(){
+  verifySSOSucceded: on('verifySSO:succeded', async function () {
     await this.get('redirectSaml').perform();
   }),
 
   actions: {
     authenticate() {
       let identification = this.get('identification');
+      console.log('identification', identification)
       let password = this.get('password');
       const otp = this.get("otp");
 
@@ -130,7 +148,6 @@ const LoginComponentComponent = Component.extend({
       identification = identification.trim();
       password = password.trim();
       this.set("isLogingIn", true);
-
       this.get('session').authenticate("authenticator:irene", identification, password, otp)
         .then()
         .catch(error => {
@@ -153,7 +170,7 @@ const LoginComponentComponent = Component.extend({
           this.get("notify").error(this.get('tPleaseEnterValidAccountDetail'), ENV.notifications);
         })
     },
-    inputChange(){
+    inputChange() {
       if (this.get('ssoCheckDone')) {
         this.set('isSS0Enabled', null);
       }

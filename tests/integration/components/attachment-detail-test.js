@@ -1,36 +1,26 @@
-// import tHelper from 'ember-intl/helpers/t';
-// import { module, test } from 'qunit';
-// import { setupTest } from 'ember-qunit';
-// import { startMirage } from 'irene/initializers/ember-cli-mirage';
-// import { run } from '@ember/runloop';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
+import { hbs } from 'ember-cli-htmlbars';
 
-// module('Integration | Component | attachment detail', function(hooks) {
-//   setupTest(hooks);
+module('Integration | Component | attachment-detail', function(hooks) {
+  setupRenderingTest(hooks);
 
-//   hooks.beforeEach(function() {
-//     // set the locale and the config
-//     this.owner.lookup('service:intl').setLocale('en');
+  test('it renders', async function(assert) {
+    // Set any properties with this.set('myProperty', 'value');
+    // Handle any actions with this.set('myAction', function(val) { ... });
 
-//     // register t helper
-//     this.owner.register('helper:t', tHelper);
+    await render(hbs`<AttachmentDetail />`);
 
-//     // start Mirage
-//     this.server = startMirage();
-//   });
+    assert.equal(this.element.textContent.trim(), '');
 
-//   hooks.afterEach(function() {
-//     // shutdown Mirage
-//     this.server.shutdown();
-//   });
+    // Template block usage:
+    await render(hbs`
+      <AttachmentDetail>
+        template block text
+      </AttachmentDetail>
+    `);
 
-//   test('clicking download link fires an external action', function(assert) {
-//     var component = this.owner.factoryFor('component:attachment-detail').create();
-
-//     run(function() {
-//       component.set("attachment", {downloadUrl: '/api/attachments/20'});
-//       component.send('downloadAttachment');
-//       assert.equal(component.get('isDownloadingAttachment'),true);
-//     });
-//   });
-// });
-
+    assert.equal(this.element.textContent.trim(), 'template block text');
+  });
+});

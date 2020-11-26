@@ -1,4 +1,4 @@
-.align-middle.contain-width local-class="login-wrapper"
+.align-middle.contain-width.login-component local-class="login-wrapper"
   div local-class="login-container"
     = auth-assets
 
@@ -17,7 +17,7 @@
                       = fa-icon "user" local-class="input-icon"
                     = input local-class="input-entry" class="input" placeholder="Username / Email" value=identification id="username" autofocus="autofocus" autocomplete="username" input=(action "inputChange")
                   unless ssoCheckDone
-                    button.is-primary.highlighted-button.margin-l-h local-class="input-button" click={(perform verifySSO)}
+                    button.is-primary.highlighted-button.margin-l-h.input-button local-class="input-button" click={(perform verifySSO)}
                       if verifySSO.isRunning
                         = fa-icon "spinner fa-spin"
                       else

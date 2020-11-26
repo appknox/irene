@@ -1,25 +1,26 @@
-// import { find } from '@ember/test-helpers';
-// import tHelper from 'ember-intl/helpers/t';
-// import { module, test } from 'qunit';
-// import { setupTest } from 'ember-qunit';
-// import hbs from 'htmlbars-inline-precompile';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
+import { hbs } from 'ember-cli-htmlbars';
 
-// module('Integration | Component | auth assets', function(hooks) {
-//   setupTest(hooks);
+module('Integration | Component | auth-assets', function(hooks) {
+  setupRenderingTest(hooks);
 
-//   hooks.beforeEach(function() {
-//     // set the locale and the config
-//     this.owner.lookup('service:intl').setLocale('en');
+  test('it renders', async function(assert) {
+    // Set any properties with this.set('myProperty', 'value');
+    // Handle any actions with this.set('myAction', function(val) { ... });
 
-//     // register t helper
-//     this.owner.register('helper:t', tHelper);
-//   });
+    await render(hbs`<AuthAssets />`);
 
-//   test('it renders', function(assert) {
-//     assert.expect(1);
+    assert.equal(this.element.textContent.trim(), '');
 
-//     this.render(hbs("{{auth-assets}}"));
+    // Template block usage:
+    await render(hbs`
+      <AuthAssets>
+        template block text
+      </AuthAssets>
+    `);
 
-//     assert.equal(find('*').textContent.trim(), 'Security fanatics at your service');
-//   });
-// });
+    assert.equal(this.element.textContent.trim(), 'template block text');
+  });
+});

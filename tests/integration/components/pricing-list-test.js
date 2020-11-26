@@ -1,35 +1,26 @@
-// import ENV from 'irene/config/environment';
-// import { module, test } from 'qunit';
-// import { setupTest } from 'ember-qunit';
-// import { run } from '@ember/runloop';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
+import { hbs } from 'ember-cli-htmlbars';
 
-// module('Integration | Component | pricing list', function(hooks) {
-//   setupTest(hooks);
+module('Integration | Component | pricing-list', function(hooks) {
+  setupRenderingTest(hooks);
 
-//   test('tapping button fires an external action', function(assert) {
+  test('it renders', async function(assert) {
+    // Set any properties with this.set('myProperty', 'value');
+    // Handle any actions with this.set('myAction', function(val) { ... });
 
-//     var component = this.owner.factoryFor('component:pricing-list').create();
-//     var store = {
-//       createRecord: function() {
-//         return [
-//           {
-//             id: "devknox",
-//             name: "Devknox",
-//             description: "Dashboard Upload, Manual Scan",
-//             price: ENV.devknoxPrice,
-//             projectsLimit: 0,
-//           }
-//         ];
-//       }
-//     };
-//     component.set('store', store);
+    await render(hbs`<PricingList />`);
 
-//     run(function() {
-//       assert.deepEqual(component.get('durations'),
-//         [{"key": "MONTHLY","value": 1},{"key": "QUARTERLY","value": 3},{"key": "HALFYEARLY","value": 6},{"key": "YEARLY","value": 10}],
-//       "Durations");
-//       assert.notOk(component.activateDuration());
-//       assert.notOk(component.didRender());
-//     });
-//   });
-// });
+    assert.equal(this.element.textContent.trim(), '');
+
+    // Template block usage:
+    await render(hbs`
+      <PricingList>
+        template block text
+      </PricingList>
+    `);
+
+    assert.equal(this.element.textContent.trim(), 'template block text');
+  });
+});

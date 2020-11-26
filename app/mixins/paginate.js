@@ -96,6 +96,7 @@ const PaginateMixin = Mixin.create({
       }
       return this.set("meta", meta); // eslint-disable-line
     });
+    console.log('objects', objects)
     return objects;
   }),
 

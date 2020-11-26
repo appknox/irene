@@ -1,66 +1,26 @@
-// import { module, test } from 'qunit';
-// import { setupTest } from 'ember-qunit';
-// import { run } from '@ember/runloop';
-// import tHelper from 'ember-intl/helpers/t';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
+import { hbs } from 'ember-cli-htmlbars';
 
-// module('Integration | Component | file details', function(hooks) {
-//   setupTest(hooks);
+module('Integration | Component | file-details', function(hooks) {
+  setupRenderingTest(hooks);
 
-//   hooks.beforeEach(function() {
-//     // set the locale and the config
-//     this.owner.lookup('service:intl').setLocale('en');
+  test('it renders', async function(assert) {
+    // Set any properties with this.set('myProperty', 'value');
+    // Handle any actions with this.set('myAction', function(val) { ... });
 
-//     this.owner.register('helper:t', tHelper);
+    await render(hbs`<FileDetails />`);
 
-//   });
+    assert.equal(this.element.textContent.trim(), '');
 
-//   test('tapping button fires an external action', function (assert) {
-//     var component = this.owner.factoryFor('component:file-details').create();
-//     this.render();
-//     run(function () {
-//       component.set("file",
-//         {
-//           sortedAnalyses: [
-//             {
-//               id: 1,
-//               hasType: false
-//             },
-//             {
-//               id: 2,
-//               hasType: false
-//             },
-//             {
-//               id: 3,
-//               hasType: false
-//             }
-//           ]
-//         });
-//       assert.deepEqual(component.get("analyses"), [{ "hasType": false, "id": 1 }, { "hasType": false, "id": 2 }, { "hasType": false, "id": 3 }], "Analyses");
+    // Template block usage:
+    await render(hbs`
+      <FileDetails>
+        template block text
+      </FileDetails>
+    `);
 
-//       component.set("file",
-//         {
-//           sortedAnalyses: [
-//             {
-//               id: 1,
-//               hasType() {
-//                 return true;
-//               }
-//             },
-//             {
-//               id: 2,
-//               hasType() {
-//                 return true;
-//               }
-//             },
-//             {
-//               id: 3,
-//               hasType() {
-//                 return true;
-//               }
-//             }
-//           ]
-//         });
-//       component.send("filterVulnerabilityType");
-//     });
-//   });
-// });
+    assert.equal(this.element.textContent.trim(), 'template block text');
+  });
+});

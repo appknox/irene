@@ -1,9 +1,9 @@
 import commondrf from './commondrf';
 
 export default class OrganizationMember extends commondrf {
-  _buildURL (modelName, id) {
+  _buildURL(modelName, id) {
     const baseurl = `${this.get('namespace_v2')}/projects`;
-
+    console.log('org servi', this.get('organization'))
     if (id) {
       return this.buildURLFromBase(`${baseurl}/${encodeURIComponent(id)}`);
     }

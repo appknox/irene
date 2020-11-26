@@ -1,39 +1,26 @@
-// import { module, test } from 'qunit';
-// import { setupTest } from 'ember-qunit';
-// import { startMirage } from 'irene/initializers/ember-cli-mirage';
-// import { run } from '@ember/runloop';
-// import tHelper from 'ember-intl/helpers/t';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
+import { hbs } from 'ember-cli-htmlbars';
 
-// module('Integration | Component | personaltoken list', function(hooks) {
-//   setupTest(hooks);
+module('Integration | Component | personaltoken-list', function(hooks) {
+  setupRenderingTest(hooks);
 
-//   hooks.beforeEach(function() {
-//     // set the locale and the config
-//     this.owner.lookup('service:intl').setLocale('en');
+  test('it renders', async function(assert) {
+    // Set any properties with this.set('myProperty', 'value');
+    // Handle any actions with this.set('myAction', function(val) { ... });
 
-//     this.owner.register('helper:t', tHelper);
-//     // start Mirage
-//     this.server = startMirage();
-//   });
+    await render(hbs`<PersonaltokenList />`);
 
-//   hooks.afterEach(function() {
-//     // shutdown Mirage
-//     this.server.shutdown();
-//   });
+    assert.equal(this.element.textContent.trim(), '');
 
-//   test('tapping button fires an external action', function(assert) {
+    // Template block usage:
+    await render(hbs`
+      <PersonaltokenList>
+        template block text
+      </PersonaltokenList>
+    `);
 
-//     var component = this.owner.factoryFor('component:personaltoken-list').create();
-//     run(function() {
-//       component.send('openGenerateTokenModal');
-//       assert.equal(component.get('showGenerateTokenModal'),true, "Open Modal");
-
-//       component.send('generateToken');
-//       component.set("tokenName", "test");
-//       component.send('generateToken');
-//       assert.equal(component.get('isGeneratingToken'),true, "Generating Token");
-//       assert.equal(component.didInsertElement(), undefined, "Register Password Copy");
-//       assert.equal(component.willDestroyElement(), undefined, "Destroy Password Copy");
-//     });
-//   });
-// });
+    assert.equal(this.element.textContent.trim(), 'template block text');
+  });
+});
