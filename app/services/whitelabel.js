@@ -16,7 +16,8 @@ export default class WhitelabelService extends Service {
   }
 
   default_name = "Appknox";
-  defautl_theme = this.THEMES.DARK;
+  default_theme = this.THEMES.DARK;
+  default_favicon = ENV.favicon;
 
 
   /**
@@ -27,7 +28,7 @@ export default class WhitelabelService extends Service {
     if(this.isEnabled()) {
       return ENV.whitelabel.theme
     }
-    return this.defautl_theme;
+    return this.default_theme;
   }
 
   /**
@@ -39,5 +40,16 @@ export default class WhitelabelService extends Service {
       return ENV.whitelabel.name;
     }
     return this.default_name;
+  }
+
+  /**
+   * @property {String} favicon
+   * Whitelabel favicon will be returned or fallback default to `favicon.ico`.
+   */
+  get favicon() {
+    if(this.isEnabled() && ENV.whitelabel.favicon)  {
+      return ENV.whitelabel.favicon;
+    }
+    return this.default_favicon;
   }
 }
