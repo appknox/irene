@@ -22,6 +22,10 @@ header.card-header
 .app-information.align-both.vertical-align-center
   .file-id-container
     .file-id-text
+      if (not file.isActive)
+        = fa-icon "exclamation-circle" class="file-in-active-icon margin-right"
+        = attach-tooltip placement="top"
+          = t "fileInactive"
       | FILE ID - #{file.id}
 
   .file-overview-scan-status

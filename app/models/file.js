@@ -33,6 +33,7 @@ const File = DS.Model.extend(BaseModelMixin, {
   manual: DS.attr('number'),
   apiScanProgress: DS.attr('number'),
   staticScanProgress: DS.attr('number'),
+  isActive: DS.attr('boolean'),
   isStaticDone: DS.attr('boolean'),
   isDynamicDone: DS.attr('boolean'),
   isManualDone: DS.attr('boolean'),

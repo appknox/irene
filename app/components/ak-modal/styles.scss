@@ -1,0 +1,22 @@
+.modal-header {
+  display: grid;
+  grid-template-columns: 1fr 30px;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  border-bottom: 2px solid rgba(128, 128, 128, 0.77);
+
+  h3.header-title {
+    margin: 0;
+  }
+
+  .close-icon {
+    i {
+      cursor: pointer;
+    }
+  }
+}
+
+.modal-body {
+  min-width: 500px;
+}

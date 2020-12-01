@@ -50,6 +50,7 @@
   "analyzing": "Analyzing",
   "appCenterPipeline": "App Center Build",
   "attachments": "Attachments",
+  "automated": "Automated",
   "azurePipeline": "Azure Pipeline",
   "back": "Back",
   "backToTeams": "Back to teams",
@@ -188,6 +189,7 @@
   "fileDetails": "File Details",
   "files": "Files",
   "fileUploadedSuccessfully": "File Uploaded Successfully. Please wait while we process your file.",
+  "fileInactive": "File Inactive",
   "filterBy": "Filter By",
   "fingerprints": "Fingerprints",
   "first": "First",
@@ -553,6 +555,7 @@
   "teamRemoved": "Team removed from accessing this project",
   "testCredentials": "Test Credentials",
   "title": "Title",
+  "type": "Type",
   "unavailable": "unavailable",
   "unreachable": "Unreachable",
   "unchanged": "Unchanged",
@@ -744,5 +747,24 @@
     "selectGHRepo": "Select the Github Repo where you want us to create issues for the risks we find in your project",
     "selectJIRAAccount": "Select the JIRA account where you want us to create issues for the risks we find in your project",
     "selectPreferredDevice": "Select the Preferred Device Type and OS Version for Dynamic Scan"
+  },
+  "storageManagement": "Storage Management",
+  "fileCleanup": {
+    "title": "Automated file cleanup",
+    "autoCleanup": "Auto cleanup",
+    "activeCount": "Files to keep active",
+    "lastActivity": "Last Activity",
+    "run": "Run CleanUp",
+    "viewList": "View All",
+    "listTitle": "File Cleanup Activities",
+    "status": "File cleaned status",
+    "description": "Enabling this will delete application binaries for files which are not in the <n> recent uploads per project. Files for which the deletion is processed will be marked as inactive. Files marked as inactive will not allow future scans to be performed on it.",
+    "noCleanup": "No Cleanups found",
+    "msg": {
+      "saveSuccess": "Cleanup preference updated!",
+      "saveError": "Problem while updating cleanup preferen",
+      "triggerSuccess": "Cleanup initiated!",
+      "triggerError": "Problem with trigger"
+    }
   }
 }

@@ -57,7 +57,7 @@
               | #{t "completed"} &nbsp;
               = fa-icon "check"
 
-            button.is-primary.margin-left5.ac-static-rescan click="openRescanModal"
+            button.is-primary.margin-left5.ac-static-rescan click="openRescanModal" disabled={if file.isActive false "disabled"}
               .fa-font-size-small
                 = fa-icon "repeat"
           else
@@ -92,15 +92,20 @@
                 | &nbsp; #{t "requested"}
           else
             if organization.selected.isTrial
-              button.is-primary click={(perform openRequestAccessModal)}
+              button.is-primary click={(perform openRequestAccessModal)} disabled={if file.isActive false "disabled"}
                 .fa-font-size
                   = fa-icon "play"
                 | &nbsp; #{t "start"}
             else
-              button.is-primary.ac-request-manual-scan click="openManualScanModal"
+              button.is-primary.ac-request-manual-scan click="openManualScanModal" disabled={if file.isActive false "disabled"}
                 .fa-font-size
                   = fa-icon "play"
                 | &nbsp; #{t "start"}
+    if (not file.isActive)
+      span local-class="file-in-active"
+        = fa-icon "exclamation-circle"
+        = attach-tooltip placement="top"
+          = t "fileInactive"
 
 
 .card.is-fullwidth.app-details-card

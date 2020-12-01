@@ -1,9 +1,21 @@
 import Mixin from '@ember/object/mixin';
 import ENV from 'irene/config/environment';
-import { observer, computed } from '@ember/object';
-import { isEmpty } from '@ember/utils';
-import { run } from '@ember/runloop';
+import {
+  observer,
+  computed
+} from '@ember/object';
+import {
+  isEmpty
+} from '@ember/utils';
+import {
+  run
+} from '@ember/runloop';
+import {
+  __range__
+} from 'irene/utils/utils';
 
+// Classic Mixin object
+// Should be deprecated once all the pagination is replaced with class based
 const PaginateMixin = Mixin.create({
 
   offset: 0,
@@ -67,7 +79,9 @@ const PaginateMixin = Mixin.create({
     }
     const objects = this.get('store').query(targetModel, query);
     objects.then((result) => {
-      const { meta } = result;
+      const {
+        meta
+      } = result;
       if (result.links && result.meta.pagination) {
         meta.total = result.meta.pagination.count;
         this.set('isJsonApiPagination', true); // eslint-disable-line
@@ -97,7 +111,7 @@ const PaginateMixin = Mixin.create({
       return 0;
     }
     return Math.ceil(total / limit) - 1;
-  }),  // `-1` because offset starts from 0
+  }), // `-1` because offset starts from 0
 
   pages: computed("maxOffset", "offset", function () {
     const offset = this.get("offset");
@@ -181,14 +195,182 @@ const PaginateMixin = Mixin.create({
   }
 });
 
-export default PaginateMixin;
+// Class basaed mixin support for glimmer components
+import {
+  action
+} from '@ember/object';
+import {
+  tracked
+} from '@glimmer/tracking';
+import {
+  gt,
+  equal,
+  alias
+} from '@ember/object/computed';
 
-function __range__(left, right, inclusive) {
-  let range = [];
-  let ascending = left < right;
-  let end = !inclusive ? right : ascending ? right + 1 : right - 1;
-  for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
-    range.push(i);
+export const PaginationMixin = superclass => class extends superclass {
+
+  constructor() {
+    super(...arguments);
   }
-  return range;
+
+  @tracked offset = 0;
+  @tracked meta = null;
+  @tracked version = 0;
+  @tracked extraQueryStrings = "";
+  @tracked limit = ENV.paginate.perPageLimit;
+  @tracked isJsonApiPagination = false;
+  @tracked isDRFPagination = false;
+  @tracked offsetMultiplier = ENV.paginate.offsetMultiplier;
+  @tracked isLoading = false;
+  @tracked error = null;
+
+  @action
+  gotoPage(offset) {
+    this.setOffset(offset);
+    console.log('set offset', offset)
+  }
+
+  @action
+  gotoPageFirst() {
+    this.gotoPage(0)
+  }
+
+  @action
+  gotoPagePrevious() {
+    this.gotoPage(this.offset - 1)
+  }
+
+  @action
+  gotoPageNext() {
+    this.gotoPage(this.offset + 1);
+  }
+
+  @action
+  gotoPageLast() {
+    this.gotoPage(this.maxOffset)
+  }
+
+  @computed('extraQueryStrings', 'limit', 'offset', 'offsetMultiplier', 'targetModel') //eslint-disable-line
+  get objects() {
+    let query;
+    if (this.isJsonApiPagination) { // eslint-disable-line
+      const query_limit = this.limit;
+      const query_offset = this.offset;
+      query = {
+        'page[limit]': this.limit,
+        'page[offset]': query_limit * query_offset
+      };
+    } else {
+      query = {
+        limit: this.limit,
+        offset: this.offset
+      };
+    }
+    const extraQueryStrings = this.extraQueryStrings; // eslint-disable-line
+    if (!isEmpty(extraQueryStrings)) {
+      const extraQueries = JSON.parse(extraQueryStrings);
+      for (let key in extraQueries) {
+        const value = extraQueries[key];
+        query[key] = value;
+      }
+    }
+    const targetModel = this.targetModel;
+    if (this.isDRFPagination) { // eslint-disable-line
+      query.offset = query.offset * (this.offsetMultiplier || 1);
+    }
+    const objects = this.store.query(targetModel, query); // eslint-disable-line
+    objects.then((result) => {
+      const meta = result.meta;
+      console.log('result', result)
+      if (result.links && result.meta.pagination) {
+        meta.total = result.meta.pagination.count;
+        this.isJsonApiPagination = true; // eslint-disable-line
+      }
+      if ("count" in result.meta) {
+        meta.total = result.meta.count || 0;
+        /*
+        count is only defined for DRF
+        JSONAPI has total
+        */
+        this.isDRFPagination = true; // eslint-disable-line
+      }
+      return this.meta = meta; // eslint-disable-line
+    })
+    return objects;
+  }
+
+  @alias('objects.length') objectCount
+
+  @gt('objectCount', 0) hasObjects;
+
+  @equal('meta.count', 0) hasNoObject;
+
+  @computed('meta.total', 'limit')
+  get maxOffset() {
+    const limit = this.limit;
+    const total = this.meta ? this.meta.total : 0 || 0;
+    if (total === 0) {
+      return 0;
+    }
+    return Math.ceil(total / limit) - 1;
+  } // `-1` because offset starts from 0
+
+  @computed("maxOffset", "offset")
+  get pages() {
+    const offset = this.offset;
+    const maxOffset = this.maxOffset;
+    let startPage = 0;
+    let stopPage = maxOffset;
+    let offsetDiffStart = 0;
+    let offsetDiffStop = 0;
+
+    if ([NaN, 0, 1].includes(maxOffset)) {
+      return [];
+    }
+    if (maxOffset <= (ENV.paginate.pagePadding * 2)) {
+      return __range__(startPage, stopPage, true);
+    }
+
+    if (offset > ENV.paginate.pagePadding) {
+      startPage = offset - ENV.paginate.pagePadding;
+    } else {
+      offsetDiffStart = ENV.paginate.pagePadding - offset;
+    }
+
+    if (maxOffset >= (ENV.paginate.pagePadding + offset)) {
+      stopPage = ENV.paginate.pagePadding + offset;
+    } else {
+      offsetDiffStop = (ENV.paginate.pagePadding + offset) - maxOffset;
+    }
+
+    startPage -= offsetDiffStop;
+    stopPage += offsetDiffStart;
+
+    return __range__(startPage, stopPage, true);
+  }
+
+  @computed("offset")
+  get preDot() {
+    return (this.offset - ENV.paginate.pagePadding) > 0;
+  }
+
+  @computed("offset", "maxOffset", )
+  get postDot() {
+    return (this.offset + ENV.paginate.pagePadding) < this.maxOffset;
+  }
+
+  @gt("offset", 0) hasPrevious
+
+  @computed('offset', 'maxOffset', )
+  get hasNext() {
+    return this.offset < this.maxOffset;
+  }
+
+  setOffset(offset) {
+    this.offset = offset;
+  }
 }
+
+
+export default PaginateMixin;

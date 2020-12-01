@@ -1,0 +1,41 @@
+.cleanup-descripton {
+  padding: 12px 0;
+  font-size: .98em;
+}
+
+.cleanup-title {
+  font-weight: 700;
+  font-size: 1.2em;
+}
+
+.files-count-input {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  column-gap: 12px;
+
+  .error-input {
+    border-color: red;
+  }
+
+  .file-count-err {
+    color: red;
+    font-size: 12px;
+    grid-column: 2;
+  }
+
+  .save-input {
+    border: 1px solid;
+    height: 41px;
+    padding: 0 8px;
+    border-radius: 4px;
+
+    i {
+      line-height: 41px;
+    }
+  }
+}
+
+.last-activity {
+  font-weight: 400;
+}

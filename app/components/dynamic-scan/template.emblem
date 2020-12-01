@@ -12,17 +12,17 @@ div class="{{if vncViewer 'dynamic-scan-on-vnc' 'dynamic-scan'}}"
           button.vnc-button.vnc-completed-button.is-primary disabled="disabled"
             = fa-icon "check"
             | &nbsp; #{t "completed"}
-          button.vnc-button.vnc-button-repeat.is-primary.margin-left5.ac-dynamic-rescan click={(perform openDynamicScanModal)}
+          button.vnc-button.vnc-button-repeat.is-primary.margin-left5.ac-dynamic-rescan click={(perform openDynamicScanModal)} disabled={if file.isActive false "disabled"}
             .fa-font-size-small
               = fa-icon "repeat"
         else
-          button.vnc-button.is-primary.ac-start-dynamic-scan click={(perform openDynamicScanModal)}
+          button.vnc-button.is-primary.ac-start-dynamic-scan click={(perform openDynamicScanModal)}  disabled={if file.isActive false "disabled"}
             .fa-font-size
               = fa-icon "play"
             | &nbsp; #{dynamicScanText}
   if file.isDynamicStatusReady
     .margin-h-q
-      button.is-primary click="dynamicShutdown"
+      button.is-primary click="dynamicShutdown" disabled={if file.isActive false "disabled"}
         .fa-font-size-small
           = fa-icon "stop"
         |  &nbsp; #{t "stop"}

@@ -51,6 +51,7 @@
   "analyzing": "分析中",
   "appCenterPipeline": "App Center Build",
   "attachments": "添付ファイル",
+  "automated": "Automated",
   "azurePipeline": "Azure Pipeline",
   "back": "Back",
   "backToTeams": "Back to teams",
@@ -189,6 +190,7 @@
   "fileDetails": "ファイルの詳細",
   "files": "ファイル",
   "fileUploadedSuccessfully": "ファイルがアップロードされました。ファイルを処理していますのでお待ちください。",
+  "fileInactive": "File Inactive",
   "filterBy": "フィルタリングする",
   "fingerprints": "Fingerprints",
   "first": "最初",
@@ -553,6 +555,7 @@
   "teamRemoved": "Team removed from accessing this project",
   "testCredentials": "テスト資格情報",
   "title": "Title",
+  "type": "Type",
   "unavailable": "unavailable",
   "unreachable": "Unreachable",
   "unchanged": "変更なし",
@@ -744,5 +747,24 @@
     "selectGHRepo": "プロジェクトで見つかったリスクに関するIssueを作成するGithub のリポジトリを選択してください",
     "selectJIRAAccount": "プロジェクトで見つかったリスクに関するIssueを作成するJIRAアカウントを選択してください",
     "selectPreferredDevice": "動的診断のデバイスタイプとOSバージョンを選択してください"
+  },
+  "storageManagement": "Storage Management",
+  "fileCleanup": {
+    "title": "Automated file cleanup",
+    "autoCleanup": "Auto cleanup",
+    "activeCount": "Files to keep active",
+    "lastActivity": "Last Activity",
+    "run": "Run CleanUp",
+    "viewList": "View All",
+    "listTitle": "File Cleanup Activities",
+    "status": "File cleaned status",
+    "description": "Enabling this will delete application binaries for files which are not in the <n> recent uploads per project. Files for which the deletion is processed will be marked as inactive. Files marked as inactive will not allow future scans to be performed on it.",
+    "noCleanup": "No Cleanups found",
+    "msg": {
+      "saveSuccess": "Cleanup preference updated!",
+      "saveError": "Problem while updating",
+      "triggerSuccess": "Cleanup initiated!",
+      "triggerError": "Problem with trigger"
+    }
   }
 }
