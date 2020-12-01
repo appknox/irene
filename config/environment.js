@@ -16,6 +16,7 @@ const possibleENVS = [
   "WHITELABEL_NAME",
   "WHITELABEL_LOGO",
   "WHITELABEL_THEME",
+  "WHITELABEL_FAVICON",
 ];
 
 const ENVHandlerCONST = {
@@ -215,6 +216,7 @@ module.exports = function (environment) {
       },
     },
     rootURL: "/",
+    favicon: "/images/favicon.ico",
     locationType: "auto",
     modulePrefix: "irene",
     environment: environment,
@@ -564,6 +566,7 @@ module.exports = function (environment) {
     ENV.whitelabel.name = handler.getEnv('WHITELABEL_NAME');
     ENV.whitelabel.logo = handler.getEnv('WHITELABEL_LOGO');
     ENV.whitelabel.theme = handler.getEnv('WHITELABEL_THEME'); // 'light' or 'dark'
+    ENV.whitelabel.favicon = handler.getEnv('WHITELABEL_FAVICON');
   }
 
   if (environment === "development") {

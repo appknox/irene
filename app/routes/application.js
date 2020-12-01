@@ -11,6 +11,7 @@ export default class ApplicationRoute extends Route {
 
   afterModel() {
     this.headData.title = "Appknox";
+    this.headData.favicon = this.whitelabel.favicon;
   }
 
   setupController(controller) {

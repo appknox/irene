@@ -13,7 +13,7 @@
         | &nbsp;
       | + {{t "templates.addNewUrlFilter"}}
   small
-    | eg. api.appknox.com. Do not specify the scheme (http://...), port (:443/...) & path (.../users)
+    | {{t "templates.enterEndpoint"}}
 
 if apiScanOptions.hasApiUrlFilters
 
