@@ -23,6 +23,7 @@ const ENVs = [
   "WHITELABEL_NAME",
   "WHITELABEL_LOGO",
   "WHITELABEL_THEME",
+  "WHITELABEL_FAVICON",
 ];
 
 const app = express();
