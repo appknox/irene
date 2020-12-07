@@ -1,33 +1,36 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Appknox</title>
-    <meta name="description" content="Sign in to scan a mobile app and access VAPT results.">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noindex" />
 
-    {{content-for "head"}}
-    <script src="{{rootURL}}runtimeconfig.js"></script>
-    <link rel="stylesheet" href="{{rootURL}}assets/vendor.css">
-    <link rel="stylesheet" href="{{rootURL}}assets/irene.css">
-    <link href="https://fonts.googleapis.com/css?family=Anonymous+Pro:400,700|Open+Sans:400,600,700" rel="stylesheet">
-    {{content-for "head-footer"}}
-  </head>
-  <body>
-    {{content-for "body"}}
-    <script src="{{rootURL}}assets/vendor.js"></script>
-    <script src="{{rootURL}}assets/irene.js"></script>
-    {{content-for "body-footer"}}
-    <link href="https://fonts.googleapis.com/css?family=Lato|Source+Code+Pro" rel="stylesheet" lazyload />
-    <div id="hiddencolorholder" style="display:none;">
-      <button class="is-danger">A</button>
-      <button class="is-critical">A</button>
-      <button class="is-warning">A</button>
-      <button class="is-info">A</button>
-      <button class="is-success">A</button>
-      <button class="is-default">A</button>
-    </div>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Mobile Security Dashboard</title>
+  <meta name="description" content="Sign in to scan a mobile app and access VAPT results.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex" />
+
+  {{content-for "head"}}
+  <script src="{{rootURL}}runtimeconfig.js"></script>
+  <link rel="stylesheet" href="{{rootURL}}assets/vendor.css">
+  <link rel="stylesheet" href="{{rootURL}}assets/irene.css">
+  <link href="https://fonts.googleapis.com/css?family=Anonymous+Pro:400,700|Open+Sans:400,600,700" rel="stylesheet">
+  {{content-for "head-footer"}}
+</head>
+
+<body>
+  {{content-for "body"}}
+  <script src="{{rootURL}}assets/vendor.js"></script>
+  <script src="{{rootURL}}assets/irene.js"></script>
+  {{content-for "body-footer"}}
+  <link href="https://fonts.googleapis.com/css?family=Lato|Source+Code+Pro" rel="stylesheet" lazyload />
+  <div id="hiddencolorholder" style="display:none;">
+    <button class="is-danger">A</button>
+    <button class="is-critical">A</button>
+    <button class="is-warning">A</button>
+    <button class="is-info">A</button>
+    <button class="is-success">A</button>
+    <button class="is-default">A</button>
+  </div>
+</body>
+
 </html>
