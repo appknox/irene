@@ -1,0 +1,36 @@
+name: Publish Docker image
+on:
+  release:
+    types: [published]
+jobs:
+  push_to_registry:
+    name: Push Docker image to GitHub Container Registry
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Get release version
+        id: release
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.APPKNOX_GITHUB_CONTAINER_TOKEN }} #encrypted secret var
+          registry: ghcr.io
+
+      - name: Build & Push to GitHub Container Registry
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository }}:${{ steps.release.outputs.VERSION }}
