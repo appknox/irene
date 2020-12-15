@@ -1,5 +1,4 @@
-$extensions-list: (
-  apk: #5eb533,
+$extensions-list: (apk: #5eb533,
   ipa: #8e44ad,
   txt: #a6b1b5,
   log: #373a43,
@@ -15,5 +14,13 @@ $extensions-list: (
   png: #80c081,
   bmp: #80c081,
 );
+
+$risk-critical: #EF4836;
+$risk-danger: #FF8C00;
+$risk-warning: #F5D76E;
+$risk-info: #2CC2F8;
+$risk-success: #80C081;
+$risk-default: #6B6B6B;
+
 
 $attachment-icon-width: 4em;
