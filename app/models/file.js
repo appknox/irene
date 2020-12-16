@@ -1,24 +1,32 @@
-import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
+import {
+  inject as service
+} from '@ember/service';
+import {
+  computed
+} from '@ember/object';
 import DS from 'ember-data';
 import BaseModelMixin from 'irene/mixins/base-model';
 import ENUMS from 'irene/enums';
-import { t } from 'ember-intl';
+import {
+  t
+} from 'ember-intl';
+import {
+  RISK_COLOR_CODE
+} from 'irene/utils/constants';
 
-const _getComputedColor = function(selector) {
-  const el = document.querySelector(`#hiddencolorholder .is-${selector}`);
-  const computedStyle = window.getComputedStyle(el);
-  return computedStyle.getPropertyValue("color");
-};
 
-const _getAnalysesCount = (analysis, risk)=> {
+const _getAnalysesCount = (analysis, risk) => {
   return analysis.filterBy('computedRisk', risk).get('length')
 };
 
 const File = DS.Model.extend(BaseModelMixin, {
   intl: service(),
-  project: DS.belongsTo('project', {inverse:'files'}),
-  profile: DS.belongsTo('profile', {inverse:'files'}),
+  project: DS.belongsTo('project', {
+    inverse: 'files'
+  }),
+  profile: DS.belongsTo('profile', {
+    inverse: 'files'
+  }),
   uuid: DS.attr('string'),
   deviceToken: DS.attr('string'),
   version: DS.attr('string'),
@@ -28,7 +36,9 @@ const File = DS.Model.extend(BaseModelMixin, {
   sha1hash: DS.attr('string'),
   name: DS.attr('string'),
   dynamicStatus: DS.attr('number'),
-  analyses: DS.hasMany('analysis', {inverse: 'file'}),
+  analyses: DS.hasMany('analysis', {
+    inverse: 'file'
+  }),
   report: DS.attr('string'),
   manual: DS.attr('number'),
   apiScanProgress: DS.attr('number'),
@@ -44,25 +54,25 @@ const File = DS.Model.extend(BaseModelMixin, {
   supportedCpuArchitectures: DS.attr('string'),
   supportedDeviceTypes: DS.attr('string'),
 
-  isManualRequested: computed('manual', function() {
+  isManualRequested: computed('manual', function () {
     return this.get("manual") !== ENUMS.MANUAL.NONE
   }),
 
-  isRunningApiScan: computed('apiScanStatus', function() {
+  isRunningApiScan: computed('apiScanStatus', function () {
     const apiScanStatus = this.get("apiScanStatus");
     return apiScanStatus == ENUMS.SCAN_STATUS.RUNNING;
   }),
 
   isApiNotDone: computed.not('isApiDone'),
 
-  scanProgressClass(type){
+  scanProgressClass(type) {
     if (type === true) {
       return true;
     }
     return false;
   },
 
-  isStaticCompleted: computed('isStaticDone', function() {
+  isStaticCompleted: computed('isStaticDone', function () {
     const isStaticDone = this.get("isStaticDone");
     return this.scanProgressClass(isStaticDone);
   }),
@@ -86,7 +96,7 @@ const File = DS.Model.extend(BaseModelMixin, {
   countRiskNone: 0,
   countRiskUnknown: 0,
 
-  doughnutData: computed('analyses.@each.computedRisk', function() {
+  doughnutData: computed('analyses.@each.computedRisk', function () {
     const analyses = this.get("analyses");
     const r = ENUMS.RISK;
     const countRiskCritical = _getAnalysesCount(analyses, r.CRITICAL);
@@ -112,7 +122,7 @@ const File = DS.Model.extend(BaseModelMixin, {
         'PASSED',
         'UNKNOWN'
       ],
-      datasets: [ {
+      datasets: [{
         label: 'Risks',
         data: [
           countRiskCritical,
@@ -123,37 +133,37 @@ const File = DS.Model.extend(BaseModelMixin, {
           countRiskUnknown
         ],
         backgroundColor: [
-         _getComputedColor("critical"),
-         _getComputedColor("danger"),
-         _getComputedColor("warning"),
-         _getComputedColor("info"),
-         _getComputedColor("success"),
-         _getComputedColor("default")
+          RISK_COLOR_CODE.CRITICAL,
+          RISK_COLOR_CODE.DANGER,
+          RISK_COLOR_CODE.WARNING,
+          RISK_COLOR_CODE.INFO,
+          RISK_COLOR_CODE.SUCCESS,
+          RISK_COLOR_CODE.DEFAULT
         ]
-      } ]
+      }]
     };
   }),
 
-  isNoneStatus: computed('dynamicStatus', function() {
+  isNoneStatus: computed('dynamicStatus', function () {
     const status = this.get('dynamicStatus');
     return status === ENUMS.DYNAMIC_STATUS.NONE;
   }),
 
   isNotNoneStatus: computed.not('isNoneStatus'),
 
-  isReady: computed('dynamicStatus', function() {
+  isReady: computed('dynamicStatus', function () {
     const status = this.get('dynamicStatus');
     return status === ENUMS.DYNAMIC_STATUS.READY;
   }),
 
   isNotReady: computed.not('isReady'),
 
-  isDynamicStatusNone: computed('dynamicStatus', function() {
+  isDynamicStatusNone: computed('dynamicStatus', function () {
     const status = this.get('dynamicStatus');
     return status === ENUMS.DYNAMIC_STATUS.NONE;
   }),
 
-  isDynamicStatusReady: computed('dynamicStatus', function() {
+  isDynamicStatusReady: computed('dynamicStatus', function () {
     const status = this.get('dynamicStatus');
     return status === ENUMS.DYNAMIC_STATUS.READY;
   }),
@@ -161,32 +171,32 @@ const File = DS.Model.extend(BaseModelMixin, {
   isDynamicStatusNotReady: computed.not('isDynamicStatusReady'),
   isDynamicStatusNotNone: computed.not('isDynamicStatusNone'),
 
-  isDynamicStatusNeitherNoneNorReady: computed('dynamicStatus', function() {
+  isDynamicStatusNeitherNoneNorReady: computed('dynamicStatus', function () {
     const status = this.get('dynamicStatus');
     return ![ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE].includes(status);
   }),
 
-  isDynamicStatusNoneOrReady: computed('dynamicStatus', function() {
+  isDynamicStatusNoneOrReady: computed('dynamicStatus', function () {
     const status = this.get('dynamicStatus');
     return [ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE].includes(status);
   }),
 
-  isDynamicStatusStarting: computed('dynamicStatus', function() {
+  isDynamicStatusStarting: computed('dynamicStatus', function () {
     const status = this.get('dynamicStatus');
     return ![ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE, ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN].includes(status);
   }),
 
-  isNeitherNoneNorReady: computed('dynamicStatus', function() {
+  isNeitherNoneNorReady: computed('dynamicStatus', function () {
     const status = this.get('dynamicStatus');
     return ![ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE].includes(status);
   }),
 
-  startingScanStatus: computed('dynamicStatus', function() {
+  startingScanStatus: computed('dynamicStatus', function () {
     const status = this.get('dynamicStatus');
     return ![ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE, ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN].includes(status);
   }),
 
-  statusText: computed('dynamicStatus', 'tDeviceBooting', 'tDeviceDownloading', 'tDeviceHooking', 'tDeviceInQueue', 'tDeviceInstalling', 'tDeviceLaunching', 'tDeviceShuttingDown', 'tdeviceCompleted', function() {
+  statusText: computed('dynamicStatus', 'tDeviceBooting', 'tDeviceDownloading', 'tDeviceHooking', 'tDeviceInQueue', 'tDeviceInstalling', 'tDeviceLaunching', 'tDeviceShuttingDown', 'tdeviceCompleted', function () {
     const tDeviceInQueue = this.get("tDeviceInQueue");
     const tDeviceBooting = this.get("tDeviceBooting");
     const tDeviceDownloading = this.get("tDeviceDownloading");
@@ -224,7 +234,7 @@ const File = DS.Model.extend(BaseModelMixin, {
         id: this.id,
         type: this.constructor.modelName,
         attributes: {
-            'dynamicStatus': status
+          'dynamicStatus': status
         }
       }
     });

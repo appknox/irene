@@ -3,4 +3,13 @@ const CONSTANTS = {
   WINDOWS_STORE_URL_RE: /microsoft.com(.*)store\/p\/(.*)\/(.*)/
 };
 
+export const RISK_COLOR_CODE = {
+  CRITICAL: '#EF4836',
+  DANGER: '#FF8C00',
+  WARNING: '#F5D76E',
+  INFO: '#2CC2F8',
+  SUCCESS: '#80C081',
+  DEFAULT: '#6B6B6B'
+}
+
 export default CONSTANTS;
