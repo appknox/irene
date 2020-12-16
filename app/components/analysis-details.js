@@ -1,9 +1,15 @@
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
-import { t } from 'ember-intl';
+import {
+  t
+} from 'ember-intl';
 import Component from '@ember/component';
-import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
+import {
+  inject as service
+} from '@ember/service';
+import {
+  computed
+} from '@ember/object';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 const AnalysisDetailsComponent = Component.extend({
@@ -22,24 +28,24 @@ const AnalysisDetailsComponent = Component.extend({
   tSuccessfullyReset: t("successfullyReset"),
   tRiskAndCommentRequired: t("riskAndCommentRequired"),
 
-  risks: computed(function() {
+  risks: computed(function () {
     const risks = ENUMS.RISK.CHOICES;
     const riskFilter = [ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN];
     return risks.filter(risk => !riskFilter.includes(risk.value));
   }),
 
-  filteredRisks: computed("risks", "analysis.risk", function() {
+  filteredRisks: computed("risks", "analysis.risk", function () {
     const risks = this.get("risks");
     const analysisRisk = this.get("analysis.risk");
     return risks.filter(risk => analysisRisk !== risk.value);
   }),
 
-  markedRisk: computed("filteredRisks", function() {
+  markedRisk: computed("filteredRisks", function () {
     const filteredRisks = this.get("filteredRisks");
     return filteredRisks[0].value;
   }),
 
-  statusClass: computed("analysis.{status,computedRisk}", function() {
+  statusClass: computed("analysis.{status,computedRisk}", function () {
     const status = this.get("analysis.status");
     if (status === ENUMS.ANALYSIS.WAITING) {
       return "is-waiting"
@@ -71,9 +77,11 @@ const AnalysisDetailsComponent = Component.extend({
   tags: computed(
     "analysis.vulnerability.types",
     "analysis.file.{isStaticDone,isDynamicDone,isManualDone,isApiDone}",
-    function() {
+    function () {
       const types = this.get("analysis.vulnerability.types");
-      if (types === undefined) { return []; }
+      if (types === undefined) {
+        return [];
+      }
       const tags = [];
       for (let type of Array.from(types)) {
         if (type === ENUMS.VULNERABILITY_TYPE.STATIC) {
@@ -116,6 +124,10 @@ const AnalysisDetailsComponent = Component.extend({
       this.set("showEditAnalysisModal", true);
     },
 
+    closeEditAnalysisModal() {
+      this.set('showEditAnalysisModal', false);
+    },
+
     selectMarkedAnalyis() {
       const markedRisk = parseInt(this.$('#marked-analysis')[0].value);
       this.set("markedRisk", markedRisk);
@@ -149,8 +161,8 @@ const AnalysisDetailsComponent = Component.extend({
       this.get("ajax").put(url, {
         data
       }).then(() => {
-        triggerAnalytics('feature',ENV.csb.editAnalysis);
-        if(!this.isDestroyed) {
+        triggerAnalytics('feature', ENV.csb.editAnalysis);
+        if (!this.isDestroyed) {
           this.get("notify").success(this.get("tSuccessfullyOverridden"));
           this.set("isMarkingAnalysis", false);
           this.set("isEditingOverriddenRisk", false);
@@ -181,7 +193,7 @@ const AnalysisDetailsComponent = Component.extend({
       this.get("ajax").delete(url, {
         data
       }).then(() => {
-        if(!this.isDestroyed) {
+        if (!this.isDestroyed) {
           this.get("notify").success(this.get("tSuccessfullyReset"));
           this.set("isResettingMarkedAnalysis", false);
           this.set("showResetAnalysisConfirmBox", false);

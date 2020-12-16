@@ -54,172 +54,177 @@
                     = link-to 'authenticated.organization.settings' class="alert-link"
                       = t "organizationSettings"
 
-= modal-card isActive=showMFADisableModal title=(t "modalCard.mfaTitle.disable") onCancel=(perform cancelMFADisable)
-  .card-body.warning-modal class=showConfirmDisableMFA:show:hide
-    .card-wrapper
-      if user.canDisableMfa
+if showMFADisableModal
+  = ak-modal showHeader=true headerTitle=(t "modalCard.mfaTitle.disable") onClose=(perform cancelMFADisable)
+    .card-body.warning-modal class=showConfirmDisableMFA:show:hide
+      .card-wrapper
+        if user.canDisableMfa
+          p
+            = t "modalCard.disableMFA.description"
+          .margin-t-1.align-end
+            button.is-primary.highlighted-button click={(perform continueDisableMFA)} disabled=sendDisableMFAOTPEmail.isRunning
+              if sendDisableMFAOTPEmail.isRunning
+                .fa-font-size
+                  i.fa class="fa-spinner fa-spin"
+                | &nbsp;
+              = t "continue"
+            button.is-primary.margin-left click={(perform cancelMFADisable)}
+              = t "cancel"
+        else
+          .alert.alert-success.alert-small
+            .vertical-align-center
+              = fa-icon "shield"
+              .margin-l-1
+                = t "disableMFADenied"
+
+    .card-body.warning-modal class=showDisableMFA:show:hide
+      .card-wrapper
         p
-          = t "modalCard.disableMFA.description"
-        .margin-t-1.align-end
-          button.is-primary.highlighted-button click={(perform continueDisableMFA)} disabled=sendDisableMFAOTPEmail.isRunning
-            if sendDisableMFAOTPEmail.isRunning
+          = t "modalCard.disableMFA.enterOTP"
+          if isEmailMFAEnabled
+            | &nbsp;(#{t "modalCard.disableMFA.viaEmail"})
+          if isAppMFAEnabled
+            | &nbsp;#{t "modalCard.disableMFA.viaApp"}
+        form.margin-t-1
+          p.control
+            = input class="form-control input" type="text" value=disableOTP
+          .margin-t-1.align-end
+            button.is-primary.highlighted-button click={(perform confirmDisableOTP)} disabled=isDisablingMFA
+              if isDisablingMFA
+                .fa-font-size
+                  i.fa class="fa-spinner fa-spin"
+                | &nbsp;
+              = t "confirm"
+            button.is-primary.margin-left click={(perform cancelMFADisable)}
+              = t "cancel"
+
+if showEmailEnableModal
+  = ak-modal showHeader=true headerTitle=(t "modalCard.mfaTitle.enable") onclose=(perform cancelEmailEnable)
+    .card-body.warning-modal
+      .card-wrapper class=showEmailSendConfirm:show:hide
+        div
+          = t "modalCard.enableMFAEmail.sendMailMsg"
+          span.bold
+            | {{ user.email }}
+        .margin-t-1h.align-end.align-end
+          button.is-primary.highlighted-button click={(perform sendEmailMFA)} disabled=getMFAEnableEmailToken.isRunning
+            if getMFAEnableEmailToken.isRunning
               .fa-font-size
                 i.fa class="fa-spinner fa-spin"
               | &nbsp;
             = t "continue"
-          button.is-primary.margin-left click={(perform cancelMFADisable)}
+          button.is-primary.margin-left click={(perform cancelEmailEnable)}
             = t "cancel"
-      else
-        .alert.alert-success.alert-small
-          .vertical-align-center
-            = fa-icon "shield"
-            .margin-l-1
-              = t "disableMFADenied"
+      .card-wrapper class=showEmailOTPEnter:show:hide
+        .fill-silver.margin-h-neg-20.margin-t-neg-20
+          .padding-h-1h.padding-v-1
+            div
+              = t "modalCard.enableMFAEmail.description"
+              span.bold
+                | {{ user.email }}
+        form.margin-t-1h
+          p.control
+            = t "modalCard.enableMFAEmail.enterCode"
+          = input class="form-control input" type="text" value=emailOTP
+          .margin-t-1.align-end.vertical-align-center
+            button.is-primary.highlighted-button click={(perform confirmEmailOTP)} disabled=verifyEmailOTP.isRunning
+              if verifyEmailOTP.isRunning
+                .fa-font-size
+                  i.fa class="fa-spinner fa-spin"
+                | &nbsp;
+              = t "confirm"
 
-  .card-body.warning-modal class=showDisableMFA:show:hide
-    .card-wrapper
-      p
-        = t "modalCard.disableMFA.enterOTP"
-        if isEmailMFAEnabled
-          | &nbsp;(#{t "modalCard.disableMFA.viaEmail"})
-        if isAppMFAEnabled
-          | &nbsp;#{t "modalCard.disableMFA.viaApp"}
-      form.margin-t-1
-        p.control
-          = input class="form-control input" type="text" value=disableOTP
-        .margin-t-1.align-end
-          button.is-primary.highlighted-button click={(perform confirmDisableOTP)} disabled=isDisablingMFA
-            if isDisablingMFA
+if showAppEnableModal
+  = ak-modal showHeader=true headerTitle=(t "modalCard.mfaTitle.enable") onClose=(perform cancelAppEnable)
+    .card-body.warning-modal
+      = mfa-appverify secret=mfaAppSecret email=user.email otp=appOTP onContinue=(perform confirmAppOTP) onCancel=(perform cancelAppEnable) waiting=verifyAppOTP.isRunning
+
+if staModalActive
+  = ak-modal showHeader=true headerTitle=(t "mfaSwitchToAppTitle") onClose=(perform staCancel)
+    .card-body.warning-modal
+      .card-wrapper class=staAppConfirmActive:show:hide
+        p
+          = t "mfaSwitchToAppDescription" htmlSafe=true
+        .margin-t-1h.align-end
+          button.is-primary.highlighted-button click={(perform staOnConfirm)} disabled=staInitialEmail.isRunning
+            if staInitialEmail.isRunning
               .fa-font-size
                 i.fa class="fa-spinner fa-spin"
               | &nbsp;
-            = t "confirm"
-          button.is-primary.margin-left click={(perform cancelMFADisable)}
+            = t "continue"
+          button.is-primary.margin-left click={(perform staCancel)}
             = t "cancel"
 
-= modal-card isActive=showEmailEnableModal title=(t "modalCard.mfaTitle.enable") onCancel=(perform cancelEmailEnable)
-  .card-body.warning-modal
-    .card-wrapper class=showEmailSendConfirm:show:hide
-      div
-        = t "modalCard.enableMFAEmail.sendMailMsg"
-        span.bold
-          | {{ user.email }}
-      .margin-t-1h.align-end.align-end
-        button.is-primary.highlighted-button click={(perform sendEmailMFA)} disabled=getMFAEnableEmailToken.isRunning
-          if getMFAEnableEmailToken.isRunning
-            .fa-font-size
-              i.fa class="fa-spinner fa-spin"
-            | &nbsp;
-          = t "continue"
-        button.is-primary.margin-left click={(perform cancelEmailEnable)}
-          = t "cancel"
-    .card-wrapper class=showEmailOTPEnter:show:hide
-      .fill-silver.margin-h-neg-20.margin-t-neg-20
-        .padding-h-1h.padding-v-1
-          div
-            = t "modalCard.enableMFAEmail.description"
-            span.bold
-              | {{ user.email }}
-      form.margin-t-1h
-        p.control
-           = t "modalCard.enableMFAEmail.enterCode"
-        = input class="form-control input" type="text" value=emailOTP
-        .margin-t-1.align-end.vertical-align-center
-          button.is-primary.highlighted-button click={(perform confirmEmailOTP)} disabled=verifyEmailOTP.isRunning
-            if verifyEmailOTP.isRunning
+      .card-wrapper class=staEmailVerifyActive:show:hide
+        .fill-silver.margin-h-neg-20.margin-t-neg-20
+          .padding-h-1h.padding-v-1
+            div
+              = t "modalCard.enableMFAEmail.description"
+              span.bold
+                | {{ user.email }}
+        form.margin-t-1h
+          p.control
+            = t "modalCard.enableMFAEmail.enterCode"
+          = input class="form-control input" type="text" value=emailOTP
+          .margin-t-1.align-end.vertical-align-center
+            button.is-primary.highlighted-button click={(perform staOnConfirmEmailOTP)} disabled=staVerifyEmailOTP.isRunning
+              if staVerifyEmailOTP.isRunning
+                .fa-font-size
+                  i.fa class="fa-spinner fa-spin"
+                | &nbsp;
+              = t "confirm"
+
+      .card-wrapper class=staAppVerifyActive:show:hide
+        = mfa-appverify secret=mfaAppSecret email=user.email otp=appOTP onContinue=(perform staOnConfirmAppOTP) onCancel=(perform staCancel) waiting=staVerifyAppOTP.isRunning
+
+if showSwitchToEmailModal
+  = ak-modal showHeader=true headerTitle=(t "mfaSwitchToEmailTitle") onClose=(perform cancelSwitchToEmail)
+    .card-body.warning-modal
+      .card-wrapper class=showSwitchToEmailConfirm:show:hide
+        p
+          = t "mfaSwitchToEmailDescription" htmlSafe=true
+        .margin-t-1h.align-end
+          button.is-primary.highlighted-button click={(perform onConfirmSwitchToEmail)} disabled=onConfirmSwitchToEmail.isRunning
+            if onConfirmSwitchToEmail.isRunning
               .fa-font-size
                 i.fa class="fa-spinner fa-spin"
               | &nbsp;
-            = t "confirm"
-
-= modal-card isActive=showAppEnableModal title=(t "modalCard.mfaTitle.enable") onCancel=(perform cancelAppEnable)
-  .card-body.warning-modal
-    = mfa-appverify secret=mfaAppSecret email=user.email otp=appOTP onContinue=(perform confirmAppOTP) onCancel=(perform cancelAppEnable) waiting=verifyAppOTP.isRunning
-
-= modal-card isActive=staModalActive title=(t "mfaSwitchToAppTitle") onCancel=(perform staCancel)
-  .card-body.warning-modal
-    .card-wrapper class=staAppConfirmActive:show:hide
-      p
-        = t "mfaSwitchToAppDescription" htmlSafe=true
-      .margin-t-1h.align-end
-        button.is-primary.highlighted-button click={(perform staOnConfirm)} disabled=staInitialEmail.isRunning
-          if staInitialEmail.isRunning
-            .fa-font-size
-              i.fa class="fa-spinner fa-spin"
-            | &nbsp;
-          = t "continue"
-        button.is-primary.margin-left click={(perform staCancel)}
-          = t "cancel"
-
-    .card-wrapper class=staEmailVerifyActive:show:hide
-      .fill-silver.margin-h-neg-20.margin-t-neg-20
-        .padding-h-1h.padding-v-1
-          div
-            = t "modalCard.enableMFAEmail.description"
-            span.bold
-              | {{ user.email }}
-      form.margin-t-1h
-        p.control
-           = t "modalCard.enableMFAEmail.enterCode"
-        = input class="form-control input" type="text" value=emailOTP
-        .margin-t-1.align-end.vertical-align-center
-          button.is-primary.highlighted-button click={(perform staOnConfirmEmailOTP)} disabled=staVerifyEmailOTP.isRunning
-            if staVerifyEmailOTP.isRunning
-              .fa-font-size
-                i.fa class="fa-spinner fa-spin"
-              | &nbsp;
-            = t "confirm"
-
-    .card-wrapper class=staAppVerifyActive:show:hide
-      = mfa-appverify secret=mfaAppSecret email=user.email otp=appOTP onContinue=(perform staOnConfirmAppOTP) onCancel=(perform staCancel) waiting=staVerifyAppOTP.isRunning
-
-= modal-card isActive=showSwitchToEmailModal title=(t "mfaSwitchToEmailTitle") onCancel=(perform cancelSwitchToEmail)
-  .card-body.warning-modal
-    .card-wrapper class=showSwitchToEmailConfirm:show:hide
-      p
-        = t "mfaSwitchToEmailDescription" htmlSafe=true
-      .margin-t-1h.align-end
-        button.is-primary.highlighted-button click={(perform onConfirmSwitchToEmail)} disabled=onConfirmSwitchToEmail.isRunning
-          if onConfirmSwitchToEmail.isRunning
-            .fa-font-size
-              i.fa class="fa-spinner fa-spin"
-            | &nbsp;
-          = t "continue"
-        button.is-primary.margin-left click={(perform cancelSwitchToEmail)}
-          = t "cancel"
-
-    .card-wrapper class=showSwitchTOEmailAppVerify:show:hide
-      p
-        = t "modalCard.disableMFA.enterOTP"
-        | &nbsp;#{t "modalCard.disableMFA.viaApp"}
-      form.margin-t-1
-        p.control
-          = input class="form-control input" type="text" value=appOTP
-        .margin-t-1.align-end
-          button.is-primary.highlighted-button click={(perform onConfirmSwitchToEmailAppOTP)} disabled=verifySwitchToEmailAppOTP.isRunning
-            if verifySwitchToEmailAppOTP.isRunning
-              .fa-font-size
-                i.fa class="fa-spinner fa-spin"
-              | &nbsp;
-            = t "confirm"
+            = t "continue"
           button.is-primary.margin-left click={(perform cancelSwitchToEmail)}
             = t "cancel"
 
-    .card-wrapper class=showSwitchTOEmailEmailVerify:show:hide
-      .fill-silver.margin-h-neg-20.margin-t-neg-20
-        .padding-h-1h.padding-v-1
-          div
-            = t "modalCard.enableMFAEmail.description"
-            span.bold
-              | {{ user.email }}
-      form.margin-t-1h
-        p.control
-           = t "modalCard.enableMFAEmail.enterCode"
-        = input class="form-control input" type="text" value=emailOTP
-        .margin-t-1.align-end.vertical-align-center
-          button.is-primary.highlighted-button click={(perform onConfirmSwitchToEmailEmailOTP)} disabled=verifyEmailOTP.isRunning
-            if verifyEmailOTP.isRunning
-              .fa-font-size
-                i.fa class="fa-spinner fa-spin"
-              | &nbsp;
-            = t "confirm"
+      .card-wrapper class=showSwitchTOEmailAppVerify:show:hide
+        p
+          = t "modalCard.disableMFA.enterOTP"
+          | &nbsp;#{t "modalCard.disableMFA.viaApp"}
+        form.margin-t-1
+          p.control
+            = input class="form-control input" type="text" value=appOTP
+          .margin-t-1.align-end
+            button.is-primary.highlighted-button click={(perform onConfirmSwitchToEmailAppOTP)} disabled=verifySwitchToEmailAppOTP.isRunning
+              if verifySwitchToEmailAppOTP.isRunning
+                .fa-font-size
+                  i.fa class="fa-spinner fa-spin"
+                | &nbsp;
+              = t "confirm"
+            button.is-primary.margin-left click={(perform cancelSwitchToEmail)}
+              = t "cancel"
+
+      .card-wrapper class=showSwitchTOEmailEmailVerify:show:hide
+        .fill-silver.margin-h-neg-20.margin-t-neg-20
+          .padding-h-1h.padding-v-1
+            div
+              = t "modalCard.enableMFAEmail.description"
+              span.bold
+                | {{ user.email }}
+        form.margin-t-1h
+          p.control
+            = t "modalCard.enableMFAEmail.enterCode"
+          = input class="form-control input" type="text" value=emailOTP
+          .margin-t-1.align-end.vertical-align-center
+            button.is-primary.highlighted-button click={(perform onConfirmSwitchToEmailEmailOTP)} disabled=verifyEmailOTP.isRunning
+              if verifyEmailOTP.isRunning
+                .fa-font-size
+                  i.fa class="fa-spinner fa-spin"
+                | &nbsp;
+              = t "confirm"

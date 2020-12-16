@@ -1,34 +1,35 @@
-button class="is-primary" click={(perform openAddMemberModal)}
+button class="is-primary" click={(perform toggleAddMemberModal)}
   = fa-icon "user-plus" class="margin-r-h"
   = t "addMember"
 
-= modal-card class="input-modal user-search-modal" isActive=showAddTeamMemberModal title=(t 'modalCard.addMember.title')
-  .card-body
-    .card-wrapper
-      form
-        .control.vertical-align-center.margin-b-1
-          = fa-icon "search"
-          = input class="form-control input input-width margin-left" placeholder="Search member" type="text" value=query autofocus="autofocus" key-up="searchQuery"
+if showAddTeamMemberModal
+  = ak-modal showHeader=true headerTitle=(t 'modalCard.addMember.title') onClose=(perform toggleAddMemberModal)
+    .card-body
+      .card-wrapper
+        form
+          .control.vertical-align-center.margin-b-1
+            = fa-icon "search"
+            = input class="form-control input input-width margin-left" placeholder="Search member" type="text" value=query autofocus="autofocus" key-up="searchQuery"
 
-      if hasObjects
-        .add-team-objects-scroll
-          table.org-table
-            tbody
-              each sortedObjects as |member|
-                tr.team-project
-                  td
-                    .black-text.bold.font-medium
-                      = member.username
-                    .text-lightgray
-                      = member.email
-                  td.team-project-action
-                    button.is-default.is-icon.no-border click={(perform addTeamMember member)} disabled=isAddingMember
-                      = fa-icon "plus"
+        if hasObjects
+          .add-team-objects-scroll
+            table.org-table
+              tbody
+                each sortedObjects as |member|
+                  tr.team-project
+                    td
+                      .black-text.bold.font-medium
+                        = member.username
+                      .text-lightgray
+                        = member.email
+                    td.team-project-action
+                      button.is-default.is-icon.no-border click={(perform addTeamMember member)} disabled=isAddingMember
+                        = fa-icon "plus"
 
-          .margin-t-q
-            = partial "paginate"
+            .margin-t-q
+              = partial "paginate"
 
-      else
-        .empty-state
-          = fa-icon "exclamation-triangle"
-          = t "noMembers"
+        else
+          .empty-state
+            = fa-icon "exclamation-triangle"
+            = t "noMembers"

@@ -1,4 +1,4 @@
-<Modal-Dialog @onClose={{fn this.onClose}} @translucentOverlay={{true}}>
+<Modal-Dialog @onClose={{fn this.onClose}} @translucentOverlay={{true}} @containerClassNames="ak-modal">
   {{#if @showHeader}}
     <div local-class="modal-header">
       <h3 local-class="header-title">{{@headerTitle}}</h3>

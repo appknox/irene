@@ -126,6 +126,10 @@ export default Component.extend({
 
     openChatBox() {
       chat.openChatBox();
+    },
+
+    closeOrgModal() {
+      this.set('isEmptyOrganization', false);
     }
   }
 

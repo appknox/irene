@@ -1,14 +1,28 @@
 import PaginateMixin from 'irene/mixins/paginate';
-import { t } from 'ember-intl';
-import { task } from 'ember-concurrency';
+import {
+  t
+} from 'ember-intl';
+import {
+  task
+} from 'ember-concurrency';
 import ENV from 'irene/config/environment';
-import { on } from '@ember/object/evented';
+import {
+  on
+} from '@ember/object/evented';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
-import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
+import {
+  inject as service
+} from '@ember/service';
+import {
+  computed
+} from '@ember/object';
 import Component from '@ember/component';
-import { observer } from '@ember/object';
-import { debounce } from '@ember/runloop';
+import {
+  observer
+} from '@ember/object';
+import {
+  debounce
+} from '@ember/runloop';
 
 export default Component.extend(PaginateMixin, {
   intl: service(),
@@ -38,9 +52,9 @@ export default Component.extend(PaginateMixin, {
   }),
 
 
-  /* Open add-team-member modal */
-  openAddMemberModal: task(function* () {
-    yield this.set('showAddTeamMemberModal', true);
+  /* Open/Close add-team-member modal */
+  toggleAddMemberModal: task(function* () {
+    yield this.set('showAddTeamMemberModal', !this.get('showAddTeamMemberModal'));
   }),
 
 

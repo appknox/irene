@@ -1,10 +1,18 @@
 import Component from '@ember/component';
-import { inject as service } from '@ember/service';
+import {
+  inject as service
+} from '@ember/service';
 import PaginateMixin from 'irene/mixins/paginate';
-import { t } from 'ember-intl';
-import { task } from 'ember-concurrency';
+import {
+  t
+} from 'ember-intl';
+import {
+  task
+} from 'ember-concurrency';
 import ENV from 'irene/config/environment';
-import { on } from '@ember/object/evented';
+import {
+  on
+} from '@ember/object/evented';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import parseEmails from 'irene/utils/parse-emails';
 
@@ -21,38 +29,42 @@ export default Component.extend(PaginateMixin, {
   tPleaseTryAgain: t('pleaseTryAgain'),
 
 
-  /* Open invite-member modal */
-  openInviteMemberModal: task(function * () {
-    yield this.set('showInviteMemberModal', true);
+  /* Open/Close invite-member modal */
+  toggleInviteMemberModal: task(function* () {
+    yield this.set('showInviteMemberModal', !this.get('showInviteMemberModal'));
   }),
 
-  inviteMember: task(function *(email){
+  inviteMember: task(function* (email) {
     const t = this.get('team');
     if (t) {
-      yield t.createInvitation({email});
+      yield t.createInvitation({
+        email
+      });
     } else {
-      const orgInvite = yield this.get('store').createRecord('organization-invitation', {email});
+      const orgInvite = yield this.get('store').createRecord('organization-invitation', {
+        email
+      });
       yield orgInvite.save();
     }
 
     // signal to update invitation list
     this.get('realtime').incrementProperty('InvitationCounter');
   }).enqueue().maxConcurrency(3),
-  
+
   /* Send invitation */
-  inviteMembers: task(function * () {
+  inviteMembers: task(function* () {
     const emails = yield parseEmails(this.get('emailsFromText'));
-    if(!emails.length) {
+    if (!emails.length) {
       throw new Error(this.get('tEmptyEmailId'));
     }
     this.set('isInvitingMember', true);
-    
-    for (let i=0;i<emails.length;i++){
+
+    for (let i = 0; i < emails.length; i++) {
       yield this.get('inviteMember').perform(emails[i]);
     }
   }).evented(),
 
-  inviteMembersSucceeded: on('inviteMembers:succeeded', function() {
+  inviteMembersSucceeded: on('inviteMembers:succeeded', function () {
     this.get('notify').success(this.get("tOrgMemberInvited"));
     this.set("email", '');
     this.set('showInviteMemberModal', false);
@@ -60,11 +72,11 @@ export default Component.extend(PaginateMixin, {
     triggerAnalytics('feature', ENV.csb.inviteMember);
   }),
 
-  inviteMembersErrored: on('inviteMembers:errored', function(_, err) {
+  inviteMembersErrored: on('inviteMembers:errored', function (_, err) {
     let errMsg = this.get('tPleaseTryAgain');
     if (err.errors && err.errors.length) {
       errMsg = err.errors[0].detail || errMsg;
-    } else if(err.message) {
+    } else if (err.message) {
       errMsg = err.message;
     }
     this.get("notify").error(errMsg);

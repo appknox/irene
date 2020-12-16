@@ -112,16 +112,17 @@ if isLoaded
         .margin-top50
           = outlet
 
-= modal-card class="input-modal" isActive=isEmptyOrganization title=(t "modalCard.orgModal.title")
-  .card-body
-    .card-wrapper
-      form
-        p.control
-          = input class="form-control input input-width margin-left" placeholder=(t "modalCard.orgModal.title") type="text" value=organizationName autofocus="autofocus"
+if isEmptyOrganization
+  = ak-modal showHeader=true headerTitle=(t "modalCard.orgModal.title") onClose=(action "closeOrgModal")
+    .card-body
+      .card-wrapper
+        form
+          p.control
+            = input class="form-control input input-width margin-left" placeholder=(t "modalCard.orgModal.title") type="text" value=organizationName autofocus="autofocus"
 
-        button.is-primary.margin-left.margin-top10 disabled=isUpdatingOrg click={(perform updateOrgName)}
-          if isUpdatingOrg
-            .fa-font-size
-              i.fa class="fa-spinner fa-spin"
-            | &nbsp;
-          = t "update"
+          button.is-primary.margin-left.margin-top10 disabled=isUpdatingOrg click={(perform updateOrgName)}
+            if isUpdatingOrg
+              .fa-font-size
+                i.fa class="fa-spinner fa-spin"
+              | &nbsp;
+            = t "update"

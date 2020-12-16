@@ -1,10 +1,20 @@
 import Component from '@ember/component';
-import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
-import { isEmpty } from '@ember/utils';
+import {
+  inject as service
+} from '@ember/service';
+import {
+  computed
+} from '@ember/object';
+import {
+  isEmpty
+} from '@ember/utils';
 import ENV from 'irene/config/environment';
-import { t } from 'ember-intl';
-import { debounce } from '@ember/runloop';
+import {
+  t
+} from 'ember-intl';
+import {
+  debounce
+} from '@ember/runloop';
 
 const TeamDetailsComponent = Component.extend({
 
@@ -23,22 +33,31 @@ const TeamDetailsComponent = Component.extend({
   tTeamMemberInvited: t("teamMemberInvited"),
   tOrganizationTeamNameUpdated: t("organizationTeamNameUpdated"),
 
-  orgTeam: computed('organization.id', 'store', 'team.teamId', function() {
+  orgTeam: computed('organization.id', 'store', 'team.teamId', function () {
     const orgId = this.get("organization.id");
     const teamId = this.get("team.teamId");
-    return this.get("store").queryRecord('organization-team', {orgId: orgId, teamId: teamId});
+    return this.get("store").queryRecord('organization-team', {
+      orgId: orgId,
+      teamId: teamId
+    });
   }),
 
-  teamMembers: computed('organization.id', 'store', 'team.teamId', function() {
+  teamMembers: computed('organization.id', 'store', 'team.teamId', function () {
     const orgId = this.get("organization.id");
     const teamId = this.get("team.teamId");
-    return this.get("store").query('team-member', {orgId: orgId, teamId: teamId});
+    return this.get("store").query('team-member', {
+      orgId: orgId,
+      teamId: teamId
+    });
   }),
 
-  teamProjects: computed('organization.id', 'store', 'team.teamId', function() {
+  teamProjects: computed('organization.id', 'store', 'team.teamId', function () {
     const orgId = this.get("organization.id");
     const teamId = this.get("team.teamId");
-    return this.get("store").query('team-project', {orgId: orgId, teamId: teamId});
+    return this.get("store").query('team-project', {
+      orgId: orgId,
+      teamId: teamId
+    });
   }),
 
   searchMember() {
@@ -48,28 +67,28 @@ const TeamDetailsComponent = Component.extend({
     this.set("isSearchingMember", true);
     const that = this;
     this.get("ajax").request(url)
-    .then(function(response) {
-      if(!that.isDestroyed) {
+      .then(function (response) {
+        if (!that.isDestroyed) {
+          that.set("isSearchingMember", false);
+        }
+        const allUsers = response.data;
+        const allUsersData = allUsers.map((user) => ({
+          id: user.id,
+          username: user.attributes.username,
+          email: user.attributes.email
+        }));
+        that.set("users", allUsersData);
+      })
+      .catch(function (error) {
         that.set("isSearchingMember", false);
-      }
-      const allUsers = response.data;
-      const allUsersData = allUsers.map((user) => ({
-        id: user.id,
-        username: user.attributes.username,
-        email: user.attributes.email
-      }));
-      that.set("users", allUsersData);
-    })
-    .catch(function(error) {
-      that.set("isSearchingMember", false);
-      that.get("notify").error(error.payload.message);
-    });
+        that.get("notify").error(error.payload.message);
+      });
   },
 
   actions: {
 
-    openAddMemberModal() {
-      this.set("showAddMemberModal", true);
+    toggleAddMemberModal() {
+      this.set("showAddMemberModal", !this.get('showAddMemberModal'));
     },
 
     searchQuery() {
@@ -83,25 +102,25 @@ const TeamDetailsComponent = Component.extend({
       const that = this;
       this.set("isAddingMember", true);
       this.get("ajax").put(url)
-      .then(function(data){
-        that.get("notify").success("Team member added");
-        if(!that.isDestroyed) {
+        .then(function (data) {
+          that.get("notify").success("Team member added");
+          if (!that.isDestroyed) {
+            that.set("isAddingMember", false);
+            that.set("identification", "");
+            that.set("showAddMemberModal", false);
+            that.store.pushPayload(data);
+          }
+        })
+        .catch(function (error) {
           that.set("isAddingMember", false);
-          that.set("identification", "");
-          that.set("showAddMemberModal", false);
-          that.store.pushPayload(data);
-        }
-      })
-      .catch(function(error){
-        that.set("isAddingMember", false);
-        that.get("notify").error(error.payload.message);
-      });
+          that.get("notify").error(error.payload.message);
+        });
     },
 
     inviteMember() {
       const identification = this.get("identification");
       // const tTeamMemberInvited = this.get("tTeamMemberInvited");
-      if(isEmpty(identification)) {
+      if (isEmpty(identification)) {
         const tEmptyEmailId = this.get("tEmptyEmailId");
         return this.get("notify").error(tEmptyEmailId);
       }
@@ -139,14 +158,16 @@ const TeamDetailsComponent = Component.extend({
       };
       const url = [ENV.endpoints.organizations, orgId, ENV.endpoints.teams, teamId].join("/");
       const that = this;
-      this.get("ajax").put(url, {data})
-      .then(function() {
-        that.get("notify").success(tOrganizationTeamNameUpdated);
-        that.send("cancelEditing");
-      })
-      .catch(function(error) {
-        that.get("notify").error(error.payload.message);
-      });
+      this.get("ajax").put(url, {
+          data
+        })
+        .then(function () {
+          that.get("notify").success(tOrganizationTeamNameUpdated);
+          that.send("cancelEditing");
+        })
+        .catch(function (error) {
+          that.get("notify").error(error.payload.message);
+        });
     },
 
     editTeamName() {
