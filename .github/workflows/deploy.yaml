@@ -1,0 +1,26 @@
+name: CF Worker Deploy
+on: push
+jobs:
+  deploy-to-cf:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout Irene
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Checkout appknox/sconf
+        uses: actions/checkout@v2
+        with:
+          repository: appknox/sconf
+          ref: cf-worker
+          # GitHub's personal access token with access to `appknox/sconf`
+          token: ${{ secrets.APPKNOX_GITHUB_CONTAINER_TOKEN }} #encrypted secret var
+
+      - name: List
+        run: ls -la
+
+      - name: run
+        run: node dist/index.js
