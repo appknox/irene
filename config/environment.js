@@ -588,11 +588,11 @@ module.exports = function (environment) {
     ENV.isRegistrationEnabled = true;
   }
 
-  if (environment === "testing") {
+  if (environment === "testing" || environment === "test") {
     ENV["ember-cli-mirage"] = {
-      enabled: false,
+      enabled: true,
     };
-    ENV["host"] = "http://localhost:8000";
+    ENV["host"] = "http://0.0.0.0:8000";
     ENV.isRegistrationEnabled = true;
     ENV.gReCaptcha["siteKey"] = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI";
   }
