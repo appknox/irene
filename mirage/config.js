@@ -1,15 +1,46 @@
 import config from 'irene/config/environment';
 
+import {
+  createServer,
+  discoverEmberDataModels
+} from "ember-cli-mirage";
 
-export default function() {
+export function makeServer(config) {
+  let finalConfig = {
+    ...config,
+    models: {
+      ...discoverEmberDataModels(),
+      ...config.models
+    },
+    routes
+
+  };
+
+  return createServer(finalConfig);
+}
+
+function routes() {
 
   this.passthrough('/write-coverage');
   this.passthrough('https://api.rollbar.com/**');
   this.passthrough('https://socket.appknox.com/**');
   this.passthrough('https://appknox.customersuccessbox.com/**');
-
   this.urlPrefix = config.host;
+
+  // NOTE v2 api namespace has to be grouped together
+  this.post('/api/v2/sso/check', () => {
+    return {
+      is_sso: false,
+      is_sso_enforced: false
+    }
+  })
+
   this.namespace = config.namespace;
+
+  this.get('/api/organizations/:id/projects', (schema) => {
+    return schema.projects.all().models;
+  });
+  this.get('/api/profiles/:id/unknown_analysis_status', 'unknown-analysis-status');
   this.get('/users/:id', 'user');
   this.get('/users', 'user');
   this.get('/projects/:id', 'project');
@@ -65,19 +96,30 @@ export default function() {
   });
 
   this.get('/files/', (schema, FakeRequest) => {
-    return schema.files.findBy({id:FakeRequest.queryParams.projectId});
+    return schema.files.findBy({
+      id: FakeRequest.queryParams.projectId
+    });
   });
 
   this.post('/signup', () => {
-    return {user_id: '1', token: 'secret'};
+    return {
+      user_id: '1',
+      token: 'secret'
+    };
   });
 
   this.post('/login', () => {
-    return {user_id: '1', token: 'secret'};
+    return {
+      user_id: '1',
+      token: 'secret'
+    };
   });
 
   this.post('/check', () => {
-    return {user_id: '1', token: 'secret'};
+    return {
+      user_id: '1',
+      token: 'secret'
+    };
   });
 
   this.post('/logout', () => {
@@ -161,7 +203,9 @@ export default function() {
   });
 
   this.put('/profiles/:id/device_preference', () => {
-    return {id: '1'};
+    return {
+      id: '1'
+    };
   });
 
   this.post('/namespace_add', () => {
@@ -245,35 +289,35 @@ export default function() {
   });
 
   this.post('/teams', () => {
-   return;
+    return;
   });
 
   this.post('/rescan', () => {
-   return;
+    return;
   });
 
   this.post('/teams/:id', () => {
-   return;
- });
+    return;
+  });
 
   this.post('/teams/:id/members', () => {
-   return;
+    return;
   });
 
   this.put('/teams/:id/members', () => {
-   return;
+    return;
   });
 
   this.delete('/teams/:id/members/yash', () => {
-   return;
+    return;
   });
 
   this.delete('/teams/:id', () => {
-   return;
+    return;
   });
 
   this.delete('/teams', () => {
-   return;
+    return;
   });
 
   this.delete('/subscriptions/:id', () => {
