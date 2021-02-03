@@ -11,6 +11,7 @@ export default DRFAdapter.extend(IreneAdapterMixin, {
   namespace_v2: ENV.namespace_v2,
   addTrailingSlashes: false,
   organization: service('organization'),
+  me: service('me'),
   buildURLFromBase: function (resource_url) {
     const hostURLstr = this.get('host');
     try {

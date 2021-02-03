@@ -1,8 +1,17 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
-import { inject as service } from '@ember/service';
+import {
+  action,
+  computed
+} from '@ember/object';
+import {
+  tracked
+} from '@glimmer/tracking';
+import {
+  task
+} from 'ember-concurrency';
+import {
+  inject as service
+} from '@ember/service';
 import lookupValidator from 'ember-changeset-validations';
 import Changeset from 'ember-changeset';
 import ENV from 'irene/config/environment';
@@ -13,16 +22,20 @@ export default class RegisterViaInvite extends Component {
   @service ajax;
   @tracked toBeSubmittedData = {};
   @tracked initialData = {};
-  inviteEndpoint = 'registration-via-invite'
 
-  constructor () {
+  @computed('args.type')
+  get inviteEndpoint() {
+    return this.args.type === 'client' ? 'partner/client_registration' : 'registration-via-invite';
+  }
+
+  constructor() {
     super(...arguments)
     this.changeset = new Changeset(
       this.toBeSubmittedData, lookupValidator(InviteOnlyRegisterValidation), InviteOnlyRegisterValidation
     );
   }
 
-  @task(function * (){
+  @task(function* () {
     const url = this.inviteEndpoint + '?token=' + this.args.token;
     const data = yield this.ajax.request(url, {
       namespace: ENV.namespace_v2
@@ -32,7 +45,7 @@ export default class RegisterViaInvite extends Component {
   })
   loadTokenData
 
-  @task(function * (data) {
+  @task(function* (data) {
     const url = this.inviteEndpoint
     try {
       const logininfo = yield this.ajax.post(url, {
@@ -40,7 +53,7 @@ export default class RegisterViaInvite extends Component {
         namespace: ENV.namespace_v2
       })
       this.authenticate(logininfo);
-    } catch(errors) {
+    } catch (errors) {
       const changeset = this.changeset;
       Object.keys(errors.payload).forEach(key => {
         changeset.addError(key, errors.payload[key]);
@@ -49,7 +62,7 @@ export default class RegisterViaInvite extends Component {
   })
   registerWithServer
 
-  @task(function * (changeset){
+  @task(function* (changeset) {
     yield changeset.validate();
     if (changeset.get('isValid')) {
       const username = changeset.get('username');

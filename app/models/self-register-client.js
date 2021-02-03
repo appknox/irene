@@ -1,0 +1,36 @@
+import Model, {
+  attr
+} from '@ember-data/model';
+import {
+  computed
+} from '@ember/object';
+
+export default class SelfRegisterClientModel extends Model {
+
+  @attr('date') expiresOn;
+  @attr('string') firstName;
+  @attr('string') lastName;
+  @attr('string') email;
+  @attr('number') noOfScans;
+  @attr('string') registrationType;
+  @attr('string') company;
+  @attr('boolean') isTrail;
+  @attr('boolean') approved;
+  @attr('date') createdOn;
+  @attr('date') updatedOn;
+  @attr('boolean') approved;
+
+  @computed('firstName', 'lastName', function () {
+    return this.firstName.charAt(0) + this.lastName.charAt(0);
+  })
+  thumbnail;
+
+  @computed('firstName', 'lastName', function () {
+    return `${this.firstName} ${this.lastName}`;
+  }) fullName;
+
+  async approve(registerId) {
+    var adapter = this.store.adapterFor(this.constructor.modelName);
+    return await adapter.approve(this, registerId);
+  }
+}

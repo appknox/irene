@@ -1,0 +1,41 @@
+.invite-client-container {
+  .client-input {
+    display: grid;
+    grid-template-columns: 30% 1fr;
+    column-gap: 15px;
+    align-items: center;
+    height: 40px;
+
+    .label {
+      font-size: 14px;
+    }
+
+    input {
+      border: none;
+      border-bottom: 1px solid;
+
+      &::placeholder {
+        font-style: italic;
+        font-size: 13px;
+        opacity: 0.7;
+      }
+    }
+
+
+  }
+
+  .client-action {
+    display: grid;
+
+    .submit {
+      justify-self: right;
+      width: max-content;
+      background-color: $primary-color;
+      color: $white;
+
+      &:hover {
+        box-shadow: 0px 0px 10px -1px #888;
+      }
+    }
+  }
+}

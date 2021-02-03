@@ -1,0 +1,80 @@
+.partner-dashboard {
+  .dashboard-header {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    justify-content: center;
+
+    .overall-uploads {}
+
+    .credits-left {
+      display: grid;
+      justify-content: center;
+
+      .header {
+        font-size: 14px;
+        text-align: center;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .available-credits {
+        display: grid;
+        width: 200px;
+        height: 200px;
+        border: 15px solid #9CC3D5FF;
+        border-radius: 50%;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-size: 30px;
+        font-weight: bold;
+        color: #0063B2FF;
+      }
+    }
+  }
+
+  .client-groups {
+    margin-top: 15px;
+    position: relative;
+
+    .group-header {
+      display: grid;
+      grid-template-columns: auto auto auto;
+      height: 50px;
+      align-items: center;
+      justify-content: center;
+      column-gap: 10px;
+      box-shadow: 0px 0px 10px -1px #888;
+      border-radius: 12px;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+
+      .client-group {
+        text-transform: uppercase;
+        font-size: 16px;
+        cursor: pointer;
+        border-right: 1px solid;
+        width: 210px;
+        text-align: center;
+        color: #424651;
+
+        &:nth-last-child(2) {
+          border-right: none;
+        }
+
+        &.active,
+        &:hover {
+          font-weight: bold;
+        }
+      }
+    }
+
+    .invite-btn {
+      position: absolute;
+      right: 10px;
+      top: 9px;
+    }
+
+
+  }
+}

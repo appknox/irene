@@ -54,6 +54,7 @@ function routes() {
   this.get('/submissions/:id', 'submission');
   this.get('/submissions', 'submission');
   this.get('/files/:id', 'file');
+  this.get('/vulnerabilities', 'vulnerability');
   this.get('/vulnerabilities/:id', 'vulnerability');
   this.get('/invitations/:id', 'invitation');
   this.get('/devices', 'device');
@@ -70,6 +71,37 @@ function routes() {
   this.get('/organization/:id/analytics', 'analytics');
   this.get('/personaltokens', 'personaltoken');
   this.get('/manualscans/:id', 'manualscan');
+  this.get('/partner/:id/clients', (schema) => {
+    return schema.clients.all();
+  });
+
+  this.get('/partner/:id/invite_client', (schema) => {
+    return schema.clientInvites.all();
+  });
+
+  this.post('/partner/:id/invite_client', 'client-invite');
+
+  this.get('/credits/all', 'credits/overallUsages');
+
+  this.get('/credits/compound', 'credits/compound');
+
+  this.get('/client/1/uploads', 'client-upload');
+
+  this.get('/credits/client/1/compound', 'credits/clientCompounds');
+
+  this.get('/organizations/:id/me', () => {
+    return {
+      id: 1,
+      is_admin: true,
+      is_member: false,
+      is_owner: true
+    }
+  });
+
+  this.get('/organizations/:orgId/members/:memId', (schema, request) => {
+    console.log('schema', schema.organizationMembers.find(request.params.memId))
+    return schema.organizationMembers.find(request.params.memId)
+  })
 
   this.get('/github_repos', () => {
     return {};
@@ -191,6 +223,10 @@ function routes() {
   });
 
   this.delete('/organizations/:id/teams/:id/members/:member', () => {
+    return {};
+  });
+
+  this.get('/organizations/:id', () => {
     return {};
   });
 

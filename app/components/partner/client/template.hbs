@@ -1,0 +1,32 @@
+<div local-class="client-container">
+  <div local-class="chart-container">
+    <Charts::ClientUploads @title="Uploads" @clientId={{@client.id}}></Charts::ClientUploads>
+    <div local-class="credits-left">
+      <div local-class="header">Available Credits</div>
+      <div local-class="available-credits">
+        <span>{{@client.creditsLeft}}<br>
+          {{#if @client.isPerScan}}
+            Scans
+          {{else}}
+            Apps
+          {{/if}}
+        </span>
+      </div>
+    </div>
+  </div>
+  <div local-class="all-uploads-container">
+    <h3 local-class="title">All Uploads ({{this.uploads.length}})</h3>
+    <div local-class="client-uploads-cards">
+      {{#each this.uploads as |upload|}}
+        <Cards::ClientUpload @upload={{upload}}></Cards::ClientUpload>
+      {{else}}
+        <div local-class="no-uploads">No Uploads</div>
+      {{/each}}
+    </div>
+    {{#if (or this.hasPrevious this.hasNext)}}
+      <div local-class="pagination">
+        {{partial 'paginate'}}
+      </div>
+    {{/if}}
+  </div>
+</div>

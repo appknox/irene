@@ -1,5 +1,7 @@
-import { JSONAPISerializer } from 'ember-cli-mirage';
+// import { JSONAPISerializer } from 'ember-cli-mirage';
 
-export default JSONAPISerializer.extend({
+import ApplicationSerializer from './application';
+
+export default ApplicationSerializer.extend({
   include: ['vulnerabilityId']
 });

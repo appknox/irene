@@ -1,0 +1,13 @@
+<div local-class="client-uploads-chart">
+  <div local-class="title">{{@title}}</div>
+  <ul local-class="duration-options">
+    {{#each this.timelinePlaceholders as |option|}}
+      <li local-class=""><a local-class="option {{if (eq this.currentTimeline.key option.key) 'active'}}" href="#"
+          {{on "click" (fn this.onChangeTimeline option)}}>{{option.key}}</a></li>
+    {{/each}}
+  </ul>
+  <div {{did-insert (perform this.loadChart)}}></div>
+  {{#if this.loadChart.isRunning}}
+    <ThreeBounceSpinner></ThreeBounceSpinner>
+  {{/if}}
+</div>

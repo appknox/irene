@@ -296,7 +296,6 @@ export const PaginationMixin = superclass => class extends superclass {
     const objects = this.store.query(targetModel, query); // eslint-disable-line
     objects.then((result) => {
       const meta = result.meta;
-      console.log('result', result)
       if (result.links && result.meta.pagination) {
         meta.total = result.meta.pagination.count;
         this.isJsonApiPagination = true; // eslint-disable-line

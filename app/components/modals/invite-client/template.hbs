@@ -1,0 +1,40 @@
+<div local-class="invite-client-container">
+  <form>
+
+    <div local-class="firstname client-input">
+      <label local-class="label" for="firstname">Fisrt name</label>
+      <Input id="firstname" placeholder="First name" autocomplete="off"
+        @value={{mut (get this.changeset "firstName")}} />
+    </div>
+
+    <div local-class="lastname client-input">
+      <label local-class="label" for="lastname">Lastname</label>
+      <Input id="lastname" placeholder="Last name" autocomplete="off" @value={{mut (get this.changeset "lastName")}} />
+    </div>
+
+
+    <div local-class="email client-input">
+      <label local-class="label" for="email">Email</label>
+      <Input id="email" placeholder="Email" autocomplete="off" @value={{mut (get this.changeset "email")}} />
+    </div>
+
+    <div local-class="company client-input">
+      <label local-class="label" for="client-company">Company</label>
+      <Input id="client-company" placeholder="Company" autocomplete="off"
+        @value={{mut (get this.changeset "company")}} />
+    </div>
+
+
+    <div local-class="trail client-input">
+      <label local-class="label" for="is-trail-version">
+        Trail
+      </label>
+      <Input id="is-trail-version" {{on "change" (fn this.onChangeTrail 'checkbox')}} @type="checkbox"
+        @checked={{get this.changeset "isTrail"}} />
+    </div>
+
+    <div local-class="client-action">
+      <button local-class="submit" type="submit" {{on "click" (perform this.sendInvitation)}}>Send Invitation</button>
+    </div>
+  </form>
+</div>

@@ -66,6 +66,13 @@ if isLoaded
                     = fa-icon "tag" class="sidebar-icons"
                     = t "billing"
 
+            if showPartnerDashboard
+              li
+                = link-to 'authenticated.partner' class="mp-auth-billing"
+                  div
+                    = fa-icon "sitemap" class="sidebar-icons"
+                    | Clients
+
           .status-updates
             = submission-list
 

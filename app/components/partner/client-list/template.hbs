@@ -1,0 +1,29 @@
+<div local-class="partner-client-list">
+  {{!-- <div local-class="client-list-header">
+    <h3 local-class="title">{{@title}} ({{this.clientList.length}})</h3>
+    {{#unless @disableInvite}}
+      <button type="button" class="is-primary" {{on "click" (fn this.openInviteModal)}}>
+        Invite Client
+      </button>
+    {{/unless}}
+  </div> --}}
+  <div local-class="client-list-container">
+    <div local-class="client-items">
+      {{#each this.clientList as |client|}}
+        {{!-- <LinkTo @route="authenticated.client" @model={{client.id}}> --}}
+        <Cards::ClientInfo @client={{client}} @type={{@type}}></Cards::ClientInfo>
+        {{!-- </LinkTo> --}}
+      {{else}}
+        <div local-class="">No Clients Availabel</div>
+      {{/each}}
+    </div>
+  </div>
+  <div local-class="client-list-footer">
+
+    {{#if (or this.hasPrevious this.hasNext)}}
+      <div local-class="pagination">
+        {{partial 'paginate'}}
+      </div>
+    {{/if}}
+  </div>
+</div>

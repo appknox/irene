@@ -1,0 +1,58 @@
+<div local-class="partner-dashboard" {{did-insert this.initializeComp}}>
+  <div local-class="dashboard-header">
+    <div local-class="overall-uploads">
+      <Charts::ClientUploads @title="Overall Uploads"></Charts::ClientUploads>
+    </div>
+    <div local-class="credits-left">
+      <div local-class="header">Available Credits</div>
+      <div local-class="available-credits">
+        <span>{{this.creditsStats.creditsLeft}}<br>
+          {{#if this.creditsStats.isPerScan}}
+            Scans
+          {{else}}
+            Apps
+          {{/if}}
+        </span>
+      </div>
+      {{!-- {{#if this.load}}
+        <Charts::AkDonutChart @data={{this.creditsCompoundData}} @title="Earned" @subTitle="200">
+        </Charts::AkDonutChart>
+      {{/if}} --}}
+    </div>
+  </div>
+
+  {{!-- <Partner::ClientList @clientList={{this.registeredClientList}} @title="Registered Clients"></Partner::ClientList> --}}
+
+  <div local-class="client-groups">
+    <div local-class="group-header">
+      {{#each this.clientGroups as |clientGroup|}}
+        <a href="#" local-class="client-group {{if clientGroup.active 'active'}}"
+          {{on "click" (fn this.onSelectClientGroup clientGroup)}}>
+          {{clientGroup.label}}
+        </a>
+      {{/each}}
+      <div local-class="invite-btn">
+        <button type="button" class="is-primary" {{on "click" (fn this.openInviteModal)}}>
+          Invite Client
+        </button>
+      </div>
+    </div>
+
+
+    <div local-class="group-body">
+      {{#each this.clientGroups as |clientGroup|}}
+        {{#if clientGroup.active}}
+          <Partner::ClientList @title={{clientGroup.label}} @model={{clientGroup.model}} @type={{clientGroup.key}}>
+          </Partner::ClientList>
+        {{/if}}
+      {{/each}}
+    </div>
+  </div>
+
+</div>
+
+{{#if this.isShowInviteClientModal}}
+  <AkModal @onClose={{this.onCloseModal}} @showHeader={{true}} @headerTitle="Invite Client">
+    <Modals::InviteClient @onInvited={{this.onClientInvited}}></Modals::InviteClient>
+  </AkModal>
+{{/if}}

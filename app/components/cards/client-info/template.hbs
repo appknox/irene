@@ -1,0 +1,94 @@
+<div local-class="client-info-card {{@client.type}}">
+  <LinkTo @route="authenticated.client" @disabled={{not this.isRegistered}} @model={{@client}}
+    local-class="client-info-header">
+    <span local-class="thumbnail {{unless this.isRegistered 'not-registered'}}">
+      {{#if this.isRegistered}}
+        {{fa-icon "cogs"}}
+
+      {{else}}
+        {{@client.thumbnail}}
+      {{/if}}
+    </span>
+    <div local-class="title">
+      {{#unless this.isRegistered}}
+        <span local-class="name">{{concat @client.firstName ' ' @client.lastName}}</span>
+      {{/unless}}
+      <span local-class="company {{if this.isRegistered 'registered'}}">{{@client.company}}</span>
+    </div>
+  </LinkTo>
+  {{#if this.isRegistered}}
+    <div local-class="client-info-body">
+      <div local-class="email info-item">{{@client.email}}</div>
+
+      {{!-- <Charts::AkProgressBar @value={{@client.creditsLeft}} @total={{10}}></Charts::AkProgressBar> --}}
+
+      <div local-class="total-users info-item">
+        <span local-class="label">Total Users</span>:
+        <span local-class="data">
+          {{@client.totalUserCount}}
+        </span>
+      </div>
+
+      <div local-class="total-uploads info-item">
+        <span local-class="label">Total Uploads</span>:
+        <span local-class="data">
+          {{@client.totalFileUploadCount}}
+        </span>
+      </div>
+
+      <div local-class="last-upload info-item">
+        <span local-class="label">Available Credits</span>:
+        <span local-class="data">
+          {{@client.creditsLeft}} {{#if @client.isPerScan}} Scans {{else}} Apps {{/if}}
+        </span>
+      </div>
+
+      <div local-class="last-upload info-item">
+        <span local-class="label">Last Upload</span>: <span>
+          <span local-class="data">
+            {{#if @client.lastUpload}}
+              {{day-js date=@client.lastUpload format='DD MMM YYYY HH:mm:ss A'}}
+            {{else}}
+              --
+            {{/if}}
+          </span>
+        </span>
+      </div>
+    </div>
+  {{/if}}
+  <div local-class="client-info-footer {{unless this.isRegistered "not-registered"}}">
+    {{#if this.isRegistered}}
+      <LinkTo @route="authenticated.client" @model={{@client.id}} local-class="view-client border-right">
+        {{fa-icon "arrows-alt"}}
+        <AttachTooltip @placemnet="top-end">
+          View Client
+        </AttachTooltip>
+      </LinkTo>
+      <div></div>
+      <div local-class="add-credit border-left">
+        {{fa-icon "plus"}}
+        <AttachTooltip @placemnet="top-end">
+          Add Credit*
+        </AttachTooltip>
+      </div>
+
+    {{else}}
+      <a href="#" local-class="resend border-right {{unless this.isInvited 'hidden'}}"
+        {{on "click" (perform this.resendInvitation)}}>
+        {{fa-icon "paper-plane"}}
+        <AttachTooltip @placemnet="top-end">
+          Resend Invitation
+        </AttachTooltip>
+      </a>
+      <div></div>
+      <a href="#" local-class="approve border-left {{unless this.isSelfRegistered 'hidden'}}"
+        {{on "click" (perform this.approveRegistration)}}>
+        {{fa-icon "check-circle"}}
+        <AttachTooltip @placemnet="top-end">
+          Approve
+        </AttachTooltip>
+      </a>
+    {{/if}}
+
+  </div>
+</div>

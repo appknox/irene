@@ -1,0 +1,23 @@
+<div local-class="client-upload-card">
+  <div local-class="card-header">
+    <div local-class="icon" style={{this.iconUrl}}></div>
+    <div local-class="header-info">
+      <span local-class="name">{{@upload.name}}</span>
+      <span local-class="pkg">{{@upload.project.package_name}}</span>
+    </div>
+  </div>
+  <div local-class="card-body">
+    <div local-class="upload-info">
+      {{fa-icon "calendar-check-o" local-class="icon"}}
+      <span local-class="value">
+        {{day-js date=@upload.uploadedAt format="DD/MM/YYYY HH:mm:ss"}}
+      </span>
+    </div>
+    <div local-class="upload-info">
+      {{fa-icon @upload.platformIcon local-class="icon"}}
+      <span local-class="value">
+        {{@upload.version}}
+      </span>
+    </div>
+  </div>
+</div>

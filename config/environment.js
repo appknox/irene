@@ -22,7 +22,7 @@ const possibleENVS = [
 const ENVHandlerCONST = {
   possibleENVS: possibleENVS,
   defaults: {
-    IRENE_API_HOST: "https://api.appknox.com",
+    IRENE_API_HOST: "http://127.0.0.1:8000",
     IRENE_DEVICEFARM_HOST: "https://devicefarm.appknox.com",
     IRENE_API_SOCKET_PATH: "https://socket.appknox.com",
     IRENE_ENABLE_REGISTRATION: false,
@@ -353,6 +353,7 @@ module.exports = function (environment) {
       recentIssues: "recent_issues",
       tags: "tags",
       capturedApiScanStart: "start_apiscan",
+      partnerOverallScansCount: "overall_upload_count",
     },
     csb: {
       userLoggedIn: {

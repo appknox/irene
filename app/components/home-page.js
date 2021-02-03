@@ -20,6 +20,9 @@ import {
   getOwner
 } from '@ember/application';
 import ENV from 'irene/config/environment';
+import {
+  readOnly
+} from '@ember/object/computed';
 
 export default Component.extend({
   me: service(),
@@ -68,6 +71,8 @@ export default Component.extend({
       return orgShowBilling && isOwner;
     }
   ),
+
+  showPartnerDashboard: readOnly('me.partner.show_partner_dashboard'),
 
   /**
    * @property {Boolean} isShowAnalytics
