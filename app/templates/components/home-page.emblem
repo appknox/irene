@@ -36,11 +36,13 @@ if isLoaded
                   = t "projects"
                 span.badge-square.is-sidebar.content-right
                   | #{organization.selected.projectsCount}
-            li
-              = link-to 'authenticated.analytics'
-                div
-                  = fa-icon "area-chart" class="sidebar-icons"
-                  = t "analytics"
+
+            if isShowAnalytics
+              li
+                = link-to 'authenticated.analytics'
+                  div
+                    = fa-icon "area-chart" class="sidebar-icons"
+                    = t "analytics"
             li
               = link-to 'authenticated.organization.namespaces' class="mp-auth-teams"
                 div
