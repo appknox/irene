@@ -69,6 +69,12 @@ export default Component.extend({
     }
   ),
 
+  /**
+   * @property {Boolean} isShowAnalytics
+   * Property to disable analytics page for member role
+   */
+  isShowAnalytics: computed.equal('me.org.is_member', false),
+
   securityDashboard() {
     if (window.location.pathname.startsWith("/security")) {
       const isSecurityEnabled = this.get("isSecurityEnabled");
