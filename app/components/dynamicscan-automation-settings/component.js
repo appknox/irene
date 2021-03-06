@@ -17,6 +17,7 @@ import ENV from 'irene/config/environment';
 
 export default class DyanmicscanAutomationSettingsComponent extends Component {
   @service store;
+  @service intl;
   @service ajax;
   @service('notifications') notify;
 
