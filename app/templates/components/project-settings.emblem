@@ -39,6 +39,11 @@ if isGeneralSettings
             = t "teamsAndCollaborators"
       = project-team-list project=project
       = project-collaborator-list project=project
+
+  if organization.selected.features.dynamicscan_automation
+    .box-container
+      = dynamicscan-automation-settings profileId=project.activeProfileId project=project
+
   .box-container
     = github-project project=project
 
