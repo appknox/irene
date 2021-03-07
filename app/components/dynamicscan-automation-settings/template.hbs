@@ -12,6 +12,7 @@
 
 
   <div class="automation-script-upload margin-v-1h">
+    {{! template-lint-disable }}
     <FileUpload
       @name="files"
       @accept="*/*"
@@ -19,7 +20,7 @@
       @onfileadd={{action this.uploadFileWrapper}} as |queue|
     >
       <a class="button is-primary">
-        {{#if this.uploadFile.isRunning}}
+        {{#if queue.files.length}}
           {{t "uploading"}}...
         {{else}}
           {{t "uploadZipFile"}}
