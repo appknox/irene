@@ -324,6 +324,7 @@ module.exports = function (environment) {
       dynamicscanMode: "dynamicscan_mode",
       uploadAutomationScript: "upload_automation_script",
       uploadAutomationScriptSignedUrl: "upload_automation_script/signed_url",
+      scheduleDynamicscanAutomation: "schedule_automation",
       reportPreference: "report_preference",
       registration: "registration",
       activate: "activate",

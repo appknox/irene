@@ -53,6 +53,7 @@ const File = DS.Model.extend(BaseModelMixin, {
   minOsVersion: DS.attr('string'),
   supportedCpuArchitectures: DS.attr('string'),
   supportedDeviceTypes: DS.attr('string'),
+  canRunAutomatedDynamicscan: DS.attr('boolean'),
 
   isManualRequested: computed('manual', function () {
     return this.get("manual") !== ENUMS.MANUAL.NONE
@@ -163,6 +164,15 @@ const File = DS.Model.extend(BaseModelMixin, {
     return status === ENUMS.DYNAMIC_STATUS.NONE;
   }),
 
+  isDynamicStatusError: computed('dynamicStatus', function () {
+    const status = this.get('dynamicStatus');
+    return status === ENUMS.DYNAMIC_STATUS.ERROR;
+  }),
+
+  isDynamicStatusQueueAndHasAutomation: computed('dynamicStatus', 'canRunAutomatedDynamicscan', function () {
+    const status = this.get('dynamicStatus');
+    return status === ENUMS.DYNAMIC_STATUS.INQUEUE && this.get('canRunAutomatedDynamicscan');
+  }),
   isDynamicStatusReady: computed('dynamicStatus', function () {
     const status = this.get('dynamicStatus');
     return status === ENUMS.DYNAMIC_STATUS.READY;
@@ -171,9 +181,14 @@ const File = DS.Model.extend(BaseModelMixin, {
   isDynamicStatusNotReady: computed.not('isDynamicStatusReady'),
   isDynamicStatusNotNone: computed.not('isDynamicStatusNone'),
 
-  isDynamicStatusNeitherNoneNorReady: computed('dynamicStatus', function () {
+  isDynamicStatusNeitherNoneNorReadyNorError: computed('dynamicStatus', function () {
     const status = this.get('dynamicStatus');
-    return ![ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE].includes(status);
+    return ![ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE, ENUMS.DYNAMIC_STATUS.ERROR].includes(status);
+  }),
+
+  isDynamicStatusNoneOrError: computed('dynamicStatus', function () {
+    const status = this.get('dynamicStatus');
+    return [ENUMS.DYNAMIC_STATUS.NONE, ENUMS.DYNAMIC_STATUS.ERROR].includes(status);
   }),
 
   isDynamicStatusNoneOrReady: computed('dynamicStatus', function () {
@@ -194,6 +209,11 @@ const File = DS.Model.extend(BaseModelMixin, {
   startingScanStatus: computed('dynamicStatus', function () {
     const status = this.get('dynamicStatus');
     return ![ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE, ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN].includes(status);
+  }),
+
+  showScheduleAutomatedDynamicScan: computed('dynamicStatus', 'canRunAutomatedDynamicscan', function () {
+    const status = this.get('dynamicStatus');
+    return status !== ENUMS.DYNAMIC_STATUS.INQUEUE && this.get('canRunAutomatedDynamicscan');
   }),
 
   statusText: computed('dynamicStatus', 'tDeviceBooting', 'tDeviceDownloading', 'tDeviceHooking', 'tDeviceInQueue', 'tDeviceInstalling', 'tDeviceLaunching', 'tDeviceShuttingDown', 'tdeviceCompleted', function () {
@@ -242,6 +262,10 @@ const File = DS.Model.extend(BaseModelMixin, {
 
   setBootingStatus() {
     this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.BOOTING);
+  },
+
+  setInQueueStatus() {
+    this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.INQUEUE);
   },
 
   setShuttingDown() {

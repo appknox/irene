@@ -78,6 +78,30 @@ export default Component.extend({
     file.setDynamicStatusNone();
   }),
 
+  scheduleDynamicScan: task(function* () {
+    const file = this.get('file');
+    const fileId = file.id;
+    const scheduleAutomationUrl = [ENV.endpoints.dynamic, fileId, ENV.endpoints.scheduleDynamicscanAutomation].join('/');
+    yield this.get('ajax').post(scheduleAutomationUrl, {data: {id: fileId}});
+  }).evented(),
+
+  scheduleDynamicScanSucceeded: on('scheduleDynamicScan:succeeded', function () {
+    const file = this.get('file');
+    file.setInQueueStatus();
+    this.set('showDynamicScanModal', false);
+    this.get('notify').success("Automated dynamic scan sucecssfully scheduled");
+  }),
+
+  scheduleDynamicScanErrored: on('scheduleDynamicScan:errored', function (_, err) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (err.errors && err.errors.length) {
+      errMsg = err.errors[0].detail || errMsg;
+    } else if (err.message) {
+      errMsg = err.message;
+    }
+    this.get('notify').error(errMsg);
+  }),
+
   actions: {
     pollDynamicStatus() {
       const isDynamicReady = this.get('file.isDynamicStatusReady');
