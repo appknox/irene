@@ -1,13 +1,27 @@
 import Component from '@ember/component';
-import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
-import { observer } from '@ember/object';
-import { underscore } from '@ember/string';
-import { run } from '@ember/runloop';
+import {
+  inject as service
+} from '@ember/service';
+import {
+  computed
+} from '@ember/object';
+import {
+  observer
+} from '@ember/object';
+import {
+  underscore
+} from '@ember/string';
+import {
+  run
+} from '@ember/runloop';
 import PaginateMixin from 'irene/mixins/paginate';
 import ENUMS from 'irene/enums';
-import { filterPlatformValues } from 'irene/helpers/filter-platform';
-import { t } from 'ember-intl';
+import {
+  filterPlatformValues
+} from 'irene/helpers/filter-platform';
+import {
+  t
+} from 'ember-intl';
 import $ from 'jquery';
 
 const ProjectListComponent = Component.extend(PaginateMixin, {
@@ -92,10 +106,18 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
     const tPackageName = this.get("tPackageName");
     const tLeastRecent = this.get("tLeastRecent");
     const tMostRecent = this.get("tMostRecent");
-    const keyObjects = [
-      { key: "lastFileCreatedOn", text: tDateUpdated },
-      { key: "id", text: tDateCreated },
-      { key: "packageName", text: tPackageName }
+    const keyObjects = [{
+        key: "lastFileCreatedOn",
+        text: tDateUpdated
+      },
+      {
+        key: "id",
+        text: tDateCreated
+      },
+      {
+        key: "packageName",
+        text: tPackageName
+      }
     ];
     const keyObjectsWithReverse = [];
     for (let keyObject of Array.from(keyObjects)) {
@@ -123,7 +145,7 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
     return keyObjectsWithReverse;
   }),
 
-  platformObjects: ENUMS.PLATFORM.CHOICES.slice(0, +-4 + 1 || undefined),
+  platformObjects: ENUMS.PLATFORM.CHOICES.slice(0, + -4 + 1 || undefined),
   actions: {
     sortProjects() {
       const select = $(this.element).find("#project-sort-property");
@@ -137,7 +159,6 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
       this.set("platformType", select.val());
     }
   }
-}
-);
+});
 
 export default ProjectListComponent;

@@ -1,4 +1,4 @@
-if hasProjects
+if isContainObjects
   .column
     .box-container.home-page.all-inputs
       .columns
@@ -35,7 +35,7 @@ if hasProjects
     if hasObjects
       = partial "paginate"
 
-else
+else if isEmpty
   .column.is-fullwidth.no-project-container
     .no-project
       h4.capitalize-text
@@ -44,3 +44,9 @@ else
         = t "noProjectUploaded"
       h6
         = t "uploadNewProject" htmlSafe=true
+
+else
+  .column
+    .columns.project-container
+      .project-loading-container
+        = three-bounce-spinner
