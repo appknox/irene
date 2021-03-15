@@ -113,6 +113,18 @@ const PaginateMixin = Mixin.create({
     return Math.ceil(total / limit) - 1;
   }), // `-1` because offset starts from 0
 
+  /**
+   * @property {Boolean} isContainObjects
+   * Property to check whether the model has atleast an object
+   */
+  isContainObjects: computed.or('hasObjects', 'meta.total'),
+
+  /**
+   * @property {Boolean} isEmpty
+   * Property to check the number of total objects
+   */
+  isEmpty: computed.equal('meta.total', 0),
+
   pages: computed("maxOffset", "offset", function () {
     const offset = this.get("offset");
     const maxOffset = this.get("maxOffset");
