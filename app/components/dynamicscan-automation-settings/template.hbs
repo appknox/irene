@@ -20,7 +20,7 @@
       @onfileadd={{action this.uploadFileWrapper}} as |queue|
     >
       <a class="button is-primary">
-        {{#if queue.files.length}}
+        {{#if this.uploadFile.isRunning}}
           {{t "uploading"}}...
         {{else}}
           {{t "uploadZipFile"}}
@@ -40,7 +40,7 @@
                 id="auto-dynamicscan"
                 class="switch-input"
                 @type="checkbox"
-                @checked={{this.appiumEnabled}}
+                @checked={{this.automationEnabled}}
                 {{on "click" (perform this.toggleDynamicscanMode)}}
                 @disabled={{this.toggleDynamicscanMode.isRunning}}
               />

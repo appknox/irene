@@ -1,4 +1,3 @@
-
 div class="{{if vncViewer 'dynamic-scan-on-vnc' 'dynamic-scan'}}"
   if file.isDynamicStatusNotReady
     div.dynamic-scan-buttons.vnc-box
@@ -129,4 +128,4 @@ div class="{{if vncViewer 'dynamic-scan-on-vnc' 'dynamic-scan'}}"
                   button.modal-button.is-default click={(perform scheduleDynamicScan)} disabled=scheduleDynamicScan.isRunning
                     = fa-icon "clock-o"
                     .margin-l-h
-                      = t "schedule"
+                      = t "scheduleDynamicscan"
