@@ -21,6 +21,7 @@ export default Component.extend({
   showApiScanSettings: false,
   isApiScanEnabled: false,
   tStartingScan: t('startingScan'),
+  tScheduleDynamicscanSuccess: t('scheduleDynamicscanSuccess'),
 
   didInsertElement() {
     this.send('pollDynamicStatus');
@@ -35,6 +36,7 @@ export default Component.extend({
   openDynamicScanModal: task(function* () {
     triggerAnalytics('feature',ENV.csb.dynamicScanBtnClick);
     yield this.set('showDynamicScanModal', true);
+    yield this.get('store').find('file', this.get('file.id'));
   }),
 
   enableApiScan: task(function* (checked) {
@@ -76,6 +78,43 @@ export default Component.extend({
 
     const file = this.get('file');
     file.setDynamicStatusNone();
+  }),
+
+  scheduleDynamicScan: task(function* () {
+    const file = this.get('file');
+    const fileId = file.id;
+    const scheduleAutomationUrl = [ENV.endpoints.dynamic, fileId, ENV.endpoints.scheduleDynamicscanAutomation].join('/');
+    yield this.get('ajax').post(scheduleAutomationUrl, {data: {id: fileId}});
+  }).evented(),
+
+  scheduleDynamicScanSucceeded: on('scheduleDynamicScan:succeeded', function () {
+    const file = this.get('file');
+    file.setInQueueStatus();
+    this.set('showDynamicScanModal', false);
+    this.get('notify').success(this.get('tScheduleDynamicscanSuccess'), {
+      clearDuration: 5000
+    });
+  }),
+
+  scheduleDynamicScanErrored: on('scheduleDynamicScan:errored', function (_, e) {
+    this.set('showDynamicScanModal', false);
+    let errMsg = this.get('tPleaseTryAgain');
+    if (e.payload) {
+      Object.keys(e.payload).forEach(p => {
+        errMsg = e.payload[p]
+        if (typeof(errMsg) !== "string") {
+          errMsg = e.payload[p][0];
+        }
+        this.get('notify').error(errMsg);
+      });
+      return;
+    } else if (e.errors && e.errors.length) {
+      errMsg = e.errors[0].detail || errMsg;
+    } else if(e.message) {
+      errMsg = e.message;
+    }
+    this.get('notify').error(errMsg);
+    return;
   }),
 
   actions: {

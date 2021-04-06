@@ -1,0 +1,62 @@
+<div local-class="dynamicscan-automation-settings">
+  <div class="vertical-align-center margin-b-1h">
+    <h5 class="bold black-text margin-bottom0">{{t "dynamicScanAutomation"}}</h5>
+    <span local-class="flag-label"><i class="fa fa-wrench" local-class="flag-label-icon"></i>{{t "experimentalFeature"}}</span>
+  </div>
+
+  <div>{{this.project.id}}</div>
+
+  <div class="legible bold black-text padding-b-h">{{t "appiumScripts"}}</div>
+  <div class="margin-b-1">{{t "appiumScriptsDescription" htmlSafe=true}}</div>
+  <small>{{t "appiumScriptsNote"}}</small>
+
+
+  <div class="automation-script-upload margin-v-1h">
+    {{! template-lint-disable }}
+    <FileUpload
+      @name="files"
+      @accept="*/*"
+      @disabled={{this.uploadFile.isRunning}}
+      @onfileadd={{action this.uploadFileWrapper}} as |queue|
+    >
+      <a class="button is-primary">
+        {{#if this.uploadFile.isRunning}}
+          {{t "uploading"}}...
+        {{else}}
+          {{t "uploadZipFile"}}
+        {{/if}}
+      </a>
+    </FileUpload>
+  </div>
+
+  {{#if this.automationScripts}}
+    <div local-class="script-list">
+      {{#each this.automationScripts as |script|}}
+        <div local-class="script" class="fill-lightgray">
+          <label local-class="script-enable" class="margin-r-1 vertical-align-center">
+            <div class="padding-r-1 bold">{{t "appiumScheduledAutomation" htmlSafe=true}}</div>
+            <label class="toggle-switch-on-off">
+              <Input
+                id="auto-dynamicscan"
+                class="switch-input"
+                @type="checkbox"
+                @checked={{this.automationEnabled}}
+                {{on "click" (perform this.toggleDynamicscanMode)}}
+                @disabled={{this.toggleDynamicscanMode.isRunning}}
+              />
+              <span class="knob"></span>
+            </label>
+          </label>
+          <div local-class="script-icon"><i class="fa fa-file-text-o"></i></div>
+          <div local-class="script-info">
+            <div><span local-class="script-name">{{script.fileKey}}</span></div>
+            <div><em>{{t "uploaded"}} {{dayjs-from-now script.createdOn}}</em></div>
+            {{#if (eq script.isValid false)}}
+              <div local-class="script-invalid"><i class="fa fa-warning" local-class="script-invalid-icon"></i>&nbsp;{{t "appiumScriptInvalid"}}</div>
+            {{/if}}
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  {{/if}}
+</div>

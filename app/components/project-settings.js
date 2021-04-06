@@ -6,6 +6,7 @@ export default Component.extend({
   isGeneralSettings: true,
   isAnalysisSettings: false,
   me: service('me'),
+  organization: service(),
 
   profile: computed('project.activeProfileId', 'store', function() {
     var profileId = this.get('project.activeProfileId');

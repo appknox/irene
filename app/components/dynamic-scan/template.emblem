@@ -1,14 +1,25 @@
-
 div class="{{if vncViewer 'dynamic-scan-on-vnc' 'dynamic-scan'}}"
   if file.isDynamicStatusNotReady
     div.dynamic-scan-buttons.vnc-box
-      if file.isDynamicStatusNeitherNoneNorReady
+      if file.isDynamicStatusNeitherNoneNorReadyNorError
         button.vnc-button.is-primary.is-progress disabled="disabled"
           .fa-font-size
             i.fa class="fa-spinner fa-spin"
           | &nbsp; #{file.statusText}
-      if file.isDynamicStatusNone
-        if file.isDynamicDone
+        if file.isDynamicStatusQueueAndHasAutomation
+          button.vnc-button.vnc-button-repeat.is-primary.margin-left5.ac-dynamic-rescan click={(perform openDynamicScanModal)} disabled={if file.isActive false "disabled"}
+              .fa-font-size-small
+                = fa-icon "repeat"
+
+      if file.isDynamicStatusNoneOrError
+        if file.isDynamicStatusError
+          button.vnc-button.vnc-completed-button.is-primary disabled="disabled"
+            = fa-icon "warning"
+            | &nbsp; {{t "errored"}}
+          button.vnc-button.vnc-button-repeat.is-primary.margin-left5.ac-dynamic-rescan click={(perform openDynamicScanModal)} disabled={if file.isActive false "disabled"}
+            .fa-font-size-small
+              = fa-icon "repeat"
+        else if file.isDynamicDone
           button.vnc-button.vnc-completed-button.is-primary disabled="disabled"
             = fa-icon "check"
             | &nbsp; #{t "completed"}
@@ -96,3 +107,25 @@ div class="{{if vncViewer 'dynamic-scan-on-vnc' 'dynamic-scan'}}"
           .align-end
             button.modal-button.is-primary.highlighted-button.mp-dont-run-api-scan click="runDynamicScan" disabled=startingDynamicScan
               = t "modalCard.dynamicScan.start"
+
+        if file.showScheduleAutomatedDynamicScan
+          .padding-t-1h
+            .margin-h-neg-20.margin-b-neg-20.fill-lightgray
+              .padding-h-1h.padding-t-1h.padding-b-1
+                .vertical-align-center
+                  .font-medium.bold.black-text
+                    = t "dynamicScanAutomation"
+                  span local-class="flag-label"
+                    = fa-icon "wrench" local-class="flag-label-icon"
+                    = t "experimentalFeature"
+              .padding-h-1h
+                = t "scheduleDynamicscanDesc"
+                .margin-v-h
+                  small
+                    = t "appiumScriptsNote"
+              .margin-t-h.padding-b-1h.padding-h-1h
+                .align-end
+                  button.modal-button.is-default click={(perform scheduleDynamicScan)} disabled=scheduleDynamicScan.isRunning
+                    = fa-icon "clock-o"
+                    .margin-l-h
+                      = t "scheduleDynamicscan"
