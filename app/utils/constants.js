@@ -16,4 +16,7 @@ export const INPUT = {
   MIN_LENGTH: 3
 };
 
+// File details tag max limit
+export const FILE_TAG_MAX_CHAR = 250;
+
 export default CONSTANTS;
