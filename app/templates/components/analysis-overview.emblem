@@ -4,13 +4,17 @@ td
   = link-to 'authenticated.security.analysis' analysis.id
     | #{analysis.vulnerability.name}
 td.uppercase-text
-  .vertical-align-center
-    .tag class="{{risk-label-class analysis.risk}}"
-      | #{risk-text analysis.risk}
-    if analysis.overriddenRisk
-      = fa-icon "long-arrow-right"
-      .tag class="{{risk-label-class analysis.overriddenRisk}}"
-        | #{risk-text analysis.overriddenRisk}
+  .align-both
+    .vertical-align-center
+      .tag class="{{risk-label-class analysis.risk}}"
+        | #{risk-text analysis.risk}
+      if analysis.overriddenRisk
+        = fa-icon "long-arrow-right"
+        .tag class="{{risk-label-class analysis.overriddenRisk}}"
+          | #{risk-text analysis.overriddenRisk}
+    .margin-l-1h.vertical-align-center
+      button.button-small.is-success click="openMarkPassedConfirmBox" title="Mark as Passed"
+        = fa-icon "check"
 td
   each tags as |tag|
     span.tag.scan-tag class=tag.status:finished-scan:unfinished-scan
@@ -26,3 +30,5 @@ td
 td
   .tag.status-tag class="status-tag-{{ analysis.status }}"
     | #{analysis-status analysis.status}
+
+= confirm-box isActive=showMarkPassedConfirmBox title="Are you sure you want to mark this analysis as passed?" description=(concat "ID " analysis.id " - " analysis.vulnerability.name " (current risk: " (risk-text analysis.risk) ")") delegate=this
