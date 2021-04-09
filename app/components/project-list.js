@@ -23,6 +23,9 @@ import {
   t
 } from 'ember-intl';
 import $ from 'jquery';
+import {
+  task
+} from 'ember-concurrency';
 
 const ProjectListComponent = Component.extend(PaginateMixin, {
 
@@ -44,6 +47,18 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
   tPackageName: t("packageName"),
   tMostRecent: t("mostRecent"),
   tLeastRecent: t("leastRecent"),
+
+  /**
+   * @property {Array} teams
+   * Property for list of matching teams
+   */
+  teams: [],
+
+  /**
+   * @property {Object} selectedTeam
+   * Property for selected team from the list
+   */
+  selectedTeam: null,
 
   newProjectsObserver: observer("realtime.ProjectCounter", "realtime.FileCounter", function () {
     return this.incrementProperty("version");
@@ -82,10 +97,11 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
   }),
 
 
-  extraQueryStrings: computed("query", "sortingKey", "sortingReversed", "platformType", function () {
+  extraQueryStrings: computed("query", "sortingKey", "sortingReversed", "platformType", "selectedTeam", function () {
     const platform = this.get("platformType")
     const reverse = this.get("sortingReversed")
     const sorting = underscore(this.get("sortingKey"))
+    const team = this.get('selectedTeam');
 
     const query = {
       q: this.get("query"),
@@ -96,6 +112,10 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
     }
     if (reverse) {
       query["sorting"] = '-' + sorting;
+    }
+
+    if (team && team.id) {
+      query['team'] = team.id;
     }
     return JSON.stringify(query, Object.keys(query).sort());
   }),
@@ -157,8 +177,25 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
     filterPlatform() {
       const select = $(this.element).find("#project-filter-platform");
       this.set("platformType", select.val());
+    },
+    // Action to get/set selected team object
+    onSelectTeam(team) {
+      this.set('selectedTeam', team);
     }
-  }
+  },
+
+  /**
+   * @function queryTeams
+   * @param {String} teamName
+   * Method to query all the matching teams with given name
+   */
+  queryTeams: task(function* (teamName) {
+    if (teamName && teamName.length) {
+      this.set('teams', yield this.get('store').query('organization-team', {
+        q: teamName
+      }))
+    }
+  }).evented()
 });
 
 export default ProjectListComponent;
