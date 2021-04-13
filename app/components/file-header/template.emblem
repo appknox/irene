@@ -173,7 +173,7 @@
               .columns
                 .column
                   li.is-success
-                    = t "none"
+                    = t "passed"
                 .column
                   = file.countRiskNone
               .columns class=unknownAnalysisStatus.status:visible:invisible

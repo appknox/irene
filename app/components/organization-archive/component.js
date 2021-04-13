@@ -55,7 +55,7 @@ export default Component.extend({
       } else {
         endDateObj.set({
           h: now.hour(),
-          m: now.minutes(),
+          m: now.minute(),
           s: 0
         });
       }
