@@ -26,7 +26,6 @@ export default class PartnerClientComponent extends PaginationMixin(Component) {
 
   @computed('args.client.id')
   get extraQueryStrings() {
-    console.log('args', this.args)
     return JSON.stringify({
       clientId: this.args.client.id
     });

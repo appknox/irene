@@ -1,5 +1,9 @@
-import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
+import {
+  inject as service
+} from '@ember/service';
+import {
+  computed
+} from '@ember/object';
 import AjaxService from 'ember-ajax/services/ajax';
 import ENV from 'irene/config/environment';
 
@@ -17,17 +21,18 @@ export default class IreneAjaxService extends AjaxService {
   @service session;
   _buildURL(url, options) {
     const ret = super._buildURL(url, options);
-    if(isFullURL(ret)) {
+    if (isFullURL(ret)) {
       return ret;
     }
-    if(ret.length && ret[0] !== '/') {
+    if (ret.length && ret[0] !== '/') {
       return '/' + ret;
     }
     return ret;
   }
   @computed('session.data.authenticated.b64token', function () {
     const token = this.session.data.authenticated.b64token;
-    if(token) {
+    console.log('token', token)
+    if (token) {
       return {
         'Authorization': "Basic " + token,
         'X-Product': ENV.product

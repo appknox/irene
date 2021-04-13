@@ -41,27 +41,32 @@ export default class ChartsClientUploadsComponent extends Component {
 
   @tracked isRedrawChart = false;
 
-  @tracked currentTimeline = {
-    key: "month",
-    axisKey: 'month',
-    format: 'MMM/YY'
-  };
-
   @tracked timelinePlaceholders = [{
       key: "month",
       axisKey: 'month',
-      format: 'MMM/YY'
+      format: 'MMM/YY',
+      tooltipFormat(d) {
+        return new dayjs(d).format('MMM/YYYY');
+      }
     },
     {
       key: "week",
       axisKey: 'week',
-      format: 'YYYY-MM-DD'
+      format: 'wo',
+      tooltipFormat(d) {
+        return `${dayjs(d).format('DD-MM-YYYY')} - ${dayjs(d).add(7, 'day').format('DD-MM-YYYY')}`;
+      }
     }, {
       key: "day",
       axisKey: 'date',
-      format: 'DD/MMM'
+      format: 'DD/MMM',
+      tooltipFormat(d) {
+        return new dayjs(d).format('DD-MM-YYYY');
+      }
     }
   ];
+
+  @tracked currentTimeline = this.timelinePlaceholders[0];
 
   @tracked chartContainer = null;
 
@@ -99,10 +104,12 @@ export default class ChartsClientUploadsComponent extends Component {
       },
       axis: {
         x: {
+          padding: {
+            right: 1000 * 60 * 60 * 12
+          },
           type: "timeseries",
           tick: {
             format: function (val) {
-              console.log('chart date', val)
               return new dayjs(val).format(component.currentTimeline.format);
               // return 'MM'
             }
@@ -123,6 +130,12 @@ export default class ChartsClientUploadsComponent extends Component {
       legend: {
         show: false
       },
+
+      tooltip: {
+        contents: function (d) {
+          return component.tooltipTemplate(component, d[0].x, d[0].value); // formatted html as you want
+        }
+      },
       bindto: element
     });
     component.isRedrawChart = false;
@@ -142,16 +155,26 @@ export default class ChartsClientUploadsComponent extends Component {
   // Functions
 
   /**
+   * Method to get custom tooltip body
+   * @param {Object} component
+   * @param {Date} x
+   * @param {Number} y
+   */
+  tooltipTemplate(component = this, x, y) {
+    return `${component.currentTimeline.key.toUpperCase()}:
+            ${component.currentTimeline.tooltipFormat(x)} <br>
+            Scans: ${y}`
+  }
+
+  /**
    * @function loadChart
    * Method to load chart data and inject chart into the DOM
    */
   @task(function* (element) {
-    console.log('ENV', ENV)
     const url = `1${this.args.clientId ? '/clients/'+this.args.clientId : ''}/${ENV.endpoints.partnerOverallScansCount}?timelines=${this.currentTimeline.key}`;
     const rawChartData = yield this.ajax.request(url, {
       namespace: 'api/v2/partner'
     });
-    console.log('rawChartData', rawChartData)
     yield this.parseChart.perform(rawChartData);
     if (!this.isRedrawChart) {
       yield this.drawChart(element);
@@ -163,7 +186,6 @@ export default class ChartsClientUploadsComponent extends Component {
 
   @task(function* (rawData) {
     const chartData = rawData.statistics[this.currentTimeline.key];
-    console.log('chartData', chartData)
     const xAxisData = ['x'];
     const yAxisData = ['y'];
     chartData.map((data) => {

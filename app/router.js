@@ -114,12 +114,6 @@ Router.map(function () {
     });
   });
 
-  this.route('partner', {
-    path: 'dummy-partner'
-  });
-  this.route('client', {
-    path: '/dummy-client/:client_id'
-  });
   this.route('invitation', {
     path: '/invitation/:uuid'
   });

@@ -27,13 +27,13 @@ export default class PartnerComponent extends Component {
       active: true
     },
     {
-      label: 'Invited Clients',
+      label: 'Invited Users',
       key: 'invited',
       model: 'client-invite',
       active: false
     },
     {
-      label: 'Self Registered Clients',
+      label: 'Self Registered Users',
       key: 'self-registered',
       model: 'self-register-client',
       active: false
