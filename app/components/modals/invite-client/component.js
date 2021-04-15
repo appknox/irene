@@ -33,7 +33,6 @@ export default class ModalsInviteClient extends Component {
 
   constructor() {
     super(...arguments);
-    console.log('ClientInvite', ClientInvite)
     this.changeset = new Changeset(this.client, lookupValidator(ClientInvite), ClientInvite);
   }
 
@@ -46,9 +45,11 @@ export default class ModalsInviteClient extends Component {
 
 
   @task(function* () {
-    console.log('changeset', this.changeset)
-    const invitedClient = yield this.store.createRecord('client-invite', this.changeset.change).save();
-    this.store.pushPayload('client-invite', invitedClient)
-    this.args.onInvited(invitedClient)
+    yield this.changeset.validate()
+    if (this.changeset.get('isValid')) {
+      const invitedClient = yield this.store.createRecord('client-invite', this.changeset.change).save();
+      this.store.pushPayload('client-invite', invitedClient)
+      this.args.onInvited(invitedClient)
+    }
   }) sendInvitation;
 }
