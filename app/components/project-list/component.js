@@ -181,6 +181,22 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
     // Action to get/set selected team object
     onSelectTeam(team) {
       this.set('selectedTeam', team);
+    },
+
+    onFocusTeam() {
+      const query = {
+        limit: 10
+      }
+      this.queryTeams.perform(query);
+    },
+
+    searchTeams(teamName) {
+      if (teamName && teamName.length) {
+        const query = {
+          q: teamName
+        }
+        this.queryTeams.perform(query);
+      }
     }
   },
 
@@ -189,12 +205,8 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
    * @param {String} teamName
    * Method to query all the matching teams with given name
    */
-  queryTeams: task(function* (teamName) {
-    if (teamName && teamName.length) {
-      this.set('teams', yield this.get('store').query('organization-team', {
-        q: teamName
-      }))
-    }
+  queryTeams: task(function* (query) {
+    this.set('teams', yield this.get('store').query('organization-team', query))
   }).evented()
 });
 
