@@ -28,6 +28,7 @@
   "addTeam": "Add Team",
   "admin": "Admin",
   "adminPermissionProject": "Admin permission is required to connect project to JIRA",
+  "all": "All",
   "allFutureAnalyses": "All Future Analyses",
   "allowEdit": "Allow Edit",
   "allPlatforms": "All Platforms",

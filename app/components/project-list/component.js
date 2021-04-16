@@ -52,13 +52,21 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
    * @property {Array} teams
    * Property for list of matching teams
    */
-  teams: [],
+  teams: [{
+    name: 'All'
+  }],
+
+  defaultTeam: {
+    name: 'All'
+  },
 
   /**
    * @property {Object} selectedTeam
    * Property for selected team from the list
    */
-  selectedTeam: null,
+  selectedTeam: {
+    name: 'All'
+  },
 
   newProjectsObserver: observer("realtime.ProjectCounter", "realtime.FileCounter", function () {
     return this.incrementProperty("version");
@@ -183,11 +191,11 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
       this.set('selectedTeam', team);
     },
 
-    onFocusTeam() {
+    onOpenTFilter() {
       const query = {
         limit: 10
       }
-      this.queryTeams.perform(query);
+      this.queryTeams.perform(query)
     },
 
     searchTeams(teamName) {
@@ -206,8 +214,16 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
    * Method to query all the matching teams with given name
    */
   queryTeams: task(function* (query) {
-    this.set('teams', yield this.get('store').query('organization-team', query))
-  }).evented()
+    const teamList = [this.get('defaultTeam')];
+    const teams = yield this.get('store').query('organization-team', query)
+    teams.forEach((team) => {
+      teamList.pushObject({
+        name: team.name,
+        id: team.id
+      })
+    })
+    this.set('teams', teamList)
+  })
 });
 
 export default ProjectListComponent;
