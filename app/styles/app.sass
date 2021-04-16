@@ -1,8 +1,6 @@
 @import "bohemia/scss/bohemia"
 @import "billboard.js/dist/billboard"
-@import "ember-power-select"
 @import "ember-power-datepicker"
-@import "ember-basic-dropdown"
 @import "datepicker-custom"
 @import 'vars'
 @import 'form'
@@ -13,6 +11,11 @@
 
 $date-picker-color-primary: #FE4D3F !default
 @import "ember-date-components/addon"
+
+
+$ember-basic-dropdown-content-z-index: 10
+@import "ember-power-select"
+@import "ember-basic-dropdown"
 
 $risk-names: (warning: ($warning, $warning-invert), info: ($info, $info-invert), danger: ($danger, $danger-invert), critical: ($critical, $critical-invert), success: ($success, $success-invert)) !default
 

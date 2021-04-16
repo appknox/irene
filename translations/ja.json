@@ -28,6 +28,7 @@
   "addTeam": "チームの追加",
   "admin": "管理者",
   "adminPermissionProject": "Admin permission is required to connect project to JIRA",
+  "all": "All",
   "allFutureAnalyses": "All Future Analyses",
   "allowEdit": "Allow Edit",
   "allPlatforms": "全プラットフォーム",

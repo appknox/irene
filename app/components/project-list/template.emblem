@@ -10,7 +10,7 @@ if isContainObjects
         div local-class="filter__item"
           = concat (t "filterBy") ' ' (t "team")
           .margin-top
-            = power-select triggerClass="input" dropdownClass="power-select-custom-repo" renderInPlace=true searchPlaceholder=(t "searchTeamByName") search=(action 'searchTeams') searchEnabled=true options=teams selected=selectedTeam loadingMessage=(t "loadingTeam") onchange=(action "onSelectTeam") onfocus=(action "onFocusTeam") allowClear=true as |team|
+            = power-select triggerClass="input" dropdownClass="power-select-custom-repo" renderInPlace=true searchPlaceholder=(t "searchTeamByName") search=(action 'searchTeams') searchEnabled=true options=teams selected=selectedTeam loadingMessage=(t "loadingTeam") onchange=(action "onSelectTeam") onopen=(action "onOpenTFilter") as |team|
               | #{team.name}
         div local-class="filter__item"
           = t "sortBy"
