@@ -94,6 +94,8 @@ const PaginateMixin = Mixin.create({
         */
         this.set('isDRFPagination', true); // eslint-disable-line
       }
+      // Set loading property
+      this.set('isLoading', false); // eslint-disable-line
       return this.set("meta", meta); // eslint-disable-line
     });
     return objects;

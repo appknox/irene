@@ -1,4 +1,4 @@
-if isContainObjects
+if (or hasProjects hasObjects)
   .column
     .box-container.home-page
       div local-class="filters"
@@ -30,9 +30,20 @@ if isContainObjects
                   = platformObject.key
 
     .columns.project-container
+
       if hasObjects
         each sortedObjects as |project|
           = project-overview project=project
+      else if isLoading
+        .project-loading-container
+          = three-bounce-spinner
+      // No results found box
+      else if isEmpty
+        div local-class="no-result-found"
+          h5.capitalize-text.text-centre
+            = t "noResultsFound"
+          h6
+            = t "tryAdjustingFilter"
       else
         .project-loading-container
           = three-bounce-spinner
@@ -41,7 +52,7 @@ if isContainObjects
     if hasObjects
       = partial "paginate"
 
-else if isEmpty
+else
   .column.is-fullwidth.no-project-container
     .no-project
       h4.capitalize-text
@@ -50,9 +61,3 @@ else if isEmpty
         = t "noProjectUploaded"
       h6
         = t "uploadNewProject" htmlSafe=true
-
-else
-  .column
-    .columns.project-container
-      .project-loading-container
-        = three-bounce-spinner
