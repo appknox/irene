@@ -30,10 +30,11 @@ import {
 const ProjectListComponent = Component.extend(PaginateMixin, {
 
   intl: service(),
+  organization: service(),
 
   classNames: ["columns"],
   projects: null,
-  hasProjects: computed.gt('projects.length', 0),
+  hasProjects: computed.gt('organization.selected.projectsCount', 0),
   query: "",
   targetModel: "Project",
 
@@ -47,6 +48,8 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
   tPackageName: t("packageName"),
   tMostRecent: t("mostRecent"),
   tLeastRecent: t("leastRecent"),
+
+  isLoading: false,
 
   /**
    * @property {Array} teams
@@ -183,11 +186,13 @@ const ProjectListComponent = Component.extend(PaginateMixin, {
     },
 
     filterPlatform() {
+      this.set('isLoading', true); // state will be updated in the paginate mixin
       const select = $(this.element).find("#project-filter-platform");
       this.set("platformType", select.val());
     },
     // Action to get/set selected team object
     onSelectTeam(team) {
+      this.set('isLoading', true); // state will be updated in the paginate mixin
       this.set('selectedTeam', team);
     },
 
