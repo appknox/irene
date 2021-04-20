@@ -1,0 +1,34 @@
+<div local-class="credit-transfer-container" {{did-insert (perform this.fetchPartnerCredits)}}>
+  <div local-class="credit-tranfer">
+    <div local-class="total-credits">
+      {{this.availableCredits}}
+      {{#if this.isPerScan}}
+        Scans
+      {{else}}
+        Apps
+      {{/if}}
+    </div>
+    {{fa-icon "long-arrow-down" local-class="arrow-right-icon"}}
+    <div local-class="client">
+      <span local-class="name">{{@client.name}}</span>
+      <div local-class="tranfer-count">
+        <Input local-class="input" @type="number" @min={{1}} @max={{this.availableCredits}}
+          @value={{this.transferCount}} />
+        <span local-class="credit-type">
+          {{#if this.isPerScan}}
+            Scans
+          {{else}}
+            Apps
+          {{/if}}
+        </span>
+      </div>
+    </div>
+    <button type="button" local-class="tranfer-btn" class="is-primary" {{on "click" (perform this.tranferCredits)}}
+      disabled={{not this.isValidNumber}}>Tranfer
+      Credits</button>
+  </div>
+
+  <div local-class="bal-credits">
+    Remaining Credits: <span class="bold">{{this.balCredits}}</span>
+  </div>
+</div>

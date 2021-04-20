@@ -12,6 +12,9 @@
           {{/if}}
         </span>
       </div>
+      <button type="button" local-class="add-credit" {{on "click" (fn this.onShowCreditTransferModal)}}>
+        Add Credit {{fa-icon "plus"}}
+      </button>
     </div>
   </div>
   <div local-class="all-uploads-container">
@@ -30,3 +33,10 @@
     {{/if}}
   </div>
 </div>
+
+{{#if this.isShowCreditAllocationModal}}
+  <AkModal @onClose={{this.onCloseModal}} @showHeader={{true}} @headerTitle="Credit Transfer">
+    <Modals::ClientCreditTransfer @client={{@client}} @onClose={{this.onCloseModal}}>
+    </Modals::ClientCreditTransfer>
+  </AkModal>
+{{/if}}

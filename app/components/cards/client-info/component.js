@@ -3,17 +3,24 @@ import {
   task
 } from 'ember-concurrency';
 import {
-  computed
+  computed,
+  action
 } from '@ember/object';
 import {
   inject as service
 } from '@ember/service';
+import {
+  tracked
+} from '@glimmer/tracking'
 
 
 export default class CardsClientInfoComponent extends Component {
 
   @service('notifications') notify;
   @service intl;
+  @service store;
+
+  @tracked isShowCreditAllocationModal = false;
 
   @computed('args.type')
   get isRegistered() {
@@ -28,6 +35,19 @@ export default class CardsClientInfoComponent extends Component {
   @computed('args.type')
   get isSelfRegistered() {
     return this.args.type === 'self-registered';
+  }
+
+  @action
+  onAddCredits() {
+    this.isShowCreditAllocationModal = true;
+  }
+
+  @action
+  onCloseModal() {
+    this.isShowCreditAllocationModal = false;
+    // Refresh model with new credit bal
+    this.store.queryRecord('credits/partner-credits-stat', {})
+    this.store.find('client', this.args.client.id);
   }
 
   @task(function* () {

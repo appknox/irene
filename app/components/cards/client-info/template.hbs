@@ -65,12 +65,13 @@
         </AttachTooltip>
       </LinkTo>
       <div></div>
-      <div local-class="add-credit border-left">
+      <a href="#" local-class="add-credit border-left {{unless @client.isPerScan 'disabled'}}"
+        {{on "click" (fn this.onAddCredits)}}>
         {{fa-icon "plus"}}
         <AttachTooltip @placemnet="top-end">
-          Add Credit*
+          Add Credit
         </AttachTooltip>
-      </div>
+      </a>
 
     {{else}}
       <a href="#" local-class="resend border-right {{unless this.isInvited 'hidden'}}"
@@ -92,3 +93,11 @@
 
   </div>
 </div>
+
+
+{{#if this.isShowCreditAllocationModal}}
+  <AkModal @onClose={{this.onCloseModal}} @showHeader={{true}} @headerTitle="Credit Transfer">
+    <Modals::ClientCreditTransfer @client={{@client}} @onClose={{this.onCloseModal}}>
+    </Modals::ClientCreditTransfer>
+  </AkModal>
+{{/if}}

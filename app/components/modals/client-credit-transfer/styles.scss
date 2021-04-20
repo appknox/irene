@@ -1,0 +1,60 @@
+.credit-transfer-container {
+  .credit-tranfer {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    row-gap: 30px;
+
+    .total-credits {
+      font-size: 30px;
+      font-weight: bold;
+      color: #0063B2FF;
+      text-align: center;
+    }
+
+    .client {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      column-gap: 12px;
+
+      .name {
+        font-size: 22px;
+        font-weight: bold;
+      }
+
+      .tranfer-count {
+        display: grid;
+        grid-template-columns: auto auto;
+        align-items: center;
+
+        .input {
+          width: 70px;
+          height: 35px;
+          border: none;
+          border-bottom: 1px solid;
+          color: #0063B2FF;
+          font-size: 18px;
+          text-align: center;
+          font-weight: bold;
+        }
+      }
+
+      .credit-type {
+        font-size: 14px;
+        color: #0063B2FF;
+      }
+    }
+
+    .tranfer-btn {
+      justify-self: center;
+    }
+
+
+  }
+
+  .bal-credits {
+    text-transform: uppercase;
+    font-size: 14px;
+  }
+}

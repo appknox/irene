@@ -26,6 +26,7 @@ export default class ChartsClientUploadsComponent extends Component {
   @service store;
 
   @service ajax;
+  @service me;
 
   constructor() {
     super(...arguments)
@@ -171,7 +172,8 @@ export default class ChartsClientUploadsComponent extends Component {
    * Method to load chart data and inject chart into the DOM
    */
   @task(function* (element) {
-    const url = `1${this.args.clientId ? '/clients/'+this.args.clientId : ''}/${ENV.endpoints.partnerOverallScansCount}?timelines=${this.currentTimeline.key}`;
+    // TODO check hard coded number
+    const url = `${this.me.partner.id}${this.args.clientId ? '/clients/'+this.args.clientId : ''}/${ENV.endpoints.partnerOverallScansCount}?timelines=${this.currentTimeline.key}`;
     const rawChartData = yield this.ajax.request(url, {
       namespace: 'api/v2/partner'
     });
