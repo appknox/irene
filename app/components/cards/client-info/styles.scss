@@ -2,8 +2,6 @@
   display: grid;
   box-shadow: 0px 0px 5px -2px #888;
   border-radius: 8px;
-  // max-width: 300px;
-  // max-height: 220px;
   min-height: 8px;
   margin: 8px;
   grid-template-rows: 80px 1fr;
@@ -123,10 +121,6 @@
       &:hover {
         opacity: 1;
         background-color: rgba(#FE4D3F, 0.2);
-
-        i {
-          // color: #fff;
-        }
       }
 
       &.hidden {

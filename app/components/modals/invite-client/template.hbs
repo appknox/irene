@@ -2,7 +2,7 @@
   <form>
 
     <div local-class="firstname client-input {{if this.changeset.error.firstName 'error'}}">
-      <label local-class="label" for="firstname">Fisrt name</label>
+      <label local-class="label" for="firstname">{{t 'firstName'}}</label>
       <Input id="firstname" placeholder="First name" autocomplete="off" @value={{mut (get this.changeset "firstName")}}
         local-class="input" />
       {{#if this.changeset.error.firstName}}
@@ -11,13 +11,13 @@
     </div>
 
     <div local-class="lastname client-input">
-      <label local-class="label" for="lastname">Lastname</label>
+      <label local-class="label" for="lastname">{{t 'lastName'}}</label>
       <Input id="lastname" placeholder="Last name" autocomplete="off" @value={{mut (get this.changeset "lastName")}} />
     </div>
 
 
     <div local-class="email client-input {{if this.changeset.error.email 'error'}}">
-      <label local-class="label" for="email">Email</label>
+      <label local-class="label" for="email">{{t 'email'}}</label>
       <Input id="email" placeholder="Email" autocomplete="off" @value={{mut (get this.changeset "email")}}
         local-class="input" />
       {{#if this.changeset.error.email}}
@@ -26,7 +26,7 @@
     </div>
 
     <div local-class="company client-input {{if this.changeset.error.company 'error'}}">
-      <label local-class="label" for="client-company">Company</label>
+      <label local-class="label" for="client-company">{{t "companyName"}}</label>
       <Input id="client-company" placeholder="Company" autocomplete="off" @value={{mut (get this.changeset "company")}}
         local-class="input" />
       {{#if this.changeset.error.company}}
@@ -37,14 +37,15 @@
 
     <div local-class="trail client-input">
       <label local-class="label" for="is-trail-version">
-        Trail
+        {{t "trail"}}
       </label>
       <Input id="is-trail-version" {{on "change" (fn this.onChangeTrail 'checkbox')}} @type="checkbox"
         @checked={{get this.changeset "isTrail"}} local-class="input" />
     </div>
 
     <div local-class="client-action">
-      <button local-class="submit" type="button" {{on "click" (perform this.sendInvitation)}}>Send Invitation</button>
+      <button local-class="submit" type="button"
+        {{on "click" (perform this.sendInvitation)}}>{{t "sendInvitation"}}</button>
     </div>
   </form>
 </div>

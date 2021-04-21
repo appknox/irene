@@ -55,7 +55,7 @@ export default class CardsClientInfoComponent extends Component {
       const success = yield this.args.client.approve(this.args.client.id);
       this.notify.success(success.message);
     } catch (e) {
-      this.notify.error(`Please try again later`);
+      this.notify.error(this.intl.t('pleaseTryAgain'));
     }
 
   }) approveRegistration;
@@ -65,7 +65,7 @@ export default class CardsClientInfoComponent extends Component {
       const success = yield this.args.client.resendInvitation(this.args.client.id);
       this.notify.success(success.message)
     } catch (e) {
-      this.notify.error(`Couldn't resend invitiation, please try again later!`);
+      this.notify.error(this.intl.t("clients.resendInvitationFail"));
     }
 
   }) resendInvitation;

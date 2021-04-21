@@ -2,28 +2,28 @@
   <div local-class="chart-container">
     <Charts::ClientUploads @title="Uploads" @clientId={{@client.id}}></Charts::ClientUploads>
     <div local-class="credits-left">
-      <div local-class="header">Available Credits</div>
+      <div local-class="header">{{ t 'clients.availableCredits'}}</div>
       <div local-class="available-credits">
         <span>{{@client.creditsLeft}}<br>
           {{#if @client.isPerScan}}
-            Scans
+            {{t 'clients.scans'}}
           {{else}}
-            Apps
+            {{t 'clients.apps'}}
           {{/if}}
         </span>
       </div>
       <button type="button" local-class="add-credit" {{on "click" (fn this.onShowCreditTransferModal)}}>
-        Add Credit {{fa-icon "plus"}}
+        {{t 'clients.addCredit'}} {{fa-icon "plus"}}
       </button>
     </div>
   </div>
   <div local-class="all-uploads-container">
-    <h3 local-class="title">All Uploads ({{this.uploads.length}})</h3>
+    <h3 local-class="title">{{t 'allUploads'}} ({{this.uploads.length}})</h3>
     <div local-class="client-uploads-cards">
       {{#each this.uploads as |upload|}}
         <Cards::ClientUpload @upload={{upload}}></Cards::ClientUpload>
       {{else}}
-        <div local-class="no-uploads">No Uploads</div>
+        <div local-class="no-uploads">{{t 'noUploads'}}</div>
       {{/each}}
     </div>
     {{#if (or this.hasPrevious this.hasNext)}}
@@ -35,7 +35,7 @@
 </div>
 
 {{#if this.isShowCreditAllocationModal}}
-  <AkModal @onClose={{this.onCloseModal}} @showHeader={{true}} @headerTitle="Credit Transfer">
+  <AkModal @onClose={{this.onCloseModal}} @showHeader={{true}} @headerTitle={{t 'clients.creditTransfer'}}>
     <Modals::ClientCreditTransfer @client={{@client}} @onClose={{this.onCloseModal}}>
     </Modals::ClientCreditTransfer>
   </AkModal>

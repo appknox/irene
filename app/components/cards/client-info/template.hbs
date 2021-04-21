@@ -20,31 +20,29 @@
     <div local-class="client-info-body">
       <div local-class="email info-item">{{@client.email}}</div>
 
-      {{!-- <Charts::AkProgressBar @value={{@client.creditsLeft}} @total={{10}}></Charts::AkProgressBar> --}}
-
       <div local-class="total-users info-item">
-        <span local-class="label">Total Users</span>:
+        <span local-class="label">{{t 'clients.users'}}</span>:
         <span local-class="data">
           {{@client.totalUserCount}}
         </span>
       </div>
 
       <div local-class="total-uploads info-item">
-        <span local-class="label">Total Uploads</span>:
+        <span local-class="label">{{t 'clients.uploads'}}</span>:
         <span local-class="data">
           {{@client.totalFileUploadCount}}
         </span>
       </div>
 
       <div local-class="last-upload info-item">
-        <span local-class="label">Available Credits</span>:
+        <span local-class="label">{{t 'clients.availableCredits'}}</span>:
         <span local-class="data">
-          {{@client.creditsLeft}} {{#if @client.isPerScan}} Scans {{else}} Apps {{/if}}
+          {{@client.creditsLeft}} {{t (concat 'clients.' (if  @client.isPerScan 'scans' 'apps'))}}
         </span>
       </div>
 
       <div local-class="last-upload info-item">
-        <span local-class="label">Last Upload</span>: <span>
+        <span local-class="label">{{t 'clients.lastUpload'}}</span>: <span>
           <span local-class="data">
             {{#if @client.lastUpload}}
               {{day-js date=@client.lastUpload format='DD MMM YYYY HH:mm:ss A'}}
@@ -61,7 +59,7 @@
       <LinkTo @route="authenticated.client" @model={{@client.id}} local-class="view-client border-right">
         {{fa-icon "arrows-alt"}}
         <AttachTooltip @placemnet="top-end">
-          View Client
+          {{t 'clients.view'}}
         </AttachTooltip>
       </LinkTo>
       <div></div>
@@ -69,7 +67,7 @@
         {{on "click" (fn this.onAddCredits)}}>
         {{fa-icon "plus"}}
         <AttachTooltip @placemnet="top-end">
-          Add Credit
+          {{t 'clients.addCredit'}}
         </AttachTooltip>
       </a>
 
@@ -78,7 +76,7 @@
         {{on "click" (perform this.resendInvitation)}}>
         {{fa-icon "paper-plane"}}
         <AttachTooltip @placemnet="top-end">
-          Resend Invitation
+          {{t 'resendInvitation'}}
         </AttachTooltip>
       </a>
       <div></div>
@@ -86,7 +84,7 @@
         {{on "click" (perform this.approveRegistration)}}>
         {{fa-icon "check-circle"}}
         <AttachTooltip @placemnet="top-end">
-          Approve
+          {{t 'approve'}}
         </AttachTooltip>
       </a>
     {{/if}}
@@ -96,7 +94,7 @@
 
 
 {{#if this.isShowCreditAllocationModal}}
-  <AkModal @onClose={{this.onCloseModal}} @showHeader={{true}} @headerTitle="Credit Transfer">
+  <AkModal @onClose={{this.onCloseModal}} @showHeader={{true}} @headerTitle={{t "clients.creditTransfer"}}>
     <Modals::ClientCreditTransfer @client={{@client}} @onClose={{this.onCloseModal}}>
     </Modals::ClientCreditTransfer>
   </AkModal>

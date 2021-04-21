@@ -3,9 +3,9 @@
     <div local-class="total-credits">
       {{this.availableCredits}}
       {{#if this.isPerScan}}
-        Scans
+        {{t 'clients.scans'}}
       {{else}}
-        Apps
+        {{t 'clients.apps'}}
       {{/if}}
     </div>
     {{fa-icon "long-arrow-down" local-class="arrow-right-icon"}}
@@ -16,19 +16,20 @@
           @value={{this.transferCount}} />
         <span local-class="credit-type">
           {{#if this.isPerScan}}
-            Scans
+            {{t 'clients.scans'}}
           {{else}}
-            Apps
+            {{t 'clients.apps'}}
           {{/if}}
         </span>
       </div>
     </div>
     <button type="button" local-class="tranfer-btn" class="is-primary" {{on "click" (perform this.tranferCredits)}}
-      disabled={{not this.isValidNumber}}>Tranfer
-      Credits</button>
+      disabled={{not this.isValidNumber}}>
+      {{t "clients.transferCredit"}}
+    </button>
   </div>
 
   <div local-class="bal-credits">
-    Remaining Credits: <span class="bold">{{this.balCredits}}</span>
+    {{t "clients.remainingCredit"}}: <span class="bold">{{this.balCredits}}</span>
   </div>
 </div>

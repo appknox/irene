@@ -4,13 +4,13 @@
       <Charts::ClientUploads @title="Overall Uploads"></Charts::ClientUploads>
     </div>
     <div local-class="credits-left">
-      <div local-class="header">Available Credits</div>
+      <div local-class="header">{{t 'clients.availableCredits'}}</div>
       <div local-class="available-credits">
         <span>{{this.creditsStats.creditsLeft}}<br>
           {{#if this.creditsStats.isPerScan}}
-            Scans
+            {{t 'clients.scans'}}
           {{else}}
-            Apps
+            {{t 'clients.apps'}}
           {{/if}}
         </span>
       </div>
@@ -27,7 +27,7 @@
       {{/each}}
       <div local-class="invite-btn">
         <button type="button" class="is-primary" {{on "click" (fn this.openInviteModal)}}>
-          Invite Client
+          {{t 'clients.invite'}}
         </button>
       </div>
     </div>
@@ -46,7 +46,7 @@
 </div>
 
 {{#if this.isShowInviteClientModal}}
-  <AkModal @onClose={{this.onCloseModal}} @showHeader={{true}} @headerTitle="Invite Client">
+  <AkModal @onClose={{this.onCloseModal}} @showHeader={{true}} @headerTitle={{t 'clients.invite'}}>
     <Modals::InviteClient @onInvited={{this.onClientInvited}}></Modals::InviteClient>
   </AkModal>
 {{/if}}
