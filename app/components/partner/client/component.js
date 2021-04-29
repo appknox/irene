@@ -11,27 +11,34 @@ import {
   action
 } from '@ember/object';
 import {
-  PaginationMixin
-} from '../../../mixins/paginate';
-import {
-  reads
-} from '@ember/object/computed';
+  task
+} from 'ember-concurrency';
 
-export default class PartnerClientComponent extends PaginationMixin(Component) {
+export default class PartnerClientComponent extends Component {
 
   @service store;
 
-  @tracked targetModel = 'client-upload';
-
-  @reads('objects') uploads;
+  @tracked members = [];
 
   @tracked isShowCreditAllocationModal = false;
+
+  @tracked isShowMemberListModal = false;
+
+  @computed('members.meta.count')
+  get totalMembers() {
+    return this.members.meta ? this.members.meta.count : 0;
+  }
 
   @computed('args.client.id')
   get extraQueryStrings() {
     return JSON.stringify({
       clientId: this.args.client.id
     });
+  }
+
+  @action
+  initializeComp() {
+    this.fetchMembers.perform();
   }
 
   @action
@@ -45,4 +52,17 @@ export default class PartnerClientComponent extends PaginationMixin(Component) {
     // Refresh model with new credit bal
     this.store.find('client', this.args.client.id)
   }
+
+  @action
+  onToggleMemberListModal(isOpen = true) {
+    this.isShowMemberListModal = isOpen;
+  }
+
+  @task(function* () {
+    this.members = yield this.store.query('client-member', {
+      clientId: this.args.client.id,
+      limit: 5,
+      offset: 0
+    })
+  }) fetchMembers;
 }

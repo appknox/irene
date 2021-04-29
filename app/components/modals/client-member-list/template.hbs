@@ -1,0 +1,13 @@
+<div local-class="member-list">
+  <ul local-class="user-list">
+    {{#each this.members as |member index|}}
+      <li local-class="list-item">
+        <span local-class="serial {{member.role}}">{{plus-one index}}</span>
+        <span local-class="name">{{member.fullName}}</span>
+        <span local-class="role">{{member.role}}</span>
+      </li>
+    {{/each}}
+  </ul>
+
+  <div local-class="pagination">{{partial "paginate"}}</div>
+</div>

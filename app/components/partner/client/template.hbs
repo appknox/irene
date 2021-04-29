@@ -1,4 +1,4 @@
-<div local-class="client-container">
+<div local-class="client-container" {{did-insert (fn this.initializeComp)}}>
   <div local-class="chart-container">
     <Charts::ClientUploads @title="Uploads" @clientId={{@client.id}}></Charts::ClientUploads>
     <div local-class="credits-left">
@@ -17,20 +17,28 @@
       </button>
     </div>
   </div>
-  <div local-class="all-uploads-container">
-    <h3 local-class="title">{{t 'allUploads'}} ({{this.uploads.length}})</h3>
-    <div local-class="client-uploads-cards">
-      {{#each this.uploads as |upload|}}
-        <Cards::ClientUpload @upload={{upload}}></Cards::ClientUpload>
-      {{else}}
-        <div local-class="no-uploads">{{t 'noUploads'}}</div>
-      {{/each}}
-    </div>
-    {{#if (or this.hasPrevious this.hasNext)}}
-      <div local-class="pagination">
-        {{partial 'paginate'}}
+  <div local-class="list-container">
+
+    <Partner::ClientUploads @clientId={{@client.id}}></Partner::ClientUploads>
+
+    <div local-class="client-users">
+      <div local-class="users-label">
+        Users ({{this.totalMembers}})
       </div>
-    {{/if}}
+      <ul local-class="user-list">
+        {{#each this.members as |member index|}}
+          <li local-class="list-item">
+            <span local-class="serial">{{plus-one index}}</span>
+            <span local-class="name">{{member.firstName}}, {{member.lastName}}</span>
+            <span local-class="role {{member.role}}">{{member.role}}</span>
+          </li>
+        {{/each}}
+      </ul>
+      {{#if (gt this.totalMembers 5)}}
+        <button local-class="view-all-users-btn" type="button" {{on "click" (fn this.onToggleMemberListModal)}}>View
+          All</button>
+      {{/if}}
+    </div>
   </div>
 </div>
 
@@ -38,5 +46,12 @@
   <AkModal @onClose={{this.onCloseModal}} @showHeader={{true}} @headerTitle={{t 'clients.creditTransfer'}}>
     <Modals::ClientCreditTransfer @client={{@client}} @onClose={{this.onCloseModal}}>
     </Modals::ClientCreditTransfer>
+  </AkModal>
+{{/if}}
+
+{{#if this.isShowMemberListModal}}
+  <AkModal @onClose={{fn this.onToggleMemberListModal false}} @showHeader={{true}} @headerTitle="All Users">
+    <Modals::ClientMemberList @clientId={{@client.id}} @onClose={{fn this.onToggleMemberListModal false}}>
+    </Modals::ClientMemberList>
   </AkModal>
 {{/if}}

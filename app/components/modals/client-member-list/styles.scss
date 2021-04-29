@@ -1,0 +1,38 @@
+.member-list {
+  max-height: 435px;
+  overflow-y: auto;
+
+  .user-list {
+    .list-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      justify-content: left;
+      align-items: center;
+      height: 40px;
+      border-bottom: 1px solid rgba($color: #888, $alpha: 0.5);
+      padding-left: 15px;
+      padding-right: 15px;
+      column-gap: 8px;
+
+      .serial {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background-color: rgba($color: #888, $alpha: 0.3);
+        display: grid;
+        align-items: center;
+        justify-content: center;
+        color: #000;
+        font-size: 12px;
+
+        &.OWNER {
+          background-color: rgba($color: #888, $alpha: 0.8);
+        }
+      }
+    }
+  }
+
+  .pagination {
+    margin-top: 10px;
+  }
+}

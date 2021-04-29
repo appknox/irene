@@ -31,7 +31,6 @@ export default class IreneAjaxService extends AjaxService {
   }
   @computed('session.data.authenticated.b64token', function () {
     const token = this.session.data.authenticated.b64token;
-    console.log('token', token)
     if (token) {
       return {
         'Authorization': "Basic " + token,

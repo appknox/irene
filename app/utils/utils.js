@@ -34,3 +34,20 @@ export function checkStringCharRange(str, min, max, includeRange = true) {
   }
   return isStringRange;
 }
+/**
+ * @function extractFilenameResHeader
+ * @param {String} disposition
+ * @param {String} type attachment | inline
+ * Method to extract filename from the req.header Content-Disposistion
+ */
+export function extractFilenameResHeader(disposition, type = 'attachment') {
+  let filename = '';
+  if (disposition && disposition.indexOf(type) !== -1) {
+    var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+    var matches = filenameRegex.exec(disposition);
+    if (matches != null && matches[1]) {
+      filename = matches[1].replace(/['"]/g, '');
+    }
+    return filename;
+  }
+}

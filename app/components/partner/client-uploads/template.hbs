@@ -1,0 +1,15 @@
+<div local-class="all-uploads-container">
+  <h3 local-class="title">{{t 'allUploads'}} ({{this.uploads.length}})</h3>
+  <div local-class="client-uploads-cards">
+    {{#each this.uploads as |upload|}}
+      <Cards::ClientUpload @upload={{upload}}></Cards::ClientUpload>
+    {{else}}
+      <div local-class="no-uploads">{{t 'noUploads'}}</div>
+    {{/each}}
+  </div>
+  {{#if (or this.hasPrevious this.hasNext)}}
+    <div local-class="pagination">
+      {{partial 'paginate'}}
+    </div>
+  {{/if}}
+</div>

@@ -22,11 +22,16 @@
       font-size: 12px;
       height: 25px;
       cursor: pointer;
+      color: #FE4D3F;
+
+      &.active {
+        background-color: #FE4D3F;
+        color: #fff;
+      }
 
       &.active,
       &:hover {
-        background-color: #FE4D3F;
-        color: #fff;
+        box-shadow: 0 1px 3px 1px rgba(60, 64, 67, 0.3);
       }
     }
   }

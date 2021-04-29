@@ -354,6 +354,7 @@ module.exports = function (environment) {
       tags: "tags",
       capturedApiScanStart: "start_apiscan",
       partnerOverallScansCount: "overall_upload_count",
+      partnerOverallPlatformUsage: "overall_platform_usage"
     },
     csb: {
       userLoggedIn: {

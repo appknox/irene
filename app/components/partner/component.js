@@ -12,11 +12,19 @@ import {
   action,
   set
 } from '@ember/object';
+import ENV from 'irene/config/environment';
+import {
+  extractFilenameResHeader
+} from 'irene/utils/utils';
+import parseError from 'irene/utils/parse-error';
 
 export default class PartnerComponent extends Component {
 
   @service store;
   @service('notification') notify;
+  @service me;
+  @service ajax;
+  @service intl;
 
   @tracked isShowInviteClientModal = false;
 
@@ -49,11 +57,6 @@ export default class PartnerComponent extends Component {
 
   @action
   onSelectClientGroup(clientGroup) {
-    // console.log('clientGroup', clientGroup)
-    // this.clientGroups.map((group) => group.active = clientGroup.key === group.key);
-    // console.log('clientGroups', this.clientGroups)
-    // this.activeClientGroup = clientGroup;
-    // clientGroup.active = true;
     this.clientGroups.map((group) =>
       set(group, 'active', clientGroup.key == group.key)
     )
@@ -86,4 +89,22 @@ export default class PartnerComponent extends Component {
       this.creditsStats = {};
     }
   }) fetchPartnerCreditStats;
+
+  @task(function* () {
+    const url = [this.me.partner.id, ENV.endpoints.partnerOverallPlatformUsage].join('/');
+    yield this.ajax.raw(url, {
+      namespace: '/api/v2/partner',
+      dataType: 'text',
+      success(response, _, xhr) {
+        const disposition = xhr.getResponseHeader('Content-Disposition');
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(new Blob([response]));
+        link.download = extractFilenameResHeader(disposition);
+        link.click();
+      },
+      error() {
+        this.notify.error(parseError(this.intl.t('pleaseTryAgain')));
+      }
+    })
+  }) exportOverallPlatformUsage;
 }
