@@ -40,6 +40,7 @@ function getRuntimeConfig() {
 app.use(morgan("tiny"));
 app.get("/runtimeconfig.js", function (req, res) {
   const config = `var runtimeGlobalConfig=${getRuntimeConfig()};`;
+  res.type('application/javascript');
   res.send(config);
 });
 app.use(
