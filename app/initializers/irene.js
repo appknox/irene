@@ -122,12 +122,19 @@ const initialize = function (application) {
   ENV.showLicense = handler.getBoolean("IRENE_SHOW_LICENSE");
   ENV.isRegistrationEnabled = handler.getBoolean("IRENE_ENABLE_REGISTRATION");
   ENV.registrationLink = handler.getEnv("IRENE_REGISTRATION_LINK");
+
   ENV.whitelabel = Object.assign({}, ENV.whitelabel, {
-    enabled: handler.getBoolean("WHITELABEL_ENABLED"),
-    name: handler.getEnv("WHITELABEL_NAME"),
-    logo: handler.getEnv("WHITELABEL_LOGO"),
-    theme: handler.getEnv("WHITELABEL_THEME"),
+    enabled: handler.getBoolean("WHITELABEL_ENABLED")
   });
+  if (ENV.whitelabel.enabled) {
+    ENV.whitelabel = Object.assign({}, ENV.whitelabel, {
+      enabled: handler.getBoolean("WHITELABEL_ENABLED"), // adding for consistency
+      name: handler.getEnv("WHITELABEL_NAME"),
+      logo: handler.getEnv("WHITELABEL_LOGO"),
+      theme: handler.getEnv("WHITELABEL_THEME"),
+      favicon: handler.getEnv('WHITELABEL_FAVICON'),
+    });
+  }
 
   ENV.crispWebsiteId = handler.getEnv("IRENE_CRISP_WEBSITE_ID");
 
