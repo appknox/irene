@@ -146,7 +146,6 @@ class ENVHandler {
   }
 }
 
-
 module.exports = function (environment) {
   const handler = new ENVHandler(ENVHandlerCONST);
   var host = handler.getEnv('IRENE_API_HOST');
@@ -158,6 +157,10 @@ module.exports = function (environment) {
   var showLicense = handler.getBoolean('IRENE_SHOW_LICENSE');
   var shouldDisableReCaptcha = enableRegistration && isEnterprise;
   var ENV = {
+    modulePrefix: 'irene',
+    environment,
+    rootURL: '/',
+    locationType: 'auto',
     ENVHandlerCONST: ENVHandlerCONST,
     version: Date.now(),
     isDevknox: false,
@@ -215,11 +218,7 @@ module.exports = function (environment) {
         ],
       },
     },
-    rootURL: "/",
     favicon: "/images/favicon.ico",
-    locationType: "auto",
-    modulePrefix: "irene",
-    environment: environment,
     crispWebsiteId: handler.getEnv('IRENE_CRISP_WEBSITE_ID'),
     enableHotjar: handler.getValueForPlugin('IRENE_ENABLE_HOTJAR'),
     enablePendo: handler.getValueForPlugin('IRENE_ENABLE_PENDO'),
@@ -245,11 +244,14 @@ module.exports = function (environment) {
     emblemOptions: {
       blueprints: true,
     },
-
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
         // e.g. 'with-controller': true
+      },
+      EXTEND_PROTOTYPES: {
+        // Prevent Ember Data from overriding Date.parse.
+        Date: false,
       },
     },
     APP: {

@@ -22,6 +22,7 @@ testem.log
 .vscode
 .env.deploy.whitelabel
 typings
+!.*
 
 # ember-try
 /.node_modules.ember-try/

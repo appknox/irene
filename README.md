@@ -38,6 +38,11 @@ Make use of the many generators for code, try `ember help generate` for more det
 * `ember test`
 * `ember test --server`
 
+### Linting
+
+* `npm run lint`
+* `npm run lint:fix`
+
 ### Building
 
 * `ember build` (development)
@@ -75,7 +80,7 @@ To deploy you should have `aws-cli` installed and logged in.
 ## License
 
 
-Copyright © 2017 by Appknox
+Copyright © 2021 by Appknox
 
 Irene code is open source under the  AGPL v3 license (see LICENSE.txt), but the name ‘Appknox’ and the distinctive appearance of the site are not part of the open source code.
 
