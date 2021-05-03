@@ -44,12 +44,12 @@ export default class AuthenticatedRoute extends Route {
   @service('socket-io') socketIOService;
 
   beforeModel(transition) {
-    this.get('session').requireAuthentication(transition, 'login');
+    this.session.requireAuthentication(transition, 'login');
     this.set("lastTransition", transition);
   }
 
   async model() {
-    const userId = this.get("session.data.authenticated.user_id");
+    const userId = this.session.data.authenticated.user_id;
     await this.store.findAll('Vulnerability');
     await this.org.load();
     await this.analytics.load();
@@ -157,7 +157,7 @@ export default class AuthenticatedRoute extends Route {
 
       logout() {
         triggerAnalytics('logout');
-        this.get('session').invalidate();
+        this.session.invalidate();
       },
 
       reload() {
@@ -172,7 +172,7 @@ export default class AuthenticatedRoute extends Route {
         realtime.set("namespace", data.namespace);
       }
     };
-    const socket = this.get('socketIOService').socketFor(ENV.socketPath, {
+    const socket = this.socketIOService.socketFor(ENV.socketPath, {
       path: '/websocket'
     });
     for (let key in allEvents) {
@@ -189,7 +189,7 @@ export default class AuthenticatedRoute extends Route {
 
   async configureRollBar(user) {
     try {
-      this.get('rollbar.notifier').configure({
+      this.rollbar.notifier.configure({
         payload: {
           person: {
             id: user.get("id"),
@@ -235,6 +235,6 @@ export default class AuthenticatedRoute extends Route {
   @action
   invalidateSession() {
     triggerAnalytics('logout');
-    this.get('session').invalidate();
+    this.session.invalidate();
   }
 }
