@@ -1,0 +1,79 @@
+.org-email-domain {
+
+  .domain-list {
+    margin: 8px 0;
+    display: grid;
+    row-gap: 8px;
+
+    .domain {
+      height: 40px;
+      display: grid;
+      grid-template-columns: 1fr 30px;
+      border-bottom: 1px solid rgba(#f0f0f0, 0.7);
+      align-items: center;
+      justify-content: center;
+      column-gap: 12px;
+      background-color: rgba($color: #000000, $alpha: 0.8);
+      color: #fff;
+      padding: 0 8px;
+      border-radius: 4px;
+
+
+      .delete {
+        cursor: pointer;
+        display: grid;
+        border: none;
+
+        i {
+          font-size: 18px;
+          color: #fff;
+        }
+      }
+
+      &:hover {
+        border-bottom-color: #FE4D3F;
+
+        .delete {
+          i {
+            color: #FE4D3F;
+          }
+        }
+      }
+    }
+  }
+
+  .input-list {
+    display: grid;
+
+    .domain-input-list {
+      position: relative;
+
+      .domain-input-item {
+        display: grid;
+        grid-template-columns: 1fr 30px;
+        column-gap: 10px;
+        margin: 8px 0;
+        align-items: center;
+
+        .domain-input {
+          height: 40px;
+        }
+
+        .add-new,
+        .remove {
+          border: none;
+
+          i {
+            font-size: 16px;
+            cursor: pointer;
+            color: #888;
+          }
+        }
+      }
+    }
+
+    .save-btn {
+      justify-self: left;
+    }
+  }
+}

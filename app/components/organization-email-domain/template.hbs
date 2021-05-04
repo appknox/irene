@@ -1,0 +1,51 @@
+<p>
+  {{t 'whitelistEmailDomain.subDesc'}}
+</p>
+<div local-class="org-email-domain" {{did-insert (fn this.initializeComp)}}>
+  <ul local-class="domain-list">
+    {{#each this.domains as |domain|}}
+      <li local-class="domain">
+        <span local-class="domain-name">
+          {{domain.domainName}}
+        </span>
+        {{#if this.me.org.is_owner}}
+          <button type="button" local-class="delete" {{on "click" (perform this.deleteDomain domain)}}>
+            <AttachTooltip @placemnet="top">
+              {{t 'whitelistEmailDomain.delete'}}
+            </AttachTooltip>
+            {{fa-icon "trash"}}
+          </button>
+        {{/if}}
+      </li>
+    {{/each}}
+  </ul>
+  {{#if this.me.org.is_owner}}
+    <div local-class="input-list">
+      <ul local-class="domain-input-list">
+        {{#each this.tempDomains as |tDomain|}}
+          <li local-class="domain-input-item {{if tDomain.isError 'error'}}" class="input-wrap">
+            <Input local-class="domain-input" class="input-field" @type="text" @value={{tDomain.domain}}
+              @key-down={{this.handleKey}} placeholder="email.com" />
+            {{#if (and (eq tDomain this.tempDomains.lastObject) tDomain.domain)}}
+              <button type="button" local-class="add-new" {{on "click" (fn this.addNewInput)}}>
+                <AttachTooltip @placemnet="top">
+                  {{t 'whitelistEmailDomain.add'}}
+                </AttachTooltip>
+                {{fa-icon "plus"}}
+              </button>
+            {{else if (not (eq tDomain this.tempDomains.lastObject))}}
+              <button type="button" local-class="remove" {{on "click" (fn this.removeItem tDomain)}}>
+                <AttachTooltip @placemnet="top">
+                  {{t 'whitelistEmailDomain.remove'}}
+                </AttachTooltip>
+                {{fa-icon "remove"}}
+              </button>
+            {{/if}}
+          </li>
+        {{/each}}
+      </ul>
+      <button type="button" class="button is-primary" local-class="save-btn" {{on "click" (fn this.saveDomainInput)}}
+        disabled={{if this.isLastDomainInputAdded false "disabled"}}>{{t 'save'}}</button>
+    </div>
+  {{/if}}
+</div>

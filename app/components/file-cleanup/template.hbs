@@ -56,7 +56,11 @@
     </div>
 
   </div>
+
+  {{!-- Added divider since it's render by self context check --}}
+  <div class="divider margin-t-1 margin-b-1"></div>
 {{/unless}}
+
 
 {{#if this.isShowAllCleanup}}
   <AkModal @onClose={{this.onCloseModal}} @showHeader={{true}} @headerTitle={{t 'fileCleanup.listTitle'}}>
