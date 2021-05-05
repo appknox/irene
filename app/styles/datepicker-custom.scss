@@ -1,17 +1,19 @@
-$custom-picker-shadow-tint: rgba(0,0,0,0.2);
+$custom-picker-shadow-tint: rgba(0, 0, 0, 0.2);
 $custom-picker-shadow: 1px 4px 12px $custom-picker-shadow-tint;
 $custom-picker-padding: 4px;
 $custom-picker-radius: 0 0 11px 11px;
 
-.custom-styled-picker{
-  &.date-picker__wrapper{
+.custom-styled-picker {
+  &.date-picker__wrapper {
     background: #fff;
+
     .date-picker__trigger {
-      &.ember-basic-dropdown-trigger{
+      &.ember-basic-dropdown-trigger {
         border: 1px solid #f0f1f3;
         min-width: 17.5rem;
-        button{
-          &.date-picker__button{
+
+        button {
+          &.date-picker__button {
             border: none;
             min-width: 150px;
             vertical-align: baseline;
@@ -23,21 +25,23 @@ $custom-picker-radius: 0 0 11px 11px;
 }
 
 .date-picker {
-  &.date-picker--options{
+  &.date-picker--options {
 
-    .date-picker__calendar{
-      .date-picker__days{
-        .date-picker__day{
-          &:hover,&:focus{
+    .date-picker__calendar {
+      .date-picker__days {
+        .date-picker__day {
+
+          &:hover,
+          &:focus {
             box-shadow: inset 0 0 1px 2px #FE4D3F;
           }
         }
       }
     }
 
-    .date-picker__options{
-      button{
-        &.date-picker__options__button{
+    .date-picker__options {
+      button {
+        &.date-picker__options__button {
           border: 1px solid #ccc;
           border-radius: 0;
         }
@@ -47,9 +51,9 @@ $custom-picker-radius: 0 0 11px 11px;
   }
 }
 
-.date-picker__header__select__content{
-  button[type='button']{
-    &.date-picker__header__select__item{
+.date-picker__header__select__content {
+  button[type='button'] {
+    &.date-picker__header__select__item {
       border-radius: 0;
     }
   }
@@ -57,7 +61,55 @@ $custom-picker-radius: 0 0 11px 11px;
 
 .date-picker__header__month,
 .date-picker__header__year {
-  &.date-picker__header__select{
+  &.date-picker__header__select {
     cursor: pointer;
+  }
+}
+
+// Required: styles been overwritten by irene default styles.
+// <AkDatePicker></AkDatePicker>
+.pika-single {
+  .pika-lendar {
+    width: auto;
+
+    .pika-title {
+      .pika-label {
+        line-height: 2;
+      }
+
+      button.pika-prev,
+      button.pika-next {
+        display: block;
+        border: none;
+      }
+    }
+
+    table.pika-table {
+      tbody {
+        tr.pika-row {
+          td {
+            border: none;
+
+            button.pika-day {
+              border: none;
+              font-size: unset;
+              display: block;
+              height: inherit;
+
+              &:hover {
+                background-color: #FE4D3F;
+                color: #fff;
+              }
+            }
+
+            &.is-selected {
+              background-color: #FE4D3F;
+              color: #fff;
+            }
+
+          }
+        }
+      }
+    }
   }
 }

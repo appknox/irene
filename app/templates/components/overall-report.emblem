@@ -7,26 +7,7 @@
   .column
     .columns
       .column.content-right
-        if showDatePicker
-          = power-datepicker selected=selectedStartDate onSelect=(perform updateStartDate value="date") as |dp|
-            = dp.trigger tabindex="-1"
-              = input type="text" class="date-input-class" placeholder="START DATE" value=(day-js date=selectedStartDate format='DD/MM/YYYY') autocomplete="off" disabled="disabled"
-            = dp.content class="demo-datepicker-small"
-              = dp.nav
-              = dp.days
-          | &nbsp; to
-          = power-datepicker selected=selectedEndDate onSelect=(perform updateEndDate value="date") as |dp|
-            = dp.trigger tabindex="-1"
-              = input type="text" class="date-input-class" placeholder="END DATE" value=(day-js date=selectedEndDate format='DD/MM/YYYY') autocomplete="off" disabled="disabled"
-            = dp.content class="demo-datepicker-small"
-              = dp.nav
-              = dp.days
-          span.margin-left click={(perform resetDuration)}
-            = fa-icon "repeat"
-        else
-          | Last 6 Months
-          span.margin-left click={(perform showHideDuration)}
-             = fa-icon "pencil"
+        | Last 6 Months
 
     .columns
       .column

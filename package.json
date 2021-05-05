@@ -91,8 +91,6 @@
     "ember-modal-dialog": "^3.0.1",
     "ember-moment": "^8.0.0",
     "ember-page-title": "^5.2.3",
-    "ember-power-calendar-moment": "^0.1.7",
-    "ember-power-datepicker": "0.6.2",
     "ember-power-select": "^2.3.5",
     "ember-qunit": "^4.6.0",
     "ember-resolver": "^8.0.2",
@@ -120,6 +118,7 @@
     "billboard.js": "^1.12.7",
     "clipboard": "^2.0.6",
     "ember-radio-button": "^2.0.1",
+    "pikaday": "^1.8.2",
     "qrious": "^4.0.2"
   },
   "ember": {

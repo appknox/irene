@@ -36,7 +36,9 @@ module.exports = function (defaults) {
         whitelabel: '.env'
       }
     },
-    sourcemaps: { enabled: false },
+    sourcemaps: {
+      enabled: false
+    },
     'ember-date-components': {
       'includeCSS': false
     }
