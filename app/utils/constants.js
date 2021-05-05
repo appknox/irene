@@ -11,5 +11,9 @@ export const RISK_COLOR_CODE = {
   SUCCESS: '#80C081',
   DEFAULT: '#6B6B6B'
 }
+//Configurable input constants
+export const INPUT = {
+  MIN_LENGTH: 3
+};
 
 export default CONSTANTS;
