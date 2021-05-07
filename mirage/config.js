@@ -95,6 +95,9 @@ function routes() {
   this.get('/submissions', 'submission');
   this.get('/files/:id', 'file');
   this.get('/vulnerabilities/:id', 'vulnerability');
+  this.get('/vulnerabilities', (schema) => {
+    return schema.vulnerabilities.all().models;
+  });
   this.get('/invitations/:id', 'invitation');
   this.get('/devices', 'device');
   this.get('/invoices', 'invoice');

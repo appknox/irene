@@ -2,7 +2,7 @@
   {{t 'whitelistEmailDomain.subDesc'}}
 </p>
 <div local-class="org-email-domain" {{did-insert (fn this.initializeComp)}}>
-  <ul local-class="domain-list">
+  <ul id="domain-list" local-class="domain-list">
     {{#each this.domains as |domain|}}
       <li local-class="domain">
         <span local-class="domain-name">
@@ -21,7 +21,7 @@
   </ul>
   {{#if this.me.org.is_owner}}
     <div local-class="input-list">
-      <ul local-class="domain-input-list">
+      <ul id="domain-input-list" local-class="domain-input-list">
         {{#each this.tempDomains as |tDomain|}}
           <li local-class="domain-input-item {{if tDomain.isError 'error'}}" class="input-wrap">
             <Input local-class="domain-input" class="input-field" @type="text" @value={{tDomain.domain}}

@@ -37,7 +37,7 @@ export default function (server) {
   server.createList('submission', submissionCount);
   server.createList('device', deviceCount);
   server.createList('invoice', invoiceCount);
-  server.createList('analytics', analyticsCount);
+  server.createList('analytic', analyticsCount);
   server.createList('personaltoken', personalTokenCount);
   server.createList('invitation', invitationCount);
   server.createList('github-integration', githubCount);
@@ -50,32 +50,36 @@ export default function (server) {
   server.create('partnerclient-plan');
   for (var teamId = 1; teamId <= teamCount; teamId++) {
     server.create('team', {
-      users: users
+      users: users,
     });
   }
   for (var projectId = 1; projectId <= projectCount; projectId++) {
     projectIds.push(projectId);
     var fileCount = getRandomInt(1, 4);
     project = server.create('project', {
-      userId: currentUserId
+      userId: currentUserId,
     });
     server.create('invitation', {
       projectId: projectId,
-      userId: currentUserId
+      userId: currentUserId,
     });
     var fileIds = [];
     for (var fileId = 1; fileId <= fileCount; fileId++) {
       file = server.create('file', {
-        projectId: projectId
+        projectId: projectId,
       });
       server.create('manualscan', {
-        projectId: projectId
+        projectId: projectId,
       });
       fileIds.push(file.id);
-      for (var vulnerabilityId = 1; vulnerabilityId <= vulnerabilityCount; vulnerabilityId++) {
+      for (
+        var vulnerabilityId = 1;
+        vulnerabilityId <= vulnerabilityCount;
+        vulnerabilityId++
+      ) {
         server.create('analysis', {
           file: file,
-          vulnerabilityId: vulnerabilityId
+          vulnerabilityId: vulnerabilityId,
         });
       }
     }
