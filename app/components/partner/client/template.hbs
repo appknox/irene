@@ -1,43 +1,62 @@
-<div local-class="client-container" {{did-insert (fn this.initializeComp)}}>
-  <div local-class="chart-container">
-    <Charts::ClientUploads @title="Uploads" @clientId={{@client.id}}></Charts::ClientUploads>
-    <div local-class="credits-left">
-      <div local-class="header">{{ t 'clients.availableCredits'}}</div>
-      <div local-class="available-credits">
-        <span>{{@client.creditsLeft}}<br>
-          {{#if @client.isPerScan}}
-            {{t 'clients.scans'}}
-          {{else}}
-            {{t 'clients.apps'}}
-          {{/if}}
-        </span>
-      </div>
-      <button type="button" local-class="add-credit" {{on "click" (fn this.onShowCreditTransferModal)}}>
-        {{t 'clients.addCredit'}} {{fa-icon "plus"}}
-      </button>
+<div class="padding-h-1">
+  <div>
+    <LinkTo @route="authenticated.partner">Clients</LinkTo> / {{@client.name}}
+  </div>
+  <div local-class="overview">
+    <h3 local-class="overview-title">{{@client.name}}</h3>
+    <div local-class="overview-plan">Payment Plan: {{#if @client.isPerScan}}Per Scan ({{@client.creditsLeft}} scans remaining){{else}}Per App ({{@client.creditsLeft}} apps){{/if}}</div>
+    <div local-class="overview-owner">Organization Owner: {{@client.email}}owner@example.com</div>
+    <div local-class="overview-status-container">
+      <div local-class="overview-status">{{this.totalMembers}} Users</div>
+      <div local-class="overview-status">0 Projects</div>
+      <div local-class="overview-status">{{@client.totalFileUploadCount}} Files</div>
     </div>
   </div>
-  <div local-class="list-container">
 
-    <Partner::ClientUploads @clientId={{@client.id}}></Partner::ClientUploads>
-
-    <div local-class="client-users">
-      <div local-class="users-label">
-        Users ({{this.totalMembers}})
+  <div local-class="client-container" class="padding-b-1" {{did-insert (fn this.initializeComp)}}>
+    <div local-class="chart-container">
+      <div local-class="client-uploads">
+        <Charts::ClientUploads @title="Uploads" @clientId={{@client.id}}></Charts::ClientUploads>
       </div>
-      <ul local-class="user-list">
-        {{#each this.members as |member index|}}
-          <li local-class="list-item">
-            <span local-class="serial {{member.role}}">{{plus-one index}}</span>
-            <span local-class="name">{{member.firstName}}, {{member.lastName}}</span>
-            <span local-class="role">{{member.role}}</span>
-          </li>
-        {{/each}}
-      </ul>
-      {{#if (gt this.totalMembers 5)}}
-        <button local-class="view-all-users-btn" type="button" {{on "click" (fn this.onToggleMemberListModal)}}>View
-          All</button>
-      {{/if}}
+      <div></div>
+      <div local-class="credits-left">
+        <div local-class="header">{{ t 'clients.availableCredits'}}</div>
+        <div local-class="available-credits">
+          <span>{{@client.creditsLeft}}<br>
+            {{#if @client.isPerScan}}
+              {{t 'clients.scans'}}
+            {{else}}
+              {{t 'clients.apps'}}
+            {{/if}}
+          </span>
+        </div>
+        <button type="button" local-class="add-credit" {{on "click" (fn this.onShowCreditTransferModal)}}>
+          {{t 'clients.addCredit'}} {{fa-icon "plus"}}
+        </button>
+      </div>
+    </div>
+    <div local-class="list-container">
+
+      <Partner::ClientUploads @clientId={{@client.id}}></Partner::ClientUploads>
+
+      {{!-- <div local-class="client-users">
+        <div local-class="users-label">
+          Users ({{this.totalMembers}})
+        </div>
+        <ul local-class="user-list">
+          {{#each this.members as |member index|}}
+            <li local-class="list-item">
+              <span local-class="serial {{member.role}}">{{plus-one index}}</span>
+              <span local-class="name">{{member.firstName}}, {{member.lastName}}</span>
+              <span local-class="role">{{member.role}}</span>
+            </li>
+          {{/each}}
+        </ul>
+        {{#if (gt this.totalMembers 5)}}
+          <button local-class="view-all-users-btn" type="button" {{on "click" (fn this.onToggleMemberListModal)}}>View
+            All</button>
+        {{/if}}
+      </div> --}}
     </div>
   </div>
 </div>
