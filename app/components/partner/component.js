@@ -29,19 +29,19 @@ export default class PartnerComponent extends Component {
   @tracked isShowInviteClientModal = false;
 
   @tracked clientGroups = [{
-      label: 'Registered Clients',
+      label: 'Clients',
       key: 'registered',
       model: 'client',
       active: true
     },
     {
-      label: 'Invited Users',
+      label: 'Invitations',
       key: 'invited',
       model: 'client-invite',
       active: false
     },
     {
-      label: 'Self Registered Users',
+      label: 'Registrations',
       key: 'self-registered',
       model: 'self-register-client',
       active: false

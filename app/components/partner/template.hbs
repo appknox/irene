@@ -1,40 +1,45 @@
-<div local-class="partner-dashboard" {{did-insert this.initializeComp}}>
+<div local-class="partner-dashboard" class="padding-h-1 padding-v-1" {{did-insert this.initializeComp}}>
   <div local-class="dashboard-header">
     <div local-class="overall-uploads">
-      <Charts::ClientUploads @title="Overall Uploads"></Charts::ClientUploads>
+      <Charts::ClientUploads @title="App uploads overview"></Charts::ClientUploads>
+      <button
+        local-class="export-btn"
+        type="button"
+        {{on "click" (perform this.exportOverallPlatformUsage)}}
+      >Export Metrics</button>
     </div>
+    <div></div>
     <div local-class="credits-left">
-      <div local-class="header">{{t 'clients.availableCredits'}}</div>
-      <div local-class="available-credits">
-        <span>{{this.creditsStats.creditsLeft}}<br>
-          {{#if this.creditsStats.isPerScan}}
-            {{t 'clients.scans'}}
-          {{else}}
-            {{t 'clients.apps'}}
-          {{/if}}
-        </span>
+      <div local-class="header">Available Scan Credits</div>
+      <div local-class="credits-status">
+        {{#if this.creditsStats.isPerScan}}
+          <div local-class="sharable-credits">
+            <div>{{this.creditsStats.creditsLeft}}0</div>
+            <div>{{t 'clients.scans'}}</div>
+          </div>
+        {{else}}
+          <div local-class="non-sharable-credits">Scan credit sharing is currently not supported in your payment plan (per-app). Please contact support for transferring credits to client organizations.</div>
+        {{/if}}
       </div>
-
-      <button local-class="export-btn" type="button" {{on "click" (perform this.exportOverallPlatformUsage)}}>Export
-        Metrics</button>
     </div>
   </div>
 
   <div local-class="client-groups">
     <div local-class="group-header">
-      {{#each this.clientGroups as |clientGroup|}}
-        <a href="#" local-class="client-group {{if clientGroup.active 'active'}}"
-          {{on "click" (fn this.onSelectClientGroup clientGroup)}}>
-          {{clientGroup.label}}
-        </a>
-      {{/each}}
+      <div local-class="tabs">
+        {{#each this.clientGroups as |clientGroup|}}
+          <a href="#" local-class="client-group {{if clientGroup.active 'active'}}"
+            {{on "click" (fn this.onSelectClientGroup clientGroup)}}>
+            {{clientGroup.label}}
+          </a>
+        {{/each}}
+      </div>
       <div local-class="invite-btn">
         <button type="button" class="is-primary" {{on "click" (fn this.openInviteModal)}}>
           {{t 'clients.invite'}}
         </button>
       </div>
     </div>
-
 
     <div local-class="group-body">
       {{#each this.clientGroups as |clientGroup|}}

@@ -401,6 +401,8 @@
   "pending": "ペンディング中",
   "pendingInvitations": "ペンディング中の招待",
   "pendingInvitationsTeam": "Pending Team Invitations",
+  "perApp": "per App",
+  "perScan": "per Scan",
   "personalAccessTokens": "作成されました ->　作成日",
   "personalAccessTokenCreate": "トークンの生成",
   "personalAccessTokenDesc": "Tokens you have generated that can be used to access the API",

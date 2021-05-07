@@ -1,25 +1,25 @@
 <div local-class="partner-client-list">
   <div local-class="client-list-container">
-    <div local-class="client-items">
-      {{#each this.clientList as |client|}}
-        <Cards::ClientInfo @client={{client}} @type={{@type}}></Cards::ClientInfo>
-      {{else}}
-        {{#if this.isLoading}}
-          <div local-class="loading">
-            <ThreeBounceSpinner />
-          </div>
-        {{else}}
-          <div local-class="no-data">{{t (concat 'clients.no-' @type)}}</div>
-        {{/if}}
-      {{/each}}
-    </div>
-  </div>
-  <div local-class="client-list-footer">
-
-    {{#if (or this.hasPrevious this.hasNext)}}
-      <div local-class="pagination">
-        {{partial 'paginate'}}
+    {{#if this.clientList}}
+      <div local-class="client-items">
+        {{#each this.clientList as |client|}}
+          <Cards::ClientInfo @client={{client}} @type={{@type}}></Cards::ClientInfo>
+        {{/each}}
       </div>
+      <div class="padding-t-1">
+        {{#if (or this.hasPrevious this.hasNext)}}
+          <div local-class="pagination">
+            {{partial 'paginate'}}
+          </div>
+        {{/if}}
+      </div>
+    {{else}}
+      {{#if this.isLoading}}
+        <div local-class="loading">
+          <ThreeBounceSpinner />
+        </div>
+      {{/if}}
+      <div local-class="no-data">{{t (concat 'clients.no-' @type)}}</div>
     {{/if}}
   </div>
 </div>

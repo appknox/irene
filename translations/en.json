@@ -401,6 +401,8 @@
   "pending": "Pending",
   "pendingInvitations": "Pending Invitations",
   "pendingInvitationsTeam": "Pending Team Invitations",
+  "perApp": "per App",
+  "perScan": "per Scan",
   "personalAccessTokens": "Personal access tokens",
   "personalAccessTokenCreate": "Generate token",
   "personalAccessTokenDesc": "Tokens you have generated that can be used to access the API",
