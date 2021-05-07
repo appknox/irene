@@ -1,26 +1,27 @@
+$card-header-height: 5rem;
+$card-thumbnail-size: 2.8rem;
+$card-padding: 1rem;
+
 .client-info-card {
   display: grid;
   box-shadow: 0px 0px 5px -2px #888;
-  border-radius: 8px;
+  border-radius: 0.3rem;
   min-height: 8px;
   margin: 8px;
-  grid-template-rows: 80px 1fr;
+  grid-template-rows: $card-header-height 1fr;
   background-color: #fff;
-  width: 300px;
-  justify-self: center;
 
   .client-info-header {
     display: grid;
-    grid-template-columns: 40px 1fr 30px;
+    grid-template-columns: $card-thumbnail-size 1fr;
     column-gap: 12px;
-    padding: 8px;
-    height: 80px;
-    border-bottom: 1px solid rgba(#424651, 0.4);
+    padding: 0 $card-padding;
+    height: $card-header-height;
     align-items: center;
 
     .thumbnail {
-      width: 40px;
-      height: 40px;
+      width: $card-thumbnail-size;
+      height: $card-thumbnail-size;
       border-radius: 50%;
       border: 1px solid rgba(#424651, 0.3);
       color: $white;
@@ -50,6 +51,9 @@
 
       .company {
         text-transform: capitalize;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
 
         &.registered {
           font-weight: bold;
@@ -67,19 +71,19 @@
   }
 
   .client-info-body {
-    padding: 8px;
-    display: grid;
-    row-gap: 8px;
-    grid-template-rows: auto auto 1fr;
+    padding: 0 $card-padding $card-padding $card-padding;
+    // display: grid;
+    // row-gap: 0.4rem;
+    // grid-template-rows: auto auto 1fr;
     height: 100%;
 
     .info-item {
       color: #424651;
-      font-size: 12px;
+      font-size: 0.95rem;
 
       .label {
-        font-size: 12px;
-        text-transform: uppercase;
+        // font-size: 12px;
+        // text-transform: uppercase;
       }
 
       .data {
@@ -92,15 +96,15 @@
     display: grid;
     grid-template-columns: 40px 1fr 40px;
     height: 40px;
-    border-top: 1px solid rgba(#424651, 0.4);
+    border-top: 1px solid #e3e8ef;
     align-items: center;
 
     .border-left {
-      border-left: 1px solid rgba(#424651, 0.4);
+      border-left: 1px solid #e3e8ef;
     }
 
     .border-right {
-      border-right: 1px solid rgba(#424651, 0.4);
+      border-right: 1px solid #e3e8ef;
     }
 
     .add-credit,

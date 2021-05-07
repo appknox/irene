@@ -1,14 +1,24 @@
 .partner-dashboard {
+  box-sizing: border-box;
   .dashboard-header {
     display: grid;
-    grid-template-columns: 70% 30%;
+    grid-template-columns: 69% 2% 29%;
     justify-content: center;
 
-    .overall-uploads {}
+    .overall-uploads {
+      background-color: #F3F5F8;
+      border-radius: 0.3rem;
+      padding: 1rem;
+    }
 
     .credits-left {
-      display: grid;
-      justify-content: center;
+      background-color: #F3F5F8;
+      border-radius: 0.3rem;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
 
       .header {
         font-size: 14px;
@@ -16,80 +26,95 @@
         font-weight: 600;
         text-transform: uppercase;
       }
+    }
+  }
+  .export-btn {
+    font-weight: bolder;
+    background-color: #66BB6A;
+    color: $white;
+    border-color: #66BB6A;
+    font-size: 15px;
+    width: max-content;
+    justify-self: center;
+    text-transform: uppercase;
 
-      .available-credits {
-        display: grid;
-        width: 200px;
-        height: 200px;
-        border: 15px solid #9CC3D5FF;
-        border-radius: 50%;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        font-size: 30px;
-        font-weight: bold;
-        color: #0063B2FF;
-      }
-
-      .export-btn {
-        font-weight: bolder;
-        background-color: #66BB6A;
-        color: $white;
-        border-color: #66BB6A;
-        font-size: 15px;
-        width: max-content;
-        justify-self: center;
-        text-transform: uppercase;
-
-        &:hover {
-          box-shadow: 0px 0px 10px -1px #888;
-        }
-      }
+    &:hover {
+      box-shadow: 0px 0px 10px -1px #888;
     }
   }
 
+  .credits-status {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+  }
+  .sharable-credits {
+    display: grid;
+    width: 200px;
+    height: 200px;
+    border: 15px solid #9CC3D5FF;
+    border-radius: 50%;
+    font-size: 30px;
+    font-weight: bold;
+    color: #0063B2FF;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .non-sharable-credits {
+    background-color: #F3F5F8;
+    padding: 1rem;
+    border: 1px dashed #f05b4b;
+    border-radius: 1rem;
+  }
+
+  .tabs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+  }
+
+  .invite-btn {
+    margin-right: 0.7rem;
+  }
+
   .client-groups {
-    margin-top: 15px;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
     position: relative;
 
     .group-header {
-      display: grid;
-      grid-template-columns: auto auto auto;
-      height: 50px;
+      height: 3.8rem;
+      display: flex;
       align-items: center;
-      justify-content: center;
-      column-gap: 10px;
-      box-shadow: 0px 0px 10px -1px #888;
-      border-radius: 12px;
+      justify-content: space-between;
+      border: 1px solid darken(#F3F5F8, 5%);
+      border-radius: 0.3rem;
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
 
       .client-group {
         text-transform: uppercase;
-        font-size: 16px;
-        cursor: pointer;
-        border-right: 1px solid;
-        width: 210px;
+        color: #adaeb3;
+        border-right: 1px solid #adaeb3;
+        padding: 0 2.3rem;
         text-align: center;
-        color: #424651;
+        font-weight: 600;
+        cursor: pointer;
 
-        &:nth-last-child(2) {
+        &:last-child {
           border-right: none;
         }
 
         &.active,
         &:hover {
-          font-weight: bold;
+          color: #424651;
         }
       }
     }
-
-    .invite-btn {
-      position: absolute;
-      right: 10px;
-      top: 9px;
-    }
-
 
   }
 }

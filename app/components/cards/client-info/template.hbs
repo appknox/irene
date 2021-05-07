@@ -3,7 +3,7 @@
     local-class="client-info-header">
     <span local-class="thumbnail {{unless this.isRegistered 'not-registered'}}">
       {{#if this.isRegistered}}
-        {{fa-icon "cogs"}}
+        {{fa-icon "users"}}
 
       {{else}}
         {{@client.thumbnail}}
@@ -34,18 +34,32 @@
         </span>
       </div>
 
-      <div local-class="last-upload info-item">
-        <span local-class="label">{{t 'clients.availableCredits'}}</span>:
+      <div local-class="plan-type info-item">
+        <span local-class="label">Payment Plan</span>:
         <span local-class="data">
-          {{@client.creditsLeft}} {{t (concat 'clients.' (if  @client.isPerScan 'scans' 'apps'))}}
+          {{t (if  @client.isPerScan 'perScan' 'perApp')}}
         </span>
+      </div>
+
+      <div local-class="credits-left info-item">
+        {{#if @client.isPerScan}}
+          <span local-class="label">Unused Scans Count:</span>
+          <span local-class="data">
+            {{@client.creditsLeft}}
+          </span>
+        {{else}}
+          <span local-class="label">Apps count:</span>
+          <span local-class="data">
+            {{@client.creditsLeft}}
+          </span>
+        {{/if}}
       </div>
 
       <div local-class="last-upload info-item">
         <span local-class="label">{{t 'clients.lastUpload'}}</span>: <span>
           <span local-class="data">
             {{#if @client.lastUpload}}
-              {{day-js date=@client.lastUpload format='DD MMM YYYY HH:mm:ss A'}}
+              {{dayjs-from-now @client.lastUpload}}
             {{else}}
               --
             {{/if}}
@@ -56,20 +70,20 @@
   {{/if}}
   <div local-class="client-info-footer {{unless this.isRegistered "not-registered"}}">
     {{#if this.isRegistered}}
-      <LinkTo @route="authenticated.client" @model={{@client.id}} local-class="view-client border-right">
-        {{fa-icon "arrows-alt"}}
-        <AttachTooltip @placemnet="top-end">
-          {{t 'clients.view'}}
-        </AttachTooltip>
-      </LinkTo>
-      <div></div>
-      <a href="#" local-class="add-credit border-left {{unless @client.isPerScan 'disabled'}}"
+      <a href="#" local-class="add-credit border-right {{unless @client.isPerScan 'disabled'}}"
         {{on "click" (fn this.onAddCredits)}}>
         {{fa-icon "plus"}}
         <AttachTooltip @placemnet="top-end">
           {{t 'clients.addCredit'}}
         </AttachTooltip>
       </a>
+      <div></div>
+      <LinkTo @route="authenticated.client" @model={{@client.id}} local-class="view-client border-left">
+        {{fa-icon "arrow-right"}}
+        <AttachTooltip @placemnet="top-end">
+          {{t 'clients.view'}}
+        </AttachTooltip>
+      </LinkTo>
 
     {{else}}
       <a href="#" local-class="resend border-right {{unless this.isInvited 'hidden'}}"
