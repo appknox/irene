@@ -812,7 +812,9 @@
     "creditTransfer": "Credit Transfer",
     "transferCredit": "Transfer Credits",
     "remainingCredit": "Remaining Credits",
-    "noClients": "No Clients Available",
+    "no-invited": "No pending invitation, invite an user to register a client",
+    "no-self-registered": "No pending request!",
+    "no-registered": "Invite an user to register a client",
     "invite": "Invite Client"
   }
 }

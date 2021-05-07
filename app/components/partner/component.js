@@ -21,7 +21,7 @@ import parseError from 'irene/utils/parse-error';
 export default class PartnerComponent extends Component {
 
   @service store;
-  @service('notification') notify;
+  @service('notifications') notify;
   @service me;
   @service ajax;
   @service intl;
@@ -64,11 +64,11 @@ export default class PartnerComponent extends Component {
 
   @action
   onClientInvited(client) {
-    console.log('invited', client)
     this.isShowInviteClientModal = false;
     this.clientGroups.map((group) =>
       set(group, 'active', group.key == 'invited')
     )
+    this.store.pushPayload('client-invite', client)
     this.notify.success(`Invitation has been sent to: ${client.email}`);
   }
 
@@ -102,8 +102,8 @@ export default class PartnerComponent extends Component {
         link.download = extractFilenameResHeader(disposition);
         link.click();
       },
-      error() {
-        this.notify.error(parseError(this.intl.t('pleaseTryAgain')));
+      error(err) {
+        this.notify.error(parseError(err, this.intl.t('pleaseTryAgain')));
       }
     })
   }) exportOverallPlatformUsage;

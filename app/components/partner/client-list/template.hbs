@@ -4,7 +4,13 @@
       {{#each this.clientList as |client|}}
         <Cards::ClientInfo @client={{client}} @type={{@type}}></Cards::ClientInfo>
       {{else}}
-        <div local-class="">{{t 'clients.noClients'}}</div>
+        {{#if this.isLoading}}
+          <div local-class="loading">
+            <ThreeBounceSpinner />
+          </div>
+        {{else}}
+          <div local-class="no-data">{{t (concat 'clients.no-' @type)}}</div>
+        {{/if}}
       {{/each}}
     </div>
   </div>

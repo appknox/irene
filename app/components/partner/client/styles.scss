@@ -98,7 +98,8 @@
             color: #000;
             font-size: 12px;
 
-            &.OWNER {
+            &.OWNER,
+            &.ADMIN {
               background-color: rgba($color: #888, $alpha: 0.8);
             }
           }

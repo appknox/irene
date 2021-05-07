@@ -71,21 +71,6 @@ export default class ChartsClientUploadsComponent extends Component {
 
   @tracked chartContainer = null;
 
-  // vals = {
-  //   day: {
-  //     date: ['2021-02-01', '2021-02-02', '2021-02-03', '2021-02-04', '2021-02-05', '2021-02-06', '2021-02-07', '2021-02-08'],
-  //     val: [1, 4, 6, 2, 9, 10, 4, 0]
-  //   },
-  //   week: {
-  //     val: [7, 3, 20, 16, 7, 4, 9, 19],
-  //     date: ["2021-01-04", "2021-01-11", "2021-01-18", "2021-01-25", "2021-02-01", "2021-02-08", "2021-02-15", "2021-02-22"]
-  //   },
-  //   month: {
-  //     val: [10, 40, 22, 40, 55, 66, 11, 29, 49, 20, 60, 55],
-  //     date: ["2021-01-01", "2021-02-01", "2021-03-18", "2021-04-25", "2021-05-01", "2021-06-08", "2021-07-15", "2021-08-22", "2021-09-22", "2021-10-22", "2021-11-22", "2021-12-22"]
-  //   }
-  // }
-
   // Actions
   async drawChart(element) {
     const component = this;
@@ -95,9 +80,6 @@ export default class ChartsClientUploadsComponent extends Component {
         columns: this.chartData,
         type: "area", // for ESM specify as: bar()
       },
-      // color: {
-      //   pattern: ['#FE4D3F']
-      // },
       grid: {
         focus: {
           show: false
@@ -122,8 +104,12 @@ export default class ChartsClientUploadsComponent extends Component {
 
         },
         y: {
+          default: [0, 5],
+          tick: {
+            stepSize: 1,
+          },
           label: {
-            text: "Upload Count",
+            text: "UPLOAD COUNT",
             position: "outer-middle"
           }
         }
@@ -136,6 +122,9 @@ export default class ChartsClientUploadsComponent extends Component {
         contents: function (d) {
           return component.tooltipTemplate(component, d[0].x, d[0].value); // formatted html as you want
         }
+      },
+      transition: {
+        duration: 500
       },
       bindto: element
     });

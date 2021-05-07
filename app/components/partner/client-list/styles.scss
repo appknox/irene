@@ -29,7 +29,7 @@
 
     .client-items {
       display: grid;
-      grid-template-columns: repeat(3, auto);
+      grid-template-columns: repeat(3, 1fr);
       // column-gap: 15px;
       // row-gap: 15px;
       justify-content: left;
@@ -37,6 +37,15 @@
       max-height: 300px;
       padding: 12px 20px;
       column-gap: 15px;
+
+      .no-data,
+      .loading {
+        grid-column: 2;
+        justify-self: center;
+        height: 70px;
+        align-items: center;
+        line-height: 70px;
+      }
     }
 
     // .client-list-item {

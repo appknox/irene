@@ -308,6 +308,7 @@ export const PaginationMixin = superclass => class extends superclass {
         */
         this.isDRFPagination = true; // eslint-disable-line
       }
+      this.isLoading = false; // eslint-disable-line
       return this.meta = meta; // eslint-disable-line
     })
     return objects;

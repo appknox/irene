@@ -31,6 +31,8 @@ export default class PartnerClientListComponent extends PaginationMixin(Componen
 
   @tracked clientList = [];
 
+  @tracked isLoading = true;
+
   @reads('objects') clientList;
 
   // @task(function* () {

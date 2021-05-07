@@ -28,9 +28,9 @@
       <ul local-class="user-list">
         {{#each this.members as |member index|}}
           <li local-class="list-item">
-            <span local-class="serial">{{plus-one index}}</span>
+            <span local-class="serial {{member.role}}">{{plus-one index}}</span>
             <span local-class="name">{{member.firstName}}, {{member.lastName}}</span>
-            <span local-class="role {{member.role}}">{{member.role}}</span>
+            <span local-class="role">{{member.role}}</span>
           </li>
         {{/each}}
       </ul>

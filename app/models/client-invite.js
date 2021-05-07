@@ -10,7 +10,6 @@ export default class ClientInviteModel extends Model {
   @attr('string') firstName;
   @attr('string') lastName;
   @attr('string') email;
-  @attr('number') noOfScans;
   @attr('string') registrationType;
   @attr('string') company;
   @attr('boolean') isTrail;

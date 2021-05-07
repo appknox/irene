@@ -48,7 +48,6 @@ export default class ModalsInviteClient extends Component {
     yield this.changeset.validate()
     if (this.changeset.get('isValid')) {
       const invitedClient = yield this.store.createRecord('client-invite', this.changeset.change).save();
-      this.store.pushPayload('client-invite', invitedClient)
       this.args.onInvited(invitedClient)
     }
   }) sendInvitation;

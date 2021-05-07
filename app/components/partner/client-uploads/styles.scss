@@ -20,20 +20,19 @@
     padding: 12px;
     display: grid;
     grid-template-columns: auto auto;
-    flex-wrap: wrap;
     box-shadow: 0px 3px 8px -2px #888;
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
-    justify-content: left;
+    justify-content: space-around;
     align-items: center;
     column-gap: 30px;
     row-gap: 30px;
 
 
-    &.no-uploads {
+    .no-uploads {
       font-size: 14px;
       margin: 12px;
-      justify-content: center;
+      justify-self: center;
     }
   }
 }
