@@ -4,7 +4,9 @@
   </div>
   <div local-class="overview">
     <h3 local-class="overview-title">{{@client.name}}</h3>
-    <div local-class="overview-plan">Payment Plan: {{#if @client.isPerScan}}Per Scan ({{@client.creditsLeft}} scans remaining){{else}}Per App ({{@client.creditsLeft}} apps){{/if}}</div>
+    <div local-class="overview-plan">Payment Plan: {{#if @client.isPerScan}}Per Scan ({{@client.creditsLeft}} scans
+        remaining)
+      {{else}}Per App ({{@client.creditsLeft}} apps){{/if}}</div>
     <div local-class="overview-owner">Organization Owner: {{@client.email}}owner@example.com</div>
     <div local-class="overview-status-container">
       <div local-class="overview-status">{{this.totalMembers}} Users</div>
@@ -30,9 +32,12 @@
             {{/if}}
           </span>
         </div>
-        <button type="button" local-class="add-credit" {{on "click" (fn this.onShowCreditTransferModal)}}>
-          {{t 'clients.addCredit'}} {{fa-icon "plus"}}
-        </button>
+        {{!-- TODO need to enable after per app credits transfer implemented --}}
+        {{#if (and @client.isPerScan this.partnerCreditStats.allowTransfer)}}
+          <button type="button" local-class="add-credit" {{on "click" (fn this.onShowCreditTransferModal)}}>
+            {{t 'clients.addCredit'}} {{fa-icon "plus"}}
+          </button>
+        {{/if}}
       </div>
     </div>
     <div local-class="list-container">

@@ -1,6 +1,5 @@
 <div local-class="client-info-card {{@client.type}}">
-  <LinkTo @route="authenticated.client" @disabled={{not this.isRegistered}} @model={{@client}}
-    local-class="client-info-header">
+  <LinkTo @route="authenticated.client" @model={{@client}} local-class="client-info-header">
     <span local-class="thumbnail {{unless this.isRegistered 'not-registered'}}">
       {{#if this.isRegistered}}
         {{fa-icon "users"}}
@@ -18,74 +17,77 @@
   </LinkTo>
   {{#if this.isRegistered}}
     <div local-class="client-info-body">
-      <div local-class="email info-item">{{@client.email}}</div>
-
-      <div local-class="total-users info-item">
-        <span local-class="label">{{t 'clients.users'}}</span>:
-        <span local-class="data">
-          {{@client.totalUserCount}}
-        </span>
+      <div local-class="client-metrics">
+        <div local-class="users metric">
+          <span>{{@client.totalUserCount}}</span>
+          <span>Users</span>
+        </div>
+        <div local-class="uploads metric">
+          <span>{{@client.totalFileUploadCount}}</span>
+          <span>Uploads</span>
+        </div>
+        <div local-class="projects metric">
+          <span>{{@client.totalProjectCount}}</span>
+          <span>Projects</span>
+        </div>
       </div>
-
-      <div local-class="total-uploads info-item">
-        <span local-class="label">{{t 'clients.uploads'}}</span>:
-        <span local-class="data">
-          {{@client.totalFileUploadCount}}
-        </span>
-      </div>
-
-      <div local-class="plan-type info-item">
-        <span local-class="label">Payment Plan</span>:
-        <span local-class="data">
-          {{t (if  @client.isPerScan 'perScan' 'perApp')}}
-        </span>
-      </div>
-
-      <div local-class="credits-left info-item">
-        {{#if @client.isPerScan}}
-          <span local-class="label">Unused Scans Count:</span>
-          <span local-class="data">
-            {{@client.creditsLeft}}
-          </span>
-        {{else}}
-          <span local-class="label">Apps count:</span>
-          <span local-class="data">
-            {{@client.creditsLeft}}
-          </span>
-        {{/if}}
-      </div>
-
-      <div local-class="last-upload info-item">
-        <span local-class="label">{{t 'clients.lastUpload'}}</span>: <span>
-          <span local-class="data">
+      <div local-class="client-activities">
+        <div local-class="last-upload activity">
+          <span local-class="label">Last Upload</span>
+          <span>
             {{#if @client.lastUpload}}
               {{dayjs-from-now @client.lastUpload}}
             {{else}}
               --
             {{/if}}
           </span>
-        </span>
+        </div>
+        <div local-class="payment activity">
+          <span local-class="label">Payment Plan</span>
+          <div local-class="credit-info">
+            <span local-class="type {{if @client.isPerScan 'per-scan' 'per-app'}}">
+              {{t (if  @client.isPerScan 'perScan' 'perApp')}}
+            </span>
+            {{!-- TODO need to enable after per app credits transfer implemented --}}
+            {{#if (not @client.isPerScan)}}
+              <span local-class="info-icon">
+                {{fa-icon 'info-circle' local-class='icon'}}
+                <AttachTooltip @placemnet="top-end">
+                  Scan credit sharing is currently not supported in per-app plan.
+                </AttachTooltip>
+              </span>
+
+            {{else if @partnerCreditStat.allowTransfer}}
+              <a href="#" class="button" local-class="add-credit {{unless @client.isPerScan 'disabled'}}"
+                {{on "click" (fn this.onAddCredits)}}>
+                {{fa-icon "plus"}}
+                <AttachTooltip @placemnet="top-end">
+                  {{t 'clients.addCredit'}}
+                </AttachTooltip>
+              </a>
+            {{/if}}
+            <span local-class="remaining">
+              <span local-class="data">
+                {{@client.creditsLeft}} {{t (if  @client.isPerScan 'clients.scans' 'clients.apps')}}
+              </span>
+              <span local-class="">
+                remaining
+              </span>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
-  {{/if}}
-  <div local-class="client-info-footer {{unless this.isRegistered "not-registered"}}">
-    {{#if this.isRegistered}}
-      <a href="#" local-class="add-credit border-right {{unless @client.isPerScan 'disabled'}}"
-        {{on "click" (fn this.onAddCredits)}}>
-        {{fa-icon "plus"}}
-        <AttachTooltip @placemnet="top-end">
-          {{t 'clients.addCredit'}}
-        </AttachTooltip>
-      </a>
-      <div></div>
-      <LinkTo @route="authenticated.client" @model={{@client.id}} local-class="view-client border-left">
-        {{fa-icon "arrow-right"}}
-        <AttachTooltip @placemnet="top-end">
-          {{t 'clients.view'}}
-        </AttachTooltip>
-      </LinkTo>
-
-    {{else}}
+  {{else}}
+    <div local-class="client-info-body">
+      <div local-class="client-invite">
+        <div local-class="invite-info">Email: {{@client.email}}</div>
+        <div local-class="invite-info">Trial: {{fa-icon (if @client.isTrial 'check-circle' 'circle-thin')}}</div>
+        <div local-class="invite-info">Invitation sent {{dayjs-from-now @client.updatedOn}}</div>
+        <div local-class="invite-info">Expires {{dayjs-from-now @client.expiresOn}}</div>
+      </div>
+    </div>
+    <div local-class="client-info-footer {{unless this.isRegistered "not-registered"}}">
       <a href="#" local-class="resend border-right {{unless this.isInvited 'hidden'}}"
         {{on "click" (perform this.resendInvitation)}}>
         {{fa-icon "paper-plane"}}
@@ -101,9 +103,9 @@
           {{t 'approve'}}
         </AttachTooltip>
       </a>
-    {{/if}}
 
-  </div>
+    </div>
+  {{/if}}
 </div>
 
 

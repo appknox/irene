@@ -12,7 +12,7 @@ export default class ClientInviteModel extends Model {
   @attr('string') email;
   @attr('string') registrationType;
   @attr('string') company;
-  @attr('boolean') isTrail;
+  @attr('boolean') isTrial;
   @attr('boolean') approved;
   @attr('date') createdOn;
   @attr('date') updatedOn;

@@ -3,7 +3,8 @@
     {{#if this.clientList}}
       <div local-class="client-items">
         {{#each this.clientList as |client|}}
-          <Cards::ClientInfo @client={{client}} @type={{@type}}></Cards::ClientInfo>
+          <Cards::ClientInfo @client={{client}} @type={{@type}} @partnerCreditStat={{@partnerCreditStat}}>
+          </Cards::ClientInfo>
         {{/each}}
       </div>
       <div class="padding-t-1">

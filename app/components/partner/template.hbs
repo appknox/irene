@@ -2,11 +2,8 @@
   <div local-class="dashboard-header">
     <div local-class="overall-uploads">
       <Charts::ClientUploads @title="App uploads overview"></Charts::ClientUploads>
-      <button
-        local-class="export-btn"
-        type="button"
-        {{on "click" (perform this.exportOverallPlatformUsage)}}
-      >Export Metrics</button>
+      <button local-class="export-btn" type="button" {{on "click" (perform this.exportOverallPlatformUsage)}}>Export
+        Metrics</button>
     </div>
     <div></div>
     <div local-class="credits-left">
@@ -14,11 +11,13 @@
       <div local-class="credits-status">
         {{#if this.creditsStats.isPerScan}}
           <div local-class="sharable-credits">
-            <div>{{this.creditsStats.creditsLeft}}0</div>
+            <div>{{this.creditsStats.creditsLeft}}</div>
             <div>{{t 'clients.scans'}}</div>
           </div>
         {{else}}
-          <div local-class="non-sharable-credits">Scan credit sharing is currently not supported in your payment plan (per-app). Please contact support for transferring credits to client organizations.</div>
+          <div local-class="non-sharable-credits">
+            Scan credit sharing is currently not supported in your payment plan
+            (per-app). Please contact support for transferring credits to client organizations.</div>
         {{/if}}
       </div>
     </div>
@@ -44,7 +43,8 @@
     <div local-class="group-body">
       {{#each this.clientGroups as |clientGroup|}}
         {{#if clientGroup.active}}
-          <Partner::ClientList @title={{clientGroup.label}} @model={{clientGroup.model}} @type={{clientGroup.key}}>
+          <Partner::ClientList @title={{clientGroup.label}} @model={{clientGroup.model}} @type={{clientGroup.key}}
+            @partnerCreditStat={{this.creditsStats}}>
           </Partner::ClientList>
         {{/if}}
       {{/each}}

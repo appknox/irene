@@ -20,6 +20,7 @@ export default class ClientModel extends Model {
   @attr('string') name;
   @attr('number') totalUserCount;
   @attr('number') totalFileUploadCount;
+  @attr('number') totalProjectCount
 
   @equal('isPerScan', false) isPerApp;
   @reads('name') company;

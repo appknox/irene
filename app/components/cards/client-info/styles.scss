@@ -71,25 +71,109 @@ $card-padding: 1rem;
   }
 
   .client-info-body {
-    padding: 0 $card-padding $card-padding $card-padding;
-    // display: grid;
-    // row-gap: 0.4rem;
-    // grid-template-rows: auto auto 1fr;
+    // padding: 0 $card-padding $card-padding $card-padding;
+
     height: 100%;
 
-    .info-item {
-      color: #424651;
-      font-size: 0.95rem;
+    .client-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      height: 60px;
+      align-items: center;
+      background-color: #f6f7f9;
 
-      .label {
-        // font-size: 12px;
-        // text-transform: uppercase;
-      }
-
-      .data {
-        font-weight: bold;
+      .metric {
+        display: grid;
+        grid-template-rows: 15px 1fr;
+        justify-content: center;
+        text-align: center;
+        color: #000;
       }
     }
+
+    .client-activities {
+      display: grid;
+      padding: $card-padding;
+      row-gap: $card-padding;
+
+      .activity {
+        display: grid;
+        grid-template-columns: 100px 1fr;
+        column-gap: $card-padding;
+        align-items: baseline;
+
+        .label {
+          color: #000;
+          font-size: 0.95rem;
+        }
+
+        &.payment {
+
+          .type {
+            height: 32px;
+            border-radius: 4px;
+            padding: 0 8px;
+            color: $white;
+            text-transform: capitalize;
+            line-height: 32px;
+            font-weight: bold;
+
+            &.per-scan {
+              background-color: #0362b1;
+            }
+
+            &.per-app {
+              background-color: #66bb6a;
+            }
+          }
+
+          .credit-info {
+            display: grid;
+            grid-template-columns: auto auto;
+            justify-content: left;
+            column-gap: 8px;
+            align-items: center;
+            row-gap: 0.5em;
+
+            .info-icon {
+              i.icon {
+                color: #FFCC00;
+                font-size: 1.3rem;
+              }
+            }
+
+            .remaining {
+              grid-column-start: 1;
+              grid-column-end: 3;
+
+              .data {
+                font-weight: bold;
+                color: #000;
+              }
+            }
+          }
+        }
+
+
+      }
+    }
+
+    .client-invite {
+      padding: $card-padding;
+      font-size: 0.95rem;
+      border-top: 1px solid #e3e8ef;
+      display: grid;
+      row-gap: $card-padding;
+
+      .invite-info {
+        display: grid;
+        grid-template-columns: auto auto;
+        column-gap: 8px;
+        align-items: center;
+        justify-content: left;
+      }
+    }
+
   }
 
   .client-info-footer {
@@ -146,6 +230,12 @@ $card-padding: 1rem;
       i {
         font-size: 18px;
       }
+    }
+  }
+
+  &.invited {
+    .client-info-header {
+      pointer-events: none;
     }
   }
 }

@@ -20,6 +20,7 @@ import {
 } from '@ember/service';
 import ENV from 'irene/config/environment';
 
+import moment from 'moment';
 export default class ChartsClientUploadsComponent extends Component {
 
   // Dependencies
@@ -70,6 +71,15 @@ export default class ChartsClientUploadsComponent extends Component {
   @tracked currentTimeline = this.timelinePlaceholders[0];
 
   @tracked chartContainer = null;
+
+  @tracked startDate = dayjs().startOf('year').format('YYYY-MM-DD');
+
+  maxDate = dayjs(Date.now());
+
+  @tracked endDate = dayjs(Date.now()).format('YYYY-MM-DD');
+
+  dateRange = [moment().startOf('year'), moment()];
+
 
   // Actions
   async drawChart(element) {
@@ -142,6 +152,14 @@ export default class ChartsClientUploadsComponent extends Component {
     }
   }
 
+  @action
+  updateDateRange(dateRange) {
+    this.startDate = dayjs(dateRange[0]).format('YYYY-MM-DD');
+    this.endDate = dayjs(dateRange[1]).format('YYYY-MM-DD');
+    this.isRedrawChart = true;
+    this.loadChart.perform();
+  }
+
   // Functions
 
   /**
@@ -161,10 +179,16 @@ export default class ChartsClientUploadsComponent extends Component {
    * Method to load chart data and inject chart into the DOM
    */
   @task(function* (element) {
-    // TODO check hard coded number
-    const url = `${this.me.partner.id}${this.args.clientId ? '/clients/'+this.args.clientId : ''}/${ENV.endpoints.partnerOverallScansCount}?timelines=${this.currentTimeline.key}`;
+    const filter = {
+      timelines: this.currentTimeline.key,
+      start_date: this.startDate,
+      end_date: this.endDate
+    }
+    const url = `${this.me.partner.id}${this.args.clientId ? '/clients/'+this.args.clientId : ''}/${ENV.endpoints.partnerOverallScansCount}`;
     const rawChartData = yield this.ajax.request(url, {
-      namespace: 'api/v2/partner'
+      namespace: 'api/v2/partner',
+      type: 'GET',
+      data: filter
     });
     yield this.parseChart.perform(rawChartData);
     if (!this.isRedrawChart) {
@@ -179,8 +203,9 @@ export default class ChartsClientUploadsComponent extends Component {
     const chartData = rawData.statistics[this.currentTimeline.key];
     const xAxisData = ['x'];
     const yAxisData = ['y'];
+    console.log('chartData', chartData)
     chartData.map((data) => {
-      xAxisData.push(data.date);
+      xAxisData.push(data.start_date);
       yAxisData.push(data.count)
     })
     this.chartData = yield [xAxisData, yAxisData];

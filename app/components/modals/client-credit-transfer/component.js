@@ -29,10 +29,10 @@ export default class ModalsClientCreditTransfer extends Component {
     return parseInt(this.availableCredits) - (parseInt(this.transferCount) || 0);
   }
 
-  @computed('availableCredits', 'transferCount')
+  @computed('availableCredits', 'transferCount', 'balCredits')
   get isValidNumber() {
     const transferCount = Number(this.transferCount);
-    return transferCount ? transferCount > 0 && Number.isInteger(transferCount) : false;
+    return transferCount ? transferCount > 0 && Number.isInteger(transferCount) && this.balCredits >= 0 : false;
   }
 
   @task(function* () {

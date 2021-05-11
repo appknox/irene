@@ -24,6 +24,8 @@ export default class PartnerClientComponent extends Component {
 
   @tracked isShowMemberListModal = false;
 
+  @tracked partnerCreditStats = {};
+
   @computed('members.meta.count')
   get totalMembers() {
     return this.members.meta ? this.members.meta.count : 0;
@@ -39,6 +41,7 @@ export default class PartnerClientComponent extends Component {
   @action
   initializeComp() {
     this.fetchMembers.perform();
+    this.fetchPartnerCredits.perform();
   }
 
   @action
@@ -65,4 +68,8 @@ export default class PartnerClientComponent extends Component {
       offset: 0
     })
   }) fetchMembers;
+
+  @task(function* () {
+    this.partnerCreditStats = yield this.store.queryRecord('credits/partner-credits-stat', {});
+  }) fetchPartnerCredits;
 }
