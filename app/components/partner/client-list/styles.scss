@@ -5,21 +5,30 @@
   border-color: darken(#F3F5F8, 5%);
   border-bottom-left-radius: 0.3rem;
   border-bottom-right-radius: 0.3rem;
-  padding: 1rem 1rem 0.5rem 1rem;
+  padding: 1.2rem 1.2rem 0.6rem 1.2rem;
 }
 
 .client-items {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  column-gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(23rem, 1fr));
+  column-gap: 0.7rem;
+  row-gap: 0.7rem;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
-.no-data,
-.loading {
-  height: 15rem;
+.no-data {
+  height: 16rem;
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
+}
+
+.loading {
+  height: 16rem;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
   justify-content: center;
 }

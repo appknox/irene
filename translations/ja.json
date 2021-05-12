@@ -802,9 +802,9 @@
   "validity": "Validity",
   "paymentPlan": "Payment Plan",
   "noClients": "No Clients",
-  "noUpload": "No upload yet",
+  "noUpload": "No uploads yet",
   "available": "available",
   "remaining": "remaining",
-  "invalidPayment": "Invalid Payment",
+  "invalidPayment": "Invalid payment",
   "noName": "No Name"
 }
