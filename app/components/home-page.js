@@ -69,6 +69,10 @@ export default Component.extend({
     }
   ),
 
+  showPartnerDashboard: computed('me.org.{is_owner,is_admin}', 'organization.selected.features.partner_dashboard', function () {
+    return (this.get('me.org.is_owner') || this.get('me.org.is_admin')) && this.get('organization.selected.features.partner_dashboard');
+  }),
+
   /**
    * @property {Boolean} isShowAnalytics
    * Property to disable analytics page for member role

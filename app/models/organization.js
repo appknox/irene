@@ -1,6 +1,10 @@
 import DS from 'ember-data';
-import { computed } from '@ember/object';
-import { not } from '@ember/object/computed';
+import {
+  computed
+} from '@ember/object';
+import {
+  not
+} from '@ember/object/computed';
 
 const Organization = DS.Model.extend({
   name: DS.attr('string'),
@@ -17,7 +21,7 @@ const Organization = DS.Model.extend({
   projectsCount: DS.attr('number'),
   namespacesCount: DS.attr('number'),
   teamsCount: DS.attr('number'),
-  membersCount: computed.reads('members.meta.count'),
+  membersCount: computed.reads('members.meta.count')
 });
 
 export default Organization;

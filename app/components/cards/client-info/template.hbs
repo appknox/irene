@@ -1,0 +1,62 @@
+<div local-class="client-info-card {{@client.type}}">
+  <a href="#" local-class="client-info-header">
+    <span local-class="thumbnail">
+      {{fa-icon "users"}}
+    </span>
+    <div local-class="title {{if this.isEmptyTitle 'empty-title'}}">
+      {{#if this.isEmptyTitle}}
+        {{t 'noName'}}
+      {{else}}
+        {{@client.name}}
+      {{/if}}
+    </div>
+  </a>
+  <div local-class="client-info-body">
+    <div local-class="client-metrics">
+      <div local-class="users metric">
+        <span>{{@client.usersCount}}</span>
+        <span>{{t 'pluralUsers' itemCount=@client.usersCount}}</span>
+      </div>
+      <div local-class="uploads metric">
+        <span>{{@client.fileUploadsCount}}</span>
+        <span>{{t 'pluralUploads' itemCount=@client.fileUploadsCount}}</span>
+      </div>
+      <div local-class="projects metric">
+        <span>{{@client.projectsCount}}</span>
+        <span>{{t 'pluralProjects' itemCount=@client.projectsCount}}</span>
+      </div>
+    </div>
+    <div local-class="client-activities">
+      <div local-class="last-upload activity">
+        <span local-class="label">{{t 'lastUpload'}}</span>
+        <span>
+          {{#if @client.lastUploadedOn}}
+            {{dayjs-from-now @client.lastUploadedOn}}
+          {{else}}
+            {{t 'noUpload'}}
+          {{/if}}
+        </span>
+      </div>
+
+      <div local-class="payment activity">
+        <span local-class="label">{{t 'paymentPlan'}}</span>
+        <div local-class="credit-info">
+          <span local-class="type {{if @client.isPerScan 'per-scan' 'per-app'}}">
+            {{t (if  @client.isPerScan 'perScan' 'perApp')}}
+          </span>
+          <span local-class="remaining">
+            {{#if @client.invalidPayment}}
+              {{t 'invalidPayment'}}
+            {{else}}
+              <span local-class="data">
+                {{@client.creditsLeft}}
+                {{t (if  @client.isPerScan 'pluralScans' 'pluralApps') itemCount=@client.creditsLeft}}
+                {{t 'remaining'}}</span>
+            {{/if}}
+
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

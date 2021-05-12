@@ -1,0 +1,47 @@
+.partner-dashboard {
+  box-sizing: border-box;
+
+  .client-groups {
+    margin-top: 2rem;
+    position: relative;
+
+    .group-header {
+      height: 3.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid darken(#F3F5F8, 5%);
+      border-radius: 0.3rem;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+
+      .tabs {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        height: inherit;
+      }
+
+      .client-group {
+        text-transform: uppercase;
+        color: #adaeb3;
+        padding: 0 2.3rem;
+        text-align: center;
+        font-weight: 600;
+        cursor: pointer;
+        height: inherit;
+        line-height: 3.8rem;
+
+        &.active,
+        &:hover {
+          color: $primary-color;
+          // TODO need to enable after added multiple items
+          // background-color: #f6f7f9;
+          // border-top: 3px solid $primary-color;
+        }
+      }
+    }
+  }
+
+}

@@ -1,0 +1,25 @@
+.client-list-container {
+  background-color: #f6f7f9;
+  border-width: 0 1px 1px 1px;
+  border-style: solid;
+  border-color: darken(#F3F5F8, 5%);
+  border-bottom-left-radius: 0.3rem;
+  border-bottom-right-radius: 0.3rem;
+  padding: 1rem 1rem 0.5rem 1rem;
+}
+
+.client-items {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 1rem;
+  justify-content: center;
+}
+
+.no-data,
+.loading {
+  height: 15rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

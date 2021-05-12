@@ -1,0 +1,13 @@
+<div local-class="partner-dashboard">
+  <div local-class="client-groups">
+    <div local-class="group-header">
+      <div local-class="tabs">
+        {{#each this.clientGroups as |clientGroup|}}
+          <LinkTo @route={{clientGroup.link}} local-class="client-group {{if clientGroup.active 'active'}}">
+            {{clientGroup.label}}
+          </LinkTo>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</div>
