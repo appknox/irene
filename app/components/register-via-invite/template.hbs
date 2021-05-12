@@ -10,9 +10,24 @@
   {{#if this.initialData.email}}
     <div class="input-wrap">
       <div class="label-error">
-        <label>Official Email</label>
+        <label>Email</label>
       </div>
       <Input placeholder="Email" readonly="readonly" disabled="disabled" @value={{this.initialData.email}} class="input-field"/>
+    </div>
+    <div class="input-wrap">
+      <div class="label-error">
+        <label>Company Name</label>
+      </div>
+      <Input placeholder="Company Name" @value={{this.changeset.company}} class="input-field"/>
+    </div>
+    <div class="input-wrap">
+      <div class="label-error">
+        <label>{{t "name"}}</label>
+      </div>
+      <div class="half-wrap">
+        <Input placeholder="First Name" @value={{this.changeset.first_name}} autocomplete="fname" autofocus="autofocus" class="input-field" />
+        <Input placeholder="Last Name" @value={{this.changeset.last_name}} autocomplete="lname" class="input-field"/>
+      </div>
     </div>
     <div class="input-wrap {{if this.changeset.error.username 'has-error'}}">
       <div class="label-error">

@@ -13,12 +13,14 @@ export default class RegisterViaInvite extends Component {
   @service ajax;
   @tracked toBeSubmittedData = {};
   @tracked initialData = {};
-  inviteEndpoint = 'registration-via-invite'
+  inviteEndpoint = 'registration-via-invite';
 
   constructor () {
     super(...arguments)
     this.changeset = new Changeset(
-      this.toBeSubmittedData, lookupValidator(InviteOnlyRegisterValidation), InviteOnlyRegisterValidation
+      this.toBeSubmittedData, lookupValidator(InviteOnlyRegisterValidation),
+      InviteOnlyRegisterValidation,
+      { skipValidate: true }
     );
   }
 
@@ -28,6 +30,9 @@ export default class RegisterViaInvite extends Component {
       namespace: ENV.namespace_v2
     })
     this.initialData = data;
+    this.changeset.set("company", data.company);
+    this.changeset.set("first_name", data.first_name);
+    this.changeset.set("last_name", data.last_name);
     return data;
   })
   loadTokenData
@@ -54,6 +59,9 @@ export default class RegisterViaInvite extends Component {
     if (changeset.get('isValid')) {
       const username = changeset.get('username');
       const password = changeset.get('password');
+      const company = changeset.get('company');
+      const first_name = changeset.get('first_name');
+      const last_name = changeset.get('last_name');
       const passwordConfirmation = changeset.get('passwordConfirmation');
       const termsAccepted = changeset.get('termsAccepted');
       const token = this.args.token;
@@ -62,6 +70,9 @@ export default class RegisterViaInvite extends Component {
         'username': username,
         'password': password,
         'confirm_password': passwordConfirmation,
+        'company': company,
+        'first_name': first_name,
+        'last_name': last_name,
         'terms_accepted': termsAccepted
       });
     }
