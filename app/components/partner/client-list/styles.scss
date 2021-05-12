@@ -10,11 +10,20 @@
 
 .client-items {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(23rem, 1fr));
+  grid-template-columns: repeat(1, 1fr);
   column-gap: 0.7rem;
   row-gap: 0.7rem;
   justify-content: center;
   flex-wrap: wrap;
+  @media (min-width: 912px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 1300px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (min-width: 2800px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .no-data {
