@@ -65,6 +65,14 @@ if isLoaded
                   div
                     = fa-icon "tag" class="sidebar-icons"
                     = t "billing"
+            if showPartnerDashboard
+              li
+                = link-to 'authenticated.partner.clients' class="mp-auth-clients"
+                  div
+                    = fa-icon "sitemap" class="sidebar-icons"
+                    = t "clients"
+                    sup.margin-left.primary-color
+                      | beta
 
           .status-updates
             = submission-list

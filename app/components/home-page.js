@@ -69,6 +69,8 @@ export default Component.extend({
     }
   ),
 
+  showPartnerDashboard: computed.reads('me.org.can_access_partner_dashboard'),
+
   /**
    * @property {Boolean} isShowAnalytics
    * Property to disable analytics page for member role

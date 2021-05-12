@@ -1,0 +1,34 @@
+.client-list-container {
+  background-color: #f6f7f9;
+  border-width: 0 1px 1px 1px;
+  border-style: solid;
+  border-color: darken(#F3F5F8, 5%);
+  border-bottom-left-radius: 0.3rem;
+  border-bottom-right-radius: 0.3rem;
+  padding: 1.2rem 1.2rem 0.6rem 1.2rem;
+}
+
+.client-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(23rem, 1fr));
+  column-gap: 0.7rem;
+  row-gap: 0.7rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.no-data {
+  height: 16rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading {
+  height: 16rem;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}

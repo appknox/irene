@@ -241,8 +241,8 @@ export const PaginationMixin = superclass => class extends superclass {
 
   @action
   gotoPage(offset) {
+    this.isLoading = true;
     this.setOffset(offset);
-    console.log('set offset', offset)
   }
 
   @action
@@ -296,7 +296,6 @@ export const PaginationMixin = superclass => class extends superclass {
     const objects = this.store.query(targetModel, query); // eslint-disable-line
     objects.then((result) => {
       const meta = result.meta;
-      console.log('result', result)
       if (result.links && result.meta.pagination) {
         meta.total = result.meta.pagination.count;
         this.isJsonApiPagination = true; // eslint-disable-line
@@ -309,6 +308,7 @@ export const PaginationMixin = superclass => class extends superclass {
         */
         this.isDRFPagination = true; // eslint-disable-line
       }
+      this.isLoading = false; // eslint-disable-line
       return this.meta = meta; // eslint-disable-line
     })
     return objects;
@@ -319,6 +319,8 @@ export const PaginationMixin = superclass => class extends superclass {
   @gt('objectCount', 0) hasObjects;
 
   @equal('meta.count', 0) hasNoObject;
+
+  @alias('meta.total') totalCount;
 
   @computed('meta.total', 'limit')
   get maxOffset() {
