@@ -5,10 +5,10 @@ import {
 
 export default class AuthenticatedPartnerClientsRoute extends Route {
 
-  @service organization;
+  @service me;
   beforeModel() {
     // Redirect to projects
-    if (!this.get('organization.selected.features.partner_dashboard')) {
+    if (!this.get('me.org.can_access_partner_dashboard')) {
       this.transitionTo('authenticated.projects');
     }
   }
