@@ -1,5 +1,5 @@
 <div local-class="client-info-card {{@client.type}}">
-  <a href="#" local-class="client-info-header">
+  <LinkTo @route="authenticated.client" @model={{@client.id}} local-class="client-info-header">
     <span local-class="thumbnail">
       {{fa-icon "users"}}
     </span>
@@ -10,7 +10,7 @@
         {{@client.name}}
       {{/if}}
     </div>
-  </a>
+  </LinkTo>
   <div local-class="client-info-body">
     <div local-class="client-metrics">
       <div local-class="users metric">
