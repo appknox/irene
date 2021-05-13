@@ -8,6 +8,10 @@ import {
   reads,
   equal
 } from '@ember/object/computed';
+import {
+  isEmpty
+} from '@ember/utils';
+
 
 export default class ClientModel extends Model {
 
@@ -23,9 +27,15 @@ export default class ClientModel extends Model {
   @attr('number') projectsCount
   @equal('isPerScan', false) isPerApp;
   @reads('name') company;
+  @attr('string') ownerEmail;
 
   @computed('creditsLeft', 'isPerScan')
   get invalidPayment() {
     return this.creditsLeft === null && !this.isPerScan;
+  }
+
+  @computed('name')
+  get isEmptyTitle() {
+    return isEmpty(this.name);
   }
 }

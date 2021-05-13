@@ -1,0 +1,16 @@
+{{page-title "Client Details"}}
+<div class="padding-h-1">
+  <LinkTo @route="authenticated.partner.clients">Clients</LinkTo> /
+  {{#if this.model.isEmptyTitle}}
+    <i>{{t 'noName'}}</i>
+  {{else}}
+    {{this.model.name}}
+  {{/if}}
+</div>
+{{#if this.isError}}
+  eror
+{{/if}}
+
+<Partner::ClientDetails @client={{this.model}}></Partner::ClientDetails>
+
+{{outlet}}

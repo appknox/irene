@@ -806,5 +806,6 @@
   "available": "available",
   "remaining": "remaining",
   "invalidPayment": "Invalid payment",
-  "noName": "No Name"
+  "noName": "No Name",
+  "organizationOwner": "Organization Owner"
 }

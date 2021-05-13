@@ -1,0 +1,34 @@
+<div local-class="overview">
+  <h3 local-class="overview-title">
+    {{#if @client.isEmptyTitle}}
+      <i>{{t 'noName'}}</i>
+    {{else}}
+      {{@client.name}}
+    {{/if}}
+  </h3>
+  <div local-class="overview-plan">
+    {{t 'paymentPlan'}}:
+    {{#if @client.isPerScan}}
+      <span local-class="type per-scan">{{t 'perScan'}}</span>
+      ({{@client.creditsLeft}} {{t 'pluralScans' itemCount=@client.creditsLeft}}
+      {{t 'remaining'}})
+    {{else}}
+      <span local-class="type per-app">{{t 'perApp'}}</span>
+      {{#if @client.invalidPayment}}
+        {{t 'invalidPayment'}}
+      {{else}}
+        ({{@client.creditsLeft}} {{t 'pluralApps' itemCount=@client.creditsLeft}})
+      {{/if}}
+    {{/if}}
+  </div>
+  <div local-class="overview-owner">{{t 'organizationOwner'}}: {{@client.ownerEmail}}</div>
+  <div local-class="overview-status-container">
+    <div local-class="overview-status">{{@client.usersCount}} {{t 'pluralUsers' itemCount=@client.usersCount}}</div>
+    <div local-class="overview-status">{{@client.projectsCount}} {{t 'pluralProjects' itemCount=@client.projectsCount}}
+    </div>
+    <div local-class="overview-status">{{@client.fileUploadsCount}}
+      {{t 'pluralUploads' itemCount=@client.fileUploadsCount}}</div>
+  </div>
+</div>
+
+<Partner::ClientUploadsList @clientId={{@client.id}}></Partner::ClientUploadsList>
