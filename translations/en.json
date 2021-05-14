@@ -44,7 +44,8 @@
   "apiKey": "API Key",
   "apiScan": "API Scan",
   "apiURLFilter": "API URL Filter",
-  "app": "app(s)",
+  "app": "app",
+  "appOrS": "app(s)",
   "appiumFileUploadedSuccessfully": "File Uploaded Successfully",
   "appiumScheduledAutomation": "Scheduled<br>Automation",
   "appiumScheduledAutomationSuccessOn": "Scheduled dynamic scan automation turned ON",
@@ -800,12 +801,13 @@
   "pluralUsers": "{itemCount, plural, =0 {Users} one {User} other {Users} }",
   "pluralProjects": "{itemCount, plural, =0 {Projects} one {Project} other {Projects} }",
   "validity": "Validity",
-  "paymentPlan": "Payment Plan",
-  "noClients": "No Clients",
-  "noUpload": "No uploads yet",
+  "paymentPlan": "Payment plan",
+  "noClients": "No clients",
+  "noUploads": "No uploads",
+  "noClientUploads": "This client has not uploaded any apps",
   "available": "available",
   "remaining": "remaining",
   "invalidPayment": "Invalid payment",
   "noName": "No Name",
-  "organizationOwner": "Organization Owner"
+  "organizationOwner": "Organization owner"
 }

@@ -1,10 +1,15 @@
-<div local-class="clent-uploads-container">
-  <h5 local-class="title">{{t 'allUploads'}} ({{this.totalCount}})</h5>
+<div local-class="client-uploads-container">
+  <div class="vertical-align-center">
+    <h5 local-class="title">{{t 'allUploads'}}</h5>
+    <div class="badge-square is-default margin-l-1">{{this.totalCount}}</div>
+  </div>
+
   <div local-class="table">
     <div local-class="header">
       <div>{{t 'app'}}</div>
       <div>{{t 'platform'}}</div>
       <div>{{t 'version'}}</div>
+      <div>{{t 'versionCode'}}</div>
       <div>{{t 'uploaded'}}</div>
     </div>
     <div local-class="body">
@@ -13,25 +18,27 @@
           <div local-class="app">
             <div local-class="app-icon" style={{upload.iconHtmlUrl}}></div>
             <div local-class="app-info">
-              <span local-class="app-name">{{upload.name}}</span>
+              <span local-class="app-name" class="black-text">{{upload.name}}</span>
               <span local-class="app-package">{{upload.project.package_name}}</span>
             </div>
           </div>
-          <div local-class="platform">
+          <div local-class="platform platform-{{upload.platformIcon}}">
             {{fa-icon upload.platformIcon}}
           </div>
           <div local-class="version">
-            <span>{{t 'version'}}: {{upload.version}}</span>
-            <span>{{t 'versionCode'}}: {{upload.versionCode}}</span>
+            <span>{{upload.version}}</span>
           </div>
-          <div local-class="uploaded">{{dayjs-from-now upload.createdOn}}</div>
+          <div local-class="version">
+            <span>{{upload.versionCode}}</span>
+          </div>
+          <div local-class="uploaded" class="text-lightgray">{{dayjs-from-now upload.createdOn}}</div>
         </div>
       {{else if this.isLoading}}
         <div local-class="center-msg">
           <ThreeBounceSpinner></ThreeBounceSpinner>
         </div>
       {{else}}
-        <div local-class="center-msg">{{t 'noUpload'}}</div>
+        <div local-class="center-msg">{{t 'noClientUploads'}}</div>
       {{/each}}
     </div>
     {{#if (or this.hasPrevious this.hasNext)}}
@@ -40,5 +47,4 @@
       </div>
     {{/if}}
   </div>
-
 </div>

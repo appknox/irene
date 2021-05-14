@@ -7,24 +7,17 @@
   padding-bottom: 4rem;
 }
 
+.overview-title {
+  color: #3b3f49;
+}
+
 .overview-plan {
   padding-bottom: 0.5rem;
 
   .type {
-    border-radius: 0.3rem;
-    padding: 0.35rem 1.2rem;
-    color: $white;
     text-transform: capitalize;
     line-height: 1.5;
     font-weight: bold;
-
-    &.per-scan {
-      background-color: #0362b1;
-    }
-
-    &.per-app {
-      background-color: #66bb6a;
-    }
   }
 }
 
@@ -37,7 +30,18 @@
 }
 
 .overview-status {
-  background-color: #F3F5F8;
-  padding: 0.2rem 0.5rem;
   margin: 0 0.5rem;
+  border: 1px solid #edf0f4;
+  background: #f3f5f8;
+  padding: 0.3rem 0.8em;
+  border-radius: 0.2em;
+}
+
+.status-count {
+  font-weight: bold;
+  padding-right: 0.2rem;
+}
+
+.payment-invalid {
+  color: #FE4D3F;
 }
