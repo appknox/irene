@@ -41,7 +41,7 @@ export default class CardsClientInfoComponent extends Component {
     this.isShowCreditAllocationModal = false;
     // Refresh model with new credit bal
     this.store.queryRecord('credits/partner-credits-stat', {})
-    this.store.find('client', this.args.client.id);
+    this.store.find('partnerclient', this.args.client.id);
   }
 
   @task(function* () {

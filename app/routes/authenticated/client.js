@@ -19,7 +19,7 @@ export default class AuthenticatedClientRoute extends Route {
   }
 
   model(data) {
-    return this.store.find('client', data.id)
+    return this.store.find('partnerclient', data.id)
   }
 
   @action

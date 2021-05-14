@@ -13,9 +13,7 @@ import {
 } from '@ember/utils';
 
 
-export default class ClientModel extends Model {
-
-
+export default class PartnerclientModel extends Model {
   @attr('boolean') isTrail;
   @attr('date') lastUploadedOn;
   @attr('string') logo;
@@ -23,7 +21,7 @@ export default class ClientModel extends Model {
   @attr('number') creditsLeft;
   @attr('boolean') isPerScan;
   @attr('number') usersCount;
-  @attr('number') fileUploadsCount;
+  @attr('number') filesCount;
   @attr('number') projectsCount
   @equal('isPerScan', false) isPerApp;
   @reads('name') company;
