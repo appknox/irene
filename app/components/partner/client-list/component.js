@@ -21,7 +21,7 @@ export default class PartnerClientListComponent extends PaginationMixin(Componen
   @service store;
 
   // Properties
-  targetModel = 'client';
+  targetModel = 'partnerclient';
 
   @tracked clientList = [];
 

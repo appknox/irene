@@ -8,7 +8,7 @@ import {
   htmlSafe
 } from '@ember/template';
 
-export default class ClientUploadModel extends Model {
+export default class PartnerclientFileModel extends Model {
 
   @attr('string') name;
   @attr('date') createdOn;
@@ -19,7 +19,7 @@ export default class ClientUploadModel extends Model {
 
   @computed('project.platform')
   get platformIcon() {
-    return this.project.platform === 'Android' ? 'android' : 'apple';
+    return this.project.platform === "iOS" ? 'apple' : 'android';
   }
 
   @computed('iconUrl')
