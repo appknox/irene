@@ -13,7 +13,7 @@ const PricingPlanComponent = Component.extend({
   planQuantity: 1,
   intl: service(),
 
-  tApp: t("app"),
+  tApp: t("appOrS"),
   tScan: t("scan"),
 
   planText: computed('plan.planId', 'tApp', 'tScan', function() {

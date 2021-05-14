@@ -10,24 +10,30 @@
     {{t 'paymentPlan'}}:
     {{#if @client.isPerScan}}
       <span local-class="type per-scan">{{t 'perScan'}}</span>
-      ({{@client.creditsLeft}} {{t 'pluralScans' itemCount=@client.creditsLeft}}
-      {{t 'remaining'}})
+      ({{@client.creditsLeft}} {{t 'pluralScans' itemCount=@client.creditsLeft}} {{t 'remaining'}})
     {{else}}
       <span local-class="type per-app">{{t 'perApp'}}</span>
       {{#if @client.invalidPayment}}
-        {{t 'invalidPayment'}}
+        <span local-class="payment-invalid">{{t 'invalidPayment'}}</span>
       {{else}}
         ({{@client.creditsLeft}} {{t 'pluralApps' itemCount=@client.creditsLeft}})
       {{/if}}
     {{/if}}
   </div>
-  <div local-class="overview-owner">{{t 'organizationOwner'}}: {{@client.ownerEmail}}</div>
+  <div local-class="overview-owner">{{t 'organizationOwner'}}: <span class="black-text">{{@client.ownerEmail}}</span></div>
   <div local-class="overview-status-container">
-    <div local-class="overview-status">{{@client.usersCount}} {{t 'pluralUsers' itemCount=@client.usersCount}}</div>
-    <div local-class="overview-status">{{@client.projectsCount}} {{t 'pluralProjects' itemCount=@client.projectsCount}}
+    <div local-class="overview-status">
+      <span local-class="status-count">{{@client.usersCount}}</span>
+      <span local-class="status-label">{{t 'pluralUsers' itemCount=@client.usersCount}}</span>
     </div>
-    <div local-class="overview-status">{{@client.fileUploadsCount}}
-      {{t 'pluralUploads' itemCount=@client.fileUploadsCount}}</div>
+    <div local-class="overview-status">
+      <span local-class="status-count">{{@client.projectsCount}}</span>
+      <span local-class="status-label">{{t 'pluralProjects' itemCount=@client.projectsCount}}</span>
+    </div>
+    <div local-class="overview-status">
+      <span local-class="status-count">{{@client.filesCount}}</span>
+      <span local-class="status-label">{{t 'pluralUploads' itemCount=@client.filesCount}}</span>
+    </div>
   </div>
 </div>
 

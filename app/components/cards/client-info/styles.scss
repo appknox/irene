@@ -157,7 +157,7 @@ $card-padding: 1rem;
               }
             }
 
-            .remaining {
+            .payment-status {
               grid-column-start: 1;
               grid-column-end: 3;
 
@@ -165,6 +165,10 @@ $card-padding: 1rem;
                 color: #000;
                 text-transform: lowercase;
               }
+            }
+
+            .payment-status {
+              color: #FE4D3F;
             }
           }
         }

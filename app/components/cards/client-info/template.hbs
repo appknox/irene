@@ -18,8 +18,8 @@
         <span local-class="metric-label">{{t 'pluralUsers' itemCount=@client.usersCount}}</span>
       </div>
       <div local-class="uploads metric">
-        <span local-class="metric-value">{{@client.fileUploadsCount}}</span>
-        <span local-class="metric-label">{{t 'pluralUploads' itemCount=@client.fileUploadsCount}}</span>
+        <span local-class="metric-value">{{@client.filesCount}}</span>
+        <span local-class="metric-label">{{t 'pluralUploads' itemCount=@client.filesCount}}</span>
       </div>
       <div local-class="projects metric">
         <span local-class="metric-value">{{@client.projectsCount}}</span>
@@ -33,7 +33,7 @@
           {{#if @client.lastUploadedOn}}
             {{dayjs-from-now @client.lastUploadedOn}}
           {{else}}
-            {{t 'noUpload'}}
+            {{t 'noUploads'}}
           {{/if}}
         </span>
       </div>
@@ -44,9 +44,9 @@
           <span local-class="type {{if @client.isPerScan 'per-scan' 'per-app'}}">
             {{t (if  @client.isPerScan 'perScan' 'perApp')}}
           </span>
-          <span local-class="remaining">
+          <span local-class="payment-status">
             {{#if @client.invalidPayment}}
-              {{t 'invalidPayment'}}
+              <span local-class="payment-invalid">{{t 'invalidPayment'}}</span>
             {{else}}
               <span local-class="data">
                 <strong>

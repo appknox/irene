@@ -1,34 +1,42 @@
-.clent-uploads-container {
-  padding: 1rem 1rem 0.5rem 1rem;
+.client-uploads-container {
+
+  .title {
+    margin-bottom: 0;
+    font-size: 1rem;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .upload-count {
+    background: #333;
+    color: white;
+    margin-left: 1rem;
+    padding: 0.3rem;
+    border-radius: 0.3rem;
+  }
 
   .table {
-    background-color: #f6f7f9;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #e3e8ef;
+    border: 1px solid #f0f1f3;
     border-radius: 0.3rem;
+    margin-top: 0.7rem;
 
     .header {
       display: grid;
-      grid-template-columns: 1fr 10% 20% 20%;
-      height: 4rem;
+      grid-template-columns: 1fr 10% 11% 13% 16%;
       align-items: center;
-      padding: 0 0.5rem;
+      padding: 1rem;
       text-transform: capitalize;
+      background-color: #f6f7f9;
     }
 
     .body {
       .row {
         display: grid;
-        grid-template-columns: 1fr 10% 20% 20%;
+        grid-template-columns: 1fr 10% 11% 13% 16%;
         justify-content: left;
         align-items: center;
-        height: 4rem;
-
-        padding: 0 0.5rem;
-        border-top: 1px solid #e3e8ef;
-        border-left: none;
-        border-right: none;
+        padding: 0.6rem;
+        border-top: 1px solid #f0f1f3;
 
         .app {
           display: grid;
@@ -43,7 +51,7 @@
             background-position: center center;
             background-repeat: no-repeat;
             border-radius: 0.3rem;
-            border: 1px solid;
+            background-color: #f6f7f9;
           }
 
           .app-info {
@@ -58,6 +66,7 @@
 
         .platform {
           padding-left: 1.5em;
+          color: #7f8084;
         }
 
         .version {
@@ -71,10 +80,16 @@
         display: grid;
         justify-content: center;
         align-items: center;
-        height: 4rem;
-        border-top: 1px solid #e3e8ef;
+        height: 16rem;
+        border-top: 1px solid #f0f1f3;
+        background-color: lighten(#f6f7f9, 4%);
       }
     }
+  }
+
+  .pagination {
+    border-top: 1px solid #f0f1f3;
+    padding: 0.75rem 0.6rem 0;
   }
 
 }
