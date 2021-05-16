@@ -24,7 +24,7 @@ export default class CardsClientInfoComponent extends Component {
   @service store;
 
 
-  @tracked isShowCreditAllocationModal = false;
+  @tracked showCreditTransferModal = false;
 
   @computed('args.client.name')
   get isEmptyTitle() {
@@ -32,16 +32,8 @@ export default class CardsClientInfoComponent extends Component {
   }
 
   @action
-  onAddCredits() {
-    this.isShowCreditAllocationModal = true;
-  }
-
-  @action
-  onCloseModal() {
-    this.isShowCreditAllocationModal = false;
-    // Refresh model with new credit bal
-    this.store.queryRecord('credits/partner-credits-stat', {})
-    this.store.find('partnerclient', this.args.client.id);
+  toggleCreditTransferModal() {
+    this.showCreditTransferModal = !this.showCreditTransferModal;
   }
 
   @task(function* () {

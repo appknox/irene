@@ -1,9 +1,9 @@
-<div local-class="partner-client-list">
+<div local-class="partner-client-list" class="padding-h-1 padding-b-2" {{did-insert this.initializeComp}}>
   <div local-class="client-list-container">
     {{#if this.clientList}}
       <div local-class="client-items">
         {{#each this.clientList as |client|}}
-          <Cards::ClientInfo @client={{client}}>
+          <Cards::ClientInfo @client={{client}} @partnerCreditStat={{this.partnerCreditStat}}>
           </Cards::ClientInfo>
         {{/each}}
       </div>

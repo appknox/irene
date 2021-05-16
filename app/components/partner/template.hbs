@@ -1,4 +1,22 @@
 <div local-class="partner-dashboard" class="padding-h-1 padding-t-1">
+  <div local-class="credits-left" {{did-insert this.initializeComp}}>
+    <div local-class="header">{{t "availableCredits"}}</div>
+    <div local-class="credits-status">
+      {{#if this.creditsStats.isPerScan}}
+        <div local-class="sharable-credits">
+          <div>{{this.creditsStats.creditsLeft}}</div>
+          <div>{{t 'pluralScans' itemCount=this.creditsStats.creditsLeft}}</div>
+        </div>
+        {{#if (eq this.creditsStats.creditsLeft 0)}}
+          <div local-class="add-purchase" class="margin-top20">{{t 'creditAddPurchase'}}</div>
+        {{/if}}
+      {{else}}
+        <div local-class="non-sharable-credits">
+          {{t 'creditTransferNotSupported'}}
+        </div>
+      {{/if}}
+    </div>
+  </div>
   <div local-class="client-groups">
     <div local-class="group-header">
       <div local-class="tabs">

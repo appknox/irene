@@ -9,5 +9,5 @@ export default DS.Model.extend({
   is_member: computed('is_admin', 'is_owner', function () {
     return !this.get('is_admin') && !this.get('is_owner');
   }),
-  can_access_partner_dashboard: DS.attr('boolean')
+  can_access_partner_dashboard: true
 });

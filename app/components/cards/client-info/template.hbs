@@ -44,6 +44,34 @@
           <span local-class="type {{if @client.isPerScan 'per-scan' 'per-app'}}">
             {{t (if  @client.isPerScan 'perScan' 'perApp')}}
           </span>
+          {{#if @partnerCreditStat.isPerScan}}
+            {{#if @client.isPerScan}}
+              {{#if (eq @partnerCreditStat.creditsLeft 0)}}
+                <span class="button" local-class="disabled">
+                  {{fa-icon 'plus'}}
+                  <AttachTooltip @placemnet="top-end">
+                    {{t '0sharableCredits'}}
+                  </AttachTooltip>
+                </span>
+              {{else}}
+                <button type="button" {{on "click" (fn this.toggleCreditTransferModal)}}>
+                  {{fa-icon 'plus'}}
+
+                  <AttachTooltip @placemnet="top-end">
+                    {{t 'transferCredits'}}
+                  </AttachTooltip>
+                </button>
+              {{/if}}
+
+            {{else}}
+              <span class="button" local-class="disabled">
+                {{fa-icon 'plus'}}
+                <AttachTooltip @placemnet="top-end">
+                  {{t 'perAppClientCredit'}}
+                </AttachTooltip>
+              </span>
+            {{/if}}
+          {{/if}}
           <span local-class="payment-status">
             {{#if @client.invalidPayment}}
               <span local-class="payment-invalid">{{t 'invalidPayment'}}</span>
@@ -65,3 +93,10 @@
     </div>
   </div>
 </div>
+
+{{#if this.showCreditTransferModal}}
+  <AkModal @onClose={{this.toggleCreditTransferModal}} @showHeader={{true}} @headerTitle={{t 'creditTransfer'}}>
+    <Modals::ClientCreditTransfer @client={{@client}} @onClose={{this.toggleCreditTransferModal}}>
+    </Modals::ClientCreditTransfer>
+  </AkModal>
+{{/if}}

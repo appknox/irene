@@ -13,12 +13,39 @@
 
 .overview-plan {
   padding-bottom: 0.5rem;
+  text-align: center;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-content: center;
+  column-gap: 0.5rem;
 
   .type {
     text-transform: capitalize;
     line-height: 1.5;
     font-weight: bold;
   }
+
+  .remaining-scan {
+    justify-self: left;
+  }
+
+  .transfer-credit,
+  .contact-support {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    width: max-content;
+    justify-self: center;
+    padding: 0.5rem;
+
+    &.disabled {
+      opacity: 0.5;
+    }
+  }
+}
+
+.credit-not-supported {
+  text-align: center;
+  padding-bottom: 0.5rem;
 }
 
 .overview-owner {
@@ -44,4 +71,42 @@
 
 .payment-invalid {
   color: #FE4D3F;
+}
+
+
+.credits-left {
+  display: grid;
+  justify-content: center;
+  background-color: #F3F5F8;
+  border-radius: 0.3rem;
+  padding: 1rem;
+
+  .header {
+    font-size: 14px;
+    text-align: center;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .available-credits {
+    display: grid;
+    width: 200px;
+    height: 200px;
+    border: 15px solid #9CC3D5FF;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    color: #0063B2FF;
+  }
+
+  .add-credit {
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    column-gap: 8px;
+    justify-self: right;
+  }
 }

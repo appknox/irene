@@ -13,6 +13,12 @@ import {
 import {
   reads
 } from '@ember/object/computed';
+import {
+  action
+} from '@ember/object';
+import {
+  task
+} from 'ember-concurrency';
 
 export default class PartnerClientListComponent extends PaginationMixin(Component) {
 
@@ -28,4 +34,20 @@ export default class PartnerClientListComponent extends PaginationMixin(Componen
   @tracked isLoading = true;
 
   @reads('objects') clientList;
+
+  @tracked partnerCreditStat = {};
+
+  @action
+  initializeComp() {
+    this.fetchPartnerCreditStats.perform();
+  }
+
+  @task(function* () {
+    try {
+      this.partnerCreditStat = yield this.store.queryRecord('partner-credit-stat', {});
+      console.log('partnerCreditStat', this.partnerCreditStat)
+    } catch (e) {
+      this.partnerCreditStat = {};
+    }
+  }) fetchPartnerCreditStats;
 }

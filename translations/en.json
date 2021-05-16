@@ -809,5 +809,14 @@
   "remaining": "remaining",
   "invalidPayment": "Invalid payment",
   "noName": "No Name",
-  "organizationOwner": "Organization owner"
+  "organizationOwner": "Organization Owner",
+  "transferCredits": "Transfer Credits",
+  "scans": "Scans",
+  "0sharableCredits": "0 sharable credits",
+  "perAppClientCredit": "Credits transfer is unavailable for Per App plan clients",
+  "creditTransfer": "Credit Transfer",
+  "availableCredits": "Available Scan Credits",
+  "creditAddPurchase": "Please contact support for purchasing scan credits",
+  "creditTransferNotSupported": "Scan credit sharing is currently not supported in your payment plan (per-app). Please contact support for transferring credits to clients."
+
 }

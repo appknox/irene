@@ -1,4 +1,4 @@
-<div local-class="overview">
+<div local-class="overview" {{did-insert this.initializeComp}}>
   <h3 local-class="overview-title">
     {{#if @client.isEmptyTitle}}
       <i>{{t 'noName'}}</i>
@@ -10,7 +10,8 @@
     {{t 'paymentPlan'}}:
     {{#if @client.isPerScan}}
       <span local-class="type per-scan">{{t 'perScan'}}</span>
-      ({{@client.creditsLeft}} {{t 'pluralScans' itemCount=@client.creditsLeft}} {{t 'remaining'}})
+      <span local-class="remaining-scan">({{@client.creditsLeft}} {{t 'pluralScans' itemCount=@client.creditsLeft}}
+        {{t 'remaining'}})</span>
     {{else}}
       <span local-class="type per-app">{{t 'perApp'}}</span>
       {{#if @client.invalidPayment}}
@@ -19,8 +20,44 @@
         ({{@client.creditsLeft}} {{t 'pluralApps' itemCount=@client.creditsLeft}})
       {{/if}}
     {{/if}}
+
+    {{#if this.partnerCreditStats.isPerScan}}
+      {{#if (and @client.isPerScan this.partnerCreditStats.allowTransfer)}}
+        <button type="button" local-class="transfer-credit" {{on "click" (fn this.toggleCreditTransferModal)}}>
+          {{fa-icon "plus"}} {{t 'transferCredits'}}
+          <AttachTooltip @placemnet="top-end">
+            {{t 'transferCredits'}}
+          </AttachTooltip>
+        </button>
+      {{else}}
+        <div class="button" local-class="transfer-credit disabled">
+          {{fa-icon "plus"}} {{t 'transferCredits'}}
+          <AttachTooltip @placemnet="top-end">
+            {{#if @client.isPerScan}}
+              {{t '0sharableCredits'}}
+            {{else}}
+              {{t 'perAppClientCredit'}}
+            {{/if}}
+          </AttachTooltip>
+        </div>
+        {{#if @client.isPerScan}}
+          <span local-class="contact-support">{{t 'creditAddPurchase'}}</span>
+        {{/if}}
+      {{/if}}
+    {{/if}}
   </div>
-  <div local-class="overview-owner">{{t 'organizationOwner'}}: <span class="black-text">{{@client.ownerEmail}}</span></div>
+
+
+  {{#unless this.partnerCreditStats.isPerScan}}
+    <div local-class='credit-not-supported'>
+      {{t 'creditTransferNotSupported'}}
+    </div>
+  {{/unless}}
+
+
+  <div local-class="overview-owner">
+    {{t 'organizationOwner'}}: <span class="black-text">{{@client.ownerEmail}}</span>
+  </div>
   <div local-class="overview-status-container">
     <div local-class="overview-status">
       <span local-class="status-count">{{@client.usersCount}}</span>
@@ -38,3 +75,10 @@
 </div>
 
 <Partner::ClientUploadsList @clientId={{@client.id}}></Partner::ClientUploadsList>
+
+{{#if this.showCreditTransferModal}}
+  <AkModal @onClose={{this.toggleCreditTransferModal}} @showHeader={{true}} @headerTitle={{t 'creditTransfer'}}>
+    <Modals::ClientCreditTransfer @client={{@client}} @onClose={{this.toggleCreditTransferModal}}>
+    </Modals::ClientCreditTransfer>
+  </AkModal>
+{{/if}}
