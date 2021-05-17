@@ -20,7 +20,6 @@ You will need the following things properly installed on your computer.
 * `git clone git@github.com:appknox/irene.git`
 * `cd irene`
 * `npm install`
-* `bower install`
 * `ember serve`
 
 ## Running / Development
