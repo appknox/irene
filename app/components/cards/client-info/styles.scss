@@ -31,6 +31,7 @@ $card-padding: 1rem;
     padding: 0 $card-padding;
     height: $card-header-height;
     align-items: center;
+    border-bottom: 1px solid rgba(#424651, 0.3);
 
     .thumbnail {
       width: $card-thumbnail-size;
@@ -100,6 +101,7 @@ $card-padding: 1rem;
         font-size: 1.3rem;
         line-height: 1;
       }
+
       .metric-label {
         font-size: 0.9em;
         line-height: 1.25;

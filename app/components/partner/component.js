@@ -6,6 +6,7 @@ import {
 export default class PartnerComponent extends Component {
 
   @service intl;
+  @service store;
 
   clientGroups = [{
     label: this.intl.t('clients'),

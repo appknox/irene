@@ -6,35 +6,55 @@
       {{@client.name}}
     {{/if}}
   </h3>
-  <div local-class="overview-plan">
-    {{t 'paymentPlan'}}:
-    {{#if @client.isPerScan}}
-      <span local-class="type per-scan">{{t 'perScan'}}</span>
-      ({{@client.creditsLeft}} {{t 'pluralScans' itemCount=@client.creditsLeft}} {{t 'remaining'}})
-    {{else}}
-      <span local-class="type per-app">{{t 'perApp'}}</span>
-      {{#if @client.invalidPayment}}
-        <span local-class="payment-invalid">{{t 'invalidPayment'}}</span>
+  {{#if this.partner.access.view_payment}}
+    <div local-class="overview-plan" {{did-insert (perform this.getClientPlan)}}>
+      {{t 'paymentPlan'}}:
+      {{#if this.clientPlan.isPerScan}}
+        <span local-class="type per-scan">{{t 'perScan'}}</span>
+        ({{this.clientPlan.creditsLeft}} {{t 'pluralScans' itemCount=this.clientPlan.creditsLeft}} {{t 'remaining'}})
       {{else}}
-        ({{@client.creditsLeft}} {{t 'pluralApps' itemCount=@client.creditsLeft}})
+        <span local-class="type per-app">{{t 'perApp'}}</span>
+        {{#if this.clientPlan.invalidPayment}}
+          <span local-class="payment-invalid">{{t 'invalidPayment'}}</span>
+        {{else}}
+          ({{this.clientPlan.creditsLeft}} {{t 'pluralApps' itemCount=this.clientPlan.creditsLeft}})
+        {{/if}}
       {{/if}}
-    {{/if}}
+    </div>
+  {{/if}}
+
+  <div local-class="overview-owner">{{t 'organizationOwner'}}: <span class="black-text">{{@client.ownerEmail}}</span>
   </div>
-  <div local-class="overview-owner">{{t 'organizationOwner'}}: <span class="black-text">{{@client.ownerEmail}}</span></div>
-  <div local-class="overview-status-container">
-    <div local-class="overview-status">
-      <span local-class="status-count">{{@client.usersCount}}</span>
-      <span local-class="status-label">{{t 'pluralUsers' itemCount=@client.usersCount}}</span>
-    </div>
-    <div local-class="overview-status">
-      <span local-class="status-count">{{@client.projectsCount}}</span>
-      <span local-class="status-label">{{t 'pluralProjects' itemCount=@client.projectsCount}}</span>
-    </div>
-    <div local-class="overview-status">
-      <span local-class="status-count">{{@client.filesCount}}</span>
-      <span local-class="status-label">{{t 'pluralUploads' itemCount=@client.filesCount}}</span>
-    </div>
+  <div local-class="overview-last-upload">
+    {{t 'lastUpload'}}:
+    <span class="black-text">
+      {{#if @client.lastUploadedOn}}
+        {{dayjs-from-now @client.lastUploadedOn}}
+      {{else}}
+        {{t 'noUploads'}}
+      {{/if}}
+    </span>
   </div>
+
+  {{#if this.partner.access.view_count_statistics}}
+    <div local-class="overview-status-container" {{did-insert (perform this.getClientStatistics)}}>
+      <div local-class="overview-status">
+        <span local-class="status-count">{{this.clientStatistics.usersCount}}</span>
+        <span local-class="status-label">{{t 'pluralUsers' itemCount=this.clientStatistics.usersCount}}</span>
+      </div>
+      <div local-class="overview-status">
+        <span local-class="status-count">{{this.clientStatistics.projectsCount}}</span>
+        <span local-class="status-label">{{t 'pluralProjects' itemCount=this.clientStatistics.projectsCount}}</span>
+      </div>
+      <div local-class="overview-status">
+        <span local-class="status-count">{{this.clientStatistics.filesCount}}</span>
+        <span local-class="status-label">{{t 'pluralUploads' itemCount=this.clientStatistics.filesCount}}</span>
+      </div>
+    </div>
+
+  {{/if}}
 </div>
 
-<Partner::ClientUploadsList @clientId={{@client.id}}></Partner::ClientUploadsList>
+{{#if this.partner.access.list_files}}
+  <Partner::ClientUploadsList @clientId={{@client.id}}></Partner::ClientUploadsList>
+{{/if}}

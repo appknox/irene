@@ -22,9 +22,14 @@ export default class CardsClientInfoComponent extends Component {
   @service('notifications') notify;
   @service intl;
   @service store;
+  @service partner;
 
 
   @tracked isShowCreditAllocationModal = false;
+
+  @tracked clientPlan = {};
+
+  @tracked clientStatistics = {};
 
   @computed('args.client.name')
   get isEmptyTitle() {
@@ -45,23 +50,11 @@ export default class CardsClientInfoComponent extends Component {
   }
 
   @task(function* () {
-    try {
-      const success = yield this.args.client.approve(this.args.client.id);
-      this.notify.success(success.message);
-    } catch (e) {
-      this.notify.error(this.intl.t('pleaseTryAgain'));
-    }
-
-  }) approveRegistration;
+    this.clientPlan = yield this.store.find('partnerclient-plan', this.args.client.id);
+  }) getClientPlan;
 
   @task(function* () {
-    try {
-      const success = yield this.args.client.resendInvitation(this.args.client.id);
-      this.notify.success(success.message)
-    } catch (e) {
-      this.notify.error(this.intl.t("clients.resendInvitationFail"));
-    }
-
-  }) resendInvitation;
+    this.clientStatistics = yield this.store.find('partnerclient-statistic', this.args.client.id);
+  }) getClientStatistics;
 
 }

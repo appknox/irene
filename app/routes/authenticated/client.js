@@ -10,6 +10,7 @@ export default class AuthenticatedClientRoute extends Route {
 
   @service organization;
   @service('notifications') notify;
+  @service partner;
 
   beforeModel() {
     // Redirect to projects
@@ -18,7 +19,8 @@ export default class AuthenticatedClientRoute extends Route {
     }
   }
 
-  model(data) {
+  async model(data) {
+    await this.partner.load();
     return this.store.find('partnerclient', data.id)
   }
 

@@ -12,20 +12,24 @@
     </div>
   </LinkTo>
   <div local-class="client-info-body">
-    <div local-class="client-metrics">
-      <div local-class="users metric">
-        <span local-class="metric-value">{{@client.usersCount}}</span>
-        <span local-class="metric-label">{{t 'pluralUsers' itemCount=@client.usersCount}}</span>
+
+    {{#if this.partner.access.view_count_statistics}}
+      <div local-class="client-metrics" {{did-insert (perform this.getClientStatistics)}}>
+        <div local-class="users metric">
+          <span local-class="metric-value">{{this.clientStatistics.usersCount}}</span>
+          <span local-class="metric-label">{{t 'pluralUsers' itemCount=this.clientStatistics.usersCount}}</span>
+        </div>
+        <div local-class="uploads metric">
+          <span local-class="metric-value">{{this.clientStatistics.filesCount}}</span>
+          <span local-class="metric-label">{{t 'pluralUploads' itemCount=this.clientStatistics.filesCount}}</span>
+        </div>
+        <div local-class="projects metric">
+          <span local-class="metric-value">{{this.clientStatistics.projectsCount}}</span>
+          <span local-class="metric-label">{{t 'pluralProjects' itemCount=this.clientStatistics.projectsCount}}</span>
+        </div>
       </div>
-      <div local-class="uploads metric">
-        <span local-class="metric-value">{{@client.filesCount}}</span>
-        <span local-class="metric-label">{{t 'pluralUploads' itemCount=@client.filesCount}}</span>
-      </div>
-      <div local-class="projects metric">
-        <span local-class="metric-value">{{@client.projectsCount}}</span>
-        <span local-class="metric-label">{{t 'pluralProjects' itemCount=@client.projectsCount}}</span>
-      </div>
-    </div>
+    {{/if}}
+
     <div local-class="client-activities">
       <div local-class="last-upload activity">
         <span local-class="label">{{t 'lastUpload'}}</span>
@@ -38,30 +42,37 @@
         </span>
       </div>
 
-      <div local-class="payment activity">
-        <span local-class="label">{{t 'paymentPlan'}}</span>
-        <div local-class="credit-info">
-          <span local-class="type {{if @client.isPerScan 'per-scan' 'per-app'}}">
-            {{t (if  @client.isPerScan 'perScan' 'perApp')}}
-          </span>
-          <span local-class="payment-status">
-            {{#if @client.invalidPayment}}
-              <span local-class="payment-invalid">{{t 'invalidPayment'}}</span>
+      {{#if this.partner.access.view_payment}}
+        <div local-class="payment activity" {{did-insert (perform this.getClientPlan)}}>
+          <span local-class="label">{{t 'paymentPlan'}}</span>
+          <div local-class="credit-info">
+            {{#if this.getClientPlan.isRunning}}
+              <div local-class="loading">{{fa-icon "circle-o-notch fa-spin"}}</div>
             {{else}}
-              <span local-class="data">
-                <strong>
-                  {{@client.creditsLeft}}
-                  {{t (if  @client.isPerScan 'pluralScans' 'pluralApps') itemCount=@client.creditsLeft}}
-                </strong>
-                {{#if @client.isPerScan}}
-                  {{t 'remaining'}}
+              <span local-class="type {{if this.clientPlan.isPerScan 'per-scan' 'per-app'}}">
+                {{t (if  this.clientPlan.isPerScan 'perScan' 'perApp')}}
+              </span>
+              <span local-class="payment-status">
+                {{#if this.clientPlan.invalidPayment}}
+                  <span local-class="payment-invalid">{{t 'invalidPayment'}}</span>
+                {{else}}
+                  <span local-class="data">
+                    <strong>
+                      {{this.clientPlan.creditsLeft}}
+                      {{t (if  this.clientPlan.isPerScan 'pluralScans' 'pluralApps') itemCount=this.clientPlan.creditsLeft}}
+                    </strong>
+                    {{#if this.clientPlan.isPerScan}}
+                      {{t 'remaining'}}
+                    {{/if}}
+                  </span>
                 {{/if}}
               </span>
             {{/if}}
+          </div>
 
-          </span>
         </div>
-      </div>
+      {{/if}}
+
     </div>
   </div>
 </div>

@@ -5,8 +5,7 @@ import {
   computed
 } from '@ember/object';
 import {
-  reads,
-  equal
+  reads
 } from '@ember/object/computed';
 import {
   isEmpty
@@ -14,23 +13,11 @@ import {
 
 
 export default class PartnerclientModel extends Model {
-  @attr('boolean') isTrail;
   @attr('date') lastUploadedOn;
   @attr('string') logo;
   @attr('string') name;
-  @attr('number') creditsLeft;
-  @attr('boolean') isPerScan;
-  @attr('number') usersCount;
-  @attr('number') filesCount;
-  @attr('number') projectsCount
-  @equal('isPerScan', false) isPerApp;
   @reads('name') company;
   @attr('string') ownerEmail;
-
-  @computed('creditsLeft', 'isPerScan')
-  get invalidPayment() {
-    return this.creditsLeft === null && !this.isPerScan;
-  }
 
   @computed('name')
   get isEmptyTitle() {
