@@ -11,13 +11,13 @@ import {
   isEmpty
 } from '@ember/utils';
 
-
 export default class PartnerclientModel extends Model {
   @attr('date') lastUploadedOn;
   @attr('string') logo;
   @attr('string') name;
   @reads('name') company;
-  @attr('string') ownerEmail;
+  @attr() ownerEmails;
+  @attr('date') createdOn;
 
   @computed('name')
   get isEmptyTitle() {

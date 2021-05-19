@@ -7,11 +7,13 @@ import {
 
 export default class PartnerclientPlanModel extends Model {
 
-  @attr('number') creditsLeft;
-  @attr('boolean') isPerScan;
+  @attr('number') scansLeft;
+  @attr('boolean') limitedScans;
+  @attr('number') projectsLimit;
+  @attr('date') expiryDate;
 
-  @computed('creditsLeft', 'isPerScan')
+  @computed('projectsLimit', 'limitedScans')
   get invalidPayment() {
-    return this.creditsLeft === null && !this.isPerScan;
+    return this.projectsLimit === null && !this.limitedScans;
   }
 }

@@ -800,6 +800,7 @@
   "pluralUploads": "{itemCount, plural, =0 {Uploads} =1 {Upload} other {Uploads} }",
   "pluralUsers": "{itemCount, plural, =0 {Users} =1 {User} other {Users} }",
   "pluralProjects": "{itemCount, plural, =0 {Projects} =1 {Project} other {Projects} }",
+  "pluralorganizationOwner": "{itemCount, plural, =0 {Organization owner} =1 {Organization owner} other {Organization owners} }",
   "validity": "Validity",
   "paymentPlan": "Payment plan",
   "noClients": "No clients",
@@ -809,5 +810,6 @@
   "remaining": "remaining",
   "invalidPayment": "Invalid payment",
   "noName": "No Name",
-  "organizationOwner": "Organization owner"
+  "viewAll": "View All",
+  "expiresOn": "Expires on"
 }

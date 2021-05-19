@@ -6,24 +6,37 @@
       {{@client.name}}
     {{/if}}
   </h3>
-  {{#if this.partner.access.view_payment}}
+  {{#if this.partner.access.view_plans}}
     <div local-class="overview-plan" {{did-insert (perform this.getClientPlan)}}>
       {{t 'paymentPlan'}}:
-      {{#if this.clientPlan.isPerScan}}
+      {{#if this.clientPlan.limitedScans}}
         <span local-class="type per-scan">{{t 'perScan'}}</span>
-        ({{this.clientPlan.creditsLeft}} {{t 'pluralScans' itemCount=this.clientPlan.creditsLeft}} {{t 'remaining'}})
+        ({{this.clientPlan.scansLeft}} {{t 'pluralScans' itemCount=this.clientPlan.scansLeft}} {{t 'remaining'}})
       {{else}}
         <span local-class="type per-app">{{t 'perApp'}}</span>
         {{#if this.clientPlan.invalidPayment}}
           <span local-class="payment-invalid">{{t 'invalidPayment'}}</span>
         {{else}}
-          ({{this.clientPlan.creditsLeft}} {{t 'pluralApps' itemCount=this.clientPlan.creditsLeft}})
+          ({{this.clientPlan.projectsLimit}} {{t 'pluralApps' itemCount=this.clientPlan.projectsLimit}})
+          <span local-class="expiry-date">{{t 'expiresOn'}}
+            {{day-js this.clientPlan.expiryDate format="DD MMM YYYY"}}</span>
         {{/if}}
       {{/if}}
     </div>
   {{/if}}
 
-  <div local-class="overview-owner">{{t 'organizationOwner'}}: <span class="black-text">{{@client.ownerEmail}}</span>
+  <div local-class="overview-owner">
+    {{t 'pluralorganizationOwner' itemCount=this.ownerEmails.length}}:
+    <span class="black-text">{{@client.ownerEmails.firstObject}}</span>
+    {{#if (gt @client.ownerEmails.length 1)}}
+      <button type="button" local-class="overview-owner-count-badge" class="badge-square is-default margin-l-1"
+        {{on "click" (fn this.toggleOwnerEmailList)}}>
+        {{fa-icon "plus"}} {{this.ownerEmailCount}}
+        <AttachTooltip @placemnet="top">
+          {{t 'viewAll'}}
+        </AttachTooltip>
+      </button>
+    {{/if}}
   </div>
   <div local-class="overview-last-upload">
     {{t 'lastUpload'}}:
@@ -36,25 +49,22 @@
     </span>
   </div>
 
-  {{#if this.partner.access.view_count_statistics}}
-    <div local-class="overview-status-container" {{did-insert (perform this.getClientStatistics)}}>
-      <div local-class="overview-status">
-        <span local-class="status-count">{{this.clientStatistics.usersCount}}</span>
-        <span local-class="status-label">{{t 'pluralUsers' itemCount=this.clientStatistics.usersCount}}</span>
-      </div>
-      <div local-class="overview-status">
-        <span local-class="status-count">{{this.clientStatistics.projectsCount}}</span>
-        <span local-class="status-label">{{t 'pluralProjects' itemCount=this.clientStatistics.projectsCount}}</span>
-      </div>
-      <div local-class="overview-status">
-        <span local-class="status-count">{{this.clientStatistics.filesCount}}</span>
-        <span local-class="status-label">{{t 'pluralUploads' itemCount=this.clientStatistics.filesCount}}</span>
-      </div>
-    </div>
-
-  {{/if}}
+  <div local-class="overview-created-on">
+    {{t 'createdOn'}}:
+    <span class="black-text">
+      {{dayjs-from-now @client.createdOn}}
+    </span>
+  </div>
 </div>
 
-{{#if this.partner.access.list_files}}
-  <Partner::ClientUploadsList @clientId={{@client.id}}></Partner::ClientUploadsList>
+{{#if this.showOwnerEmails}}
+  <AkModal @onClose={{this.toggleOwnerEmailList}} @showHeader={{true}} @headerTitle="Organization Owner Emails">
+    <div local-class="owner-email-list">
+      {{#each @client.ownerEmails as |email seq|}}
+        <div local-class="owner-email" class="margin-top">
+          {{add seq 1}}. {{email}}
+        </div>
+      {{/each}}
+    </div>
+  </AkModal>
 {{/if}}

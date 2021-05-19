@@ -165,7 +165,16 @@ $card-padding: 1rem;
 
               .data {
                 color: #000;
-                text-transform: lowercase;
+
+                .value {
+                  text-transform: lowercase;
+                }
+
+                .expiry-date {
+                  font-size: 0.9em;
+                  font-style: italic;
+                  font-weight: normal;
+                }
               }
             }
 

@@ -8,6 +8,9 @@ import {
 import {
   tracked
 } from '@glimmer/tracking';
+import {
+  action
+} from '@ember/object';
 
 export default class PartnerClientDetailsComponent extends Component {
 
@@ -17,12 +20,17 @@ export default class PartnerClientDetailsComponent extends Component {
   @tracked clientPlan = {};
   @tracked clientStatistics = {};
 
+  @tracked showOwnerEmails = false;
+
+  ownerEmailCount = this.args.client.ownerEmails.length - 1;
+
+  @action
+  toggleOwnerEmailList() {
+    this.showOwnerEmails = !this.showOwnerEmails;
+  }
+
   @task(function* () {
     this.clientPlan = yield this.store.find('partnerclient-plan', this.args.client.id);
   }) getClientPlan;
-
-  @task(function* () {
-    this.clientStatistics = yield this.store.find('partnerclient-statistic', this.args.client.id);
-  }) getClientStatistics;
 
 }
