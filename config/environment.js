@@ -562,7 +562,7 @@ module.exports = function (environment) {
     },
     gReCaptcha: {
       jsUrl: "https://recaptcha.net/recaptcha/api.js?render=explicit",
-      siteKey: "6LfDdlUUAAAAAE9Bz9-3FLjrNw_AEUk11zXDH-0_",
+      siteKey: "6LffPdIaAAAAANWL4gm7J6j9EJzKSuYEDAQ0Ry2x",
     },
   };
 
@@ -578,10 +578,6 @@ module.exports = function (environment) {
       enabled: false,
     };
     ENV.isRegistrationEnabled = true;
-    ENV.gReCaptcha = {
-      jsUrl: "https://recaptcha.net/recaptcha/api.js?render=explicit",
-      siteKey: "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI",
-    };
   }
 
   if (environment === "mirage") {
@@ -598,7 +594,6 @@ module.exports = function (environment) {
     };
     ENV["host"] = "http://0.0.0.0:8000";
     ENV.isRegistrationEnabled = true;
-    ENV.gReCaptcha["siteKey"] = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI";
   }
 
   if (environment === "production") {

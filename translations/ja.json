@@ -447,7 +447,7 @@
   "recover": "復元",
   "recoverPassword": "パスワードの復元",
   "register": "登録",
-  "registerConfirmation": "Thank you for registering with us. An activation link has been send to the email provided.",
+  "registerConfirmation": "Your registration process has been initiated. Please check your mail for further instructions",
   "invitationRegisterConfirmation": "Thank you for registering with us. Please login to continue.",
   "reconnect": "Reconnet",
   "reconnectGotoSettings": "is not integrated, something went wrong you can go to settings &amp; reconnect by",

@@ -448,7 +448,7 @@
   "recover": "Recover",
   "recoverPassword": "Recover your password",
   "register": "Register",
-  "registerConfirmation": "Thank you for registering with us. An activation link has been send to the email provided.",
+  "registerConfirmation": "Your registration process has been initiated. Please check your email for further instructions",
   "invitationRegisterConfirmation": "Thank you for registering with us. Please login to continue.",
   "regulatory": "Regulatory",
   "regulatoryPreferences": "Regulatory Preferences",

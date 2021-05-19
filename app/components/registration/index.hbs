@@ -1,0 +1,63 @@
+<div class="bg-color-container" local-class="container {{if this.showSuccess "is_success" }}">
+  <div class="bg-color-container" local-class="inner-container">
+    <AuthAssets></AuthAssets>
+
+    <div local-class="register-confirm">
+      {{fa-icon "check-circle" local-class="register-confirm-icon"}}
+      <p local-class="register-confirm-text">{{t "registerConfirmation" }}</p>
+    </div>
+
+    <form local-class="register-form" onsubmit="return false">
+      <div local-class="spacing">
+        <h4 class="has-text-centered">{{t "register"}}</h4>
+        <div class="input-wrap {{if this.changeset.error.email "has-error"}}" >
+          <div class="label-error">
+            <label for="registration-input-email">{{t "email"}}</label>
+            {{#if this.changeset.error.email}}
+            <span class="error-msg">{{this.changeset.error.email.validation}}</span>
+            {{/if}}
+          </div>
+          <Input @id="registration-input-email" @value={{this.changeset.email}} type="text" class="input-field" placeholder="{{t "email"}}" autocomplete="email" autofocus="autofocus" required="required" />
+        </div>
+
+        <div class="input-wrap {{if this.changeset.error.company "has-error"}}">
+          <div class="label-error">
+            <label for="registration-input-company">{{t "companyName"}}</label>
+            {{#if this.changeset.error.company}}
+            <span class="error-msg">{{this.changeset.error.company.validation}}</span>
+            {{/if}}
+          </div>
+          <Input @id="registration-input-company" class="input-field" placeholder="{{t "companyName"}}" @value={{this.changeset.company}} autocomplete="company" required="required" ></Input>
+        </div>
+
+        {{#if this.enabledName}}
+        <div class="input-wrap {{if this.changeset.error.firstname "has-error"}}">
+          <div class="label-error">
+            <label for="registration-input-firstname">{{ t "name" }}</label>
+            {{#if this.changeset.error.firstname}}
+            <span class="error-msg">{{this.changeset.error.firstname.validation}}</span>
+            {{/if}}
+          </div>
+          <div class="half-wrap">
+            <Input type="text" @id="registration-input-firstname" class="input-field" placeholder="First Name" autocomplete="fname" @value={{this.changeset.firstname}} required="required" />
+            <Input type="text" @id="registration-input-lastname" class="input-field" placeholder="Last Name" autocomplete="lname" @value={{this.changeset.lastname}} required="required" />
+          </div>
+        </div>
+        {{/if}}
+        {{#if this.enableReCaptcha}}
+        {{g-recaptcha onSuccess=(action "onCaptchaResolved")size="invisible"}}
+        {{/if}}
+        <div local-class="register-button-container">
+          <button {{on "click" (fn this.register this.changeset)}}class="button is-primary highlighted-button" local-class="register-button">
+            {{t "register" }}
+            <TaskSpin @task={{this.registerTask}}></TaskSpin>
+          </button>
+        </div>
+      </div>
+      <div local-class="login-footer-container">
+        {{t "alreadyHaveAccount" }}
+        <LinkTo @route="login" local-class="login-footer-container-link">{{t "login"}}</LinkTo>
+      </div>
+    </form>
+  </div>
+</div>
