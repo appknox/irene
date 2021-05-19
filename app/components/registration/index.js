@@ -10,17 +10,13 @@ import {
   validateFormat
 } from 'ember-changeset-validations/validators';
 
-import styles from './index.scss';
-
 export default class RegistrationComponent extends Component {
-  @service session;
   @service ajax;
   @service('notifications') notify;
   @tracked registerPOJO = {};
   @tracked showSuccess = false;
 
   registrationEndpoint = 'v2/registration';
-  styles = styles;
 
   registrationValidatorWithoutName = {
     email: validateFormat({ type: 'email' }),
@@ -44,11 +40,11 @@ export default class RegistrationComponent extends Component {
   }
 
   get enabledName () {
-    return false;
+    return this.args.enable_name == true;
   }
 
   get enableReCaptcha () {
-    return true
+    return this.args.enable_recaptcha == true;
   }
 
   get registrationValidator() {
@@ -64,12 +60,16 @@ export default class RegistrationComponent extends Component {
       yield this.ajax.request(url, {
         method: 'POST',
         data: data
-      })
+      });
       this.showSuccess = true;
     } catch(errors) {
+      if (!errors.payload) {
+        this.notify.error(errors.message);
+        return;
+      }
       if(errors.payload.recaptcha && errors.payload.recaptcha.length) {
         this.notify.error(errors.payload.recaptcha[0]);
-        return
+        return;
       }
       const changeset = this.changeset;
       Object.keys(errors.payload).forEach(key => {
@@ -110,12 +110,5 @@ export default class RegistrationComponent extends Component {
   @action
   register(changeset) {
     this.registerTask.perform(changeset);
-  }
-
-  @action
-  onCaptchaResolved(data) {
-    if (this.enableReCaptcha){
-      this.recaptcha = data;
-    }
   }
 }
