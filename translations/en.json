@@ -812,5 +812,17 @@
   "noName": "No Name",
   "viewAll": "View All",
   "expiresOn": "Expires on",
-  "expiredOn": "Expired on"
+  "expiredOn": "Expired on",
+  "firstName": "Firstname",
+  "lastName": "LastName",
+  "sendInvitation": "Send Invitation",
+  "fullName": "Full name",
+  "rejected": "Rejected",
+  "undo": "Undo",
+  "noRequestByStatus": "No {status} request",
+  "registrationRequests": "Registration requests",
+  "invitations": "Invitations",
+  "pendingRequests": "Pending Requests",
+  "rejectedRequests": "Rejected Requests"
+
 }

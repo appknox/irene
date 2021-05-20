@@ -13,6 +13,23 @@
   </LinkTo>
   <div local-class="client-info-body">
 
+    {{#if this.partner.access.view_count_statistics}}
+      <div local-class="client-metrics" {{did-insert (perform this.getClientStatistics)}}>
+        <div local-class="users metric">
+          <span local-class="metric-value">{{this.clientStatistics.usersCount}}</span>
+          <span local-class="metric-label">{{t 'pluralUsers' itemCount=this.clientStatistics.usersCount}}</span>
+        </div>
+        <div local-class="uploads metric">
+          <span local-class="metric-value">{{this.clientStatistics.filesCount}}</span>
+          <span local-class="metric-label">{{t 'pluralUploads' itemCount=this.clientStatistics.filesCount}}</span>
+        </div>
+        <div local-class="projects metric">
+          <span local-class="metric-value">{{this.clientStatistics.projectsCount}}</span>
+          <span local-class="metric-label">{{t 'pluralProjects' itemCount=this.clientStatistics.projectsCount}}</span>
+        </div>
+      </div>
+    {{/if}}
+
     <div local-class="client-activities">
       <div local-class="last-upload activity">
         <span local-class="label">{{t 'lastUpload'}}</span>

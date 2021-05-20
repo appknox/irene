@@ -53,6 +53,24 @@
       {{day-js @client.createdOn format="DD MMM YYYY"}}
     </span>
   </div>
+
+  {{#if this.partner.access.view_count_statistics}}
+    <div local-class="overview-status-container" {{did-insert (perform this.getClientStatistics)}}>
+      <div local-class="overview-status">
+        <span local-class="status-count">{{this.clientStatistics.usersCount}}</span>
+        <span local-class="status-label">{{t 'pluralUsers' itemCount=this.clientStatistics.usersCount}}</span>
+      </div>
+      <div local-class="overview-status">
+        <span local-class="status-count">{{this.clientStatistics.projectsCount}}</span>
+        <span local-class="status-label">{{t 'pluralProjects' itemCount=this.clientStatistics.projectsCount}}</span>
+      </div>
+      <div local-class="overview-status">
+        <span local-class="status-count">{{this.clientStatistics.filesCount}}</span>
+        <span local-class="status-label">{{t 'pluralUploads' itemCount=this.clientStatistics.filesCount}}</span>
+      </div>
+    </div>
+
+  {{/if}}
 </div>
 
 {{#if this.showOwnerEmails}}

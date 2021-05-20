@@ -1,0 +1,27 @@
+.tabs {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: center;
+  column-gap: 5em;
+  height: 35px;
+  align-items: center;
+
+  .tab {
+
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    color: #adaeb3;
+    font-weight: 500;
+    height: inherit;
+    line-height: 3;
+
+    &.active {
+      border-bottom: 2px solid;
+    }
+
+    &.active,
+    &:hover {
+      color: $primary-color;
+    }
+  }
+}

@@ -1,0 +1,10 @@
+<div local-class="tabs">
+  {{#each this.tabs as |tab|}}
+    <a href="#" local-class="tab {{if tab.active 'active'}}">
+      {{tab.label}}
+    </a>
+  {{/each}}
+</div>
+
+
+<Partner::RegistrationRequestsList @status={{'approved'}}></Partner::RegistrationRequestsList>

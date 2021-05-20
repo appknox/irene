@@ -3,7 +3,8 @@ import {
   task
 } from 'ember-concurrency';
 import {
-  computed
+  computed,
+  action
 } from '@ember/object';
 import {
   inject as service
@@ -23,6 +24,9 @@ export default class CardsClientInfoComponent extends Component {
   @service store;
   @service partner;
 
+
+  @tracked isShowCreditAllocationModal = false;
+
   @tracked clientPlan = {};
 
   @tracked clientStatistics = {};
@@ -32,8 +36,25 @@ export default class CardsClientInfoComponent extends Component {
     return isEmpty(this.args.client.name);
   }
 
+  @action
+  onAddCredits() {
+    this.isShowCreditAllocationModal = true;
+  }
+
+  @action
+  onCloseModal() {
+    this.isShowCreditAllocationModal = false;
+    // Refresh model with new credit bal
+    this.store.queryRecord('credits/partner-credits-stat', {})
+    this.store.find('partnerclient', this.args.client.id);
+  }
+
   @task(function* () {
     this.clientPlan = yield this.store.find('partnerclient-plan', this.args.client.id);
   }) getClientPlan;
+
+  @task(function* () {
+    this.clientStatistics = yield this.store.find('partnerclient-statistic', this.args.client.id);
+  }) getClientStatistics;
 
 }

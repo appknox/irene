@@ -1,0 +1,108 @@
+.table {
+  border: 1px solid #f0f1f3;
+  border-radius: 0.3rem;
+  margin-top: 0.7rem;
+
+  .header {
+    display: grid;
+
+    align-items: center;
+    padding: 1rem;
+    text-transform: capitalize;
+    background-color: #f6f7f9;
+  }
+
+  .body {
+    .row {
+      display: grid;
+      justify-content: left;
+      align-items: center;
+      padding: 0.6rem;
+      border-top: 1px solid #f0f1f3;
+
+      .invite,
+      .reject,
+      .undo,
+      .resend {
+        display: grid;
+        width: 30px;
+        height: 30px;
+        border: 1px solid rgba(#000, 0.3);
+        border-radius: 50%;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        &:hover {
+          border: 1px solid $primary-color;
+        }
+      }
+
+      .source {
+        width: max-content;
+        padding: 0 0.3em;
+        background-color: #adaeb3;
+
+        &.invitation {
+          background-color: #87cefa;
+        }
+
+        &.backoffice {
+          background-color: #a9a9aa;
+        }
+
+        &.registration {
+          background-color: rgba($primary-color, 0.7);
+        }
+      }
+
+      &.fade-in {
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s linear 500ms, opacity 500ms;
+      }
+
+      &.hidden {
+        display: none;
+      }
+    }
+
+    .center-msg {
+      display: grid;
+      justify-content: center;
+      align-items: center;
+      height: 16rem;
+      border-top: 1px solid #f0f1f3;
+      background-color: lighten(#f6f7f9, 4%);
+    }
+  }
+
+  &.pending {
+
+    .header,
+    .body .row {
+      grid-template-columns: 1fr 25% 14% 13% 6% 6%;
+    }
+  }
+
+  &.rejected {
+
+    .header,
+    .body .row {
+      grid-template-columns: 1fr 25% 14% 13% 6%;
+    }
+  }
+
+  &.approved {
+
+    .header,
+    .body .row {
+      grid-template-columns: 1fr 25% 13% 14% 10% 6%;
+    }
+  }
+}
+
+.pagination {
+  border-top: 1px solid #f0f1f3;
+  padding: 0.75rem 0.6rem 0;
+}

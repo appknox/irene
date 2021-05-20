@@ -110,6 +110,8 @@ Router.map(function () {
     });
     this.route('partner', function () {
       this.route('clients');
+      this.route('registration-requests');
+      this.route('invitations');
     });
     this.route('client', {
       path: '/partner/client/:id'
