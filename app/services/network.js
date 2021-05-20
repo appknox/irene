@@ -12,7 +12,7 @@ export default class NetworkService extends Service {
 
   headers() {
     const head_values =  {
-      'X-Product': 'irene-' + ENV.Version
+      'X-Product': 'irene-' + ENV.APP.version
     };
     const token = this.session.data.authenticated.b64token;
     if(token) {
@@ -31,5 +31,30 @@ export default class NetworkService extends Service {
   fetch(url, options={}) {
     const buildURL = this.buildurl.build(url, this.mergeOptions(options));
     return fetch(buildURL, options);
+  }
+
+  request(url, reqOptions={}) {
+    if(!reqOptions.method) {
+      reqOptions.method = 'GET';
+    }
+    if (!reqOptions.headers) {
+      reqOptions.headers = {};
+    }
+
+    if(reqOptions.body && reqOptions.method !== 'GET') {
+      if (!reqOptions.headers['Content-Type'] && !reqOptions.headers['content-type']) {
+        reqOptions.headers['content-type'] = 'application/json'
+      }
+    }
+    return this.fetch(url, reqOptions);
+  }
+
+  post(url, body, reqOptions={}) {
+    const post_options = {
+      method: "POST",
+      body: JSON.stringify(body),
+    }
+    const options = Object.assign({}, reqOptions, post_options);
+    return this.request(url, options);
   }
 }

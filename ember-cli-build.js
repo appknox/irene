@@ -37,7 +37,7 @@ module.exports = function (defaults) {
       }
     },
     sourcemaps: {
-      enabled: false
+      enabled: true
     },
     'ember-date-components': {
       'includeCSS': false

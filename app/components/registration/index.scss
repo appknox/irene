@@ -1,0 +1,77 @@
+$bg-color: #F2F3F7;
+
+@mixin bg-register {
+  background-color: $bg-color;
+  border-radius: 0.1rem;
+  box-shadow: inset 0 0 1px 1px #dddddd;
+  margin: 1em 1em 3em 1em;
+}
+
+.container {
+  height: 100vh;
+}
+
+.inner-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 3em;
+}
+
+.register-form {
+  @include bg-register;
+}
+
+.spacing {
+  padding: 2em 2.5em 0em 2.5em;
+  min-width: 25em;
+}
+
+.login-footer-container {
+  display: flex;
+  justify-content: center;
+  padding: 1em 0em
+}
+
+.login-footer-container-link {
+  margin-left: 0.5em;
+}
+
+.register-button {
+  width: 100%;
+  height: 3em;
+}
+
+.register-button-container {
+  width: 100%;
+  text-align: center;
+}
+
+.register-confirm {
+  @include bg-register;
+  display: flex;
+  padding: 2em 1em;
+  display: None;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.register-confirm-icon {
+  font-size: 8em;
+  margin: auto;
+  color: #80C081;
+}
+
+.register-confirm-text {
+  font-size: 1.2em;
+  padding: 1em 1em 0;
+}
+
+.is_success .register-confirm {
+  display: flex;
+}
+
+.is_success .register-form {
+  display: none;
+}
