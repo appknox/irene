@@ -8,11 +8,8 @@
       <nav local-class='nav'>
         {{#each this.tabs as |tab|}}
           {{#if tab.enabled}}
-            <LinkTo
-              @route={{tab.link}}
-              local-class='nav-link {{if tab.active 'active'}}'
-              {{on 'click' (fn this.switchTab tab)}}
-            >
+            <LinkTo @route={{tab.link}} local-class='nav-link {{if tab.active 'active'}}'
+              {{on 'click' (fn this.switchTab tab)}}>
               {{tab.label}}
             </LinkTo>
           {{/if}}
