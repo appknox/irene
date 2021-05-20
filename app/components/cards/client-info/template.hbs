@@ -51,8 +51,9 @@
                         {{this.clientPlan.projectsLimit}}
                         {{t 'pluralApps' itemCount=this.clientPlan.projectsLimit}}
                       </strong>
-                      <span local-class="expiry-date">{{t 'expiresOn'}}
-                        {{day-js this.clientPlan.expiryDate format="DD MMM YYYY"}}</span>
+                      <span
+                        local-class="expiry-date">{{t (if this.clientPlan.isPaymentExpired 'expiredOn' 'expiresOn')}}
+                        {{day-js date=this.clientPlan.expiryDate format="DD MMM YYYY"}}</span>
                     {{/if}}
                   </span>
                 {{/if}}

@@ -3,20 +3,47 @@
   grid-template-columns: 1fr 30px;
   justify-content: center;
   align-items: center;
-  height: 40px;
-  border-bottom: 2px solid rgba(128, 128, 128, 0.77);
+  padding: 1.2rem;
+  background: #4d525f;
+  color: white;
 
   h3.header-title {
     margin: 0;
   }
 
   .close-icon {
-    i {
-      cursor: pointer;
+    position: relative;
+    display: inline-block;
+    height: 1.8rem;
+    width: 1.8rem;
+    border-radius: 1.8rem;
+    background-color: #FFF;
+    cursor: pointer;
+    &::before, &::after {
+      content: "";
+      display: block;
+      position: absolute;
+      height: 2px;
+      width: 50%;
+      top: 50%;
+      left: 50%;
+      margin-left: -25%;
+      margin-top: -1px;
+      background-color: #424651;
+    }
+    &::before {
+      transform: rotate(45deg);
+    }
+    &::after {
+      transform: rotate(-45deg);
+    }
+    &:hover {
+      background-color: darken(#FFF, 5%);
     }
   }
 }
 
 .modal-body {
   min-width: 500px;
+  padding: 1.2rem;
 }

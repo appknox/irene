@@ -4,6 +4,7 @@ import Model, {
 import {
   computed
 } from '@ember/object';
+import dayjs from 'dayjs';
 
 export default class PartnerclientPlanModel extends Model {
 
@@ -11,6 +12,11 @@ export default class PartnerclientPlanModel extends Model {
   @attr('boolean') limitedScans;
   @attr('number') projectsLimit;
   @attr('date') expiryDate;
+
+  @computed('expiryDate')
+  get isPaymentExpired() {
+    return dayjs().isAfter(this.expiryDate);
+  }
 
   @computed('projectsLimit', 'limitedScans')
   get invalidPayment() {

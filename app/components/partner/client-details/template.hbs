@@ -18,23 +18,21 @@
           <span local-class="payment-invalid">{{t 'invalidPayment'}}</span>
         {{else}}
           ({{this.clientPlan.projectsLimit}} {{t 'pluralApps' itemCount=this.clientPlan.projectsLimit}})
-          <span local-class="expiry-date">{{t 'expiresOn'}}
-            {{day-js this.clientPlan.expiryDate format="DD MMM YYYY"}}</span>
+          <span local-class="expiry-date">
+            {{t (if this.clientPlan.isPaymentExpired 'expiredOn' 'expiresOn')}}
+            {{day-js date=this.clientPlan.expiryDate format="DD MMM YYYY"}}</span>
         {{/if}}
       {{/if}}
     </div>
   {{/if}}
 
   <div local-class="overview-owner">
-    {{t 'pluralorganizationOwner' itemCount=this.ownerEmails.length}}:
+    {{t 'pluralorganizationOwner' itemCount=@client.ownerEmails.length}}:
     <span class="black-text">{{@client.ownerEmails.firstObject}}</span>
     {{#if (gt @client.ownerEmails.length 1)}}
-      <button type="button" local-class="overview-owner-count-badge" class="badge-square is-default margin-l-1"
+      <button type="button" title="{{t 'viewAll'}}" local-class="overview-owner-count-badge"
         {{on "click" (fn this.toggleOwnerEmailList)}}>
-        {{fa-icon "plus"}} {{this.ownerEmailCount}}
-        <AttachTooltip @placemnet="top">
-          {{t 'viewAll'}}
-        </AttachTooltip>
+        +{{this.ownerEmailCount}}
       </button>
     {{/if}}
   </div>
@@ -52,13 +50,13 @@
   <div local-class="overview-created-on">
     {{t 'createdOn'}}:
     <span class="black-text">
-      {{dayjs-from-now @client.createdOn}}
+      {{day-js @client.createdOn format="DD MMM YYYY"}}
     </span>
   </div>
 </div>
 
 {{#if this.showOwnerEmails}}
-  <AkModal @onClose={{this.toggleOwnerEmailList}} @showHeader={{true}} @headerTitle="Organization Owner Emails">
+  <AkModal @onClose={{this.toggleOwnerEmailList}} @showHeader={{true}} @headerTitle="Client organization owners">
     <div local-class="owner-email-list">
       {{#each @client.ownerEmails as |email seq|}}
         <div local-class="owner-email" class="margin-top">

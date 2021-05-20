@@ -8,12 +8,10 @@
 }
 
 .overview-title {
-  color: #3b3f49;
+  color: #4c4949;
 }
 
 .overview-plan {
-  padding-bottom: 0.5rem;
-
   .type {
     text-transform: capitalize;
     line-height: 1.5;
@@ -27,6 +25,7 @@
   }
 }
 
+.overview-plan,
 .overview-owner,
 .overview-last-upload,
 .overview-created-on {
@@ -37,14 +36,24 @@
 }
 
 .overview-owner-count-badge {
-  padding: 0 0.3rem;
+  padding: 0 0.36rem 0 0.3rem;
   display: flex;
   align-items: center;
-  cursor: pointer;
+  background: #dde0e3;
+  min-width: 1.95em;
+  height: 1.5em;
+  border-radius: 0.3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82em;
+  font-weight: bold;
+  border: none;
 
   i {
     font-size: 0.8rem;
     padding: 0 0.1rem;
+    margin-right: 0.5rem;
   }
 }
 
