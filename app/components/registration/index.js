@@ -11,7 +11,7 @@ import {
 } from 'ember-changeset-validations/validators';
 
 export default class RegistrationComponent extends Component {
-  @service ajax;
+  @service network;
   @service('notifications') notify;
   @tracked registerPOJO = {};
   @tracked showSuccess = false;
@@ -57,10 +57,17 @@ export default class RegistrationComponent extends Component {
   @task(function* (data){
     const url = this.registrationEndpoint
     try {
-      yield this.ajax.request(url, {
-        method: 'POST',
-        data: data
-      });
+      const res = yield this.network.post(url, data);
+      if (!res.ok) {
+        const err = new Error(res.statusText);
+        try {
+          const error_payload = yield res.json();
+          err.payload = error_payload;
+        } catch {
+          err.message = yield res.text();
+        }
+        throw err;
+      }
       this.showSuccess = true;
     } catch(errors) {
       if (!errors.payload) {

@@ -32,4 +32,29 @@ export default class NetworkService extends Service {
     const buildURL = this.buildurl.build(url, this.mergeOptions(options));
     return fetch(buildURL, options);
   }
+
+  request(url, reqOptions={}) {
+    if(!reqOptions.method) {
+      reqOptions.method = 'GET';
+    }
+    if (!reqOptions.headers) {
+      reqOptions.headers = {};
+    }
+
+    if(reqOptions.body && reqOptions.method !== 'GET') {
+      if (!reqOptions.headers['Content-Type'] && !reqOptions.headers['content-type']) {
+        reqOptions.headers['content-type'] = 'application/json'
+      }
+    }
+    return this.fetch(url, reqOptions);
+  }
+
+  post(url, body, reqOptions={}) {
+    const post_options = {
+      method: "POST",
+      body: JSON.stringify(body),
+    }
+    const options = Object.assign({}, reqOptions, post_options);
+    return this.request(url, options);
+  }
 }
