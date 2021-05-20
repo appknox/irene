@@ -1,0 +1,61 @@
+<div local-class="table {{@status}}" class="margin-h-1">
+  <div local-class="header">
+    <div>{{t 'companyName'}}</div>
+    <div>{{t 'email'}}</div>
+
+    {{#if this.isPending}}
+      <div>{{t 'fullName'}}</div>
+      <div>{{t 'requested'}}</div>
+      <div>{{t 'invite'}}</div>
+      <div>{{t 'reject'}}</div>
+    {{else if this.isRejected}}
+      <div>{{t 'fullName'}}</div>
+      <div>{{t 'rejected'}}</div>
+      <div>{{t 'undo'}}</div>
+    {{else if this.isApproved}}
+      <div>Invited</div>
+      <div>Valid until</div>
+      <div>Source</div>
+      <div>{{t 'resend'}}</div>
+    {{/if}}
+  </div>
+  <div local-class="body">
+    {{#each this.requests as |request|}}
+      <div local-class="row {{request.tempClass}}" data-registration-requests-row-id="{{request.id}}">
+        <div>{{request.data.company}}</div>
+        <div>{{request.email}}</div>
+
+        {{#if this.isPending}}
+          <div>{{request.fullName}}</div>
+          <div>{{dayjs-from-now request.createdOn}}</div>
+          <button type="button" local-class="invite" {{on "click" (perform this.inviteByApprove request)}}>
+            {{fa-icon "check"}}</button>
+          <button type="button" local-class="reject"
+            {{on "click" (perform this.rejectRequest request)}}>{{fa-icon "remove"}}</button>
+        {{else if this.isRejected}}
+          <div>{{request.fullName}}</div>
+          <div>{{dayjs-from-now request.updatedOn}}</div>
+          <button type="button" local-class="undo"
+            {{on "click" (perform this.undoReject request)}}>{{fa-icon "reply"}}</button>
+        {{else if this.isApproved}}
+          <div>{{dayjs-from-now request.updatedOn}}</div>
+          <div>{{day-js date=request.validUntil format="DD MMM YYYY HH:mm"}}</div>
+          <div class="badge-square" local-class="source {{request.source}}">{{request.source}}</div>
+          <button type="button" local-class="resend"
+            {{on "click" (perform this.resendInvite request)}}>{{fa-icon "send"}}</button>
+        {{/if}}
+      </div>
+    {{else if this.isLoading}}
+      <div local-class="center-msg">
+        <ThreeBounceSpinner></ThreeBounceSpinner>
+      </div>
+    {{else}}
+      <div local-class="center-msg">{{t 'noRequestByStatus' status=@status}}</div>
+    {{/each}}
+  </div>
+  {{#if (or this.hasPrevious this.hasNext)}}
+    <div local-class="pagination">
+      {{partial 'paginate'}}
+    </div>
+  {{/if}}
+</div>

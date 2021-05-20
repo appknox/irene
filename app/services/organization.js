@@ -1,5 +1,7 @@
 import Service from '@ember/service';
-import { inject as service } from '@ember/service';
+import {
+  inject as service
+} from '@ember/service';
 import ENV from 'irene/config/environment';
 
 const OrganizationService = Service.extend({

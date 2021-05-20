@@ -1,13 +1,23 @@
-<div local-class="partner-dashboard" class="padding-h-1 padding-t-1">
+<div local-class="partner-dashboard" class="padding-h-1 padding-t-1" {{did-insert this.initalize}}>
   <div local-class="client-groups">
     <div local-class="group-header">
       <div local-class="tabs">
-        {{#each this.clientGroups as |clientGroup|}}
-          <LinkTo @route={{clientGroup.link}} local-class="client-group {{if clientGroup.active 'active'}}">
-            {{clientGroup.label}}
-          </LinkTo>
+        {{#each this.tabs as |tab|}}
+          {{#if tab.enabled}}
+            <LinkTo @route={{tab.link}} local-class="client-group {{if tab.active 'active'}}"
+              {{on "click" (fn this.switchTab tab)}}>
+              {{tab.label}}
+            </LinkTo>
+          {{/if}}
         {{/each}}
       </div>
     </div>
   </div>
 </div>
+
+{{#if this.showInviteModal}}
+  <AkModal @onClose={{this.toggleInviteModal}} @showHeader={{true}} @headerTitle="Invite">
+    <Modals::UserInvitation>
+    </Modals::UserInvitation>
+  </AkModal>
+{{/if}}

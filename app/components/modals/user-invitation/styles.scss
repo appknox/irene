@@ -1,0 +1,49 @@
+.invite-container {
+  padding: 2rem;
+  display: grid;
+  row-gap: 1rem;
+
+  .input-container {
+    display: grid;
+    grid-template-columns: 30% 1fr;
+    column-gap: 15px;
+    align-items: center;
+    height: 45px;
+
+    .label {
+      font-size: 14px;
+    }
+
+    input {
+      border: none;
+      border-bottom: 1px solid;
+
+      &::placeholder {
+        font-style: italic;
+        font-size: 13px;
+        opacity: 0.7;
+      }
+    }
+
+    .error {
+      grid-column: 2;
+      color: red;
+      font-size: 12px;
+    }
+
+    &.error {
+      .input {
+        border-bottom-color: red;
+      }
+    }
+
+  }
+
+
+  .submit {
+    justify-self: center;
+    width: max-content;
+    background-color: $primary-color;
+    color: $white;
+  }
+}
