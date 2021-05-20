@@ -75,42 +75,44 @@
               .column
                 = analysis-list fileDetails=file
 
-= modal-card class="input-modal" isActive=showGenerateReportModal title="Generate Report"
-  .card-body
-    .card-wrapper
-      if reportGenerated
-        | Report generated successfully
-        if emailIDs
-          | &nbsp;and sent to following Email IDS:
-          ul.email-list
-            each emailIDs as |email|
-              li = email
-      else
-        form.input-form
-          p.control
-            = input class="form-control input" placeholder="Enter the file number" type="text" value=file.id disabled=true
-          p.control
-            = input class="form-control input" placeholder="Enter the Email IDs(comma separated)" type="email" value=emails
-          button.is-primary click="generateReport" disabled=isGeneratingReport
-            if isGeneratingReport
-              .fa-font-size
-                i.fa class="fa-spinner fa-spin"
-              | &nbsp;
-            | Generate Report
+if showGenerateReportModal
+  = ak-modal showHeader=true headerTitle="Generate Report" onClose=(action "closeGeneratedReportModal")
+    .card-body
+      .card-wrapper
+        if reportGenerated
+          | Report generated successfully
+          if emailIDs
+            | &nbsp;and sent to following Email IDS:
+            ul.email-list
+              each emailIDs as |email|
+                li = email
+        else
+          form.input-form
+            p.control
+              = input class="form-control input" placeholder="Enter the file number" type="text" value=file.id disabled=true
+            p.control
+              = input class="form-control input" placeholder="Enter the Email IDs(comma separated)" type="email" value=emails
+            button.is-primary click="generateReport" disabled=isGeneratingReport
+              if isGeneratingReport
+                .fa-font-size
+                  i.fa class="fa-spinner fa-spin"
+                | &nbsp;
+              | Generate Report
 
-= modal-card class="input-modal vuln-modal" isActive=showAddAnalysisModal title="Add Analysis"
-  .card-body
-    .card-wrapper
-      .columns
-        .column
-          | Vulnerability
-      .columns
-       .column.margin-top20
-          = power-select searchField="name" placeholder="Select the Vulnerability" renderInPlace=true selected=selectedVulnerability options=vulnerabilities onchange=(perform selectVulnerabilty) as |key|
-            | #{key.id} - #{key.name}
-      .columns
+if showAddAnalysisModal
+  = ak-modal showHeader=true headerTitle="Add Analysis" onClose=(perform toggleAddAnalysisModal)
+    .card-body
+      .card-wrapper
+        .columns
+          .column
+            | Vulnerability
+        .columns
         .column.margin-top20
-          button.is-primary click={(perform addAnalysis)}
-            | Add Analysis
+            = power-select searchField="name" placeholder="Select the Vulnerability" renderInPlace=true selected=selectedVulnerability options=vulnerabilities onchange=(perform selectVulnerabilty) as |key|
+              | #{key.id} - #{key.name}
+        .columns
+          .column.margin-top20
+            button.is-primary click={(perform addAnalysis)}
+              | Add Analysis
 
 = confirm-box isActive=showPurgeAPIAnalysisConfirmBox title="Are you sure of Purging API Analyses" delegate=this confirmAction=(action "confirmPurgeAPIAnalysisConfirmBox") disabled=isPurgingAPIAnalysis key="purge"

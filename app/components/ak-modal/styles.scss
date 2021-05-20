@@ -3,20 +3,35 @@
   grid-template-columns: 1fr 30px;
   justify-content: center;
   align-items: center;
-  height: 40px;
-  border-bottom: 2px solid rgba(128, 128, 128, 0.77);
+  padding: 10px;
+  background-color: lighten($modal-header, 5%);
 
   h3.header-title {
     margin: 0;
+    color: $white;
   }
 
   .close-icon {
+    border-radius: 50%;
+    background-color: rgba($white, 0.7);
+    height: 25px;
+    width: 25px;
+    text-align: center;
+
+    &:hover {
+      background-color: $white;
+    }
+
     i {
       cursor: pointer;
+      line-height: 25px;
     }
   }
 }
 
 .modal-body {
   min-width: 500px;
+  padding: 20px;
+  max-height: 90vh;
+  overflow-y: auto;
 }

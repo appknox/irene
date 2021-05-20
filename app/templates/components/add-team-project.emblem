@@ -1,33 +1,34 @@
-button.is-primary click={(perform openAddProjectModal)}
+button.is-primary click={(perform toggleAddProjectModal)}
   i.fa.fa-folder-open-o.margin-r-h
   = t "addProject"
 
-= modal-card class="input-modal user-search-modal" isActive=showAddTeamProjectModal title=(t 'modalCard.addProject.title')
-  .card-body
-    .card-wrapper
-      form
-        .control.vertical-align-center.margin-b-1
-          = fa-icon "search"
-          = input class="form-control input input-width margin-left" placeholder="Search project" type="text" value=query autofocus="autofocus" key-up="searchQuery"
+if showAddTeamProjectModal
+  = ak-modal showHeader=true headerTitle=(t 'modalCard.addProject.title') onClose=(perform toggleAddProjectModal)
+    .card-body
+      .card-wrapper
+        form
+          .control.vertical-align-center.margin-b-1
+            = fa-icon "search"
+            = input class="form-control input input-width margin-left" placeholder="Search project" type="text" value=query autofocus="autofocus" key-up="searchQuery"
 
-      if hasObjects
-        .add-team-projects-scroll
-          table.org-table
-            tbody
-              each sortedObjects as |project|
-                tr.team-project
-                  td
-                    .vertical-align-center
-                      span.team-project-icon.text-lightgray class="team-project-icon-{{project.platformIconClass}}"
-                        = fa-icon project.platformIconClass
-                      span.team-project-name.black-text
-                       = project.packageName
-                  td.team-project-action
-                    button.is-default.is-icon.no-border click={(perform addTeamProject project)} disabled=isAddingProject
-                      = fa-icon "plus"   
-          .margin-t-q
-            = partial "paginate"
-      else
-        div.empty-state
-          = fa-icon "exclamation-triangle"
-          = t "noProject"
+        if hasObjects
+          .add-team-projects-scroll
+            table.org-table
+              tbody
+                each sortedObjects as |project|
+                  tr.team-project
+                    td
+                      .vertical-align-center
+                        span.team-project-icon.text-lightgray class="team-project-icon-{{project.platformIconClass}}"
+                          = fa-icon project.platformIconClass
+                        span.team-project-name.black-text
+                        = project.packageName
+                    td.team-project-action
+                      button.is-default.is-icon.no-border click={(perform addTeamProject project)} disabled=isAddingProject
+                        = fa-icon "plus"
+            .margin-t-q
+              = partial "paginate"
+        else
+          div.empty-state
+            = fa-icon "exclamation-triangle"
+            = t "noProject"

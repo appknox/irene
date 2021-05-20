@@ -29,27 +29,28 @@ else
   span
     | #{t (user-role member.role)}
 
-= modal-card isActive=showEditModal title=modaltitle
-  .card-body.modal-small
-    .card-wrapper
-      div
-        .vertical-align-center
-          p local-class="m-l-1-b-1"
-            | #{t "userActivationChangeMessage"}&nbsp;
-            strong
-              = member.member.username
-            if member.member.isActive
-              | &nbsp;#{t 'inactive'}?
-            else
-              | &nbsp;#{t 'active'}?
-      .margin-t-h
-        .align-end
-          button.modal-button.is-primary.margin-left click="closeModal"
-            = t "cancel"
-          | &nbsp; &nbsp;
-          button.modal-button.is-primary.highlighted-button.mp-dont-run-api-scan click={(perform changeSetting)} disabled=changeSetting.isRunning
-            if changeSetting.isRunning
-              .fa-font-size
-                i.fa class="fa-spinner fa-spin"
-              | &nbsp;
-            | Confirm
+if showEditModal
+  = ak-modal showHeader=true headerTitle=modaltitle onClose=(action "closeModal")
+    .card-body.modal-small
+      .card-wrapper
+        div
+          .vertical-align-center
+            p local-class="m-l-1-b-1"
+              | #{t "userActivationChangeMessage"}&nbsp;
+              strong
+                = member.member.username
+              if member.member.isActive
+                | &nbsp;#{t 'inactive'}?
+              else
+                | &nbsp;#{t 'active'}?
+        .margin-t-h
+          .align-end
+            button.modal-button.is-primary.margin-left click="closeModal"
+              = t "cancel"
+            | &nbsp; &nbsp;
+            button.modal-button.is-primary.highlighted-button.mp-dont-run-api-scan click={(perform changeSetting)} disabled=changeSetting.isRunning
+              if changeSetting.isRunning
+                .fa-font-size
+                  i.fa class="fa-spinner fa-spin"
+                | &nbsp;
+              | Confirm

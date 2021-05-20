@@ -1,9 +1,19 @@
 import Component from '@ember/component';
-import { inject as service } from '@ember/service';
-import { task } from 'ember-concurrency';
-import { on } from '@ember/object/evented';
-import { observer } from '@ember/object';
-import { t } from 'ember-intl';
+import {
+  inject as service
+} from '@ember/service';
+import {
+  task
+} from 'ember-concurrency';
+import {
+  on
+} from '@ember/object/evented';
+import {
+  observer
+} from '@ember/object';
+import {
+  t
+} from 'ember-intl';
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
 import poll from 'irene/services/poll';
@@ -33,9 +43,9 @@ export default Component.extend({
     }
   }),
 
-  openDynamicScanModal: task(function* () {
-    triggerAnalytics('feature',ENV.csb.dynamicScanBtnClick);
-    yield this.set('showDynamicScanModal', true);
+  toggleDynamicScanModal: task(function* () {
+    triggerAnalytics('feature', ENV.csb.dynamicScanBtnClick);
+    yield this.set('showDynamicScanModal', !this.get('showDynamicScanModal'));
     yield this.get('store').find('file', this.get('file.id'));
   }),
 
@@ -55,7 +65,9 @@ export default Component.extend({
     const file = this.get('file');
     const fileId = file.id;
     const dynamicUrl = [ENV.endpoints.dynamic, fileId].join('/');
-    yield this.get('ajax').put(dynamicUrl, { data });
+    yield this.get('ajax').put(dynamicUrl, {
+      data
+    });
     file.setBootingStatus();
     this.send('pollDynamicStatus');
   }).evented(),
@@ -84,7 +96,11 @@ export default Component.extend({
     const file = this.get('file');
     const fileId = file.id;
     const scheduleAutomationUrl = [ENV.endpoints.dynamic, fileId, ENV.endpoints.scheduleDynamicscanAutomation].join('/');
-    yield this.get('ajax').post(scheduleAutomationUrl, {data: {id: fileId}});
+    yield this.get('ajax').post(scheduleAutomationUrl, {
+      data: {
+        id: fileId
+      }
+    });
   }).evented(),
 
   scheduleDynamicScanSucceeded: on('scheduleDynamicScan:succeeded', function () {
@@ -102,7 +118,7 @@ export default Component.extend({
     if (e.payload) {
       Object.keys(e.payload).forEach(p => {
         errMsg = e.payload[p]
-        if (typeof(errMsg) !== "string") {
+        if (typeof (errMsg) !== "string") {
           errMsg = e.payload[p][0];
         }
         this.get('notify').error(errMsg);
@@ -110,7 +126,7 @@ export default Component.extend({
       return;
     } else if (e.errors && e.errors.length) {
       errMsg = e.errors[0].detail || errMsg;
-    } else if(e.message) {
+    } else if (e.message) {
       errMsg = e.message;
     }
     this.get('notify').error(errMsg);

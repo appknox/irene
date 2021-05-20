@@ -122,128 +122,130 @@ if showVulnerability
           each analysis.attachments as |attachment|
             = attachment-detail attachment=attachment
 
-= modal-card class="input-modal edit-analysis-modal" isActive=showEditAnalysisModal title="Edit Analysis"
-  .card-body
-    .card-wrapper
-      .padding-b-1h.text-centre
-        h5.vuln-name = analysis.vulnerability.name
-      if analysis.isRisky
-        .fill-silver.margin-h-neg-20.margin-b-neg-20.padding-h-1h.padding-t-1h
-          .bold.black-text.uppercase-text.padding-b-1
-            = t "overrideRisk"
-          if analysis.isOverriddenRisk
-            .columns.margin-top-q
-              .column
-                .vertical-align-center
-                  if isEditingOverriddenRisk
-                    .bold
-                      = t "markItAs"
-                    select{action 'selectMarkedAnalyis' on='change'} id="marked-analysis" class="margin-h-h"
+// NOTE: need to verify whether it's active or not
+if showEditAnalysisModal
+  = ak-modal showHeader=true headerTitle="Edit Analysis" onClose=(perform closeEditAnalysisModal)
+    .card-body
+      .card-wrapper
+        .padding-b-1h.text-centre
+          h5.vuln-name = analysis.vulnerability.name
+        if analysis.isRisky
+          .fill-silver.margin-h-neg-20.margin-b-neg-20.padding-h-1h.padding-t-1h
+            .bold.black-text.uppercase-text.padding-b-1
+              = t "overrideRisk"
+            if analysis.isOverriddenRisk
+              .columns.margin-top-q
+                .column
+                  .vertical-align-center
+                    if isEditingOverriddenRisk
+                      .bold
+                        = t "markItAs"
+                      select{action 'selectMarkedAnalyis' on='change'} id="marked-analysis" class="margin-h-h"
+                        each filteredRisks as |risk|
+                          option value=risk.value
+                            | #{ t (risk-text risk.value)}
+                      .bold
+                        = t "for"
+                      select{action 'selectMarkedAnalyisType' on='change'} id="marked-analysis-all" class="margin-h-h mark-analysis-all"
+                        option value="false"
+                          = t "currentFileOnly"
+                        option value="true"
+                          =  t "allFutureAnalyses"
+                    else
+                      .bold
+                        = t "overriddenRisk"
+                      .tag class="{{analysis.overriddenRiskLabelClass}} margin-h-q"
+                        i.fa.risk-icons class=analysis.overriddenRiskIconClass
+                        .uppercase-text
+                          | &nbsp; #{ t (risk-text analysis.overriddenRisk)}
+                    .bold.margin-l-h
+                      = t "orginalRisk"
+                    .tag class="{{analysis.riskLabelClass}} margin-h-q"
+                      i.fa.risk-icons class=analysis.riskIconClass
+                      .uppercase-text
+                        | &nbsp; #{ t (risk-text analysis.risk)}
+
+                  .vertical-align-top.margin-v-h
+                    .margin-r-1.padding-t-h
+                      label.bold
+                        = t "comment"
+                    if isEditingOverriddenRisk
+                      div.contain-width
+                        = textarea class="form-control textarea-input margin-t-q" rows="2" placeholder=(t "reasonForOverride") value=analysis.overriddenRiskComment
+                    else
+                      span.padding-t-h.padding-b-1h
+                        if analysis.overriddenRiskComment
+                          | #{analysis.overriddenRiskComment}
+                        else
+                          em.text-lightgray
+                            = t "none"
+
+                  .columns
+                    if isEditingOverriddenRisk
+                      .column.is-one-third
+                        button.is-default.edit-marked-analysis click="markAnalysis" disabled=isMarkingAnalysis
+                          if isMarkingAnalysis
+                            = fa-icon "spinner fa-spin"
+                          else
+                            = fa-icon "check"
+                          span.margin-l-h
+                            = t "save"
+                        button.is-default.edit-marked-analysis click="cancelEditMarkingAnalysis"
+                          = fa-icon "times"
+                          span.margin-l-h
+                            = t "cancel"
+                    else
+                      .column
+                        button.is-default.edit-marked-analysis click="editMarkedAnalysis" disabled=isEditingMarkedAnalysis
+                          if isEditingMarkedAnalysis
+                            = fa-icon "spinner fa-spin"
+                          else
+                            = fa-icon "pencil"
+                          span.margin-l-h
+                            = t "edit"
+                        button.is-default.edit-marked-analysis click="openResetMarkedAnalysisConfirmBox"
+                          = fa-icon "undo"
+                          span.margin-l-h
+                            = t "reset"
+
+            else
+              .columns.margin-top-q
+                .column
+                  h6
+                    = t "falsePositive"
+
+                  .vertical-align-center.margin-v-3q
+                    .margin-r-h
+                      h6.bold
+                        = t "markItAs"
+                    select{action 'selectMarkedAnalyis' on='change'} id="marked-analysis"
                       each filteredRisks as |risk|
                         option value=risk.value
                           | #{ t (risk-text risk.value)}
-                    .bold
-                      = t "for"
-                    select{action 'selectMarkedAnalyisType' on='change'} id="marked-analysis-all" class="margin-h-h mark-analysis-all"
+                    .margin-h-h
+                      h6.bold
+                        = t "for"
+                    select{action 'selectMarkedAnalyisType' on='change'} id="marked-analysis-all" class="mark-analysis-all"
                       option value="false"
                         = t "currentFileOnly"
                       option value="true"
                         =  t "allFutureAnalyses"
-                  else
-                    .bold
-                      = t "overriddenRisk"
-                    .tag class="{{analysis.overriddenRiskLabelClass}} margin-h-q"
-                      i.fa.risk-icons class=analysis.overriddenRiskIconClass
-                      .uppercase-text
-                        | &nbsp; #{ t (risk-text analysis.overriddenRisk)}
-                  .bold.margin-l-h
-                    = t "orginalRisk"
-                  .tag class="{{analysis.riskLabelClass}} margin-h-q"
-                    i.fa.risk-icons class=analysis.riskIconClass
-                    .uppercase-text
-                      | &nbsp; #{ t (risk-text analysis.risk)}
 
-                .vertical-align-top.margin-v-h
-                  .margin-r-1.padding-t-h
-                    label.bold
-                      = t "comment"
-                  if isEditingOverriddenRisk
+                  .vertical-align-top
+                    .margin-r-1.padding-t-h
+                      label.bold
+                        = t "comment"
                     div.contain-width
                       = textarea class="form-control textarea-input margin-t-q" rows="2" placeholder=(t "reasonForOverride") value=analysis.overriddenRiskComment
-                  else
-                    span.padding-t-h.padding-b-1h
-                      if analysis.overriddenRiskComment
-                        | #{analysis.overriddenRiskComment}
-                      else
-                        em.text-lightgray
-                          = t "none"
 
-                .columns
-                  if isEditingOverriddenRisk
-                    .column.is-one-third
-                      button.is-default.edit-marked-analysis click="markAnalysis" disabled=isMarkingAnalysis
+                  .columns.margin-t-h
+                    .column
+                      button.is-default click="markAnalysis" disabled=isMarkingAnalysis
                         if isMarkingAnalysis
                           = fa-icon "spinner fa-spin"
                         else
                           = fa-icon "check"
                         span.margin-l-h
                           = t "save"
-                      button.is-default.edit-marked-analysis click="cancelEditMarkingAnalysis"
-                        = fa-icon "times"
-                        span.margin-l-h
-                          = t "cancel"
-                  else
-                    .column
-                      button.is-default.edit-marked-analysis click="editMarkedAnalysis" disabled=isEditingMarkedAnalysis
-                        if isEditingMarkedAnalysis
-                          = fa-icon "spinner fa-spin"
-                        else
-                          = fa-icon "pencil"
-                        span.margin-l-h
-                          = t "edit"
-                      button.is-default.edit-marked-analysis click="openResetMarkedAnalysisConfirmBox"
-                        = fa-icon "undo"
-                        span.margin-l-h
-                          = t "reset"
-
-          else
-            .columns.margin-top-q
-              .column
-                h6
-                  = t "falsePositive"
-
-                .vertical-align-center.margin-v-3q
-                  .margin-r-h
-                    h6.bold
-                      = t "markItAs"
-                  select{action 'selectMarkedAnalyis' on='change'} id="marked-analysis"
-                    each filteredRisks as |risk|
-                      option value=risk.value
-                        | #{ t (risk-text risk.value)}
-                  .margin-h-h
-                    h6.bold
-                      = t "for"
-                  select{action 'selectMarkedAnalyisType' on='change'} id="marked-analysis-all" class="mark-analysis-all"
-                    option value="false"
-                      = t "currentFileOnly"
-                    option value="true"
-                      =  t "allFutureAnalyses"
-
-                .vertical-align-top
-                  .margin-r-1.padding-t-h
-                    label.bold
-                      = t "comment"
-                  div.contain-width
-                    = textarea class="form-control textarea-input margin-t-q" rows="2" placeholder=(t "reasonForOverride") value=analysis.overriddenRiskComment
-
-                .columns.margin-t-h
-                  .column
-                    button.is-default click="markAnalysis" disabled=isMarkingAnalysis
-                      if isMarkingAnalysis
-                        = fa-icon "spinner fa-spin"
-                      else
-                        = fa-icon "check"
-                      span.margin-l-h
-                        = t "save"
 
 = confirm-box isActive=showResetAnalysisConfirmBox title="Reset Overridden Analysis" delegate=this disabled=isResettingMarkedAnalysis

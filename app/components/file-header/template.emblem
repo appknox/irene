@@ -92,7 +92,7 @@
                 | &nbsp; #{t "requested"}
           else
             if organization.selected.isTrial
-              button.is-primary click={(perform openRequestAccessModal)} disabled={if file.isActive false "disabled"}
+              button.is-primary click={(perform toggleRequestAccessModal)} disabled={if file.isActive false "disabled"}
                 .fa-font-size
                   = fa-icon "play"
                 | &nbsp; #{t "start"}
@@ -124,7 +124,7 @@
         .columns
           .column.card-button
             if organization.selected.isTrial
-              button.is-primary.margin-top20 click={(perform openRequestAccessModal)}
+              button.is-primary.margin-top20 click={(perform toggleRequestAccessModal)}
                 = fa-icon "download"
                 | &nbsp; #{ t "pdfReport"}
             else
@@ -207,206 +207,210 @@
 
         = ember-chart type='bar' data=owaspData.web width=320 height=200 options=barChartOptions
 
-= modal-card isActive=showRequestAccessModal title=(t "modalCard.requestAccess.title")
-  h5
-   = t "modalCard.requestAccess.description"
-  .columns
-    .column.is-one-third
-      button.modal-button.is-primary click={(perform requestAccess)}
-        =  t "modalCard.requestAccess.button"
-    .column
-      button.modal-button.is-primary click={(perform closeRequestAccessModal)}
-        = t "cancel"
+if showRequestAccessModal
+  = ak-modal showHeader=true headerTitle=(t "modalCard.requestAccess.title") onClose=(perform toggleRequestAccessModal)
+    h5
+    = t "modalCard.requestAccess.description"
+    .columns
+      .column.is-one-third
+        button.modal-button.is-primary click={(perform requestAccess)}
+          =  t "modalCard.requestAccess.button"
+      .column
+        button.modal-button.is-primary click={(perform closeRequestAccessModal)}
+          = t "cancel"
 
-= modal-card isActive=showManualScanModal title=(t "modalCard.manual.title") class="manual-scan-modal"
-  h5
-   = t "modalCard.manual.description"
-  ul
-    li
-      a click="displayAppInfo"
-        .columns
-          .column.is-one-quarter
-            | #{t "modalCard.manual.basicAppInfo"} &nbsp;
-          .column.content-right
-            if isBasicInfo
-              = fa-icon "chevron-up"
-            else
-              = fa-icon "chevron-down"
-    if isBasicInfo
+if showManualScanModal
+  = ak-modal showHeader=true headerTitle=(t "modalCard.manual.title") onClose=(action "closeManualScanModal")
+    h5
+    = t "modalCard.manual.description"
+    ul
+      li
+        a click="displayAppInfo"
+          .columns
+            .column.is-one-quarter
+              | #{t "modalCard.manual.basicAppInfo"} &nbsp;
+            .column.content-right
+              if isBasicInfo
+                = fa-icon "chevron-up"
+              else
+                = fa-icon "chevron-down"
+      if isBasicInfo
+          .modal-sub-container
+            .columns
+              .column
+                = t "modalCard.manual.appEnv"
+              .column
+                select.select{action 'selectAppEnvironment' on='change'} id="app-env"
+                  option selected="true" value=manualscan.filteredAppEnv
+                    | #{ t (app-environment manualscan.filteredAppEnv)}
+                  each filteredEnvironments as |env|
+                    option value=env.value
+                      | #{ t (app-environment env.value)}
+            .columns
+              .column
+                = t "modalCard.manual.minOSVersion"
+              .column
+                = input class="input" placeholder=(t "modalCard.manual.minOSVersion") type="text" value=manualscan.minOsVersion
+            .columns
+              .column
+                = t "modalCard.manual.appQuestion1"
+              .column
+                select.select{action 'requiredAppAction' on='change'} id="required-app-action"
+                  option selected="true" value=manualscan.filteredAppAction
+                    | #{ t (app-action manualscan.filteredAppAction)}
+                  each filteredAppActions as |appAction|
+                    option value=appAction.value
+                      | #{ t (app-action appAction.value)}
+                .margin-top
+                  small
+                    if manualscan.showProceedText
+                      = t "modalCard.manual.appQuestion1Answer1"
+                    else if manualscan.showHaltText
+                      = t "modalCard.manual.appQuestion1Answer2"
+
+            .columns
+              .column
+                = t "modalCard.manual.poc"
+              .column
+                = input class="input" type="name" value=manualscan.contact.name placeholder=(t "name")
+                = input class="input margin-top" type="email" value=manualscan.contact.email placeholder=(t "email")
+
+      li
+        a click="displayLoginDetails"
+          .columns
+            .column.is-one-quarter
+              | #{t "modalCard.manual.loginDetails"} &nbsp;
+            .column.content-right
+              if isLoginDetails
+                = fa-icon "chevron-up"
+              else
+                = fa-icon "chevron-down"
+      if isLoginDetails
         .modal-sub-container
           .columns
             .column
-              = t "modalCard.manual.appEnv"
+              = t "modalCard.manual.loginRequired"
             .column
-              select.select{action 'selectAppEnvironment' on='change'} id="app-env"
-                option selected="true" value=manualscan.filteredAppEnv
-                  | #{ t (app-environment manualscan.filteredAppEnv)}
-                each filteredEnvironments as |env|
-                  option value=env.value
-                    | #{ t (app-environment env.value)}
-          .columns
-            .column
-              = t "modalCard.manual.minOSVersion"
-            .column
-              = input class="input" placeholder=(t "modalCard.manual.minOSVersion") type="text" value=manualscan.minOsVersion
-          .columns
-            .column
-              = t "modalCard.manual.appQuestion1"
-            .column
-              select.select{action 'requiredAppAction' on='change'} id="required-app-action"
-                option selected="true" value=manualscan.filteredAppAction
-                  | #{ t (app-action manualscan.filteredAppAction)}
-                each filteredAppActions as |appAction|
-                  option value=appAction.value
-                    | #{ t (app-action appAction.value)}
-              .margin-top
-                small
-                  if manualscan.showProceedText
-                    = t "modalCard.manual.appQuestion1Answer1"
-                  else if manualscan.showHaltText
-                    = t "modalCard.manual.appQuestion1Answer2"
-
-          .columns
-            .column
-              = t "modalCard.manual.poc"
-            .column
-              = input class="input" type="name" value=manualscan.contact.name placeholder=(t "name")
-              = input class="input margin-top" type="email" value=manualscan.contact.email placeholder=(t "email")
-
-    li
-      a click="displayLoginDetails"
-        .columns
-          .column.is-one-quarter
-            | #{t "modalCard.manual.loginDetails"} &nbsp;
-          .column.content-right
-            if isLoginDetails
-              = fa-icon "chevron-up"
-            else
-              = fa-icon "chevron-down"
-    if isLoginDetails
-      .modal-sub-container
-        .columns
-          .column
-            = t "modalCard.manual.loginRequired"
-          .column
-            select.select{action 'loginRequired' on='change'} id="app-login-required"
-              if manualscan.loginStatus
-                option selected="true" value=manualscan.loginStatus
-                  | #{ t manualscan.loginStatus}
-              each filteredLoginStatuses as |status|
-                option value=status
-                  | #{ t status}
-        if manualscan.loginRequired
-          .user-roles
-            h6.margin-top
-               = t "modalCard.manual.enterLoginDetails" htmlSafe=true
-            .columns.no-border-column
-              .column
-                form.columns.no-border-column
-                  .column.is-one-third
-                    = input class="input userrole" type="name" value=newUserRole placeholder=(t "role")
-                  .column.is-one-third
-                    = input class="input" type="name" value=username autocomplete="new-user" placeholder=(t "username")
-                  .column.is-one-third
-                    = input class="input password" type="password" value=password autocomplete="new-password" placeholder=(t "password")
-                  button.modal-button.is-primary.uppercase-text.margin-left click="addUserRole"
-                    = t "modalCard.manual.addUserRole"
-            if hasUserRoles
-              .column
-                table.user-roles-table
-                  tr
-                    th.uppercase-text
-                      = t "modalCard.manual.userRoles"
-                    th.uppercase-text
-                      = t "modalCard.manual.actions"
-                  each allUserRoles as |userRole|
+              select.select{action 'loginRequired' on='change'} id="app-login-required"
+                if manualscan.loginStatus
+                  option selected="true" value=manualscan.loginStatus
+                    | #{ t manualscan.loginStatus}
+                each filteredLoginStatuses as |status|
+                  option value=status
+                    | #{ t status}
+          if manualscan.loginRequired
+            .user-roles
+              h6.margin-top
+                = t "modalCard.manual.enterLoginDetails" htmlSafe=true
+              .columns.no-border-column
+                .column
+                  form.columns.no-border-column
+                    .column.is-one-third
+                      = input class="input userrole" type="name" value=newUserRole placeholder=(t "role")
+                    .column.is-one-third
+                      = input class="input" type="name" value=username autocomplete="new-user" placeholder=(t "username")
+                    .column.is-one-third
+                      = input class="input password" type="password" value=password autocomplete="new-password" placeholder=(t "password")
+                    button.modal-button.is-primary.uppercase-text.margin-left click="addUserRole"
+                      = t "modalCard.manual.addUserRole"
+              if hasUserRoles
+                .column
+                  table.user-roles-table
                     tr
-                      td
-                        .columns
-                          .column.text-centre.lowercase-text
-                            .tag
-                              = userRole.role
-                        .columns.table-head
-                          .column.lowercase-text
-                            | #{t "username"}
-                          .column.lowercase-text
-                            | #{t "password"}
+                      th.uppercase-text
+                        = t "modalCard.manual.userRoles"
+                      th.uppercase-text
+                        = t "modalCard.manual.actions"
+                    each allUserRoles as |userRole|
+                      tr
+                        td
+                          .columns
+                            .column.text-centre.lowercase-text
+                              .tag
+                                = userRole.role
+                          .columns.table-head
+                            .column.lowercase-text
+                              | #{t "username"}
+                            .column.lowercase-text
+                              | #{t "password"}
 
-                        .columns.no-border-column
-                          .column
-                            = userRole.username
-                          .column
-                            = userRole.password
-                      td
-                        .tag.delete-tag.margin-top3.remove click="'openRemoveUserRoleConfirmBox' userRole.id"
-                          i.fa.risk-icons.fa-trash-o
-                            | &nbsp; #{t "remove"}
-    li
-      a click="displayVPNDetails"
-        .columns
-          .column.is-one-quarter
-            | #{t "modalCard.manual.vpnDetails"} &nbsp;
-          .column.content-right
-            if isVPNDetails
-              = fa-icon "chevron-up"
-            else
-              = fa-icon "chevron-down"
-    if isVPNDetails
-      .modal-sub-container
+                          .columns.no-border-column
+                            .column
+                              = userRole.username
+                            .column
+                              = userRole.password
+                        td
+                          .tag.delete-tag.margin-top3.remove click="'openRemoveUserRoleConfirmBox' userRole.id"
+                            i.fa.risk-icons.fa-trash-o
+                              | &nbsp; #{t "remove"}
+      li
+        a click="displayVPNDetails"
+          .columns
+            .column.is-one-quarter
+              | #{t "modalCard.manual.vpnDetails"} &nbsp;
+            .column.content-right
+              if isVPNDetails
+                = fa-icon "chevron-up"
+              else
+                = fa-icon "chevron-down"
+      if isVPNDetails
+        .modal-sub-container
+          .columns
+            .column
+              = t "modalCard.manual.vpnRequired"
+            .column
+              select.select{action 'vpnRequired' on='change'} id="vpn-required"
+                if manualscan.vpnStatus
+                  option selected="true" value=manualscan.vpnStatus
+                    | #{ t manualscan.vpnStatus}
+                each filteredVpnStatuses as |status|
+                  option value=status
+                    | #{ t status}
+          if manualscan.vpnRequired
+            h6.margin-top
+              = t "modalCard.manual.enterVPNDetails"
+              .columns.no-border-column
+                .column
+                  form.columns.no-border-column
+                    .column.is-one-third
+                        = input class="input" type="name" placeholder=(t "modalCard.manual.vpnAddress") value=manualscan.vpnDetails.address autocomplete="new-address"
+                    .column.is-one-third
+                      = input class="input" type="name" placeholder=(t "modalCard.manual.vpnPort") value=manualscan.vpnDetails.port autocomplete="new-port"
+                    h6.margin-left.margin-top.margin-bottom0
+                      = t "modalCard.manual.enterCredentails"
+                    .column.is-one-third
+                      = input class="input" type="name" value=manualscan.vpnDetails.username autocomplete="new-username" placeholder=(t "username")
+                    .column.is-one-third
+                      = input class="input" type="password" value=manualscan.vpnDetails.password  autocomplete="new-password" placeholder=(t "password")
+      li
         .columns
           .column
-            = t "modalCard.manual.vpnRequired"
-          .column
-            select.select{action 'vpnRequired' on='change'} id="vpn-required"
-              if manualscan.vpnStatus
-                option selected="true" value=manualscan.vpnStatus
-                  | #{ t manualscan.vpnStatus}
-              each filteredVpnStatuses as |status|
-                option value=status
-                  | #{ t status}
-        if manualscan.vpnRequired
-          h6.margin-top
-            = t "modalCard.manual.enterVPNDetails"
-            .columns.no-border-column
-              .column
-                form.columns.no-border-column
-                  .column.is-one-third
-                      = input class="input" type="name" placeholder=(t "modalCard.manual.vpnAddress") value=manualscan.vpnDetails.address autocomplete="new-address"
-                  .column.is-one-third
-                    = input class="input" type="name" placeholder=(t "modalCard.manual.vpnPort") value=manualscan.vpnDetails.port autocomplete="new-port"
-                  h6.margin-left.margin-top.margin-bottom0
-                    = t "modalCard.manual.enterCredentails"
-                  .column.is-one-third
-                    = input class="input" type="name" value=manualscan.vpnDetails.username autocomplete="new-username" placeholder=(t "username")
-                  .column.is-one-third
-                    = input class="input" type="password" value=manualscan.vpnDetails.password  autocomplete="new-password" placeholder=(t "password")
-    li
+            .default-text.margin-left
+              = t "modalCard.manual.additionalComments"
+          .column.margin-right
+            = textarea class="input text-area" type="name" value=manualscan.additionalComments
+    .columns
+      .column.flex-center.margin-top50
+        button.modal-button.is-primary click="saveManualScanForm" disabled=isRequestingManual
+          = t "modalCard.manual.title"
+
+        button.modal-button.is-primary.margin-left click="closeManualScanModal"
+          = t "cancel"
+
+if showRescanModal
+  = ak-modal showHeader=true headerTitle=(t "modalCard.rescan.title") onClose=(action "closeRescanModal")
+      h5
+        = t "modalCard.rescan.description"
       .columns
+        .column.is-one-sixth
+          button.modal-button.is-primary click="rescanApp" disabled=isStartingRescan
+            =  t "yes"
         .column
-          .default-text.margin-left
-            = t "modalCard.manual.additionalComments"
-        .column.margin-right
-          = textarea class="input text-area" type="name" value=manualscan.additionalComments
-  .columns
-    .column.flex-center.margin-top50
-      button.modal-button.is-primary click="saveManualScanForm" disabled=isRequestingManual
-        = t "modalCard.manual.title"
+          button.modal-button.is-primary click="closeRescanModal"
+            = t "no"
 
-      button.modal-button.is-primary.margin-left click="closeManualScanModal"
-        = t "cancel"
-
-= modal-card isActive=showRescanModal title=(t "modalCard.rescan.title")
-  h5
-   = t "modalCard.rescan.description"
-  .columns
-    .column.is-one-sixth
-      button.modal-button.is-primary click="rescanApp" disabled=isStartingRescan
-        =  t "yes"
-    .column
-      button.modal-button.is-primary click="closeRescanModal"
-        = t "no"
-
-= modal-card isActive=showCopyPasswordModal title=(t "modalCard.copyPassword.title") class="copy-password-modal"
-  = copy-password pdfPassword=file.project.pdfPassword
+if showCopyPasswordModal
+  = ak-modal showHeader=true headerTitle=(t "modalCard.copyPassword.title") onClose=(action "closeCopyPasswordModal")
+    = copy-password pdfPassword=file.project.pdfPassword
 
 = confirm-box isActive=showRemoveRoleConfirmBox title=(t "confirmBox.removeUserRole") delegate=this

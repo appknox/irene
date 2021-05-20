@@ -2,15 +2,16 @@ if data.published
   a local-class="marketplace-card" href={data.link} target="_blank"
     = marketplace-card-content title=data.title logo=data.logo text=data.description
 else
-  a local-class="marketplace-card" click={(perform openInstructionsModal)}
+  a local-class="marketplace-card" click={(perform toggleInstructionsModal)}
     = marketplace-card-content title=data.title logo=data.logo text=data.description
 
-= modal-card class="input-modal modal-l" isActive=showInstructionsModal title=(t 'integrateAppknoxToCICDPipeline')
-  .card-body
-    .card-wrapper
-      div local-class="marketplace-modal-logo"
-        img src={data.logo}
-      .black-text.bold.font-medium.text-centre.padding-b-1h
-        | #{data.title}
-      div
-        | #{data.instructions}
+if showInstructionsModal
+  = ak-modal showHeader=true headerTitle=(t 'integrateAppknoxToCICDPipeline') onClose=(perform toggleInstructionsModal)
+    .card-body
+      .card-wrapper
+        div local-class="marketplace-modal-logo"
+          img src={data.logo}
+        .black-text.bold.font-medium.text-centre.padding-b-1h
+          | #{data.title}
+        div
+          | #{data.instructions}

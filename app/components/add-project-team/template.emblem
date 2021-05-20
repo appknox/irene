@@ -1,31 +1,32 @@
-button.is-primary click={(perform openAddTeamModal)}
+button.is-primary click={(perform toggleAddTeamModal)}
   i.fa.fa-users.margin-r-h
   = t "addTeam"
 
-= modal-card class="input-modal user-search-modal" isActive=showAddProjectTeamModal title=(t 'modalCard.addTeam.title')
-  .card-body
-    .card-wrapper
-      form
-        .control.vertical-align-center.margin-b-1
-          = fa-icon "search"
-          = input class="form-control input input-width margin-left" placeholder="Search team" type="text" value=query autofocus="autofocus" key-up="searchQuery"
+if showAddProjectTeamModal
+  = ak-modal headerTitle=(t 'modalCard.addTeam.title') showHeader=true onClose=(perform toggleAddTeamModal)
+    .card-body
+      .card-wrapper
+        form
+          .control.vertical-align-center.margin-b-1
+            = fa-icon "search"
+            = input class="form-control input input-width margin-left" placeholder="Search team" type="text" value=query autofocus="autofocus" key-up="searchQuery"
 
-      if hasObjects
-        .add-team-projects-scroll
-          table.org-table
-            tbody
-              each sortedObjects as |team|
-                tr.team-project
-                  td
-                    .vertical-align-center
-                      span.team-project-name.black-text
-                       = team.name
-                  td.team-project-action
-                    button.is-default.is-icon.no-border click={(perform addProjectTeam project team)} disabled=isAddingTeam
-                      = fa-icon "plus"
-          .margin-t-q
-            = partial "paginate"
-      else
-        div.empty-state
-          = fa-icon "exclamation-triangle"
-          = t "noProject"
+        if hasObjects
+          .add-team-projects-scroll
+            table.org-table
+              tbody
+                each sortedObjects as |team|
+                  tr.team-project
+                    td
+                      .vertical-align-center
+                        span.team-project-name.black-text
+                        = team.name
+                    td.team-project-action
+                      button.is-default.is-icon.no-border click={(perform addProjectTeam project team)} disabled=isAddingTeam
+                        = fa-icon "plus"
+            .margin-t-q
+              = partial "paginate"
+        else
+          div.empty-state
+            = fa-icon "exclamation-triangle"
+            = t "noProject"

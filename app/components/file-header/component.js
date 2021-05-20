@@ -333,12 +333,8 @@ const FileHeaderComponent = Component.extend({
     };
   }),
 
-  openRequestAccessModal: task(function* () {
-    yield this.set("showRequestAccessModal", true);
-  }),
-
-  closeRequestAccessModal: task(function* () {
-    yield this.set("showRequestAccessModal", false);
+  toggleRequestAccessModal: task(function* () {
+    yield this.set("showRequestAccessModal", !this.get('showRequestAccessModal'));
   }),
 
   requestAccess: task(function* () {
@@ -473,6 +469,9 @@ const FileHeaderComponent = Component.extend({
         });
     },
 
+    closeCopyPasswordModal() {
+      this.set('showCopyPasswordModal', false);
+    },
 
     loginRequired() {
       const loginRequiredText = this.$('#app-login-required').val();
