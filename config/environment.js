@@ -580,19 +580,13 @@ module.exports = function (environment) {
     ENV.isRegistrationEnabled = true;
   }
 
-  if (environment === "mirage") {
+  if (environment === "testing" || environment === "test" || environment === "mirage") {
     ENV["ember-cli-mirage"] = {
       enabled: true,
+      trackRequests: true
     };
     ENV["host"] = "http://0.0.0.0:8000";
-    ENV.isRegistrationEnabled = true;
-  }
-
-  if (environment === "testing" || environment === "test") {
-    ENV["ember-cli-mirage"] = {
-      enabled: true,
-    };
-    ENV["host"] = "http://0.0.0.0:8000";
+    ENV.ENVHandlerCONST.processENV["IRENE_API_HOST"] = "/"
     ENV.isRegistrationEnabled = true;
   }
 

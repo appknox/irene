@@ -33,3 +33,4 @@ package.json.ember-try
 /build
 /staticserver/dist
 /staticserver/node_modules
+/mirage/mirage

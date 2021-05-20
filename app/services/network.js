@@ -12,7 +12,7 @@ export default class NetworkService extends Service {
 
   headers() {
     const head_values =  {
-      'X-Product': 'irene-' + ENV.Version
+      'X-Product': 'irene-' + ENV.APP.version
     };
     const token = this.session.data.authenticated.b64token;
     if(token) {

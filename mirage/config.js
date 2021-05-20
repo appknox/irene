@@ -20,11 +20,7 @@ export function makeServer(config) {
 }
 
 function routes() {
-
   this.passthrough('/write-coverage');
-  this.passthrough('https://api.rollbar.com/**');
-  this.passthrough('https://socket.appknox.com/**');
-  this.passthrough('https://appknox.customersuccessbox.com/**');
   this.urlPrefix = config.host;
 
   // NOTE v2 api namespace has to be grouped together
@@ -131,10 +127,6 @@ function routes() {
   });
 
   this.put('/manualscans/:id', () => {
-    return {};
-  });
-
-  this.post('/registration', () => {
     return {};
   });
 
@@ -327,4 +319,5 @@ function routes() {
   this.get('/example/download_url', () => {
     return {};
   });
+  this.passthrough();
 }

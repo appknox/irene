@@ -4,6 +4,7 @@ import { click, fillIn, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
+import { Response } from 'miragejs';
 
 module('Integration | Component | registration', function(hooks) {
   setupRenderingTest(hooks);
@@ -11,9 +12,6 @@ module('Integration | Component | registration', function(hooks) {
   setupMirage(hooks);
 
   test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
-
     await render(hbs`<Registration></Registration>`);
     assert.dom("[data-test-registration-form]").exists();
     assert.dom("[data-test-registration-form-title]").hasText("t:register:()");
@@ -115,20 +113,31 @@ module('Integration | Component | registration', function(hooks) {
     assert.dom("[data-test-registration-input-name-error]").hasText("Firstname can't be blank");
   })
 
-  // test('it should show success view for valid email and company', async function(assert) {
-  //   // this.server.post('/api/v2/registration', (schema, request) => {
-  //   //   debugger;
-  //   //   return {};
-  //   // })
-  //   await render(hbs`<Registration></Registration>`);
-  //   assert.dom("[data-test-register-btn]").exists();
-  //   const register_btn = this.element.querySelector("[data-test-register-btn]");
-  //   const email_input = this.element.querySelector("[data-test-registration-input-email]");
-  //   const company_input = this.element.querySelector("[data-test-registration-input-company]");
-  //   fillIn(email_input, "appknoxuser@appknox.com");
-  //   fillIn(company_input, "Appknox");
-  //   await click(register_btn);
-  //   assert.dom("[data-test-registration-input-company-error]").doesNotExist();
-  //   assert.dom("[data-test-registration-input-email-error]").doesNotExist();
-  // });
+  test('it should show success view for valid email and company', async function(assert) {
+    this.server.post('v2/registration', () => {
+      return new Response(204);
+    });
+    await render(hbs`<Registration></Registration>`);
+    assert.dom("[data-test-registration-success]").hasStyle({
+      'display': 'none'
+    });
+    assert.dom("[data-test-registration-form]").doesNotHaveStyle({
+      'display': 'none'
+    });
+    assert.dom("[data-test-register-btn]").exists();
+    const register_btn = this.element.querySelector("[data-test-register-btn]");
+    const email_input = this.element.querySelector("[data-test-registration-input-email]");
+    const company_input = this.element.querySelector("[data-test-registration-input-company]");
+    fillIn(email_input, "appknoxuser@appknox.com");
+    fillIn(company_input, "Appknox");
+    await click(register_btn);
+    assert.dom("[data-test-registration-input-company-error]").doesNotExist();
+    assert.dom("[data-test-registration-input-email-error]").doesNotExist();
+    assert.dom("[data-test-registration-success]").doesNotHaveStyle({
+      'display': 'none'
+    });
+    assert.dom("[data-test-registration-form]").hasStyle({
+      'display': 'none'
+    });
+  });
 });
