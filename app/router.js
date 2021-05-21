@@ -111,6 +111,9 @@ Router.map(function () {
     this.route('partner', function () {
       this.route('clients');
     });
+    this.route('client', {
+      path: '/partner/client/:id'
+    });
   });
   this.route('invitation', {
     path: '/invitation/:uuid'

@@ -17,7 +17,7 @@ $card-padding: 1rem;
 
 .client-info-card {
   display: grid;
-  box-shadow: 0px 0px 5px -2px #888;
+  box-shadow: 0px 1px 5px -2px #888;
   border-radius: 0.3rem;
   min-height: 8px;
   margin: 8px;
@@ -31,21 +31,33 @@ $card-padding: 1rem;
     padding: 0 $card-padding;
     height: $card-header-height;
     align-items: center;
+    border-bottom: 1px solid #f3f3f5;
 
     .thumbnail {
       width: $card-thumbnail-size;
       height: $card-thumbnail-size;
       border-radius: 50%;
-      border: 1px solid rgba(#424651, 0.3);
+      border: 1px solid lighten($primary-color, 3%);
+      background: lighten($primary-color, 3%);
       color: $white;
       display: grid;
       align-items: center;
       justify-content: center;
-      background: $primary-color;
+    }
+
+    &:hover {
+      background-color: #fbfbfd;
+      .thumbnail {
+        border-color: darken($primary-color, 4%);
+        background: darken($primary-color, 4%);
+        color: $white;
+      }
+      .title {
+        color: rgba(#000, 1);
+      }
     }
 
     .title {
-
       text-transform: capitalize;
       font-weight: bold;
       color: rgba(#000, 0.7);
@@ -60,18 +72,7 @@ $card-padding: 1rem;
         font-style: italic;
       }
 
-      &:hover {
-        color: rgba(#000, 1);
-      }
-
       // @include truncate(18px, 1, 2);
-    }
-
-    &:hover {
-      .thumbnail {
-        background: $white;
-        color: $primary-color;
-      }
     }
   }
 
@@ -100,6 +101,7 @@ $card-padding: 1rem;
         font-size: 1.3rem;
         line-height: 1;
       }
+
       .metric-label {
         font-size: 0.9em;
         line-height: 1.25;
@@ -157,14 +159,27 @@ $card-padding: 1rem;
               }
             }
 
-            .remaining {
+            .payment-status {
               grid-column-start: 1;
               grid-column-end: 3;
 
               .data {
                 color: #000;
-                text-transform: lowercase;
+
+                .value {
+                  text-transform: lowercase;
+                }
+
+                .expiry-date {
+                  font-size: 0.9em;
+                  color: #9ba2ad;
+                  margin-left: 0.5em;
+                }
               }
+            }
+
+            .payment-status {
+              color: #FE4D3F;
             }
           }
         }

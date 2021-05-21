@@ -15,29 +15,25 @@
   row-gap: 0.7rem;
   justify-content: center;
   flex-wrap: wrap;
+
   @media (min-width: 912px) {
     grid-template-columns: repeat(2, 1fr);
   }
+
   @media (min-width: 1300px) {
     grid-template-columns: repeat(3, 1fr);
   }
+
   @media (min-width: 2800px) {
     grid-template-columns: repeat(4, 1fr);
   }
 }
 
-.no-data {
-  height: 16rem;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
+.no-data,
 .loading {
   height: 16rem;
   width: 100%;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
 }
