@@ -823,6 +823,8 @@
   "registrationRequests": "Registration requests",
   "invitations": "Invitations",
   "pendingRequests": "Pending Requests",
-  "rejectedRequests": "Rejected Requests"
-
+  "rejectedRequests": "Rejected Requests",
+  "invited": "Invited",
+  "validUntil": "Valid until",
+  "source": "Source"
 }
