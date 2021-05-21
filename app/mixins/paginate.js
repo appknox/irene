@@ -265,7 +265,8 @@ export const PaginationMixin = superclass => class extends superclass {
     this.gotoPage(this.maxOffset)
   }
 
-  @computed('extraQueryStrings', 'limit', 'offset', 'offsetMultiplier', 'targetModel') //eslint-disable-line
+  // refresh => dummy to reload model with current params
+  @computed('extraQueryStrings', 'limit', 'offset', 'offsetMultiplier', 'targetModel', 'refresh') //eslint-disable-line
   get objects() {
     let query;
     if (this.isJsonApiPagination) { // eslint-disable-line

@@ -31,6 +31,8 @@ export default class PartnerRegistrationRequestsListComponent extends Pagination
 
   targetModel = 'registration-request';
 
+  @tracked refresh = false;
+
   @computed('args.status')
   get extraQueryStrings() {
     return JSON.stringify({
@@ -59,6 +61,7 @@ export default class PartnerRegistrationRequestsListComponent extends Pagination
       yield request.updateStatus({
         approval_status: 'approved'
       }, request.id);
+      this.refreshModel();
       this.animateRowVisibility(request);
       this.notify.success("Request approved successfully")
     } catch (err) {
@@ -71,9 +74,7 @@ export default class PartnerRegistrationRequestsListComponent extends Pagination
       yield request.updateStatus({
         approval_status: 'rejected'
       }, request.id);
-
-      this.animateRowVisibility(request);
-
+      this.refreshModel();
       this.notify.success("Request rejected successully")
     } catch (err) {
       this.notify.error(parseError(err));
@@ -85,7 +86,7 @@ export default class PartnerRegistrationRequestsListComponent extends Pagination
       yield request.updateStatus({
         approval_status: 'pending'
       }, request.id);
-      this.animateRowVisibility(request);
+      this.refreshModel();
       this.notify.success("Rejection undone successfully")
     } catch (err) {
       this.notify.error(parseError(err));
@@ -113,5 +114,10 @@ export default class PartnerRegistrationRequestsListComponent extends Pagination
       }
       set(row, 'tempClass', undefined);
     }, 500);
+  }
+
+  refreshModel() {
+    // toggle refresh prop to reload model explicitly
+    this.refresh = !this.refresh;
   }
 }
