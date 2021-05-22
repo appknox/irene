@@ -11,7 +11,8 @@
   </div>
 
 
-  <div data-input-container="email" local-class="email input-container {{if this.changeset.error.email 'error'}}">
+  <div data-input-container="email" data-input-required
+    local-class="email input-container {{if this.changeset.error.email 'error'}}">
     <label local-class="label" for="email">{{t 'email'}}</label>
     <Input id="email" placeholder="Email" autocomplete="off" @value={{mut (get this.changeset "email")}}
       local-class="input" />
@@ -20,7 +21,8 @@
     {{/if}}
   </div>
 
-  <div data-input-container="company" local-class="company input-container {{if this.changeset.error.company 'error'}}">
+  <div data-input-container="company" data-input-required
+    local-class="company input-container {{if this.changeset.error.company 'error'}}">
     <label local-class="label" for="user-company">{{t "companyName"}}</label>
     <Input id="user-company" placeholder="Company" autocomplete="off" @value={{mut (get this.changeset "company")}}
       local-class="input" />

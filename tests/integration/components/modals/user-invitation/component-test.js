@@ -33,7 +33,16 @@ module('Integration | Component | modals/user-invitation', function (hooks) {
     assert.equal(this.element.querySelectorAll('div[data-input-container]').length, 4);
   });
 
-  test('Validate required fields', async function (assert) {
+  test('No error on initial rendering', async function (assert) {
+    assert.expect(2);
+
+    await render(hbs `<Modals::UserInvitation />`);
+
+    assert.notOk(this.element.querySelector('div[data-input-container="email"] > span[data-input-error]'), 'Email error not shown');
+    assert.notOk(this.element.querySelector('div[data-input-container="company"] > span[data-input-error]'), 'Company error not shown');
+  });
+
+  test('Validate required fields and error should be shown', async function (assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
     assert.expect(2);
