@@ -1,6 +1,8 @@
 {{page-title "Client Details"}}
 
-<div class="padding-h-1 padding-t-h padding-b-2">
+<Partner::ClientsNav></Partner::ClientsNav>
+
+<div class="padding-h-1 padding-t-1h padding-b-2">
   <LinkTo @route="authenticated.partner.clients">Clients</LinkTo> /
   {{#if this.model.isEmptyTitle}}
     <i>{{t 'noName'}}</i>
@@ -11,7 +13,7 @@
     error
   {{/if}}
 
-  <Partner::ClientDetails @client={{this.model}}></Partner::ClientDetails>
+  <Partner::ClientDetail @client={{this.model}}></Partner::ClientDetail>
 
   {{outlet}}
 </div>

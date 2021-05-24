@@ -88,12 +88,14 @@ Router.map(function () {
       this.route('redirect');
     });
     this.route('partner', function () {
-      this.route('clients');
-      this.route('registration-requests');
-      this.route('invitations');
-    });
-    this.route('client', {
-      path: '/partner/client/:id'
+      this.route('clients', function () {
+        this.route('overview');
+        this.route('invitations');
+        this.route('registration-requests');
+      });
+      this.route('client', {
+        path: '/client/:id'
+      });
     });
   });
   this.route('invitation', {
