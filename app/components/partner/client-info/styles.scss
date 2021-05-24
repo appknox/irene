@@ -17,7 +17,7 @@ $card-padding: 1rem;
 
 .client-info-card {
   display: grid;
-  box-shadow: 0px 1px 5px -2px #888;
+  border: 1px solid darken(#F3F5F8, 5%);
   border-radius: 0.3rem;
   min-height: 8px;
   margin: 8px;
@@ -128,19 +128,24 @@ $card-padding: 1rem;
         &.payment {
 
           .type {
-            border-radius: 0.3rem;
+            border-radius: 0.2rem;
             padding: 0.35rem 1.2rem;
             color: $white;
             text-transform: capitalize;
             line-height: 1.5;
             font-weight: bold;
-
-            &.per-scan {
-              background-color: #0362b1;
-            }
+            border: 1px solid transparent;
 
             &.per-app {
-              background-color: #66bb6a;
+              color: #5995ef;
+              background-color: #F2F7FF;
+              border-color: darken(#F2F7FF, 1%);
+            }
+
+            &.per-scan {
+              color: #57bf72;
+              background-color: #f0f9f2;
+              border-color: darken(#f0f9f2, 1%);
             }
           }
 
@@ -175,11 +180,10 @@ $card-padding: 1rem;
                   color: #9ba2ad;
                   margin-left: 0.5em;
                 }
+                .expiry-date-expired {
+                  color: #FE4D3F;
+                }
               }
-            }
-
-            .payment-status {
-              color: #FE4D3F;
             }
           }
         }

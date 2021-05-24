@@ -1,5 +1,5 @@
 <div local-class="client-info-card {{@client.type}}">
-  <LinkTo @route="authenticated.client" @model={{@client.id}} local-class="client-info-header">
+  <LinkTo @route="authenticated.partner.client" @model={{@client.id}} local-class="client-info-header">
     <span local-class="thumbnail">
       {{fa-icon "users"}}
     </span>
@@ -68,9 +68,9 @@
                         {{this.clientPlan.projectsLimit}}
                         {{t 'pluralApps' itemCount=this.clientPlan.projectsLimit}}
                       </strong>
-                      <span
-                        local-class="expiry-date">{{t (if this.clientPlan.isPaymentExpired 'expiredOn' 'expiresOn')}}
-                        {{day-js date=this.clientPlan.expiryDate format="DD MMM YYYY"}}</span>
+                      <span local-class="expiry-date {{if this.clientPlan.isPaymentExpired 'expiry-date-expired'}}">
+                        {{t (if this.clientPlan.isPaymentExpired 'expiredOn' 'expiresOn')}} {{day-js date=this.clientPlan.expiryDate format="DD MMM YYYY"}}
+                      </span>
                     {{/if}}
                   </span>
                 {{/if}}
