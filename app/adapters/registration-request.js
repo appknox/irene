@@ -6,17 +6,14 @@ export default class RegistrationRequestAdapter extends commondrf {
     return this.buildURLFromBase(`${this.namespace_v2}/registration_requests${id ? '/' + id : ''}`);
   }
 
-  updateStatus(store, type, snapshot, data) {
-    let id = snapshot.id;
-    const url = this.buildURL(type.modelName, id);
-    return this.ajax(url, 'PATCH', {
-      data
-    });
+  async patch(id, modelName, snapshot, data) {
+    const url = this.buildURL(modelName, id);
+    await this.ajax(url, 'PATCH', {data});
+    return this.store.findRecord(modelName, id);
   }
 
-  resend(store, type, snapshot) {
-    let id = snapshot.id;
-    const url = `${this.buildURL(type.modelName, id)}/resend`;
+  async resend(id, modelName, snapshot) {
+    const url = `${this.buildURL(modelName, id)}/resend`;
     return this.ajax(url, 'POST', {});
   }
 }
