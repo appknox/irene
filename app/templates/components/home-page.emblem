@@ -41,7 +41,7 @@ if isLoaded
               li
                 = link-to 'authenticated.analytics'
                   div
-                    = fa-icon "area-chart" class="sidebar-icons"
+                    = fa-icon "chart-area" class="sidebar-icons"
                     = t "analytics"
             li
               = link-to 'authenticated.organization.namespaces' class="mp-auth-teams"

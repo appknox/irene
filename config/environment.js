@@ -564,6 +564,11 @@ module.exports = function (environment) {
       jsUrl: "https://recaptcha.net/recaptcha/api.js?render=explicit",
       siteKey: "6LffPdIaAAAAANWL4gm7J6j9EJzKSuYEDAQ0Ry2x",
     },
+
+    fontawesome: {
+      warnIfNoIconsIncluded: false,
+      // ...
+    }
   };
 
   if (ENV.whitelabel.enabled) {
