@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject } from '@ember/inject';
+import { inject } from '@ember/service';
 
 export default class PartnerClientNavComponent extends Component {
   @inject intl;
