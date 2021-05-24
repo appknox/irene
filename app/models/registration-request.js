@@ -1,6 +1,7 @@
 import Model, {
   attr
 } from '@ember-data/model';
+import dayjs from 'dayjs';
 
 export default class RegistrationRequestModel extends Model {
 
@@ -14,16 +15,26 @@ export default class RegistrationRequestModel extends Model {
   @attr('boolean') isActivated;
 
   get fullName() {
-    return `${this.data.first_name} ${this.data.last_name}`;
+    return `${this.data.first_name ? this.data.first_name : ''} ${this.data.last_name ? this.data.last_name : ''}`;
   }
 
-  updateStatus(data, id) {
-    var adapter = this.store.adapterFor(this.constructor.modelName);
-    return adapter.updateStatus(this.store, this.constructor.modelName, this, data, id);
+  get hasExpired() {
+    if (new dayjs(this.validUntil) < new dayjs()) {
+      return true;
+    }
+    return false;
   }
 
-  resend(id) {
+  updateStatus(status) {
+    const data = {
+      'approval_status': status
+    };
     var adapter = this.store.adapterFor(this.constructor.modelName);
-    return adapter.resend(this.store, this.constructor.modelName, this, id);
+    return adapter.patch(this.id, this.constructor.modelName, this, data);
+  }
+
+  resend() {
+    var adapter = this.store.adapterFor(this.constructor.modelName);
+    return adapter.resend(this.id, this.constructor.modelName, this);
   }
 }
