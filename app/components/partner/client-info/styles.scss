@@ -1,197 +1,154 @@
 $card-header-height: 5rem;
 $card-thumbnail-size: 2.8rem;
-$card-padding: 1rem;
-
-@mixin truncate($font-size, $line-height, $lines-to-show) {
-  display: block; // Fallback for non-webkit
-  display: -webkit-box;
-  max-width: 400px;
-  // height: $font-size*$line-height*$lines-to-show; // Fallback for non-webkit
-  font-size: $font-size;
-  line-height: $line-height;
-  -webkit-line-clamp: $lines-to-show;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 
 .client-info-card {
-  display: grid;
   border: 1px solid darken(#F3F5F8, 5%);
   border-radius: 0.3rem;
-  min-height: 8px;
-  margin: 8px;
   grid-template-rows: $card-header-height 1fr;
-  background-color: #fff;
+  background-color: #fbfbfd;
+}
 
-  .client-info-header {
-    display: grid;
-    grid-template-columns: $card-thumbnail-size 1fr;
-    column-gap: 12px;
-    padding: 0 $card-padding;
-    height: $card-header-height;
-    align-items: center;
-    border-bottom: 1px solid #f3f3f5;
+.client-info-header {
+  display: grid;
+  grid-template-columns: $card-thumbnail-size 1fr;
+  column-gap: 12px;
+  padding: 0 1rem;
+  height: $card-header-height;
+  align-items: center;
+}
 
-    .thumbnail {
-      width: $card-thumbnail-size;
-      height: $card-thumbnail-size;
-      border-radius: 50%;
-      border: 1px solid lighten($primary-color, 3%);
-      background: lighten($primary-color, 3%);
-      color: $white;
-      display: grid;
-      align-items: center;
-      justify-content: center;
-    }
+.thumbnail {
+  width: $card-thumbnail-size;
+  height: $card-thumbnail-size;
+  border-radius: 50%;
+  border: 1px solid lighten($primary-color, 3%);
+  background: lighten($primary-color, 3%);
+  color: $white;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+}
 
-    &:hover {
-      background-color: #fbfbfd;
-      .thumbnail {
-        border-color: darken($primary-color, 4%);
-        background: darken($primary-color, 4%);
-        color: $white;
-      }
-      .title {
-        color: rgba(#000, 1);
-      }
-    }
+.title {
+  text-transform: capitalize;
+  font-weight: bold;
+  color: rgba(#000, 0.7);
+  max-height: 92%;
+  font-size: 1.1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
-    .title {
-      text-transform: capitalize;
-      font-weight: bold;
-      color: rgba(#000, 0.7);
-      max-height: 92%;
-      font-size: 1.1rem;
-      overflow: hidden;
-      text-overflow: ellipsis;
+  &.empty-title {
+    color: #424651;
+    font-size: 14px;
+    font-style: italic;
+  }
+}
 
-      &.empty-title {
-        color: #424651;
-        font-size: 14px;
-        font-style: italic;
-      }
+.table {
+  display: flex;
+  flex-direction: column;
+  padding: 0 1.5rem 1rem;
+}
 
-      // @include truncate(18px, 1, 2);
-    }
+.row {
+  display: flex;
+  border-bottom: 1px dashed #e3e8ef;
+  padding: 0.5rem 0;
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.key {
+  width: 30%;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+}
+.value {
+  width: 70%;
+  display: flex;
+  align-items: center;
+}
+
+.plan {
+  display: flex;
+}
+
+.plan-type {
+  border-radius: 0.2rem;
+  padding: 0.2rem 0.6rem;
+  color: $white;
+  text-transform: capitalize;
+  line-height: 1.2;
+  font-weight: bold;
+  border: 1px solid transparent;
+
+  &.per-app {
+    color: #5995ef;
+    background-color: #F2F7FF;
+    border-color: darken(#F2F7FF, 1%);
   }
 
-  .client-info-body {
-
-    height: 100%;
-
-    .client-metrics {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      padding: 1.2rem;
-      align-items: center;
-      background-color: #f6f7f9;
-
-      .metric {
-        display: grid;
-        grid-template-rows: 1.5rem 1fr;
-        row-gap: 0.2rem;
-        justify-content: center;
-        text-align: center;
-        color: #000;
-        padding-left: 0.5rem;
-      }
-
-      .metric-value {
-        font-size: 1.3rem;
-        line-height: 1;
-      }
-
-      .metric-label {
-        font-size: 0.9em;
-        line-height: 1.25;
-      }
-    }
-
-    .client-activities {
-      display: grid;
-      padding: $card-padding * 1.3 $card-padding * 2 $card-padding * 1.5;
-      row-gap: $card-padding;
-      font-size: 0.95em;
-
-      .activity {
-        display: grid;
-        grid-template-columns: 100px 1fr;
-        column-gap: 0.1rem;
-        align-items: baseline;
-
-        .label {
-          color: #000;
-          font-size: 0.95em;
-        }
-
-        &.payment {
-
-          .type {
-            border-radius: 0.2rem;
-            padding: 0.35rem 1.2rem;
-            color: $white;
-            text-transform: capitalize;
-            line-height: 1.5;
-            font-weight: bold;
-            border: 1px solid transparent;
-
-            &.per-app {
-              color: #5995ef;
-              background-color: #F2F7FF;
-              border-color: darken(#F2F7FF, 1%);
-            }
-
-            &.per-scan {
-              color: #57bf72;
-              background-color: #f0f9f2;
-              border-color: darken(#f0f9f2, 1%);
-            }
-          }
-
-          .credit-info {
-            display: grid;
-            grid-template-columns: auto auto;
-            justify-content: left;
-            column-gap: 8px;
-            align-items: center;
-            row-gap: 0.5em;
-
-            .info-icon {
-              i.icon {
-                color: #FFCC00;
-                font-size: 1.3rem;
-              }
-            }
-
-            .payment-status {
-              grid-column-start: 1;
-              grid-column-end: 3;
-
-              .data {
-                color: #000;
-
-                .value {
-                  text-transform: lowercase;
-                }
-
-                .expiry-date {
-                  font-size: 0.9em;
-                  color: #9ba2ad;
-                  margin-left: 0.5em;
-                }
-                .expiry-date-expired {
-                  color: #FE4D3F;
-                }
-              }
-            }
-          }
-        }
-
-
-      }
-    }
-
+  &.per-scan {
+    color: #57bf72;
+    background-color: #f0f9f2;
+    border-color: darken(#f0f9f2, 1%);
   }
+}
+.plan-status {
+  display: flex;
+  align-items: center;
+  color: #000;
+  margin-left: 0.5rem;
+}
 
+.expiry-date {
+  font-size: 0.9em;
+  color: #9ba2ad;
+}
+.expiry-date-expired {
+  color: #FE4D3F;
+}
+
+.client-owner-email {
+  color: #000;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  width: 100%;
+}
+.client-owner-count-badge {
+  padding: 0 0.36rem 0 0.3rem;
+  display: flex;
+  align-items: center;
+  background: #dde0e3;
+  min-width: 1.95em;
+  height: 1.5em;
+  border-radius: 0.3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82em;
+  font-weight: bold;
+  border: none;
+
+  i {
+    font-size: 0.8rem;
+    padding: 0 0.1rem;
+    margin-right: 0.5rem;
+  }
+}
+.client-owner {
+  display: flex;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 1rem 1rem;
+  button {
+    margin: 0 0.5rem;
+  }
 }

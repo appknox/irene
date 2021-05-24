@@ -18,43 +18,29 @@ import {
 
 
 export default class CardsClientInfoComponent extends Component {
-
   @service('notifications') notify;
   @service intl;
   @service store;
   @service partner;
 
-
   @tracked isShowCreditAllocationModal = false;
-
   @tracked clientPlan = {};
+  @tracked showOwnerEmails = false;
 
-  @tracked clientStatistics = {};
+  ownerEmailCount = this.args.client.ownerEmails.length - 1;
+
+  @action
+  toggleOwnerEmailList() {
+    this.showOwnerEmails = !this.showOwnerEmails;
+  }
 
   @computed('args.client.name')
   get isEmptyTitle() {
     return isEmpty(this.args.client.name);
   }
 
-  @action
-  onAddCredits() {
-    this.isShowCreditAllocationModal = true;
-  }
-
-  @action
-  onCloseModal() {
-    this.isShowCreditAllocationModal = false;
-    // Refresh model with new credit bal
-    this.store.queryRecord('credits/partner-credits-stat', {})
-    this.store.find('partnerclient', this.args.client.id);
-  }
-
   @task(function* () {
     this.clientPlan = yield this.store.find('partnerclient-plan', this.args.client.id);
-  }) getClientPlan;
-
-  @task(function* () {
-    this.clientStatistics = yield this.store.find('partnerclient-statistic', this.args.client.id);
-  }) getClientStatistics;
-
+  })
+  getClientPlan;
 }

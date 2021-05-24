@@ -17,9 +17,4 @@ export default class PartnerclientPlanModel extends Model {
   get isPaymentExpired() {
     return dayjs().isAfter(this.expiryDate);
   }
-
-  @computed('projectsLimit', 'limitedScans')
-  get invalidPayment() {
-    return this.projectsLimit === null && !this.limitedScans;
-  }
 }
