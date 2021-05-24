@@ -1,0 +1,59 @@
+.invitation {
+  display: grid;
+  grid-template-columns: 1fr 20% 12% 12% 12% 6%;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.6rem 1rem;
+}
+.invitation-expired {
+  background-color: #fafafb;
+  opacity: 0.6;
+}
+.email {
+  color: #3b3f49;
+  font-weight: 600;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  text-overflow: ellipsis;
+  padding-right: 3rem;
+}
+.name {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  text-overflow: ellipsis;
+  padding-top: 0.3rem;
+  padding-right: 3rem;
+  font: 0.9rem;
+}
+.company {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  text-overflow: ellipsis;
+  padding-right: 2rem;
+}
+.date {
+  font-style: italic;
+  font-size: 0.9rem;
+}
+.expired {
+  color: tomato;
+}
+.source {
+  font-size: 0.85rem;
+  padding: 0.1rem 0.6rem 0.2rem;
+  display: inline-block;
+  border-radius: 0.3rem;
+}
+.source-backoffice {
+  color: #FFA57F;
+  background-color: #FFF3ED;
+}
+.source-invitation {
+  color: #51b7b7;
+  background-color: #E8F7F7;
+}
+.source-registration {
+  color: #5995ef;
+  background-color: #F2F7FF;
+}

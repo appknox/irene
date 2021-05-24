@@ -1,0 +1,36 @@
+<div class="invitations">
+  <h3 local-class="title">{{t "pendingInvitations"}}</h3>
+  {{#if this.requests}}
+    <div>
+      <div local-class="table">
+        <div local-class="table-header">
+          <div class="bold">User</div>
+          <div class="bold">Company</div>
+          <div class="bold">Invited</div>
+          <div class="bold">Expires on</div>
+          <div class="bold">Source</div>
+          <div class="bold">Resend</div>
+          {{!-- <div class="bold">Delete</div> --}}
+        </div>
+        <div local-class="table-body">
+          {{#each this.requests as |request|}}
+            <div local-class="table-row">
+              <Partner::Invitation @request={{request}}></Partner::Invitation>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+      {{#if (or this.hasPrevious this.hasNext)}}
+        <div local-class="pagination">
+          {{partial 'paginate'}}
+        </div>
+      {{/if}}
+    </div>
+  {{else if this.isLoading}}
+    <div local-class="loading">
+      <ThreeBounceSpinner></ThreeBounceSpinner>
+    </div>
+  {{else}}
+    <div local-class="empty-data">No invitations</div>
+  {{/if}}
+</div>
