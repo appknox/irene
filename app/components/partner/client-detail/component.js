@@ -12,14 +12,12 @@ import {
   action
 } from '@ember/object';
 
-export default class PartnerClientDetailsComponent extends Component {
-
+export default class PartnerClientDetailComponent extends Component {
   @service partner;
   @service store;
 
   @tracked clientPlan = {};
   @tracked clientStatistics = {};
-
   @tracked showOwnerEmails = false;
 
   ownerEmailCount = this.args.client.ownerEmails.length - 1;
@@ -36,5 +34,4 @@ export default class PartnerClientDetailsComponent extends Component {
   @task(function* () {
     this.clientStatistics = yield this.store.find('partnerclient-statistic', this.args.client.id);
   }) getClientStatistics;
-
 }

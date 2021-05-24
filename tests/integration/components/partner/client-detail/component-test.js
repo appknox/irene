@@ -3,22 +3,22 @@
 // import { render } from '@ember/test-helpers';
 // import { hbs } from 'ember-cli-htmlbars';
 
-// module('Integration | Component | partner/client-details', function(hooks) {
+// module('Integration | Component | partner/client-detail', function(hooks) {
 //   setupRenderingTest(hooks);
 
 //   test('it renders', async function(assert) {
 //     // Set any properties with this.set('myProperty', 'value');
 //     // Handle any actions with this.set('myAction', function(val) { ... });
 
-//     await render(hbs`<Partner::ClientDetails />`);
+//     await render(hbs`<Partner::ClientDetail />`);
 
 //     assert.equal(this.element.textContent.trim(), '');
 
 //     // Template block usage:
 //     await render(hbs`
-//       <Partner::ClientDetails>
+//       <Partner::ClientDetail>
 //         template block text
-//       </Partner::ClientDetails>
+//       </Partner::ClientDetail>
 //     `);
 
 //     assert.equal(this.element.textContent.trim(), 'template block text');
