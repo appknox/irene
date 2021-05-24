@@ -16,6 +16,7 @@ export default class PartnerComponent extends Component {
   @service store;
   @service router;
   @service partner;
+  @service organization;
 
   @tracked tabs = [{
       label: this.intl.t('clients'),
@@ -23,18 +24,6 @@ export default class PartnerComponent extends Component {
       enabled: true,
       link: 'authenticated.partner.clients'
     },
-    {
-      label: this.intl.t('registrationRequests'),
-      active: false,
-      enabled: this.partner.access.invite_clients,
-      link: 'authenticated.partner.registration-requests'
-    },
-    {
-      label: this.intl.t('invitations'),
-      active: false,
-      enabled: this.partner.access.invite_clients,
-      link: 'authenticated.partner.invitations'
-    }
   ];
 
   @tracked showInviteModal = false;
