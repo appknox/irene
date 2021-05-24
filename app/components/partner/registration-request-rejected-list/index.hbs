@@ -1,0 +1,28 @@
+<div class="pending-registration-requests">
+  {{#if this.requests}}
+    <h3 local-class="title" class="margin-t-3">{{t "rejectedRequests"}}</h3>
+    <div>
+      <div local-class="table">
+        <div local-class="table-header">
+          <div class="bold">Requested by</div>
+          <div class="bold">Company</div>
+          <div class="bold">Requested</div>
+          <div class="bold">Rejected</div>
+          <div class="bold">Undo reject</div>
+        </div>
+        <div local-class="table-body">
+          {{#each this.requests as |request|}}
+            <div local-class="table-row">
+              <Partner::RegistrationRequestRejected @request={{request}}></Partner::RegistrationRequestRejected>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+      {{#if (or this.hasPrevious this.hasNext)}}
+        <div local-class="pagination">
+          {{partial 'paginate'}}
+        </div>
+      {{/if}}
+    </div>
+  {{/if}}
+</div>
