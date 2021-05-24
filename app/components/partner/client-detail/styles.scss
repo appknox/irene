@@ -1,17 +1,18 @@
-.overview {
+.client {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding-top: 2rem;
-  padding-bottom: 4rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1rem;
+  margin-top: 1rem;
 }
 
-.overview-title {
+.client-title {
   color: #4c4949;
 }
 
-.overview-plan {
+.client-plan {
   .type {
     text-transform: capitalize;
     line-height: 1.5;
@@ -23,19 +24,22 @@
     font-style: italic;
     font-weight: normal;
   }
+  .expiry-date-expired {
+    color: #FE4D3F;
+  }
 }
 
-.overview-plan,
-.overview-owner,
-.overview-last-upload,
-.overview-created-on {
+.client-plan,
+.client-owner,
+.client-last-upload,
+.client-created-on {
   padding-bottom: 1rem;
   display: flex;
   align-items: center;
   column-gap: 0.35rem;
 }
 
-.overview-owner-count-badge {
+.client-owner-count-badge {
   padding: 0 0.36rem 0 0.3rem;
   display: flex;
   align-items: center;
@@ -57,11 +61,11 @@
   }
 }
 
-.overview-status-container {
+.client-status-container {
   display: flex;
 }
 
-.overview-status {
+.client-status {
   margin: 0 0.5rem;
   border: 1px solid #edf0f4;
   background: #f3f5f8;
@@ -72,10 +76,6 @@
 .status-count {
   font-weight: bold;
   padding-right: 0.2rem;
-}
-
-.payment-invalid {
-  color: #FE4D3F;
 }
 
 .owner-email-list {

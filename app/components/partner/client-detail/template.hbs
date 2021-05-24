@@ -1,5 +1,5 @@
-<div local-class="overview">
-  <h3 local-class="overview-title">
+<div local-class="client">
+  <h3 local-class="client-title">
     {{#if @client.isEmptyTitle}}
       <i>{{t 'noName'}}</i>
     {{else}}
@@ -7,7 +7,7 @@
     {{/if}}
   </h3>
   {{#if this.partner.access.view_plans}}
-    <div local-class="overview-plan" {{did-insert (perform this.getClientPlan)}}>
+    <div local-class="client-plan" {{did-insert (perform this.getClientPlan)}}>
       {{t 'paymentPlan'}}:
       {{#if this.clientPlan.limitedScans}}
         <span local-class="type per-scan">{{t 'perScan'}}</span>
@@ -18,7 +18,7 @@
           <span local-class="payment-invalid">{{t 'invalidPayment'}}</span>
         {{else}}
           ({{this.clientPlan.projectsLimit}} {{t 'pluralApps' itemCount=this.clientPlan.projectsLimit}})
-          <span local-class="expiry-date">
+          <span local-class="expiry-date {{if this.clientPlan.isPaymentExpired 'expiry-date-expired'}}">
             {{t (if this.clientPlan.isPaymentExpired 'expiredOn' 'expiresOn')}}
             {{day-js date=this.clientPlan.expiryDate format="DD MMM YYYY"}}</span>
         {{/if}}
@@ -26,17 +26,17 @@
     </div>
   {{/if}}
 
-  <div local-class="overview-owner">
+  <div local-class="client-owner">
     {{t 'pluralorganizationOwner' itemCount=@client.ownerEmails.length}}:
     <span class="black-text">{{@client.ownerEmails.firstObject}}</span>
     {{#if (gt @client.ownerEmails.length 1)}}
-      <button type="button" title="{{t 'viewAll'}}" local-class="overview-owner-count-badge"
+      <button type="button" title="{{t 'viewAll'}}" local-class="client-owner-count-badge"
         {{on "click" (fn this.toggleOwnerEmailList)}}>
         +{{this.ownerEmailCount}}
       </button>
     {{/if}}
   </div>
-  <div local-class="overview-last-upload">
+  <div local-class="client-last-upload">
     {{t 'lastUpload'}}:
     <span class="black-text">
       {{#if @client.lastUploadedOn}}
@@ -47,7 +47,7 @@
     </span>
   </div>
 
-  <div local-class="overview-created-on">
+  <div local-class="client-created-on">
     {{t 'createdOn'}}:
     <span class="black-text">
       {{day-js @client.createdOn format="DD MMM YYYY"}}
@@ -55,21 +55,20 @@
   </div>
 
   {{#if this.partner.access.view_count_statistics}}
-    <div local-class="overview-status-container" {{did-insert (perform this.getClientStatistics)}}>
-      <div local-class="overview-status">
+    <div local-class="client-status-container" {{did-insert (perform this.getClientStatistics)}}>
+      <div local-class="client-status">
         <span local-class="status-count">{{this.clientStatistics.usersCount}}</span>
         <span local-class="status-label">{{t 'pluralUsers' itemCount=this.clientStatistics.usersCount}}</span>
       </div>
-      <div local-class="overview-status">
+      <div local-class="client-status">
         <span local-class="status-count">{{this.clientStatistics.projectsCount}}</span>
         <span local-class="status-label">{{t 'pluralProjects' itemCount=this.clientStatistics.projectsCount}}</span>
       </div>
-      <div local-class="overview-status">
+      <div local-class="client-status">
         <span local-class="status-count">{{this.clientStatistics.filesCount}}</span>
         <span local-class="status-label">{{t 'pluralUploads' itemCount=this.clientStatistics.filesCount}}</span>
       </div>
     </div>
-
   {{/if}}
 </div>
 
