@@ -17,7 +17,7 @@ export default class PartnerService extends Service {
 
   async load() {
     try {
-      const partner = await this.store.queryRecord('partner', {});
+      const partner = await this.store.queryRecord('partner/partner', {});
       this.id = partner.id;
       this.access = partner.access;
     } catch (err) {

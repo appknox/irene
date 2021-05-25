@@ -1,14 +1,14 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { reads } from '@ember/object/computed';
 import { PaginationMixin } from '../../../mixins/paginate';
 
 export default class PartnerInvitationListComponent extends PaginationMixin(Component) {
-  @inject intl;
-  @inject store;
-  @inject realtime;
-  @inject('notifications') notify;
+  @service intl;
+  @service store;
+  @service realtime;
+  @service('notifications') notify;
 
   @tracked isLoading = true;
   @tracked refresh = false;
@@ -20,7 +20,7 @@ export default class PartnerInvitationListComponent extends PaginationMixin(Comp
     this.realtime.addObserver('RegistrationRequestCounter', this, 'registrationRequestDidChange');
   }
 
-  targetModel = 'registration-request';
+  targetModel = 'partner/registration-request';
   sortProperties = 'updatedOn:asc';
   get extraQueryStrings() {
     return JSON.stringify({
