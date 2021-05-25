@@ -1,18 +1,18 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { reads } from '@ember/object/computed';
 import { PaginationMixin } from '../../../mixins/paginate';
 
 export default class PartnerClientListComponent extends PaginationMixin(Component) {
-  @inject intl;
-  @inject store;
+  @service intl;
+  @service store;
 
   @tracked clientList = [];
   @tracked isLoading = true;
 
   @reads('objects') clientList;
 
-  targetModel = 'partnerclient';
+  targetModel = 'partner/partnerclient';
   sortProperties = 'createdOn:desc';
 }

@@ -28,10 +28,6 @@ export default class PartnerClientDetailComponent extends Component {
   }
 
   @task(function* () {
-    this.clientPlan = yield this.store.find('partnerclient-plan', this.args.client.id);
+    this.clientPlan = yield this.store.find('partner/partnerclient-plan', this.args.client.id);
   }) getClientPlan;
-
-  @task(function* () {
-    this.clientStatistics = yield this.store.find('partnerclient-statistic', this.args.client.id);
-  }) getClientStatistics;
 }

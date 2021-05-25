@@ -1,13 +1,13 @@
 import Component from '@glimmer/component';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { task }  from 'ember-concurrency';
 import parseError from 'irene/utils/parse-error';
 
 export default class PartnerInvitationComponent extends Component {
-  @inject intl;
-  @inject store;
-  @inject realtime;
-  @inject('notifications') notify;
+  @service intl;
+  @service store;
+  @service realtime;
+  @service('notifications') notify;
 
   @task(function* (request) {
     try {
