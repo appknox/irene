@@ -2,7 +2,7 @@ import commondrf from '../commondrf';
 
 export default class RegistrationRequestAdapter extends commondrf {
   buildURL(modelName, id) {
-    return this.buildURLFromBase(`${this.namespace_v2}/registration_requests${id ? '/' + id : ''}`);
+    return this.buildURLFromBase(`${this.namespace_v2}/partners/${this.organization.selected.id}/registration_requests${id ? '/' + id : ''}`);
   }
 
   async patch(id, modelName, snapshot, data) {
