@@ -311,6 +311,11 @@ export const PaginationMixin = superclass => class extends superclass {
       }
       this.isLoading = false; // eslint-disable-line
       return this.meta = meta; // eslint-disable-line
+    }).catch((err) => {
+      // TODO: Fix all pagination error states and then enable this:
+      // this.isLoading = false; // eslint-disable-line
+      this.error = err; // eslint-disable-line
+      return [];
     })
     return objects;
   }
