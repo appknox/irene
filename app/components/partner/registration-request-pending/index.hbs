@@ -1,5 +1,5 @@
 {{#if (eq @request.approvalStatus "pending")}}
-  <div local-class="request" data-test-pending-request>
+  <div local-class="request" data-test-pending-request ...attributes>
     <div local-class="user">
       <div local-class="email" data-test-pending-request-email>{{@request.email}}</div>
       <div local-class="name" class="text-lightgray" data-test-pending-request-name>{{@request.fullName}}</div>

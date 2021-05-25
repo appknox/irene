@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { render, click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -13,6 +13,46 @@ class OrganizationStub extends Service {
   }
 }
 
+class RealtimeStub extends Service {
+  RegistrationRequestCounter = 0
+}
+
+function registrationRequestSerializer(data, many=false) {
+  if (many === true) {
+    return {
+      "count": data.length,
+      "next": null,
+      "previous": null,
+      "results": data.models.map(d => {
+        return {
+          "id": d.attrs.id,
+          "email": d.attrs.email,
+          "data": d.attrs.data,
+          "created_on": d.attrs.createdOn,
+          "updated_on": d.attrs.updatedOn,
+          "valid_until": d.attrs.validUntil,
+          "approval_status": d.attrs.approvalStatus,
+          "source": d.attrs.source,
+          "moderated_by": null,
+          "is_activated": d.attrs.isActivated
+        };
+      })
+    }
+  }
+  return {
+    "id": data.attrs.id,
+    "email": data.attrs.email,
+    "data": data.attrs.data,
+    "created_on": data.attrs.createdOn,
+    "updated_on": data.attrs.updatedOn,
+    "valid_until": data.attrs.validUntil,
+    "approval_status": data.attrs.approvalStatus,
+    "source": data.attrs.source,
+    "moderated_by": null,
+    "is_activated": data.attrs.isActivated
+  }
+}
+
 
 module('Integration | Component | partner/registration-request-pending-list', function(hooks) {
   setupRenderingTest(hooks);
@@ -21,6 +61,10 @@ module('Integration | Component | partner/registration-request-pending-list', fu
 
   hooks.beforeEach(function() {
     this.owner.register('service:organization', OrganizationStub);
+  });
+
+  hooks.beforeEach(function() {
+    this.owner.register('service:realtime', RealtimeStub);
   });
 
   test('it renders translated section title', async function(assert) {
@@ -70,31 +114,20 @@ module('Integration | Component | partner/registration-request-pending-list', fu
   });
 
   test('it renders table header for pending requests', async function(assert) {
-    this.server.get('v2/partners/1/registration_requests', () => {
-      return {
-        "count": 1,
-        "next": null,
-        "previous": null,
-        "results": [
-          {
-            "id": 1,
-            "email": "test1@test.test",
-            "data": {
-              "company": "TestCompany1",
-              "first_name":"Test1"
-            },
-            "created_on": "2020-05-22T15:08:18.008097Z",
-            "updated_on": "2021-03-24T18:02:22.481033Z",
-            "valid_until": "2022-05-31T17:48:58.330920Z",
-            "approval_status": "pending",
-            "source": "registration",
-            "moderated_by": 2,
-            "is_activated": false
-          }
-        ]
-      };
+    this.server.createList("partner/registrationRequest", 1, { "approvalStatus": "pending" });
+
+    this.server.get('v2/partners/1/registration_requests', (schema, request) => {
+      const is_activated = request.queryParams.is_activated;
+      const status= request.queryParams.status;
+      const data = schema["partner/registrationRequests"].where({
+        isActivated: is_activated,
+        approvalStatus: status
+      });
+      return registrationRequestSerializer(data, true)
     });
+
     await render(hbs`<Partner::RegistrationRequestPendingList />`);
+
     assert.dom("[data-test-pending-requests-table-header]").exists();
     const header = this.element.querySelector("[data-test-pending-requests-table-header]");
     assert.equal(header.children[0].textContent, "Requested by");
@@ -113,56 +146,107 @@ module('Integration | Component | partner/registration-request-pending-list', fu
         "results": []
       };
     });
+
     await render(hbs`<Partner::RegistrationRequestPendingList />`);
+
     assert.dom("[data-test-pending-requests-table-header]").doesNotExist();
     assert.dom("[data-test-pending-requests-empty]").exists();
   });
 
   test('it renders pending registrations requests list', async function(assert) {
-    this.server.get('v2/partners/1/registration_requests', () => {
-      return {
-        "count": 2,
-        "next": null,
-        "previous": null,
-        "results":[
-          {
-            "id": 2,
-            "email": "test2@test.test",
-            "data": {
-              "company": "TestCompany2",
-              "first_name":"Test2"
-            },
-            "created_on": "2021-05-22T15:08:18.008097Z",
-            "updated_on": "2021-05-24T18:02:22.481033Z",
-            "valid_until": "2021-05-31T17:48:58.330920Z",
-            "approval_status": "pending",
-            "source": "registration",
-            "moderated_by": 2,
-            "is_activated": false
-          },
-          {
-            "id": 1,
-            "email": "test1@test.test",
-            "data": {
-              "company": "TestCompany1",
-              "first_name":"Test1"
-            },
-            "created_on": "2020-05-22T15:08:18.008097Z",
-            "updated_on": "2021-03-24T18:02:22.481033Z",
-            "valid_until": "2022-05-31T17:48:58.330920Z",
-            "approval_status": "pending",
-            "source": "registration",
-            "moderated_by": 2,
-            "is_activated": false
-          }
-        ]
-      };
+    this.server.createList("partner/registrationRequest", 5, { "approvalStatus": "pending" });
+    this.server.get('v2/partners/1/registration_requests', (schema, request) => {
+      const is_activated = request.queryParams.is_activated;
+      const status= request.queryParams.status;
+      const data = schema["partner/registrationRequests"].where({
+        isActivated: is_activated,
+        approvalStatus: status
+      });
+      return registrationRequestSerializer(data, true)
     });
+
     await render(hbs`<Partner::RegistrationRequestPendingList />`);
+
     assert.dom("[data-test-pending-requests-list]").exists();
     const rows = this.element.querySelectorAll("[data-test-pending-request-row]");
-    assert.equal(rows.length, 2)
+    assert.equal(rows.length, 5)
     assert.dom("[data-test-pending-requests-empty]").doesNotExist();
     assert.dom("[data-test-pending-requests-list]").exists();
+  });
+
+  test('rejection action should remove the request from pending list', async function(assert) {
+    const rrsPending = this.server.createList("partner/registrationRequest", 5, { "approvalStatus": "pending" });
+    const rrPendingObj = rrsPending[0];
+
+    this.server.get('v2/partners/1/registration_requests', (schema, request) => {
+      const is_activated = request.queryParams.is_activated;
+      const status= request.queryParams.status;
+      const data = schema["partner/registrationRequests"].where({
+        isActivated: is_activated,
+        approvalStatus: status
+      });
+      return registrationRequestSerializer(data, true)
+    });
+
+    this.server.patch('v2/partners/1/registration_requests/:id', (schema, request) => {
+      const obj = schema["partner/registrationRequests"].find(request.params.id)
+      const body = JSON.parse(request.requestBody);
+      obj.update({
+        'approvalStatus': body.approval_status,
+      })
+      return registrationRequestSerializer(obj);
+    });
+
+    this.server.get('v2/partners/1/registration_requests/:id', (schema, request) => {
+      const obj = schema["partner/registrationRequests"].find(request.params.id)
+      return registrationRequestSerializer(obj);
+    });
+
+    await render(hbs`<Partner::RegistrationRequestPendingList />`);
+    assert.dom(`[data-test-pending-request-id='${rrPendingObj.attrs.id}']`).exists();
+
+    const selectedRequest = this.element.querySelector(`[data-test-pending-request-id='${rrPendingObj.attrs.id}']`);
+    const selectedRequestRejectBtn = selectedRequest.querySelector("[data-test-pending-request-reject-button]");
+    await click(selectedRequestRejectBtn);
+
+    assert.dom(`[data-test-pending-request-id='${rrPendingObj.attrs.id}']`).doesNotExist();
+  });
+
+  test('approve action should remove the request from pending list', async function(assert) {
+    const rrsPending = this.server.createList("partner/registrationRequest", 5, { "approvalStatus": "pending" });
+    const rrPendingObj = rrsPending[0];
+
+    this.server.get('v2/partners/1/registration_requests', (schema, request) => {
+      const is_activated = request.queryParams.is_activated;
+      const status= request.queryParams.status;
+      const data = schema["partner/registrationRequests"].where({
+        isActivated: is_activated,
+        approvalStatus: status
+      });
+      return registrationRequestSerializer(data, true)
+    });
+
+    this.server.patch('v2/partners/1/registration_requests/:id', (schema, request) => {
+      const obj = schema["partner/registrationRequests"].find(request.params.id)
+      const body = JSON.parse(request.requestBody);
+      obj.update({
+        'approvalStatus': body.approval_status,
+      })
+      return registrationRequestSerializer(obj);
+    });
+
+    this.server.get('v2/partners/1/registration_requests/:id', (schema, request) => {
+      const obj = schema["partner/registrationRequests"].find(request.params.id)
+      return registrationRequestSerializer(obj);
+    });
+
+    await render(hbs`<Partner::RegistrationRequestPendingList />`);
+    assert.dom(`[data-test-pending-request-id='${rrPendingObj.attrs.id}']`).exists();
+
+    const selectedRequest = this.element.querySelector(`[data-test-pending-request-id='${rrPendingObj.attrs.id}']`);
+    const selectedRequestApproveBtn = selectedRequest.querySelector("[data-test-pending-request-approve-button]");
+    await click(selectedRequestApproveBtn);
+
+    assert.dom(`[data-test-pending-request-id='${rrPendingObj.attrs.id}']`).doesNotExist();
   });
 });
