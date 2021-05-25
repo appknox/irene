@@ -1,10 +1,10 @@
 import Component from '@glimmer/component';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 
 export default class PartnerClientNavComponent extends Component {
-  @inject intl;
-  @inject router;
-  @inject partner;
+  @service intl;
+  @service router;
+  @service partner;
 
   tabs = [
     {

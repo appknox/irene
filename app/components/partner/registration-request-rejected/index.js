@@ -1,12 +1,12 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import parseError from 'irene/utils/parse-error';
 
 export default class PartnerRegistrationRequestRejectedComponent extends Component {
-  @inject realtime;
-  @inject('notifications') notify;
+  @service realtime;
+  @service('notifications') notify;
 
   @tracked request;
 
