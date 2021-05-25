@@ -18,6 +18,7 @@ const RealtimeService = Service.extend({
   OrganizationNonTeamMemberCounter: 0,
   OrganizationArchiveCounter: 0,
   CapturedApiCounter: 0,
+  RegistrationRequestCounter: 0,
   namespace: ''
 });
 

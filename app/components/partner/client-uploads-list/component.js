@@ -19,7 +19,7 @@ export default class PartnerClientUploadsListComponent extends PaginationMixin(C
 
   @service store;
 
-  @tracked targetModel = 'partnerclient-file';
+  @tracked targetModel = 'partner/partnerclient-file';
 
   @tracked isLoading = true;
 
