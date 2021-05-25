@@ -35,6 +35,6 @@ export default class RegistrationRequestModel extends Model {
 
   resend() {
     var adapter = this.store.adapterFor(this.constructor.modelName);
-    return adapter.resend(this.id, this.constructor.modelName, this);
+    return adapter.resend(this.id, this.constructor.modelName);
   }
 }
