@@ -11,6 +11,7 @@ export default class PartnerRegistrationRequestPendingListComponent extends Pagi
   @inject('notifications') notify;
 
   @tracked isLoading = true;
+  @tracked error = null;
   @tracked refresh = false;
 
   @reads('objects') requests;

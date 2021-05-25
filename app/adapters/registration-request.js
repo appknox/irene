@@ -12,7 +12,7 @@ export default class RegistrationRequestAdapter extends commondrf {
     return this.store.findRecord(modelName, id);
   }
 
-  async resend(id, modelName, snapshot) {
+  async resend(id, modelName) {
     const url = `${this.buildURL(modelName, id)}/resend`;
     return this.ajax(url, 'POST', {});
   }
