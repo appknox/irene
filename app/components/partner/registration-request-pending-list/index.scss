@@ -35,6 +35,17 @@
   height: 7.5rem;
 }
 
+.loading-error {
+  display: flex;
+  height: 7.5rem;
+  background: #f6f7f9;
+  border: 1px solid #ebedf1;
+  border-radius: 0.3rem;
+  color: #e7817a;
+  align-items: center;
+  justify-content: center;
+}
+
 .empty-data {
   display: flex;
   height: 7.5rem;

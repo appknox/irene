@@ -1,9 +1,9 @@
 <div class="pending-registration-requests">
-  <h3 local-class="title">{{t "pendingRequests"}}</h3>
+  <h3 local-class="title" data-test-pending-requests-title>{{t "pendingRequests"}}</h3>
   {{#if this.requests}}
-    <div>
+    <div data-test-pending-requests-list>
       <div local-class="table">
-        <div local-class="table-header">
+        <div local-class="table-header" data-test-pending-requests-table-header>
           <div class="bold">Requested by</div>
           <div class="bold">Company</div>
           <div class="bold">Requested</div>
@@ -12,23 +12,25 @@
         </div>
         <div local-class="table-body">
           {{#each this.requests as |request|}}
-            <div local-class="table-row">
+            <div local-class="table-row" data-test-pending-request-row>
               <Partner::RegistrationRequestPending @request={{request}}></Partner::RegistrationRequestPending>
             </div>
           {{/each}}
         </div>
       </div>
       {{#if (or this.hasPrevious this.hasNext)}}
-        <div local-class="pagination">
+        <div local-class="pagination" data-test-pending-requests-pagination>
           {{partial 'paginate'}}
         </div>
       {{/if}}
     </div>
+  {{else if this.error}}
+    <div local-class="loading-error" data-test-pending-requests-loading-error>Error: Could not load data</div>
   {{else if this.isLoading}}
-    <div local-class="loading">
+    <div local-class="loading" data-test-pending-requests-loader>
       <ThreeBounceSpinner></ThreeBounceSpinner>
     </div>
   {{else}}
-    <div local-class="empty-data">No pending requests</div>
+    <div local-class="empty-data" data-test-pending-requests-empty>No pending requests</div>
   {{/if}}
 </div>
