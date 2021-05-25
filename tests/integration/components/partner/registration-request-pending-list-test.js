@@ -4,12 +4,24 @@ import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
+import Service from '@ember/service';
+
+// Stub organization service
+class OrganizationStub extends Service {
+  selected = {
+    id: 1,
+  }
+}
 
 
 module('Integration | Component | partner/registration-request-pending-list', function(hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
   setupIntl(hooks);
+
+  hooks.beforeEach(function() {
+    this.owner.register('service:organization', OrganizationStub);
+  });
 
   test('it renders translated section title', async function(assert) {
     await render(hbs`<Partner::RegistrationRequestPendingList />`);
@@ -18,7 +30,7 @@ module('Integration | Component | partner/registration-request-pending-list', fu
   });
 
   test('it renders loading error on data fetch error', async function(assert) {
-    this.server.get('v2/registration_requests', () => {
+    this.server.get('v2/partners/1/registration_requests', () => {
       return new Response(500);
     });
     await render(hbs`<Partner::RegistrationRequestPendingList />`);
@@ -28,7 +40,7 @@ module('Integration | Component | partner/registration-request-pending-list', fu
   });
 
   test('it renders empty state', async function(assert) {
-    this.server.get('v2/registration_requests', () => {
+    this.server.get('v2/partners/1/registration_requests', () => {
       return {
         "count": 0,
         "next": null,
@@ -43,7 +55,7 @@ module('Integration | Component | partner/registration-request-pending-list', fu
   });
 
   test('it should not render loading indicator or error once data is loaded', async function(assert) {
-    this.server.get('v2/registration_requests', () => {
+    this.server.get('v2/partners/1/registration_requests', () => {
       return {
         "count": 0,
         "next": null,
@@ -58,7 +70,7 @@ module('Integration | Component | partner/registration-request-pending-list', fu
   });
 
   test('it renders table header for pending requests', async function(assert) {
-    this.server.get('v2/registration_requests', () => {
+    this.server.get('v2/partners/1/registration_requests', () => {
       return {
         "count": 1,
         "next": null,
@@ -93,7 +105,7 @@ module('Integration | Component | partner/registration-request-pending-list', fu
   });
 
   test('it does not render table header for empty state', async function(assert) {
-    this.server.get('v2/registration_requests', () => {
+    this.server.get('v2/partners/1/registration_requests', () => {
       return {
         "count": 0,
         "next": null,
@@ -107,7 +119,7 @@ module('Integration | Component | partner/registration-request-pending-list', fu
   });
 
   test('it renders pending registrations requests list', async function(assert) {
-    this.server.get('v2/registration_requests', () => {
+    this.server.get('v2/partners/1/registration_requests', () => {
       return {
         "count": 2,
         "next": null,
