@@ -16,7 +16,7 @@
     <div local-class="source source-{{@request.source}}">{{@request.source}}</div>
   </div>
   <div local-class="action">
-    <button class="is-default is-icon no-border no-hover-button" local-class="resend" title="Resend invite mail" {{on "click" (perform this.resendInvite @request)}}>{{fa-icon "repeat"}}</button>
+    <button type="button" class="is-default is-icon no-border no-hover-button" local-class="resend" title="Resend invite mail" {{on "click" (perform this.resendInvite @request)}}>{{fa-icon "repeat"}}</button>
   </div>
   {{!-- <div local-class="action">
     <button class="is-critical is-icon no-border no-hover-button" local-class="delete" title="Delete invitation" {{on "click" (perform this.deleteInvite @request)}}>{{fa-icon "trash"}}</button>
