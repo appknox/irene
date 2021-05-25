@@ -16,7 +16,7 @@
     <div local-class="client-activities">
       <div local-class="last-upload activity">
         <span local-class="label">{{t 'lastUpload'}}</span>
-        <span>
+        <span data-elem-last-uploaded>
           {{#if @client.lastUploadedOn}}
             {{dayjs-from-now @client.lastUploadedOn}}
           {{else}}
@@ -26,41 +26,12 @@
       </div>
 
       {{#if this.partner.access.view_plans}}
-        <div local-class="payment activity" {{did-insert (perform this.getClientPlan)}}>
-          <span local-class="label">{{t 'paymentPlan'}}</span>
-          <div local-class="credit-info">
-            {{#if this.getClientPlan.isRunning}}
-              <div local-class="loading">{{fa-icon "circle-o-notch fa-spin"}}</div>
-            {{else}}
-              <span local-class="type {{if this.clientPlan.limitedScans 'per-scan' 'per-app'}}">
-                {{t (if  this.clientPlan.limitedScans 'perScan' 'perApp')}}
-              </span>
-              <span local-class="payment-status">
-                {{#if this.clientPlan.invalidPayment}}
-                  <span local-class="payment-invalid">{{t 'invalidPayment'}}</span>
-                {{else}}
-                  <span local-class="data">
-                    {{#if this.clientPlan.limitedScans}}
-                      <strong local-class="value">
-                        {{this.clientPlan.scansLeft}}
-                        {{t 'pluralScans' itemCount=this.clientPlan.scansLeft}}
-                      </strong>
-                      {{t 'remaining'}}
-                    {{else}}
-                      <strong local-class="value">
-                        {{this.clientPlan.projectsLimit}}
-                        {{t 'pluralApps' itemCount=this.clientPlan.projectsLimit}}
-                      </strong>
-                      <span
-                        local-class="expiry-date">{{t (if this.clientPlan.isPaymentExpired 'expiredOn' 'expiresOn')}}
-                        {{day-js date=this.clientPlan.expiryDate format="DD MMM YYYY"}}</span>
-                    {{/if}}
-                  </span>
-                {{/if}}
-              </span>
-            {{/if}}
-          </div>
-
+        <div local-class="payment-container" {{did-insert (perform this.getClientPlan)}}>
+          {{#if this.getClientPlan.isRunning}}
+            <div local-class="loading">{{fa-icon "circle-o-notch fa-spin"}}</div>
+          {{else}}
+            <Partner::ClientInfo::Plan @clientPlan={{this.clientPlan}}></Partner::ClientInfo::Plan>
+          {{/if}}
         </div>
       {{/if}}
 

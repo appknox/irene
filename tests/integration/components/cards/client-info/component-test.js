@@ -1,26 +1,50 @@
-// import { module, test } from 'qunit';
-// import { setupRenderingTest } from 'ember-qunit';
-// import { render } from '@ember/test-helpers';
-// import { hbs } from 'ember-cli-htmlbars';
+import {
+  module,
+  test
+} from 'qunit';
+import {
+  setupRenderingTest
+} from 'ember-qunit';
+import {
+  render
+} from '@ember/test-helpers';
+import {
+  hbs
+} from 'ember-cli-htmlbars';
+import {
+  setupMirage
+} from "ember-cli-mirage/test-support";
+import {
+  setupIntl
+} from 'ember-intl/test-support';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
-// module('Integration | Component | cards/client-info', function(hooks) {
-//   setupRenderingTest(hooks);
+module('Integration | Component | cards/client-info', function (hooks) {
+  setupRenderingTest(hooks);
+  setupMirage(hooks);
+  setupIntl(hooks);
 
-//   test('it renders', async function(assert) {
-//     // Set any properties with this.set('myProperty', 'value');
-//     // Handle any actions with this.set('myAction', function(val) { ... });
+  hooks.beforeEach(async function () {
+    await this.server.createList('organization', 2);
+    await this.owner.lookup('service:organization').load();
+    await this.owner.lookup('service:partner').load();
+  });
 
-//     await render(hbs`<Cards::ClientInfo />`);
+  test('No uploads text should be shown', async function (assert) {
+    const client = this.server.create('partnerclient');
+    client.lastUploadedOn = null;
+    this.set('client', client);
+    await render(hbs `<Cards::ClientInfo @client={{this.client}}/>`);
+    assert.dom('span[data-elem-last-uploaded]').hasText('t:noUploads:()')
+  })
 
-//     assert.equal(this.element.textContent.trim(), '');
-
-//     // Template block usage:
-//     await render(hbs`
-//       <Cards::ClientInfo>
-//         template block text
-//       </Cards::ClientInfo>
-//     `);
-
-//     assert.equal(this.element.textContent.trim(), 'template block text');
-//   });
-// });
+  test('Last uploaded date shown in relative time', async function (assert) {
+    const client = this.server.create('partnerclient');
+    this.server.create('partnerclient-plan');
+    this.set('client', client);
+    dayjs.extend(relativeTime)
+    await render(hbs `<Cards::ClientInfo @client={{this.client}}/>`);
+    assert.dom('span[data-elem-last-uploaded]').hasText(dayjs(this.client.lastUploadedOn).fromNow())
+  })
+});

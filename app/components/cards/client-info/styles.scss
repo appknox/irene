@@ -47,11 +47,13 @@ $card-padding: 1rem;
 
     &:hover {
       background-color: #fbfbfd;
+
       .thumbnail {
         border-color: darken($primary-color, 4%);
         background: darken($primary-color, 4%);
         color: $white;
       }
+
       .title {
         color: rgba(#000, 1);
       }
@@ -124,67 +126,10 @@ $card-padding: 1rem;
           color: #000;
           font-size: 0.95em;
         }
+      }
 
-        &.payment {
-
-          .type {
-            border-radius: 0.3rem;
-            padding: 0.35rem 1.2rem;
-            color: $white;
-            text-transform: capitalize;
-            line-height: 1.5;
-            font-weight: bold;
-
-            &.per-scan {
-              background-color: #0362b1;
-            }
-
-            &.per-app {
-              background-color: #66bb6a;
-            }
-          }
-
-          .credit-info {
-            display: grid;
-            grid-template-columns: auto auto;
-            justify-content: left;
-            column-gap: 8px;
-            align-items: center;
-            row-gap: 0.5em;
-
-            .info-icon {
-              i.icon {
-                color: #FFCC00;
-                font-size: 1.3rem;
-              }
-            }
-
-            .payment-status {
-              grid-column-start: 1;
-              grid-column-end: 3;
-
-              .data {
-                color: #000;
-
-                .value {
-                  text-transform: lowercase;
-                }
-
-                .expiry-date {
-                  font-size: 0.9em;
-                  color: #9ba2ad;
-                  margin-left: 0.5em;
-                }
-              }
-            }
-
-            .payment-status {
-              color: #FE4D3F;
-            }
-          }
-        }
-
-
+      .loading {
+        display: grid;
       }
     }
 

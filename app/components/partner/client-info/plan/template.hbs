@@ -1,0 +1,33 @@
+<div local-class="payment activity">
+  <span local-class="label">{{t 'paymentPlan'}}</span>
+  <div local-class="credit-info">
+
+    <span data-test-payment-type local-class="type {{if @clientPlan.limitedScans 'per-scan' 'per-app'}}">
+      {{t (if  @clientPlan.limitedScans 'perScan' 'perApp')}}
+    </span>
+    <span local-class="payment-status">
+      {{#if @clientPlan.invalidPayment}}
+        <span data-test-invalid-payment local-class="payment-invalid">{{t 'invalidPayment'}}</span>
+      {{else}}
+        <span data-test-payment-data-container local-class="data">
+          {{#if @clientPlan.limitedScans}}
+            <strong data-test-payment-data="per-scan" local-class="value">
+              {{@clientPlan.scansLeft}}
+              {{t 'pluralScans' itemCount=@clientPlan.scansLeft}}
+            </strong>
+            <span data-test-payment-remaining>{{t 'remaining'}}</span>
+          {{else}}
+            <strong data-test-payment-data="per-app" local-class="value">
+              {{@clientPlan.projectsLimit}}
+              {{t 'pluralApps' itemCount=@clientPlan.projectsLimit}}
+            </strong>
+            <span data-test-expiry-date
+              local-class="expiry-date">{{t (if @clientPlan.isPaymentExpired 'expiredOn' 'expiresOn')}}
+              {{day-js date=@clientPlan.expiryDate format="DD MMM YYYY"}}</span>
+          {{/if}}
+        </span>
+      {{/if}}
+    </span>
+  </div>
+
+</div>

@@ -33,7 +33,11 @@ export default class CardsClientInfoComponent extends Component {
   }
 
   @task(function* () {
-    this.clientPlan = yield this.store.find('partnerclient-plan', this.args.client.id);
+    try {
+      this.clientPlan = yield this.store.find('partnerclient-plan', this.args.client.id);
+    } catch (err) {
+      return;
+    }
   }) getClientPlan;
 
 }
