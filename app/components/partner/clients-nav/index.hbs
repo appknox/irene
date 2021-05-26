@@ -8,16 +8,4 @@
       {{/if}}
     {{/each}}
   </nav>
-  {{#if this.partner.access.invite_clients}}
-    <button class="is-primary margin-right" type="button" {{on "click" (fn this.toggleInviteModal)}}>
-      {{t 'invite'}}
-    </button>
-  {{/if}}
 </div>
-
-{{#if this.showInviteModal}}
-  <AkModal @onClose={{this.toggleInviteModal}} @showHeader={{true}} @headerTitle={{t 'invite'}}>
-    <Modals::UserInvitation @onSent={{this.invitationSent}}>
-    </Modals::UserInvitation>
-  </AkModal>
-{{/if}}

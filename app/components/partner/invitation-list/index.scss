@@ -1,3 +1,9 @@
+.header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+
 .title {
   font-size: 1.2rem;
   font-weight: bold;
@@ -11,6 +17,7 @@
   border-radius: 0.3rem;
   margin-top: 0.7rem;
 }
+
 .table-header {
   display: grid;
   grid-template-columns: 1fr 20% 12% 12% 12% 6% 6%;
@@ -20,9 +27,11 @@
   background-color: #f6f7f9;
   word-break: break-all;
 }
+
 .table-row {
   border-top: 1px solid #f0f1f3;
 }
+
 .pagination {
   margin: 1rem -3px;
 }
