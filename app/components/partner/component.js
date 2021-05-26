@@ -19,14 +19,12 @@ export default class PartnerComponent extends Component {
   @service organization;
 
   @tracked tabs = [{
-      label: this.intl.t('clients'),
-      active: true,
-      enabled: true,
-      link: 'authenticated.partner.clients'
-    },
-  ];
+    label: this.intl.t('clients'),
+    active: true,
+    enabled: true,
+    link: 'authenticated.partner.clients'
+  }, ];
 
-  @tracked showInviteModal = false;
 
   @action
   initalize() {
@@ -39,11 +37,6 @@ export default class PartnerComponent extends Component {
       set(tab, 'active', false);
     })
     set(tab, 'active', true);
-  }
-
-  @action
-  toggleInviteModal() {
-    this.showInviteModal = !this.showInviteModal;
   }
 
   setDefaultTab() {

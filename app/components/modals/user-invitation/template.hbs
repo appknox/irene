@@ -1,38 +1,39 @@
 <div local-class="invite-container" {{did-insert this.initializeCompo}}>
-  <div local-class="firstname input-container {{if this.changeset.error.firstName 'error'}}">
+  <div data-test-input-container="first-name" local-class="firstname input-container">
     <label local-class="label" for="firstname">{{t 'firstName'}}</label>
-    <Input id="firstname" placeholder="First name" autocomplete="off" @value={{mut (get this.changeset "firstName")}}
-      local-class="input" />
-    {{#if this.changeset.error.firstName}}
-      <span local-class="error"> {{this.changeset.error.firstName.validation}}</span>
-    {{/if}}
+    <Input data-test-input="first_name" id="firstname" placeholder="First name" autocomplete="off"
+      @value={{mut (get this.changeset "first_name")}} local-class="input" />
   </div>
 
-  <div local-class="lastname input-container">
+  <div data-test-input-container="last-name" local-class="lastname input-container">
     <label local-class="label" for="lastname">{{t 'lastName'}}</label>
-    <Input id="lastname" placeholder="Last name" autocomplete="off" @value={{mut (get this.changeset "lastName")}} />
+    <Input data-test-input="last_name" id="lastname" placeholder="Last name" autocomplete="off"
+      @value={{mut (get this.changeset "last_name")}} />
   </div>
 
 
-  <div local-class="email input-container {{if this.changeset.error.email 'error'}}">
-    <label local-class="label" for="email">{{t 'email'}}</label>
-    <Input id="email" placeholder="Email" autocomplete="off" @value={{mut (get this.changeset "email")}}
-      local-class="input" />
+  <div data-test-input-container="email" local-class="email input-container {{if this.changeset.error.email 'error'}}">
+    <label local-class="label"
+      for="email">{{t 'email'}}<sup>{{fa-icon "asterisk" local-class="asterisk-icon"}}</sup></label>
+    <Input data-test-input="email" id="email" placeholder="Email" autocomplete="off"
+      @value={{mut (get this.changeset "email")}} local-class="input" />
     {{#if this.changeset.error.email}}
-      <span local-class="error"> {{this.changeset.error.email.validation}}</span>
+      <span data-test-input-error="email" local-class="error"> {{this.changeset.error.email.validation}}</span>
     {{/if}}
   </div>
 
-  <div local-class="company input-container {{if this.changeset.error.company 'error'}}">
-    <label local-class="label" for="user-company">{{t "companyName"}}</label>
-    <Input id="user-company" placeholder="Company" autocomplete="off" @value={{mut (get this.changeset "company")}}
-      local-class="input" />
+  <div data-test-input-container="company"
+    local-class="company input-container {{if this.changeset.error.company 'error'}}">
+    <label local-class="label"
+      for="user-company">{{t "companyName"}}<sup>{{fa-icon "asterisk" local-class="asterisk-icon"}}</sup></label>
+    <Input data-test-input="company" id="user-company" placeholder="Company" autocomplete="off"
+      @value={{mut (get this.changeset "company")}} local-class="input" />
     {{#if this.changeset.error.company}}
-      <span local-class="error"> {{this.changeset.error.company.validation}}</span>
+      <span data-test-input-error="company" local-class="error"> {{this.changeset.error.company.validation}}</span>
     {{/if}}
   </div>
 
 
-  <button local-class="submit" type="button" class="is-primary"
+  <button data-test-input-btn="send" local-class="submit" type="button" class="is-primary"
     {{on "click" (perform this.sendInvitation)}}>{{t "sendInvitation"}}</button>
 </div>

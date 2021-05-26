@@ -14,20 +14,25 @@ import {
   task
 } from 'ember-concurrency';
 import UserInvite from 'irene/validations/user-invite';
+import parseError from 'irene/utils/parse-error';
 
 export default class ModalsUserInvitation extends Component {
 
   @service store;
+  @service ajax;
+  @service('notifications') notify;
+  @service intl;
+
 
   @service me;
 
   @tracked changeset = {};
 
   @tracked user = {
-    firstName: null,
-    lastName: null,
     email: null,
     company: null,
+    first_name: '',
+    last_name: '',
   };
 
   @action
@@ -39,7 +44,22 @@ export default class ModalsUserInvitation extends Component {
   @task(function* () {
     yield this.changeset.validate()
     if (this.changeset.get('isValid')) {
-      yield this.store.createRecord('client-invite', this.changeset.change).save();
+      try {
+        const userData = {
+          email: this.changeset.get('email'),
+          data: {
+            first_name: this.changeset.get('first_name'),
+            last_name: this.changeset.get('last_name'),
+            company: this.changeset.get('company')
+          }
+        }
+        yield this.store.createRecord('partner/registration-request', userData).save();
+        this.notify.success(this.intl.t('invitationSent'));
+        this.args.onSent();
+      } catch (err) {
+        this.notify.error(parseError(err));
+      }
+
     }
   }) sendInvitation;
 }
