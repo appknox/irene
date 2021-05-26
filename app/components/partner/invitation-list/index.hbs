@@ -1,5 +1,10 @@
 <div class="invitations">
-  <h3 local-class="title">{{t "pendingInvitations"}}</h3>
+  <div local-class="header">
+    <h3 local-class="title">{{t "pendingInvitations"}}</h3>
+    <button class="is-primary button" type="button" {{on "click" (fn this.toggleInviteModal)}}>
+      {{t 'invite'}}
+    </button>
+  </div>
   {{#if this.objects}}
     <div>
       <div local-class="table">
@@ -15,11 +20,8 @@
         <div local-class="table-body">
           {{#each this.objects as |request|}}
             <div local-class="table-row">
-              <Partner::Invitation
-                @request={{request}}
-                @onResend={{this.onResend}}
-                @onDelete={{this.onDelete}}
-              ></Partner::Invitation>
+              <Partner::Invitation @request={{request}} @onResend={{this.onResend}} @onDelete={{this.onDelete}}>
+              </Partner::Invitation>
             </div>
           {{/each}}
         </div>
@@ -40,3 +42,10 @@
     <div local-class="empty-data">No invitations</div>
   {{/if}}
 </div>
+
+{{#if this.showInviteModal}}
+  <AkModal @onClose={{this.toggleInviteModal}} @showHeader={{true}} @headerTitle={{t 'invite'}}>
+    <Modals::UserInvitation @onSent={{this.invitationSent}}>
+    </Modals::UserInvitation>
+  </AkModal>
+{{/if}}

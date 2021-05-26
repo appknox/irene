@@ -1,9 +1,21 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
-import { task }  from 'ember-concurrency';
+import {
+  inject as service
+} from '@ember/service';
+import {
+  action
+} from '@ember/object';
+import {
+  task
+} from 'ember-concurrency';
 import parseError from 'irene/utils/parse-error';
-import { PaginationMixin } from '../../../mixins/paginate';
+import {
+  PaginationMixin
+} from '../../../mixins/paginate';
+import {
+  tracked
+} from '@glimmer/tracking';
+
 
 export default class PartnerInvitationListComponent extends PaginationMixin(Component) {
   @service intl;
@@ -23,6 +35,8 @@ export default class PartnerInvitationListComponent extends PaginationMixin(Comp
       is_activated: false
     });
   }
+
+  @tracked showInviteModal = false;
 
   async registrationRequestDidChange() {
     await this.reload();
@@ -62,5 +76,16 @@ export default class PartnerInvitationListComponent extends PaginationMixin(Comp
   @action
   onDelete(request) {
     this.deleteInvite.perform(request);
+  }
+
+  @action
+  toggleInviteModal() {
+    this.showInviteModal = !this.showInviteModal;
+  }
+
+  @action
+  invitationSent() {
+    this.realtime.incrementProperty('RegistrationRequestCounter');
+    this.toggleInviteModal();
   }
 }
