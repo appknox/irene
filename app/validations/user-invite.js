@@ -8,5 +8,5 @@ export default {
   email: validateFormat({
     type: 'email'
   }),
-  company: validatePresence(true),
+  company: validatePresence(true)
 };

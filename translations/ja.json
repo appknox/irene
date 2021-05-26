@@ -827,5 +827,6 @@
   "rejectedRequests": "Rejected Requests",
   "invited": "Invited",
   "validUntil": "Valid until",
-  "source": "Source"
+  "source": "Source",
+  "invitationSent": "Invitation sent successfully"
 }

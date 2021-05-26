@@ -1,9 +1,16 @@
-.subnav {
+.clients-nav {
   background-color: #ebedf1;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  border-bottom: 1px solid #dee2ea;
+  align-items: center;
+}
+
+.subnav {
   margin: 0 -10px;
   padding: 0.4rem 1.5rem 0;
-  border-bottom: 1px solid #dee2ea;
 }
+
 .subnav-link {
   padding: 0.45rem 1.2rem 0.5rem;
   margin-right: 0.1rem;
@@ -16,6 +23,7 @@
   border-top-left-radius: 0.3rem;
   border-top-right-radius: 0.3rem;
   background-color: lighten(#ebedf1, 2%);
+
   &.active {
     background-color: white;
     color: $primary-color;

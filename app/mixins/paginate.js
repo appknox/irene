@@ -1,6 +1,8 @@
 import Mixin from '@ember/object/mixin';
 import ENV from 'irene/config/environment';
-import { task } from 'ember-concurrency';
+import {
+  task
+} from 'ember-concurrency';
 import {
   observer,
   computed
@@ -211,11 +213,23 @@ const PaginateMixin = Mixin.create({
 });
 
 // Class basaed mixin support for glimmer components
-import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
-import { gt, equal, alias } from '@ember/object/computed';
-import { scheduleOnce } from '@ember/runloop';
-import { inject as service } from '@ember/service';
+import {
+  action
+} from '@ember/object';
+import {
+  tracked
+} from '@glimmer/tracking';
+import {
+  gt,
+  equal,
+  alias
+} from '@ember/object/computed';
+import {
+  scheduleOnce
+} from '@ember/runloop';
+import {
+  inject as service
+} from '@ember/service';
 
 export const PaginationMixin = superclass => class extends superclass {
   @service store;
@@ -301,7 +315,7 @@ export const PaginationMixin = superclass => class extends superclass {
     return this.fetchObjects.isRunning;
   }
 
-  @task(function *() {
+  @task(function* () {
     const query = this.currentQuery;
     const targetModel = this.targetModel;
     try {
@@ -321,7 +335,7 @@ export const PaginationMixin = superclass => class extends superclass {
       }
       this.meta = meta;
       this.currentObjects = objects;
-    } catch(err) {
+    } catch (err) {
       this.error = err;
       this.currentObjects = [];
     }
