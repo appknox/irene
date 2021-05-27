@@ -260,6 +260,8 @@
   "invalidProject": "Please select valid project",
   "invalidRisk": "Please select valid risk value",
   "invite": "招待",
+  "inviteClient": "Invite Client",
+  "inviteClients": "Invite Clients",
   "inviteMember": "Invite Member",
   "inviteMembers": "Invite Members",
   "inviteType": "Invite type",

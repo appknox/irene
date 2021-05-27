@@ -2,7 +2,7 @@
   <div local-class="header">
     <h3 local-class="title">{{t "pendingInvitations"}}</h3>
     <button class="is-primary button" type="button" {{on "click" (fn this.toggleInviteModal)}}>
-      {{t 'invite'}}
+      {{fa-icon "envelope"}}&nbsp; {{t "inviteClients"}}
     </button>
   </div>
   {{#if this.objects}}
@@ -28,7 +28,7 @@
       </div>
       {{#if (or this.hasPrevious this.hasNext)}}
         <div local-class="pagination">
-          {{partial 'paginate'}}
+          {{partial "paginate"}}
         </div>
       {{/if}}
     </div>
@@ -44,7 +44,7 @@
 </div>
 
 {{#if this.showInviteModal}}
-  <AkModal @onClose={{this.toggleInviteModal}} @showHeader={{true}} @headerTitle={{t 'invite'}}>
+  <AkModal @onClose={{this.toggleInviteModal}} @showHeader={{true}} @headerTitle={{t "inviteClient"}}>
     <Modals::UserInvitation @onSent={{this.invitationSent}}>
     </Modals::UserInvitation>
   </AkModal>
