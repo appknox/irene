@@ -8,9 +8,6 @@ import {
 import {
   PaginationMixin
 } from '../../../mixins/paginate';
-import {
-  reads
-} from '@ember/object/computed';
 
 export default class OrgFileCleanupListComponent extends PaginationMixin(Component) {
 
@@ -21,7 +18,5 @@ export default class OrgFileCleanupListComponent extends PaginationMixin(Compone
   constructor() {
     super(...arguments);
   }
-
-  @reads('objects') fileCleanupList;
 
 }

@@ -1,5 +1,5 @@
 <div class="pending-registration-requests">
-  {{#if this.requests}}
+  {{#if this.objects}}
     <h3 local-class="title" class="margin-t-3">{{t "rejectedRequests"}}</h3>
     <div>
       <div local-class="table">
@@ -11,7 +11,7 @@
           <div class="bold">Undo reject</div>
         </div>
         <div local-class="table-body">
-          {{#each this.requests as |request|}}
+          {{#each this.objects as |request|}}
             <div local-class="table-row">
               <Partner::RegistrationRequestRejected @request={{request}}></Partner::RegistrationRequestRejected>
             </div>
