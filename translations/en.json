@@ -260,6 +260,8 @@
   "invalidPassword": "Passwords did not match",
   "invalidURL": " is an invalid URL",
   "invite": "Invite",
+  "inviteClient": "Invite Client",
+  "inviteClients": "Invite Clients",
   "inviteMember": "Invite Member",
   "inviteMembers": "Invite Members",
   "inviteType": "Invite type",

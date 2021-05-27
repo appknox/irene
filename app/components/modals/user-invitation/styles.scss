@@ -1,10 +1,7 @@
-.invite-container {
-  display: grid;
-
-  .submit {
-    justify-self: center;
-    width: max-content;
-    background-color: $primary-color;
-    color: $white;
-  }
+.submit {
+  display: flex;
+  justify-content: flex-end;
+}
+.required-marker {
+  color: #F04F44;
 }
