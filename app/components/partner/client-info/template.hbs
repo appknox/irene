@@ -1,117 +1,52 @@
-<div local-class='client-info-card {{@client.type}}'>
-  <div local-class='client-info-header'>
-    <span local-class='thumbnail'>
-      {{fa-icon 'users' local-class='thumbnail-icon'}}
+<div local-class="client-info-card {{@client.type}}">
+  <div local-class="client-info-header">
+    <span local-class="thumbnail" data-test-thumbnail>
+      {{fa-icon "users"}}
     </span>
-    <div local-class='title {{if this.isEmptyTitle 'empty-title'}}'>
+    <div local-class="title {{if this.isEmptyTitle 'empty-title'}}" data-test-title>
       {{#if this.isEmptyTitle}}
-        {{t 'noName'}}
+        {{t "noName"}}
       {{else}}
         {{@client.name}}
       {{/if}}
     </div>
   </div>
-  <div local-class='client-info-body'>
-    <div local-class='table'>
-      <div local-class='row'>
-        <div local-class='key'>{{t 'lastUpload'}}</div>
-        <div local-class='value'>
-          <div>
+  <div local-class="client-info-body">
+    <div local-class="table">
+      <div local-class="row">
+        <div local-class="key" data-test-last-upload-label>{{t 'lastUpload'}}</div>
+        <div local-class="value">
+          <div data-test-last-upload>
             {{#if @client.lastUploadedOn}}
               {{dayjs-from-now @client.lastUploadedOn}}
             {{else}}
-              <em class='text-lightgray'>{{t 'noUploads'}}</em>
+              <em class="text-lightgray">{{t "noUploads"}}</em>
             {{/if}}
           </div>
         </div>
       </div>
       {{#if this.partner.access.view_plans}}
-        <div local-class='row'>
-          <div local-class='key'>{{t 'paymentPlan'}}</div>
-          <div local-class='value'>
-            <div local-class='plan' {{did-insert (perform this.getClientPlan)}}>
-              {{#if this.getClientPlan.isRunning}}
-                <div local-class='plan-loading'>{{fa-icon
-                    'circle-o-notch fa-spin'
-                  }}</div>
-              {{else}}
-                <div
-                  local-class='plan-type {{if
-                    this.clientPlan.limitedScans
-                    'per-scan'
-                    'per-app'
-                  }}'
-                >{{t
-                    (if this.clientPlan.limitedScans 'perScan' 'perApp')
-                  }}</div>
-                <div local-class='plan-status'>
-                  {{#if this.clientPlan.limitedScans}}
-                    <strong class='margin-r-h'>
-                      {{this.clientPlan.scansLeft}}
-                      {{t 'pluralScans' itemCount=this.clientPlan.scansLeft}}
-                    </strong>
-                    {{t 'remaining'}}
-                  {{else}}
-                    <strong class='margin-r-h'>
-                      {{this.clientPlan.projectsLimit}}
-                      {{t 'pluralApps' itemCount=this.clientPlan.projectsLimit}}
-                    </strong>
-                    <span
-                      local-class='expiry-date {{if
-                        this.clientPlan.isPaymentExpired
-                        'expiry-date-expired'
-                      }}'
-                    >
-                      {{t
-                        (if
-                          this.clientPlan.isPaymentExpired
-                          'expiredOn'
-                          'expiresOn'
-                        )
-                      }}
-                      {{day-js
-                        date=this.clientPlan.expiryDate
-                        format='DD MMM YYYY'
-                      }}
-                    </span>
-                  {{/if}}
-                </div>
-              {{/if}}
-            </div>
+        <div local-class="row" {{did-insert (perform this.getClientPlan)}} data-test-payment-plan-row>
+          <div local-class="key" data-test-payment-plan-label>{{t 'paymentPlan'}}</div>
+          <div local-class="value">
+            <Partner::ClientInfoPlan @isLoading={{this.getClientPlan.isRunning}} @clientPlan={{this.clientPlan}}
+              data-test-payment-plan />
           </div>
         </div>
       {{/if}}
-      <div local-class='row'>
-        <div local-class='key'>{{t
-            'pluralorganizationOwner'
-            itemCount=@client.ownerEmails.length
-          }}</div>
-        <div local-class='value'>
-          <div local-class='client-owner'>
-            <span
-              local-class='client-owner-email'
-              class='black-text'
-            >{{@client.ownerEmails.firstObject}}</span>
-            {{#if (gt @client.ownerEmails.length 1)}}
-              <button
-                type='button'
-                title='{{t 'viewAll'}}'
-                local-class='client-owner-count-badge'
-                class='margin-l-h'
-                {{on 'click' (fn this.toggleOwnerEmailList)}}
-              >
-                +{{this.ownerEmailCount}}
-              </button>
-            {{/if}}
-          </div>
+      <div local-class="row">
+        <div local-class="key">
+          {{t "pluralorganizationOwner" itemCount=@client.ownerEmails.length }}
+        </div>
+        <div local-class="value">
+          <Modals::EmailList @emails={{@client.ownerEmails}} @headerTitle="Client owner emails"
+            data-test-client-owner-emails>
+          </Modals::EmailList>
         </div>
       </div>
-      <div local-class='row'>
-        <div local-class='key'>{{t 'createdOn'}}</div>
-        <div local-class='value'>{{day-js
-            @client.createdOn
-            format='DD MMM YYYY'
-          }}</div>
+      <div local-class="row">
+        <div local-class="key">{{t 'createdOn'}}</div>
+        <div local-class="value" data-test-created-on>{{day-js @client.createdOn format="DD MMM YYYY"}}</div>
       </div>
     </div>
     {{!-- {{#if (or this.partner.access.transfer_credits this.partner.access.list_projects)}}
@@ -126,20 +61,3 @@
     {{/if}} --}}
   </div>
 </div>
-
-{{#if this.showOwnerEmails}}
-  <AkModal
-    @onClose={{this.toggleOwnerEmailList}}
-    @showHeader={{true}}
-    @headerTitle='Client organization owners'
-  >
-    <div local-class='owner-email-list'>
-      {{#each @client.ownerEmails as |email seq|}}
-        <div local-class='owner-email' class='margin-top'>
-          {{add seq 1}}.
-          {{email}}
-        </div>
-      {{/each}}
-    </div>
-  </AkModal>
-{{/if}}

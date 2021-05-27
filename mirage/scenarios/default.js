@@ -6,24 +6,29 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export default function(server) {
+export default function (server) {
   var userCount = getRandomInt(3, 5),
     pricingCount = getRandomInt(3, 3),
     planCount = getRandomInt(3, 3),
     subscriptionCount = getRandomInt(1, 1),
     analyticsCount = getRandomInt(1, 1),
     vulnerabilityCount = getRandomInt(5, 15),
-    submissionCount = getRandomInt(3,3),
-    personalTokenCount = getRandomInt(3,3),
-    invitationCount = getRandomInt(1,1),
-    availableDeviceCount = getRandomInt(3,3),
-    organizationCount = getRandomInt(1,1),
+    submissionCount = getRandomInt(3, 3),
+    personalTokenCount = getRandomInt(3, 3),
+    invitationCount = getRandomInt(1, 1),
+    availableDeviceCount = getRandomInt(3, 3),
+    organizationCount = getRandomInt(1, 1),
     teamCount = 3,
     githubCount = 1,
     jiraCount = 1,
     vulnerabilityPreferenceCount = 10,
-    projectCount = 0, project = null, file = null, projectIds = [],
-    currentUserId = 1, deviceCount=30, invoiceCount=3;
+    projectCount = 0,
+    project = null,
+    file = null,
+    projectIds = [],
+    currentUserId = 1,
+    deviceCount = 30,
+    invoiceCount = 3;
   var users = server.createList('user', userCount);
   server.createList('pricing', pricingCount);
   server.createList('plan', planCount);
@@ -40,22 +45,40 @@ export default function(server) {
   server.createList('vulnerability-preference', vulnerabilityPreferenceCount);
   server.createList('available-device', availableDeviceCount);
   server.createList('organization', organizationCount);
-  projectCount =  getRandomInt(4, 5);
+  server.create('organization-me');
+  server.create('organization-member');
+  server.create('partnerclient-plan');
+  projectCount = getRandomInt(4, 5);
+  projectCount = getRandomInt(4, 5);
   for (var teamId = 1; teamId <= teamCount; teamId++) {
-    server.create('team', {users: users});
+    server.create('team', {
+      users: users
+    });
   }
   for (var projectId = 1; projectId <= projectCount; projectId++) {
     projectIds.push(projectId);
-    var fileCount = getRandomInt(1,4);
-    project = server.create('project', {userId: currentUserId});
-    server.create('invitation', {projectId: projectId, userId:currentUserId});
+    var fileCount = getRandomInt(1, 4);
+    project = server.create('project', {
+      userId: currentUserId
+    });
+    server.create('invitation', {
+      projectId: projectId,
+      userId: currentUserId
+    });
     var fileIds = [];
     for (var fileId = 1; fileId <= fileCount; fileId++) {
-      file = server.create('file', {projectId: projectId});
-      server.create('manualscan', {projectId: projectId});
+      file = server.create('file', {
+        projectId: projectId
+      });
+      server.create('manualscan', {
+        projectId: projectId
+      });
       fileIds.push(file.id);
       for (var vulnerabilityId = 1; vulnerabilityId <= vulnerabilityCount; vulnerabilityId++) {
-        server.create('analysis', {file: file, vulnerabilityId: vulnerabilityId});
+        server.create('analysis', {
+          file: file,
+          vulnerabilityId: vulnerabilityId
+        });
       }
     }
     project.fileIds = fileIds;

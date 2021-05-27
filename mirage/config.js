@@ -29,7 +29,30 @@ function routes() {
       is_sso: false,
       is_sso_enforced: false
     }
+  });
+
+  this.get('/api/v2/partners/:id', () => {
+    return {
+      id: 1,
+      access: {
+        view_plans: true
+      }
+    }
+  });
+
+  this.get('/api/v2/partnerclients', (schema) => {
+    return schema.partnerClients.all();
   })
+
+  this.get('/api/v2/partnerclients/:id', (schema, FakeRequest) => {
+    return schema.partnerClients.findBy({
+      id: FakeRequest.queryParams.id
+    });
+  })
+
+  this.get('/api/v2/partnerclients/:id/plan', () => {
+    return this.db.partnerclientPlans[0];
+  });
 
   this.namespace = config.namespace;
 
@@ -45,7 +68,9 @@ function routes() {
   this.get('/plans', 'plan');
   this.get('/pricings/:id', 'pricing');
   this.get('/teams', 'team');
-  this.get('/organizations', 'organization');
+  this.get('/organizations', (schema) => {
+    return schema.organizations.all().models;
+  });
   this.get('/teams/:id', 'team');
   this.get('/submissions/:id', 'submission');
   this.get('/submissions', 'submission');
@@ -319,5 +344,19 @@ function routes() {
   this.get('/example/download_url', () => {
     return {};
   });
+
+
+  this.get('/organizations/:id/me', () => {
+    return {
+      id: 1,
+      is_admin: true,
+      is_member: false,
+      is_owner: true
+    }
+  });
+
+  this.get('/organizations/:orgId/members/:memId', (schema, request) => {
+    return schema.organizationMembers.find(request.params.memId)
+  })
   this.passthrough();
 }
