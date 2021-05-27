@@ -6,6 +6,7 @@ import { setupIntl } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import dayjs from 'dayjs';
 
+const noop = () => {};
 
 module('Integration | Component | partner/registration-request-pending', function(hooks) {
   setupRenderingTest(hooks);
@@ -14,7 +15,9 @@ module('Integration | Component | partner/registration-request-pending', functio
 
   test('it should not render if request is empty', async function(assert) {
     this.set('request', {})
-    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} />`);
+    this.set('onApprove', noop);
+    this.set('onReject', noop);
+    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} @onApprove={{this.onApprove}} @onReject={{this.onReject}} />`);
     assert.dom("[data-test-pending-request]").doesNotExist();
   });
 
@@ -34,8 +37,10 @@ module('Integration | Component | partner/registration-request-pending', functio
       updatedOn: "2021-03-24T18:02:22.481033Z",
       validUntil: "2022-05-31T17:48:58.330920Z",
       moderatedBy: 1,
-    })
-    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} />`);
+    });
+    this.set('onApprove', noop);
+    this.set('onReject', noop);
+    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} @onApprove={{this.onApprove}} @onReject={{this.onReject}} />`);
     assert.dom("[data-test-pending-request]").doesNotExist();
   });
 
@@ -56,7 +61,9 @@ module('Integration | Component | partner/registration-request-pending', functio
       validUntil: "2022-05-31T17:48:58.330920Z",
       moderatedBy: 1,
     })
-    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} />`);
+    this.set('onApprove', noop);
+    this.set('onReject', noop);
+    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} @onApprove={{this.onApprove}} @onReject={{this.onReject}} />`);
     assert.dom("[data-test-pending-request-email]").exists();
     assert.dom("[data-test-pending-request-email]").hasText("test1@test.test");
   });
@@ -81,7 +88,9 @@ module('Integration | Component | partner/registration-request-pending', functio
         return "FirstName LastName";
       }
     })
-    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} />`);
+    this.set('onApprove', noop);
+    this.set('onReject', noop);
+    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} @onApprove={{this.onApprove}} @onReject={{this.onReject}} />`);
     assert.dom("[data-test-pending-request-name]").exists();
     assert.dom("[data-test-pending-request-name]").hasText("FirstName LastName");
   });
@@ -102,7 +111,9 @@ module('Integration | Component | partner/registration-request-pending', functio
         return "";
       }
     })
-    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} />`);
+    this.set('onApprove', noop);
+    this.set('onReject', noop);
+    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} @onApprove={{this.onApprove}} @onReject={{this.onReject}} />`);
     assert.dom("[data-test-pending-request-name]").exists();
     assert.dom("[data-test-pending-request-name]").hasText("");
   });
@@ -125,7 +136,9 @@ module('Integration | Component | partner/registration-request-pending', functio
         return "FirstName";
       }
     })
-    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} />`);
+    this.set('onApprove', noop);
+    this.set('onReject', noop);
+    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} @onApprove={{this.onApprove}} @onReject={{this.onReject}} />`);
     assert.dom("[data-test-pending-request-name]").exists();
     assert.dom("[data-test-pending-request-name]").hasText("FirstName");
   });
@@ -145,7 +158,9 @@ module('Integration | Component | partner/registration-request-pending', functio
       validUntil: "2022-05-31T17:48:58.330920Z",
       moderatedBy: 1,
     })
-    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} />`);
+    this.set('onApprove', noop);
+    this.set('onReject', noop);
+    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} @onApprove={{this.onApprove}} @onReject={{this.onReject}} />`);
     assert.dom("[data-test-pending-request-company]").exists();
     assert.dom("[data-test-pending-request-company]").hasText("TestCompany");
   });
@@ -163,7 +178,9 @@ module('Integration | Component | partner/registration-request-pending', functio
       validUntil: "2022-05-31T17:48:58.330920Z",
       moderatedBy: 1,
     })
-    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} />`);
+    this.set('onApprove', noop);
+    this.set('onReject', noop);
+    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} @onApprove={{this.onApprove}} @onReject={{this.onReject}} />`);
     assert.dom("[data-test-pending-request-company]").exists();
     assert.dom("[data-test-pending-request-company]").hasText("");
   });
@@ -182,7 +199,9 @@ module('Integration | Component | partner/registration-request-pending', functio
       validUntil: "2022-05-31T17:48:58.330920Z",
       moderatedBy: 1,
     })
-    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} />`);
+    this.set('onApprove', noop);
+    this.set('onReject', noop);
+    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} @onApprove={{this.onApprove}} @onReject={{this.onReject}} />`);
     assert.dom("[data-test-pending-request-createdon]").exists();
 
     const createdOnElem = this.element.querySelector("[data-test-pending-request-createdon]");
@@ -203,7 +222,9 @@ module('Integration | Component | partner/registration-request-pending', functio
       validUntil: "2022-05-31T17:48:58.330920Z",
       moderatedBy: 1,
     })
-    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} />`);
+    this.set('onApprove', noop);
+    this.set('onReject', noop);
+    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} @onApprove={{this.onApprove}} @onReject={{this.onReject}} />`);
     assert.dom("[data-test-pending-request-createdon]").exists();
 
     const createdOnElem = this.element.querySelector("[data-test-pending-request-createdon]");
@@ -224,7 +245,9 @@ module('Integration | Component | partner/registration-request-pending', functio
       validUntil: "2022-05-31T17:48:58.330920Z",
       moderatedBy: 1,
     })
-    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} />`);
+    this.set('onApprove', noop);
+    this.set('onReject', noop);
+    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} @onApprove={{this.onApprove}} @onReject={{this.onReject}} />`);
     assert.dom("[data-test-pending-request-approve-button]").exists();
 
     const btn = this.element.querySelector("[data-test-pending-request-approve-button]");
@@ -246,7 +269,9 @@ module('Integration | Component | partner/registration-request-pending', functio
       validUntil: "2022-05-31T17:48:58.330920Z",
       moderatedBy: 1,
     })
-    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} />`);
+    this.set('onApprove', noop);
+    this.set('onReject', noop);
+    await render(hbs`<Partner::RegistrationRequestPending @request={{this.request}} @onApprove={{this.onApprove}} @onReject={{this.onReject}} />`);
     assert.dom("[data-test-pending-request-reject-button]").exists();
 
     const btn = this.element.querySelector("[data-test-pending-request-reject-button]");

@@ -13,7 +13,12 @@
         <div local-class="table-body">
           {{#each this.objects as |request|}}
             <div local-class="table-row" data-test-pending-request-row>
-              <Partner::RegistrationRequestPending @request={{request}} data-test-pending-request-id={{request.id}}></Partner::RegistrationRequestPending>
+              <Partner::RegistrationRequestPending
+                @request={{request}}
+                @onApprove={{this.onApprove}}
+                @onReject={{this.onReject}}
+                data-test-pending-request-id={{request.id}}
+              ></Partner::RegistrationRequestPending>
             </div>
           {{/each}}
         </div>
