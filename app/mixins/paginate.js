@@ -1,5 +1,6 @@
 import Mixin from '@ember/object/mixin';
 import ENV from 'irene/config/environment';
+import { task } from 'ember-concurrency';
 import {
   observer,
   computed
@@ -210,22 +211,18 @@ const PaginateMixin = Mixin.create({
 });
 
 // Class basaed mixin support for glimmer components
-import {
-  action
-} from '@ember/object';
-import {
-  tracked
-} from '@glimmer/tracking';
-import {
-  gt,
-  equal,
-  alias
-} from '@ember/object/computed';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { gt, equal, alias } from '@ember/object/computed';
+import { scheduleOnce } from '@ember/runloop';
+import { inject as service } from '@ember/service';
 
 export const PaginationMixin = superclass => class extends superclass {
+  @service store;
 
   constructor() {
     super(...arguments);
+    scheduleOnce('afterRender', this, this.once);
   }
 
   @tracked offset = 0;
@@ -235,13 +232,11 @@ export const PaginationMixin = superclass => class extends superclass {
   @tracked limit = ENV.paginate.perPageLimit;
   @tracked isJsonApiPagination = false;
   @tracked isDRFPagination = false;
-  @tracked offsetMultiplier = ENV.paginate.offsetMultiplier;
-  @tracked isLoading = false;
   @tracked error = null;
+  @tracked currentObjects = [];
 
   @action
   gotoPage(offset) {
-    this.isLoading = true;
     this.setOffset(offset);
   }
 
@@ -265,11 +260,17 @@ export const PaginationMixin = superclass => class extends superclass {
     this.gotoPage(this.maxOffset)
   }
 
-  // refresh => dummy to reload model with current params
-  @computed('extraQueryStrings', 'limit', 'offset', 'offsetMultiplier', 'targetModel', 'refresh') //eslint-disable-line
-  get objects() {
+  reload() {
+    return this.fetchObjects.perform();
+  }
+
+  once() {
+    this.reload();
+  }
+
+  get currentQuery() {
     let query;
-    if (this.isJsonApiPagination) { // eslint-disable-line
+    if (this.isJsonApiPagination) {
       const query_limit = this.limit;
       const query_offset = this.offset;
       query = {
@@ -282,7 +283,7 @@ export const PaginationMixin = superclass => class extends superclass {
         offset: this.offset
       };
     }
-    const extraQueryStrings = this.extraQueryStrings; // eslint-disable-line
+    const extraQueryStrings = this.extraQueryStrings;
     if (!isEmpty(extraQueryStrings)) {
       const extraQueries = JSON.parse(extraQueryStrings);
       for (let key in extraQueries) {
@@ -290,34 +291,45 @@ export const PaginationMixin = superclass => class extends superclass {
         query[key] = value;
       }
     }
-    const targetModel = this.targetModel;
-    if (this.isDRFPagination) { // eslint-disable-line
-      query.offset = query.offset * (this.offsetMultiplier || 1);
+    if (this.isDRFPagination) {
+      query.offset = query.offset * (this.limit || 1);
     }
-    const objects = this.store.query(targetModel, query); // eslint-disable-line
-    objects.then((result) => {
-      const meta = result.meta;
-      if (result.links && result.meta.pagination) {
-        meta.total = result.meta.pagination.count;
-        this.isJsonApiPagination = true; // eslint-disable-line
+    return query
+  }
+
+  get isLoading() {
+    return this.fetchObjects.isRunning;
+  }
+
+  @task(function *() {
+    const query = this.currentQuery;
+    const targetModel = this.targetModel;
+    try {
+      const objects = yield this.store.query(targetModel, query);
+      const meta = objects.meta;
+      if (objects.links && objects.meta.pagination) {
+        meta.total = objects.meta.pagination.count;
+        this.isJsonApiPagination = true;
       }
-      if ("count" in result.meta) {
-        meta.total = result.meta.count || 0;
+      if ("count" in objects.meta) {
+        meta.total = objects.meta.count || 0;
         /*
         count is only defined for DRF
         JSONAPI has total
         */
-        this.isDRFPagination = true; // eslint-disable-line
+        this.isDRFPagination = true;
       }
-      this.isLoading = false; // eslint-disable-line
-      return this.meta = meta; // eslint-disable-line
-    }).catch((err) => {
-      // TODO: Fix all pagination error states and then enable this:
-      // this.isLoading = false; // eslint-disable-line
-      this.error = err; // eslint-disable-line
-      return [];
-    })
-    return objects;
+      this.meta = meta;
+      this.currentObjects = objects;
+    } catch(err) {
+      this.error = err;
+      this.currentObjects = [];
+    }
+  })
+  fetchObjects
+
+  get objects() {
+    return this.currentObjects;
   }
 
   @alias('objects.length') objectCount
@@ -391,6 +403,7 @@ export const PaginationMixin = superclass => class extends superclass {
 
   setOffset(offset) {
     this.offset = offset;
+    this.fetchObjects.perform();
   }
 }
 

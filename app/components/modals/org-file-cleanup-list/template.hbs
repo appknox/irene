@@ -11,7 +11,7 @@
           <ThreeBounceSpinner></ThreeBounceSpinner>
         </div>
       {{else}}
-        {{#each this.fileCleanupList as |cleanup|}}
+        {{#each this.objects as |cleanup|}}
           <div local-class="list-body__row">
             <span local-class="list-body__row-item">{{moment-format cleanup.createdOn 'DD MMM YYYY'}}</span>
             {{#if cleanup.isManual}}

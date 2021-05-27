@@ -1,6 +1,6 @@
 <div class="pending-registration-requests">
   <h3 local-class="title" data-test-pending-requests-title>{{t "pendingRequests"}}</h3>
-  {{#if this.requests}}
+  {{#if this.objects}}
     <div data-test-pending-requests-list>
       <div local-class="table">
         <div local-class="table-header" data-test-pending-requests-table-header>
@@ -11,7 +11,7 @@
           <div class="bold">Reject</div>
         </div>
         <div local-class="table-body">
-          {{#each this.requests as |request|}}
+          {{#each this.objects as |request|}}
             <div local-class="table-row" data-test-pending-request-row>
               <Partner::RegistrationRequestPending @request={{request}} data-test-pending-request-id={{request.id}}></Partner::RegistrationRequestPending>
             </div>

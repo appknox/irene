@@ -1,19 +1,12 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { reads } from '@ember/object/computed';
 import { PaginationMixin } from '../../../mixins/paginate';
 
 export default class PartnerRegistrationRequestRejectedListComponent extends PaginationMixin(Component) {
   @service intl;
-  @service store;
   @service realtime;
   @service('notifications') notify;
-
-  @tracked isLoading = true;
-  @tracked refresh = false;
-
-  @reads('objects') requests;
 
   constructor() {
     super(...arguments);
