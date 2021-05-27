@@ -4,18 +4,22 @@
     <div>
       <div local-class="table">
         <div local-class="table-header">
-          <div class="bold">User</div>
+          <div class="bold">Invitee</div>
           <div class="bold">Company</div>
           <div class="bold">Invited</div>
           <div class="bold">Expires on</div>
           <div class="bold">Source</div>
           <div class="bold">Resend</div>
-          {{!-- <div class="bold">Delete</div> --}}
+          <div class="bold">Delete</div>
         </div>
         <div local-class="table-body">
           {{#each this.objects as |request|}}
             <div local-class="table-row">
-              <Partner::Invitation @request={{request}}></Partner::Invitation>
+              <Partner::Invitation
+                @request={{request}}
+                @onResend={{this.onResend}}
+                @onDelete={{this.onDelete}}
+              ></Partner::Invitation>
             </div>
           {{/each}}
         </div>

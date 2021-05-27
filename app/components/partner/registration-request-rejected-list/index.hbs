@@ -13,7 +13,10 @@
         <div local-class="table-body">
           {{#each this.objects as |request|}}
             <div local-class="table-row">
-              <Partner::RegistrationRequestRejected @request={{request}}></Partner::RegistrationRequestRejected>
+              <Partner::RegistrationRequestRejected
+                @request={{request}}
+                @onUndoReject={{this.onUndoReject}}
+              ></Partner::RegistrationRequestRejected>
             </div>
           {{/each}}
         </div>

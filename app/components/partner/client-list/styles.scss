@@ -19,11 +19,32 @@
   }
 }
 
-.no-data,
 .loading {
-  height: 16rem;
-  width: 100%;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 7.5rem;
+}
+
+.loading-error {
+  display: flex;
+  height: 7.5rem;
+  background: #f6f7f9;
+  border: 1px solid #ebedf1;
+  border-radius: 0.3rem;
+  color: #e7817a;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-data {
+  display: flex;
+  height: 7.5rem;
+  background: #f6f7f9;
+  border: 1px solid #ebedf1;
+  border-radius: 0.3rem;
+  color: #9ea4ad;
+  font-style: italic;
   align-items: center;
   justify-content: center;
 }

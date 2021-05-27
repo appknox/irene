@@ -13,14 +13,14 @@
           </div>
         {{/if}}
       </div>
+    {{else if this.error}}
+      <div local-class="loading-error">Error: Could not load data</div>
+    {{else if this.isLoading}}
+      <div local-class="loading">
+        <ThreeBounceSpinner></ThreeBounceSpinner>
+      </div>
     {{else}}
-      {{#if this.isLoading}}
-        <div local-class="loading">
-          <ThreeBounceSpinner />
-        </div>
-      {{else}}
-        <div local-class="no-data">{{t 'noClients'}}</div>
-      {{/if}}
+      <div local-class="empty-data">{{t 'noClients'}}</div>
     {{/if}}
   </div>
 </div>

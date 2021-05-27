@@ -1,5 +1,8 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { task } from 'ember-concurrency';
+import parseError from 'irene/utils/parse-error';
 import { PaginationMixin } from '../../../mixins/paginate';
 
 export default class PartnerRegistrationRequestPendingListComponent extends PaginationMixin(Component) {
@@ -16,12 +19,48 @@ export default class PartnerRegistrationRequestPendingListComponent extends Pagi
   sortProperties = 'createdOn:desc';
   get extraQueryStrings() {
     return JSON.stringify({
-      status: "pending",
+      approval_status: "pending",
       is_activated: false
     });
   }
 
-  registrationRequestDidChange() {
-    this.refresh = !this.refresh;
+  async registrationRequestDidChange() {
+    await this.reload();
+    // After item removal if no items exist in the page then redirect to first page
+    if (this.offset > 0 && this.objects.length == 0) {
+      this.gotoPageFirst();
+    }
+  }
+
+  @task(function* (request) {
+    try {
+      yield request.updateStatus('approved');
+      this.realtime.incrementProperty('RegistrationRequestCounter');
+      this.notify.success(`Sent invitation to ${request.email}`);
+    } catch (err) {
+      this.notify.error(parseError(err));
+    }
+  })
+  approveRequest;
+
+  @task(function* (request) {
+    try {
+      yield request.updateStatus('rejected');
+      this.realtime.incrementProperty('RegistrationRequestCounter');
+      this.notify.success(`Rejected ${request.email}'s request`);
+    } catch (err) {
+      this.notify.error(parseError(err));
+    }
+  })
+  rejectRequest;
+
+  @action
+  onApprove(request) {
+    this.approveRequest.perform(request);
+  }
+
+  @action
+  onReject(request) {
+    this.rejectRequest.perform(request);
   }
 }

@@ -17,7 +17,7 @@
         class="is-success is-icon no-border no-hover-button"
         local-class="approveRequest"
         title="Send invite mail"
-        {{on "click" (perform this.approveRequest @request)}}
+        {{on "click" (fn @onApprove @request)}}
         data-test-pending-request-approve-button
       >{{fa-icon "check"}}</button>
     </div>
@@ -27,7 +27,7 @@
         class="is-primary is-icon no-border no-hover-button"
         local-class="rejectRequest"
         title="Reject request"
-        {{on "click" (perform this.rejectRequest @request)}}
+        {{on "click" (fn @onReject @request)}}
         data-test-pending-request-reject-button
       >{{fa-icon "remove"}}</button>
     </div>
