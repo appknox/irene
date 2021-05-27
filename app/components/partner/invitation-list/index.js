@@ -1,6 +1,8 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { reads } from '@ember/object/computed';
+import { action } from '@ember/object';
+import { task }  from 'ember-concurrency';
+import parseError from 'irene/utils/parse-error';
 import { PaginationMixin } from '../../../mixins/paginate';
 
 export default class PartnerInvitationListComponent extends PaginationMixin(Component) {
@@ -17,12 +19,48 @@ export default class PartnerInvitationListComponent extends PaginationMixin(Comp
   sortProperties = 'updatedOn:asc';
   get extraQueryStrings() {
     return JSON.stringify({
-      status: "approved",
+      approval_status: "approved",
       is_activated: false
     });
   }
 
-  registrationRequestDidChange() {
-    this.refresh = !this.refresh;
+  async registrationRequestDidChange() {
+    await this.reload();
+    if (this.offset > 0 && this.objects.length == 0) {
+      this.gotoPageFirst();
+    }
+  }
+
+  @task(function* (request) {
+    try {
+      yield request.resend();
+      this.realtime.incrementProperty('RegistrationRequestCounter');
+      this.notify.success(`Resend invitation to ${request.email}`);
+    } catch (err) {
+      this.notify.error(parseError(err));
+    }
+  })
+  resendInvite;
+
+  @task(function* (request) {
+    try {
+      const email = request.email;
+      yield request.destroyRecord();
+      this.realtime.incrementProperty('RegistrationRequestCounter');
+      this.notify.success(`Deleted invitation to ${email}`);
+    } catch (err) {
+      this.notify.error(parseError(err));
+    }
+  })
+  deleteInvite;
+
+  @action
+  onResend(request) {
+    this.resendInvite.perform(request);
+  }
+
+  @action
+  onDelete(request) {
+    this.deleteInvite.perform(request);
   }
 }

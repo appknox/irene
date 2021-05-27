@@ -118,7 +118,7 @@ module('Integration | Component | partner/registration-request-pending-list', fu
 
     this.server.get('v2/partners/1/registration_requests', (schema, request) => {
       const is_activated = request.queryParams.is_activated;
-      const status= request.queryParams.status;
+      const status= request.queryParams.approval_status;
       const data = schema["partner/registrationRequests"].where({
         isActivated: is_activated,
         approvalStatus: status
@@ -157,7 +157,7 @@ module('Integration | Component | partner/registration-request-pending-list', fu
     this.server.createList("partner/registrationRequest", 5, { "approvalStatus": "pending" });
     this.server.get('v2/partners/1/registration_requests', (schema, request) => {
       const is_activated = request.queryParams.is_activated;
-      const status= request.queryParams.status;
+      const status= request.queryParams.approval_status;
       const data = schema["partner/registrationRequests"].where({
         isActivated: is_activated,
         approvalStatus: status
@@ -180,7 +180,7 @@ module('Integration | Component | partner/registration-request-pending-list', fu
 
     this.server.get('v2/partners/1/registration_requests', (schema, request) => {
       const is_activated = request.queryParams.is_activated;
-      const status= request.queryParams.status;
+      const status= request.queryParams.approval_status;
       const data = schema["partner/registrationRequests"].where({
         isActivated: is_activated,
         approvalStatus: status
@@ -218,7 +218,7 @@ module('Integration | Component | partner/registration-request-pending-list', fu
 
     this.server.get('v2/partners/1/registration_requests', (schema, request) => {
       const is_activated = request.queryParams.is_activated;
-      const status= request.queryParams.status;
+      const status= request.queryParams.approval_status;
       const data = schema["partner/registrationRequests"].where({
         isActivated: is_activated,
         approvalStatus: status
