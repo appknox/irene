@@ -41,7 +41,9 @@ export default class PartnerInvitationListComponent extends PaginationMixin(
     try {
       yield request.resend();
       this.realtime.incrementProperty("RegistrationRequestCounter");
-      this.notify.success(`Resend invitation to ${request.email}`);
+      this.notify.success(
+        `${this.intl.t("resentInvitationTo")} ${request.email}`
+      );
     } catch (err) {
       this.notify.error(parseError(err));
     }
@@ -53,7 +55,7 @@ export default class PartnerInvitationListComponent extends PaginationMixin(
       const email = request.email;
       yield request.destroyRecord();
       this.realtime.incrementProperty("RegistrationRequestCounter");
-      this.notify.success(`Deleted invitation to ${email}`);
+      this.notify.success(`${this.intl.t("deletedInvitationOf")} ${email}`);
     } catch (err) {
       this.notify.error(parseError(err));
     }

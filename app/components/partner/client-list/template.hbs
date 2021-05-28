@@ -3,24 +3,24 @@
     {{#if this.objects}}
       <div local-class="client-items">
         {{#each this.objects as |client|}}
-          <Partner::ClientInfo @client={{client}}></Partner::ClientInfo>
+          <Partner::ClientInfo @client={{client}} @showDetailLink={{true}} />
         {{/each}}
       </div>
       <div class="padding-t-1">
         {{#if (or this.hasPrevious this.hasNext)}}
           <div local-class="pagination">
-            {{partial 'paginate'}}
+            {{partial "paginate"}}
           </div>
         {{/if}}
       </div>
     {{else if this.error}}
-      <div local-class="loading-error">Error: Could not load data</div>
+      <div local-class="loading-error">{{t "errorCouldNotLoadData"}}</div>
     {{else if this.isLoading}}
       <div local-class="loading">
-        <ThreeBounceSpinner></ThreeBounceSpinner>
+        <ThreeBounceSpinner />
       </div>
     {{else}}
-      <div local-class="empty-data">{{t 'noClients'}}</div>
+      <div local-class="empty-data">{{t "noClients"}}</div>
     {{/if}}
   </div>
 </div>

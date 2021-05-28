@@ -1,33 +1,47 @@
 .request {
   display: grid;
-  grid-template-columns: 1fr 20% 15% 6% 6%;
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  padding: 0.3rem 0.8rem;
+  grid-template-columns: 1fr 21% 14% 12rem;
+  @media (min-width: 1200px) {
+    grid-template-columns: 1fr 30% 11.5rem 12rem;
+  }
+}
+.user {
+  padding-right: 1rem;
 }
 .email {
   color: #3b3f49;
+  font-size: 0.95rem;
   font-weight: 600;
+  line-height: 1.2;
   word-break: break-word;
   overflow-wrap: break-word;
   text-overflow: ellipsis;
-  padding-right: 3rem;
 }
 .name {
   word-break: break-word;
   overflow-wrap: break-word;
   text-overflow: ellipsis;
   padding-top: 0.3rem;
-  padding-right: 3rem;
-  font: 0.9rem;
+  font-size: 0.9rem;
 }
 .company {
   word-break: break-word;
   overflow-wrap: break-word;
   text-overflow: ellipsis;
-  padding-right: 2rem;
+  padding-right: 1rem;
+  font-size: 0.92rem;
 }
 .date {
   font-style: italic;
   font-size: 0.9rem;
+  padding-right: 0.5rem;
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }

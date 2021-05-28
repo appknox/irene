@@ -13,14 +13,16 @@
 }
 .table-header {
   display: grid;
-  grid-template-columns: 1fr 20% 15% 6% 6%;
   align-items: center;
   justify-content: space-between;
-  padding: 0.8rem 1rem;
+  padding: 0.6rem 1rem;
   background-color: #f3f5f8;
+  grid-template-columns: 1fr 21% 14% 12rem;
+  @media (min-width: 1200px) {
+    grid-template-columns: 1fr 30% 11.5rem 12rem;
+  }
 }
 .table-row {
-  padding: 0.6rem 1rem;
   border-top: 1px solid #f0f1f3;
 }
 

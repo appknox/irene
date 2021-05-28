@@ -5,9 +5,7 @@ import { tracked } from "@glimmer/tracking";
 
 export default class PartnerComponent extends Component {
   @service intl;
-  @service store;
   @service router;
-  @service partner;
   @service organization;
 
   @tracked tabs = [

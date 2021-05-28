@@ -2,14 +2,15 @@
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
+  padding-top: 1.2rem;
+  padding-bottom: 0.5rem;
 }
 
 .title {
   font-size: 1.2rem;
   font-weight: bold;
   color: #5e5f63;
-  padding-top: 1.5rem;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0 !important;
 }
 
 .table {
@@ -20,12 +21,15 @@
 
 .table-header {
   display: grid;
-  grid-template-columns: 1fr 20% 12% 12% 12% 6% 6%;
   align-items: center;
   justify-content: space-between;
-  padding: 0.8rem 1rem;
+  padding: 0.6rem 1rem;
   background-color: #f6f7f9;
   word-break: break-all;
+  grid-template-columns: 1fr 20% 8rem 6rem 6.5rem 6rem;
+  @media (min-width: 1200px) {
+    grid-template-columns: 1fr 25% 9rem 7rem 6.5rem 6rem;
+  }
 }
 
 .table-row {

@@ -4,11 +4,11 @@
     <div>
       <div local-class="table">
         <div local-class="table-header">
-          <div class="bold">Requested by</div>
-          <div class="bold">Company</div>
-          <div class="bold">Requested</div>
-          <div class="bold">Rejected</div>
-          <div class="bold">Undo reject</div>
+          <div class="bold">{{t "requested"}} {{t "by"}}</div>
+          <div class="bold">{{t "company"}}</div>
+          <div class="bold">{{t "requested"}}</div>
+          <div class="bold">{{t "rejected"}}</div>
+          <div class="bold"></div>
         </div>
         <div local-class="table-body">
           {{#each this.objects as |request|}}
@@ -16,14 +16,14 @@
               <Partner::RegistrationRequestRejected
                 @request={{request}}
                 @onUndoReject={{this.onUndoReject}}
-              ></Partner::RegistrationRequestRejected>
+              />
             </div>
           {{/each}}
         </div>
       </div>
       {{#if (or this.hasPrevious this.hasNext)}}
         <div local-class="pagination">
-          {{partial 'paginate'}}
+          {{partial "paginate"}}
         </div>
       {{/if}}
     </div>

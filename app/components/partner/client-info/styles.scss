@@ -2,7 +2,7 @@ $card-header-height: 5rem;
 $card-thumbnail-size: 2.8rem;
 
 .client-info-card {
-  border: 1px solid darken(#F3F5F8, 5%);
+  border: 1px solid darken(#f3f5f8, 5%);
   border-radius: 0.3rem;
   grid-template-rows: $card-header-height 1fr;
   background-color: #fbfbfd;
@@ -21,12 +21,14 @@ $card-thumbnail-size: 2.8rem;
   width: $card-thumbnail-size;
   height: $card-thumbnail-size;
   border-radius: 50%;
-  border: 1px solid lighten($primary-color, 3%);
-  background: lighten($primary-color, 3%);
+  background-color: #cacdd4;
   color: $white;
   display: grid;
   align-items: center;
   justify-content: center;
+}
+.thumbnail-icon {
+  font-size: 1.2rem;
 }
 
 .title {
@@ -54,7 +56,7 @@ $card-thumbnail-size: 2.8rem;
 .row {
   display: flex;
   border-bottom: 1px dashed #e3e8ef;
-  padding: 0.5rem 0;
+  padding: 0.2rem 0;
   &:last-child {
     border-bottom: none;
   }
@@ -74,27 +76,28 @@ $card-thumbnail-size: 2.8rem;
 
 .plan {
   display: flex;
+  align-items: center;
 }
 
 .plan-type {
   border-radius: 0.2rem;
-  padding: 0.2rem 0.6rem;
-  color: $white;
-  text-transform: capitalize;
-  line-height: 1.2;
-  font-weight: bold;
-  border: 1px solid transparent;
+  height: 1.2rem;
+  width: 4.8rem;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &.per-app {
-    color: #5995ef;
-    background-color: #F2F7FF;
-    border-color: darken(#F2F7FF, 1%);
+    color: #4160a9;
+    background-color: #dbe6ff;
   }
 
   &.per-scan {
-    color: #57bf72;
-    background-color: #f0f9f2;
-    border-color: darken(#f0f9f2, 1%);
+    color: #156347;
+    background-color: #ccf3cc;
   }
 }
 .plan-status {
@@ -109,7 +112,7 @@ $card-thumbnail-size: 2.8rem;
   color: #9ba2ad;
 }
 .expiry-date-expired {
-  color: #FE4D3F;
+  color: #fe4d3f;
 }
 
 .client-owner-email {
@@ -142,13 +145,11 @@ $card-thumbnail-size: 2.8rem;
 }
 .client-owner {
   display: flex;
+  align-items: center;
 }
 
 .actions {
   display: flex;
   justify-content: flex-end;
   padding: 0 1rem 1rem;
-  button {
-    margin: 0 0.5rem;
-  }
 }

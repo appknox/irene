@@ -1,26 +1,32 @@
-import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
-import { task } from 'ember-concurrency';
-import parseError from 'irene/utils/parse-error';
-import { PaginationMixin } from '../../../mixins/paginate';
+import Component from "@glimmer/component";
+import { inject as service } from "@ember/service";
+import { action } from "@ember/object";
+import { task } from "ember-concurrency";
+import parseError from "irene/utils/parse-error";
+import { PaginationMixin } from "../../../mixins/paginate";
 
-export default class PartnerRegistrationRequestRejectedListComponent extends PaginationMixin(Component) {
+export default class PartnerRegistrationRequestRejectedListComponent extends PaginationMixin(
+  Component
+) {
   @service intl;
   @service realtime;
-  @service('notifications') notify;
+  @service("notifications") notify;
 
   constructor() {
     super(...arguments);
-    this.realtime.addObserver('RegistrationRequestCounter', this, 'registrationRequestDidChange');
+    this.realtime.addObserver(
+      "RegistrationRequestCounter",
+      this,
+      "registrationRequestDidChange"
+    );
   }
 
-  targetModel = 'partner/registration-request';
-  sortProperties = 'createdOn:desc';
+  targetModel = "partner/registration-request";
+  sortProperties = "createdOn:desc";
   get extraQueryStrings() {
     return JSON.stringify({
       approval_status: "rejected",
-      is_activated: false
+      is_activated: false,
     });
   }
 
@@ -33,9 +39,11 @@ export default class PartnerRegistrationRequestRejectedListComponent extends Pag
 
   @task(function* (request) {
     try {
-      yield request.updateStatus('pending');
-      this.realtime.incrementProperty('RegistrationRequestCounter');
-      this.notify.success(`Restored ${request.email}'s request to pending`);
+      yield request.updateStatus("pending");
+      this.realtime.incrementProperty("RegistrationRequestCounter");
+      this.notify.success(
+        `${this.intl.t("movedRequestToPending")}: ${request.email}`
+      );
     } catch (err) {
       this.notify.error(parseError(err));
     }
