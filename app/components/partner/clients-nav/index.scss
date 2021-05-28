@@ -1,9 +1,8 @@
 .subnav {
+  background-color: #ebedf1;
   margin: 0 -10px;
   padding: 0.4rem 1.5rem 0;
-  background-color: #ebedf1;
   border-bottom: 1px solid #dee2ea;
-  align-items: center;
 }
 
 .subnav-link {
@@ -18,7 +17,6 @@
   border-top-left-radius: 0.3rem;
   border-top-right-radius: 0.3rem;
   background-color: lighten(#ebedf1, 2%);
-
   &.active {
     background-color: white;
     color: $primary-color;

@@ -1,14 +1,10 @@
 import Component from '@glimmer/component';
-import {
-  inject as service
-} from '@ember/service';
+import { inject as service } from '@ember/service';
 
 export default class PartnerClientNavComponent extends Component {
   @service intl;
   @service router;
   @service partner;
-  @service store;
-  @service realtime;
 
   tabs = [{
       label: this.intl.t('overview'),
