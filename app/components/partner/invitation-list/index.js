@@ -1,42 +1,34 @@
-import Component from '@glimmer/component';
-import {
-  inject as service
-} from '@ember/service';
-import {
-  action
-} from '@ember/object';
-import {
-  task
-} from 'ember-concurrency';
-import parseError from 'irene/utils/parse-error';
-import {
-  PaginationMixin
-} from '../../../mixins/paginate';
-import {
-  tracked
-} from '@glimmer/tracking';
+import Component from "@glimmer/component";
+import { inject as service } from "@ember/service";
+import { action } from "@ember/object";
+import { task } from "ember-concurrency";
+import parseError from "irene/utils/parse-error";
+import { PaginationMixin } from "../../../mixins/paginate";
 
-
-export default class PartnerInvitationListComponent extends PaginationMixin(Component) {
+export default class PartnerInvitationListComponent extends PaginationMixin(
+  Component
+) {
   @service intl;
   @service realtime;
-  @service('notifications') notify;
+  @service("notifications") notify;
 
   constructor() {
     super(...arguments);
-    this.realtime.addObserver('RegistrationRequestCounter', this, 'registrationRequestDidChange');
+    this.realtime.addObserver(
+      "RegistrationRequestCounter",
+      this,
+      "registrationRequestDidChange"
+    );
   }
 
-  targetModel = 'partner/registration-request';
-  sortProperties = 'updatedOn:asc';
+  targetModel = "partner/registration-request";
+  sortProperties = "updatedOn:asc";
   get extraQueryStrings() {
     return JSON.stringify({
       approval_status: "approved",
-      is_activated: false
+      is_activated: false,
     });
   }
-
-  @tracked showInviteModal = false;
 
   async registrationRequestDidChange() {
     await this.reload();
@@ -48,7 +40,7 @@ export default class PartnerInvitationListComponent extends PaginationMixin(Comp
   @task(function* (request) {
     try {
       yield request.resend();
-      this.realtime.incrementProperty('RegistrationRequestCounter');
+      this.realtime.incrementProperty("RegistrationRequestCounter");
       this.notify.success(`Resend invitation to ${request.email}`);
     } catch (err) {
       this.notify.error(parseError(err));
@@ -60,7 +52,7 @@ export default class PartnerInvitationListComponent extends PaginationMixin(Comp
     try {
       const email = request.email;
       yield request.destroyRecord();
-      this.realtime.incrementProperty('RegistrationRequestCounter');
+      this.realtime.incrementProperty("RegistrationRequestCounter");
       this.notify.success(`Deleted invitation to ${email}`);
     } catch (err) {
       this.notify.error(parseError(err));
@@ -76,16 +68,5 @@ export default class PartnerInvitationListComponent extends PaginationMixin(Comp
   @action
   onDelete(request) {
     this.deleteInvite.perform(request);
-  }
-
-  @action
-  toggleInviteModal() {
-    this.showInviteModal = !this.showInviteModal;
-  }
-
-  @action
-  invitationSent() {
-    this.realtime.incrementProperty('RegistrationRequestCounter');
-    this.toggleInviteModal();
   }
 }
