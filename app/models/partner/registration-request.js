@@ -1,18 +1,20 @@
-import Model, { attr } from '@ember-data/model';
-import dayjs from 'dayjs';
+import Model, { attr } from "@ember-data/model";
+import dayjs from "dayjs";
 
 export default class RegistrationRequestModel extends Model {
-  @attr('string') email;
+  @attr("string") email;
   @attr() data;
-  @attr('date') createdOn;
-  @attr('date') updatedOn;
-  @attr('date') validUntil;
-  @attr('string') approvalStatus;
-  @attr('string') source;
-  @attr('boolean') isActivated;
+  @attr("date") createdOn;
+  @attr("date") updatedOn;
+  @attr("date") validUntil;
+  @attr("string") approvalStatus;
+  @attr("string") source;
+  @attr("boolean") isActivated;
 
   get fullName() {
-    return `${this.data.first_name ? this.data.first_name : ''} ${this.data.last_name ? this.data.last_name : ''}`;
+    return `${this.data.first_name ? this.data.first_name : ""}${
+      this.data.last_name ? " " + this.data.last_name : ""
+    }`;
   }
 
   get hasExpired() {
@@ -24,7 +26,7 @@ export default class RegistrationRequestModel extends Model {
 
   updateStatus(status) {
     const data = {
-      'approval_status': status
+      approval_status: status,
     };
     var adapter = this.store.adapterFor(this.constructor.modelName);
     return adapter.patch(this.id, this.constructor.modelName, this, data);

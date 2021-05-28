@@ -1,6 +1,6 @@
-import dayjs from 'dayjs';
-import faker from 'faker';
-import { Factory } from 'ember-cli-mirage';
+import dayjs from "dayjs";
+import faker from "faker";
+import { Factory } from "ember-cli-mirage";
 
 export default Factory.extend({
   email(i) {
@@ -16,7 +16,11 @@ export default Factory.extend({
     return dayjs(faker.date.future()).toISOString();
   },
   source() {
-    return faker.random.arrayElement(["registration", "backoffice", "invitation"]);
+    return faker.random.arrayElement([
+      "registration",
+      "backoffice",
+      "invitation",
+    ]);
   },
   isActivated() {
     return false;
@@ -28,6 +32,6 @@ export default Factory.extend({
     return {
       company: `Company ${i}`,
       first_name: `FirstName${i}`,
-    }
+    };
   },
 });

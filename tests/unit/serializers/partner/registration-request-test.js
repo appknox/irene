@@ -17,18 +17,18 @@ module("Unit | Serializer | partner registration request", function (hooks) {
 
     let serializedRecord = record.serialize();
     assert.deepEqual(serializedRecord, {
-      "email": "test@example.com",
-      "data": {
-        "company": "CompanyName",
-        "first_name": "FirstName",
-        "last_name": "LastName"
+      email: "test@example.com",
+      data: {
+        company: "CompanyName",
+        first_name: "FirstName",
+        last_name: "LastName",
       },
-      "approval_status": null,
-      "source": null,
-      "is_activated": false,
-      "created_on": null,
-      "updated_on": null,
-      "valid_until": null
+      approval_status: null,
+      source: null,
+      is_activated: false,
+      created_on: null,
+      updated_on: null,
+      valid_until: null,
     });
   });
 
@@ -47,18 +47,18 @@ module("Unit | Serializer | partner registration request", function (hooks) {
     assert.deepEqual(
       serializedRecord,
       {
-        "email": "test@example.com",
-        "data": {
-          "company": "CompanyName",
-          "first_name": "",
-          "last_name": "LastName"
+        email: "test@example.com",
+        data: {
+          company: "CompanyName",
+          first_name: "",
+          last_name: "LastName",
         },
-        "approval_status": null,
-        "source": null,
-        "is_activated": false,
-        "created_on": null,
-        "updated_on": null,
-        "valid_until": null
+        approval_status: null,
+        source: null,
+        is_activated: false,
+        created_on: null,
+        updated_on: null,
+        valid_until: null,
       },
       "empty fields are omitted by set undefined"
     );

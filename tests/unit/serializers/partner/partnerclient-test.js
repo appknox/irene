@@ -1,20 +1,20 @@
-import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
+import { module, test } from "qunit";
+import { setupTest } from "ember-qunit";
 
-module('Unit | Serializer | partner partnerclient', function(hooks) {
+module("Unit | Serializer | partner partnerclient", function (hooks) {
   setupTest(hooks);
 
   // Replace this with your real tests.
-  test('it exists', function(assert) {
-    let store = this.owner.lookup('service:store');
-    let serializer = store.serializerFor('partner/partnerclient');
+  test("it exists", function (assert) {
+    let store = this.owner.lookup("service:store");
+    let serializer = store.serializerFor("partner/partnerclient");
 
     assert.ok(serializer);
   });
 
-  test('it serializes records', function(assert) {
-    let store = this.owner.lookup('service:store');
-    let record = store.createRecord('partner/partnerclient', {});
+  test("it serializes records", function (assert) {
+    let store = this.owner.lookup("service:store");
+    let record = store.createRecord("partner/partnerclient", {});
 
     let serializedRecord = record.serialize();
 
