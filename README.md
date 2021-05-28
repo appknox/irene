@@ -14,13 +14,13 @@ You will need the following things properly installed on your computer.
 * [Node.js](https://nodejs.org/) (with npm)
 * [Ember CLI](https://ember-cli.com/)
 * [Google Chrome](https://google.com/chrome/)
+* [Watchman](https://facebook.github.io/watchman/docs/install.html) (only for development)
 
 ## Installation
 
 * `git clone git@github.com:appknox/irene.git`
 * `cd irene`
 * `npm install`
-* `bower install`
 * `ember serve`
 
 ## Running / Development

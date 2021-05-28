@@ -4,10 +4,21 @@ var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 var environment = EmberApp.env();
 var minifyEnabled = environment === "production" || environment === "staging";
 
+var babel = {
+  plugins: []
+};
+if (environment === 'development') {
+  // Add CodeSee instrumentation in development mode
+  babel.plugins.push([
+    "@codesee/instrument", { frameworks: ["ember"]}
+  ]);
+}
+
 module.exports = function (defaults) {
   let app = new EmberApp(defaults, {
     // Add options here
     storeConfigInMeta: false,
+    babel,
     minifyJS: {
       options: {
         exclude: ['runtimeconfig.js']
@@ -43,6 +54,13 @@ module.exports = function (defaults) {
       'includeCSS': false
     }
   });
+
+
+  if (environment === 'development') {
+    // Import the CodeSee tracker when in development mode
+    // This is what causes the CodeSee eye to appear in the app
+    app.import('node_modules/@codesee/tracker/build/codesee.web.hosted.js');
+  }
 
   // Custom hacks to get a similar build in staging and production
   app.options.minifyCSS.enabled = minifyEnabled;

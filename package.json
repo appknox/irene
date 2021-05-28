@@ -36,6 +36,7 @@
     "babel-eslint": "^10.1.0",
     "bohemia": "^0.9.2",
     "broccoli-asset-rev": "^3.0.0",
+    "codesee": "^0.29.1",
     "cross-env": "^7.0.2",
     "dayjs": "^1.9.6",
     "ember-ajax": "^5.0.0",
