@@ -1,4 +1,4 @@
-<div local-class="invitation {{if @request.hasExpired 'invitation-expired'}}">
+<div local-class="invitation {{if @request.hasExpired "invitation-expired"}}" ...attributes>
   <div local-class="user">
     <div local-class="email">{{@request.email}}</div>
     <div local-class="name" class="text-lightgray">{{@request.fullName}}</div>
