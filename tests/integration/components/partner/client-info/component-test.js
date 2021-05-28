@@ -29,7 +29,7 @@ module('Integration | Component | cards/client-info', function (hooks) {
   hooks.beforeEach(async function () {
     await this.server.createList('organization', 2);
     await this.owner.lookup('service:organization').load();
-    await this.owner.lookup('service:partner').load();
+    // await this.owner.lookup('service:partner').load();
   });
 
   test('Client thumbnail', async function (assert) {
@@ -81,7 +81,7 @@ module('Integration | Component | cards/client-info', function (hooks) {
     const client = this.server.create('partnerclient');
     this.set('client', client);
     await render(hbs `<Partner::ClientInfo @client={{this.client}}/>`);
-    assert.dom('span[data-test-first-owner]').hasText(this.client.ownerEmails[0]);
+    assert.dom('span[data-test-first-owner]').hasText(this.client.ownerEmails.firstObject);
     assert.dom('button[data-test-owner-list-btn]').exists();
   });
 
@@ -91,7 +91,7 @@ module('Integration | Component | cards/client-info', function (hooks) {
     });
     this.set('client', client);
     await render(hbs `<Partner::ClientInfo @client={{this.client}}/>`);
-    assert.dom('span[data-test-first-owner]').hasText(this.client.ownerEmails[0]);
+    assert.dom('span[data-test-first-owner]').hasText(this.client.ownerEmails.firstObject);
     assert.dom('button[data-test-owner-list-btn]').doesNotExist();
   })
 });

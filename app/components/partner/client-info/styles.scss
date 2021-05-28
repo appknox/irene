@@ -27,6 +27,7 @@ $card-thumbnail-size: 2.8rem;
   align-items: center;
   justify-content: center;
 }
+
 .thumbnail-icon {
   font-size: 1.2rem;
 }
@@ -56,7 +57,8 @@ $card-thumbnail-size: 2.8rem;
 .row {
   display: flex;
   border-bottom: 1px dashed #e3e8ef;
-  padding: 0.2rem 0;
+  padding: 0.5rem 0;
+
   &:last-child {
     border-bottom: none;
   }
@@ -68,51 +70,11 @@ $card-thumbnail-size: 2.8rem;
   display: flex;
   align-items: center;
 }
+
 .value {
   width: 70%;
   display: flex;
   align-items: center;
-}
-
-.plan {
-  display: flex;
-  align-items: center;
-}
-
-.plan-type {
-  border-radius: 0.2rem;
-  height: 1.2rem;
-  width: 4.8rem;
-  font-weight: 600;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &.per-app {
-    color: #4160a9;
-    background-color: #dbe6ff;
-  }
-
-  &.per-scan {
-    color: #156347;
-    background-color: #ccf3cc;
-  }
-}
-.plan-status {
-  display: flex;
-  align-items: center;
-  color: #000;
-  margin-left: 0.5rem;
-}
-
-.expiry-date {
-  font-size: 0.9em;
-  color: #9ba2ad;
-}
-.expiry-date-expired {
-  color: #fe4d3f;
 }
 
 .client-owner-email {
@@ -122,6 +84,7 @@ $card-thumbnail-size: 2.8rem;
   word-break: break-all;
   width: 100%;
 }
+
 .client-owner-count-badge {
   padding: 0 0.36rem 0 0.3rem;
   display: flex;
@@ -143,6 +106,7 @@ $card-thumbnail-size: 2.8rem;
     margin-right: 0.5rem;
   }
 }
+
 .client-owner {
   display: flex;
   align-items: center;
@@ -152,4 +116,8 @@ $card-thumbnail-size: 2.8rem;
   display: flex;
   justify-content: flex-end;
   padding: 0 1rem 1rem;
+
+  button {
+    margin: 0 0.5rem;
+  }
 }
