@@ -17,7 +17,7 @@ $color-error: #FE4D3F;
     font-weight: bold;
   }
   .label-error {
-    height: 1.2em;
+    min-height: 1.2em;
     display: flex;
     align-items: baseline;
     justify-content: space-between;
