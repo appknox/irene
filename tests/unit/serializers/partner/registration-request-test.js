@@ -1,51 +1,66 @@
-import {
-  module,
-  test
-} from 'qunit';
-import {
-  setupTest
-} from 'ember-qunit';
+import { module, test } from "qunit";
+import { setupTest } from "ember-qunit";
 
-module('Unit | Serializer | partner registration request', function (hooks) {
+module("Unit | Serializer | partner registration request", function (hooks) {
   setupTest(hooks);
 
-  test('it serializes all valid inputs', function (assert) {
-    let store = this.owner.lookup('service:store');
-    let record = store.createRecord('partner/registration-request', {
-      email: 'bot@appknox.com',
+  test("it serializes all valid inputs", function (assert) {
+    let store = this.owner.lookup("service:store");
+    let record = store.createRecord("partner/registration-request", {
+      email: "test@example.com",
       data: {
-        first_name: "bot",
-        last_name: "appknox",
-        company: 'appknox'
-      }
+        first_name: "FirstName",
+        last_name: "LastName",
+        company: "CompanyName",
+      },
     });
 
     let serializedRecord = record.serialize();
     assert.deepEqual(serializedRecord, {
-      first_name: "bot",
-      last_name: "appknox",
-      email: "bot@appknox.com",
-      company: "appknox"
+      "email": "test@example.com",
+      "data": {
+        "company": "CompanyName",
+        "first_name": "FirstName",
+        "last_name": "LastName"
+      },
+      "approval_status": null,
+      "source": null,
+      "is_activated": false,
+      "created_on": null,
+      "updated_on": null,
+      "valid_until": null
     });
   });
 
-  test('it serializes mixed inputs', function (assert) {
-    let store = this.owner.lookup('service:store');
-    let record = store.createRecord('partner/registration-request', {
-      email: 'bot@appknox.com',
+  test("it serializes mixed inputs", function (assert) {
+    let store = this.owner.lookup("service:store");
+    let record = store.createRecord("partner/registration-request", {
+      email: "test@example.com",
       data: {
         first_name: "",
-        last_name: "appknox",
-        company: 'appknox'
-      }
+        last_name: "LastName",
+        company: "CompanyName",
+      },
     });
 
     let serializedRecord = record.serialize();
-    assert.deepEqual(serializedRecord, {
-      first_name: undefined,
-      last_name: "appknox",
-      email: "bot@appknox.com",
-      company: "appknox"
-    }, "empty fields are omitted by set undefined");
+    assert.deepEqual(
+      serializedRecord,
+      {
+        "email": "test@example.com",
+        "data": {
+          "company": "CompanyName",
+          "first_name": "",
+          "last_name": "LastName"
+        },
+        "approval_status": null,
+        "source": null,
+        "is_activated": false,
+        "created_on": null,
+        "updated_on": null,
+        "valid_until": null
+      },
+      "empty fields are omitted by set undefined"
+    );
   });
 });
