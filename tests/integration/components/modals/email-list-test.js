@@ -6,6 +6,11 @@ import { hbs } from 'ember-cli-htmlbars';
 module('Integration | Component | modals/email-list', function (hooks) {
   setupRenderingTest(hooks);
 
+  const emails = [];
+  for (let i = 0; i <= 5; i++) {
+    emails.push(`test+${i}@test.app`);
+  }
+
   test('it renders', async function (assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
@@ -25,10 +30,6 @@ module('Integration | Component | modals/email-list', function (hooks) {
   });
 
   test('it renders 3 default emails', async function (assert) {
-    const emails = [];
-    for (let i = 0; i <= 5; i++) {
-      emails.push(`test+${i}@test.app`);
-    }
     this.set('emails', emails)
     await render(hbs`<Modals::EmailList @emails={{this.emails}} @defaultCount=3/>`);
     const defaultEmails = this.emails.slice(0, 3).join(', ');
@@ -36,30 +37,19 @@ module('Integration | Component | modals/email-list', function (hooks) {
   });
 
   test('it renders button with remaining count as +5', async function (assert) {
-    const emails = [];
-    for (let i = 0; i <= 5; i++) {
-      emails.push(`test+${i}@test.app`);
-    }
     this.set('emails', emails)
     await render(hbs`<Modals::EmailList @emails={{this.emails}}/>`);
     assert.dom('button[data-test-owner-list-btn]').hasText('+5');
   });
 
   test('it should not render remaining count button', async function (assert) {
-    const emails = [];
-    for (let i = 0; i < 1; i++) {
-      emails.push(`test+${i}@test.app`);
-    }
+    let emails = ['test+0@test.app'];
     this.set('emails', emails)
     await render(hbs`<Modals::EmailList @emails={{this.emails}}/>`);
     assert.dom('button[data-test-owner-list-btn]').doesNotExist()
   });
 
   test('it should open email list with modal when clicking on remaining count btn', async function (assert) {
-    const emails = [];
-    for (let i = 0; i <= 5; i++) {
-      emails.push(`test+${i}@test.app`);
-    }
     this.set('emails', emails)
     await render(hbs`<Modals::EmailList @emails={{this.emails}}/>`);
     await click(this.element.querySelector('button[data-test-owner-list-btn]'));
@@ -67,10 +57,6 @@ module('Integration | Component | modals/email-list', function (hooks) {
   });
 
   test('it should show 6 emails in the modal', async function (assert) {
-    const emails = [];
-    for (let i = 0; i <= 5; i++) {
-      emails.push(`test+${i}@test.app`);
-    }
     this.set('emails', emails)
     await render(hbs`<Modals::EmailList @emails={{this.emails}}/>`);
     await click(this.element.querySelector('button[data-test-owner-list-btn]'));

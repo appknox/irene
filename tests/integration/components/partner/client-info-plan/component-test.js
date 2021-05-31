@@ -53,7 +53,6 @@ module('Integration | Component | partner/client-info-plan', function (hooks) {
     assert.dom('strong[data-test-plan-status-left]').hasText(`${this.clientPlan.projectsLimit} t:pluralApps:("itemCount":${this.clientPlan.projectsLimit})`)
     assert.dom('span[data-test-plan-expiry]').hasText(`t:expiresOn:() ${dayjs(this.clientPlan.expiryDate).format('DD MMM YYYY')}`)
     assert.dom('span[data-test-plan-expiry]').hasStyle({
-      'font-size': '12.6px',
       color: 'rgb(155, 162, 173)'
     })
   });
@@ -77,7 +76,6 @@ module('Integration | Component | partner/client-info-plan', function (hooks) {
     assert.dom('strong[data-test-plan-status-left]').hasText(`${this.clientPlan.projectsLimit} t:pluralApps:("itemCount":${this.clientPlan.projectsLimit})`)
     assert.dom('span[data-test-plan-expiry]').hasText(`t:expiredOn:() ${dayjs(this.clientPlan.expiryDate).format('DD MMM YYYY')}`)
     assert.dom('span[data-test-plan-expiry]').hasStyle({
-      'font-size': '12.6px',
       color: 'rgb(254, 77, 63)'
     })
   });

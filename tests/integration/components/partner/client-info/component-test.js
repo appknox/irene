@@ -53,12 +53,29 @@ module('Integration | Component | partner/client-info', function (hooks) {
     assert.dom('div[data-test-title]').hasText(`t:noName:()`);
     assert.dom('div[data-test-title]').hasStyle({
       "color": "rgb(66, 70, 81)",
-      "font-size": "14px",
       "font-style": "italic"
     });
   });
 
-  //pending client name visibility ellipsis
+  test("it should truncate client name if it has 200 chars", async function (assert) {
+    const client = this.server.create('partnerclient', {
+      name: 'g'.repeat(200)
+    });
+    this.set('client', client);
+    await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
+    const titleEle = this.element.querySelector('div[data-test-title]');
+    assert.ok(titleEle.offsetWidth < titleEle.scrollWidth);
+  });
+
+  test("it should not truncate client name if it has 10 chars", async function (assert) {
+    const client = this.server.create('partnerclient', {
+      name: 'g'.repeat(10)
+    });
+    this.set('client', client);
+    await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
+    const titleEle = this.element.querySelector('div[data-test-title]');
+    assert.notOk(titleEle.offsetWidth < titleEle.scrollWidth);
+  });
 
   test('it should no uploades done by the client', async function (assert) {
     const client = this.server.create('partnerclient');
@@ -84,8 +101,16 @@ module('Integration | Component | partner/client-info', function (hooks) {
     assert.dom('div[data-test-client-owner-emails]').exists();
   });
 
-  test('it should render payment plan section, if view_plans enabled', async function (assert) {
+  test('it should render payment plan row, if view_plans enabled', async function (assert) {
     const client = this.server.create('partnerclient');
+    this.server.get('v2/partners/:id', (_, req) => {
+      return {
+        id: req.params.id,
+        access: {
+          view_plans: true
+        }
+      }
+    })
     await this.owner.lookup('service:partner').load();
     this.server.get('v2/partnerclients/:id/plan', (schema, req) => {
       return {
@@ -101,7 +126,48 @@ module('Integration | Component | partner/client-info', function (hooks) {
     assert.dom('div[data-test-payment-plan]').exists()
   })
 
+  test('it should not render payment plan row, if view_plans disabled', async function (assert) {
+    const client = this.server.create('partnerclient');
+    this.server.get('v2/partners/:id', (_, req) => {
+      return {
+        id: req.params.id,
+        access: {
+          view_plans: false
+        }
+      }
+    })
+    await this.owner.lookup('service:partner').load();
+
+    this.set('client', client);
+    await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
+    assert.dom('div[data-test-payment-plan-row]').doesNotExist();
+  })
+
+  test('it should not render payment plan row, if view_plans not available', async function (assert) {
+    const client = this.server.create('partnerclient');
+    this.server.get('v2/partners/:id', (_, req) => {
+      return {
+        id: req.params.id,
+        access: {
+        }
+      }
+    })
+    await this.owner.lookup('service:partner').load();
+
+    this.set('client', client);
+    await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
+    assert.dom('div[data-test-payment-plan-row]').doesNotExist();
+  })
+
   test('it should not render payment plan, if error occurred during plan details fetch', async function (assert) {
+    this.server.get('v2/partners/:id', (_, req) => {
+      return {
+        id: req.params.id,
+        access: {
+          view_plans: true
+        }
+      }
+    })
     await this.owner.lookup('service:partner').load();
     this.server.get('v2/partnerclients/:id/plan', () => {
       return Response(500)
