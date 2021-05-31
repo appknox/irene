@@ -42,6 +42,7 @@ const PricingListComponent = Component.extend({
   },
 
   didRender() {
+this._super(...arguments);
     const paymentDuration = this.get("paymentDuration");
     // eslint-disable-next-line no-undef
     const element = $(this.element).find(`[data-value='${paymentDuration}']`);

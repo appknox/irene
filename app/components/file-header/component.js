@@ -149,6 +149,7 @@ const FileHeaderComponent = Component.extend({
   ).property(),
 
   didInsertElement() {
+this._super(...arguments);
     const tPasswordCopied = this.get("tPasswordCopied");
     const tPleaseTryAgain = this.get("tPleaseTryAgain");
     // eslint-disable-next-line no-undef
@@ -162,6 +163,7 @@ const FileHeaderComponent = Component.extend({
   },
 
   willDestroyElement() {
+this._super(...arguments);
     const clipboard = this.get("clipboard");
     clipboard.destroy();
   },

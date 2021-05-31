@@ -27,6 +27,7 @@ export default Component.extend({
 
     /* Initialise tabs state */
     didInsertElement() {
+this._super(...arguments);
       const route = this.get('router.currentRouteName');
       const routeName = route.split(".")[2];
       if(routeName === "teams" || routeName === "team") {

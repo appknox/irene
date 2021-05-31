@@ -24,6 +24,7 @@ export default Component.extend({
   tScheduleDynamicscanSuccess: t('scheduleDynamicscanSuccess'),
 
   didInsertElement() {
+this._super(...arguments);
     this.send('pollDynamicStatus');
   },
 

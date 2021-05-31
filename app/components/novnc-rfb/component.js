@@ -5,6 +5,7 @@ export default Component.extend({
   localClassNames: ['novnc-rfb'],
   rfb: null,
   didInsertElement(){
+this._super(...arguments);
     const canvasEl = this.element.getElementsByClassName("canvas-container")[0];
     const deviceFarmURL = this.get('deviceFarmURL');
     const rfb = new RFB(
@@ -23,6 +24,7 @@ export default Component.extend({
     });
   },
   willDestroyElement(){
+this._super(...arguments);
     const rfb = this.get('rfb');
     rfb.removeEventListener('connect', ()=>{
       rfb.disconnect();

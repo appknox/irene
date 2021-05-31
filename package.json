@@ -106,7 +106,7 @@
     "ember-uploader": "^2.0.0",
     "ember-websockets": "7.2.0",
     "eslint": "^7.23.0",
-    "eslint-plugin-ember": "^8.13.0",
+    "eslint-plugin-ember": "^10.3.0",
     "eslint-plugin-node": "^11.1.0",
     "faker": "^4.1.0",
     "loader.js": "^4.7.0",

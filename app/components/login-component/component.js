@@ -33,6 +33,7 @@ const LoginComponentComponent = Component.extend({
   classNames: ['vertical-align-stretch'],
 
   didRender() {
+this._super(...arguments);
     // Set autofocus at once rendered
     if (this.element.querySelector('#password')) {
       this.element.querySelector('#password').focus()

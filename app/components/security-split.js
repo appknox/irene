@@ -8,6 +8,7 @@ const SecuritySplitComponent = Component.extend({
   isPurgeAnalysisClass: false,
 
   didInsertElement() {
+this._super(...arguments);
     this.activeTab();
   },
 

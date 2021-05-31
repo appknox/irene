@@ -26,6 +26,14 @@ module.exports = {
     "ember/no-get": 0,
     "ember/no-jquery": 0,
     "ember/no-mixins": 0,
+    "ember/no-classic-classes": 0,
+    "ember/no-classic-components": 0,
+    "ember/classic-decorator-no-classic-methods": 0,
+    "ember/require-tagless-components": 0,
+    "ember/no-computed-properties-in-native-classes": 0,
+    "ember/no-actions-hash": 0,
+    "ember/no-side-effects": 0,
+    "ember/no-component-lifecycle-hooks": 0,
   },
   overrides: [
     // node files

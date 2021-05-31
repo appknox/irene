@@ -26,6 +26,7 @@ const SettingsSplitComponent = Component.extend({
   }),
 
   didInsertElement() {
+this._super(...arguments);
     const path = window.location.pathname;
     if(path === "/settings/security") {
       this.set("isGeneral", false);

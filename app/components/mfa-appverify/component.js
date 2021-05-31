@@ -13,6 +13,7 @@ export default Component.extend({
   onCancel: null,
   qr: null,
   didInsertElement() {
+this._super(...arguments);
     const canvas = this.element.querySelector('canvas');
     const qr = new QRious({
       element: canvas,

@@ -82,6 +82,7 @@ const PersonaltokenListComponent = Component.extend(PaginateMixin, {
   tPleaseTryAgain: t('pleaseTryAgain'),
 
   didInsertElement() {
+this._super(...arguments);
     const tTokenCopied = this.get('tTokenCopied');
     const tPleaseTryAgain = this.get('tPleaseTryAgain');
     // eslint-disable-next-line no-undef
@@ -96,6 +97,7 @@ const PersonaltokenListComponent = Component.extend(PaginateMixin, {
   },
 
   willDestroyElement() {
+this._super(...arguments);
     const clipboard = this.get('clipboard');
     clipboard.destroy();
   }

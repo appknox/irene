@@ -21,6 +21,7 @@ export default Component.extend(PaginateMixin, {
   }),
 
   didInsertElement() {
+this._super(...arguments);
     this.get('setSelectedCount').perform();
   },
 

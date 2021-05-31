@@ -56,6 +56,7 @@ const JiraProjectComponent = Component.extend({
   }),
 
   didInsertElement() {
+this._super(...arguments);
     this.get('fetchJIRAProjects').perform();
     this.get('setCurrentJiraRepo').perform();
   },

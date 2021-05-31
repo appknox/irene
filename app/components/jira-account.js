@@ -39,6 +39,7 @@ const JiraAccountComponent = Component.extend({
     this.set('changeset', changeset);
   },
   didInsertElement() {
+this._super(...arguments);
     this.get('checkJIRA').perform();
   },
   baseURL: computed('organization.selected.id', '', function(){

@@ -26,6 +26,7 @@ export default Component.extend({
 
 
   didInsertElement(){
+this._super(...arguments);
     this.get('SPMetadata').perform();
     this.get('getIdPMetadata').perform();
   },

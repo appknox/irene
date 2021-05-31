@@ -11,6 +11,7 @@ export default Component.extend({
   isAPIServerWorking: false,
 
   didInsertElement() {
+this._super(...arguments);
     this.get('getStorageStatus').perform();
     this.get('getDeviceFarmStatus').perform();
     this.get('getAPIServerStatus').perform();

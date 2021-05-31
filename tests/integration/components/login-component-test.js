@@ -46,7 +46,7 @@ module('Integration | Component | login component', function (hooks) {
       @identification={{this.username}}
       @isSS0Enabled={{this.isSS0Enabled}}
       @isSS0Enforced={{this.isSS0Enforced}}></LoginComponent>`);
-    await settled();
+    
     await click('button.input-button');
     assert.false(this.get('isSS0Enabled'), 'SSO is not enabled');
     assert.false(this.get('isSS0Enforced'), 'SSO is not enforced')

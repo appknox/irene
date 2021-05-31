@@ -227,6 +227,7 @@ const OverallReportComponent = Component.extend({
 
 
   didInsertElement() {
+this._super(...arguments);
     this.get('resetDuration').perform();
     this.scanCountData();
   },

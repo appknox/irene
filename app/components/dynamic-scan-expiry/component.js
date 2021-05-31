@@ -44,6 +44,7 @@ export default class DyanmicScanExpiryComponent extends Component {
   }
 
   willDestroy() {
+super.willDestroy(...arguments);
     this.clockStop = true;
     removeObserver(this.args.file, 'isReady', this.observeDeviceState);
   }

@@ -178,6 +178,7 @@ export default class AkDatePicker extends Component {
    * destroyed.
    */
   willDestroy() {
+super.willDestroy(...arguments);
     if (this._picker) {
       this._picker.destroy();
     }

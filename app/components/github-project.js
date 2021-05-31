@@ -75,6 +75,7 @@ const GithubProjectComponent = Component.extend({
   }),
 
   didInsertElement(){
+this._super(...arguments);
     this.get('setCurrentGithubRepo').perform();
     this.get('fetchGithubRepos').perform();
   },

@@ -8,7 +8,7 @@ export default class InviteRoute extends Route {
   async model(params){
     const token = params.token;
     const url = [ENV.endpoints.invite, token].join('/')
-    const ret = await this.get("ajax").request(url)
+    const ret = await this.ajax.request(url)
     return ret;
   }
 }

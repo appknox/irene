@@ -22,6 +22,7 @@ const FileDetailsComponent = Component.extend({
   }),
 
   didInsertElement() {
+this._super(...arguments);
     this.securityEnabled();
   },
 
