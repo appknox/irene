@@ -12,12 +12,8 @@ $('body').addClass('theme-' + ENV.whitelabel.theme);
 
 Router.map(function () {
   this.route('login');
-  this.route('saml2', {
-    path: '/saml2'
-  }, function () {
-    this.route('redirect', {
-      path: '/redirect'
-    });
+  this.route('saml2', function () {
+    this.route('redirect');
   });
   if (ENV.isRegistrationEnabled || ENV.registrationLink) {
     this.route('register');
@@ -38,39 +34,23 @@ Router.map(function () {
     this.route("index", {
       path: '/'
     });
-    this.route("organization", {
-      path: '/organization'
-    }, function () {
-      this.route('namespaces', {
-        path: '/namespaces'
-      });
-      this.route('members', {
-        path: '/members'
-      });
-      this.route('teams', {
-        path: '/teams'
-      });
+    this.route("organization", function () {
+      this.route('namespaces');
+      this.route('members');
+      this.route('teams');
       this.route('team', {
         path: '/team/:teamid'
       });
       this.route('settings');
     });
-    this.route("settings", {
-      path: '/settings'
-    }, function () {
+    this.route("settings", function () {
       this.route('general');
       this.route('security');
       this.route('developersettings');
     });
-    this.route("billing", {
-      path: '/billing'
-    });
-    this.route("marketplace", {
-      path: '/marketplace'
-    });
-    this.route('projects', {
-      path: '/projects'
-    });
+    this.route("billing");
+    this.route("marketplace");
+    this.route('projects');
     this.route("project", {
       path: '/project/:projectid'
     }, function () {
