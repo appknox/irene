@@ -77,41 +77,6 @@ $card-thumbnail-size: 2.8rem;
   align-items: center;
 }
 
-.client-owner-email {
-  color: #000;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-break: break-all;
-  width: 100%;
-}
-
-.client-owner-count-badge {
-  padding: 0 0.36rem 0 0.3rem;
-  display: flex;
-  align-items: center;
-  background: #dde0e3;
-  min-width: 1.95em;
-  height: 1.5em;
-  border-radius: 0.3em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.82em;
-  font-weight: bold;
-  border: none;
-
-  i {
-    font-size: 0.8rem;
-    padding: 0 0.1rem;
-    margin-right: 0.5rem;
-  }
-}
-
-.client-owner {
-  display: flex;
-  align-items: center;
-}
-
 .actions {
   display: flex;
   justify-content: flex-end;

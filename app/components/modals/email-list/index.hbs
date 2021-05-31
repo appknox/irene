@@ -1,0 +1,22 @@
+<div local-class="emails" data-test-email-list ...attributes>
+  <div class="black-text" data-test-default-email>{{this.defaultEmails}}</div>
+  {{#if (gt remainingCount 0)}}
+    <button type="button" class="margin-l-h" local-class="email-count-badge"
+      {{on "click" (fn this.toggleMoreEmailsModal)}} data-test-owner-list-btn>
+      +{{this.remainingCount}}
+    </button>
+  {{/if}}
+</div>
+
+{{#if this.showEmailModal}}
+  <AkModal @onClose={{this.toggleMoreEmailsModal}} @showHeader={{true}} @headerTitle={{this.modalHeaderTitle}}>
+    <div local-class="email-list" data-test-email-list-modal>
+      {{#each @emails as |email seq|}}
+        <div class="margin-top" local-class="email-item" data-test-email-list-item="{{seq}}">
+          {{add seq 1}}.
+          {{email}}
+        </div>
+      {{/each}}
+    </div>
+  </AkModal>
+{{/if}}
