@@ -1,0 +1,56 @@
+<div
+  local-class='invitation {{if @request.hasExpired 'invitation-expired'}}'
+  ...attributes
+>
+  <div local-class='user'>
+    <div local-class='email'>{{@request.email}}</div>
+    <div local-class='name' class='text-lightgray'>{{@request.fullName}}</div>
+  </div>
+  <div local-class='company'>{{@request.data.company}}</div>
+  <div
+    local-class='date'
+    class='text-lightgray'
+    title='{{day-js date=@request.updatedOn format='DD MMM YYYY HH:mm A'}}'
+  >{{dayjs-from-now @request.updatedOn}}</div>
+  <div>
+    {{#if @request.hasExpired}}
+      <div
+        local-class='expired'
+        title='{{day-js date=@request.validUntil format='DD MMM YYYY'}}'
+      >{{t 'expired'}}</div>
+    {{else}}
+      <div
+        local-class='date'
+        title='{{day-js date=@request.validUntil format='DD MMM YYYY HH:mm A'}}'
+        class='text-lightgray'
+      >{{day-js date=@request.validUntil format='DD MMM YYYY'}}</div>
+    {{/if}}
+  </div>
+  <div>
+    <div
+      local-class='source source-{{@request.source}}'
+    >{{@request.source}}</div>
+  </div>
+  <div local-class='actions'>
+    <button
+      type='button'
+      class='is-default is-icon no-border no-hover-button'
+      local-class='resend'
+      title='Resend invite mail'
+      {{on 'click' (fn @onResend @request)}}
+    >
+      {{fa-icon 'repeat'}}
+      <AttachTooltip @placemnet='top'>{{t 'resend'}}</AttachTooltip>
+    </button>
+    <button
+      type='button'
+      class='is-critical is-icon no-border no-hover-button margin-l-q'
+      local-class='delete'
+      title='Delete invitation'
+      {{on 'click' (fn @onDelete @request)}}
+    >
+      {{fa-icon 'trash'}}
+      <AttachTooltip @placemnet='top'>{{t 'delete'}}</AttachTooltip>
+    </button>
+  </div>
+</div>

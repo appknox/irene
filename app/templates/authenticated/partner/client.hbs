@@ -1,0 +1,15 @@
+{{page-title 'Client Details'}}
+
+<Partner::ClientsNav />
+
+<div class='padding-h-1 padding-t-1h padding-b-2'>
+  <LinkTo @route='authenticated.partner.clients'>{{t 'clients'}}</LinkTo>
+  /
+  {{#if this.model.isEmptyTitle}}
+    <em>{{t 'noName'}}</em>
+  {{else}}
+    {{this.model.name}}
+  {{/if}}
+  <Partner::ClientDetail @client={{this.model}} />
+  {{outlet}}
+</div>

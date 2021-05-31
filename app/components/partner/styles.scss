@@ -1,46 +1,43 @@
-.partner-dashboard {
-  box-sizing: border-box;
-
-  .client-groups {
-    position: relative;
-
-    .group-header {
-      height: 3.8rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border: 1px solid darken(#F3F5F8, 5%);
-      border-radius: 0.3rem;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-
-      .tabs {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex: 1;
-        height: inherit;
-      }
-
-      .client-group {
-        text-transform: uppercase;
-        color: #adaeb3;
-        padding: 0 2.3rem;
-        text-align: center;
-        font-weight: 600;
-        cursor: pointer;
-        height: inherit;
-        line-height: 3.8rem;
-
-        &.active,
-        &:hover {
-          color: $primary-color;
-          // TODO need to enable after added multiple items
-          // background-color: #f6f7f9;
-          // border-top: 3px solid $primary-color;
-        }
-      }
-    }
+.header {
+  display: flex;
+  justify-content: space-between;
+  background-color: #f6f7f9;
+  margin: -10px -10px 0 -10px;
+}
+.header-left {
+  padding: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+}
+.header-title {
+  color: #000;
+  font-weight: bold;
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+.header-right {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding-right: 1.5rem;
+}
+.nav {
+  display: flex;
+  justify-content: flex-end;
+}
+.nav-link {
+  padding: 0.3rem 1rem;
+  border-bottom: 3px solid transparent;
+  color: inherit;
+  &.active {
+    border-bottom-color: $primary-color;
+    color: #000;
   }
-
+  &:hover,
+  &:focus,
+  &:active {
+    color: #000;
+  }
 }

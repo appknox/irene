@@ -1,0 +1,15 @@
+<nav local-class='subnav'>
+  {{#each this.tabs as |tab|}}
+    {{#if tab.enabled}}
+      <LinkTo
+        @route={{tab.link}}
+        local-class='subnav-link {{if
+          (eq tab.link this.currentRoute)
+          'active'
+        }}'
+      >
+        {{tab.label}}
+      </LinkTo>
+    {{/if}}
+  {{/each}}
+</nav>

@@ -11,7 +11,7 @@ export default class AuthenticatedPartnerRoute extends Route {
 
   beforeModel() {
     // Redirect to partner/clients
-    this.transitionTo('authenticated.partner.clients');
+    // this.transitionTo('authenticated.partner.clients');
   }
 
   async model() {
