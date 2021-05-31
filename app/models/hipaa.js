@@ -1,11 +1,10 @@
-import DS from 'ember-data';
-const { Model } = DS;
+import Model, { attr }  from '@ember-data/model';
 
 const Hipaa = Model.extend({
-  code: DS.attr(),
-  safeguard: DS.attr(),
-  title: DS.attr(),
-  standards: DS.attr()
+  code: attr(),
+  safeguard: attr(),
+  title: attr(),
+  standards: attr()
 });
 
 export default Hipaa;

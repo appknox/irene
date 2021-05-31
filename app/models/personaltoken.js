@@ -1,10 +1,10 @@
-import DS from 'ember-data';
+import Model, { attr }  from '@ember-data/model';
 import { computed } from '@ember/object';
 
-const Personaltoken = DS.Model.extend({
-  key: DS.attr('string'),
-  name: DS.attr('string'),
-  created: DS.attr('date'),
+const Personaltoken = Model.extend({
+  key: attr('string'),
+  name: attr('string'),
+  created: attr('date'),
 
   createdDateOnHumanized: computed('created', function() {
     const created = this.get('created');

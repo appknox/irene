@@ -1,13 +1,13 @@
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
-import DS from 'ember-data';
+import Model, { attr }  from '@ember-data/model';
 import { t } from 'ember-intl';
 
-export default DS.Model.extend({
+export default Model.extend({
 
   intl: service(),
-  deviceType: DS.attr('number'),
-  platformVersion: DS.attr('string'),
+  deviceType: attr('number'),
+  platformVersion: attr('string'),
 
   tAnyVersion: t("anyVersion"),
 

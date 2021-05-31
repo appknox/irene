@@ -1,5 +1,5 @@
-import DS from 'ember-data';
+import Model, { attr }  from '@ember-data/model';
 
-export default DS.Model.extend({
-  mandate: DS.attr('boolean'),
+export default Model.extend({
+  mandate: attr('boolean'),
 });

@@ -1,27 +1,27 @@
 import { computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
-import DS from 'ember-data';
+import Model, { attr, hasMany, belongsTo }  from '@ember-data/model';
 import ENUMS from 'irene/enums';
 import { t } from 'ember-intl';
 
-const Analysis = DS.Model.extend({
-  findings: DS.attr(),
-  risk: DS.attr('number'),
-  status: DS.attr('number'),
-  owasp: DS.hasMany('owasp'),
-  hipaa: DS.hasMany('hipaa'),
-  cvssBase: DS.attr('number'),
-  pcidss: DS.hasMany('pcidss'),
-  cvssVector: DS.attr('string'),
-  cvssVersion: DS.attr('number'),
-  cvssMetricsHumanized: DS.attr(),
-  computedRisk: DS.attr('number'),
-  overriddenRisk: DS.attr('number'),
-  overriddenRiskComment: DS.attr('string'),
-  analiserVersion: DS.attr('number'),
-  attachments: DS.hasMany('attachment'),
-  vulnerability: DS.belongsTo('vulnerability'),
-  file: DS.belongsTo('file', {inverse: 'analyses'}),
+const Analysis = Model.extend({
+  findings: attr(),
+  risk: attr('number'),
+  status: attr('number'),
+  owasp: hasMany('owasp'),
+  hipaa: hasMany('hipaa'),
+  cvssBase: attr('number'),
+  pcidss: hasMany('pcidss'),
+  cvssVector: attr('string'),
+  cvssVersion: attr('number'),
+  cvssMetricsHumanized: attr(),
+  computedRisk: attr('number'),
+  overriddenRisk: attr('number'),
+  overriddenRiskComment: attr('string'),
+  analiserVersion: attr('number'),
+  attachments: hasMany('attachment'),
+  vulnerability: belongsTo('vulnerability'),
+  file: belongsTo('file', {inverse: 'analyses'}),
 
 
   hascvccBase: computed.equal('cvssVersion', 3),

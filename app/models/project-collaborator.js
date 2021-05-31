@@ -1,8 +1,8 @@
-import DS from 'ember-data';
+import Model, { attr }  from '@ember-data/model';
 
-export default DS.Model.extend({
-  username: DS.attr('string'),
-  write: DS.attr('boolean'),
+export default Model.extend({
+  username: attr('string'),
+  write: attr('boolean'),
 
   async deleteCollaborator(projectId) {
     var adapter = this.store.adapterFor(this.constructor.modelName);

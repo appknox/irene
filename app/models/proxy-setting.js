@@ -1,10 +1,10 @@
-import DS from 'ember-data';
+import Model, { attr }  from '@ember-data/model';
 import { computed } from '@ember/object';
 
-export default DS.Model.extend({
-  enabled: DS.attr('boolean'),
-  host: DS.attr('string'),
-  port: DS.attr('string'),
+export default Model.extend({
+  enabled: attr('boolean'),
+  host: attr('string'),
+  port: attr('string'),
 
   hasProxyUrl: computed('host', 'port', function() {
     const host = this.get('host');

@@ -1,9 +1,9 @@
-import DS from 'ember-data';
+import Model, { attr, belongsTo }  from '@ember-data/model';
 
-export default DS.Model.extend({
-  account: DS.attr('string'),
-  project: DS.belongsTo('project'),
-  repo: DS.attr('string'),
-  risk_threshold: DS.attr('number'),
-  repo_details: DS.attr()
+export default Model.extend({
+  account: attr('string'),
+  project: belongsTo('project'),
+  repo: attr('string'),
+  risk_threshold: attr('number'),
+  repo_details: attr()
 });

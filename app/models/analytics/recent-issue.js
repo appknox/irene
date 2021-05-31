@@ -1,6 +1,6 @@
-import DS from 'ember-data';
+import Model, { attr, belongsTo }  from '@ember-data/model';
 
-export default DS.Model.extend({
-  count: DS.attr('number'),
-  vulnerability: DS.belongsTo('vulnerability')
+export default Model.extend({
+  count: attr('number'),
+  vulnerability: belongsTo('vulnerability')
 });

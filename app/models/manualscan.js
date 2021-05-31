@@ -1,17 +1,17 @@
-import DS from 'ember-data';
+import Model, { attr }  from '@ember-data/model';
 import ENUMS from 'irene/enums';
 import { computed } from '@ember/object';
 
-const Manualscan = DS.Model.extend({
-  appEnv: DS.attr('string'),
-  minOsVersion: DS.attr('string'),
-  contact: DS.attr(),
-  loginRequired: DS.attr('boolean'),
-  userRoles: DS.attr(),
-  vpnRequired: DS.attr('boolean'),
-  vpnDetails: DS.attr(),
-  appAction: DS.attr('string'),
-  additionalComments: DS.attr('string'),
+const Manualscan = Model.extend({
+  appEnv: attr('string'),
+  minOsVersion: attr('string'),
+  contact: attr(),
+  loginRequired: attr('boolean'),
+  userRoles: attr(),
+  vpnRequired: attr('boolean'),
+  vpnDetails: attr(),
+  appAction: attr('string'),
+  additionalComments: attr('string'),
 
   filteredAppEnv: computed("appEnv", function() {
     const appEnv = parseInt(this.get("appEnv"));

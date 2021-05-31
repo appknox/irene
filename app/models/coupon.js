@@ -1,8 +1,8 @@
-import DS from 'ember-data';
+import Model, { attr }  from '@ember-data/model';
 
-const Coupon = DS.Model.extend({
-  code: DS.attr('string'),
-  discount: DS.attr('string')
+const Coupon = Model.extend({
+  code: attr('string'),
+  discount: attr('string')
 });
 
 export default Coupon;

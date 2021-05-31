@@ -1,7 +1,6 @@
-import DS from 'ember-data';
-const { Model } = DS;
+import Model, { attr }  from '@ember-data/model';
 
 export default Model.extend({
-  enabled: DS.attr('boolean'),
-  enforced: DS.attr('boolean'),
+  enabled: attr('boolean'),
+  enforced: attr('boolean'),
 });

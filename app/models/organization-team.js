@@ -1,12 +1,12 @@
-import DS from 'ember-data';
+import Model, { attr, hasMany }  from '@ember-data/model';
 
-export default DS.Model.extend({
-  name: DS.attr('string'),
-  members: DS.hasMany('organization-team-member'),
-  organization: DS.attr('string'),
-  createdOn: DS.attr('date'),
-  membersCount: DS.attr('number'),
-  projectsCount: DS.attr('number'),
+export default Model.extend({
+  name: attr('string'),
+  members: hasMany('organization-team-member'),
+  organization: attr('string'),
+  createdOn: attr('date'),
+  membersCount: attr('number'),
+  projectsCount: attr('number'),
 
   async deleteMember(member) {
     var adapter = this.store.adapterFor(this.constructor.modelName);

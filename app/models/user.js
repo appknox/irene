@@ -1,4 +1,4 @@
-import DS from 'ember-data';
+import Model, { attr, hasMany }  from '@ember-data/model';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
@@ -6,36 +6,36 @@ import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
 import { t } from 'ember-intl';
 
-const User = DS.Model.extend({
+const User = Model.extend({
 
   intl: service(),
 
-  uuid: DS.attr('string'),
-  lang: DS.attr('string'),
-  username: DS.attr('string'),
-  email: DS.attr('string'),
-  firstName: DS.attr('string'),
-  lastName: DS.attr('string'),
-  ownedProjects: DS.hasMany('project', {inverse:'owner'}),
-  projects: DS.hasMany('project'),
-  pricings: DS.hasMany('pricing'),
-  submissions: DS.hasMany('submission', {inverse:'user'}),
-  namespaces: DS.attr('string'),
-  expiryDate: DS.attr('date'),
-  devknoxExpiry: DS.attr('date'),
-  projectCount: DS.attr('number'),
-  hasGithubToken: DS.attr('boolean'),
-  hasJiraToken: DS.attr('boolean'),
-  socketId: DS.attr('string'),
-  limitedScans: DS.attr('boolean'),
-  scansLeft: DS.attr('number'),
-  githubRedirectUrl: DS.attr('string'),
-  billingHidden: DS.attr('boolean'),
-  mfaMethod: DS.attr('number'),
-  mfaSecret: DS.attr('string'),
-  isTrial: DS.attr('boolean'),
-  crispHash: DS.attr('string'),
-  canDisableMfa: DS.attr('boolean'),
+  uuid: attr('string'),
+  lang: attr('string'),
+  username: attr('string'),
+  email: attr('string'),
+  firstName: attr('string'),
+  lastName: attr('string'),
+  ownedProjects: hasMany('project', {inverse:'owner'}),
+  projects: hasMany('project'),
+  pricings: hasMany('pricing'),
+  submissions: hasMany('submission', {inverse:'user'}),
+  namespaces: attr('string'),
+  expiryDate: attr('date'),
+  devknoxExpiry: attr('date'),
+  projectCount: attr('number'),
+  hasGithubToken: attr('boolean'),
+  hasJiraToken: attr('boolean'),
+  socketId: attr('string'),
+  limitedScans: attr('boolean'),
+  scansLeft: attr('number'),
+  githubRedirectUrl: attr('string'),
+  billingHidden: attr('boolean'),
+  mfaMethod: attr('number'),
+  mfaSecret: attr('string'),
+  isTrial: attr('boolean'),
+  crispHash: attr('string'),
+  canDisableMfa: attr('boolean'),
   isSecurity: true, // FIXME:
 
   isNotSecurity: computed.not('isSecurity'),

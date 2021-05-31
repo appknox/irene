@@ -1,10 +1,10 @@
-import DS from 'ember-data';
+import Model, { attr, hasMany, belongsTo }  from '@ember-data/model';
 
-export default DS.Model.extend({
-  member: DS.belongsTo('organization-user'),
-  role: DS.attr('number'),
-  roleDisplay: DS.attr('string'),
-  isAdmin: DS.attr('boolean'),
-  createdOn: DS.attr('date'),
-  teams: DS.hasMany('organization-team')
+export default Model.extend({
+  member: belongsTo('organization-user'),
+  role: attr('number'),
+  roleDisplay: attr('string'),
+  isAdmin: attr('boolean'),
+  createdOn: attr('date'),
+  teams: hasMany('organization-team')
 });

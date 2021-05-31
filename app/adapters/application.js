@@ -1,11 +1,10 @@
-import DS from 'ember-data';
+import JSONAPIAdapter from '@ember-data/adapter/json-api';
 import ENV from 'irene/config/environment';
 import IreneAdapterMixin from 'irene/mixins/data-adapter-mixin';
 
-const ApplicationAdapter = DS.JSONAPIAdapter.extend(IreneAdapterMixin, {
+const ApplicationAdapter = JSONAPIAdapter.extend(IreneAdapterMixin, {
   host: ENV.host,
   namespace: ENV.namespace,
-}
-);
+});
 
 export default ApplicationAdapter;

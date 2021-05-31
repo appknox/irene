@@ -1,10 +1,10 @@
-import DS from 'ember-data';
+import Model, { attr }  from '@ember-data/model';
 
-const Owasp = DS.Model.extend({
-  code: DS.attr(),
-  title: DS.attr(),
-  description: DS.attr(),
-  year: DS.attr()
+const Owasp = Model.extend({
+  code: attr(),
+  title: attr(),
+  description: attr(),
+  year: attr()
 });
 
 export default Owasp;

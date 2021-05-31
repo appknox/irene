@@ -1,6 +1,5 @@
-import DS from 'ember-data';
-const { Model } = DS;
-import {computed} from "@ember/object";
+import Model, { attr, belongsTo }  from '@ember-data/model';
+import { computed } from "@ember/object";
 import { inject as service } from '@ember/service';
 
 export default Model.extend({
@@ -11,12 +10,12 @@ export default Model.extend({
   AVAILABLE: 'Available',
   ERRORED: 'Errored',
 
-  createdOn: DS.attr('date'),
-  availableUntil: DS.attr('date'),
-  generatedBy: DS.belongsTo('organization-user'),
-  fromDate: DS.attr(),
-  toDate: DS.attr(),
-  progressPercent: DS.attr('number'),
+  createdOn: attr('date'),
+  availableUntil: attr('date'),
+  generatedBy: belongsTo('organization-user'),
+  fromDate: attr(),
+  toDate: attr(),
+  progressPercent: attr('number'),
 
   isAvailable: computed('AVAILABLE', 'status',function() {
     return this.get('status') === this.get('AVAILABLE')

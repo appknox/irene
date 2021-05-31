@@ -1,11 +1,10 @@
-import DS from 'ember-data';
-const { Model } = DS;
+import Model, { attr } from '@ember-data/model';
 
 export default Model.extend({
-  entityId: DS.attr('string'),
-  ssoServiceUrl: DS.attr('string'),
-  createdOn: DS.attr('date'),
-  certificate: DS.attr(),
+  entityId: attr('string'),
+  ssoServiceUrl: attr('string'),
+  createdOn: attr('date'),
+  certificate: attr(),
 
   deleteIdPMetadata(data) {
     const adapter = this.store.adapterFor(this.constructor.modelName);

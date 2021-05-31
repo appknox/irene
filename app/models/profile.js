@@ -1,9 +1,9 @@
-import DS from 'ember-data';
+import Model, { attr, hasMany }  from '@ember-data/model';
 
-export default DS.Model.extend({
-  files: DS.hasMany('file', {inverse:'profile'}),
-  showUnknownAnalysis: DS.attr('boolean'),
-  reportPreference: DS.attr(),
+export default Model.extend({
+  files: hasMany('file', {inverse:'profile'}),
+  showUnknownAnalysis: attr('boolean'),
+  reportPreference: attr(),
 
   saveReportPreference(data) {
     const adapter = this.store.adapterFor(this.constructor.modelName);

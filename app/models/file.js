@@ -4,7 +4,7 @@ import {
 import {
   computed
 } from '@ember/object';
-import DS from 'ember-data';
+import Model, { attr, hasMany, belongsTo }  from '@ember-data/model';
 import BaseModelMixin from 'irene/mixins/base-model';
 import ENUMS from 'irene/enums';
 import {
@@ -19,41 +19,41 @@ const _getAnalysesCount = (analysis, risk) => {
   return analysis.filterBy('computedRisk', risk).get('length')
 };
 
-const File = DS.Model.extend(BaseModelMixin, {
+const File = Model.extend(BaseModelMixin, {
   intl: service(),
-  project: DS.belongsTo('project', {
+  project: belongsTo('project', {
     inverse: 'files'
   }),
-  profile: DS.belongsTo('profile', {
+  profile: belongsTo('profile', {
     inverse: 'files'
   }),
-  uuid: DS.attr('string'),
-  deviceToken: DS.attr('string'),
-  version: DS.attr('string'),
-  versionCode: DS.attr('string'),
-  iconUrl: DS.attr('string'),
-  md5hash: DS.attr('string'),
-  sha1hash: DS.attr('string'),
-  name: DS.attr('string'),
-  dynamicStatus: DS.attr('number'),
-  analyses: DS.hasMany('analysis', {
+  uuid: attr('string'),
+  deviceToken: attr('string'),
+  version: attr('string'),
+  versionCode: attr('string'),
+  iconUrl: attr('string'),
+  md5hash: attr('string'),
+  sha1hash: attr('string'),
+  name: attr('string'),
+  dynamicStatus: attr('number'),
+  analyses: hasMany('analysis', {
     inverse: 'file'
   }),
-  report: DS.attr('string'),
-  manual: DS.attr('number'),
-  apiScanProgress: DS.attr('number'),
-  staticScanProgress: DS.attr('number'),
-  isActive: DS.attr('boolean'),
-  isStaticDone: DS.attr('boolean'),
-  isDynamicDone: DS.attr('boolean'),
-  isManualDone: DS.attr('boolean'),
-  isApiDone: DS.attr('boolean'),
-  apiScanStatus: DS.attr('number'),
-  tags: DS.hasMany('tag'),
-  minOsVersion: DS.attr('string'),
-  supportedCpuArchitectures: DS.attr('string'),
-  supportedDeviceTypes: DS.attr('string'),
-  canRunAutomatedDynamicscan: DS.attr('boolean'),
+  report: attr('string'),
+  manual: attr('number'),
+  apiScanProgress: attr('number'),
+  staticScanProgress: attr('number'),
+  isActive: attr('boolean'),
+  isStaticDone: attr('boolean'),
+  isDynamicDone: attr('boolean'),
+  isManualDone: attr('boolean'),
+  isApiDone: attr('boolean'),
+  apiScanStatus: attr('number'),
+  tags: hasMany('tag'),
+  minOsVersion: attr('string'),
+  supportedCpuArchitectures: attr('string'),
+  supportedDeviceTypes: attr('string'),
+  canRunAutomatedDynamicscan: attr('boolean'),
 
   isManualRequested: computed('manual', function () {
     return this.get("manual") !== ENUMS.MANUAL.NONE

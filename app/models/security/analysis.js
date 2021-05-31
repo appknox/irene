@@ -1,33 +1,33 @@
-import DS from 'ember-data';
+import Model, { attr, hasMany, belongsTo }  from '@ember-data/model';
 import ENUMS from 'irene/enums';
 import { computed } from '@ember/object';
 
-export default DS.Model.extend({
-  findings: DS.attr(),
-  risk: DS.attr('number'),
-  status: DS.attr('string'), // this is made as string because ember power select considers 0 as null value. ref:https://github.com/cibernox/ember-power-select/issues/962
-  attackVector: DS.attr(),
-  attackComplexity: DS.attr(),
-  privilegesRequired: DS.attr(),
-  userInteraction: DS.attr(),
-  scope: DS.attr(),
-  confidentialityImpact: DS.attr(),
-  integrityImpact: DS.attr(),
-  availabilityImpact: DS.attr(),
-  cvssBase: DS.attr('string'),
-  cvssVector: DS.attr('string'),
-  cvssVersion: DS.attr('string'),
-  analiserVersion: DS.attr('number'),
-  overriddenRisk: DS.attr('string'), // this is made as string because ember power select considers 0 as null value. ref: https://github.com/cibernox/ember-power-select/issues/962
-  overriddenRiskComment: DS.attr('string'),
-  overriddenRiskToProfile: DS.attr('boolean'),
-  computedRisk: DS.attr('string'),
-  file: DS.belongsTo('security/file'),
-  owasp: DS.hasMany('owasp'),
-  pcidss: DS.hasMany('pcidss'),
-  hipaa: DS.hasMany('hipaa'),
-  attachments: DS.hasMany('security/attachment'),
-  vulnerability: DS.belongsTo('vulnerability'),
+export default Model.extend({
+  findings: attr(),
+  risk: attr('number'),
+  status: attr('string'), // this is made as string because ember power select considers 0 as null value. ref:https://github.com/cibernox/ember-power-select/issues/962
+  attackVector: attr(),
+  attackComplexity: attr(),
+  privilegesRequired: attr(),
+  userInteraction: attr(),
+  scope: attr(),
+  confidentialityImpact: attr(),
+  integrityImpact: attr(),
+  availabilityImpact: attr(),
+  cvssBase: attr('string'),
+  cvssVector: attr('string'),
+  cvssVersion: attr('string'),
+  analiserVersion: attr('number'),
+  overriddenRisk: attr('string'), // this is made as string because ember power select considers 0 as null value. ref: https://github.com/cibernox/ember-power-select/issues/962
+  overriddenRiskComment: attr('string'),
+  overriddenRiskToProfile: attr('boolean'),
+  computedRisk: attr('string'),
+  file: belongsTo('security/file'),
+  owasp: hasMany('owasp'),
+  pcidss: hasMany('pcidss'),
+  hipaa: hasMany('hipaa'),
+  attachments: hasMany('security/attachment'),
+  vulnerability: belongsTo('vulnerability'),
 
   isPassed: computed('risk', function() {
     const risk = this.get("risk");

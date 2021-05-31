@@ -28,7 +28,6 @@ module.exports = {
     "ember/no-arrow-function-computed-properties": 0,
     "ember/no-get": 0,
     "ember/no-jquery": 0,
-    "ember/use-ember-data-rfc-395-imports": 0,
     "ember/no-mixins": 0,
   },
   overrides: [

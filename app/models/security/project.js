@@ -1,7 +1,7 @@
-import DS from 'ember-data';
+import Model, { attr, hasMany, belongsTo }  from '@ember-data/model';
 
-export default DS.Model.extend({
-  owner: DS.belongsTo('user', {inverse: 'ownedProjects'}),
-  files: DS.hasMany('security/file'),
-  packageName: DS.attr('string')
+export default Model.extend({
+  owner: belongsTo('user', {inverse: 'ownedProjects'}),
+  files: hasMany('security/file'),
+  packageName: attr('string')
 });

@@ -1,20 +1,20 @@
 import { computed } from '@ember/object';
-import DS from 'ember-data';
+import Model, { attr, hasMany, belongsTo }  from '@ember-data/model';
 import ENUMS from 'irene/enums';
 
-export default DS.Model.extend({
-  activeProfileId: DS.attr('number'),
-  organization: DS.belongsTo('organization'),
-  files: DS.hasMany('file', {inverse:'project'}),
-  name: DS.attr('string'),
-  packageName: DS.attr('string'),
-  platform: DS.attr('number'),
-  source: DS.attr('number'),
-  githubRepo: DS.attr('string'),
-  jiraProject: DS.attr('string'),
-  url: DS.attr('string'),
-  lastFileCreatedOn: DS.attr('date'),
-  fileCount: DS.attr('number'),
+export default Model.extend({
+  activeProfileId: attr('number'),
+  organization: belongsTo('organization'),
+  files: hasMany('file', {inverse:'project'}),
+  name: attr('string'),
+  packageName: attr('string'),
+  platform: attr('number'),
+  source: attr('number'),
+  githubRepo: attr('string'),
+  jiraProject: attr('string'),
+  url: attr('string'),
+  lastFileCreatedOn: attr('date'),
+  fileCount: attr('number'),
 
   lastFile: computed('fileCount', 'id', 'store', function() {
     const params = {

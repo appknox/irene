@@ -1,27 +1,27 @@
-import DS from 'ember-data';
+import Model, { attr, hasMany, belongsTo }  from '@ember-data/model';
 import BaseModelMixin from 'irene/mixins/base-model';
 import ENUMS from 'irene/enums';
 import { computed } from '@ember/object';
 import { alias } from '@ember/object/computed';
 import { isEmpty } from '@ember/utils';
 
-const Project = DS.Model.extend(BaseModelMixin, {
-  activeProfileId: DS.attr('number'),
-  owner: DS.belongsTo('user', {inverse: 'ownedProjects'}),
-  files: DS.hasMany('file', {inverse:'project'}),
-  name: DS.attr('string'),
-  packageName: DS.attr('string'),
-  platform: DS.attr('number'),
-  source: DS.attr('number'),
-  githubRepo: DS.attr('string'),
-  jiraProject: DS.attr('string'),
-  testUser:DS.attr('string'),
-  testPassword: DS.attr('string'),
-  url: DS.attr('string'),
-  lastFileCreatedOn: DS.attr('date'),
-  fileCount: DS.attr('number'),
-  lastFileId: DS.belongsTo('file'),
-  // lastFile: DS.belongsTo('file'),
+const Project = Model.extend(BaseModelMixin, {
+  activeProfileId: attr('number'),
+  owner: belongsTo('user', {inverse: 'ownedProjects'}),
+  files: hasMany('file', {inverse:'project'}),
+  name: attr('string'),
+  packageName: attr('string'),
+  platform: attr('number'),
+  source: attr('number'),
+  githubRepo: attr('string'),
+  jiraProject: attr('string'),
+  testUser:attr('string'),
+  testPassword: attr('string'),
+  url: attr('string'),
+  lastFileCreatedOn: attr('date'),
+  fileCount: attr('number'),
+  lastFileId: belongsTo('file'),
+  // lastFile: belongsTo('file'),
 
   pdfPassword: computed('uuid', function() {
     const uuid = this.get("uuid");

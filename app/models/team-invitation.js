@@ -1,9 +1,9 @@
-import DS from 'ember-data';
+import Model, { attr }  from '@ember-data/model';
 
-const TeamInvitation = DS.Model.extend({
+const TeamInvitation = Model.extend({
 
-  role : DS.attr('number'),
-  email: DS.attr('string'),
+  role : attr('number'),
+  email: attr('string'),
 });
 
 

@@ -1,16 +1,16 @@
-import DS from 'ember-data';
+import Model, { attr, belongsTo }  from '@ember-data/model';
 import ENUMS from 'irene/enums';
 import { computed } from '@ember/object';
 
-export default DS.Model.extend({
-  value: DS.attr('string'),
-  createdOn: DS.attr('date'),
-  approvedOn: DS.attr('date'),
-  isApproved: DS.attr('boolean'),
-  organization: DS.belongsTo('organization'),
-  requestedBy: DS.belongsTo('organization-user'),
-  approvedBy: DS.belongsTo('organization-user'),
-  platform: DS.attr('number'),
+export default Model.extend({
+  value: attr('string'),
+  createdOn: attr('date'),
+  approvedOn: attr('date'),
+  isApproved: attr('boolean'),
+  organization: belongsTo('organization'),
+  requestedBy: belongsTo('organization-user'),
+  approvedBy: belongsTo('organization-user'),
+  platform: attr('number'),
 
   platformIconClass: computed('platform', function() {
     switch (this.get("platform")) {

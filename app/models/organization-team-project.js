@@ -1,7 +1,7 @@
-import DS from 'ember-data';
+import Model, { attr }  from '@ember-data/model';
 
-export default DS.Model.extend({
-  write: DS.attr('boolean'),
+export default Model.extend({
+  write: attr('boolean'),
 
   async deleteProject(teamId) {
     var adapter = this.store.adapterFor(this.constructor.modelName);

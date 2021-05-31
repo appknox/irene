@@ -1,15 +1,15 @@
-import DS from 'ember-data';
+import Model, { attr, belongsTo }  from '@ember-data/model';
 import BaseModeMixin from 'irene/mixins/base-model';
 import { computed } from '@ember/object';
 
-const Submission = DS.Model.extend(BaseModeMixin, {
-  user: DS.belongsTo('user', {inverse: 'submissions'}),
-  metaData: DS.attr('string'),
-  status: DS.attr('number'),
-  reason:DS.attr('string'),
-  source: DS.attr('number'),
-  packageName: DS.attr('string'),
-  statusHumanized: DS.attr('string'),
+const Submission = Model.extend(BaseModeMixin, {
+  user: belongsTo('user', {inverse: 'submissions'}),
+  metaData: attr('string'),
+  status: attr('number'),
+  reason:attr('string'),
+  source: attr('number'),
+  packageName: attr('string'),
+  statusHumanized: attr('string'),
 
   hasReason: computed('reason', function() {
     const reason = this.get("reason");

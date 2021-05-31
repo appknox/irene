@@ -1,16 +1,16 @@
-import DS from 'ember-data';
+import Model, { attr }  from '@ember-data/model';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import { t } from 'ember-intl';
 
-const Invoice = DS.Model.extend({
+const Invoice = Model.extend({
   intl: service(),
-  invoiceId: DS.attr('number'),
-  amount: DS.attr('string'),
-  paidOn: DS.attr('date'),
-  planName: DS.attr('string'),
-  downloadUrl: DS.attr('string'),
-  isPaid: DS.attr('boolean'),
+  invoiceId: attr('number'),
+  amount: attr('string'),
+  paidOn: attr('date'),
+  planName: attr('string'),
+  downloadUrl: attr('string'),
+  isPaid: attr('boolean'),
 
   tPending: t("pending"),
   tPaid: t("paid"),

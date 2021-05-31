@@ -1,9 +1,9 @@
-import DS from 'ember-data';
+import Model, { attr }  from '@ember-data/model';
 
-const Attachment = DS.Model.extend({
-  uuid: DS.attr('string'),
-  name: DS.attr('string'),
-  downloadUrl: DS.attr('string')
+const Attachment = Model.extend({
+  uuid: attr('string'),
+  name: attr('string'),
+  downloadUrl: attr('string')
 });
 
 export default Attachment;

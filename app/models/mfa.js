@@ -1,11 +1,11 @@
-import DS from 'ember-data';
+import Model, { attr }  from '@ember-data/model';
 import { computed } from '@ember/object';
 import ENUMS from 'irene/enums';
 
 
-export default DS.Model.extend({
-  method: DS.attr('string'),
-  enabled: DS.attr('boolean'),
+export default Model.extend({
+  method: attr('string'),
+  enabled: attr('boolean'),
 
   display: computed('method', function () {
     const mfaMethod = this.get('method');

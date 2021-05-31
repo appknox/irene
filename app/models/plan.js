@@ -1,20 +1,20 @@
-import DS from 'ember-data';
+import Model, { attr }  from '@ember-data/model';
 import { computed } from '@ember/object';
 
-const Plan = DS.Model.extend({
-  planId: DS.attr('string'),
-  name: DS.attr('string'),
-  description: DS.attr('string'),
-  price: DS.attr('number'),
-  projectsLimit: DS.attr("number"),
-  monthlyUrl: DS.attr('string'),
-  quarterlyUrl: DS.attr('string'),
-  halfYearlyUrl: DS.attr('string'),
-  yearlyUrl: DS.attr('string'),
-  monthlyPrice: DS.attr('string'),
-  quarterlyPrice: DS.attr('string'),
-  halfYearlyPrice: DS.attr('string'),
-  yearlyPrice: DS.attr('string'),
+const Plan = Model.extend({
+  planId: attr('string'),
+  name: attr('string'),
+  description: attr('string'),
+  price: attr('number'),
+  projectsLimit: attr("number"),
+  monthlyUrl: attr('string'),
+  quarterlyUrl: attr('string'),
+  halfYearlyUrl: attr('string'),
+  yearlyUrl: attr('string'),
+  monthlyPrice: attr('string'),
+  quarterlyPrice: attr('string'),
+  halfYearlyPrice: attr('string'),
+  yearlyPrice: attr('string'),
 
   descriptionItems: computed('description', function() {
     const description = this.get("description");

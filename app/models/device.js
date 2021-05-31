@@ -1,9 +1,9 @@
-import DS from 'ember-data';
+import Model, { attr }  from '@ember-data/model';
 
-const Device = DS.Model.extend({
-  isTablet: DS.attr('boolean'),
-  version: DS.attr('string'),
-  platform: DS.attr('number')
+const Device = Model.extend({
+  isTablet: attr('boolean'),
+  version: attr('string'),
+  platform: attr('number')
 });
 
 export default Device;

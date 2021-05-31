@@ -1,21 +1,21 @@
-import DS from 'ember-data';
+import Model, { attr }  from '@ember-data/model';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import { t } from 'ember-intl';
 
-const Subscription = DS.Model.extend({
+const Subscription = Model.extend({
   intl: service(),
-  subscriptionId: DS.attr('string'),
-  billingPeriod: DS.attr('number'),
-  billingPeriodUnit: DS.attr('string'),
-  planQuantity: DS.attr('number'),
-  expiryDate: DS.attr('date'),
-  status: DS.attr('string'),
-  isActive: DS.attr('boolean'),
-  isTrial: DS.attr('boolean'),
-  isCancelled: DS.attr('boolean'),
-  isPerScan: DS.attr('boolean'),
-  planName: DS.attr('string'),
+  subscriptionId: attr('string'),
+  billingPeriod: attr('number'),
+  billingPeriodUnit: attr('string'),
+  planQuantity: attr('number'),
+  expiryDate: attr('date'),
+  status: attr('string'),
+  isActive: attr('boolean'),
+  isTrial: attr('boolean'),
+  isCancelled: attr('boolean'),
+  isPerScan: attr('boolean'),
+  planName: attr('string'),
 
   isNotCancelled: computed.not('isCancelled'),
 

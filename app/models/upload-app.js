@@ -1,9 +1,9 @@
-import DS from 'ember-data';
+import Model, { attr }  from '@ember-data/model';
 
-const UploadApp = DS.Model.extend({
-  url: DS.attr('string'),
-  fileKey: DS.attr('string'),
-  fileKeySigned: DS.attr('string'),
+const UploadApp = Model.extend({
+  url: attr('string'),
+  fileKey: attr('string'),
+  fileKeySigned: attr('string'),
 });
 
 export default UploadApp;

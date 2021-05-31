@@ -1,11 +1,11 @@
-import DS from 'ember-data';
+import Model, { attr, belongsTo }  from '@ember-data/model';
 
-export default DS.Model.extend({
-  email: DS.attr('string'),
-  createdOn: DS.attr('date'),
-  updatedOn: DS.attr('date'),
-  team: DS.belongsTo('organization-team'),
-  organization: DS.belongsTo('organization'),
+export default Model.extend({
+  email: attr('string'),
+  createdOn: attr('date'),
+  updatedOn: attr('date'),
+  team: belongsTo('organization-team'),
+  organization: belongsTo('organization'),
 
   resend: function resend() {
     var adapter = this.store.adapterFor(this.constructor.modelName);

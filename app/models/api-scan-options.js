@@ -1,9 +1,9 @@
 import { computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
-import DS from 'ember-data';
+import Model, { attr }  from '@ember-data/model';
 
-export default DS.Model.extend({
-  apiUrlFilters: DS.attr('string'),
+export default Model.extend({
+  apiUrlFilters: attr('string'),
 
   apiUrlFilterItems: computed("apiUrlFilters", function() {
     const apiUrlFilters = this.get("apiUrlFilters");

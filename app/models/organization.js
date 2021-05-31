@@ -1,4 +1,4 @@
-import DS from 'ember-data';
+import Model, { attr, hasMany }  from '@ember-data/model';
 import {
   computed
 } from '@ember/object';
@@ -6,21 +6,21 @@ import {
   not
 } from '@ember/object/computed';
 
-const Organization = DS.Model.extend({
-  name: DS.attr('string'),
-  logo: DS.attr('string'),
-  billingHidden: DS.attr('boolean'),
+const Organization = Model.extend({
+  name: attr('string'),
+  logo: attr('string'),
+  billingHidden: attr('boolean'),
   showBilling: not('billingHidden'),
-  isTrial: DS.attr('boolean'),
-  mandatoryMfa: DS.attr('boolean'),
-  members: DS.hasMany('organization-member'),
-  namespaces: DS.hasMany('organization-namespace'),
-  projects: DS.hasMany('organization-project'),
-  teams: DS.hasMany('organization-team'),
-  features: DS.attr(),
-  projectsCount: DS.attr('number'),
-  namespacesCount: DS.attr('number'),
-  teamsCount: DS.attr('number'),
+  isTrial: attr('boolean'),
+  mandatoryMfa: attr('boolean'),
+  members: hasMany('organization-member'),
+  namespaces: hasMany('organization-namespace'),
+  projects: hasMany('organization-project'),
+  teams: hasMany('organization-team'),
+  features: attr(),
+  projectsCount: attr('number'),
+  namespacesCount: attr('number'),
+  teamsCount: attr('number'),
   membersCount: computed.reads('members.meta.count')
 });
 

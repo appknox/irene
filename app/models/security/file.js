@@ -1,13 +1,13 @@
 import { computed } from '@ember/object';
-import DS from 'ember-data';
+import Model, { attr, hasMany, belongsTo }  from '@ember-data/model';
 import ENUMS from 'irene/enums';
 
-export default DS.Model.extend({
-  name: DS.attr('string'),
-  user: DS.belongsTo('user'),
-  apiScanStatus: DS.attr('number'),
-  project: DS.belongsTo('security/project'),
-  analyses: DS.hasMany('security/analysis'),
+export default Model.extend({
+  name: attr('string'),
+  user: belongsTo('user'),
+  apiScanStatus: attr('number'),
+  project: belongsTo('security/project'),
+  analyses: hasMany('security/analysis'),
 
   analysesSorting: ['risk:desc'],
   sortedAnalyses: computed.sort('analyses', 'analysesSorting'),
@@ -16,8 +16,8 @@ export default DS.Model.extend({
     const apiScanStatus = this.get("apiScanStatus");
     if(apiScanStatus === ENUMS.SCAN_STATUS.COMPLETED) return true;
   }),
-  isDynamicDone: DS.attr('boolean'),
-  isStaticDone: DS.attr('boolean'),
-  manual: DS.attr('number'),
+  isDynamicDone: attr('boolean'),
+  isStaticDone: attr('boolean'),
+  manual: attr('number'),
 
 });

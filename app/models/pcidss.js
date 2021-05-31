@@ -1,9 +1,9 @@
-import DS from 'ember-data';
+import Model, { attr }  from '@ember-data/model';
 
-const Pcidss = DS.Model.extend({
-  code: DS.attr(),
-  title: DS.attr(),
-  description: DS.attr()
+const Pcidss = Model.extend({
+  code: attr(),
+  title: attr(),
+  description: attr()
 });
 
 export default Pcidss;

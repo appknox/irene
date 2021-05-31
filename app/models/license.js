@@ -1,23 +1,23 @@
-import DS from 'ember-data';
+import Model, { attr }  from '@ember-data/model';
 import { computed } from '@ember/object';
 
 
-export default DS.Model.extend({
-  key: DS.attr('string'),
-  startDate: DS.attr('date'),
-  expiryDate: DS.attr('date'),
-  name: DS.attr('string'),
-  email: DS.attr('string'),
-  isLimitedScans: DS.attr('boolean'),
-  status: DS.attr('string'),
-  perAppId: DS.attr('string'),
-  perAppName: DS.attr('string'),
-  perAppDescription: DS.attr('string'),
-  perAppQuantity: DS.attr('number'),
-  perScanId: DS.attr('string'),
-  perScanName: DS.attr('string'),
-  perScanDescription: DS.attr('string'),
-  perScanQuantity: DS.attr('number'),
+export default Model.extend({
+  key: attr('string'),
+  startDate: attr('date'),
+  expiryDate: attr('date'),
+  name: attr('string'),
+  email: attr('string'),
+  isLimitedScans: attr('boolean'),
+  status: attr('string'),
+  perAppId: attr('string'),
+  perAppName: attr('string'),
+  perAppDescription: attr('string'),
+  perAppQuantity: attr('number'),
+  perScanId: attr('string'),
+  perScanName: attr('string'),
+  perScanDescription: attr('string'),
+  perScanQuantity: attr('number'),
 
 
   isActive: computed.equal('status', 'Active'),
