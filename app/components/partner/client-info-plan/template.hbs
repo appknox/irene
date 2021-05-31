@@ -1,28 +1,29 @@
-<div local-class="row" ...attributes>
-  <div data-test-key local-class="key">{{t 'paymentPlan'}}</div>
-  <div local-class="value">
-    <div data-test-plan local-class="plan">
-      <div data-test-plan-type local-class="plan-type {{if @clientPlan.limitedScans 'per-scan' 'per-app'}}">
-        {{t (if  @clientPlan.limitedScans 'perScan' 'perApp')}}</div>
-      <div data-test-plan-status local-class="plan-status">
-        {{#if @clientPlan.limitedScans}}
-          <strong data-test-plan-status-left class="margin-r-h">
-            {{@clientPlan.scansLeft}}
-            {{t 'pluralScans' itemCount=@clientPlan.scansLeft}}
-          </strong>
-          {{t 'remaining'}}
-        {{else}}
-          <strong data-test-plan-status-left class="margin-r-h">
-            {{@clientPlan.projectsLimit}}
-            {{t 'pluralApps' itemCount=@clientPlan.projectsLimit}}
-          </strong>
-          <span data-test-plan-expiry
-            local-class="expiry-date {{if @clientPlan.isPaymentExpired 'expiry-date-expired'}}">
-            {{t (if @clientPlan.isPaymentExpired 'expiredOn' 'expiresOn')}}
-            {{day-js date=@clientPlan.expiryDate format="DD MMM YYYY"}}
-          </span>
-        {{/if}}
-      </div>
+{{#if @isLoading}}
+  <div data-test-loading-spinner>
+    <ThreeBounceSpinner />
+  </div>
+{{else if @clientPlan}}
+  <div local-class="plan" ...attributes data-test-plan>
+    <div local-class="plan-type {{if @clientPlan.limitedScans 'per-scan' 'per-app'}}" data-test-plan-type>
+      {{t (if  @clientPlan.limitedScans 'perScan' 'perApp')}}
+    </div>
+    <div local-class="plan-status" data-test-plan-status>
+      {{#if @clientPlan.limitedScans}}
+        <strong class="margin-r-h" data-test-plan-status-left>
+          {{@clientPlan.scansLeft}}
+          {{t 'pluralScans' itemCount=@clientPlan.scansLeft}}
+        </strong>
+        {{t 'remaining'}}
+      {{else}}
+        <strong class="margin-r-h" data-test-plan-status-left>
+          {{@clientPlan.projectsLimit}}
+          {{t 'pluralApps' itemCount=@clientPlan.projectsLimit}}
+        </strong>
+        <span local-class="expiry-date {{if @clientPlan.isPaymentExpired 'expiry-date-expired'}}" data-test-plan-expiry>
+          {{t (if @clientPlan.isPaymentExpired 'expiredOn' 'expiresOn')}}
+          {{day-js date=@clientPlan.expiryDate format="DD MMM YYYY"}}
+        </span>
+      {{/if}}
     </div>
   </div>
-</div>
+{{/if}}

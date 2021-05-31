@@ -28,25 +28,21 @@ module('Integration | Component | partner/client-info-plan', function (hooks) {
   hooks.beforeEach(async function () {
     await this.server.createList('organization', 2);
     await this.owner.lookup('service:organization').load();
-    // await this.owner.lookup('service:partner').load();
   });
 
-  test('it renders', async function (assert) {
-    await render(hbs `<Partner::ClientInfoPlan/>`);
-    assert.dom('div[data-test-key]').hasText(`t:paymentPlan:()`);
+  test('it renders loading spinner', async function (assert) {
+    await render(hbs`<Partner::ClientInfoPlan @isLoading={{true}}/>`);
+    assert.dom('div[data-test-loading-spinner]').exists();
+    assert.dom('div[data-test-plan]').doesNotExist();
   })
 
-  test('Render per app plan with projects count and expires on', async function (assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
-
+  test('it should render per-app plan with available projects limit & future expiry date', async function (assert) {
     const clientPlan = this.server.create('partnerclient-plan', {
       limitedScans: false,
       expiryDate: dayjs(faker.date.future()).toISOString()
     });
-    console.log('clientPlan', clientPlan)
     this.set('clientPlan', clientPlan)
-    await render(hbs `<Partner::ClientInfoPlan @clientPlan={{this.clientPlan}}/>`);
+    await render(hbs`<Partner::ClientInfoPlan @clientPlan={{this.clientPlan}}/>`);
 
     assert.dom('div[data-test-plan-type]').hasText(`t:perApp:()`);
     assert.dom('div[data-test-plan-type]').hasStyle({
@@ -62,9 +58,7 @@ module('Integration | Component | partner/client-info-plan', function (hooks) {
     })
   });
 
-  test('Render per app plan without projects count and expired', async function (assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
+  test('it should render per-app plan without projects count & expired', async function (assert) {
 
     const clientPlan = this.server.create('partnerclient-plan', {
       limitedScans: false,
@@ -72,7 +66,7 @@ module('Integration | Component | partner/client-info-plan', function (hooks) {
       expiryDate: dayjs(faker.date.past()).toISOString()
     });
     this.set('clientPlan', clientPlan)
-    await render(hbs `<Partner::ClientInfoPlan @clientPlan={{this.clientPlan}}/>`);
+    await render(hbs`<Partner::ClientInfoPlan @clientPlan={{this.clientPlan}}/>`);
 
     assert.dom('div[data-test-plan-type]').hasText(`t:perApp:()`);
     assert.dom('div[data-test-plan-type]').hasStyle({
@@ -88,15 +82,13 @@ module('Integration | Component | partner/client-info-plan', function (hooks) {
     })
   });
 
-  test('Render per scan plan', async function (assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
+  test('it should render per-scan plan', async function (assert) {
 
     const clientPlan = this.server.create('partnerclient-plan', {
       limitedScans: true
     });
     this.set('clientPlan', clientPlan)
-    await render(hbs `<Partner::ClientInfoPlan @clientPlan={{this.clientPlan}}/>`);
+    await render(hbs`<Partner::ClientInfoPlan @clientPlan={{this.clientPlan}}/>`);
 
     assert.dom('div[data-test-plan-type]').hasText(`t:perScan:()`);
     assert.dom('div[data-test-plan-type]').hasStyle({
@@ -106,5 +98,12 @@ module('Integration | Component | partner/client-info-plan', function (hooks) {
     })
     assert.dom('strong[data-test-plan-status-left]').hasText(`${this.clientPlan.scansLeft} t:pluralScans:("itemCount":${this.clientPlan.scansLeft})`)
     assert.dom('div[data-test-plan-status]').hasText(`${this.clientPlan.scansLeft} t:pluralScans:("itemCount":${this.clientPlan.scansLeft}) t:remaining:()`)
+  });
+
+  test('it should not render payment plan, if error occurred', async function (assert) {
+
+    this.set('clientPlan', null)
+    await render(hbs`<Partner::ClientInfoPlan @clientPlan={{this.clientPlan}}/>`);
+    assert.dom('div[data-test-payment-plan]').doesNotExist();
   });
 });

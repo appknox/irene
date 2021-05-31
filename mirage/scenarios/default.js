@@ -22,7 +22,7 @@ export default function (server) {
     githubCount = 1,
     jiraCount = 1,
     vulnerabilityPreferenceCount = 10,
-    projectCount = 0,
+    projectCount = getRandomInt(4, 5),
     project = null,
     file = null,
     projectIds = [],
@@ -48,8 +48,6 @@ export default function (server) {
   server.create('organization-me');
   server.create('organization-member');
   server.create('partnerclient-plan');
-  projectCount = getRandomInt(4, 5);
-  projectCount = getRandomInt(4, 5);
   for (var teamId = 1; teamId <= teamCount; teamId++) {
     server.create('team', {
       users: users
