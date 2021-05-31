@@ -10,13 +10,13 @@ const FileOverviewComponent = Component.extend({
     return this.get("store").queryRecord('unknown-analysis-status', {id: this.get("profileId")});
   }),
 
-  chartOptions: computed(() =>
-    ({
+  chartOptions: computed(function() {
+    return {
       legend: { display: false },
       animation: {animateRotate: false},
       responsive: false
-    })
-  )
+    }
+  })
 });
 
 export default FileOverviewComponent;
