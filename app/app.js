@@ -2,7 +2,7 @@ import ENUMS from 'irene/enums';
 import config from 'irene/config/environment';
 import installPendo from 'irene/utils/install-pendo';
 import Application from '@ember/application';
-import Resolver from './resolver';
+import Resolver from 'ember-resolver';
 import loadInitializers from 'ember-load-initializers';
 import installCrisp from 'irene/utils/install-crisp';
 import installHotjar from 'irene/utils/install-hotjar';
@@ -24,12 +24,13 @@ installCrisp();
 installHotjar();
 customerSuccessBox();
 
-const App = Application.extend({
-  modulePrefix: config.modulePrefix,
-  podModulePrefix: config.podModulePrefix,
-  Resolver
-});
+export default class App extends Application {
+  modulePrefix = config.modulePrefix;
+  podModulePrefix =config.podModulePrefix;
+  Resolver = Resolver;
+}
+
+
 
 loadInitializers(App, config.modulePrefix);
 
-export default App;
