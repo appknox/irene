@@ -82,7 +82,6 @@ Router.map(function () {
         path: '/analysis/:analysisid'
       });
     });
-    this.route('status');
     this.route('analytics');
 
     this.route('github-cloud', function () {

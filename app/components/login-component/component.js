@@ -8,9 +8,6 @@ import {
 import {
   inject as service
 } from '@ember/service';
-import {
-  getOwner
-} from '@ember/application';
 import ENV from 'irene/config/environment';
 import {
   isUnauthorizedError
@@ -29,11 +26,12 @@ import parseError from 'irene/utils/parse-error';
 const LoginComponentComponent = Component.extend({
   session: service('session'),
   notify: service('notifications'),
+  router: service('router'),
 
   classNames: ['vertical-align-stretch'],
 
   didRender() {
-this._super(...arguments);
+    this._super(...arguments);
     // Set autofocus at once rendered
     if (this.element.querySelector('#password')) {
       this.element.querySelector('#password').focus()
@@ -64,9 +62,7 @@ this._super(...arguments);
       return ENV.registrationLink;
     }
     try {
-      var router = getOwner(this).lookup('router:main')
-      var link = router.generate('register');
-      return link;
+      return this.get("router").urlFor('register');
     } catch (err) {
       return ENV.registrationLink;
     }
