@@ -31,15 +31,6 @@ function routes() {
     }
   });
 
-  this.get('/api/v2/partners/:id', () => {
-    return {
-      id: 1,
-      access: {
-        view_plans: true
-      }
-    }
-  });
-
   this.get('/api/v2/partnerclients', (schema) => {
     return schema.partnerClients.all();
   })
@@ -343,16 +334,6 @@ function routes() {
 
   this.get('/example/download_url', () => {
     return {};
-  });
-
-
-  this.get('/organizations/:id/me', () => {
-    return {
-      id: 1,
-      is_admin: true,
-      is_member: false,
-      is_owner: true
-    }
   });
 
   this.get('/organizations/:orgId/members/:memId', (schema, request) => {

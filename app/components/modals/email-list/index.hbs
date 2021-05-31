@@ -1,6 +1,6 @@
 <div local-class="emails" data-test-email-list ...attributes>
   <div class="black-text" data-test-default-email>{{this.defaultEmails}}</div>
-  {{#if (gt remainingCount 0)}}
+  {{#if (gt this.remainingCount 0)}}
     <button type="button" class="margin-l-h" local-class="email-count-badge"
       {{on "click" (fn this.toggleMoreEmailsModal)}} data-test-owner-list-btn>
       +{{this.remainingCount}}
