@@ -8,6 +8,9 @@ module.exports = function (defaults) {
   let app = new EmberApp(defaults, {
     // Add options here
     storeConfigInMeta: false,
+    babel: {
+      sourceMaps: 'inline'
+    },
     minifyJS: {
       options: {
         exclude: ['runtimeconfig.js']
