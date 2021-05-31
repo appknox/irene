@@ -15,41 +15,6 @@ module(
     setupMirage(hooks);
     setupIntl(hooks);
 
-    test("it should not render if request is empty", async function (assert) {
-      this.set("request", {});
-      this.set("onApprove", noop);
-      this.set("onReject", noop);
-      await render(
-        hbs`<Partner::RegistrationRequestPending @request={{this.request}} @onApprove={{this.onApprove}} @onReject={{this.onReject}} />`
-      );
-      assert.dom("[data-test-pending-request]").doesNotExist();
-    });
-
-    test("it should not render if request approvaStatus is not pending", async function (assert) {
-      this.set("request", {
-        approvalStatus: "approved",
-        id: "1",
-        email: "test1@test.test",
-        data: {
-          company: "TestCompany",
-          firstName: "FirstName",
-          lastName: "LastName",
-        },
-        source: "registration",
-        isActivated: false,
-        createdOn: "2020-05-22T15:08:18.008097Z",
-        updatedOn: "2021-03-24T18:02:22.481033Z",
-        validUntil: "2022-05-31T17:48:58.330920Z",
-        moderatedBy: 1,
-      });
-      this.set("onApprove", noop);
-      this.set("onReject", noop);
-      await render(
-        hbs`<Partner::RegistrationRequestPending @request={{this.request}} @onApprove={{this.onApprove}} @onReject={{this.onReject}} />`
-      );
-      assert.dom("[data-test-pending-request]").doesNotExist();
-    });
-
     test("it renders email", async function (assert) {
       this.set("request", {
         id: "1",
@@ -297,7 +262,7 @@ module(
       assert
         .dom("[data-test-pending-request-approve-button]")
         .hasAttribute("title");
-      assert.equal(btn.title, "Send invite mail");
+      assert.equal(btn.title, "Send invitation");
     });
 
     test("it renders reject button as primary btn with title reject request", async function (assert) {
