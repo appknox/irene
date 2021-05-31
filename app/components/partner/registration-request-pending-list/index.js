@@ -1,31 +1,31 @@
-import Component from "@glimmer/component";
-import { inject as service } from "@ember/service";
-import { action } from "@ember/object";
-import { task } from "ember-concurrency";
-import parseError from "irene/utils/parse-error";
-import { PaginationMixin } from "../../../mixins/paginate";
+import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { task } from 'ember-concurrency';
+import parseError from 'irene/utils/parse-error';
+import { PaginationMixin } from '../../../mixins/paginate';
 
 export default class PartnerRegistrationRequestPendingListComponent extends PaginationMixin(
   Component
 ) {
   @service intl;
   @service realtime;
-  @service("notifications") notify;
+  @service('notifications') notify;
 
   constructor() {
     super(...arguments);
     this.realtime.addObserver(
-      "RegistrationRequestCounter",
+      'RegistrationRequestCounter',
       this,
-      "registrationRequestDidChange"
+      'registrationRequestDidChange'
     );
   }
 
-  targetModel = "partner/registration-request";
-  sortProperties = "createdOn:desc";
+  targetModel = 'partner/registration-request';
+  sortProperties = 'createdOn:desc';
   get extraQueryStrings() {
     return JSON.stringify({
-      approval_status: "pending",
+      approval_status: 'pending',
       is_activated: false,
     });
   }
@@ -40,10 +40,10 @@ export default class PartnerRegistrationRequestPendingListComponent extends Pagi
 
   @task(function* (request) {
     try {
-      yield request.updateStatus("approved");
-      this.realtime.incrementProperty("RegistrationRequestCounter");
+      yield request.updateStatus('approved');
+      this.realtime.incrementProperty('RegistrationRequestCounter');
       this.notify.success(
-        `${this.intl.t("sentInvitationTo")} ${request.email}`
+        `${this.intl.t('sentInvitationTo')} ${request.email}`
       );
     } catch (err) {
       this.notify.error(parseError(err));
@@ -53,10 +53,10 @@ export default class PartnerRegistrationRequestPendingListComponent extends Pagi
 
   @task(function* (request) {
     try {
-      yield request.updateStatus("rejected");
-      this.realtime.incrementProperty("RegistrationRequestCounter");
+      yield request.updateStatus('rejected');
+      this.realtime.incrementProperty('RegistrationRequestCounter');
       this.notify.success(
-        `${this.intl.t("rejectedRequestFrom")} ${request.email}`
+        `${this.intl.t('rejectedRequestFrom')} ${request.email}`
       );
     } catch (err) {
       this.notify.error(parseError(err));

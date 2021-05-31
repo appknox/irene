@@ -1,26 +1,26 @@
-<div local-class="partner-client-list" class="padding-h-1 padding-b-2">
-  <div local-class="client-list-container">
+<div local-class='partner-client-list' class='padding-h-1 padding-b-2'>
+  <div local-class='client-list-container'>
     {{#if this.objects}}
-      <div local-class="client-items">
+      <div local-class='client-items'>
         {{#each this.objects as |client|}}
           <Partner::ClientInfo @client={{client}} @showDetailLink={{true}} />
         {{/each}}
       </div>
-      <div class="padding-t-1">
+      <div class='padding-t-1'>
         {{#if (or this.hasPrevious this.hasNext)}}
-          <div local-class="pagination">
-            {{partial "paginate"}}
+          <div local-class='pagination'>
+            {{partial 'paginate'}}
           </div>
         {{/if}}
       </div>
     {{else if this.error}}
-      <div local-class="loading-error">{{t "errorCouldNotLoadData"}}</div>
+      <div local-class='loading-error'>{{t 'errorCouldNotLoadData'}}</div>
     {{else if this.isLoading}}
-      <div local-class="loading">
+      <div local-class='loading'>
         <ThreeBounceSpinner />
       </div>
     {{else}}
-      <div local-class="empty-data">{{t "noClients"}}</div>
+      <div local-class='empty-data'>{{t 'noClients'}}</div>
     {{/if}}
   </div>
 </div>

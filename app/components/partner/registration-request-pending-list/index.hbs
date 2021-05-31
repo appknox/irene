@@ -1,19 +1,19 @@
-<div class="pending-registration-requests">
-  <h3 local-class="title" data-test-pending-requests-title>{{t
-      "pendingRequests"
+<div class='pending-registration-requests'>
+  <h3 local-class='title' data-test-pending-requests-title>{{t
+      'pendingRequests'
     }}</h3>
   {{#if this.objects}}
     <div data-test-pending-requests-list>
-      <div local-class="table">
-        <div local-class="table-header" data-test-pending-requests-table-header>
-          <div class="bold">{{t "requested"}} {{t "by"}}</div>
-          <div class="bold">{{t "company"}}</div>
-          <div class="bold">{{t "requested"}}</div>
-          <div class="bold"></div>
+      <div local-class='table'>
+        <div local-class='table-header' data-test-pending-requests-table-header>
+          <div class='bold'>{{t 'requested'}} {{t 'by'}}</div>
+          <div class='bold'>{{t 'company'}}</div>
+          <div class='bold'>{{t 'requested'}}</div>
+          <div class='bold'></div>
         </div>
-        <div local-class="table-body">
+        <div local-class='table-body'>
           {{#each this.objects as |request|}}
-            <div local-class="table-row" data-test-pending-request-row>
+            <div local-class='table-row' data-test-pending-request-row>
               <Partner::RegistrationRequestPending
                 @request={{request}}
                 @onApprove={{this.onApprove}}
@@ -25,23 +25,23 @@
         </div>
       </div>
       {{#if (or this.hasPrevious this.hasNext)}}
-        <div local-class="pagination" data-test-pending-requests-pagination>
-          {{partial "paginate"}}
+        <div local-class='pagination' data-test-pending-requests-pagination>
+          {{partial 'paginate'}}
         </div>
       {{/if}}
     </div>
   {{else if this.error}}
     <div
-      local-class="loading-error"
+      local-class='loading-error'
       data-test-pending-requests-loading-error
-    >{{t "errorCouldNotLoadData"}}</div>
+    >{{t 'errorCouldNotLoadData'}}</div>
   {{else if this.isLoading}}
-    <div local-class="loading" data-test-pending-requests-loader>
+    <div local-class='loading' data-test-pending-requests-loader>
       <ThreeBounceSpinner />
     </div>
   {{else}}
-    <div local-class="empty-data" data-test-pending-requests-empty>{{t
-        "noPendingRequests"
+    <div local-class='empty-data' data-test-pending-requests-empty>{{t
+        'noPendingRequests'
       }}</div>
   {{/if}}
 </div>

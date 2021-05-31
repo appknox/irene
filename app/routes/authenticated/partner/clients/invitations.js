@@ -1,5 +1,5 @@
-import Route from "@ember/routing/route";
-import { inject as service } from "@ember/service";
+import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default class AuthenticatedPartnerInvitationsRoute extends Route {
   @service me;
@@ -7,10 +7,10 @@ export default class AuthenticatedPartnerInvitationsRoute extends Route {
 
   beforeModel() {
     if (
-      !this.get("me.org.can_access_partner_dashboard") ||
+      !this.get('me.org.can_access_partner_dashboard') ||
       !this.partner.access.invite_clients
     ) {
-      this.transitionTo("authenticated.partner.clients");
+      this.transitionTo('authenticated.partner.clients');
     }
   }
 }

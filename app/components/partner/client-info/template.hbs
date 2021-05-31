@@ -1,77 +1,77 @@
-<div local-class="client-info-card {{@client.type}}">
-  <div local-class="client-info-header">
-    <span local-class="thumbnail">
-      {{fa-icon "users" local-class="thumbnail-icon"}}
+<div local-class='client-info-card {{@client.type}}'>
+  <div local-class='client-info-header'>
+    <span local-class='thumbnail'>
+      {{fa-icon 'users' local-class='thumbnail-icon'}}
     </span>
-    <div local-class="title {{if this.isEmptyTitle "empty-title"}}">
+    <div local-class='title {{if this.isEmptyTitle 'empty-title'}}'>
       {{#if this.isEmptyTitle}}
-        {{t "noName"}}
+        {{t 'noName'}}
       {{else}}
         {{@client.name}}
       {{/if}}
     </div>
   </div>
-  <div local-class="client-info-body">
-    <div local-class="table">
-      <div local-class="row">
-        <div local-class="key">{{t "lastUpload"}}</div>
-        <div local-class="value">
+  <div local-class='client-info-body'>
+    <div local-class='table'>
+      <div local-class='row'>
+        <div local-class='key'>{{t 'lastUpload'}}</div>
+        <div local-class='value'>
           <div>
             {{#if @client.lastUploadedOn}}
               {{dayjs-from-now @client.lastUploadedOn}}
             {{else}}
-              <em class="text-lightgray">{{t "noUploads"}}</em>
+              <em class='text-lightgray'>{{t 'noUploads'}}</em>
             {{/if}}
           </div>
         </div>
       </div>
       {{#if this.partner.access.view_plans}}
-        <div local-class="row">
-          <div local-class="key">{{t "paymentPlan"}}</div>
-          <div local-class="value">
-            <div local-class="plan" {{did-insert (perform this.getClientPlan)}}>
+        <div local-class='row'>
+          <div local-class='key'>{{t 'paymentPlan'}}</div>
+          <div local-class='value'>
+            <div local-class='plan' {{did-insert (perform this.getClientPlan)}}>
               {{#if this.getClientPlan.isRunning}}
-                <div local-class="plan-loading">{{fa-icon
-                    "circle-o-notch fa-spin"
+                <div local-class='plan-loading'>{{fa-icon
+                    'circle-o-notch fa-spin'
                   }}</div>
               {{else}}
                 <div
-                  local-class="plan-type {{if
+                  local-class='plan-type {{if
                     this.clientPlan.limitedScans
-                    "per-scan"
-                    "per-app"
-                  }}"
+                    'per-scan'
+                    'per-app'
+                  }}'
                 >{{t
-                    (if this.clientPlan.limitedScans "perScan" "perApp")
+                    (if this.clientPlan.limitedScans 'perScan' 'perApp')
                   }}</div>
-                <div local-class="plan-status">
+                <div local-class='plan-status'>
                   {{#if this.clientPlan.limitedScans}}
-                    <strong class="margin-r-h">
+                    <strong class='margin-r-h'>
                       {{this.clientPlan.scansLeft}}
-                      {{t "pluralScans" itemCount=this.clientPlan.scansLeft}}
+                      {{t 'pluralScans' itemCount=this.clientPlan.scansLeft}}
                     </strong>
-                    {{t "remaining"}}
+                    {{t 'remaining'}}
                   {{else}}
-                    <strong class="margin-r-h">
+                    <strong class='margin-r-h'>
                       {{this.clientPlan.projectsLimit}}
-                      {{t "pluralApps" itemCount=this.clientPlan.projectsLimit}}
+                      {{t 'pluralApps' itemCount=this.clientPlan.projectsLimit}}
                     </strong>
                     <span
-                      local-class="expiry-date {{if
+                      local-class='expiry-date {{if
                         this.clientPlan.isPaymentExpired
-                        "expiry-date-expired"
-                      }}"
+                        'expiry-date-expired'
+                      }}'
                     >
                       {{t
                         (if
                           this.clientPlan.isPaymentExpired
-                          "expiredOn"
-                          "expiresOn"
+                          'expiredOn'
+                          'expiresOn'
                         )
                       }}
                       {{day-js
                         date=this.clientPlan.expiryDate
-                        format="DD MMM YYYY"
+                        format='DD MMM YYYY'
                       }}
                     </span>
                   {{/if}}
@@ -81,24 +81,24 @@
           </div>
         </div>
       {{/if}}
-      <div local-class="row">
-        <div local-class="key">{{t
-            "pluralorganizationOwner"
+      <div local-class='row'>
+        <div local-class='key'>{{t
+            'pluralorganizationOwner'
             itemCount=@client.ownerEmails.length
           }}</div>
-        <div local-class="value">
-          <div local-class="client-owner">
+        <div local-class='value'>
+          <div local-class='client-owner'>
             <span
-              local-class="client-owner-email"
-              class="black-text"
+              local-class='client-owner-email'
+              class='black-text'
             >{{@client.ownerEmails.firstObject}}</span>
             {{#if (gt @client.ownerEmails.length 1)}}
               <button
-                type="button"
-                title="{{t "viewAll"}}"
-                local-class="client-owner-count-badge"
-                class="margin-l-h"
-                {{on "click" (fn this.toggleOwnerEmailList)}}
+                type='button'
+                title='{{t 'viewAll'}}'
+                local-class='client-owner-count-badge'
+                class='margin-l-h'
+                {{on 'click' (fn this.toggleOwnerEmailList)}}
               >
                 +{{this.ownerEmailCount}}
               </button>
@@ -106,11 +106,11 @@
           </div>
         </div>
       </div>
-      <div local-class="row">
-        <div local-class="key">{{t "createdOn"}}</div>
-        <div local-class="value">{{day-js
+      <div local-class='row'>
+        <div local-class='key'>{{t 'createdOn'}}</div>
+        <div local-class='value'>{{day-js
             @client.createdOn
-            format="DD MMM YYYY"
+            format='DD MMM YYYY'
           }}</div>
       </div>
     </div>
@@ -131,11 +131,11 @@
   <AkModal
     @onClose={{this.toggleOwnerEmailList}}
     @showHeader={{true}}
-    @headerTitle="Client organization owners"
+    @headerTitle='Client organization owners'
   >
-    <div local-class="owner-email-list">
+    <div local-class='owner-email-list'>
       {{#each @client.ownerEmails as |email seq|}}
-        <div local-class="owner-email" class="margin-top">
+        <div local-class='owner-email' class='margin-top'>
           {{add seq 1}}.
           {{email}}
         </div>

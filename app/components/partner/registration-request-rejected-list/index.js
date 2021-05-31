@@ -1,31 +1,31 @@
-import Component from "@glimmer/component";
-import { inject as service } from "@ember/service";
-import { action } from "@ember/object";
-import { task } from "ember-concurrency";
-import parseError from "irene/utils/parse-error";
-import { PaginationMixin } from "../../../mixins/paginate";
+import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { task } from 'ember-concurrency';
+import parseError from 'irene/utils/parse-error';
+import { PaginationMixin } from '../../../mixins/paginate';
 
 export default class PartnerRegistrationRequestRejectedListComponent extends PaginationMixin(
   Component
 ) {
   @service intl;
   @service realtime;
-  @service("notifications") notify;
+  @service('notifications') notify;
 
   constructor() {
     super(...arguments);
     this.realtime.addObserver(
-      "RegistrationRequestCounter",
+      'RegistrationRequestCounter',
       this,
-      "registrationRequestDidChange"
+      'registrationRequestDidChange'
     );
   }
 
-  targetModel = "partner/registration-request";
-  sortProperties = "createdOn:desc";
+  targetModel = 'partner/registration-request';
+  sortProperties = 'createdOn:desc';
   get extraQueryStrings() {
     return JSON.stringify({
-      approval_status: "rejected",
+      approval_status: 'rejected',
       is_activated: false,
     });
   }
@@ -39,10 +39,10 @@ export default class PartnerRegistrationRequestRejectedListComponent extends Pag
 
   @task(function* (request) {
     try {
-      yield request.updateStatus("pending");
-      this.realtime.incrementProperty("RegistrationRequestCounter");
+      yield request.updateStatus('pending');
+      this.realtime.incrementProperty('RegistrationRequestCounter');
       this.notify.success(
-        `${this.intl.t("movedRequestToPending")}: ${request.email}`
+        `${this.intl.t('movedRequestToPending')}: ${request.email}`
       );
     } catch (err) {
       this.notify.error(parseError(err));

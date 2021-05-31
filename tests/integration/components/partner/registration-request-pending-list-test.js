@@ -1,10 +1,10 @@
-import { module, test } from "qunit";
-import { setupRenderingTest } from "ember-qunit";
-import { render, click } from "@ember/test-helpers";
-import { hbs } from "ember-cli-htmlbars";
-import { setupIntl } from "ember-intl/test-support";
-import { setupMirage } from "ember-cli-mirage/test-support";
-import Service from "@ember/service";
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render, click } from '@ember/test-helpers';
+import { hbs } from 'ember-cli-htmlbars';
+import { setupIntl } from 'ember-intl/test-support';
+import { setupMirage } from 'ember-cli-mirage/test-support';
+import Service from '@ember/service';
 
 // Stub organization service
 class OrganizationStub extends Service {
@@ -54,37 +54,37 @@ function registrationRequestSerializer(data, many = false) {
 }
 
 module(
-  "Integration | Component | partner/registration-request-pending-list",
+  'Integration | Component | partner/registration-request-pending-list',
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en');
 
     hooks.beforeEach(function () {
-      this.owner.register("service:organization", OrganizationStub);
-      this.owner.register("service:realtime", RealtimeStub);
+      this.owner.register('service:organization', OrganizationStub);
+      this.owner.register('service:realtime', RealtimeStub);
     });
 
-    test("it renders translated section title", async function (assert) {
+    test('it renders translated section title', async function (assert) {
       await render(hbs`<Partner::RegistrationRequestPendingList />`);
-      assert.dom("[data-test-pending-requests-title]").exists();
+      assert.dom('[data-test-pending-requests-title]').exists();
       assert
-        .dom("[data-test-pending-requests-title]")
-        .hasText("t:pendingRequests:()");
+        .dom('[data-test-pending-requests-title]')
+        .hasText('Pending Registration Requests');
     });
 
-    test("it renders loading error on data fetch error", async function (assert) {
-      this.server.get("v2/partners/1/registration_requests", () => {
+    test('it renders loading error on data fetch error', async function (assert) {
+      this.server.get('v2/partners/1/registration_requests', () => {
         return new Response(500);
       });
       await render(hbs`<Partner::RegistrationRequestPendingList />`);
-      assert.dom("[data-test-pending-requests-loading-error]").exists();
-      assert.dom("[data-test-pending-requests-loader]").doesNotExist();
-      assert.dom("[data-test-pending-requests-list]").doesNotExist();
+      assert.dom('[data-test-pending-requests-loading-error]').exists();
+      assert.dom('[data-test-pending-requests-loader]').doesNotExist();
+      assert.dom('[data-test-pending-requests-list]').doesNotExist();
     });
 
-    test("it renders empty state", async function (assert) {
-      this.server.get("v2/partners/1/registration_requests", () => {
+    test('it renders empty state', async function (assert) {
+      this.server.get('v2/partners/1/registration_requests', () => {
         return {
           count: 0,
           next: null,
@@ -93,15 +93,15 @@ module(
         };
       });
       await render(hbs`<Partner::RegistrationRequestPendingList />`);
-      assert.dom("[data-test-pending-requests-empty]").exists();
+      assert.dom('[data-test-pending-requests-empty]').exists();
       assert
-        .dom("[data-test-pending-requests-empty]")
-        .hasText("No pending requests");
-      assert.dom("[data-test-pending-requests-list]").doesNotExist();
+        .dom('[data-test-pending-requests-empty]')
+        .hasText('No pending requests');
+      assert.dom('[data-test-pending-requests-list]').doesNotExist();
     });
 
-    test("it should not render loading indicator or error once data is loaded", async function (assert) {
-      this.server.get("v2/partners/1/registration_requests", () => {
+    test('it should not render loading indicator or error once data is loaded', async function (assert) {
+      this.server.get('v2/partners/1/registration_requests', () => {
         return {
           count: 0,
           next: null,
@@ -110,22 +110,22 @@ module(
         };
       });
       await render(hbs`<Partner::RegistrationRequestPendingList />`);
-      assert.dom("[data-test-pending-requests-loader]").doesNotExist();
-      assert.dom("[data-test-pending-requests-loading-error]").doesNotExist();
-      assert.dom("[data-test-pending-requests-empty]").exists();
+      assert.dom('[data-test-pending-requests-loader]').doesNotExist();
+      assert.dom('[data-test-pending-requests-loading-error]').doesNotExist();
+      assert.dom('[data-test-pending-requests-empty]').exists();
     });
 
-    test("it renders table header for pending requests", async function (assert) {
-      this.server.createList("partner/registrationRequest", 1, {
-        approvalStatus: "pending",
+    test('it renders table header for pending requests', async function (assert) {
+      this.server.createList('partner/registrationRequest', 1, {
+        approvalStatus: 'pending',
       });
 
       this.server.get(
-        "v2/partners/1/registration_requests",
+        'v2/partners/1/registration_requests',
         (schema, request) => {
           const is_activated = request.queryParams.is_activated;
           const status = request.queryParams.approval_status;
-          const data = schema["partner/registrationRequests"].where({
+          const data = schema['partner/registrationRequests'].where({
             isActivated: is_activated,
             approvalStatus: status,
           });
@@ -135,19 +135,18 @@ module(
 
       await render(hbs`<Partner::RegistrationRequestPendingList />`);
 
-      assert.dom("[data-test-pending-requests-table-header]").exists();
+      assert.dom('[data-test-pending-requests-table-header]').exists();
       const header = this.element.querySelector(
-        "[data-test-pending-requests-table-header]"
+        '[data-test-pending-requests-table-header]'
       );
-      assert.equal(header.children[0].textContent, "Requested by");
-      assert.equal(header.children[1].textContent, "Company");
-      assert.equal(header.children[2].textContent, "Requested");
-      assert.equal(header.children[3].textContent, "Invite");
-      assert.equal(header.children[4].textContent, "Reject");
+      assert.equal(header.children[0].textContent, 'Requested by');
+      assert.equal(header.children[1].textContent, 'Company');
+      assert.equal(header.children[2].textContent, 'Requested');
+      assert.equal(header.children[3].textContent, '');
     });
 
-    test("it does not render table header for empty state", async function (assert) {
-      this.server.get("v2/partners/1/registration_requests", () => {
+    test('it does not render table header for empty state', async function (assert) {
+      this.server.get('v2/partners/1/registration_requests', () => {
         return {
           count: 0,
           next: null,
@@ -158,20 +157,20 @@ module(
 
       await render(hbs`<Partner::RegistrationRequestPendingList />`);
 
-      assert.dom("[data-test-pending-requests-table-header]").doesNotExist();
-      assert.dom("[data-test-pending-requests-empty]").exists();
+      assert.dom('[data-test-pending-requests-table-header]').doesNotExist();
+      assert.dom('[data-test-pending-requests-empty]').exists();
     });
 
-    test("it renders pending registrations requests list", async function (assert) {
-      this.server.createList("partner/registrationRequest", 5, {
-        approvalStatus: "pending",
+    test('it renders pending registrations requests list', async function (assert) {
+      this.server.createList('partner/registrationRequest', 5, {
+        approvalStatus: 'pending',
       });
       this.server.get(
-        "v2/partners/1/registration_requests",
+        'v2/partners/1/registration_requests',
         (schema, request) => {
           const is_activated = request.queryParams.is_activated;
           const status = request.queryParams.approval_status;
-          const data = schema["partner/registrationRequests"].where({
+          const data = schema['partner/registrationRequests'].where({
             isActivated: is_activated,
             approvalStatus: status,
           });
@@ -181,29 +180,29 @@ module(
 
       await render(hbs`<Partner::RegistrationRequestPendingList />`);
 
-      assert.dom("[data-test-pending-requests-list]").exists();
+      assert.dom('[data-test-pending-requests-list]').exists();
       const rows = this.element.querySelectorAll(
-        "[data-test-pending-request-row]"
+        '[data-test-pending-request-row]'
       );
       assert.equal(rows.length, 5);
-      assert.dom("[data-test-pending-requests-empty]").doesNotExist();
-      assert.dom("[data-test-pending-requests-list]").exists();
+      assert.dom('[data-test-pending-requests-empty]').doesNotExist();
+      assert.dom('[data-test-pending-requests-list]').exists();
     });
 
-    test("rejection action should remove the request from pending list", async function (assert) {
+    test('rejection action should remove the request from pending list', async function (assert) {
       const rrsPending = this.server.createList(
-        "partner/registrationRequest",
+        'partner/registrationRequest',
         5,
-        { approvalStatus: "pending" }
+        { approvalStatus: 'pending' }
       );
       const rrPendingObj = rrsPending[0];
 
       this.server.get(
-        "v2/partners/1/registration_requests",
+        'v2/partners/1/registration_requests',
         (schema, request) => {
           const is_activated = request.queryParams.is_activated;
           const status = request.queryParams.approval_status;
-          const data = schema["partner/registrationRequests"].where({
+          const data = schema['partner/registrationRequests'].where({
             isActivated: is_activated,
             approvalStatus: status,
           });
@@ -212,9 +211,9 @@ module(
       );
 
       this.server.patch(
-        "v2/partners/1/registration_requests/:id",
+        'v2/partners/1/registration_requests/:id',
         (schema, request) => {
-          const obj = schema["partner/registrationRequests"].find(
+          const obj = schema['partner/registrationRequests'].find(
             request.params.id
           );
           const body = JSON.parse(request.requestBody);
@@ -226,9 +225,9 @@ module(
       );
 
       this.server.get(
-        "v2/partners/1/registration_requests/:id",
+        'v2/partners/1/registration_requests/:id',
         (schema, request) => {
-          const obj = schema["partner/registrationRequests"].find(
+          const obj = schema['partner/registrationRequests'].find(
             request.params.id
           );
           return registrationRequestSerializer(obj);
@@ -244,7 +243,7 @@ module(
         `[data-test-pending-request-id='${rrPendingObj.attrs.id}']`
       );
       const selectedRequestRejectBtn = selectedRequest.querySelector(
-        "[data-test-pending-request-reject-button]"
+        '[data-test-pending-request-reject-button]'
       );
       await click(selectedRequestRejectBtn);
 
@@ -253,20 +252,20 @@ module(
         .doesNotExist();
     });
 
-    test("approve action should remove the request from pending list", async function (assert) {
+    test('approve action should remove the request from pending list', async function (assert) {
       const rrsPending = this.server.createList(
-        "partner/registrationRequest",
+        'partner/registrationRequest',
         5,
-        { approvalStatus: "pending" }
+        { approvalStatus: 'pending' }
       );
       const rrPendingObj = rrsPending[0];
 
       this.server.get(
-        "v2/partners/1/registration_requests",
+        'v2/partners/1/registration_requests',
         (schema, request) => {
           const is_activated = request.queryParams.is_activated;
           const status = request.queryParams.approval_status;
-          const data = schema["partner/registrationRequests"].where({
+          const data = schema['partner/registrationRequests'].where({
             isActivated: is_activated,
             approvalStatus: status,
           });
@@ -275,9 +274,9 @@ module(
       );
 
       this.server.patch(
-        "v2/partners/1/registration_requests/:id",
+        'v2/partners/1/registration_requests/:id',
         (schema, request) => {
-          const obj = schema["partner/registrationRequests"].find(
+          const obj = schema['partner/registrationRequests'].find(
             request.params.id
           );
           const body = JSON.parse(request.requestBody);
@@ -289,9 +288,9 @@ module(
       );
 
       this.server.get(
-        "v2/partners/1/registration_requests/:id",
+        'v2/partners/1/registration_requests/:id',
         (schema, request) => {
-          const obj = schema["partner/registrationRequests"].find(
+          const obj = schema['partner/registrationRequests'].find(
             request.params.id
           );
           return registrationRequestSerializer(obj);
@@ -307,7 +306,7 @@ module(
         `[data-test-pending-request-id='${rrPendingObj.attrs.id}']`
       );
       const selectedRequestApproveBtn = selectedRequest.querySelector(
-        "[data-test-pending-request-approve-button]"
+        '[data-test-pending-request-approve-button]'
       );
       await click(selectedRequestApproveBtn);
 

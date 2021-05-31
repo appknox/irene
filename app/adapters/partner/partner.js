@@ -1,4 +1,4 @@
-import commondrf from "../commondrf";
+import commondrf from '../commondrf';
 
 export default class PartnerclientAdapter extends commondrf {
   buildURL() {

@@ -1,41 +1,41 @@
-<div local-class="request" data-test-pending-request ...attributes>
-  <div local-class="user">
+<div local-class='request' data-test-pending-request ...attributes>
+  <div local-class='user'>
     <div
-      local-class="email"
+      local-class='email'
       data-test-pending-request-email
     >{{@request.email}}</div>
     <div
-      local-class="name"
-      class="text-lightgray"
+      local-class='name'
+      class='text-lightgray'
       data-test-pending-request-name
     >{{@request.fullName}}</div>
   </div>
   <div
-    local-class="company"
+    local-class='company'
     data-test-pending-request-company
   >{{@request.data.company}}</div>
   <div
-    local-class="date"
-    class="text-lightgray"
-    title="{{day-js date=@request.createdOn format="DD MMM YYYY HH:mm A"}}"
+    local-class='date'
+    class='text-lightgray'
+    title='{{day-js date=@request.createdOn format='DD MMM YYYY HH:mm A'}}'
     data-test-pending-request-createdon
   >{{dayjs-from-now @request.createdOn}}</div>
-  <div local-class="actions">
+  <div local-class='actions'>
     <button
-      type="button"
-      class="button is-success"
-      local-class="approveRequest"
-      title="Send invitation"
+      type='button'
+      class='button is-success'
+      local-class='approveRequest'
+      title='Send invitation'
       data-test-pending-request-approve-button
-      {{on "click" (fn @onApprove @request)}}
-    >{{fa-icon "check"}}&nbsp; Invite</button>
+      {{on 'click' (fn @onApprove @request)}}
+    >{{fa-icon 'check'}}&nbsp; Invite</button>
     <button
-      type="button"
-      class="button is-primary margin-l-h"
-      local-class="rejectRequest"
-      title="Reject request"
+      type='button'
+      class='button is-primary margin-l-h'
+      local-class='rejectRequest'
+      title='Reject request'
       data-test-pending-request-reject-button
-      {{on "click" (fn @onReject @request)}}
-    >{{fa-icon "remove"}}&nbsp; Reject</button>
+      {{on 'click' (fn @onReject @request)}}
+    >{{fa-icon 'remove'}}&nbsp; Reject</button>
   </div>
 </div>
