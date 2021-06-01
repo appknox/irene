@@ -57,7 +57,7 @@ $card-thumbnail-size: 2.8rem;
 .row {
   display: flex;
   border-bottom: 1px dashed #e3e8ef;
-  padding: 0.5rem 0;
+  padding: 0.2rem 0;
 
   &:last-child {
     border-bottom: none;
@@ -81,8 +81,4 @@ $card-thumbnail-size: 2.8rem;
   display: flex;
   justify-content: flex-end;
   padding: 0 1rem 1rem;
-
-  button {
-    margin: 0 0.5rem;
-  }
 }
