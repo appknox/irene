@@ -567,6 +567,7 @@ module.exports = function (environment) {
 
     fontawesome: {
       warnIfNoIconsIncluded: false,
+      defaultPrefix: 'fas'  //light icons
       // ...
     }
   };

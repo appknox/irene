@@ -100,7 +100,7 @@ if isLoaded
                   a href="/security/projects" target="_blank" class="button security-link"
                     | Security Dashboard
                 a click="openChatBox"
-                  = fa-icon "support" class="sidebar-icons"
+                  = fa-icon "life-ring" class="sidebar-icons"
                   = t "support"
                 a
                   = fa-icon "user" class="sidebar-icons"
