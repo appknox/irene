@@ -31,21 +31,21 @@ module('Integration | Component | partner/client-info', function (hooks) {
   });
 
   test('it should render client thumbnail', async function (assert) {
-    const client = this.server.create('partnerclient');
+    const client = this.server.create('partner/partnerclient');
     this.set('client', client);
     await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
     assert.dom('span[data-test-thumbnail]').exists();
   });
 
   test("it should render client name", async function (assert) {
-    const client = this.server.create('partnerclient');
+    const client = this.server.create('partner/partnerclient');
     this.set('client', client);
     await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
     assert.dom('div[data-test-title]').hasText(this.client.name);
   });
 
   test("it should handle empty client name", async function (assert) {
-    const client = this.server.create('partnerclient', {
+    const client = this.server.create('partner/partnerclient', {
       name: null
     });
     this.set('client', client);
@@ -58,7 +58,7 @@ module('Integration | Component | partner/client-info', function (hooks) {
   });
 
   test("it should truncate client name if it has 200 chars", async function (assert) {
-    const client = this.server.create('partnerclient', {
+    const client = this.server.create('partner/partnerclient', {
       name: 'g'.repeat(200)
     });
     this.set('client', client);
@@ -68,7 +68,7 @@ module('Integration | Component | partner/client-info', function (hooks) {
   });
 
   test("it should truncate client name when the container has set limited width", async function (assert) {
-    const client = this.server.create('partnerclient', {
+    const client = this.server.create('partner/partnerclient', {
       name: 'g'.repeat(200)
     });
     this.set('client', client);
@@ -78,7 +78,7 @@ module('Integration | Component | partner/client-info', function (hooks) {
   })
 
   test("it should not truncate client name if it has 10 chars", async function (assert) {
-    const client = this.server.create('partnerclient', {
+    const client = this.server.create('partner/partnerclient', {
       name: 'g'.repeat(10)
     });
     this.set('client', client);
@@ -88,7 +88,7 @@ module('Integration | Component | partner/client-info', function (hooks) {
   });
 
   test('it should no uploades done by the client', async function (assert) {
-    const client = this.server.create('partnerclient');
+    const client = this.server.create('partner/partnerclient');
     client.lastUploadedOn = null;
     this.set('client', client);
     await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
@@ -96,7 +96,7 @@ module('Integration | Component | partner/client-info', function (hooks) {
   });
 
   test('it should show last uploded date in relative format', async function (assert) {
-    const client = this.server.create('partnerclient');
+    const client = this.server.create('partner/partnerclient');
     this.set('client', client);
     dayjs.extend(relativeTime)
     await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
@@ -105,14 +105,14 @@ module('Integration | Component | partner/client-info', function (hooks) {
   });
 
   test("it should render client owner list", async function (assert) {
-    const client = this.server.create('partnerclient');
+    const client = this.server.create('partner/partnerclient');
     this.set('client', client);
     await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
     assert.dom('div[data-test-client-owner-emails]').exists();
   });
 
   test('it should render payment plan row, if view_plans enabled', async function (assert) {
-    const client = this.server.create('partnerclient');
+    const client = this.server.create('partner/partnerclient');
     this.server.get('v2/partners/:id', (_, req) => {
       return {
         id: req.params.id,
@@ -137,7 +137,7 @@ module('Integration | Component | partner/client-info', function (hooks) {
   })
 
   test('it should not render payment plan row, if view_plans disabled', async function (assert) {
-    const client = this.server.create('partnerclient');
+    const client = this.server.create('partner/partnerclient');
     this.server.get('v2/partners/:id', (_, req) => {
       return {
         id: req.params.id,
@@ -154,7 +154,7 @@ module('Integration | Component | partner/client-info', function (hooks) {
   })
 
   test('it should not render payment plan row, if view_plans not available', async function (assert) {
-    const client = this.server.create('partnerclient');
+    const client = this.server.create('partner/partnerclient');
     this.server.get('v2/partners/:id', (_, req) => {
       return {
         id: req.params.id,
@@ -182,7 +182,7 @@ module('Integration | Component | partner/client-info', function (hooks) {
     this.server.get('v2/partnerclients/:id/plan', () => {
       return Response(500)
     })
-    const client = this.server.create('partnerclient');
+    const client = this.server.create('partner/partnerclient');
     this.set('client', client);
     await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
     assert.dom('div[data-test-payment-plan-label]').hasText(`t:paymentPlan:()`);
@@ -190,7 +190,7 @@ module('Integration | Component | partner/client-info', function (hooks) {
   })
 
   test('it should not render payment plan section, if view_plans is not enabled', async function (assert) {
-    const client = this.server.create('partnerclient');
+    const client = this.server.create('partner/partnerclient');
     this.set('client', client);
     await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
     assert.dom('div[data-test-payment-plan-row]').doesNotExist();

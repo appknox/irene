@@ -37,7 +37,7 @@ module('Integration | Component | partner/client-info-plan', function (hooks) {
   })
 
   test('it should render per-app plan with available projects limit & future expiry date', async function (assert) {
-    const clientPlan = this.server.create('partnerclient-plan', {
+    const clientPlan = this.server.create('partner/partnerclient-plan', {
       limitedScans: false,
       expiryDate: dayjs(faker.date.future()).toISOString()
     });
@@ -46,9 +46,9 @@ module('Integration | Component | partner/client-info-plan', function (hooks) {
 
     assert.dom('div[data-test-plan-type]').hasText(`t:perApp:()`);
     assert.dom('div[data-test-plan-type]').hasStyle({
-      color: 'rgb(89, 149, 239)',
-      'background-color': 'rgb(242, 247, 255)',
-      'border-color': 'rgb(237, 244, 255)'
+      "background-color": "rgb(219, 230, 255)",
+      "border-color": "rgb(65, 96, 169)",
+      "color": "rgb(65, 96, 169)"
     })
     assert.dom('strong[data-test-plan-status-left]').hasText(`${this.clientPlan.projectsLimit} t:pluralApps:("itemCount":${this.clientPlan.projectsLimit})`)
     assert.dom('span[data-test-plan-expiry]').hasText(`t:expiresOn:() ${dayjs(this.clientPlan.expiryDate).format('DD MMM YYYY')}`)
@@ -59,7 +59,7 @@ module('Integration | Component | partner/client-info-plan', function (hooks) {
 
   test('it should render per-app plan without projects count & expired', async function (assert) {
 
-    const clientPlan = this.server.create('partnerclient-plan', {
+    const clientPlan = this.server.create('partner/partnerclient-plan', {
       limitedScans: false,
       projectsLimit: 0,
       expiryDate: dayjs(faker.date.past()).toISOString()
@@ -69,9 +69,9 @@ module('Integration | Component | partner/client-info-plan', function (hooks) {
 
     assert.dom('div[data-test-plan-type]').hasText(`t:perApp:()`);
     assert.dom('div[data-test-plan-type]').hasStyle({
-      color: 'rgb(89, 149, 239)',
-      'background-color': 'rgb(242, 247, 255)',
-      'border-color': 'rgb(237, 244, 255)'
+      "background-color": "rgb(219, 230, 255)",
+      "border-color": "rgb(65, 96, 169)",
+      "color": "rgb(65, 96, 169)"
     })
     assert.dom('strong[data-test-plan-status-left]').hasText(`${this.clientPlan.projectsLimit} t:pluralApps:("itemCount":${this.clientPlan.projectsLimit})`)
     assert.dom('span[data-test-plan-expiry]').hasText(`t:expiredOn:() ${dayjs(this.clientPlan.expiryDate).format('DD MMM YYYY')}`)
@@ -82,7 +82,7 @@ module('Integration | Component | partner/client-info-plan', function (hooks) {
 
   test('it should render per-scan plan', async function (assert) {
 
-    const clientPlan = this.server.create('partnerclient-plan', {
+    const clientPlan = this.server.create('partner/partnerclient-plan', {
       limitedScans: true
     });
     this.set('clientPlan', clientPlan)
@@ -90,9 +90,9 @@ module('Integration | Component | partner/client-info-plan', function (hooks) {
 
     assert.dom('div[data-test-plan-type]').hasText(`t:perScan:()`);
     assert.dom('div[data-test-plan-type]').hasStyle({
-      "background-color": "rgb(240, 249, 242)",
-      "border-color": "rgb(236, 248, 239)",
-      "color": "rgb(87, 191, 114)"
+      "background-color": "rgb(204, 243, 204)",
+      "border-color": "rgb(21, 99, 71)",
+      "color": "rgb(21, 99, 71)"
     })
     assert.dom('strong[data-test-plan-status-left]').hasText(`${this.clientPlan.scansLeft} t:pluralScans:("itemCount":${this.clientPlan.scansLeft})`)
     assert.dom('div[data-test-plan-status]').hasText(`${this.clientPlan.scansLeft} t:pluralScans:("itemCount":${this.clientPlan.scansLeft}) t:remaining:()`)
