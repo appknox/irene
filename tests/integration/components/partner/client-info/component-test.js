@@ -67,6 +67,16 @@ module('Integration | Component | partner/client-info', function (hooks) {
     assert.ok(titleEle.offsetWidth < titleEle.scrollWidth);
   });
 
+  test("it should truncate client name when the container has set limited width", async function (assert) {
+    const client = this.server.create('partnerclient', {
+      name: 'g'.repeat(200)
+    });
+    this.set('client', client);
+    await render(hbs`<div style="width:100px"><Partner::ClientInfo @client={{this.client}}/></div>`);
+    const titleEle = this.element.querySelector('div[data-test-title]');
+    assert.ok(titleEle.offsetWidth < titleEle.scrollWidth);
+  })
+
   test("it should not truncate client name if it has 10 chars", async function (assert) {
     const client = this.server.create('partnerclient', {
       name: 'g'.repeat(10)

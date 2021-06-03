@@ -99,9 +99,13 @@ module('Integration | Component | partner/client-info-plan', function (hooks) {
   });
 
   test('it should not render payment plan, if error occurred', async function (assert) {
-
     this.set('clientPlan', null)
     await render(hbs`<Partner::ClientInfoPlan @clientPlan={{this.clientPlan}}/>`);
     assert.dom('div[data-test-payment-plan]').doesNotExist();
+  });
+
+  test('it should not render payment plan, if view_plans privilege is not enabled', async function (assert) {
+    await render(hbs`<Partner::ClientInfoPlan/>`);
+    assert.dom('div[data-test-plan]').doesNotExist();
   });
 });
