@@ -169,26 +169,6 @@ module('Integration | Component | partner/client-info', function (hooks) {
     assert.dom('div[data-test-payment-plan-row]').doesNotExist();
   })
 
-  test('it should not render payment plan, if error occurred during plan details fetch', async function (assert) {
-    this.server.get('v2/partners/:id', (_, req) => {
-      return {
-        id: req.params.id,
-        access: {
-          view_plans: true
-        }
-      }
-    })
-    await this.owner.lookup('service:partner').load();
-    this.server.get('v2/partnerclients/:id/plan', () => {
-      return Response(500)
-    })
-    const client = this.server.create('partner/partnerclient');
-    this.set('client', client);
-    await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
-    assert.dom('div[data-test-payment-plan-label]').hasText(`t:paymentPlan:()`);
-    assert.dom('div[data-test-payment-plan]').doesNotExist();
-  })
-
   test('it should not render payment plan section, if view_plans is not enabled', async function (assert) {
     const client = this.server.create('partner/partnerclient');
     this.set('client', client);
