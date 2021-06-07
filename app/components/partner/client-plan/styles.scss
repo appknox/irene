@@ -1,0 +1,42 @@
+.plan {
+  display: flex;
+  align-items: center;
+}
+
+.plan-type {
+  border-radius: 0.2rem;
+  height: 1.2rem;
+  width: 4.8rem;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.per-app {
+    color: #4160a9;
+    background-color: #dbe6ff;
+  }
+
+  &.per-scan {
+    color: #156347;
+    background-color: #ccf3cc;
+  }
+}
+
+.plan-status {
+  display: flex;
+  align-items: center;
+  color: #000;
+  margin-left: 0.5rem;
+}
+
+.expiry-date {
+  font-size: 0.9em;
+  color: #9ba2ad;
+}
+
+.expiry-date-expired {
+  color: #FE4D3F;
+}

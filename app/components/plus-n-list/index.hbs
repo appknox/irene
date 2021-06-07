@@ -1,0 +1,42 @@
+<div
+  local-class='initial-container'
+  data-test='initial-container'
+  ...attributes
+>
+  <div class='black-text' data-test='default-items'>
+    {{this.defaultItems}}
+  </div>
+  {{#if (gt this.remainingCount 0)}}
+    <button
+      type='button'
+      class='margin-l-h'
+      local-class='show-more-count-badge'
+      data-test='more-btn'
+      {{on 'click' (fn this.toggleShowMoreModal)}}
+    >
+      +
+      {{this.remainingCount}}
+      {{#if @suffix}}
+        {{@suffix}}
+      {{/if}}
+    </button>
+  {{/if}}
+</div>
+{{#if this.showMoreModal}}
+  <AkModal
+    @onClose={{this.toggleShowMoreModal}}
+    @showHeader={{true}}
+    @headerTitle={{@modalTitle}}
+  >
+    <div local-class='list' data-test='list-modal'>
+      {{#each @list as |item seq|}}
+        <div local-class='list-item' data-test='list-item-{{seq}}'>
+          {{#if @isShowSeq}}
+            {{add seq 1}}.
+          {{/if}}
+          {{item}}
+        </div>
+      {{/each}}
+    </div>
+  </AkModal>
+{{/if}}
