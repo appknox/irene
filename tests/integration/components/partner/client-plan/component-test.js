@@ -20,6 +20,7 @@ import {
 import dayjs from 'dayjs';
 import faker from 'faker';
 import { underscore } from '@ember/string';
+import styles from 'irene/components/partner/client-plan/styles';
 
 function serializer(payload) {
   const serializedPayload = {};
@@ -61,16 +62,10 @@ module('Integration | Component | partner/client-plan', function (hooks) {
     await render(hbs`<Partner::ClientPlan @clientId={{this.clientId}}/>`);
 
     assert.dom('div[data-test="plan-type"]').hasText(`t:perApp:()`);
-    assert.dom('div[data-test="plan-type"]').hasStyle({
-      "background-color": "rgb(219, 230, 255)",
-      "border-color": "rgb(65, 96, 169)",
-      "color": "rgb(65, 96, 169)"
-    })
+    assert.dom('div[data-test="plan-type"]').hasClass(styles['per-app']);
     assert.dom('strong[data-test="projects-left"]').hasText(`${clientPlan.projectsLimit} t:pluralApps:("itemCount":${clientPlan.projectsLimit})`)
     assert.dom('span[data-test="plan-expiry"]').hasText(`t:expiresOn:() ${dayjs(clientPlan.expiryDate).format('DD MMM YYYY')}`)
-    assert.dom('span[data-test="plan-expiry"]').hasStyle({
-      color: 'rgb(155, 162, 173)'
-    })
+    assert.dom('span[data-test="plan-expiry"]').doesNotHaveClass(styles['expiry-date-expired'])
   });
 
   test('it should render per-app plan without projects count & expired', async function (assert) {
@@ -95,16 +90,10 @@ module('Integration | Component | partner/client-plan', function (hooks) {
     await render(hbs`<Partner::ClientPlan @clientId={{this.clientId}}/>`);
 
     assert.dom('div[data-test="plan-type"]').hasText(`t:perApp:()`);
-    assert.dom('div[data-test="plan-type"]').hasStyle({
-      "background-color": "rgb(219, 230, 255)",
-      "border-color": "rgb(65, 96, 169)",
-      "color": "rgb(65, 96, 169)"
-    })
+    assert.dom('div[data-test="plan-type"]').hasClass(styles['per-app']);
     assert.dom('strong[data-test="projects-left"]').hasText(`${clientPlan.projectsLimit} t:pluralApps:("itemCount":${clientPlan.projectsLimit})`)
     assert.dom('span[data-test="plan-expiry"]').hasText(`t:expiredOn:() ${dayjs(clientPlan.expiryDate).format('DD MMM YYYY')}`)
-    assert.dom('span[data-test="plan-expiry"]').hasStyle({
-      color: 'rgb(254, 77, 63)'
-    })
+    assert.dom('span[data-test="plan-expiry"]').hasClass(styles['expiry-date-expired'])
   });
 
   test('it should render per-scan plan', async function (assert) {
@@ -128,11 +117,7 @@ module('Integration | Component | partner/client-plan', function (hooks) {
     await render(hbs`<Partner::ClientPlan @clientId={{this.clientId}}/>`);
 
     assert.dom('div[data-test="plan-type"]').hasText(`t:perScan:()`);
-    assert.dom('div[data-test="plan-type"]').hasStyle({
-      "background-color": "rgb(204, 243, 204)",
-      "border-color": "rgb(21, 99, 71)",
-      "color": "rgb(21, 99, 71)"
-    })
+    assert.dom('div[data-test="plan-type"]').hasClass(styles['per-scan']);
     assert.dom('strong[data-test="scans-left"]').hasText(`${clientPlan.scansLeft} t:pluralScans:("itemCount":${clientPlan.scansLeft})`)
     assert.dom('div[data-test="plan-status"]').hasText(`${clientPlan.scansLeft} t:pluralScans:("itemCount":${clientPlan.scansLeft}) t:remaining:()`)
   });

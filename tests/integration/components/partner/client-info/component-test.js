@@ -19,6 +19,7 @@ import {
 } from 'ember-intl/test-support';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import styles from 'irene/components/partner/client-info/styles';
 
 module('Integration | Component | partner/client-info', function (hooks) {
   setupRenderingTest(hooks);
@@ -51,10 +52,7 @@ module('Integration | Component | partner/client-info', function (hooks) {
     this.set('client', client);
     await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
     assert.dom('div[data-test-title]').hasText(`t:noName:()`);
-    assert.dom('div[data-test-title]').hasStyle({
-      "color": "rgb(66, 70, 81)",
-      "font-style": "italic"
-    });
+    assert.dom('div[data-test-title]').hasClass(styles['empty-title'])
   });
 
   test("it should truncate client name if it has 200 chars", async function (assert) {
