@@ -50,9 +50,9 @@
           {{t 'pluralorganizationOwner' itemCount=@client.ownerEmails.length}}
         </div>
         <div local-class="value">
-          <Modals::PlusNList
+          <PlusNList
             @list={{@client.ownerEmails}}
-            @modalTitle="Client owner emails"
+            @modalTitle="{{@client.name}} organization owners"
             data-test-client-owner-emails
             @isShowSeq={{false}}
           />

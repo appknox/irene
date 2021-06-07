@@ -1,7 +1,7 @@
 {{#if this.partner.access.view_plans}}
   <div ...attributes {{did-insert (perform this.getClientPlan)}}>
     {{#if this.getClientPlan.isRunning}}
-      <ThreeBounceSpinner data-test="loading" />
+      {{fa-icon "circle-o-notch fa-spin text-lightgray"}}
     {{else if this.clientPlan}}
       <div local-class="plan" ...attributes data-test="client-plan">
         <div
@@ -9,7 +9,7 @@
             {{if this.clientPlan.limitedScans 'per-scan' 'per-app'}}"
           data-test="plan-type"
         >
-          {{t (if this.clientPlan.limitedScans 'perScan' 'perApp')}}
+          <span>{{t (if this.clientPlan.limitedScans 'perScan' 'perApp')}}</span>
         </div>
         <div local-class="plan-status" data-test="plan-status">
           {{#if this.clientPlan.limitedScans}}

@@ -3,6 +3,10 @@
   align-items: center;
 }
 
+.list-item:not(:last-child) {
+  margin-bottom: 0.6rem;
+}
+
 .show-more-count-badge {
   padding: 0 0.36rem 0 0.3rem;
   display: flex;
