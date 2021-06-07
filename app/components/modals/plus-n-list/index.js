@@ -1,10 +1,9 @@
-import Component from "@glimmer/component";
+import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { isArray } from '@ember/array';
 
 export default class PlusNList extends Component {
-
   @tracked showMoreModal = false;
 
   get defaultCount() {
