@@ -12,7 +12,7 @@
       class='margin-l-h'
       local-class='show-more-count-badge'
       data-test='more-btn'
-      {{on 'click' (fn this.toggleShowMoreModal)}}
+      {{on 'click' this.toggleShowMoreModal}}
     >
       +
       {{this.remainingCount}}

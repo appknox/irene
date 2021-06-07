@@ -3,7 +3,7 @@
     {{#if this.getClientPlan.isRunning}}
       {{fa-icon 'circle-o-notch fa-spin text-lightgray'}}
     {{else if this.clientPlan}}
-      <div local-class='plan' ...attributes data-test='client-plan'>
+      <div local-class='plan' data-test-payment-plan data-test='client-plan'>
         <div
           local-class='plan-type
             {{if this.clientPlan.limitedScans 'per-scan' 'per-app'}}'

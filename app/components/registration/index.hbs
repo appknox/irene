@@ -17,7 +17,7 @@
             <span data-test-registration-input-email-error class="error-msg">{{this.changeset.error.email.validation}}</span>
             {{/if}}
           </div>
-          <Input data-test-registration-input-email @id="registration-input-email" @value={{this.changeset.email}} type="text" class="input-field" placeholder="{{t "email"}}" autocomplete="email" autofocus="autofocus" required="required" />
+          <Input data-test-registration-input-email id="registration-input-email" @value={{this.changeset.email}} @type="text" class="input-field" placeholder="{{t "email"}}" autocomplete="email" autofocus="autofocus" required="required" />
         </div>
 
         <div class="input-wrap {{if this.changeset.error.company "has-error"}}">
@@ -27,7 +27,7 @@
             <span data-test-registration-input-company-error class="error-msg">{{this.changeset.error.company.validation}}</span>
             {{/if}}
           </div>
-          <Input data-test-registration-input-company @id="registration-input-company" class="input-field" placeholder="{{t "companyName"}}" @value={{this.changeset.company}} autocomplete="company" required="required" ></Input>
+          <Input data-test-registration-input-company id="registration-input-company" class="input-field" placeholder="{{t "companyName"}}" @value={{this.changeset.company}} autocomplete="company" required="required" ></Input>
         </div>
 
         {{#if this.enabledName}}
@@ -39,8 +39,8 @@
             {{/if}}
           </div>
           <div class="half-wrap">
-            <Input data-test-registration-input-fname type="text" @id="registration-input-firstname" class="input-field" placeholder="First Name" autocomplete="fname" @value={{this.changeset.firstname}} required="required" />
-            <Input data-test-registration-input-lname type="text" @id="registration-input-lastname" class="input-field" placeholder="Last Name" autocomplete="lname" @value={{this.changeset.lastname}} required="required" />
+            <Input data-test-registration-input-fname @type="text" id="registration-input-firstname" class="input-field" placeholder="First Name" autocomplete="fname" @value={{this.changeset.firstname}} required="required" />
+            <Input data-test-registration-input-lname @type="text" id="registration-input-lastname" class="input-field" placeholder="Last Name" autocomplete="lname" @value={{this.changeset.lastname}} required="required" />
           </div>
         </div>
         {{/if}}

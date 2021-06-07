@@ -6,7 +6,8 @@
     <div class="vertical-align-top">
       <div local-class="toggle-check" class="div">
         <label class="switch margin-right">
-          <Input class="switch-input" @type="checkbox" id="auto-cleanup"
+          <Input {{!-- template-lint-disable require-input-label  --}}
+            class="switch-input" @type="checkbox" id="auto-cleanup"
             {{on "change" (fn this.onChangePref this.changeset 'checkbox')}}
             @checked={{get this.changeset "isEnabled"}} />
           <span class="slider slider-nolabel round"></span>
@@ -22,9 +23,9 @@
             <label for="active-file-limit">
               {{t 'fileCleanup.activeCount'}}
             </label>
-            <Input class="input-field" local-class="{{if this.changeset.error.filesToKeep 'error-input'}}" type="number"
-              @value={{mut (get this.changeset "filesToKeep")}} @min={{2}} @max={{50}} id="active-file-limit"
-              @disabled={{unless this.changeset.isEnabled "disabled"}} />
+            <Input class="input-field" local-class="{{if this.changeset.error.filesToKeep 'error-input'}}" @type="number"
+              @value={{mut (get this.changeset "filesToKeep")}} min={{2}} max={{50}} id="active-file-limit"
+              disabled={{unless this.changeset.isEnabled "disabled"}} />
             <button type="button" local-class="save-input {{unless this.changeset.error.filesToKeep 'correct-input'}}"
               disabled={{if this.changeset.error.filesToKeep "disabled"}}
               {{on "click" (fn this.onChangePref this.changeset)}}>

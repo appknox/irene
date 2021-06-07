@@ -16,7 +16,7 @@
     <FileUpload
       @name="files"
       @accept="*/*"
-      @disabled={{this.uploadFile.isRunning}}
+      disabled={{this.uploadFile.isRunning}}
       @onfileadd={{action this.uploadFileWrapper}} as |queue|
     >
       <a class="button is-primary">
@@ -36,13 +36,13 @@
           <label local-class="script-enable" class="margin-r-1 vertical-align-center">
             <div class="padding-r-1 bold">{{t "appiumScheduledAutomation" htmlSafe=true}}</div>
             <label class="toggle-switch-on-off">
-              <Input
+              <Input {{!-- template-lint-disable require-input-label  --}}
                 id="auto-dynamicscan"
                 class="switch-input"
                 @type="checkbox"
                 @checked={{this.automationEnabled}}
                 {{on "click" (perform this.toggleDynamicscanMode)}}
-                @disabled={{this.toggleDynamicscanMode.isRunning}}
+                disabled={{this.toggleDynamicscanMode.isRunning}}
               />
               <span class="knob"></span>
             </label>

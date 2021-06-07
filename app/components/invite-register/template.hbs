@@ -5,54 +5,55 @@
         <h4 class="has-text-centered">{{t "acceptInvite"}}</h4>
         <div class="input-wrap {{if this.changeset.error.company 'has-error'}}">
           <div class="label-error">
-            <label>{{t "companyName"}}</label>
+            <label for="invite-register-company-name">{{t "companyName"}}</label>
           </div>
-          <Input placeholder="Company Name" readonly="readonly" disabled="disabled" @value={{@company}} class="input-field"/>
+          <Input id="invite-register-company-name" placeholder="Company Name" readonly="readonly" disabled="disabled" @value={{@company}} class="input-field"/>
         </div>
         <div class="input-wrap">
           <div class="label-error">
-            <label>Official Email</label>
+            <label for="invite-register-email">Official Email</label>
           </div>
-          <Input placeholder="Official Email" readonly="readonly" disabled="disabled" @value={{@email}} class="input-field"/>
+          <Input id="invite-register-email" placeholder="Official Email" readonly="readonly" disabled="disabled" @value={{@email}} class="input-field"/>
         </div>
         {{#unless @isSSOEnforced}}
           <div class="input-wrap">
             <div class="label-error">
-              <label>{{t "name"}}</label>
+              <label for="invite-register-fname">{{t "name"}}</label>
             </div>
             <div class="half-wrap">
-              <Input placeholder="First Name" @value={{this.changeset.firstname}} autocomplete="fname" autofocus="autofocus" class="input-field" />
-              <Input placeholder="Last Name" @value={{this.changeset.lastname}} autocomplete="lname" class="input-field"/>
+              <Input id="invite-register-fname" placeholder="First Name" @value={{this.changeset.firstname}} autocomplete="fname" autofocus="autofocus" class="input-field" />
+              <Input id="invite-register-lname" placeholder="Last Name" @value={{this.changeset.lastname}} autocomplete="lname" class="input-field"/>
             </div>
           </div>
         {{/unless}}
           <div class="input-wrap {{if this.changeset.error.username 'has-error'}}">
             <div class="label-error">
-              <label>{{t "username"}}</label>
+              <label for="invite-register-username">{{t "username"}}</label>
               {{#if this.changeset.error.username}}
                 <span class="error-msg">{{this.changeset.error.username.validation}}</span>
               {{/if}}
             </div>
-            <Input placeholder="Username" @value={{this.changeset.username}} autocomplete="username" class="input-field"/>
+            <Input id="invite-register-username" placeholder="Username" @value={{this.changeset.username}} autocomplete="username" class="input-field"/>
           </div>
         {{#unless @isSSOEnforced}}
           <div class="input-wrap">
             <div class="label-error">
-              <label>{{t "password"}}</label>
+              <label for="invite-register-password">{{t "password"}}</label>
               {{#if this.changeset.error.password}}
                 <span class="error-msg">{{this.changeset.error.password.validation}}</span>
               {{else if this.changeset.error.passwordConfirmation}}
                 <span class="error-msg">{{this.changeset.error.passwordConfirmation.validation}}</span>
               {{/if}}
             </div>
-            <Input type="password" autocomplete="new-password" @value={{this.changeset.password}} placeholder='Mininum 6 characters' class="input-field {{if this.changeset.error.password "has-error"}}"/>
-            <Input type="password" autocomplete="new-password" @value={{this.changeset.passwordConfirmation}} placeholder='Confirm Password' class="input-field {{if this.changeset.error.passwordConfirmation "has-error"}}"/>
+            <Input id="invite-register-password" @type="password" autocomplete="new-password" @value={{this.changeset.password}} placeholder='Mininum 6 characters' class="input-field {{if this.changeset.error.password "has-error"}}"/>
+            <Input id="invite-register-confimpassword" @type="password" autocomplete="new-password" @value={{this.changeset.passwordConfirmation}} placeholder='Confirm Password' class="input-field {{if this.changeset.error.passwordConfirmation "has-error"}}"/>
           </div>
         {{/unless}}
         <div class="input-wrap {{if this.changeset.error.termsAccepted 'has-error'}}">
           <div class="label-error">
             <label class="register-form-accept">
-              <Input id="terms-accepted" @type="checkbox" @checked={{this.changeset.termsAccepted}} class="checkbox-field"/>
+              <Input {{!-- template-lint-disable require-input-label  --}}
+                id="terms-accepted" @type="checkbox" @checked={{this.changeset.termsAccepted}} class="checkbox-field"/>
               <span>
                 {{t "acceptTerms"}}
                 <a href="https://appknox.com/privacy" target="_blank" rel="noopener noreferrer">

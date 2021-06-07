@@ -2,7 +2,7 @@
   class='is-primary button vertical-align-center'
   type='button'
   data-test-invite-client-button
-  {{on 'click' (fn this.toggleInviteModal)}}
+  {{on 'click' this.toggleInviteModal}}
 >
   {{fa-icon 'envelope'}}&nbsp;
   {{t 'inviteClients'}}
@@ -36,13 +36,13 @@
           {{/if}}
         </div>
         <Input
-          type='text'
+          @type='text'
           class='input-field'
           placeholder='{{t 'email'}}'
           autocomplete='email'
           autofocus='autofocus'
           required='required'
-          @id='registration-input-email'
+          id='registration-input-email'
           @value={{this.changeset.email}}
           data-test-input-email
         />
@@ -63,23 +63,23 @@
         </div>
         <div class='half-wrap'>
           <Input
-            type='text'
+            @type='text'
             class='input-field
               {{if this.changeset.error.first_name 'has-error'}}'
             placeholder='First Name'
             autocomplete='fname'
             required='required'
-            @id='registration-input-firstname'
+            id='registration-input-firstname'
             @value={{this.changeset.first_name}}
             data-test-input-firstname
           />
           <Input
-            type='text'
+            @type='text'
             class='input-field
               {{if this.changeset.error.last_name 'has-error'}}'
             placeholder='Last Name'
             autocomplete='lname'
-            @id='registration-input-lastname'
+            id='registration-input-lastname'
             @value={{this.changeset.last_name}}
             required='required'
             data-test-input-lastname
@@ -104,12 +104,13 @@
           {{/if}}
         </div>
         <Input
+          @type="text"
           class='input-field'
           placeholder='{{t 'companyName'}}'
           autocomplete='company'
           required='required'
           @value={{this.changeset.company}}
-          @id='registration-input-company'
+          id='registration-input-company'
           data-test-input-company
         />
       </div>
