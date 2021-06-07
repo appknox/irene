@@ -1,10 +1,10 @@
-<div local-class="client-info-card {{@client.type}}">
-  <div local-class="client-info-header">
-    <span local-class="thumbnail" data-test-thumbnail>
+<div local-class='client-info-card {{@client.type}}'>
+  <div local-class='client-info-header'>
+    <span local-class='thumbnail' data-test-thumbnail>
       {{fa-icon 'users' local-class='thumbnail-icon'}}
     </span>
     <div
-      local-class="title {{if this.isEmptyTitle 'empty-title'}}"
+      local-class='title {{if this.isEmptyTitle 'empty-title'}}'
       data-test-title
     >
       {{#if this.isEmptyTitle}}
@@ -14,18 +14,18 @@
       {{/if}}
     </div>
   </div>
-  <div local-class="client-info-body">
-    <div local-class="table">
-      <div local-class="row">
-        <div local-class="key" data-test-last-upload-label>
+  <div local-class='client-info-body'>
+    <div local-class='table'>
+      <div local-class='row'>
+        <div local-class='key' data-test-last-upload-label>
           {{t 'lastUpload'}}
         </div>
-        <div local-class="value">
+        <div local-class='value'>
           <div data-test-last-upload>
             {{#if @client.lastUploadedOn}}
               {{dayjs-from-now @client.lastUploadedOn}}
             {{else}}
-              <em class="text-lightgray">
+              <em class='text-lightgray'>
                 {{t 'noUploads'}}
               </em>
             {{/if}}
@@ -33,11 +33,11 @@
         </div>
       </div>
       {{#if this.partner.access.view_plans}}
-        <div local-class="row" data-test-payment-plan-row>
-          <div local-class="key" data-test-payment-plan-label>
+        <div local-class='row' data-test-payment-plan-row>
+          <div local-class='key' data-test-payment-plan-label>
             {{t 'paymentPlan'}}
           </div>
-          <div local-class="value">
+          <div local-class='value'>
             <Partner::ClientPlan
               data-test-payment-plan
               @clientId={{@client.id}}
@@ -45,24 +45,24 @@
           </div>
         </div>
       {{/if}}
-      <div local-class="row">
-        <div local-class="key">
+      <div local-class='row'>
+        <div local-class='key'>
           {{t 'pluralorganizationOwner' itemCount=@client.ownerEmails.length}}
         </div>
-        <div local-class="value">
+        <div local-class='value'>
           <PlusNList
             @list={{@client.ownerEmails}}
-            @modalTitle="{{@client.name}} organization owners"
+            @modalTitle='{{@client.name}} organization owners'
             data-test-client-owner-emails
             @isShowSeq={{false}}
           />
         </div>
       </div>
-      <div local-class="row">
-        <div local-class="key">
+      <div local-class='row'>
+        <div local-class='key'>
           {{t 'createdOn'}}
         </div>
-        <div local-class="value" data-test-created-on>
+        <div local-class='value' data-test-created-on>
           {{day-js @client.createdOn format='DD MMM YYYY'}}
         </div>
       </div>
