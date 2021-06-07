@@ -17,7 +17,7 @@
   <div local-class='client-info-body'>
     <div local-class='table'>
       <div local-class='row'>
-        <div local-class='key' data-test-last-upload-label>
+        <div local-class='key'>
           {{t 'lastUpload'}}
         </div>
         <div local-class='value'>
@@ -42,6 +42,7 @@
               data-test-payment-plan
               @clientId={{@client.id}}
             />
+            <Partner::CreditTransfer @client={{@client}} />
           </div>
         </div>
       {{/if}}

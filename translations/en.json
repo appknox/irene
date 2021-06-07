@@ -839,5 +839,13 @@
   "invited": "Invited",
   "validUntil": "Valid until",
   "source": "Source",
-  "invitationSent": "Invitation sent successfully"
+  "invitationSent": "Invitation sent successfully",
+  "transferCredits": "Transfer Credits",
+  "creditTransfer": "Credit Transfer",
+  "invalidCredits": "Invalid Credits",
+  "0sharableCredits": "0 sharable credits",
+  "perAppClientCredit": "Credits transfer is unavailable for Per App plan clients",
+  "availableCredits": "Available Scan Credits",
+  "creditAddPurchase": "Please contact support for purchasing scan credits",
+  "creditTransferNotSupported": "Scan credit sharing is currently not supported in your payment plan (per-app). Please contact support for transferring credits to clients."
 }

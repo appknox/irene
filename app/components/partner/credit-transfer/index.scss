@@ -1,0 +1,70 @@
+.client {
+  display: flex;
+  align-items: center;
+  column-gap: 1.5rem;
+}
+
+.title {
+  text-transform: capitalize;
+  font-weight: bold;
+  color: rgba(#000, 0.7);
+  max-height: 92%;
+  font-size: 1.1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &.empty-title {
+    color: #424651;
+    font-size: 1em;
+    font-style: italic;
+  }
+}
+.credit-tranfer {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  row-gap: 1.5rem;
+}
+
+.total-credits {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #0063b2ff;
+  text-align: center;
+}
+
+.tranfer-count {
+  display: flex;
+  align-items: center;
+}
+
+.input-count {
+  width: 4rem;
+  height: 2rem;
+  border: none;
+  border-bottom: 1px solid;
+  color: #0063b2ff;
+  font-size: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+.credit-type {
+  font-size: 0.95em;
+  color: #0063b2ff;
+  width: 3em;
+}
+
+.tranfer-btn {
+  justify-self: center;
+}
+
+.bal-credits {
+  text-transform: capitalize;
+  font-size: 0.95rem;
+}
+
+.invalid-credits {
+  color: $red;
+  font-size: 0.9rem;
+}
