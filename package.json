@@ -49,7 +49,7 @@
     "ember-changeset": "^2.1.2",
     "ember-changeset-validations": "^2.1.0",
     "ember-cli": "~3.21.2",
-    "ember-cli-app-version": "^3.2.0",
+    "ember-cli-app-version": "^5.0.0",
     "ember-cli-autoprefixer": "1.0.2",
     "ember-cli-babel": "^7.22.1",
     "ember-cli-bourbon": "2.0.1",
