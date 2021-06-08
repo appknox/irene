@@ -5,9 +5,11 @@ export default class ApplicationRoute extends Route {
   @service headData;
   @service intl;
   @service whitelabel;
+  @service configuration;
 
-  beforeModel() {
-    return this.get('intl').setLocale(['en']);
+  async beforeModel() {
+    await this.configuration.getFrontendConfig();
+    return this.intl.setLocale(['en']);
   }
 
   afterModel() {

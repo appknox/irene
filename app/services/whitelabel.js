@@ -1,55 +1,71 @@
 import Service from '@ember/service';
 import ENV from 'irene/config/environment';
+import { inject as service } from '@ember/service';
 
-/**
- * Service:WhitelabelService
- */
 export default class WhitelabelService extends Service {
+  @service configuration;
+
+  default_name = 'Appknox';
+  default_theme = 'dark';
+  default_favicon = 'images/favicon.ico';
+  default_logo_on_darkbg = '/images/logo-white.png';
+  default_logo_on_lightbg = '/images/logo.png';
+
+  THEMES = {
+    DARK: 'dark',
+    LIGHT: 'light',
+  };
+
+  get name() {
+    return this.configuration.frontendData.name || this.default_name;
+  }
 
   isEnabled() {
     return ENV.whitelabel.enabled || false;
   }
 
-  THEMES = {
-    'DARK': 'dark',
-    'LIGHT': 'light'
-  }
-
-  default_name = "Appknox";
-  default_theme = this.THEMES.DARK;
-  default_favicon = ENV.favicon;
-
-
-  /**
-   * @property {String} theme
-   * Whitelabel theme will be returned or fallback default to `dark`.
-   */
   get theme() {
-    if(this.isEnabled()) {
-      return ENV.whitelabel.theme
+    if (this.configuration.themeData.scheme == 'light') {
+      return this.THEMES.LIGHT;
     }
-    return this.default_theme;
+    return this.THEMES.DARK;
   }
 
-  /**
-   * @property {String} name
-   * Whitelabel name will be returned or fallback default to `Appknox`.
-   */
-  get name() {
-    if(this.isEnabled())  {
-      return ENV.whitelabel.name;
-    }
-    return this.default_name;
-  }
-
-  /**
-   * @property {String} favicon
-   * Whitelabel favicon will be returned or fallback default to `favicon.ico`.
-   */
   get favicon() {
-    if(this.isEnabled() && ENV.whitelabel.favicon)  {
-      return ENV.whitelabel.favicon;
+    return this.configuration.imageData.favicon || this.default_favicon;
+  }
+
+  get hide_poweredby_logo() {
+    return this.configuration.frontendData.hide_poweredby_logo;
+  }
+
+  get url() {
+    return this.configuration.frontendData.url;
+  }
+
+  get logo() {
+    const logo = this.client_logo;
+    if (logo) {
+      return logo;
     }
-    return this.default_favicon;
+    if (this.theme === this.THEMES.LIGHT) {
+      return this.default_logo_on_lightbg;
+    }
+
+    return this.default_logo_on_darkbg;
+  }
+
+  get client_logo() {
+    // the or'ing order is important
+    if (this.theme === this.THEMES.LIGHT) {
+      return (
+        this.configuration.imageData.logo_on_lightbg ||
+        this.configuration.imageData.logo_on_darkbg
+      );
+    }
+    return (
+      this.configuration.imageData.logo_on_darkbg ||
+      this.configuration.imageData.logo_on_lightbg
+    );
   }
 }
