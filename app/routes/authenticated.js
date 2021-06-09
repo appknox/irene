@@ -40,7 +40,6 @@ export default class AuthenticatedRoute extends Route {
   @service session;
   @service realtime;
   @service trial;
-  @service analytics;
   @service rollbar;
   @service('organization') org;
   @service('socket-io') socketIOService;
@@ -55,7 +54,6 @@ export default class AuthenticatedRoute extends Route {
     await all([
       this.store.findAll('Vulnerability'),
       this.org.load(),
-      this.analytics.load()
     ]);
     return this.store.find('user', userId);
   }

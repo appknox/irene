@@ -7,15 +7,16 @@ import {
 } from '@ember/service';
 
 export default class AuthenticatedAnalyticsRoute extends ScrollTopMixin(Route) {
-
   @service me;
+  @service analytics;
+
   beforeModel() {
     if (this.get('me.org.is_member')) {
       this.transitionTo('authenticated.projects');
     }
   }
 
-  model() {
-    return this.modelFor("authenticated");
+  async model() {
+    await this.get('analytics').load();
   }
 }
