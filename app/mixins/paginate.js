@@ -27,7 +27,7 @@ const PaginateMixin = Mixin.create({
   extraQueryStrings: "",
   limit: ENV.paginate.perPageLimit,
   isJsonApiPagination: false,
-  isDRFPagination: false,
+  isDRFPagination: true,
   offsetMultiplier: ENV.paginate.offsetMultiplier,
 
   versionIncrementer() {
@@ -88,6 +88,7 @@ const PaginateMixin = Mixin.create({
       if (result.links && result.meta.pagination) {
         meta.total = result.meta.pagination.count;
         this.set('isJsonApiPagination', true); // eslint-disable-line
+        this.set('isDRFPagination', false); // eslint-disable-line
       }
       if ("count" in result.meta) {
         meta.total = result.meta.count || 0;
@@ -95,6 +96,7 @@ const PaginateMixin = Mixin.create({
         count is only defined for DRF
         JSONAPI has total
         */
+        this.set('isJsonApiPagination', false); // eslint-disable-line
         this.set('isDRFPagination', true); // eslint-disable-line
       }
       // Set loading property
@@ -245,7 +247,7 @@ export const PaginationMixin = superclass => class extends superclass {
   @tracked extraQueryStrings = "";
   @tracked limit = ENV.paginate.perPageLimit;
   @tracked isJsonApiPagination = false;
-  @tracked isDRFPagination = false;
+  @tracked isDRFPagination = true;
   @tracked error = null;
   @tracked currentObjects = [];
 
@@ -324,6 +326,7 @@ export const PaginationMixin = superclass => class extends superclass {
       if (objects.links && objects.meta.pagination) {
         meta.total = objects.meta.pagination.count;
         this.isJsonApiPagination = true;
+        this.isDRFPagination = false;
       }
       if ("count" in objects.meta) {
         meta.total = objects.meta.count || 0;
@@ -331,6 +334,7 @@ export const PaginationMixin = superclass => class extends superclass {
         count is only defined for DRF
         JSONAPI has total
         */
+        this.isJsonApiPagination = false;
         this.isDRFPagination = true;
       }
       this.meta = meta;
