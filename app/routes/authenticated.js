@@ -26,6 +26,8 @@ import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import * as chat from 'irene/utils/chat';
 
+import { all } from 'rsvp';
+
 const {
   location
 } = window;
@@ -50,9 +52,11 @@ export default class AuthenticatedRoute extends Route {
 
   async model() {
     const userId = this.session.data.authenticated.user_id;
-    await this.store.findAll('Vulnerability');
-    await this.org.load();
-    await this.analytics.load();
+    await all([
+      this.store.findAll('Vulnerability'),
+      this.org.load(),
+      this.analytics.load()
+    ]);
     return this.store.find('user', userId);
   }
 

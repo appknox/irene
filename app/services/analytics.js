@@ -4,6 +4,7 @@ import {
   inject as service
 } from '@ember/service';
 import dayjs from 'dayjs';
+import { all } from 'rsvp';
 
 
 export default Service.extend({
@@ -14,8 +15,10 @@ export default Service.extend({
   appscan: {},
 
   async load() {
-    this.get_scancount();
-    this.get_appscan();
+    await all([
+      this.get_scancount(),
+      this.get_appscan(),
+    ]);
   },
 
   async get_scancount() {
