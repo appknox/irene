@@ -255,7 +255,7 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
       .hasText(`t:transferCredits:()`);
   });
 
-  test('it open modal whien clicking at plus btn and renders input screen', async function (assert) {
+  test('it open modal whien clicking at plus btn and renders input component', async function (assert) {
     this.server.get('v2/partners/:id', (_, req) => {
       return {
         id: req.params.id,
@@ -266,12 +266,7 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
       };
     });
 
-    const partnerPlan = {
-      limitedScans: true,
-      scansLeft: 10,
-    };
-
-    this.server.create('partner/plan', partnerPlan);
+    this.server.create('partner/plan', { limitedScans: true, scansLeft: 10 });
     this.server.get('v2/partners/:id/plan', (schema) => {
       return serializer(schema['partner/plans'].find(1));
     });
@@ -292,25 +287,10 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
 
     assert.dom('[data-test="credit-transfer-modal"]').exists();
     assert.dom(`[data-test='credit-transfer-input']`).exists();
-    assert.dom(`[data-test='credit-transfer-ack']`).doesNotExist();
-    assert
-      .dom(`[data-test='transferable-credits']`)
-      .hasText(
-        `${partnerPlan.scansLeft} t:pluralScans:("itemCount":${partnerPlan.scansLeft})`
-      );
-    assert.dom(`[data-test='client-title']`).hasText(this.client.name);
-    const defaultInputValue = 1;
-    assert
-      .dom(`[data-test='data-input-count']`)
-      .hasValue(`${defaultInputValue}`);
-    assert
-      .dom(`[data-test='credit-type']`)
-      .hasText(`t:pluralScans:("itemCount":${defaultInputValue})`);
-    assert.dom(`[data-test='transfer-btn']`).hasText(`t:transferCredits:()`);
-    assert.dom(`[data-test='transfer-btn']`).doesNotHaveAttribute(`disabled`);
+    assert.dom(`[data-test='credit-transfer-confirm']`).doesNotExist();
   });
 
-  test('it open ack screen in modal whien clicking at transfer credits button', async function (assert) {
+  test('it render nothing when error occured', async function (assert) {
     this.server.get('v2/partners/:id', (_, req) => {
       return {
         id: req.params.id,
@@ -321,24 +301,12 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
       };
     });
 
-    const partnerPlan = {
-      limitedScans: true,
-      scansLeft: 10,
-    };
-
-    this.server.create('partner/plan', partnerPlan);
-    this.server.get('v2/partners/:id/plan', (schema) => {
-      return serializer(schema['partner/plans'].find(1));
+    this.server.get('v2/partners/:id/plan', () => {
+      return Response(500);
     });
 
-    const clientPlan = {
-      limitedScans: true,
-      scansLeft: 99,
-    };
-
-    this.server.create('partner/partnerclient-plan', clientPlan);
-    this.server.get('v2/partnerclients/:id/plan', (schema) => {
-      return serializer(schema['partner/partnerclientPlans'].find(1));
+    this.server.get('v2/partnerclients/:id/plan', () => {
+      return Response(500);
     });
     await this.owner.lookup('service:partner').load();
 
@@ -346,77 +314,7 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
 
     await render(hbs`<Partner::CreditTransfer @client={{this.client}}/>`);
 
-    // click plus btn
-    await click(this.element.querySelector('[data-test="plus-btn"]'));
-
-    //click transfer credits btn, assumed there is default credits
-    await click(this.element.querySelector(`[data-test='transfer-btn']`));
-
-    assert.dom(`[data-test='credit-transfer-ack']`).exists();
-    assert.dom(`[data-test='credit-transfer-input']`).doesNotExist();
-    assert.equal(
-      this.element.querySelectorAll(
-        `[data-test='partner-credits'] [data-test='row']`
-      ).length,
-      2,
-      'Partner credits has two rows'
-    );
-
-    assert
-      .dom(`[data-test='partner-current-credits-key']`)
-      .hasText(`t:currentCredits:():`);
-    assert
-      .dom(`[data-test='partner-current-credits-value']`)
-      .hasText(
-        `${partnerPlan.scansLeft} t:pluralScans:("itemCount":${partnerPlan.scansLeft})`
-      );
-
-    const defaultInputValue = 1;
-    assert
-      .dom(`[data-test='partner-remaining-credits-key']`)
-      .hasText(`t:remainingCredits:():`);
-    assert
-      .dom(`[data-test='partner-remaining-credits-value']`)
-      .hasText(
-        `${
-          partnerPlan.scansLeft - defaultInputValue
-        } t:pluralScans:("itemCount":${
-          partnerPlan.scansLeft - defaultInputValue
-        })`
-      );
-
-    // Client credits sec
-    assert.equal(
-      this.element.querySelectorAll(
-        `[data-test='client-credits'] [data-test='row']`
-      ).length,
-      3,
-      'Client credits has three rows'
-    );
-
-    assert.dom(`[data-test='client-key']`).hasText(`t:client:():`);
-    assert.dom(`[data-test='client-value']`).hasText(this.client.name);
-    assert
-      .dom(`[data-test='client-current-credits-key']`)
-      .hasText(`t:currentCredits:():`);
-    assert
-      .dom(`[data-test='client-current-credits-value']`)
-      .hasText(
-        `${clientPlan.scansLeft} t:pluralScans:("itemCount":${clientPlan.scansLeft})`
-      );
-
-    assert.dom(`[data-test='new-credits-key']`).hasText(`t:newCredits:():`);
-    assert
-      .dom(`[data-test='new-credits-value']`)
-      .hasText(
-        `${defaultInputValue} t:pluralScans:("itemCount":${defaultInputValue})`
-      );
-
-    assert.equal(
-      this.element.querySelectorAll(`[data-test='action-btns'] button`).length,
-      2
-    );
-    assert.dom(`[data-test='confirm-btn']`).hasText(`t:confirmTransfer:()`);
-    assert.dom(`[data-test='back-btn']`).hasText(`t:back:()`);
+    assert.dom(`[data-test='credit-transfer']`).exists();
+    assert.dom(`[data-test='plus-btn']`).doesNotExist();
   });
 });

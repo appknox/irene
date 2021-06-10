@@ -1,0 +1,80 @@
+<div data-test='credit-transfer-confirm'>
+  <div local-class='partner-credits' data-test='partner-credits'>
+    <div local-class='row' data-test='row'>
+      <div local-class='key' data-test='partner-current-credits-key'>
+        {{t 'currentCredits'}}:</div>
+      <strong local-class='value' data-test='partner-current-credits-value'>
+        {{@partnerPlan.scansLeft}}
+        {{t 'pluralScans' itemCount=@partnerPlan.scansLeft}}
+      </strong>
+    </div>
+    <div local-class='row' data-test='row'>
+      <div local-class='key' data-test='partner-remaining-credits-key'>
+        {{t 'remainingCredits'}}:</div>
+      <strong local-class='value' data-test='partner-remaining-credits-value'>
+        {{@remainingCredits}}
+        {{t 'pluralScans' itemCount=@remainingCredits}}
+      </strong>
+    </div>
+  </div>
+  <div class='divider margin-t-1 margin-b-1'></div>
+
+  <div local-class='client-crdits' data-test='client-credits'>
+    <div local-class='row' data-test='row'>
+      <div local-class='key' data-test='client-key'>
+        {{t 'client'}}:
+      </div>
+      <strong
+        local-class='value {{if @isEmptyTitle 'empty-title'}}'
+        data-test='client-value'
+      >
+        {{#if @isEmptyTitle}}
+          {{t 'noName'}}
+        {{else}}
+          {{@clientName}}
+        {{/if}}
+      </strong>
+    </div>
+    <div local-class='row' data-test='row'>
+      <div local-class='key' data-test='client-current-credits-key'>
+        {{t 'currentCredits'}}:</div>
+      <strong local-class='value' data-test='client-current-credits-value'>
+        {{@clientPlan.scansLeft}}
+        {{t 'pluralScans' itemCount=@clientPlan.scansLeft}}
+      </strong>
+    </div>
+    <div local-class='row' data-test='row'>
+      <div local-class='key' data-test='new-credits-key'>
+        {{t 'newCredits'}}:</div>
+      <strong local-class='value' data-test='new-credits-value'>
+        {{@transferCount}}
+        {{t 'pluralScans' itemCount=@transferCount}}
+      </strong>
+    </div>
+  </div>
+
+  <div local-class='action-btns' data-test='action-btns'>
+    {{#if @tranferCredits}}
+      <button
+        type='button'
+        local-class='transfer-btn'
+        class='is-primary button margin-top margin-right'
+        data-test='confirm-btn'
+        {{on 'click' (perform @tranferCredits)}}
+      >
+        {{t 'confirmTransfer'}}
+      </button>
+    {{/if}}
+    {{#if @toggleMode}}
+      <button
+        type='button'
+        local-class='back-btn'
+        class='button margin-top'
+        data-test='back-btn'
+        {{on 'click' (fn @toggleMode)}}
+      >
+        {{t 'back'}}
+      </button>
+    {{/if}}
+  </div>
+</div>

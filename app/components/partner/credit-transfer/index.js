@@ -54,14 +54,6 @@ export default class PartnerCreditTransferComponent extends Component {
   }
 
   // @computed('partnerPlan', 'transferCount', 'remainingCredits')
-  get isValidNumber() {
-    const transferCount = Number(this.transferCount);
-    return transferCount
-      ? transferCount > 0 &&
-          Number.isInteger(transferCount) &&
-          this.remainingCredits >= 0
-      : false;
-  }
 
   @action
   initializeComp() {

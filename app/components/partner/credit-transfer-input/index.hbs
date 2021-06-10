@@ -1,0 +1,45 @@
+<div local-class='credit-tranfer' data-test='credit-transfer-input'>
+  <div local-class='transferable-credits' data-test='transferable-credits'>
+    {{@partnerPlan.scansLeft}}
+    {{t 'pluralScans' itemCount=@partnerPlan.scansLeft}}
+  </div>
+  {{fa-icon 'long-arrow-down' local-class='arrow-right-icon'}}
+  <div local-class='client'>
+    <div
+      local-class='title {{if this.isEmptyTitle 'empty-title'}}'
+      data-test='client-title'
+    >
+      {{#if this.isEmptyTitle}}
+        {{t 'noName'}}
+      {{else}}
+        {{@clientName}}
+      {{/if}}
+    </div>
+    <div local-class='tranfer-count'>
+      <Input
+        local-class='input-count'
+        @type='number'
+        @min={{1}}
+        @max={{@partnerPlan.scansLeft}}
+        @value={{@transferCount}}
+        autofocus='autofocus'
+        data-test='data-input-count'
+      />
+      <span local-class='credit-type' data-test='credit-type'>
+        {{t 'pluralScans' itemCount=@transferCount}}
+      </span>
+    </div>
+  </div>
+  {{#if @toggleMode}}
+    <button
+      type='button'
+      local-class='tranfer-btn'
+      class='is-primary button'
+      disabled={{not this.isValidNumber}}
+      data-test='transfer-btn'
+      {{on 'click' (fn @toggleMode)}}
+    >
+      {{t 'transferCredits'}}
+    </button>
+  {{/if}}
+</div>
