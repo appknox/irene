@@ -1,7 +1,25 @@
+.credit-transfer {
+  margin: 0 0.35rem;
+}
+
+.credit-transfer-btn {
+  border-radius: 50%;
+}
+
 .client {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto auto;
   align-items: center;
-  column-gap: 1.5rem;
+  column-gap: 1rem;
+  justify-content: center;
+}
+
+.invalid-credits {
+  color: $red;
+  font-size: 0.8rem;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  justify-self: center;
 }
 
 .title {
@@ -19,6 +37,7 @@
     font-style: italic;
   }
 }
+
 .credit-tranfer {
   display: grid;
   align-items: center;
@@ -26,7 +45,7 @@
   row-gap: 1.5rem;
 }
 
-.total-credits {
+.transferable-credits {
   font-size: 1.5rem;
   font-weight: bold;
   color: #0063b2ff;
@@ -39,7 +58,7 @@
 }
 
 .input-count {
-  width: 4rem;
+  width: 8rem;
   height: 2rem;
   border: none;
   border-bottom: 1px solid;
@@ -64,7 +83,39 @@
   font-size: 0.95rem;
 }
 
-.invalid-credits {
-  color: $red;
-  font-size: 0.9rem;
+.disabled-btn {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.row {
+  display: flex;
+  padding: 0.2rem 0;
+}
+
+.key {
+  width: 30%;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+}
+
+.value {
+  width: 70%;
+  display: flex;
+  align-items: center;
+}
+
+.action-btns {
+  display: flex;
+  justify-content: center;
+}
+
+.back-btn {
+  border-color: rgba(#424651, 0.7);
+  color: rgba(#424651, 0.7);
+  &:hover {
+    border-color: rgba(#424651, 1);
+    color: rgba(#424651, 1);
+  }
 }

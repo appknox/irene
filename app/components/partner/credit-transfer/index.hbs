@@ -1,33 +1,33 @@
-<div {{did-insert (fn this.initializeComp)}}>
-  {{#if this.partnerPlan.limitedScans}}
-    {{#if this.clientPlan.limitedScans}}
-      {{#if (eq @partnerPlan.scansLeft 0)}}
-        <span class='button' local-class='disabled'>
-          {{fa-icon 'plus'}}
-          <AttachTooltip @placemnet='top-end'>
-            {{t '0sharableCredits'}}
-          </AttachTooltip>
-        </span>
-      {{else}}
-        <button type='button' {{on 'click' (fn this.toggleModal)}}>
-          {{fa-icon 'plus'}}
-
-          <AttachTooltip @placemnet='top-end'>
-            {{t 'transferCredits'}}
-          </AttachTooltip>
-        </button>
-      {{/if}}
-
-    {{else}}
-      <span class='button' local-class='disabled'>
+{{#if
+  (and this.partner.access.view_plans this.partner.access.transfer_credits)
+}}
+  <div
+    local-class='credit-transfer'
+    ...attributes
+    data-test='credit-transfer'
+    {{did-insert (fn this.initializeComp)}}
+  >
+    {{#if this.partnerPlan.limitedScans}}
+      <button
+        class='is-primary'
+        local-class='credit-transfer-btn {{if
+          this.disablePlusbtn
+          'disabled-btn'
+        }}'
+        data-test='plus-btn' type="button" {{on 'click' (fn this.toggleModal)}}
+      >
         {{fa-icon 'plus'}}
-        <AttachTooltip @placemnet='top-end'>
-          {{t 'perAppClientCredit'}}
+        <AttachTooltip
+          @placemnet='top-end'
+          data-test='tooltip'
+          @id='client-{{@client.id}}-tooltip'
+        >
+          {{this.buttonTooltip}}
         </AttachTooltip>
-      </span>
+      </button>
     {{/if}}
-  {{/if}}
-</div>
+  </div>
+{{/if}}
 
 {{#if this.isShowModal}}
   <AkModal
@@ -36,65 +36,172 @@
     @headerTitle={{t 'creditTransfer'}}
   >
 
-    <div local-class='credit-transfer-container'>
+    <div
+      local-class='credit-transfer-container'
+      data-test='credit-transfer-modal'
+    >
 
-      <div local-class='credit-tranfer'>
-        <div local-class='total-credits'>
-          {{this.partnerPlan.scansLeft}}
-          {{#if this.isPerScan}}
+      {{#if this.isEditMode}}
+
+        <div local-class='credit-tranfer' data-test='credit-transfer-input'>
+          <div
+            local-class='transferable-credits'
+            data-test='transferable-credits'
+          >
+            {{this.partnerPlan.scansLeft}}
             {{t 'pluralScans' itemCount=this.partnerPlan.scansLeft}}
-          {{else}}
-            {{t 'pluralApps' itemCount=this.partnerPlan.projectsLimit}}
-          {{/if}}
-        </div>
-        {{fa-icon 'long-arrow-down' local-class='arrow-right-icon'}}
-        <div local-class='client'>
-          <div local-class='title {{if this.isEmptyTitle 'empty-title'}}'>
-            {{#if this.isEmptyTitle}}
-              {{t 'noName'}}
-            {{else}}
-              {{@client.name}}
-            {{/if}}
           </div>
-          <div local-class='tranfer-count'>
-            <Input
-              local-class='input-count'
-              @type='number'
-              @min={{1}}
-              @max={{this.partnerPlan.scansLeft}}
-              @value={{this.transferCount}}
-            />
-            <span local-class='credit-type'>
-              {{#if this.isPerScan}}
-                {{t 'pluralScans' itemCount=this.transferCount}}
+          {{fa-icon 'long-arrow-down' local-class='arrow-right-icon'}}
+          <div local-class='client'>
+            <div
+              local-class='title {{if this.isEmptyTitle 'empty-title'}}'
+              data-test='client-title'
+            >
+              {{#if this.isEmptyTitle}}
+                {{t 'noName'}}
               {{else}}
-                {{t 'pluralApps' itemCount=this.transferCount}}
+                {{@client.name}}
               {{/if}}
-            </span>
+            </div>
+            <div local-class='tranfer-count'>
+              <Input
+                local-class='input-count'
+                @type='number'
+                @min={{1}}
+                @max={{this.partnerPlan.scansLeft}}
+                @value={{this.transferCount}}
+                autofocus='autofocus'
+                data-test='data-input-count'
+              />
+              <span local-class='credit-type' data-test='credit-type'>
+                {{t 'pluralScans' itemCount=this.transferCount}}
+              </span>
+            </div>
+            {{!-- {{#unless this.isValidNumber}}
+              <div class='margin-top' local-class='invalid-credits'>
+                Tranferrable count should be between 1 &amp;
+                {{this.partnerPlan.scansLeft}}
+              </div>
+            {{/unless}} --}}
+          </div>
+          <button
+            type='button'
+            local-class='tranfer-btn'
+            class='is-primary button'
+            disabled={{not this.isValidNumber}}
+            data-test='transfer-btn'
+            {{on 'click' (fn this.toggleMode)}}
+          >
+            {{t 'transferCredits'}}
+          </button>
+        </div>
+        {{!-- <div local-class='bal-credits'>
+          {{t 'remaining'}}
+          :
+          <span class='bold'>
+            {{#if (gt this.balCredits 0)}}
+              {{this.balCredits}}
+              {{t 'pluralScans' itemCount=this.balCredits}}
+            {{else}}
+              <span local-class='invalid-credits'>{{t 'invalidCredits'}}</span>
+            {{/if}}
+          </span>
+        </div> --}}
+
+      {{else}}
+        <div local-class='credit-transfer-ack' data-test='credit-transfer-ack'>
+          <div local-class='partner-credits' data-test='partner-credits'>
+            <div local-class='row' data-test='row'>
+              <div local-class='key' data-test='partner-current-credits-key'>
+                {{t 'currentCredits'}}:</div>
+              <strong
+                local-class='value'
+                data-test='partner-current-credits-value'
+              >
+                {{this.partnerPlan.scansLeft}}
+                {{t 'pluralScans' itemCount=this.partnerPlan.scansLeft}}
+              </strong>
+            </div>
+            <div local-class='row' data-test='row'>
+              <div local-class='key' data-test='partner-remaining-credits-key'>
+                {{t 'remainingCredits'}}:</div>
+              <strong
+                local-class='value'
+                data-test='partner-remaining-credits-value'
+              >
+                {{this.remainingCredits}}
+                {{t 'pluralScans' itemCount=this.remainingCredits}}
+              </strong>
+            </div>
+          </div>
+          <div class='divider margin-t-1 margin-b-1'></div>
+
+          <div local-class='client-crdits' data-test='client-credits'>
+            <div local-class='row' data-test='row'>
+              <div local-class='key' data-test='client-key'>
+                {{t 'client'}}:
+              </div>
+              <strong
+                local-class='value {{if this.isEmptyTitle 'empty-title'}}'
+                data-test='client-value'
+              >
+                {{#if this.isEmptyTitle}}
+                  {{t 'noName'}}
+                {{else}}
+                  {{@client.name}}
+                {{/if}}
+              </strong>
+            </div>
+            <div local-class='row' data-test='row'>
+              <div local-class='key' data-test='client-current-credits-key'>
+                {{t 'currentCredits'}}:</div>
+              <strong
+                local-class='value'
+                data-test='client-current-credits-value'
+              >
+                {{this.clientPlan.scansLeft}}
+                {{t 'pluralScans' itemCount=this.clientPlan.scansLeft}}
+              </strong>
+            </div>
+            <div local-class='row' data-test='row'>
+              <div local-class='key' data-test='new-credits-key'>
+                {{t 'newCredits'}}:</div>
+              <strong local-class='value' data-test='new-credits-value'>
+                {{!-- <Input
+                          local-class='input-count'
+                          @type='number'
+                          @min={{1}}
+                          @max={{this.partnerPlan.scansLeft}}
+                          @value={{this.transferCount}}
+                        /> --}}
+                {{this.transferCount}}
+                {{t 'pluralScans' itemCount=this.transferCount}}
+              </strong>
+            </div>
+          </div>
+
+          <div local-class='action-btns' data-test='action-btns'>
+            <button
+              type='button'
+              local-class='transfer-btn'
+              class='is-primary button margin-top margin-right'
+              data-test='confirm-btn'
+              {{on 'click' (perform this.tranferCredits)}}
+            >
+              {{t 'confirmTransfer'}}
+            </button>
+            <button
+              type='button'
+              local-class='back-btn'
+              class='button margin-top'
+              data-test='back-btn'
+              {{on 'click' (fn this.toggleMode)}}
+            >
+              {{t 'back'}}
+            </button>
           </div>
         </div>
-        <button
-          type='button'
-          local-class='tranfer-btn'
-          class='is-primary button'
-          disabled={{not this.isValidNumber}}
-          {{on 'click' (perform this.tranferCredits)}}
-        >
-          {{t 'transferCredits'}}
-        </button>
-      </div>
-      <div local-class='bal-credits'>
-        {{t 'remaining'}}
-        :
-        <span class='bold'>
-          {{#if (gt this.balCredits 0)}}
-            {{this.balCredits}}
-            {{t 'pluralScans' itemCount=this.balCredits}}
-          {{else}}
-            <span local-class='invalid-credits'>{{t 'invalidCredits'}}</span>
-          {{/if}}
-        </span>
-      </div>
+      {{/if}}
     </div>
   </AkModal>
 {{/if}}

@@ -42,7 +42,12 @@
               data-test-payment-plan
               @clientId={{@client.id}}
             />
-            <Partner::CreditTransfer @client={{@client}} />
+            {{#if this.partner.access.transfer_credits}}
+              <Partner::CreditTransfer
+                @client={{@client}}
+                data-test='credit-transfer'
+              />
+            {{/if}}
           </div>
         </div>
       {{/if}}

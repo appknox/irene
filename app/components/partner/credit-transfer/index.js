@@ -10,10 +10,12 @@ export default class PartnerCreditTransferComponent extends Component {
   @service ajax;
   @service me;
   @service('notifications') notify;
+  @service partner;
+  @service intl;
 
   @tracked availableCredits = 0;
 
-  @tracked transferCount = 0;
+  @tracked transferCount = 1;
 
   @tracked isPerScan = true;
 
@@ -23,24 +25,41 @@ export default class PartnerCreditTransferComponent extends Component {
 
   @tracked clientPlan = {};
 
+  @tracked isEditMode = true;
+
   get isEmptyTitle() {
     return isEmpty(this.args.client.name);
   }
 
   // @computed('availableCredits', 'transferCount')
-  get balCredits() {
+  get remainingCredits() {
     return (
       parseInt(this.partnerPlan.scansLeft) - (parseInt(this.transferCount) || 0)
     );
   }
 
-  // @computed('partnerPlan', 'transferCount', 'balCredits')
+  get buttonTooltip() {
+    let tooltipMsg = this.intl.t('transferCredits');
+    if (this.partnerPlan.scansLeft === 0) {
+      tooltipMsg = this.intl.t('0sharableCredits');
+    }
+    if (!this.clientPlan.limitedScans) {
+      tooltipMsg = this.intl.t('perAppCreditTransferStatus');
+    }
+    return tooltipMsg;
+  }
+
+  get disablePlusbtn() {
+    return this.partnerPlan.scansLeft === 0 || !this.clientPlan.limitedScans;
+  }
+
+  // @computed('partnerPlan', 'transferCount', 'remainingCredits')
   get isValidNumber() {
     const transferCount = Number(this.transferCount);
     return transferCount
       ? transferCount > 0 &&
           Number.isInteger(transferCount) &&
-          this.balCredits >= 0
+          this.remainingCredits >= 0
       : false;
   }
 
@@ -52,13 +71,23 @@ export default class PartnerCreditTransferComponent extends Component {
 
   @action
   toggleModal() {
-    this.isShowModal = !this.isShowModal;
+    if (!this.disablePlusbtn) {
+      this.isShowModal = !this.isShowModal;
+    }
+    this.resetToDefault();
+  }
+
+  @action
+  toggleMode() {
+    this.isEditMode = !this.isEditMode;
   }
 
   @task(function* () {
     try {
       this.partnerPlan = yield this.store.queryRecord('partner/plan', {});
-    } catch {
+      console.log('partnerPlan', this.partnerPlan);
+    } catch (err) {
+      console.log('err', err);
       return;
     }
   })
@@ -66,11 +95,14 @@ export default class PartnerCreditTransferComponent extends Component {
 
   @task(function* () {
     try {
+      console.log('this.args.client', this.args.client);
       this.clientPlan = yield this.store.find(
         'partner/partnerclient-plan',
         this.args.client.id
       );
-    } catch {
+      console.log('this.clientPlan', this.clientPlan);
+    } catch (err) {
+      console.log('er', err);
       return;
     }
   })
@@ -78,20 +110,30 @@ export default class PartnerCreditTransferComponent extends Component {
 
   @task(function* () {
     try {
-      yield this.ajax.put(`partnerclients/${this.args.client.id}/add_credits`, {
-        namespace: 'api/v2',
-        data: {
-          credits_to_add: parseInt(this.transferCount),
-        },
-      });
+      // yield this.ajax.put(
+      //   `partnerclients/${this.args.client.id}/transfer_scans`,
+      //   {
+      //     namespace: 'api/v2',
+      //     data: {
+      //       credits_to_add: parseInt(this.transferCount),
+      //     },
+      //   }
+      // );
+      yield this.clientPlan.transferScans(this.transferCount);
       this.notify.success('Credits transferred to cilent');
       // Refresh credit balance for partner & client
-      yield this.store.find('partnerclient', this.args.client.id);
-      yield this.store.queryRecord('partner-credit-stat', {});
-      this.args.onClose();
+      this.fetchClientPlan.perform();
+      this.fetchPartnerPlan.perform();
+      this.toggleModal();
+      this.resetToDefault();
     } catch {
       this.notify.error(`Couldn't transfer credits, please try again later!`);
     }
   })
   tranferCredits;
+
+  resetToDefault() {
+    this.transferCount = 1;
+    this.isEditMode = true;
+  }
 }
