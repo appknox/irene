@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+
 export default class ApplicationRoute extends Route {
   @service headData;
   @service intl;
@@ -10,11 +11,13 @@ export default class ApplicationRoute extends Route {
   }
 
   afterModel() {
-    this.headData.title = "Appknox";
+    this.headData.title = this.whitelabel.name;
     this.headData.favicon = this.whitelabel.favicon;
   }
 
-  setupController(controller) {
-    controller.set('whitelabelName', this.whitelabel.name);
+  model() {
+    return {
+      body_classes: `theme-${this.whitelabel.theme}`,
+    };
   }
 }
