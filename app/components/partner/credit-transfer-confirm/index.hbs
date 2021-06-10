@@ -25,13 +25,13 @@
         {{t 'client'}}:
       </div>
       <strong
-        local-class='value {{if @isEmptyTitle 'empty-title'}}'
+        local-class='value {{unless @clientName 'empty-title'}}'
         data-test='client-value'
       >
-        {{#if @isEmptyTitle}}
-          {{t 'noName'}}
-        {{else}}
+        {{#if @clientName}}
           {{@clientName}}
+        {{else}}
+          {{t 'noName'}}
         {{/if}}
       </strong>
     </div>
@@ -71,7 +71,7 @@
         local-class='back-btn'
         class='button margin-top'
         data-test='back-btn'
-        {{on 'click' (fn @toggleMode)}}
+        {{on 'click' @toggleMode}}
       >
         {{t 'back'}}
       </button>

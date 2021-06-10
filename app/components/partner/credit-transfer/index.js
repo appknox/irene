@@ -27,11 +27,10 @@ export default class PartnerCreditTransferComponent extends Component {
 
   @tracked isEditMode = true;
 
-  get isEmptyTitle() {
-    return isEmpty(this.args.client.name);
+  get clientName() {
+    return isEmpty(this.args.client.name) ? null : this.args.client.name;
   }
 
-  // @computed('availableCredits', 'transferCount')
   get remainingCredits() {
     return (
       parseInt(this.partnerPlan.scansLeft) - (parseInt(this.transferCount) || 0)
@@ -52,8 +51,6 @@ export default class PartnerCreditTransferComponent extends Component {
   get disablePlusbtn() {
     return this.partnerPlan.scansLeft === 0 || !this.clientPlan.limitedScans;
   }
-
-  // @computed('partnerPlan', 'transferCount', 'remainingCredits')
 
   @action
   initializeComp() {
@@ -77,9 +74,7 @@ export default class PartnerCreditTransferComponent extends Component {
   @task(function* () {
     try {
       this.partnerPlan = yield this.store.queryRecord('partner/plan', {});
-      console.log('partnerPlan', this.partnerPlan);
-    } catch (err) {
-      console.log('err', err);
+    } catch {
       return;
     }
   })
@@ -87,14 +82,11 @@ export default class PartnerCreditTransferComponent extends Component {
 
   @task(function* () {
     try {
-      console.log('this.args.client', this.args.client);
       this.clientPlan = yield this.store.find(
         'partner/partnerclient-plan',
         this.args.client.id
       );
-      console.log('this.clientPlan', this.clientPlan);
-    } catch (err) {
-      console.log('er', err);
+    } catch {
       return;
     }
   })
@@ -102,24 +94,15 @@ export default class PartnerCreditTransferComponent extends Component {
 
   @task(function* () {
     try {
-      // yield this.ajax.put(
-      //   `partnerclients/${this.args.client.id}/transfer_scans`,
-      //   {
-      //     namespace: 'api/v2',
-      //     data: {
-      //       credits_to_add: parseInt(this.transferCount),
-      //     },
-      //   }
-      // );
       yield this.clientPlan.transferScans(this.transferCount);
-      this.notify.success('Credits transferred to cilent');
+      this.notify.success(this.intl.t('creditTransferSuccess'));
       // Refresh credit balance for partner & client
       this.fetchClientPlan.perform();
       this.fetchPartnerPlan.perform();
       this.toggleModal();
       this.resetToDefault();
     } catch {
-      this.notify.error(`Couldn't transfer credits, please try again later!`);
+      this.notify.error(this.intl.t('creditTransferError'));
     }
   })
   tranferCredits;

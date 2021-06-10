@@ -18,12 +18,14 @@ module(
       });
       this.set('clientName', faker.company.companyName());
       this.set('transferCount', 20);
+      this.set('remainingCredits', 1);
       this.set('toggleMode', () => {});
 
       await render(
         hbs`<Partner::CreditTransferInput
         @partnerPlan={{this.partnerPlan}}
         @transferCount={{this.transferCount}}
+        @remainingCredits={{this.remainingCredits}}
         @clientName={{this.clientName}}
         @toggleMode={{this.toggleMode}}/>`
       );
@@ -86,12 +88,14 @@ module(
       this.set('toggleMode', () => {});
       this.set('transferCount', 21);
       this.set('partnerPlan', { scansLeft: 22 });
+      this.set('remainingCredits', 1);
 
       await render(
         hbs`<Partner::CreditTransferInput
         @toggleMode={{this.toggleMode}}
         @transferCount={{this.transferCount}}
         @partnerPlan={{this.partnerPlan}}
+        @remainingCredits={{this.remainingCredits}}
         />`
       );
 

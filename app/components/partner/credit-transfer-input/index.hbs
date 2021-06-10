@@ -6,24 +6,25 @@
   {{fa-icon 'long-arrow-down' local-class='arrow-right-icon'}}
   <div local-class='client'>
     <div
-      local-class='title {{if this.isEmptyTitle 'empty-title'}}'
+      local-class='title {{unless @clientName 'empty-title'}}'
       data-test='client-title'
     >
-      {{#if this.isEmptyTitle}}
-        {{t 'noName'}}
-      {{else}}
+      {{#if @clientName}}
         {{@clientName}}
+      {{else}}
+        {{t 'noName'}}
       {{/if}}
     </div>
     <div local-class='tranfer-count'>
       <Input
         local-class='input-count'
         @type='number'
-        @min={{1}}
-        @max={{@partnerPlan.scansLeft}}
+        min={{1}}
+        max={{@partnerPlan.scansLeft}}
         @value={{@transferCount}}
         autofocus='autofocus'
         data-test='data-input-count'
+        aria-label='Credit tranfer input'
       />
       <span local-class='credit-type' data-test='credit-type'>
         {{t 'pluralScans' itemCount=@transferCount}}
@@ -35,9 +36,9 @@
       type='button'
       local-class='tranfer-btn'
       class='is-primary button'
-      disabled={{not this.isValidNumber}}
+      disabled={{not this.isValidInput}}
       data-test='transfer-btn'
-      {{on 'click' (fn @toggleMode)}}
+      {{on 'click' @toggleMode}}
     >
       {{t 'transferCredits'}}
     </button>

@@ -5,7 +5,7 @@
     local-class='credit-transfer'
     ...attributes
     data-test='credit-transfer'
-    {{did-insert (fn this.initializeComp)}}
+    {{did-insert this.initializeComp}}
   >
     {{#if this.partnerPlan.limitedScans}}
       <button
@@ -16,7 +16,7 @@
         }}'
         data-test='plus-btn'
         type='button'
-        {{on 'click' (fn this.toggleModal)}}
+        {{on 'click' this.toggleModal}}
       >
         {{fa-icon 'plus'}}
         <AttachTooltip
@@ -49,7 +49,7 @@
           @transferCount={{this.transferCount}}
           @remainingCredits={{this.remainingCredits}}
           @toggleMode={{this.toggleMode}}
-          @clientName={{@client.name}}
+          @clientName={{this.clientName}}
         />
 
       {{else}}
@@ -57,8 +57,7 @@
           @partnerPlan={{this.partnerPlan}}
           @clientPlan={{this.clientPlan}}
           @remainingCredits={{this.remainingCredits}}
-          @isEmptyTitle={{this.isEmptyTitle}}
-          @clientName={{@client.name}}
+          @clientName={{this.clientName}}
           @transferCount={{this.transferCount}}
           @tranferCredits={{this.tranferCredits}}
           @toggleMode={{this.toggleMode}}

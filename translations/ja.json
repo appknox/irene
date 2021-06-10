@@ -852,5 +852,7 @@
   "client": "Client",
   "currentCredits": "Current Credits",
   "newCredits": "New Credits",
-  "confirmTransfer": "Confirm Transfer"
+  "confirmTransfer": "Confirm Transfer",
+  "creditTransferSuccess": "Credits transferred to the client successfully",
+  "creditTransferError": "Couldn't transfer credits, please try again later!"
 }
