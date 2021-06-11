@@ -255,7 +255,7 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
       .hasText(`t:transferCredits:()`);
   });
 
-  test('it open modal whien clicking at plus btn and renders input component', async function (assert) {
+  test('it should open modal when clicking at plus btn and renders input component', async function (assert) {
     this.server.get('v2/partners/:id', (_, req) => {
       return {
         id: req.params.id,
@@ -285,9 +285,212 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
 
     await click(this.element.querySelector('[data-test="plus-btn"]'));
 
-    assert.dom('[data-test="credit-transfer-modal"]').exists();
-    assert.dom(`[data-test='credit-transfer-input']`).exists();
-    assert.dom(`[data-test='credit-transfer-confirm']`).doesNotExist();
+    assert.dom('[data-test="credit-transfer-modal"]').exists('Modal shown');
+    assert
+      .dom(`[data-test='credit-transfer-input']`)
+      .exists('Input screen rendered by default');
+    assert
+      .dom(`[data-test='credit-transfer-confirm']`)
+      .doesNotExist(`Confirm screen isn't visible`);
+  });
+
+  test('it should open confirm screen after clicking at transfer credits btn', async function (assert) {
+    this.server.get('v2/partners/:id', (_, req) => {
+      return {
+        id: req.params.id,
+        access: {
+          view_plans: true,
+          transfer_credits: true,
+        },
+      };
+    });
+
+    this.server.create('partner/plan', { limitedScans: true, scansLeft: 10 });
+    this.server.get('v2/partners/:id/plan', (schema) => {
+      return serializer(schema['partner/plans'].find(1));
+    });
+
+    this.server.create('partner/partnerclient-plan', {
+      limitedScans: true,
+    });
+    this.server.get('v2/partnerclients/:id/plan', (schema) => {
+      return serializer(schema['partner/partnerclientPlans'].find(1));
+    });
+    await this.owner.lookup('service:partner').load();
+
+    this.set('client', this.server.create('partner/partnerclient'));
+
+    await render(hbs`<Partner::CreditTransfer @client={{this.client}}/>`);
+
+    await click(this.element.querySelector('[data-test="plus-btn"]'));
+
+    assert.dom('[data-test="credit-transfer-modal"]').exists('Modal opened');
+    assert
+      .dom(`[data-test='credit-transfer-input']`)
+      .exists('Input screen shown by default');
+    assert
+      .dom(`[data-test='credit-transfer-confirm']`)
+      .doesNotExist(`Confirm screen is not visible by default`);
+    await click(this.element.querySelector(`[data-test='transfer-btn']`));
+    assert
+      .dom(`[data-test='credit-transfer-confirm']`)
+      .exists(`Confirm screen visible after hit tranfer credits btn`);
+  });
+
+  test('it should show input screen after clicking back btn', async function (assert) {
+    this.server.get('v2/partners/:id', (_, req) => {
+      return {
+        id: req.params.id,
+        access: {
+          view_plans: true,
+          transfer_credits: true,
+        },
+      };
+    });
+
+    this.server.create('partner/plan', { limitedScans: true, scansLeft: 10 });
+    this.server.get('v2/partners/:id/plan', (schema) => {
+      return serializer(schema['partner/plans'].find(1));
+    });
+
+    this.server.create('partner/partnerclient-plan', {
+      limitedScans: true,
+    });
+    this.server.get('v2/partnerclients/:id/plan', (schema) => {
+      return serializer(schema['partner/partnerclientPlans'].find(1));
+    });
+    await this.owner.lookup('service:partner').load();
+
+    this.set('client', this.server.create('partner/partnerclient'));
+
+    await render(hbs`<Partner::CreditTransfer @client={{this.client}}/>`);
+
+    await click(this.element.querySelector('[data-test="plus-btn"]'));
+
+    assert.dom('[data-test="credit-transfer-modal"]').exists('Modal opened');
+    assert
+      .dom(`[data-test='credit-transfer-input']`)
+      .exists('Input screen shown by default');
+    assert
+      .dom(`[data-test='credit-transfer-confirm']`)
+      .doesNotExist(`Confirm screen isn't visible by default`);
+    await click(this.element.querySelector(`[data-test='transfer-btn']`));
+    assert
+      .dom(`[data-test='credit-transfer-confirm']`)
+      .exists('Confirm screen shown after hit transfer credits btn');
+
+    await click(this.element.querySelector(`[data-test='back-btn']`));
+
+    assert
+      .dom(`[data-test='credit-transfer-input']`)
+      .exists('Input screen shown after click at back btn from confirm screen');
+    assert
+      .dom(`[data-test='credit-transfer-confirm']`)
+      .doesNotExist(`Confirm screen isn't rendering`);
+  });
+
+  test('it should close modal after hit confirm transfer btn', async function (assert) {
+    this.server.get('v2/partners/:id', (_, req) => {
+      return {
+        id: req.params.id,
+        access: {
+          view_plans: true,
+          transfer_credits: true,
+        },
+      };
+    });
+
+    this.server.create('partner/plan', { limitedScans: true, scansLeft: 10 });
+    this.server.get('v2/partners/:id/plan', (schema) => {
+      return serializer(schema['partner/plans'].find(1));
+    });
+
+    this.server.create('partner/partnerclient-plan', {
+      limitedScans: true,
+    });
+    this.server.get('v2/partnerclients/:id/plan', (schema) => {
+      return serializer(schema['partner/partnerclientPlans'].find(1));
+    });
+    this.server.post('v2/partnerclients/:id/transfer_scans', (schema) => {
+      return serializer(schema['partner/partnerclientPlans'].find(1));
+    });
+    await this.owner.lookup('service:partner').load();
+
+    this.set('client', this.server.create('partner/partnerclient'));
+
+    await render(hbs`<Partner::CreditTransfer @client={{this.client}}/>`);
+
+    await click(this.element.querySelector('[data-test="plus-btn"]'));
+
+    assert.dom('[data-test="credit-transfer-modal"]').exists('Modal opened');
+    assert
+      .dom(`[data-test='credit-transfer-input']`)
+      .exists('Input screen shown by default');
+    assert
+      .dom(`[data-test='credit-transfer-confirm']`)
+      .doesNotExist(`Confirm screen isn't visible by default`);
+    await click(this.element.querySelector(`[data-test='transfer-btn']`));
+    assert
+      .dom(`[data-test='credit-transfer-confirm']`)
+      .exists('Confirm screen shown after hit transfer credits btn');
+
+    await click(this.element.querySelector(`[data-test='confirm-btn']`));
+
+    assert
+      .dom('[data-test="credit-transfer-modal"]')
+      .doesNotExist('Modal closed');
+  });
+
+  test('it should not close modal after hit confirm transfer btn, if error occured', async function (assert) {
+    this.server.get('v2/partners/:id', (_, req) => {
+      return {
+        id: req.params.id,
+        access: {
+          view_plans: true,
+          transfer_credits: true,
+        },
+      };
+    });
+
+    this.server.create('partner/plan', { limitedScans: true, scansLeft: 10 });
+    this.server.get('v2/partners/:id/plan', (schema) => {
+      return serializer(schema['partner/plans'].find(1));
+    });
+
+    this.server.create('partner/partnerclient-plan', {
+      limitedScans: true,
+    });
+    this.server.get('v2/partnerclients/:id/plan', (schema) => {
+      return serializer(schema['partner/partnerclientPlans'].find(1));
+    });
+    this.server.post('v2/partnerclients/:id/transfer_scans', () => {
+      return Response(500);
+    });
+    await this.owner.lookup('service:partner').load();
+
+    this.set('client', this.server.create('partner/partnerclient'));
+
+    await render(hbs`<Partner::CreditTransfer @client={{this.client}}/>`);
+
+    await click(this.element.querySelector('[data-test="plus-btn"]'));
+
+    assert.dom('[data-test="credit-transfer-modal"]').exists('Modal opened');
+    assert
+      .dom(`[data-test='credit-transfer-input']`)
+      .exists('Input screen shown by default');
+    assert
+      .dom(`[data-test='credit-transfer-confirm']`)
+      .doesNotExist(`Confirm screen isn't visible by default`);
+    await click(this.element.querySelector(`[data-test='transfer-btn']`));
+    assert
+      .dom(`[data-test='credit-transfer-confirm']`)
+      .exists('Confirm screen shown after hit transfer credits btn');
+
+    await click(this.element.querySelector(`[data-test='confirm-btn']`));
+
+    assert
+      .dom('[data-test="credit-transfer-modal"]')
+      .exists('Modal still in open state');
   });
 
   test('it render nothing when error occured', async function (assert) {

@@ -1,13 +1,13 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupIntl } from 'ember-intl/test-support';
-import { render } from '@ember/test-helpers';
+import { click, fillIn, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import faker from 'faker';
-import styles from 'irene/components/partner/credit-transfer-input/index.scss';
+import styles from 'irene/components/partner/credit-transfer/credit-transfer-input/index.scss';
 
 module(
-  'Integration | Component | partner/credit-transfer-input',
+  'Integration | Component | partner/credit-transfer/credit-transfer-input',
   function (hooks) {
     setupRenderingTest(hooks);
     setupIntl(hooks);
@@ -22,7 +22,7 @@ module(
       this.set('toggleMode', () => {});
 
       await render(
-        hbs`<Partner::CreditTransferInput
+        hbs`<Partner::CreditTransfer::CreditTransferInput
         @partnerPlan={{this.partnerPlan}}
         @transferCount={{this.transferCount}}
         @remainingCredits={{this.remainingCredits}}
@@ -50,7 +50,7 @@ module(
       this.set('clientName', '');
 
       await render(
-        hbs`<Partner::CreditTransferInput
+        hbs`<Partner::CreditTransfer::CreditTransferInput
         @clientName={{this.clientName}} />`
       );
 
@@ -65,7 +65,7 @@ module(
       this.set('transferCount', 20);
 
       await render(
-        hbs`<Partner::CreditTransferInput
+        hbs`<Partner::CreditTransfer::CreditTransferInput
         @partnerPlan={{this.partnerPlan}}
         @transferCount={{this.transferCount}} />`
       );
@@ -91,7 +91,7 @@ module(
       this.set('remainingCredits', 1);
 
       await render(
-        hbs`<Partner::CreditTransferInput
+        hbs`<Partner::CreditTransfer::CreditTransferInput
         @toggleMode={{this.toggleMode}}
         @transferCount={{this.transferCount}}
         @partnerPlan={{this.partnerPlan}}
@@ -108,7 +108,7 @@ module(
       this.set('partnerPlan', { scansLeft: 22 });
 
       await render(
-        hbs`<Partner::CreditTransferInput
+        hbs`<Partner::CreditTransfer::CreditTransferInput
         @transferCount={{this.transferCount}}
         @partnerPlan={{this.partnerPlan}}
         />`
@@ -123,7 +123,7 @@ module(
       this.set('partnerPlan', { scansLeft: 22 });
 
       await render(
-        hbs`<Partner::CreditTransferInput
+        hbs`<Partner::CreditTransfer::CreditTransferInput
           @toggleMode={{this.toggleMode}}
         @transferCount={{this.transferCount}}
         @partnerPlan={{this.partnerPlan}}
@@ -131,6 +131,89 @@ module(
       );
 
       assert.dom(`[data-test='transfer-btn']`).hasAttribute('disabled');
+    });
+
+    test('transfer btn state should be changed by transfer count value', async function (assert) {
+      this.set('toggleMode', () => {});
+      this.set('transferCount', 1);
+      this.set('partnerPlan', { scansLeft: 22 });
+      this.set('remainingCredits', 21);
+
+      await render(
+        hbs`<Partner::CreditTransfer::CreditTransferInput
+          @toggleMode={{this.toggleMode}}
+        @transferCount={{this.transferCount}}
+        @partnerPlan={{this.partnerPlan}}
+        @remainingCredits={{this.remainingCredits}}
+        />`
+      );
+
+      assert
+        .dom(`[data-test='transfer-btn']`)
+        .doesNotHaveAttribute(
+          'disabled',
+          `Should be in active state becuase of default value`
+        );
+      const inputBtn = this.element.querySelector(
+        `[data-test='data-input-count']`
+      );
+
+      await fillIn(inputBtn, 0);
+
+      assert
+        .dom(`[data-test='transfer-btn']`)
+        .hasAttribute(
+          'disabled',
+          '',
+          'Should be disabled, since the vlaue is 0'
+        );
+
+      await fillIn(inputBtn, 1.5);
+
+      assert
+        .dom(`[data-test='transfer-btn']`)
+        .hasAttribute(
+          'disabled',
+          '',
+          'Should be in disabled state since the value is not correct'
+        );
+
+      await fillIn(inputBtn, 10);
+
+      assert
+        .dom(`[data-test='transfer-btn']`)
+        .doesNotHaveAttribute(
+          'disabled',
+          'Should be in active state, since the value is correct'
+        );
+
+      await fillIn(inputBtn, '');
+
+      assert
+        .dom(`[data-test='transfer-btn']`)
+        .hasAttribute(
+          'disabled',
+          '',
+          'Should be in disabled state, since the value is not available'
+        );
+    });
+
+    test('it should handle transfer credits btn action', async function (assert) {
+      this.set('toggleMode', () => {
+        assert.ok(true, 'Tranfer Credits btn has clicked');
+      });
+      this.set('transferCount', 1);
+      this.set('remainingCredits', 9);
+
+      await render(
+        hbs`<Partner::CreditTransfer::CreditTransferInput
+          @toggleMode={{this.toggleMode}}
+        @transferCount={{this.transferCount}}
+        @remainingCredits={{this.remainingCredits}}
+        />`
+      );
+
+      await click(this.element.querySelector(`[data-test='transfer-btn']`));
     });
   }
 );

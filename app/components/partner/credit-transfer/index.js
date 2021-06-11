@@ -71,6 +71,11 @@ export default class PartnerCreditTransferComponent extends Component {
     this.isEditMode = !this.isEditMode;
   }
 
+  @action
+  transferCredits() {
+    this.transferCreditsToClient.perform();
+  }
+
   @task(function* () {
     try {
       this.partnerPlan = yield this.store.queryRecord('partner/plan', {});
@@ -105,7 +110,7 @@ export default class PartnerCreditTransferComponent extends Component {
       this.notify.error(this.intl.t('creditTransferError'));
     }
   })
-  tranferCredits;
+  transferCreditsToClient;
 
   resetToDefault() {
     this.transferCount = 1;

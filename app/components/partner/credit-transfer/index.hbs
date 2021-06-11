@@ -44,7 +44,7 @@
     >
 
       {{#if this.isEditMode}}
-        <Partner::CreditTransferInput
+        <Partner::CreditTransfer::CreditTransferInput
           @partnerPlan={{this.partnerPlan}}
           @transferCount={{this.transferCount}}
           @remainingCredits={{this.remainingCredits}}
@@ -53,13 +53,13 @@
         />
 
       {{else}}
-        <Partner::CreditTransferConfirm
+        <Partner::CreditTransfer::CreditTransferConfirm
           @partnerPlan={{this.partnerPlan}}
           @clientPlan={{this.clientPlan}}
           @remainingCredits={{this.remainingCredits}}
           @clientName={{this.clientName}}
           @transferCount={{this.transferCount}}
-          @tranferCredits={{this.tranferCredits}}
+          @transferCredits={{this.transferCredits}}
           @toggleMode={{this.toggleMode}}
         />
       {{/if}}

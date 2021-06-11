@@ -54,13 +54,13 @@
   </div>
 
   <div local-class='action-btns' data-test='action-btns'>
-    {{#if @tranferCredits}}
+    {{#if @transferCredits}}
       <button
         type='button'
         local-class='transfer-btn'
         class='is-primary button margin-top margin-right'
         data-test='confirm-btn'
-        {{on 'click' (perform @tranferCredits)}}
+        {{on 'click' @transferCredits}}
       >
         {{t 'confirmTransfer'}}
       </button>

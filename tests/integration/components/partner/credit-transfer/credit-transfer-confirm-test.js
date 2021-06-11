@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupIntl } from 'ember-intl/test-support';
-import { render } from '@ember/test-helpers';
+import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import faker from 'faker';
 
@@ -15,7 +15,7 @@ module(
       this.set('partnerPlan', { scansLeft: 26 });
       this.set('remainingCredits', 2);
 
-      await render(hbs`<Partner::CreditTransferConfirm
+      await render(hbs`<Partner::CreditTransfer::CreditTransferConfirm
       @partnerPlan={{this.partnerPlan}}
       @remainingCredits={{this.remainingCredits}}/>`);
       assert.equal(
@@ -50,7 +50,7 @@ module(
       this.set('clientName', faker.company.companyName());
       this.set('transferCount', 15);
 
-      await render(hbs`<Partner::CreditTransferConfirm
+      await render(hbs`<Partner::CreditTransfer::CreditTransferConfirm
       @clientPlan={{this.clientPlan}}
       @clientName={{this.clientName}}
       @transferCount={{this.transferCount}}/>`);
@@ -82,11 +82,11 @@ module(
         );
     });
 
-    test('it render confirm & back btns', async function (assert) {
-      this.set('tranferCredits', () => {});
+    test('it should render confirm & back btns', async function (assert) {
+      this.set('transferCredits', () => {});
       this.set('toggleMode', () => {});
-      await render(hbs`<Partner::CreditTransferConfirm
-      @tranferCredits={{this.tranferCredits}}
+      await render(hbs`<Partner::CreditTransfer::CreditTransferConfirm
+      @transferCredits={{this.transferCredits}}
       @toggleMode={{this.toggleMode}}
       />`);
 
@@ -94,10 +94,10 @@ module(
       assert.dom(`[data-test='back-btn']`).hasText(`t:back:()`);
     });
 
-    test('it render only confirm btn', async function (assert) {
-      this.set('tranferCredits', () => {});
-      await render(hbs`<Partner::CreditTransferConfirm
-      @tranferCredits={{this.tranferCredits}}
+    test('it should only render confirm btn', async function (assert) {
+      this.set('transferCredits', () => {});
+      await render(hbs`<Partner::CreditTransfer::CreditTransferConfirm
+      @transferCredits={{this.transferCredits}}
       />`);
 
       assert.dom(`[data-test='confirm-btn']`).exists();
@@ -105,14 +105,36 @@ module(
       assert.dom(`[data-test='back-btn']`).doesNotExist();
     });
 
-    test('it render only back btn', async function (assert) {
+    test('it should only render back btn', async function (assert) {
       this.set('toggleMode', () => {});
-      await render(hbs`<Partner::CreditTransferConfirm
+      await render(hbs`<Partner::CreditTransfer::CreditTransferConfirm
       @toggleMode={{this.toggleMode}}
       />`);
 
       assert.dom(`[data-test='confirm-btn']`).doesNotExist();
       assert.dom(`[data-test='back-btn']`).hasText(`t:back:()`);
+    });
+
+    test('it should handle back btn action', async function (assert) {
+      this.set('toggleMode', () => {
+        assert.ok(true, 'Back btn has clicked');
+      });
+      await render(hbs`<Partner::CreditTransfer::CreditTransferConfirm
+      @toggleMode={{this.toggleMode}}
+      />`);
+
+      click(this.element.querySelector(`[data-test='back-btn']`));
+    });
+
+    test('it should handle confirm transfer btn action', async function (assert) {
+      this.set('transferCredits', () => {
+        assert.ok(true, 'Confirm transfer btn has clicked');
+      });
+      await render(hbs`<Partner::CreditTransfer::CreditTransferConfirm
+      @transferCredits={{this.transferCredits}}
+      />`);
+
+      click(this.element.querySelector(`[data-test='confirm-btn']`));
     });
   }
 );
