@@ -1,5 +1,5 @@
-<div local-class='credit-tranfer' data-test='credit-transfer-input'>
-  <div local-class='transferable-credits' data-test='transferable-credits'>
+<div local-class='credit-tranfer' data-test-credit-transfer-input>
+  <div local-class='transferable-credits' data-test-transferable-credits>
     {{@partnerPlan.scansLeft}}
     {{t 'pluralScans' itemCount=@partnerPlan.scansLeft}}
   </div>
@@ -7,7 +7,7 @@
   <div local-class='client'>
     <div
       local-class='title {{unless @clientName 'empty-title'}}'
-      data-test='client-title'
+      data-test-client-title
     >
       {{#if @clientName}}
         {{@clientName}}
@@ -23,10 +23,10 @@
         max={{@partnerPlan.scansLeft}}
         @value={{@transferCount}}
         autofocus='autofocus'
-        data-test='data-input-count'
+        data-test-data-input-count
         aria-label='Credit tranfer input'
       />
-      <span local-class='credit-type' data-test='credit-type'>
+      <span local-class='credit-type' data-test-credit-type>
         {{t 'pluralScans' itemCount=@transferCount}}
       </span>
     </div>
@@ -37,7 +37,7 @@
       local-class='tranfer-btn'
       class='is-primary button'
       disabled={{not this.isValidInput}}
-      data-test='transfer-btn'
+      data-test-transfer-btn
       {{on 'click' @toggleMode}}
     >
       {{t 'transferCredits'}}

@@ -4,24 +4,26 @@
   <div
     local-class='credit-transfer'
     ...attributes
-    data-test='credit-transfer'
+    data-test-credit-transfer
     {{did-insert this.initializeComp}}
   >
     {{#if this.partnerPlan.limitedScans}}
       <button
-        class='is-primary'
+        class='button is-default'
         local-class='credit-transfer-btn {{if
           this.disablePlusbtn
           'disabled-btn'
         }}'
-        data-test='plus-btn'
+        data-test-plus-btn
         type='button'
         {{on 'click' this.toggleModal}}
       >
         {{fa-icon 'plus'}}
+        &nbsp;
+        {{t 'transferCredits'}}
         <AttachTooltip
           @placemnet='top-end'
-          data-test='tooltip'
+          data-test-tooltip
           @id='client-{{@client.id}}-tooltip'
         >
           {{this.buttonTooltip}}
@@ -40,7 +42,7 @@
 
     <div
       local-class='credit-transfer-container'
-      data-test='credit-transfer-modal'
+      data-test-credit-transfer-modal
     >
 
       {{#if this.isEditMode}}

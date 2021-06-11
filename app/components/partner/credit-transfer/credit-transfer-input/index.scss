@@ -39,7 +39,7 @@
 .transferable-credits {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #0063b2ff;
+  color: $primary-color;
   text-align: center;
 }
 
@@ -52,17 +52,18 @@
   width: 8rem;
   height: 2rem;
   border: none;
-  border-bottom: 1px solid;
-  color: #0063b2ff;
+  border-bottom: 1px solid #000;
+  color: $primary-color;
   font-size: 1.5rem;
   text-align: center;
   font-weight: bold;
 }
 
 .credit-type {
-  font-size: 0.95em;
-  color: #0063b2ff;
   width: 3em;
+  text-transform: lowercase;
+  font-size: 1rem;
+  font-weight: bold;
 }
 
 .tranfer-btn {

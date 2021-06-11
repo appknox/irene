@@ -1,17 +1,17 @@
-<div data-test='credit-transfer-confirm'>
-  <div local-class='partner-credits' data-test='partner-credits'>
-    <div local-class='row' data-test='row'>
-      <div local-class='key' data-test='partner-current-credits-key'>
+<div data-test-credit-transfer-confirm>
+  <div local-class='partner-credits' data-test-partner-credits>
+    <div local-class='row' data-test-row>
+      <div local-class='key' data-test-partner-current-credits-key>
         {{t 'currentCredits'}}:</div>
-      <strong local-class='value' data-test='partner-current-credits-value'>
+      <strong local-class='value' data-test-partner-current-credits-value>
         {{@partnerPlan.scansLeft}}
         {{t 'pluralScans' itemCount=@partnerPlan.scansLeft}}
       </strong>
     </div>
-    <div local-class='row' data-test='row'>
-      <div local-class='key' data-test='partner-remaining-credits-key'>
+    <div local-class='row' data-test-row>
+      <div local-class='key' data-test-partner-remaining-credits-key>
         {{t 'remainingCredits'}}:</div>
-      <strong local-class='value' data-test='partner-remaining-credits-value'>
+      <strong local-class='value' data-test-partner-remaining-credits-value>
         {{@remainingCredits}}
         {{t 'pluralScans' itemCount=@remainingCredits}}
       </strong>
@@ -19,14 +19,14 @@
   </div>
   <div class='divider margin-t-1 margin-b-1'></div>
 
-  <div local-class='client-crdits' data-test='client-credits'>
-    <div local-class='row' data-test='row'>
-      <div local-class='key' data-test='client-key'>
+  <div local-class='client-crdits' data-test-client-credits>
+    <div local-class='row' data-test-row>
+      <div local-class='key' data-test-client-key>
         {{t 'client'}}:
       </div>
       <strong
         local-class='value {{unless @clientName 'empty-title'}}'
-        data-test='client-value'
+        data-test-client-value
       >
         {{#if @clientName}}
           {{@clientName}}
@@ -35,31 +35,31 @@
         {{/if}}
       </strong>
     </div>
-    <div local-class='row' data-test='row'>
-      <div local-class='key' data-test='client-current-credits-key'>
+    <div local-class='row' data-test-row>
+      <div local-class='key' data-test-client-current-credits-key>
         {{t 'currentCredits'}}:</div>
-      <strong local-class='value' data-test='client-current-credits-value'>
+      <strong local-class='value' data-test-client-current-credits-value>
         {{@clientPlan.scansLeft}}
         {{t 'pluralScans' itemCount=@clientPlan.scansLeft}}
       </strong>
     </div>
-    <div local-class='row' data-test='row'>
-      <div local-class='key' data-test='new-credits-key'>
+    <div local-class='row' data-test-row>
+      <div local-class='key' data-test-new-credits-key>
         {{t 'newCredits'}}:</div>
-      <strong local-class='value' data-test='new-credits-value'>
+      <strong local-class='value' data-test-new-credits-value>
         {{@transferCount}}
         {{t 'pluralScans' itemCount=@transferCount}}
       </strong>
     </div>
   </div>
 
-  <div local-class='action-btns' data-test='action-btns'>
+  <div local-class='action-btns' data-test-action-btns>
     {{#if @transferCredits}}
       <button
         type='button'
         local-class='transfer-btn'
         class='is-primary button margin-top margin-right'
-        data-test='confirm-btn'
+        data-test-confirm-btn
         {{on 'click' @transferCredits}}
       >
         {{t 'confirmTransfer'}}
@@ -69,8 +69,8 @@
       <button
         type='button'
         local-class='back-btn'
-        class='button margin-top'
-        data-test='back-btn'
+        class='button margin-top is-default'
+        data-test-back-btn
         {{on 'click' @toggleMode}}
       >
         {{t 'back'}}

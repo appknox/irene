@@ -31,19 +31,19 @@ module(
       );
 
       assert
-        .dom(`[data-test='transferable-credits']`)
+        .dom(`[data-test-transferable-credits]`)
         .hasText(
           `${this.partnerPlan.scansLeft} t:pluralScans:("itemCount":${this.partnerPlan.scansLeft})`
         );
-      assert.dom(`[data-test='client-title']`).hasText(this.clientName);
+      assert.dom(`[data-test-client-title]`).hasText(this.clientName);
       assert
-        .dom(`[data-test='data-input-count']`)
+        .dom(`[data-test-data-input-count]`)
         .hasValue(`${this.transferCount}`);
       assert
-        .dom(`[data-test='credit-type']`)
+        .dom(`[data-test-credit-type]`)
         .hasText(`t:pluralScans:("itemCount":${this.transferCount})`);
-      assert.dom(`[data-test='transfer-btn']`).hasText(`t:transferCredits:()`);
-      assert.dom(`[data-test='transfer-btn']`).doesNotHaveAttribute(`disabled`);
+      assert.dom(`[data-test-transfer-btn]`).hasText(`t:transferCredits:()`);
+      assert.dom(`[data-test-transfer-btn]`).doesNotHaveAttribute(`disabled`);
     });
 
     test('it renders empty client name', async function (assert) {
@@ -54,8 +54,8 @@ module(
         @clientName={{this.clientName}} />`
       );
 
-      assert.dom(`[data-test='client-title']`).hasClass(styles['empty-title']);
-      assert.dom(`[data-test='client-title']`).hasText(`t:noName:()`);
+      assert.dom(`[data-test-client-title]`).hasClass(styles['empty-title']);
+      assert.dom(`[data-test-client-title]`).hasText(`t:noName:()`);
     });
 
     test('it renders with input box', async function (assert) {
@@ -71,16 +71,16 @@ module(
       );
 
       assert
-        .dom(`[data-test='data-input-count']`)
+        .dom(`[data-test-data-input-count]`)
         .hasValue(`${this.transferCount}`);
       assert.equal(
-        this.element.querySelector(`[data-test='data-input-count']`).max,
+        this.element.querySelector(`[data-test-data-input-count]`).max,
         this.partnerPlan.scansLeft,
         'Input has max limit equals to partner scans left'
       );
 
       assert
-        .dom(`[data-test='credit-type']`)
+        .dom(`[data-test-credit-type]`)
         .hasText(`t:pluralScans:("itemCount":${this.transferCount})`);
     });
 
@@ -99,8 +99,8 @@ module(
         />`
       );
 
-      assert.dom(`[data-test='transfer-btn']`).doesNotHaveAttribute('disabled');
-      assert.dom(`[data-test='transfer-btn']`).hasText(`t:transferCredits:()`);
+      assert.dom(`[data-test-transfer-btn]`).doesNotHaveAttribute('disabled');
+      assert.dom(`[data-test-transfer-btn]`).hasText(`t:transferCredits:()`);
     });
 
     test('it should not render transfer btn', async function (assert) {
@@ -114,7 +114,7 @@ module(
         />`
       );
 
-      assert.dom(`[data-test='transfer-btn']`).doesNotExist();
+      assert.dom(`[data-test-transfer-btn]`).doesNotExist();
     });
 
     test('it should render transfer btn with disabled state', async function (assert) {
@@ -130,7 +130,7 @@ module(
         />`
       );
 
-      assert.dom(`[data-test='transfer-btn']`).hasAttribute('disabled');
+      assert.dom(`[data-test-transfer-btn]`).hasAttribute('disabled');
     });
 
     test('transfer btn state should be changed by transfer count value', async function (assert) {
@@ -149,19 +149,19 @@ module(
       );
 
       assert
-        .dom(`[data-test='transfer-btn']`)
+        .dom(`[data-test-transfer-btn]`)
         .doesNotHaveAttribute(
           'disabled',
           `Should be in active state becuase of default value`
         );
       const inputBtn = this.element.querySelector(
-        `[data-test='data-input-count']`
+        `[data-test-data-input-count]`
       );
 
       await fillIn(inputBtn, 0);
 
       assert
-        .dom(`[data-test='transfer-btn']`)
+        .dom(`[data-test-transfer-btn]`)
         .hasAttribute(
           'disabled',
           '',
@@ -171,7 +171,7 @@ module(
       await fillIn(inputBtn, 1.5);
 
       assert
-        .dom(`[data-test='transfer-btn']`)
+        .dom(`[data-test-transfer-btn]`)
         .hasAttribute(
           'disabled',
           '',
@@ -181,7 +181,7 @@ module(
       await fillIn(inputBtn, 10);
 
       assert
-        .dom(`[data-test='transfer-btn']`)
+        .dom(`[data-test-transfer-btn]`)
         .doesNotHaveAttribute(
           'disabled',
           'Should be in active state, since the value is correct'
@@ -190,7 +190,7 @@ module(
       await fillIn(inputBtn, '');
 
       assert
-        .dom(`[data-test='transfer-btn']`)
+        .dom(`[data-test-transfer-btn]`)
         .hasAttribute(
           'disabled',
           '',
@@ -213,7 +213,7 @@ module(
         />`
       );
 
-      await click(this.element.querySelector(`[data-test='transfer-btn']`));
+      await click(this.element.querySelector(`[data-test-transfer-btn]`));
     });
   }
 );

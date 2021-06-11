@@ -37,7 +37,7 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
     });
     await this.owner.lookup('service:partner').load();
     await render(hbs`<Partner::CreditTransfer />`);
-    assert.dom('[data-test="credit-transfer"]').doesNotExist();
+    assert.dom('[data-test-credit-transfer]').doesNotExist();
   });
 
   test('it render nothing when partner view_plans: true, transfer_credits: false', async function (assert) {
@@ -52,7 +52,7 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
     });
     await this.owner.lookup('service:partner').load();
     await render(hbs`<Partner::CreditTransfer />`);
-    assert.dom('[data-test="credit-transfer"]').doesNotExist();
+    assert.dom('[data-test-credit-transfer]').doesNotExist();
   });
 
   test('it render nothing when partner view_plans: false, transfer_credits: false', async function (assert) {
@@ -67,7 +67,7 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
     });
     await this.owner.lookup('service:partner').load();
     await render(hbs`<Partner::CreditTransfer />`);
-    assert.dom('[data-test="credit-transfer"]').doesNotExist();
+    assert.dom('[data-test-credit-transfer]').doesNotExist();
   });
 
   test('it render nothing when partner access privilege is not set', async function (assert) {
@@ -79,7 +79,7 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
     });
     await this.owner.lookup('service:partner').load();
     await render(hbs`<Partner::CreditTransfer />`);
-    assert.dom('[data-test="credit-transfer"]').doesNotExist();
+    assert.dom('[data-test-credit-transfer]').doesNotExist();
   });
 
   test('it render DOM only when partner partner view_plans: true, transfer_credits: true', async function (assert) {
@@ -94,7 +94,7 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
     });
     await this.owner.lookup('service:partner').load();
     await render(hbs`<Partner::CreditTransfer />`);
-    assert.dom('[data-test="credit-transfer"]').exists();
+    assert.dom('[data-test-credit-transfer]').exists();
   });
 
   test('it should not render plus btn, if partner plan is per app', async function (assert) {
@@ -116,8 +116,8 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
     });
     await this.owner.lookup('service:partner').load();
     await render(hbs`<Partner::CreditTransfer />`);
-    assert.dom('[data-test="credit-transfer"]').exists();
-    assert.dom('[data-test="plus-btn"]').doesNotExist();
+    assert.dom('[data-test-credit-transfer]').exists();
+    assert.dom('[data-test-plus-btn]').doesNotExist();
   });
 
   test('it render plus btn, if partner plan is per scan', async function (assert) {
@@ -139,8 +139,8 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
     });
     await this.owner.lookup('service:partner').load();
     await render(hbs`<Partner::CreditTransfer />`);
-    assert.dom('[data-test="credit-transfer"]').exists();
-    assert.dom('[data-test="plus-btn"]').exists();
+    assert.dom('[data-test-credit-transfer]').exists();
+    assert.dom('[data-test-plus-btn]').exists();
   });
 
   test('it render plus btn with disabled state, if client plan is per app', async function (assert) {
@@ -172,8 +172,8 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
     this.set('client', this.server.create('partner/partnerclient'));
 
     await render(hbs`<Partner::CreditTransfer @client={{this.client}}/>`);
-    assert.dom('[data-test="plus-btn"]').exists();
-    assert.dom('[data-test="plus-btn"]').hasClass(styles['disabled-btn']);
+    assert.dom('[data-test-plus-btn]').exists();
+    assert.dom('[data-test-plus-btn]').hasClass(styles['disabled-btn']);
     assert
       .dom(`#client-${this.client.id}-tooltip`)
       .hasText(`t:perAppCreditTransferStatus:()`);
@@ -209,8 +209,8 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
     this.set('client', this.server.create('partner/partnerclient'));
 
     await render(hbs`<Partner::CreditTransfer @client={{this.client}}/>`);
-    assert.dom('[data-test="plus-btn"]').exists();
-    assert.dom('[data-test="plus-btn"]').hasClass(styles['disabled-btn']);
+    assert.dom('[data-test-plus-btn]').exists();
+    assert.dom('[data-test-plus-btn]').hasClass(styles['disabled-btn']);
     assert
       .dom(`#client-${this.client.id}-tooltip`)
       .hasText(`t:0sharableCredits:()`);
@@ -246,10 +246,8 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
     this.set('client', this.server.create('partner/partnerclient'));
 
     await render(hbs`<Partner::CreditTransfer @client={{this.client}}/>`);
-    assert.dom('[data-test="plus-btn"]').exists();
-    assert
-      .dom('[data-test="plus-btn"]')
-      .doesNotHaveClass(styles['disabled-btn']);
+    assert.dom('[data-test-plus-btn]').exists();
+    assert.dom('[data-test-plus-btn]').doesNotHaveClass(styles['disabled-btn']);
     assert
       .dom(`#client-${this.client.id}-tooltip`)
       .hasText(`t:transferCredits:()`);
@@ -283,14 +281,14 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
 
     await render(hbs`<Partner::CreditTransfer @client={{this.client}}/>`);
 
-    await click(this.element.querySelector('[data-test="plus-btn"]'));
+    await click(this.element.querySelector('[data-test-plus-btn]'));
 
-    assert.dom('[data-test="credit-transfer-modal"]').exists('Modal shown');
+    assert.dom('[data-test-credit-transfer-modal]').exists('Modal shown');
     assert
-      .dom(`[data-test='credit-transfer-input']`)
+      .dom(`[data-test-credit-transfer-input]`)
       .exists('Input screen rendered by default');
     assert
-      .dom(`[data-test='credit-transfer-confirm']`)
+      .dom(`[data-test-credit-transfer-confirm]`)
       .doesNotExist(`Confirm screen isn't visible`);
   });
 
@@ -322,18 +320,18 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
 
     await render(hbs`<Partner::CreditTransfer @client={{this.client}}/>`);
 
-    await click(this.element.querySelector('[data-test="plus-btn"]'));
+    await click(this.element.querySelector('[data-test-plus-btn]'));
 
-    assert.dom('[data-test="credit-transfer-modal"]').exists('Modal opened');
+    assert.dom('[data-test-credit-transfer-modal]').exists('Modal opened');
     assert
-      .dom(`[data-test='credit-transfer-input']`)
+      .dom(`[data-test-credit-transfer-input]`)
       .exists('Input screen shown by default');
     assert
-      .dom(`[data-test='credit-transfer-confirm']`)
+      .dom(`[data-test-credit-transfer-confirm]`)
       .doesNotExist(`Confirm screen is not visible by default`);
-    await click(this.element.querySelector(`[data-test='transfer-btn']`));
+    await click(this.element.querySelector(`[data-test-transfer-btn]`));
     assert
-      .dom(`[data-test='credit-transfer-confirm']`)
+      .dom(`[data-test-credit-transfer-confirm]`)
       .exists(`Confirm screen visible after hit tranfer credits btn`);
   });
 
@@ -365,27 +363,27 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
 
     await render(hbs`<Partner::CreditTransfer @client={{this.client}}/>`);
 
-    await click(this.element.querySelector('[data-test="plus-btn"]'));
+    await click(this.element.querySelector('[data-test-plus-btn]'));
 
-    assert.dom('[data-test="credit-transfer-modal"]').exists('Modal opened');
+    assert.dom('[data-test-credit-transfer-modal]').exists('Modal opened');
     assert
-      .dom(`[data-test='credit-transfer-input']`)
+      .dom(`[data-test-credit-transfer-input]`)
       .exists('Input screen shown by default');
     assert
-      .dom(`[data-test='credit-transfer-confirm']`)
+      .dom(`[data-test-credit-transfer-confirm]`)
       .doesNotExist(`Confirm screen isn't visible by default`);
-    await click(this.element.querySelector(`[data-test='transfer-btn']`));
+    await click(this.element.querySelector(`[data-test-transfer-btn]`));
     assert
-      .dom(`[data-test='credit-transfer-confirm']`)
+      .dom(`[data-test-credit-transfer-confirm]`)
       .exists('Confirm screen shown after hit transfer credits btn');
 
-    await click(this.element.querySelector(`[data-test='back-btn']`));
+    await click(this.element.querySelector(`[data-test-back-btn]`));
 
     assert
-      .dom(`[data-test='credit-transfer-input']`)
+      .dom(`[data-test-credit-transfer-input]`)
       .exists('Input screen shown after click at back btn from confirm screen');
     assert
-      .dom(`[data-test='credit-transfer-confirm']`)
+      .dom(`[data-test-credit-transfer-confirm]`)
       .doesNotExist(`Confirm screen isn't rendering`);
   });
 
@@ -420,24 +418,24 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
 
     await render(hbs`<Partner::CreditTransfer @client={{this.client}}/>`);
 
-    await click(this.element.querySelector('[data-test="plus-btn"]'));
+    await click(this.element.querySelector('[data-test-plus-btn]'));
 
-    assert.dom('[data-test="credit-transfer-modal"]').exists('Modal opened');
+    assert.dom('[data-test-credit-transfer-modal]').exists('Modal opened');
     assert
-      .dom(`[data-test='credit-transfer-input']`)
+      .dom(`[data-test-credit-transfer-input]`)
       .exists('Input screen shown by default');
     assert
-      .dom(`[data-test='credit-transfer-confirm']`)
+      .dom(`[data-test-credit-transfer-confirm]`)
       .doesNotExist(`Confirm screen isn't visible by default`);
-    await click(this.element.querySelector(`[data-test='transfer-btn']`));
+    await click(this.element.querySelector(`[data-test-transfer-btn]`));
     assert
-      .dom(`[data-test='credit-transfer-confirm']`)
+      .dom(`[data-test-credit-transfer-confirm]`)
       .exists('Confirm screen shown after hit transfer credits btn');
 
-    await click(this.element.querySelector(`[data-test='confirm-btn']`));
+    await click(this.element.querySelector(`[data-test-confirm-btn]`));
 
     assert
-      .dom('[data-test="credit-transfer-modal"]')
+      .dom('[data-test-credit-transfer-modal]')
       .doesNotExist('Modal closed');
   });
 
@@ -472,24 +470,24 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
 
     await render(hbs`<Partner::CreditTransfer @client={{this.client}}/>`);
 
-    await click(this.element.querySelector('[data-test="plus-btn"]'));
+    await click(this.element.querySelector('[data-test-plus-btn]'));
 
-    assert.dom('[data-test="credit-transfer-modal"]').exists('Modal opened');
+    assert.dom('[data-test-credit-transfer-modal]').exists('Modal opened');
     assert
-      .dom(`[data-test='credit-transfer-input']`)
+      .dom(`[data-test-credit-transfer-input]`)
       .exists('Input screen shown by default');
     assert
-      .dom(`[data-test='credit-transfer-confirm']`)
+      .dom(`[data-test-credit-transfer-confirm]`)
       .doesNotExist(`Confirm screen isn't visible by default`);
-    await click(this.element.querySelector(`[data-test='transfer-btn']`));
+    await click(this.element.querySelector(`[data-test-transfer-btn]`));
     assert
-      .dom(`[data-test='credit-transfer-confirm']`)
+      .dom(`[data-test-credit-transfer-confirm]`)
       .exists('Confirm screen shown after hit transfer credits btn');
 
-    await click(this.element.querySelector(`[data-test='confirm-btn']`));
+    await click(this.element.querySelector(`[data-test-confirm-btn]`));
 
     assert
-      .dom('[data-test="credit-transfer-modal"]')
+      .dom('[data-test-credit-transfer-modal]')
       .exists('Modal still in open state');
   });
 
@@ -517,7 +515,7 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
 
     await render(hbs`<Partner::CreditTransfer @client={{this.client}}/>`);
 
-    assert.dom(`[data-test='credit-transfer']`).exists();
-    assert.dom(`[data-test='plus-btn']`).doesNotExist();
+    assert.dom(`[data-test-credit-transfer]`).exists();
+    assert.dom(`[data-test-plus-btn]`).doesNotExist();
   });
 });

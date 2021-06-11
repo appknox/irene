@@ -42,12 +42,6 @@
               data-test-payment-plan
               @clientId={{@client.id}}
             />
-            {{#if this.partner.access.transfer_credits}}
-              <Partner::CreditTransfer
-                @client={{@client}}
-                data-test='credit-transfer'
-              />
-            {{/if}}
           </div>
         </div>
       {{/if}}
@@ -73,15 +67,21 @@
         </div>
       </div>
     </div>
-    {{!-- {{#if (or this.partner.access.transfer_credits this.partner.access.list_projects)}}
-      <div local-class="actions">
-        {{#if this.partner.access.transfer_credits}}
-          <button class="button is-default">{{fa-icon "plus"}}&nbsp; Transfer credits</button>
-        {{/if}}
-        {{#if (and @showDetailLink this.partner.access.list_projects)}}
-          <LinkTo @route="authenticated.partner.client" @model={{@client.id}} class="button is-primary margin-l-3q">{{fa-icon "arrow-right"}}</LinkTo>
-        {{/if}}
+    {{#if this.partner.access.transfer_credits}}
+      <div local-class='actions'>
+        <Partner::CreditTransfer
+          @client={{@client}}
+          data-test-credit-transfer
+        />
+
+        {{!-- {{#if (and @showDetailLink this.partner.access.list_projects)}}
+          <LinkTo
+            @route='authenticated.partner.client'
+            @model={{@client.id}}
+            class='button is-primary margin-l-3q'
+          >{{fa-icon 'arrow-right'}}</LinkTo>
+        {{/if}} --}}
       </div>
-    {{/if}} --}}
+    {{/if}}
   </div>
 </div>

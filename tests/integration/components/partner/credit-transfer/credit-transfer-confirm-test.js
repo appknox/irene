@@ -6,7 +6,7 @@ import { hbs } from 'ember-cli-htmlbars';
 import faker from 'faker';
 
 module(
-  'Integration | Component | partner/credit-transfer-confirm',
+  'Integration | Component | partner/credit-transfer/credit-transfer-confirm',
   function (hooks) {
     setupRenderingTest(hooks);
     setupIntl(hooks);
@@ -20,26 +20,26 @@ module(
       @remainingCredits={{this.remainingCredits}}/>`);
       assert.equal(
         this.element.querySelectorAll(
-          `[data-test='partner-credits'] [data-test='row']`
+          `[data-test-partner-credits] [data-test-row]`
         ).length,
         2,
         'Partner credits has two rows'
       );
 
       assert
-        .dom(`[data-test='partner-current-credits-key']`)
+        .dom(`[data-test-partner-current-credits-key]`)
         .hasText(`t:currentCredits:():`);
       assert
-        .dom(`[data-test='partner-current-credits-value']`)
+        .dom(`[data-test-partner-current-credits-value]`)
         .hasText(
           `${this.partnerPlan.scansLeft} t:pluralScans:("itemCount":${this.partnerPlan.scansLeft})`
         );
 
       assert
-        .dom(`[data-test='partner-remaining-credits-key']`)
+        .dom(`[data-test-partner-remaining-credits-key]`)
         .hasText(`t:remainingCredits:():`);
       assert
-        .dom(`[data-test='partner-remaining-credits-value']`)
+        .dom(`[data-test-partner-remaining-credits-value]`)
         .hasText(
           `${this.remainingCredits} t:pluralScans:("itemCount":${this.remainingCredits})`
         );
@@ -57,26 +57,26 @@ module(
 
       assert.equal(
         this.element.querySelectorAll(
-          `[data-test='client-credits'] [data-test='row']`
+          `[data-test-client-credits] [data-test-row]`
         ).length,
         3,
         'Client credits has three rows'
       );
 
-      assert.dom(`[data-test='client-key']`).hasText(`t:client:():`);
-      assert.dom(`[data-test='client-value']`).hasText(this.clientName);
+      assert.dom(`[data-test-client-key]`).hasText(`t:client:():`);
+      assert.dom(`[data-test-client-value]`).hasText(this.clientName);
       assert
-        .dom(`[data-test='client-current-credits-key']`)
+        .dom(`[data-test-client-current-credits-key]`)
         .hasText(`t:currentCredits:():`);
       assert
-        .dom(`[data-test='client-current-credits-value']`)
+        .dom(`[data-test-client-current-credits-value]`)
         .hasText(
           `${this.clientPlan.scansLeft} t:pluralScans:("itemCount":${this.clientPlan.scansLeft})`
         );
 
-      assert.dom(`[data-test='new-credits-key']`).hasText(`t:newCredits:():`);
+      assert.dom(`[data-test-new-credits-key]`).hasText(`t:newCredits:():`);
       assert
-        .dom(`[data-test='new-credits-value']`)
+        .dom(`[data-test-new-credits-value]`)
         .hasText(
           `${this.transferCount} t:pluralScans:("itemCount":${this.transferCount})`
         );
@@ -90,8 +90,8 @@ module(
       @toggleMode={{this.toggleMode}}
       />`);
 
-      assert.dom(`[data-test='confirm-btn']`).hasText(`t:confirmTransfer:()`);
-      assert.dom(`[data-test='back-btn']`).hasText(`t:back:()`);
+      assert.dom(`[data-test-confirm-btn]`).hasText(`t:confirmTransfer:()`);
+      assert.dom(`[data-test-back-btn]`).hasText(`t:back:()`);
     });
 
     test('it should only render confirm btn', async function (assert) {
@@ -100,9 +100,9 @@ module(
       @transferCredits={{this.transferCredits}}
       />`);
 
-      assert.dom(`[data-test='confirm-btn']`).exists();
-      assert.dom(`[data-test='confirm-btn']`).hasText(`t:confirmTransfer:()`);
-      assert.dom(`[data-test='back-btn']`).doesNotExist();
+      assert.dom(`[data-test-confirm-btn]`).exists();
+      assert.dom(`[data-test-confirm-btn]`).hasText(`t:confirmTransfer:()`);
+      assert.dom(`[data-test-back-btn]`).doesNotExist();
     });
 
     test('it should only render back btn', async function (assert) {
@@ -111,8 +111,8 @@ module(
       @toggleMode={{this.toggleMode}}
       />`);
 
-      assert.dom(`[data-test='confirm-btn']`).doesNotExist();
-      assert.dom(`[data-test='back-btn']`).hasText(`t:back:()`);
+      assert.dom(`[data-test-confirm-btn]`).doesNotExist();
+      assert.dom(`[data-test-back-btn]`).hasText(`t:back:()`);
     });
 
     test('it should handle back btn action', async function (assert) {
@@ -123,7 +123,7 @@ module(
       @toggleMode={{this.toggleMode}}
       />`);
 
-      click(this.element.querySelector(`[data-test='back-btn']`));
+      click(this.element.querySelector(`[data-test-back-btn]`));
     });
 
     test('it should handle confirm transfer btn action', async function (assert) {
@@ -134,7 +134,7 @@ module(
       @transferCredits={{this.transferCredits}}
       />`);
 
-      click(this.element.querySelector(`[data-test='confirm-btn']`));
+      click(this.element.querySelector(`[data-test-confirm-btn]`));
     });
   }
 );
