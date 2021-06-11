@@ -1,7 +1,7 @@
 .header {
   display: flex;
   justify-content: space-between;
-  background-color: #f6f7f9;
+  background-color: var(--bg-gray);
   margin: -10px -10px 0 -10px;
 }
 .header-left {
@@ -12,7 +12,7 @@
   flex-direction: column;
 }
 .header-title {
-  color: #000;
+  color: var(--black);
   font-weight: bold;
   font-size: 1.2rem;
   line-height: 1.5;
@@ -32,12 +32,12 @@
   border-bottom: 3px solid transparent;
   color: inherit;
   &.active {
-    border-bottom-color: $primary-color;
-    color: #000;
+    border-bottom-color: var(--primary);
+    color: var(--black);
   }
   &:hover,
   &:focus,
   &:active {
-    color: #000;
+    color: var(--black);
   }
 }

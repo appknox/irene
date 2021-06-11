@@ -10,14 +10,14 @@
   }
 }
 .invitation-expired {
-  background-color: #fafafb;
+  background-color: var(--bg-gray-lighten-015);
   opacity: 0.6;
 }
 .user {
   padding-right: 1rem;
 }
 .email {
-  color: #3b3f49;
+  color: var(--black-700);
   font-size: 0.95rem;
   font-weight: 600;
   line-height: 1.2;
@@ -45,7 +45,7 @@
   padding-right: 0.5rem;
 }
 .expired {
-  color: tomato;
+  color: var(--text-error);
   text-transform: lowercase;
 }
 .source {
@@ -55,16 +55,16 @@
   border-radius: 0.3rem;
 }
 .source-backoffice {
-  color: #a9560f;
-  background-color: #fde6ca;
+  color: var(--label-orange-color);
+  background-color: var(--label-orange-bg);
 }
 .source-invitation {
-  color: #156347;
-  background-color: #ccf3cc;
+  color: var(--label-green-color);
+  background-color: var(--label-green-bg);
 }
 .source-registration {
-  color: #4160a9;
-  background-color: #dbe6ff;
+  color: var(--label-blue-color);
+  background-color: var(--label-blue-bg);
 }
 .actions {
   display: flex;

@@ -29,10 +29,10 @@
 .loading-error {
   display: flex;
   height: 7.5rem;
-  background: #f6f7f9;
-  border: 1px solid #ebedf1;
+  background: var(--bg-gray);
+  border: 1px solid var(--bg-gray-darken-040);
   border-radius: 0.3rem;
-  color: #e7817a;
+  color: var(--loading-error-color);
   align-items: center;
   justify-content: center;
 }
@@ -40,10 +40,10 @@
 .empty-data {
   display: flex;
   height: 7.5rem;
-  background: #f6f7f9;
-  border: 1px solid #ebedf1;
+  background: var(--bg-gray);
+  border: 1px solid var(--bg-gray-darken-040);
   border-radius: 0.3rem;
-  color: #9ea4ad;
+  color: var(--empty-state-color);
   font-style: italic;
   align-items: center;
   justify-content: center;
