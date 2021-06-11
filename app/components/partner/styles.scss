@@ -41,3 +41,61 @@
     color: var(--black);
   }
 }
+
+.partner-plan {
+  display: flex;
+  background-color: #fff;
+  padding: 0.8rem;
+  margin: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ebedf1;
+}
+
+.plan-label {
+  color: #000;
+  margin: 0.3rem;
+}
+
+.plan-type {
+  border-radius: 0.2rem;
+  height: 1.5rem;
+  width: 4.8rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.per-app {
+    color: #4160a9;
+    background-color: #dbe6ff;
+  }
+
+  &.per-scan {
+    color: #156347;
+    background-color: #ccf3cc;
+  }
+}
+
+.plan-value {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #ebedf1;
+  padding: 0.1rem 0.8rem;
+  border-radius: 8px;
+}
+
+.credits-left {
+  color: $primary-color;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.credits-type {
+  text-transform: lowercase;
+  font-size: 1rem;
+  font-weight: bold;
+}

@@ -2,11 +2,13 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action, set } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
 
 export default class PartnerComponent extends Component {
   @service intl;
   @service router;
   @service organization;
+  @service store;
 
   @tracked tabs = [
     {
@@ -17,9 +19,12 @@ export default class PartnerComponent extends Component {
     },
   ];
 
+  @tracked partnerPlan = {};
+
   @action
   initalize() {
     this.setDefaultTab();
+    this.fetchPartnerPlan.perform();
   }
 
   @action
@@ -36,4 +41,13 @@ export default class PartnerComponent extends Component {
       this.switchTab(loadedTab);
     }
   }
+
+  @task(function* () {
+    try {
+      this.partnerPlan = yield this.store.queryRecord('partner/plan', {});
+    } catch {
+      return;
+    }
+  })
+  fetchPartnerPlan;
 }

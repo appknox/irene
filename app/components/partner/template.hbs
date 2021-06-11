@@ -18,6 +18,36 @@
           {{/if}}
         {{/each}}
       </nav>
+      <div local-class='partner-plan'>
+        <div class='margin-right' local-class='partner-plan-labels'>
+          <div local-class='plan-label'>Your Plan</div>
+          <div
+            local-class='plan-type
+                      {{if this.partnerPlan.limitedScans 'per-scan' 'per-app'}}'
+            data-test-plan-type
+          >
+            <span>{{t
+                (if this.partnerPlan.limitedScans 'perScan' 'perApp')
+              }}</span>
+          </div>
+        </div>
+        <div local-class='plan-value '>
+          <span local-class='credits-left'>
+            {{#if this.partnerPlan.limitedScans}}
+              {{this.partnerPlan.scansLeft}}
+            {{else}}
+              {{this.partnerPlan.projectsLimit}}
+            {{/if}}
+          </span>
+          <span local-class='credits-type'>
+            {{#if this.partnerPlan.limitedScans}}
+              {{t 'pluralScans' itemCount=this.partnerPlan.scansLeft}}
+            {{else}}
+              {{t 'pluralApps' itemCount=this.partnerPlan.projectsLimit}}
+            {{/if}}
+          </span>
+        </div>
+      </div>
     </div>
   </header>
 </div>
