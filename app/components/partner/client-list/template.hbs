@@ -1,4 +1,10 @@
 <div local-class='partner-client-list' class='padding-h-1 padding-b-2'>
+  <div local-class='header'>
+    <h3 local-class='title'>{{t 'clients'}}</h3>
+    {{#if this.partner.access.view_plans}}
+      <Partner::PartnerPlan />
+    {{/if}}
+  </div>
   <div local-class='client-list-container'>
     {{#if this.objects}}
       <div local-class='client-items'>

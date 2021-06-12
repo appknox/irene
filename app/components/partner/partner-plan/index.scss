@@ -1,23 +1,36 @@
 .partner-plan {
   display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.plan {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #fff;
-  padding: 0.8rem;
-  margin: 1rem;
+  width: auto;
+  padding: 0.5rem;
   border-radius: 6px;
   border: 1px solid #ebedf1;
 }
 
+.plan-key {
+  display: flex;
+  flex-direction: column;
+}
 .plan-label {
   color: #000;
-  margin: 0.3rem;
+  margin-bottom: 0.3rem;
+  font-size: 0.9rem;
+  text-align: center;
 }
-
 .plan-type {
   border-radius: 0.2rem;
-  height: 1.5rem;
+  height: 1.2rem;
   width: 4.8rem;
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   display: flex;
   align-items: center;
@@ -36,22 +49,25 @@
 
 .plan-value {
   display: flex;
-  flex-flow: column;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
   background-color: #ebedf1;
-  padding: 0.1rem 0.8rem;
-  border-radius: 8px;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.4rem;
+  margin-left: 0.5rem;
 }
 
 .credits-left {
   color: $primary-color;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+  line-height: 1;
   font-weight: bold;
 }
 
 .credits-type {
   text-transform: lowercase;
-  font-size: 1rem;
+  font-size: 0.8rem;
+  line-height: 1.2;
   font-weight: bold;
 }
