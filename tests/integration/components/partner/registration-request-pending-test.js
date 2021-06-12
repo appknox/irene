@@ -126,7 +126,7 @@ module(
       assert.dom('[data-test-pending-request-name]').hasText('FirstName');
     });
 
-    test('it renders comany name', async function (assert) {
+    test('it renders company name', async function (assert) {
       this.set('request', {
         id: '1',
         email: 'test1@test.test',
@@ -150,7 +150,7 @@ module(
       assert.dom('[data-test-pending-request-company]').hasText('TestCompany');
     });
 
-    test('it supports empty comany name', async function (assert) {
+    test('it supports empty company name', async function (assert) {
       this.set('request', {
         id: '1',
         email: 'test1@test.test',

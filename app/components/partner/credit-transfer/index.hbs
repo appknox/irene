@@ -11,7 +11,7 @@
       <button
         class='button is-default'
         local-class='credit-transfer-btn {{if
-          this.disablePlusbtn
+          this.disableTransfer
           'disabled-btn'
         }}'
         data-test-plus-btn
@@ -21,13 +21,20 @@
         {{fa-icon 'plus'}}
         &nbsp;
         {{t 'transferCredits'}}
-        <AttachTooltip
-          @placemnet='top-end'
-          data-test-tooltip
-          @id='client-{{@client.id}}-tooltip'
-        >
-          {{this.buttonTooltip}}
-        </AttachTooltip>
+        {{#if
+          (or
+            (eq this.partnerPlan.scansLeft 0)
+            (eq this.clientPlan.limitedScans false)
+          )
+        }}
+          <AttachTooltip
+            @placement='top-end'
+            data-test-tooltip
+            @id='client-{{@client.id}}-tooltip'
+          >
+            {{this.buttonTooltip}}
+          </AttachTooltip>
+        {{/if}}
       </button>
     {{/if}}
   </div>

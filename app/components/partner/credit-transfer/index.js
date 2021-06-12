@@ -48,7 +48,7 @@ export default class PartnerCreditTransferComponent extends Component {
     return tooltipMsg;
   }
 
-  get disablePlusbtn() {
+  get disableTransfer() {
     return this.partnerPlan.scansLeft === 0 || !this.clientPlan.limitedScans;
   }
 
@@ -60,7 +60,7 @@ export default class PartnerCreditTransferComponent extends Component {
 
   @action
   toggleModal() {
-    if (!this.disablePlusbtn) {
+    if (!this.disableTransfer) {
       this.isShowModal = !this.isShowModal;
     }
     this.resetToDefault();
