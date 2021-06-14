@@ -1,9 +1,5 @@
-<div
-  local-class='initial-container'
-  data-test='initial-container'
-  ...attributes
->
-  <div local-class='first-item' data-test='default-items'>
+<div local-class='initial-container' data-test-initial-container ...attributes>
+  <div class='black-text' data-test-default-items>
     {{this.defaultItems}}
   </div>
   {{#if (gt this.remainingCount 0)}}
@@ -12,7 +8,7 @@
       class='margin-l-h'
       local-class='show-more-count-badge'
       title='View {{this.remainingCount}} more'
-      data-test='more-btn'
+      data-test-more-btn
       {{on 'click' this.toggleShowMoreModal}}
     >
       +
@@ -29,9 +25,9 @@
     @showHeader={{true}}
     @headerTitle={{@modalTitle}}
   >
-    <div local-class='list' data-test='list-modal'>
+    <div local-class='list' data-test-list-modal>
       {{#each @list as |item seq|}}
-        <div local-class='list-item' data-test='list-item-{{seq}}'>
+        <div local-class='list-item' data-test-list-item='{{seq}}'>
           {{#if @isShowSeq}}
             {{add seq 1}}.
           {{/if}}

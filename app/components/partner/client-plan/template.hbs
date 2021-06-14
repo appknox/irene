@@ -3,32 +3,32 @@
     {{#if this.getClientPlan.isRunning}}
       {{fa-icon 'circle-o-notch fa-spin text-lightgray'}}
     {{else if this.clientPlan}}
-      <div local-class='plan' data-test-payment-plan data-test='client-plan'>
+      <div local-class='plan' data-test-client-plan>
         <div
           local-class='plan-type
             {{if this.clientPlan.limitedScans 'per-scan' 'per-app'}}'
-          data-test='plan-type'
+          data-test-plan-type
         >
           <span>{{t
               (if this.clientPlan.limitedScans 'perScan' 'perApp')
             }}</span>
         </div>
-        <div local-class='plan-status' data-test='plan-status'>
+        <div local-class='plan-status' data-test-plan-status>
           {{#if this.clientPlan.limitedScans}}
-            <strong class='margin-r-h' data-test='scans-left'>
+            <strong class='margin-r-h' data-test-scans-left>
               {{this.clientPlan.scansLeft}}
               {{t 'pluralScans' itemCount=this.clientPlan.scansLeft}}
             </strong>
             {{t 'remaining'}}
           {{else}}
-            <strong class='margin-r-h' data-test='projects-left'>
+            <strong class='margin-r-h' data-test-projects-left>
               {{this.clientPlan.projectsLimit}}
               {{t 'pluralApps' itemCount=this.clientPlan.projectsLimit}}
             </strong>
             <span
               local-class='expiry-date
                 {{if this.clientPlan.isPaymentExpired 'expiry-date-expired'}}'
-              data-test='plan-expiry'
+              data-test-plan-expiry
             >
               {{t
                 (if this.clientPlan.isPaymentExpired 'expiredOn' 'expiresOn')

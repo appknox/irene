@@ -50,20 +50,20 @@ module('Integration | Component | partner/client-plan', function (hooks) {
     this.set('clientId', 1);
     await render(hbs`<Partner::ClientPlan @clientId={{this.clientId}}/>`);
 
-    assert.dom('div[data-test="plan-type"]').hasText(`t:perApp:()`);
-    assert.dom('div[data-test="plan-type"]').hasClass(styles['per-app']);
+    assert.dom('div[data-test-plan-type]').hasText(`t:perApp:()`);
+    assert.dom('div[data-test-plan-type]').hasClass(styles['per-app']);
     assert
-      .dom('strong[data-test="projects-left"]')
+      .dom('strong[data-test-projects-left]')
       .hasText(
         `${clientPlan.projectsLimit} t:pluralApps:("itemCount":${clientPlan.projectsLimit})`
       );
     assert
-      .dom('span[data-test="plan-expiry"]')
+      .dom('span[data-test-plan-expiry]')
       .hasText(
         `t:expiresOn:() ${dayjs(clientPlan.expiryDate).format('DD MMM YYYY')}`
       );
     assert
-      .dom('span[data-test="plan-expiry"]')
+      .dom('span[data-test-plan-expiry]')
       .doesNotHaveClass(styles['expiry-date-expired']);
   });
 
@@ -90,20 +90,20 @@ module('Integration | Component | partner/client-plan', function (hooks) {
     this.set('clientId', 1);
     await render(hbs`<Partner::ClientPlan @clientId={{this.clientId}}/>`);
 
-    assert.dom('div[data-test="plan-type"]').hasText(`t:perApp:()`);
-    assert.dom('div[data-test="plan-type"]').hasClass(styles['per-app']);
+    assert.dom('div[data-test-plan-type]').hasText(`t:perApp:()`);
+    assert.dom('div[data-test-plan-type]').hasClass(styles['per-app']);
     assert
-      .dom('strong[data-test="projects-left"]')
+      .dom('strong[data-test-projects-left]')
       .hasText(
         `${clientPlan.projectsLimit} t:pluralApps:("itemCount":${clientPlan.projectsLimit})`
       );
     assert
-      .dom('span[data-test="plan-expiry"]')
+      .dom('span[data-test-plan-expiry]')
       .hasText(
         `t:expiredOn:() ${dayjs(clientPlan.expiryDate).format('DD MMM YYYY')}`
       );
     assert
-      .dom('span[data-test="plan-expiry"]')
+      .dom('span[data-test-plan-expiry]')
       .hasClass(styles['expiry-date-expired']);
   });
 
@@ -128,15 +128,15 @@ module('Integration | Component | partner/client-plan', function (hooks) {
     this.set('clientId', 1);
     await render(hbs`<Partner::ClientPlan @clientId={{this.clientId}}/>`);
 
-    assert.dom('div[data-test="plan-type"]').hasText(`t:perScan:()`);
-    assert.dom('div[data-test="plan-type"]').hasClass(styles['per-scan']);
+    assert.dom('div[data-test-plan-type]').hasText(`t:perScan:()`);
+    assert.dom('div[data-test-plan-type]').hasClass(styles['per-scan']);
     assert
-      .dom('strong[data-test="scans-left"]')
+      .dom('strong[data-test-scans-left]')
       .hasText(
         `${clientPlan.scansLeft} t:pluralScans:("itemCount":${clientPlan.scansLeft})`
       );
     assert
-      .dom('div[data-test="plan-status"]')
+      .dom('div[data-test-plan-status]')
       .hasText(
         `${clientPlan.scansLeft} t:pluralScans:("itemCount":${clientPlan.scansLeft}) t:remaining:()`
       );
@@ -157,7 +157,7 @@ module('Integration | Component | partner/client-plan', function (hooks) {
     });
     this.set('clientId', 1);
     await render(hbs`<Partner::ClientPlan @clientId={{this.clientId}}/>`);
-    assert.dom('div[data-test="client-plan"]').doesNotExist();
+    assert.dom('div[data-test-client-plan]').doesNotExist();
   });
 
   test('it should not render client plan, if view_plans privilege is not enabled', async function (assert) {
@@ -171,6 +171,6 @@ module('Integration | Component | partner/client-plan', function (hooks) {
     });
     await this.owner.lookup('service:partner').load();
     await render(hbs`<Partner::ClientPlan/>`);
-    assert.dom('div[data-test="client-plan"]').doesNotExist();
+    assert.dom('div[data-test-client-plan]').doesNotExist();
   });
 });
