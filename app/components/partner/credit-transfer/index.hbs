@@ -1,0 +1,72 @@
+{{#if
+  (and this.partner.access.view_plans this.partner.access.transfer_credits)
+}}
+  <div
+    local-class='credit-transfer'
+    ...attributes
+    data-test-credit-transfer
+    {{did-insert this.initializeComp}}
+  >
+    {{#if this.partnerPlan.limitedScans}}
+      <button
+        class='button is-default'
+        local-class='credit-transfer-btn {{if
+          this.disableTransfer
+          'disabled-btn'
+        }}'
+        data-test-plus-btn
+        type='button'
+        {{on 'click' this.toggleModal}}
+      >
+        {{fa-icon 'plus'}}
+        &nbsp;
+        {{t 'transferCredits'}}
+        {{#if this.buttonTooltip}}
+          <AttachTooltip
+            @placement='top-end'
+            data-test-tooltip
+            @id='client-{{@client.id}}-tooltip'
+          >
+            {{this.buttonTooltip}}
+          </AttachTooltip>
+        {{/if}}
+      </button>
+    {{/if}}
+  </div>
+{{/if}}
+
+{{#if this.isShowModal}}
+  <AkModal
+    @onClose={{this.toggleModal}}
+    @showHeader={{true}}
+    @headerTitle={{t 'creditTransfer'}}
+  >
+
+    <div
+      local-class='credit-transfer-container'
+      data-test-credit-transfer-modal
+    >
+
+      {{#if this.isEditMode}}
+        <Partner::CreditTransfer::CreditTransferInput
+          @partnerPlan={{this.partnerPlan}}
+          @transferCount={{this.transferCount}}
+          @remainingCredits={{this.remainingCredits}}
+          @toggleMode={{this.toggleMode}}
+          @clientName={{this.clientName}}
+        />
+
+      {{else}}
+        <Partner::CreditTransfer::CreditTransferConfirm
+          @partnerPlan={{this.partnerPlan}}
+          @clientPlan={{this.clientPlan}}
+          @remainingCredits={{this.remainingCredits}}
+          @clientName={{this.clientName}}
+          @transferCount={{this.transferCount}}
+          @transferCredits={{this.transferCredits}}
+          @toggleMode={{this.toggleMode}}
+        />
+      {{/if}}
+    </div>
+  </AkModal>
+{{/if}}

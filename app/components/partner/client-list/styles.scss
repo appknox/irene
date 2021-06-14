@@ -1,5 +1,16 @@
-.client-list-container {
-  padding-top: 2rem;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.7rem;
+  padding-bottom: 0.5rem;
+}
+.title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #5e5f63;
+  padding-top: 0.8rem;
+  padding-bottom: 0.9rem;
 }
 
 .client-items {

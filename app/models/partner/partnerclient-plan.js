@@ -12,4 +12,11 @@ export default class PartnerclientPlanModel extends Model {
   get isPaymentExpired() {
     return dayjs().isAfter(this.expiryDate);
   }
+
+  transferScans(count) {
+    var adapter = this.store.adapterFor(this.constructor.modelName);
+    return adapter.transferScans(this.id, {
+      count,
+    });
+  }
 }

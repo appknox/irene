@@ -1,0 +1,73 @@
+.partner-plan {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.plan {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--white);
+  width: auto;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--bg-gray-darken-040);
+}
+
+.plan-key {
+  display: flex;
+  flex-direction: column;
+}
+.plan-label {
+  color: var(--black);
+  margin-bottom: 0.3rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+.plan-type {
+  border-radius: 0.2rem;
+  height: 1.2rem;
+  width: 4.8rem;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.per-app {
+    color: var(--label-blue-color);
+    background-color: var(--label-blue-bg);
+  }
+
+  &.per-scan {
+    color: var(--label-green-color);
+    background-color: var(--label-green-bg);
+  }
+}
+
+.plan-value {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--bg-gray-darken-040);
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.4rem;
+  margin-left: 0.5rem;
+}
+
+.credits-left {
+  color: $primary-color;
+  font-size: 1.2rem;
+  line-height: 1;
+  font-weight: bold;
+}
+
+.credits-type {
+  text-transform: lowercase;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  font-weight: bold;
+}
