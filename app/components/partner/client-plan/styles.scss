@@ -15,28 +15,28 @@
   justify-content: center;
 
   &.per-app {
-    color: #4160a9;
-    background-color: #dbe6ff;
+    color: var(--label-blue-color);
+    background-color: var(--label-blue-bg);
   }
 
   &.per-scan {
-    color: #156347;
-    background-color: #ccf3cc;
+    color: var(--label-green-color);
+    background-color: var(--label-green-bg);
   }
 }
 
 .plan-status {
   display: flex;
   align-items: center;
-  color: #000;
+  color: var(--black);
   margin-left: 0.5rem;
 }
 
 .expiry-date {
   font-size: 0.9em;
-  color: #9ba2ad;
+  color: var(--empty-state-color);
 }
 
 .expiry-date-expired {
-  color: #FE4D3F;
+  color: var(--text-error);
 }

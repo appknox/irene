@@ -3,6 +3,10 @@
   align-items: center;
 }
 
+.first-item {
+  color: var(--black-700);
+}
+
 .list-item:not(:last-child) {
   margin-bottom: 0.6rem;
 }
@@ -11,7 +15,7 @@
   padding: 0 0.36rem 0 0.3rem;
   display: flex;
   align-items: center;
-  background: #dde0e3;
+  background: var(--bg-gray-darken-060);
   min-width: 1.95em;
   height: 1.5em;
   border-radius: 0.3em;
@@ -19,7 +23,7 @@
   align-items: center;
   justify-content: center;
   font-size: 0.82em;
-  font-weight: bold;
+  font-weight: 600;
   border: none;
 
   i {

@@ -2,10 +2,10 @@ $card-header-height: 5rem;
 $card-thumbnail-size: 2.8rem;
 
 .client-info-card {
-  border: 1px solid darken(#f3f5f8, 5%);
+  border: 1px solid var(--bg-gray-darken-050);
   border-radius: 0.3rem;
   grid-template-rows: $card-header-height 1fr;
-  background-color: #fbfbfd;
+  background-color: var(--bg-gray-lighten-015);
 }
 
 .client-info-header {
@@ -21,7 +21,7 @@ $card-thumbnail-size: 2.8rem;
   width: $card-thumbnail-size;
   height: $card-thumbnail-size;
   border-radius: 50%;
-  background-color: #cacdd4;
+  background-color: var(--bg-darkgray);
   color: $white;
   display: grid;
   align-items: center;
@@ -35,14 +35,14 @@ $card-thumbnail-size: 2.8rem;
 .title {
   text-transform: capitalize;
   font-weight: bold;
-  color: rgba(#000, 0.7);
+  color: var(--black-700);
   max-height: 92%;
   font-size: 1.1rem;
   overflow: hidden;
   text-overflow: ellipsis;
 
   &.empty-title {
-    color: #424651;
+    color: var(--black-400);
     font-size: 14px;
     font-style: italic;
   }
@@ -56,7 +56,7 @@ $card-thumbnail-size: 2.8rem;
 
 .row {
   display: flex;
-  border-bottom: 1px dashed #e3e8ef;
+  border-bottom: 1px dashed var(--bg-gray-darken-050);
   padding: 0.2rem 0;
 
   &:last-child {
