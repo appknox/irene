@@ -8,11 +8,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #fff;
+  background-color: var(--white);
   width: auto;
   padding: 0.5rem;
   border-radius: 6px;
-  border: 1px solid #ebedf1;
+  border: 1px solid var(--bg-gray-darken-040);
 }
 
 .plan-key {
@@ -20,7 +20,7 @@
   flex-direction: column;
 }
 .plan-label {
-  color: #000;
+  color: var(--black);
   margin-bottom: 0.3rem;
   font-size: 0.9rem;
   text-align: center;
@@ -37,13 +37,13 @@
   justify-content: center;
 
   &.per-app {
-    color: #4160a9;
-    background-color: #dbe6ff;
+    color: var(--label-blue-color);
+    background-color: var(--label-blue-bg);
   }
 
   &.per-scan {
-    color: #156347;
-    background-color: #ccf3cc;
+    color: var(--label-green-color);
+    background-color: var(--label-green-bg);
   }
 }
 
@@ -52,7 +52,7 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  background-color: #ebedf1;
+  background-color: var(--bg-gray-darken-040);
   padding: 0.35rem 0.6rem;
   border-radius: 0.4rem;
   margin-left: 0.5rem;

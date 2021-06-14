@@ -17,14 +17,14 @@
 .title {
   text-transform: capitalize;
   font-weight: bold;
-  color: rgba(#000, 0.7);
+  color: var(--black-700);
   max-height: 92%;
   font-size: 1.1rem;
   overflow: hidden;
   text-overflow: ellipsis;
 
   &.empty-title {
-    color: #424651;
+    color: $secondary;
     font-style: italic;
   }
 }
@@ -39,7 +39,7 @@
 .transferable-credits {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #000;
+  color: var(--black);
   text-align: center;
 }
 
@@ -52,8 +52,8 @@
   width: 8rem;
   height: 2rem;
   border: none;
-  border-bottom: 1px solid #000;
-  color: #000;
+  border-bottom: 1px solid var(--black);
+  color: var(--black);
   font-size: 1.5rem;
   text-align: center;
   font-weight: bold;
