@@ -38,7 +38,7 @@ export default class PartnerCreditTransferComponent extends Component {
   }
 
   get buttonTooltip() {
-    let tooltipMsg = this.intl.t('transferCredits');
+    let tooltipMsg = null;
     if (this.partnerPlan.scansLeft === 0) {
       tooltipMsg = this.intl.t('0sharableCredits');
     }

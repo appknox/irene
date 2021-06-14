@@ -250,7 +250,7 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
     assert.dom('[data-test-plus-btn]').doesNotHaveClass(styles['disabled-btn']);
     assert
       .dom(`#client-${this.client.id}-tooltip`)
-      .hasText(`t:transferCredits:()`);
+      .doesNotExist('Tooltip not required for clickable state');
   });
 
   test('it should open modal when clicking at plus btn and renders input component', async function (assert) {

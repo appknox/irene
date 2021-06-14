@@ -21,12 +21,7 @@
         {{fa-icon 'plus'}}
         &nbsp;
         {{t 'transferCredits'}}
-        {{#if
-          (or
-            (eq this.partnerPlan.scansLeft 0)
-            (eq this.clientPlan.limitedScans false)
-          )
-        }}
+        {{#if this.buttonTooltip}}
           <AttachTooltip
             @placement='top-end'
             data-test-tooltip

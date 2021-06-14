@@ -8,19 +8,10 @@
       {{fa-icon 'circle-o-notch fa-spin text-lightgray'}}
     {{else if this.partnerPlan}}
       {{#if this.partner.access.transfer_credits}}
-        {{#unless this.partnerPlan.limitedScans}}
-          <!-- credit transfer unavailable warning -->
-          <div data-test-warning-credit-transfer-unavailable>
-            <div class='margin-r-1'>{{fa-icon 'exclamation-circle'}}</div>
-            <AttachTooltip @placement='top-end'>
-              Credit transfer option is unavailable in your plan. Please contact
-              support for transferring credits to clients
-            </AttachTooltip>
-          </div>
-        {{else if (and
-          this.partnerPlan.limitedScans (eq this.partnerPlan.scansLeft 0)
-        )}}
-          <!-- 0 credits left warning -->
+        {{#if
+          (and this.partnerPlan.limitedScans (eq this.partnerPlan.scansLeft 0))
+        }}
+          {{! NOTE 0 credits left warning }}
           <div data-test-warning-zero-scan-credits>
             <div class='margin-r-1'>{{fa-icon 'exclamation-circle'}}</div>
             <AttachTooltip @placement='top-end'>
@@ -28,7 +19,16 @@
               plan
             </AttachTooltip>
           </div>
-        {{/unless}}
+        {{else if (not this.partnerPlan.limitedScans)}}
+          {{! NOTE credit transfer unavailable warning }}
+          <div data-test-warning-credit-transfer-unavailable>
+            <div class='margin-r-1'>{{fa-icon 'exclamation-circle'}}</div>
+            <AttachTooltip @placement='top-end'>
+              Credit transfer option is unavailable in your plan. Please contact
+              support for transferring credits to clients
+            </AttachTooltip>
+          </div>
+        {{/if}}
       {{/if}}
 
       <div local-class='plan'>
