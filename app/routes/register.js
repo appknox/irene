@@ -1,10 +1,11 @@
 import Route from '@ember/routing/route';
-import ENV from 'irene/config/environment';
+import { inject as service } from '@ember/service';
 
 export default class RegisterViaInviteRoute extends Route {
-  beforeModel(){
-    if(ENV.registrationLink) {
-      window.location.href = ENV.registrationLink;
+  @service registration;
+  beforeModel() {
+    if (this.registration.isExternalLink()) {
+      window.location.href = this.registration.link;
     }
   }
 }

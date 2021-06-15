@@ -58,14 +58,8 @@ export default class WhitelabelService extends Service {
   get client_logo() {
     // the or'ing order is important
     if (this.theme === this.THEMES.LIGHT) {
-      return (
-        this.configuration.imageData.logo_on_lightbg ||
-        this.configuration.imageData.logo_on_darkbg
-      );
+      return this.configuration.imageData.logo_on_lightbg;
     }
-    return (
-      this.configuration.imageData.logo_on_darkbg ||
-      this.configuration.imageData.logo_on_lightbg
-    );
+    return this.configuration.imageData.logo_on_darkbg;
   }
 }

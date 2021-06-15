@@ -7,7 +7,7 @@ import lookupValidator from 'ember-changeset-validations';
 import Changeset from 'ember-changeset';
 import {
   validatePresence,
-  validateFormat
+  validateFormat,
 } from 'ember-changeset-validations/validators';
 
 export default class RegistrationComponent extends Component {
@@ -27,23 +27,24 @@ export default class RegistrationComponent extends Component {
     email: validateFormat({ type: 'email' }),
     company: validatePresence(true),
     firstname: validatePresence(true),
-    lastname: validatePresence(true)
+    lastname: validatePresence(true),
   };
 
-  constructor () {
+  constructor() {
     super(...arguments);
     this.changeset = new Changeset(
-      this.registerPOJO, lookupValidator(this.registrationValidator),
+      this.registerPOJO,
+      lookupValidator(this.registrationValidator),
       this.registrationValidator,
       { skipValidate: true }
     );
   }
 
-  get enabledName () {
+  get enabledName() {
     return this.args.enable_name == true;
   }
 
-  get enableReCaptcha () {
+  get enableReCaptcha() {
     return this.args.enable_recaptcha == true;
   }
 
@@ -54,8 +55,8 @@ export default class RegistrationComponent extends Component {
     return this.registrationValidatorWithoutName;
   }
 
-  @task(function* (data){
-    const url = this.registrationEndpoint
+  @task(function* (data) {
+    const url = this.registrationEndpoint;
     try {
       const res = yield this.network.post(url, data);
       if (!res.ok) {
@@ -69,50 +70,52 @@ export default class RegistrationComponent extends Component {
         throw err;
       }
       this.showSuccess = true;
-    } catch(errors) {
+    } catch (errors) {
       if (!errors.payload) {
         this.notify.error(errors.message);
         return;
       }
-      if(errors.payload.recaptcha && errors.payload.recaptcha.length) {
+      if (errors.payload.recaptcha && errors.payload.recaptcha.length) {
         this.notify.error(errors.payload.recaptcha[0]);
         return;
       }
       const changeset = this.changeset;
-      Object.keys(errors.payload).forEach(key => {
+      Object.keys(errors.payload).forEach((key) => {
         changeset.addError(key, errors.payload[key]);
       });
     }
   })
-  registerWithServer
+  registerWithServer;
 
-  @task(function*(changeset) {
+  @task(function* (changeset) {
     yield changeset.validate();
     if (changeset.get('isValid')) {
       const email = changeset.get('email');
       const companyName = changeset.get('company');
 
       const data = {
-        'email': email,
-        'company': companyName,
-      }
+        email: email,
+        company: companyName,
+      };
 
       if (this.enabledName) {
         const firstname = changeset.get('firstname');
         const lastname = changeset.get('lastname');
-        data["first_name"] = firstname;
-        data["last_name"] = lastname
+        data['first_name'] = firstname;
+        data['last_name'] = lastname;
       }
 
-      let recaptchaValue = "notenabled";
-      if(this.enableReCaptcha && window.grecaptcha) {
-        recaptchaValue= yield window.grecaptcha.execute({action: 'registration'});
+      let recaptchaValue = 'notenabled';
+      if (this.enableReCaptcha && window.grecaptcha) {
+        recaptchaValue = yield window.grecaptcha.execute({
+          action: 'registration',
+        });
       }
-      data["recaptcha"] = recaptchaValue;
+      data['recaptcha'] = recaptchaValue;
       yield this.registerWithServer.perform(data);
     }
   })
-  registerTask
+  registerTask;
 
   @action
   register(changeset) {
