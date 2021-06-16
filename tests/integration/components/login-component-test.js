@@ -367,4 +367,175 @@ module('Integration | Component | login component', function (hooks) {
     assert.dom('[data-test-login-sso-forced-username-input]').exists();
     assert.dom('[data-test-login-sso-forced-button]').exists();
   });
+
+  test('it should hide registration link', async function (assert) {
+    this.server.get('v2/frontend_configuration', () => {
+      return new Response(
+        200,
+        {},
+        {
+          hide_poweredby_logo: true,
+          images: {
+            favicon: '',
+            logo_on_darkbg: '',
+            logo_on_lightbg: '',
+          },
+          integrations: {
+            crisp_key: '',
+            csb_key: '',
+            hotjar_key: '',
+            pendo_key: '',
+            rollbar_key: '',
+          },
+          name: '',
+          registration_enabled: false,
+          registration_link: '',
+          theme: {
+            primary_alt_color: '',
+            primary_color: '',
+            scheme: 'dark',
+            secondary_alt_color: '',
+            secondary_color: '',
+          },
+          url: '',
+        }
+      );
+    });
+    const configuration = this.owner.lookup('service:configuration');
+    await configuration.getFrontendConfig();
+    await render(hbs`<LoginComponent></LoginComponent>`);
+    assert.dom('[data-test-login-registration-link]').doesNotExist();
+  });
+
+  test('it should show native registration link', async function (assert) {
+    class RouterStub extends Service {
+      urlFor(routename) {
+        return `/${routename}`;
+      }
+    }
+    this.owner.register('service:router', RouterStub);
+    this.server.get('v2/frontend_configuration', () => {
+      return new Response(
+        200,
+        {},
+        {
+          hide_poweredby_logo: true,
+          images: {
+            favicon: '',
+            logo_on_darkbg: '',
+            logo_on_lightbg: '',
+          },
+          integrations: {
+            crisp_key: '',
+            csb_key: '',
+            hotjar_key: '',
+            pendo_key: '',
+            rollbar_key: '',
+          },
+          name: '',
+          registration_enabled: true,
+          registration_link: '',
+          theme: {
+            primary_alt_color: '',
+            primary_color: '',
+            scheme: 'dark',
+            secondary_alt_color: '',
+            secondary_color: '',
+          },
+          url: '',
+        }
+      );
+    });
+    const configuration = this.owner.lookup('service:configuration');
+    await configuration.getFrontendConfig();
+    await render(hbs`<LoginComponent></LoginComponent>`);
+    assert.dom('[data-test-login-registration-link]').exists();
+    assert
+      .dom('[data-test-login-registration-link]')
+      .hasAttribute('href', '/register');
+  });
+
+  test('it should show external registration link', async function (assert) {
+    this.server.get('v2/frontend_configuration', () => {
+      return new Response(
+        200,
+        {},
+        {
+          hide_poweredby_logo: true,
+          images: {
+            favicon: '',
+            logo_on_darkbg: '',
+            logo_on_lightbg: '',
+          },
+          integrations: {
+            crisp_key: '',
+            csb_key: '',
+            hotjar_key: '',
+            pendo_key: '',
+            rollbar_key: '',
+          },
+          name: '',
+          registration_enabled: false,
+          registration_link: 'https://example.com/registration',
+          theme: {
+            primary_alt_color: '',
+            primary_color: '',
+            scheme: 'dark',
+            secondary_alt_color: '',
+            secondary_color: '',
+          },
+          url: '',
+        }
+      );
+    });
+    const configuration = this.owner.lookup('service:configuration');
+    await configuration.getFrontendConfig();
+    await render(hbs`<LoginComponent></LoginComponent>`);
+    assert.dom('[data-test-login-registration-link]').exists();
+    assert
+      .dom('[data-test-login-registration-link]')
+      .hasAttribute('href', 'https://example.com/registration');
+  });
+
+  test('it should show external registration link for reg enabled', async function (assert) {
+    this.server.get('v2/frontend_configuration', () => {
+      return new Response(
+        200,
+        {},
+        {
+          hide_poweredby_logo: true,
+          images: {
+            favicon: '',
+            logo_on_darkbg: '',
+            logo_on_lightbg: '',
+          },
+          integrations: {
+            crisp_key: '',
+            csb_key: '',
+            hotjar_key: '',
+            pendo_key: '',
+            rollbar_key: '',
+          },
+          name: '',
+          registration_enabled: true,
+          registration_link: 'https://example.com/registration',
+          theme: {
+            primary_alt_color: '',
+            primary_color: '',
+            scheme: 'dark',
+            secondary_alt_color: '',
+            secondary_color: '',
+          },
+          url: '',
+        }
+      );
+    });
+    const configuration = this.owner.lookup('service:configuration');
+    await configuration.getFrontendConfig();
+    await render(hbs`<LoginComponent></LoginComponent>`);
+    assert.dom('[data-test-login-registration-link]').exists();
+    assert
+      .dom('[data-test-login-registration-link]')
+      .hasAttribute('href', 'https://example.com/registration');
+  });
 });

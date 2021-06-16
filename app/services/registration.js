@@ -4,6 +4,7 @@ import Service from '@ember/service';
 export default class RegistrationService extends Service {
   @service configuration;
   @service router;
+  @service logger;
 
   externalURLRegex = /^https?:\/\//i;
 
@@ -35,6 +36,7 @@ export default class RegistrationService extends Service {
     try {
       return this.router.urlFor('register');
     } catch (err) {
+      this.logger.warn(err);
       return '';
     }
   }
