@@ -52,15 +52,15 @@
           >
           </LoginComponent::Check>
         {{/if}}
-
-
       </div>
+      {{#if this.showRegistrationLink}}
       <div local-class="login-footer">
         <p>{{t "dontHaveAccount"}}</p>
         <a href="{{this.registrationLink}}" local-class="register-link">
           {{t "register"}}
         </a>
       </div>
+      {{/if}}
     </section>
   </div>
 </div>

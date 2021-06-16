@@ -13,6 +13,7 @@ export default class LoginComponent extends Component {
   @service network;
   @service notifications;
   @service logger;
+  @service registration;
 
   @tracked isCheckDone = false;
   checkToken = '';
@@ -37,6 +38,14 @@ export default class LoginComponent extends Component {
     const origin = this.origin;
     const redirectURL = this.router.urlFor('saml2.redirect');
     return `${origin}${redirectURL}`;
+  }
+
+  get showRegistrationLink() {
+    return this.registration.shouldShowInLogin();
+  }
+
+  get registrationLink() {
+    return this.registration.link;
   }
 
   @task(function* () {
