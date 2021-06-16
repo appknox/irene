@@ -1,0 +1,25 @@
+<form onsubmit="return false">
+  <div class="{{local-class 'input-group' from='irene/components/login-component/index.scss'}}">
+    <label for="login-username" class="{{ local-class 'input-label' from='irene/components/login-component/index.scss'}}">
+      {{fa-icon "user" class="input-icon"}}
+    </label>
+    <Input class="{{local-class 'input input-connect-label' from='irene/components/login-component/index.scss'}}" placeholder="Username / Email" id="login-username" autocomplete="username" @value={{@username}} {{on "input" @usernameChanged}}/>
+  </div>
+  <div class="{{local-class 'input-group' from='irene/components/login-component/index.scss'}}">
+    <label for="login-password" class="{{ local-class 'input-label' from='irene/components/login-component/index.scss'}}">
+      {{fa-icon "lock" class="input-icon" for="password"}}
+    </label>
+    <Input class="{{local-class 'input input-connect-label' from='irene/components/login-component/index.scss'}}" @type="password" placeholder={{t 'password'}} @value={{@password}} id="login-password" autocomplete="current-password" autofocus="autofocus" {{autofocus}}/>
+  </div>
+  <div class="{{local-class 'forgot-password' from='irene/components/login-component/index.scss'}}">
+    <LinkTo @route="recover">
+      {{t "forgotPassword"}}
+    </LinkTo>
+  </div>
+  <button class="button is-primary is-fullwidth highlighted-button {{local-class 'login-button' from='irene/components/login-component/index.scss'}}" type="submit" {{on "click" @login}}>
+    {{#if @showSpinner }}
+      {{fa-icon "spinner fa-spin"}}
+    {{/if}}
+    <span class="{{local-class 'login-button-text' from='irene/components/login-component/index.scss'}}">{{t "login"}}</span>
+  </button>
+</form>

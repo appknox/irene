@@ -1,0 +1,36 @@
+{{#if @isEnforced}}
+<form onsubmit="return false">
+  <div class="{{local-class 'input-group' from='irene/components/login-component/index.scss'}}">
+    <label for="login-username" class="{{ local-class 'input-label' from='irene/components/login-component/index.scss'}}">
+      {{fa-icon "user" class="input-icon"}}
+    </label>
+    <Input class="{{local-class 'input input-connect-label' from='irene/components/login-component/index.scss'}}" placeholder="Username / Email" id="login-username" autofocus="autofocus" autocomplete="username" @value={{@username}} {{on "input" @usernameChanged}}/>
+  </div>
+  <button class="button" local-class="login-form-sso-button" type="submit" {{on "click" @ssologin}} {{autofocus}}>
+    {{#if @showSSOSpinner }}
+      {{fa-icon "spinner fa-spin"}}
+    {{/if}}
+    <span class="{{local-class 'login-button-text' from='irene/components/login-component/index.scss'}}" >{{t "ssoLogin"}}</span>
+  </button>
+</form>
+{{else}}
+<LoginComponent::Login
+  @username={{@username}}
+  @password={{@password}}
+  @usernameChanged={{@usernameChanged}}
+  @showSpinner={{@showLoginSpinner}}
+  @login={{@login}}
+>
+</LoginComponent::Login>
+<div local-class="login-form-sso-separator">
+  <div local-class="login-form-sso-separator-or">
+    {{t "or"}}
+  </div>
+</div>
+<button class="button" local-class="login-form-sso-button" type="button" {{on "click" @ssologin}}>
+  {{#if @showSSOSpinner }}
+    {{fa-icon "spinner fa-spin"}}
+  {{/if}}
+  <span class="{{local-class 'login-button-text' from='irene/components/login-component/index.scss'}}">{{t "ssoLogin"}}</span>
+</button>
+{{/if}}

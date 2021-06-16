@@ -1,0 +1,32 @@
+.login-form-sso-separator {
+  height: 0.06em;
+  width: 100%;
+  background: #ebebeb;
+  position: relative;
+  margin: 3em 0em;
+}
+
+.login-form-sso-separator-or {
+  text-align: center;
+  background: #fff;
+  width: 2.3em;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.login-form-sso-button {
+  width: 100%;
+  display: block;
+  margin: auto;
+  margin-top: 1em;
+  background: #ececec;
+  border-color: #ececec;
+  &:hover,
+  &:focus,
+  &:active {
+    color: inherit;
+    background: darken(#ececec, 5%);
+    border-color: darken(#ececec, 5%);
+  }
+}

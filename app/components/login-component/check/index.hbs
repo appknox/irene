@@ -1,0 +1,15 @@
+<form onsubmit="return false">
+  <div class="{{local-class 'input-group' from='irene/components/login-component/index.scss'}}">
+    <label for="login-username" class="{{ local-class 'input-label' from='irene/components/login-component/index.scss'}}">
+      {{fa-icon "user" class="input-icon"}}
+    </label>
+    <Input class="{{local-class 'input input-connect-label' from='irene/components/login-component/index.scss'}}" placeholder="Username / Email" id="login-username" autofocus="autofocus" autocomplete="username" @value={{@username}} {{autofocus}}/>
+    <button class="button is-primary highlighted-button margin-l-h" type="submit" {{on "click" @check}}>
+      {{#if @showSpinner}}
+      {{fa-icon "spinner fa-spin"}}
+      {{else}}
+      {{fa-icon "arrow-right"}}
+      {{/if}}
+    </button>
+  </div>
+</form>
