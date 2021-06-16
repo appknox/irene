@@ -163,4 +163,14 @@ module('Integration | Component | partner/client-info', function (hooks) {
     await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
     assert.dom('div[data-test-payment-plan-row]').doesNotExist();
   });
+
+  test('it should show client created on date in actual format', async function (assert) {
+    const client = this.server.create('partner/partnerclient');
+    this.set('client', client);
+    await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
+
+    assert
+      .dom(`[data-test-created-on]`)
+      .hasText(dayjs(this.client.createdOn).format('DD MMM YYYY'));
+  });
 });
