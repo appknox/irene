@@ -1,0 +1,46 @@
+.client-project-list .title {
+  margin-bottom: 0;
+  font-size: 1rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.table {
+  border: 1px solid var(--bg-gray-darken-050);
+  border-radius: 0.3rem;
+  margin-top: 0.7rem;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 10% 1fr 15%;
+  align-items: center;
+  padding: 1rem;
+  text-transform: capitalize;
+  background-color: var(--bg-gray-darken-050);
+
+  &.add-column {
+    grid-template-columns: 10% 1fr 15% 15%;
+  }
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 10% 1fr 15%;
+  justify-content: left;
+  align-items: center;
+  padding: 0.6rem;
+  border-top: 1px solid var(--bg-gray-darken-050);
+  &.add-column {
+    grid-template-columns: 10% 1fr 15% 15%;
+  }
+}
+
+.center-msg {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  height: 16rem;
+  border-top: 1px solid #f0f1f3;
+  background-color: lighten(#f6f7f9, 4%);
+}

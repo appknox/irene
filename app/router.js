@@ -96,7 +96,10 @@ Router.map(function () {
           this.route('registration-requests');
         });
         this.route('client', {
-          path: '/client/:id',
+          path: '/clients/:id',
+        });
+        this.route('project', {
+          path: '/clients/:client_id/projects/:project_id',
         });
       });
     }

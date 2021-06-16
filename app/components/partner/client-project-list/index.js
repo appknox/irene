@@ -3,21 +3,25 @@ import { PaginationMixin } from '../../../mixins/paginate';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 
-export default class PartnerClientUploadsListComponent extends PaginationMixin(
+export default class PartnerClientProjectListComponent extends PaginationMixin(
   Component
 ) {
   @service store;
+  @service partner;
 
-  @tracked targetModel = 'partner/partnerclient-file';
+  @tracked targetModel = 'partner/partnerclient-project';
 
-  get uploads() {
+  get projects() {
     return this.objects;
   }
 
   get extraQueryStrings() {
     return JSON.stringify({
       clientId: this.args.clientId,
-      projectId: this.args.projectId,
     });
+  }
+
+  get enableViewFiles() {
+    return this.partner.access.list_files;
   }
 }

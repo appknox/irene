@@ -1,5 +1,4 @@
 .client-uploads-container {
-
   .title {
     margin-bottom: 0;
     font-size: 1rem;
@@ -22,7 +21,7 @@
 
     .header {
       display: grid;
-      grid-template-columns: 1fr 10% 11% 13% 16%;
+      grid-template-columns: 1fr 11% 13% 16%;
       align-items: center;
       padding: 1rem;
       text-transform: capitalize;
@@ -32,7 +31,7 @@
     .body {
       .row {
         display: grid;
-        grid-template-columns: 1fr 10% 11% 13% 16%;
+        grid-template-columns: 1fr 11% 13% 16%;
         justify-content: left;
         align-items: center;
         padding: 0.6rem;
@@ -64,11 +63,6 @@
           }
         }
 
-        .platform {
-          padding-left: 1.5em;
-          color: #7f8084;
-        }
-
         .version {
           display: grid;
           align-items: center;
@@ -91,5 +85,4 @@
     border-top: 1px solid #f0f1f3;
     padding: 0.75rem 0.6rem 0;
   }
-
 }
