@@ -12,6 +12,7 @@ export default class LoginComponent extends Component {
   @service whitelabel;
   @service network;
   @service notifications;
+  @service logger;
 
   @tracked isCheckDone = false;
   checkToken = '';
@@ -64,7 +65,8 @@ export default class LoginComponent extends Component {
       this.isSSOEnforced = data.is_sso_enforced == true;
       this.checkToken = data.token;
       this.isCheckDone = true;
-    } catch {
+    } catch (error) {
+      this.logger.error(error);
       this.checkToken = '';
       this.isCheckDone = false;
       this.isSSOEnabled = false;
@@ -81,7 +83,6 @@ export default class LoginComponent extends Component {
     const username = this.username.trim();
     const password = this.password.trim();
     const otp = this.otp.trim();
-
     if (!username || !password) {
       return yield this.notifications.error(
         this.intl.t('pleaseEnterValidEmail'),
@@ -113,6 +114,7 @@ export default class LoginComponent extends Component {
           }
         }
       }
+      this.logger.error(error);
       this.notifications.error(
         this.intl.t('tPleaseEnterValidAccountDetail'),
         ENV.notifications
@@ -129,6 +131,7 @@ export default class LoginComponent extends Component {
     const res = yield this.network.request(url);
     const data = yield res.json();
     if (!data.url) {
+      this.logger.error('Invalid sso redirect call', data);
       return;
     }
     yield (window.location.href = data.url);

@@ -12,6 +12,7 @@
               @otp={{this.otp}}
               @showSpinner={{this.loginTask.isRunning}}
               @login={{this.login}}
+              data-test-login-mfa
             >
             </LoginComponent::Mfa>
           {{else}}
@@ -26,6 +27,7 @@
                 @showSSOSpinner={{this.ssoLoginTask.isRunning}}
                 @ssologin={{this.ssologin}}
                 @isEnforced={{this.isSSOEnforced}}
+                data-test-login-sso
               >
               </LoginComponent::Sso>
             {{else}}
@@ -35,6 +37,7 @@
                 @usernameChanged={{this.usernameChanged}}
                 @showSpinner={{this.loginTask.isRunning}}
                 @login={{this.login}}
+                data-test-login-login
               >
               </LoginComponent::Login>
             {{/if}}
@@ -45,6 +48,7 @@
             @showSpinner={{this.verifySSOTask.isRunning}}
             @check={{this.verifySSO}}
             @username={{this.username}}
+            data-test-login-check
           >
           </LoginComponent::Check>
         {{/if}}

@@ -1,35 +1,370 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, click } from '@ember/test-helpers';
+import { render, click, fillIn } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl, t } from 'ember-intl/test-support';
+import { setupIntl } from 'ember-intl/test-support';
+import Service from '@ember/service';
+import { Response } from 'miragejs';
+
+class SessionStub extends Service {
+  token = '';
+  lastUsername = '';
+  lastPassword = '';
+  lastOtp = '';
+  lastAuthenticator = '';
+
+  get data() {
+    return {
+      authenticated: {
+        b64token: this.token,
+      },
+    };
+  }
+
+  authenticate(authenticator, username, password, otp) {
+    this.lastAuthenticator = authenticator;
+    this.lastUsername = username;
+    this.lastPassword = password;
+    this.lastOtp = otp;
+    return this.authenticateTestHook();
+  }
+
+  authenticateTestHook() {}
+}
 
 module('Integration | Component | login component', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
   setupIntl(hooks);
 
-  // TODO should move to util testing
-  test('tapping button fires an external action', function (assert) {
-    var component = this.owner.factoryFor('component:login-component').create();
-    component.send('authenticate');
-    assert.false(component.get('MFAEnabled'), 'MFA Enabled');
+  hooks.beforeEach(function () {
+    this.owner.register('service:session', SessionStub);
   });
 
-  test('Check authentication', async function (assert) {
-    this.setProperties({
-      username: 'bot',
-      isSS0Enabled: null,
-      isSS0Enforced: null,
-    });
-    await render(hbs`<LoginComponent
-      @identification={{this.username}}
-      @isSS0Enabled={{this.isSS0Enabled}}
-      @isSS0Enforced={{this.isSS0Enforced}}></LoginComponent>`);
+  test('it renders', async function (assert) {
+    await render(hbs`<LoginComponent></LoginComponent>`);
+    assert.dom('[data-test-login-check]').exists();
+  });
 
-    await click('button.input-button');
-    assert.false(this.get('isSS0Enabled'), 'SSO is not enabled');
-    assert.false(this.get('isSS0Enforced'), 'SSO is not enforced');
+  test('it should render check form by default', async function (assert) {
+    await render(hbs`<LoginComponent></LoginComponent>`);
+    assert.dom('[data-test-login-check]').exists();
+    assert.dom('[data-test-login-check-username-input]').exists();
+    assert.dom('[data-test-login-check-button]').exists();
+  });
+
+  test('it should render login form from check for not sso', async function (assert) {
+    this.server.post('v2/sso/check', function (schema, request) {
+      const body = JSON.parse(request.requestBody);
+      assert.equal(body.username, 'appknoxusername');
+      return new Response(
+        200,
+        {},
+        {
+          is_sso: false,
+          is_sso_enforced: false,
+          token: null,
+        }
+      );
+    });
+    await render(hbs`<LoginComponent></LoginComponent>`);
+    assert.dom('[data-test-login-check]').exists();
+    assert.dom('[data-test-login-check-username-input]').exists();
+    assert.dom('[data-test-login-check-button]').exists();
+
+    const usernameInput = this.element.querySelector(
+      '[data-test-login-check-username-input]'
+    );
+    const arrowbtn = this.element.querySelector(
+      '[data-test-login-check-button]'
+    );
+    await fillIn(usernameInput, 'appknoxusername');
+    await click(arrowbtn);
+    assert.dom('[data-test-login-login]').exists();
+    assert.dom('[data-test-login-login-username-input]').exists();
+    assert.dom('[data-test-login-login-password-input]').exists();
+    assert.dom('[data-test-login-login-button]').exists();
+    assert
+      .dom('[data-test-login-login-username-input]')
+      .hasValue('appknoxusername');
+  });
+
+  test('it should go back to check form from login from is username is edited', async function (assert) {
+    this.server.post('v2/sso/check', function (schema, request) {
+      const body = JSON.parse(request.requestBody);
+      assert.equal(body.username, 'appknoxusername');
+      return new Response(
+        200,
+        {},
+        {
+          is_sso: false,
+          is_sso_enforced: false,
+          token: null,
+        }
+      );
+    });
+    await render(hbs`<LoginComponent></LoginComponent>`);
+    assert.dom('[data-test-login-check]').exists();
+    assert.dom('[data-test-login-check-username-input]').exists();
+    assert.dom('[data-test-login-check-button]').exists();
+
+    const usernameInput = this.element.querySelector(
+      '[data-test-login-check-username-input]'
+    );
+    const arrowbtn = this.element.querySelector(
+      '[data-test-login-check-button]'
+    );
+    await fillIn(usernameInput, 'appknoxusername');
+    await click(arrowbtn);
+    assert.dom('[data-test-login-login]').exists();
+    assert.dom('[data-test-login-login-username-input]').exists();
+    assert.dom('[data-test-login-login-password-input]').exists();
+    assert.dom('[data-test-login-login-button]').exists();
+    assert
+      .dom('[data-test-login-login-username-input]')
+      .hasValue('appknoxusername');
+
+    const usernameLoginInput = this.element.querySelector(
+      '[data-test-login-login-username-input]'
+    );
+    await fillIn(usernameLoginInput, 'appknoxuser');
+    assert.dom('[data-test-login-login]').doesNotExist();
+    assert.dom('[data-test-login-login-username-input]').doesNotExist();
+    assert.dom('[data-test-login-login-password-input]').doesNotExist();
+    assert.dom('[data-test-login-login-button]').doesNotExist();
+    assert.dom('[data-test-login-check]').exists();
+    assert.dom('[data-test-login-check-username-input]').exists();
+    assert.dom('[data-test-login-check-button]').exists();
+    assert
+      .dom('[data-test-login-check-username-input]')
+      .hasValue('appknoxuser');
+  });
+
+  test('it should hit login api with username and password', async function (assert) {
+    this.server.post('v2/sso/check', function (schema, request) {
+      const body = JSON.parse(request.requestBody);
+      assert.equal(body.username, 'appknoxusername');
+      return new Response(
+        200,
+        {},
+        {
+          is_sso: false,
+          is_sso_enforced: false,
+          token: null,
+        }
+      );
+    });
+    await render(hbs`<LoginComponent></LoginComponent>`);
+    const usernameInput = this.element.querySelector(
+      '[data-test-login-check-username-input]'
+    );
+    const arrowbtn = this.element.querySelector(
+      '[data-test-login-check-button]'
+    );
+    await fillIn(usernameInput, 'appknoxusername');
+    await click(arrowbtn);
+    assert.dom('[data-test-login-login]').exists();
+    assert.dom('[data-test-login-login-username-input]').exists();
+    assert.dom('[data-test-login-login-password-input]').exists();
+    assert.dom('[data-test-login-login-button]').exists();
+    assert
+      .dom('[data-test-login-login-username-input]')
+      .hasValue('appknoxusername');
+    const passwordLoginInput = this.element.querySelector(
+      '[data-test-login-login-password-input]'
+    );
+    const loginbtn = this.element.querySelector(
+      '[data-test-login-login-button]'
+    );
+    await fillIn(passwordLoginInput, 'appknoxpassword');
+    await click(loginbtn);
+    const session = this.owner.lookup('service:session');
+    assert.equal(session.lastUsername, 'appknoxusername');
+    assert.equal(session.lastPassword, 'appknoxpassword');
+  });
+
+  test('it should show otp screen for email otp flow', async function (assert) {
+    this.server.post('v2/sso/check', function (schema, request) {
+      const body = JSON.parse(request.requestBody);
+      assert.equal(body.username, 'appknoxusername');
+      return new Response(
+        200,
+        {},
+        {
+          is_sso: false,
+          is_sso_enforced: false,
+          token: null,
+        }
+      );
+    });
+    const session = this.owner.lookup('service:session');
+    session.authenticateTestHook = function () {
+      const err = new Error('otp required');
+      err.payload = {
+        message: 'otp required',
+        type: 'HOTP',
+        forced: false,
+      };
+      throw err;
+    };
+
+    await render(hbs`<LoginComponent></LoginComponent>`);
+    const usernameInput = this.element.querySelector(
+      '[data-test-login-check-username-input]'
+    );
+    const arrowbtn = this.element.querySelector(
+      '[data-test-login-check-button]'
+    );
+    await fillIn(usernameInput, 'appknoxusername');
+    await click(arrowbtn);
+    const passwordLoginInput = this.element.querySelector(
+      '[data-test-login-login-password-input]'
+    );
+    const loginbtn = this.element.querySelector(
+      '[data-test-login-login-button]'
+    );
+    await fillIn(passwordLoginInput, 'appknoxpassword');
+    await click(loginbtn);
+    assert.equal(session.lastUsername, 'appknoxusername');
+    assert.equal(session.lastPassword, 'appknoxpassword');
+
+    assert.dom('[data-test-login-mfa]').exists();
+    assert.dom('[data-test-login-mfa-email-otp]').exists();
+    assert.dom('[data-test-login-mfa-otp-input]').exists();
+    assert.dom('[data-test-login-mfa-button]').exists();
+    assert.dom('[data-test-login-mfa-email-otp]').hasText('t:emailOTP:()');
+
+    const otpInput = this.element.querySelector(
+      '[data-test-login-mfa-otp-input]'
+    );
+    const otpbtn = this.element.querySelector('[data-test-login-mfa-button]');
+    await fillIn(otpInput, '462613');
+    await click(otpbtn);
+    assert.equal(session.lastUsername, 'appknoxusername');
+    assert.equal(session.lastPassword, 'appknoxpassword');
+    assert.equal(session.lastOtp, '462613');
+  });
+
+  test('it should show otp screen for totp otp flow', async function (assert) {
+    this.server.post('v2/sso/check', function (schema, request) {
+      const body = JSON.parse(request.requestBody);
+      assert.equal(body.username, 'appknoxusername');
+      return new Response(
+        200,
+        {},
+        {
+          is_sso: false,
+          is_sso_enforced: false,
+          token: null,
+        }
+      );
+    });
+    const session = this.owner.lookup('service:session');
+    session.authenticateTestHook = function () {
+      const err = new Error('otp required');
+      err.payload = {
+        message: 'otp required',
+        type: 'TOTP',
+        forced: false,
+      };
+      throw err;
+    };
+
+    await render(hbs`<LoginComponent></LoginComponent>`);
+    const usernameInput = this.element.querySelector(
+      '[data-test-login-check-username-input]'
+    );
+    const arrowbtn = this.element.querySelector(
+      '[data-test-login-check-button]'
+    );
+    await fillIn(usernameInput, 'appknoxusername');
+    await click(arrowbtn);
+    const passwordLoginInput = this.element.querySelector(
+      '[data-test-login-login-password-input]'
+    );
+    const loginbtn = this.element.querySelector(
+      '[data-test-login-login-button]'
+    );
+    await fillIn(passwordLoginInput, 'appknoxpassword');
+    await click(loginbtn);
+    assert.equal(session.lastUsername, 'appknoxusername');
+    assert.equal(session.lastPassword, 'appknoxpassword');
+
+    assert.dom('[data-test-login-mfa]').exists();
+    assert.dom('[data-test-login-mfa-email-otp]').doesNotExist();
+    assert.dom('[data-test-login-mfa-otp-input]').exists();
+    assert.dom('[data-test-login-mfa-button]').exists();
+
+    const otpInput = this.element.querySelector(
+      '[data-test-login-mfa-otp-input]'
+    );
+    const otpbtn = this.element.querySelector('[data-test-login-mfa-button]');
+    await fillIn(otpInput, '462617');
+    await click(otpbtn);
+    assert.equal(session.lastUsername, 'appknoxusername');
+    assert.equal(session.lastPassword, 'appknoxpassword');
+    assert.equal(session.lastOtp, '462617');
+  });
+
+  test('it should show sso button with login form for not forced', async function (assert) {
+    this.server.post('v2/sso/check', function (schema, request) {
+      const body = JSON.parse(request.requestBody);
+      assert.equal(body.username, 'appknoxusername');
+      return new Response(
+        200,
+        {},
+        {
+          is_sso: true,
+          is_sso_enforced: false,
+          token: null,
+        }
+      );
+    });
+    await render(hbs`<LoginComponent></LoginComponent>`);
+    const usernameInput = this.element.querySelector(
+      '[data-test-login-check-username-input]'
+    );
+    const arrowbtn = this.element.querySelector(
+      '[data-test-login-check-button]'
+    );
+    await fillIn(usernameInput, 'appknoxusername');
+    await click(arrowbtn);
+    assert.dom('[data-test-login-sso]').doesNotExist();
+    assert.dom('[data-test-login-sso-not-forced-login]').exists();
+    assert.dom('[data-test-login-sso-or]').exists();
+    assert.dom('[data-test-login-sso-not-forced-button]').exists();
+    assert.dom('[data-test-login-sso-or]').hasText('t:or:()');
+  });
+
+  test('it should show sso button without login form for forced', async function (assert) {
+    this.server.post('v2/sso/check', function (schema, request) {
+      const body = JSON.parse(request.requestBody);
+      assert.equal(body.username, 'appknoxusername');
+      return new Response(
+        200,
+        {},
+        {
+          is_sso: true,
+          is_sso_enforced: true,
+          token: null,
+        }
+      );
+    });
+    await render(hbs`<LoginComponent></LoginComponent>`);
+    const usernameInput = this.element.querySelector(
+      '[data-test-login-check-username-input]'
+    );
+    const arrowbtn = this.element.querySelector(
+      '[data-test-login-check-button]'
+    );
+    await fillIn(usernameInput, 'appknoxusername');
+    await click(arrowbtn);
+    assert.dom('[data-test-login-sso]').exists();
+    assert.dom('[data-test-login-sso-not-forced-login]').doesNotExist();
+    assert.dom('[data-test-login-sso-or]').doesNotExist();
+    assert.dom('[data-test-login-sso-not-forced-button]').doesNotExist();
+    assert.dom('[data-test-login-sso-forced-username-input]').exists();
+    assert.dom('[data-test-login-sso-forced-button]').exists();
   });
 });

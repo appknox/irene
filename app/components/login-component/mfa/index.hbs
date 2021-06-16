@@ -1,20 +1,20 @@
-<form onsubmit="return false">
+<form ...attributes onsubmit="return false">
   {{#if @forced}}
-    <p class="margin-b-1">
+    <p data-test-login-mfa-org-2fa class="margin-b-1">
       {{t "organizationMandatory2FA"}}
     </p>
   {{/if}}
   {{#if @isEmail}}
-    <p>{{t "emailOTP"}}</p>
+    <p data-test-login-mfa-email-otp >{{t "emailOTP"}}</p>
     <p class="margin-b-1">{{t "emailCode"}}</p>
   {{/if}}
   <div class="{{local-class 'input-group' from='irene/components/login-component/index.scss'}}">
     <label for="login-otp" class="{{ local-class 'input-label' from='irene/components/login-component/index.scss'}}">
       {{fa-icon "key" class="input-icon" for="key"}}
     </label>
-    <Input class="{{local-class 'input input-connect-label' from='irene/components/login-component/index.scss'}}" placeholder="OTP Code" id="login-otp" autofocus="autofocus" autocomplete="one-time-code" @value={{@otp}} {{autofocus}}/>
+    <Input data-test-login-mfa-otp-input class="{{local-class 'input input-connect-label' from='irene/components/login-component/index.scss'}}" placeholder="OTP Code" id="login-otp" autofocus="autofocus" autocomplete="one-time-code" @value={{@otp}} {{autofocus}}/>
   </div>
-  <button class="button is-primary is-fullwidth highlighted-button {{local-class 'login-button' from='irene/components/login-component/index.scss'}}" type="submit" {{on "click" @login}}>
+  <button data-test-login-mfa-button class="button is-primary is-fullwidth highlighted-button {{local-class 'login-button' from='irene/components/login-component/index.scss'}}" type="submit" {{on "click" @login}}>
       {{#if @showSpinner }}
         {{fa-icon "spinner fa-spin"}}
       {{/if}}
