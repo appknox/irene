@@ -3,6 +3,8 @@ import Service from '@ember/service';
 
 export default class ConfigurationService extends Service {
   @service network;
+  @service logger;
+
   serverConfigEndpoint = '/v2/server_configuration';
   frontendConfigEndpoint = '/v2/frontend_configuration';
   dashboardConfigEndpoint = '/v2/dashboard_configuration';
@@ -46,29 +48,33 @@ export default class ConfigurationService extends Service {
   }
 
   async frontendConfigFetch() {
-    const data = await this.fetchConfig(this.frontendConfigEndpoint);
-    this.frontendData.hide_poweredby_logo = data.hide_poweredby_logo == true;
-    this.frontendData.name ||= data.name;
-    this.frontendData.registration_enabled ||=
-      data.registration_enabled == true;
-    this.frontendData.registration_link ||= data.registration_link;
-    this.frontendData.url ||= data.url;
+    try {
+      const data = await this.fetchConfig(this.frontendConfigEndpoint);
+      this.frontendData.hide_poweredby_logo = data.hide_poweredby_logo == true;
+      this.frontendData.name ||= data.name;
+      this.frontendData.registration_enabled ||=
+        data.registration_enabled == true;
+      this.frontendData.registration_link ||= data.registration_link;
+      this.frontendData.url ||= data.url;
 
-    this.imageData.favicon ||= data.images.favicon;
-    this.imageData.logo_on_darkbg ||= data.images.logo_on_darkbg;
-    this.imageData.logo_on_lightbg ||= data.images.logo_on_lightbg;
+      this.imageData.favicon ||= data.images.favicon;
+      this.imageData.logo_on_darkbg ||= data.images.logo_on_darkbg;
+      this.imageData.logo_on_lightbg ||= data.images.logo_on_lightbg;
 
-    this.integrationData.crisp_key ||= data.integrations.crisp_key;
-    this.integrationData.csb_key ||= data.integrations.csb_key;
-    this.integrationData.hotjar_key ||= data.integrations.hotjar_key;
-    this.integrationData.pendo_key ||= data.integrations.pendo_key;
-    this.integrationData.rollbar_key ||= data.integrations.rollbar_key;
+      this.integrationData.crisp_key ||= data.integrations.crisp_key;
+      this.integrationData.csb_key ||= data.integrations.csb_key;
+      this.integrationData.hotjar_key ||= data.integrations.hotjar_key;
+      this.integrationData.pendo_key ||= data.integrations.pendo_key;
+      this.integrationData.rollbar_key ||= data.integrations.rollbar_key;
 
-    this.themeData.scheme ||= data.theme.scheme;
-    this.themeData.primary_color ||= data.theme.primary_color;
-    this.themeData.primary_alt_color ||= data.theme.primary_alt_color;
-    this.themeData.secondary_color ||= data.theme.secondary_color;
-    this.themeData.secondary_alt_color ||= data.theme.secondary_alt_color;
+      this.themeData.scheme ||= data.theme.scheme;
+      this.themeData.primary_color ||= data.theme.primary_color;
+      this.themeData.primary_alt_color ||= data.theme.primary_alt_color;
+      this.themeData.secondary_color ||= data.theme.secondary_color;
+      this.themeData.secondary_alt_color ||= data.theme.secondary_alt_color;
+    } catch (error) {
+      this.logger.error('Error getting frontend configuration', error);
+    }
   }
 
   async getFrontendConfig() {
