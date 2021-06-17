@@ -11,29 +11,26 @@ module.exports = {
     },
   },
   plugins: ['ember'],
-  extends: [
-    'eslint:recommended',
-    'plugin:ember/recommended',
-  ],
+  extends: ['eslint:recommended', 'plugin:ember/recommended'],
   env: {
-    browser: true
+    browser: true,
   },
   rules: {
-    "ember/avoid-leaking-state-in-ember-objects": 0,
-    "ember/no-observers": 0,
-    "ember/no-new-mixins": 0,
-    "ember/require-return-from-computed": 0,
-    "ember/no-get": 0,
-    "ember/no-jquery": 0,
-    "ember/no-mixins": 0,
-    "ember/no-classic-classes": 0,
-    "ember/no-classic-components": 0,
-    "ember/classic-decorator-no-classic-methods": 0,
-    "ember/require-tagless-components": 0,
-    "ember/no-computed-properties-in-native-classes": 0,
-    "ember/no-actions-hash": 0,
-    "ember/no-side-effects": 0,
-    "ember/no-component-lifecycle-hooks": 0,
+    'ember/avoid-leaking-state-in-ember-objects': 0,
+    'ember/no-observers': 0,
+    'ember/no-new-mixins': 0,
+    'ember/require-return-from-computed': 0,
+    'ember/no-get': 0,
+    'ember/no-jquery': 0,
+    'ember/no-mixins': 0,
+    'ember/no-classic-classes': 0,
+    'ember/no-classic-components': 0,
+    'ember/classic-decorator-no-classic-methods': 0,
+    'ember/require-tagless-components': 0,
+    'ember/no-computed-properties-in-native-classes': 0,
+    'ember/no-actions-hash': 0,
+    'ember/no-side-effects': 0,
+    'ember/no-component-lifecycle-hooks': 0,
   },
   overrides: [
     // node files
@@ -62,12 +59,10 @@ module.exports = {
         // this can be removed once the following is fixed
         // https://github.com/mysticatea/eslint-plugin-node/issues/77
         'node/no-unpublished-require': 'off',
-      }
+      },
     },
     {
-      files: [
-        'staticserver/**/*.js',
-      ],
+      files: ['staticserver/**/*.js'],
       parserOptions: {
         sourceType: 'script',
       },
@@ -82,7 +77,7 @@ module.exports = {
         // https://github.com/mysticatea/eslint-plugin-node/issues/77
         'node/no-unpublished-require': 'off',
         'node/no-missing-require': 'off',
-      }
-    }
-  ]
+      },
+    },
+  ],
 };
