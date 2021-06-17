@@ -1,19 +1,15 @@
 import config from 'irene/config/environment';
 
-import {
-  createServer,
-  discoverEmberDataModels
-} from "ember-cli-mirage";
+import { createServer, discoverEmberDataModels } from 'ember-cli-mirage';
 
 export function makeServer(config) {
   let finalConfig = {
     ...config,
     models: {
       ...discoverEmberDataModels(),
-      ...config.models
+      ...config.models,
     },
-    routes
-
+    routes,
   };
 
   return createServer(finalConfig);
@@ -27,22 +23,51 @@ function routes() {
   this.post('/api/v2/sso/check', () => {
     return {
       is_sso: false,
-      is_sso_enforced: false
-    }
+      is_sso_enforced: false,
+    };
   });
 
   this.get('/api/v2/partnerclients', (schema) => {
     return schema.partnerClients.all();
-  })
+  });
 
   this.get('/api/v2/partnerclients/:id', (schema, FakeRequest) => {
     return schema.partnerClients.findBy({
-      id: FakeRequest.queryParams.id
+      id: FakeRequest.queryParams.id,
     });
-  })
+  });
 
   this.get('/api/v2/partnerclients/:id/plan', () => {
     return this.db.partnerclientPlans[0];
+  });
+
+  this.get('/api/v2/frontend_configuration', () => {
+    return {
+      hide_poweredby_logo: true,
+      images: {
+        favicon: '',
+        logo_on_darkbg: '',
+        logo_on_lightbg: '',
+      },
+      integrations: {
+        crisp_key: '',
+        csb_key: '',
+        hotjar_key: '',
+        pendo_key: '',
+        rollbar_key: '',
+      },
+      name: '',
+      registration_enabled: true,
+      registration_link: '',
+      theme: {
+        primary_alt_color: '',
+        primary_color: '',
+        scheme: 'dark',
+        secondary_alt_color: '',
+        secondary_color: '',
+      },
+      url: '',
+    };
   });
 
   this.namespace = config.namespace;
@@ -50,7 +75,10 @@ function routes() {
   this.get('/api/organizations/:id/projects', (schema) => {
     return schema.projects.all().models;
   });
-  this.get('/api/profiles/:id/unknown_analysis_status', 'unknown-analysis-status');
+  this.get(
+    '/api/profiles/:id/unknown_analysis_status',
+    'unknown-analysis-status'
+  );
   this.get('/users/:id', 'user');
   this.get('/users', 'user');
   this.get('/projects/:id', 'project');
@@ -76,7 +104,10 @@ function routes() {
   this.get('/subscriptions/', 'subscription');
   this.get('/profiles/:id/github_integration');
   this.get('/profiles/:id/jira_integration');
-  this.get('/profiles/:id/vulnerability_preferences', 'vulnerability-preference');
+  this.get(
+    '/profiles/:id/vulnerability_preferences',
+    'vulnerability-preference'
+  );
   this.get('/available_devices/', 'available-device');
   this.get('/subscriptions/', 'subscription');
   this.get('/organization/:id/analytics', 'analytics');
@@ -109,28 +140,28 @@ function routes() {
 
   this.get('/files/', (schema, FakeRequest) => {
     return schema.files.findBy({
-      id: FakeRequest.queryParams.projectId
+      id: FakeRequest.queryParams.projectId,
     });
   });
 
   this.post('/signup', () => {
     return {
       user_id: '1',
-      token: 'secret'
+      token: 'secret',
     };
   });
 
   this.post('/login', () => {
     return {
       user_id: '1',
-      token: 'secret'
+      token: 'secret',
     };
   });
 
   this.post('/check', () => {
     return {
       user_id: '1',
-      token: 'secret'
+      token: 'secret',
     };
   });
 
@@ -212,7 +243,7 @@ function routes() {
 
   this.put('/profiles/:id/device_preference', () => {
     return {
-      id: '1'
+      id: '1',
     };
   });
 
@@ -337,7 +368,7 @@ function routes() {
   });
 
   this.get('/organizations/:orgId/members/:memId', (schema, request) => {
-    return schema.organizationMembers.find(request.params.memId)
-  })
+    return schema.organizationMembers.find(request.params.memId);
+  });
   this.passthrough();
 }

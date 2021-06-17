@@ -1,4 +1,4 @@
-import ENV from "irene/config/environment";
+import ENV from 'irene/config/environment';
 
 class ENVHandler {
   constructor(envHandlerConst) {
@@ -6,17 +6,17 @@ class ENVHandler {
   }
 
   isRuntimeAvailable() {
-    return !(typeof runtimeGlobalConfig == "undefined");
+    return !(typeof runtimeGlobalConfig == 'undefined');
   }
 
   getEnv(env_key) {
-    const host_key = "IRENE_API_HOST";
+    const host_key = 'IRENE_API_HOST';
     this.assertEnvKey(env_key);
     if (this.isAvailableInRuntimeENV(env_key)) {
       const runtimeValue = this.getRuntimeObject()[env_key];
       if (env_key === host_key) {
-        if (runtimeValue === "/") {
-          return "";
+        if (runtimeValue === '/') {
+          return '';
         }
       }
       return runtimeValue;
@@ -24,8 +24,8 @@ class ENVHandler {
     if (this.isAvailableInProcessENV(env_key)) {
       const processValue = this.envHandlerConst.processENV[env_key];
       if (env_key === host_key) {
-        if (processValue === "/") {
-          return "";
+        if (processValue === '/') {
+          return '';
         }
       }
       return processValue;
@@ -68,7 +68,7 @@ class ENVHandler {
 
   isTrue(value) {
     value = String(value).toLowerCase();
-    return value === "true";
+    return value === 'true';
   }
 
   getBoolean(env_key) {
@@ -81,7 +81,7 @@ class ENVHandler {
   }
 
   getValueForPlugin(env_key) {
-    const enterpriseKey = "ENTERPRISE";
+    const enterpriseKey = 'ENTERPRISE';
     this.assertEnvKey(enterpriseKey);
     this.assertEnvKey(env_key);
 
@@ -101,68 +101,64 @@ const handler = new ENVHandler(ENV.ENVHandlerCONST);
 
 const initialize = function (application) {
   // inject Ajax
-  application.inject("route", "ajax", "service:ajax");
-  application.inject("component", "ajax", "service:ajax");
+  application.inject('route', 'ajax', 'service:ajax');
+  application.inject('component', 'ajax', 'service:ajax');
 
   // Inject notify
-  application.inject("route", "notify", "service:notifications");
-  application.inject("component", "notify", "service:notifications");
-  application.inject("authenticator", "notify", "service:notifications");
+  application.inject('route', 'notify', 'service:notifications');
+  application.inject('component', 'notify', 'service:notifications');
+  application.inject('authenticator', 'notify', 'service:notifications');
 
   // Inject realtime
-  application.inject("component", "realtime", "service:realtime");
+  application.inject('component', 'realtime', 'service:realtime');
 
   // Inject Store
-  application.inject("component", "store", "service:store");
+  application.inject('component', 'store', 'service:store');
 
-  ENV.host = handler.getEnv("IRENE_API_HOST");
-  ENV.devicefarmHost = handler.getEnv("IRENE_DEVICEFARM_HOST");
-  ENV.socketPath = handler.getEnv("IRENE_API_SOCKET_PATH");
-  ENV.isEnterprise = handler.getBoolean("ENTERPRISE");
-  ENV.showLicense = handler.getBoolean("IRENE_SHOW_LICENSE");
-  ENV.isRegistrationEnabled = handler.getBoolean("IRENE_ENABLE_REGISTRATION");
-  ENV.registrationLink = handler.getEnv("IRENE_REGISTRATION_LINK");
+  ENV.host = handler.getEnv('IRENE_API_HOST');
+  ENV.devicefarmHost = handler.getEnv('IRENE_DEVICEFARM_HOST');
+  ENV.socketPath = handler.getEnv('IRENE_API_SOCKET_PATH');
+  ENV.isEnterprise = handler.getBoolean('ENTERPRISE');
+  ENV.showLicense = handler.getBoolean('IRENE_SHOW_LICENSE');
 
   ENV.whitelabel = Object.assign({}, ENV.whitelabel, {
-    enabled: handler.getBoolean("WHITELABEL_ENABLED")
+    enabled: handler.getBoolean('WHITELABEL_ENABLED'),
   });
   if (ENV.whitelabel.enabled) {
     ENV.whitelabel = Object.assign({}, ENV.whitelabel, {
-      enabled: handler.getBoolean("WHITELABEL_ENABLED"), // adding for consistency
-      name: handler.getEnv("WHITELABEL_NAME"),
-      logo: handler.getEnv("WHITELABEL_LOGO"),
-      theme: handler.getEnv("WHITELABEL_THEME"),
+      enabled: handler.getBoolean('WHITELABEL_ENABLED'), // adding for consistency
+      name: handler.getEnv('WHITELABEL_NAME'),
+      logo: handler.getEnv('WHITELABEL_LOGO'),
+      theme: handler.getEnv('WHITELABEL_THEME'),
       favicon: handler.getEnv('WHITELABEL_FAVICON'),
     });
   }
 
-  ENV.crispWebsiteId = handler.getEnv("IRENE_CRISP_WEBSITE_ID");
+  ENV.crispWebsiteId = handler.getEnv('IRENE_CRISP_WEBSITE_ID');
 
-  ENV.enableHotjar = handler.getValueForPlugin("IRENE_ENABLE_HOTJAR");
-  ENV.enablePendo = handler.getValueForPlugin("IRENE_ENABLE_PENDO");
-  ENV.enableCSB = handler.getValueForPlugin("IRENE_ENABLE_CSB");
-  ENV.enableMarketplace = handler.getValueForPlugin("IRENE_ENABLE_MARKETPLACE");
+  ENV.enableHotjar = handler.getValueForPlugin('IRENE_ENABLE_HOTJAR');
+  ENV.enablePendo = handler.getValueForPlugin('IRENE_ENABLE_PENDO');
+  ENV.enableCSB = handler.getValueForPlugin('IRENE_ENABLE_CSB');
+  ENV.enableMarketplace = handler.getValueForPlugin('IRENE_ENABLE_MARKETPLACE');
   ENV.emberRollbarClient = {
-    enabled: handler.getValueForPlugin("IRENE_ENABLE_ROLLBAR"),
+    enabled: handler.getValueForPlugin('IRENE_ENABLE_ROLLBAR'),
   };
 
   // Inject ENV
-  if (ENV.environment !== "test") {
+  if (ENV.environment !== 'test') {
     // FIXME: Fix this test properly
-    application.register("env:main", ENV, {
+    application.register('env:main', ENV, {
       singleton: true,
       instantiate: false,
     });
-    return application.inject("component", "env", "env:main");
+    return application.inject('component', 'env', 'env:main');
   }
 };
 
 const IreneInitializer = {
-  name: "irene",
+  name: 'irene',
   initialize,
 };
 
-export {
-  initialize
-};
+export { initialize };
 export default IreneInitializer;

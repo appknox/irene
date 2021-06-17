@@ -12,9 +12,7 @@ Router.map(function () {
   this.route('saml2', function () {
     this.route('redirect');
   });
-  if (ENV.isRegistrationEnabled || ENV.registrationLink) {
-    this.route('register');
-  }
+  this.route('register');
   this.route('register-via-invite', {
     path: 'register-via-invite/:token',
   });
