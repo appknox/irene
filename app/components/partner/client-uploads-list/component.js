@@ -7,6 +7,7 @@ export default class PartnerClientUploadsListComponent extends PaginationMixin(
   Component
 ) {
   @service store;
+  @service partner;
 
   @tracked targetModel = 'partner/partnerclient-file';
 
@@ -19,5 +20,9 @@ export default class PartnerClientUploadsListComponent extends PaginationMixin(
       clientId: this.args.clientId,
       projectId: this.args.projectId,
     });
+  }
+
+  get enableViewFiles() {
+    return this.partner.access.list_files;
   }
 }

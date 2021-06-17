@@ -31,7 +31,7 @@ export default class AuthenticatedPartnerProjectRoute extends Route {
 
   @action
   error() {
-    // this.notify.error('Client not found');
+    this.notify.error('Problem with viewing files!');
     this.transitionTo('authenticated.partner.clients');
   }
 }

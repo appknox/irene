@@ -5,7 +5,7 @@ import { setupIntl } from 'ember-intl/test-support';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-function registrationRequestSerializer(data, many = false) {
+function serializer(data, many = false) {
   if (many === true) {
     return {
       count: data.length,
@@ -44,6 +44,15 @@ module(
     });
 
     test('it should show header with title and total count as 0', async function (assert) {
+      this.server.get('v2/partners/:id', (_, req) => {
+        return {
+          id: req.params.id,
+          access: {
+            list_projects: true,
+          },
+        };
+      });
+      await this.owner.lookup('service:partner').load();
       this.server.get('v2/partnerclients/:clientId/projects', () => {
         return {
           count: 0,
@@ -63,6 +72,15 @@ module(
     });
 
     test('it should show 3 table headers ', async function (assert) {
+      this.server.get('v2/partners/:id', (_, req) => {
+        return {
+          id: req.params.id,
+          access: {
+            list_projects: true,
+          },
+        };
+      });
+      await this.owner.lookup('service:partner').load();
       this.server.get('v2/partnerclients/:clientId/projects', () => {
         return {
           count: 0,
@@ -91,6 +109,15 @@ module(
     });
 
     test('it should show header with title and total count as "" when the api got errored', async function (assert) {
+      this.server.get('v2/partners/:id', (_, req) => {
+        return {
+          id: req.params.id,
+          access: {
+            list_projects: true,
+          },
+        };
+      });
+      await this.owner.lookup('service:partner').load();
       this.server.get('v2/partnerclients/:clientId/projects', () => {
         return Response(500);
       });
@@ -101,11 +128,20 @@ module(
     });
 
     test('it should show header with title, total count as 5 and contain 5 project rows', async function (assert) {
+      this.server.get('v2/partners/:id', (_, req) => {
+        return {
+          id: req.params.id,
+          access: {
+            list_projects: true,
+          },
+        };
+      });
+      await this.owner.lookup('service:partner').load();
       this.server.createList('partner/partnerclient-project', 5);
 
       this.server.get('v2/partnerclients/:clientId/projects', (schema) => {
         const data = schema['partner/partnerclientProjects'].all();
-        return registrationRequestSerializer(data, true);
+        return serializer(data, true);
       });
       this.set('clientId', 1);
 
@@ -122,11 +158,21 @@ module(
     });
 
     test('it should render pagination container', async function (assert) {
+      this.server.get('v2/partners/:id', (_, req) => {
+        return {
+          id: req.params.id,
+          access: {
+            list_projects: true,
+          },
+        };
+      });
+      await this.owner.lookup('service:partner').load();
+
       this.server.createList('partner/partnerclient-project', 10);
 
       this.server.get('v2/partnerclients/:clientId/projects', (schema) => {
         const data = schema['partner/partnerclientProjects'].all();
-        return registrationRequestSerializer(data, true);
+        return serializer(data, true);
       });
       this.set('clientId', 1);
 
@@ -134,6 +180,62 @@ module(
         hbs`<Partner::ClientProjectList @clientId={{this.clientId}}/>`
       );
       assert.dom(`[data-test-pagination]`).exists();
+    });
+
+    test('it should render table, if privilege is set to true', async function (assert) {
+      this.server.get('v2/partners/:id', (_, req) => {
+        return {
+          id: req.params.id,
+          access: {
+            list_projects: true,
+          },
+        };
+      });
+      await this.owner.lookup('service:partner').load();
+
+      await render(hbs`<Partner::ClientProjectList/>`);
+
+      assert.dom(`[ data-test-total-projects-count]`).exists();
+      assert.dom(`[data-test-table]`).exists();
+      assert.dom(`[data-test-no-privilege]`).doesNotExist();
+    });
+
+    test('it should not render table and show a msg when the privilege is set to false', async function (assert) {
+      this.server.get('v2/partners/:id', (_, req) => {
+        return {
+          id: req.params.id,
+          access: {
+            list_projects: false,
+          },
+        };
+      });
+      await this.owner.lookup('service:partner').load();
+
+      await render(hbs`<Partner::ClientProjectList/>`);
+
+      assert.dom(`[ data-test-total-projects-count]`).doesNotExist();
+      assert.dom(`[data-test-table]`).doesNotExist();
+      assert
+        .dom(`[data-test-no-privilege]`)
+        .hasText(`t:partnerPrivilege.noListProjects:()`);
+    });
+
+    test('it should not render table and show a msg when the privilege is not set', async function (assert) {
+      this.server.get('v2/partners/:id', (_, req) => {
+        return {
+          id: req.params.id,
+          access: {},
+        };
+      });
+      await this.owner.lookup('service:partner').load();
+
+      await render(hbs`<Partner::ClientProjectList/>`);
+
+      assert.dom(`[ data-test-total-projects-count]`).doesNotExist();
+      assert.dom(`[data-test-table]`).doesNotExist();
+      assert
+        .dom(`[data-test-no-privilege]`)
+        .hasText(`t:partnerPrivilege.noListProjects:()`);
     });
   }
 );

@@ -8,4 +8,17 @@ export default class PartnerclientProjectAdapter extends commondrf {
       `${this.namespace_v2}/partnerclients/${clientId}/projects`
     );
   }
+
+  // buildURL(modelName, id, snapshot, requestType, query) {
+  //   console.log('params', modelName, id, snapshot, requestType, query);
+  //   const clientId = query.clientId;
+  //   const projectId = query.projectId;
+  //   query.clientId = undefined;
+  //   query.projectId = undefined;
+  //   return this.buildURLFromBase(
+  //     `${this.namespace_v2}/partnerclients/${clientId}/projects${
+  //       projectId ? '/' + projectId : ''
+  //     }`
+  //   );
+  // }
 }

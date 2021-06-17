@@ -2,53 +2,71 @@
   local-class='client-uploads-container'
   class='padding-h-1 padding-t-1h padding-b-2'
 >
+
   <div class='vertical-align-center'>
-    <h5 local-class='title'>{{t 'allUploads'}}</h5>
-    <div class='badge-square is-default margin-l-1'>{{this.totalCount}}</div>
-  </div>
-
-  <div local-class='table'>
-    <div local-class='header'>
-      <div>{{t 'app'}}</div>
-      <div>{{t 'version'}}</div>
-      <div>{{t 'versionCode'}}</div>
-      <div>{{t 'uploaded'}}</div>
-    </div>
-    <div local-class='body'>
-      {{#each this.uploads as |upload|}}
-        <div local-class='row'>
-          <div local-class='app'>
-            <div local-class='app-icon' style={{upload.iconHtmlUrl}}></div>
-            <div local-class='app-info'>
-              <span
-                local-class='app-name'
-                class='black-text'
-              >{{upload.name}}</span>
-            </div>
-          </div>
-
-          <div local-class='version'>
-            <span>{{upload.version}}</span>
-          </div>
-          <div local-class='version'>
-            <span>{{upload.versionCode}}</span>
-          </div>
-          <div local-class='uploaded' class='text-lightgray'>{{dayjs-from-now
-              upload.createdOn
-            }}</div>
-        </div>
-      {{else if this.isLoading}}
-        <div local-class='center-msg'>
-          <ThreeBounceSpinner />
-        </div>
-      {{else}}
-        <div local-class='center-msg'>{{t 'noClientUploads'}}</div>
-      {{/each}}
-    </div>
-    {{#if (or this.hasPrevious this.hasNext)}}
-      <div local-class='pagination'>
-        {{partial 'paginate'}}
-      </div>
+    <h5 local-class='title' data-test-title>{{t 'allUploads'}}</h5>
+    {{#if this.enableViewFiles}}
+      <div
+        class='badge-square is-default margin-l-1'
+        data-test-total-files-count
+      >{{this.totalCount}}</div>
     {{/if}}
   </div>
+  {{#if this.enableViewFiles}}
+
+    <div local-class='table' data-test-table>
+      <div local-class='header' data-test-table-header>
+        <div data-test-table-header-app>{{t 'app'}}</div>
+        <div data-test-table-header-version>{{t 'version'}}</div>
+        <div data-test-table-header-versioncode>{{t 'versionCode'}}</div>
+        <div data-test-table-header-uploaded>{{t 'uploaded'}}</div>
+      </div>
+      <div local-class='body' data-test-table-body>
+        {{#each this.uploads as |upload seq|}}
+          <div local-class='row' data-test-table-body-row='{{seq}}'>
+            <div local-class='app' data-test-row-app>
+              <div
+                local-class='app-icon'
+                style={{upload.iconHtmlUrl}}
+                data-test-row-app-icon
+              ></div>
+              <div local-class='app-info' data-test-row-app-info>
+                <span
+                  local-class='app-name'
+                  class='black-text'
+                >{{upload.name}}</span>
+              </div>
+            </div>
+
+            <div local-class='version' data-test-row-version>
+              <span>{{upload.version}}</span>
+            </div>
+            <div local-class='version' data-test-row-versioncode>
+              <span>{{upload.versionCode}}</span>
+            </div>
+            <div
+              local-class='uploaded'
+              class='text-lightgray'
+              data-test-row-uploaded
+            >{{dayjs-from-now upload.createdOn}}</div>
+          </div>
+        {{else if this.isLoading}}
+          <div local-class='center-msg'>
+            <ThreeBounceSpinner />
+          </div>
+        {{else}}
+          <div local-class='center-msg' data-test-no-uploads>{{t
+              'noClientUploads'
+            }}</div>
+        {{/each}}
+      </div>
+      {{#if (or this.hasPrevious this.hasNext)}}
+        <div local-class='pagination' data-test-pagination>
+          {{partial 'paginate'}}
+        </div>
+      {{/if}}
+    </div>
+  {{else}}
+    <div data-test-no-privilege>{{t 'partnerPrivilege.noListFiles'}}</div>
+  {{/if}}
 </div>

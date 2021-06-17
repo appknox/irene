@@ -2,49 +2,57 @@
   class='padding-h-1 padding-t-1h padding-b-2'
   local-class='client-project-list'
 >
+
   <div class='vertical-align-center'>
     <h5 local-class='title' data-test-title>{{t 'projects'}}</h5>
-    <div
-      class='badge-square is-default margin-l-1'
-      data-test-total-projects-count
-    >{{this.totalCount}}</div>
-  </div>
-
-  <div local-class='table'>
-    <div
-      local-class='header {{if this.enableViewFiles 'add-column'}}'
-      data-test-table-header
-    >
-      <div data-test-table-header-platform>{{t 'platform'}}</div>
-      <div data-test-table-header-package_name>{{t 'packageName'}}</div>
-      <div data-test-table-header-created_on>{{t 'createdOn'}}</div>
-    </div>
-    <div local-class='body' data-test-table-body>
-      {{#each this.projects as |project|}}
-        <div
-          local-class='row {{if this.enableViewFiles 'add-column'}}'
-          data-test-table-row
-        >
-          <Partner::ClientProjectList::Item
-            @project={{project}}
-            @clientId={{@clientId}}
-            @enableViewFiles={{this.enableViewFiles}}
-          />
-        </div>
-      {{else if this.isLoading}}
-        <div local-class='center-msg'>
-          <ThreeBounceSpinner />
-        </div>
-      {{else}}
-        <div local-class='center-msg' data-test-no-upload-msg>{{t
-            'noClientUploads'
-          }}</div>
-      {{/each}}
-    </div>
-    {{#if (or this.hasPrevious this.hasNext)}}
-      <div local-class='pagination' data-test-pagination>
-        {{partial 'paginate'}}
-      </div>
+    {{#if this.enableListProjects}}
+      <div
+        class='badge-square is-default margin-l-1'
+        data-test-total-projects-count
+      >{{this.totalCount}}</div>
     {{/if}}
   </div>
+  {{#if this.enableListProjects}}
+
+    <div local-class='table' data-test-table>
+      <div
+        local-class='header {{if this.enableViewFiles 'add-column'}}'
+        data-test-table-header
+      >
+        <div data-test-table-header-platform>{{t 'platform'}}</div>
+        <div data-test-table-header-package_name>{{t 'packageName'}}</div>
+        <div data-test-table-header-created_on>{{t 'createdOn'}}</div>
+      </div>
+      <div local-class='body' data-test-table-body>
+        {{#each this.projects as |project|}}
+          <div
+            local-class='row {{if this.enableViewFiles 'add-column'}}'
+            data-test-table-row
+          >
+            <Partner::ClientProjectList::Item
+              @project={{project}}
+              @clientId={{@clientId}}
+              @enableViewFiles={{this.enableViewFiles}}
+            />
+          </div>
+        {{else if this.isLoading}}
+          <div local-class='center-msg'>
+            <ThreeBounceSpinner />
+          </div>
+        {{else}}
+          <div local-class='center-msg' data-test-no-upload-msg>{{t
+              'noClientUploads'
+            }}</div>
+        {{/each}}
+      </div>
+      {{#if (or this.hasPrevious this.hasNext)}}
+        <div local-class='pagination' data-test-pagination>
+          {{partial 'paginate'}}
+        </div>
+      {{/if}}
+    </div>
+  {{else}}
+    <div data-test-no-privilege>{{t 'partnerPrivilege.noListProjects'}}</div>
+  {{/if}}
+
 </div>

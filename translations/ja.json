@@ -573,6 +573,10 @@
   "packageName": "パッケージ名",
   "pageNotFound": "ページが見つかりません",
   "paid": "有料",
+  "partnerPrivilege": {
+    "noListFiles": "You were not privileged to access files",
+    "noListProjects": "You were not privileged to access projects"
+  },
   "passed": "合格",
   "password": "パスワード",
   "passwordChanged": "パスワードが変更されました",

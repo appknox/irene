@@ -573,6 +573,10 @@
   "packageName": "Package Name",
   "pageNotFound": "The page cannot be found",
   "paid": "Paid",
+  "partnerPrivilege": {
+    "noListFiles": "You were not privileged to access files",
+    "noListProjects": "You were not privileged to access projects"
+  },
   "passed": "Passed",
   "password": "Password",
   "passwordChanged": "Your password has been changed",
