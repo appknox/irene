@@ -1,0 +1,10 @@
+.project-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--bg-gray-darken-050);
+  border-radius: 0.3rem;
+  background-color: var(--bg-gray-lighten-015);
+  padding: 1rem;
+  gap: 0.5rem;
+}
