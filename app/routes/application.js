@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { all } from 'rsvp';
 
 export default class ApplicationRoute extends Route {
   @service headData;
@@ -8,7 +9,10 @@ export default class ApplicationRoute extends Route {
   @service configuration;
 
   async beforeModel() {
-    await this.configuration.getFrontendConfig();
+    await all([
+      this.configuration.serverConfigFetch(),
+      this.configuration.getFrontendConfig(),
+    ]);
     return this.intl.setLocale(['en']);
   }
 

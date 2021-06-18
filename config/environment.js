@@ -1,7 +1,6 @@
 const possibleENVS = [
   'IRENE_API_HOST',
   'IRENE_DEVICEFARM_HOST',
-  'IRENE_API_SOCKET_PATH',
   'IRENE_SHOW_LICENSE',
   'IRENE_CRISP_WEBSITE_ID',
   'IRENE_ENABLE_HOTJAR',
@@ -22,7 +21,6 @@ const ENVHandlerCONST = {
   defaults: {
     IRENE_API_HOST: 'https://api.appknox.com',
     IRENE_DEVICEFARM_HOST: 'https://devicefarm.appknox.com',
-    IRENE_API_SOCKET_PATH: 'https://socket.appknox.com',
     IRENE_SHOW_LICENSE: false,
     IRENE_CRISP_WEBSITE_ID: '',
     IRENE_ENABLE_HOTJAR: false,
@@ -146,7 +144,6 @@ module.exports = function (environment) {
   const handler = new ENVHandler(ENVHandlerCONST);
   var host = handler.getEnv('IRENE_API_HOST');
   var devicefarmHost = handler.getEnv('IRENE_DEVICEFARM_HOST');
-  var socketPath = handler.getEnv('IRENE_API_SOCKET_PATH');
   var isEnterprise = handler.getBoolean('ENTERPRISE');
   var showLicense = handler.getBoolean('IRENE_SHOW_LICENSE');
   var ENV = {
@@ -158,7 +155,6 @@ module.exports = function (environment) {
     showLicense: showLicense,
     exportApplicationGlobal: true,
     devknoxPrice: 9, // This should also change in `mycroft/settings.py`
-    socketPath: socketPath,
     platform: -1,
     paginate: {
       perPageLimit: 9,

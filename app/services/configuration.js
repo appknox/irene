@@ -39,6 +39,11 @@ export default class ConfigurationService extends Service {
     rollbar_key: '',
   };
 
+  serverData = {
+    websocket: '',
+    enterprise: '',
+  };
+
   async fetchConfig(url) {
     const res = await this.network.request(url);
     if (res.ok) {
@@ -107,5 +112,23 @@ export default class ConfigurationService extends Service {
       await this.frontendPromise;
     }
     return this.integrationData;
+  }
+
+  async serverConfigFetch() {
+    try {
+      const data = await this.fetchConfig(this.serverConfigEndpoint);
+      this.serverData.websocket ||= data.websocket;
+      this.serverData.enterprise ||= data.enterprise == true;
+    } catch (error) {
+      this.logger.error('Error getting server configuration', error);
+    }
+  }
+
+  async getServerConfig() {
+    if (!this.serverPromise) {
+      this.serverPromise = this.serverConfigFetch();
+      await this.serverPromise;
+    }
+    return this.serverData;
   }
 }
