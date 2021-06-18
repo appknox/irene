@@ -117,7 +117,6 @@ const initialize = function (application) {
 
   ENV.host = handler.getEnv('IRENE_API_HOST');
   ENV.devicefarmHost = handler.getEnv('IRENE_DEVICEFARM_HOST');
-  ENV.socketPath = handler.getEnv('IRENE_API_SOCKET_PATH');
   ENV.isEnterprise = handler.getBoolean('ENTERPRISE');
   ENV.showLicense = handler.getBoolean('IRENE_SHOW_LICENSE');
 
