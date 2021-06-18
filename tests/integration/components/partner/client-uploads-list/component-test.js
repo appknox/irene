@@ -49,7 +49,7 @@ module(
       await this.owner.lookup('service:organization').load();
     });
 
-    test('it should show title and total count as 0', async function (assert) {
+    test('it should show no content message for 0 file count', async function (assert) {
       this.server.get('v2/partners/:id', (_, req) => {
         return {
           id: req.params.id,
@@ -76,12 +76,11 @@ module(
       await render(
         hbs`<Partner::ClientUploadsList @clientId={{this.clientId}} @projectId={{this.projectId}}/>`
       );
-      assert.dom('[data-test-title]').hasText(`t:allUploads:()`);
-      assert.dom('[data-test-total-files-count]').hasText('0');
+      assert.dom('[data-test-no-uploads]').exists();
       assert.dom('[data-test-no-uploads]').hasText('t:noClientUploads:()');
     });
 
-    test('it should show title and total count as "" when errored', async function (assert) {
+    test('it should show error message on api error', async function (assert) {
       this.server.get('v2/partners/:id', (_, req) => {
         return {
           id: req.params.id,
@@ -103,12 +102,13 @@ module(
       await render(
         hbs`<Partner::ClientUploadsList @clientId={{this.clientId}} @projectId={{this.projectId}}/>`
       );
-      assert.dom('[data-test-title]').hasText(`t:allUploads:()`);
-      assert.dom('[data-test-total-files-count]').hasText('');
-      assert.dom('[data-test-no-uploads]').hasText('t:noClientUploads:()');
+      assert.dom('[data-test-load-error]').exists();
+      assert
+        .dom('[data-test-load-error]')
+        .hasText('t:errorCouldNotLoadData:()');
     });
 
-    test('it should show table with 4 headers', async function (assert) {
+    test('it should show table headers correctly', async function (assert) {
       this.server.get('v2/partners/:id', (_, req) => {
         return {
           id: req.params.id,
@@ -118,15 +118,12 @@ module(
         };
       });
       await this.owner.lookup('service:partner').load();
+      this.server.createList('partner/partnerclient-file', 5);
       this.server.get(
         'v2/partnerclients/:clientId/projects/:projectId/files',
-        () => {
-          return {
-            count: 0,
-            next: null,
-            previous: null,
-            results: [],
-          };
+        (schema) => {
+          const data = schema['partner/partnerclientFiles'].all();
+          return serializer(data, true);
         }
       );
       this.set('clientId', 1);
@@ -148,7 +145,7 @@ module(
       assert.dom(`[data-test-table-header-uploaded]`).hasText(`t:uploaded:()`);
     });
 
-    test('it should show table body with 5 rows', async function (assert) {
+    test('it should render table rows for each file', async function (assert) {
       this.server.get('v2/partners/:id', (_, req) => {
         return {
           id: req.params.id,
@@ -264,7 +261,7 @@ module(
       assert.dom(`[ data-test-pagination]`).exists();
     });
 
-    test('it should render table, if privilege is set to true', async function (assert) {
+    test('it should render files list section if privilege is set to true', async function (assert) {
       this.server.get('v2/partners/:id', (_, req) => {
         return {
           id: req.params.id,
@@ -277,12 +274,10 @@ module(
 
       await render(hbs`<Partner::ClientUploadsList/>`);
 
-      assert.dom(`[ data-test-total-files-count]`).exists();
-      assert.dom(`[data-test-table]`).exists();
-      assert.dom(`[data-test-no-privilege]`).doesNotExist();
+      assert.dom(`[data-test-upload-list]`).exists();
     });
 
-    test('it should not render table and show a msg when the privilege is set to false', async function (assert) {
+    test('it should not render anything if the privilege is set to false', async function (assert) {
       this.server.get('v2/partners/:id', (_, req) => {
         return {
           id: req.params.id,
@@ -295,29 +290,7 @@ module(
 
       await render(hbs`<Partner::ClientUploadsList/>`);
 
-      assert.dom(`[ data-test-total-files-count]`).doesNotExist();
-      assert.dom(`[data-test-table]`).doesNotExist();
-      assert
-        .dom(`[data-test-no-privilege]`)
-        .hasText(`t:partnerPrivilege.noListFiles:()`);
-    });
-
-    test('it should not render table and show a msg when the privilege is not set', async function (assert) {
-      this.server.get('v2/partners/:id', (_, req) => {
-        return {
-          id: req.params.id,
-          access: {},
-        };
-      });
-      await this.owner.lookup('service:partner').load();
-
-      await render(hbs`<Partner::ClientUploadsList/>`);
-
-      assert.dom(`[data-test-total-files-count]`).doesNotExist();
-      assert.dom(`[data-test-table]`).doesNotExist();
-      assert
-        .dom(`[data-test-no-privilege]`)
-        .hasText(`t:partnerPrivilege.noListFiles:()`);
+      assert.dom(`[data-test-upload-list]`).doesNotExist();
     });
   }
 );

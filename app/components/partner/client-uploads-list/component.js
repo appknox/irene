@@ -11,10 +11,6 @@ export default class PartnerClientUploadsListComponent extends PaginationMixin(
 
   @tracked targetModel = 'partner/partnerclient-file';
 
-  get uploads() {
-    return this.objects;
-  }
-
   get extraQueryStrings() {
     return JSON.stringify({
       clientId: this.args.clientId,

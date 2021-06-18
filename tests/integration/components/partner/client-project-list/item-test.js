@@ -72,7 +72,7 @@ module(
       );
       assert.dom(`[data-test-view-files]`).exists();
       assert.dom(`[data-test-view-files]`).hasClass('button');
-      assert.dom(`[data-test-view-files]`).hasText(`t:viewFiles:()`);
+      assert.dom(`[data-test-view-files]`).hasText(`t:viewUploads:()`);
       assert.dom(`[data-test-view-files]`).hasTagName('a');
     });
 

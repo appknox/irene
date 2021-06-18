@@ -3,6 +3,13 @@
   color: var(--black-500);
 }
 
+.platform-android {
+  color: var(--android);
+}
+.platform-apple {
+  color: var(--ios);
+}
+
 .version {
   display: grid;
   align-items: center;

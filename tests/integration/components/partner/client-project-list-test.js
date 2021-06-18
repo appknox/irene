@@ -71,7 +71,7 @@ module(
       assert.dom('[data-test-no-upload-msg]').hasText('t:noClientUploads:()');
     });
 
-    test('it should show 3 table headers ', async function (assert) {
+    test('it should render table headers correctly', async function (assert) {
       this.server.get('v2/partners/:id', (_, req) => {
         return {
           id: req.params.id,
@@ -81,13 +81,11 @@ module(
         };
       });
       await this.owner.lookup('service:partner').load();
-      this.server.get('v2/partnerclients/:clientId/projects', () => {
-        return {
-          count: 0,
-          next: null,
-          previous: null,
-          results: [],
-        };
+      this.server.createList('partner/partnerclient-project', 5);
+
+      this.server.get('v2/partnerclients/:clientId/projects', (schema) => {
+        const data = schema['partner/partnerclientProjects'].all();
+        return serializer(data, true);
       });
       this.set('clientId', 1);
 
@@ -108,7 +106,7 @@ module(
         .hasText(`t:createdOn:()`);
     });
 
-    test('it should show header with title and total count as "" when the api got errored', async function (assert) {
+    test('it should render error message on api error', async function (assert) {
       this.server.get('v2/partners/:id', (_, req) => {
         return {
           id: req.params.id,
@@ -122,12 +120,14 @@ module(
         return Response(500);
       });
       await render(hbs`<Partner::ClientProjectList />`);
-      assert.dom('[data-test-title]').hasText(`t:projects:()`);
-      assert.dom('[data-test-total-projects-count]').hasText('');
-      assert.dom('[data-test-no-upload-msg]').hasText('t:noClientUploads:()');
+
+      assert.dom('[data-test-load-error]').exists();
+      assert
+        .dom('[data-test-load-error]')
+        .hasText('t:errorCouldNotLoadData:()');
     });
 
-    test('it should show header with title, total count as 5 and contain 5 project rows', async function (assert) {
+    test('it should render rows for each project', async function (assert) {
       this.server.get('v2/partners/:id', (_, req) => {
         return {
           id: req.params.id,
@@ -182,7 +182,7 @@ module(
       assert.dom(`[data-test-pagination]`).exists();
     });
 
-    test('it should render table, if privilege is set to true', async function (assert) {
+    test('it should render projects list if privilege is set to true', async function (assert) {
       this.server.get('v2/partners/:id', (_, req) => {
         return {
           id: req.params.id,
@@ -195,12 +195,10 @@ module(
 
       await render(hbs`<Partner::ClientProjectList/>`);
 
-      assert.dom(`[ data-test-total-projects-count]`).exists();
-      assert.dom(`[data-test-table]`).exists();
-      assert.dom(`[data-test-no-privilege]`).doesNotExist();
+      assert.dom(`[data-test-project-list]`).exists();
     });
 
-    test('it should not render table and show a msg when the privilege is set to false', async function (assert) {
+    test('it should not render projects list if the privilege is set to false', async function (assert) {
       this.server.get('v2/partners/:id', (_, req) => {
         return {
           id: req.params.id,
@@ -213,29 +211,7 @@ module(
 
       await render(hbs`<Partner::ClientProjectList/>`);
 
-      assert.dom(`[ data-test-total-projects-count]`).doesNotExist();
-      assert.dom(`[data-test-table]`).doesNotExist();
-      assert
-        .dom(`[data-test-no-privilege]`)
-        .hasText(`t:partnerPrivilege.noListProjects:()`);
-    });
-
-    test('it should not render table and show a msg when the privilege is not set', async function (assert) {
-      this.server.get('v2/partners/:id', (_, req) => {
-        return {
-          id: req.params.id,
-          access: {},
-        };
-      });
-      await this.owner.lookup('service:partner').load();
-
-      await render(hbs`<Partner::ClientProjectList/>`);
-
-      assert.dom(`[ data-test-total-projects-count]`).doesNotExist();
-      assert.dom(`[data-test-table]`).doesNotExist();
-      assert
-        .dom(`[data-test-no-privilege]`)
-        .hasText(`t:partnerPrivilege.noListProjects:()`);
+      assert.dom(`[data-test-project-list]`).doesNotExist();
     });
   }
 );

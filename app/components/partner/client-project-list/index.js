@@ -11,10 +11,6 @@ export default class PartnerClientProjectListComponent extends PaginationMixin(
 
   @tracked targetModel = 'partner/partnerclient-project';
 
-  get projects() {
-    return this.objects;
-  }
-
   get extraQueryStrings() {
     return JSON.stringify({
       clientId: this.args.clientId,

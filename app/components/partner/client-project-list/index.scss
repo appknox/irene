@@ -1,46 +1,79 @@
-.client-project-list .title {
-  margin-bottom: 0;
-  font-size: 1rem;
+.header {
+  margin-bottom: 1rem;
   text-transform: uppercase;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+.title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--black-600);
+  margin-bottom: 0 !important;
 }
 
 .table {
-  border: 1px solid var(--bg-gray-darken-050);
+  border: 1px solid var(--border-table);
   border-radius: 0.3rem;
-  margin-top: 0.7rem;
 }
 
-.header {
+.table-header {
   display: grid;
-  grid-template-columns: 10% 1fr 15%;
   align-items: center;
-  padding: 1rem;
-  text-transform: capitalize;
-  background-color: var(--bg-gray-darken-050);
-
+  justify-content: space-between;
+  padding: 0.6rem 1rem;
+  background-color: var(--bg-gray);
+  word-break: break-all;
+  grid-template-columns: 10% 1fr 15%;
   &.add-column {
     grid-template-columns: 10% 1fr 15% 15%;
   }
 }
 
-.row {
+.table-row {
+  border-top: 1px solid var(--border-table);
   display: grid;
-  grid-template-columns: 10% 1fr 15%;
-  justify-content: left;
+  justify-content: space-between;
   align-items: center;
-  padding: 0.6rem;
-  border-top: 1px solid var(--bg-gray-darken-050);
+  width: 100%;
+  padding: 0.3rem 0.8rem;
+  min-height: 2.5rem;
+  grid-template-columns: 10% 1fr 15%;
   &.add-column {
     grid-template-columns: 10% 1fr 15% 15%;
   }
 }
 
-.center-msg {
-  display: grid;
+.pagination {
+  margin: 1rem -3px;
+}
+
+.loading-error {
+  display: flex;
+  height: 7.5rem;
+  background: var(--bg-gray);
+  border: 1px solid var(--bg-gray-darken-040);
+  border-radius: 0.3rem;
+  color: var(--loading-error-color);
+  align-items: center;
   justify-content: center;
+}
+
+.loading {
+  display: flex;
   align-items: center;
-  height: 16rem;
-  border-top: 1px solid #f0f1f3;
-  background-color: lighten(#f6f7f9, 4%);
+  justify-content: center;
+  height: 7.5rem;
+}
+
+.empty-data {
+  display: flex;
+  height: 7.5rem;
+  background: var(--bg-gray);
+  border: 1px solid var(--bg-gray-darken-040);
+  border-radius: 0.3rem;
+  color: var(--empty-state-color);
+  font-style: italic;
+  align-items: center;
+  justify-content: center;
 }
