@@ -9,7 +9,6 @@ export default class AuthenticatedPartnerProjectRoute extends Route {
   @service store;
 
   async beforeModel() {
-    await this.partner.load();
     if (!this.get('organization.selected.features.partner_dashboard')) {
       this.transitionTo('authenticated.projects');
     }
@@ -22,10 +21,10 @@ export default class AuthenticatedPartnerProjectRoute extends Route {
   async model(data) {
     return {
       client: await this.store.find('partner/partnerclient', data.client_id),
-      project: await this.store.find(
-        'partner/partnerclient-project',
-        data.project_id
-      ),
+      project: await this.store.queryRecord('partner/partnerclient-project', {
+        clientId: data.client_id,
+        projectId: data.project_id,
+      }),
     };
   }
 

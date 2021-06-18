@@ -14,13 +14,11 @@ export default class AuthenticatedClientRoute extends Route {
   }
 
   async model(data) {
-    await this.partner.load();
     return this.store.find('partner/partnerclient', data.id);
   }
 
   @action
   error() {
-    // this.notify.error('Client not found');
     this.transitionTo('authenticated.partner.clients');
   }
 }

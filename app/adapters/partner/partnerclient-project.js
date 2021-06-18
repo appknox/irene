@@ -1,24 +1,23 @@
 import commondrf from '../commondrf';
 
 export default class PartnerclientProjectAdapter extends commondrf {
-  urlForQuery(q) {
-    const clientId = q.clientId;
-    q.clientId = undefined;
+  _buildUrl(endpoint) {
     return this.buildURLFromBase(
-      `${this.namespace_v2}/partnerclients/${clientId}/projects`
+      `${this.namespace_v2}/partnerclients${endpoint}`
     );
   }
 
-  // buildURL(modelName, id, snapshot, requestType, query) {
-  //   console.log('params', modelName, id, snapshot, requestType, query);
-  //   const clientId = query.clientId;
-  //   const projectId = query.projectId;
-  //   query.clientId = undefined;
-  //   query.projectId = undefined;
-  //   return this.buildURLFromBase(
-  //     `${this.namespace_v2}/partnerclients/${clientId}/projects${
-  //       projectId ? '/' + projectId : ''
-  //     }`
-  //   );
-  // }
+  urlForQuery(q) {
+    const clientId = q.clientId;
+    q.clientId = undefined;
+    return this._buildUrl(`/${clientId}/projects`);
+  }
+
+  urlForQueryRecord(q) {
+    const clientId = q.clientId;
+    const projectId = q.projectId;
+    q.clientId = undefined;
+    q.projectId = undefined;
+    return this._buildUrl(`/${clientId}/projects/${projectId}`);
+  }
 }
