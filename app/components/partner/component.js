@@ -1,21 +1,22 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action, set } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 
 export default class PartnerComponent extends Component {
   @service intl;
   @service router;
   @service organization;
 
-  @tracked tabs = [
-    {
-      label: this.intl.t('clients'),
-      active: true,
-      enabled: true,
-      link: 'authenticated.partner.clients',
-    },
-  ];
+  get tabs() {
+    return [
+      {
+        label: this.intl.t('clients'),
+        active: true,
+        enabled: true,
+        link: 'authenticated.partner.clients',
+      },
+    ];
+  }
 
   @action
   initalize() {

@@ -6,10 +6,7 @@ export default class AuthenticatedPartnerRegistrationRequestsRoute extends Route
   @service partner;
 
   beforeModel() {
-    if (
-      !this.get('me.org.can_access_partner_dashboard') ||
-      !this.partner.access.invite_clients
-    ) {
+    if (!this.get('me.org.can_access_partner_dashboard')) {
       this.transitionTo('authenticated.partner.clients');
     }
   }
