@@ -27,3 +27,15 @@ jobs:
             ${{ runner.OS }}-node-
       - run: npm ci
       - run: npm run deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          ENVIRONMENT: 'production'
+          IRENE_CRISP_WEBSITE_ID: '806bf0a8-c022-4a1f-ae9b-ecb859c001b4'
+          IRENE_ENABLE_HOTJAR: 'True'
+          IRENE_ENABLE_MARKETPLACE: 'True'
+          IRENE_ENABLE_PENDO: 'True'
+          IRENE_ENABLE_ROLLBAR: 'True'
+          ROLLBAR_ACCESS_TOKEN: 'f1d76383c2d346a3aeedc21823f18c76'
