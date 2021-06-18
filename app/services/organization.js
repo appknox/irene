@@ -1,26 +1,22 @@
 import Service from '@ember/service';
-import {
-  inject as service
-} from '@ember/service';
+import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
 
-const OrganizationService = Service.extend({
-  selected: null,
-
-  store: service('store'),
-  notify: service('notifications'),
+export default class OrganizationService extends Service {
+  selected = null;
+  @service store;
+  @service notifications;
 
   async load() {
-    const orgs = await this.get('store').findAll('organization');
+    const orgs = await this.store.findAll('organization');
     const selectedOrg = orgs.get('firstObject');
     if (selectedOrg) {
-      this.set('selected', selectedOrg);
+      this.selected = selectedOrg;
     } else {
-      this.get("notify").error(
-        "Organization is missing Contact Support", ENV.notifications
+      this.notifications.error(
+        'Organization is missing Contact Support',
+        ENV.notifications
       );
     }
   }
-});
-
-export default OrganizationService;
+}

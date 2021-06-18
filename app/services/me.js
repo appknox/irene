@@ -1,29 +1,27 @@
 import Service from '@ember/service';
-import {
-  inject as service
-} from '@ember/service';
-import computed from 'ember-awesome-macros/computed';
-import {
-  promise
-} from 'ember-awesome-macros';
-import {
-  reads
-} from '@ember/object/computed';
+import { inject as service } from '@ember/service';
 
-const MeService = Service.extend({
-  store: service('store'),
-  notify: service('notifications'),
-  ajax: service('ajax'),
-  organization: service('organization'),
-  org: promise.object(computed('organization.selected.id', function () {
-    return this.get('store').queryRecord('organization-me', {});
-  })),
-  membership: promise.object(computed('org.id', async function () {
-    await this.get('org');
-    const user_id = this.get('org.id');
-    return this.get('store').findRecord('organization-member', user_id);
-  })),
-  partner: reads('org.partner')
-});
+export default class MeService extends Service {
+  @service store;
+  @service notifications;
+  @service organization;
 
-export default MeService;
+  organization_me = null;
+
+  get org() {
+    if (!this.organization_me) {
+      this.organization_me = this.store.queryRecord('organization-me', {});
+    }
+    return this.organization_me;
+  }
+
+  async getMembership() {
+    const org = await this.org;
+    const user_id = org.id;
+    return this.store.findRecord('organization-member', user_id);
+  }
+
+  get partner() {
+    return this.org.partner;
+  }
+}
