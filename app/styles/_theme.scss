@@ -40,6 +40,9 @@ $color-error: #fe4d3f;
   --black-800: #242729;
   --black-900: #0c0d0e;
 
+  --android: #7bb054;
+  --ios: #8d9096;
+
   /* generic derived colors */
   --text-default: #{$color-gray};
   --text-error: #{$color-error};
@@ -49,6 +52,7 @@ $color-error: #fe4d3f;
   --bg-gray-darken-040: #{darken($bg-gray, 4%)};
   --bg-gray-darken-050: #{darken($bg-gray, 5%)};
   --bg-gray-darken-060: #{darken($bg-gray, 6%)};
+  --bg-gray-darken-070: #{darken($bg-gray, 7%)};
   --bg-gray-darken-080: #{darken($bg-gray, 8%)};
   --bg-gray-lighten-015: #{lighten($bg-gray, 1.5%)};
   --bg-darkgray: #{darken(mix($color-gray, $bg-gray, 2%), 14%)};

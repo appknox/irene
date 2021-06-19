@@ -1,26 +1,296 @@
-// import { module, test } from 'qunit';
-// import { setupRenderingTest } from 'ember-qunit';
-// import { render } from '@ember/test-helpers';
-// import { hbs } from 'ember-cli-htmlbars';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { setupMirage } from 'ember-cli-mirage/test-support';
+import { setupIntl } from 'ember-intl/test-support';
+import { render } from '@ember/test-helpers';
+import { hbs } from 'ember-cli-htmlbars';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
-// module('Integration | Component | partner/client-uploads-list', function(hooks) {
-//   setupRenderingTest(hooks);
+function serializer(data, many = false) {
+  if (many === true) {
+    return {
+      count: data.length,
+      next: null,
+      previous: null,
+      results: data.models.map((d) => {
+        return {
+          id: d.id,
+          data: d.attrs,
+          created_on: d.createdOn,
+          name: d.name,
+          version: d.version,
+          version_code: d.versionCode,
+          icon_url: d.iconUrl,
+        };
+      }),
+    };
+  }
+  return {
+    id: data.id,
+    data: data.attrs,
+    created_on: data.createdOn,
+    name: data.name,
+    version: data.version,
+    version_code: data.versionCode,
+    icon_url: data.iconUrl,
+  };
+}
 
-//   test('it renders', async function(assert) {
-//     // Set any properties with this.set('myProperty', 'value');
-//     // Handle any actions with this.set('myAction', function(val) { ... });
+module(
+  'Integration | Component | partner/client-uploads-list',
+  function (hooks) {
+    setupRenderingTest(hooks);
+    setupMirage(hooks);
+    setupIntl(hooks);
 
-//     await render(hbs`<Partner::ClientUploadsList />`);
+    hooks.beforeEach(async function () {
+      await this.server.createList('organization', 2);
+      await this.owner.lookup('service:organization').load();
+    });
 
-//     assert.equal(this.element.textContent.trim(), '');
+    test('it should show no content message for 0 file count', async function (assert) {
+      this.server.get('v2/partners/:id', (_, req) => {
+        return {
+          id: req.params.id,
+          access: {
+            list_files: true,
+          },
+        };
+      });
+      await this.owner.lookup('service:partner').load();
+      this.server.get(
+        'v2/partnerclients/:clientId/projects/:projectId/files',
+        () => {
+          return {
+            count: 0,
+            next: null,
+            previous: null,
+            results: [],
+          };
+        }
+      );
+      this.set('clientId', 1);
+      this.set('projectId', 1);
 
-//     // Template block usage:
-//     await render(hbs`
-//       <Partner::ClientUploadsList>
-//         template block text
-//       </Partner::ClientUploadsList>
-//     `);
+      await render(
+        hbs`<Partner::ClientUploadsList @clientId={{this.clientId}} @projectId={{this.projectId}}/>`
+      );
+      assert.dom('[data-test-no-uploads]').exists();
+      assert.dom('[data-test-no-uploads]').hasText('t:noClientUploads:()');
+    });
 
-//     assert.equal(this.element.textContent.trim(), 'template block text');
-//   });
-// });
+    test('it should show error message on api error', async function (assert) {
+      this.server.get('v2/partners/:id', (_, req) => {
+        return {
+          id: req.params.id,
+          access: {
+            list_files: true,
+          },
+        };
+      });
+      await this.owner.lookup('service:partner').load();
+      this.server.get(
+        'v2/partnerclients/:clientId/projects/:projectId/files',
+        () => {
+          return Response(500);
+        }
+      );
+      this.set('clientId', 1);
+      this.set('projectId', 1);
+
+      await render(
+        hbs`<Partner::ClientUploadsList @clientId={{this.clientId}} @projectId={{this.projectId}}/>`
+      );
+      assert.dom('[data-test-load-error]').exists();
+      assert
+        .dom('[data-test-load-error]')
+        .hasText('t:errorCouldNotLoadData:()');
+    });
+
+    test('it should show table headers correctly', async function (assert) {
+      this.server.get('v2/partners/:id', (_, req) => {
+        return {
+          id: req.params.id,
+          access: {
+            list_files: true,
+          },
+        };
+      });
+      await this.owner.lookup('service:partner').load();
+      this.server.createList('partner/partnerclient-file', 5);
+      this.server.get(
+        'v2/partnerclients/:clientId/projects/:projectId/files',
+        (schema) => {
+          const data = schema['partner/partnerclientFiles'].all();
+          return serializer(data, true);
+        }
+      );
+      this.set('clientId', 1);
+      this.set('projectId', 1);
+
+      await render(
+        hbs`<Partner::ClientUploadsList @clientId={{this.clientId}} @projectId={{this.projectId}}/>`
+      );
+      assert.equal(
+        this.element.querySelectorAll('[data-test-table-header] > div').length,
+        4,
+        'Should have 4 headers'
+      );
+      assert.dom(`[data-test-table-header-app]`).hasText(`t:app:()`);
+      assert.dom(`[data-test-table-header-version]`).hasText(`t:version:()`);
+      assert
+        .dom(`[data-test-table-header-versioncode]`)
+        .hasText(`t:versionCode:()`);
+      assert.dom(`[data-test-table-header-uploaded]`).hasText(`t:uploaded:()`);
+    });
+
+    test('it should render table rows for each file', async function (assert) {
+      this.server.get('v2/partners/:id', (_, req) => {
+        return {
+          id: req.params.id,
+          access: {
+            list_files: true,
+          },
+        };
+      });
+      await this.owner.lookup('service:partner').load();
+      this.server.createList('partner/partnerclient-file', 5);
+      this.server.get(
+        'v2/partnerclients/:clientId/projects/:projectId/files',
+        (schema) => {
+          const data = schema['partner/partnerclientFiles'].all();
+          return serializer(data, true);
+        }
+      );
+      this.set('clientId', 1);
+      this.set('projectId', 1);
+
+      await render(
+        hbs`<Partner::ClientUploadsList @clientId={{this.clientId}} @projectId={{this.projectId}}/>`
+      );
+      assert.equal(
+        this.element.querySelectorAll(`[data-test-table-body-row]`).length,
+        5,
+        'Should have 5 rows'
+      );
+      assert.dom(`[data-test-row-app] [data-test-row-app-icon]`).exists();
+      assert.dom(`[data-test-row-app] [data-test-row-app-info]`).exists();
+      assert.dom(`[data-test-row-version]`).exists();
+      assert.dom(`[data-test-row-versioncode]`).exists();
+      assert.dom(`[ data-test-row-uploaded]`).exists();
+      assert.dom(`[ data-test-pagination]`).doesNotExist();
+    });
+
+    test('it should contain actual values in each row', async function (assert) {
+      this.server.get('v2/partners/:id', (_, req) => {
+        return {
+          id: req.params.id,
+          access: {
+            list_files: true,
+          },
+        };
+      });
+      await this.owner.lookup('service:partner').load();
+      dayjs.extend(relativeTime);
+      const files = this.server.createList('partner/partnerclient-file', 2);
+      this.server.get(
+        'v2/partnerclients/:clientId/projects/:projectId/files',
+        (schema) => {
+          const data = schema['partner/partnerclientFiles'].all();
+          return serializer(data, true);
+        }
+      );
+      this.set('clientId', 1);
+      this.set('projectId', 1);
+
+      await render(
+        hbs`<Partner::ClientUploadsList @clientId={{this.clientId}} @projectId={{this.projectId}}/>`
+      );
+      for (let row = 0; row <= files.length - 1; row++) {
+        const rowData = files.objectAt(row);
+        console.log('rowData', rowData);
+        assert
+          .dom(`[data-test-table-body-row="${row}"] [data-test-row-app-icon]`)
+          .hasStyle({
+            'background-image': `url("${rowData.iconUrl}")`,
+          });
+        assert
+          .dom(`[data-test-table-body-row="${row}"] [data-test-row-app-info]`)
+          .hasText(rowData.name);
+
+        assert
+          .dom(`[data-test-table-body-row="${row}"] [data-test-row-version]`)
+          .hasText(`${rowData.version}`);
+        assert
+          .dom(
+            `[data-test-table-body-row="${row}"] [data-test-row-versioncode]`
+          )
+          .hasText(`${rowData.versionCode}`);
+        assert
+          .dom(`[data-test-table-body-row="${row}"] [data-test-row-uploaded]`)
+          .hasText(dayjs(rowData.createdOn).fromNow());
+      }
+    });
+
+    test('it should show pagination', async function (assert) {
+      this.server.get('v2/partners/:id', (_, req) => {
+        return {
+          id: req.params.id,
+          access: {
+            list_files: true,
+          },
+        };
+      });
+      await this.owner.lookup('service:partner').load();
+      this.server.createList('partner/partnerclient-file', 10);
+      this.server.get(
+        'v2/partnerclients/:clientId/projects/:projectId/files',
+        (schema) => {
+          const data = schema['partner/partnerclientFiles'].all();
+          return serializer(data, true);
+        }
+      );
+      this.set('clientId', 1);
+      this.set('projectId', 1);
+
+      await render(
+        hbs`<Partner::ClientUploadsList @clientId={{this.clientId}} @projectId={{this.projectId}}/>`
+      );
+
+      assert.dom(`[ data-test-pagination]`).exists();
+    });
+
+    test('it should render files list section if privilege is set to true', async function (assert) {
+      this.server.get('v2/partners/:id', (_, req) => {
+        return {
+          id: req.params.id,
+          access: {
+            list_files: true,
+          },
+        };
+      });
+      await this.owner.lookup('service:partner').load();
+
+      await render(hbs`<Partner::ClientUploadsList/>`);
+
+      assert.dom(`[data-test-upload-list]`).exists();
+    });
+
+    test('it should not render anything if the privilege is set to false', async function (assert) {
+      this.server.get('v2/partners/:id', (_, req) => {
+        return {
+          id: req.params.id,
+          access: {
+            list_files: false,
+          },
+        };
+      });
+      await this.owner.lookup('service:partner').load();
+
+      await render(hbs`<Partner::ClientUploadsList/>`);
+
+      assert.dom(`[data-test-upload-list]`).doesNotExist();
+    });
+  }
+);

@@ -573,6 +573,10 @@
   "packageName": "Package Name",
   "pageNotFound": "The page cannot be found",
   "paid": "Paid",
+  "partnerPrivilege": {
+    "noListFiles": "You were not privileged to access files",
+    "noListProjects": "You were not privileged to access projects"
+  },
   "passed": "Passed",
   "password": "Password",
   "passwordChanged": "Your password has been changed",
@@ -825,6 +829,7 @@
   "uploadZipFile": "Upload .zip file",
   "uploaded": "Uploaded",
   "uploading": "Uploading",
+  "uploads": "Uploads",
   "urlUpdated": "Successfully updated the url filter",
   "usd": "USD for",
   "user": "User",
@@ -839,6 +844,8 @@
   "version": "Version",
   "versionCode": "version code",
   "viewAll": "View All",
+  "viewFiles": "View Files",
+  "viewUploads": "View uploads",
   "viewIntegrationInstructions": "View Instructions to Integrate",
   "vulnerabilities": "Vulnerabilities",
   "vulnerability": "Vulnerability",

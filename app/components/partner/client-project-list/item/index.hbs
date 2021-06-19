@@ -1,0 +1,26 @@
+<div
+  local-class='platform platform-{{@project.platformIcon}}'
+  data-test-platform='{{@project.platformIcon}}'
+>
+  {{fa-icon @project.platformIcon}}
+</div>
+<div
+  local-class='package-name'
+  title='Project ID: {{@project.id}}'
+  data-test-package_name
+>
+  {{@project.packageName}}
+</div>
+<div local-class='created-on' class='text-lightgray' data-test-created_on>
+  {{day-js date=@project.createdOn format='DD MMM YYYY'}}
+</div>
+{{#if (and @enableViewFiles @clientId @project.id)}}
+  <LinkTo
+    @route='authenticated.partner.project'
+    @models={{array @clientId @project.id}}
+    class='button is-primary margin-l-3q'
+    data-test-view-files
+  >
+    {{t 'viewUploads'}}
+  </LinkTo>
+{{/if}}

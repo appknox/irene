@@ -1,13 +1,10 @@
 import Service from '@ember/service';
-import {
-  inject as service
-} from '@ember/service';
+import { inject as service } from '@ember/service';
 
 /**
  * Service:PartnerService
  */
 export default class PartnerService extends Service {
-
   @service store;
   @service organization;
 

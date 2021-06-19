@@ -573,6 +573,10 @@
   "packageName": "パッケージ名",
   "pageNotFound": "ページが見つかりません",
   "paid": "有料",
+  "partnerPrivilege": {
+    "noListFiles": "You were not privileged to access files",
+    "noListProjects": "You were not privileged to access projects"
+  },
   "passed": "合格",
   "password": "パスワード",
   "passwordChanged": "パスワードが変更されました",
@@ -825,6 +829,7 @@
   "uploadZipFile": "Upload .zip file",
   "uploaded": "Uploaded",
   "uploading": "アップロード中",
+  "uploads": "Uploads",
   "urlUpdated": "Successfully updated the url filter",
   "usd": "米ドル",
   "user": "User",
@@ -839,6 +844,8 @@
   "version": "バージョン",
   "versionCode": "バージョンコード",
   "viewAll": "View All",
+  "viewFiles": "View Files",
+  "viewUploads": "View uploads",
   "viewIntegrationInstructions": "View Instructions to Integrate",
   "vulnerabilities": "脆弱性",
   "vulnerability": "脆弱性",

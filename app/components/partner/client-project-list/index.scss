@@ -24,8 +24,10 @@
   padding: 0.6rem 1rem;
   background-color: var(--bg-gray);
   word-break: break-all;
-  grid-template-columns: 1fr 11% 13% 16%;
-  text-transform: capitalize;
+  grid-template-columns: 10% 1fr 15%;
+  &.add-column {
+    grid-template-columns: 10% 1fr 15% 15%;
+  }
 }
 
 .table-row {
@@ -36,29 +38,10 @@
   width: 100%;
   padding: 0.3rem 0.8rem;
   min-height: 2.5rem;
-  grid-template-columns: 1fr 11% 13% 16%;
-}
-
-.app {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.app-icon {
-  width: 2rem;
-  height: 2rem;
-  display: block;
-  border-radius: 0.3rem;
-  background-color: var(--bg-gray);
-  background-size: contain;
-  background-position: center center;
-  background-repeat: no-repeat;
-}
-
-.version {
-  display: grid;
-  align-items: center;
-  font-size: 0.95em;
+  grid-template-columns: 10% 1fr 15%;
+  &.add-column {
+    grid-template-columns: 10% 1fr 15% 15%;
+  }
 }
 
 .pagination {
