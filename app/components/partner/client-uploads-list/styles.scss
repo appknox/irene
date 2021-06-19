@@ -40,20 +40,19 @@
 }
 
 .app {
-  display: grid;
-  grid-template-columns: 2rem 1fr;
-  column-gap: 0.5rem;
-
-  .app-icon {
-    width: 2rem;
-    height: 2rem;
-    display: block;
-    background-size: contain;
-    background-position: center center;
-    background-repeat: no-repeat;
-    border-radius: 0.3rem;
-    background-color: #f6f7f9;
-  }
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.app-icon {
+  width: 2rem;
+  height: 2rem;
+  display: block;
+  border-radius: 0.3rem;
+  background-color: var(--bg-gray);
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .version {

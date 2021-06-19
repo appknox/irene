@@ -4,9 +4,18 @@ import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
+import { underscore } from '@ember/string';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import styles from 'irene/components/partner/client-info/styles';
+
+function serializer(payload) {
+  const serializedPayload = {};
+  Object.keys(payload.attrs).map((_key) => {
+    serializedPayload[underscore(_key)] = payload[_key];
+  });
+  return serializedPayload;
+}
 
 module('Integration | Component | partner/client-info', function (hooks) {
   setupRenderingTest(hooks);
@@ -14,7 +23,7 @@ module('Integration | Component | partner/client-info', function (hooks) {
   setupIntl(hooks);
 
   hooks.beforeEach(async function () {
-    await this.server.createList('organization', 2);
+    await this.server.createList('organization', 1);
     await this.owner.lookup('service:organization').load();
   });
 
@@ -101,7 +110,6 @@ module('Integration | Component | partner/client-info', function (hooks) {
   });
 
   test('it should render payment plan row, if view_plans enabled', async function (assert) {
-    const client = this.server.create('partner/partnerclient');
     this.server.get('v2/partners/:id', (_, req) => {
       return {
         id: req.params.id,
@@ -118,6 +126,7 @@ module('Integration | Component | partner/client-info', function (hooks) {
       };
     });
 
+    const client = this.server.create('partner/partnerclient');
     this.set('client', client);
     await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
     assert.dom('div[data-test-payment-plan-row]').exists();
@@ -164,7 +173,7 @@ module('Integration | Component | partner/client-info', function (hooks) {
     assert.dom('div[data-test-payment-plan-row]').doesNotExist();
   });
 
-  test('it should show client created on date in actual format', async function (assert) {
+  test('it should show client created on date correctly', async function (assert) {
     const client = this.server.create('partner/partnerclient');
     this.set('client', client);
     await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
@@ -172,5 +181,145 @@ module('Integration | Component | partner/client-info', function (hooks) {
     assert
       .dom(`[data-test-created-on]`)
       .hasText(dayjs(this.client.createdOn).format('DD MMM YYYY'));
+  });
+
+  test('it should render transfer credits button if transfer_credits & view_plans privileges are enabled', async function (assert) {
+    this.server.create('partner/partner', {
+      access: {
+        transfer_credits: true,
+        view_plans: true,
+      },
+    });
+    this.server.get('v2/partners/:id', (schema, request) => {
+      return serializer(schema['partner/partners'].find(request.params.id));
+    });
+
+    const client = this.server.create('partner/partnerclient');
+    this.set('client', client);
+
+    await this.owner.lookup('service:partner').load();
+
+    await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
+
+    assert.dom('[data-test-credit-transfer]').exists();
+  });
+
+  test('it should not render transfer credits button if transfer_credits or view_plans privileges is disabled', async function (assert) {
+    const client = this.server.create('partner/partnerclient');
+    this.set('client', client);
+
+    this.server.create('partner/partner', {
+      access: {
+        transfer_credits: false,
+        view_plans: true,
+      },
+    });
+    this.server.get('v2/partners/:id', (schema, request) => {
+      return serializer(schema['partner/partners'].find(request.params.id));
+    });
+
+    await this.owner.lookup('service:partner').load();
+
+    await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
+
+    assert.dom('[data-test-credit-transfer]').doesNotExist();
+
+    this.server.create('partner/partner', {
+      access: {
+        transfer_credits: true,
+        view_plans: false,
+      },
+    });
+    this.server.get('v2/partners/:id', (schema, request) => {
+      return serializer(schema['partner/partners'].find(request.params.id));
+    });
+
+    await this.owner.lookup('service:partner').load();
+
+    await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
+
+    assert.dom('[data-test-credit-transfer]').doesNotExist();
+
+    this.server.create('partner/partner', {
+      access: {
+        transfer_credits: false,
+        view_plans: false,
+      },
+    });
+    this.server.get('v2/partners/:id', (schema, request) => {
+      return serializer(schema['partner/partners'].find(request.params.id));
+    });
+
+    await this.owner.lookup('service:partner').load();
+
+    await render(hbs`<Partner::ClientInfo @client={{this.client}}/>`);
+
+    assert.dom('[data-test-credit-transfer]').doesNotExist();
+  });
+
+  test('it should render detail link button if list_projects privilege is enabled', async function (assert) {
+    this.server.create('partner/partner', {
+      access: {
+        list_projects: true,
+      },
+    });
+    this.server.get('v2/partners/:id', (schema, request) => {
+      return serializer(schema['partner/partners'].find(request.params.id));
+    });
+
+    const client = this.server.create('partner/partnerclient');
+    this.set('client', client);
+
+    await this.owner.lookup('service:partner').load();
+
+    await render(
+      hbs`<Partner::ClientInfo @client={{this.client}} @showDetailLink={{true}}/>`
+    );
+
+    assert.dom('[data-test-detail-page-link]').exists();
+  });
+
+  test('it should not render detail link button if list_projects privilege is disabled', async function (assert) {
+    this.server.create('partner/partner', {
+      access: {
+        list_projects: false,
+      },
+    });
+    this.server.get('v2/partners/:id', (schema, request) => {
+      return serializer(schema['partner/partners'].find(request.params.id));
+    });
+
+    const client = this.server.create('partner/partnerclient');
+    this.set('client', client);
+
+    await this.owner.lookup('service:partner').load();
+
+    await render(
+      hbs`<Partner::ClientInfo @client={{this.client}} @showDetailLink={{true}}/>`
+    );
+
+    assert.dom('[data-test-detail-page-link]').doesNotExist();
+  });
+
+  test('it should not render detail link button if showDetailLink is false even if list_projects privilege is enabled', async function (assert) {
+    this.server.create('partner/partner', {
+      access: {
+        list_projects: true,
+      },
+    });
+    this.server.get('v2/partners/:id', (schema, request) => {
+      return serializer(schema['partner/partners'].find(request.params.id));
+    });
+
+    const client = this.server.create('partner/partnerclient');
+    this.set('client', client);
+
+    await this.owner.lookup('service:partner').load();
+
+    await render(
+      hbs`<Partner::ClientInfo @client={{this.client}} @showDetailLink={{false}}/>`
+    );
+
+    assert.dom('[data-test-detail-page-link]').doesNotExist();
   });
 });

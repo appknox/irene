@@ -1,4 +1,4 @@
-{{#if this.enableListProjects}}
+{{#if this.partner.access.list_projects}}
   <div
     class='padding-h-1 padding-t-1h padding-b-2'
     local-class='client-project-list'
@@ -16,7 +16,10 @@
       <div>
         <div local-class='table' data-test-table>
           <div
-            local-class='table-header {{if this.enableViewFiles 'add-column'}}'
+            local-class='table-header {{if
+              this.partner.access.list_files
+              'add-column'
+            }}'
             data-test-table-header
           >
             <div class='bold' data-test-table-header-platform>{{t
@@ -32,13 +35,16 @@
           <div local-class='table-body' data-test-table-body>
             {{#each this.objects as |project|}}
               <div
-                local-class='table-row {{if this.enableViewFiles 'add-column'}}'
+                local-class='table-row {{if
+                  this.partner.access.list_files
+                  'add-column'
+                }}'
                 data-test-table-row
               >
                 <Partner::ClientProjectList::Item
                   @project={{project}}
                   @clientId={{@clientId}}
-                  @enableViewFiles={{this.enableViewFiles}}
+                  @enableViewFiles={{this.partner.access.list_files}}
                 />
               </div>
             {{/each}}

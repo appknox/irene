@@ -16,12 +16,4 @@ export default class PartnerClientProjectListComponent extends PaginationMixin(
       clientId: this.args.clientId,
     });
   }
-
-  get enableListProjects() {
-    return this.partner.access.list_projects;
-  }
-
-  get enableViewFiles() {
-    return this.partner.access.list_files;
-  }
 }

@@ -67,21 +67,25 @@
         </div>
       </div>
     </div>
-    {{#if this.partner.access.transfer_credits}}
-      <div local-class='actions'>
-        <Partner::CreditTransfer
-          @client={{@client}}
-          data-test-credit-transfer
-        />
-
-        {{#if (and @showDetailLink this.partner.access.list_projects)}}
+    <div local-class='actions'>
+      {{#if
+        (and
+          this.partner.access.transfer_credits this.partner.access.view_plans
+        )
+      }}
+        <div local-class='action' data-test-credit-transfer>
+          <Partner::CreditTransfer @client={{@client}} />
+        </div>
+      {{/if}}
+      {{#if (and @showDetailLink this.partner.access.list_projects)}}
+        <div local-class='action' data-test-detail-page-link>
           <LinkTo
             @route='authenticated.partner.client'
             @model={{@client.id}}
-            class='button is-primary margin-l-3q'
+            class='button is-primary'
           >{{fa-icon 'arrow-right'}}</LinkTo>
-        {{/if}}
-      </div>
-    {{/if}}
+        </div>
+      {{/if}}
+    </div>
   </div>
 </div>

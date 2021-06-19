@@ -11,7 +11,7 @@ $card-thumbnail-size: 2.8rem;
 .client-info-header {
   display: grid;
   grid-template-columns: $card-thumbnail-size 1fr;
-  column-gap: 12px;
+  column-gap: 0.5rem;
   padding: 0 1rem;
   height: $card-header-height;
   align-items: center;
@@ -43,7 +43,7 @@ $card-thumbnail-size: 2.8rem;
 
   &.empty-title {
     color: var(--black-400);
-    font-size: 14px;
+    font-size: 0.95rem;
     font-style: italic;
   }
 }
@@ -80,5 +80,10 @@ $card-thumbnail-size: 2.8rem;
 .actions {
   display: flex;
   justify-content: flex-end;
-  padding: 0 1rem 1rem;
+  gap: 0.8rem;
+  padding-right: 1.2rem;
+}
+
+.action {
+  padding-bottom: 1.2rem;
 }

@@ -17,8 +17,4 @@ export default class PartnerClientUploadsListComponent extends PaginationMixin(
       projectId: this.args.projectId,
     });
   }
-
-  get enableViewFiles() {
-    return this.partner.access.list_files;
-  }
 }
