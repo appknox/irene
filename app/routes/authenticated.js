@@ -18,6 +18,7 @@ export default class AuthenticatedRoute extends Route {
   @service trial;
   @service rollbar;
   @service websocket;
+  @service integration;
 
   @service('organization') org;
   @service('socket-io') socketIOService;
@@ -47,6 +48,7 @@ export default class AuthenticatedRoute extends Route {
       accountName: company,
     };
     triggerAnalytics('login', data);
+    await this.integration.configure(user);
     chat.setUserEmail(user.get('email'), user.get('crispHash'));
     chat.setUserCompany(company);
     await this.configureRollBar(user);
