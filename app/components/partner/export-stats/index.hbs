@@ -1,0 +1,37 @@
+<div local-class='date-range-picker'>
+  <DatePicker
+    @range={{true}}
+    @value={{this.dateRange}}
+    @maxDate={{this.maxDate}}
+    @action={{this.updateDateRange}}
+    as |selectedDates|
+  >
+    <div local-class='date-range'>
+      <span local-class='date'>
+        {{#if selectedDates.firstObject}}
+          {{day-js date=selectedDates.firstObject format='DD/MM/YYYY'}}
+        {{else}}
+          --
+        {{/if}}
+
+      </span>
+      <span>
+        -
+      </span>
+      <span local-class='date'>
+        {{#if selectedDates.lastObject}}
+          {{day-js date=selectedDates.lastObject format='DD/MM/YYYY'}}
+        {{else}}
+          --
+        {{/if}}
+      </span>
+    </div>
+  </DatePicker>
+</div>
+<button
+  type='button'
+  class='is-primary button'
+  {{on 'click' (fn this.downloadCSV)}}
+>
+  Export CSV
+</button>
