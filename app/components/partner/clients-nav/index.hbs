@@ -1,12 +1,14 @@
-<nav local-class='subnav'>
+<nav local-class='subnav' data-test-clients-nav>
   {{#each this.tabs as |tab|}}
     {{#if tab.enabled}}
       <LinkTo
+        id={{tab.id}}
         @route={{tab.link}}
         local-class='subnav-link {{if
           (eq tab.link this.currentRoute)
           'active'
         }}'
+        data-test-nav-tab={{tab.id}}
       >
         {{tab.label}}
       </LinkTo>
