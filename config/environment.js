@@ -309,7 +309,6 @@ module.exports = function (environment) {
       scheduleDynamicscanAutomation: 'schedule_automation',
       reportPreference: 'report_preference',
       registration: 'registration',
-      activate: 'activate',
       saml2: 'sso/saml2',
       saml2IdPMetadata: 'sso/saml2/idp_metadata',
       saml2SPMetadata: 'v2/sso/saml2/metadata',

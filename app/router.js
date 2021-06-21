@@ -16,9 +16,6 @@ Router.map(function () {
   this.route('register-via-invite', {
     path: 'register-via-invite/:token',
   });
-  this.route('activate', {
-    path: '/activate/:pk/:token',
-  });
   this.route('recover');
   this.route('reset', {
     path: '/reset/:token',
