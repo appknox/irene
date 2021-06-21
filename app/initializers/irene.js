@@ -132,9 +132,6 @@ const initialize = function (application) {
       favicon: handler.getEnv('WHITELABEL_FAVICON'),
     });
   }
-
-  ENV.crispWebsiteId = handler.getEnv('IRENE_CRISP_WEBSITE_ID');
-
   ENV.enableHotjar = handler.getValueForPlugin('IRENE_ENABLE_HOTJAR');
   ENV.enablePendo = handler.getValueForPlugin('IRENE_ENABLE_PENDO');
   ENV.enableCSB = handler.getValueForPlugin('IRENE_ENABLE_CSB');
