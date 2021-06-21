@@ -1,7 +1,0 @@
-.columns
-  .column
-    = img-logo
-.columns
-  .column.has-text-centered
-    h6.themed-text
-      = t "greet"
