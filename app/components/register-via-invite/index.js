@@ -11,50 +11,60 @@ import InviteOnlyRegisterValidation from '../../validations/register-invite';
 export default class RegisterViaInvite extends Component {
   @service session;
   @service ajax;
+  @service logger;
+
   @tracked toBeSubmittedData = {};
   @tracked initialData = {};
+  @tracked invalid = false;
+
   inviteEndpoint = 'registration-via-invite';
 
-  constructor () {
-    super(...arguments)
+  constructor() {
+    super(...arguments);
     this.changeset = new Changeset(
-      this.toBeSubmittedData, lookupValidator(InviteOnlyRegisterValidation),
+      this.toBeSubmittedData,
+      lookupValidator(InviteOnlyRegisterValidation),
       InviteOnlyRegisterValidation,
       { skipValidate: true }
     );
   }
 
-  @task(function * (){
+  @task(function* () {
     const url = this.inviteEndpoint + '?token=' + this.args.token;
-    const data = yield this.ajax.request(url, {
-      namespace: ENV.namespace_v2
-    })
-    this.initialData = data;
-    this.changeset.set("company", data.company);
-    this.changeset.set("first_name", data.first_name);
-    this.changeset.set("last_name", data.last_name);
-    return data;
+    try {
+      const data = yield this.ajax.request(url, {
+        namespace: ENV.namespace_v2,
+      });
+      this.initialData = data;
+      this.changeset.set('company', data.company);
+      this.changeset.set('first_name', data.first_name);
+      this.changeset.set('last_name', data.last_name);
+      return data;
+    } catch (error) {
+      this.logger.warn(error);
+      this.invalid = true;
+    }
   })
-  loadTokenData
+  loadTokenData;
 
-  @task(function * (data) {
-    const url = this.inviteEndpoint
+  @task(function* (data) {
+    const url = this.inviteEndpoint;
     try {
       const logininfo = yield this.ajax.post(url, {
         data: data,
-        namespace: ENV.namespace_v2
-      })
+        namespace: ENV.namespace_v2,
+      });
       this.authenticate(logininfo);
-    } catch(errors) {
+    } catch (errors) {
       const changeset = this.changeset;
-      Object.keys(errors.payload).forEach(key => {
+      Object.keys(errors.payload).forEach((key) => {
         changeset.addError(key, errors.payload[key]);
       });
     }
   })
-  registerWithServer
+  registerWithServer;
 
-  @task(function * (changeset){
+  @task(function* (changeset) {
     yield changeset.validate();
     if (changeset.get('isValid')) {
       const username = changeset.get('username');
@@ -66,21 +76,21 @@ export default class RegisterViaInvite extends Component {
       const termsAccepted = changeset.get('termsAccepted');
       const token = this.args.token;
       yield this.registerWithServer.perform({
-        'token': token,
-        'username': username,
-        'password': password,
-        'confirm_password': passwordConfirmation,
-        'company': company,
-        'first_name': first_name,
-        'last_name': last_name,
-        'terms_accepted': termsAccepted
+        token: token,
+        username: username,
+        password: password,
+        confirm_password: passwordConfirmation,
+        company: company,
+        first_name: first_name,
+        last_name: last_name,
+        terms_accepted: termsAccepted,
       });
     }
   })
-  registerTask
+  registerTask;
 
   authenticate(data) {
-    this.session.authenticate("authenticator:login", data);
+    this.session.authenticate('authenticator:login', data);
   }
 
   @action

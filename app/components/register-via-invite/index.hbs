@@ -3,10 +3,11 @@
     <AuthAssets></AuthAssets>
     <form {{did-insert this.fetchdata}} local-class="register-form" onsubmit="return false">
       <div local-class="spacing">
-        {{#if this.loadTokenData.isRunning}}
-          <div>Loading...</div>
+        {{#if this.loadTokenData.isRunning }}
+          <div local-class="loading">Loading...</div>
         {{/if}}
-        {{#if this.loadTokenData.isIdle}}
+        {{#if this.loadTokenData.isIdle }}
+        {{#unless invalid}}
           <h4 data-test-register-invite-form-title local-class="register-title" class="has-text-centered">{{t "register"}}</h4>
           <div class="input-wrap">
             <div class="label-error">
@@ -73,7 +74,8 @@
             <TaskSpin @task={{this.registerTask}}></TaskSpin>
           </button>
         {{else}}
-          <p> You seems to have landed in a wrong location. If this seems like a mistake please contact <a href="mailto:support@appknox.com?subject=Invalid%20Invitation">support</a> </p>
+          <p local-class="wrong-location"> You seems to have landed in a wrong location. If this seems like a mistake please contact <a href="mailto:support@appknox.com?subject=Invalid%20Invitation">support</a> </p>
+        {{/unless}}
         {{/if}}
       </div>
     </form>
