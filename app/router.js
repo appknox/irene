@@ -98,6 +98,7 @@ Router.map(function () {
         this.route('project', {
           path: '/clients/:client_id/projects/:project_id',
         });
+        this.route('analytics');
       });
     }
   );

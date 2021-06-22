@@ -7,9 +7,9 @@ export default class PartnerAnalyticAdapter extends commondrf {
     );
   }
 
-  getDownloadURL(filter) {
-    const url = `${this._buildURL()}/download`;
-    return this.ajax(url, 'GET', {
+  async getDownloadURL(filter) {
+    const url = `${this._buildURL()}/download_url`;
+    return await this.ajax(url, 'GET', {
       data: filter,
     });
   }

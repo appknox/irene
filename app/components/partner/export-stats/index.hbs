@@ -1,37 +1,54 @@
-<div local-class='date-range-picker'>
-  <DatePicker
-    @range={{true}}
-    @value={{this.dateRange}}
-    @maxDate={{this.maxDate}}
-    @action={{this.updateDateRange}}
-    as |selectedDates|
-  >
-    <div local-class='date-range'>
-      <span local-class='date'>
-        {{#if selectedDates.firstObject}}
-          {{day-js date=selectedDates.firstObject format='DD/MM/YYYY'}}
-        {{else}}
-          --
-        {{/if}}
+<div class='margin-top20 padding-h-1 padding-b-2'>
+  <div local-class='header' data-test-header>
+    {{t 'downloadClientsStatData'}}
+  </div>
+  <div local-class='body'>
+    <div local-class='date-range-picker' data-test-date-range-picker-container>
+      <DatePicker
+        @range={{true}}
+        @maxDate={{this.maxDate}}
+        @action={{this.updateDateRange}}
+        @options={{this.datepickerOptions}}
+        data-test-date-range-picker
+        as |selectedDates|
+      >
+        <div local-class='date-range' data-test-date-range>
+          {{fa-icon 'calendar' class='font-small' title='Select date range'}}
+          <span data-test-date-range-selected>
+            <span local-class='date' data-test-from-date>
+              {{#if selectedDates.firstObject}}
+                {{day-js date=selectedDates.firstObject format='DD/MM/YYYY'}}
+              {{else}}
+                {{t 'fromDate'}}
+              {{/if}}
 
-      </span>
-      <span>
-        -
-      </span>
-      <span local-class='date'>
-        {{#if selectedDates.lastObject}}
-          {{day-js date=selectedDates.lastObject format='DD/MM/YYYY'}}
-        {{else}}
-          --
-        {{/if}}
-      </span>
+            </span>
+            <span>
+              -
+            </span>
+            <span local-class='date' data-test-to-date>
+              {{#if selectedDates.lastObject}}
+                {{day-js date=selectedDates.lastObject format='DD/MM/YYYY'}}
+              {{else}}
+                {{t 'toDate'}}
+              {{/if}}
+            </span>
+          </span>
+        </div>
+      </DatePicker>
     </div>
-  </DatePicker>
+    <button
+      type='button'
+      class='is-primary button margin-left highlighted-button'
+      {{on 'click' this.downloadCSV}}
+      disabled={{this.fetchDownloadUrl.isRunning}}
+      data-test-export-btn
+    >
+      {{#if this.fetchDownloadUrl.isRunning}}
+        {{fa-icon 'spinner fa-spin'}}
+        &nbsp;
+      {{/if}}
+      {{t 'exportCSV'}}
+    </button>
+  </div>
 </div>
-<button
-  type='button'
-  class='is-primary button'
-  {{on 'click' (fn this.downloadCSV)}}
->
-  Export CSV
-</button>

@@ -1,0 +1,35 @@
+.header {
+  border: 1px solid var(--bg-gray-darken-080);
+  height: 3rem;
+  line-height: 3rem;
+  padding-left: 0.5rem;
+  color: var(--black);
+  font-weight: bold;
+}
+.body {
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-gray);
+  padding: 2rem;
+  border: 1px solid var(--bg-gray-darken-080);
+  justify-content: center;
+}
+
+.date-range-picker {
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid var(--bg-gray-darken-080);
+  border-radius: 2px;
+  padding: 0.4rem;
+  background-color: $white;
+  min-width: 200px;
+  justify-content: center;
+}
+
+.date-range {
+  display: flex;
+  align-items: center;
+  column-gap: 0.4rem;
+}
