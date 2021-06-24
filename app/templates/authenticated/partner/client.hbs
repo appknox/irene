@@ -5,15 +5,26 @@
 <div class='padding-h-1 padding-t-1h padding-b-h'>
   <LinkTo @route='authenticated.partner.clients'>{{t 'clients'}}</LinkTo>
   /
-  {{#if this.model.isEmptyTitle}}
+  {{#if this.model.client.isEmptyTitle}}
     <em>{{t 'noName'}}</em>
   {{else}}
-    {{this.model.name}}
+    {{this.model.client.name}}
   {{/if}}
-  <Partner::ClientDetail @client={{this.model}} />
+
+  <Partner::ClientDetail @client={{this.model.client}} />
   {{outlet}}
 </div>
 
+{{#if this.model.partner.access.view_analytics}}
+  <div class='padding-b-2'>
+    <Partner::ClientUploadsStatChart
+      @title={{this.model.client.name}}
+      @targetModel='partner/partnerclient-analytic'
+      @id={{this.model.client.id}}
+    />
+  </div>
+{{/if}}
+
 <div class='padding-b-2'>
-  <Partner::ClientProjectList @clientId={{this.model.id}} />
+  <Partner::ClientProjectList @clientId={{this.model.client.id}} />
 </div>

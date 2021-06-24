@@ -14,7 +14,10 @@ export default class AuthenticatedClientRoute extends Route {
   }
 
   async model(data) {
-    return this.store.find('partner/partnerclient', data.id);
+    return {
+      client: await this.store.find('partner/partnerclient', data.id),
+      partner: await this.partner,
+    };
   }
 
   @action
