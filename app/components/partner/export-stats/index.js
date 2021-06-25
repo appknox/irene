@@ -16,8 +16,9 @@ export default class PartnerExportStatsComponent extends Component {
 
   datepickerOptions = [
     'clear',
-    'today',
-    'last3Months',
+    'last7Days',
+    'last30Days',
+    'thisMonth',
     'last6Months',
     'lastYear',
   ];

@@ -1,81 +1,174 @@
-<div class="bg-color-container" local-class="container">
-  <div class="bg-color-container" local-class="inner-container">
-    <AuthAssets></AuthAssets>
-    <form {{did-insert this.fetchdata}} local-class="register-form" onsubmit="return false">
-      <div local-class="spacing">
-        {{#if this.loadTokenData.isRunning }}
-          <div local-class="loading">Loading...</div>
+<div class='bg-color-container' local-class='container'>
+  <div class='bg-color-container' local-class='inner-container'>
+    <AuthAssets />
+    <form
+      {{did-insert this.fetchdata}}
+      local-class='register-form'
+      onsubmit='return false'
+    >
+      <div local-class='spacing'>
+        {{#if this.loadTokenData.isRunning}}
+          <div local-class='loading'>Loading...</div>
         {{/if}}
-        {{#if this.loadTokenData.isIdle }}
-        {{#unless invalid}}
-          <h4 data-test-register-invite-form-title local-class="register-title" class="has-text-centered">{{t "register"}}</h4>
-          <div class="input-wrap">
-            <div class="label-error">
-              <label for="register-invite-email">{{t "email"}}</label>
+        {{#if this.loadTokenData.isIdle}}
+          {{#if this.invalid}}
+            <p local-class='wrong-location'>
+              You seems to have landed in a wrong location. If this seems like a
+              mistake please contact
+              <a
+                href='mailto:support@appknox.com?subject=Invalid%20Invitation'
+              >support</a>
+            </p>
+          {{else}}
+            <h4
+              data-test-register-invite-form-title
+              local-class='register-title'
+              class='has-text-centered'
+            >{{t 'register'}}</h4>
+            <div class='input-wrap'>
+              <div class='label-error'>
+                <label for='register-invite-email'>{{t 'email'}}</label>
+              </div>
+              <Input
+                data-test-register-invite-email
+                id='register-invite-email'
+                readonly='readonly'
+                disabled='disabled'
+                @value={{this.initialData.email}}
+                @type='text'
+                placeholder='{{t 'email'}}'
+                class='input-field'
+              />
             </div>
-            <Input data-test-register-invite-email id="register-invite-email" readonly="readonly" disabled="disabled" @value={{this.initialData.email}} @type="text" placeholder="{{t "email"}}" class="input-field"/>
-          </div>
-          <div class="input-wrap">
-            <div class="label-error">
-              <label for="register-invite-company">{{t "companyName"}}</label>
+            <div class='input-wrap'>
+              <div class='label-error'>
+                <label for='register-invite-company'>{{t 'companyName'}}</label>
+              </div>
+              <Input
+                id='register-invite-company'
+                placeholder='Company Name'
+                @value={{this.changeset.company}}
+                class='input-field'
+              />
             </div>
-            <Input id="register-invite-company" placeholder="Company Name" @value={{this.changeset.company}} class="input-field"/>
-          </div>
-          <div class="input-wrap">
-            <div class="label-error">
-              <label for="register-invite-fname">{{t "name"}}</label>
+            <div class='input-wrap'>
+              <div class='label-error'>
+                <label for='register-invite-fname'>{{t 'name'}}</label>
+              </div>
+              <div class='half-wrap'>
+                <Input
+                  id='register-invite-fname'
+                  placeholder='First Name'
+                  @value={{this.changeset.first_name}}
+                  autocomplete='fname'
+                  autofocus='autofocus'
+                  class='input-field'
+                />
+                <Input
+                  id='register-invite-lname'
+                  placeholder='Last Name'
+                  @value={{this.changeset.last_name}}
+                  autocomplete='lname'
+                  class='input-field'
+                />
+              </div>
             </div>
-            <div class="half-wrap">
-              <Input id="register-invite-fname" placeholder="First Name" @value={{this.changeset.first_name}} autocomplete="fname" autofocus="autofocus" class="input-field" />
-              <Input id="register-invite-lname" placeholder="Last Name" @value={{this.changeset.last_name}} autocomplete="lname" class="input-field"/>
+            <div
+              class='input-wrap
+                {{if this.changeset.error.username 'has-error'}}'
+            >
+              <div class='label-error'>
+                <label for='register-invite-username'>{{t 'username'}}</label>
+                {{#if this.changeset.error.username}}
+                  <span
+                    class='error-msg'
+                  >{{this.changeset.error.username.validation}}</span>
+                {{/if}}
+              </div>
+              <Input
+                id='register-invite-username'
+                placeholder='{{t 'username'}}'
+                @value={{this.changeset.username}}
+                autocomplete='username'
+                class='input-field'
+              />
             </div>
-          </div>
-          <div class="input-wrap {{if this.changeset.error.username 'has-error'}}">
-            <div class="label-error">
-              <label for="register-invite-username">{{t "username"}}</label>
-              {{#if this.changeset.error.username}}
-                <span class="error-msg">{{this.changeset.error.username.validation}}</span>
-              {{/if}}
+            <div class='input-wrap'>
+              <div class='label-error'>
+                <label for='register-invite-password'>{{t 'password'}}</label>
+                {{#if this.changeset.error.password}}
+                  <span
+                    class='error-msg'
+                  >{{this.changeset.error.password.validation}}</span>
+                {{else if this.changeset.error.passwordConfirmation}}
+                  <span
+                    class='error-msg'
+                  >{{this.changeset.error.passwordConfirmation.validation}}</span>
+                {{/if}}
+              </div>
+              <Input
+                id='register-invite-password'
+                @type='password'
+                @value={{this.changeset.password}}
+                placeholder='Mininum 8 characters'
+                class='input-field
+                  {{if this.changeset.error.password 'has-error'}}'
+                autocomplete='new-password'
+              />
+              <Input
+                id='register-invite-confirmpassword'
+                @type='password'
+                @value={{this.changeset.passwordConfirmation}}
+                placeholder='Confirm Password'
+                class='input-field
+                  {{if this.changeset.error.passwordConfirmation 'has-error'}}'
+                autocomplete='new-password'
+              />
             </div>
-            <Input id="register-invite-username" placeholder="{{t "username"}}" @value={{this.changeset.username}} autocomplete="username" class="input-field"/>
-          </div>
-          <div class="input-wrap">
-            <div class="label-error">
-              <label for="register-invite-password">{{t "password"}}</label>
-              {{#if this.changeset.error.password}}
-                <span class="error-msg">{{this.changeset.error.password.validation}}</span>
-              {{else if this.changeset.error.passwordConfirmation}}
-                <span class="error-msg">{{this.changeset.error.passwordConfirmation.validation}}</span>
-              {{/if}}
+            <div
+              class='input-wrap
+                {{if this.changeset.error.termsAccepted 'has-error'}}'
+            >
+              <div class='label-error'>
+                <label local-class='register-form-accept'>
+                  <Input
+                    {{! template-lint-disable require-input-label  }}
+                    id='register-invite-terms-accepted'
+                    @type='checkbox'
+                    @checked={{this.changeset.termsAccepted}}
+                    local-class='checkbox-field'
+                  />
+                  <span>{{t 'acceptTerms'}}
+                    <a
+                      href='https://appknox.com/privacy'
+                      target='_blank'
+                      rel='noopener noreferrer'
+                    >
+                      <sup>*</sup>
+                    </a>
+                  </span>
+                </label>
+                {{#if this.changeset.error.termsAccepted}}
+                  <span class='error-msg'>
+                    <a
+                      href='https://appknox.com/privacy'
+                      target='_blank'
+                      rel='noopener noreferrer'
+                    >{{this.changeset.error.termsAccepted.validation}}</a>
+                  </span>
+                {{/if}}
+              </div>
             </div>
-            <Input id="register-invite-password" @type="password" @value={{this.changeset.password}} placeholder='Mininum 8 characters' class="input-field {{if this.changeset.error.password "has-error"}}" autocomplete="new-password"/>
-            <Input id="register-invite-confirmpassword" @type="password" @value={{this.changeset.passwordConfirmation}} placeholder='Confirm Password' class="input-field {{if this.changeset.error.passwordConfirmation "has-error"}}" autocomplete="new-password"/>
-          </div>
-          <div class="input-wrap {{if this.changeset.error.termsAccepted 'has-error'}}">
-            <div class="label-error">
-              <label local-class="register-form-accept">
-                <Input {{!-- template-lint-disable require-input-label  --}}
-                  id="register-invite-terms-accepted" @type="checkbox" @checked={{this.changeset.termsAccepted}} local-class="checkbox-field" />
-                <span>{{t "acceptTerms"}}
-                  <a href="https://appknox.com/privacy" target="_blank" rel="noopener noreferrer">
-                    <sup>*</sup>
-                  </a>
-                </span>
-              </label>
-              {{#if this.changeset.error.termsAccepted}}
-                <span class="error-msg">
-                  <a href="https://appknox.com/privacy" target="_blank" rel="noopener noreferrer">{{this.changeset.error.termsAccepted.validation}}</a>
-                </span>
-              {{/if}}
-            </div>
-          </div>
-          <button {{on "click" (fn this.register this.changeset)}} class="button is-primary is-fullwidth highlighted-button" type="submit" local-class="register-button">
-          {{t "register"}}
-            <TaskSpin @task={{this.registerTask}}></TaskSpin>
-          </button>
-        {{else}}
-          <p local-class="wrong-location"> You seems to have landed in a wrong location. If this seems like a mistake please contact <a href="mailto:support@appknox.com?subject=Invalid%20Invitation">support</a> </p>
-        {{/unless}}
+            <button
+              {{on 'click' (fn this.register this.changeset)}}
+              class='button is-primary is-fullwidth highlighted-button'
+              type='submit'
+              local-class='register-button'
+            >
+              {{t 'register'}}
+              <TaskSpin @task={{this.registerTask}} />
+            </button>
+          {{/if}}
         {{/if}}
       </div>
     </form>
