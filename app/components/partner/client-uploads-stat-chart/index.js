@@ -8,6 +8,8 @@ import advancedFormat from 'dayjs/plugin/advancedFormat';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import weekday from 'dayjs/plugin/weekday';
 import { inject as service } from '@ember/service';
+import { htmlSafe } from '@ember/template';
+import styles from './index.scss';
 
 import moment from 'moment';
 
@@ -49,9 +51,9 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
       axisKey: 'week',
       format: 'wo',
       tooltipFormat(d) {
-        return `${dayjs(d).format('DD-MM-YYYY')} - ${dayjs(d)
+        return `${dayjs(d).format('DD/MM/YYYY')} - ${dayjs(d)
           .add(7, 'day')
-          .format('DD-MM-YYYY')}`;
+          .format('DD/MM/YYYY')}`;
       },
     },
     {
@@ -59,7 +61,7 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
       axisKey: 'month',
       format: 'MMM/YY',
       tooltipFormat(d) {
-        return new dayjs(d).format('MMM/YYYY');
+        return new dayjs(d).format('MMMM/YYYY');
       },
     },
   ];
@@ -249,8 +251,11 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
    * @param {Number} y
    */
   tooltipTemplate(component = this, x, y) {
-    return `${component.currentTimeline.key.toUpperCase()}:
-            ${component.currentTimeline.tooltipFormat(x)} <br>
-            Uploads: ${y}`;
+    return htmlSafe(`<div class="${styles['tooltip']}">
+                      <div>${component.currentTimeline.tooltipFormat(x)}</div>
+                      <div><span class="${
+                        styles['tt-val-label']
+                      }">Uploads</span>: ${y}</div>
+                    </div>`);
   }
 }

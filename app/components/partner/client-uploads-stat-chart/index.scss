@@ -89,3 +89,16 @@
     }
   }
 }
+
+.tooltip {
+  border: 1px solid var(--bg-gray-darken-080);
+  width: max-content;
+  padding: 0.5rem;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  background-color: $white;
+}
+
+.tt-val-label {
+  font-weight: bold;
+}
