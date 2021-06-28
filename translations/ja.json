@@ -867,5 +867,13 @@
   "yes": "はい",
   "youCanCreateTeam": "you can create a new team by",
   "youWillBeChargedOn": "次のとおり請求されます：",
-  "yourPlan": "Your Plan"
+  "yourPlan": "Your Plan",
+  "whitelistEmailDomain": {
+    "title": "Email Domain Restriction",
+    "delete": "Delete Domain",
+    "subDesc": "Whitelist email domains which are allowed to be invited as organization members. If not set all domains will be allowed.",
+    "add": "Add Domain",
+    "added": "added successfully",
+    "deleted": "Domain Deleted"
+  }
 }

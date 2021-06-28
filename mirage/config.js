@@ -373,5 +373,9 @@ function routes() {
   this.get('/organizations/:orgId/members/:memId', (schema, request) => {
     return schema.organizationMembers.find(request.params.memId);
   });
+
+  this.get('/organizations/:id/me', (schema, req) => {
+    return schema.organizationMes.find(req.params.id);
+  });
   this.passthrough();
 }
