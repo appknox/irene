@@ -1,9 +1,5 @@
 {{#if this.partner.access.view_analytics}}
-  <div
-    class='margin-top20 padding-h-1 padding-b-2'
-    local-class='client-uploads-chart'
-    data-test-chart='upload-stat-chart'
-  >
+  <div local-class='client-uploads-chart' data-test-chart='upload-stat-chart'>
     <div local-class='header' data-test-chart='title'>
       {{@title}}
       {{t 'uploadStatistics'}}
@@ -64,6 +60,7 @@
         </div>
       </div>
       <div
+        local-class='chart-container'
         {{did-insert (perform this.loadChart)}}
         data-test-chart='container'
       ></div>
@@ -73,7 +70,5 @@
         </div>
       {{/if}}
     </div>
-
   </div>
-
 {{/if}}

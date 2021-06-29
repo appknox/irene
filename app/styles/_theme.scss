@@ -1,3 +1,4 @@
+$primary: #fe4d3f;
 $secondary: #424651;
 
 $lightgreen: #ccf3cc;
@@ -13,7 +14,7 @@ $color-error: #fe4d3f;
 
 :root {
   /* base colors */
-  --primary: #fe4d3f;
+  --primary: #{$primary};
   --secondary: #{$secondary};
   --white: #ffffff;
   --black: #000000;
@@ -46,6 +47,8 @@ $color-error: #fe4d3f;
   /* generic derived colors */
   --text-default: #{$color-gray};
   --text-error: #{$color-error};
+
+  --primary-transparent-005: #{rgba($primary, 0.05)};
 
   --bg-gray: #{$bg-gray};
   --bg-gray-darken-020: #{darken($bg-gray, 2%)};
