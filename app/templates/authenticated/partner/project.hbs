@@ -2,8 +2,8 @@
 
 <Partner::ClientsNav />
 
-<div class='padding-h-1 padding-t-1h padding-b-q'>
-  <div class='padding-b-1'>
+<div class='padding-h-1 padding-t-1h padding-b-3'>
+  <div class='padding-b-1h'>
     <LinkTo @route='authenticated.partner.clients'>{{t 'clients'}}</LinkTo>
     /
     <LinkTo
@@ -22,13 +22,15 @@
       title='Project ID: {{this.model.project.id}}'
     >{{this.model.project.id}}</span>
   </div>
-  <Partner::ClientProjectDetail @project={{this.model.project}} />
-</div>
-{{outlet}}
+  <div class='padding-b-3'>
+    <Partner::ClientProjectDetail @project={{this.model.project}} />
+  </div>
+  <div class='padding-b-3'>
+    <Partner::ClientUploadsList
+      @clientId={{this.model.client.id}}
+      @projectId={{this.model.project.id}}
+    />
+  </div>
 
-<div class='padding-b-2'>
-  <Partner::ClientUploadsList
-    @clientId={{this.model.client.id}}
-    @projectId={{this.model.project.id}}
-  />
+  {{outlet}}
 </div>

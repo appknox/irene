@@ -49,27 +49,27 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
     {
       key: this.intl.t('day'),
       axisKey: 'date',
-      format: 'DD/MMM',
+      format: 'DD MMM',
       tooltipFormat(d) {
-        return new dayjs(d).format('DD-MM-YYYY');
+        return new dayjs(d).format('DD MMM YYYY');
       },
     },
     {
       key: this.intl.t('week'),
       axisKey: 'week',
-      format: 'DD/MMM',
+      format: 'DD MMM',
       tooltipFormat(d) {
-        return `${dayjs(d).format('DD/MM/YYYY')} - ${dayjs(d)
+        return `${dayjs(d).format('DD MMM YYYY')} - ${dayjs(d)
           .add(6, 'day')
-          .format('DD/MM/YYYY')}`;
+          .format('DD MMM YYYY')}`;
       },
     },
     {
       key: this.intl.t('month'),
       axisKey: 'month',
-      format: 'MMM/YY',
+      format: 'MMM YYYY',
       tooltipFormat(d) {
-        return new dayjs(d).format('MMMM/YYYY');
+        return new dayjs(d).format('MMM YYYY');
       },
     },
   ];
