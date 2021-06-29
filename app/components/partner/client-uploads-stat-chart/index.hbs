@@ -1,0 +1,74 @@
+{{#if this.partner.access.view_analytics}}
+  <div local-class='client-uploads-chart' data-test-chart='upload-stat-chart'>
+    <div local-class='header' data-test-chart='title'>
+      {{@title}}
+      {{t 'uploadStatistics'}}
+    </div>
+
+    <div local-class='body'>
+      <div local-class='filter'>
+        <div
+          local-class='date-range-picker'
+          data-test-chart='date-range-picker'
+        >
+          <DatePicker
+            @range={{true}}
+            @value={{this.dateRange}}
+            @maxDate={{this.maxDate}}
+            @action={{this.updateDateRange}}
+            @options={{this.datepickerOptions}}
+            as |selectedDates|
+          >
+            <div local-class='date-range'>
+              <span local-class='date' data-test-chart='start-date'>
+                {{#if selectedDates.firstObject}}
+                  {{day-js date=selectedDates.firstObject format='DD MMM YYYY'}}
+                {{else}}
+                  --
+                {{/if}}
+
+              </span>
+              <span>
+                -
+              </span>
+              <span local-class='date' data-test-chart='end-date'>
+                {{#if selectedDates.lastObject}}
+                  {{day-js date=selectedDates.lastObject format='DD MMM YYYY'}}
+                {{else}}
+                  --
+                {{/if}}
+              </span>
+            </div>
+          </DatePicker>
+        </div>
+        <div local-class='duration-options' data-test-chart='filter-options'>
+          {{#each this.timelinePlaceholders as |option seq|}}
+            <button
+              class='button'
+              type='button'
+              local-class='option {{if
+                (eq this.currentTimeline.key option.key)
+                'active'
+              }}'
+              {{on 'click' (fn this.onChangeTimeline option)}}
+              data-test-chart='filter-btns-{{seq}}'
+            >
+              {{option.key}}
+            </button>
+
+          {{/each}}
+        </div>
+      </div>
+      <div
+        local-class='chart-container'
+        {{did-insert (perform this.loadChart)}}
+        data-test-chart='container'
+      ></div>
+      {{#if this.loadChart.isRunning}}
+        <div local-class='loading-spinner'>
+          {{fa-icon 'spinner fa-spin'}}
+        </div>
+      {{/if}}
+    </div>
+  </div>
+{{/if}}
