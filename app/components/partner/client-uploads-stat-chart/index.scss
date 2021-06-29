@@ -18,6 +18,7 @@
   border: 1px solid var(--bg-gray-darken-080);
   padding-right: 0.5rem;
   padding-top: 0.5rem;
+  position: relative;
 }
 
 .filter {
@@ -101,4 +102,10 @@
 
 .tt-val-label {
   font-weight: bold;
+}
+
+.loading-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
 }

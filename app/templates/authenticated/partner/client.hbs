@@ -15,6 +15,10 @@
   {{outlet}}
 </div>
 
+<div class='padding-b-2'>
+  <Partner::ClientProjectList @clientId={{this.model.client.id}} />
+</div>
+
 {{#if this.model.partner.access.view_analytics}}
   <div class='padding-b-2'>
     <Partner::ClientUploadsStatChart
@@ -24,7 +28,3 @@
     />
   </div>
 {{/if}}
-
-<div class='padding-b-2'>
-  <Partner::ClientProjectList @clientId={{this.model.client.id}} />
-</div>

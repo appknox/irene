@@ -31,6 +31,14 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
   }
 
   // Properties
+  datepickerOptions = [
+    'last7Days',
+    'last30Days',
+    'thisMonth',
+    'last6Months',
+    'lastYear',
+  ];
+
   @tracked isHideLegend = true;
 
   @tracked chartData = [];
@@ -49,10 +57,10 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
     {
       key: this.intl.t('week'),
       axisKey: 'week',
-      format: 'wo',
+      format: 'DD/MMM',
       tooltipFormat(d) {
         return `${dayjs(d).format('DD/MM/YYYY')} - ${dayjs(d)
-          .add(7, 'day')
+          .add(6, 'day')
           .format('DD/MM/YYYY')}`;
       },
     },
@@ -157,7 +165,7 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
       // Find all data points which fall under given group
       const dataPoints = rawData.filter(
         (data) =>
-          dayjs(data.created_on).startOf(groupBy).format('YYYY-MM-DD') ==
+          dayjs(data.created_on_date).startOf(groupBy).format('YYYY-MM-DD') ==
           curpointFormattedDate
       );
       // Insert/Update by date
@@ -217,6 +225,10 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
           },
         },
         y: {
+          padding: {
+            bottom: 0,
+          },
+          min: 0,
           default: [0, 5],
           tick: {
             stepSize: 1,

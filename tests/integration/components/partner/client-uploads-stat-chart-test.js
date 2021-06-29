@@ -53,10 +53,10 @@ module(
       assert.dom(`[data-test-chart='date-range-picker']`).exists();
       assert
         .dom(`[data-test-chart='start-date']`)
-        .hasText(`${dayjs().subtract(1, 'month').format('DD/MM/YYYY')}`);
+        .hasText(`${dayjs().subtract(1, 'month').format('DD MMM YYYY')}`);
       assert
         .dom(`[data-test-chart='end-date']`)
-        .hasText(`${dayjs().format('DD/MM/YYYY')}`);
+        .hasText(`${dayjs().format('DD MMM YYYY')}`);
     });
 
     test('it should handle active filter option', async function (assert) {
