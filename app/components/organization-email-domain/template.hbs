@@ -1,0 +1,57 @@
+<p data-test-organization-email='sub-desc'>
+  {{t 'emailRestrictDesc'}}
+</p>
+<div local-class='org-email-domain' {{did-insert this.initializeComp}}>
+  <ul local-class='domain-list' data-test-organization-email='domain-list'>
+    {{#each this.domains as |domain seq|}}
+      <li
+        class='margin-top10'
+        local-class='domain'
+        data-test-organization-email='domain'
+      >
+        <span local-class='domain-name'>
+          {{domain.domainName}}
+        </span>
+        {{#if @isEditable}}
+          <button
+            class='is-secondary is-icon no-border'
+            type='button'
+            local-class='delete'
+            {{on 'click' (perform this.deleteDomain domain)}}
+            data-test-organization-email='delete-{{seq}}'
+          >
+            <AttachTooltip @placemnet='top'>
+              {{t 'deleteDomain'}}
+            </AttachTooltip>
+            {{fa-icon 'remove'}}
+          </button>
+        {{/if}}
+      </li>
+    {{/each}}
+  </ul>
+  {{#if @isEditable}}
+    <div
+      local-class='domain-input-item'
+      class='input-wrap vertical-align-center margin-b-0'
+      data-test-organization-email='input-container'
+    >
+      <Input
+        local-class='domain-input'
+        class='input-field'
+        @type='text'
+        @value={{this.tDomain}}
+        placeholder='example.com'
+        aria-label='domain input'
+        data-test-organization-email='input'
+      />
+      <button
+        type='button'
+        class='button is-primary highlighted-button'
+        local-class='save-btn'
+        {{on 'click' this.saveDomainInput}}
+        disabled={{if this.isDisableSave 'disabled'}}
+        data-test-organization-email='save-btn'
+      >{{t 'addDomain'}}</button>
+    </div>
+  {{/if}}
+</div>

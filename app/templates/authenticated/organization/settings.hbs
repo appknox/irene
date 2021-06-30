@@ -1,33 +1,49 @@
-{{page-title "Settings"}}
-<div class="org-container">
-  <OrganizationSettings @organization={{@model.organization}} @user={{@model.user}}></OrganizationSettings>
+{{page-title 'Settings'}}
+<div class='org-container'>
+  <OrganizationSettings
+    @organization={{@model.organization}}
+    @user={{@model.user}}
+  />
   {{#if @model.organization.features.sso}}
-    <SsoSettings @organization={{@model.organization}} @user={{@model.user}}></SsoSettings>
-    <div class="divider margin-t-1 margin-b-1"></div>
+    <SsoSettings @organization={{@model.organization}} @user={{@model.user}} />
+    <div class='divider margin-t-1 margin-b-1'></div>
   {{/if}}
-  <OrganizationArchive></OrganizationArchive>
-  <div class="divider margin-t-1 margin-b-1"></div>
-  <div class="columns">
-    <div class="column">
-      <div class="org-settings-subtitle black-text is-fullwidth">
-        {{t "jiraIntegration"}}
+  <div class='columns'>
+    <div class='column'>
+      <div class='org-settings-subtitle black-text is-fullwidth'>
+        {{t 'emailDomainRestriction'}}
       </div>
-      <JiraAccount @user={{@model.user}}></JiraAccount>
+      <OrganizationEmailDomain @isEditable={{this.model.me.org.is_owner}} />
     </div>
   </div>
-  <div class="divider margin-t-1 margin-b-1"></div>
-  <div class="columns">
-    <div class="column">
-      <div class="org-settings-subtitle black-text is-fullwidth">
-        {{t "githubIntegration"}}
+  <div class='divider margin-t-1 margin-b-1'></div>
+  <OrganizationArchive />
+  <div class='divider margin-t-1 margin-b-1'></div>
+  <div class='columns'>
+    <div class='column'>
+      <div class='org-settings-subtitle black-text is-fullwidth'>
+        {{t 'jiraIntegration'}}
       </div>
-      <GithubAccount @integratedUser={{@model.integratedUser}} @reconnect={{@model.reconnect}} @user={{@model.user}}></GithubAccount>
+      <JiraAccount @user={{@model.user}} />
     </div>
   </div>
-  <div class="divider margin-t-1 margin-b-1"></div>
-  <div class="columns">
-    <div class="column">
-      <FileCleanup></FileCleanup>
+  <div class='divider margin-t-1 margin-b-1'></div>
+  <div class='columns'>
+    <div class='column'>
+      <div class='org-settings-subtitle black-text is-fullwidth'>
+        {{t 'githubIntegration'}}
+      </div>
+      <GithubAccount
+        @integratedUser={{@model.integratedUser}}
+        @reconnect={{@model.reconnect}}
+        @user={{@model.user}}
+      />
+    </div>
+  </div>
+  <div class='divider margin-t-1 margin-b-1'></div>
+  <div class='columns'>
+    <div class='column'>
+      <FileCleanup />
     </div>
   </div>
 </div>
