@@ -2,25 +2,27 @@
   display: flex;
   flex-flow: wrap;
   column-gap: 0.95rem;
+  padding-top: 0.4rem;
 }
 
 .domain {
-  height: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  column-gap: 10px;
-  background-color: var(--bg-gray-darken-040);
+  column-gap: 0.4rem;
+  background-color: var(--bg-gray-darken-020);
   color: var(--black-750);
-  padding: 0 0.5rem;
-  border-radius: 5px;
+  padding: 0 1rem;
+  height: 2.6rem;
+  border-radius: 0.3rem;
 }
 
 .delete {
-  border: none;
+  margin-right: -0.7rem;
 }
 
 .domain-input-item {
+  padding-top: 0.4rem;
   column-gap: 1rem;
 }
 

@@ -14,7 +14,7 @@
         </span>
         {{#if @isEditable}}
           <button
-            class='is-secondary'
+            class='is-secondary is-icon no-border'
             type='button'
             local-class='delete'
             {{on 'click' (perform this.deleteDomain domain)}}
@@ -32,7 +32,7 @@
   {{#if @isEditable}}
     <div
       local-class='domain-input-item'
-      class='input-wrap vertical-align-center'
+      class='input-wrap vertical-align-center margin-b-0'
       data-test-organization-email='input-container'
     >
       <Input

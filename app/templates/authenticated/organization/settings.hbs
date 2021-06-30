@@ -8,6 +8,15 @@
     <SsoSettings @organization={{@model.organization}} @user={{@model.user}} />
     <div class='divider margin-t-1 margin-b-1'></div>
   {{/if}}
+  <div class='columns'>
+    <div class='column'>
+      <div class='org-settings-subtitle black-text is-fullwidth'>
+        {{t 'emailDomainRestriction'}}
+      </div>
+      <OrganizationEmailDomain @isEditable={{this.model.me.org.is_owner}} />
+    </div>
+  </div>
+  <div class='divider margin-t-1 margin-b-1'></div>
   <OrganizationArchive />
   <div class='divider margin-t-1 margin-b-1'></div>
   <div class='columns'>
@@ -35,15 +44,6 @@
   <div class='columns'>
     <div class='column'>
       <FileCleanup />
-    </div>
-  </div>
-
-  <div class='columns'>
-    <div class='column'>
-      <div class='org-settings-subtitle black-text is-fullwidth'>
-        {{t 'emailDomainRestriction'}}
-      </div>
-      <OrganizationEmailDomain @isEditable={{this.model.me.org.is_owner}} />
     </div>
   </div>
 </div>

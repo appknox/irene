@@ -201,7 +201,7 @@
   "editProjectSettings": "Edit Project Settings",
   "email": "Eメール",
   "emailCode": "Enter the code from the email in the field below.",
-  "emailDomainRestriction": "Email Domain Restriction",
+  "emailDomainRestriction": "Email Domain Restriction for Invitations",
   "emailOTP": "We've sent a OTP code to your email.",
   "emailOrUsername": "Eメール/ユーザ名",
   "emailRestrictDesc": "Whitelist email domains which are allowed to be invited as organization members. If not set all domains will be allowed.",
