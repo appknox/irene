@@ -14,11 +14,7 @@ function serializer(data) {
       return {
         id: d.id,
         data: d.attrs,
-        created_on: d.createdOn,
-        name: d.name,
-        version: d.version,
-        version_code: d.versionCode,
-        icon_url: d.iconUrl,
+        domain_name: d.domainName,
       };
     }),
   };
@@ -42,7 +38,7 @@ module('Integration | Component | organization-email-domain', function (hooks) {
     await render(hbs`<OrganizationEmailDomain />`);
     assert
       .dom(`[data-test-organization-email='sub-desc']`)
-      .hasText(`t:whitelistEmailDomain.subDesc:()`);
+      .hasText(`t:emailRestrictDesc:()`);
     assert
       .dom(`[data-test-organization-email='input-container']`)
       .doesNotExist();

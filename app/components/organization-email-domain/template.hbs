@@ -1,5 +1,5 @@
 <p data-test-organization-email='sub-desc'>
-  {{t 'whitelistEmailDomain.subDesc'}}
+  {{t 'emailRestrictDesc'}}
 </p>
 <div local-class='org-email-domain' {{did-insert this.initializeComp}}>
   <ul local-class='domain-list' data-test-organization-email='domain-list'>
@@ -21,7 +21,7 @@
             data-test-organization-email='delete-{{seq}}'
           >
             <AttachTooltip @placemnet='top'>
-              {{t 'whitelistEmailDomain.delete'}}
+              {{t 'deleteDomain'}}
             </AttachTooltip>
             {{fa-icon 'remove'}}
           </button>
@@ -51,7 +51,7 @@
         {{on 'click' this.saveDomainInput}}
         disabled={{if this.isDisableSave 'disabled'}}
         data-test-organization-email='save-btn'
-      >{{t 'whitelistEmailDomain.add'}}</button>
+      >{{t 'addDomain'}}</button>
     </div>
   {{/if}}
 </div>

@@ -38,7 +38,6 @@ export default class OrganizationEmailDomainComponent extends Component {
 
   @task(function* () {
     this.domains = yield this.store.findAll('organization-email-domain');
-    console.log(' this.domains', this.domains);
   })
   fetchDomains;
 
@@ -53,7 +52,7 @@ export default class OrganizationEmailDomainComponent extends Component {
       .save()
       .then(() => {
         this.notify.success(
-          `${domainName} ${this.intl.t('whitelistEmailDomain.added')}`
+          `${domainName} ${this.intl.t('addedSuccessfully')}`
         );
         return domainInfo;
       })
@@ -70,9 +69,11 @@ export default class OrganizationEmailDomainComponent extends Component {
       yield domain.deleteRecord();
       yield domain.save();
       this.domains.removeObject(domain);
-      this.notify.success(this.intl.t('whitelistEmailDomain.deleted'));
+      this.notify.success(this.intl.t('domainDeleted'));
     } catch (err) {
-      this.notify.error(parseError(err, 'Problem while deleting domain'));
+      this.notify.error(
+        parseError(err, this.intl.t('problemWhileDeletingDomain'))
+      );
     }
   })
   deleteDomain;
