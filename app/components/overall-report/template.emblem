@@ -7,7 +7,22 @@
   .column
     .columns
       .column.content-right
-        | Last 6 Months
+        = date-picker class="custom-styled-picker" value=dateRange  maxDate=maxDate range=true options=datepickerOptions action=(action "updateDateRange") as |selectedDates|
+          .align-middle
+            = fa-icon "calendar" class="font-small" title="Select date range"
+            button local-class="date-btn"
+              if selectedDates.firstObject
+                = day-js date=selectedDates.firstObject format="DD MMM YYYY"
+              else
+                = t "fromDate"
+            span
+              | ~
+            button local-class="date-btn"
+              if selectedDates.lastObject
+                = day-js date=selectedDates.lastObject format="DD MMM YYYY"
+              else
+                = t "toDate"
+
 
     .columns
       .column
