@@ -211,6 +211,13 @@ export default Component.extend({
     }
   }),
 
+  downloadReportHTMLen: task(function* () {
+    const data = yield this.get('fetchSignedReportURL').perform();
+    if (data.html_en) {
+      window.location.href = data.html_en;
+    }
+  }),
+
   addAnalysis: task(function* () {
     const vulnerability = this.get('selectedVulnerability');
     const file = this.get('file');
