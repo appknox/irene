@@ -874,5 +874,15 @@
   "yes": "Yes",
   "youCanCreateTeam": "you can create a new team by",
   "youWillBeChargedOn": "You will be charged on",
-  "yourPlan": "Your Plan"
+  "yourPlan": "Your Plan",
+  "generatedOn": "Generated On",
+  "generateReport": "Generate Report",
+  "downloadReport": "Download Report",
+  "generatingReport": "Generating Report",
+  "downloadUrlNotFound": "Couldn't download the report!",
+  "downloadExcelReport": "Download Excel Report",
+  "reportGeneratedSuccessfully": "Report generated successfully",
+  "reportSendTo": "and sent to following Email IDS:",
+  "reportGenerateError": "Problem while generating report, please try again!",
+  "downloadPrevReport": "Download Previous Report"
 }
