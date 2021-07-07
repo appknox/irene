@@ -32,6 +32,10 @@
                     span.dropdown-item-icon
                       = fa-icon "file-excel-o"
                     | Download Excel Report
+                  a.dropdown-item click={(perform downloadReportHTMLja)}
+                    span.dropdown-item-icon
+                      = fa-icon "file-excel-o"
+                    | Download JA HTML Report
 
       .columns
         .column
