@@ -120,7 +120,7 @@
   },
   "dependencies": {
     "@novnc/novnc": "^1.1.0",
-    "billboard.js": "^1.12.7",
+    "billboard.js": "^3.1.0",
     "clipboard": "^2.0.6",
     "ember-radio-button": "^2.0.1",
     "pikaday": "^1.8.2",
