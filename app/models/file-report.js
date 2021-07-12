@@ -1,15 +1,7 @@
-import Model, {
-  attr
-} from '@ember-data/model';
-import {
-  equal
-} from '@ember/object/computed';
-import {
-  computed
-} from '@ember/object';
+import Model, { attr } from '@ember-data/model';
+import { equal } from '@ember/object/computed';
 
 export default class FileReportModel extends Model {
-
   @attr('date') generatedOn;
 
   @attr('string') language;
@@ -24,11 +16,9 @@ export default class FileReportModel extends Model {
 
   @attr('number') fileId;
 
-  @computed('progress')
   get isGenerating() {
     return this.progress >= 0 && this.progress <= 99;
   }
 
   @equal('progress', 100) isGenerated;
-
 }

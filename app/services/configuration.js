@@ -117,7 +117,7 @@ export default class ConfigurationService extends Service {
   async serverConfigFetch() {
     try {
       const data = await this.fetchConfig(this.serverConfigEndpoint);
-      this.serverData.websocket ||= 'http://localhost:8008';
+      this.serverData.websocket ||= data.websocket;
       this.serverData.enterprise ||= data.enterprise == true;
     } catch (error) {
       this.logger.error('Error getting server configuration', error);

@@ -24,6 +24,9 @@ import {
   addObserver,
   removeObserver
 } from '@ember/object/observers';
+import {
+  htmlSafe
+} from '@ember/template';
 
 export default class FileReportBtn extends Component {
 
@@ -36,7 +39,6 @@ export default class FileReportBtn extends Component {
   // Properties
   @tracked reports = [];
   @tracked isDropdownOpen = false;
-  @tracked isDownloadingReport = false;
   @tracked isShowCopyPasswordModal = false;
   @tracked isShowGenerateReportModal = false;
   @tracked emailsToSend = '';
@@ -57,12 +59,15 @@ export default class FileReportBtn extends Component {
     return this.reports.length ? this.reports.firstObject : {};
   }
 
+  get isFileUpdated() {
+    return this.args.file.canGenerateReport;
+  }
+
   /**
    * Property will return previous reports based on the current state
    */
   get prevReports() {
-    const prevStartIndex = this.args.file.canGenerateReport ? 0 : 1;
-    return this.reports.length > 1 ? this.reports.slice(prevStartIndex, (REPORT.MAX_LIMIT + prevStartIndex) - 1) : [];
+    return this.reports.length > 1 ? this.reports.slice(1, REPORT.MAX_LIMIT) : [];
   }
 
   get enableBtn() {
@@ -86,6 +91,10 @@ export default class FileReportBtn extends Component {
     return btnLabel
   }
 
+  get reportGenerationProgress() {
+    return htmlSafe(`width: ${this.latestReport.progress}%`);
+  }
+
   constructor() {
     super(...arguments);
     addObserver(this.realtime, 'ReportCounter', this, this.observeReportCounter)
@@ -93,7 +102,8 @@ export default class FileReportBtn extends Component {
 
 
   willDestroy() {
-    removeObserver(this.realtime, 'errored', this, this.observeReportCounter)
+    super.willDestroy(...arguments);
+    removeObserver(this.realtime, 'ReportCounter', this, this.observeReportCounter)
   }
 
   // Actions
@@ -123,18 +133,20 @@ export default class FileReportBtn extends Component {
   }
 
   @action
-  loadReports() {
+  initializeComp() {
     this.getReports.perform();
+  }
+
+  @action
+  onCloseModal() {
+    this.isShowCopyPasswordModal = false;
+    this.isShowGenerateReportModal = false;
   }
 
   // Events
 
   observeReportCounter() {
     this.getReports.perform();
-  }
-
-  doProgressFilling(progress, element) {
-    element.style.width = `${progress}%`;
   }
 
   // Methods
@@ -145,11 +157,11 @@ export default class FileReportBtn extends Component {
   @task(function* () {
     this.isReportGenerating = true;
     try {
-      const genReport = this.store.createRecord(this.modelName, {
+      const genReport = yield this.store.createRecord(this.modelName, {
         fileId: this.fileId
       });
       yield genReport.save();
-      this.getReports.perform();
+      yield this.getReports.perform();
       this.notify.success(this.intl.t('reportIsGettingGenerated'));
       this.isReportGenerating = false;
     } catch (error) {
