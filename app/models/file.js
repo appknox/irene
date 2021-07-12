@@ -214,6 +214,20 @@ const File = Model.extend(BaseModelMixin, {
     ].includes(status);
   }),
 
+  isDynamicStatusInProgress: computed('dynamicStatus', function () {
+    const status = this.get('dynamicStatus');
+    return [
+      ENUMS.DYNAMIC_STATUS.INQUEUE,
+      ENUMS.DYNAMIC_STATUS.BOOTING,
+      ENUMS.DYNAMIC_STATUS.DOWNLOADING,
+      ENUMS.DYNAMIC_STATUS.INSTALLING,
+      ENUMS.DYNAMIC_STATUS.LAUNCHING,
+      ENUMS.DYNAMIC_STATUS.HOOKING,
+      ENUMS.DYNAMIC_STATUS.READY,
+      ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN,
+    ].includes(status);
+  }),
+
   isNeitherNoneNorReady: computed('dynamicStatus', function () {
     const status = this.get('dynamicStatus');
     return ![ENUMS.DYNAMIC_STATUS.READY, ENUMS.DYNAMIC_STATUS.NONE].includes(

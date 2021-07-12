@@ -11,7 +11,7 @@
       position: absolute;
       width: 0%;
       height: 100%;
-      background-color: #fe4d3f;
+      background-color: $primary;
       bottom: 0;
       left: 0;
       opacity: 0.2;
@@ -20,13 +20,12 @@
 
   .report-list-dropdown {
     .dd-trigger {
-      height: 32px;
-      // margin-top: -5px;
-      border-radius: 5px;
+      height: inherit;
+      border-radius: 0.4em;
       margin-bottom: 5px;
-      border: 1px solid #fe4d3f;
-      color: #fe4d3f;
-      padding: 0 8px;
+      border: 1px solid $primary;
+      color: $primary;
+      padding: 0 0.6em;
       cursor: pointer;
 
       .toggle-icon {
@@ -37,21 +36,24 @@
 
     .prev-report {
       border-radius: 4px;
-      display: grid;
-      width: max-content;
-      align-items: center;
-      justify-content: left;
-      padding: 4px 8px;
-      box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.4);
-      cursor: pointer;
+      .prev-report-item {
+        display: flex;
+        flex-flow: column;
+        padding: 0.3rem;
+        width: max-content;
+        align-items: center;
+        justify-content: left;
+        box-shadow: 0px 0px 6px 1px var(--black-400);
+        cursor: pointer;
 
-      .download-pre-report {
-        color: #000;
-      }
+        .download-pre-report {
+          color: var(--black);
+        }
 
-      .generated-label {
-        font-size: 12px;
-        color: rgba(0, 0, 0, 0.4);
+        .generated-label {
+          font-size: 0.9rem;
+          color: var(--black-400);
+        }
       }
     }
   }
@@ -71,21 +73,20 @@
       margin-top: 3px;
 
       .excel-report {
-        color: #000;
+        color: var(--black);
         border-radius: 4px;
         width: max-content;
         align-items: center;
-        padding: 4px 8px;
-        box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.4);
+        padding: 0.3rem;
+        box-shadow: 0px 0px 6px 1px var(--black-400);
         cursor: pointer;
-        display: grid;
-        grid-template-columns: auto auto;
+        display: flex;
         align-items: center;
         column-gap: 8px;
-        height: 32px;
+        height: inherit;
 
         i {
-          font-size: 13px;
+          font-size: 1rem;
         }
       }
     }
