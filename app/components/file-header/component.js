@@ -512,29 +512,6 @@ const FileHeaderComponent = Component.extend({
       this.set('showCopyPasswordModal', true);
     },
 
-    // getPDFReportLink() {
-    //   triggerAnalytics('feature', ENV.csb.reportDownload);
-    //   const tReportIsGettingGenerated = this.get("tReportIsGettingGenerated");
-    //   const fileId = this.get("file.id");
-    //   const url = [ENV.endpoints.signedPdfUrl, fileId].join('/');
-    //   this.set("isDownloadingReport", true);
-    //   this.get("ajax").request(url)
-    //     .then((result) => {
-    //       if (!this.isDestroyed) {
-    //         window.location = result.url;
-    //         this.set("isDownloadingReport", false);
-    //         setTimeout(() => {
-    //           this.set("showCopyPasswordModal", true);
-    //         }, 3000);
-    //       }
-    //     }, (error) => {
-    //       // eslint-disable-next-line no-console
-    //       console.log(error);
-    //       this.set("isDownloadingReport", false);
-    //       this.get("notify").error(tReportIsGettingGenerated);
-    //     });
-    // },
-
     loginRequired() {
       const loginRequiredText = this.$('#app-login-required').val();
       this.set('manualscan.loginRequired', false);

@@ -44,7 +44,7 @@ export default class FileReport extends commondrf {
     return response.json();
   }
 
-  async downloadExcelReport(model, fileId) {
+  async downloadExternalReport(model, fileId) {
     const url = `${this.get('host')}/${this.hudsonNamespace}/${ENV.endpoints.reports}/${fileId}/download_url`;
     const response = await fetch(url, {
       headers: this.headers,

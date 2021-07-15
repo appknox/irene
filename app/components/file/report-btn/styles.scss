@@ -70,15 +70,14 @@
     }
 
     .dd-content {
-      margin-top: 3px;
+      margin-top: 0.5em;
+      width: max-content;
 
-      .excel-report {
+      .external-report-item {
         color: var(--black);
-        border-radius: 4px;
-        width: max-content;
+        width: auto;
         align-items: center;
-        padding: 0.3rem;
-        box-shadow: 0px 0px 6px 1px var(--black-400);
+        padding: 0.5em 1em;
         cursor: pointer;
         display: flex;
         align-items: center;

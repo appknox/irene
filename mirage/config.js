@@ -70,6 +70,14 @@ function routes() {
     };
   });
 
+  this.get('/api/hudson-api/reports/:fileId/download_url', () => {
+    return {};
+  });
+
+  this.put('/api/hudson-api/reports/:fileId', () => {
+    return {};
+  });
+
   this.namespace = config.namespace;
 
   this.get('/api/organizations/:id/projects', (schema) => {

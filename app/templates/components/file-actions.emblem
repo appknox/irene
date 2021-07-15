@@ -2,10 +2,6 @@
   .column
     .file-action-container
       .columns
-        / .column.is-one-sixth.margin-top
-        /   = link-to 'authenticated.security.files' file.project.id
-        /     = fa-icon "caret-left"
-        /     | &nbsp; View All Files
         .column
           h3
             | #{file.name} | #{file.id}
@@ -17,29 +13,8 @@
           button.margin-left.is-primary click={(perform downloadAppModified)}
             = fa-icon "download"
             | &nbsp; Resigned
-          // button.margin-left.is-primary click="openGenerateReportModal"
-          //   | Generate Report
           a.margin-left href=ireneFilePath target="_blank" class="button is-primary"
             | Visit Dashboard
-          span.dropdown.dropdown--default.margin-left
-            = basic-dropdown horizontalPosition='right' as |dropdown|
-              = dropdown.trigger class="button is-primary"
-                = fa-icon "ellipsis-v"
-              = dropdown.content class="dropdown-content dropdown--default-content"
-                .dropdown-pointer
-                .dropdown-container
-                  a.dropdown-item click={(perform downloadReportExcel)}
-                    span.dropdown-item-icon
-                      = fa-icon "file-excel-o"
-                    | Download Excel Report
-                  a.dropdown-item click={(perform downloadReportHTMLen)}
-                    span.dropdown-item-icon
-                      = fa-icon "file-excel-o"
-                    | Download EN HTML Report
-                  a.dropdown-item click={(perform downloadReportHTMLja)}
-                    span.dropdown-item-icon
-                      = fa-icon "file-excel-o"
-                    | Download JA HTML Report
           .margin-left
             = file/report-btn file=file isSecurityDashboard=true
 
@@ -85,28 +60,6 @@
               .column
                 = analysis-list fileDetails=file
 
-= modal-card class="input-modal" isActive=showGenerateReportModal title="Generate Report"
-  .card-body
-    .card-wrapper
-      if reportGenerated
-        | Report generated successfully
-        if emailIDs
-          | &nbsp;and sent to following Email IDS:
-          ul.email-list
-            each emailIDs as |email|
-              li = email
-      else
-        form.input-form
-          p.control
-            = input class="form-control input" placeholder="Enter the file number" type="text" value=file.id disabled=true
-          p.control
-            = input class="form-control input" placeholder="Enter the Email IDs(comma separated)" type="email" value=emails
-          button.is-primary click="generateReport" disabled=isGeneratingReport
-            if isGeneratingReport
-              .fa-font-size
-                i.fa class="fa-spinner fa-spin"
-              | &nbsp;
-            | Generate Report
 
 = modal-card class="input-modal vuln-modal" isActive=showAddAnalysisModal title="Add Analysis"
   .card-body

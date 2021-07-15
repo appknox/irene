@@ -396,7 +396,4 @@
       button.modal-button.is-primary click="closeRescanModal"
         = t "no"
 
-// = modal-card isActive=showCopyPasswordModal title=(t "modalCard.copyPassword.title") class="copy-password-modal"
-//   = copy-password pdfPassword=file.project.pdfPassword
-
 = confirm-box isActive=showRemoveRoleConfirmBox title=(t "confirmBox.removeUserRole") delegate=this

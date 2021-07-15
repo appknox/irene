@@ -16,12 +16,16 @@ class RealtimeStub extends Service {
 
 class NotificationsStub extends Service {
   errorMsg = null;
+  successMsg = null;
   error(msg) {
     return (this.errorMsg = msg);
   }
+  success(msg) {
+    return (this.successMsg = msg);
+  }
 }
 
-function serializer(payload) {
+function serialize(payload) {
   const serializedPayload = {};
   Object.keys(payload.attrs).map((_key) => {
     serializedPayload[underscore(_key)] = payload[_key];
@@ -29,13 +33,13 @@ function serializer(payload) {
   return serializedPayload;
 }
 
-function serializerAll(data) {
+function serializeAll(data) {
   return {
     count: data.length,
     next: null,
     previous: null,
     results: data.models.map((d) => {
-      return serializer(d);
+      return serialize(d);
     }),
   };
 }
@@ -78,12 +82,12 @@ module('Integration | Component | file/report-btn', function (hooks) {
   test('it should handle generating status', async function (assert) {
     var fileReport = this.server.create('file-report', { progress: -1 });
     this.server.get('v2/files/:id/reports', () => {
-      return [serializer(fileReport)];
+      return [serialize(fileReport)];
     });
 
     this.server.post('v2/files/:id/reports', () => {
       fileReport.update('progress', 30);
-      return serializer(fileReport);
+      return serialize(fileReport);
     });
     this.realtimeService = this.owner.lookup('service:realtime');
     this.set('file', { id: 1, canGenerateReport: true, isStaticDone: true });
@@ -105,39 +109,39 @@ module('Integration | Component | file/report-btn', function (hooks) {
     );
   });
 
-  // test('it should handle generated/download status', async function (assert) {
-  //   console.log('testing generated');
-  //   this.set('file', { id: 1, canGenerateReport: true, isStaticDone: true });
-  //   var fileReport = this.server.create('file-report', {
-  //     progress: -1,
-  //   });
-  //   this.server.get('v2/files/:id/reports', (schema, req) => {
-  //     console.log('req', req);
-  //     return [serializer(schema.fileReports.find(req.params.id))];
-  //   });
+  test('it should handle generated/download status', async function (assert) {
+    this.set('file', { id: 1, canGenerateReport: true, isStaticDone: true });
+    var fileReport = this.server.create('file-report', {
+      progress: -1,
+    });
+    this.server.get('v2/files/:id/reports', () => {
+      return [serialize(fileReport)];
+    });
 
-  //   this.server.post('v2/files/:id/reports', () => {
-  //     fileReport.update('progress', 100);
-  //     fileReport.update('isGenerated', true);
-  //     this.set('file', { id: 1, canGenerateReport: false });
-  //     return serializer(fileReport);
-  //   });
+    this.server.post('v2/files/:id/reports', () => {
+      fileReport.update('progress', 100);
+      fileReport.update('isGenerated', true);
+      this.set('file', { id: 1, canGenerateReport: false });
+      return serialize(fileReport);
+    });
 
-  //   this.realtimeService = this.owner.lookup('service:realtime');
+    this.realtimeService = this.owner.lookup('service:realtime');
+    this.notifyService = this.owner.lookup('service:notifications');
 
-  //   await render(hbs`<File::ReportBtn @file={{this.file}}/>`);
+    await render(hbs`<File::ReportBtn @file={{this.file}}/>`);
 
-  //   assert
-  //     .dom(`[data-test-report="action-btn-label"]`)
-  //     .hasText(`t:generateReport:()`);
+    assert
+      .dom(`[data-test-report="action-btn-label"]`)
+      .hasText(`t:generateReport:()`);
 
-  //   await click(`[data-test-report="action-btn-label"]`);
+    await click(`[data-test-report="action-btn-label"]`);
 
-  //   await this.realtimeService.incrementProperty('ReportCounter');
-  //   assert
-  //     .dom(`[data-test-report="action-btn-label"]`)
-  //     .hasText(`t:downloadReport:()`);
-  // });
+    await this.realtimeService.incrementProperty('ReportCounter');
+    assert.equal(this.notifyService.get('successMsg'), `t:reportIsGettingGenerated:()`);
+    assert
+      .dom(`[data-test-report="action-btn-label"]`)
+      .hasText(`t:downloadReport:()`);
+  });
 
   test('it should show btn with generate report state', async function (assert) {
     this.set('file', { canGenerateReport: true });
@@ -151,7 +155,7 @@ module('Integration | Component | file/report-btn', function (hooks) {
   test('it should show prev report dropdown', async function (assert) {
     const reports = this.server.createList('file-report', 2);
     this.server.get('v2/files/:id/reports', (schema) => {
-      return serializerAll(schema.fileReports.all());
+      return serializeAll(schema.fileReports.all());
     });
 
     this.set('file', { id: 1 });
@@ -193,7 +197,7 @@ module('Integration | Component | file/report-btn', function (hooks) {
   test('it should show error when report url is not found', async function (assert) {
     this.server.create('file-report', { progress: 100 });
     this.server.get('v2/files/:id/reports', (schema) => {
-      return serializerAll(schema.fileReports.all());
+      return serializeAll(schema.fileReports.all());
     });
 
     this.server.get('v2/reports/:id/:type', () => {
@@ -233,7 +237,7 @@ module('Integration | Component | file/report-btn', function (hooks) {
     );
   });
 
-  test('it should show generate report btn in sec dashboard', async function (assert) {
+  test('it should show all the external report btns', async function (assert) {
     this.set('isSecurityDashboard', true);
     this.set('file', { id: 1, canGenerateReport: true, isStaticDone: true });
     await render(
@@ -247,9 +251,45 @@ module('Integration | Component | file/report-btn', function (hooks) {
 
     await click(`[data-test-report='ext-download-trigger']`);
 
+    const externalReports = [
+      `t:excelReport:()`,
+      `t:jaHTMLReport:()`,
+      `t:enHTMLReport:()`
+    ];
+
     assert.dom(`[data-test-report='ext-download-content']`).exists();
-    assert
-      .dom(`[data-test-report='ext-download-excel']`)
-      .hasText(`t:downloadExcelReport:()`);
+
+    externalReports.forEach((externalReportKey ,seq) => assert
+      .dom(`[data-test-report='external-report-${seq}']`)
+      .hasText(`t:download:() ${externalReportKey}`));
+
+  });
+
+
+  test('it should show error when download external report which is not exist', async function (assert) {
+    this.set('isSecurityDashboard', true);
+    this.set('file', { id: 1, canGenerateReport: true, isStaticDone: true });
+    await render(
+      hbs`<File::ReportBtn @file={{this.file}} @isSecurityDashboard={{this.isSecurityDashboard}}/>`
+    );
+
+    await click(`[data-test-report='ext-download-trigger']`);
+
+    const externalReports = [
+      `t:excelReport:()`,
+      `t:jaHTMLReport:()`,
+      `t:enHTMLReport:()`
+    ];
+
+    assert.dom(`[data-test-report='ext-download-content']`).exists();
+    const notifyService = this.owner.lookup('service:notifications');
+    await click(`[data-test-report='external-report-0']`);
+    assert.equal(notifyService.get('errorMsg'), `t:noReportExists:("format":"${externalReports[0]}")`);
+
+    await click(`[data-test-report='external-report-1']`);
+    assert.equal(notifyService.get('errorMsg'), `t:noReportExists:("format":"${externalReports[1]}")`);
+
+    await click(`[data-test-report='external-report-2']`);
+    assert.equal(notifyService.get('errorMsg'), `t:noReportExists:("format":"${externalReports[2]}")`);
   });
 });

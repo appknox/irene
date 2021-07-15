@@ -7,9 +7,9 @@ export default Factory.extend({
   format: faker.random.arrayElement(['DEFAULT', 'DETAILED']),
   progress: faker.random.number({ min: -1, max: 100 }),
   isGenerating() {
-    this.progress >= 0 && this.progress <= 99;
+    return this.progress >= 0 && this.progress <= 99;
   },
   isGenerated() {
-    this.progress == 100;
+    return this.progress == 100;
   },
 });

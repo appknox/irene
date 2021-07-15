@@ -63,24 +63,36 @@ export default class FileReportBtn extends Component {
     return this.args.file.canGenerateReport;
   }
 
+  get canGenerateReport () {
+    return this.args.file.canGenerateReport;
+  }
+
   /**
    * Property will return previous reports based on the current state
    */
   get prevReports() {
-    return this.reports.length > 1 ? this.reports.slice(1, REPORT.MAX_LIMIT) : [];
+    const noOfReports = this.reports.length;
+    if (this.canGenerateReport && !this.latestReport.isGenerating && noOfReports === 1) {
+      return this.reports;
+    } else if (this.canGenerateReport && !this.latestReport.isGenerating && noOfReports > 1) {
+      return this.reports.slice(0, REPORT.MAX_LIMIT - 1);
+    } else if (noOfReports > 1) {
+      return this.reports.slice(1, REPORT.MAX_LIMIT);
+    }
+    return [];
   }
 
   get enableBtn() {
     return ((this.args.file.canGenerateReport && this.args.file.isStaticDone && !this.isReportGenerating) ||
-        this.latestReport.isGenerated ||
-        this.args.file.isDynamicStatusInProgress ||
-        this.args.file.isRunningApiScan ||
-        this.args.isSecurityDashboard) &&
+      this.latestReport.isGenerated ||
+      this.args.file.isDynamicStatusInProgress ||
+      this.args.file.isRunningApiScan ||
+      this.args.isSecurityDashboard) &&
       !this.latestReport.isGenerating;
   }
 
   get btnLabel() {
-    let btnLabel = this.intl.t('generateReport');
+    let btnLabel = this.intl.t("generateReport");
     if (this.latestReport.isGenerating || this.isReportGenerating) {
       btnLabel = this.intl.t('generatingReport');
     } else if (this.args.file.canGenerateReport) {
@@ -93,6 +105,26 @@ export default class FileReportBtn extends Component {
 
   get reportGenerationProgress() {
     return htmlSafe(`width: ${this.latestReport.progress}%`);
+  }
+
+  get externalReportTypes() {
+    return [
+      {
+        label: this.intl.t('excelReport'),
+        format: 'xlsx',
+        icon: 'file-excel-o'
+      },
+      {
+        label: this.intl.t('jaHTMLReport'),
+        format: 'html_ja',
+        icon: 'file-code-o'
+      },
+      {
+        label: this.intl.t('enHTMLReport'),
+        format: 'html_en',
+        icon: 'file-code-o'
+      }
+    ];
   }
 
   constructor() {
@@ -229,18 +261,18 @@ export default class FileReportBtn extends Component {
   /**
    * Method to download excel report
    */
-  @task(function* () {
+  @task(function* (type) {
     const adapter = this.store.adapterFor(this.modelName);
     try {
-      const data = yield adapter.downloadExcelReport(this.modelName, this.fileId)
-      if (data.xlsx) {
-        window.location = data.xlsx;
+      const data = yield adapter.downloadExternalReport(this.modelName, this.fileId)
+      if (data && data[type.format]) {
+        window.location = data[type.format];
       } else {
-        this.notify.error(this.intl.t('downloadUrlNotFound'));
+        this.notify.error(this.intl.t('noReportExists', { format: type.label }));
       }
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')))
     }
-  }).restartable() downloadExcelReport;
+  }).restartable() downloadExternalReport;
 
 }
