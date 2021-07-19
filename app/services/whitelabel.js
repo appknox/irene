@@ -7,7 +7,7 @@ export default class WhitelabelService extends Service {
 
   default_name = 'Appknox';
   default_theme = 'dark';
-  default_favicon = 'images/favicon.ico';
+  default_favicon = '/images/favicon.ico';
   default_logo_on_darkbg = '/images/logo-white.png';
   default_logo_on_lightbg = '/images/logo.png';
 
