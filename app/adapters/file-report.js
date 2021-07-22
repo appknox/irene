@@ -1,4 +1,3 @@
-import ENV from 'irene/config/environment';
 import fetch from 'fetch';
 import commondrf from './commondrf';
 
@@ -26,31 +25,8 @@ export default class FileReport extends commondrf {
     const url = `${this.reportsBaseUrl}/${reportId}/${type}`;
     const response = await fetch(url, {
       headers: this.headers,
-      method: 'GET'
+      method: 'GET',
     });
     return response.json();
   }
-
-  async reGenerateReport(modelName, fileId, data = {}) {
-    const url = `${this.get('host')}/${this.hudsonNamespace}/${ENV.endpoints.reports}/${fileId}`;
-    const response = await fetch(url, {
-      headers: Object.assign(this.headers, {
-        'Content-Type': 'application/json'
-      }),
-      method: 'PUT',
-      body: JSON.stringify(data),
-      contentType: 'application/json'
-    });
-    return response.json();
-  }
-
-  async downloadExternalReport(model, fileId) {
-    const url = `${this.get('host')}/${this.hudsonNamespace}/${ENV.endpoints.reports}/${fileId}/download_url`;
-    const response = await fetch(url, {
-      headers: this.headers,
-      method: 'GET'
-    });
-    return response.json();
-  }
-
 }

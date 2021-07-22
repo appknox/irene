@@ -16,7 +16,7 @@
           a.margin-left href=ireneFilePath target="_blank" class="button is-primary"
             | Visit Dashboard
           .margin-left
-            = file/report-btn file=file isSecurityDashboard=true
+            = security/analysis-report-btn file=file
 
       .columns
         .column

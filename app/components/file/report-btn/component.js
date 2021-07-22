@@ -1,35 +1,16 @@
 import Component from '@glimmer/component';
-import {
-  tracked
-} from '@glimmer/tracking';
-import {
-  task
-} from 'ember-concurrency';
-import {
-  inject as service
-} from '@ember/service';
-import {
-  action
-} from '@ember/object';
-import {
-  REPORT
-} from 'irene/utils/constants';
+import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { REPORT } from 'irene/utils/constants';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import ENV from 'irene/config/environment';
-import {
-  isEmpty
-} from '@ember/utils';
 import parseError from 'irene/utils/parse-error';
-import {
-  addObserver,
-  removeObserver
-} from '@ember/object/observers';
-import {
-  htmlSafe
-} from '@ember/template';
+import { addObserver, removeObserver } from '@ember/object/observers';
+import { htmlSafe } from '@ember/template';
 
 export default class FileReportBtn extends Component {
-
   // Dependencies
   @service store;
   @service intl;
@@ -40,10 +21,6 @@ export default class FileReportBtn extends Component {
   @tracked reports = [];
   @tracked isDropdownOpen = false;
   @tracked isShowCopyPasswordModal = false;
-  @tracked isShowGenerateReportModal = false;
-  @tracked emailsToSend = '';
-  @tracked sentEmailIds = [];
-  @tracked isReportReGenerated = false;
   @tracked isReportGenerating = false;
   modelName = 'file-report';
 
@@ -63,7 +40,7 @@ export default class FileReportBtn extends Component {
     return this.args.file.canGenerateReport;
   }
 
-  get canGenerateReport () {
+  get canGenerateReport() {
     return this.args.file.canGenerateReport;
   }
 
@@ -72,9 +49,17 @@ export default class FileReportBtn extends Component {
    */
   get prevReports() {
     const noOfReports = this.reports.length;
-    if (this.canGenerateReport && !this.latestReport.isGenerating && noOfReports === 1) {
+    if (
+      this.canGenerateReport &&
+      !this.latestReport.isGenerating &&
+      noOfReports === 1
+    ) {
       return this.reports;
-    } else if (this.canGenerateReport && !this.latestReport.isGenerating && noOfReports > 1) {
+    } else if (
+      this.canGenerateReport &&
+      !this.latestReport.isGenerating &&
+      noOfReports > 1
+    ) {
       return this.reports.slice(0, REPORT.MAX_LIMIT - 1);
     } else if (noOfReports > 1) {
       return this.reports.slice(1, REPORT.MAX_LIMIT);
@@ -83,80 +68,65 @@ export default class FileReportBtn extends Component {
   }
 
   get enableBtn() {
-    return ((this.args.file.canGenerateReport && this.args.file.isStaticDone && !this.isReportGenerating) ||
-      this.latestReport.isGenerated ||
-      this.args.file.isDynamicStatusInProgress ||
-      this.args.file.isRunningApiScan ||
-      this.args.isSecurityDashboard) &&
-      !this.latestReport.isGenerating;
+    return (
+      ((this.args.file.canGenerateReport &&
+        this.args.file.isStaticDone &&
+        !this.isReportGenerating) ||
+        this.latestReport.isGenerated ||
+        this.args.file.isDynamicStatusInProgress ||
+        this.args.file.isRunningApiScan ||
+        this.args.isSecurityDashboard) &&
+      !this.latestReport.isGenerating
+    );
   }
 
   get btnLabel() {
-    let btnLabel = this.intl.t("generateReport");
+    let btnLabel = this.intl.t('generateReport');
     if (this.latestReport.isGenerating || this.isReportGenerating) {
       btnLabel = this.intl.t('generatingReport');
     } else if (this.args.file.canGenerateReport) {
       btnLabel = this.intl.t('generateReport');
     } else if (this.latestReport.isGenerated) {
-      btnLabel = this.intl.t('downloadReport')
+      btnLabel = this.intl.t('downloadReport');
     }
-    return btnLabel
+    return btnLabel;
   }
 
   get reportGenerationProgress() {
     return htmlSafe(`width: ${this.latestReport.progress}%`);
   }
 
-  get externalReportTypes() {
-    return [
-      {
-        label: this.intl.t('excelReport'),
-        format: 'xlsx',
-        icon: 'file-excel-o'
-      },
-      {
-        label: this.intl.t('jaHTMLReport'),
-        format: 'html_ja',
-        icon: 'file-code-o'
-      },
-      {
-        label: this.intl.t('enHTMLReport'),
-        format: 'html_en',
-        icon: 'file-code-o'
-      }
-    ];
-  }
-
   constructor() {
     super(...arguments);
-    addObserver(this.realtime, 'ReportCounter', this, this.observeReportCounter)
+    addObserver(
+      this.realtime,
+      'ReportCounter',
+      this,
+      this.observeReportCounter
+    );
   }
-
 
   willDestroy() {
     super.willDestroy(...arguments);
-    removeObserver(this.realtime, 'ReportCounter', this, this.observeReportCounter)
+    removeObserver(
+      this.realtime,
+      'ReportCounter',
+      this,
+      this.observeReportCounter
+    );
   }
 
   // Actions
 
   @action
   onGenerateReport() {
-    if (this.args.isSecurityDashboard) {
-      this.isShowGenerateReportModal = true;
-      this.isReportReGenerated = false;
-    } else if (this.args.file.canGenerateReport) {
+    if (this.canGenerateReport) {
       this.generateReport.perform();
     } else if (this.latestReport.isGenerated) {
       this.getReportByType.perform(REPORT.TYPE.PDF, this.latestReport.id);
     } else {
       this.generateReport.perform();
     }
-  }
-
-  @action
-  onReGenerateReport() {
-    this.isShowGenerateReportModal = true;
   }
 
   @action
@@ -172,7 +142,6 @@ export default class FileReportBtn extends Component {
   @action
   onCloseModal() {
     this.isShowCopyPasswordModal = false;
-    this.isShowGenerateReportModal = false;
   }
 
   // Events
@@ -190,7 +159,7 @@ export default class FileReportBtn extends Component {
     this.isReportGenerating = true;
     try {
       const genReport = yield this.store.createRecord(this.modelName, {
-        fileId: this.fileId
+        fileId: this.fileId,
       });
       yield genReport.save();
       yield this.getReports.perform();
@@ -199,29 +168,8 @@ export default class FileReportBtn extends Component {
     } catch (error) {
       this.notify.error(parseError(error), this.intl.t('reportGenerateError'));
     }
-  }).restartable() generateReport;
-
-  /**
-   * Method to re-generate a new report from security dashboard
-   */
-  @task(function* () {
-    const emails = this.emailsToSend;
-    let data = {};
-    if (!isEmpty(emails)) {
-      data = {
-        emails: emails.split(",").map(item => item.trim())
-      };
-    }
-    const adapter = this.store.adapterFor(this.modelName);
-    try {
-      yield adapter.reGenerateReport(this.modelName, this.fileId, data)
-      this.isReportReGenerated = true;
-      this.emailsToSend = '';
-      this.sentEmailIds = data.emails;
-    } catch (error) {
-      this.notify.error(parseError(error), this.intl.t('pleaseTryAgain'))
-    }
-  }).restartable() reGenerateReport;
+  })
+  generateReport;
 
   /**
    * Method to get reports under a file
@@ -229,8 +177,8 @@ export default class FileReportBtn extends Component {
   @task(function* () {
     const query = {
       fileId: this.fileId,
-      limit: REPORT.MAX_LIMIT
-    }
+      limit: REPORT.MAX_LIMIT,
+    };
     try {
       this.reports = yield this.store.query(this.modelName, query);
     } catch {
@@ -246,33 +194,20 @@ export default class FileReportBtn extends Component {
     triggerAnalytics('feature', ENV.csb.reportDownload);
     const adapter = this.store.adapterFor(this.modelName);
     try {
-      const report = yield adapter.getReportByType(this.modelName, reportId, type);
+      const report = yield adapter.getReportByType(
+        this.modelName,
+        reportId,
+        type
+      );
       if (report && report.url) {
         window.location = report.url;
         this.isShowCopyPasswordModal = true;
       } else {
-        this.notify.error(this.intl.t('downloadUrlNotFound'))
+        this.notify.error(this.intl.t('downloadUrlNotFound'));
       }
     } catch {
-      this.notify.error(this.intl.t('reportIsGettingGenerated'))
+      this.notify.error(this.intl.t('reportIsGettingGenerated'));
     }
-  }).restartable() getReportByType;
-
-  /**
-   * Method to download excel report
-   */
-  @task(function* (type) {
-    const adapter = this.store.adapterFor(this.modelName);
-    try {
-      const data = yield adapter.downloadExternalReport(this.modelName, this.fileId)
-      if (data && data[type.format]) {
-        window.location = data[type.format];
-      } else {
-        this.notify.error(this.intl.t('noReportExists', { format: type.label }));
-      }
-    } catch (error) {
-      this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')))
-    }
-  }).restartable() downloadExternalReport;
-
+  })
+  getReportByType;
 }

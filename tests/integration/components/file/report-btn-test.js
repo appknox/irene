@@ -64,21 +64,6 @@ module('Integration | Component | file/report-btn', function (hooks) {
     assert.dom(`[data-test-report="analysis"]`).doesNotExist();
   });
 
-  test('it should render btn in security dashboard', async function (assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
-    this.server.get('v2/files/:id/reports', () => {
-      return [];
-    });
-    this.set('file', {});
-    this.set('isSecurityDashboard', true);
-    await render(
-      hbs`<File::ReportBtn @file={{this.file}} @isSecurityDashboard={{this.isSecurityDashboard}}/>`
-    );
-    assert.dom(`[data-test-report="file-details"]`).doesNotExist();
-    assert.dom(`[data-test-report="analysis"]`).exists();
-  });
-
   test('it should handle generating status', async function (assert) {
     var fileReport = this.server.create('file-report', { progress: -1 });
     this.server.get('v2/files/:id/reports', () => {
@@ -137,7 +122,10 @@ module('Integration | Component | file/report-btn', function (hooks) {
     await click(`[data-test-report="action-btn-label"]`);
 
     await this.realtimeService.incrementProperty('ReportCounter');
-    assert.equal(this.notifyService.get('successMsg'), `t:reportIsGettingGenerated:()`);
+    assert.equal(
+      this.notifyService.get('successMsg'),
+      `t:reportIsGettingGenerated:()`
+    );
     assert
       .dom(`[data-test-report="action-btn-label"]`)
       .hasText(`t:downloadReport:()`);
@@ -235,61 +223,5 @@ module('Integration | Component | file/report-btn', function (hooks) {
       this.notifyService.get('errorMsg'),
       `Report generation failed`
     );
-  });
-
-  test('it should show all the external report btns', async function (assert) {
-    this.set('isSecurityDashboard', true);
-    this.set('file', { id: 1, canGenerateReport: true, isStaticDone: true });
-    await render(
-      hbs`<File::ReportBtn @file={{this.file}} @isSecurityDashboard={{this.isSecurityDashboard}}/>`
-    );
-
-    assert.dom(`[data-test-report='analysis']`).hasText(`t:generateReport:()`);
-    assert
-      .dom(`[data-test-report='external-report-download-dropdown']`)
-      .exists();
-
-    await click(`[data-test-report='ext-download-trigger']`);
-
-    const externalReports = [
-      `t:excelReport:()`,
-      `t:jaHTMLReport:()`,
-      `t:enHTMLReport:()`
-    ];
-
-    assert.dom(`[data-test-report='ext-download-content']`).exists();
-
-    externalReports.forEach((externalReportKey ,seq) => assert
-      .dom(`[data-test-report='external-report-${seq}']`)
-      .hasText(`t:download:() ${externalReportKey}`));
-
-  });
-
-
-  test('it should show error when download external report which is not exist', async function (assert) {
-    this.set('isSecurityDashboard', true);
-    this.set('file', { id: 1, canGenerateReport: true, isStaticDone: true });
-    await render(
-      hbs`<File::ReportBtn @file={{this.file}} @isSecurityDashboard={{this.isSecurityDashboard}}/>`
-    );
-
-    await click(`[data-test-report='ext-download-trigger']`);
-
-    const externalReports = [
-      `t:excelReport:()`,
-      `t:jaHTMLReport:()`,
-      `t:enHTMLReport:()`
-    ];
-
-    assert.dom(`[data-test-report='ext-download-content']`).exists();
-    const notifyService = this.owner.lookup('service:notifications');
-    await click(`[data-test-report='external-report-0']`);
-    assert.equal(notifyService.get('errorMsg'), `t:noReportExists:("format":"${externalReports[0]}")`);
-
-    await click(`[data-test-report='external-report-1']`);
-    assert.equal(notifyService.get('errorMsg'), `t:noReportExists:("format":"${externalReports[1]}")`);
-
-    await click(`[data-test-report='external-report-2']`);
-    assert.equal(notifyService.get('errorMsg'), `t:noReportExists:("format":"${externalReports[2]}")`);
   });
 });

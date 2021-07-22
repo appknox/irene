@@ -125,7 +125,7 @@
           = fa-icon "download"
           | &nbsp; #{ t "pdfReport"}
       else
-        = file/report-btn file=file showCopyPasswordModal=(action "onShowPasswordModal")
+        = file/report-btn file=file
   .card-content
     if isScanDetails
       .columns

@@ -22,7 +22,7 @@
     .dd-trigger {
       height: inherit;
       border-radius: 0.4em;
-      margin-bottom: 5px;
+      margin-bottom: 0.3em;
       border: 1px solid $primary;
       color: $primary;
       padding: 0 0.6em;
@@ -35,7 +35,6 @@
     }
 
     .prev-report {
-      border-radius: 4px;
       .prev-report-item {
         display: flex;
         flex-flow: column;

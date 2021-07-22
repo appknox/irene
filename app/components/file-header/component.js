@@ -508,10 +508,6 @@ const FileHeaderComponent = Component.extend({
       this.set('showAddTagForm', false);
     },
 
-    onShowPasswordModal() {
-      this.set('showCopyPasswordModal', true);
-    },
-
     loginRequired() {
       const loginRequiredText = this.$('#app-login-required').val();
       this.set('manualscan.loginRequired', false);

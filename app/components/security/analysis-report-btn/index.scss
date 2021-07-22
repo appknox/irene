@@ -1,0 +1,43 @@
+.report-btn {
+  display: flex;
+  column-gap: 12px;
+
+  .btn-container {
+    column-gap: 8px;
+    position: relative;
+    border-radius: 4px;
+  }
+
+  .report-download {
+    cursor: pointer;
+
+    .dd-trigger {
+      .trigger-item {
+        i {
+          vertical-align: middle;
+        }
+      }
+    }
+
+    .dd-content {
+      margin-top: 0.5em;
+      width: max-content;
+
+      .report-item {
+        color: var(--black);
+        width: auto;
+        align-items: center;
+        padding: 0.5em 1em;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        column-gap: 8px;
+        height: inherit;
+
+        i {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+}

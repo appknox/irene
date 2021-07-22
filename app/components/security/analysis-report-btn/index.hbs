@@ -1,0 +1,108 @@
+<div local-class="report-btn" data-test-report="analysis">
+  <button
+    type="button"
+    class="button is-primary"
+    local-class="btn-container"
+    data-test-report="security-generate-report"
+    {{on "click" this.onGenerateReport}}
+  >
+    {{t "generateReport"}}
+  </button>
+  {{! Download specific reports like excel, HTML etc,. }}
+  <div
+    class="dropdown dropdown--default"
+    local-class="report-download"
+    data-test-report="report-download-dropdown"
+  >
+    <BasicDropdown
+      @renderInPlace={{true}}
+      @horizontalPosition="auto-right" as |dd|
+    >
+      <dd.trigger
+        class="trigger-bootstrap-feel button is-primary"
+        local-class="dd-trigger"
+      >
+        <div local-class="trigger-item" data-test-report="download-trigger">
+          {{fa-icon "ellipsis-v"}}
+        </div>
+      </dd.trigger>
+      <dd.content @class="dropdown-content dropdown--default-content">
+        <div class="dropdown-pointer"></div>
+        <div
+          class="dropdown-container"
+          local-class="dd-content"
+          data-test-report="download-content"
+        >
+          {{#each this.externalReportTypes as |type seq|}}
+            <a
+              href="#"
+              class="dropdown-item"
+              local-class="report-item"
+              data-test-report="report-type-{{seq}}"
+              {{on "click" (perform this.downloadReport type)}}
+            >
+              {{fa-icon type.icon}}
+              {{t "download"}}
+              {{type.label}}
+            </a>
+          {{/each}}
+        </div>
+      </dd.content>
+    </BasicDropdown>
+  </div>
+</div>
+{{#if this.isShowGenerateReportModal}}
+  <AkModal
+    @showHeader={{true}}
+    @headerTitle={{t "generateReport"}}
+    class="input-modal"
+    @onClose={{this.onCloseModal}}
+  >
+    <div class="card-body">
+      <div class="card-wrapper">
+        {{#if this.isReportGenerated}}
+          {{t "reportGeneratedSuccessfully"}}
+          {{#if this.sentEmailIds}}
+            {{t "reportSendTo"}}
+            <ul class="email-list">
+              {{#each this.sentEmailIds as |email|}}
+                <li>
+                  {{email}}
+                </li>
+              {{/each}}
+            </ul>
+          {{/if}}
+        {{else}}
+          <form class="input-form">
+            <p class="control">
+              <Input
+                placeholder="Enter the file number"
+                @type="text"
+                @value={{this.fileId}}
+                disabled={{true}}
+                class="form-control input"
+                aria-label="Enter the file number"
+              />
+            </p>
+            <p class="control">
+              <Input
+                placeholder="Enter the Email IDs(comma separated)"
+                @type="email"
+                @value={{this.emailsToSend}}
+                class="form-control input"
+                aria-label="Enter the email IDs(comma separated)"
+              />
+            </p>
+            <button
+              type="button"
+              class="is-primary"
+              {{on "click" (perform this.generateReport)}}
+            >
+              {{t "generateReport"}}
+            </button>
+          </form>
+        {{/if}}
+      </div>
+    </div>
+  </AkModal>
+{{/if}}
