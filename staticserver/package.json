@@ -1,6 +1,6 @@
 {
   "name": "irene-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "license": "MIT",
   "author": "Appknox",
@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
-    "node": ">= 12.*"
+    "node": ">= 14.*"
   },
   "dependencies": {
     "express": "^4.17.1",
