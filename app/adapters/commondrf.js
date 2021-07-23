@@ -9,7 +9,6 @@ export default DRFAdapter.extend(IreneAdapterMixin, {
   namespace_v2: ENV.namespace_v2,
   addTrailingSlashes: false,
   organization: service('organization'),
-  hudsonNamespace: 'api/hudson-api',
   buildURLFromBase: function (resource_url) {
     const hostURLstr = this.get('host');
     try {

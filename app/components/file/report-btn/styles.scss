@@ -1,17 +1,16 @@
 .file-report-btn {
   display: flex;
-  column-gap: 12px;
+  column-gap: 0.8rem;
 
   .btn-container {
-    column-gap: 8px;
+    column-gap: 0.8rem;
     position: relative;
-    border-radius: 4px;
 
     .progress-loader {
       position: absolute;
       width: 0%;
       height: 100%;
-      background-color: $primary;
+      background-color: var(--primary);
       bottom: 0;
       left: 0;
       opacity: 0.2;
@@ -23,8 +22,8 @@
       height: inherit;
       border-radius: 0.4em;
       margin-bottom: 0.3em;
-      border: 1px solid $primary;
-      color: $primary;
+      border: 1px solid var(--primary);
+      color: var(--primary);
       padding: 0 0.6em;
       cursor: pointer;
 
@@ -52,39 +51,6 @@
         .generated-label {
           font-size: 0.9rem;
           color: var(--black-400);
-        }
-      }
-    }
-  }
-
-  .external-download {
-    cursor: pointer;
-
-    .dd-trigger {
-      .trigger-item {
-        i {
-          vertical-align: middle;
-        }
-      }
-    }
-
-    .dd-content {
-      margin-top: 0.5em;
-      width: max-content;
-
-      .external-report-item {
-        color: var(--black);
-        width: auto;
-        align-items: center;
-        padding: 0.5em 1em;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        column-gap: 8px;
-        height: inherit;
-
-        i {
-          font-size: 1rem;
         }
       }
     }

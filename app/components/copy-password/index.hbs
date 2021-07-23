@@ -1,7 +1,7 @@
 <table>
   <thead>
     <tr>
-      <td colspan="2" local-class="table-data" data-test-copy-password="label">
+      <td colspan="2" local-class="table-data" data-test-copy-password-label>
         {{t "reportPassword"}}
       </td>
     </tr>
@@ -10,17 +10,17 @@
     <tr
       class="copy-password"
       data-clipboard-target="#copy-password"
-      data-test-copy-password="clipboard-target"
+      data-test-copy-password-clipboard-target
     >
       <td
         id="copy-password"
         value="pdfPassword"
         local-class="table-data"
-        data-test-copy-password="value"
+        data-test-copy-password-value
       >
         {{@pdfPassword}}
       </td>
-      <td local-class="table-data" data-test-copy-password="copy">
+      <td local-class="table-data" data-test-copy-password-text>
         {{fa-icon "clipboard copy-icon"}}
         {{t "copy"}}
       </td>

@@ -36,10 +36,6 @@ export default class FileReportBtn extends Component {
     return this.reports.length ? this.reports.firstObject : {};
   }
 
-  get isFileUpdated() {
-    return this.args.file.canGenerateReport;
-  }
-
   get canGenerateReport() {
     return this.args.file.canGenerateReport;
   }
@@ -69,7 +65,7 @@ export default class FileReportBtn extends Component {
 
   get enableBtn() {
     return (
-      ((this.args.file.canGenerateReport &&
+      ((this.canGenerateReport &&
         this.args.file.isStaticDone &&
         !this.isReportGenerating) ||
         this.latestReport.isGenerated ||
@@ -84,7 +80,7 @@ export default class FileReportBtn extends Component {
     let btnLabel = this.intl.t('generateReport');
     if (this.latestReport.isGenerating || this.isReportGenerating) {
       btnLabel = this.intl.t('generatingReport');
-    } else if (this.args.file.canGenerateReport) {
+    } else if (this.canGenerateReport) {
       btnLabel = this.intl.t('generateReport');
     } else if (this.latestReport.isGenerated) {
       btnLabel = this.intl.t('downloadReport');

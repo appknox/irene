@@ -1,9 +1,9 @@
-<div local-class="report-btn" data-test-report="analysis">
+<div local-class="report-btn" data-test-report-analysis>
   <button
     type="button"
     class="button is-primary"
     local-class="btn-container"
-    data-test-report="security-generate-report"
+    data-test-report-security-generate-report
     {{on "click" this.onGenerateReport}}
   >
     {{t "generateReport"}}
@@ -12,7 +12,7 @@
   <div
     class="dropdown dropdown--default"
     local-class="report-download"
-    data-test-report="report-download-dropdown"
+    data-test-report-report-download-dropdown
   >
     <BasicDropdown
       @renderInPlace={{true}}
@@ -22,7 +22,7 @@
         class="trigger-bootstrap-feel button is-primary"
         local-class="dd-trigger"
       >
-        <div local-class="trigger-item" data-test-report="download-trigger">
+        <div local-class="trigger-item" data-test-report-download-trigger>
           {{fa-icon "ellipsis-v"}}
         </div>
       </dd.trigger>
@@ -31,14 +31,14 @@
         <div
           class="dropdown-container"
           local-class="dd-content"
-          data-test-report="download-content"
+          data-test-report-download-content
         >
           {{#each this.externalReportTypes as |type seq|}}
             <a
               href="#"
               class="dropdown-item"
               local-class="report-item"
-              data-test-report="report-type-{{seq}}"
+              data-test-report-type="{{seq}}"
               {{on "click" (perform this.downloadReport type)}}
             >
               {{fa-icon type.icon}}

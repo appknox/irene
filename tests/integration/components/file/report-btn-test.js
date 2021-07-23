@@ -60,8 +60,8 @@ module('Integration | Component | file/report-btn', function (hooks) {
     });
     this.set('file', {});
     await render(hbs`<File::ReportBtn @file={{this.file}}/>`);
-    assert.dom(`[data-test-report="file-details"]`).exists();
-    assert.dom(`[data-test-report="analysis"]`).doesNotExist();
+    assert.dom(`[data-test-report-file-details]`).exists();
+    assert.dom(`[data-test-report-analysis]`).doesNotExist();
   });
 
   test('it should handle generating status', async function (assert) {
@@ -79,17 +79,16 @@ module('Integration | Component | file/report-btn', function (hooks) {
     await render(hbs`<File::ReportBtn @file={{this.file}}/>`);
 
     assert
-      .dom(`[data-test-report="action-btn-label"]`)
+      .dom(`[data-test-report-action-btn-label]`)
       .hasText(`t:generateReport:()`);
 
-    await click(`[data-test-report="action-btn-label"]`);
+    await click(`[data-test-report-action-btn-label]`);
     this.realtimeService.incrementProperty('ReportCounter');
     assert
-      .dom(`[data-test-report="action-btn-label"]`)
+      .dom(`[data-test-report-action-btn-label]`)
       .hasText(`t:generatingReport:()`);
-    assert.dom(`i.fa-spinner`).exists();
     assert.equal(
-      this.element.querySelector(`[data-test-report='progress']`).style.width,
+      this.element.querySelector(`[data-test-report-progress]`).style.width,
       '30%'
     );
   });
@@ -116,10 +115,10 @@ module('Integration | Component | file/report-btn', function (hooks) {
     await render(hbs`<File::ReportBtn @file={{this.file}}/>`);
 
     assert
-      .dom(`[data-test-report="action-btn-label"]`)
+      .dom(`[data-test-report-action-btn-label]`)
       .hasText(`t:generateReport:()`);
 
-    await click(`[data-test-report="action-btn-label"]`);
+    await click(`[data-test-report-action-btn-label]`);
 
     await this.realtimeService.incrementProperty('ReportCounter');
     assert.equal(
@@ -127,7 +126,7 @@ module('Integration | Component | file/report-btn', function (hooks) {
       `t:reportIsGettingGenerated:()`
     );
     assert
-      .dom(`[data-test-report="action-btn-label"]`)
+      .dom(`[data-test-report-action-btn-label]`)
       .hasText(`t:downloadReport:()`);
   });
 
@@ -136,7 +135,7 @@ module('Integration | Component | file/report-btn', function (hooks) {
     await render(hbs`<File::ReportBtn @file={{this.file}}/>`);
 
     assert
-      .dom(`[data-test-report="action-btn-label"]`)
+      .dom(`[data-test-report-action-btn-label]`)
       .hasText(`t:generateReport:()`);
   });
 
@@ -149,30 +148,28 @@ module('Integration | Component | file/report-btn', function (hooks) {
     this.set('file', { id: 1 });
     await render(hbs`<File::ReportBtn @file={{this.file}}/>`);
 
-    assert.dom(`[data-test-report='pre-reports']`).exists();
+    assert.dom(`[data-test-pre-reports]`).exists();
 
-    await click(`[data-test-report='prev-report-trigger']`);
+    await click(`[data-test-prev-report-trigger]`);
 
     const noOfPrevReports = REPORT.MAX_LIMIT - 1;
 
     assert.equal(
-      this.element.querySelectorAll(`[data-test-report='prev-report']`).length,
+      this.element.querySelectorAll(`[data-test-prev-report]`).length,
       noOfPrevReports,
       `Number of prev reports limited to ${noOfPrevReports}`
     );
     for (let i = 1; i <= noOfPrevReports; i++) {
       assert
         .dom(
-          `[data-test-report='prev-report-${
-            i - 1
-          }'] [data-test-report='download-prev-report']`
+          `[data-test-prev-report='${i - 1}'] [data-test-download-prev-report]`
         )
         .hasText(`t:downloadPrevReport:()`);
       assert
         .dom(
-          `[data-test-report='prev-report-${
+          `[data-test-prev-report='${
             i - 1
-          }'] [data-test-report='generated-label']`
+          }'] [data-test-report-generated-label]`
         )
         .hasText(
           `t:generatedOn:() ${dayjs(reports.objectAt(i).generatedOn).format(
@@ -195,7 +192,7 @@ module('Integration | Component | file/report-btn', function (hooks) {
     this.set('file', { id: 1 });
     await render(hbs`<File::ReportBtn @file={{this.file}}/>`);
 
-    await click(`[data-test-report="action-btn-label"]`);
+    await click(`[data-test-report-action-btn-label]`);
 
     this.notifyService = this.owner.lookup('service:notifications');
     assert.equal(
@@ -216,7 +213,7 @@ module('Integration | Component | file/report-btn', function (hooks) {
     this.set('file', { id: 1, canGenerateReport: true, isStaticDone: true });
     await render(hbs`<File::ReportBtn @file={{this.file}}/>`);
 
-    await click(`[data-test-report="action-btn-label"]`);
+    await click(`[data-test-report-action-btn-label]`);
 
     this.notifyService = this.owner.lookup('service:notifications');
     assert.equal(

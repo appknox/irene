@@ -2,14 +2,14 @@
   <div
     class="margin-top-5"
     local-class="file-report-btn"
-    data-test-report="file-details"
+    data-test-report-file-details
   >
     <button
       type="button"
       class="button is-primary"
       local-class="btn-container"
       disabled={{unless this.enableBtn "disabled" false}}
-      data-test-report="action-btn-label"
+      data-test-report-action-btn-label
       {{on "click" this.onGenerateReport}}
     >
       {{#if this.latestReport.isGenerating}}
@@ -25,7 +25,7 @@
           local-class="progress-loader"
           class="is-progress"
           style={{this.reportGenerationProgress}}
-          data-test-report="progress"
+          data-test-report-progress
         ></span>
       {{/if}}
       {{#if
@@ -37,13 +37,16 @@
       }}
         <AttachTooltip placement="top">
           {{t "generatedOn"}}
-          {{moment-format this.latestReport.generatedOn "DD MMM YYYY hh:mm a"}}
+          {{day-js
+            date=this.latestReport.generatedOn
+            format="DD MMM YYYY hh:mm a"
+          }}
         </AttachTooltip>
       {{/if}}
     </button>
     {{! Access to previous reports }}
     {{#if this.prevReports.length}}
-      <div local-class="report-list-dropdown" data-test-report="pre-reports">
+      <div local-class="report-list-dropdown" data-test-pre-reports>
         <BasicDropdown
           @onOpen={{this.onToggleDropdown}}
           @onClose={{this.onToggleDropdown}}
@@ -51,10 +54,7 @@
           @horizontalPosition="auto-right" as |dd|
         >
           <dd.trigger class="trigger-bootstrap-feel">
-            <div
-              local-class="dd-trigger"
-              data-test-report="prev-report-trigger"
-            >
+            <div local-class="dd-trigger" data-test-prev-report-trigger>
               {{fa-icon
                 (if this.isDropdownOpen "caret-up" "caret-down")
                 local-class="toggle-icon"
@@ -66,22 +66,21 @@
               <a
                 href="#"
                 local-class="prev-report"
-                data-test-report="prev-report"
                 {{on "click" (perform this.getReportByType "pdf" report.id)}}
               >
                 <span
                   local-class="prev-report-item"
-                  data-test-report="prev-report-{{seq}}"
+                  data-test-prev-report="{{seq}}"
                 >
                   <span
                     local-class="download-pre-report"
-                    data-test-report="download-prev-report"
+                    data-test-download-prev-report
                   >
                     {{t "downloadPrevReport"}}
                   </span>
                   <span
                     local-class="generated-label"
-                    data-test-report="generated-label"
+                    data-test-report-generated-label
                   >
                     {{t "generatedOn"}}
                     {{day-js

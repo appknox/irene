@@ -13,8 +13,11 @@ export default class FileReport extends commondrf {
     return `${this.filesBaseUrl}/${q.fileId}/reports`;
   }
 
-  urlForCreateRecord(modelName, snapshot) {
-    return `${this.filesBaseUrl}/${snapshot.record.fileId}/reports`;
+  createRecord(store, modelClass, snapshot) {
+    let url = this._buildURL(modelClass.modelName, snapshot.record.fileId);
+    return this.ajax(url, 'POST', {
+      data: {},
+    });
   }
 
   urlForFindRecord(id) {

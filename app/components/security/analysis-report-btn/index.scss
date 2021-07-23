@@ -1,12 +1,6 @@
 .report-btn {
   display: flex;
-  column-gap: 12px;
-
-  .btn-container {
-    column-gap: 8px;
-    position: relative;
-    border-radius: 4px;
-  }
+  column-gap: 0.7rem;
 
   .report-download {
     cursor: pointer;
@@ -31,7 +25,7 @@
         cursor: pointer;
         display: flex;
         align-items: center;
-        column-gap: 8px;
+        column-gap: 0.8rem;
         height: inherit;
 
         i {
