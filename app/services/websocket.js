@@ -10,6 +10,7 @@ export default class WebsocketService extends Service {
   @service logger;
   @service realtime;
   @service notifications;
+  @service network;
   @service('socket-io') socketIOService;
 
   connectionPath = '/websocket';
@@ -28,6 +29,9 @@ export default class WebsocketService extends Service {
     const hostFromConfig = this.configuration.serverData.websocket;
     if (hostFromConfig) {
       return hostFromConfig;
+    }
+    if (this.network.host) {
+      return this.network.host;
     }
     return '/';
   }
