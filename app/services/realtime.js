@@ -1,7 +1,6 @@
 import Service from '@ember/service';
 
 const RealtimeService = Service.extend({
-
   FileCounter: 0,
   ProjectCounter: 0,
   ProjectCollaboratorCounter: 0,
@@ -19,7 +18,8 @@ const RealtimeService = Service.extend({
   OrganizationArchiveCounter: 0,
   CapturedApiCounter: 0,
   RegistrationRequestCounter: 0,
-  namespace: ''
+  namespace: '',
+  ReportCounter: 0,
 });
 
 export default RealtimeService;

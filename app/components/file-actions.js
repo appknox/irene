@@ -26,7 +26,10 @@ export default Component.extend({
     const projectId = this.get('file.project.id');
     const store = this.get('store');
     return store
-      .query('security/vulnerability', { projectId, limit: 0 })
+      .query('security/vulnerability', {
+        projectId,
+        limit: 0,
+      })
       .then((data) =>
         store.query('security/vulnerability', {
           projectId,
@@ -175,49 +178,6 @@ export default Component.extend({
     this.get('notify').error(errMsg);
   }),
 
-  fetchSignedReportURL: task(function* () {
-    const fileid = this.get('file.id');
-    const url = [ENV.endpoints.reports, fileid, 'download_url'].join('/');
-    const data = yield this.get('ajax').request(url, {
-      namespace: 'api/hudson-api',
-    });
-    return data;
-  }),
-
-  downloadReportExcel: task(function* () {
-    const data = yield this.get('fetchSignedReportURL').perform();
-    if (data.xlsx) {
-      window.location.href = data.xlsx;
-    }
-  }),
-
-  downloadReportExcelErrored: on(
-    'downloadReportExcel:errored',
-    function (_, error) {
-      let errMsg = this.get('tPleaseTryAgain');
-      if (error.errors && error.errors.length) {
-        errMsg = error.errors[0].detail || errMsg;
-      } else if (error.message) {
-        errMsg = error.message;
-      }
-      this.get('notify').error(errMsg);
-    }
-  ),
-
-  downloadReportHTMLja: task(function* () {
-    const data = yield this.get('fetchSignedReportURL').perform();
-    if (data.html_ja) {
-      window.location.href = data.html_ja;
-    }
-  }),
-
-  downloadReportHTMLen: task(function* () {
-    const data = yield this.get('fetchSignedReportURL').perform();
-    if (data.html_en) {
-      window.location.href = data.html_en;
-    }
-  }),
-
   addAnalysis: task(function* () {
     const vulnerability = this.get('selectedVulnerability');
     const file = this.get('file');
@@ -254,43 +214,6 @@ export default Component.extend({
   }),
 
   actions: {
-    generateReport() {
-      const fileid = this.get('file.id');
-      const emails = this.get('emails');
-      let data = {};
-      if (!isEmpty(emails)) {
-        data = {
-          emails: emails.split(',').map((item) => item.trim()),
-        };
-      }
-      this.set('isGeneratingReport', true);
-      const url = [ENV.endpoints.reports, fileid].join('/');
-      return this.get('ajax')
-        .put(url, {
-          namespace: 'api/hudson-api',
-          data,
-          contentType: 'application/json',
-        })
-        .then(
-          () => {
-            this.set('isGeneratingReport', false);
-            this.set('reportGenerated', true);
-            this.set('emailIDs', emails.split(','));
-            this.set('emails', '');
-          },
-          (error) => {
-            this.set('isGeneratingReport', false);
-            for (error of error.errors) {
-              this.get('notify').error(error.detail.error);
-            }
-          }
-        );
-    },
-
-    openGenerateReportModal() {
-      this.set('reportGenerated', false);
-      this.set('showGenerateReportModal', true);
-    },
 
     confirmPurgeAPIAnalysisConfirmBox() {
       this.get('confirmPurge').perform();

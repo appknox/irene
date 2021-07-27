@@ -1,9 +1,7 @@
 import DRFAdapter from 'ember-django-adapter/adapters/drf';
 import ENV from 'irene/config/environment';
 import IreneAdapterMixin from 'irene/mixins/data-adapter-mixin';
-import {
-  inject as service
-} from '@ember/service';
+import { inject as service } from '@ember/service';
 
 export default DRFAdapter.extend(IreneAdapterMixin, {
   host: ENV.host,
@@ -17,13 +15,13 @@ export default DRFAdapter.extend(IreneAdapterMixin, {
       const hostURL = new URL(hostURLstr);
       return new URL(resource_url, hostURL).href;
     } catch (e) {
-      if (hostURLstr === '/' || hostURLstr === "") {
-        if (resource_url[0] !== "/") {
-          return "/" + resource_url;
+      if (hostURLstr === '/' || hostURLstr === '') {
+        if (resource_url[0] !== '/') {
+          return '/' + resource_url;
         }
         return resource_url;
       }
       throw e;
     }
-  }
+  },
 });

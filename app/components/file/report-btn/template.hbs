@@ -1,0 +1,108 @@
+<div {{did-insert this.initializeComp}}>
+  <div
+    class="margin-top-5"
+    local-class="file-report-btn"
+    data-test-report-file-details
+  >
+    <button
+      type="button"
+      class="button is-primary"
+      local-class="btn-container"
+      disabled={{unless this.enableBtn "disabled" false}}
+      data-test-report-action-btn-label
+      {{on "click" this.onGenerateReport}}
+    >
+      {{#if this.latestReport.isGenerating}}
+        {{fa-icon "spinner fa-pulse"}}
+      {{else if (and (not this.isFileUpdated) this.latestReport.isGenerated)}}
+        {{fa-icon "download"}}
+      {{else}}
+        {{fa-icon "file-text-o"}}
+      {{/if}}
+      {{this.btnLabel}}
+      {{#if this.latestReport.isGenerating}}
+        <span
+          local-class="progress-loader"
+          class="is-progress"
+          style={{this.reportGenerationProgress}}
+          data-test-report-progress
+        ></span>
+      {{/if}}
+      {{#if
+        (and
+          this.latestReport
+          this.latestReport.generatedOn
+          (not this.isFileUpdated)
+        )
+      }}
+        <AttachTooltip placement="top">
+          {{t "generatedOn"}}
+          {{day-js
+            date=this.latestReport.generatedOn
+            format="DD MMM YYYY hh:mm a"
+          }}
+        </AttachTooltip>
+      {{/if}}
+    </button>
+    {{! Access to previous reports }}
+    {{#if this.prevReports.length}}
+      <div local-class="report-list-dropdown" data-test-pre-reports>
+        <BasicDropdown
+          @onOpen={{this.onToggleDropdown}}
+          @onClose={{this.onToggleDropdown}}
+          @renderInPlace={{true}}
+          @horizontalPosition="auto-right" as |dd|
+        >
+          <dd.trigger class="trigger-bootstrap-feel">
+            <div local-class="dd-trigger" data-test-prev-report-trigger>
+              {{fa-icon
+                (if this.isDropdownOpen "caret-up" "caret-down")
+                local-class="toggle-icon"
+              }}
+            </div>
+          </dd.trigger>
+          <dd.content class="content-bootstrap-feel width-300 slide-fade">
+            {{#each this.prevReports as |report seq|}}
+              <a
+                href="#"
+                local-class="prev-report"
+                {{on "click" (perform this.getReportByType "pdf" report.id)}}
+              >
+                <span
+                  local-class="prev-report-item"
+                  data-test-prev-report="{{seq}}"
+                >
+                  <span
+                    local-class="download-pre-report"
+                    data-test-download-prev-report
+                  >
+                    {{t "downloadPrevReport"}}
+                  </span>
+                  <span
+                    local-class="generated-label"
+                    data-test-report-generated-label
+                  >
+                    {{t "generatedOn"}}
+                    {{day-js
+                      date=report.generatedOn
+                      format="DD MMM YYYY hh:mm a"
+                    }}
+                  </span>
+                </span>
+              </a>
+            {{/each}}
+          </dd.content>
+        </BasicDropdown>
+      </div>
+    {{/if}}
+  </div>
+</div>
+{{#if this.isShowCopyPasswordModal}}
+  <AkModal
+    @onClose={{this.onCloseModal}}
+    @showHeader={{true}}
+    @headerTitle={{t "modalCard.copyPassword.title"}}
+  >
+    <CopyPassword @pdfPassword={{@file.project.pdfPassword}} />
+  </AkModal>
+{{/if}}
