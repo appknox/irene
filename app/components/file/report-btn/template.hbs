@@ -8,16 +8,17 @@
       type="button"
       class="button is-primary"
       local-class="btn-container"
-      disabled={{unless this.enableBtn "disabled" false}}
+      disabled={{unless this.enableBtn 'disabled' false}}
       data-test-report-action-btn-label
-      {{on "click" this.onGenerateReport}}
+      {{on 'click' this.onGenerateReport}}
     >
       {{#if this.latestReport.isGenerating}}
-        {{fa-icon "spinner fa-pulse"}}
-      {{else if (and (not this.isFileUpdated) this.latestReport.isGenerated)}}
-        {{fa-icon "download"}}
+        {{fa-icon 'spinner fa-pulse'}}
+      {{else if
+        (and (not this.canGenerateReport) this.latestReport.isGenerated)}}
+        {{fa-icon 'download'}}
       {{else}}
-        {{fa-icon "file-text-o"}}
+        {{fa-icon 'file-text-o'}}
       {{/if}}
       {{this.btnLabel}}
       {{#if this.latestReport.isGenerating}}
@@ -32,14 +33,14 @@
         (and
           this.latestReport
           this.latestReport.generatedOn
-          (not this.isFileUpdated)
+          (not this.canGenerateReport)
         )
       }}
         <AttachTooltip placement="top">
-          {{t "generatedOn"}}
+          {{t 'generatedOn'}}
           {{day-js
             date=this.latestReport.generatedOn
-            format="DD MMM YYYY hh:mm a"
+            format='DD MMM YYYY hh:mm a'
           }}
         </AttachTooltip>
       {{/if}}
@@ -56,8 +57,8 @@
           <dd.trigger class="trigger-bootstrap-feel">
             <div local-class="dd-trigger" data-test-prev-report-trigger>
               {{fa-icon
-                (if this.isDropdownOpen "caret-up" "caret-down")
-                local-class="toggle-icon"
+                (if this.isDropdownOpen 'caret-up' 'caret-down')
+                local-class='toggle-icon'
               }}
             </div>
           </dd.trigger>
@@ -66,7 +67,7 @@
               <a
                 href="#"
                 local-class="prev-report"
-                {{on "click" (perform this.getReportByType "pdf" report.id)}}
+                {{on 'click' (perform this.getReportByType 'pdf' report.id)}}
               >
                 <span
                   local-class="prev-report-item"
@@ -76,16 +77,16 @@
                     local-class="download-pre-report"
                     data-test-download-prev-report
                   >
-                    {{t "downloadPrevReport"}}
+                    {{t 'downloadPrevReport'}}
                   </span>
                   <span
                     local-class="generated-label"
                     data-test-report-generated-label
                   >
-                    {{t "generatedOn"}}
+                    {{t 'generatedOn'}}
                     {{day-js
                       date=report.generatedOn
-                      format="DD MMM YYYY hh:mm a"
+                      format='DD MMM YYYY hh:mm a'
                     }}
                   </span>
                 </span>
@@ -101,7 +102,7 @@
   <AkModal
     @onClose={{this.onCloseModal}}
     @showHeader={{true}}
-    @headerTitle={{t "modalCard.copyPassword.title"}}
+    @headerTitle={{t 'modalCard.copyPassword.title'}}
   >
     <CopyPassword @pdfPassword={{@file.project.pdfPassword}} />
   </AkModal>
