@@ -1,0 +1,22 @@
+/*
+Generic styles will be defined here
+NOTE: overriding any of these styles will effect globally
+*/
+.primary-btn {
+  height: 35px;
+  padding: 8px 12px;
+  border-radius: 3px;
+  background-color: var(--primary);
+  color: var(--white);
+  font-size: inherit;
+  border: 1px solid var(--primary);
+
+  &.transparent-bg {
+    background-color: transparent;
+    color: var(--primary);
+    &:hover {
+      background-color: var(--primary);
+      color: var(--white);
+    }
+  }
+}

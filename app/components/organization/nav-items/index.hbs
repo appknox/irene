@@ -1,0 +1,19 @@
+<div class="tabs is-medium is-boxed margin-top is-centered">
+  <ul>
+    {{#each this.tabs as |tab|}}
+      {{#if tab.isEnabled}}
+        <li class={{if tab.isActive 'is-active'}}>
+          <LinkTo @route={{tab.route}}>
+            {{fa-icon tab.icon class='sidebar-icons'}}
+            {{tab.label}}
+            {{#if tab.showCount}}
+              <span class="badge-square is-default margin-l-1 content-right">
+                {{tab.count}}
+              </span>
+            {{/if}}
+          </LinkTo>
+        </li>
+      {{/if}}
+    {{/each}}
+  </ul>
+</div>
