@@ -19,7 +19,7 @@
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
     "start": "cross-env IRENE_API_HOST=http://localhost:8000 ember server",
-    "startstaging": "cross-env IRENE_API_HOST=https://api.appknox.io IRENE_DEVICEFARM_URL=wss://devicefarm.appknox.com ember server",
+    "startstaging": "cross-env IRENE_API_HOST=https://sherlock.staging.do.appknox.io IRENE_DEVICEFARM_URL=wss://devicefarm.appknox.com ember server",
     "startprod": "cross-env IRENE_API_HOST=https://api.appknox.com IRENE_DEVICEFARM_URL=wss://devicefarm.appknox.com ember server",
     "test": "npm-run-all lint test:*",
     "test:ember": "ember test",
@@ -123,6 +123,7 @@
     "billboard.js": "^1.12.7",
     "clipboard": "^2.0.6",
     "ember-radio-button": "^2.0.1",
+    "material-design-icons": "^3.0.1",
     "pikaday": "^1.8.2",
     "qrious": "^4.0.2"
   },

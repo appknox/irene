@@ -36,8 +36,8 @@ Router.map(function () {
         this.route('team', {
           path: '/team/:teamid',
         });
-        this.route('settings');
       });
+      this.route('organization-settings');
       this.route('settings', function () {
         this.route('general');
         this.route('security');

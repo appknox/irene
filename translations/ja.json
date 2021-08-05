@@ -567,6 +567,7 @@
   "organizationArchiveTableHeading": "Previous Exports",
   "organizationMandatory2FA": "Your organization has enabled mandatory 2FA",
   "organizationMembers": "組織メンバー",
+  "organizationName": "Organization Name",
   "organizationNameUpdated": "Successfully updated the organization name",
   "organizationSettings": "Organization Settings",
   "organizationTableCreatedOn": "Created On",

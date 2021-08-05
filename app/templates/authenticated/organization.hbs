@@ -1,5 +1,9 @@
-{{page-title "Organization"}}
-<div class="org-header">
-  <OrganizationDetails></OrganizationDetails>
+{{page-title 'Organization'}}
+<div class="organization-page">
+  <Organization::Header
+    @name={{this.model.orgName}}
+    @isAdmin={{this.model.isAdmin}}
+  />
+  <Organization::NavItems />
+  {{outlet}}
 </div>
-{{outlet}}

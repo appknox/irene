@@ -1,0 +1,43 @@
+/* Rules for sizing the material icons. */
+.material-icons.md-18 {
+  font-size: 18px;
+}
+.material-icons.md-24 {
+  font-size: 24px;
+}
+.material-icons.md-36 {
+  font-size: 36px;
+}
+.material-icons.md-48 {
+  font-size: 48px;
+}
+
+// Route page styles
+
+/*
+Generic styles will be defined here
+NOTE: overriding any of these styles will effect globally
+*/
+.primary-btn {
+  height: 35px;
+  padding: 8px 12px;
+  border-radius: 3px;
+  background-color: var(--primary);
+  color: var(--white);
+  font-size: inherit;
+  border: 1px solid var(--primary);
+
+  &.transparent-bg {
+    background-color: transparent;
+    color: var(--primary);
+    // Animation effect
+    background: linear-gradient(to right, var(--primary) 50%, var(--white) 50%);
+    background-size: 200% 100%;
+    background-position: right bottom;
+    transition: all 0.3s ease-out;
+    &:hover {
+      background-position: left bottom;
+      color: var(--white);
+    }
+  }
+}

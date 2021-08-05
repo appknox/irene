@@ -1,0 +1,21 @@
+<div local-class="org-header">
+  <div local-class="org-header-content">
+    <div local-class="org-name-label" data-test-org-name-label>
+      {{t 'organizationName'}}
+    </div>
+    <div local-class="org-name-text" data-test-org-name-text>
+      {{@name}}
+    </div>
+  </div>
+  {{#if @isAdmin}}
+    <LinkTo
+      @route="authenticated.organization-settings"
+      class="primary-btn transparent-bg"
+      local-class="org-settings-btn"
+      data-test-org-settings-link
+    >
+      <AkIcon @name="settings" class="md-18" />
+      {{t 'organizationSettings'}}
+    </LinkTo>
+  {{/if}}
+</div>
