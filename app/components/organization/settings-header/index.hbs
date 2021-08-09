@@ -1,0 +1,58 @@
+<div>
+  Back
+</div>
+<div local-class="org-name-editable-container">
+  <div local-class="org-name-editable-content">
+    <div local-class="org-name-label">
+      {{t 'organizationName'}}
+    </div>
+    <div local-class="org-name-text">
+      {{#if this.isEditNameEnabled}}
+        <Input type="text" @value={{this.orgName}} />
+      {{else}}
+        {{this.orgName}}
+      {{/if}}
+    </div>
+  </div>
+  <button
+    class="primary-btn transparent-bg"
+    type="button"
+    local-class="edit-name-btn"
+    {{on 'click' this.toggleEditEnabled}}
+  >
+    <AkIcon @name="create" class="md-18" />
+    Edit
+  </button>
+</div>
+{{#if this.isShowEditOrgName}}
+  <AkModal
+    @showHeader={{true}}
+    @headerTitle={{t 'editOrganizationName'}}
+    @onClose={{this.toggleEditEnabled}}
+  >
+    <div>
+      <div>
+        Here you can edit the existing organization name
+      </div>
+      <div>
+        <Input type="text" @value={{this.orgName}} />
+      </div>
+      <div>
+        <button
+          class="secondary-btn transparent-bg"
+          type="button"
+          {{on 'click' this.toggleEditEnabled}}
+        >
+          Cancel
+        </button>
+        <button
+          class="primary-btn"
+          type="button"
+          {{on 'click' this.updateOrgName}}
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </AkModal>
+{{/if}}

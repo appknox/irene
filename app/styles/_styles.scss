@@ -24,7 +24,7 @@ NOTE: overriding any of these styles will effect globally
   border-radius: 3px;
   background-color: var(--primary);
   color: var(--white);
-  font-size: inherit;
+  font-size: 16px;
   border: 1px solid var(--primary);
 
   &.transparent-bg {
@@ -32,6 +32,38 @@ NOTE: overriding any of these styles will effect globally
     color: var(--primary);
     // Animation effect
     background: linear-gradient(to right, var(--primary) 50%, var(--white) 50%);
+    background-size: 200% 100%;
+    background-position: right bottom;
+    transition: all 0.3s ease-out;
+    &:hover {
+      background-position: left bottom;
+      color: var(--white);
+    }
+  }
+}
+
+.secondary-btn {
+  height: 35px;
+  padding: 8px 12px;
+  border-radius: 3px;
+  background-color: var(--secondary);
+  color: var(--white);
+  font-size: 16px;
+  border: 1px solid var(--secondary);
+
+  &:hover {
+    border-color: var(--secondary);
+  }
+
+  &.transparent-bg {
+    background-color: transparent;
+    color: var(--secondary);
+    // Animation effect
+    background: linear-gradient(
+      to right,
+      var(--secondary) 50%,
+      var(--white) 50%
+    );
     background-size: 200% 100%;
     background-position: right bottom;
     transition: all 0.3s ease-out;
