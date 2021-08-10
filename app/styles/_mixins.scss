@@ -6,3 +6,13 @@
   display: -webkit-box;
   -webkit-box-orient: vertical;
 }
+
+// PX to REM converter
+$html-font-size: 14px;
+
+@function stripUnit($value) {
+  @return $value / ($value * 0 + 1);
+}
+@function rem($pxValue) {
+  @return #{stripUnit($pxValue) / stripUnit($html-font-size)}rem;
+}

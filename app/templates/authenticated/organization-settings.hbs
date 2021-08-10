@@ -1,6 +1,9 @@
 {{page-title 'Organization Settings'}}
 <div class="org-container">
-  <Organization::SettingsHeader />
+  <Organization::SettingsHeader
+    @isOwner={{@model.me.org.is_owner}}
+    @organization={{@model.organization}}
+  />
   <OrganizationSettings
     @organization={{@model.organization}}
     @user={{@model.user}}

@@ -1,56 +1,71 @@
-<div>
-  Back
+<div local-class="back-to-container" data-test-back-to-org>
+  <a href="#" local-class="back-to" {{on 'click' this.backTo}}>
+    <AkIcon @name="arrow_back" />
+    {{t 'back'}}
+  </a>
 </div>
-<div local-class="org-name-editable-container">
+<div local-class="org-name-editable-container" {{did-insert this.initCompo}}>
   <div local-class="org-name-editable-content">
-    <div local-class="org-name-label">
+    <div local-class="org-name-label" data-test-org-name-label>
       {{t 'organizationName'}}
     </div>
-    <div local-class="org-name-text">
-      {{#if this.isEditNameEnabled}}
-        <Input type="text" @value={{this.orgName}} />
-      {{else}}
-        {{this.orgName}}
-      {{/if}}
+    <div local-class="org-name-text" data-test-org-name-value>
+      {{@organization.name}}
     </div>
   </div>
-  <button
-    class="primary-btn transparent-bg"
-    type="button"
-    local-class="edit-name-btn"
-    {{on 'click' this.toggleEditEnabled}}
-  >
-    <AkIcon @name="create" class="md-18" />
-    Edit
-  </button>
+  {{#if @isOwner}}
+    <button
+      class="primary-btn transparent-bg"
+      type="button"
+      local-class="edit-name-btn"
+      data-test-org-name-edit-btn
+      {{on 'click' this.toggleEditNameModal}}
+    >
+      <AkIcon @name="create" class="md-18" />
+      {{t 'edit'}}
+    </button>
+  {{/if}}
 </div>
 {{#if this.isShowEditOrgName}}
   <AkModal
     @showHeader={{true}}
     @headerTitle={{t 'editOrganizationName'}}
-    @onClose={{this.toggleEditEnabled}}
+    @onClose={{this.toggleEditNameModal}}
   >
-    <div>
-      <div>
-        Here you can edit the existing organization name
+    <div local-class="edit-name-modal-container" data-test-org-edit-modal>
+      <div local-class="edit-name-label" data-test-org-edit-modal-label>
+        {{t 'editOrganizationNameModalLabel'}}
       </div>
-      <div>
-        <Input type="text" @value={{this.orgName}} />
+      <div local-class="edit-name-input">
+        <Input
+          class="input-box"
+          type="text"
+          @value={{this.changeset.organizationName}}
+          data-test-org-edit-modal-input
+        />
+        {{#if this.changeset.error.organizationName}}
+          <span class="error-msg" data-test-input-error-org-name>
+            {{this.changeset.error.organizationName.validation}}
+          </span>
+        {{/if}}
       </div>
-      <div>
+      <div local-class="edit-name-action-container">
         <button
           class="secondary-btn transparent-bg"
           type="button"
-          {{on 'click' this.toggleEditEnabled}}
+          data-test-org-edit-modal-cancel-btn
+          {{on 'click' this.toggleEditNameModal}}
         >
-          Cancel
+          {{t 'cancel'}}
         </button>
         <button
           class="primary-btn"
           type="button"
+          disabled={{this.changeset.error.organizationName}}
+          data-test-org-edit-modal-save-btn
           {{on 'click' this.updateOrgName}}
         >
-          Save
+          {{t 'save'}}
         </button>
       </div>
     </div>
