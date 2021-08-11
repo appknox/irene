@@ -859,7 +859,7 @@ select
     margin-top: 10px
 
 div[class^="_c-notification__container"]
-    z-index: 2000!important
+  z-index: 2000!important
 
 .is-progress
   border: 1px solid #ffe0dd
@@ -966,6 +966,7 @@ div[class^="_c-notification__container"]
   &-fixed
     position: fixed
     width: 16.2%
+    height: 100%
   .box
     background-color: #f0f0f0
     box-shadow: none
@@ -3730,3 +3731,11 @@ sup
 
 .primary-color
   color: #EF4836
+
+// TODO should move to component level
+.product-version
+  position: absolute
+  right: 1em
+  bottom: 1.5em
+  color: lighten($sidebar-bg, 25%)
+  font-size: 0.8rem
