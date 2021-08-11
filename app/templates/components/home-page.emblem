@@ -76,6 +76,8 @@ if isLoaded
 
           .status-updates
             = submission-list
+          .product-version
+            | #{t "version"} #{productVersion}
 
       .column.margin-right.margin-top
         .columns
