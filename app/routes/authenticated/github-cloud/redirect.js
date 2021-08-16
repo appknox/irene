@@ -6,18 +6,22 @@ export default class AuthenticatedGithubRedirectRoute extends Route {
   @service('notifications') notify;
   @service organization;
 
-  async beforeModel(transition){
-    const token = encodeURIComponent(transition.queryParams.token);
-    const url = `/api/organizations/${this.get('organization.selected.id')}/github`;
-    try{
-      let data = await this.get("ajax").post(url, {data:{token: token}})
-      this.get("notify").success(`Successfully Integrated with user ${data.login}`);
-    }catch(err){
-      this.get("notify").error(`Error Occured: ${err.payload.message}`);
+  async beforeModel(transition) {
+    const token = encodeURIComponent(transition.to.queryParams.token);
+    const url = `/api/organizations/${this.get(
+      'organization.selected.id'
+    )}/github`;
+    try {
+      let data = await this.get('ajax').post(url, { data: { token: token } });
+      this.get('notify').success(
+        `Successfully Integrated with user ${data.login}`
+      );
+    } catch (err) {
+      this.get('notify').error(`Error Occured: ${err.payload.message}`);
     }
   }
 
-  afterModel(){
+  afterModel() {
     return this.transitionTo('authenticated.organization.settings');
   }
 }
