@@ -1,0 +1,89 @@
+{{#if @isOwner}}
+  {{!-- <div class="margin-t-2 margin-b-1h">
+    <div class="columns">
+      <div class="column">
+        {{regulatory-preference-organization organization=organization}}
+      </div>
+    </div>
+  </div> --}}
+  <div class="divider margin-t-1 margin-b-1"></div>
+  <div class="columns" data-test-mfa-setting {{did-insert this.initComp}}>
+    <div class="column">
+      <div class="org-setting-mfa">
+        <div class="org-settings-subtitle" data-test-mfa-setting-title>
+          {{t 'multiFactorAuth'}}
+        </div>
+        <div class="vertical-align-top">
+          <div class="div">
+            <label class="switch">
+              <Input
+                id="mandate-mfa"
+                class="switch-input"
+                @type="checkbox"
+                disabled={{this.isMfaMandateDisabled}}
+                @checked={{get this.changeset 'isEnabled'}}
+                data-test-mfa-setting-toggle
+                {{on 'change' this.onToggleSwitch}}
+              />
+              <span class="slider slider-nolabel round"></span>
+            </label>
+          </div>
+          <div class="padding-l-1h">
+            <label
+              local-class="org-setting-title"
+              for="mandate-mfa"
+              class="black-text"
+              data-test-mfa-setting-toggle-title
+            >
+              {{t 'enableMandatoryMFATitle'}}
+            </label>
+            <div
+              local-class="org-setting-desc checkbox-desc"
+              data-test-mfa-setting-desc
+            >
+              {{t 'enableMandatoryMFADescription'}}
+            </div>
+            <div
+              class="alert alert-critical alert-small margin-t-1"
+              data-test-mfa-setting-warning-note
+            >
+              <div class="vertical-align-center">
+                {{fa-icon 'warning'}}
+                <div class="margin-l-h" data-test-mfa-setting-warning-note-text>
+                  {{t 'enableMandatoryMFAWarning'}}
+                </div>
+              </div>
+            </div>
+            {{#if this.isUserMfaDisabled}}
+              <div class="margin-t-1">
+                <div
+                  class="alert alert-danger alert-small"
+                  data-test-mfa-setting-user-mfa
+                >
+                  <div class="vertical-align-center">
+                    {{fa-icon 'shield'}}
+                    <div class="margin-l-1" data-test-mfa-setting-user-mfa-desc>
+                      {{t 'enableMandatoryMFARequirement'}}
+                      <LinkTo
+                        @route="authenticated.settings.security"
+                        class="alert-link"
+                        data-test-mfa-setting-user-mfa-link
+                      >
+                        {{t 'accountSettings'}}
+                        >
+                        {{t 'security'}}
+                        >
+                        {{t 'multiFactorAuth'}}
+                      </LinkTo>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="divider margin-t-1 margin-b-1"></div>
+{{/if}}
