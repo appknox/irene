@@ -1,0 +1,49 @@
+.toggle-mfa {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--body-text-1);
+}
+
+.warn-desc {
+  padding: 1.1em;
+  display: flex;
+  background-color: rgba(215, 47, 47, 0.1);
+  color: var(--body-text-1);
+  font-size: 1rem;
+  border: 1px solid #d72f2f;
+  border-radius: 0.2em;
+  column-gap: 0.8em;
+  margin-top: 1.8em;
+  width: 70%;
+}
+
+.warn-icon {
+  color: #d72f2f;
+  font-size: 1.5em;
+}
+
+.info-desc {
+  padding: 1.1em;
+  display: flex;
+  color: var(--body-text-1);
+  font-size: 1rem;
+  border: 1px solid #be9a1d;
+  border-radius: 0.2em;
+  column-gap: 0.8em;
+  background-color: rgba(190, 154, 29, 0.1);
+  width: 70%;
+  margin-top: 0.7em;
+}
+
+.info-icon {
+  color: #be9a1d;
+  font-size: 1.5em;
+}
+
+.info-link {
+  font-weight: 500;
+  color: #be9a1d;
+  text-decoration: underline;
+  margin-top: 2em;
+  display: block;
+}

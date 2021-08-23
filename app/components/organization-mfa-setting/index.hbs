@@ -1,0 +1,52 @@
+<div data-test-mfa-setting {{did-insert this.initComp}}>
+  <h2 data-test-mfa-setting-title>
+    {{t 'multiFactorAuth'}}
+  </h2>
+  <h4 data-test-mfa-setting-sub-title>
+    {{t 'mandatoryMultiFactAuth'}}
+  </h4>
+  <p data-test-mfa-setting-desc>
+    {{t 'enableMandatoryMFADescription'}}
+  </p>
+  <div local-class="toggle-container">
+    <AkToggle
+      @isDisabled={{this.isMfaMandateDisabled}}
+      @isChecked={{get this.changeset 'isEnabled'}}
+      data-test-mfa-setting-toggle
+      {{on 'input' this.onToggleSwitch}}
+    >
+      <span local-class="toggle-mfa" data-test-mfa-setting-toggle-title>
+        {{t 'enableMandatoryMFATitle'}}
+      </span>
+    </AkToggle>
+  </div>
+  <div local-class="warn-desc" data-test-mfa-setting-warning-note>
+    <span local-class="warn-icon" data-test-mfa-setting-warning-note-icon>
+      <MdIcon @name="report_problem" />
+    </span>
+    <div data-test-mfa-setting-warning-note-text>
+      {{t 'enableMandatoryMFAWarning'}}
+    </div>
+  </div>
+  {{#if this.isUserMfaDisabled}}
+    <div local-class="info-desc" data-test-mfa-setting-user-mfa>
+      <span local-class="info-icon" data-test-mfa-setting-user-mfa-icon>
+        <MdIcon @name="security" />
+      </span>
+      <div data-test-mfa-setting-user-mfa-desc>
+        {{t 'enableMandatoryMFARequirement'}}
+        <LinkTo
+          @route="authenticated.settings.security"
+          local-class="info-link"
+          data-test-mfa-setting-user-mfa-link
+        >
+          {{t 'accountSettings'}}
+          >
+          {{t 'security'}}
+          >
+          {{t 'multiFactorAuth'}}
+        </LinkTo>
+      </div>
+    </div>
+  {{/if}}
+</div>

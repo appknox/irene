@@ -1,10 +1,14 @@
 {{page-title 'Settings'}}
 <div class="org-container">
-  <OrganizationSettings::MfaSetting
-    @organization={{@model.organization}}
-    @user={{@model.user}}
-    @isOwner={{true}}
-  />
+  <RegulatoryPreferenceOrganization />
+  <div class="divider margin-t-1 margin-b-1"></div>
+  {{#if this.model.me.org.is_owner}}
+    <OrganizationMfaSetting
+      @organization={{@model.organization}}
+      @user={{@model.user}}
+    />
+    <div class="divider margin-t-1 margin-b-1"></div>
+  {{/if}}
   {{#if @model.organization.features.sso}}
     <SsoSettings @organization={{@model.organization}} @user={{@model.user}} />
     <div class="divider margin-t-1 margin-b-1"></div>

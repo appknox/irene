@@ -2,11 +2,11 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import Changeset from 'ember-changeset';
 import parseError from 'irene/utils/parse-error';
 import { tracked } from '@glimmer/tracking';
+import Changeset from 'ember-changeset';
 
-export default class MFASettingComponent extends Component {
+export default class OrganizationMfaSetting extends Component {
   // Dependencies
   @service me;
   @service intl;
@@ -39,7 +39,7 @@ export default class MFASettingComponent extends Component {
   /**
    * @property {Object} changeset
    */
-  @tracked changeset = {};
+  @tracked changeset = new Object();
 
   // Actions
 
@@ -49,14 +49,13 @@ export default class MFASettingComponent extends Component {
     this.changeset = new Changeset({
       isEnabled: this.organization.mandatoryMfa,
     });
-    console.log('this.changeset', this.changeset);
   }
 
   // Action will be triggered while clicking at checkbox
   @action
-  onToggleSwitch() {
-    this.toggleCheckboxState();
-    this.toggleMFAuthFlag.perform();
+  onToggleSwitch(event) {
+    this.setToggleState(event.target.checked);
+    this.toggleMFAuthFlag.perform(event.target.checked);
   }
 
   // Functions
@@ -64,21 +63,24 @@ export default class MFASettingComponent extends Component {
   /**
    * @task to update the organization mfa state
    */
-  @task(function* () {
+  @task(function* (state) {
     try {
       const org = this.organization;
-      yield org.set('mandatoryMfa', this.changeset.isEnabled);
+      yield org.set('mandatoryMfa', state);
       yield org.save();
       this.notify.success(this.intl.t('changedMandatoryMFA'));
     } catch (err) {
       this.notify.error(parseError(err, this.intl.t('pleaseTryAgain')));
-      this.toggleCheckboxState();
+      this.setToggleState(!state);
     }
   })
   toggleMFAuthFlag;
 
-  // Function to toggle changeset value
-  toggleCheckboxState() {
-    this.changeset.set('isEnabled', !this.changeset.get('isEnabled'));
+  /**
+   * Set toggle switch state
+   * @param {Boolean} state
+   */
+  setToggleState(state) {
+    this.changeset.set('isEnabled', state);
   }
 }

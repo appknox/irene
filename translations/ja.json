@@ -374,6 +374,7 @@
   "logout": "ログアウト",
   "low": "低",
   "manager": "マネージャー",
+  "mandatoryMultiFactAuth": "Mandatory multi factor authentication",
   "manual": "手動",
   "manualRequested": "手動診断がリクエストされました",
   "manualScan": "手動診断",

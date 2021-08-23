@@ -374,6 +374,7 @@
   "logout": "Logout",
   "low": "Low",
   "manager": "Manager",
+  "mandatoryMultiFactAuth": "Mandatory multi factor authentication",
   "manual": "Manual",
   "manualRequested": "Manual assessment requested",
   "manualScan": "Manual Scan",
