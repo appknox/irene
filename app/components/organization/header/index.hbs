@@ -1,13 +1,33 @@
-<div local-class="org-header">
-  <div local-class="org-header-content">
+{{#if @isEnableBack}}
+  <div local-class="back-to-container" data-test-back-to-org>
+    <a href="#" local-class="back-to" {{on 'click' this.backTo}}>
+      <MdIcon @name="arrow_back" />
+      {{t 'back'}}
+    </a>
+  </div>
+{{/if}}
+<div local-class="org-name-container" {{did-insert this.initCompo}}>
+  <div local-class="org-name-content">
     <div local-class="org-name-label" data-test-org-name-label>
       {{t 'organizationName'}}
     </div>
     <div local-class="org-name-text" data-test-org-name-text>
-      {{@name}}
+      {{@organization.name}}
     </div>
   </div>
-  {{#if @isAdmin}}
+  {{#if this.isShowEdit}}
+    <button
+      class="primary-btn transparent-bg"
+      type="button"
+      local-class="edit-name-btn"
+      data-test-org-name-edit-btn
+      {{on 'click' this.toggleEditNameModal}}
+    >
+      <MdIcon @name="create" />
+      {{t 'edit'}}
+    </button>
+  {{/if}}
+  {{#if this.isShowSettings}}
     <LinkTo
       @route="authenticated.organization-settings"
       class="primary-btn transparent-bg"
@@ -19,3 +39,48 @@
     </LinkTo>
   {{/if}}
 </div>
+{{#if this.isShowEditOrgName}}
+  <AkModal
+    @showHeader={{true}}
+    @headerTitle={{t 'editOrganizationName'}}
+    @onClose={{this.toggleEditNameModal}}
+  >
+    <div local-class="edit-name-modal-container" data-test-org-edit-modal>
+      <div local-class="edit-name-label" data-test-org-edit-modal-label>
+        {{t 'editOrganizationNameModalLabel'}}
+      </div>
+      <div local-class="edit-name-input">
+        <Input
+          class="input-box"
+          type="text"
+          @value={{this.changeset.organizationName}}
+          data-test-org-edit-modal-input
+        />
+        {{#if this.changeset.error.organizationName}}
+          <span class="error-msg" data-test-input-error-org-name>
+            {{this.changeset.error.organizationName.validation}}
+          </span>
+        {{/if}}
+      </div>
+      <div local-class="edit-name-action-container">
+        <button
+          class="secondary-btn transparent-bg"
+          type="button"
+          data-test-org-edit-modal-cancel-btn
+          {{on 'click' this.toggleEditNameModal}}
+        >
+          {{t 'cancel'}}
+        </button>
+        <button
+          class="primary-btn"
+          type="button"
+          disabled={{this.changeset.error.organizationName}}
+          data-test-org-edit-modal-save-btn
+          {{on 'click' this.updateOrgName}}
+        >
+          {{t 'save'}}
+        </button>
+      </div>
+    </div>
+  </AkModal>
+{{/if}}

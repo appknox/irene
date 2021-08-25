@@ -888,5 +888,7 @@
   "yes": "Yes",
   "youCanCreateTeam": "you can create a new team by",
   "youWillBeChargedOn": "You will be charged on",
-  "yourPlan": "Your Plan"
+  "yourPlan": "Your Plan",
+  "editOrganizationName": "Edit Organization Name",
+  "editOrganizationNameModalLabel": "Here you can edit the existing organization name"
 }

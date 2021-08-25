@@ -8,10 +8,12 @@ export default class AuthenticatedOrganizationRoute extends ScrollTopMixin(
   @service me;
   @service organization;
 
-  model() {
+  async model() {
     return {
       isAdmin: this.me.org.get('is_admin'),
+      isOwner: this.me.org.get('is_owner'),
       orgName: this.organization.selected.name,
+      organization: await this.get('organization.selected'),
     };
   }
 }
