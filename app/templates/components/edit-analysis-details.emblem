@@ -144,6 +144,16 @@
       .columns
         .column.is-one-third
           h5.bold-font
+            | ASVS Section
+      .columns.border-bottom-container
+        .column.margin-bottom20
+          = power-select-multiple placeholder="Select ASVS Risk Section" selected=analysisDetails.asv options=asvses onchange=(action "selectAsvCategory") as |key|
+            | #{key.code} - #{key.title}
+
+
+      .columns
+        .column.is-one-third
+          h5.bold-font
             | Override Risk
       .columns.border-bottom-container
         .column.padding-h-1h

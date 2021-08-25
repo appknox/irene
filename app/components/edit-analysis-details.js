@@ -55,6 +55,10 @@ export default Component.extend({
     return this.get("store").findAll("mstg");
   }),
 
+  asvses: computed('store', function() {
+    return this.get("store").findAll("asv");
+  }),
+
   allFindings: computed('addedFindings', 'analysisDetails.findings', 'findingId', function() {
     let findingId = this.get("findingId");
     const findings = this.get("addedFindings") || this.get("analysisDetails.findings");
@@ -234,6 +238,7 @@ export default Component.extend({
     const pcidss = this.get("analysisDetails.pcidss");
     const hipaa = this.get("analysisDetails.hipaa");
     const mstg = this.get("analysisDetails.mstg");
+    const asv = this.get("analysisDetails.asv");
     let status = this.get("analysisDetails.status");
     if(typeof status === "object") {
       status = status.value;
@@ -263,6 +268,7 @@ export default Component.extend({
       pcidss: pcidss.map(a=>a.get('id')),
       hipaa: hipaa.map(a=>a.get('id')),
       mstg: mstg.map(a=>a.get('id')),
+      asv: asv.map(a=>a.get('id')),
       findings,
       overridden_risk: overriddenRisk,
       overridden_risk_comment: overriddenRiskComment,
@@ -377,6 +383,10 @@ export default Component.extend({
 
     selectMstgCategory(param) {
       this.set('analysisDetails.mstg', param);
+    },
+
+    selectAsvCategory(param) {
+      this.set('analysisDetails.asv', param);
     },
 
     selectOverriddenRisk(param) {
