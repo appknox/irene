@@ -13,6 +13,7 @@ const Analysis = Model.extend({
   cvssBase: attr('number'),
   pcidss: hasMany('pcidss'),
   mstg: hasMany('mstg'),
+  asv: hasMany('asv'),
   cvssVector: attr('string'),
   cvssVersion: attr('number'),
   cvssMetricsHumanized: attr(),
