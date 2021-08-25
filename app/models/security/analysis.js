@@ -25,6 +25,7 @@ export default Model.extend({
   file: belongsTo('security/file'),
   owasp: hasMany('owasp'),
   pcidss: hasMany('pcidss'),
+  mstg: hasMany('mstg'),
   hipaa: hasMany('hipaa'),
   attachments: hasMany('security/attachment'),
   vulnerability: belongsTo('vulnerability'),

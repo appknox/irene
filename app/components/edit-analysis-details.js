@@ -51,6 +51,10 @@ export default Component.extend({
     return this.get("store").findAll("hipaa");
   }),
 
+  mstgs: computed('store', function() {
+    return this.get("store").findAll("mstg");
+  }),
+
   allFindings: computed('addedFindings', 'analysisDetails.findings', 'findingId', function() {
     let findingId = this.get("findingId");
     const findings = this.get("addedFindings") || this.get("analysisDetails.findings");
@@ -229,6 +233,7 @@ export default Component.extend({
     const owasp = this.get("analysisDetails.owasp");
     const pcidss = this.get("analysisDetails.pcidss");
     const hipaa = this.get("analysisDetails.hipaa");
+    const mstg = this.get("analysisDetails.mstg");
     let status = this.get("analysisDetails.status");
     if(typeof status === "object") {
       status = status.value;
@@ -257,6 +262,7 @@ export default Component.extend({
       owasp: owasp.map(a=>a.get('id')),
       pcidss: pcidss.map(a=>a.get('id')),
       hipaa: hipaa.map(a=>a.get('id')),
+      mstg: mstg.map(a=>a.get('id')),
       findings,
       overridden_risk: overriddenRisk,
       overridden_risk_comment: overriddenRiskComment,
@@ -367,6 +373,10 @@ export default Component.extend({
 
     selectHipaaCategory(param) {
       this.set('analysisDetails.hipaa', param);
+    },
+
+    selectMstgCategory(param) {
+      this.set('analysisDetails.mstg', param);
     },
 
     selectOverriddenRisk(param) {

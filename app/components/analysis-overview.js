@@ -70,6 +70,7 @@ export default Component.extend({
         owasp: this.get("analysis.owasp").map(a=>a.get('id')),
         pcidss: this.get("analysis.pcidss").map(a=>a.get('id')),
         hipaa: this.get("analysis.hipaa").map(a=>a.get('id')),
+        mstg: this.get("analysis.mstg").map(a=>a.get('id')),
         findings: this.get('analysis.findings'),
         overridden_risk: this.get('analysis.overridden_risk') || "None",
         overridden_risk_comment: this.get('analysis.overridden_risk_comment') || "",
