@@ -1,4 +1,14 @@
-.org-header {
+.back-to-container {
+  width: max-content;
+}
+.back-to {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  column-gap: 0.5rem;
+}
+
+.org-name-container {
   background-color: var(--white);
   height: 5rem;
   border: 1px solid var(--black-shade-11);
@@ -7,10 +17,9 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 1rem;
-  margin: 1rem;
 }
 
-.org-header-content {
+.org-name-content {
   width: 1px; //px required, but has no effect
   flex-basis: 80%;
 }
@@ -25,10 +34,25 @@
   @include ellipsis;
 }
 
-.org-settings-btn {
+.edit-name-btn {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   column-gap: 0.6em;
+}
+
+// Edit name modal styles
+.edit-name-label {
+  color: var(--dark-text-color);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5em;
+}
+
+.edit-name-action-container {
+  margin-top: 1em;
+  display: flex;
+  column-gap: 0.5em;
+  justify-content: flex-end;
 }

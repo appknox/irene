@@ -1,5 +1,12 @@
 {{page-title 'Organization Settings'}}
 <div class="org-container">
+  <Organization::Header
+    @isOwner={{@model.me.org.is_owner}}
+    @isShowEdit={{true}}
+    @isAdming={{@model.me.org.is_admin}}
+    @organization={{@model.organization}}
+    @isEnableBack={{true}}
+  />
   <OrganizationSettings
     @organization={{@model.organization}}
     @user={{@model.user}}
