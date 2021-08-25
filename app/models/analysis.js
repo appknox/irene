@@ -12,6 +12,7 @@ const Analysis = Model.extend({
   hipaa: hasMany('hipaa'),
   cvssBase: attr('number'),
   pcidss: hasMany('pcidss'),
+  mstg: hasMany('mstg'),
   cvssVector: attr('string'),
   cvssVersion: attr('number'),
   cvssMetricsHumanized: attr(),
