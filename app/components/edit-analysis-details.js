@@ -59,6 +59,10 @@ export default Component.extend({
     return this.get("store").findAll("asv");
   }),
 
+  cwes: computed('store', function() {
+    return this.get("store").findAll("cwe");
+  }),
+
   allFindings: computed('addedFindings', 'analysisDetails.findings', 'findingId', function() {
     let findingId = this.get("findingId");
     const findings = this.get("addedFindings") || this.get("analysisDetails.findings");
@@ -239,6 +243,7 @@ export default Component.extend({
     const hipaa = this.get("analysisDetails.hipaa");
     const mstg = this.get("analysisDetails.mstg");
     const asv = this.get("analysisDetails.asv");
+    const cwe = this.get("analysisDetails.asv");
     let status = this.get("analysisDetails.status");
     if(typeof status === "object") {
       status = status.value;
@@ -269,6 +274,7 @@ export default Component.extend({
       hipaa: hipaa.map(a=>a.get('id')),
       mstg: mstg.map(a=>a.get('id')),
       asv: asv.map(a=>a.get('id')),
+      cwe: cwe.map(a=>a.get('id')),
       findings,
       overridden_risk: overriddenRisk,
       overridden_risk_comment: overriddenRiskComment,
@@ -386,6 +392,10 @@ export default Component.extend({
     },
 
     selectAsvCategory(param) {
+      this.set('analysisDetails.asv', param);
+    },
+
+    selectCWECategory(param) {
       this.set('analysisDetails.asv', param);
     },
 
