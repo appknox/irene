@@ -12,6 +12,9 @@ $bg-gray: #f6f7f9;
 $color-gray: #6b6b6b;
 $color-error: #fe4d3f;
 
+$orange-tone-color: #fe4d3f;
+$grey-tone-color: #424651;
+
 :root {
   /* base colors */
   --primary: #{$primary};
@@ -72,6 +75,28 @@ $color-error: #fe4d3f;
 
   --loading-error-color: #{lighten($color-error, 14%)};
   --empty-state-color: var(--black-300);
+
+  // UX style guidelines
+
+  // Orange Tone colors
+  --orange-tone-100: #{$orange-tone-color};
+  --orange-tone-90: #{rgba($orange-tone-color, 0.9)};
+  --orange-tone-60: #{rgba($orange-tone-color, 0.6)};
+
+  // Grey Tone colors
+  --grey-tone-100: #{$grey-tone-color};
+  --grey-tone-90: #{rgba($grey-tone-color, 0.9)};
+  --grey-tone-60: #{rgba($grey-tone-color, 0.6)};
+  --grey-tone-20: #{rgba($grey-tone-color, 0.2)};
+
+  // Shades of black
+  --black-shade-5: #7b7b7b;
+  --black-shade-8: #d9d9d9;
+
+  // Other colors
+  --table-header-color: #f5f5f5;
+  --body-type-color: #171717;
+  --green-approval: #2db421;
 
   // --sidebar-bg: var(--secondary);
   // --navbar-bg: #{darken($secondary, 2%)};
