@@ -71,7 +71,7 @@ export default Component.extend({
         pcidss: this.get("analysis.pcidss").map(a=>a.get('id')),
         hipaa: this.get("analysis.hipaa").map(a=>a.get('id')),
         mstg: this.get("analysis.mstg").map(a=>a.get('id')),
-        asv: this.get("analysis.asv").map(a=>a.get('id')),
+        asvs: this.get("analysis.asvs").map(a=>a.get('id')),
         cwe: this.get("analysis.cwe").map(a=>a.get('id')),
         gdpr: this.get("analysis.gdpr").map(a=>a.get('id')),
         findings: this.get('analysis.findings'),

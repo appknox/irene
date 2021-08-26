@@ -56,7 +56,7 @@ export default Component.extend({
   }),
 
   asvses: computed('store', function() {
-    return this.get("store").findAll("asv");
+    return this.get("store").findAll("asvs");
   }),
 
   cwes: computed('store', function() {
@@ -246,7 +246,7 @@ export default Component.extend({
     const pcidss = this.get("analysisDetails.pcidss");
     const hipaa = this.get("analysisDetails.hipaa");
     const mstg = this.get("analysisDetails.mstg");
-    const asv = this.get("analysisDetails.asv");
+    const asvs = this.get("analysisDetails.asvs");
     const cwe = this.get("analysisDetails.cwe");
     const gdpr = this.get("analysisDetails.gdpr");
     let status = this.get("analysisDetails.status");
@@ -278,7 +278,7 @@ export default Component.extend({
       pcidss: pcidss.map(a=>a.get('id')),
       hipaa: hipaa.map(a=>a.get('id')),
       mstg: mstg.map(a=>a.get('id')),
-      asv: asv.map(a=>a.get('id')),
+      asvs: asvs.map(a=>a.get('id')),
       cwe: cwe.map(a=>a.get('id')),
       gdpr: gdpr.map(a=>a.get('id')),
       findings,
@@ -397,8 +397,8 @@ export default Component.extend({
       this.set('analysisDetails.mstg', param);
     },
 
-    selectAsvCategory(param) {
-      this.set('analysisDetails.asv', param);
+    selectAsvsCategory(param) {
+      this.set('analysisDetails.asvs', param);
     },
 
     selectCWECategory(param) {

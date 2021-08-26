@@ -147,7 +147,7 @@
             | ASVS Section
       .columns.border-bottom-container
         .column.margin-bottom20
-          = power-select-multiple placeholder="Select ASVS Risk Section" selected=analysisDetails.asv options=asvses onchange=(action "selectAsvCategory") as |key|
+          = power-select-multiple placeholder="Select ASVS Risk Section" selected=analysisDetails.asvs options=asvses onchange=(action "selectAsvsCategory") as |key|
             | #{key.code} - #{key.title}
 
       .columns
