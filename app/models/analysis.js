@@ -15,6 +15,7 @@ const Analysis = Model.extend({
   mstg: hasMany('mstg'),
   asv: hasMany('asv'),
   cwe: hasMany('cwe'),
+  gdpr: hasMany('gdpr'),
   cvssVector: attr('string'),
   cvssVersion: attr('number'),
   cvssMetricsHumanized: attr(),

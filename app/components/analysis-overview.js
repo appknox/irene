@@ -73,6 +73,7 @@ export default Component.extend({
         mstg: this.get("analysis.mstg").map(a=>a.get('id')),
         asv: this.get("analysis.asv").map(a=>a.get('id')),
         cwe: this.get("analysis.cwe").map(a=>a.get('id')),
+        gdpr: this.get("analysis.gdpr").map(a=>a.get('id')),
         findings: this.get('analysis.findings'),
         overridden_risk: this.get('analysis.overridden_risk') || "None",
         overridden_risk_comment: this.get('analysis.overridden_risk_comment') || "",
