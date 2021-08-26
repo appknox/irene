@@ -1,0 +1,12 @@
+<label local-class="switch" for="switch-input">
+  <Input
+    id="switch-input"
+    local-class="switch-input"
+    @type="checkbox"
+    disabled={{@isDisabled}}
+    @checked={{@isChecked}}
+    data-test-switch-input
+    {{on 'click' @onClick}}
+  />
+  <span local-class="slider round"></span>
+</label>
