@@ -28,6 +28,7 @@ export default Model.extend({
   mstg: hasMany('mstg'),
   asv: hasMany('asv'),
   cwe: hasMany('cwe'),
+  gdpr: hasMany('gdpr'),
   hipaa: hasMany('hipaa'),
   attachments: hasMany('security/attachment'),
   vulnerability: belongsTo('vulnerability'),
