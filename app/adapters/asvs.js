@@ -1,6 +1,6 @@
 import commondrf from './commondrf';
 
-export default class ASV extends commondrf {
+export default class ASVS extends commondrf {
   _buildURL(modelName, id) {
     const baseurl = `${this.get('namespace')}/v2/asvses`;
     if (id) {

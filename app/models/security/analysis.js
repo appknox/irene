@@ -26,7 +26,7 @@ export default Model.extend({
   owasp: hasMany('owasp'),
   pcidss: hasMany('pcidss'),
   mstg: hasMany('mstg'),
-  asv: hasMany('asv'),
+  asvs: hasMany('asvs'),
   cwe: hasMany('cwe'),
   gdpr: hasMany('gdpr'),
   hipaa: hasMany('hipaa'),
