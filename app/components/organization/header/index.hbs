@@ -1,12 +1,17 @@
 {{#if @isEnableBack}}
   <div local-class="back-to-container" data-test-back-to-org>
-    <a href="#" local-class="back-to" {{on 'click' this.backTo}}>
+    <LinkTo
+      @route="authenticated.organization.namespaces"
+      local-class="back-to"
+    >
       <MdIcon @name="arrow_back" />
-      {{t 'back'}}
-    </a>
+      <span local-class="back-text">
+        {{t 'back'}}
+      </span>
+    </LinkTo>
   </div>
 {{/if}}
-<div local-class="org-name-container" {{did-insert this.initCompo}}>
+<div local-class="org-name-container">
   <div local-class="org-name-content">
     <div local-class="org-name-label" data-test-org-name-label>
       {{t 'organizationName'}}
@@ -22,6 +27,7 @@
       local-class="edit-name-btn"
       data-test-org-name-edit-btn
       {{on 'click' this.toggleEditNameModal}}
+      {{did-insert this.initChangeset}}
     >
       <MdIcon @name="create" />
       {{t 'edit'}}
@@ -52,7 +58,8 @@
       <div local-class="edit-name-input">
         <Input
           class="input-box"
-          type="text"
+          @type="text"
+          aria-label="organization name"
           @value={{this.changeset.organizationName}}
           data-test-org-edit-modal-input
         />
