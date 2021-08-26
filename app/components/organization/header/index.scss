@@ -1,11 +1,18 @@
 .back-to-container {
   width: max-content;
+  margin: 1.43rem 0;
 }
 .back-to {
   display: flex;
   align-items: center;
   font-size: 1rem;
   column-gap: 0.5rem;
+  color: var(--dark-text-color);
+  font-weight: 600;
+}
+
+.back-text {
+  text-decoration: underline;
 }
 
 .org-name-container {

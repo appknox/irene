@@ -49,9 +49,9 @@ export default class OrganizationHeaderComponent extends Component {
 
   // Actions
 
-  // Action triggered while DOM initialized {{did-insert}}
+  // Action triggered while edit button DOM initialized {{did-insert}}
   @action
-  initCompo() {
+  initChangeset() {
     if (this.isShowEdit) {
       this.changeset = new Changeset(
         this.orgnamePOJO,
@@ -72,12 +72,6 @@ export default class OrganizationHeaderComponent extends Component {
   @action
   updateOrgName() {
     this.updateOrganizationName.perform();
-  }
-
-  // Action triggered while clicking at back
-  @action
-  backTo() {
-    window.history.back(); //Back to last accessed url
   }
 
   // Functions

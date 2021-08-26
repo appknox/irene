@@ -28,7 +28,7 @@ module('Integration | Component | organization/header', function (hooks) {
     this.owner.register('service:notifications', NotificationsStub);
   });
 
-  test('it renders org name', async function (assert) {
+  test('it show org name and back link hidden', async function (assert) {
     this.set('isOwner', true);
     this.set(
       'organization',
@@ -39,6 +39,7 @@ module('Integration | Component | organization/header', function (hooks) {
     );
     assert.dom('[data-test-org-name-label]').hasText(`t:organizationName:()`);
     assert.dom('[data-test-org-name-text]').hasText(this.organization.name);
+    assert.dom(`[data-test-back-to-org]`).doesNotExist();
   });
 
   test('it should show ellipsis for 255 chars', async function (assert) {
@@ -58,6 +59,35 @@ module('Integration | Component | organization/header', function (hooks) {
     );
   });
 
+  test('it should not show ellipsis for 50 chars', async function (assert) {
+    this.set('name', 'a'.repeat(50));
+    await render(hbs`<Organization::Header @name={{this.name}}/>`);
+    const orgNameTextEl = this.element.querySelector(
+      `[data-test-org-name-text]`
+    );
+    assert.false(
+      orgNameTextEl.scrollWidth > orgNameTextEl.clientWidth,
+      'Ellipsis not applied'
+    );
+  });
+
+  test('it should show org settings button with link to organization-settings route', async function (assert) {
+    this.set('isAdmin', true);
+    this.set('isShowSettings', true);
+    await render(
+      hbs`<Organization::Header @isAdmin={{this.isAdmin}} @isShowSettings={{this.isShowSettings}}/>`
+    );
+    assert
+      .dom(`[data-test-org-settings-link]`)
+      .hasAttribute('href', '/organization-settings');
+  });
+
+  test('it should not show org settings button', async function (assert) {
+    this.set('isAdmin', true);
+    await render(hbs`<Organization::Header @isAdmin={{this.isAdmin}}/>`);
+    assert.dom(`[data-test-org-settings-link]`).doesNotExist();
+  });
+
   test('it should not show edit button', async function (assert) {
     this.set('isOwner', false);
     this.set('isShowEdit', false);
@@ -69,6 +99,20 @@ module('Integration | Component | organization/header', function (hooks) {
       hbs`<Organization::Header @isOwner={{this.isOwner}} @organization={{this.organization}} @isShowEdit={{this.isShowEdit}}/>`
     );
     assert.dom('[data-test-org-name-edit-btn]').doesNotExist();
+  });
+
+  test('it should show back to org link', async function (assert) {
+    this.set('isEnableBack', true);
+    this.set(
+      'organization',
+      this.owner.lookup('service:organization').selected
+    );
+    await render(
+      hbs`<Organization::Header @isEnableBack={{this.isEnableBack}} @organization={{this.organization}}/>`
+    );
+    assert
+      .dom('[data-test-back-to-org] a')
+      .hasAttribute('href', '/organization/namespaces');
   });
 
   test('clicking on edit btn should open edit org name modal', async function (assert) {
