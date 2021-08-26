@@ -1,0 +1,20 @@
+<label
+  local-class="toggle-container {{if @isDisabled 'disabled'}}"
+  for={{this.toggleId}}
+>
+  <Input
+    id={{this.toggleId}}
+    local-class="toggle-input"
+    @type="checkbox"
+    disabled={{@isDisabled}}
+    @checked={{@isChecked}}
+    data-test-toggle-input
+    ...attributes
+  />
+  <span local-class="slider" data-test-toggle-input-slider></span>
+  {{#if (has-block)}}
+    <span local-class="toggle-label" data-test-toggle-input-label>
+      {{yield}}
+    </span>
+  {{/if}}
+</label>
