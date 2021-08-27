@@ -25,4 +25,12 @@ export default Model.extend({
     const adapter = this.store.adapterFor(this.constructor.modelName);
     return adapter.unsetShowHipaa(this, data);
   },
+  setShowAsvs(data) {
+    const adapter = this.store.adapterFor(this.constructor.modelName);
+    return adapter.setShowAsvs(this, data);
+  },
+  unsetShowAsvs(data) {
+    const adapter = this.store.adapterFor(this.constructor.modelName);
+    return adapter.unsetShowAsvs(this, data);
+  },
 });

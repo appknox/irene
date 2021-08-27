@@ -3,6 +3,10 @@ import { isEmpty } from '@ember/utils';
 import Model, { attr, hasMany, belongsTo }  from '@ember-data/model';
 import ENUMS from 'irene/enums';
 import { t } from 'ember-intl';
+import Inflector from  'ember-inflector';
+
+const inflector = Inflector.inflector;
+inflector.irregular('asvs', 'asvses');
 
 const Analysis = Model.extend({
   findings: attr(),
@@ -87,6 +91,8 @@ const Analysis = Model.extend({
   showPcidss: computed.reads('file.profile.reportPreference.show_pcidss.value'),
 
   showHipaa: computed.reads('file.profile.reportPreference.show_hipaa.value'),
+
+  showAsvs: computed.reads('file.profile.reportPreference.show_asvs.value'),
 
   labelClass(risk) {
     const cls = 'tag';

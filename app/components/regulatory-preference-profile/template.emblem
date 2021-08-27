@@ -42,3 +42,18 @@ div local-class="regulatory__wrapper"
               = fa-icon "times"
               = attach-tooltip position="right"
                 = t "resetToDefault"
+
+  .columns
+    .column
+      div local-class="regulatory__pref"
+        .vertical-align-center class="regulatory__item {{if profile.reportPreference.show_asvs.is_inherited 'regulatory__item--inherited' 'regulatory__item--active'}}"
+          label.vertical-align-center
+            = input checked=profile.reportPreference.show_asvs.value local-class="regulatory__checkbox" type="checkbox" click=(perform saveAsvs value="target.checked")
+            span.margin-l-h
+              | ASVS
+          = task-spin task=saveAsvs
+          unless profile.reportPreference.show_asvs.is_inherited
+            button.btn local-class="remove-button" click={(perform deleteAsvs)}
+              = fa-icon "times"
+              = attach-tooltip position="right"
+                = t "resetToDefault"

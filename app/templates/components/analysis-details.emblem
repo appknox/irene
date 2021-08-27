@@ -105,6 +105,16 @@ if showVulnerability
                   each analysis.hipaa as |hipaa|
                     = hipaa-details hipaa=hipaa
 
+        if analysis.showAsvs
+          if analysis.asvs
+            .columns.section
+              .column.is-one-sixth
+                | ASVS
+              .column
+                ul
+                  each analysis.asvs as |asvs|
+                    = asvs-details asvs=asvs
+
     .columns
       .column
         if analysis.isRisky

@@ -18,3 +18,9 @@ div
     = input checked=orgPreference.reportPreference.show_hipaa local-class="report__preference__checkbox" type="checkbox" click=(perform saveHipaa value="target.checked")
     | HIPAA
     = task-spin task=saveHipaa
+
+div
+  span
+    = input checked=orgPreference.reportPreference.show_asvs local-class="report__preference__checkbox" type="checkbox" click=(perform saveAsvs value="target.checked")
+    | ASVS
+    = task-spin task=saveAsvs

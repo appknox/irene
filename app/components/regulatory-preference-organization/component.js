@@ -20,4 +20,10 @@ export default Component.extend({
     pref.set('reportPreference.show_hipaa', value);
     yield pref.save();
   }).restartable(),
+
+  saveAsvs: task(function *(value){
+    const pref = yield this.get('orgPreference');
+    pref.set('reportPreference.show_asvs', value);
+    yield pref.save();
+  }).restartable(),
 });
