@@ -122,4 +122,51 @@ export default Component.extend({
     this.get('notify').error(errMsg);
   }),
 
+  /* save asvs */
+  saveAsvs: task(function *(status){
+    const profile = this.store.peekRecord('profile', this.get('project.activeProfileId'));
+    yield profile.setAsvs({value: status});
+  }).restartable().evented(),
+
+  saveAsvsSucceeded: on('saveAsvs:succeeded', function(instance) {
+    const [status] = instance.args;
+    const statusDisplay = status ? 'SHOW': 'HIDE'
+    this.get('notify').success(`ASVS ${this.get('tPreferenceSetTo')} ${statusDisplay}`);
+  }),
+
+  saveAsvsErrored: on('saveAsvs:errored', function(_, err) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (err.errors && err.errors.length) {
+      errMsg = err.errors[0].detail || errMsg;
+    } else if (err.payload && err.payload.detail) {
+      errMsg = err.payload.detail;
+    } else if (err.message) {
+      errMsg = err.message;
+    }
+    this.get('notify').error(errMsg);
+  }),
+
+
+  /* delete asvs */
+  deleteAsvs: task(function *(){
+    const profile = this.store.peekRecord('profile', this.get('project.activeProfileId'));
+    yield profile.unsetShowAsvs();
+  }).restartable().evented(),
+
+  deleteAsvsSucceeded: on('deleteAsvs:succeeded', function() {
+    this.get('notify').info(this.get('tRegulatoryPreferenceReset'));
+  }),
+
+  deleteAsvsErrored: on('deleteAsvs:errored', function(_, err) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (err.errors && err.errors.length) {
+      errMsg = err.errors[0].detail || errMsg;
+    } else if (err.payload && err.payload.detail) {
+      errMsg = err.payload.detail;
+    } else if (err.message) {
+      errMsg = err.message;
+    }
+    this.get('notify').error(errMsg);
+  }),
+
 });
