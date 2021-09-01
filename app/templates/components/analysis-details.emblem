@@ -135,6 +135,16 @@ if showVulnerability
                   each analysis.mstg as |mstg|
                     = mstg-details mstg=mstg
 
+        if analysis.showGdpr
+          if analysis.gdpr
+            .columns.section
+              .column.is-one-sixth
+                | GDPR
+              .column
+                ul
+                  each analysis.gdpr as |gdpr|
+                    = gdpr-details gdpr=gdpr
+
     .columns
       .column
         if analysis.isRisky

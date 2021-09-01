@@ -67,4 +67,16 @@ export default class Organization extends commondrf {
     await this.ajax(url, 'DELETE');
     return this.store.findRecord('profile', modelId);
   }
+  async setShowGdpr(modelInstance, data) {
+    const modelId = modelInstance.get('id');
+    const url = this.buildURL('profile', modelId) + '/show_gdpr';
+    await this.ajax(url, 'PUT', {data});
+    return this.store.findRecord('profile', modelId);
+  }
+  async unsetShowGdpr(modelInstance) {
+    const modelId = modelInstance.get('id');
+    const url = this.buildURL('profile', modelId) + '/show_gdpr';
+    await this.ajax(url, 'DELETE');
+    return this.store.findRecord('profile', modelId);
+  }
 }

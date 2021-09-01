@@ -38,4 +38,10 @@ export default Component.extend({
     pref.set('reportPreference.show_mstg', value);
     yield pref.save();
   }).restartable(),
+
+  saveGdpr: task(function *(value){
+    const pref = yield this.get('orgPreference');
+    pref.set('reportPreference.show_gdpr', value);
+    yield pref.save();
+  }).restartable(),
 });

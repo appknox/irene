@@ -87,3 +87,18 @@ div local-class="regulatory__wrapper"
               = fa-icon "times"
               = attach-tooltip position="right"
                 = t "resetToDefault"
+
+.columns
+    .column
+      div local-class="regulatory__pref"
+        .vertical-align-center class="regulatory__item {{if profile.reportPreference.show_gdpr.is_inherited 'regulatory__item--inherited' 'regulatory__item--active'}}"
+          label.vertical-align-center
+            = input checked=profile.reportPreference.show_gdpr.value local-class="regulatory__checkbox" type="checkbox" click=(perform saveGdpr value="target.checked")
+            span.margin-l-h
+              | GDPR
+          = task-spin task=saveGdpr
+          unless profile.reportPreference.show_gdpr.is_inherited
+            button.btn local-class="remove-button" click={(perform deleteGdpr)}
+              = fa-icon "times"
+              = attach-tooltip position="right"
+                = t "resetToDefault"
