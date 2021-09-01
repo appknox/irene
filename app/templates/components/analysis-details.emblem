@@ -125,6 +125,16 @@ if showVulnerability
                   each analysis.cwe as |cwe|
                     = cwe-details cwe=cwe
 
+        if analysis.showMstg
+          if analysis.mstg
+            .columns.section
+              .column.is-one-sixth
+                | MSTG
+              .column
+                ul
+                  each analysis.mstg as |mstg|
+                    = mstg-details mstg=mstg
+
     .columns
       .column
         if analysis.isRisky

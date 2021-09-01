@@ -30,3 +30,9 @@ div
     = input checked=orgPreference.reportPreference.show_cwe local-class="report__preference__checkbox" type="checkbox" click=(perform saveCwe value="target.checked")
     | CWE
     = task-spin task=saveCwe
+
+div
+  span
+    = input checked=orgPreference.reportPreference.show_mstg local-class="report__preference__checkbox" type="checkbox" click=(perform saveMstg value="target.checked")
+    | MSTG
+    = task-spin task=saveMstg

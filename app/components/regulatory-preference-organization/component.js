@@ -32,4 +32,10 @@ export default Component.extend({
     pref.set('reportPreference.show_cwe', value);
     yield pref.save();
   }).restartable(),
+
+  saveMstg: task(function *(value){
+    const pref = yield this.get('orgPreference');
+    pref.set('reportPreference.show_mstg', value);
+    yield pref.save();
+  }).restartable(),
 });

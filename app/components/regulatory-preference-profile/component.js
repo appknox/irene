@@ -216,4 +216,51 @@ export default Component.extend({
     this.get('notify').error(errMsg);
   }),
 
+  /* save mstg */
+  saveMstg: task(function *(status){
+    const profile = this.store.peekRecord('profile', this.get('project.activeProfileId'));
+    yield profile.setShowMstg({value: status});
+  }).restartable().evented(),
+
+  saveMstgSucceeded: on('saveMstg:succeeded', function(instance) {
+    const [status] = instance.args;
+    const statusDisplay = status ? 'SHOW': 'HIDE'
+    this.get('notify').success(`MSTG ${this.get('tPreferenceSetTo')} ${statusDisplay}`);
+  }),
+
+  saveMstgErrored: on('saveMstg:errored', function(_, err) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (err.errors && err.errors.length) {
+      errMsg = err.errors[0].detail || errMsg;
+    } else if (err.payload && err.payload.detail) {
+      errMsg = err.payload.detail;
+    } else if (err.message) {
+      errMsg = err.message;
+    }
+    this.get('notify').error(errMsg);
+  }),
+
+
+  /* delete Mstg */
+  deleteMstg: task(function *(){
+    const profile = this.store.peekRecord('profile', this.get('project.activeProfileId'));
+    yield profile.unsetShowMstg();
+  }).restartable().evented(),
+
+  deleteMstgSucceeded: on('deleteMstg:succeeded', function() {
+    this.get('notify').info(this.get('tRegulatoryPreferenceReset'));
+  }),
+
+  deleteMstgErrored: on('deleteMstg:errored', function(_, err) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (err.errors && err.errors.length) {
+      errMsg = err.errors[0].detail || errMsg;
+    } else if (err.payload && err.payload.detail) {
+      errMsg = err.payload.detail;
+    } else if (err.message) {
+      errMsg = err.message;
+    }
+    this.get('notify').error(errMsg);
+  }),
+
 });

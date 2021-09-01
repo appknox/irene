@@ -72,3 +72,18 @@ div local-class="regulatory__wrapper"
               = fa-icon "times"
               = attach-tooltip position="right"
                 = t "resetToDefault"
+
+.columns
+    .column
+      div local-class="regulatory__pref"
+        .vertical-align-center class="regulatory__item {{if profile.reportPreference.show_mstg.is_inherited 'regulatory__item--inherited' 'regulatory__item--active'}}"
+          label.vertical-align-center
+            = input checked=profile.reportPreference.show_mstg.value local-class="regulatory__checkbox" type="checkbox" click=(perform saveMstg value="target.checked")
+            span.margin-l-h
+              | MSTG
+          = task-spin task=saveMstg
+          unless profile.reportPreference.show_mstg.is_inherited
+            button.btn local-class="remove-button" click={(perform deleteMstg)}
+              = fa-icon "times"
+              = attach-tooltip position="right"
+                = t "resetToDefault"
