@@ -57,3 +57,18 @@ div local-class="regulatory__wrapper"
               = fa-icon "times"
               = attach-tooltip position="right"
                 = t "resetToDefault"
+
+.columns
+    .column
+      div local-class="regulatory__pref"
+        .vertical-align-center class="regulatory__item {{if profile.reportPreference.show_cwe.is_inherited 'regulatory__item--inherited' 'regulatory__item--active'}}"
+          label.vertical-align-center
+            = input checked=profile.reportPreference.show_cwe.value local-class="regulatory__checkbox" type="checkbox" click=(perform saveCwe value="target.checked")
+            span.margin-l-h
+              | CWE
+          = task-spin task=saveCwe
+          unless profile.reportPreference.show_cwe.is_inherited
+            button.btn local-class="remove-button" click={(perform deleteCwe)}
+              = fa-icon "times"
+              = attach-tooltip position="right"
+                = t "resetToDefault"

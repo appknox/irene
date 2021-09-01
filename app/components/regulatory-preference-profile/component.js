@@ -125,7 +125,7 @@ export default Component.extend({
   /* save asvs */
   saveAsvs: task(function *(status){
     const profile = this.store.peekRecord('profile', this.get('project.activeProfileId'));
-    yield profile.setAsvs({value: status});
+    yield profile.setShowAsvs({value: status});
   }).restartable().evented(),
 
   saveAsvsSucceeded: on('saveAsvs:succeeded', function(instance) {
@@ -158,6 +158,53 @@ export default Component.extend({
   }),
 
   deleteAsvsErrored: on('deleteAsvs:errored', function(_, err) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (err.errors && err.errors.length) {
+      errMsg = err.errors[0].detail || errMsg;
+    } else if (err.payload && err.payload.detail) {
+      errMsg = err.payload.detail;
+    } else if (err.message) {
+      errMsg = err.message;
+    }
+    this.get('notify').error(errMsg);
+  }),
+
+  /* save cwe */
+  saveCwe: task(function *(status){
+    const profile = this.store.peekRecord('profile', this.get('project.activeProfileId'));
+    yield profile.setShowCwe({value: status});
+  }).restartable().evented(),
+
+  saveCweSucceeded: on('saveCwe:succeeded', function(instance) {
+    const [status] = instance.args;
+    const statusDisplay = status ? 'SHOW': 'HIDE'
+    this.get('notify').success(`CWE ${this.get('tPreferenceSetTo')} ${statusDisplay}`);
+  }),
+
+  saveCweErrored: on('saveCwe:errored', function(_, err) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (err.errors && err.errors.length) {
+      errMsg = err.errors[0].detail || errMsg;
+    } else if (err.payload && err.payload.detail) {
+      errMsg = err.payload.detail;
+    } else if (err.message) {
+      errMsg = err.message;
+    }
+    this.get('notify').error(errMsg);
+  }),
+
+
+  /* delete cwe */
+  deleteCwe: task(function *(){
+    const profile = this.store.peekRecord('profile', this.get('project.activeProfileId'));
+    yield profile.unsetShowCwe();
+  }).restartable().evented(),
+
+  deleteCweSucceeded: on('deleteCwe:succeeded', function() {
+    this.get('notify').info(this.get('tRegulatoryPreferenceReset'));
+  }),
+
+  deleteCweErrored: on('deleteCwe:errored', function(_, err) {
     let errMsg = this.get('tPleaseTryAgain');
     if (err.errors && err.errors.length) {
       errMsg = err.errors[0].detail || errMsg;

@@ -94,6 +94,8 @@ const Analysis = Model.extend({
 
   showAsvs: computed.reads('file.profile.reportPreference.show_asvs.value'),
 
+  showCwe: computed.reads('file.profile.reportPreference.show_cwe.value'),
+
   labelClass(risk) {
     const cls = 'tag';
     switch (risk) {
