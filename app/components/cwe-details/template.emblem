@@ -1,6 +1,0 @@
-.columns
-  .column.is-one-third
-    = cwe.code
-  .column.black-text
-    a href="#{cwe.url}" target="_blank"
-      = cwe.url
