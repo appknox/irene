@@ -49,4 +49,12 @@ export default Model.extend({
     const adapter = this.store.adapterFor(this.constructor.modelName);
     return adapter.unsetShowMstg(this, data);
   },
+  setShowGdpr(data) {
+    const adapter = this.store.adapterFor(this.constructor.modelName);
+    return adapter.setShowGdpr(this, data);
+  },
+  unsetShowGdpr(data) {
+    const adapter = this.store.adapterFor(this.constructor.modelName);
+    return adapter.unsetShowGdpr(this, data);
+  },
 });

@@ -263,4 +263,51 @@ export default Component.extend({
     this.get('notify').error(errMsg);
   }),
 
+  /* save gdpr */
+  saveGdpr: task(function *(status){
+    const profile = this.store.peekRecord('profile', this.get('project.activeProfileId'));
+    yield profile.setShowGdpr({value: status});
+  }).restartable().evented(),
+
+  saveGdprSucceeded: on('saveGdpr:succeeded', function(instance) {
+    const [status] = instance.args;
+    const statusDisplay = status ? 'SHOW': 'HIDE'
+    this.get('notify').success(`GDPR ${this.get('tPreferenceSetTo')} ${statusDisplay}`);
+  }),
+
+  saveGdprErrored: on('saveGdpr:errored', function(_, err) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (err.errors && err.errors.length) {
+      errMsg = err.errors[0].detail || errMsg;
+    } else if (err.payload && err.payload.detail) {
+      errMsg = err.payload.detail;
+    } else if (err.message) {
+      errMsg = err.message;
+    }
+    this.get('notify').error(errMsg);
+  }),
+
+
+  /* delete gdpr */
+  deleteGdpr: task(function *(){
+    const profile = this.store.peekRecord('profile', this.get('project.activeProfileId'));
+    yield profile.unsetShowGdpr();
+  }).restartable().evented(),
+
+  deleteGdprSucceeded: on('deleteGdpr:succeeded', function() {
+    this.get('notify').info(this.get('tRegulatoryPreferenceReset'));
+  }),
+
+  deleteGdprErrored: on('deleteGdpr:errored', function(_, err) {
+    let errMsg = this.get('tPleaseTryAgain');
+    if (err.errors && err.errors.length) {
+      errMsg = err.errors[0].detail || errMsg;
+    } else if (err.payload && err.payload.detail) {
+      errMsg = err.payload.detail;
+    } else if (err.message) {
+      errMsg = err.message;
+    }
+    this.get('notify').error(errMsg);
+  }),
+
 });

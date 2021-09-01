@@ -98,6 +98,8 @@ const Analysis = Model.extend({
 
   showMstg: computed.reads('file.profile.reportPreference.show_mstg.value'),
 
+  showGdpr: computed.reads('file.profile.reportPreference.show_gdpr.value'),
+
   labelClass(risk) {
     const cls = 'tag';
     switch (risk) {
