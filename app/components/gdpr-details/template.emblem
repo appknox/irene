@@ -1,5 +1,0 @@
-.columns
-  .column.is-one-third
-    = gdpr.code
-  .column.black-text
-    = gdpr.title

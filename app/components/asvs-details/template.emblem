@@ -1,5 +1,0 @@
-.columns
-  .column.is-one-third
-    = asvs.code
-  .column.black-text
-    = asvs.title
