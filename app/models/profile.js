@@ -33,4 +33,12 @@ export default Model.extend({
     const adapter = this.store.adapterFor(this.constructor.modelName);
     return adapter.unsetShowAsvs(this, data);
   },
+  setShowCwe(data) {
+    const adapter = this.store.adapterFor(this.constructor.modelName);
+    return adapter.setShowCwe(this, data);
+  },
+  unsetShowCwe(data) {
+    const adapter = this.store.adapterFor(this.constructor.modelName);
+    return adapter.unsetShowCwe(this, data);
+  },
 });

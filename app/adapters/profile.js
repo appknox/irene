@@ -43,4 +43,16 @@ export default class Organization extends commondrf {
     await this.ajax(url, 'DELETE');
     return this.store.findRecord('profile', modelId);
   }
+  async setShowCwe(modelInstance, data) {
+    const modelId = modelInstance.get('id');
+    const url = this.buildURL('profile', modelId) + '/show_cwe';
+    await this.ajax(url, 'PUT', {data});
+    return this.store.findRecord('profile', modelId);
+  }
+  async unsetShowCwe(modelInstance) {
+    const modelId = modelInstance.get('id');
+    const url = this.buildURL('profile', modelId) + '/show_cwe';
+    await this.ajax(url, 'DELETE');
+    return this.store.findRecord('profile', modelId);
+  }
 }

@@ -24,3 +24,9 @@ div
     = input checked=orgPreference.reportPreference.show_asvs local-class="report__preference__checkbox" type="checkbox" click=(perform saveAsvs value="target.checked")
     | ASVS
     = task-spin task=saveAsvs
+
+div
+  span
+    = input checked=orgPreference.reportPreference.show_cwe local-class="report__preference__checkbox" type="checkbox" click=(perform saveCwe value="target.checked")
+    | CWE
+    = task-spin task=saveCwe

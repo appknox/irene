@@ -26,4 +26,10 @@ export default Component.extend({
     pref.set('reportPreference.show_asvs', value);
     yield pref.save();
   }).restartable(),
+
+  saveCwe: task(function *(value){
+    const pref = yield this.get('orgPreference');
+    pref.set('reportPreference.show_cwe', value);
+    yield pref.save();
+  }).restartable(),
 });
