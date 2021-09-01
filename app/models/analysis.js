@@ -96,6 +96,8 @@ const Analysis = Model.extend({
 
   showCwe: computed.reads('file.profile.reportPreference.show_cwe.value'),
 
+  showMstg: computed.reads('file.profile.reportPreference.show_mstg.value'),
+
   labelClass(risk) {
     const cls = 'tag';
     switch (risk) {

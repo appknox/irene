@@ -1,0 +1,5 @@
+.columns
+  .column.is-one-third
+    = mstg.code
+  .column.black-text
+    = mstg.title

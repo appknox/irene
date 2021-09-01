@@ -41,4 +41,12 @@ export default Model.extend({
     const adapter = this.store.adapterFor(this.constructor.modelName);
     return adapter.unsetShowCwe(this, data);
   },
+  setShowMstg(data) {
+    const adapter = this.store.adapterFor(this.constructor.modelName);
+    return adapter.setShowMstg(this, data);
+  },
+  unsetShowMstg(data) {
+    const adapter = this.store.adapterFor(this.constructor.modelName);
+    return adapter.unsetShowMstg(this, data);
+  },
 });
