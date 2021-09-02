@@ -71,13 +71,6 @@ $color-error: #fe4d3f;
   --loading-error-color: #{lighten($color-error, 14%)};
   --empty-state-color: var(--black-300);
 
-  /* UX style guidelines  */
-  --primary-tone-90: #{rgba($primary, 0.9)};
-  --primary-tone-60: #{rgba($primary, 0.6)};
-
-  --secondary-tone-90: #{rgba($secondary, 0.9)};
-  --secondary-tone-60: #{rgba($secondary, 0.6)};
-
   // --sidebar-bg: var(--secondary);
   // --navbar-bg: #{darken($secondary, 2%)};
 }

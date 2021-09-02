@@ -1,0 +1,13 @@
+<button
+  type="button"
+  disabled={{@isDisabled}}
+  local-class="primary-filled"
+  ...attributes
+  data-test-btn-primary-filled
+  {{on 'click' @onClick}}
+>
+  {{#if @icon}}
+    <MdIcon @name={{@icon}} data-test-btn-primary-filled-icon />
+  {{/if}}
+  {{@text}}
+</button>

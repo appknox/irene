@@ -1,0 +1,16 @@
+.neutral-outlined {
+  background-color: var(--white);
+  color: #171717;
+  box-shadow: inset 0 0 0 1px #c4c4c4;
+  composes: btn from 'irene/components/ak-button/index.scss';
+
+  &:disabled {
+    box-shadow: inset 0 0 0 1px #c4c4c4;
+    color: #c4c4c4;
+  }
+
+  &:hover {
+    color: #171717;
+    box-shadow: inset 0 0 0 1.5px #c4c4c4;
+  }
+}
