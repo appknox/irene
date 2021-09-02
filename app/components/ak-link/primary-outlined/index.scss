@@ -1,0 +1,28 @@
+.primary-outlined {
+  width: fit-content;
+  height: 2.5rem;
+  padding: 0.57em 0.85em;
+  border-radius: 0.21em;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  column-gap: 0.5em;
+  line-height: 2.5rem;
+  cursor: pointer;
+  border: none;
+  background-color: var(--white);
+  color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+
+  span {
+    //Icon size
+    font-size: 1rem;
+  }
+
+  &:hover {
+    color: var(--primary);
+    box-shadow: inset 0 0 0 1.5px var(--primary);
+  }
+}
