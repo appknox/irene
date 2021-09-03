@@ -1,56 +1,63 @@
 {{page-title 'Organization Settings'}}
-<div class="org-container">
-  <Organization::Header
-    @isOwner={{@model.me.org.is_owner}}
-    @isShowEdit={{true}}
-    @isAdming={{@model.me.org.is_admin}}
-    @organization={{@model.organization}}
-    @isEnableBack={{true}}
-  />
-  <OrganizationSettings
-    @organization={{@model.organization}}
-    @user={{@model.user}}
-  />
-  {{#if @model.organization.features.sso}}
-    <SsoSettings @organization={{@model.organization}} @user={{@model.user}} />
-    <div class="divider margin-t-1 margin-b-1"></div>
-  {{/if}}
-  <div class="columns">
-    <div class="column">
-      <div class="org-settings-subtitle black-text is-fullwidth">
-        {{t 'emailDomainRestriction'}}
-      </div>
-      <OrganizationEmailDomain @isEditable={{this.model.me.org.is_owner}} />
-    </div>
+<div class="org-container" local-class="organization-settings">
+  <div local-class="organization-settings-header">
+    <Organization::Header
+      @isOwner={{@model.me.org.is_owner}}
+      @isShowEdit={{true}}
+      @isAdming={{@model.me.org.is_admin}}
+      @organization={{@model.organization}}
+      @isEnableBack={{true}}
+    />
   </div>
-  <div class="divider margin-t-1 margin-b-1"></div>
-  <OrganizationArchive />
-  <div class="divider margin-t-1 margin-b-1"></div>
-  <div class="columns">
-    <div class="column">
-      <div class="org-settings-subtitle black-text is-fullwidth">
-        {{t 'jiraIntegration'}}
-      </div>
-      <JiraAccount @user={{@model.user}} />
-    </div>
-  </div>
-  <div class="divider margin-t-1 margin-b-1"></div>
-  <div class="columns">
-    <div class="column">
-      <div class="org-settings-subtitle black-text is-fullwidth">
-        {{t 'githubIntegration'}}
-      </div>
-      <GithubAccount
-        @integratedUser={{@model.integratedUser}}
-        @reconnect={{@model.reconnect}}
+  <div local-class="organization-settings-body">
+    <OrganizationSettings
+      @organization={{@model.organization}}
+      @user={{@model.user}}
+    />
+    {{#if @model.organization.features.sso}}
+      <SsoSettings
+        @organization={{@model.organization}}
         @user={{@model.user}}
       />
+      <div class="divider margin-t-1 margin-b-1"></div>
+    {{/if}}
+    <div class="columns">
+      <div class="column">
+        <div class="org-settings-subtitle black-text is-fullwidth">
+          {{t 'emailDomainRestriction'}}
+        </div>
+        <OrganizationEmailDomain @isEditable={{this.model.me.org.is_owner}} />
+      </div>
     </div>
-  </div>
-  <div class="divider margin-t-1 margin-b-1"></div>
-  <div class="columns">
-    <div class="column">
-      <FileCleanup />
+    <div class="divider margin-t-1 margin-b-1"></div>
+    <OrganizationArchive />
+    <div class="divider margin-t-1 margin-b-1"></div>
+    <div class="columns">
+      <div class="column">
+        <div class="org-settings-subtitle black-text is-fullwidth">
+          {{t 'jiraIntegration'}}
+        </div>
+        <JiraAccount @user={{@model.user}} />
+      </div>
+    </div>
+    <div class="divider margin-t-1 margin-b-1"></div>
+    <div class="columns">
+      <div class="column">
+        <div class="org-settings-subtitle black-text is-fullwidth">
+          {{t 'githubIntegration'}}
+        </div>
+        <GithubAccount
+          @integratedUser={{@model.integratedUser}}
+          @reconnect={{@model.reconnect}}
+          @user={{@model.user}}
+        />
+      </div>
+    </div>
+    <div class="divider margin-t-1 margin-b-1"></div>
+    <div class="columns">
+      <div class="column">
+        <FileCleanup />
+      </div>
     </div>
   </div>
 </div>
