@@ -1,0 +1,13 @@
+.organization-settings {
+  //TODO important required to overwrites app.sass
+  margin: 1.42em !important;
+  max-width: 100% !important;
+}
+
+.organization-settings-header {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 50px; //margin top has 50px by default for body right content
+  z-index: 1;
+  background: var(--white);
+}
