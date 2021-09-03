@@ -1,0 +1,31 @@
+.link-container {
+  width: max-content;
+  margin: 1.43rem 0;
+}
+
+.neutral-underlined {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  column-gap: 0.5rem;
+  color: #171717;
+  font-weight: 600;
+
+  span {
+    font-size: 1rem;
+  }
+
+  &:hover {
+    .underlined-text {
+      text-decoration: none;
+    }
+
+    span {
+      color: #171717;
+    }
+  }
+}
+
+.underlined-text {
+  text-decoration: underline;
+}

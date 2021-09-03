@@ -1,0 +1,15 @@
+<div local-class="link-container">
+  <LinkTo
+    @route={{@route}}
+    local-class="neutral-underlined"
+    data-test-link-neutral-underlined
+    ...attributes
+  >
+    {{#if @icon}}
+      <MdIcon @name={{@icon}} data-test-link-neutral-underlined-icon />
+    {{/if}}
+    <span local-class="underlined-text">
+      {{@text}}
+    </span>
+  </LinkTo>
+</div>

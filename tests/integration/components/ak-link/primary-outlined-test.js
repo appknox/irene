@@ -7,16 +7,16 @@ module('Integration | Component | ak-link/primary-outlined', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders anchor tag with given route', async function (assert) {
-    this.set('route', 'authenticated.organization');
+    this.set('route', 'login');
 
     await render(hbs`<AkLink::PrimaryOutlined @route={{this.route}}/>`);
 
     assert
       .dom(`[data-test-link-primary-outlined]`)
-      .hasAttribute('href', '/organization');
+      .hasAttribute('href', '/login');
   });
 
-  test('it should render link with given text and icon should not be there', async function (assert) {
+  test('it should render given text and icon should not be there', async function (assert) {
     this.set('text', 'redirect');
 
     await render(hbs`<AkLink::PrimaryOutlined @text={{this.text}}/>`);
