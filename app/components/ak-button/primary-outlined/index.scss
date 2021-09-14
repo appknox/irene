@@ -1,17 +1,26 @@
 .primary-outlined {
-  background-color: var(--white);
-  color: var(--primary);
-  box-shadow: inset 0 0 0 1px var(--primary);
+  background-color: var(--button-primary-outlined-bg);
+  color: var(--button-primary-outlined-font-color);
+  box-shadow: inset 0 0 0 var(--button-primary-outlined-border-width)
+    var(--button-primary-outlined-border-color);
   composes: btn from 'irene/components/ak-button/index.scss';
 
   &:disabled {
-    box-shadow: inset 0 0 0 1px #c4c4c4;
-    color: #c4c4c4;
-    background-color: var(--white);
+    box-shadow: inset 0 0 0 var(--button-primary-outlined-border-width)
+      var(--button-primary-outlined-border-color__disabled);
+    color: var(--button-primary-outlined-font-color__disabled);
+    background-color: var(--button-primary-outlined-bg);
   }
 
   &:hover {
-    color: var(--primary);
-    box-shadow: inset 0 0 0 1.5px var(--primary);
+    color: var(--button-primary-outlined-font-color);
+    box-shadow: inset 0 0 0 var(--button-primary-outlined-border-width__hover)
+      var(--button-primary-outlined-border-color);
+  }
+
+  &:focus {
+    color: var(--button-primary-outlined-font-color);
+    box-shadow: inset 0 0 0 var(--button-primary-outlined-border-width__focus)
+      var(--button-primary-outlined-border-color);
   }
 }

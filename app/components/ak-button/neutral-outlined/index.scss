@@ -1,16 +1,25 @@
 .neutral-outlined {
-  background-color: var(--white);
-  color: #171717;
-  box-shadow: inset 0 0 0 1px #c4c4c4;
+  background-color: var(--button-neutral-outlined-bg);
+  color: var(--button-neutral-outlined-font-color);
+  box-shadow: inset 0 0 0 var(--button-neutral-outlined-border-width)
+    var(--button-neutral-outlined-border-color);
   composes: btn from 'irene/components/ak-button/index.scss';
 
   &:disabled {
-    box-shadow: inset 0 0 0 1px #c4c4c4;
-    color: #c4c4c4;
+    box-shadow: inset 0 0 0 var(--button-neutral-outlined-border-width)
+      var(--button-neutral-outlined-border-color__disabled);
+    color: var(--button-neutral-outlined-font-color__disabled);
   }
 
   &:hover {
-    color: #171717;
-    box-shadow: inset 0 0 0 1.5px #c4c4c4;
+    color: var(--button-neutral-outlined-font-color);
+    box-shadow: inset 0 0 0 var(--button-neutral-outlined-border-width__hover)
+      var(--button-neutral-outlined-border-color);
+  }
+
+  &:focus {
+    color: var(--button-neutral-outlined-font-color);
+    box-shadow: inset 0 0 0 var(--button-neutral-outlined-border-width__focus)
+      var(--button-neutral-outlined-border-color);
   }
 }
