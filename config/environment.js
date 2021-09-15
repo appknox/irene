@@ -249,7 +249,6 @@ module.exports = function (environment) {
     endpoints: {
       token: 'token',
       tokenNew: 'token/new.json',
-      signedUrl: 'signed_url',
       uploadedFile: 'uploaded_file',
       invoice: 'invoice',
       logout: 'logout',
@@ -257,7 +256,6 @@ module.exports = function (environment) {
       devicePreferences: 'device_preference',
       dynamic: 'dynamicscan',
       dynamicShutdown: 'dynamic_shutdown',
-      signedPdfUrl: 'signed_pdf_url',
       storeUrl: 'store_url',
       deleteProject: 'projects/delete',
       recover: 'v2/forgot_password',
