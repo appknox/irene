@@ -1,9 +1,12 @@
-<div class="columns">
-  <div class="column is-one-third">
-    {{@cwe.code}}
-  </div>
-  <div class="column black-text">
-    <a href="{{@cwe.url}}" target="_blank" rel="noopener noreferrer">
+<div class='columns'>
+  <div class='column is-one-third' data-test-cwe-code>{{@cwe.code}}</div>
+  <div class='column black-text'>
+    <a
+      href='{{@cwe.url}}'
+      target='_blank'
+      rel='noopener noreferrer'
+      data-test-cwe-url
+    >
       {{@cwe.url}}
     </a>
   </div>

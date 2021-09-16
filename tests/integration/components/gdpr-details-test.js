@@ -7,9 +7,6 @@ module('Integration | Component | gdpr-details', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it should render gdpr code and title', async function (assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
-
     this.set('gdpr', {
       code: 'Art-25-GDPR',
       title: 'Data protection by design and by default',
