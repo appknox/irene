@@ -1,8 +1,6 @@
-import Model, { attr }  from '@ember-data/model';
+import Model, { attr } from '@ember-data/model';
 
-const Mstg = Model.extend({
-  code: attr(),
-  title: attr(),
-});
-
-export default Mstg;
+export default class Mstg extends Model {
+  @attr('string') code;
+  @attr('string') title;
+}

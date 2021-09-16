@@ -1,8 +1,6 @@
-import Model, { attr }  from '@ember-data/model';
+import Model, { attr } from '@ember-data/model';
 
-const Cwe = Model.extend({
-  code: attr(),
-  url: attr(),
-});
-
-export default Cwe;
+export default class Cwe extends Model {
+  @attr('string') code;
+  @attr('string') url;
+}

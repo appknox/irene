@@ -1,8 +1,6 @@
-import Model, { attr }  from '@ember-data/model';
+import Model, { attr } from '@ember-data/model';
 
-const Gdpr = Model.extend({
-  code: attr(),
-  title: attr(),
-});
-
-export default Gdpr;
+export default class Gdpr extends Model {
+  @attr('string') code;
+  @attr('string') title;
+}
