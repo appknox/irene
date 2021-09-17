@@ -1,0 +1,51 @@
+<div local-class="service-provider">
+  <div local-class="header">
+    <div local-class="title">
+      {{t 'serviceProvider'}}
+      (SP)
+    </div>
+    <div local-class="desc">
+      {{t 'spMetadataDesc'}}
+    </div>
+  </div>
+  {{#each this.configTypes as |config|}}
+    <AkRadioButton
+      @name={{config.name}}
+      @value={{config.type}}
+      @label={{config.label}}
+      @onChange={{this.onChange}}
+      @isChecked={{config.default}}
+    />
+  {{/each}}
+  <div class="column">
+    <div class="bordered-box">
+      <div class="vertical-align-center">
+        <RadioButton
+          @value="manual"
+          @groupValue={{@spConfig}}
+          @classNames="vertical-align-center"
+        >
+          <span class="padding-l-h margin-r-1">
+            {{t 'manualSettings'}}
+          </span>
+        </RadioButton>
+        <RadioButton
+          @value="xml"
+          @groupValue={{@spConfig}}
+          @classNames="vertical-align-center"
+        >
+          <span class="padding-l-h">
+            {{t 'xmlMetadata'}}
+          </span>
+        </RadioButton>
+      </div>
+      {{#if this.isShowManualSettings}}
+        <SsoSettings::ServiceProviderManualSetting
+          @spMetadata={{@spMetadata}}
+        />
+      {{else if this.isShowXmlMetadata}}
+        <SsoSettings::ServiceProviderXmlMetadata @spMetadata={{@spMetadata}} />
+      {{/if}}
+    </div>
+  </div>
+</div>
