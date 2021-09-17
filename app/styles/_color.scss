@@ -9,6 +9,7 @@ body {
   --white: #ffffff;
   --black: #{$black};
   --shade-black-7: #c4c4c4;
+  --green-approval: #2db421;
 }
 /*------- static colors end -------*/
 
@@ -61,4 +62,11 @@ body {
   );
 }
 
-/*------- button colors end -------*/
+/*------- radio button colors end -------*/
+
+body {
+  --radio-button-color: var(--green-approval);
+  --radio-button-label-color: var(--body-text-1);
+}
+
+/*------- radio button colors end -------*/

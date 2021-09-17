@@ -1,0 +1,22 @@
+<label
+  for={{this.radioBtnId}}
+  local-class="ak-radio-button"
+  data-test-ak-radio-btn
+>
+  <input
+    id={{this.radioBtnId}}
+    type="radio"
+    name={{@name}}
+    checked={{@isChecked}}
+    value={{@value}}
+    ...attributes
+    local-class="radio-input"
+    data-test-ak-radio-btn-input
+    {{on 'change' this.onChange}}
+  />
+  <span local-class="label" data-test-ak-radio-btn-label>
+    {{#if (has-block)}}
+      {{yield}}
+    {{/if}}
+  </span>
+</label>
