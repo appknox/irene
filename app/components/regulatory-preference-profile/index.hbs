@@ -1,0 +1,76 @@
+<div local-class='regulatory-preferences'>
+  <h5 local-class='title'>{{t 'regulatoryPreferences'}}</h5>
+  <div local-class='description'>
+    {{t 'regulatoryPreferencesChooseForProfile'}}
+    {{t 'regulatoryPreferencesWarning'}}
+  </div>
+  <div local-class='note'>({{t 'regulatoryPreferencesProfileNote'}})</div>
+
+  <div local-class='preferences'>
+    <div class='margin-b-1'>{{profile.setShowPcidss}}
+      <TriStateCheckbox
+        @label='PCI-DSS'
+        @value={{profile.reportPreference.show_pcidss.value}}
+        @onToggle={{this.onSavePcidss}}
+        @onOverrideReset={{this.onResetPcidss}}
+        @isToggleRunning={{this.savePcidss.isRunning}}
+        @isOverridden={{not profile.reportPreference.show_pcidss.is_inherited}}
+      />
+    </div>
+
+    <div class='margin-b-1'>
+      <TriStateCheckbox
+        @label='HIPAA'
+        @value={{profile.reportPreference.show_hipaa.value}}
+        @onToggle={{this.onSaveHipaa}}
+        @onOverrideReset={{this.onResetHipaa}}
+        @isToggleRunning={{this.saveHipaa.isRunning}}
+        @isOverridden={{not profile.reportPreference.show_hipaa.is_inherited}}
+      />
+    </div>
+
+    <div class='margin-b-1'>
+      <TriStateCheckbox
+        @label='ASVS'
+        @value={{profile.reportPreference.show_asvs.value}}
+        @onToggle={{this.onSaveAsvs}}
+        @onOverrideReset={{this.onResetAsvs}}
+        @isToggleRunning={{this.saveAsvs.isRunning}}
+        @isOverridden={{not profile.reportPreference.show_asvs.is_inherited}}
+      />
+    </div>
+
+    <div class='margin-b-1'>
+      <TriStateCheckbox
+        @label='MSTG'
+        @value={{profile.reportPreference.show_mstg.value}}
+        @onToggle={{this.onSaveMstg}}
+        @onOverrideReset={{this.onResetMstg}}
+        @isToggleRunning={{this.saveMstg.isRunning}}
+        @isOverridden={{not profile.reportPreference.show_mstg.is_inherited}}
+      />
+    </div>
+
+    <div class='margin-b-1'>
+      <TriStateCheckbox
+        @label='CWE'
+        @value={{profile.reportPreference.show_cwe.value}}
+        @onToggle={{this.onSaveCwe}}
+        @onOverrideReset={{this.onResetCwe}}
+        @isToggleRunning={{this.saveCwe.isRunning}}
+        @isOverridden={{not profile.reportPreference.show_cwe.is_inherited}}
+      />
+    </div>
+
+    <div class='margin-b-1'>
+      <TriStateCheckbox
+        @label='GDPR'
+        @value={{profile.reportPreference.show_gdpr.value}}
+        @onToggle={{this.onSaveGdpr}}
+        @onOverrideReset={{this.onResetGdpr}}
+        @isToggleRunning={{this.saveGdpr.isRunning}}
+        @isOverridden={{not profile.reportPreference.show_gdpr.is_inherited}}
+      />
+    </div>
+  </div>
+</div>
