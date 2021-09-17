@@ -1,0 +1,38 @@
+<div local-class='container' data-test-container>
+  {{#if @label}}
+    <div
+      local-class='check {{if @isOverridden 'overridden' 'inherited'}}'
+      data-test-check
+    >
+      <label local-class='label'>
+        <Input
+          @type='checkbox'
+          @checked={{@value}}
+          onclick={{action @onToggle value='target.checked'}}
+          data-test-input
+        />
+        <span local-class='label-text' data-test-label>{{@label}}</span>
+      </label>
+
+      {{#if @isToggleRunning}}
+        <span local-class='progress-spinner' data-test-progress-spinner>
+          {{fa-icon 'spinner fa-spin font-small'}}
+        </span>
+      {{/if}}
+
+      {{#if @isOverridden}}
+        <button
+          type='button'
+          local-class='reset'
+          onclick={{@onOverrideReset}}
+          data-test-reset
+        >
+          {{fa-icon 'times' local-class='remove-button-icon'}}
+          <AttachTooltip @placement='top' data-test-reset-tooltip>
+            {{t 'resetToDefault'}}
+          </AttachTooltip>
+        </button>
+      {{/if}}
+    </div>
+  {{/if}}
+</div>
