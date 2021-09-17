@@ -41,10 +41,12 @@
   box-shadow: inset 0 0 6px #ccc;
 }
 
-.sso-table tr, .sso-table tr:hover {
+.sso-table tr,
+.sso-table tr:hover {
   background-color: #f9f9f9;
 }
-.sso-table th, .sso-table th:hover {
+.sso-table th,
+.sso-table th:hover {
   background-color: #f7f7f7;
 }
 
@@ -55,4 +57,27 @@
 
 .checkbox {
   margin-top: 0.3em;
+}
+
+.sso-setting {
+  margin: 1.1em 0;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 1.14rem;
+  color: #171717;
+  margin: 0.4em 0;
+}
+
+.sub-title {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #171717;
+  margin: 0.4em 0;
+}
+
+.description {
+  font-size: 0.9rem;
+  color: #7b7b7b;
 }
