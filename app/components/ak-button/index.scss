@@ -1,6 +1,6 @@
 .btn {
-  height: 2.5rem;
-  padding: 0.57em 0.85em;
+  height: 2.5em;
+  padding: 0.5em;
   border: none;
   border-radius: var(--button-border-radius);
   font-size: 1rem;
@@ -9,13 +9,8 @@
   flex-direction: row;
   justify-content: center;
   column-gap: 0.5em;
-  line-height: 2.5rem;
+  line-height: 2.5em; //overwrites global style
   cursor: pointer;
-
-  span {
-    //Icon size
-    font-size: 1rem;
-  }
 
   &:disabled {
     opacity: 1;

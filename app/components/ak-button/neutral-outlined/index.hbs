@@ -6,8 +6,5 @@
   data-test-btn-neutral-outlined
   {{on 'click' @onClick}}
 >
-  {{#if @icon}}
-    <MdIcon @name={{@icon}} data-test-btn-neutral-outlined-icon />
-  {{/if}}
-  {{@text}}
+  {{yield}}
 </button>
