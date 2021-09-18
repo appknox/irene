@@ -2,7 +2,7 @@ if me.org.is_owner
   .margin-t-2.margin-b-1h
     .columns
       .column
-        = regulatory-preference-organization organization=organization
+        = regulatory-preference-organization
 
   .divider.margin-t-1.margin-b-1
 

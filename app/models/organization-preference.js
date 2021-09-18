@@ -1,5 +1,5 @@
-import Model, { attr }  from '@ember-data/model';
+import Model, { attr } from '@ember-data/model';
 
-export default Model.extend({
-  reportPreference: attr(),
-});
+export default class OrganizationPreference extends Model {
+  @attr() reportPreference;
+}
