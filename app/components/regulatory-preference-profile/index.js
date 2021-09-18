@@ -20,7 +20,7 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
 
   @task(function* () {
     try {
-      this.profile = yield this.store.peekRecord(
+      this.profile = yield this.store.findRecord(
         'profile',
         this.args.project.activeProfileId
       );
@@ -34,12 +34,7 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
   // PCIDSS
   @task(function* (status) {
     try {
-      const profile = this.store.peekRecord(
-        'profile',
-        this.args.project.activeProfileId
-      );
-      yield profile.setShowPcidss({ value: status });
-
+      yield this.profile.setShowPcidss({ value: status });
       const statusDisplay = status ? 'SHOW' : 'HIDE';
       this.notify.info(
         `PCI-DSS ${this.intl.t('preferenceSetTo')} ${statusDisplay}`
@@ -52,11 +47,7 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
 
   @task(function* () {
     try {
-      const profile = this.store.peekRecord(
-        'profile',
-        this.args.project.activeProfileId
-      );
-      yield profile.unsetShowPcidss();
+      yield this.profile.unsetShowPcidss();
       this.notify.info(this.intl.t('regulatoryPreferenceReset'));
     } catch (err) {
       this.notify.error(parseError(err));
@@ -67,11 +58,7 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
   // HIPAA
   @task(function* (status) {
     try {
-      const profile = this.store.peekRecord(
-        'profile',
-        this.args.project.activeProfileId
-      );
-      yield profile.setShowHipaa({ value: status });
+      yield this.profile.setShowHipaa({ value: status });
 
       const statusDisplay = status ? 'SHOW' : 'HIDE';
       this.notify.info(
@@ -85,11 +72,7 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
 
   @task(function* () {
     try {
-      const profile = this.store.peekRecord(
-        'profile',
-        this.args.project.activeProfileId
-      );
-      yield profile.unsetShowHipaa();
+      yield this.profile.unsetShowHipaa();
       this.notify.info(this.intl.t('regulatoryPreferenceReset'));
     } catch (err) {
       this.notify.error(parseError(err));
@@ -100,11 +83,7 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
   // ASVS
   @task(function* (status) {
     try {
-      const profile = this.store.peekRecord(
-        'profile',
-        this.args.project.activeProfileId
-      );
-      yield profile.setShowAsvs({ value: status });
+      yield this.profile.setShowAsvs({ value: status });
 
       const statusDisplay = status ? 'SHOW' : 'HIDE';
       this.notify.info(
@@ -118,11 +97,7 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
 
   @task(function* () {
     try {
-      const profile = this.store.peekRecord(
-        'profile',
-        this.args.project.activeProfileId
-      );
-      yield profile.unsetShowAsvs();
+      yield this.profile.unsetShowAsvs();
       this.notify.info(this.intl.t('regulatoryPreferenceReset'));
     } catch (err) {
       this.notify.error(parseError(err));
@@ -133,11 +108,7 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
   // CWE
   @task(function* (status) {
     try {
-      const profile = this.store.peekRecord(
-        'profile',
-        this.args.project.activeProfileId
-      );
-      yield profile.setShowCwe({ value: status });
+      yield this.profile.setShowCwe({ value: status });
 
       const statusDisplay = status ? 'SHOW' : 'HIDE';
       this.notify.info(
@@ -151,11 +122,7 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
 
   @task(function* () {
     try {
-      const profile = this.store.peekRecord(
-        'profile',
-        this.args.project.activeProfileId
-      );
-      yield profile.unsetShowCwe();
+      yield this.profile.unsetShowCwe();
       this.notify.info(this.intl.t('regulatoryPreferenceReset'));
     } catch (err) {
       this.notify.error(parseError(err));
@@ -166,11 +133,7 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
   // MSTG
   @task(function* (status) {
     try {
-      const profile = this.store.peekRecord(
-        'profile',
-        this.args.project.activeProfileId
-      );
-      yield profile.setShowMstg({ value: status });
+      yield this.profile.setShowMstg({ value: status });
 
       const statusDisplay = status ? 'SHOW' : 'HIDE';
       this.notify.info(
@@ -184,11 +147,7 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
 
   @task(function* () {
     try {
-      const profile = this.store.peekRecord(
-        'profile',
-        this.args.project.activeProfileId
-      );
-      yield profile.unsetShowMstg();
+      yield this.profile.unsetShowMstg();
       this.notify.info(this.intl.t('regulatoryPreferenceReset'));
     } catch (err) {
       this.notify.error(parseError(err));
@@ -199,11 +158,7 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
   // GDPR
   @task(function* (status) {
     try {
-      const profile = this.store.peekRecord(
-        'profile',
-        this.args.project.activeProfileId
-      );
-      yield profile.setShowGdpr({ value: status });
+      yield this.profile.setShowGdpr({ value: status });
 
       const statusDisplay = status ? 'SHOW' : 'HIDE';
       this.notify.info(
@@ -217,11 +172,7 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
 
   @task(function* () {
     try {
-      const profile = this.store.peekRecord(
-        'profile',
-        this.args.project.activeProfileId
-      );
-      yield profile.unsetShowGdpr();
+      yield this.profile.unsetShowGdpr();
       this.notify.info(this.intl.t('regulatoryPreferenceReset'));
     } catch (err) {
       this.notify.error(parseError(err));
