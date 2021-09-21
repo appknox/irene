@@ -11,7 +11,9 @@
           onclick={{action @onToggle value='target.checked'}}
           data-test-input
         />
-        <span local-class='label-text' data-test-label>{{@label}}</span>
+        <span title={{@title}} local-class='label-text' data-test-label>
+          {{@label}}
+        </span>
       </label>
 
       {{#if @isToggleRunning}}

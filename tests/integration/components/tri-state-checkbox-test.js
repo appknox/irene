@@ -61,6 +61,30 @@ module('Integration | Component | tri-state-checkbox', function (hooks) {
     assert.equal(checkbox.checked, true);
   });
 
+  test('it should render label title if passed', async function (assert) {
+    this.set('label', 'Test label');
+    this.set('value', true);
+    this.set('onToggle', () => {});
+    this.set('onOverrideReset', () => {});
+    this.set('isToggleRunning', false);
+    this.set('isOverridden', false);
+
+    await render(
+      hbs`<TriStateCheckbox @label={{this.label}} @value={{this.value}} @onToggle={{this.onToggle}} @onOverrideReset={{this.onOverrideReset}} @isToggleRunning={{this.isToggleRunning}} @isOverridden={{this.isOverridden}} />`
+    );
+
+    let label = this.element.querySelector('[data-test-label]');
+    assert.equal(label.title, '');
+
+    this.set('title', 'Test title');
+    await render(
+      hbs`<TriStateCheckbox @label={{this.label}} @title={{this.title}} @value={{this.value}} @onToggle={{this.onToggle}} @onOverrideReset={{this.onOverrideReset}} @isToggleRunning={{this.isToggleRunning}} @isOverridden={{this.isOverridden}} />`
+    );
+
+    label = this.element.querySelector('[data-test-label]');
+    assert.equal(label.title, 'Test title');
+  });
+
   test('it toggles value on label click', async function (assert) {
     this.set('label', 'Test');
     this.set('value', true);
