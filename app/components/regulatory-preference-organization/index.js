@@ -52,36 +52,6 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
 
   @task(function* (value) {
     try {
-      this.orgPreference.reportPreference.show_asvs = value;
-      yield this.orgPreference.save();
-    } catch (err) {
-      this.notify.error(parseError(err));
-    }
-  })
-  saveAsvs;
-
-  @task(function* (value) {
-    try {
-      this.orgPreference.reportPreference.show_mstg = value;
-      yield this.orgPreference.save();
-    } catch (err) {
-      this.notify.error(parseError(err));
-    }
-  })
-  saveMstg;
-
-  @task(function* (value) {
-    try {
-      this.orgPreference.reportPreference.show_cwe = value;
-      yield this.orgPreference.save();
-    } catch (err) {
-      this.notify.error(parseError(err));
-    }
-  })
-  saveCwe;
-
-  @task(function* (value) {
-    try {
       this.orgPreference.reportPreference.show_gdpr = value;
       yield this.orgPreference.save();
     } catch (err) {

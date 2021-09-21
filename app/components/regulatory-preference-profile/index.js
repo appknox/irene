@@ -80,81 +80,6 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
   })
   resetHipaa;
 
-  // ASVS
-  @task(function* (status) {
-    try {
-      yield this.profile.setShowAsvs({ value: status });
-
-      const statusDisplay = status ? 'SHOW' : 'HIDE';
-      this.notify.info(
-        `ASVS ${this.intl.t('preferenceSetTo')} ${statusDisplay}`
-      );
-    } catch (err) {
-      this.notify.error(parseError(err));
-    }
-  })
-  saveAsvs;
-
-  @task(function* () {
-    try {
-      yield this.profile.unsetShowAsvs();
-      this.notify.info(this.intl.t('regulatoryPreferenceReset'));
-    } catch (err) {
-      this.notify.error(parseError(err));
-    }
-  })
-  resetAsvs;
-
-  // CWE
-  @task(function* (status) {
-    try {
-      yield this.profile.setShowCwe({ value: status });
-
-      const statusDisplay = status ? 'SHOW' : 'HIDE';
-      this.notify.info(
-        `CWE ${this.intl.t('preferenceSetTo')} ${statusDisplay}`
-      );
-    } catch (err) {
-      this.notify.error(parseError(err));
-    }
-  })
-  saveCwe;
-
-  @task(function* () {
-    try {
-      yield this.profile.unsetShowCwe();
-      this.notify.info(this.intl.t('regulatoryPreferenceReset'));
-    } catch (err) {
-      this.notify.error(parseError(err));
-    }
-  })
-  resetCwe;
-
-  // MSTG
-  @task(function* (status) {
-    try {
-      yield this.profile.setShowMstg({ value: status });
-
-      const statusDisplay = status ? 'SHOW' : 'HIDE';
-      this.notify.info(
-        `MSTG ${this.intl.t('preferenceSetTo')} ${statusDisplay}`
-      );
-    } catch (err) {
-      this.notify.error(parseError(err));
-    }
-  })
-  saveMstg;
-
-  @task(function* () {
-    try {
-      yield this.profile.unsetShowMstg();
-      this.notify.info(this.intl.t('regulatoryPreferenceReset'));
-    } catch (err) {
-      this.notify.error(parseError(err));
-    }
-  })
-  resetMstg;
-
   // GDPR
   @task(function* (status) {
     try {
@@ -191,21 +116,6 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
   }
 
   @action
-  onSaveAsvs(status) {
-    this.saveAsvs.perform(status);
-  }
-
-  @action
-  onSaveCwe(status) {
-    this.saveCwe.perform(status);
-  }
-
-  @action
-  onSaveMstg(status) {
-    this.saveMstg.perform(status);
-  }
-
-  @action
   onSaveGdpr(status) {
     this.saveGdpr.perform(status);
   }
@@ -218,21 +128,6 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
   @action
   onResetHipaa() {
     this.resetHipaa.perform();
-  }
-
-  @action
-  onResetAsvs() {
-    this.resetAsvs.perform();
-  }
-
-  @action
-  onResetCwe() {
-    this.resetCwe.perform();
-  }
-
-  @action
-  onResetMstg() {
-    this.resetMstg.perform();
   }
 
   @action

@@ -26,7 +26,27 @@ module(
       await this.owner.lookup('service:organization').load();
     });
 
-    test('it renders preferences for all regulatory', async function (assert) {
+    test('it renders regulatory preferences section correctly', async function (assert) {
+      this.server.create('organization-preference');
+      this.server.get('organizations/:id/preference', (schema) => {
+        return serializer(schema.organizationPreferences.first());
+      });
+
+      await render(hbs`<RegulatoryPreferenceOrganization />`);
+
+      assert
+        .dom('[data-test-preferences-title]')
+        .hasText('t:regulatoryPreferences:()');
+      assert
+        .dom('[data-test-preferences-subtitle]')
+        .hasText('t:regulatoryPreferencesChooseForAll:()');
+      assert
+        .dom('[data-test-preferences-desc]')
+        .hasText('t:regulatoryPreferencesWarning:()');
+      assert.dom('[data-test-preferences-options]').exists();
+    });
+
+    test('it renders supported regulatory list', async function (assert) {
       this.server.create('organization-preference');
       this.server.get('organizations/:id/preference', (schema) => {
         return serializer(schema.organizationPreferences.first());
@@ -35,12 +55,47 @@ module(
       await render(hbs`<RegulatoryPreferenceOrganization />`);
 
       assert.dom('[data-test-preferences]').exists();
+
       assert.dom('[data-test-preference-pcidss]').exists();
+      const pcidss = this.element.querySelector('[data-test-pcidss-label]');
+      assert.equal(pcidss.innerHTML, 'PCI-DSS');
+      assert.equal(pcidss.getAttribute('title'), 't:pcidssExpansion:()');
+
       assert.dom('[data-test-preference-hipaa]').exists();
-      assert.dom('[data-test-preference-asvs]').exists();
-      assert.dom('[data-test-preference-mstg]').exists();
-      assert.dom('[data-test-preference-cwe]').exists();
+      const hipaa = this.element.querySelector('[data-test-hipaa-label]');
+      assert.equal(hipaa.innerHTML, 'HIPAA');
+      assert.equal(hipaa.getAttribute('title'), 't:hipaaExpansion:()');
+
       assert.dom('[data-test-preference-gdpr]').exists();
+      const gdpr = this.element.querySelector('[data-test-gdpr-label]');
+      assert.equal(gdpr.innerHTML, 'GDPR');
+      assert.equal(gdpr.getAttribute('title'), 't:gdprExpansion:()');
+    });
+
+    test('it renders regulatory inclusion status based on organization preference', async function (assert) {
+      this.server.create('organization-preference', {
+        reportPreference: {
+          show_pcidss: true,
+          show_hipaa: false,
+          show_gdpr: false,
+        },
+      });
+      this.server.get('organizations/:id/preference', (schema, request) => {
+        return serializer(
+          schema.organizationPreferences.find(request.params.id)
+        );
+      });
+
+      await render(hbs`<RegulatoryPreferenceOrganization />`);
+
+      const pcidss = this.element.querySelector('[data-test-pcidss-input]');
+      assert.true(pcidss.checked);
+
+      const hipaa = this.element.querySelector('[data-test-hipaa-input]');
+      assert.false(hipaa.checked);
+
+      const gdpr = this.element.querySelector('[data-test-gdpr-input]');
+      assert.false(gdpr.checked);
     });
 
     test('it toggles regulatory preference on label click', async function (assert) {
@@ -102,18 +157,6 @@ module(
       const hipaaInput = this.element.querySelector('[data-test-hipaa-input]');
       await click(hipaaInput);
       assert.equal(hipaaInput.checked, !orgPrefs.reportPreference.show_hipaa);
-
-      const asvsInput = this.element.querySelector('[data-test-asvs-input]');
-      await click(asvsInput);
-      assert.equal(asvsInput.checked, !orgPrefs.reportPreference.show_asvs);
-
-      const mstgInput = this.element.querySelector('[data-test-mstg-input]');
-      await click(mstgInput);
-      assert.equal(mstgInput.checked, !orgPrefs.reportPreference.show_mstg);
-
-      const cweInput = this.element.querySelector('[data-test-cwe-input]');
-      await click(cweInput);
-      assert.equal(cweInput.checked, !orgPrefs.reportPreference.show_cwe);
 
       const gdprInput = this.element.querySelector('[data-test-gdpr-input]');
       await click(gdprInput);

@@ -12,18 +12,6 @@ export default Factory.extend({
       value: faker.datatype.boolean(),
       is_inherited: faker.datatype.boolean(),
     },
-    show_asvs: {
-      value: faker.datatype.boolean(),
-      is_inherited: faker.datatype.boolean(),
-    },
-    show_mstg: {
-      value: faker.datatype.boolean(),
-      is_inherited: faker.datatype.boolean(),
-    },
-    show_cwe: {
-      value: faker.datatype.boolean(),
-      is_inherited: faker.datatype.boolean(),
-    },
     show_gdpr: {
       value: faker.datatype.boolean(),
       is_inherited: faker.datatype.boolean(),

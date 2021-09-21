@@ -47,15 +47,44 @@ module(
       assert.dom('[data-test-preferences]').doesNotExist();
     });
 
-    test('it renders preferences for all regulatory', async function (assert) {
-      const projects = this.server.createList('project', 1, {
-        activeProfileId: 1,
+    test('it renders regulatory preferences section correctly', async function (assert) {
+      const profile = this.server.create('profile');
+      const project = this.server.create('project', {
+        activeProfileId: profile.id,
       });
-      this.set('project', projects[0]);
+      this.set('project', project);
 
-      this.server.createList('profile', 1);
-      this.server.get('profiles/:id', (schema) => {
-        return serializer(schema['profiles'].find(1));
+      this.server.get('profiles/:id', (schema, request) => {
+        return serializer(schema['profiles'].find(request.params.id));
+      });
+
+      await render(
+        hbs`<RegulatoryPreferenceProfile @project={{this.project}}/>`
+      );
+
+      assert
+        .dom('[data-test-preferences-title]')
+        .hasText('t:regulatoryPreferences:()');
+      assert
+        .dom('[data-test-preferences-desc]')
+        .hasText(
+          't:regulatoryPreferencesChooseForProfile:() t:regulatoryPreferencesWarning:()'
+        );
+      assert
+        .dom('[data-test-preferences-note]')
+        .hasText('(t:regulatoryPreferencesProfileNote:())');
+      assert.dom('[data-test-preferences-options]').exists();
+    });
+
+    test('it renders preferences for optional regulatories', async function (assert) {
+      const profile = this.server.create('profile');
+      const project = this.server.create('project', {
+        activeProfileId: profile.id,
+      });
+      this.set('project', project);
+
+      this.server.get('profiles/:id', (schema, request) => {
+        return serializer(schema['profiles'].find(request.params.id));
       });
 
       await render(
@@ -64,19 +93,11 @@ module(
 
       assert.dom('[data-test-preference-pcidss]').hasText('PCI-DSS');
       assert.dom('[data-test-preference-hipaa]').hasText('HIPAA');
-      assert.dom('[data-test-preference-asvs]').hasText('ASVS');
-      assert.dom('[data-test-preference-mstg]').hasText('MSTG');
-      assert.dom('[data-test-preference-cwe]').hasText('CWE');
       assert.dom('[data-test-preference-gdpr]').hasText('GDPR');
     });
 
     test('it toggles preference value for the corresponding regulatory on click', async function (assert) {
-      const projects = this.server.createList('project', 1, {
-        activeProfileId: 1,
-      });
-      this.set('project', projects[0]);
-
-      const profiles = this.server.createList('profile', 1, {
+      const profile = this.server.create('profile', {
         reportPreference: {
           show_pcidss: {
             value: true,
@@ -86,28 +107,19 @@ module(
             value: true,
             is_inherited: false,
           },
-          show_asvs: {
-            value: true,
-            is_inherited: true,
-          },
-          show_mstg: {
-            value: true,
-            is_inherited: true,
-          },
-          show_cwe: {
-            value: false,
-            is_inherited: false,
-          },
           show_gdpr: {
             value: false,
             is_inherited: false,
           },
         },
       });
-      const profile = profiles[0];
+      const project = this.server.create('project', {
+        activeProfileId: profile.id,
+      });
+      this.set('project', project);
 
-      this.server.get('profiles/:id', (schema) => {
-        return serializer(schema['profiles'].find(1));
+      this.server.get('profiles/:id', (schema, request) => {
+        return serializer(schema['profiles'].find(request.params.id));
       });
 
       this.server.put('profiles/:id/show_pcidss', (schema, request) => {
@@ -134,45 +146,6 @@ module(
         profile.save();
 
         return profile.reportPreference.show_hipaa;
-      });
-
-      this.server.put('profiles/:id/show_asvs', (schema, request) => {
-        const body = JSON.parse(request.requestBody);
-
-        const profile = schema['profiles'].find(request.params.id);
-        profile.reportPreference.show_asvs = {
-          value: body.value,
-          is_inherited: false,
-        };
-        profile.save();
-
-        return profile.reportPreference.show_asvs;
-      });
-
-      this.server.put('profiles/:id/show_mstg', (schema, request) => {
-        const body = JSON.parse(request.requestBody);
-
-        const profile = schema['profiles'].find(request.params.id);
-        profile.reportPreference.show_mstg = {
-          value: body.value,
-          is_inherited: false,
-        };
-        profile.save();
-
-        return profile.reportPreference.show_mstg;
-      });
-
-      this.server.put('profiles/:id/show_cwe', (schema, request) => {
-        const body = JSON.parse(request.requestBody);
-
-        const profile = schema['profiles'].find(request.params.id);
-        profile.reportPreference.show_cwe = {
-          value: body.value,
-          is_inherited: false,
-        };
-        profile.save();
-
-        return profile.reportPreference.show_cwe;
       });
 
       this.server.put('profiles/:id/show_gdpr', (schema, request) => {
@@ -208,27 +181,6 @@ module(
       await click(hipaaInput);
       assert.equal(hipaaInput.checked, !hipaaInitialValue);
 
-      const asvs = this.element.querySelector('[data-test-preference-asvs]');
-      const asvsInitialValue = profile.reportPreference.show_asvs.value;
-      const asvsInput = asvs.querySelector('[data-test-input]');
-      assert.equal(asvsInput.checked, asvsInitialValue);
-      await click(asvsInput);
-      assert.equal(asvsInput.checked, !asvsInitialValue);
-
-      const mstg = this.element.querySelector('[data-test-preference-mstg]');
-      const mstgInitialValue = profile.reportPreference.show_mstg.value;
-      const mstgInput = mstg.querySelector('[data-test-input]');
-      assert.equal(mstgInput.checked, mstgInitialValue);
-      await click(mstgInput);
-      assert.equal(mstgInput.checked, !mstgInitialValue);
-
-      const cwe = this.element.querySelector('[data-test-preference-cwe]');
-      const cweInitialValue = profile.reportPreference.show_cwe.value;
-      const cweInput = cwe.querySelector('[data-test-input]');
-      assert.equal(cweInput.checked, cweInitialValue);
-      await click(cweInput);
-      assert.equal(cweInput.checked, !cweInitialValue);
-
       const gdpr = this.element.querySelector('[data-test-preference-gdpr]');
       const gdprInitialValue = profile.reportPreference.show_gdpr.value;
       const gdprInput = gdpr.querySelector('[data-test-input]');
@@ -238,12 +190,7 @@ module(
     });
 
     test('it displays overridden state with reset button if a preference is updated', async function (assert) {
-      const projects = this.server.createList('project', 1, {
-        activeProfileId: 1,
-      });
-      this.set('project', projects[0]);
-
-      this.server.createList('profile', 1, {
+      const profile = this.server.create('profile', {
         reportPreference: {
           show_pcidss: {
             value: false,
@@ -251,8 +198,13 @@ module(
           },
         },
       });
-      this.server.get('profiles/:id', (schema) => {
-        return serializer(schema['profiles'].find(1));
+      const project = this.server.create('project', {
+        activeProfileId: profile.id,
+      });
+      this.set('project', project);
+
+      this.server.get('profiles/:id', (schema, request) => {
+        return serializer(schema['profiles'].find(request.params.id));
       });
 
       this.server.put('profiles/:id/show_pcidss', (schema, request) => {
@@ -292,12 +244,7 @@ module(
     });
 
     test('it dismisses overridden state on reset button click', async function (assert) {
-      const projects = this.server.createList('project', 1, {
-        activeProfileId: 1,
-      });
-      this.set('project', projects[0]);
-
-      this.server.createList('profile', 1, {
+      const profile = this.server.create('profile', {
         reportPreference: {
           show_pcidss: {
             value: true,
@@ -305,8 +252,13 @@ module(
           },
         },
       });
-      this.server.get('profiles/:id', (schema) => {
-        return serializer(schema['profiles'].find(1));
+      const project = this.server.create('project', {
+        activeProfileId: profile.id,
+      });
+      this.set('project', project);
+
+      this.server.get('profiles/:id', (schema, request) => {
+        return serializer(schema['profiles'].find(request.params.id));
       });
 
       this.server.delete('profiles/:id/show_pcidss', (schema, request) => {

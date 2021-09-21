@@ -31,42 +31,6 @@ export default class Profile extends commondrf {
     await this.ajax(url, 'DELETE');
     return this.store.findRecord('profile', modelId);
   }
-  async setShowAsvs(modelInstance, data) {
-    const modelId = modelInstance.get('id');
-    const url = this.buildURL('profile', modelId) + '/show_asvs';
-    await this.ajax(url, 'PUT', { data });
-    return this.store.findRecord('profile', modelId);
-  }
-  async unsetShowAsvs(modelInstance) {
-    const modelId = modelInstance.get('id');
-    const url = this.buildURL('profile', modelId) + '/show_asvs';
-    await this.ajax(url, 'DELETE');
-    return this.store.findRecord('profile', modelId);
-  }
-  async setShowCwe(modelInstance, data) {
-    const modelId = modelInstance.get('id');
-    const url = this.buildURL('profile', modelId) + '/show_cwe';
-    await this.ajax(url, 'PUT', { data });
-    return this.store.findRecord('profile', modelId);
-  }
-  async unsetShowCwe(modelInstance) {
-    const modelId = modelInstance.get('id');
-    const url = this.buildURL('profile', modelId) + '/show_cwe';
-    await this.ajax(url, 'DELETE');
-    return this.store.findRecord('profile', modelId);
-  }
-  async setShowMstg(modelInstance, data) {
-    const modelId = modelInstance.get('id');
-    const url = this.buildURL('profile', modelId) + '/show_mstg';
-    await this.ajax(url, 'PUT', { data });
-    return this.store.findRecord('profile', modelId);
-  }
-  async unsetShowMstg(modelInstance) {
-    const modelId = modelInstance.get('id');
-    const url = this.buildURL('profile', modelId) + '/show_mstg';
-    await this.ajax(url, 'DELETE');
-    return this.store.findRecord('profile', modelId);
-  }
   async setShowGdpr(modelInstance, data) {
     const modelId = modelInstance.get('id');
     const url = this.buildURL('profile', modelId) + '/show_gdpr';
