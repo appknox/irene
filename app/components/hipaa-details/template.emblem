@@ -1,4 +1,4 @@
-.columns
+.columns data-test-hipaa=hipaa.id
   .column.is-one-third
     = hipaa.code
   .column
@@ -17,8 +17,8 @@
               | &nbsp; (#{std.specifications})
               div
                 | #{std.description}
-        a click="hideMoreDetails"
+        a click="hideMoreDetails" data-test-hipaa-toggle="less"
           | #{ t "lessDetails"}
     else
-      a click="showMoreDetails"
+      a click="showMoreDetails"  data-test-hipaa-toggle="more"
         | &nbsp; #{ t "moreDetails"}

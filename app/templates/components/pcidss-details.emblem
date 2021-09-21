@@ -1,4 +1,4 @@
-.columns
+.columns data-test-pcidss=category.id ...attributes
   .column.is-one-third
     = category.code
   .column.black-text
