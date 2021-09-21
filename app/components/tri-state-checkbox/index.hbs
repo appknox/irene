@@ -8,7 +8,7 @@
         <Input
           @type='checkbox'
           @checked={{@value}}
-          onclick={{action @onToggle value='target.checked'}}
+          {{on 'click' this.toggle}}
           data-test-input
         />
         <span title={{@title}} local-class='label-text' data-test-label>
