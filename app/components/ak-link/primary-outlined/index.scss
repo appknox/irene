@@ -1,28 +1,32 @@
 .primary-outlined {
   width: fit-content;
-  height: 2.5rem;
-  padding: 0.57em 0.85em;
-  border-radius: 0.21em;
+  height: 2.5em;
+  padding: 0.5em;
+  border: none;
+  border-radius: var(--button-border-radius);
   font-size: 1rem;
   display: flex;
   align-items: center;
   flex-direction: row;
   justify-content: center;
   column-gap: 0.5em;
-  line-height: 2.5rem;
+  line-height: 2.5em; //overwrites global style
   cursor: pointer;
-  border: none;
-  background-color: var(--white);
-  color: var(--primary);
-  box-shadow: inset 0 0 0 1px var(--primary);
 
-  span {
-    //Icon size
-    font-size: 1rem;
-  }
+  background-color: var(--button-primary-outlined-bg);
+  color: var(--button-primary-outlined-font-color);
+  box-shadow: inset 0 0 0 var(--button-primary-outlined-border-width)
+    var(--button-primary-outlined-border-color);
 
   &:hover {
-    color: var(--primary);
-    box-shadow: inset 0 0 0 1.5px var(--primary);
+    color: var(--button-primary-outlined-font-color);
+    box-shadow: inset 0 0 0 var(--button-primary-outlined-border-width__hover)
+      var(--button-primary-outlined-border-color);
+  }
+
+  &:focus {
+    color: var(--button-primary-outlined-font-color);
+    box-shadow: inset 0 0 0 var(--button-primary-outlined-border-width__focus)
+      var(--button-primary-outlined-border-color);
   }
 }

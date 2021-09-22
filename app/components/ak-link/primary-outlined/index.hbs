@@ -4,8 +4,5 @@
   data-test-link-primary-outlined
   ...attributes
 >
-  {{#if @icon}}
-    <MdIcon @name={{@icon}} data-test-link-primary-outlined-icon />
-  {{/if}}
-  {{@text}}
+  {{yield}}
 </LinkTo>

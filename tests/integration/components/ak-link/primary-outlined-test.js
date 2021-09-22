@@ -16,25 +16,11 @@ module('Integration | Component | ak-link/primary-outlined', function (hooks) {
       .hasAttribute('href', '/login');
   });
 
-  test('it should render given text and icon should not be there', async function (assert) {
-    this.set('text', 'redirect');
+  test('it should render inner content', async function (assert) {
+    await render(
+      hbs`<AkLink::PrimaryOutlined>Test Link</AkLink::PrimaryOutlined>`
+    );
 
-    await render(hbs`<AkLink::PrimaryOutlined @text={{this.text}}/>`);
-
-    assert.dom(`[data-test-link-primary-outlined]`).containsText(this.text);
-
-    assert.dom(`[data-test-link-primary-outlined-icon]`).doesNotExist();
-  });
-
-  test('it should render icon inside anchor tag', async function (assert) {
-    this.set('icon', 'tick');
-
-    await render(hbs`<AkLink::PrimaryOutlined @icon={{this.icon}}/>`);
-
-    assert
-      .dom(
-        `[data-test-link-primary-outlined] [data-test-link-primary-outlined-icon]`
-      )
-      .hasText(this.icon);
+    assert.dom(`[data-test-link-primary-outlined]`).containsText('Test Link');
   });
 });
