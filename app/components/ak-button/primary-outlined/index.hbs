@@ -1,0 +1,10 @@
+<button
+  type="button"
+  disabled={{@isDisabled}}
+  local-class="primary-outlined"
+  ...attributes
+  data-test-btn-primary-outlined
+  {{on 'click' @onClick}}
+>
+  {{yield}}
+</button>

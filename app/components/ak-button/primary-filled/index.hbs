@@ -1,0 +1,10 @@
+<button
+  type="button"
+  disabled={{@isDisabled}}
+  local-class="primary-filled"
+  ...attributes
+  data-test-btn-primary-filled
+  {{on 'click' @onClick}}
+>
+  {{yield}}
+</button>
