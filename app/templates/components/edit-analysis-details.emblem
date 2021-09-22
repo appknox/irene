@@ -135,37 +135,37 @@
       .columns
         .column.is-one-third
           h5.bold-font
-            | MSTG Sections
+            | MSTG Requirements
       .columns.border-bottom-container
         .column.margin-bottom20
-          = power-select-multiple placeholder="Select MSTG Risk Section" selected=analysisDetails.mstg options=mstgs onchange=(action "selectMstgCategory") as |key|
+          = power-select-multiple placeholder="Select MSTG Requirements" selected=analysisDetails.mstg options=mstgs onchange=(action "selectMstgCategory") as |key|
             | #{key.code} - #{key.title}
 
       .columns
         .column.is-one-third
           h5.bold-font
-            | ASVS Section
+            | ASVS Requirements
       .columns.border-bottom-container
         .column.margin-bottom20
-          = power-select-multiple placeholder="Select ASVS Risk Section" selected=analysisDetails.asvs options=asvses onchange=(action "selectAsvsCategory") as |key|
+          = power-select-multiple placeholder="Select ASVS Requirements" selected=analysisDetails.asvs options=asvses onchange=(action "selectAsvsCategory") as |key|
             | #{key.code} - #{key.title}
 
       .columns
         .column.is-one-third
           h5.bold-font
-            | CWE Section
+            | CWE Weaknesses
       .columns.border-bottom-container
         .column.margin-bottom20
-          = power-select-multiple placeholder="Select CWE Risk Section" selected=analysisDetails.cwe options=cwes onchange=(action "selectCWECategory") as |key|
+          = power-select-multiple placeholder="Select CWE Weaknesses" selected=analysisDetails.cwe options=cwes onchange=(action "selectCWECategory") as |key|
             | #{key.code} - #{key.url}
 
       .columns
         .column.is-one-third
           h5.bold-font
-            | GDPR Section
+            | GDPR Articles
       .columns.border-bottom-container
         .column.margin-bottom20
-          = power-select-multiple placeholder="Select GDPR Risk Section" selected=analysisDetails.gdpr options=gdprs onchange=(action "selectGDPRCategory") as |key|
+          = power-select-multiple placeholder="Select GDPR Articles" selected=analysisDetails.gdpr options=gdprs onchange=(action "selectGDPRCategory") as |key|
             | #{key.code} - #{key.title}
 
       .columns
