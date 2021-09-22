@@ -5,11 +5,9 @@
     data-test-link-neutral-underlined
     ...attributes
   >
-    {{#if @icon}}
-      <MdIcon @name={{@icon}} data-test-link-neutral-underlined-icon />
-    {{/if}}
+    <MdIcon @name="arrow_back" data-test-link-neutral-underlined-icon />
     <span local-class="underlined-text">
-      {{@text}}
+      {{@label}}
     </span>
   </LinkTo>
 </div>
