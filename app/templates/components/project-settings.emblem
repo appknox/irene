@@ -53,9 +53,8 @@ if isGeneralSettings
 if isAnalysisSettings
   .box-container
     = analysis-settings project=project
-  if me.org.is_admin
-    .box-container
-      = regulatory-preference-profile project=project
+  .box-container
+    = regulatory-preference-profile project=project
   div class=me.org.is_admin:box-container:box-container-w-b
     = report-preference project=project
   = vulnerability-list project=project
