@@ -32,7 +32,8 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
   fetchProfile;
 
   // PCIDSS
-  @task(function* (status) {
+  @task(function* (event) {
+    const status = event.target.checked;
     try {
       yield this.profile.setShowPcidss({ value: status });
       const statusDisplay = status ? 'SHOW' : 'HIDE';
@@ -41,6 +42,7 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
       );
     } catch (err) {
       this.notify.error(parseError(err));
+      event.target.checked = !status;
     }
   })
   savePcidss;
@@ -56,7 +58,8 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
   resetPcidss;
 
   // HIPAA
-  @task(function* (status) {
+  @task(function* (event) {
+    const status = event.target.checked;
     try {
       yield this.profile.setShowHipaa({ value: status });
 
@@ -66,6 +69,7 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
       );
     } catch (err) {
       this.notify.error(parseError(err));
+      event.target.checked = !status;
     }
   })
   saveHipaa;
@@ -81,7 +85,8 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
   resetHipaa;
 
   // GDPR
-  @task(function* (status) {
+  @task(function* (event) {
+    const status = event.target.checked;
     try {
       yield this.profile.setShowGdpr({ value: status });
 
@@ -91,6 +96,7 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
       );
     } catch (err) {
       this.notify.error(parseError(err));
+      event.target.checked = !status;
     }
   })
   saveGdpr;
@@ -106,18 +112,18 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
   resetGdpr;
 
   @action
-  onSavePcidss(status) {
-    this.savePcidss.perform(status);
+  onSavePcidss(event) {
+    this.savePcidss.perform(event);
   }
 
   @action
-  onSaveHipaa(status) {
-    this.saveHipaa.perform(status);
+  onSaveHipaa(event) {
+    this.saveHipaa.perform(event);
   }
 
   @action
-  onSaveGdpr(status) {
-    this.saveGdpr.perform(status);
+  onSaveGdpr(event) {
+    this.saveGdpr.perform(event);
   }
 
   @action
