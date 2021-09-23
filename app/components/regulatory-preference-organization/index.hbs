@@ -17,7 +17,7 @@
             local-class='checkbox'
             @type='checkbox'
             @checked={{this.orgPreference.reportPreference.show_pcidss}}
-            onclick={{perform this.savePcidss value='target.checked'}}
+            onclick={{perform this.savePcidss}}
             data-test-pcidss-input
           />
           <abbr
@@ -38,7 +38,7 @@
             local-class='checkbox'
             @type='checkbox'
             @checked={{this.orgPreference.reportPreference.show_hipaa}}
-            onclick={{perform this.saveHipaa value='target.checked'}}
+            onclick={{perform this.saveHipaa}}
             data-test-hipaa-input
           />
           <abbr
@@ -56,7 +56,7 @@
             local-class='checkbox'
             @type='checkbox'
             @checked={{this.orgPreference.reportPreference.show_gdpr}}
-            onclick={{perform this.saveGdpr value='target.checked'}}
+            onclick={{perform this.saveGdpr}}
             data-test-gdpr-input
           />
           <abbr

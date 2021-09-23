@@ -30,32 +30,35 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
   })
   fetchOrganizationPreference;
 
-  @task(function* (value) {
+  @task(function* (event) {
     try {
-      this.orgPreference.reportPreference.show_pcidss = value;
+      this.orgPreference.reportPreference.show_pcidss = event.target.checked;
       yield this.orgPreference.save();
     } catch (err) {
       this.notify.error(parseError(err));
+      event.target.checked = !event.target.checked;
     }
   })
   savePcidss;
 
-  @task(function* (value) {
+  @task(function* (event) {
     try {
-      this.orgPreference.reportPreference.show_hipaa = value;
+      this.orgPreference.reportPreference.show_hipaa = event.target.checked;
       yield this.orgPreference.save();
     } catch (err) {
       this.notify.error(parseError(err));
+      event.target.checked = !event.target.checked;
     }
   })
   saveHipaa;
 
-  @task(function* (value) {
+  @task(function* (event) {
     try {
-      this.orgPreference.reportPreference.show_gdpr = value;
+      this.orgPreference.reportPreference.show_gdpr = event.target.checked;
       yield this.orgPreference.save();
     } catch (err) {
       this.notify.error(parseError(err));
+      event.target.checked = !event.target.checked;
     }
   })
   saveGdpr;

@@ -5,6 +5,7 @@ import { setupIntl } from 'ember-intl/test-support';
 import { render, click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { underscore } from '@ember/string';
+import { Response } from 'miragejs';
 
 function serializer(payload) {
   const serializedPayload = {};
@@ -161,6 +162,50 @@ module(
       const gdprInput = this.element.querySelector('[data-test-gdpr-input]');
       await click(gdprInput);
       assert.equal(gdprInput.checked, !orgPrefs.reportPreference.show_gdpr);
+    });
+
+    test('it does not toggle regulatory preference on error', async function (assert) {
+      this.server.create('organization-preference');
+      this.server.get('organizations/:id/preference', (schema, request) => {
+        return serializer(
+          schema.organizationPreferences.find(request.params.id)
+        );
+      });
+
+      this.server.put('organizations/:id/preference', () => {
+        return new Response(
+          400,
+          {},
+          {
+            report_preference: {
+              non_field_errors: [
+                'Invalid data. Expected a dictionary, but got str.',
+              ],
+            },
+          }
+        );
+      });
+
+      await render(hbs`<RegulatoryPreferenceOrganization />`);
+
+      const pcidssInput = this.element.querySelector(
+        '[data-test-pcidss-input]'
+      );
+      const pcidssInitialValue = pcidssInput.checked;
+      await click(pcidssInput);
+      assert.equal(pcidssInput.checked, pcidssInitialValue);
+      await click(pcidssInput);
+      assert.equal(pcidssInput.checked, pcidssInitialValue);
+
+      const hipaaInput = this.element.querySelector('[data-test-hipaa-input]');
+      const hipaaInitialValue = hipaaInput.checked;
+      await click(hipaaInput);
+      assert.equal(hipaaInput.checked, hipaaInitialValue);
+
+      const gdprInput = this.element.querySelector('[data-test-gdpr-input]');
+      const gdprInitialValue = gdprInput.checked;
+      await click(gdprInput);
+      assert.equal(gdprInput.checked, gdprInitialValue);
     });
   }
 );

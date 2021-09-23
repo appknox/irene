@@ -5,6 +5,7 @@ import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
 import { underscore } from '@ember/string';
+import { Response } from 'miragejs';
 import checkboxStyles from 'irene/components/tri-state-checkbox/index.scss';
 
 function serializer(payload) {
@@ -187,6 +188,59 @@ module(
       assert.equal(gdprInput.checked, gdprInitialValue);
       await click(gdprInput);
       assert.equal(gdprInput.checked, !gdprInitialValue);
+    });
+
+    test('it does not toggle preference value on error', async function (assert) {
+      const profile = this.server.create('profile');
+      const project = this.server.create('project', {
+        activeProfileId: profile.id,
+      });
+      this.set('project', project);
+
+      this.server.get('profiles/:id', (schema, request) => {
+        return serializer(schema['profiles'].find(request.params.id));
+      });
+
+      this.server.put('profiles/:id/show_pcidss', () => {
+        return new Response(400, {}, { value: ['Must be a valid boolean.'] });
+      });
+
+      this.server.put('profiles/:id/show_hipaa', () => {
+        return new Response(400, {}, { value: ['Must be a valid boolean.'] });
+      });
+
+      this.server.put('profiles/:id/show_gdpr', () => {
+        return new Response(400, {}, { value: ['Must be a valid boolean.'] });
+      });
+
+      await render(
+        hbs`<RegulatoryPreferenceProfile @project={{this.project}}/>`
+      );
+
+      const pcidss = this.element.querySelector(
+        '[data-test-preference-pcidss]'
+      );
+      const pcidssInitialValue = profile.reportPreference.show_pcidss.value;
+      const pcidssInput = pcidss.querySelector('[data-test-input]');
+      assert.equal(pcidssInput.checked, pcidssInitialValue);
+      await click(pcidssInput);
+      assert.equal(pcidssInput.checked, pcidssInitialValue);
+      await click(pcidssInput);
+      assert.equal(pcidssInput.checked, pcidssInitialValue);
+
+      const hipaa = this.element.querySelector('[data-test-preference-hipaa]');
+      const hipaaInitialValue = profile.reportPreference.show_hipaa.value;
+      const hipaaInput = hipaa.querySelector('[data-test-input]');
+      assert.equal(hipaaInput.checked, hipaaInitialValue);
+      await click(hipaaInput);
+      assert.equal(hipaaInput.checked, hipaaInitialValue);
+
+      const gdpr = this.element.querySelector('[data-test-preference-gdpr]');
+      const gdprInitialValue = profile.reportPreference.show_gdpr.value;
+      const gdprInput = gdpr.querySelector('[data-test-input]');
+      assert.equal(gdprInput.checked, gdprInitialValue);
+      await click(gdprInput);
+      assert.equal(gdprInput.checked, gdprInitialValue);
     });
 
     test('it displays overridden state with reset button if a preference is updated', async function (assert) {
