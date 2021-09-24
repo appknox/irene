@@ -1,5 +1,6 @@
 import { inject as service } from '@ember/service';
 import Service from '@ember/service';
+import ENV from 'irene/config/environment';
 
 export default class IntegrationService extends Service {
   @service configuration;
@@ -23,6 +24,7 @@ export default class IntegrationService extends Service {
     await this.configureCrisp();
   }
 
+  // Crisp
   async configureCrisp() {
     if (!this.isCrispEnabled()) {
       this.logger.debug('Crisp disabled');
@@ -54,5 +56,10 @@ export default class IntegrationService extends Service {
     s.async = 1;
     d.getElementsByTagName('head')[0].appendChild(s);
     window.$crisp.push(['safe', true]);
+  }
+
+  // Pendo
+  isPendoEnabled() {
+    return !!ENV.enablePendo;
   }
 }

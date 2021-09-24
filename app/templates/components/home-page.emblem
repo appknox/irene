@@ -76,7 +76,7 @@ if isLoaded
 
           .status-updates
             = submission-list
-          .product-version
+          .product-version class="{{if enablePendo 'ak-pendo-version-container'}}"
             | #{t "version"} #{productVersion}
 
       .column.margin-right.margin-top
