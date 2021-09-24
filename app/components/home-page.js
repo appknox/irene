@@ -15,12 +15,16 @@ export default Component.extend({
   ajax: service(),
   session: service(),
   organization: service(),
+  integration: service(),
 
   isLoaded: false,
   isSecurityEnabled: false,
   isSecurityDashboard: false,
   showMarketplace: ENV.enableMarketplace,
   productVersion: ENV.productVersion,
+  enablePendo: computed(function () {
+    return this.integration.isPendoEnabled();
+  }),
 
   tSomethingWentWrong: t('somethingWentWrong'),
   tOrganizationNameUpdated: t('organizationNameUpdated'),
