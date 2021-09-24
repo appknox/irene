@@ -1,6 +1,6 @@
-.columns
+.columns data-test-analysis-id=analysis.id
   .column
-    .message-header.vuln-header.hideOrShow click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus class=statusClass
+    .message-header.vuln-header.hideOrShow data-test-analysis-detail="header" click="toggleVulnerability" class=mpClassSelector:mp-plus:mp-minus class=statusClass
       .columns
         = risk-tag analysis=analysis columnSize="is-one-sixth"
         .column
@@ -25,7 +25,7 @@
 
 
 if showVulnerability
-  .message-body.vuln-body
+  .message-body.vuln-body data-test-analysis-detail="body"
     .align-both
       h5.black-text.margin-t-h
         = t "description"
@@ -47,63 +47,100 @@ if showVulnerability
           = analysis.vulnerability.successMessage
 
     if analysis.isRisky
-      .regulatary-section.margin-top
+      .regulatary-section.margin-top data-test-analysis-detail="regulatories"
         .columns.section
           .column
             h5.black-text
               = t "regulatory"
-        if analysis.hascvccBase
-          .columns.section
-            .column.is-one-sixth
-              | CVSSv3
-              / a href="https://help.appknox.com/using-appknox/basic-usage/vulnerability-severity" target="_blank"
-              /   = fa-icon "info-circle" class="more-details"
-            .column.black-text
-              = analysis.cvssBase
-          .columns.section
-            .column.is-one-sixth
-              = t "cvssMetrics"
-            .column
-              ul
-                each analysis.cvssMetricsHumanized as |metric|
-                  li
-                    .columns
-                      .column.is-one-third
-                        = metric.key
-                      .column.black-text
-                        = metric.value
-        .columns.section
-          .column.is-one-sixth
-            | OWASP
-          .column
-            ul
-              each analysis.owasp as |category|
-                li
-                  .columns
-                    .column.is-one-third
-                      = category.code
-                    .column.black-text
-                      = category.title
-
-        if analysis.showPcidss
-          if analysis.pcidss
+        if (and (eq analysis.cvssVersion 3) analysis.cvssVector)
+          div data-test-regulatory="cvssv3"
             .columns.section
-              .column.is-one-sixth
+              .column.is-one-sixth title="#{t 'cvssExpansion'}" data-test-regulatory-label="cvssv3"
+                | CVSSv3
+              .column.black-text data-test-regulatory-detail="cvssv3"
+                = analysis.cvssBase
+            .columns.section
+              .column.is-one-sixth data-test-regulatory-label="cvssv3metrics"
+                = t "cvssMetrics"
+              .column data-test-regulatory-detail="cvssv3metrics"
+                ul
+                  each analysis.cvssMetricsHumanized as |metric|
+                    li
+                      .columns
+                        .column.is-one-third data-test-cvssv3metrics-key=metric.key
+                          = metric.key
+                        .column.black-text
+                          = metric.value
+        if analysis.owasp
+          .columns.section data-test-regulatory="owasp"
+            .column.is-one-sixth title="#{t 'owaspExpansion'}" data-test-regulatory-label="owasp"
+              | OWASP
+            .column data-test-regulatory-detail="owasp"
+              ul
+                each analysis.owasp as |category|
+                  li
+                    .columns data-test-owasp=category.id
+                      .column.is-one-third
+                        = category.code
+                      .column.black-text
+                        = category.title
+
+        if analysis.cwe
+          .columns.section data-test-regulatory="cwe"
+            .column.is-one-sixth title="#{t 'cweExpansion'}" data-test-regulatory-label="cwe"
+              | CWE
+            .column data-test-regulatory-detail="cwe"
+              ul
+                each analysis.cwe as |cwe|
+                  = cwe-details cwe=cwe
+
+        if analysis.asvs
+          .columns.section data-test-regulatory="asvs"
+            .column.is-one-sixth title="#{t 'asvsExpansion'}" data-test-regulatory-label="asvs"
+              | ASVS
+            .column data-test-regulatory-detail="asvs"
+              ul
+                each analysis.asvs as |asvs|
+                  = asvs-details asvs=asvs
+
+        if analysis.mstg
+          .columns.section data-test-regulatory="mstg"
+            .column.is-one-sixth title="#{t 'mstgExpansion'}" data-test-regulatory-label="mstg"
+              | MSTG
+            .column data-test-regulatory-detail="mstg"
+              ul
+                each analysis.mstg as |mstg|
+                  = mstg-details mstg=mstg
+
+        if analysis.file.profile.reportPreference.show_pcidss.value
+          if analysis.pcidss
+            .columns.section data-test-regulatory="pcidss"
+              .column.is-one-sixth title="#{t 'pcidssExpansion'}" data-test-regulatory-label="pcidss"
                 | PCI-DSS
-              .column
+              .column data-test-regulatory-detail="pcidss"
                 ul
                   each analysis.pcidss as |category|
-                    = pcidss-details category=category
+                    = pcidss-details category=category data-test-pcidss-id=category.code
 
-        if analysis.showHipaa
+        if analysis.file.profile.reportPreference.show_hipaa.value
           if analysis.hipaa
-            .columns.section
-              .column.is-one-sixth
+            .columns.section data-test-regulatory="hipaa"
+              .column.is-one-sixth title="#{t 'hipaaExpansion'}" data-test-regulatory-label="hipaa"
                 | HIPAA
-              .column
+              .column data-test-regulatory-detail="hipaa"
                 ul
                   each analysis.hipaa as |hipaa|
                     = hipaa-details hipaa=hipaa
+
+        if analysis.file.profile.reportPreference.show_gdpr.value
+          if analysis.gdpr
+            .columns.section data-test-regulatory="gdpr"
+              .column.is-one-sixth title="#{t 'gdprExpansion'}" data-test-regulatory-label="gdpr"
+                | GDPR
+              .column data-test-regulatory-detail="gdpr"
+                ul
+                  each analysis.gdpr as |gdpr|
+                    = gdpr-details gdpr=gdpr
 
     .columns
       .column

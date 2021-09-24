@@ -1,9 +1,7 @@
-import Model, { attr }  from '@ember-data/model';
+import Model, { attr } from '@ember-data/model';
 
-const Pcidss = Model.extend({
-  code: attr(),
-  title: attr(),
-  description: attr()
-});
-
-export default Pcidss;
+export default class Pcidss extends Model {
+  @attr('string') code;
+  @attr('string') title;
+  @attr('string') description;
+}

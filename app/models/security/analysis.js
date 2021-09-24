@@ -1,6 +1,10 @@
-import Model, { attr, hasMany, belongsTo }  from '@ember-data/model';
+import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 import ENUMS from 'irene/enums';
 import { computed } from '@ember/object';
+import Inflector from 'ember-inflector';
+
+const inflector = Inflector.inflector;
+inflector.irregular('asvs', 'asvses');
 
 export default Model.extend({
   findings: attr(),
@@ -25,28 +29,37 @@ export default Model.extend({
   file: belongsTo('security/file'),
   owasp: hasMany('owasp'),
   pcidss: hasMany('pcidss'),
+  mstg: hasMany('mstg'),
+  asvs: hasMany('asvs'),
+  cwe: hasMany('cwe'),
+  gdpr: hasMany('gdpr'),
   hipaa: hasMany('hipaa'),
   attachments: hasMany('security/attachment'),
   vulnerability: belongsTo('vulnerability'),
 
-  isPassed: computed('risk', function() {
-    const risk = this.get("risk");
+  isPassed: computed('risk', function () {
+    const risk = this.get('risk');
     return risk !== ENUMS.RISK.NONE;
   }),
 
-  riskLabelClass: computed('risk', function() {
-    return this.labelClass(this.get("risk"));
+  riskLabelClass: computed('risk', function () {
+    return this.labelClass(this.get('risk'));
   }),
 
   labelClass(risk) {
     switch (risk) {
-      case ENUMS.RISK.UNKNOWN: return `is-progress`;
-      case ENUMS.RISK.NONE: return `is-success`;
-      case ENUMS.RISK.LOW: return `is-info`;
-      case ENUMS.RISK.MEDIUM: return `is-warning`;
-      case ENUMS.RISK.HIGH: return `is-danger`;
-      case ENUMS.RISK.CRITICAL: return `is-critical`;
+      case ENUMS.RISK.UNKNOWN:
+        return `is-progress`;
+      case ENUMS.RISK.NONE:
+        return `is-success`;
+      case ENUMS.RISK.LOW:
+        return `is-info`;
+      case ENUMS.RISK.MEDIUM:
+        return `is-warning`;
+      case ENUMS.RISK.HIGH:
+        return `is-danger`;
+      case ENUMS.RISK.CRITICAL:
+        return `is-critical`;
     }
-  }
-
+  },
 });

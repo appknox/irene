@@ -1,6 +1,8 @@
 $primary: #fe4d3f;
 $secondary: #424651;
 
+$success: #80c081;
+
 $lightgreen: #ccf3cc;
 $lightblue: #dbe6ff;
 $lightorange: #fde6ca;
@@ -70,6 +72,10 @@ $color-error: #fe4d3f;
 
   --loading-error-color: #{lighten($color-error, 14%)};
   --empty-state-color: var(--black-300);
+
+  --tri-state-checkbox-bg: var(--bg-gray);
+  --tri-state-checkbox-overridden-bg: #{rgba($success, 0.1)};
+  --tri-state-checkbox-border-color: #{rgba($success, 0.6)};
 
   // --sidebar-bg: var(--secondary);
   // --navbar-bg: #{darken($secondary, 2%)};

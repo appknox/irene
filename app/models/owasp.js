@@ -1,10 +1,8 @@
-import Model, { attr }  from '@ember-data/model';
+import Model, { attr } from '@ember-data/model';
 
-const Owasp = Model.extend({
-  code: attr(),
-  title: attr(),
-  description: attr(),
-  year: attr()
-});
-
-export default Owasp;
+export default class Owasp extends Model {
+  @attr('string') code;
+  @attr('string') title;
+  @attr('string') description;
+  @attr('string') year;
+}
