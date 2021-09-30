@@ -71,35 +71,6 @@ $color-error: #fe4d3f;
   --loading-error-color: #{lighten($color-error, 14%)};
   --empty-state-color: var(--black-300);
 
-  /* UX style guidelines  */
-  --primary-tone-80: #{rgba($primary, 0.8)};
-  --primary-tone-60: #{rgba($primary, 0.6)};
-  --primary-tone-40: #{rgba($primary, 0.4)};
-  --primary-tone-20: #{rgba($primary, 0.2)};
-  --primary-tone-05: #{rgba($primary, 0.05)};
-
-  --secondary-tone-80: #{rgba($secondary, 0.8)};
-  --secondary-tone-60: #{rgba($secondary, 0.6)};
-  --secondary-tone-40: #{rgba($secondary, 0.4)};
-  --secondary-tone-20: #{rgba($secondary, 0.2)};
-
-  --black-shade-3: #434343;
-  --black-shade-4: #555555;
-  --black-shade-5: #7b7b7b;
-  --black-shade-6: #9d9d9d;
-  --black-shade-7: #c4c4c4;
-  --black-shade-8: #d9d9d9;
-  --black-shade-9: #e9e9e9;
-  --black-shade-10: #f5f5f5;
-  --black-shade-11: #f2f2f2;
-  --black-shade-12: #f1f1f1;
-
-  --dark-text-color: #171717;
-
-  --table-header-color: #f5f5f5;
-  --action-approval: #2db421;
-  --action-disable: #fbfbfb;
-
   // --sidebar-bg: var(--secondary);
   // --navbar-bg: #{darken($secondary, 2%)};
 }

@@ -7,7 +7,7 @@
   align-items: center;
   font-size: 1rem;
   column-gap: 0.5rem;
-  color: var(--dark-text-color);
+  color: var(--body-text-1);
   font-weight: 600;
 }
 
@@ -36,22 +36,14 @@
 }
 
 .org-name-text {
-  color: var(--dark-text-color);
+  color: var(--body-text-1);
   font-weight: 700;
   @include ellipsis;
 }
 
-.edit-name-btn {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  column-gap: 0.6em;
-}
-
 // Edit name modal styles
 .edit-name-label {
-  color: var(--dark-text-color);
+  color: var(--body-text-1);
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: 0.5em;

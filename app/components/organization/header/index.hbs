@@ -21,17 +21,14 @@
     </div>
   </div>
   {{#if this.isShowEdit}}
-    <button
-      class="primary-btn transparent-bg"
-      type="button"
-      local-class="edit-name-btn"
+    <AkButton::PrimaryOutlined
+      @onClick={{this.toggleEditNameModal}}
       data-test-org-name-edit-btn
-      {{on 'click' this.toggleEditNameModal}}
       {{did-insert this.initChangeset}}
     >
       <MdIcon @name="create" />
       {{t 'edit'}}
-    </button>
+    </AkButton::PrimaryOutlined>
   {{/if}}
   {{#if this.isShowSettings}}
     <LinkTo
@@ -70,23 +67,19 @@
         {{/if}}
       </div>
       <div local-class="edit-name-action-container">
-        <button
-          class="secondary-btn transparent-bg"
-          type="button"
+        <AkButton::NeutralOutlined
+          @onClick={{this.toggleEditNameModal}}
           data-test-org-edit-modal-cancel-btn
-          {{on 'click' this.toggleEditNameModal}}
         >
           {{t 'cancel'}}
-        </button>
-        <button
-          class="primary-btn"
-          type="button"
-          disabled={{this.changeset.error.organizationName}}
+        </AkButton::NeutralOutlined>
+        <AkButton::PrimaryFilled
+          @isDisabled={{this.changeset.error.organizationName}}
+          @onClick={{this.updateOrgName}}
           data-test-org-edit-modal-save-btn
-          {{on 'click' this.updateOrgName}}
         >
           {{t 'save'}}
-        </button>
+        </AkButton::PrimaryFilled>
       </div>
     </div>
   </AkModal>
