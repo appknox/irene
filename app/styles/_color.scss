@@ -65,8 +65,12 @@ body {
 /*------- radio button colors end -------*/
 
 body {
-  --radio-button-color: var(--green-approval);
+  --radio-button-color__checked: var(--green-approval);
+  --radio-button-border-color__checked: var(--radio-button-color__checked);
+  --radio-button-border-color__unchecked: var(--body-text-1);
   --radio-button-label-color: var(--body-text-1);
+  --radio-button-color__disabled: var(--shade-black-7);
+  --radio-button-border-color__disabled: var(--radio-button-color__disabled);
 }
 
 /*------- radio button colors end -------*/

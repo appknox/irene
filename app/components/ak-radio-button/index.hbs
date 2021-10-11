@@ -1,6 +1,6 @@
 <label
   for={{this.radioBtnId}}
-  local-class="ak-radio-button"
+  local-class="ak-radio-button {{if @isDisabled 'disabled'}}"
   data-test-ak-radio-btn
 >
   <input
@@ -9,6 +9,7 @@
     name={{@name}}
     checked={{@isChecked}}
     value={{@value}}
+    disabled={{@isDisabled}}
     ...attributes
     local-class="radio-input"
     data-test-ak-radio-btn-input
