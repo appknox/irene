@@ -9,6 +9,7 @@ body {
   --white: #ffffff;
   --black: #{$black};
   --shade-black-7: #c4c4c4;
+  --green-approval: #2db421;
 }
 /*------- static colors end -------*/
 
@@ -62,3 +63,17 @@ body {
 }
 
 /*------- button colors end -------*/
+
+/*------- checkbox colors start -------*/
+body {
+  --checkbox-background-color__default: var(--white);
+  --checkbox-border-color__unchecked: var(--text-black-91);
+  --checkbox-background-color__checked: var(--green-approval);
+  --checkbox-border-color__checked: var(--checkbox-background-color__checked);
+  --checkbox-background-color__disabled: var(--shade-black-7);
+  --checkbox-border-color__disabled: var(--checkbox-background-color__disabled);
+  --checkbox-checkmark-indicator-color: var(--white);
+  --checkbox-label-color: var(--body-text-1);
+  --checkbox-tick-color: var(--white);
+}
+/*------- checkbox colors end -------*/

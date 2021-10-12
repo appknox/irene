@@ -1,0 +1,18 @@
+<label
+  local-class="checkbox-container {{if @isDisabled 'disabled'}}"
+  for={{this.checkboxId}}
+  data-test-checkbox
+>
+  <Input
+    id={{this.checkboxId}}
+    @type="checkbox"
+    disabled={{@isDisabled}}
+    @checked={{@isChecked}}
+    local-class="checkbox-input"
+    data-test-checkbox-input
+    ...attributes
+  />
+  {{#if (has-block)}}
+    {{yield}}
+  {{/if}}
+</label>
