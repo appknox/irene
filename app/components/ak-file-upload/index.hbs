@@ -1,0 +1,36 @@
+<FileDropzone
+  @name="files"
+  @disabled={{@isDisabled}}
+  @onDrop={{@onAddFile}} as |dropzone queue|
+>
+  {{#if dropzone.supported}}
+    <div local-class="dropzone">
+      {{#if (has-block)}}
+        <div local-class="yielded-content"></div>{{yield}}
+      {{/if}}
+      <div local-class="dropzone-upload">
+        <div local-class="drag-drop-text">
+          Drag & Drop to Upload File
+        </div>
+        <div local-class="or-divider">
+          {{t 'or'}}
+        </div>
+        <FileUpload @name="files" @accept="text/xml" @onfileadd={{@onAddFile}}>
+          {{! TODO button is not supported inside file upload, has to be replaced with anchor }}
+          {{!-- <AkButton::PrimaryFilled>
+            Browse File
+            {{#if @isUploading}}
+              {{fa-icon 'spinner fa-spin'}}
+            {{/if}}
+          </AkButton::PrimaryFilled> --}}
+          <a>
+            Browse File
+            {{#if @isUploading}}
+              {{fa-icon 'spinner fa-spin'}}
+            {{/if}}
+          </a>
+        </FileUpload>
+      </div>
+    </div>
+  {{/if}}
+</FileDropzone>

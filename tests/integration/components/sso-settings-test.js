@@ -2,29 +2,44 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
+import { underscore } from '@ember/string';
 
-module(
-  'Integration | Component | sso-settings/service-provider',
-  function (hooks) {
-    setupRenderingTest(hooks);
-    setupIntl(hooks);
+function serializer(payload) {
+  console.log('payload', payload);
+  const serializedPayload = {};
+  Object.keys(payload.attrs).map((_key) => {
+    serializedPayload[underscore(_key)] = payload[_key];
+  });
+  return serializedPayload;
+}
 
-    test('it renders service provider title & desc', async function (assert) {
-      await render(hbs`<SsoSettings::ServiceProvider />`);
+module('Integration | Component | sso-settings', function (hooks) {
+  setupRenderingTest(hooks);
+  setupMirage(hooks);
+  setupIntl(hooks);
 
-      assert.dom(`[data-test-sp-title]`).hasText(`t:serviceProvider:() (SP)`);
-      assert.dom(`[data-test-sp-desc]`).hasText(`t:spMetadataDesc:()`);
-    });
+  hooks.beforeEach(async function () {
+    await this.server.createList('organization', 1);
+    await this.owner.lookup('service:organization').load();
+  });
 
-    // TODO: need to updated after AkRadioBtn has been added
-    // test('it should render 2 radio btns for config types', async function (assert) {
-    //   await render(hbs`<SsoSettings::ServiceProvider />`);
-
-    // });
-
-    test('it should render SP manual setting config details', async function (assert) {
-      const spConfig = {
+  test('it renders', async function (assert) {
+    // Set any properties with this.set('myProperty', 'value');
+    // Handle any actions with this.set('myAction', function(val) { ... });
+    this.server.get(
+      'organizations/:orgId/sso/saml2/idp_metadata',
+      (schema, req) => {
+        console.log('schema', schema);
+        console.log('saml2IdpMetadata', schema.saml2IdpMetadata.new());
+        console.log('req', req);
+        return serializer(schema.saml2IdpMetadata.first());
+      }
+    );
+    this.server.get('v2/sso/saml2/metadata', (schema, req) => {
+      console.log('req', req);
+      return {
         acs_url: 'https://sherlock.staging.do.appknox.io/api/sso/saml2/acs',
         entity_id: 'https://sherlock.staging.do.appknox.io/api/sso/saml2',
         metadata:
@@ -32,46 +47,17 @@ module(
         named_id_format:
           'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
       };
-      this.set('spConfig', spConfig);
-      this.set('defaultConfig', 'manual');
-      await render(
-        hbs`<SsoSettings::ServiceProvider @spMetadata={{this.spConfig}} @defaultConfig={{this.defaultConfig}}/>`
-      );
-
-      assert
-        .dom(`[data-test-sp-manual-entity-id-label]`)
-        .hasText(`t:entityID:()`);
-      assert
-        .dom(`[data-test-sp-manual-entity-id-value]`)
-        .hasText(this.spConfig.entity_id);
-      assert.dom(`[data-test-sp-manual-acsurl-label]`).hasText(`t:acsURL:()`);
-      assert
-        .dom(`[data-test-sp-manual-acsurl-value]`)
-        .hasText(this.spConfig.acs_url);
-
-      assert
-        .dom(`[data-test-sp-manual-name-id-format-label]`)
-        .hasText(`t:nameIDFormat:()`);
-      assert
-        .dom(`[data-test-sp-manual-name-id-format-value]`)
-        .hasText(this.spConfig.named_id_format);
     });
-
-    test('it should render SP XML metadata', async function (assert) {
-      const spConfig = {
-        metadata: '<?xml version="1.0"?>metadata',
-      };
-      this.set('spConfig', spConfig);
-      this.set('defaultConfig', 'xml');
-      await render(
-        hbs`<SsoSettings::ServiceProvider @spMetadata={{this.spConfig}} @defaultConfig={{this.defaultConfig}}/>`
-      );
-
-      assert
-        .dom(`[data-test-sp-xml-metadata-textarea]`)
-        .hasValue(this.spConfig.metadata);
-    });
-
-    // TODO toggle between config types need to be added
-  }
-);
+    // Template block usage:
+    await render(hbs`
+     <SsoSettings>
+       template block text
+     </SsoSettings>
+   `);
+    assert.dom(`[data-test-sso-title]`).hasText('t:singleSignOn:()');
+    assert.dom(`[data-test-sso-sub-title]`).hasText('t:samlAuth:()');
+    assert.dom(`[data-test-sso-desc]`).hasText(`t:samlDesc:()`);
+    assert.dom(`[data-test-sso-sp-config]`).exists();
+    assert.dom(`[data-test-sso-idp-config]`).exists();
+  });
+});

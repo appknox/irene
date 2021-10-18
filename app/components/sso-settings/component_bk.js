@@ -53,11 +53,18 @@ export default Component.extend({
 
   // Fetch IdP Metadata
   getIdPMetadata: task(function* () {
-    const idpMetadata = yield this.get('store').queryRecord(
-      'saml2-idp-metadata',
-      {}
-    );
-    this.set('idpMetadata', idpMetadata);
+    console.log('check2');
+    try {
+      const idpMetadata = yield this.get('store').queryRecord(
+        'saml2-idp-metadata',
+        {}
+      );
+      console.log('idpMetadata', idpMetadata);
+      this.set('idpMetadata', idpMetadata);
+    } catch (e) {
+      console.log('e', e);
+    }
+    console.log('check3');
   }).restartable(),
 
   // Parse & upload IdP metadata

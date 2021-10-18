@@ -385,5 +385,11 @@ function routes() {
   this.get('/organizations/:id/me', (schema, req) => {
     return schema.organizationMes.find(req.params.id);
   });
+  this.get(
+    '/organizations/:orgId/sso/saml2/idp_metadata',
+    ({ saml2IdpMetadata }) => {
+      return saml2IdpMetadata.all();
+    }
+  );
   this.passthrough();
 }

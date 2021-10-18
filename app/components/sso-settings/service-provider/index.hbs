@@ -1,10 +1,10 @@
-<div local-class="service-provider">
+<div local-class="service-provider" ...attributes>
   <div local-class="header">
-    <div local-class="title">
+    <div local-class="title" data-test-sp-title>
       {{t 'serviceProvider'}}
       (SP)
     </div>
-    <div local-class="desc">
+    <div local-class="sub-title" data-test-sp-desc>
       {{t 'spMetadataDesc'}}
     </div>
   </div>
@@ -18,7 +18,7 @@
       @isChecked={{config.default}}
     /> --}}
     {{!-- {{/each}} --}}
-    <div local-class="radio-btn-container">
+    <div local-class="radio-btn-container" data-test-sp-config-types>
       <RadioButton
         @value="manual"
         @groupValue={{@spConfig}}
@@ -61,40 +61,65 @@
         </RadioButton>
       </div> --}}
     {{#if this.isShowManualSettings}}
-      <div local-class="manual-setting">
+      <div local-class="manual-setting" data-test-sp-manul-setting>
         <table local-classs="manual-setting-table">
-          <tr local-class="manual-setting-table-row">
-            <td local-class="manual-setting-table-data">
+          <tr
+            local-class="manual-setting-table-row"
+            data-test-sp-manual-entity-id
+          >
+            <td
+              local-class="manual-setting-table-data"
+              data-test-sp-manual-entity-id-label
+            >
               {{t 'entityID'}}
             </td>
-            <td local-class="manual-setting-table-data">
+            <td
+              local-class="manual-setting-table-data"
+              data-test-sp-manual-entity-id-value
+            >
               {{@spMetadata.entity_id}}
             </td>
           </tr>
-          <tr local-class="manual-setting-table-row">
-            <td local-class="manual-setting-table-data">
+          <tr local-class="manual-setting-table-row" data-test-sp-manual-acsurl>
+            <td
+              local-class="manual-setting-table-data"
+              data-test-sp-manual-acsurl-label
+            >
               {{t 'acsURL'}}
             </td>
-            <td local-class="manual-setting-table-data">
+            <td
+              local-class="manual-setting-table-data"
+              data-test-sp-manual-acsurl-value
+            >
               {{@spMetadata.acs_url}}
             </td>
           </tr>
-          <tr local-class="manual-setting-table-row">
-            <td local-class="manual-setting-table-data">
+          <tr
+            local-class="manual-setting-table-row"
+            data-test-sp-manual-name-id-format
+          >
+            <td
+              local-class="manual-setting-table-data"
+              data-test-sp-manual-name-id-format-label
+            >
               {{t 'nameIDFormat'}}
             </td>
-            <td local-class="manual-setting-table-data">
+            <td
+              local-class="manual-setting-table-data"
+              data-test-sp-manual-name-id-format-value
+            >
               {{@spMetadata.named_id_format}}
             </td>
           </tr>
         </table>
       </div>
     {{else if this.isShowXmlMetadata}}
-      <div local-class="xml-metadata">
+      <div local-class="xml-metadata" data-test-sp-xml-metadata>
         <Textarea
           rows="8"
           @value={{@spMetadata.metadata}}
           local-class="xml-metadata-textarea"
+          data-test-sp-xml-metadata-textarea
         />
       </div>
     {{/if}}

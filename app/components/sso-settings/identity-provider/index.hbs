@@ -1,11 +1,14 @@
-<div class="columns margin-t-h">
-  <div class="column">
-    <div class="bordered-box padding-b-1">
-      <div local-class="org-setting-subtitle" class="black-text">
-        {{t 'identityProvider'}}
-        (IdP)
-      </div>
-      {{#if idpMetadata}}
+<div local-class="idp-container" ...attributes>
+  <div local-class="header">
+    <div local-class="title" data-test-idp-title>
+      {{t 'identityProvider'}}
+      (IdP)
+    </div>
+    <div local-class="sub-title" data-test-idp-sub-title>
+      {{t 'idpMetadataUpload'}}
+    </div>
+  </div>
+  {{!-- {{#if @idpMetadata}}
         <table
           local-class="sso-table"
           class="margin-t-1 margin-b-h table-h-bordered-gray"
@@ -19,7 +22,7 @@
                     {{t 'idpMetadata'}}
                   </div>
                 </div>
-                {{#unless sso.enabled}}
+                {{#unless @sso.enabled}}
                   <button
                     class="button is-default"
                     type="button"
@@ -51,7 +54,7 @@
               <div class="margin-t-3q margin-b-q">
                 <table class="table-h-bordered-gray font-small fill-white">
                   <tr>
-                    <th colspan="2">
+                    <th coldiv="2">
                       <div class="vertical-align-center">
                         {{fa-icon 'certificate' local-class='idp-cert-icon'}}
                         <div class="margin-l-h black-text bold">
@@ -61,7 +64,7 @@
                     </th>
                   </tr>
                   <tr>
-                    <td colspan="2" class="bold black-text">
+                    <td coldiv="2" class="bold black-text">
                       {{t 'issuer'}}
                       <div class="text-gray">
                         {{idpMetadata.certificate.issuer}}
@@ -89,24 +92,24 @@
                     </td>
                   </tr>
                   <tr>
-                    <td colspan="2" class="bold black-text">
+                    <td coldiv="2" class="bold black-text">
                       {{t 'fingerprints'}}
                       <div class="text-gray uppercase-text padding-t-q">
                         <div>
-                          <span class="bold black-text padding-r-3q">
+                          <div class="bold black-text padding-r-3q">
                             SHA256
-                          </span>
-                          <span local-class="fingerprint">
+                          </div>
+                          <div local-class="fingerprint">
                             {{idpMetadata.certificate.fingerprint_sha256}}
-                          </span>
+                          </div>
                         </div>
                         <div>
-                          <span class="bold black-text padding-r-3q">
+                          <div class="bold black-text padding-r-3q">
                             SHA1
-                          </span>
-                          <span local-class="fingerprint">
+                          </div>
+                          <div local-class="fingerprint">
                             {{idpMetadata.certificate.fingerprint_sha1}}
-                          </span>
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -150,44 +153,179 @@
             </button>
           </div>
         </form>
-      {{else}}
-        <div local-class="org-setting-desc" class="margin-b-1">
-          {{t 'idpMetadataUpload'}}
+      {{else}} --}}
+  <div local-class="body">
+    {{#if @idpMetadataXml}}
+      <div local-class="xml-template-upload" data-test-idp-preview-xml>
+        <div local-class="xml-editor">
+          <Textarea
+            rows="10"
+            placeholder="IdP Metadata XML Content"
+            @value={{@idpMetadataXml}}
+            local-class="xml-textarea"
+            data-test-idp-xml-metadata-textarea
+          />
         </div>
-        <FileDropzone @name="files" as |dropzone queue|>
-          {{#if dropzone.supported}}
-            <div
-              local-class="dropzone
-                {{if dropzone.active 'dropzone-upload-active'}}"
-            >
-              <div local-class="dropzone-logo">
-                <img local-class="xml-logo" src="/images/xml.svg" />
+        <div>
+          <AkButton::PrimaryFilled
+            @onClick={{@onUploadIdpMetadata}}
+            data-test-idp-upload-metadata-btn
+          >
+            Upload
+          </AkButton::PrimaryFilled>
+        </div>
+      </div>
+    {{else if @idpMetadata}}
+      <div local-class="idp-config-container" data-test-idp-metadata-details>
+        <div local-class="idp-config-section">
+          <div local-class="idp-config-title" data-test-idp-meta-title>
+            <MdIcon
+              @name="integration_instructions"
+              data-test-idp-meta-title-icon
+            />
+            <span data-test-idp-meta-title-text>
+              IdP Metadata
+            </span>
+            <div local-class="remove-idp">
+              <AkButton::NeutralOutlined
+                @isDisabled={{@sso.enabled}}
+                @onClick={{@onToggleDeleteIdpMetadataModal}}
+                data-test-ipd-meta-delete-btn
+              >
+                <MdIcon @name="delete" />
+                <AttachTooltip @position="top">
+                  {{t 'idpMetadataDelete'}}
+                </AttachTooltip>
+              </AkButton::NeutralOutlined>
+            </div>
+          </div>
+          <div local-class="idp-content">
+            <div local-class="idp-content-item">
+              <div
+                local-class="idp-content-item-title"
+                data-test-idp-meta-entity-id-title
+              >
+                {{t 'entityID'}}
               </div>
-              <div local-class="dropzone-upload">
-                {{fa-icon 'upload'}}
-                <div class="black-text">
-                  {{t 'dragDropFile'}}
-                </div>
-                <div class="padding-h-q">
-                  {{t 'or'}}
-                </div>
-                <FileUpload
-                  @name="files"
-                  @accept="text/xml"
-                  @onfileadd={{perform parseIdpMetadataXml}}
-                >
-                  <a>
-                    {{t 'browseFiles'}}
-                  </a>
-                  {{#if parseIdpMetadataXml.isRunning}}
-                    {{fa-icon 'spinner fa-spin'}}
-                  {{/if}}
-                </FileUpload>
+              <div
+                local-class="idp-content-item-value"
+                data-test-idp-meta-entity-id-value
+              >
+                {{@idpMetadata.entityId}}
               </div>
             </div>
-          {{/if}}
-        </FileDropzone>
-      {{/if}}
-    </div>
+            <div local-class="idp-content-item">
+              <div
+                local-class="idp-content-item-title"
+                data-test-idp-meta-sso-service-url-title
+              >
+                {{t 'ssoServiceURL'}}
+              </div>
+              <div
+                local-class="idp-content-item-value"
+                data-test-idp-meta-sso-service-url-value
+              >
+                {{@idpMetadata.ssoServiceUrl}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div local-class="idp-config-section">
+          <div local-class="idp-config-title" data-test-idp-certificate-title>
+            <MdIcon @name="verified" data-test-idp-certificate-icon />
+            <span data-test-idp-certificate-title-text>
+              {{t 'certificate'}}
+            </span>
+          </div>
+          <div local-class="idp-content">
+            <div local-class="idp-content-item">
+              <div
+                local-class="idp-content-item-title"
+                data-test-idp-certificate-issuer-title
+              >
+                {{t 'issuer'}}
+              </div>
+              <div
+                local-class="idp-content-item-value"
+                data-test-idp-certificate-issuer-value
+              >
+                {{@idpMetadata.certificate.issuer}}
+              </div>
+            </div>
+            <div local-class="idp-content-item">
+              <div
+                local-class="idp-content-item-title"
+                data-test-idp-certificate-issuedon-title
+              >
+                {{t 'issuedOn'}}
+              </div>
+              <div
+                local-class="idp-content-item-value"
+                data-test-idp-certificate-issuedon-value
+              >
+                {{day-js
+                  date=@idpMetadata.certificate.issued_on
+                  format='DD MMM YYYY HH:mm:ss A'
+                }}
+              </div>
+            </div>
+            <div local-class="idp-content-item">
+              <div
+                local-class="idp-content-item-title"
+                data-test-idp-certificate-expiry-title
+              >
+                {{t 'expiry'}}
+              </div>
+              <div
+                local-class="idp-content-item-value"
+                data-test-idp-certificate-expiry-value
+              >
+                {{day-js
+                  date=@idpMetadata.certificate.expires_on
+                  format='DD MMM YYYY HH:mm:ss A'
+                }}
+              </div>
+            </div>
+            <div local-class="idp-content-item">
+              <div
+                local-class="idp-content-item-title"
+                data-test-idp-certificate-fingerprint-title
+              >
+                {{t 'fingerprints'}}
+              </div>
+              <div local-class="idp-content-item-value">
+                <div
+                  local-class="idp-content-item-value fingerprint-value"
+                  data-test-idp-certificate-fingerprint-sha256
+                >
+                  <span local-class="idp-content-item-value-dark">
+                    SHA256
+                  </span>
+                  <span>
+                    {{@idpMetadata.certificate.fingerprint_sha256}}
+                  </span>
+                </div>
+                <div
+                  local-class="idp-content-item-value fingerprint-value"
+                  data-test-idp-certificate-fingerprint-sha1
+                >
+                  <span local-class="idp-content-item-value-dark">
+                    SHA1
+                  </span>
+                  <span>
+                    {{@idpMetadata.certificate.fingerprint_sha1}}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {{else}}
+      <div local-class="xml-upload" data-test-idp-xml-upload>
+        <AkFileUpload @isDisabled={{true}} @onAddFile={{@onSelectXmlFile}} />
+      </div>
+    {{/if}}
   </div>
+  {{!-- {{/if}} --}}
 </div>

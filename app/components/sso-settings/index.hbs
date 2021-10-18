@@ -1,0 +1,126 @@
+<div local-class="sso-setting" {{did-insert this.initializeComp}}>
+  <div local-class="title" data-test-sso-title>
+    {{t 'singleSignOn'}}
+  </div>
+  <div local-class="sub-title" data-test-sso-sub-title>
+    {{t 'samlAuth'}}
+  </div>
+  <div local-class="description" data-test-sso-desc>
+    {{t 'samlDesc'}}
+  </div>
+  <SsoSettings::ServiceProvider
+    @spConfig={{spConfig}}
+    @spConfigIsManual={{spConfigIsManual}}
+    @spMetadata={{this.spMetadata}}
+    @spConfigIsXml={{spConfigIsXml}}
+    @isLoading={{this.fetchSpMetadata.isRunning}}
+    @defaultConfig="manual"
+    data-test-sso-sp-config
+  />
+  <SsoSettings::IdentityProvider
+    @idpMetadata={{this.idpMetadata}}
+    @idpMetadataXml={{this.idpMetadataXml}}
+    @sso={{this.sso}}
+    @onToggleDeleteIdpMetadataModal={{this.onToggleDeleteIdpMetadataModal}}
+    @onSelectXmlFile={{this.onSelectXmlFile}}
+    @onUploadIdpMetadata={{this.onUploadIdpMetadata}}
+    data-test-sso-idp-config
+  />
+  {{#if idpMetadata}}
+    <SsoSettings::AuthenticationConfig data-test-sso-auth-config />
+    {{!-- <div class="columns margin-t-h">
+      <div class="column">
+        <div class="vertical-align-top">
+          <div class="div">
+            <label class="toggle-switch-on-off">
+              {{input
+                type='checkbox'
+                id='enable-sso'
+                checked=sso.enabled
+                disabled=toggleSSOEnable.isRunning
+                click=(perform toggleSSOEnable value='target.checked')
+                class='switch-input'
+              }}
+              <span class="knob"></span>
+            </label>
+          </div>
+          <div class="padding-l-1h">
+            <label
+              local-class="org-setting-title"
+              for="enable-sso"
+              class="black-text"
+            >
+              {{t 'enable'}}
+              {{t 'ssoAuthentication'}}
+            </label>
+            <div local-class="org-setting-desc" local-class="checkbox-desc">
+              {{t 'ssoEnableDesc'}}
+            </div>
+            {{#if sso.enabled}}
+              <div class="columns margin-t-q">
+                <div class="column">
+                  <div class="vertical-align-top">
+                    <div local-class="checkbox">
+                      {{input
+                        type='checkbox'
+                        id='enforce-sso'
+                        checked=sso.enforced
+                        disabled=toggleSSOEnforce.isRunning
+                        click=(perform toggleSSOEnforce value='target.checked')
+                      }}
+                    </div>
+                    <div class="padding-l-h">
+                      <label
+                        local-class="org-setting-subtitle"
+                        for="enforce-sso"
+                        class="black-text"
+                      >
+                        {{t 'ssoEnforce'}}
+                      </label>
+                      <div
+                        local-class="org-setting-desc"
+                        local-class="checkbox-desc"
+                      >
+                        {{t 'ssoEnforceDesc'}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div> --}}
+  {{/if}}
+</div>
+{{#if this.showDeleteIdpMetadataConfirm}}
+  <AkModal
+    @onClose={{this.onToggleDeleteIdpMetadataModal}}
+    @showHeader={{true}}
+    @headerTitle="Confirmation"
+  >
+    <div local-class="delete-idp-confirm-content">
+      <div
+        local-class="delete-idp-confirm-content-info"
+        data-test-idp-delete-modal-desc
+      >
+        Are you sure you want delete this IdP configuration?
+      </div>
+      <div local-class="delete-idp-confirm-content-actions">
+        <AkButton::PrimaryFilled
+          @onClick={{this.onDeleteIdpConfig}}
+          data-test-idp-delete-ok
+        >
+          Ok
+        </AkButton::PrimaryFilled>
+        <AkButton::NeutralOutlined
+          @onClick={{this.onToggleDeleteIdpMetadataModal}}
+          data-test-idp-delete-cancel
+        >
+          Cancel
+        </AkButton::NeutralOutlined>
+      </div>
+    </div>
+  </AkModal>
+{{/if}}

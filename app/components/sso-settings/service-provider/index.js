@@ -8,25 +8,25 @@ export default class SsoSettingsServiceProvider extends Component {
       type: 'manual',
       name: 'sp-config',
       label: 'Manual Settings',
-      default: true,
+      default: this.args.defaultConfig == 'manual',
     },
     {
       type: 'xml',
       name: 'sp-config',
       label: 'XML Metadata',
-      default: false,
+      default: this.args.defaultConfig == 'xml',
     },
   ];
 
-  @tracked activeConfigType = this.configTypes.find((config) => config.default)
-    .type;
+  @tracked activeConfigType = this.args.defaultConfig
+    ? this.configTypes.find((config) => config.default).type
+    : '';
 
   get isShowManualSettings() {
     return this.activeConfigType == 'manual';
   }
 
   get isShowXmlMetadata() {
-    return true;
     return this.activeConfigType == 'xml';
   }
 

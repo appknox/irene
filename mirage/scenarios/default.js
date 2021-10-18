@@ -48,6 +48,7 @@ export default function (server) {
   server.create('organization-me');
   server.create('organization-member');
   server.create('partnerclient-plan');
+  server.create('saml2-idp-metadata');
   for (var teamId = 1; teamId <= teamCount; teamId++) {
     server.create('team', {
       users: users,
