@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { action, set } from '@ember/object';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class SsoSettingsServiceProvider extends Component {
@@ -26,6 +26,7 @@ export default class SsoSettingsServiceProvider extends Component {
   }
 
   get isShowXmlMetadata() {
+    return true;
     return this.activeConfigType == 'xml';
   }
 

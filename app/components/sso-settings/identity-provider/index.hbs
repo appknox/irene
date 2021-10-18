@@ -1,0 +1,193 @@
+<div class="columns margin-t-h">
+  <div class="column">
+    <div class="bordered-box padding-b-1">
+      <div local-class="org-setting-subtitle" class="black-text">
+        {{t 'identityProvider'}}
+        (IdP)
+      </div>
+      {{#if idpMetadata}}
+        <table
+          local-class="sso-table"
+          class="margin-t-1 margin-b-h table-h-bordered-gray"
+        >
+          <tr>
+            <th>
+              <div class="align-both">
+                <div class="vertical-align-center">
+                  {{fa-icon 'file-code-o'}}
+                  <div class="margin-l-h bold black-text">
+                    {{t 'idpMetadata'}}
+                  </div>
+                </div>
+                {{#unless sso.enabled}}
+                  <button
+                    class="button is-default"
+                    type="button"
+                    {{action (perform openDeleteIdpMetadataConfirm) on='click'}}
+                  >
+                    {{fa-icon 'trash-o'}}
+                    <AttachTooltip @position="top">
+                      {{t 'idpMetadataDelete'}}
+                    </AttachTooltip>
+                  </button>
+                {{/unless}}
+              </div>
+            </th>
+          </tr>
+          <tr>
+            <td>
+              <div class="black-text bold font-small">
+                {{t 'entityID'}}
+              </div>
+              <div class="text-gray margin-b-1">
+                {{idpMetadata.entityId}}
+              </div>
+              <div class="black-text bold font-small">
+                {{t 'ssoServiceURL'}}
+              </div>
+              <div class="text-gray margin-b-1">
+                {{idpMetadata.ssoServiceUrl}}
+              </div>
+              <div class="margin-t-3q margin-b-q">
+                <table class="table-h-bordered-gray font-small fill-white">
+                  <tr>
+                    <th colspan="2">
+                      <div class="vertical-align-center">
+                        {{fa-icon 'certificate' local-class='idp-cert-icon'}}
+                        <div class="margin-l-h black-text bold">
+                          {{t 'certificate'}}
+                        </div>
+                      </div>
+                    </th>
+                  </tr>
+                  <tr>
+                    <td colspan="2" class="bold black-text">
+                      {{t 'issuer'}}
+                      <div class="text-gray">
+                        {{idpMetadata.certificate.issuer}}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="bold black-text">
+                      {{t 'issuedOn'}}
+                      <div class="text-gray">
+                        {{day-js
+                          date=idpMetadata.certificate.issued_on
+                          format='DD MMM YYYY HH:mm:ss A'
+                        }}
+                      </div>
+                    </td>
+                    <td class="bold black-text">
+                      {{t 'expiry'}}
+                      <div class="text-gray">
+                        {{day-js
+                          date=idpMetadata.certificate.expires_on
+                          format='DD MMM YYYY HH:mm:ss A'
+                        }}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" class="bold black-text">
+                      {{t 'fingerprints'}}
+                      <div class="text-gray uppercase-text padding-t-q">
+                        <div>
+                          <span class="bold black-text padding-r-3q">
+                            SHA256
+                          </span>
+                          <span local-class="fingerprint">
+                            {{idpMetadata.certificate.fingerprint_sha256}}
+                          </span>
+                        </div>
+                        <div>
+                          <span class="bold black-text padding-r-3q">
+                            SHA1
+                          </span>
+                          <span local-class="fingerprint">
+                            {{idpMetadata.certificate.fingerprint_sha1}}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </table>
+      {{else if getIdPMetadata.isRunning}}
+        <div class="align-middle">
+          {{fa-icon 'spinner fa-spin'}}
+          <div class="padding-l-h padding-v-1">
+            {{t 'loading'}}
+            ...
+          </div>
+        </div>
+      {{else if idpMetadataXml}}
+        <div local-class="org-setting-desc" class="margin-b-1">
+          {{t 'idpMetadataEdit'}}
+        </div>
+        <form {{action (perform uploadIdPMetadata) on='submit'}}>
+          {{textarea
+            rows='10'
+            placeholder='IdP Metadata XML Content'
+            value=idpMetadataXml
+            class='form-control textarea-input margin-t-q'
+          }}
+          <div class="margin-t-h">
+            <button
+              type="submit"
+              disabled={{uploadIdPMetadata.isRunning}}
+              class="button is-primary"
+            >
+              {{#if uploadIdPMetadata.isRunning}}
+                <div class="fa-font-size margin-r-1">
+                  {{fa-icon 'spinner fa-spin'}}
+                </div>
+              {{/if}}
+              {{t 'upload'}}
+            </button>
+          </div>
+        </form>
+      {{else}}
+        <div local-class="org-setting-desc" class="margin-b-1">
+          {{t 'idpMetadataUpload'}}
+        </div>
+        <FileDropzone @name="files" as |dropzone queue|>
+          {{#if dropzone.supported}}
+            <div
+              local-class="dropzone
+                {{if dropzone.active 'dropzone-upload-active'}}"
+            >
+              <div local-class="dropzone-logo">
+                <img local-class="xml-logo" src="/images/xml.svg" />
+              </div>
+              <div local-class="dropzone-upload">
+                {{fa-icon 'upload'}}
+                <div class="black-text">
+                  {{t 'dragDropFile'}}
+                </div>
+                <div class="padding-h-q">
+                  {{t 'or'}}
+                </div>
+                <FileUpload
+                  @name="files"
+                  @accept="text/xml"
+                  @onfileadd={{perform parseIdpMetadataXml}}
+                >
+                  <a>
+                    {{t 'browseFiles'}}
+                  </a>
+                  {{#if parseIdpMetadataXml.isRunning}}
+                    {{fa-icon 'spinner fa-spin'}}
+                  {{/if}}
+                </FileUpload>
+              </div>
+            </div>
+          {{/if}}
+        </FileDropzone>
+      {{/if}}
+    </div>
+  </div>
+</div>

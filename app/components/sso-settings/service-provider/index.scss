@@ -20,3 +20,40 @@
   font-size: 0.9rem;
   color: #7b7b7b;
 }
+
+.body {
+  padding: 1.1em;
+}
+
+.radio-btn-container {
+  display: flex;
+  padding-bottom: 1.1em;
+}
+
+.manual-setting-table-row {
+  // height: 2.85em;
+}
+
+.manual-setting-table-data {
+  border: 1px solid #e9e9e9;
+  color: #7b7b7b;
+  font-size: 0.95rem;
+  height: 2.85em;
+  padding: 0 0 0 0.5em;
+  vertical-align: middle;
+}
+
+.manual-setting-table-row .manual-setting-table-data:first-child {
+  font-weight: 600;
+  color: #171717;
+}
+
+.xml-metadata-textarea {
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid #e9e9e9;
+  color: #171717;
+  font-size: 0.95rem;
+  padding: 0.5em;
+  line-height: 1.5em;
+}

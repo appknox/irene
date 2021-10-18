@@ -8,18 +8,39 @@
       {{t 'spMetadataDesc'}}
     </div>
   </div>
-  {{#each this.configTypes as |config|}}
-    <AkRadioButton
+  <div local-class="body">
+    {{!-- {{#each this.configTypes as |config|}} --}}
+    {{!-- <AkRadioButton
       @name={{config.name}}
       @value={{config.type}}
       @label={{config.label}}
       @onChange={{this.onChange}}
       @isChecked={{config.default}}
-    />
-  {{/each}}
-  <div class="column">
-    <div class="bordered-box">
-      <div class="vertical-align-center">
+    /> --}}
+    {{!-- {{/each}} --}}
+    <div local-class="radio-btn-container">
+      <RadioButton
+        @value="manual"
+        @groupValue={{@spConfig}}
+        @classNames="vertical-align-center"
+      >
+        <span class="padding-l-h margin-r-1">
+          {{t 'manualSettings'}}
+        </span>
+      </RadioButton>
+      <RadioButton
+        @value="xml"
+        @groupValue={{@spConfig}}
+        @classNames="vertical-align-center"
+      >
+        <span class="padding-l-h">
+          {{t 'xmlMetadata'}}
+        </span>
+      </RadioButton>
+    </div>
+    {{! <div class="column"> }}
+    {{! <div class="bordered-box"> }}
+    {{!-- <div class="vertical-align-center">
         <RadioButton
           @value="manual"
           @groupValue={{@spConfig}}
@@ -38,14 +59,46 @@
             {{t 'xmlMetadata'}}
           </span>
         </RadioButton>
+      </div> --}}
+    {{#if this.isShowManualSettings}}
+      <div local-class="manual-setting">
+        <table local-classs="manual-setting-table">
+          <tr local-class="manual-setting-table-row">
+            <td local-class="manual-setting-table-data">
+              {{t 'entityID'}}
+            </td>
+            <td local-class="manual-setting-table-data">
+              {{@spMetadata.entity_id}}
+            </td>
+          </tr>
+          <tr local-class="manual-setting-table-row">
+            <td local-class="manual-setting-table-data">
+              {{t 'acsURL'}}
+            </td>
+            <td local-class="manual-setting-table-data">
+              {{@spMetadata.acs_url}}
+            </td>
+          </tr>
+          <tr local-class="manual-setting-table-row">
+            <td local-class="manual-setting-table-data">
+              {{t 'nameIDFormat'}}
+            </td>
+            <td local-class="manual-setting-table-data">
+              {{@spMetadata.named_id_format}}
+            </td>
+          </tr>
+        </table>
       </div>
-      {{#if this.isShowManualSettings}}
-        <SsoSettings::ServiceProviderManualSetting
-          @spMetadata={{@spMetadata}}
+    {{else if this.isShowXmlMetadata}}
+      <div local-class="xml-metadata">
+        <Textarea
+          rows="8"
+          @value={{@spMetadata.metadata}}
+          local-class="xml-metadata-textarea"
         />
-      {{else if this.isShowXmlMetadata}}
-        <SsoSettings::ServiceProviderXmlMetadata @spMetadata={{@spMetadata}} />
-      {{/if}}
-    </div>
+      </div>
+    {{/if}}
+    {{! </div> }}
+    {{! </div> }}
   </div>
 </div>
