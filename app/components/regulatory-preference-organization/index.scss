@@ -1,9 +1,19 @@
-.subtitle {
+.title {
+  color: var(--organization-setting-title-color);
+  font-size: 1.1rem;
   font-weight: bold;
 }
+.subtitle {
+  font-weight: 600;
+  font-size: 1rem;
+  padding-top: 0.15em;
+  color: var(--organization-setting-subtitle-color);
+}
+
 .description {
   font-size: 0.93rem;
   padding-top: 0.5rem;
+  color: var(--organization-setting-desc-color);
 }
 .preferences {
   padding-top: 1.2rem;
