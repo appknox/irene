@@ -1,72 +1,70 @@
-{{#if this.orgPreference.reportPreference}}
-  <div data-test-preferences>
-    <div class='org-settings-subtitle' data-test-preferences-title>
-      {{t 'regulatoryPreferences'}}
+<div data-test-preferences {{did-insert this.initComp}}>
+  <h2 data-test-preferences-title>
+    {{t 'regulatoryPreferences'}}
+  </h2>
+  <h4 data-test-preferences-subtitle>
+    {{t 'regulatoryPreferencesChooseForAll'}}
+  </h4>
+  <p data-test-preferences-desc>
+    {{t 'regulatoryPreferencesWarning'}}
+  </p>
+  <div
+    local-class="preferences
+      {{if this.orgPreference.reportPreference 'visibile' 'in-visible'}}"
+    data-test-preferences-options
+  >
+    <div data-test-preference-pcidss>
+      <AkCheckbox
+        @isChecked={{this.orgPreference.reportPreference.show_pcidss}}
+        data-test-preference-pcidss-checkbox
+        {{on 'input' this.onSavePcidss}}
+      >
+        <abbr
+          title={{t 'pcidssExpansion'}}
+          local-class="abbr-label"
+          data-test-preference-pcidss-label
+        >
+          PCI-DSS
+        </abbr>
+        <TaskSpin @task={{this.savePcidss}} />
+      </AkCheckbox>
     </div>
-    <div local-class='subtitle' data-test-preferences-subtitle>
-      {{t 'regulatoryPreferencesChooseForAll'}}
+    <div data-test-preference-hipaa>
+      <AkCheckbox
+        @isChecked={{this.orgPreference.reportPreference.show_hipaa}}
+        data-test-preference-hipaa-checkbox
+        {{on 'input' this.onSaveHipaa}}
+      >
+        <abbr
+          title={{t 'hipaaExpansion'}}
+          local-class="abbr-label"
+          data-test-preference-hipaa-label
+        >
+          HIPAA
+        </abbr>
+        <TaskSpin @task={{this.saveHipaa}} />
+      </AkCheckbox>
     </div>
-    <div local-class='description' data-test-preferences-desc>
-      {{t 'regulatoryPreferencesWarning'}}
+    <div data-test-preference-gdpr>
+      <AkCheckbox
+        @isChecked={{this.orgPreference.reportPreference.show_gdpr}}
+        data-test-preference-gdpr-checkbox
+        {{on 'input' this.onSaveGdpr}}
+      >
+        <abbr
+          title={{t 'gdprExpansion'}}
+          local-class="abbr-label"
+          data-test-preference-gdpr-label
+        >
+          GDPR
+        </abbr>
+        <TaskSpin @task={{this.saveGdpr}} />
+      </AkCheckbox>
     </div>
-
-    <div local-class='preferences' data-test-preferences-options>
-      <div data-test-preference-pcidss>
-        <label local-class='preference'>
-          <Input
-            local-class='checkbox'
-            @type='checkbox'
-            @checked={{this.orgPreference.reportPreference.show_pcidss}}
-            onclick={{perform this.savePcidss}}
-            data-test-pcidss-input
-          />
-          <abbr
-            title={{t 'pcidssExpansion'}}
-            local-class='label'
-            data-test-pcidss-label
-          >PCI-DSS</abbr>
-          <TaskSpin
-            @task={{this.savePcidss}}
-            data-test-pcidss-progress-spinner
-          />
-        </label>
+    {{#if this.fetchOrganizationPreference.isRunning}}
+      <div local-class="loading-spinner">
+        <ThreeBounceSpinner />
       </div>
-
-      <div data-test-preference-hipaa>
-        <label local-class='preference'>
-          <Input
-            local-class='checkbox'
-            @type='checkbox'
-            @checked={{this.orgPreference.reportPreference.show_hipaa}}
-            onclick={{perform this.saveHipaa}}
-            data-test-hipaa-input
-          />
-          <abbr
-            title={{t 'hipaaExpansion'}}
-            local-class='label'
-            data-test-hipaa-label
-          >HIPAA</abbr>
-          <TaskSpin @task={{this.saveHipaa}} data-test-hipaa-progress-spinner />
-        </label>
-      </div>
-
-      <div data-test-preference-gdpr>
-        <label local-class='preference'>
-          <Input
-            local-class='checkbox'
-            @type='checkbox'
-            @checked={{this.orgPreference.reportPreference.show_gdpr}}
-            onclick={{perform this.saveGdpr}}
-            data-test-gdpr-input
-          />
-          <abbr
-            title={{t 'gdprExpansion'}}
-            local-class='label'
-            data-test-gdpr-label
-          >GDPR</abbr>
-          <TaskSpin @task={{this.saveGdpr}} data-test-gdpr-progress-spinner />
-        </label>
-      </div>
-    </div>
+    {{/if}}
   </div>
-{{/if}}
+</div>

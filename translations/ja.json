@@ -692,6 +692,7 @@
   "registrationRequests": "Registration requests",
   "regulatory": "Regulatory",
   "regulatoryPreferenceReset": "Reset preference to default",
+  "regulatoryPreferenceSuccessMsg": "Regulatory preference updated",
   "regulatoryPreferences": "Regulatory Preferences",
   "regulatoryPreferencesChooseForAll": "Choose regulatories applicable for all projects",
   "regulatoryPreferencesChooseForProfile": "Choose regulatories applicable for this project",

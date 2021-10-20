@@ -58,18 +58,24 @@ module(
       assert.dom('[data-test-preferences]').exists();
 
       assert.dom('[data-test-preference-pcidss]').exists();
-      const pcidss = this.element.querySelector('[data-test-pcidss-label]');
-      assert.equal(pcidss.innerHTML, 'PCI-DSS');
+      const pcidss = this.element.querySelector(
+        '[data-test-preference-pcidss-label]'
+      );
+      assert.equal(pcidss.innerHTML.trim(), 'PCI-DSS');
       assert.equal(pcidss.getAttribute('title'), 't:pcidssExpansion:()');
 
       assert.dom('[data-test-preference-hipaa]').exists();
-      const hipaa = this.element.querySelector('[data-test-hipaa-label]');
-      assert.equal(hipaa.innerHTML, 'HIPAA');
+      const hipaa = this.element.querySelector(
+        '[data-test-preference-hipaa-label]'
+      );
+      assert.equal(hipaa.innerHTML.trim(), 'HIPAA');
       assert.equal(hipaa.getAttribute('title'), 't:hipaaExpansion:()');
 
       assert.dom('[data-test-preference-gdpr]').exists();
-      const gdpr = this.element.querySelector('[data-test-gdpr-label]');
-      assert.equal(gdpr.innerHTML, 'GDPR');
+      const gdpr = this.element.querySelector(
+        '[data-test-preference-gdpr-label]'
+      );
+      assert.equal(gdpr.innerHTML.trim(), 'GDPR');
       assert.equal(gdpr.getAttribute('title'), 't:gdprExpansion:()');
     });
 
@@ -89,13 +95,21 @@ module(
 
       await render(hbs`<RegulatoryPreferenceOrganization />`);
 
-      const pcidss = this.element.querySelector('[data-test-pcidss-input]');
+      const pcidss = this.element.querySelector(
+        '[data-test-preference-pcidss-checkbox]'
+      );
       assert.true(pcidss.checked);
 
-      const hipaa = this.element.querySelector('[data-test-hipaa-input]');
+      const hipaa = this.element.querySelector(
+        '[data-test-preference-hipaa-checkbox]'
+      );
+
       assert.false(hipaa.checked);
 
-      const gdpr = this.element.querySelector('[data-test-gdpr-input]');
+      const gdpr = this.element.querySelector(
+        '[data-test-preference-gdpr-checkbox]'
+      );
+
       assert.false(gdpr.checked);
     });
 
@@ -118,10 +132,10 @@ module(
       await render(hbs`<RegulatoryPreferenceOrganization />`);
 
       const pcidssInput = this.element.querySelector(
-        '[data-test-pcidss-input]'
+        '[data-test-preference-pcidss-checkbox]'
       );
       const pcidssLabel = this.element.querySelector(
-        '[data-test-pcidss-label]'
+        '[data-test-preference-pcidss-label]'
       );
 
       await click(pcidssLabel);
@@ -150,16 +164,20 @@ module(
       await render(hbs`<RegulatoryPreferenceOrganization />`);
 
       const pcidssInput = this.element.querySelector(
-        '[data-test-pcidss-input]'
+        '[data-test-preference-pcidss-checkbox]'
       );
       await click(pcidssInput);
       assert.equal(pcidssInput.checked, !orgPrefs.reportPreference.show_pcidss);
 
-      const hipaaInput = this.element.querySelector('[data-test-hipaa-input]');
+      const hipaaInput = this.element.querySelector(
+        '[data-test-preference-hipaa-checkbox]'
+      );
       await click(hipaaInput);
       assert.equal(hipaaInput.checked, !orgPrefs.reportPreference.show_hipaa);
 
-      const gdprInput = this.element.querySelector('[data-test-gdpr-input]');
+      const gdprInput = this.element.querySelector(
+        '[data-test-preference-gdpr-checkbox]'
+      );
       await click(gdprInput);
       assert.equal(gdprInput.checked, !orgPrefs.reportPreference.show_gdpr);
     });
@@ -189,7 +207,7 @@ module(
       await render(hbs`<RegulatoryPreferenceOrganization />`);
 
       const pcidssInput = this.element.querySelector(
-        '[data-test-pcidss-input]'
+        '[data-test-preference-pcidss-checkbox]'
       );
       const pcidssInitialValue = pcidssInput.checked;
       await click(pcidssInput);
@@ -197,12 +215,16 @@ module(
       await click(pcidssInput);
       assert.equal(pcidssInput.checked, pcidssInitialValue);
 
-      const hipaaInput = this.element.querySelector('[data-test-hipaa-input]');
+      const hipaaInput = this.element.querySelector(
+        '[data-test-preference-hipaa-checkbox]'
+      );
       const hipaaInitialValue = hipaaInput.checked;
       await click(hipaaInput);
       assert.equal(hipaaInput.checked, hipaaInitialValue);
 
-      const gdprInput = this.element.querySelector('[data-test-gdpr-input]');
+      const gdprInput = this.element.querySelector(
+        '[data-test-preference-gdpr-checkbox]'
+      );
       const gdprInitialValue = gdprInput.checked;
       await click(gdprInput);
       assert.equal(gdprInput.checked, gdprInitialValue);

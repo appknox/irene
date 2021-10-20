@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import parseError from 'irene/utils/parse-error';
+import { action, set } from '@ember/object';
 
 export default class RegulatoryPreferenceOrganizationComponent extends Component {
   @service intl;
@@ -12,9 +13,20 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
 
   @tracked orgPreference;
 
-  constructor() {
-    super(...arguments);
+  @action initComp() {
     this.fetchOrganizationPreference.perform();
+  }
+
+  @action onSavePcidss(event) {
+    this.savePcidss.perform(event.target.checked);
+  }
+
+  @action onSaveHipaa(event) {
+    this.saveHipaa.perform(event.target.checked);
+  }
+
+  @action onSaveGdpr(event) {
+    this.saveGdpr.perform(event.target.checked);
   }
 
   @task(function* () {
@@ -30,35 +42,38 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
   })
   fetchOrganizationPreference;
 
-  @task(function* (event) {
+  @task(function* (state) {
     try {
-      this.orgPreference.reportPreference.show_pcidss = event.target.checked;
+      this.orgPreference.reportPreference.show_pcidss = state;
       yield this.orgPreference.save();
+      this.notify.success(this.intl.t('regulatoryPreferenceSuccessMsg'));
     } catch (err) {
       this.notify.error(parseError(err));
-      event.target.checked = !event.target.checked;
+      set(this.orgPreference.reportPreference, 'show_pcidss', !state);
     }
   })
   savePcidss;
 
-  @task(function* (event) {
+  @task(function* (state) {
     try {
-      this.orgPreference.reportPreference.show_hipaa = event.target.checked;
+      this.orgPreference.reportPreference.show_hipaa = state;
       yield this.orgPreference.save();
+      this.notify.success(this.intl.t('regulatoryPreferenceSuccessMsg'));
     } catch (err) {
       this.notify.error(parseError(err));
-      event.target.checked = !event.target.checked;
+      set(this.orgPreference.reportPreference, 'show_hipaa', !state);
     }
   })
   saveHipaa;
 
-  @task(function* (event) {
+  @task(function* (state) {
     try {
-      this.orgPreference.reportPreference.show_gdpr = event.target.checked;
+      this.orgPreference.reportPreference.show_gdpr = state;
       yield this.orgPreference.save();
+      this.notify.success(this.intl.t('regulatoryPreferenceSuccessMsg'));
     } catch (err) {
       this.notify.error(parseError(err));
-      event.target.checked = !event.target.checked;
+      set(this.orgPreference.reportPreference, 'show_gdpr', !state);
     }
   })
   saveGdpr;

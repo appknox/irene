@@ -1,23 +1,30 @@
-.subtitle {
-  font-weight: bold;
-}
-.description {
-  font-size: 0.93rem;
-  padding-top: 0.5rem;
-}
 .preferences {
-  padding-top: 1.2rem;
-}
-.preference {
+  margin-top: 1.2rem;
   display: flex;
-  align-items: center;
-  margin-bottom: 0.5rem;
-  cursor: default;
+  flex-flow: column;
+  row-gap: 0.8em;
+  position: relative;
 }
-.checkbox {
-  display: inline;
-}
-.label {
-  margin-left: 0.5rem;
+
+.abbr-label {
   text-decoration: none;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.in-visible {
+  visibility: hidden;
+}
+
+.loading-spinner {
+  width: 70px;
+  height: 25px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
 }
