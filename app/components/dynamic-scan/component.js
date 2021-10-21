@@ -24,7 +24,7 @@ export default Component.extend({
   tScheduleDynamicscanSuccess: t('scheduleDynamicscanSuccess'),
 
   didInsertElement() {
-this._super(...arguments);
+    this._super(...arguments);
     this.send('pollDynamicStatus');
   },
 
@@ -35,7 +35,7 @@ this._super(...arguments);
   }),
 
   openDynamicScanModal: task(function* () {
-    triggerAnalytics('feature',ENV.csb.dynamicScanBtnClick);
+    triggerAnalytics('feature', ENV.csb.dynamicScanBtnClick);
     yield this.set('showDynamicScanModal', true);
     yield this.get('store').find('file', this.get('file.id'));
   }),
@@ -51,7 +51,7 @@ this._super(...arguments);
 
   startDynamicScan: task(function* () {
     const data = {
-      isApiScanEnabled: this.get('isApiScanEnabled') === true
+      isApiScanEnabled: this.get('isApiScanEnabled') === true,
     };
     const file = this.get('file');
     const fileId = file.id;
@@ -84,39 +84,51 @@ this._super(...arguments);
   scheduleDynamicScan: task(function* () {
     const file = this.get('file');
     const fileId = file.id;
-    const scheduleAutomationUrl = [ENV.endpoints.dynamic, fileId, ENV.endpoints.scheduleDynamicscanAutomation].join('/');
-    yield this.get('ajax').post(scheduleAutomationUrl, {data: {id: fileId}});
+    const scheduleAutomationUrl = [
+      ENV.endpoints.dynamic,
+      fileId,
+      ENV.endpoints.scheduleDynamicscanAutomation,
+    ].join('/');
+    yield this.get('ajax').post(scheduleAutomationUrl, {
+      data: { id: fileId },
+    });
   }).evented(),
 
-  scheduleDynamicScanSucceeded: on('scheduleDynamicScan:succeeded', function () {
-    const file = this.get('file');
-    file.setInQueueStatus();
-    this.set('showDynamicScanModal', false);
-    this.get('notify').success(this.get('tScheduleDynamicscanSuccess'), {
-      clearDuration: 5000
-    });
-  }),
-
-  scheduleDynamicScanErrored: on('scheduleDynamicScan:errored', function (_, e) {
-    this.set('showDynamicScanModal', false);
-    let errMsg = this.get('tPleaseTryAgain');
-    if (e.payload) {
-      Object.keys(e.payload).forEach(p => {
-        errMsg = e.payload[p]
-        if (typeof(errMsg) !== "string") {
-          errMsg = e.payload[p][0];
-        }
-        this.get('notify').error(errMsg);
+  scheduleDynamicScanSucceeded: on(
+    'scheduleDynamicScan:succeeded',
+    function () {
+      const file = this.get('file');
+      file.setInQueueStatus();
+      this.set('showDynamicScanModal', false);
+      this.get('notify').success(this.get('tScheduleDynamicscanSuccess'), {
+        clearDuration: 5000,
       });
-      return;
-    } else if (e.errors && e.errors.length) {
-      errMsg = e.errors[0].detail || errMsg;
-    } else if(e.message) {
-      errMsg = e.message;
     }
-    this.get('notify').error(errMsg);
-    return;
-  }),
+  ),
+
+  scheduleDynamicScanErrored: on(
+    'scheduleDynamicScan:errored',
+    function (_, e) {
+      this.set('showDynamicScanModal', false);
+      let errMsg = this.get('tPleaseTryAgain');
+      if (e.payload) {
+        Object.keys(e.payload).forEach((p) => {
+          errMsg = e.payload[p];
+          if (typeof errMsg !== 'string') {
+            errMsg = e.payload[p][0];
+          }
+          this.get('notify').error(errMsg);
+        });
+        return;
+      } else if (e.errors && e.errors.length) {
+        errMsg = e.errors[0].detail || errMsg;
+      } else if (e.message) {
+        errMsg = e.message;
+      }
+      this.get('notify').error(errMsg);
+      return;
+    }
+  ),
 
   actions: {
     pollDynamicStatus() {
@@ -129,15 +141,22 @@ this._super(...arguments);
         return;
       }
       var stopPoll = poll(() => {
-        return this.get('store').find('file', fileId)
-          .then(() => {
-            const dynamicStatus = this.get('file.dynamicStatus');
-            if (dynamicStatus === ENUMS.DYNAMIC_STATUS.NONE || dynamicStatus === ENUMS.DYNAMIC_STATUS.READY) {
+        return this.get('store')
+          .find('file', fileId)
+          .then(
+            (file) => {
+              const dynamicStatus = file.get('dynamicStatus');
+              if (
+                dynamicStatus === ENUMS.DYNAMIC_STATUS.NONE ||
+                dynamicStatus === ENUMS.DYNAMIC_STATUS.READY
+              ) {
+                stopPoll();
+              }
+            },
+            () => {
               stopPoll();
             }
-          }, () => {
-            stopPoll();
-          });
+          );
       }, 5000);
     },
 
@@ -154,18 +173,21 @@ this._super(...arguments);
       this.set('isPoppedOut', false);
       const fileId = this.get('file.id');
       const dynamicUrl = [ENV.endpoints.dynamic, fileId].join('/');
-      this.get('ajax').delete(dynamicUrl)
-        .then(() => {
-          if (!this.isDestroyed) {
-            this.send('pollDynamicStatus');
+      this.get('ajax')
+        .delete(dynamicUrl)
+        .then(
+          () => {
+            if (!this.isDestroyed) {
+              this.send('pollDynamicStatus');
+              this.set('startingDynamicScan', false);
+            }
+          },
+          (error) => {
+            file.setNone();
             this.set('startingDynamicScan', false);
+            this.get('notify').error(error.payload.error);
           }
-        }, (error) => {
-          file.setNone();
-          this.set('startingDynamicScan', false);
-          this.get('notify').error(error.payload.error);
-        });
+        );
     },
-
-  }
+  },
 });
