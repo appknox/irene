@@ -31,17 +31,28 @@ module('Integration | Component | organization-email-domain', function (hooks) {
     await this.owner.lookup('service:me');
   });
 
-  test('it should render description and should not be editable', async function (assert) {
+  test('it should render title & description', async function (assert) {
     this.server.get('/organizations/:id/email_domains', () => {
       return [];
     });
     await render(hbs`<OrganizationEmailDomain />`);
     assert
-      .dom(`[data-test-organization-email='sub-desc']`)
-      .hasText(`t:emailRestrictDesc:()`);
+      .dom(`[data-test-org-email-domain-title]`)
+      .hasText(`t:emailDomainRestriction:()`);
     assert
-      .dom(`[data-test-organization-email='input-container']`)
-      .doesNotExist();
+      .dom(`[data-test-org-email-domain-desc]`)
+      .hasText(`t:emailRestrictDesc:()`);
+  });
+
+  test('it should not render input box & save button', async function (assert) {
+    this.server.get('/organizations/:id/email_domains', () => {
+      return [];
+    });
+    this.set('isEditable', false);
+    await render(
+      hbs`<OrganizationEmailDomain @isEditable={{this.isEditable}}/>`
+    );
+    assert.dom(`[data-test-organization-email-input-container]`).doesNotExist();
   });
 
   test('it should show 5 domains by default', async function (assert) {
@@ -51,10 +62,11 @@ module('Integration | Component | organization-email-domain', function (hooks) {
     });
     await render(hbs`<OrganizationEmailDomain />`);
     assert.equal(
-      this.element.querySelectorAll(`[data-test-organization-email='domain']`)
+      this.element.querySelectorAll(`[data-test-organization-email-domain]`)
         .length,
       5
     );
+    assert.dom(`[data-test-organization-email-no-domain]`).doesNotExist();
   });
 
   test('it should handle delete domain', async function (assert) {
@@ -73,16 +85,18 @@ module('Integration | Component | organization-email-domain', function (hooks) {
       hbs`<OrganizationEmailDomain @isEditable={{this.isEditable}}/>`
     );
     assert.equal(
-      this.element.querySelectorAll(`[data-test-organization-email='domain']`)
+      this.element.querySelectorAll(`[data-test-organization-email-domain]`)
         .length,
       5,
       'should have 5 domains'
     );
     await click(
-      this.element.querySelector(`[data-test-organization-email='delete-1']`)
+      this.element.querySelector(
+        `[data-test-organization-email='delete-domain-1']`
+      )
     );
     assert.equal(
-      this.element.querySelectorAll(`[data-test-organization-email='domain']`)
+      this.element.querySelectorAll(`[data-test-organization-email-domain]`)
         .length,
       4,
       'should only have 4 domains'
@@ -104,21 +118,21 @@ module('Integration | Component | organization-email-domain', function (hooks) {
     );
 
     assert.equal(
-      this.element.querySelectorAll(`[data-test-organization-email='domain']`)
+      this.element.querySelectorAll(`[data-test-organization-email-domain]`)
         .length,
       0,
       'empty domains'
     );
     await fillIn(
-      this.element.querySelector(`[data-test-organization-email='input']`),
+      this.element.querySelector(`[data-test-organization-email-input]`),
       'test.io'
     );
     await click(
-      this.element.querySelector(`[data-test-organization-email='save-btn']`)
+      this.element.querySelector(`[data-test-organization-email-save-btn]`)
     );
 
     assert.equal(
-      this.element.querySelectorAll(`[data-test-organization-email='domain']`)
+      this.element.querySelectorAll(`[data-test-organization-email-domain]`)
         .length,
       1,
       'one domain added'
@@ -134,7 +148,21 @@ module('Integration | Component | organization-email-domain', function (hooks) {
       hbs`<OrganizationEmailDomain @isEditable={{this.isEditable}}/>`
     );
     assert
-      .dom(`[data-test-organization-email='save-btn']`)
+      .dom(`[data-test-organization-email-save-btn]`)
       .hasAttribute('disabled');
+  });
+
+  test('it should show no domain found UX', async function (assert) {
+    this.server.get('/organizations/:id/email_domains', () => {
+      return [];
+    });
+    await render(hbs`<OrganizationEmailDomain />`);
+    assert.dom(`[data-test-organization-email-no-domain]`).exists();
+    assert
+      .dom(`[data-test-organization-email-no-domain-title]`)
+      .hasText(`t:noDataFound:()`);
+    assert
+      .dom(`[data-test-organization-email-no-domain-exp]`)
+      .hasText(`t:noDomainAdded:()`);
   });
 });

@@ -33,7 +33,11 @@ export default class OrganizationEmailDomainComponent extends Component {
     } catch {
       return;
     }
-    return;
+  }
+
+  @action
+  onDeleteDomain(domain) {
+    this.deleteDomain.perform(domain);
   }
 
   @task(function* () {
