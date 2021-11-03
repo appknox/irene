@@ -1,0 +1,17 @@
+<Input
+  aria-label="{{@label}}"
+  @type="text"
+  @value={{@value}}
+  placeholder={{@placeholder}}
+  disabled={{@isDisabled}}
+  local-class="ak-input-text
+    {{if @isReadOnly 'read-only'}}
+
+    {{if @isInputError 'error'}}"
+  data-test-ak-input-text
+/>
+{{#if @isInputError}}
+  <span local-class="input-error" data-test-ak-input-text-error>
+    {{@yield}}
+  </span>
+{{/if}}

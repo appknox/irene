@@ -1,6 +1,7 @@
 /*------- sass vars for function start -------*/
 /* these should not be used unless required for sass functions */
 $black: #000000;
+$grey-tone: #424651;
 
 /*------- sass vars for function end -------*/
 
@@ -9,8 +10,17 @@ body {
   --white: #ffffff;
   --black: #{$black};
   --shade-black-7: #c4c4c4;
+  --shade-black-10: #f5f5f5;
+  --red-error: #d72f2f;
 }
 /*------- static colors end -------*/
+
+/*------- Grey tone colors start -------*/
+body {
+  --grey-tone-20: #{rgba($grey-tone, 0.2)};
+  --grey-tone-60: #{rgba($grey-tone, 0.6)};
+}
+/*------- Grey tone colors end -------*/
 
 /*------- text colors start ------*/
 body {
@@ -61,4 +71,14 @@ body {
   );
 }
 
-/*------- button colors end -------*/
+/*------- input text field colors start -------*/
+body {
+  --input-text-field-border-color: var(--grey-tone-20);
+  --input-text-field-text-color: var(--text-black-91);
+  --input-text-field-placeholder-color: var(--grey-tone-60);
+  --input-text-field-error-color: var(--red-error);
+  --input-text-field-background-color: var(--white);
+  --input-text-field-background-color__disabled: var(--shade-black-10);
+  --input-text-filed-color__disabled: var(--grey-tone-60);
+}
+/*------- input text field colors end -------*/
