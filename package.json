@@ -3,7 +3,7 @@
   "version": "5.9.4",
   "private": true,
   "description": "Appknox Dashboard",
-  "license": "MIT",
+  "license": "AGPL-3.0-only",
   "author": "Appknox",
   "directories": {
     "doc": "doc",
