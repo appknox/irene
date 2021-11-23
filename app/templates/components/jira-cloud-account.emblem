@@ -1,0 +1,25 @@
+if isJIRAConnected
+  .integration.integration-jira
+    .integration-logo-container
+      img.integration-logo src="/images/jira-icon.png"
+    .integration-account-container
+      .integration-account
+        div
+          .text-lightgray.padding-b-q
+            | https://jira.com
+        button.is-primary.mp-jira-revoke click="openRevokeJIRAConfirmBox"
+          = t "disconnect"
+else
+  if reconnect
+    h6
+      = t "integrationFailed"
+    a.button.is-primary.mp-jira-integrate click={( perform integrateJiraCloud)} disabled=integrateJiraCloud.isRunning
+      = t "reconnect"
+  else
+    a.button.is-primary.mp-jira-integrate click={( perform integrateJiraCloud)} disabled=integrateJiraCloud.isRunning
+      = t "integrateJIRA"
+  if integrateJiraCloud.isRunning
+    = fa-icon "fa-spinner fa-spin"
+  = yield
+
+= confirm-box isActive=showRevokeJIRAConfirmBox title=(t 'confirmBox.revokeJira') delegate=this disabled=isRevokingJIRA
