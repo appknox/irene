@@ -1,0 +1,157 @@
+<div {{did-insert this.initComp}}>
+  {{! Cloud Integration start }}
+  {{#if this.isJiraCloudEnabled}}
+    <div data-test-jira-cloud-integration>
+      {{#if (or this.isIntegratedByCloud (not this.isJIRAIntegrated))}}
+        <div
+          local-class="jira-integration-subtitle subtitle-margin"
+          data-test-jira-cloud-integration-title
+        >
+          {{t 'jiraCloudIntegration'}}
+        </div>
+      {{/if}}
+      {{#unless this.isJIRAIntegrated}}
+        <button
+          type="button"
+          disabled={{this.integrateJiraCloud.isRunning}}
+          class="button is-primary mp-jira-integrate"
+          data-test-jira-cloud-integration-btn
+          {{on 'click' this.onIntegrateJiraCloud}}
+        >
+          {{t 'integrateJIRA'}}
+        </button>
+      {{/unless}}
+    </div>
+    {{#unless this.isJIRAIntegrated}}
+      <div local-class="subsection-divider"></div>
+    {{/unless}}
+  {{/if}}
+  {{! Cloud Integration end }}
+  {{! On-Premise Integration start}}
+  <div>
+    {{#if (or this.isIntegratedByCred (not this.isJIRAIntegrated))}}
+      <div
+        local-class="subtitle-margin jira-integration-subtitle"
+        data-test-jira-on-premise-integration-title
+      >
+        {{t 'jiraOnPremiseIntegration'}}
+      </div>
+    {{/if}}
+    {{#unless this.isJIRAIntegrated}}
+      <form data-test-jira-on-premise-integration-form>
+        <div class="input-wrap">
+          <Input
+            classNameBindings="changeset.error.host:has-error"
+            placeholder={{t 'jiraHost'}}
+            @type="text"
+            @value={{this.changeset.host}}
+            class="input-field"
+            id="jira-host"
+          />
+        </div>
+        <div class="input-wrap">
+          <div class="half-wrap">
+            <Input
+              classNameBindings="changeset.error.username:has-error"
+              placeholder={{t 'username'}}
+              @type="text"
+              @value={{this.changeset.username}}
+              class="input-field"
+              id="jira-username"
+            />
+            <Input
+              classNameBindings="changeset.error.password:has-error"
+              placeholder={{t 'apiKey'}}
+              @type="password"
+              @value={{this.changeset.password}}
+              autocomplete="jira-password"
+              class="input-field"
+              id="jira-password"
+            />
+          </div>
+        </div>
+        <button
+          disabled={{this.integrateJIRAByCred.isRunning}}
+          class="button is-primary mp-jira-integrate"
+          type="button"
+          {{on 'click' this.onIntegrateJIRAByCred}}
+        >
+          {{#if this.integrateJIRAByCred.isRunning}}
+            <div class="fa-font-size">
+              <i class="fa fa-spinner fa-spin"></i>
+            </div>
+          {{/if}}
+          {{t 'integrateJIRA'}}
+        </button>
+      </form>
+    {{/unless}}
+  </div>
+  {{! On-Premise Integration end }}
+  {{! JIRA integrated info container }}
+  {{#if this.isJIRAIntegrated}}
+    <div class="integration integration-jira" data-test-jira-integrated>
+      <div class="integration-logo-container">
+        <img
+          src="/images/jira-icon.png"
+          class="integration-logo"
+          alt="JIRA Icon"
+          data-test-jira-logo
+        />
+      </div>
+      <div class="integration-account-container">
+        <div class="integration-account">
+          <div>
+            <div
+              class="text-lightgray padding-b-q"
+              data-test-jira-integrated-host
+            >
+              {{this.connectedHost}}
+            </div>
+            {{#if this.isIntegratedByCred}}
+              <div class="black-text" data-test-jira-integrated-username>
+                {{this.connectedUsername}}
+              </div>
+            {{/if}}
+          </div>
+          <button
+            class="button is-primary mp-jira-revoke"
+            type="button"
+            data-test-jira-disconnect-btn
+            {{on 'click' this.toggleConfirmBox}}
+          >
+            {{t 'disconnect'}}
+          </button>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+</div>
+{{! Revoke JIRA integration confirmation modal }}
+{{#if this.showRevokeJIRAConfirmBox}}
+  <AkModal
+    @onClose={{this.toggleConfirmBox}}
+    @showHeader={{true}}
+    @headerTitle={{t 'revokeJira'}}
+  >
+    <div
+      local-class="confirm-box-label"
+      data-test-jira-disconnect-confirm-label
+    >
+      {{t 'confirmBox.revokeJira'}}
+    </div>
+    <div local-class="confirm-box-action-btns">
+      <AkButton::PrimaryFilled
+        @onClick={{this.onRevokeJira}}
+        data-test-jira-disconnect-confirm-ok-btn
+      >
+        {{t 'ok'}}
+      </AkButton::PrimaryFilled>
+      <AkButton::NeutralOutlined
+        @onClick={{this.toggleConfirmBox}}
+        data-test-jira-disconnect-confirm-cancel-btn
+      >
+        {{t 'cancel'}}
+      </AkButton::NeutralOutlined>
+    </div>
+  </AkModal>
+{{/if}}
