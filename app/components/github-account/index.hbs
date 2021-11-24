@@ -1,0 +1,77 @@
+<div local-class="title" data-test-github-account-title>
+  {{t 'githubIntegration'}}
+</div>
+{{#if this.integratedUser}}
+  <div local-class="body" data-test-github-account-integrated>
+    <div local-class="integrated-container">
+      <div local-class="github-logo">
+        <img
+          local-class="logo-img"
+          src="/images/github-icon.png"
+          alt="GitHub Icon"
+          data-test-github-account-integrated-github-logo
+        />
+      </div>
+      <div>
+        <div data-test-github-account-integrated-github-url>
+          https://github.com
+        </div>
+        <div data-test-github-account-integrated-user>
+          {{this.integratedUser.login}}
+        </div>
+      </div>
+      <AkButton::PrimaryOutlined
+        @onClick={{this.toggleDisconnectConfirmBox}}
+        data-test-github-account-disconnect-btn
+      >
+        {{t 'disconnect'}}
+      </AkButton::PrimaryOutlined>
+    </div>
+  </div>
+{{else if @reconnect}}
+  <div local-class="description" data-test-github-account-description>
+    {{t 'githubIntegrationReconnectDesc'}}
+  </div>
+  <div local-class="body" data-test-github-account-reconnect>
+    <AkButton::PrimaryOutlined
+      @onClick={{this.onIntegrateGithub}}
+      data-test-github-account-reconnect-btn
+    >
+      {{t 'reconnect'}}
+    </AkButton::PrimaryOutlined>
+  </div>
+{{else}}
+  <div local-class="description" data-test-github-account-description>
+    {{t 'githubIntegrationDesc'}}
+  </div>
+  <div local-class="body" data-test-github-account-integrate>
+    <AkButton::PrimaryOutlined
+      @onClick={{this.onIntegrateGithub}}
+      data-test-github-account-integrate-btn
+    >
+      {{t 'integrateGithub'}}
+    </AkButton::PrimaryOutlined>
+  </div>
+{{/if}}
+{{#if this.isShowDisconnectConfirmBox}}
+  <AkModal
+    @onClose={{this.toggleDisconnectConfirmBox}}
+    @showHeader={{true}}
+    @headerTitle={{t 'revokeGihtubIntegration'}}
+  >
+    <div data-test-github-account-confirm-modal>
+      <AkButton::PrimaryFilled
+        @onClick={{this.onRemoveIntegration}}
+        data-test-github-account-confirm-revoke-btn
+      >
+        {{t 'ok'}}
+      </AkButton::PrimaryFilled>
+      <AkButton::NeutralOutlined
+        @onClick={{this.toggleDisconnectConfirmBox}}
+        data-test-github-account-confirm-cancel-btn
+      >
+        {{t 'cancel'}}
+      </AkButton::NeutralOutlined>
+    </div>
+  </AkModal>
+{{/if}}

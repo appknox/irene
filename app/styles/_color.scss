@@ -9,6 +9,7 @@ body {
   --white: #ffffff;
   --black: #{$black};
   --shade-black-7: #c4c4c4;
+  --shade-black-5: #7b7b7b;
 }
 /*------- static colors end -------*/
 
@@ -62,3 +63,11 @@ body {
 }
 
 /*------- button colors end -------*/
+
+/* Organization settings page colors start */
+body {
+  --organization-setting-title-color: var(--body-text-1);
+  --organization-setting-subtitle-color: var(--body-text-1);
+  --organization-setting-desc-color: var(--shade-black-5);
+}
+/* Organization settings page colors end */

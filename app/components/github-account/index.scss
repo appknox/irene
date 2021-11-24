@@ -1,0 +1,36 @@
+.title {
+  color: var(--organization-setting-title-color);
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.description {
+  font-size: 0.93rem;
+  padding-top: 0.5rem;
+  color: var(--organization-setting-desc-color);
+}
+
+.body {
+  margin-top: 1em;
+}
+
+.integrated-container {
+  display: flex;
+  height: 5em;
+  width: 100%;
+  border: 1px solid #e9e9e9;
+  border-radius: 3px 0px 0px 3px;
+}
+.github-logo {
+  width: 5em;
+  border-right: 1px solid #e9e9e9;
+  height: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-img {
+  width: 2.3em;
+  height: 2.3em;
+}
