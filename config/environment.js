@@ -469,6 +469,11 @@ module.exports = function (environment) {
         module: 'Report',
         product: 'Appknox',
       },
+      integrateJIRACloud: {
+        feature: 'Integrate JIRA Cloud',
+        module: 'Report',
+        product: 'Appknox',
+      },
       changePassword: {
         feature: 'Change Password',
         module: 'Setup',

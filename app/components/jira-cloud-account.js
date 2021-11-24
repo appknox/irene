@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
 import { on } from '@ember/object/evented';
 import { t } from 'ember-intl';
-// import triggerAnalytics from 'irene/utils/trigger-analytics';
+import triggerAnalytics from 'irene/utils/trigger-analytics';
 import { task } from 'ember-concurrency';
 
 const JiraCloudAccountComponent = Component.extend({
@@ -15,7 +15,14 @@ const JiraCloudAccountComponent = Component.extend({
   isRevokingJIRA: false,
   isJIRAConnected: false,
   tJiraWillBeRevoked: t("jiraWillBeRevoked"),
-  tGithubErrorIntegration: t("githubErrorIntegration"),
+  tJiraErrorIntegration: t("jiraErrorIntegration"),
+
+  integrateJiraURL: computed('organization.selected.id', '', function () {
+    return [
+      '/api/organizations',
+      this.get('organization.selected.id'), ENV.endpoints.integrateJira
+    ].join('/')
+  }),
 
   redirectAPI: task(function* () {
     return yield this.get("ajax").request(
@@ -24,20 +31,17 @@ const JiraCloudAccountComponent = Component.extend({
   }),
 
   integrateJiraCloud: task(function* () {
+    triggerAnalytics('feature', ENV.csb.integrateJIRACloud);
     let data = yield this.get('redirectAPI').perform()
     window.location.href = data.url;
   }).evented(),
 
   integrateJiraCloudErrored: on('integrateJiraCloud:errored', function () {
-    this.get("notify").error(this.get('tGithubErrorIntegration'));
+    this.get("notify").error(this.get('tJiraErrorIntegration'));
   }),
 
   removeIntegrationUri: task(function* () {
-    let url = [
-      '/api/organizations',
-      this.get('organization.selected.id'), ENV.endpoints.integrateJira
-    ].join('/')
-    return yield this.get("ajax").delete(url)
+    return yield this.get("ajax").delete(this.get("integrateJiraURL"))
   }),
 
   didInsertElement() {
@@ -47,11 +51,7 @@ const JiraCloudAccountComponent = Component.extend({
 
   checkJIRA: task(function* () {
     try {
-      let url = [
-        '/api/organizations',
-        this.get('organization.selected.id'), ENV.endpoints.integrateJira
-      ].join('/')
-      const data = yield this.get("ajax").request(url);
+      const data = yield this.get("ajax").request(this.get("integrateJiraURL"));
       if (data.type == "jira_cloud_oauth") {
         this.set("isJIRAConnected", true);
       }
