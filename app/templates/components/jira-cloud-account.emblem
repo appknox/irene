@@ -6,7 +6,7 @@ if isJIRAConnected
       .integration-account
         div
           .text-lightgray.padding-b-q
-            | https://jira.com
+            | #{connectedHost}
         button.is-primary.mp-jira-revoke click="openRevokeJIRAConfirmBox"
           = t "disconnect"
 else

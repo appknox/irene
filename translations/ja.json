@@ -356,6 +356,7 @@
   "jaHTMLReport": "JA HTML Report",
   "jenkinsPipeline": "Jenkins Pipeline",
   "jira": "JIRA",
+  "jiraErrorIntegration": "Intergration failed, please contact support",
   "jiraHost": "JIRAホスト",
   "jiraIntegrated": "JIRAと連携されました",
   "jiraIntegration": "JIRA連携",

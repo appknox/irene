@@ -1,5 +1,6 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
 import ENV from 'irene/config/environment';
 import { on } from '@ember/object/evented';
 import { t } from 'ember-intl';
@@ -14,6 +15,7 @@ const JiraCloudAccountComponent = Component.extend({
   organization: service('organization'),
   isRevokingJIRA: false,
   isJIRAConnected: false,
+  connectedHost: null,
   tJiraWillBeRevoked: t("jiraWillBeRevoked"),
   tJiraErrorIntegration: t("jiraErrorIntegration"),
 
@@ -54,6 +56,7 @@ const JiraCloudAccountComponent = Component.extend({
       const data = yield this.get("ajax").request(this.get("integrateJiraURL"));
       if (data.type == "jira_cloud_oauth") {
         this.set("isJIRAConnected", true);
+        this.set("connectedHost", data.connected_hosts)
       }
     } catch (error) {
       if (error.status == 404) {

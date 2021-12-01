@@ -39,10 +39,10 @@ const JiraAccountComponent = Component.extend({
     this.set('changeset', changeset);
   },
   didInsertElement() {
-this._super(...arguments);
+    this._super(...arguments);
     this.get('checkJIRA').perform();
   },
-  baseURL: computed('organization.selected.id', '', function(){
+  baseURL: computed('organization.selected.id', '', function () {
     return [
       '/api/organizations',
       this.get('organization.selected.id'), ENV.endpoints.integrateJira
@@ -52,34 +52,36 @@ this._super(...arguments);
     this.get('revokeJIRA').perform();
   },
 
-  checkJIRA: task(function *() {
+  checkJIRA: task(function* () {
     try {
       const data = yield this.get("ajax").request(this.get('baseURL'));
-      this.set("isJIRAConnected", true);
-      this.set("connectedHost", data.host);
-      this.set("connectedUsername", data.username);
-    } catch(error) {
-      if(error.status == 404) {
+      if (data.type == "jira") {
+        this.set("isJIRAConnected", true);
+        this.set("connectedHost", data.host);
+        this.set("connectedUsername", data.username);
+      }
+    } catch (error) {
+      if (error.status == 404) {
         this.set("isJIRAConnected", false);
       }
     }
   }).drop(),
-  revokeJIRA: task(function*(){
+  revokeJIRA: task(function* () {
     try {
       this.send("closeRevokeJIRAConfirmBox");
       yield this.get("ajax").delete(this.get('baseURL'));
       const tJiraWillBeRevoked = this.get("tJiraWillBeRevoked");
       this.get("notify").success(tJiraWillBeRevoked);
       this.get('checkJIRA').perform();
-    } catch(error) {
+    } catch (error) {
       this.get("notify").error("Sorry something went wrong, please try again");
     }
   }).drop(),
-  integrateJIRA: task(function *(changeset){
+  integrateJIRA: task(function* (changeset) {
     const tJiraIntegrated = this.get("tJiraIntegrated");
     yield changeset.validate()
-    if(!changeset.get('isValid')) {
-      if(changeset.get('errors') && changeset.get('errors')[0].validation) {
+    if (!changeset.get('isValid')) {
+      if (changeset.get('errors') && changeset.get('errors')[0].validation) {
         this.get("notify").error(
           changeset.get('errors')[0].validation[0],
           ENV.notifications
@@ -88,24 +90,24 @@ this._super(...arguments);
       return;
     }
     const host = changeset.get('host').trim();
-    const username =  changeset.get('username').trim();
-    const password =  changeset.get('password');
+    const username = changeset.get('username').trim();
+    const password = changeset.get('password');
     const data = {
       host,
       username,
       password
     };
     try {
-      yield this.get("ajax").post(this.get('baseURL'), {data})
+      yield this.get("ajax").post(this.get('baseURL'), { data })
       this.get('checkJIRA').perform();
       this.get("notify").success(tJiraIntegrated);
-      triggerAnalytics('feature',ENV.csb.integrateJIRA);
-    } catch(error) {
-      if(error.payload) {
-        if(error.payload.host) {
+      triggerAnalytics('feature', ENV.csb.integrateJIRA);
+    } catch (error) {
+      if (error.payload) {
+        if (error.payload.host) {
           this.get("notify").error(error.payload.host[0], ENV.notifications)
         }
-        if(error.payload.username || error.payload.password) {
+        if (error.payload.username || error.payload.password) {
           this.get("notify").error(this.get('tInValidCredentials'))
         }
       }

@@ -114,7 +114,7 @@ const JiraProjectComponent = Component.extend({
           project_key: this.get('selectedRepo.key'),
           project_name: this.get('selectedRepo.name'),
           risk_threshold: this.get('selectedThreshold'),
-          jira_cloud_id: this.get('selectedRepo.jira_cloud_id')
+          jira_cloud_project_hash: this.get('selectedRepo.jira_cloud_project_hash')
         }
       );
     } else {
@@ -126,7 +126,7 @@ const JiraProjectComponent = Component.extend({
         project_name: this.get('selectedRepo.name'),
         risk_threshold: this.get('selectedThreshold'),
         project: this.get('project'),
-        jira_cloud_id: this.get('selectedRepo.jira_cloud_id')
+        jira_cloud_project_hash: this.get('selectedRepo.jira_cloud_project_hash')
       }
       )
     }

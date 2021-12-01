@@ -5,5 +5,5 @@ export default Model.extend({
   project_key: attr("string"),
   project_name: attr("string"),
   risk_threshold: attr('number'),
-  jira_cloud_id: attr("string", { defaultValue: null }),
+  jira_cloud_project_hash: attr("string", { defaultValue: null }),
 });
