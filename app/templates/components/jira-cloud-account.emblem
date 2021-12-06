@@ -22,4 +22,4 @@ else
     = fa-icon "fa-spinner fa-spin"
   = yield
 
-= confirm-box isActive=showRevokeJIRAConfirmBox title=(t 'confirmBox.revokeJira') delegate=this disabled=isRevokingJIRA
+= confirm-box isActive=showRevokeJIRAConfirmBox title=(t 'confirmBox.removeIntegration') delegate=this disabled=isRevokingJIRA
