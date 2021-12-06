@@ -13,6 +13,7 @@ const possibleENVS = [
   'WHITELABEL_LOGO',
   'WHITELABEL_THEME',
   'WHITELABEL_FAVICON',
+  'IRENE_SHOW_JIRA_CLOUD'
 ];
 
 const ENVHandlerCONST = {
@@ -31,6 +32,7 @@ const ENVHandlerCONST = {
     WHITELABEL_NAME: '',
     WHITELABEL_LOGO: '',
     WHITELABEL_THEME: 'dark',
+    IRENE_SHOW_JIRA_CLOUD: false
   },
 
   processENV: Object.keys(process.env).reduce((acc, key) => {
@@ -144,6 +146,7 @@ module.exports = function (environment) {
   var devicefarmHost = handler.getEnv('IRENE_DEVICEFARM_HOST');
   var isEnterprise = handler.getBoolean('ENTERPRISE');
   var showLicense = handler.getBoolean('IRENE_SHOW_LICENSE');
+  var showJiraCloud = handler.getBoolean('IRENE_SHOW_JIRA_CLOUD');
   var ENV = {
     ENVHandlerCONST: ENVHandlerCONST,
     version: Date.now(),
@@ -151,6 +154,7 @@ module.exports = function (environment) {
     isAppknox: false,
     isEnterprise: isEnterprise,
     showLicense: showLicense,
+    showJiraCloud: showJiraCloud,
     exportApplicationGlobal: true,
     devknoxPrice: 9, // This should also change in `mycroft/settings.py`
     platform: -1,

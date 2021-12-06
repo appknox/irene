@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import ENV from 'irene/config/environment';
 
 export default class AuthenticatedOrganizationSettingsRoute extends Route {
   @service me;
@@ -12,6 +13,7 @@ export default class AuthenticatedOrganizationSettingsRoute extends Route {
     )}/github`;
     let integratedUser = null;
     let reconnect = null;
+    let showJiraCloud = ENV.showJiraCloud;
     try {
       let data = await this.get('ajax').request(url);
       if (data) {
@@ -29,6 +31,7 @@ export default class AuthenticatedOrganizationSettingsRoute extends Route {
       user: await this.modelFor('authenticated'),
       organization: await this.get('organization.selected'),
       me: this.me,
+      showJiraCloud: showJiraCloud,
     };
   }
 }
