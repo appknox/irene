@@ -56,7 +56,7 @@ const JiraCloudAccountComponent = Component.extend({
       const data = yield this.get("ajax").request(this.get("integrateJiraURL"));
       if (data.type == "jira_cloud_oauth") {
         this.set("isJIRAConnected", true);
-        this.set("connectedHost", data.connected_hosts)
+        this.set("connectedHost", data.accounts)
       }
     } catch (error) {
       if (error.status == 404) {
@@ -67,6 +67,7 @@ const JiraCloudAccountComponent = Component.extend({
 
   removeIntegration: task(function* () {
     yield this.get('removeIntegrationUri').perform()
+    this.get('checkJIRA').perform();
   }).evented(),
 
   removeIntegrationErrored: on('removeIntegration:errored', function (_, err) {

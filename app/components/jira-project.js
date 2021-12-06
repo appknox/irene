@@ -51,7 +51,8 @@ const JiraProjectComponent = Component.extend({
     this.set('currentJiraProject', instance.value)
     this.set('selectedRepo', {
       key: instance.value.get('project_key'),
-      name: instance.value.get('project_name')
+      name: instance.value.get('project_name'),
+      jira_cloud_project_hash: instance.value.get('jira_cloud_project_hash')
     })
   }),
 
