@@ -32,7 +32,7 @@ const ENVHandlerCONST = {
     WHITELABEL_NAME: '',
     WHITELABEL_LOGO: '',
     WHITELABEL_THEME: 'dark',
-    IRENE_SHOW_JIRA_CLOUD: false
+    IRENE_SHOW_JIRA_CLOUD: true
   },
 
   processENV: Object.keys(process.env).reduce((acc, key) => {
