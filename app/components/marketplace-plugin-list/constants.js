@@ -13,7 +13,7 @@ $ export APPKNOX_ACCESS_TOKEN=&lt;personal access token&gt;
       <li class="margin-b-1">
         Download the appknox binary:<br>
 <pre class="code-block">
-$ curl -L https://github.com/appknox/appknox-go/releases/download/1.2.0/appknox-\`uname -s\`-x86_64 &gt; /usr/local/bin/appknox && chmod +x /usr/local/bin/appknox
+$ curl -L https://github.com/appknox/appknox-go/releases/latest/download/appknox-\`uname -s\`-x86_64 &gt; /usr/local/bin/appknox && chmod +x /usr/local/bin/appknox
 </pre>
       </li>
       <li class="margin-b-1">
@@ -35,8 +35,9 @@ $ appknox upload &lt;path to apk/ipa file&gt; | xargs appknox cicheck --risk-thr
 </pre>
       </li>
     </ul>
+    <div class="margin-b-1">For more configuration options: <a href="https://github.com/appknox/appknox-go" target="_blank">github.com/appknox-go</a></div>
   `,
-  appCenterInstructions:`
+  appCenterInstructions: `
     <ol class="margin-r-1 margin-l-1h">
       <li class="margin-b-1">
         Generate a personal access token from <a href="/settings/developersettings" target="_blank">Developer Settings</a>
@@ -47,7 +48,7 @@ $ appknox upload &lt;path to apk/ipa file&gt; | xargs appknox cicheck --risk-thr
   if [ "$AGENT_JOBSTATUS" == "Succeeded" ]; then
     if [ "$APPCENTER_BRANCH" == "master" ];
       then
-          curl -L https://github.com/appknox/appknox-go/releases/download/1.1.0/appknox-\`uname -s\`-x86_64 > appknox && chmod +x appknox
+          curl -L https://github.com/appknox/appknox-go/releases/latest/download/appknox-\`uname -s\`-x86_64 > appknox && chmod +x appknox
           ./appknox upload $APPCENTER_OUTPUT_DIRECTORY/&lt;binary_file_name&gt;
           rm appknox
     else
@@ -67,7 +68,7 @@ $ appknox upload &lt;path to apk/ipa file&gt; | xargs appknox cicheck --risk-thr
       </li>
     </ol>
   `,
-  bitriseInstructions:`
+  bitriseInstructions: `
     <ol class="margin-r-1 margin-l-1h">
       <li class="margin-b-1">
         Generate a personal access token from <a href="/settings/developersettings" target="_blank">Developer Settings</a>
@@ -90,7 +91,7 @@ $ appknox upload &lt;path to apk/ipa file&gt; | xargs appknox cicheck --risk-thr
       set -ex
 
       # upload to appknox
-      curl -L https://github.com/appknox/appknox-go/releases/download/1.1.2/appknox-\`uname -s\`-x86_64 > appknox && chmod +x appknox
+      curl -L https://github.com/appknox/appknox-go/releases/latest/download/appknox-\`uname -s\`-x86_64 > appknox && chmod +x appknox
       ./appknox upload $BITRISE_IPA_PATH
       rm ./appknox
 </pre>
@@ -106,4 +107,4 @@ $ appknox upload &lt;path to apk/ipa file&gt; | xargs appknox cicheck --risk-thr
 </pre>
     </div>
   `,
-}
+};
