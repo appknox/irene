@@ -1,21 +1,19 @@
-FROM node:14.13.1-stretch AS builder
+FROM node:16.13.1-stretch AS builder
 
 LABEL maintainer "Appknox <engineering@appknox.com>"
 
 WORKDIR /code/
-
 COPY package*.json ./
-
 RUN npm ci
-
 COPY . ./
-
 RUN npm run deploy:server
 
 
-FROM node:14.13.1-alpine
+FROM node:16.13.1-alpine
 
 LABEL maintainer "Appknox <engineering@appknox.com>"
+
+EXPOSE 4200
 
 RUN mkdir /app && chown node -R /app
 USER node
