@@ -35,7 +35,7 @@ jobs:
             {
               attachments: [{
                 color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `Docker image creation ${{ job.status }}: ghcr.io/appknox/magnussen:${{ steps.docker_tag.outputs.docker_tag }}`,
+                text: `Docker image creation ${{ job.status }}: ghcr.io/appknox/irene:${{ steps.docker_tag.outputs.docker_tag }}`,
               }]
             }
         env:
