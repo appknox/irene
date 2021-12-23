@@ -1,28 +1,23 @@
 <table>
   <thead>
     <tr>
-      <td colspan="2" local-class="table-data" data-test-copy-password-label>
-        {{t "reportPassword"}}
+      <td colspan="2" local-class="table-data" data-test-copy-password-title>
+        {{t 'reportPassword'}}
       </td>
     </tr>
   </thead>
   <tbody>
     <tr
       class="copy-password"
-      data-clipboard-target="#copy-password"
-      data-test-copy-password-clipboard-target
+      data-clipboard-text="{{@pdfPassword}}"
+      data-test-copy-password-clipboard-value
     >
-      <td
-        id="copy-password"
-        value="pdfPassword"
-        local-class="table-data"
-        data-test-copy-password-value
-      >
+      <td local-class="table-data" data-test-copy-password-value>
         {{@pdfPassword}}
       </td>
-      <td local-class="table-data" data-test-copy-password-text>
-        {{fa-icon "clipboard copy-icon"}}
-        {{t "copy"}}
+      <td local-class="table-data" data-test-copy-password-label>
+        {{fa-icon 'clipboard copy-icon'}}
+        {{t 'copy'}}
       </td>
     </tr>
   </tbody>

@@ -15,15 +15,18 @@ module('Integration | Component | copy-password', function (hooks) {
     this.set('pdfPassword', 'dYJaLeARhX8E4XiC');
     await render(hbs`<CopyPassword  @pdfPassword={{this.pdfPassword}}/>`);
     assert
-      .dom(`[data-test-copy-password-label]`)
+      .dom(`[data-test-copy-password-title]`)
       .hasText(`t:reportPassword:()`);
 
     assert.dom(`[data-test-copy-password-value]`).hasText(this.pdfPassword);
 
-    assert.dom(`[data-test-copy-password-text]`).hasText(`t:copy:()`);
+    assert.dom(`[data-test-copy-password-label]`).hasText(`t:copy:()`);
 
     assert
-      .dom(`[data-test-copy-password-clipboard-target]`)
-      .hasAttribute('data-clipboard-target', '#copy-password');
+      .dom(`[data-test-copy-password-clipboard-value]`)
+      .hasAttribute('data-clipboard-text', this.pdfPassword);
+    assert
+      .dom(`[data-test-copy-password-clipboard-value]`)
+      .hasAttribute('class', 'copy-password');
   });
 });
