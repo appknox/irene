@@ -1,21 +1,25 @@
 {
   "name": "irene-server",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "license": "MIT",
   "author": "Appknox",
   "description": "Appknox Dashboard wrapper server",
   "main": "index.js",
   "scripts": {
+    "serve": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
-    "node": ">= 14.*"
+    "node": ">= 16.*"
   },
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.2",
     "express-static-gzip": "^2.0.8",
     "morgan": "^1.10.0",
-    "serve-static": "^1.14.1"
+    "serve-static": "^1.14.2"
+  },
+  "volta": {
+    "node": "16.13.1"
   }
 }
