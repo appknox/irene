@@ -101,6 +101,12 @@ if isLoaded
                 if isSecurityEnabled
                   a href="/security/projects" target="_blank" class="button security-link"
                     | Security Dashboard
+
+                if showKnowledgeBase
+                  a click="onOpenKnowledgeBase"
+                    = fa-icon "book" class="sidebar-icons"
+                    | Knowledge Base
+
                 a click="openChatBox"
                   = fa-icon "support" class="sidebar-icons"
                   = t "support"

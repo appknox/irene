@@ -1,6 +1,7 @@
 import { inject as service } from '@ember/service';
 import Service from '@ember/service';
 import ENV from 'irene/config/environment';
+import { injectDocument360 } from 'irene/utils/knowledge-base';
 
 export default class IntegrationService extends Service {
   @service configuration;
@@ -22,15 +23,24 @@ export default class IntegrationService extends Service {
     await this.configuration.getIntegrationConfig();
     this.currentUser = user;
     await this.configureCrisp();
+    await this.configureDocument360();
   }
 
   // Crisp
   async configureCrisp() {
     if (!this.isCrispEnabled()) {
-      this.logger.debug('Crisp disabled');
+      this.logger.debug('Crisp Disabled');
       return;
     }
     await this.installCrisp();
+  }
+
+  async configureDocument360() {
+    if (!this.isDocument360Enabled()) {
+      this.logger.debug('Document360 Disabled');
+      return;
+    }
+    await injectDocument360(this.document360Key);
   }
 
   isCrispEnabled() {
@@ -38,8 +48,16 @@ export default class IntegrationService extends Service {
     return !!token;
   }
 
+  isDocument360Enabled() {
+    return !!this.document360Key;
+  }
+
   get crispToken() {
     return this.configuration.integrationData.crisp_key;
+  }
+
+  get document360Key() {
+    return this.configuration.integrationData.document360_key;
   }
 
   // get the snippet code from https://app.crisp.chat/settings/website/
