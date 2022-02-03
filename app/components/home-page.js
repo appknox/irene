@@ -7,6 +7,7 @@ import { inject as service } from '@ember/service';
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { getOwner } from '@ember/application';
+import { openKnowledgeBasePanel } from 'irene/utils/knowledge-base';
 import ENV from 'irene/config/environment';
 
 export default Component.extend({
@@ -22,6 +23,9 @@ export default Component.extend({
   isSecurityDashboard: false,
   showMarketplace: ENV.enableMarketplace,
   productVersion: ENV.productVersion,
+  showKnowledgeBase: computed(function () {
+    return this.integration.isDocument360Enabled();
+  }),
   enablePendo: computed(function () {
     return this.integration.isPendoEnabled();
   }),
@@ -129,6 +133,10 @@ export default Component.extend({
 
     openChatBox() {
       chat.openChatBox();
+    },
+
+    onOpenKnowledgeBase() {
+      openKnowledgeBasePanel();
     },
   },
 });
