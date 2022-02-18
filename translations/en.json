@@ -509,7 +509,7 @@
       "title": "Please enter organization name"
     }
   },
-  "month": "Month",
+  "month": "{numYears, plural, =0 {0 Month} =1 {1 Month} other {# Months}}",
   "monthly": "Monthly",
   "moreDetails": "more details",
   "mostRecent": " (Most Recent First)",
@@ -890,7 +890,7 @@
   "welcome": "Welcome ",
   "worsened": "Worsened",
   "xmlMetadata": "XML Metadata",
-  "year": "Year",
+  "year": "{numYears, plural, =0 {0 Year} =1 {1 Year} other {# Years}}",
   "yearly": "Yearly",
   "yes": "Yes",
   "youCanCreateTeam": "you can create a new team by",

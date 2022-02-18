@@ -29,6 +29,28 @@ const Subscription = Model.extend({
   tTrialWillBeConverted: t('trialWillBeConverted'),
   tSubscriptionWillExpireOn: t('subscriptionWillExpireOn'),
 
+  billingPeriodText: computed(
+    'billingPeriod',
+    'billingPeriodUnit',
+    function () {
+      const intl = this.get('intl');
+      const num = this.get('billingPeriod');
+      const unit = this.get('billingPeriodUnit');
+      const lcaseunit = (unit || '').toLowerCase();
+      if (lcaseunit == 'year') {
+        return intl.t('year', {
+          numYears: num,
+        });
+      }
+      if (lcaseunit == 'month') {
+        return intl.t('month', {
+          numYears: num,
+        });
+      }
+      return unit;
+    }
+  ),
+
   subscriptionText: computed(
     'isCancelled',
     'isTrial',
