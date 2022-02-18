@@ -13,7 +13,7 @@
         td.td-heading
            = t "billingPeriod"
         td
-           | #{subscription.billingPeriod} #{subscription.billingPeriodUnit}
+           | #{subscription.billingPeriodText}
       tr
         td colspan="2"
           | #{subscription.subscriptionText} #{subscription.expiryDateOnHumanized}
@@ -22,4 +22,4 @@
               = fa-icon "times" class="font-size-18"
               | &nbsp; #{ t "cancelSubsciption"}
 
-= confirm-box isActive=showCancelSubscriptionConfirmBox title=(t 'confirmBox.cancelSubsciption') delegate=this disabled=isCancellingSubscription 
+= confirm-box isActive=showCancelSubscriptionConfirmBox title=(t 'confirmBox.cancelSubsciption') delegate=this disabled=isCancellingSubscription

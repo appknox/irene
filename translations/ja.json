@@ -509,7 +509,7 @@
       "title": "Please enter organization name"
     }
   },
-  "month": "月",
+  "month": "{numYears, plural, =0 {0月} =1 {1月} other {#月}}",
   "monthly": "１か月",
   "moreDetails": "more details",
   "mostRecent": " (新しい順)",
@@ -890,7 +890,7 @@
   "welcome": "ようこそ",
   "worsened": "悪化",
   "xmlMetadata": "XML Metadata",
-  "year": "年",
+  "year": "{numYears, plural, =0 {0年} =1 {1年} other {#年}}",
   "yearly": "１年",
   "yes": "はい",
   "youCanCreateTeam": "you can create a new team by",
