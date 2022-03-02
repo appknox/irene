@@ -1143,6 +1143,21 @@ div[class^="_c-notification__container"]
     z-index: 1
     overflow: visible
 
+.hide-overflow.package-name
+  &:hover
+    z-index: 1
+    overflow: hidden
+
+@media screen and (min-width: 1380px)
+  .hide-overflow.package-name
+    max-width: 250px
+
+@media screen and (max-width: 1380px)
+  .hide-overflow.package-name
+    max-width: 200px
+
+
+
 .wrap-text
   word-break: break-word
 

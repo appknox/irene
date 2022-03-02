@@ -10,7 +10,7 @@ header.card-header
               = file.name
             .column.is-one-sixth.fixed-icon
               = fa-icon file.project.platformIconClass class="card-icon"
-      li.hide-overflow
+      li.hide-overflow.package-name title=file.project.packageName
         | #{file.project.packageName}
       li.hide-overflow.font-small.text-lightgray
         if file.version
