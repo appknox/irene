@@ -44,7 +44,7 @@ const Subscription = Model.extend({
       }
       if (lcaseunit == 'month') {
         return intl.t('month', {
-          numYears: num,
+          numMonths: num,
         });
       }
       return unit;
