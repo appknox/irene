@@ -509,7 +509,7 @@
       "title": "Please enter organization name"
     }
   },
-  "month": "{numYears, plural, =0 {0月} =1 {1月} other {#月}}",
+  "month": "{numMonths, plural, =0 {0月} =1 {1月} other {#月}}",
   "monthly": "１か月",
   "moreDetails": "more details",
   "mostRecent": " (新しい順)",
