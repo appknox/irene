@@ -71,7 +71,11 @@ module(
       await this.owner.lookup('service:partner').load();
       await render(hbs`<Partner::ClientUploadsStatChart/>`);
 
-      const filterOptions = [{ key: 'day' }, { key: 'week' }, { key: 'month' }];
+      const filterOptions = [
+        { key: 'day', value: '' },
+        { key: 'week', value: '' },
+        { key: 'month', value: '"numMonths":1' },
+      ];
 
       assert.equal(
         this.element.querySelectorAll(
@@ -84,7 +88,7 @@ module(
       filterOptions.forEach((option, seq) => {
         assert
           .dom(`[data-test-chart='filter-btns-${seq}']`)
-          .hasText(`t:${option.key}:()`);
+          .hasText(`t:${option.key}:(${option.value})`);
       });
 
       assert
