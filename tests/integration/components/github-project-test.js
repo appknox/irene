@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
-import { hbs } from 'ember-cli-htmlbars';
+// import { render } from '@ember/test-helpers';
+// import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Component | github-project', function (hooks) {
   setupRenderingTest(hooks);
@@ -10,7 +10,7 @@ module('Integration | Component | github-project', function (hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`<GithubProject />`);
+    // await render(hbs`<GithubProject />`);
     assert.true(true);
 
     // assert.equal(this.element.textContent.trim(), '');
