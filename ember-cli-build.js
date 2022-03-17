@@ -2,32 +2,35 @@
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 var environment = EmberApp.env();
-var minifyEnabled = environment === "production" || environment === "staging";
+var minifyEnabled = environment === 'production' || environment === 'staging';
 
 module.exports = function (defaults) {
   let app = new EmberApp(defaults, {
     // Add options here
     storeConfigInMeta: false,
     babel: {
-      sourceMaps: 'inline'
+      sourceMaps: 'inline',
     },
     minifyJS: {
       options: {
-        exclude: ['runtimeconfig.js']
-      }
+        exclude: ['runtimeconfig.js'],
+      },
     },
     fingerprint: {
-      exclude: ['runtimeconfig.js']
+      exclude: ['runtimeconfig.js'],
     },
     sassOptions: {
       includePaths: [
-        'node_modules',
+        'node_modules/bohemia',
+        'node_modules/billboard.js/dist/',
+        'node_modules/pikaday/css/',
       ],
-      implementation: require("node-sass"),
-      extension: 'sass'
+      // onlyIncluded: true,
+      implementation: require('node-sass'),
+      extension: 'sass',
     },
     cssModules: {
-      intermediateOutputPath: 'app/styles/_modules.scss'
+      intermediateOutputPath: 'app/styles/_modules.scss',
     },
     dotEnv: {
       clientAllowedKeys: ['AWS_BUCKET', 'AWS_REGION', 'WEBHOOK_URL'],
@@ -36,15 +39,15 @@ module.exports = function (defaults) {
         test: '.env.staging',
         production: '.env',
         staging: '.env.staging',
-        whitelabel: '.env'
-      }
+        whitelabel: '.env',
+      },
     },
     sourcemaps: {
-      enabled: true
+      enabled: true,
     },
     'ember-date-components': {
-      'includeCSS': false
-    }
+      includeCSS: false,
+    },
   });
 
   // Custom hacks to get a similar build in staging and production
