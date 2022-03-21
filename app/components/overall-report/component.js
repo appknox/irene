@@ -59,7 +59,9 @@ class ChartData {
         const years = [];
         const startYear = this.months[0].getFullYear();
         const endYear = this.months[this.months.length - 1].getFullYear();
-        for (let i = startYear; i <= endYear; i++) years.push(i);
+        for (let i = startYear; i <= endYear; i++) {
+          years.push(i);
+        }
         this.years = years;
         this.showYearlyData = true;
         return ['x', ...years];

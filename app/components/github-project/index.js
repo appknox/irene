@@ -117,8 +117,9 @@ export default class GithubProjectComponent extends Component {
       if (
         err.errors[0].detail &&
         err.errors[0].detail === 'No connected repository'
-      )
+      ) {
         return;
+      }
 
       this.notifications.error(this.tFailedGitHubProject);
     }
