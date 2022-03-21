@@ -108,20 +108,20 @@
               </div>
               <div class='columns'>
                 <div class='column'>
-                  {{#power-select
-                    searchEnabled=true
-                    searchField='name'
-                    dropdownClass='power-select-custom-repo'
-                    searchPlaceholder='Type repository name'
-                    placeholder='Select Repo'
-                    selected=this.selectedRepo
-                    renderInPlace=true
-                    options=this.githubRepos
-                    onchange=this.selectRepo
+                  <PowerSelect
+                    @searchEnabled={{true}}
+                    @searchField='name'
+                    @dropdownClass='power-select-custom-repo'
+                    @searchPlaceholder='Type repository name'
+                    @placeholder='Select Repo'
+                    @selected={{this.selectedRepo}}
+                    @renderInPlace={{true}}
+                    @options={{this.githubRepos}}
+                    @onchange={{this.selectRepo}}
                     as |repo|
-                  }}
+                  >
                     {{repo.full_name}}
-                  {{/power-select}}
+                  </PowerSelect>
                 </div>
               </div>
               <div class='columns'>
@@ -133,19 +133,19 @@
               </div>
               <div class='columns'>
                 <div class='column'>
-                  {{#power-select
-                    class='power-select-custom-width'
-                    dropdownClass='power-select-custom-threshold'
-                    searchEnabled=false
-                    placeholder='Select Repo'
-                    selected=this.selectedThreshold
-                    renderInPlace=true
-                    options=this.thresholds
-                    onchange=this.selectThreshold
+                  <PowerSelect
+                    @class='power-select-custom-width'
+                    @dropdownClass='power-select-custom-threshold'
+                    @searchEnabled={{false}}
+                    @placeholder='Select Repo'
+                    @selected={{this.selectedThreshold}}
+                    @renderInPlace={{true}}
+                    @options={{this.thresholds}}
+                    @onchange={{this.selectThreshold}}
                     as |threshold|
-                  }}
+                  >
                     {{threshold-status threshold}}
-                  {{/power-select}}
+                  </PowerSelect>
                 </div>
               </div>
             {{/if}}
