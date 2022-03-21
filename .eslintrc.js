@@ -11,40 +11,28 @@ module.exports = {
     },
   },
   plugins: ['ember'],
-  extends: ['eslint:recommended', 'plugin:ember/recommended'],
+  extends: [
+    'eslint:recommended',
+    'plugin:ember/recommended',
+    'plugin:prettier/recommended',
+  ],
   env: {
     browser: true,
   },
-  rules: {
-    'ember/avoid-leaking-state-in-ember-objects': 0,
-    'ember/no-observers': 0,
-    'ember/no-new-mixins': 0,
-    'ember/require-return-from-computed': 0,
-    'ember/no-get': 0,
-    'ember/no-jquery': 0,
-    'ember/no-mixins': 0,
-    'ember/no-classic-classes': 0,
-    'ember/no-classic-components': 0,
-    'ember/classic-decorator-no-classic-methods': 0,
-    'ember/require-tagless-components': 0,
-    'ember/no-computed-properties-in-native-classes': 0,
-    'ember/no-actions-hash': 0,
-    'ember/no-side-effects': 0,
-    'ember/no-component-lifecycle-hooks': 0,
-  },
+  rules: {},
   overrides: [
     // node files
     {
       files: [
-        '.eslintrc.js',
-        '.prettierrc.js',
-        '.template-lintrc.js',
-        'ember-cli-build.js',
-        'testem.js',
-        'blueprints/*/index.js',
-        'config/**/*.js',
-        'lib/*/index.js',
-        'server/**/*.js',
+        './.eslintrc.js',
+        './.prettierrc.js',
+        './.template-lintrc.js',
+        './ember-cli-build.js',
+        './testem.js',
+        './blueprints/*/index.js',
+        './config/**/*.js',
+        './lib/*/index.js',
+        './server/**/*.js',
       ],
       parserOptions: {
         sourceType: 'script',
@@ -78,6 +66,11 @@ module.exports = {
         'node/no-unpublished-require': 'off',
         'node/no-missing-require': 'off',
       },
+    },
+    {
+      // test files
+      files: ['tests/**/*-test.{js,ts}'],
+      extends: ['plugin:qunit/recommended'],
     },
   ],
 };
