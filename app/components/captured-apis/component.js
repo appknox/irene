@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-components, ember/no-mixins, ember/no-classic-classes, ember/require-tagless-components, ember/avoid-leaking-state-in-ember-objects, prettier/prettier, ember/no-get, ember/no-observers, ember/no-component-lifecycle-hooks */
 import Component from '@ember/component';
 import { computed, observer } from '@ember/object';
 import { task } from 'ember-concurrency';

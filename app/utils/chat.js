@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export function setUserEmail(email, hash) {
   if (crispExists()) {
     window.$crisp.push(['do', 'chat:show']);

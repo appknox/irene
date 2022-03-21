@@ -1,3 +1,4 @@
+/* eslint-disable qunit/no-commented-tests, prettier/prettier */
 // import tHelper from 'ember-intl/helpers/t';
 // import { module, test } from 'qunit';
 // import { setupTest } from 'ember-qunit';

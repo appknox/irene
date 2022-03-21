@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-mixins, ember/no-classic-classes, ember/no-get, ember/avoid-leaking-state-in-ember-objects */
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import Model, { attr, hasMany, belongsTo } from '@ember-data/model';

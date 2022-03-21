@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, qunit/no-assert-equal, qunit/no-assert-equal-boolean */
 import { module, test } from 'qunit';
 import { isEqualTo } from 'irene/helpers/is-equal';
 

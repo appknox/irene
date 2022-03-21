@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-mixins, prettier/prettier, ember/no-new-mixins, ember/no-get */
 import ENV from 'irene/config/environment';
 import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
 import Mixin from '@ember/object/mixin';

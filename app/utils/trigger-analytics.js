@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { debug } from '@ember/debug';
 import ENV from 'irene/config/environment';
 

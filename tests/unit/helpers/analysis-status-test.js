@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, qunit/no-assert-equal */
 
 import { analysisStatus } from 'irene/helpers/analysis-status';
 import { module, test } from 'qunit';

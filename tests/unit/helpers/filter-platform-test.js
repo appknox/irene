@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, qunit/no-assert-equal */
 import { module, test } from 'qunit';
 import { filterPlatform, filterPlatformValues } from 'irene/helpers/filter-platform';
 

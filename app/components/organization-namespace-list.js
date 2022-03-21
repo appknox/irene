@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-mixins, ember/no-classic-components, ember/no-classic-classes, ember/require-tagless-components, ember/avoid-leaking-state-in-ember-objects, prettier/prettier */
 import PaginateMixin from 'irene/mixins/paginate';
 import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';

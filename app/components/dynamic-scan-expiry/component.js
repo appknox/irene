@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-computed-properties-in-native-classes, prettier/prettier, ember/no-observers */
 import Component from '@glimmer/component';
 import {
   computed,

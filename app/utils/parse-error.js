@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 const parseError = function(err, defaultMessage) {
   let errMsg = defaultMessage || '';
   if (err.errors && err.errors.length) {

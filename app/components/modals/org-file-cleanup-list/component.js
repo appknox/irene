@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, ember/no-mixins */
 import Component from '@glimmer/component';
 import {
   tracked

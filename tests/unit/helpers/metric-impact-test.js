@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 
 import { metricImpact } from 'irene/helpers/metric-impact';
 import { module, test } from 'qunit';

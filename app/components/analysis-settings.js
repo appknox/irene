@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-components, ember/no-classic-classes, ember/require-tagless-components, prettier/prettier, ember/no-get, ember/no-actions-hash, ember/no-jquery */
 import ENV from 'irene/config/environment';
 import { t } from 'ember-intl';
 import Component from '@ember/component';

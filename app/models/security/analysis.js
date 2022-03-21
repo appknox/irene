@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-classes, ember/no-get */
 import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 import ENUMS from 'irene/enums';
 import { computed } from '@ember/object';

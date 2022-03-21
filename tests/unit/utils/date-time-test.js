@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { module, test } from 'qunit';
 
 module('Unit | Utility | date time', function() {

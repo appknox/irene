@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-components, ember/no-classic-classes, ember/require-tagless-components, prettier/prettier, ember/no-component-lifecycle-hooks, ember/no-get, ember/no-jquery */
 import $ from 'jquery';
 import Component from '@ember/component';
 import { computed } from '@ember/object';

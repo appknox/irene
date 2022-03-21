@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, ember/no-classic-classes, ember/require-return-from-computed, ember/no-get */
 import { computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import Model, { attr }  from '@ember-data/model';

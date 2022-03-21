@@ -1,3 +1,4 @@
+/* eslint-disable qunit/no-commented-tests */
 //
 // import { thresholdStatus } from 'irene/helpers/threshold-status';
 // import { module, test } from 'qunit';

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, ember/avoid-leaking-state-in-ember-objects */
 import {
   Factory
 } from 'ember-cli-mirage';

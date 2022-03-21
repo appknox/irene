@@ -1,3 +1,4 @@
+/* eslint-disable qunit/require-expect, qunit/no-assert-equal */
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { run } from '@ember/runloop';

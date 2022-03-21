@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import Service from '@ember/service';
 import { debug } from '@ember/debug';
 import { inject as service } from '@ember/service';

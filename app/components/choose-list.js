@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, ember/no-get */
 import { computed } from '@ember/object';
 import FileListComponent from 'irene/components/file-list';
 

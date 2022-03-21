@@ -1,3 +1,4 @@
+/* eslint-disable qunit/no-commented-tests */
 // import {
 //   module,
 //   test

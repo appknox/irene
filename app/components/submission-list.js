@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-components, ember/no-classic-classes, ember/require-tagless-components, prettier/prettier, ember/no-get, ember/no-observers, ember/avoid-leaking-state-in-ember-objects */
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { observer } from '@ember/object';

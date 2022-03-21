@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-classes, ember/avoid-leaking-state-in-ember-objects, ember/no-get */
 import Service from '@ember/service';
 import ENV from 'irene/config/environment';
 import { inject as service } from '@ember/service';

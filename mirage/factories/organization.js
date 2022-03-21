@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import faker from 'faker';
 import Base from './base';
 

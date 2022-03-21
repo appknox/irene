@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { helper } from '@ember/component/helper';
 
 const fileExtension = params => {

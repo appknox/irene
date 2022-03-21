@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, qunit/no-assert-equal */
 
 import { requestToUrl } from 'irene/helpers/request-to-url';
 import { module, test } from 'qunit';

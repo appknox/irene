@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-mixins, ember/no-classic-classes */
 import JSONAPIAdapter from '@ember-data/adapter/json-api';
 import ENV from 'irene/config/environment';
 import IreneAdapterMixin from 'irene/mixins/data-adapter-mixin';

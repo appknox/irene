@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import dayjs from "dayjs";
 import faker from "faker";
 import { Factory } from "ember-cli-mirage";

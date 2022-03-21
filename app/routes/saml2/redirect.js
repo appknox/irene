@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-classes, prettier/prettier, ember/no-get */
 import config from 'irene/config/environment';
 import Route from '@ember/routing/route';
 import ENV from 'irene/config/environment';

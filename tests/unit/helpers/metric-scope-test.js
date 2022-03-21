@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 
 import { metricScope } from 'irene/helpers/metric-scope';
 import { module, test } from 'qunit';

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, qunit/no-early-return */
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 

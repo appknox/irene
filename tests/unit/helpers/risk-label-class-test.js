@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, qunit/no-assert-equal */
 
 import { riskLabelClass } from 'irene/helpers/risk-label-class';
 import { module, test } from 'qunit';

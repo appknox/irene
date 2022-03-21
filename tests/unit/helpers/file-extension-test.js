@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, qunit/no-early-return, qunit/no-assert-equal */
 import { fileExtension } from 'irene/helpers/file-extension';
 import { module, test } from 'qunit';
 

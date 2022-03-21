@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-components, ember/no-classic-classes, ember/require-tagless-components, ember/no-actions-hash, ember/no-get, prettier/prettier */
 import Component from '@ember/component';
 import { isEmpty } from '@ember/utils';
 import ENV from 'irene/config/environment';

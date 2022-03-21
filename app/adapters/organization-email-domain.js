@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import commondrf from './commondrf';
 
 export default class OrganizationEmailDomainAdapter extends commondrf {

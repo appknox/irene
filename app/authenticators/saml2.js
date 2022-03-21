@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, ember/no-get */
 import IreneAuth from './irene';
 import ENV from 'irene/config/environment';
 import { Promise } from 'rsvp';

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, qunit/no-assert-equal */
 
 import { manualScanStatus } from 'irene/helpers/manual-scan-status';
 import { module, test } from 'qunit';

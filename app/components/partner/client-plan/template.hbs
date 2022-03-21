@@ -1,3 +1,4 @@
+{{! template-lint-disable no-curly-component-invocation }}
 {{#if this.partner.access.view_plans}}
   <div ...attributes {{did-insert (perform this.getClientPlan)}}>
     {{#if this.getClientPlan.isRunning}}

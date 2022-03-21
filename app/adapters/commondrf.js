@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-mixins, ember/no-get */
 import DRFAdapter from 'ember-django-adapter/adapters/drf';
 import ENV from 'irene/config/environment';
 import IreneAdapterMixin from 'irene/mixins/data-adapter-mixin';

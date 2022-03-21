@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-mixins, prettier/prettier, ember/no-get, ember/classic-decorator-no-classic-methods */
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { ScrollTopMixin } from '../../mixins/scroll-top';

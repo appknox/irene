@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-classes, ember/no-get */
 import { computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import Model, { attr, hasMany, belongsTo } from '@ember-data/model';

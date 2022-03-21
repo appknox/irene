@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-new-mixins, prettier/prettier, ember/no-get */
 import { belongsTo } from '@ember-data/model';
 import { attr } from '@ember-data/model';
 import Mixin from '@ember/object/mixin';

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import ENV from 'irene/config/environment';
 import Route from '@ember/routing/route';
 

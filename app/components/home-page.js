@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-components, ember/no-classic-classes, ember/require-tagless-components, ember/no-get, ember/require-return-from-computed, ember/no-component-lifecycle-hooks, ember/no-actions-hash */
 import { task } from 'ember-concurrency';
 import { on } from '@ember/object/evented';
 import { t } from 'ember-intl';
