@@ -1,3 +1,4 @@
+/* eslint-disable ember/avoid-leaking-state-in-ember-objects */
 import { Factory } from 'ember-cli-mirage';
 import faker from 'faker';
 import ENUMS from 'irene/enums';

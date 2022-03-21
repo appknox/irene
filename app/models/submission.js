@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, ember/no-mixins, ember/no-classic-classes, ember/no-get */
 import Model, { attr, belongsTo }  from '@ember-data/model';
 import BaseModeMixin from 'irene/mixins/base-model';
 import { computed } from '@ember/object';

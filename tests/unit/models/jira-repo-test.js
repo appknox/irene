@@ -1,3 +1,4 @@
+/* eslint-disable qunit/no-commented-tests */
 // import { moduleForModel, test } from 'ember-qunit';
 //
 // moduleForModel('jira-repo', 'Unit | Model | jira repo', {

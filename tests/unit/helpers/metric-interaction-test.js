@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 
 import { metricInteraction } from 'irene/helpers/metric-interaction';
 import { module, test } from 'qunit';

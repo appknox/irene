@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, ember/no-mixins, ember/no-classic-classes, ember/no-get */
 import Model, { attr, hasMany, belongsTo }  from '@ember-data/model';
 import BaseModelMixin from 'irene/mixins/base-model';
 import ENUMS from 'irene/enums';

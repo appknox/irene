@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import ENV from 'irene/config/environment';
 
 export default function installHotjar() {

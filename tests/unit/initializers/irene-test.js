@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { module, test } from 'qunit';
 import { run } from '@ember/runloop';
 import Application from '@ember/application'

@@ -1,3 +1,4 @@
+/* eslint-disable qunit/no-commented-tests */
 // import ENV from 'irene/config/environment';
 // import { module, test } from 'qunit';
 // import { setupTest } from 'ember-qunit';

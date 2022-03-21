@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-mixins, prettier/prettier */
 import ENV from 'irene/config/environment';
 import DRFAdapter from 'irene/adapters/drf';
 import IreneAdapterMixin from 'irene/mixins/data-adapter-mixin';

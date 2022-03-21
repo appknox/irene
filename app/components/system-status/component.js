@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-components, ember/no-classic-classes, ember/require-tagless-components, ember/no-component-lifecycle-hooks, prettier/prettier, ember/no-get */
 import Component from '@ember/component';
 import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';

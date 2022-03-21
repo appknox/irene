@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-computed-properties-in-native-classes */
 import Model, { attr } from '@ember-data/model';
 import { equal } from '@ember/object/computed';
 

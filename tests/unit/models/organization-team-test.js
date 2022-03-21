@@ -1,3 +1,4 @@
+/* eslint-disable qunit/no-commented-tests */
 // import { moduleForModel, test } from 'ember-qunit';
 //
 // moduleForModel('organization-team', 'Unit | Model | organization team', {

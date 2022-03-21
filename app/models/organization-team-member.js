@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-classes, prettier/prettier, ember/no-get */
 import Model from '@ember-data/model';
 import { computed } from '@ember/object';
 

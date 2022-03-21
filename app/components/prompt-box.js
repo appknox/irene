@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-components, ember/no-classic-classes, ember/require-tagless-components, prettier/prettier, ember/no-actions-hash, ember/no-get */
 import Component from '@ember/component';
 
 const PromptBoxComponent = Component.extend({

@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-components, prettier/prettier, ember/no-classic-classes, ember/require-tagless-components, ember/avoid-leaking-state-in-ember-objects, ember/no-get, ember/no-actions-hash */
 import Component from '@ember/component';
 import {
   task

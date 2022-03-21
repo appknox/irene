@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, qunit/no-assert-equal */
 import ENUMS from 'irene/enums';
 import { module, test } from 'qunit';
 import { deviceType } from 'irene/helpers/device-type';

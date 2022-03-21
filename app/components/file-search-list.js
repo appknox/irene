@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-components, ember/no-mixins, ember/no-classic-classes, ember/require-tagless-components, prettier/prettier, ember/avoid-leaking-state-in-ember-objects, ember/no-observers, ember/no-get */
 import Component from '@ember/component';
 import { computed, observer } from '@ember/object';
 import PaginateMixin from 'irene/mixins/paginate';

@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-components, ember/no-classic-classes, ember/avoid-leaking-state-in-ember-objects, prettier/prettier, ember/no-observers, ember/no-get, ember/no-actions-hash */
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { observer } from '@ember/object';

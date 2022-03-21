@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-computed-properties-in-native-classes, ember/no-classic-components, ember/require-tagless-components, prettier/prettier, ember/no-get, ember/classic-decorator-no-classic-methods */
 import { inject as service } from '@ember/service';
 import { computed, action } from '@ember/object';
 import { filter } from '@ember/object/computed';

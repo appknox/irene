@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-get, ember/classic-decorator-no-classic-methods, prettier/prettier */
 import commondrf from './commondrf';
 
 export default class OrganizationMember extends commondrf {

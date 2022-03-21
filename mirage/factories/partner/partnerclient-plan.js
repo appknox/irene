@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   Factory
 } from 'ember-cli-mirage';

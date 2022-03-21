@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, ember/no-classic-classes, ember/avoid-leaking-state-in-ember-objects, ember/require-return-from-computed, ember/no-get */
 import { computed } from '@ember/object';
 import Model, { attr, hasMany, belongsTo }  from '@ember-data/model';
 import ENUMS from 'irene/enums';

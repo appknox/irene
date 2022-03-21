@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-components, ember/no-classic-classes, prettier/prettier, ember/no-get */
 import Component from '@ember/component';
 import { task } from 'ember-concurrency';
 import { t } from 'ember-intl';

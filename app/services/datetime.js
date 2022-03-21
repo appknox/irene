@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import Service from '@ember/service';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';

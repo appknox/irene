@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, ember/no-get */
 import Base from 'ember-simple-auth/authenticators/base';
 import ENV from 'irene/config/environment';
 import { inject as service } from '@ember/service';

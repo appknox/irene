@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-classes, ember/no-get, ember/require-return-from-computed */
 import Model, { attr } from '@ember-data/model';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';

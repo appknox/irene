@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { startMirage } from 'irene/initializers/ember-cli-mirage';

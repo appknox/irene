@@ -1,3 +1,4 @@
+/* eslint-disable qunit/no-commented-tests */
 // import Ember from 'ember';
 // import { test, moduleFor } from 'ember-qunit';
 // import { startMirage } from 'irene/initializers/ember-cli-mirage';

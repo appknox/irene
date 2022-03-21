@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, ember/no-get, ember/no-jquery */
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import FileUploader from 'irene/utils/uploader';

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, ember/no-get, ember/classic-decorator-no-classic-methods */
 import commondrf from '../commondrf';
 
 export default class RecentIssue extends commondrf {

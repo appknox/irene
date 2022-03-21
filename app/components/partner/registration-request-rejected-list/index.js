@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-mixins, ember/no-observers */
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';

@@ -1,3 +1,4 @@
+/* eslint-disable ember/classic-decorator-no-classic-methods, ember/no-get */
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import Route from '@ember/routing/route';

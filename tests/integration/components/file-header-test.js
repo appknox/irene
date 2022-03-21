@@ -1,3 +1,4 @@
+/* eslint-disable qunit/no-commented-tests */
 // import Ember from 'ember';
 // import ENUMS from 'irene/enums';
 // import tHelper from 'ember-i18n/helper';

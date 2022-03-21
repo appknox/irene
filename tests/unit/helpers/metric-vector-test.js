@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 
 import { metricVector } from 'irene/helpers/metric-vector';
 import { module, test } from 'qunit';

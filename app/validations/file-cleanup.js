@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   validateNumber
 } from 'ember-changeset-validations/validators';

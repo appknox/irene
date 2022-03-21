@@ -1,3 +1,4 @@
+/* eslint-disable qunit/no-commented-tests */
 // import { moduleFor, test } from 'ember-qunit';
 //
 // moduleFor('route:authenticated/file', 'Unit | Route | authenticated/file', {

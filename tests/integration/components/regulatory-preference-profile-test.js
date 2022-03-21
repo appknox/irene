@@ -1,3 +1,4 @@
+/* eslint-disable qunit/no-assert-equal, qunit/no-assert-equal-boolean */
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, click } from '@ember/test-helpers';

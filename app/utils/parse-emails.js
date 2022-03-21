@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {validate} from 'ember-validators';
 
 function validateEmail(email) {

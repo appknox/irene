@@ -1,3 +1,4 @@
+/* eslint-disable qunit/no-commented-tests, prettier/prettier */
 // import { find } from '@ember/test-helpers';
 // import ENUMS from 'irene/enums';
 // import hbs from 'htmlbars-inline-precompile';

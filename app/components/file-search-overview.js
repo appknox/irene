@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-components, ember/no-classic-classes, ember/avoid-leaking-state-in-ember-objects, ember/no-actions-hash, ember/no-get, prettier/prettier */
 import Component from '@ember/component';
 import ENV from 'irene/config/environment';
 

@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-components, ember/no-classic-classes, ember/require-tagless-components, ember/avoid-leaking-state-in-ember-objects, ember/no-component-lifecycle-hooks, prettier/prettier, ember/no-get */
 import Component from '@ember/component';
 import RFB from '@novnc/novnc/core/rfb';
 

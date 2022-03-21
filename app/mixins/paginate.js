@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-new-mixins, ember/no-observers, ember/no-get */
 import Mixin from '@ember/object/mixin';
 import ENV from 'irene/config/environment';
 import { task } from 'ember-concurrency';

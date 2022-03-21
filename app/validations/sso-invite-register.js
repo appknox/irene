@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   validatePresence,
 } from 'ember-changeset-validations/validators';

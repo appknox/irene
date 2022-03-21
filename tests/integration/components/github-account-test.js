@@ -1,3 +1,4 @@
+/* eslint-disable qunit/no-commented-tests */
 // import { getOwner } from '@ember/application';
 // import tHelper from 'ember-i18n/helper';
 // import localeConfig from 'ember-i18n/config/en';

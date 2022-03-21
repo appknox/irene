@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // jshint ignore: start
 import ENV from 'irene/config/environment';
 

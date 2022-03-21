@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // Ref: https://gist.github.com/paulirish/1579671
 
 var lastTime = 0;

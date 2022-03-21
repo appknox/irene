@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-mixins */
 import Component from '@glimmer/component';
 import { PaginationMixin } from '../../../mixins/paginate';
 import { tracked } from '@glimmer/tracking';

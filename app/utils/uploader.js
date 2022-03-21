@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, ember/no-get */
 import Uploader from 'ember-uploader/uploaders/uploader';
 import { inject as service } from '@ember/service';
 import $ from 'jquery';

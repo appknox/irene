@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-mixins, prettier/prettier */
 import { ScrollTopMixin } from '../../mixins/scroll-top';
 import Route from '@ember/routing/route';
 

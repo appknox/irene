@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier, qunit/require-expect */
 import { run } from '@ember/runloop';
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';

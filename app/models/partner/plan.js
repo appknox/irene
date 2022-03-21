@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import Model, { attr } from '@ember-data/model';
 
 export default class PartnerPlanModel extends Model {

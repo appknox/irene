@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-computed-properties-in-native-classes, prettier/prettier */
 import { computed } from '@ember/object';
 import Model, { belongsTo, attr } from '@ember-data/model';
 import { inject as service } from '@ember/service';

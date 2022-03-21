@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-computed-properties-in-native-classes, prettier/prettier */
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import AjaxService from 'ember-ajax/services/ajax';
