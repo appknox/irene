@@ -1,7 +1,7 @@
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import ENUMS from 'irene/enums';
 
@@ -114,6 +114,12 @@ export default class GithubProjectComponent extends Component {
         this.reconnect = true;
         return;
       }
+      if (
+        err.errors[0].detail &&
+        err.errors[0].detail === 'No connected repository'
+      )
+        return;
+
       this.notifications.error(this.tFailedGitHubProject);
     }
   })
