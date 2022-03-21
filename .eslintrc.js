@@ -19,7 +19,9 @@ module.exports = {
   env: {
     browser: true,
   },
-  rules: {},
+  rules: {
+    curly: 'error',
+  },
   overrides: [
     // node files
     {
