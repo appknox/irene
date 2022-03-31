@@ -5,6 +5,7 @@ import ENUMS from 'irene/enums';
 
 export default Model.extend({
   name: attr('string'),
+  fileFormatDisplay: attr('string'),
   user: belongsTo('user'),
   apiScanStatus: attr('number'),
   project: belongsTo('security/project'),

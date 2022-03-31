@@ -11,4 +11,4 @@ td
       .fa-font-size
         i.fa class="fa-spinner fa-spin"
       | &nbsp;
-    | Download App
+    | Download #{file.fileFormatDisplay}
