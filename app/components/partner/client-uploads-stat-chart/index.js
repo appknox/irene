@@ -65,7 +65,7 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
       },
     },
     {
-      key: this.intl.t('month', {
+      key: this.intl.t('monthWithNum', {
         numMonths: 1,
       }),
       axisKey: 'month',

@@ -75,7 +75,7 @@ module(
       const filterOptions = [
         { key: 'day', value: '' },
         { key: 'week', value: '' },
-        { key: 'month', value: '"numMonths":1' },
+        { key: 'monthWithNum', value: '"numMonths":1' },
       ];
 
       assert.equal(

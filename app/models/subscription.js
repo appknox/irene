@@ -39,12 +39,12 @@ const Subscription = Model.extend({
       const unit = this.get('billingPeriodUnit');
       const lcaseunit = (unit || '').toLowerCase();
       if (lcaseunit == 'year') {
-        return intl.t('year', {
+        return intl.t('yearWithNum', {
           numYears: num,
         });
       }
       if (lcaseunit == 'month') {
-        return intl.t('month', {
+        return intl.t('monthWithNum', {
           numMonths: num,
         });
       }
