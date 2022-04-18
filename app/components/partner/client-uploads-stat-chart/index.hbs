@@ -49,12 +49,12 @@
               type='button'
               local-class='option {{if
                 (eq this.currentTimeline.key option.key)
-                'active'
+                "active"
               }}'
               {{on 'click' (fn this.onChangeTimeline option)}}
               data-test-chart='filter-btns-{{seq}}'
             >
-              {{option.key}}
+              {{option.buttonSelectorText}}
             </button>
 
           {{/each}}
