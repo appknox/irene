@@ -1,12 +1,12 @@
 /* eslint-disable qunit/no-assert-equal */
-import { module, test } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
-import { render, click } from '@ember/test-helpers';
+import { click, render } from '@ember/test-helpers';
+import dayjs from 'dayjs';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
-import dayjs from 'dayjs';
+import { setupRenderingTest } from 'ember-qunit';
 import styles from 'irene/components/partner/client-uploads-stat-chart/index.scss';
+import { module, test } from 'qunit';
 
 module(
   'Integration | Component | partner/client-uploads-stat-chart',
@@ -73,9 +73,9 @@ module(
       await render(hbs`<Partner::ClientUploadsStatChart/>`);
 
       const filterOptions = [
-        { key: 'day', value: '' },
-        { key: 'week', value: '' },
-        { key: 'monthWithNum', value: '"numMonths":1' },
+        { buttonSelectorText: 'day', intlVariable: '' },
+        { buttonSelectorText: 'week', intlVariable: '' },
+        { buttonSelectorText: 'month', intlVariable: '' },
       ];
 
       assert.equal(
@@ -89,7 +89,7 @@ module(
       filterOptions.forEach((option, seq) => {
         assert
           .dom(`[data-test-chart='filter-btns-${seq}']`)
-          .hasText(`t:${option.key}:(${option.value})`);
+          .hasText(`t:${option.buttonSelectorText}:(${option.intlVariable})`);
       });
 
       assert

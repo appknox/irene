@@ -1,14 +1,14 @@
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
+import { htmlSafe } from '@ember/template';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { bb } from 'billboard.js/dist/billboard.min.js';
-import { action } from '@ember/object';
-import { task } from 'ember-concurrency';
 import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
-import weekOfYear from 'dayjs/plugin/weekOfYear';
 import weekday from 'dayjs/plugin/weekday';
-import { inject as service } from '@ember/service';
-import { htmlSafe } from '@ember/template';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
+import { task } from 'ember-concurrency';
 import styles from './index.scss';
 
 import moment from 'moment';
@@ -47,16 +47,20 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
 
   @tracked timelinePlaceholders = [
     {
-      key: this.intl.t('day'),
-      axisKey: 'date',
+      key: 'day',
+      axisText: this.intl.t('day'),
+      buttonSelectorText: this.intl.t('day'),
+      dayjsSelector: 'day',
       format: 'DD MMM',
       tooltipFormat(d) {
         return new dayjs(d).format('DD MMM YYYY');
       },
     },
     {
-      key: this.intl.t('week'),
-      axisKey: 'week',
+      key: 'week',
+      axisText: this.intl.t('week'),
+      buttonSelectorText: this.intl.t('week'),
+      dayjsSelector: 'week',
       format: 'DD MMM',
       tooltipFormat(d) {
         return `${dayjs(d).format('DD MMM YYYY')} - ${dayjs(d)
@@ -65,10 +69,10 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
       },
     },
     {
-      key: this.intl.t('monthWithNum', {
-        numMonths: 1,
-      }),
-      axisKey: 'month',
+      key: 'month',
+      axisText: this.intl.t('month'),
+      buttonSelectorText: this.intl.t('month'),
+      dayjsSelector: 'month',
       format: 'MMM YYYY',
       tooltipFormat(d) {
         return new dayjs(d).format('MMM YYYY');
@@ -101,11 +105,9 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
 
   @action
   onChangeTimeline(option) {
-    if (this.currentTimeline !== option.key) {
-      this.currentTimeline = option;
-      this.isRedrawChart = true;
-      this.loadChart.perform();
-    }
+    this.currentTimeline = option;
+    this.isRedrawChart = true;
+    this.loadChart.perform();
   }
   @action
   updateDateRange(dateRange) {
@@ -141,7 +143,7 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
 
   async redrawChart() {
     await this.chartContainer.axis.labels({
-      x: this.currentTimeline.key.toUpperCase(),
+      x: this.currentTimeline.axisText.toUpperCase(),
     });
     await this.chartContainer.load({
       columns: this.chartData,
@@ -152,7 +154,7 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
   async parseChartData(rawData) {
     const dataPoints = await this.generateTimeseriesData(
       rawData,
-      this.currentTimeline.key
+      this.currentTimeline.dayjsSelector
     );
     this.chartData = [dataPoints.x, dataPoints.y];
     return;
@@ -222,7 +224,7 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
             },
           },
           label: {
-            text: `${component.currentTimeline.key.toUpperCase()}`,
+            text: `${component.currentTimeline.axisText.toUpperCase()}`,
             position: 'outer-center',
           },
         },
