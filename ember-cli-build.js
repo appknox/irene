@@ -1,8 +1,11 @@
 'use strict';
-var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
-var environment = EmberApp.env();
-var minifyEnabled = environment === 'production' || environment === 'staging';
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const defaultFingerprintExtensions =
+  require('broccoli-asset-rev/lib/default-options').extensions;
+
+const environment = EmberApp.env();
+const minifyEnabled = environment === 'production' || environment === 'staging';
 
 module.exports = function (defaults) {
   let app = new EmberApp(defaults, {
@@ -17,7 +20,9 @@ module.exports = function (defaults) {
       },
     },
     fingerprint: {
+      enabled: true,
       exclude: ['runtimeconfig.js'],
+      extensions: defaultFingerprintExtensions.concat(['svg']),
     },
     sassOptions: {
       includePaths: [
