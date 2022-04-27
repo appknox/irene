@@ -123,14 +123,16 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
   @task(function* (element) {
     if (this.targetModel) {
       const filter = {
-        start_timestamp: dayjs(this.startDate).toISOString(),
-        end_timestamp: dayjs(this.endDate).toISOString(),
+        start_timestamp: dayjs(this.startDate).format(),
+        end_timestamp: dayjs(this.endDate).format(),
         ...this.queryParams,
       };
+
       const rawChartData = yield this.store.queryRecord(
         this.targetModel,
         filter
       );
+
       yield this.parseChartData(rawChartData.uploadTimeline);
       if (!this.isRedrawChart) {
         yield this.drawChart(element);
