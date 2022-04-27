@@ -1,8 +1,8 @@
-import Component from '@glimmer/component';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import dayjs from 'dayjs';
-import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import parseError from 'irene/utils/parse-error';
 
@@ -49,9 +49,10 @@ export default class PartnerExportStatsComponent extends Component {
     const endDate = this.dateRange.objectAt(1);
     if (startDate && endDate) {
       const filters = {
-        start_timestamp: dayjs(startDate).toISOString(),
-        end_timestamp: dayjs(endDate).toISOString(),
+        start_timestamp: dayjs(startDate).format(),
+        end_timestamp: dayjs(endDate).format(),
       };
+
       return yield this.store
         .adapterFor('partner/analytic')
         .getDownloadURL(filters);
