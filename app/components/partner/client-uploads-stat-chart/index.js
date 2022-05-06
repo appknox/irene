@@ -11,8 +11,6 @@ import weekOfYear from 'dayjs/plugin/weekOfYear';
 import { task } from 'ember-concurrency';
 import styles from './index.scss';
 
-import moment from 'moment';
-
 export default class PartnerClientUploadsStatChartComponent extends Component {
   // Dependencies
   @service store;
@@ -84,7 +82,7 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
 
   @tracked chartContainer = null;
 
-  @tracked dateRange = [moment().subtract(1, 'months'), moment()];
+  @tracked dateRange = [dayjs().subtract(1, 'month'), dayjs()];
 
   maxDate = dayjs(Date.now());
 
