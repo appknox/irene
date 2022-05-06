@@ -1,11 +1,11 @@
 /* eslint-disable qunit/no-assert-equal */
-import { module, test } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
-import { render, click } from '@ember/test-helpers';
-import { setupIntl } from 'ember-intl/test-support';
-import { setupMirage } from 'ember-cli-mirage/test-support';
-import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
+import { click, render } from '@ember/test-helpers';
+import { hbs } from 'ember-cli-htmlbars';
+import { setupMirage } from 'ember-cli-mirage/test-support';
+import { setupIntl } from 'ember-intl/test-support';
+import { setupRenderingTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -42,6 +42,17 @@ module('Integration | Component | partner/export-stats', function (hooks) {
       null,
       'Error msg should not exist'
     );
+    await click(this.element.querySelector(`[data-test-export-btn]`));
+
+    assert.equal(
+      this.notifyService.get('errorMsg'),
+      'Please select valid date range'
+    );
+  });
+
+  test('It sends right date range to the api endpoint', async function (assert) {
+    await render(hbs`<Partner::ExportStats />`);
+    this.notifyService = this.owner.lookup('service:notifications');
     await click(this.element.querySelector(`[data-test-export-btn]`));
 
     assert.equal(

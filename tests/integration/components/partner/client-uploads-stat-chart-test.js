@@ -6,6 +6,7 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import styles from 'irene/components/partner/client-uploads-stat-chart/index.scss';
+
 import { module, test } from 'qunit';
 
 module(
@@ -125,6 +126,50 @@ module(
       await render(hbs`<Partner::ClientUploadsStatChart/>`);
 
       assert.dom(`[data-test-chart='upload-stat-chart']`).doesNotExist();
+    });
+
+    test('it should check if the datetime getting passed in the api is timezoned correctly', async function (assert) {
+      this.server.get('v2/partners/:id', (_, req) => {
+        return {
+          id: req.params.id,
+          access: {
+            view_analytics: true,
+          },
+        };
+      });
+      await this.owner.lookup('service:partner').load();
+      await render(hbs`<Partner::ClientUploadsStatChart />`);
+      assert.dom(`[data-test-chart='date-range-picker']`).exists();
+      assert
+        .dom(`[data-test-chart='start-date']`)
+        .hasText(`${dayjs().subtract(1, 'month').format('DD MMM YYYY')}`);
+      assert
+        .dom(`[data-test-chart='end-date']`)
+        .hasText(`${dayjs().format('DD MMM YYYY')}`);
+
+      await click(
+        this.element.querySelector(`[data-test-chart='filter-btns-2']`)
+      );
+
+      let partnerAnalytics = this.owner
+        .factoryFor('component:partner/client-uploads-stat-chart')
+        .class();
+      console.log({ partnerAnalytics });
+
+      // let partnerAnalytics = this.server.create('partner/analytic', {
+      //   title: 'Old title',
+      // });
+      // let store = this.owner.lookup('service:store');
+      // let analytics = await store.findRecord(
+      //   'partner/analytic',
+      //   partnerAnalytics.id
+      // );
+      // this.set('analytics', analytics);
+
+      // console.log({ analytics });
+
+      let requests = this.server.pretender;
+      console.log({ requests });
     });
   }
 );

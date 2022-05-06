@@ -41,6 +41,18 @@ function routes() {
     return this.db.partnerclientPlans[0];
   });
 
+  this.get('/api/v2/partners/:id/analytics', () => {
+    return {
+      id: 3689,
+      upload_timeline: [
+        {
+          created_on_date: '2022-04-11',
+          upload_count: 2,
+        },
+      ],
+    };
+  });
+
   this.get('/api/v2/frontend_configuration', () => {
     return {
       hide_poweredby_logo: true,
