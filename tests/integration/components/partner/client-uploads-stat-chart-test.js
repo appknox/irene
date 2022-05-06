@@ -137,8 +137,18 @@ module(
           },
         };
       });
+      this.server.get('v2/partners/:id/analytics', (_, req) => {
+        debugger;
+        return {
+          id: req.params.id,
+          access: {
+            view_analytics: true,
+          },
+        };
+      });
       await this.owner.lookup('service:partner').load();
-      await render(hbs`<Partner::ClientUploadsStatChart />`);
+      await render(hbs`<Partner::ClientUploadsStatChart @title='Clients Overall'
+      @targetModel='partner/analytic' />`);
       assert.dom(`[data-test-chart='date-range-picker']`).exists();
       assert
         .dom(`[data-test-chart='start-date']`)
@@ -151,11 +161,10 @@ module(
         this.element.querySelector(`[data-test-chart='filter-btns-2']`)
       );
 
-      let partnerAnalytics = this.owner
-        .factoryFor('component:partner/client-uploads-stat-chart')
-        .class();
-      console.log({ partnerAnalytics });
-
+      // let partnerAnalytics = this.owner
+      //   .factoryFor('component:partner/client-uploads-stat-chart')
+      //   .class();
+      // console.log({ partnerAnalytics });
       // let partnerAnalytics = this.server.create('partner/analytic', {
       //   title: 'Old title',
       // });
