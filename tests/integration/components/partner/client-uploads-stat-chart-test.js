@@ -1,4 +1,3 @@
-/* eslint-disable qunit/no-assert-equal */
 import { click, render } from '@ember/test-helpers';
 import dayjs from 'dayjs';
 import { hbs } from 'ember-cli-htmlbars';
@@ -78,7 +77,7 @@ module(
         { buttonSelectorText: 'month', intlVariable: '' },
       ];
 
-      assert.equal(
+      assert.strictEqual(
         this.element.querySelectorAll(
           `[data-test-chart='filter-options'] button`
         ).length,
@@ -125,6 +124,74 @@ module(
       await render(hbs`<Partner::ClientUploadsStatChart/>`);
 
       assert.dom(`[data-test-chart='upload-stat-chart']`).doesNotExist();
+    });
+
+    test('it should check if the datetime getting passed in the api is timezoned correctly in the partners analytics chart', async function (assert) {
+      let chart_analytics_request;
+
+      this.server.get('v2/partners/:id', (_, req) => {
+        return {
+          id: req.params.id,
+          access: {
+            view_analytics: true,
+          },
+        };
+      });
+
+      this.server.get('v2/partners/:id/analytics', (_, req) => {
+        chart_analytics_request = req;
+        return {
+          id: req.params.id,
+          upload_timeline: [
+            {
+              created_on_date: '2022-04-11',
+              upload_count: 2,
+            },
+          ],
+        };
+      });
+
+      // The default values of the start and end dates to be set in the ClientUploadsStatChart Component
+      this.set('startDate', dayjs().subtract(1, 'months'));
+      this.set('endDate', dayjs());
+
+      await this.owner.lookup('service:partner').load();
+      await render(hbs`
+        <Partner::ClientUploadsStatChart 
+          @title='Clients Overall'
+          @targetModel='partner/analytic' 
+        />
+      `);
+
+      assert.dom(`[data-test-chart='date-range-picker']`).exists();
+
+      assert
+        .dom(`[data-test-chart='start-date']`)
+        .hasText(`${this.startDate.format('DD MMM YYYY')}`);
+      assert
+        .dom(`[data-test-chart='end-date']`)
+        .hasText(`${this.endDate.format('DD MMM YYYY')}`);
+
+      await click(
+        this.element.querySelector(`[data-test-chart='filter-btns-2']`)
+      );
+
+      // Get mocked request from pretender initiated by the click of the filter button
+      const chart_analytics_request_params =
+        chart_analytics_request.queryParams;
+      const { start_timestamp, end_timestamp } = chart_analytics_request_params;
+
+      assert.strictEqual(
+        dayjs(start_timestamp).format(),
+        this.startDate.format(), // default unformatted selected start_date of date range picker in ClientUploadsStatChart
+        "Element [data-test-chart='start-date'] value is equal to the start_date in chart data request URL params"
+      );
+
+      assert.strictEqual(
+        dayjs(end_timestamp).format(),
+        this.endDate.format(), // default unformatted selected end_date of date range picker in ClientUploadsStatChart
+        "Element [data-test-chart='end-date'] value is equal to the end_date in chart data request URL params"
+      );
     });
   }
 );

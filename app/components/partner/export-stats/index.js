@@ -10,7 +10,7 @@ export default class PartnerExportStatsComponent extends Component {
   @service store;
   @service('notifications') notify;
 
-  @tracked dateRange = [];
+  @tracked dateRange = [...this.initialDateRange];
 
   maxDate = dayjs(Date.now());
 
@@ -22,6 +22,20 @@ export default class PartnerExportStatsComponent extends Component {
     'last6Months',
     'lastYear',
   ];
+
+  get initialDateRange() {
+    if (this.args.startDate && this.args.endDate) {
+      return [this.args.startDate, this.args.endDate];
+    }
+    if (this.args.startDate) {
+      return [this.args.startDate, null];
+    }
+    if (this.args.endDate) {
+      return [null, this.args.endDate];
+    }
+
+    return [null, null];
+  }
 
   @action
   updateDateRange(range) {
