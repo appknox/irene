@@ -1,5 +1,6 @@
 <Modal-Dialog
   @onClose={{@onClose}}
+  @onClickOverlay={{@onClickOverlay}}
   @translucentOverlay={{true}}
   @overlayClass="ak-modal-overlay"
   ...attributes
@@ -9,7 +10,7 @@
       <h3 local-class="header-title">
         {{@headerTitle}}
       </h3>
-      <div role="button" local-class="close-icon" {{on "click" @onClose}}></div>
+      <div data-test-modal-close-btn role="button" local-class="close-icon" {{on "click" @onClose}}></div>
     </div>
   {{/if}}
   <div local-class="modal-body">

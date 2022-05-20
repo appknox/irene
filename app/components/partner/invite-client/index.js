@@ -52,6 +52,9 @@ export default class PartnerInviteClient extends Component {
     this.showInviteModal = !this.showInviteModal;
   }
 
+  @action
+  inviteModalOverlayClick() {}
+
   @task(function* (data) {
     const body = {
       email: data.email,

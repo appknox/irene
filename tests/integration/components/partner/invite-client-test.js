@@ -45,6 +45,24 @@ module("Integration | Component | partner/invite-client", function (hooks) {
     assert.dom("[data-test-invite-client-form]").exists();
   });
 
+  test('it should close modal only on close button click', async function (assert) {
+    assert.dom('[data-test-invite-client-form]').doesNotExist();
+    await render(hbs`<Partner::InviteClient />`);
+    const inviteBtn = this.element.querySelector(
+      '[data-test-invite-client-button]'
+    );
+    await click(inviteBtn);
+    assert.dom('[data-test-invite-client-form]').exists();
+
+    const overlayElement = this.element.querySelector('.ak-modal-overlay');
+    await click(overlayElement);
+    assert.dom('[data-test-invite-client-form]').exists();
+
+    const closeButton = this.element.querySelector('[data-test-modal-close-btn]');
+    await click(closeButton);
+    assert.dom('[data-test-invite-client-form]').doesNotExist();
+  });
+
   test("it should render email, first name, last name & company input fields", async function (assert) {
     await render(hbs`<Partner::InviteClient />`);
     const inviteBtn = this.element.querySelector(
