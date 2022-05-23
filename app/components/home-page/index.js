@@ -3,9 +3,6 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import ENV from 'irene/config/environment';
-import * as chat from 'irene/utils/chat';
-import { openKnowledgeBasePanel } from 'irene/utils/knowledge-base';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 export default class HomePageComponent extends Component {
@@ -23,22 +20,12 @@ export default class HomePageComponent extends Component {
   @tracked isEmptyOrgName = this.checkIfOrgNameIsEmpty;
   @tracked isUpdatingOrg = false;
 
-  showMarketplace = ENV.enableMarketplace;
-  productVersion = ENV.productVersion;
   tSomethingWentWrong = this.intl.t('somethingWentWrong');
   tOrganizationNameUpdated = this.intl.t('organizationNameUpdated');
 
   constructor(...args) {
     super(...args);
     this.securityEnabled();
-  }
-
-  get showKnowledgeBase() {
-    return this.integration.isDocument360Enabled();
-  }
-
-  get enablePendo() {
-    return this.integration.isPendoEnabled();
   }
 
   get checkIfOrgNameIsEmpty() {
@@ -53,24 +40,6 @@ export default class HomePageComponent extends Component {
     }
 
     return false;
-  }
-
-  get showBilling() {
-    const orgShowBilling = this.organization.selected.showBilling;
-    const isOwner = this.me.org.get('is_owner');
-    return orgShowBilling && isOwner;
-  }
-
-  get showPartnerDashboard() {
-    return this.me.org.get('can_access_partner_dashboard');
-  }
-
-  /**
-   * @property {Boolean} isShowAnalytics
-   * Property to disable analytics page for member role
-   */
-  get isShowAnalytics() {
-    return this.me.org.get('is_member') === false;
   }
 
   @action securityEnabled() {
@@ -109,14 +78,6 @@ export default class HomePageComponent extends Component {
   @action invalidateSession() {
     triggerAnalytics('logout');
     this.session.invalidate();
-  }
-
-  @action openChatBox() {
-    chat.openChatBox();
-  }
-
-  @action onOpenKnowledgeBase() {
-    openKnowledgeBasePanel();
   }
 
   @task(function* () {

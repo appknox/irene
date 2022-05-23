@@ -9,8 +9,6 @@ import triggerAnalytics from 'irene/utils/trigger-analytics';
 import FileUploader from 'irene/utils/uploader';
 import $ from 'jquery';
 
-// export default class HomePageComponent extends Component{}
-
 const UploadAppComponent = FileField.extend({
   store: service('store'),
   delegate: null,
@@ -29,14 +27,11 @@ const UploadAppComponent = FileField.extend({
     if (isEmpty(files)) {
       return;
     }
-    // delegate.set('isUploading', true);
     delegate.setAppUploadStatus(true);
-    // delegate.set('progress', 0);
     delegate.setAppUploadProgress(0);
 
     const uploader = FileUploader.create({ container: getOwner(this) });
     uploader.on('progress', (e) =>
-      // delegate.set('progress', parseInt(e.percent))
       delegate.setAppUploadProgress(parseInt(e.percent))
     );
     try {
@@ -46,14 +41,12 @@ const UploadAppComponent = FileField.extend({
       triggerAnalytics('feature', ENV.csb.applicationUpload);
       this.get('notify').success(this.get('tFileUploadedSuccessfully'));
     } catch (e) {
-      // eslint-disable-next-line no-console
       const err = this.get('tErrorWhileUploading');
       this.get('notify').error(err);
       this.get('rollbar').critical(err, e);
     }
     $('input[type=file]').val('');
     delegate.setAppUploadStatus(false);
-    // delegate.set('isUploading', false);
   },
 });
 
