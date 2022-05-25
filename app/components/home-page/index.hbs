@@ -1,0 +1,56 @@
+{{#if this.isLoaded}}
+  {{#if this.isSecurityDashboard}}
+    <HomePage::SecurityDashboardNav
+      @user={{@user}}
+      @logoutAction={{this.invalidateSession}}
+    />
+    <SecuritySplit />
+  {{else}}
+    <div class='columns columns-main-container'>
+      <HomePage::OrgSideMenu @organization={{this.organization}} />
+      <HomePage::OrgDashboardNav
+        @user={{@user}}
+        @isSecurityEnabled={{this.isSecurityEnabled}}
+        @logoutAction={{this.invalidateSession}}
+      >
+        {{yield}}
+      </HomePage::OrgDashboardNav>
+    </div>
+  {{/if}}
+{{/if}}
+
+<ModalCard
+  @isActive={{this.isEmptyOrgName}}
+  @title={{t 'modalCard.orgModal.title'}}
+  @class='input-modal'
+>
+  <div class='card-body'>
+    <div class='card-wrapper'>
+      <form>
+        <p class='control'>
+          <Input
+            placeholder={{t 'modalCard.orgModal.title'}}
+            @type='text'
+            @value={{this.organizationName}}
+            autofocus='autofocus'
+            class='form-control input input-width margin-left'
+            id='organizationName'
+          />
+        </p>
+        <button
+          disabled={{this.isUpdatingOrg}}
+          class='is-primary margin-left margin-top10'
+          {{on 'click' (perform this.updateOrgName)}}
+          type='button'
+        >
+          {{#if this.isUpdatingOrg}}
+            <div class='fa-font-size'>
+              <i class='fa fa-spinner fa-spin'></i>
+            </div>
+            &nbsp;
+          {{/if}}{{t 'update'}}
+        </button>
+      </form>
+    </div>
+  </div>
+</ModalCard>

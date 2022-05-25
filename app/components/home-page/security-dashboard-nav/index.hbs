@@ -1,0 +1,46 @@
+<div class='columns security-dashboard'>
+  <div class='column top-nav'>
+    <div class='columns top-columns'>
+      <div class='column'>
+        <div class='appknox-logo'>
+          <ImgLogo />
+        </div>
+      </div>
+      <div class='column content-right top-icons'>
+        <a href='#'>
+          {{fa-icon 'user' class='sidebar-icons'}}
+          {{@user.username}}
+          &nbsp;
+          {{fa-icon 'angle-down' class='sidebar-icons'}}
+
+          <AttachPopover
+            @interactive={{true}}
+            @placement='bottom'
+            @showOn='click'
+            @hideOn='clickout'
+          >
+            <div class='user-info-popover'>
+              <div class='user-name'>
+                {{@user.username}}
+              </div>
+              <div class='user-email'>
+                {{@user.email}}
+              </div>
+              <div class='content-right'>
+                {{! template-lint-disable no-nested-interactive }}
+                <a
+                  href='#'
+                  class='mp-auth-logout highlighted-button'
+                  {{on 'click' @logoutAction}}
+                >
+                  {{fa-icon 'power-off' class='sidebar-icons'}}
+                  {{t 'logout'}}
+                </a>
+              </div>
+            </div>
+          </AttachPopover>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
