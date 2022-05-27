@@ -1,6 +1,6 @@
 import EmberRouter from '@ember/routing/router';
-import config from './config/environment';
 import ENV from 'irene/config/environment';
+import config from './config/environment';
 
 export default class Router extends EmberRouter {
   location = config.locationType;
@@ -46,6 +46,7 @@ Router.map(function () {
       this.route('billing');
       this.route('marketplace');
       this.route('projects');
+      this.route('production-scan');
       this.route(
         'project',
         {

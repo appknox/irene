@@ -35,6 +35,15 @@
           </div>
         </LinkTo>
       </li>
+      {{#if this.showProductionScanDashboard}}
+        <li>
+          <LinkTo @route='authenticated.production-scan' class='mp-auth-teams'>
+            <div>
+              {{fa-icon 'barcode' class='sidebar-icons'}}{{t 'productionScan'}}
+            </div>
+          </LinkTo>
+        </li>
+      {{/if}}
       <li>
         <LinkTo @route='authenticated.settings' class='mp-auth-setting'>
           <div>

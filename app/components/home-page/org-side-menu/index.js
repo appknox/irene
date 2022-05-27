@@ -28,6 +28,10 @@ export default class HomePageSideMenuComponent extends Component {
     return this.me.org.get('can_access_partner_dashboard');
   }
 
+  get showProductionScanDashboard() {
+    return this.organization.selected.features.post_production_scan;
+  }
+
   get enablePendo() {
     return this.integration.isPendoEnabled();
   }
