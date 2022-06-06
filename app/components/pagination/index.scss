@@ -1,0 +1,125 @@
+/* Pagination Component */
+.app-pagination {
+  background: #f5f5f5;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 15px;
+  width: 100%;
+}
+
+.app-pagination-info {
+  display: flex;
+  align-items: center;
+}
+
+.app-pagination-info p,
+.app-pagination-btn,
+.app-pagination-page-range {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  letter-spacing: -0.008em;
+  color: #171717;
+}
+
+.app-pagination-info p {
+  margin-bottom: 0px;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+.app-pagination-btn {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid #c4c4c4;
+  border-radius: 3px;
+  padding: 4px 1px;
+  background-color: white;
+  transition: all 0.4s !important;
+}
+
+.app-pagination-btn span {
+  display: flex;
+  align-items: center;
+  margin: 2px;
+}
+
+.app-pagination-btn:hover {
+  color: #fe4d3f;
+}
+
+.app-pagination-btn:hover svg path {
+  fill: #fe4d3f;
+}
+
+.app-pagination-btn.prev-btn {
+  margin-right: 11px;
+  padding-right: 12px;
+}
+.app-pagination-btn.next-btn {
+  padding-left: 12px;
+}
+
+.app-pagination-btns {
+  display: flex;
+  align-self: flex-end;
+  position: relative;
+}
+
+.app-pagination-btn:disabled {
+  border: 1px solid #c4c4c4;
+  color: #c4c4c4;
+  cursor: not-allowed;
+}
+
+.app-pagination-btn:disabled svg path {
+  fill: #c4c4c4;
+}
+
+/* Custom Select */
+
+.app-pagination select {
+  width: 60px;
+  padding: 6px 7px;
+  padding-right: 0px;
+  font-size: 16px;
+  border: 1px solid #42465133 !important;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='8' height='4' viewBox='0 0 8 4' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.666748 0.666651L4.00008 3.99998L7.33341 0.666651H0.666748Z' fill='%23171717'/%3E%3C/svg%3E%0A") !important;
+  background-repeat: no-repeat;
+  background-position: right 11px top 50%;
+  background-color: #fff;
+  border-radius: 3px !important;
+  color: #171717 !important;
+}
+
+.app-pagination select:hover {
+  box-shadow: none !important;
+}
+
+.app-pagination-page-range {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-left: 25px;
+  height: 32px;
+}
+
+.app-pagination-page-range::after,
+.app-pagination-btns::after {
+  position: absolute;
+  content: '';
+  width: 1px;
+  height: 100%;
+  background: rgba(66, 70, 81, 0.2);
+  left: -11px;
+}
+
+.app-pagination-btns::after {
+  left: -20px;
+}
