@@ -1,0 +1,38 @@
+<div local-class='table-row' data-test-table-row data-test-table-row-id={{@id}}>
+  <div
+    local-class='platform platform-{{@project.platform}}'
+    data-test-table-row-item
+    data-test-table-row-platform={{@project.platform}}
+  >
+    {{fa-icon @project.platform}}
+  </div>
+  <div
+    local-class='app-name-container'
+    data-test-table-row-item
+    data-test-table-row-app-namespace
+  >
+    <span local-class='app-namespace'>{{@project.package_name}}</span>
+    <span local-class='app-name'>{{@project.name}}</span>
+  </div>
+  <div
+    local-class='production-version'
+    data-test-table-row-item
+    data-test-table-row-prod-version
+  >
+    {{@project.production_version}}
+  </div>
+  <div
+    local-class='last-scanned-version'
+    data-test-table-row-item
+    data-test-table-row-version
+  >
+    {{@project.version}}
+  </div>
+  <div
+    local-class='project-status'
+    data-test-table-row-item
+    data-test-table-row-status
+  >
+    <ProductionScan::Table::Status @status={{@project.status}} />
+  </div>
+</div>

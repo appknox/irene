@@ -1,0 +1,47 @@
+{{yield (hash currentPage=this.currentPageResults)}}
+
+<div local-class='app-pagination'>
+  <aside local-class='app-pagination-info' role='contentinfo'>
+    <p>Records per page</p>
+    <select
+      local-class=''
+      name='recordPerPage'
+      id='recordPerPage'
+      {{on 'change' this.onItemsPerPageSelect}}
+    >
+      {{#each this.itemPerPageSelectOptions as |item|}}
+        <option
+          selected={{item.selected}}
+          value={{item.value}}
+        >{{item.value}}</option>
+      {{/each}}
+    </select>
+    <span local-class='app-pagination-page-range'>
+      {{this.startItemIdx}}-{{this.endItemIdx}}
+      of
+      {{@totalItems}}
+      {{@tableItemLabel}}
+    </span>
+  </aside>
+
+  <aside local-class='app-pagination-btns'>
+    <button
+      type='button'
+      local-class='app-pagination-btn prev-btn'
+      disabled={{this.disablePrev}}
+      {{on 'click' this.goToPrevPage}}
+    >
+      <span>{{inline-svg '/arrowLeft.svg'}}</span>Previous
+    </button>
+
+    <button
+      type='button'
+      local-class='app-pagination-btn next-btn'
+      disabled={{this.disableNext}}
+      {{on 'click' this.goToNextPage}}
+    >
+      Next
+      <span>{{inline-svg '/arrowRight.svg'}}</span>
+    </button>
+  </aside>
+</div>

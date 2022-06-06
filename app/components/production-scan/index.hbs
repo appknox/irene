@@ -1,4 +1,10 @@
 <div local-class='production-scan-container'>
   <ProductionScan::Settings @settings={{this.settings}} />
-  <ProductionScan::Table />
+  <ProductionScan::Table
+    @prodScanTableData={{this.productionScanData}}
+    @updateTableData={{this.getTableData}}
+    @defaultLimit={{this.limit}}
+    @settings={{this.settings}}
+    @offset={{this.offset}}
+  />
 </div>
