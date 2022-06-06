@@ -53,6 +53,9 @@ module.exports = function (defaults) {
     'ember-date-components': {
       includeCSS: false,
     },
+    svg: {
+      paths: ['public/images'],
+    },
   });
 
   // Custom hacks to get a similar build in staging and production

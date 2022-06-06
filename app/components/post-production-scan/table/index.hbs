@@ -1,0 +1,26 @@
+<Pagination
+  @results={{this.currentPageResults}}
+  @onPageItemsCountChange={{this.getPage}}
+  @totalItems={{this.allResultCount}}
+  @nextAction={{this.goToNextPage}}
+  @prevAction={{this.goToPrevPage}}
+  @tableItemLabel='Projects'
+  as |context|
+>
+  <table local-class='styled-table'>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Index</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each context.currentPage as |result|}}
+        <tr>
+          <td>{{result.name}}</td>
+          <td>{{result.index}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</Pagination>
