@@ -543,7 +543,7 @@ module.exports = function (environment) {
       jsUrl: 'https://recaptcha.net/recaptcha/api.js?render=explicit',
       siteKey: '6LffPdIaAAAAANWL4gm7J6j9EJzKSuYEDAQ0Ry2x',
     },
-    productVersion: '22.4.1',
+    productVersion: '22.6.1',
   };
 
   if (ENV.whitelabel.enabled) {
