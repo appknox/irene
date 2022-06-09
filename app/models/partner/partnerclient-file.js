@@ -1,7 +1,4 @@
-/* eslint-disable ember/no-computed-properties-in-native-classes */
 import Model, { attr } from '@ember-data/model';
-import { computed } from '@ember/object';
-import { htmlSafe } from '@ember/template';
 
 export default class PartnerclientFileModel extends Model {
   @attr('string') name;
@@ -10,8 +7,8 @@ export default class PartnerclientFileModel extends Model {
   @attr('string') version;
   @attr('string') versionCode;
 
-  @computed('iconUrl')
-  get iconHtmlUrl() {
-    return htmlSafe(`background-image: url(${this.iconUrl})`);
+  async createReport(clientId, id, data) {
+    var adapter = this.store.adapterFor(this.constructor.modelName);
+    await adapter.createReport(this, clientId, id, data);
   }
 }
