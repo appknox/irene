@@ -15,7 +15,6 @@
   border: 1px solid var(--border-table);
   border-radius: 0.3rem;
 }
-
 .table-header {
   display: grid;
   align-items: center;
@@ -23,29 +22,39 @@
   padding: 0.6rem 1rem;
   background-color: var(--bg-gray);
   word-break: break-all;
-  grid-template-columns: 1fr 11% 13% 16%;
   text-transform: capitalize;
 }
-
 .table-row {
   border-top: 1px solid var(--border-table);
   display: grid;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 0.3rem 0.8rem;
+  padding: 0.5rem 0.8rem;
   min-height: 2.5rem;
-  grid-template-columns: 1fr 11% 13% 16%;
+}
+.table-header,
+.table-row {
+  grid-template-columns: 1.3fr 1fr 1fr;
+  gap: 2rem;
+  &.has-report-column {
+    grid-template-columns: 1fr 16% 13% 0.6fr 14rem;
+    gap: 0.8rem;
+  }
+  &.has-results-column {
+    grid-template-columns: 1fr 16% 13% 0.6fr;
+    gap: 0.8rem;
+  }
 }
 
 .app {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 3rem 1fr;
   gap: 0.5rem;
 }
 .app-icon {
-  width: 2rem;
-  height: 2rem;
+  width: 3rem;
+  height: 3rem;
   display: block;
   border-radius: 0.3rem;
   background-color: var(--bg-gray);
@@ -53,11 +62,31 @@
   background-position: center center;
   background-repeat: no-repeat;
 }
+.app-name {
+  color: var(--black-900);
+}
 
-.version {
-  display: grid;
-  align-items: center;
+.fileid-key {
+  color: var(--black-300);
+}
+.fileid-value {
+  color: var(--black-900);
+}
+.version-info {
   font-size: 0.95em;
+}
+.version {
+  width: 100%;
+  word-break: break-word;
+}
+.version-key {
+  color: var(--black-300);
+}
+.version-value {
+  color: var(--black-900);
+}
+.uploaded {
+  color: var(--black-300);
 }
 
 .pagination {

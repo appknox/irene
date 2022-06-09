@@ -119,11 +119,11 @@ module(
         };
       });
       await this.owner.lookup('service:partner').load();
-      this.server.createList('partner/partnerclient-file', 5);
+      this.server.createList('partner/partnerclient-project-file', 5);
       this.server.get(
         'v2/partnerclients/:clientId/projects/:projectId/files',
         (schema) => {
-          const data = schema['partner/partnerclientFiles'].all();
+          const data = schema['partner/partnerclientProjectFiles'].all();
           return serializer(data, true);
         }
       );
@@ -135,14 +135,11 @@ module(
       );
       assert.equal(
         this.element.querySelectorAll('[data-test-table-header] > div').length,
-        4,
-        'Should have 4 headers'
+        3,
+        'Should have 3 headers by default'
       );
       assert.dom(`[data-test-table-header-app]`).hasText(`t:app:()`);
       assert.dom(`[data-test-table-header-version]`).hasText(`t:version:()`);
-      assert
-        .dom(`[data-test-table-header-versioncode]`)
-        .hasText(`t:versionCode:()`);
       assert.dom(`[data-test-table-header-uploaded]`).hasText(`t:uploaded:()`);
     });
 
@@ -156,11 +153,11 @@ module(
         };
       });
       await this.owner.lookup('service:partner').load();
-      this.server.createList('partner/partnerclient-file', 5);
+      this.server.createList('partner/partnerclient-project-file', 5);
       this.server.get(
         'v2/partnerclients/:clientId/projects/:projectId/files',
         (schema) => {
-          const data = schema['partner/partnerclientFiles'].all();
+          const data = schema['partner/partnerclientProjectFiles'].all();
           return serializer(data, true);
         }
       );
@@ -175,11 +172,11 @@ module(
         5,
         'Should have 5 rows'
       );
-      assert.dom(`[data-test-row-app] [data-test-row-app-icon]`).exists();
-      assert.dom(`[data-test-row-app] [data-test-row-app-info]`).exists();
-      assert.dom(`[data-test-row-version]`).exists();
-      assert.dom(`[data-test-row-versioncode]`).exists();
-      assert.dom(`[ data-test-row-uploaded]`).exists();
+      assert.dom(`[data-test-app] [data-test-app-icon]`).exists();
+      assert.dom(`[data-test-app] [data-test-app-info]`).exists();
+      assert.dom(`[data-test-version]`).exists();
+      assert.dom(`[data-test-versioncode]`).exists();
+      assert.dom(`[ data-test-uploaded]`).exists();
       assert.dom(`[ data-test-pagination]`).doesNotExist();
     });
 
@@ -194,11 +191,14 @@ module(
       });
       await this.owner.lookup('service:partner').load();
       dayjs.extend(relativeTime);
-      const files = this.server.createList('partner/partnerclient-file', 2);
+      const files = this.server.createList(
+        'partner/partnerclient-project-file',
+        2
+      );
       this.server.get(
         'v2/partnerclients/:clientId/projects/:projectId/files',
         (schema) => {
-          const data = schema['partner/partnerclientFiles'].all();
+          const data = schema['partner/partnerclientProjectFiles'].all();
           return serializer(data, true);
         }
       );
@@ -210,26 +210,25 @@ module(
       );
       for (let row = 0; row <= files.length - 1; row++) {
         const rowData = files.objectAt(row);
-        console.log('rowData', rowData);
         assert
-          .dom(`[data-test-table-body-row="${row}"] [data-test-row-app-icon]`)
+          .dom(`[data-test-table-body-row="${row}"] [data-test-app-icon]`)
           .hasStyle({
             'background-image': `url("${rowData.iconUrl}")`,
           });
         assert
-          .dom(`[data-test-table-body-row="${row}"] [data-test-row-app-info]`)
+          .dom(`[data-test-table-body-row="${row}"] [data-test-app-info]`)
           .hasText(rowData.name);
-
         assert
-          .dom(`[data-test-table-body-row="${row}"] [data-test-row-version]`)
-          .hasText(`${rowData.version}`);
+          .dom(`[data-test-table-body-row="${row}"] [data-test-app-fileid]`)
+          .hasText(`t:fileID:(): ${rowData.id}`);
         assert
-          .dom(
-            `[data-test-table-body-row="${row}"] [data-test-row-versioncode]`
-          )
-          .hasText(`${rowData.versionCode}`);
+          .dom(`[data-test-table-body-row="${row}"] [data-test-version]`)
+          .hasText(`t:version:(): ${rowData.version}`);
         assert
-          .dom(`[data-test-table-body-row="${row}"] [data-test-row-uploaded]`)
+          .dom(`[data-test-table-body-row="${row}"] [data-test-versioncode]`)
+          .hasText(`t:versionCode:(): ${rowData.versionCode}`);
+        assert
+          .dom(`[data-test-table-body-row="${row}"] [data-test-uploaded]`)
           .hasText(dayjs(rowData.createdOn).fromNow());
       }
     });
@@ -244,11 +243,11 @@ module(
         };
       });
       await this.owner.lookup('service:partner').load();
-      this.server.createList('partner/partnerclient-file', 10);
+      this.server.createList('partner/partnerclient-project-file', 10);
       this.server.get(
         'v2/partnerclients/:clientId/projects/:projectId/files',
         (schema) => {
-          const data = schema['partner/partnerclientFiles'].all();
+          const data = schema['partner/partnerclientProjectFiles'].all();
           return serializer(data, true);
         }
       );
@@ -262,7 +261,7 @@ module(
       assert.dom(`[ data-test-pagination]`).exists();
     });
 
-    test('it should render files list section if privilege is set to true', async function (assert) {
+    test('it should render files list section if list_files privilege is set to true', async function (assert) {
       this.server.get('v2/partners/:id', (_, req) => {
         return {
           id: req.params.id,
@@ -278,7 +277,7 @@ module(
       assert.dom(`[data-test-upload-list]`).exists();
     });
 
-    test('it should not render anything if the privilege is set to false', async function (assert) {
+    test('it should not render anything if the list_files privilege is set to false', async function (assert) {
       this.server.get('v2/partners/:id', (_, req) => {
         return {
           id: req.params.id,
@@ -292,6 +291,127 @@ module(
       await render(hbs`<Partner::ClientUploadsList/>`);
 
       assert.dom(`[data-test-upload-list]`).doesNotExist();
+    });
+
+    test('it should render scan results & report columns if download_reports privilege is set to true', async function (assert) {
+      this.server.get('v2/partners/:id', (_, req) => {
+        return {
+          id: req.params.id,
+          access: {
+            list_files: true,
+            download_reports: true,
+          },
+        };
+      });
+      await this.owner.lookup('service:partner').load();
+      dayjs.extend(relativeTime);
+      const files = this.server.createList(
+        'partner/partnerclient-project-file',
+        5
+      );
+      this.server.get(
+        'v2/partnerclients/:clientId/projects/:projectId/files',
+        (schema) => {
+          const data = schema['partner/partnerclientProjectFiles'].all();
+          return serializer(data, true);
+        }
+      );
+      this.set('clientId', 1);
+      this.set('projectId', 1);
+
+      await render(
+        hbs`<Partner::ClientUploadsList @clientId={{this.clientId}} @projectId={{this.projectId}}/>`
+      );
+      assert.equal(
+        this.element.querySelectorAll('[data-test-table-header] > div').length,
+        5,
+        'Should have 5 headers by default'
+      );
+      assert.dom(`[data-test-table-header-app]`).hasText(`t:app:()`);
+      assert.dom(`[data-test-table-header-version]`).hasText(`t:version:()`);
+      assert.dom(`[data-test-table-header-uploaded]`).hasText(`t:uploaded:()`);
+      assert
+        .dom(`[data-test-table-header-summary]`)
+        .hasText(`t:scanResults:()`);
+      assert.dom(`[data-test-table-header-report]`).hasText(`t:report:()`);
+
+      for (let row = 0; row <= files.length - 1; row++) {
+        const rowData = files.objectAt(row);
+        assert
+          .dom(`[data-test-table-body-row="${row}"] [data-test-app-icon]`)
+          .hasStyle({
+            'background-image': `url("${rowData.iconUrl}")`,
+          });
+        assert
+          .dom(`[data-test-table-body-row="${row}"] [data-test-app-info]`)
+          .hasText(rowData.name);
+        assert
+          .dom(`[data-test-table-body-row="${row}"] [data-test-app-fileid]`)
+          .hasText(`t:fileID:(): ${rowData.id}`);
+        assert
+          .dom(`[data-test-table-body-row="${row}"] [data-test-version]`)
+          .hasText(`t:version:(): ${rowData.version}`);
+        assert
+          .dom(`[data-test-table-body-row="${row}"] [data-test-versioncode]`)
+          .hasText(`t:versionCode:(): ${rowData.versionCode}`);
+        assert
+          .dom(`[data-test-table-body-row="${row}"] [data-test-uploaded]`)
+          .hasText(dayjs(rowData.createdOn).fromNow());
+        assert
+          .dom(`[data-test-table-body-row="${row}"] [data-test-summary]`)
+          .hasText('');
+        assert
+          .dom(`[data-test-table-body-row="${row}"] [data-test-report]`)
+          .containsText('Download');
+      }
+    });
+
+    test('it should not render scan results & report columns if download_reports privilege is set to false', async function (assert) {
+      this.server.get('v2/partners/:id', (_, req) => {
+        return {
+          id: req.params.id,
+          access: {
+            list_files: true,
+            download_reports: false,
+          },
+        };
+      });
+      await this.owner.lookup('service:partner').load();
+      dayjs.extend(relativeTime);
+      const files = this.server.createList(
+        'partner/partnerclient-project-file',
+        5
+      );
+      this.server.get(
+        'v2/partnerclients/:clientId/projects/:projectId/files',
+        (schema) => {
+          const data = schema['partner/partnerclientProjectFiles'].all();
+          return serializer(data, true);
+        }
+      );
+      this.set('clientId', 1);
+      this.set('projectId', 1);
+
+      await render(
+        hbs`<Partner::ClientUploadsList @clientId={{this.clientId}} @projectId={{this.projectId}}/>`
+      );
+      assert.equal(
+        this.element.querySelectorAll('[data-test-table-header] > div').length,
+        3,
+        'Should have 3 headers by default'
+      );
+
+      assert.dom(`[data-test-table-header-summary]`).doesNotExist();
+      assert.dom(`[data-test-table-header-report]`).doesNotExist();
+
+      for (let row = 0; row <= files.length - 1; row++) {
+        assert
+          .dom(`[data-test-table-body-row="${row}"] [data-test-summary]`)
+          .doesNotExist();
+        assert
+          .dom(`[data-test-table-body-row="${row}"] [data-test-report]`)
+          .doesNotExist();
+      }
     });
   }
 );
