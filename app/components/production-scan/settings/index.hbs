@@ -1,0 +1,17 @@
+<div local-class='settings-block'>
+  <div local-class='label-group'>
+    <h6 local-class='label-heading'>Production Scan Setting</h6>
+    <p local-class='label-description'>Once enabled, our platform will monitor
+      for any unscanned versions of your applications on the Playstore or
+      Appstore. If any such applications are found, the list below will be
+      updated with a status of 'Not Initiated'. After you upload the unscanned
+      version to Appknox, the status will change to 'Completed'.</p>
+  </div>
+
+  <AkToggle
+    @size='small'
+    @checked={{@settings.enabled}}
+    @disabled={{not this.canEditSettings}}
+    {{on 'click' this.toggleProductionScanEnabled}}
+  />
+</div>
