@@ -1,0 +1,30 @@
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.button-small {
+  height: 2rem;
+  padding: 0.5rem;
+}
+.download-button {
+  width: 8rem;
+}
+.progress-button {
+  &:hover {
+    background-color: transparent !important;
+    color: var(--primary) !important;
+  }
+}
+.copy-button {
+  border: none;
+}
+
+.progress-loader {
+  position: absolute;
+  width: 0%;
+  height: 100%;
+  background-color: var(--primary);
+  bottom: 0;
+  left: 0;
+  opacity: 0.2;
+}

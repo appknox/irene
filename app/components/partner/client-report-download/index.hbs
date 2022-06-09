@@ -1,0 +1,88 @@
+<div {{did-insert (perform this.getReports)}}>
+  <div local-class='actions'>
+    <div>
+      <button
+        type='button'
+        class='button is-primary is-small'
+        local-class='{{if
+          this.isGenerating
+          "progress-button"
+        }} download-button button-small '
+        disabled={{not this.latestReport.id}}
+        {{on 'click' (fn this.onDownload this.latestReport.id)}}
+      >
+        {{#if this.isGenerating}}
+          <span
+            local-class='progress-loader'
+            class='is-progress'
+            style={{this.generationProgressStyle}}
+          ></span>
+          Generating
+        {{else}}
+          {{fa-icon 'download'}}&nbsp; Download
+        {{/if}}
+      </button>
+      <AttachTooltip @placement='top' @arrow={{true}} @animation='shift'>
+        {{#if this.isGenerating}}
+          Progress:
+          {{this.latestReport.progress}}%
+        {{else if this.latestReport.id}}
+          {{t 'generatedOn'}}
+          {{day-js
+            date=this.latestReport.generatedOn
+            format='DD MMM YYYY hh:mm a'
+          }}
+        {{else}}
+          No reports generated yet
+        {{/if}}
+      </AttachTooltip>
+    </div>
+
+    <div>
+      <button
+        type='button'
+        class='button is-default'
+        local-class='button-small'
+        disabled={{this.isGenerating}}
+        {{on 'click' this.onGenerate}}
+      >
+        {{fa-icon 'repeat'}}
+      </button>
+      <AttachTooltip @placement='top' @arrow={{true}} @animation='shift'>
+        {{#if this.isGenerating}}
+          Report generation
+          <br />in progress.
+          <br />Please wait
+        {{else}}
+          Generate<br />New Report
+        {{/if}}
+      </AttachTooltip>
+    </div>
+
+    {{#if this.latestReport.id}}
+      <span {{did-insert (perform this.getUnlockKey this.latestReport.id)}}>
+        {{#if this.getUnlockKey.isRunning}}
+          {{fa-icon 'circle-o-notch fa-spin text-lightgray'}}
+        {{else}}
+          <button
+            type='button'
+            class='button is-default no-border no-hover-button copy-unlock-key-{{this.latestReport.id}}'
+            local-class='copy-button button-small'
+            disabled={{this.getUnlockKey.isRunning}}
+            {{on 'click' (fn this.onCopyPassword this.latestReport.id)}}
+            data-clipboard-text='{{this.unlockKey.unlockKey}}'
+          >
+            {{fa-icon 'clone'}}
+            <AttachTooltip
+              @placement='top-end'
+              @arrow={{true}}
+              @animation='shift'
+            >
+              Copy Password
+            </AttachTooltip>
+          </button>
+        {{/if}}
+      </span>
+    {{/if}}
+  </div>
+</div>
