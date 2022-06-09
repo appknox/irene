@@ -1,0 +1,110 @@
+{{#if this.partner.access.list_files}}
+  <div {{did-insert (perform this.getFileSummary)}}>
+    {{#if this.getFileSummary.isRunning}}
+      {{fa-icon 'circle-o-notch fa-spin text-lightgray'}}
+    {{else if this.fileSummary}}
+      <div local-class='summary'>
+        <div local-class='riskbar'>
+          <div
+            local-class='riskblock riskblock--critical'
+            style={{this.criticalWidthStyle}}
+          ></div>
+          <div
+            local-class='riskblock riskblock--high'
+            style={{this.highWidthStyle}}
+          ></div>
+          <div
+            local-class='riskblock riskblock--medium'
+            style={{this.mediumWidthStyle}}
+          ></div>
+          <div
+            local-class='riskblock riskblock--low'
+            style={{this.lowWidthStyle}}
+          ></div>
+          <div
+            local-class='riskblock riskblock--passed'
+            style={{this.passedWidthStyle}}
+          ></div>
+          <div
+            local-class='riskblock riskblock--untested'
+            style={{this.untestedWidthStyle}}
+          ></div>
+        </div>
+        <AttachPopover
+          @interactive={{true}}
+          @arrow={{true}}
+          @placement='left'
+          @isShown={{false}}
+          @showOn='mouseenter focus'
+          @hideOn='mouseleave blur escapekey'
+          @animation='shift'
+          @class='ember-attacher-popper'
+          as |attacher|
+        >
+          <div local-class='popover'>
+            <div local-class='index'>
+              <div local-class='riskkey'>
+                <div local-class='riskkey-label'>
+                  <div
+                    local-class='riskkey-color riskkey-color--critical'
+                  ></div>
+                  <div local-class='riskkey-text'>Critical</div>
+                </div>
+                <div
+                  local-class='riskkey-count'
+                >{{this.fileSummary.riskCountCritical}}</div>
+              </div>
+              <div local-class='riskkey'>
+                <div local-class='riskkey-label'>
+                  <div local-class='riskkey-color riskkey-color--high'></div>
+                  <div local-class='riskkey-text'>High</div>
+                </div>
+                <div
+                  local-class='riskkey-count'
+                >{{this.fileSummary.riskCountHigh}}</div>
+              </div>
+              <div local-class='riskkey'>
+                <div local-class='riskkey-label'>
+                  <div local-class='riskkey-color riskkey-color--medium'></div>
+                  <div local-class='riskkey-text'>Medium</div>
+                </div>
+                <div
+                  local-class='riskkey-count'
+                >{{this.fileSummary.riskCountMedium}}</div>
+              </div>
+              <div local-class='riskkey'>
+                <div local-class='riskkey-label'>
+                  <div local-class='riskkey-color riskkey-color--low'></div>
+                  <div local-class='riskkey-text'>Low</div>
+                </div>
+                <div
+                  local-class='riskkey-count'
+                >{{this.fileSummary.riskCountLow}}</div>
+              </div>
+              <div local-class='riskkey'>
+                <div local-class='riskkey-label'>
+                  <div local-class='riskkey-color riskkey-color--passed'></div>
+                  <div local-class='riskkey-text'>Passed</div>
+                </div>
+                <div
+                  local-class='riskkey-count'
+                >{{this.fileSummary.riskCountPassed}}</div>
+              </div>
+              <div local-class='riskkey'>
+                <div local-class='riskkey-label'>
+                  <div
+                    local-class='riskkey-color riskkey-color--untested'
+                  ></div>
+                  <div local-class='riskkey-text'>Untested</div>
+                </div>
+                <div
+                  local-class='riskkey-count'
+                >{{this.fileSummary.riskCountUntested}}</div>
+              </div>
+            </div>
+          </div>
+        </AttachPopover>
+      </div>
+    {{/if}}
+  </div>
+{{/if}}
