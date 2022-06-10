@@ -1,0 +1,132 @@
+{{#if (or this.hasProjects this.hasObjects)}}
+  <div class='column' {{did-insert this.fetchProjects}}>
+    <div class='box-container home-page'>
+      <div local-class='filters'>
+        <div local-class='filter__item'>
+          {{t 'search'}}<div class='margin-top'>
+            {{! template-lint-disable require-input-label }}
+            <Input
+              label='search'
+              @type='search'
+              @value={{this.tempQuery}}
+              class='input mp-search-query'
+              placeholder={{t 'searchQuery'}}
+            />
+          </div>
+        </div>
+        <div local-class='filter__item'>
+          {{concat (t 'filterBy') ' ' (t 'team')}}<div class='margin-top'>
+            <PowerSelect
+              @triggerClass='input'
+              @dropdownClass='power-select-custom-repo'
+              @renderInPlace={{true}}
+              @searchPlaceholder={{t 'searchTeamByName'}}
+              @search={{this.searchTeams}}
+              @searchEnabled={{true}}
+              @options={{this.teams}}
+              @selected={{this.selectedTeam}}
+              @loadingMessage={{t 'loadingTeam'}}
+              @onchange={{this.onSelectTeam}}
+              @onopen={{this.onOpenTFilter}}
+              as |team|
+            >
+              {{team.name}}
+            </PowerSelect>
+
+          </div>
+        </div>
+        <div local-class='filter__item'>
+          {{t 'sortBy'}}<div class='margin-top'>
+            <select
+              id='project-sort-property'
+              class='input'
+              {{on 'change' this.sortProjects}}
+            >
+              {{#each this.sortingKeyObjects as |sortingKeyObject|}}
+                <option
+                  action='foo'
+                  value='{{filter-platform sortingKeyObject}}'
+                >
+                  {{sortingKeyObject.text}}
+                </option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
+        <div local-class='filter__item'>
+          {{t 'filterBy'}}<div class='margin-top'>
+            <select
+              id='project-filter-platform'
+              class='input'
+              {{on 'change' this.filterPlatform}}
+            >
+              <option value='-1'>
+                {{t 'allPlatforms'}}
+              </option>{{#each this.platformObjects as |platformObject|}}
+                <option value={{platformObject.value}}>
+                  {{platformObject.key}}
+                </option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='columns project-container'>
+      {{#if this.hasObjects}}
+        <Pagination
+          @results={{this.objects}}
+          @onPageItemsCountChange={{this.getPage}}
+          @totalItems={{this.totalCount}}
+          @nextAction={{this.goToPage}}
+          @prevAction={{this.goToPage}}
+          @itemPerPageSelectOptions={{this.itemPerPageSelectOptions}}
+          @tableItemLabel='Projects'
+          as |context|
+        >
+          {{#if this.isLoading}}
+            <div
+              class='project-loading-container'
+              local-class='loading-container'
+            >
+              <ThreeBounceSpinner />
+            </div>
+          {{else}}
+            <div class='columns project-container'>
+              {{#each context.currentPage as |project|}}
+                <ProjectOverview @project={{project}} />
+              {{/each}}
+            </div>
+          {{/if}}
+        </Pagination>
+      {{else if this.isEmptyResults}}
+        <div local-class='no-result-found'>
+          <h5 class='capitalize-text text-centre'>
+            {{t 'noResultsFound'}}
+          </h5>
+          <h6>
+            {{t 'tryAdjustingFilter'}}
+          </h6>
+        </div>
+      {{else}}
+        <div class='project-loading-container'>
+          <ThreeBounceSpinner />
+        </div>
+      {{/if}}
+    </div>
+  </div>
+{{else}}
+  <div class='column is-fullwidth no-project-container'>
+    <div class='no-project'>
+      <h4 class='capitalize-text'>
+        {{t 'noProject'}}!!
+      </h4>
+      <h5>
+        {{t 'noProjectUploaded'}}
+      </h5>
+      <h6>
+        {{t 'uploadNewProject' htmlSafe=true}}
+      </h6>
+    </div>
+  </div>
+{{/if}}
