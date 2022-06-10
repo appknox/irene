@@ -11,45 +11,32 @@ export default class PartnerClientReportSummaryComponent extends Component {
 
   @tracked fileSummary = null;
 
-  get totalCount() {
-    return (
-      this.fileSummary.riskCountCritical +
-      this.fileSummary.riskCountHigh +
-      this.fileSummary.riskCountMedium +
-      this.fileSummary.riskCountLow +
-      this.fileSummary.riskCountPassed +
-      this.fileSummary.riskCountUntested
-    );
+  get popoverPlacement() {
+    return this.args.indexPlacement ? this.args.indexPlacement : 'top';
   }
 
   get criticalWidthStyle() {
-    let p = (this.fileSummary.riskCountCritical / this.totalCount) * 100;
-    return htmlSafe(`width: ${p}%`);
+    return htmlSafe(`width: ${this.fileSummary.criticalPercent}%`);
   }
 
   get highWidthStyle() {
-    let p = (this.fileSummary.riskCountHigh / this.totalCount) * 100;
-    return htmlSafe(`width: ${p}%`);
+    return htmlSafe(`width: ${this.fileSummary.highPercent}%`);
   }
 
   get mediumWidthStyle() {
-    let p = (this.fileSummary.riskCountMedium / this.totalCount) * 100;
-    return htmlSafe(`width: ${p}%`);
+    return htmlSafe(`width: ${this.fileSummary.mediumPercent}%`);
   }
 
   get lowWidthStyle() {
-    let p = (this.fileSummary.riskCountLow / this.totalCount) * 100;
-    return htmlSafe(`width: ${p}%`);
+    return htmlSafe(`width: ${this.fileSummary.lowPercent}%`);
   }
 
   get passedWidthStyle() {
-    let p = (this.fileSummary.riskCountPassed / this.totalCount) * 100;
-    return htmlSafe(`width: ${p}%`);
+    return htmlSafe(`width: ${this.fileSummary.passedPercent}%`);
   }
 
   get untestedWidthStyle() {
-    const p = (this.fileSummary.riskCountUntested / this.totalCount) * 100;
-    return htmlSafe(`width: ${p}%`);
+    return htmlSafe(`width: ${this.fileSummary.untestedPercent}%`);
   }
 
   @task(function* () {
