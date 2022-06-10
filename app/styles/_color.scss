@@ -9,6 +9,8 @@ body {
   --white: #ffffff;
   --black: #{$black};
   --shade-black-7: #c4c4c4;
+  --shade-black-8: #d9d9d9;
+  --green-approval: #80c081;
 }
 /*------- static colors end -------*/
 
@@ -62,3 +64,12 @@ body {
 }
 
 /*------- button colors end -------*/
+
+/*------- toggle button colors start ------*/
+body {
+  --toggle-button-checked-color: var(--green-approval);
+  --toggle-button-unchecked-color: var(--shade-black-8);
+  --toggle-button-label-color: var(--text-black-91);
+  --toggle-button-slider-circle-color: var(--white);
+}
+/*------- toggle button colors end ------*/

@@ -1,0 +1,21 @@
+<label
+  local-class='
+    toggle-container toggle-container-{{if @size @size "default"}} {{if
+    @disabled
+    "disabled"
+  }}
+  '
+>
+  <Input
+    local-class='toggle-input toggle-input-{{if @size @size "default"}}'
+    @type='checkbox'
+    disabled={{@disabled}}
+    @checked={{@checked}}
+    data-test-toggle-input
+    ...attributes
+  />
+  <span
+    local-class='track track-{{if @size @size "default"}}'
+    data-test-toggle-input-slider
+  ></span>
+</label>
