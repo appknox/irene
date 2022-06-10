@@ -9,16 +9,15 @@
       id='recordPerPage'
       {{on 'change' this.onItemsPerPageSelect}}
     >
-      {{#each this.pageItemsCountSelectOptions as |item|}}
+      {{#each this.itemPerPageSelectOptions as |item|}}
         <option
           selected={{item.selected}}
           value={{item.value}}
         >{{item.value}}</option>
       {{/each}}
     </select>
-    <span
-      local-class='app-pagination-page-range'
-    >{{this.startIndex}}-{{this.endOffset}}
+    <span local-class='app-pagination-page-range'>
+      {{this.startItemIdx}}-{{this.endItemIdx}}
       of
       {{@totalItems}}
       {{@tableItemLabel}}
@@ -29,6 +28,7 @@
     <button
       type='button'
       local-class='app-pagination-btn prev-btn'
+      disabled={{this.disablePrev}}
       {{on 'click' this.goToPrevPage}}
     >
       <span>{{inline-svg '/arrowLeft.svg'}}</span>Previous
@@ -37,6 +37,7 @@
     <button
       type='button'
       local-class='app-pagination-btn next-btn'
+      disabled={{this.disableNext}}
       {{on 'click' this.goToNextPage}}
     >
       Next

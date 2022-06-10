@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 8px 15px;
+  width: 100%;
 }
 
 .app-pagination-info {
@@ -66,6 +67,16 @@
   display: flex;
   align-self: flex-end;
   position: relative;
+}
+
+.app-pagination-btn:disabled {
+  border: 1px solid #c4c4c4;
+  color: #c4c4c4;
+  cursor: not-allowed;
+}
+
+.app-pagination-btn:disabled svg path {
+  fill: #c4c4c4;
 }
 
 /* Custom Select */

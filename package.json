@@ -131,6 +131,7 @@
     "billboard.js": "^1.12.7",
     "clipboard": "^2.0.6",
     "ember-radio-button": "^2.0.1",
+    "emblem-migrator": "^1.2.0",
     "pikaday": "^1.8.2",
     "qrious": "^4.0.2"
   },
