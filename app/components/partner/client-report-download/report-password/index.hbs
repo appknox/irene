@@ -1,0 +1,69 @@
+{{#if this.partner.access.download_reports}}
+  <div local-class='dropdown' data-test-dropdown>
+    <button
+      type='button'
+      class='button is-default no-border no-hover-button'
+      local-class='dropdown-toggle'
+      data-test-dropdown-toggle
+    >
+      {{fa-icon 'key'}}
+    </button>
+    <AttachTooltip @placement='top-end' @arrow={{true}} @animation='shift'>
+      <span data-test-dropdown-tooltip-text>{{t 'reportPassword'}}</span>
+    </AttachTooltip>
+    <AttachPopover
+      @interactive={{true}}
+      @arrow={{true}}
+      @placement='bottom-end'
+      @isShown={{false}}
+      @lazyRender={{true}}
+      @showOn='click'
+      @hideOn='clickout click'
+      @animation='shift'
+      @class='ember-attacher-popper popper-white'
+      as |attacher|
+    >
+      <div
+        local-class='dropdown-tray'
+        {{did-insert (perform this.getUnlockKey)}}
+        data-test-dropdown-tray
+      >
+        <div class='dropdown-content' data-test-report-password>
+          {{#if this.getUnlockKey.isRunning}}
+            <div local-class='password-loading' data-test-loading>
+              {{fa-icon 'circle-o-notch fa-spin text-lightgray'}}
+              {{t 'loading'}}
+            </div>
+          {{else if this.unlockKey}}
+            <div local-class='password-title' data-test-report-password-title>
+              {{t 'reportPassword'}}
+            </div>
+            <div local-class='password-display'>
+              <input
+                type='text'
+                id='unlock-key-{{@reportId}}'
+                local-class='password-input'
+                value={{this.unlockKey.unlockKey}}
+                data-test-report-password-value
+              />
+              <button
+                type='button'
+                class='button is-primary highlighted-button copy-unlock-key-button-{{@reportId}}'
+                local-class='copy-button button-small'
+                data-clipboard-target='#unlock-key-{{@reportId}}'
+                data-clipboard-action='copy'
+                {{on 'click' this.onCopyPassword}}
+                data-test-report-password-copy-button
+              >{{fa-icon 'clone'}}&nbsp; {{t 'copy'}}</button>
+            </div>
+          {{else if this.apiError}}
+            <div local-class='password-loading-error' data-test-api-error>
+              <div>{{fa-icon 'warning'}}</div>
+              <div>{{t 'somethingWentWrong'}}</div>
+            </div>
+          {{/if}}
+        </div>
+      </div>
+    </AttachPopover>
+  </div>
+{{/if}}

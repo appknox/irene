@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
 module(
-  'Unit | Serializer | partner/partnerclient file report unlockkey',
+  'Unit | Serializer | partner/partnerclient report unlockkey',
   function (hooks) {
     setupTest(hooks);
 
@@ -10,7 +10,7 @@ module(
     test('it exists', function (assert) {
       let store = this.owner.lookup('service:store');
       let serializer = store.serializerFor(
-        'partner/partnerclient-file-report-unlockkey'
+        'partner/partnerclient-report-unlockkey'
       );
 
       assert.ok(serializer);
@@ -19,7 +19,7 @@ module(
     test('it serializes records', function (assert) {
       let store = this.owner.lookup('service:store');
       let record = store.createRecord(
-        'partner/partnerclient-file-report-unlockkey',
+        'partner/partnerclient-report-unlockkey',
         {}
       );
 

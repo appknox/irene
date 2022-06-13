@@ -1,0 +1,53 @@
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
+import ClipboardJS from 'clipboard/src/clipboard';
+
+export default class PartnerClientReportDownloadReportPasswordComponent extends Component {
+  @service intl;
+  @service store;
+  @service partner;
+  @service('notifications') notify;
+
+  @tracked unlockKey = null;
+  @tracked apiError = false;
+
+  @task(function* () {
+    try {
+      this.unlockKey = yield this.store.queryRecord(
+        'partner/partnerclient-report-unlockkey',
+        {
+          clientId: this.args.clientId,
+          reportId: this.args.reportId,
+        }
+      );
+    } catch (err) {
+      this.unlockKey = null;
+      this.apiError = true;
+    }
+  })
+  getUnlockKey;
+
+  @action
+  onCopyPassword() {
+    let clipboard = new ClipboardJS(
+      `.copy-unlock-key-button-${this.args.reportId}`
+    );
+    clipboard.on('success', async (err) => {
+      console.info('Action:', err.action);
+      console.info('Text:', err.text);
+      console.info('Trigger:', err.trigger);
+      this.notify.info(
+        `Report password copied for file ID ${this.args.fileId}`
+      );
+      err.clearSelection();
+      clipboard.destroy();
+    });
+    clipboard.on('error', () => {
+      this.notify.error(this.intl.t('tPleaseTryAgain'));
+      clipboard.destroy();
+    });
+  }
+}
