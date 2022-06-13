@@ -1,6 +1,6 @@
 import Model, { attr } from '@ember-data/model';
 
-export default class PartnerPartnerclientFileReportModel extends Model {
+export default class PartnerclientFileReportModel extends Model {
   @attr('string') language;
   @attr('number') progress;
   @attr('date') generatedOn;

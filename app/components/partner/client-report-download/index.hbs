@@ -1,88 +1,101 @@
-<div {{did-insert (perform this.getReports)}}>
-  <div local-class='actions'>
-    <div>
-      <button
-        type='button'
-        class='button is-primary is-small'
-        local-class='{{if
-          this.isGenerating
-          "progress-button"
-        }} download-button button-small '
-        disabled={{not this.latestReport.id}}
-        {{on 'click' (fn this.onDownload this.latestReport.id)}}
-      >
-        {{#if this.isGenerating}}
-          <span
-            local-class='progress-loader'
-            class='is-progress'
-            style={{this.generationProgressStyle}}
-          ></span>
-          Generating
-        {{else}}
-          {{fa-icon 'download'}}&nbsp; Download
-        {{/if}}
-      </button>
-      <AttachTooltip @placement='top' @arrow={{true}} @animation='shift'>
-        {{#if this.isGenerating}}
-          Progress:
-          {{this.latestReport.progress}}%
-        {{else if this.latestReport.id}}
-          {{t 'generatedOn'}}
-          {{day-js
-            date=this.latestReport.generatedOn
-            format='DD MMM YYYY hh:mm a'
-          }}
-        {{else}}
-          No reports generated yet
-        {{/if}}
-      </AttachTooltip>
-    </div>
+{{#if this.partner.access.download_reports}}
+  <div
+    {{did-insert (perform this.getReports)}}
+    data-test-report-download
+    ...attributes
+  >
+    {{#unless this.reportListAPIError}}
+      <div local-class='report-actions' data-test-report-actions>
 
-    <div>
-      <button
-        type='button'
-        class='button is-default'
-        local-class='button-small'
-        disabled={{this.isGenerating}}
-        {{on 'click' this.onGenerate}}
-      >
-        {{fa-icon 'repeat'}}
-      </button>
-      <AttachTooltip @placement='top' @arrow={{true}} @animation='shift'>
-        {{#if this.isGenerating}}
-          Report generation
-          <br />in progress.
-          <br />Please wait
-        {{else}}
-          Generate<br />New Report
-        {{/if}}
-      </AttachTooltip>
-    </div>
-
-    {{#if this.latestReport.id}}
-      <span {{did-insert (perform this.getUnlockKey this.latestReport.id)}}>
-        {{#if this.getUnlockKey.isRunning}}
-          {{fa-icon 'circle-o-notch fa-spin text-lightgray'}}
-        {{else}}
+        <div data-test-action-download>
           <button
             type='button'
-            class='button is-default no-border no-hover-button copy-unlock-key-{{this.latestReport.id}}'
-            local-class='copy-button button-small'
-            disabled={{this.getUnlockKey.isRunning}}
-            {{on 'click' (fn this.onCopyPassword this.latestReport.id)}}
-            data-clipboard-text='{{this.unlockKey.unlockKey}}'
+            class='button is-primary is-small
+              {{if this.isGenerating "is-progress"}}'
+            local-class='{{if
+              this.isGenerating
+              "button-progress"
+            }} download-button button-small'
+            disabled={{this.isDownloadButtonDisabled}}
+            {{on 'click' (fn this.onDownload this.latestReport.id)}}
+            data-test-download-report-button
           >
-            {{fa-icon 'clone'}}
-            <AttachTooltip
-              @placement='top-end'
-              @arrow={{true}}
-              @animation='shift'
-            >
-              Copy Password
-            </AttachTooltip>
+            {{#if this.isGenerating}}
+              <span
+                class='vertical-align-center'
+                data-test-download-button-generating-label
+              >{{t 'generating'}}</span>
+            {{else}}
+              <span
+                class='vertical-align-center'
+                data-test-download-button-download-label
+              >{{fa-icon 'download'}}&nbsp; {{t 'download'}}</span>
+            {{/if}}
           </button>
+          <AttachTooltip @placement='top' @arrow={{true}} @animation='shift'>
+            {{#if this.isGenerating}}
+              <span data-test-download-button-generating-tooltip>
+                Progress:
+                {{this.latestReport.progress}}%
+              </span>
+            {{else if this.latestReport.id}}
+              <span data-test-download-button-tooltip>
+                {{t 'generatedOn'}}
+                {{day-js
+                  date=this.latestReport.generatedOn
+                  format='DD MMM YYYY hh:mm a'
+                }}
+              </span>
+            {{else}}
+              <span data-test-download-button-no-report-tooltip>
+                {{t 'noReportsGenerated'}}
+              </span>
+            {{/if}}
+          </AttachTooltip>
+        </div>
+
+        <div data-test-action-generate>
+          <button
+            type='button'
+            class='button is-default'
+            local-class='button-small'
+            disabled={{this.isGenerateButtonDisabled}}
+            {{on 'click' this.onGenerate}}
+            data-test-generate-report-button
+          >
+            {{fa-icon 'repeat'}}
+          </button>
+          <AttachTooltip @placement='top' @arrow={{true}} @animation='shift'>
+            {{#if this.isGenerating}}
+              <span
+                local-class='generate-tooltip'
+                data-test-generate-button-progress-tooltip
+              >
+                Report generation in progress. Please wait
+              </span>
+            {{else}}
+              <span
+                local-class='generate-tooltip'
+                data-test-generate-button-tooltip
+              >
+                {{t 'generate'}}
+                {{t 'newReport'}}
+              </span>
+            {{/if}}
+          </AttachTooltip>
+        </div>
+
+        {{#if this.latestReport.id}}
+          <div data-test-action-copy-password>
+            <Partner::ClientReportDownload::ReportPassword
+              @clientId={{@clientId}}
+              @fileId={{@fileId}}
+              @reportId={{this.latestReport.id}}
+              data-test-report-password-toggle-id='{{this.latestReport.id}}'
+            />
+          </div>
         {{/if}}
-      </span>
-    {{/if}}
+      </div>
+    {{/unless}}
   </div>
-</div>
+{{/if}}

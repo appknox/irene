@@ -4,7 +4,6 @@ import { htmlSafe } from '@ember/template';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import ClipboardJS from 'clipboard/src/clipboard';
 import { REPORT } from 'irene/utils/constants';
 import poll from 'irene/services/poll';
 
@@ -14,11 +13,9 @@ export default class PartnerClientReportDownloadComponent extends Component {
   @service partner;
   @service('notifications') notify;
 
-  @tracked reports = [];
-  @tracked unlockKey = null;
+  @tracked reports = null;
   @tracked latestReport = {};
-
-  @tracked progress = 2;
+  @tracked reportListAPIError = false;
 
   get generationProgressStyle() {
     return htmlSafe(`width: ${this.latestReport.progress}%`);
@@ -26,6 +23,14 @@ export default class PartnerClientReportDownloadComponent extends Component {
 
   get isGenerating() {
     return this.latestReport.progress < 100 ? true : false;
+  }
+
+  get isDownloadButtonDisabled() {
+    return !this.latestReport.id || this.isGenerating;
+  }
+
+  get isGenerateButtonDisabled() {
+    return this.reports == null || this.isGenerating;
   }
 
   @task(function* (id) {
@@ -61,6 +66,7 @@ export default class PartnerClientReportDownloadComponent extends Component {
       }
     } catch (err) {
       this.reports = null;
+      this.reportListAPIError = true;
     }
   })
   getReports;
@@ -74,22 +80,21 @@ export default class PartnerClientReportDownloadComponent extends Component {
     if (!reportId) {
       return;
     }
-    var stopPoll = poll(() => {
-      return this.store
-        .queryRecord('partner/partnerclient-report', {
-          clientId: this.args.clientId,
-          id: this.reports.firstObject.id,
-        })
-        .then(
-          (report) => {
-            if (report.progress == 100) {
-              stopPoll();
-            }
-          },
-          () => {
-            stopPoll();
+    var stopPoll = poll(async () => {
+      try {
+        let report = await this.store.queryRecord(
+          'partner/partnerclient-report',
+          {
+            clientId: this.args.clientId,
+            id: this.reports.firstObject.id,
           }
         );
+        if (report.progress == 100) {
+          stopPoll();
+        }
+      } catch (err) {
+        stopPoll();
+      }
     }, 5000);
   }
 
@@ -136,36 +141,5 @@ export default class PartnerClientReportDownloadComponent extends Component {
   @action
   onDownload(reportId) {
     this.downloadPDFReport.perform(reportId);
-  }
-
-  @task(function* (reportId) {
-    try {
-      this.unlockKey = yield this.store.queryRecord(
-        'partner/partnerclient-file-report-unlockkey',
-        {
-          clientId: this.args.clientId,
-          reportId: reportId,
-        }
-      );
-    } catch (err) {
-      this.unlockKey = null;
-    }
-  })
-  getUnlockKey;
-
-  @action
-  onCopyPassword(reportId) {
-    let clipboard = new ClipboardJS(`.copy-unlock-key-${reportId}`);
-    clipboard.on('success', (err) => {
-      this.notify.info(
-        `Report password copied for file ID ${this.args.fileId}`
-      );
-      err.clearSelection();
-      clipboard.destroy();
-    });
-    clipboard.on('error', () => {
-      this.notify.error(this.intl.t('tPleaseTryAgain'));
-      clipboard.destroy();
-    });
   }
 }

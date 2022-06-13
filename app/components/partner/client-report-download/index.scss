@@ -1,4 +1,4 @@
-.actions {
+.report-actions {
   display: flex;
   gap: 0.5rem;
 }
@@ -6,25 +6,24 @@
   height: 2rem;
   padding: 0.5rem;
 }
-.download-button {
-  width: 8rem;
-}
-.progress-button {
+.button-progress {
   &:hover {
     background-color: transparent !important;
     color: var(--primary) !important;
   }
 }
-.copy-button {
-  border: none;
+.download-button {
+  width: 8rem;
 }
-
-.progress-loader {
-  position: absolute;
-  width: 0%;
-  height: 100%;
-  background-color: var(--primary);
-  bottom: 0;
-  left: 0;
-  opacity: 0.2;
+.generate-tooltip {
+  width: 5rem;
+}
+.report-loading-error {
+  color: var(--text-error);
+  font-size: 0.95rem;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
