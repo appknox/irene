@@ -82,7 +82,7 @@ export default class PartnerClientReportDownloadComponent extends Component {
     if (!reportId) {
       return;
     }
-    var stopPoll = poll(async () => {
+    let stopPoll = poll(async () => {
       try {
         let report = await this.store.queryRecord(
           'partner/partnerclient-report',

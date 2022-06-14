@@ -8,7 +8,7 @@ function _serialize_object(payload) {
 }
 
 export function serializer(data, many = false) {
-  if (many == true) {
+  if (many) {
     return {
       count: data.length,
       next: null,

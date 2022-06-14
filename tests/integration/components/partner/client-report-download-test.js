@@ -21,10 +21,10 @@ class NotificationsStub extends Service {
   successMsg = null;
 
   error(msg) {
-    return (this.errorMsg = msg);
+    this.errorMsg = msg;
   }
   success(msg) {
-    return (this.successMsg = msg);
+    this.successMsg = msg;
   }
 }
 
@@ -423,7 +423,7 @@ module(
       this.server.get(
         'v2/partnerclients/:clientId/files/:fileId/reports',
         () => {
-          return Response(500);
+          return new Response(500);
         }
       );
       this.set('clientId', 1);

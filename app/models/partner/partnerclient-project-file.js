@@ -3,7 +3,7 @@ import Model, { attr } from '@ember-data/model';
 import { htmlSafe } from '@ember/template';
 import { computed } from '@ember/object';
 
-export default class PartnerclientFileModel extends Model {
+export default class PartnerclientProjectFileModel extends Model {
   @attr('string') name;
   @attr('date') createdOn;
   @attr('string') iconUrl;

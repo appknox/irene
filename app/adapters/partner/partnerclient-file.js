@@ -1,7 +1,7 @@
 import commondrf from '../commondrf';
 
 export default class PartnerclientFileAdapter extends commondrf {
-  _buildNestedURL(modelName, clientId, id) {
+  _buildNestedURL(_modelName, clientId, id) {
     const baseURL = `${this.namespace_v2}/partnerclients/${clientId}/files/${id}`;
     return this.buildURLFromBase(baseURL);
   }

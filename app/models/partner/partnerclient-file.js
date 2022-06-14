@@ -8,7 +8,7 @@ export default class PartnerclientFileModel extends Model {
   @attr('string') versionCode;
 
   async createReport(clientId, id, data) {
-    var adapter = this.store.adapterFor(this.constructor.modelName);
+    let adapter = this.store.adapterFor(this.constructor.modelName);
     await adapter.createReport(this, clientId, id, data);
   }
 }

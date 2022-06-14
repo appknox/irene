@@ -94,7 +94,7 @@ module(
       this.server.get(
         'v2/partnerclients/:clientId/projects/:projectId/files',
         () => {
-          return Response(500);
+          return new Response(500);
         }
       );
       this.set('clientId', 1);

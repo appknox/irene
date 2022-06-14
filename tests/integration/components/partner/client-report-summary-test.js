@@ -184,9 +184,9 @@ module(
 
       assert.dom('[class="ember-attacher"]').hasStyle({ display: 'none' });
 
-      // TODO: mouseenter event on data-test-risk-summary element should remove
+      // Note: mouseenter event on data-test-risk-summary element should remove
       // display: none from ember-attacher, and vice versa for mouseleave
-      // It is pending because those mouse events are not supported in
+      // Testing this is pending because those mouse events are not supported in
       // ember test helpers
     });
 

@@ -87,7 +87,7 @@ module(
         'v2/partnerclients/:clientId/reports/:id/unlock_key',
         () => {
           this.set('unlockKeyAPICalled', true);
-          return Response(403);
+          return new Response(403);
         }
       );
 
@@ -251,14 +251,11 @@ module(
       );
       await click(copyBtn);
 
-      // TODO: ClipboardJS copies text to clipboard using
+      // Note: ClipboardJS copies text to clipboard using
       // document.execcommand('copy'), in order to retrieve the text we have
-      // to use Clipboard web API, which require permissions to be set from
-      // test context. Even it is given, it does not seems to be copying to
-      // clipboard from tests. Will have to check this further
-
-      // const clipboardText = await navigator.clipboard.readText();
-      // assert.strictEqual(clipboardText, unlockKey.unlockKey);
+      // to use Clipboard web API navigator.clipboard.readText(),
+      // which require permissions to be set from test context.
+      // Therefore skipping this test
     });
 
     test('it should not render if download_reports privilege is set to false', async function (assert) {
@@ -321,7 +318,7 @@ module(
       this.server.get(
         'v2/partnerclients/:clientId/reports/:id/unlock_key',
         () => {
-          return Response(403);
+          return new Response(403);
         }
       );
 

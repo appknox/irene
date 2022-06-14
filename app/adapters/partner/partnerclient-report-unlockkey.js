@@ -1,7 +1,7 @@
 import commondrf from '../commondrf';
 
 export default class PartnerclientFileReportUnlockkeyAdapter extends commondrf {
-  _buildNestedURL(modelName, clientId, reportId) {
+  _buildNestedURL(_modelName, clientId, reportId) {
     const baseURL = `${this.namespace_v2}/partnerclients/${clientId}/reports/${reportId}/unlock_key`;
     return this.buildURLFromBase(baseURL);
   }
