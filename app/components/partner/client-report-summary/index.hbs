@@ -1,5 +1,9 @@
 {{#if this.partner.access.list_files}}
-  <div {{did-insert (perform this.getFileSummary)}} data-test-report-summary>
+  <div
+    {{did-insert (perform this.getFileSummary)}}
+    data-test-report-summary
+    ...attributes
+  >
     {{#if this.getFileSummary.isRunning}}
       {{fa-icon 'circle-o-notch fa-spin text-lightgray'}}
     {{else if this.fileSummary}}
@@ -46,7 +50,6 @@
           @animation='shift'
           @class='ember-attacher-popper'
           data-test-risk-summary-popover
-          as |attacher|
         >
           <div local-class='popover' data-test-riskpopover>
             <div local-class='index' data-test-riskindex>

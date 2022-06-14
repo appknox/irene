@@ -15,28 +15,32 @@ export default class PartnerClientReportSummaryComponent extends Component {
     return this.args.indexPlacement ? this.args.indexPlacement : 'top';
   }
 
+  riskWidthStyle(riskPercent) {
+    return htmlSafe(`width: ${riskPercent}%`);
+  }
+
   get criticalWidthStyle() {
-    return htmlSafe(`width: ${this.fileSummary.criticalPercent}%`);
+    return this.riskWidthStyle(this.fileSummary.criticalPercent);
   }
 
   get highWidthStyle() {
-    return htmlSafe(`width: ${this.fileSummary.highPercent}%`);
+    return this.riskWidthStyle(this.fileSummary.highPercent);
   }
 
   get mediumWidthStyle() {
-    return htmlSafe(`width: ${this.fileSummary.mediumPercent}%`);
+    return this.riskWidthStyle(this.fileSummary.mediumPercent);
   }
 
   get lowWidthStyle() {
-    return htmlSafe(`width: ${this.fileSummary.lowPercent}%`);
+    return this.riskWidthStyle(this.fileSummary.lowPercent);
   }
 
   get passedWidthStyle() {
-    return htmlSafe(`width: ${this.fileSummary.passedPercent}%`);
+    return this.riskWidthStyle(this.fileSummary.passedPercent);
   }
 
   get untestedWidthStyle() {
-    return htmlSafe(`width: ${this.fileSummary.untestedPercent}%`);
+    return this.riskWidthStyle(this.fileSummary.untestedPercent);
   }
 
   @task(function* () {
