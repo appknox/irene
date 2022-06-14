@@ -362,7 +362,7 @@ module(
           .hasText('');
         assert
           .dom(`[data-test-table-body-row="${row}"] [data-test-report]`)
-          .containsText('Download');
+          .exists();
       }
     });
 

@@ -81,16 +81,16 @@
                   }}</div>
 
                 {{#if this.partner.access.download_reports}}
-                  <div local-class='version' data-test-summary>
+                  <div local-class='summary' data-test-summary>
                     <Partner::ClientReportSummary
-                      @clientId={{this.args.clientId}}
+                      @clientId={{@clientId}}
                       @fileId={{upload.id}}
                       @indexPlacement='left'
                     />
                   </div>
                   <div local-class='download' data-test-report>
                     <Partner::ClientReportDownload
-                      @clientId={{this.args.clientId}}
+                      @clientId={{@clientId}}
                       @fileId={{upload.id}}
                     />
                   </div>
@@ -101,6 +101,7 @@
         </div>
         {{#if (or this.hasPrevious this.hasNext)}}
           <div local-class='pagination' data-test-pagination>
+            {{! template-lint-disable no-partial }}
             {{partial 'paginate'}}
           </div>
         {{/if}}
