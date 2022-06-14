@@ -36,9 +36,6 @@ export default class PartnerClientReportDownloadReportPasswordComponent extends 
       `.copy-unlock-key-button-${this.args.reportId}`
     );
     clipboard.on('success', async (err) => {
-      console.info('Action:', err.action);
-      console.info('Text:', err.text);
-      console.info('Trigger:', err.trigger);
       this.notify.info(
         `Report password copied for file ID ${this.args.fileId}`
       );
