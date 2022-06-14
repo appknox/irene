@@ -12,11 +12,20 @@
     color: var(--primary) !important;
   }
 }
+.progress-loader {
+  position: absolute;
+  width: 0%;
+  height: 100%;
+  background-color: var(--primary);
+  bottom: 0;
+  left: 0;
+  opacity: 0.2;
+}
 .download-button {
   width: 8rem;
 }
 .generate-tooltip {
-  width: 5rem;
+  width: 6rem;
 }
 .report-loading-error {
   color: var(--text-error);

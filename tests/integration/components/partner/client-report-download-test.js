@@ -2,12 +2,31 @@ import { module, test } from 'qunit';
 import dayjs from 'dayjs';
 import { Response } from 'miragejs';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import Service from '@ember/service';
+import { render, click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { serializer } from 'irene/tests/test-utils';
 import styles from 'irene/components/partner/client-report-download/index.scss';
+
+class WindowStub extends Service {
+  locationAssign(url) {
+    return url;
+  }
+}
+
+class NotificationsStub extends Service {
+  errorMsg = null;
+  successMsg = null;
+
+  error(msg) {
+    return (this.errorMsg = msg);
+  }
+  success(msg) {
+    return (this.successMsg = msg);
+  }
+}
 
 module(
   'Integration | Component | partner/client-report-download',
@@ -17,6 +36,9 @@ module(
     setupIntl(hooks);
 
     hooks.beforeEach(async function () {
+      this.owner.register('service:notifications', NotificationsStub);
+      this.owner.register('service:window', WindowStub);
+
       await this.server.create('organization');
       await this.owner.lookup('service:organization').load();
     });
@@ -179,8 +201,12 @@ module(
       assert
         .dom('[data-test-download-report-button]')
         .hasAttribute('disabled')
-        .hasClass('is-progress')
         .hasClass(styles['button-progress']);
+      assert
+        .dom('[data-test-download-button-generating-progress]')
+        .hasClass('is-progress')
+        .hasClass(styles['progress-loader'])
+        .hasAttribute('style', `width: ${report.progress}%`);
       assert
         .dom('[data-test-download-button-generating-label]')
         .hasText(`t:generating:()`);
@@ -311,7 +337,7 @@ module(
         .hasText('');
       assert
         .dom('[data-test-generate-button-tooltip]')
-        .hasText(`t:generate:() t:newReport:()`);
+        .hasText(`t:generateNewReport:()`);
     });
 
     test('it should disable generate button even if report is in generating state', async function (assert) {
@@ -353,7 +379,7 @@ module(
         .hasText('');
       assert
         .dom('[data-test-generate-button-progress-tooltip]')
-        .hasText('Report generation in progress. Please wait');
+        .hasText(`t:reportGenerationInProgressWait:()`);
     });
 
     test('it should hide password toggle button if no report exists', async function (assert) {
@@ -481,6 +507,306 @@ module(
       assert
         .dom(`[data-test-report-password-toggle-id="${report.id}"]`)
         .exists();
+    });
+
+    test('it should download report pdf file on download button click', async function (assert) {
+      this.server.create('partner/partner', {
+        access: { download_reports: true },
+      });
+      this.server.get('v2/partners/:id', (schema) => {
+        return serializer(schema['partner/partners'].find(1));
+      });
+      await this.owner.lookup('service:partner').load();
+
+      this.server.create('partner/partnerclient-file-report');
+      this.server.get(
+        'v2/partnerclients/:clientId/files/:fileId/reports',
+        (schema) => {
+          const data = schema['partner/partnerclientFileReports'].all();
+          return serializer(data, true);
+        }
+      );
+
+      this.server.create('partner/partnerclient-report', {
+        progress: 100,
+      });
+      this.server.get('v2/partnerclients/:clientId/reports/:id', (schema) => {
+        const data = schema['partner/partnerclientReports'].find(1);
+        return serializer(data);
+      });
+
+      this.server.get('v2/reports/:id/pdf', () => {
+        return new Response(
+          200,
+          {},
+          {
+            url: 'http://localhost/report_signed_url.pdf',
+          }
+        );
+      });
+
+      this.set('clientId', 1);
+      this.set('fileId', 1);
+
+      const notifyService = this.owner.lookup('service:notifications');
+
+      await render(
+        hbs`<Partner::ClientReportDownload @clientId={{this.clientId}} @fileId={{this.fileId}} />`
+      );
+
+      const downloadBtn = this.element.querySelector(
+        '[data-test-download-report-button]'
+      );
+
+      await click(downloadBtn);
+
+      assert.strictEqual(notifyService.get('errorMsg'), null);
+    });
+
+    test('it should notify on download report error', async function (assert) {
+      this.server.create('partner/partner', {
+        access: { download_reports: true },
+      });
+      this.server.get('v2/partners/:id', (schema) => {
+        return serializer(schema['partner/partners'].find(1));
+      });
+      await this.owner.lookup('service:partner').load();
+
+      this.server.create('partner/partnerclient-file-report');
+      this.server.get(
+        'v2/partnerclients/:clientId/files/:fileId/reports',
+        (schema) => {
+          const data = schema['partner/partnerclientFileReports'].all();
+          return serializer(data, true);
+        }
+      );
+
+      this.server.create('partner/partnerclient-report', {
+        progress: 100,
+      });
+      this.server.get('v2/partnerclients/:clientId/reports/:id', (schema) => {
+        const data = schema['partner/partnerclientReports'].find(1);
+        return serializer(data);
+      });
+
+      this.server.get('v2/reports/:id/pdf', () => {
+        return new Response(500);
+      });
+
+      this.set('clientId', 1);
+      this.set('fileId', 1);
+
+      const notifyService = this.owner.lookup('service:notifications');
+
+      await render(
+        hbs`<Partner::ClientReportDownload @clientId={{this.clientId}} @fileId={{this.fileId}} />`
+      );
+
+      const downloadBtn = this.element.querySelector(
+        '[data-test-download-report-button]'
+      );
+
+      await click(downloadBtn);
+
+      assert.strictEqual(
+        notifyService.get('errorMsg'),
+        `t:downloadUrlNotFound:()`
+      );
+    });
+
+    test('it should trigger report generation and notify on generate button click', async function (assert) {
+      this.server.create('partner/partner', {
+        access: { download_reports: true },
+      });
+      this.server.get('v2/partners/:id', (schema) => {
+        return serializer(schema['partner/partners'].find(1));
+      });
+      await this.owner.lookup('service:partner').load();
+
+      this.server.create('partner/partnerclient-file');
+      this.server.get('v2/partnerclients/:clientId/files/:fileId', (schema) => {
+        const data = schema['partner/partnerclientFiles'].find(1);
+        return serializer(data);
+      });
+
+      this.server.post(
+        'v2/partnerclients/:clientId/files/:fileId/reports',
+        () => {
+          return new Response(202);
+        }
+      );
+
+      this.server.create('partner/partnerclient-file-report');
+      this.server.get(
+        'v2/partnerclients/:clientId/files/:fileId/reports',
+        (schema) => {
+          const data = schema['partner/partnerclientFileReports'].all();
+          return serializer(data, true);
+        }
+      );
+
+      this.server.create('partner/partnerclient-report', {
+        progress: 100,
+      });
+      this.server.get('v2/partnerclients/:clientId/reports/:id', (schema) => {
+        const data = schema['partner/partnerclientReports'].find(1);
+        return serializer(data);
+      });
+
+      this.set('clientId', 1);
+      this.set('fileId', 1);
+
+      const notifyService = this.owner.lookup('service:notifications');
+
+      await render(
+        hbs`<Partner::ClientReportDownload @clientId={{this.clientId}} @fileId={{this.fileId}} />`
+      );
+
+      const generateBtn = this.element.querySelector(
+        '[data-test-generate-report-button]'
+      );
+
+      await click(generateBtn);
+
+      assert.strictEqual(
+        notifyService.get('successMsg'),
+        `t:reportIsGettingGenerated:()`
+      );
+      assert.strictEqual(notifyService.get('errorMsg'), null);
+    });
+
+    test('it should notify error on report generation button click', async function (assert) {
+      this.server.create('partner/partner', {
+        access: { download_reports: true },
+      });
+      this.server.get('v2/partners/:id', (schema) => {
+        return serializer(schema['partner/partners'].find(1));
+      });
+      await this.owner.lookup('service:partner').load();
+
+      this.server.create('partner/partnerclient-file');
+      this.server.get('v2/partnerclients/:clientId/files/:fileId', (schema) => {
+        const data = schema['partner/partnerclientFiles'].find(1);
+        return serializer(data);
+      });
+
+      this.server.post(
+        'v2/partnerclients/:clientId/files/:fileId/reports',
+        () => {
+          return new Response(
+            403,
+            {},
+            {
+              detail: 'You do not have permission to perform this action.',
+            }
+          );
+        }
+      );
+
+      this.server.create('partner/partnerclient-file-report');
+      this.server.get(
+        'v2/partnerclients/:clientId/files/:fileId/reports',
+        (schema) => {
+          const data = schema['partner/partnerclientFileReports'].all();
+          return serializer(data, true);
+        }
+      );
+
+      this.server.create('partner/partnerclient-report', {
+        progress: 100,
+      });
+      this.server.get('v2/partnerclients/:clientId/reports/:id', (schema) => {
+        const data = schema['partner/partnerclientReports'].find(1);
+        return serializer(data);
+      });
+
+      this.set('clientId', 1);
+      this.set('fileId', 1);
+
+      const notifyService = this.owner.lookup('service:notifications');
+
+      await render(
+        hbs`<Partner::ClientReportDownload @clientId={{this.clientId}} @fileId={{this.fileId}} />`
+      );
+
+      const generateBtn = this.element.querySelector(
+        '[data-test-generate-report-button]'
+      );
+
+      await click(generateBtn);
+
+      assert.strictEqual(notifyService.get('successMsg'), null);
+      assert.strictEqual(
+        notifyService.get('errorMsg'),
+        'You do not have permission to perform this action.'
+      );
+    });
+
+    test('it should notify error from API if exists on report generation failure', async function (assert) {
+      this.server.create('partner/partner', {
+        access: { download_reports: true },
+      });
+      this.server.get('v2/partners/:id', (schema) => {
+        return serializer(schema['partner/partners'].find(1));
+      });
+      await this.owner.lookup('service:partner').load();
+
+      this.server.create('partner/partnerclient-file');
+      this.server.get('v2/partnerclients/:clientId/files/:fileId', (schema) => {
+        const data = schema['partner/partnerclientFiles'].find(1);
+        return serializer(data);
+      });
+
+      this.server.post(
+        'v2/partnerclients/:clientId/files/:fileId/reports',
+        () => {
+          return new Response(
+            400,
+            {},
+            {
+              message: 'A report is already being generated. Please wait.',
+            }
+          );
+        }
+      );
+
+      this.server.create('partner/partnerclient-file-report');
+      this.server.get(
+        'v2/partnerclients/:clientId/files/:fileId/reports',
+        (schema) => {
+          const data = schema['partner/partnerclientFileReports'].all();
+          return serializer(data, true);
+        }
+      );
+
+      this.server.create('partner/partnerclient-report', {
+        progress: 100,
+      });
+      this.server.get('v2/partnerclients/:clientId/reports/:id', (schema) => {
+        const data = schema['partner/partnerclientReports'].find(1);
+        return serializer(data);
+      });
+
+      this.set('clientId', 1);
+      this.set('fileId', 1);
+
+      const notifyService = this.owner.lookup('service:notifications');
+
+      await render(
+        hbs`<Partner::ClientReportDownload @clientId={{this.clientId}} @fileId={{this.fileId}} />`
+      );
+
+      const generateBtn = this.element.querySelector(
+        '[data-test-generate-report-button]'
+      );
+
+      await click(generateBtn);
+
+      assert.strictEqual(notifyService.get('successMsg'), null);
+      assert.strictEqual(
+        notifyService.get('errorMsg'),
+        'A report is already being generated. Please wait.'
+      );
     });
   }
 );

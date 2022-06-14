@@ -6,11 +6,13 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { REPORT } from 'irene/utils/constants';
 import poll from 'irene/services/poll';
+import parseError from 'irene/utils/parse-error';
 
 export default class PartnerClientReportDownloadComponent extends Component {
   @service intl;
   @service store;
   @service partner;
+  @service window;
   @service('notifications') notify;
 
   @tracked reports = null;
@@ -107,9 +109,9 @@ export default class PartnerClientReportDownloadComponent extends Component {
       yield file.createReport(this.args.clientId, this.args.fileId, {});
       yield this.getReports.perform();
       this.pollReportProgress();
-      this.notify.success(this.intl.t('reportIsGettingGenerated'));
-    } catch (error) {
-      this.notify.error(error, this.intl.t('reportGenerateError'));
+      yield this.notify.success(this.intl.t('reportIsGettingGenerated'));
+    } catch (err) {
+      this.notify.error(parseError(err, this.intl.t('reportGenerateError')));
     }
   })
   generatePDFReport;
@@ -120,20 +122,25 @@ export default class PartnerClientReportDownloadComponent extends Component {
   }
 
   @task(function* (reportId) {
-    const adapter = this.store.adapterFor('file-report');
     try {
+      const adapter = this.store.adapterFor('file-report');
       const pdfReport = yield adapter.getReportByType(
         'file-report',
         reportId,
         REPORT.TYPE.PDF
       );
-      if (pdfReport && pdfReport.url) {
-        window.location = pdfReport.url;
-      } else {
-        this.notify.error(this.intl.t('downloadUrlNotFound'));
+      if (!pdfReport || !pdfReport.url) {
+        throw new Error(this.intl.t('downloadUrlNotFound'));
       }
+
+      let togglePasswordBtn = document.getElementById(
+        `password-toggle-${this.latestReport.id}`
+      );
+      togglePasswordBtn.click();
+
+      this.window.locationAssign(pdfReport.url);
     } catch {
-      this.notify.error('Report download failed');
+      this.notify.error(this.intl.t('downloadUrlNotFound'));
     }
   })
   downloadPDFReport;

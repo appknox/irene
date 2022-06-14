@@ -10,8 +10,7 @@
         <div data-test-action-download>
           <button
             type='button'
-            class='button is-primary is-small
-              {{if this.isGenerating "is-progress"}}'
+            class='button is-primary is-small'
             local-class='{{if
               this.isGenerating
               "button-progress"
@@ -21,6 +20,12 @@
             data-test-download-report-button
           >
             {{#if this.isGenerating}}
+              <span
+                class='is-progress'
+                local-class='progress-loader'
+                style={{this.generationProgressStyle}}
+                data-test-download-button-generating-progress
+              ></span>
               <span
                 class='vertical-align-center'
                 data-test-download-button-generating-label
@@ -67,20 +72,19 @@
           </button>
           <AttachTooltip @placement='top' @arrow={{true}} @animation='shift'>
             {{#if this.isGenerating}}
-              <span
+              <div
                 local-class='generate-tooltip'
                 data-test-generate-button-progress-tooltip
               >
-                Report generation in progress. Please wait
-              </span>
+                {{t 'reportGenerationInProgressWait'}}
+              </div>
             {{else}}
-              <span
+              <div
                 local-class='generate-tooltip'
                 data-test-generate-button-tooltip
               >
-                {{t 'generate'}}
-                {{t 'newReport'}}
-              </span>
+                {{t 'generateNewReport'}}
+              </div>
             {{/if}}
           </AttachTooltip>
         </div>
@@ -91,6 +95,7 @@
               @clientId={{@clientId}}
               @fileId={{@fileId}}
               @reportId={{this.latestReport.id}}
+              id='password-toggle-{{this.latestReport.id}}'
               data-test-report-password-toggle-id='{{this.latestReport.id}}'
             />
           </div>
