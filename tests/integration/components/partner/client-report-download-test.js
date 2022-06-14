@@ -545,6 +545,15 @@ module(
         );
       });
 
+      this.server.create('partner/partnerclient-report-unlockkey');
+      this.server.get(
+        'v2/partnerclients/:clientId/reports/:id/unlock_key',
+        (schema) => {
+          const data = schema['partner/partnerclientReportUnlockkeys'].find(1);
+          return serializer(data);
+        }
+      );
+
       this.set('clientId', 1);
       this.set('fileId', 1);
 
@@ -561,6 +570,87 @@ module(
       await click(downloadBtn);
 
       assert.strictEqual(notifyService.get('errorMsg'), null);
+    });
+
+    test('it should auto expand password dropdown after download', async function (assert) {
+      this.server.create('partner/partner', {
+        access: { download_reports: true },
+      });
+      this.server.get('v2/partners/:id', (schema) => {
+        return serializer(schema['partner/partners'].find(1));
+      });
+      await this.owner.lookup('service:partner').load();
+
+      this.server.create('partner/partnerclient-file-report');
+      this.server.get(
+        'v2/partnerclients/:clientId/files/:fileId/reports',
+        (schema) => {
+          const data = schema['partner/partnerclientFileReports'].all();
+          return serializer(data, true);
+        }
+      );
+
+      const report = this.server.create('partner/partnerclient-report', {
+        progress: 100,
+      });
+      this.server.get('v2/partnerclients/:clientId/reports/:id', (schema) => {
+        const data = schema['partner/partnerclientReports'].find(1);
+        return serializer(data);
+      });
+
+      this.server.get('v2/reports/:id/pdf', () => {
+        return new Response(
+          200,
+          {},
+          { url: 'http://localhost/report_signed_url.pdf' }
+        );
+      });
+
+      const unlockKey = this.server.create(
+        'partner/partnerclient-report-unlockkey'
+      );
+      this.server.get(
+        'v2/partnerclients/:clientId/reports/:id/unlock_key',
+        (schema) => {
+          const data = schema['partner/partnerclientReportUnlockkeys'].find(1);
+          return serializer(data);
+        }
+      );
+
+      this.set('clientId', 1);
+      this.set('fileId', 1);
+
+      await render(
+        hbs`<Partner::ClientReportDownload @clientId={{this.clientId}} @fileId={{this.fileId}} />`
+      );
+
+      assert.dom('[data-test-action-copy-password]').exists();
+      assert
+        .dom(`[data-test-report-password-toggle-id="${report.id}"]`)
+        .exists();
+      assert.dom('[data-test-dropdown-tray]').doesNotExist();
+
+      const downloadBtn = this.element.querySelector(
+        '[data-test-download-report-button]'
+      );
+      await click(downloadBtn);
+
+      assert.dom('[data-test-action-copy-password]').exists();
+      assert
+        .dom(`[data-test-report-password-toggle-id="${report.id}"]`)
+        .exists();
+      assert.dom('[data-test-dropdown-tray]').exists();
+      assert.dom('[data-test-report-password]').exists();
+      assert
+        .dom('[data-test-report-password-title]')
+        .hasText(`t:reportPassword:()`);
+      assert
+        .dom('[data-test-report-password-value]')
+        .hasAttribute('id', `unlock-key-${report.id}`)
+        .hasValue(unlockKey.unlockKey);
+      assert
+        .dom('[data-test-report-password-copy-button]')
+        .containsText(`t:copy:()`);
     });
 
     test('it should notify on download report error', async function (assert) {
