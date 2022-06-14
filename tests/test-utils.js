@@ -1,11 +1,10 @@
 import { underscore } from '@ember/string';
 
 function _serialize_object(payload) {
-  const serializedPayload = {};
-  Object.keys(payload.attrs).map((_key) => {
-    serializedPayload[underscore(_key)] = payload[_key];
-  });
-  return serializedPayload;
+  return Object.keys(payload.attrs).reduce((acc, curr) => {
+    acc[underscore(curr)] = payload[curr];
+    return acc;
+  }, {});
 }
 
 export function serializer(data, many = false) {
@@ -14,9 +13,7 @@ export function serializer(data, many = false) {
       count: data.length,
       next: null,
       previous: null,
-      results: data.models.map((d) => {
-        return _serialize_object(d);
-      }),
+      results: data.models.map((d) => _serialize_object(d)),
     };
   } else {
     return _serialize_object(data);
