@@ -293,13 +293,13 @@ module(
       assert.dom(`[data-test-upload-list]`).doesNotExist();
     });
 
-    test('it should render scan results & report columns if download_reports privilege is set to true', async function (assert) {
+    test('it should render scan results & report columns if view_reports privilege is set to true', async function (assert) {
       this.server.get('v2/partners/:id', (_, req) => {
         return {
           id: req.params.id,
           access: {
             list_files: true,
-            download_reports: true,
+            view_reports: true,
           },
         };
       });
@@ -366,13 +366,13 @@ module(
       }
     });
 
-    test('it should not render scan results & report columns if download_reports privilege is set to false', async function (assert) {
+    test('it should not render scan results & report columns if view_reports privilege is set to false', async function (assert) {
       this.server.get('v2/partners/:id', (_, req) => {
         return {
           id: req.params.id,
           access: {
             list_files: true,
-            download_reports: false,
+            view_reports: false,
           },
         };
       });

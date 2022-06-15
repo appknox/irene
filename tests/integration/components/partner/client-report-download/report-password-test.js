@@ -21,7 +21,7 @@ module(
 
     test('it should render password toggle button', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -47,7 +47,7 @@ module(
 
     test('it should show tooltip', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -74,7 +74,7 @@ module(
 
     test('it should not call unlock_key API without toggle click', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -108,7 +108,7 @@ module(
 
     test('it should call unlock_key API on toggle click', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -149,7 +149,7 @@ module(
 
     test('it should render dropdown with password and copy button on toggle click', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -202,7 +202,7 @@ module(
 
     test('it should copy password to clipboard on click of copy button', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -258,9 +258,9 @@ module(
       // Therefore skipping this test
     });
 
-    test('it should not render if download_reports privilege is set to false', async function (assert) {
+    test('it should not render if view_reports privilege is set to false', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: false },
+        access: { view_reports: false },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -282,9 +282,9 @@ module(
       assert.dom('[data-test-dropdown]').doesNotExist();
     });
 
-    test('it should render if download_reports privilege is set to true', async function (assert) {
+    test('it should render if view_reports privilege is set to true', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -308,7 +308,7 @@ module(
 
     test('it should display error state if unable to load unlock_key API', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));

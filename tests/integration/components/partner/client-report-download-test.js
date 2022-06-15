@@ -45,7 +45,7 @@ module(
 
     test('it should not render if report_download privilege is set to false', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: false },
+        access: { view_reports: false },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -63,7 +63,7 @@ module(
 
     test('it should not render report download, generate or copy password buttons if reports list API fails', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -91,7 +91,7 @@ module(
 
     test('it should show disabled download button if no report exists', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -127,7 +127,7 @@ module(
 
     test('it should show disabled download button if fails to fetch report for the id', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -166,7 +166,7 @@ module(
 
     test('it should render download button with generating state if report generation is in progress', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -217,7 +217,7 @@ module(
 
     test('it should show download button if report already exists for the user language', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -267,7 +267,7 @@ module(
 
     test('it should enable generate button if no report exists', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -300,7 +300,7 @@ module(
 
     test('it should enable generate button even if report already exists', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -342,7 +342,7 @@ module(
 
     test('it should disable generate button even if report is in generating state', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -384,7 +384,7 @@ module(
 
     test('it should hide password toggle button if no report exists', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -413,7 +413,7 @@ module(
 
     test('it should hide password toggle button if report detail api fails to load', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -437,7 +437,7 @@ module(
 
     test('it should show password toggle button if report already exists', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -474,7 +474,7 @@ module(
 
     test('it should show password toggle button if report is being generated', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -511,7 +511,7 @@ module(
 
     test('it should download report pdf file on download button click', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -574,7 +574,7 @@ module(
 
     test('it should auto expand password dropdown after download', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -655,7 +655,7 @@ module(
 
     test('it should notify on download report error', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -706,7 +706,7 @@ module(
 
     test('it should trigger report generation and notify on generate button click', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -767,7 +767,7 @@ module(
 
     test('it should notify error on report generation button click', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));
@@ -834,7 +834,7 @@ module(
 
     test('it should notify error from API if exists on report generation failure', async function (assert) {
       this.server.create('partner/partner', {
-        access: { download_reports: true },
+        access: { view_reports: true },
       });
       this.server.get('v2/partners/:id', (schema) => {
         return serializer(schema['partner/partners'].find(1));

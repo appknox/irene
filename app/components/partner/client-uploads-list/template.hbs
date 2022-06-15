@@ -13,7 +13,7 @@
         <div local-class='table' data-test-table>
           <div
             local-class='table-header {{if
-              this.partner.access.download_reports
+              this.partner.access.view_reports
               "has-report-column"
             }}'
             data-test-table-header
@@ -26,7 +26,7 @@
               {{t 'uploaded'}}
             </div>
 
-            {{#if this.partner.access.download_reports}}
+            {{#if this.partner.access.view_reports}}
               <div class='bold' data-test-table-header-summary>{{t
                   'scanResults'
                 }}</div>
@@ -39,7 +39,7 @@
             {{#each this.objects as |upload seq|}}
               <div
                 local-class='table-row {{if
-                  this.partner.access.download_reports
+                  this.partner.access.view_reports
                   "has-report-column"
                 }}'
                 data-test-table-body-row='{{seq}}'
@@ -80,7 +80,7 @@
                     upload.createdOn
                   }}</div>
 
-                {{#if this.partner.access.download_reports}}
+                {{#if this.partner.access.view_reports}}
                   <div local-class='summary' data-test-summary>
                     <Partner::ClientReportSummary
                       @clientId={{@clientId}}

@@ -7,7 +7,7 @@ export default Factory.extend({
       transfer_credits: false,
       list_projects: false,
       list_files: false,
-      download_reports: false,
+      view_reports: false,
       admin_registration: false,
     };
   },
