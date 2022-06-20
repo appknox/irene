@@ -1,0 +1,41 @@
+<label
+  local-class='
+    toggle-label-container
+    toggle-label-placement-{{if @labelPlacement @labelPlacement "left"}}
+  '
+  title={{@title}}
+  data-test-toggle-input-label-container
+>
+  {{#if @label}}
+    <span
+      local-class='
+        toggle-label
+        toggle-label-{{if @labelPlacement @labelPlacement "left"}}
+      '
+      data-test-toggle-input-label
+    >
+      {{@label}}
+    </span>
+  {{/if}}
+
+  <span
+    local-class='
+    toggle-container
+    toggle-container-{{if @size @size "default"}}
+    {{if @disabled "disabled"}}
+  '
+  >
+    <Input
+      local-class='toggle-input toggle-input-{{if @size @size "default"}}'
+      @type='checkbox'
+      disabled={{@disabled}}
+      @checked={{@checked}}
+      data-test-toggle-input
+      ...attributes
+    />
+    <span
+      local-class='track track-{{if @size @size "default"}}'
+      data-test-toggle-input-slider
+    ></span>
+  </span>
+</label>
