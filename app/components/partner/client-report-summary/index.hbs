@@ -9,36 +9,48 @@
     {{else if this.fileSummary}}
       <div local-class='summary' data-test-risk-summary>
         <div local-class='riskbar' data-test-risk-summary-bar>
-          <div
-            local-class='riskblock riskblock--critical'
-            style={{this.criticalWidthStyle}}
-            data-test-riskblock-critical
-          ></div>
-          <div
-            local-class='riskblock riskblock--high'
-            style={{this.highWidthStyle}}
-            data-test-riskblock-high
-          ></div>
-          <div
-            local-class='riskblock riskblock--medium'
-            style={{this.mediumWidthStyle}}
-            data-test-riskblock-medium
-          ></div>
-          <div
-            local-class='riskblock riskblock--low'
-            style={{this.lowWidthStyle}}
-            data-test-riskblock-low
-          ></div>
-          <div
-            local-class='riskblock riskblock--passed'
-            style={{this.passedWidthStyle}}
-            data-test-riskblock-passed
-          ></div>
-          <div
-            local-class='riskblock riskblock--untested'
-            style={{this.untestedWidthStyle}}
-            data-test-riskblock-untested
-          ></div>
+          {{#if this.fileSummary.riskCountCritical}}
+            <div
+              local-class='riskblock riskblock--critical'
+              style={{this.criticalWidthStyle}}
+              data-test-riskblock-critical
+            ></div>
+          {{/if}}
+          {{#if this.fileSummary.riskCountHigh}}
+            <div
+              local-class='riskblock riskblock--high'
+              style={{this.highWidthStyle}}
+              data-test-riskblock-high
+            ></div>
+          {{/if}}
+          {{#if this.fileSummary.riskCountMedium}}
+            <div
+              local-class='riskblock riskblock--medium'
+              style={{this.mediumWidthStyle}}
+              data-test-riskblock-medium
+            ></div>
+          {{/if}}
+          {{#if this.fileSummary.riskCountLow}}
+            <div
+              local-class='riskblock riskblock--low'
+              style={{this.lowWidthStyle}}
+              data-test-riskblock-low
+            ></div>
+          {{/if}}
+          {{#if this.fileSummary.riskCountPassed}}
+            <div
+              local-class='riskblock riskblock--passed'
+              style={{this.passedWidthStyle}}
+              data-test-riskblock-passed
+            ></div>
+          {{/if}}
+          {{#if this.fileSummary.riskCountUntested}}
+            <div
+              local-class='riskblock riskblock--untested'
+              style={{this.untestedWidthStyle}}
+              data-test-riskblock-untested
+            ></div>
+          {{/if}}
         </div>
         <AttachPopover
           @interactive={{true}}

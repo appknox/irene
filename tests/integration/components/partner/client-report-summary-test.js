@@ -252,12 +252,12 @@ module(
       await this.owner.lookup('service:partner').load();
 
       this.server.create('partner/partnerclient-file-summary', {
-        riskCountCritical: 0,
-        riskCountHigh: 0,
-        riskCountMedium: 0,
-        riskCountLow: 0,
-        riskCountPassed: 0,
-        riskCountUntested: 100,
+        riskCountCritical: 10,
+        riskCountHigh: 20,
+        riskCountMedium: 5,
+        riskCountLow: 15,
+        riskCountPassed: 30,
+        riskCountUntested: 20,
       });
       this.server.get(
         'v2/partnerclients/:clientId/files/:fileId/summary',
@@ -275,22 +275,22 @@ module(
       assert.dom('[data-test-risk-summary-bar]').exists();
       assert
         .dom('[data-test-riskblock-critical]')
-        .hasAttribute('style', `width: 0%`);
+        .hasAttribute('style', `width: 10%`);
       assert
         .dom('[data-test-riskblock-high]')
-        .hasAttribute('style', `width: 0%`);
+        .hasAttribute('style', `width: 20%`);
       assert
         .dom('[data-test-riskblock-medium]')
-        .hasAttribute('style', `width: 0%`);
+        .hasAttribute('style', `width: 5%`);
       assert
         .dom('[data-test-riskblock-low]')
-        .hasAttribute('style', `width: 0%`);
+        .hasAttribute('style', `width: 15%`);
       assert
         .dom('[data-test-riskblock-passed]')
-        .hasAttribute('style', `width: 0%`);
+        .hasAttribute('style', `width: 30%`);
       assert
         .dom('[data-test-riskblock-untested]')
-        .hasAttribute('style', `width: 100%`);
+        .hasAttribute('style', `width: 20%`);
     });
   }
 );
