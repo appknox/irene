@@ -2,7 +2,4 @@
 
 module.exports = {
   extends: 'recommended',
-  rules: {
-    'no-curly-component-invocation': { allow: ['day-js'] },
-  },
 };
