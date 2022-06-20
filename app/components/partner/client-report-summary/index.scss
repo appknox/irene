@@ -38,12 +38,6 @@
   background: var(--risk-untested);
 }
 
-.popover {
-  background-color: var(--white);
-  padding: 1rem;
-  border: 1px solid var(--black-150);
-  border-radius: 0.3rem;
-}
 .index {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

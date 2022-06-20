@@ -3005,20 +3005,20 @@ $login-button-width: 100%
 .my-popper
   display: none
 
-.popper-white
-  background-color: var(--white)
-  border: 1px solid var(--black-150)
-  padding: 1rem;
+.popper--white
+  background-color: var(--popover-white-bg)
+  border: 1px solid var(--popover-white-border-color)
   border-radius: 0.3rem
   position: relative
+  padding: 1rem
   div[x-arrow]
-    background-color: white
+    background-color: var(--popover-white-bg)
+    border-bottom: 1px solid var(--popover-white-border-color)
+    border-left: 1px solid var(--popover-white-border-color)
     height: 10px
-    position: absolute
     width: 10px
+    position: absolute
     z-index: -1
-    border-bottom: 1px solid var(--black-150)
-    border-left: 1px solid var(--black-150)
 
 .regulatary-section
   .section
