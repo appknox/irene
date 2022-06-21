@@ -29,6 +29,7 @@ module.exports = function (defaults) {
         'node_modules/bohemia',
         'node_modules/billboard.js/dist/',
         'node_modules/pikaday/css/',
+        'node_modules/material-icons/css/',
       ],
       // onlyIncluded: true,
       implementation: require('node-sass'),

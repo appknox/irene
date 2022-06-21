@@ -130,6 +130,7 @@
     "billboard.js": "^1.12.7",
     "clipboard": "^2.0.6",
     "ember-radio-button": "^2.0.1",
+    "material-icons": "^1.11.2",
     "pikaday": "^1.8.2",
     "qrious": "^4.0.2"
   },

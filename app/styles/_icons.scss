@@ -1,0 +1,28 @@
+@import 'material-icons.scss';
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('/fonts/2ef373830aa561f31f385b4f343fd646/material-icons.woff2')
+    format('woff2');
+}
+
+@font-face {
+  font-family: 'Material Icons Outlined';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('/fonts/80ffd7f38b1f58a1a8c7125c12cc7878/material-icons-outlined.woff2')
+    format('woff2');
+}
+
+@font-face {
+  font-family: 'Material Icons Round';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('/fonts/82f9b1b404daf3f2637660b24d6e0e8e/material-icons-round.woff2')
+    format('woff2');
+}
