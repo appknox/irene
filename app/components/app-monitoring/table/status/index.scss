@@ -1,0 +1,25 @@
+.status {
+  padding: 4px 6px;
+  text-transform: uppercase;
+  border-radius: 2px;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  letter-spacing: -0.4px;
+
+  &.not-found,
+  &.inactive {
+    color: #a3332c;
+    background: #f8b5b9;
+  }
+
+  &.pending {
+    background: #fff7d7;
+    color: #a5872d;
+  }
+
+  &.is-active {
+    color: #2e9940;
+    background: #e9f5ed;
+  }
+}

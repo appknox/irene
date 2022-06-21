@@ -4,98 +4,114 @@ import { tracked } from '@glimmer/tracking';
 
 export default class PaginationComponent extends Component {
   @tracked itemPerPageSelectOptions = this.defaultItemPerPageSelectOptions;
-  @tracked offset = 1;
+  @tracked offset = this.defaultOffset;
 
   get currentPageResults() {
     return this.args.results;
   }
 
+  get limit() {
+    return (
+      this.itemPerPageSelectOptions.find((item) => item.selected)?.value ||
+      this.itemPerPageSelectOptions[0].value
+    );
+  }
+
+  get maxOffset() {
+    const limit = this.limit;
+    const total = this.args.totalItems || 0;
+    if (total === 0) {
+      return 0;
+    }
+
+    return Math.ceil(total / limit) - 1;
+  } // `-1` because offset starts from 0
+
   get defaultItemPerPageSelectOptions() {
     return this._resolveReceivedPageItemsCountOptions(
-      this.args.itemPerPageSelectOptions
+      this.args.itemPerPageOptions,
+      this.args.defaultLimit
     );
   }
 
   get disableNext() {
-    return this.offset === this.totalPages;
+    return this.offset >= this.maxOffset;
   }
 
   get disablePrev() {
-    return this.offset === 1;
-  }
-
-  get endItemIdx() {
-    return Math.min(
-      this.startItemIdx + this.selectedItemsPerPage - 1,
-      this.args.totalItems
-    );
-  }
-
-  get nextAction() {
-    return this._resolveFunctionProp(this.args.nextAction);
-  }
-
-  get onItemsPerPageChange() {
-    return this._resolveFunctionProp(this.args.onPageItemsCountChange);
-  }
-
-  get prevAction() {
-    return this._resolveFunctionProp(this.args.prevAction);
-  }
-
-  get selectedItemsPerPage() {
-    return this.itemPerPageSelectOptions.find((item) => item.selected).value;
+    return this.offset === 0;
   }
 
   get startItemIdx() {
-    return (this.offset - 1) * this.selectedItemsPerPage + 1;
+    return this.offset * this.limit + 1;
+  }
+
+  get endItemIdx() {
+    if (this.offset + 1 === this.totalPages) {
+      return this.args.totalItems;
+    }
+
+    return (this.offset + 1) * this.limit;
+  }
+
+  get nextAction() {
+    return this.args.nextAction;
+  }
+
+  get prevAction() {
+    return this.args.prevAction;
   }
 
   get totalPages() {
-    return Math.ceil(this.args.totalItems / this.selectedItemsPerPage);
+    return Math.ceil(this.args.totalItems / this.limit);
+  }
+
+  get defaultOffset() {
+    if (this.args.offset > this.totalPages) {
+      return this.totalPages;
+    }
+    return this.args.offset;
   }
 
   @action
   onItemsPerPageSelect(event) {
     this._updatePageItemSelectOptions(event.target.value);
-    this.onItemsPerPageChange({
-      selectedItemsPerPage: this.selectedItemsPerPage,
-    });
     this._resetOffset();
+    this.args.onPageItemsCountChange({
+      limit: this.limit,
+      offset: this.offset,
+    });
   }
 
   @action goToNextPage() {
-    this.offset =
-      this.offset < this.totalPages ? this.offset + 1 : this.totalPages;
+    this.offset = this.offset + 1;
+
     this.nextAction({
-      selectedItemsPerPage: this.selectedItemsPerPage,
-      offset: this.offset,
+      limit: this.limit,
+      offset: this.offset * this.limit,
     });
   }
 
   @action goToPrevPage() {
-    this.offset = this.offset > 1 ? this.offset - 1 : 1;
+    this.offset = this.offset - 1;
+
     this.prevAction({
-      selectedItemsPerPage: this.selectedItemsPerPage,
-      offset: this.offset,
+      limit: this.limit,
+      offset: this.offset * this.limit,
     });
   }
 
-  // Check if callback function props are valid before calls
-  _resolveFunctionProp(value) {
-    return value && typeof value === 'function' ? value : () => null;
-  }
-
   // Check if received page items count items are valid
-  _resolveReceivedPageItemsCountOptions(items) {
+  _resolveReceivedPageItemsCountOptions(
+    items = [5, 10, 20, 30, 40],
+    defaultLimit = items[0]
+  ) {
     const allReceivedItemsAreValid =
       Array.isArray(items) && items.every((item) => !isNaN(Number(item)));
-    const defaultItems = allReceivedItemsAreValid
-      ? items
-      : [10, 20, 30, 40, 40];
+    const defaultItems = allReceivedItemsAreValid ? items : [5, 10, 20, 30, 40];
 
-    return defaultItems.map((option, idx) => ({
-      selected: idx === 0 || false,
+    return defaultItems.map((option) => ({
+      selected: Number(option) === defaultLimit || false,
       value: Number(option),
     }));
   }
@@ -117,6 +133,6 @@ export default class PaginationComponent extends Component {
 
   // Page offset reset handler
   _resetOffset() {
-    this.offset = 1;
+    this.offset = 0;
   }
 }

@@ -7,6 +7,7 @@
   justify-content: space-between;
   padding: 8px 15px;
   width: 100%;
+  margin-top: 10px;
 }
 
 .app-pagination-info {
@@ -47,11 +48,15 @@
   margin: 2px;
 }
 
-.app-pagination-btn:hover {
+.app-pagination-btn:hover,
+.app-pagination-btn:active,
+.app-pagination-btn:focus {
   color: #fe4d3f;
 }
 
-.app-pagination-btn:hover svg path {
+.app-pagination-btn:hover svg path,
+.app-pagination-btn:focus svg path,
+.app-pagination-btn:active svg path {
   fill: #fe4d3f;
 }
 
@@ -73,6 +78,7 @@
   border: 1px solid #c4c4c4;
   color: #c4c4c4;
   cursor: not-allowed;
+  opacity: 1;
 }
 
 .app-pagination-btn:disabled svg path {

@@ -1,0 +1,62 @@
+<div local-class='table-container' data-test-production-scan-table>
+  <AppMonitoring::Table::Header />
+  {{#if this.isDisabled}}
+    <div
+      local-class='table-empty-container'
+      data-test-empty-prod-data-container
+    >
+      <span
+        local-class='empty-state-vector'
+        data-test-empty-prod-data-illustration
+      >
+        {{inline-svg '/prod_scan_empty_illustration.svg'}}
+      </span>
+      <h2>{{t 'productionScanDisabledDesc.header'}}</h2>
+      <p>{{t 'productionScanDisabledDesc.body'}}</p>
+    </div>
+  {{else if this.showProdScanTableData}}
+    <div
+      local-class='table-body'
+      data-test-prod-scan-table-body
+      {{did-insert this.fetchProdscanData}}
+    >
+      <Pagination
+        @results={{this.tableData}}
+        @onPageItemsCountChange={{this.getPage}}
+        @totalItems={{this.totalCount}}
+        @nextAction={{this.goToPage}}
+        @prevAction={{this.goToPage}}
+        @itemPerPageOptions={{this.itemPerPageOptions}}
+        @defaultLimit={{this.limit}}
+        @offset={{this.offset}}
+        @tableItemLabel='Projects'
+        data-test-pagination-component
+        as |context|
+      >
+        {{#if this.fetchTableData.isRunning}}
+          <div local-class='loading'>
+            <ThreeBounceSpinner />
+          </div>
+        {{else if this.isEmptyProdScanResult}}
+          <div
+            local-class='table-empty-container'
+            data-test-empty-prod-data-container
+          >
+            <span
+              local-class='empty-state-vector'
+              data-test-empty-prod-data-illustration
+            >
+              {{inline-svg '/prod_scan_empty_illustration.svg'}}
+            </span>
+            <h2>{{t 'productionScanEmptyDesc.header'}}</h2>
+            <p>{{t 'productionScanEmptyDesc.body'}}</p>
+          </div>
+        {{else}}
+          {{#each context.currentPage as |app idx|}}
+            <AppMonitoring::Table::Row @amApp={{app}} @id={{idx}} />
+          {{/each}}
+        {{/if}}
+      </Pagination>
+    </div>
+  {{/if}}
+</div>
