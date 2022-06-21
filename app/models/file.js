@@ -1,10 +1,10 @@
 /* eslint-disable ember/no-array-prototype-extensions, ember/no-mixins, ember/no-classic-classes, ember/no-get, ember/avoid-leaking-state-in-ember-objects */
-import { inject as service } from '@ember/service';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { computed } from '@ember/object';
-import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
-import BaseModelMixin from 'irene/mixins/base-model';
-import ENUMS from 'irene/enums';
+import { inject as service } from '@ember/service';
 import { t } from 'ember-intl';
+import ENUMS from 'irene/enums';
+import BaseModelMixin from 'irene/mixins/base-model';
 import { RISK_COLOR_CODE } from 'irene/utils/constants';
 
 const _getAnalysesCount = (analysis, risk) => {

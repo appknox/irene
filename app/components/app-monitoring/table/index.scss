@@ -1,0 +1,50 @@
+.table-container {
+  margin-top: 1.25em;
+  background-color: transparent;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+// Table body
+.table-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 4.625em;
+}
+
+.empty-state-vector {
+  margin-bottom: 1.5625em;
+}
+
+.table-empty-container h2 {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: -0.008em;
+  color: #171717;
+  margin-bottom: 0.9375em;
+}
+
+.table-empty-container p {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  color: #121212;
+  text-align: center;
+  max-width: 302px;
+}
+
+// Loading styles
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 12.5em;
+}
