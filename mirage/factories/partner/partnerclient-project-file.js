@@ -1,6 +1,6 @@
 import { Factory } from 'ember-cli-mirage';
-import faker from 'faker';
 import dayjs from 'dayjs';
+import faker from 'faker';
 import { htmlSafe } from '@ember/template';
 
 export default Factory.extend({

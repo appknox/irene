@@ -1,4 +1,3 @@
-{{! template-lint-disable no-partial }}
 {{#if this.partner.access.list_files}}
   <div data-test-upload-list>
     <div local-class='header'>
@@ -12,52 +11,97 @@
     {{#if this.objects}}
       <div>
         <div local-class='table' data-test-table>
-          <div local-class='table-header' data-test-table-header>
+          <div
+            local-class='table-header {{if
+              this.partner.access.view_reports
+              "has-report-column"
+            }}'
+            data-test-table-header
+          >
             <div class='bold' data-test-table-header-app>{{t 'app'}}</div>
-            <div class='bold' data-test-table-header-version>{{t
-                'version'
-              }}</div>
-            <div class='bold' data-test-table-header-versioncode>{{t
-                'versionCode'
-              }}</div>
-            <div class='bold' data-test-table-header-uploaded>{{t
-                'uploaded'
-              }}</div>
+            <div class='bold' data-test-table-header-version>
+              {{t 'version'}}
+            </div>
+            <div class='bold' data-test-table-header-uploaded>
+              {{t 'uploaded'}}
+            </div>
+
+            {{#if this.partner.access.view_reports}}
+              <div class='bold' data-test-table-header-summary>{{t
+                  'scanResults'
+                }}</div>
+              <div class='bold' data-test-table-header-report>
+                {{t 'report'}}
+              </div>
+            {{/if}}
           </div>
           <div local-class='table-body' data-test-table-body>
             {{#each this.objects as |upload seq|}}
-              <div local-class='table-row' data-test-table-body-row='{{seq}}'>
-                <div local-class='app' data-test-row-app>
+              <div
+                local-class='table-row {{if
+                  this.partner.access.view_reports
+                  "has-report-column"
+                }}'
+                data-test-table-body-row='{{seq}}'
+              >
+                <div local-class='app' data-test-app>
                   <div
                     local-class='app-icon'
-                    style={{upload.iconHtmlUrl}}
-                    data-test-row-app-icon
+                    style={{upload.backgroundIconStyle}}
+                    data-test-app-icon
                   ></div>
-                  <div
-                    local-class='app-name'
-                    class='black-text bold'
-                    title='File ID: {{upload.id}}'
-                    data-test-row-app-info
-                  >{{upload.name}}</div>
+                  <div>
+                    <div
+                      local-class='app-name'
+                      class='bold'
+                      title='File ID: {{upload.id}}'
+                      data-test-app-info
+                    >{{upload.name}}</div>
+                    <div data-test-app-fileid>
+                      <span local-class='fileid-key'>{{t 'fileID'}}:</span>
+                      <span local-class='fileid-value'>{{upload.id}}</span>
+                    </div>
+                  </div>
                 </div>
 
-                <div local-class='version' data-test-row-version>
-                  <span>{{upload.version}}</span>
+                <div local-class='version-info' data-test-version-info>
+                  <div local-class='version' data-test-version>
+                    <span local-class='version-key'>{{t 'version'}}:</span>
+                    <span local-class='version-value'>{{upload.version}}</span>
+                  </div>
+                  <div local-class='version' data-test-versioncode>
+                    <span local-class='version-key'>{{t 'versionCode'}}:</span>
+                    <span local-class='version-value'>
+                      {{upload.versionCode}}
+                    </span>
+                  </div>
                 </div>
-                <div local-class='version' data-test-row-versioncode>
-                  <span>{{upload.versionCode}}</span>
-                </div>
-                <div
-                  local-class='uploaded'
-                  class='text-lightgray'
-                  data-test-row-uploaded
-                >{{dayjs-from-now upload.createdOn}}</div>
+                <div local-class='uploaded' data-test-uploaded>{{dayjs-from-now
+                    upload.createdOn
+                  }}</div>
+
+                {{#if this.partner.access.view_reports}}
+                  <div local-class='summary' data-test-summary>
+                    <Partner::ClientReportSummary
+                      @clientId={{@clientId}}
+                      @fileId={{upload.id}}
+                      @indexPlacement='left'
+                    />
+                  </div>
+                  <div local-class='download' data-test-report>
+                    <Partner::ClientReportDownload
+                      @clientId={{@clientId}}
+                      @fileId={{upload.id}}
+                    />
+                  </div>
+                {{/if}}
               </div>
             {{/each}}
           </div>
         </div>
         {{#if (or this.hasPrevious this.hasNext)}}
           <div local-class='pagination' data-test-pagination>
+            {{! template-lint-disable no-partial }}
             {{partial 'paginate'}}
           </div>
         {{/if}}

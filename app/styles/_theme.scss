@@ -44,6 +44,13 @@ $color-error: #fe4d3f;
   --android: #7bb054;
   --ios: #8d9096;
 
+  --risk-critical: #ef4836;
+  --risk-high: #ff8c00;
+  --risk-medium: #f5d76e;
+  --risk-low: #2cc2f8;
+  --risk-passed: #80c081;
+  --risk-untested: #6b6b6b;
+
   /* generic derived colors */
   --text-default: #{$color-gray};
   --text-error: #{$color-error};

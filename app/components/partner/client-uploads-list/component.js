@@ -1,8 +1,8 @@
 /* eslint-disable ember/no-mixins */
-import Component from '@glimmer/component';
-import { PaginationMixin } from '../../../mixins/paginate';
-import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { PaginationMixin } from '../../../mixins/paginate';
 
 export default class PartnerClientUploadsListComponent extends PaginationMixin(
   Component
@@ -10,7 +10,7 @@ export default class PartnerClientUploadsListComponent extends PaginationMixin(
   @service store;
   @service partner;
 
-  @tracked targetModel = 'partner/partnerclient-file';
+  @tracked targetModel = 'partner/partnerclient-project-file';
 
   get extraQueryStrings() {
     return JSON.stringify({
