@@ -991,23 +991,32 @@ div[class^="_c-notification__container"]
     margin-bottom: 1em
 
 .menu-list
-  i
-    min-width: 2.1em
-    color: lighten($sidebar-bg, 25%)
-  a
+  .menu-list-title-beta
+    margin-left: 0.15em
+  .menu-list-link
     padding: 0.4em 1em
     color: lighten($sidebar-bg, 45%)
     font-weight: 500
     display: flex
     justify-content: space-between
     align-items: center
+
     &:hover
       color: lighten($sidebar-bg, 65%)
       background-color: lighten(#424651, 3%)
       font-weight: 500
-  a.active
-    color: lighten($sidebar-bg, 65%)
-    background-color: lighten($sidebar-bg, 5%)
+
+    &.active
+      color: lighten($sidebar-bg, 65%)
+      background-color: lighten($sidebar-bg, 5%)
+
+    .menu-list-title-container
+      display: flex
+      align-items: center
+
+      .menu-list-icons
+        color: lighten($sidebar-bg, 25%)
+        margin-right: 0.3em
 
 // theme section
 .bg-color-container

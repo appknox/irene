@@ -26,3 +26,47 @@
   src: url('/fonts/82f9b1b404daf3f2637660b24d6e0e8e/material-icons-round.woff2')
     format('woff2');
 }
+
+.ak-icon {
+  @extend .mi;
+}
+
+.ak-icon-outlined {
+  @extend .mi-outlined;
+}
+
+.ak-icon-round {
+  @extend .mi-round;
+}
+
+.ak-icon-folder {
+  @extend .mi-folder;
+}
+
+.ak-icon-graphic-eq {
+  @extend .mi-graphic-eq;
+}
+
+.ak-icon-people {
+  @extend .mi-people;
+}
+
+.ak-icon-inventory-2 {
+  @extend .mi-inventory-2;
+}
+
+.ak-icon-account-box {
+  @extend .mi-account-box;
+}
+
+.ak-icon-account-balance {
+  @extend .mi-account-balance;
+}
+
+.ak-icon-credit-card {
+  @extend .mi-credit-card;
+}
+
+.ak-icon-groups-2 {
+  @extend .mi-groups-2;
+}
