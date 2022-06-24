@@ -5,9 +5,10 @@
     </div>
     <ul class='menu-list text-center margin-top20'>
       <li>
-        <LinkTo @route='authenticated.projects' class="class='mp-auth-projects">
-          <div>
-            {{fa-icon 'tasks' class='sidebar-icons'}}{{t 'projects'}}
+        <LinkTo @route='authenticated.projects' class='menu-list-link'>
+          <div class='menu-list-title-container'>
+            <span class='menu-list-icons ak-icon ak-icon-folder'></span>
+            <span class='menu-list-title'>{{t 'projects'}}</span>
           </div>
           <span class='badge-square is-sidebar content-right'>
             {{this.organization.selected.projectsCount}}
@@ -17,9 +18,10 @@
       {{#if this.isShowAnalytics}}
         <li>
 
-          <LinkTo @route='authenticated.analytics'>
-            <div>
-              {{fa-icon 'area-chart' class='sidebar-icons'}}{{t 'analytics'}}
+          <LinkTo @route='authenticated.analytics' class='menu-list-link'>
+            <div class='menu-list-title-container'>
+              <span class='menu-list-icons ak-icon ak-icon-graphic-eq'></span>
+              <span class='menu-list-title'>{{t 'analytics'}}</span>
             </div>
           </LinkTo>
 
@@ -28,38 +30,41 @@
       <li>
         <LinkTo
           @route='authenticated.organization.namespaces'
-          class='mp-auth-teams'
+          class='menu-list-link'
         >
-          <div>
-            {{fa-icon 'users' class='sidebar-icons'}}{{t 'organization'}}
+          <div class='menu-list-title-container'>
+            <span class='menu-list-icons ak-icon ak-icon-people'></span>
+            <span class='menu-list-title'>{{t 'organization'}}</span>
           </div>
         </LinkTo>
       </li>
       {{#if this.showProductionScanDashboard}}
         <li>
-          <LinkTo @route='authenticated.production-scan' class='mp-auth-teams'>
-            <div>
-              {{fa-icon 'barcode' class='sidebar-icons'}}{{t 'productionScan'}}
+          <LinkTo @route='authenticated.production-scan' class='menu-list-link'>
+            <div class='menu-list-title-container'>
+              <span class='menu-list-icons ak-icon ak-icon-inventory-2'></span>
+              <span class='menu-list-title'>{{t 'productionScan'}}</span>
             </div>
           </LinkTo>
         </li>
       {{/if}}
       <li>
-        <LinkTo @route='authenticated.settings' class='mp-auth-setting'>
-          <div>
-            {{fa-icon 'cog' class='sidebar-icons'}}{{t 'accountSettings'}}
+        <LinkTo @route='authenticated.settings' class='menu-list-link'>
+          <div class='menu-list-title-container'>
+            <span class='menu-list-icons ak-icon ak-icon-account-box'></span>
+            <span class='menu-list-title'>{{t 'accountSettings'}}</span>
           </div>
         </LinkTo>
 
       </li>
       {{#if this.showMarketplace}}
         <li>
-          <LinkTo
-            @route='authenticated.marketplace'
-            class='mp-auth-marketplace'
-          >
-            <div>
-              {{fa-icon 'cubes' class='sidebar-icons'}}{{t 'marketplace'}}
+          <LinkTo @route='authenticated.marketplace' class='menu-list-link'>
+            <div class='menu-list-title-container'>
+              <span
+                class='menu-list-icons ak-icon ak-icon-account-balance'
+              ></span>
+              <span class='menu-list-title'>{{t 'marketplace'}}</span>
             </div>
           </LinkTo>
 
@@ -67,25 +72,23 @@
       {{/if}}
       {{#if this.showBilling}}
         <li>
-          <LinkTo @route='authenticated.billing' class='mp-auth-billing'>
-            <div>
-              {{fa-icon 'tag' class='sidebar-icons'}}{{t 'billing'}}
+          <LinkTo @route='authenticated.billing' class='menu-list-link'>
+            <div class='menu-list-title-container'>
+              <span class='menu-list-icons ak-icon ak-icon-credit-card'></span>
+              <span class='menu-list-title'>{{t 'billing'}}</span>
             </div>
           </LinkTo>
         </li>
       {{/if}}
       {{#if this.showPartnerDashboard}}
         <li>
-          <LinkTo
-            @route='authenticated.partner.clients'
-            class='mp-auth-clients'
-          >
-            <div>
-              {{fa-icon 'sitemap' class='sidebar-icons'}}{{t 'clients'}}<sup
-                class='margin-left primary-color'
-              >
-                beta
-              </sup>
+          <LinkTo @route='authenticated.partner.clients' class='menu-list-link'>
+            <div class='menu-list-title-container'>
+              <span
+                class='menu-list-icons ak-icon-outlined ak-icon-groups-2'
+              ></span>
+              <span class='menu-list-title'>{{t 'clients'}}</span>
+              <sup class='menu-list-title-beta primary-color'>beta</sup>
             </div>
           </LinkTo>
 
