@@ -1,0 +1,62 @@
+<AuthAssets />
+
+<div local-class='container flex-center'>
+  <form local-class='form'>
+    <h4 local-class='text-center'>
+      {{t 'resetPassword'}}
+    </h4>
+
+    {{#if this.mailSent}}
+      <h6 data-test-mail-sent-text local-class='text-center'>
+        Check your email for a link to reset your password. If it doesn't appear
+        within a few minutes, check your spam folder.
+      </h6>
+    {{else}}
+      <div
+        local-class='input-wrapper {{if
+          this.changeset.error.username
+          "has-error"
+        }}'
+      >
+        {{#if this.changeset.error.username}}
+          <span data-test-username-error local-class='error-msg'>
+            {{this.changeset.error.username.validation}}
+          </span>
+        {{/if}}
+
+        <Input
+          id='recover-username-email'
+          local-class='input-field'
+          placeholder='{{t "identification"}}'
+          @value={{this.changeset.username}}
+          autofocus='autofocus'
+          data-test-username-email-input
+        />
+      </div>
+
+      <div local-class='flex-center'>
+        <AkButton::PrimaryFilled
+          @onClick={{perform this.recover}}
+          @isDisabled={{this.recover.isRunning}}
+          local-class='send-reset-mail-btn'
+          data-test-send-reset-mail-btn
+        >
+          {{#if this.recover.isRunning}}
+            <div local-class='flex-center'>
+              <i class='fa fa-spinner fa-spin'></i>
+            </div>
+          {{/if}}
+
+          {{t 'sendPasswordResetMail'}}
+        </AkButton::PrimaryFilled>
+      </div>
+
+      <div local-class='flex-center'>
+        <LinkTo @route='login' local-class='login-link'>
+          {{t 'login'}}
+          ?
+        </LinkTo>
+      </div>
+    {{/if}}
+  </form>
+</div>
