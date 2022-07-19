@@ -45,6 +45,7 @@
         from='irene/components/login-component/index.scss'
       }}'
     type='submit'
+    disabled={{this.isOTPEmpty}}
     {{on 'click' @login}}
   >
     {{#if @showSpinner}}
