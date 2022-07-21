@@ -9,7 +9,7 @@ export default class OrganizationService extends Service {
 
   async load() {
     const orgs = await this.store.findAll('organization');
-    const selectedOrg = orgs.get('firstObject');
+    const selectedOrg = orgs.map((_) => _)[0];
     if (selectedOrg) {
       this.selected = selectedOrg;
     } else {

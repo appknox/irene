@@ -1,4 +1,4 @@
-/* eslint-disable ember/no-observers */
+/* eslint-disable ember/no-array-prototype-extensions, ember/no-observers */
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';

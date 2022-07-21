@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-array-prototype-extensions */
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action, set } from '@ember/object';

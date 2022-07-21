@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-array-prototype-extensions */
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { htmlSafe } from '@ember/template';

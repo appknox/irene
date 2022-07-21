@@ -1,4 +1,3 @@
-/* eslint-disable qunit/no-assert-equal */
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, click } from '@ember/test-helpers';
@@ -88,7 +87,7 @@ module('Integration | Component | file/report-btn', function (hooks) {
     assert
       .dom(`[data-test-report-action-btn-label]`)
       .hasText(`t:generatingReport:()`);
-    assert.equal(
+    assert.strictEqual(
       this.element.querySelector(`[data-test-report-progress]`).style.width,
       '30%'
     );
@@ -122,7 +121,7 @@ module('Integration | Component | file/report-btn', function (hooks) {
     await click(`[data-test-report-action-btn-label]`);
 
     await this.realtimeService.incrementProperty('ReportCounter');
-    assert.equal(
+    assert.strictEqual(
       this.notifyService.get('successMsg'),
       `t:reportIsGettingGenerated:()`
     );
@@ -155,7 +154,7 @@ module('Integration | Component | file/report-btn', function (hooks) {
 
     const noOfPrevReports = REPORT.MAX_LIMIT - 1;
 
-    assert.equal(
+    assert.strictEqual(
       this.element.querySelectorAll(`[data-test-prev-report]`).length,
       noOfPrevReports,
       `Number of prev reports limited to ${noOfPrevReports}`
@@ -173,7 +172,7 @@ module('Integration | Component | file/report-btn', function (hooks) {
           }'] [data-test-report-generated-label]`
         )
         .hasText(
-          `t:generatedOn:() ${dayjs(reports.objectAt(i).generatedOn).format(
+          `t:generatedOn:() ${dayjs(reports[i].generatedOn).format(
             'DD MMM YYYY hh:mm a'
           )}`
         );
@@ -196,7 +195,7 @@ module('Integration | Component | file/report-btn', function (hooks) {
     await click(`[data-test-report-action-btn-label]`);
 
     this.notifyService = this.owner.lookup('service:notifications');
-    assert.equal(
+    assert.strictEqual(
       this.notifyService.get('errorMsg'),
       `t:downloadUrlNotFound:()`
     );
@@ -217,7 +216,7 @@ module('Integration | Component | file/report-btn', function (hooks) {
     await click(`[data-test-report-action-btn-label]`);
 
     this.notifyService = this.owner.lookup('service:notifications');
-    assert.equal(
+    assert.strictEqual(
       this.notifyService.get('errorMsg'),
       `Report generation failed`
     );
