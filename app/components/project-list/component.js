@@ -1,4 +1,4 @@
-/* eslint-disable ember/no-classic-components, prettier/prettier, ember/no-mixins, ember/no-classic-classes, ember/require-tagless-components, ember/avoid-leaking-state-in-ember-objects, ember/no-observers, ember/no-get, ember/no-actions-hash, ember/no-jquery */
+/* eslint-disable ember/no-array-prototype-extensions, ember/no-classic-components, prettier/prettier, ember/no-mixins, ember/no-classic-classes, ember/require-tagless-components, ember/avoid-leaking-state-in-ember-objects, ember/no-observers, ember/no-get, ember/no-actions-hash, ember/no-jquery */
 import Component from '@ember/component';
 import {
   inject as service

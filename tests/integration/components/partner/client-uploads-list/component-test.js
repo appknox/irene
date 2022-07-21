@@ -1,4 +1,3 @@
-/* eslint-disable qunit/no-assert-equal */
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -133,7 +132,7 @@ module(
       await render(
         hbs`<Partner::ClientUploadsList @clientId={{this.clientId}} @projectId={{this.projectId}}/>`
       );
-      assert.equal(
+      assert.strictEqual(
         this.element.querySelectorAll('[data-test-table-header] > div').length,
         3,
         'Should have 3 headers by default'
@@ -167,7 +166,7 @@ module(
       await render(
         hbs`<Partner::ClientUploadsList @clientId={{this.clientId}} @projectId={{this.projectId}}/>`
       );
-      assert.equal(
+      assert.strictEqual(
         this.element.querySelectorAll(`[data-test-table-body-row]`).length,
         5,
         'Should have 5 rows'
@@ -209,7 +208,7 @@ module(
         hbs`<Partner::ClientUploadsList @clientId={{this.clientId}} @projectId={{this.projectId}}/>`
       );
       for (let row = 0; row <= files.length - 1; row++) {
-        const rowData = files.objectAt(row);
+        const rowData = files[row];
         assert
           .dom(`[data-test-table-body-row="${row}"] [data-test-app-icon]`)
           .hasStyle({
@@ -322,7 +321,7 @@ module(
       await render(
         hbs`<Partner::ClientUploadsList @clientId={{this.clientId}} @projectId={{this.projectId}}/>`
       );
-      assert.equal(
+      assert.strictEqual(
         this.element.querySelectorAll('[data-test-table-header] > div').length,
         5,
         'Should have 5 headers by default'
@@ -336,7 +335,7 @@ module(
       assert.dom(`[data-test-table-header-report]`).hasText(`t:report:()`);
 
       for (let row = 0; row <= files.length - 1; row++) {
-        const rowData = files.objectAt(row);
+        const rowData = files[row];
         assert
           .dom(`[data-test-table-body-row="${row}"] [data-test-app-icon]`)
           .hasStyle({
@@ -395,7 +394,7 @@ module(
       await render(
         hbs`<Partner::ClientUploadsList @clientId={{this.clientId}} @projectId={{this.projectId}}/>`
       );
-      assert.equal(
+      assert.strictEqual(
         this.element.querySelectorAll('[data-test-table-header] > div').length,
         3,
         'Should have 3 headers by default'

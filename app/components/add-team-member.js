@@ -1,4 +1,4 @@
-/* eslint-disable ember/no-mixins, ember/no-classic-components, ember/no-classic-classes, ember/require-tagless-components, ember/avoid-leaking-state-in-ember-objects, ember/no-get, prettier/prettier, ember/no-observers, ember/no-actions-hash */
+/* eslint-disable ember/no-array-prototype-extensions, ember/no-mixins, ember/no-classic-components, ember/no-classic-classes, ember/require-tagless-components, ember/avoid-leaking-state-in-ember-objects, ember/no-get, prettier/prettier, ember/no-observers, ember/no-actions-hash */
 import PaginateMixin from 'irene/mixins/paginate';
 import { t } from 'ember-intl';
 import { task } from 'ember-concurrency';

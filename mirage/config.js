@@ -32,7 +32,7 @@ function routes() {
   });
 
   this.get('/api/v2/partnerclients/:id', (schema, FakeRequest) => {
-    return schema.partnerClients.findBy({
+    return schema.partnerClients.find({
       id: FakeRequest.queryParams.id,
     });
   });
@@ -150,7 +150,7 @@ function routes() {
   });
 
   this.get('/files/', (schema, FakeRequest) => {
-    return schema.files.findBy({
+    return schema.files.find({
       id: FakeRequest.queryParams.projectId,
     });
   });

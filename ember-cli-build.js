@@ -5,7 +5,8 @@ const defaultFingerprintExtensions =
   require('broccoli-asset-rev/lib/default-options').extensions;
 
 const environment = EmberApp.env();
-const minifyEnabled = environment === 'production' || environment === 'staging';
+const isProduction = environment === 'production' || environment === 'staging';
+const minifyEnabled = isProduction;
 
 module.exports = function (defaults) {
   let app = new EmberApp(defaults, {
@@ -34,9 +35,16 @@ module.exports = function (defaults) {
       // onlyIncluded: true,
       implementation: require('node-sass'),
       extension: 'sass',
+      sourceMap: !isProduction,
+      sourceMapEmbed: !isProduction,
     },
     cssModules: {
       intermediateOutputPath: 'app/styles/_modules.scss',
+    },
+    autoprefixer: {
+      enabled: true,
+      cascade: true,
+      sourcemap: !isProduction,
     },
     dotEnv: {
       clientAllowedKeys: ['AWS_BUCKET', 'AWS_REGION', 'WEBHOOK_URL'],
