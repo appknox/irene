@@ -1,0 +1,198 @@
+<h5 class='bold black-text' data-test-jira-integration-header>{{t
+    'jiraIntegration'
+  }}</h5>
+{{#if this.currentJiraProject}}
+  <h6>
+    <span class='margin-r-h'>{{t 'integratedJIRA'}}</span>
+    <code class='margin-r-h' data-test-jira-project-key-name>
+      {{this.currentJiraProject.project_key}}-{{this.currentJiraProject.project_name}}
+    </code>
+    <div
+      class='tag threshold-tag remove'
+      data-test-jira-project-risk
+    >{{threshold-status this.currentJiraProject.risk_threshold}}</div>
+    <div
+      class='tag delete-tag remove'
+      role='button'
+      data-test-delete-project-trigger
+      {{on 'click' this.openDeleteJIRAConfirmBox}}
+    >
+      <i class='fa risk-icons fa-trash-o'></i>
+    </div>
+    <div
+      class='tag edit-tag remove'
+      role='button'
+      data-test-edit-project-trigger
+      {{on 'click' this.editJiraRepoModal}}
+    >
+      <i class='fa risk-icons fa-pencil'></i>
+    </div>
+  </h6>
+{{else}}
+  <div class='padding-v-h'>
+    {{#if this.fetchJIRAProjects.isRunning}}
+      <div class='fa-font-size'>
+        <i class='fa fa-spinner fa-spin'></i>
+        &nbsp;
+      </div>
+    {{/if}}{{#if this.fetchJIRAProjects.isIdle}}
+      {{#if this.noAccess}}
+        <i class='fa fa-warning margin-r-h'></i>
+        <span>
+          {{t 'adminPermissionProject'}}
+        </span>
+      {{else if this.noIntegration}}
+        <h6>
+          {{t 'jira'}}&nbsp;{{t 'gotoSettings'}}
+          <LinkTo
+            @route='authenticated.organization.settings'
+            class='is-primary'
+          >
+            &nbsp;{{t 'clickingHere'}}
+          </LinkTo>
+
+        </h6>
+      {{else if this.hasJIRAProject}}
+        <h6 data-test-select-project-header>
+          {{t 'otherTemplates.selectJIRAAccount'}}
+        </h6>
+        <div class='columns'>
+          <div class='column'>
+            <button
+              class='is-primary button'
+              type='button'
+              {{on 'click' this.editJiraRepoModal}}
+              data-test-select-project-button
+            >
+              {{t 'selectProject'}}
+            </button>
+          </div>
+        </div>
+      {{else if this.reconnect}}
+        <h6>
+          {{t 'jira'}}&nbsp;{{t 'reconnectGotoSettings'}}
+          <LinkTo
+            @route='authenticated.organization.settings'
+            class='is-primary'
+          >
+            &nbsp;{{t 'clickingHere'}}
+          </LinkTo>
+        </h6>
+      {{else}}
+        <h6 data-test-no-jira-project>
+          {{t 'jiraNoProject'}}
+        </h6>
+      {{/if}}
+    {{/if}}
+  </div>
+{{/if}}
+
+<ModalCard
+  @isActive={{this.showEditJiraModal}}
+  @title={{t 'editProjectSettings'}}
+  data-test-edit-modal
+>
+  <div class='card-body warning-modal'>
+    <div class='card-wrapper'>
+      <div class='api-scanning'>
+        <h6>
+          {{t 'otherTemplates.selectJIRAAccount'}}
+        </h6>
+        <div class='project-preference-component margin-v-1'>
+          {{#if this.jiraProjects}}
+            <div class='columns'>
+              <div class='column'>
+                <h5 class='black-text'>
+                  Repo
+                </h5>
+              </div>
+            </div>
+            <div class='columns'>
+              <div class='column'>
+                <PowerSelect
+                  class='select-repo-class'
+                  @tagName='div'
+                  @searchEnabled={{true}}
+                  @searchField='name'
+                  @dropdownClass='power-select-custom-repo'
+                  @searchPlaceholder='Type repository name'
+                  @placeholder='Select Repo'
+                  @selected={{this.selectedRepo}}
+                  @renderInPlace={{true}}
+                  @options={{this.jiraProjects}}
+                  @onchange={{this.selectRepo}}
+                  @triggerClass='power-select-trigger-class'
+                  data-test-power-select-repo
+                  as |repo|
+                >
+                  {{repo.key}}-{{repo.name}}
+                </PowerSelect>
+              </div>
+            </div>
+            <div class='columns'>
+              <div class='column'>
+                <h5 class='black-text'>
+                  Threshold
+                </h5>
+              </div>
+            </div>
+            <div class='columns'>
+              <div class='column'>
+                <PowerSelect
+                  class='select-threshold-class'
+                  @tagName='div'
+                  @dropdownClass='power-select-custom-threshold'
+                  @searchEnabled={{false}}
+                  @placeholder='Select Repo'
+                  @selected={{this.selectedThreshold}}
+                  @renderInPlace={{true}}
+                  @options={{this.thresholds}}
+                  @onchange={{this.selectThreshold}}
+                  @class='power-select-custom-width'
+                  as |threshold|
+                >
+                  {{threshold-status threshold}}
+                </PowerSelect>
+              </div>
+            </div>
+          {{/if}}
+        </div>
+        <form class='margin-top20'>
+          <div class='align-both'>
+            <button
+              class='modal-button is-default button'
+              type='button'
+              {{on 'click' this.closeJiraRepoModal}}
+              data-test-modal-cancel-button
+            >
+              {{t 'cancel'}}
+            </button>
+            <button
+              disabled={{this.selectProject.isRunning}}
+              type='button'
+              class='modal-button button is-primary highlighted-button'
+              {{on 'click' (perform this.selectProject)}}
+              data-test-modal-save-button
+            >
+              {{#if this.selectProject.isRunning}}
+                <div class='fa-font-size'>
+                  <i class='fa fa-spinner fa-spin'></i>
+                  &nbsp;
+                </div>
+              {{/if}}
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</ModalCard>
+
+<ConfirmBox
+  @isActive={{this.showDeleteJIRAConfirmBox}}
+  @title={{t 'confirmBox.removeJIRA'}}
+  @delegate={{this}}
+  @disabled={{this.deleteRepo.isRunning}}
+  data-test-delete-modal
+/>
