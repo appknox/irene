@@ -1,28 +1,27 @@
-/* eslint-disable prettier/prettier, ember/no-classic-classes */
-import Model, { attr, hasMany }  from '@ember-data/model';
-import {
-  computed
-} from '@ember/object';
-import {
-  not
-} from '@ember/object/computed';
+import Model, { attr, hasMany } from '@ember-data/model';
 
-const Organization = Model.extend({
-  name: attr('string'),
-  logo: attr('string'),
-  billingHidden: attr('boolean'),
-  showBilling: not('billingHidden'),
-  isTrial: attr('boolean'),
-  mandatoryMfa: attr('boolean'),
-  members: hasMany('organization-member'),
-  namespaces: hasMany('organization-namespace'),
-  projects: hasMany('organization-project'),
-  teams: hasMany('organization-team'),
-  features: attr(),
-  projectsCount: attr('number'),
-  namespacesCount: attr('number'),
-  teamsCount: attr('number'),
-  membersCount: computed.reads('members.meta.count')
-});
+class Organization extends Model {
+  @attr('string') name;
+  @attr('string') logo;
+  @attr('boolean') billingHidden;
+  @attr('boolean') isTrial;
+  @attr('boolean') mandatoryMfa;
+  @hasMany('organization-member') members;
+  @hasMany('organization-namespace') namespaces;
+  @hasMany('organization-project') projects;
+  @hasMany('organization-team') teams;
+  @attr() features;
+  @attr('number') projectsCount;
+  @attr('number') namespacesCount;
+  @attr('number') teamsCount;
+
+  get showBilling() {
+    return !this.billingHidden;
+  }
+
+  get membersCount() {
+    return this.members?.meta?.count;
+  }
+}
 
 export default Organization;
