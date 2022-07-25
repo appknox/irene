@@ -19,4 +19,9 @@ export default class OrganizationService extends Service {
       );
     }
   }
+
+  async get_am_configurtion() {
+    const adapter = this.store.adapterFor('amconfiguration');
+    return await adapter.from_organization(this.selected.id);
+  }
 }

@@ -29,7 +29,7 @@ export default class HomePageSideMenuComponent extends Component {
   }
 
   get showProductionScanDashboard() {
-    return this.organization.selected.features.post_production_scan;
+    return this.organization.selected.features.app_monitoring;
   }
 
   get enablePendo() {
