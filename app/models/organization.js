@@ -22,6 +22,14 @@ class Organization extends Model {
   get membersCount() {
     return this.members?.meta?.count;
   }
+
+  async get_am_configuration() {
+    const adapter = this.store.adapterFor('amconfiguration');
+    const payload = await adapter.from_organization(this.id);
+
+    const normalized = this.store.normalize('amconfiguration', payload);
+    return this.store.push(normalized);
+  }
 }
 
 export default Organization;

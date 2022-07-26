@@ -46,7 +46,7 @@ Router.map(function () {
       this.route('billing');
       this.route('marketplace');
       this.route('projects');
-      this.route('production-scan');
+      this.route('app-monitoring', { path: '/store-monitoring' });
       this.route(
         'project',
         {
