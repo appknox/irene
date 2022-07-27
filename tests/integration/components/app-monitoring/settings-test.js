@@ -73,12 +73,13 @@ module('Integration | Component | app-monitoring-settings', function (hooks) {
     });
 
     const me = this.owner.lookup('service:me');
-    me.org.is_owner = false;
+    me.org.is_admin = false;
 
     await render(hbs`<AppMonitoring::Settings @settings={{this.settings}} />`);
 
     assert.dom(`[data-test-toggle-input]`).exists();
     assert.dom(`[data-test-toggle-input]`).hasAttribute('disabled');
+    assert.ok(this.element.querySelector(`[data-test-toggle-input]`).checked);
   });
 
   test('should toggle app monitoring enabled', async function (assert) {
