@@ -385,5 +385,10 @@ function routes() {
   this.get('/organizations/:id/me', (schema, req) => {
     return schema.organizationMes.find(req.params.id);
   });
+
+  this.put('/v2/am_configuration/:id', () => {
+    return {};
+  });
+
   this.passthrough();
 }
