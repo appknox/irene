@@ -17,6 +17,12 @@ module('Integration | Component | pagination', function (hooks) {
     });
   });
 
+  hooks.beforeEach(async function () {
+    this.prodScanRoute = this.owner.lookup(
+      'route:authenticated/app-monitoring'
+    );
+  });
+
   test('it renders a passed block template', async function (assert) {
     await render(hbs`
       <Pagination>
@@ -346,7 +352,7 @@ module('Integration | Component | pagination', function (hooks) {
     this.set('customSelectOptions', [2, 4, 6, 8, 10]);
     this.set('defaultLimit', 2);
     this.set('onNextButtonClicked', (args) => {
-      this.set('callBackTriggered', true);
+      this.set('callbackIsTriggered', true);
 
       // If this block is executed the expected args will be in the format:
       // {limit: NUMBER, offset: NUMBER}
@@ -373,35 +379,35 @@ module('Integration | Component | pagination', function (hooks) {
     assert.dom(`[data-test-pagination-next-btn]`).exists();
 
     // These values should not exist until the 'onNextButtonClicked' callback is called
-    assert.notOk(this.callBackTriggered, 'callBackTriggered is undefined');
-    assert.notOk(this.callBackTriggered, 'callBackValue is undefined');
+    assert.notOk(this.callbackIsTriggered, 'callBackTriggered is undefined');
+    assert.notOk(this.callbackValue, 'callBackValue is undefined');
 
     await click(`[data-test-pagination-next-btn]`);
 
     // These values should exist if the callback was triggered by the select change
-    assert.true(this.callBackTriggered, 'Callback was triggered');
-    assert.ok(this.callBackValue, 'callBackValue is defined');
+    assert.true(this.callbackIsTriggered, 'Callback was triggered');
+    assert.ok(this.callbackValue, 'callbackValue is defined');
 
     // The value passed to the callback is in the format {limit: NUMBER, offset: NUMBER}
     assert.propContains(
-      this.callBackValue,
+      this.callbackValue,
       {
         limit: 2,
         offset: 6,
       },
-      'callBackValue contains the right properties'
+      'callbackValue contains the right properties'
     );
 
     await click(`[data-test-pagination-next-btn]`);
 
     // The value passed to the callback is in the format {limit: NUMBER, offset: NUMBER}
     assert.propContains(
-      this.callBackValue,
+      this.callbackValue,
       {
         limit: 2,
         offset: 8,
       },
-      'callBackValue contains the right properties '
+      'callbackValue contains the right properties '
     );
   });
 
@@ -498,7 +504,7 @@ module('Integration | Component | pagination', function (hooks) {
       this.set('callBackValue', args);
     });
 
-    // NOTE: The default pagination offset is equal to 1 if not provided
+    // NOTE: The  pagination offset is equal to 2 since it's provided
     await render(hbs`
         <Pagination
           @totalItems={{this.totalItems}}
