@@ -2,25 +2,10 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+import { setupMirage } from 'ember-cli-mirage/test-support';
+import { setupIntl } from 'ember-intl/test-support';
 
 import Service from '@ember/service';
-import JSONAPIAdapter from '@ember-data/adapter/json-api';
-
-class AMConfigurationAdapterStub extends JSONAPIAdapter {
-  createRecord() {
-    return { id: 1, enabled: true };
-  }
-
-  updateRecord() {
-    return { id: 1, enabled: false };
-  }
-}
-
-class OrganizationStub extends Service {
-  selected = {
-    id: 1,
-  };
-}
 
 class OrganizationMeStub extends Service {
   org = {
@@ -31,9 +16,13 @@ class OrganizationMeStub extends Service {
 
 module('Integration | Component | app-monitoring-settings', function (hooks) {
   setupRenderingTest(hooks);
+  setupMirage(hooks);
+  setupIntl(hooks);
 
   hooks.beforeEach(async function () {
-    this.owner.register('service:organization', OrganizationStub);
+    this.server.createList('organization', 1);
+    await this.owner.lookup('service:organization').load();
+
     this.owner.register('service:me', OrganizationMeStub);
   });
 
@@ -73,21 +62,26 @@ module('Integration | Component | app-monitoring-settings', function (hooks) {
     });
 
     const me = this.owner.lookup('service:me');
-    me.org.is_owner = false;
+    me.org.is_admin = false;
 
     await render(hbs`<AppMonitoring::Settings @settings={{this.settings}} />`);
 
     assert.dom(`[data-test-toggle-input]`).exists();
     assert.dom(`[data-test-toggle-input]`).hasAttribute('disabled');
+    assert.ok(this.element.querySelector(`[data-test-toggle-input]`).checked);
   });
 
   test('should toggle app monitoring enabled', async function (assert) {
+    this.server.put('/v2/am_configuration/:id', (schema, req) => ({
+      id: 1,
+      enabled: false,
+      organization: req.params.id,
+    }));
+
     this.set('settings', {
       id: 1,
       enabled: true,
     });
-
-    this.owner.register('adapter:amconfiguration', AMConfigurationAdapterStub);
 
     const store = this.owner.lookup('service:store');
 

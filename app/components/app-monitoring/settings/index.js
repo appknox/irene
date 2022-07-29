@@ -6,7 +6,7 @@ export default class AppMonitoringSettingsComponent extends Component {
   @service me;
 
   get canEditSettings() {
-    return this.me.get('org.is_owner');
+    return this.me.get('org.is_admin');
   }
 
   @task(function* () {
