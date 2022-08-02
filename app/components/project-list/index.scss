@@ -6,6 +6,11 @@
 
 .no-result-found {
   margin: 90px auto;
-  padding: 15px;
+  padding: 0.9375em;
   border-radius: 20px;
+}
+
+.sorting-select {
+  text-overflow: ellipsis;
+  padding-right: 1.8125em;
 }

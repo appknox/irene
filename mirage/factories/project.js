@@ -5,24 +5,36 @@ import Base from './base';
 
 export default Base.extend({
   name: faker.company.companyName(),
-  packageName: faker.internet.domainName(),
   version: faker.random.number(),
-  githubRepo: faker.company.companyName(),
-  jiraProject: faker.company.companyName(),
-  testUser: faker.name.firstName(),
-  testPassword: faker.internet.password(),
-  url: faker.internet.domainName(),
-  platformVersion: faker.random.number(),
-  fileCount: 2,
-  showUnknownAnalysis: faker.random.boolean(),
-  showIgnoredAnalysis: faker.random.boolean(),
-  activeProfileId: 2,
+  github_repo: faker.company.companyName(),
+  jira_project: faker.company.companyName(),
+  test_user: faker.name.firstName(),
+  platform_version: faker.random.number(),
+  file_count: 2,
+  show_unknown_analysis: faker.random.boolean(),
+  show_ignored_analysis: faker.random.boolean(),
 
-  platform() {
-    return faker.random.arrayElement(ENUMS.PLATFORM.VALUES);
+  active_profile_id(i) {
+    return i + 1;
   },
 
-  deviceType() {
+  platform() {
+    return faker.random.arrayElement([0, 1, 2]);
+  },
+
+  test_password() {
+    return faker.internet.password();
+  },
+
+  url() {
+    return faker.internet.domainName();
+  },
+
+  packageName() {
+    return faker.internet.domainName();
+  },
+
+  device_type() {
     return faker.random.arrayElement(ENUMS.DEVICE_TYPE.VALUES);
   },
 
@@ -39,7 +51,7 @@ export default Base.extend({
     }
   },
 
-  apiUrlFilters() {
+  api_url_filters() {
     var desc = [];
     for (var i = 0; i < 5; i++) {
       desc.push(faker.internet.domainName(2).split(' ').join(' -> '));

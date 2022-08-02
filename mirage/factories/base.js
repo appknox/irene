@@ -4,10 +4,10 @@ import { Factory } from 'ember-cli-mirage';
 import faker from 'faker';
 
 export default Factory.extend({
-  id (i) {
-    return i+1;
+  id(i) {
+    return i + 1;
   },
-  createdOn: faker.date.past,
-  updatedOn: faker.date.past
+  created_on: faker.date.past,
+  updated_on: faker.date.past,
   // createdBy: an ID of a user
 });
