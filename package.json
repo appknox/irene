@@ -101,7 +101,6 @@
     "ember-template-lint": "^3.4.2",
     "ember-test-selectors": "^5.2.0",
     "ember-uploader": "^2.0.0",
-    "ember-websockets": "7.2.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.4.0",
     "eslint-plugin-ember": "^11.0.0",
@@ -130,6 +129,7 @@
     "billboard.js": "^1.12.7",
     "clipboard": "^2.0.6",
     "ember-radio-button": "^2.0.1",
+    "ember-websockets": "^10.2.1",
     "material-icons": "^1.11.6",
     "pikaday": "^1.8.2",
     "qrious": "^4.0.2"
