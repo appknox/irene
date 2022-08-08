@@ -7,10 +7,16 @@
     </h4>
 
     {{#if this.mailSent}}
-      <h6 data-test-mail-sent-text local-class='text-center'>
-        Check your email for a link to reset your password. If it doesn't appear
-        within a few minutes, check your spam folder.
-      </h6>
+      <div data-test-mail-sent-text>
+        <div local-class='reset-success-text'>
+          Check your email for a link to reset your password. If it doesn't
+          appear within a few minutes, check your spam folder.
+        </div>
+        <div local-class='reset-success-subtext'>
+          If you are not receiving new emails after a few attempts, please retry
+          after 24 hours or contact support.
+        </div>
+      </div>
     {{else}}
       <div
         local-class='input-wrapper {{if
