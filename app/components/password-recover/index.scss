@@ -23,6 +23,15 @@
   text-align: center;
 }
 
+.reset-success-text {
+  font-size: 1.1rem;
+}
+
+.reset-success-subtext {
+  color: var(--black-400);
+  padding-top: 1rem;
+}
+
 .send-reset-mail-btn {
   border-radius: 5px;
   padding-right: 10px;
