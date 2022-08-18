@@ -20,11 +20,17 @@ export default Factory.extend({
   ],
   isIgnored: faker.datatype.boolean(),
   overridenRisk: faker.random.arrayElement([null, 1, 2, 3, 4]),
-  risk: faker.random.arrayElement(ENUMS.RISK.VALUES),
-  computedRisk: faker.random.arrayElement(ENUMS.RISK.VALUES),
   status: faker.random.arrayElement(ENUMS.ANALYSIS.VALUES),
   createdOn: faker.date.past(),
   updatedOn: faker.date.past(),
+
+  risk() {
+    return faker.random.arrayElement(ENUMS.RISK.VALUES);
+  },
+
+  computedRisk() {
+    return faker.random.arrayElement(ENUMS.RISK.VALUES);
+  },
 
   findings() {
     var desc = [];

@@ -1,13 +1,12 @@
 /* eslint-disable prettier/prettier */
 import faker from 'faker';
-import Base from './base';
 import ENUMS from 'irene/enums';
+import Base from './base';
 
 export default Base.extend({
-
   name: faker.company.companyName(),
-  packageName:  faker.internet.domainName(),
-  version : faker.random.number(),
+  packageName: faker.internet.domainName(),
+  version: faker.random.number(),
   githubRepo: faker.company.companyName(),
   jiraProject: faker.company.companyName(),
   testUser: faker.name.firstName(),
@@ -19,17 +18,32 @@ export default Base.extend({
   showIgnoredAnalysis: faker.random.boolean(),
   activeProfileId: 2,
 
-  platform: 1,
+  platform() {
+    return faker.random.arrayElement(ENUMS.PLATFORM.VALUES);
+  },
 
   deviceType() {
     return faker.random.arrayElement(ENUMS.DEVICE_TYPE.VALUES);
   },
 
-  apiUrlFilters(){
+  platformIconClass() {
+    switch (this.platform) {
+      case ENUMS.PLATFORM.ANDROID:
+        return 'android';
+      case ENUMS.PLATFORM.IOS:
+        return 'apple';
+      case ENUMS.PLATFORM.WINDOWS:
+        return 'windows';
+      default:
+        return 'mobile';
+    }
+  },
+
+  apiUrlFilters() {
     var desc = [];
     for (var i = 0; i < 5; i++) {
-      desc.push(faker.internet.domainName(2).split(" ").join(" -> "));
+      desc.push(faker.internet.domainName(2).split(' ').join(' -> '));
     }
-    return desc.join(",");
-  }
+    return desc.join(',');
+  },
 });
