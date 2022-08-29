@@ -1,0 +1,242 @@
+<div
+  class='card file-card is-fullwidth margin-bottom20'
+  data-test-file-overview-container
+>
+  <header class='card-header'>
+    <div class='card-header-icon padding-l-3q'>
+      <img
+        src={{this.file.iconUrl}}
+        alt={{this.file.name}}
+        data-test-file-overview-icon-url
+      />
+    </div>
+    <p class='card-header-title padding-v-q'>
+      <ul class='is-fullwidth'>
+        <li>
+          <h5>
+            <div class='columns project-specific'>
+              <div
+                class='column hide-overflow'
+                data-test-file-overview-file-name
+              >
+                {{this.file.name}}
+              </div>
+              <div
+                class='column is-one-sixth fixed-icon'
+                data-test-file-overview-platform-icon
+              >
+                {{fa-icon
+                  this.file.project.platformIconClass
+                  class='card-icon'
+                }}
+              </div>
+            </div>
+          </h5>
+        </li>
+        <li
+          title={{this.file.project.packageName}}
+          class='hide-overflow package-name'
+          data-test-file-overview-package-name
+        >
+          {{this.file.project.packageName}}
+        </li>
+        <li
+          class='hide-overflow font-small text-lightgray'
+          data-test-file-overview-version
+        >
+          {{#if this.file.version}}
+            version:
+            {{this.file.version}}
+          {{/if}}
+          {{#if this.file.versionCode}}
+            <span class='margin-l-1'></span>
+            version code:
+            {{this.file.versionCode}}
+          {{/if}}
+        </li>
+      </ul>
+    </p>
+  </header>
+  <div class='app-information align-both vertical-align-center'>
+    <div class='file-id-container'>
+      <div class='file-id-text' data-test-file-overview-file-id>
+        {{#unless this.file.isActive}}
+          {{fa-icon
+            'exclamation-circle'
+            class='file-in-active-icon margin-right'
+          }}
+          <AttachTooltip @placement='top'>
+            {{t 'fileInactive'}}
+          </AttachTooltip>
+        {{/unless}}
+        FILE ID -
+        {{this.file.id}}
+      </div>
+    </div>
+    <div class='file-overview-scan-status'>
+      <div class='scan-status-tag'>
+        {{#if this.file.isStaticDone}}
+          <div class='scan-status-tag-icon scan-status-tag-icon-done'>
+            {{fa-icon 'check-circle'}}
+          </div>
+        {{else}}
+          <div class='scan-status-tag-icon'>
+            {{fa-icon 'circle-o'}}
+          </div>
+        {{/if}}
+        <div class='scan-status-tag-label'>
+          {{t 'static'}}
+        </div>
+      </div>
+      <div class='scan-status-tag'>
+        {{#if this.file.isDynamicDone}}
+          <div class='scan-status-tag-icon scan-status-tag-icon-done'>
+            {{fa-icon 'check-circle'}}
+          </div>
+        {{else}}
+          <div class='scan-status-tag-icon'>
+            {{fa-icon 'circle-o'}}
+          </div>
+        {{/if}}
+        <div class='scan-status-tag-label'>
+          {{t 'dynamic'}}
+        </div>
+      </div>
+      <div class='scan-status-tag'>
+        {{#if this.file.isApiDone}}
+          <div class='scan-status-tag-icon scan-status-tag-icon-done'>
+            {{fa-icon 'check-circle'}}
+          </div>
+        {{else}}
+          <div class='scan-status-tag-icon'>
+            {{fa-icon 'circle-o'}}
+          </div>
+        {{/if}}
+        <div class='scan-status-tag-label'>
+          {{t 'api'}}
+        </div>
+      </div>
+      <div class='scan-status-tag'>
+        {{#if this.file.isManualDone}}
+          <div class='scan-status-tag-icon scan-status-tag-icon-done'>
+            {{fa-icon 'check-circle'}}
+          </div>
+        {{else if this.file.isManualRequested}}
+          <div class='scan-status-tag-icon scan-status-tag-icon-done'>
+            {{fa-icon 'clock-o'}}
+          </div>
+        {{else}}
+          <div class='scan-status-tag-icon'>
+            {{fa-icon 'circle-o'}}
+          </div>
+        {{/if}}
+        <div class='scan-status-tag-label'>
+          {{t 'manual'}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class='card-content'>
+    <div class='content'>
+      <div class='columns app-risk-info {{if @isReverse "is-reverse"}}'>
+        <div class='column flex-center'>
+          <EmberChart
+            @type='doughnut'
+            @data={{this.file.doughnutData}}
+            @width={{150}}
+            @height={{150}}
+            @options={{this.chartOptions}}
+          />
+        </div>
+        <div class='column'>
+          <div class='lowercase-text text-centre'>
+            <div class='overflow ellipse' data-test-file-overview-date-created>
+              {{t 'started'}}&nbsp;
+              {{dayjs-from-now this.file.createdOn}}
+            </div>
+            <AttachTooltip @placement='bottom'>
+              {{this.file.createdOnDateTime}}
+            </AttachTooltip>
+          </div>
+          <ul class='risk-table'>
+            <div class='risk-values'>
+              <div class='columns'>
+                <div class='column'>
+                  <li class='is-critical'>
+                    {{t 'critical'}}
+                  </li>
+                </div>
+                <div class='column' data-test-critical-risk-count>
+                  {{this.file.countRiskCritical}}
+                </div>
+              </div>
+              <div class='columns'>
+                <div class='column'>
+                  <li class='is-danger'>
+                    {{t 'high'}}
+                  </li>
+                </div>
+                <div class='column' data-test-count-risk-high>
+                  {{this.file.countRiskHigh}}
+                </div>
+              </div>
+              <div class='columns'>
+                <div class='column'>
+                  <li class='is-warning'>
+                    {{t 'medium'}}
+                  </li>
+                </div>
+                <div class='column' data-test-count-risk-medium>
+                  {{this.file.countRiskMedium}}
+                </div>
+              </div>
+              <div class='columns'>
+                <div class='column'>
+                  <li class='is-info'>
+                    {{t 'low'}}
+                  </li>
+                </div>
+                <div class='column' data-test-count-risk-low>
+                  {{this.file.countRiskLow}}
+                </div>
+              </div>
+              <div class='columns'>
+                <div class='column'>
+                  <li class='is-success'>
+                    {{t 'passed'}}
+                  </li>
+                </div>
+                <div class='column' data-test-count-risk-none>
+                  {{this.file.countRiskNone}}
+                </div>
+              </div>
+              <div
+                class='columns
+                  {{if
+                    this.unknownAnalysisStatus.status
+                    "visible"
+                    "invisible"
+                  }}'
+              >
+                <div class='column'>
+                  <li class='is-default'>
+                    {{t 'untested'}}
+                  </li>
+                </div>
+                <div class='column' data-test-count-risk-unknown>
+                  {{this.file.countRiskUnknown}}
+                </div>
+              </div>
+            </div>
+          </ul>
+        </div>
+      </div>
+      <div class='file-tags align-center'>
+        {{#each this.file.tags as |tag|}}
+          <AkTag @tag={{tag}} />
+        {{/each}}
+      </div>
+    </div>
+  </div>
+  {{yield}}
+</div>
