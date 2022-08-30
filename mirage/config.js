@@ -80,13 +80,13 @@ function routes() {
 
   this.namespace = config.namespace;
 
-  this.get('/api/organizations/:id/projects', (schema) => {
+  this.get('/organizations/:id/projects', (schema) => {
     return schema.projects.all().models;
   });
-  this.get(
-    '/api/profiles/:id/unknown_analysis_status',
-    'unknown-analysis-status'
-  );
+  this.get('/organizations/:id/teams', (schema) => {
+    return schema.teams.all().models;
+  });
+  this.get('/profiles/:id/unknown_analysis_status', 'unknown-analysis-status');
   this.get('/users/:id', 'user');
   this.get('/users', 'user');
   this.get('/projects/:id', 'project');

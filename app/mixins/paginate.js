@@ -1,10 +1,10 @@
 /* eslint-disable ember/no-new-mixins, ember/no-observers, ember/no-get */
+import { computed, observer } from '@ember/object';
 import Mixin from '@ember/object/mixin';
-import ENV from 'irene/config/environment';
-import { task } from 'ember-concurrency';
-import { observer, computed } from '@ember/object';
-import { isEmpty } from '@ember/utils';
 import { run } from '@ember/runloop';
+import { isEmpty } from '@ember/utils';
+import { task } from 'ember-concurrency';
+import ENV from 'irene/config/environment';
 import { __range__ } from 'irene/utils/utils';
 
 // Classic Mixin object
@@ -222,10 +222,10 @@ const PaginateMixin = Mixin.create({
 
 // Class based mixin support for glimmer components
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
-import { gt, equal, alias } from '@ember/object/computed';
+import { alias, equal, gt } from '@ember/object/computed';
 import { scheduleOnce } from '@ember/runloop';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 export const PaginationMixin = (superclass) =>
   class extends superclass {
@@ -245,6 +245,7 @@ export const PaginationMixin = (superclass) =>
     @tracked isDRFPagination = true;
     @tracked error = null;
     @tracked currentObjects = [];
+    @tracked isLoading = false;
 
     @action
     gotoPage(offset) {
@@ -308,16 +309,16 @@ export const PaginationMixin = (superclass) =>
       return query;
     }
 
-    get isLoading() {
-      return this.fetchObjects.isRunning;
-    }
-
     @task(function* () {
+      this.isLoading = true;
+
       const query = this.currentQuery;
       const targetModel = this.targetModel;
+
       try {
         const objects = yield this.store.query(targetModel, query);
         const meta = objects.meta;
+
         if (objects.links && objects.meta.pagination) {
           // JSON API
           meta.total = objects.meta.pagination.count;
@@ -330,11 +331,14 @@ export const PaginationMixin = (superclass) =>
           this.isJsonApiPagination = false;
           this.isDRFPagination = true;
         }
+
         this.meta = meta;
         this.currentObjects = objects;
+        this.isLoading = false;
       } catch (err) {
         this.error = err;
         this.currentObjects = [];
+        this.isLoading = false;
       }
     })
     fetchObjects;
@@ -350,6 +354,12 @@ export const PaginationMixin = (superclass) =>
     @equal('meta.count', 0) hasNoObject;
 
     @alias('meta.total') totalCount;
+
+    /**
+     * @property {Boolean} isEmpty
+     * Property to check the number of total objects
+     */
+    @equal('meta.total', 0) isEmpty;
 
     @computed('meta.total', 'limit')
     get maxOffset() {

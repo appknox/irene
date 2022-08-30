@@ -1,0 +1,132 @@
+{{! template-lint-disable no-partial }}
+{{#if (or this.hasProjects this.objects)}}
+  <div class='column project-list'>
+    <div class='box-container home-page'>
+      <div local-class='filters'>
+        <label>
+          {{t 'search'}}
+          <div class='margin-top'>
+            <Input
+              @type='search'
+              @value={{this.tempQuery}}
+              placeholder={{t 'searchQuery'}}
+              class='input mp-search-query'
+              {{on 'input' this.onQueryChange}}
+              data-test-search-query-input
+            />
+          </div>
+        </label>
+        <div>
+          {{concat (t 'filterBy') ' ' (t 'team')}}
+          <div class='margin-top'>
+            <PowerSelect
+              @triggerClass='input'
+              @dropdownClass='power-select-custom-repo'
+              @renderInPlace={{true}}
+              @searchPlaceholder={{t 'searchTeamByName'}}
+              @search={{this.searchTeams}}
+              @searchEnabled={{true}}
+              @options={{this.teams}}
+              @selected={{this.selectedTeam}}
+              @loadingMessage={{t 'loadingTeam'}}
+              @onchange={{this.onSelectTeam}}
+              @onopen={{this.onOpenTFilter}}
+              @tagName='div'
+              class='select-team-class'
+              as |team|
+            >
+              {{team.name}}
+            </PowerSelect>
+          </div>
+        </div>
+        <div>
+          {{t 'sortBy'}}<div class='margin-top'>
+            <select
+              id='project-sort-property'
+              local-class='sorting-select'
+              class='input'
+              {{on 'change' this.sortProjects}}
+              data-test-project-sort-property
+            >
+              {{#each this.sortingKeyObjects as |sortingKeyObject|}}
+                <option
+                  action='foo'
+                  value='{{filter-platform sortingKeyObject}}'
+                  data-test-project-sort-property-option
+                >
+                  {{sortingKeyObject.text}}
+                </option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
+        <div>
+          {{t 'filterBy'}}<div class='margin-top'>
+            <select
+              id='project-filter-platform'
+              class='input'
+              {{on 'change' this.filterPlatform}}
+              data-test-platform-filter
+            >
+              <option value='-1' data-test-platform-filter-option>
+                {{t 'allPlatforms'}}
+              </option>
+              {{#each this.platformObjects as |platformObject|}}
+                <option
+                  value={{platformObject.value}}
+                  data-test-platform-filter-option
+                >
+                  {{platformObject.key}}
+                </option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='columns project-container'>
+      {{#if this.isLoading}}
+        <div class='project-loading-container'>
+          <ThreeBounceSpinner />
+        </div>
+      {{else if this.showProjectResults}}
+        {{#each this.objects as |project|}}
+          <ProjectOverview @project={{project}} />
+        {{/each}}
+      {{else if this.isEmpty}}
+        <div local-class='no-result-found'>
+          <h5 class='capitalize-text text-centre'>
+            {{t 'noResultsFound'}}
+          </h5>
+          <h6>
+            {{t 'tryAdjustingFilter'}}
+          </h6>
+        </div>
+      {{else}}
+        <div class='project-loading-container'>
+          <ThreeBounceSpinner />
+        </div>
+      {{/if}}
+    </div>
+    {{#if this.showPagination}}
+      {{partial 'paginate'}}
+    {{/if}}
+  </div>
+{{else}}
+  <div
+    class='column is-fullwidth no-project-container'
+    data-test-no-project-container
+  >
+    <div class='no-project'>
+      <h4 class='capitalize-text' data-test-no-project-header>
+        {{t 'noProject'}}!!
+      </h4>
+      <h5 data-test-no-project-uploaded-text>
+        {{t 'noProjectUploaded'}}
+      </h5>
+      <h6 data-test-upload-new-project-text>
+        {{t 'uploadNewProject' htmlSafe=true}}
+      </h6>
+    </div>
+  </div>
+{{/if}}
