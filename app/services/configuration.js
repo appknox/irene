@@ -38,6 +38,8 @@ export default class ConfigurationService extends Service {
     pendo_key: '',
     rollbar_key: '',
     document360_key: '',
+    sentry_dsn: '',
+    environment: '',
   };
 
   serverData = {
@@ -74,6 +76,8 @@ export default class ConfigurationService extends Service {
       this.integrationData.rollbar_key ||= data.integrations.rollbar_key;
       this.integrationData.document360_key ||=
         data.integrations.document360_key;
+      this.integrationData.sentry_dsn ||= data.integrations.sentry_dsn;
+      this.integrationData.environment ||= data.integrations.environment;
 
       this.themeData.scheme ||= data.theme.scheme;
       this.themeData.primary_color ||= data.theme.primary_color;

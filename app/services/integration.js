@@ -2,6 +2,7 @@ import { inject as service } from '@ember/service';
 import Service from '@ember/service';
 import ENV from 'irene/config/environment';
 import { injectDocument360 } from 'irene/utils/knowledge-base';
+import Sentry from '@sentry/ember';
 
 export default class IntegrationService extends Service {
   @service configuration;
@@ -22,8 +23,11 @@ export default class IntegrationService extends Service {
   async configure(user) {
     await this.configuration.getIntegrationConfig();
     this.currentUser = user;
+
     await this.configureCrisp();
     await this.configureDocument360();
+
+    this.configureSentry();
   }
 
   // Crisp
@@ -58,6 +62,32 @@ export default class IntegrationService extends Service {
 
   get document360Key() {
     return this.configuration.integrationData.document360_key;
+  }
+
+  get sentryDsn() {
+    return this.configuration.integrationData.sentry_dsn;
+  }
+
+  get deployedEnvironment() {
+    return this.configuration.integrationData.environment;
+  }
+
+  isSentryEnabled() {
+    return !!this.sentryDsn;
+  }
+
+  configureSentry() {
+    if (!this.isSentryEnabled()) {
+      this.logger.debug('Sentry Disabled');
+      return;
+    }
+
+    Sentry.init({
+      dsn: this.sentryDsn,
+      tracesSampleRate: this.deployedEnvironment === 'production' ? 1.0 : 0.7,
+      environment: this.deployedEnvironment,
+      release: ENV.APP.version,
+    });
   }
 
   // get the snippet code from https://app.crisp.chat/settings/website/
