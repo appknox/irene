@@ -135,7 +135,7 @@ module('Integration | Component | jira-project', function (hooks) {
 
     await render(hbs`<JiraProject @project={{this.project}} />`);
     await click('[data-test-select-project-button]');
-    await clickTrigger('.select-repo-class');
+    await clickTrigger('[data-test-select-repo-container]');
 
     const projectDropdownList = this.element.querySelectorAll(
       '.ember-power-select-option'
@@ -181,11 +181,11 @@ module('Integration | Component | jira-project', function (hooks) {
     await render(hbs`<JiraProject @project={{this.project}} />`);
     await click('[data-test-select-project-button]');
 
-    await clickTrigger('.select-repo-class');
+    await clickTrigger('[data-test-select-repo-container]');
     // Select first repo in power select dropdown
     await selectChoose('.select-repo-class', '.ember-power-select-option', 0);
 
-    await clickTrigger('.select-threshold-class');
+    await clickTrigger('[data-test-select-threshold-container]');
     // Select second threshold in power select dropdown
     await selectChoose(
       '.select-threshold-class',
@@ -225,11 +225,11 @@ module('Integration | Component | jira-project', function (hooks) {
     await render(hbs`<JiraProject @project={{this.project}} />`);
     await click('[data-test-select-project-button]');
 
-    await clickTrigger('.select-repo-class');
+    await clickTrigger('[data-test-select-repo-container]');
     // Select first repo in power select dropdown
     await selectChoose('.select-repo-class', '.ember-power-select-option', 0);
 
-    await clickTrigger('.select-threshold-class');
+    await clickTrigger('[data-test-select-repo-container]');
     // Select first threshold in power select dropdown
     await selectChoose(
       '.select-threshold-class',
@@ -287,11 +287,11 @@ module('Integration | Component | jira-project', function (hooks) {
     await render(hbs`<JiraProject @project={{this.project}} />`);
     await click('[data-test-select-project-button]');
 
-    await clickTrigger('.select-repo-class');
+    await clickTrigger('[data-test-select-repo-container]');
     // Select first repo in power select dropdown
     await selectChoose('.select-repo-class', '.ember-power-select-option', 0);
 
-    await clickTrigger('.select-threshold-class');
+    await clickTrigger('[data-test-select-threshold-container]');
     // Select first threshold in power select dropdown
     await selectChoose(
       '.select-threshold-class',
@@ -347,11 +347,11 @@ module('Integration | Component | jira-project', function (hooks) {
     await render(hbs`<JiraProject @project={{this.project}} />`);
     await click('[data-test-select-project-button]');
 
-    await clickTrigger('.select-repo-class');
+    await clickTrigger('[data-test-select-repo-container]');
     // Select first repo in power select dropdown
     await selectChoose('.select-repo-class', '.ember-power-select-option', 0);
 
-    await clickTrigger('.select-threshold-class');
+    await clickTrigger('[data-test-select-threshold-container]');
     // Select second threshold in power select dropdown
     await selectChoose(
       '.select-threshold-class',
@@ -376,11 +376,11 @@ module('Integration | Component | jira-project', function (hooks) {
     // Flow for updating the existing JiraIntegration
     await click('[data-test-edit-project-trigger]');
 
-    await clickTrigger('.select-repo-class');
+    await clickTrigger('[data-test-select-repo-container]');
     // Select first repo in power select dropdown
     await selectChoose('.select-repo-class', '.ember-power-select-option', 1);
 
-    await clickTrigger('.select-threshold-class');
+    await clickTrigger('[data-test-select-threshold-container]');
     // Select second threshold in power select dropdown
     await selectChoose(
       '.select-threshold-class',

@@ -5,7 +5,6 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import dayjs from 'dayjs';
 import { task } from 'ember-concurrency';
-import parseError from 'irene/utils/parse-error';
 
 export default class PartnerExportStatsComponent extends Component {
   @service store;
@@ -45,8 +44,8 @@ export default class PartnerExportStatsComponent extends Component {
 
   @action
   async downloadCSV() {
-    try {
-      const url = await this.fetchDownloadUrl.perform();
+    const url = await this.fetchDownloadUrl.perform();
+    if (url?.csv) {
       var element = document.createElement('a');
       element.setAttribute('href', url.csv);
       element.setAttribute('download', 'dashboard_analytics.csv');
@@ -54,8 +53,6 @@ export default class PartnerExportStatsComponent extends Component {
       document.body.appendChild(element);
       element.click();
       document.body.removeChild(element);
-    } catch (err) {
-      this.notify.error(parseError(err));
     }
   }
 
@@ -72,7 +69,7 @@ export default class PartnerExportStatsComponent extends Component {
         .adapterFor('partner/analytic')
         .getDownloadURL(filters);
     } else {
-      throw new Error('Please select valid date range');
+      this.notify.error('Please select valid date range');
     }
   })
   fetchDownloadUrl;

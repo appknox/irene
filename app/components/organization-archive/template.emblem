@@ -7,7 +7,7 @@
 .columns.margin-t-q
   .column
     .padding-v-1.text-centre local-class="generate-box"
-      = date-picker class="custom-styled-picker"  maxDate=maxDate range=true options=datepickerOptions action=(action "setDuration") as |selectedDates|
+      = date-picker class="custom-styled-picker" renderInPlace=true  maxDate=maxDate range=true options=datepickerOptions onChange=(action "setDuration") as |selectedDates|
         .align-middle
           = fa-icon "calendar" class="font-small" title="Select date range"
           button local-class="date-btn"

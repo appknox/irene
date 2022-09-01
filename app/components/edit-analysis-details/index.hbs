@@ -56,7 +56,7 @@
             @placeholder='Select Status'
             @selected={{this.analysisDetails.status}}
             @options={{this.statuses}}
-            @onchange={{this.selectStatus}}
+            @onChange={{this.selectStatus}}
             as |status|
           >
             {{analysis-status status}}
@@ -124,7 +124,7 @@
               <PowerSelect
                 @selected={{this.analysisDetails.attackVector}}
                 @options={{this.attackVectors}}
-                @onchange={{this.selectAttackVector}}
+                @onChange={{this.selectAttackVector}}
                 as |key|
               >
                 {{metric-vector key}}
@@ -139,7 +139,7 @@
               <PowerSelect
                 @selected={{this.analysisDetails.attackComplexity}}
                 @options={{this.attackComplexities}}
-                @onchange={{this.selectAttackComplexity}}
+                @onChange={{this.selectAttackComplexity}}
                 as |key|
               >
                 {{metric-impact key}}
@@ -154,7 +154,7 @@
               <PowerSelect
                 @selected={{this.analysisDetails.privilegesRequired}}
                 @options={{this.requiredPrevileges}}
-                @onchange={{this.selectRequiredPrevilege}}
+                @onChange={{this.selectRequiredPrevilege}}
                 as |key|
               >
                 {{metric-impact key}}
@@ -169,7 +169,7 @@
               <PowerSelect
                 @selected={{this.analysisDetails.userInteraction}}
                 @options={{this.userInteractions}}
-                @onchange={{this.selectUserInteraction}}
+                @onChange={{this.selectUserInteraction}}
                 as |key|
               >
                 {{metric-interaction key}}
@@ -185,7 +185,7 @@
               <PowerSelect
                 @selected={{this.analysisDetails.scope}}
                 @options={{this.scopes}}
-                @onchange={{this.selectScope}}
+                @onChange={{this.selectScope}}
                 as |key|
               >
                 {{metric-scope key}}
@@ -200,7 +200,7 @@
               <PowerSelect
                 @selected={{this.analysisDetails.confidentialityImpact}}
                 @options={{this.confidentialityImpacts}}
-                @onchange={{this.selectConfidentialityImpact}}
+                @onChange={{this.selectConfidentialityImpact}}
                 as |key|
               >
                 {{metric-impact key}}
@@ -215,7 +215,7 @@
               <PowerSelect
                 @selected={{this.analysisDetails.integrityImpact}}
                 @options={{this.integrityImpacts}}
-                @onchange={{this.selectIntegrityImpact}}
+                @onChange={{this.selectIntegrityImpact}}
                 as |key|
               >
                 {{metric-impact key}}
@@ -230,7 +230,7 @@
               <PowerSelect
                 @selected={{this.analysisDetails.availabilityImpact}}
                 @options={{this.availabilityImpacts}}
-                @onchange={{this.selectAvailabilityImpact}}
+                @onChange={{this.selectAvailabilityImpact}}
                 as |key|
               >
                 {{metric-impact key}}
@@ -252,7 +252,7 @@
             @placeholder='Select OWASP Categories'
             @selected={{this.analysisDetails.owasp}}
             @options={{this.owasps}}
-            @onchange={{this.selectOwaspCategory}}
+            @onChange={{this.selectOwaspCategory}}
             as |key|
           >
             {{key.code}}
@@ -276,7 +276,7 @@
             @placeholder='Select PCI-DSS Risk Category'
             @selected={{this.analysisDetails.pcidss}}
             @options={{this.pcidsses}}
-            @onchange={{this.selectPcidssCategory}}
+            @onChange={{this.selectPcidssCategory}}
             as |key|
           >
             {{key.code}}
@@ -298,7 +298,7 @@
             @placeholder='Select HIPAA Risk Section'
             @selected={{this.analysisDetails.hipaa}}
             @options={{this.hipaas}}
-            @onchange={{this.selectHipaaCategory}}
+            @onChange={{this.selectHipaaCategory}}
             as |key|
           >
             {{key.code}}
@@ -322,7 +322,7 @@
             @placeholder='Select MSTG Requirements'
             @selected={{this.analysisDetails.mstg}}
             @options={{this.mstgs}}
-            @onchange={{this.selectMstgCategory}}
+            @onChange={{this.selectMstgCategory}}
             as |key|
           >
             {{key.code}}
@@ -344,7 +344,7 @@
             @placeholder='Select ASVS Requirements'
             @selected={{this.analysisDetails.asvs}}
             @options={{this.asvses}}
-            @onchange={{this.selectAsvsCategory}}
+            @onChange={{this.selectAsvsCategory}}
             as |key|
           >
             {{key.code}}
@@ -366,7 +366,7 @@
             @placeholder='Select CWE Weaknesses'
             @selected={{this.analysisDetails.cwe}}
             @options={{this.cwes}}
-            @onchange={{this.selectCWECategory}}
+            @onChange={{this.selectCWECategory}}
             as |key|
           >
             {{key.code}}
@@ -388,7 +388,7 @@
             @placeholder='Select GDPR Articles'
             @selected={{this.analysisDetails.gdpr}}
             @options={{this.gdprs}}
-            @onchange={{this.selectGDPRCategory}}
+            @onChange={{this.selectGDPRCategory}}
             as |key|
           >
             {{key.code}}
@@ -417,7 +417,7 @@
                   @placeholder='Select Risk'
                   @selected={{this.analysisDetails.overriddenRisk}}
                   @options={{this.risks}}
-                  @onchange={{this.selectOverriddenRisk}}
+                  @onChange={{this.selectOverriddenRisk}}
                   as |key|
                 >
                   <span class='uppercase-text'>

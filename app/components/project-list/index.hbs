@@ -18,7 +18,7 @@
         </label>
         <div>
           {{concat (t 'filterBy') ' ' (t 'team')}}
-          <div class='margin-top'>
+          <div class='margin-top' data-test-select-team-container>
             <PowerSelect
               @triggerClass='input'
               @dropdownClass='power-select-custom-repo'
@@ -29,8 +29,8 @@
               @options={{this.teams}}
               @selected={{this.selectedTeam}}
               @loadingMessage={{t 'loadingTeam'}}
-              @onchange={{this.onSelectTeam}}
-              @onopen={{this.onOpenTFilter}}
+              @onChange={{this.onSelectTeam}}
+              @onOpen={{this.onOpenTFilter}}
               @tagName='div'
               class='select-team-class'
               as |team|
