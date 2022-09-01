@@ -1,0 +1,28 @@
+<div local-class='header-container'>
+  {{#if @showAddOrgNameBtn}}
+    <AkButton::PrimaryOutlined
+      data-test-org-name-add-btn
+      local-class='add-button'
+      @onClick={{@onAddBtnClick}}
+      @isDisabled={{this.isAddBtnDisabled}}
+    >
+      {{fa-icon 'plus'}}
+      Add Organization Name
+    </AkButton::PrimaryOutlined>
+  {{else}}
+    <div local-class='header-group'>
+      <span local-class='label'>Organization Name</span>
+      <span data-test-org-name local-class='value'>{{@organization.name}}</span>
+    </div>
+  {{/if}}
+
+  {{#if @showActionBtn}}
+    <AkButton::PrimaryOutlined
+      data-test-org-name-action-btn
+      @onClick={{@actionBtnClick}}
+    >
+      {{#if @actionBtnIconName}} {{fa-icon @actionBtnIconName}} {{/if}}
+      {{@actionBtnLabel}}
+    </AkButton::PrimaryOutlined>
+  {{/if}}
+</div>

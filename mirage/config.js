@@ -83,9 +83,19 @@ function routes() {
   this.get('/organizations/:id/projects', (schema) => {
     return schema.projects.all().models;
   });
+
+  this.put('/organizations/:id', () => {
+    return {};
+  });
+
+  this.get('/organizations/:id/preference', () => {
+    return {};
+  });
+
   this.get('/organizations/:id/teams', (schema) => {
     return schema.teams.all().models;
   });
+
   this.get('/profiles/:id/unknown_analysis_status', 'unknown-analysis-status');
   this.get('/users/:id', 'user');
   this.get('/users', 'user');

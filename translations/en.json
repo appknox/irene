@@ -579,6 +579,7 @@
   "organizationMandatory2FA": "Your organization has enabled mandatory 2FA",
   "organizationMembers": "Organization Members",
   "organizationNameUpdated": "Successfully updated the organization name",
+  "organizationNameAddedOrUpdated": "Organization Name has been successfully {type, select, edit { updated } add { added }}",
   "organizationSettings": "Organization Settings",
   "organizationTableCreatedOn": "Created On",
   "organizationTableDuration": "Duration",
