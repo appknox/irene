@@ -108,7 +108,7 @@
               </div>
             </div>
             <div class='columns'>
-              <div class='column'>
+              <div class='column' data-test-select-repo-container>
                 <PowerSelect
                   class='select-repo-class'
                   @tagName='div'
@@ -120,9 +120,8 @@
                   @selected={{this.selectedRepo}}
                   @renderInPlace={{true}}
                   @options={{this.jiraProjects}}
-                  @onchange={{this.selectRepo}}
+                  @onChange={{this.selectRepo}}
                   @triggerClass='power-select-trigger-class'
-                  data-test-power-select-repo
                   as |repo|
                 >
                   {{repo.key}}-{{repo.name}}
@@ -137,7 +136,7 @@
               </div>
             </div>
             <div class='columns'>
-              <div class='column'>
+              <div class='column' data-test-select-threshold-container>
                 <PowerSelect
                   class='select-threshold-class'
                   @tagName='div'
@@ -147,7 +146,7 @@
                   @selected={{this.selectedThreshold}}
                   @renderInPlace={{true}}
                   @options={{this.thresholds}}
-                  @onchange={{this.selectThreshold}}
+                  @onChange={{this.selectThreshold}}
                   @class='power-select-custom-width'
                   as |threshold|
                 >

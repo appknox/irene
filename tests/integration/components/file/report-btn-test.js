@@ -1,14 +1,14 @@
-import { module, test } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
-import { render, click } from '@ember/test-helpers';
-import { setupIntl } from 'ember-intl/test-support';
-import { setupMirage } from 'ember-cli-mirage/test-support';
-import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
 import { underscore } from '@ember/string';
-import { REPORT } from 'irene/utils/constants';
+import { click, render } from '@ember/test-helpers';
 import dayjs from 'dayjs';
+import { hbs } from 'ember-cli-htmlbars';
+import { setupMirage } from 'ember-cli-mirage/test-support';
+import { setupIntl } from 'ember-intl/test-support';
+import { setupRenderingTest } from 'ember-qunit';
+import { REPORT } from 'irene/utils/constants';
 import { Response } from 'miragejs';
+import { module, test } from 'qunit';
 
 class RealtimeStub extends Service {
   ReportCounter = 0;

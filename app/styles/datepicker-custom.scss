@@ -3,21 +3,19 @@ $custom-picker-shadow: 1px 4px 12px $custom-picker-shadow-tint;
 $custom-picker-padding: 4px;
 $custom-picker-radius: 0 0 11px 11px;
 
-.custom-styled-picker {
-  &.date-picker__wrapper {
-    background: #fff;
+.date-picker__wrapper {
+  background: #fff;
 
-    .date-picker__trigger {
-      &.ember-basic-dropdown-trigger {
-        border: 1px solid #f0f1f3;
-        min-width: 17.5rem;
+  .date-picker__trigger {
+    &.ember-basic-dropdown-trigger {
+      border: 1px solid #f0f1f3;
+      min-width: 17.5rem;
 
-        button {
-          &.date-picker__button {
-            border: none;
-            min-width: 150px;
-            vertical-align: baseline;
-          }
+      button {
+        &.date-picker__button {
+          border: none;
+          min-width: 150px;
+          vertical-align: baseline;
         }
       }
     }
@@ -26,14 +24,16 @@ $custom-picker-radius: 0 0 11px 11px;
 
 .date-picker {
   &.date-picker--options {
-
     .date-picker__calendar {
       .date-picker__days {
         .date-picker__day {
-
           &:hover,
           &:focus {
-            box-shadow: inset 0 0 1px 2px #FE4D3F;
+            box-shadow: inset 0 0 1px 2px #fe4d3f;
+          }
+
+          &:focus {
+            color: #fff;
           }
         }
       }
@@ -47,7 +47,6 @@ $custom-picker-radius: 0 0 11px 11px;
         }
       }
     }
-
   }
 }
 
@@ -97,16 +96,15 @@ $custom-picker-radius: 0 0 11px 11px;
               height: inherit;
 
               &:hover {
-                background-color: #FE4D3F;
+                background-color: #fe4d3f;
                 color: #fff;
               }
             }
 
             &.is-selected {
-              background-color: #FE4D3F;
+              background-color: #fe4d3f;
               color: #fff;
             }
-
           }
         }
       }

@@ -178,9 +178,10 @@ module('Integration | Component | project list', function (hooks) {
       'Contains correct number of project overview cards.'
     );
 
-    await clickTrigger('.select-team-class');
+    await clickTrigger('[data-test-select-team-container]');
+
     const teamSelectOptions = this.element.querySelectorAll(
-      '.select-team-class .ember-power-select-option'
+      '[data-test-select-team-container] .ember-power-select-option'
     );
 
     // Default teams dropdown list is [{ name: 'All' }] which makes it three in all
@@ -235,7 +236,8 @@ module('Integration | Component | project list', function (hooks) {
     );
 
     await render(hbs`<ProjectList />`);
-    await clickTrigger('.select-team-class');
+
+    await clickTrigger('[data-test-select-team-container]');
 
     // Select second team in power select dropdown
     await selectChoose('.select-team-class', '.ember-power-select-option', 1);

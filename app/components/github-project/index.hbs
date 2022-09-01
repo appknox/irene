@@ -118,7 +118,7 @@
                     @selected={{this.selectedRepo}}
                     @renderInPlace={{true}}
                     @options={{this.githubRepos}}
-                    @onchange={{this.selectRepo}}
+                    @onChange={{this.selectRepo}}
                     as |repo|
                   >
                     {{repo.full_name}}
@@ -142,7 +142,7 @@
                     @selected={{this.selectedThreshold}}
                     @renderInPlace={{true}}
                     @options={{this.thresholds}}
-                    @onchange={{this.selectThreshold}}
+                    @onChange={{this.selectThreshold}}
                     as |threshold|
                   >
                     {{threshold-status threshold}}
