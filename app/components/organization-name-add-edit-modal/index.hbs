@@ -1,0 +1,66 @@
+<AkModal
+  @showHeader={{true}}
+  @headerTitle={{if
+    this.showSuccessMessage
+    'Message'
+    (if this.orgNameDoesNotExist 'Add Name' 'Edit Name')
+  }}
+  @onClose={{@handleCancel}}
+>
+  {{#if this.showSuccessMessage}}
+    <div local-class='success-message-container'>
+      <AkSvg::OrgNameAddEditSuccess />
+
+      <p data-test-org-name-success-message>{{t
+          'organizationNameAddedOrUpdated'
+          type=this.actionType
+        }}</p>
+
+      <AkButton::PrimaryFilled @onClick={{@handleCancel}}>
+        OK
+      </AkButton::PrimaryFilled>
+    </div>
+  {{else}}
+    <form local-class='edit-org-form'>
+      <div local-class='form-group'>
+        <label for='org-name-edit-input'>
+          {{#if this.orgNameDoesNotExist}}
+            Add Organization Name
+          {{else}}
+            Here you edit organization name
+          {{/if}}
+        </label>
+
+        <input
+          id='org-name-edit-input'
+          data-test-org-name-edit-input
+          class='input'
+          placeholder='{{if
+            this.orgNameDoesNotExist
+            "Organization name"
+            @organization.name
+          }}'
+          value={{this.newOrUpdatedOrgName}}
+          {{on 'change' this.handleOrgNameChange}}
+        />
+      </div>
+
+      <div local-class='form-footer'>
+        <AkButton::NeutralOutlined
+          @isDisabled={{this.updateOrgName.isRunning}}
+          @onClick={{@handleCancel}}
+        >
+          Cancel
+        </AkButton::NeutralOutlined>
+
+        <AkButton::PrimaryFilled
+          @isDisabled={{this.updateOrgName.isRunning}}
+          @onClick={{perform this.updateOrgName}}
+          data-test-org-name-edit-save-btn
+        >
+          Save
+        </AkButton::PrimaryFilled>
+      </div>
+    </form>
+  {{/if}}
+</AkModal>
