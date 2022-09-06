@@ -396,7 +396,7 @@ function routes() {
     return schema.organizationMes.find(req.params.id);
   });
 
-  this.put('/v2/am_configuration/:id', () => {
+  this.put('/v2/am_configurations/:id', () => {
     return {};
   });
 

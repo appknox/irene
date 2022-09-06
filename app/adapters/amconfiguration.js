@@ -7,7 +7,7 @@ export default class AMConfigurationAdapter extends commondrf {
     }
 
     return this.buildURLFromBase(
-      `/${this.namespace_v2}/am_configuration/${encodeURIComponent(id)}`
+      `/${this.namespace_v2}/am_configurations/${encodeURIComponent(id)}`
     );
   }
 
