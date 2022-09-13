@@ -36,6 +36,14 @@ export default Base.extend({
     return faker.company.companyName();
   },
 
+  comparableVersion() {
+    const platform = this.project?.platform;
+    if (platform === ENUMS.PLATFORM.IOS) {
+      return this.version;
+    }
+    return this.versionCode;
+  },
+
   doughnutData() {
     const countRiskCritical = faker.datatype.number({
       min: 0,

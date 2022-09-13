@@ -1,4 +1,5 @@
 import { render } from '@ember/test-helpers';
+import dayjs from 'dayjs';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
@@ -12,143 +13,240 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
   setupIntl(hooks);
 
   hooks.beforeEach(async function () {
-    this.prodScanRoute = this.owner.lookup(
-      'route:authenticated/app-monitoring'
-    );
+    this.lastFile = this.server.create('file');
+    this.latestAmAppVersion = this.server.create('am-app-version');
+    this.lastSync = this.server.create('am-app-sync');
 
-    this.appDetails = this.prodScanRoute.createProdScanTableData(1)[0];
+    this.project = this.server.create('project', {
+      lastFile: this.lastFile,
+      platformIconClass: 'apple',
+    });
+
     this.closeDrawer = function () {
       return;
     };
   });
 
-  test('it renders with the right data', async function (assert) {
-    this.appDetails.scannedOnDate = 'April 18, 2016';
+  test('it renders with the right data assuming monitoring is enabled and settings is active', async function (assert) {
+    this.amApp = this.server.create('am-app', 1, {
+      project: this.project,
+      latestAmAppVersion: this.latestAmAppVersion,
+      monitoringEnabled: true,
+      lastSync: this.lastSync,
+    });
+
+    this.set('settings', {
+      id: 1,
+      enabled: true,
+    });
 
     await render(hbs`
       <AppMonitoring::Drawer
         @showRightDrawer={{true}}
-        @appDetails={{this.appDetails}}
+        @appDetails={{this.amApp}}
         @closeModalHandler={{this.closeDrawer}}
+        @settings={{this.settings}}
       />
     `);
 
-    assert.dom(`[data-test-modal-container]`).exists();
+    assert.dom(`[data-test-am-drawer-container]`).exists();
     assert.dom(`[data-test-header-close-icon]`).exists();
     assert.dom(`[data-test-header-title]`).exists();
-    assert.dom(`[data-test-app-name]`).hasText(this.appDetails.name);
+    assert
+      .dom(`[data-test-app-name]`)
+      .hasText(`${this.amApp.project.lastFile.name}`);
     assert
       .dom(`[data-test-app-namespace]`)
-      .hasText(this.appDetails.package_name);
+      .hasText(`${this.amApp.project.packageName}`);
 
     assert
       .dom(`[data-test-app-platform]`)
-      .hasClass(styles[`platform-${this.appDetails.platform}`]);
+      .hasClass(styles[`platform-${this.amApp.project.platformIconClass}`]);
 
     assert
       .dom(`[data-test-app-last-scanned-version]`)
-      .hasText(this.appDetails.version);
+      .hasText(`${this.amApp.project.lastFile.comparableVersion}`);
 
     assert
-      .dom(`[data-test-app-prod-version]`)
-      .hasText(this.appDetails.production_version);
+      .dom(`[data-test-app-store-version]`)
+      .hasText(`${this.amApp.latestAmAppVersion.comparableVersion}`);
 
     assert
-      .dom(`[data-test-app-file-link]`)
-      .hasText(`${this.appDetails.file_id}`);
+      .dom(`[data-test-am-app-status] [data-test-am-status-element]`)
+      .exists();
+
+    // In this scenario settings === true and monitoringEnabled === true
+    assert
+      .dom(`[data-test-am-app-status] [data-test-am-status-element]`)
+      .exists();
 
     assert
-      .dom(`[data-test-app-scanned-on]`)
-      .hasText(this.appDetails.scannedOnDate);
-    if (this.appDetails.app_url) {
-      assert.dom(`[data-test-app-store-btn]`).exists();
-    }
-  });
+      .dom(`[data-test-am-app-status] [data-test-am-status-element]`)
+      .hasText('active');
 
-  test('it hides the footer if no app url is provided', async function (assert) {
-    this.appDetails.app_url = '';
-
-    await render(hbs`
-    <AppMonitoring::Drawer
-      @showRightDrawer={{true}}
-      @appDetails={{this.appDetails}}
-      @closeModalHandler={{this.closeDrawer}}
-      />
-      `);
-
-    assert.dom(`[data-test-drawer-footer]`).doesNotExist();
-  });
-
-  test('it displays a "-" instead of the file id the when no file_id is provided', async function (assert) {
-    this.appDetails.file_id = '';
-
-    await render(hbs`
-    <AppMonitoring::Drawer
-      @showRightDrawer={{true}}
-      @appDetails={{this.appDetails}}
-      @closeModalHandler={{this.closeDrawer}}
-      />
-      `);
-
-    assert.dom(`[data-test-app-no-file-id]`).hasText('-');
-  });
-
-  test('the footer button displays the right label depending on the app platform', async function (assert) {
-    this.appDetails.platform = 'apple';
-    this.appDetails.app_url = 'https://localhost:4200';
-
-    await render(hbs`
-    <AppMonitoring::Drawer
-      @showRightDrawer={{true}}
-      @appDetails={{this.appDetails}}
-      @closeModalHandler={{this.closeDrawer}}
-      />
-      `);
-
-    assert.dom(`[data-test-drawer-footer]`).exists('Footer exists');
     assert
-      .dom(`[data-test-app-store-btn]`)
-      .hasTextContaining(
-        'AppStore',
-        "Contains 'AppStore' for ios applications."
+      .dom(`[data-test-am-app-status] [data-test-am-app-last-sync]`)
+      .exists()
+      .containsText(
+        `${new dayjs(this.amApp.lastSync.syncedOn).format('DD MMM YYYY')}`
       );
+  });
 
-    this.appDetails.platform = 'android';
+  test('it renders with the right data assuming monitoring is enabled and settings is inactive', async function (assert) {
+    this.amApp = this.server.create('am-app', 1, {
+      project: this.project,
+      latestAmAppVersion: this.latestAmAppVersion,
+      monitoringEnabled: true,
+      lastSync: this.lastSync,
+    });
+
+    this.set('settings', {
+      id: 1,
+      enabled: false,
+    });
 
     await render(hbs`
     <AppMonitoring::Drawer
       @showRightDrawer={{true}}
-      @appDetails={{this.appDetails}}
+      @appDetails={{this.amApp}}
       @closeModalHandler={{this.closeDrawer}}
-      />
-      `);
+      @settings={{this.settings}}
+    />
+  `);
+
+    assert.dom(`[data-test-am-drawer-container]`).exists();
+    assert.dom(`[data-test-header-close-icon]`).exists();
+    assert.dom(`[data-test-header-title]`).exists();
+    assert
+      .dom(`[data-test-app-name]`)
+      .hasText(`${this.amApp.project.lastFile.name}`);
+    assert
+      .dom(`[data-test-app-namespace]`)
+      .hasText(`${this.amApp.project.packageName}`);
 
     assert
-      .dom(`[data-test-app-store-btn]`)
-      .hasTextContaining(
-        'PlayStore',
-        "Contains 'PlayStore' for android applications."
+      .dom(`[data-test-app-platform]`)
+      .hasClass(styles[`platform-${this.amApp.project.platformIconClass}`]);
+
+    assert
+      .dom(`[data-test-app-last-scanned-version]`)
+      .hasText(`${this.amApp.project.lastFile.comparableVersion}`);
+
+    assert
+      .dom(`[data-test-app-store-version]`)
+      .hasText(`${this.amApp.latestAmAppVersion.comparableVersion}`);
+
+    assert
+      .dom(`[data-test-am-app-status] [data-test-am-status-element]`)
+      .exists();
+
+    // In this scenario settings === true and monitoringEnabled === true
+    assert
+      .dom(`[data-test-am-app-status] [data-test-am-status-element]`)
+      .exists();
+
+    assert
+      .dom(`[data-test-am-app-status] [data-test-am-status-element]`)
+      .hasText('inactive');
+
+    assert
+      .dom(`[data-test-am-app-status] [data-test-am-app-last-sync]`)
+      .exists()
+      .containsText(
+        `${new dayjs(this.amApp.lastSync.syncedOn).format('DD MMM YYYY')}`
       );
+  });
+
+  test('it renders "PENDING" status in store version column if comparableVersion is empty and lastSync are null', async function (assert) {
+    this.latestAmAppVersion = this.server.create('am-app-version', {
+      comparableVersion: null,
+    });
+
+    this.amApp = this.server.create('am-app', 1, {
+      project: this.project,
+      latestAmAppVersion: this.latestAmAppVersion,
+      lastSync: null,
+      monitoringEnabled: true,
+    });
+
+    this.set('settings', {
+      id: 1,
+      enabled: true,
+    });
+
+    await render(hbs`
+    <AppMonitoring::Drawer
+      @showRightDrawer={{true}}
+      @appDetails={{this.amApp}}
+      @closeModalHandler={{this.closeDrawer}}
+      @settings={{this.settings}}
+    />
+  `);
+
+    assert.dom(`[data-test-am-drawer-container]`).exists();
+    assert.dom(`[data-test-header-close-icon]`).exists();
+    assert.dom(`[data-test-header-title]`).exists();
+
+    assert
+      .dom(`[data-test-app-store-version] [data-test-am-status-element]`)
+      .exists()
+      .hasText(`pending`);
+  });
+
+  test('it renders "NOT FOUND" status in store version column if comparableVersion is empty and latestAmAppVersion is null', async function (assert) {
+    this.latestAmAppVersion = this.server.create('am-app-version', {
+      comparableVersion: '',
+    });
+
+    this.amApp = this.server.create('am-app', 1, {
+      project: this.project,
+      latestAmAppVersion: null,
+      lastSync: this.lastSync,
+      monitoringEnabled: true,
+    });
+
+    this.set('settings', {
+      id: 1,
+      enabled: true,
+    });
+
+    await render(hbs`
+    <AppMonitoring::Drawer
+      @showRightDrawer={{true}}
+      @appDetails={{this.amApp}}
+      @closeModalHandler={{this.closeDrawer}}
+      @settings={{this.settings}}
+    />
+  `);
+
+    assert.dom(`[data-test-am-drawer-container]`).exists();
+    assert.dom(`[data-test-header-close-icon]`).exists();
+    assert.dom(`[data-test-header-title]`).exists();
+
+    assert
+      .dom(`[data-test-app-store-version] [data-test-am-status-element]`)
+      .exists()
+      .hasText(`not found`);
   });
 
   test('it hides drawer when "showRightDrawer" property is set to false', async function (assert) {
     await render(hbs`
     <AppMonitoring::Drawer
       @showRightDrawer={{false}}
-      @appDetails={{this.appDetails}}
+      @appDetails={{this.amApp}}
       @closeModalHandler={{this.closeDrawer}}
       />
       `);
 
     assert
-      .dom(`[data-test-modal-container]`)
+      .dom(`[data-test-am-drawer-container]`)
       .doesNotHaveClass(
         'open',
         "Drawer container element does not have a 'open' class"
       );
 
     assert
-      .dom(`[data-test-modal-container]`)
+      .dom(`[data-test-am-drawer-container]`)
       .hasStyle(
         { opacity: '0', zIndex: '-1' },
         'Has a style of { opacity: 1, zIndex: -1 }'
@@ -158,7 +256,7 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
       .dom(`[data-test-modal-content]`)
       .doesNotHaveClass(
         'open',
-        "Drawer content element does not have a 'open' class"
+        "Drawer content element does not have an 'open' class"
       );
   });
 });

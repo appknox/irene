@@ -8,36 +8,62 @@
 
 .table-row {
   @include tableRowStyle(0.875rem);
-  border-bottom: 1px solid #f5f5f5;
-}
+  border-bottom: 1px solid var(--neutral-grey-100);
+  transition: background-color 0.3s ease-in-out;
+  cursor: pointer;
 
-.app-name-container {
-  display: flex;
-  flex-direction: column;
-}
+  &:hover {
+    background-color: rgba($black, 0.01);
+  }
 
-.app-name,
-.app-namespace,
-.last-scanned-version,
-.production-version {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 19px;
-  letter-spacing: -0.4px;
-  color: #7b7b7b;
-}
+  .app-name-container,
+  .project-status {
+    display: flex;
+    flex-direction: column;
+  }
 
-.app-namespace,
-.last-scanned-version,
-.production-version {
-  color: var(--black);
-  margin-bottom: 0.4375em;
-}
+  .app-name,
+  .app-namespace,
+  .last-scanned-version,
+  .production-version,
+  .last-sync-date {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 19px;
+    letter-spacing: -0.4px;
+    color: var(--neutral-grey-600);
+  }
 
-// Icon styles
-.platform-android {
-  color: var(--android);
-}
-.platform-apple {
-  color: var(--black);
+  .app-namespace,
+  .last-scanned-version,
+  .production-version {
+    color: var(--black);
+    margin-bottom: 0.4375em;
+  }
+
+  .last-sync-date {
+    margin-top: 0.4375em;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+  }
+
+  .last-sync-date span {
+    margin-left: 0.5em;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+  }
+
+  .last-sync-date span i {
+    font-size: 14px;
+  }
+
+  // Icon styles
+  .platform-android {
+    color: var(--android);
+  }
+  .platform-apple {
+    color: var(--black);
+  }
 }

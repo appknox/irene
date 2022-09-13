@@ -1,24 +1,16 @@
-<div local-class='table-container' data-test-production-scan-table>
+<div local-class='table-container' data-test-am-table-container>
   <AppMonitoring::Table::Header />
-  {{#if this.isDisabled}}
-    <div
-      local-class='table-empty-container'
-      data-test-empty-prod-data-container
-    >
-      <span
-        local-class='empty-state-vector'
-        data-test-empty-prod-data-illustration
-      >
-        {{inline-svg '/prod_scan_empty_illustration.svg'}}
-      </span>
-      <h2>{{t 'productionScanDisabledDesc.header'}}</h2>
-      <p>{{t 'productionScanDisabledDesc.body'}}</p>
-    </div>
-  {{else if this.showProdScanTableData}}
+
+  {{#if this.hasNoOrgProjects}}
+    <AppMonitoring::Table::Error
+      @header='{{t "appMonitoringErrors.noOrgProjects.header"}}'
+      @body='{{t "appMonitoringErrors.noOrgProjects.body"}}'
+    />
+  {{else}}
     <div
       local-class='table-body'
-      data-test-prod-scan-table-body
       {{did-insert this.fetchProdscanData}}
+      data-test-am-table-body
     >
       <Pagination
         @results={{this.tableData}}
@@ -37,26 +29,29 @@
           <div local-class='loading'>
             <ThreeBounceSpinner />
           </div>
-        {{else if this.isEmptyProdScanResult}}
-          <div
-            local-class='table-empty-container'
-            data-test-empty-prod-data-container
-          >
-            <span
-              local-class='empty-state-vector'
-              data-test-empty-prod-data-illustration
-            >
-              {{inline-svg '/prod_scan_empty_illustration.svg'}}
-            </span>
-            <h2>{{t 'productionScanEmptyDesc.header'}}</h2>
-            <p>{{t 'productionScanEmptyDesc.body'}}</p>
-          </div>
+        {{else if this.isEmptyAMResult}}
+          <AppMonitoring::Table::Error
+            @header='{{t "appMonitoringErrors.emptyResults.header"}}'
+            @body='{{t "appMonitoringErrors.emptyResults.body"}}'
+          />
         {{else}}
           {{#each context.currentPage as |app idx|}}
-            <AppMonitoring::Table::Row @amApp={{app}} @id={{idx}} />
+            <AppMonitoring::Table::Row
+              @amApp={{app}}
+              @id={{idx}}
+              @onRowClick={{this.onTableRowClick}}
+              @settings={{@settings}}
+            />
           {{/each}}
         {{/if}}
       </Pagination>
     </div>
   {{/if}}
 </div>
+
+<AppMonitoring::Drawer
+  @showRightDrawer={{this.showRightDrawer}}
+  @appDetails={{this.currentAppInView}}
+  @closeModalHandler={{this.closeRightDrawer}}
+  @settings={{@settings}}
+/>

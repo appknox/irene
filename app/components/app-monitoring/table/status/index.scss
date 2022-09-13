@@ -1,5 +1,6 @@
 .status {
-  padding: 4px 6px;
+  width: fit-content;
+  padding: 0.25em 0.375em;
   text-transform: uppercase;
   border-radius: 2px;
   font-weight: 600;
@@ -9,17 +10,17 @@
 
   &.not-found,
   &.inactive {
-    color: #a3332c;
-    background: #f8b5b9;
+    color: var(--am-status-not-found);
+    background: var(--am-status-not-found-bg);
   }
 
   &.pending {
-    background: #fff7d7;
-    color: #a5872d;
+    background: var(--am-status-pending);
+    color: var(--am-status-pending-bg);
   }
 
-  &.is-active {
-    color: #2e9940;
-    background: #e9f5ed;
+  &.active {
+    color: var(--am-status-active);
+    background: var(--am-status-active-bg);
   }
 }

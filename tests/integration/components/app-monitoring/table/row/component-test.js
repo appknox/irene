@@ -12,86 +12,171 @@ module('Integration | Component | app-monitoring/table/row', function (hooks) {
 
   hooks.beforeEach(async function () {
     this.lastFile = this.server.create('file');
-    this.latest_am_app_version = this.server.create(
-      'app-monitoring/am-app-version'
-    );
-    this.am_app_syncs = this.server.createList('app-monitoring/am-app-sync', 2);
+    this.latestAmAppVersion = this.server.create('am-app-version');
+    this.lastSync = this.server.create('am-app-sync');
     this.project = this.server.create('project', {
       lastFile: this.lastFile,
     });
 
-    this.amApp = this.server.create('app-monitoring/am-app', 1, {
+    this.amApp = this.server.create('am-app', 1, {
       project: this.project,
-      latest_am_app_version: this.latest_am_app_version,
+      latestAmAppVersion: this.latestAmAppVersion,
     });
+
+    this.onRowClick = function () {
+      return;
+    };
   });
 
   test('It renders with the right row data', async function (assert) {
-    await render(hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}} />`);
+    await render(
+      hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}} @onRowClick={{this.onRowClick}} />`
+    );
 
     assert.strictEqual(
-      this.element.querySelectorAll('[data-test-table-row-item]').length,
+      this.element.querySelectorAll('[data-test-am-table-row-item]').length,
       5,
       'It has five row items'
     );
 
     assert
-      .dom(`[data-test-table-row-app-namespace]`)
+      .dom(`[data-test-am-table-row-app-namespace]`)
       .containsText(this.amApp.project.packageName);
 
     assert
-      .dom(`[data-test-table-row-app-name]`)
+      .dom(`[data-test-am-table-row-app-name]`)
       .containsText(this.amApp.project.lastFile.name);
 
     assert
-      .dom(`[data-test-table-row-prod-version]`)
-      .hasText(`${this.amApp.latest_am_app_version.version}`);
+      .dom(`[data-test-am-table-row-store-version]`)
+      .hasText(`${this.amApp.latestAmAppVersion.comparableVersion}`);
 
     assert
-      .dom(`[data-test-table-row-platform=${this.amApp.platform}]`)
+      .dom(
+        `[data-test-am-table-row-platform=${this.amApp.project.platformIconClass}]`
+      )
       .exists();
 
     assert
-      .dom(`[data-test-table-row-version]`)
-      .hasText(`${this.amApp.project.lastFile.version}`);
+      .dom(`[data-test-am-table-row-version]`)
+      .hasText(`${this.amApp.project.lastFile.comparableVersion}`);
   });
 
-  test('It renders with the right row status', async function (assert) {
-    this.amApp = this.server.create('app-monitoring/am-app', 1, {
-      project: this.project,
-      latest_am_app_version: this.latest_am_app_version,
-      monitoring_enabled: true,
+  test('It renders "INACTIVE" in status column if settings is disabled or monitoringEnabled is false', async function (assert) {
+    this.set('settings', {
+      id: 1,
+      enabled: false,
     });
 
-    await render(hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}} />`);
+    this.amApp = this.server.create('am-app', 1, {
+      project: this.project,
+      latestAmAppVersion: this.latestAmAppVersion,
+      monitoringEnabled: true,
+    });
+
+    await render(
+      hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}}  @settings={{@settings}} @onRowClick={{this.onRowClick}} />`
+    );
 
     assert.strictEqual(
-      this.element.querySelectorAll('[data-test-table-row-item]').length,
+      this.element.querySelectorAll('[data-test-am-table-row-item]').length,
       5,
       'It has five row items'
     );
 
-    assert.dom(`[data-test-table-row-status]`).hasText(`is active`);
+    assert.dom(`[data-test-am-table-row-status] `).containsText(`inactive`);
 
-    this.amApp = this.server.create('app-monitoring/am-app', 1, {
+    this.amApp = this.server.create('am-app', 1, {
       project: this.project,
-      latest_am_app_version: null,
-      am_app_syncs: [],
+      latestAmAppVersion: null,
+      lastSync: null,
+      monitoringEnabled: false,
     });
 
-    await render(hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}} />`);
-    assert.dom(`[data-test-table-row-status]`).hasText(`pending`);
+    this.set('settings', {
+      id: 1,
+      enabled: true,
+    });
+
+    await render(
+      hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}} @settings={{@settings}}  @onRowClick={{this.onRowClick}} />`
+    );
+    assert.dom(`[data-test-am-table-row-status]`).containsText(`inactive`);
   });
 
-  test('It renders a status of "not-found" when app-syncs is not empty', async function (assert) {
-    this.amApp = this.server.create('app-monitoring/am-app', 1, {
-      project: this.project,
-      latest_am_app_version: null,
-      monitoring_enabled: true,
-      am_app_syncs: this.am_app_syncs,
+  test('It renders "ACTIVE" in status column if settings is enabled and monitoringEnabled is enabled', async function (assert) {
+    this.set('settings', {
+      id: 1,
+      enabled: true,
     });
 
-    await render(hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}} />`);
-    assert.dom(`[data-test-table-row-status]`).hasText(`not found`);
+    this.amApp = this.server.create('am-app', 1, {
+      project: this.project,
+      latestAmAppVersion: this.latestAmAppVersion,
+      monitoringEnabled: true,
+    });
+
+    await render(
+      hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}}  @settings={{@settings}} @onRowClick={{this.onRowClick}} />`
+    );
+
+    assert.dom(`[data-test-am-table-row-status] `).containsText(`active`);
+  });
+
+  test('it renders "NOT FOUND" status in store version column if comparableVersion is empty and latestAmAppVersion is null', async function (assert) {
+    this.latestAmAppVersion = this.server.create('am-app-version', {
+      comparableVersion: '',
+    });
+
+    this.amApp = this.server.create('am-app', 1, {
+      project: this.project,
+      latestAmAppVersion: null,
+      lastSync: this.lastSync,
+      monitoringEnabled: true,
+    });
+
+    this.set('settings', {
+      id: 1,
+      enabled: true,
+    });
+
+    await render(
+      hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}}  @settings={{@settings}} @onRowClick={{this.onRowClick}} />`
+    );
+    assert
+      .dom(`[data-test-am-table-row-store-version]`)
+      .containsText(`not found`);
+  });
+
+  test('it renders "PENDING" status in store version column if comparableVersion is empty and lastSync are null', async function (assert) {
+    this.latestAmAppVersion = this.server.create('am-app-version', {
+      comparableVersion: '',
+    });
+
+    this.amApp = this.server.create('am-app', 1, {
+      project: this.project,
+      latestAmAppVersion: this.latestAmAppVersion,
+      lastSync: null,
+      monitoringEnabled: true,
+    });
+
+    this.set('settings', {
+      id: 1,
+      enabled: true,
+    });
+
+    await render(
+      hbs`
+      <AppMonitoring::Table::Row 
+        @amApp={{this.amApp}}  
+        @settings={{@settings}} 
+        @onRowClick={{this.onRowClick}} 
+      />`
+    );
+    assert
+      .dom(
+        `[data-test-am-table-row-store-version] [data-test-am-status-element]`
+      )
+      .containsText(`pending`);
   });
 });

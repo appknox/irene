@@ -1,5 +1,6 @@
 import { belongsTo, Model } from 'ember-cli-mirage';
 
 export default Model.extend({
-  am_app: belongsTo('app-monitoring/am_app'),
+  amApp: belongsTo('am-app'),
+  latestFile: belongsTo('file', { inverse: null }),
 });

@@ -1,60 +1,62 @@
 <div data-test-pagination-container>
   {{yield (hash currentPage=this.currentPageResults)}}
 
-  <div local-class='app-pagination'>
-    <aside local-class='app-pagination-info' role='contentinfo'>
-      <p>Records per page</p>
-      <select
-        local-class=''
-        name='recordPerPage'
-        id='recordPerPage'
-        {{on 'change' this.onItemsPerPageSelect}}
-        data-test-pagination-select
-      >
-        {{#each this.itemPerPageSelectOptions as |item|}}
-          <option
-            selected={{item.selected}}
-            value={{item.value}}
-            data-test-pagination-select-option
-          >
-            {{item.value}}
-          </option>
-        {{/each}}
-      </select>
-      {{#if @totalItems}}
-        <span local-class='app-pagination-page-range' data-test-page-range>
-          {{this.startItemIdx}}-{{this.endItemIdx}}
-          of
-          {{@totalItems}}
-          {{@tableItemLabel}}
-        </span>
-      {{/if}}
-    </aside>
+  {{#if this.showPaginationNavBar}}
+    <div local-class='app-pagination'>
+      <aside local-class='app-pagination-info' role='contentinfo'>
+        <p>Records per page</p>
+        <select
+          local-class=''
+          name='recordPerPage'
+          id='recordPerPage'
+          {{on 'change' this.onItemsPerPageSelect}}
+          data-test-pagination-select
+        >
+          {{#each this.itemPerPageSelectOptions as |item|}}
+            <option
+              selected={{item.selected}}
+              value={{item.value}}
+              data-test-pagination-select-option
+            >
+              {{item.value}}
+            </option>
+          {{/each}}
+        </select>
+        {{#if @totalItems}}
+          <span local-class='app-pagination-page-range' data-test-page-range>
+            {{this.startItemIdx}}-{{this.endItemIdx}}
+            of
+            {{@totalItems}}
+            {{@tableItemLabel}}
+          </span>
+        {{/if}}
+      </aside>
 
-    <aside
-      local-class='app-pagination-btns'
-      data-test-pagination-btns-container
-    >
-      <button
-        type='button'
-        local-class='app-pagination-btn prev-btn'
-        disabled={{this.disablePrev}}
-        {{on 'click' this.goToPrevPage}}
-        data-test-pagination-prev-btn
+      <aside
+        local-class='app-pagination-btns'
+        data-test-pagination-btns-container
       >
-        <span>{{inline-svg '/arrowLeft.svg'}}</span>Previous
-      </button>
+        <button
+          type='button'
+          local-class='app-pagination-btn prev-btn'
+          disabled={{this.disablePrev}}
+          {{on 'click' this.goToPrevPage}}
+          data-test-pagination-prev-btn
+        >
+          <span>{{inline-svg '/arrowLeft.svg'}}</span>Previous
+        </button>
 
-      <button
-        type='button'
-        local-class='app-pagination-btn next-btn'
-        disabled={{this.disableNext}}
-        {{on 'click' this.goToNextPage}}
-        data-test-pagination-next-btn
-      >
-        Next
-        <span>{{inline-svg '/arrowRight.svg'}}</span>
-      </button>
-    </aside>
-  </div>
+        <button
+          type='button'
+          local-class='app-pagination-btn next-btn'
+          disabled={{this.disableNext}}
+          {{on 'click' this.goToNextPage}}
+          data-test-pagination-next-btn
+        >
+          Next
+          <span>{{inline-svg '/arrowRight.svg'}}</span>
+        </button>
+      </aside>
+    </div>
+  {{/if}}
 </div>

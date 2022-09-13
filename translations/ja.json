@@ -663,13 +663,15 @@
   "processing": "Processing ...",
   "production": "プロダクション",
   "appMonitoring": "Store Monitoring",
-  "productionScanEmptyDesc": {
-    "header": "No Production Scans Found",
-    "body": "Enable the Production Scan Setting to initiate the monitoring of your applications in Playstore or Appstore."
-  },
-  "productionScanDisabledDesc": {
-    "header": "No Production Scans Found",
-    "body": "Enable the Production Scan Setting to initiate the monitoring of your applications in Playstore or Appstore."
+  "appMonitoringErrors": {
+    "noOrgProjects": {
+      "header": "No Projects Uploaded",
+      "body": "Upload a Project and then Enable the Store Monitoring Setting to initiate the monitoring of your applications in Playstore or Appstore."
+    },
+    "emptyResults": {
+      "header": "Store Monitoring is Initiated",
+      "body": "We are looking for unscanned versions of your applications on Playstore or Appstore. This data will be available to you in some time."
+    }
   },
   "project": "プロジェクト",
   "projectCollaboratorAdded": "Added collaborator to project",

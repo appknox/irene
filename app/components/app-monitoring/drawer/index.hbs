@@ -1,7 +1,8 @@
+{{! template-lint-disable no-curly-component-invocation }}
 <div
   local-class='modal {{if @showRightDrawer "open"}}'
   id='am-right-drawer-container'
-  data-test-modal-container
+  data-test-am-drawer-container
 >
   <div
     local-class='modal-content {{if @showRightDrawer "open"}}'
@@ -9,116 +10,94 @@
     {{on-click-outside @closeModalHandler '#am-right-drawer-container'}}
   >
     <header local-class='modal-header' data-test-header>
-      <h2 data-test-header-title>Production Scan details</h2>
+      <h2 data-test-header-title>Store Monitoring Details</h2>
       <span
         local-class='close-icon'
         class='ak-icon ak-icon-close'
         role='button'
         data-test-header-close-icon
         {{on 'click' @closeModalHandler}}
-      ></span>
+      >
+      </span>
     </header>
-    <section local-class='modal-body'>
-      <div local-class='modal-body-section basic-details'>
-        {{#if this.hasError}}
-          <aside local-class='modal-error-box'>
+    {{#if @appDetails}}
+      <section local-class='modal-body'>
+        <div local-class='modal-body-section basic-details'>
+          <h3>Basic Details</h3>
+          <section local-class='section'>
+            <h4>Application Name</h4>
+            <p data-test-app-name>{{@appDetails.project.lastFile.name}}</p>
+          </section>
+          <section local-class='section'>
+            <h4>Namespace</h4>
+            <p data-test-app-namespace> {{@appDetails.project.packageName}}</p>
+          </section>
+          <section local-class='section'>
+            <h4>Platform</h4>
             <span
-              local-class='error-warning'
-              class='ak-icon
-                {{if
-                  this.isGeoLocationError
-                  "ak-icon-pin-drop"
-                  "ak-icon-warning"
-                }}'
+              local-class='platform-icon platform-{{@appDetails.project.platformIconClass}}'
+              data-test-app-platform
             >
+              {{fa-icon @appDetails.project.platformIconClass}}
             </span>
-            <div>
-              <p>
-                This application does not exist in the Playstore/Appstore of the
-                specified geographical location.
+          </section>
+        </div>
+        <div local-class='modal-body-section scan-details'>
+          <h3>Scan Details</h3>
+          <section local-class='section'>
+            <div local-class='section-content'>
+              <h4>Appknox Version</h4>
+              <p data-test-app-last-scanned-version>
+                {{if
+                  @appDetails.project.lastFile.comparableVersion
+                  @appDetails.project.lastFile.comparableVersion
+                  '-'
+                }}
               </p>
-              {{#if this.isGeoLocationError}}
-                <p local-class='geo-location-iso-code'><span>ISO code</span>
-                  - USA
-                </p>
-              {{/if}}
             </div>
-          </aside>
-        {{/if}}
-        <h3>Basic Details</h3>
-        <section local-class='section'>
-          <h4>Application Name</h4>
-          <p data-test-app-name>{{this.appName}}</p>
-        </section>
-        <section local-class='section'>
-          <h4>Namespace</h4>
-          <p data-test-app-namespace>{{this.namespace}}</p>
-        </section>
-        <section local-class='section'>
-          <h4>Platform</h4>
-          <span
-            local-class='platform-icon platform-{{this.platform}}'
-            data-test-app-platform
-          >
-            {{fa-icon this.platform}}
-          </span>
-        </section>
-      </div>
-      <div local-class='modal-body-section scan-details'>
-        <h3>Scan Details</h3>
-        <section local-class='section'>
-          <div local-class='section-content'>
-            <h4>Last Scanned Version in Appknox</h4>
-            <p data-test-app-last-scanned-version>
-              {{this.lastScannedVersion}}
-            </p>
-          </div>
-          <div local-class='section-content'>
-            <h4>Version in Production</h4>
-            <p data-test-app-prod-version>{{this.versionInProd}} </p>
-          </div>
-        </section>
-        <section local-class='section'>
-          <div local-class='section-content'>
-            <h4>Status</h4>
-            <p><AppMonitoring::Table::Status @status={{this.scanStatus}} /></p>
-          </div>
-          <div local-class='section-content'>
-            <h4>Scanned on</h4>
-            <p data-test-app-scanned-on>{{this.scannedOnDate}}</p>
-          </div>
-        </section>
-        <section local-class='section'>
-          <div local-class='section-content'>
-            <h4>File ID</h4>
-            {{#if this.fileId}}
-              <a
-                href={{this.ireneFilePath}}
-                local-class='file-link'
-                data-test-app-file-link
-              >
-                {{this.fileId}}
-              </a>
-            {{else}}
-              <p data-test-app-no-file-id>-</p>
-            {{/if}}
-          </div>
-        </section>
-      </div>
-    </section>
-
-    {{#if this.appURL}}
-      <footer local-class='modal-footer' data-test-drawer-footer>
-        <button
-          type='button'
-          local-class='modal-footer-btn'
-          class='button is-primary highlighted-button'
-          data-test-app-store-btn
-        >
-          View in
-          {{if (eq this.platform 'android') 'PlayStore' 'AppStore'}}
-        </button>
-      </footer>
+            <div local-class='section-content'>
+              <h4>Store Version</h4>
+              <p data-test-app-store-version>
+                {{#if @appDetails.latestAmAppVersion.comparableVersion}}
+                  {{@appDetails.latestAmAppVersion.comparableVersion}}
+                {{else}}
+                  <AppMonitoring::Table::Status
+                    @columnName='storeVersion'
+                    @settings={{@settings}}
+                    @amApp={{@appDetails}}
+                  />
+                {{/if}}
+              </p>
+            </div>
+          </section>
+          <section local-class='section'>
+            <div local-class='section-content'>
+              <h4>Status</h4>
+              <div data-test-am-app-status>
+                <AppMonitoring::Table::Status
+                  @settings={{@settings}}
+                  @amApp={{@appDetails}}
+                />
+                <p local-class='last-sync-date' data-test-am-app-last-sync>
+                  Last Synced On:
+                  {{#if @appDetails.lastSync.syncedOn}}
+                    <span>
+                      {{day-js
+                        date=@appDetails.lastSync.syncedOn
+                        format='DD MMM YYYY'
+                      }}
+                    </span>
+                  {{else}}
+                    <span>
+                      {{fa-icon 'spinner fa-spin' class='last-sync-loading'}}
+                    </span>
+                  {{/if}}
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
     {{/if}}
   </div>
 </div>

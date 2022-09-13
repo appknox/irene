@@ -73,6 +73,10 @@ export default class PaginationComponent extends Component {
     return this.args.offset;
   }
 
+  get showPaginationNavBar() {
+    return this.args.totalItems >= 1;
+  }
+
   @action
   onItemsPerPageSelect(event) {
     this._updatePageItemSelectOptions(event.target.value);

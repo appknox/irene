@@ -12,15 +12,13 @@ module('Integration | Component | pagination', function (hooks) {
 
   hooks.beforeEach(async function () {
     this.project = this.server.create('project');
-    this.amApp = this.server.create('app-monitoring/am-app', 1, {
+    this.amApp = this.server.create('am-app', 1, {
       project: this.project,
     });
-  });
 
-  hooks.beforeEach(async function () {
-    this.prodScanRoute = this.owner.lookup(
-      'route:authenticated/app-monitoring'
-    );
+    this.onRowClick = function () {
+      return;
+    };
   });
 
   test('it renders a passed block template', async function (assert) {
@@ -35,18 +33,18 @@ module('Integration | Component | pagination', function (hooks) {
 
     await render(hbs`
         <Pagination>
-            <AppMonitoring::Table::Row @amApp={{this.amApp}} />
+            <AppMonitoring::Table::Row @amApp={{this.amApp}} @onRowClick={{this.onRowClick}} />
         </Pagination>
     `);
 
-    assert.dom('[data-test-table-row]').exists();
+    assert.dom('[data-test-am-table-row]').exists();
   });
 
   // This suite is tested with the post production table component
   test('it renders an n-number of template based on an n-supplied list of data ', async function (assert) {
     this.set(
       'tableData',
-      this.server.createList('app-monitoring/am-app', 5, {
+      this.server.createList('am-app', 5, {
         project: this.project,
       })
     );
@@ -57,28 +55,28 @@ module('Integration | Component | pagination', function (hooks) {
         as |context|
      >
         {{#each context.currentPage as |project|}}
-          <AppMonitoring::Table::Row @amApp={{project}} />
+          <AppMonitoring::Table::Row @amApp={{project}} @onRowClick={{this.onRowClick}} />
         {{/each}}
      </Pagination>
     `);
 
-    assert.dom('[data-test-table-row]').exists();
+    assert.dom('[data-test-am-table-row]').exists();
 
     assert.strictEqual(
-      this.element.querySelectorAll('[data-test-table-row]').length,
+      this.element.querySelectorAll('[data-test-am-table-row]').length,
       5,
       'Should show five (5) table rows'
     );
 
     this.set(
       'tableData',
-      this.server.createList('app-monitoring/am-app', 10, {
+      this.server.createList('am-app', 10, {
         project: this.project,
       })
     );
 
     assert.strictEqual(
-      this.element.querySelectorAll('[data-test-table-row]').length,
+      this.element.querySelectorAll('[data-test-am-table-row]').length,
       10,
       'Should show ten (10) table rows'
     );
@@ -92,18 +90,21 @@ module('Integration | Component | pagination', function (hooks) {
     // Creates a mocked production scan data
     this.set(
       'tableData',
-      this.server.createList('app-monitoring/am-app', 5, {
+      this.server.createList('am-app', 5, {
         project: this.project,
       })
     );
 
+    this.set('totalItems', this.tableData.length);
+
     await render(hbs`
         <Pagination
+          @totalItems={{this.totalItems}}
           @itemPerPageOptions={{this.customSelectOptions}}
           as |context|
        >
           {{#each context.currentPage as |project|}}
-            <AppMonitoring::Table::Row @amApp={{project}} />
+            <AppMonitoring::Table::Row @amApp={{project}} @onRowClick={{this.onRowClick}} />
           {{/each}}
        </Pagination>
       `);
@@ -139,18 +140,21 @@ module('Integration | Component | pagination', function (hooks) {
     // Creates a mocked production scan data
     this.set(
       'tableData',
-      this.server.createList('app-monitoring/am-app', 5, {
+      this.server.createList('am-app', 5, {
         project: this.project,
       })
     );
 
+    this.set('totalItems', this.tableData.length);
+
     await render(hbs`
         <Pagination
+          @totalItems={{this.totalItems}}
           @itemPerPageOptions={{this.customSelectOptions}}
           as |context|
        >
           {{#each context.currentPage as |project|}}
-            <AppMonitoring::Table::Row @amApp={{project}} />
+            <AppMonitoring::Table::Row @amApp={{project}} @onRowClick={{this.onRowClick}} />
           {{/each}}
        </Pagination>
       `);
@@ -185,19 +189,22 @@ module('Integration | Component | pagination', function (hooks) {
     // Creates a mocked production scan data
     this.set(
       'tableData',
-      this.server.createList('app-monitoring/am-app', 5, {
+      this.server.createList('am-app', 5, {
         project: this.project,
       })
     );
 
+    this.set('totalItems', this.tableData.length);
+
     await render(hbs`
         <Pagination
+          @totalItems={{this.totalItems}}
           @defaultLimit={{this.defaultLimit}}
           @itemPerPageOptions={{this.customSelectOptions}}
           as |context|
        >
           {{#each context.currentPage as |project|}}
-            <AppMonitoring::Table::Row @amApp={{project}} />
+            <AppMonitoring::Table::Row @amApp={{project}} @onRowClick={{this.onRowClick}} />
           {{/each}}
        </Pagination>
       `);
@@ -228,7 +235,7 @@ module('Integration | Component | pagination', function (hooks) {
   test('It renders the correct total items count', async function (assert) {
     this.set(
       'tableData',
-      this.server.createList('app-monitoring/am-app', 5, {
+      this.server.createList('am-app', 5, {
         project: this.project,
       })
     );
@@ -242,7 +249,7 @@ module('Integration | Component | pagination', function (hooks) {
           as |context|
        >
           {{#each context.currentPage as |project|}}
-            <AppMonitoring::Table::Row @amApp={{project}} />
+            <AppMonitoring::Table::Row @amApp={{project}} @onRowClick={{this.onRowClick}} />
           {{/each}}
        </Pagination>
       `);
@@ -260,7 +267,7 @@ module('Integration | Component | pagination', function (hooks) {
   test('It renders the correct pagination items label', async function (assert) {
     this.set(
       'tableData',
-      this.server.createList('app-monitoring/am-app', 5, {
+      this.server.createList('am-app', 5, {
         project: this.project,
       })
     );
@@ -275,7 +282,7 @@ module('Integration | Component | pagination', function (hooks) {
           as |context|
        >
           {{#each context.currentPage as |project|}}
-            <AppMonitoring::Table::Row @amApp={{project}} />
+            <AppMonitoring::Table::Row @amApp={{project}} @onRowClick={{this.onRowClick}} />
           {{/each}}
        </Pagination>
       `);
@@ -288,7 +295,7 @@ module('Integration | Component | pagination', function (hooks) {
   test('It triggers the page items count change callback whenever the no. of items per page changes', async function (assert) {
     this.set(
       'tableData',
-      this.server.createList('app-monitoring/am-app', 5, {
+      this.server.createList('am-app', 5, {
         project: this.project,
       })
     );
@@ -300,14 +307,17 @@ module('Integration | Component | pagination', function (hooks) {
       this.set('callBackValue', args);
     });
 
+    this.set('totalItems', this.tableData.length);
+
     await render(hbs`
         <Pagination
+          @totalItems={{this.totalItems}}
           @results={{this.tableData}}
           @onPageItemsCountChange={{this.onPageItemsChange}}
           as |context|
        >
           {{#each context.currentPage as |project|}}
-            <AppMonitoring::Table::Row @amApp={{project}} />
+            <AppMonitoring::Table::Row @amApp={{project}} @onRowClick={{this.onRowClick}} />
           {{/each}}
        </Pagination>
       `);
@@ -340,14 +350,6 @@ module('Integration | Component | pagination', function (hooks) {
 
   // This suite is tested with the post production table component
   test('It triggers the next action callback whenever the next button (if enabled) is clicked', async function (assert) {
-    this.set(
-      'tableData',
-      this.server.createList('app-monitoring/am-app', 9, {
-        project: this.project,
-      })
-    );
-
-    this.set('totalItems', this.tableData.length);
     this.set('offset', 2);
     this.set('customSelectOptions', [2, 4, 6, 8, 10]);
     this.set('defaultLimit', 2);
@@ -359,11 +361,27 @@ module('Integration | Component | pagination', function (hooks) {
       this.set('callBackValue', args);
     });
 
+    this.set(
+      'tableData',
+      this.server.createList('am-app', 9, {
+        project: this.project,
+      })
+    );
+
+    this.set(
+      'result',
+      this.tableData.slice(
+        this.offset * this.defaultLimit + 1,
+        (this.offset + 1) * this.defaultLimit + 1
+      )
+    );
+    this.set('totalItems', this.tableData.length);
+
     // NOTE: The default pagination offset is equal to 1 if not provided
     await render(hbs`
         <Pagination
           @totalItems={{this.totalItems}}
-          @results={{this.tableData}}
+          @results={{this.result}}
           @nextAction={{this.onNextButtonClicked}}
           @offset={{this.offset}}
           @defaultLimit={{this.defaultLimit}}
@@ -371,7 +389,7 @@ module('Integration | Component | pagination', function (hooks) {
           as |context|
        >
           {{#each context.currentPage as |project|}}
-            <AppMonitoring::Table::Row @amApp={{project}} />
+            <AppMonitoring::Table::Row @amApp={{project}} @onRowClick={{this.onRowClick}} />
           {{/each}}
        </Pagination>
       `);
@@ -380,34 +398,35 @@ module('Integration | Component | pagination', function (hooks) {
 
     // These values should not exist until the 'onNextButtonClicked' callback is called
     assert.notOk(this.callbackIsTriggered, 'callBackTriggered is undefined');
-    assert.notOk(this.callbackValue, 'callBackValue is undefined');
+    assert.notOk(this.callBackValue, 'callBackValue is undefined');
 
     await click(`[data-test-pagination-next-btn]`);
 
     // These values should exist if the callback was triggered by the select change
     assert.true(this.callbackIsTriggered, 'Callback was triggered');
-    assert.ok(this.callbackValue, 'callbackValue is defined');
+
+    assert.ok(this.callBackValue, 'callBackValue is defined');
 
     // The value passed to the callback is in the format {limit: NUMBER, offset: NUMBER}
     assert.propContains(
-      this.callbackValue,
+      this.callBackValue,
       {
         limit: 2,
         offset: 6,
       },
-      'callbackValue contains the right properties'
+      'callBackValue contains the right properties'
     );
 
     await click(`[data-test-pagination-next-btn]`);
 
     // The value passed to the callback is in the format {limit: NUMBER, offset: NUMBER}
     assert.propContains(
-      this.callbackValue,
+      this.callBackValue,
       {
         limit: 2,
         offset: 8,
       },
-      'callbackValue contains the right properties '
+      'callBackValue contains the right properties '
     );
   });
 
@@ -415,7 +434,7 @@ module('Integration | Component | pagination', function (hooks) {
   test('It triggers the previous action callback whenever the previous button (if enabled) is clicked', async function (assert) {
     this.set(
       'tableData',
-      this.server.createList('app-monitoring/am-app', 21, {
+      this.server.createList('am-app', 21, {
         project: this.project,
       })
     );
@@ -443,7 +462,7 @@ module('Integration | Component | pagination', function (hooks) {
             as |context|
          >
             {{#each context.currentPage as |project|}}
-              <AppMonitoring::Table::Row @amApp={{project}} />
+              <AppMonitoring::Table::Row @amApp={{project}} @onRowClick={{this.onRowClick}} />
             {{/each}}
          </Pagination>
         `);
@@ -487,7 +506,7 @@ module('Integration | Component | pagination', function (hooks) {
   test('It should disable next button when the last page is reached', async function (assert) {
     this.set(
       'tableData',
-      this.server.createList('app-monitoring/am-app', 15, {
+      this.server.createList('am-app', 15, {
         project: this.project,
       })
     );
@@ -504,7 +523,7 @@ module('Integration | Component | pagination', function (hooks) {
       this.set('callBackValue', args);
     });
 
-    // NOTE: The  pagination offset is equal to 2 since it's provided
+    // NOTE: The pagination offset is equal to 2 since it's provided
     await render(hbs`
         <Pagination
           @totalItems={{this.totalItems}}
@@ -516,7 +535,7 @@ module('Integration | Component | pagination', function (hooks) {
           as |context|
        >
           {{#each context.currentPage as |project|}}
-            <AppMonitoring::Table::Row @amApp={{project}} />
+            <AppMonitoring::Table::Row @amApp={{project}} @onRowClick={{this.onRowClick}} />
           {{/each}}
        </Pagination>
       `);
@@ -535,7 +554,7 @@ module('Integration | Component | pagination', function (hooks) {
   test('It should disable previous button when the first page is reached', async function (assert) {
     this.set(
       'tableData',
-      this.server.createList('app-monitoring/am-app', 15, {
+      this.server.createList('am-app', 15, {
         project: this.project,
       })
     );
@@ -567,7 +586,7 @@ module('Integration | Component | pagination', function (hooks) {
           as |context|
        >
           {{#each context.currentPage as |project|}}
-            <AppMonitoring::Table::Row @amApp={{project}} />
+            <AppMonitoring::Table::Row @amApp={{project}} @onRowClick={{this.onRowClick}} />
           {{/each}}
        </Pagination>
       `);

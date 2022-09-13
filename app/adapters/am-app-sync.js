@@ -1,6 +1,6 @@
-import commondrf from '../commondrf';
+import commondrf from './commondrf';
 
-export default class AppMonitoringAmAppSyncAdapter extends commondrf {
+export default class AmAppSyncAdapter extends commondrf {
   buildURL(modelName, id) {
     const baseurl = `${this.namespace_v2}/am_app_syncs`;
 
