@@ -1,6 +1,6 @@
 {{! template-lint-disable no-partial }}
 {{#if (or this.hasProjects this.objects)}}
-  <div class='column project-list'>
+  <div class='flex-column'>
     <div class='box-container home-page'>
       <div local-class='filters'>
         <label>
@@ -84,18 +84,20 @@
         </div>
       </div>
     </div>
-    <div class='columns project-container'>
+    <div class='py-3 px-2'>
       {{#if this.isLoading}}
-        <div class='project-loading-container'>
+        <div class='flex-row flex-justify-center mt-7'>
           <ThreeBounceSpinner />
         </div>
       {{else if this.showProjectResults}}
-        {{#each this.objects as |project|}}
-          <ProjectOverview @project={{project}} />
-        {{/each}}
+        <div local-class='project-grid'>
+          {{#each this.objects as |project|}}
+            <ProjectOverview @project={{project}} />
+          {{/each}}
+        </div>
       {{else if this.isEmpty}}
         <div local-class='no-result-found'>
-          <h5 class='capitalize-text text-centre'>
+          <h5 class='capitalize-text'>
             {{t 'noResultsFound'}}
           </h5>
           <h6>
@@ -103,7 +105,7 @@
           </h6>
         </div>
       {{else}}
-        <div class='project-loading-container'>
+        <div class='flex-row flex-justify-center mt-7'>
           <ThreeBounceSpinner />
         </div>
       {{/if}}
@@ -113,11 +115,8 @@
     {{/if}}
   </div>
 {{else}}
-  <div
-    class='column is-fullwidth no-project-container'
-    data-test-no-project-container
-  >
-    <div class='no-project'>
+  <div local-class='no-project-container' data-test-no-project-container>
+    <div local-class='no-project'>
       <h4 class='capitalize-text' data-test-no-project-header>
         {{t 'noProject'}}!!
       </h4>

@@ -5384,8 +5384,8 @@ $dropdown-default-theme: $color-table;
 
 .file-tags {
   display: flex;
-  margin: 0 1em;
-  overflow: scroll;
+  margin: 1em 1em 0 1em;
+  overflow: auto;
   height: 3em;
 }
 

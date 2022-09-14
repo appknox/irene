@@ -1,7 +1,4 @@
-<div
-  class='card file-card is-fullwidth margin-bottom20'
-  data-test-file-overview-container
->
+<div class='card file-card is-fullwidth' data-test-file-overview-container>
   <header class='card-header'>
     <div class='card-header-icon padding-l-3q'>
       <img
@@ -138,97 +135,104 @@
   </div>
   <div class='card-content'>
     <div class='content'>
-      <div class='columns app-risk-info {{if @isReverse "is-reverse"}}'>
-        <div class='column flex-center'>
-          <EmberChart
-            @type='doughnut'
-            @data={{this.file.doughnutData}}
-            @width={{150}}
-            @height={{150}}
-            @options={{this.chartOptions}}
-          />
-        </div>
-        <div class='column'>
-          <div class='lowercase-text text-centre'>
-            <div class='overflow ellipse' data-test-file-overview-date-created>
-              {{t 'started'}}&nbsp;
-              {{dayjs-from-now this.file.createdOn}}
-            </div>
-            <AttachTooltip @placement='bottom'>
-              {{this.file.createdOnDateTime}}
-            </AttachTooltip>
+      <div class='flex-row flex-justify-center mt-3'>
+        <div
+          class='flex-row flex-justify-center {{if @isReverse "is-reverse"}}'
+        >
+          <div class='flex-center px-3'>
+            <EmberChart
+              @type='doughnut'
+              @data={{this.file.doughnutData}}
+              @width={{150}}
+              @height={{150}}
+              @options={{this.chartOptions}}
+            />
           </div>
-          <ul class='risk-table'>
-            <div class='risk-values'>
-              <div class='columns'>
-                <div class='column'>
-                  <li class='is-critical'>
-                    {{t 'critical'}}
-                  </li>
-                </div>
-                <div class='column' data-test-critical-risk-count>
-                  {{this.file.countRiskCritical}}
-                </div>
-              </div>
-              <div class='columns'>
-                <div class='column'>
-                  <li class='is-danger'>
-                    {{t 'high'}}
-                  </li>
-                </div>
-                <div class='column' data-test-count-risk-high>
-                  {{this.file.countRiskHigh}}
-                </div>
-              </div>
-              <div class='columns'>
-                <div class='column'>
-                  <li class='is-warning'>
-                    {{t 'medium'}}
-                  </li>
-                </div>
-                <div class='column' data-test-count-risk-medium>
-                  {{this.file.countRiskMedium}}
-                </div>
-              </div>
-              <div class='columns'>
-                <div class='column'>
-                  <li class='is-info'>
-                    {{t 'low'}}
-                  </li>
-                </div>
-                <div class='column' data-test-count-risk-low>
-                  {{this.file.countRiskLow}}
-                </div>
-              </div>
-              <div class='columns'>
-                <div class='column'>
-                  <li class='is-success'>
-                    {{t 'passed'}}
-                  </li>
-                </div>
-                <div class='column' data-test-count-risk-none>
-                  {{this.file.countRiskNone}}
-                </div>
-              </div>
+          <div class='px-3'>
+            <div class='lowercase-text text-centre'>
               <div
-                class='columns
-                  {{if
-                    this.unknownAnalysisStatus.status
-                    "visible"
-                    "invisible"
-                  }}'
+                class='overflow ellipse'
+                data-test-file-overview-date-created
               >
-                <div class='column'>
-                  <li class='is-default'>
-                    {{t 'untested'}}
-                  </li>
+                {{t 'started'}}&nbsp;
+                {{dayjs-from-now this.file.createdOn}}
+              </div>
+              <AttachTooltip @placement='bottom'>
+                {{this.file.createdOnDateTime}}
+              </AttachTooltip>
+            </div>
+            <ul class='risk-table'>
+              <div class='risk-values'>
+                <div class='columns'>
+                  <div class='column'>
+                    <li class='is-critical'>
+                      {{t 'critical'}}
+                    </li>
+                  </div>
+                  <div class='column' data-test-critical-risk-count>
+                    {{this.file.countRiskCritical}}
+                  </div>
                 </div>
-                <div class='column' data-test-count-risk-unknown>
-                  {{this.file.countRiskUnknown}}
+                <div class='columns'>
+                  <div class='column'>
+                    <li class='is-danger'>
+                      {{t 'high'}}
+                    </li>
+                  </div>
+                  <div class='column' data-test-count-risk-high>
+                    {{this.file.countRiskHigh}}
+                  </div>
+                </div>
+                <div class='columns'>
+                  <div class='column'>
+                    <li class='is-warning'>
+                      {{t 'medium'}}
+                    </li>
+                  </div>
+                  <div class='column' data-test-count-risk-medium>
+                    {{this.file.countRiskMedium}}
+                  </div>
+                </div>
+                <div class='columns'>
+                  <div class='column'>
+                    <li class='is-info'>
+                      {{t 'low'}}
+                    </li>
+                  </div>
+                  <div class='column' data-test-count-risk-low>
+                    {{this.file.countRiskLow}}
+                  </div>
+                </div>
+                <div class='columns'>
+                  <div class='column'>
+                    <li class='is-success'>
+                      {{t 'passed'}}
+                    </li>
+                  </div>
+                  <div class='column' data-test-count-risk-none>
+                    {{this.file.countRiskNone}}
+                  </div>
+                </div>
+                <div
+                  class='columns
+                    {{if
+                      this.unknownAnalysisStatus.status
+                      "visible"
+                      "invisible"
+                    }}'
+                >
+                  <div class='column'>
+                    <li class='is-default'>
+                      {{t 'untested'}}
+                    </li>
+                  </div>
+                  <div class='column' data-test-count-risk-unknown>
+                    {{this.file.countRiskUnknown}}
+                  </div>
                 </div>
               </div>
-            </div>
-          </ul>
+            </ul>
+          </div>
         </div>
       </div>
       <div class='file-tags align-center'>
