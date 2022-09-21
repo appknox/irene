@@ -15,6 +15,16 @@
           </span>
         </LinkTo>
       </li>
+      {{#if this.showAppMonitoringDashboard}}
+        <li>
+          <LinkTo @route='authenticated.app-monitoring' class='menu-list-link'>
+            <div class='menu-list-title-container'>
+              <span class='menu-list-icons ak-icon ak-icon-inventory-2'></span>
+              <span class='menu-list-title'>{{t 'appMonitoring'}}</span>
+            </div>
+          </LinkTo>
+        </li>
+      {{/if}}
       {{#if this.isShowAnalytics}}
         <li>
 
@@ -38,16 +48,7 @@
           </div>
         </LinkTo>
       </li>
-      {{#if this.showAppMonitoringDashboard}}
-        <li>
-          <LinkTo @route='authenticated.app-monitoring' class='menu-list-link'>
-            <div class='menu-list-title-container'>
-              <span class='menu-list-icons ak-icon ak-icon-inventory-2'></span>
-              <span class='menu-list-title'>{{t 'appMonitoring'}}</span>
-            </div>
-          </LinkTo>
-        </li>
-      {{/if}}
+
       <li>
         <LinkTo @route='authenticated.settings' class='menu-list-link'>
           <div class='menu-list-title-container'>
