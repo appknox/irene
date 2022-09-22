@@ -229,6 +229,14 @@ class File extends ModelBaseMixin(Model) {
     }
   }
 
+  get comparableVersion() {
+    const platform = this.project.get('platform');
+    if (platform === ENUMS.PLATFORM.IOS) {
+      return this.version;
+    }
+    return this.versionCode;
+  }
+
   setDynamicStatus(status) {
     this.store.push({
       data: {
