@@ -35,6 +35,7 @@ export default class ProjectListComponent extends PaginationMixin(Component) {
   @tracked query = '';
   @tracked sortingKey = 'lastFileCreatedOn';
   @tracked sortingReversed = true;
+  @tracked limit = 12;
 
   /**
    * @property {Array} teams
