@@ -60,12 +60,6 @@ class File extends ModelBaseMixin(Model) {
   tDeviceCompleted = this.intl.t('deviceCompleted');
 
   analysesSorting = ['computedRisk:desc'];
-  countRiskCritical = 0;
-  countRiskHigh = 0;
-  countRiskMedium = 0;
-  countRiskLow = 0;
-  countRiskNone = 0;
-  countRiskUnknown = 0;
 
   scanProgressClass(type) {
     if (type === true) {
@@ -274,35 +268,54 @@ class File extends ModelBaseMixin(Model) {
   @sort('analyses', 'analysesSorting') sortedAnalyses;
 
   @computed('analyses.@each.computedRisk')
-  get doughnutData() {
+  get countRiskCritical() {
     const analyses = this.analyses;
-    const r = ENUMS.RISK;
-    const countRiskCritical = _getAnalysesCount(analyses, r.CRITICAL);
-    const countRiskHigh = _getAnalysesCount(analyses, r.HIGH);
-    const countRiskMedium = _getAnalysesCount(analyses, r.MEDIUM);
-    const countRiskLow = _getAnalysesCount(analyses, r.LOW);
-    const countRiskNone = _getAnalysesCount(analyses, r.NONE);
-    const countRiskUnknown = _getAnalysesCount(analyses, r.UNKNOWN);
+    return _getAnalysesCount(analyses, ENUMS.RISK.CRITICAL);
+  }
 
-    this.countRiskCritical = countRiskCritical; // eslint-disable-line
-    this.countRiskHigh = countRiskHigh; // eslint-disable-line
-    this.countRiskMedium = countRiskMedium; // eslint-disable-line
-    this.countRiskLow = countRiskLow; // eslint-disable-line
-    this.countRiskNone = countRiskNone; // eslint-disable-line
-    this.countRiskUnknown = countRiskUnknown; // eslint-disable-line
+  @computed('analyses.@each.computedRisk')
+  get countRiskHigh() {
+    const analyses = this.analyses;
+    return _getAnalysesCount(analyses, ENUMS.RISK.HIGH);
+  }
 
+  @computed('analyses.@each.computedRisk')
+  get countRiskMedium() {
+    const analyses = this.analyses;
+    return _getAnalysesCount(analyses, ENUMS.RISK.MEDIUM);
+  }
+
+  @computed('analyses.@each.computedRisk')
+  get countRiskLow() {
+    const analyses = this.analyses;
+    return _getAnalysesCount(analyses, ENUMS.RISK.LOW);
+  }
+
+  @computed('analyses.@each.computedRisk')
+  get countRiskNone() {
+    const analyses = this.analyses;
+    return _getAnalysesCount(analyses, ENUMS.RISK.NONE);
+  }
+
+  @computed('analyses.@each.computedRisk')
+  get countRiskUnknown() {
+    const analyses = this.analyses;
+    return _getAnalysesCount(analyses, ENUMS.RISK.UNKNOWN);
+  }
+
+  get doughnutData() {
     return {
       labels: ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW', 'PASSED', 'UNKNOWN'],
       datasets: [
         {
           label: 'Risks',
           data: [
-            countRiskCritical,
-            countRiskHigh,
-            countRiskMedium,
-            countRiskLow,
-            countRiskNone,
-            countRiskUnknown,
+            this.countRiskCritical,
+            this.countRiskHigh,
+            this.countRiskMedium,
+            this.countRiskLow,
+            this.countRiskNone,
+            this.countRiskUnknown,
           ],
           backgroundColor: [
             RISK_COLOR_CODE.CRITICAL,
