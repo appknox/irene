@@ -1,52 +1,41 @@
 <LinkTo
   @route='authenticated.file'
   @model={{this.project.lastFile.id}}
-  class='column is-one-third'
   data-test-project-overview-container
 >
   <FileOverview
     @file={{this.project.lastFile}}
     @profileId={{this.project.activeProfileId}}
   >
-    <footer class='card-button'>
-      <div class='columns button-width'>
-        <div
-          class='column padding-t-q
-            {{if this.project.hasMultipleFiles "" "auto-adjust"}}'
-        >
-          <LinkTo
-            @route='authenticated.project.settings'
-            @model={{this.project.id}}
-            class='button is-primary mp-project-setting'
-          >
-            {{fa-icon 'cog'}}&nbsp;
-            {{t 'settings'}}
-          </LinkTo>
+    <div class='flex-row flex-justify-center flex-row-gap-2 px-1 py-2'>
+      <LinkTo
+        @route='authenticated.project.settings'
+        @model={{this.project.id}}
+        class='button is-primary mp-project-setting'
+      >
+        {{fa-icon 'cog'}}&nbsp;
+        {{t 'settings'}}
+      </LinkTo>
 
-        </div>
-        {{#if this.project.hasMultipleFiles}}
-          <div class='column padding-t-q'>
-            <LinkTo
-              @route='authenticated.project.files'
-              @model={{this.project.id}}
-              class='button is-primary mp-all-scans'
-            >
-              {{fa-icon 'navicon'}}&nbsp;
-              {{t 'allUploads'}}
-            </LinkTo>
-          </div>
-          <div class='column padding-t-q'>
-            <LinkTo
-              @route='authenticated.choose'
-              @model={{this.project.lastFile.id}}
-              class='button is-primary mp-file-compare'
-            >
-              {{fa-icon 'exchange'}}&nbsp;
-              {{t 'compare'}}
-            </LinkTo>
-          </div>
-        {{/if}}
-      </div>
-    </footer>
+      {{#if this.project.hasMultipleFiles}}
+        <LinkTo
+          @route='authenticated.project.files'
+          @model={{this.project.id}}
+          class='button is-primary mp-all-scans'
+        >
+          {{fa-icon 'navicon'}}&nbsp;
+          {{t 'allUploads'}}
+        </LinkTo>
+
+        <LinkTo
+          @route='authenticated.choose'
+          @model={{this.project.lastFile.id}}
+          class='button is-primary mp-file-compare'
+        >
+          {{fa-icon 'exchange'}}&nbsp;
+          {{t 'compare'}}
+        </LinkTo>
+      {{/if}}
+    </div>
   </FileOverview>
 </LinkTo>

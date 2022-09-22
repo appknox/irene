@@ -1,16 +1,45 @@
 .filters {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  column-gap: 15px;
+  gap: 2em;
 }
 
 .no-result-found {
-  margin: 90px auto;
-  padding: 0.9375em;
-  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .sorting-select {
   text-overflow: ellipsis;
   padding-right: 1.8125em;
+}
+
+.no-project-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 500px;
+  box-sizing: border-box;
+
+  .no-project {
+    width: 100%;
+    min-width: 300px;
+    max-width: 400px;
+    padding: 10px;
+    border: 1px dashed var(--primary);
+    border-radius: 10px;
+    text-align: center;
+  }
+}
+
+.project-grid {
+  display: grid;
+  justify-items: stretch;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 2em;
 }
