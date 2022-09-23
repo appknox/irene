@@ -1,0 +1,29 @@
+.card-header {
+  display: flex;
+  background-color: var(--neutral-grey-100);
+  padding: 1em;
+  box-sizing: border-box;
+}
+
+.app-information {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--neutral-grey-50);
+  padding: 0.2em 1em;
+  border: 1px solid var(--neutral-grey-100);
+  box-sizing: border-box;
+
+  .file-id-text {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 0.75em;
+    line-height: 1.4;
+    color: var(--neutral-grey-800);
+
+    .file-in-active-icon {
+      font-size: 13px;
+    }
+  }
+}

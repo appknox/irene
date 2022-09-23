@@ -1,31 +1,22 @@
 <div class='card file-card is-fullwidth' data-test-file-overview-container>
-  <header class='card-header'>
-    <div class='card-header-icon padding-l-3q'>
+  <header local-class='card-header'>
+    <div class='card-header-icon'>
       <img
         src={{this.file.iconUrl}}
         alt={{this.file.name}}
         data-test-file-overview-icon-url
       />
     </div>
-    <p class='card-header-title padding-v-q'>
+    <p class='card-header-title'>
       <ul class='is-fullwidth'>
         <li>
           <h5>
-            <div class='columns project-specific'>
-              <div
-                class='column hide-overflow'
-                data-test-file-overview-file-name
-              >
+            <div class='flex-row flex-align-center flex-justify-space-between'>
+              <div class='hide-overflow' data-test-file-overview-file-name>
                 {{this.file.name}}
               </div>
-              <div
-                class='column is-one-sixth fixed-icon'
-                data-test-file-overview-platform-icon
-              >
-                {{fa-icon
-                  this.file.project.platformIconClass
-                  class='card-icon'
-                }}
+              <div data-test-file-overview-platform-icon>
+                {{fa-icon this.file.project.platformIconClass}}
               </div>
             </div>
           </h5>
@@ -54,21 +45,22 @@
       </ul>
     </p>
   </header>
-  <div class='app-information align-both vertical-align-center'>
-    <div class='file-id-container'>
-      <div class='file-id-text' data-test-file-overview-file-id>
-        {{#unless this.file.isActive}}
-          {{fa-icon
-            'exclamation-circle'
-            class='file-in-active-icon margin-right'
-          }}
-          <AttachTooltip @placement='top'>
-            {{t 'fileInactive'}}
-          </AttachTooltip>
-        {{/unless}}
-        FILE ID -
-        {{this.file.id}}
-      </div>
+  <div local-class='app-information'>
+    <div local-class='file-id-text' data-test-file-overview-file-id>
+      {{#unless this.file.isActive}}
+        {{fa-icon
+          'exclamation-circle'
+          local-class='file-in-active-icon'
+          class='margin-right'
+        }}
+
+        <AttachTooltip @placement='top'>
+          {{t 'fileInactive'}}
+        </AttachTooltip>
+      {{/unless}}
+
+      FILE ID -
+      {{this.file.id}}
     </div>
     <div class='file-overview-scan-status'>
       <div class='scan-status-tag'>
