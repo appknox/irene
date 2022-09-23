@@ -12,7 +12,6 @@ export default class AuthenticatedAppMonitoringRoute extends Route {
 
   async model() {
     const orgModel = this.organization.selected;
-
     return {
       settings: await orgModel.get_am_configuration(),
     };
