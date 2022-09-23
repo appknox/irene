@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 
 export default class AuthenticatedAppMonitoringRoute extends Route {
   @service organization;
-  @service store;
 
   beforeModel() {
     if (!this.organization.selected.features.app_monitoring) {
