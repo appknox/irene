@@ -1,18 +1,25 @@
-/* eslint-disable ember/no-computed-properties-in-native-classes */
-import Model, { attr, belongsTo } from '@ember-data/model';
-import { bool, not } from '@ember/object/computed';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
-export default class AmApp extends Model {
+export default class AmAppModel extends Model {
   @attr('boolean') automatedUpload;
   @attr('boolean') monitoringEnabled;
+  @attr('boolean') isActive;
 
   @belongsTo('amconfiguration') amConfiguration;
   @belongsTo('project') project;
-  @belongsTo('am-app-sync') lastSync;
-  @belongsTo('am-app-version') latestAmAppVersion;
+  @belongsTo('am-app-sync', { inverse: null }) lastSync;
+  @belongsTo('am-app-version', { inverse: null }) latestAmAppVersion;
 
-  @not('lastSync.id') isPending;
-  @bool('latestAmAppVersion.id') hasLatestAmAppVersion;
+  @hasMany('am-app-sync') amAppSyncs;
+  @hasMany('am-app-version') amAppVersions;
+
+  get isPending() {
+    return !this.lastSync.get('id');
+  }
+
+  get hasLatestAmAppVersion() {
+    return !!this.latestAmAppVersion.get('id');
+  }
 
   get isNotFound() {
     if (this.isPending) {
