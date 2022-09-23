@@ -1,0 +1,129 @@
+/* Pagination Component */
+.app-pagination {
+  background: var(--neutral-grey-100);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5em 0.9375em;
+  margin-top: 0.625em;
+  width: 100%;
+
+  .app-pagination-info {
+    display: flex;
+    align-items: center;
+  }
+
+  .app-pagination-info p,
+  .app-pagination-btn,
+  .app-pagination-page-range {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 19px;
+    letter-spacing: -0.008em;
+    color: var(--body-type-color);
+  }
+
+  .app-pagination-info p {
+    margin-right: 0.625em;
+    margin-bottom: 0em;
+    font-weight: 600;
+  }
+
+  select {
+    width: 60px;
+    padding: 0.375em 0.4375em;
+    padding-right: 0em;
+    font-size: 16px;
+    border: 1px solid #42465133 !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='8' height='4' viewBox='0 0 8 4' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.666748 0.666651L4.00008 3.99998L7.33341 0.666651H0.666748Z' fill='%23171717'/%3E%3C/svg%3E%0A") !important;
+    background-repeat: no-repeat;
+    background-position: right 11px top 50%;
+    background-color: var(--white);
+    border-radius: 3px !important;
+    color: var(--body-type-color) !important;
+
+    &:hover {
+      box-shadow: none !important;
+    }
+  }
+
+  .app-pagination-page-range::after,
+  .app-pagination-btns::after {
+    position: absolute;
+    content: '';
+    width: 1px;
+    height: 100%;
+    background: rgba(66, 70, 81, 0.2);
+    left: -11px;
+  }
+
+  .app-pagination-page-range {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-left: 1.5625em;
+    height: 32px;
+  }
+
+  .app-pagination-btns {
+    display: flex;
+    align-self: flex-end;
+    position: relative;
+  }
+
+  .app-pagination-btns::after {
+    left: -20px;
+  }
+
+  .app-pagination-btn {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border: 1px solid var(--neutral-grey-400);
+    border-radius: 3px;
+    padding: 0.25em 0.0625em;
+    background-color: var(--white);
+
+    span {
+      display: flex;
+      align-items: center;
+      margin: 0.125em;
+    }
+
+    &:hover,
+    &:active,
+    &:focus {
+      color: $primary;
+    }
+
+    &:hover svg path,
+    &:focus svg path,
+    &:active svg path {
+      fill: $primary;
+    }
+
+    &.prev-btn {
+      margin-right: 0.6875em;
+      padding-right: 0.75em;
+    }
+
+    &.next-btn {
+      padding-left: 0.75em;
+    }
+
+    &:disabled {
+      border: 1px solid var(--neutral-grey-400);
+      color: var(--neutral-grey-400);
+      cursor: not-allowed;
+      opacity: 1;
+    }
+
+    &:disabled svg path {
+      fill: var(--neutral-grey-400);
+    }
+  }
+}
