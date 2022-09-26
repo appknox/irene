@@ -8,16 +8,12 @@ export default class AppMonitoringTableComponent extends Component {
   @service store;
   @service organization;
 
-  itemPerPageOptions = [1, 2, 3, 5];
+  itemPerPageOptions = [10, 25, 50];
 
   @tracked monitoringData = [];
-  @tracked limit = 5;
+  @tracked limit = 10;
   @tracked offset = 0;
   @tracked currentAppInView = null;
-
-  constructor(...args) {
-    super(...args);
-  }
 
   get hasNoOrgProjects() {
     return this.organization.selected.projectsCount <= 0;
@@ -55,7 +51,7 @@ export default class AppMonitoringTableComponent extends Component {
     this.getAMTableData({ limit, offset });
   }
 
-  @action getPage(args) {
+  @action onPageItemsCountChange(args) {
     const { limit } = args;
     this.getAMTableData({ limit, offset: 0 });
   }
@@ -70,16 +66,11 @@ export default class AppMonitoringTableComponent extends Component {
   }
 
   @task(function* () {
-    try {
-      const monitoringData = yield this.store.query('am-app', {
-        limit: this.limit,
-        offset: this.offset,
-      });
-      this.monitoringData = monitoringData;
-    } catch (error) {
-      // TODO: Remove log
-      console.log(error);
-    }
+    const monitoringData = yield this.store.query('am-app', {
+      limit: this.limit,
+      offset: this.offset,
+    });
+    this.monitoringData = monitoringData;
   })
   fetchTableData;
 }

@@ -4,6 +4,7 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
+import dayjs from 'dayjs';
 
 module('Integration | Component | app-monitoring/table/row', function (hooks) {
   setupRenderingTest(hooks);
@@ -22,6 +23,10 @@ module('Integration | Component | app-monitoring/table/row', function (hooks) {
       project: this.project,
       latestAmAppVersion: this.latestAmAppVersion,
     });
+    this.settings = {
+      id: 1,
+      enabled: true,
+    };
 
     this.onRowClick = function () {
       return;
@@ -30,7 +35,7 @@ module('Integration | Component | app-monitoring/table/row', function (hooks) {
 
   test('It renders with the right row data', async function (assert) {
     await render(
-      hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}} @onRowClick={{this.onRowClick}} />`
+      hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}} @settings={{this.settings}} @onRowClick={{this.onRowClick}} />`
     );
 
     assert.strictEqual(
@@ -62,20 +67,17 @@ module('Integration | Component | app-monitoring/table/row', function (hooks) {
       .hasText(`${this.amApp.project.lastFile.comparableVersion}`);
   });
 
-  test('It renders "INACTIVE" in status column if settings is disabled or monitoringEnabled is false', async function (assert) {
-    this.set('settings', {
-      id: 1,
-      enabled: false,
-    });
-
+  test('It renders "INACTIVE" in status column if settings is disabled or isActive is false', async function (assert) {
     this.amApp = this.server.create('am-app', 1, {
       project: this.project,
       latestAmAppVersion: this.latestAmAppVersion,
-      monitoringEnabled: true,
+      isActive: true,
     });
 
+    this.settings.enabled = false;
+
     await render(
-      hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}}  @settings={{@settings}} @onRowClick={{this.onRowClick}} />`
+      hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}}  @settings={{this.settings}} @onRowClick={{this.onRowClick}} />`
     );
 
     assert.strictEqual(
@@ -84,43 +86,43 @@ module('Integration | Component | app-monitoring/table/row', function (hooks) {
       'It has five row items'
     );
 
-    assert.dom(`[data-test-am-table-row-status] `).containsText(`inactive`);
+    assert
+      .dom('[data-test-am-table-row-status]')
+      .containsText(`t:inactiveCaptital:()`);
 
     this.amApp = this.server.create('am-app', 1, {
       project: this.project,
       latestAmAppVersion: null,
       lastSync: null,
-      monitoringEnabled: false,
+      isActive: false,
     });
 
-    this.set('settings', {
-      id: 1,
-      enabled: true,
-    });
+    this.settings.enabled = true;
 
     await render(
-      hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}} @settings={{@settings}}  @onRowClick={{this.onRowClick}} />`
+      hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}} @settings={{this.settings}}  @onRowClick={{this.onRowClick}} />`
     );
-    assert.dom(`[data-test-am-table-row-status]`).containsText(`inactive`);
+    assert
+      .dom(`[data-test-am-table-row-status]`)
+      .containsText(`t:inactiveCaptital:()`);
   });
 
-  test('It renders "ACTIVE" in status column if settings is enabled and monitoringEnabled is enabled', async function (assert) {
-    this.set('settings', {
-      id: 1,
-      enabled: true,
-    });
-
+  test('It renders "ACTIVE" in status column if settings is enabled and isActive is enabled', async function (assert) {
     this.amApp = this.server.create('am-app', 1, {
       project: this.project,
       latestAmAppVersion: this.latestAmAppVersion,
-      monitoringEnabled: true,
+      isActive: true,
     });
 
+    this.settings.enabled = true;
+
     await render(
-      hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}}  @settings={{@settings}} @onRowClick={{this.onRowClick}} />`
+      hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}}  @settings={{this.settings}} @onRowClick={{this.onRowClick}} />`
     );
 
-    assert.dom(`[data-test-am-table-row-status] `).containsText(`active`);
+    assert
+      .dom('[data-test-am-table-row-status]')
+      .containsText('t:activeCaptital:()');
   });
 
   test('it renders "NOT FOUND" status in store version column if comparableVersion is empty and latestAmAppVersion is null', async function (assert) {
@@ -132,20 +134,15 @@ module('Integration | Component | app-monitoring/table/row', function (hooks) {
       project: this.project,
       latestAmAppVersion: null,
       lastSync: this.lastSync,
-      monitoringEnabled: true,
-    });
-
-    this.set('settings', {
-      id: 1,
-      enabled: true,
+      isActive: true,
     });
 
     await render(
-      hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}}  @settings={{@settings}} @onRowClick={{this.onRowClick}} />`
+      hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}}  @settings={{this.settings}} @onRowClick={{this.onRowClick}} />`
     );
     assert
-      .dom(`[data-test-am-table-row-store-version]`)
-      .containsText(`not found`);
+      .dom('[data-test-am-table-row-store-version]')
+      .containsText('t:notFound:()');
   });
 
   test('it renders "PENDING" status in store version column if comparableVersion is empty and lastSync are null', async function (assert) {
@@ -157,26 +154,72 @@ module('Integration | Component | app-monitoring/table/row', function (hooks) {
       project: this.project,
       latestAmAppVersion: this.latestAmAppVersion,
       lastSync: null,
-      monitoringEnabled: true,
-    });
-
-    this.set('settings', {
-      id: 1,
-      enabled: true,
+      isActive: true,
     });
 
     await render(
       hbs`
-      <AppMonitoring::Table::Row 
-        @amApp={{this.amApp}}  
-        @settings={{@settings}} 
-        @onRowClick={{this.onRowClick}} 
+      <AppMonitoring::Table::Row
+        @amApp={{this.amApp}}
+        @settings={{this.settings}}
+        @onRowClick={{this.onRowClick}}
       />`
     );
     assert
       .dom(
-        `[data-test-am-table-row-store-version] [data-test-am-status-element]`
+        '[data-test-am-table-row-store-version] [data-test-am-status-element]'
       )
-      .containsText(`pending`);
+      .containsText('t:pending:()');
+  });
+
+  test('it should render loading indicator if last sync is null', async function (assert) {
+    this.latestAmAppVersion = this.server.create('am-app-version', {
+      comparableVersion: '',
+    });
+
+    this.amApp = this.server.create('am-app', 1, {
+      project: this.project,
+      latestAmAppVersion: this.latestAmAppVersion,
+      lastSync: null,
+      isActive: true,
+    });
+
+    await render(
+      hbs`
+      <AppMonitoring::Table::Row
+        @amApp={{this.amApp}}
+        @settings={{this.settings}}
+        @onRowClick={{this.onRowClick}}
+      />`
+    );
+    assert.dom('[data-test-am-table-row-last-sync-spinner]').exists();
+
+    assert.dom('data-test-am-table-row-last-sync-date').doesNotExist();
+  });
+
+  test('it should render loading indicator if last sync is not null', async function (assert) {
+    this.latestAmAppVersion = this.server.create('am-app-version', {
+      comparableVersion: '',
+    });
+
+    this.amApp = this.server.create('am-app', 1, {
+      project: this.project,
+      latestAmAppVersion: this.latestAmAppVersion,
+      lastSync: this.lastSync,
+      isActive: true,
+    });
+
+    await render(
+      hbs`
+      <AppMonitoring::Table::Row
+        @amApp={{this.amApp}}
+        @settings={{this.settings}}
+        @onRowClick={{this.onRowClick}}
+      />`
+    );
+    const dateStr = new dayjs(this.lastSync.syncedOn).format('DD MMM YYYY');
+    assert.dom('[data-test-am-table-row-last-sync-spinner]').doesNotExist();
+    assert.dom('[data-test-am-table-row-last-sync-date]').exists();
+    assert.dom('[data-test-am-table-row-last-sync-date]').containsText(dateStr);
   });
 });

@@ -14,7 +14,7 @@
     >
       <Pagination
         @results={{this.tableData}}
-        @onPageItemsCountChange={{this.getPage}}
+        @onPageItemsCountChange={{this.onPageItemsCountChange}}
         @totalItems={{this.totalCount}}
         @nextAction={{this.goToPage}}
         @prevAction={{this.goToPage}}
@@ -48,10 +48,3 @@
     </div>
   {{/if}}
 </div>
-
-{{!-- <AppMonitoring::Drawer
-  @showRightDrawer={{this.showRightDrawer}}
-  @appDetails={{this.currentAppInView}}
-  @closeModalHandler={{this.closeRightDrawer}}
-  @settings={{@settings}}
-/> --}}

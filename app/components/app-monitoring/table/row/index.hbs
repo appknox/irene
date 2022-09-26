@@ -30,10 +30,8 @@
       {{@amApp.latestAmAppVersion.comparableVersion}}
     {{else}}
       <AppMonitoring::Table::Status
-        @columnName='storeVersion'
-        @settings={{@settings}}
-        @amApp={{@amApp}}
-      />
+        @condition='{{this.statusCondition}}'
+      >{{this.statusText}}</AppMonitoring::Table::Status>
     {{/if}}
   </div>
   <div
@@ -48,15 +46,19 @@
     data-test-am-table-row-item
     data-test-am-table-row-status
   >
-    <AppMonitoring::Table::Status @settings={{@settings}} @amApp={{@amApp}} />
+    <AppMonitoring::Table::Status
+      @condition='{{this.monitoredStatusCondition}}'
+    >
+      {{this.monitoredStatusText}}
+    </AppMonitoring::Table::Status>
     <p local-class='last-sync-date' data-test-am-table-row-last-sync>
       Last Synced On:
       {{#if @amApp.lastSync.syncedOn}}
-        <span>
+        <span data-test-am-table-row-last-sync-date>
           {{day-js date=@amApp.lastSync.syncedOn format='DD MMM YYYY'}}
         </span>
       {{else}}
-        <span>
+        <span data-test-am-table-row-last-sync-spinner>
           {{fa-icon 'spinner fa-spin' class='last-sync-loading'}}
         </span>
       {{/if}}

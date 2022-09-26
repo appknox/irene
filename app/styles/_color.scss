@@ -101,12 +101,12 @@ body {
 
 /*------- AM status colors start ------*/
 body {
-  --am-status-pending: #fff7d7;
-  --am-status-pending-bg: #a5872d;
-  --am-status-active: #2e9940;
-  --am-status-active-bg: #e9f5ed;
-  --am-status-not-found: #a3332c;
-  --am-status-not-found-bg: #f8b5b9;
+  --am-status-warning: #fff7d7;
+  --am-status-warning-bg: #a5872d;
+  --am-status-success: #2e9940;
+  --am-status-success-bg: #e9f5ed;
+  --am-status-alert: #a3332c;
+  --am-status-alert-bg: #f8b5b9;
 }
 /*------- AM status colors end ------*/
 

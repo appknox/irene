@@ -8,19 +8,18 @@
   line-height: 1.125rem;
   letter-spacing: -0.4px;
 
-  &.not-found,
-  &.inactive {
-    color: var(--am-status-not-found);
-    background: var(--am-status-not-found-bg);
+  &.alert {
+    color: var(--am-status-alert);
+    background: var(--am-status-alert-bg);
   }
 
-  &.pending {
-    background: var(--am-status-pending);
-    color: var(--am-status-pending-bg);
+  &.warning {
+    background: var(--am-status-warning);
+    color: var(--am-status-warning-bg);
   }
 
-  &.active {
-    color: var(--am-status-active);
-    background: var(--am-status-active-bg);
+  &.success {
+    color: var(--am-status-success);
+    background: var(--am-status-success-bg);
   }
 }

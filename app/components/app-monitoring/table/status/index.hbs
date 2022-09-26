@@ -1,7 +1,7 @@
 <span
-  local-class='status {{this.status}}'
-  data-test-am-status={{this.status}}
+  local-class='status {{@condition}}'
+  data-test-am-status={{@condition}}
   data-test-am-status-element
 >
-  {{this.formattedStatus}}
+  {{yield}}
 </span>

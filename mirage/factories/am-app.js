@@ -4,6 +4,7 @@ import Base from './base';
 export default Base.extend({
   automatedUpload: faker.random.boolean(),
   monitoringEnabled: faker.random.boolean(),
+  isActive: faker.random.boolean(),
 
   isPending() {
     return !this.lastSync?.id;
