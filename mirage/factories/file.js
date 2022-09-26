@@ -99,4 +99,11 @@ export default Base.extend({
       ],
     };
   },
+  comparableVersion() {
+    const platform = this.project?.platform;
+    if (platform === ENUMS.PLATFORM.IOS) {
+      return this.version;
+    }
+    return this.versionCode;
+  },
 });

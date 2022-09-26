@@ -1,0 +1,18 @@
+.table-header {
+  display: grid;
+  grid-template-columns: 12% 1fr 22% 22% 14%;
+  align-items: center;
+  border-radius: 2px;
+  padding: 0.6875em 1.0625em;
+  margin-bottom: 0.625em;
+  background-color: var(--neutral-grey-100);
+  border: 1px solid var(--neutral-grey-200);
+
+  .column-header {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 19px;
+    letter-spacing: -0.0176em;
+    color: var(--body-type-color);
+  }
+}

@@ -10,7 +10,7 @@ export default class AmAppVersionModel extends Model {
   @belongsTo('file', { inverse: null }) latestFile;
 
   get comparableVersion() {
-    const platform = this.amApp.get('project').get('platform');
+    const platform = this.amApp?.get('project')?.get('platform');
     if (platform === ENUMS.PLATFORM.IOS) {
       return this.version;
     }

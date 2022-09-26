@@ -99,6 +99,17 @@ body {
 }
 /*------- ember-attacher colors end ------*/
 
+/*------- AM status colors start ------*/
+body {
+  --am-status-warning: #fff7d7;
+  --am-status-warning-bg: #a5872d;
+  --am-status-success: #2e9940;
+  --am-status-success-bg: #e9f5ed;
+  --am-status-alert: #a3332c;
+  --am-status-alert-bg: #f8b5b9;
+}
+/*------- AM status colors end ------*/
+
 /*------- input colors start ------*/
 body {
   --input-border-color: #fff2f1;

@@ -1,0 +1,20 @@
+.table-container {
+  margin-top: 1.25em;
+  background-color: transparent;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .table-body {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+// Loading styles
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 12.5em;
+}

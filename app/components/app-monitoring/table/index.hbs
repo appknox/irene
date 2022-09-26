@@ -1,0 +1,50 @@
+<div local-class='table-container' data-test-am-table-container>
+  <AppMonitoring::Table::Header />
+
+  {{#if this.hasNoOrgProjects}}
+    <AppMonitoring::Table::Error
+      @header='{{t "appMonitoringErrors.noOrgProjects.header"}}'
+      @body='{{t "appMonitoringErrors.noOrgProjects.body"}}'
+    />
+  {{else}}
+    <div
+      local-class='table-body'
+      {{did-insert this.fetchProdscanData}}
+      data-test-am-table-body
+    >
+      <Pagination
+        @results={{this.tableData}}
+        @onPageItemsCountChange={{this.onPageItemsCountChange}}
+        @totalItems={{this.totalCount}}
+        @nextAction={{this.goToPage}}
+        @prevAction={{this.goToPage}}
+        @itemPerPageOptions={{this.itemPerPageOptions}}
+        @defaultLimit={{this.limit}}
+        @offset={{this.offset}}
+        @tableItemLabel='Projects'
+        data-test-pagination-component
+        as |context|
+      >
+        {{#if this.fetchTableData.isRunning}}
+          <div local-class='loading'>
+            <ThreeBounceSpinner />
+          </div>
+        {{else if this.isEmptyAMResult}}
+          <AppMonitoring::Table::Error
+            @header='{{t "appMonitoringErrors.emptyResults.header"}}'
+            @body='{{t "appMonitoringErrors.emptyResults.body"}}'
+          />
+        {{else}}
+          {{#each context.currentPage as |app idx|}}
+            <AppMonitoring::Table::Row
+              @amApp={{app}}
+              @id={{idx}}
+              @onRowClick={{this.onTableRowClick}}
+              @settings={{@settings}}
+            />
+          {{/each}}
+        {{/if}}
+      </Pagination>
+    </div>
+  {{/if}}
+</div>
