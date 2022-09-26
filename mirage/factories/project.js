@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import faker from 'faker';
 import ENUMS from 'irene/enums';
 import Base from './base';

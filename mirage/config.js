@@ -400,5 +400,17 @@ function routes() {
     return {};
   });
 
+  this.get('/v2/am_apps/:id', () => {
+    return {};
+  });
+
+  this.get('/v2/am_apps_syncs/:id', () => {
+    return {};
+  });
+
+  this.get('/v2/am_apps_versions/:id', () => {
+    return {};
+  });
+
   this.passthrough();
 }

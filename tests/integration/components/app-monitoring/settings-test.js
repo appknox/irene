@@ -1,9 +1,9 @@
-import { module, test } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
-import { render, click } from '@ember/test-helpers';
+import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
+import { setupRenderingTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 
 import Service from '@ember/service';
 
@@ -14,15 +14,20 @@ class OrganizationMeStub extends Service {
   };
 }
 
+class OrganizationStub extends Service {
+  selected = {
+    id: 1,
+    projectsCount: 1,
+  };
+}
+
 module('Integration | Component | app-monitoring-settings', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
   setupIntl(hooks);
 
   hooks.beforeEach(async function () {
-    this.server.createList('organization', 1);
-    await this.owner.lookup('service:organization').load();
-
+    this.owner.register('service:organization', OrganizationStub);
     this.owner.register('service:me', OrganizationMeStub);
   });
 
@@ -105,5 +110,44 @@ module('Integration | Component | app-monitoring-settings', function (hooks) {
       this.element.querySelector(`[data-test-toggle-input]`).checked
     );
     assert.notOk(this.amConfigModel.enabled);
+  });
+
+  test('toggling should be disabled if org project count is less than 1', async function (assert) {
+    class OrganizationStub extends Service {
+      selected = {
+        id: 1,
+        projectsCount: 0,
+      };
+    }
+    this.owner.register('service:organization', OrganizationStub);
+
+    this.server.put('/v2/am_configuration/:id', (schema, req) => ({
+      id: 1,
+      enabled: false,
+      organization: req.params.id,
+    }));
+
+    this.set('settings', {
+      id: 1,
+      enabled: false,
+    });
+
+    const store = this.owner.lookup('service:store');
+    const normailizedSettings = store.normalize(
+      'amconfiguration',
+      this.settings
+    );
+
+    this.set('amConfigModel', store.push(normailizedSettings));
+
+    await render(
+      hbs`<AppMonitoring::Settings @settings={{this.amConfigModel}} />`
+    );
+
+    assert.dom(`[data-test-toggle-input]`).exists();
+    assert.dom(`[data-test-toggle-input]`).hasAttribute('disabled');
+    assert.notOk(
+      this.element.querySelector(`[data-test-toggle-input]`).checked
+    );
   });
 });

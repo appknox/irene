@@ -1,0 +1,26 @@
+.status {
+  width: fit-content;
+  padding: 0.25em 0.375em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  letter-spacing: -0.4px;
+
+  &.not-found,
+  &.inactive {
+    color: var(--am-status-not-found);
+    background: var(--am-status-not-found-bg);
+  }
+
+  &.pending {
+    background: var(--am-status-pending);
+    color: var(--am-status-pending-bg);
+  }
+
+  &.active {
+    color: var(--am-status-active);
+    background: var(--am-status-active-bg);
+  }
+}
