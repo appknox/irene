@@ -1,13 +1,9 @@
-@mixin tableRowStyle($vertPadding) {
+.table-row {
   display: grid;
   grid-template-columns: 12% 1fr 22% 22% 14%;
   align-items: center;
   border-radius: 2px;
-  padding: $vertPadding 1.0625rem;
-}
-
-.table-row {
-  @include tableRowStyle(0.875rem);
+  padding: 0.875em 1.0625rem;
   border-bottom: 1px solid var(--neutral-grey-100);
   transition: background-color 0.3s ease-in-out;
   cursor: pointer;
@@ -27,9 +23,6 @@
   .last-scanned-version,
   .production-version,
   .last-sync-date {
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 19px;
     letter-spacing: -0.4px;
     color: var(--neutral-grey-600);
   }
@@ -39,6 +32,11 @@
   .production-version {
     color: var(--black);
     margin-bottom: 0.4375em;
+  }
+
+  .production-version {
+    display: flex;
+    align-items: center;
   }
 
   .last-sync-date {
@@ -66,4 +64,10 @@
   .platform-apple {
     color: var(--black);
   }
+}
+
+// Warning Icon
+.warning-icon {
+  color: #d72f2f;
+  margin-left: 0.4em;
 }

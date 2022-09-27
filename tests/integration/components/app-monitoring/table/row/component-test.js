@@ -1,10 +1,10 @@
 import { render } from '@ember/test-helpers';
+import dayjs from 'dayjs';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
-import dayjs from 'dayjs';
 
 module('Integration | Component | app-monitoring/table/row', function (hooks) {
   setupRenderingTest(hooks);
@@ -12,17 +12,21 @@ module('Integration | Component | app-monitoring/table/row', function (hooks) {
   setupIntl(hooks);
 
   hooks.beforeEach(async function () {
-    this.lastFile = this.server.create('file');
-    this.latestAmAppVersion = this.server.create('am-app-version');
+    this.file = this.server.create('file');
+    this.latestAmAppVersion = this.server.create('am-app-version', {
+      latestFile: this.file,
+    });
+
     this.lastSync = this.server.create('am-app-sync');
     this.project = this.server.create('project', {
-      lastFile: this.lastFile,
+      lastFile: this.file,
     });
 
     this.amApp = this.server.create('am-app', 1, {
       project: this.project,
       latestAmAppVersion: this.latestAmAppVersion,
     });
+
     this.settings = {
       id: 1,
       enabled: true,
@@ -221,5 +225,31 @@ module('Integration | Component | app-monitoring/table/row', function (hooks) {
     assert.dom('[data-test-am-table-row-last-sync-spinner]').doesNotExist();
     assert.dom('[data-test-am-table-row-last-sync-date]').exists();
     assert.dom('[data-test-am-table-row-last-sync-date]').containsText(dateStr);
+  });
+
+  test('it alert icon when latestFile in latestAmAppVersion is null', async function (assert) {
+    this.latestAmAppVersion = this.server.create('am-app-version', {
+      latestFile: null,
+    });
+
+    this.amApp = this.server.create('am-app', 1, {
+      project: this.project,
+      latestAmAppVersion: this.latestAmAppVersion,
+      lastSync: this.lastSync,
+      isActive: true,
+    });
+
+    await render(
+      hbs`
+      <AppMonitoring::Table::Row
+        @amApp={{this.amApp}}
+        @settings={{this.settings}}
+        @onRowClick={{this.onRowClick}}
+      />`
+    );
+    assert.dom('[data-test-am-table-row-warning-icon]').exists();
+    assert
+      .dom('[data-test-am-table-row-warning-tooltip]')
+      .hasText(`t:appMonitoringErrors.akUnscannedVersion:()`);
   });
 });

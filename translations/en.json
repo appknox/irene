@@ -666,6 +666,7 @@
   "production": "Production",
   "appMonitoring": "Store Monitoring",
   "appMonitoringErrors": {
+    "akUnscannedVersion": "This version is not scanned",
     "noOrgProjects": {
       "header": "No Projects Uploaded",
       "body": "Upload a Project and then Enable the Store Monitoring Setting to initiate the monitoring of your applications in Playstore or Appstore."

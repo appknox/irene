@@ -60,6 +60,22 @@
               <p data-test-app-store-version>
                 {{#if @appDetails.latestAmAppVersion.comparableVersion}}
                   {{@appDetails.latestAmAppVersion.comparableVersion}}
+                  {{#unless @appDetails.latestAmAppVersion.latestFile}}
+                    <span
+                      local-class='warning-icon'
+                      class='ak-icon ak-icon-warning'
+                      data-test-app-warning-icon
+                    >
+                      <AttachTooltip
+                        @placement='bottom'
+                        class='am-drawer-tooltip'
+                      >
+                        <span data-test-app-warning-tooltip>
+                          {{t 'appMonitoringErrors.akUnscannedVersion'}}
+                        </span>
+                      </AttachTooltip>
+                    </span>
+                  {{/unless}}
                 {{else}}
                   <AppMonitoring::Table::Status
                     @condition='{{this.statusCondition}}'
