@@ -48,3 +48,10 @@
     </div>
   {{/if}}
 </div>
+
+<AppMonitoring::Drawer
+  @showRightDrawer={{this.showRightDrawer}}
+  @appDetails={{this.currentAppInView}}
+  @closeModalHandler={{this.closeRightDrawer}}
+  @settings={{@settings}}
+/>

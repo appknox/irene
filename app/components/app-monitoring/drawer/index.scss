@@ -1,0 +1,165 @@
+/* The Modal (background) */
+.modal {
+  display: block;
+  position: fixed;
+  z-index: -1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba($black, 0.2);
+  transition: opacity 0.2s ease-in-out, z-index 0.3s ease-in-out;
+  opacity: 0;
+
+  &.open {
+    opacity: 1;
+    z-index: 10000;
+  }
+}
+
+/* Modal Content */
+.modal-content {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  right: -522px;
+  background-color: var(--white);
+  width: 522px;
+  height: 100%;
+  transition: 0.2s ease-in-out;
+
+  &.open {
+    right: 0;
+  }
+}
+
+/* Modal Header */
+.modal-header,
+.modal-footer {
+  padding: 1.125em 1.5625em;
+}
+
+.modal-header {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: $secondary;
+  color: var(--white);
+
+  h2 {
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 22px;
+    letter-spacing: -0.008em;
+    margin-bottom: 0em;
+  }
+}
+
+/* Modal Body */
+.modal-body {
+  padding: 1.125em 0em;
+  padding-bottom: 4em;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+
+  .modal-body-section {
+    margin-bottom: 1.875em;
+    padding-left: 1.5625em;
+    padding-right: 1.5625em;
+    border-bottom: 1px solid var(--neutral-grey-200);
+
+    h3,
+    h4 {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 18px;
+      letter-spacing: -0.0176em;
+    }
+
+    h3 {
+      color: var(--am-drawer-header-title);
+      text-transform: uppercase;
+      margin-bottom: 0.9375em;
+    }
+
+    h4 {
+      margin-bottom: 4px;
+      color: var(--body-type-color);
+    }
+
+    .section {
+      padding: 0px;
+    }
+
+    .section p {
+      line-height: 21px;
+      align-items: center;
+      letter-spacing: -0.0176em;
+      color: var(--body-type-color);
+    }
+  }
+
+  .basic-details {
+    .section {
+      margin-bottom: 1.25em;
+    }
+  }
+
+  .scan-details {
+    .section {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .section-content {
+      margin-bottom: 1.25em;
+
+      .last-sync-date {
+        margin-top: 0.4375em;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+      }
+
+      .last-sync-date span {
+        margin-left: 0.5em;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+      }
+
+      .last-sync-date span i {
+        font-size: 14px;
+      }
+    }
+
+    .section-content:first-child {
+      width: 55%;
+    }
+  }
+}
+
+/* Platform Icons */
+
+.platform-icon i {
+  font-size: 16px;
+}
+
+.platform-android {
+  color: var(--android);
+}
+.platform-apple {
+  color: var(--black);
+}
+
+/* Close Icon */
+
+.close-icon {
+  font-size: 16px !important;
+  cursor: pointer;
+}
