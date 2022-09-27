@@ -10,8 +10,7 @@ body {
   --black: #{$black};
 
   --body-type-color: #171717;
-  --shade-black-7: #c4c4c4;
-  --shade-black-8: #d9d9d9;
+  --am-drawer-header-title: #ff4d3f;
   --green-approval: #80c081;
 
   --neutral-white-100: #f1f1f1;
@@ -42,7 +41,7 @@ body {
 /* button primary filled */
 body {
   --button-primary-filled-bg: var(--primary);
-  --button-primary-filled-bg__disabled: var(--shade-black-7);
+  --button-primary-filled-bg__disabled: var(--neutral-grey-400);
   --button-primary-filled-font-color: var(--white);
   --button-primary-filled-font-color__disabled: var(--white);
   --button-primary-filled-bg__hover: linear-gradient(
@@ -62,7 +61,7 @@ body {
 body {
   --button-primary-outlined-bg: var(--white);
   --button-primary-outlined-font-color: var(--primary);
-  --button-primary-outlined-font-color__disabled: var(--shade-black-7);
+  --button-primary-outlined-font-color__disabled: var(--neutral-grey-400);
   --button-primary-outlined-border-color: var(--primary);
   --button-primary-outlined-border-color__disabled: var(
     --button-primary-outlined-font-color__disabled
@@ -73,8 +72,8 @@ body {
 body {
   --button-neutral-outlined-bg: var(--white);
   --button-neutral-outlined-font-color: var(--body-text-1);
-  --button-neutral-outlined-font-color__disabled: var(--shade-black-7);
-  --button-neutral-outlined-border-color: var(--shade-black-7);
+  --button-neutral-outlined-font-color__disabled: var(--neutral-grey-400);
+  --button-neutral-outlined-border-color: var(--neutral-grey-400);
   --button-neutral-outlined-border-color__disabled: var(
     --button-neutral-outlined-font-color__disabled
   );
@@ -85,7 +84,7 @@ body {
 /*------- toggle button colors start ------*/
 body {
   --toggle-button-checked-color: var(--green-approval);
-  --toggle-button-unchecked-color: var(--shade-black-8);
+  --toggle-button-unchecked-color: var(--neutral-grey-300);
   --toggle-button-label-color: var(--text-black-91);
   --toggle-button-slider-circle-color: var(--white);
 }
