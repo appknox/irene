@@ -17,10 +17,6 @@
   .app-pagination-info p,
   .app-pagination-btn,
   .app-pagination-page-range {
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 19px;
-    letter-spacing: -0.008em;
     color: var(--body-type-color);
   }
 
@@ -31,11 +27,10 @@
   }
 
   select {
-    width: 60px;
+    width: 3.75em;
     padding: 0.375em 0.4375em;
     padding-right: 0em;
     font-size: 16px;
-    border: 1px solid #42465133 !important;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -118,7 +113,6 @@
     &:disabled {
       border: 1px solid var(--neutral-grey-400);
       color: var(--neutral-grey-400);
-      cursor: not-allowed;
       opacity: 1;
     }
 
