@@ -14,7 +14,7 @@
 
   &.open {
     opacity: 1;
-    z-index: 10000;
+    z-index: 100;
   }
 }
 
@@ -119,6 +119,11 @@
     .section-content {
       margin-bottom: 1.25em;
 
+      p {
+        display: flex;
+        align-items: center;
+      }
+
       .last-sync-date {
         margin-top: 0.4375em;
         font-size: 12px;
@@ -162,4 +167,10 @@
 .close-icon {
   font-size: 16px !important;
   cursor: pointer;
+}
+
+// Warning Icon
+.warning-icon {
+  color: #d72f2f;
+  margin-left: 0.4em;
 }

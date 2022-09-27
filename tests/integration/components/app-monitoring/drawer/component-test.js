@@ -242,4 +242,31 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
         "Drawer content element does not have an 'open' class"
       );
   });
+
+  test('it renders alert icon in store version field when latestFile in latestAmAppVersion is null', async function (assert) {
+    this.latestAmAppVersion = this.server.create('am-app-version', {
+      latestFile: null,
+    });
+
+    this.amApp = this.server.create('am-app', 1, {
+      project: this.project,
+      latestAmAppVersion: this.latestAmAppVersion,
+      lastSync: this.lastSync,
+      isActive: true,
+    });
+
+    await render(
+      hbs`
+      <AppMonitoring::Drawer
+        @showRightDrawer={{true}}
+        @appDetails={{this.amApp}}
+        @closeModalHandler={{this.closeDrawer}}
+        @settings={{this.settings}}
+      />`
+    );
+    assert.dom('[data-test-app-warning-icon]').exists();
+    assert
+      .dom('[data-test-app-warning-tooltip]')
+      .hasText(`t:appMonitoringErrors.akUnscannedVersion:()`);
+  });
 });

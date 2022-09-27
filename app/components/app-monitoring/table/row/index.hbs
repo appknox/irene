@@ -28,6 +28,19 @@
   >
     {{#if @amApp.latestAmAppVersion.comparableVersion}}
       {{@amApp.latestAmAppVersion.comparableVersion}}
+      {{#unless @amApp.latestAmAppVersion.latestFile}}
+        <span
+          local-class='warning-icon'
+          class='ak-icon ak-icon-warning'
+          data-test-am-table-row-warning-icon
+        >
+          <AttachTooltip @placement='bottom'>
+            <span data-test-am-table-row-warning-tooltip>
+              {{t 'appMonitoringErrors.akUnscannedVersion'}}
+            </span>
+          </AttachTooltip>
+        </span>
+      {{/unless}}
     {{else}}
       <AppMonitoring::Table::Status
         @condition='{{this.statusCondition}}'
