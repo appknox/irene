@@ -1,0 +1,13 @@
+.modal-card {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  max-width: 1024px;
+  max-height: calc(100vh - 40px);
+  background-color: var(--white);
+  border-radius: 5px;
+}
+
+.btn-border-radius {
+  border-radius: 5px;
+}

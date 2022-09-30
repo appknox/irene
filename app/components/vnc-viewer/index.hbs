@@ -1,0 +1,85 @@
+<div class='{{if this.isPoppedOut "modal is-active"}}'>
+  {{#if this.isPoppedOut}}
+    <div class='modal-background'></div>
+  {{/if}}
+
+  <div local-class='{{if this.isPoppedOut "modal-card"}}' class='device-modal'>
+    <div class='modal-card-body device-modal-body padding-10 margin-top'>
+      <div class='flex-center'>
+        <div
+          id='vnc-device-container'
+          class='marvel-device {{this.deviceType}}'
+        >
+          {{#if this.isNotTablet}}
+            <div class='top-bar'></div>
+            <div class='sleep'></div>
+            <div class='volume'></div>
+          {{/if}}
+
+          <div class='camera'></div>
+
+          {{#if this.isIOSDevice}}
+            {{#if this.isNotTablet}} <div class='speaker'></div> {{/if}}
+          {{/if}}
+
+          <div class='{{if this.screenRequired "noscreen" "screen"}}'>
+            {{#if (and @file.isReady this.deviceType)}}
+              {{!-- {{#unless this.changingOrientation}} --}}
+              <NovncRfb
+                @deviceFarmURL={{this.deviceFarmURL}}
+                @deviceFarmPassword={{this.deviceFarmPassword}}
+                @vncViewerContext={{this}}
+              />
+              {{!-- {{/unless}} --}}
+            {{/if}}
+          </div>
+
+          {{#if this.isIOSDevice}}
+            <div class='home'></div>
+
+            {{#if this.isNotTablet}} <div class='bottom-bar'></div> {{/if}}
+          {{/if}}
+        </div>
+      </div>
+
+      <div class='flex-center padding-t-2 padding-b-1'>
+        <DynamicScan
+          @file={{@file}}
+          @vncViewer={{true}}
+          @dynamicScanText={{t 'startDynamicScan'}}
+        />
+
+        {{#if this.showVNCControls}}
+          <div class='flex-row'>
+            {{#if this.isPoppedOut}}
+              <button
+                type='button'
+                class='is-default ml-1'
+                local-class='btn-border-radius'
+                {{on 'click' this.rotateDevice}}
+                disabled={{this.changingOrientation}}
+              >
+                Rotate
+              </button>
+            {{/if}}
+
+            <button
+              type='button'
+              class='is-default ml-1'
+              local-class='btn-border-radius'
+              {{on 'click' this.togglePop}}
+            >
+              {{this.vncPopText}}
+            </button>
+          </div>
+        {{/if}}
+      </div>
+
+      <div class='flex-center'>
+        {{#if @file.isReady}}
+          <DynamicScanExpiry @file={{@file}} />
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>
