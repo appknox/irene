@@ -92,6 +92,14 @@ function routes() {
     return {};
   });
 
+  this.get('/organizations/:id/archives', () => {
+    return [];
+  });
+
+  this.get('/organizations/:id/email_domains', () => {
+    return [];
+  });
+
   this.get('/organizations/:id/teams', (schema) => {
     return schema.teams.all().models;
   });

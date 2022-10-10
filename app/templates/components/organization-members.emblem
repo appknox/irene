@@ -1,13 +1,4 @@
 if me.org.is_admin
-  .columns.margin-v-h
-    .column
-      h3.bold.black-text
-        = t "organizationMembers"
-    .column.content-right
-      if me.org.is_owner
-        = invite-member organization=organization
-
-
   = organization-member-list organization=organization
   = organization-invitation-list organization=organization
 

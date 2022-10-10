@@ -23,6 +23,6 @@ export default class AuthenticatedGithubRedirectRoute extends Route {
   }
 
   afterModel() {
-    return this.transitionTo('authenticated.organization.settings');
+    return this.transitionTo('authenticated.organization-settings');
   }
 }

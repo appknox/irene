@@ -6,15 +6,25 @@ export default class AuthenticatedOrganizationSettingsRoute extends Route {
   @service me;
   @service organization;
   @service('notifications') notify;
+  @service router;
+
+  beforeModel() {
+    if (!this.me.org.get('is_admin')) {
+      this.router.transitionTo('authenticated.organization.namespaces');
+    }
+  }
 
   async model() {
     const url = `/api/organizations/${this.get(
       'organization.selected.id'
     )}/github`;
+
     let integratedUser = null;
     let reconnect = null;
+
     try {
       let data = await this.get('ajax').request(url);
+
       if (data) {
         integratedUser = data;
       }
@@ -23,7 +33,9 @@ export default class AuthenticatedOrganizationSettingsRoute extends Route {
         reconnect = true;
       }
     }
+
     await this.get('store').query('organization', { id: null });
+
     return {
       integratedUser: integratedUser,
       reconnect: reconnect,

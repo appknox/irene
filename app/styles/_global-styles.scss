@@ -26,6 +26,21 @@ $risk-names: (
   ),
 ) !default;
 
+.not-permitted-popover {
+  position: relative;
+  padding: 1em;
+  border: 1px solid var(--neutral-white-100);
+  background-color: var(--white);
+  border-radius: 3px;
+  box-sizing: border-box;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+
+  strong {
+    color: var(--text-primary-color);
+  }
+}
+
 // text styling and utils
 body {
   font-family: 'Open Sans', sans-serif;
@@ -2820,6 +2835,10 @@ ul.risk-table {
 
 .team-container.box-container {
   padding-bottom: 20px;
+}
+
+.org-tab-content-container {
+  padding: 0 1em 5em;
 }
 
 .org {

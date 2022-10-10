@@ -1,7 +1,7 @@
 .columns
   .column
     h5.bold.black-text.margin-t-q
-      = t "members"
+      = t "teamMembers"
   if me.org.is_admin
     .column.content-right
       = add-team-member team=team organization=organization

@@ -192,6 +192,6 @@ module('Integration | Component | organization-name-header', function (hooks) {
       .dom('[data-test-org-name-add-btn]')
       .exists()
       .hasText('Add Organization Name')
-      .isDisabled();
+      .hasClass(/add-button-disabled/i);
   });
 });

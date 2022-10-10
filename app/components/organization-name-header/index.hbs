@@ -1,13 +1,36 @@
 <div local-class='header-container'>
   {{#if @showAddOrgNameBtn}}
+
     <AkButton::PrimaryOutlined
       data-test-org-name-add-btn
-      local-class='add-button'
-      @onClick={{@onAddBtnClick}}
-      @isDisabled={{this.isAddBtnDisabled}}
+      local-class='add-button {{if
+        this.isAddBtnDisabled
+        "add-button-disabled"
+      }}'
+      @onClick={{if this.isAddBtnDisabled this.voidFunction @onAddBtnClick}}
     >
       {{fa-icon 'plus'}}
       Add Organization Name
+
+      {{#if this.isAddBtnDisabled}}
+        <AttachPopover
+          @interactive={{true}}
+          @arrow={{true}}
+          @placement='bottom-end'
+          @isShow={{false}}
+          @lazyRender={{true}}
+          @animation='shift'
+          @class='not-permitted-popover'
+        >
+          <span data-test-org-name-add-not-permitted-msg>
+            {{t
+              'organizationNameAddNotPermitted'
+              type=this.userType
+              htmlSafe=true
+            }}
+          </span>
+        </AttachPopover>
+      {{/if}}
     </AkButton::PrimaryOutlined>
   {{else}}
     <div local-class='header-group'>

@@ -29,15 +29,18 @@ Router.map(function () {
       this.route('index', {
         path: '/',
       });
+
       this.route('organization', function () {
         this.route('namespaces');
-        this.route('members');
+        this.route('users');
         this.route('teams');
         this.route('team', {
           path: '/team/:teamid',
         });
-        this.route('settings');
       });
+
+      this.route('organization-settings', { path: '/organization/settings' });
+
       this.route('settings', function () {
         this.route('general');
         this.route('security');
@@ -125,7 +128,7 @@ export const CSBMap = {
   'authenticated.project.files': ENV.csb.navigateToAllScans,
   'authenticated.choose': ENV.csb.naigateToCompareScans,
   'authenticated.organization.namespaces': ENV.csb.navigateToOrganization,
-  'authenticated.organization.settings': ENV.csb.navigateToOrgSettings,
+  'authenticated.organization-settings': ENV.csb.navigateToOrgSettings,
   'authenticated.settings.index': ENV.csb.navigateToAccountSettings,
   'authenticated.marketplace': ENV.csb.navigateToMarketPlace,
   'authenticated.billing': ENV.csb.navigateToBilling,

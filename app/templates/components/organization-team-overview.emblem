@@ -1,7 +1,7 @@
-div.teamcard.margin-b-1h
-  .columns
-    = link-to "authenticated.organization.team" team.id class="column padding-b-0"
-      .padding-h-1.padding-t-3q.padding-b-h
+div.teamcard.mb-3
+  .flex-row.flex-justify-space-between
+    = link-to "authenticated.organization.team" team.id class="p-2 w-full"
+      div
         h6.teamcard-name
           = team.name
 
@@ -19,7 +19,7 @@ div.teamcard.margin-b-1h
               = team.projectsCount
 
     if me.org.is_admin
-      .column.is-one-sixth.flex-center.padding-b-0
+      .is-one-sixth.flex-center.p-1
         button.is-primary.is-icon.no-border.no-hover-button title="{{t 'deleteTeam'}}" click={(perform openDeleteTeamConfirmBox)} disabled=team.isDefaultTeam
           i.fa.fa-trash-o
 

@@ -1,13 +1,4 @@
-{{page-title "Namespaces"}}
-<div class="org-container">
-  <div class="columns margin-v-h">
-    <div class="column">
-      <h3 class="bold black-text">
-        {{t "namespaces"}}
-      </h3>
-    </div>
-  </div>
-  <div class="columns">
-    <OrganizationNamespaceList @organization={{@model}}></OrganizationNamespaceList>
-  </div>
+{{page-title 'Namespaces'}}
+<div class='org-tab-content-container'>
+  <OrganizationNamespaceList @organization={{@model}} />
 </div>

@@ -1,0 +1,69 @@
+<div class='org-setting-mfa'>
+  <div data-test-mfa-title class='org-settings-subtitle'>
+    {{t 'multiFactorAuth'}}
+  </div>
+
+  <div class='vertical-align-top'>
+    <div class='div'>
+      <AkToggle
+        id='mandate-mfa'
+        @checked={{@organization.mandatoryMfa}}
+        @disabled={{this.isMfaMandateDisabled}}
+        {{on 'click' (perform this.setMandatoryMFA)}}
+      />
+    </div>
+
+    <div class='padding-l-1h'>
+      <label
+        data-test-enable-mandatory-mfa-label
+        for='mandate-mfa'
+        class='black-text'
+      >
+        {{t 'enableMandatoryMFATitle'}}
+      </label>
+
+      <div
+        data-test-enable-mandatory-mfa-description
+        local-class='org-setting-desc checkbox-desc'
+      >
+        {{t 'enableMandatoryMFADescription'}}
+      </div>
+
+      <div class='alert alert-critical alert-small margin-t-1'>
+        <div class='vertical-align-center'>
+          {{fa-icon 'warning'}}
+          <div data-test-enable-mandatory-mfa-warning class='margin-l-h'>
+            {{t 'enableMandatoryMFAWarning'}}
+          </div>
+        </div>
+      </div>
+
+      {{#if this.isUserMfaDisabled}}
+        <div class='margin-t-1'>
+          <div class='alert alert-danger alert-small'>
+            <div class='vertical-align-center'>
+              {{fa-icon 'shield'}}
+              <div
+                data-test-enable-mandatory-mfa-requirement
+                class='margin-l-1'
+              >
+                {{t 'enableMandatoryMFARequirement'}}
+                &nbsp;
+                <LinkTo
+                  @route='authenticated.settings.security'
+                  class='alert-link'
+                >
+                  {{t 'accountSettings'}}
+                  >
+                  {{t 'security'}}
+                  >
+                  {{t 'multiFactorAuth'}}
+                </LinkTo>
+              </div>
+            </div>
+          </div>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</div>

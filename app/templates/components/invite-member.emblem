@@ -1,8 +1,8 @@
 button.is-primary click={(perform openInviteMemberModal)}
   i.fa.fa-envelope.margin-r-h
-  = t "inviteMembers"
+  = t "inviteUsers"
 
-= modal-card class="input-modal" isActive=showInviteMemberModal title=(t 'inviteMembers')
+= modal-card class="input-modal" isActive=showInviteMemberModal title=(t 'inviteUsers')
   .card-body
     .card-wrapper
       form submit={(perform inviteMembers)}
