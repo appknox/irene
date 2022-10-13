@@ -5,7 +5,7 @@ button.is-primary click={(perform openInviteMemberModal)}
 = modal-card class="input-modal" isActive=showInviteMemberModal title=(t 'inviteUsers')
   .card-body
     .card-wrapper
-      form submit={(perform inviteMembers)}
+      form
         span.black-text.margin-b-h.margin-t-1.bold
           | Email &nbsp;
         small.text-lightgray
@@ -13,7 +13,7 @@ button.is-primary click={(perform openInviteMemberModal)}
         br
         = textarea class="form-control input margin-t-q" placeholder=(t "email") value=emailsFromText autofocus="autofocus"
 
-        button.margin-t-1.is-primary type="submit" disabled=isInvitingMember
+        button.margin-t-1.is-primary disabled=isInvitingMember click={(perform inviteMembers)}
           if isInvitingMember
             .fa-font-size
               i.fa.fa-spinner.fa-spin
