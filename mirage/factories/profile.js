@@ -17,5 +17,8 @@ export default Factory.extend({
       value: faker.datatype.boolean(),
       is_inherited: faker.datatype.boolean(),
     },
+    show_dynamic_scan: faker.datatype.boolean(),
+    show_api_scan: faker.datatype.boolean(),
+    show_manual_scan: faker.datatype.boolean(),
   },
 });

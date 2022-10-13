@@ -30,7 +30,6 @@ export default class AnalysisDetailsComponent extends Component {
   get analysis() {
     return this.args.analysis || null;
   }
-
   get vulnerability() {
     return this.analysis.vulnerability || null;
   }

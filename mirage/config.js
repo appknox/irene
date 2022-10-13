@@ -74,6 +74,14 @@ function routes() {
     return {};
   });
 
+  this.get('/api/hudson-api/projects', () => {
+    return {};
+  });
+
+  this.get('/api/profiles/:id/proxy_settings', () => {
+    return {};
+  });
+
   this.put('/api/hudson-api/reports/:fileId', () => {
     return {};
   });
