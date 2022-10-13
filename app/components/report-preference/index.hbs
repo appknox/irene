@@ -1,0 +1,61 @@
+<div class='columns' {{did-insert this.getProfie}}>
+  <div class='column'>
+    <h5 class='bold black-text'>
+      Report Preferences
+    </h5>
+    <p>
+      Choose types of scans to be included in the report
+    </p>
+  </div>
+</div>
+<div>
+  <span>
+    <Input
+      local-class='report__preference__checkbox'
+      @checked={{this.reportPreference.show_dynamic_scan}}
+      @type='checkbox'
+      aria-label='report preference checkbox'
+      {{on 'click' this.saveDynamic}}
+      data-test-show-dynamic-scan-checkbox
+    />
+    Dynamic Scan
+    <TaskSpin
+      @task={{this.saveDynamicReportPreference}}
+      data-test-dynamic-task-spinner
+    />
+  </span>
+</div>
+<div>
+  <span>
+    <Input
+      local-class='report__preference__checkbox'
+      @checked={{this.reportPreference.show_api_scan}}
+      @type='checkbox'
+      aria-label='report preference checkbox'
+      {{on 'click' this.saveAPI}}
+      data-test-show-api-scan-checkbox
+    />
+    API Scan
+    <TaskSpin
+      @task={{this.saveAPIReportPreference}}
+      data-test-api-task-spinner
+    />
+  </span>
+</div>
+<div>
+  <span>
+    <Input
+      local-class='report__preference__checkbox'
+      @checked={{this.reportPreference.show_manual_scan}}
+      @type='checkbox'
+      aria-label='report preference checkbox'
+      {{on 'click' this.saveManual}}
+      data-test-show-manual-scan-checkbox
+    />
+    Manual Scan
+    <TaskSpin
+      @task={{this.saveManualReportPreference}}
+      data-test-manual-task-spinner
+    />
+  </span>
+</div>
