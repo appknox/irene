@@ -11,6 +11,16 @@ class OrganizationNameHeader extends Component {
   get isAddBtnDisabled() {
     return !this.me.get('org.is_owner');
   }
+
+  voidFunction() {}
+
+  get userType() {
+    return this.me.get('org.is_owner')
+      ? 'owner'
+      : this.me.get('org.is_admin')
+      ? 'admin'
+      : 'member';
+  }
 }
 
 export default OrganizationNameHeader;

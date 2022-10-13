@@ -51,7 +51,7 @@
                   div
                     = t "disableThisIn"
                     | &nbsp;
-                    = link-to 'authenticated.organization.settings' class="alert-link"
+                    = link-to 'authenticated.organization-settings' class="alert-link"
                       = t "organizationSettings"
 
 = modal-card isActive=showMFADisableModal title=(t "modalCard.mfaTitle.disable") onCancel=(perform cancelMFADisable)

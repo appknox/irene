@@ -1,23 +1,27 @@
-form.margin-t-1
-  .columns
-    .column
-      .control.vertical-align-center.margin-b-1
-        = fa-icon "search"
-        = input class="form-control input margin-left" placeholder="Search member" type="text" value=query autofocus="autofocus" key-up="searchQuery"
-    .column
-      .align-end
-        .padding-t-h
+form.py-3
+  .flex-row
+    .flex-row.flex-align-center.px-1.w-full
+      = fa-icon "search"
+      = input class="form-control input ml-2" local-class="search-input" placeholder="Search user" type="text" value=query autofocus="autofocus" key-up="searchQuery"
+    .flex-row.flex-align-center.flex-justify-end.w-full
+        .pt-1
           label
             = input type="checkbox" checked=showDeactivated class="checkbox" click=(perform showDeactivatedMembers)
             | &nbsp; #{t "includeInactiveMembers"}
+
+        if me.org.is_owner
+            .ml-2
+              = invite-member organization=organization
 if hasObjects
   .columns
     .column
       table.org-table
         tr
           th
-            = t "user"
-          th.text-centre
+            = t "username"
+          th
+            = t "email"
+          th class=me.org.is_owner:text-centre:
             = t "role"
           th
         each sortedObjects as |member|

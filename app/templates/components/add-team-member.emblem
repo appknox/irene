@@ -1,6 +1,6 @@
 button class="is-primary" click={(perform openAddMemberModal)}
   = fa-icon "user-plus" class="margin-r-h"
-  = t "addMember"
+  = t "addTeamMember"
 
 = modal-card class="input-modal user-search-modal" isActive=showAddTeamMemberModal title=(t 'modalCard.addMember.title')
   .card-body

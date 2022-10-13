@@ -1,0 +1,25 @@
+.org-settings-container {
+  padding: 1em 2em 5em 2em;
+  box-sizing: border-box;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 1.5em;
+
+  .back-icon {
+    font-size: 20px;
+    margin-right: 3px;
+    color: var(--text-primary-color);
+  }
+
+  .back-text {
+    color: var(--text-primary-color);
+    font-weight: 600;
+  }
+
+  &:hover .back-text {
+    text-decoration: underline;
+  }
+}

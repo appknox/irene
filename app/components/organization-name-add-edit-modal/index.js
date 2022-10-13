@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency-decorators';
 import { action } from '@ember/object';
 import ENV from 'irene/config/environment';
-import { t } from 'ember-intl';
 import { tracked } from '@glimmer/tracking';
 
 import triggerAnalytics from 'irene/utils/trigger-analytics';
@@ -16,7 +15,7 @@ class OrganizationNameAddEditModal extends Component {
   @tracked showSuccessMessage = false;
   @tracked actionType = 'edit';
 
-  tPleaseTryAgain = t('pleaseTryAgain');
+  tPleaseTryAgain = this.intl.t('pleaseTryAgain');
 
   constructor() {
     super(...arguments);

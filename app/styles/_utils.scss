@@ -141,3 +141,26 @@ it ranges from 0 - 8 and mutliplication factor is 0.5em
   margin-left: auto;
   margin-right: auto;
 }
+
+/*
+===================== width util =====================
+Examples:
+------------------
+| class  | value |
+------------------
+| w-1/12 | 8.33% |
+| w-3/12 | 25%   |
+| w-6/12 | 50%   |
+| w-9/12 | 75%   |
+------------------
+*/
+
+@for $i from 1 to 12 {
+  .w-#{$i}\/12 {
+    width: ($i / 12) * 100%;
+  }
+}
+
+.w-full {
+  width: 100%;
+}

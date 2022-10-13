@@ -1,16 +1,15 @@
-.columns
-  .column.margin-top
-    = link-to 'authenticated.organization.teams'
-      = fa-icon "angle-left"
-      | &nbsp; #{ t "backToTeams"}
+.flex-column.my-3
+  = link-to 'authenticated.organization.teams'
+    = fa-icon "angle-left"
+    | &nbsp; #{ t "backToTeams"}
 
-.columns
-  .column
-    h3.margin-t-2.margin-b-1.bold.black-text
+  div
+    h3.my-1.bold.black-text
       if me.org.is_admin
-        div class=showEdit:hide:show
-          = team.name
-          small.text-lightgray.edit-button.top0 click="editTeamName"
+        div.flex-align-center class=showEdit:hide:flex-row
+          span
+            = team.name
+          small.text-lightgray.ml-2 click="editTeamName"
             = fa-icon "pencil"
         div class=saveEdit:edit:save
           .vertical-align-center
@@ -22,7 +21,7 @@
       else
         = team.name
 
-hr.margin-v-0
+hr.mb-4.mt-0
 
 .margin-v-3q
   = organization-team-project-list organization=organization team=team

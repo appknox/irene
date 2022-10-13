@@ -6,8 +6,11 @@ td
     div.display-inline-block
       span.vertical-align-center local-class="filetag"
         | #{t "inactiveCaptital"}
-  div.text-lightgray.margin-t-h
+
+td
+  div.text-lightgray.font-medium.display-inline-block
     = member.member.email
+
 if me.org.is_owner
   td.text-centre
     select{action (perform selectMemberRole) on='change'} value="target.value" id="org-user-role" class="width-100" disabled=userDisabled
@@ -26,8 +29,9 @@ if me.org.is_owner
               | #{t "activateUser"}
 
 else
-  span
-    | #{t (user-role member.role)}
+  td
+    .font-medium
+      | #{t (user-role member.role)}
 
 = modal-card isActive=showEditModal title=modaltitle
   .card-body.modal-small

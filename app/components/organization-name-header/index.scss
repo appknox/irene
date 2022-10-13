@@ -36,9 +36,13 @@
     text-decoration: underline;
   }
 
+  &.add-button-disabled,
   &:disabled {
     box-shadow: none;
     border-color: var(--button-primary-outlined-border-color__disabled);
     background-color: var(--neutral-white-100);
+    color: var(--button-primary-outlined-font-color__disabled);
+    text-decoration: none;
+    cursor: not-allowed;
   }
 }

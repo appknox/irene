@@ -1,0 +1,76 @@
+<div local-class='header-container'>
+  <OrganizationNameHeader
+    @organization={{this.organization.selected}}
+    @showActionBtn={{this.me.org.is_admin}}
+    @actionBtnIconName='cog'
+    @actionBtnLabel='{{t "organizationSettings"}}'
+    @actionBtnClick={{this.routeToOrgSettings}}
+    @showAddOrgNameBtn={{this.orgNameDoesNotExist}}
+    @onAddBtnClick={{this.addOrganizationName}}
+  />
+</div>
+
+<div local-class='tabs-container'>
+  <ul local-class='tabs-root' role='tablist'>
+    <li local-class='tab-root' role='tab' {{on 'click' this.displayNamespaces}}>
+      <LinkTo
+        data-test-namespace-link
+        local-class='{{this.namespaceClass}}'
+        @route='authenticated.organization.namespaces'
+      >
+        {{fa-icon 'check-square' local-class='tab-icon'}}
+
+        {{t 'namespaces'}}
+
+        {{#if this.me.org.is_admin}}
+          <span local-class='badge' class='margin-left'>
+            {{this.organization.selected.namespacesCount}}
+          </span>
+        {{/if}}
+      </LinkTo>
+    </li>
+
+    {{#if this.me.org.is_admin}}
+      <li role='tab' local-class='tab-root' {{on 'click' this.displayMembers}}>
+        <LinkTo
+          data-test-member-link
+          local-class='{{this.memberClass}}'
+          @route='authenticated.organization.users'
+        >
+          {{fa-icon 'user-circle-o' local-class='tab-icon'}}
+
+          {{t 'users'}}
+
+          <span local-class='badge' class='margin-left'>
+            {{this.organization.selected.membersCount}}
+          </span>
+        </LinkTo>
+      </li>
+    {{/if}}
+
+    <li local-class='tab-root' role='tab' {{on 'click' this.displayTeams}}>
+      <LinkTo
+        data-test-team-link
+        local-class='{{this.teamClass}}'
+        @route='authenticated.organization.teams'
+      >
+        {{fa-icon 'sitemap' local-class='tab-icon'}}
+
+        {{t 'teams'}}
+
+        {{#if this.me.org.is_admin}}
+          <span local-class='badge' class='margin-left'>
+            {{this.organization.selected.teamsCount}}
+          </span>
+        {{/if}}
+      </LinkTo>
+    </li>
+  </ul>
+</div>
+
+{{#if this.showAddPopup}}
+  <OrganizationNameAddEditModal
+    @organization={{this.organization.selected}}
+    @handleCancel={{this.closeAddPopup}}
+  />
+{{/if}}
