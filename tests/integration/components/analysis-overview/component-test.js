@@ -1,3 +1,4 @@
+import Service from '@ember/service';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -43,6 +44,17 @@ module('Integration | Component | analysis-overview', function (hooks) {
       risk: ENUMS.RISK.CRITICAL,
       status: ENUMS.ANALYSIS_STATUS.COMPLETED,
     });
+
+    class OrganizationStub extends Service {
+      selected = {
+        id: 1,
+        features: {
+          manualscan: true,
+        },
+      };
+    }
+
+    this.owner.register('service:organization', OrganizationStub);
 
     await render(hbs`<AnalysisOverview  @analysis={{this.analysis }}/>`);
     assert

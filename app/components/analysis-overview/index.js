@@ -9,6 +9,7 @@ import ENUMS from 'irene/enums';
 export default class AnalysisOverviewComponent extends Component {
   @service ajax;
   @service intl;
+  @service organization;
   @service('notifications') notify;
 
   tPleaseTryAgain = this.intl.t('tPleaseTryAgain');
