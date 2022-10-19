@@ -69,6 +69,12 @@ export default class AnalysisOverviewComponent extends Component {
     return tags;
   }
 
+  get isManualScanVulnerability() {
+    const analysisVulnerabilitytypes = this.analysis.vulnerability.get('types');
+    const types = ENUMS.VULNERABILITY_TYPE;
+    return analysisVulnerabilitytypes?.includes(types.MANUAL);
+  }
+
   @action confirmCallback() {
     this.markAsPassed.perform();
     this.showMarkPassedConfirmBox = false;
