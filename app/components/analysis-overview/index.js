@@ -9,6 +9,7 @@ import ENUMS from 'irene/enums';
 export default class AnalysisOverviewComponent extends Component {
   @service ajax;
   @service intl;
+  @service organization;
   @service('notifications') notify;
 
   tPleaseTryAgain = this.intl.t('tPleaseTryAgain');
@@ -67,6 +68,19 @@ export default class AnalysisOverviewComponent extends Component {
       }
     }
     return tags;
+  }
+
+  get isManualScanDisabled() {
+    return !this.organization.selected.features.manualscan;
+  }
+
+  get hideManualScanVulnerability() {
+    const analysisVulnerabilitytypes = this.analysis.vulnerability.get('types');
+    const types = ENUMS.VULNERABILITY_TYPE;
+    return (
+      this.isManualScanDisabled &&
+      analysisVulnerabilitytypes?.includes(types.MANUAL)
+    );
   }
 
   @action confirmCallback() {

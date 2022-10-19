@@ -1,87 +1,90 @@
-<tr data-test-analysis-overview-container>
-  <td data-test-analysis-id>
-    {{this.analysis.id}}
-  </td>
-  <td>
-    <LinkTo
-      data-test-analysis-vulnerability-name
-      @route='authenticated.security.analysis'
-      @model={{this.analysis.id}}
-    >
-      {{this.analysis.vulnerability.name}}
-    </LinkTo>
-  </td>
-  <td class='uppercase-text'>
-    <div class='align-both'>
-      <div class='vertical-align-center'>
-        <div
-          data-test-analysis-risk
-          class='tag {{risk-label-class this.analysis.risk}}'
-        >
-          {{risk-text this.analysis.risk}}
-        </div>
-        {{#if this.analysis.overriddenRisk}}
-          {{fa-icon 'long-arrow-right'}}<div
-            class='tag {{risk-label-class this.analysis.overriddenRisk}}'
-          >
-            {{risk-text this.analysis.overriddenRisk}}
-          </div>
-        {{/if}}
-      </div>
-      <div class='margin-l-1h vertical-align-center'>
-        <button
-          title='Mark as Passed'
-          class='button-small button is-success'
-          type='button'
-          {{on 'click' this.openMarkPassedConfirmBox}}
-        >
-          {{fa-icon 'check'}}
-        </button>
-      </div>
-    </div>
-  </td>
-  <td>
-    {{#each this.tags as |tag|}}
-      <span
-        class='tag scan-tag {{if tag.status "finished-scan" "unfinished-scan"}}'
+{{#unless this.hideManualScanVulnerability}}
+  <tr data-test-analysis-overview-container>
+    <td data-test-analysis-id>
+      {{this.analysis.id}}
+    </td>
+    <td>
+      <LinkTo
+        data-test-analysis-vulnerability-name
+        @route='authenticated.security.analysis'
+        @model={{this.analysis.id}}
       >
-        {{t tag.text}}{{#if tag.status}}
-          {{fa-icon 'check'}}
-          <AttachTooltip @position='top'>
-            {{tag.text}}
-            {{t 'scanCompleted'}}
-          </AttachTooltip>
-        {{else}}
-          {{fa-icon 'times'}}
-          <AttachTooltip @position='top'>
-            {{tag.text}}
-            {{t 'scanNotCompleted'}}
-          </AttachTooltip>
-        {{/if}}
-      </span>
-    {{/each}}
-  </td>
-  <td>
-    <div
-      data-test-analysis-status
-      class='tag status-tag status-tag-{{this.analysis.status}}'
-    >
-      {{analysis-status this.analysis.status}}
-    </div>
-  </td>
+        {{this.analysis.vulnerability.name}}
+      </LinkTo>
+    </td>
+    <td class='uppercase-text'>
+      <div class='align-both'>
+        <div class='vertical-align-center'>
+          <div
+            data-test-analysis-risk
+            class='tag {{risk-label-class this.analysis.risk}}'
+          >
+            {{risk-text this.analysis.risk}}
+          </div>
+          {{#if this.analysis.overriddenRisk}}
+            {{fa-icon 'long-arrow-right'}}<div
+              class='tag {{risk-label-class this.analysis.overriddenRisk}}'
+            >
+              {{risk-text this.analysis.overriddenRisk}}
+            </div>
+          {{/if}}
+        </div>
+        <div class='margin-l-1h vertical-align-center'>
+          <button
+            title='Mark as Passed'
+            class='button-small button is-success'
+            type='button'
+            {{on 'click' this.openMarkPassedConfirmBox}}
+          >
+            {{fa-icon 'check'}}
+          </button>
+        </div>
+      </div>
+    </td>
+    <td>
+      {{#each this.tags as |tag|}}
+        <span
+          class='tag scan-tag
+            {{if tag.status "finished-scan" "unfinished-scan"}}'
+        >
+          {{t tag.text}}{{#if tag.status}}
+            {{fa-icon 'check'}}
+            <AttachTooltip @position='top'>
+              {{tag.text}}
+              {{t 'scanCompleted'}}
+            </AttachTooltip>
+          {{else}}
+            {{fa-icon 'times'}}
+            <AttachTooltip @position='top'>
+              {{tag.text}}
+              {{t 'scanNotCompleted'}}
+            </AttachTooltip>
+          {{/if}}
+        </span>
+      {{/each}}
+    </td>
+    <td>
+      <div
+        data-test-analysis-status
+        class='tag status-tag status-tag-{{this.analysis.status}}'
+      >
+        {{analysis-status this.analysis.status}}
+      </div>
+    </td>
 
-  <ConfirmBox
-    @isActive={{this.showMarkPassedConfirmBox}}
-    @title='Are you sure you want to mark this analysis as passed?'
-    @description={{concat
-      'ID '
-      this.analysis.id
-      ' - '
-      this.analysis.vulnerability.name
-      ' (current risk: '
-      (risk-text this.analysis.risk)
-      ')'
-    }}
-    @delegate={{this}}
-  />
-</tr>
+    <ConfirmBox
+      @isActive={{this.showMarkPassedConfirmBox}}
+      @title='Are you sure you want to mark this analysis as passed?'
+      @description={{concat
+        'ID '
+        this.analysis.id
+        ' - '
+        this.analysis.vulnerability.name
+        ' (current risk: '
+        (risk-text this.analysis.risk)
+        ')'
+      }}
+      @delegate={{this}}
+    />
+  </tr>
+{{/unless}}

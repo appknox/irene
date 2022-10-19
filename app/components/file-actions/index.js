@@ -10,6 +10,7 @@ import ENUMS from 'irene/enums';
 export default class FileActionsNewComponent extends Component {
   @service intl;
   @service store;
+  @service organization;
   @service notifications;
   @service ajax;
 
@@ -32,6 +33,14 @@ export default class FileActionsNewComponent extends Component {
     return ENUMS.MANUAL.CHOICES.filter((c) => c.key !== 'UNKNOWN').map((c) =>
       String(c.value)
     );
+  }
+
+  get isManualScanDisabled() {
+    return !this.organization.selected.features.manualscan;
+  }
+
+  get hideManualScanStatusSelect() {
+    return this.isManualScanDisabled;
   }
 
   get file() {
