@@ -1,102 +1,43 @@
-/* eslint-disable ember/no-classic-classes, ember/no-get */
-import { computed } from '@ember/object';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { isEmpty } from '@ember/utils';
-import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
-import ENUMS from 'irene/enums';
-import { t } from 'ember-intl';
 import Inflector from 'ember-inflector';
+import { t } from 'ember-intl';
+import ENUMS from 'irene/enums';
 
 const inflector = Inflector.inflector;
 inflector.irregular('asvs', 'asvses');
 
-const Analysis = Model.extend({
-  findings: attr(),
-  risk: attr('number'),
-  status: attr('number'),
-  owasp: hasMany('owasp'),
-  cwe: hasMany('cwe'),
-  asvs: hasMany('asvs'),
-  mstg: hasMany('mstg'),
-  pcidss: hasMany('pcidss'),
-  hipaa: hasMany('hipaa'),
-  gdpr: hasMany('gdpr'),
-  cvssBase: attr('number'),
-  cvssVector: attr('string'),
-  cvssVersion: attr('number'),
-  cvssMetricsHumanized: attr(),
-  computedRisk: attr('number'),
-  overriddenRisk: attr('number'),
-  overriddenRiskComment: attr('string'),
-  analiserVersion: attr('number'),
-  attachments: hasMany('attachment'),
-  vulnerability: belongsTo('vulnerability'),
-  file: belongsTo('file', { inverse: 'analyses' }),
+export default class Analysis extends Model {
+  @attr() findings;
+  @attr('number') risk;
+  @attr('number') status;
 
-  hasCvssBase: computed.equal('cvssVersion', 3),
+  @attr('number') cvssBase;
+  @attr('string') cvssVector;
+  @attr('number') cvssVersion;
+  @attr() cvssMetricsHumanized;
+  @attr('number') computedRisk;
+  @attr('number') overriddenRisk;
+  @attr('string') overriddenRiskComment;
+  @attr('number') analiserVersion;
 
-  tLow: t('low'),
-  tNone: t('none'),
-  tHigh: t('high'),
-  tMedium: t('medium'),
-  tCritical: t('critical'),
+  @hasMany('attachment') attachments;
+  @hasMany('owasp') owasp;
+  @hasMany('cwe') cwe;
+  @hasMany('asvs') asvs;
+  @hasMany('mstg') mstg;
+  @hasMany('pcidss') pcidss;
+  @hasMany('hipaa') hipaa;
+  @hasMany('gdpr') gdpr;
 
-  isOverriddenRisk: computed.notEmpty('overriddenRisk'),
+  @belongsTo('vulnerability') vulnerability;
+  @belongsTo('file', { inverse: 'analyses' }) file;
 
-  isScanning: computed('computedRisk', function () {
-    const risk = this.get('computedRisk');
-    return risk === ENUMS.RISK.UNKNOWN;
-  }),
-
-  hasType(type) {
-    const types = this.get('vulnerability.types');
-    if (isEmpty(types)) {
-      return false;
-    }
-    return types.includes(type);
-  },
-
-  isRisky: computed('computedRisk', function () {
-    const risk = this.get('computedRisk');
-    return ![ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN].includes(risk);
-  }),
-
-  iconClass(risk) {
-    switch (risk) {
-      case ENUMS.RISK.UNKNOWN:
-        return 'fa-spinner fa-spin';
-      case ENUMS.RISK.NONE:
-        return 'fa-check';
-      case ENUMS.RISK.CRITICAL:
-      case ENUMS.RISK.HIGH:
-      case ENUMS.RISK.LOW:
-      case ENUMS.RISK.MEDIUM:
-        return 'fa-warning';
-    }
-  },
-
-  riskIconClass: computed('risk', function () {
-    return this.iconClass(this.get('risk'));
-  }),
-
-  overriddenRiskIconClass: computed('overriddenRisk', function () {
-    return this.iconClass(this.get('overriddenRisk'));
-  }),
-
-  computedRiskIconClass: computed('computedRisk', function () {
-    return this.iconClass(this.get('computedRisk'));
-  }),
-
-  riskLabelClass: computed('risk', function () {
-    return this.labelClass(this.get('risk'));
-  }),
-
-  overriddenRiskLabelClass: computed('overriddenRisk', function () {
-    return this.labelClass(this.get('overriddenRisk'));
-  }),
-
-  showPcidss: computed.reads('file.profile.reportPreference.show_pcidss.value'),
-  showHipaa: computed.reads('file.profile.reportPreference.show_hipaa.value'),
-  showGdpr: computed.reads('file.profile.reportPreference.show_gdpr.value'),
+  tLow = t('low');
+  tNone = t('none');
+  tHigh = t('high');
+  tMedium = t('medium');
+  tCritical = t('critical');
 
   labelClass(risk) {
     const cls = 'tag';
@@ -114,7 +55,79 @@ const Analysis = Model.extend({
       case ENUMS.RISK.CRITICAL:
         return `${cls} is-critical`;
     }
-  },
-});
+  }
 
-export default Analysis;
+  hasType(type) {
+    const types = this.vulnerability.get('types');
+    if (isEmpty(types)) {
+      return false;
+    }
+    return types.includes(type);
+  }
+
+  iconClass(risk) {
+    switch (risk) {
+      case ENUMS.RISK.UNKNOWN:
+        return 'fa-spinner fa-spin';
+      case ENUMS.RISK.NONE:
+        return 'fa-check';
+      case ENUMS.RISK.CRITICAL:
+      case ENUMS.RISK.HIGH:
+      case ENUMS.RISK.LOW:
+      case ENUMS.RISK.MEDIUM:
+        return 'fa-warning';
+    }
+  }
+
+  get hasCvssBase() {
+    return this.cvssVersion === 3;
+  }
+
+  get isOverriddenRisk() {
+    return !isEmpty(this.overriddenRisk);
+  }
+
+  get isScanning() {
+    const risk = this.computedRisk;
+    return risk === ENUMS.RISK.UNKNOWN;
+  }
+
+  get isRisky() {
+    const risk = this.computedRisk;
+    return ![ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN].includes(risk);
+  }
+
+  get riskIconClass() {
+    return this.iconClass(this.risk);
+  }
+
+  get overriddenRiskIconClass() {
+    return this.iconClass(this.overriddenRisk);
+  }
+
+  get computedRiskIconClass() {
+    return this.iconClass(this.computedRisk);
+  }
+
+  get riskLabelClass() {
+    return this.labelClass(this.risk);
+  }
+
+  get overriddenRiskLabelClass() {
+    return this.labelClass(this.overriddenRisk);
+  }
+
+  get showPcidss() {
+    return this.file.profile.reportPreference.show_pcidss.value;
+  }
+  get showHipaa() {
+    return this.file.profile.reportPreference.show_hipaa.value;
+  }
+  get showGdpr() {
+    return this.file.profile.reportPreference.show_gdpr.value;
+  }
+
+  get vulnerabilityTypes() {
+    return this.vulnerability.get('types');
+  }
+}
