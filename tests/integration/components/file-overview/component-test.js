@@ -1,3 +1,4 @@
+import Service from '@ember/service';
 import { underscore } from '@ember/string';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
@@ -14,6 +15,14 @@ function profile_serializer(payload) {
 
   return serializedPayload;
 }
+class OrganizationStub extends Service {
+  selected = {
+    id: 1,
+    features: {
+      manualscan: true,
+    },
+  };
+}
 
 module('Integration | Component | file-overview', function (hooks) {
   setupRenderingTest(hooks);
@@ -21,13 +30,15 @@ module('Integration | Component | file-overview', function (hooks) {
   setupIntl(hooks);
 
   hooks.beforeEach(async function () {
-    const project = this.server.create('project');
+    this.owner.register('service:organization', OrganizationStub);
+
+    this.project = this.server.create('project');
 
     this.server.create('profile');
     this.file = this.server.create('file', 1, {
       iconUrl:
         'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/315.jpg',
-      project: project,
+      project: this.project,
     });
 
     this.server.get(
@@ -124,6 +135,28 @@ module('Integration | Component | file-overview', function (hooks) {
       .exists()
       .includesText(this.file.countRiskUnknown);
 
+    // Status tags
+    assert.dom(`[data-test-static-scan-status-tag]`).exists();
+    assert
+      .dom(`[data-test-static-scan-status-tag-label]`)
+      .exists()
+      .containsText('t:static:()');
+    assert.dom(`[data-test-api-scan-status-tag]`).exists();
+    assert
+      .dom(`[data-test-api-scan-status-tag-label]`)
+      .exists()
+      .containsText('t:api:()');
+    assert.dom(`[data-test-manual-scan-status-tag]`).exists();
+    assert
+      .dom(`[data-test-manual-scan-status-tag-label]`)
+      .exists()
+      .containsText('t:manual:()');
+    assert.dom(`[data-test-dynamic-scan-status-tag]`).exists();
+    assert
+      .dom(`[data-test-dynamic-scan-status-tag-label]`)
+      .exists()
+      .containsText('t:dynamic:()');
+
     // Platform Icon
     assert.dom(`[data-test-file-overview-platform-icon]`).exists();
     const platformIconElementClass = this.element.querySelector(
@@ -161,5 +194,39 @@ module('Integration | Component | file-overview', function (hooks) {
       <FileOverview  @file={{this.file}} @profileId={{this.file.id}} />`
     );
     assert.dom(`[data-test-file-overview-file-id] i`).doesNotExist();
+  });
+
+  test('It renders the right number of tags if available', async function (assert) {
+    this.file.tags = ['New_Detailed_Scan', 'New_Detailed_Test'];
+    this.file.isActive = true;
+
+    await render(
+      hbs`
+      <FileOverview  @file={{this.file}} @profileId={{this.file.id}} />`
+    );
+    assert.dom(`[data-test-file-tags]`).exists();
+    const fileTags = this.element.querySelectorAll('[data-test="file-tag"]');
+    assert.strictEqual(fileTags.length, 2);
+  });
+
+  test('It hides manual scan tag if manual scan feature is disabled', async function (assert) {
+    class OrganizationStub extends Service {
+      selected = {
+        id: 1,
+        features: {
+          manualscan: false,
+        },
+      };
+    }
+
+    this.owner.register('service:organization', OrganizationStub);
+
+    await render(
+      hbs`
+      <FileOverview  @file={{this.file}} @profileId={{this.file.id}} />`
+    );
+
+    assert.dom(`[data-test-manual-scan-status-tag]`).doesNotExist();
+    assert.dom(`[data-test-manual-scan-status-tag-label]`).doesNotExist();
   });
 });

@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier, qunit/no-commented-tests */
+import Service from '@ember/service';
 import { underscore } from '@ember/string';
 import { render, select, typeIn } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
@@ -11,6 +12,15 @@ import {
 import { setupRenderingTest } from 'ember-qunit';
 import { Response } from 'miragejs';
 import { module, test } from 'qunit';
+
+class OrganizationStub extends Service {
+  selected = {
+    id: 1,
+    features: {
+      manualscan: true,
+    },
+  };
+}
 
 function profile_serializer(payload) {
   const serializedPayload = {};
@@ -88,8 +98,7 @@ module('Integration | Component | project list', function (hooks) {
   setupIntl(hooks);
 
   hooks.beforeEach(async function () {
-    this.server.createList('organization', 1);
-    await this.owner.lookup('service:organization').load();
+    this.owner.register('service:organization', OrganizationStub);
   });
 
   test('It renders successfully with no projects', async function (assert) {

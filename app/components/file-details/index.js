@@ -9,13 +9,13 @@ import ENUMS from 'irene/enums';
 
 export default class FileDetailsComponent extends Component {
   @service ajax;
+  @service organization;
 
   @tracked sortImpactAscending = false;
   @tracked isSecurityEnabled = false;
   @tracked sortedUnhiddenAnalyses = this.analyses;
 
   vulnerabilityType = ENUMS.VULNERABILITY_TYPE.UNKNOWN;
-  vulnerabilityTypes = ENUMS.VULNERABILITY_TYPE.CHOICES.slice(0, -1);
 
   constructor() {
     super(...arguments);
@@ -28,6 +28,21 @@ export default class FileDetailsComponent extends Component {
 
   get analyses() {
     return this.file.sortedAnalyses;
+  }
+
+  get isManualScanDisabled() {
+    return !this.organization.selected.features.manualscan;
+  }
+
+  get vulnerabilityTypes() {
+    const manualType = ENUMS.VULNERABILITY_TYPE.MANUAL;
+    const types = ENUMS.VULNERABILITY_TYPE.CHOICES.slice(0, -1);
+
+    if (this.isManualScanDisabled) {
+      return types.filter((type) => type.value !== manualType);
+    }
+
+    return types;
   }
 
   @action filterVulnerabilityType(event) {

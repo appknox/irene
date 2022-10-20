@@ -133,4 +133,35 @@ module('Integration | Component | file-details', function (hooks) {
     assert.dom('[data-test-edit-analyses-link-wrapper]').doesNotExist();
     assert.dom('[data-test-edit-analyses-link]').doesNotExist();
   });
+
+  test('it should remove manual option scan from vulnerability select if manual scan is disabled', async function (assert) {
+    class OrganizationStub extends Service {
+      selected = {
+        id: 1,
+        features: {
+          manualscan: false,
+        },
+      };
+    }
+
+    this.owner.register('service:organization', OrganizationStub);
+
+    this.server.get('/hudson-api/projects', () => {
+      return Response(403);
+    });
+
+    await render(hbs`<FileDetails @file={{this.file}} />`);
+
+    assert.dom('[data-test-vulnerability-filter-select]').exists();
+    const vulnerabilitySelectOptions = this.element.querySelectorAll(
+      '[data-test-vulnerability-filter-select-option]'
+    );
+    const optionsList = [...vulnerabilitySelectOptions];
+    const manualScanType = ENUMS.VULNERABILITY_TYPE.MANUAL;
+
+    assert.ok(
+      optionsList.every((option) => Number(option.value) !== manualScanType),
+      'Manual scan select option does not exist in vulnerability select options'
+    );
+  });
 });
