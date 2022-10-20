@@ -48,6 +48,10 @@ export default Factory.extend({
     return ![ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN].includes(this.computedRisk);
   },
 
+  vulnerabilityTypes() {
+    return this.vulnerability.types;
+  },
+
   afterCreate(model, server) {
     model.update({
       owasp: server.createList('owasp', 2),
