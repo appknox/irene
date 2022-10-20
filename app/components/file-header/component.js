@@ -1,16 +1,16 @@
 /* eslint-disable ember/no-array-prototype-extensions, ember/no-classic-components, ember/no-classic-classes, ember/require-tagless-components, ember/avoid-leaking-state-in-ember-objects, ember/no-get, ember/no-component-lifecycle-hooks, ember/require-return-from-computed, ember/no-actions-hash, ember/no-jquery */
 import Component from '@ember/component';
-import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
+import { on } from '@ember/object/evented';
+import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
+import ClipboardJS from 'clipboard/src/clipboard';
+import { task } from 'ember-concurrency';
+import { t } from 'ember-intl';
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
-import { task } from 'ember-concurrency';
-import { on } from '@ember/object/evented';
-import { t } from 'ember-intl';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
-import ClipboardJS from 'clipboard/src/clipboard';
 import { FILE_TAG_MAX_CHAR } from 'irene/utils/constants';
+import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 import { checkStringCharRange } from 'irene/utils/utils';
 
@@ -94,6 +94,8 @@ const FileHeaderComponent = Component.extend({
       return appActions.filter((action) => appAction !== action.value);
     }
   ),
+
+  isManualScanDisabled: computed.not('file.project.isManualScanAvailable'),
 
   filteredLoginStatuses: computed(
     'loginStatuses',

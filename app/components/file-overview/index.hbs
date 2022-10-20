@@ -63,7 +63,7 @@
       {{this.file.id}}
     </div>
     <div class='file-overview-scan-status'>
-      <div class='scan-status-tag'>
+      <div class='scan-status-tag' data-test-static-scan-status-tag>
         {{#if this.file.isStaticDone}}
           <div class='scan-status-tag-icon scan-status-tag-icon-done'>
             {{fa-icon 'check-circle'}}
@@ -73,11 +73,14 @@
             {{fa-icon 'circle-o'}}
           </div>
         {{/if}}
-        <div class='scan-status-tag-label'>
+        <div
+          class='scan-status-tag-label'
+          data-test-static-scan-status-tag-label
+        >
           {{t 'static'}}
         </div>
       </div>
-      <div class='scan-status-tag'>
+      <div class='scan-status-tag' data-test-dynamic-scan-status-tag>
         {{#if this.file.isDynamicDone}}
           <div class='scan-status-tag-icon scan-status-tag-icon-done'>
             {{fa-icon 'check-circle'}}
@@ -87,11 +90,14 @@
             {{fa-icon 'circle-o'}}
           </div>
         {{/if}}
-        <div class='scan-status-tag-label'>
+        <div
+          class='scan-status-tag-label'
+          data-test-dynamic-scan-status-tag-label
+        >
           {{t 'dynamic'}}
         </div>
       </div>
-      <div class='scan-status-tag'>
+      <div class='scan-status-tag' data-test-api-scan-status-tag>
         {{#if this.file.isApiDone}}
           <div class='scan-status-tag-icon scan-status-tag-icon-done'>
             {{fa-icon 'check-circle'}}
@@ -101,28 +107,33 @@
             {{fa-icon 'circle-o'}}
           </div>
         {{/if}}
-        <div class='scan-status-tag-label'>
+        <div class='scan-status-tag-label' data-test-api-scan-status-tag-label>
           {{t 'api'}}
         </div>
       </div>
-      <div class='scan-status-tag'>
-        {{#if this.file.isManualDone}}
-          <div class='scan-status-tag-icon scan-status-tag-icon-done'>
-            {{fa-icon 'check-circle'}}
+      {{#unless this.isManualScanDisabled}}
+        <div class='scan-status-tag' data-test-manual-scan-status-tag>
+          {{#if this.file.isManualDone}}
+            <div class='scan-status-tag-icon scan-status-tag-icon-done'>
+              {{fa-icon 'check-circle'}}
+            </div>
+          {{else if this.file.isManualRequested}}
+            <div class='scan-status-tag-icon scan-status-tag-icon-done'>
+              {{fa-icon 'clock-o'}}
+            </div>
+          {{else}}
+            <div class='scan-status-tag-icon'>
+              {{fa-icon 'circle-o'}}
+            </div>
+          {{/if}}
+          <div
+            class='scan-status-tag-label'
+            data-test-manual-scan-status-tag-label
+          >
+            {{t 'manual'}}
           </div>
-        {{else if this.file.isManualRequested}}
-          <div class='scan-status-tag-icon scan-status-tag-icon-done'>
-            {{fa-icon 'clock-o'}}
-          </div>
-        {{else}}
-          <div class='scan-status-tag-icon'>
-            {{fa-icon 'circle-o'}}
-          </div>
-        {{/if}}
-        <div class='scan-status-tag-label'>
-          {{t 'manual'}}
         </div>
-      </div>
+      {{/unless}}
     </div>
   </div>
   <div class='card-content'>
@@ -227,7 +238,7 @@
           </div>
         </div>
       </div>
-      <div class='file-tags align-center'>
+      <div class='file-tags align-center' data-test-file-tags>
         {{#each this.file.tags as |tag|}}
           <AkTag @tag={{tag}} />
         {{/each}}

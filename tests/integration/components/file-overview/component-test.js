@@ -1,19 +1,10 @@
-import { underscore } from '@ember/string';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
+import faker from 'faker';
 import { module, test } from 'qunit';
-
-function profile_serializer(payload) {
-  const serializedPayload = {};
-  Object.keys(payload.attrs).forEach((_key) => {
-    serializedPayload[underscore(_key)] = payload[_key];
-  });
-
-  return serializedPayload;
-}
 
 module('Integration | Component | file-overview', function (hooks) {
   setupRenderingTest(hooks);
@@ -21,21 +12,32 @@ module('Integration | Component | file-overview', function (hooks) {
   setupIntl(hooks);
 
   hooks.beforeEach(async function () {
-    const project = this.server.create('project');
-
-    this.server.create('profile');
-    this.file = this.server.create('file', 1, {
-      iconUrl:
-        'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/315.jpg',
-      project: project,
+    this.store = this.owner.lookup('service:store');
+    this.project = this.store.createRecord('project', {
+      id: 1,
+      isManualScanAvailable: true,
+      name: faker.company.companyName(),
+      packageName: 'MFVA',
     });
 
-    this.server.get(
-      '/profiles/:id/unknown_analysis_status',
-      (schema, request) => {
-        return profile_serializer(schema['profiles'].find(request.params.id));
-      }
-    );
+    this.file = this.store.createRecord('file', {
+      id: 1,
+      project: this.project,
+      name: faker.company.companyName(),
+      iconUrl:
+        'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/315.jpg',
+      version: faker.random.number(),
+      versionCode: faker.random.number(),
+    });
+
+    this.server.create('profile');
+
+    this.server.get('/profiles/:id/unknown_analysis_status', () => {
+      return {
+        id: 1,
+        status: true,
+      };
+    });
   });
 
   test('it renders with yielded content', async function (assert) {
@@ -72,7 +74,7 @@ module('Integration | Component | file-overview', function (hooks) {
     assert
       .dom(`[data-test-file-overview-package-name]`)
       .exists()
-      .containsText(this.file.project.packageName);
+      .containsText(this.file.project.get('packageName'));
 
     // File Version
     assert
@@ -124,6 +126,28 @@ module('Integration | Component | file-overview', function (hooks) {
       .exists()
       .includesText(this.file.countRiskUnknown);
 
+    // Status tags
+    assert.dom(`[data-test-static-scan-status-tag]`).exists();
+    assert
+      .dom(`[data-test-static-scan-status-tag-label]`)
+      .exists()
+      .containsText('t:static:()');
+    assert.dom(`[data-test-api-scan-status-tag]`).exists();
+    assert
+      .dom(`[data-test-api-scan-status-tag-label]`)
+      .exists()
+      .containsText('t:api:()');
+    assert.dom(`[data-test-manual-scan-status-tag]`).exists();
+    assert
+      .dom(`[data-test-manual-scan-status-tag-label]`)
+      .exists()
+      .containsText('t:manual:()');
+    assert.dom(`[data-test-dynamic-scan-status-tag]`).exists();
+    assert
+      .dom(`[data-test-dynamic-scan-status-tag-label]`)
+      .exists()
+      .containsText('t:dynamic:()');
+
     // Platform Icon
     assert.dom(`[data-test-file-overview-platform-icon]`).exists();
     const platformIconElementClass = this.element.querySelector(
@@ -131,7 +155,9 @@ module('Integration | Component | file-overview', function (hooks) {
     )?.className;
 
     assert.ok(
-      platformIconElementClass?.includes(this.file.project.platformIconClass),
+      platformIconElementClass?.includes(
+        this.file.project.get('platformIconClass')
+      ),
       'Contains the right platform icon class.'
     );
 
@@ -161,5 +187,36 @@ module('Integration | Component | file-overview', function (hooks) {
       <FileOverview  @file={{this.file}} @profileId={{this.file.id}} />`
     );
     assert.dom(`[data-test-file-overview-file-id] i`).doesNotExist();
+  });
+
+  test('It renders the right number of tags if available', async function (assert) {
+    let tags = [];
+    for (let i = 0; i < 2; i++) {
+      tags.push(this.store.createRecord('tag', { id: i }));
+    }
+
+    this.file.tags = tags;
+    this.file.isActive = true;
+
+    await render(
+      hbs`
+      <FileOverview  @file={{this.file}} @profileId={{this.file.id}} />`
+    );
+    assert.dom(`[data-test-file-tags]`).exists();
+    const fileTags = this.element.querySelectorAll('[data-test="file-tag"]');
+    assert.strictEqual(fileTags.length, 2);
+  });
+
+  test('It hides manual scan tag if manual scan feature is disabled', async function (assert) {
+    this.project.isManualScanAvailable = false;
+    this.file.project = this.project;
+
+    await render(
+      hbs`
+      <FileOverview  @file={{this.file}} @profileId={{this.file.id}} />`
+    );
+
+    assert.dom(`[data-test-manual-scan-status-tag]`).doesNotExist();
+    assert.dom(`[data-test-manual-scan-status-tag-label]`).doesNotExist();
   });
 });
