@@ -10,12 +10,12 @@ export default class FileOverviewComponent extends Component {
     responsive: false,
   };
 
-  constructor() {
-    super(...arguments);
-  }
-
   get file() {
     return this.args.file || null;
+  }
+
+  get isManualScanDisabled() {
+    return !this.file.get('project')?.get('isManualScanAvailable');
   }
 
   get fileOld() {
