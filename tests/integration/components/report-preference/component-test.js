@@ -32,7 +32,7 @@ module('Integration | Component | report-preference', function (hooks) {
   });
 
   test('it renders', async function (assert) {
-    this.profile = this.server.create('profile');
+    this.server.create('profile');
 
     await render(hbs`<ReportPreference @project={{this.project}} />`);
     assert.dom('[data-test-show-dynamic-scan-checkbox]').exists();
