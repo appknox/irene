@@ -1,3 +1,4 @@
+import Service from '@ember/service';
 import { underscore } from '@ember/string';
 import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
@@ -5,6 +6,15 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
+
+class OrganizationStub extends Service {
+  selected = {
+    id: 1,
+    features: {
+      manualscan: true,
+    },
+  };
+}
 
 function profile_serializer(payload) {
   const serializedPayload = {};
@@ -28,10 +38,12 @@ module('Integration | Component | report-preference', function (hooks) {
     this.server.get('/profiles/:id/', (schema, req) => {
       return profile_serializer(schema['profiles'].find(req.params.id));
     });
+
+    this.owner.register('service:organization', OrganizationStub);
   });
 
   test('it renders', async function (assert) {
-    this.profile = this.server.create('profile');
+    this.server.create('profile');
 
     await render(hbs`<ReportPreference @project={{this.project}} />`);
     assert.dom('[data-test-show-dynamic-scan-checkbox]').exists();
@@ -199,5 +211,24 @@ module('Integration | Component | report-preference', function (hooks) {
     assert.dom('[data-test-show-api-scan-checkbox]').isNotChecked();
     await click('[data-test-show-api-scan-checkbox]');
     assert.dom('[data-test-show-api-scan-checkbox]').isChecked();
+  });
+
+  test('it should hide manual scan checkbox if manual scan feature is disabled', async function (assert) {
+    class OrganizationStub extends Service {
+      selected = {
+        id: 1,
+        features: {
+          manualscan: false,
+        },
+      };
+    }
+    this.owner.register('service:organization', OrganizationStub);
+    this.server.create('profile');
+
+    await render(hbs`<ReportPreference @project={{this.project}} />`);
+    assert
+      .dom('[data-test-show-manual-scan-checkbox-container]')
+      .doesNotExist();
+    assert.dom('[data-test-show-manual-scan-checkbox]').doesNotExist();
   });
 });
