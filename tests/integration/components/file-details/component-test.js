@@ -1,5 +1,3 @@
-import Service from '@ember/service';
-import { underscore } from '@ember/string';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -9,34 +7,23 @@ import ENUMS from 'irene/enums';
 import { Response } from 'miragejs';
 import { module, test } from 'qunit';
 
-function profile_serializer(payload) {
-  const serializedPayload = {};
-  Object.keys(payload.attrs).forEach((_key) => {
-    serializedPayload[underscore(_key)] = payload[_key];
-  });
-
-  return serializedPayload;
-}
-class OrganizationStub extends Service {
-  selected = {
-    id: 1,
-    features: {
-      manualscan: true,
-    },
-  };
-}
-
 module('Integration | Component | file-details', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
   setupIntl(hooks);
 
   hooks.beforeEach(async function () {
-    this.owner.register('service:organization', OrganizationStub);
+    this.store = this.owner.lookup('service:store');
+    this.profile = this.store.createRecord('profile', { id: 1 });
+    this.project = this.store.createRecord('project', {
+      id: 1,
+      isManualScanAvailable: true,
+    });
 
-    this.profile = this.server.create('profile');
-    this.file = this.server.create('file', {
+    this.file = this.store.createRecord('file', {
+      id: 1,
       profile: this.profile,
+      project: this.project,
     });
 
     this.server.get('v2/files/:id/reports', () => {
@@ -52,12 +39,12 @@ module('Integration | Component | file-details', function (hooks) {
       };
     });
 
-    this.server.get(
-      '/profiles/:id/unknown_analysis_status',
-      (schema, request) => {
-        return profile_serializer(schema['profiles'].find(request.params.id));
-      }
-    );
+    this.server.get('/profiles/:id/unknown_analysis_status', () => {
+      return {
+        id: 1,
+        status: true,
+      };
+    });
 
     this.server.get('v2/files/:id', () => {
       return {
@@ -132,5 +119,36 @@ module('Integration | Component | file-details', function (hooks) {
     await render(hbs`<FileDetails @file={{this.file}} />`);
     assert.dom('[data-test-edit-analyses-link-wrapper]').doesNotExist();
     assert.dom('[data-test-edit-analyses-link]').doesNotExist();
+  });
+
+  test('it should remove manual option scan from vulnerability select if manual scan is disabled', async function (assert) {
+    this.project = this.store.createRecord('project', {
+      id: 2,
+      isManualScanAvailable: false,
+    });
+
+    this.file = this.store.createRecord('file', {
+      id: 2,
+      profile: this.profile,
+      project: this.project,
+    });
+
+    this.server.get('/hudson-api/projects', () => {
+      return Response(403);
+    });
+
+    await render(hbs`<FileDetails @file={{this.file}} />`);
+
+    assert.dom('[data-test-vulnerability-filter-select]').exists();
+    const vulnerabilitySelectOptions = this.element.querySelectorAll(
+      '[data-test-vulnerability-filter-select-option]'
+    );
+    const optionsList = [...vulnerabilitySelectOptions];
+    const manualScanType = ENUMS.VULNERABILITY_TYPE.MANUAL;
+
+    assert.ok(
+      optionsList.every((option) => Number(option.value) !== manualScanType),
+      'Manual scan select option does not exist in vulnerability select options'
+    );
   });
 });
