@@ -1,4 +1,4 @@
-.card.is-fullwidth.margin-bottom20.scan-status-card
+.card.is-fullwidth.margin-bottom20.scan-status-card data-test="file-header"
   .columns
     .column.file-icon.padding-r-0
       .card-header-icon.margin-t-q
