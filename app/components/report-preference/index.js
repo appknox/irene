@@ -6,11 +6,16 @@ import { task } from 'ember-concurrency';
 
 export default class ReportPreferenceComponent extends Component {
   @service store;
+  @service organization;
 
   @tracked profile = null;
 
   get project() {
     return this.args.project;
+  }
+
+  get manualScanIsDisabled() {
+    return !this.organization.selected.features.manualscan;
   }
 
   get reportPreference() {
