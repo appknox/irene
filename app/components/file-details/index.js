@@ -9,6 +9,7 @@ import ENUMS from 'irene/enums';
 
 export default class FileDetailsComponent extends Component {
   @service ajax;
+  @service organization;
 
   @tracked sortImpactAscending = false;
   @tracked isSecurityEnabled = false;

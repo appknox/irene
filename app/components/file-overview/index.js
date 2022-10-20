@@ -3,6 +3,7 @@ import Component from '@glimmer/component';
 
 export default class FileOverviewComponent extends Component {
   @service store;
+  @service organization;
 
   chartOptions = {
     legend: { display: false },
