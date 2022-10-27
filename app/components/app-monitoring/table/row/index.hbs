@@ -14,10 +14,20 @@
     {{fa-icon @amApp.project.platformIconClass}}
   </div>
   <div local-class='app-name-container' data-test-am-table-row-item>
-    <span local-class='app-namespace' data-test-am-table-row-app-namespace>
+    <span
+      local-class='app-namespace'
+      class='pr-4'
+      title={{@amApp.project.packageName}}
+      data-test-am-table-row-app-namespace
+    >
       {{@amApp.project.packageName}}
     </span>
-    <span local-class='app-name' data-test-am-table-row-app-name>
+    <span
+      local-class='app-name'
+      class='pr-4'
+      title={{@amApp.project.lastFile.name}}
+      data-test-am-table-row-app-name
+    >
       {{@amApp.project.lastFile.name}}
     </span>
   </div>

@@ -1,6 +1,6 @@
 .table-header {
   display: grid;
-  grid-template-columns: 12% 1fr 22% 22% 14%;
+  grid-template-columns: 10% 30% 22% 16% 22%;
   align-items: center;
   border-radius: 2px;
   padding: 0.6875em 1.0625em;
@@ -14,5 +14,8 @@
     line-height: 19px;
     letter-spacing: -0.0176em;
     color: var(--body-type-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }

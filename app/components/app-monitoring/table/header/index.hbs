@@ -1,5 +1,12 @@
 <div local-class='table-header' data-test-table-header-container>
   {{#each this.tableHeaders as |header|}}
-    <div local-class='column-header' data-test-table-header>{{header}}</div>
+    <div
+      local-class='column-header'
+      class='pr-4'
+      title={{header}}
+      data-test-table-header
+    >
+      {{header}}
+    </div>
   {{/each}}
 </div>

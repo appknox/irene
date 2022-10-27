@@ -1,6 +1,6 @@
 .table-row {
   display: grid;
-  grid-template-columns: 12% 1fr 22% 22% 14%;
+  grid-template-columns: 10% 30% 22% 16% 22%;
   align-items: center;
   border-radius: 2px;
   padding: 0.875em 1.0625rem;
@@ -32,6 +32,12 @@
   .production-version {
     color: var(--black);
     margin-bottom: 0.4375em;
+  }
+
+  .app-namespace,
+  .app-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .production-version {
