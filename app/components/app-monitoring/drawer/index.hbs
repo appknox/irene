@@ -96,18 +96,19 @@
                   {{this.monitoredStatusText}}
                 </AppMonitoring::Table::Status>
                 <p local-class='last-sync-date' data-test-am-app-last-sync>
-                  Last Synced On:
                   {{#if @appDetails.lastSync.syncedOn}}
-                    <span>
+                    Last synced on:
+                    <span class='ml-1' data-test-am-table-row-last-sync-date>
                       {{day-js
                         date=@appDetails.lastSync.syncedOn
                         format='DD MMM YYYY'
                       }}
                     </span>
                   {{else}}
-                    <span>
+                    <span class='mr-1' data-test-am-table-row-last-sync-spinner>
                       {{fa-icon 'spinner fa-spin' class='last-sync-loading'}}
                     </span>
+                    Sync in progress
                   {{/if}}
                 </p>
               </div>
