@@ -59,7 +59,6 @@
               <h4>Store Version</h4>
               <p data-test-app-store-version>
                 {{#if @appDetails.latestAmAppVersion.comparableVersion}}
-                  {{@appDetails.latestAmAppVersion.comparableVersion}}
                   {{#unless @appDetails.latestAmAppVersion.latestFile}}
                     <span
                       local-class='warning-icon'
@@ -76,6 +75,7 @@
                       </AttachTooltip>
                     </span>
                   {{/unless}}
+                  {{@appDetails.latestAmAppVersion.comparableVersion}}
                 {{else}}
                   <AppMonitoring::Table::Status
                     @condition='{{this.statusCondition}}'
