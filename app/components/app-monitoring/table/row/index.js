@@ -32,7 +32,7 @@ export default class AppMonitoringTableRowComponent extends Component {
   }
 
   get monitoredStatusText() {
-    if (!this.amConfiguration.enabled) {
+    if (!this.amApp.isActive) {
       return this.intl.t('inactiveCaptital');
     }
     if (this.amApp.isActive) {
@@ -42,7 +42,7 @@ export default class AppMonitoringTableRowComponent extends Component {
   }
 
   get monitoredStatusCondition() {
-    if (!this.amConfiguration.enabled) {
+    if (!this.amApp.isActive) {
       return 'alert';
     }
     if (this.amApp.isActive) {

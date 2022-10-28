@@ -408,6 +408,10 @@ function routes() {
     return {};
   });
 
+  this.get('/v2/am_apps', () => {
+    return {};
+  });
+
   this.get('/v2/am_apps/:id', () => {
     return {};
   });

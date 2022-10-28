@@ -7,11 +7,7 @@
       @body='{{t "appMonitoringErrors.noOrgProjects.body"}}'
     />
   {{else}}
-    <div
-      local-class='table-body'
-      {{did-insert this.fetchProdscanData}}
-      data-test-am-table-body
-    >
+    <div local-class='table-body' data-test-am-table-body>
       <Pagination
         @results={{this.tableData}}
         @onPageItemsCountChange={{this.onPageItemsCountChange}}
@@ -25,7 +21,7 @@
         data-test-pagination-component
         as |context|
       >
-        {{#if this.fetchTableData.isRunning}}
+        {{#if this.isFetchingAMTableData}}
           <div local-class='loading'>
             <ThreeBounceSpinner />
           </div>

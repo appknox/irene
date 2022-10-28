@@ -71,11 +71,11 @@ module('Integration | Component | app-monitoring/table/row', function (hooks) {
       .hasText(`${this.amApp.project.lastFile.comparableVersion}`);
   });
 
-  test('It renders "INACTIVE" in status column if settings is disabled or isActive is false', async function (assert) {
+  test('It renders "INACTIVE" in status column if isActive is false', async function (assert) {
     this.amApp = this.server.create('am-app', 1, {
       project: this.project,
       latestAmAppVersion: this.latestAmAppVersion,
-      isActive: true,
+      isActive: false,
     });
 
     this.settings.enabled = false;
@@ -90,22 +90,6 @@ module('Integration | Component | app-monitoring/table/row', function (hooks) {
       'It has five row items'
     );
 
-    assert
-      .dom('[data-test-am-table-row-status]')
-      .containsText(`t:inactiveCaptital:()`);
-
-    this.amApp = this.server.create('am-app', 1, {
-      project: this.project,
-      latestAmAppVersion: null,
-      lastSync: null,
-      isActive: false,
-    });
-
-    this.settings.enabled = true;
-
-    await render(
-      hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}} @settings={{this.settings}}  @onRowClick={{this.onRowClick}} />`
-    );
     assert
       .dom(`[data-test-am-table-row-status]`)
       .containsText(`t:inactiveCaptital:()`);
