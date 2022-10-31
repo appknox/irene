@@ -227,7 +227,7 @@ module('Integration | Component | app-monitoring/table/row', function (hooks) {
     assert.dom('[data-test-am-table-row-last-sync-date]').containsText(dateStr);
   });
 
-  test('it alert icon when latestFile in latestAmAppVersion is null', async function (assert) {
+  test('it renders  "NOT FOUND" status when latestFile in latestAmAppVersion is null', async function (assert) {
     this.latestAmAppVersion = this.server.create('am-app-version', {
       latestFile: null,
     });
@@ -247,9 +247,17 @@ module('Integration | Component | app-monitoring/table/row', function (hooks) {
         @onRowClick={{this.onRowClick}}
       />`
     );
-    assert.dom('[data-test-am-table-row-warning-icon]').exists();
+
     assert
-      .dom('[data-test-am-table-row-warning-tooltip]')
-      .hasText(`t:appMonitoringErrors.akUnscannedVersion:()`);
+      .dom('[data-test-am-table-row-store-version]')
+      .containsText(`${this.amApp.latestAmAppVersion.comparableVersion}`)
+      .containsText(`t:notScanned:()`);
+
+    assert
+      .dom(
+        '[data-test-am-table-row-store-version] [data-test-am-status-element]'
+      )
+      .exists()
+      .containsText(`t:notScanned:()`);
   });
 });

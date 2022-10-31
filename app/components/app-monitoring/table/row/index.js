@@ -1,5 +1,5 @@
-import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
+import Component from '@glimmer/component';
 
 export default class AppMonitoringTableRowComponent extends Component {
   @service intl;
@@ -9,10 +9,6 @@ export default class AppMonitoringTableRowComponent extends Component {
   }
   get amConfiguration() {
     return this.args.settings;
-  }
-
-  get hasComparableVersion() {
-    return !!this.amApp.latestAmAppVersion.comparableVersion;
   }
 
   get statusText() {

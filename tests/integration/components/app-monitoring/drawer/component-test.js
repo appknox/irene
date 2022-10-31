@@ -13,12 +13,12 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
   setupIntl(hooks);
 
   hooks.beforeEach(async function () {
-    this.lastFile = this.server.create('file');
+    this.file = this.server.create('file');
     this.latestAmAppVersion = this.server.create('am-app-version');
     this.lastSync = this.server.create('am-app-sync');
 
     this.project = this.server.create('project', {
-      lastFile: this.lastFile,
+      lastFile: this.file,
       platformIconClass: 'apple',
     });
 
@@ -33,6 +33,10 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
   });
 
   test('it renders with the right data assuming monitoring is enabled and settings is active', async function (assert) {
+    this.latestAmAppVersion = this.server.create('am-app-version', {
+      latestFile: this.file,
+    });
+
     this.amApp = this.server.create('am-app', 1, {
       project: this.project,
       latestAmAppVersion: this.latestAmAppVersion,
@@ -67,11 +71,13 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
 
     assert
       .dom('[data-test-app-last-scanned-version]')
-      .hasText(`${this.amApp.project.lastFile.comparableVersion}`);
+      .containsText(`${this.amApp.project.lastFile.comparableVersion}`)
+      .containsText(`File ID - ${this.amApp.project.lastFile.id}`);
 
     assert
       .dom('[data-test-app-store-version]')
-      .hasText(`${this.amApp.latestAmAppVersion.comparableVersion}`);
+      .containsText(`${this.amApp.latestAmAppVersion.comparableVersion}`)
+      .containsText(`File ID - ${this.amApp.latestAmAppVersion.latestFile.id}`);
 
     // In this scenario settings === true and isActive === true
     assert
@@ -122,17 +128,19 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
 
     assert
       .dom('[data-test-app-last-scanned-version]')
-      .hasText(`${this.amApp.project.lastFile.comparableVersion}`);
+      .containsText(`${this.amApp.project.lastFile.comparableVersion}`)
+      .containsText(`File ID - ${this.amApp.project.lastFile.id}`);
 
     assert
       .dom('[data-test-app-store-version]')
-      .hasText(`${this.amApp.latestAmAppVersion.comparableVersion}`);
+      .containsText(`${this.amApp.latestAmAppVersion.comparableVersion}`)
+      .containsText(`t:notScanned:()`);
 
     assert
       .dom('[data-test-am-app-status] [data-test-am-status-element]')
       .exists();
 
-    // In this scenario settings === true and isActive === true
+    // isActive === true
     assert
       .dom('[data-test-am-app-status] [data-test-am-status-element]')
       .exists()
@@ -243,7 +251,7 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
       );
   });
 
-  test('it renders alert icon in store version field when latestFile in latestAmAppVersion is null', async function (assert) {
+  test('it renders "NOT SCANNED" in store version field when latestFile in latestAmAppVersion is null', async function (assert) {
     this.latestAmAppVersion = this.server.create('am-app-version', {
       latestFile: null,
     });
@@ -264,9 +272,15 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
         @settings={{this.settings}}
       />`
     );
-    assert.dom('[data-test-app-warning-icon]').exists();
+
     assert
-      .dom('[data-test-app-warning-tooltip]')
-      .hasText(`t:appMonitoringErrors.akUnscannedVersion:()`);
+      .dom('[data-test-app-store-version]')
+      .containsText(`${this.amApp.latestAmAppVersion.comparableVersion}`)
+      .containsText(`t:notScanned:()`);
+
+    assert
+      .dom('[data-test-app-store-version] [data-test-am-status-element]')
+      .exists()
+      .containsText(`t:notScanned:()`);
   });
 });

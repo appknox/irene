@@ -6,10 +6,15 @@
 >
   <div
     local-class='modal-content {{if @showRightDrawer "open"}}'
+    class='flex-column flex-justify-space-between'
     data-test-modal-content
     {{on-click-outside @closeModalHandler '#am-right-drawer-container'}}
   >
-    <header local-class='modal-header' data-test-header>
+    <header
+      local-class='modal-header'
+      class='flex-row flex-justify-space-between'
+      data-test-header
+    >
       <h2 data-test-header-title>Store Monitoring Details</h2>
       <span
         local-class='close-icon'
@@ -47,35 +52,60 @@
           <section local-class='section'>
             <div local-class='section-content'>
               <h4>Appknox Version</h4>
-              <p data-test-app-last-scanned-version>
-                {{if
-                  @appDetails.project.lastFile.comparableVersion
-                  @appDetails.project.lastFile.comparableVersion
-                  '-'
-                }}
+              <p
+                class='flex-column flex-justify-center'
+                data-test-app-last-scanned-version
+              >
+                <span class='mb-1'>
+                  {{if
+                    @appDetails.project.lastFile.comparableVersion
+                    @appDetails.project.lastFile.comparableVersion
+                    '-'
+                  }}
+                </span>
+
+                {{#if @appDetails.project.lastFile}}
+                  <LinkTo
+                    local-class='file-link'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    @route='authenticated.file'
+                    @model={{@appDetails.project.lastFile.id}}
+                  >
+                    File ID -
+                    {{@appDetails.project.lastFile.id}}
+                  </LinkTo>
+                {{/if}}
               </p>
             </div>
             <div local-class='section-content'>
               <h4>Store Version</h4>
-              <p data-test-app-store-version>
+              <p
+                local-class='store-version'
+                class='flex-column flex-justify-center'
+                data-test-app-store-version
+              >
                 {{#if @appDetails.latestAmAppVersion.comparableVersion}}
-                  {{@appDetails.latestAmAppVersion.comparableVersion}}
-                  {{#unless @appDetails.latestAmAppVersion.latestFile}}
-                    <span
-                      local-class='warning-icon'
-                      class='ak-icon ak-icon-warning'
-                      data-test-app-warning-icon
+                  <span class='mb-1'>
+                    {{@appDetails.latestAmAppVersion.comparableVersion}}
+                  </span>
+
+                  {{#if @appDetails.latestAmAppVersion.latestFile}}
+                    <LinkTo
+                      local-class='file-link'
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      @route='authenticated.file'
+                      @model={{@appDetails.latestAmAppVersion.latestFile.id}}
                     >
-                      <AttachTooltip
-                        @placement='bottom'
-                        class='am-drawer-tooltip'
-                      >
-                        <span data-test-app-warning-tooltip>
-                          {{t 'appMonitoringErrors.akUnscannedVersion'}}
-                        </span>
-                      </AttachTooltip>
-                    </span>
-                  {{/unless}}
+                      File ID -
+                      {{@appDetails.latestAmAppVersion.latestFile.id}}
+                    </LinkTo>
+                  {{else}}
+                    <AppMonitoring::Table::Status @condition='alert'>
+                      {{t 'notScanned'}}
+                    </AppMonitoring::Table::Status>
+                  {{/if}}
                 {{else}}
                   <AppMonitoring::Table::Status
                     @condition='{{this.statusCondition}}'
@@ -95,7 +125,11 @@
                 >
                   {{this.monitoredStatusText}}
                 </AppMonitoring::Table::Status>
-                <p local-class='last-sync-date' data-test-am-app-last-sync>
+                <p
+                  local-class='last-sync-date'
+                  class='flex-row flex-justify-start'
+                  data-test-am-app-last-sync
+                >
                   {{#if @appDetails.lastSync.syncedOn}}
                     Last synced on:
                     <span class='ml-1' data-test-am-table-row-last-sync-date>
@@ -105,7 +139,10 @@
                       }}
                     </span>
                   {{else}}
-                    <span class='mr-1' data-test-am-table-row-last-sync-spinner>
+                    <span
+                      class='mr-1 flex-row flex-align-center'
+                      data-test-am-table-row-last-sync-spinner
+                    >
                       {{fa-icon 'spinner fa-spin' class='last-sync-loading'}}
                     </span>
                     Sync in progress
