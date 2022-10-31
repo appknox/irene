@@ -88,6 +88,10 @@ module('Integration | Component | app-monitoring-settings', function (hooks) {
       enabled: true,
     });
 
+    this.server.get('v2/am_apps', () => {
+      return [];
+    });
+
     const store = this.owner.lookup('service:store');
 
     const normailizedSettings = store.normalize(
@@ -110,6 +114,56 @@ module('Integration | Component | app-monitoring-settings', function (hooks) {
       this.element.querySelector(`[data-test-toggle-input]`).checked
     );
     assert.notOk(this.amConfigModel.enabled);
+  });
+
+  test('it should reload app monitoring data when settings is toggled', async function (assert) {
+    assert.expect(3);
+
+    this.server.put('/v2/am_configuration/:id', (schema, req) => ({
+      id: 1,
+      enabled: false,
+      organization: req.params.id,
+    }));
+
+    this.set('settings', {
+      id: 1,
+      enabled: true,
+    });
+
+    this.server.get('v2/am_apps', () => {
+      return [];
+    });
+
+    const store = this.owner.lookup('service:store');
+
+    class AppMonitoringStub extends Service {
+      offset = 10;
+      limit = 10;
+
+      reload() {
+        assert.ok(true, 'Monitoring data reload function was triggered.');
+
+        return [];
+      }
+    }
+
+    this.owner.register('service:appmonitoring', AppMonitoringStub);
+
+    const normailizedSettings = store.normalize(
+      'amconfiguration',
+      this.settings
+    );
+
+    this.set('amConfigModel', store.push(normailizedSettings));
+
+    await render(
+      hbs`<AppMonitoring::Settings @settings={{this.amConfigModel}} />`
+    );
+
+    assert.dom(`[data-test-toggle-input]`).exists();
+    assert.ok(this.element.querySelector(`[data-test-toggle-input]`).checked);
+
+    await click('[data-test-toggle-input]');
   });
 
   test('toggling should be disabled if org project count is less than 1', async function (assert) {

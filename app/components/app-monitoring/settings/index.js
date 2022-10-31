@@ -5,6 +5,7 @@ import { task } from 'ember-concurrency';
 export default class AppMonitoringSettingsComponent extends Component {
   @service me;
   @service organization;
+  @service appmonitoring;
 
   get canEditSettings() {
     return (
@@ -18,6 +19,8 @@ export default class AppMonitoringSettingsComponent extends Component {
 
     settings.set('enabled', !settings.enabled);
     yield settings.save();
+
+    this.appmonitoring.reload();
   })
   toggleAppMonitoringEnabled;
 }

@@ -30,11 +30,11 @@ module('Integration | Component | app-monitoring/table', function (hooks) {
       project: this.project,
       latestAmAppVersion: this.latestAmAppVersion,
     });
-
-    this.owner.register('service:organization', OrganizationStub);
   });
 
   test('it should show only table headers and no-content message for enabled settings state if table data is less than one', async function (assert) {
+    this.owner.register('service:organization', OrganizationStub);
+
     this.set('settings', {
       id: 1,
       enabled: true,
@@ -43,6 +43,8 @@ module('Integration | Component | app-monitoring/table', function (hooks) {
     this.server.get('v2/am_apps', () => {
       return [];
     });
+
+    this.owner.lookup('service:appmonitoring');
 
     await render(hbs`<AppMonitoring::Table @settings={{this.settings}}  />`);
     assert.dom(`[data-test-am-table-container]`).exists();
@@ -61,6 +63,8 @@ module('Integration | Component | app-monitoring/table', function (hooks) {
   });
 
   test('it should show table rows if settings is enabled and table data is more than zero', async function (assert) {
+    this.owner.register('service:organization', OrganizationStub);
+
     this.set('settings', {
       id: 1,
       enabled: true,
@@ -69,6 +73,17 @@ module('Integration | Component | app-monitoring/table', function (hooks) {
     this.server.get('v2/am_apps', (schema) => {
       return schema['amApps'].all().models;
     });
+
+    const amApps = this.server.db.amApps;
+
+    class AppMonitoringStub extends Service {
+      offset = 10;
+      limit = 10;
+
+      appMonitoringData = amApps;
+    }
+
+    this.owner.register('service:appmonitoring', AppMonitoringStub);
 
     await render(hbs`<AppMonitoring::Table @settings={{this.settings}}  />`);
     assert.dom(`[data-test-am-table-container]`).exists();
