@@ -12,12 +12,6 @@
     background-color: rgba($black, 0.01);
   }
 
-  .app-name-container,
-  .project-status {
-    display: flex;
-    flex-direction: column;
-  }
-
   .app-name,
   .app-namespace,
   .last-scanned-version,
@@ -28,9 +22,7 @@
   }
 
   .app-namespace,
-  .last-scanned-version,
-  .production-version {
-    color: var(--black);
+  .last-scanned-version {
     margin-bottom: 0.4375em;
   }
 
@@ -41,21 +33,16 @@
   }
 
   .production-version {
-    display: flex;
-    align-items: center;
+    color: var(--black);
   }
 
   .last-sync-date {
     margin-top: 0.4375em;
     font-size: 12px;
-    display: flex;
-    align-items: center;
   }
 
   .last-sync-date span {
     font-weight: 800;
-    display: flex;
-    align-items: center;
   }
 
   .last-sync-date span i {
@@ -69,10 +56,4 @@
   .platform-apple {
     color: var(--black);
   }
-}
-
-// Warning Icon
-.warning-icon {
-  color: #d72f2f;
-  margin-left: 0.4em;
 }

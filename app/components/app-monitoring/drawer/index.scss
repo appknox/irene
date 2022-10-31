@@ -21,9 +21,6 @@
 /* Modal Content */
 .modal-content {
   position: fixed;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   right: -522px;
   background-color: var(--white);
   width: 522px;
@@ -43,9 +40,6 @@
 
 .modal-header {
   height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   background-color: $secondary;
   color: var(--white);
 
@@ -54,7 +48,6 @@
     font-size: 1rem;
     line-height: 22px;
     letter-spacing: -0.008em;
-    margin-bottom: 0em;
   }
 }
 
@@ -63,8 +56,6 @@
   padding: 1.125em 0em;
   padding-bottom: 4em;
   height: 100%;
-  display: flex;
-  flex-direction: column;
   overflow-y: scroll;
 
   .modal-body-section {
@@ -98,7 +89,6 @@
 
     .section p {
       line-height: 21px;
-      align-items: center;
       letter-spacing: -0.0176em;
       color: var(--body-type-color);
     }
@@ -119,22 +109,19 @@
     .section-content {
       margin-bottom: 1.25em;
 
-      p {
-        display: flex;
-        align-items: center;
+      .file-link {
+        width: fit-content;
+        text-decoration: underline;
+        color: var(--body-type-color);
       }
 
       .last-sync-date {
         margin-top: 0.4375em;
         font-size: 12px;
-        display: flex;
-        align-items: center;
       }
 
       .last-sync-date span {
         font-weight: 800;
-        display: flex;
-        align-items: center;
       }
 
       .last-sync-date span i {
@@ -162,14 +149,7 @@
 }
 
 /* Close Icon */
-
 .close-icon {
   font-size: 16px !important;
   cursor: pointer;
-}
-
-// Warning Icon
-.warning-icon {
-  color: #d72f2f;
-  margin-left: 0.4em;
 }

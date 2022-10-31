@@ -13,7 +13,11 @@
   >
     {{fa-icon @amApp.project.platformIconClass}}
   </div>
-  <div local-class='app-name-container' data-test-am-table-row-item>
+  <div
+    local-class='app-name-container'
+    class='flex-column'
+    data-test-am-table-row-item
+  >
     <span
       local-class='app-namespace'
       class='pr-4'
@@ -33,28 +37,23 @@
   </div>
   <div
     local-class='production-version'
+    class='flex-column flex-justify-center'
     data-test-am-table-row-item
     data-test-am-table-row-store-version
   >
     {{#if @amApp.latestAmAppVersion.comparableVersion}}
-      {{@amApp.latestAmAppVersion.comparableVersion}}
+      <span class='mb-1'>
+        {{@amApp.latestAmAppVersion.comparableVersion}}
+      </span>
       {{#unless @amApp.latestAmAppVersion.latestFile}}
-        <span
-          local-class='warning-icon'
-          class='ak-icon ak-icon-warning'
-          data-test-am-table-row-warning-icon
-        >
-          <AttachTooltip @placement='bottom'>
-            <span data-test-am-table-row-warning-tooltip>
-              {{t 'appMonitoringErrors.akUnscannedVersion'}}
-            </span>
-          </AttachTooltip>
-        </span>
+        <AppMonitoring::Table::Status @condition='alert'>
+          {{t 'notScanned'}}
+        </AppMonitoring::Table::Status>
       {{/unless}}
     {{else}}
-      <AppMonitoring::Table::Status
-        @condition='{{this.statusCondition}}'
-      >{{this.statusText}}</AppMonitoring::Table::Status>
+      <AppMonitoring::Table::Status @condition='{{this.statusCondition}}'>
+        {{this.statusText}}
+      </AppMonitoring::Table::Status>
     {{/if}}
   </div>
   <div
@@ -66,6 +65,7 @@
   </div>
   <div
     local-class='project-status'
+    class='flex-column'
     data-test-am-table-row-item
     data-test-am-table-row-status
   >
@@ -74,10 +74,17 @@
     >
       {{this.monitoredStatusText}}
     </AppMonitoring::Table::Status>
-    <p local-class='last-sync-date' data-test-am-table-row-last-sync>
+    <p
+      local-class='last-sync-date'
+      class='flex-row flex-align-center'
+      data-test-am-table-row-last-sync
+    >
       {{#if @amApp.lastSync.syncedOn}}
         Last synced on:
-        <span class='ml-1' data-test-am-table-row-last-sync-date>
+        <span
+          class='ml-1 flex-row flex-align-center'
+          data-test-am-table-row-last-sync-date
+        >
           {{day-js date=@amApp.lastSync.syncedOn format='DD MMM YYYY'}}
         </span>
       {{else}}
