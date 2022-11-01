@@ -20,7 +20,7 @@
             </option>
           {{/each}}
         </select>
-        {{#if @totalItems}}
+        {{#if (and @totalItems this.currentPageResults.length)}}
           <span local-class='app-pagination-page-range' data-test-page-range>
             {{this.startItemIdx}}-{{this.endItemIdx}}
             of

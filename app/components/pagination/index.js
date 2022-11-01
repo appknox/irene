@@ -67,10 +67,17 @@ export default class PaginationComponent extends Component {
   }
 
   get defaultOffset() {
-    if (this.args.offset > this.totalPages) {
+    const offset = Math.floor(this.args.offset / this.limit);
+
+    if (offset < 0) {
+      return 0;
+    }
+
+    if (offset > this.totalPages) {
       return this.totalPages;
     }
-    return this.args.offset;
+
+    return offset;
   }
 
   get showPaginationNavBar() {
