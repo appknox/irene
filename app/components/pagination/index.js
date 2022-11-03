@@ -10,6 +10,25 @@ export default class PaginationComponent extends Component {
     return this.args.results;
   }
 
+  get nextAction() {
+    return this.args.nextAction;
+  }
+
+  get prevAction() {
+    return this.args.prevAction;
+  }
+
+  get totalCount() {
+    return this.args.totalItems || 0;
+  }
+
+  get defaultOffset() {
+    if (this.args.offset > this.maxOffset) {
+      return this.maxOffset;
+    }
+    return this.args.offset;
+  }
+
   get limit() {
     return (
       this.itemPerPageSelectOptions.find((item) => item.selected)?.value ||
@@ -18,14 +37,8 @@ export default class PaginationComponent extends Component {
   }
 
   get maxOffset() {
-    const limit = this.limit;
-    const total = this.args.totalItems || 0;
-    if (total === 0) {
-      return 0;
-    }
-
-    return Math.ceil(total / limit) - 1;
-  } // `-1` because offset starts from 0
+    return this.totalCount;
+  }
 
   get defaultItemPerPageSelectOptions() {
     return this._resolveReceivedPageItemsCountOptions(
@@ -35,7 +48,8 @@ export default class PaginationComponent extends Component {
   }
 
   get disableNext() {
-    return this.offset >= this.maxOffset;
+    const nextOffset = this.offset + this.limit;
+    return nextOffset >= this.maxOffset;
   }
 
   get disablePrev() {
@@ -43,34 +57,17 @@ export default class PaginationComponent extends Component {
   }
 
   get startItemIdx() {
-    return this.offset * this.limit + 1;
+    // offset is 0 indexed but we need it to be 1 indexed for display
+    return this.offset + 1;
   }
 
   get endItemIdx() {
-    if (this.offset + 1 === this.totalPages) {
-      return this.args.totalItems;
-    }
-
-    return (this.offset + 1) * this.limit;
-  }
-
-  get nextAction() {
-    return this.args.nextAction;
-  }
-
-  get prevAction() {
-    return this.args.prevAction;
+    // offset is 0 indexed but we need it to be 1 indexed for display
+    return Math.min(this.offset + this.limit + 1, this.maxOffset);
   }
 
   get totalPages() {
-    return Math.ceil(this.args.totalItems / this.limit);
-  }
-
-  get defaultOffset() {
-    if (this.args.offset > this.totalPages) {
-      return this.totalPages;
-    }
-    return this.args.offset;
+    return Math.ceil(this.totalCount / Math.max(this.limit, 1));
   }
 
   get showPaginationNavBar() {
@@ -88,20 +85,18 @@ export default class PaginationComponent extends Component {
   }
 
   @action goToNextPage() {
-    this.offset = this.offset + 1;
-
+    this.offset = this.offset + this.limit;
     this.nextAction({
       limit: this.limit,
-      offset: this.offset * this.limit,
+      offset: this.offset,
     });
   }
 
   @action goToPrevPage() {
-    this.offset = this.offset - 1;
-
+    this.offset = this.offset - this.limit;
     this.prevAction({
       limit: this.limit,
-      offset: this.offset * this.limit,
+      offset: this.offset,
     });
   }
 
