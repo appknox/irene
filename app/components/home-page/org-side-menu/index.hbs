@@ -17,7 +17,11 @@
       </li>
       {{#if this.showAppMonitoringDashboard}}
         <li>
-          <LinkTo @route='authenticated.app-monitoring' class='menu-list-link'>
+          <LinkTo
+            @route='authenticated.app-monitoring'
+            @query={{hash app_offset=0}}
+            class='menu-list-link'
+          >
             <div class='menu-list-title-container'>
               <span class='menu-list-icons ak-icon ak-icon-inventory-2'></span>
               <span class='menu-list-title'>{{t 'appMonitoring'}}</span>
