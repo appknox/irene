@@ -680,6 +680,8 @@
       "body": "We are looking for unscanned versions of your applications on Playstore or Appstore. This data will be available to you in some time."
     }
   },
+  "appMonitoringHeading": "Store Monitoring Setting",
+  "appMonitoringDescription": "Once enabled, our platform will monitor for any unscanned versions of your applications on Google Play Store or Apple App Store. If any such applications are found, the list below will be updated automatically at 24 hour intervals.",
   "project": "プロジェクト",
   "projectCollaboratorAdded": "Added collaborator to project",
   "projectCount": "Projects count",
