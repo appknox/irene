@@ -1,10 +1,13 @@
 <div local-class='settings-block'>
   <div local-class='label-group'>
-    <h6 local-class='label-heading'>Store Monitoring Setting</h6>
-    <p local-class='label-description'>Once enabled, our platform will monitor
-      for any unscanned versions of your applications on Playstore or Appstore.
-      If any such applications are found, the list below will be updated
-      automatically.</p>
+    <h6
+      local-class='label-heading'
+      data-test-app-monitoring-settings-heading
+    >{{t 'appMonitoringHeading'}}</h6>
+    <p
+      local-class='label-description'
+      data-test-app-monitoring-settings-description
+    >{{t 'appMonitoringDescription'}}</p>
   </div>
 
   <AkToggle

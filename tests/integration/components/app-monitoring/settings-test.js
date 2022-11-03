@@ -39,7 +39,12 @@ module('Integration | Component | app-monitoring-settings', function (hooks) {
 
     await render(hbs`<AppMonitoring::Settings @settings={{this.settings}} />`);
 
-    assert.dom('h6').hasText('Store Monitoring Setting');
+    assert
+      .dom(`[data-test-app-monitoring-settings-heading]`)
+      .hasText(`t:appMonitoringHeading:()`);
+    assert
+      .dom(`[data-test-app-monitoring-settings-description]`)
+      .hasText(`t:appMonitoringDescription:()`);
     assert.dom(`[data-test-toggle-input]`).exists();
     assert.ok(this.element.querySelector(`[data-test-toggle-input]`).checked);
   });
@@ -51,8 +56,12 @@ module('Integration | Component | app-monitoring-settings', function (hooks) {
     });
 
     await render(hbs`<AppMonitoring::Settings @settings={{this.settings}} />`);
-
-    assert.dom('h6').hasText('Store Monitoring Setting');
+    assert
+      .dom(`[data-test-app-monitoring-settings-heading]`)
+      .hasText(`t:appMonitoringHeading:()`);
+    assert
+      .dom(`[data-test-app-monitoring-settings-description]`)
+      .hasText(`t:appMonitoringDescription:()`);
     assert.dom(`[data-test-toggle-input]`).exists();
 
     assert.notOk(
