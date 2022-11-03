@@ -4,10 +4,16 @@ import { tracked } from '@glimmer/tracking';
 
 export default class PaginationComponent extends Component {
   @tracked itemPerPageSelectOptions = this.defaultItemPerPageSelectOptions;
-  @tracked offset = this.defaultOffset;
 
   get currentPageResults() {
     return this.args.results;
+  }
+
+  get offset() {
+    if (this.args.offset > this.maxOffset) {
+      return this.maxOffset;
+    }
+    return this.args.offset;
   }
 
   get nextAction() {
@@ -20,13 +26,6 @@ export default class PaginationComponent extends Component {
 
   get totalCount() {
     return this.args.totalItems || 0;
-  }
-
-  get defaultOffset() {
-    if (this.args.offset > this.maxOffset) {
-      return this.maxOffset;
-    }
-    return this.args.offset;
   }
 
   get limit() {
@@ -77,26 +76,23 @@ export default class PaginationComponent extends Component {
   @action
   onItemsPerPageSelect(event) {
     this._updatePageItemSelectOptions(event.target.value);
-    this._resetOffset();
     this.args.onPageItemsCountChange({
       limit: this.limit,
-      offset: this.offset,
+      offset: 0,
     });
   }
 
   @action goToNextPage() {
-    this.offset = this.offset + this.limit;
     this.nextAction({
       limit: this.limit,
-      offset: this.offset,
+      offset: this.offset + this.limit,
     });
   }
 
   @action goToPrevPage() {
-    this.offset = this.offset - this.limit;
     this.prevAction({
       limit: this.limit,
-      offset: this.offset,
+      offset: this.offset - this.limit,
     });
   }
 
@@ -128,10 +124,5 @@ export default class PaginationComponent extends Component {
         return item;
       }
     );
-  }
-
-  // Page offset reset handler
-  _resetOffset() {
-    this.offset = 0;
   }
 }
