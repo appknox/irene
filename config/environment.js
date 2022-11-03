@@ -146,6 +146,7 @@ module.exports = function (environment) {
   var showLicense = handler.getBoolean('IRENE_SHOW_LICENSE');
   var ENV = {
     ENVHandlerCONST: ENVHandlerCONST,
+    productVersion: '22.11.1',
     version: Date.now(),
     isDevknox: false,
     isAppknox: false,
@@ -543,7 +544,6 @@ module.exports = function (environment) {
       jsUrl: 'https://recaptcha.net/recaptcha/api.js?render=explicit',
       siteKey: '6LffPdIaAAAAANWL4gm7J6j9EJzKSuYEDAQ0Ry2x',
     },
-    productVersion: '22.7.1',
   };
 
   if (ENV.whitelabel.enabled) {
