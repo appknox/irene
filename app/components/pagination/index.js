@@ -61,8 +61,7 @@ export default class PaginationComponent extends Component {
   }
 
   get endItemIdx() {
-    // offset is 0 indexed but we need it to be 1 indexed for display
-    return Math.min(this.offset + this.limit + 1, this.maxOffset);
+    return Math.min(this.offset + this.limit, this.maxOffset);
   }
 
   get totalPages() {
