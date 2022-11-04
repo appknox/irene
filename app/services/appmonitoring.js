@@ -9,8 +9,8 @@ export default class AppMonitoringService extends Service {
 
   @tracked appMonitoringData = [];
 
-  limit = 10;
-  offset = 0;
+  @tracked limit = 10;
+  @tracked offset = 0;
 
   @task(function* () {
     try {
