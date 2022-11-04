@@ -56,26 +56,26 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
     `);
 
     assert.dom('[data-test-am-drawer-container]').exists();
-    assert.dom('[data-test-header-close-icon]').exists();
-    assert.dom('[data-test-header-title]').exists();
+    assert.dom('[data-test-am-drawer-header-close-icon]').exists();
+    assert.dom('[data-test-am-drawer-header-title]').exists();
     assert
-      .dom('[data-test-app-name]')
+      .dom('[data-test-am-drawer-name]')
       .hasText(`${this.amApp.project.lastFile.name}`);
     assert
-      .dom('[data-test-app-namespace]')
+      .dom('[data-test-am-drawer-namespace]')
       .hasText(`${this.amApp.project.packageName}`);
 
     assert
-      .dom('[data-test-app-platform]')
+      .dom('[data-test-am-drawer-platform]')
       .hasClass(styles[`platform-${this.amApp.project.platformIconClass}`]);
 
     assert
-      .dom('[data-test-app-last-scanned-version]')
+      .dom('[data-test-am-drawer-last-scanned-version]')
       .containsText(`${this.amApp.project.lastFile.comparableVersion}`)
       .containsText(`File ID - ${this.amApp.project.lastFile.id}`);
 
     assert
-      .dom('[data-test-app-store-version]')
+      .dom('[data-test-am-drawer-store-version]')
       .containsText(`${this.amApp.latestAmAppVersion.comparableVersion}`)
       .containsText(`File ID - ${this.amApp.latestAmAppVersion.latestFile.id}`);
 
@@ -113,26 +113,26 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
   `);
 
     assert.dom('[data-test-am-drawer-container]').exists();
-    assert.dom('[data-test-header-close-icon]').exists();
-    assert.dom('[data-test-header-title]').exists();
+    assert.dom('[data-test-am-drawer-header-close-icon]').exists();
+    assert.dom('[data-test-am-drawer-header-title]').exists();
     assert
-      .dom('[data-test-app-name]')
+      .dom('[data-test-am-drawer-name]')
       .hasText(`${this.amApp.project.lastFile.name}`);
     assert
-      .dom('[data-test-app-namespace]')
+      .dom('[data-test-am-drawer-namespace]')
       .hasText(`${this.amApp.project.packageName}`);
 
     assert
-      .dom('[data-test-app-platform]')
+      .dom('[data-test-am-drawer-platform]')
       .hasClass(styles[`platform-${this.amApp.project.platformIconClass}`]);
 
     assert
-      .dom('[data-test-app-last-scanned-version]')
+      .dom('[data-test-am-drawer-last-scanned-version]')
       .containsText(`${this.amApp.project.lastFile.comparableVersion}`)
       .containsText(`File ID - ${this.amApp.project.lastFile.id}`);
 
     assert
-      .dom('[data-test-app-store-version]')
+      .dom('[data-test-am-drawer-store-version]')
       .containsText(`${this.amApp.latestAmAppVersion.comparableVersion}`)
       .containsText(`t:notScanned:()`);
 
@@ -178,13 +178,15 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
   `);
 
     assert.dom('[data-test-am-drawer-container]').exists();
-    assert.dom('[data-test-header-close-icon]').exists();
-    assert.dom('[data-test-header-title]').exists();
+    assert.dom('[data-test-am-drawer-header-close-icon]').exists();
+    assert.dom('[data-test-am-drawer-header-title]').exists();
 
     assert
-      .dom('[data-test-app-store-version] [data-test-am-status-element]')
+      .dom('[data-test-am-drawer-store-version] [data-test-am-status-element]')
       .exists()
       .hasText(`t:pending:()`);
+
+    assert.dom('[data-test-am-app-last-sync-spinner]').exists();
   });
 
   test('it renders "NOT FOUND" status in store version column if comparableVersion is empty and latestAmAppVersion is null', async function (assert) {
@@ -211,11 +213,11 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
   `);
 
     assert.dom('[data-test-am-drawer-container]').exists();
-    assert.dom('[data-test-header-close-icon]').exists();
-    assert.dom('[data-test-header-title]').exists();
+    assert.dom('[data-test-am-drawer-header-close-icon]').exists();
+    assert.dom('[data-test-am-drawer-header-title]').exists();
 
     assert
-      .dom('[data-test-app-store-version] [data-test-am-status-element]')
+      .dom('[data-test-am-drawer-store-version] [data-test-am-status-element]')
       .exists()
       .hasText(`t:notFound:()`);
   });
@@ -274,13 +276,44 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
     );
 
     assert
-      .dom('[data-test-app-store-version]')
+      .dom('[data-test-am-drawer-store-version]')
       .containsText(`${this.amApp.latestAmAppVersion.comparableVersion}`)
       .containsText(`t:notScanned:()`);
 
     assert
-      .dom('[data-test-app-store-version] [data-test-am-status-element]')
+      .dom('[data-test-am-drawer-store-version] [data-test-am-status-element]')
       .exists()
       .containsText(`t:notScanned:()`);
+  });
+
+  test('it hides "sync in progress" status section when store monitoring is inactive', async function (assert) {
+    this.latestAmAppVersion = this.server.create('am-app-version', {
+      comparableVersion: null,
+    });
+
+    this.amApp = this.server.create('am-app', 1, {
+      project: this.project,
+      latestAmAppVersion: this.latestAmAppVersion,
+      lastSync: null,
+      isActive: false,
+    });
+
+    this.settings.enabled = false;
+
+    await render(hbs`
+    <AppMonitoring::Drawer
+      @showRightDrawer={{true}}
+      @appDetails={{this.amApp}}
+      @closeModalHandler={{this.closeDrawer}}
+      @settings={{this.settings}}
+    />
+  `);
+
+    assert
+      .dom('[data-test-am-drawer-store-version] [data-test-am-status-element]')
+      .exists()
+      .hasText(`t:pending:()`);
+
+    assert.dom('[data-test-am-app-last-sync-spinner]').doesNotExist();
   });
 });
