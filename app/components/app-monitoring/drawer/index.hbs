@@ -13,14 +13,14 @@
     <header
       local-class='modal-header'
       class='flex-row flex-justify-space-between'
-      data-test-header
+      data-test-am-drawer-header
     >
-      <h2 data-test-header-title>Store Monitoring Details</h2>
+      <h2 data-test-am-drawer-header-title>Store Monitoring Details</h2>
       <span
         local-class='close-icon'
         class='ak-icon ak-icon-close'
         role='button'
-        data-test-header-close-icon
+        data-test-am-drawer-header-close-icon
         {{on 'click' @closeModalHandler}}
       >
       </span>
@@ -31,17 +31,20 @@
           <h3>Basic Details</h3>
           <section local-class='section'>
             <h4>Application Name</h4>
-            <p data-test-app-name>{{@appDetails.project.lastFile.name}}</p>
+            <p
+              data-test-am-drawer-name
+            >{{@appDetails.project.lastFile.name}}</p>
           </section>
           <section local-class='section'>
             <h4>Namespace</h4>
-            <p data-test-app-namespace> {{@appDetails.project.packageName}}</p>
+            <p data-test-am-drawer-namespace>
+              {{@appDetails.project.packageName}}</p>
           </section>
           <section local-class='section'>
             <h4>Platform</h4>
             <span
               local-class='platform-icon platform-{{@appDetails.project.platformIconClass}}'
-              data-test-app-platform
+              data-test-am-drawer-platform
             >
               {{fa-icon @appDetails.project.platformIconClass}}
             </span>
@@ -54,7 +57,7 @@
               <h4>Appknox Version</h4>
               <p
                 class='flex-column flex-justify-center'
-                data-test-app-last-scanned-version
+                data-test-am-drawer-last-scanned-version
               >
                 <span class='mb-1'>
                   {{if
@@ -83,7 +86,7 @@
               <p
                 local-class='store-version'
                 class='flex-column flex-justify-center'
-                data-test-app-store-version
+                data-test-am-drawer-store-version
               >
                 {{#if @appDetails.latestAmAppVersion.comparableVersion}}
                   <span class='mb-1'>
@@ -132,16 +135,16 @@
                 >
                   {{#if @appDetails.lastSync.syncedOn}}
                     Last monitored on
-                    <span class='ml-1' data-test-am-table-row-last-sync-date>
+                    <span class='ml-1' data-test-am-app-last-sync-date>
                       {{day-js
                         date=@appDetails.lastSync.syncedOn
                         format='DD MMM YYYY'
                       }}
                     </span>
-                  {{else}}
+                  {{else if @appDetails.isActive}}
                     <span
                       class='mr-1 flex-row flex-align-center'
-                      data-test-am-table-row-last-sync-spinner
+                      data-test-am-app-last-sync-spinner
                     >
                       {{fa-icon 'spinner fa-spin' class='last-sync-loading'}}
                     </span>

@@ -87,7 +87,7 @@
         >
           {{day-js date=@amApp.lastSync.syncedOn format='DD MMM YYYY'}}
         </span>
-      {{else}}
+      {{else if @amApp.isActive}}
         <span class='mr-1' data-test-am-table-row-last-sync-spinner>
           {{fa-icon 'spinner fa-spin' class='last-sync-loading'}}
         </span>

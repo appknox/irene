@@ -244,4 +244,25 @@ module('Integration | Component | app-monitoring/table/row', function (hooks) {
       .exists()
       .containsText(`t:notScanned:()`);
   });
+
+  test('it hides "sync in progress" status column when store monitoring is inactive and status is "PENDING"', async function (assert) {
+    this.amApp = this.server.create('am-app', 1, {
+      project: this.project,
+      latestAmAppVersion: this.latestAmAppVersion,
+      lastSync: null,
+      isActive: false,
+    });
+
+    this.settings.enabled = false;
+
+    await render(
+      hbs`<AppMonitoring::Table::Row @amApp={{this.amApp}}  @settings={{this.settings}} @onRowClick={{this.onRowClick}} />`
+    );
+
+    assert
+      .dom(`[data-test-am-table-row-status]`)
+      .containsText(`t:inactiveCaptital:()`);
+
+    assert.dom('[data-test-am-table-row-last-sync-spinner]').doesNotExist();
+  });
 });
