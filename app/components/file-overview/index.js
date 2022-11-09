@@ -3,6 +3,7 @@ import Component from '@glimmer/component';
 
 export default class FileOverviewComponent extends Component {
   @service store;
+  @service organization;
 
   chartOptions = {
     legend: { display: false },
@@ -10,12 +11,12 @@ export default class FileOverviewComponent extends Component {
     responsive: false,
   };
 
-  constructor() {
-    super(...arguments);
-  }
-
   get file() {
     return this.args.file || null;
+  }
+
+  get isManualScanDisabled() {
+    return !this.organization.selected.features.manualscan;
   }
 
   get fileOld() {

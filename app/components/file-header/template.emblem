@@ -1,4 +1,4 @@
-.card.is-fullwidth.margin-bottom20.scan-status-card
+.card.is-fullwidth.margin-bottom20.scan-status-card data-test="file-header"
   .columns
     .column.file-icon.padding-r-0
       .card-header-icon.margin-t-q
@@ -77,30 +77,30 @@
             = t "apiScan"
           .align-middle
             = api-scan file=file dynamicScanText=(t 'start')
-
-      .column.flex-column
-        .align-middle.margin-b-1h
-          = t "manualScan"
-        .align-middle
-          if file.isManualRequested
-            button.is-primary disabled="disabled"
-              if file.isManualDone
-                = fa-icon "check"
-                | &nbsp; #{t "completed"}
-              else
-                = fa-icon "clock-o"
-                | &nbsp; #{t "requested"}
-          else
-            if organization.selected.isTrial
-              button.is-primary click={(perform openRequestAccessModal)} disabled={if file.isActive false "disabled"}
-                .fa-font-size
-                  = fa-icon "play"
-                | &nbsp; #{t "start"}
+      unless isManualScanDisabled
+        .column.flex-column
+          .align-middle.margin-b-1h
+            = t "manualScan"
+          .align-middle
+            if file.isManualRequested
+              button.is-primary disabled="disabled"
+                if file.isManualDone
+                  = fa-icon "check"
+                  | &nbsp; #{t "completed"}
+                else
+                  = fa-icon "clock-o"
+                  | &nbsp; #{t "requested"}
             else
-              button.is-primary.ac-request-manual-scan click="openManualScanModal" disabled={if file.isActive false "disabled"}
-                .fa-font-size
-                  = fa-icon "play"
-                | &nbsp; #{t "start"}
+              if organization.selected.isTrial
+                button.is-primary click={(perform openRequestAccessModal)} disabled={if file.isActive false "disabled"}
+                  .fa-font-size
+                    = fa-icon "play"
+                  | &nbsp; #{t "start"}
+              else
+                button.is-primary.ac-request-manual-scan click="openManualScanModal" disabled={if file.isActive false "disabled"}
+                  .fa-font-size
+                    = fa-icon "play"
+                  | &nbsp; #{t "start"}
     if (not file.isActive)
       span local-class="file-in-active"
         = fa-icon "exclamation-circle"
