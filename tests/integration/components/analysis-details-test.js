@@ -1,11 +1,21 @@
 /* eslint-disable qunit/no-assert-equal, qunit/no-commented-tests */
-import { module, test } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
+import Service from '@ember/service';
+import { click, render } from '@ember/test-helpers';
+import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
-import { render, click } from '@ember/test-helpers';
-import { hbs } from 'ember-cli-htmlbars';
+import { setupRenderingTest } from 'ember-qunit';
 import ENUMS from 'irene/enums';
+import { module, test } from 'qunit';
+
+class OrganizationStub extends Service {
+  selected = {
+    id: 1,
+    features: {
+      manualscan: true,
+    },
+  };
+}
 
 module('Integration | Component | analysis details', function (hooks) {
   setupRenderingTest(hooks);
@@ -13,8 +23,7 @@ module('Integration | Component | analysis details', function (hooks) {
   setupIntl(hooks);
 
   hooks.beforeEach(async function () {
-    this.server.createList('organization', 1);
-    await this.owner.lookup('service:organization').load();
+    this.owner.register('service:organization', OrganizationStub);
   });
 
   test('it expands details on header click', async function (assert) {
@@ -57,6 +66,68 @@ module('Integration | Component | analysis details', function (hooks) {
     );
     await click(header);
     assert.dom('[data-test-analysis-detail="regulatories"]').doesNotExist();
+  });
+
+  test('it renders if manual scan feature is disabled and vulnerability type is not manual', async function (assert) {
+    const vulnerability = this.server.create('vulnerability', {
+      types: [ENUMS.VULNERABILITY_TYPE.DYNAMIC],
+    });
+    const profile = this.server.create('profile');
+    const file = this.server.create('file', {
+      profile: profile,
+    });
+    const analysis = this.server.create('analysis', {
+      file: file,
+      vulnerability: vulnerability,
+      computedRisk: ENUMS.RISK.NONE,
+      status: ENUMS.ANALYSIS.COMPLETED,
+    });
+    this.set('analysis', analysis);
+
+    class OrganizationStub extends Service {
+      selected = {
+        id: 1,
+        features: {
+          manualscan: false,
+        },
+      };
+    }
+
+    this.owner.register('service:organization', OrganizationStub);
+
+    await render(hbs`<AnalysisDetails @analysis={{this.analysis}} />`);
+    assert.dom('[data-test-analysis-details-container]').exists();
+  });
+
+  test('it does not render if manual scan feature is disabled and vulnerability type is manual', async function (assert) {
+    const vulnerability = this.server.create('vulnerability', {
+      types: [ENUMS.VULNERABILITY_TYPE.MANUAL],
+    });
+    const profile = this.server.create('profile');
+    const file = this.server.create('file', {
+      profile: profile,
+    });
+    const analysis = this.server.create('analysis', {
+      file: file,
+      vulnerability: vulnerability,
+      computedRisk: ENUMS.RISK.NONE,
+      status: ENUMS.ANALYSIS.COMPLETED,
+    });
+    this.set('analysis', analysis);
+
+    class OrganizationStub extends Service {
+      selected = {
+        id: 1,
+        features: {
+          manualscan: false,
+        },
+      };
+    }
+
+    this.owner.register('service:organization', OrganizationStub);
+
+    await render(hbs`<AnalysisDetails @analysis={{this.analysis}} />`);
+    assert.dom('[data-test-analysis-details-container]').doesNotExist();
   });
 
   test('it does not render regulatories for untested risk', async function (assert) {

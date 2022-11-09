@@ -1,0 +1,12 @@
+{{#if this.me.org.is_admin}}
+  {{#if @analysis.isRisky}}
+    <button
+      class='is-primary button'
+      type='button'
+      {{on 'click' @confirmCallback}}
+      data-test-edit-analysis-btn
+    >
+      {{fa-icon 'pencil'}}<span class='padding-l-h'></span>{{t 'editAnalysis'}}
+    </button>
+  {{/if}}
+{{/if}}

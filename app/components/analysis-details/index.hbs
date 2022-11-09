@@ -1,0 +1,570 @@
+{{#unless this.hideManualScanVulnerability}}
+  <article class='message' data-test-analysis-details-container>
+    <div data-test-analysis-id={{@analysis.id}} class='columns'>
+      <div class='column'>
+        <div
+          data-test-analysis-detail='header'
+          class='message-header vuln-header hideOrShow
+            {{if this.mpClassSelector "mp-plus" "mp-minus"}}
+            {{this.statusClass}}'
+          role='button'
+          {{on 'click' this.toggleVulnerability}}
+        >
+          <div class='columns'>
+            <RiskTag @analysis={{@analysis}} @columnSize='is-one-sixth' />
+            <div class='column'>
+              <h6 class='vuln-name'>
+                {{@analysis.vulnerability.name}}
+              </h6>
+            </div>
+            <div class='column content-right'>
+              {{#each this.tags as |tag|}}
+                <span
+                  class='tag scan-tag
+                    {{if tag.status "finished-scan" "unfinished-scan"}}'
+                >
+                  {{t tag.text}}
+                  {{#if tag.status}}
+                    {{fa-icon 'check'}}
+                    <AttachTooltip @position='top'>
+                      {{tag.text}}
+                      {{t 'scanCompleted'}}
+                    </AttachTooltip>
+                  {{else}}
+                    {{fa-icon 'times'}}
+                    <AttachTooltip @position='top'>
+                      {{tag.text}}
+                      {{t 'scanNotCompleted'}}
+                    </AttachTooltip>
+                  {{/if}}
+                </span>
+              {{/each}}
+              <div class='margin-left details'>
+                {{#if this.showVulnerability}}
+                  <i class='fa fa-chevron-up'></i>
+                {{else}}
+                  <i class='fa fa-chevron-down'></i>
+                {{/if}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{#if this.showVulnerability}}
+      <div data-test-analysis-detail='body' class='message-body vuln-body'>
+        <div class='align-both'>
+          <h5 class='black-text margin-t-h'>
+            {{t 'description'}}
+          </h5>
+          <EditAnalysisButton
+            @analysis={{@analysis}}
+            @confirmCallback={{this.openEditAnalysisModal}}
+          />
+        </div>
+        {{#if this.analysis.isScanning}}
+          <div class='margin-top'>
+            {{@analysis.vulnerability.question}}
+          </div>
+        {{else if @analysis.isRisky}}
+          <p>
+            {{@analysis.vulnerability.descriptionUnescapedd}}
+          </p>{{#if @analysis.vulnerability.businessImplication}}
+            <h5 class='margin-top30 black-text'>
+              {{t 'businessImplication'}}
+            </h5>
+            <span class='bi-span'>
+              {{this.businessImplication}}
+            </span>
+          {{/if}}
+        {{else}}
+          <div class='margin-top'>
+            {{@analysis.vulnerability.successMessage}}
+          </div>
+        {{/if}}
+        {{#if @analysis.isRisky}}
+          <div
+            data-test-analysis-detail='regulatories'
+            class='regulatary-section margin-top'
+          >
+            <div class='columns section'>
+              <div class='column'>
+                <h5 class='black-text'>
+                  {{t 'regulatory'}}
+                </h5>
+              </div>
+            </div>
+            {{#if (and (eq @analysis.cvssVersion 3) @analysis.cvssVector)}}
+              <div data-test-regulatory='cvssv3'>
+                <div class='columns section'>
+                  <div
+                    title='{{t "cvssExpansion"}}'
+                    data-test-regulatory-label='cvssv3'
+                    class='column is-one-sixth'
+                  >CVSSv3</div>
+                  <div
+                    data-test-regulatory-detail='cvssv3'
+                    class='column black-text'
+                  >
+                    {{@analysis.cvssBase}}
+                  </div>
+                </div>
+                <div class='columns section'>
+                  <div
+                    data-test-regulatory-label='cvssv3metrics'
+                    class='column is-one-sixth'
+                  >{{t 'cvssMetrics'}}</div>
+                  <div
+                    data-test-regulatory-detail='cvssv3metrics'
+                    class='column'
+                  >
+                    <ul>
+                      {{#each @analysis.cvssMetricsHumanized as |metric|}}
+                        <li>
+                          <div class='columns'>
+                            <div
+                              data-test-cvssv3metrics-key={{metric.key}}
+                              class='column is-one-third'
+                            >
+                              {{metric.key}}
+                            </div>
+                            <div class='column black-text'>
+                              {{metric.value}}
+                            </div>
+                          </div>
+                        </li>
+                      {{/each}}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            {{/if}}
+            {{#if @analysis.owasp}}
+              <div data-test-regulatory='owasp' class='columns section'>
+                <div
+                  title='{{t "owaspExpansion"}}'
+                  data-test-regulatory-label='owasp'
+                  class='column is-one-sixth'
+                >OWASP</div>
+                <div data-test-regulatory-detail='owasp' class='column'>
+                  <ul>
+                    {{#each @analysis.owasp as |category|}}
+                      <li>
+                        <div data-test-owasp={{category.id}} class='columns'>
+                          <div class='column is-one-third'>
+                            {{category.code}}
+                          </div>
+                          <div class='column black-text'>
+                            {{category.title}}
+                          </div>
+                        </div>
+                      </li>
+                    {{/each}}
+                  </ul>
+                </div>
+              </div>
+            {{/if}}
+            {{#if @analysis.cwe}}
+              <div data-test-regulatory='cwe' class='columns section'>
+                <div
+                  title='{{t "cweExpansion"}}'
+                  data-test-regulatory-label='cwe'
+                  class='column is-one-sixth'
+                >CWE</div>
+                <div data-test-regulatory-detail='cwe' class='column'>
+                  <ul>
+                    {{#each @analysis.cwe as |cwe|}}
+                      <CweDetails @cwe={{cwe}} />
+                    {{/each}}
+                  </ul>
+                </div>
+              </div>
+            {{/if}}
+            {{#if @analysis.asvs}}
+              <div data-test-regulatory='asvs' class='columns section'>
+                <div
+                  title='{{t "asvsExpansion"}}'
+                  data-test-regulatory-label='asvs'
+                  class='column is-one-sixth'
+                >ASVS</div>
+                <div data-test-regulatory-detail='asvs' class='column'>
+                  <ul>
+                    {{#each @analysis.asvs as |asvs|}}
+                      <AsvsDetails @asvs={{asvs}} />
+                    {{/each}}
+                  </ul>
+                </div>
+              </div>
+            {{/if}}
+            {{#if @analysis.mstg}}
+              <div data-test-regulatory='mstg' class='columns section'>
+                <div
+                  title='{{t "mstgExpansion"}}'
+                  data-test-regulatory-label='mstg'
+                  class='column is-one-sixth'
+                >MSTG</div>
+                <div data-test-regulatory-detail='mstg' class='column'>
+                  <ul>
+                    {{#each @analysis.mstg as |mstg|}}
+                      <MstgDetails @mstg={{mstg}} />
+                    {{/each}}
+                  </ul>
+                </div>
+              </div>
+            {{/if}}
+            {{#if @analysis.file.profile.reportPreference.show_pcidss.value}}
+              {{#if @analysis.pcidss}}
+                <div data-test-regulatory='pcidss' class='columns section'>
+                  <div
+                    title='{{t "pcidssExpansion"}}'
+                    data-test-regulatory-label='pcidss'
+                    class='column is-one-sixth'
+                  >PCI-DSS</div>
+                  <div data-test-regulatory-detail='pcidss' class='column'>
+                    <ul>
+                      {{#each @analysis.pcidss as |category|}}
+                        <PcidssDetails
+                          @category={{category}}
+                          data-test-pcidss-id={{category.code}}
+                        />
+                      {{/each}}
+                    </ul>
+                  </div>
+                </div>
+              {{/if}}
+            {{/if}}
+            {{#if @analysis.file.profile.reportPreference.show_hipaa.value}}
+              {{#if @analysis.hipaa}}
+                <div data-test-regulatory='hipaa' class='columns section'>
+                  <div
+                    title='{{t "hipaaExpansion"}}'
+                    data-test-regulatory-label='hipaa'
+                    class='column is-one-sixth'
+                  >HIPAA</div>
+                  <div data-test-regulatory-detail='hipaa' class='column'>
+                    <ul>
+                      {{#each @analysis.hipaa as |hipaa|}}
+                        <HipaaDetails @hipaa={{hipaa}} />
+                      {{/each}}
+                    </ul>
+                  </div>
+                </div>
+              {{/if}}
+            {{/if}}
+            {{#if @analysis.file.profile.reportPreference.show_gdpr.value}}
+              {{#if @analysis.gdpr}}
+                <div data-test-regulatory='gdpr' class='columns section'>
+                  <div
+                    title='{{t "gdprExpansion"}}'
+                    data-test-regulatory-label='gdpr'
+                    class='column is-one-sixth'
+                  >GDPR</div>
+                  <div data-test-regulatory-detail='gdpr' class='column'>
+                    <ul>
+                      {{#each @analysis.gdpr as |gdpr|}}
+                        <GdprDetails @gdpr={{gdpr}} />
+                      {{/each}}
+                    </ul>
+                  </div>
+                </div>
+              {{/if}}
+            {{/if}}
+          </div>
+        {{/if}}
+        <div class='columns'>
+          <div class='column'>
+            {{#if @analysis.isRisky}}
+              <h5 class='margin-top black-text'>
+                {{t 'vulnerability'}}
+              </h5>
+              {{#each @analysis.findings as |finding|}}
+                <p class='extra-desc'>
+                  {{finding.title}}
+                </p>
+                <span class='scrollable-box'>
+                  <pre class='pre-code' local-class='finding-desc-code'>
+                    {{finding.description}}
+                  </pre>
+                </span>
+              {{/each}}
+            {{/if}}
+            {{#if @analysis.attachments}}
+              <h5 class='margin-top20 black-text'>
+                {{t 'attachments'}}
+              </h5>
+              {{#each @analysis.attachments as |attachment|}}
+                <AttachmentDetail @attachment={{attachment}} />
+              {{/each}}
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    {{/if}}
+  </article>
+
+  <ModalCard
+    @isActive={{this.showEditAnalysisModal}}
+    @title='Edit Analysis'
+    @class='input-modal edit-analysis-modal'
+  >
+    <div class='card-body'>
+      <div class='card-wrapper'>
+        <div class='padding-b-1h text-centre'>
+          <h5 class='vuln-name'>
+            {{@analysis.vulnerability.name}}
+          </h5>
+        </div>
+        {{#if @analysis.isRisky}}
+          <div
+            class='fill-silver margin-h-neg-20 margin-b-neg-20 padding-h-1h padding-t-1h'
+          >
+            <div class='bold black-text uppercase-text padding-b-1'>
+              {{t 'overrideRisk'}}
+            </div>
+            {{#if @analysis.isOverriddenRisk}}
+              <div class='columns margin-top-q'>
+                <div class='column'>
+                  <div class='vertical-align-center'>
+                    {{#if this.isEditingOverriddenRisk}}
+                      <div class='bold'>
+                        {{t 'markItAs'}}
+                      </div>
+                      <select
+                        id='marked-analysis'
+                        class='margin-h-h'
+                        {{on 'change' this.selectMarkedAnalyis}}
+                      >
+                        {{#each this.filteredRisks as |risk|}}
+                          <option value={{risk.value}}>
+                            {{t (risk-text risk.value)}}
+                          </option>
+                        {{/each}}
+                      </select>
+                      <div class='bold'>
+                        {{t 'for'}}
+                      </div>
+                      <select
+                        id='marked-analysis-all'
+                        class='margin-h-h mark-analysis-all'
+                        {{on 'change' this.selectMarkedAnalyisType}}
+                      >
+                        <option value={{false}}>
+                          {{t 'currentFileOnly'}}
+                        </option>
+                        <option
+                          value={{true}}
+                          selected={{this.markAllAnalyses}}
+                        >
+                          {{t 'allFutureAnalyses'}}
+                        </option>
+                      </select>
+                    {{else}}
+                      <div class='bold'>
+                        {{t 'overriddenRisk'}}
+                      </div>
+                      <div
+                        class='tag
+                          {{@analysis.overriddenRiskLabelClass}}
+                          margin-h-q'
+                      >
+                        <i
+                          class='fa risk-icons
+                            {{@analysis.overriddenRiskIconClass}}'
+                        ></i>
+                        <div class='uppercase-text'>
+                          &nbsp;
+                          {{t (risk-text @analysis.overriddenRisk)}}
+                        </div>
+                      </div>
+                    {{/if}}
+                    <div class='bold margin-l-h'>
+                      {{t 'orginalRisk'}}
+                    </div>
+                    <div class='tag {{@analysis.riskLabelClass}} margin-h-q'>
+                      <i class='fa risk-icons {{@analysis.riskIconClass}}'></i>
+                      <div class='uppercase-text'>
+                        &nbsp;
+                        {{t (risk-text @analysis.risk)}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class='vertical-align-top margin-v-h'>
+                    <div class='margin-r-1 padding-t-h'>
+                      <label class='bold'>
+                        {{t 'comment'}}
+                      </label>
+                    </div>
+                    {{#if this.isEditingOverriddenRisk}}
+                      <div class='contain-width'>
+                        <Textarea
+                          aria-label='override reason'
+                          rows='2'
+                          placeholder='{{t "reasonForOverride"}}'
+                          @value={{@analysis.overriddenRiskComment}}
+                          class='form-control textarea-input margin-t-q'
+                        />
+
+                      </div>
+                    {{else}}
+                      <span class='padding-t-h padding-b-1h'>
+                        {{#if @analysis.overriddenRiskComment}}
+                          {{@analysis.overriddenRiskComment}}
+                        {{else}}
+                          <em class='text-lightgray'>
+                            {{t 'none'}}
+                          </em>
+                        {{/if}}
+                      </span>
+                    {{/if}}
+                  </div>
+                  <div class='columns'>
+                    {{#if this.isEditingOverriddenRisk}}
+                      <div class='column is-one-third'>
+                        <button
+                          disabled={{this.isMarkingAnalysis}}
+                          class='is-default edit-marked-analysis button'
+                          type='button'
+                          {{on 'click' this.markAnalysis}}
+                        >
+                          {{#if this.isMarkingAnalysis}}
+                            {{fa-icon 'spinner fa-spin'}}
+                          {{else}}
+                            {{fa-icon 'check'}}
+                          {{/if}}
+                          <span class='margin-l-h'>
+                            {{t 'save'}}
+                          </span>
+                        </button>
+                        <button
+                          class='is-default edit-marked-analysis button'
+                          type='button'
+                          {{on 'click' this.cancelEditMarkingAnalysis}}
+                        >
+                          {{fa-icon 'times'}}<span class='margin-l-h'>
+                            {{t 'cancel'}}
+                          </span>
+                        </button>
+                      </div>
+                    {{else}}
+                      <div class='column'>
+                        <button
+                          disabled={{this.isEditingMarkedAnalysis}}
+                          class='is-default edit-marked-analysis button'
+                          type='button'
+                          {{on 'click' this.editMarkedAnalysis}}
+                        >
+                          {{#if this.isEditingMarkedAnalysis}}
+                            {{fa-icon 'spinner fa-spin'}}
+                          {{else}}
+                            {{fa-icon 'pencil'}}
+                          {{/if}}
+                          <span class='margin-l-h'>
+                            {{t 'edit'}}
+                          </span>
+                        </button>
+                        <button
+                          class='is-default edit-marked-analysis button'
+                          type='button'
+                          {{on 'click' this.openResetMarkedAnalysisConfirmBox}}
+                        >
+                          {{fa-icon 'undo'}}<span class='margin-l-h'>
+                            {{t 'reset'}}
+                          </span>
+                        </button>
+                      </div>
+                    {{/if}}
+                  </div>
+                </div>
+              </div>
+            {{else}}
+              <div class='columns margin-top-q'>
+                <div class='column'>
+                  <h6>
+                    {{t 'falsePositive'}}
+                  </h6>
+                  <div class='vertical-align-center margin-v-3q'>
+                    <div class='margin-r-h'>
+                      <h6 class='bold'>
+                        {{t 'markItAs'}}
+                      </h6>
+                    </div>
+                    <select
+                      id='marked-analysis'
+                      {{on 'change' this.selectMarkedAnalyis}}
+                    >
+                      {{#each this.filteredRisks as |risk|}}
+                        <option value={{risk.value}}>
+                          {{t (risk-text risk.value)}}
+                        </option>
+                      {{/each}}
+                    </select>
+                    <div class='margin-h-h'>
+                      <h6 class='bold'>
+                        {{t 'for'}}
+                      </h6>
+                    </div>
+                    <select
+                      id='marked-analysis-all'
+                      class='mark-analysis-all'
+                      {{on 'change' this.selectMarkedAnalyisType}}
+                    >
+                      <option value='false'>
+                        {{t 'currentFileOnly'}}
+                      </option>
+                      <option value='true'>
+                        {{t 'allFutureAnalyses'}}
+                      </option>
+                    </select>
+                  </div>
+                  <div class='vertical-align-top'>
+                    <div class='margin-r-1 padding-t-h'>
+                      <label class='bold'>
+                        {{t 'comment'}}
+                      </label>
+                    </div>
+                    <div class='contain-width'>
+                      <Textarea
+                        rows='2'
+                        aria-label='Overridden Risk Comment'
+                        placeholder={{t 'reasonForOverride'}}
+                        @value={{this.analysis.overriddenRiskComment}}
+                        class='form-control textarea-input margin-t-q'
+                      />
+
+                    </div>
+                  </div>
+                  <div class='columns margin-t-h'>
+                    <div class='column'>
+                      <button
+                        disabled={{this.isMarkingAnalysis}}
+                        class='is-default button'
+                        type='button'
+                        {{on 'click' this.markAnalysis}}
+                      >
+                        {{#if this.isMarkingAnalysis}}
+                          {{fa-icon 'spinner fa-spin'}}
+                        {{else}}
+                          {{fa-icon 'check'}}
+                        {{/if}}
+                        <span class='margin-l-h'>
+                          {{t 'save'}}
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {{/if}}
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  </ModalCard>
+
+  <ConfirmBox
+    @isActive={{this.showResetAnalysisConfirmBox}}
+    @title='Reset Overridden Analysis'
+    @delegate={{this}}
+    @disabled={{this.isResettingMarkedAnalysis}}
+  />
+{{/unless}}
