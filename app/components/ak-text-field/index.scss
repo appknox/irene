@@ -1,0 +1,131 @@
+.ak-form-control {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.ak-form-label {
+  color: var(--text-secondary);
+  font-weight: 400;
+  font-size: 1rem;
+  padding: 0;
+  position: relative;
+  display: block;
+  transform-origin: top left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.4em;
+}
+
+.ak-form-helper-text {
+  color: var(--text-secondary);
+  font-weight: 400;
+  font-size: 0.857rem;
+  text-align: left;
+  margin-top: 0.2em;
+  margin-right: 0.5em;
+  margin-bottom: 0;
+  margin-left: 0.5em;
+}
+
+.ak-error-form-helper-text {
+  color: var(--error-main) !important;
+}
+
+.ak-text-field-root {
+  font-weight: 400;
+  font-size: 1rem;
+  color: var(--text-primary);
+  box-sizing: border-box;
+  position: relative;
+  cursor: text;
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--border-radius);
+}
+
+.ak-text-input {
+  font: inherit;
+  letter-spacing: inherit;
+  color: currentColor;
+  box-sizing: content-box;
+  background: none;
+  border: 0;
+  height: 1.4375em;
+  margin: 0;
+  display: block;
+  min-width: 0;
+  width: 100%;
+  padding: 0.6em;
+  outline: unset;
+
+  &::placeholder {
+    color: var(--text-secondary);
+    opacity: 1;
+  }
+
+  &:-ms-input-placeholder {
+    color: var(--text-secondary);
+  }
+
+  &::-ms-input-placeholder {
+    color: var(--text-secondary);
+  }
+
+  &:focus ~ .ak-text-input-outlined,
+  &:focus-visible ~ .ak-text-input-outlined {
+    border-width: 2px;
+  }
+
+  &:disabled {
+    color: var(--text-secondary);
+  }
+
+  &:disabled ~ .ak-text-input-outlined {
+    background-color: var(--disabled-background-textfield);
+    border-color: var(--disabled-background-textfield);
+    z-index: -1;
+  }
+}
+
+.ak-error-text-input {
+  border-color: var(--error-main) !important;
+}
+
+.ak-text-input-outlined {
+  text-align: left;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0 0.5em;
+  pointer-events: none;
+  border-radius: inherit;
+  border-style: solid;
+  border-width: 1px;
+  overflow: hidden;
+  min-width: 0%;
+  border-color: var(--border-color-2);
+}
+
+.ak-text-field-left-adornment,
+.ak-text-field-right-adornment {
+  display: inline-flex;
+  align-items: center;
+
+  :global(.ak-icon) {
+    font-size: 1.25rem;
+  }
+}
+
+.ak-text-field-left-adornment {
+  margin-left: 0.6em;
+}
+
+.ak-text-field-right-adornment {
+  margin-right: 0.6em;
+}

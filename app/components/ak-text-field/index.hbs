@@ -1,0 +1,58 @@
+<div local-class='ak-form-control'>
+  {{#if @label}}
+    <label data-test-form-label local-class='ak-form-label' for={{this.id}}>
+      {{@label}}
+      {{if @required ' *'}}
+    </label>
+  {{/if}}
+
+  <div local-class='ak-text-field-root'>
+    {{#if (has-block 'leftAdornment')}}
+      <div
+        data-test-ak-text-field-left-adornment
+        local-class='ak-text-field-left-adornment'
+      >
+        {{yield to='leftAdornment'}}
+      </div>
+    {{/if}}
+
+    <Input
+      data-test-text-input
+      id={{this.id}}
+      local-class='ak-text-input'
+      @type={{or @type 'text'}}
+      @value={{@value}}
+      required={{@required}}
+      placeholder={{@placeholder}}
+      autofocus={{@autofocus}}
+      disabled={{@disabled}}
+      readonly={{@readonly}}
+      ...attributes
+    />
+
+    {{#if (has-block 'rightAdornment')}}
+      <div
+        data-test-ak-text-field-right-adornment
+        local-class='ak-text-field-right-adornment'
+      >
+        {{yield to='rightAdornment'}}
+      </div>
+    {{/if}}
+
+    <fieldset
+      aria-hidden='true'
+      data-test-text-input-outlined
+      local-class='ak-text-input-outlined {{if @error "ak-error-text-input"}}'
+    ></fieldset>
+  </div>
+
+  {{#if @helperText}}
+    <p
+      data-test-helper-text
+      local-class='ak-form-helper-text {{if
+        @error
+        "ak-error-form-helper-text"
+      }}'
+    >{{@helperText}}</p>
+  {{/if}}
+</div>
