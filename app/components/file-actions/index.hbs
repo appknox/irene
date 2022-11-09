@@ -1,9 +1,13 @@
-<div class='columns' {{did-insert (perform this.getVulnerabilities)}}>
+<div
+  data-test-file-actions-container
+  class='columns'
+  {{did-insert (perform this.getVulnerabilities)}}
+>
   <div class='column'>
     <div class='file-action-container'>
       <div class='columns'>
         <div class='column'>
-          <h3>
+          <h3 data-test-file-actions-name-id>
             {{this.file.name}}
             |
             {{this.file.id}}
@@ -79,24 +83,26 @@
                   &nbsp; Is Dynamic done
                 </label>
               </div>
-              <div class='column'>
-                <div class='vertical-align-center'>
-                  <div class='padding-r-h'>
-                    Manual Scan
-                  </div>
-                  <div class='flex-grow-1'>
-                    <PowerSelect
-                      @searchEnabled={{false}}
-                      @selected={{this.manualToString}}
-                      @onChange={{this.selectManualScan}}
-                      @options={{this.manualStatuses}}
-                      as |status|
-                    >
-                      {{manual-scan-status status}}
-                    </PowerSelect>
+              {{#unless this.hideManualScanStatusSelect}}
+                <div class='column' data-test-manual-scan-statuses>
+                  <div class='vertical-align-center'>
+                    <div class='padding-r-h'>
+                      Manual Scan
+                    </div>
+                    <div class='flex-grow-1'>
+                      <PowerSelect
+                        @searchEnabled={{false}}
+                        @selected={{this.manualToString}}
+                        @onChange={{this.selectManualScan}}
+                        @options={{this.manualStatuses}}
+                        as |status|
+                      >
+                        {{manual-scan-status status}}
+                      </PowerSelect>
+                    </div>
                   </div>
                 </div>
-              </div>
+              {{/unless}}
             </div>
           </div>
         </div>
