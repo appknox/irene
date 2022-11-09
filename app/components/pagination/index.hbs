@@ -1,60 +1,132 @@
 <div data-test-pagination-container>
-  {{yield (hash currentPage=this.currentPageResults)}}
-  {{#if this.showPaginationNavBar}}
-    <div local-class='app-pagination'>
-      <aside local-class='app-pagination-info' role='contentinfo'>
-        <p>Records per page</p>
-        <select
-          name='recordPerPage'
-          id='recordPerPage'
-          {{on 'change' this.onItemsPerPageSelect}}
-          data-test-pagination-select
-        >
-          {{#each this.itemPerPageSelectOptions as |item|}}
-            <option
-              selected={{item.selected}}
-              value={{item.value}}
-              data-test-pagination-select-option
-            >
-              {{item.value}}
-            </option>
-          {{/each}}
-        </select>
-        {{#if @totalItems}}
-          <span local-class='app-pagination-page-range' data-test-page-range>
-            {{this.startItemIdx}}-{{this.endItemIdx}}
-            of
-            {{@totalItems}}
-            {{@tableItemLabel}}
-          </span>
-        {{/if}}
-      </aside>
-      <aside
-        local-class='app-pagination-btns'
-        data-test-pagination-btns-container
-      >
-        <button
-          type='button'
-          local-class='app-pagination-btn prev-btn'
-          disabled={{this.disablePrev}}
-          {{on 'click' this.goToPrevPage}}
-          data-test-pagination-prev-btn
-        >
-          <span class='ak-icon ak-icon-arrow-left'></span>
-          Previous
-        </button>
+  {{#if (has-block 'currentPageRecords')}}
+    {{yield this.currentPageResults to='currentPageRecords'}}
+  {{else}}
+    {{yield (hash currentPage=this.currentPageResults)}}
+  {{/if}}
 
-        <button
-          type='button'
-          local-class='app-pagination-btn next-btn'
-          disabled={{this.disableNext}}
-          {{on 'click' this.goToNextPage}}
-          data-test-pagination-next-btn
-        >
-          Next
-          <span class='ak-icon ak-icon-arrow-right'></span>
-        </button>
-      </aside>
-    </div>
+  {{#if this.showPaginationNavBar}}
+    {{#if (has-block 'paginationBar')}}
+      {{yield
+        (hash
+          itemPerPageSelectOptions=this.itemPerPageSelectOptions
+          onItemsPerPageSelect=this.onItemsPerPageSelect
+          totalItems=@totalItems
+          startItemIdx=this.startItemIdx
+          endItemIdx=this.endItemIdx
+          tableItemLabel=@tableItemLabel
+          prevAction=this.goToPrevPage
+          prevBtnIsDisabled=(readonly this.disablePrev)
+          nextAction=this.goToNextPage
+          nextBtnIsDisabled=(readonly this.disableNext)
+        )
+        to='paginationBar'
+      }}
+    {{else}}
+      <div local-class='app-pagination'>
+        {{#if (has-block 'currentPageDetails')}}
+          {{yield
+            (hash
+              itemPerPageSelectOptions=this.itemPerPageSelectOptions
+              onItemsPerPageSelect=this.onItemsPerPageSelect
+              totalItems=@totalItems
+              startItemIdx=this.startItemIdx
+              endItemIdx=this.endItemIdx
+              tableItemLabel=@tableItemLabel
+            )
+            to='currentPageDetails'
+          }}
+        {{else}}
+          <aside local-class='app-pagination-info' role='contentinfo'>
+            <p>{{this.perPageTranslation}}</p>
+            <select
+              name='recordPerPage'
+              id='recordPerPage'
+              {{on 'change' this.onItemsPerPageSelect}}
+              data-test-pagination-select
+            >
+              {{#each this.itemPerPageSelectOptions as |item|}}
+                <option
+                  selected={{item.selected}}
+                  value={{item.value}}
+                  data-test-pagination-select-option
+                >
+                  {{item.value}}
+                </option>
+              {{/each}}
+            </select>
+            {{#if (and @totalItems (gt this.currentPageResults.length 0))}}
+              <span
+                local-class='app-pagination-page-range'
+                data-test-page-range
+              >
+                {{this.startItemIdx}}-{{this.endItemIdx}}
+                of
+                {{@totalItems}}
+                {{@tableItemLabel}}
+              </span>
+            {{/if}}
+          </aside>
+        {{/if}}
+
+        {{#if (has-block 'paginationButtonGroup')}}
+          {{yield
+            (hash
+              prevAction=this.goToPrevPage
+              prevBtnIsDisabled=(readonly this.disablePrev)
+              nextAction=this.goToNextPage
+              nextBtnIsDisabled=(readonly this.disableNext)
+            )
+            to='paginationButtonGroup'
+          }}
+        {{else}}
+          <aside
+            local-class='app-pagination-btns'
+            data-test-pagination-btns-container
+          >
+            {{#if (has-block 'previousButton')}}
+              {{yield
+                (hash
+                  prevAction=this.goToPrevPage
+                  isDisabled=(readonly this.disablePrev)
+                )
+                to='previousButton'
+              }}
+            {{else}}
+              <button
+                type='button'
+                local-class='app-pagination-btn prev-btn'
+                disabled={{this.disablePrev}}
+                {{on 'click' this.goToPrevPage}}
+                data-test-pagination-prev-btn
+              >
+                <span class='ak-icon ak-icon-arrow-left'></span>
+                Previous
+              </button>
+            {{/if}}
+            {{#if (has-block 'nextButton')}}
+              {{yield
+                (hash
+                  nextAction=this.goToNextPage
+                  isDisabled=(readonly this.disableNext)
+                )
+                to='nextButton'
+              }}
+            {{else}}
+              <button
+                type='button'
+                local-class='app-pagination-btn next-btn'
+                disabled={{this.disableNext}}
+                {{on 'click' this.goToNextPage}}
+                data-test-pagination-next-btn
+              >
+                Next
+                <span class='ak-icon ak-icon-arrow-right'></span>
+              </button>
+            {{/if}}
+          </aside>
+        {{/if}}
+      </div>
+    {{/if}}
   {{/if}}
 </div>

@@ -9,6 +9,10 @@ export default class PaginationComponent extends Component {
     return this.args.results;
   }
 
+  get perPageTranslation() {
+    return this.args.perPageTranslation;
+  }
+
   get offset() {
     if (this.args.offset > this.maxOffset) {
       return this.maxOffset;
@@ -96,15 +100,15 @@ export default class PaginationComponent extends Component {
   }
 
   // Check if received page items count items are valid
-  _resolveReceivedPageItemsCountOptions(
-    items = [5, 10, 20, 30, 40],
-    defaultLimit = items[0]
-  ) {
+  _resolveReceivedPageItemsCountOptions(items, defaultLimit = items[0]) {
     const allReceivedItemsAreValid =
       Array.isArray(items) && items.every((item) => !isNaN(Number(item)));
-    const defaultItems = allReceivedItemsAreValid ? items : [5, 10, 20, 30, 40];
 
-    return defaultItems.map((option) => ({
+    if (!allReceivedItemsAreValid) {
+      throw new Error('You provided an invalid page size list');
+    }
+
+    return items.map((option) => ({
       selected: Number(option) === defaultLimit || false,
       value: Number(option),
     }));

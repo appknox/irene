@@ -18,28 +18,30 @@
         @defaultLimit={{this.limit}}
         @offset={{this.offset}}
         @tableItemLabel='Projects'
+        @perPageTranslation={{t 'recordsPerPage'}}
         data-test-pagination-component
-        as |context|
       >
-        {{#if this.isFetchingAMTableData}}
-          <div local-class='loading'>
-            <ThreeBounceSpinner />
-          </div>
-        {{else if this.isEmptyAMResult}}
-          <AppMonitoring::Table::Error
-            @header='{{t "appMonitoringErrors.emptyResults.header"}}'
-            @body='{{t "appMonitoringErrors.emptyResults.body"}}'
-          />
-        {{else}}
-          {{#each context.currentPage as |app idx|}}
-            <AppMonitoring::Table::Row
-              @amApp={{app}}
-              @id={{idx}}
-              @onRowClick={{this.onTableRowClick}}
-              @settings={{@settings}}
+        <:currentPageRecords as |records|>
+          {{#if this.isFetchingAMTableData}}
+            <div local-class='loading'>
+              <ThreeBounceSpinner />
+            </div>
+          {{else if this.isEmptyAMResult}}
+            <AppMonitoring::Table::Error
+              @header='{{t "appMonitoringErrors.emptyResults.header"}}'
+              @body='{{t "appMonitoringErrors.emptyResults.body"}}'
             />
-          {{/each}}
-        {{/if}}
+          {{else}}
+            {{#each records as |app idx|}}
+              <AppMonitoring::Table::Row
+                @amApp={{app}}
+                @id={{idx}}
+                @onRowClick={{this.onTableRowClick}}
+                @settings={{@settings}}
+              />
+            {{/each}}
+          {{/if}}
+        </:currentPageRecords>
       </Pagination>
     </div>
   {{/if}}
