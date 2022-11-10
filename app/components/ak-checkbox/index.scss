@@ -1,0 +1,60 @@
+.ak-checkbox-root {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  background-color: transparent;
+  outline: 0px;
+  border: 0px;
+  margin: 0px;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+  appearance: none;
+  text-decoration: none;
+  padding: 0.8em;
+  border-radius: 50%;
+
+  &.ak-checkbox-hover-focus {
+    &:hover,
+    &:focus {
+      background-color: var(--hover-light-background);
+    }
+  }
+}
+
+.ak-checkbox {
+  cursor: inherit;
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  margin: 0px;
+  padding: 0px;
+  z-index: 1;
+
+  &:disabled + .ak-svg-checkbox-icon {
+    color: var(--text-disabled) !important;
+  }
+}
+
+.ak-svg-checkbox-icon {
+  user-select: none;
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  color: currentColor;
+  flex-shrink: 0;
+  font-size: 1.5rem !important;
+
+  &.ak-svg-checkbox-icon-checked {
+    color: var(--success-main);
+  }
+
+  &.ak-svg-checkbox-icon-indeterminate {
+    color: var(--success-main);
+  }
+}
