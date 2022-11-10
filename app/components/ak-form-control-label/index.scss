@@ -1,0 +1,26 @@
+.ak-form-control-label-root {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.ak-form-control-label {
+  margin: 0px;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5;
+  letter-spacing: 0.00938em;
+}
+
+.ak-form-control-label-placement-right {
+  flex-direction: row;
+}
+
+.ak-form-control-label-placement-left {
+  flex-direction: row-reverse;
+}
+
+.ak-form-control-label-disabled {
+  color: var(--disabled-color);
+}
