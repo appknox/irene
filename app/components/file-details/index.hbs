@@ -1,0 +1,86 @@
+<div class='columns'>
+  <div class='column'>
+    <FileHeader @file={{this.file}} class='margin-top' />
+  </div>
+</div>
+<div class='columns margin-left5 margin-top'>
+  <div class='column'>
+    <div
+      class='uppercase-text font-size-16 red-text'
+      data-test-vulnerability-details-header
+    >
+      {{t 'vulnerabilityDetails'}}
+    </div>
+  </div>
+  {{#if this.isSecurityEnabled}}
+    <div class='column content-right' data-test-edit-analyses-link-wrapper>
+      <a
+        href='/security/file/{{this.file.id}}'
+        target='_blank'
+        rel='noopener noreferrer'
+        class='button is-primary'
+        data-test-edit-analyses-link
+      >
+        Edit Analyses
+      </a>
+    </div>
+  {{/if}}
+</div>
+<div class='columns'>
+  <div class='column margin-left5'>
+    <div class='columns analysis-header'>
+      <div class='column is-one-sixth uppercase-text'>
+        <div
+          class='remove'
+          role='button'
+          {{on 'click' this.sortByImpact}}
+          data-test-sort-analyses-by-impact
+        >
+          {{t 'impact'}}
+          {{#if this.sortImpactAscending}}
+            <i class='fa fa-sort-down sort-icons'></i>
+          {{else}}
+            <i class='fa fa-sort-up sort-icons'></i>
+          {{/if}}
+        </div>
+      </div>
+      <div class='column uppercase-text'>
+        {{t 'title'}}
+      </div>
+      <div
+        class='column content-right is-one-sixth'
+        data-test-vulnerability-filter
+      >
+        <select
+          id='filter-vulnerability-type'
+          class='input filter-input'
+          {{on 'change' this.filterVulnerabilityType}}
+          data-test-vulnerability-filter-select
+        >
+          <option value='-1' data-test-vulnerability-filter-select-option>
+            {{t 'allScans'}}
+          </option>
+          {{#each this.vulnerabilityTypes as |vulnerabilityType|}}
+            <option
+              value={{vulnerabilityType.value}}
+              data-test-vulnerability-filter-select-option
+            >
+              {{t (vulnerability-type vulnerabilityType.value)}}
+            </option>
+          {{/each}}
+        </select>
+      </div>
+    </div>
+    {{#if this.sortedUnhiddenAnalyses}}
+      {{#each this.sortedUnhiddenAnalyses as |analysis|}}
+        <AnalysisDetails @analysis={{analysis}} />
+      {{/each}}
+    {{else}}
+      <div class='not-found' data-test-no-analyses-found>
+        <h4>
+          {{fa-icon 'exclamation-triangle'}}{{t 'noScansFound'}}
+        </h4>
+      </div>
+    {{/if}}
+  </div>
+</div>
