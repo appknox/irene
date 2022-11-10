@@ -36,7 +36,9 @@
 # broccoli-debug
 /DEBUG/
 
-
 # Local Netlify folder
 .netlify
+
+#storybook
+/.storybook/preview-head.html
 

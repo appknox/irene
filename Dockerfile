@@ -1,4 +1,4 @@
-FROM node:16.13.1-stretch AS builder
+FROM node:16.18.0-stretch AS builder
 
 LABEL maintainer "Appknox <engineering@appknox.com>"
 
@@ -9,7 +9,7 @@ COPY . ./
 RUN npm run deploy:server
 
 
-FROM node:16.13.1-alpine
+FROM node:16.18.0-alpine
 
 LABEL maintainer "Appknox <engineering@appknox.com>"
 
