@@ -1,7 +1,7 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 
-export default class AppMonitoringDrawerComponent extends Component {
+export default class AppMonitoringDetailsComponent extends Component {
   @service intl;
 
   get amApp() {

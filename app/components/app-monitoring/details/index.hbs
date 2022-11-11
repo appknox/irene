@@ -1,15 +1,11 @@
 {{! template-lint-disable no-curly-component-invocation }}
-<div
-  local-class='modal {{if @showRightDrawer "open"}}'
-  id='am-right-drawer-container'
-  data-test-am-drawer-container
+<AkDrawer
+  @open={{@showRightDrawer}}
+  @anchor='right'
+  @onClose={{@closeModalHandler}}
+  as |dr|
 >
-  <div
-    local-class='modal-content {{if @showRightDrawer "open"}}'
-    class='flex-column flex-justify-space-between'
-    data-test-modal-content
-    {{on-click-outside @closeModalHandler '#am-right-drawer-container'}}
-  >
+  <div local-class='app-details-container'>
     <header
       local-class='modal-header'
       class='flex-row flex-justify-space-between'
@@ -21,7 +17,7 @@
         class='ak-icon ak-icon-close'
         role='button'
         data-test-am-drawer-header-close-icon
-        {{on 'click' @closeModalHandler}}
+        {{on 'click' dr.closeHandler}}
       >
       </span>
     </header>
@@ -158,4 +154,4 @@
       </section>
     {{/if}}
   </div>
-</div>
+</AkDrawer>

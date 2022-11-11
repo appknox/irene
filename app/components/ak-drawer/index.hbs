@@ -1,0 +1,20 @@
+{{#if @open}}
+  <div role='presentation' local-class='drawer-root'>
+    <div
+      data-test-backdrop
+      role='button'
+      aria-hidden='true'
+      local-class='backdrop-root'
+      {{on 'click' this.handleBackdropClick}}
+      {{did-insert this.backdropInserted}}
+    ></div>
+
+    <div
+      data-test-ak-drawer-container
+      local-class='drawer-container drawer-anchor-{{@anchor}}'
+      {{did-insert this.drawerInserted}}
+    >
+      {{yield (hash closeHandler=this.handleDrawerClose)}}
+    </div>
+  </div>
+{{/if}}
