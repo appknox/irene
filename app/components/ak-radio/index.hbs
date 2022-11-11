@@ -1,0 +1,32 @@
+<span
+  data-test-radio-root
+  local-class='ak-radio-root {{unless @disabled "ak-radio-hover-focus"}}'
+>
+  <input
+    data-test-radio
+    ...attributes
+    local-class='ak-radio'
+    checked={{this.checked}}
+    disabled={{@disabled}}
+    readonly={{@readonly}}
+    value={{@value}}
+    name={{this.name}}
+    type='radio'
+    id={{this.id}}
+    {{on 'change' this.onChange}}
+  />
+
+  {{#if this.checked}}
+    <span
+      data-test-radio-checked
+      local-class='ak-svg-radio-icon ak-svg-radio-icon-checked'
+      class='ak-icon ak-icon-radio-button-checked'
+    ></span>
+  {{else}}
+    <span
+      data-test-radio-unchecked
+      local-class='ak-svg-radio-icon'
+      class='ak-icon ak-icon-radio-button-unchecked'
+    ></span>
+  {{/if}}
+</span>

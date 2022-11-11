@@ -1,0 +1,8 @@
+<div
+  data-test-ak-radio-group
+  local-class='ak-radio-group-root ak-radio-group-{{this.groupDirection}}'
+>
+  {{yield
+    (hash value=this.finalValue handleChange=this.handleChange name=this.name)
+  }}
+</div>
