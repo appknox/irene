@@ -4,10 +4,10 @@ import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
-import styles from 'irene/components/app-monitoring/drawer/index.scss';
+import styles from 'irene/components/app-monitoring/details/index.scss';
 import { module, test } from 'qunit';
 
-module('Integration | Component | app-monitoring/drawer', function (hooks) {
+module('Integration | Component | app-monitoring/details', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
   setupIntl(hooks);
@@ -47,7 +47,7 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
     this.settings.enabled = true;
 
     await render(hbs`
-      <AppMonitoring::Drawer
+      <AppMonitoring::Details
         @showRightDrawer={{true}}
         @appDetails={{this.amApp}}
         @closeModalHandler={{this.closeDrawer}}
@@ -55,7 +55,7 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
       />
     `);
 
-    assert.dom('[data-test-am-drawer-container]').exists();
+    assert.dom('[data-test-ak-drawer-container]').exists();
     assert.dom('[data-test-am-drawer-header-close-icon]').exists();
     assert.dom('[data-test-am-drawer-header-title]').exists();
     assert
@@ -104,7 +104,7 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
     this.settings.enabled = false;
 
     await render(hbs`
-    <AppMonitoring::Drawer
+    <AppMonitoring::Details
       @showRightDrawer={{true}}
       @appDetails={{this.amApp}}
       @closeModalHandler={{this.closeDrawer}}
@@ -112,7 +112,7 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
     />
   `);
 
-    assert.dom('[data-test-am-drawer-container]').exists();
+    assert.dom('[data-test-ak-drawer-container]').exists();
     assert.dom('[data-test-am-drawer-header-close-icon]').exists();
     assert.dom('[data-test-am-drawer-header-title]').exists();
     assert
@@ -169,7 +169,7 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
     this.settings.enabled = true;
 
     await render(hbs`
-    <AppMonitoring::Drawer
+    <AppMonitoring::Details
       @showRightDrawer={{true}}
       @appDetails={{this.amApp}}
       @closeModalHandler={{this.closeDrawer}}
@@ -177,7 +177,7 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
     />
   `);
 
-    assert.dom('[data-test-am-drawer-container]').exists();
+    assert.dom('[data-test-ak-drawer-container]').exists();
     assert.dom('[data-test-am-drawer-header-close-icon]').exists();
     assert.dom('[data-test-am-drawer-header-title]').exists();
 
@@ -204,7 +204,7 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
     this.settings.enabled = true;
 
     await render(hbs`
-    <AppMonitoring::Drawer
+    <AppMonitoring::Details
       @showRightDrawer={{true}}
       @appDetails={{this.amApp}}
       @closeModalHandler={{this.closeDrawer}}
@@ -212,7 +212,7 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
     />
   `);
 
-    assert.dom('[data-test-am-drawer-container]').exists();
+    assert.dom('[data-test-ak-drawer-container]').exists();
     assert.dom('[data-test-am-drawer-header-close-icon]').exists();
     assert.dom('[data-test-am-drawer-header-title]').exists();
 
@@ -224,33 +224,16 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
 
   test('it hides drawer when "showRightDrawer" property is set to false', async function (assert) {
     await render(hbs`
-    <AppMonitoring::Drawer
+    <AppMonitoring::Details
       @showRightDrawer={{false}}
       @appDetails={{this.amApp}}
       @closeModalHandler={{this.closeDrawer}}
       />
       `);
 
-    assert
-      .dom('[data-test-am-drawer-container]')
-      .doesNotHaveClass(
-        'open',
-        "Drawer container element does not have a 'open' class"
-      );
+    assert.dom('[data-test-drawer-container]').doesNotExist();
 
-    assert
-      .dom('[data-test-am-drawer-container]')
-      .hasStyle(
-        { opacity: '0', zIndex: '-1' },
-        'Has a style of { opacity: 1, zIndex: -1 }'
-      );
-
-    assert
-      .dom('[data-test-modal-content]')
-      .doesNotHaveClass(
-        'open',
-        "Drawer content element does not have an 'open' class"
-      );
+    assert.dom('[data-test-drawer-content]').doesNotExist();
   });
 
   test('it renders "NOT SCANNED" in store version field when latestFile in latestAmAppVersion is null', async function (assert) {
@@ -267,7 +250,7 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
 
     await render(
       hbs`
-      <AppMonitoring::Drawer
+      <AppMonitoring::Details
         @showRightDrawer={{true}}
         @appDetails={{this.amApp}}
         @closeModalHandler={{this.closeDrawer}}
@@ -301,7 +284,7 @@ module('Integration | Component | app-monitoring/drawer', function (hooks) {
     this.settings.enabled = false;
 
     await render(hbs`
-    <AppMonitoring::Drawer
+    <AppMonitoring::Details
       @showRightDrawer={{true}}
       @appDetails={{this.amApp}}
       @closeModalHandler={{this.closeDrawer}}

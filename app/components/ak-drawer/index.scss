@@ -1,0 +1,41 @@
+.drawer-root {
+  position: fixed;
+  inset: 0px;
+  z-index: 1200;
+}
+
+.backdrop-root {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inset: 0px;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: -1;
+  opacity: 0;
+}
+
+.drawer-container {
+  background-color: var(--white);
+  color: rgba(0, 0, 0, 0.87);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1 0 auto;
+  z-index: 1200;
+  position: fixed;
+  outline: 0px;
+}
+
+.drawer-anchor-left {
+  top: 0px;
+  left: 0px;
+  transform: translateX(-100%);
+}
+
+.drawer-anchor-right {
+  top: 0px;
+  right: 0px;
+  transform: translateX(100%);
+}
