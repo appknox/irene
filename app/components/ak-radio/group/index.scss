@@ -1,0 +1,12 @@
+.ak-radio-group-root {
+  display: inline-flex;
+  box-sizing: border-box;
+}
+
+.ak-radio-group-column {
+  flex-direction: column;
+}
+
+.ak-radio-group-row {
+  flex-direction: row;
+}
