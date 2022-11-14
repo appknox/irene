@@ -1,0 +1,62 @@
+<div local-class='ak-pagination'>
+  <div local-class='ak-pagination-info'>
+    <p data-test-per-page-translation>
+      {{@perPageTranslation}}
+    </p>
+    <select
+      name='recordPerPage'
+      id='recordPerPage'
+      {{on 'change' (or @onItemPerPageChange this.noop)}}
+      data-test-pagination-select
+    >
+      {{#each @itemPerPageOptions as |item|}}
+        <option
+          selected={{item.selected}}
+          value={{item.value}}
+          data-test-pagination-select-option
+        >
+          {{item.value}}
+        </option>
+      {{/each}}
+    </select>
+    {{#if @totalItems}}
+      <span local-class='ak-pagination-page-range' data-test-page-range>
+        {{@startItemIdx}}-{{@endItemIdx}}
+        of
+        {{@totalItems}}
+        {{@tableItemLabel}}
+      </span>
+    {{/if}}
+  </div>
+  <div local-class='ak-pagination-btns' data-test-pagination-btns-container>
+    <button
+      type='button'
+      local-class='ak-pagination-btn prev-btn'
+      disabled={{@disablePrev}}
+      {{on 'click' (or @prevAction this.noop)}}
+      data-test-pagination-prev-btn
+    >
+      <span class='ak-icon ak-icon-arrow-left' data-test-prev-btn-icon></span>
+      {{#if @prevBtnLabel}}
+        {{@prevBtnLabel}}
+      {{else}}
+        {{t 'previous'}}
+      {{/if}}
+    </button>
+
+    <button
+      type='button'
+      local-class='ak-pagination-btn next-btn'
+      disabled={{@disableNext}}
+      {{on 'click' (or @nextAction this.noop)}}
+      data-test-pagination-next-btn
+    >
+      {{#if @nextBtnLabel}}
+        {{@nextBtnLabel}}
+      {{else}}
+        {{t 'next'}}
+      {{/if}}
+      <span class='ak-icon ak-icon-arrow-right' data-test-next-btn-icon></span>
+    </button>
+  </div>
+</div>

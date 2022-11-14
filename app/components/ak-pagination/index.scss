@@ -1,7 +1,7 @@
 /* Pagination Component */
-.app-pagination {
+.ak-pagination {
   background: var(--neutral-grey-100);
-  border-radius: 3px;
+  border-radius: var(--border-radius);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -9,18 +9,18 @@
   margin-top: 0.625em;
   width: 100%;
 
-  .app-pagination-info {
+  .ak-pagination-info {
     display: flex;
     align-items: center;
   }
 
-  .app-pagination-info p,
-  .app-pagination-btn,
-  .app-pagination-page-range {
+  .ak-pagination-info p,
+  .ak-pagination-btn,
+  .ak-pagination-page-range {
     color: var(--body-type-color);
   }
 
-  .app-pagination-info p {
+  .ak-pagination-info p {
     margin-right: 0.625em;
     margin-bottom: 0em;
     font-weight: 600;
@@ -38,7 +38,7 @@
     background-repeat: no-repeat;
     background-position: right 11px top 50%;
     background-color: var(--white);
-    border-radius: 3px !important;
+    border-radius: var(--border-radius) !important;
     color: var(--body-type-color) !important;
 
     &:hover {
@@ -46,8 +46,8 @@
     }
   }
 
-  .app-pagination-page-range::after,
-  .app-pagination-btns::after {
+  .ak-pagination-page-range::after,
+  .ak-pagination-btns::after {
     position: absolute;
     content: '';
     width: 1px;
@@ -56,7 +56,7 @@
     left: -11px;
   }
 
-  .app-pagination-page-range {
+  .ak-pagination-page-range {
     display: flex;
     align-items: center;
     position: relative;
@@ -64,22 +64,22 @@
     height: 32px;
   }
 
-  .app-pagination-btns {
+  .ak-pagination-btns {
     display: flex;
     align-self: flex-end;
     position: relative;
   }
 
-  .app-pagination-btns::after {
+  .ak-pagination-btns::after {
     left: -20px;
   }
 
-  .app-pagination-btn {
+  .ak-pagination-btn {
     display: flex;
     align-items: center;
     cursor: pointer;
     border: 1px solid var(--neutral-grey-400);
-    border-radius: 3px;
+    border-radius: var(--border-radius);
     padding: 0.25em 0.0625em;
     background-color: var(--white);
 
@@ -94,28 +94,23 @@
     &:focus {
       color: $primary;
     }
-
     &:hover svg path,
     &:focus svg path,
     &:active svg path {
       fill: $primary;
     }
-
     &.prev-btn {
       margin-right: 0.6875em;
       padding-right: 0.75em;
     }
-
     &.next-btn {
       padding-left: 0.75em;
     }
-
     &:disabled {
       border: 1px solid var(--neutral-grey-400);
       color: var(--neutral-grey-400);
       opacity: 1;
     }
-
     &:disabled svg path {
       fill: var(--neutral-grey-400);
     }
