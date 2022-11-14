@@ -21,12 +21,13 @@ module('Integration | Component | report-preference', function (hooks) {
   setupIntl(hooks);
 
   hooks.beforeEach(async function () {
-    this.project = this.server.create('project', {
-      activeProfileId: 1,
-    });
-
     this.server.get('/profiles/:id/', (schema, req) => {
       return profile_serializer(schema['profiles'].find(req.params.id));
+    });
+
+    this.project = this.server.create('project', {
+      activeProfileId: 1,
+      isManualScanAvailable: true,
     });
   });
 
@@ -199,5 +200,18 @@ module('Integration | Component | report-preference', function (hooks) {
     assert.dom('[data-test-show-api-scan-checkbox]').isNotChecked();
     await click('[data-test-show-api-scan-checkbox]');
     assert.dom('[data-test-show-api-scan-checkbox]').isChecked();
+  });
+
+  test('it hides manual scan checkbox if manual scan is disabled at project level', async function (assert) {
+    this.project = this.server.create('project', {
+      activeProfileId: 1,
+      isManualScanAvailable: false,
+    });
+
+    this.profile = this.server.create('profile');
+
+    await render(hbs`<ReportPreference @project={{this.project}} />`);
+    assert.dom('[data-test-show-manual-scan-checkbox]').doesNotExist();
+    assert.dom('[data-test-manual-task-spinner]').doesNotExist();
   });
 });

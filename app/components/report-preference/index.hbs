@@ -42,20 +42,23 @@
     />
   </span>
 </div>
-<div>
-  <span>
-    <Input
-      local-class='report__preference__checkbox'
-      @checked={{this.reportPreference.show_manual_scan}}
-      @type='checkbox'
-      aria-label='report preference checkbox'
-      {{on 'click' this.saveManual}}
-      data-test-show-manual-scan-checkbox
-    />
-    Manual Scan
-    <TaskSpin
-      @task={{this.saveManualReportPreference}}
-      data-test-manual-task-spinner
-    />
-  </span>
-</div>
+
+{{#if this.project.isManualScanAvailable}}
+  <div>
+    <span>
+      <Input
+        local-class='report__preference__checkbox'
+        @checked={{this.reportPreference.show_manual_scan}}
+        @type='checkbox'
+        aria-label='report preference checkbox'
+        {{on 'click' this.saveManual}}
+        data-test-show-manual-scan-checkbox
+      />
+      Manual Scan
+      <TaskSpin
+        @task={{this.saveManualReportPreference}}
+        data-test-manual-task-spinner
+      />
+    </span>
+  </div>
+{{/if}}
