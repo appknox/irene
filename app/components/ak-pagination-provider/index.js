@@ -2,8 +2,8 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
-export default class PaginationComponent extends Component {
-  @tracked itemPerPageSelectOptions = this.defaultItemPerPageSelectOptions;
+export default class AkPaginationProviderComponent extends Component {
+  @tracked itemPerPageOptions = this.defaultitemPerPageOptions;
 
   get currentPageResults() {
     return this.args.results;
@@ -16,22 +16,14 @@ export default class PaginationComponent extends Component {
     return this.args.offset;
   }
 
-  get nextAction() {
-    return this.args.nextAction;
-  }
-
-  get prevAction() {
-    return this.args.prevAction;
-  }
-
   get totalCount() {
     return this.args.totalItems || 0;
   }
 
   get limit() {
     return (
-      this.itemPerPageSelectOptions.find((item) => item.selected)?.value ||
-      this.itemPerPageSelectOptions[0].value
+      this.itemPerPageOptions.find((item) => item.selected)?.value ||
+      this.itemPerPageOptions[0].value
     );
   }
 
@@ -39,7 +31,7 @@ export default class PaginationComponent extends Component {
     return this.totalCount;
   }
 
-  get defaultItemPerPageSelectOptions() {
+  get defaultitemPerPageOptions() {
     return this._resolveReceivedPageItemsCountOptions(
       this.args.itemPerPageOptions,
       this.args.defaultLimit
@@ -73,23 +65,23 @@ export default class PaginationComponent extends Component {
   }
 
   @action
-  onItemsPerPageSelect(event) {
+  onItemPerPageChange(event) {
     this._updatePageItemSelectOptions(event.target.value);
-    this.args.onPageItemsCountChange({
+    this.args.onItemPerPageChange({
       limit: this.limit,
       offset: 0,
     });
   }
 
-  @action goToNextPage() {
-    this.nextAction({
+  @action nextAction() {
+    this.args.nextAction({
       limit: this.limit,
       offset: this.offset + this.limit,
     });
   }
 
-  @action goToPrevPage() {
-    this.prevAction({
+  @action prevAction() {
+    this.args.prevAction({
       limit: this.limit,
       offset: this.offset - this.limit,
     });
@@ -112,16 +104,14 @@ export default class PaginationComponent extends Component {
 
   // Handler for updating selected items per page
   _updatePageItemSelectOptions(value) {
-    this.itemPerPageSelectOptions = this.itemPerPageSelectOptions.map(
-      (item) => {
-        if (item.value === Number(value)) {
-          item.selected = true;
-        } else {
-          item.selected = false;
-        }
-
-        return item;
+    this.itemPerPageOptions = this.itemPerPageOptions.map((item) => {
+      if (item.value === Number(value)) {
+        item.selected = true;
+      } else {
+        item.selected = false;
       }
-    );
+
+      return item;
+    });
   }
 }
