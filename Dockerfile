@@ -1,4 +1,4 @@
-FROM node:16.18.0-stretch AS builder
+FROM node:16.18.0-bullseye AS builder
 
 LABEL maintainer "Appknox <engineering@appknox.com>"
 
