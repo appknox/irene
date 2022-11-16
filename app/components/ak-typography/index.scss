@@ -1,0 +1,142 @@
+.ak-typography {
+  font-family: 'Open Sans', sans-serif;
+  font-style: normal;
+  margin: 0;
+  padding: 0;
+}
+
+.ak-typography-no-gutter-bottom {
+  margin-bottom: 0 !important;
+}
+
+.ak-typography-gutter-bottom {
+  margin-bottom: 0.5em !important;
+}
+
+.ak-typography-color-primary {
+  color: var(--primary-main);
+}
+
+.ak-typography-color-secondary {
+  color: var(--secondary-main);
+}
+
+.ak-typography-color-textPrimary {
+  color: var(--text-primary);
+}
+
+.ak-typography-color-textSecondary {
+  color: var(--text-secondary);
+}
+
+.ak-typography-color-error {
+  color: var(--error-main);
+}
+
+.ak-typography-color-success {
+  color: var(--success-main);
+}
+
+.ak-typography-color-warn {
+  color: var(--warn-main);
+}
+
+.ak-typography-color-info {
+  color: var(--info-main);
+}
+
+.ak-typography-color-inherit {
+  color: inherit;
+}
+
+.ak-typography-align-left {
+  text-align: left;
+}
+
+.ak-typography-align-center {
+  text-align: center;
+}
+
+.ak-typography-align-right {
+  text-align: right;
+}
+
+.ak-typography-align-justify {
+  text-align: justify;
+}
+
+.ak-typography-align-inherit {
+  text-align: inherit;
+}
+
+.ak-typography-h1 {
+  font-weight: var(--font-weight-regular);
+  font-size: 2.285rem;
+}
+
+.ak-typography-h2 {
+  font-weight: var(--font-weight-regular);
+  font-size: 2rem;
+}
+
+.ak-typography-h3 {
+  font-weight: var(--font-weight-bold);
+  font-size: 1.714rem;
+}
+
+.ak-typography-h4 {
+  font-weight: var(--font-weight-medium);
+  font-size: 1.428rem;
+}
+
+.ak-typography-h5 {
+  font-weight: var(--font-weight-bold);
+  font-size: 1.143rem;
+}
+
+.ak-typography-h6 {
+  font-weight: var(--font-weight-medium);
+  font-size: 1rem;
+}
+
+.ak-typography-subtitle1 {
+  font-weight: var(--font-weight-bold);
+  font-size: 1rem;
+}
+
+.ak-typography-subtitle2 {
+  font-weight: var(--font-weight-medium);
+  font-size: 0.928rem;
+}
+
+.ak-typography-body1 {
+  font-weight: var(--font-weight-regular);
+  font-size: 1rem;
+}
+
+.ak-typography-body2 {
+  font-weight: var(--font-weight-regular);
+  font-size: 0.928rem;
+}
+
+.no-wrap {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ak-typography-underline-none {
+  text-decoration: none;
+}
+
+.ak-typography-underline-always {
+  text-decoration: underline;
+}
+
+.ak-typography-underline-hover {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
