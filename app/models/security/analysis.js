@@ -1,51 +1,49 @@
-/* eslint-disable ember/no-classic-classes, ember/no-get */
-import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
-import ENUMS from 'irene/enums';
-import { computed } from '@ember/object';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import Inflector from 'ember-inflector';
+import ENUMS from 'irene/enums';
 
 const inflector = Inflector.inflector;
 inflector.irregular('asvs', 'asvses');
 
-export default Model.extend({
-  findings: attr(),
-  risk: attr('number'),
-  status: attr('string'), // this is made as string because ember power select considers 0 as null value. ref:https://github.com/cibernox/ember-power-select/issues/962
-  attackVector: attr(),
-  attackComplexity: attr(),
-  privilegesRequired: attr(),
-  userInteraction: attr(),
-  scope: attr(),
-  confidentialityImpact: attr(),
-  integrityImpact: attr(),
-  availabilityImpact: attr(),
-  cvssBase: attr('string'),
-  cvssVector: attr('string'),
-  cvssVersion: attr('string'),
-  analiserVersion: attr('number'),
-  overriddenRisk: attr('string'), // this is made as string because ember power select considers 0 as null value. ref: https://github.com/cibernox/ember-power-select/issues/962
-  overriddenRiskComment: attr('string'),
-  overriddenRiskToProfile: attr('boolean'),
-  computedRisk: attr('string'),
-  file: belongsTo('security/file'),
-  owasp: hasMany('owasp'),
-  pcidss: hasMany('pcidss'),
-  mstg: hasMany('mstg'),
-  asvs: hasMany('asvs'),
-  cwe: hasMany('cwe'),
-  gdpr: hasMany('gdpr'),
-  hipaa: hasMany('hipaa'),
-  attachments: hasMany('security/attachment'),
-  vulnerability: belongsTo('vulnerability'),
+export default class SecurityAnalysisModel extends Model {
+  @attr() findings;
+  @attr('number') risk;
+  @attr('string') status; // this is made as string because ember power select considers 0 as null value. ref:https://github.com/cibernox/ember-power-select/issues/962
+  @attr() attackVector;
+  @attr() attackComplexity;
+  @attr() privilegesRequired;
+  @attr() userInteraction;
+  @attr() scope;
+  @attr() confidentialityImpact;
+  @attr() integrityImpact;
+  @attr() availabilityImpact;
+  @attr('string') cvssBase;
+  @attr('string') cvssVector;
+  @attr('string') cvssVersion;
+  @attr('number') analiserVersion;
+  @attr('string') overriddenRisk; // this is made as string because ember power select considers 0 as null value. ref:https://github.com/cibernox/ember-power-select/issues/962
+  @attr('string') overriddenRiskComment;
+  @attr('boolean') overriddenRiskToProfile;
+  @attr('string') computedRisk;
+  @belongsTo('security/file') file;
+  @hasMany('owasp') owasp;
+  @hasMany('pcidss') pcidss;
+  @hasMany('mstg') mstg;
+  @hasMany('asvs') asvs;
+  @hasMany('cwe') cwe;
+  @hasMany('gdpr') gdpr;
+  @hasMany('hipaa') hipaa;
+  @hasMany('security/attachment') attachments;
+  @belongsTo('vulnerability') vulnerability;
 
-  isPassed: computed('risk', function () {
-    const risk = this.get('risk');
+  get isPassed() {
+    const risk = this.risk;
     return risk !== ENUMS.RISK.NONE;
-  }),
+  }
 
-  riskLabelClass: computed('risk', function () {
-    return this.labelClass(this.get('risk'));
-  }),
+  get riskLabelClass() {
+    return this.labelClass(this.risk);
+  }
 
   labelClass(risk) {
     switch (risk) {
@@ -62,5 +60,5 @@ export default Model.extend({
       case ENUMS.RISK.CRITICAL:
         return `is-critical`;
     }
-  },
-});
+  }
+}
