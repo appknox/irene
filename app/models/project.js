@@ -9,6 +9,7 @@ import { ModelBaseMixin } from 'irene/mixins/base-model';
 export default class ProjectModel extends ModelBaseMixin(Model) {
   @attr('string') name;
   @attr('string') packageName;
+  @attr('boolean') isManualScanAvailable;
   @attr('string') githubRepo;
   @attr('string') jiraProject;
   @attr('string') testUser;
