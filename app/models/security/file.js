@@ -1,26 +1,29 @@
-/* eslint-disable ember/no-classic-classes, ember/avoid-leaking-state-in-ember-objects, ember/require-return-from-computed, ember/no-get */
-import { computed } from '@ember/object';
-import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
+/* eslint-disable ember/no-computed-properties-in-native-classes */
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import { sort } from '@ember/object/computed';
 import ENUMS from 'irene/enums';
 
-export default Model.extend({
-  name: attr('string'),
-  fileFormatDisplay: attr('string'),
-  user: belongsTo('user'),
-  apiScanStatus: attr('number'),
-  project: belongsTo('security/project'),
-  analyses: hasMany('security/analysis'),
+export default class SecurityFileModel extends Model {
+  analysesSorting = ['risk:desc'];
+  @sort('analyses', 'analysesSorting') sortedAnalyses;
 
-  analysesSorting: ['risk:desc'],
-  sortedAnalyses: computed.sort('analyses', 'analysesSorting'),
+  @attr('string') name;
+  @attr('string') fileFormatDisplay;
+  @belongsTo('user') user;
+  @attr('number') apiScanStatus;
+  @belongsTo('security/project') project;
+  @hasMany('security/analysis') analyses;
 
-  isApiDone: computed('apiScanStatus', function () {
-    const apiScanStatus = this.get('apiScanStatus');
+  @attr('boolean') isDynamicDone;
+  @attr('boolean') isStaticDone;
+  @attr('number') manual;
+
+  get isApiDone() {
+    const apiScanStatus = this.apiScanStatus;
     if (apiScanStatus === ENUMS.SCAN_STATUS.COMPLETED) {
       return true;
     }
-  }),
-  isDynamicDone: attr('boolean'),
-  isStaticDone: attr('boolean'),
-  manual: attr('number'),
-});
+
+    return false;
+  }
+}
