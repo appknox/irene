@@ -6,7 +6,7 @@ export default class AppMonitoringTableHeaderComponent extends Component {
       'Platform',
       'Application Name',
       'Store Version ',
-      'Appknox Version',
+      'Latest Scanned Version',
       'Status',
     ];
   }
