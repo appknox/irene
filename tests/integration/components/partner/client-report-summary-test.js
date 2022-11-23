@@ -30,7 +30,15 @@ module(
       await this.owner.lookup('service:partner').load();
 
       const fileSummary = this.server.create(
-        'partner/partnerclient-file-summary'
+        'partner/partnerclient-file-summary',
+        {
+          riskCountCritical: 3,
+          riskCountHigh: 5,
+          riskCountMedium: 8,
+          riskCountLow: 13,
+          riskCountPassed: 21,
+          riskCountUntested: 34,
+        }
       );
       this.server.get(
         'v2/partnerclients/:clientId/files/:fileId/summary',
