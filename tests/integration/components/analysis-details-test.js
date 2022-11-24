@@ -70,39 +70,6 @@ module('Integration | Component | analysis details', function (hooks) {
     assert.dom('[data-test-analysis-detail="regulatories"]').doesNotExist();
   });
 
-  test('it renders if manual scan feature is disabled and vulnerability type is not manual', async function (assert) {
-    this.vulnerability.types = [ENUMS.VULNERABILITY_TYPE.DYNAMIC];
-    this.file.project.isManualScanAvailable = false;
-
-    const analysis = this.server.create('analysis', {
-      file: this.file,
-      vulnerability: this.vulnerability,
-      computedRisk: ENUMS.RISK.NONE,
-      status: ENUMS.ANALYSIS.COMPLETED,
-    });
-    this.set('analysis', analysis);
-
-    await render(hbs`<AnalysisDetails @analysis={{this.analysis}} />`);
-    assert.dom('[data-test-analysis-details-container]').exists();
-  });
-
-  test('it does not render if manual scan feature is disabled and vulnerability type is manual', async function (assert) {
-    this.vulnerability.types = [ENUMS.VULNERABILITY_TYPE.MANUAL];
-    this.project.isManualScanAvailable = false;
-    this.file.project = this.project;
-
-    const analysis = this.server.create('analysis', {
-      file: this.file,
-      vulnerability: this.vulnerability,
-      computedRisk: ENUMS.RISK.NONE,
-      status: ENUMS.ANALYSIS.COMPLETED,
-    });
-    this.set('analysis', analysis);
-
-    await render(hbs`<AnalysisDetails @analysis={{this.analysis}} />`);
-    assert.dom('[data-test-analysis-details-container]').doesNotExist();
-  });
-
   test('it does not render regulatories for untested risk', async function (assert) {
     const analysis = this.server.create('analysis', {
       file: this.file,

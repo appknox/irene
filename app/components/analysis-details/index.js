@@ -39,11 +39,6 @@ export default class AnalysisDetailsComponent extends Component {
     return this.analysis.vulnerabilityTypes;
   }
 
-  get isManualScanVulnerability() {
-    const type = ENUMS.VULNERABILITY_TYPE;
-    return this.vulnerabilityTypes.includes(type.MANUAL);
-  }
-
   get risks() {
     const risks = ENUMS.RISK.CHOICES;
     const riskFilter = [ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN];
