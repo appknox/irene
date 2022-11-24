@@ -20,19 +20,29 @@ module('Integration | Component | analysis-overview', function (hooks) {
       id: 1,
       types: [ENUMS.VULNERABILITY_TYPE.MANUAL],
     });
-
-    this.analysis = this.store.createRecord('analysis', {
-      id: 1,
-      vulnerability: this.vulnerability,
-    });
   });
 
   test('it renders with the right properties', async function (assert) {
+    this.project = this.store.createRecord('project', {
+      id: 1,
+      isManualScanAvailable: true,
+    });
+
+    this.file = this.store.createRecord('file', {
+      id: 1,
+      project: this.project,
+      name: 'Appknox-MFVA',
+    });
+
     this.vulnerability.name = 'One Time Password';
 
-    this.analysis.vulnerability = this.vulnerability;
-    this.analysis.risk = ENUMS.RISK.CRITICAL;
-    this.analysis.status = ENUMS.ANALYSIS_STATUS.COMPLETED;
+    this.analysis = this.store.createRecord('analysis', {
+      id: 1,
+      file: this.file,
+      vulnerability: this.vulnerability,
+      risk: ENUMS.RISK.CRITICAL,
+      status: ENUMS.ANALYSIS_STATUS.COMPLETED,
+    });
 
     await render(hbs`<AnalysisOverview  @analysis={{this.analysis }}/>`);
     assert
