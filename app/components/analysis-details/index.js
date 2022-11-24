@@ -11,7 +11,6 @@ import triggerAnalytics from 'irene/utils/trigger-analytics';
 export default class AnalysisDetailsComponent extends Component {
   @service intl;
   @service ajax;
-  @service organization;
   @service('notifications') notify;
 
   @tracked mpClassSelector = true;
@@ -36,19 +35,8 @@ export default class AnalysisDetailsComponent extends Component {
     return this.analysis.vulnerability || null;
   }
 
-  get isManualScanDisabled() {
-    return !this.organization.selected.features.manualscan;
-  }
-
   get vulnerabilityTypes() {
     return this.analysis.vulnerabilityTypes;
-  }
-
-  get hideManualScanVulnerability() {
-    const type = ENUMS.VULNERABILITY_TYPE;
-    return (
-      this.isManualScanDisabled && this.vulnerabilityTypes.includes(type.MANUAL)
-    );
   }
 
   get risks() {
