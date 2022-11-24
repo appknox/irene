@@ -22,7 +22,7 @@ module('Integration | Component | analysis-overview', function (hooks) {
     });
   });
 
-  test('it renders with the right properties when manual scan feature is enabled at the project level', async function (assert) {
+  test('it renders with the right properties', async function (assert) {
     this.project = this.store.createRecord('project', {
       id: 1,
       isManualScanAvailable: true,
@@ -62,78 +62,5 @@ module('Integration | Component | analysis-overview', function (hooks) {
       .dom('[data-test-analysis-status]')
       .exists()
       .hasTextContaining(`${analysisStatus([this.analysis.status])}`);
-  });
-
-  test('it renders when manual scan feature is enabled at the project level and vulnerability types include manual scan', async function (assert) {
-    this.project = this.store.createRecord('project', {
-      id: 1,
-      isManualScanAvailable: true,
-    });
-
-    this.file = this.store.createRecord('file', {
-      id: 1,
-      project: this.project,
-      name: 'Appknox-MFVA',
-    });
-
-    this.analysis = this.store.createRecord('analysis', {
-      id: 1,
-      vulnerability: this.vulnerability,
-      file: this.file,
-    });
-
-    await render(hbs`<AnalysisOverview  @analysis={{this.analysis }}/>`);
-    assert.dom('[data-test-analysis-overview-container]').exists();
-  });
-
-  test('it renders when manual scan feature is enabled at the project level and vulnerability types do not include manual scan', async function (assert) {
-    this.vulnerability.types = [
-      ENUMS.VULNERABILITY_TYPE.STATIC,
-      ENUMS.VULNERABILITY_TYPE.DYNAMIC,
-    ];
-
-    this.project = this.store.createRecord('project', {
-      id: 1,
-      isManualScanAvailable: true,
-    });
-
-    this.file = this.store.createRecord('file', {
-      id: 1,
-      project: this.project,
-      name: 'Appknox-MFVA',
-    });
-
-    this.analysis = this.store.createRecord('analysis', {
-      id: 1,
-      vulnerability: this.vulnerability,
-      file: this.file,
-    });
-
-    await render(hbs`<AnalysisOverview  @analysis={{this.analysis }}/>`);
-    assert.dom('[data-test-analysis-overview-container]').exists();
-  });
-
-  test('it does not render when manual scan feature is disabled at the project level and vulnerability types include manual scan', async function (assert) {
-    this.vulnerability.types = [ENUMS.VULNERABILITY_TYPE.MANUAL];
-
-    this.project = this.store.createRecord('project', {
-      id: 1,
-      isManualScanAvailable: false,
-    });
-
-    this.file = this.store.createRecord('file', {
-      id: 1,
-      project: this.project,
-      name: 'Appknox-MFVA',
-    });
-
-    this.analysis = this.store.createRecord('analysis', {
-      id: 1,
-      vulnerability: this.vulnerability,
-      file: this.file,
-    });
-
-    await render(hbs`<AnalysisOverview  @analysis={{this.analysis }}/>`);
-    assert.dom('[data-test-analysis-overview-container]').doesNotExist();
   });
 });
