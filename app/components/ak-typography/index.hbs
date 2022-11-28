@@ -1,0 +1,16 @@
+{{#let (element this.tag) as |Tag|}}
+  <Tag
+    data-test-ak-typography
+    ...attributes
+    local-class='
+      ak-typography 
+      ak-typography-{{this.variant}} 
+      ak-typography-color-{{this.color}}
+      ak-typography-{{this.gutterBottom}}
+      ak-typography-align-{{this.align}}
+      ak-typography-underline-{{this.underline}}
+      {{if @noWrap "no-wrap"}}'
+  >
+    {{yield}}
+  </Tag>
+{{/let}}
