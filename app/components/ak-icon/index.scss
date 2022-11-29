@@ -1,0 +1,49 @@
+.ak-icon-root {
+  font-size: inherit;
+}
+
+// color styles
+.ak-icon-color-primary {
+  color: var(--ak-icon-color-primary);
+}
+
+.ak-icon-color-secondary {
+  color: var(--ak-icon-color-secondary);
+}
+
+.ak-icon-color-textPrimary {
+  color: var(--ak-icon-color-text-primary);
+}
+
+.ak-icon-color-textSecondary {
+  color: var(--ak-icon-color-text-secondary);
+}
+
+.ak-icon-color-error {
+  color: var(--ak-icon-color-error);
+}
+
+.ak-icon-color-success {
+  color: var(--ak-icon-color-success);
+}
+
+.ak-icon-color-warn {
+  color: var(--ak-icon-color-warn);
+}
+
+.ak-icon-color-info {
+  color: var(--ak-icon-color-info);
+}
+
+.ak-icon-color-inherit {
+  color: inherit;
+}
+
+// size styles
+.ak-icon-size-small {
+  font-size: 1.125rem !important;
+}
+
+.ak-icon-size-medium {
+  font-size: 1.5rem !important;
+}
