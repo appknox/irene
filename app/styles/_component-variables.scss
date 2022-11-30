@@ -12,4 +12,20 @@ body {
   // variables for ak-loader
   --ak-loader-stroke-primary-main: var(--primary-main);
   --ak-loader-stroke-primary-light: var(--primary-light);
+
+  // variables for ak-popover
+  --ak-popover-arrow-background-light: var(--background-main);
+  --ak-popover-arrow-border-light: var(--border-color-1);
+  --ak-popover-arrow-background-dark: var(--background-dark);
+
+  // variables for ak-popover
+  --ak-tooltip-border-radius: var(--border-radius);
+  --ak-tooltip-font-weight-regular: var(--font-weight-regular);
+  --ak-tooltip-font-family: var(--font-family);
+  --ak-tooltip-box-shadow-2: var(--box-shadow-2);
+  --ak-tooltip-background-light: var(--background-main);
+  --ak-tooltip-background-dark: var(--background-dark);
+  --ak-tooltip-color-on-light: var(--text-primary);
+  --ak-tooltip-color-on-dark: var(--common-white);
+  --ak-tooltip-border-light: var(--border-color-1);
 }

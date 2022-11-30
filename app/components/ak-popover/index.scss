@@ -1,0 +1,103 @@
+.ak-popover-arrow {
+  position: absolute;
+  font-size: 10px;
+  width: 2.1em;
+  height: 2.1em;
+
+  &::before {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 1em;
+    height: 1em;
+    z-index: 0;
+  }
+}
+
+.ak-popover-arrow-color-light::before {
+  background-color: var(--ak-popover-arrow-background-light);
+  border-width: 1px;
+  border-style: solid;
+}
+
+.ak-popover-arrow-color-dark::before {
+  background-color: var(--ak-popover-arrow-background-dark);
+}
+
+.ak-popover-root {
+  z-index: 1;
+
+  &[data-popper-placement*='bottom'] {
+    .ak-popover-arrow {
+      top: 0;
+      left: 0;
+      width: 2.1em;
+      height: 0.7em;
+      margin-top: 0.6em;
+
+      &::before {
+        transform: translateX(50%) rotate(-45deg);
+      }
+    }
+
+    .ak-popover-arrow-color-light::before {
+      border-color: var(--ak-popover-arrow-border-light)
+        var(--ak-popover-arrow-border-light) transparent transparent;
+    }
+  }
+
+  &[data-popper-placement*='top'] {
+    .ak-popover-arrow {
+      bottom: 0;
+      left: 0;
+      width: 2.1em;
+      height: 0.7em;
+      margin-bottom: 0.9em;
+
+      &::before {
+        transform: translateX(50%) rotate(-45deg);
+      }
+    }
+
+    .ak-popover-arrow-color-light::before {
+      border-color: transparent transparent var(--ak-popover-arrow-border-light)
+        var(--ak-popover-arrow-border-light);
+    }
+  }
+
+  &[data-popper-placement*='right'] {
+    .ak-popover-arrow {
+      left: 0;
+      width: 0.7em;
+      height: 2.1em;
+      margin-left: 0.6em;
+
+      &::before {
+        transform: translateY(50%) rotate(-45deg);
+      }
+    }
+
+    .ak-popover-arrow-color-light::before {
+      border-color: var(--ak-popover-arrow-border-light) transparent transparent
+        var(--ak-popover-arrow-border-light);
+    }
+  }
+
+  &[data-popper-placement*='left'] {
+    .ak-popover-arrow {
+      right: 0;
+      width: 0.7em;
+      height: 2.1em;
+      margin-right: 0.9em;
+
+      &::before {
+        transform: translateY(50%) rotate(-45deg);
+      }
+    }
+
+    .ak-popover-arrow-color-light::before {
+      border-color: transparent var(--ak-popover-arrow-border-light)
+        var(--ak-popover-arrow-border-light) transparent;
+    }
+  }
+}
