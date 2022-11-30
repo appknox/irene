@@ -1,0 +1,19 @@
+{{#if @anchorRef}}
+  <div
+    class='ak-popover'
+    local-class='ak-popover-root'
+    {{did-insert this.elementInserted}}
+    {{will-destroy this.elementWillDestroy}}
+  >
+    {{yield}}
+
+    {{#if @arrow}}
+      <span
+        data-popper-arrow
+        local-class='
+          ak-popover-arrow 
+          ak-popover-arrow-color-{{or @arrowColor "light"}}'
+      ></span>
+    {{/if}}
+  </div>
+{{/if}}
