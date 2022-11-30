@@ -1,0 +1,28 @@
+.ak-loader-root {
+  display: inline-flex;
+}
+
+.ak-loader-svg {
+  transform-origin: 50% 50%;
+  animation: SpinnerFrames 1s infinite linear;
+}
+
+.ak-loader-circle-foreground {
+  stroke-dasharray: 90, 200;
+  stroke-dashoffset: 0;
+  stroke: var(--ak-loader-stroke-primary-main);
+  stroke-linecap: round;
+}
+
+.ak-loader-circle-background {
+  stroke: var(--ak-loader-stroke-primary-light);
+}
+
+@keyframes SpinnerFrames {
+  0% {
+    transform: rotateZ(0deg);
+  }
+  100% {
+    transform: rotateZ(360deg);
+  }
+}

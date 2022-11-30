@@ -8,4 +8,8 @@ body {
   --ak-icon-color-success: var(--success-main);
   --ak-icon-color-warn: var(--warn-main);
   --ak-icon-color-info: var(--info-main);
+
+  // variables for ak-loader
+  --ak-loader-stroke-primary-main: var(--primary-main);
+  --ak-loader-stroke-primary-light: var(--primary-light);
 }
