@@ -41,4 +41,4 @@
 
 #storybook
 /.storybook/preview-head.html
-
+/storybook-static/

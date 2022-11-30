@@ -34,3 +34,4 @@ package.json.ember-try
 /build
 /staticserver/dist
 /staticserver/node_modules
+/storybook-static/
