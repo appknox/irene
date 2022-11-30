@@ -1,0 +1,39 @@
+<span
+  data-test-ak-loader
+  ...attributes
+  {{style width=(concat this.size 'px') height=(concat this.size 'px')}}
+  class='ak-loader-root'
+  local-class='ak-loader-root'
+  role='progressbar'
+>
+  <svg
+    data-test-ak-loader-svg
+    class='ak-loader-svg'
+    local-class='ak-loader-svg'
+    viewBox={{this.viewBox}}
+  >
+    <g>
+      <circle
+        data-test-ak-loader-circle-background
+        class='ak-loader-circle-background'
+        local-class='ak-loader-circle-background'
+        cx='{{this.viewPortSize}}'
+        cy='{{this.viewPortSize}}'
+        r='{{this.radius}}'
+        fill='none'
+        stroke-width='{{this.thickness}}'
+      ></circle>
+
+      <circle
+        data-test-ak-loader-circle-foreground
+        class='ak-loader-circle-foreground'
+        local-class='ak-loader-circle-foreground'
+        cx='{{this.viewPortSize}}'
+        cy='{{this.viewPortSize}}'
+        r='{{this.radius}}'
+        fill='none'
+        stroke-width='{{this.thickness}}'
+      ></circle>
+    </g>
+  </svg>
+</span>
