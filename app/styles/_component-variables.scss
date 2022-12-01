@@ -28,4 +28,8 @@ body {
   --ak-tooltip-color-on-light: var(--text-primary);
   --ak-tooltip-color-on-dark: var(--common-white);
   --ak-tooltip-border-light: var(--border-color-1);
+
+  // variables for ak-divider
+  --ak-divider-color-light: var(--divider);
+  --ak-divider-color-dark: var(--divider-dark);
 }

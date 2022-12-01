@@ -1,0 +1,10 @@
+{{#let (element (or @tag 'hr')) as |Tag|}}
+  <Tag
+    data-test-ak-divider
+    ...attributes
+    local-class='
+      ak-divider-root 
+      ak-divider-variant-{{or @variant "fullWidth"}} 
+      ak-divider-color-{{or @color "light"}}'
+  />
+{{/let}}

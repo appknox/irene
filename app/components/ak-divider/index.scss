@@ -1,0 +1,22 @@
+.ak-divider-root {
+  flex-shrink: 0;
+  border-width: 0px 0px thin;
+  border-style: solid;
+}
+
+.ak-divider-variant-fullWidth {
+  width: 100%;
+  margin: 0px;
+}
+
+.ak-divider-variant-middle {
+  margin: 0 1em;
+}
+
+.ak-divider-color-light {
+  border-color: var(--ak-divider-color-light);
+}
+
+.ak-divider-color-dark {
+  border-color: var(--ak-divider-color-dark);
+}
