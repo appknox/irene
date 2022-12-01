@@ -1352,11 +1352,17 @@ div[class^='_c-notification__container'] {
 .side-menu {
   background-color: $sidebar-bg;
   z-index: 13;
+  box-shadow: none;
 
   &-fixed {
+    padding-top: 1em;
+    box-sizing: border-box;
     position: fixed;
-    width: 16.2%;
+    width: 16.67%;
     height: 100%;
+    top: 0;
+    background-color: var(--org-side-menu-bg-color);
+    box-shadow: 1px 0px 8px -1px rgba(0, 0, 0, 0.3);
   }
 
   .box {

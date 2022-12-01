@@ -64,3 +64,13 @@ body {
   --ak-menu-border-color: var(--border-color-1);
   --ak-menu-z-index: var(--zIndex-tooltip);
 }
+
+body {
+  // variables for sidebar menu
+  &.theme-light {
+    --org-side-menu-bg-color: var(--background-main);
+  }
+  &.theme-dark {
+    --org-side-menu-bg-color: var(--background-dark);
+  }
+}
