@@ -1,0 +1,52 @@
+.ak-menu-root {
+  position: fixed;
+  inset: 0px;
+  z-index: var(--ak-menu-z-index);
+}
+
+.backdrop-root {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inset: 0px;
+  background-color: transparent;
+  z-index: -1;
+}
+
+.ak-menu-dropdown-root {
+  display: inline-flex;
+  background-color: var(--ak-menu-background);
+  border-radius: var(--ak-menu-border-radius);
+  box-shadow: var(--ak-menu-box-shadow);
+  border: 1px solid var(--ak-menu-border-color);
+  min-width: 100px;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.ak-menu-dropdown-full-width {
+  width: 100%;
+}
+
+.ak-menu-dropdown-list {
+  width: 100%;
+}
+
+:global(.ak-popover) {
+  &[data-popper-placement*='top'] .ak-menu-with-arrow {
+    margin-bottom: 0.8em;
+  }
+
+  &[data-popper-placement*='bottom'] .ak-menu-with-arrow {
+    margin-top: 0.8em;
+  }
+
+  &[data-popper-placement*='left'] .ak-menu-with-arrow {
+    margin-right: 0.8em;
+  }
+
+  &[data-popper-placement*='right'] .ak-menu-with-arrow {
+    margin-left: 0.8em;
+  }
+}

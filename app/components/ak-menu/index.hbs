@@ -1,0 +1,34 @@
+{{#if @anchorRef}}
+  <div data-test-ak-menu-root role='presentation' local-class='ak-menu-root'>
+    <div
+      data-test-ak-menu-backdrop
+      role='button'
+      aria-hidden='true'
+      local-class='backdrop-root'
+      {{on 'click' this.handleBackdropClick}}
+    ></div>
+
+    <AkPopover
+      @anchorRef={{@anchorRef}}
+      @placement='bottom-start'
+      @modifiers={{this.modifiers}}
+      @arrow={{@arrow}}
+      @sameWidthAsRef={{@sameWidthAsRef}}
+    >
+      <div
+        data-test-ak-menu
+        local-class='ak-menu-dropdown-root
+         {{if @sameWidthAsRef "ak-menu-dropdown-full-width"}}
+         {{if @arrow "ak-menu-with-arrow"}}'
+      >
+        <AkList local-class='ak-menu-dropdown-list' role={{or @role 'menu'}}>
+          {{yield
+            (hash
+              listItem=(component 'ak-list/item' button=true role='menuitem')
+            )
+          }}
+        </AkList>
+      </div>
+    </AkPopover>
+  </div>
+{{/if}}
