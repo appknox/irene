@@ -1,9 +1,0 @@
-.column.severity-tags class="tag {{analysisRiskStatus.cssclass}}" class=columnSize
-  i.fa.risk-icons class="{{analysisRiskStatus.icon}}"
-  .uppercase-text.padding-l-h
-    | {{analysisRiskStatus.label}}
-  if isNonPassedRiskOverridden
-    img src="/images/user-edited.svg" class="user-edited-icon"
-    = attach-tooltip placement="top"
-      | #{ t "overriddenRisk"},&nbsp;
-      | #{ t "orginalRisk"}: #{t (risk-text analysis.risk)}

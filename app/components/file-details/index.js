@@ -12,7 +12,8 @@ export default class FileDetailsComponent extends Component {
 
   @tracked sortImpactAscending = false;
   @tracked isSecurityEnabled = false;
-  @tracked sortedUnhiddenAnalyses = this.analyses;
+  @tracked unsortedUnhiddenAnalyses = this.analyses;
+  @tracked analysesSorting = ['computedRisk:desc'];
 
   vulnerabilityType = ENUMS.VULNERABILITY_TYPE.UNKNOWN;
 
@@ -26,7 +27,7 @@ export default class FileDetailsComponent extends Component {
   }
 
   get analyses() {
-    return this.file.sortedAnalyses;
+    return this.file.analyses;
   }
 
   get isManualScanDisabled() {
@@ -44,8 +45,10 @@ export default class FileDetailsComponent extends Component {
     return types;
   }
 
+  @sort('unsortedUnhiddenAnalyses', 'analysesSorting') sortedUnhiddenAnalyses;
+
   @action filterVulnerabilityType(event) {
-    this.sortedUnhiddenAnalyses = this.analyses;
+    this.unsortedUnhiddenAnalyses = this.analyses;
     this.sortImpactAscending = false;
     this.vulnerabilityType = event.target.value;
     this.sortUnhiddenAnalyses.perform();
@@ -60,11 +63,7 @@ export default class FileDetailsComponent extends Component {
       this.analysesSorting = ['computedRisk:desc'];
       this.sortImpactAscending = false;
     }
-    const sortedAnalyses = this.sortedAnalyses;
-    this.sortedUnhiddenAnalyses = sortedAnalyses;
   }
-
-  @sort('sortedUnhiddenAnalyses', 'analysesSorting') sortedAnalyses;
 
   @task(function* () {
     yield this.ajax.request('projects', { namespace: 'api/hudson-api' }).then(
@@ -84,7 +83,7 @@ export default class FileDetailsComponent extends Component {
 
   @task(function* () {
     const vulnerabilityType = parseInt(this.vulnerabilityType);
-    const analyses = this.analyses;
+    const analyses = this.analyses.toArray();
     if (vulnerabilityType === ENUMS.VULNERABILITY_TYPE.UNKNOWN) {
       return analyses;
     }
@@ -95,7 +94,7 @@ export default class FileDetailsComponent extends Component {
       }
     }
 
-    this.sortedUnhiddenAnalyses = filteredAnalysis;
+    this.unsortedUnhiddenAnalyses = filteredAnalysis;
     yield filteredAnalysis;
   })
   sortUnhiddenAnalyses;

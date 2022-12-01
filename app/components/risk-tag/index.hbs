@@ -1,0 +1,27 @@
+<div
+  class='column severity-tags tag
+    {{this.analysisRiskStatus.cssclass}}
+    {{@columnSize}}'
+  data-test-analysis-risk-tag
+  data-test-analysis-risk-tag-label='{{this.analysisRiskStatus.label}}'
+>
+  <i
+    class='fa risk-icons {{this.analysisRiskStatus.icon}}'
+    data-test-risk-tag-icon
+  ></i>
+  <div class='uppercase-text padding-l-h' data-test-risk-tag-label>
+    {{this.analysisRiskStatus.label}}
+  </div>
+  {{#if this.isNonPassedRiskOverridden}}
+    <img
+      src='/images/user-edited.svg'
+      class='user-edited-icon'
+      alt='edit icon'
+      data-test-risk-tag-edit-icon
+    />
+    <AttachTooltip @placement='top'>
+      {{t 'overriddenRisk'}},&nbsp;{{t 'orginalRisk'}}:
+      {{t (risk-text @analysis.risk)}}
+    </AttachTooltip>
+  {{/if}}
+</div>
