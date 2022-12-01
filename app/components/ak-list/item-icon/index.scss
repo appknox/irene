@@ -1,0 +1,25 @@
+.ak-list-item-icon-root {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+
+  :global(.ak-icon) {
+    color: var(--ak-list-item-color-text-primary);
+  }
+}
+
+.ak-list-item-icon-disabled {
+  color: var(--ak-list-item-color-text-disabled);
+
+  :global(.ak-icon) {
+    color: var(--ak-list-item-color-text-disabled);
+  }
+}
+
+.ak-list-item-icon-gutter-right {
+  margin-right: 0.5em;
+}
+
+.ak-list-item-icon-gutter-left {
+  margin-left: 0.5em;
+}

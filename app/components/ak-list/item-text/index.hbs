@@ -1,0 +1,29 @@
+<div
+  data-test-list-item-text
+  ...attributes
+  local-class='
+        ak-list-item-text-root
+        {{if @disabled "ak-list-item-text-disabled"}}'
+>
+  <AkTypography
+    data-test-list-item-text-primary
+    local-class='{{if @disabled "ak-list-item-text-disabled"}}'
+    @tag='span'
+    @noWrap={{true}}
+    @gutterBottom={{if @secondaryText true false}}
+  >
+    {{@primaryText}}
+  </AkTypography>
+
+  {{#if @secondaryText}}
+    <AkTypography
+      data-test-list-item-text-secondary
+      local-class='{{if @disabled "ak-list-item-text-disabled"}}'
+      @tag='span'
+      @noWrap={{true}}
+      @variant='body2'
+    >
+      {{@secondaryText}}
+    </AkTypography>
+  {{/if}}
+</div>
