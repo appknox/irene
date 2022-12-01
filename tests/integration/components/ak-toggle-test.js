@@ -3,23 +3,19 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-const noop = () => {};
 module('Integration | Component | ak-toggle', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders default toggle input', async function (assert) {
-    this.set('onClick', noop);
-    await render(hbs`<AkToggle @onClick={{this.onClick}}/>`);
+    await render(hbs`<AkToggle />`);
 
     assert.dom('[data-test-toggle-input-slider]').exists();
   });
 
   test('it renders toggle with disabled state', async function (assert) {
     this.set('disabled', true);
-    this.set('onClick', noop);
-    await render(
-      hbs`<AkToggle @disabled={{this.disabled}} @onClick={{this.onClick}}/>`
-    );
+
+    await render(hbs`<AkToggle @disabled={{this.disabled}} />`);
 
     assert.dom('[data-test-toggle-input]').hasAttribute('disabled');
   });
@@ -27,9 +23,9 @@ module('Integration | Component | ak-toggle', function (hooks) {
   test('it renders toggle with disabled and checked', async function (assert) {
     this.set('disabled', true);
     this.set('checked', true);
-    this.set('onClick', noop);
+
     await render(
-      hbs`<AkToggle @disabled={{this.disabled}} @checked={{this.checked}} @onClick={{this.onClick}}/>`
+      hbs`<AkToggle @disabled={{this.disabled}} @checked={{this.checked}} />`
     );
 
     assert.dom('[data-test-toggle-input]').hasAttribute('disabled');
@@ -39,9 +35,9 @@ module('Integration | Component | ak-toggle', function (hooks) {
   test('it renders toggle with checked state', async function (assert) {
     this.set('disabled', false);
     this.set('checked', true);
-    this.set('onClick', noop);
+
     await render(
-      hbs`<AkToggle @disabled={{this.disabled}} @checked={{this.checked}} @onClick={{this.onClick}}/>`
+      hbs`<AkToggle @disabled={{this.disabled}} @checked={{this.checked}} />`
     );
 
     assert.dom('[data-test-toggle-input]').doesNotHaveAttribute('disabled');
@@ -51,9 +47,9 @@ module('Integration | Component | ak-toggle', function (hooks) {
   test('it renders toggle with unchecked state', async function (assert) {
     this.set('disabled', false);
     this.set('checked', false);
-    this.set('onClick', noop);
+
     await render(
-      hbs`<AkToggle @disabled={{this.disabled}} @checked={{this.checked}} @onClick={{this.onClick}}/>`
+      hbs`<AkToggle @disabled={{this.disabled}} @checked={{this.checked}} />`
     );
 
     assert.dom('[data-test-toggle-input]').doesNotHaveAttribute('disabled');
@@ -65,9 +61,9 @@ module('Integration | Component | ak-toggle', function (hooks) {
   test('it toggle state while clicking on it', async function (assert) {
     this.set('disabled', false);
     this.set('checked', false);
-    this.set('onClick', noop);
+
     await render(
-      hbs`<AkToggle @disabled={{this.disabled}} @checked={{this.checked}} @onClick={{this.onClick}}/>`
+      hbs`<AkToggle @disabled={{this.disabled}} @checked={{this.checked}} />`
     );
 
     assert.notOk(
@@ -79,33 +75,57 @@ module('Integration | Component | ak-toggle', function (hooks) {
     assert.ok(this.element.querySelector('[data-test-toggle-input]').checked);
   });
 
-  test('it renders toggle with label and placement left', async function (assert) {
-    this.set('onClick', noop);
-    await render(hbs`<AkToggle @onClick={{this.onClick}} @label="TestLeft" />`);
+  test('test toggle with onchange handler uncontrolled', async function (assert) {
+    let checked = false;
+    let event = null;
 
-    assert
-      .dom(`[data-test-toggle-input-label]`)
-      .hasText('TestLeft')
-      .hasClass(/toggle-label-left/i);
+    this.set('onChange', function (e, val) {
+      checked = val;
+      event = e;
+    });
 
-    assert
-      .dom('[data-test-toggle-input-label-container]')
-      .doesNotHaveStyle({ 'flex-direction': 'row-reverse' });
+    await render(hbs`<AkToggle @onChange={{this.onChange}} />`);
+
+    assert.false(checked);
+    assert.strictEqual(event, null);
+    assert.dom('[data-test-toggle-input]').isNotChecked();
+
+    await click('[data-test-toggle-input]');
+
+    assert.true(checked);
+    assert.strictEqual(event.type, 'change');
+    assert.dom('[data-test-toggle-input]').isChecked();
+
+    await click('[data-test-toggle-input]');
+
+    assert.false(checked);
+    assert.strictEqual(event.type, 'change');
+    assert.dom('[data-test-toggle-input]').isNotChecked();
   });
 
-  test('it renders toggle with label and placement right', async function (assert) {
-    this.set('onClick', noop);
+  test('test toggle with onchange handler controlled', async function (assert) {
+    this.setProperties({
+      checked: false,
+      onChange: (event, checked) => {
+        this.set('checked', checked);
+      },
+    });
+
     await render(
-      hbs`<AkToggle @onClick={{this.onClick}} @label="TestRight" @labelPlacement="right" />`
+      hbs`<AkToggle @checked={{this.checked}} @onChange={{this.onChange}} />`
     );
 
-    assert
-      .dom(`[data-test-toggle-input-label]`)
-      .hasText('TestRight')
-      .hasClass(/toggle-label-right/i);
+    assert.false(this.checked);
+    assert.dom('[data-test-toggle-input]').isNotChecked();
 
-    assert
-      .dom('[data-test-toggle-input-label-container]')
-      .hasStyle({ 'flex-direction': 'row-reverse' });
+    await click('[data-test-toggle-input]');
+
+    assert.true(this.checked);
+    assert.dom('[data-test-toggle-input]').isChecked();
+
+    await click('[data-test-toggle-input]');
+
+    assert.false(this.checked);
+    assert.dom('[data-test-toggle-input]').isNotChecked();
   });
 });

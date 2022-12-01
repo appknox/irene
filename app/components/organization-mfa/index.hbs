@@ -6,10 +6,10 @@
   <div class='vertical-align-top'>
     <div class='div'>
       <AkToggle
-        id='mandate-mfa'
+        @id='mandate-mfa'
         @checked={{@organization.mandatoryMfa}}
         @disabled={{this.isMfaMandateDisabled}}
-        {{on 'click' (perform this.setMandatoryMFA)}}
+        @onChange={{perform this.setMandatoryMFA}}
       />
     </div>
 

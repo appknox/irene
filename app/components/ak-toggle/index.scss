@@ -5,6 +5,7 @@ $defaultThumbSize: 1.3125em;
 @mixin toggleContainerSize($scale: 1) {
   width: $defaultTrackWidth * $scale;
   height: $defaultTrackHeight * $scale;
+  margin: 0.4em;
 }
 
 @mixin trackRadiusAndThumbSize($scale: 1) {
@@ -28,23 +29,30 @@ $defaultThumbSize: 1.3125em;
 .toggle-container {
   position: relative;
   display: inline-block;
-
-  &.disabled {
-    cursor: not-allowed;
-  }
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+  appearance: none;
+  text-decoration: none;
 }
 
 .toggle-input {
+  cursor: inherit;
+  position: absolute;
   opacity: 0;
-  width: 0;
-  height: 0;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  margin: 0px;
+  padding: 0px;
+  z-index: 1;
 
   &:checked + .track {
-    background-color: var(--toggle-button-checked-color);
+    background-color: var(--ak-toggle-checked-background-color);
   }
 
   &:disabled + .track {
-    cursor: not-allowed;
     opacity: 0.5;
   }
 }
@@ -57,14 +65,14 @@ $defaultThumbSize: 1.3125em;
   right: 0;
   bottom: 0;
   transition: 0.4s;
-  background-color: var(--toggle-button-unchecked-color);
+  background-color: var(--ak-toggle-unchecked-background-color);
 
   &::before {
     position: absolute;
     content: '';
     border-radius: 50%;
     transition: 0.4s;
-    background-color: var(--toggle-button-slider-circle-color);
+    background-color: var(--ak-toggle-slider-background-color);
   }
 }
 
@@ -105,26 +113,4 @@ $defaultThumbSize: 1.3125em;
 
 .track-large {
   @include trackRadiusAndThumbSize(1.3);
-}
-
-// label styles
-.toggle-label-container {
-  display: inline-flex;
-  align-items: center;
-}
-
-.toggle-label {
-  color: var(--toggle-button-label-color);
-}
-
-.toggle-label-placement-right {
-  flex-direction: row-reverse;
-}
-
-.toggle-label-left {
-  margin-right: 8px;
-}
-
-.toggle-label-right {
-  margin-left: 8px;
 }
