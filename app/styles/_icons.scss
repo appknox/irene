@@ -95,6 +95,14 @@
   @extend .mi-arrow-back;
 }
 
+.ak-icon-arrow-drop-down {
+  @extend .mi-arrow-drop-down;
+}
+
+.ak-icon-arrow-drop-up {
+  @extend .mi-arrow-drop-up;
+}
+
 .ak-icon-search {
   @extend .mi-search;
 }
@@ -117,4 +125,52 @@
 
 .ak-icon-radio-button-checked {
   @extend .mi-radio-button-checked;
+}
+
+.ak-icon-close {
+  @extend .mi-close;
+}
+
+.ak-icon-done {
+  @extend .mi-done;
+}
+
+.ak-icon-refresh {
+  @extend .mi-refresh;
+}
+
+.ak-icon-delete {
+  @extend .mi-delete;
+}
+
+.ak-icon-more-vert {
+  @extend .mi-more-vert;
+}
+
+.ak-icon-note-add {
+  @extend .mi-note-add;
+}
+
+.ak-icon-group-add {
+  @extend .mi-group-add;
+}
+
+.ak-icon-integration-instructions {
+  @extend .mi-integration-instructions;
+}
+
+.ak-icon-verified {
+  @extend .mi-verified;
+}
+
+.ak-icon-subdirectory-arrow-right {
+  @extend .mi-subdirectory-arrow-right;
+}
+
+.ak-icon-download {
+  @extend .mi-download;
+}
+
+.ak-icon-security {
+  @extend .mi-security;
 }

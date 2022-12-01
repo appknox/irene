@@ -43,4 +43,11 @@ body {
   --ak-link-color-success: var(--success-main);
   --ak-link-color-warn: var(--warn-main);
   --ak-link-color-info: var(--info-main);
+
+  // variables for ak-icon-button
+  --ak-icon-button-color-text-disabled: var(--text-disabled);
+  --ak-icon-button-color-text-primary: var(--text-primary);
+  --ak-icon-button-border-radius: var(--border-radius);
+  --ak-icon-button-border-color: var(--border-color-2);
+  --ak-icon-button-hover-background: var(--hover-light-background);
 }
