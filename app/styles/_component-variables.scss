@@ -56,4 +56,11 @@ body {
   --ak-list-item-hover-background: var(--hover-light-background);
   --ak-list-item-selected-background: var(--primary-light);
   --ak-list-item-color-text-primary: var(--text-primary);
+
+  // variables for ak-menu
+  --ak-menu-background: var(--background-main);
+  --ak-menu-border-radius: var(--border-radius);
+  --ak-menu-box-shadow: var(--box-shadow-2);
+  --ak-menu-border-color: var(--border-color-1);
+  --ak-menu-z-index: var(--zIndex-tooltip);
 }
