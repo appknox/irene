@@ -32,4 +32,15 @@ body {
   // variables for ak-divider
   --ak-divider-color-light: var(--divider);
   --ak-divider-color-dark: var(--divider-dark);
+
+  // variables for ak-link
+  --ak-link-color-text-disabled: var(--text-disabled);
+  --ak-link-color-primary: var(--primary-main);
+  --ak-link-color-secondary: var(--secondary-main);
+  --ak-link-color-text-primary: var(--text-primary);
+  --ak-link-color-text-secondary: var(--text-secondary);
+  --ak-link-color-error: var(--error-main);
+  --ak-link-color-success: var(--success-main);
+  --ak-link-color-warn: var(--warn-main);
+  --ak-link-color-info: var(--info-main);
 }

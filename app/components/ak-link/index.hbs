@@ -1,0 +1,37 @@
+<LinkTo
+  data-test-ak-link
+  ...attributes
+  @disabled={{@disabled}}
+  title='{{@title}}'
+  class={{@class}}
+  local-class='
+  ak-link-root 
+  {{if @disabled "ak-link-disabled"}}
+  ak-link-color-{{or @color "textPrimary"}}
+  ak-link-underline-{{or @underline "hover"}}'
+  @route={{@route}}
+  @models={{this.modelOrModels}}
+  @query={{@query}}
+>
+  {{#if (has-block 'leftIcon')}}
+    <div data-test-ak-link-left-icon local-class='ak-link-left-icon'>
+      {{yield to='leftIcon'}}
+    </div>
+  {{/if}}
+
+  <AkTypography
+    data-test-ak-link-text
+    @variant={{@typographyVariant}}
+    @color={{if @disabled 'inherit' @color}}
+    @tag='span'
+    local-class='ak-link-text'
+  >
+    {{yield}}
+  </AkTypography>
+
+  {{#if (has-block 'rightIcon')}}
+    <div data-test-ak-link-right-icon local-class='ak-link-right-icon'>
+      {{yield to='rightIcon'}}
+    </div>
+  {{/if}}
+</LinkTo>

@@ -1,0 +1,128 @@
+.ak-link-root {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  background-color: transparent;
+  outline: 0;
+  border: 0;
+  margin: 0;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 400;
+  font-size: 1rem;
+
+  &.ak-link-disabled {
+    color: var(--ak-link-color-text-disabled);
+    pointer-events: none;
+
+    &:hover .ak-link-text {
+      text-decoration: none;
+    }
+  }
+}
+
+.ak-link-color-primary {
+  color: var(--ak-link-color-primary);
+}
+
+.ak-link-color-secondary {
+  color: var(--ak-link-color-secondary);
+}
+
+.ak-link-color-textPrimary {
+  color: var(--ak-link-color-text-primary);
+}
+
+.ak-link-color-textSecondary {
+  color: var(--ak-link-color-text-secondary);
+}
+
+.ak-link-color-warn {
+  color: var(--ak-link-color-warn);
+}
+
+.ak-link-color-error {
+  color: var(--ak-link-color-error);
+}
+
+.ak-link-color-success {
+  color: var(--ak-link-color-success);
+}
+
+.ak-link-color-info {
+  color: var(--ak-link-color-info);
+}
+
+a:hover {
+  &.ak-link-color-primary {
+    color: var(--ak-link-color-primary);
+  }
+
+  &.ak-link-color-secondary {
+    color: var(--ak-link-color-secondary);
+  }
+
+  &.ak-link-color-textPrimary {
+    color: var(--ak-link-color-text-primary);
+  }
+
+  &.ak-link-color-textSecondary {
+    color: var(--ak-link-color-text-secondary);
+  }
+
+  &.ak-link-color-warn {
+    color: var(--ak-link-color-warn);
+  }
+
+  &.ak-link-color-error {
+    color: var(--ak-link-color-error);
+  }
+
+  &.ak-link-color-success {
+    color: var(--ak-link-color-success);
+  }
+
+  &.ak-link-color-info {
+    color: var(--ak-link-color-info);
+  }
+}
+
+.ak-link-underline-none .ak-link-text {
+  text-decoration: none;
+}
+
+.ak-link-underline-always .ak-link-text {
+  text-decoration: underline;
+}
+
+.ak-link-underline-hover {
+  text-decoration: none;
+
+  &:hover .ak-link-text {
+    text-decoration: underline;
+  }
+}
+
+.ak-link-left-icon,
+.ak-link-right-icon {
+  display: inline-flex;
+  align-items: center;
+
+  :global(.ak-icon) {
+    font-size: 1.125rem !important;
+    user-select: none;
+  }
+}
+
+.ak-link-left-icon {
+  margin-right: 0.5em;
+}
+
+.ak-link-right-icon {
+  margin-left: 0.5em;
+}
