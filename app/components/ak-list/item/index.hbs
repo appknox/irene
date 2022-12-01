@@ -1,0 +1,63 @@
+{{#let
+  (hash
+    leftIcon=(component 'ak-list/item-icon' disabled=@disabled rightGutter=true)
+    text=(component 'ak-list/item-text' disabled=@disabled)
+    rightIcon=(component 'ak-list/item-icon' disabled=@disabled leftGutter=true)
+  )
+  as |api|
+}}
+  {{#if @button}}
+    <li
+      data-test-ak-list-item-button
+      ...attributes
+      role={{@role}}
+      local-class='ak-list-item-root {{if @selected "ak-list-item-selected"}}'
+    >
+      <button
+        type='button'
+        disabled={{@disabled}}
+        {{on 'click' (or @onClick this.noop)}}
+        local-class='
+        ak-list-item-button-root 
+        {{unless @noGutters "ak-list-item-gutters"}}'
+      >
+        {{yield api}}
+      </button>
+    </li>
+  {{else if @link}}
+    <li
+      data-test-ak-list-item-link
+      ...attributes
+      role={{@role}}
+      local-class='ak-list-item-root {{if @selected "ak-list-item-selected"}}'
+    >
+      <LinkTo
+        @route={{@route}}
+        @query={{@query}}
+        @models={{this.modelOrModels}}
+        @disabled={{@disabled}}
+        local-class='
+        ak-list-item-link-root 
+        {{if @disabled "ak-list-item-link-disabled"}}
+        {{unless @noGutters "ak-list-item-gutters"}}'
+      >
+        {{yield api}}
+      </LinkTo>
+    </li>
+  {{else}}
+    <li
+      data-test-ak-list-item
+      ...attributes
+      role={{@role}}
+      local-class='ak-list-item-root 
+    {{if @selected "ak-list-item-selected"}}
+    {{unless @noGutters "ak-list-item-gutters"}}'
+    >
+      {{yield api}}
+    </li>
+  {{/if}}
+{{/let}}
+
+{{#if @divider}}
+  <AkDivider data-test-ak-list-item-divider @tag='li' />
+{{/if}}

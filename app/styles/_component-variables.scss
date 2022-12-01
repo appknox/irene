@@ -50,4 +50,10 @@ body {
   --ak-icon-button-border-radius: var(--border-radius);
   --ak-icon-button-border-color: var(--border-color-2);
   --ak-icon-button-hover-background: var(--hover-light-background);
+
+  // variables for ak-list
+  --ak-list-item-color-text-disabled: var(--text-disabled);
+  --ak-list-item-hover-background: var(--hover-light-background);
+  --ak-list-item-selected-background: var(--primary-light);
+  --ak-list-item-color-text-primary: var(--text-primary);
 }

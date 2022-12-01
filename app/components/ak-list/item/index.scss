@@ -1,0 +1,64 @@
+.ak-list-item-root {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  text-decoration: none;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.ak-list-item-button-root,
+.ak-list-item-link-root {
+  background-color: transparent;
+  outline: 0px;
+  border: 0px;
+  margin: 0px;
+  border-radius: 0px;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+  appearance: none;
+  color: inherit;
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  text-decoration: none;
+  min-width: 0px;
+  box-sizing: border-box;
+  text-align: left;
+  height: auto;
+  line-height: normal;
+
+  &:hover:not(:disabled) {
+    background-color: var(--ak-list-item-hover-background);
+  }
+
+  &:focus:not(:disabled) {
+    background-color: var(--ak-list-item-hover-background);
+  }
+
+  &:disabled {
+    color: var(--ak-list-item-color-text-disabled);
+  }
+}
+
+.ak-list-item-link-disabled {
+  pointer-events: none;
+  color: var(--ak-list-item-color-text-disabled);
+
+  &:hover {
+    background-color: transparent;
+  }
+}
+
+.ak-list-item-selected {
+  background-color: var(--ak-list-item-selected-background);
+}
+
+.ak-list-item-gutters {
+  padding: 0.5em 1em;
+}

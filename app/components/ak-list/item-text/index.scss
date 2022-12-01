@@ -1,0 +1,10 @@
+.ak-list-item-text-root {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0px;
+}
+
+.ak-list-item-text-disabled {
+  color: var(--ak-list-item-color-text-disabled) !important;
+}

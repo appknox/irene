@@ -1,0 +1,11 @@
+<div
+  data-test-list-item-icon
+  ...attributes
+  local-class='
+    ak-list-item-icon-root
+    {{if @leftGutter "ak-list-item-icon-gutter-left"}}
+    {{if @rightGutter "ak-list-item-icon-gutter-right"}}
+    {{if @disabled "ak-list-item-icon-disabled"}}'
+>
+  {{yield}}
+</div>
