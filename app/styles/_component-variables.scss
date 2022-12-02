@@ -29,6 +29,11 @@ body {
   --ak-tooltip-color-on-dark: var(--common-white);
   --ak-tooltip-border-light: var(--border-color-1);
 
+  // variables for ak-toggle
+  --ak-toggle-slider-background-color: var(--background-main);
+  --ak-toggle-checked-background-color: var(--success-main);
+  --ak-toggle-unchecked-background-color: var(--neutral-grey-300);
+
   // variables for ak-divider
   --ak-divider-color-light: var(--divider);
   --ak-divider-color-dark: var(--divider-dark);
@@ -63,6 +68,24 @@ body {
   --ak-menu-box-shadow: var(--box-shadow-2);
   --ak-menu-border-color: var(--border-color-1);
   --ak-menu-z-index: var(--zIndex-tooltip);
+
+  // variables for ak-select
+  --ak-select-form-helper-color: var(--text-secondary);
+  --ak-select-error-color: var(--error-main);
+  --ak-select-dropdown-background: var(--background-main);
+  --ak-select-dropdown-border-radius: var(--border-radius);
+  --ak-select-dropdown-box-shadow: var(--box-shadow-2);
+  --ak-select-dropdown-border-color: var(--border-color-1);
+  --ak-select-option-color-text-primary: var(--text-primary);
+  --ak-select-option-hover-background: var(--hover-light-background);
+  --ak-select-option-selected-background: var(--primary-light);
+  --ak-select-option-divider-color: var(--divider);
+  --ak-select-trigger-color-text-primary: var(--text-primary);
+  --ak-select-trigger-border-radius: var(--border-radius);
+  --ak-select-trigger-border-color: var(--border-color-2);
+  --ak-select-trigger-disabled-color: var(--text-secondary);
+  --ak-select-trigger-disabled-background: var(--disabled-background-textfield);
+  --ak-select-trigger-arrow-color: var(--text-primary);
 }
 
 body {
