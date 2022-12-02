@@ -1,0 +1,32 @@
+<Modal-Dialog
+  @onClose={{if @disableClose this.noop @onClose}}
+  @onClickOverlay={{if
+    (or @disableClose @disableOverlayClick)
+    this.noop
+    @onClickOverlay
+  }}
+  @translucentOverlay={{true}}
+  @overlayClass='ak-modal-overlay'
+  ...attributes
+>
+  {{#if @showHeader}}
+    <div data-test-ak-modal-header local-class='modal-header'>
+      <h3 local-class='header-title'>
+        {{@headerTitle}}
+      </h3>
+
+      <AkIconButton
+        data-test-modal-close-btn
+        local-class='close-btn'
+        {{on 'click' (or @onClose this.noop)}}
+        @size='small'
+        disabled={{@disableClose}}
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </div>
+  {{/if}}
+  <div data-test-ak-modal-body local-class='modal-body'>
+    {{yield}}
+  </div>
+</Modal-Dialog>

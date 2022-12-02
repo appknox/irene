@@ -86,6 +86,21 @@ body {
   --ak-select-trigger-disabled-color: var(--text-secondary);
   --ak-select-trigger-disabled-background: var(--disabled-background-textfield);
   --ak-select-trigger-arrow-color: var(--text-primary);
+
+  // variables for ak-modal
+  &.theme-light {
+    --ak-modal-appbar-background: var(--background-light);
+    --ak-modal-appbar-border-bottom: 1px solid var(--border-color-1);
+    --ak-modal-appbar-background-text-color: var(--text-primary);
+    --ak-modal-appbar-hover-background: var(--hover-light-background);
+  }
+
+  &.theme-dark {
+    --ak-modal-appbar-background: var(--background-dark);
+    --ak-modal-appbar-border-bottom: none;
+    --ak-modal-appbar-background-text-color: var(--common-white);
+    --ak-modal-appbar-hover-background: var(--hover-dark-background);
+  }
 }
 
 body {

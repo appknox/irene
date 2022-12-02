@@ -1,0 +1,31 @@
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em;
+  background: var(--ak-modal-appbar-background);
+  color: var(--ak-modal-appbar-background-text-color);
+  border-bottom: var(--ak-modal-appbar-border-bottom);
+
+  h3.header-title {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+
+  .close-btn {
+    margin-left: 1em;
+
+    :global(.ak-icon) {
+      color: var(--ak-modal-appbar-background-text-color) !important;
+    }
+
+    &:hover {
+      background-color: var(--ak-modal-appbar-hover-background) !important;
+    }
+  }
+}
+
+.modal-body {
+  min-width: 400px;
+  padding: 1.2em;
+}
