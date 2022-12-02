@@ -14,4 +14,10 @@ module.exports = {
   emberOptions: {
     polyfills: [namedBlockPolyfill],
   },
+  previewBody: (body) => `
+    ${body}
+    <script>
+      document.body.classList.add('theme-dark');
+    </script>
+  `,
 };
