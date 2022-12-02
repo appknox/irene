@@ -1,0 +1,53 @@
+<div local-class='ak-select-root'>
+  <div local-class='ak-form-control'>
+    {{#if @label}}
+      <AkTypography
+        @variant={{@labelTypographyVariant}}
+        @color={{or @labelTypographyColor 'textSecondary'}}
+        @tag='label'
+        data-test-form-label
+        local-class='ak-form-label'
+        for={{this.labelId}}
+      >
+        {{@label}}
+        {{if @required ' *'}}
+      </AkTypography>
+    {{/if}}
+
+    <div
+      local-class='ak-select-trigger-root {{if @label "ak-form-label-spacing"}}'
+    >
+      <PowerSelect
+        @triggerId={{this.labelId}}
+        @dropdownClass='{{this.classes.dropdown}}'
+        @triggerClass='
+          {{this.classes.trigger}} 
+          {{if @error this.classes.triggerError}}'
+        @options={{@options}}
+        @onChange={{@onChange}}
+        @selected={{@selected}}
+        @placeholder={{@placeholder}}
+        @disabled={{@disabled}}
+        @renderInPlace={{@renderInPlace}}
+        @ariaInvalid='{{if @error true false}}'
+        @onOpen={{@onOpen}}
+        @onClose={{@onClose}}
+        @loadingMessage={{@loadingMessage}}
+        @selectedItemComponent={{@selectedItemComponent}}
+        as |option|
+      >
+        {{yield option}}
+      </PowerSelect>
+    </div>
+
+    {{#if @helperText}}
+      <p
+        data-test-helper-text
+        local-class='ak-form-helper-text {{if
+          @error
+          "ak-error-form-helper-text"
+        }}'
+      >{{@helperText}}</p>
+    {{/if}}
+  </div>
+</div>
