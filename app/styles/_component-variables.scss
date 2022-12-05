@@ -101,6 +101,17 @@ body {
     --ak-modal-appbar-background-text-color: var(--common-white);
     --ak-modal-appbar-hover-background: var(--hover-dark-background);
   }
+
+  // variables for ak-table
+  --ak-table-font-weight-regular: var(--font-weight-regular);
+  --ak-table-font-weight-medium: var(--font-weight-medium);
+  --ak-table-font-family: var(--font-family);
+  --ak-table-color-text-primary: var(--text-primary);
+  --ak-table-header-background-neutral: var(--neutral-grey-100);
+  --ak-table-header-border-neutral: var(--border-color-1);
+  --ak-table-border-light: var(--divider);
+  --ak-table-border-dark: var(--divider-dark);
+  --ak-table-hover-background: var(--hover-light-background);
 }
 
 body {
