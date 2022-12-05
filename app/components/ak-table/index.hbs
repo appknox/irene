@@ -1,0 +1,13 @@
+<EmberTable
+  local-class='
+    ak-table-root
+    ak-table-header-color-{{or @headerColor "neutral"}}
+    ak-table-variant-{{or @variant "semi-bordered"}}
+    ak-table-border-color-{{or @borderColor "light"}}
+    {{if @hoverable "ak-table-hoverable"}}
+    ak-table-padding-{{if @dense "dense" "default"}}'
+  data-test-ak-table
+  as |et|
+>
+  {{yield et}}
+</EmberTable>
