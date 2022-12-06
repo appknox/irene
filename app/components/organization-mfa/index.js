@@ -22,10 +22,12 @@ class OrganizationMfa extends Component {
   }
 
   @task()
-  *setMandatoryMFA() {
+  *setMandatoryMFA(event, checked) {
     try {
       this.isSavingStatus = true;
       const org = this.args.organization;
+
+      org.mandatoryMfa = checked;
 
       yield org.save();
 

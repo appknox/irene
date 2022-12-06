@@ -14,6 +14,6 @@
     @size='small'
     @checked={{@settings.enabled}}
     @disabled={{not this.canEditSettings}}
-    {{on 'click' (perform this.toggleAppMonitoringEnabled)}}
+    @onChange={{perform this.toggleAppMonitoringEnabled}}
   />
 </div>
