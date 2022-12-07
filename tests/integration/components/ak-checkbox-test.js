@@ -11,10 +11,10 @@ module('Integration | Component | ak-checkbox', function (hooks) {
       checked: false,
     });
 
-    await render(hbs`<AkCheckbox />`);
+    await render(hbs`<AkCheckbox @checked={{this.checked}} />`);
 
     assert.dom('[data-test-checkbox]').exists().isNotChecked();
-    assert.dom('[data-test-checkbox-unchecked]').exists();
+    assert.dom('[data-test-checkbox-icon]').exists();
   });
 
   test('it renders ak-checkbox indeterminate', async function (assert) {
@@ -27,8 +27,11 @@ module('Integration | Component | ak-checkbox', function (hooks) {
       hbs`<AkCheckbox @checked={{this.checked}} @indeterminate={{this.indeterminate}} />`
     );
 
-    assert.dom('[data-test-checkbox]').exists().isNotChecked();
-    assert.dom('[data-test-checkbox-indeterminate]').exists();
+    const checkbox = find('[data-test-checkbox]');
+
+    assert.dom(checkbox).exists().isNotChecked();
+
+    assert.strictEqual(checkbox.dataset.indeterminate, 'true');
   });
 
   test('it renders ak-checkbox with form-control-label', async function (assert) {
@@ -39,77 +42,37 @@ module('Integration | Component | ak-checkbox', function (hooks) {
 
     await render(hbs`
         <AkFormControlLabel @label={{this.label}} as |fcl|>
-            <AkCheckbox @disabled={{fcl.disabled}} />
+            <AkCheckbox @checked={{this.checked}} @disabled={{fcl.disabled}} />
         </AkFormControlLabel>
     `);
 
     assert.dom('[data-test-ak-form-label]').exists().hasText(this.label);
 
     assert.dom('[data-test-checkbox]').exists().isNotChecked().isNotDisabled();
-    assert.dom('[data-test-checkbox-unchecked]').exists();
+    assert.dom('[data-test-checkbox-icon]').exists();
   });
 
-  test('test ak-checkbox uncontrolled', async function (assert) {
+  test('test ak-checkbox check toggle', async function (assert) {
     await render(hbs`<AkCheckbox />`);
 
     assert.dom('[data-test-checkbox]').exists().isNotChecked();
-    assert.dom('[data-test-checkbox-unchecked]').exists();
 
     const checkbox = find('[data-test-checkbox]');
 
     await triggerEvent(checkbox, 'click');
 
     assert.dom('[data-test-checkbox]').isChecked();
-    assert.dom('[data-test-checkbox-checked]').exists();
 
     await triggerEvent('[data-test-checkbox]', 'click');
 
     assert.dom('[data-test-checkbox]').exists().isNotChecked();
-    assert.dom('[data-test-checkbox-unchecked]').exists();
   });
 
-  test('test ak-checkbox uncontrolled with onchange handler', async function (assert) {
+  test('test ak-checkbox with onchange handler', async function (assert) {
     this.setProperties({
       checked: false,
       event: null,
-      onChange: (event, checked) => {
-        this.set('checked', checked);
-        this.set('event', event);
-      },
-    });
-
-    await render(hbs`<AkCheckbox @onChange={{this.onChange}} />`);
-
-    assert.dom('[data-test-checkbox]').exists().isNotChecked();
-    assert.dom('[data-test-checkbox-unchecked]').exists();
-    assert.false(this.checked);
-    assert.strictEqual(this.event, null);
-
-    const checkbox = find('[data-test-checkbox]');
-
-    await triggerEvent(checkbox, 'click');
-
-    assert.dom('[data-test-checkbox]').isChecked();
-    assert.dom('[data-test-checkbox-checked]').exists();
-    assert.true(this.checked);
-    assert.strictEqual(this.event.type, 'change');
-
-    this.set('event', null);
-
-    await triggerEvent('[data-test-checkbox]', 'click');
-
-    assert.dom('[data-test-checkbox]').exists().isNotChecked();
-    assert.dom('[data-test-checkbox-unchecked]').exists();
-    assert.false(this.checked);
-    assert.strictEqual(this.event.type, 'change');
-  });
-
-  test('test ak-checkbox controlled with onchange handler', async function (assert) {
-    this.setProperties({
-      checked: false,
-      event: null,
-      onChange: (event, checked) => {
-        this.set('checked', checked);
+      onChange: (event) => {
         this.set('event', event);
       },
     });
@@ -119,7 +82,6 @@ module('Integration | Component | ak-checkbox', function (hooks) {
     );
 
     assert.dom('[data-test-checkbox]').exists().isNotChecked();
-    assert.dom('[data-test-checkbox-unchecked]').exists();
     assert.false(this.checked);
     assert.strictEqual(this.event, null);
 
@@ -128,7 +90,6 @@ module('Integration | Component | ak-checkbox', function (hooks) {
     await triggerEvent(checkbox, 'click');
 
     assert.dom('[data-test-checkbox]').isChecked();
-    assert.dom('[data-test-checkbox-checked]').exists();
     assert.true(this.checked);
     assert.strictEqual(this.event.type, 'change');
 
@@ -137,7 +98,6 @@ module('Integration | Component | ak-checkbox', function (hooks) {
     await triggerEvent('[data-test-checkbox]', 'click');
 
     assert.dom('[data-test-checkbox]').exists().isNotChecked();
-    assert.dom('[data-test-checkbox-unchecked]').exists();
     assert.false(this.checked);
     assert.strictEqual(this.event.type, 'change');
   });
@@ -166,14 +126,12 @@ module('Integration | Component | ak-checkbox', function (hooks) {
     await triggerEvent(checkbox, 'click');
 
     assert.dom('[data-test-checkbox]').isChecked();
-    assert.dom('[data-test-checkbox-checked]').exists();
     assert.strictEqual(checkbox.dataset.indeterminate, 'false');
     assert.true(this.checked);
 
     await triggerEvent('[data-test-checkbox]', 'click');
 
     assert.dom('[data-test-checkbox]').exists().isNotChecked();
-    assert.dom('[data-test-checkbox-unchecked]').exists();
     assert.strictEqual(checkbox.dataset.indeterminate, 'false');
     assert.false(this.checked);
 
@@ -182,26 +140,10 @@ module('Integration | Component | ak-checkbox', function (hooks) {
     this.set('indeterminate', true);
 
     assert.strictEqual(checkbox.dataset.indeterminate, 'true');
-    assert.dom('[data-test-checkbox-indeterminate]').exists();
 
     await triggerEvent(checkbox, 'click');
 
     assert.dom('[data-test-checkbox]').isChecked();
-    assert.dom('[data-test-checkbox-checked]').exists();
-    assert.strictEqual(checkbox.dataset.indeterminate, 'false');
-    assert.true(this.checked);
-
-    // testing when checkbox was checked then went to indeterminate
-    // so if again clicked it should be checked
-    this.set('indeterminate', true);
-
-    assert.strictEqual(checkbox.dataset.indeterminate, 'true');
-    assert.dom('[data-test-checkbox-indeterminate]').exists();
-
-    await triggerEvent(checkbox, 'click');
-
-    assert.dom('[data-test-checkbox]').isChecked();
-    assert.dom('[data-test-checkbox-checked]').exists();
     assert.strictEqual(checkbox.dataset.indeterminate, 'false');
     assert.true(this.checked);
   });
@@ -221,5 +163,59 @@ module('Integration | Component | ak-checkbox', function (hooks) {
     this.set('checked', true);
 
     assert.dom('[data-test-checkbox]').exists().isChecked().isDisabled();
+  });
+
+  test('it renders ak-checkbox readonly', async function (assert) {
+    this.setProperties({
+      checked: true,
+      readonly: true,
+      clickEvent: null,
+      changeEvent: null,
+      handleChange: (event) => {
+        this.set('changeEvent', event);
+      },
+      handleClick: (event) => {
+        this.set('clickEvent', event);
+      },
+    });
+
+    await render(
+      hbs`<AkCheckbox @onClick={{this.handleClick}} @onChange={{this.handleChange}} @checked={{this.checked}} @readonly={{this.readonly}} />`
+    );
+
+    assert.dom('[data-test-checkbox]').exists().isChecked().isNotDisabled();
+    assert.notOk(this.changeEvent);
+    assert.notOk(this.clickEvent);
+
+    await triggerEvent('[data-test-checkbox]', 'click');
+
+    assert.dom('[data-test-checkbox]').exists().isChecked().isNotDisabled();
+    assert.notOk(this.changeEvent);
+    assert.notOk(this.clickEvent);
+  });
+
+  test('it renders ak-checkbox with click handler', async function (assert) {
+    this.setProperties({
+      checked: true,
+      clickEvent: null,
+      handleClick: (event) => {
+        this.set('clickEvent', event);
+      },
+    });
+
+    await render(
+      hbs`<AkCheckbox @onClick={{this.handleClick}} @checked={{this.checked}} />`
+    );
+
+    assert.dom('[data-test-checkbox]').exists().isChecked().isNotDisabled();
+    assert.true(this.checked);
+    assert.notOk(this.clickEvent);
+
+    await triggerEvent('[data-test-checkbox]', 'click');
+
+    assert.dom('[data-test-checkbox]').exists().isNotChecked().isNotDisabled();
+    assert.false(this.checked);
+    assert.ok(this.clickEvent);
+    assert.strictEqual(this.clickEvent.type, 'click');
   });
 });

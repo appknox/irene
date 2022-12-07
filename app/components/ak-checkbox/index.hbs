@@ -2,37 +2,23 @@
   data-test-ak-checkbox-root
   local-class='ak-checkbox-root {{unless @disabled "ak-checkbox-hover-focus"}}'
 >
-  <input
+  <Input
     data-test-checkbox
     ...attributes
     data-indeterminate='{{@indeterminate}}'
     local-class='ak-checkbox'
-    checked={{this.checked}}
+    @checked={{@checked}}
     disabled={{@disabled}}
     readonly={{@readonly}}
-    type='checkbox'
+    @type='checkbox'
     id={{this.id}}
     {{on 'change' this.onChange}}
+    {{on 'click' this.onClick}}
   />
 
-  {{#if this.checked}}
-    <span
-      data-test-checkbox-checked
-      local-class='ak-svg-checkbox-icon ak-svg-checkbox-icon-checked'
-      class='ak-icon ak-icon-check-box'
-    ></span>
-  {{else if @indeterminate}}
-    <span
-      data-test-checkbox-indeterminate
-      local-class='ak-svg-checkbox-icon ak-svg-checkbox-icon-indeterminate'
-      class='ak-icon ak-icon-indeterminate-check-box'
-    ></span>
-  {{else}}
-    <span
-      data-test-checkbox-unchecked
-      local-class='ak-svg-checkbox-icon'
-      class='ak-icon ak-icon-check-box-outline-blank'
-    ></span>
-  {{/if}}
-
+  <span
+    data-test-checkbox-icon
+    local-class='ak-svg-checkbox-icon'
+    class='ak-icon'
+  ></span>
 </span>
