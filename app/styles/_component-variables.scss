@@ -112,6 +112,12 @@ body {
   --ak-table-border-light: var(--divider);
   --ak-table-border-dark: var(--divider-dark);
   --ak-table-hover-background: var(--hover-light-background);
+
+  // variables for ak-checkbox
+  --ak-checkbox-color-checked: var(--success-main);
+  --ak-checkbox-color-indeterminate: var(--success-main);
+  --ak-checkbox-color-text-disabled: var(--text-disabled);
+  --ak-checkbox-hover-background: var(--hover-light-background);
 }
 
 body {
