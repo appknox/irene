@@ -6,20 +6,58 @@ export default {
   excludeStories: [],
 };
 
+const actions = {
+  handleClick(event) {
+    console.log('click event!', event);
+  },
+  handleChange(event, checked) {
+    console.log('change event!', { event, checked });
+  },
+};
+
 const Template = (args) => ({
   template: hbs`
-    <AkFormControlLabel @label={{this.label}} @disabled={{this.disabled}} as |fcl|>
-        <AkToggle @size={{this.size}} @disabled={{fcl.disabled}} @readonly={{this.readonly}} />
-    </AkFormControlLabel>
+    <AkToggle 
+      @checked={{this.checked}} 
+      @size={{this.size}} 
+      @disabled={{this.disabled}} 
+      @readonly={{this.readonly}}
+      @onClick={{this.handleClick}}
+      @onChange={{this.handleChange}} />
   `,
-  context: args,
+  context: { ...args, ...actions },
 });
 
 export const Basic = Template.bind({});
 
 Basic.args = {
+  disabled: false,
+  readonly: false,
+  checked: false,
+  size: 'small',
+};
+
+const LabelTemplate = (args) => ({
+  template: hbs`
+    <AkFormControlLabel @label={{this.label}} @disabled={{this.disabled}} as |fcl|>
+      <AkToggle
+        @checked={{this.checked}} 
+        @size={{this.size}} 
+        @disabled={{fcl.disabled}} 
+        @readonly={{this.readonly}}
+        @onClick={{this.handleClick}}
+        @onChange={{this.handleChange}} />
+    </AkFormControlLabel>
+  `,
+  context: { ...args, ...actions },
+});
+
+export const Label = LabelTemplate.bind({});
+
+Label.args = {
   label: 'Check me',
   disabled: false,
   readonly: false,
+  checked: true,
   size: 'small',
 };

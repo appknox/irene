@@ -5,16 +5,17 @@
     {{if @disabled "disabled"}}
   '
 >
-  <input
+  <Input
     data-test-toggle-input
     ...attributes
     local-class='toggle-input toggle-input-{{if @size @size "default"}}'
-    type='checkbox'
+    @type='checkbox'
     disabled={{@disabled}}
     readonly={{@readonly}}
-    checked={{this.checked}}
+    @checked={{@checked}}
     id={{this.id}}
     {{on 'change' this.onChange}}
+    {{on 'click' this.onClick}}
   />
   <span
     local-class='track track-{{if @size @size "default"}}'

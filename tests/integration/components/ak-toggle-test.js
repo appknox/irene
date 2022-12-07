@@ -70,9 +70,12 @@ module('Integration | Component | ak-toggle', function (hooks) {
       this.element.querySelector('[data-test-toggle-input]').checked
     );
 
+    assert.false(this.checked);
+
     await click('[data-test-toggle-input]');
 
     assert.ok(this.element.querySelector('[data-test-toggle-input]').checked);
+    assert.true(this.checked);
   });
 
   test('test toggle with onchange handler uncontrolled', async function (assert) {
@@ -127,5 +130,64 @@ module('Integration | Component | ak-toggle', function (hooks) {
 
     assert.false(this.checked);
     assert.dom('[data-test-toggle-input]').isNotChecked();
+  });
+
+  test('it renders ak-toggle readonly', async function (assert) {
+    this.setProperties({
+      checked: true,
+      readonly: true,
+      clickEvent: null,
+      changeEvent: null,
+      handleChange: (event) => {
+        this.set('changeEvent', event);
+      },
+      handleClick: (event) => {
+        this.set('clickEvent', event);
+      },
+    });
+
+    await render(
+      hbs`<AkToggle @onClick={{this.handleClick}} @onChange={{this.handleChange}} @checked={{this.checked}} @readonly={{this.readonly}} />`
+    );
+
+    assert.dom('[data-test-toggle-input]').exists().isChecked().isNotDisabled();
+    assert.notOk(this.changeEvent);
+    assert.notOk(this.clickEvent);
+
+    await click('[data-test-toggle-input]');
+
+    assert.dom('[data-test-toggle-input]').exists().isChecked().isNotDisabled();
+    assert.notOk(this.changeEvent);
+    assert.notOk(this.clickEvent);
+  });
+
+  test('it renders ak-toggle with click handler', async function (assert) {
+    this.setProperties({
+      checked: true,
+      clickEvent: null,
+      handleClick: (event) => {
+        this.set('clickEvent', event);
+      },
+    });
+
+    await render(
+      hbs`<AkToggle @onClick={{this.handleClick}} @checked={{this.checked}} />`
+    );
+
+    assert.dom('[data-test-toggle-input]').exists().isChecked().isNotDisabled();
+    assert.true(this.checked);
+    assert.notOk(this.clickEvent);
+
+    await click('[data-test-toggle-input]');
+
+    assert
+      .dom('[data-test-toggle-input]')
+      .exists()
+      .isNotChecked()
+      .isNotDisabled();
+
+    assert.false(this.checked);
+    assert.ok(this.clickEvent);
+    assert.strictEqual(this.clickEvent.type, 'click');
   });
 });
