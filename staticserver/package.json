@@ -14,7 +14,7 @@
     "node": ">= 16.*"
   },
   "dependencies": {
-    "express": "^4.17.2",
+    "express": "^4.18.2",
     "express-static-gzip": "^2.0.8",
     "morgan": "^1.10.0",
     "serve-static": "^1.14.2"
