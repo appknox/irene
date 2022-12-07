@@ -118,6 +118,22 @@ body {
   --ak-checkbox-color-indeterminate: var(--success-main);
   --ak-checkbox-color-text-disabled: var(--text-disabled);
   --ak-checkbox-hover-background: var(--hover-light-background);
+
+  // variables for ak-button
+  --ak-button-border-radius: var(--border-radius);
+  --ak-button-color-primary: var(--primary-main);
+  --ak-button-filled-primary-hover-background: var(--primary-dark);
+  --ak-button-color-primary-contrast-text: var(--primary-contrast-text);
+  --ak-button-color-secondary: var(--secondary-main);
+  --ak-button-color-text-primary: var(--text-primary);
+  --ak-button-color-text-secondary: var(--text-secondary);
+  --ak-button-color-error: var(--error-main);
+  --ak-button-color-success: var(--success-main);
+  --ak-button-color-warn: var(--warn-main);
+  --ak-button-color-info: var(--info-main);
+  --ak-button-color-neutral: var(--neutral-grey-400);
+  --ak-button-color-text-disabled: var(--text-disabled);
+  --ak-button-disabled-background: var(--disabled-background-button);
 }
 
 body {

@@ -41,20 +41,14 @@
       </div>
 
       <div local-class='flex-center'>
-        <AkButton::PrimaryFilled
-          @onClick={{perform this.recover}}
-          @isDisabled={{this.recover.isRunning}}
+        <AkButton
+          {{on 'click' (perform this.recover)}}
+          @loading={{this.recover.isRunning}}
           local-class='send-reset-mail-btn'
           data-test-send-reset-mail-btn
         >
-          {{#if this.recover.isRunning}}
-            <div local-class='flex-center'>
-              <i class='fa fa-spinner fa-spin'></i>
-            </div>
-          {{/if}}
-
           {{t 'sendPasswordResetMail'}}
-        </AkButton::PrimaryFilled>
+        </AkButton>
       </div>
 
       <div local-class='flex-center'>

@@ -1,37 +1,41 @@
 <div local-class='header-container'>
   {{#if @showAddOrgNameBtn}}
 
-    <AkButton::PrimaryOutlined
+    <AkButton
+      @variant='outlined'
       data-test-org-name-add-btn
-      local-class='add-button {{if
-        this.isAddBtnDisabled
-        "add-button-disabled"
-      }}'
-      @onClick={{if this.isAddBtnDisabled this.voidFunction @onAddBtnClick}}
+      local-class='
+        add-button {{if this.isAddBtnDisabled "add-button-disabled"}}'
+      {{on 'click' (if this.isAddBtnDisabled this.voidFunction @onAddBtnClick)}}
     >
-      {{fa-icon 'plus'}}
-      Add Organization Name
+      <:leftIcon>
+        {{fa-icon 'plus'}}
+      </:leftIcon>
 
-      {{#if this.isAddBtnDisabled}}
-        <AttachPopover
-          @interactive={{true}}
-          @arrow={{true}}
-          @placement='bottom-end'
-          @isShow={{false}}
-          @lazyRender={{true}}
-          @animation='shift'
-          @class='not-permitted-popover'
-        >
-          <span data-test-org-name-add-not-permitted-msg>
-            {{t
-              'organizationNameAddNotPermitted'
-              type=this.userType
-              htmlSafe=true
-            }}
-          </span>
-        </AttachPopover>
-      {{/if}}
-    </AkButton::PrimaryOutlined>
+      <:default>
+        Add Organization Name
+
+        {{#if this.isAddBtnDisabled}}
+          <AttachPopover
+            @interactive={{true}}
+            @arrow={{true}}
+            @placement='bottom-end'
+            @isShow={{false}}
+            @lazyRender={{true}}
+            @animation='shift'
+            @class='not-permitted-popover'
+          >
+            <span data-test-org-name-add-not-permitted-msg>
+              {{t
+                'organizationNameAddNotPermitted'
+                type=this.userType
+                htmlSafe=true
+              }}
+            </span>
+          </AttachPopover>
+        {{/if}}
+      </:default>
+    </AkButton>
   {{else}}
     <div local-class='header-group'>
       <span local-class='label'>Organization Name</span>
@@ -40,12 +44,18 @@
   {{/if}}
 
   {{#if @showActionBtn}}
-    <AkButton::PrimaryOutlined
+    <AkButton
+      @variant='outlined'
       data-test-org-name-action-btn
-      @onClick={{@actionBtnClick}}
+      {{on 'click' @actionBtnClick}}
     >
-      {{#if @actionBtnIconName}} {{fa-icon @actionBtnIconName}} {{/if}}
-      {{@actionBtnLabel}}
-    </AkButton::PrimaryOutlined>
+      <:leftIcon>
+        {{#if @actionBtnIconName}} {{fa-icon @actionBtnIconName}} {{/if}}
+      </:leftIcon>
+
+      <:default>
+        {{@actionBtnLabel}}
+      </:default>
+    </AkButton>
   {{/if}}
 </div>
