@@ -15,10 +15,10 @@ export default class AppMonitoringSettingsComponent extends Component {
     );
   }
 
-  @task(function* () {
+  @task(function* (event, checked) {
     const settings = yield this.args.settings;
 
-    settings.set('enabled', !settings.enabled);
+    settings.set('enabled', checked);
     yield settings.save();
 
     this.appmonitoring.reload();
