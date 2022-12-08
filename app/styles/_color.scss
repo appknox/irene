@@ -107,50 +107,6 @@ body {
 }
 /*------- text colors end ------*/
 
-/*------- button colors start -------*/
-/* button primary filled */
-body {
-  --button-primary-filled-bg: var(--primary);
-  --button-primary-filled-bg__disabled: var(--neutral-grey-400);
-  --button-primary-filled-font-color: var(--white);
-  --button-primary-filled-font-color__disabled: var(--white);
-  --button-primary-filled-bg__hover: linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 0.08),
-      rgba(0, 0, 0, 0.08)
-    ),
-    linear-gradient(
-      0deg,
-      var(--button-primary-filled-bg),
-      var(--button-primary-filled-bg)
-    );
-  --button-primary-filled-border-color__focus: rgba(0, 0, 0, 0.4);
-}
-
-/* button primary outlined */
-body {
-  --button-primary-outlined-bg: var(--white);
-  --button-primary-outlined-font-color: var(--primary);
-  --button-primary-outlined-font-color__disabled: var(--neutral-grey-400);
-  --button-primary-outlined-border-color: var(--primary);
-  --button-primary-outlined-border-color__disabled: var(
-    --button-primary-outlined-font-color__disabled
-  );
-}
-
-/* button neutral outlined */
-body {
-  --button-neutral-outlined-bg: var(--white);
-  --button-neutral-outlined-font-color: var(--body-text-1);
-  --button-neutral-outlined-font-color__disabled: var(--neutral-grey-400);
-  --button-neutral-outlined-border-color: var(--neutral-grey-400);
-  --button-neutral-outlined-border-color__disabled: var(
-    --button-neutral-outlined-font-color__disabled
-  );
-}
-
-/*------- button colors end -------*/
-
 /*------- ember-attacher colors start ------*/
 /* popover white */
 body {

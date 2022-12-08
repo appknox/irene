@@ -1,0 +1,43 @@
+<button
+  data-test-ak-button
+  ...attributes
+  type={{or @type 'button'}}
+  disabled={{or this.loading @disabled}}
+  local-class='
+    {{if this.textVariant "ak-button-text-root" "ak-button-root"}} 
+    {{if this.loading "ak-button-loading"}}
+    ak-button-{{this.variant}}-{{this.color}}'
+>
+  {{#if this.loading}}
+    <div local-class='ak-button-loader'>
+      <AkLoader data-test-ak-button-loader @size={{13}} />
+    </div>
+  {{else if (has-block 'leftIcon')}}
+    <div data-test-ak-button-left-icon local-class='ak-button-left-icon'>
+      {{yield to='leftIcon'}}
+    </div>
+  {{/if}}
+
+  {{#if this.textVariant}}
+    <AkTypography
+      data-test-ak-button-text
+      local-class='ak-button-text'
+      @tag='span'
+      @variant={{@typographyVariant}}
+      @color={{@color}}
+      @underline={{@underline}}
+    >
+      {{yield}}
+    </AkTypography>
+  {{else}}
+    {{yield}}
+  {{/if}}
+
+  {{#unless this.loading}}
+    {{#if (has-block 'rightIcon')}}
+      <div data-test-ak-button-right-icon local-class='ak-button-right-icon'>
+        {{yield to='rightIcon'}}
+      </div>
+    {{/if}}
+  {{/unless}}
+</button>

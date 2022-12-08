@@ -19,9 +19,9 @@ const Template = (args) => {
   return {
     template: hbs`
         {{!-- template-lint-disable no-action --}}
-        <AkButton::PrimaryFilled {{on 'click' (action this.handleOpen)}}>
+        <AkButton {{on 'click' (action this.handleOpen)}}>
             Open drawer
-        </AkButton::PrimaryFilled>
+        </AkButton>
 
         <AkDrawer 
             @anchor={{this.anchor}} 

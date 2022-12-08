@@ -16,9 +16,9 @@
           type=this.actionType
         }}</p>
 
-      <AkButton::PrimaryFilled @onClick={{@handleCancel}}>
+      <AkButton {{on 'click' @handleCancel}}>
         OK
-      </AkButton::PrimaryFilled>
+      </AkButton>
     </div>
   {{else}}
     <form local-class='edit-org-form'>
@@ -46,20 +46,22 @@
       </div>
 
       <div local-class='form-footer'>
-        <AkButton::NeutralOutlined
-          @isDisabled={{this.updateOrgName.isRunning}}
-          @onClick={{@handleCancel}}
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          @disabled={{this.updateOrgName.isRunning}}
+          {{on 'click' @handleCancel}}
         >
           Cancel
-        </AkButton::NeutralOutlined>
+        </AkButton>
 
-        <AkButton::PrimaryFilled
-          @isDisabled={{this.updateOrgName.isRunning}}
-          @onClick={{perform this.updateOrgName}}
+        <AkButton
+          @loading={{this.updateOrgName.isRunning}}
+          {{on 'click' (perform this.updateOrgName)}}
           data-test-org-name-edit-save-btn
         >
           Save
-        </AkButton::PrimaryFilled>
+        </AkButton>
       </div>
     </form>
   {{/if}}
