@@ -1,0 +1,16 @@
+{{#let (element this.tag) as |Tag|}}
+  <Tag
+    data-test-ak-stack
+    ...attributes
+    local-class='
+      ak-stack-root
+      ak-stack-direction-{{or @direction "row"}}
+      ak-stack-spacing-{{this.spacingUnit}} 
+      ak-stack-width-{{or @width "auto"}} 
+      ak-stack-alignitems-{{or @alignItems "flex-start"}} 
+      ak-stack-justifycontent-{{or @justifyContent "flex-start"}}
+    '
+  >
+    {{yield}}
+  </Tag>
+{{/let}}
