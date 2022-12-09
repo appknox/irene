@@ -17,10 +17,10 @@ const actions = {
 
 const Template = (args) => ({
   template: hbs`
-    <AkToggle 
-      @checked={{this.checked}} 
-      @size={{this.size}} 
-      @disabled={{this.disabled}} 
+    <AkToggle
+      @checked={{this.checked}}
+      @size={{this.size}}
+      @disabled={{this.disabled}}
       @readonly={{this.readonly}}
       @onClick={{this.handleClick}}
       @onChange={{this.handleChange}} />
@@ -41,9 +41,9 @@ const LabelTemplate = (args) => ({
   template: hbs`
     <AkFormControlLabel @label={{this.label}} @disabled={{this.disabled}} as |fcl|>
       <AkToggle
-        @checked={{this.checked}} 
-        @size={{this.size}} 
-        @disabled={{fcl.disabled}} 
+        @checked={{this.checked}}
+        @size={{this.size}}
+        @disabled={{fcl.disabled}}
         @readonly={{this.readonly}}
         @onClick={{this.handleClick}}
         @onChange={{this.handleChange}} />
@@ -60,4 +60,40 @@ Label.args = {
   readonly: false,
   checked: true,
   size: 'small',
+};
+
+const SizesTemplate = (args) => ({
+  template: hbs`
+    <AkToggle
+      @checked={{this.checked}}
+      @size="small"
+      @disabled={{this.disabled}}
+      @readonly={{this.readonly}}
+      @onClick={{this.handleClick}}
+      @onChange={{this.handleChange}} />
+
+    <AkToggle
+      @checked={{this.checked}}
+      @disabled={{this.disabled}}
+      @readonly={{this.readonly}}
+      @onClick={{this.handleClick}}
+      @onChange={{this.handleChange}} />
+
+    <AkToggle
+      @checked={{this.checked}}
+      @size="large"
+      @disabled={{this.disabled}}
+      @readonly={{this.readonly}}
+      @onClick={{this.handleClick}}
+      @onChange={{this.handleChange}} />
+  `,
+  context: { ...args, ...actions },
+});
+
+export const Sizes = SizesTemplate.bind({});
+
+Sizes.args = {
+  disabled: false,
+  readonly: false,
+  checked: false,
 };
