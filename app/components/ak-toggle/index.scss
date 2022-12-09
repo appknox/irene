@@ -1,28 +1,8 @@
-$defaultTrackWidth: 3em;
 $defaultTrackHeight: 1.6875em;
-$defaultThumbSize: 1.3125em;
 
 @mixin toggleContainerSize($scale: 1) {
-  width: $defaultTrackWidth * $scale;
   height: $defaultTrackHeight * $scale;
   margin: 0.4em;
-}
-
-@mixin trackRadiusAndThumbSize($scale: 1) {
-  border-radius: $defaultTrackHeight * $scale;
-
-  &::before {
-    height: $defaultThumbSize * $scale;
-    width: $defaultThumbSize * $scale;
-    left: 0.1875em * $scale;
-    bottom: 0.1875em * $scale;
-  }
-}
-
-@mixin thumbTranslateDistance($scale: 1, $trackClassName: 'track-default') {
-  &:checked + .#{$trackClassName}::before {
-    transform: translateX($defaultThumbSize * $scale);
-  }
 }
 
 // static base css
@@ -34,6 +14,7 @@ $defaultThumbSize: 1.3125em;
   vertical-align: middle;
   appearance: none;
   text-decoration: none;
+  aspect-ratio: 2/1;
 }
 
 .toggle-input {
@@ -48,6 +29,10 @@ $defaultThumbSize: 1.3125em;
   padding: 0px;
   z-index: 1;
 
+  &:checked + .track::before {
+    flex: auto;
+  }
+
   &:checked + .track {
     background-color: var(--ak-toggle-checked-background-color);
   }
@@ -58,35 +43,38 @@ $defaultThumbSize: 1.3125em;
 }
 
 .track {
-  position: absolute;
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  transition: 0.4s;
+  display: flex;
   background-color: var(--ak-toggle-unchecked-background-color);
+  border-radius: 999px;
+  height: 100%;
+  width: 100%;
+  padding: 5%;
+
+  &::before, &::after {
+    display: block;
+    content: '';
+    flex: 0;
+    height: 100%;
+  }
 
   &::before {
-    position: absolute;
-    content: '';
-    border-radius: 50%;
-    transition: 0.4s;
+    transition: flex 0.4s;
+  }
+
+  &::after {
+    flex: 0;
+    aspect-ratio: 1/1;
+    max-width: fit-content;
+    border-radius: 999px;
     background-color: var(--ak-toggle-slider-background-color);
   }
 }
 
+
 // small switch
 .toggle-container-small {
   @include toggleContainerSize(0.7);
-}
-
-.toggle-input-small {
-  @include thumbTranslateDistance(0.7, 'track-small');
-}
-
-.track-small {
-  @include trackRadiusAndThumbSize(0.7);
 }
 
 // default switch
@@ -94,23 +82,9 @@ $defaultThumbSize: 1.3125em;
   @include toggleContainerSize;
 }
 
-.toggle-input-default {
-  @include thumbTranslateDistance;
-}
-
-.track-default {
-  @include trackRadiusAndThumbSize;
-}
-
 // large switch
 .toggle-container-large {
   @include toggleContainerSize(1.3);
 }
 
-.toggle-input-large {
-  @include thumbTranslateDistance(1.3, 'track-large');
-}
 
-.track-large {
-  @include trackRadiusAndThumbSize(1.3);
-}
