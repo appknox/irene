@@ -1,0 +1,190 @@
+.ak-chip-root {
+  max-width: 100%;
+  font-family: var(--ak-chip-font-family);
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  background-color: transparent;
+  border-radius: var(--ak-chip-border-radius);
+  white-space: nowrap;
+  cursor: default;
+  outline: 0px;
+  text-decoration: none;
+  padding: 0px;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+
+.ak-chip-button {
+  cursor: pointer;
+}
+
+.ak-chip-variant-filled {
+  border: 0px;
+
+  &.ak-chip-color-default {
+    background-color: var(--ak-chip-color-filled-default-background);
+    color: var(--ak-chip-color-filled-default-contrast-text);
+  }
+
+  &.ak-chip-color-primary {
+    background-color: var(--ak-chip-color-filled-primary-background);
+    color: var(--ak-chip-color-filled-primary-contrast-text);
+  }
+
+  &.ak-chip-color-secondary {
+    background-color: var(--ak-chip-color-filled-secondary-background);
+    color: var(--ak-chip-color-filled-secondary-contrast-text);
+  }
+
+  &.ak-chip-color-success {
+    background-color: var(--ak-chip-color-filled-success-background);
+    color: var(--ak-chip-color-filled-success-contrast-text);
+  }
+
+  &.ak-chip-color-error {
+    background-color: var(--ak-chip-color-filled-error-background);
+    color: var(--ak-chip-color-filled-error-contrast-text);
+  }
+
+  &.ak-chip-color-warn {
+    background-color: var(--ak-chip-color-filled-warn-background);
+    color: var(--ak-chip-color-filled-warn-contrast-text);
+  }
+
+  &.ak-chip-color-info {
+    background-color: var(--ak-chip-color-filled-info-background);
+    color: var(--ak-chip-color-filled-info-contrast-text);
+  }
+}
+
+.ak-chip-variant-semi-filled {
+  border: 0px;
+
+  &.ak-chip-color-default {
+    background-color: var(--ak-chip-color-semi-filled-default-background);
+    color: var(--ak-chip-color-semi-filled-default-contrast-text);
+  }
+
+  &.ak-chip-color-primary {
+    background-color: var(--ak-chip-color-semi-filled-primary-background);
+    color: var(--ak-chip-color-semi-filled-primary-contrast-text);
+  }
+
+  &.ak-chip-color-secondary {
+    background-color: var(--ak-chip-color-semi-filled-secondary-background);
+    color: var(--ak-chip-color-semi-filled-secondary-contrast-text);
+  }
+
+  &.ak-chip-color-success {
+    background-color: var(--ak-chip-color-semi-filled-success-background);
+    color: var(--ak-chip-color-semi-filled-success-contrast-text);
+  }
+
+  &.ak-chip-color-error {
+    background-color: var(--ak-chip-color-semi-filled-error-background);
+    color: var(--ak-chip-color-semi-filled-error-contrast-text);
+  }
+
+  &.ak-chip-color-warn {
+    background-color: var(--ak-chip-color-semi-filled-warn-background);
+    color: var(--ak-chip-color-semi-filled-warn-contrast-text);
+  }
+
+  &.ak-chip-color-info {
+    background-color: var(--ak-chip-color-semi-filled-info-background);
+    color: var(--ak-chip-color-semi-filled-info-contrast-text);
+  }
+}
+
+.ak-chip-variant-outlined {
+  border-width: 1px;
+  border-style: solid;
+
+  &.ak-chip-color-default {
+    border-color: var(--ak-chip-color-outlined-default);
+    color: var(--ak-chip-color-text-primary);
+  }
+
+  &.ak-chip-color-primary {
+    border-color: var(--ak-chip-color-outlined-primary);
+    color: var(--ak-chip-color-outlined-primary);
+  }
+
+  &.ak-chip-color-secondary {
+    border-color: var(--ak-chip-color-outlined-secondary);
+    color: var(--ak-chip-color-outlined-secondary);
+  }
+
+  &.ak-chip-color-success {
+    border-color: var(--ak-chip-color-outlined-success);
+    color: var(--ak-chip-color-outlined-success);
+  }
+
+  &.ak-chip-color-error {
+    border-color: var(--ak-chip-color-outlined-error);
+    color: var(--ak-chip-color-outlined-error);
+  }
+
+  &.ak-chip-color-warn {
+    border-color: var(--ak-chip-color-outlined-warn);
+    color: var(--ak-chip-color-outlined-warn);
+  }
+
+  &.ak-chip-color-info {
+    border-color: var(--ak-chip-color-outlined-info);
+    color: var(--ak-chip-color-outlined-info);
+  }
+}
+
+.ak-chip-label {
+  margin: 0 0.5em !important;
+}
+
+.ak-chip-icon {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.5em;
+}
+
+.ak-chip-size-medium {
+  height: 32px;
+
+  .ak-chip-delete-icon-button {
+    padding: 0.143em !important;
+  }
+
+  .ak-chip-icon {
+    :global(.ak-icon) {
+      font-size: 1.125rem !important;
+    }
+  }
+}
+
+.ak-chip-size-small {
+  height: 22px;
+
+  .ak-chip-delete-icon-button {
+    padding: 0.107em !important;
+  }
+
+  .ak-chip-label {
+    font-size: 0.857rem;
+  }
+
+  .ak-chip-icon {
+    :global(.ak-icon) {
+      font-size: 0.85rem !important;
+    }
+  }
+}
+
+.ak-chip-delete-icon-button {
+  margin-right: 0.25em !important;
+
+  &:hover {
+    background-color: var(--ak-chip-delete-btn-hover-background) !important;
+  }
+}
