@@ -93,6 +93,13 @@
   "changedMandatoryMFA": "Changed MFA setting",
   "checking": "Checking",
   "chooseAFile": "比較するファイルを選択してください",
+  "chipStatus": {
+    "active": "ACTIVE",
+    "inactive": "INACTIVE",
+    "notFound": "NOT FOUND",
+    "pending": "PENDING",
+    "notScanned": "NOT SCANNED"
+  },
   "circleCIPipeline": "Circle CI Pipeline",
   "clickOnDynamicScan": "動的診断の開始をクリック",
   "clickToAddOrgName": "Click to add organization name",

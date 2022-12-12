@@ -1,0 +1,40 @@
+<div
+  data-test-ak-chip
+  ...attributes
+  role={{if @button 'button'}}
+  local-class='
+    ak-chip-root 
+    ak-chip-variant-{{this.variant}} 
+    ak-chip-size-{{this.size}}
+    ak-chip-color-{{this.color}}
+    {{if @button "ak-chip-button"}}'
+>
+  {{#if (has-block 'icon')}}
+    <div local-class='ak-chip-icon'>
+      {{yield to='icon'}}
+    </div>
+  {{/if}}
+
+  <AkTypography local-class='ak-chip-label' @tag='span' @color='inherit'>
+    {{@label}}
+  </AkTypography>
+
+  {{#if this.hasDeleteAction}}
+    <AkIconButton
+      data-test-chip-delete-btn
+      {{style color='inherit !important'}}
+      local-class='ak-chip-delete-icon-button'
+      {{on 'click' this.onDelete}}
+      @size='small'
+    >
+      {{#if (has-block 'deleteIcon')}}
+        {{yield to='deleteIcon'}}
+      {{else}}
+        <AkIcon
+          {{style fontSize=(if this.isSizeSmall '0.85rem !important')}}
+          @iconName='close'
+        />
+      {{/if}}
+    </AkIconButton>
+  {{/if}}
+</div>

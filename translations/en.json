@@ -93,6 +93,13 @@
   "changedMandatoryMFA": "Changed MFA setting",
   "checking": "Checking",
   "chooseAFile": "Choose a file to compare",
+  "chipStatus": {
+    "active": "ACTIVE",
+    "inactive": "INACTIVE",
+    "notFound": "NOT FOUND",
+    "pending": "PENDING",
+    "notScanned": "NOT SCANNED"
+  },
   "circleCIPipeline": "Circle CI Pipeline",
   "clickOnDynamicScan": "Click on Start Dynamic Scan",
   "clickToAddOrgName": "Click to add organization name",

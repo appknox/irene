@@ -134,6 +134,50 @@ body {
   --ak-button-color-neutral: var(--neutral-grey-400);
   --ak-button-color-text-disabled: var(--text-disabled);
   --ak-button-disabled-background: var(--disabled-background-button);
+
+  // variables for ak-chip
+  --ak-chip-font-family: var(--font-family);
+  --ak-chip-border-radius: var(--border-radius);
+  --ak-chip-color-text-primary: var(--text-primary);
+  --ak-chip-delete-btn-hover-background: var(--hover-light-background);
+
+  --ak-chip-color-filled-default-background: var(--neutral-grey-100);
+  --ak-chip-color-filled-default-contrast-text: var(--text-primary);
+  --ak-chip-color-filled-primary-background: var(--primary-main);
+  --ak-chip-color-filled-primary-contrast-text: var(--common-white);
+  --ak-chip-color-filled-secondary-background: var(--secondary-main);
+  --ak-chip-color-filled-secondary-contrast-text: var(--common-white);
+  --ak-chip-color-filled-success-background: var(--success-main);
+  --ak-chip-color-filled-success-contrast-text: var(--common-white);
+  --ak-chip-color-filled-error-background: var(--error-main);
+  --ak-chip-color-filled-error-contrast-text: var(--common-white);
+  --ak-chip-color-filled-warn-background: var(--warn-main);
+  --ak-chip-color-filled-warn-contrast-text: var(--common-white);
+  --ak-chip-color-filled-info-background: var(--info-main);
+  --ak-chip-color-filled-info-contrast-text: var(--common-white);
+
+  --ak-chip-color-semi-filled-default-background: var(--neutral-grey-200);
+  --ak-chip-color-semi-filled-default-contrast-text: var(--neutral-grey-700);
+  --ak-chip-color-semi-filled-primary-background: var(--primary-light);
+  --ak-chip-color-semi-filled-primary-contrast-text: var(--primary-dark);
+  --ak-chip-color-semi-filled-secondary-background: var(--secondary-light);
+  --ak-chip-color-semi-filled-secondary-contrast-text: var(--secondary-main);
+  --ak-chip-color-semi-filled-success-background: var(--success-light);
+  --ak-chip-color-semi-filled-success-contrast-text: var(--success-main);
+  --ak-chip-color-semi-filled-error-background: var(--error-light);
+  --ak-chip-color-semi-filled-error-contrast-text: var(--error-main);
+  --ak-chip-color-semi-filled-warn-background: var(--warn-light);
+  --ak-chip-color-semi-filled-warn-contrast-text: var(--warn-dark);
+  --ak-chip-color-semi-filled-info-background: var(--info-light);
+  --ak-chip-color-semi-filled-info-contrast-text: var(--info-dark);
+
+  --ak-chip-color-outlined-default: var(--border-color-1);
+  --ak-chip-color-outlined-primary: var(--primary-main);
+  --ak-chip-color-outlined-secondary: var(--secondary-main);
+  --ak-chip-color-outlined-success: var(--success-main);
+  --ak-chip-color-outlined-error: var(--error-main);
+  --ak-chip-color-outlined-warn: var(--warn-main);
+  --ak-chip-color-outlined-info: var(--info-main);
 }
 
 body {
