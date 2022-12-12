@@ -1,0 +1,48 @@
+{{#if @namespace.isApproved}}
+  <AkTypography @color='textSecondary' @tag='span'>
+    {{dayjs-from-now @namespace.approvedOn}}
+  </AkTypography>
+
+  {{#if @namespace.approvedBy}}
+    <AkTypography @color='textSecondary' @tag='span'>
+      {{t 'by'}}
+    </AkTypography>
+
+    <AkTypography @tag='span'>
+      {{@namespace.approvedBy.username}}
+    </AkTypography>
+  {{/if}}
+{{else}}
+  {{#if this.me.org.is_owner}}
+    <AkIconButton
+      data-test-namespace-approve-btn
+      class='mr-1'
+      {{on 'click' (perform this.approveNamespace)}}
+      @variant='outlined'
+      @size='small'
+      aria-label='{{t "approve"}}'
+      title='{{t "approve"}}'
+    >
+      <AkIcon @iconName='done' @color='success' />
+    </AkIconButton>
+
+    <AkIconButton
+      data-test-namespace-reject-btn
+      {{on 'click' (fn @onRejectNamespace @namespace)}}
+      @variant='outlined'
+      @size='small'
+      aria-label='{{t "reject"}}'
+      title='{{t "reject"}}'
+    >
+      <AkIcon @iconName='close' @color='error' />
+    </AkIconButton>
+  {{else}}
+    <AkChip
+      data-test-approval-status-chip
+      @label={{t 'chipStatus.pending'}}
+      @color='warn'
+      @size='small'
+      @variant='semi-filled'
+    />
+  {{/if}}
+{{/if}}

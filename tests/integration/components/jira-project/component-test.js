@@ -247,14 +247,10 @@ module('Integration | Component | jira-project', function (hooks) {
     assert.dom('[data-test-edit-project-trigger]').exists();
 
     await click('[data-test-delete-project-trigger]');
-    assert.dom(`[data-test-delete-modal]`).hasClass('is-active');
+    assert.dom('[data-test-ak-modal-header]').exists();
 
-    // TODO: Modify to a better implementation
-    const deleteConfirmButton = this.element
-      .querySelector(`[data-test-delete-modal]`)
-      .querySelectorAll('button[data-ember-action]')[1];
+    await click('[data-test-confirmbox-confirmBtn]');
 
-    await click(deleteConfirmButton);
     assert.strictEqual(
       this.notifyService.get('successMsg'),
       `t:projectRemoved:()`,
@@ -309,14 +305,9 @@ module('Integration | Component | jira-project', function (hooks) {
     assert.dom('[data-test-edit-project-trigger]').exists();
 
     await click('[data-test-delete-project-trigger]');
-    assert.dom(`[data-test-delete-modal]`).hasClass('is-active');
+    assert.dom('[data-test-ak-modal-header]').exists();
 
-    // TODO: Modify to a better implementation
-    const deleteCancelButton = this.element
-      .querySelector(`[data-test-delete-modal]`)
-      .querySelectorAll('button[data-ember-action]')[0];
-
-    await click(deleteCancelButton);
+    await click('[data-test-confirmbox-cancelBtn]');
 
     assert.dom(`[data-test-delete-modal]`).doesNotHaveClass('is-active');
     assert

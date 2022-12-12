@@ -1,0 +1,13 @@
+<AkTypography @color='textSecondary' @tag='span'>
+  {{dayjs-from-now @namespace.createdOn}}
+</AkTypography>
+
+{{#if @namespace.requestedBy}}
+  <AkTypography @color='textSecondary' @tag='span'>
+    {{t 'by'}}
+  </AkTypography>
+
+  <AkTypography @tag='span'>
+    {{@namespace.requestedBy.username}}
+  </AkTypography>
+{{/if}}

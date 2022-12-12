@@ -104,6 +104,22 @@ function routes() {
     return schema.teams.all().models;
   });
 
+  this.get('/organizations/:id/namespaces', (schema) => {
+    return schema.namespaces.all().models;
+  });
+
+  this.put('/organizations/:id/namespaces/:namespaceId', () => {
+    return {};
+  });
+
+  this.delete('/organizations/:id/namespaces/:namespaceId', () => {
+    return {};
+  });
+
+  this.get('/organizations/:id/users/:userId', () => {
+    return {};
+  });
+
   this.get('/profiles/:id/unknown_analysis_status', 'unknown-analysis-status');
   this.get('/users/:id', 'user');
   this.get('/users', 'user');

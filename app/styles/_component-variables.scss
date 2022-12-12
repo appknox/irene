@@ -188,4 +188,15 @@ body {
   &.theme-dark {
     --org-side-menu-bg-color: var(--background-dark);
   }
+
+  // variables for organization-namespace/namespace-value
+  --organization-namespace-value-color-ios: var(--ios);
+  --organization-namespace-value-color-android: var(--android);
+  --organization-namespace-loading-container-background: var(
+    --background-light
+  );
+  --organization-namespace-loading-container-border: var(--border-color-1);
+  --organization-namespace-loading-container-border-radius: var(
+    --border-radius
+  );
 }

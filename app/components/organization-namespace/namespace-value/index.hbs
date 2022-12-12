@@ -1,0 +1,12 @@
+<AkStack @alignItems='center'>
+  <span
+    class='mr-2'
+    local-class='team-project-icon-{{@namespace.platformIconClass}}'
+  >
+    {{fa-icon @namespace.platformIconClass local-class='team-project-icon'}}
+  </span>
+
+  <AkTypography @tag='span' @noWrap={{true}}>
+    {{@namespace.value}}
+  </AkTypography>
+</AkStack>
