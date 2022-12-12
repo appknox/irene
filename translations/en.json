@@ -555,6 +555,7 @@
   "noName": "No Name",
   "noNamespace": "No namespaces",
   "noNamespaceRequested": "No namespaces requested",
+  "noNamespaceDescription": "Once the app is added to appknox dashboard you will be seeing the respected data over here",
   "noOfProjects": "No of projects",
   "noPendingRequests": "No pending requests",
   "noPersonalToken": "no tokens found",

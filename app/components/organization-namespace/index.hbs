@@ -1,0 +1,68 @@
+{{! template-lint-disable no-partial }}
+{{#if this.hasObjects}}
+  <AkTable as |t|>
+    <t.head data-test-namespace-thead @columns={{this.columns}} />
+    <t.body @rows={{this.sortedObjects}} as |b|>
+      <b.row data-test-namespace-row as |r|>
+        <r.cell data-test-namespace-cell>
+          {{#let (component r.columnValue.component) as |Component|}}
+            <Component
+              @onRejectNamespace={{perform this.rejectNamespaceConfirm}}
+              @namespace={{r.rowValue}}
+            />
+          {{/let}}
+        </r.cell>
+      </b.row>
+    </t.body>
+  </AkTable>
+
+  <div class='mt-3'>
+    {{partial 'paginate'}}
+  </div>
+
+  <ConfirmBox
+    @isActive={{this.showRejectNamespaceConfirm}}
+    @disabled={{this.confirmReject.isRunning}}
+    @description={{t 'confirmBox.rejectNamespace'}}
+    @confirmAction={{perform this.confirmReject}}
+    @cancelAction={{perform this.rejectNamespaceCancel}}
+  />
+{{else}}
+  <AkStack @alignItems='center' @justifyContent='center'>
+    {{#if this.hasNoObject}}
+      <AkStack
+        local-class='no-result-container'
+        @direction='column'
+        @alignItems='center'
+        @justifyContent='center'
+        @spacing='2'
+      >
+        <AkSvg::OrgNamespaceEmpty data-test-ns-empty-icon />
+
+        <AkTypography data-test-ns-empty-title @variant='h5'>
+          {{if
+            this.me.org.is_admin
+            (t 'noNamespace')
+            (t 'noNamespaceRequested')
+          }}
+        </AkTypography>
+
+        <AkTypography data-test-ns-empty-description class='w-9/12'>
+          {{t 'noNamespaceDescription'}}
+        </AkTypography>
+      </AkStack>
+    {{else}}
+      <AkStack
+        local-class='loading-container'
+        @alignItems='center'
+        @justifyContent='center'
+        @spacing='1.5'
+      >
+        <AkLoader @size={{16}} />
+        <AkTypography local-class='loading-text' @color='textSecondary'>
+          {{t 'loading'}}...
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+{{/if}}

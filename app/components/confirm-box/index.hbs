@@ -1,0 +1,41 @@
+{{#if this.isActive}}
+  <AkModal
+    @showHeader={{true}}
+    @headerTitle={{or @title (t 'confirm')}}
+    @disableClose={{@disabled}}
+    @onClose={{perform this.clearModal}}
+  >
+    <AkStack @direction='column' @alignItems='center' @justifyContent='center'>
+      {{#if @description}}
+        <AkTypography data-test-confirmbox-description>
+          {{@description}}
+        </AkTypography>
+      {{/if}}
+
+      <AkStack
+        @alignItems='center'
+        @justifyContent='center'
+        @spacing='2'
+        class='mt-3'
+      >
+        <AkButton
+          data-test-confirmbox-confirmBtn
+          @loading={{@disabled}}
+          {{on 'click' (perform this.sendCallback)}}
+        >
+          {{or @confirmText (t 'ok')}}
+        </AkButton>
+
+        <AkButton
+          data-test-confirmbox-cancelBtn
+          @variant='outlined'
+          @color='neutral'
+          @disabled={{@disabled}}
+          {{on 'click' (perform this.clearModal)}}
+        >
+          {{or @cancelText (t 'cancel')}}
+        </AkButton>
+      </AkStack>
+    </AkStack>
+  </AkModal>
+{{/if}}
