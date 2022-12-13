@@ -1,4 +1,5 @@
 <span
+  ...attributes
   local-class='
     toggle-container
     toggle-container-{{if @size @size "default"}}
@@ -7,7 +8,6 @@
 >
   <Input
     data-test-toggle-input
-    ...attributes
     local-class='toggle-input toggle-input-{{if @size @size "default"}}'
     @type='checkbox'
     disabled={{@disabled}}
