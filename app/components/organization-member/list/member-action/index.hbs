@@ -1,0 +1,43 @@
+<AkIconButton
+  data-test-org-user-more-action-btn
+  {{on 'click' this.handleMoreBtnClicked}}
+  @variant='outlined'
+>
+  <AkIcon @iconName='more-vert' />
+</AkIconButton>
+
+<AkMenu
+  @anchorRef={{this.moreBtnAnchorRef}}
+  @onClose={{this.handleMoreBtnMenuClose}}
+  @arrow={{true}}
+  as |dd|
+>
+  <dd.listItem
+    data-test-user-active-toggle-opt
+    @onClick={{this.editMemberSetting}}
+  >
+    <AkTypography>
+      {{if @member.member.isActive (t 'deactivateUser') (t 'activateUser')}}
+    </AkTypography>
+  </dd.listItem>
+</AkMenu>
+
+<ConfirmBox
+  @isActive={{this.showEditModal}}
+  @disabled={{this.changeSetting.isRunning}}
+  @confirmAction={{perform this.changeSetting}}
+  @cancelAction={{this.closeModal}}
+  @title={{this.modaltitle}}
+  @confirmText={{t 'confirm'}}
+>
+  <:description>
+    <AkTypography data-test-confirmbox-description>
+      {{t 'userActivationChangeMessage'}}
+
+      <strong>{{@member.member.username}}</strong>
+
+      {{if @member.member.isActive (t 'inactive') (t 'active')}}
+      ?
+    </AkTypography>
+  </:description>
+</ConfirmBox>

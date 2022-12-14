@@ -192,6 +192,8 @@ body {
   // variables for organization-namespace/namespace-value
   --organization-namespace-value-color-ios: var(--ios);
   --organization-namespace-value-color-android: var(--android);
+
+  // variables for organization-namespace
   --organization-namespace-loading-container-background: var(
     --background-light
   );
@@ -199,4 +201,35 @@ body {
   --organization-namespace-loading-container-border-radius: var(
     --border-radius
   );
+
+  // variables for organization-member/list
+  --organization-member-list-loading-container-background: var(
+    --background-light
+  );
+  --organization-member-list-loading-container-border: var(--border-color-1);
+  --organization-member-list-loading-container-border-radius: var(
+    --border-radius
+  );
+
+  // variables for invite-member
+  --invite-member-font-weight: var(--font-weight-medium);
+  --invite-member-drawer-footer-background: var(--background-main);
+
+  &.theme-light {
+    --invite-member-drawer-appbar-background: var(--background-light);
+    --invite-member-drawer-appbar-border-bottom: 1px solid var(--border-color-1);
+    --invite-member-drawer-appbar-background-text-color: var(--text-primary);
+    --invite-member-drawer-appbar-hover-background: var(
+      --hover-light-background
+    );
+  }
+
+  &.theme-dark {
+    --invite-member-drawer-appbar-background: var(--background-dark);
+    --invite-member-drawer-appbar-border-bottom: none;
+    --invite-member-drawer-appbar-background-text-color: var(--common-white);
+    --invite-member-drawer-appbar-hover-background: var(
+      --hover-dark-background
+    );
+  }
 }

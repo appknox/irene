@@ -18,7 +18,7 @@ export const actionsData = {
 const Template = (args) => ({
   template: hbs`
     {{!-- template-lint-disable no-action --}}
-    <button type="button" {{on 'click' (action this.openModal)}}>Open Modal</button>
+    <AkButton {{on 'click' (action this.openModal)}}>Open Modal</AkButton>
 
     {{#if this.showModal}}
         <AkModal

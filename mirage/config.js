@@ -101,7 +101,11 @@ function routes() {
   });
 
   this.get('/organizations/:id/teams', (schema) => {
-    return schema.teams.all().models;
+    return schema.organizationTeams.all().models;
+  });
+
+  this.get('/organizations/:id/teams/:teamId', () => {
+    return {};
   });
 
   this.get('/organizations/:id/namespaces', (schema) => {
@@ -117,6 +121,10 @@ function routes() {
   });
 
   this.get('/organizations/:id/users/:userId', () => {
+    return {};
+  });
+
+  this.put('/organizations/:id/users/:userId', () => {
     return {};
   });
 
@@ -412,8 +420,32 @@ function routes() {
     return {};
   });
 
+  this.get('/organizations/:id/members', (schema) => {
+    return schema.organizationMembers.all().models;
+  });
+
   this.get('/organizations/:orgId/members/:memId', (schema, request) => {
     return schema.organizationMembers.find(request.params.memId);
+  });
+
+  this.put('/organizations/:orgId/members/:memId', () => {
+    return {};
+  });
+
+  this.get('/organizations/:id/invitations', (schema) => {
+    return schema.organizationInvitations.all().models;
+  });
+
+  this.post('/organizations/:id/invitations', () => {
+    return {};
+  });
+
+  this.post('/organizations/:id/invitations/:inviteId/resend', () => {
+    return {};
+  });
+
+  this.delete('/organizations/:id/invitations/:inviteId', () => {
+    return {};
   });
 
   this.get('/organizations/:id/me', (schema, req) => {

@@ -94,9 +94,9 @@ module('Integration | Component | ak-menu', function (hooks) {
     });
 
     await render(hbs`
-        <button type="button" data-test-more-btn {{on 'click' this.handleMoreClick}}>
+        <AkButton data-test-more-btn {{on 'click' this.handleMoreClick}}>
             Menu button
-        </button>
+        </AkButton>
 
         <AkMenu @sameWidthAsRef={{this.sameWidthAsRef}} @anchorRef={{this.anchorRef}} as |akm|>
             {{#each this.menuData as |data|}}

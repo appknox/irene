@@ -6,7 +6,9 @@
     @onClose={{perform this.clearModal}}
   >
     <AkStack @direction='column' @alignItems='center' @justifyContent='center'>
-      {{#if @description}}
+      {{#if (has-block 'description')}}
+        {{yield to='description'}}
+      {{else if @description}}
         <AkTypography data-test-confirmbox-description>
           {{@description}}
         </AkTypography>

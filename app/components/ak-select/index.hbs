@@ -1,4 +1,4 @@
-<div local-class='ak-select-root'>
+<div ...attributes local-class='ak-select-root'>
   <div local-class='ak-form-control'>
     {{#if @label}}
       <AkTypography
@@ -21,6 +21,7 @@
         @triggerId={{this.labelId}}
         @dropdownClass='{{this.classes.dropdown}}'
         @triggerClass='
+          {{@triggerClass}}
           {{this.classes.trigger}} 
           {{if @error this.classes.triggerError}}'
         @options={{@options}}

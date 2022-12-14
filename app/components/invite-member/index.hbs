@@ -1,0 +1,101 @@
+<AkButton
+  data-test-invite-member-btn
+  {{on 'click' this.openInviteMemberDrawer}}
+>
+  <:leftIcon>
+    <AkIcon @iconName='group-add' />
+  </:leftIcon>
+
+  <:default>{{t 'inviteUsers'}}</:default>
+</AkButton>
+
+<AkDrawer
+  @onClose={{this.closeDrawer}}
+  @anchor='right'
+  @open={{this.showInviteMemberDrawer}}
+  @disableBackdropClick={{this.isInvitingMember}}
+  as |dr|
+>
+  <AkStack local-class='drawer-content-container' @direction='column'>
+    <AkStack
+      @alignItems='center'
+      @justifyContent='space-between'
+      local-class='app-bar'
+    >
+      <AkTypography
+        data-test-drawer-title
+        local-class='app-bar-title'
+        @color='inherit'
+        @variant='h6'
+      >
+        {{t 'inviteUsers'}}
+      </AkTypography>
+
+      <AkIconButton
+        data-test-drawer-close-btn
+        {{on 'click' dr.closeHandler}}
+        local-class='app-bar-icon-btn'
+        disabled={{this.isInvitingMember}}
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkStack>
+
+    <div local-class='invite-drawer-content'>
+      <AkStack
+        @tag='label'
+        @direction='column'
+        @spacing='0.5'
+        for='invite-user-email-input'
+      >
+        <AkTypography data-test-label-primary-text @variant='subtitle1'>
+          {{t 'email'}}
+        </AkTypography>
+
+        <AkTypography
+          data-test-label-secondary-text
+          @variant='body2'
+          @color='textSecondary'
+        >
+          {{t 'inviteUserMultipleEmailHelperText'}}
+        </AkTypography>
+      </AkStack>
+
+      <AkTextField
+        data-test-invite-member-input
+        @formControlClass='my-2'
+        @id='invite-user-email-input'
+        @placeholder={{t 'email'}}
+        @value={{this.emailsFromText}}
+        @autofocus={{true}}
+        @error={{if this.emailErrorMsg true}}
+        @helperText={{this.emailErrorMsg}}
+      />
+
+      <AkStack @spacing='2' {{style flexWrap='wrap'}}>
+        {{#each this.emailList as |email idx|}}
+          <AkChip
+            data-test-email-chip='{{idx}}'
+            @variant='outlined'
+            @label={{email}}
+            @onDelete={{fn this.handleEmailDelete idx}}
+          />
+        {{/each}}
+      </AkStack>
+    </div>
+
+    <AkStack
+      @alignItems='center'
+      @justifyContent='flex-end'
+      local-class='invite-drawer-footer'
+    >
+      <AkButton
+        data-test-send-invite-btn
+        {{on 'click' (perform this.inviteMembers dr.closeHandler)}}
+        @loading={{this.isInvitingMember}}
+      >
+        {{t 'invite'}}
+      </AkButton>
+    </AkStack>
+  </AkStack>
+</AkDrawer>

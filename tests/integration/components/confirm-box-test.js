@@ -187,4 +187,36 @@ module('Integration | Component | confirm-box', function (hooks) {
     assert.dom('[data-test-confirmbox-confirmBtn]').doesNotExist();
     assert.dom('[data-test-confirmbox-cancelBtn]').doesNotExist();
   });
+
+  test('it renders confirm-box with description block', async function (assert) {
+    this.setProperties({
+      open: false,
+      handleOpen: () => {
+        this.set('open', true);
+      },
+    });
+
+    await render(hbs`
+        <button data-test-button type="button" {{on 'click' this.handleOpen}}>Open modal</button>
+
+        <ConfirmBox @isActive={{this.open}}>
+          <:description>
+            <span data-test-description-block>description</span>
+          </:description>
+        </ConfirmBox>
+    `);
+
+    await click('[data-test-button]');
+
+    assert.dom('[data-test-ak-modal-header]').exists().hasText('t:confirm:()');
+    assert.dom('[data-test-description-block]').exists().hasText('description');
+    assert.dom('[data-test-confirmbox-description]').doesNotExist();
+
+    assert.dom('[data-test-confirmbox-confirmBtn]').exists().hasText('t:ok:()');
+
+    assert
+      .dom('[data-test-confirmbox-cancelBtn]')
+      .exists()
+      .hasText('t:cancel:()');
+  });
 });

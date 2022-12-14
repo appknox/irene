@@ -1,0 +1,18 @@
+<AkIconButton
+  data-test-invitation-delete-btn
+  title='{{t "deleteInvitation"}}'
+  aria-label='{{t "deleteInvitation"}}'
+  {{on 'click' this.openDeleteInvitationConfirmBox}}
+>
+  <AkIcon @color='error' @iconName='delete' />
+</AkIconButton>
+
+<ConfirmBox
+  @isActive={{this.showDeleteInvitationConfirmBox}}
+  @description={{t 'confirmBox.deleteInvitation'}}
+  @delegate={{this}}
+  @confirmAction={{perform this.confirmDelete}}
+  @disabled={{this.isDeletetingInvitation}}
+  @confirmText={{t 'delete'}}
+  @key='delete'
+/>

@@ -1,0 +1,20 @@
+{{#if @invitation.team}}
+  <AkStack @alignItems='center' @spacing='1'>
+    <AkTypography data-test-invite-type-text @tag='span' @color='textSecondary'>
+      {{t 'team'}}
+    </AkTypography>
+
+    <AkLink
+      data-test-invite-type-link
+      @color='primary'
+      @route='authenticated.organization.team'
+      @model={{@invitation.team.id}}
+    >
+      {{@invitation.team.name}}
+    </AkLink>
+  </AkStack>
+{{else}}
+  <AkTypography @tag='span' @color='textSecondary'>
+    {{t 'organization'}}
+  </AkTypography>
+{{/if}}
