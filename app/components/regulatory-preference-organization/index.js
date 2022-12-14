@@ -17,6 +17,29 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
     this.fetchOrganizationPreference.perform();
   }
 
+  get regulatoryPreferences() {
+    return [
+      {
+        label: 'PCI-DSS',
+        checked: Boolean(this.orgPreference?.reportPreference.show_pcidss),
+        task: this.savePcidss,
+        title: this.intl.t('pcidssExpansion'),
+      },
+      {
+        label: 'HIPAA',
+        checked: Boolean(this.orgPreference?.reportPreference.show_hipaa),
+        task: this.saveHipaa,
+        title: this.intl.t('hipaaExpansion'),
+      },
+      {
+        label: 'GDPR',
+        checked: Boolean(this.orgPreference?.reportPreference.show_gdpr),
+        task: this.saveGdpr,
+        title: this.intl.t('gdprExpansion'),
+      },
+    ];
+  }
+
   @task(function* () {
     try {
       this.orgPreference = yield this.store.queryRecord(

@@ -1,93 +1,64 @@
 <div local-class='org-settings-container'>
-  <LinkTo local-class='back-btn' @route='authenticated.organization.namespaces'>
-    <span local-class='back-icon' class='ak-icon ak-icon-arrow-back'></span>
-    <span local-class='back-text'>Back</span>
-  </LinkTo>
+  <AkLink @route='authenticated.organization.namespaces'>
+    <:leftIcon>
+      <span class='ak-icon ak-icon-arrow-back'></span>
+    </:leftIcon>
 
-  <OrganizationNameHeader
-    @organization={{@model.organization}}
-    @showActionBtn={{this.showOrgNameActionBtn}}
-    @actionBtnIconName={{'pencil'}}
-    @actionBtnLabel={{'Edit Name'}}
-    @actionBtnClick={{this.addEditOrganization}}
-    @showAddOrgNameBtn={{this.orgNameDoesNotExist}}
-    @onAddBtnClick={{this.addEditOrganization}}
-  />
+    <:default>Back</:default>
+  </AkLink>
+
+  <div class='my-3'>
+    <OrganizationNameHeader
+      @organization={{@model.organization}}
+      @showActionBtn={{this.showOrgNameActionBtn}}
+      @actionBtnIconName={{'pencil'}}
+      @actionBtnLabel={{'Edit Name'}}
+      @actionBtnClick={{this.addEditOrganization}}
+      @showAddOrgNameBtn={{this.orgNameDoesNotExist}}
+      @onAddBtnClick={{this.addEditOrganization}}
+    />
+  </div>
 
   {{#if this.me.org.is_owner}}
-    <div class='margin-t-1 margin-b-1h'>
-      <div class='columms'>
-        <div class='column'>
-          <RegulatoryPreferenceOrganization />
-        </div>
-      </div>
-    </div>
+    <RegulatoryPreferenceOrganization />
 
-    <div class='divider margin-t-1 margin-b-1'></div>
+    <AkDivider class='my-3' @color='dark' />
 
-    <div class='columms'>
-      <div class='column'>
-        <OrganizationMfa
-          @organization={{@model.organization}}
-          @user={{@model.user}}
-        />
-      </div>
-    </div>
+    <OrganizationMfa
+      @organization={{@model.organization}}
+      @user={{@model.user}}
+    />
 
-    <div class='divider margin-t-1 margin-b-1'></div>
+    <AkDivider class='my-3' @color='dark' />
   {{/if}}
 
   {{#if @model.organization.features.sso}}
     <SsoSettings @organization={{@model.organization}} @user={{@model.user}} />
-    <div class='divider margin-t-1 margin-b-1'></div>
+
+    <AkDivider class='my-3' @color='dark' />
   {{/if}}
 
-  <div class='columns'>
-    <div class='column'>
-      <div class='org-settings-subtitle black-text is-fullwidth'>
-        {{t 'emailDomainRestriction'}}
-      </div>
-      <OrganizationEmailDomain @isEditable={{this.me.org.is_owner}} />
-    </div>
-  </div>
+  <OrganizationEmailDomain @isEditable={{this.me.org.is_owner}} />
 
-  <div class='divider margin-t-1 margin-b-1'></div>
+  <AkDivider class='my-3' @color='dark' />
 
   <OrganizationArchive />
 
-  <div class='divider margin-t-1 margin-b-1'></div>
+  <AkDivider class='my-3' @color='dark' />
 
-  <div class='columns'>
-    <div class='column'>
-      <div class='org-settings-subtitle black-text is-fullwidth'>
-        {{t 'jiraIntegration'}}
-      </div>
-      <JiraAccount @user={{@model.user}} />
-    </div>
-  </div>
+  <JiraAccount @user={{@model.user}} />
 
-  <div class='divider margin-t-1 margin-b-1'></div>
+  <AkDivider class='my-3' @color='dark' />
 
-  <div class='columns'>
-    <div class='column'>
-      <div class='org-settings-subtitle black-text is-fullwidth'>
-        {{t 'githubIntegration'}}
-      </div>
-      <GithubAccount
-        @integratedUser={{@model.integratedUser}}
-        @reconnect={{@model.reconnect}}
-        @user={{@model.user}}
-      />
-    </div>
-  </div>
+  <GithubAccount
+    @integratedUser={{@model.integratedUser}}
+    @reconnect={{@model.reconnect}}
+    @user={{@model.user}}
+  />
 
-  <div class='divider margin-t-1 margin-b-1'></div>
+  <AkDivider class='my-3' @color='dark' />
 
-  <div class='columns'>
-    <div class='column'>
-      <FileCleanup />
-    </div>
-  </div>
+  <FileCleanup />
 </div>
 
 {{#if this.showAddEditPopup}}

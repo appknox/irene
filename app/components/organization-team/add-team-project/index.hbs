@@ -1,0 +1,75 @@
+{{! template-lint-disable no-partial no-action }}
+<AkButton @variant='outlined' {{on 'click' (perform this.openAddProjectModal)}}>
+  <i class='fa fa-folder-open-o margin-r-h'></i>
+  {{t 'addProject'}}
+</AkButton>
+
+<ModalCard
+  class='input-modal user-search-modal'
+  @isActive={{this.showAddTeamProjectModal}}
+  @title={{t 'modalCard.addProject.title'}}
+>
+  <div class='card-body'>
+    <div class='card-wrapper'>
+      <form>
+        <div class='control vertical-align-center margin-b-1'>
+          {{fa-icon 'search'}}
+          <Input
+            id='team-project-search-input'
+            class='form-control input input-width margin-left'
+            placeholder='Search project'
+            @type='text'
+            @value={{this.query}}
+            autofocus='autofocus'
+            {{action 'searchQuery' on='keypup'}}
+          />
+        </div>
+      </form>
+
+      {{#if this.hasObjects}}
+        <div class='add-team-projects-scroll'>
+          <table class='org-table'>
+            <tbody>
+              {{#each this.sortedObjects as |project|}}
+                <tr class='team-project'>
+                  <td>
+                    <div class='vertical-align-center'>
+                      <span
+                        class='team-project-icon text-lightgray team-project-icon-{{project.platformIconClass}}'
+                      >
+                        {{fa-icon project.platformIconClass}}
+                      </span>
+
+                      <span class='team-project-name black-text'>
+                        {{project.packageName}}
+                      </span>
+                    </div>
+                  </td>
+
+                  <td class='team-project-action'>
+                    <button
+                      type='button'
+                      class='is-default is-icon no-border'
+                      {{on 'click' (perform this.addTeamProject project)}}
+                      disabled={{this.isAddingProject}}
+                    >
+                      {{fa-icon 'plus'}}
+                    </button>
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+          <div class='margin-t-q'>
+            {{partial 'paginate'}}
+          </div>
+        </div>
+      {{else}}
+        <div class='empty-state'>
+          {{fa-icon 'exclamation-triangle'}}
+          {{t 'noProject'}}
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</ModalCard>

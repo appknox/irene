@@ -1,0 +1,32 @@
+<td>
+  <div class='bold black-text font-medium'>
+    {{@member.user.username}}
+  </div>
+
+  <div class='text-lightgray margin-t-h'>
+    {{@member.user.email}}
+  </div>
+</td>
+
+{{#if this.me.org.is_admin}}
+  <td class='content-right margin-right20'>
+    <button
+      type='button'
+      class='is-primary is-icon no-border no-hover-button'
+      title='{{t "removeFromTeam"}}'
+      {{on 'click' this.openRemoveMemberPrompt}}
+    >
+      <i class='fa fa-user-times'></i>
+    </button>
+  </td>
+{{/if}}
+
+<PromptBox
+  @isActive={{this.showRemoveMemberPrompt}}
+  @title={{t 'promptBox.removeMemberPrompt.title'}}
+  @description={{t 'promptBox.removeMemberPrompt.description'}}
+  @button='remove'
+  @delegate={{this}}
+  @confirmAction={{perform this.removeMember}}
+  @disabled={{this.isRemovingMember}}
+/>

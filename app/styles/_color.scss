@@ -103,7 +103,7 @@ body {
   --text-black-91: #{lighten($black, 9%)};
   --body-text-1: var(--text-black-91);
   --text-primary-color: var(--text-black-91);
-  --text-secondary-color: #9d9d9d;
+  --text-secondary-color: var(--neutral-grey-600);
 }
 /*------- text colors end ------*/
 

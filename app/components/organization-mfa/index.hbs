@@ -1,69 +1,68 @@
-<div class='org-setting-mfa'>
-  <div data-test-mfa-title class='org-settings-subtitle'>
+<div local-class='org-setting-mfa'>
+  <AkTypography @gutterBottom={{true}} @variant='h5' data-test-mfa-title>
     {{t 'multiFactorAuth'}}
+  </AkTypography>
+
+  <AkTypography @variant='h6' data-test-mfa-subtitle>
+    Mandatory multi factor authentication
+  </AkTypography>
+
+  <AkTypography
+    @variant='body2'
+    @color='textSecondary'
+    data-test-enable-mandatory-mfa-description
+  >
+    {{t 'enableMandatoryMFADescription'}}
+  </AkTypography>
+
+  <AkFormControlLabel
+    data-test-enable-mandatory-mfa-label
+    class='my-3'
+    @disabled={{this.isMfaMandateDisabled}}
+    @label={{t 'enableMandatoryMFATitle'}}
+    as |fcl|
+  >
+    <AkToggle
+      @id='mandate-mfa'
+      @checked={{@organization.mandatoryMfa}}
+      @disabled={{fcl.disabled}}
+      @size='small'
+      @onChange={{perform this.setMandatoryMFA}}
+    />
+  </AkFormControlLabel>
+
+  <div class='mb-2' local-class='alert-error'>
+    <AkIcon @iconName='warning' @color='error' />
+
+    <AkTypography data-test-enable-mandatory-mfa-warning class='ml-2'>
+      {{t 'enableMandatoryMFAWarning'}}
+    </AkTypography>
   </div>
 
-  <div class='vertical-align-top'>
-    <div class='div'>
-      <AkToggle
-        @id='mandate-mfa'
-        @checked={{@organization.mandatoryMfa}}
-        @disabled={{this.isMfaMandateDisabled}}
-        @onChange={{perform this.setMandatoryMFA}}
-      />
-    </div>
+  {{#if this.isUserMfaDisabled}}
+    <div class='mb-3' local-class='alert-warn'>
+      <AkIcon @iconName='security' @color='inherit' />
 
-    <div class='padding-l-1h'>
-      <label
-        data-test-enable-mandatory-mfa-label
-        for='mandate-mfa'
-        class='black-text'
-      >
-        {{t 'enableMandatoryMFATitle'}}
-      </label>
+      <div class='ml-3'>
+        <AkTypography
+          data-test-enable-mandatory-mfa-requirement
+          @gutterBottom={{true}}
+        >
+          {{t 'enableMandatoryMFARequirement'}}
+        </AkTypography>
 
-      <div
-        data-test-enable-mandatory-mfa-description
-        local-class='org-setting-desc checkbox-desc'
-      >
-        {{t 'enableMandatoryMFADescription'}}
+        <AkLink
+          local-class='alert-warn-link'
+          @route='authenticated.settings.security'
+          @underline='always'
+        >
+          {{t 'accountSettings'}}
+          >
+          {{t 'security'}}
+          >
+          {{t 'multiFactorAuth'}}
+        </AkLink>
       </div>
-
-      <div class='alert alert-critical alert-small margin-t-1'>
-        <div class='vertical-align-center'>
-          {{fa-icon 'warning'}}
-          <div data-test-enable-mandatory-mfa-warning class='margin-l-h'>
-            {{t 'enableMandatoryMFAWarning'}}
-          </div>
-        </div>
-      </div>
-
-      {{#if this.isUserMfaDisabled}}
-        <div class='margin-t-1'>
-          <div class='alert alert-danger alert-small'>
-            <div class='vertical-align-center'>
-              {{fa-icon 'shield'}}
-              <div
-                data-test-enable-mandatory-mfa-requirement
-                class='margin-l-1'
-              >
-                {{t 'enableMandatoryMFARequirement'}}
-                &nbsp;
-                <LinkTo
-                  @route='authenticated.settings.security'
-                  class='alert-link'
-                >
-                  {{t 'accountSettings'}}
-                  >
-                  {{t 'security'}}
-                  >
-                  {{t 'multiFactorAuth'}}
-                </LinkTo>
-              </div>
-            </div>
-          </div>
-        </div>
-      {{/if}}
     </div>
-  </div>
+  {{/if}}
 </div>

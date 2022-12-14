@@ -27,6 +27,14 @@
     format('woff2');
 }
 
+.ak-icon-small {
+  font-size: 1.125rem !important;
+}
+
+.ak-icon-medium {
+  font-size: 1.5rem !important;
+}
+
 .ak-icon {
   @extend .mi;
 }

@@ -1,0 +1,71 @@
+{{! template-lint-disable no-action no-partial }}
+<AkButton @variant='outlined' {{on 'click' (perform this.openAddMemberModal)}}>
+  {{fa-icon 'user-plus' class='margin-r-h'}}
+  {{t 'addTeamMember'}}
+</AkButton>
+
+<ModalCard
+  class='input-modal user-search-modal'
+  @isActive={{this.showAddTeamMemberModal}}
+  @title={{t 'modalCard.addMember.title'}}
+>
+  <div class='card-body'>
+    <div class='card-wrapper'>
+      <form>
+        <div class='control vertical-align-center margin-b-1'>
+          {{fa-icon 'search'}}
+          <Input
+            id='add-member-search-input'
+            class='form-control input input-width margin-left'
+            placeholder='Search member'
+            @type='text'
+            @value={{this.query}}
+            autofocus='autofocus'
+            {{action 'searchQuery' on='keyup'}}
+          />
+        </div>
+      </form>
+
+      {{#if this.hasObjects}}
+        <div class='add-team-objects-scroll'>
+          <table class='org-table'>
+            <tbody>
+              {{#each this.sortedObjects as |member|}}
+                <tr class='team-project'>
+                  <td>
+                    <div class='black-text bold font-medium'>
+                      {{member.username}}
+                    </div>
+                    <div class='text-lightgray'>
+                      {{member.email}}
+                    </div>
+                  </td>
+
+                  <td class='team-project-action'>
+                    <button
+                      type='button'
+                      class='is-default is-icon no-border'
+                      {{on 'click' (perform this.addTeamMember member)}}
+                      disabled={{this.isAddingMember}}
+                    >
+                      {{fa-icon 'plus'}}
+                    </button>
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+
+          <div class='margin-t-q'>
+            {{partial 'paginate'}}
+          </div>
+        </div>
+      {{else}}
+        <div class='empty-state'>
+          {{fa-icon 'exclamation-triangle'}}
+          {{t 'noMembers'}}
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</ModalCard>

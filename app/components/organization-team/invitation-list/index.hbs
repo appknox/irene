@@ -1,0 +1,50 @@
+{{! template-lint-disable no-partial }}
+<div class='columns'>
+  <div class='column'>
+    <h5 class='bold black-text margin-t-h'>
+      {{t 'teamInvitations'}}
+    </h5>
+  </div>
+  <div class='column content-right'>
+    <InviteMember @team={{@team}} @organization={{@organization}} />
+  </div>
+</div>
+
+{{#if this.hasObjects}}
+  <div class='columns'>
+    <div class='column'>
+      <table class='org-table'>
+        <thead>
+          <tr>
+            <th>{{t 'email'}}</th>
+            <th>{{t 'invitedOn'}}</th>
+            <th>{{t 'resend'}}</th>
+            <th>{{t 'delete'}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each this.sortedObjects as |invitation|}}
+            <OrganizationTeam::InvitationOverview
+              @invitation={{invitation}}
+              @organization={{@organization}}
+            />
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class='columns'>
+    <div class='column'>
+      <div class='margin-t-h'>
+        {{partial 'paginate'}}
+      </div>
+    </div>
+  </div>
+
+{{else}}
+  <div class='empty-state'>
+    {{fa-icon 'exclamation-triangle'}}
+    {{t 'noInvitations'}}
+  </div>
+{{/if}}

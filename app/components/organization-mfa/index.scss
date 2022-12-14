@@ -1,4 +1,27 @@
-.org-setting-desc {
-  font-size: 0.93em;
-  padding-top: 0.15em;
+.org-setting-mfa {
+  max-width: 600px;
+}
+
+.alert-error,
+.alert-warn {
+  display: flex;
+  align-items: center;
+  padding: 1em;
+  border-radius: var(--border-radius);
+  box-sizing: border-box;
+}
+
+.alert-error {
+  border: 1px solid var(--error-main);
+  background-color: var(--error-light);
+}
+
+.alert-warn {
+  border: 1px solid var(--warn-dark);
+  background-color: var(--warn-light);
+  color: var(--warn-dark);
+
+  .alert-warn-link {
+    color: var(--warn-dark) !important;
+  }
 }

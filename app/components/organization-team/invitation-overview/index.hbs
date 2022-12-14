@@ -1,0 +1,49 @@
+<td>
+  <div class='bold font-legible black-text'>
+    {{@invitation.email}}
+  </div>
+</td>
+
+<td class='text-lightgray'>
+  {{dayjs-from-now @invitation.createdOn}}
+</td>
+
+<td>
+  <button
+    type='button'
+    class='is-default is-icon no-border'
+    title='{{t "resendInvitation"}}'
+    {{on 'click' this.openResendInvitationConfirmBox}}
+  >
+    <i class='fa fa-repeat'></i>
+  </button>
+</td>
+
+<td>
+  <button
+    type='button'
+    class='is-primary is-icon no-border no-hover-button'
+    title='{{t "deleteInvitation"}}'
+    {{on 'click' this.openDeleteInvitationConfirmBox}}
+  >
+    <i class='fa fa-trash-o'></i>
+  </button>
+</td>
+
+<ConfirmBox
+  @isActive={{this.showResendInvitationConfirmBox}}
+  @title={{t 'confirmBox.resendInvitation'}}
+  @delegate={{this}}
+  @confirmAction={{perform this.confirmResend}}
+  @disabled={{this.isResendtingInvitation}}
+  @key='resend'
+/>
+
+<ConfirmBox
+  @isActive={{this.showDeleteInvitationConfirmBox}}
+  @title={{t 'confirmBox.deleteInvitation'}}
+  @delegate={{this}}
+  @confirmAction={{perform this.confirmDelete}}
+  @disabled={{this.isDeletetingInvitation}}
+  @key='delete'
+/>

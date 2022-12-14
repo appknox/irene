@@ -1,0 +1,56 @@
+{{! template-lint-disable no-partial }}
+<div class='columns'>
+  <div class='column'>
+    <h5 class='bold black-text margin-t-q'>
+      {{t 'teamMembers'}}
+    </h5>
+  </div>
+
+  {{#if this.me.org.is_admin}}
+    <div class='column content-right'>
+      <OrganizationTeam::AddTeamMember
+        @team={{@team}}
+        @organization={{@organization}}
+      />
+    </div>
+  {{/if}}
+</div>
+
+{{#if this.hasObjects}}
+  <div class='columns'>
+    <div class='column'>
+      <table class='org-table'>
+        <thead>
+          <tr>
+            <th>
+              {{t 'user'}}
+            </th>
+
+            {{#if this.me.org.is_admin}}
+              <th></th>
+            {{/if}}
+          </tr>
+
+          {{#each this.sortedObjects as |member|}}
+            <OrganizationTeam::MemberOverview
+              @member={{member}}
+              @team={{@team}}
+              @organization={{@organization}}
+            />
+          {{/each}}
+        </thead>
+      </table>
+    </div>
+  </div>
+
+  <div class='margin-t-q'>
+    {{partial 'paginate'}}
+  </div>
+
+{{else}}
+
+  <div class='empty-state'>
+    {{fa-icon 'exclamation-triangle'}}
+    {{t 'noMembers'}}
+  </div>
+{{/if}}

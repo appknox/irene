@@ -1,0 +1,44 @@
+{{! template-lint-disable no-partial no-action }}
+<div class='columns margin-v-h'>
+  {{#if this.me.org.is_admin}}
+    <div class='column content-right'>
+      <OrganizationTeam::CreateTeam />
+    </div>
+  {{/if}}
+</div>
+
+{{#if this.hasObjects}}
+  <AkTable>
+    <AkTable::Head>
+      <AkTable::Row>
+        <AkTable::Cell @header={{true}}>{{t 'teamName'}}</AkTable::Cell>
+        <AkTable::Cell @header={{true}}>{{t 'projectName'}}</AkTable::Cell>
+        <AkTable::Cell @header={{true}}>{{t 'members'}}</AkTable::Cell>
+        <AkTable::Cell @header={{true}} />
+      </AkTable::Row>
+    </AkTable::Head>
+    <AkTable::Body>
+      {{#each this.sortedObjects as |team|}}
+        <OrganizationTeam::Overview
+          @team={{team}}
+          @organization={{@organization}}
+          @showTeamDetails={{perform this.handleShowTeamDetails}}
+        />
+      {{/each}}
+    </AkTable::Body>
+  </AkTable>
+
+  <div class='margin-top20'>
+    {{partial 'paginate'}}
+  </div>
+{{else}}
+  <div class='empty-state'>
+    {{#if this.hasNoObject}}
+      {{fa-icon 'exclamation-triangle'}}
+      {{if this.me.owner.is_admin (t 'noTeams') (t 'noTeamsMember')}}
+    {{else}}
+      {{fa-icon 'spinner spin'}}
+      {{t 'loading'}}...
+    {{/if}}
+  </div>
+{{/if}}

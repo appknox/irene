@@ -1,0 +1,81 @@
+<div class='flex-column my-3'>
+  <LinkTo @route='authenticated.organization.teams'>
+    {{fa-icon 'angle-left'}}
+    {{t 'backToTeams'}}
+  </LinkTo>
+
+  <div>
+    <h3 class='my-1 bold black-text'>
+      {{#if this.me.org.is_admin}}
+        <div class={{if this.showEdit 'hide' 'flex-row flex-align-center'}}>
+          <span>
+            {{@team.name}}
+          </span>
+          <small
+            role='button'
+            class='text-lightgray ml-2'
+            {{on 'click' this.editTeamName}}
+          >
+            {{fa-icon 'pencil'}}
+          </small>
+        </div>
+
+        <div class={{if this.saveEdit 'edit' 'save'}}>
+          <div class='vertical-align-center'>
+            <Input
+              id='team-name-edit-input'
+              class='input edit-input maxwidth65'
+              @type='text'
+              placeholder={{@team.name}}
+              @value={{@team.name}}
+            />
+
+            <button
+              type='button'
+              class='is-success no-border margin-l-q'
+              {{on 'click' (perform this.updateTeamName)}}
+            >
+              {{fa-icon 'check'}}
+            </button>
+
+            <button
+              type='button'
+              class='is-primary no-border margin-l-q'
+              {{on 'click' this.cancelEditing}}
+            >
+              {{fa-icon 'times'}}
+            </button>
+          </div>
+        </div>
+      {{else}}
+        {{@team.name}}
+      {{/if}}
+    </h3>
+  </div>
+</div>
+
+<hr class='mb-4 mt-0' />
+
+<div class='margin-v-3q'>
+  <OrganizationTeam::ProjectList
+    @organization={{@organization}}
+    @team={{@team}}
+  />
+</div>
+
+<div class='margin-t-3 margin-b-h'>
+  <OrganizationTeam::MemberList
+    @members={{@team.members}}
+    @organization={{@organization}}
+    @team={{@team}}
+  />
+</div>
+
+{{#if this.me.org.is_admin}}
+  <div class='margin-t-3 margin-b-h'>
+    <OrganizationTeam::InvitationList
+      @organization={{@organization}}
+      @team={{@team}}
+    />
+  </div>
+{{/if}}

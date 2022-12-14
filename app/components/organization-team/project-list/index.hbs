@@ -1,0 +1,57 @@
+{{! template-lint-disable no-partial }}
+<div class='columns'>
+  <div class='column'>
+    <h5 class='bold black-text margin-t-q'>
+      {{t 'projects'}}
+    </h5>
+  </div>
+
+  {{#if this.me.org.is_admin}}
+    <div class='column content-right'>
+      <OrganizationTeam::AddTeamProject
+        @team={{@team}}
+        @organization={{@organization}}
+      />
+    </div>
+  {{/if}}
+</div>
+
+{{#if this.hasObjects}}
+  <div class='columns'>
+    <div class='column'>
+      <table class='org-table'>
+        <thead>
+          <tr>
+            <th class='capitalize-text'>
+              {{t 'project'}}
+            </th>
+
+            {{#if this.me.org.is_admin}}
+              <th class='text-centre'>
+                {{t 'accessPermissions'}}
+              </th>
+            {{/if}}
+          </tr>
+        </thead>
+        <tbody>
+          {{#each this.sortedObjects as |project|}}
+            <OrganizationTeam::ProjectOverview
+              @project={{project}}
+              @team={{@team}}
+              @organization={{@organization}}
+            />
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class='margin-t-q'>
+      {{partial 'paginate'}}
+    </div>
+  </div>
+{{else}}
+  <div class='empty-state'>
+    {{fa-icon 'exclamation-triangle'}}
+    {{t 'noProject'}}
+  </div>
+{{/if}}

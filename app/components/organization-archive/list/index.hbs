@@ -1,0 +1,36 @@
+{{! template-lint-disable no-partial }}
+{{#if this.hasObjects}}
+  <AkTypography @variant='subtitle1'>
+    {{t 'organizationArchiveTableHeading'}}
+  </AkTypography>
+  <AkTypography @variant='body2' @color='textSecondary'>
+    Here are your previous exports details
+  </AkTypography>
+
+  <div class='my-2'>
+    <AkTable as |t|>
+      <t.head @columns={{this.columns}} />
+      <t.body @rows={{this.sortedObjects}} as |b|>
+        <b.row
+          local-class='
+            archive-row-{{if b.rowValue.isExpired "expired" "available"}}'
+          as |r|
+        >
+          <r.cell as |value|>
+            {{#if r.columnValue.component}}
+              {{#let (component r.columnValue.component) as |Component|}}
+                <Component @archive={{r.rowValue}} />
+              {{/let}}
+            {{else}}
+              {{value}}
+            {{/if}}
+          </r.cell>
+        </b.row>
+      </t.body>
+    </AkTable>
+  </div>
+
+  <div>
+    {{partial 'paginate'}}
+  </div>
+{{/if}}

@@ -1,0 +1,40 @@
+<AkButton @variant='outlined' {{on 'click' this.openTeamModal}}>
+  <i class='fa fa-group margin-r-h'></i>
+  {{t 'createTeam'}}
+</AkButton>
+
+<ModalCard
+  class='input-modal'
+  @isActive={{this.showTeamModal}}
+  @title={{t 'createTeam'}}
+>
+  <div class='card-body'>
+    <div class='card-wrapper'>
+      <form {{on 'submit' (perform this.createTeam)}}>
+        <div class='control'>
+          <Input
+            id='create-team'
+            class='form-control input'
+            placeholder={{t 'teamName'}}
+            @type='text'
+            @value={{this.teamName}}
+            autofocus='autofocus'
+          />
+        </div>
+
+        <button
+          class='margin-top10 is-primary'
+          type='submit'
+          disabled={{this.isCreatingTeam}}
+        >
+          {{#if this.isCreatingTeam}}
+            <div class='fa-font-size'><i
+                class='fa fa-spinner fa-spin'
+              ></i></div>
+          {{/if}}
+          {{t 'createTeam'}}
+        </button>
+      </form>
+    </div>
+  </div>
+</ModalCard>

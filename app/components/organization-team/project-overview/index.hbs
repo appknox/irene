@@ -1,0 +1,48 @@
+<td>
+  <div class='vertical-align-center'>
+    <span
+      class='team-project-icon text-lightgray team-project-icon-{{this.teamProject.platformIconClass}}'
+    >
+      {{fa-icon this.teamProject.platformIconClass}}
+    </span>
+
+    <span class='team-project-name black-text'>
+      <LinkTo @route='authenticated.project.files' @model={{@project}}>
+        {{this.teamProject.packageName}}
+      </LinkTo>
+    </span>
+  </div>
+</td>
+
+{{#if this.me.org.is_admin}}
+  <td>
+    <label class='align-center'>
+      <Input
+        @type='checkbox'
+        class='input-checkbox'
+        name='can-write-{{@project.id}}'
+        @checked={{@project.write}}
+      />
+      {{t 'allowEdit'}}
+    </label>
+  </td>
+
+  <td>
+    <button
+      type='button'
+      class='is-primary is-icon no-border no-hover-button'
+      title='{{t "removeFromTeam"}}'
+      {{on 'click' this.openRemoveProjectConfirm}}
+    >
+      <i class='fa fa-trash-0'></i>
+    </button>
+  </td>
+{{/if}}
+
+<ConfirmBox
+  @isActive={{this.showRemoveProjectConfirm}}
+  @title={{t 'confirmBox.removeTeamProject'}}
+  @delegate={{this}}
+  @confirmAction={{perform this.removeProject}}
+  @disabled={{this.isRemovingProject}}
+/>

@@ -1,0 +1,68 @@
+{{! template-lint-disable no-curly-component-invocation }}
+<div local-class='organization-archive-header-container'>
+  <AkTypography @variant='h5' @gutterBottom={{true}}>
+    {{t 'organizationArchive'}}
+  </AkTypography>
+
+  <AkTypography @variant='body2' @color='textSecondary'>
+    {{t 'organizationArchiveDescription'}}
+  </AkTypography>
+
+  <div class='my-3'>
+    <AkTypography @variant='subtitle1'>
+      Select the date
+    </AkTypography>
+
+    <AkTypography @variant='body2' @color='textSecondary'>
+      Choose your required date to export organization data
+    </AkTypography>
+
+    <DatePicker
+      class='custom-styled-picker mt-2 mr-1'
+      @renderInPlace={{true}}
+      @maxDate={{this.maxDate}}
+      @range={{true}}
+      @options={{this.datepickerOptions}}
+      @onChange={{this.setDuration}}
+      as |selectedDates|
+    >
+      <div class='align-middle'>
+        {{fa-icon 'calendar' class='font-small' title='Select date range'}}
+        <button local-class='date-btn' type='button'>
+          {{#if selectedDates.firstObject}}
+            {{day-js date=selectedDates.firstObject format='DD MMM YYYY'}}
+          {{else}}
+            {{t 'fromDate'}}
+          {{/if}}
+        </button>
+
+        <span>-</span>
+
+        <button local-class='date-btn' type='button'>
+          {{#if selectedDates.lastObject}}
+            {{day-js date=selectedDates.lastObject format='DD MMM YYYY'}}
+          {{else}}
+            {{t 'fromDate'}}
+          {{/if}}
+        </button>
+      </div>
+    </DatePicker>
+
+    <AkButton
+      @onClick={{perform this.tiggerGenerateArchive}}
+      @disabled={{this.tiggerGenerateArchive.isRunning}}
+    >
+      {{#if this.tiggerGenerateArchive.isRunning}}
+        <div class='fa-font-size'>
+          {{fa-icon 'spinner fa-spin'}}
+        </div>
+
+        {{t 'processing'}}
+      {{else}}
+        {{t 'organizationArchiveExport'}}
+      {{/if}}
+    </AkButton>
+  </div>
+</div>
+
+<OrganizationArchive::List />

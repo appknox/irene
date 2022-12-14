@@ -1,0 +1,13 @@
+{{#if @archive.isAvailable}}
+  {{#if this.downloadArchive.isRunning}}
+    {{fa-icon 'spinner fa-spin' title='processing...'}}
+  {{else}}
+    <AkIconButton
+      @variant='outlined'
+      @size='small'
+      {{on 'click' (perform this.downloadArchive)}}
+    >
+      <span class='ak-icon ak-icon-download'></span>
+    </AkIconButton>
+  {{/if}}
+{{/if}}

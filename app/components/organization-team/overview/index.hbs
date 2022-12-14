@@ -1,0 +1,96 @@
+<AkTable::Row
+  @button={{true}}
+  role='button'
+  {{on 'click' this.showTeamDetails}}
+>
+  <AkTable::Cell>
+    <AkTypography>
+      {{@team.name}}
+    </AkTypography>
+  </AkTable::Cell>
+
+  <AkTable::Cell>
+    {{#unless this.fetchFirstProjectName.isRunning}}
+      {{#if this.firstProjectName}}
+        <AkTypography @tag='span'>
+          {{this.firstProjectName}}{{if this.remaingProjectsCount ', '}}
+        </AkTypography>
+
+        {{#if this.remaingProjectsCount}}
+          <AkTypography @color='secondary' @tag='span'>
+            +{{this.remaingProjectsCount}}
+            more
+          </AkTypography>
+        {{/if}}
+      {{else}}
+        <AkTypography @color='secondary' @tag='span'>
+          No projects
+        </AkTypography>
+      {{/if}}
+    {{/unless}}
+  </AkTable::Cell>
+
+  <AkTable::Cell>
+    {{#unless this.fetchFirstTeamMemberName.isRunning}}
+      {{#if this.firstMemberName}}
+        <AkTypography @tag='span'>
+          {{this.firstMemberName}}{{if this.remaingMembersCount ', '}}
+        </AkTypography>
+
+        {{#if this.remaingMembersCount}}
+          <AkTypography @color='secondary' @tag='span'>
+            +{{this.remaingMembersCount}}
+            more
+          </AkTypography>
+        {{/if}}
+      {{else}}
+        <AkTypography @color='secondary' @tag='span'>
+          No members
+        </AkTypography>
+      {{/if}}
+    {{/unless}}
+  </AkTable::Cell>
+
+  <AkTable::Cell>
+    <AkIconButton @variant='outlined' @size='small'>
+      <span class='ak-icon ak-icon-note-add'></span>
+    </AkIconButton>
+
+    <AkIconButton @class='mx-1' @variant='outlined' @size='small'>
+      <span class='ak-icon ak-icon-group-add'></span>
+    </AkIconButton>
+
+    <AkIconButton @variant='outlined' @size='small'>
+      <span class='ak-icon ak-icon-more-vert'></span>
+    </AkIconButton>
+  </AkTable::Cell>
+</AkTable::Row>
+
+{{!-- <div class='teamcard mb-3'>
+  <div class='flex-row flex-justify-space-between'>
+
+    {{#if this.me.org.is_admin}}
+      <div class='is-one-sixth flex-center p-1'>
+        <button
+          type='button'
+          class='is-primary is-icon no-border no-hover-button'
+          title='{{t "deleteTeam"}}'
+          {{on 'click' this.openDeleteTeamConfirmBox}}
+          disabled={{@team.isDefaultTeam}}
+        >
+          <i class='fa fa-trash-o'></i>
+        </button>
+      </div>
+    {{/if}}
+  </div>
+</div> --}}
+
+<PromptBox
+  @isActive={{this.showDeleteTeamPrompt}}
+  @title={{t 'promptBox.deleteTeamPrompt.title'}}
+  @description={{t 'promptBox.deleteTeamPrompt.description'}}
+  @button='deleteTeam'
+  @delegate={{this}}
+  @confirmAction={{perform this.confirmDelete}}
+  @disabled={{this.isDeletingTeam}}
+/>

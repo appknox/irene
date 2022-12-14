@@ -1,0 +1,21 @@
+{{#if @archive.isAvailable}}
+  <AkTypography @align='center'>
+    {{t 'expires'}}
+    {{dayjs-from-now @archive.availableUntil}}
+  </AkTypography>
+{{/if}}
+
+{{#if @archive.isExpired}}
+  <AkTypography @align='center'>
+    {{t 'expired'}}
+  </AkTypography>
+{{/if}}
+
+{{#if @archive.isInProgress}}
+  <span local-class='status-inprogress'>
+    {{fa-icon 'spinner fa-spin'}}
+    <span class='margin-l-h'>
+      {{@archive.progressPercent}}%
+    </span>
+  </span>
+{{/if}}

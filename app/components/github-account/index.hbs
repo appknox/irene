@@ -1,0 +1,59 @@
+<AkTypography @variant='h5' @gutterBottom={{true}}>
+  {{t 'githubIntegration'}}
+</AkTypography>
+
+{{#if this.integratedUser}}
+  <div local-class='bordered-box'>
+    <div local-class='integration-logo-container'>
+      <img src='/images/github-icon.png' alt='github-icon' />
+    </div>
+
+    <div local-class='integration-account-container'>
+      <div class='mr-2'>
+        <AkTypography @color='textSecondary'>
+          https://github.com
+        </AkTypography>
+
+        <AkTypography>
+          {{this.integratedUser.login}}
+        </AkTypography>
+      </div>
+
+      <AkButton
+        @variant='outlined'
+        @onClick={{this.openRevokeGithubConfirmBox}}
+      >
+        {{t 'disconnect'}}
+      </AkButton>
+    </div>
+  </div>
+{{else}}
+  <AkTypography @variant='body2' @color='textSecondary'>
+    {{#if this.reconnect}}
+      {{t 'integrationFailed'}}
+    {{else}}
+      Here you can intergrate your GitHub Account
+    {{/if}}
+  </AkTypography>
+
+  <AkButton
+    class='my-2'
+    @disabled={{this.integrateGithub.isRunning}}
+    @onClick={{perform this.integrateGithub}}
+  >
+    {{if this.reconnect (t 'reconnect') (t 'integrateGithub')}}
+  </AkButton>
+
+  {{#if this.integrateGithub.isRunning}}
+    {{fa-icon 'fa-spinner fa-spin'}}
+  {{/if}}
+
+  {{yield}}
+{{/if}}
+
+<ConfirmBox
+  @isActive={{this.showRevokeGithubConfirmBox}}
+  @title={{t 'confirmBox.revokeGithub'}}
+  @delegate={{this}}
+  @disabled={{this.removeIntegration.isRunning}}
+/>

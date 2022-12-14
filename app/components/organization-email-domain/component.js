@@ -16,13 +16,14 @@ export default class OrganizationEmailDomainComponent extends Component {
 
   @tracked domains = [];
 
-  get isDisableSave() {
-    return isEmpty(this.tDomain) || this.addDomain.isRunning;
+  constructor() {
+    super(...arguments);
+
+    this.fetchDomains.perform();
   }
 
-  @action
-  initializeComp() {
-    this.fetchDomains.perform();
+  get isDisableSave() {
+    return isEmpty(this.tDomain) || this.addDomain.isRunning;
   }
 
   @action
