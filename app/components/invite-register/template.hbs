@@ -45,7 +45,7 @@
                 <span class="error-msg">{{this.changeset.error.passwordConfirmation.validation}}</span>
               {{/if}}
             </div>
-            <Input id="invite-register-password" @type="password" autocomplete="new-password" @value={{this.changeset.password}} placeholder='Mininum 6 characters' class="input-field {{if this.changeset.error.password "has-error"}}"/>
+            <Input id="invite-register-password" @type="password" autocomplete="new-password" @value={{this.changeset.password}} placeholder='Mininum 10 characters' class="input-field {{if this.changeset.error.password "has-error"}}"/>
             <Input id="invite-register-confimpassword" @type="password" autocomplete="new-password" @value={{this.changeset.passwordConfirmation}} placeholder='Confirm Password' class="input-field {{if this.changeset.error.passwordConfirmation "has-error"}}"/>
           </div>
         {{/unless}}
