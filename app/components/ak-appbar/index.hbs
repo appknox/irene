@@ -1,0 +1,17 @@
+<AkStack
+  data-test-ak-appbar
+  ...attributes
+  local-class='
+    ak-appbar-root 
+    ak-appbar-color-{{or @color "inherit"}}
+    ak-appbar-position-{{or @position "static"}}
+    ak-appbar-placement-{{or @placement "top"}}
+    {{if (eq @gutter false) "" "ak-appbar-gutter"}}
+    {{if @elevation "ak-appbar-bottom-elevation"}}'
+  @direction={{@direction}}
+  @alignItems={{or @alignItems 'center'}}
+  @spacing={{@spacing}}
+  @justifyContent={{@justifyContent}}
+>
+  {{yield (hash classes=this.classes)}}
+</AkStack>

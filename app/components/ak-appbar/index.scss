@@ -1,0 +1,88 @@
+.ak-appbar-root {
+  width: 100%;
+  z-index: var(--ak-appbar-zIndex);
+}
+
+.ak-appbar-gutter {
+  padding: 0.8em 1em;
+}
+
+.ak-appbar-color-inherit {
+  background: var(--ak-appbar-inherit-background);
+  color: var(--ak-appbar-inherit-background-text-color);
+  border-bottom: var(--ak-appbar-inherit-border-bottom);
+
+  .ak-appbar-default-icon-button {
+    :global(.ak-icon) {
+      color: var(--ak-appbar-inherit-background-text-color) !important;
+    }
+
+    &:hover {
+      background-color: var(--ak-appbar-inherit-hover-background) !important;
+    }
+  }
+}
+
+.ak-appbar-color-default {
+  background: var(--ak-appbar-default-background);
+  color: var(--ak-appbar-default-background-text-color);
+  border-bottom: var(--ak-appbar-default-border-bottom);
+}
+
+.ak-appbar-color-light {
+  background: var(--ak-appbar-light-background);
+  color: var(--ak-appbar-light-background-text-color);
+  border-bottom: var(--ak-appbar-light-border-bottom);
+}
+
+.ak-appbar-color-dark {
+  background: var(--ak-appbar-dark-background);
+  color: var(--ak-appbar-dark-background-text-color);
+  border-bottom: var(--ak-appbar-dark-border-bottom);
+
+  .ak-appbar-default-icon-button {
+    :global(.ak-icon) {
+      color: var(--ak-appbar-dark-background-text-color) !important;
+    }
+
+    &:hover {
+      background-color: var(--ak-appbar-dark-hover-background) !important;
+    }
+  }
+}
+
+.ak-appbar-position-static {
+  position: static;
+}
+
+.ak-appbar-position-relative {
+  position: relative;
+}
+
+.ak-appbar-position-fixed {
+  position: fixed;
+}
+
+.ak-appbar-position-sticky {
+  position: sticky;
+}
+
+.ak-appbar-position-absolute {
+  position: absolute;
+}
+
+.ak-appbar-placement-top {
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.ak-appbar-placement-bottom {
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.ak-appbar-bottom-elevation {
+  box-shadow: var(--ak-appbar-box-shadow);
+}

@@ -178,6 +178,34 @@ body {
   --ak-chip-color-outlined-error: var(--error-main);
   --ak-chip-color-outlined-warn: var(--warn-main);
   --ak-chip-color-outlined-info: var(--info-main);
+
+  // variables for ak-app-bar
+  --ak-appbar-default-background: var(--background-main);
+  --ak-appbar-default-border-bottom: 1px solid var(--border-color-1);
+  --ak-appbar-default-background-text-color: var(--text-primary);
+  --ak-appbar-light-background: var(--background-light);
+  --ak-appbar-light-border-bottom: 1px solid var(--border-color-1);
+  --ak-appbar-light-background-text-color: var(--text-primary);
+  --ak-appbar-dark-background: var(--background-dark);
+  --ak-appbar-dark-border-bottom: none;
+  --ak-appbar-dark-background-text-color: var(--common-white);
+  --ak-appbar-dark-hover-background: var(--hover-dark-background);
+  --ak-appbar-box-shadow: var(--box-shadow-2);
+  --ak-appbar-zIndex: var(--zIndex-appbar);
+
+  &.theme-light {
+    --ak-appbar-inherit-background: var(--background-light);
+    --ak-appbar-inherit-border-bottom: 1px solid var(--border-color-1);
+    --ak-appbar-inherit-background-text-color: var(--text-primary);
+    --ak-appbar-inherit-hover-background: var(--hover-light-background);
+  }
+
+  &.theme-dark {
+    --ak-appbar-inherit-background: var(--background-dark);
+    --ak-appbar-inherit-border-bottom: none;
+    --ak-appbar-inherit-background-text-color: var(--common-white);
+    --ak-appbar-inherit-hover-background: var(--hover-dark-background);
+  }
 }
 
 body {
