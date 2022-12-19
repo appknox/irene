@@ -5269,18 +5269,6 @@ ul.email-list {
   }
 }
 
-.ak-modal-overlay {
-  &.translucent {
-    background-color: rgba(107, 107, 107, 0.86);
-  }
-
-  .ember-modal-dialog {
-    padding: 0;
-    border-radius: 0;
-    box-shadow: none;
-  }
-}
-
 .network-state {
   visibility: visible;
   text-align: center;

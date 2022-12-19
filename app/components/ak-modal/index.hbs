@@ -6,25 +6,28 @@
     @onClickOverlay
   }}
   @translucentOverlay={{true}}
-  @overlayClass='ak-modal-overlay'
+  @overlayClass='
+    ak-modal-overlay
+    {{this.classes.overlay}} 
+    {{if @blurOverlay this.classes.overlayBlur}}'
   ...attributes
 >
   {{#if @showHeader}}
-    <div data-test-ak-modal-header local-class='modal-header'>
-      <h3 local-class='header-title'>
+    <AkAppbar data-test-ak-modal-header @justifyContent='space-between' as |ab|>
+      <AkTypography @variant='h5' @color='inherit'>
         {{@headerTitle}}
-      </h3>
+      </AkTypography>
 
       <AkIconButton
         data-test-modal-close-btn
-        local-class='close-btn'
+        class={{ab.classes.defaultIconBtn}}
         {{on 'click' (or @onClose this.noop)}}
         @size='small'
         disabled={{@disableClose}}
       >
         <AkIcon @iconName='close' />
       </AkIconButton>
-    </div>
+    </AkAppbar>
   {{/if}}
   <div data-test-ak-modal-body local-class='modal-body'>
     {{yield}}

@@ -18,13 +18,15 @@ export const actionsData = {
 const Template = (args) => ({
   template: hbs`
     {{!-- template-lint-disable no-action --}}
-    <button type="button" {{on 'click' (action this.openModal)}}>Open Modal</button>
+    <AkButton {{on 'click' (action this.openModal)}}>Open Modal</AkButton>
 
     {{#if this.showModal}}
         <AkModal
             @showHeader={{this.showHeader}}
             @headerTitle={{this.headerTitle}}
             @disableClose={{this.disableClose}}
+            @disableOverlayClick={{this.disableOverlayClick}}
+            @blurOverlay={{this.blurOverlay}}
             @onClose={{action this.onClose}}
             >
             <div class='flex-column flex-align-center flex-justify-center'>
@@ -60,4 +62,6 @@ Default.args = {
   showHeader: true,
   headerTitle: 'Greetings',
   disableClose: false,
+  disableOverlayClick: false,
+  blurOverlay: false,
 };

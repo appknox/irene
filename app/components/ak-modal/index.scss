@@ -1,27 +1,18 @@
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1em;
-  background: var(--ak-modal-appbar-background);
-  color: var(--ak-modal-appbar-background-text-color);
-  border-bottom: var(--ak-modal-appbar-border-bottom);
+.ak-modal-overlay {
+  z-index: var(--ak-modal-zIndex);
 
-  h3.header-title {
-    margin: 0;
-    font-size: 1.2rem;
+  &:global(.translucent) {
+    background-color: var(--ak-modal-backdrop-overlay-background);
   }
 
-  .close-btn {
-    margin-left: 1em;
+  :global(.ember-modal-dialog) {
+    padding: 0;
+    border-radius: var(--ak-modal-border-radius);
+    box-shadow: none;
+  }
 
-    :global(.ak-icon) {
-      color: var(--ak-modal-appbar-background-text-color) !important;
-    }
-
-    &:hover {
-      background-color: var(--ak-modal-appbar-hover-background) !important;
-    }
+  &.ak-modal-overlay-blur {
+    backdrop-filter: blur(5px);
   }
 }
 

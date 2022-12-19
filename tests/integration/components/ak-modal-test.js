@@ -1,7 +1,13 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { click, render, find } from '@ember/test-helpers';
+import styles from 'irene/components/ak-modal/index.scss';
 import { hbs } from 'ember-cli-htmlbars';
+
+const classes = {
+  overlay: 'ak-modal-overlay',
+  blurOverlay: 'ak-modal-overlay-blur',
+};
 
 module('Integration | Component | ak-modal', function (hooks) {
   setupRenderingTest(hooks);
@@ -27,6 +33,8 @@ module('Integration | Component | ak-modal', function (hooks) {
     `);
 
     await click('[data-test-button]');
+
+    assert.dom(`.${styles[classes.overlay]}`).exists();
 
     assert
       .dom('[data-test-ak-modal-header]')
@@ -104,7 +112,7 @@ module('Integration | Component | ak-modal', function (hooks) {
       .exists()
       .hasText(this.headerTitle);
 
-    const overlay = find('.ak-modal-overlay');
+    const overlay = find(`.${styles[classes.overlay]}`);
 
     await click(overlay);
 
@@ -170,7 +178,7 @@ module('Integration | Component | ak-modal', function (hooks) {
 
     assert.dom('[data-test-modal-close-btn]').exists().isDisabled();
 
-    const overlay = find('.ak-modal-overlay');
+    const overlay = find(`.${styles[classes.overlay]}`);
 
     await click(overlay);
 
@@ -186,5 +194,47 @@ module('Integration | Component | ak-modal', function (hooks) {
     await click(overlay);
 
     assert.dom('[data-test-ak-modal-header]').doesNotExist();
+  });
+
+  test('it renders ak-modal with blur overlay', async function (assert) {
+    this.setProperties({
+      open: false,
+      handleOpen: () => {
+        this.set('open', true);
+      },
+      showHeader: true,
+      headerTitle: 'Header title',
+    });
+
+    await render(hbs`
+        <button data-test-button type="button" {{on 'click' this.handleOpen}}>Open modal</button>
+
+        {{#if this.open}}
+            <AkModal @showHeader={{this.showHeader}} @headerTitle={{this.headerTitle}} @blurOverlay={{this.blurOverlay}}>
+                modal content
+            </AkModal>
+        {{/if}}
+    `);
+
+    await click('[data-test-button]');
+
+    assert
+      .dom(`.${styles[classes.overlay]}`)
+      .exists()
+      .doesNotHaveClass(styles[classes.blurOverlay]);
+
+    assert
+      .dom('[data-test-ak-modal-header]')
+      .exists()
+      .hasText(this.headerTitle);
+
+    assert.dom('[data-test-ak-modal-body]').exists().hasText('modal content');
+
+    this.set('blurOverlay', true);
+
+    assert
+      .dom(`.${styles[classes.overlay]}`)
+      .exists()
+      .hasClass(styles[classes.blurOverlay]);
   });
 });

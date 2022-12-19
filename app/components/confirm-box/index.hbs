@@ -4,9 +4,12 @@
     @headerTitle={{or @title (t 'confirm')}}
     @disableClose={{@disabled}}
     @onClose={{perform this.clearModal}}
+    @blurOverlay={{@blurOverlay}}
   >
     <AkStack @direction='column' @alignItems='center' @justifyContent='center'>
-      {{#if @description}}
+      {{#if (has-block 'content')}}
+        {{yield to='content'}}
+      {{else if @description}}
         <AkTypography data-test-confirmbox-description>
           {{@description}}
         </AkTypography>
@@ -14,8 +17,9 @@
 
       <AkStack
         @alignItems='center'
-        @justifyContent='center'
+        @justifyContent={{or @justifyActionContent 'center'}}
         @spacing='2'
+        @width='full'
         class='mt-3'
       >
         <AkButton
