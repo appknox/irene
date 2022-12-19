@@ -88,19 +88,9 @@ body {
   --ak-select-trigger-arrow-color: var(--text-primary);
 
   // variables for ak-modal
-  &.theme-light {
-    --ak-modal-appbar-background: var(--background-light);
-    --ak-modal-appbar-border-bottom: 1px solid var(--border-color-1);
-    --ak-modal-appbar-background-text-color: var(--text-primary);
-    --ak-modal-appbar-hover-background: var(--hover-light-background);
-  }
-
-  &.theme-dark {
-    --ak-modal-appbar-background: var(--background-dark);
-    --ak-modal-appbar-border-bottom: none;
-    --ak-modal-appbar-background-text-color: var(--common-white);
-    --ak-modal-appbar-hover-background: var(--hover-dark-background);
-  }
+  --ak-modal-zIndex: var(--zIndex-modal);
+  --ak-modal-backdrop-overlay-background: var(--backdrop-overlay-background);
+  --ak-modal-border-radius: var(--border-radius);
 
   // variables for ak-table
   --ak-table-font-weight-regular: var(--font-weight-regular);
@@ -220,6 +210,8 @@ body {
   // variables for organization-namespace/namespace-value
   --organization-namespace-value-color-ios: var(--ios);
   --organization-namespace-value-color-android: var(--android);
+
+  // variables for organization-namespace
   --organization-namespace-loading-container-background: var(
     --background-light
   );
