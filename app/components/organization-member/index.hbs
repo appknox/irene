@@ -1,0 +1,11 @@
+{{#if this.me.org.is_admin}}
+  <OrganizationMember::List @organization={{@organization}} />
+
+  <OrganizationInvitationList @organization={{@organization}}>
+    <:headerContent>
+      <AkTypography data-test-invitation-list-title @variant='h5'>
+        {{t 'pendingInvitations'}}
+      </AkTypography>
+    </:headerContent>
+  </OrganizationInvitationList>
+{{/if}}

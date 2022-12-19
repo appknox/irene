@@ -1,0 +1,39 @@
+{{! template-lint-disable no-partial }}
+{{#if this.hasObjects}}
+  {{#if (has-block 'headerContent')}}
+    <div class='my-2'>
+      {{yield to='headerContent'}}
+    </div>
+  {{/if}}
+
+  <AkTable data-test-invitation-list as |t|>
+    <t.head data-test-invitation-list-thead @columns={{this.columns}} />
+    <t.body @rows={{this.sortedObjects}} as |b|>
+      <b.row data-test-invitation-list-row as |r|>
+        <r.cell data-test-invitation-list-cell as |value|>
+          {{#if r.columnValue.component}}
+            {{#let (component r.columnValue.component) as |Component|}}
+              <Component
+                @invitation={{r.rowValue}}
+                @organization={{@organization}}
+                @blurOverlay={{@blurConfirmBoxOverlay}}
+              />
+            {{/let}}
+          {{else}}
+            <AkTypography title={{value}} @noWrap={{true}}>
+              {{value}}
+            </AkTypography>
+          {{/if}}
+        </r.cell>
+      </b.row>
+    </t.body>
+  </AkTable>
+
+  <div class='mt-3'>
+    {{partial 'paginate'}}
+  </div>
+{{else}}
+  {{#if (has-block 'loadingEmptyContent')}}
+    {{yield (hash isEmpty=this.hasNoObject) to='loadingEmptyContent'}}
+  {{/if}}
+{{/if}}

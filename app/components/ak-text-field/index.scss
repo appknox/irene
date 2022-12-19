@@ -6,9 +6,6 @@
 }
 
 .ak-form-label {
-  color: var(--text-secondary);
-  font-weight: 400;
-  font-size: 1rem;
   padding: 0;
   position: relative;
   display: block;
@@ -16,7 +13,10 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-bottom: 0.4em;
+}
+
+.ak-form-label-spacing {
+  margin-top: 0.4em;
 }
 
 .ak-form-helper-text {
@@ -58,7 +58,7 @@
   display: block;
   min-width: 0;
   width: 100%;
-  padding: 0.6em;
+  padding: 0.54em;
   outline: unset;
 
   &::placeholder {
@@ -102,7 +102,7 @@
   top: 0;
   left: 0;
   margin: 0;
-  padding: 0 0.5em;
+  padding: 0 0.54em;
   pointer-events: none;
   border-radius: inherit;
   border-style: solid;
@@ -118,14 +118,14 @@
   align-items: center;
 
   :global(.ak-icon) {
-    font-size: 1.25rem;
+    font-size: 1.25rem !important;
   }
 }
 
 .ak-text-field-left-adornment {
-  margin-left: 0.6em;
+  margin-left: 0.54em;
 }
 
 .ak-text-field-right-adornment {
-  margin-right: 0.6em;
+  margin-right: 0.54em;
 }

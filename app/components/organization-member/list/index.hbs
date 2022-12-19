@@ -1,0 +1,96 @@
+{{! template-lint-disable no-partial no-action }}
+<AkStack class='py-3'>
+  <div local-class='search-input'>
+    <AkTextField
+      data-test-user-search-input
+      @placeholder='Search user'
+      @value={{this.query}}
+      {{on 'keyup' (perform this.searchUserForQuery)}}
+    >
+      <:leftAdornment>
+        <AkIcon @iconName='search' @color='textSecondary' />
+      </:leftAdornment>
+    </AkTextField>
+  </div>
+
+  <AkStack @alignItems='center' @justifyContent='flex-end' @width='full'>
+    <AkFormControlLabel
+      data-test-inactive-user-label
+      @label={{t 'includeInactiveMembers'}}
+    >
+      <AkCheckbox
+        data-test-inactive-user-checkbox
+        @checked={{this.showDeactivated}}
+        @onChange={{perform this.showDeactivatedMembers}}
+      />
+    </AkFormControlLabel>
+
+    {{#if this.me.org.is_owner}}
+      <div class='ml-3'>
+        <OrganizationMember::InviteUser @organization={{@organization}} />
+      </div>
+    {{/if}}
+  </AkStack>
+</AkStack>
+
+{{#if this.hasObjects}}
+  <AkTable data-test-org-user-table as |t|>
+    <t.head data-test-org-user-thead @columns={{this.columns}} />
+    <t.body @rows={{this.sortedObjects}} as |b|>
+      <b.row
+        data-test-org-user-row
+        class={{unless b.rowValue.member.isActive 'user-disabled'}}
+        as |r|
+      >
+        <r.cell data-test-org-user-cell as |value|>
+          {{#if r.columnValue.component}}
+            {{#let (component r.columnValue.component) as |Component|}}
+              <Component
+                @member={{r.rowValue}}
+                @organization={{@organization}}
+              />
+            {{/let}}
+          {{else}}
+            <AkTypography title={{value}} @noWrap={{true}}>
+              {{value}}
+            </AkTypography>
+          {{/if}}
+        </r.cell>
+      </b.row>
+    </t.body>
+  </AkTable>
+
+  <div class='mt-3'>
+    {{partial 'paginate'}}
+  </div>
+{{else}}
+  <AkStack @alignItems='center' @justifyContent='center'>
+    {{#if this.hasNoObject}}
+      <AkStack
+        local-class='no-result-container'
+        @direction='column'
+        @alignItems='center'
+        @justifyContent='center'
+        @spacing='2'
+      >
+        <AkSvg::OrgUsersEmpty />
+
+        <AkTypography @variant='h5'>
+          {{t 'noMembers'}}
+        </AkTypography>
+      </AkStack>
+    {{else}}
+      <AkStack
+        local-class='loading-container'
+        @alignItems='center'
+        @justifyContent='center'
+        @spacing='1.5'
+      >
+        <AkLoader @size={{16}} />
+        <AkTypography local-class='loading-text' @color='textSecondary'>
+          {{t 'loading'}}...
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+{{/if}}

@@ -1,0 +1,51 @@
+<AkStack
+  @tag='label'
+  @direction='column'
+  @spacing='0.5'
+  for='invite-user-email-input'
+>
+  <AkTypography data-test-label-primary-text @variant='subtitle1'>
+    {{t 'email'}}
+  </AkTypography>
+
+  <AkTypography
+    data-test-label-secondary-text
+    @variant='body2'
+    @color='textSecondary'
+  >
+    {{t 'inviteUserMultipleEmailHelperText'}}
+  </AkTypography>
+</AkStack>
+
+<AkTextField
+  data-test-invite-member-input
+  @formControlClass='my-2'
+  @id='invite-user-email-input'
+  @placeholder={{t 'email'}}
+  @value={{this.emailsFromText}}
+  @autofocus={{true}}
+  @error={{if this.emailErrorMsg true}}
+  @helperText={{this.emailErrorMsg}}
+/>
+
+<AkStack @spacing='2' {{style flexWrap='wrap'}}>
+  {{#each this.emailList as |email idx|}}
+    <AkChip
+      data-test-email-chip='{{idx}}'
+      @variant='outlined'
+      @label={{email}}
+      @onDelete={{fn this.handleEmailDelete idx}}
+    />
+  {{/each}}
+</AkStack>
+
+{{#if (has-block 'actionContent')}}
+  {{yield
+    (hash
+      action=(perform this.inviteMembers)
+      actionLabel=(t 'invite')
+      actionRunning=this.isInvitingMember
+    )
+    to='actionContent'
+  }}
+{{/if}}

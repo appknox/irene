@@ -1,16 +1,20 @@
 <label
   data-test-ak-form-label-root
+  ...attributes
   local-class='ak-form-control-label-root ak-form-control-label-placement-{{this.placement}}'
 >
   {{yield (hash control=(component 'blank-template') disabled=@disabled)}}
 
   {{#if @label}}
-    <span
+    <AkTypography
+      @tag='span'
+      @variant={{@labelTypographyVariant}}
+      @noWrap={{@labelTypographyNoWrap}}
+      @color={{@labelTypographyColor}}
       data-test-ak-form-label
-      local-class='ak-form-control-label {{if
-        @disabled
-        "ak-form-control-label-disabled"
-      }}'
-    >{{@label}}</span>
+      local-class='
+        ak-form-control-label 
+        {{if @disabled "ak-form-control-label-disabled"}}'
+    >{{@label}}</AkTypography>
   {{/if}}
 </label>
