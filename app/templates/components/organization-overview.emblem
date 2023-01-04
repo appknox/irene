@@ -1,3 +1,0 @@
-h4.margin-left.text-centre
-  = link-to 'authenticated.organization' organization.id
-    = organization.name

@@ -1,12 +1,19 @@
-<div local-class='ak-form-control'>
+<div class='{{@formControlClass}}' local-class='ak-form-control'>
   {{#if @label}}
-    <label data-test-form-label local-class='ak-form-label' for={{this.id}}>
+    <AkTypography
+      @variant={{@labelTypographyVariant}}
+      @color={{or @labelTypographyColor 'textSecondary'}}
+      @tag='label'
+      data-test-form-label
+      local-class='ak-form-label'
+      for={{this.id}}
+    >
       {{@label}}
       {{if @required ' *'}}
-    </label>
+    </AkTypography>
   {{/if}}
 
-  <div local-class='ak-text-field-root'>
+  <div local-class='ak-text-field-root {{if @label "ak-form-label-spacing"}}'>
     {{#if (has-block 'leftAdornment')}}
       <div
         data-test-ak-text-field-left-adornment

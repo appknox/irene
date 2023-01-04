@@ -1,4 +1,0 @@
-if me.org.is_admin
-  = organization-member-list organization=organization
-  = organization-invitation-list organization=organization
-

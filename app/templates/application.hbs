@@ -1,4 +1,7 @@
 <HeadLayout />
-{{ body-class this.model.body_classes }}
+
+{{body-class this.model.body_classes}}
+
 {{outlet}}
-<NotificationContainer @position="bottom-right"></NotificationContainer>
+
+<NotificationContainer @position='bottom-right' @zindex='1400' />

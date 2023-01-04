@@ -1,0 +1,65 @@
+<AkButton data-test-invite-member-btn {{on 'click' this.openInviteUserDrawer}}>
+  <:leftIcon>
+    <AkIcon @iconName='group-add' />
+  </:leftIcon>
+
+  <:default>{{t 'inviteUsers'}}</:default>
+</AkButton>
+
+<AkDrawer
+  @onClose={{this.closeDrawer}}
+  @anchor='right'
+  @open={{this.showInviteUserDrawer}}
+  @disableBackdropClick={{true}}
+  as |dr|
+>
+  <AkStack local-class='drawer-content-container' @direction='column'>
+    <AkAppbar @justifyContent='space-between' as |ab|>
+      <AkTypography data-test-drawer-title @color='inherit' @variant='h5'>
+        {{t 'inviteUsers'}}
+      </AkTypography>
+
+      <AkIconButton
+        data-test-drawer-close-btn
+        {{on 'click' dr.closeHandler}}
+        class={{ab.classes.defaultIconBtn}}
+        disabled={{this.inviteUser.isRunning}}
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <div local-class='invite-drawer-content'>
+      <InviteMember>
+        <:actionContent as |ac|>
+          <AkAppbar
+            @position='absolute'
+            @placement='bottom'
+            @justifyContent='flex-end'
+            @spacing='1.5'
+            @color='default'
+            local-class='invite-drawer-footer'
+          >
+            <AkButton
+              data-test-send-invite-cancelBtn
+              @variant='outlined'
+              @color='neutral'
+              {{on 'click' dr.closeHandler}}
+              @disabled={{this.inviteUser.isRunning}}
+            >
+              {{t 'cancel'}}
+            </AkButton>
+
+            <AkButton
+              data-test-send-invite-btn
+              {{on 'click' (perform this.inviteUser ac.action dr.closeHandler)}}
+              @loading={{this.inviteUser.isRunning}}
+            >
+              {{ac.actionLabel}}
+            </AkButton>
+          </AkAppbar>
+        </:actionContent>
+      </InviteMember>
+    </div>
+  </AkStack>
+</AkDrawer>

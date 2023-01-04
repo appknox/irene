@@ -219,4 +219,13 @@ body {
   --organization-namespace-loading-container-border-radius: var(
     --border-radius
   );
+
+  // variables for organization-member/list
+  --organization-member-list-loading-container-background: var(
+    --background-light
+  );
+  --organization-member-list-loading-container-border: var(--border-color-1);
+  --organization-member-list-loading-container-border-radius: var(
+    --border-radius
+  );
 }

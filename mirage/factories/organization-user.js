@@ -13,5 +13,5 @@ export default Factory.extend({
   email() {
     return faker.internet.email(this.username);
   },
-  isActive: true,
+  is_active: true,
 });
