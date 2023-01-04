@@ -1,0 +1,126 @@
+<AkAppbar
+  @color='light'
+  @position='sticky'
+  @direction='column'
+  @gutter={{false}}
+  local-class='team-detail-info'
+>
+  <AkStack @width='full' @alignItems='center' @justifyContent='space-between'>
+    <AkTypography data-test-orgTeamDetailsInfo-name @variant='h5'>
+      {{@team.name}}
+    </AkTypography>
+
+    {{#if this.me.org.is_admin}}
+      <AkButton
+        data-test-orgTeamDetailsInfo-editBtn
+        @variant='text'
+        @color='primary'
+        {{on 'click' this.showEditTeamName}}
+      >
+        <:leftIcon>
+          <AkIcon @color='primary' @iconName='edit' />
+        </:leftIcon>
+
+        <:default>{{t 'editTeamName'}}</:default>
+      </AkButton>
+    {{/if}}
+  </AkStack>
+
+  <AkStack @width='full' class='mt-2' @alignItems='center' @spacing='4'>
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography
+        data-test-orgTeamDetailsInfo-totalProjectlabel
+        @variant='subtitle2'
+      >
+        {{t 'totalProjects'}}
+      </AkTypography>
+
+      <AkTypography data-test-orgTeamDetailsInfo-totalProjectCount>
+        {{@team.projectsCount}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography
+        data-test-orgTeamDetailsInfo-totalUserlabel
+        @variant='subtitle2'
+      >
+        {{t 'totalUsers'}}
+      </AkTypography>
+
+      <AkTypography data-test-orgTeamDetailsInfo-totalUserCount>
+        {{@team.membersCount}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+</AkAppbar>
+
+<div local-class='team-detail-content'>
+  <div class='p-3'>
+    <OrganizationTeam::ProjectList
+      @organization={{@organization}}
+      @team={{@team}}
+      @handleActiveAction={{@handleActiveAction}}
+    />
+
+    {{#if this.me.org.is_admin}}
+      <div class='mt-6'>
+        <OrganizationTeam::MemberList
+          @members={{@team.members}}
+          @organization={{@organization}}
+          @team={{@team}}
+          @handleActiveAction={{@handleActiveAction}}
+        />
+      </div>
+    {{/if}}
+
+    {{#if this.me.org.is_admin}}
+      <div class='mt-6'>
+        <OrganizationTeam::InvitationList
+          @organization={{@organization}}
+          @team={{@team}}
+          @handleActiveAction={{@handleActiveAction}}
+        />
+      </div>
+    {{/if}}
+  </div>
+
+  {{#if this.me.org.is_admin}}
+    <AkDivider @color='dark' />
+
+    <AkStack class='p-3' @justifyContent='flex-end'>
+      <AkButton
+        data-test-orgTeamDetailsInfo-deleteBtn
+        {{on 'click' this.handleShowDeleteConfirm}}
+        @variant='outlined'
+        @disabled={{@team.isDefaultTeam}}
+      >
+        <:leftIcon>
+          <AkIcon @iconName='delete' />
+        </:leftIcon>
+
+        <:default>{{t 'deleteTeam'}}</:default>
+      </AkButton>
+    </AkStack>
+
+    <ConfirmBox
+      @isActive={{this.showTeamDeleteConfirm}}
+      @confirmText={{t 'deleteTeam'}}
+      @delegate={{this}}
+      @confirmAction={{perform this.deleteTeam}}
+      @disabled={{this.deleteTeam.isRunning}}
+      @justifyActionContent='flex-end'
+      @blurOverlay={{true}}
+    >
+      <:content>
+        <AkTextField
+          data-test-orgTeamDetailsInfo-promptInput
+          @labelTypographyColor='textPrimary'
+          @label={{t 'promptBox.deleteTeamPrompt.description'}}
+          @value={{this.promptTeamName}}
+          @autofocus={{true}}
+        />
+      </:content>
+    </ConfirmBox>
+  {{/if}}
+</div>

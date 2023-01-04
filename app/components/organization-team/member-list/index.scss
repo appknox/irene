@@ -1,0 +1,19 @@
+.emtpy-container {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5em;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  min-height: 150px;
+  border-radius: var(
+    --organization-team-member-list-loading-container-border-radius
+  );
+  border: 1px solid
+    var(--organization-team-member-list-loading-container-border-color);
+  box-sizing: border-box;
+
+  .empty-svg {
+    height: 70px;
+  }
+}

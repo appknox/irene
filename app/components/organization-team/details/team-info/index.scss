@@ -1,0 +1,10 @@
+.team-detail-content {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.team-detail-info {
+  padding: 1.5em;
+  box-shadow: var(--organization-team-details-team-info-summary-shadow);
+}

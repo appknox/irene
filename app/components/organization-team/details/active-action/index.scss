@@ -1,0 +1,12 @@
+.team-action-container {
+  padding: 1.5em;
+  padding-bottom: 5em;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.action-footer-shadow {
+  box-shadow: var(--organization-team-details-active-action-footer-shadow);
+}

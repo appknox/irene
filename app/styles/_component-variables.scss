@@ -196,6 +196,12 @@ body {
     --ak-appbar-inherit-background-text-color: var(--common-white);
     --ak-appbar-inherit-hover-background: var(--hover-dark-background);
   }
+
+  // variables for ak-drawer
+  --ak-drawer-backdrop-overlay-background: var(--backdrop-overlay-background);
+  --ak-drawer-background: var(--background-main);
+  --ak-drawer-color-text-primary: var(--text-primary);
+  --ak-drawer-zIndex: var(--zIndex-drawer);
 }
 
 body {
@@ -228,4 +234,58 @@ body {
   --organization-member-list-loading-container-border-radius: var(
     --border-radius
   );
+
+  // variables for organization-team
+  --organization-team-loading-container-background: var(--background-light);
+  --organization-team-loading-container-border: var(--border-color-1);
+  --organization-team-loading-container-border-radius: var(--border-radius);
+
+  // variables for organization-team/add-team-member
+  --add-team-member-loading-container-border-radius: var(--border-radius);
+  --add-team-member-loading-container-border-color: var(--border-color-1);
+
+  // variables for organization-team/add-team-project
+  --add-team-project-color-ios: var(--ios);
+  --add-team-project-color-android: var(--android);
+  --add-team-project-loading-container-border-radius: var(--border-radius);
+  --add-team-project-loading-container-border-color: var(--border-color-1);
+
+  // variables for organization-team/overview
+  --organization-team-overview-border-radius: var(--border-radius);
+  --organization-team-overview-border-color: var(--border-color-1);
+  --organization-team-overview-hover-background: var(--hover-light-background);
+
+  // variables for organization-team/details/active-action
+  --organization-team-details-active-action-footer-shadow: var(--box-shadow-4);
+
+  // variables for organization-team/details/team-info
+  --organization-team-details-team-info-summary-shadow: var(--box-shadow-3);
+
+  // variables for organization-team/invitation-list
+  --organization-team-invitation-list-loading-container-border-radius: var(
+    --border-radius
+  );
+  --organization-team-invitation-list-loading-container-border-color: var(
+    --border-color-1
+  );
+
+  // variables for organization-team/member-list
+  --organization-team-member-list-loading-container-border-radius: var(
+    --border-radius
+  );
+  --organization-team-member-list-loading-container-border-color: var(
+    --border-color-1
+  );
+
+  // variables for organization-team/project-list
+  --organization-team-project-list-loading-container-border-radius: var(
+    --border-radius
+  );
+  --organization-team-project-list-loading-container-border-color: var(
+    --border-color-1
+  );
+
+  // variables for organization-team/project-list/project-info
+  --organization-team-project-list-info-color-ios: var(--ios);
+  --organization-team-project-list-info-color-android: var(--android);
 }

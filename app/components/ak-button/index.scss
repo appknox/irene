@@ -49,6 +49,16 @@
   &:focus .ak-button-text {
     text-decoration: underline;
   }
+
+  &.ak-button-text-underline-none {
+    &:hover .ak-button-text {
+      text-decoration: none;
+    }
+
+    &:focus .ak-button-text {
+      text-decoration: none;
+    }
+  }
 }
 
 .ak-button-filled-primary {

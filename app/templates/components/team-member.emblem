@@ -1,9 +1,0 @@
-td
-  = member.username
-td
-  = member.email
-td
-  button.is-primary click="openRemoveMemberPrompt"
-    = t "remove"
-
-= prompt-box isActive=showRemoveMemberPrompt title=(t 'promptBox.removeMemberPrompt.title') description=(t 'promptBox.removeMemberPrompt.description') button="remove" delegate=this disabled=isRemovingMember

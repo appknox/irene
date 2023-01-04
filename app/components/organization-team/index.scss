@@ -1,0 +1,30 @@
+.emtpy-container {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5em;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  min-height: 250px;
+  box-sizing: border-box;
+
+  .empty-svg {
+    height: 150px;
+  }
+}
+
+.loading-container {
+  display: flex;
+  padding: 1.5em;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px;
+  background-color: var(--organization-team-loading-container-background);
+  border-radius: var(--organization-team-loading-container-border-radius);
+  border: 1px solid var(--organization-team-loading-container-border);
+  box-sizing: border-box;
+
+  .loading-text {
+    font-style: italic;
+  }
+}

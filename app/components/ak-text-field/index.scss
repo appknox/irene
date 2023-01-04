@@ -63,15 +63,18 @@
 
   &::placeholder {
     color: var(--text-secondary);
+    font-style: normal;
     opacity: 1;
   }
 
   &:-ms-input-placeholder {
     color: var(--text-secondary);
+    font-style: normal;
   }
 
   &::-ms-input-placeholder {
     color: var(--text-secondary);
+    font-style: normal;
   }
 
   &:focus ~ .ak-text-input-outlined,

@@ -1,0 +1,55 @@
+<AkAppbar @color='light' @position='sticky'>
+  <AkButton
+    data-test-teamDetailAction-titleBtn
+    @variant='text'
+    @typographyVariant='h5'
+    @underline='none'
+    {{on 'click' @cancelActiveAction}}
+  >
+    <:leftIcon>
+      <AkIcon @iconName='arrow-back' @color='primary' />
+    </:leftIcon>
+
+    <:default>{{@team.name}}</:default>
+  </AkButton>
+</AkAppbar>
+
+{{#let (component @activeActionDetails.component) as |Component|}}
+  <div local-class='team-action-container'>
+    <Component
+      @team={{@team}}
+      @organization={{@organization}}
+      @cancelActiveAction={{@cancelActiveAction}}
+    >
+      <:actionContent as |ac|>
+        <AkAppbar
+          @position='absolute'
+          @placement='bottom'
+          @color='default'
+          @justifyContent='flex-end'
+          local-class='action-footer-shadow'
+        >
+          <AkStack @spacing='2'>
+            <AkButton
+              data-test-teamDetailAction-backBtn
+              {{on 'click' @cancelActiveAction}}
+              @variant='outlined'
+              @color='neutral'
+            >
+              {{t 'back'}}
+            </AkButton>
+
+            <AkButton
+              data-test-teamDetailAction-actionBtn
+              {{on 'click' (fn ac.action @cancelActiveAction)}}
+              @disabled={{ac.actionDisabled}}
+              @loading={{ac.actionRunning}}
+            >
+              {{ac.actionLabel}}
+            </AkButton>
+          </AkStack>
+        </AkAppbar>
+      </:actionContent>
+    </Component>
+  </div>
+{{/let}}

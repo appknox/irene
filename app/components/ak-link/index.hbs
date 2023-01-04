@@ -5,10 +5,11 @@
   title='{{@title}}'
   class={{@class}}
   local-class='
-  ak-link-root 
-  {{if @disabled "ak-link-disabled"}}
-  ak-link-color-{{or @color "textPrimary"}}
-  ak-link-underline-{{or @underline "hover"}}'
+    ak-link-root 
+    {{if @disabled "ak-link-disabled"}}
+    ak-link-color-{{or @color "textPrimary"}}
+    ak-link-underline-{{or @underline "hover"}}
+    {{if @noWrap "ak-link-noWrap"}}'
   @route={{@route}}
   @models={{this.modelOrModels}}
   @query={{@query}}
@@ -23,6 +24,7 @@
     data-test-ak-link-text
     @variant={{@typographyVariant}}
     @color={{if @disabled 'inherit' @color}}
+    @noWrap={{@noWrap}}
     @tag='span'
     local-class='ak-link-text'
   >

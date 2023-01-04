@@ -1,0 +1,38 @@
+<div>
+  <AkButton data-test-orgCreateTeam-btn {{on 'click' this.openTeamModal}}>
+    <:leftIcon>
+      <AkIcon @iconName='groups' />
+    </:leftIcon>
+
+    <:default>{{t 'createTeam'}}</:default>
+  </AkButton>
+
+  {{#if this.showTeamModal}}
+    <AkModal
+      @showHeader={{true}}
+      @headerTitle={{t 'createTeam'}}
+      @onClose={{this.closeTeamModal}}
+    >
+      <form {{on 'submit' (perform this.createTeam)}}>
+        <AkTextField
+          data-test-orgCreateTeam-input
+          @value={{this.teamName}}
+          @placeholder={{t 'teamName'}}
+          @label={{t 'createTeamInputLabel'}}
+          @labelTypographyVariant='h6'
+          @labelTypographyColor='textPrimary'
+          @autofocus={{true}}
+        />
+
+        <AkButton
+          data-test-orgCreateTeam-submitBtn
+          class='mt-3'
+          @type='submit'
+          @loading={{this.isCreatingTeam}}
+        >
+          {{t 'createTeam'}}
+        </AkButton>
+      </form>
+    </AkModal>
+  {{/if}}
+</div>
