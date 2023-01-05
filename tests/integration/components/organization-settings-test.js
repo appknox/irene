@@ -58,6 +58,11 @@ module('Integration | Component | organization-settings', function (hooks) {
     await render(hbs`<OrganizationSettings @model={{this.model}} />`);
 
     assert.dom('[data-test-org-name]').hasText(this.model.organization.name);
+
+    assert
+      .dom('[data-test-org-name-action-btn]')
+      .isNotDisabled()
+      .hasText('t:editName:()');
   });
 
   test('edit name button should be not visible to admin/member', async function (assert) {
@@ -111,10 +116,7 @@ module('Integration | Component | organization-settings', function (hooks) {
     await render(hbs`<OrganizationSettings @model={{this.model}} />`);
 
     assert.dom('[data-test-org-name-action-btn]').doesNotExist();
-    assert
-      .dom('[data-test-org-name-add-btn]')
-      .exists()
-      .hasClass(/add-button-disabled/i);
+    assert.dom('[data-test-org-name-add-btn]').exists().isDisabled();
   });
 
   test('organization mfa should render', async function (assert) {

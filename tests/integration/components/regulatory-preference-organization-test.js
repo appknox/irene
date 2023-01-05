@@ -3,17 +3,22 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
-import { render, click } from '@ember/test-helpers';
+import { render, click, find, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { underscore } from '@ember/string';
 import { Response } from 'miragejs';
 
-function serializer(payload) {
-  const serializedPayload = {};
-  Object.keys(payload.attrs).map((_key) => {
-    serializedPayload[underscore(_key)] = payload[_key];
-  });
-  return serializedPayload;
+import Service from '@ember/service';
+
+class NotificationsStub extends Service {
+  errorMsg = null;
+  successMsg = null;
+
+  error(msg) {
+    this.errorMsg = msg;
+  }
+  success(msg) {
+    this.successMsg = msg;
+  }
 }
 
 module(
@@ -26,12 +31,17 @@ module(
     hooks.beforeEach(async function () {
       await this.server.createList('organization', 1);
       await this.owner.lookup('service:organization').load();
+
+      this.owner.register('service:notifications', NotificationsStub);
+
+      const preference = this.server.create('organization-preference');
+
+      this.setProperties({ preference });
     });
 
     test('it renders regulatory preferences section correctly', async function (assert) {
-      this.server.create('organization-preference');
       this.server.get('organizations/:id/preference', (schema) => {
-        return serializer(schema.organizationPreferences.first());
+        return schema.organizationPreferences.first().toJSON();
       });
 
       await render(hbs`<RegulatoryPreferenceOrganization />`);
@@ -39,174 +49,270 @@ module(
       assert
         .dom('[data-test-preferences-title]')
         .hasText('t:regulatoryPreferences:()');
+
       assert
         .dom('[data-test-preferences-subtitle]')
         .hasText('t:regulatoryPreferencesChooseForAll:()');
+
       assert
         .dom('[data-test-preferences-desc]')
         .hasText('t:regulatoryPreferencesWarning:()');
-      assert.dom('[data-test-preferences-options]').exists();
+
+      assert
+        .dom(
+          '[data-test-ak-form-label]',
+          find('[data-test-preference="PCI-DSS"]')
+        )
+        .hasText('PCI-DSS');
+
+      assert
+        .dom(
+          '[data-test-ak-form-label]',
+          find('[data-test-preference="HIPAA"]')
+        )
+        .hasText('HIPAA');
+
+      assert
+        .dom('[data-test-ak-form-label]', find('[data-test-preference="GDPR"]'))
+        .hasText('GDPR');
     });
 
-    test('it renders supported regulatory list', async function (assert) {
-      this.server.create('organization-preference');
+    test('it renders regulatory list tooltip', async function (assert) {
       this.server.get('organizations/:id/preference', (schema) => {
-        return serializer(schema.organizationPreferences.first());
+        return schema.organizationPreferences.first().toJSON();
       });
 
       await render(hbs`<RegulatoryPreferenceOrganization />`);
 
-      assert.dom('[data-test-preferences]').exists();
+      const pcidssContainer = find('[data-test-preference="PCI-DSS"]');
+      const hipaaContainer = find('[data-test-preference="HIPAA"]');
+      const gdprContainer = find('[data-test-preference="GDPR"]');
 
-      assert.dom('[data-test-preference-pcidss]').exists();
-      const pcidss = this.element.querySelector('[data-test-pcidss-label]');
-      assert.equal(pcidss.innerHTML, 'PCI-DSS');
-      assert.equal(pcidss.getAttribute('title'), 't:pcidssExpansion:()');
+      // pci-dss
+      await triggerEvent(
+        `#${pcidssContainer.id} [data-test-ak-tooltip-root]`,
+        'mouseenter'
+      );
 
-      assert.dom('[data-test-preference-hipaa]').exists();
-      const hipaa = this.element.querySelector('[data-test-hipaa-label]');
-      assert.equal(hipaa.innerHTML, 'HIPAA');
-      assert.equal(hipaa.getAttribute('title'), 't:hipaaExpansion:()');
+      assert
+        .dom('[data-test-ak-tooltip-content]', pcidssContainer)
+        .hasText('t:pcidssExpansion:()');
 
-      assert.dom('[data-test-preference-gdpr]').exists();
-      const gdpr = this.element.querySelector('[data-test-gdpr-label]');
-      assert.equal(gdpr.innerHTML, 'GDPR');
-      assert.equal(gdpr.getAttribute('title'), 't:gdprExpansion:()');
+      await triggerEvent(
+        `#${pcidssContainer.id} [data-test-ak-tooltip-root]`,
+        'mouseleave'
+      );
+
+      assert
+        .dom('[data-test-ak-tooltip-content]', pcidssContainer)
+        .doesNotExist();
+
+      // hipaa
+      await triggerEvent(
+        `#${hipaaContainer.id} [data-test-ak-tooltip-root]`,
+        'mouseenter'
+      );
+
+      assert
+        .dom('[data-test-ak-tooltip-content]', hipaaContainer)
+        .hasText('t:hipaaExpansion:()');
+
+      await triggerEvent(
+        `#${hipaaContainer.id} [data-test-ak-tooltip-root]`,
+        'mouseleave'
+      );
+
+      assert
+        .dom('[data-test-ak-tooltip-content]', hipaaContainer)
+        .doesNotExist();
+
+      // gdpr
+      await triggerEvent(
+        `#${gdprContainer.id} [data-test-ak-tooltip-root]`,
+        'mouseenter'
+      );
+
+      assert
+        .dom('[data-test-ak-tooltip-content]', gdprContainer)
+        .hasText('t:gdprExpansion:()');
+
+      await triggerEvent(
+        `#${gdprContainer.id} [data-test-ak-tooltip-root]`,
+        'mouseleave'
+      );
+
+      assert
+        .dom('[data-test-ak-tooltip-content]', gdprContainer)
+        .doesNotExist();
     });
 
     test('it renders regulatory inclusion status based on organization preference', async function (assert) {
-      this.server.create('organization-preference', {
-        reportPreference: {
-          show_pcidss: true,
-          show_hipaa: false,
-          show_gdpr: false,
-        },
-      });
-      this.server.get('organizations/:id/preference', (schema, request) => {
-        return serializer(
-          schema.organizationPreferences.find(request.params.id)
-        );
+      this.server.get('organizations/:id/preference', (schema) => {
+        const json = schema.organizationPreferences.first().toJSON();
+        json.report_preference.show_pcidss = true;
+        json.report_preference.show_hipaa = false;
+        json.report_preference.show_gdpr = true;
+
+        return json;
       });
 
       await render(hbs`<RegulatoryPreferenceOrganization />`);
 
-      const pcidss = this.element.querySelector('[data-test-pcidss-input]');
-      assert.true(pcidss.checked);
+      assert
+        .dom(
+          '[data-test-preference-checkbox]',
+          find('[data-test-preference="PCI-DSS"]')
+        )
+        .isChecked();
 
-      const hipaa = this.element.querySelector('[data-test-hipaa-input]');
-      assert.false(hipaa.checked);
+      assert
+        .dom(
+          '[data-test-preference-checkbox]',
+          find('[data-test-preference="HIPAA"]')
+        )
+        .isNotChecked();
 
-      const gdpr = this.element.querySelector('[data-test-gdpr-input]');
-      assert.false(gdpr.checked);
+      assert
+        .dom(
+          '[data-test-preference-checkbox]',
+          find('[data-test-preference="GDPR"]')
+        )
+        .isChecked();
     });
 
     test('it toggles regulatory preference on label click', async function (assert) {
-      const orgPrefs = this.server.create('organization-preference');
-      this.server.get('organizations/:id/preference', (schema, request) => {
-        return serializer(
-          schema.organizationPreferences.find(request.params.id)
-        );
-      });
+      this.server.get('organizations/:id/preference', (schema) => {
+        const json = schema.organizationPreferences.first().toJSON();
+        json.report_preference.show_pcidss = false;
+        json.report_preference.show_hipaa = false;
+        json.report_preference.show_gdpr = false;
 
-      this.server.put('organizations/:id/preference', (schema, request) => {
-        const body = JSON.parse(request.requestBody);
-        const pref = schema.organizationPreferences.find(request.params.id);
-        pref.reportPreference = body.reportPreference;
-        pref.save();
-        return serializer(pref);
-      });
-
-      await render(hbs`<RegulatoryPreferenceOrganization />`);
-
-      const pcidssInput = this.element.querySelector(
-        '[data-test-pcidss-input]'
-      );
-      const pcidssLabel = this.element.querySelector(
-        '[data-test-pcidss-label]'
-      );
-
-      await click(pcidssLabel);
-      assert.equal(pcidssInput.checked, !orgPrefs.reportPreference.show_pcidss);
-
-      await click(pcidssLabel);
-      assert.equal(pcidssInput.checked, orgPrefs.reportPreference.show_pcidss);
-    });
-
-    test('it updates regulatory preference on toggle', async function (assert) {
-      const orgPrefs = this.server.create('organization-preference');
-      this.server.get('organizations/:id/preference', (schema, request) => {
-        return serializer(
-          schema.organizationPreferences.find(request.params.id)
-        );
-      });
-
-      this.server.put('organizations/:id/preference', (schema, request) => {
-        const body = JSON.parse(request.requestBody);
-        const pref = schema.organizationPreferences.find(request.params.id);
-        pref.reportPreference = body.reportPreference;
-        pref.save();
-        return serializer(pref);
-      });
-
-      await render(hbs`<RegulatoryPreferenceOrganization />`);
-
-      const pcidssInput = this.element.querySelector(
-        '[data-test-pcidss-input]'
-      );
-      await click(pcidssInput);
-      assert.equal(pcidssInput.checked, !orgPrefs.reportPreference.show_pcidss);
-
-      const hipaaInput = this.element.querySelector('[data-test-hipaa-input]');
-      await click(hipaaInput);
-      assert.equal(hipaaInput.checked, !orgPrefs.reportPreference.show_hipaa);
-
-      const gdprInput = this.element.querySelector('[data-test-gdpr-input]');
-      await click(gdprInput);
-      assert.equal(gdprInput.checked, !orgPrefs.reportPreference.show_gdpr);
-    });
-
-    test('it does not toggle regulatory preference on error', async function (assert) {
-      this.server.create('organization-preference');
-      this.server.get('organizations/:id/preference', (schema, request) => {
-        return serializer(
-          schema.organizationPreferences.find(request.params.id)
-        );
+        return json;
       });
 
       this.server.put('organizations/:id/preference', () => {
-        return new Response(
-          400,
-          {},
-          {
-            report_preference: {
-              non_field_errors: [
-                'Invalid data. Expected a dictionary, but got str.',
-              ],
-            },
-          }
-        );
+        return {};
       });
 
       await render(hbs`<RegulatoryPreferenceOrganization />`);
 
-      const pcidssInput = this.element.querySelector(
-        '[data-test-pcidss-input]'
+      const pcidssContainer = find('[data-test-preference="PCI-DSS"]');
+      const hipaaContainer = find('[data-test-preference="HIPAA"]');
+      const gdprContainer = find('[data-test-preference="GDPR"]');
+
+      assert
+        .dom('[data-test-preference-checkbox]', pcidssContainer)
+        .isNotDisabled()
+        .isNotChecked();
+
+      assert
+        .dom('[data-test-preference-checkbox]', hipaaContainer)
+        .isNotDisabled()
+        .isNotChecked();
+
+      assert
+        .dom('[data-test-preference-checkbox]', gdprContainer)
+        .isNotDisabled()
+        .isNotChecked();
+
+      await click(`#${pcidssContainer.id} [data-test-ak-form-label]`);
+
+      assert
+        .dom('[data-test-preference-checkbox]', pcidssContainer)
+        .isChecked();
+
+      await click(`#${hipaaContainer.id} [data-test-ak-form-label]`);
+
+      assert.dom('[data-test-preference-checkbox]', hipaaContainer).isChecked();
+
+      await click(`#${gdprContainer.id} [data-test-ak-form-label]`);
+
+      assert.dom('[data-test-preference-checkbox]', gdprContainer).isChecked();
+
+      await click(`#${pcidssContainer.id} [data-test-ak-form-label]`);
+
+      assert
+        .dom('[data-test-preference-checkbox]', pcidssContainer)
+        .isNotChecked();
+
+      await click(`#${hipaaContainer.id} [data-test-ak-form-label]`);
+
+      assert
+        .dom('[data-test-preference-checkbox]', hipaaContainer)
+        .isNotChecked();
+
+      await click(`#${gdprContainer.id} [data-test-ak-form-label]`);
+
+      assert
+        .dom('[data-test-preference-checkbox]', gdprContainer)
+        .isNotChecked();
+    });
+
+    test('it does not toggle regulatory preference on error', async function (assert) {
+      const errorObj = {
+        report_preference: {
+          non_field_errors: [
+            'Invalid data. Expected a dictionary, but got str.',
+          ],
+        },
+      };
+
+      this.server.get('organizations/:id/preference', (schema) => {
+        return schema.organizationPreferences.first().toJSON();
+      });
+
+      this.server.put('organizations/:id/preference', () => {
+        return new Response(400, {}, errorObj);
+      });
+
+      await render(hbs`<RegulatoryPreferenceOrganization />`);
+
+      const pref = this.preference.report_preference;
+      const notify = this.owner.lookup('service:notifications');
+
+      const pcidssContainer = find('[data-test-preference="PCI-DSS"]');
+      const hipaaContainer = find('[data-test-preference="HIPAA"]');
+      const gdprContainer = find('[data-test-preference="GDPR"]');
+
+      await click(`#${pcidssContainer.id} [data-test-ak-form-label]`);
+
+      // no change to state
+      assert
+        .dom('[data-test-preference-checkbox]', pcidssContainer)
+        [pref.show_pcidss ? 'isChecked' : 'isNotChecked']();
+
+      assert.strictEqual(
+        notify.errorMsg,
+        errorObj.report_preference.non_field_errors[0]
       );
-      const pcidssInitialValue = pcidssInput.checked;
-      await click(pcidssInput);
-      assert.equal(pcidssInput.checked, pcidssInitialValue);
-      await click(pcidssInput);
-      assert.equal(pcidssInput.checked, pcidssInitialValue);
 
-      const hipaaInput = this.element.querySelector('[data-test-hipaa-input]');
-      const hipaaInitialValue = hipaaInput.checked;
-      await click(hipaaInput);
-      assert.equal(hipaaInput.checked, hipaaInitialValue);
+      notify.errorMsg = null;
 
-      const gdprInput = this.element.querySelector('[data-test-gdpr-input]');
-      const gdprInitialValue = gdprInput.checked;
-      await click(gdprInput);
-      assert.equal(gdprInput.checked, gdprInitialValue);
+      await click(`#${hipaaContainer.id} [data-test-ak-form-label]`);
+
+      // no change to state
+      assert
+        .dom('[data-test-preference-checkbox]', hipaaContainer)
+        [pref.show_hipaa ? 'isChecked' : 'isNotChecked']();
+
+      assert.strictEqual(
+        notify.errorMsg,
+        errorObj.report_preference.non_field_errors[0]
+      );
+
+      notify.errorMsg = null;
+
+      await click(`#${gdprContainer.id} [data-test-ak-form-label]`);
+
+      // no change to state
+      assert
+        .dom('[data-test-preference-checkbox]', gdprContainer)
+        [pref.show_gdpr ? 'isChecked' : 'isNotChecked']();
+
+      assert.strictEqual(
+        notify.errorMsg,
+        errorObj.report_preference.non_field_errors[0]
+      );
     });
   }
 );

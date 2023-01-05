@@ -202,6 +202,25 @@ body {
   --ak-drawer-background: var(--background-main);
   --ak-drawer-color-text-primary: var(--text-primary);
   --ak-drawer-zIndex: var(--zIndex-drawer);
+
+  // variables for ak-radio
+  --ak-radio-hover-background: var(--hover-light-background);
+  --ak-radio-color-text-disabled: var(--text-disabled);
+  --ak-radio-color-success-main: var(--success-main);
+
+  // variables for ak-date-picker
+  --ak-date-picker-border-color: var(--border-color-1);
+  --ak-date-picker-border-radius: var(--border-radius);
+  --ak-date-picker-box-shadow: var(--box-shadow-2);
+  --ak-date-picker-header-btn-hover-background: var(--hover-light-background);
+  --ak-date-picker-color-text-primary: var(--text-primary);
+  --ak-date-picker-color-text-secondary: var(--text-secondary);
+  --ak-date-picker-color-primary: var(--primary-main);
+  --ak-date-picker-color-primary-contrast-text: var(--primary-contrast-text);
+  --ak-date-picker-weekday-color: var(--neutral-grey-900);
+  --ak-date-picker-font-family: var(--font-family);
+  --ak-date-picker-font-weight-regular: var(--font-weight-regular);
+  --ak-date-picker-font-weight-medium: var(--font-weight-medium);
 }
 
 body {
@@ -288,4 +307,51 @@ body {
   // variables for organization-team/project-list/project-info
   --organization-team-project-list-info-color-ios: var(--ios);
   --organization-team-project-list-info-color-android: var(--android);
+
+  // variables for organization-mfa
+  --organization-mfa-border-radius: var(--border-radius);
+  --organization-mfa-alert-error-border-color: var(--error-main);
+  --organization-mfa-alert-error-background: var(--error-light);
+  --organization-mfa-alert-warn-border-color: var(--warn-dark);
+  --organization-mfa-alert-warn-text-color: var(--warn-dark);
+  --organization-mfa-alert-warn-background: var(--warn-light);
+
+  // variables for sso-settings
+  --sso-settings-border-color: var(--border-color-1);
+  --sso-settings-border-radius: var(--border-radius);
+  --sso-settings-dropzone-active-shadow-color: var(--neutral-grey-200);
+  --sso-settings-file-upload-btn-color: var(--primary-main);
+
+  // variables for organization-archive
+  --organization-archive-border-color: var(--border-color-1);
+  --organization-archive-border-radius: var(--border-radius);
+
+  // variables for organization-archive/list
+  --organization-archive-list-expired-background: var(--neutral-grey-50);
+
+  // variables for jira-account
+  --jira-account-border-radius: var(--border-radius);
+  --jira-account-border-color: var(--border-color-1);
+
+  // variables for github-account
+  --github-account-border-radius: var(--border-radius);
+  --github-account-border-color: var(--border-color-1);
+
+  // variables for organization-name-header
+  --organization-name-header-border-color: var(--neutral-grey-100);
+  --organization-name-header-border-radius: var(--border-radius);
+  --organization-name-color-primary-light: var(--primary-light);
+  --organization-name-color-text-disabled: var(--text-disabled);
+  --organization-name-add-btn-disabled-background: var(--neutral-white-100);
+
+  // variables for organization-details
+  --organization-details-color-primary: var(--primary-main);
+  --organization-details-color-primary-light: var(--primary-light);
+  --organization-details-color-text-primary: var(--text-primary);
+  --organization-details-color-text-secondary: var(--text-secondary);
+  --organization-details-border-color: var(--border-color-1);
+  --organization-details-border-radius: var(--border-radius);
+  --organization-details-neutral-background: var(--neutral-grey-200);
+  --organization-details-font-weight-regular: var(--font-weight-regular);
+  --organization-details-font-weight-bold: var(--font-weight-bold);
 }

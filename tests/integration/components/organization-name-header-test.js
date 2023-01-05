@@ -1,9 +1,10 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { render, click, fillIn } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
+import { Response } from 'miragejs';
 
 import Service from '@ember/service';
 
@@ -12,6 +13,18 @@ class OrganizationMeStub extends Service {
     is_owner: true,
     is_admin: true,
   };
+}
+
+class NotificationsStub extends Service {
+  errorMsg = null;
+  successMsg = null;
+
+  error(msg) {
+    this.errorMsg = msg;
+  }
+  success(msg) {
+    this.successMsg = msg;
+  }
 }
 
 module('Integration | Component | organization-name-header', function (hooks) {
@@ -24,6 +37,7 @@ module('Integration | Component | organization-name-header', function (hooks) {
     await this.owner.lookup('service:organization').load();
 
     this.owner.register('service:me', OrganizationMeStub);
+    this.owner.register('service:notifications', NotificationsStub);
   });
 
   test('it renders organization name header', async function (assert) {
@@ -31,144 +45,55 @@ module('Integration | Component | organization-name-header', function (hooks) {
 
     this.setProperties({
       organization,
-      showActionBtn: true,
-      actionBtnIconName: 'pencil',
-      actionBtnLabel: 'Edit Name',
-      actionBtnClick() {},
-      showAddOrgNameBtn: false,
-      onAddBtnClick() {},
     });
 
     await render(
-      hbs`<OrganizationNameHeader
-        @organization={{this.organization.selected}}
-        @showActionBtn={{this.showActionBtn}}
-        @actionBtnIconName={{this.actionBtnIconName}}
-        @actionBtnLabel={{this.actionBtnLabel}}
-        @actionBtnClick={{this.actionBtnClick}}
-        @showAddOrgNameBtn={{this.showAddOrgNameBtn}}
-        @onAddBtnClick={{this.onAddBtnClick}} />`
+      hbs`
+        <OrganizationNameHeader @organization={{this.organization.selected}}>
+          <:actionBtn>
+            <button data-test-org-name-action-btn type="button">action</button>
+          </:actionBtn>
+        </OrganizationNameHeader>
+      `
     );
 
+    assert.dom('[data-test-org-name-label]').hasText('t:organizationName:()');
     assert.dom('[data-test-org-name]').hasText(this.organization.selected.name);
 
-    assert
-      .dom('[data-test-org-name-action-btn]')
-      .exists()
-      .hasText(this.actionBtnLabel);
-  });
-
-  test('it renders organization name header with no action button', async function (assert) {
-    const organization = this.owner.lookup('service:organization');
-
-    this.setProperties({
-      organization,
-      showActionBtn: false,
-      actionBtnIconName: 'pencil',
-      actionBtnLabel: 'Edit Name',
-      actionBtnClick() {},
-      showAddOrgNameBtn: false,
-      onAddBtnClick() {},
-    });
-
-    await render(
-      hbs`<OrganizationNameHeader
-        @organization={{this.organization.selected}}
-        @showActionBtn={{this.showActionBtn}}
-        @actionBtnIconName={{this.actionBtnIconName}}
-        @actionBtnLabel={{this.actionBtnLabel}}
-        @actionBtnClick={{this.actionBtnClick}}
-        @showAddOrgNameBtn={{this.showAddOrgNameBtn}}
-        @onAddBtnClick={{this.onAddBtnClick}} />`
-    );
-
-    assert.dom('[data-test-org-name]').hasText(this.organization.selected.name);
-    assert.dom('[data-test-org-name-action-btn]').doesNotExist();
-  });
-
-  test('it renders organization name header with action button & add button', async function (assert) {
-    const organization = this.owner.lookup('service:organization');
-
-    this.setProperties({
-      organization,
-      showActionBtn: true,
-      actionBtnIconName: 'cog',
-      actionBtnLabel: 'Organization Settings',
-      actionBtnClick() {},
-      showAddOrgNameBtn: true,
-      onAddBtnClick() {},
-    });
-
-    await render(
-      hbs`<OrganizationNameHeader
-        @organization={{this.organization.selected}}
-        @showActionBtn={{this.showActionBtn}}
-        @actionBtnIconName={{this.actionBtnIconName}}
-        @actionBtnLabel={{this.actionBtnLabel}}
-        @actionBtnClick={{this.actionBtnClick}}
-        @showAddOrgNameBtn={{this.showAddOrgNameBtn}}
-        @onAddBtnClick={{this.onAddBtnClick}} />`
-    );
-
-    assert.dom('[data-test-org-name]').doesNotExist();
-
-    assert
-      .dom('[data-test-org-name-action-btn]')
-      .exists()
-      .hasText(this.actionBtnLabel);
-
-    assert
-      .dom('[data-test-org-name-add-btn]')
-      .exists()
-      .hasText('Add Organization Name')
-      .isNotDisabled();
+    assert.dom('[data-test-org-name-action-btn]').exists().isNotDisabled();
   });
 
   test('it renders organization name header with add button and no action button', async function (assert) {
     const organization = this.owner.lookup('service:organization');
 
+    organization.selected.set('name', '');
+
     this.setProperties({
       organization,
-      showActionBtn: false,
-      actionBtnIconName: 'pencil',
-      actionBtnLabel: 'Edit Name',
-      actionBtnClick() {},
-      showAddOrgNameBtn: true,
-      onAddBtnClick() {},
     });
 
     await render(
-      hbs`<OrganizationNameHeader
-        @organization={{this.organization.selected}}
-        @showActionBtn={{this.showActionBtn}}
-        @actionBtnIconName={{this.actionBtnIconName}}
-        @actionBtnLabel={{this.actionBtnLabel}}
-        @actionBtnClick={{this.actionBtnClick}}
-        @showAddOrgNameBtn={{this.showAddOrgNameBtn}}
-        @onAddBtnClick={{this.onAddBtnClick}} />`
+      hbs`<OrganizationNameHeader @organization={{this.organization.selected}} />`
     );
 
+    assert.dom('[data-test-org-name-label]').doesNotExist();
     assert.dom('[data-test-org-name]').doesNotExist();
     assert.dom('[data-test-org-name-action-btn]').doesNotExist();
 
     assert
       .dom('[data-test-org-name-add-btn]')
       .exists()
-      .hasText('Add Organization Name')
+      .hasText('t:addOrgName:()')
       .isNotDisabled();
   });
 
   test('it renders organization name header with add button disabled', async function (assert) {
     const organization = this.owner.lookup('service:organization');
 
+    organization.selected.set('name', '');
+
     this.setProperties({
       organization,
-      showActionBtn: false,
-      actionBtnIconName: 'pencil',
-      actionBtnLabel: 'Edit Name',
-      actionBtnClick() {},
-      showAddOrgNameBtn: true,
-      onAddBtnClick() {},
     });
 
     const me = this.owner.lookup('service:me');
@@ -176,22 +101,195 @@ module('Integration | Component | organization-name-header', function (hooks) {
     me.org.is_owner = false;
 
     await render(
-      hbs`<OrganizationNameHeader
-        @organization={{this.organization.selected}}
-        @showActionBtn={{this.showActionBtn}}
-        @actionBtnIconName={{this.actionBtnIconName}}
-        @actionBtnLabel={{this.actionBtnLabel}}
-        @actionBtnClick={{this.actionBtnClick}}
-        @showAddOrgNameBtn={{this.showAddOrgNameBtn}}
-        @onAddBtnClick={{this.onAddBtnClick}} />`
+      hbs`
+        <OrganizationNameHeader @organization={{this.organization.selected}}>
+          <:actionBtn>
+            <button data-test-org-name-action-btn type="button">action</button>
+          </:actionBtn>
+        </OrganizationNameHeader>
+      `
     );
 
+    assert.dom('[data-test-org-name-label]').doesNotExist();
     assert.dom('[data-test-org-name]').doesNotExist();
 
     assert
       .dom('[data-test-org-name-add-btn]')
       .exists()
-      .hasText('Add Organization Name')
-      .hasClass(/add-button-disabled/i);
+      .hasText('t:addOrgName:()')
+      .isDisabled();
   });
+
+  test.each(
+    'it should edit organization name',
+    [{ fail: false }, { fail: true }],
+    async function (assert, { fail }) {
+      this.server.put('/organizations/:id', () => {
+        return fail ? new Response(500) : {};
+      });
+
+      const organization = this.owner.lookup('service:organization');
+
+      this.setProperties({
+        organization,
+      });
+
+      await render(
+        hbs`
+        <OrganizationNameHeader @organization={{this.organization.selected}}>
+          <:actionBtn as |ab|>
+            <button data-test-org-name-action-btn type="button" {{on 'click' ab.openEditOrgNameModal}}>action</button>
+          </:actionBtn>
+        </OrganizationNameHeader>
+      `
+      );
+
+      assert
+        .dom('[data-test-org-name]')
+        .hasText(this.organization.selected.name);
+
+      assert.dom('[data-test-org-name-action-btn]').exists().isNotDisabled();
+
+      await click('[data-test-org-name-action-btn]');
+
+      assert.dom('[data-test-ak-modal-header]').hasText('t:editName:()');
+
+      assert
+        .dom('[data-test-form-label]')
+        .hasText('t:organizationNameEditLabel:()');
+
+      assert
+        .dom('[data-test-org-name-edit-input]')
+        .exists()
+        .hasValue(this.organization.selected.name);
+
+      assert.dom('[data-test-org-name-edit-save-btn]').exists();
+
+      const updatedOrgName = `${this.organization.selected.name} updated`;
+      const existingName = this.organization.selected.name;
+
+      await fillIn('[data-test-org-name-edit-input]', updatedOrgName);
+
+      await click('[data-test-org-name-edit-save-btn]');
+
+      const notify = this.owner.lookup('service:notifications');
+
+      if (fail) {
+        assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+        assert.strictEqual(this.organization.selected.name, existingName);
+        assert.dom('[data-test-ak-modal-header]').hasText('t:editName:()');
+        assert.dom('[data-test-org-name-edit-input]').hasValue(updatedOrgName);
+
+        assert.dom('[data-test-org-name-edit-save-btn]').exists();
+
+        assert
+          .dom('[data-test-form-label]')
+          .hasText('t:organizationNameEditLabel:()');
+      } else {
+        assert.strictEqual(this.organization.selected.name, updatedOrgName);
+
+        assert.dom('[data-test-ak-modal-header]').hasText('t:message:()');
+
+        assert
+          .dom('[data-test-org-name-success-message]')
+          .exists()
+          .hasText('t:organizationNameAddedOrUpdated:("type":"edit")');
+
+        assert
+          .dom('[data-test-org-name-success-okBtn]')
+          .isNotDisabled()
+          .hasText('t:ok:()');
+
+        await click('[data-test-org-name-success-okBtn]');
+
+        assert.dom('[data-test-ak-modal-header]').doesNotExist();
+        assert.dom('[data-test-form-label]').doesNotExist();
+        assert.dom('[data-test-org-name-edit-input]').doesNotExist();
+        assert.dom('[data-test-org-name-edit-save-btn]').doesNotExist();
+      }
+    }
+  );
+
+  test.each(
+    'it should add organization name',
+    [{ fail: false }, { fail: true }],
+    async function (assert, { fail }) {
+      this.server.put('/organizations/:id', () => {
+        return fail ? new Response(500) : {};
+      });
+
+      const organization = this.owner.lookup('service:organization');
+
+      organization.selected.set('name', '');
+
+      this.setProperties({
+        organization,
+      });
+
+      await render(
+        hbs`<OrganizationNameHeader @organization={{this.organization.selected}} />`
+      );
+
+      assert.dom('[data-test-org-name]').doesNotExist();
+
+      assert
+        .dom('[data-test-org-name-add-btn]')
+        .exists()
+        .hasText('t:addOrgName:()')
+        .isNotDisabled();
+
+      await click('[data-test-org-name-add-btn]');
+
+      assert.dom('[data-test-ak-modal-header]').hasText('t:addName:()');
+
+      assert
+        .dom('[data-test-form-label]')
+        .hasText('t:organizationNameAddLabel:()');
+
+      assert.dom('[data-test-org-name-edit-input]').exists().hasNoValue();
+
+      assert.dom('[data-test-org-name-edit-save-btn]').exists();
+
+      const newOrgName = 'appknox';
+
+      await fillIn('[data-test-org-name-edit-input]', newOrgName);
+
+      await click('[data-test-org-name-edit-save-btn]');
+
+      const notify = this.owner.lookup('service:notifications');
+
+      if (fail) {
+        assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
+        assert.strictEqual(this.organization.selected.name, '');
+        assert.dom('[data-test-ak-modal-header]').hasText('t:addName:()');
+        assert.dom('[data-test-org-name-edit-input]').hasValue(newOrgName);
+        assert.dom('[data-test-org-name-edit-save-btn]').exists();
+
+        assert
+          .dom('[data-test-form-label]')
+          .hasText('t:organizationNameAddLabel:()');
+      } else {
+        assert.strictEqual(this.organization.selected.name, newOrgName);
+
+        assert.dom('[data-test-ak-modal-header]').hasText('t:message:()');
+
+        assert
+          .dom('[data-test-org-name-success-message]')
+          .exists()
+          .hasText('t:organizationNameAddedOrUpdated:("type":"add")');
+
+        assert
+          .dom('[data-test-org-name-success-okBtn]')
+          .isNotDisabled()
+          .hasText('t:ok:()');
+
+        await click('[data-test-org-name-success-okBtn]');
+
+        assert.dom('[data-test-ak-modal-header]').doesNotExist();
+        assert.dom('[data-test-form-label]').doesNotExist();
+        assert.dom('[data-test-org-name-edit-input]').doesNotExist();
+        assert.dom('[data-test-org-name-edit-save-btn]').doesNotExist();
+      }
+    }
+  );
 });

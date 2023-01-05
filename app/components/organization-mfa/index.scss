@@ -1,4 +1,27 @@
-.org-setting-desc {
-  font-size: 0.93em;
-  padding-top: 0.15em;
+.org-setting-mfa {
+  max-width: 600px;
+}
+
+.alert-error,
+.alert-warn {
+  display: flex;
+  align-items: center;
+  padding: 1em;
+  border-radius: var(--organization-mfa-border-radius);
+  box-sizing: border-box;
+}
+
+.alert-error {
+  border: 1px solid var(--organization-mfa-alert-error-border-color);
+  background-color: var(--organization-mfa-alert-error-background);
+}
+
+.alert-warn {
+  border: 1px solid var(--organization-mfa-alert-warn-border-color);
+  background-color: var(--organization-mfa-alert-warn-background);
+  color: var(--organization-mfa-alert-warn-text-color);
+
+  .alert-warn-link {
+    color: var(--organization-mfa-alert-warn-text-color) !important;
+  }
 }

@@ -6,7 +6,7 @@
 .tabs-container {
   display: flex;
   margin: 0 1em;
-  border-bottom: 1px solid var(--neutral-white-100);
+  border-bottom: 1px solid var(--organization-details-border-color);
   box-sizing: border-box;
 
   .tabs-root {
@@ -18,21 +18,22 @@
       align-items: center;
       justify-content: center;
       padding: 1em 1.5em;
-      color: var(--text-secondary-color);
-      font-weight: 700;
+      color: var(--organization-details-color-text-secondary);
+      font-weight: var(--organization-details-font-weight-bold);
 
       .tab-icon {
         margin-right: 0.5em;
         font-size: 18px;
-        color: var(--text-secondary-color);
+        color: var(--organization-details-color-text-secondary);
       }
 
       .badge {
         font-size: 12px;
-        padding: 2px 5px;
-        border-radius: 2px;
+        font-weight: var(--organization-details-font-weight-regular);
+        padding: 0.143em 0.357em;
+        border-radius: var(--organization-details-border-radius);
 
-        background-color: #e9e9e9;
+        background-color: var(--organization-details-neutral-background);
         min-width: 24px;
         display: flex;
         align-items: center;
@@ -40,15 +41,15 @@
       }
 
       &.active {
-        color: var(--text-primary-color);
+        color: var(--organization-details-color-text-primary);
         position: relative;
 
         .badge {
-          background: rgba(254, 77, 63, 0.2);
+          background: var(--organization-details-color-primary-light);
         }
 
         .tab-icon {
-          color: var(--text-primary-color);
+          color: var(--organization-details-color-text-primary);
         }
 
         &::after {
@@ -59,7 +60,7 @@
           position: absolute;
           bottom: 0;
           border-radius: 3px 3px 0px 0px;
-          background-color: var(--primary);
+          background-color: var(--organization-details-color-primary);
         }
       }
     }

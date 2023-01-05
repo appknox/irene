@@ -1,0 +1,24 @@
+.organization-archive-header-container {
+  max-width: 600px;
+}
+
+.date-picker-btn {
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid var(--organization-archive-border-color);
+  border-radius: var(--organization-archive-border-radius);
+
+  .date-picker-dateText {
+    padding: 0.5em 1em;
+    border-left: 1px solid var(--organization-archive-border-color);
+    border-right: 1px solid var(--organization-archive-border-color);
+  }
+
+  .date-picker-icon {
+    margin: 0 0.6em;
+  }
+
+  .date-picker-clearBtn {
+    min-width: 60px;
+  }
+}

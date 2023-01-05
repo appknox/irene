@@ -13,13 +13,13 @@
   vertical-align: middle;
   appearance: none;
   text-decoration: none;
-  padding: 0.8em;
+  padding: 0.4em;
   border-radius: 50%;
 
   &.ak-radio-hover-focus {
     &:hover,
     &:focus {
-      background-color: var(--hover-light-background);
+      background-color: var(--ak-radio-hover-background);
     }
   }
 }
@@ -37,7 +37,7 @@
   z-index: 1;
 
   &:disabled + .ak-svg-radio-icon {
-    color: var(--text-disabled) !important;
+    color: var(--ak-radio-color-text-disabled) !important;
   }
 }
 
@@ -51,6 +51,6 @@
   font-size: 1.5rem !important;
 
   &.ak-svg-radio-icon-checked {
-    color: var(--success-main);
+    color: var(--ak-radio-color-success-main);
   }
 }

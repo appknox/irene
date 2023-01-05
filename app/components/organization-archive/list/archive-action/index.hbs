@@ -1,0 +1,14 @@
+{{#if @archive.isAvailable}}
+  {{#if this.downloadArchive.isRunning}}
+    <AkLoader @size={{16}} />
+  {{else}}
+    <AkIconButton
+      data-test-archiveAction-btn
+      @variant='outlined'
+      @size='small'
+      {{on 'click' (perform this.downloadArchive)}}
+    >
+      <span class='ak-icon ak-icon-download'></span>
+    </AkIconButton>
+  {{/if}}
+{{/if}}
