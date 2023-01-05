@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, click } from '@ember/test-helpers';
+import { render, click, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
@@ -49,7 +49,10 @@ module('Integration | Component | organization-mfa', function (hooks) {
     assert.dom('[data-test-toggle-input]').exists().isDisabled().isNotChecked();
 
     assert
-      .dom('[data-test-enable-mandatory-mfa-label]')
+      .dom(
+        '[data-test-ak-form-label]',
+        find('[data-test-enable-mandatory-mfa-label]')
+      )
       .hasText('t:enableMandatoryMFATitle:()');
 
     assert

@@ -1,0 +1,102 @@
+<AkTypography data-test-jiraAccount-title @variant='h5' @gutterBottom={{true}}>
+  {{t 'jiraIntegration'}}
+</AkTypography>
+
+{{#if this.isJIRAConnected}}
+  <div local-class='bordered-box'>
+    <div local-class='integration-logo-container'>
+      <img
+        data-test-jiraAccount-logo
+        src='/images/jira-icon.png'
+        alt='jira-icon'
+      />
+    </div>
+
+    <div local-class='integration-account-container'>
+      <div class='mr-2'>
+        <AkTypography data-test-jiraAccount-host @color='textSecondary'>
+          {{this.connectedHost}}
+        </AkTypography>
+
+        <AkTypography data-test-jiraAccount-username>
+          {{this.connectedUsername}}
+        </AkTypography>
+      </div>
+
+      <AkButton
+        data-test-jiraAccount-disconnectBtn
+        @variant='outlined'
+        {{on 'click' this.openRevokeJIRAConfirmBox}}
+      >
+        {{t 'disconnect'}}
+      </AkButton>
+    </div>
+  </div>
+
+  <ConfirmBox
+    @isActive={{this.showRevokeJIRAConfirmBox}}
+    @description={{t 'confirmBox.revokeJira'}}
+    @delegate={{this}}
+    @disabled={{this.isRevokingJIRA}}
+    @confirmText={{t 'disconnect'}}
+    @confirmAction={{perform this.revokeJIRA}}
+  />
+{{else}}
+  {{#if this.checkJIRA.isRunning}}
+    <AkStack
+      @alignItems='center'
+      @justifyContent='center'
+      class='p-4'
+      local-class='bordered-box'
+    >
+      <AkStack @spacing='1.5' @alignItems='center'>
+        <AkLoader @size={{16}} />
+        <AkTypography @tag='span'>{{t 'loading'}}...</AkTypography>
+      </AkStack>
+    </AkStack>
+  {{else}}
+    <AkTypography
+      data-test-jiraAccount-desc
+      @variant='body2'
+      @color='textSecondary'
+    >
+      {{t 'jiraIntegrationDesc'}}
+    </AkTypography>
+
+    <form class='mt-2'>
+      <AkStack @spacing='2'>
+        <AkTextField
+          data-test-jiraAccount-hostInput
+          @placeholder={{t 'jiraHost'}}
+          @value={{this.changeset.host}}
+          @error={{this.changeset.error.host}}
+        />
+
+        <AkTextField
+          data-test-jiraAccount-usernameInput
+          @placeholder={{t 'username'}}
+          @value={{this.changeset.username}}
+          @error={{this.changeset.error.username}}
+        />
+
+        <AkTextField
+          data-test-jiraAccount-apiKeyInput
+          @placeholder={{t 'apiKey'}}
+          @type='password'
+          @value={{this.changeset.password}}
+          @error={{this.changeset.error.password}}
+          autocomplete='jira-password'
+        />
+      </AkStack>
+
+      <AkButton
+        data-test-jiraAccount-integrateBtn
+        class='mt-2'
+        @loading={{this.integrateJIRA.isRunning}}
+        {{on 'click' (perform this.integrateJIRA this.changeset)}}
+      >
+        {{t 'integrateJIRA'}}
+      </AkButton>
+    </form>
+  {{/if}}
+{{/if}}

@@ -1,0 +1,21 @@
+{{#if @archive.isAvailable}}
+  <AkTypography @align='center'>
+    {{t 'expires'}}
+    {{dayjs-from-now @archive.availableUntil}}
+  </AkTypography>
+{{/if}}
+
+{{#if @archive.isExpired}}
+  <AkTypography @align='center'>
+    {{t 'expired'}}
+  </AkTypography>
+{{/if}}
+
+{{#if @archive.isInProgress}}
+  <AkStack @justifyContent='center' @alignItems='center' @spacing='1.5'>
+    <AkLoader @size={{14}} />
+    <AkTypography>
+      {{@archive.progressPercent}}%
+    </AkTypography>
+  </AkStack>
+{{/if}}

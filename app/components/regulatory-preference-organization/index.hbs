@@ -1,72 +1,59 @@
 {{#if this.orgPreference.reportPreference}}
-  <div data-test-preferences>
-    <div class='org-settings-subtitle' data-test-preferences-title>
+  <div local-class='preferences-container' data-test-preferences>
+    <AkTypography
+      @gutterBottom={{true}}
+      @variant='h5'
+      data-test-preferences-title
+    >
       {{t 'regulatoryPreferences'}}
-    </div>
-    <div local-class='subtitle' data-test-preferences-subtitle>
-      {{t 'regulatoryPreferencesChooseForAll'}}
-    </div>
-    <div local-class='description' data-test-preferences-desc>
-      {{t 'regulatoryPreferencesWarning'}}
-    </div>
+    </AkTypography>
 
-    <div local-class='preferences' data-test-preferences-options>
-      <div data-test-preference-pcidss>
-        <label local-class='preference'>
-          <Input
-            local-class='checkbox'
-            @type='checkbox'
-            @checked={{this.orgPreference.reportPreference.show_pcidss}}
-            onclick={{perform this.savePcidss}}
-            data-test-pcidss-input
-          />
-          <abbr
-            title={{t 'pcidssExpansion'}}
-            local-class='label'
-            data-test-pcidss-label
-          >PCI-DSS</abbr>
-          <TaskSpin
-            @task={{this.savePcidss}}
-            data-test-pcidss-progress-spinner
-          />
-        </label>
-      </div>
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography @variant='h6' data-test-preferences-subtitle>
+        {{t 'regulatoryPreferencesChooseForAll'}}
+      </AkTypography>
 
-      <div data-test-preference-hipaa>
-        <label local-class='preference'>
-          <Input
-            local-class='checkbox'
-            @type='checkbox'
-            @checked={{this.orgPreference.reportPreference.show_hipaa}}
-            onclick={{perform this.saveHipaa}}
-            data-test-hipaa-input
-          />
-          <abbr
-            title={{t 'hipaaExpansion'}}
-            local-class='label'
-            data-test-hipaa-label
-          >HIPAA</abbr>
-          <TaskSpin @task={{this.saveHipaa}} data-test-hipaa-progress-spinner />
-        </label>
-      </div>
+      <AkTypography
+        @variant='body2'
+        @color='textSecondary'
+        data-test-preferences-desc
+      >
+        {{t 'regulatoryPreferencesWarning'}}
+      </AkTypography>
+    </AkStack>
 
-      <div data-test-preference-gdpr>
-        <label local-class='preference'>
-          <Input
-            local-class='checkbox'
-            @type='checkbox'
-            @checked={{this.orgPreference.reportPreference.show_gdpr}}
-            onclick={{perform this.saveGdpr}}
-            data-test-gdpr-input
-          />
-          <abbr
-            title={{t 'gdprExpansion'}}
-            local-class='label'
-            data-test-gdpr-label
-          >GDPR</abbr>
-          <TaskSpin @task={{this.saveGdpr}} data-test-gdpr-progress-spinner />
-        </label>
-      </div>
+    <div class='mt-2'>
+      {{#each this.regulatoryPreferences as |pref|}}
+        <AkStack
+          @alignItems='center'
+          @spacing='1'
+          data-test-preference='{{pref.label}}'
+        >
+          <AkTooltip
+            @disabled={{pref.task.isRunning}}
+            @title={{pref.title}}
+            @arrow={{true}}
+            @placement='right'
+          >
+            <AkFormControlLabel
+              @disabled={{pref.task.isRunning}}
+              @label={{pref.label}}
+              as |fcl|
+            >
+              <AkCheckbox
+                data-test-preference-checkbox
+                @disabled={{fcl.disabled}}
+                @checked={{pref.checked}}
+                @onChange={{perform pref.task}}
+              />
+            </AkFormControlLabel>
+          </AkTooltip>
+
+          {{#if pref.task.isRunning}}
+            <AkLoader @size={{14}} data-test-progress-spinner />
+          {{/if}}
+        </AkStack>
+      {{/each}}
     </div>
   </div>
 {{/if}}

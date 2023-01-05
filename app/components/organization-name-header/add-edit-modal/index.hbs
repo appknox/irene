@@ -1,0 +1,47 @@
+<AkModal
+  @showHeader={{true}}
+  @headerTitle={{this.modalHeaderTitle}}
+  @onClose={{@handleCancel}}
+>
+  {{#if this.showSuccessMessage}}
+    <AkStack @direction='column' @alignItems='center' @spacing='2' class='p-2'>
+      <AkSvg::OrgNameAddEditSuccess />
+
+      <AkTypography data-test-org-name-success-message>
+        {{t 'organizationNameAddedOrUpdated' type=this.actionType}}
+      </AkTypography>
+
+      <AkButton data-test-org-name-success-okBtn {{on 'click' @handleCancel}}>
+        {{t 'ok'}}
+      </AkButton>
+    </AkStack>
+  {{else}}
+    <AkTextField
+      data-test-org-name-edit-input
+      @placeholder={{this.inputPlaceholder}}
+      @label={{this.inputLabel}}
+      @labelTypographyColor='textPrimary'
+      @labelTypographyVariant='h6'
+      @value={{this.newOrUpdatedOrgName}}
+    />
+
+    <AkStack class='mt-2' @justifyContent='flex-end' @spacing='1.5'>
+      <AkButton
+        @variant='outlined'
+        @color='neutral'
+        @disabled={{this.updateOrgName.isRunning}}
+        {{on 'click' @handleCancel}}
+      >
+        {{t 'cancel'}}
+      </AkButton>
+
+      <AkButton
+        @loading={{this.updateOrgName.isRunning}}
+        {{on 'click' (perform this.updateOrgName)}}
+        data-test-org-name-edit-save-btn
+      >
+        {{t 'save'}}
+      </AkButton>
+    </AkStack>
+  {{/if}}
+</AkModal>

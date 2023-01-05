@@ -1,0 +1,107 @@
+{{! template-lint-disable no-curly-component-invocation }}
+<div local-class='organization-archive-header-container'>
+  <AkTypography data-test-orgArchive-title @variant='h5' @gutterBottom={{true}}>
+    {{t 'organizationArchive'}}
+  </AkTypography>
+
+  <AkTypography
+    data-test-orgArchive-subtitle
+    @variant='body2'
+    @color='textSecondary'
+  >
+    {{t 'organizationArchiveDescription'}}
+  </AkTypography>
+
+  <div class='my-3'>
+    <AkTypography data-test-orgArchive-dateTitle @variant='subtitle1'>
+      {{t 'organizationArchiveSelectDateTitle'}}
+    </AkTypography>
+
+    <AkTypography
+      data-test-orgArchive-dateSubtitle
+      @variant='body2'
+      @color='textSecondary'
+    >
+      {{t 'organizationArchiveSelectDateDesc'}}
+    </AkTypography>
+
+    <AkStack class='mt-2' @alignItems='center' @spacing='1.5'>
+      <AkDatePicker
+        @renderInPlace={{true}}
+        @maxDate={{this.maxDate}}
+        @range={{true}}
+        @options={{this.datepickerOptions}}
+        @onChange={{this.setDuration}}
+        as |selectedDates|
+      >
+        <AkStack
+          data-test-date-picker-toggle-button
+          local-class='date-picker-btn'
+          @alignItems='center'
+        >
+          <AkIcon
+            @iconName='event'
+            @size='small'
+            @color='textPrimary'
+            title='Select date range'
+            local-class='date-picker-icon'
+          />
+
+          <div
+            data-test-orgArchive-dateRangeLabel
+            local-class='date-picker-dateText'
+          >
+            {{#if (and selectedDates.firstObject this.startDate)}}
+              <AkTypography @tag='span' @color='textPrimary'>
+                {{day-js date=this.startDate format='DD MMM YYYY'}}
+              </AkTypography>
+            {{else}}
+              <AkTypography @tag='span' @color='textSecondary'>
+                {{t 'fromDate'}}
+              </AkTypography>
+            {{/if}}
+
+            <AkTypography @tag='span' @color='textSecondary'>
+              -
+            </AkTypography>
+
+            {{#if (and selectedDates.lastObject this.endDate)}}
+              <AkTypography @tag='span' @color='textPrimary'>
+                {{day-js date=this.endDate format='DD MMM YYYY'}}
+              </AkTypography>
+            {{else}}
+              <AkTypography @tag='span' @color='textSecondary'>
+                {{t 'toDate'}}
+              </AkTypography>
+            {{/if}}
+          </div>
+
+          <AkButton
+            data-test-orgArchive-dateClearBtn
+            local-class='date-picker-clearBtn'
+            @variant='text'
+            @color='primary'
+            @underline='always'
+            {{on 'click' this.clearSelectedDatePickerDates}}
+          >
+            Clear
+          </AkButton>
+        </AkStack>
+      </AkDatePicker>
+
+      <AkButton
+        data-test-orgArchive-exportBtn
+        {{on 'click' (perform this.tiggerGenerateArchive)}}
+        @loading={{this.tiggerGenerateArchive.isRunning}}
+      >
+        {{#if this.tiggerGenerateArchive.isRunning}}
+          {{t 'processing'}}
+        {{else}}
+          {{t 'organizationArchiveExport'}}
+        {{/if}}
+      </AkButton>
+    </AkStack>
+  </div>
+</div>
+
+<OrganizationArchive::List />

@@ -1,61 +1,62 @@
 <div local-class='header-container'>
-  {{#if @showAddOrgNameBtn}}
-
-    <AkButton
-      @variant='outlined'
-      data-test-org-name-add-btn
-      local-class='
-        add-button {{if this.isAddBtnDisabled "add-button-disabled"}}'
-      {{on 'click' (if this.isAddBtnDisabled this.voidFunction @onAddBtnClick)}}
+  {{#if this.orgNameDoesNotExist}}
+    <AkTooltip
+      @arrow={{true}}
+      @color='light'
+      @disabled={{not this.isAddBtnDisabled}}
+      @placement='bottom-start'
     >
-      <:leftIcon>
-        {{fa-icon 'plus'}}
-      </:leftIcon>
-
       <:default>
-        Add Organization Name
+        <AkButton
+          data-test-org-name-add-btn
+          @variant='outlined'
+          @disabled={{this.isAddBtnDisabled}}
+          local-class='add-button'
+          {{on 'click' this.handleAddOrgNameClick}}
+        >
+          <:leftIcon>
+            <AkIcon @iconName='add' />
+          </:leftIcon>
 
-        {{#if this.isAddBtnDisabled}}
-          <AttachPopover
-            @interactive={{true}}
-            @arrow={{true}}
-            @placement='bottom-end'
-            @isShow={{false}}
-            @lazyRender={{true}}
-            @animation='shift'
-            @class='not-permitted-popover'
-          >
-            <span data-test-org-name-add-not-permitted-msg>
-              {{t
-                'organizationNameAddNotPermitted'
-                type=this.userType
-                htmlSafe=true
-              }}
-            </span>
-          </AttachPopover>
-        {{/if}}
+          <:default>
+            <span local-class='add-button-text'>{{t 'addOrgName'}}</span>
+          </:default>
+        </AkButton>
       </:default>
-    </AkButton>
+
+      <:tooltipContent>
+        <div local-class='tooltip-content-container'>
+          <AkTypography @tag='span' data-test-org-name-add-not-permitted-msg>
+            {{t
+              'organizationNameAddNotPermitted'
+              type=this.userType
+              htmlSafe=true
+            }}
+          </AkTypography>
+        </div>
+      </:tooltipContent>
+    </AkTooltip>
   {{else}}
-    <div local-class='header-group'>
-      <span local-class='label'>Organization Name</span>
-      <span data-test-org-name local-class='value'>{{@organization.name}}</span>
-    </div>
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography data-test-org-name-label @tag='span' @color='textSecondary'>
+        {{t 'organizationName'}}
+      </AkTypography>
+
+      <AkTypography data-test-org-name @variant='subtitle1'>
+        {{@organization.name}}
+      </AkTypography>
+    </AkStack>
   {{/if}}
 
-  {{#if @showActionBtn}}
-    <AkButton
-      @variant='outlined'
-      data-test-org-name-action-btn
-      {{on 'click' @actionBtnClick}}
-    >
-      <:leftIcon>
-        {{#if @actionBtnIconName}} {{fa-icon @actionBtnIconName}} {{/if}}
-      </:leftIcon>
-
-      <:default>
-        {{@actionBtnLabel}}
-      </:default>
-    </AkButton>
+  {{#if (has-block 'actionBtn')}}
+    {{yield (hash openEditOrgNameModal=this.handleEditOrgName) to='actionBtn'}}
   {{/if}}
 </div>
+
+{{#if this.showAddEditModal}}
+  <OrganizationNameHeader::AddEditModal
+    @organization={{@organization}}
+    @handleCancel={{this.handleCancel}}
+    @editModal={{this.editModal}}
+  />
+{{/if}}

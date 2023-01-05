@@ -1,13 +1,23 @@
 <div local-class='header-container'>
-  <OrganizationNameHeader
-    @organization={{this.organization.selected}}
-    @showActionBtn={{this.me.org.is_admin}}
-    @actionBtnIconName='cog'
-    @actionBtnLabel='{{t "organizationSettings"}}'
-    @actionBtnClick={{this.routeToOrgSettings}}
-    @showAddOrgNameBtn={{this.orgNameDoesNotExist}}
-    @onAddBtnClick={{this.addOrganizationName}}
-  />
+  <OrganizationNameHeader @organization={{this.organization.selected}}>
+    <:actionBtn>
+      {{#if this.me.org.is_admin}}
+        <AkButton
+          @variant='outlined'
+          data-test-org-name-action-btn
+          {{on 'click' this.routeToOrgSettings}}
+        >
+          <:leftIcon>
+            <AkIcon @iconName='settings' />
+          </:leftIcon>
+
+          <:default>
+            {{t 'organizationSettings'}}
+          </:default>
+        </AkButton>
+      {{/if}}
+    </:actionBtn>
+  </OrganizationNameHeader>
 </div>
 
 <div local-class='tabs-container'>
@@ -18,7 +28,7 @@
         local-class='{{this.namespaceClass}}'
         @route='authenticated.organization.namespaces'
       >
-        {{fa-icon 'check-square' local-class='tab-icon'}}
+        <AkIcon @iconName='assignment' local-class='tab-icon' />
 
         {{t 'namespaces'}}
 
@@ -37,7 +47,7 @@
           local-class='{{this.memberClass}}'
           @route='authenticated.organization.users'
         >
-          {{fa-icon 'user-circle-o' local-class='tab-icon'}}
+          <AkIcon @iconName='people' local-class='tab-icon' />
 
           {{t 'users'}}
 
@@ -54,7 +64,7 @@
         local-class='{{this.teamClass}}'
         @route='authenticated.organization.teams'
       >
-        {{fa-icon 'sitemap' local-class='tab-icon'}}
+        <AkIcon @iconName='groups' local-class='tab-icon' />
 
         {{t 'teams'}}
 
@@ -67,10 +77,3 @@
     </li>
   </ul>
 </div>
-
-{{#if this.showAddPopup}}
-  <OrganizationNameAddEditModal
-    @organization={{this.organization.selected}}
-    @handleCancel={{this.closeAddPopup}}
-  />
-{{/if}}

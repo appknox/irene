@@ -62,7 +62,7 @@ module('Integration | Component | organization-details', function (hooks) {
     );
   });
 
-  test('organization settings button should be not visible to member', async function (assert) {
+  test('organization settings button should not be visible to member', async function (assert) {
     const me = this.owner.lookup('service:me');
 
     me.org.is_owner = false;
@@ -73,7 +73,7 @@ module('Integration | Component | organization-details', function (hooks) {
     assert.dom('[data-test-org-name-action-btn]').doesNotExist();
   });
 
-  test('organization settings button should be not visible to member add button disabled', async function (assert) {
+  test('organization settings button should not be visible to member add button disabled', async function (assert) {
     const me = this.owner.lookup('service:me');
     const organization = this.owner.lookup('service:organization');
 
@@ -85,10 +85,7 @@ module('Integration | Component | organization-details', function (hooks) {
     await render(hbs`<OrganizationDetails />`);
 
     assert.dom('[data-test-org-name-action-btn]').doesNotExist();
-    assert
-      .dom('[data-test-org-name-add-btn]')
-      .exists()
-      .hasClass(/add-button-disabled/i);
+    assert.dom('[data-test-org-name-add-btn]').exists().isDisabled();
   });
 
   test('no org name add button and org settings button visible', async function (assert) {

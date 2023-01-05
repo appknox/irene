@@ -235,4 +235,36 @@ module('Integration | Component | ak-stack', function (hooks) {
       assert.dom('[data-test-ak-stack]').exists().hasClass(spacingClass);
     }
   );
+
+  test.each(
+    'it renders all wrap variants correctly',
+    [
+      ['', /ak-stack-flexwrap-nowrap/i],
+      ['wrap', /ak-stack-flexwrap-wrap/i],
+      ['nowrap', /ak-stack-flexwrap-nowrap/i],
+      ['wrap-reverse', /ak-stack-flexwrap-wrap-reverse/i],
+    ],
+    async function (assert, [flexWrap, spacingClass]) {
+      this.setProperties({
+        flexWrap,
+      });
+
+      await render(hbs`
+    <AkStack 
+      @flexWrap={{this.flexWrap}}
+    >
+      <span class="p-2">
+        Item - 1
+      </span>
+      <span class="p-2">
+        Item - 2
+      </span>
+      <span class="p-2">
+        Item - 3
+      </span>
+    </AkStack>`);
+
+      assert.dom('[data-test-ak-stack]').exists().hasClass(spacingClass);
+    }
+  );
 });

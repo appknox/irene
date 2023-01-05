@@ -1,0 +1,11 @@
+<DatePicker
+  class='{{this.classes.root}} {{@class}}'
+  @renderInPlace={{true}}
+  @maxDate={{@maxDate}}
+  @range={{@range}}
+  @options={{@options}}
+  @onChange={{@onChange}}
+  as |api|
+>
+  {{yield api}}
+</DatePicker>

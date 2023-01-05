@@ -92,8 +92,32 @@ function routes() {
     return {};
   });
 
+  this.get('/organizations/:id/sso/saml2', () => {
+    return {};
+  });
+
+  this.put('/organizations/:id/sso/saml2', () => {
+    return {};
+  });
+
+  this.get('/v2/sso/saml2/metadata', () => {
+    return {};
+  });
+
+  this.get('/organizations/:id/sso/saml2/idp_metadata', () => {
+    return {};
+  });
+
+  this.delete('/organizations/:id/sso/saml2/idp_metadata', () => {
+    return {};
+  });
+
   this.get('/organizations/:id/archives', () => {
     return [];
+  });
+
+  this.post('/organizations/:id/archives', () => {
+    return {};
   });
 
   this.get('/organizations/:id/email_domains', () => {
@@ -157,6 +181,26 @@ function routes() {
   });
 
   this.put('/organizations/:id/users/:userId', () => {
+    return {};
+  });
+
+  this.get('/organizations/:id/integrate_jira', () => {
+    return {};
+  });
+
+  this.delete('/organizations/:id/integrate_jira', () => {
+    return {};
+  });
+
+  this.post('/organizations/:id/integrate_jira', () => {
+    return {};
+  });
+
+  this.get('/organizations/:id/github/redirect', () => {
+    return {};
+  });
+
+  this.delete('/organizations/:id/github', () => {
     return {};
   });
 

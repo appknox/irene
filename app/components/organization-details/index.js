@@ -19,7 +19,6 @@ class OrganizationDetails extends Component {
   @service('notifications') notify;
 
   @tracked activeTab = 0;
-  @tracked showAddPopup = false;
 
   constructor() {
     super(...arguments);
@@ -32,20 +31,6 @@ class OrganizationDetails extends Component {
 
   @action routeToOrgSettings() {
     this.router.transitionTo('authenticated.organization-settings');
-  }
-
-  get orgNameDoesNotExist() {
-    return this.organization.selected.name === '';
-  }
-
-  @action
-  addOrganizationName() {
-    this.showAddPopup = true;
-  }
-
-  @action
-  closeAddPopup() {
-    this.showAddPopup = false;
   }
 
   /* Set active tab */

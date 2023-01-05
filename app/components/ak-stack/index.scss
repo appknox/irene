@@ -84,6 +84,19 @@
   justify-content: end;
 }
 
+// Wrap
+.ak-stack-flexwrap-nowrap {
+  flex-wrap: nowrap;
+}
+
+.ak-stack-flexwrap-wrap {
+  flex-wrap: wrap;
+}
+
+.ak-stack-flexwrap-wrap-reverse {
+  flex-wrap: wrap-reverse;
+}
+
 // Spacing
 .ak-stack-spacing-0 {
   gap: 0em;
