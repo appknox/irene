@@ -1,0 +1,19 @@
+<AkTextField
+  data-test-editTeamName-input
+  @value={{this.teamName}}
+  @label={{t 'editTeamNameInputLabel'}}
+  @labelTypographyColor='textPrimary'
+  @labelTypographyVariant='h6'
+/>
+
+{{#if (has-block 'actionContent')}}
+  {{yield
+    (hash
+      action=(perform this.updateTeamName)
+      actionLabel=(t 'edit')
+      actionRunning=this.updateTeamName.isRunning
+      actionDisabled=this.teamNameEmptyOrSame
+    )
+    to='actionContent'
+  }}
+{{/if}}

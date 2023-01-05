@@ -104,8 +104,36 @@ function routes() {
     return schema.organizationTeams.all().models;
   });
 
+  this.post('/organizations/:id/teams', () => {
+    return {};
+  });
+
   this.get('/organizations/:id/teams/:teamId', () => {
     return {};
+  });
+
+  this.post('/organizations/:id/teams/:teamId', () => {
+    return {};
+  });
+
+  this.delete('/organizations/:id/teams/:teamId', () => {
+    return {};
+  });
+
+  this.get('/organizations/:id/teams/:teamId/members', (schema) => {
+    return schema.organizationUsers.all().models;
+  });
+
+  this.get('/organizations/:id/teams/:teamId/projects', (schema) => {
+    return schema.organizationProjects.all().models;
+  });
+
+  this.put('/organizations/:id/teams/:teamId/projects/:projectId', () => {
+    return {};
+  });
+
+  this.get('/organizations/:id/teams/:teamId/invitations', (schema) => {
+    return schema.organizationInvitations.all().models;
   });
 
   this.get('/organizations/:id/namespaces', (schema) => {
@@ -118,6 +146,10 @@ function routes() {
 
   this.delete('/organizations/:id/namespaces/:namespaceId', () => {
     return {};
+  });
+
+  this.get('/organizations/:id/users', (schema) => {
+    return schema.organizationUsers.all().models;
   });
 
   this.get('/organizations/:id/users/:userId', () => {
@@ -429,6 +461,10 @@ function routes() {
   });
 
   this.put('/organizations/:orgId/members/:memId', () => {
+    return {};
+  });
+
+  this.post('/organizations/:orgId/members/:memId', () => {
     return {};
   });
 

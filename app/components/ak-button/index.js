@@ -16,4 +16,8 @@ export default class AkButtonComponent extends Component {
   get loading() {
     return this.variant === 'filled' && this.args.loading;
   }
+
+  get underlineNone() {
+    return this.textVariant && this.args.underline === 'none';
+  }
 }

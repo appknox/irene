@@ -4,7 +4,8 @@
   type={{or @type 'button'}}
   disabled={{or this.loading @disabled}}
   local-class='
-    {{if this.textVariant "ak-button-text-root" "ak-button-root"}} 
+    {{if this.textVariant "ak-button-text-root" "ak-button-root"}}
+    {{if this.underlineNone "ak-button-text-underline-none"}}
     {{if this.loading "ak-button-loading"}}
     ak-button-{{this.variant}}-{{this.color}}'
 >

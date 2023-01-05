@@ -1,0 +1,16 @@
+.org-team-overview-container {
+  width: 100%;
+  padding: 1em;
+  box-sizing: border-box;
+  border-radius: var(--organization-team-overview-border-radius);
+  border: 1px solid var(--organization-team-overview-border-color);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--organization-team-overview-hover-background);
+  }
+}
+
+.upper-case {
+  text-transform: uppercase;
+}

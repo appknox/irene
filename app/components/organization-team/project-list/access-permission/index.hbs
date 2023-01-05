@@ -1,0 +1,7 @@
+<AkFormControlLabel @label={{t 'allowEdit'}}>
+  <AkCheckbox
+    data-test-accessPermission-checkbox
+    @checked={{@project.write}}
+    @onChange={{perform this.changeProjectWrite}}
+  />
+</AkFormControlLabel>

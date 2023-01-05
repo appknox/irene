@@ -1,0 +1,87 @@
+{{! template-lint-disable no-partial }}
+<AkStack @alignItems='center' @justifyContent='space-between' class='mb-3'>
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkTypography data-test-addUserList-title @variant='h6'>
+      {{t 'addUsers'}}
+    </AkTypography>
+
+    <AkTypography
+      data-test-addUserList-description
+      @color='textSecondary'
+      @variant='body2'
+    >
+      {{t 'addTeamMemberDesc'}}
+    </AkTypography>
+  </AkStack>
+
+  <div {{style width='180px'}}>
+    <AkTextField
+      data-test-addUserList-searchInput
+      @placeholder={{t 'searchUser'}}
+      @value={{this.query}}
+      {{on 'keyup' (perform this.handleSearchQueryChange)}}
+    >
+      <:leftAdornment>
+        <AkIcon @iconName='search' @color='textSecondary' />
+      </:leftAdornment>
+    </AkTextField>
+  </div>
+</AkStack>
+
+{{#if this.hasObjects}}
+  <AkTable @dense={{true}} as |t|>
+    <t.head data-test-addUserList-thead @columns={{this.columns}} />
+    <t.body @rows={{this.modifiedSortedObjects}} as |b|>
+      <b.row data-test-addUserList-row as |r|>
+        <r.cell data-test-addUserList-cell as |value|>
+          {{#if r.columnValue.component}}
+            {{#let (component r.columnValue.component) as |CheckBox|}}
+              <CheckBox
+                @checked={{r.rowValue.checked}}
+                @onChange={{perform this.selectionChange r.rowValue}}
+                @disabled={{this.isAddingMember}}
+              />
+            {{/let}}
+          {{else}}
+            <AkTypography title={{value}} @noWrap={{true}}>
+              {{value}}
+            </AkTypography>
+          {{/if}}
+        </r.cell>
+      </b.row>
+    </t.body>
+  </AkTable>
+
+  <div class='mt-2'>
+    {{partial 'paginate'}}
+  </div>
+
+  {{#if (has-block 'actionContent')}}
+    {{yield
+      (hash
+        action=(perform this.addSelectedTeamMembers)
+        actionLabel=(t 'addUsers')
+        actionRunning=this.isAddingMember
+        actionDisabled=this.hasNoSelection
+      )
+      to='actionContent'
+    }}
+  {{/if}}
+{{else}}
+  {{#if this.hasNoObject}}
+    <div local-class='emtpy-container'>
+      <AkSvg::OrgUsersEmpty local-class='empty-svg' />
+
+      <AkTypography @variant='h6'>
+        {{t 'noMembers'}}
+      </AkTypography>
+    </div>
+  {{else}}
+    <div local-class='loading-container'>
+      <AkStack @alignItems='center' @spacing='2'>
+        <AkLoader @size={{16}} />
+        <AkTypography>{{t 'loading'}}...</AkTypography>
+      </AkStack>
+    </div>
+  {{/if}}
+{{/if}}

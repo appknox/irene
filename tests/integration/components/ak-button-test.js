@@ -121,6 +121,7 @@ module('Integration | Component | ak-button', function (hooks) {
     assert
       .dom(button)
       .hasClass(/ak-button-text-root/i)
+      .hasClass(/ak-button-text-underline-none/i)
       .hasNoClass(/ak-button-root/i);
 
     assert
@@ -130,6 +131,8 @@ module('Integration | Component | ak-button', function (hooks) {
       .hasClass(/ak-typography-underline-none/i);
 
     this.set('underline', 'always');
+
+    assert.dom(button).hasNoClass(/ak-button-text-underline-none/i);
 
     assert
       .dom('[data-test-ak-button-text]', button)

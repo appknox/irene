@@ -1,0 +1,27 @@
+<AkIconButton
+  data-test-teamUserList-actionBtn
+  title='{{t "removeFromTeam"}}'
+  {{on 'click' this.openRemoveMemberPrompt}}
+>
+  <AkIcon @iconName='person-remove' />
+</AkIconButton>
+
+<ConfirmBox
+  @isActive={{this.showRemoveMemberPrompt}}
+  @confirmText={{this.confirmText}}
+  @delegate={{this}}
+  @confirmAction={{perform this.removeMember}}
+  @disabled={{this.isRemovingMember}}
+  @justifyActionContent='flex-end'
+  @blurOverlay={{true}}
+>
+  <:content>
+    <AkTextField
+      data-test-teamUserList-promptInput
+      @labelTypographyColor='textPrimary'
+      @label={{t 'promptBox.removeMemberPrompt.description'}}
+      @value={{this.promptMemberName}}
+      @autofocus={{true}}
+    />
+  </:content>
+</ConfirmBox>

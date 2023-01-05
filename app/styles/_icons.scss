@@ -71,6 +71,10 @@
   @extend .mi-groups-2;
 }
 
+.ak-icon-groups {
+  @extend .mi-groups;
+}
+
 .ak-icon-arrow-left {
   @extend .mi-arrow-left;
 }
@@ -177,4 +181,12 @@
 
 .ak-icon-settings {
   @extend .mi-settings;
+}
+
+.ak-icon-person-remove {
+  @extend .mi-person-remove;
+}
+
+.ak-icon-edit {
+  @extend .mi-edit;
 }

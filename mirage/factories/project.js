@@ -3,6 +3,10 @@ import ENUMS from 'irene/enums';
 import Base from './base';
 
 export default Base.extend({
+  id(i) {
+    return i + 1;
+  },
+
   name: faker.company.companyName(),
   version: faker.random.number(),
   github_repo: faker.company.companyName(),
@@ -29,6 +33,11 @@ export default Base.extend({
     return faker.internet.domainName();
   },
 
+  package_name() {
+    return faker.internet.domainName();
+  },
+
+  // TODO: remove this (need to correct app-monitoring tests)
   packageName() {
     return faker.internet.domainName();
   },

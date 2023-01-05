@@ -1,0 +1,40 @@
+<AkStack
+  data-test-orgTeamOverview
+  @direction='column'
+  role='button'
+  local-class='org-team-overview-container'
+  {{on 'click' this.showTeamDetails}}
+>
+  <AkTypography
+    data-test-orgTeamOverview-name
+    @variant='h5'
+    @color='primary'
+    @gutterBottom={{true}}
+  >
+    {{@team.name}}
+  </AkTypography>
+
+  <AkStack @spacing='2'>
+    <AkTypography
+      data-test-orgTeamOverview-membersCount
+      local-class='upper-case'
+      @color='textSecondary'
+      @variant='body2'
+      @tag='span'
+    >
+      {{t 'users'}}
+      <strong>{{@team.membersCount}}</strong>
+    </AkTypography>
+
+    <AkTypography
+      data-test-orgTeamOverview-projectsCount
+      local-class='upper-case'
+      @color='textSecondary'
+      @variant='body2'
+      @tag='span'
+    >
+      {{t 'projects'}}
+      <strong>{{@team.projectsCount}}</strong>
+    </AkTypography>
+  </AkStack>
+</AkStack>

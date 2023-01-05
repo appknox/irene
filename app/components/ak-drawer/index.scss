@@ -1,7 +1,7 @@
 .drawer-root {
   position: fixed;
   inset: 0px;
-  z-index: 1200;
+  z-index: var(--ak-drawer-zIndex);
 }
 
 .backdrop-root {
@@ -10,20 +10,20 @@
   align-items: center;
   justify-content: center;
   inset: 0px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--ak-drawer-backdrop-overlay-background);
   z-index: -1;
   opacity: 0;
 }
 
 .drawer-container {
-  background-color: var(--white);
-  color: rgba(0, 0, 0, 0.87);
+  background-color: var(--ak-drawer-background);
+  color: var(--ak-drawer-color-text-primary);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   height: 100%;
   flex: 1 0 auto;
-  z-index: 1200;
+  z-index: var(--ak-drawer-zIndex);
   position: fixed;
   outline: 0px;
 }

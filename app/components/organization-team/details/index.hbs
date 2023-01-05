@@ -1,0 +1,41 @@
+<AkDrawer
+  @open={{@showTeamDetail}}
+  @onClose={{this.handleDrawerClose}}
+  @anchor='right'
+  as |dr|
+>
+  <AkStack local-class='team-detail-root' @direction='column'>
+    <AkAppbar @justifyContent='space-between' as |ab|>
+      <AkTypography
+        data-test-orgTeamDetail-title
+        @variant='h5'
+        @color='inherit'
+      >
+        {{t 'teamDetails'}}
+      </AkTypography>
+
+      <AkIconButton
+        class={{ab.classes.defaultIconBtn}}
+        {{on 'click' dr.closeHandler}}
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    {{#if this.activeActionDetails}}
+      <OrganizationTeam::Details::ActiveAction
+        @cancelActiveAction={{this.cancelActiveAction}}
+        @activeActionDetails={{this.activeActionDetails}}
+        @team={{@team}}
+        @organization={{@organization}}
+      />
+    {{else}}
+      <OrganizationTeam::Details::TeamInfo
+        @drawerCloseHandler={{dr.closeHandler}}
+        @handleActiveAction={{this.handleActiveAction}}
+        @team={{@team}}
+        @organization={{@organization}}
+      />
+    {{/if}}
+  </AkStack>
+</AkDrawer>
