@@ -1,10 +1,19 @@
 <DatePicker
   class='{{this.classes.root}} {{@class}}'
   @renderInPlace={{true}}
+  @minDate={{@minDate}}
   @maxDate={{@maxDate}}
+  @value={{@value}}
   @range={{@range}}
   @options={{@options}}
   @onChange={{@onChange}}
+  @availableYearOffset={{@availableYearOffset}}
+  @buttonClasses={{@buttonClasses}}
+  @disabledDates={{@disabledDates}}
+  @disableMonthPicker={{@disableMonthPicker}}
+  @disableYearPicker={{@disableYearPicker}}
+  @horizontalPosition={{@horizontalPosition}}
+  @verticalPosition={{@verticalPosition}}
   as |api|
 >
   {{yield api}}

@@ -95,16 +95,30 @@
         &:focus {
           background-color: var(--ak-date-picker-color-primary) !important;
           color: var(--ak-date-picker-color-primary-contrast-text) !important;
-        }
-
-        &:focus {
+          border-radius: var(--ak-date-picker-border-radius) !important;
           box-shadow: unset !important;
+          border-left: none !important;
+          border-top-color: var(
+            --ak-date-picker-color-primary-contrast-text
+          ) !important;
         }
       }
 
       :global(.date-picker__day--disabled) {
         border: none;
       }
+    }
+
+    :global(.date-picker__day--selected) {
+      background-color: var(--ak-date-picker-color-primary) !important;
+      color: var(--ak-date-picker-color-primary-contrast-text) !important;
+      border-left: none !important;
+    }
+
+    :global(.date-picker__day--in-range) {
+      background-color: var(--ak-date-picker-color-primary-light) !important;
+      border-radius: 0 !important;
+      border-left: none !important;
     }
 
     :global(.date-picker__options) {
