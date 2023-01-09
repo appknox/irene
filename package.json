@@ -54,6 +54,7 @@
     "ember-attacher": "^0.15.1",
     "ember-auto-import": "^2.4.0",
     "ember-awesome-macros": "^6.0.0",
+    "ember-browser-services": "^4.0.3",
     "ember-changeset": "^3.13.8",
     "ember-changeset-validations": "^3.14.4",
     "ember-cli": "^4.3.0",
