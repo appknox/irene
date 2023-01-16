@@ -13,6 +13,7 @@ export default class HomePageComponent extends Component {
   @service organization;
   @service integration;
   @service notifications;
+  @service freshdesk;
 
   @tracked isLoaded = false;
   @tracked isSecurityEnabled = false;
@@ -76,6 +77,7 @@ export default class HomePageComponent extends Component {
   }
 
   @action invalidateSession() {
+    this.freshdesk.logUserOutOfSupportWidget();
     triggerAnalytics('logout');
     this.session.invalidate();
   }

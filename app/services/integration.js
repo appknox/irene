@@ -9,6 +9,7 @@ export default class IntegrationService extends Service {
   @service('-document') document;
   @service configuration;
   @service logger;
+  @service freshdesk;
 
   currentUser = null;
 
@@ -20,6 +21,9 @@ export default class IntegrationService extends Service {
     await this.configuration.getIntegrationConfig();
     this.currentUser = user;
     await this.configureCrisp();
+
+    // Freshdesk integrations
+    await this.freshdesk.configureSupportWidget();
   }
 
   // Crisp
