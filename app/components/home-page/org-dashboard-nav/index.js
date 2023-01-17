@@ -3,16 +3,15 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import * as chat from 'irene/utils/chat';
-import { openKnowledgeBasePanel } from 'irene/utils/knowledge-base';
-
 export default class HomePageOrgDashboardNavComponent extends Component {
   @service integration;
+  @service freshdesk;
 
   @tracked isUploading = false;
   @tracked progress = 0;
 
   get showKnowledgeBase() {
-    return this.integration.isDocument360Enabled();
+    return this.freshdesk.isSupportWidgetEnabled;
   }
 
   @action setAppUploadStatus(status) {
@@ -28,6 +27,6 @@ export default class HomePageOrgDashboardNavComponent extends Component {
   }
 
   @action onOpenKnowledgeBase() {
-    openKnowledgeBasePanel();
+    this.freshdesk.openSupportWidget();
   }
 }

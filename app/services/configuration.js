@@ -33,11 +33,13 @@ export default class ConfigurationService extends Service {
 
   integrationData = {
     crisp_key: '',
+    freshdesk_configuration: {
+      widget_id: '',
+    },
     csb_key: '',
     hotjar_key: '',
     pendo_key: '',
     rollbar_key: '',
-    document360_key: '',
   };
 
   serverData = {
@@ -72,8 +74,8 @@ export default class ConfigurationService extends Service {
       this.integrationData.hotjar_key ||= data.integrations.hotjar_key;
       this.integrationData.pendo_key ||= data.integrations.pendo_key;
       this.integrationData.rollbar_key ||= data.integrations.rollbar_key;
-      this.integrationData.document360_key ||=
-        data.integrations.document360_key;
+      this.integrationData.freshdesk_configuration.widget_id ||=
+        data.integrations.freshdesk_configuration.widget_id;
 
       this.themeData.scheme ||= data.theme.scheme;
       this.themeData.primary_color ||= data.theme.primary_color;

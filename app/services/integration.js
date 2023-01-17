@@ -1,17 +1,15 @@
 import { inject as service } from '@ember/service';
 import Service from '@ember/service';
 import ENV from 'irene/config/environment';
-import { injectDocument360 } from 'irene/utils/knowledge-base';
 
 export default class IntegrationService extends Service {
-  @service configuration;
-  @service logger;
-
   // https://github.com/ember-cli/ember-page-title/blob/a886af4d83c7a3a3c716372e8a322258a4f92991/addon/services/page-title-list.js#L27
   // in fastboot context "document" is instance of
   // ember-fastboot/simple-dom document
-  @service('-document')
-  document;
+  @service('-document') document;
+  @service configuration;
+  @service logger;
+  @service freshdesk;
 
   currentUser = null;
 
@@ -23,7 +21,9 @@ export default class IntegrationService extends Service {
     await this.configuration.getIntegrationConfig();
     this.currentUser = user;
     await this.configureCrisp();
-    await this.configureDocument360();
+
+    // Freshdesk integrations
+    await this.freshdesk.configureSupportWidget();
   }
 
   // Crisp
@@ -35,29 +35,13 @@ export default class IntegrationService extends Service {
     await this.installCrisp();
   }
 
-  async configureDocument360() {
-    if (!this.isDocument360Enabled()) {
-      this.logger.debug('Document360 Disabled');
-      return;
-    }
-    await injectDocument360(this.document360Key);
-  }
-
   isCrispEnabled() {
     const token = this.crispToken;
     return !!token;
   }
 
-  isDocument360Enabled() {
-    return !!this.document360Key;
-  }
-
   get crispToken() {
     return this.configuration.integrationData.crisp_key;
-  }
-
-  get document360Key() {
-    return this.configuration.integrationData.document360_key;
   }
 
   // get the snippet code from https://app.crisp.chat/settings/website/
