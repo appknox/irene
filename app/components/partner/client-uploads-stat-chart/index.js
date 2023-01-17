@@ -202,7 +202,9 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
   }
 
   async drawChart(element) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const component = this;
+
     component.chartContainer = await bb.generate({
       data: {
         x: 'x',
