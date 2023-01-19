@@ -1,8 +1,9 @@
-import { click, render, select } from '@ember/test-helpers';
+import { click, findAll, render, select } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupRenderingTest } from 'ember-qunit';
 import faker from 'faker';
 import { module, test } from 'qunit';
+import { selectChoose } from 'ember-power-select/test-support';
 
 module('Integration | Component | ak-pagination-provider', function (hooks) {
   setupRenderingTest(hooks);
@@ -136,37 +137,45 @@ module('Integration | Component | ak-pagination-provider', function (hooks) {
       <AkPaginationProvider
         @onItemPerPageChange={{this.onItemPerPageChange}}
         @itemPerPageOptions={{this.itemPerPageOptions}}
-        as |context|
+        as |ctx|
       >
-        <select
-          name='recordPerPage'
-          id='recordPerPage'
-          {{on 'change' context.onItemPerPageChange}}
+        <AkSelect
+          @onChange={{ctx.onItemPerPageChange}}
+          @options={{ctx.itemPerPageOptions}}
+          @selected={{ctx.selectedOption}}
+          @renderInPlace={{true}}
+          @veritcalPosition='above'
+          @triggerClass='ak-pagination-select'
           data-test-pagination-select
+          as |aks|
         >
-          {{#each context.itemPerPageOptions as |item|}}
-            <option
-              selected={{item.selected}}
-              value={{item.value}}
-              data-test-pagination-select-option
-            >
-              {{item.value}}
-            </option>
-          {{/each}}
-       </select>
+          {{aks.label}}
+        </AkSelect>
       </AkPaginationProvider>
      `);
 
     assert.dom('[data-test-pagination-select]').exists();
+    await click('.ak-pagination-select');
 
-    const selectOptionsList = this.element.querySelectorAll(
-      '[data-test-pagination-select-option]'
+    let selectListItems = findAll('.ember-power-select-option');
+    const selectedIndex = 0;
+    assert.dom(selectListItems[selectedIndex]).hasAria('selected', 'true');
+    const nextSelectIndex = 1;
+    assert.dom(selectListItems[nextSelectIndex]).hasAria('selected', 'false');
+
+    await selectChoose(
+      '.ak-pagination-select',
+      String(this.itemPerPageOptions[nextSelectIndex])
     );
-    await select('[data-test-pagination-select]', selectOptionsList[1].value);
+
+    await click('.ak-pagination-select');
+    selectListItems = findAll('.ember-power-select-option');
+    assert.dom(selectListItems[nextSelectIndex]).hasAria('selected', 'true');
+
     assert.strictEqual(
       this.limit,
-      Number(selectOptionsList[1].value),
-      `Default limit was changed to ${selectOptionsList[1].value}.`
+      this.itemPerPageOptions[nextSelectIndex],
+      `Default limit was changed to ${this.itemPerPageOptions[nextSelectIndex]}.`
     );
   });
 

@@ -1,8 +1,16 @@
-import { click, render, select } from '@ember/test-helpers';
+import { findAll } from '@ember/test-helpers';
+import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
+import { selectChoose } from 'ember-power-select/test-support';
+
+const selectOptions = [
+  { value: '2', selected: true, label: '2' },
+  { value: '4', selected: false, label: '4' },
+  { value: '6', selected: false, label: '6' },
+];
 
 module('Integration | Component | ak-pagination', function (hooks) {
   setupRenderingTest(hooks);
@@ -15,11 +23,8 @@ module('Integration | Component | ak-pagination', function (hooks) {
       disableNext: false,
       startItemIdx: 1,
       endItemIdx: 2,
-      itemPerPageOptions: [
-        { value: '2', selected: true },
-        { value: '4', selected: false },
-        { value: '6', selected: false },
-      ],
+      itemPerPageOptions: selectOptions,
+      selectedOption: selectOptions[0],
       limit: 2,
       offset: 0,
       tableItemLabel: 'Projects',
@@ -41,6 +46,7 @@ module('Integration | Component | ak-pagination', function (hooks) {
           @disableNext={{this.disableNext}}
           @nextAction={{this.nextAction}}
           @disablePrev={{this.disablePrev}}
+          @selectedOption={{this.selectedOption}}
           @prevAction={{this.prevAction}}
           @endItemIdx={{this.endItemIdx}}
           @startItemIdx={{this.startItemIdx}}
@@ -90,22 +96,21 @@ module('Integration | Component | ak-pagination', function (hooks) {
     assert.dom('[data-test-next-btn-icon]').exists();
 
     assert.dom('[data-test-pagination-select]').exists();
-    const selectOptionsList = this.element.querySelectorAll(
-      '[data-test-pagination-select-option]'
-    );
+    await click('.ak-pagination-select');
 
+    const selectListItems = findAll('.ember-power-select-option');
     assert.strictEqual(
-      selectOptionsList.length,
+      selectListItems.length,
       3,
       'Pagination context returns the right page count select options'
     );
 
-    for (let i = 0; i < selectOptionsList.length; i++) {
-      const optionElement = selectOptionsList[i];
+    for (let i = 0; i < selectListItems.length; i++) {
+      const optionElement = selectListItems[i];
       const itemPerPageOption = this.itemPerPageOptions[i].value;
 
       assert.strictEqual(
-        optionElement.value,
+        optionElement.textContent?.trim(),
         itemPerPageOption,
         `data-test-pagination-select-option="${i}" has a value of ${itemPerPageOption}`
       );
@@ -159,8 +164,8 @@ module('Integration | Component | ak-pagination', function (hooks) {
     await click('[data-test-pagination-prev-btn]');
   });
 
-  test('it triggers the page count change handler when triggered', async function (assert) {
-    assert.expect(3);
+  test('it triggers the page count change handler when select item changes', async function (assert) {
+    assert.expect(2);
 
     this.setProperties({
       onItemPerPageChange: () => {
@@ -195,16 +200,12 @@ module('Integration | Component | ak-pagination', function (hooks) {
       ]
      */
     assert.dom('[data-test-pagination-select]').exists();
-    // Select item 2
-    await select(
-      '[data-test-pagination-select]',
-      this.itemPerPageOptions[1].value
-    );
+    const selectedOption = 1;
 
-    // Select item 3
-    await select(
+    // Select item 2
+    await selectChoose(
       '[data-test-pagination-select]',
-      this.itemPerPageOptions[2].value
+      this.itemPerPageOptions[selectedOption].value
     );
   });
 });

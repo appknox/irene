@@ -109,9 +109,36 @@ module('Integration | Component | ak-button', function (hooks) {
       .hasClass(/ak-typography-color-warn/i);
   });
 
+  test.each(
+    'test icon size variant',
+    [
+      ['small', /ak-button-icon-small/i],
+      ['medium', /ak-button-icon-medium/i],
+    ],
+    async function (assert, [sizeVariant, className]) {
+      this.setProperties({ iconSize: sizeVariant, color: 'textPrimary' });
+
+      await render(
+        hbs`<AkButton @variant="text" @color={{this.color}} @iconSize={{this.iconSize}}>
+            <:leftIcon> 
+              LeftIcon
+            </:leftIcon>
+
+            <:default>Button</:default>
+
+            <:rightIcon> 
+              RightIcon
+            </:rightIcon>
+          </AkButton>`
+      );
+
+      assert.dom('[data-test-ak-button-left-icon]').hasClass(className);
+      assert.dom('[data-test-ak-button-right-icon]').hasClass(className);
+    }
+  );
+
   test('test text variant button for underline', async function (assert) {
     this.set('underline', 'none');
-
     await render(
       hbs`<AkButton @variant="text" @underline={{this.underline}}>Button</AkButton>`
     );

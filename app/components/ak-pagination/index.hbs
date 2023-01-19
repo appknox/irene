@@ -1,62 +1,72 @@
 <div local-class='ak-pagination'>
   <div local-class='ak-pagination-info'>
-    <p data-test-per-page-translation>
+    <AkTypography @tag='p' data-test-per-page-translation>
       {{@perPageTranslation}}
-    </p>
-    <select
-      name='recordPerPage'
-      id='recordPerPage'
-      {{on 'change' (or @onItemPerPageChange this.noop)}}
+    </AkTypography>
+
+    <AkSelect
+      @onChange={{or @onItemPerPageChange this.noop}}
+      @options={{@itemPerPageOptions}}
+      @selected={{@selectedOption}}
+      @renderInPlace={{true}}
+      @veritcalPosition='above'
+      @triggerClass='ak-pagination-select'
+      {{style width='50px'}}
       data-test-pagination-select
+      as |aks|
     >
-      {{#each @itemPerPageOptions as |item|}}
-        <option
-          selected={{item.selected}}
-          value={{item.value}}
-          data-test-pagination-select-option
-        >
-          {{item.value}}
-        </option>
-      {{/each}}
-    </select>
+      {{aks.label}}
+    </AkSelect>
+
     {{#if @totalItems}}
-      <span local-class='ak-pagination-page-range' data-test-page-range>
+      <div local-class='ak-pagination-divider'></div>
+      <AkTypography @tag='span' data-test-page-range>
         {{@startItemIdx}}-{{@endItemIdx}}
         of
         {{@totalItems}}
         {{@tableItemLabel}}
-      </span>
+      </AkTypography>
     {{/if}}
   </div>
   <div local-class='ak-pagination-btns' data-test-pagination-btns-container>
-    <button
-      type='button'
-      local-class='ak-pagination-btn prev-btn'
-      disabled={{@disablePrev}}
+    <div local-class='ak-pagination-divider'></div>
+    <AkButton
+      @disabled={{@disablePrev}}
+      @color='neutral'
+      @variant='outlined'
+      @iconSize='medium'
       {{on 'click' (or @prevAction this.noop)}}
       data-test-pagination-prev-btn
     >
-      <span class='ak-icon ak-icon-arrow-left' data-test-prev-btn-icon></span>
-      {{#if @prevBtnLabel}}
-        {{@prevBtnLabel}}
-      {{else}}
-        {{t 'previous'}}
-      {{/if}}
-    </button>
-
-    <button
-      type='button'
-      local-class='ak-pagination-btn next-btn'
-      disabled={{@disableNext}}
+      <:leftIcon>
+        <AkIcon @iconName='arrow-left' data-test-prev-btn-icon />
+      </:leftIcon>
+      <:default>
+        {{#if @prevBtnLabel}}
+          {{@prevBtnLabel}}
+        {{else}}
+          {{t 'previous'}}
+        {{/if}}
+      </:default>
+    </AkButton>
+    <AkButton
+      @disabled={{@disableNext}}
+      @color='neutral'
+      @variant='outlined'
+      @iconSize='medium'
       {{on 'click' (or @nextAction this.noop)}}
       data-test-pagination-next-btn
     >
-      {{#if @nextBtnLabel}}
-        {{@nextBtnLabel}}
-      {{else}}
-        {{t 'next'}}
-      {{/if}}
-      <span class='ak-icon ak-icon-arrow-right' data-test-next-btn-icon></span>
-    </button>
+      <:default>
+        {{#if @nextBtnLabel}}
+          {{@nextBtnLabel}}
+        {{else}}
+          {{t 'next'}}
+        {{/if}}
+      </:default>
+      <:rightIcon>
+        <AkIcon @iconName='arrow-right' data-test-next-btn-icon />
+      </:rightIcon>
+    </AkButton>
   </div>
 </div>

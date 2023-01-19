@@ -35,6 +35,8 @@
         @onClose={{@onClose}}
         @loadingMessage={{@loadingMessage}}
         @selectedItemComponent={{@selectedItemComponent}}
+        @verticalPosition={{or @veritcalPosition 'below'}}
+        data-test-power-select
         as |option|
       >
         {{yield option}}
