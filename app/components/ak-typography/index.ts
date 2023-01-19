@@ -15,26 +15,30 @@ const variantMapping = {
 
 type TypographyVariant = keyof typeof variantMapping;
 
-export interface IAkTypography {
-  tag: keyof HTMLElementTagNameMap;
-  variant: TypographyVariant;
-  color:
-    | 'inherit'
-    | 'textPrimary'
-    | 'textSecondary'
-    | 'primary'
-    | 'secondary'
-    | 'success'
-    | 'error'
-    | 'info'
-    | 'warn';
-  gutterBottom: boolean;
-  align: 'inherit' | 'left' | 'right' | 'center' | 'justify';
-  noWrap: boolean;
-  underline: 'none' | 'always' | 'hover';
+export interface AkTypographySignature {
+  Element: HTMLElement;
+  Args: {
+    tag: keyof HTMLElementTagNameMap;
+    variant: TypographyVariant;
+    color:
+      | 'inherit'
+      | 'textPrimary'
+      | 'textSecondary'
+      | 'primary'
+      | 'secondary'
+      | 'success'
+      | 'error'
+      | 'info'
+      | 'warn';
+    gutterBottom: boolean;
+    align: 'inherit' | 'left' | 'right' | 'center' | 'justify';
+    noWrap: boolean;
+    underline: 'none' | 'always' | 'hover';
+  };
+  Blocks: { default: [] };
 }
 
-class AkTypography extends Component<IAkTypography> {
+export default class AkTypography extends Component<AkTypographySignature> {
   defaultVariant: TypographyVariant = 'body1';
 
   get tag() {
@@ -76,4 +80,8 @@ class AkTypography extends Component<IAkTypography> {
   }
 }
 
-export default AkTypography;
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    AkTypography: typeof AkTypography;
+  }
+}
