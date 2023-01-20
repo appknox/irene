@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import lookupValidator from 'ember-changeset-validations';
 import Changeset from 'ember-changeset';
 import JIRAValidation from '../../validations/jiraintegrate';

@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import ENUMS from 'irene/enums';
 
 export default class OrganizationMemberListMemberRole extends Component {
