@@ -1,7 +1,11 @@
 import { TemplateFactory } from 'ember-cli-htmlbars';
-import { HelperLike, ComponentLike } from '@glint/template';
+import { HelperLike, ComponentLike, ModifierLike } from '@glint/template';
 
 import '@glint/environment-ember-loose';
+import {
+  PowerSelectArgs,
+  Select,
+} from 'ember-power-select/components/power-select';
 
 import type CssTransitionsRegistry from 'ember-css-transitions/template-registry';
 
@@ -12,6 +16,19 @@ declare module 'irene/templates/*' {
 }
 
 declare module '@glint/environment-ember-loose/registry' {
+  interface PowerSelectExtendedArgs extends PowerSelectArgs {
+    triggerId?: string;
+    dropdownClass?: string;
+    triggerClass?: string;
+    placeholder?: string;
+    disabled?: boolean;
+    renderInPlace?: boolean;
+    ariaInvalid: string;
+    loadingMessage?: string;
+    selectedItemComponent?: string;
+    verticalPosition?: 'above' | 'below' | 'auto';
+  }
+
   export default interface Registry extends CssTransitionsRegistry {
     element: HelperLike<{
       Args: { Positional: [tagName: string] };
@@ -20,12 +37,42 @@ declare module '@glint/environment-ember-loose/registry' {
         Blocks: { default: [] };
       }>;
     }>;
+
     EmberWormhole: ComponentLike<{
       Args: {
         to: string;
         renderInPlace?: boolean;
       };
       Blocks: { default: [] };
+    }>;
+
+    t: HelperLike<{
+      Args: {
+        Positional: [string];
+        Named: {
+          [key: string]: unknown;
+          htmlSafe?: boolean;
+        };
+      };
+      Return: string;
+    }>;
+
+    style: ModifierLike<{
+      Args: {
+        Positional: [];
+        Named: {
+          [key: string]: string;
+        };
+      };
+      Return: Array<string[]>;
+    }>;
+
+    PowerSelect: ComponentLike<{
+      Element: HTMLElement;
+      Args: PowerSelectExtendedArgs;
+      Blocks: {
+        default: [option: unknown, select?: Select];
+      };
     }>;
   }
 }

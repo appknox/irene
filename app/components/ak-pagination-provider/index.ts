@@ -13,24 +13,23 @@ export type PaginationItemPerPageOptionProps = {
   label: number;
 };
 
-interface PaginationProviderDefaultBlockHash {
-  currentPageResults: unknown[];
+interface PaginationProviderDefaultBlockHash<R> {
+  currentPageResults: R[];
   disablePrev: boolean;
   totalItems: number;
   startItemIdx: number;
   endItemIdx: number;
   itemPerPageOptions: PaginationItemPerPageOptionProps[];
-  selectedOption: PaginationItemPerPageOptionProps | undefined;
+  selectedOption?: PaginationItemPerPageOptionProps;
   onItemPerPageChange: (args: PaginationItemPerPageOptionProps) => void;
   nextAction: () => void;
   prevAction: () => void;
   disableNext: boolean;
 }
 
-export interface AkPaginationProviderSignature {
-  Element: HTMLElement;
+export interface AkPaginationProviderSignature<R> {
   Args: {
-    results: unknown[];
+    results: R[];
     offset: number;
     totalItems: number;
     itemPerPageOptions: number[];
@@ -40,11 +39,13 @@ export interface AkPaginationProviderSignature {
     prevAction: (args: PaginationProviderActionsArgs) => void;
   };
   Blocks: {
-    default: [PaginationProviderDefaultBlockHash];
+    default: [PaginationProviderDefaultBlockHash<R>];
   };
 }
 
-export default class AkPaginationProviderComponent extends Component<AkPaginationProviderSignature> {
+export default class AkPaginationProviderComponent<R> extends Component<
+  AkPaginationProviderSignature<R>
+> {
   // Default pagePerItem options if not provided
   DEFAULT_SELECT_OPTIONS = [5, 10, 20, 30, 40];
 
@@ -174,5 +175,11 @@ export default class AkPaginationProviderComponent extends Component<AkPaginatio
 
       return item;
     });
+  }
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    AkPaginationProvider: typeof AkPaginationProviderComponent;
   }
 }

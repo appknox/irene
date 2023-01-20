@@ -1,3 +1,4 @@
+{{! @glint-nocheck: or }}
 <button
   data-test-ak-button
   ...attributes
@@ -16,9 +17,8 @@
   {{else if (has-block 'leftIcon')}}
     <div
       data-test-ak-button-left-icon
-      local-class='
-      ak-button-left-icon 
-      ak-button-icon-{{or @iconSize "small"}}'
+      local-class='ak-button-left-icon'
+      class='{{@leftIconClass}}'
     >
       {{yield to='leftIcon'}}
     </div>
@@ -43,10 +43,8 @@
     {{#if (has-block 'rightIcon')}}
       <div
         data-test-ak-button-right-icon
-        local-class='
-        ak-button-right-icon 
-        ak-button-icon-{{or @iconSize "small"}}
-        '
+        local-class='ak-button-right-icon'
+        class='{{@rightIconClass}}'
       >
         {{yield to='rightIcon'}}
       </div>

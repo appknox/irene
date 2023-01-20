@@ -1,31 +1,52 @@
 import Component from '@glimmer/component';
 import { PaginationItemPerPageOptionProps } from '../ak-pagination-provider';
+import styles from './index.scss';
 
 export interface AkPaginationSignature {
-  Element: HTMLElement;
+  Element: HTMLDivElement;
   Args: {
-    currentPageResults: unknown[];
-    disablePrev: boolean;
-    totalItems: number;
-    startItemIdx: number;
-    endItemIdx: number;
+    disablePrev?: boolean;
+    disableNext?: boolean;
+    totalItems?: number;
+    startItemIdx?: number;
+    endItemIdx?: number;
     itemPerPageOptions: PaginationItemPerPageOptionProps[];
-    selectedOption: PaginationItemPerPageOptionProps | undefined;
-    onItemPerPageChange: (
+    selectedOption?: PaginationItemPerPageOptionProps;
+    onItemPerPageChange?: (
       selectedItem: PaginationItemPerPageOptionProps
     ) => void;
-    nextAction: () => void;
-    prevAction: () => void;
-    disableNext: boolean;
-    tableItemLabel: string;
-    nextBtnLabel: string;
-    prevBtnLabel: string;
+    nextAction?: () => void;
+    prevAction?: () => void;
+    tableItemLabel?: string;
+    nextBtnLabel?: string;
+    prevBtnLabel?: string;
     perPageTranslation?: string;
-  };
-  Blocks: {
-    default: [];
+    variant?: 'default' | 'compact';
+    paginationSelectOptionsVertPosition?: 'above' | 'below' | 'auto';
   };
 }
 export default class AkPaginationComponent extends Component<AkPaginationSignature> {
   noop() {}
+
+  get classes() {
+    return {
+      selectClass: styles['ak-pagination-select'],
+      prevButtonIconClass: styles['ak-pagination-button-prev-icon'],
+      nextButtonIconClass: styles['ak-pagination-button-next-icon'],
+    };
+  }
+
+  get variant() {
+    return this.args.variant || 'default';
+  }
+
+  get isCompactPagination() {
+    return this.variant === 'compact';
+  }
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    AkPagination: typeof AkPaginationComponent;
+  }
 }

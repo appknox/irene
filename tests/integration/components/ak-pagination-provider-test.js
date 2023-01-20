@@ -4,6 +4,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import faker from 'faker';
 import { module, test } from 'qunit';
 import { selectChoose } from 'ember-power-select/test-support';
+import styles from 'irene/components/ak-pagination/index.scss';
 
 module('Integration | Component | ak-pagination-provider', function (hooks) {
   setupRenderingTest(hooks);
@@ -131,6 +132,7 @@ module('Integration | Component | ak-pagination-provider', function (hooks) {
         this.limit = params.limit;
         this.offset = params.offset;
       },
+      selectTriggerClass: styles['ak-pagination-select'],
     });
 
     await render(hbs`
@@ -144,8 +146,8 @@ module('Integration | Component | ak-pagination-provider', function (hooks) {
           @options={{ctx.itemPerPageOptions}}
           @selected={{ctx.selectedOption}}
           @renderInPlace={{true}}
-          @veritcalPosition='above'
-          @triggerClass='ak-pagination-select'
+          @verticalPosition='above'
+          @triggerClass={{this.selectTriggerClass}}
           data-test-pagination-select
           as |aks|
         >
@@ -155,7 +157,7 @@ module('Integration | Component | ak-pagination-provider', function (hooks) {
      `);
 
     assert.dom('[data-test-pagination-select]').exists();
-    await click('.ak-pagination-select');
+    await click(`.${this.selectTriggerClass}`);
 
     let selectListItems = findAll('.ember-power-select-option');
     const selectedIndex = 0;
@@ -164,11 +166,11 @@ module('Integration | Component | ak-pagination-provider', function (hooks) {
     assert.dom(selectListItems[nextSelectIndex]).hasAria('selected', 'false');
 
     await selectChoose(
-      '.ak-pagination-select',
+      `.${this.selectTriggerClass}`,
       String(this.itemPerPageOptions[nextSelectIndex])
     );
 
-    await click('.ak-pagination-select');
+    await click(`.${this.selectTriggerClass}`);
     selectListItems = findAll('.ember-power-select-option');
     assert.dom(selectListItems[nextSelectIndex]).hasAria('selected', 'true');
 

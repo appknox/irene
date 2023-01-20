@@ -1,15 +1,15 @@
-import { findAll } from '@ember/test-helpers';
-import { click, render } from '@ember/test-helpers';
+import { click, render, findAll } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { selectChoose } from 'ember-power-select/test-support';
+import styles from 'irene/components/ak-pagination/index.scss';
 
 const selectOptions = [
-  { value: '2', selected: true, label: '2' },
-  { value: '4', selected: false, label: '4' },
-  { value: '6', selected: false, label: '6' },
+  { value: 2, selected: true, label: 2 },
+  { value: 4, selected: false, label: 4 },
+  { value: 6, selected: false, label: 6 },
 ];
 
 module('Integration | Component | ak-pagination', function (hooks) {
@@ -39,6 +39,7 @@ module('Integration | Component | ak-pagination', function (hooks) {
       onItemPerPageChange: () => {},
       nextAction: () => {},
       prevAction: () => {},
+      selectTriggerClass: styles['ak-pagination-select'],
     });
 
     await render(hbs`
@@ -94,9 +95,9 @@ module('Integration | Component | ak-pagination', function (hooks) {
       .exists()
       .containsText('t:next:()');
     assert.dom('[data-test-next-btn-icon]').exists();
-
     assert.dom('[data-test-pagination-select]').exists();
-    await click('.ak-pagination-select');
+
+    await click(`.${this.selectTriggerClass}`);
 
     const selectListItems = findAll('.ember-power-select-option');
     assert.strictEqual(
@@ -111,7 +112,7 @@ module('Integration | Component | ak-pagination', function (hooks) {
 
       assert.strictEqual(
         optionElement.textContent?.trim(),
-        itemPerPageOption,
+        String(itemPerPageOption),
         `data-test-pagination-select-option="${i}" has a value of ${itemPerPageOption}`
       );
     }
@@ -207,5 +208,71 @@ module('Integration | Component | ak-pagination', function (hooks) {
       '[data-test-pagination-select]',
       this.itemPerPageOptions[selectedOption].value
     );
+  });
+  test('it hides button labels in compact variant', async function (assert) {
+    this.setProperties({
+      onItemPerPageChange: () => {},
+      nextAction: () => {},
+      prevAction: () => {},
+      prevBtnLabel: 'Previous button label',
+      nextBtnLabel: 'Next button label',
+    });
+
+    // When no labels for the next and previous buttons were provided
+    await render(hbs`
+       <AkPagination 
+          @disableNext={{this.disableNext}}
+          @nextAction={{this.nextAction}}
+          @disablePrev={{this.disablePrev}}
+          @prevAction={{this.prevAction}}
+          @endItemIdx={{this.endItemIdx}}
+          @startItemIdx={{this.startItemIdx}}
+          @itemPerPageOptions={{this.itemPerPageOptions}}
+          @onItemPerPageChange={{this.onItemPerPageChange}}
+          @perPageTranslation={{this.perPageTranslation}}
+          @tableItemLabel={{this.tableItemLabel}}
+          @totalItems={{this.totalItems}}
+          @variant="compact"
+       />
+    `);
+
+    assert
+      .dom('[data-test-pagination-prev-btn]')
+      .exists()
+      .doesNotContainText('t:previous:()');
+    assert
+      .dom('[data-test-pagination-next-btn]')
+      .exists()
+      .doesNotContainText('t:next:()');
+
+    // When labels for the next and previous buttons were provided
+    await render(hbs`
+      <AkPagination 
+         @disableNext={{this.disableNext}}
+         @nextAction={{this.nextAction}}
+         @disablePrev={{this.disablePrev}}
+         @prevAction={{this.prevAction}}
+         @endItemIdx={{this.endItemIdx}}
+         @startItemIdx={{this.startItemIdx}}
+         @itemPerPageOptions={{this.itemPerPageOptions}}
+         @onItemPerPageChange={{this.onItemPerPageChange}}
+         @perPageTranslation={{this.perPageTranslation}}
+         @tableItemLabel={{this.tableItemLabel}}
+         @totalItems={{this.totalItems}}
+         @variant="compact"
+         @prevBtnLabel={{this.prevBtnLabel}}
+         @nextBtnLabel={{this.nextBtnLabel}}
+      />
+   `);
+
+    assert
+      .dom('[data-test-pagination-prev-btn]')
+      .exists()
+      .doesNotContainText(this.prevBtnLabel);
+
+    assert
+      .dom('[data-test-pagination-next-btn]')
+      .exists()
+      .doesNotContainText(this.nextBtnLabel);
   });
 });

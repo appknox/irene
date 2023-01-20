@@ -13,23 +13,25 @@ const variantMapping = {
   body2: 'p',
 };
 
-type TypographyVariant = keyof typeof variantMapping;
+export type TypographyVariant = keyof typeof variantMapping;
+export type TypographyColors =
+  | 'inherit'
+  | 'textPrimary'
+  | 'textSecondary'
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'error'
+  | 'info'
+  | 'warn'
+  | 'neutral';
 
 export interface AkTypographySignature {
   Element: HTMLElement;
   Args: {
     tag?: keyof HTMLElementTagNameMap;
     variant?: TypographyVariant;
-    color?:
-      | 'inherit'
-      | 'textPrimary'
-      | 'textSecondary'
-      | 'primary'
-      | 'secondary'
-      | 'success'
-      | 'error'
-      | 'info'
-      | 'warn';
+    color?: TypographyColors;
     gutterBottom?: boolean;
     align?: 'inherit' | 'left' | 'right' | 'center' | 'justify';
     noWrap?: boolean;

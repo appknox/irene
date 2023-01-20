@@ -166,6 +166,7 @@ module('Integration | Component | ak-stack', function (hooks) {
       '12/12',
       'full',
       'fit-content',
+      'auto',
     ],
     async function (assert, width) {
       this.setProperties({

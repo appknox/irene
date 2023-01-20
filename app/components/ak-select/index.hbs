@@ -1,3 +1,4 @@
+{{! @glint-nocheck: or}}
 <div ...attributes local-class='ak-select-root'>
   <div local-class='ak-form-control'>
     {{#if @label}}
@@ -35,7 +36,7 @@
         @onClose={{@onClose}}
         @loadingMessage={{@loadingMessage}}
         @selectedItemComponent={{@selectedItemComponent}}
-        @verticalPosition={{or @veritcalPosition 'below'}}
+        @verticalPosition={{or @verticalPosition 'below'}}
         data-test-power-select
         as |option|
       >
@@ -50,7 +51,9 @@
           @error
           "ak-error-form-helper-text"
         }}'
-      >{{@helperText}}</p>
+      >
+        {{@helperText}}
+      </p>
     {{/if}}
   </div>
 </div>
