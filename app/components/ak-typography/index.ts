@@ -18,9 +18,9 @@ type TypographyVariant = keyof typeof variantMapping;
 export interface AkTypographySignature {
   Element: HTMLElement;
   Args: {
-    tag: keyof HTMLElementTagNameMap;
-    variant: TypographyVariant;
-    color:
+    tag?: keyof HTMLElementTagNameMap;
+    variant?: TypographyVariant;
+    color?:
       | 'inherit'
       | 'textPrimary'
       | 'textSecondary'
@@ -30,10 +30,10 @@ export interface AkTypographySignature {
       | 'error'
       | 'info'
       | 'warn';
-    gutterBottom: boolean;
-    align: 'inherit' | 'left' | 'right' | 'center' | 'justify';
-    noWrap: boolean;
-    underline: 'none' | 'always' | 'hover';
+    gutterBottom?: boolean;
+    align?: 'inherit' | 'left' | 'right' | 'center' | 'justify';
+    noWrap?: boolean;
+    underline?: 'none' | 'always' | 'hover';
   };
   Blocks: { default: [] };
 }

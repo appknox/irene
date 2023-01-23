@@ -72,15 +72,17 @@ module('Integration | Component | ak-menu', function (hooks) {
     assert.dom('[data-test-ak-menu-backdrop]').exists();
 
     assert
-      .dom('[data-test-ak-menu]')
+      .dom('[data-test-ak-menu-popover]')
       .exists()
-      .doesNotHaveClass(/ak-menu-with-arrow/i);
+      .doesNotHaveClass(/ak-menu-arrow-popover-root/i);
 
     assert.dom('[data-popper-arrow]').doesNotExist();
 
     this.set('arrow', true);
 
-    assert.dom('[data-test-ak-menu]').hasClass(/ak-menu-with-arrow/i);
+    assert
+      .dom('[data-test-ak-menu-popover]')
+      .hasClass(/ak-menu-arrow-popover-root/i);
 
     assert.dom('[data-popper-arrow]').exists();
   });

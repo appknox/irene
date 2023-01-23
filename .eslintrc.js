@@ -23,6 +23,7 @@ module.exports = {
   rules: {
     curly: 'error',
     '@typescript-eslint/no-empty-function': 'off',
+    'ember/no-empty-glimmer-component-classes': 'off',
   },
   overrides: [
     // node files
