@@ -28,6 +28,7 @@ body {
   --ak-tooltip-color-on-light: var(--text-primary);
   --ak-tooltip-color-on-dark: var(--common-white);
   --ak-tooltip-border-light: var(--border-color-1);
+  --ak-tooltip-zIndex: var(--zIndex-tooltip);
 
   // variables for ak-toggle
   --ak-toggle-slider-background-color: var(--background-main);

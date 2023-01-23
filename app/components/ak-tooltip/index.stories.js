@@ -11,7 +11,12 @@ const Template = (args) => ({
     <AkTypography @color="textSecondary" @gutterBottom={{true}}>Experiment with me</AkTypography>
     
     <div class="flex-row flex-justify-center flex-align-center w-full">
-        <AkTooltip @title={{this.title}} @placement={{this.placement}} @color={{this.color}} @arrow={{this.arrow}}>
+        <AkTooltip 
+          @title={{this.title}} 
+          @placement={{this.placement}} 
+          @color={{this.color}} 
+          @arrow={{this.arrow}}
+          @disabled={{this.disabled}}>
             <AkLink>Link with tooltip</AkLink>
         </AkTooltip>
     </div>
@@ -26,6 +31,7 @@ Default.args = {
   placement: 'bottom',
   arrow: true,
   color: 'dark',
+  disabled: false,
 };
 
 const PlacementTemplate = (args) => ({
@@ -56,4 +62,34 @@ export const Placements = PlacementTemplate.bind({});
 Placements.args = {
   arrow: true,
   color: 'dark',
+};
+
+const WithDelayTemplate = (args) => ({
+  template: hbs`
+    <div class="p-6 flex-row flex-justify-center flex-align-center w-full">
+        <AkTooltip 
+          @title={{this.title}} 
+          @placement={{this.placement}} 
+          @color={{this.color}} 
+          @arrow={{this.arrow}}
+          @disabled={{this.disabled}}
+          @enterDelay={{this.enterDelay}}
+          @leaveDelay={{this.leaveDelay}}>
+            <AkLink>Delay Tooltip</AkLink>
+        </AkTooltip>
+    </div>
+  `,
+  context: args,
+});
+
+export const WithDelay = WithDelayTemplate.bind({});
+
+WithDelay.args = {
+  title: 'I am a delayed tooltip!',
+  placement: 'bottom',
+  arrow: true,
+  color: 'dark',
+  disabled: false,
+  enterDelay: 500,
+  leaveDelay: 200,
 };

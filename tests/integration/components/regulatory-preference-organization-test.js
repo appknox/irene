@@ -95,7 +95,7 @@ module(
       );
 
       assert
-        .dom('[data-test-ak-tooltip-content]', pcidssContainer)
+        .dom('[data-test-ak-tooltip-content]')
         .hasText('t:pcidssExpansion:()');
 
       await triggerEvent(
@@ -103,9 +103,7 @@ module(
         'mouseleave'
       );
 
-      assert
-        .dom('[data-test-ak-tooltip-content]', pcidssContainer)
-        .doesNotExist();
+      assert.dom('[data-test-ak-tooltip-content]').doesNotExist();
 
       // hipaa
       await triggerEvent(
@@ -114,7 +112,7 @@ module(
       );
 
       assert
-        .dom('[data-test-ak-tooltip-content]', hipaaContainer)
+        .dom('[data-test-ak-tooltip-content]')
         .hasText('t:hipaaExpansion:()');
 
       await triggerEvent(
@@ -122,9 +120,7 @@ module(
         'mouseleave'
       );
 
-      assert
-        .dom('[data-test-ak-tooltip-content]', hipaaContainer)
-        .doesNotExist();
+      assert.dom('[data-test-ak-tooltip-content]').doesNotExist();
 
       // gdpr
       await triggerEvent(
@@ -133,7 +129,7 @@ module(
       );
 
       assert
-        .dom('[data-test-ak-tooltip-content]', gdprContainer)
+        .dom('[data-test-ak-tooltip-content]')
         .hasText('t:gdprExpansion:()');
 
       await triggerEvent(
@@ -141,9 +137,7 @@ module(
         'mouseleave'
       );
 
-      assert
-        .dom('[data-test-ak-tooltip-content]', gdprContainer)
-        .doesNotExist();
+      assert.dom('[data-test-ak-tooltip-content]').doesNotExist();
     });
 
     test('it renders regulatory inclusion status based on organization preference', async function (assert) {
