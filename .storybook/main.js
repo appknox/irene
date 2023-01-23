@@ -16,6 +16,7 @@ module.exports = {
   },
   previewBody: (body) => `
     ${body}
+    <div id="ak-component-wormhole"></div>
     <script>
       document.body.classList.add('theme-dark');
     </script>

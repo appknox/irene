@@ -1,8 +1,10 @@
+{{! @glint-nocheck : did-insert, will-destroy, or}}
 {{#if @anchorRef}}
   <div
+    ...attributes
     class='ak-popover'
     local-class='ak-popover-root'
-    {{did-insert this.elementInserted}}
+    {{did-insert (fn this.elementInserted @anchorRef)}}
     {{will-destroy this.elementWillDestroy}}
   >
     {{yield}}

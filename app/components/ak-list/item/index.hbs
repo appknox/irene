@@ -1,3 +1,4 @@
+{{! @glint-nocheck : or}}
 {{#let
   (hash
     leftIcon=(component 'ak-list/item-icon' disabled=@disabled rightGutter=true)
@@ -32,7 +33,7 @@
       local-class='ak-list-item-root {{if @selected "ak-list-item-selected"}}'
     >
       <LinkTo
-        @route={{@route}}
+        @route={{this.route}}
         @query={{@query}}
         @models={{this.modelOrModels}}
         @disabled={{@disabled}}
