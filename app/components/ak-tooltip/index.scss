@@ -4,6 +4,13 @@
   position: relative;
 }
 
+.ak-tooltip-container-root {
+  position: fixed;
+  inset: 0px;
+  z-index: var(--ak-tooltip-zIndex);
+  width: 0;
+}
+
 .ak-tooltip-root {
   border-radius: var(--ak-tooltip-border-radius);
   padding: 0.4em 0.8em;
@@ -27,22 +34,20 @@
   color: var(--ak-tooltip-color-on-dark);
 }
 
-.ak-tooltip-with-arrow {
-  :global(.ak-popover) {
-    &[data-popper-placement*='top'] .ak-tooltip-root {
-      margin-bottom: 0.8em;
-    }
+.ak-tooltip-arrow-popover-root {
+  &[data-popper-placement*='top'] .ak-tooltip-root {
+    margin-bottom: 0.8em;
+  }
 
-    &[data-popper-placement*='bottom'] .ak-tooltip-root {
-      margin-top: 0.8em;
-    }
+  &[data-popper-placement*='bottom'] .ak-tooltip-root {
+    margin-top: 0.8em;
+  }
 
-    &[data-popper-placement*='left'] .ak-tooltip-root {
-      margin-right: 0.8em;
-    }
+  &[data-popper-placement*='left'] .ak-tooltip-root {
+    margin-right: 0.8em;
+  }
 
-    &[data-popper-placement*='right'] .ak-tooltip-root {
-      margin-left: 0.8em;
-    }
+  &[data-popper-placement*='right'] .ak-tooltip-root {
+    margin-left: 0.8em;
   }
 }

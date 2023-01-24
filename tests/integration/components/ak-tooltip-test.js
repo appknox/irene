@@ -26,6 +26,26 @@ module('Integration | Component | ak-tooltip', function (hooks) {
     assert.dom('[data-test-ak-tooltip-content]').doesNotExist();
   });
 
+  test('it renders ak-tooltip with enterDelay & leaveDelay', async function (assert) {
+    await render(hbs`
+        <AkTooltip @title="ak-tooltip" @enterDelay={{500}} @leaveDelay={{200}}>
+            <button data-test-button type="button">Show tooltip</button>
+        </AkTooltip>
+    `);
+
+    const tooltipRoot = find('[data-test-ak-tooltip-root]');
+
+    assert.dom(tooltipRoot).exists();
+
+    await triggerEvent(tooltipRoot, 'mouseenter');
+
+    assert.dom('[data-test-ak-tooltip-content]').exists().hasText('ak-tooltip');
+
+    await triggerEvent(tooltipRoot, 'mouseleave');
+
+    assert.dom('[data-test-ak-tooltip-content]').doesNotExist();
+  });
+
   test('it renders ak-tooltip with tootip content block', async function (assert) {
     await render(hbs`
         <AkTooltip>
@@ -67,12 +87,12 @@ module('Integration | Component | ak-tooltip', function (hooks) {
 
     const tooltipRoot = find('[data-test-ak-tooltip-root]');
 
-    assert
-      .dom(tooltipRoot)
-      .exists()
-      .doesNotHaveClass(/ak-tooltip-with-arrow/i);
-
     await triggerEvent(tooltipRoot, 'mouseenter');
+
+    assert
+      .dom('[data-test-ak-tooltip-popover]')
+      .exists()
+      .doesNotHaveClass(/ak-tooltip-arrow-popover-root/i);
 
     assert.dom('[data-test-ak-tooltip-content]').exists().hasText('ak-tooltip');
     assert.dom('[data-popper-arrow]').doesNotExist();
@@ -80,7 +100,10 @@ module('Integration | Component | ak-tooltip', function (hooks) {
     this.set('arrow', true);
 
     assert.dom('[data-popper-arrow]').exists();
-    assert.dom(tooltipRoot).hasClass(/ak-tooltip-with-arrow/i);
+
+    assert
+      .dom('[data-test-ak-tooltip-popover]')
+      .hasClass(/ak-tooltip-arrow-popover-root/i);
   });
 
   test('it renders ak-tooltip in dark & light color', async function (assert) {
