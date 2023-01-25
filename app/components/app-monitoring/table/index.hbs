@@ -8,18 +8,16 @@
     />
   {{else}}
     <div local-class='table-body' data-test-am-table-body>
-      <Pagination
+      <AkPaginationProvider
         @results={{this.tableData}}
-        @onPageItemsCountChange={{this.onPageItemsCountChange}}
+        @onItemPerPageChange={{this.onItemPerPageChange}}
         @totalItems={{this.totalCount}}
         @nextAction={{this.goToPage}}
         @prevAction={{this.goToPage}}
         @itemPerPageOptions={{this.itemPerPageOptions}}
         @defaultLimit={{this.limit}}
         @offset={{this.offset}}
-        @tableItemLabel='Projects'
-        data-test-pagination-component
-        as |context|
+        as |pgc|
       >
         {{#if this.isFetchingAMTableData}}
           <div local-class='loading'>
@@ -31,7 +29,7 @@
             @body='{{t "appMonitoringErrors.emptyResults.body"}}'
           />
         {{else}}
-          {{#each context.currentPage as |app idx|}}
+          {{#each pgc.currentPageResults as |app idx|}}
             <AppMonitoring::Table::Row
               @amApp={{app}}
               @id={{idx}}
@@ -40,7 +38,22 @@
             />
           {{/each}}
         {{/if}}
-      </Pagination>
+
+        <AkPagination
+          @disableNext={{pgc.disableNext}}
+          @nextAction={{pgc.nextAction}}
+          @disablePrev={{pgc.disablePrev}}
+          @prevAction={{pgc.prevAction}}
+          @endItemIdx={{pgc.endItemIdx}}
+          @startItemIdx={{pgc.startItemIdx}}
+          @itemPerPageOptions={{pgc.itemPerPageOptions}}
+          @onItemPerPageChange={{pgc.onItemPerPageChange}}
+          @selectedOption={{pgc.selectedOption}}
+          @tableItemLabel='Projects'
+          @perPageTranslation='Records per page'
+          @totalItems={{pgc.totalItems}}
+        />
+      </AkPaginationProvider>
     </div>
   {{/if}}
 </div>

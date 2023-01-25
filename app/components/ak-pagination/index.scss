@@ -1,0 +1,66 @@
+/* Pagination Component */
+.ak-pagination {
+  background: var(--ak-pagination-background);
+  border-radius: var(--ak-pagination-border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.571em 1.071em;
+  margin-top: 0.714em;
+  width: 100%;
+  height: 45px;
+
+  .ak-pagination-divider {
+    width: 1px;
+    height: 100%;
+    min-height: 32px;
+    background: var(--ak-pagination-divider-background);
+  }
+
+  .ak-pagination-divider.pagination-buttons {
+    margin-right: 0.643em;
+  }
+
+  .ak-pagination-button-prev-icon {
+    margin-right: 0.214em;
+  }
+
+  .ak-pagination-button-next-icon {
+    margin-left: 0.214em;
+  }
+
+  .ak-pagination-select {
+    height: 30px !important;
+  }
+
+  .ak-pagination-prev-button,
+  .ak-pagination-next-button {
+    height: 30px;
+    background-color: var(--ak-pagination-button-background);
+    min-width: unset;
+    padding-left: 0.143em;
+    padding-right: 0.857em;
+  }
+
+  .ak-pagination-next-button {
+    padding-left: 0.857em;
+    padding-right: 0.143em;
+  }
+}
+
+.ak-pagination-variant-compact {
+  .ak-pagination-divider.pagination-buttons {
+    display: none;
+  }
+
+  .ak-pagination-prev-button,
+  .ak-pagination-next-button {
+    padding-left: 0.357em;
+    padding-right: 0.357em;
+  }
+
+  .ak-pagination-button-prev-icon,
+  .ak-pagination-button-next-icon {
+    margin: 0em;
+  }
+}

@@ -223,6 +223,12 @@ body {
   --ak-date-picker-font-family: var(--font-family);
   --ak-date-picker-font-weight-regular: var(--font-weight-regular);
   --ak-date-picker-font-weight-medium: var(--font-weight-medium);
+
+  // variables for ak-pagination
+  --ak-pagination-background: var(--neutral-grey-100);
+  --ak-pagination-border-radius: var(--border-radius);
+  --ak-pagination-divider-background: var(--divider-dark);
+  --ak-pagination-button-background: var(--common-white);
 }
 
 body {

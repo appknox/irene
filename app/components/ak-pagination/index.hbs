@@ -1,0 +1,102 @@
+{{! @glint-nocheck: or}}
+<div
+  ...attributes
+  local-class='ak-pagination ak-pagination-variant-{{this.variant}}'
+>
+  <AkStack @direction='row' @alignItems='center' @spacing='1.5'>
+    <AkTypography {{style fontWeight='600'}} data-test-per-page-translation>
+      {{@perPageTranslation}}
+    </AkTypography>
+
+    <AkSelect
+      @onChange={{or @onItemPerPageChange this.noop}}
+      @options={{@itemPerPageOptions}}
+      @selected={{@selectedOption}}
+      @renderInPlace={{true}}
+      @verticalPosition={{or @paginationSelectOptionsVertPosition 'above'}}
+      @triggerClass={{this.classes.selectClass}}
+      {{style width='50px'}}
+      data-test-pagination-select
+      as |aks|
+    >
+      {{aks.label}}
+    </AkSelect>
+
+    {{#if @totalItems}}
+      <div local-class='ak-pagination-divider'></div>
+
+      <AkTypography @tag='span' data-test-page-range>
+        {{@startItemIdx}}-{{@endItemIdx}}
+        of
+        {{@totalItems}}
+        {{@tableItemLabel}}
+      </AkTypography>
+    {{/if}}
+
+  </AkStack>
+
+  <AkStack
+    @direction='row'
+    @alignItems='center'
+    @spacing='1.5'
+    data-test-pagination-btns-container
+  >
+    <div local-class='ak-pagination-divider pagination-buttons'></div>
+
+    <AkButton
+      @disabled={{@disablePrev}}
+      @leftIconClass={{this.classes.prevButtonIconClass}}
+      @color='neutral'
+      @variant='outlined'
+      local-class='ak-pagination-prev-button'
+      {{on 'click' (or @prevAction this.noop)}}
+      data-test-pagination-prev-btn
+    >
+      <:leftIcon>
+        <AkIcon
+          @iconName='arrow-left'
+          {{style fontSize='1.28rem !important'}}
+          data-test-prev-btn-icon
+        />
+      </:leftIcon>
+
+      <:default>
+        {{#unless this.isCompactPagination}}
+          {{#if @prevBtnLabel}}
+            {{@prevBtnLabel}}
+          {{else}}
+            {{t 'previous'}}
+          {{/if}}
+        {{/unless}}
+      </:default>
+    </AkButton>
+
+    <AkButton
+      @disabled={{@disableNext}}
+      @color='neutral'
+      @variant='outlined'
+      @rightIconClass={{this.classes.nextButtonIconClass}}
+      local-class='ak-pagination-next-button'
+      {{on 'click' (or @nextAction this.noop)}}
+      data-test-pagination-next-btn
+    >
+      <:default>
+        {{#unless this.isCompactPagination}}
+          {{#if @nextBtnLabel}}
+            {{@nextBtnLabel}}
+          {{else}}
+            {{t 'next'}}
+          {{/if}}
+        {{/unless}}
+      </:default>
+
+      <:rightIcon>
+        <AkIcon
+          @iconName='arrow-right'
+          {{style fontSize='1.28rem !important'}}
+          data-test-next-btn-icon
+        />
+      </:rightIcon>
+    </AkButton>
+  </AkStack>
+</div>

@@ -59,7 +59,7 @@ export default class AppMonitoringTableComponent extends Component {
     });
   }
 
-  @action onPageItemsCountChange(args) {
+  @action onItemPerPageChange(args) {
     const { limit } = args;
     const offset = 0;
 

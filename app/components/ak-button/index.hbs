@@ -1,3 +1,4 @@
+{{! @glint-nocheck: or }}
 <button
   data-test-ak-button
   ...attributes
@@ -14,7 +15,11 @@
       <AkLoader data-test-ak-button-loader @size={{13}} />
     </div>
   {{else if (has-block 'leftIcon')}}
-    <div data-test-ak-button-left-icon local-class='ak-button-left-icon'>
+    <div
+      data-test-ak-button-left-icon
+      local-class='ak-button-left-icon'
+      class='{{@leftIconClass}}'
+    >
       {{yield to='leftIcon'}}
     </div>
   {{/if}}
@@ -36,7 +41,11 @@
 
   {{#unless this.loading}}
     {{#if (has-block 'rightIcon')}}
-      <div data-test-ak-button-right-icon local-class='ak-button-right-icon'>
+      <div
+        data-test-ak-button-right-icon
+        local-class='ak-button-right-icon'
+        class='{{@rightIconClass}}'
+      >
         {{yield to='rightIcon'}}
       </div>
     {{/if}}
