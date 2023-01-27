@@ -7,8 +7,6 @@ import {
   Select,
 } from 'ember-power-select/components/power-select';
 
-import type CssTransitionsRegistry from 'ember-css-transitions/template-registry';
-
 // Types for compiled templates
 declare module 'irene/templates/*' {
   const tmpl: TemplateFactory;
@@ -29,7 +27,7 @@ declare module '@glint/environment-ember-loose/registry' {
     verticalPosition?: 'above' | 'below' | 'auto';
   }
 
-  export default interface Registry extends CssTransitionsRegistry {
+  export default interface Registry {
     element: HelperLike<{
       Args: { Positional: [tagName: string] };
       Return: ComponentLike<{
