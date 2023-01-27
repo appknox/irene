@@ -62,13 +62,6 @@ module.exports = function (defaults) {
     'ember-date-components': {
       includeCSS: false,
     },
-    '@embroider/macros': {
-      setConfig: {
-        'ember-css-transitions': {
-          useTestWaiters: true,
-        },
-      },
-    },
   });
 
   // Custom hacks to get a similar build in staging and production
