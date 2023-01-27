@@ -1,20 +1,23 @@
+{{! @glint-nocheck : did-insert}}
 {{#if @open}}
-  <div role='presentation' local-class='drawer-root'>
-    <div
-      data-test-backdrop
-      role='button'
-      aria-hidden='true'
-      local-class='backdrop-root'
-      {{on 'click' this.handleBackdropClick}}
-      {{did-insert this.backdropInserted}}
-    ></div>
+  <EmberWormhole @to='ak-component-wormhole'>
+    <div role='presentation' local-class='drawer-root'>
+      <div
+        data-test-backdrop
+        role='button'
+        aria-hidden='true'
+        local-class='backdrop-root'
+        {{on 'click' this.handleBackdropClick}}
+        {{did-insert this.backdropInserted}}
+      ></div>
 
-    <div
-      data-test-ak-drawer-container
-      local-class='drawer-container drawer-anchor-{{@anchor}}'
-      {{did-insert this.drawerInserted}}
-    >
-      {{yield (hash closeHandler=this.handleDrawerClose)}}
+      <div
+        data-test-ak-drawer-container
+        local-class='drawer-container drawer-anchor-{{this.anchor}}'
+        {{did-insert this.drawerInserted}}
+      >
+        {{yield (hash closeHandler=this.handleDrawerClose)}}
+      </div>
     </div>
-  </div>
+  </EmberWormhole>
 {{/if}}
