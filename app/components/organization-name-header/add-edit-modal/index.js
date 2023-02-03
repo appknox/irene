@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import { tracked } from '@glimmer/tracking';
 
@@ -45,14 +45,13 @@ class OrganizationNameAddEditModal extends Component {
       : this.intl.t('organizationNameAddLabel');
   }
 
-  @task()
-  *updateOrgName() {
+  updateOrgName = task(async () => {
     const org = this.args.organization;
     const existingName = org.name;
 
     try {
-      yield org.set('name', this.newOrUpdatedOrgName);
-      yield org.save();
+      await org.set('name', this.newOrUpdatedOrgName);
+      await org.save();
 
       this.showSuccessMessage = true;
       triggerAnalytics('feature', ENV.csb.updateOrgName);
@@ -69,7 +68,7 @@ class OrganizationNameAddEditModal extends Component {
 
       this.notify.error(errMsg);
     }
-  }
+  });
 }
 
 export default OrganizationNameAddEditModal;

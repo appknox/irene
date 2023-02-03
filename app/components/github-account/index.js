@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
 import { action } from '@ember/object';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 
 export default class GithubAccountComponent extends Component {

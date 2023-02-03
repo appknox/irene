@@ -3,7 +3,7 @@ import $ from 'jquery';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
 import { tracked } from '@glimmer/tracking';
