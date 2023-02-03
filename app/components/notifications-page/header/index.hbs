@@ -1,0 +1,41 @@
+<header local-class='notification_header'>
+  <div local-class='notification_header_line'>
+    <div local-class='notification_title_area'>
+      <AkTypography local-class='notification_title' @variant='h4'>
+        <span>{{t 'notifications'}}</span>
+      </AkTypography>
+      <AkTypography
+        @variant='h5'
+        local-class='notifications_unread_count'
+        data-test-unread-count
+      >{{this.unReadCount}}</AkTypography>
+    </div>
+    <div local-class='notification_settings_area'>
+      <span local-class='notification_unread_text'>Only show unread</span>
+      <AkToggle
+        @checked={{this.akNotifications.showUnReadOnly}}
+        @size='small'
+        local-class='notification_unread_toggle'
+        @onChange={{this.onShowUnReadOnlyChange}}
+        data-test-ak-toggle-unread
+      />
+      {{! <span local-class='vertical-divider'></span>
+      <AkIconButton @variant='outlined'>
+        <AkIcon @iconName='settings' />
+      </AkIconButton> }}
+    </div>
+  </div>
+  <div local-class='notification_header_line'>
+    <AkTypography @variant='h5'>LATEST</AkTypography>
+    <AkButton
+      @type='button'
+      @color='primary'
+      @variant='text'
+      @underline='always'
+      {{on 'click' this.markAllAsRead}}
+      data-test-ak-button-mark-all-as-read
+    >
+      <strong>Mark all as read</strong>
+    </AkButton>
+  </div>
+</header>
