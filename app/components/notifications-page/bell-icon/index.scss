@@ -1,0 +1,12 @@
+.nf-icon {
+  position: relative;
+}
+.nf-unread-dot {
+  background-color: var(--primary);
+  height: 0.5em;
+  width: 0.5em;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
