@@ -77,6 +77,7 @@ export default class AkNotificationsService extends Service {
     await this.fetch.perform();
   });
 
+  @action
   realtimeUpdate(data: websocketData) {
     this.unReadCount = data.unReadCount;
   }
