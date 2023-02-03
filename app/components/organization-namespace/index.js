@@ -1,72 +1,115 @@
-/* eslint-disable ember/no-mixins, ember/no-classic-components, ember/no-classic-classes, ember/require-tagless-components, ember/avoid-leaking-state-in-ember-objects, ember/no-get */
-import PaginateMixin from 'irene/mixins/paginate';
-import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import { t } from 'ember-intl';
 
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 
-export default Component.extend(PaginateMixin, {
-  intl: service(),
-  notify: service('notifications'),
-  org: service('organization'),
+export default class OrganizationNamespaceComponent extends Component {
+  @service intl;
+  @service('notifications') notify;
+  @service me;
+  @service store;
+  @service router;
 
-  classNames: ['py-2 mt-2'],
-  targetModel: 'organization-namespace',
-  sortProperties: ['created:desc'],
-  showRejectNamespaceConfirm: false,
-  selectedNamespace: null,
+  @tracked showRejectNamespaceConfirm = false;
+  @tracked selectedNamespace = null;
+  @tracked namespaceResponse = null;
 
-  tNamespaceRejected: t('namespaceRejected'),
-  tPleaseTryAgain: t('pleaseTryAgain'),
+  tNamespaceRejected = this.intl.t('namespaceRejected');
+  tPleaseTryAgain = this.intl.t('pleaseTryAgain');
 
-  hasNamespace: computed.gt('org.selected.namespacesCount', 0),
+  constructor() {
+    super(...arguments);
 
-  columns: computed('intl', function () {
+    const { namespaceLimit, namespaceOffset } = this.args.queryParams;
+
+    this.fetchNamespace.perform(namespaceLimit, namespaceOffset);
+  }
+
+  get namespaceList() {
+    return this.namespaceResponse?.toArray() || [];
+  }
+
+  get totalNamespaceCount() {
+    return this.namespaceResponse?.meta?.count || 0;
+  }
+
+  get hasNoNamespace() {
+    return this.totalNamespaceCount === 0;
+  }
+
+  get columns() {
     return [
       {
-        name: this.get('intl').t('namespace'),
+        name: this.intl.t('namespace'),
         component: 'organization-namespace/namespace-value',
       },
       {
-        name: this.get('intl').t('requestStatus'),
+        name: this.intl.t('requestStatus'),
         component: 'organization-namespace/request-status',
       },
       {
-        name: this.get('intl').t('approvalStatus'),
+        name: this.intl.t('approvalStatus'),
         component: 'organization-namespace/approval-status',
       },
     ];
-  }),
+  }
 
   /* Open reject-namespace confirmation */
-  rejectNamespaceConfirm: task(function* (namespace) {
-    yield this.set('showRejectNamespaceConfirm', true);
-    yield this.set('selectedNamespace', namespace);
-  }),
+  @action
+  rejectNamespaceConfirm(namespace) {
+    this.showRejectNamespaceConfirm = true;
+    this.selectedNamespace = namespace;
+  }
 
-  rejectNamespaceCancel: task(function* () {
-    yield this.set('showRejectNamespaceConfirm', false);
-    yield this.set('selectedNamespace', null);
-  }),
+  @action
+  rejectNamespaceCancel() {
+    this.showRejectNamespaceConfirm = false;
+    this.selectedNamespace = null;
+  }
 
-  /* Reject namespace action */
-  confirmReject: task(function* () {
+  @action
+  handleNextAction({ limit, offset }) {
+    this.router.transitionTo({
+      queryParams: { namespace_limit: limit, namespace_offset: offset },
+    });
+
+    this.fetchNamespace.perform(limit, offset);
+  }
+
+  @action
+  handlePrevAction({ limit, offset }) {
+    this.router.transitionTo({
+      queryParams: { namespace_limit: limit, namespace_offset: offset },
+    });
+
+    this.fetchNamespace.perform(limit, offset);
+  }
+
+  @action
+  handleItemPerPageChange({ limit }) {
+    this.router.transitionTo({
+      queryParams: { namespace_limit: limit, namespace_offset: 0 },
+    });
+
+    this.fetchNamespace.perform(limit, 0);
+  }
+
+  @task
+  *fetchNamespace(limit, offset) {
     try {
-      const namespace = this.get('selectedNamespace');
-
-      namespace.deleteRecord();
-      yield namespace.save();
-
-      this.notify.success(this.get('tNamespaceRejected'));
-      triggerAnalytics('feature', ENV.csb.namespaceRejected);
-
-      this.set('showRejectNamespaceConfirm', false);
+      this.namespaceResponse = yield this.store.query(
+        'organization-namespace',
+        {
+          limit,
+          offset,
+        }
+      );
     } catch (err) {
-      let errMsg = this.get('tPleaseTryAgain');
+      let errMsg = this.tPleaseTryAgain;
 
       if (err.errors && err.errors.length) {
         errMsg = err.errors[0].detail || errMsg;
@@ -76,5 +119,31 @@ export default Component.extend(PaginateMixin, {
 
       this.notify.error(errMsg);
     }
-  }),
-});
+  }
+
+  /* Reject namespace action */
+  @task
+  *confirmReject() {
+    try {
+      const namespace = this.selectedNamespace;
+
+      namespace.deleteRecord();
+      yield namespace.save();
+
+      this.notify.success(this.tNamespaceRejected);
+      triggerAnalytics('feature', ENV.csb.namespaceRejected);
+
+      this.showRejectNamespaceConfirm = false;
+    } catch (err) {
+      let errMsg = this.tPleaseTryAgain;
+
+      if (err.errors && err.errors.length) {
+        errMsg = err.errors[0].detail || errMsg;
+      } else if (err.message) {
+        errMsg = err.message;
+      }
+
+      this.notify.error(errMsg);
+    }
+  }
+}
