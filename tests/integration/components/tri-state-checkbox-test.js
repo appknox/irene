@@ -3,10 +3,12 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+import { setupIntl } from 'ember-intl/test-support';
 import styles from 'irene/components/tri-state-checkbox/index.scss';
 
 module('Integration | Component | tri-state-checkbox', function (hooks) {
   setupRenderingTest(hooks);
+  setupIntl(hooks);
 
   test('it does not render component if label is not passed', async function (assert) {
     await render(hbs`<TriStateCheckbox />`);
