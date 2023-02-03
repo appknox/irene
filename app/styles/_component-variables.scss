@@ -362,4 +362,9 @@ body {
   --organization-details-neutral-background: var(--neutral-grey-200);
   --organization-details-font-weight-regular: var(--font-weight-regular);
   --organization-details-font-weight-bold: var(--font-weight-bold);
+
+  //variables for notifications
+  --notification-unread-count-color-primary: var(--primary-main);
+  --notification-unread-count-background-color: var(--primary-main-10);
+  --notification-divider-border-color: var(--common-black);
 }

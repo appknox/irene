@@ -1,0 +1,50 @@
+.notification_header {
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  padding-left: 1em;
+  padding-bottom: 0.5em;
+}
+.notification_header_line {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 2em;
+}
+
+.notification_title {
+  margin-right: 0.5em;
+}
+
+.notification_title_area {
+  display: flex;
+  align-items: center;
+}
+
+.notification_settings_area {
+  display: flex;
+  align-items: center;
+}
+
+.notifications_unread_count {
+  color: var(--notification-unread-count-color-primary);
+  background-color: var(--notification-unread-count-background-color);
+  line-height: 1em;
+  padding: 0.25em 0.4em;
+}
+
+.notification_unread_text {
+  margin-right: 1em;
+  color: var(--body-type-color);
+}
+
+.notification_unread_toggle {
+  margin: 0;
+}
+
+.vertical-divider {
+  height: 100%;
+  border: 1px solid;
+  border-color: var(--notification-divider-border-color);
+  opacity: 0.1;
+  margin: 0 1em;
+}
