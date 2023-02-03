@@ -49,7 +49,11 @@ module('Integration | Component | organization-namespace', function (hooks) {
       });
     });
 
-    this.setProperties({ namespaces, users });
+    this.setProperties({
+      namespaces,
+      users,
+      queryParams: { namespaceLimit: 10, namespaceOffset: 0 },
+    });
 
     await this.owner.lookup('service:organization').load();
 
@@ -59,7 +63,9 @@ module('Integration | Component | organization-namespace', function (hooks) {
 
   test('it renders organization namespace', async function (assert) {
     this.server.get('/organizations/:id/namespaces', (schema) => {
-      return schema.namespaces.all().models;
+      const results = schema.namespaces.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
     });
 
     this.server.get('/organizations/:id/users/:userId', (schema, req) => {
@@ -69,7 +75,7 @@ module('Integration | Component | organization-namespace', function (hooks) {
     });
 
     await render(hbs`
-      <OrganizationNamespace />
+      <OrganizationNamespace @queryParams={{this.queryParams}} />
     `);
 
     const headerRow = find('[data-test-namespace-thead] tr').querySelectorAll(
@@ -122,7 +128,9 @@ module('Integration | Component | organization-namespace', function (hooks) {
     ['admin', 'member'],
     async function (assert, role) {
       this.server.get('/organizations/:id/namespaces', (schema) => {
-        return schema.namespaces.all().models;
+        const results = schema.namespaces.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
       });
 
       this.server.get('/organizations/:id/users/:userId', (schema, req) => {
@@ -140,7 +148,7 @@ module('Integration | Component | organization-namespace', function (hooks) {
       }
 
       await render(hbs`
-      <OrganizationNamespace />
+      <OrganizationNamespace @queryParams={{this.queryParams}} />
     `);
 
       const contentRows = findAll('[data-test-namespace-row]');
@@ -171,7 +179,9 @@ module('Integration | Component | organization-namespace', function (hooks) {
 
   test('test approve namespace success', async function (assert) {
     this.server.get('/organizations/:id/namespaces', (schema) => {
-      return schema.namespaces.all().models;
+      const results = schema.namespaces.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
     });
 
     this.server.get('/organizations/:id/users/:userId', (schema, req) => {
@@ -181,7 +191,7 @@ module('Integration | Component | organization-namespace', function (hooks) {
     });
 
     await render(hbs`
-      <OrganizationNamespace />
+      <OrganizationNamespace @queryParams={{this.queryParams}} />
     `);
 
     const rows = findAll('[data-test-namespace-row]');
@@ -213,7 +223,9 @@ module('Integration | Component | organization-namespace', function (hooks) {
 
   test('test approve namespace failure', async function (assert) {
     this.server.get('/organizations/:id/namespaces', (schema) => {
-      return schema.namespaces.all().models;
+      const results = schema.namespaces.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
     });
 
     this.server.get('/organizations/:id/users/:userId', (schema, req) => {
@@ -227,7 +239,7 @@ module('Integration | Component | organization-namespace', function (hooks) {
     });
 
     await render(hbs`
-      <OrganizationNamespace />
+      <OrganizationNamespace @queryParams={{this.queryParams}} />
     `);
 
     const rows = findAll('[data-test-namespace-row]');
@@ -257,7 +269,9 @@ module('Integration | Component | organization-namespace', function (hooks) {
 
   test('test reject namespace success', async function (assert) {
     this.server.get('/organizations/:id/namespaces', (schema) => {
-      return schema.namespaces.all().models;
+      const results = schema.namespaces.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
     });
 
     this.server.get('/organizations/:id/users/:userId', (schema, req) => {
@@ -267,7 +281,7 @@ module('Integration | Component | organization-namespace', function (hooks) {
     });
 
     await render(hbs`
-      <OrganizationNamespace />
+      <OrganizationNamespace @queryParams={{this.queryParams}} />
     `);
 
     const rows = findAll('[data-test-namespace-row]');
@@ -327,7 +341,9 @@ module('Integration | Component | organization-namespace', function (hooks) {
 
   test('test reject namespace failure', async function (assert) {
     this.server.get('/organizations/:id/namespaces', (schema) => {
-      return schema.namespaces.all().models;
+      const results = schema.namespaces.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
     });
 
     this.server.get('/organizations/:id/users/:userId', (schema, req) => {
@@ -341,7 +357,7 @@ module('Integration | Component | organization-namespace', function (hooks) {
     });
 
     await render(hbs`
-      <OrganizationNamespace />
+      <OrganizationNamespace @queryParams={{this.queryParams}} />
     `);
 
     const rows = findAll('[data-test-namespace-row]');
