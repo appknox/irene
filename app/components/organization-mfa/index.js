@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 
 class OrganizationMfa extends Component {
@@ -21,13 +21,12 @@ class OrganizationMfa extends Component {
     return !this.args.user.mfaEnabled;
   }
 
-  @task()
-  *setMandatoryMFA() {
+  setMandatoryMFA = task(async () => {
     try {
       this.isSavingStatus = true;
       const org = this.args.organization;
 
-      yield org.save();
+      await org.save();
 
       this.isSavingStatus = false;
       this.notify.success(this.tChangedMandatoryMFA);
@@ -43,7 +42,7 @@ class OrganizationMfa extends Component {
 
       this.notify.error(errMsg);
     }
-  }
+  });
 }
 
 export default OrganizationMfa;

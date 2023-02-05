@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import ENUMS from 'irene/enums';
 
 export default class OrganizationMemberListMemberRole extends Component {
@@ -26,12 +26,11 @@ export default class OrganizationMemberListMemberRole extends Component {
   }
 
   /* Change member role */
-  @task
-  *selectMemberRole({ value: role }) {
+  selectMemberRole = task(async ({ value: role }) => {
     try {
       const member = this.args.member;
       member.set('role', role);
-      yield member.save();
+      await member.save();
 
       this.notify.success(this.tUserRoleUpdated);
     } catch (err) {
@@ -45,5 +44,5 @@ export default class OrganizationMemberListMemberRole extends Component {
 
       this.notify.error(errMsg);
     }
-  }
+  });
 }

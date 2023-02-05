@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import dayjs from 'dayjs';
@@ -28,8 +28,7 @@ export default class OrganizationArchiveComponent extends Component {
     'lastYear',
   ];
 
-  @task
-  *tiggerGenerateArchive() {
+  tiggerGenerateArchive = task(async () => {
     try {
       const startDateObj = this.startDate;
       const endDateObj = this.endDate;
@@ -61,7 +60,7 @@ export default class OrganizationArchiveComponent extends Component {
         requestParams['to_date'] = endDateObj.toISOString();
       }
 
-      const archiveRecord = yield this.store.createRecord(
+      const archiveRecord = await this.store.createRecord(
         'organization-archive',
         {
           fromDate: requestParams['from_date'],
@@ -69,7 +68,7 @@ export default class OrganizationArchiveComponent extends Component {
         }
       );
 
-      yield archiveRecord.save();
+      await archiveRecord.save();
 
       this.realtime.incrementProperty('OrganizationArchiveCounter');
 
@@ -77,7 +76,7 @@ export default class OrganizationArchiveComponent extends Component {
     } catch (err) {
       this.notify.error(this.tArchiveError);
     }
-  }
+  });
 
   @action
   setDuration(dates) {

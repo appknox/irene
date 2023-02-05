@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 
 export default class OrganizationTeamDetailsTeamInfo extends Component {
   @service intl;
@@ -29,8 +29,7 @@ export default class OrganizationTeamDetailsTeamInfo extends Component {
   }
 
   /* Delete team */
-  @task
-  *deleteTeam() {
+  deleteTeam = task(async () => {
     try {
       this.isDeletingTeam = true;
 
@@ -44,7 +43,7 @@ export default class OrganizationTeamDetailsTeamInfo extends Component {
       }
 
       t.deleteRecord();
-      yield t.save();
+      await t.save();
 
       this.notify.success(`${this.args.team.name} ${this.tTeamDeleted}`);
 
@@ -62,5 +61,5 @@ export default class OrganizationTeamDetailsTeamInfo extends Component {
 
       this.notify.error(errMsg);
     }
-  }
+  });
 }

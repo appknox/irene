@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import parseError from 'irene/utils/parse-error';
 
@@ -40,10 +40,9 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
     ];
   }
 
-  @task
-  *fetchOrganizationPreference() {
+  fetchOrganizationPreference = task(async () => {
     try {
-      this.orgPreference = yield this.store.queryRecord(
+      this.orgPreference = await this.store.queryRecord(
         'organization-preference',
         {}
       );
@@ -51,31 +50,27 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
       this.orgPreference = null;
       return;
     }
-  }
+  });
 
-  @task
-  *savePcidss(event) {
-    yield this.saveReportPreference.perform('show_pcidss', event);
-  }
+  savePcidss = task(async (event) => {
+    await this.saveReportPreference.perform('show_pcidss', event);
+  });
 
-  @task
-  *saveHipaa(event) {
-    yield this.saveReportPreference.perform('show_hipaa', event);
-  }
+  saveHipaa = task(async (event) => {
+    await this.saveReportPreference.perform('show_hipaa', event);
+  });
 
-  @task
-  *saveGdpr(event) {
-    yield this.saveReportPreference.perform('show_gdpr', event);
-  }
+  saveGdpr = task(async (event) => {
+    await this.saveReportPreference.perform('show_gdpr', event);
+  });
 
-  @task
-  *saveReportPreference(regulator, event) {
+  saveReportPreference = task(async (regulator, event) => {
     try {
       this.orgPreference.reportPreference[regulator] = event.target.checked;
-      yield this.orgPreference.save();
+      await this.orgPreference.save();
     } catch (err) {
       this.notify.error(parseError(err));
       event.target.checked = !event.target.checked;
     }
-  }
+  });
 }

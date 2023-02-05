@@ -98,10 +98,9 @@ export default class OrganizationNamespaceComponent extends Component {
     this.fetchNamespace.perform(limit, 0);
   }
 
-  @task
-  *fetchNamespace(limit, offset) {
+  fetchNamespace = task(async (limit, offset) => {
     try {
-      this.namespaceResponse = yield this.store.query(
+      this.namespaceResponse = await this.store.query(
         'organization-namespace',
         {
           limit,
@@ -119,16 +118,15 @@ export default class OrganizationNamespaceComponent extends Component {
 
       this.notify.error(errMsg);
     }
-  }
+  });
 
   /* Reject namespace action */
-  @task
-  *confirmReject() {
+  confirmReject = task(async () => {
     try {
       const namespace = this.selectedNamespace;
 
       namespace.deleteRecord();
-      yield namespace.save();
+      await namespace.save();
 
       this.notify.success(this.tNamespaceRejected);
       triggerAnalytics('feature', ENV.csb.namespaceRejected);
@@ -145,5 +143,5 @@ export default class OrganizationNamespaceComponent extends Component {
 
       this.notify.error(errMsg);
     }
-  }
+  });
 }

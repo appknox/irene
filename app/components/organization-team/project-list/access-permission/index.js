@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 
 export default class OrganizationTeamProjectListAccessPermission extends Component {
@@ -9,10 +9,10 @@ export default class OrganizationTeamProjectListAccessPermission extends Compone
   tPleaseTryAgain = this.intl.t('pleaseTryAgain');
   tPermissionChanged = this.intl.t('permissionChanged');
 
-  @task *changeProjectWrite() {
+  changeProjectWrite = task(async () => {
     try {
       const prj = this.args.project;
-      yield prj.updateProject(this.args.team.id);
+      await prj.updateProject(this.args.team.id);
 
       this.notify.success(this.tPermissionChanged);
     } catch (err) {
@@ -26,5 +26,5 @@ export default class OrganizationTeamProjectListAccessPermission extends Compone
 
       this.notify.error(errMsg);
     }
-  }
+  });
 }

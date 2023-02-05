@@ -3,7 +3,7 @@ import $ from 'jquery';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
 import { tracked } from '@glimmer/tracking';
@@ -58,17 +58,15 @@ export default class SsoSettingsComponent extends Component {
   }
 
   // Fetch SP Metadata
-  @task({ restartable: true })
-  *SPMetadata() {
-    const spMetadata = yield this.ajax.request(ENV.endpoints.saml2SPMetadata);
+  SPMetadata = task({ restartable: true }, async () => {
+    const spMetadata = await this.ajax.request(ENV.endpoints.saml2SPMetadata);
     this.spMetadata = spMetadata;
-  }
+  });
 
   // Fetch IdP Metadata
-  @task({ restartable: true })
-  *getIdPMetadata() {
+  getIdPMetadata = task({ restartable: true }, async () => {
     try {
-      const idpMetadata = yield this.store.queryRecord(
+      const idpMetadata = await this.store.queryRecord(
         'saml2-idp-metadata',
         {}
       );
@@ -77,22 +75,20 @@ export default class SsoSettingsComponent extends Component {
     } catch (error) {
       // catch error
     }
-  }
+  });
 
   // Parse & upload IdP metadata
-  @task
-  *parseIdpMetadataXml(file) {
-    let idpMetadataXml = yield file.readAsText();
+  parseIdpMetadataXml = task(async (file) => {
+    let idpMetadataXml = await file.readAsText();
     this.idpMetadataXml = idpMetadataXml;
-  }
+  });
 
   @action
   cancelIdpMetadataXmlUpload() {
     this.idpMetadataXml = null;
   }
 
-  @task({ restartable: true })
-  *uploadIdPMetadata(event) {
+  uploadIdPMetadata = task({ restartable: true }, async (event) => {
     event.preventDefault();
 
     try {
@@ -114,7 +110,7 @@ export default class SsoSettingsComponent extends Component {
         ENV.endpoints.saml2IdPMetadata,
       ].join('/');
 
-      yield this.ajax.post(url, {
+      await this.ajax.post(url, {
         data: idpFormData,
         processData: false,
         contentType: false,
@@ -129,7 +125,7 @@ export default class SsoSettingsComponent extends Component {
     } catch (err) {
       this.notify.error(parseError(err, this.tPleaseTryAgain));
     }
-  }
+  });
 
   // Delete IdP Metadata
   @action
@@ -137,14 +133,13 @@ export default class SsoSettingsComponent extends Component {
     this.showDeleteIdpMetadataConfirm = true;
   }
 
-  @task({ restartable: true })
-  *deleteIdpConfig() {
+  deleteIdpConfig = task({ restartable: true }, async () => {
     try {
-      const ssoObj = yield this.store.queryRecord('saml2-idp-metadata', {});
+      const ssoObj = await this.store.queryRecord('saml2-idp-metadata', {});
 
-      yield ssoObj.deleteRecord();
-      yield ssoObj.save();
-      yield this.store.unloadAll('saml2-idp-metadata');
+      await ssoObj.deleteRecord();
+      await ssoObj.save();
+      await this.store.unloadAll('saml2-idp-metadata');
 
       this.notify.success('Deleted IdP Metadata Config successfully');
       this.showDeleteIdpMetadataConfirm = false;
@@ -152,11 +147,10 @@ export default class SsoSettingsComponent extends Component {
     } catch (err) {
       this.notify.error(parseError(err, this.tPleaseTryAgain));
     }
-  }
+  });
 
   // Enable SSO
-  @task({ restartable: true })
-  *toggleSSOEnable(event, value) {
+  toggleSSOEnable = task({ restartable: true }, async (event, value) => {
     try {
       const ssoObj = this.store.peekRecord(
         'organization-sso',
@@ -164,7 +158,7 @@ export default class SsoSettingsComponent extends Component {
       );
       ssoObj.set('enabled', value);
 
-      yield ssoObj.save();
+      await ssoObj.save();
 
       this.notify.success(
         `SSO authentication ${value ? 'enabled' : 'disabled'}`
@@ -172,11 +166,10 @@ export default class SsoSettingsComponent extends Component {
     } catch (err) {
       this.notify.error(parseError(err, this.tPleaseTryAgain));
     }
-  }
+  });
 
   // Enforce SSO
-  @task({ restartable: true })
-  *toggleSSOEnforce(event, value) {
+  toggleSSOEnforce = task({ restartable: true }, async (event, value) => {
     try {
       const ssoObj = this.store.peekRecord(
         'organization-sso',
@@ -184,11 +177,11 @@ export default class SsoSettingsComponent extends Component {
       );
       ssoObj.set('enforced', value);
 
-      yield ssoObj.save();
+      await ssoObj.save();
 
       this.notify.success(`SSO enforce turned ${value ? 'ON' : 'OFF'}`);
     } catch (err) {
       this.notify.error(parseError(err, this.tPleaseTryAgain));
     }
-  }
+  });
 }
