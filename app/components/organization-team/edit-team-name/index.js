@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 
 export default class OrganizationTeamEditTeamName extends Component {
@@ -26,12 +26,12 @@ export default class OrganizationTeamEditTeamName extends Component {
     );
   }
 
-  @task *updateTeamName() {
+  updateTeamName = task(async () => {
     try {
       const team = this.args.team;
 
       team.name = this.teamName;
-      yield team.save();
+      await team.save();
 
       this.notify.success(this.tOrganizationTeamNameUpdated);
 
@@ -47,5 +47,5 @@ export default class OrganizationTeamEditTeamName extends Component {
 
       this.notify.error(errMsg);
     }
-  }
+  });
 }

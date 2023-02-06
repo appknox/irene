@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import lookupValidator from 'ember-changeset-validations';
 import Changeset from 'ember-changeset';
 import JIRAValidation from '../../validations/jiraintegrate';
@@ -64,10 +64,9 @@ export default class JiraAccountComponent extends Component {
     this.revokeJIRA.perform();
   }
 
-  @task
-  *checkJIRA() {
+  checkJIRA = task(async () => {
     try {
-      const data = yield this.ajax.request(this.baseURL);
+      const data = await this.ajax.request(this.baseURL);
 
       this.isJIRAConnected = true;
       this.connectedHost = data.host;
@@ -77,12 +76,11 @@ export default class JiraAccountComponent extends Component {
         this.isJIRAConnected = false;
       }
     }
-  }
+  });
 
-  @task
-  *revokeJIRA() {
+  revokeJIRA = task(async () => {
     try {
-      yield this.ajax.delete(this.baseURL);
+      await this.ajax.delete(this.baseURL);
 
       this.closeRevokeJIRAConfirmBox();
 
@@ -92,11 +90,10 @@ export default class JiraAccountComponent extends Component {
     } catch (error) {
       this.notify.error(this.tPleaseTryAgain);
     }
-  }
+  });
 
-  @task
-  *integrateJIRA(changeset) {
-    yield changeset.validate();
+  integrateJIRA = task(async (changeset) => {
+    await changeset.validate();
 
     if (!changeset.isValid) {
       if (changeset.errors && changeset.errors[0].validation) {
@@ -113,7 +110,7 @@ export default class JiraAccountComponent extends Component {
     };
 
     try {
-      yield this.ajax.post(this.baseURL, { data });
+      await this.ajax.post(this.baseURL, { data });
 
       this.checkJIRA.perform();
 
@@ -130,7 +127,7 @@ export default class JiraAccountComponent extends Component {
         }
       }
     }
-  }
+  });
 
   @action
   openRevokeJIRAConfirmBox() {

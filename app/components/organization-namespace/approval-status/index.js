@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import { tracked } from '@glimmer/tracking';
@@ -16,15 +16,14 @@ export default class OrganizationNamespaceApprovalStatus extends Component {
   tPleaseTryAgain = this.intl.t('pleaseTryAgain');
 
   /* Approve namespace action */
-  @task
-  *approveNamespace() {
+  approveNamespace = task(async () => {
     try {
       this.isApprovingNamespace = true;
 
       const ns = this.args.namespace;
       ns.set('isApproved', true);
 
-      yield ns.save();
+      await ns.save();
 
       this.notify.success(this.tNamespaceApproved);
       triggerAnalytics('feature', ENV.csb.namespaceAdded);
@@ -42,5 +41,5 @@ export default class OrganizationNamespaceApprovalStatus extends Component {
       this.notify.error(errMsg);
       this.isApprovingNamespace = false;
     }
-  }
+  });
 }

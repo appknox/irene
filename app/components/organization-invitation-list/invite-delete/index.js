@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import { tracked } from '@glimmer/tracking';
@@ -24,15 +24,14 @@ export default class OrganizationMemberInvitationListInviteDelete extends Compon
   }
 
   /* Delete invitation */
-  @task
-  *confirmDelete() {
+  confirmDelete = task(async () => {
     try {
       this.isDeletingInvitation = true;
 
       const invite = this.args.invitation;
 
       invite.deleteRecord();
-      yield invite.save();
+      await invite.save();
 
       this.notify.success(this.tInvitationDeleted);
       triggerAnalytics('feature', ENV.csb.inviteDelete);
@@ -51,5 +50,5 @@ export default class OrganizationMemberInvitationListInviteDelete extends Compon
 
       this.isDeletingInvitation = false;
     }
-  }
+  });
 }

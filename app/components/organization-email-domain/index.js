@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import parseError from 'irene/utils/parse-error';
 import { isEmpty } from '@ember/utils';
@@ -23,24 +23,22 @@ export default class OrganizationEmailDomainComponent extends Component {
     return isEmpty(this.tDomain.trim());
   }
 
-  @task
-  *fetchDomains() {
-    this.domains = (yield this.store.findAll(
-      'organization-email-domain'
-    )).toArray();
-  }
+  fetchDomains = task(async () => {
+    this.domains = (
+      await this.store.findAll('organization-email-domain')
+    ).toArray();
+  });
 
-  @task
-  *addDomain() {
+  addDomain = task(async () => {
     const domainName = this.tDomain;
 
-    const domainInfo = yield this.store.createRecord(
+    const domainInfo = await this.store.createRecord(
       'organization-email-domain',
       { domainName }
     );
 
     try {
-      yield domainInfo.save();
+      await domainInfo.save();
 
       this.notify.success(`${domainName} ${this.intl.t('addedSuccessfully')}`);
 
@@ -52,15 +50,14 @@ export default class OrganizationEmailDomainComponent extends Component {
 
       this.notify.error(parseError(err, domainName));
     }
-  }
+  });
 
-  @task
-  *deleteDomain(domain, index) {
+  deleteDomain = task(async (domain, index) => {
     try {
       this.domains = this.domains.filter((d) => d.id !== domain.id);
 
-      yield domain.deleteRecord();
-      yield domain.save();
+      await domain.deleteRecord();
+      await domain.save();
 
       this.notify.success(this.intl.t('domainDeleted'));
     } catch (err) {
@@ -72,5 +69,5 @@ export default class OrganizationEmailDomainComponent extends Component {
         parseError(err, this.intl.t('problemWhileDeletingDomain'))
       );
     }
-  }
+  });
 }

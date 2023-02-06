@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import { tracked } from '@glimmer/tracking';
@@ -34,8 +34,7 @@ export default class OrganizationTeamCreateTeam extends Component {
   }
 
   /* Create team */
-  @task
-  *createTeam(event) {
+  createTeam = task(async (event) => {
     event.preventDefault();
 
     try {
@@ -49,7 +48,7 @@ export default class OrganizationTeamCreateTeam extends Component {
         name: this.teamName,
       });
 
-      yield t.save();
+      await t.save();
 
       // signal to update invitation list
       this.realtime.incrementProperty('OrganizationTeamCounter');
@@ -72,5 +71,5 @@ export default class OrganizationTeamCreateTeam extends Component {
       this.notify.error(errMsg);
       this.isCreatingTeam = false;
     }
-  }
+  });
 }

@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
 import { action } from '@ember/object';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 
 export default class GithubAccountComponent extends Component {
@@ -18,37 +18,33 @@ export default class GithubAccountComponent extends Component {
   tGithubWillBeRevoked = this.intl.t('githubWillBeRevoked');
   tGithubErrorIntegration = this.intl.t('githubErrorIntegration');
 
-  @task
-  *redirectAPI() {
-    return yield this.ajax.request(
+  redirectAPI = task(async () => {
+    return await this.ajax.request(
       `/api/organizations/${this.organization.selected.id}/github/redirect`
     );
-  }
+  });
 
-  @task
-  *integrateGithub() {
+  integrateGithub = task(async () => {
     try {
       triggerAnalytics('feature', ENV.csb.integrateGithub);
 
-      let data = yield this.redirectAPI.perform();
+      let data = await this.redirectAPI.perform();
 
       window.location.href = data.url;
     } catch (error) {
       this.notify.error(this.tGithubErrorIntegration);
     }
-  }
+  });
 
-  @task
-  *removeIntegrationUri() {
-    return yield this.ajax.delete(
+  removeIntegrationUri = task(async () => {
+    return await this.ajax.delete(
       `/api/organizations/${this.organization.selected.id}/github`
     );
-  }
+  });
 
-  @task
-  *removeIntegration() {
+  removeIntegration = task(async () => {
     try {
-      yield this.removeIntegrationUri.perform();
+      await this.removeIntegrationUri.perform();
 
       this.notify.success(this.tGithubWillBeRevoked);
 
@@ -58,7 +54,7 @@ export default class GithubAccountComponent extends Component {
     } catch (err) {
       this.notify.error(err.payload.detail);
     }
-  }
+  });
 
   @action
   openRevokeGithubConfirmBox() {

@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { capitalize } from '@ember/string';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import { tracked } from '@glimmer/tracking';
@@ -31,15 +31,15 @@ export default class OrganizationProjectOverview extends Component {
   }
 
   /* Remove project action */
-  @task *removeProject() {
+  removeProject = task(async () => {
     try {
       this.isRemovingProject = true;
 
       const prj = this.args.project;
       const teamId = this.args.team.id;
 
-      yield prj.deleteProject(teamId);
-      yield this.store.unloadRecord(prj);
+      await prj.deleteProject(teamId);
+      await this.store.unloadRecord(prj);
 
       this.notify.success(this.tProjectRemoved);
       triggerAnalytics('feature', ENV.csb.teamProjectRemove);
@@ -60,5 +60,5 @@ export default class OrganizationProjectOverview extends Component {
       this.notify.error(errMsg);
       this.isRemovingProject = false;
     }
-  }
+  });
 }

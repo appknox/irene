@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 
 export default class OrganizationMemberListMemberAction extends Component {
@@ -42,13 +42,12 @@ export default class OrganizationMemberListMemberAction extends Component {
     this.moreBtnAnchorRef = null;
   }
 
-  @task
-  *changeSetting() {
+  changeSetting = task(async () => {
     try {
-      const member = yield this.args.member.member;
+      const member = await this.args.member.member;
 
       member.set('isActive', !member.get('isActive'));
-      yield member.save();
+      await member.save();
 
       this.showEditModal = false;
 
@@ -68,7 +67,7 @@ export default class OrganizationMemberListMemberAction extends Component {
 
       this.notify.error(errMsg);
     }
-  }
+  });
 
   @action
   closeModal() {

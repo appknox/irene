@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import { action } from '@ember/object';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
@@ -36,30 +36,28 @@ export default class InviteMemberComponent extends Component {
     this.emailsFromText = el.join(', ');
   }
 
-  @task({ enqueue: true, maxConcurrency: 3 })
-  *inviteMember(email) {
+  inviteMember = task({ enqueue: true, maxConcurrency: 3 }, async (email) => {
     const t = this.args.team;
 
     if (t) {
-      yield t.createInvitation({ email });
+      await t.createInvitation({ email });
     } else {
-      const orgInvite = yield this.store.createRecord(
+      const orgInvite = await this.store.createRecord(
         'organization-invitation',
         { email }
       );
 
-      yield orgInvite.save();
+      await orgInvite.save();
     }
 
     // signal to update invitation list
     this.realtime.incrementProperty('InvitationCounter');
-  }
+  });
 
   /* Send invitation */
-  @task
-  *inviteMembers(closeHandler) {
+  inviteMembers = task(async (closeHandler) => {
     try {
-      const emails = yield parseEmails(this.emailsFromText);
+      const emails = await parseEmails(this.emailsFromText);
 
       if (!emails.length) {
         this.emailErrorMsg = this.intl.t('emptyEmailId');
@@ -71,7 +69,7 @@ export default class InviteMemberComponent extends Component {
       this.isInvitingMember = true;
 
       for (let i = 0; i < emails.length; i++) {
-        yield this.inviteMember.perform(emails[i]);
+        await this.inviteMember.perform(emails[i]);
       }
 
       // cleanup or close function
@@ -97,5 +95,5 @@ export default class InviteMemberComponent extends Component {
       this.notify.error(errMsg);
       this.isInvitingMember = false;
     }
-  }
+  });
 }

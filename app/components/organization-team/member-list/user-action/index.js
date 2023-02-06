@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { capitalize } from '@ember/string';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 
 export default class OrganizationTeamMemberListUserAction extends Component {
@@ -31,11 +31,11 @@ export default class OrganizationTeamMemberListUserAction extends Component {
   }
 
   /* Remove member */
-  @task *removeMember() {
+  removeMember = task(async () => {
     try {
       this.isRemovingMember = true;
 
-      const memberName = (yield this.args.member.user).username.toLowerCase();
+      const memberName = (await this.args.member.user).username.toLowerCase();
       const promptMemberName = this.promptMemberName.toLowerCase();
 
       if (promptMemberName !== memberName) {
@@ -43,7 +43,7 @@ export default class OrganizationTeamMemberListUserAction extends Component {
       }
 
       const { team, member } = this.args;
-      yield team.deleteMember(member);
+      await team.deleteMember(member);
 
       this.notify.success(this.tTeamMemberRemoved);
 
@@ -63,5 +63,5 @@ export default class OrganizationTeamMemberListUserAction extends Component {
       this.notify.error(errMsg);
       this.isRemovingMember = false;
     }
-  }
+  });
 }

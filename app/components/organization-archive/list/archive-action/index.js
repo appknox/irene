@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 
 export default class OrganizationArchiveListArchiveActionComponent extends Component {
@@ -8,9 +8,8 @@ export default class OrganizationArchiveListArchiveActionComponent extends Compo
 
   tdownloadFailed = this.intl.t('organizationArchiveDownloadErrored');
 
-  @task
-  *downloadArchive() {
-    const downloadURL = yield this.args.archive.downloadURL();
+  downloadArchive = task(async () => {
+    const downloadURL = await this.args.archive.downloadURL();
 
     if (downloadURL) {
       window.open(downloadURL);
@@ -18,5 +17,5 @@ export default class OrganizationArchiveListArchiveActionComponent extends Compo
     }
 
     this.notify.error(this.tdownloadFailed);
-  }
+  });
 }

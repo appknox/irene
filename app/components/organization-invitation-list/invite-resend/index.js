@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import { tracked } from '@glimmer/tracking';
@@ -24,13 +24,12 @@ export default class OrganizationMemberInvitationListInviteResend extends Compon
   }
 
   /* Resend invitation */
-  @task
-  *confirmResend() {
+  confirmResend = task(async () => {
     try {
       this.isResendingInvitation = true;
       const invite = this.args.invitation;
 
-      yield invite.resend();
+      await invite.resend();
 
       this.notify.success(this.tInvitationReSent);
       triggerAnalytics('feature', ENV.csb.inviteResend);
@@ -50,5 +49,5 @@ export default class OrganizationMemberInvitationListInviteResend extends Compon
 
       this.isResendingInvitation = false;
     }
-  }
+  });
 }
