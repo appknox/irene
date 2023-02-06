@@ -5,9 +5,11 @@ import faker from 'faker';
 import ENUMS from 'irene/enums';
 import { analysisRiskStatus } from 'irene/helpers/analysis-risk-status';
 import { module, test } from 'qunit';
+import { setupIntl } from 'ember-intl/test-support';
 
 module('Integration | Component | risk-tag', function (hooks) {
   setupRenderingTest(hooks);
+  setupIntl(hooks);
 
   hooks.beforeEach(async function () {
     this.store = this.owner.lookup('service:store');
