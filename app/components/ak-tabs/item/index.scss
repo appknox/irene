@@ -1,0 +1,67 @@
+.ak-tab-item {
+  height: 40px;
+  width: fit-content;
+
+  a,
+  button {
+    height: 100%;
+    padding: 0em 1.143em;
+    font-family: var(--ak-tabs-font-family);
+    color: var(--ak-tabs-text-color-secondary);
+    font-weight: var(--ak-tabs-font-weight-bold);
+
+    &:hover {
+      color: var(--ak-tabs-text-color-secondary);
+    }
+  }
+
+  .ak-tab-badge {
+    font-size: 0.857em;
+    min-width: 24px;
+    height: 20px;
+    padding: 0em 0.357em;
+    margin-left: 0.7em;
+    font-weight: var(--ak-tabs-font-weight-regular);
+    border-radius: var(--ak-tabs-border-radius);
+    background-color: var(--ak-tabs-neutral-background);
+  }
+
+  .ak-tab-icon {
+    :global(.ak-icon) {
+      font-size: 1.29rem !important;
+      color: var(--ak-tabs-text-color-secondary);
+    }
+  }
+
+  .active {
+    position: relative;
+    color: var(--ak-tabs-text-color-primary) !important;
+
+    &:hover,
+    &:focus {
+      background-color: unset;
+    }
+
+    .ak-tab-badge {
+      background: var(--ak-tabs-color-primary-light);
+    }
+
+    .ak-tab-icon {
+      :global(.ak-icon) {
+        color: var(--ak-tabs-text-color-primary);
+      }
+    }
+
+    &::after {
+      display: block;
+      width: 100%;
+      height: 3px;
+      content: '';
+      position: absolute;
+      left: 0px;
+      bottom: 0px;
+      border-radius: 3px 3px 0px 0px;
+      background-color: var(--ak-tabs-color-primary);
+    }
+  }
+}
