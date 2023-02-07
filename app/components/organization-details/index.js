@@ -1,15 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
-
-const tabRouteNameMap = {
-  namespaces: 0,
-  users: 1,
-  teams: 2,
-  team: 2,
-  settings: 3,
-};
 
 class OrganizationDetails extends Component {
   @service intl;
@@ -18,57 +9,42 @@ class OrganizationDetails extends Component {
   @service router;
   @service('notifications') notify;
 
-  @tracked activeTab = 0;
+  get isAdmin() {
+    return this.me.org.get('is_admin');
+  }
 
-  constructor() {
-    super(...arguments);
-
-    const route = this.router.currentRouteName;
-    const routeName = route.split('.')[2];
-
-    this.activeTab = tabRouteNameMap[routeName] || 0;
+  get tabItems() {
+    return [
+      {
+        id: 'namespaces',
+        route: 'authenticated.organization.namespaces',
+        badgeCount: this.organization.selected.namespacesCount,
+        hasBadge: this.isAdmin,
+        label: this.intl.t('namespaces'),
+        iconName: 'assignment',
+      },
+      {
+        id: 'users',
+        route: 'authenticated.organization.users',
+        hidden: !this.isAdmin,
+        badgeCount: this.organization.selected.membersCount,
+        hasBadge: true,
+        label: this.intl.t('users'),
+        iconName: 'people',
+      },
+      {
+        id: 'teams',
+        route: 'authenticated.organization.teams',
+        badgeCount: this.organization.selected.teamsCount,
+        hasBadge: this.isAdmin,
+        label: this.intl.t('teams'),
+        iconName: 'groups',
+      },
+    ];
   }
 
   @action routeToOrgSettings() {
     this.router.transitionTo('authenticated.organization-settings');
-  }
-
-  /* Set active tab */
-  get namespaceClass() {
-    return this.activeTab === 0 ? 'active' : '';
-  }
-
-  get memberClass() {
-    return this.activeTab === 1 ? 'active' : '';
-  }
-
-  get teamClass() {
-    return this.activeTab === 2 ? 'active' : '';
-  }
-
-  get settingsClass() {
-    return this.activeTab === 3 ? 'active' : '';
-  }
-
-  /* Select tab */
-  @action
-  displayNamespaces() {
-    this.activeTab = 0;
-  }
-
-  @action
-  displayMembers() {
-    this.activeTab = 1;
-  }
-
-  @action
-  displayTeams() {
-    this.activeTab = 2;
-  }
-
-  @action
-  displaySettings() {
-    this.activeTab = 3;
   }
 }
 

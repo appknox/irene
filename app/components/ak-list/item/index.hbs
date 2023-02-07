@@ -21,6 +21,7 @@
         local-class='
         ak-list-item-button-root 
         {{unless @noGutters "ak-list-item-gutters"}}'
+        class='{{@buttonClass}}'
       >
         {{yield api}}
       </button>
@@ -37,6 +38,7 @@
         @query={{@query}}
         @models={{this.modelOrModels}}
         @disabled={{@disabled}}
+        @activeClass={{@activeLinkClass}}
         local-class='
         ak-list-item-link-root 
         {{if @disabled "ak-list-item-link-disabled"}}

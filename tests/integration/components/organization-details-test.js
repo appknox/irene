@@ -7,13 +7,6 @@ import { setupIntl } from 'ember-intl/test-support';
 
 import Service from '@ember/service';
 
-class OrganizationMeStub extends Service {
-  org = {
-    is_owner: true,
-    is_admin: true,
-  };
-}
-
 class RouterStub extends Service {
   currentRouteName = 'authenticated.organization.namespaces';
 
@@ -29,6 +22,17 @@ module('Integration | Component | organization-details', function (hooks) {
 
   hooks.beforeEach(async function () {
     this.server.createList('organization', 1);
+
+    const store = this.owner.lookup('service:store');
+    const organizationMe = store.createRecord('organization-me', {
+      is_owner: true,
+      is_admin: true,
+    });
+
+    class OrganizationMeStub extends Service {
+      org = organizationMe;
+    }
+
     await this.owner.lookup('service:organization').load();
 
     this.owner.register('service:me', OrganizationMeStub);
@@ -41,7 +45,6 @@ module('Integration | Component | organization-details', function (hooks) {
     const organization = this.owner.lookup('service:organization');
 
     assert.dom('[data-test-org-name]').hasText(organization.selected.name);
-    assert.dom('[data-test-namespace-link]').hasClass(/_active_/i);
   });
 
   test('on org name header action button click route to organization settings', async function (assert) {

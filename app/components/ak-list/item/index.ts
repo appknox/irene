@@ -18,6 +18,8 @@ export interface AkListItemSignature {
     role?: string;
     noGutters?: boolean;
     divider?: boolean;
+    activeLinkClass?: string;
+    buttonClass?: string;
     onClick?: (event: MouseEvent) => void;
   };
   Blocks: {
@@ -45,14 +47,12 @@ export default class AkListItemComponent extends Component<AkListItemSignature> 
   }
 
   get modelOrModels() {
-    const hasModel = 'model' in this.args;
-    const hasModels = 'models' in this.args;
-
-    if (hasModel) {
+    if (this.args.model) {
       return [this.args.model];
-    } else if (hasModels) {
+    } else if (this.args.models) {
       return this.args.models;
     }
+
     return [];
   }
 }

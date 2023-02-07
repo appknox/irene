@@ -1,0 +1,10 @@
+<div ...attributes local-class='ak-tabs-container' data-test-ak-tabs-container>
+  <AkStack
+    @tag='ul'
+    @direction='row'
+    role='tablist'
+    data-test-ak-tab-list-wrapper
+  >
+    {{yield (hash tabItem=(component 'ak-tabs/item'))}}
+  </AkStack>
+</div>

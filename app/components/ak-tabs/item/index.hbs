@@ -1,0 +1,37 @@
+<AkList::Item
+  ...attributes
+  @disabled={{@disabled}}
+  @button={{@buttonVariant}}
+  @link={{unless @buttonVariant true}}
+  @route={{@route}}
+  @model={{@model}}
+  @models={{@models}}
+  @activeLinkClass={{this.classes.activeClass}}
+  @buttonClass='{{if @isActive this.classes.activeClass}}'
+  @onClick={{this.onTabClick}}
+  local-class='ak-tab-item'
+  data-test-ak-tab-item
+  as |It|
+>
+
+  <It.leftIcon local-class='ak-tab-icon'>
+    {{#if (has-block 'tabIcon')}}
+      {{yield to='tabIcon'}}
+    {{/if}}
+  </It.leftIcon>
+
+  {{yield}}
+
+  {{#if @hasBadge}}
+    <AkStack
+      @tag='span'
+      @direction='row'
+      @alignItems='center'
+      @justifyContent='center'
+      local-class='ak-tab-badge'
+      data-test-ak-tab-badge
+    >
+      {{@badgeCount}}
+    </AkStack>
+  {{/if}}
+</AkList::Item>

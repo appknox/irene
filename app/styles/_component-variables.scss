@@ -229,6 +229,18 @@ body {
   --ak-pagination-border-radius: var(--border-radius);
   --ak-pagination-divider-background: var(--divider-dark);
   --ak-pagination-button-background: var(--common-white);
+
+  // variables for ak-tabs
+  --ak-tabs-font-family: var(--font-family);
+  --ak-tabs-border-color: var(--border-color-1);
+  --ak-tabs-color-primary: var(--primary-main);
+  --ak-tabs-color-primary-light: var(--primary-light);
+  --ak-tabs-text-color-secondary: var(--text-secondary);
+  --ak-tabs-text-color-primary: var(--text-primary);
+  --ak-tabs-font-weight-bold: var(--font-weight-bold);
+  --ak-tabs-font-weight-regular: var(--font-weight-regular);
+  --ak-tabs-border-radius: var(--border-radius);
+  --ak-tabs-neutral-background: var(--neutral-grey-200);
 }
 
 body {
