@@ -5,6 +5,7 @@ import Store from '@ember-data/store';
 import NfInAppNotificationModel from 'irene/models/nf-in-app-notification';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import { DS } from 'ember-data';
+import { action } from '@ember/object';
 
 type NFModelArray = DS.AdapterPopulatedRecordArray<NfInAppNotificationModel> & {
   meta: { count: number };
@@ -12,6 +13,8 @@ type NFModelArray = DS.AdapterPopulatedRecordArray<NfInAppNotificationModel> & {
 
 interface NfInAppNotificationArgs {
   has_read?: boolean;
+  limit?: number;
+  offset?: number;
 }
 
 export default class AkNotificationsService extends Service {
@@ -19,8 +22,10 @@ export default class AkNotificationsService extends Service {
   @tracked showUnReadOnly = false;
   @tracked
   notifications?: DS.AdapterPopulatedRecordArray<NfInAppNotificationModel>;
-
+  @tracked notificationsCount = 0;
   @tracked unReadCount = 0;
+  @tracked notification_limit = 10;
+  @tracked notification_offset = 0;
 
   markAllAsRead = task(async () => {
     const adapter = this.store.adapterFor('nf-in-app-notification');
@@ -29,15 +34,22 @@ export default class AkNotificationsService extends Service {
   });
 
   fetch = task(async () => {
-    const args: NfInAppNotificationArgs = {};
+    const args: NfInAppNotificationArgs = {
+      limit: this.notification_limit,
+      offset: this.notification_offset,
+    };
+
     if (this.showUnReadOnly) {
       args.has_read = false;
     }
-    const notifications = await this.store.query(
+
+    const notifications = (await this.store.query(
       'nf-in-app-notification',
       args
-    );
+    )) as NFModelArray;
+
     this.notifications = await notifications;
+    this.notificationsCount = notifications.meta.count;
   });
 
   fetchUnreadCount = task(async () => {
@@ -56,4 +68,16 @@ export default class AkNotificationsService extends Service {
     await this.fetchUnreadCount.perform();
     await this.fetch.perform();
   });
+
+  @action
+  setNotificationLimitAndOffset(limit = 10, offset = 0) {
+    this.notification_limit = limit;
+    this.notification_offset = offset;
+    return this;
+  }
+
+  @action
+  reload() {
+    return this.refresh.perform();
+  }
 }
