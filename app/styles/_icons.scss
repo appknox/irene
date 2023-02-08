@@ -183,6 +183,10 @@
   @extend .mi-settings;
 }
 
+.ak-icon-settings-applications {
+  @extend .mi-settings-applications;
+}
+
 .ak-icon-person-remove {
   @extend .mi-person-remove;
 }

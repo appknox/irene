@@ -379,4 +379,13 @@ body {
   --notification-unread-count-color-primary: var(--primary-main);
   --notification-unread-count-background-color: var(--primary-main-10);
   --notification-divider-border-color: var(--common-black);
+  --notification-message-hover-background-color: var(--neutral-grey-50);
+  --notification-message-read-unread-dot-background-color: var(
+    --secondary-main
+  );
+  --notification-message-read-unread-ring-border-color: var(
+    --notification-message-read-unread-dot-background-color
+  );
+  --notification-message-time-color: var(--neutral-grey-400);
+  --notification-message-color-text-primary: var(--text-primary);
 }

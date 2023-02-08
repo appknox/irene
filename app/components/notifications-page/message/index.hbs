@@ -1,0 +1,29 @@
+<div data-test-notification-message local-class='message_container_outer'>
+  <div local-class='message_container_inner'>
+    <div data-test-notification-message-component>
+      {{component
+        this.componentName
+        notification=this.notification
+        context=this.notificatonContext
+      }}
+    </div>
+    <AkTypography
+      data-test-notification-created-on
+      local-class='notification_created_on'
+    >{{dayjs-from-now this.notification.createdOn}}</AkTypography>
+  </div>
+  <div local-class='unread_container'>
+    <input
+      id='un_read_checkbox-{{this.uniqueID}}'
+      type='checkbox'
+      checked={{not this.notification.hasRead}}
+      local-class='unread'
+      {{on 'input' this.changeRead}}
+    />
+    <label
+      for='un_read_checkbox-{{this.uniqueID}}'
+      local-class='unread_label'
+      data-test-notification-checkbox-label
+    ></label>
+  </div>
+</div>

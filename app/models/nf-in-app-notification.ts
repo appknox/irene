@@ -1,9 +1,10 @@
 import Model, { attr } from '@ember-data/model';
+import { NotificationMessageKey } from 'irene/components/notifications-page/notification_map';
 
 export default class NfInAppNotificationModel extends Model {
-  @attr declare createdOn: Date;
-  @attr declare hasRead: boolean;
-  @attr declare messageCode: string;
+  @attr('date') declare createdOn: Date;
+  @attr('boolean') declare hasRead: boolean;
+  @attr('string') declare messageCode: NotificationMessageKey;
   @attr declare context: unknown;
 }
 

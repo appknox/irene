@@ -17,7 +17,7 @@ module('Unit | Adapter | nf in app notification', function (hooks) {
     assert.expect(1);
     this.server.post(
       'v2/nf_in_app_notifications/mark_all_as_read',
-      function (schema, request) {
+      function () {
         assert.ok(true);
         return new Response(200, {}, {});
       }

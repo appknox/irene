@@ -1,0 +1,84 @@
+.message_container_outer {
+  padding: 1em;
+  display: flex;
+  flex-direction: row;
+}
+.message_container_outer:hover,
+.message_container_outer:focus,
+.message_container_outer:active {
+  background-color: var(--notification-message-hover-background-color);
+}
+
+.message_container_inner {
+  flex: auto;
+}
+
+.unread_container {
+  height: 100%;
+  margin: 0.5em;
+}
+
+.unread_label {
+  display: block;
+  background-color: transparent;
+  width: 0.5em;
+  border-radius: 999px;
+  aspect-ratio: 1/1;
+  position: relative;
+}
+
+.unread:checked + .unread_label {
+  background-color: var(
+    --notification-message-read-unread-dot-background-color
+  );
+}
+
+.unread_label::before,
+.unread_label::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 1.5em;
+  border-radius: 999px;
+  aspect-ratio: 1/1;
+}
+
+.unread_label::before {
+  opacity: 0;
+}
+
+.unread_label::after {
+  border: 1px solid var(--notification-message-read-unread-ring-border-color);
+  opacity: 0;
+}
+
+.unread_label:hover::after,
+.unread_label:active::after {
+  opacity: 0.1;
+}
+
+.message_container_outer:hover,
+.message_container_outer:focus,
+.message_container_outer:active {
+  .unread_label::after {
+    opacity: 0.1;
+  }
+}
+
+.unread {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.notification_created_on {
+  color: var(--notification-message-time-color);
+  font-size: 0.9em;
+  margin-top: 0.4em;
+}
+
+.message_container_inner {
+  color: var(--notification-message-color-text-primary);
+}
