@@ -17,6 +17,10 @@ interface NfInAppNotificationArgs {
   offset?: number;
 }
 
+interface websocketData {
+  unReadCount: number;
+}
+
 export default class AkNotificationsService extends Service {
   @service declare store: Store;
   @tracked showUnReadOnly = false;
@@ -26,6 +30,10 @@ export default class AkNotificationsService extends Service {
   @tracked unReadCount = 0;
   @tracked notification_limit = 10;
   @tracked notification_offset = 0;
+
+  get hasUnReadNotifications() {
+    return this.unReadCount > 0;
+  }
 
   markAllAsRead = task(async () => {
     const adapter = this.store.adapterFor('nf-in-app-notification');
@@ -68,6 +76,11 @@ export default class AkNotificationsService extends Service {
     await this.fetchUnreadCount.perform();
     await this.fetch.perform();
   });
+
+  @action
+  realtimeUpdate(data: websocketData) {
+    this.unReadCount = data.unReadCount;
+  }
 
   @action
   setNotificationLimitAndOffset(limit = 10, offset = 0) {

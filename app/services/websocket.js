@@ -10,6 +10,7 @@ export default class WebsocketService extends Service {
   @service logger;
   @service realtime;
   @service notifications;
+  @service akNotifications;
   @service network;
   @service('socket-io') socketIOService;
 
@@ -65,6 +66,7 @@ export default class WebsocketService extends Service {
     socket.on('newobject', this.onNewObject, this);
     socket.on('message', this.onMessage, this);
     socket.on('counter', this.onCounter, this);
+    socket.on('notification', this.onNotification, this);
     socket.on('close', (event) => {
       this.logger.warning('socket close called. Trying to reconnect', event);
       socket.reconnect();
@@ -98,6 +100,23 @@ export default class WebsocketService extends Service {
 
   onNewObject(...args) {
     return this.onObject(...args);
+  }
+
+  onNotification(data) {
+    if (!data) {
+      this.logger.error(`invalid data for onNotification`);
+      return;
+    }
+    if (!('unread_count' in data)) {
+      this.logger.error(
+        `invalid data for onNotification ${JSON.stringify(data)}`
+      );
+      return;
+    }
+
+    this.akNotifications.realtimeUpdate({
+      unReadCount: data.unread_count,
+    });
   }
 
   onMessage(data) {

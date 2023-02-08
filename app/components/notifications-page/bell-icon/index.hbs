@@ -1,0 +1,13 @@
+<AkLink
+  @color='inherit'
+  @route='authenticated.dashboard.notifications'
+  local-class='nf-icon'
+  {{did-insert (perform this.AkNotifications.refresh)}}
+  @title='{{this.AkNotifications.unReadCount}} unread notifications'
+  data-test-bell-icon
+>
+  <AkIcon @iconName='notifications' data-test-notification-icon />
+  {{#if this.AkNotifications.hasUnReadNotifications}}
+    <div local-class='nf-unread-dot' data-test-unread-dot></div>
+  {{/if}}
+</AkLink>
