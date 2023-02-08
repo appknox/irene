@@ -1,0 +1,47 @@
+<div local-class='notification_container'>
+  <NotificationsPage::Header />
+  <main local-class='notification_main_list'>
+    <AkPaginationProvider
+      @results={{this.tableData}}
+      @onItemPerPageChange={{this.onItemPerPageChange}}
+      @totalItems={{this.totalCount}}
+      @nextAction={{this.goToPage}}
+      @prevAction={{this.goToPage}}
+      @itemPerPageOptions={{this.itemPerPageOptions}}
+      @defaultLimit={{this.limit}}
+      @offset={{this.offset}}
+      as |pgc|
+    >
+
+      {{#if this.isLoading}}
+        <NotificationsPage::Divider />
+        <div local-class='loading'>
+          <AkLoader />
+        </div>
+      {{else if this.isEmpty}}
+        <NotificationsPage::Divider />
+        <NotificationsPage::Empty />
+      {{else}}
+        {{#each pgc.currentPageResults as |notification|}}
+          <NotificationsPage::Divider />
+          <NotificationsPage::Message @notification={{notification}} />
+        {{/each}}
+        <AkPagination
+          @disableNext={{pgc.disableNext}}
+          @nextAction={{pgc.nextAction}}
+          @disablePrev={{pgc.disablePrev}}
+          @prevAction={{pgc.prevAction}}
+          @endItemIdx={{pgc.endItemIdx}}
+          @startItemIdx={{pgc.startItemIdx}}
+          @itemPerPageOptions={{pgc.itemPerPageOptions}}
+          @onItemPerPageChange={{pgc.onItemPerPageChange}}
+          @selectedOption={{pgc.selectedOption}}
+          @tableItemLabel='Notifications'
+          @perPageTranslation='Notifications per page'
+          @totalItems={{pgc.totalItems}}
+        />
+      {{/if}}
+
+    </AkPaginationProvider>
+  </main>
+</div>
