@@ -104,6 +104,10 @@ Router.map(function () {
         });
         this.route('analytics');
       });
+
+      this.route('dashboard', function () {
+        this.route('notifications');
+      });
     }
   );
   this.route('invitation', {
