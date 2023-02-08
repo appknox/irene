@@ -1,0 +1,19 @@
+.notification_container {
+  display: flex;
+  width: 80%;
+  padding-left: 1em;
+  flex-direction: column;
+}
+
+.notification_main_list {
+  display: flex;
+  flex-direction: column;
+}
+
+// Loading styles
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 12.5em;
+}
