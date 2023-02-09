@@ -1,0 +1,24 @@
+<div>
+  <div>
+    {{@context.platform_display}}
+    <strong>namespace {{@context.namespace_value}}</strong>
+    requested by
+    {{@context.requester_username}}
+    was
+    <strong>rejected</strong>
+    by
+    {{@context.moderator_username}}.
+  </div>
+  <div>
+    <div class='pt-1'>
+      <AkLink
+        @color='primary'
+        @route='authenticated.organization.namespaces'
+        @underline='always'
+        @title='View namespaces'
+      >
+        View namespaces
+      </AkLink>
+    </div>
+  </div>
+</div>

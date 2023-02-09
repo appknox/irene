@@ -1,0 +1,30 @@
+<div>
+  <div>
+    Upload of
+    {{@context.platform_display}}
+    app
+    {{@context.package_name}}
+    by
+    {{@context.requester_username}}
+    ({{@context.requester_role}}
+    role) failed.
+    <strong>User does not have access to the project</strong>.
+  </div>
+  <div local-class='help-text'>
+    <em>(Access can be provided to the user via team or collaborator settings if
+      required)</em>
+  </div>
+  <div class='pt-1'>
+    <AkLink
+      @color='primary'
+      @route='authenticated.project.settings'
+      @model={{@context.project_id}}
+      @underline='always'
+      @title='View project settings'
+    >
+      <:default>
+        Project settings
+      </:default>
+    </AkLink>
+  </div>
+</div>

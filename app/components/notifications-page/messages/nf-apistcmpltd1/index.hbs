@@ -1,0 +1,80 @@
+<div>
+  <div>
+    <strong>API scan completed</strong>
+    for
+    {{@context.platform_display}}
+    app
+    <strong>{{@context.file_name}} ({{@context.package_name}})</strong>.
+  </div>
+
+  <div class='pt-1' local-class='meta-info'>
+    version:
+    {{@context.version}}
+    <span local-class='pipe'>|</span>
+    version code:
+    {{@context.version_code}}
+  </div>
+
+  <div local-class='vulnerability-stats'>
+    <AkTypography @variant='subtitle2' class='pb-2'>Current risk status of file</AkTypography>
+    <ul local-class='severity-levels'>
+      <li local-class='severity-level'>
+        <div local-class='severity-label'>
+          <div local-class='severity-color severity-color--critical'></div>
+          <div local-class='severity-text'>Critical</div>
+        </div>
+        <div local-class='severity-count'>{{@context.critical_count}}</div>
+      </li>
+      <li local-class='severity-level'>
+        <div local-class='severity-label'>
+          <div local-class='severity-color severity-color--high'></div>
+          <div local-class='severity-text'>High</div>
+        </div>
+        <div local-class='severity-count'>{{@context.high_count}}</div>
+      </li>
+      <li local-class='severity-level'>
+        <div local-class='severity-label'>
+          <div local-class='severity-color severity-color--medium'></div>
+          <div local-class='severity-text'>Medium</div>
+        </div>
+        <div local-class='severity-count'>{{@context.medium_count}}</div>
+      </li>
+      <li local-class='severity-level'>
+        <div local-class='severity-label'>
+          <div local-class='severity-color severity-color--low'></div>
+          <div local-class='severity-text'>Low</div>
+        </div>
+        <div local-class='severity-count'>{{@context.low_count}}</div>
+      </li>
+      <li local-class='severity-level'>
+        <div local-class='severity-label'>
+          <div local-class='severity-color severity-color--passed'></div>
+          <div local-class='severity-text'>Passed</div>
+        </div>
+        <div local-class='severity-count'>{{@context.passed_count}}</div>
+      </li>
+      <li local-class='severity-level'>
+        <div local-class='severity-label'>
+          <div local-class='severity-color severity-color--untested'></div>
+          <div local-class='severity-text'>Untested</div>
+        </div>
+        <div local-class='severity-count'>{{@context.untested_count}}</div>
+      </li>
+    </ul>
+  </div>
+
+  <div>
+    <div>
+      <AkLink
+        @color='primary'
+        @route='authenticated.file'
+        @model={{@context.file_id}}
+        @underline='always'
+        @title='View file {{@context.file_id}}'
+      >
+        View file:
+        {{@context.file_id}}
+      </AkLink>
+    </div>
+  </div>
+</div>
