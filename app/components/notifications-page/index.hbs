@@ -20,7 +20,7 @@
         </div>
       {{else if this.isEmpty}}
         <NotificationsPage::Divider />
-        <NotificationsPage::Empty />
+        <NotificationsPage::Empty @message='No Notifications' />
       {{else}}
         {{#each pgc.currentPageResults as |notification|}}
           <NotificationsPage::Divider />

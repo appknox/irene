@@ -26,6 +26,8 @@ export default class AkNotificationsService extends Service {
   @tracked showUnReadOnly = false;
   @tracked
   notifications?: DS.AdapterPopulatedRecordArray<NfInAppNotificationModel>;
+  @tracked
+  notificaions_drop_down?: DS.AdapterPopulatedRecordArray<NfInAppNotificationModel>;
   @tracked notificationsCount = 0;
   @tracked unReadCount = 0;
   @tracked notification_limit = 10;
@@ -60,20 +62,24 @@ export default class AkNotificationsService extends Service {
     this.notificationsCount = notifications.meta.count;
   });
 
-  fetchUnreadCount = task(async () => {
-    const unReadNotifications: NFModelArray = (await this.store.query(
+  fetchUnRead = task(async () => {
+    const args: NfInAppNotificationArgs = {
+      limit: 7,
+      offset: 0,
+      has_read: false,
+    };
+
+    const notifications = (await this.store.query(
       'nf-in-app-notification',
-      {
-        has_read: false,
-        limit: 0,
-      }
+      args
     )) as NFModelArray;
-    const unReadCount = unReadNotifications.meta.count;
-    this.unReadCount = unReadCount;
+
+    this.notificaions_drop_down = await notifications;
+    this.unReadCount = notifications.meta.count;
   });
 
   refresh = task(async () => {
-    await this.fetchUnreadCount.perform();
+    await this.fetchUnRead.perform();
     await this.fetch.perform();
   });
 

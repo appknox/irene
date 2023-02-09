@@ -62,52 +62,14 @@ module('Integration | Component | notifications-page', function (hooks) {
     });
 
     const service = this.owner.lookup('service:ak-notifications');
-
-    this.server.get('v2/nf_in_app_notifications', function (schema, request) {
-      if (request.queryParams.has_read == 'false') {
-        const unreadData = this.serialize(
-          schema.nfInAppNotifications.where({ hasRead: false })
-        );
-        if (request.queryParams.limit == '0') {
-          return {
-            count: unreadData.nfInAppNotifications.length,
-            next: null,
-            previous: null,
-            results: [],
-          };
-        }
-        return {
-          count: unreadData.nfInAppNotifications.length,
-          next: null,
-          previous: null,
-          results: unreadData.nfInAppNotifications,
-        };
-      }
-      const data = this.serialize(schema.nfInAppNotifications.all());
-      return {
-        count: data.nfInAppNotifications.length,
-        next: null,
-        previous: null,
-        results: data.nfInAppNotifications,
-      };
-    });
     await service.reload();
     await render(hbs`<NotificationsPage />`);
-    assert.dom('[data-test-notification-message]').exists({ count: 13 });
+    assert.dom('[data-test-notification-message]').exists({ count: 10 });
     assert.dom('[data-test-notification-empty]').doesNotExist();
   });
 
   test('it should render empty', async function (assert) {
     const service = this.owner.lookup('service:ak-notifications');
-
-    this.server.get('v2/nf_in_app_notifications', function () {
-      return {
-        count: 0,
-        next: null,
-        previous: null,
-        results: [],
-      };
-    });
     await service.reload();
     await render(hbs`<NotificationsPage />`);
     assert.dom('[data-test-notification-message]').doesNotExist();
@@ -116,14 +78,6 @@ module('Integration | Component | notifications-page', function (hooks) {
 
   test('it should render loading', async function (assert) {
     const service = this.owner.lookup('service:ak-notifications');
-    this.server.get('v2/nf_in_app_notifications', function () {
-      return {
-        count: 0,
-        next: null,
-        previous: null,
-        results: [],
-      };
-    });
     await service.reload();
     service.fetch = {
       isRunning: true,
