@@ -1,0 +1,24 @@
+<header local-class='notification_header'>
+  <div local-class='notification_header_line'>
+    <div local-class='notification_title_area'>
+      <AkTypography local-class='notification_title' @variant='h4'>
+        <span>{{t 'notifications'}}</span>
+      </AkTypography>
+      <AkTypography
+        @variant='h5'
+        local-class='notifications_unread_count'
+        data-test-unread-count
+      >{{this.unReadCount}}</AkTypography>
+    </div>
+    <AkButton
+      @type='button'
+      @color='primary'
+      @variant='text'
+      @underline='always'
+      {{on 'click' this.markAllAsRead}}
+      data-test-ak-button-mark-all-as-read
+    >
+      <strong>Mark all as read</strong>
+    </AkButton>
+  </div>
+</header>
