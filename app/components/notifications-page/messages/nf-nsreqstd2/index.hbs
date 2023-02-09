@@ -1,0 +1,33 @@
+<div>
+  <div>
+    {{@context.current_requester_username}}
+    has
+    <strong>requested for an unapproved
+      {{@context.platform_display}}
+      namespace
+      {{@context.namespace_value}}</strong>
+    (initially requested by
+    {{@context.initial_requester_username}}
+    on
+    {{@context.namespaceCreatedOnDisplay}}).
+  </div>
+  {{! <div class='pt-1'>
+    <AkButton @color='primary'>Approve</AkButton>
+    <AkButton @color='neutral' @variant='outlined'>Reject</AkButton>
+  </div> }}
+  <div class='pt-1'>
+    <AkLink
+      @color='primary'
+      @route='authenticated.organization.namespaces'
+      @underline='always'
+      @title='View namespaces'
+    >
+      {{! <:leftIcon>
+        <AkIcon @color='primary' @iconName='settings-applications' />
+      </:leftIcon> }}
+      <:default>
+        View namespaces
+      </:default>
+    </AkLink>
+  </div>
+</div>

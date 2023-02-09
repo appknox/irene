@@ -1,0 +1,27 @@
+<div>
+  <div>
+    Unscanned version of
+    {{@context.platform_display}}
+    app
+    <strong>{{@context.app_name}} ({{@context.package_name}})</strong>
+    detected via store monitoring. Please
+    <strong>upload app binary of version
+      {{@context.version_unscanned}}
+      to perform scan.</strong>
+  </div>
+
+  <div>
+    <div class='pt-1'>
+      <AkLink
+        @color='primary'
+        @route='authenticated.app-monitoring'
+        @underline='always'
+        @title='View store monitoring'
+      >
+        <:default>
+          View store monitoring results
+        </:default>
+      </AkLink>
+    </div>
+  </div>
+</div>

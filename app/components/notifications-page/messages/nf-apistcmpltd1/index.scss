@@ -1,0 +1,56 @@
+.meta-info {
+  font-size: 0.95em;
+}
+.pipe {
+  color: var(--neutral-grey-200);
+}
+
+.vulnerability-stats {
+  border: 1px solid var(--neutral-grey-100);
+  padding: 1em 1.2em;
+  margin: 0.8em 0 0.5em;
+  border-radius: 0.2em;
+  max-width: 40em;
+}
+.severity-levels {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-auto-flow: column;
+  row-gap: 0.35em;
+  column-gap: 5em;
+}
+.severity-level {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95em;
+}
+.severity-label {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.severity-color {
+  height: 0.8em;
+  width: 0.8em;
+  border-radius: 50%;
+  margin-right: 0.4em;
+}
+.severity-color--critical {
+  background-color: var(--risk-critical);
+}
+.severity-color--high {
+  background-color: var(--risk-high);
+}
+.severity-color--medium {
+  background-color: var(--risk-medium);
+}
+.severity-color--low {
+  background-color: var(--risk-low);
+}
+.severity-color--passed {
+  background-color: var(--risk-passed);
+}
+.severity-color--untested {
+  background-color: var(--risk-untested);
+}
