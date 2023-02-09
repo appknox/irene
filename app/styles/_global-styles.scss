@@ -864,12 +864,6 @@ input {
   }
 }
 
-button:hover,
-button:active,
-button:focus {
-  transition: all 0.4s !important;
-}
-
 canvas.other-devices {
   margin-top: 30px;
 }
@@ -1277,6 +1271,8 @@ div[class^='_c-notification__container'] {
 }
 
 .top-nav {
+  --top-nav-icon-color: #e5e5e5;
+  --top-nav-icon-color-hover: #fff;
   width: 100%;
   margin-top: -10px;
   height: 50px;
@@ -1476,6 +1472,9 @@ div[class^='_c-notification__container'] {
   }
 
   .top-nav {
+    --top-nav-icon-color: #7c7f88;
+    --top-nav-icon-color-hover: #28282b;
+
     background: #f3f3f3;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 
@@ -4478,16 +4477,16 @@ $login-button-width: 100%;
 }
 
 .popper--white {
-  background-color: var(popover-white-bg);
-  border: 1px solid var(popover-white-border-color);
+  background-color: var(--popover-white-bg);
+  border: 1px solid var(--popover-white-border-color);
   border-radius: 0.3rem;
   position: relative;
   padding: 1rem;
 
   div[x-arrow] {
-    background-color: var(popover-white-bg);
-    border-bottom: 1px solid var(popover-white-border-color);
-    border-left: 1px solid var(popover-white-border-color);
+    background-color: var(--popover-white-bg);
+    border-bottom: 1px solid var(--popover-white-border-color);
+    border-left: 1px solid var(--popover-white-border-color);
     height: 10px;
     width: 10px;
     position: absolute;
