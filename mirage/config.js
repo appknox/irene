@@ -583,5 +583,11 @@ function routes() {
     };
   });
 
+  this.post('v2/nf_in_app_notifications/mark_all_as_read', function (schema) {
+    const notifications = schema.nfInAppNotifications.all();
+    notifications.update('hasRead', true);
+    return new Response(204, {}, {});
+  });
+
   this.passthrough();
 }

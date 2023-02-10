@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
 module(
@@ -12,47 +12,14 @@ module(
     setupMirage(hooks);
     setupIntl(hooks);
 
-    hooks.beforeEach(function () {});
-
-    test('it should render bell icon with link to notifications page', async function (assert) {
-      this.server.get('v2/nf_in_app_notifications', function (schema, request) {
-        const data = schema.nfInAppNotifications.all().models;
-        if (request.queryParams.has_read == 'false') {
-          const unread_data = data.filter((d) => d.hasRead == false);
-          if (request.queryParams.limit == '0') {
-            return {
-              count: unread_data.length,
-              next: null,
-              previous: null,
-              results: [],
-            };
-          }
-          return {
-            count: unread_data.length,
-            next: null,
-            previous: null,
-            results: unread_data,
-          };
-        }
-        return {
-          count: data.length,
-          next: null,
-          previous: null,
-          results: data,
-        };
-      });
-      this.owner.lookup('service:ak-notifications');
-
+    test('it should render bell icon and should open dropdown on click', async function (assert) {
       await render(hbs`<NotificationsPage::BellIcon />`);
-
-      assert.strictEqual(this.element.textContent.trim(), '');
+      assert.dom('[data-test-notification-dropdown]').doesNotExist();
       assert
         .dom(`[data-test-bell-icon]`)
         .hasAttribute('title', '0 unread notifications');
-      // assert
-      //   .dom(`[data-test-bell-icon]`)
-      //   .hasAttribute('href', '/dashboard/notifications');
-      assert.dom(`[data-test-notification-icon]`).exists();
+      await click('[data-test-bell-icon-trigger]');
+      assert.dom(`[data-test-notification-dropdown]`).exists();
     });
 
     test('it should render unread dot if unread notifications exists', async function (assert) {
@@ -65,34 +32,6 @@ module(
         hasRead: true,
         messageCode: 'RANDOM_NF_CODE',
       });
-
-      this.server.get('v2/nf_in_app_notifications', function (schema, request) {
-        const data = schema.nfInAppNotifications.all().models;
-        if (request.queryParams.has_read == 'false') {
-          const unread_data = data.filter((d) => d.hasRead == false);
-          if (request.queryParams.limit == '0') {
-            return {
-              count: unread_data.length,
-              next: null,
-              previous: null,
-              results: [],
-            };
-          }
-          return {
-            count: unread_data.length,
-            next: null,
-            previous: null,
-            results: unread_data,
-          };
-        }
-        return {
-          count: data.length,
-          next: null,
-          previous: null,
-          results: data,
-        };
-      });
-      this.owner.lookup('service:ak-notifications');
 
       await render(hbs`<NotificationsPage::BellIcon />`);
 
@@ -108,34 +47,6 @@ module(
         hasRead: true,
         messageCode: 'RANDOM_NF_CODE',
       });
-
-      this.server.get('v2/nf_in_app_notifications', function (schema, request) {
-        const data = schema.nfInAppNotifications.all().models;
-        if (request.queryParams.has_read == 'false') {
-          const unread_data = data.filter((d) => d.hasRead == false);
-          if (request.queryParams.limit == '0') {
-            return {
-              count: unread_data.length,
-              next: null,
-              previous: null,
-              results: [],
-            };
-          }
-          return {
-            count: unread_data.length,
-            next: null,
-            previous: null,
-            results: unread_data,
-          };
-        }
-        return {
-          count: data.length,
-          next: null,
-          previous: null,
-          results: data,
-        };
-      });
-      this.owner.lookup('service:ak-notifications');
 
       await render(hbs`<NotificationsPage::BellIcon />`);
 
@@ -157,33 +68,7 @@ module(
         messageCode: 'RANDOM_NF_CODE',
       });
 
-      this.server.get('v2/nf_in_app_notifications', function (schema, request) {
-        const data = schema.nfInAppNotifications.all().models;
-        if (request.queryParams.has_read == 'false') {
-          const unread_data = data.filter((d) => d.hasRead == false);
-          if (request.queryParams.limit == '0') {
-            return {
-              count: unread_data.length,
-              next: null,
-              previous: null,
-              results: [],
-            };
-          }
-          return {
-            count: unread_data.length,
-            next: null,
-            previous: null,
-            results: unread_data,
-          };
-        }
-        return {
-          count: data.length,
-          next: null,
-          previous: null,
-          results: data,
-        };
-      });
-      let service = this.owner.lookup('service:ak-notifications');
+      const service = this.owner.lookup('service:ak-notifications');
 
       await render(hbs`<NotificationsPage::BellIcon />`);
 
@@ -191,25 +76,11 @@ module(
         .dom(`[data-test-bell-icon]`)
         .hasAttribute('title', '5 unread notifications');
       assert.dom(`[data-test-unread-dot]`).exists();
-
-      this.server.post(
-        'v2/nf_in_app_notifications/mark_all_as_read',
-        function (schema, request) {
-          let notifications_list = schema.nfInAppNotifications.all().models;
-          for (let nf of notifications_list) {
-            nf.hasRead = true;
-            nf.save();
-          }
-          return new Response(204, {}, {});
-        }
-      );
       await service.markAllAsRead.perform();
-
       assert
         .dom(`[data-test-bell-icon]`)
         .hasAttribute('title', '0 unread notifications');
       assert.dom(`[data-test-unread-dot]`).doesNotExist();
-      assert.ok(1);
     });
   }
 );
