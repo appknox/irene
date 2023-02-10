@@ -34,17 +34,19 @@ type AkStackWidthValues =
   | 'fit-content'
   | 'auto';
 
+export interface AkStackArgs {
+  tag?: string;
+  spacing?: string | number;
+  direction?: AkStackDirection;
+  width?: AkStackWidthValues;
+  justifyContent?: AkStackJustifyContentValues;
+  alignItems?: AkStackAlignItemsValues;
+  flexWrap?: AkStackFlexWrapValues;
+}
+
 export interface AkStackSignature {
   Element: HTMLElement;
-  Args: {
-    tag?: string;
-    spacing?: string | number;
-    direction?: AkStackDirection;
-    width?: AkStackWidthValues;
-    justifyContent?: AkStackJustifyContentValues;
-    alignItems?: AkStackAlignItemsValues;
-    flexWrap?: AkStackFlexWrapValues;
-  };
+  Args: AkStackArgs;
   Blocks: {
     default: [];
   };

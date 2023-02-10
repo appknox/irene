@@ -19,6 +19,7 @@ export interface AkListItemSignature {
     noGutters?: boolean;
     divider?: boolean;
     activeLinkClass?: string;
+    linkClass?: string;
     buttonClass?: string;
     onClick?: (event: MouseEvent) => void;
   };

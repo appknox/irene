@@ -43,6 +43,7 @@
         ak-list-item-link-root 
         {{if @disabled "ak-list-item-link-disabled"}}
         {{unless @noGutters "ak-list-item-gutters"}}'
+        class='{{@linkClass}}'
       >
         {{yield api}}
       </LinkTo>

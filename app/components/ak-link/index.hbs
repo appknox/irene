@@ -1,3 +1,4 @@
+{{! @glint-nocheck: or}}
 <LinkTo
   data-test-ak-link
   ...attributes
@@ -26,6 +27,7 @@
     @color={{if @disabled 'inherit' @color}}
     @noWrap={{@noWrap}}
     @tag='span'
+    class={{@linkTextClass}}
     local-class='ak-link-text'
   >
     {{yield}}

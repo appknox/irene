@@ -1,0 +1,41 @@
+{{#each this.breadcrumbsService.containers as |container|}}
+  {{#in-element container.element insertBefore=null}}
+    <AkList::Item
+      ...attributes
+      local-class='ak-breadcrumb-item'
+      id={{this.id}}
+      @noGutters={{true}}
+      @link={{true}}
+      @disabled={{@disabled}}
+      @route={{@route}}
+      @query={{@query}}
+      @model={{@model}}
+      @models={{@models}}
+      @linkClass={{this.classes.linkTextClass}}
+      {{breadcrumbs-item id=this.id replace=@replace}}
+      data-test-breadcrumb-item
+    >
+      <span local-class='breadcrumb-title'>
+        {{#if @linkTitle}}
+          {{@linkTitle}}
+        {{else}}
+          {{yield}}
+        {{/if}}
+      </span>
+
+      <AkStack
+        @tag='span'
+        @direction='row'
+        @alignItems='center'
+        local-class='separator'
+        data-test-breadcrumb-separator
+      >
+        {{#if (has-block 'separator')}}
+          {{yield to='separator'}}
+        {{else}}
+          {{if @separator @separator '/'}}
+        {{/if}}
+      </AkStack>
+    </AkList::Item>
+  {{/in-element}}
+{{/each}}

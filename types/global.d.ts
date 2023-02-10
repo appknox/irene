@@ -1,7 +1,8 @@
+import '@glint/environment-ember-loose';
 import { TemplateFactory } from 'ember-cli-htmlbars';
 import { HelperLike, ComponentLike, ModifierLike } from '@glint/template';
-
-import '@glint/environment-ember-loose';
+import { BreadcrumbsContainerModifierArgs } from '../app/modifiers/breadcrumbs-container';
+import { BreadcrumbsItemModifierArgs } from '../app/modifiers/breadcrumbs-item';
 import {
   PowerSelectArgs,
   Select,
@@ -44,6 +45,14 @@ declare module '@glint/environment-ember-loose/registry' {
       Blocks: { default: [] };
     }>;
 
+    PowerSelect: ComponentLike<{
+      Element: HTMLElement;
+      Args: PowerSelectExtendedArgs;
+      Blocks: {
+        default: [option: unknown, select?: Select];
+      };
+    }>;
+
     t: HelperLike<{
       Args: {
         Positional: [string];
@@ -65,12 +74,14 @@ declare module '@glint/environment-ember-loose/registry' {
       Return: Array<string[]>;
     }>;
 
-    PowerSelect: ComponentLike<{
-      Element: HTMLElement;
-      Args: PowerSelectExtendedArgs;
-      Blocks: {
-        default: [option: unknown, select?: Select];
-      };
+    'breadcrumbs-container': ModifierLike<{
+      Args: BreadcrumbsContainerModifierArgs;
+      Return: void;
+    }>;
+
+    'breadcrumbs-item': ModifierLike<{
+      Args: BreadcrumbsItemModifierArgs;
+      Return: void;
     }>;
   }
 }
