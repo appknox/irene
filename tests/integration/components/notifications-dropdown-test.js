@@ -2,13 +2,13 @@ import { module, test } from 'qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setComponentTemplate } from '@ember/component';
 import Component from '@glimmer/component';
 import { NotificationMap } from 'irene/components/notifications-page/notification_map';
 
-module('Integration | Component | notifications-page', function (hooks) {
+module('Integration | Component | notifications-dropdown', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
   setupIntl(hooks);
@@ -37,14 +37,29 @@ module('Integration | Component | notifications-page', function (hooks) {
   });
 
   test('it renders', async function (assert) {
-    await render(hbs`<NotificationsPage />`);
+    this.registerRef = (element) => {
+      this.anchorRef = element;
+    };
+
+    this.showDropDown = false;
+
+    const template = hbs`
+      <button id="notification-button" type="button" {{did-insert this.registerRef}}></button>
+      <NotificationsDropdown
+        @show={{this.showDropDown}}
+        @anchorRef={{this.anchorRef}}
+      />
+    `;
+    await render(template);
+    await click('#notification-button');
+    assert.dom('[data-test-notification-dropdown]').exists();
     assert.notEqual(
       this.element.textContent.trim().indexOf('t:notifications:()'),
       -1
     );
   });
 
-  test('it should render all notification', async function (assert) {
+  test('it should render only unread notification', async function (assert) {
     this.unread_nf = this.server.createList('nf-in-app-notification', 3, {
       hasRead: false,
       messageCode: 'NF_TEST',
@@ -61,28 +76,70 @@ module('Integration | Component | notifications-page', function (hooks) {
       },
     });
 
+    this.registerRef = (element) => {
+      this.anchorRef = element;
+    };
+
+    this.showDropDown = false;
+
+    const template = hbs`
+      <button id="notification-button" type="button" {{did-insert this.registerRef}}></button>
+      <NotificationsDropdown
+        @show={{this.showDropDown}}
+        @anchorRef={{this.anchorRef}}
+      />
+    `;
+    await render(template);
+    await click('#notification-button');
     const service = this.owner.lookup('service:ak-notifications');
     await service.reload();
-    await render(hbs`<NotificationsPage />`);
-    assert.dom('[data-test-notification-message]').exists({ count: 10 });
+    assert.dom('[data-test-notification-message]').exists({ count: 3 });
     assert.dom('[data-test-notification-empty]').doesNotExist();
   });
 
   test('it should render empty', async function (assert) {
+    this.registerRef = (element) => {
+      this.anchorRef = element;
+    };
+
+    this.showDropDown = false;
+
+    const template = hbs`
+      <button id="notification-button" type="button" {{did-insert this.registerRef}}></button>
+      <NotificationsDropdown
+        @show={{this.showDropDown}}
+        @anchorRef={{this.anchorRef}}
+      />
+    `;
+    await render(template);
+    await click('#notification-button');
     const service = this.owner.lookup('service:ak-notifications');
     await service.reload();
-    await render(hbs`<NotificationsPage />`);
     assert.dom('[data-test-notification-message]').doesNotExist();
     assert.dom('[data-test-notification-empty]').exists();
   });
 
   test('it should render loading', async function (assert) {
+    this.registerRef = (element) => {
+      this.anchorRef = element;
+    };
+
+    this.showDropDown = false;
+
+    const template = hbs`
+      <button id="notification-button" type="button" {{did-insert this.registerRef}}></button>
+      <NotificationsDropdown
+        @show={{this.showDropDown}}
+        @anchorRef={{this.anchorRef}}
+      />
+    `;
     const service = this.owner.lookup('service:ak-notifications');
     await service.reload();
-    service.fetch = {
+    service.fetchUnRead = {
       isRunning: true,
     };
-    await render(hbs`<NotificationsPage />`);
+    await render(template);
+    await click('#notification-button');
     assert.dom('[data-test-notification-message]').doesNotExist();
     assert.dom('[data-test-notification-empty]').doesNotExist();
     assert.dom('[data-test-ak-loader]').exists();

@@ -1,6 +1,23 @@
 .nf-icon {
   position: relative;
+  color: var(--top-nav-icon-color);
 }
+
+.nf-icon:hover,
+.nf-icon:focus,
+.nf-icon:active {
+  color: var(--top-nav-icon-color-hover);
+}
+
+.nf-button {
+  border: 0;
+  border-radius: 0;
+  display: inline-block;
+  height: auto;
+  padding: 0;
+  margin: 0.5em;
+}
+
 .nf-unread-dot {
   background-color: var(--primary);
   height: 0.5em;
@@ -9,4 +26,8 @@
   position: absolute;
   top: 0;
   right: 0;
+}
+
+.icon-container {
+  position: relative;
 }

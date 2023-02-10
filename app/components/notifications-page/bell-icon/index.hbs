@@ -1,13 +1,23 @@
-<AkLink
-  @color='inherit'
-  @route='authenticated.dashboard.notifications'
-  local-class='nf-icon'
-  {{did-insert (perform this.AkNotifications.refresh)}}
-  @title='{{this.AkNotifications.unReadCount}} unread notifications'
+<button
+  type='button'
+  local-class='nf-icon nf-button'
+  {{on 'click' this.onClick}}
+  title='{{this.akNotifications.unReadCount}} unread notifications'
   data-test-bell-icon
 >
-  <AkIcon @iconName='notifications' data-test-notification-icon />
-  {{#if this.AkNotifications.hasUnReadNotifications}}
-    <div local-class='nf-unread-dot' data-test-unread-dot></div>
-  {{/if}}
-</AkLink>
+  <div
+    local-class='icon-container'
+    {{did-insert this.registerAnchorRef}}
+    data-test-bell-icon-trigger
+  >
+    <AkIcon @iconName='notifications' data-test-notification-icon />
+    {{#if this.akNotifications.hasUnReadNotifications}}
+      <div local-class='nf-unread-dot' data-test-unread-dot></div>
+    {{/if}}
+  </div>
+</button>
+<NotificationsDropdown
+  @show={{this.showDropDown}}
+  @anchorRef={{this.anchorRef}}
+  @onClose={{this.closeNotification}}
+/>

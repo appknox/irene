@@ -1,0 +1,10 @@
+<div local-class='notification-dropdown-footer'>
+  <AkLink
+    @color='primary'
+    @route='authenticated.dashboard.notifications'
+    @underline='always'
+    @title='View notifications'
+    data-test-notification-dropdown-link
+    {{on 'click' this.onClick}}
+  ><strong>View All Notifications</strong></AkLink>
+</div>

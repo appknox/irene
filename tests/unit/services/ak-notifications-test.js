@@ -21,41 +21,15 @@ module('Unit | Service | ak-notifications', function (hooks) {
       hasRead: true,
       messageCode: 'RANDOM_NF_CODE',
     });
-
-    this.server.get('v2/nf_in_app_notifications', function (schema, request) {
-      const data = schema.nfInAppNotifications.all().models;
-      if (request.queryParams.has_read == 'false') {
-        const unread_data = data.filter((d) => d.hasRead == false);
-        if (request.queryParams.limit == '0') {
-          return {
-            count: unread_data.length,
-            next: null,
-            previous: null,
-            results: [],
-          };
-        }
-        return {
-          count: unread_data.length,
-          next: null,
-          previous: null,
-          results: unread_data,
-        };
-      }
-      return {
-        count: data.length,
-        next: null,
-        previous: null,
-        results: data,
-      };
-    });
     const service = this.owner.lookup('service:ak-notifications');
     await service.refresh.perform();
     assert.false(service.showUnReadOnly);
     assert.strictEqual(service.unReadCount, 3);
-    assert.strictEqual(service.notifications.length, 13);
+    assert.strictEqual(service.notifications.length, 10);
+    assert.strictEqual(service.notificaions_drop_down.length, 3);
   });
 
-  test('it should get fetch only unread', async function (assert) {
+  test('it should only fetch only unread', async function (assert) {
     const service = this.owner.lookup('service:ak-notifications');
     service.showUnReadOnly = true;
 
@@ -69,37 +43,10 @@ module('Unit | Service | ak-notifications', function (hooks) {
       messageCode: 'RANDOM_NF_CODE',
     });
 
-    this.server.get('v2/nf_in_app_notifications', function (schema, request) {
-      const data = schema.nfInAppNotifications.all().models;
-
-      if (request.queryParams.has_read == 'false') {
-        const unread_data = data.filter((d) => d.hasRead == false);
-        if (request.queryParams.limit == '0') {
-          return {
-            count: unread_data.length,
-            next: null,
-            previous: null,
-            results: [],
-          };
-        }
-        return {
-          count: unread_data.length,
-          next: null,
-          previous: null,
-          results: unread_data,
-        };
-      }
-      return {
-        count: data.length,
-        next: null,
-        previous: null,
-        results: data,
-      };
-    });
-
     await service.refresh.perform();
     assert.true(service.showUnReadOnly);
     assert.strictEqual(service.unReadCount, 3);
     assert.strictEqual(service.notifications.length, 3);
+    assert.strictEqual(service.notificaions_drop_down.length, 3);
   });
 });
