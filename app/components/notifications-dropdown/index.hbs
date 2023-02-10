@@ -1,0 +1,39 @@
+<AttachPopover
+  @interactive={{true}}
+  @arrow={{true}}
+  @isShown={{@show}}
+  @placement='bottom-start'
+  @lazyRender={{true}}
+  @showOn='click'
+  @hideOn='clickout click'
+  @animation='shift'
+  @class='ember-attacher-popper {{local-class "popper"}}'
+  @popperTarget={{@anchorRef}}
+  as |attacher|
+>
+  <div
+    data-test-notification-dropdown
+    local-class='notification-dropdown-container'
+  >
+    <NotificationsDropdown::Header />
+    <main local-class='notification_main_list'>
+      {{#if this.isLoading}}
+        <NotificationsPage::Divider />
+        <div local-class='loading'>
+          <AkLoader />
+        </div>
+      {{else if this.isEmpty}}
+        <NotificationsPage::Divider />
+        <NotificationsPage::Empty @message='No unread notifications' />
+      {{else}}
+        {{#each this.akNotifications.notificaions_drop_down as |notification|}}
+          <NotificationsPage::Divider />
+          <NotificationsPage::Message @notification={{notification}} />
+        {{/each}}
+      {{/if}}
+    </main>
+    <NotificationsDropdown::Footer
+      @onViewAllNotificationClick={{attacher.hide}}
+    />
+  </div>
+</AttachPopover>
