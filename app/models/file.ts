@@ -1,70 +1,133 @@
-/* eslint-disable ember/no-computed-properties-in-native-classes */
-/* eslint-disable ember/no-mixins */
-import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+/* eslint-disable ember/no-computed-properties-in-native-classes, ember/no-mixins */
+import {
+  AsyncBelongsTo,
+  AsyncHasMany,
+  attr,
+  belongsTo,
+  hasMany,
+} from '@ember-data/model';
+
 import { computed } from '@ember/object';
-import { sort } from '@ember/object/computed';
+import ComputedProperty, { sort } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
+
 import ENUMS from 'irene/enums';
 import { ModelBaseMixin } from 'irene/mixins/base-model';
 import { RISK_COLOR_CODE } from 'irene/utils/constants';
+import { Service as IntlService } from 'ember-intl';
+import Store from '@ember-data/store';
 
-const _getAnalysesCount = (analysis, risk) => {
+import ProjectModel from './project';
+import TagModel from './tag';
+import FileReportModel from './file-report';
+import AnalysisModel from './analysis';
+import ProfileModel from './profile';
+
+const _getAnalysesCount = (
+  analysis: AsyncHasMany<AnalysisModel>,
+  risk: number
+) => {
   return analysis.filter((analysis) => analysis.computedRisk === risk).length;
 };
 
-class File extends ModelBaseMixin(Model) {
-  @service intl;
-  @service store;
+export default class FileModel extends ModelBaseMixin {
+  @service declare intl: IntlService;
+  @service declare store: Store;
 
-  @attr('string') uuid;
-  @attr('string') deviceToken;
-  @attr('string') version;
-  @attr('string') versionCode;
-  @attr('string') iconUrl;
-  @attr('string') md5hash;
-  @attr('string') sha1hash;
-  @attr('string') name;
-  @attr('string') minOsVersion;
-  @attr('string') supportedCpuArchitectures;
-  @attr('string') supportedDeviceTypes;
-  @attr('string') report;
+  @attr('string')
+  declare uuid: string;
 
-  @attr('number') manual;
-  @attr('number') dynamicStatus;
-  @attr('number') apiScanProgress;
-  @attr('number') staticScanProgress;
-  @attr('number') apiScanStatus;
+  @attr('string')
+  declare deviceToken: string;
 
-  @attr('boolean') isActive;
-  @attr('boolean') isApiDone;
-  @attr('boolean') isStaticDone;
-  @attr('boolean') isManualDone;
-  @attr('boolean') isDynamicDone;
-  @attr('boolean') canGenerateReport;
-  @attr('boolean') canRunAutomatedDynamicscan;
+  @attr('string')
+  declare version: string;
 
-  @hasMany('tag') tags;
-  @hasMany('file-report', { async: true }) reports;
-  @hasMany('analysis', { inverse: 'file' }) analyses;
+  @attr('string')
+  declare versionCode: string;
 
-  @belongsTo('project', { inverse: 'files' }) project;
-  @belongsTo('profile', { inverse: 'files' }) profile;
+  @attr('string')
+  declare iconUrl: string;
 
-  tDeviceInQueue = this.intl.t('deviceInQueue');
-  tDeviceBooting = this.intl.t('deviceBooting');
-  tDeviceDownloading = this.intl.t('deviceDownloading');
-  tDeviceInstalling = this.intl.t('deviceInstalling');
-  tDeviceLaunching = this.intl.t('deviceLaunching');
-  tDeviceHooking = this.intl.t('deviceHooking');
-  tDeviceShuttingDown = this.intl.t('deviceShuttingDown');
-  tDeviceCompleted = this.intl.t('deviceCompleted');
+  @attr('string')
+  declare md5hash: string;
+
+  @attr('string')
+  declare sha1hash: string;
+
+  @attr('string')
+  declare name: string;
+
+  @attr('string')
+  declare minOsVersion: string;
+
+  @attr('string')
+  declare supportedCpuArchitectures: string;
+
+  @attr('string')
+  declare supportedDeviceTypes: string;
+
+  @attr('string')
+  declare report: string;
+
+  @attr('number')
+  declare manual: number;
+
+  @attr('number')
+  declare dynamicStatus: number;
+
+  @attr('number')
+  declare apiScanProgress: number;
+
+  @attr('number')
+  declare staticScanProgress: number;
+
+  @attr('number')
+  declare apiScanStatus: number;
+
+  @attr('boolean')
+  declare isActive: boolean;
+
+  @attr('boolean')
+  declare isApiDone: boolean;
+
+  @attr('boolean')
+  declare isStaticDone: boolean;
+
+  @attr('boolean')
+  declare isManualDone: boolean;
+
+  @attr('boolean')
+  declare isDynamicDone: boolean;
+
+  @attr('boolean')
+  declare canGenerateReport: boolean;
+
+  @attr('boolean')
+  declare canRunAutomatedDynamicscan: boolean;
+
+  @hasMany('tag')
+  declare tags: AsyncHasMany<TagModel>;
+
+  @hasMany('file-report', { async: true })
+  declare reports: AsyncHasMany<FileReportModel>;
+
+  @hasMany('analysis', { inverse: 'file' })
+  declare analyses: AsyncHasMany<AnalysisModel>;
+
+  @belongsTo('project', { inverse: 'files' })
+  declare project: AsyncBelongsTo<ProjectModel>;
+
+  @belongsTo('profile', { inverse: 'files' })
+  declare profile: AsyncBelongsTo<ProfileModel>;
 
   analysesSorting = ['computedRisk:desc'];
 
-  scanProgressClass(type) {
+  scanProgressClass(type?: boolean) {
     if (type === true) {
       return true;
     }
+
     return false;
   }
 
@@ -198,14 +261,14 @@ class File extends ModelBaseMixin(Model) {
   }
 
   get statusText() {
-    const tDeviceInQueue = this.tDeviceInQueue;
-    const tDeviceBooting = this.tDeviceBooting;
-    const tDeviceDownloading = this.tDeviceDownloading;
-    const tDeviceInstalling = this.tDeviceInstalling;
-    const tDeviceLaunching = this.tDeviceLaunching;
-    const tDeviceHooking = this.tDeviceHooking;
-    const tDeviceShuttingDown = this.tDeviceShuttingDown;
-    const tDeviceCompleted = this.tdeviceCompleted;
+    const tDeviceInQueue = this.intl.t('deviceInQueue');
+    const tDeviceBooting = this.intl.t('deviceBooting');
+    const tDeviceDownloading = this.intl.t('deviceDownloading');
+    const tDeviceInstalling = this.intl.t('deviceInstalling');
+    const tDeviceLaunching = this.intl.t('deviceLaunching');
+    const tDeviceHooking = this.intl.t('deviceHooking');
+    const tDeviceShuttingDown = this.intl.t('deviceShuttingDown');
+    const tDeviceCompleted = this.intl.t('deviceCompleted');
 
     switch (this.dynamicStatus) {
       case ENUMS.DYNAMIC_STATUS.INQUEUE:
@@ -237,11 +300,11 @@ class File extends ModelBaseMixin(Model) {
     return this.versionCode;
   }
 
-  setDynamicStatus(status) {
+  setDynamicStatus(status: number) {
     this.store.push({
       data: {
         id: this.id,
-        type: this.constructor.modelName,
+        type: FileModel.modelName,
         attributes: {
           dynamicStatus: status,
         },
@@ -273,7 +336,8 @@ class File extends ModelBaseMixin(Model) {
     this.setDynamicStatus(ENUMS.DYNAMIC_STATUS.READY);
   }
 
-  @sort('analyses', 'analysesSorting') sortedAnalyses;
+  @sort<AnalysisModel>('analyses', 'analysesSorting')
+  declare sortedAnalyses: ComputedProperty<AnalysisModel[]>;
 
   @computed('analyses.@each.computedRisk')
   get countRiskCritical() {
@@ -339,4 +403,8 @@ class File extends ModelBaseMixin(Model) {
   }
 }
 
-export default File;
+declare module 'ember-data/types/registries/model' {
+  export default interface ModelRegistry {
+    file: FileModel;
+  }
+}
