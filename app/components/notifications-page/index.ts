@@ -13,7 +13,7 @@ export default class NotificationsPageComponent extends Component {
   @service declare akNotifications: AkNotificationsService;
   @service declare router: RouterService;
 
-  notificationPageRoute = 'authenticated.dashboard.notifications';
+  notificationPageRoute = 'authenticated.dashboard.notifications' as const;
 
   get limit() {
     return this.akNotifications.notification_limit;
@@ -28,7 +28,7 @@ export default class NotificationsPageComponent extends Component {
   }
 
   get itemPerPageOptions() {
-    return [10, 25, 50];
+    return [10, 25, 50] as const;
   }
 
   get totalCount() {
@@ -46,9 +46,8 @@ export default class NotificationsPageComponent extends Component {
   @action onItemPerPageChange(args: LimitOffset) {
     const { limit } = args;
     const offset = 0;
-
     this.router.transitionTo(this.notificationPageRoute, {
-      queryParams: { app_limit: limit, app_offset: offset },
+      queryParams: { notification_limit: limit, notification_offset: offset },
     });
   }
 
