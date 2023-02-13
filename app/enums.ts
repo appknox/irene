@@ -55,6 +55,7 @@ const ENUMS = {
     ASSESSING: 2,
     DONE: 3,
   },
+
   THRESHOLD: {
     LOW: 1,
     MEDIUM: 2,
@@ -211,27 +212,51 @@ export const ENUMS_DISPLAY = {
   },
 };
 
-// Populate `CHOICES`
-for (const enumName in ENUMS) {
-  const enumValues = ENUMS[enumName];
-  const base_choices = [];
-  const base_values = [];
-  const choices = [];
-  const values = [];
-  for (const key in enumValues) {
-    const value = enumValues[key];
-    base_choices.push({ key, value });
-    base_values.push(value);
-    choices.push({ key, value });
-    values.push(value);
-  }
-  enumValues['UNKNOWN'] = -1;
-  choices.push({ key: 'UNKNOWN', value: enumValues['UNKNOWN'] });
-  values.push(enumValues['UNKNOWN']);
-  ENUMS[enumName]['BASE_CHOICES'] = base_choices;
-  ENUMS[enumName]['BASE_VALUES'] = base_values;
-  ENUMS[enumName]['CHOICES'] = choices;
-  ENUMS[enumName]['VALUES'] = values;
-}
+type ExtendedObject = {
+  UNKNOWN: number;
+  BASE_CHOICES: { key: string; value: string | number }[];
+  BASE_VALUES: (string | number)[];
+  CHOICES: { key: string; value: string | number }[];
+  VALUES: (string | number)[];
+};
 
-export default ENUMS;
+type EnumType = {
+  [key in keyof typeof ENUMS]: (typeof ENUMS)[key] & ExtendedObject;
+};
+
+// Populate `CHOICES`
+const finalEnum = Object.entries(ENUMS).reduce(
+  (acc, [enumName, enumValues]) => {
+    const base_choices = [];
+    const base_values = [];
+    const choices = [];
+    const values = [];
+
+    for (const [key, value] of Object.entries(enumValues)) {
+      base_choices.push({ key, value });
+      base_values.push(value);
+      choices.push({ key, value });
+      values.push(value);
+    }
+
+    const UNKNOWN_VALUE = -1;
+
+    choices.push({ key: 'UNKNOWN', value: UNKNOWN_VALUE });
+    values.push(UNKNOWN_VALUE);
+
+    return {
+      ...acc,
+      [enumName]: {
+        ...enumValues,
+        UNKNOWN: UNKNOWN_VALUE,
+        BASE_CHOICES: base_choices,
+        BASE_VALUES: base_values,
+        CHOICES: choices,
+        VALUES: values,
+      },
+    };
+  },
+  {} as EnumType
+);
+
+export default finalEnum;
