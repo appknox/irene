@@ -591,8 +591,10 @@
   "note": "Note",
   "notifications": "通知",
   "notificationModule": {
+    "currentRiskStatusFile": "Current risk status of file",
     "messages": {
-      "nf-am-newversn": "Unscanned version of {platform_display} app <strong>{app_name} ({package_name})</strong> detected via store monitoring. Please <strong>upload app binary of version {version_unscanned} to perform scan.</strong>"
+      "nf-am-newversn": "Unscanned version of {platform_display} app <strong>{app_name} ({package_name})</strong> detected via store monitoring. Please <strong>upload app binary of version {version_unscanned} to perform scan.</strong>",
+      "nf-apistcmpltd1": "<strong>API scan completed</strong> for {platform_display} app <strong>{file_name} ({package_name})</strong>."
     },
     "viewStoreMonitoring": "View store monitoring",
     "viewStoreMonitoringResults": "View store monitoring results"
@@ -952,8 +954,10 @@
   "validUntil": "Valid until",
   "validity": "Validity",
   "version": "バージョン",
+  "versionLowercase": "バージョン",
   "versionCode": "バージョンコード",
   "viewAll": "View All",
+  "viewFile": "View file",
   "viewFiles": "View Files",
   "viewIntegrationInstructions": "View Instructions to Integrate",
   "viewUploads": "View uploads",
