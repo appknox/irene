@@ -67,18 +67,16 @@
     </ul>
   </div>
 
-  <div>
-    <div data-test-nf-apistcmpltd1-link>
-      <AkLink
-        @color='primary'
-        @route='authenticated.file'
-        @model={{@context.file_id}}
-        @underline='always'
-        @title='{{t "viewFile"}} {{@context.file_id}}'
-      >
-        {{t 'viewFile'}}:
-        {{@context.file_id}}
-      </AkLink>
-    </div>
+  <div data-test-nf-apistcmpltd1-link>
+    <AkLink
+      @color='primary'
+      @route='authenticated.file'
+      @model={{@context.file_id}}
+      @underline='always'
+      @title='{{t "viewFile"}} {{@context.file_id}}'
+    >
+      {{t 'viewFile'}}:
+      {{@context.file_id}}
+    </AkLink>
   </div>
 </div>
