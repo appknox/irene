@@ -1,8 +1,7 @@
 <div>
-  Your
-  {{@context.platform_display}}
-  app's
-  <strong>namespace {{@context.namespace_value}}</strong>
-  was
-  <strong>auto approved</strong>.
+  {{t
+    'notificationModule.messages.nf-nsautoapprvd1'
+    platform_display=@context.platform_display
+    namespace_value=@context.namespace_value
+  }}
 </div>
