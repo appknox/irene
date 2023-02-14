@@ -1,15 +1,10 @@
 <span>
-  Your
-  <strong>namespace request</strong>
-  for
-  {{@context.platform_display}}
-  app
-  <strong>{{@context.namespace_value}}</strong>
-  created on
-  {{@context.namespace_created_on}}
-  <strong>has approved</strong>
-  by
-  {{@context.moderator_username}}. Please
-  <strong>upload the app again</strong>
-  to perform scan.
+  {{t
+    'notificationModule.messages.nf-nsapprvd1'
+    htmlSafe=true
+    platform_display=@context.platform_display
+    namespace_value=@context.namespace_value
+    namespace_created_on=@context.namespace_created_on
+    moderator_username=@context.moderator_username
+  }}
 </span>

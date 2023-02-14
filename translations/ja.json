@@ -596,9 +596,14 @@
       "nf-am-newversn": "Unscanned version of {platform_display} app <strong>{app_name} ({package_name})</strong> detected via store monitoring. Please <strong>upload app binary of version {version_unscanned} to perform scan.</strong>",
       "nf-apistcmpltd1": "<strong>API scan completed</strong> for {platform_display} app <strong>{file_name} ({package_name})</strong>.",
       "nf-dastcmpltd1": "<strong>Dynamic scan completed</strong> for {platform_display} app <strong>{file_name}} ({package_name})</strong>.",
+      "nf-nsapprvd1": "Your <strong>namespace request</strong> for {platform_display} app <strong>{namespace_value}</strong> created on {namespace_created_on} <strong>has approved</strong> by {moderator_username}. Please <strong>upload the app again</strong> to perform scan.",
+      "nf-nsapprvd2": "{platform_display} <strong>namespace {namespace_value}</strong> requested by {requester_username} <strong>has approved</strong> by {moderator_username}.",
+      "nf-nsautoapprvd1": "Your {platform_display} app's <strong>namespace {namespace_value}</strong> was <strong>auto approved</strong>.",
+      "nf-nsautoapprvd2": "{platform_display} <strong>namespace {namespace_value}</strong> requested by {requester_username} was <strong>auto approved</strong>.",
       "nf-sastcmpltd1": "<strong>Static scan completed</strong> for {platform_display} app <strong>{file_name} ({package_name})</strong>."
     },
     "riskStatus": "Risk status",
+    "viewNamespaces": "View namespaces",
     "viewStoreMonitoring": "View store monitoring",
     "viewStoreMonitoringResults": "View store monitoring results"
   },
