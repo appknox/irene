@@ -590,6 +590,13 @@
   "notScanned": "Not Scanned",
   "note": "Note",
   "notifications": "Notifications",
+  "notificationModule": {
+    "messages": {
+      "nf-am-newversn": "Unscanned version of {platform_display} app <strong>{app_name} ({package_name})</strong> detected via store monitoring. Please <strong>upload app binary of version {version_unscanned} to perform scan.</strong>"
+    },
+    "viewStoreMonitoring": "View store monitoring",
+    "viewStoreMonitoringResults": "View store monitoring results"
+  },
   "off": "off",
   "ok": "Ok",
   "on": "on",
