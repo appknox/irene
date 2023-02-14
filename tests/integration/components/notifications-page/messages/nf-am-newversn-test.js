@@ -5,6 +5,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { NfAmNewversnContext } from 'irene/components/notifications-page/messages/nf-am-newversn/context';
+
 module(
   'Integration | Component | notifications-page/messages/nf-am-newversn',
   function (hooks) {
