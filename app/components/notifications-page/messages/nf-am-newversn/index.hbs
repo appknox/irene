@@ -1,13 +1,13 @@
 <div>
   <div>
-    Unscanned version of
-    {{@context.platform_display}}
-    app
-    <strong>{{@context.app_name}} ({{@context.package_name}})</strong>
-    detected via store monitoring. Please
-    <strong>upload app binary of version
-      {{@context.version_unscanned}}
-      to perform scan.</strong>
+    {{t
+      'notificationModule.messages.nf-am-newversn'
+      platform_display=@context.platform_display
+      app_name=@context.app_name
+      package_name=@context.package_name
+      version_unscanned=@context.version_unscanned
+      htmlSafe=true
+    }}
   </div>
 
   <div>
@@ -16,11 +16,9 @@
         @color='primary'
         @route='authenticated.app-monitoring'
         @underline='always'
-        @title='View store monitoring'
+        @title='{{t "viewStoreMonitoring"}}'
       >
-        <:default>
-          View store monitoring results
-        </:default>
+        <:default>{{t 'viewStoreMonitoringResults'}}</:default>
       </AkLink>
     </div>
   </div>
