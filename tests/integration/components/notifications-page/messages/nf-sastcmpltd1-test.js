@@ -62,9 +62,11 @@ module(
         .dom('[data-test-nf-sastcmpltd1-risk-count]')
         .exists()
         .containsText(
-          `${t('riskStatus')} ${t('critical')} 1 ${t('high')} 2 ${t(
-            'medium'
-          )} 3 ${t('low')} 4 ${t('passed')} 5 ${t('untested')} 10`
+          `${t('notificationModule.riskStatus')} ${t('critical')} 1 ${t(
+            'high'
+          )} 2 ${t('medium')} 3 ${t('low')} 4 ${t('passed')} 5 ${t(
+            'untested'
+          )} 10`
         );
 
       assert

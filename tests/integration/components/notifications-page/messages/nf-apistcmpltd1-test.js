@@ -61,9 +61,11 @@ module(
         .dom('[data-test-nf-apistcmpltd1-risk-count]')
         .exists()
         .containsText(
-          `${t('currentRiskStatusFile')} ${t('critical')} 1 ${t('high')} 2 ${t(
-            'medium'
-          )} 3 ${t('low')} 4 ${t('passed')} 5 ${t('untested')} 10`
+          `${t('notificationModule.currentRiskStatusFile')} ${t(
+            'critical'
+          )} 1 ${t('high')} 2 ${t('medium')} 3 ${t('low')} 4 ${t(
+            'passed'
+          )} 5 ${t('untested')} 10`
         );
 
       assert
