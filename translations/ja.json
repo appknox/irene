@@ -601,6 +601,7 @@
       "nf-nsautoapprvd1": "Your {platform_display} app's <strong>namespace {namespace_value}</strong> was <strong>auto approved</strong>.",
       "nf-nsautoapprvd2": "{platform_display} <strong>namespace {namespace_value}</strong> requested by {requester_username} was <strong>auto approved</strong>.",
       "nf-sastcmpltd1": "<strong>Static scan completed</strong> for {platform_display} app <strong>{file_name} ({package_name})</strong>.",
+      "nf-upldfailnsunaprv1": "Your upload of {platform_display} app {namespace_value} <strong>failed due to unapproved namespace</strong>.",
       "nf-upldfailpay2": "App {package_name} upload by {requester_username} <strong>failed due to insufficient payment credits</strong>.",
       "nf-upldfailpayrq1": "Failed to upload app {package_name}. Your organization has <strong>no payment credits</strong> left."
     },

@@ -1,7 +1,8 @@
 <div>
-  Your upload of
-  {{@context.platform_display}}
-  app
-  {{@context.namespace_value}}
-  <strong>failed due to unapproved namespace</strong>.
+  {{t
+    'notificationModule.messages.nf-upldfailnsunaprv1'
+    htmlSafe=true
+    platform_display=@context.platform_display
+    namespace_value=@context.namespace_value
+  }}
 </div>
