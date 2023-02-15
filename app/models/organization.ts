@@ -5,6 +5,14 @@ import OrganizationNamespaceModel from './organization-namespace';
 import OrganizationProjectModel from './organization-project';
 import OrganizationTeamModel from './organization-team';
 
+interface Features {
+  app_monitoring: boolean;
+  dynamicscan_automation: boolean;
+  manualscan: boolean;
+  partner_dashboard: boolean;
+  sso: boolean;
+}
+
 export default class OrganizationModel extends Model {
   @attr('string')
   declare name: string;
@@ -34,7 +42,7 @@ export default class OrganizationModel extends Model {
   declare teams: AsyncHasMany<OrganizationTeamModel>;
 
   @attr()
-  declare features: unknown;
+  declare features: Features;
 
   @attr('number')
   declare projectsCount: number;
