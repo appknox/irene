@@ -1,23 +1,23 @@
 <div>
-  <div>
-    {{@context.platform_display}}
-    <strong>namespace {{@context.namespace_value}}</strong>
-    requested by
-    {{@context.requester_username}}
-    was
-    <strong>rejected</strong>
-    by
-    {{@context.moderator_username}}.
+  <div data-test-nf-nsrejctd2-primary-message>
+    {{t
+      'notificationModule.messages.nf-nsrejctd2'
+      htmlSafe=true
+      platform_display=@context.platform_display
+      namespace_value=@context.namespace_value
+      requester_username=@context.requester_username
+      moderator_username=@context.moderator_username
+    }}
   </div>
   <div>
-    <div class='pt-1'>
+    <div class='pt-1' data-test-nf-nsrejctd2-link>
       <AkLink
         @color='primary'
         @route='authenticated.organization.namespaces'
         @underline='always'
-        @title='View namespaces'
+        @title='{{t "notificationModule.viewNamespaces"}}'
       >
-        View namespaces
+        {{t 'notificationModule.viewNamespaces'}}
       </AkLink>
     </div>
   </div>
