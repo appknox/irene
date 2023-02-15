@@ -1,12 +1,9 @@
 <div>
-  Your
-  <strong>namespace request</strong>
-  for
-  {{@context.platform_display}}
-  app
-  <strong>{{@context.namespace_value}}</strong>
-  created on
-  {{@context.namespace_created_on}}
-  was
-  <strong>not approved</strong>.
+  {{t
+    'notificationModule.messages.nf-nsrejctd1'
+    htmlSafe=true
+    platform_display=@context.platform_display
+    namespace_value=@context.namespace_value
+    namespace_created_on=@context.namespace_created_on
+  }}
 </div>

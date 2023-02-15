@@ -1,8 +1,8 @@
 <div>
-  You
-  <strong>don't have permission</strong>
-  to upload to
-  {{@context.platform_display}}
-  project
-  {{@context.package_name}}
+  {{t
+    'notificationModule.messages.nf-upldfailnprjdeny1'
+    htmlSafe=true
+    platform_display=@context.platform_display
+    package_name=@context.package_name
+  }}
 </div>

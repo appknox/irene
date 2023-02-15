@@ -1,6 +1,7 @@
 <span>
-  Failed to upload app
-  {{@context.package_name}}. Your organization has
-  <strong>no payment credits</strong>
-  left.
+  {{t
+    'notificationModule.messages.nf-upldfailpayrq1'
+    htmlSafe=true
+    package_name=@context.package_name
+  }}
 </span>

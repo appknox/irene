@@ -1,8 +1,8 @@
 <div>
-  Your
-  {{@context.platform_display}}
-  app upload of
-  {{@context.namespace_value}}
-  <strong>failed due to non-existent namespace</strong>. New namespace request
-  has been submitted to your organization owner for approval.
+  {{t
+    'notificationModule.messages.nf-upldfailnscreatd1'
+    htmlSafe=true
+    platform_display=@context.platform_display
+    namespace_value=@context.namespace_value
+  }}
 </div>
