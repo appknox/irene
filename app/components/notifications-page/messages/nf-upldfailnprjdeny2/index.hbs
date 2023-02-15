@@ -1,29 +1,29 @@
 <div>
-  <div>
-    Upload of
-    {{@context.platform_display}}
-    app
-    {{@context.package_name}}
-    by
-    {{@context.requester_username}}
-    ({{@context.requester_role}}
-    role) failed.
-    <strong>User does not have access to the project</strong>.
+  <div data-test-nf-upldfailnprjdeny2-primary-message>
+    {{t
+      'notificationModule.messages.nf-upldfailnprjdeny2.primary'
+      htmlSafe=true
+      platform_display=@context.platform_display
+      package_name=@context.package_name
+      requester_username=@context.requester_username
+      requester_role=@context.requester_role
+    }}
   </div>
-  <div local-class='help-text'>
-    <em>(Access can be provided to the user via team or collaborator settings if
-      required)</em>
+  <div local-class='help-text' data-test-nf-upldfailnprjdeny2-secodary-message>
+    <em>({{t
+        'notificationModule.messages.nf-upldfailnprjdeny2.secondary'
+      }})</em>
   </div>
-  <div class='pt-1'>
+  <div class='pt-1' data-test-nf-upldfailnprjdeny2-link>
     <AkLink
       @color='primary'
       @route='authenticated.project.settings'
       @model={{@context.project_id}}
       @underline='always'
-      @title='View project settings'
+      @title='{{t "notificationModule.viewProjectSettings"}}'
     >
       <:default>
-        Project settings
+        {{t 'notificationModule.projectSettings'}}
       </:default>
     </AkLink>
   </div>

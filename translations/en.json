@@ -604,13 +604,19 @@
       "nf-nsrejctd2": "{platform_display} <strong>namespace {namespace_value}</strong> requested by {requester_username} was <strong>rejected</strong> by {moderator_username}.",
       "nf-sastcmpltd1": "<strong>Static scan completed</strong> for {platform_display} app <strong>{file_name} ({package_name})</strong>.",
       "nf-upldfailnprjdeny1": "You <strong>don't have permission</strong> to upload to {platform_display} project {package_name}",
+      "nf-upldfailnprjdeny2": {
+        "primary": "Upload of {platform_display} app {package_name} by {requester_username} ({requester_role} role) failed. <strong>User does not have access to the project</strong>.",
+        "secondary": "Access can be provided to the user via team or collaborator settings if required"
+      },
       "nf-upldfailnscreatd1": "Your {platform_display} app upload of {namespace_value} <strong>failed due to non-existent namespace</strong>. New namespace request has been submitted to your organization owner for approval.",
       "nf-upldfailnsunaprv1": "Your upload of {platform_display} app {namespace_value} <strong>failed due to unapproved namespace</strong>.",
       "nf-upldfailpay2": "App {package_name} upload by {requester_username} <strong>failed due to insufficient payment credits</strong>.",
       "nf-upldfailpayrq1": "Failed to upload app {package_name}. Your organization has <strong>no payment credits</strong> left."
     },
+    "projectSettings": "Project settings",
     "riskStatus": "Risk status",
     "viewNamespaces": "View namespaces",
+    "viewProjectSettings": "View project settings",
     "viewStoreMonitoring": "View store monitoring",
     "viewStoreMonitoringResults": "View store monitoring results"
   },
