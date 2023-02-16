@@ -131,6 +131,13 @@
   @extend .mi-radio-button-checked;
 }
 
+.ak-icon-check-circle {
+  @extend .mi-check-circle;
+}
+.ak-icon-cancel {
+  @extend .mi-cancel;
+}
+
 .ak-icon-close {
   @extend .mi-close;
 }
