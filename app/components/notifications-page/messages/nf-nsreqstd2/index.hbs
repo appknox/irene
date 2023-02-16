@@ -11,23 +11,51 @@
     on
     {{@context.namespaceCreatedOnDisplay}}).
   </div>
-  {{! <div class='pt-1'>
-    <AkButton @color='primary'>Approve</AkButton>
-    <AkButton @color='neutral' @variant='outlined'>Reject</AkButton>
-  </div> }}
-  <div class='pt-1'>
-    <AkLink
-      @color='primary'
-      @route='authenticated.organization.namespaces'
-      @underline='always'
-      @title='View namespaces'
-    >
-      {{! <:leftIcon>
-        <AkIcon @color='primary' @iconName='settings-applications' />
-      </:leftIcon> }}
-      <:default>
-        View namespaces
-      </:default>
-    </AkLink>
-  </div>
+  {{#if this.me.org.is_owner}}
+    <div class='pt-1' {{did-insert (perform this.fetchNamespace)}}>
+      {{#if this.namespace}}
+        {{#unless this.namespace.isApproved}}
+          <div local-class='state-actionable'>
+            <AkButton
+              @color='primary'
+              {{on 'click' (perform this.approveNamespace)}}
+            >Approve</AkButton>
+            <AkButton
+              @color='neutral'
+              @variant='outlined'
+              {{on 'click' (perform this.rejectNamespace)}}
+            >Reject</AkButton>
+          </div>
+          <div class='pt-1'>
+            <AkLink
+              @color='primary'
+              @route='authenticated.organization.namespaces'
+              @underline='always'
+              @title='View namespaces'
+            >
+              View namespaces
+            </AkLink>
+          </div>
+        {{else}}
+          <div
+            local-class='state-moderated'
+            {{did-insert (perform this.fetchUsernames)}}
+          >
+            <AkIcon @iconName='check-circle' @color='success' />
+            <div>
+              {{this.namespaceModeratorDisplay}}
+              approved this namespace
+            </div>
+          </div>
+        {{/unless}}
+      {{else}}
+        {{#if this.namespaceIsRejected}}
+          <div local-class='state-moderated'>
+            <AkIcon @iconName='cancel' @color='error' />
+            <div>This namespace was rejected</div>
+          </div>
+        {{/if}}
+      {{/if}}
+    </div>
+  {{/if}}
 </div>
