@@ -12,7 +12,7 @@ import OrganizationTeamMemberModel from 'irene/models/organization-team-member';
 
 export default class OrganizationTeamAdapter extends commondrf {
   _buildURL(modelName?: string | number, id?: string | number) {
-    const baseurl = `${this.namespace}/organizations/${this.organization.selected.id}/teams`;
+    const baseurl = `${this.namespace}/organizations/${this.organization.selected?.id}/teams`;
 
     if (id) {
       return this.buildURLFromBase(`${baseurl}/${encodeURIComponent(id)}`);
@@ -42,7 +42,6 @@ export default class OrganizationTeamAdapter extends commondrf {
     memberId: string
   ) {
     const baseURL = this._buildURL(modelName, id);
-
     return [baseURL, 'members', memberId].join('/');
   }
 

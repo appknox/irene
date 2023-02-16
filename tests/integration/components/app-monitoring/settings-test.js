@@ -7,18 +7,15 @@ import { module, test } from 'qunit';
 
 import Service from '@ember/service';
 
-class OrganizationMeStub extends Service {
-  org = {
-    is_owner: true,
-    is_admin: true,
-  };
-}
-
 class OrganizationStub extends Service {
   selected = {
     id: 1,
     projectsCount: 1,
   };
+
+  get selectedOrgProjectsCount() {
+    return this.selected.projectsCount;
+  }
 }
 
 module('Integration | Component | app-monitoring-settings', function (hooks) {
@@ -28,6 +25,17 @@ module('Integration | Component | app-monitoring-settings', function (hooks) {
 
   hooks.beforeEach(async function () {
     this.owner.register('service:organization', OrganizationStub);
+
+    const store = this.owner.lookup('service:store');
+    const organizationMe = store.createRecord('organization-me', {
+      id: 1,
+      is_owner: true,
+      is_admin: true,
+    });
+    class OrganizationMeStub extends Service {
+      org = organizationMe;
+    }
+
     this.owner.register('service:me', OrganizationMeStub);
   });
 

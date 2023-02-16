@@ -1,6 +1,7 @@
 import { inject as service } from '@ember/service';
 import RESTAdapter from '@ember-data/adapter/rest';
 import Store from '@ember-data/store';
+import OrganizationService from 'irene/services/organization';
 
 export default class CommonDRFAdapter extends RESTAdapter {
   host: string;
@@ -8,8 +9,7 @@ export default class CommonDRFAdapter extends RESTAdapter {
   namespace_v2: string;
   addTrailingSlashes: boolean;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @service declare organization: any;
+  @service declare organization: OrganizationService;
   @service declare store: Store;
 
   buildURLFromBase(resource_url: string): string;

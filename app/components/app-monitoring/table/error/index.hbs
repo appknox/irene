@@ -1,7 +1,17 @@
-<div local-class='empty-container' data-test-am-error-container>
+{{! @glint-nocheck: AkSvg::AppMonitoringTableErrorIllustration}}
+<AkStack
+  @direction='column'
+  @alignItems='center'
+  local-class='empty-container'
+  data-test-am-error-container
+>
   <span local-class='empty-state-vector' data-test-am-error-illustration>
-    <AkSvg::AppMonitoringTableErrorIllustration />
+    <AkSvg::AppMonitoringTableEmpty />
   </span>
-  <h2>{{@header}}</h2>
-  <p>{{@body}}</p>
-</div>
+
+  <AkTypography @variant='h5' @gutterBottom={{true}}>
+    {{@header}}
+  </AkTypography>
+
+  <AkTypography local-class='body-text'>{{@body}}</AkTypography>
+</AkStack>

@@ -60,18 +60,14 @@ module('Unit | Service | appmonitoring', function (hooks) {
       return schema['amApps'].all().models;
     });
 
-    assert.strictEqual(
-      service.appMonitoringData.length,
-      0,
-      'App monitoring data is empty'
-    );
+    assert.notOk(service.appMonitoringData, 'App monitoring data is empty');
 
     await service.reload();
 
     assert.strictEqual(
       service.appMonitoringData.length,
       3,
-      'App monitoring data is update'
+      'App monitoring data is updated'
     );
   });
 

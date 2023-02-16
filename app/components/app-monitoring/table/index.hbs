@@ -1,43 +1,78 @@
-<div local-class='table-container' data-test-am-table-container>
-  <AppMonitoring::Table::Header />
-
+<div local-class='app-monitoring-table-container' data-test-am-table-container>
   {{#if this.hasNoOrgProjects}}
+    <AkTable as |tb|>
+      <tb.head @columns={{this.columns}} data-test-am-table-header />
+    </AkTable>
+
     <AppMonitoring::Table::Error
       @header='{{t "appMonitoringErrors.noOrgProjects.header"}}'
       @body='{{t "appMonitoringErrors.noOrgProjects.body"}}'
     />
+
   {{else}}
-    <div local-class='table-body' data-test-am-table-body>
-      <AkPaginationProvider
-        @results={{this.tableData}}
-        @onItemPerPageChange={{this.onItemPerPageChange}}
-        @totalItems={{this.totalCount}}
-        @nextAction={{this.goToPage}}
-        @prevAction={{this.goToPage}}
-        @itemPerPageOptions={{this.itemPerPageOptions}}
-        @defaultLimit={{this.limit}}
-        @offset={{this.offset}}
-        as |pgc|
-      >
-        {{#if this.isFetchingAMTableData}}
-          <div local-class='loading'>
-            <ThreeBounceSpinner />
-          </div>
-        {{else if this.isEmptyAMResult}}
-          <AppMonitoring::Table::Error
-            @header='{{t "appMonitoringErrors.emptyResults.header"}}'
-            @body='{{t "appMonitoringErrors.emptyResults.body"}}'
-          />
-        {{else}}
-          {{#each pgc.currentPageResults as |app idx|}}
-            <AppMonitoring::Table::Row
-              @amApp={{app}}
-              @id={{idx}}
-              @onRowClick={{this.onTableRowClick}}
-              @settings={{@settings}}
-            />
-          {{/each}}
-        {{/if}}
+
+    <AkPaginationProvider
+      @results={{this.tableData}}
+      @onItemPerPageChange={{this.onItemPerPageChange}}
+      @totalItems={{this.totalCount}}
+      @nextAction={{this.goToPage}}
+      @prevAction={{this.goToPage}}
+      @itemPerPageOptions={{this.itemPerPageOptions}}
+      @defaultLimit={{this.limit}}
+      @offset={{this.offset}}
+      as |pgc|
+    >
+
+      {{#if this.isFetchingAMTableData}}
+        <AkTable as |tb|>
+          <tb.head @columns={{this.columns}} data-test-am-table-header />
+        </AkTable>
+
+        <AkStack
+          @direction='row'
+          @alignItems='center'
+          @justifyContent='center'
+          local-class='loading'
+        >
+          <AkLoader @size={{70}} />
+        </AkStack>
+
+      {{else if this.isEmptyAMResult}}
+        <AkTable as |tb|>
+          <tb.head @columns={{this.columns}} data-test-am-table-header />
+        </AkTable>
+
+        <AppMonitoring::Table::Error
+          @header='{{t "appMonitoringErrors.emptyResults.header"}}'
+          @body='{{t "appMonitoringErrors.emptyResults.body"}}'
+        />
+
+      {{else}}
+        <AkTable @hoverable={{true}} as |tb|>
+          <tb.head @columns={{this.columns}} data-test-am-table-header />
+          <tb.body
+            @rows={{pgc.currentPageResults}}
+            data-test-am-table-body
+            as |b|
+          >
+            <b.row
+              data-test-am-table-row
+              local-class='app-monitoring-table-row'
+              @onClick={{this.onTableRowClick}}
+              as |r|
+            >
+              <r.cell>
+                {{#let (component r.columnValue.component) as |Component|}}
+                  <Component
+                    @amApp={{r.rowValue}}
+                    @id={{r.rowValue.id}}
+                    @settings={{@settings}}
+                  />
+                {{/let}}
+              </r.cell>
+            </b.row>
+          </tb.body>
+        </AkTable>
 
         <AkPagination
           @disableNext={{pgc.disableNext}}
@@ -49,12 +84,12 @@
           @itemPerPageOptions={{pgc.itemPerPageOptions}}
           @onItemPerPageChange={{pgc.onItemPerPageChange}}
           @selectedOption={{pgc.selectedOption}}
-          @tableItemLabel='Projects'
-          @perPageTranslation='Records per page'
+          @tableItemLabel={{t 'projects'}}
+          @perPageTranslation={{t 'recordPerPage'}}
           @totalItems={{pgc.totalItems}}
         />
-      </AkPaginationProvider>
-    </div>
+      {{/if}}
+    </AkPaginationProvider>
   {{/if}}
 </div>
 

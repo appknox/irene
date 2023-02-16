@@ -1,9 +1,9 @@
 import Model, { attr, hasMany, AsyncHasMany } from '@ember-data/model';
-
 import OrganizationMemberModel from './organization-member';
 import OrganizationNamespaceModel from './organization-namespace';
 import OrganizationProjectModel from './organization-project';
 import OrganizationTeamModel from './organization-team';
+import AmConfigurationModel from 'irene/models/amconfiguration';
 
 interface Features {
   app_monitoring: boolean;
@@ -64,12 +64,12 @@ export default class OrganizationModel extends Model {
     return this.members?.meta?.count;
   }
 
-  async get_am_configuration() {
+  async get_am_configuration(): Promise<AmConfigurationModel> {
     const adapter = this.store.adapterFor('amconfiguration');
     const payload = await adapter.from_organization(this.id);
 
     const normalized = this.store.normalize('amconfiguration', payload);
-    return this.store.push(normalized);
+    return this.store.push(normalized) as AmConfigurationModel;
   }
 }
 

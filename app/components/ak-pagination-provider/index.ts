@@ -1,6 +1,8 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
+import { DS } from 'ember-data';
 
 export type PaginationProviderActionsArgs = {
   limit: number;
@@ -14,7 +16,7 @@ export type PaginationItemPerPageOptionProps = {
 };
 
 interface PaginationProviderDefaultBlockHash<R> {
-  currentPageResults: R[];
+  currentPageResults: R[] | DS.AdapterPopulatedRecordArray<R> | undefined;
   disablePrev: boolean;
   totalItems: number;
   startItemIdx: number;
@@ -29,7 +31,7 @@ interface PaginationProviderDefaultBlockHash<R> {
 
 export interface AkPaginationProviderSignature<R> {
   Args: {
-    results: R[];
+    results: R[] | DS.AdapterPopulatedRecordArray<R> | undefined;
     offset: number;
     totalItems: number;
     itemPerPageOptions: number[];

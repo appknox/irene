@@ -1,14 +1,28 @@
-<div local-class='settings-block'>
-  <div local-class='label-group'>
-    <h6
-      local-class='label-heading'
+{{! @glint-nocheck: not, perform}}
+<AkStack
+  @direction='row'
+  @justifyContent='space-between'
+  @alignItems='center'
+  @width='full'
+  local-class='settings-block'
+>
+  <AkStack @direction='column' @width='10/12'>
+    <AkTypography
+      @variant='h5'
+      @gutterBottom={{true}}
       data-test-app-monitoring-settings-heading
-    >{{t 'appMonitoringHeading'}}</h6>
-    <p
-      local-class='label-description'
+    >
+      {{t 'appMonitoringHeading'}}
+    </AkTypography>
+
+    <AkTypography
+      @variant='body2'
+      local-class='settings-description'
       data-test-app-monitoring-settings-description
-    >{{t 'appMonitoringDescription'}}</p>
-  </div>
+    >
+      {{t 'appMonitoringDescription'}}
+    </AkTypography>
+  </AkStack>
 
   <AkToggle
     @size='small'
@@ -16,4 +30,4 @@
     @disabled={{not this.canEditSettings}}
     @onChange={{perform this.toggleAppMonitoringEnabled}}
   />
-</div>
+</AkStack>

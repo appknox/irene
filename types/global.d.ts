@@ -1,12 +1,13 @@
 import '@glint/environment-ember-loose';
 import { TemplateFactory } from 'ember-cli-htmlbars';
 import { HelperLike, ComponentLike, ModifierLike } from '@glint/template';
-import { BreadcrumbsContainerModifierArgs } from '../app/modifiers/breadcrumbs-container';
-import { BreadcrumbsItemModifierArgs } from '../app/modifiers/breadcrumbs-item';
+import { BreadcrumbsContainerModifierArgs } from 'irene/modifiers/breadcrumbs-container';
+import { BreadcrumbsItemModifierArgs } from 'irene/modifiers/breadcrumbs-item';
 import {
   PowerSelectArgs,
   Select,
 } from 'ember-power-select/components/power-select';
+import EmberTableRegistry from 'ember-table/template-registry';
 
 // Types for compiled templates
 declare module 'irene/templates/*' {
@@ -28,7 +29,7 @@ declare module '@glint/environment-ember-loose/registry' {
     verticalPosition?: 'above' | 'below' | 'auto';
   }
 
-  export default interface Registry {
+  export default interface Registry extends EmberTableRegistry {
     element: HelperLike<{
       Args: { Positional: [tagName: string] };
       Return: ComponentLike<{
@@ -68,7 +69,7 @@ declare module '@glint/environment-ember-loose/registry' {
       Args: {
         Positional: [];
         Named: {
-          [key: string]: string;
+          [key: string]: string | undefined;
         };
       };
       Return: Array<string[]>;

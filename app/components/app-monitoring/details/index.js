@@ -19,39 +19,47 @@ export default class AppMonitoringDetailsComponent extends Component {
     if (this.amApp.isPending) {
       return this.intl.t('pending');
     }
+
     if (this.amApp.isNotFound) {
       return this.intl.t('notFound');
     }
+
     return '';
   }
 
   get statusCondition() {
     if (this.amApp.isPending) {
-      return 'warning';
+      return 'warn';
     }
+
     if (this.amApp.isNotFound) {
-      return 'alert';
+      return 'error';
     }
-    return '';
+
+    return 'default';
   }
 
   get monitoredStatusText() {
     if (!this.amConfiguration.enabled) {
       return this.intl.t('inactiveCaptital');
     }
+
     if (this.amApp.isActive) {
       return this.intl.t('activeCaptital');
     }
+
     return this.intl.t('inactiveCaptital');
   }
 
   get monitoredStatusCondition() {
     if (!this.amConfiguration.enabled) {
-      return 'alert';
+      return 'error';
     }
+
     if (this.amApp.isActive) {
       return 'success';
     }
-    return 'alert';
+
+    return 'error';
   }
 }
