@@ -18,6 +18,7 @@ export default class OrganizationArchiveComponent extends Component {
   @tracked startDate = null;
   @tracked endDate = null;
   @tracked maxDate = dayjs(Date.now());
+  @tracked archiveListRef = {};
 
   datepickerOptions = [
     'today',
@@ -69,6 +70,8 @@ export default class OrganizationArchiveComponent extends Component {
       );
 
       await archiveRecord.save();
+
+      this.archiveListRef.reloadArchiveList();
 
       this.realtime.incrementProperty('OrganizationArchiveCounter');
 

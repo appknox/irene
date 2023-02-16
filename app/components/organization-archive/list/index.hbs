@@ -1,42 +1,80 @@
-{{! template-lint-disable no-partial }}
-{{#if this.hasObjects}}
-  <AkTypography data-test-orgArchiveList-title @variant='subtitle1'>
-    {{t 'organizationArchiveTableHeading'}}
-  </AkTypography>
+<AkTypography data-test-orgArchiveList-title @variant='subtitle1'>
+  {{t 'organizationArchiveTableHeading'}}
+</AkTypography>
 
-  <AkTypography
-    data-test-orgArchiveList-desc
-    @variant='body2'
-    @color='textSecondary'
-  >
-    {{t 'organizationArchiveTableDesc'}}
-  </AkTypography>
+<AkTypography
+  data-test-orgArchiveList-desc
+  @variant='body2'
+  @color='textSecondary'
+>
+  {{t 'organizationArchiveTableDesc'}}
+</AkTypography>
 
-  <div class='my-2'>
-    <AkTable as |t|>
-      <t.head data-test-orgArchiveList-thead @columns={{this.columns}} />
-      <t.body @rows={{this.sortedObjects}} as |b|>
-        <b.row
-          data-test-orgArchiveList-row
-          local-class='
+<AkPaginationProvider
+  @results={{this.archiveList}}
+  @onItemPerPageChange={{this.handleItemPerPageChange}}
+  @totalItems={{this.totalArchiveCount}}
+  @nextAction={{this.handleNextPrevAction}}
+  @prevAction={{this.handleNextPrevAction}}
+  @itemPerPageOptions={{array 10 25 50}}
+  @defaultLimit={{this.limit}}
+  @offset={{this.offset}}
+  as |pgc|
+>
+
+  {{#if this.fetchArchives.isRunning}}
+    <div local-class='bordered-container'>
+      <AkStack @alignItems='center' @spacing='2'>
+        <AkLoader @size={{16}} />
+        <AkTypography>{{t 'loading'}}...</AkTypography>
+      </AkStack>
+    </div>
+  {{else if this.hasNoArchive}}
+    <div local-class='bordered-container'>
+      <AkSvg::OrgDataEmpty local-class='empty-svg' />
+
+      <AkTypography @variant='h6'>
+        {{t 'noArchiveExports'}}
+      </AkTypography>
+    </div>
+  {{else}}
+    <div class='my-2'>
+      <AkTable as |t|>
+        <t.head data-test-orgArchiveList-thead @columns={{this.columns}} />
+        <t.body @rows={{pgc.currentPageResults}} as |b|>
+          <b.row
+            data-test-orgArchiveList-row
+            local-class='
             archive-row-{{if b.rowValue.isExpired "expired" "available"}}'
-          as |r|
-        >
-          <r.cell data-test-orgArchiveList-cell as |value|>
-            {{#if r.columnValue.component}}
-              {{#let (component r.columnValue.component) as |Component|}}
-                <Component @archive={{r.rowValue}} />
-              {{/let}}
-            {{else}}
-              {{value}}
-            {{/if}}
-          </r.cell>
-        </b.row>
-      </t.body>
-    </AkTable>
-  </div>
+            as |r|
+          >
+            <r.cell data-test-orgArchiveList-cell as |value|>
+              {{#if r.columnValue.component}}
+                {{#let (component r.columnValue.component) as |Component|}}
+                  <Component @archive={{r.rowValue}} />
+                {{/let}}
+              {{else}}
+                {{value}}
+              {{/if}}
+            </r.cell>
+          </b.row>
+        </t.body>
+      </AkTable>
+    </div>
 
-  <div>
-    {{partial 'paginate'}}
-  </div>
-{{/if}}
+    <AkPagination
+      @disableNext={{pgc.disableNext}}
+      @nextAction={{pgc.nextAction}}
+      @disablePrev={{pgc.disablePrev}}
+      @prevAction={{pgc.prevAction}}
+      @endItemIdx={{pgc.endItemIdx}}
+      @startItemIdx={{pgc.startItemIdx}}
+      @itemPerPageOptions={{pgc.itemPerPageOptions}}
+      @onItemPerPageChange={{pgc.onItemPerPageChange}}
+      @selectedOption={{pgc.selectedOption}}
+      @tableItemLabel={{t 'exports'}}
+      @perPageTranslation={{t 'recordPerPage'}}
+      @totalItems={{pgc.totalItems}}
+    />
+  {{/if}}
+</AkPaginationProvider>
