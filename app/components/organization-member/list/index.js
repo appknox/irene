@@ -1,95 +1,157 @@
-/* eslint-disable ember/no-classic-components, ember/no-mixins, ember/no-classic-classes, ember/avoid-leaking-state-in-ember-objects, ember/require-tagless-components, prettier/prettier, ember/no-get, ember/no-observers, ember/no-actions-hash */
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { computed, observer } from '@ember/object';
-import PaginateMixin from 'irene/mixins/paginate';
+import { action } from '@ember/object';
 import { debounce } from '@ember/runloop';
 import { task } from 'ember-concurrency';
-import { t } from 'ember-intl';
-import ENV from 'irene/config/environment';
+import { tracked } from '@glimmer/tracking';
 
-export default Component.extend(PaginateMixin, {
-  intl: service(),
-  organization: service('organization'),
-  me: service('me'),
-  notify: service('notifications'),
-  query: '',
-  searchQuery: '',
-  showDeactivated: false,
-  targetModel: 'organization-member',
+export default class OrganizationMemberListComponent extends Component {
+  @service intl;
+  @service me;
+  @service store;
+  @service('notifications') notify;
+  @service router;
 
-  columns: computed('intl', 'me.org.is_owner', function () {
+  @tracked userResponse = null;
+
+  tPleaseTryAgain = this.intl.t('pleaseTryAgain');
+
+  constructor() {
+    super(...arguments);
+
+    const { user_limit, user_offset, user_query, show_inactive_user } =
+      this.args.queryParams;
+
+    this.fetchUsers.perform(
+      user_limit,
+      user_offset,
+      user_query,
+      show_inactive_user,
+      false
+    );
+  }
+
+  get userList() {
+    return this.userResponse?.toArray() || [];
+  }
+
+  get totalUserCount() {
+    return this.userResponse?.meta?.count || 0;
+  }
+
+  get hasNoUser() {
+    return this.totalUserCount === 0;
+  }
+
+  get columns() {
     return [
       {
-        name: this.get('intl').t('user'),
+        name: this.intl.t('user'),
         component: 'organization-member/list/member-info',
         minWidth: 150,
       },
       {
-        name: this.get('intl').t('email'),
+        name: this.intl.t('email'),
         valuePath: 'member.email',
         minWidth: 150,
       },
       {
-        name: this.get('intl').t('role'),
+        name: this.intl.t('role'),
         component: 'organization-member/list/member-role',
-        textAlign: this.get('me.org.is_owner') ? 'center' : 'left',
+        textAlign: this.me.org.get('is_owner') ? 'center' : 'left',
       },
-      this.get('me.org.is_owner')
+      this.me.org.get('is_owner')
         ? {
-            name: this.get('intl').t('action'),
+            name: this.intl.t('action'),
             component: 'organization-member/list/member-action',
             textAlign: 'center',
           }
         : null,
     ].filter(Boolean);
-  }),
+  }
 
-  /* computed.sort compares the values with previous value,
-    if it's not change same value will return everytime */
+  @action
+  handleNextAction({ limit, offset }) {
+    const { user_query, show_inactive_user } = this.args.queryParams;
 
-  sortProperties: [],
-  // sortedObjects: computed.reads('objects'),
+    this.fetchUsers.perform(limit, offset, user_query, show_inactive_user);
+  }
 
-  tPleaseTryAgain: t('pleaseTryAgain'),
+  @action
+  handlePrevAction({ limit, offset }) {
+    const { user_query, show_inactive_user } = this.args.queryParams;
 
-  extraQueryStrings: computed('showDeactivated', 'searchQuery', function () {
-    const query = {
-      q: this.get('searchQuery'),
-      ...(this.get('showDeactivated') !== true && { is_active: true }),
-    };
-    return JSON.stringify(query, Object.keys(query).sort());
-  }),
+    this.fetchUsers.perform(limit, offset, user_query, show_inactive_user);
+  }
 
-  newMembersObserver: observer(
-    'realtime.OrganizationMemberCounter',
-    function () {
-      return this.incrementProperty('version');
-    }
-  ),
+  @action
+  handleItemPerPageChange({ limit }) {
+    const { user_query, show_inactive_user } = this.args.queryParams;
+
+    this.fetchUsers.perform(limit, 0, user_query, show_inactive_user);
+  }
+
+  @action
+  showDeactivatedMembers(event, checked) {
+    const { user_limit, user_query } = this.args.queryParams;
+
+    this.fetchUsers.perform(user_limit, 0, user_query, checked);
+  }
+
+  @action
+  searchUserForQuery(event) {
+    debounce(this, this.setSearchQuery, event.target.value, 500);
+  }
 
   /* Set debounced searchQuery */
-  setSearchQuery() {
-    this.set('searchQuery', this.get('query'));
-    if (this.get('query') !== '') {
-      this.set('limit', ENV.paginate.perPageLimit);
-      this.set('offset', 0);
-    }
-  },
+  setSearchQuery(query) {
+    const { user_limit, show_inactive_user } = this.args.queryParams;
 
-  resetInitialState() {
-    this.setProperties({
-      offset: 0,
-      meta: null,
+    this.fetchUsers.perform(user_limit, 0, query, show_inactive_user);
+  }
+
+  setRouteQueryParams(limit, offset, query, showInActiveUser) {
+    this.router.transitionTo({
+      queryParams: {
+        user_limit: limit,
+        user_offset: offset,
+        user_query: query,
+        show_inactive_user: showInActiveUser,
+      },
     });
-  },
-  showDeactivatedMembers: task(function* (event, checked) {
-    yield this.set('showDeactivated', checked);
+  }
 
-    yield this.resetInitialState();
-    yield this.incrementProperty('version');
-  }),
-  searchUserForQuery: task(function* () {
-    yield debounce(this, this.setSearchQuery, 500);
-  }),
-});
+  fetchUsers = task(
+    { drop: true },
+    async (
+      limit,
+      offset,
+      query = '',
+      showInActiveUser = false,
+      setQueryParams = true
+    ) => {
+      if (setQueryParams) {
+        this.setRouteQueryParams(limit, offset, query, showInActiveUser);
+      }
+
+      try {
+        this.userResponse = await this.store.query('organization-member', {
+          limit,
+          offset,
+          q: query,
+          ...(!showInActiveUser && { is_active: true }),
+        });
+      } catch (err) {
+        let errMsg = this.tPleaseTryAgain;
+
+        if (err.errors && err.errors.length) {
+          errMsg = err.errors[0].detail || errMsg;
+        } else if (err.message) {
+          errMsg = err.message;
+        }
+
+        this.notify.error(errMsg);
+      }
+    }
+  );
+}

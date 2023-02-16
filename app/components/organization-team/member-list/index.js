@@ -1,70 +1,126 @@
-/* eslint-disable ember/no-classic-components, ember/no-mixins, ember/no-classic-classes, ember/require-tagless-components, ember/avoid-leaking-state-in-ember-objects, prettier/prettier, ember/no-get, ember/no-observers */
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { computed, observer } from '@ember/object';
+import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { debounce } from '@ember/runloop';
-import PaginateMixin from 'irene/mixins/paginate';
+import { tracked } from '@glimmer/tracking';
 
-export default Component.extend(PaginateMixin, {
-  intl: service(),
-  me: service(),
+export default class OrganizationTeamMemberListComponent extends Component {
+  @service intl;
+  @service me;
+  @service store;
+  @service('notifications') notify;
 
-  classNames: [''],
-  targetModel: 'organization-team-member',
-  sortProperties: ['created:desc'],
-  searchQuery: '',
+  @tracked searchQuery = '';
+  @tracked limit = 5;
+  @tracked offset = 0;
+  @tracked teamMemberResponse = null;
 
-  columns: computed('intl', 'me.org.is_admin', function () {
+  tPleaseTryAgain = this.intl.t('pleaseTryAgain');
+
+  constructor() {
+    super(...arguments);
+
+    this.fetchTeamMembers.perform(this.limit, this.offset);
+  }
+
+  get teamMemberList() {
+    return this.teamMemberResponse?.toArray() || [];
+  }
+
+  get totalTeamMemberCount() {
+    return this.teamMemberResponse?.meta?.count || 0;
+  }
+
+  get hasNoTeamMember() {
+    return this.totalTeamMemberCount === 0;
+  }
+
+  get columns() {
     return [
       {
-        name: this.get('intl').t('user'),
+        name: this.intl.t('user'),
         valuePath: 'user.username',
         minWidth: 150,
       },
       {
-        name: this.get('intl').t('email'),
+        name: this.intl.t('email'),
         valuePath: 'user.email',
         minWidth: 150,
       },
-      this.get('me.org.is_admin')
+      this.me.org.get('is_admin')
         ? {
-            name: this.get('intl').t('action'),
+            name: this.intl.t('action'),
             component: 'organization-team/member-list/user-action',
             textAlign: 'center',
           }
         : null,
     ].filter(Boolean);
-  }),
+  }
 
-  extraQueryStrings: computed('team.id', 'searchQuery', function () {
-    const query = {
-      teamId: this.get('team.id'),
-      q: this.get('searchQuery'),
-    };
-
-    return JSON.stringify(query, Object.keys(query).sort());
-  }),
-
-  newOrganizationTeamMembersObserver: observer(
-    'realtime.TeamMemberCounter',
-    function () {
-      return this.incrementProperty('version');
-    }
-  ),
-
-  showAddMemberList: task(function* () {
-    const handleAction = yield this.get('handleActiveAction');
+  @action
+  showAddMemberList() {
+    const handleAction = this.args.handleActiveAction;
 
     handleAction({ component: 'organization-team/add-team-member' });
-  }),
+  }
+
+  @action
+  handleNextPrevAction({ limit, offset }) {
+    this.limit = limit;
+    this.offset = offset;
+
+    this.fetchTeamMembers.perform(limit, offset, this.searchQuery);
+  }
+
+  @action
+  handleItemPerPageChange({ limit }) {
+    this.limit = limit;
+    this.offset = 0;
+
+    this.fetchTeamMembers.perform(limit, 0, this.searchQuery);
+  }
 
   /* Set debounced searchQuery */
   setSearchQuery(query) {
-    this.set('searchQuery', query);
-  },
+    this.searchQuery = query;
 
-  handleSearchQueryChange: task(function* (event) {
-    yield debounce(this, this.get('setSearchQuery'), event.target.value, 500);
-  }),
-});
+    this.fetchTeamMembers.perform(this.limit, 0, query);
+  }
+
+  @action
+  handleSearchQueryChange(event) {
+    debounce(this, this.setSearchQuery, event.target.value, 500);
+  }
+
+  @action
+  handleReloadTeamMembers() {
+    this.fetchTeamMembers.perform(this.limit, this.offset, this.searchQuery);
+  }
+
+  fetchTeamMembers = task({ drop: true }, async (limit, offset, query = '') => {
+    try {
+      const queryParams = {
+        limit,
+        offset,
+        q: query,
+        teamId: this.args.team.id,
+      };
+
+      this.teamMemberResponse = await this.store.query(
+        'organization-team-member',
+        queryParams
+      );
+    } catch (err) {
+      let errMsg = this.tPleaseTryAgain;
+
+      if (err.errors && err.errors.length) {
+        errMsg = err.errors[0].detail || errMsg;
+      } else if (err.message) {
+        errMsg = err.message;
+      }
+
+      this.notify.error(errMsg);
+    }
+  });
+}

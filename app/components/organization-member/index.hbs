@@ -1,11 +1,19 @@
 {{#if this.me.org.is_admin}}
-  <OrganizationMember::List @organization={{@organization}} />
+  <OrganizationMember::List
+    @queryParams={{@queryParams}}
+    @organization={{this.organization.selected}}
+  />
 
-  <OrganizationInvitationList @organization={{@organization}}>
-    <:headerContent>
-      <AkTypography data-test-invitation-list-title @variant='h5'>
-        {{t 'pendingInvitations'}}
-      </AkTypography>
-    </:headerContent>
-  </OrganizationInvitationList>
+  <div class='mt-7'>
+    <OrganizationInvitationList
+      @queryParams={{@queryParams}}
+      @organization={{this.organization.selected}}
+    >
+      <:headerContent>
+        <AkTypography data-test-invitation-list-title @variant='h5'>
+          {{t 'pendingInvitations'}}
+        </AkTypography>
+      </:headerContent>
+    </OrganizationInvitationList>
+  </div>
 {{/if}}

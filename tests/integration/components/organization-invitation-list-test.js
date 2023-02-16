@@ -9,12 +9,13 @@ import { Response } from 'miragejs';
 
 import Service from '@ember/service';
 
-class OrganizationMeStub extends Service {
-  org = {
-    is_owner: true,
-    is_admin: true,
-    is_member: false,
-  };
+class RouterStub extends Service {
+  currentRouteName = '';
+  queryParams = null;
+
+  transitionTo({ queryParams }) {
+    this.queryParams = queryParams;
+  }
 }
 
 class NotificationsStub extends Service {
@@ -39,6 +40,16 @@ module(
     hooks.beforeEach(async function () {
       this.server.createList('organization', 1);
 
+      const store = this.owner.lookup('service:store');
+      const organizationMe = store.createRecord('organization-me', {
+        is_owner: true,
+        is_admin: true,
+      });
+
+      class OrganizationMeStub extends Service {
+        org = organizationMe;
+      }
+
       const organizationInvitations = this.server.createList(
         'organization-invitation',
         3
@@ -55,20 +66,29 @@ module(
 
       await this.owner.lookup('service:organization').load();
 
+      const queryParams = {
+        invite_limit: 10,
+        invite_offset: 0,
+      };
+
       this.setProperties({
         organization: this.owner.lookup('service:organization').selected,
         organizationInvitations,
         organizationTeam,
         users,
+        queryParams,
       });
 
       this.owner.register('service:me', OrganizationMeStub);
       this.owner.register('service:notifications', NotificationsStub);
+      this.owner.register('service:router', RouterStub);
     });
 
     test('it renders organization user invitation list', async function (assert) {
       this.server.get('/organizations/:id/invitations', (schema) => {
-        return schema.organizationInvitations.all().models;
+        const results = schema.organizationInvitations.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
       });
 
       this.server.get('/organizations/:id/users/:userId', (schema, req) => {
@@ -84,7 +104,7 @@ module(
       });
 
       await render(hbs`
-        <OrganizationInvitationList @organization={{this.organization}}>
+        <OrganizationInvitationList @queryParams={{this.queryParams}} @organization={{this.organization}}>
           <:headerContent>
             <h5 data-test-invitation-list-title>
               {{t 'pendingInvitations'}}
@@ -163,7 +183,9 @@ module(
       [{ fail: false }, { fail: true }],
       async function (assert, { fail }) {
         this.server.get('/organizations/:id/invitations', (schema) => {
-          return schema.organizationInvitations.all().models;
+          const results = schema.organizationInvitations.all().models;
+
+          return { count: results.length, next: null, previous: null, results };
         });
 
         this.server.post(
@@ -186,7 +208,7 @@ module(
         });
 
         await render(hbs`
-            <OrganizationInvitationList @organization={{this.organization}} />
+            <OrganizationInvitationList @queryParams={{this.queryParams}} @organization={{this.organization}} />
         `);
 
         assert.dom('[data-test-invitation-list]').exists();
@@ -244,8 +266,14 @@ module(
       'test organization user invitation delete',
       [{ fail: false }, { fail: true }],
       async function (assert, { fail }) {
+        this.set('inviteDeleted', false);
+
         this.server.get('/organizations/:id/invitations', (schema) => {
-          return schema.organizationInvitations.all().models;
+          const results = this.inviteDeleted
+            ? schema.organizationInvitations.all().models.slice(1)
+            : schema.organizationInvitations.all().models;
+
+          return { count: results.length, next: null, previous: null, results };
         });
 
         this.server.delete('/organizations/:id/invitations/:inviteId', () => {
@@ -265,7 +293,7 @@ module(
         });
 
         await render(hbs`
-            <OrganizationInvitationList @organization={{this.organization}} />
+            <OrganizationInvitationList @queryParams={{this.queryParams}} @organization={{this.organization}} />
         `);
 
         assert.dom('[data-test-invitation-list]').exists();
@@ -300,6 +328,10 @@ module(
           .exists()
           .isNotDisabled()
           .hasText('t:cancel:()');
+
+        if (!fail) {
+          this.set('inviteDeleted', true);
+        }
 
         await click('[data-test-confirmbox-confirmBtn]');
 

@@ -9,9 +9,12 @@ export default class OrganizationTeamProjectListAccessPermission extends Compone
   tPleaseTryAgain = this.intl.t('pleaseTryAgain');
   tPermissionChanged = this.intl.t('permissionChanged');
 
-  changeProjectWrite = task(async () => {
+  changeProjectWrite = task(async (event, checked) => {
     try {
       const prj = this.args.project;
+
+      prj.write = checked;
+
       await prj.updateProject(this.args.team.id);
 
       this.notify.success(this.tPermissionChanged);

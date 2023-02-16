@@ -70,6 +70,12 @@ module(
     });
 
     test('it renders add-team-project', async function (assert) {
+      this.server.get('organizations/:id/projects', (schema) => {
+        const results = schema.projects.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      });
+
       await render(hbs`
         <OrganizationTeam::AddTeamProject @team={{this.organizationTeam}} @organization={{this.organization}}>
             <:actionContent as |ac|>
@@ -117,7 +123,9 @@ module(
       this.server.get('organizations/:id/projects', (schema, req) => {
         this.set('query', req.queryParams.q);
 
-        return schema.projects.all().models;
+        const results = schema.projects.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
       });
 
       await render(hbs`
@@ -145,6 +153,16 @@ module(
       'test add-team-project add projects action',
       [{ fail: false }, { fail: true }],
       async function (assert, { fail }) {
+        this.set('projectsAdded', false);
+
+        this.server.get('organizations/:id/projects', (schema) => {
+          const results = this.projectsAdded
+            ? schema.projects.all().models.slice(2)
+            : schema.projects.all().models;
+
+          return { count: results.length, next: null, previous: null, results };
+        });
+
         this.server.put(
           '/organizations/:id/teams/:teamId/projects/:projectId',
           () => {
@@ -205,6 +223,10 @@ module(
           .dom('[data-test-checkbox]', secondRow[1])
           .isChecked()
           .isNotDisabled();
+
+        if (!fail) {
+          this.set('projectsAdded', true);
+        }
 
         await click('[data-test-action-btn]');
 

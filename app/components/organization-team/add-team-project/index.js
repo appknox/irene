@@ -1,80 +1,75 @@
-/* eslint-disable ember/no-array-prototype-extensions, ember/no-mixins, ember/no-classic-components, ember/no-classic-classes, ember/require-tagless-components, ember/no-get, prettier/prettier, ember/no-observers, ember/no-actions-hash */
-import PaginateMixin from 'irene/mixins/paginate';
-import { t } from 'ember-intl';
 import { task } from 'ember-concurrency';
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
-import { observer } from '@ember/object';
+import { action } from '@ember/object';
 import { debounce } from '@ember/runloop';
+import { tracked } from '@glimmer/tracking';
 
-export default Component.extend(PaginateMixin, {
-  intl: service(),
-  realtime: service(),
-  notify: service('notifications'),
+export default class OrganizationTeamAddTeamProjectComponent extends Component {
+  @service intl;
+  @service realtime;
+  @service store;
+  @service('notifications') notify;
 
-  query: '',
-  searchQuery: '',
-  isAddingProject: false,
-  addProjectErrorCount: 0,
+  @tracked searchQuery = '';
+  @tracked limit = 10;
+  @tracked offset = 0;
+  @tracked projectResponse = null;
+  @tracked isAddingProject = false;
+  @tracked addProjectErrorCount = 0;
+  @tracked selectedProjects = {};
 
-  tTeamProjectAdded: t('teamProjectAdded'),
-  tPleaseTryAgain: t('pleaseTryAgain'),
+  tTeamProjectAdded = this.intl.t('teamProjectAdded');
+  tPleaseTryAgain = this.intl.t('pleaseTryAgain');
 
-  targetModel: 'organization-project',
-  sortProperties: Object.freeze(['created:desc']),
+  constructor() {
+    super(...arguments);
 
-  init(...args) {
-    this._super(...args);
-    this.set('selectedProjects', {});
-  },
+    this.fetchProjects.perform(this.limit, this.offset);
+  }
 
-  columns: computed('intl', function () {
+  get projectList() {
+    const list = this.projectResponse?.toArray() || [];
+
+    if (this.hasNoSelection) {
+      return list;
+    }
+
+    return list.map((it) => {
+      if (this.selectedProjects[it.id]) {
+        it.set('checked', true);
+      }
+
+      return it;
+    });
+  }
+
+  get totalProjectCount() {
+    return this.projectResponse?.meta?.count || 0;
+  }
+
+  get hasNoProject() {
+    return this.totalProjectCount === 0;
+  }
+
+  get columns() {
     return [
       {
-        name: this.get('intl').t('name'),
+        name: this.intl.t('name'),
         component: 'organization-team/add-team-project/project-info',
         minWidth: 250,
       },
       {
-        name: this.get('intl').t('action'),
+        name: this.intl.t('action'),
         component: 'ak-checkbox',
         textAlign: 'center',
       },
     ];
-  }),
+  }
 
-  modifiedSortedObjects: computed(
-    'sortedObjects',
-    'selectedProjects',
-    function () {
-      return this.get('sortedObjects').map((so) => {
-        if (this.get('selectedProjects')[so.id]) {
-          so.set('checked', true);
-        }
-
-        return so;
-      });
-    }
-  ),
-
-  extraQueryStrings: computed('team.id', 'searchQuery', function () {
-    const query = {
-      q: this.get('searchQuery'),
-      exclude_team: this.get('team.id'),
-    };
-    return JSON.stringify(query, Object.keys(query).sort());
-  }),
-
-  newOrganizationNonTeamProjectsObserver: observer(
-    'realtime.OrganizationNonTeamProjectCounter',
-    function () {
-      return this.incrementProperty('version');
-    }
-  ),
-
-  selectionChange: task(function* (project, event) {
-    const selectedProjects = yield this.get('selectedProjects');
+  @action
+  selectionChange(project, event) {
+    const selectedProjects = { ...this.selectedProjects };
 
     if (event.target.checked) {
       selectedProjects[project.id] = project;
@@ -82,27 +77,109 @@ export default Component.extend(PaginateMixin, {
       delete selectedProjects[project.id];
     }
 
-    this.set('selectedProjects', { ...selectedProjects });
-  }),
+    this.selectedProjects = selectedProjects;
+  }
 
-  hasNoSelection: computed('selectedProjects', function () {
-    return Object.keys(this.get('selectedProjects')).length === 0;
-  }),
+  get hasNoSelection() {
+    return Object.keys(this.selectedProjects).length === 0;
+  }
 
   /* Add project to team */
-  addTeamProject: task(function* (project) {
+  addTeamProject = task(
+    { enqueue: true, maxConcurrency: 3 },
+    async (project) => {
+      try {
+        const data = {
+          write: false,
+        };
+
+        const team = this.args.team;
+        await team.addProject(data, project.id);
+
+        this.realtime.incrementProperty('TeamProjectCounter');
+      } catch (err) {
+        let errMsg = this.tPleaseTryAgain;
+
+        if (err.errors && err.errors.length) {
+          errMsg = err.errors[0].detail || errMsg;
+        } else if (err.message) {
+          errMsg = err.message;
+        }
+
+        this.notify.error(errMsg);
+        this.addProjectErrorCount = this.addProjectErrorCount + 1;
+      }
+    }
+  );
+
+  addSelectedTeamProjects = task(async () => {
+    this.isAddingProject = true;
+
+    const selectedProjects = Object.values(this.selectedProjects);
+
+    if (selectedProjects.length === 0) {
+      return;
+    }
+
+    for (let i = 0; i < selectedProjects.length; i++) {
+      await this.addTeamProject.perform(selectedProjects[i]);
+    }
+
+    if (this.addProjectErrorCount === 0) {
+      this.notify.success(this.tTeamProjectAdded);
+
+      this.fetchProjects.perform(this.limit, this.offset, this.searchQuery);
+
+      this.selectedProjects = {};
+      this.searchQuery = '';
+    }
+
+    this.isAddingProject = false;
+  });
+
+  @action
+  handleNextPrevAction({ limit, offset }) {
+    this.limit = limit;
+    this.offset = offset;
+
+    this.fetchProjects.perform(limit, offset, this.searchQuery);
+  }
+
+  @action
+  handleItemPerPageChange({ limit }) {
+    this.limit = limit;
+    this.offset = 0;
+
+    this.fetchProjects.perform(limit, 0, this.searchQuery);
+  }
+
+  /* Set debounced searchQuery */
+  setSearchQuery(query) {
+    this.searchQuery = query;
+
+    this.fetchProjects.perform(this.limit, 0, query);
+  }
+
+  @action
+  handleSearchQueryChange(event) {
+    debounce(this, this.setSearchQuery, event.target.value, 500);
+  }
+
+  fetchProjects = task({ drop: true }, async (limit, offset, query = '') => {
     try {
-      const data = {
-        write: false,
+      const queryParams = {
+        limit,
+        offset,
+        q: query,
+        exclude_team: this.args.team.id,
       };
 
-      const team = this.get('team');
-      yield team.addProject(data, project.id);
-
-      this.get('realtime').incrementProperty('TeamProjectCounter');
-      this.get('sortedObjects').removeObject(project);
+      this.projectResponse = await this.store.query(
+        'organization-project',
+        queryParams
+      );
     } catch (err) {
-      let errMsg = this.get('tPleaseTryAgain');
+      let errMsg = this.tPleaseTryAgain;
 
       if (err.errors && err.errors.length) {
         errMsg = err.errors[0].detail || errMsg;
@@ -110,42 +187,7 @@ export default Component.extend(PaginateMixin, {
         errMsg = err.message;
       }
 
-      this.get('notify').error(errMsg);
-      this.incrementProperty('addProjectErrorCount');
+      this.notify.error(errMsg);
     }
-  })
-    .enqueue()
-    .maxConcurrency(3),
-
-  addSelectedTeamProjects: task(function* () {
-    this.set('isAddingProject', true);
-
-    const selectedProjects = Object.values(this.get('selectedProjects'));
-
-    if (selectedProjects.length === 0) {
-      return;
-    }
-
-    for (let i = 0; i < selectedProjects.length; i++) {
-      yield this.get('addTeamProject').perform(selectedProjects[i]);
-    }
-
-    if (this.get('addProjectErrorCount') === 0) {
-      this.get('notify').success(this.get('tTeamProjectAdded'));
-      this.set('selectedProjects', {});
-      this.set('query', '');
-      this.set('searchQuery', '');
-    }
-
-    this.set('isAddingProject', false);
-  }),
-
-  /* Set debounced searchQuery */
-  setSearchQuery() {
-    this.set('searchQuery', this.get('query'));
-  },
-
-  handleSearchQueryChange: task(function* () {
-    yield debounce(this, this.setSearchQuery, 500);
-  }),
-});
+  });
+}

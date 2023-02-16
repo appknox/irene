@@ -1,82 +1,77 @@
-/* eslint-disable ember/no-array-prototype-extensions, ember/no-mixins, ember/no-classic-components, ember/no-classic-classes, ember/require-tagless-components, ember/no-get, prettier/prettier, ember/no-observers, ember/no-actions-hash */
-import PaginateMixin from 'irene/mixins/paginate';
-import { t } from 'ember-intl';
 import { task } from 'ember-concurrency';
-import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
+import ENV from 'irene/config/environment';
 import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
-import Component from '@ember/component';
-import { observer } from '@ember/object';
+import { action } from '@ember/object';
+import Component from '@glimmer/component';
 import { debounce } from '@ember/runloop';
+import { tracked } from '@glimmer/tracking';
 
-export default Component.extend(PaginateMixin, {
-  intl: service(),
-  realtime: service(),
-  notify: service('notifications'),
+export default class OrganizationTeamAddTeamMemberComponent extends Component {
+  @service intl;
+  @service realtime;
+  @service store;
+  @service('notifications') notify;
 
-  query: '',
-  searchQuery: '',
-  isAddingMember: false,
-  addMemberErrorCount: 0,
+  @tracked searchQuery = '';
+  @tracked limit = 10;
+  @tracked offset = 0;
+  @tracked userResponse = null;
+  @tracked isAddingMember = false;
+  @tracked addMemberErrorCount = 0;
+  @tracked selectedMembers = {};
 
-  tTeamMemberAdded: t('teamMemberAdded'),
-  tPleaseTryAgain: t('pleaseTryAgain'),
+  tTeamMemberAdded = this.intl.t('teamMemberAdded');
+  tPleaseTryAgain = this.intl.t('pleaseTryAgain');
 
-  targetModel: 'organization-user',
-  sortProperties: Object.freeze(['created:desc']),
+  constructor() {
+    super(...arguments);
 
-  init(...args) {
-    this._super(...args);
-    this.set('selectedMembers', {});
-  },
+    this.fetchUsers.perform(this.limit, this.offset);
+  }
 
-  columns: computed('intl', function () {
+  get userList() {
+    const list = this.userResponse?.toArray() || [];
+
+    if (this.hasNoSelection) {
+      return list;
+    }
+
+    return list.map((it) => {
+      if (this.selectedMembers[it.id]) {
+        it.set('checked', true);
+      }
+
+      return it;
+    });
+  }
+
+  get totalUserCount() {
+    return this.userResponse?.meta?.count || 0;
+  }
+
+  get hasNoUser() {
+    return this.totalUserCount === 0;
+  }
+
+  get columns() {
     return [
       {
-        name: this.get('intl').t('name'),
+        name: this.intl.t('name'),
         valuePath: 'username',
         minWidth: 250,
       },
       {
-        name: this.get('intl').t('action'),
+        name: this.intl.t('action'),
         component: 'ak-checkbox',
         textAlign: 'center',
       },
     ];
-  }),
+  }
 
-  modifiedSortedObjects: computed(
-    'sortedObjects',
-    'selectedMembers',
-    function () {
-      return this.get('sortedObjects').map((so) => {
-        if (this.get('selectedMembers')[so.id]) {
-          so.set('checked', true);
-        }
-
-        return so;
-      });
-    }
-  ),
-
-  extraQueryStrings: computed('team.id', 'searchQuery', function () {
-    const query = {
-      q: this.get('searchQuery'),
-      exclude_team: this.get('team.id'),
-    };
-    return JSON.stringify(query, Object.keys(query).sort());
-  }),
-
-  newOrganizationNonTeamMembersObserver: observer(
-    'realtime.OrganizationNonTeamMemberCounter',
-    function () {
-      return this.incrementProperty('version');
-    }
-  ),
-
-  selectionChange: task(function* (member, event) {
-    const selectedMembers = yield this.get('selectedMembers');
+  @action
+  selectionChange(member, event) {
+    const selectedMembers = { ...this.selectedMembers };
 
     if (event.target.checked) {
       selectedMembers[member.id] = member;
@@ -84,27 +79,26 @@ export default Component.extend(PaginateMixin, {
       delete selectedMembers[member.id];
     }
 
-    this.set('selectedMembers', { ...selectedMembers });
-  }),
+    this.selectedMembers = selectedMembers;
+  }
 
-  hasNoSelection: computed('selectedMembers', function () {
-    return Object.keys(this.get('selectedMembers')).length === 0;
-  }),
+  get hasNoSelection() {
+    return Object.keys(this.selectedMembers).length === 0;
+  }
 
   /* Add member to team */
-  addTeamMember: task(function* (member) {
+  addTeamMember = task({ enqueue: true, maxConcurrency: 3 }, async (member) => {
     try {
       const data = {
         write: false,
       };
 
-      const team = this.get('team');
-      yield team.addMember(data, member.id);
+      const team = this.args.team;
+      await team.addMember(data, member.id);
 
-      this.get('realtime').incrementProperty('TeamMemberCounter');
-      this.get('sortedObjects').removeObject(member);
+      this.realtime.incrementProperty('TeamMemberCounter');
     } catch (err) {
-      let errMsg = this.get('tPleaseTryAgain');
+      let errMsg = this.tPleaseTryAgain;
 
       if (err.errors && err.errors.length) {
         errMsg = err.errors[0].detail || errMsg;
@@ -112,44 +106,89 @@ export default Component.extend(PaginateMixin, {
         errMsg = err.message;
       }
 
-      this.get('notify').error(errMsg);
-      this.incrementProperty('addMemberErrorCount');
+      this.notify.error(errMsg);
+      this.addMemberErrorCount = this.addMemberErrorCount + 1;
     }
-  })
-    .enqueue()
-    .maxConcurrency(3),
+  });
 
-  addSelectedTeamMembers: task(function* () {
-    this.set('isAddingMember', true);
+  addSelectedTeamMembers = task(async () => {
+    this.isAddingMember = true;
 
-    const selectedMembers = Object.values(this.get('selectedMembers'));
+    const selectedMembers = Object.values(this.selectedMembers);
 
     if (selectedMembers.length === 0) {
       return;
     }
 
     for (let i = 0; i < selectedMembers.length; i++) {
-      yield this.get('addTeamMember').perform(selectedMembers[i]);
+      await this.addTeamMember.perform(selectedMembers[i]);
     }
 
-    if (this.get('addMemberErrorCount') === 0) {
-      this.get('notify').success(this.get('tTeamMemberAdded'));
-      this.set('query', '');
-      this.set('searchQuery', '');
-      this.set('selectedMembers', {});
+    if (this.addMemberErrorCount === 0) {
+      this.notify.success(this.tTeamMemberAdded);
+
+      this.fetchUsers.perform(this.limit, this.offset, this.searchQuery);
+
+      this.searchQuery = '';
+      this.selectedMembers = {};
 
       triggerAnalytics('feature', ENV.csb.addTeamMember);
     }
 
-    this.set('isAddingMember', false);
-  }),
+    this.isAddingMember = false;
+  });
+
+  @action
+  handleNextPrevAction({ limit, offset }) {
+    this.limit = limit;
+    this.offset = offset;
+
+    this.fetchUsers.perform(limit, offset, this.searchQuery);
+  }
+
+  @action
+  handleItemPerPageChange({ limit }) {
+    this.limit = limit;
+    this.offset = 0;
+
+    this.fetchUsers.perform(limit, 0, this.searchQuery);
+  }
 
   /* Set debounced searchQuery */
-  setSearchQuery() {
-    this.set('searchQuery', this.get('query'));
-  },
+  setSearchQuery(query) {
+    this.searchQuery = query;
 
-  handleSearchQueryChange: task(function* () {
-    yield debounce(this, this.setSearchQuery, 500);
-  }),
-});
+    this.fetchUsers.perform(this.limit, 0, query);
+  }
+
+  @action
+  handleSearchQueryChange(event) {
+    debounce(this, this.setSearchQuery, event.target.value, 500);
+  }
+
+  fetchUsers = task({ drop: true }, async (limit, offset, query = '') => {
+    try {
+      const queryParams = {
+        limit,
+        offset,
+        q: query,
+        exclude_team: this.args.team.id,
+      };
+
+      this.userResponse = await this.store.query(
+        'organization-user',
+        queryParams
+      );
+    } catch (err) {
+      let errMsg = this.tPleaseTryAgain;
+
+      if (err.errors && err.errors.length) {
+        errMsg = err.errors[0].detail || errMsg;
+      } else if (err.message) {
+        errMsg = err.message;
+      }
+
+      this.notify.error(errMsg);
+    }
+  });
+}

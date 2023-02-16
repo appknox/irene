@@ -18,8 +18,7 @@
     <AkTextField
       data-test-addProjectList-searchInput
       @placeholder={{t 'searchProject'}}
-      @value={{this.query}}
-      {{on 'keyup' (perform this.handleSearchQueryChange)}}
+      {{on 'keyup' this.handleSearchQueryChange}}
     >
       <:leftAdornment>
         <AkIcon @iconName='search' @color='textSecondary' />
@@ -28,44 +27,25 @@
   </div>
 </AkStack>
 
-{{#if this.hasObjects}}
-  <AkTable @dense={{true}} as |t|>
-    <t.head data-test-addProjectList-thead @columns={{this.columns}} />
-    <t.body @rows={{this.modifiedSortedObjects}} as |b|>
-      <b.row data-test-addProjectList-row as |r|>
-        <r.cell data-test-addProjectList-cell>
-          {{#if r.columnValue.component}}
-            {{#let (component r.columnValue.component) as |Component|}}
-              <Component
-                @project={{r.rowValue}}
-                @checked={{r.rowValue.checked}}
-                @onChange={{perform this.selectionChange r.rowValue}}
-                @disabled={{this.isAddingProject}}
-              />
-            {{/let}}
-          {{/if}}
-        </r.cell>
-      </b.row>
-    </t.body>
-  </AkTable>
-
-  <div class='mt-2'>
-    {{partial 'paginate'}}
-  </div>
-
-  {{#if (has-block 'actionContent')}}
-    {{yield
-      (hash
-        action=(perform this.addSelectedTeamProjects)
-        actionLabel=(t 'addProject')
-        actionRunning=this.isAddingProject
-        actionDisabled=this.hasNoSelection
-      )
-      to='actionContent'
-    }}
-  {{/if}}
-{{else}}
-  {{#if this.hasNoObject}}
+<AkPaginationProvider
+  @results={{this.projectList}}
+  @onItemPerPageChange={{this.handleItemPerPageChange}}
+  @totalItems={{this.totalProjectCount}}
+  @nextAction={{this.handleNextPrevAction}}
+  @prevAction={{this.handleNextPrevAction}}
+  @itemPerPageOptions={{array 10 25 50}}
+  @defaultLimit={{this.limit}}
+  @offset={{this.offset}}
+  as |pgc|
+>
+  {{#if this.fetchProjects.isRunning}}
+    <div local-class='loading-container'>
+      <AkStack @alignItems='center' @spacing='2'>
+        <AkLoader @size={{16}} />
+        <AkTypography>{{t 'loading'}}...</AkTypography>
+      </AkStack>
+    </div>
+  {{else if this.hasNoProject}}
     <div local-class='emtpy-container'>
       <AkSvg::OrgUsersEmpty local-class='empty-svg' />
 
@@ -74,11 +54,52 @@
       </AkTypography>
     </div>
   {{else}}
-    <div local-class='loading-container'>
-      <AkStack @alignItems='center' @spacing='2'>
-        <AkLoader @size={{16}} />
-        <AkTypography>{{t 'loading'}}...</AkTypography>
-      </AkStack>
-    </div>
+    <AkTable @dense={{true}} as |t|>
+      <t.head data-test-addProjectList-thead @columns={{this.columns}} />
+      <t.body @rows={{pgc.currentPageResults}} as |b|>
+        <b.row data-test-addProjectList-row as |r|>
+          <r.cell data-test-addProjectList-cell>
+            {{#if r.columnValue.component}}
+              {{#let (component r.columnValue.component) as |Component|}}
+                <Component
+                  @project={{r.rowValue}}
+                  @checked={{r.rowValue.checked}}
+                  @onChange={{fn this.selectionChange r.rowValue}}
+                  @disabled={{this.isAddingProject}}
+                />
+              {{/let}}
+            {{/if}}
+          </r.cell>
+        </b.row>
+      </t.body>
+    </AkTable>
+
+    <AkPagination
+      @disableNext={{pgc.disableNext}}
+      @nextAction={{pgc.nextAction}}
+      @disablePrev={{pgc.disablePrev}}
+      @prevAction={{pgc.prevAction}}
+      @endItemIdx={{pgc.endItemIdx}}
+      @startItemIdx={{pgc.startItemIdx}}
+      @itemPerPageOptions={{pgc.itemPerPageOptions}}
+      @onItemPerPageChange={{pgc.onItemPerPageChange}}
+      @selectedOption={{pgc.selectedOption}}
+      @tableItemLabel={{t 'projects'}}
+      @perPageTranslation={{t 'recordPerPage'}}
+      @totalItems={{pgc.totalItems}}
+      @variant='compact'
+    />
+
+    {{#if (has-block 'actionContent')}}
+      {{yield
+        (hash
+          action=(perform this.addSelectedTeamProjects)
+          actionLabel=(t 'addProject')
+          actionRunning=this.isAddingProject
+          actionDisabled=this.hasNoSelection
+        )
+        to='actionContent'
+      }}
+    {{/if}}
   {{/if}}
-{{/if}}
+</AkPaginationProvider>

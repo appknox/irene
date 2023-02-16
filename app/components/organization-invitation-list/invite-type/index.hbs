@@ -7,8 +7,8 @@
     <AkLink
       data-test-invite-type-link
       @color='primary'
-      @route='authenticated.organization.team'
-      @model={{@invitation.team.id}}
+      @route='authenticated.organization.teams'
+      @query={{hash team_query=@invitation.team.name}}
     >
       {{@invitation.team.name}}
     </AkLink>

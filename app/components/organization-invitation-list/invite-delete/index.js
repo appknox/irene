@@ -34,6 +34,9 @@ export default class OrganizationMemberInvitationListInviteDelete extends Compon
       await invite.save();
 
       this.notify.success(this.tInvitationDeleted);
+
+      this.args.reloadInvites();
+
       triggerAnalytics('feature', ENV.csb.inviteDelete);
 
       this.showDeleteInvitationConfirmBox = false;
