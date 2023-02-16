@@ -15,14 +15,6 @@ import { Response } from 'miragejs';
 
 import Service from '@ember/service';
 
-class OrganizationMeStub extends Service {
-  org = {
-    is_owner: true,
-    is_admin: true,
-    is_member: false,
-  };
-}
-
 class NotificationsStub extends Service {
   errorMsg = null;
   successMsg = null;
@@ -43,6 +35,16 @@ module('Integration | Component | organization-team/details', function (hooks) {
   hooks.beforeEach(async function () {
     this.server.createList('organization', 1);
 
+    const store = this.owner.lookup('service:store');
+    const organizationMe = store.createRecord('organization-me', {
+      is_owner: true,
+      is_admin: true,
+    });
+
+    class OrganizationMeStub extends Service {
+      org = organizationMe;
+    }
+
     const organizationProjects = this.server.createList(
       'organization-project',
       2
@@ -51,7 +53,6 @@ module('Integration | Component | organization-team/details', function (hooks) {
     const projects = this.server.createList('project', 2);
     const organizationUsers = this.server.createList('organization-user', 2);
 
-    const store = this.owner.lookup('service:store');
     const [team] = this.server.createList('organization-team', 1);
 
     const organizationTeam = store.createRecord('organization-team', {
@@ -95,16 +96,33 @@ module('Integration | Component | organization-team/details', function (hooks) {
         me.org.is_admin = false;
       }
 
+      this.server.get('/organizations/:id/teams/:teamId/projects', (schema) => {
+        const results = schema.organizationProjects.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      });
+
+      this.server.get('/organizations/:id/teams/:teamId/members', (schema) => {
+        const results = schema.organizationUsers.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      });
+
+      this.server.get(
+        '/organizations/:id/teams/:teamId/invitations',
+        (schema) => {
+          const results = schema.organizationInvitations.all().models;
+
+          return { count: results.length, next: null, previous: null, results };
+        }
+      );
+
       this.server.get('/organizations/:id/users/:userId', (schema, req) => {
         return schema.organizationUsers.find(req.params.userId)?.toJSON();
       });
 
       this.server.get('/v2/projects/:id', (schema, req) => {
         return schema.projects.find(`${req.params.id}`)?.toJSON();
-      });
-
-      this.server.get('/organizations/:id/teams', (schema) => {
-        return schema.organizationTeams.all().models;
       });
 
       await render(hbs`
@@ -406,16 +424,39 @@ module('Integration | Component | organization-team/details', function (hooks) {
   );
 
   test('it renders organization-team add project action', async function (assert) {
+    this.server.get('/organizations/:id/teams/:teamId/projects', (schema) => {
+      const results = schema.organizationProjects.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.server.get('/organizations/:id/teams/:teamId/members', (schema) => {
+      const results = schema.organizationUsers.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.server.get(
+      '/organizations/:id/teams/:teamId/invitations',
+      (schema) => {
+        const results = schema.organizationInvitations.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      }
+    );
+
     this.server.get('/organizations/:id/users/:userId', (schema, req) => {
       return schema.organizationUsers.find(req.params.userId)?.toJSON();
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
-      return schema.projects.find(`${req.params.id}`)?.toJSON();
+    this.server.get('organizations/:id/projects', (schema) => {
+      const results = schema.projects.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
     });
 
-    this.server.get('/organizations/:id/teams', (schema) => {
-      return schema.organizationTeams.all().models;
+    this.server.get('/v2/projects/:id', (schema, req) => {
+      return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
 
     await render(hbs`
@@ -477,16 +518,39 @@ module('Integration | Component | organization-team/details', function (hooks) {
   });
 
   test('it renders organization-team add user action', async function (assert) {
+    this.server.get('/organizations/:id/teams/:teamId/projects', (schema) => {
+      const results = schema.organizationProjects.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.server.get('/organizations/:id/teams/:teamId/members', (schema) => {
+      const results = schema.organizationUsers.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.server.get(
+      '/organizations/:id/teams/:teamId/invitations',
+      (schema) => {
+        const results = schema.organizationInvitations.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      }
+    );
+
+    this.server.get('organizations/:id/users', (schema) => {
+      const results = schema.organizationUsers.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
     this.server.get('/organizations/:id/users/:userId', (schema, req) => {
       return schema.organizationUsers.find(req.params.userId)?.toJSON();
     });
 
     this.server.get('/v2/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
-    });
-
-    this.server.get('/organizations/:id/teams', (schema) => {
-      return schema.organizationTeams.all().models;
     });
 
     await render(hbs`
@@ -548,16 +612,33 @@ module('Integration | Component | organization-team/details', function (hooks) {
   });
 
   test('it renders organization-team invite user action', async function (assert) {
+    this.server.get('/organizations/:id/teams/:teamId/projects', (schema) => {
+      const results = schema.organizationProjects.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.server.get('/organizations/:id/teams/:teamId/members', (schema) => {
+      const results = schema.organizationUsers.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.server.get(
+      '/organizations/:id/teams/:teamId/invitations',
+      (schema) => {
+        const results = schema.organizationInvitations.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      }
+    );
+
     this.server.get('/organizations/:id/users/:userId', (schema, req) => {
       return schema.organizationUsers.find(req.params.userId)?.toJSON();
     });
 
     this.server.get('/v2/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
-    });
-
-    this.server.get('/organizations/:id/teams', (schema) => {
-      return schema.organizationTeams.all().models;
     });
 
     await render(hbs`
@@ -601,16 +682,16 @@ module('Integration | Component | organization-team/details', function (hooks) {
 
   // TODO: remove skip once ui is uncommmented
   test.skip('test organization-team invitation-list search', async function (assert) {
-    this.server.get('/organizations/:id/users/:userId', (schema, req) => {
-      return schema.organizationUsers.find(req.params.userId)?.toJSON();
+    this.server.get('/organizations/:id/teams/:teamId/projects', (schema) => {
+      const results = schema.organizationProjects.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
     });
 
-    this.server.get('/v2/projects/:id', (schema, req) => {
-      return schema.projects.find(`${req.params.id}`)?.toJSON();
-    });
+    this.server.get('/organizations/:id/teams/:teamId/members', (schema) => {
+      const results = schema.organizationUsers.all().models;
 
-    this.server.get('/organizations/:id/teams', (schema) => {
-      return schema.organizationTeams.all().models;
+      return { count: results.length, next: null, previous: null, results };
     });
 
     this.server.get(
@@ -618,9 +699,19 @@ module('Integration | Component | organization-team/details', function (hooks) {
       (schema, req) => {
         this.set('query', req.queryParams.q);
 
-        return schema.organizationInvitations.all().models;
+        const results = schema.organizationInvitations.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
       }
     );
+
+    this.server.get('/organizations/:id/users/:userId', (schema, req) => {
+      return schema.organizationUsers.find(req.params.userId)?.toJSON();
+    });
+
+    this.server.get('/v2/projects/:id', (schema, req) => {
+      return schema.projects.find(`${req.params.id}`)?.toJSON();
+    });
 
     await render(hbs`
         <OrganizationTeam::Details @showTeamDetail={{true}} @team={{this.organizationTeam}} @organization={{this.organization}} />
@@ -646,16 +737,33 @@ module('Integration | Component | organization-team/details', function (hooks) {
     'test organization-team invite user',
     [{ fail: false }, { fail: true }],
     async function (assert, { fail }) {
+      this.server.get('/organizations/:id/teams/:teamId/projects', (schema) => {
+        const results = schema.organizationProjects.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      });
+
+      this.server.get('/organizations/:id/teams/:teamId/members', (schema) => {
+        const results = schema.organizationUsers.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      });
+
+      this.server.get(
+        '/organizations/:id/teams/:teamId/invitations',
+        (schema) => {
+          const results = schema.organizationInvitations.all().models;
+
+          return { count: results.length, next: null, previous: null, results };
+        }
+      );
+
       this.server.get('/organizations/:id/users/:userId', (schema, req) => {
         return schema.organizationUsers.find(req.params.userId)?.toJSON();
       });
 
       this.server.get('/v2/projects/:id', (schema, req) => {
         return schema.projects.find(`${req.params.id}`)?.toJSON();
-      });
-
-      this.server.get('/organizations/:id/teams', (schema) => {
-        return schema.organizationTeams.all().models;
       });
 
       this.server.post('/organizations/:id/teams/:teamId/invitations', () => {
@@ -740,16 +848,33 @@ module('Integration | Component | organization-team/details', function (hooks) {
       // { fail: true }
     ],
     async function (assert, { fail }) {
+      this.server.get('/organizations/:id/teams/:teamId/projects', (schema) => {
+        const results = schema.organizationProjects.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      });
+
+      this.server.get('/organizations/:id/teams/:teamId/members', (schema) => {
+        const results = schema.organizationUsers.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      });
+
+      this.server.get(
+        '/organizations/:id/teams/:teamId/invitations',
+        (schema) => {
+          const results = schema.organizationInvitations.all().models;
+
+          return { count: results.length, next: null, previous: null, results };
+        }
+      );
+
       this.server.get('/organizations/:id/users/:userId', (schema, req) => {
         return schema.organizationUsers.find(req.params.userId)?.toJSON();
       });
 
       this.server.get('/v2/projects/:id', (schema, req) => {
         return schema.projects.find(`${req.params.id}`)?.toJSON();
-      });
-
-      this.server.get('/organizations/:id/teams', (schema) => {
-        return schema.organizationTeams.all().models;
       });
 
       this.server.delete('/organizations/:id/teams/:teamId', () => {

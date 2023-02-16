@@ -14,14 +14,6 @@ import { Response } from 'miragejs';
 
 import Service from '@ember/service';
 
-class OrganizationMeStub extends Service {
-  org = {
-    is_owner: true,
-    is_admin: true,
-    is_member: false,
-  };
-}
-
 class NotificationsStub extends Service {
   errorMsg = null;
   successMsg = null;
@@ -44,6 +36,16 @@ module(
     hooks.beforeEach(async function () {
       this.server.createList('organization', 1);
 
+      const store = this.owner.lookup('service:store');
+      const organizationMe = store.createRecord('organization-me', {
+        is_owner: true,
+        is_admin: true,
+      });
+
+      class OrganizationMeStub extends Service {
+        org = organizationMe;
+      }
+
       const organizationProjects = this.server.createList(
         'organization-project',
         2
@@ -51,7 +53,6 @@ module(
 
       const projects = this.server.createList('project', 2);
 
-      const store = this.owner.lookup('service:store');
       const [team] = this.server.createList('organization-team', 1);
 
       const organizationTeam = store.createRecord('organization-team', {
@@ -77,6 +78,12 @@ module(
 
     test('it renders project-list', async function (assert) {
       this.set('handleActiveAction', () => {});
+
+      this.server.get('/organizations/:id/teams/:teamId/projects', (schema) => {
+        const results = schema.organizationProjects.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      });
 
       this.server.get('/v2/projects/:id', (schema, req) => {
         return schema.projects.find(`${req.params.id}`)?.toJSON();
@@ -140,7 +147,9 @@ module(
         (schema, req) => {
           this.set('query', req.queryParams.q);
 
-          return schema.organizationProjects.all().models;
+          const results = schema.organizationProjects.all().models;
+
+          return { count: results.length, next: null, previous: null, results };
         }
       );
 
@@ -173,6 +182,20 @@ module(
       [{ fail: false }, { fail: true }],
       async function (assert, { fail }) {
         this.set('handleActiveAction', () => {});
+
+        this.server.get(
+          '/organizations/:id/teams/:teamId/projects',
+          (schema) => {
+            const results = schema.organizationProjects.all().models;
+
+            return {
+              count: results.length,
+              next: null,
+              previous: null,
+              results,
+            };
+          }
+        );
 
         this.server.get('/v2/projects/:id', (schema, req) => {
           return schema.projects.find(`${req.params.id}`)?.toJSON();
@@ -227,7 +250,26 @@ module(
       'test project-list project remove',
       [{ fail: false }, { fail: true }],
       async function (assert, { fail }) {
-        this.set('handleActiveAction', () => {});
+        this.setProperties({
+          handleActiveAction: () => {},
+          projectRemoved: false,
+        });
+
+        this.server.get(
+          '/organizations/:id/teams/:teamId/projects',
+          (schema) => {
+            const results = this.projectRemoved
+              ? schema.organizationProjects.all().models.slice(1)
+              : schema.organizationProjects.all().models;
+
+            return {
+              count: results.length,
+              next: null,
+              previous: null,
+              results,
+            };
+          }
+        );
 
         this.server.get('/v2/projects/:id', (schema, req) => {
           return schema.projects.find(`${req.params.id}`)?.toJSON();
@@ -277,6 +319,10 @@ module(
         assert
           .dom('[data-test-confirmBox-description]')
           .hasText('t:confirmBox.removeTeamProject:()');
+
+        if (!fail) {
+          this.set('projectRemoved', true);
+        }
 
         await click('[data-test-confirmBox-confirmBtn]');
 

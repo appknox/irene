@@ -1,3 +1,25 @@
 .archive-row-expired {
   background-color: var(--organization-archive-list-expired-background);
 }
+
+.bordered-container {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5em;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  margin: 1em 0;
+  max-width: 800px;
+  min-height: 100px;
+  border-radius: var(
+    --organization-archive-list-bordered-container-border-radius
+  );
+  border: 1px solid
+    var(--organization-archive-list-bordered-container-border-color);
+  box-sizing: border-box;
+
+  .empty-svg {
+    height: 70px;
+  }
+}

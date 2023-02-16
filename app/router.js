@@ -34,9 +34,6 @@ Router.map(function () {
         this.route('namespaces');
         this.route('users');
         this.route('teams');
-        this.route('team', {
-          path: '/team/:teamid',
-        });
       });
 
       this.route('organization-settings', { path: '/organization/settings' });

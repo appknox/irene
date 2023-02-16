@@ -1,39 +1,67 @@
-{{! template-lint-disable no-partial }}
-{{#if this.hasObjects}}
-  {{#if (has-block 'headerContent')}}
-    <div class='my-2'>
-      {{yield to='headerContent'}}
-    </div>
-  {{/if}}
+<AkPaginationProvider
+  @results={{this.inviteList}}
+  @onItemPerPageChange={{this.handleItemPerPageChange}}
+  @totalItems={{this.totalInviteCount}}
+  @nextAction={{this.handleNextAction}}
+  @prevAction={{this.handlePrevAction}}
+  @itemPerPageOptions={{this.itemPerPageOptions}}
+  @defaultLimit={{this.limit}}
+  @offset={{this.offset}}
+  as |pgc|
+>
+  {{#if this.fetchInvites.isRunning}}
+    {{#if (has-block 'loading')}}
+      {{yield to='loading'}}
+    {{/if}}
+  {{else if this.hasNoInvite}}
+    {{#if (has-block 'empty')}}
+      {{yield to='empty'}}
+    {{/if}}
+  {{else}}
+    {{#if (has-block 'headerContent')}}
+      <div class='my-3'>
+        {{yield to='headerContent'}}
+      </div>
+    {{/if}}
 
-  <AkTable data-test-invitation-list as |t|>
-    <t.head data-test-invitation-list-thead @columns={{this.columns}} />
-    <t.body @rows={{this.sortedObjects}} as |b|>
-      <b.row data-test-invitation-list-row as |r|>
-        <r.cell data-test-invitation-list-cell as |value|>
-          {{#if r.columnValue.component}}
-            {{#let (component r.columnValue.component) as |Component|}}
-              <Component
-                @invitation={{r.rowValue}}
-                @organization={{@organization}}
-                @blurOverlay={{@blurConfirmBoxOverlay}}
-              />
-            {{/let}}
-          {{else}}
-            <AkTypography title={{value}} @noWrap={{true}}>
-              {{value}}
-            </AkTypography>
-          {{/if}}
-        </r.cell>
-      </b.row>
-    </t.body>
-  </AkTable>
+    <AkTable data-test-invitation-list as |t|>
+      <t.head data-test-invitation-list-thead @columns={{this.columns}} />
+      <t.body @rows={{pgc.currentPageResults}} as |b|>
+        <b.row data-test-invitation-list-row as |r|>
+          <r.cell data-test-invitation-list-cell as |value|>
+            {{#if r.columnValue.component}}
+              {{#let (component r.columnValue.component) as |Component|}}
+                <Component
+                  @invitation={{r.rowValue}}
+                  @organization={{@organization}}
+                  @blurOverlay={{@blurConfirmBoxOverlay}}
+                  @reloadInvites={{this.handleReloadInvites}}
+                />
+              {{/let}}
+            {{else}}
+              <AkTypography title={{value}} @noWrap={{true}}>
+                {{value}}
+              </AkTypography>
+            {{/if}}
+          </r.cell>
+        </b.row>
+      </t.body>
+    </AkTable>
 
-  <div class='mt-3'>
-    {{partial 'paginate'}}
-  </div>
-{{else}}
-  {{#if (has-block 'loadingEmptyContent')}}
-    {{yield (hash isEmpty=this.hasNoObject) to='loadingEmptyContent'}}
+    <AkPagination
+      @disableNext={{pgc.disableNext}}
+      @nextAction={{pgc.nextAction}}
+      @disablePrev={{pgc.disablePrev}}
+      @prevAction={{pgc.prevAction}}
+      @endItemIdx={{pgc.endItemIdx}}
+      @startItemIdx={{pgc.startItemIdx}}
+      @itemPerPageOptions={{pgc.itemPerPageOptions}}
+      @onItemPerPageChange={{pgc.onItemPerPageChange}}
+      @selectedOption={{pgc.selectedOption}}
+      @tableItemLabel={{t 'invites'}}
+      @perPageTranslation={{t 'recordPerPage'}}
+      @totalItems={{pgc.totalItems}}
+      @variant={{@paginationVariant}}
+    />
   {{/if}}
-{{/if}}
+</AkPaginationProvider>

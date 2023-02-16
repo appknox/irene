@@ -16,12 +16,13 @@ import { Response } from 'miragejs';
 
 import Service from '@ember/service';
 
-class OrganizationMeStub extends Service {
-  org = {
-    is_owner: true,
-    is_admin: true,
-    is_member: false,
-  };
+class RouterStub extends Service {
+  currentRouteName = '';
+  queryParams = null;
+
+  transitionTo({ queryParams }) {
+    this.queryParams = queryParams;
+  }
 }
 
 class NotificationsStub extends Service {
@@ -44,6 +45,16 @@ module('Integration | Component | organization-member/list', function (hooks) {
   hooks.beforeEach(async function () {
     this.server.createList('organization', 1);
 
+    const store = this.owner.lookup('service:store');
+    const organizationMe = store.createRecord('organization-me', {
+      is_owner: true,
+      is_admin: true,
+    });
+
+    class OrganizationMeStub extends Service {
+      org = organizationMe;
+    }
+
     const organizationMembers = this.server.createList(
       'organization-member',
       5
@@ -64,19 +75,30 @@ module('Integration | Component | organization-member/list', function (hooks) {
 
     await this.owner.lookup('service:organization').load();
 
+    const queryParams = {
+      user_limit: 10,
+      user_offset: 0,
+      user_query: '',
+      show_inactive_user: false,
+    };
+
     this.setProperties({
       organization: this.owner.lookup('service:organization').selected,
       organizationMembers,
       users,
+      queryParams,
     });
 
     this.owner.register('service:me', OrganizationMeStub);
     this.owner.register('service:notifications', NotificationsStub);
+    this.owner.register('service:router', RouterStub);
   });
 
   test('it renders organization user list', async function (assert) {
     this.server.get('/organizations/:id/members', (schema) => {
-      return schema.organizationMembers.all().models;
+      const results = schema.organizationMembers.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
     });
 
     this.server.get('/organizations/:id/users/:userId', (schema, req) => {
@@ -86,7 +108,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
     });
 
     await render(hbs`
-      <OrganizationMember::List @organization={{this.organization}} />
+      <OrganizationMember::List @queryParams={{this.queryParams}} @organization={{this.organization}} />
     `);
 
     const inactiveUserFormControl = find('[data-test-inactive-user-label]');
@@ -170,7 +192,9 @@ module('Integration | Component | organization-member/list', function (hooks) {
     me.org.is_owner = false;
 
     this.server.get('/organizations/:id/members', (schema) => {
-      return schema.organizationMembers.all().models;
+      const results = schema.organizationMembers.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
     });
 
     this.server.get('/organizations/:id/users/:userId', (schema, req) => {
@@ -180,7 +204,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
     });
 
     await render(hbs`
-      <OrganizationMember::List @organization={{this.organization}} />
+      <OrganizationMember::List @queryParams={{this.queryParams}} @organization={{this.organization}} />
     `);
 
     const inactiveUserFormControl = find('[data-test-inactive-user-label]');
@@ -256,7 +280,9 @@ module('Integration | Component | organization-member/list', function (hooks) {
 
   test('test organization user role change success', async function (assert) {
     this.server.get('/organizations/:id/members', (schema) => {
-      return schema.organizationMembers.all().models;
+      const results = schema.organizationMembers.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
     });
 
     this.server.get('/organizations/:id/users/:userId', (schema, req) => {
@@ -266,7 +292,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
     });
 
     await render(hbs`
-      <OrganizationMember::List @organization={{this.organization}} />
+      <OrganizationMember::List @queryParams={{this.queryParams}} @organization={{this.organization}} />
     `);
 
     const contentRows = findAll('[data-test-org-user-row]');
@@ -294,7 +320,9 @@ module('Integration | Component | organization-member/list', function (hooks) {
 
   test('test organization user role change failure', async function (assert) {
     this.server.get('/organizations/:id/members', (schema) => {
-      return schema.organizationMembers.all().models;
+      const results = schema.organizationMembers.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
     });
 
     this.server.get('/organizations/:id/users/:userId', (schema, req) => {
@@ -308,7 +336,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
     });
 
     await render(hbs`
-      <OrganizationMember::List @organization={{this.organization}} />
+      <OrganizationMember::List @queryParams={{this.queryParams}} @organization={{this.organization}} />
     `);
 
     const contentRows = findAll('[data-test-org-user-row]');
@@ -336,7 +364,9 @@ module('Integration | Component | organization-member/list', function (hooks) {
 
   test('test organization user deactivate', async function (assert) {
     this.server.get('/organizations/:id/members', (schema) => {
-      return schema.organizationMembers.all().models;
+      const results = schema.organizationMembers.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
     });
 
     this.server.get('/organizations/:id/users/:userId', (schema, req) => {
@@ -346,7 +376,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
     });
 
     await render(hbs`
-      <OrganizationMember::List @organization={{this.organization}} />
+      <OrganizationMember::List @queryParams={{this.queryParams}} @organization={{this.organization}} />
     `);
 
     const contentRows = findAll('[data-test-org-user-row]');
@@ -410,7 +440,9 @@ module('Integration | Component | organization-member/list', function (hooks) {
 
   test('test organization user activate', async function (assert) {
     this.server.get('/organizations/:id/members', (schema) => {
-      return schema.organizationMembers.all().models;
+      const results = schema.organizationMembers.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
     });
 
     this.server.get('/organizations/:id/users/:userId', (schema, req) => {
@@ -420,7 +452,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
     });
 
     await render(hbs`
-      <OrganizationMember::List @organization={{this.organization}} />
+      <OrganizationMember::List @queryParams={{this.queryParams}} @organization={{this.organization}} />
     `);
 
     const contentRows = findAll('[data-test-org-user-row]');
@@ -485,7 +517,9 @@ module('Integration | Component | organization-member/list', function (hooks) {
 
   test('test organization user activate/deactivate failure', async function (assert) {
     this.server.get('/organizations/:id/members', (schema) => {
-      return schema.organizationMembers.all().models;
+      const results = schema.organizationMembers.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
     });
 
     this.server.get('/organizations/:id/users/:userId', (schema, req) => {
@@ -499,7 +533,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
     });
 
     await render(hbs`
-      <OrganizationMember::List @organization={{this.organization}} />
+      <OrganizationMember::List @queryParams={{this.queryParams}} @organization={{this.organization}} />
     `);
 
     const contentRows = findAll('[data-test-org-user-row]');
@@ -563,7 +597,9 @@ module('Integration | Component | organization-member/list', function (hooks) {
     this.server.get('/organizations/:id/members', (schema, req) => {
       this.set('is_active', req.queryParams.is_active);
 
-      return schema.organizationMembers.all().models;
+      const results = schema.organizationMembers.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
     });
 
     this.server.get('/organizations/:id/users/:userId', (schema, req) => {
@@ -573,7 +609,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
     });
 
     await render(hbs`
-      <OrganizationMember::List @organization={{this.organization}} />
+      <OrganizationMember::List @queryParams={{this.queryParams}} @organization={{this.organization}} />
     `);
 
     const contentRows = findAll('[data-test-org-user-row]');
@@ -593,7 +629,9 @@ module('Integration | Component | organization-member/list', function (hooks) {
     this.server.get('/organizations/:id/members', (schema, req) => {
       this.set('query', req.queryParams.q);
 
-      return schema.organizationMembers.all().models;
+      const results = schema.organizationMembers.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
     });
 
     this.server.get('/organizations/:id/users/:userId', (schema, req) => {
@@ -603,7 +641,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
     });
 
     await render(hbs`
-      <OrganizationMember::List @organization={{this.organization}} />
+      <OrganizationMember::List @queryParams={{this.queryParams}} @organization={{this.organization}} />
     `);
 
     const contentRows = findAll('[data-test-org-user-row]');

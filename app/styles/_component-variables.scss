@@ -348,6 +348,12 @@ body {
 
   // variables for organization-archive/list
   --organization-archive-list-expired-background: var(--neutral-grey-50);
+  --organization-archive-list-bordered-container-border-radius: var(
+    --border-radius
+  );
+  --organization-archive-list-bordered-container-border-color: var(
+    --border-color-1
+  );
 
   // variables for jira-account
   --jira-account-border-radius: var(--border-radius);

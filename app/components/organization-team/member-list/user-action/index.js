@@ -47,6 +47,8 @@ export default class OrganizationTeamMemberListUserAction extends Component {
 
       this.notify.success(this.tTeamMemberRemoved);
 
+      this.args.reloadTeamMembers();
+
       this.showRemoveMemberPrompt = false;
       this.isRemovingMember = false;
 

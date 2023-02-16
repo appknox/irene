@@ -37,13 +37,11 @@ export default class OrganizationTeamInvitationList extends Component {
   }
 
   get extraQueryStrings() {
-    const query = {
+    return {
       teamId: this.args.team.id,
       is_accepted: false,
       q: this.searchQuery,
     };
-
-    return JSON.stringify(query, Object.keys(query).sort());
   }
 
   @action

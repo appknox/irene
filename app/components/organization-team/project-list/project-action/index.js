@@ -42,6 +42,9 @@ export default class OrganizationProjectOverview extends Component {
       await this.store.unloadRecord(prj);
 
       this.notify.success(this.tProjectRemoved);
+
+      this.args.reloadTeamProjects();
+
       triggerAnalytics('feature', ENV.csb.teamProjectRemove);
 
       this.showRemoveProjectConfirm = false;

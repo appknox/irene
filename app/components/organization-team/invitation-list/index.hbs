@@ -45,22 +45,28 @@
   @columns={{this.columns}}
   @targetModel={{this.targetModel}}
   @extraQueryStrings={{this.extraQueryStrings}}
+  @itemPerPageOptions={{array 5 10 20}}
+  @limit={{5}}
+  @offset={{0}}
+  @paginationVariant='compact'
   @blurConfirmBoxOverlay={{true}}
 >
-  <:loadingEmptyContent as |oil|>
+  <:loading>
     <div local-class='emtpy-container'>
-      {{#if oil.isEmpty}}
-        <AkSvg::OrgInvitationEmpty local-class='empty-svg' />
-
-        <AkTypography @variant='h6'>
-          {{t 'noInvitations'}}
-        </AkTypography>
-      {{else}}
-        <AkStack @alignItems='center' @spacing='2'>
-          <AkLoader @size={{16}} />
-          <AkTypography>{{t 'loading'}}...</AkTypography>
-        </AkStack>
-      {{/if}}
+      <AkStack @alignItems='center' @spacing='2'>
+        <AkLoader @size={{16}} />
+        <AkTypography>{{t 'loading'}}...</AkTypography>
+      </AkStack>
     </div>
-  </:loadingEmptyContent>
+  </:loading>
+
+  <:empty>
+    <div local-class='emtpy-container'>
+      <AkSvg::OrgInvitationEmpty local-class='empty-svg' />
+
+      <AkTypography @variant='h6'>
+        {{t 'noInvitations'}}
+      </AkTypography>
+    </div>
+  </:empty>
 </OrganizationInvitationList>

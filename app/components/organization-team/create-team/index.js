@@ -50,10 +50,9 @@ export default class OrganizationTeamCreateTeam extends Component {
 
       await t.save();
 
-      // signal to update invitation list
-      this.realtime.incrementProperty('OrganizationTeamCounter');
-
       this.notify.success(this.tTeamCreated);
+
+      this.args.reloadTeams();
 
       this.showTeamModal = false;
       this.teamName = '';

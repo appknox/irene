@@ -57,7 +57,9 @@ module('Integration | Component | organization-archive', function (hooks) {
 
   test('it renders organization-archive', async function (assert) {
     this.server.get('/organizations/:id/archives', (schema) => {
-      return schema.organizationArchives.all().models;
+      const results = schema.organizationArchives.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
     });
 
     this.server.get('/organizations/:id/users/:userId', (schema, req) => {
@@ -141,12 +143,12 @@ module('Integration | Component | organization-archive', function (hooks) {
 
   test('it should render expired excel export', async function (assert) {
     this.server.get('/organizations/:id/archives', (schema) => {
-      const archives = schema.organizationArchives.all().models;
+      const results = schema.organizationArchives.all().models;
 
-      archives[3].available_until = faker.date.past();
-      archives[4].available_until = faker.date.past();
+      results[3].available_until = faker.date.past();
+      results[4].available_until = faker.date.past();
 
-      return archives;
+      return { count: results.length, next: null, previous: null, results };
     });
 
     this.server.get('/organizations/:id/users/:userId', (schema, req) => {
@@ -206,9 +208,9 @@ module('Integration | Component | organization-archive', function (hooks) {
       };
 
       this.server.get('/organizations/:id/archives', (schema) => {
-        const archives = schema.organizationArchives.all().models;
+        const results = schema.organizationArchives.all().models;
 
-        return archives;
+        return { count: results.length, next: null, previous: null, results };
       });
 
       this.server.get(
@@ -264,7 +266,9 @@ module('Integration | Component | organization-archive', function (hooks) {
     [{ fail: false }, { fail: true }],
     async function (assert, { fail }) {
       this.server.get('/organizations/:id/archives', (schema) => {
-        return schema.organizationArchives.all().models;
+        const results = schema.organizationArchives.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
       });
 
       this.server.post('/organizations/:id/archives', () => {

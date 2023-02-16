@@ -14,14 +14,6 @@ import { Response } from 'miragejs';
 
 import Service from '@ember/service';
 
-class OrganizationMeStub extends Service {
-  org = {
-    is_owner: true,
-    is_admin: true,
-    is_member: false,
-  };
-}
-
 class NotificationsStub extends Service {
   errorMsg = null;
   successMsg = null;
@@ -44,9 +36,18 @@ module(
     hooks.beforeEach(async function () {
       this.server.createList('organization', 1);
 
+      const store = this.owner.lookup('service:store');
+      const organizationMe = store.createRecord('organization-me', {
+        is_owner: true,
+        is_admin: true,
+      });
+
+      class OrganizationMeStub extends Service {
+        org = organizationMe;
+      }
+
       const organizationUsers = this.server.createList('organization-user', 5);
 
-      const store = this.owner.lookup('service:store');
       const [team] = this.server.createList('organization-team', 1);
 
       const organizationTeam = store.createRecord('organization-team', {
@@ -70,6 +71,12 @@ module(
     });
 
     test('it renders add-team-member', async function (assert) {
+      this.server.get('organizations/:id/users', (schema) => {
+        const results = schema.organizationUsers.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      });
+
       await render(hbs`
         <OrganizationTeam::AddTeamMember @team={{this.organizationTeam}} @organization={{this.organization}}>
             <:actionContent as |ac|>
@@ -117,7 +124,9 @@ module(
       this.server.get('organizations/:id/users', (schema, req) => {
         this.set('query', req.queryParams.q);
 
-        return schema.organizationUsers.all().models;
+        const results = schema.organizationUsers.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
       });
 
       await render(hbs`
@@ -145,6 +154,16 @@ module(
       'test add-team-member add user action',
       [{ fail: false }, { fail: true }],
       async function (assert, { fail }) {
+        this.set('usersAdded', false);
+
+        this.server.get('organizations/:id/users', (schema) => {
+          const results = this.usersAdded
+            ? schema.organizationUsers.all().models.slice(2)
+            : schema.organizationUsers.all().models;
+
+          return { count: results.length, next: null, previous: null, results };
+        });
+
         this.server.put(
           '/organizations/:id/teams/:teamId/members/:memId',
           () => {
@@ -205,6 +224,10 @@ module(
           .dom('[data-test-checkbox]', secondRow[1])
           .isChecked()
           .isNotDisabled();
+
+        if (!fail) {
+          this.set('usersAdded', true);
+        }
 
         await click('[data-test-action-btn]');
 

@@ -30,7 +30,7 @@
     {{#if this.me.org.is_admin}}
       <AkButton
         data-test-teamProjectList-addProjectBtn
-        {{on 'click' (perform this.showAddProjectList)}}
+        {{on 'click' this.showAddProjectList}}
       >
         <:leftIcon>
           <AkIcon @iconName='note-add' />
@@ -42,40 +42,65 @@
   </AkStack>
 </AkStack>
 
-{{#if this.hasObjects}}
-  <AkTable @dense={{this.me.org.is_admin}} as |t|>
-    <t.head data-test-teamProjectList-thead @columns={{this.columns}} />
-    <t.body @rows={{this.sortedObjects}} as |b|>
-      <b.row data-test-teamProjectList-row as |r|>
-        <r.cell data-test-teamProjectList-cell>
-          {{#let (component r.columnValue.component) as |Component|}}
-            <Component
-              @project={{r.rowValue}}
-              @team={{@team}}
-              @organization={{@organization}}
-            />
-          {{/let}}
-        </r.cell>
-      </b.row>
-    </t.body>
-  </AkTable>
-
-  <div class='mt-2'>
-    {{partial 'paginate'}}
-  </div>
-{{else}}
-  <div local-class='emtpy-container'>
-    {{#if this.hasNoObject}}
+<AkPaginationProvider
+  @results={{this.teamProjectList}}
+  @onItemPerPageChange={{this.handleItemPerPageChange}}
+  @totalItems={{this.totalTeamProjectCount}}
+  @nextAction={{this.handleNextPrevAction}}
+  @prevAction={{this.handleNextPrevAction}}
+  @itemPerPageOptions={{array 5 10 20}}
+  @defaultLimit={{this.limit}}
+  @offset={{this.offset}}
+  as |pgc|
+>
+  {{#if this.fetchTeamProjects.isRunning}}
+    <div local-class='emtpy-container'>
+      <AkStack @alignItems='center' @spacing='2'>
+        <AkLoader @size={{16}} />
+        <AkTypography>{{t 'loading'}}...</AkTypography>
+      </AkStack>
+    </div>
+  {{else if this.hasNoTeamProject}}
+    <div local-class='emtpy-container'>
       <AkSvg::OrgNamespaceEmpty local-class='empty-svg' />
 
       <AkTypography @variant='h6'>
         {{t 'noProject'}}
       </AkTypography>
-    {{else}}
-      <AkStack @alignItems='center' @spacing='2'>
-        <AkLoader @size={{16}} />
-        <AkTypography>{{t 'loading'}}...</AkTypography>
-      </AkStack>
-    {{/if}}
-  </div>
-{{/if}}
+    </div>
+  {{else}}
+    <AkTable @dense={{this.me.org.is_admin}} as |t|>
+      <t.head data-test-teamProjectList-thead @columns={{this.columns}} />
+      <t.body @rows={{pgc.currentPageResults}} as |b|>
+        <b.row data-test-teamProjectList-row as |r|>
+          <r.cell data-test-teamProjectList-cell>
+            {{#let (component r.columnValue.component) as |Component|}}
+              <Component
+                @project={{r.rowValue}}
+                @team={{@team}}
+                @organization={{@organization}}
+                @reloadTeamProjects={{this.handleReloadTeamProjects}}
+              />
+            {{/let}}
+          </r.cell>
+        </b.row>
+      </t.body>
+    </AkTable>
+
+    <AkPagination
+      @disableNext={{pgc.disableNext}}
+      @nextAction={{pgc.nextAction}}
+      @disablePrev={{pgc.disablePrev}}
+      @prevAction={{pgc.prevAction}}
+      @endItemIdx={{pgc.endItemIdx}}
+      @startItemIdx={{pgc.startItemIdx}}
+      @itemPerPageOptions={{pgc.itemPerPageOptions}}
+      @onItemPerPageChange={{pgc.onItemPerPageChange}}
+      @selectedOption={{pgc.selectedOption}}
+      @tableItemLabel={{t 'projects'}}
+      @perPageTranslation={{t 'recordPerPage'}}
+      @totalItems={{pgc.totalItems}}
+      @variant='compact'
+    />
+  {{/if}}
+</AkPaginationProvider>

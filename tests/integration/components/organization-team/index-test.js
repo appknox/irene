@@ -14,12 +14,13 @@ import { Response } from 'miragejs';
 
 import Service from '@ember/service';
 
-class OrganizationMeStub extends Service {
-  org = {
-    is_owner: true,
-    is_admin: true,
-    is_member: true,
-  };
+class RouterStub extends Service {
+  currentRouteName = '';
+  queryParams = null;
+
+  transitionTo({ queryParams }) {
+    this.queryParams = queryParams;
+  }
 }
 
 class NotificationsStub extends Service {
@@ -42,6 +43,16 @@ module('Integration | Component | organization-team', function (hooks) {
   hooks.beforeEach(async function () {
     this.server.createList('organization', 1);
 
+    const store = this.owner.lookup('service:store');
+    const organizationMe = store.createRecord('organization-me', {
+      is_owner: true,
+      is_admin: true,
+    });
+
+    class OrganizationMeStub extends Service {
+      org = organizationMe;
+    }
+
     const organizationTeams = this.server.createList('organization-team', 3);
 
     await this.owner.lookup('service:organization').load();
@@ -49,10 +60,12 @@ module('Integration | Component | organization-team', function (hooks) {
     this.setProperties({
       organization: this.owner.lookup('service:organization').selected,
       organizationTeams,
+      queryParams: { team_limit: 10, team_offset: 0, team_query: '' },
     });
 
     this.owner.register('service:me', OrganizationMeStub);
     this.owner.register('service:notifications', NotificationsStub);
+    this.owner.register('service:router', RouterStub);
   });
 
   test.each(
@@ -69,11 +82,13 @@ module('Integration | Component | organization-team', function (hooks) {
       }
 
       this.server.get('/organizations/:id/teams', (schema) => {
-        return schema.organizationTeams.all().models;
+        const results = schema.organizationTeams.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
       });
 
       await render(
-        hbs`<OrganizationTeam @organization={{this.organization}} />`
+        hbs`<OrganizationTeam @queryParams={{this.queryParams}} @organization={{this.organization}} />`
       );
 
       assert
@@ -112,10 +127,14 @@ module('Integration | Component | organization-team', function (hooks) {
     this.server.get('/organizations/:id/teams', (schema, req) => {
       this.set('query', req.queryParams.q);
 
-      return schema.organizationTeams.all().models;
+      const results = schema.organizationTeams.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
     });
 
-    await render(hbs`<OrganizationTeam @organization={{this.organization}} />`);
+    await render(
+      hbs`<OrganizationTeam @queryParams={{this.queryParams}} @organization={{this.organization}} />`
+    );
 
     assert.dom('[data-test-orgTeamSearch-input]').isNotDisabled().hasNoValue();
     assert.notOk(this.query);
@@ -134,7 +153,11 @@ module('Integration | Component | organization-team', function (hooks) {
       const server = this.server;
 
       this.server.get('/organizations/:id/teams', (schema) => {
-        return schema.organizationTeams.all().models;
+        const results = schema.organizationTeams
+          .all()
+          .models.sortBy('created_on');
+
+        return { count: results.length, next: null, previous: null, results };
       });
 
       this.server.post('/organizations/:id/teams', (schema, req) => {
@@ -147,7 +170,7 @@ module('Integration | Component | organization-team', function (hooks) {
       });
 
       await render(
-        hbs`<OrganizationTeam @organization={{this.organization}} />`
+        hbs`<OrganizationTeam @queryParams={{this.queryParams}} @organization={{this.organization}} />`
       );
 
       assert
