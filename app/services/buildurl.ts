@@ -1,32 +1,30 @@
-/* eslint-disable prettier/prettier */
 import Service from '@ember/service';
 import ENV from 'irene/config/environment';
 
 // https://github.com/ember-cli/ember-ajax/blob/c178c5e28a316a23cd1da5736c0e29621d838cb1/addon/-private/utils/url-helpers.ts#L55
 const completeUrlRegex = /^(http|https)/;
 
-export function isFullURL(url) {
+export function isFullURL(url: string) {
   return !!url.match(completeUrlRegex);
 }
 
-function startsWithSlash(string) {
-  return string.charAt(0) === '/';
+function startsWithSlash(value: string) {
+  return value.charAt(0) === '/';
 }
 
-function endsWithSlash(string) {
-  return string.charAt(string.length - 1) === '/';
+function endsWithSlash(value: string) {
+  return value.charAt(value.length - 1) === '/';
 }
 
-
-function removeLeadingSlash(string) {
-  return string.substring(1);
+function removeLeadingSlash(value: string) {
+  return value.substring(1);
 }
 
-function removeTrailingSlash(string) {
-  return string.slice(0, -1);
+function removeTrailingSlash(value: string) {
+  return value.slice(0, -1);
 }
 
-function stripSlashes(path) {
+function stripSlashes(path: string) {
   // make sure path starts with `/`
   if (startsWithSlash(path)) {
     path = removeLeadingSlash(path);
@@ -36,19 +34,25 @@ function stripSlashes(path) {
   if (endsWithSlash(path)) {
     path = removeTrailingSlash(path);
   }
+
   return path;
 }
 
+type BuildUrlOptions = {
+  host?: string;
+  namespace?: string;
+  headers?: { [x: string]: string };
+};
 
 export default class BuildURL extends Service {
-  host = ENV.host
+  host = ENV.host;
   namespace = ENV.namespace;
 
-  isFullURL(url) {
+  isFullURL(url: string) {
     return !!url.match(completeUrlRegex);
   }
 
-  build(url, options = {}) {
+  build(url: string, options: BuildUrlOptions = {}) {
     if (isFullURL(url)) {
       return url;
     }
@@ -56,12 +60,14 @@ export default class BuildURL extends Service {
     const urlParts = [];
 
     let host = options.host || this.host;
+
     if (host) {
       host = endsWithSlash(host) ? removeTrailingSlash(host) : host;
       urlParts.push(host);
     }
 
     let namespace = options.namespace || this.namespace;
+
     if (namespace) {
       // If host is given then we need to strip leading slash too( as it will be added through join)
       if (host) {
@@ -72,6 +78,7 @@ export default class BuildURL extends Service {
 
       // If the URL has already been constructed (presumably, by Ember Data), then we should just leave it alone
       const hasNamespaceRegex = new RegExp(`^(/)?${stripSlashes(namespace)}/`);
+
       if (!hasNamespaceRegex.test(url)) {
         urlParts.push(namespace);
       }
@@ -82,14 +89,16 @@ export default class BuildURL extends Service {
     if (startsWithSlash(url) && urlParts.length !== 0) {
       url = removeLeadingSlash(url);
     }
+
     urlParts.push(url);
+
     const finalurl = urlParts.join('/');
 
     if (isFullURL(finalurl)) {
       return finalurl;
     }
 
-    if(finalurl.length && !startsWithSlash(finalurl)) {
+    if (finalurl.length && !startsWithSlash(finalurl)) {
       return '/' + finalurl;
     }
 

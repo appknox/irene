@@ -1,9 +1,20 @@
 import { inject as service } from '@ember/service';
 import Service from '@ember/service';
 
+import NetworkService from './network';
+import LoggerService from './logger';
+
+type ServerData = {
+  websocket: string;
+  enterprise: string | boolean;
+};
+
 export default class ConfigurationService extends Service {
-  @service network;
-  @service logger;
+  @service declare network: NetworkService;
+  @service declare logger: LoggerService;
+
+  frontendPromise?: Promise<void>;
+  serverPromise?: Promise<void>;
 
   serverConfigEndpoint = '/v2/server_configuration';
   frontendConfigEndpoint = '/v2/frontend_configuration';
@@ -42,16 +53,18 @@ export default class ConfigurationService extends Service {
     rollbar_key: '',
   };
 
-  serverData = {
+  serverData: ServerData = {
     websocket: '',
     enterprise: '',
   };
 
-  async fetchConfig(url) {
+  async fetchConfig(url: string) {
     const res = await this.network.request(url);
+
     if (res.ok) {
       return await res.json();
     }
+
     throw new Error(`Error fetching ${url} configuration`);
   }
 
@@ -92,6 +105,7 @@ export default class ConfigurationService extends Service {
       this.frontendPromise = this.frontendConfigFetch();
       await this.frontendPromise;
     }
+
     return this.frontendData;
   }
 
@@ -100,6 +114,7 @@ export default class ConfigurationService extends Service {
       this.frontendPromise = this.frontendConfigFetch();
       await this.frontendPromise;
     }
+
     return this.themeData;
   }
 
@@ -108,6 +123,7 @@ export default class ConfigurationService extends Service {
       this.frontendPromise = this.frontendConfigFetch();
       await this.frontendPromise;
     }
+
     return this.imageData;
   }
 
@@ -116,12 +132,14 @@ export default class ConfigurationService extends Service {
       this.frontendPromise = this.frontendConfigFetch();
       await this.frontendPromise;
     }
+
     return this.integrationData;
   }
 
   async serverConfigFetch() {
     try {
       const data = await this.fetchConfig(this.serverConfigEndpoint);
+
       this.serverData.websocket ||= data.websocket;
       this.serverData.enterprise ||= data.enterprise == true;
     } catch (error) {
@@ -134,6 +152,7 @@ export default class ConfigurationService extends Service {
       this.serverPromise = this.serverConfigFetch();
       await this.serverPromise;
     }
+
     return this.serverData;
   }
 }
