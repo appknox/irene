@@ -4,11 +4,15 @@ import { task } from 'ember-concurrency';
 import { injectSupportWidget } from 'irene/utils/freshdesk';
 import { action } from '@ember/object';
 
+import ConfigurationService from './configuration';
+import LoggerService from './logger';
+import NetworkService from './network';
+
 export default class FreshdeskService extends Service {
-  @service('browser/window') window;
-  @service configuration;
-  @service logger;
-  @service network;
+  @service('browser/window') declare window: Window;
+  @service declare configuration: ConfigurationService;
+  @service declare logger: LoggerService;
+  @service declare network: NetworkService;
 
   @tracked widgetAuthToken = '';
   WIDGET_AUTH_ENDPOINT = '/api/v2/freshdesk/authenticate/';
@@ -72,7 +76,7 @@ export default class FreshdeskService extends Service {
   }
 
   @action
-  async authenticateSupportWidget(token) {
+  async authenticateSupportWidget(token: string) {
     if (!this.supportWidgetIsIntegrated) {
       return;
     }
@@ -97,14 +101,13 @@ export default class FreshdeskService extends Service {
     this.hideSupportWidget();
   }
 
-  @task(function* () {
+  getFreshWidgetToken = task(async () => {
     try {
-      const authRes = yield this.network.post(this.WIDGET_AUTH_ENDPOINT);
-      const widgetAuthData = yield authRes.json();
+      const authRes = await this.network.post(this.WIDGET_AUTH_ENDPOINT);
+      const widgetAuthData = await authRes.json();
       this.widgetAuthToken = widgetAuthData.token;
     } catch (error) {
       this.logger.error(error);
     }
-  })
-  getFreshWidgetToken;
+  });
 }

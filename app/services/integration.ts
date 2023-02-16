@@ -1,25 +1,32 @@
 import { inject as service } from '@ember/service';
 import Service from '@ember/service';
 import ENV from 'irene/config/environment';
+import UserModel from 'irene/models/user';
+
+import ConfigurationService from './configuration';
+import LoggerService from './logger';
+import FreshdeskService from './freshdesk';
 
 export default class IntegrationService extends Service {
   // https://github.com/ember-cli/ember-page-title/blob/a886af4d83c7a3a3c716372e8a322258a4f92991/addon/services/page-title-list.js#L27
   // in fastboot context "document" is instance of
   // ember-fastboot/simple-dom document
-  @service('-document') document;
-  @service configuration;
-  @service logger;
-  @service freshdesk;
+  @service('-document') declare document: Document;
+  @service declare configuration: ConfigurationService;
+  @service declare logger: LoggerService;
+  @service declare freshdesk: FreshdeskService;
 
-  currentUser = null;
+  currentUser: UserModel | null = null;
 
   get window() {
     return window;
   }
 
-  async configure(user) {
+  async configure(user: UserModel) {
     await this.configuration.getIntegrationConfig();
+
     this.currentUser = user;
+
     await this.configureCrisp();
 
     // Freshdesk integrations
@@ -55,7 +62,11 @@ export default class IntegrationService extends Service {
     const d = this.document;
     const s = d.createElement('script');
     s.src = 'https://client.crisp.chat/l.js';
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     s.async = 1;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     d.getElementsByTagName('head')[0].appendChild(s);
     window.$crisp.push(['safe', true]);
   }

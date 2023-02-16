@@ -193,9 +193,11 @@ export default class AnalysisModel extends Model {
   get showPcidss() {
     return this.file.get('profile')?.get('reportPreference')?.show_pcidss.value;
   }
+
   get showHipaa() {
     return this.file.get('profile')?.get('reportPreference')?.show_hipaa.value;
   }
+
   get showGdpr() {
     return this.file.get('profile')?.get('reportPreference')?.show_gdpr.value;
   }

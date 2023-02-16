@@ -1,11 +1,16 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
+
 // Inject freshdesk support script that enables widget in the application
-const injectSupportWidget = (widgetId) => {
+const injectSupportWidget = (widgetId: string) => {
   // Widget launch
   window.fwSettings = { widget_id: widgetId };
 
   !(function () {
     if ('function' != typeof window.FreshworksWidget) {
+      // eslint-disable-next-line no-var
       var n = function () {
+        // eslint-disable-next-line prefer-rest-params
         n.q.push(arguments);
       };
       (n.q = []), (window.FreshworksWidget = n);

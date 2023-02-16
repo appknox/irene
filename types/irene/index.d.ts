@@ -7,6 +7,13 @@ declare global {
   interface Array<T> extends Ember.ArrayPrototypeExtensions<T> {}
   // interface Function extends Ember.FunctionPrototypeExtensions {}
 
+  interface Window {
+    FreshworksWidget: (...args: unknown[]) => void;
+    $crisp: unknown[];
+    CRISP_WEBSITE_ID: string;
+    fwSettings: { widget_id: string };
+  }
+
   interface NotificationOption {
     message: string;
     type?: 'info' | 'error' | 'success' | 'warning';
