@@ -58,6 +58,10 @@
   color: var(--ak-link-color-info);
 }
 
+.ak-link-color-inherit {
+  color: inherit;
+}
+
 a:hover {
   &.ak-link-color-primary {
     color: var(--ak-link-color-primary);
