@@ -8,7 +8,7 @@ import OrganizationMeModel from 'irene/models/organization-me';
 export default class MeService extends Service {
   @service declare store: Store;
 
-  @tracked organization_me?: OrganizationMeModel;
+  @tracked organizationMe?: OrganizationMeModel;
 
   constructor(properties?: object) {
     super(properties);
@@ -17,7 +17,7 @@ export default class MeService extends Service {
   }
 
   async fetchOrganizationMe() {
-    this.organization_me = await this.queryOrganizationMe;
+    this.organizationMe = await this.queryOrganizationMe;
   }
 
   get queryOrganizationMe() {
@@ -25,13 +25,19 @@ export default class MeService extends Service {
   }
 
   get org() {
-    return this.organization_me;
+    return this.organizationMe;
   }
 
   async getMembership() {
     const org = await this.queryOrganizationMe;
-    const user_id = org.id;
+    const userId = org.id;
 
-    return this.store.findRecord('organization-member', user_id);
+    return this.store.findRecord('organization-member', userId);
+  }
+
+  async user() {
+    const org = await this.queryOrganizationMe;
+    const userId = org.id;
+    return this.store.findRecord('user', userId);
   }
 }
