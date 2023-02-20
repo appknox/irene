@@ -387,6 +387,12 @@ body {
   --organization-details-font-weight-bold: var(--font-weight-bold);
 
   //variables for notifications
+  --notification-bell-icon-dot-background-color: var(--primary);
+  --notification-bell-icon-dot-border-color: var(--black-700);
+  &.theme-light {
+    --notification-bell-icon-dot-border-color: #f3f3f3; /* this is .top-nav background color, migrate to CSS var on navbar refactor */
+  }
+
   --notification-unread-count-color-primary: var(--primary-main);
   --notification-unread-count-background-color: var(--primary-main-10);
   --notification-divider-border-color: var(--common-black);

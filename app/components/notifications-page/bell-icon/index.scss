@@ -19,13 +19,14 @@
 }
 
 .nf-unread-dot {
-  background-color: var(--primary);
-  height: 0.5em;
-  width: 0.5em;
+  background-color: var(--notification-bell-icon-dot-background-color);
+  border: 2px solid var(--notification-bell-icon-dot-border-color);
+  height: 0.9em;
+  width: 0.9em;
   border-radius: 50%;
   position: absolute;
-  top: 0;
-  right: 0;
+  top: -0.3em;
+  right: -0.1em;
 }
 
 .icon-container {
