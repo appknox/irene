@@ -610,6 +610,11 @@
         "approved": "{moderaterName} approved this namespace",
         "rejected": "This namespace was rejected"
       },
+      "nf-nsreqstd2": {
+        "primary": "{current_requester_username} has <strong>requested for an unapproved {platform_display} namespace {namespace_value}</strong> (initially requested by {initial_requester_username} on {namespace_created_on}).",
+        "approved": "{moderaterName} approved this namespace",
+        "rejected": "This namespace was rejected"
+      },
       "nf-sastcmpltd1": "<strong>Static scan completed</strong> for {platform_display} app <strong>{file_name} ({package_name})</strong>.",
       "nf-upldfailnprjdeny1": "You <strong>don't have permission</strong> to upload to {platform_display} project {package_name}",
       "nf-upldfailnprjdeny2": {

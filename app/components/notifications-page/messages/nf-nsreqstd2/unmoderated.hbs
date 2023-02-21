@@ -1,0 +1,40 @@
+<div>
+  <div data-test-nf-nsreqstd2-primary-message>
+    {{t
+      'notificationModule.messages.nf-nsreqstd2.primary'
+      htmlSafe=true
+      current_requester_username=@context.current_requester_username
+      platform_display=@context.platform_display
+      namespace_value=@context.namespace_value
+      initial_requester_username=@context.initial_requester_username
+      namespace_created_on=(format-date
+        @context.namespace_created_on day='numeric' month='long' year='numeric'
+      )
+    }}
+  </div>
+  <div class='pt-1'>
+    <div local-class='state-actionable'>
+      <AkButton
+        data-test-nf-nsreqstd2-approve-button
+        @color='primary'
+        {{on 'click' @onApprove}}
+      >{{t 'approve'}}</AkButton>
+      <AkButton
+        data-test-nf-nsreqstd2-reject-button
+        @color='neutral'
+        @variant='outlined'
+        {{on 'click' @onReject}}
+      >{{t 'reject'}}</AkButton>
+    </div>
+    <div class='pt-1' data-test-nf-nsreqstd2-link>
+      <AkLink
+        @color='primary'
+        @route='authenticated.organization.namespaces'
+        @underline='always'
+        @title='{{t "notificationModule.viewNamespaces"}}'
+      >
+        {{t 'notificationModule.viewNamespaces'}}
+      </AkLink>
+    </div>
+  </div>
+</div>

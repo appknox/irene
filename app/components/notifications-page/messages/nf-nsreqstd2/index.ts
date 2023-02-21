@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
@@ -7,6 +6,8 @@ import { task } from 'ember-concurrency';
 import MeService from 'irene/services/me';
 import OrganizationNamespaceModel from 'irene/models/organization-namespace';
 import { NfNsreqstd2Context } from './context';
+import UserModel from 'irene/models/user';
+import OrganizationUserModel from 'irene/models/organization-user';
 
 interface NfNsreqstd2ComponentArgs {
   context: NfNsreqstd2Context;
@@ -17,34 +18,48 @@ export default class NfNsreqstd2Component extends Component<NfNsreqstd2Component
   @service declare me: MeService;
   @service declare notification: NotificationService;
 
-  @tracked namespace: OrganizationNamespaceModel | null = null;
-  @tracked namespaceIsRejected = false;
+  @tracked namespace?: OrganizationNamespaceModel | null;
+  @tracked currentUser?: UserModel;
+  @tracked approver?: OrganizationUserModel;
 
-  @tracked meUsername = '';
-  @tracked moderatorUsername = '';
+  get context() {
+    return this.args.context;
+  }
 
-  fetchNamespace = task(async () => {
+  fetch = task({ drop: true }, async () => {
+    const [namespace, user] = await Promise.all([
+      await this.fetchNamespace.perform(),
+      await this.me.user(),
+    ]);
+    const approver = await namespace?.approvedBy;
+    this.approver = approver;
+    this.currentUser = user;
+  });
+
+  fetchNamespace = task({ drop: true }, async () => {
+    const namespace_id = this.context.namespace_id;
     try {
       this.namespace = await this.store.findRecord(
         'organization-namespace',
-        this.args.context.namespace_id
+        namespace_id
       );
-    } catch (err: any) {
-      this.namespaceIsRejected = true;
+    } catch (err: unknown) {
       this.namespace = null;
     }
-  });
-
-  fetchUsernames = task(async () => {
-    this.meUsername = (await (await this.me.getMembership()).member).username;
-    this.moderatorUsername = (await this.namespace?.approvedBy)?.username || '';
+    return this.namespace;
   });
 
   get namespaceModeratorDisplay(): string {
-    if (this.meUsername == this.moderatorUsername) {
+    const currentUsername = this.currentUser?.username;
+    const approverUsername = this.approver?.username || '';
+    if (!currentUsername) {
+      return approverUsername;
+    }
+
+    if (currentUsername == approverUsername) {
       return 'You';
     }
-    return this.moderatorUsername;
+    return approverUsername;
   }
 
   approveNamespace = task(async () => {
@@ -54,7 +69,7 @@ export default class NfNsreqstd2Component extends Component<NfNsreqstd2Component
     }
     ns.isApproved = true;
     await ns.save();
-    this.fetchUsernames.perform();
+    await this.fetch.perform();
   });
 
   rejectNamespace = task(async () => {
@@ -64,6 +79,31 @@ export default class NfNsreqstd2Component extends Component<NfNsreqstd2Component
     }
     ns.deleteRecord();
     await ns.save();
-    this.fetchNamespace.perform();
+    await this.fetch.perform();
   });
+
+  get isApproved() {
+    if (!this.namespace) {
+      return false;
+    }
+    return this.namespace.isApproved;
+  }
+
+  get isRejected() {
+    if (this.namespace == null) {
+      return true;
+    }
+    return false;
+  }
+
+  get isUnModerated() {
+    if (!this.namespace) {
+      return false;
+    }
+    return !!this.namespace.isApproved;
+  }
+
+  get isLoading() {
+    return this.fetchNamespace.isRunning;
+  }
 }
