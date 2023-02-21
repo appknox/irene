@@ -1,0 +1,23 @@
+<div>
+  <div data-test-nf-nsreqstd1-primary-message>
+    {{t
+      'notificationModule.messages.nf-nsreqstd1.primary'
+      htmlSafe=true
+      requester_username=@context.requester_username
+      platform_display=@context.platform_display
+      namespace_value=@context.namespace_value
+    }}
+  </div>
+  <div class='pt-1'>
+    <div local-class='state-moderated'>
+      <AkIcon
+        data-test-nf-nsreqstd1-rejected-icon
+        @iconName='cancel'
+        @color='error'
+      />
+      <div data-test-nf-nsreqstd1-rejected-message>{{t
+          'notificationModule.messages.nf-nsreqstd1.rejected'
+        }}</div>
+    </div>
+  </div>
+</div>

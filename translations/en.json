@@ -605,6 +605,11 @@
       "nf-nsautoapprvd2": "{platform_display} <strong>namespace {namespace_value}</strong> requested by {requester_username} was <strong>auto approved</strong>.",
       "nf-nsrejctd1": "Your <strong>namespace request</strong> for {platform_display} app <strong>{namespace_value}</strong> created on {namespace_created_on} was <strong>not approved</strong>.",
       "nf-nsrejctd2": "{platform_display} <strong>namespace {namespace_value}</strong> requested by {requester_username} was <strong>rejected</strong> by {moderator_username}.",
+      "nf-nsreqstd1": {
+        "primary": "{requester_username} has <strong>requested for {platform_display} namespace {namespace_value}</strong>.",
+        "approved": "{moderaterName} approved this namespace",
+        "rejected": "This namespace was rejected"
+      },
       "nf-sastcmpltd1": "<strong>Static scan completed</strong> for {platform_display} app <strong>{file_name} ({package_name})</strong>.",
       "nf-upldfailnprjdeny1": "You <strong>don't have permission</strong> to upload to {platform_display} project {package_name}",
       "nf-upldfailnprjdeny2": {
