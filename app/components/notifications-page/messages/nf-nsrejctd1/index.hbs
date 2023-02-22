@@ -4,6 +4,8 @@
     htmlSafe=true
     platform_display=@context.platform_display
     namespace_value=@context.namespace_value
-    namespace_created_on=@context.namespace_created_on
+    namespace_created_on=(format-date
+      @context.namespace_created_on day='numeric' month='long' year='numeric'
+    )
   }}
 </div>

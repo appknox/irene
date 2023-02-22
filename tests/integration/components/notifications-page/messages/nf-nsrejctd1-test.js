@@ -38,7 +38,10 @@ module(
         t('notificationModule.messages.nf-nsrejctd1', {
           platform_display: 'android',
           namespace_value: 'com.mfva.test',
-          namespace_created_on: this.context.namespace_created_on,
+          namespace_created_on: this.intl.formatDate(
+            this.context.namespace_created_on,
+            { month: 'long', year: 'numeric', day: 'numeric' }
+          ),
         })
       );
     });
