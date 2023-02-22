@@ -1,4 +1,5 @@
 import config from 'irene/config/environment';
+import { Response } from 'miragejs';
 
 import {
   createServer,
@@ -165,24 +166,121 @@ function routes() {
     return schema.organizationInvitations.all().models;
   });
 
-  this.get('/organizations/:id/namespaces', (schema) => {
-    return schema.namespaces.all().models;
+  this.get('/organizations/:id/namespaces', function (schema, request) {
+    let data = schema.organizationNamespaces.all();
+    let limit = data.length;
+    let offset = 0;
+    if (request.queryParams.limit) {
+      limit = request.queryParams.limit;
+    }
+    if (request.queryParams.offset) {
+      offset = request.queryParams.offset;
+    }
+
+    const retdata = data.slice(offset, offset + limit);
+    return {
+      count: data.length,
+      next: null,
+      previous: null,
+      results: this.serialize(retdata).organizationNamespaces,
+    };
   });
 
-  this.put('/organizations/:id/namespaces/:namespaceId', () => {
-    return {};
-  });
+  this.get(
+    '/organizations/:id/namespaces/:namespaceId',
+    function (schema, request) {
+      const namespace = schema.organizationNamespaces.find(
+        request.params.namespaceId
+      );
+      if (!namespace) {
+        return new Response(
+          404,
+          {},
+          {
+            detail: 'Not found.',
+          }
+        );
+      }
+      return this.serialize(namespace).organizationNamespace;
+    }
+  );
 
-  this.delete('/organizations/:id/namespaces/:namespaceId', () => {
-    return {};
-  });
+  this.put(
+    '/organizations/:id/namespaces/:namespaceId',
+    function (schema, request) {
+      const namespace = schema.organizationNamespaces.find(
+        request.params.namespaceId
+      );
+      if (!namespace) {
+        return new Response(
+          404,
+          {},
+          {
+            detail: 'Not found.',
+          }
+        );
+      }
+      const currentUser = schema.currentUsers.first();
+      let orgUser = schema.organizationUsers.find(currentUser.id);
+      if (!orgUser) {
+        orgUser = this.server.create('organization-user', {
+          id: currentUser.id,
+          username: 'appknox_requester',
+          email: 'appknox_requester@test.com',
+          isActive: true,
+        });
+      }
+      const body = JSON.parse(request.requestBody);
+      let updateObject = { isApproved: body.is_approved };
+
+      if (updateObject.isApproved) {
+        updateObject = {
+          ...updateObject,
+          approvedBy: orgUser,
+          approvedOn: new Date(),
+        };
+      }
+      namespace.update(updateObject);
+      return this.serialize(namespace).organizationNamespace;
+    }
+  );
+
+  this.delete(
+    '/organizations/:id/namespaces/:namespaceId',
+    function (schema, request) {
+      const namespace = schema.organizationNamespaces.find(
+        request.params.namespaceId
+      );
+      if (!namespace) {
+        return new Response(
+          404,
+          {},
+          {
+            detail: 'Not found.',
+          }
+        );
+      }
+      namespace.destroy();
+      return new Response(204, {}, '');
+    }
+  );
 
   this.get('/organizations/:id/users', (schema) => {
     return schema.organizationUsers.all().models;
   });
 
-  this.get('/organizations/:id/users/:userId', () => {
-    return {};
+  this.get('/organizations/:id/users/:userId', function (schema, request) {
+    const orgUser = schema.organizationUsers.find(request.params.userId);
+    if (!orgUser) {
+      return new Response(
+        404,
+        {},
+        {
+          detail: 'Not found.',
+        }
+      );
+    }
+    return this.serialize(orgUser).organizationUser;
   });
 
   this.put('/organizations/:id/users/:userId', () => {
@@ -533,8 +631,12 @@ function routes() {
     return {};
   });
 
-  this.get('/organizations/:id/me', (schema, req) => {
-    return schema.organizationMes.find(req.params.id);
+  this.get('/organizations/:id/me', function (schema, req) {
+    const currentUser = schema.currentUsers.findBy({
+      organizationId: req.params.id,
+    });
+    const me = schema.organizationMes.find(currentUser.id);
+    return this.serialize(me).organizationMe;
   });
 
   this.put('/v2/am_configurations/:id', () => {

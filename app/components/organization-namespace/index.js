@@ -23,7 +23,6 @@ export default class OrganizationNamespaceComponent extends Component {
 
   constructor() {
     super(...arguments);
-
     const { namespaceLimit, namespaceOffset } = this.args.queryParams;
 
     this.fetchNamespace.perform(namespaceLimit, namespaceOffset);
