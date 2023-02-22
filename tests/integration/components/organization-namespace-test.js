@@ -6,7 +6,6 @@ import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import dayjs from 'dayjs';
 import { Response } from 'miragejs';
-
 import Service from '@ember/service';
 
 class OrganizationMeStub extends Service {
@@ -35,16 +34,33 @@ module('Integration | Component | organization-namespace', function (hooks) {
   setupIntl(hooks);
 
   hooks.beforeEach(async function () {
-    this.server.createList('organization', 1);
+    const organization = this.server.create('organization', {});
+    const currentUser = this.server.create('current-user', {
+      organization: organization,
+    });
 
-    const namespaces = this.server.createList('namespace', 10);
+    this.server.create('organization-me', {
+      id: currentUser.id,
+    });
+    const user = this.server.create('user', {
+      id: currentUser.id,
+    });
+
+    this.server.create('organization-user', {
+      id: currentUser.id,
+      username: user.username,
+      email: user.email,
+      isActive: true,
+    });
+
+    const namespaces = this.server.createList('organization-namespace', 10);
     const users = this.server.createList('organization-user', 2);
 
     namespaces.forEach((namespace, index) => {
       namespace.update({
-        requested_by: users[0].id,
-        approved_by: index === 5 ? null : users[1].id,
-        is_approved: index !== 5,
+        requestedBy: users[0],
+        approvedBy: index === 5 ? null : users[1],
+        isApproved: index !== 5,
         platform: [2, 3, 7].includes(index) ? 1 : 0,
       });
     });
@@ -62,18 +78,6 @@ module('Integration | Component | organization-namespace', function (hooks) {
   });
 
   test('it renders organization namespace', async function (assert) {
-    this.server.get('/organizations/:id/namespaces', (schema) => {
-      const results = schema.namespaces.all().models;
-
-      return { count: results.length, next: null, previous: null, results };
-    });
-
-    this.server.get('/organizations/:id/users/:userId', (schema, req) => {
-      const user = schema.organizationUsers.find(req.params.userId);
-
-      return user?.toJSON();
-    });
-
     await render(hbs`
       <OrganizationNamespace @queryParams={{this.queryParams}} />
     `);
@@ -97,11 +101,11 @@ module('Integration | Component | organization-namespace', function (hooks) {
     );
 
     const approvedUser = this.users.find(
-      (user) => user.id === this.namespaces[0].approved_by
+      (user) => user.id === this.namespaces[0].approvedBy.id
     );
 
     const requestedUser = this.users.find(
-      (user) => user.id === this.namespaces[0].requested_by
+      (user) => user.id === this.namespaces[0].requestedBy.id
     );
 
     assert.dom(contentRow[0]).hasText(this.namespaces[0].value);
@@ -109,7 +113,7 @@ module('Integration | Component | organization-namespace', function (hooks) {
     assert
       .dom(contentRow[1])
       .hasText(
-        `${dayjs(this.namespaces[0].created_on).fromNow()} t:by:() ${
+        `${dayjs(this.namespaces[0].createdOn).fromNow()} t:by:() ${
           requestedUser.username
         }`
       );
@@ -117,7 +121,7 @@ module('Integration | Component | organization-namespace', function (hooks) {
     assert
       .dom(contentRow[2])
       .hasText(
-        `${dayjs(this.namespaces[0].approved_on).fromNow()} t:by:() ${
+        `${dayjs(this.namespaces[0].approvedOn).fromNow()} t:by:() ${
           approvedUser.username
         }`
       );
@@ -127,18 +131,6 @@ module('Integration | Component | organization-namespace', function (hooks) {
     'it renders organization namespace for admin/member',
     ['admin', 'member'],
     async function (assert, role) {
-      this.server.get('/organizations/:id/namespaces', (schema) => {
-        const results = schema.namespaces.all().models;
-
-        return { count: results.length, next: null, previous: null, results };
-      });
-
-      this.server.get('/organizations/:id/users/:userId', (schema, req) => {
-        const user = schema.organizationUsers.find(req.params.userId);
-
-        return user?.toJSON();
-      });
-
       const me = this.owner.lookup('service:me');
       me.org.is_owner = false;
 
@@ -158,7 +150,7 @@ module('Integration | Component | organization-namespace', function (hooks) {
       );
 
       const requestedUser = this.users.find(
-        (user) => user.id === this.namespaces[5].requested_by
+        (user) => user.id === this.namespaces[5].requestedBy.id
       );
 
       assert.dom(contentRow[0]).hasText(this.namespaces[5].value);
@@ -166,7 +158,7 @@ module('Integration | Component | organization-namespace', function (hooks) {
       assert
         .dom(contentRow[1])
         .hasText(
-          `${dayjs(this.namespaces[5].created_on).fromNow()} t:by:() ${
+          `${dayjs(this.namespaces[5].createdOn).fromNow()} t:by:() ${
             requestedUser.username
           }`
         );
@@ -178,24 +170,10 @@ module('Integration | Component | organization-namespace', function (hooks) {
   );
 
   test('test approve namespace success', async function (assert) {
-    this.server.get('/organizations/:id/namespaces', (schema) => {
-      const results = schema.namespaces.all().models;
-
-      return { count: results.length, next: null, previous: null, results };
-    });
-
-    this.server.get('/organizations/:id/users/:userId', (schema, req) => {
-      const user = schema.organizationUsers.find(req.params.userId);
-
-      return user?.toJSON();
-    });
-
     await render(hbs`
       <OrganizationNamespace @queryParams={{this.queryParams}} />
     `);
-
     const rows = findAll('[data-test-namespace-row]');
-
     // 6th row has not approved namespace and -1 for 0 index
     const contentRow = rows[5].querySelectorAll('[data-test-namespace-cell]');
 
@@ -216,24 +194,12 @@ module('Integration | Component | organization-namespace', function (hooks) {
 
     assert
       .dom(contentRow[2])
-      .hasText(dayjs(this.namespaces[5].approved_on).fromNow());
+      .containsText(dayjs(this.namespaces[5].approvedOn).fromNow());
 
     assert.strictEqual(notify.successMsg, 't:namespaceApproved:()');
   });
 
   test('test approve namespace failure', async function (assert) {
-    this.server.get('/organizations/:id/namespaces', (schema) => {
-      const results = schema.namespaces.all().models;
-
-      return { count: results.length, next: null, previous: null, results };
-    });
-
-    this.server.get('/organizations/:id/users/:userId', (schema, req) => {
-      const user = schema.organizationUsers.find(req.params.userId);
-
-      return user?.toJSON();
-    });
-
     this.server.put('/organizations/:id/namespaces/:namespaceId', () => {
       return new Response(500);
     });
@@ -268,18 +234,6 @@ module('Integration | Component | organization-namespace', function (hooks) {
   });
 
   test('test reject namespace success', async function (assert) {
-    this.server.get('/organizations/:id/namespaces', (schema) => {
-      const results = schema.namespaces.all().models;
-
-      return { count: results.length, next: null, previous: null, results };
-    });
-
-    this.server.get('/organizations/:id/users/:userId', (schema, req) => {
-      const user = schema.organizationUsers.find(req.params.userId);
-
-      return user?.toJSON();
-    });
-
     await render(hbs`
       <OrganizationNamespace @queryParams={{this.queryParams}} />
     `);
@@ -340,18 +294,6 @@ module('Integration | Component | organization-namespace', function (hooks) {
   });
 
   test('test reject namespace failure', async function (assert) {
-    this.server.get('/organizations/:id/namespaces', (schema) => {
-      const results = schema.namespaces.all().models;
-
-      return { count: results.length, next: null, previous: null, results };
-    });
-
-    this.server.get('/organizations/:id/users/:userId', (schema, req) => {
-      const user = schema.organizationUsers.find(req.params.userId);
-
-      return user?.toJSON();
-    });
-
     this.server.delete('/organizations/:id/namespaces/:namespaceId', () => {
       return new Response(500);
     });

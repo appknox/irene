@@ -236,21 +236,21 @@ module('Integration | Component | file-details', function (hooks) {
 
       const expectedRenderedAnalysis =
         this.analyses[this.analyses.length - i - 1];
+
       const expectedRiskStatus = analysisRiskStatus([
         expectedRenderedAnalysis.computedRisk,
         expectedRenderedAnalysis.status,
         expectedRenderedAnalysis.isOverriddenRisk,
-      ]).label.toLowerCase();
+      ]).label;
 
-      assert.ok(
-        renderedAnalysisDetailsElement
-          .querySelector('[data-test-analysis-risk-tag]')
-          ?.innerText.toLowerCase()
-          .includes(expectedRiskStatus),
-        `Rendered Analysis Element #${
-          i + 1
-        } has risk status of ${expectedRiskStatus}`
-      );
+      assert
+        .dom('[data-test-analysis-risk-tag]', renderedAnalysisDetailsElement)
+        .hasText(
+          expectedRiskStatus,
+          `Rendered Analysis Element #${
+            i + 1
+          } has risk status of ${expectedRiskStatus}`
+        );
     }
   });
 
@@ -312,17 +312,16 @@ module('Integration | Component | file-details', function (hooks) {
         expectedRenderedAnalysis.computedRisk,
         expectedRenderedAnalysis.status,
         expectedRenderedAnalysis.isOverriddenRisk,
-      ]).label.toLowerCase();
+      ]).label;
 
-      assert.ok(
-        renderedAnalysisDetailsElement
-          .querySelector('[data-test-analysis-risk-tag]')
-          ?.innerText.toLowerCase()
-          .includes(expectedRiskStatus),
-        `Rendered Analysis Element #${
-          i + 1
-        } has risk status of ${expectedRiskStatus}`
-      );
+      assert
+        .dom('[data-test-analysis-risk-tag]', renderedAnalysisDetailsElement)
+        .hasText(
+          expectedRiskStatus,
+          `Rendered Analysis Element #${
+            i + 1
+          } has risk status of ${expectedRiskStatus}`
+        );
     }
 
     // Change the computed risk of the third analysis
@@ -332,7 +331,7 @@ module('Integration | Component | file-details', function (hooks) {
       thirdAnalysesItem.computedRisk,
       thirdAnalysesItem.status,
       thirdAnalysesItem.isOverriddenRisk,
-    ]).label.toLowerCase();
+    ]).label;
 
     await render(hbs`<FileDetails @file={{this.file}} />`);
 
@@ -342,13 +341,11 @@ module('Integration | Component | file-details', function (hooks) {
 
     // Check if risk status of first element
     // corresponds to the risk status of third item in the analysis list
-
-    assert.ok(
-      updatedAnalysisDetailsElements[0]
-        .querySelector('[data-test-analysis-risk-tag]')
-        ?.innerText.toLowerCase()
-        .includes(thirdItemRistStatus),
-      `Rendered Analysis Element #${1} has changed to the third risk that has a status of ${thirdItemRistStatus}`
-    );
+    assert
+      .dom('[data-test-analysis-risk-tag]', updatedAnalysisDetailsElements[0])
+      .hasText(
+        thirdItemRistStatus,
+        `Rendered Analysis Element #${1} has changed to the third risk that has a status of ${thirdItemRistStatus}`
+      );
   });
 });

@@ -33,31 +33,21 @@ module('Integration | Component | ak-pagination-provider', function (hooks) {
         @results={{this.tableData}}
         as |context|
       >
-        {{#each context.currentPageResults as |record idx|}}
+        {{#each context.currentPageResults as |record|}}
           <span data-test-record-container>{{record}}</span>
         {{/each}}
       </AkPaginationProvider>
     `);
 
+    assert.dom('[data-test-record-container]').exists({ count: 2 });
     const currentPageRecordElements = this.element.querySelectorAll(
       '[data-test-record-container]'
-    );
-
-    assert.strictEqual(
-      currentPageRecordElements.length,
-      2,
-      'Returns right number of records'
     );
 
     for (let i = 0; i < currentPageRecordElements.length; i++) {
       const recordElement = currentPageRecordElements[i];
       const tableDataRecord = this.tableData[i];
-
-      assert.strictEqual(
-        recordElement.innerText,
-        tableDataRecord,
-        `Table record at index ${i} matches mapped record element text at index ${i}`
-      );
+      assert.dom(recordElement).hasText(tableDataRecord);
     }
   });
 
@@ -218,14 +208,12 @@ module('Integration | Component | ak-pagination-provider', function (hooks) {
         as |context|
       >
         <button
-          data-test-previous-button
-          {{on "click" context.nextAction}}
+          data-test-previous-button type="button" {{on "click" context.nextAction}}
         >
           Prev
         </button>
         <button
-          data-test-next-button
-          {{on "click" context.prevAction}}
+          data-test-next-button type="button" {{on "click" context.prevAction}}
         >
           Next
         </button>
@@ -264,6 +252,7 @@ module('Integration | Component | ak-pagination-provider', function (hooks) {
         as |context|
       >
         <button
+          type="button"
           disabled={{context.disableNext}}
           {{on "click" context.nextAction}}
           data-test-next-button
@@ -286,6 +275,7 @@ module('Integration | Component | ak-pagination-provider', function (hooks) {
       as |context|
     >
       <button
+        type="button"
         disabled={{context.disableNext}}
         {{on "click" context.nextAction}}
         data-test-next-button
@@ -324,6 +314,7 @@ module('Integration | Component | ak-pagination-provider', function (hooks) {
         as |context|
       >
         <button
+          type="button"
           disabled={{context.disablePrev}}
           {{on "click" context.prevAction}}
           data-test-previous-button
@@ -346,6 +337,7 @@ module('Integration | Component | ak-pagination-provider', function (hooks) {
       as |context|
     >
       <button
+        type="button"
         disabled={{context.disablePrev}}
         {{on "click" context.nextAction}}
         data-test-previous-button

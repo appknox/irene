@@ -27,6 +27,15 @@ module('Integration | Component | organization-email-domain', function (hooks) {
 
   hooks.beforeEach(async function () {
     await this.server.createList('organization', 2);
+    const organization = this.server.schema.organizations.first();
+    const currentUser = this.server.create('current-user', {
+      organization: organization,
+    });
+
+    this.server.create('organization-me', {
+      id: currentUser.id,
+    });
+
     await this.owner.lookup('service:organization').load();
 
     await this.owner.lookup('service:me');

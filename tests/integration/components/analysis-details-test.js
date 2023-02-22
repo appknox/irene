@@ -8,19 +8,20 @@ import { setupRenderingTest } from 'ember-qunit';
 import ENUMS from 'irene/enums';
 import { module, test } from 'qunit';
 
-class OrganizationStub extends Service {
-  selected = {
-    id: 1,
-  };
-}
-
 module('Integration | Component | analysis details', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
   setupIntl(hooks);
 
   hooks.beforeEach(async function () {
-    this.owner.register('service:organization', OrganizationStub);
+    const organization = this.server.create('organization', {});
+    const currentUser = this.server.create('current-user', {
+      organization: organization,
+    });
+
+    this.server.create('organization-me', {
+      id: currentUser.id,
+    });
 
     this.vulnerability = this.server.create('vulnerability');
     this.project = this.server.create('project', {
@@ -33,6 +34,8 @@ module('Integration | Component | analysis details', function (hooks) {
       project: this.project,
       profile: this.profile,
     });
+    const orgService = this.owner.lookup('service:organization');
+    await orgService.load();
   });
 
   test('it expands details on header click', async function (assert) {
