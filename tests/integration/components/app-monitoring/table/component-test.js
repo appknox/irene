@@ -48,9 +48,9 @@ module('Integration | Component | app-monitoring/table', function (hooks) {
 
     await render(hbs`<AppMonitoring::Table @settings={{this.settings}}  />`);
     assert.dom(`[data-test-am-table-container]`).exists();
-    assert.dom(`[data-test-table-header-container]`).exists();
+    assert.dom(`[data-test-am-table-header]`).exists();
     assert.strictEqual(
-      this.element.querySelectorAll(`[data-test-table-header]`).length,
+      this.element.querySelectorAll(`[data-test-am-table-header] tr th`).length,
       5,
       'Should have five (5) table headers'
     );
@@ -87,9 +87,9 @@ module('Integration | Component | app-monitoring/table', function (hooks) {
 
     await render(hbs`<AppMonitoring::Table @settings={{this.settings}}  />`);
     assert.dom(`[data-test-am-table-container]`).exists();
-    assert.dom(`[data-test-table-header-container]`).exists();
+    assert.dom(`[data-test-am-table-header]`).exists();
     assert.strictEqual(
-      this.element.querySelectorAll(`[data-test-table-header]`).length,
+      this.element.querySelectorAll(`[data-test-am-table-header] tr th`).length,
       5,
       'Should have five (5) table headers'
     );
@@ -103,7 +103,7 @@ module('Integration | Component | app-monitoring/table', function (hooks) {
     );
   });
 
-  test('it should show only table headers and no-project message when no org projects exist', async function (assert) {
+  test('it should show empty message when no org projects exist', async function (assert) {
     class OrganizationStub extends Service {
       selected = {
         id: 1,
@@ -119,9 +119,9 @@ module('Integration | Component | app-monitoring/table', function (hooks) {
 
     await render(hbs`<AppMonitoring::Table @settings={{this.settings}}  />`);
     assert.dom(`[data-test-am-table-container]`).exists();
-    assert.dom(`[data-test-table-header-container]`).exists();
+    assert.dom(`[data-test-am-table-header]`).exists();
     assert.strictEqual(
-      this.element.querySelectorAll(`[data-test-table-header]`).length,
+      this.element.querySelectorAll(`[data-test-am-table-header] tr th`).length,
       5,
       'Should have five (5) table headers'
     );

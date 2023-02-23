@@ -407,4 +407,19 @@ body {
   --notification-message-color-text-primary: var(--text-primary);
   --notification-dropdown-border-color: var(--neutral-grey-100);
   --notification-dropdown-arrow-border-color: var(--neutral-grey-200);
+
+  //variables for appmonitoring
+  --appmonitoring-font-weight-medium: var(--font-weight-medium);
+  --appmonitoring-color-black: var(--common-black);
+
+  //variables for appmonitoring/settings
+  --appmonitoring-settings-block-border-color: var(--neutral-white-100);
+  --appmonitoring-settings-block-description: var(--text-secondary-color);
+  --appmonitoring-settings-border-radius: var(--border-radius);
+
+  //variables for appmonitoring/table/platform-column
+  --appmonitoring-table-platform-android-color: var(--android);
+
+  //variables for appmonitoring/table/status-column
+  --appmonitoring-table-status-last-sync-color: var(--neutral-grey-600);
 }

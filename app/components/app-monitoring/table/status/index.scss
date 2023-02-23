@@ -1,25 +1,10 @@
-.status {
-  width: fit-content;
-  padding: 0.25em 0.375em;
-  text-transform: uppercase;
-  border-radius: 2px;
-  font-weight: 600;
-  font-size: 0.8125rem;
-  line-height: 1.125rem;
-  letter-spacing: -0.4px;
+.last-sync-date {
+  letter-spacing: -0.0286em;
+  margin-top: 0.4375em;
+  color: var(--appmonitoring-table-status-last-sync-color);
+  font-size: 0.928em;
 
-  &.alert {
-    color: var(--am-status-alert);
-    background: var(--am-status-alert-bg);
-  }
-
-  &.warning {
-    background: var(--am-status-warning);
-    color: var(--am-status-warning-bg);
-  }
-
-  &.success {
-    color: var(--am-status-success);
-    background: var(--am-status-success-bg);
+  span i {
+    font-size: 1em;
   }
 }

@@ -1,7 +1,45 @@
-<span
-  local-class='status {{@condition}}'
-  data-test-am-status={{@condition}}
-  data-test-am-status-element
+{{! template-lint-disable no-curly-component-invocation }}
+<AkStack
+  local-class='project-status'
+  @direction='column'
+  data-test-am-table-row-item
+  data-test-am-table-row-status
 >
-  {{yield}}
-</span>
+  <AppMonitoring::Status
+    @condition='{{this.monitoredStatusCondition}}'
+    @label={{this.monitoredStatusText}}
+  />
+
+  <AkStack
+    local-class='last-sync-date'
+    @direction='row'
+    @alignItems='center'
+    data-test-am-table-row-last-sync
+  >
+    {{#if @amApp.lastSync.syncedOn}}
+      Last monitored on
+
+      <AkTypography
+        @variant='subtitle2'
+        @color='textSecondary'
+        local-class='date-value'
+        class='ml-1'
+        data-test-am-table-row-last-sync-date
+      >
+        {{day-js date=@amApp.lastSync.syncedOn format='DD MMM YYYY'}}
+      </AkTypography>
+
+    {{else if @amApp.isActive}}
+      <AkStack
+        @direction='row'
+        @alignItems='center'
+        @tag='span'
+        class='mr-1'
+        data-test-am-table-row-last-sync-spinner
+      >
+        <AkLoader @size={{13}} />
+      </AkStack>
+      Sync in progress
+    {{/if}}
+  </AkStack>
+</AkStack>

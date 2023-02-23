@@ -1,15 +1,23 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
 import ENV from 'irene/config/environment';
-
 import Store from '@ember-data/store';
-import OrganizationModel from 'irene/models/organization';
+import OrganizationModel from '../models/organization';
+import { tracked } from '@glimmer/tracking';
 
 export default class OrganizationService extends Service {
   @service declare store: Store;
   @service declare notifications: NotificationService;
 
-  selected: OrganizationModel | null = null;
+  @tracked selected: OrganizationModel | null = null;
+
+  get selectedOrgProjectsCount() {
+    if (this.selected) {
+      return this.selected.projectsCount;
+    }
+
+    return 0;
+  }
 
   async load() {
     const orgs = await this.store.findAll('organization');

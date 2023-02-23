@@ -1,20 +1,17 @@
-.table-container {
+.app-monitoring-table-container {
   margin-top: 1.25em;
-  background-color: transparent;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
 
-  .table-body {
-    display: flex;
-    flex-direction: column;
+  .app-monitoring-table-row {
+    transition: background-color 0.3s ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(var(--appmonitoring-color-black), 0.01);
+    }
   }
-}
 
-// Loading styles
-.loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 12.5em;
+  .loading {
+    width: 100%;
+    height: 12.5em;
+  }
 }

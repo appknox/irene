@@ -1,0 +1,24 @@
+<AkStack @direction='column' data-test-am-table-row-item>
+  <AkTypography
+    @color='secondary'
+    @gutterBottom={{true}}
+    @noWrap={{true}}
+    title={{@amApp.project.packageName}}
+    local-class='app-namespace'
+    class='pr-4'
+    data-test-am-table-row-app-namespace
+  >
+    {{@amApp.project.packageName}}
+  </AkTypography>
+
+  <AkTypography
+    @color='neutral'
+    @noWrap={{true}}
+    title={{@amApp.project.lastFile.name}}
+    local-class='app-name'
+    class='pr-4'
+    data-test-am-table-row-app-name
+  >
+    {{@amApp.project.lastFile.name}}
+  </AkTypography>
+</AkStack>

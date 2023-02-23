@@ -2,7 +2,7 @@ import commondrf from './commondrf';
 
 export default class OrganizationTeamMemberAdapter extends commondrf {
   _buildURL(modelName?: string | number, id?: string | number) {
-    const baseURL = `${this.namespace}/organizations/${this.organization.selected.id}/teams`;
+    const baseURL = `${this.namespace}/organizations/${this.organization.selected?.id}/teams`;
 
     if (id) {
       return this.buildURLFromBase(`${baseURL}/${encodeURIComponent(id)}`);

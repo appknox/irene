@@ -1,0 +1,26 @@
+<AkStack
+  local-class='production-version'
+  @direction='column'
+  @justifyContent='center'
+  data-test-am-table-row-item
+  data-test-am-table-row-store-version
+>
+  {{#if @amApp.latestAmAppVersion.comparableVersion}}
+
+    {{@amApp.latestAmAppVersion.comparableVersion}}
+
+    {{#unless @amApp.latestAmAppVersion.latestFile}}
+      <AppMonitoring::Status
+        @condition='error'
+        @label='{{t "notScanned"}}'
+        class='mt-1'
+      />
+    {{/unless}}
+
+  {{else}}
+    <AppMonitoring::Status
+      @condition='{{this.statusCondition}}'
+      @label='{{this.statusText}}'
+    />
+  {{/if}}
+</AkStack>

@@ -1,6 +1,5 @@
 import commondrf from './commondrf';
 import Store from '@ember-data/store';
-
 import OrganizationProjectModel, {
   OrganizationProjectModelName,
   AddProjectData,
@@ -8,7 +7,7 @@ import OrganizationProjectModel, {
 
 export default class OrganizationProjectAdapter extends commondrf {
   _buildURL(modelName?: string | number, id?: string | number) {
-    const baseurl = `${this.namespace}/organizations/${this.organization.selected.id}/projects`;
+    const baseurl = `${this.namespace}/organizations/${this.organization.selected?.id}/projects`;
 
     if (id) {
       return this.buildURLFromBase(`${baseurl}/${encodeURIComponent(id)}`);
@@ -32,7 +31,6 @@ export default class OrganizationProjectAdapter extends commondrf {
       snapshot,
       collaboratorId
     );
-
     return this.ajax(url, 'PUT', {
       data,
     });

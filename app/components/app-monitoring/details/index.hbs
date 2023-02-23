@@ -101,16 +101,16 @@
                       {{@appDetails.latestAmAppVersion.latestFile.id}}
                     </LinkTo>
                   {{else}}
-                    <AppMonitoring::Table::Status @condition='alert'>
-                      {{t 'notScanned'}}
-                    </AppMonitoring::Table::Status>
+                    <AppMonitoring::Status
+                      @condition='error'
+                      @label='{{t "notScanned"}}'
+                    />
                   {{/if}}
                 {{else}}
-                  <AppMonitoring::Table::Status
+                  <AppMonitoring::Status
                     @condition='{{this.statusCondition}}'
-                  >
-                    {{this.statusText}}
-                  </AppMonitoring::Table::Status>
+                    @label='{{this.statusText}}'
+                  />
                 {{/if}}
               </p>
             </div>
@@ -119,11 +119,10 @@
             <div local-class='section-content'>
               <h4>Status</h4>
               <div data-test-am-app-status>
-                <AppMonitoring::Table::Status
+                <AppMonitoring::Status
                   @condition='{{this.monitoredStatusCondition}}'
-                >
-                  {{this.monitoredStatusText}}
-                </AppMonitoring::Table::Status>
+                  @label='{{this.monitoredStatusText}}'
+                />
                 <p
                   local-class='last-sync-date'
                   class='flex-row flex-justify-start'

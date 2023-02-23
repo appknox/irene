@@ -8,12 +8,22 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
 
-    test('it renders', async function (assert) {
-      // Set any properties with this.set('myProperty', 'value');
-      // Handle any actions with this.set('myAction', function(val) { ... });
+    test('it renders the correct error header and body messages', async function (assert) {
+      this.setProperties({
+        errorHeaderText: 'Error Header Text',
+        errorBodyText: 'Error Body Text',
+      });
 
-      await render(hbs`<AppMonitoring::Table::Error />`);
-      assert.strictEqual(this.element.textContent.trim(), '');
+      await render(
+        hbs`<AppMonitoring::Table::Error @header={{this.errorHeaderText}} @body={{this.errorBodyText}} />`
+      );
+
+      assert.dom('[data-test-am-error-container]').exists();
+      assert.dom('[data-test-am-error-illustration]').exists();
+      assert
+        .dom('[data-test-am-error-container]')
+        .containsText(this.errorHeaderText)
+        .containsText(this.errorBodyText);
     });
   }
 );

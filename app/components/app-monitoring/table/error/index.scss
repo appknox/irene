@@ -1,7 +1,4 @@
 .empty-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   margin-top: 4.625em;
   margin-bottom: 4.625em;
 
@@ -9,21 +6,7 @@
     margin-bottom: 1.5625em;
   }
 
-  h2 {
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 22px;
-    letter-spacing: -0.008em;
-    color: var(--body-type-color);
-    margin-bottom: 0.9375em;
-  }
-
-  p {
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 22px;
-    color: #121212;
-    text-align: center;
+  .body-text {
     max-width: 302px;
   }
 }
