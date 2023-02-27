@@ -1,6 +1,6 @@
 td
   .bold.black-text.font-medium
-    = link-to "authenticated.organization.team" team.id
+    = link-to route="authenticated.organization.teams" query=(hash team_query=team.name)
         = team.name
   .text-lightgray.margin-t-h
     = team.membersCount
