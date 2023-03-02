@@ -1,9 +1,0 @@
-if submission.hasReason
-  div.status-details class=messageClass
-    = submission.statusHumanized
-  .status-reason
-    = submission.reason
-else
-
-  div.no-reason class=messageClass
-    = submission.statusHumanized

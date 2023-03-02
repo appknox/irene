@@ -5,28 +5,30 @@ import { observer } from '@ember/object';
 import ENUMS from 'irene/enums';
 
 const SubmissionListComponent = Component.extend({
-
   submissionCount: computed.alias('submissions.length'),
   hasSubmissions: computed.gt('submissionCount', 0),
 
-  submissions: computed('realtime.SubmissionCounter', 'store', function() {
-    this.get("store").query("submission", {
-      'status': ENUMS.SUBMISSION_STATUS.VALIDATING
+  submissions: computed('realtime.SubmissionCounter', 'store', function () {
+    this.get('store').query('submission', {
+      status: ENUMS.SUBMISSION_STATUS.VALIDATING,
     });
-    return this.get("store").peekAll("submission");
+    return this.get('store').peekAll('submission');
   }),
 
-  submissionStatusObserver: observer("submissions.@each.status", function() {
-    const submissions = this.get("submissions");
-    const filteredSubmissions = submissions.filter(submission => submission.get("status") !== ENUMS.SUBMISSION_STATUS.ANALYZING);
-    return this.set("filteredSubmissions", filteredSubmissions);
+  submissionStatusObserver: observer('submissions.@each.status', function () {
+    const submissions = this.get('submissions');
+    const filteredSubmissions = submissions.filter(
+      (submission) =>
+        submission.get('status') !== ENUMS.SUBMISSION_STATUS.ANALYZING
+    );
+    return this.set('filteredSubmissions', filteredSubmissions);
   }),
 
   submissionSorting: ['createdOn:desc'],
   sortedSubmissions: computed.sort('filteredSubmissions', 'submissionSorting'),
 
   sortedSubmissionsCount: computed.alias('filteredSubmissions.length'),
-  hasSortedSubmissions: computed.gt('sortedSubmissionsCount', 0)
+  hasSortedSubmissions: computed.gt('sortedSubmissionsCount', 0),
 });
 
 export default SubmissionListComponent;

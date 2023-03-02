@@ -1,0 +1,19 @@
+{{#if @submission.hasReason}}
+  <div
+    data-test-submission-status-detail
+    class='status-details {{this.messageClass}}'
+  >
+    {{@submission.statusHumanized}}
+  </div>
+
+  <div data-test-submission-status-reason class='status-reason'>
+    {{@submission.reason}}
+  </div>
+{{else}}
+  <div
+    data-test-submission-status-no-reason
+    class='no-reason {{this.messageClass}}'
+  >
+    {{@submission.statusHumanized}}
+  </div>
+{{/if}}

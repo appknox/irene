@@ -2,8 +2,10 @@ import Service from '@ember/service';
 import ENV from 'irene/config/environment';
 import { inject as service } from '@ember/service';
 
+import ConfigurationService from './configuration';
+
 export default class WhitelabelService extends Service {
-  @service configuration;
+  @service declare configuration: ConfigurationService;
 
   default_name = 'Appknox';
   default_theme = 'dark';
@@ -28,6 +30,7 @@ export default class WhitelabelService extends Service {
     if (this.configuration.themeData.scheme == 'light') {
       return this.THEMES.LIGHT;
     }
+
     return this.THEMES.DARK;
   }
 
@@ -45,9 +48,11 @@ export default class WhitelabelService extends Service {
 
   get logo() {
     const logo = this.client_logo;
+
     if (logo) {
       return logo;
     }
+
     if (this.theme === this.THEMES.LIGHT) {
       return this.default_logo_on_lightbg;
     }
@@ -60,6 +65,7 @@ export default class WhitelabelService extends Service {
     if (this.theme === this.THEMES.LIGHT) {
       return this.configuration.imageData.logo_on_lightbg;
     }
+
     return this.configuration.imageData.logo_on_darkbg;
   }
 }

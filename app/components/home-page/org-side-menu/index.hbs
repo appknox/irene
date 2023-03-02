@@ -1,110 +1,60 @@
-<div class='column is-one-sixth side-menu'>
-  <div class='side-menu-fixed'>
-    <div class='appknox-logo'>
+<div class='column' local-class='side-menu'>
+  <div local-class='side-menu-fixed'>
+    <div local-class='app-logo'>
       <ImgLogo />
     </div>
-    <ul class='menu-list text-center margin-top20'>
-      <li>
-        <LinkTo @route='authenticated.projects' class='menu-list-link'>
-          <div class='menu-list-title-container'>
-            <span class='menu-list-icons ak-icon ak-icon-folder'></span>
-            <span class='menu-list-title'>{{t 'projects'}}</span>
-          </div>
-          <span class='badge-square is-sidebar content-right'>
-            {{this.organization.selected.projectsCount}}
-          </span>
-        </LinkTo>
-      </li>
-      {{#if this.showAppMonitoringDashboard}}
-        <li>
-          <LinkTo
-            @route='authenticated.app-monitoring'
-            @query={{hash app_offset=0}}
-            class='menu-list-link'
-          >
-            <div class='menu-list-title-container'>
-              <span class='menu-list-icons ak-icon ak-icon-inventory-2'></span>
-              <span class='menu-list-title'>{{t 'appMonitoring'}}</span>
-            </div>
-          </LinkTo>
-        </li>
-      {{/if}}
-      {{#if this.isShowAnalytics}}
-        <li>
 
-          <LinkTo @route='authenticated.analytics' class='menu-list-link'>
-            <div class='menu-list-title-container'>
-              <span class='menu-list-icons ak-icon ak-icon-graphic-eq'></span>
-              <span class='menu-list-title'>{{t 'analytics'}}</span>
-            </div>
-          </LinkTo>
-
-        </li>
-      {{/if}}
-      <li>
-        <LinkTo
-          @route='authenticated.organization.namespaces'
-          class='menu-list-link'
+    <AkList class='mt-2' as |akl|>
+      {{#each this.menuItems as |it|}}
+        <akl.listItem
+          @link={{true}}
+          @route={{it.route}}
+          @query={{it.query}}
+          @activeLinkClass={{this.classes.menuItemLinkActive}}
+          data-test-side-menu-item
+          @linkClass={{this.classes.menuItemLink}}
+          as |li|
         >
-          <div class='menu-list-title-container'>
-            <span class='menu-list-icons ak-icon ak-icon-people'></span>
-            <span class='menu-list-title'>{{t 'organization'}}</span>
-          </div>
-        </LinkTo>
-      </li>
+          <li.leftIcon>
+            <AkIcon
+              local-class='menu-item-icon'
+              data-test-side-menu-item-icon
+              @iconName={{it.icon}}
+            />
+          </li.leftIcon>
 
-      <li>
-        <LinkTo @route='authenticated.settings' class='menu-list-link'>
-          <div class='menu-list-title-container'>
-            <span class='menu-list-icons ak-icon ak-icon-account-box'></span>
-            <span class='menu-list-title'>{{t 'accountSettings'}}</span>
-          </div>
-        </LinkTo>
+          <li.text
+            data-test-side-menu-item-text
+            @primaryText={{it.label}}
+            @primaryTextClass={{this.classes.menuItemText}}
+          />
 
-      </li>
-      {{#if this.showMarketplace}}
-        <li>
-          <LinkTo @route='authenticated.marketplace' class='menu-list-link'>
-            <div class='menu-list-title-container'>
-              <span
-                class='menu-list-icons ak-icon ak-icon-account-balance'
-              ></span>
-              <span class='menu-list-title'>{{t 'marketplace'}}</span>
-            </div>
-          </LinkTo>
+          {{#if it.hasBadge}}
+            <AkStack @alignItems='center' @justifyContent='center'>
+              <AkChip
+                data-test-side-menu-item-badge
+                local-class='menu-item-badge'
+                @variant='filled'
+                @size='small'
+                @label='
+                  {{if
+                  it.isBeta
+                  "Beta"
+                  this.organization.selected.projectsCount
+                }}'
+              />
+            </AkStack>
+          {{/if}}
+        </akl.listItem>
+      {{/each}}
+    </AkList>
 
-        </li>
-      {{/if}}
-      {{#if this.showBilling}}
-        <li>
-          <LinkTo @route='authenticated.billing' class='menu-list-link'>
-            <div class='menu-list-title-container'>
-              <span class='menu-list-icons ak-icon ak-icon-credit-card'></span>
-              <span class='menu-list-title'>{{t 'billing'}}</span>
-            </div>
-          </LinkTo>
-        </li>
-      {{/if}}
-      {{#if this.showPartnerDashboard}}
-        <li>
-          <LinkTo @route='authenticated.partner.clients' class='menu-list-link'>
-            <div class='menu-list-title-container'>
-              <span
-                class='menu-list-icons ak-icon-outlined ak-icon-groups-2'
-              ></span>
-              <span class='menu-list-title'>{{t 'clients'}}</span>
-              <sup class='menu-list-title-beta primary-color'>beta</sup>
-            </div>
-          </LinkTo>
-
-        </li>
-      {{/if}}
-    </ul>
-    <div class='status-updates'>
+    <div>
       <SubmissionList />
     </div>
+
     <div
-      class='product-version
+      local-class='product-version
         {{if this.enablePendo "ak-pendo-version-container"}}'
     >
       {{t 'version'}}

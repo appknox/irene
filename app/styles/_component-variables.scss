@@ -250,11 +250,32 @@ body {
 
 body {
   // variables for sidebar menu
+  --org-side-menu-font-weight-medium: var(--font-weight-medium);
+  --org-side-menu-text-secondary: var(--text-secondary);
+  --org-side-menu-item-active-badge-background: var(--primary-main);
+  --org-side-menu-item-active-badge-text-color: var(--primary-contrast-text);
+  --org-side-menu-item-active-border-color: var(--primary-main);
+
   &.theme-light {
     --org-side-menu-bg-color: var(--background-main);
+    --org-side-menu-text-color: var(--text-primary);
+    --org-side-menu-item-badge-background: var(--neutral-grey-200);
+    --org-side-menu-item-badge-text-color: var(--text-primary);
+    --org-side-menu-item-hover-background: var(--hover-light-background);
+    --org-side-menu-item-active-background: var(
+      --side-menu-active-background-light
+    );
   }
+
   &.theme-dark {
     --org-side-menu-bg-color: var(--background-dark);
+    --org-side-menu-text-color: var(--secondary-contrast-text);
+    --org-side-menu-item-badge-background: var(--neutral-grey-900);
+    --org-side-menu-item-badge-text-color: var(--secondary-contrast-text);
+    --org-side-menu-item-hover-background: var(--hover-dark-background);
+    --org-side-menu-item-active-background: var(
+      --side-menu-active-background-dark
+    );
   }
 
   // variables for organization-namespace/namespace-value
