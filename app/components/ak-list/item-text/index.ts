@@ -4,6 +4,7 @@ export interface AkListItemTextSignature {
   Element: HTMLDivElement;
   Args: {
     primaryText?: string;
+    primaryTextClass?: string;
     secondaryText?: string;
     disabled?: boolean;
   };

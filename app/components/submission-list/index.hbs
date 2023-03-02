@@ -1,0 +1,15 @@
+{{#if this.hasSubmissions}}
+  {{#if this.hasSortedSubmissions}}
+    <p data-test-submission-list-title class='menu-label margin-left'>
+      {{t 'status'}}
+    </p>
+
+    <div class='status-container'>
+      {{#each this.sortedSubmissions as |submission|}}
+        <div data-test-submission-list-detail class='status-list'>
+          <SubmissionList::Details @submission={{submission}} />
+        </div>
+      {{/each}}
+    </div>
+  {{/if}}
+{{/if}}
