@@ -50,6 +50,23 @@
   color: inherit;
 }
 
+// Typography font weight
+.ak-typography-font-weight-bold {
+  font-weight: var(--font-weight-bold) !important;
+}
+
+.ak-typography-font-weight-medium {
+  font-weight: var(--font-weight-medium) !important;
+}
+
+.ak-typography-font-weight-regular {
+  font-weight: var(--font-weight-regular) !important;
+}
+
+.ak-typography-font-weight-light {
+  font-weight: var(--font-weight-light) !important;
+}
+
 .ak-typography-align-left {
   text-align: left;
 }

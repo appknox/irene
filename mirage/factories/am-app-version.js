@@ -3,15 +3,15 @@ import ENUMS from 'irene/enums';
 import Base from './base';
 
 export default Base.extend({
-  createdOn: faker.date.past(),
+  created_on: faker.date.past(),
   version: faker.random.number(),
-  versionCode: faker.random.number(),
+  version_code: faker.random.number(),
 
-  comparableVersion() {
-    const platform = this.amApp?.project?.platform;
+  comparable_version() {
+    const platform = this.am_app?.project?.platform;
     if (platform === ENUMS.PLATFORM.IOS) {
       return this.version;
     }
-    return this.versionCode;
+    return this.version_code;
   },
 });

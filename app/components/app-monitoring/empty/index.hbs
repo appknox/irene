@@ -1,0 +1,24 @@
+{{! @glint-nocheck: AkSvg::AmTableEmpty}}
+<AkStack
+  ...attributes
+  @direction='column'
+  @alignItems='center'
+  local-class='empty-container'
+  data-test-am-error-container
+>
+  <span local-class='empty-state-vector' data-test-am-error-illustration>
+    <AkSvg::AmTableEmpty />
+  </span>
+
+  <AkTypography
+    @variant='h5'
+    @gutterBottom={{true}}
+    data-test-am-empty-header-text
+  >
+    {{@header}}
+  </AkTypography>
+
+  <AkTypography local-class='body-text' data-test-am-empty-body-text>
+    {{@body}}
+  </AkTypography>
+</AkStack>

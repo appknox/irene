@@ -1,0 +1,39 @@
+{{! @glint-nocheck:  nested latestAmAppVersion properties}}
+<AkStack
+  @direction='column'
+  @justifyContent='center'
+  data-test-am-details-table-store-version
+>
+  {{#if this.amApp.latestAmAppVersion.comparableVersion}}
+
+    {{this.amApp.latestAmAppVersion.comparableVersion}}
+
+    <AkStack @alignItems='center' class='mt-1'>
+      <AppMonitoring::Status
+        @condition='{{am-status-condition this.amApp}}'
+        @label='{{am-status-text this.amApp}}'
+        data-test-am-details-table-store-version-status
+      />
+
+      {{#if this.amApp.latestAmAppVersion.latestFile.id}}
+        <AkStack>
+          <AkLink
+            @underline='always'
+            @color='primary'
+            @fontWeight='medium'
+            @route='authenticated.file'
+            @model={{this.amApp.latestAmAppVersion.latestFile.id}}
+            target='_blank'
+            rel='noopener noreferrer'
+            class='ml-2'
+            data-test-am-details-table-store-version-fileID
+          >
+            {{t 'fileID'}}
+            -
+            {{this.amApp.latestAmAppVersion.latestFile.id}}
+          </AkLink>
+        </AkStack>
+      {{/if}}
+    </AkStack>
+  {{/if}}
+</AkStack>

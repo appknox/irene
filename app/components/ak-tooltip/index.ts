@@ -6,6 +6,7 @@ import { Placement } from '@popperjs/core';
 import { EmberRunTimer } from '@ember/runloop/types';
 
 export interface AkTooltipSignature {
+  Element: HTMLDivElement;
   Args: {
     disabled?: boolean;
     placement?: Placement;

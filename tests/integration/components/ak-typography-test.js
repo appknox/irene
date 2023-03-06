@@ -103,6 +103,29 @@ module('Integration | Component | ak-typography', function (hooks) {
   );
 
   test.each(
+    'it renders ak-typography with different font-weight',
+    ['medium', 'regular', 'bold', 'light'],
+    async function (assert, fontWeight) {
+      this.setProperties({
+        content: 'hello world',
+        fontWeight,
+      });
+
+      await render(
+        hbs`<AkTypography @fontWeight={{this.fontWeight}}>{{this.content}}</AkTypography>`
+      );
+
+      assert
+        .dom('[data-test-ak-typography]')
+        .exists()
+        .hasText(this.content)
+        .hasClass(
+          new RegExp(`ak-typography-font-weight-${this.fontWeight}`, 'i')
+        );
+    }
+  );
+
+  test.each(
     'it renders ak-typography with different alignments',
     [
       ['', /ak-typography-align-inherit/i],

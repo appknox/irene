@@ -4,13 +4,12 @@
       <tb.head @columns={{this.columns}} data-test-am-table-header />
     </AkTable>
 
-    <AppMonitoring::Table::Error
+    <AppMonitoring::Empty
       @header='{{t "appMonitoringErrors.noOrgProjects.header"}}'
       @body='{{t "appMonitoringErrors.noOrgProjects.body"}}'
     />
 
   {{else}}
-
     <AkPaginationProvider
       @results={{this.tableData}}
       @onItemPerPageChange={{this.onItemPerPageChange}}
@@ -24,17 +23,19 @@
     >
 
       {{#if this.isFetchingAMTableData}}
-        <AkTable as |tb|>
-          <tb.head @columns={{this.columns}} data-test-am-table-header />
-        </AkTable>
-
         <AkStack
-          @direction='row'
+          @direction='column'
           @alignItems='center'
-          @justifyContent='center'
           local-class='loading'
+          class='pt-7'
         >
-          <AkLoader @size={{70}} />
+          <AkSvg::EmptyLoadingList />
+
+          <AkStack @direction='row' @spacing='1.5' class='mt-2'>
+            <AkLoader @size={{19}} />
+
+            <AkTypography>{{t 'loading'}}...</AkTypography>
+          </AkStack>
         </AkStack>
 
       {{else if this.isEmptyAMResult}}
@@ -42,7 +43,7 @@
           <tb.head @columns={{this.columns}} data-test-am-table-header />
         </AkTable>
 
-        <AppMonitoring::Table::Error
+        <AppMonitoring::Empty
           @header='{{t "appMonitoringErrors.emptyResults.header"}}'
           @body='{{t "appMonitoringErrors.emptyResults.body"}}'
         />
@@ -61,7 +62,7 @@
               @onClick={{this.onTableRowClick}}
               as |r|
             >
-              <r.cell>
+              <r.cell data-test-am-table-cell>
                 {{#let (component r.columnValue.component) as |Component|}}
                   <Component
                     @amApp={{r.rowValue}}
@@ -92,10 +93,3 @@
     </AkPaginationProvider>
   {{/if}}
 </div>
-
-<AppMonitoring::Details
-  @showRightDrawer={{this.showRightDrawer}}
-  @appDetails={{this.currentAppInView}}
-  @closeModalHandler={{this.closeRightDrawer}}
-  @settings={{@settings}}
-/>

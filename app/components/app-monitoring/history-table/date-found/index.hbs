@@ -1,0 +1,8 @@
+{{! template-lint-disable no-curly-component-invocation }}
+<AkTypography data-test-history-table-date-found>
+  {{#if @amAppSync.syncedOn}}
+    {{day-js date=@amAppSync.syncedOn format='DD MMM YYYY'}}
+  {{else}}
+    -
+  {{/if}}
+</AkTypography>

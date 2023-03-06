@@ -46,7 +46,17 @@ Router.map(function () {
       this.route('billing');
       this.route('marketplace');
       this.route('projects');
-      this.route('app-monitoring', { path: '/store-monitoring' });
+
+      this.route('app-monitoring', { path: '/store-monitoring' }, function () {
+        this.route(
+          'monitoring-details',
+          { path: '/monitoring-details/:am_app_id' },
+          function () {
+            this.route('history');
+          }
+        );
+      });
+
       this.route(
         'project',
         {

@@ -1,10 +1,11 @@
 .settings-block {
   padding: 1em 1.5em;
-  border-radius: var(--appmonitoring-settings-border-radius);
-  border: 1px solid var(--appmonitoring-settings-block-border-color);
+  border-radius: var(--appmonitoring-border-radius);
+  border: 1px solid var(--appmonitoring-border-color);
   box-sizing: border-box;
 
   .settings-description {
-    color: var(--appmonitoring-settings-block-description);
+    color: var(--appmonitoring-settings-block-description-text-color);
+    max-width: 900px;
   }
 }

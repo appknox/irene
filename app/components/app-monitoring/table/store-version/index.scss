@@ -1,4 +1,12 @@
 .production-version {
   letter-spacing: -0.0286em;
   color: var(--appmonitoring-color-black);
+
+  .multi-geo-tooltip-header {
+    margin-bottom: 0.2857em;
+  }
+
+  .multi-geo-icon {
+    margin-left: 0.2857em;
+  }
 }

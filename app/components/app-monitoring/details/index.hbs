@@ -1,156 +1,231 @@
 {{! template-lint-disable no-curly-component-invocation }}
-<AkDrawer
-  @open={{@showRightDrawer}}
-  @anchor='right'
-  @onClose={{@closeModalHandler}}
-  as |dr|
+<div
+  local-class='app-details-container'
+  class='pl-3 pt-3 pr-3'
+  data-test-app-details-container
 >
-  <div local-class='app-details-container'>
-    <header
-      local-class='modal-header'
-      class='flex-row flex-justify-space-between'
-      data-test-am-drawer-header
+  <AkStack @direction='column' @tag='section' local-class='app-details-wrapper'>
+    <AkStack
+      @direction='row'
+      @justifyContent='space-between'
+      @alignItems='stretch'
+      @width='full'
+      local-class='overview-container'
     >
-      <h2 data-test-am-drawer-header-title>Store Monitoring Details</h2>
-      <span
-        local-class='close-icon'
-        class='ak-icon ak-icon-close'
-        role='button'
-        data-test-am-drawer-header-close-icon
-        {{on 'click' dr.closeHandler}}
+      <AkStack @direction='column' @tag='article'>
+        <AkStack @direction='row' @spacing='1.5' local-class='overview-icons'>
+          <AkStack
+            @tag='span'
+            @direction='row'
+            @justifyContent='center'
+            @alignItems='center'
+            local-class='project-icon'
+          >
+            <img
+              src={{@amApp.project.lastFile.iconUrl}}
+              alt='app icon'
+              data-test-app-icon-url
+            />
+          </AkStack>
+
+          <AkStack
+            @tag='span'
+            @direction='row'
+            @justifyContent='center'
+            @alignItems='center'
+            local-class='platform-icon platform-{{@amApp.project.platformIconClass}}'
+            data-test-app-platform
+          >
+            {{fa-icon @amApp.project.platformIconClass}}
+          </AkStack>
+        </AkStack>
+
+        <AkTypography
+          @tag='h3'
+          @variant='h5'
+          @gutterBottom={{true}}
+          data-test-app-name
+        >
+          {{@amApp.project.lastFile.name}}
+        </AkTypography>
+
+        <AkTypography
+          @tag='p'
+          @variant='h6'
+          @color='textSecondary'
+          data-test-app-namespace
+        >
+          {{@amApp.project.packageName}}
+        </AkTypography>
+      </AkStack>
+
+      <AkStack
+        @direction='column'
+        @alignItems='flex-start'
+        @justifyContent='center'
+        local-class='monitoring-toggle-container'
       >
-      </span>
-    </header>
-    {{#if @appDetails}}
-      <section local-class='modal-body'>
-        <div local-class='modal-body-section basic-details'>
-          <h3>Basic Details</h3>
-          <section local-class='section'>
-            <h4>Application Name</h4>
-            <p
-              data-test-am-drawer-name
-            >{{@appDetails.project.lastFile.name}}</p>
-          </section>
-          <section local-class='section'>
-            <h4>Namespace</h4>
-            <p data-test-am-drawer-namespace>
-              {{@appDetails.project.packageName}}</p>
-          </section>
-          <section local-class='section'>
-            <h4>Platform</h4>
-            <span
-              local-class='platform-icon platform-{{@appDetails.project.platformIconClass}}'
-              data-test-am-drawer-platform
+        <AkTypography
+          @tag='p'
+          @variant='h6'
+          @color='secondary'
+          @gutterBottom={{true}}
+        >
+          {{t 'appMonitoringModule.monitoringAction'}}
+        </AkTypography>
+
+        <AkToggle
+          @size='small'
+          @checked={{@amApp.monitoringEnabled}}
+          local-class='monitoring-toggle'
+          data-test-app-monitoring-toggle
+        />
+      </AkStack>
+    </AkStack>
+
+    <AkStack @direction='column' local-class='monitoring-details-container'>
+      <div local-class='monitoring-details-group'>
+        <AkStack>
+          <AkTypography
+            @tag='p'
+            @variant='body1'
+            @color='textSecondary'
+            local-class='details-header'
+          >
+            {{t 'appMonitoringModule.latestScannedVersion'}}
+          </AkTypography>
+
+          <AkTypography
+            @tag='span'
+            @variant='body1'
+            @color='textSecondary'
+            local-class='details-value'
+            data-test-app-latest-scanned-version
+          >
+            {{if
+              @amApp.project.lastFile.comparableVersion
+              @amApp.project.lastFile.comparableVersion
+              '-'
+            }}
+          </AkTypography>
+        </AkStack>
+
+        <AkStack>
+          <AkTypography
+            @tag='p'
+            @variant='body1'
+            @color='textSecondary'
+            local-class='details-header'
+          >
+            {{t 'appMonitoringModule.lastMonitoredOn'}}
+          </AkTypography>
+
+          <AkStack
+            local-class='details-value'
+            @direction='row'
+            @alignItems='center'
+            @tag='p'
+            data-test-app-last-monitored-date
+          >
+            {{#if @amApp.lastSync.syncedOn}}
+
+              {{day-js date=@amApp.lastSync.syncedOn format='DD MMM YYYY'}}
+
+            {{else if @amApp.isActive}}
+              <AkStack
+                @direction='row'
+                @alignItems='center'
+                @tag='span'
+                class='mr-1'
+                data-test-app-last-monitored-date-pending
+              >
+                <AkLoader @size={{13}} />
+              </AkStack>
+
+              <AkTypography
+                @tag='span'
+                @variant='body1'
+                @color='secondary'
+                local-class='details-header'
+                data-test-app-last-monitored-date-pending-text
+              >
+                {{t 'appMonitoringModule.syncInProgress'}}
+              </AkTypography>
+
+            {{else}}
+              ---
+            {{/if}}
+          </AkStack>
+        </AkStack>
+      </div>
+
+      <div local-class='monitoring-details-group'>
+        <AkStack>
+          <AkTypography
+            @tag='p'
+            @variant='body1'
+            @color='textSecondary'
+            local-class='details-header'
+          >
+            {{t 'fileID'}}
+          </AkTypography>
+
+          {{#if @amApp.project.lastFile}}
+            <AkLink
+              @underline='always'
+              @color='primary'
+              @fontWeight='medium'
+              @route='authenticated.file'
+              @model={{@amApp.project.lastFile.id}}
+              target='_blank'
+              rel='noopener noreferrer'
+              data-test-app-file-id
             >
-              {{fa-icon @appDetails.project.platformIconClass}}
-            </span>
-          </section>
-        </div>
-        <div local-class='modal-body-section scan-details'>
-          <h3>Scan Details</h3>
-          <section local-class='section'>
-            <div local-class='section-content'>
-              <h4>Latest Scanned Version</h4>
-              <p
-                class='flex-column flex-justify-center'
-                data-test-am-drawer-last-scanned-version
-              >
-                <span class='mb-1'>
-                  {{if
-                    @appDetails.project.lastFile.comparableVersion
-                    @appDetails.project.lastFile.comparableVersion
-                    '-'
-                  }}
-                </span>
+              {{@amApp.project.lastFile.id}}
+            </AkLink>
 
-                {{#if @appDetails.project.lastFile}}
-                  <LinkTo
-                    local-class='file-link'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    @route='authenticated.file'
-                    @model={{@appDetails.project.lastFile.id}}
-                  >
-                    File ID -
-                    {{@appDetails.project.lastFile.id}}
-                  </LinkTo>
-                {{/if}}
-              </p>
-            </div>
-            <div local-class='section-content'>
-              <h4>Store Version</h4>
-              <p
-                local-class='store-version'
-                class='flex-column flex-justify-center'
-                data-test-am-drawer-store-version
-              >
-                {{#if @appDetails.latestAmAppVersion.comparableVersion}}
-                  <span class='mb-1'>
-                    {{@appDetails.latestAmAppVersion.comparableVersion}}
-                  </span>
+          {{else}}
+            -
+          {{/if}}
+        </AkStack>
 
-                  {{#if @appDetails.latestAmAppVersion.latestFile}}
-                    <LinkTo
-                      local-class='file-link'
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      @route='authenticated.file'
-                      @model={{@appDetails.latestAmAppVersion.latestFile.id}}
-                    >
-                      File ID -
-                      {{@appDetails.latestAmAppVersion.latestFile.id}}
-                    </LinkTo>
-                  {{else}}
-                    <AppMonitoring::Status
-                      @condition='error'
-                      @label='{{t "notScanned"}}'
-                    />
-                  {{/if}}
-                {{else}}
-                  <AppMonitoring::Status
-                    @condition='{{this.statusCondition}}'
-                    @label='{{this.statusText}}'
-                  />
-                {{/if}}
-              </p>
-            </div>
-          </section>
-          <section local-class='section'>
-            <div local-class='section-content'>
-              <h4>Status</h4>
-              <div data-test-am-app-status>
-                <AppMonitoring::Status
-                  @condition='{{this.monitoredStatusCondition}}'
-                  @label='{{this.monitoredStatusText}}'
-                />
-                <p
-                  local-class='last-sync-date'
-                  class='flex-row flex-justify-start'
-                  data-test-am-app-last-sync
-                >
-                  {{#if @appDetails.lastSync.syncedOn}}
-                    Last monitored on
-                    <span class='ml-1' data-test-am-app-last-sync-date>
-                      {{day-js
-                        date=@appDetails.lastSync.syncedOn
-                        format='DD MMM YYYY'
-                      }}
-                    </span>
-                  {{else if @appDetails.isActive}}
-                    <span
-                      class='mr-1 flex-row flex-align-center'
-                      data-test-am-app-last-sync-spinner
-                    >
-                      {{fa-icon 'spinner fa-spin' class='last-sync-loading'}}
-                    </span>
-                    Sync in progress
-                  {{/if}}
-                </p>
-              </div>
-            </div>
-          </section>
-        </div>
-      </section>
-    {{/if}}
-  </div>
-</AkDrawer>
+        <AkStack>
+          <AkTypography
+            @tag='p'
+            @variant='body1'
+            @color='textSecondary'
+            local-class='details-header'
+          >
+            {{t 'appMonitoringModule.monitoringStatus'}}
+          </AkTypography>
+
+          <AkTypography
+            @tag='span'
+            @variant='body1'
+            @color='textSecondary'
+            local-class='details-value'
+            data-test-app-monitoring-status
+          >
+            <AppMonitoring::Status
+              @condition='{{am-monitoring-condition @amApp}}'
+              @label='{{am-monitoring-text @amApp}}'
+            />
+          </AkTypography>
+        </AkStack>
+      </div>
+    </AkStack>
+  </AkStack>
+
+  <AkTabs as |Akt|>
+    {{#each this.tabItems as |item|}}
+      <Akt.tabItem
+        @id={{item.id}}
+        @hasBadge={{false}}
+        @route={{item.route}}
+        data-test-app-details-tabs='{{item.id}}-tab'
+      >
+        {{item.label}}
+      </Akt.tabItem>
+    {{/each}}
+  </AkTabs>
+</div>

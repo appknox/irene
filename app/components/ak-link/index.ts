@@ -1,5 +1,8 @@
 import Component from '@glimmer/component';
-import { TypographyVariant } from '../ak-typography/index';
+import {
+  TypographyFontWeight,
+  TypographyVariant,
+} from '../ak-typography/index';
 
 export type AkLinkColors =
   | 'textPrimary'
@@ -13,11 +16,13 @@ export type AkLinkColors =
   | 'inherit';
 
 export type AkLinkTypographyVariant = TypographyVariant;
+export type AkLinkTypographyFontWeight = TypographyFontWeight;
 
 export interface AkLinkSignatureArgs {
   title?: string;
   class?: string;
   disabled?: boolean;
+  fontWeight?: AkLinkTypographyFontWeight;
   color?: AkLinkColors;
   underline?: 'none' | 'always' | 'hover';
   noWrap?: boolean;

@@ -14,7 +14,7 @@
   "activated": "Activated",
   "activationSuccess": "Your account has been activated, you will be redirected to login page.",
   "active": "active",
-  "activeCaptital": "Active",
+  "activeCapital": "Active",
   "activeSubscription": "Active Subscription",
   "addCollaborator": "Add Collaborator",
   "addDomain": "Add Domain",
@@ -338,7 +338,7 @@
   "impact": "Impact",
   "improved": "Improved",
   "inactive": "inactive",
-  "inactiveCaptital": "Inactive",
+  "inactiveCapital": "Inactive",
   "includeInactiveMembers": "Include inactive users",
   "installAppknoxPluginTo": "Install plugin to ",
   "integrateAppknoxTo": "Integrate to ",
@@ -752,6 +752,26 @@
       "body": "We are looking for unscanned versions of your applications on Playstore or Appstore. This data will be available to you in some time."
     }
   },
+  "appMonitoringModule": {
+    "applicationName": "Application Name",
+    "scannedOnAppknox": "Scanned on Appknox",
+    "foundOn": "Found On",
+    "initiateScan": "Initiate Scan",
+    "storeVersion": "Store Version",
+    "countryCode": "Country Code",
+    "startScan": "Start Scan",
+    "monitoringDetails": "Monitoring Details",
+    "monitoringHistory": "Monitoring History",
+    "monitoringStatus": "Monitoring Status",
+    "syncInProgress": "Sync in progress",
+    "monitoringAction": "Monitoring Action",
+    "latestScannedVersion": "Latest Scanned Version",
+    "lastMonitoredOn": "Last monitored on",
+    "multiGeoToolTip": {
+      "headerText": "Multiple versions detected.",
+      "bodyText": "Click on this row to get more details."
+    }
+  },
   "appMonitoringHeading": "Store Monitoring Setting",
   "appMonitoringDescription": "Once enabled, our platform will monitor for any unscanned versions of your applications on Google Play Store or Apple App Store. If any such applications are found, the list below will be updated automatically at 24 hour intervals.",
   "project": "project",
@@ -838,6 +858,7 @@
   "saveCredentials": "Save Credentials",
   "savedPreferences": "Successfully saved the preferences",
   "scan": "scan(s)",
+  "scanned": "scanned",
   "scanCompleted": "scan completed",
   "scanDetails": "Scan Details",
   "scanNotCompleted": "scan not completed",

@@ -26,12 +26,15 @@ export type TypographyColors =
   | 'warn'
   | 'neutral';
 
+export type TypographyFontWeight = 'medium' | 'light' | 'bold' | 'regular';
+
 export interface AkTypographySignature {
   Element: HTMLElement;
   Args: {
     tag?: keyof HTMLElementTagNameMap;
     variant?: TypographyVariant;
     color?: TypographyColors;
+    fontWeight?: TypographyFontWeight;
     gutterBottom?: boolean;
     align?: 'inherit' | 'left' | 'right' | 'center' | 'justify';
     noWrap?: boolean;
