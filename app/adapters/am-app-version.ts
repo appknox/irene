@@ -2,11 +2,13 @@ import commondrf from './commondrf';
 
 type AmAppVersionQuery = {
   amAppId?: string | number;
+  latestVersions?: boolean;
 };
 
 export default class AmAppVersionAdapter extends commondrf {
   _buildURL(modelName: string, id: string | number) {
     const baseurl = `${this.namespace_v2}/am_app_versions`;
+
     if (id) {
       return this.buildURLFromBase(`${baseurl}/${encodeURIComponent(id)}`);
     }
@@ -16,7 +18,14 @@ export default class AmAppVersionAdapter extends commondrf {
 
   _buildNestedURL(modelName: string | number, amAppId: string | number) {
     const baseURL = `${this.namespace_v2}/am_apps/${amAppId}/am_app_versions`;
+
     return this.buildURLFromBase(baseURL);
+  }
+
+  buildAmAppLatestVersionsURL(amAppId: string | number) {
+    const amAppAdapter = this.store.adapterFor('am-app');
+
+    return amAppAdapter._buildURL('am-app', amAppId) + '/latest_versions';
   }
 
   urlForQuery<K extends string | number>(
@@ -25,7 +34,16 @@ export default class AmAppVersionAdapter extends commondrf {
   ) {
     if (query.amAppId) {
       const amAppId = query.amAppId;
+
+      if (query.latestVersions) {
+        delete query.latestVersions;
+        delete query.amAppId;
+
+        return this.buildAmAppLatestVersionsURL(amAppId);
+      }
+
       delete query.amAppId;
+
       return this._buildNestedURL(modelName, amAppId);
     }
 
