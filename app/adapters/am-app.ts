@@ -1,8 +1,9 @@
 import commondrf from './commondrf';
 
 export default class AmAppAdapter extends commondrf {
-  _buildURL(modelName: string, id: string | number) {
+  _buildURL(_: string | number, id: string | number) {
     const baseurl = `${this.namespace_v2}/am_apps`;
+
     if (id) {
       return this.buildURLFromBase(`${baseurl}/${encodeURIComponent(id)}`);
     }

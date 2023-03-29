@@ -1,36 +1,35 @@
-{{! @glint-nocheck:  nested latestAmAppVersion properties}}
+{{!@glint-nocheck}}
 <AkStack
   @direction='column'
   @justifyContent='center'
-  data-test-am-details-table-store-version
+  data-test-amDetailsTable-storeVersion
 >
-  {{#if this.amApp.latestAmAppVersion.comparableVersion}}
-
-    {{this.amApp.latestAmAppVersion.comparableVersion}}
+  {{#if this.amAppVersion.displayVersion}}
+    {{this.amAppVersion.displayVersion}}
 
     <AkStack @alignItems='center' class='mt-1'>
       <AppMonitoring::Status
-        @condition='{{am-status-condition this.amApp}}'
-        @label='{{am-status-text this.amApp}}'
-        data-test-am-details-table-store-version-status
+        @condition={{this.versionStatusCondition}}
+        @label={{this.versionStatusText}}
+        data-test-amDetailsTable-storeVersionStatus
       />
 
-      {{#if this.amApp.latestAmAppVersion.latestFile.id}}
+      {{#if this.amAppVersion.latestFile.id}}
         <AkStack>
           <AkLink
             @underline='always'
             @color='primary'
             @fontWeight='medium'
             @route='authenticated.file'
-            @model={{this.amApp.latestAmAppVersion.latestFile.id}}
+            @model={{this.amAppVersion.latestFile.id}}
             target='_blank'
             rel='noopener noreferrer'
             class='ml-2'
-            data-test-am-details-table-store-version-fileID
+            data-test-amDetailsTable-storeVersion-fileID
           >
             {{t 'fileID'}}
             -
-            {{this.amApp.latestAmAppVersion.latestFile.id}}
+            {{this.amAppVersion.latestFile.id}}
           </AkLink>
         </AkStack>
       {{/if}}

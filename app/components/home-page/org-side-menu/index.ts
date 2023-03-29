@@ -13,6 +13,7 @@ interface MenuItem {
   icon: string;
   route: string;
   query?: Record<string, string | number>;
+  currentWhen?: string;
   hasBadge?: boolean;
   isBeta?: boolean;
 }
@@ -45,7 +46,9 @@ export default class HomePageSideMenuComponent extends Component {
       this.showAppMonitoringDashboard && {
         label: this.intl.t('appMonitoring'),
         icon: 'inventory-2',
-        route: 'authenticated.app-monitoring',
+        route: 'authenticated.dashboard.app-monitoring',
+        query: { app_offset: 0 },
+        currentWhen: 'authenticated.dashboard.app-monitoring',
       },
       this.isShowAnalytics && {
         label: this.intl.t('analytics'),

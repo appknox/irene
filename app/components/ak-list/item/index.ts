@@ -9,6 +9,7 @@ export interface AkListItemSignature {
   Args: {
     route?: string;
     query?: Record<string, unknown>;
+    currentWhen?: string;
     model?: string;
     models?: string[];
     disabled?: boolean;

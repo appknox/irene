@@ -21,14 +21,12 @@ module(
 
       // Project Record
       const project = this.server.create('project', {
-        id: 1,
         last_file_id: file.id,
       });
 
       // AmAppSync Record
       const amAppSync = this.server.create('am-app-sync', {
         id: 1,
-        latest_file: file.id,
       });
 
       // AmApp Record.
@@ -39,11 +37,14 @@ module(
         last_sync: amAppSync.id,
       });
 
+      const amAppStoreInstance = this.server.create('am-app-store-instance', 1);
+
       this.setProperties({
         amApp,
         file,
         project,
         amAppSync,
+        amAppStoreInstance,
       });
 
       // Server mocks
@@ -61,13 +62,6 @@ module(
     });
 
     test('it renders correctly when amApp is "SCANNED"', async function (assert) {
-      this.server.get('/v2/am_apps/:id', (schema, req) => {
-        return {
-          ...schema.amApps.find(`${req.params.id}`)?.toJSON(),
-          latest_am_app_version: this.amAppVersion.id,
-        };
-      });
-
       // AmAppVersion for a "SCANNED" amApp
       const amAppVersion = this.server.create('am-app-version', {
         id: 1,
@@ -82,35 +76,42 @@ module(
 
       this.amAppVersion = this.store.push(normalizedAmAppVersion);
 
+      const amAppRecord = this.server.create('am-app-record', {
+        am_app_version: this.amAppVersion.id,
+        am_app_store_instance: this.amAppStoreInstance.id,
+      });
+
+      const normalized = this.store.normalize(
+        'am-app-record',
+        amAppRecord.toJSON()
+      );
+
+      this.amAppRecord = this.store.push(normalized);
+
       await render(
-        hbs`<AppMonitoring::DetailsTable::StoreVersion @amAppVersion={{this.amAppVersion}} />`
+        hbs`<AppMonitoring::DetailsTable::StoreVersion @amAppRecord={{this.amAppRecord}} />`
       );
 
       assert
-        .dom('[data-test-am-details-table-store-version]')
+        .dom('[data-test-amDetailsTable-storeVersion]')
         .exists()
-        .containsText(this.amAppVersion.comparableVersion);
+        .containsText(this.amAppRecord.amAppVersion.get('comparableVersion'));
 
       assert
-        .dom('[data-test-am-details-table-store-version-fileID]')
+        .dom('[data-test-amDetailsTable-storeVersion-fileID]')
         .exists()
         .containsText('t:fileID:()')
-        .containsText(this.amAppVersion.latestFile.get('id'));
+        .containsText(
+          this.amAppRecord.amAppVersion.get('latestFile').get('id')
+        );
 
       assert
-        .dom('[data-test-am-details-table-store-version-status]')
+        .dom('[data-test-amDetailsTable-storeVersionStatus]')
         .exists()
         .containsText('t:scanned:()');
     });
 
     test('it renders correctly when amApp is "NOT SCANNED"', async function (assert) {
-      this.server.get('/v2/am_apps/:id', (schema, req) => {
-        return {
-          ...schema.amApps.find(`${req.params.id}`)?.toJSON(),
-          latest_am_app_version: this.amAppVersion.id,
-        };
-      });
-
       // AmAppVersion for a "NOT SCANNED" amApp
       const amAppVersion = this.server.create('am-app-version', {
         id: 1,
@@ -125,22 +126,34 @@ module(
 
       this.amAppVersion = this.store.push(normalizedAmAppVersion);
 
+      const amAppRecord = this.server.create('am-app-record', {
+        am_app_version: this.amAppVersion.id,
+        am_app_store_instance: this.amAppStoreInstance.id,
+      });
+
+      const normalized = this.store.normalize(
+        'am-app-record',
+        amAppRecord.toJSON()
+      );
+
+      this.amAppRecord = this.store.push(normalized);
+
       await render(
-        hbs`<AppMonitoring::DetailsTable::StoreVersion @amAppVersion={{this.amAppVersion}} />`
+        hbs`<AppMonitoring::DetailsTable::StoreVersion @amAppRecord={{this.amAppRecord}} />`
       );
 
       assert
-        .dom('[data-test-am-details-table-store-version]')
+        .dom('[data-test-amDetailsTable-storeVersion]')
         .exists()
-        .containsText(this.amAppVersion.get('comparableVersion'));
+        .containsText(this.amAppRecord.amAppVersion.get('comparableVersion'));
 
       assert
-        .dom('[data-test-am-details-table-store-version-status]')
+        .dom('[data-test-amDetailsTable-storeVersionStatus]')
         .exists()
         .containsText('t:notScanned:()');
 
       assert
-        .dom('[data-test-am-details-table-store-version-fileID]')
+        .dom('[data-test-amDetailsTable-storeVersion-fileID]')
         .doesNotExist();
     });
   }

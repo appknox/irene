@@ -27,14 +27,14 @@ module('Integration | Component | app-monitoring/table', function (hooks) {
       this.server.create('project', { last_file_id: file.id })
     );
 
-    const latestAmAppVersions = files.map((file) =>
+    const relevantAmAppVersions = files.map((file) =>
       this.server.create('am-app-version', { latest_file: file.id })
     );
 
     const amApps = projects.map((project, idx) => {
       const amApp = this.server.create('am-app', {
         project: project.id,
-        latest_am_app_version: latestAmAppVersions[idx].id,
+        relevant_am_app_version: relevantAmAppVersions[idx].id,
       });
 
       const normalized = store.normalize('am-app', amApp.toJSON());
@@ -69,6 +69,12 @@ module('Integration | Component | app-monitoring/table', function (hooks) {
     this.server.get('/v2/am_apps/:id', (schema, req) => {
       return schema.amApps.find(`${req.params.id}`)?.toJSON();
     });
+
+    this.server.get('/v2/am_apps/:id/latest_versions', (schema) => {
+      const results = schema.amAppVersions.all().models;
+
+      return { count: 0, next: null, previous: null, results };
+    });
   });
 
   test('it should show only table headers and no-content message for enabled settings state if amApps data is empty', async function (assert) {
@@ -92,24 +98,24 @@ module('Integration | Component | app-monitoring/table', function (hooks) {
 
     await render(hbs`<AppMonitoring::Table @settings={{this.settings}}  />`);
 
-    assert.dom(`[data-test-am-table-container]`).exists();
+    assert.dom(`[data-test-am-tableContainer]`).exists();
 
-    assert.dom(`[data-test-am-table-header]`).exists();
+    assert.dom(`[data-test-amTable-header]`).exists();
 
     assert.strictEqual(
-      this.element.querySelectorAll(`[data-test-am-table-header] tr th`).length,
+      this.element.querySelectorAll(`[data-test-amTable-header] tr th`).length,
       5,
       'Should have five (5) table headers'
     );
 
-    assert.dom('[data-test-am-error-container]').exists();
+    assert.dom('[data-test-am-errorContainer]').exists();
 
-    assert.dom('[data-test-am-error-illustration]').exists();
+    assert.dom('[data-test-am-errorIllustration]').exists();
 
     assert
-      .dom('[data-test-am-error-container]')
-      .containsText('t:appMonitoringErrors.emptyResults.header:()')
-      .containsText('t:appMonitoringErrors.emptyResults.body:()');
+      .dom('[data-test-am-errorContainer]')
+      .containsText('t:appMonitoringMessages.emptyResults.header:()')
+      .containsText('t:appMonitoringMessages.emptyResults.body:()');
   });
 
   test('it should show table rows if settings is enabled and atleast one amApp exists', async function (assert) {
@@ -133,9 +139,9 @@ module('Integration | Component | app-monitoring/table', function (hooks) {
 
     await render(hbs`<AppMonitoring::Table @settings={{this.settings}}  />`);
 
-    assert.dom(`[data-test-am-table-container]`).exists();
+    assert.dom(`[data-test-am-tableContainer]`).exists();
 
-    assert.dom('[data-test-am-error-container]').doesNotExist();
+    assert.dom('[data-test-am-errorContainer]').doesNotExist();
 
     assert.dom('[data-test-am-table-body]').exists();
 
@@ -164,7 +170,7 @@ module('Integration | Component | app-monitoring/table', function (hooks) {
     assert
       .dom(rowCells[2])
       .containsText(
-        `${this.amApps[0].get('latestAmAppVersion').get('comparableVersion')}`
+        `${this.amApps[0].get('relevantAmAppVersion').get('comparableVersion')}`
       );
 
     assert
@@ -203,15 +209,15 @@ module('Integration | Component | app-monitoring/table', function (hooks) {
 
     await render(hbs`<AppMonitoring::Table @settings={{this.settings}}  />`);
 
-    assert.dom(`[data-test-am-table-container]`).exists();
+    assert.dom(`[data-test-am-tableContainer]`).exists();
 
-    assert.dom('[data-test-am-error-container]').exists();
+    assert.dom('[data-test-am-errorContainer]').exists();
 
-    assert.dom('[data-test-am-error-illustration]').exists();
+    assert.dom('[data-test-am-errorIllustration]').exists();
 
     assert
-      .dom('[data-test-am-error-container]')
-      .containsText('t:appMonitoringErrors.noOrgProjects.header:()')
-      .containsText('t:appMonitoringErrors.noOrgProjects.body:()');
+      .dom('[data-test-am-errorContainer]')
+      .containsText('t:appMonitoringMessages.noOrgProjects.header:()')
+      .containsText('t:appMonitoringMessages.noOrgProjects.body:()');
   });
 });

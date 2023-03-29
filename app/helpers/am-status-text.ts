@@ -18,9 +18,9 @@ export default class AmStatusText extends Helper<AmStatusTextSignature> {
   compute(params: Positional): string {
     const [amApp] = params;
 
-    const latestAmAppVersion = amApp?.latestAmAppVersion;
-    const hasComparableVersion = latestAmAppVersion?.get('comparableVersion');
-    const hasLatestFile = latestAmAppVersion?.get('latestFile')?.get('id');
+    const relevantAmAppVersion = amApp?.relevantAmAppVersion;
+    const hasComparableVersion = relevantAmAppVersion?.get('comparableVersion');
+    const hasLatestFile = relevantAmAppVersion?.get('latestFile')?.get('id');
 
     // For scanned state
     if (hasComparableVersion && hasLatestFile) {

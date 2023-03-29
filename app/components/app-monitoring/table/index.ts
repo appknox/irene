@@ -103,7 +103,7 @@ export default class AppMonitoringTableComponent extends Component<AppMonitoring
   // Table Actions
   @action goToPage(args: LimitOffset) {
     const { limit, offset } = args;
-    this.router.transitionTo('authenticated.app-monitoring', {
+    this.router.transitionTo('authenticated.dashboard.app-monitoring', {
       queryParams: { app_limit: limit, app_offset: offset },
     });
   }
@@ -112,7 +112,7 @@ export default class AppMonitoringTableComponent extends Component<AppMonitoring
     const { limit } = args;
     const offset = 0;
 
-    this.router.transitionTo('authenticated.app-monitoring', {
+    this.router.transitionTo('authenticated.dashboard.app-monitoring', {
       queryParams: { app_limit: limit, app_offset: offset },
     });
   }
@@ -120,7 +120,7 @@ export default class AppMonitoringTableComponent extends Component<AppMonitoring
   // Drawer Actions
   @action onTableRowClick({ rowValue: amApp }: { rowValue: AmAppModel }) {
     this.router.transitionTo(
-      'authenticated.app-monitoring.monitoring-details',
+      'authenticated.dashboard.app-monitoring.monitoring-details',
       amApp.id
     );
   }

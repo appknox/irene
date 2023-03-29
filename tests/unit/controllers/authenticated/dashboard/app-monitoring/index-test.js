@@ -2,13 +2,13 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
 module(
-  'Unit | Controller | authenticated/app-monitoring/index',
+  'Unit | Controller | authenticated/dashboard/app-monitoring/index',
   function (hooks) {
     setupTest(hooks);
 
     test('it exists', function (assert) {
       let controller = this.owner.lookup(
-        'controller:authenticated/app-monitoring/index'
+        'controller:authenticated/dashboard/app-monitoring/index'
       );
 
       assert.ok(controller);
@@ -16,7 +16,7 @@ module(
 
     test('it contains default app_limit and app_offset', function (assert) {
       const controller = this.owner.lookup(
-        'controller:authenticated/app-monitoring/index'
+        'controller:authenticated/dashboard/app-monitoring/index'
       );
 
       assert.strictEqual(
@@ -34,7 +34,7 @@ module(
 
     test('it updates app_limit and app_offset', function (assert) {
       const controller = this.owner.lookup(
-        'controller:authenticated/app-monitoring/index'
+        'controller:authenticated/dashboard/app-monitoring/index'
       );
 
       assert.strictEqual(

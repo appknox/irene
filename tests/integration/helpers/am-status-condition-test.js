@@ -23,7 +23,6 @@ module('Integration | Helper | am-status-condition', function (hooks) {
     // AmAppSync Record
     const amAppSync = this.server.create('am-app-sync', {
       id: 1,
-      latest_file: file.id,
     });
 
     this.setProperties({
@@ -55,8 +54,8 @@ module('Integration | Helper | am-status-condition', function (hooks) {
   });
 
   test('it renders "success" condition when amApp status is "SCANNED"', async function (assert) {
-    // For a "SCANNED" state the latestAmAppVersion and lastSync exist
-    // and the lastFile of the latestAmAppVersion exists also.
+    // For a "SCANNED" state the relevantAmAppVersion and lastSync exist
+    // and the lastFile of the relevantAmAppVersion exists also.
     const amAppVersion = this.server.create('am-app-version', {
       id: 1,
       latest_file: this.file.id,
@@ -66,7 +65,7 @@ module('Integration | Helper | am-status-condition', function (hooks) {
       id: 1,
       project: this.project.id,
       last_sync: this.amAppSync.id,
-      latest_am_app_version: amAppVersion.id,
+      relevant_am_app_version: amAppVersion.id,
     });
 
     const normalizedAmApp = this.store.normalize('am-app', amApp.toJSON());
@@ -79,8 +78,8 @@ module('Integration | Helper | am-status-condition', function (hooks) {
   });
 
   test('it renders "error" when amApp status is "NOT SCANNED"', async function (assert) {
-    // For a "NOT SCANNED" state the latestAmAppVersion and lastSync exist
-    // but the lastFile of the latestAmAppVersion is null.
+    // For a "NOT SCANNED" state the relevantAmAppVersion and lastSync exist
+    // but the lastFile of the relevantAmAppVersion is null.
     const amAppVersion = this.server.create('am-app-version', {
       id: 1,
       latest_file: null,
@@ -90,7 +89,7 @@ module('Integration | Helper | am-status-condition', function (hooks) {
       id: 1,
       project: this.project.id,
       last_sync: this.amAppSync.id,
-      latest_am_app_version: amAppVersion.id,
+      relevant_am_app_version: amAppVersion.id,
     });
 
     const normalizedAmApp = this.store.normalize('am-app', amApp.toJSON());
@@ -103,12 +102,12 @@ module('Integration | Helper | am-status-condition', function (hooks) {
   });
 
   test('it renders "warn" when amApp status is "PENDING"', async function (assert) {
-    // For a "PENDING" state the latestAmAppVersion and lastSync are null.
+    // For a "PENDING" state the relevantAmAppVersion and lastSync are null.
     const amApp = this.server.create('am-app', {
       id: 1,
       project: this.project.id,
       last_sync: null,
-      latest_am_app_version: null,
+      relevant_am_app_version: null,
     });
 
     const normalizedAmApp = this.store.normalize('am-app', amApp.toJSON());
@@ -121,12 +120,12 @@ module('Integration | Helper | am-status-condition', function (hooks) {
   });
 
   test('it renders "error" when amApp status is "NOT FOUND"', async function (assert) {
-    // For a "NOT FOUND" state the latestAmAppVersion is null.
+    // For a "NOT FOUND" state the relevantAmAppVersion is null.
     const amApp = this.server.create('am-app', {
       id: 1,
       project: this.project.id,
       last_sync: this.amAppSync.id,
-      latest_am_app_version: null,
+      relevant_am_app_version: null,
     });
 
     const normalizedAmApp = this.store.normalize('am-app', amApp.toJSON());

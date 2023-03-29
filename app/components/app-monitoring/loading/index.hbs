@@ -1,0 +1,20 @@
+<AkStack
+  ...attributes
+  @direction='column'
+  @alignItems='center'
+  local-class='loading'
+  class='pt-7'
+  data-test-am-loading-container
+>
+  <AkSvg::EmptyLoadingList local-class='loading-state-vector' data-test-am-loading-illustration />
+
+  <AkStack @direction='column' @alignItems='center' @spacing='1.5' class='mt-2'>
+    <AkLoader @size={{19}} data-test-am-loading-spinner />
+
+    {{#if @loadingText}}
+      <AkTypography local-class='loading-text'>
+        {{@loadingText}}
+      </AkTypography>
+    {{/if}}
+  </AkStack>
+</AkStack>

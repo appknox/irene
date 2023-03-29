@@ -1,36 +1,54 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
-import AmAppVersionModel from 'irene/models/am-app-version';
-import Store from '@ember-data/store';
-import { task } from 'ember-concurrency';
-import { tracked } from '@glimmer/tracking';
-import AmAppModel from 'irene/models/am-app';
+import IntlService from 'ember-intl/services/intl';
+import AmAppRecordModel from 'irene/models/am-app-record';
 
 interface AppMonitoringDetailsTableStoreVersionSignature {
   Args: {
-    amAppVersion: AmAppVersionModel;
+    amAppRecord: AmAppRecordModel;
   };
 }
 
 export default class AppMonitoringDetailsTableStoreVersionComponent extends Component<AppMonitoringDetailsTableStoreVersionSignature> {
-  @service declare store: Store;
+  @service declare intl: IntlService;
 
-  @tracked amApp: AmAppModel | null = null;
-
-  constructor(
-    owner: unknown,
-    args: AppMonitoringDetailsTableStoreVersionSignature['Args']
-  ) {
-    super(owner, args);
-    this.fetchAmApp.perform();
+  get amAppVersion() {
+    return this.args.amAppRecord.amAppVersion;
   }
 
-  fetchAmApp = task(async () => {
-    const amAppId = this.args.amAppVersion.amApp?.get('id');
+  get hasComparableVersion() {
+    return Boolean(this.amAppVersion?.get('comparableVersion'));
+  }
 
-    if (amAppId) {
-      const amApp = await this.store.findRecord('am-app', amAppId);
-      this.amApp = amApp;
+  get hasLatestFile() {
+    return Boolean(this.amAppVersion.get('latestFile')?.get('id'));
+  }
+
+  get versionStatusCondition() {
+    // For scanned state
+    if (this.hasComparableVersion && this.hasLatestFile) {
+      return 'success';
     }
-  });
+
+    // For not-scanned state
+    if (this.hasComparableVersion && !this.hasLatestFile) {
+      return 'error';
+    }
+
+    return 'default';
+  }
+
+  get versionStatusText() {
+    // For scanned state
+    if (this.hasComparableVersion && this.hasLatestFile) {
+      return this.intl.t('scanned');
+    }
+
+    // For not-scanned state
+    if (this.hasComparableVersion && !this.hasLatestFile) {
+      return this.intl.t('notScanned');
+    }
+
+    return 'default';
+  }
 }

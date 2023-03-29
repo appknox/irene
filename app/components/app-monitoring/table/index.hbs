@@ -1,12 +1,12 @@
-<div local-class='app-monitoring-table-container' data-test-am-table-container>
+<div local-class='app-monitoring-table-container' data-test-am-tableContainer>
   {{#if this.hasNoOrgProjects}}
     <AkTable as |tb|>
-      <tb.head @columns={{this.columns}} data-test-am-table-header />
+      <tb.head @columns={{this.columns}} data-test-amTable-header />
     </AkTable>
 
     <AppMonitoring::Empty
-      @header='{{t "appMonitoringErrors.noOrgProjects.header"}}'
-      @body='{{t "appMonitoringErrors.noOrgProjects.body"}}'
+      @header='{{t "appMonitoringMessages.noOrgProjects.header"}}'
+      @body='{{t "appMonitoringMessages.noOrgProjects.body"}}'
     />
 
   {{else}}
@@ -23,34 +23,21 @@
     >
 
       {{#if this.isFetchingAMTableData}}
-        <AkStack
-          @direction='column'
-          @alignItems='center'
-          local-class='loading'
-          class='pt-7'
-        >
-          <AkSvg::EmptyLoadingList />
-
-          <AkStack @direction='row' @spacing='1.5' class='mt-2'>
-            <AkLoader @size={{19}} />
-
-            <AkTypography>{{t 'loading'}}...</AkTypography>
-          </AkStack>
-        </AkStack>
+        <AppMonitoring::Loading @loadingText='{{t "loading"}}...' />
 
       {{else if this.isEmptyAMResult}}
         <AkTable as |tb|>
-          <tb.head @columns={{this.columns}} data-test-am-table-header />
+          <tb.head @columns={{this.columns}} data-test-amTable-header />
         </AkTable>
 
         <AppMonitoring::Empty
-          @header='{{t "appMonitoringErrors.emptyResults.header"}}'
-          @body='{{t "appMonitoringErrors.emptyResults.body"}}'
+          @header='{{t "appMonitoringMessages.emptyResults.header"}}'
+          @body='{{t "appMonitoringMessages.emptyResults.body"}}'
         />
 
       {{else}}
         <AkTable @hoverable={{true}} as |tb|>
-          <tb.head @columns={{this.columns}} data-test-am-table-header />
+          <tb.head @columns={{this.columns}} data-test-amTable-header />
           <tb.body
             @rows={{pgc.currentPageResults}}
             data-test-am-table-body

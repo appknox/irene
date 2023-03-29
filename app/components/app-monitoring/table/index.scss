@@ -4,11 +4,4 @@
   .app-monitoring-table-row {
     cursor: pointer;
   }
-
-  .loading {
-    border: 1px solid var(--appmonitoring-border-color);
-    border-radius: var(--appmonitoring-border-radius);
-    width: 100%;
-    min-height: 35em;
-  }
 }

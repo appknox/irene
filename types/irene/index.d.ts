@@ -47,6 +47,20 @@ declare global {
       options?: Omit<NotificationOption, 'message' | 'type'>
     ) => void;
   }
+
+  export interface AdapterError {
+    isAdapterError?: boolean;
+    stack?: string;
+    message?: string;
+    name?: string;
+    errors?: Error[];
+  }
+
+  interface Error {
+    status?: string;
+    title?: string;
+    detail?: string;
+  }
 }
 
 export {};

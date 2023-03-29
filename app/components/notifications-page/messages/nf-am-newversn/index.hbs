@@ -14,13 +14,14 @@
     <div class='pt-1'>
       <AkLink
         @color='primary'
-        @route='authenticated.app-monitoring'
+        @route='authenticated.dashboard.app-monitoring.monitoring-details.index'
+        @model={{@context.am_app_id}}
         @underline='always'
         @title='{{t "notificationModule.viewStoreMonitoring"}}'
       >
-        <:default>{{t
-            'notificationModule.viewStoreMonitoringResults'
-          }}</:default>
+        <:default>
+          {{t 'notificationModule.viewStoreMonitoringResults'}}
+        </:default>
       </AkLink>
     </div>
   </div>

@@ -13,7 +13,7 @@ export interface AppMonitoringRouteModel {
   settings: AMConfigurationModel | undefined;
 }
 
-export default class AuthenticatedAppMonitoringIndexRoute extends Route {
+export default class AuthenticatedDashboardAppMonitoringIndexRoute extends Route {
   @service declare organization: OrganizationService;
   @service declare appmonitoring: AppMonitoringService;
 

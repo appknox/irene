@@ -50,7 +50,7 @@ module(
       );
 
       assert
-        .dom(`[data-test-am-table-row-version]`)
+        .dom(`[data-test-amTableRow-version]`)
         .hasText(
           `${this.amApp.project.get('lastFile').get('comparableVersion')}`
         );

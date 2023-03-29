@@ -1,5 +1,4 @@
 .app-details-container {
-  width: 100%;
   padding-bottom: 1.3571em;
 
   .app-details-wrapper {
@@ -58,7 +57,7 @@
       .monitoring-details-group {
         width: 100%;
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 400px);
 
         &:first-of-type {
           border-bottom: 1px solid var(--appmonitoring-details-border-color);
@@ -82,5 +81,9 @@
         color: var(--appmonitoring-color-black);
       }
     }
+  }
+
+  .app-details-tabs {
+    width: 100%;
   }
 }

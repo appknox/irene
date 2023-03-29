@@ -2,7 +2,7 @@
   {{#if this.hasNoAmAppSyncs}}
     <AppMonitoring::Empty
       @header='{{t "notFound"}}'
-      @body='Lorem ipsum dolor sit amet consectetur. Maecenas quis morbi libero lacus. Cras sapien cursus bibendum.'
+      @body={{t 'appMonitoringMessages.monitoringHistoryEmpty.body'}}
       data-test-history-table-empty
     />
   {{else}}
