@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { AppMonitoringRouteModel } from 'irene/routes/authenticated/app-monitoring';
+import { AppMonitoringRouteModel } from 'irene/routes/authenticated/dashboard/app-monitoring';
 
 interface AppMonitoringSignature {
   Args: {

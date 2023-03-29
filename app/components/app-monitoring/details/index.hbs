@@ -1,10 +1,16 @@
-{{! template-lint-disable no-curly-component-invocation }}
-<div
+<AkStack
+  @direction='column'
+  @width='full'
   local-class='app-details-container'
   class='pl-3 pt-3 pr-3'
   data-test-app-details-container
 >
-  <AkStack @direction='column' @tag='section' local-class='app-details-wrapper'>
+  <AkStack
+    @direction='column'
+    @tag='section'
+    @width='full'
+    local-class='app-details-wrapper'
+  >
     <AkStack
       @direction='row'
       @justifyContent='space-between'
@@ -22,7 +28,7 @@
             local-class='project-icon'
           >
             <img
-              src={{@amApp.project.lastFile.iconUrl}}
+              src={{this.lastFile.iconUrl}}
               alt='app icon'
               data-test-app-icon-url
             />
@@ -33,10 +39,10 @@
             @direction='row'
             @justifyContent='center'
             @alignItems='center'
-            local-class='platform-icon platform-{{@amApp.project.platformIconClass}}'
+            local-class='platform-icon platform-{{this.project.platformIconClass}}'
             data-test-app-platform
           >
-            {{fa-icon @amApp.project.platformIconClass}}
+            {{fa-icon this.project.platformIconClass}}
           </AkStack>
         </AkStack>
 
@@ -46,7 +52,7 @@
           @gutterBottom={{true}}
           data-test-app-name
         >
-          {{@amApp.project.lastFile.name}}
+          {{this.lastFile.name}}
         </AkTypography>
 
         <AkTypography
@@ -55,32 +61,34 @@
           @color='textSecondary'
           data-test-app-namespace
         >
-          {{@amApp.project.packageName}}
+          {{this.project.packageName}}
         </AkTypography>
       </AkStack>
 
-      <AkStack
-        @direction='column'
-        @alignItems='flex-start'
-        @justifyContent='center'
-        local-class='monitoring-toggle-container'
-      >
-        <AkTypography
-          @tag='p'
-          @variant='h6'
-          @color='secondary'
-          @gutterBottom={{true}}
+      {{! This is to hide the monitoring action button until it's ready for release }}
+      {{!-- <AkStack
+          @direction='column'
+          @alignItems='flex-start'
+          @justifyContent='center'
+          local-class='monitoring-toggle-container'
         >
-          {{t 'appMonitoringModule.monitoringAction'}}
-        </AkTypography>
+          <AkTypography
+            @tag='p'
+            @variant='h6'
+            @color='secondary'
+            @gutterBottom={{true}}
+          >
+            {{t 'appMonitoringModule.monitoringAction'}}
+          </AkTypography>
 
-        <AkToggle
-          @size='small'
-          @checked={{@amApp.monitoringEnabled}}
-          local-class='monitoring-toggle'
-          data-test-app-monitoring-toggle
-        />
-      </AkStack>
+          <AkToggle
+            @size='small'
+            @checked={{@amApp.monitoringEnabled}}
+            local-class='monitoring-toggle'
+            data-test-app-monitoring-toggle
+          />
+        </AkStack> --}}
+
     </AkStack>
 
     <AkStack @direction='column' local-class='monitoring-details-container'>
@@ -103,8 +111,8 @@
             data-test-app-latest-scanned-version
           >
             {{if
-              @amApp.project.lastFile.comparableVersion
-              @amApp.project.lastFile.comparableVersion
+              this.lastFile.comparableVersion
+              this.lastFile.comparableVersion
               '-'
             }}
           </AkTypography>
@@ -127,9 +135,9 @@
             @tag='p'
             data-test-app-last-monitored-date
           >
-            {{#if @amApp.lastSync.syncedOn}}
+            {{#if this.lastSyncedDate}}
 
-              {{day-js date=@amApp.lastSync.syncedOn format='DD MMM YYYY'}}
+              {{this.lastSyncedDate}}
 
             {{else if @amApp.isActive}}
               <AkStack
@@ -170,18 +178,18 @@
             {{t 'fileID'}}
           </AkTypography>
 
-          {{#if @amApp.project.lastFile}}
+          {{#if this.lastFile}}
             <AkLink
               @underline='always'
               @color='primary'
               @fontWeight='medium'
               @route='authenticated.file'
-              @model={{@amApp.project.lastFile.id}}
+              @model={{this.lastFile.id}}
               target='_blank'
               rel='noopener noreferrer'
               data-test-app-file-id
             >
-              {{@amApp.project.lastFile.id}}
+              {{this.lastFile.id}}
             </AkLink>
 
           {{else}}
@@ -216,7 +224,7 @@
     </AkStack>
   </AkStack>
 
-  <AkTabs as |Akt|>
+  <AkTabs local-class='app-details-tabs' as |Akt|>
     {{#each this.tabItems as |item|}}
       <Akt.tabItem
         @id={{item.id}}
@@ -228,4 +236,4 @@
       </Akt.tabItem>
     {{/each}}
   </AkTabs>
-</div>
+</AkStack>

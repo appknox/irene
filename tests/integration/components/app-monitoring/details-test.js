@@ -1,11 +1,11 @@
-import { click, render } from '@ember/test-helpers';
+import { render } from '@ember/test-helpers';
 import dayjs from 'dayjs';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
-import styles from 'irene/components/app-monitoring/details/index.scss';
 import { module, test } from 'qunit';
 import faker from 'faker';
+import styles from 'irene/components/app-monitoring/details/index.scss';
 
 module('Integration | Component | app-monitoring/details', function (hooks) {
   setupRenderingTest(hooks);
@@ -80,11 +80,6 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
     assert.dom('[data-test-app-file-id]').containsText(`${lastFile.get('id')}`);
 
     assert
-      .dom('[data-test-app-monitoring-toggle] [data-test-toggle-input]')
-      .exists()
-      .isChecked();
-
-    assert
       .dom('[data-test-app-latest-scanned-version]')
       .exists()
       .hasText(`${lastFile.get('comparableVersion')}`);
@@ -94,31 +89,6 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
       .dom('[data-test-app-monitoring-status]')
       .exists()
       .hasText('t:activeCapital:()');
-  });
-
-  test('it toggles monitoring status correctly', async function (assert) {
-    this.amApp = this.store.createRecord('am-app', {
-      id: 1,
-      project: this.project,
-      latestAmAppVersion: this.latestAmAppVersion,
-      isActive: true,
-      monitoringEnabled: false,
-    });
-
-    await render(hbs`
-      <AppMonitoring::Details @amApp={{this.amApp}} />
-    `);
-
-    assert
-      .dom('[data-test-app-monitoring-toggle] [data-test-toggle-input]')
-      .exists()
-      .isNotChecked();
-
-    await click('[data-test-app-monitoring-toggle] [data-test-toggle-input]');
-
-    assert
-      .dom('[data-test-app-monitoring-toggle] [data-test-toggle-input]')
-      .isChecked();
   });
 
   test('it renders monitored date if amApp has a lastSynced date', async function (assert) {
@@ -224,7 +194,7 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
     'it renders the history and details tabs',
     [
       ['monitoring-details', 't:appMonitoringModule.monitoringDetails:()'],
-      ['monitoring-history', 't:appMonitoringModule.monitoringHistory:()'],
+      // ['monitoring-history', 't:appMonitoringModule.monitoringHistory:()'],
     ],
     async function (assert, [tabId, tabLabel]) {
       this.amApp = this.store.createRecord('am-app', {

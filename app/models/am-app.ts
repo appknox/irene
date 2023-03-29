@@ -33,6 +33,9 @@ export default class AmAppModel extends Model {
   @belongsTo('am-app-version', { inverse: null })
   declare latestAmAppVersion: AsyncBelongsTo<AmAppVersionModel>;
 
+  @belongsTo('am-app-version', { inverse: null })
+  declare relevantAmAppVersion: AsyncBelongsTo<AmAppVersionModel>;
+
   @hasMany('am-app-sync')
   declare amAppSyncs: AsyncHasMany<AmAppSyncModel>;
 
@@ -43,8 +46,8 @@ export default class AmAppModel extends Model {
     return !this.lastSync.get('id');
   }
 
-  get hasLatestAmAppVersion() {
-    return !!this.latestAmAppVersion.get('id');
+  get hasRelevantAmAppVersion() {
+    return !!this.relevantAmAppVersion.get('id');
   }
 
   get isNotFound() {
@@ -52,7 +55,7 @@ export default class AmAppModel extends Model {
       return false;
     }
 
-    return !this.hasLatestAmAppVersion || false;
+    return !this.hasRelevantAmAppVersion || false;
   }
 }
 

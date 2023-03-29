@@ -1,18 +1,47 @@
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import { DS } from 'ember-data';
 import Component from '@glimmer/component';
-import AmAppVersionModel from 'irene/models/am-app-version';
+import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
+import Store from '@ember-data/store';
+import AmAppRecordModel from 'irene/models/am-app-record';
+import AmAppModel from 'irene/models/am-app';
+import { action } from '@ember/object';
+
+interface LimitOffset {
+  limit: number;
+  offset: number;
+}
+
+type AmAppRecordModelArray =
+  DS.AdapterPopulatedRecordArray<AmAppRecordModel> & {
+    meta: { count: number };
+  };
 
 interface AppMonitoringDetailsTableSignature {
   Args: {
-    amAppVersions: DS.AdapterPopulatedRecordArray<AmAppVersionModel>;
+    amApp: AmAppModel | null;
   };
 }
 
 export default class AppMonitoringDetailsTableComponent extends Component<AppMonitoringDetailsTableSignature> {
   @service declare intl: IntlService;
+  @service declare store: Store;
+
+  @tracked amAppRecordsData: AmAppRecordModel[] = [];
+  @tracked amAppRecordsTotalCount = 0;
+  @tracked limit = 50;
+  @tracked offset = 0;
+
+  constructor(
+    owner: unknown,
+    args: AppMonitoringDetailsTableSignature['Args']
+  ) {
+    super(owner, args);
+    this.fetchAmAppRecords.perform();
+  }
 
   get columns() {
     return [
@@ -22,33 +51,71 @@ export default class AppMonitoringDetailsTableComponent extends Component<AppMon
         width: 200,
       },
       {
-        name: this.intl.t('appMonitoringModule.countryCode'),
-        component: 'app-monitoring/details-table/country-code',
-        width: 10,
-        textAlign: 'center',
-      },
-      {
-        name: this.intl.t('appMonitoringModule.initiateScan'),
-        component: 'app-monitoring/details-table/initiate-scan',
-        width: 10,
-        textAlign: 'center',
-      },
-      {
-        name: this.intl.t('action'),
-        component: 'app-monitoring/details-table/action',
-        width: 10,
+        name: this.intl.t('country'),
+        component: 'app-monitoring/details-table/country',
+        width: 20,
         textAlign: 'center',
       },
     ];
   }
 
-  get amAppVersions() {
-    return this.args.amAppVersions.toArray();
+  get amApp() {
+    return this.args.amApp;
+  }
+
+  get fixTableHeight() {
+    return this.amAppRecordsData.length > 10;
   }
 
   get hasNoAmAppVersions() {
-    return this.amAppVersions.length < 1;
+    return this.amAppRecordsData.length < 1;
   }
+
+  get showPendingStateLoader() {
+    return (
+      this.hasNoAmAppVersions && this.amApp?.isPending && this.amApp.isActive
+    );
+  }
+
+  // Table Actions
+  @action goToPage(args: LimitOffset) {
+    const { limit, offset } = args;
+
+    this.limit = limit;
+    this.offset = offset;
+
+    this.fetchAmAppRecords.perform();
+  }
+
+  @action onItemPerPageChange(args: LimitOffset) {
+    const { limit } = args;
+    const offset = 0;
+
+    this.limit = limit;
+    this.offset = offset;
+
+    this.fetchAmAppRecords.perform();
+  }
+
+  @action
+  reloadAmAppRecords() {
+    this.fetchAmAppRecords.perform();
+  }
+
+  fetchAmAppRecords = task(async () => {
+    const amAppId = this.amApp?.id;
+
+    if (amAppId) {
+      const amAppRecordsData = (await this.store.query('am-app-record', {
+        amAppId,
+        limit: this.limit,
+        offset: this.offset,
+      })) as AmAppRecordModelArray;
+
+      this.amAppRecordsData = amAppRecordsData.toArray();
+      this.amAppRecordsTotalCount = amAppRecordsData.meta.count;
+    }
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

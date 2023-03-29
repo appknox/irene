@@ -27,7 +27,6 @@ module(
       // AmAppSync Record
       const amAppSync = this.server.create('am-app-sync', {
         id: 1,
-        latest_file: file.id,
       });
 
       this.setProperties({
@@ -58,13 +57,17 @@ module(
       });
     });
 
-    test('it renders "NOT FOUND" status in store version column if comparableVersion is empty and latestAmAppVersion is null', async function (assert) {
-      // For a "NOT FOUND" state the latestAmAppVersion is null.
+    test('it renders "NOT FOUND" status in store version column if comparableVersion is empty and relevantAmAppVersion is null', async function (assert) {
+      this.server.get('/v2/am_apps/:id/latest_versions', () => {
+        return { count: 0, next: null, previous: null, results: [] };
+      });
+
+      // For a "NOT FOUND" state the relevantAmAppVersion is null.
       const amApp = this.server.create('am-app', {
         id: 1,
         project: this.project.id,
         last_sync: this.amAppSync.id,
-        latest_am_app_version: null,
+        relevant_am_app_version: null,
       });
 
       const normalizedAmApp = this.store.normalize('am-app', amApp.toJSON());
@@ -76,17 +79,21 @@ module(
       );
 
       assert
-        .dom('[data-test-am-table-row-store-version]')
+        .dom('[data-test-amTableRow-store-version]')
         .containsText('t:notFound:()');
     });
 
     test('it renders "PENDING" status in store version column if comparableVersion is empty and lastSync are null', async function (assert) {
-      // For a "PENDING" state the latestAmAppVersion and lastSync are null.
+      this.server.get('/v2/am_apps/:id/latest_versions', () => {
+        return { count: 0, next: null, previous: null, results: [] };
+      });
+
+      // For a "PENDING" state the relevantAmAppVersion and lastSync are null.
       const amApp = this.server.create('am-app', {
         id: 1,
         project: this.project.id,
         last_sync: null,
-        latest_am_app_version: null,
+        relevant_am_app_version: null,
       });
 
       const normalizedAmApp = this.store.normalize('am-app', amApp.toJSON());
@@ -102,15 +109,19 @@ module(
 
       assert
         .dom(
-          '[data-test-am-table-row-store-version] [data-test-am-status-element]'
+          '[data-test-amTableRow-store-version] [data-test-am-status-element]'
         )
         .containsText('t:pending:()');
     });
 
-    test('it renders "NOT SCANNED" status when latestAmAppVersion has a comparableVersion but latestFile is null', async function (assert) {
-      // For a "NOT SCANNED" state the latestAmAppVersion and lastSync exist
-      // but the lastFile of the latestAmAppVersion is null.
-      const amAppVersion = this.server.create('am-app-version', {
+    test('it renders "NOT SCANNED" status when relevantAmAppVersion has a comparableVersion but latestFile is null', async function (assert) {
+      this.server.get('/v2/am_apps/:id/latest_versions', () => {
+        return { count: 0, next: null, previous: null, results: [] };
+      });
+
+      // For a "NOT SCANNED" state the relevantAmAppVersion and lastSync exist
+      // but the lastFile of the relevantAmAppVersion is null.
+      const relevantAmAppVersion = this.server.create('am-app-version', {
         id: 1,
         latest_file: null,
       });
@@ -119,7 +130,7 @@ module(
         id: 1,
         project: this.project.id,
         last_sync: this.amAppSync.id,
-        latest_am_app_version: amAppVersion.id,
+        relevant_am_app_version: relevantAmAppVersion.id,
       });
 
       const normalizedAmApp = this.store.normalize('am-app', amApp.toJSON());
@@ -134,23 +145,27 @@ module(
       );
 
       assert
-        .dom('[data-test-am-table-row-store-version]')
+        .dom('[data-test-amTableRow-store-version]')
         .containsText(
-          `${this.amApp.get('latestAmAppVersion').get('comparableVersion')}`
+          `${this.amApp.get('relevantAmAppVersion').get('comparableVersion')}`
         )
         .containsText(`t:notScanned:()`);
 
       assert
         .dom(
-          '[data-test-am-table-row-store-version] [data-test-am-status-element]'
+          '[data-test-amTableRow-store-version] [data-test-am-status-element]'
         )
         .exists()
         .containsText(`t:notScanned:()`);
     });
 
-    test('it renders "SCANNED" status when latestAmAppVersion has a comparableVersion and a latestFile', async function (assert) {
-      // For a "SCANNED" state the latestAmAppVersion and lastSync exist
-      // and the lastFile of the latestAmAppVersion exists also.
+    test('it renders "SCANNED" status when relevantAmAppVersion has a comparableVersion and a latestFile', async function (assert) {
+      this.server.get('/v2/am_apps/:id/latest_versions', () => {
+        return { count: 0, next: null, previous: null, results: [] };
+      });
+
+      // For a "SCANNED" state the relevantAmAppVersion and lastSync exist
+      // and the lastFile of the relevantAmAppVersion exists also.
       const amAppVersion = this.server.create('am-app-version', {
         id: 1,
         latest_file: this.file.id,
@@ -160,7 +175,7 @@ module(
         id: 1,
         project: this.project.id,
         last_sync: this.amAppSync.id,
-        latest_am_app_version: amAppVersion.id,
+        relevant_am_app_version: amAppVersion.id,
       });
 
       const normalizedAmApp = this.store.normalize('am-app', amApp.toJSON());
@@ -175,16 +190,58 @@ module(
       );
 
       assert
-        .dom('[data-test-am-table-row-store-version]')
+        .dom('[data-test-amTableRow-store-version]')
         .containsText(
-          `${this.amApp.get('latestAmAppVersion').get('comparableVersion')}`
+          `${this.amApp.get('relevantAmAppVersion').get('comparableVersion')}`
         );
 
       assert
         .dom(
-          '[data-test-am-table-row-store-version] [data-test-am-status-element]'
+          '[data-test-amTableRow-store-version] [data-test-am-status-element]'
         )
         .doesNotExist();
+    });
+
+    test('it renders multiple versions icon if amApp has multiple versions with distinct comparableVersions', async function (assert) {
+      this.server.get('/v2/am_apps/:id/latest_versions', (schema) => {
+        const results = schema.amAppVersions.all().models;
+
+        return { count: 0, next: null, previous: null, results };
+      });
+
+      const files = [this.file, ...this.server.createList('file', 4)];
+
+      const amAppVersions = files.map((file) =>
+        this.server.create('am-app-version', {
+          latest_file: file.id,
+        })
+      );
+
+      const amApp = this.server.create('am-app', {
+        id: 1,
+        project: this.project.id,
+        last_sync: this.amAppSync.id,
+        relevant_am_app_version: amAppVersions[0].id,
+      });
+
+      const normalizedAmApp = this.store.normalize('am-app', amApp.toJSON());
+
+      this.amApp = this.store.push(normalizedAmApp);
+
+      await render(
+        hbs`
+        <AppMonitoring::Table::StoreVersion
+          @amApp={{this.amApp}}
+        />`
+      );
+
+      assert
+        .dom('[data-test-amTable-storeVersion-multipleVersion-tooltip]')
+        .exists();
+
+      assert
+        .dom('[data-test-amTable-storeVersion-multipleVersion-icon]')
+        .exists();
     });
   }
 );

@@ -13,6 +13,5 @@ export default class AppMonitoringEmptyComponent extends Component<AppMonitoring
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
     'AppMonitoring::Empty': typeof AppMonitoringEmptyComponent;
-    'app-monitoring/empty': typeof AppMonitoringEmptyComponent;
   }
 }

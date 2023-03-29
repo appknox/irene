@@ -4,21 +4,23 @@
   @direction='column'
   @alignItems='center'
   local-class='empty-container'
-  data-test-am-error-container
+  data-test-am-errorContainer
 >
-  <span local-class='empty-state-vector' data-test-am-error-illustration>
-    <AkSvg::AmTableEmpty />
-  </span>
+
+  <AkSvg::AmTableEmpty
+    local-class='empty-state-vector'
+    data-test-am-errorIllustration
+  />
 
   <AkTypography
     @variant='h5'
     @gutterBottom={{true}}
-    data-test-am-empty-header-text
+    data-test-am-emptyHeaderText
   >
     {{@header}}
   </AkTypography>
 
-  <AkTypography local-class='body-text' data-test-am-empty-body-text>
+  <AkTypography local-class='body-text' data-test-am-emptyBodyText>
     {{@body}}
   </AkTypography>
 </AkStack>

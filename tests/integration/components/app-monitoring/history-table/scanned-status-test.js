@@ -36,7 +36,7 @@ module(
         id: 1,
         latest_file: file.id,
         project: project.id,
-        latest_am_app_version: amAppVersion.id,
+        relevant_am_app_version: amAppVersion.id,
       });
 
       this.setProperties({
@@ -113,7 +113,7 @@ module(
         id: 1,
         latest_file: this.file.id,
         project: this.project.id,
-        latest_am_app_version: amAppVersion.id,
+        relevant_am_app_version: amAppVersion.id,
       });
 
       const amAppSync = this.server.create('am-app-sync', {
@@ -151,7 +151,7 @@ module(
         id: 1,
         latest_file: this.file.id,
         project: this.project.id,
-        latest_am_app_version: null,
+        relevant_am_app_version: null,
       });
 
       const amAppSync = this.server.create('am-app-sync', {

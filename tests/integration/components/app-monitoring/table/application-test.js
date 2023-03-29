@@ -49,11 +49,11 @@ module(
       );
 
       assert
-        .dom(`[data-test-am-table-row-app-namespace]`)
+        .dom(`[data-test-amTableRow-app-namespace]`)
         .containsText(this.amApp.get('project').get('packageName'));
 
       assert
-        .dom(`[data-test-am-table-row-app-name]`)
+        .dom(`[data-test-amTableRow-app-name]`)
         .containsText(this.amApp.get('project').get('lastFile').get('name'));
     });
   }

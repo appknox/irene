@@ -51,7 +51,7 @@ module(
 
       assert
         .dom(
-          `[data-test-am-table-row-platform=${this.amApp.project.get(
+          `[data-test-amTableRow-platform=${this.amApp.project.get(
             'platformIconClass'
           )}]`
         )

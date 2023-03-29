@@ -7,9 +7,9 @@ type Positional = [AmAppModel | null];
 export function amStatusCondition(params: Positional): AkChipColor {
   const [amApp] = params;
 
-  const latestAmAppVersion = amApp?.latestAmAppVersion;
-  const hasComparableVersion = latestAmAppVersion?.get('comparableVersion');
-  const hasLatestFile = latestAmAppVersion?.get('latestFile')?.get('id');
+  const relevantAmAppVersion = amApp?.relevantAmAppVersion;
+  const hasComparableVersion = relevantAmAppVersion?.get('comparableVersion');
+  const hasLatestFile = relevantAmAppVersion?.get('latestFile')?.get('id');
 
   // For scanned state
   if (hasComparableVersion && hasLatestFile) {

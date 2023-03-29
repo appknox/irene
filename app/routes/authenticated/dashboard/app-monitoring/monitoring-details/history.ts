@@ -4,14 +4,14 @@ import Route from '@ember/routing/route';
 import OrganizationService from 'irene/services/organization';
 import Store from '@ember-data/store';
 import { inject as service } from '@ember/service';
-import AmAppVersionModel from 'irene/models/am-app-version';
-import { MonitoringDetailsQueryParams } from 'irene/routes/authenticated/app-monitoring/monitoring-details';
+import { AppMonitoringDetailsQueryParams } from '../monitoring-details';
+import AmAppSyncModel from 'irene/models/am-app-sync';
 
-export default class AuthenticatedAppMonitoringMonitoringDetailsIndexRoute extends Route {
+export default class AuthenticatedDashboardAppMonitoringMonitoringDetailsHistoryRoute extends Route {
   @service declare organization: OrganizationService;
   @service declare store: Store;
 
-  parentRoute = 'authenticated.app-monitoring.monitoring-details';
+  parentRoute = 'authenticated.dashboard.app-monitoring.monitoring-details';
 
   beforeModel() {
     if (!this.organization.selected?.features.app_monitoring) {
@@ -19,15 +19,17 @@ export default class AuthenticatedAppMonitoringMonitoringDetailsIndexRoute exten
     }
   }
 
-  async model(): Promise<DS.AdapterPopulatedRecordArray<AmAppVersionModel>> {
+  async model(): Promise<DS.AdapterPopulatedRecordArray<AmAppSyncModel>> {
     const { am_app_id } = this.paramsFor(
       this.parentRoute
-    ) as MonitoringDetailsQueryParams;
+    ) as AppMonitoringDetailsQueryParams;
 
-    const amAppVersions = await this.store.query('am-app-version', {
+    const amAppSyncs = await this.store.query('am-app-sync', {
       amAppId: am_app_id,
+      limit: 4,
+      offset: 0,
     });
 
-    return amAppVersions;
+    return amAppSyncs;
   }
 }

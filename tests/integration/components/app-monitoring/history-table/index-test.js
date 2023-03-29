@@ -36,14 +36,12 @@ module(
 
       // TODO: Add proper tests for empty content when empty messages have been updated
       assert
-        .dom('[data-test-history-table-empty] [data-test-am-empty-header-text]')
+        .dom('[data-test-history-table-empty] [data-test-am-emptyHeaderText]')
         .hasText('t:notFound:()');
 
       assert
-        .dom('[data-test-history-table-empty] [data-test-am-empty-body-text]')
-        .hasText(
-          'Lorem ipsum dolor sit amet consectetur. Maecenas quis morbi libero lacus. Cras sapien cursus bibendum.'
-        );
+        .dom('[data-test-history-table-empty] [data-test-am-emptyBodyText]')
+        .hasText('t:appMonitoringMessages.monitoringHistoryEmpty.body:()');
     });
 
     test('it renders details table when atleast one amApp sync record exists', async function (assert) {

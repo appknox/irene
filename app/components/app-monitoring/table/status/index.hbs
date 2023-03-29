@@ -2,8 +2,8 @@
 <AkStack
   local-class='project-status'
   @direction='column'
-  data-test-am-table-row-item
-  data-test-am-table-row-status
+  data-test-amTable-rowItem
+  data-test-amTableRow-status
 >
   <AppMonitoring::Status
     @condition='{{am-monitoring-condition @amApp}}'
@@ -14,7 +14,7 @@
     local-class='last-sync-date'
     @direction='row'
     @alignItems='center'
-    data-test-am-table-row-last-sync
+    data-test-amTableRow-last-sync
   >
     {{#if @amApp.lastSync.syncedOn}}
       {{t 'appMonitoringModule.lastMonitoredOn'}}
@@ -23,7 +23,7 @@
         @variant='subtitle2'
         @color='textSecondary'
         class='ml-1'
-        data-test-am-table-row-last-sync-date
+        data-test-amTableRow-last-sync-date
       >
         {{day-js date=@amApp.lastSync.syncedOn format='DD MMM YYYY'}}
       </AkTypography>
@@ -34,7 +34,7 @@
         @alignItems='center'
         @tag='span'
         class='mr-1'
-        data-test-am-table-row-last-sync-spinner
+        data-test-amTableRow-last-sync-spinner
       >
         <AkLoader @size={{13}} />
       </AkStack>

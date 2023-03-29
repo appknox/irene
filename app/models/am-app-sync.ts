@@ -2,11 +2,11 @@ import Model, { attr, belongsTo, AsyncBelongsTo } from '@ember-data/model';
 import AmAppModel from './am-app';
 
 export default class AmAppSyncModel extends Model {
-  @belongsTo('am-app')
-  declare amApp: AsyncBelongsTo<AmAppModel>;
-
   @attr('date')
   declare syncedOn: Date;
+
+  @belongsTo('am-app')
+  declare amApp: AsyncBelongsTo<AmAppModel>;
 }
 
 declare module 'ember-data/types/registries/model' {

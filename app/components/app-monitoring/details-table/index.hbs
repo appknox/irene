@@ -1,28 +1,82 @@
-<div class='px-3'>
-  {{#if this.hasNoAmAppVersions}}
-    <AppMonitoring::Empty
-      @header='{{t "notFound"}}'
-      @body='Lorem ipsum dolor sit amet consectetur. Maecenas quis morbi libero lacus. Cras sapien cursus bibendum.'
-      data-test-am-details-table-empty
-    />
-  {{else}}
-    <AkTable
-      @variant='full-bordered'
-      @borderColor='dark'
-      local-class='app-details-table'
-      data-test-am-details-table
-      as |tb|
-    >
-      <tb.head @columns={{this.columns}} data-test-am-table-header />
-      <tb.body @rows={{this.amAppVersions}} as |b|>
-        <b.row data-test-am-details-table-row as |r|>
-          <r.cell>
-            {{#let (component r.columnValue.component) as |Component|}}
-              <Component @amAppVersion={{r.rowValue}} />
-            {{/let}}
-          </r.cell>
-        </b.row>
-      </tb.body>
-    </AkTable>
-  {{/if}}
+{{!@glint-nocheck: did-update}}
+<div
+  class='px-3'
+  {{did-update this.reloadAmAppRecords this.amApp.id}}
+  data-test-amDetailsTable-container
+>
+  <AkPaginationProvider
+    @results={{this.amAppRecordsData}}
+    @onItemPerPageChange={{this.onItemPerPageChange}}
+    @totalItems={{this.amAppRecordsTotalCount}}
+    @nextAction={{this.goToPage}}
+    @prevAction={{this.goToPage}}
+    @itemPerPageOptions={{array 50 75}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    as |pgc|
+  >
+    {{#if this.showPendingStateLoader}}
+      <AppMonitoring::Loading
+        @loadingText='{{t "appMonitoringMessages.pendingStateLoadingText"}}'
+        data-test-amDetailsTable-pendingStateLoader
+      />
+
+    {{else if this.fetchAmAppRecords.isRunning}}
+      <AppMonitoring::Loading
+        @loadingText='{{t "loading"}}...'
+        data-test-amDetailsTable-loading
+      />
+
+    {{else if this.hasNoAmAppVersions}}
+      <AppMonitoring::Empty
+        @header='{{t "notFound"}}'
+        @body={{t 'appMonitoringMessages.monitoringDetailsEmpty.body'}}
+        data-test-amDetailsTable-empty
+      />
+
+    {{else}}
+      <div
+        local-class='
+        app-details-table-container
+        {{if this.fixTableHeight "fixed"}}
+        '
+      >
+        <AkTable
+          @variant='full-bordered'
+          @borderColor='dark'
+          local-class='app-details-table'
+          data-test-amDetailsTable
+          as |tb|
+        >
+          <tb.head @columns={{this.columns}} data-test-amTable-header />
+
+          <tb.body @rows={{pgc.currentPageResults}} @renderAll={{true}} as |b|>
+            <b.row local-class='table-row' data-test-amDetailsTable-row as |r|>
+              <r.cell data-test-amDetailsTable-cell>
+                {{#let (component r.columnValue.component) as |Component|}}
+                  <Component @amAppRecord={{r.rowValue}} />
+                {{/let}}
+              </r.cell>
+            </b.row>
+          </tb.body>
+        </AkTable>
+      </div>
+
+      <AkPagination
+        @disableNext={{pgc.disableNext}}
+        @nextAction={{pgc.nextAction}}
+        @disablePrev={{pgc.disablePrev}}
+        @prevAction={{pgc.prevAction}}
+        @endItemIdx={{pgc.endItemIdx}}
+        @startItemIdx={{pgc.startItemIdx}}
+        @itemPerPageOptions={{pgc.itemPerPageOptions}}
+        @onItemPerPageChange={{pgc.onItemPerPageChange}}
+        @selectedOption={{pgc.selectedOption}}
+        @tableItemLabel={{t 'versions'}}
+        @perPageTranslation={{t 'recordPerPage'}}
+        @totalItems={{pgc.totalItems}}
+      />
+    {{/if}}
+
+  </AkPaginationProvider>
 </div>

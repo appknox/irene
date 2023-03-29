@@ -16,10 +16,10 @@ module('Integration | Component | app-monitoring/empty', function (hooks) {
       hbs`<AppMonitoring::Empty @header={{this.errorHeaderText}} @body={{this.errorBodyText}} />`
     );
 
-    assert.dom('[data-test-am-error-container]').exists();
-    assert.dom('[data-test-am-error-illustration]').exists();
+    assert.dom('[data-test-am-errorContainer]').exists();
+    assert.dom('[data-test-am-errorIllustration]').exists();
     assert
-      .dom('[data-test-am-error-container]')
+      .dom('[data-test-am-errorContainer]')
       .containsText(this.errorHeaderText)
       .containsText(this.errorBodyText);
   });

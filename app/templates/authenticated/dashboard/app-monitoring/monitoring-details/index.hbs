@@ -1,0 +1,8 @@
+{{page-title @model.project.lastFile.name}}
+
+<AkBreadcrumbs::Item
+  @route='authenticated.dashboard.app-monitoring.monitoring-details'
+  @linkTitle={{t 'appMonitoringModule.monitoringDetails'}}
+/>
+
+<AppMonitoring::DetailsTable @amApp={{@model}} />

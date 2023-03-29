@@ -1,11 +1,19 @@
-.app-details-table {
-  th:first-child,
-  td:first-child {
-    border-left: none !important;
+.app-details-table-container {
+  &.fixed {
+    height: 460px;
   }
 
-  th:last-child,
-  td:last-child {
-    border-right: none !important;
+  .app-details-table {
+    td:first-child {
+      border-left: none !important;
+    }
+
+    td:last-child {
+      border-right: none !important;
+    }
+
+    .table-row {
+      height: 5.5714em !important;
+    }
   }
 }

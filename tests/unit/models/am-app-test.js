@@ -20,53 +20,55 @@ module('Unit | Model | am app', function (hooks) {
     assert.false(am_app2.isPending);
   });
 
-  test('hasLatestAmAppVersion should be true if latestAmAppVersion is not null', function (assert) {
+  test('hasRelevantAmAppVersion should be true if relevantAmAppVersion is not null', function (assert) {
     const store = this.owner.lookup('service:store');
     const am_app_version = store.createRecord('am-app-version', { id: 1 });
     const am_app1 = store.createRecord('am-app', {
-      latestAmAppVersion: am_app_version,
+      relevantAmAppVersion: am_app_version,
     });
-    assert.true(am_app1.hasLatestAmAppVersion);
+    assert.true(am_app1.hasRelevantAmAppVersion);
 
-    const am_app2 = store.createRecord('am-app', { latestAmAppVersion: null });
-    assert.false(am_app2.hasLatestAmAppVersion);
+    const am_app2 = store.createRecord('am-app', {
+      relevantAmAppVersion: null,
+    });
+    assert.false(am_app2.hasRelevantAmAppVersion);
   });
 
-  test('isNotFound should be true if not pending and latestAmAppVersion is null', function (assert) {
+  test('isNotFound should be true if not pending and relevantAmAppVersion is null', function (assert) {
     const store = this.owner.lookup('service:store');
     const am_app_version = store.createRecord('am-app-version', { id: 21 });
     const am_app_sync = store.createRecord('am-app-sync', { id: 11 });
     const mapping = [
       {
         lastSync: am_app_sync,
-        latestAmAppVersion: am_app_version,
+        relevantAmAppVersion: am_app_version,
         isNotFound: false,
       },
       {
         lastSync: null,
-        latestAmAppVersion: am_app_version,
+        relevantAmAppVersion: am_app_version,
         isNotFound: false,
       },
       {
         lastSync: am_app_sync,
-        latestAmAppVersion: null,
+        relevantAmAppVersion: null,
         isNotFound: true,
       },
       {
         lastSync: null,
-        latestAmAppVersion: null,
+        relevantAmAppVersion: null,
         isNotFound: false,
       },
     ];
     assert.expect(4);
     for (let obj of mapping) {
       const am_app = store.createRecord('am-app', {
-        latestAmAppVersion: obj.latestAmAppVersion,
+        relevantAmAppVersion: obj.relevantAmAppVersion,
         lastSync: obj.lastSync,
       });
       const msg = `isNotFound(${
         obj.isNotFound
-      }):hasLatestAmAppVersion(${!!obj.hasLatestAmAppVersion}):lastSync(${!!obj.lastSync})`;
+      }):hasRelevantAmAppVersion(${!!obj.hasRelevantAmAppVersion}):lastSync(${!!obj.lastSync})`;
       assert.strictEqual(obj.isNotFound, am_app.isNotFound, msg);
     }
   });

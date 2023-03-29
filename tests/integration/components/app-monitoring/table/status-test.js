@@ -67,7 +67,7 @@ module(
       );
 
       assert
-        .dom(`[data-test-am-table-row-status]`)
+        .dom(`[data-test-amTableRow-status]`)
         .exists()
         .containsText(`t:inactiveCapital:()`);
     });
@@ -91,7 +91,7 @@ module(
       );
 
       assert
-        .dom('[data-test-am-table-row-status]')
+        .dom('[data-test-amTableRow-status]')
         .containsText('t:activeCapital:()');
     });
 
@@ -115,10 +115,10 @@ module(
       );
 
       assert
-        .dom(`[data-test-am-table-row-status]`)
+        .dom(`[data-test-amTableRow-status]`)
         .containsText(`t:inactiveCapital:()`);
 
-      assert.dom('[data-test-am-table-row-last-sync-spinner]').doesNotExist();
+      assert.dom('[data-test-amTableRow-last-sync-spinner]').doesNotExist();
     });
   }
 );
