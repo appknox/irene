@@ -20,6 +20,20 @@ export default class AppMonitoringService extends Service {
   @tracked offset = 0;
   @tracked appMonitoringDataCount = 0;
 
+  get isFetchingAMData() {
+    return this.fetch.isRunning;
+  }
+
+  setLimitOffset({ limit = 10, offset = 0 }) {
+    this.limit = limit;
+    this.offset = offset;
+    return this;
+  }
+
+  async reload() {
+    await this.fetch.perform();
+  }
+
   fetch = task(async () => {
     try {
       const monitoringData = (await this.store.query('am-app', {
@@ -36,18 +50,4 @@ export default class AppMonitoringService extends Service {
       );
     }
   });
-
-  get isFetchingAMData() {
-    return this.fetch.isRunning;
-  }
-
-  async reload() {
-    await this.fetch.perform();
-  }
-
-  setLimitOffset({ limit = 10, offset = 0 }) {
-    this.limit = limit;
-    this.offset = offset;
-    return this;
-  }
 }

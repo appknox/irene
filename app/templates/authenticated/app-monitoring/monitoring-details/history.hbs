@@ -1,0 +1,8 @@
+{{page-title 'History'}}
+
+<AkBreadcrumbs::Item
+  @route='authenticated.app-monitoring.monitoring-details.history'
+  @linkTitle={{t 'appMonitoringModule.monitoringHistory'}}
+/>
+
+<AppMonitoring::HistoryTable @amAppSyncs={{@model}} />

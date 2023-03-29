@@ -1,13 +1,13 @@
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import Store from '@ember-data/store';
 import OrganizationService from 'irene/services/organization';
 import RouterService from '@ember/routing/router-service';
 import AmAppModel from 'irene/models/am-app';
 import AMConfigurationModel from 'irene/models/amconfiguration';
 import AppMonitoringService from 'irene/services/appmonitoring';
+import IntlService from 'ember-intl/services/intl';
 
 interface LimitOffset {
   limit: number;
@@ -25,33 +25,32 @@ export default class AppMonitoringTableComponent extends Component<AppMonitoring
   @service declare organization: OrganizationService;
   @service declare router: RouterService;
   @service declare appmonitoring: AppMonitoringService;
-
-  @tracked currentAppInView: AmAppModel | null = null;
+  @service declare intl: IntlService;
 
   get columns() {
     return [
       {
-        name: 'Platform',
+        name: this.intl.t('platform'),
         component: 'app-monitoring/table/platform',
         width: 70,
       },
       {
-        name: 'Application Name',
+        name: this.intl.t('appMonitoringModule.applicationName'),
         component: 'app-monitoring/table/application',
         width: 180,
       },
       {
-        name: 'Store Version ',
+        name: this.intl.t('appMonitoringModule.storeVersion'),
         component: 'app-monitoring/table/store-version',
-        width: 100,
+        width: 120,
       },
       {
-        name: 'Latest Scanned Version',
+        name: this.intl.t('appMonitoringModule.latestScannedVersion'),
         component: 'app-monitoring/table/last-scanned',
         width: 150,
       },
       {
-        name: 'Status',
+        name: this.intl.t('status'),
         component: 'app-monitoring/table/status',
         width: 180,
       },
@@ -101,10 +100,6 @@ export default class AppMonitoringTableComponent extends Component<AppMonitoring
     return tableDataCount < 1;
   }
 
-  get showRightDrawer() {
-    return !!this.currentAppInView;
-  }
-
   // Table Actions
   @action goToPage(args: LimitOffset) {
     const { limit, offset } = args;
@@ -124,11 +119,10 @@ export default class AppMonitoringTableComponent extends Component<AppMonitoring
 
   // Drawer Actions
   @action onTableRowClick({ rowValue: amApp }: { rowValue: AmAppModel }) {
-    this.currentAppInView = amApp;
-  }
-
-  @action closeRightDrawer() {
-    this.currentAppInView = null;
+    this.router.transitionTo(
+      'authenticated.app-monitoring.monitoring-details',
+      amApp.id
+    );
   }
 }
 

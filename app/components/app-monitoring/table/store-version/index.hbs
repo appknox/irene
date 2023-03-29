@@ -7,20 +7,51 @@
 >
   {{#if @amApp.latestAmAppVersion.comparableVersion}}
 
-    {{@amApp.latestAmAppVersion.comparableVersion}}
+    <AkStack @alignItems='center'>
+      {{@amApp.latestAmAppVersion.comparableVersion}}
+
+      <AkTooltip
+        @arrow={{true}}
+        @color='light'
+        @placement='bottom-start'
+        class='flex-row flex-align-center'
+      >
+        <:tooltipContent>
+          <AkTypography
+            @tag='h3'
+            @variant='subtitle1'
+            local-class='multi-geo-tooltip-header'
+          >
+            {{t 'appMonitoringModule.multiGeoToolTip.headerText'}}
+          </AkTypography>
+
+          <AkTypography>
+            {{t 'appMonitoringModule.multiGeoToolTip.bodyText'}}
+          </AkTypography>
+        </:tooltipContent>
+
+        <:default>
+          <AkIcon
+            @iconName='dynamic-feed'
+            @size='small'
+            local-class='multi-geo-icon'
+          />
+        </:default>
+      </AkTooltip>
+    </AkStack>
 
     {{#unless @amApp.latestAmAppVersion.latestFile}}
       <AppMonitoring::Status
-        @condition='error'
-        @label='{{t "notScanned"}}'
+        @condition='{{am-status-condition @amApp}}'
+        @label='{{am-status-text @amApp}}'
         class='mt-1'
       />
     {{/unless}}
 
   {{else}}
     <AppMonitoring::Status
-      @condition='{{this.statusCondition}}'
-      @label='{{this.statusText}}'
+      @condition='{{am-status-condition @amApp}}'
+      @label='{{am-status-text @amApp}}'
     />
   {{/if}}
 </AkStack>

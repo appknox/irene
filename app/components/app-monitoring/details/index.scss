@@ -1,125 +1,86 @@
 .app-details-container {
-  width: 500px;
-}
+  width: 100%;
+  padding-bottom: 1.3571em;
 
-/* Modal Header */
-.modal-header,
-.modal-footer {
-  padding: 1.125em 1.5625em;
-}
+  .app-details-wrapper {
+    padding: 1.4286em;
+    border: 1px solid var(--appmonitoring-details-border-color);
+    margin-bottom: 1.5714em;
 
-.modal-header {
-  height: 50px;
-  background-color: $secondary;
-  color: var(--white);
+    .overview-container {
+      height: fit-content;
+      margin-bottom: 1.4286em;
 
-  h2 {
-    font-weight: 600;
-    font-size: 1rem;
-    line-height: 22px;
-    letter-spacing: -0.008em;
-  }
-}
+      .overview-icons {
+        margin-bottom: 0.857em;
 
-/* Modal Body */
-.modal-body {
-  padding: 1.125em 0em;
-  padding-bottom: 4em;
-  height: 100%;
-  overflow-y: scroll;
+        .platform-icon,
+        .project-icon {
+          border: 1px solid var(--appmonitoring-details-border-color);
+          border-radius: var(--appmonitoring-border-radius);
+          width: 2.714em;
+          height: 2.714em;
+        }
 
-  .modal-body-section {
-    margin-bottom: 1.875em;
-    padding-left: 1.5625em;
-    padding-right: 1.5625em;
-    border-bottom: 1px solid var(--neutral-grey-200);
+        img {
+          width: 1.7143em;
+          height: 1.7143em;
+        }
 
-    h3,
-    h4 {
-      font-size: 13px;
-      font-weight: 700;
-      line-height: 18px;
-      letter-spacing: -0.0176em;
-    }
+        .platform-icon {
+          i::before {
+            font-size: 1.714rem;
+          }
+        }
 
-    h3 {
-      color: var(--am-drawer-header-title);
-      text-transform: uppercase;
-      margin-bottom: 0.9375em;
-    }
+        .platform-android {
+          color: var(--appmonitoring-platform-android-color);
+        }
 
-    h4 {
-      margin-bottom: 4px;
-      color: var(--body-type-color);
-    }
-
-    .section {
-      padding: 0px;
-    }
-
-    .section p {
-      line-height: 21px;
-      letter-spacing: -0.0176em;
-      color: var(--body-type-color);
-    }
-  }
-
-  .basic-details {
-    .section {
-      margin-bottom: 1.25em;
-    }
-  }
-
-  .scan-details {
-    .section {
-      display: flex;
-      flex-wrap: wrap;
-    }
-
-    .section-content {
-      margin-bottom: 1.25em;
-
-      .file-link {
-        width: fit-content;
-        text-decoration: underline;
-        color: var(--body-type-color);
+        .platform-apple {
+          color: var(--appmonitoring-color-black);
+        }
       }
 
-      .last-sync-date {
-        margin-top: 0.4375em;
-        font-size: 12px;
-      }
+      .monitoring-toggle-container {
+        border-left: 1px solid var(--appmonitoring-details-toggle-border-color);
+        padding-left: 1.214em;
 
-      .last-sync-date span {
-        font-weight: 800;
-      }
-
-      .last-sync-date span i {
-        font-size: 14px;
+        .monitoring-toggle {
+          margin: 0em;
+        }
       }
     }
 
-    .section-content:first-child {
-      width: 55%;
+    .monitoring-details-container {
+      width: 100%;
+
+      .monitoring-details-group {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        &:first-of-type {
+          border-bottom: 1px solid var(--appmonitoring-details-border-color);
+          padding-bottom: 0.6428em;
+          margin-bottom: 0.6428em;
+        }
+      }
+
+      .details-header,
+      .details-value {
+        letter-spacing: -0.02857em;
+      }
+
+      .details-header {
+        display: flex;
+        min-width: 152px;
+        margin-right: 1.4286em;
+      }
+
+      .details-value {
+        color: var(--appmonitoring-color-black);
+      }
     }
   }
-}
-
-/* Platform Icons */
-
-.platform-icon i {
-  font-size: 16px;
-}
-
-.platform-android {
-  color: var(--android);
-}
-.platform-apple {
-  color: var(--black);
-}
-
-/* Close Icon */
-.close-icon {
-  font-size: 16px !important;
-  cursor: pointer;
 }

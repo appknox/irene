@@ -8,7 +8,7 @@ export default Base.extend({
   uuid: faker.random.number(),
   deviceToken: faker.random.number(),
   version: faker.random.number(),
-  versionCode: faker.random.number(),
+  version_code: faker.random.number(),
   md5hash: faker.random.number(),
   sha1hash: faker.random.number(),
   report: faker.internet.avatar(),
@@ -98,12 +98,5 @@ export default Base.extend({
         },
       ],
     };
-  },
-  comparableVersion() {
-    const platform = this.project?.platform;
-    if (platform === ENUMS.PLATFORM.IOS) {
-      return this.version;
-    }
-    return this.versionCode;
   },
 });

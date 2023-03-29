@@ -1,0 +1,9 @@
+<div data-test-history-table-scanned-status>
+  {{#if (eq (am-status-text this.amApp) (t 'scanned'))}}
+    <AppMonitoring::Status @condition='success' @label='{{t "yes"}}' />
+  {{else if (eq (am-status-text this.amApp) (t 'notScanned'))}}
+    <AppMonitoring::Status @condition='error' @label='{{t "no"}}' />
+  {{else}}
+    -
+  {{/if}}
+</div>

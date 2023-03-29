@@ -15,7 +15,7 @@ export default class AmAppVersionModel extends Model {
   declare versionCode: string;
 
   @belongsTo('am-app')
-  declare amApp?: AsyncBelongsTo<AmAppModel>;
+  declare amApp: AsyncBelongsTo<AmAppModel>;
 
   @belongsTo('file', { inverse: null })
   declare latestFile: AsyncBelongsTo<FileModel>;

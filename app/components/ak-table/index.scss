@@ -19,21 +19,21 @@
 
 .ak-table-padding-dense {
   table thead th {
-    padding: 0.5em 0.75em;
+    padding: 0.5em 1.2143em;
   }
 
   table tbody td {
-    padding: 0.6em 0.75em;
+    padding: 0.6em 1.2143em;
   }
 }
 
 .ak-table-padding-default {
   table thead th {
-    padding: 0.75em;
+    padding: 0.75em 1.2143em;
   }
 
   table tbody td {
-    padding: 1em 0.75em;
+    padding: 1em 1.2143em;
   }
 }
 
@@ -130,6 +130,8 @@
 
 .ak-table-variant-full-bordered table {
   tbody tr td {
+    border: 1px solid;
+
     &:first-child {
       border-left-width: 1px;
       border-left-style: solid;

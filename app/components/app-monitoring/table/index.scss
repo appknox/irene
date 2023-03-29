@@ -2,16 +2,13 @@
   margin-top: 1.25em;
 
   .app-monitoring-table-row {
-    transition: background-color 0.3s ease-in-out;
     cursor: pointer;
-
-    &:hover {
-      background-color: rgba(var(--appmonitoring-color-black), 0.01);
-    }
   }
 
   .loading {
+    border: 1px solid var(--appmonitoring-border-color);
+    border-radius: var(--appmonitoring-border-radius);
     width: 100%;
-    height: 12.5em;
+    min-height: 35em;
   }
 }

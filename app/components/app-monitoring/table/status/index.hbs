@@ -6,8 +6,8 @@
   data-test-am-table-row-status
 >
   <AppMonitoring::Status
-    @condition='{{this.monitoredStatusCondition}}'
-    @label={{this.monitoredStatusText}}
+    @condition='{{am-monitoring-condition @amApp}}'
+    @label={{am-monitoring-text @amApp}}
   />
 
   <AkStack
@@ -17,12 +17,11 @@
     data-test-am-table-row-last-sync
   >
     {{#if @amApp.lastSync.syncedOn}}
-      Last monitored on
+      {{t 'appMonitoringModule.lastMonitoredOn'}}
 
       <AkTypography
         @variant='subtitle2'
         @color='textSecondary'
-        local-class='date-value'
         class='ml-1'
         data-test-am-table-row-last-sync-date
       >
@@ -39,7 +38,9 @@
       >
         <AkLoader @size={{13}} />
       </AkStack>
-      Sync in progress
+
+      {{t 'appMonitoringModule.syncInProgress'}}
+
     {{/if}}
   </AkStack>
 </AkStack>

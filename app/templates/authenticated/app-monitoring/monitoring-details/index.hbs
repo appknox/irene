@@ -1,0 +1,8 @@
+{{page-title 'Index'}}
+
+<AkBreadcrumbs::Item
+  @route='authenticated.app-monitoring.monitoring-details'
+  @linkTitle={{t 'appMonitoringModule.monitoringDetails'}}
+/>
+
+<AppMonitoring::DetailsTable @amAppVersions={{@model}} />

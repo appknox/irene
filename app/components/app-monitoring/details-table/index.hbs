@@ -1,0 +1,28 @@
+<div class='px-3'>
+  {{#if this.hasNoAmAppVersions}}
+    <AppMonitoring::Empty
+      @header='{{t "notFound"}}'
+      @body='Lorem ipsum dolor sit amet consectetur. Maecenas quis morbi libero lacus. Cras sapien cursus bibendum.'
+      data-test-am-details-table-empty
+    />
+  {{else}}
+    <AkTable
+      @variant='full-bordered'
+      @borderColor='dark'
+      local-class='app-details-table'
+      data-test-am-details-table
+      as |tb|
+    >
+      <tb.head @columns={{this.columns}} data-test-am-table-header />
+      <tb.body @rows={{this.amAppVersions}} as |b|>
+        <b.row data-test-am-details-table-row as |r|>
+          <r.cell>
+            {{#let (component r.columnValue.component) as |Component|}}
+              <Component @amAppVersion={{r.rowValue}} />
+            {{/let}}
+          </r.cell>
+        </b.row>
+      </tb.body>
+    </AkTable>
+  {{/if}}
+</div>

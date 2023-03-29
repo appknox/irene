@@ -46,7 +46,6 @@ export default class HomePageSideMenuComponent extends Component {
         label: this.intl.t('appMonitoring'),
         icon: 'inventory-2',
         route: 'authenticated.app-monitoring',
-        query: { app_offset: 0 },
       },
       this.isShowAnalytics && {
         label: this.intl.t('analytics'),
