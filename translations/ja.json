@@ -80,6 +80,7 @@
   "azurePipeline": "Azure Pipeline",
   "back": "Back",
   "backToTeams": "Back to teams",
+  "beta": "Beta",
   "billing": "料金プラン",
   "billingPeriod": "支払い請求周期",
   "bitbucketPipeline": "Bitbucket Pipeline",
@@ -391,6 +392,7 @@
   "jiraNoProject": "Linked JIRA account doesn't have any projects",
   "jiraPageConfigure": "JIRA連携設定ページ",
   "jiraWillBeRevoked": "JIRA認証は直ちに取り消されます",
+  "knowledgeBase": "Knowledge Base",
   "language": "言語",
   "last": "最終",
   "lastName": "Last name",
@@ -779,26 +781,6 @@
       "bodyText": "Click on this row to get more details."
     }
   },
-  "appMonitoringModule": {
-    "applicationName": "Application Name",
-    "scannedOnAppknox": "Scanned on Appknox",
-    "foundOn": "Found On",
-    "initiateScan": "Initiate Scan",
-    "storeVersion": "Store Version",
-    "countryCode": "Country Code",
-    "startScan": "Start Scan",
-    "monitoringDetails": "Monitoring Details",
-    "monitoringHistory": "Monitoring History",
-    "monitoringStatus": "Monitoring Status",
-    "syncInProgress": "Sync in progress",
-    "monitoringAction": "Monitoring Action",
-    "latestScannedVersion": "Latest Scanned Version",
-    "lastMonitoredOn": "Last monitored on",
-    "multiGeoToolTip": {
-      "headerText": "Multiple versions detected.",
-      "bodyText": "Click on this row to get more details."
-    }
-  },
   "appMonitoringHeading": "Store Monitoring Setting",
   "appMonitoringDescription": "Once enabled, our platform will monitor for any unscanned versions of your applications on Google Play Store or Apple App Store. If any such applications are found, the list below will be updated automatically at 24 hour intervals.",
   "project": "プロジェクト",
@@ -904,6 +886,7 @@
   "searchQuery": "パッケージ名で検索",
   "searchTeamByName": "Search by team name",
   "security": "セキュリティ",
+  "securityDashboard": "Security Dashboard",
   "selectAnyTeam": "チームを選択してください",
   "selectDevice": "デバイスを選択する",
   "selectLanguage": "以下より言語を選択してください",

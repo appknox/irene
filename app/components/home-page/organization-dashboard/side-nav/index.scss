@@ -1,0 +1,112 @@
+.side-menu-root {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1em;
+  box-sizing: border-box;
+  position: fixed;
+  z-index: var(--organization-dashboard-side-nav-zIndex);
+  width: 250px;
+  height: 100%;
+  top: 0;
+  background-color: var(--organization-dashboard-side-nav-bg-color);
+  box-shadow: var(--organization-dashboard-side-nav-box-shadow);
+  border-right: var(--organization-dashboard-side-nav-border);
+  overflow-y: auto;
+
+  .app-logo {
+    margin-top: 1em;
+
+    img {
+      max-width: 56%;
+      max-height: 9em;
+      margin: auto;
+    }
+  }
+
+  .menu-item-link {
+    padding: 0.7em 1em;
+    display: flex;
+    width: 100%;
+
+    &:hover,
+    &:focus {
+      background-color: var(
+        --organization-dashboard-side-nav-item-hover-background
+      );
+    }
+
+    &.active {
+      position: relative;
+      background-color: var(
+        --organization-dashboard-side-nav-item-active-background
+      );
+
+      &::before {
+        content: '';
+        display: block;
+        width: 2px;
+        height: 100%;
+        background-color: var(
+          --organization-dashboard-side-nav-item-active-border-color
+        );
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+
+      .menu-item-text {
+        font-weight: var(--organization-dashboard-side-nav-font-weight-medium);
+      }
+
+      .menu-item-badge {
+        height: 18px !important;
+        background-color: var(
+          --organization-dashboard-side-nav-item-active-badge-background
+        );
+
+        span {
+          color: var(
+            --organization-dashboard-side-nav-item-active-badge-text-color
+          );
+          font-weight: var(
+            --organization-dashboard-side-nav-font-weight-medium
+          );
+          opacity: unset;
+        }
+      }
+    }
+
+    .menu-item-icon,
+    .menu-item-text {
+      color: var(--organization-dashboard-side-nav-text-color) !important;
+    }
+
+    .menu-item-badge {
+      height: 18px !important;
+      background-color: var(
+        --organization-dashboard-side-nav-item-badge-background
+      );
+
+      span {
+        color: var(--organization-dashboard-side-nav-item-badge-text-color);
+        font-weight: var(--organization-dashboard-side-nav-font-weight-medium);
+        opacity: 0.4;
+      }
+    }
+  }
+
+  .submission-container {
+    height: 100%;
+  }
+
+  .product-version {
+    padding: 1em;
+    text-align: right;
+    color: var(--organization-dashboard-side-nav-text-secondary);
+    font-size: 0.8rem;
+
+    &.ak-pendo-version-container {
+      padding-right: 1.5rem;
+    }
+  }
+}

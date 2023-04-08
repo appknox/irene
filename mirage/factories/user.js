@@ -1,43 +1,29 @@
-/* eslint-disable prettier/prettier */
 import { Factory } from 'ember-cli-mirage';
 import faker from 'faker';
-import ENUMS from 'irene/enums';
 
 export default Factory.extend({
-  id (i) {
-    return i+1;
+  id(i) {
+    return i + 1;
   },
 
+  uuid: 'bdbef1ee-65bf-4b28-b724-5a61e818b7ce',
   username: faker.name.firstName(),
+  'first-name': faker.name.firstName(),
+  'last-name': faker.name.lastName(),
+  lang: 'en',
+  'socket-id': 'e9da7077-6ca2-4c0c-a6e5-76f4a9fb24be',
   email: faker.internet.email(),
-  firstName: faker.name.firstName(),
-  lastName: faker.name.lastName(),
-  expiryDate: faker.date.future(),
-
-  hasGithubToken: faker.random.boolean(),
-  hasJiraToken: faker.random.boolean(),
-  limitedScans: false,
-  scansLeft: faker.random.number(),
-  uuid: faker.random.number(),
-  socketId: faker.random.number(),
-  mfaMethod(){
-    return faker.random.arrayElement(ENUMS.MFA_METHOD.VALUES);
-  },
-
-  projectCount() {
-    return faker.random.arrayElement([1,2,3,4]);
-  },
-
-  lang(){
-    return faker.random.arrayElement(["en"]);
-  },
-
-  namespaces(){
-    var desc = [];
-    for (var i = 0; i < 5; i++) {
-      desc.push(faker.internet.domainName(2).split(" "));
-    }
-    return desc.join(",");
-  }
-
+  'mfa-secret': 'CRZ4ISZZG6Z5EPBO',
+  'mfa-method': 0,
+  namespaces: () => [],
+  'billing-hidden': faker.datatype.boolean(),
+  'devknox-expiry': faker.date.future(),
+  'project-count': faker.datatype.number(1000),
+  'any-namespace': faker.datatype.boolean(),
+  'is-trial': faker.datatype.boolean(),
+  'intercom-hash':
+    '5bfda34bb23a8d0e6fb1df6a741124a79a26cdff954c951d7b772d9bc28f885c',
+  'crisp-hash':
+    '662b72521f5ae389e23bfcbad9c45910167e576f93f865cf8edb5e895fa08a38',
+  'can-disable-mfa': faker.datatype.boolean(),
 });

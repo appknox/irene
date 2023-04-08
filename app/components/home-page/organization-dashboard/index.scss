@@ -1,0 +1,16 @@
+.organization-dashboard-root {
+  width: 100%;
+
+  .dashboard-main {
+    width: calc(100% - 250px);
+    margin-left: 250px;
+    padding: 0.5em;
+    box-sizing: border-box;
+
+    &::before {
+      content: '';
+      display: block;
+      height: 56px;
+    }
+  }
+}

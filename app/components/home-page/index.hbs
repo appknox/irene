@@ -6,16 +6,13 @@
     />
     <SecuritySplit />
   {{else}}
-    <div class='columns columns-main-container'>
-      <HomePage::OrgSideMenu @organization={{this.organization}} />
-      <HomePage::OrgDashboardNav
-        @user={{@user}}
-        @isSecurityEnabled={{this.isSecurityEnabled}}
-        @logoutAction={{this.invalidateSession}}
-      >
-        {{yield}}
-      </HomePage::OrgDashboardNav>
-    </div>
+    <HomePage::OrganizationDashboard
+      @isSecurityEnabled={{this.isSecurityEnabled}}
+      @user={{@user}}
+      @logoutAction={{this.invalidateSession}}
+    >
+      {{yield}}
+    </HomePage::OrganizationDashboard>
   {{/if}}
 {{/if}}
 

@@ -22,13 +22,55 @@ module('Integration | Component | ak-button', function (hooks) {
     }
   );
 
-  test('it render button with disabled state', async function (assert) {
-    this.set('disabled', true);
+  test.each(
+    'it renders ak-button with different tags',
+    ['', 'button', 'a', 'div', 'label', 'span'],
+    async function (assert, tag) {
+      this.setProperties({ tag });
 
-    await render(hbs`<AkButton @disabled={{this.disabled}}>Button</AkButton>`);
+      await render(hbs`<AkButton @tag={{this.tag}}>Button</AkButton>`);
 
-    assert.dom('[data-test-ak-button]').exists().isDisabled().hasText('Button');
-  });
+      assert
+        .dom('[data-test-ak-button]')
+        .exists()
+        .hasTagName(this.tag || 'button')
+        .hasText('Button');
+
+      if ((this.tag || 'button') === 'button') {
+        assert.dom('[data-test-ak-button]').hasAttribute('type', 'button');
+        assert.dom('[data-test-ak-button]').hasNoAttribute('role');
+      } else {
+        assert.dom('[data-test-ak-button]').hasNoAttribute('type');
+        assert.dom('[data-test-ak-button]').hasAttribute('role', 'button');
+      }
+    }
+  );
+
+  test.each(
+    'it render button with disabled state',
+    ['', 'button', 'a', 'div', 'label', 'span'],
+    async function (assert, tag) {
+      this.setProperties({ tag, disabled: true });
+
+      await render(
+        hbs`<AkButton @tag={{this.tag}} @disabled={{this.disabled}}>Button</AkButton>`
+      );
+
+      if ((this.tag || 'button') === 'button') {
+        assert
+          .dom('[data-test-ak-button]')
+          .isDisabled()
+          .hasClass(/ak-button-disabled/)
+          .hasText('Button');
+      } else {
+        assert
+          .dom('[data-test-ak-button]')
+          .hasClass(/ak-button-disabled/)
+          .hasNoAttribute('disabled')
+          .hasText('Button');
+      }
+    }
+  );
 
   test('it render button with different types', async function (assert) {
     this.set('type', 'button');

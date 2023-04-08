@@ -1,0 +1,5 @@
+.upload-btn-loader {
+  :global(.ak-loader-circle-foreground) {
+    stroke: var(--upload-app-color-primary-contrast-text);
+  }
+}

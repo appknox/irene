@@ -6,5 +6,5 @@ export default Base.extend({
   userCount: faker.random.number(),
   teamCount: faker.random.number(),
   invitationCount: faker.random.number(),
-  projectsCount: faker.random.number(),
+  projects_count: faker.random.number(),
 });

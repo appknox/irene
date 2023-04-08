@@ -1,0 +1,14 @@
+<div local-class='organization-dashboard-root'>
+  <HomePage::OrganizationDashboard::Header
+    @user={{@user}}
+    @logoutAction={{@logoutAction}}
+  />
+
+  <HomePage::OrganizationDashboard::SideNav
+    @isSecurityEnabled={{@isSecurityEnabled}}
+  />
+
+  <main local-class='dashboard-main'>
+    {{yield}}
+  </main>
+</div>
