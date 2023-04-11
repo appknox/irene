@@ -1,0 +1,83 @@
+{{!@glint-nocheck: or, did-insert}}
+<AkStack
+  ...attributes
+  @direction='column'
+  local-class='ak-accordion-root'
+  data-test-ak-accordion
+>
+  {{#if (has-block 'summary')}}
+    {{yield
+      (hash
+        onSummaryClick=this.onSummaryClick
+        disabled=this.isDisabled
+        isExpanded=this.isExpanded
+      )
+      to='summary'
+    }}
+  {{else}}
+    <AkStack
+      @alignItems='center'
+      @justifyContent='space-between'
+      @width='full'
+      local-class='
+        summary 
+        {{if @disabled "disabled"}} 
+        {{this.variant}} 
+        {{@customSumaryClass}}
+      '
+      {{on 'click' this.onSummaryClick}}
+      data-test-ak-accordion-summary
+    >
+      <AkStack @alignItems='center' @spacing='1.5'>
+        {{#if (or (has-block 'summaryIcon') @summaryIconName)}}
+          {{#if (has-block 'summaryIcon')}}
+            {{yield to='summaryIcon'}}
+          {{else if @summaryIconName}}
+            <AkIcon
+              @iconName={{@summaryIconName}}
+              @color={{this.summaryIconColorVariant}}
+              local-class='summary-icon'
+              data-test-akAccordion-summaryIcon
+            />
+          {{/if}}
+        {{/if}}
+
+        {{#if (or (has-block 'summaryText') @summaryText)}}
+          {{#if (has-block 'summaryText')}}
+            {{yield to='summaryText'}}
+          {{else}}
+            <AkTypography
+              @fontWeight={{@summaryTextFontWeight}}
+              @variant={{or @summaryTextVariant 'subtitle1'}}
+              @color={{this.summaryColorVariant}}
+              data-test-akAccordion-summaryText
+            >
+              {{@summaryText}}
+            </AkTypography>
+          {{/if}}
+        {{/if}}
+      </AkStack>
+
+      <AkIcon
+        @iconName='arrow-drop-down'
+        @color={{this.summaryIconColorVariant}}
+        local-class='summary-expand-icon {{if this.expandAccordion "expanded"}}'
+        data-test-akAccordion-dropIcon
+      />
+    </AkStack>
+  {{/if}}
+
+  {{#unless @disabled}}
+    <div
+      local-class='details {{if this.expandAccordion "expanded"}}'
+      {{did-insert this.contentInserted}}
+      data-test-ak-accordion-content-wrapper
+    >
+      {{#if (has-block 'content')}}
+        {{yield to='content'}}
+      {{else}}
+        {{yield}}
+      {{/if}}
+    </div>
+  {{/unless}}
+</AkStack>

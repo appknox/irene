@@ -246,6 +246,12 @@ body {
   --ak-breadcrumbs-color-text-primary: var(--text-primary);
   --ak-breadcrumbs-color-text-secondary: var(--text-secondary-color);
   --ak-breadcrumbs-font-weight-medium: var(--font-weight-medium);
+
+  // variables for ak-accordion
+  --ak-accordion-summary-secondary-background: var(--background-light);
+  --ak-accordion-summary-secondary-border-color: var(--border-color-1);
+  --ak-accordion-summary-primary-background: var(--primary-main-10);
+  --ak-accordion-summary-primary-border-color: var(--primary-main-10);
 }
 
 body {
