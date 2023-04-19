@@ -8,6 +8,7 @@ import {
   Select,
 } from 'ember-power-select/components/power-select';
 import EmberTableRegistry from 'ember-table/template-registry';
+import AkSvgRegistry from 'ak-svg';
 
 // Types for compiled templates
 declare module 'irene/templates/*' {
@@ -29,7 +30,7 @@ declare module '@glint/environment-ember-loose/registry' {
     verticalPosition?: 'above' | 'below' | 'auto';
   }
 
-  export default interface Registry extends EmberTableRegistry {
+  export default interface Registry extends EmberTableRegistry, AkSvgRegistry {
     element: HelperLike<{
       Args: { Positional: [tagName: string] };
       Return: ComponentLike<{

@@ -1,0 +1,53 @@
+{{!@glint-nocheck}}
+<AkDrawer
+  @open={{@open}}
+  @onClose={{@onClose}}
+  @anchor='right'
+  data-test-fileReportDrawer
+  as |dr|
+>
+  <div {{style width='428px'}}>
+    <AkAppbar @justifyContent='space-between' class='px-3' as |ab|>
+      <AkTypography
+        data-test-fileReportDrawer-title
+        @color='inherit'
+        @variant='h5'
+      >
+        {{t 'downloadReport'}}
+      </AkTypography>
+
+      <AkIconButton
+        data-test-fileReportDrawer-closeBtn
+        {{on 'click' dr.closeHandler}}
+        class={{ab.classes.defaultIconBtn}}
+      >
+        <AkIcon @iconName='close' data-test-fileReportDrawer-closeBtn-icon />
+      </AkIconButton>
+    </AkAppbar>
+
+    <AkTypography
+      @variant='subtitle2'
+      class='px-3 py-2'
+      data-test-fileReportDrawer-headerText
+    >
+      {{t 'fileReport.reportDrawerHeaderText'}}
+    </AkTypography>
+
+    {{#each this.reportGroupList as |group|}}
+      <AkAccordion
+        @id={{group.id}}
+        @isExpanded={{group.expanded}}
+        @summaryText={{group.title}}
+        @onChange={{this.onReportGroupClick}}
+        data-test-fileReportDrawer-group
+        data-test-fileReportDrawer-groupItem='{{group.id}}'
+      >
+        <:content>
+          {{#let (component group.contentComponent) as |GroupContent|}}
+            <GroupContent @file={{@file}} />
+          {{/let}}
+        </:content>
+      </AkAccordion>
+    {{/each}}
+  </div>
+</AkDrawer>

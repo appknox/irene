@@ -1,0 +1,14 @@
+.file-report-va-reports-drawer {
+  .generate-container {
+    width: 100%;
+    border: 1px solid var(--file-report-dr-va-reports-border-color);
+    border-radius: var(--file-report-dr-va-reports-border-radius);
+    padding: 1.5em;
+  }
+
+  .report-gen-progress-indicator {
+    background-color: var(
+      --file-report-dr-va-reports-gen-progress-indicator-bg
+    );
+  }
+}

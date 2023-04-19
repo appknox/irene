@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import { Csb, Module, Product } from 'irene/config/environment';
 
 declare global {
   // Prevents ESLint from "fixing" this via its auto-fix to turn it into a type
@@ -7,15 +8,64 @@ declare global {
   interface Array<T> extends Ember.ArrayPrototypeExtensions<T> {}
   // interface Function extends Ember.FunctionPrototypeExtensions {}
 
+  // Restrict an integer value to a certain range
+  // src - https://stackoverflow.com/questions/39494689/is-it-possible-to-restrict-number-to-a-certain-range
+  type Enumerate<
+    N extends number,
+    Acc extends number[] = []
+  > = Acc['length'] extends N
+    ? Acc[number]
+    : Enumerate<N, [...Acc, Acc['length']]>;
+
+  type IntRange<F extends number, T extends number> = Exclude<
+    Enumerate<T>,
+    Enumerate<F>
+  >;
+
+  // Types for the CSB Analytics
+  interface CsbAnalytics {
+    logout: () => void;
+    login: (userId: string, accountId: string) => void;
+    identify: (
+      userId: string,
+      identification: CsbAnalyticsUserIdentificationObject
+    ) => void;
+    feature: (feature: string, module: Module, product: Product) => void;
+  }
+
+  type CsbAnalyticsType = 'feature' | 'login' | 'logout';
+
+  type CsbAnalyticsUserIdentificationObject = {
+    custom_username: string;
+    email: string;
+    account_id: string;
+    custom_Organization: string;
+    custom_role: string;
+    first_name: string;
+  };
+
+  type CsbAnalyticsFeatureData = Csb;
+
+  type CsbAnalyticsLoginData = {
+    userName: string;
+    userEmail: string;
+    accountId: string;
+    accountName: string;
+    userRole: string;
+    userId: string;
+  };
+
+  type CsbAnalyticsData = CsbAnalyticsFeatureData | CsbAnalyticsLoginData;
+
   interface Window {
     FreshworksWidget: (...args: unknown[]) => void;
     $crisp: unknown[];
     CRISP_WEBSITE_ID: string;
     fwSettings: { widget_id: string };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    analytics: any;
+    analytics?: CsbAnalytics;
   }
 
+  // Notification Types
   interface NotificationOption {
     message: string;
     type?: 'info' | 'error' | 'success' | 'warning';

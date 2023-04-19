@@ -6,29 +6,30 @@ import Base from './base';
 
 export default Base.extend({
   uuid: faker.random.number(),
-  deviceToken: faker.random.number(),
+  device_token: faker.random.number(),
   version: faker.random.number(),
   version_code: faker.random.number(),
   md5hash: faker.random.number(),
   sha1hash: faker.random.number(),
   report: faker.internet.avatar(),
   manual: false,
-  apiScanProgress: faker.random.number(),
-  staticScanProgress: faker.random.number(),
-  isStaticDone: faker.random.boolean(),
-  isDynamicDone: faker.random.boolean(),
-  isManualDone: faker.random.boolean(),
-  isApiDone: faker.random.boolean(),
+  api_scan_progress: faker.random.number(),
+  static_scan_progress: faker.random.number(),
+  is_static_done: faker.random.boolean(),
+  is_dynamic_done: faker.random.boolean(),
+  is_manual_done: faker.random.boolean(),
+  is_api_done: faker.random.boolean(),
+  can_generate_report: faker.random.boolean(),
 
-  iconUrl() {
+  icon_url() {
     return faker.internet.avatar();
   },
 
-  isActive() {
+  is_active() {
     return faker.random.boolean();
   },
 
-  dynamicStatus() {
+  dynamic_status() {
     return faker.random.arrayElement(ENUMS.DYNAMIC_STATUS.VALUES);
   },
 
@@ -36,7 +37,7 @@ export default Base.extend({
     return faker.company.companyName();
   },
 
-  doughnutData() {
+  doughnut_data() {
     const countRiskCritical = faker.datatype.number({
       min: 0,
       max: 10,

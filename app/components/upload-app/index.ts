@@ -36,7 +36,10 @@ export default class UploadAppComponent extends Component {
 
       await uploadItem.save();
 
-      triggerAnalytics('feature', ENV.csb['applicationUpload']);
+      triggerAnalytics(
+        'feature',
+        ENV.csb['applicationUpload'] as CsbAnalyticsFeatureData
+      );
 
       this.notify.success(this.tFileUploadedSuccessfully);
     } catch (e) {

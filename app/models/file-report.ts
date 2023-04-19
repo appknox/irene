@@ -1,19 +1,24 @@
-/* eslint-disable ember/no-computed-properties-in-native-classes */
 import Model, { attr } from '@ember-data/model';
-import { computed } from '@ember/object';
+import { isEmpty } from '@ember/utils';
+import triggerAnalytics from 'irene/utils/trigger-analytics';
+import ENV from 'irene/config/environment';
+import dayjs from 'dayjs';
+
+export type FileReportScanType = 'pdf' | 'xlsx' | 'csv';
+export type FileReportModelName = 'file-report';
 
 export default class FileReportModel extends Model {
   @attr('date')
   declare generatedOn: Date;
 
   @attr('string')
-  declare language: string;
+  declare language: 'en' | 'ja';
 
   @attr('string')
   declare format: string;
 
   @attr('number')
-  declare progress: number;
+  declare progress: IntRange<0, 101>;
 
   @attr()
   declare preferences: unknown;
@@ -28,9 +33,27 @@ export default class FileReportModel extends Model {
     return this.progress >= 0 && this.progress <= 99;
   }
 
-  @computed('progress')
   get isGenerated() {
     return this.progress === 100;
+  }
+
+  get generatedOnDateTime() {
+    const createdOn = this.generatedOn;
+
+    if (isEmpty(createdOn)) {
+      return '';
+    }
+
+    return dayjs(createdOn).format('D MMMM YYYY h:mm A');
+  }
+
+  getReportByType(type: FileReportScanType) {
+    const analyticsData = ENV.csb['reportDownload'] as CsbAnalyticsFeatureData;
+    triggerAnalytics('feature', analyticsData);
+
+    const adapter = this.store.adapterFor('file-report');
+
+    return adapter.getReportByType('file-report', this.id, type);
   }
 }
 

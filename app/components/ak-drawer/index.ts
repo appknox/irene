@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { later } from '@ember/runloop';
 
 export interface DrawerSignature {
+  Element: HTMLDivElement;
   Args: {
     open?: boolean;
     anchor?: 'left' | 'right';

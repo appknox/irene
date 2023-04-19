@@ -502,4 +502,11 @@ body {
 
   //variables for upload-app
   --upload-app-color-primary-contrast-text: var(--primary-contrast-text);
+
+  // variables for file/report-drawer/va-reports
+  --file-report-dr-va-reports-border-radius: var(--border-radius);
+  --file-report-dr-va-reports-border-color: var(--border-color-1);
+  --file-report-dr-va-reports-gen-progress-indicator-bg: var(
+    --background-light
+  );
 }

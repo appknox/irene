@@ -1,0 +1,111 @@
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { findAll, render } from '@ember/test-helpers';
+import { hbs } from 'ember-cli-htmlbars';
+import { setupIntl } from 'ember-intl/test-support';
+import { setupMirage } from 'ember-cli-mirage/test-support';
+import Service from '@ember/service';
+
+class RealtimeStub extends Service {
+  ReportCounter = 0;
+}
+
+class NotificationsStub extends Service {
+  errorMsg = null;
+  successMsg = null;
+
+  error(msg) {
+    this.errorMsg = msg;
+  }
+
+  success(msg) {
+    this.successMsg = msg;
+  }
+}
+
+// File report group list
+const fileReportGroups = [
+  {
+    id: 'va-reports',
+    title: 't:fileReport.vaReports:()',
+  },
+];
+
+module('Integration | Component | file/report-drawer', function (hooks) {
+  setupRenderingTest(hooks);
+  setupMirage(hooks);
+  setupIntl(hooks);
+
+  hooks.beforeEach(async function () {
+    this.owner.register('service:realtime', RealtimeStub);
+    this.owner.register('service:notifications', NotificationsStub);
+
+    const store = this.owner.lookup('service:store');
+
+    const file = this.server.create('file', { can_generate_report: true });
+    const fileNormalized = store.normalize('file', file.toJSON());
+
+    this.setProperties({
+      file: store.push(fileNormalized),
+    });
+
+    this.server.get('/v2/files/:fileId/reports', () => {
+      return { count: 0, next: null, previous: null, result: [] };
+    });
+  });
+
+  test('it renders report drawer', async function (assert) {
+    this.set('onClose', function () {});
+
+    await render(
+      hbs`<File::ReportDrawer @file={{this.file}} @open={{true}} @onClose={{this.onClose}} />`
+    );
+
+    assert.dom('[data-test-fileReportDrawer]').exists();
+
+    assert
+      .dom('[data-test-fileReportDrawer-title]')
+      .exists()
+      .hasText('t:downloadReport:()');
+
+    assert.dom('[data-test-fileReportDrawer-closeBtn]').exists();
+
+    assert.dom('[data-test-fileReportDrawer-closeBtn-icon]').exists();
+
+    assert
+      .dom('[data-test-fileReportDrawer-headerText]')
+      .exists()
+      .hasText('t:fileReport.reportDrawerHeaderText:()');
+
+    const reportGroups = findAll('[data-test-fileReportDrawer-group]');
+
+    assert.strictEqual(
+      reportGroups.length,
+      fileReportGroups.length,
+      'renders the correct number of file report groups'
+    );
+
+    for (const group of fileReportGroups) {
+      assert
+        .dom(`[data-test-fileReportDrawer-groupItem="${group.id}"]`)
+        .exists();
+    }
+  });
+
+  test('it opens va reports accordion by default ', async function (assert) {
+    this.set('onClose', function () {});
+
+    await render(
+      hbs`<File::ReportDrawer @file={{this.file}} @open={{true}} @onClose={{this.onClose}} />`
+    );
+
+    const vaReportsGroup = fileReportGroups[0];
+
+    assert
+      .dom(
+        `[data-test-fileReportDrawer-groupItem="${vaReportsGroup.id}"] [data-test-ak-accordion-content-wrapper]`
+      )
+      .exists()
+      .hasClass(/expanded/);
+  });
+});

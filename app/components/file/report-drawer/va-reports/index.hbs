@@ -1,0 +1,98 @@
+{{!@glint-nocheck: perform, will-destroy}}
+<div
+  {{will-destroy this.removeReportCounterObserver}}
+  local-class='file-report-va-reports-drawer'
+  data-test-fileReportDrawer-vaReports
+>
+  {{#if this.getReports.isRunning}}
+    <AkStack
+      @alignItems='center'
+      @justifyContent='center'
+      class='p-2'
+      data-test-vaReports-reportsLoader
+    >
+      <AkLoader @size={{18}} />
+    </AkStack>
+  {{else}}
+
+    {{#if this.canGenerateReport}}
+      <div class='p-3'>
+        <AkStack
+          local-class='generate-container'
+          @direction='column'
+          @spacing='2'
+          data-test-vaReports-generateReport-CTA
+        >
+          <AkSvg::GenerateReport data-test-vaReports-generateReportCTA-vector />
+
+          <AkTypography data-test-vaReports-generateReportCTA-directiveText>
+            {{t 'fileReport.generateReportCTAText'}}
+          </AkTypography>
+
+          <AkButton
+            @disabled={{this.disableGenerateBtn}}
+            @loading={{this.loadingGenerateBtn}}
+            {{on 'click' (perform this.generateReport)}}
+            data-test-vaReports-generateReportCTA-btn
+          >
+            {{this.btnLabel}}
+          </AkButton>
+        </AkStack>
+      </div>
+    {{/if}}
+
+    {{#if this.hasReports}}
+
+      {{#if this.latestReport.isGenerating}}
+        <AkStack
+          @alignItems='center'
+          @justifyContent='space-between'
+          @spacing='1.5'
+          @width='full'
+          local-class='report-gen-progress-indicator'
+          class='px-3 py-2'
+          data-test-vaReports-generateReportProgress-container
+        >
+          <AkStack @direction='column' @spacing='1' @width='10/12'>
+            <AkTypography
+              @fontWeight='medium'
+              data-test-vaReports-generateReportProgress-text
+            >
+              {{t 'fileReport.generateReportLoaderText'}}...
+            </AkTypography>
+
+            <AkLoader::Linear
+              @variant='determinate'
+              @progress={{this.latestReport.progress}}
+              @hideLabel={{true}}
+              data-test-vaReports-generateReportProgress-loader
+            />
+          </AkStack>
+
+          <AkTypography
+            @variant='h6'
+            @fontWeight='medium'
+            data-test-vaReports-generateReportProgress-percent
+          >
+            {{this.latestReport.progress}}%
+          </AkTypography>
+        </AkStack>
+      {{/if}}
+
+      <AkDivider />
+
+      <AkList {{style padding='0px'}} data-test-vaReports-reportList>
+        {{#each this.reportDetails as |details|}}
+          {{#unless details.hideReport}}
+            <File::ReportDrawer::VaReports::ReportItem
+              @reportDetails={{details}}
+              @fileReport={{details.fileReport}}
+              data-test-vaReports-reportList-reportItem
+              data-test-vaReports-reportList-Item='{{details.type}}'
+            />
+          {{/unless}}
+        {{/each}}
+      </AkList>
+    {{/if}}
+  {{/if}}
+</div>
