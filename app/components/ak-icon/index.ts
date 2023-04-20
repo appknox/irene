@@ -1,21 +1,23 @@
 import Component from '@glimmer/component';
 
+export type AkIconColorVariant =
+  | 'inherit'
+  | 'textPrimary'
+  | 'textSecondary'
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'error'
+  | 'info'
+  | 'warn';
+
 export interface AkIconSignature {
   Element: HTMLSpanElement;
   Args: {
     variant?: 'filled' | 'rounded' | 'outlined';
     iconName: string;
     size?: 'medium' | 'small';
-    color?:
-      | 'inherit'
-      | 'textPrimary'
-      | 'textSecondary'
-      | 'primary'
-      | 'secondary'
-      | 'success'
-      | 'error'
-      | 'info'
-      | 'warn';
+    color?: AkIconColorVariant;
   };
 }
 
