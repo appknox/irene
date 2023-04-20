@@ -80,6 +80,7 @@
   "azurePipeline": "Azure Pipeline",
   "back": "Back",
   "backToTeams": "Back to teams",
+  "beta": "Beta",
   "billing": "Billing",
   "billingPeriod": "Billing Period",
   "bitbucketPipeline": "Bitbucket Pipeline",
@@ -391,6 +392,7 @@
   "jiraNoProject": "Linked JIRA account doesn't have any projects",
   "jiraPageConfigure": "page to configure JIRA integration",
   "jiraWillBeRevoked": "Your JIRA authorization will be revoked in a moment",
+  "knowledgeBase": "Knowledge Base",
   "language": "Language",
   "last": "Last",
   "lastName": "Last name",
@@ -779,26 +781,6 @@
       "bodyText": "Click on this row to get more details."
     }
   },
-  "appMonitoringModule": {
-    "applicationName": "Application Name",
-    "scannedOnAppknox": "Scanned on Appknox",
-    "foundOn": "Found On",
-    "initiateScan": "Initiate Scan",
-    "storeVersion": "Store Version",
-    "countryCode": "Country Code",
-    "startScan": "Start Scan",
-    "monitoringDetails": "Monitoring Details",
-    "monitoringHistory": "Monitoring History",
-    "monitoringStatus": "Monitoring Status",
-    "syncInProgress": "Sync in progress",
-    "monitoringAction": "Monitoring Action",
-    "latestScannedVersion": "Latest Scanned Version",
-    "lastMonitoredOn": "Last monitored on",
-    "multiGeoToolTip": {
-      "headerText": "Multiple versions detected.",
-      "bodyText": "Click on this row to get more details."
-    }
-  },
   "appMonitoringHeading": "Store Monitoring Setting",
   "appMonitoringDescription": "Once enabled, our platform will monitor for any unscanned versions of your applications on Google Play Store or Apple App Store. If any such applications are found, the list below will be updated automatically at 24 hour intervals.",
   "project": "project",
@@ -904,6 +886,7 @@
   "searchQuery": "Search By Package Name",
   "searchTeamByName": "Search by team name",
   "security": "Security",
+  "securityDashboard": "Security Dashboard",
   "selectAnyTeam": "Please select any team",
   "selectDevice": "Select the device",
   "selectLanguage": "Select the preferred language below",

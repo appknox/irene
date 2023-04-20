@@ -16,6 +16,7 @@
   color: inherit;
   font-weight: 400;
   font-size: 1rem;
+  line-height: 24px; // This was global value for button setting it here for uniformity across elements
   min-width: 80px;
   height: auto;
   border-radius: var(--ak-button-border-radius);
@@ -29,6 +30,11 @@
   &:disabled {
     opacity: unset;
   }
+
+  &.ak-button-disabled,
+  &.ak-button-loading {
+    pointer-events: none; // for non button elements
+  }
 }
 
 .ak-button-root {
@@ -38,7 +44,8 @@
 .ak-button-text-root {
   padding: 0;
 
-  &:disabled .ak-button-text {
+  &:disabled .ak-button-text,
+  &.ak-button-disabled .ak-button-text {
     color: var(--ak-button-color-text-disabled);
   }
 
@@ -65,7 +72,8 @@
   background-color: var(--ak-button-color-primary);
   color: var(--ak-button-color-primary-contrast-text);
 
-  &:disabled {
+  &:disabled,
+  &.ak-button-disabled {
     color: var(--ak-button-color-primary-contrast-text);
     background-color: var(--ak-button-disabled-background);
   }
@@ -86,7 +94,8 @@
   border: 1px solid var(--ak-button-color-neutral);
   color: var(--ak-button-color-text-primary);
 
-  &:disabled {
+  &:disabled,
+  &.ak-button-disabled {
     border-color: var(--ak-button-color-neutral);
     color: var(--ak-button-color-text-disabled);
   }
@@ -103,7 +112,8 @@
   border: 1px solid var(--ak-button-color-primary);
   color: var(--ak-button-color-primary);
 
-  &:disabled {
+  &:disabled,
+  &.ak-button-disabled {
     border-color: var(--ak-button-color-neutral);
     color: var(--ak-button-color-text-disabled);
   }

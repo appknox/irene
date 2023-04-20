@@ -1,0 +1,87 @@
+<aside local-class='side-menu-root'>
+  <div local-class='app-logo'>
+    <ImgLogo />
+  </div>
+
+  <AkList class='mt-2' as |akl|>
+    {{#each this.menuItems as |it|}}
+      <akl.listItem
+        @link={{true}}
+        @route={{it.route}}
+        @query={{it.query}}
+        @currentWhen={{it.currentWhen}}
+        @activeLinkClass={{this.classes.menuItemLinkActive}}
+        data-test-side-menu-item
+        @linkClass={{this.classes.menuItemLink}}
+        as |li|
+      >
+        <li.leftIcon>
+          <AkIcon
+            local-class='menu-item-icon'
+            data-test-side-menu-item-icon
+            @iconName={{it.icon}}
+          />
+        </li.leftIcon>
+
+        <li.text
+          data-test-side-menu-item-text
+          @primaryText={{it.label}}
+          @primaryTextClass={{this.classes.menuItemText}}
+        />
+
+        {{#if it.hasBadge}}
+          <AkStack @alignItems='center' @justifyContent='center'>
+            <AkChip
+              data-test-side-menu-item-badge
+              local-class='menu-item-badge'
+              @variant='filled'
+              @size='small'
+              @label={{it.badgeLabel}}
+            />
+          </AkStack>
+        {{/if}}
+      </akl.listItem>
+    {{/each}}
+
+    {{#if @isSecurityEnabled}}
+      <akl.listItem @noGutters={{true}} data-test-side-menu-item as |li|>
+        <a
+          class={{this.classes.menuItemLink}}
+          href='/security/projects'
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          <li.leftIcon>
+            <AkIcon
+              local-class='menu-item-icon'
+              data-test-side-menu-item-icon
+              @iconName='security'
+            />
+          </li.leftIcon>
+
+          <li.text
+            data-test-side-menu-item-text
+            @primaryText={{t 'securityDashboard'}}
+            @primaryTextClass={{this.classes.menuItemText}}
+          />
+
+          <li.rightIcon>
+            <AkIcon local-class='menu-item-icon' @iconName='open-in-new' />
+          </li.rightIcon>
+        </a>
+      </akl.listItem>
+    {{/if}}
+  </AkList>
+
+  <div local-class='submission-container'>
+    <SubmissionList />
+  </div>
+
+  <div
+    local-class='product-version
+      {{if this.enablePendo "ak-pendo-version-container"}}'
+  >
+    {{t 'version'}}
+    {{this.productVersion}}
+  </div>
+</aside>

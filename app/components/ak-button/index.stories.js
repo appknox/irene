@@ -13,12 +13,14 @@ const Template = (args) => ({
     <AkTypography @color="textSecondary" @gutterBottom={{true}}>Experiment with me</AkTypography>
     
     <AkButton 
+        @tag={{this.tag}}
         @type={{this.type}}
         @disabled={{this.disabled}}>
         Filled Primary
     </AkButton>
 
     <AkButton 
+        @tag={{this.tag}}
         @type={{this.type}}
         @variant="outlined"
         @disabled={{this.disabled}}>
@@ -26,6 +28,7 @@ const Template = (args) => ({
     </AkButton>
 
     <AkButton 
+        @tag={{this.tag}}
         @type={{this.type}}
         @color="neutral"
         @variant="outlined"
@@ -34,6 +37,7 @@ const Template = (args) => ({
     </AkButton>
 
     <AkButton 
+        @tag={{this.tag}}
         @type={{this.type}}
         @color="primary"
         @variant="text"
@@ -47,6 +51,7 @@ const Template = (args) => ({
 export const Default = Template.bind({});
 
 Default.args = {
+  tag: 'button',
   type: 'button',
   disabled: false,
 };
@@ -56,6 +61,7 @@ const TextButtonTemplate = (args) => ({
     <AkTypography @color="textSecondary" @gutterBottom={{true}}>Experiment with me</AkTypography>
 
     <AkButton 
+        @tag={{this.tag}}
         @type={{this.type}}
         @color={{this.color}}
         @variant="text"
@@ -71,6 +77,7 @@ const TextButtonTemplate = (args) => ({
 export const TextButton = TextButtonTemplate.bind({});
 
 TextButton.args = {
+  tag: 'button',
   color: '',
   underline: '',
   typographyVariant: '',
@@ -80,19 +87,19 @@ TextButton.args = {
 
 const DisabledTemplate = (args) => ({
   template: hbs`
-    <AkButton @disabled={{this.disabled}}>
+    <AkButton @tag={{this.tag}} @disabled={{this.disabled}}>
         Filled Primary
     </AkButton>
 
-    <AkButton @variant="outlined" @disabled={{this.disabled}}>
+    <AkButton @tag={{this.tag}} @variant="outlined" @disabled={{this.disabled}}>
         Outlined Primary
     </AkButton>
 
-    <AkButton @color="neutral" @variant="outlined" @disabled={{this.disabled}}>
+    <AkButton @tag={{this.tag}} @color="neutral" @variant="outlined" @disabled={{this.disabled}}>
         Outlined Neutral
     </AkButton>
 
-    <AkButton @color="primary" @variant="text" @disabled={{this.disabled}}>
+    <AkButton @tag={{this.tag}} @color="primary" @variant="text" @disabled={{this.disabled}}>
         Text Primary
     </AkButton>
   `,
@@ -102,12 +109,13 @@ const DisabledTemplate = (args) => ({
 export const Disabled = DisabledTemplate.bind({});
 
 Disabled.args = {
+  tag: 'button',
   disabled: true,
 };
 
 const WithIconsTemplate = (args) => ({
   template: hbs`
-    <AkButton>
+    <AkButton @tag={{this.tag}}>
         <:leftIcon>
             <AkIcon @iconName="delete" />
         </:leftIcon>
@@ -117,7 +125,7 @@ const WithIconsTemplate = (args) => ({
         </:default>
     </AkButton>
 
-    <AkButton @variant="outlined">
+    <AkButton @tag={{this.tag}} @variant="outlined">
         <:leftIcon>
             <AkIcon @iconName="note-add" />
         </:leftIcon>
@@ -125,7 +133,7 @@ const WithIconsTemplate = (args) => ({
         <:default>Add Note</:default>
     </AkButton>
 
-    <AkButton @color="neutral" @variant="outlined">
+    <AkButton @tag={{this.tag}} @color="neutral" @variant="outlined">
         <:leftIcon>
             <AkIcon @iconName="refresh" />
         </:leftIcon>
@@ -138,15 +146,17 @@ const WithIconsTemplate = (args) => ({
 
 export const WithIcons = WithIconsTemplate.bind({});
 
-WithIcons.args = {};
+WithIcons.args = {
+  tag: 'button',
+};
 
 const LoadingButtonTemplate = (args) => ({
   template: hbs`
-    <AkButton @loading={{this.loading}}> 
+    <AkButton @tag={{this.tag}} @loading={{this.loading}}> 
         Loading Button
     </AkButton>
 
-    <AkButton @loading={{this.loading}}>
+    <AkButton @tag={{this.tag}} @loading={{this.loading}}>
         <:leftIcon>
             <AkIcon @iconName="note-add" />
         </:leftIcon>
@@ -166,5 +176,6 @@ const LoadingButtonTemplate = (args) => ({
 export const LoadingButton = LoadingButtonTemplate.bind({});
 
 LoadingButton.args = {
+  tag: 'button',
   loading: true,
 };

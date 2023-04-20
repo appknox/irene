@@ -181,7 +181,6 @@ body {
   --ak-appbar-dark-border-bottom: none;
   --ak-appbar-dark-background-text-color: var(--common-white);
   --ak-appbar-dark-hover-background: var(--hover-dark-background);
-  --ak-appbar-box-shadow: var(--box-shadow-2);
   --ak-appbar-zIndex: var(--zIndex-appbar);
 
   &.theme-light {
@@ -189,6 +188,7 @@ body {
     --ak-appbar-inherit-border-bottom: 1px solid var(--border-color-1);
     --ak-appbar-inherit-background-text-color: var(--text-primary);
     --ak-appbar-inherit-hover-background: var(--hover-light-background);
+    --ak-appbar-box-shadow: var(--box-shadow-light);
   }
 
   &.theme-dark {
@@ -196,6 +196,7 @@ body {
     --ak-appbar-inherit-border-bottom: none;
     --ak-appbar-inherit-background-text-color: var(--common-white);
     --ak-appbar-inherit-hover-background: var(--hover-dark-background);
+    --ak-appbar-box-shadow: var(--box-shadow-dark);
   }
 
   // variables for ak-drawer
@@ -255,33 +256,77 @@ body {
 }
 
 body {
-  // variables for sidebar menu
-  --org-side-menu-font-weight-medium: var(--font-weight-medium);
-  --org-side-menu-text-secondary: var(--text-secondary);
-  --org-side-menu-item-active-badge-background: var(--primary-main);
-  --org-side-menu-item-active-badge-text-color: var(--primary-contrast-text);
-  --org-side-menu-item-active-border-color: var(--primary-main);
-
+  //variables for home-page/organization-dashboard/header
   &.theme-light {
-    --org-side-menu-bg-color: var(--background-main);
-    --org-side-menu-text-color: var(--text-primary);
-    --org-side-menu-item-badge-background: var(--neutral-grey-200);
-    --org-side-menu-item-badge-text-color: var(--text-primary);
-    --org-side-menu-item-hover-background: var(--hover-light-background);
-    --org-side-menu-item-active-background: var(
-      --side-menu-active-background-light
+    --organization-dashboard-header-background-color: var(--background-main);
+    --organization-dashboard-header-text-color: var(--text-primary);
+    --organization-dashboard-header-security-dashboard-btn-color: var(
+      --secondary-main
     );
   }
 
   &.theme-dark {
-    --org-side-menu-bg-color: var(--background-dark);
-    --org-side-menu-text-color: var(--secondary-contrast-text);
-    --org-side-menu-item-badge-background: var(--neutral-grey-900);
-    --org-side-menu-item-badge-text-color: var(--secondary-contrast-text);
-    --org-side-menu-item-hover-background: var(--hover-dark-background);
-    --org-side-menu-item-active-background: var(
+    --organization-dashboard-header-background-color: var(--secondary-main);
+    --organization-dashboard-header-text-color: var(--secondary-contrast-text);
+    --organization-dashboard-header-security-dashboard-btn-color: var(
+      --secondary-contrast-text
+    );
+  }
+
+  //variables for home-page/organization-dashboard/side-nav
+  --organization-dashboard-side-nav-font-weight-medium: var(
+    --font-weight-medium
+  );
+  --organization-dashboard-side-nav-text-secondary: var(--text-secondary);
+  --organization-dashboard-side-nav-item-active-badge-background: var(
+    --primary-main
+  );
+  --organization-dashboard-side-nav-item-active-badge-text-color: var(
+    --primary-contrast-text
+  );
+  --organization-dashboard-side-nav-item-active-border-color: var(
+    --primary-main
+  );
+  --organization-dashboard-side-nav-zIndex: calc(var(--zIndex-appbar) + 1);
+
+  &.theme-light {
+    --organization-dashboard-side-nav-bg-color: var(--background-main);
+    --organization-dashboard-side-nav-text-color: var(--text-primary);
+    --organization-dashboard-side-nav-box-shadow: var(--box-shadow-light);
+    --organization-dashboard-side-nav-item-badge-background: var(
+      --neutral-grey-200
+    );
+    --organization-dashboard-side-nav-item-badge-text-color: var(
+      --text-primary
+    );
+    --organization-dashboard-side-nav-item-hover-background: var(
+      --hover-light-background
+    );
+    --organization-dashboard-side-nav-item-active-background: var(
+      --side-menu-active-background-light
+    );
+    --organization-dashboard-side-nav-border: 1px solid var(--border-color-1);
+  }
+
+  &.theme-dark {
+    --organization-dashboard-side-nav-bg-color: var(--background-dark);
+    --organization-dashboard-side-nav-text-color: var(
+      --secondary-contrast-text
+    );
+    --organization-dashboard-side-nav-box-shadow: var(--box-shadow-dark);
+    --organization-dashboard-side-nav-item-badge-background: var(
+      --neutral-grey-900
+    );
+    --organization-dashboard-side-nav-item-badge-text-color: var(
+      --secondary-contrast-text
+    );
+    --organization-dashboard-side-nav-item-hover-background: var(
+      --hover-dark-background
+    );
+    --organization-dashboard-side-nav-item-active-background: var(
       --side-menu-active-background-dark
     );
+    --organization-dashboard-side-nav-border: none;
   }
 
   // variables for organization-namespace/namespace-value
@@ -453,4 +498,7 @@ body {
 
   //variables for appmonitoring/table/status-column
   --appmonitoring-table-status-last-sync-color: var(--neutral-grey-600);
+
+  //variables for upload-app
+  --upload-app-color-primary-contrast-text: var(--primary-contrast-text);
 }

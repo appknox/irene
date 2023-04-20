@@ -3,10 +3,12 @@ import { TypographyColors, TypographyVariant } from '../ak-typography';
 
 type ButtonColors = TypographyColors;
 type ButtonVariants = TypographyVariant;
+type ButtonTags = 'button' | 'a' | 'div' | 'label' | 'span';
 
-export interface AkButtonSignature {
-  Element: HTMLButtonElement;
+export interface AkButtonSignature<T extends ButtonTags> {
+  Element: HTMLElementTagNameMap[T];
   Args: {
+    tag?: T;
     disabled?: boolean;
     variant?: 'filled' | 'text' | 'outlined';
     loading?: boolean;
@@ -26,7 +28,25 @@ export interface AkButtonSignature {
   };
 }
 
-export default class AkButtonComponent extends Component<AkButtonSignature> {
+export default class AkButtonComponent extends Component<
+  AkButtonSignature<ButtonTags>
+> {
+  get tag() {
+    return this.args.tag || 'button';
+  }
+
+  get isButton() {
+    return this.tag === 'button';
+  }
+
+  get type() {
+    return this.args.type || 'button';
+  }
+
+  get disabled() {
+    return this.loading || this.args.disabled;
+  }
+
   get variant() {
     return this.args.variant || 'filled';
   }

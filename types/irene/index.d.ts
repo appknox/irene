@@ -12,6 +12,8 @@ declare global {
     $crisp: unknown[];
     CRISP_WEBSITE_ID: string;
     fwSettings: { widget_id: string };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    analytics: any;
   }
 
   interface NotificationOption {
