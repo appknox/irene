@@ -131,8 +131,8 @@
   align-items: center;
   margin-right: 0.5em;
 
-  :global(.ak-loader-circle-foreground) {
-    stroke: var(--ak-button-color-primary-contrast-text);
+  :global(.ak-loader-circle-indicator) {
+    stroke: var(--ak-button-color-primary-contrast-text) !important;
   }
 }
 

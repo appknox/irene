@@ -58,7 +58,7 @@ export default class AkAccordionComponent extends Component<AkAccordionSignature
   }
 
   get id() {
-    return this.args.id || `ak-checkbox-${guidFor(this)}`;
+    return this.args.id || `ak-accordion-${guidFor(this)}`;
   }
 
   get variant() {
