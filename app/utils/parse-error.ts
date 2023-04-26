@@ -1,11 +1,14 @@
-export default function parseError(err, defaultMessage) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function parseError(err: any, defaultMessage?: string) {
   let errMsg = defaultMessage || '';
   let error;
+
   if (err.errors && err.errors.length) {
     error = err.errors[0];
   } else {
     error = err;
   }
+
   if (error.status == 500) {
     errMsg = error.title;
   } else if (error.status == 0) {
@@ -21,5 +24,6 @@ export default function parseError(err, defaultMessage) {
   } else if (error.title) {
     errMsg = error.title;
   }
+
   return errMsg;
 }

@@ -1,11 +1,10 @@
 import { debug } from '@ember/debug';
-import ENV from 'irene/config/environment';
+import ENV, { Csb } from 'irene/config/environment';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const triggerAnalytics = (type: string, data: any) => {
+const triggerAnalytics = (type: CsbAnalyticsType, data: CsbAnalyticsData) => {
   if (typeof window.analytics !== 'undefined') {
     try {
-      if (type === 'feature') {
+      if (type === 'feature' && 'feature' in data) {
         return window.analytics.feature(
           data.feature,
           data.module,
@@ -17,8 +16,8 @@ const triggerAnalytics = (type: string, data: any) => {
         return window.analytics.logout();
       }
 
-      if (type === 'login') {
-        const logInFeatureData = ENV.csb['userLoggedIn'];
+      if (type === 'login' && 'userName' in data) {
+        const logInFeatureData = ENV.csb['userLoggedIn'] as Csb;
 
         const {
           userName: custom_username,
@@ -44,9 +43,9 @@ const triggerAnalytics = (type: string, data: any) => {
 
         // To publish user's login as an activity on the CSB dashboard and visulaization
         return window.analytics.feature(
-          logInFeatureData?.feature,
-          logInFeatureData?.module,
-          logInFeatureData?.product
+          logInFeatureData.feature,
+          logInFeatureData.module,
+          logInFeatureData.product
         );
       }
     } catch (error) {

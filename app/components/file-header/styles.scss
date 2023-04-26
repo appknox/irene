@@ -5,3 +5,21 @@
     right: 10px;
   }
 }
+
+.app-details-card--header {
+  height: fit-content !important;
+
+  .tabs-wrapper,
+  .tabs-container {
+    height: 50px;
+  }
+
+  .tab-list,
+  .tab-item a {
+    height: 46px;
+  }
+
+  .tab-item {
+    height: 44px;
+  }
+}

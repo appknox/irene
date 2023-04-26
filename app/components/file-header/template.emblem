@@ -108,15 +108,15 @@
           = t "fileInactive"
 
 
-.card.is-fullwidth.app-details-card
-  header.card-header
-    .column
-      .tabs.is-medium.is-boxed
-        ul
-          li class=scanDetailsClass
+.card.is-fullwidth.app-details-card 
+  header.card-header local-class="app-details-card--header"
+    div.column local-class="tabs-wrapper"
+      div.tabs.is-medium.is-boxed local-class="tabs-container"
+        ul local-class="tab-list"
+          li class=scanDetailsClass local-class="tab-item"
             a click="displayScanDetails" class="uppercase-text"
               = t "scanDetails"
-          li class=owaspDetailsClass
+          li class=owaspDetailsClass local-class="tab-item"
             a click="displayOWASPDetails" class="uppercase-text"
               | Owasp Details
     .column.content-right

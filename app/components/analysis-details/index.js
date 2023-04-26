@@ -160,6 +160,7 @@ export default class AnalysisDetailsComponent extends Component {
   }
 
   @action openResetMarkedAnalysisConfirmBox() {
+    this.showEditAnalysisModal = false;
     this.showResetAnalysisConfirmBox = true;
   }
 
