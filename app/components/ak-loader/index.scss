@@ -1,21 +1,44 @@
 .ak-loader-root {
   display: inline-flex;
-}
+  position: relative;
 
-.ak-loader-svg {
-  transform-origin: 50% 50%;
-  animation: SpinnerFrames 1s infinite linear;
-}
+  .ak-loader-svg {
+    transform: rotate(-90deg);
 
-.ak-loader-circle-foreground {
-  stroke-dasharray: 90, 200;
-  stroke-dashoffset: 0;
-  stroke: var(--ak-loader-stroke-primary-main);
-  stroke-linecap: round;
-}
+    &.indeterminate {
+      transform-origin: 50% 50%;
+      animation: SpinnerFrames 1s infinite linear;
+    }
 
-.ak-loader-circle-background {
-  stroke: var(--ak-loader-stroke-primary-light);
+    .ak-loader-svg-track,
+    .ak-loader-svg-indicator {
+      fill: transparent;
+    }
+
+    .ak-loader-svg-track {
+      stroke: var(--ak-loader-stroke-primary-light);
+    }
+
+    .ak-loader-svg-indicator {
+      stroke: var(--ak-loader-stroke-primary-main);
+      stroke-linecap: round;
+
+      &.indeterminate {
+        stroke-dasharray: 90, 200;
+        stroke-dashoffset: 0;
+      }
+    }
+  }
+
+  .ak-loader-svg-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+  }
 }
 
 @keyframes SpinnerFrames {

@@ -1,11 +1,19 @@
 import Component from '@glimmer/component';
 
+export interface AkLoaderCommonArgs {
+  progress?: number;
+  variant?: 'determinate' | 'indeterminate';
+}
+
+export interface AkLoaderArgs extends AkLoaderCommonArgs {
+  thickness?: number;
+  size?: number;
+}
+
 export interface AkLoaderSignature {
   Element: HTMLSpanElement;
-  Args: {
-    thickness?: number;
-    size?: number;
-  };
+  Args: AkLoaderArgs;
+  Blocks: { label: [] };
 }
 
 export default class AkLoader extends Component<AkLoaderSignature> {
@@ -15,12 +23,47 @@ export default class AkLoader extends Component<AkLoaderSignature> {
     return this.args.size || 40;
   }
 
+  get variant() {
+    return this.args.variant || 'indeterminate';
+  }
+
+  get isIndeterminateLoader() {
+    return this.variant === 'indeterminate';
+  }
+
+  // For a determinate loader
+  get progress() {
+    const progress = Number(this.args.progress);
+
+    if (progress < 0) {
+      return 0;
+    }
+
+    if (progress > 100) {
+      return 100;
+    }
+
+    return progress;
+  }
+
   get thickness() {
     return this.args.thickness || 4;
   }
 
   get radius() {
     return (this.viewPortSize - this.thickness) / 2;
+  }
+
+  get dashArray() {
+    return 2 * Math.PI * this.radius;
+  }
+
+  get dashOffset() {
+    if (this.args.progress && !isNaN(this.progress)) {
+      return this.dashArray * ((100 - this.progress) / 100);
+    }
+
+    return this.dashArray;
   }
 
   get viewBox() {

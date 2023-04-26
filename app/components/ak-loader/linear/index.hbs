@@ -1,0 +1,34 @@
+<AkStack
+  @alignItems='center'
+  @spacing='1.5'
+  @width='full'
+  ...attributes
+  data-test-ak-loader-linear
+  data-test-ak-loader-linear-progress='{{this.progress}}'
+>
+  <span
+    local-class='ak-loader-linear-root'
+    {{style height=(concat this.height 'px')}}
+  >
+    <span
+      local-class='
+      {{if
+        this.isIndeterminateLoader
+        "indeterminate-indicator-bar--1"
+        "ak-loader-linear-indicator"
+      }}'
+      {{style left=(concat this.progressIndicatorPosition '%')}}
+      data-test-ak-loader-linear-indicator
+    ></span>
+
+    {{#if this.isIndeterminateLoader}}
+      <span local-class='indeterminate-indicator-bar--2'></span>
+    {{/if}}
+  </span>
+
+  {{#if (has-block 'label')}}
+    <span local-class='ak-loader-linear-label'>
+      {{yield to='label'}}
+    </span>
+  {{/if}}
+</AkStack>
