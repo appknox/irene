@@ -78,8 +78,9 @@
   </div>
 
   <div
-    local-class='product-version
-      {{if this.enablePendo "ak-pendo-version-container"}}'
+    id={{if this.enablePendo 'ak-pendo-version-container'}}
+    local-class='product-version 
+      {{if this.enablePendo "pendo-version-padding"}}'
   >
     {{t 'version'}}
     {{this.productVersion}}
