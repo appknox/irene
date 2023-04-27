@@ -100,13 +100,15 @@
   }
 
   .product-version {
-    padding: 1em;
+    position: absolute;
+    right: 1em;
+    bottom: 1.5em;
     text-align: right;
     color: var(--organization-dashboard-side-nav-text-secondary);
     font-size: 0.8rem;
 
-    &.ak-pendo-version-container {
-      padding-right: 1.5rem;
+    &.pendo-version-padding {
+      padding-right: 2em;
     }
   }
 }
