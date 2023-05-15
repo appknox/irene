@@ -146,7 +146,7 @@ module.exports = function (environment) {
   var showLicense = handler.getBoolean('IRENE_SHOW_LICENSE');
   var ENV = {
     ENVHandlerCONST: ENVHandlerCONST,
-    productVersion: '23.4',
+    productVersion: '23.5',
     version: Date.now(),
     isDevknox: false,
     isAppknox: false,
