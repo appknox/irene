@@ -13,6 +13,10 @@ class OrganizationMfa extends Component {
   tChangedMandatoryMFA = this.intl.t('changedMandatoryMFA');
   tPleaseTryAgain = this.intl.t('pleaseTryAgain');
 
+  get organization() {
+    return this.args.organization;
+  }
+
   get isMfaMandateDisabled() {
     return !this.args.user.mfaEnabled || this.isSavingStatus;
   }
@@ -21,10 +25,12 @@ class OrganizationMfa extends Component {
     return !this.args.user.mfaEnabled;
   }
 
-  setMandatoryMFA = task(async () => {
+  setMandatoryMFA = task(async (_, mandatoryStateChecked) => {
     try {
       this.isSavingStatus = true;
-      const org = this.args.organization;
+
+      const org = this.organization;
+      org.set('mandatoryMfa', mandatoryStateChecked);
 
       await org.save();
 
