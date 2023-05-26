@@ -94,6 +94,19 @@ module('Integration | Component | organization-mfa', function (hooks) {
   });
 
   test('it should toggle mfa', async function (assert) {
+    assert.expect(10);
+
+    this.server.put('/organizations/', (schema, req) => {
+      const orgUpdateReqBody = JSON.parse(req.requestBody);
+
+      assert.strictEqual(
+        this.organization.mandatoryMfa,
+        orgUpdateReqBody.mandatory_mfa
+      );
+
+      return orgUpdateReqBody;
+    });
+
     this.user.set('mfaEnabled', true);
     const notify = this.owner.lookup('service:notifications');
 

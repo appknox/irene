@@ -26,7 +26,7 @@
   >
     <AkToggle
       @id='mandate-mfa'
-      @checked={{@organization.mandatoryMfa}}
+      @checked={{this.organization.mandatoryMfa}}
       @disabled={{fcl.disabled}}
       @size='small'
       @onChange={{perform this.setMandatoryMFA}}
