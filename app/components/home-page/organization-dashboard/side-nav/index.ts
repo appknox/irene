@@ -57,6 +57,14 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
         query: { app_offset: 0 },
         currentWhen: 'authenticated.dashboard.app-monitoring',
       },
+      this.showSbomDashboard && {
+        label: this.intl.t('SBOM'),
+        icon: 'receipt-long',
+        route: 'authenticated.dashboard.sbom.apps',
+        query: { app_offset: 0 },
+        currentWhen:
+          'authenticated.dashboard.sbom.apps authenticated.dashboard.sbom.app-scans authenticated.dashboard.sbom.scan-details',
+      },
       this.isShowAnalytics && {
         label: this.intl.t('analytics'),
         icon: 'graphic-eq',
@@ -115,6 +123,10 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
 
   get showAppMonitoringDashboard() {
     return this.organization?.selected?.features?.app_monitoring;
+  }
+
+  get showSbomDashboard() {
+    return this.organization.selected?.features?.sbom;
   }
 
   get enablePendo() {

@@ -33,10 +33,12 @@ const menuItems = ({
   billing,
   partner,
   security,
+  sbom,
 }) =>
   [
     { label: 't:projects:()', icon: 'folder', hasBadge: true },
     appMonitoring && { label: 't:appMonitoring:()', icon: 'inventory-2' },
+    sbom && { label: 't:SBOM:()', icon: 'receipt-long' },
     analytics && { label: 't:analytics:()', icon: 'graphic-eq' },
     { label: 't:organization:()', icon: 'people' },
     { label: 't:accountSettings:()', icon: 'account-box' },
@@ -57,6 +59,7 @@ const sections = (enabled) => ({
   market: enabled,
   partner: enabled,
   security: enabled,
+  sbom: enabled,
 });
 
 module(
@@ -110,7 +113,16 @@ module(
       ],
       async function (
         assert,
-        { owner, admin, billing, partner, market, appMonitoring, security }
+        {
+          owner,
+          admin,
+          billing,
+          partner,
+          market,
+          appMonitoring,
+          security,
+          sbom,
+        }
       ) {
         this.server.get('/submissions', () => {
           return [];
@@ -129,7 +141,11 @@ module(
         ENV.enableMarketplace = market;
 
         this.organization.selected.billingHidden = !billing;
-        this.organization.selected.features = { app_monitoring: appMonitoring };
+
+        this.organization.selected.features = {
+          app_monitoring: appMonitoring,
+          sbom,
+        };
 
         await render(
           hbs`<HomePage::OrganizationDashboard::SideNav @isSecurityEnabled={{this.isSecurityEnabled}} />`
@@ -146,6 +162,7 @@ module(
           appMonitoring,
           partner,
           security,
+          sbom,
         }).forEach((it, index) => {
           assert
             .dom('[data-test-side-menu-item-icon]', menuItemEle[index])
