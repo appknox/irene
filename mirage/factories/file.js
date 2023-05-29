@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import faker from 'faker';
 import ENUMS from 'irene/enums';
 import { RISK_COLOR_CODE } from 'irene/utils/constants';

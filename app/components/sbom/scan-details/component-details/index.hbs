@@ -1,0 +1,48 @@
+<AkDrawer @anchor='right' @onClose={{@onClose}} @open={{@open}} as |dr|>
+  <div {{style width='675px'}} data-test-componentDetails-container>
+    <AkAppbar @justifyContent='space-between' as |ab|>
+      <AkTypography @color='inherit' @variant='h5' data-test-drawer-title>
+        {{this.appDrawerTitle}}
+      </AkTypography>
+
+      <AkIconButton
+        data-test-drawer-close-btn
+        {{on 'click' dr.closeHandler}}
+        class={{ab.classes.defaultIconBtn}}
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <AkTabs
+      local-class='tabs-container'
+      data-test-componentDetails-tabs
+      as |akt|
+    >
+      {{#each this.tabItems as |item|}}
+        <akt.tabItem
+          @id={{item.id}}
+          @hasBadge={{item.hasBadge}}
+          @badgeCount={{item.badgeCount}}
+          @buttonVariant={{true}}
+          @onTabClick={{this.handleTabClick}}
+          @isActive={{eq item.id this.selectedTab}}
+          data-test-componentDetails-tab='{{item.id}}'
+        >
+          {{item.label}}
+        </akt.tabItem>
+      {{/each}}
+    </AkTabs>
+
+    <div class='p-3'>
+      {{#let (component this.activeTabComponent) as |Component|}}
+        <Component
+          @sbomProject={{@sbomProject}}
+          @sbomFile={{@sbomFile}}
+          @sbomComponent={{@sbomComponent}}
+          data-test-activeComponent='{{this.appDrawerTitle}}'
+        />
+      {{/let}}
+    </div>
+  </div>
+</AkDrawer>

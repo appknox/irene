@@ -97,6 +97,15 @@ body {
   // special case variable for app-bar & side-nav
   --box-shadow-dark: 1px 0px 8px -1px rgba(0, 0, 0, 0.3);
   --box-shadow-light: 4px 4px 20px rgba(222, 222, 222, 0.25);
+
+  // special case variable for severity
+  --severity-critical: #d72f2f;
+  --severity-high: #f98746;
+  --severity-medium: #fad34a;
+  --severity-low: #46cef9;
+  --severity-info: #2141b4;
+  --severity-none: #a0a0a0;
+  --severity-unknown: #202020;
 }
 
 /*------- static colors start -------*/

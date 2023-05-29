@@ -1,0 +1,23 @@
+{{page-title 'Scan Details'}}
+
+<AkBreadcrumbs::Container
+  @id='sbom-scan-details-breadcrumb'
+  class='px-3 pt-2 pb-3'
+>
+  <AkBreadcrumbs::Item
+    @route='authenticated.dashboard.sbom.apps'
+    @linkTitle={{t 'SBOM'}}
+  />
+
+  <AkBreadcrumbs::Item
+    @route='authenticated.dashboard.sbom.scan-details'
+    @linkTitle={{t 'sbomModule.allComponentsAndVulnerabilities'}}
+  />
+</AkBreadcrumbs::Container>
+
+<Sbom::ScanDetails
+  @sbomProject={{@model.sbomProject}}
+  @sbomFile={{@model.sbomFile}}
+  @sbomScanSummary={{@model.sbomScanSummary}}
+  @queryParams={{@model.queryParams}}
+/>

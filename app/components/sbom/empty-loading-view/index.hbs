@@ -1,0 +1,53 @@
+{{! @glint-nocheck: or}}
+{{#if (or @empty @loading)}}
+  <AkStack
+    local-class='empty-loading-container'
+    {{style height=(or @height '500px')}}
+    @alignItems='center'
+    @justifyContent='center'
+    @direction='column'
+    @spacing='2.5'
+  >
+    {{#if @loading}}
+      {{#if (has-block 'loadingSvg')}}
+        {{yield to='loadingSvg'}}
+      {{else}}
+        <AkSvg::EmptyLoadingList
+          width={{@loadingSvgWidth}}
+          height={{or @loadingSvgHeight '50%'}}
+          data-test-sbom-loadingSvg
+        />
+      {{/if}}
+    {{else}}
+      {{#if (has-block 'emptySvg')}}
+        {{yield to='emptySvg'}}
+      {{else}}
+        <AkSvg::EmptyLoadingList
+          width={{@emptySvgWidth}}
+          height={{or @emptySvgHeight '50%'}}
+          data-test-sbom-emptySvg
+        />
+      {{/if}}
+    {{/if}}
+
+    {{#if @loading}}
+      <AkStack @alignItems='center' @justifyContent='center' @spacing='1.5'>
+        <AkLoader data-test-sbom-loader @size={{16}} />
+
+        <AkTypography data-test-sbom-loadingText>
+          {{t 'loading'}}...
+        </AkTypography>
+      </AkStack>
+    {{else}}
+      {{#if (has-block 'emptyText')}}
+        {{yield to='emptyText'}}
+      {{else}}
+        <AkTypography data-test-sbom-emptyText @variant='h5'>
+          {{@emptyText}}
+        </AkTypography>
+      {{/if}}
+    {{/if}}
+  </AkStack>
+{{else}}
+  {{yield}}
+{{/if}}

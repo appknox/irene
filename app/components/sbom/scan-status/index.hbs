@@ -1,0 +1,9 @@
+{{#unless @sbomFile.isLoading}}
+  <AkChip
+    @variant='semi-filled'
+    @label={{this.statusValue}}
+    @size='small'
+    @color={{this.statusColor}}
+    data-test-sbom-scanStatus
+  />
+{{/unless}}

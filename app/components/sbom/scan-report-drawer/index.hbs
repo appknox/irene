@@ -1,0 +1,41 @@
+<AkDrawer
+  @open={{@open}}
+  @onClose={{@onClose}}
+  @anchor='right'
+  data-test-sbomReportDrawer-drawer
+  as |dr|
+>
+  <div {{style width='420px'}}>
+    <AkAppbar @justifyContent='space-between' as |ab|>
+      <AkTypography
+        data-test-sbomReportDrawer-title
+        @color='inherit'
+        @variant='h5'
+      >
+        {{t 'sbomModule.scanReports'}}
+      </AkTypography>
+
+      <AkIconButton
+        data-test-sbomReportDrawer-closeBtn
+        {{on 'click' dr.closeHandler}}
+        class={{ab.classes.defaultIconBtn}}
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    {{#if @showAppDetails}}
+      <div class='py-2'>
+        <Sbom::ScanReportDrawer::AppDetails @sbomProject={{this.sbomProject}} />
+      </div>
+    {{else}}
+      <AkTypography data-test-sbomReportDrawer-description class='px-3 py-2'>
+        {{t 'sbomModule.sbomDownloadReportDescription'}}
+      </AkTypography>
+
+      <AkDivider @color='dark' />
+    {{/if}}
+
+    <Sbom::ScanReportDrawer::ReportList @sbomFile={{@sbomFile}} />
+  </div>
+</AkDrawer>

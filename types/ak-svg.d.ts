@@ -17,6 +17,7 @@ export enum AkSvgComponentInvocationByNames {
   InProgress,
   XlsxIcon,
   CsvIcon,
+  NoVulnerability,
 }
 
 export enum AkSvgComponentInvocationByPaths {
