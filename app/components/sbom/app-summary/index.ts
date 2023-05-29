@@ -1,13 +1,17 @@
 import Component from '@glimmer/component';
 import SbomProjectModel from 'irene/models/sbom-project';
 
-export interface SbomProjectListAppNameSignature {
+export interface SbomAppSummarySignature {
   Args: {
     sbomProject: SbomProjectModel;
   };
+  Blocks: {
+    default: [];
+    actionBtn: [];
+  };
 }
 
-export default class SbomProjectListAppNameComponent extends Component<SbomProjectListAppNameSignature> {
+export default class SbomAppSummaryComponent extends Component<SbomAppSummarySignature> {
   get packageName() {
     return this.args.sbomProject.project.get('packageName');
   }
@@ -19,7 +23,6 @@ export default class SbomProjectListAppNameComponent extends Component<SbomProje
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
-    'Sbom::AppList::AppName': typeof SbomProjectListAppNameComponent;
-    'sbom/app-list/app-name': typeof SbomProjectListAppNameComponent;
+    'Sbom::AppSummary': typeof SbomAppSummaryComponent;
   }
 }

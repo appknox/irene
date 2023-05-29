@@ -1,11 +1,11 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import IntlService from 'ember-intl/services/intl';
-import SbomScanComponentModel from 'irene/models/sbom-scan-component';
+import SbomComponentModel from 'irene/models/sbom-component';
 
 export interface SbomScanDetailsComponentListKnownVulnerabilitiesSignature {
   Args: {
-    sbomScanComponent: SbomScanComponentModel;
+    sbomComponent: SbomComponentModel;
   };
 }
 
@@ -14,7 +14,7 @@ export default class SbomScanDetailsComponentListKnownVulnerabilitiesComponent e
 
   get hasVulnerabilitiesLabel() {
     return this.intl
-      .t(this.args.sbomScanComponent.isVulnerable ? 'yes' : 'no')
+      .t(this.args.sbomComponent.isVulnerable ? 'yes' : 'no')
       .toUpperCase();
   }
 }

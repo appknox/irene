@@ -1,9 +1,9 @@
 import Component from '@glimmer/component';
-import SbomScanComponentModel from 'irene/models/sbom-scan-component';
+import SbomComponentModel from 'irene/models/sbom-component';
 
 export interface SbomScanDetailsComponentListVersionSignature {
   Args: {
-    sbomScanComponent: SbomScanComponentModel;
+    sbomComponent: SbomComponentModel;
   };
 }
 

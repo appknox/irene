@@ -1,6 +1,6 @@
 import commondrf from './commondrf';
 
-export default class SbomScanAdapter extends commondrf {
+export default class SbomFileAdapter extends commondrf {
   _buildURL(modelName?: string | number, id?: string | number) {
     const baseURL = `${this.namespace_v2}/sb_files`;
 
@@ -11,9 +11,9 @@ export default class SbomScanAdapter extends commondrf {
     return this.buildURLFromBase(baseURL);
   }
 
-  urlForQuery(query: { sbomAppId?: string | number }) {
+  urlForQuery(query: { sbomProjectId?: string | number }) {
     const baseURL = this.buildURLFromBase(
-      `${this.namespace_v2}/sb_projects/${query.sbomAppId}`
+      `${this.namespace_v2}/sb_projects/${query.sbomProjectId}`
     );
 
     return `${baseURL}/sb_files`;
@@ -22,6 +22,6 @@ export default class SbomScanAdapter extends commondrf {
 
 declare module 'ember-data/types/registries/adapter' {
   export default interface AdapterRegistry {
-    'sbom-scan': SbomScanAdapter;
+    'sbom-file': SbomFileAdapter;
   }
 }

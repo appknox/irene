@@ -7,23 +7,23 @@ import { action } from '@ember/object';
 import parseError from 'irene/utils/parse-error';
 import ClipboardJS from 'clipboard/src/clipboard';
 
-import SbomScanReportModel, {
-  SbomScanReportStatus,
-  SbomScanReportType,
-} from 'irene/models/sbom-scan-report';
+import SbomReportModel, {
+  SbomReportStatus,
+  SbomReportType,
+} from 'irene/models/sbom-report';
 
 interface SbomScanReportDetails {
-  type: SbomScanReportType;
+  type: SbomReportType;
   primaryText: string;
   secondaryText: string;
   iconComponent: 'ak-svg/json-report' | 'ak-svg/pdf-report';
   copyText?: string;
-  status?: SbomScanReportStatus;
+  status?: SbomReportStatus;
 }
 
 export interface SbomScanReportDrawerReportListItemSignature {
   Args: {
-    sbomScanReport?: SbomScanReportModel;
+    sbomReport?: SbomReportModel;
     reportDetails: SbomScanReportDetails;
   };
 }
@@ -45,23 +45,23 @@ export default class SbomScanReportDrawerReportListItemComponent extends Compone
     this.tPleaseTryAgain = this.intl.t('pleaseTryAgain');
   }
 
-  get sbomScanReport() {
-    return this.args.sbomScanReport;
+  get sbomReport() {
+    return this.args.sbomReport;
   }
 
   get isReportGenerating() {
     return (
-      this.args.reportDetails.status === SbomScanReportStatus.STARTED ||
-      this.args.reportDetails.status === SbomScanReportStatus.IN_PROGRESS
+      this.args.reportDetails.status === SbomReportStatus.STARTED ||
+      this.args.reportDetails.status === SbomReportStatus.IN_PROGRESS
     );
   }
 
   get isReportGenerated() {
-    return this.args.reportDetails.status === SbomScanReportStatus.COMPLETED;
+    return this.args.reportDetails.status === SbomReportStatus.COMPLETED;
   }
 
   get isReportGenerateFailed() {
-    return this.args.reportDetails.status === SbomScanReportStatus.FAILED;
+    return this.args.reportDetails.status === SbomReportStatus.FAILED;
   }
 
   @action
@@ -76,9 +76,9 @@ export default class SbomScanReportDrawerReportListItemComponent extends Compone
     this.notify.error(this.tPleaseTryAgain);
   }
 
-  handleDownloadReport = task(async (type: SbomScanReportType) => {
+  handleDownloadReport = task(async (type: SbomReportType) => {
     try {
-      const data = await this.sbomScanReport?.downloadReport(type);
+      const data = await this.sbomReport?.downloadReport(type);
 
       if (data) {
         this.window.open(data.url, '_blank');
@@ -88,10 +88,10 @@ export default class SbomScanReportDrawerReportListItemComponent extends Compone
     }
   });
 
-  handleGenerateReport = task(async (type: SbomScanReportType) => {
+  handleGenerateReport = task(async (type: SbomReportType) => {
     try {
-      await this.sbomScanReport?.generateReport(type);
-      await this.sbomScanReport?.reload();
+      await this.sbomReport?.generateReport(type);
+      await this.sbomReport?.reload();
     } catch (e) {
       this.notify.error(parseError(e, this.tPleaseTryAgain));
     }

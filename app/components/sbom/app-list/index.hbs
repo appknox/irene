@@ -19,7 +19,7 @@
         data-test-sbomApp-searchInput
         @value={{@queryParams.app_query}}
         @placeholder={{t 'search'}}
-        {{on 'keyup' this.searchSbomAppForQuery}}
+        {{on 'keyup' this.searchSbomProjectForQuery}}
       >
         <:leftAdornment>
           <AkIcon @iconName='search' @color='textSecondary' />
@@ -30,9 +30,9 @@
 
   <div class='my-3'>
     <AkPaginationProvider
-      @results={{this.sbomAppList}}
+      @results={{this.sbomProjectList}}
       @onItemPerPageChange={{this.handleItemPerPageChange}}
-      @totalItems={{this.totalSbomAppCount}}
+      @totalItems={{this.totalSbomProjectCount}}
       @nextAction={{this.handlePrevNextAction}}
       @prevAction={{this.handlePrevNextAction}}
       @itemPerPageOptions={{array 10 25 50}}
@@ -41,8 +41,8 @@
       as |pgc|
     >
       <Sbom::EmptyLoadingView
-        @empty={{this.hasNoSbomApp}}
-        @loading={{this.fetchSbomApps.isRunning}}
+        @empty={{this.hasNoSbomProject}}
+        @loading={{this.fetchSbomProjects.isRunning}}
       >
         <:emptySvg>
           <AkSvg::OrgNamespaceEmpty data-test-sbomApp-emptySvg />
@@ -76,15 +76,15 @@
             <t.body @rows={{pgc.currentPageResults}} as |b|>
               <b.row
                 {{style cursor='pointer'}}
-                @onClick={{this.handleSbomAppRowClick}}
+                @onClick={{this.handleSbomProjectRowClick}}
                 data-test-sbomApp-row
                 as |r|
               >
                 <r.cell data-test-sbomApp-cell>
                   {{#let (component r.columnValue.component) as |Component|}}
                     <Component
-                      @sbomApp={{r.rowValue}}
-                      @sbomScan={{r.rowValue.latestSbFile.content}}
+                      @sbomProject={{r.rowValue}}
+                      @sbomFile={{r.rowValue.latestSbFile.content}}
                       @onViewReportClick={{this.handleViewReportOpen}}
                     />
                   {{/let}}
@@ -111,7 +111,7 @@
           <Sbom::ScanReportDrawer
             @open={{this.openViewReportDrawer}}
             @onClose={{this.handleViewReportClose}}
-            @sbomScan={{this.selectedSbomScan}}
+            @sbomFile={{this.selectedSbomFile}}
             @showAppDetails={{true}}
           />
 

@@ -1,6 +1,6 @@
 {{#if this.fetchSbomScanReports.isRunning}}
   <AkStack
-    data-test-sbomScanReportList-loader
+    data-test-sbomReportList-loader
     class='p-2'
     @alignItems='center'
     @justifyContent='center'
@@ -16,15 +16,15 @@
     @direction='column'
     @spacing='2.5'
   >
-    <AkSvg::NoResult data-test-sbomScanReportList-emptySvg />
+    <AkSvg::NoResult data-test-sbomReportList-emptySvg />
 
     <AkStack class='mt-2' @direction='column' @alignItems='center' @spacing='1'>
-      <AkTypography data-test-sbomScanReportList-emptyTextTitle @variant='h5'>
+      <AkTypography data-test-sbomReportList-emptyTextTitle @variant='h5'>
         {{t 'sbomModule.scanReportEmptyText.title'}}
       </AkTypography>
 
       <AkTypography
-        data-test-sbomScanReportList-emptyTextDescription
+        data-test-sbomReportList-emptyTextDescription
         @color='textSecondary'
         @align='center'
       >
@@ -33,11 +33,11 @@
     </AkStack>
   </AkStack>
 {{else}}
-  <AkList data-test-sbomScanReportList-reportlist>
+  <AkList data-test-sbomReportList-reportlist>
     {{#each this.reportDetails as |details|}}
       <Sbom::ScanReportDrawer::ReportList::Item
         @reportDetails={{details}}
-        @sbomScanReport={{this.latestSbomScanReport}}
+        @sbomReport={{this.latestSbomScanReport}}
       />
     {{/each}}
   </AkList>

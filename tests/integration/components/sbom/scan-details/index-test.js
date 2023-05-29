@@ -6,7 +6,7 @@ import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
-import { SbomScanStatus } from 'irene/models/sbom-scan';
+import { SbomScanStatus } from 'irene/models/sbom-file';
 
 module('Integration | Component | sbom/scan-details', function (hooks) {
   setupRenderingTest(hooks);
@@ -20,19 +20,22 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
     const project = this.server.create('project', 1, { last_file_id: file.id });
     const sbomScanSummary = this.server.create('sbom-scan-summary', 1);
 
-    const sbomApp = this.server.create('sbom-app', 1, {
+    const sbomProject = this.server.create('sbom-project', 1, {
       project: project.id,
     });
 
-    const sbomScan = this.server.create('sbom-scan', 1, {
+    const sbomFile = this.server.create('sbom-file', 1, {
       file: file.id,
-      sb_project: sbomApp.id,
+      sb_project: sbomProject.id,
     });
 
-    sbomApp.latest_sb_file = sbomScan.id;
+    sbomProject.latest_sb_file = sbomFile.id;
 
-    const sbomAppNormalized = store.normalize('sbom-app', sbomApp.toJSON());
-    const sbomScanNormalized = store.normalize('sbom-scan', sbomScan.toJSON());
+    const sbomProjectNormalized = store.normalize(
+      'sbom-project',
+      sbomProject.toJSON()
+    );
+    const sbomFileNormalized = store.normalize('sbom-file', sbomFile.toJSON());
 
     const sbomScanSummaryNormalized = store.normalize(
       'sbom-scan-summary',
@@ -40,8 +43,8 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
     );
 
     this.setProperties({
-      sbomApp: store.push(sbomAppNormalized),
-      sbomScan: store.push(sbomScanNormalized),
+      sbomProject: store.push(sbomProjectNormalized),
+      sbomFile: store.push(sbomFileNormalized),
       sbomScanSummary: store.push(sbomScanSummaryNormalized),
       queryParams: {
         component_limit: 10,
@@ -69,12 +72,12 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
       SbomScanStatus.FAILED,
     ],
     async function (assert, status) {
-      this.sbomScan.status = status;
+      this.sbomFile.status = status;
 
       await render(hbs`
       <Sbom::ScanDetails 
-        @sbomApp={{this.sbomApp}} 
-        @sbomScan={{this.sbomScan}} 
+        @sbomProject={{this.sbomProject}} 
+        @sbomFile={{this.sbomFile}} 
         @sbomScanSummary={{this.sbomScanSummary}} 
         @queryParams={{this.queryParams}} 
       />
@@ -139,19 +142,19 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
         }
       }
 
-      assert.dom('[data-test-sbomScanReportDrawer-drawer]').doesNotExist();
+      assert.dom('[data-test-sbomReportDrawer-drawer]').doesNotExist();
 
       assert.dom('[data-test-fileScanSummary-container]').doesNotExist();
     }
   );
 
   test('it toggles file and scan  summary on "show more or less" button click', async function (assert) {
-    this.sbomScan.status = SbomScanStatus.COMPLETED;
+    this.sbomFile.status = SbomScanStatus.COMPLETED;
 
     await render(hbs`
       <Sbom::ScanDetails 
-        @sbomApp={{this.sbomApp}} 
-        @sbomScan={{this.sbomScan}} 
+        @sbomProject={{this.sbomProject}} 
+        @sbomFile={{this.sbomFile}} 
         @sbomScanSummary={{this.sbomScanSummary}} 
         @queryParams={{this.queryParams}} 
       />
@@ -176,15 +179,15 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
     const fileSummaryDetailsList = [
       {
         label: 't:version:()',
-        value: this.sbomScan.get('file').get('version'),
+        value: this.sbomFile.get('file').get('version'),
       },
       {
         label: 't:sbomModule.versionCode:()',
-        value: this.sbomScan.get('file').get('versionCode'),
+        value: this.sbomFile.get('file').get('versionCode'),
       },
       {
         label: 't:file:()',
-        value: this.sbomScan.get('file').get('id'),
+        value: this.sbomFile.get('file').get('id'),
         link: true,
       },
     ];
@@ -237,7 +240,7 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
           `t:file:() - ${this.sbomScanSummary.fileCount}`,
           `t:firmware:() - ${this.sbomScanSummary.firmwareCount}`,
           `t:operatingSystem:() - ${this.sbomScanSummary.operatingSystemCount}`,
-        ],
+        ].filter((it) => !it.endsWith(' - 0')), // remove zero counts it will not be rendered
       },
       {
         label: 't:status:()',
@@ -247,7 +250,7 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
       },
       {
         label: 't:sbomModule.generatedDate:()',
-        value: [dayjs(this.sbomScan.completedAt).format('MMM DD, YYYY')],
+        value: [dayjs(this.sbomFile.completedAt).format('MMM DD, YYYY')],
       },
     ];
 
@@ -288,21 +291,21 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
   });
 
   test('it launches download report drawer on download report button click', async function (assert) {
-    this.sbomScan.status = SbomScanStatus.COMPLETED;
+    this.sbomFile.status = SbomScanStatus.COMPLETED;
 
     await render(hbs`
       <Sbom::ScanDetails 
-        @sbomApp={{this.sbomApp}} 
-        @sbomScan={{this.sbomScan}} 
+        @sbomProject={{this.sbomProject}} 
+        @sbomFile={{this.sbomFile}} 
         @sbomScanSummary={{this.sbomScanSummary}} 
         @queryParams={{this.queryParams}} 
       />
     `);
 
-    assert.dom('[data-test-sbomScanReportDrawer-drawer]').doesNotExist();
+    assert.dom('[data-test-sbomReportDrawer-drawer]').doesNotExist();
 
     await click('[data-test-sbomScanDetails-viewReport-btn]');
 
-    assert.dom('[data-test-sbomScanReportDrawer-drawer]').exists();
+    assert.dom('[data-test-sbomReportDrawer-drawer]').exists();
   });
 });

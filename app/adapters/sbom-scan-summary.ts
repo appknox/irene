@@ -12,12 +12,12 @@ export default class SbomScanSummaryAdapter extends CommonDRFAdapter {
   }
 
   urlForQueryRecord(
-    query: { sbomAppId?: string | number; sbomScanId?: string | number },
+    query: { sbomProjectId?: string | number; sbomFileId?: string | number },
     modelName?: string | number
   ) {
-    const baseURL = this._buildURL(modelName, query.sbomAppId);
+    const baseURL = this._buildURL(modelName, query.sbomProjectId);
 
-    return `${baseURL}/sb_files/${query.sbomScanId}/summary`;
+    return `${baseURL}/sb_files/${query.sbomFileId}/summary`;
   }
 }
 

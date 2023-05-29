@@ -1,10 +1,6 @@
 import CommonDRFAdapter from './commondrf';
 
-export interface SbomScanDownloadReportDetails {
-  url: string;
-}
-
-export default class SbomAppAdapter extends CommonDRFAdapter {
+export default class SbomProjectAdapter extends CommonDRFAdapter {
   _buildURL(modelName: string | number, id?: string | number) {
     const baseURL = `${this.namespace_v2}/sb_projects`;
 
@@ -18,6 +14,6 @@ export default class SbomAppAdapter extends CommonDRFAdapter {
 
 declare module 'ember-data/types/registries/adapter' {
   export default interface AdapterRegistry {
-    'sbom-app': SbomAppAdapter;
+    'sbom-project': SbomProjectAdapter;
   }
 }

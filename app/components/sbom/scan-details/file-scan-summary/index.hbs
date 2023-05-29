@@ -63,7 +63,7 @@
         >
           {{#if ss.component}}
             {{#let (component ss.component) as |Component|}}
-              <Component @sbomScan={{@sbomScan}} />
+              <Component @sbomFile={{@sbomFile}} />
             {{/let}}
           {{else}}
             {{#each ss.value as |val|}}

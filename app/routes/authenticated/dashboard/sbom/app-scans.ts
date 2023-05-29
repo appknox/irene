@@ -9,7 +9,7 @@ export interface SbomAppScanQueryParam {
 }
 
 export interface SbomAppScanParam extends SbomAppScanQueryParam {
-  sbom_app_id: string;
+  sbom_project_id: string;
 }
 
 export default class AuthenticatedDashboardSbomAppScansRoute extends Route {
@@ -29,14 +29,14 @@ export default class AuthenticatedDashboardSbomAppScansRoute extends Route {
 
   async model(params: SbomAppScanParam) {
     const {
-      sbom_app_id,
+      sbom_project_id,
       scan_limit = '10',
       scan_offset = '0',
       scan_query = '',
     } = params;
 
     return {
-      sbomApp: await this.store.findRecord('sbom-app', sbom_app_id),
+      sbomProject: await this.store.findRecord('sbom-project', sbom_project_id),
       queryParams: { scan_limit, scan_offset, scan_query },
     };
   }

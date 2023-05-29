@@ -1,7 +1,7 @@
 <AkChip
   @variant='filled'
-  @label={{@sbomScanComponentVulnerability.severityDisplayValue}}
+  @label={{@sbomVulnerability.severityDisplayValue}}
   @size='small'
-  local-class='severity-chip severity-chip-{{@sbomScanComponentVulnerability.severityClass}}'
-  data-test-sbomScanComponentVulnerabilities-severity
+  local-class='severity-chip severity-chip-{{@sbomVulnerability.severityClass}}'
+  data-test-sbomComponentVulnerabilities-severity
 />

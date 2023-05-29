@@ -12,18 +12,18 @@ import RouterService from '@ember/routing/router-service';
 
 import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import { SbomAppScanQueryParam } from 'irene/routes/authenticated/dashboard/sbom/app-scans';
-import SbomScanModel from 'irene/models/sbom-scan';
-import SbomAppModel from 'irene/models/sbom-app';
+import SbomFileModel from 'irene/models/sbom-file';
+import SbomProjectModel from 'irene/models/sbom-project';
 import parseError from 'irene/utils/parse-error';
 
 export interface SbomAppScanListSignature {
   Args: {
-    sbomApp: SbomAppModel;
+    sbomProject: SbomProjectModel;
     queryParams: SbomAppScanQueryParam;
   };
 }
 
-type SbomScanQueryResponse = DS.AdapterPopulatedRecordArray<SbomScanModel> & {
+type SbomScanQueryResponse = DS.AdapterPopulatedRecordArray<SbomFileModel> & {
   meta: { count: number };
 };
 
@@ -33,8 +33,8 @@ export default class SbomAppScanListComponent extends Component<SbomAppScanListS
   @service declare router: RouterService;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked sbomScanQueryResponse: SbomScanQueryResponse | null = null;
-  @tracked selectedSbomScan: SbomScanModel | null = null;
+  @tracked sbomFileQueryResponse: SbomScanQueryResponse | null = null;
+  @tracked selectedSbomFile: SbomFileModel | null = null;
 
   // translation variables
   tPleaseTryAgain: string;
@@ -46,26 +46,26 @@ export default class SbomAppScanListComponent extends Component<SbomAppScanListS
 
     const { scan_limit, scan_offset } = args.queryParams;
 
-    this.fetchSbomAppScans.perform(scan_limit, scan_offset, false);
+    this.fetchSbomProjectFiles.perform(scan_limit, scan_offset, false);
   }
 
   get projectName() {
-    return this.args.sbomApp.project.get('lastFile')?.get('name');
+    return this.args.sbomProject.project.get('lastFile')?.get('name');
   }
 
   get openViewReportDrawer() {
-    return Boolean(this.selectedSbomScan);
+    return Boolean(this.selectedSbomFile);
   }
 
   @action
-  handleViewReportDrawerOpen(sbomScan: SbomScanModel, event: MouseEvent) {
+  handleViewReportDrawerOpen(sbomFile: SbomFileModel, event: MouseEvent) {
     event.stopPropagation();
-    this.selectedSbomScan = sbomScan;
+    this.selectedSbomFile = sbomFile;
   }
 
   @action
   handleViewReportDrawerClose() {
-    this.selectedSbomScan = null;
+    this.selectedSbomFile = null;
   }
 
   get limit() {
@@ -76,12 +76,12 @@ export default class SbomAppScanListComponent extends Component<SbomAppScanListS
     return Number(this.args.queryParams.scan_offset);
   }
 
-  get sbomScanList() {
-    return this.sbomScanQueryResponse?.toArray() || [];
+  get sbomFileList() {
+    return this.sbomFileQueryResponse?.toArray() || [];
   }
 
   get totalSbomScanCount() {
-    return this.sbomScanQueryResponse?.meta?.count || 0;
+    return this.sbomFileQueryResponse?.meta?.count || 0;
   }
 
   get hasNoSbomScan() {
@@ -120,22 +120,22 @@ export default class SbomAppScanListComponent extends Component<SbomAppScanListS
   }
 
   @action
-  handleSbomScanClick({ rowValue }: { rowValue: SbomScanModel }) {
+  handleSbomScanClick({ rowValue }: { rowValue: SbomFileModel }) {
     this.router.transitionTo(
       'authenticated.dashboard.sbom.scan-details',
-      this.args.sbomApp.id,
+      this.args.sbomProject.id,
       rowValue.id
     );
   }
 
   @action
   handlePrevNextAction({ limit, offset }: PaginationProviderActionsArgs) {
-    this.fetchSbomAppScans.perform(limit, offset);
+    this.fetchSbomProjectFiles.perform(limit, offset);
   }
 
   @action
   handleItemPerPageChange({ limit }: PaginationProviderActionsArgs) {
-    this.fetchSbomAppScans.perform(limit, 0);
+    this.fetchSbomProjectFiles.perform(limit, 0);
   }
 
   setRouteQueryParams(limit: string | number, offset: string | number) {
@@ -147,7 +147,7 @@ export default class SbomAppScanListComponent extends Component<SbomAppScanListS
     });
   }
 
-  fetchSbomAppScans = task(
+  fetchSbomProjectFiles = task(
     async (
       limit: string | number,
       offset: string | number,
@@ -158,10 +158,10 @@ export default class SbomAppScanListComponent extends Component<SbomAppScanListS
       }
 
       try {
-        this.sbomScanQueryResponse = (await this.store.query('sbom-scan', {
+        this.sbomFileQueryResponse = (await this.store.query('sbom-file', {
           limit,
           offset,
-          sbomAppId: this.args.sbomApp.id,
+          sbomProjectId: this.args.sbomProject.id,
         })) as SbomScanQueryResponse;
       } catch (e) {
         this.notify.error(parseError(e, this.tPleaseTryAgain));

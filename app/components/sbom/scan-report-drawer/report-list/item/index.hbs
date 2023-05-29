@@ -1,6 +1,6 @@
 {{! @glint-nocheck or, perform }}
 <AkList::Item
-  data-test-sbomScanReportList-reportlistItem
+  data-test-sbomReportList-reportlistItem
   class='px-3'
   @divider={{true}}
   as |li|
@@ -8,13 +8,13 @@
   {{#if (or this.isReportGenerated this.isReportGenerating)}}
     <li.leftIcon>
       {{#let (component @reportDetails.iconComponent) as |Icon|}}
-        <Icon data-test-sbomScanReportList-reportIcon />
+        <Icon data-test-sbomReportList-reportIcon />
       {{/let}}
     </li.leftIcon>
 
     <AkStack @direction='column' @width='full' @spacing='0.5' class='pl-1'>
       <AkTypography
-        data-test-sbomScanReportList-reportPrimaryText
+        data-test-sbomReportList-reportPrimaryText
         @variant='subtitle1'
       >
         {{@reportDetails.primaryText}}
@@ -22,14 +22,14 @@
 
       {{#if this.isReportGenerating}}
         <AkTypography
-          data-test-sbomScanReportList-reportGeneratingText
+          data-test-sbomReportList-reportGeneratingText
           @color='textSecondary'
         >
           {{t 'generating'}}...
         </AkTypography>
       {{else}}
         <AkStack @alignItems='center' @spacing='0.5'>
-          <AkTypography data-test-sbomScanReportList-reportSecondaryText>
+          <AkTypography data-test-sbomReportList-reportSecondaryText>
             {{@reportDetails.secondaryText}}
           </AkTypography>
 
@@ -43,7 +43,7 @@
                 id={{cb.triggerId}}
                 @size='small'
                 data-clipboard-text={{@reportDetails.copyText}}
-                data-test-sbomScanReportList-reportCopyBtn
+                data-test-sbomReportList-reportCopyBtn
               >
                 <AkIcon @iconName='content-copy' @color='primary' />
               </AkIconButton>
@@ -56,14 +56,14 @@
     <li.rightIcon>
       {{#if this.isReportGenerating}}
         <AkLoader
-          data-test-sbomScanReportList-reportGeneratingLoader
+          data-test-sbomReportList-reportGeneratingLoader
           @size={{18}}
         />
       {{else}}
         <AkIconButton
           {{on 'click' (perform this.handleDownloadReport @reportDetails.type)}}
           disabled={{this.handleDownloadReport.isRunning}}
-          data-test-sbomScanReportList-reportDownloadBtn
+          data-test-sbomReportList-reportDownloadBtn
         >
           <AkIcon @variant='outlined' @iconName='file-download' />
         </AkIconButton>
@@ -72,7 +72,7 @@
   {{else}}
     <AkStack @direction='column' @spacing='2' @width='full'>
       <AkTypography
-        data-test-sbomScanReportList-reportGenerateTitle
+        data-test-sbomReportList-reportGenerateTitle
         @variant='subtitle1'
       >
         {{t 'sbomModule.sbomDownloadPdfPrimaryText'}}
@@ -83,16 +83,16 @@
         @direction='column'
         @spacing='2'
       >
-        <AkSvg::GenerateReport data-test-sbomScanReportList-reportGenerateSvg />
+        <AkSvg::GenerateReport data-test-sbomReportList-reportGenerateSvg />
 
-        <AkTypography data-test-sbomScanReportList-reportGenerateDescription>
+        <AkTypography data-test-sbomReportList-reportGenerateDescription>
           {{t 'sbomModule.generateReportDescription'}}
         </AkTypography>
 
         <AkButton
           {{on 'click' (perform this.handleGenerateReport @reportDetails.type)}}
           @loading={{this.handleGenerateReport.isRunning}}
-          data-test-sbomScanReportList-reportGenerateBtn
+          data-test-sbomReportList-reportGenerateBtn
         >
           {{t 'generateReport'}}
         </AkButton>

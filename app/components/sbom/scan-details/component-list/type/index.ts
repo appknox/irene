@@ -1,17 +1,17 @@
 import Component from '@glimmer/component';
 import { capitalize } from '@ember/string';
 
-import SbomScanComponentModel from 'irene/models/sbom-scan-component';
+import SbomComponentModel from 'irene/models/sbom-component';
 
 export interface SbomScanDetailsComponentListTypeSignature {
   Args: {
-    sbomScanComponent: SbomScanComponentModel;
+    sbomComponent: SbomComponentModel;
   };
 }
 
 export default class SbomScanDetailsComponentListTypeComponent extends Component<SbomScanDetailsComponentListTypeSignature> {
   get type() {
-    return capitalize(this.args.sbomScanComponent.type);
+    return capitalize(this.args.sbomComponent.type);
   }
 }
 

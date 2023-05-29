@@ -1,23 +1,22 @@
 import Component from '@glimmer/component';
-import SbomScanComponentVulnerabilityModel, {
+import SbomVulnerabilityModel, {
   VulnerabilitySeverity,
-} from 'irene/models/sbom-scan-component-vulnerability';
+} from 'irene/models/sbom-vulnerability';
 
 export interface SbomScanDetailsComponentDetailsVulnerabilitiesCvssScoreSignature {
   Args: {
-    sbomScanComponentVulnerability: SbomScanComponentVulnerabilityModel;
+    sbomVulnerability: SbomVulnerabilityModel;
   };
 }
 
 export default class SbomScanDetailsComponentDetailsVulnerabilitiesCvssScoreComponent extends Component<SbomScanDetailsComponentDetailsVulnerabilitiesCvssScoreSignature> {
   get score() {
-    return this.args.sbomScanComponentVulnerability.score;
+    return this.args.sbomVulnerability.score;
   }
 
   get isUnknownSeverity() {
     return (
-      this.args.sbomScanComponentVulnerability.severity ===
-      VulnerabilitySeverity.UNKNOWN
+      this.args.sbomVulnerability.severity === VulnerabilitySeverity.UNKNOWN
     );
   }
 }

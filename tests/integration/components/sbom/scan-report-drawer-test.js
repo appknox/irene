@@ -5,7 +5,7 @@ import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
-import { SbomScanReportStatus } from 'irene/models/sbom-scan-report';
+import { SbomReportStatus } from 'irene/models/sbom-report';
 import Service from '@ember/service';
 
 class NotificationsStub extends Service {
@@ -47,20 +47,23 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     const file = this.server.create('file');
     const project = this.server.create('project', { last_file_id: file.id });
 
-    const sbomApp = this.server.create('sbom-app', {
+    const sbomProject = this.server.create('sbom-project', {
       project: project.id,
     });
 
-    const sbomScan = this.server.create('sbom-scan');
-    const sbomScanReport = this.server.create('sbom-scan-report');
+    const sbomFile = this.server.create('sbom-file');
+    const sbomReport = this.server.create('sbom-report');
 
-    const normalizedSbomScan = store.normalize('sbom-scan', sbomScan.toJSON());
-    const normalizedSbomApp = store.normalize('sbom-scan', sbomApp.toJSON());
+    const normalizedSbomScan = store.normalize('sbom-file', sbomFile.toJSON());
+    const normalizedSbomProject = store.normalize(
+      'sbom-file',
+      sbomProject.toJSON()
+    );
 
     this.setProperties({
-      sbomScan: store.push(normalizedSbomScan),
-      sbomApp: store.push(normalizedSbomApp),
-      sbomScanReport,
+      sbomFile: store.push(normalizedSbomScan),
+      sbomProject: store.push(normalizedSbomProject),
+      sbomReport,
       onClose: () => {},
     });
 
@@ -70,62 +73,60 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
 
   test('it renders scan report drawer', async function (assert) {
     this.server.get('/v2/sb_files/:id/sb_reports', (schema) => {
-      const results = schema.sbomScanReports.all().models;
+      const results = schema.sbomReports.all().models;
 
       return { count: results.length, next: null, previous: null, results };
     });
 
     await render(hbs`
-      <Sbom::ScanReportDrawer @sbomScan={{this.sbomScan}} @open={{true}} @onClose={{this.onClose}} />
+      <Sbom::ScanReportDrawer @sbomFile={{this.sbomFile}} @open={{true}} @onClose={{this.onClose}} />
     `);
 
-    assert.dom('[data-test-sbomScanReportDrawer-drawer]').exists();
+    assert.dom('[data-test-sbomReportDrawer-drawer]').exists();
 
     assert
-      .dom('[data-test-sbomScanReportDrawer-title]')
+      .dom('[data-test-sbomReportDrawer-title]')
       .hasText('t:sbomModule.scanReports:()');
 
-    assert.dom('[data-test-sbomScanReportDrawer-closeBtn]').isNotDisabled();
+    assert.dom('[data-test-sbomReportDrawer-closeBtn]').isNotDisabled();
 
     assert
       .dom(
         '[data-test-appPlatform-icon]',
-        find('[data-test-sbomScanReportDrawer-drawer]')
+        find('[data-test-sbomReportDrawer-drawer]')
       )
       .doesNotExist();
 
     assert
       .dom(
         '[data-test-sbomApp-logo]',
-        find('[data-test-sbomScanReportDrawer-drawer]')
+        find('[data-test-sbomReportDrawer-drawer]')
       )
       .doesNotExist();
 
-    assert.dom('[data-test-sbomScanReportDrawer-appName]').doesNotExist();
+    assert.dom('[data-test-sbomReportDrawer-appName]').doesNotExist();
+
+    assert.dom('[data-test-sbomReportDrawer-appPackageName]').doesNotExist();
 
     assert
-      .dom('[data-test-sbomScanReportDrawer-appPackageName]')
-      .doesNotExist();
-
-    assert
-      .dom('[data-test-sbomScanReportDrawer-description]')
+      .dom('[data-test-sbomReportDrawer-description]')
       .hasText('t:sbomModule.sbomDownloadReportDescription:()');
 
-    assert.dom('[data-test-sbomScanReportList-reportlist]').exists();
+    assert.dom('[data-test-sbomReportList-reportlist]').exists();
 
-    const reportList = findAll('[data-test-sbomScanReportList-reportlistItem]');
+    const reportList = findAll('[data-test-sbomReportList-reportlistItem]');
 
     assert.strictEqual(reportList.length, 2);
   });
 
   test('test pdf report generate & download flow', async function (assert) {
     this.setProperties({
-      status: SbomScanReportStatus.PENDING,
+      status: SbomReportStatus.PENDING,
       open: true,
     });
 
     this.server.get('/v2/sb_files/:id/sb_reports', (schema) => {
-      const results = schema.sbomScanReports.all().models;
+      const results = schema.sbomReports.all().models;
 
       results[0].pdf_status = this.status;
 
@@ -134,8 +135,8 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
 
     this.server.get('/v2/sb_reports/:id', (schema, req) => {
       return {
-        ...schema.sbomScanReports.find(`${req.params.id}`)?.toJSON(),
-        pdf_status: SbomScanReportStatus.IN_PROGRESS,
+        ...schema.sbomReports.find(`${req.params.id}`)?.toJSON(),
+        pdf_status: SbomReportStatus.IN_PROGRESS,
       };
     });
 
@@ -148,135 +149,129 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     });
 
     await render(hbs`
-      <Sbom::ScanReportDrawer @sbomScan={{this.sbomScan}} @open={{this.open}} @onClose={{this.onClose}} />
+      <Sbom::ScanReportDrawer @sbomFile={{this.sbomFile}} @open={{this.open}} @onClose={{this.onClose}} />
     `);
 
-    assert.dom('[data-test-sbomScanReportDrawer-drawer]').exists();
-    assert.dom('[data-test-sbomScanReportList-reportlist]').exists();
+    assert.dom('[data-test-sbomReportDrawer-drawer]').exists();
+    assert.dom('[data-test-sbomReportList-reportlist]').exists();
 
-    let reportList = findAll('[data-test-sbomScanReportList-reportlistItem]');
+    let reportList = findAll('[data-test-sbomReportList-reportlistItem]');
 
     assert
-      .dom('[data-test-sbomScanReportList-reportGenerateTitle]', reportList[0])
+      .dom('[data-test-sbomReportList-reportGenerateTitle]', reportList[0])
       .hasText('t:sbomModule.sbomDownloadPdfPrimaryText:()');
 
     assert
-      .dom('[data-test-sbomScanReportList-reportGenerateSvg]', reportList[0])
+      .dom('[data-test-sbomReportList-reportGenerateSvg]', reportList[0])
       .exists();
 
     assert
       .dom(
-        '[data-test-sbomScanReportList-reportGenerateDescription]',
+        '[data-test-sbomReportList-reportGenerateDescription]',
         reportList[0]
       )
       .hasText('t:sbomModule.generateReportDescription:()');
 
     assert
-      .dom('[data-test-sbomScanReportList-reportGenerateBtn]', reportList[0])
+      .dom('[data-test-sbomReportList-reportGenerateBtn]', reportList[0])
       .isNotDisabled()
       .hasText('t:generateReport:()');
 
     await click(
       reportList[0].querySelector(
-        '[data-test-sbomScanReportList-reportGenerateBtn]'
+        '[data-test-sbomReportList-reportGenerateBtn]'
       )
     );
 
     // refresh dom reference
-    reportList = findAll('[data-test-sbomScanReportList-reportlistItem]');
+    reportList = findAll('[data-test-sbomReportList-reportlistItem]');
 
     // previous state
     assert
-      .dom('[data-test-sbomScanReportList-reportGenerateTitle]', reportList[0])
+      .dom('[data-test-sbomReportList-reportGenerateTitle]', reportList[0])
       .doesNotExist();
 
     assert
-      .dom('[data-test-sbomScanReportList-reportGenerateSvg]', reportList[0])
+      .dom('[data-test-sbomReportList-reportGenerateSvg]', reportList[0])
       .doesNotExist();
 
     assert
       .dom(
-        '[data-test-sbomScanReportList-reportGenerateDescription]',
+        '[data-test-sbomReportList-reportGenerateDescription]',
         reportList[0]
       )
       .doesNotExist();
 
     assert
-      .dom('[data-test-sbomScanReportList-reportGenerateBtn]', reportList[0])
+      .dom('[data-test-sbomReportList-reportGenerateBtn]', reportList[0])
       .doesNotExist();
 
     // current state
     assert
-      .dom('[data-test-sbomScanReportList-reportPrimaryText]', reportList[0])
+      .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[0])
       .hasText('t:sbomModule.sbomDownloadPdfPrimaryText:()');
 
     assert
-      .dom('[data-test-sbomScanReportList-reportGeneratingText]', reportList[0])
+      .dom('[data-test-sbomReportList-reportGeneratingText]', reportList[0])
       .hasText('t:generating:()...');
 
     assert
-      .dom(
-        '[data-test-sbomScanReportList-reportGeneratingLoader]',
-        reportList[0]
-      )
+      .dom('[data-test-sbomReportList-reportGeneratingLoader]', reportList[0])
       .exists();
 
     // close and open to get latest status
     this.set('open', false);
 
-    assert.dom('[data-test-sbomScanReportDrawer-drawer]').doesNotExist();
-    assert.dom('[data-test-sbomScanReportList-reportlist]').doesNotExist();
+    assert.dom('[data-test-sbomReportDrawer-drawer]').doesNotExist();
+    assert.dom('[data-test-sbomReportList-reportlist]').doesNotExist();
 
     this.setProperties({
-      status: SbomScanReportStatus.COMPLETED,
+      status: SbomReportStatus.COMPLETED,
       open: true,
     });
 
-    assert.dom('[data-test-sbomScanReportDrawer-drawer]').exists();
+    assert.dom('[data-test-sbomReportDrawer-drawer]').exists();
 
     // wait for api
-    await waitFor('[data-test-sbomScanReportList-reportlist]', {
+    await waitFor('[data-test-sbomReportList-reportlist]', {
       timeout: 200,
     });
 
     // refresh dom reference
-    reportList = findAll('[data-test-sbomScanReportList-reportlistItem]');
+    reportList = findAll('[data-test-sbomReportList-reportlistItem]');
 
     // previous state
     assert
-      .dom('[data-test-sbomScanReportList-reportGeneratingText]', reportList[0])
+      .dom('[data-test-sbomReportList-reportGeneratingText]', reportList[0])
       .doesNotExist();
 
     assert
-      .dom(
-        '[data-test-sbomScanReportList-reportGeneratingLoader]',
-        reportList[0]
-      )
+      .dom('[data-test-sbomReportList-reportGeneratingLoader]', reportList[0])
       .doesNotExist();
 
     // after report generation
     assert
-      .dom('[data-test-sbomScanReportList-reportPrimaryText]', reportList[0])
+      .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[0])
       .hasText('t:sbomModule.sbomDownloadPdfPrimaryText:()');
 
     assert
-      .dom('[data-test-sbomScanReportList-reportSecondaryText]', reportList[0])
+      .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[0])
       .hasText(
-        `t:sbomModule.sbomDownloadPdfSecondaryText:("password":"${this.sbomScanReport.report_password}")`
+        `t:sbomModule.sbomDownloadPdfSecondaryText:("password":"${this.sbomReport.report_password}")`
       );
 
     assert
-      .dom('[data-test-sbomScanReportList-reportCopyBtn]', reportList[0])
+      .dom('[data-test-sbomReportList-reportCopyBtn]', reportList[0])
       .isNotDisabled()
-      .hasAttribute('data-clipboard-text', this.sbomScanReport.report_password);
+      .hasAttribute('data-clipboard-text', this.sbomReport.report_password);
 
     assert
-      .dom('[data-test-sbomScanReportList-reportDownloadBtn]', reportList[0])
+      .dom('[data-test-sbomReportList-reportDownloadBtn]', reportList[0])
       .isNotDisabled();
 
     await click(
       reportList[0].querySelector(
-        '[data-test-sbomScanReportList-reportDownloadBtn]'
+        '[data-test-sbomReportList-reportDownloadBtn]'
       )
     );
 
@@ -288,9 +283,9 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
 
   test('test pdf report download (already generated)', async function (assert) {
     this.server.get('/v2/sb_files/:id/sb_reports', (schema) => {
-      const results = schema.sbomScanReports.all().models;
+      const results = schema.sbomReports.all().models;
 
-      results[0].pdf_status = SbomScanReportStatus.COMPLETED;
+      results[0].pdf_status = SbomReportStatus.COMPLETED;
 
       return { count: results.length, next: null, previous: null, results };
     });
@@ -300,36 +295,36 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     });
 
     await render(hbs`
-      <Sbom::ScanReportDrawer @sbomScan={{this.sbomScan}} @open={{true}} @onClose={{this.onClose}} />
+      <Sbom::ScanReportDrawer @sbomFile={{this.sbomFile}} @open={{true}} @onClose={{this.onClose}} />
     `);
 
-    assert.dom('[data-test-sbomScanReportDrawer-drawer]').exists();
-    assert.dom('[data-test-sbomScanReportList-reportlist]').exists();
+    assert.dom('[data-test-sbomReportDrawer-drawer]').exists();
+    assert.dom('[data-test-sbomReportList-reportlist]').exists();
 
-    const reportList = findAll('[data-test-sbomScanReportList-reportlistItem]');
+    const reportList = findAll('[data-test-sbomReportList-reportlistItem]');
 
     assert
-      .dom('[data-test-sbomScanReportList-reportPrimaryText]', reportList[0])
+      .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[0])
       .hasText('t:sbomModule.sbomDownloadPdfPrimaryText:()');
 
     assert
-      .dom('[data-test-sbomScanReportList-reportSecondaryText]', reportList[0])
+      .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[0])
       .hasText(
-        `t:sbomModule.sbomDownloadPdfSecondaryText:("password":"${this.sbomScanReport.report_password}")`
+        `t:sbomModule.sbomDownloadPdfSecondaryText:("password":"${this.sbomReport.report_password}")`
       );
 
     assert
-      .dom('[data-test-sbomScanReportList-reportCopyBtn]', reportList[0])
+      .dom('[data-test-sbomReportList-reportCopyBtn]', reportList[0])
       .isNotDisabled()
-      .hasAttribute('data-clipboard-text', this.sbomScanReport.report_password);
+      .hasAttribute('data-clipboard-text', this.sbomReport.report_password);
 
     assert
-      .dom('[data-test-sbomScanReportList-reportDownloadBtn]', reportList[0])
+      .dom('[data-test-sbomReportList-reportDownloadBtn]', reportList[0])
       .isNotDisabled();
 
     await click(
       reportList[0].querySelector(
-        '[data-test-sbomScanReportList-reportDownloadBtn]'
+        '[data-test-sbomReportList-reportDownloadBtn]'
       )
     );
 
@@ -341,37 +336,35 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
 
   test('test pdf report copy password', async function (assert) {
     this.server.get('/v2/sb_files/:id/sb_reports', (schema) => {
-      const results = schema.sbomScanReports.all().models;
+      const results = schema.sbomReports.all().models;
 
-      results[0].pdf_status = SbomScanReportStatus.COMPLETED;
+      results[0].pdf_status = SbomReportStatus.COMPLETED;
 
       return { count: results.length, next: null, previous: null, results };
     });
 
     await render(hbs`
-      <Sbom::ScanReportDrawer @sbomScan={{this.sbomScan}} @open={{true}} @onClose={{this.onClose}} />
+      <Sbom::ScanReportDrawer @sbomFile={{this.sbomFile}} @open={{true}} @onClose={{this.onClose}} />
     `);
 
-    assert.dom('[data-test-sbomScanReportDrawer-drawer]').exists();
-    assert.dom('[data-test-sbomScanReportList-reportlist]').exists();
+    assert.dom('[data-test-sbomReportDrawer-drawer]').exists();
+    assert.dom('[data-test-sbomReportList-reportlist]').exists();
 
-    const reportList = findAll('[data-test-sbomScanReportList-reportlistItem]');
+    const reportList = findAll('[data-test-sbomReportList-reportlistItem]');
 
     assert
-      .dom('[data-test-sbomScanReportList-reportSecondaryText]', reportList[0])
+      .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[0])
       .hasText(
-        `t:sbomModule.sbomDownloadPdfSecondaryText:("password":"${this.sbomScanReport.report_password}")`
+        `t:sbomModule.sbomDownloadPdfSecondaryText:("password":"${this.sbomReport.report_password}")`
       );
 
     assert
-      .dom('[data-test-sbomScanReportList-reportCopyBtn]', reportList[0])
+      .dom('[data-test-sbomReportList-reportCopyBtn]', reportList[0])
       .isNotDisabled()
-      .hasAttribute('data-clipboard-text', this.sbomScanReport.report_password);
+      .hasAttribute('data-clipboard-text', this.sbomReport.report_password);
 
     await click(
-      reportList[0].querySelector(
-        '[data-test-sbomScanReportList-reportCopyBtn]'
-      )
+      reportList[0].querySelector('[data-test-sbomReportList-reportCopyBtn]')
     );
 
     const notify = this.owner.lookup('service:notifications');
@@ -381,9 +374,9 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
 
   test('test json report download', async function (assert) {
     this.server.get('/v2/sb_files/:id/sb_reports', (schema) => {
-      const results = schema.sbomScanReports.all().models;
+      const results = schema.sbomReports.all().models;
 
-      results[0].pdf_status = SbomScanReportStatus.COMPLETED;
+      results[0].pdf_status = SbomReportStatus.COMPLETED;
 
       return { count: results.length, next: null, previous: null, results };
     });
@@ -396,29 +389,29 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     );
 
     await render(hbs`
-      <Sbom::ScanReportDrawer @sbomScan={{this.sbomScan}} @open={{true}} @onClose={{this.onClose}} />
+      <Sbom::ScanReportDrawer @sbomFile={{this.sbomFile}} @open={{true}} @onClose={{this.onClose}} />
     `);
 
-    assert.dom('[data-test-sbomScanReportDrawer-drawer]').exists();
-    assert.dom('[data-test-sbomScanReportList-reportlist]').exists();
+    assert.dom('[data-test-sbomReportDrawer-drawer]').exists();
+    assert.dom('[data-test-sbomReportList-reportlist]').exists();
 
-    const reportList = findAll('[data-test-sbomScanReportList-reportlistItem]');
+    const reportList = findAll('[data-test-sbomReportList-reportlistItem]');
 
     assert
-      .dom('[data-test-sbomScanReportList-reportPrimaryText]', reportList[1])
+      .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[1])
       .hasText('t:sbomModule.sbomDownloadJsonPrimaryText:()');
 
     assert
-      .dom('[data-test-sbomScanReportList-reportSecondaryText]', reportList[1])
+      .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[1])
       .hasText('t:sbomModule.sbomDownloadJsonSecondaryText:()');
 
     assert
-      .dom('[data-test-sbomScanReportList-reportDownloadBtn]', reportList[1])
+      .dom('[data-test-sbomReportList-reportDownloadBtn]', reportList[1])
       .isNotDisabled();
 
     await click(
       reportList[1].querySelector(
-        '[data-test-sbomScanReportList-reportDownloadBtn]'
+        '[data-test-sbomReportList-reportDownloadBtn]'
       )
     );
 

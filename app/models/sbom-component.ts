@@ -1,14 +1,14 @@
 import Model, { attr, belongsTo, AsyncBelongsTo } from '@ember-data/model';
 import { isEmpty } from '@ember/utils';
-import SbomScanModel from './sbom-scan';
+import SbomFileModel from './sbom-file';
 
 export interface SbomComponentProperty {
   [key: string]: string;
 }
 
-export default class SbomScanComponentModel extends Model {
-  @belongsTo('sbom-scan')
-  declare sbFile: AsyncBelongsTo<SbomScanModel>;
+export default class SbomComponentModel extends Model {
+  @belongsTo('sbom-file')
+  declare sbFile: AsyncBelongsTo<SbomFileModel>;
 
   @attr('string')
   declare name: string;
@@ -61,6 +61,6 @@ export default class SbomScanComponentModel extends Model {
 
 declare module 'ember-data/types/registries/model' {
   export default interface ModelRegistry {
-    'sbom-scan-component': SbomScanComponentModel;
+    'sbom-component': SbomComponentModel;
   }
 }

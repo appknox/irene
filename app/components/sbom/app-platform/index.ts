@@ -1,17 +1,17 @@
 import Component from '@glimmer/component';
-import SbomAppModel from 'irene/models/sbom-app';
+import SbomProjectModel from 'irene/models/sbom-project';
 
 export interface SbomAppPlatformSignature {
   Element: HTMLDivElement;
   Args: {
-    sbomApp?: SbomAppModel;
+    sbomProject?: SbomProjectModel;
     bordered?: boolean;
   };
 }
 
 export default class SbomAppPlatformComponent extends Component<SbomAppPlatformSignature> {
   get platformIconClass() {
-    return this.args.sbomApp?.project.get('platformIconClass');
+    return this.args.sbomProject?.project.get('platformIconClass');
   }
 }
 

@@ -5,7 +5,7 @@ import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
-import { SbomScanStatus } from 'irene/models/sbom-scan';
+import { SbomScanStatus } from 'irene/models/sbom-file';
 
 module('Integration | Component | sbom/scan-status', function (hooks) {
   setupRenderingTest(hooks);
@@ -15,12 +15,12 @@ module('Integration | Component | sbom/scan-status', function (hooks) {
   hooks.beforeEach(async function () {
     const store = this.owner.lookup('service:store');
 
-    const sbomScan = this.server.create('sbom-scan');
+    const sbomFile = this.server.create('sbom-file');
 
-    const normalized = store.normalize('sbom-scan', sbomScan.toJSON());
+    const normalized = store.normalize('sbom-file', sbomFile.toJSON());
 
     this.setProperties({
-      sbomScan: store.push(normalized),
+      sbomFile: store.push(normalized),
     });
   });
 
@@ -35,13 +35,13 @@ module('Integration | Component | sbom/scan-status', function (hooks) {
     ],
     async function (assert, status) {
       if (status) {
-        this.sbomScan.status = status;
+        this.sbomFile.status = status;
       } else {
-        this.sbomScan = null;
+        this.sbomFile = null;
       }
 
       await render(hbs`
-        <Sbom::ScanStatus @sbomScan={{this.sbomScan}} />
+        <Sbom::ScanStatus @sbomFile={{this.sbomFile}} />
       `);
 
       assert
@@ -49,11 +49,11 @@ module('Integration | Component | sbom/scan-status', function (hooks) {
         .exists()
         .hasClass(
           RegExp(
-            `ak-chip-color-${status ? this.sbomScan.statusColor : 'default'}`
+            `ak-chip-color-${status ? this.sbomFile.statusColor : 'default'}`
           )
         )
         .hasText(
-          status ? this.sbomScan.statusValue : 't:chipStatus.neverInitiated:()'
+          status ? this.sbomFile.statusValue : 't:chipStatus.neverInitiated:()'
         );
     }
   );

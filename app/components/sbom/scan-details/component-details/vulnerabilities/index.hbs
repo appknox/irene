@@ -1,8 +1,8 @@
-<div ...attributes data-test-sbomScanComponentVulnerabilities>
+<div ...attributes data-test-sbomComponentVulnerabilities>
   <AkPaginationProvider
-    @results={{this.sbomScanComponentVulnerabilityList}}
+    @results={{this.sbomVulnerabilityList}}
     @onItemPerPageChange={{this.handleItemPerPageChange}}
-    @totalItems={{this.totalSbomScanComponentVulnerabilityCount}}
+    @totalItems={{this.totalSbomVulnerabilityCount}}
     @nextAction={{this.handlePrevNextAction}}
     @prevAction={{this.handlePrevNextAction}}
     @itemPerPageOptions={{array 10 25 50}}
@@ -11,12 +11,12 @@
     as |pgc|
   >
     <Sbom::EmptyLoadingView
-      @empty={{this.hasNoSbomScanComponentVulnerability}}
-      @loading={{this.fetchSbomScanComponentVulnerabilities.isRunning}}
+      @empty={{this.hasNoSbomVulnerability}}
+      @loading={{this.fetchSbomComponentVulnerabilities.isRunning}}
     >
       <:emptySvg>
         <AkSvg::NoVulnerability
-          data-test-sbomScanComponentVulnerabilities-emptySvg
+          data-test-sbomComponentVulnerabilities-emptySvg
         />
       </:emptySvg>
 
@@ -28,14 +28,14 @@
           @spacing='1'
         >
           <AkTypography
-            data-test-sbomScanComponentVulnerabilities-emptyTextTitle
+            data-test-sbomComponentVulnerabilities-emptyTextTitle
             @variant='h5'
           >
             {{t 'sbomModule.knownVulnerabilitiesEmptyText.title'}}
           </AkTypography>
 
           <AkTypography
-            data-test-sbomScanComponentVulnerabilities-emptyTextDescription
+            data-test-sbomComponentVulnerabilities-emptyTextDescription
             {{style width='400px'}}
             @color='textSecondary'
             @align='center'
@@ -46,21 +46,18 @@
       </:emptyText>
 
       <:default>
-        <AkTable data-test-sbomScanComponentVulnerabilities-table as |t|>
+        <AkTable data-test-sbomComponentVulnerabilities-table as |t|>
           <t.head
-            data-test-sbomScanComponentVulnerabilities-thead
+            data-test-sbomComponentVulnerabilities-thead
             @columns={{this.columns}}
           />
           <t.body @rows={{pgc.currentPageResults}} as |b|>
-            <b.row data-test-sbomScanComponentVulnerabilities-row as |r|>
-              <r.cell
-                data-test-sbomScanComponentVulnerabilities-cell
-                as |value|
-              >
+            <b.row data-test-sbomComponentVulnerabilities-row as |r|>
+              <r.cell data-test-sbomComponentVulnerabilities-cell as |value|>
                 {{#if r.columnValue.component}}
                   {{#let (component r.columnValue.component) as |Component|}}
                     <Component
-                      @sbomScanComponentVulnerability={{r.rowValue.sbVulnerability}}
+                      @sbomVulnerability={{r.rowValue.sbVulnerability}}
                     />
                   {{/let}}
                 {{else}}

@@ -14,24 +14,24 @@ module(
     setupIntl(hooks);
 
     test('it renders component details summary correctly', async function (assert) {
-      this.sbomApp = this.server.create('sbom-app');
-      this.sbomScan = this.server.create('sbom-scan');
+      this.sbomProject = this.server.create('sbom-project');
+      this.sbomFile = this.server.create('sbom-file');
 
       const store = this.owner.lookup('service:store');
-      const sbomScanComponent = this.server.create('sbom-scan-component');
+      const sbomComponent = this.server.create('sbom-component');
 
       const normalized = store.normalize(
-        'sbom-scan-component',
-        sbomScanComponent.toJSON()
+        'sbom-component',
+        sbomComponent.toJSON()
       );
 
-      this.sbomScanComponent = store.push(normalized);
+      this.sbomComponent = store.push(normalized);
 
       await render(hbs`
           <Sbom::ScanDetails::ComponentDetails::Summary
-            @sbomApp={{this.sbomApp}}
-            @sbomScan={{this.sbomScan}}
-            @sbomScanComponent={{this.sbomScanComponent}}
+            @sbomProject={{this.sbomProject}}
+            @sbomFile={{this.sbomFile}}
+            @sbomComponent={{this.sbomComponent}}
           />
       `);
 
@@ -43,27 +43,27 @@ module(
       const componentSummaryList = [
         {
           label: 't:sbomModule.componentName:()',
-          value: this.sbomScanComponent.name,
+          value: this.sbomComponent.name,
         },
         {
           label: 't:sbomModule.componentType:()',
-          value: capitalize(this.sbomScanComponent.type),
+          value: capitalize(this.sbomComponent.type),
         },
         {
           label: 't:version:()',
-          value: this.sbomScanComponent.version,
+          value: this.sbomComponent.version,
         },
         {
           label: 't:sbomModule.latestVersion:()',
-          value: this.sbomScanComponent.latestVersion,
+          value: this.sbomComponent.latestVersion,
         },
         {
           label: 't:author:()',
-          value: this.sbomScanComponent.author,
+          value: this.sbomComponent.author,
         },
         {
           label: 't:license:()',
-          value: this.sbomScanComponent.licenses.join(', '),
+          value: this.sbomComponent.licenses.join(', '),
         },
       ];
 
@@ -83,7 +83,7 @@ module(
 
       // assert
       //   .dom('[data-test-sbomScanDetails-componentDetails-howToFixRemedy]')
-      //   .hasText(this.sbomScanComponent.remediation);
+      //   .hasText(this.sbomComponent.remediation);
     });
   }
 );

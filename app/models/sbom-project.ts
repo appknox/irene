@@ -1,18 +1,18 @@
 import Model, { AsyncBelongsTo, belongsTo } from '@ember-data/model';
 
 import ProjectModel from './project';
-import SbomScanModel from './sbom-scan';
+import SbomFileModel from './sbom-file';
 
-export default class SbomAppModel extends Model {
+export default class SbomProjectModel extends Model {
   @belongsTo('project')
   declare project: AsyncBelongsTo<ProjectModel>;
 
-  @belongsTo('sbom-scan')
-  declare latestSbFile: AsyncBelongsTo<SbomScanModel> | null;
+  @belongsTo('sbom-file')
+  declare latestSbFile: AsyncBelongsTo<SbomFileModel> | null;
 }
 
 declare module 'ember-data/types/registries/model' {
   export default interface ModelRegistry {
-    'sbom-app': SbomAppModel;
+    'sbom-project': SbomProjectModel;
   }
 }

@@ -12,7 +12,7 @@ import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
-import { SbomScanStatus } from 'irene/models/sbom-scan';
+import { SbomScanStatus } from 'irene/models/sbom-file';
 import Service from '@ember/service';
 import dayjs from 'dayjs';
 
@@ -63,15 +63,15 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
       this.server.create('project', { last_file_id: file.id })
     );
 
-    const sbomScans = [file, ...files].map((file) =>
-      this.server.create('sbom-scan', { file: file.id })
+    const sbomFiles = [file, ...files].map((file) =>
+      this.server.create('sbom-file', { file: file.id })
     );
 
-    const sbomApp = this.server.create('sbom-app', {
-      latest_sb_file: sbomScans[0].id,
+    const sbomProject = this.server.create('sbom-project', {
+      latest_sb_file: sbomFiles[0].id,
     });
 
-    const normalized = store.normalize('sbom-app', sbomApp.toJSON());
+    const normalized = store.normalize('sbom-project', sbomProject.toJSON());
 
     await this.owner.lookup('service:organization').load();
 
@@ -83,8 +83,8 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
 
     this.setProperties({
       organization: this.owner.lookup('service:organization').selected,
-      sbomApp: store.push(normalized),
-      sbomScans,
+      sbomProject: store.push(normalized),
+      sbomFiles,
       projects: [project, ...projects],
       files: [file, ...files],
       queryParams,
@@ -105,7 +105,7 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
     ],
     async function (assert, status) {
       this.server.get('/v2/sb_projects/:id/sb_files', (schema) => {
-        const results = schema.sbomScans.all().models;
+        const results = schema.sbomFiles.all().models;
 
         results[0].status = status;
 
@@ -119,7 +119,7 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
       });
 
       this.server.get('/v2/sb_files/:id', (schema, req) => {
-        return schema.sbomScans.find(`${req.params.id}`)?.toJSON();
+        return schema.sbomFiles.find(`${req.params.id}`)?.toJSON();
       });
 
       this.server.get('/v2/projects/:id', (schema, req) => {
@@ -131,7 +131,7 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
       });
 
       await render(hbs`
-      <Sbom::AppScan @sbomApp={{this.sbomApp}} @queryParams={{this.queryParams}} />
+      <Sbom::AppScan @sbomProject={{this.sbomProject}} @queryParams={{this.queryParams}} />
     `);
 
       assert.dom('[data-test-appPlatform-icon]').exists();
@@ -141,12 +141,12 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
 
       // latest file
       assert
-        .dom('[data-test-sbomScanSummary-appName]')
+        .dom('[data-test-sbomAppSummary-appName]')
         .hasText(this.files[0].name);
 
       // latest project
       assert
-        .dom('[data-test-sbomScanSummary-appPackageName]')
+        .dom('[data-test-sbomAppSummary-appPackageName]')
         .hasText(this.projects[0].package_name);
 
       assert
@@ -174,7 +174,7 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
 
       const contentRows = findAll('[data-test-sbomScan-row]');
 
-      assert.strictEqual(contentRows.length, this.sbomScans.length);
+      assert.strictEqual(contentRows.length, this.sbomFiles.length);
 
       // first row sanity check
       const firstRow = contentRows[0].querySelectorAll(
@@ -188,7 +188,7 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
         .dom(firstRow[2])
         .hasText(
           status === SbomScanStatus.COMPLETED
-            ? dayjs(this.sbomScans[0].completed_at).format('DD MMM YYYY')
+            ? dayjs(this.sbomFiles[0].completed_at).format('DD MMM YYYY')
             : '-'
         );
 
@@ -208,7 +208,7 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
 
   test('it renders view report drawer for sbom scan', async function (assert) {
     this.server.get('/v2/sb_projects/:id/sb_files', (schema) => {
-      const results = schema.sbomScans.all().models;
+      const results = schema.sbomFiles.all().models;
 
       results[2].status = SbomScanStatus.COMPLETED;
 
@@ -216,7 +216,7 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
     });
 
     this.server.get('/v2/sb_files/:id', (schema, req) => {
-      return schema.sbomScans.find(`${req.params.id}`)?.toJSON();
+      return schema.sbomFiles.find(`${req.params.id}`)?.toJSON();
     });
 
     this.server.get('/v2/projects/:id', (schema, req) => {
@@ -228,12 +228,12 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
     });
 
     await render(hbs`
-      <Sbom::AppScan @sbomApp={{this.sbomApp}} @queryParams={{this.queryParams}} />
+      <Sbom::AppScan @sbomProject={{this.sbomProject}} @queryParams={{this.queryParams}} />
     `);
 
     const contentRows = findAll('[data-test-sbomScan-row]');
 
-    assert.strictEqual(contentRows.length, this.sbomScans.length);
+    assert.strictEqual(contentRows.length, this.sbomFiles.length);
 
     // third row sanity check
     const thirdRow = contentRows[2].querySelectorAll(
@@ -245,7 +245,7 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
 
     assert
       .dom(thirdRow[2])
-      .hasText(dayjs(this.sbomScans[2].completed_at).format('DD MMM YYYY'));
+      .hasText(dayjs(this.sbomFiles[2].completed_at).format('DD MMM YYYY'));
 
     assert.dom('[data-test-sbom-scanStatus]', thirdRow[3]).hasAnyText();
 
@@ -257,48 +257,46 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
       thirdRow[4].querySelector('[data-test-sbomScan-viewReportBtn]')
     );
 
-    assert.dom('[data-test-sbomScanReportDrawer-drawer]').exists();
+    assert.dom('[data-test-sbomReportDrawer-drawer]').exists();
 
     assert
-      .dom('[data-test-sbomScanReportDrawer-title]')
+      .dom('[data-test-sbomReportDrawer-title]')
       .hasText('t:sbomModule.scanReports:()');
 
-    assert.dom('[data-test-sbomScanReportDrawer-closeBtn]').isNotDisabled();
+    assert.dom('[data-test-sbomReportDrawer-closeBtn]').isNotDisabled();
 
     assert
       .dom(
         '[data-test-appPlatform-icon]',
-        find('[data-test-sbomScanReportDrawer-drawer]')
+        find('[data-test-sbomReportDrawer-drawer]')
       )
       .doesNotExist();
 
     assert
       .dom(
         '[data-test-sbomApp-logo]',
-        find('[data-test-sbomScanReportDrawer-drawer]')
+        find('[data-test-sbomReportDrawer-drawer]')
       )
       .doesNotExist();
 
-    assert.dom('[data-test-sbomScanReportDrawer-appName]').doesNotExist();
+    assert.dom('[data-test-sbomReportDrawer-appName]').doesNotExist();
+
+    assert.dom('[data-test-sbomReportDrawer-appPackageName]').doesNotExist();
 
     assert
-      .dom('[data-test-sbomScanReportDrawer-appPackageName]')
-      .doesNotExist();
-
-    assert
-      .dom('[data-test-sbomScanReportDrawer-description]')
+      .dom('[data-test-sbomReportDrawer-description]')
       .hasText('t:sbomModule.sbomDownloadReportDescription:()');
   });
 
   test('test sbom scan list row click', async function (assert) {
     this.server.get('/v2/sb_projects/:id/sb_files', (schema) => {
-      const results = schema.sbomScans.all().models;
+      const results = schema.sbomFiles.all().models;
 
       return { count: results.length, next: null, previous: null, results };
     });
 
     this.server.get('/v2/sb_files/:id', (schema, req) => {
-      return schema.sbomScans.find(`${req.params.id}`)?.toJSON();
+      return schema.sbomFiles.find(`${req.params.id}`)?.toJSON();
     });
 
     this.server.get('/v2/projects/:id', (schema, req) => {
@@ -310,12 +308,12 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
     });
 
     await render(hbs`
-      <Sbom::AppScan @sbomApp={{this.sbomApp}} @queryParams={{this.queryParams}} />
+      <Sbom::AppScan @sbomProject={{this.sbomProject}} @queryParams={{this.queryParams}} />
     `);
 
     const contentRows = findAll('[data-test-sbomScan-row]');
 
-    assert.strictEqual(contentRows.length, this.sbomScans.length);
+    assert.strictEqual(contentRows.length, this.sbomFiles.length);
 
     await click(contentRows[1]);
 
@@ -327,8 +325,8 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
       transitionToArgs[0],
       'authenticated.dashboard.sbom.scan-details'
     );
-    assert.strictEqual(transitionToArgs[1], this.sbomApp.id);
-    assert.strictEqual(transitionToArgs[2], this.sbomScans[1].id);
+    assert.strictEqual(transitionToArgs[1], this.sbomProject.id);
+    assert.strictEqual(transitionToArgs[2], this.sbomFiles[1].id);
   });
 
   test('test sbom app scans loading & empty state', async function (assert) {
@@ -341,7 +339,7 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
     );
 
     this.server.get('/v2/sb_files/:id', (schema, req) => {
-      return schema.sbomScans.find(`${req.params.id}`)?.toJSON();
+      return schema.sbomFiles.find(`${req.params.id}`)?.toJSON();
     });
 
     this.server.get('/v2/projects/:id', (schema, req) => {
@@ -354,12 +352,12 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
 
     // not awaiting here as it stops execution till delayed response is recieved
     render(hbs`
-      <Sbom::AppScan @sbomApp={{this.sbomApp}} @queryParams={{this.queryParams}} />
+      <Sbom::AppScan @sbomProject={{this.sbomProject}} @queryParams={{this.queryParams}} />
     `);
 
     await waitUntil(
       () =>
-        find('[data-test-sbomScanSummary-appName]').textContent.includes(
+        find('[data-test-sbomAppSummary-appName]').textContent.includes(
           this.files[0].name
         ),
       { timeout: 500 }
@@ -372,12 +370,12 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
 
     // latest file
     assert
-      .dom('[data-test-sbomScanSummary-appName]')
+      .dom('[data-test-sbomAppSummary-appName]')
       .hasText(this.files[0].name);
 
     // latest project
     assert
-      .dom('[data-test-sbomScanSummary-appPackageName]')
+      .dom('[data-test-sbomAppSummary-appPackageName]')
       .hasText(this.projects[0].package_name);
 
     assert

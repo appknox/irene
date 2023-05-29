@@ -1,6 +1,6 @@
 import commondrf from './commondrf';
 
-export default class SbomScanComponentAdapter extends commondrf {
+export default class SbomComponentAdapter extends commondrf {
   _buildURL(modelName?: string | number, id?: string | number) {
     const baseURL = `${this.namespace_v2}/sb_files`;
 
@@ -13,29 +13,29 @@ export default class SbomScanComponentAdapter extends commondrf {
 
   _buildNestedURL(
     modelName: string | number,
-    sbomScanId: string | number,
+    sbomFileId: string | number,
     id?: string | number
   ) {
-    const sbomScanUrl = this._buildURL(modelName, sbomScanId);
-    const sbomScanComponentUrl = `${sbomScanUrl}/sb_components`;
+    const sbomFileUrl = this._buildURL(modelName, sbomFileId);
+    const sbomComponentUrl = `${sbomFileUrl}/sb_components`;
 
     if (id) {
-      return `${sbomScanComponentUrl}/${encodeURIComponent(id)}`;
+      return `${sbomComponentUrl}/${encodeURIComponent(id)}`;
     }
 
-    return sbomScanComponentUrl;
+    return sbomComponentUrl;
   }
 
   urlForQuery(
-    query: { sbomScanId: string | number },
+    query: { sbomFileId: string | number },
     modelName: string | number
   ) {
-    return this._buildNestedURL(modelName, query.sbomScanId);
+    return this._buildNestedURL(modelName, query.sbomFileId);
   }
 }
 
 declare module 'ember-data/types/registries/adapter' {
   export default interface AdapterRegistry {
-    'sbom-scan-component': SbomScanComponentAdapter;
+    'sbom-component': SbomComponentAdapter;
   }
 }

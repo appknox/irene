@@ -26,16 +26,19 @@ module(
         return store.push(normalized);
       };
 
-      this.sbomApp = pushStoreData('sbom-app', this.server.create('sbom-app'));
-
-      this.sbomScan = pushStoreData(
-        'sbom-scan',
-        this.server.create('sbom-scan')
+      this.sbomProject = pushStoreData(
+        'sbom-project',
+        this.server.create('sbom-project')
       );
 
-      this.sbomScanComponent = pushStoreData(
-        'sbom-scan-component',
-        this.server.create('sbom-scan-component', {
+      this.sbomFile = pushStoreData(
+        'sbom-file',
+        this.server.create('sbom-file')
+      );
+
+      this.sbomComponent = pushStoreData(
+        'sbom-component',
+        this.server.create('sbom-component', {
           id: 1,
           vulnerabilities_count: 22,
         })
@@ -45,9 +48,9 @@ module(
     test('it renders', async function (assert) {
       await render(hbs`
           <Sbom::ScanDetails::ComponentDetails
-            @sbomApp={{this.sbomApp}}
-            @sbomScan={{this.sbomScan}}
-            @sbomScanComponent={{this.sbomScanComponent}}
+            @sbomProject={{this.sbomProject}}
+            @sbomFile={{this.sbomFile}}
+            @sbomComponent={{this.sbomComponent}}
             @open={{this.open}}
             @onClose={{this.onClose}}
           />
@@ -64,7 +67,7 @@ module(
         },
         {
           id: 'known_vulnerabilities',
-          badgeCount: this.sbomScanComponent.vulnerabilitiesCount,
+          badgeCount: this.sbomComponent.vulnerabilitiesCount,
           hasBadge: true,
           label: 't:sbomModule.knownVulnerabilities:()',
         },
@@ -87,9 +90,9 @@ module(
     test('it toggles the active component and drawer title when the active tab changes', async function (assert) {
       await render(hbs`
         <Sbom::ScanDetails::ComponentDetails
-          @sbomApp={{this.sbomApp}}
-          @sbomScan={{this.sbomScan}}
-          @sbomScanComponent={{this.sbomScanComponent}}
+          @sbomProject={{this.sbomProject}}
+          @sbomFile={{this.sbomFile}}
+          @sbomComponent={{this.sbomComponent}}
           @open={{this.open}}
           @onClose={{this.onClose}}
         />
@@ -106,7 +109,7 @@ module(
         },
         {
           id: 'known_vulnerabilities',
-          badgeCount: this.sbomScanComponent.vulnerabilitiesCount,
+          badgeCount: this.sbomComponent.vulnerabilitiesCount,
           hasBadge: true,
           label: 't:sbomModule.knownVulnerabilities:()',
         },

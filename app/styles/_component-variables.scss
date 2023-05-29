@@ -574,7 +574,7 @@ body {
     --common-white
   );
 
-  // variables for sbom/scan-summary
-  --sbom-scan-summary-border-radius: var(--border-radius);
-  --sbom-scan-summary-border-color: var(--border-color-1);
+  // variables for sbom/app-summary
+  --sbom-app-summary-border-radius: var(--border-radius);
+  --sbom-app-summary-border-color: var(--border-color-1);
 }

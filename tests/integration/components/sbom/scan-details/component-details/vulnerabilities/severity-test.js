@@ -5,7 +5,7 @@ import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
-import { VulnerabilitySeverity } from 'irene/models/sbom-scan-component-vulnerability';
+import { VulnerabilitySeverity } from 'irene/models/sbom-vulnerability';
 
 const severityIconMap = {
   [VulnerabilitySeverity.CRITICAL]: 'warning',
@@ -28,7 +28,7 @@ module(
       'it renders the right vulnerability severity data',
       Object.keys(severityIconMap),
       async function (assert, severity) {
-        const modelName = 'sbom-scan-component-vulnerability-affect';
+        const modelName = 'sbom-vulnerability-audit';
         const store = this.owner.lookup('service:store');
 
         const normalized = store.normalize(
@@ -36,28 +36,26 @@ module(
           this.server.create(modelName).toJSON()
         );
 
-        this.sbomScanComponentVulnerabilityAffect = store.push(normalized);
+        this.sbomVulnerabilityAudit = store.push(normalized);
 
-        this.sbomScanComponentVulnerabilityAffect.sbVulnerability.severity =
-          severity;
+        this.sbomVulnerabilityAudit.sbVulnerability.severity = severity;
 
         await render(hbs`
           <Sbom::ScanDetails::ComponentDetails::Vulnerabilities::Severity
-            @sbomScanComponentVulnerability={{this.sbomScanComponentVulnerabilityAffect.sbVulnerability}}
+            @sbomVulnerability={{this.sbomVulnerabilityAudit.sbVulnerability}}
           />
         `);
 
         assert
-          .dom('[data-test-sbomScanComponentVulnerabilities-severity]')
+          .dom('[data-test-sbomComponentVulnerabilities-severity]')
           .exists()
           .hasClass(
             RegExp(
-              `severity-chip-${this.sbomScanComponentVulnerabilityAffect.sbVulnerability.severityClass}`
+              `severity-chip-${this.sbomVulnerabilityAudit.sbVulnerability.severityClass}`
             )
           )
           .hasText(
-            this.sbomScanComponentVulnerabilityAffect.sbVulnerability
-              .severityDisplayValue
+            this.sbomVulnerabilityAudit.sbVulnerability.severityDisplayValue
           );
       }
     );

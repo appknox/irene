@@ -1,7 +1,7 @@
 <div ...attributes class='my-4'>
   <AkStack @alignItems='center' @justifyContent='space-between'>
     <AkStack @alignItems='center' @spacing='1'>
-      <AkTypography data-test-sbomScanComponent-title @variant='h5'>
+      <AkTypography data-test-sbomComponent-title @variant='h5'>
         {{t 'sbomModule.allComponents'}}
       </AkTypography>
 
@@ -17,10 +17,10 @@
 
     {{!-- <div {{style width='180px'}}>
       <AkTextField
-        data-test-sbomScanComponent-searchInput
+        data-test-sbomComponent-searchInput
         @placeholder={{t 'search'}}
         @value={{@queryParams.component_query}}
-        {{on 'keyup' this.searchSbomScanComponentForQuery}}
+        {{on 'keyup' this.searchSbomComponentForQuery}}
       >
         <:leftAdornment>
           <AkIcon @iconName='search' @color='textSecondary' />
@@ -31,9 +31,9 @@
 
   <div class='mt-4'>
     <AkPaginationProvider
-      @results={{this.sbomScanComponentList}}
+      @results={{this.sbomComponentList}}
       @onItemPerPageChange={{this.handleItemPerPageChange}}
-      @totalItems={{this.totalSbomScanComponentCount}}
+      @totalItems={{this.totalSbomComponentCount}}
       @nextAction={{this.handlePrevNextAction}}
       @prevAction={{this.handlePrevNextAction}}
       @itemPerPageOptions={{array 10 25 50}}
@@ -42,13 +42,13 @@
       as |pgc|
     >
       <Sbom::EmptyLoadingView
-        @empty={{this.hasNoSbomScanComponent}}
-        @loading={{this.fetchSbomScanComponents.isRunning}}
+        @empty={{this.hasNoSbomComponent}}
+        @loading={{this.fetchSbomComponents.isRunning}}
         @loadingSvgHeight='200px'
         @height='350px'
       >
         <:emptySvg>
-          <AkSvg::NoResult data-test-sbomScanComponent-emptySvg />
+          <AkSvg::NoResult data-test-sbomComponent-emptySvg />
         </:emptySvg>
 
         <:emptyText>
@@ -58,15 +58,12 @@
             @alignItems='center'
             @spacing='1'
           >
-            <AkTypography
-              data-test-sbomScanComponent-emptyTextTitle
-              @variant='h5'
-            >
+            <AkTypography data-test-sbomComponent-emptyTextTitle @variant='h5'>
               {{t 'sbomModule.componentListEmptyText.title'}}
             </AkTypography>
 
             <AkTypography
-              data-test-sbomScanComponent-emptyTextDescription
+              data-test-sbomComponent-emptyTextDescription
               {{style width='600px'}}
               @color='textSecondary'
               @align='center'
@@ -77,22 +74,19 @@
         </:emptyText>
 
         <:default>
-          <AkTable @hoverable={{true}} data-test-sbomScanComponent-table as |t|>
-            <t.head
-              data-test-sbomScanComponent-thead
-              @columns={{this.columns}}
-            />
+          <AkTable @hoverable={{true}} data-test-sbomComponent-table as |t|>
+            <t.head data-test-sbomComponent-thead @columns={{this.columns}} />
             <t.body @rows={{pgc.currentPageResults}} as |b|>
               <b.row
                 {{style cursor='pointer'}}
                 @onClick={{this.handleComponentClick}}
-                data-test-sbomScanComponent-row
+                data-test-sbomComponent-row
                 as |r|
               >
-                <r.cell data-test-sbomScanComponent-cell as |value|>
+                <r.cell data-test-sbomComponent-cell as |value|>
                   {{#if r.columnValue.component}}
                     {{#let (component r.columnValue.component) as |Component|}}
-                      <Component @sbomScanComponent={{r.rowValue}} />
+                      <Component @sbomComponent={{r.rowValue}} />
                     {{/let}}
                   {{else}}
                     <AkTypography title={{value}} @noWrap={{true}}>
@@ -120,9 +114,9 @@
           />
 
           <Sbom::ScanDetails::ComponentDetails
-            @sbomApp={{@sbomApp}}
-            @sbomScan={{@sbomScan}}
-            @sbomScanComponent={{this.selectedComponent}}
+            @sbomProject={{@sbomProject}}
+            @sbomFile={{@sbomFile}}
+            @sbomComponent={{this.selectedComponent}}
             @open={{this.openComponentDetailDrawer}}
             @onClose={{this.handleComponentDetailDrawerClose}}
           />

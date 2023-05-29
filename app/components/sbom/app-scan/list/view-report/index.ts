@@ -1,17 +1,17 @@
 import Component from '@glimmer/component';
 
-import SbomScanModel, { SbomScanStatus } from 'irene/models/sbom-scan';
+import SbomFileModel, { SbomScanStatus } from 'irene/models/sbom-file';
 
 export interface SbomAppScanListViewReportSignature {
   Args: {
-    sbomScan: SbomScanModel;
-    onViewReportClick: (sbomScan: SbomScanModel) => void;
+    sbomFile: SbomFileModel;
+    onViewReportClick: (sbomFile: SbomFileModel) => void;
   };
 }
 
 export default class SbomAppScanListViewReportComponent extends Component<SbomAppScanListViewReportSignature> {
   get disableViewReport() {
-    return this.args.sbomScan.status !== SbomScanStatus.COMPLETED;
+    return this.args.sbomFile.status !== SbomScanStatus.COMPLETED;
   }
 }
 

@@ -1,7 +1,7 @@
 <AkStack local-class='app-summary-container' @direction='column' @spacing='1.5'>
   <AkStack @alignItems='center' @justifyContent='space-between' @width='full'>
     <AkStack @spacing='1.5'>
-      <Sbom::AppLogo @sbomApp={{@sbomApp}} />
+      <Sbom::AppLogo @sbomProject={{@sbomProject}} />
     </AkStack>
 
     {{#if (has-block 'actionBtn')}}
@@ -12,19 +12,22 @@
   </AkStack>
 
   <AkStack @direction='column' @spacing='0.5'>
-    <AkTypography data-test-sbomScanSummary-appName @variant='h5'>
+    <AkTypography data-test-sbomAppSummary-appName @variant='h5'>
       {{this.name}}
     </AkTypography>
 
     <AkTypography
-      data-test-sbomScanSummary-appPackageName
+      data-test-sbomAppSummary-appPackageName
       @variant='h6'
       @color='textSecondary'
     >
       {{this.packageName}}
     </AkTypography>
 
-    <Sbom::AppPlatform local-class='app-platform-icon' @sbomApp={{@sbomApp}} />
+    <Sbom::AppPlatform
+      local-class='app-platform-icon'
+      @sbomProject={{@sbomProject}}
+    />
   </AkStack>
 
   {{yield}}

@@ -2,11 +2,11 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import IntlService from 'ember-intl/services/intl';
 
-import SbomScanModel from 'irene/models/sbom-scan';
+import SbomFileModel from 'irene/models/sbom-file';
 
 export interface SbomScanStatusSignature {
   Args: {
-    sbomScan: SbomScanModel | null;
+    sbomFile: SbomFileModel | null;
   };
 }
 
@@ -14,16 +14,16 @@ export default class SbomScanStatusComponent extends Component<SbomScanStatusSig
   @service declare intl: IntlService;
 
   get statusValue() {
-    if (this.args.sbomScan) {
-      return this.args.sbomScan.statusValue;
+    if (this.args.sbomFile) {
+      return this.args.sbomFile.statusValue;
     }
 
     return this.intl.t('chipStatus.neverInitiated');
   }
 
   get statusColor() {
-    if (this.args.sbomScan) {
-      return this.args.sbomScan.statusColor;
+    if (this.args.sbomFile) {
+      return this.args.sbomFile.statusColor;
     }
 
     return 'default';

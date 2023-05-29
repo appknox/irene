@@ -1,11 +1,11 @@
 <div class='px-3 py-1' data-test-sbomScanDetails-container>
-  <Sbom::ScanSummary @sbomApp={{@sbomApp}}>
+  <Sbom::AppSummary @sbomProject={{@sbomProject}}>
     <:actionBtn>
       <AkStack @alignItems='center' @spacing='1'>
         <AkLink
           @class={{this.classes.akLinkBtn}}
           @route='authenticated.dashboard.sbom.app-scans'
-          @model={{@sbomApp.id}}
+          @model={{@sbomProject.id}}
           @color='primary'
           @underline='none'
           data-test-sbomScanDetails-pastSbomAnalyses-link
@@ -28,7 +28,7 @@
       <div local-class='show-more-container'>
         {{#if this.showFileScanSummary}}
           <Sbom::ScanDetails::FileScanSummary
-            @sbomScan={{@sbomScan}}
+            @sbomFile={{@sbomFile}}
             @sbomScanSummary={{@sbomScanSummary}}
           />
         {{/if}}
@@ -62,12 +62,12 @@
         </AkButton>
       </div>
     </:default>
-  </Sbom::ScanSummary>
+  </Sbom::AppSummary>
 
   {{#if this.scanStatusCompleted}}
     <Sbom::ScanDetails::ComponentList
-      @sbomApp={{@sbomApp}}
-      @sbomScan={{@sbomScan}}
+      @sbomProject={{@sbomProject}}
+      @sbomFile={{@sbomFile}}
       @sbomScanSummary={{@sbomScanSummary}}
       @queryParams={{@queryParams}}
       data-test-sbomScanDetails-componentList-container
@@ -109,7 +109,7 @@
 </div>
 
 <Sbom::ScanReportDrawer
-  @sbomScan={{@sbomScan}}
+  @sbomFile={{@sbomFile}}
   @open={{this.openViewReportDrawer}}
   @onClose={{this.handleViewReportDrawerClose}}
 />

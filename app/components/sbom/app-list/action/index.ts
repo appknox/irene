@@ -5,13 +5,13 @@ import { tracked } from '@glimmer/tracking';
 import IntlService from 'ember-intl/services/intl';
 
 import { AkIconSignature } from 'irene/components/ak-icon';
-import SbomAppModel from 'irene/models/sbom-app';
-import { SbomScanStatus } from 'irene/models/sbom-scan';
+import SbomProjectModel from 'irene/models/sbom-project';
+import { SbomScanStatus } from 'irene/models/sbom-file';
 
-export interface SbomAppListActionSignature {
+export interface SbomProjectListActionSignature {
   Args: {
-    sbomApp: SbomAppModel;
-    onViewReportClick: (sbomApp: SbomAppModel) => void;
+    sbomProject: SbomProjectModel;
+    onViewReportClick: (sbomProject: SbomProjectModel) => void;
   };
 }
 
@@ -28,18 +28,19 @@ type MenuItem = {
   hidden?: boolean;
 };
 
-export default class SbomAppListActionComponent extends Component<SbomAppListActionSignature> {
+export default class SbomProjectListActionComponent extends Component<SbomProjectListActionSignature> {
   @service declare intl: IntlService;
 
   @tracked anchorRef: HTMLElement | null = null;
 
   get hasNoSbomScan() {
-    return this.args.sbomApp.latestSbFile?.content === null;
+    return this.args.sbomProject.latestSbFile?.content === null;
   }
 
   get scanStatusCompleted() {
     return (
-      this.args.sbomApp.latestSbFile?.get('status') === SbomScanStatus.COMPLETED
+      this.args.sbomProject.latestSbFile?.get('status') ===
+      SbomScanStatus.COMPLETED
     );
   }
 
@@ -51,7 +52,7 @@ export default class SbomAppListActionComponent extends Component<SbomAppListAct
         button: false,
         link: true,
         route: 'authenticated.dashboard.sbom.app-scans',
-        model: this.args.sbomApp.id,
+        model: this.args.sbomProject.id,
         divider: this.scanStatusCompleted,
       },
       {
@@ -67,7 +68,7 @@ export default class SbomAppListActionComponent extends Component<SbomAppListAct
 
   @action
   handleViewReportClick() {
-    this.args.onViewReportClick(this.args.sbomApp);
+    this.args.onViewReportClick(this.args.sbomProject);
     this.handleCloseMenu();
   }
 
@@ -85,7 +86,7 @@ export default class SbomAppListActionComponent extends Component<SbomAppListAct
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
-    'Sbom::AppList::Action': typeof SbomAppListActionComponent;
-    'sbom/app-list/action': typeof SbomAppListActionComponent;
+    'Sbom::AppList::Action': typeof SbomProjectListActionComponent;
+    'sbom/app-list/action': typeof SbomProjectListActionComponent;
   }
 }

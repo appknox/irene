@@ -1,10 +1,10 @@
 import Component from '@glimmer/component';
 
-import SbomScanModel from 'irene/models/sbom-scan';
+import SbomFileModel from 'irene/models/sbom-file';
 
 export interface SbomScanReportDrawerSignature {
   Args: {
-    sbomScan: SbomScanModel | null;
+    sbomFile: SbomFileModel | null;
     showAppDetails?: boolean;
     open?: boolean;
     onClose: () => void;
@@ -12,8 +12,8 @@ export interface SbomScanReportDrawerSignature {
 }
 
 export default class SbomScanReportDrawerComponent extends Component<SbomScanReportDrawerSignature> {
-  get sbomApp() {
-    return this.args.sbomScan?.sbProject.content;
+  get sbomProject() {
+    return this.args.sbomFile?.sbProject.content;
   }
 }
 

@@ -1,14 +1,14 @@
 <AkStack @alignItems='center' @spacing='1'>
-  {{#if @sbomScanComponent.version}}
-    <AkTypography data-test-sbomScanComponent-version @tag='span'>
-      {{@sbomScanComponent.version}}
+  {{#if @sbomComponent.version}}
+    <AkTypography data-test-sbomComponent-version @tag='span'>
+      {{@sbomComponent.version}}
     </AkTypography>
 
-    {{#if @sbomScanComponent.isOutdated}}
+    {{#if @sbomComponent.isOutdated}}
       <AkTooltip @placement='bottom-start' @arrow={{true}} @color='light'>
         <:tooltipContent>
           <div
-            data-test-sbomScanComponent-versionOutdatedText
+            data-test-sbomComponent-versionOutdatedText
             local-class='tooltip-content-container'
           >
             <AkTypography @variant='body2'>
@@ -19,7 +19,7 @@
 
         <:default>
           <AkIcon
-            data-test-sbomScanComponent-versionOutdatedIcon
+            data-test-sbomComponent-versionOutdatedIcon
             @iconName='history-toggle-off'
             @size='small'
           />
@@ -28,7 +28,7 @@
     {{/if}}
 
   {{else}}
-    <AkTypography data-test-sbomScanComponent-version @tag='span'>
+    <AkTypography data-test-sbomComponent-version @tag='span'>
       -
     </AkTypography>
   {{/if}}

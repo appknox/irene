@@ -13,13 +13,14 @@ import RouterService from '@ember/routing/router-service';
 
 import { SbomAppQueryParam } from 'irene/routes/authenticated/dashboard/sbom/apps';
 import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
-import SbomAppModel from 'irene/models/sbom-app';
+import SbomProjectModel from 'irene/models/sbom-project';
 import parseError from 'irene/utils/parse-error';
-import SbomScanModel from 'irene/models/sbom-scan';
+import SbomFileModel from 'irene/models/sbom-file';
 
-type SbomAppQueryResponse = DS.AdapterPopulatedRecordArray<SbomAppModel> & {
-  meta: { count: number };
-};
+type SbomProjectQueryResponse =
+  DS.AdapterPopulatedRecordArray<SbomProjectModel> & {
+    meta: { count: number };
+  };
 
 export interface SbomAppListSignature {
   Args: {
@@ -33,8 +34,8 @@ export default class SbomAppListComponent extends Component<SbomAppListSignature
   @service declare router: RouterService;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked sbomAppQueryResponse: SbomAppQueryResponse | null = null;
-  @tracked selectedSbomScan: SbomScanModel | null = null;
+  @tracked sbomProjectQueryResponse: SbomProjectQueryResponse | null = null;
+  @tracked selectedSbomFile: SbomFileModel | null = null;
   @tracked showNoScanAlert = false;
 
   // translation variables
@@ -47,7 +48,7 @@ export default class SbomAppListComponent extends Component<SbomAppListSignature
 
     const { app_limit, app_offset, app_query } = args.queryParams;
 
-    this.fetchSbomApps.perform(app_limit, app_offset, app_query, false);
+    this.fetchSbomProjects.perform(app_limit, app_offset, app_query, false);
   }
 
   get limit() {
@@ -58,16 +59,16 @@ export default class SbomAppListComponent extends Component<SbomAppListSignature
     return Number(this.args.queryParams.app_offset);
   }
 
-  get sbomAppList() {
-    return this.sbomAppQueryResponse?.toArray() || [];
+  get sbomProjectList() {
+    return this.sbomProjectQueryResponse?.toArray() || [];
   }
 
-  get totalSbomAppCount() {
-    return this.sbomAppQueryResponse?.meta?.count || 0;
+  get totalSbomProjectCount() {
+    return this.sbomProjectQueryResponse?.meta?.count || 0;
   }
 
-  get hasNoSbomApp() {
-    return this.totalSbomAppCount === 0;
+  get hasNoSbomProject() {
+    return this.totalSbomProjectCount === 0;
   }
 
   get columns() {
@@ -107,21 +108,21 @@ export default class SbomAppListComponent extends Component<SbomAppListSignature
   }
 
   get openViewReportDrawer() {
-    return Boolean(this.selectedSbomScan);
+    return Boolean(this.selectedSbomFile);
   }
 
   @action
-  async handleViewReportOpen(sbomApp: SbomAppModel) {
-    this.selectedSbomScan = await sbomApp.latestSbFile;
+  async handleViewReportOpen(sbomProject: SbomProjectModel) {
+    this.selectedSbomFile = await sbomProject.latestSbFile;
   }
 
   @action
   handleViewReportClose() {
-    this.selectedSbomScan = null;
+    this.selectedSbomFile = null;
   }
 
   @action
-  handleSbomAppRowClick({ rowValue }: { rowValue: SbomAppModel }) {
+  handleSbomProjectRowClick({ rowValue }: { rowValue: SbomProjectModel }) {
     const scanId = rowValue.latestSbFile?.get('id');
 
     if (scanId) {
@@ -139,18 +140,18 @@ export default class SbomAppListComponent extends Component<SbomAppListSignature
   handlePrevNextAction({ limit, offset }: PaginationProviderActionsArgs) {
     const { app_query } = this.args.queryParams;
 
-    this.fetchSbomApps.perform(limit, offset, app_query);
+    this.fetchSbomProjects.perform(limit, offset, app_query);
   }
 
   @action
   handleItemPerPageChange({ limit }: PaginationProviderActionsArgs) {
     const { app_query } = this.args.queryParams;
 
-    this.fetchSbomApps.perform(limit, 0, app_query);
+    this.fetchSbomProjects.perform(limit, 0, app_query);
   }
 
   @action
-  searchSbomAppForQuery(event: Event) {
+  searchSbomProjectForQuery(event: Event) {
     const query = (event.target as HTMLInputElement).value;
 
     debounce(this, this.setSearchQuery, query, 500);
@@ -158,7 +159,7 @@ export default class SbomAppListComponent extends Component<SbomAppListSignature
 
   /* Set debounced searchQuery */
   setSearchQuery(query: string) {
-    this.fetchSbomApps.perform(this.limit, 0, query);
+    this.fetchSbomProjects.perform(this.limit, 0, query);
   }
 
   setRouteQueryParams(limit: string | number, offset: string | number) {
@@ -170,7 +171,7 @@ export default class SbomAppListComponent extends Component<SbomAppListSignature
     });
   }
 
-  fetchSbomApps = task(
+  fetchSbomProjects = task(
     { drop: true },
     async (
       limit: string | number,
@@ -183,11 +184,14 @@ export default class SbomAppListComponent extends Component<SbomAppListSignature
       }
 
       try {
-        this.sbomAppQueryResponse = (await this.store.query('sbom-app', {
-          limit,
-          offset,
-          q: query,
-        })) as SbomAppQueryResponse;
+        this.sbomProjectQueryResponse = (await this.store.query(
+          'sbom-project',
+          {
+            limit,
+            offset,
+            q: query,
+          }
+        )) as SbomProjectQueryResponse;
       } catch (e) {
         this.notify.error(parseError(e, this.tPleaseTryAgain));
       }

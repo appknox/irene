@@ -2,17 +2,17 @@ import { inject as service } from '@ember/service';
 import { capitalize } from '@ember/string';
 import Component from '@glimmer/component';
 
-import SbomAppModel from 'irene/models/sbom-app';
-import SbomScanModel from 'irene/models/sbom-scan';
-import SbomScanComponentModel from 'irene/models/sbom-scan-component';
+import SbomProjectModel from 'irene/models/sbom-project';
+import SbomFileModel from 'irene/models/sbom-file';
+import SbomComponentModel from 'irene/models/sbom-component';
 import IntlService from 'ember-intl/services/intl';
 
 export interface SbomScanDetailsComponentDetailsSummarySignature {
   Element: HTMLDivElement;
   Args: {
-    sbomApp: SbomAppModel;
-    sbomScanComponent: SbomScanComponentModel | null;
-    sbomScan: SbomScanModel;
+    sbomProject: SbomProjectModel;
+    sbomComponent: SbomComponentModel | null;
+    sbomFile: SbomFileModel;
   };
 }
 
@@ -23,27 +23,27 @@ export default class SbomScanDetailsComponentDetailsSummaryComponent extends Com
     return [
       {
         label: this.intl.t('sbomModule.componentName'),
-        value: this.args.sbomScanComponent?.name,
+        value: this.args.sbomComponent?.name,
       },
       {
         label: this.intl.t('sbomModule.componentType'),
-        value: capitalize(this.args.sbomScanComponent?.type || ''),
+        value: capitalize(this.args.sbomComponent?.type || ''),
       },
       {
         label: this.intl.t('version'),
-        value: this.args.sbomScanComponent?.version,
+        value: this.args.sbomComponent?.version,
       },
       {
         label: this.intl.t('sbomModule.latestVersion'),
-        value: this.args.sbomScanComponent?.latestVersion,
+        value: this.args.sbomComponent?.latestVersion,
       },
       {
         label: this.intl.t('author'),
-        value: this.args.sbomScanComponent?.author,
+        value: this.args.sbomComponent?.author,
       },
       {
         label: this.intl.t('license'),
-        value: this.args.sbomScanComponent?.licenses.join(', '),
+        value: this.args.sbomComponent?.licenses.join(', '),
         isLast: true,
       },
     ];

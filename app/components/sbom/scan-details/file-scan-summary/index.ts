@@ -4,11 +4,11 @@ import IntlService from 'ember-intl/services/intl';
 import dayjs from 'dayjs';
 
 import SbomScanSummaryModel from 'irene/models/sbom-scan-summary';
-import SbomScanModel, { SbomScanStatus } from 'irene/models/sbom-scan';
+import SbomFileModel, { SbomScanStatus } from 'irene/models/sbom-file';
 
 export interface SbomScanDetailsFileScanSummarySignature {
   Args: {
-    sbomScan: SbomScanModel;
+    sbomFile: SbomFileModel;
     sbomScanSummary: SbomScanSummaryModel | null;
   };
 }
@@ -17,28 +17,28 @@ export default class SbomScanDetailsFileScanSummaryComponent extends Component<S
   @service declare intl: IntlService;
 
   get scanStatusCompleted() {
-    return this.args.sbomScan.status === SbomScanStatus.COMPLETED;
+    return this.args.sbomFile.status === SbomScanStatus.COMPLETED;
   }
 
   get fileSummary() {
     return [
       {
         label: this.intl.t('version'),
-        value: this.args.sbomScan.file.get('version'),
+        value: this.args.sbomFile.file.get('version'),
       },
       {
         label: this.intl.t('sbomModule.versionCode'),
-        value: this.args.sbomScan.file.get('versionCode'),
+        value: this.args.sbomFile.file.get('versionCode'),
       },
       {
         label: this.intl.t('file'),
-        value: this.args.sbomScan.file.get('id'),
+        value: this.args.sbomFile.file.get('id'),
         link: true,
         linkArgs: {
           route: 'authenticated.file',
-          model: this.args.sbomScan.file.get('id'),
+          model: this.args.sbomFile.file.get('id'),
         },
-        hideDivider: this.args.sbomScan.status !== SbomScanStatus.COMPLETED,
+        hideDivider: this.args.sbomFile.status !== SbomScanStatus.COMPLETED,
       },
     ];
   }
@@ -59,7 +59,7 @@ export default class SbomScanDetailsFileScanSummaryComponent extends Component<S
       },
       {
         label: this.intl.t('sbomModule.generatedDate'),
-        value: [dayjs(this.args.sbomScan.completedAt).format('MMM DD, YYYY')],
+        value: [dayjs(this.args.sbomFile.completedAt).format('MMM DD, YYYY')],
         isLast: true,
       },
     ];

@@ -121,11 +121,11 @@ Router.map(function () {
           this.route('apps');
 
           this.route('app-scans', {
-            path: 'apps/:sbom_app_id/scans',
+            path: 'apps/:sbom_project_id/scans',
           });
 
           this.route('scan-details', {
-            path: 'apps/:sbom_app_id/scans/:sbom_scan_id',
+            path: 'apps/:sbom_project_id/scans/:sbom_file_id',
           });
         });
       });

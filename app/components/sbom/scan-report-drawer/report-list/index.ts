@@ -9,20 +9,18 @@ import { DS } from 'ember-data';
 import Store from '@ember-data/store';
 import parseError from 'irene/utils/parse-error';
 
-import SbomScanModel from 'irene/models/sbom-scan';
+import SbomFileModel from 'irene/models/sbom-file';
 
-import SbomScanReportModel, {
-  SbomScanReportStatus,
-} from 'irene/models/sbom-scan-report';
+import SbomReportModel, { SbomReportStatus } from 'irene/models/sbom-report';
 
 type SbomScanReportQueryResponse =
-  DS.AdapterPopulatedRecordArray<SbomScanReportModel> & {
+  DS.AdapterPopulatedRecordArray<SbomReportModel> & {
     meta: { count: number };
   };
 
 export interface SbomScanReportDrawerReportListSignature {
   Args: {
-    sbomScan: SbomScanModel | null;
+    sbomFile: SbomFileModel | null;
   };
 }
 
@@ -47,7 +45,7 @@ export default class SbomScanReportDrawerReportListComponent extends Component<S
     this.fetchSbomScanReports.perform();
   }
 
-  get sbomScanReports() {
+  get sbomReports() {
     return this.scanReportQueryResponse?.toArray() || [];
   }
 
@@ -60,7 +58,7 @@ export default class SbomScanReportDrawerReportListComponent extends Component<S
   }
 
   get latestSbomScanReport() {
-    return this.sbomScanReports[0];
+    return this.sbomReports[0];
   }
 
   get reportDetails() {
@@ -80,19 +78,16 @@ export default class SbomScanReportDrawerReportListComponent extends Component<S
         primaryText: this.intl.t('sbomModule.sbomDownloadJsonPrimaryText'),
         secondaryText: this.intl.t('sbomModule.sbomDownloadJsonSecondaryText'),
         iconComponent: 'ak-svg/json-report' as const,
-        status: SbomScanReportStatus.COMPLETED,
+        status: SbomReportStatus.COMPLETED,
       },
     ];
   }
 
   fetchSbomScanReports = task(async () => {
     try {
-      this.scanReportQueryResponse = (await this.store.query(
-        'sbom-scan-report',
-        {
-          sbomScanId: this.args.sbomScan?.id,
-        }
-      )) as SbomScanReportQueryResponse;
+      this.scanReportQueryResponse = (await this.store.query('sbom-report', {
+        sbomFileId: this.args.sbomFile?.id,
+      })) as SbomScanReportQueryResponse;
     } catch (e) {
       this.notify.error(parseError(e, this.tPleaseTryAgain));
     }

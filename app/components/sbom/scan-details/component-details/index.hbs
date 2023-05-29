@@ -37,9 +37,9 @@
     <div class='p-3'>
       {{#let (component this.activeTabComponent) as |Component|}}
         <Component
-          @sbomApp={{@sbomApp}}
-          @sbomScan={{@sbomScan}}
-          @sbomScanComponent={{@sbomScanComponent}}
+          @sbomProject={{@sbomProject}}
+          @sbomFile={{@sbomFile}}
+          @sbomComponent={{@sbomComponent}}
           data-test-activeComponent='{{this.appDrawerTitle}}'
         />
       {{/let}}

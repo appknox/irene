@@ -5,7 +5,7 @@ import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
-import { VulnerabilitySeverity } from 'irene/models/sbom-scan-component-vulnerability';
+import { VulnerabilitySeverity } from 'irene/models/sbom-vulnerability';
 
 module(
   'Integration | Component | sbom/scan-details/component-details/vulnerabilities',
@@ -15,11 +15,11 @@ module(
     setupIntl(hooks);
 
     hooks.beforeEach(async function () {
-      this.sbomApp = this.server.create('sbom-app');
+      this.sbomProject = this.server.create('sbom-project');
 
-      this.sbomScan = this.server.create('sbom-scan');
+      this.sbomFile = this.server.create('sbom-file');
 
-      this.sbomScanComponent = this.server.create('sbom-scan-component', {
+      this.sbomComponent = this.server.create('sbom-component', {
         id: 1,
       });
     });
@@ -35,9 +35,9 @@ module(
 
       render(hbs`
         <Sbom::ScanDetails::ComponentDetails::Vulnerabilities
-            @sbomApp={{this.sbomApp}}
-            @sbomScan={{this.sbomScan}}
-            @sbomScanComponent={{this.sbomScanComponent}}
+            @sbomProject={{this.sbomProject}}
+            @sbomFile={{this.sbomFile}}
+            @sbomComponent={{this.sbomComponent}}
           />
       `);
 
@@ -45,108 +45,93 @@ module(
         timeout: 500,
       });
 
-      assert.dom('[data-test-sbomScanComponentVulnerabilities]').exists();
+      assert.dom('[data-test-sbomComponentVulnerabilities]').exists();
 
       assert.dom('[data-test-sbom-loadingSvg]').exists();
 
       assert.dom('[data-test-sbom-loadingText]').hasText('t:loading:()...');
 
-      await waitFor(
-        '[data-test-sbomScanComponentVulnerabilities-emptyTextTitle]',
-        {
-          timeout: 500,
-        }
-      );
+      await waitFor('[data-test-sbomComponentVulnerabilities-emptyTextTitle]', {
+        timeout: 500,
+      });
 
       assert
-        .dom('[data-test-sbomScanComponentVulnerabilities-emptyTextTitle]')
+        .dom('[data-test-sbomComponentVulnerabilities-emptyTextTitle]')
         .hasText('t:sbomModule.knownVulnerabilitiesEmptyText.title:()');
 
       assert
-        .dom(
-          '[data-test-sbomScanComponentVulnerabilities-emptyTextDescription]'
-        )
+        .dom('[data-test-sbomComponentVulnerabilities-emptyTextDescription]')
         .hasText('t:sbomModule.knownVulnerabilitiesEmptyText.description:()');
 
-      assert
-        .dom('[data-test-sbomScanComponentVulnerabilities-emptySvg]')
-        .exists();
+      assert.dom('[data-test-sbomComponentVulnerabilities-emptySvg]').exists();
     });
 
     test('it renders the vulnerabilities of a component', async function (assert) {
       this.server.get(
         '/v2/sb_components/:comp_id/sb_vulnerability_audits',
         (schema) => {
-          const results =
-            schema.sbomScanComponentVulnerabilityAffects.all().models;
+          const results = schema.sbomVulnerabilityAudits.all().models;
 
           return { count: results.length, next: null, previous: null, results };
         }
       );
 
-      this.sbomScanComponentVulnerabilityAffects = this.server.createList(
-        'sbom-scan-component-vulnerability-affect',
+      this.sbomVulnerabilityAudits = this.server.createList(
+        'sbom-vulnerability-audit',
         3
       );
 
       await render(hbs`
         <Sbom::ScanDetails::ComponentDetails::Vulnerabilities
-            @sbomApp={{this.sbomApp}}
-            @sbomScan={{this.sbomScan}}
-            @sbomScanComponent={{this.sbomScanComponent}}
+            @sbomProject={{this.sbomProject}}
+            @sbomFile={{this.sbomFile}}
+            @sbomComponent={{this.sbomComponent}}
           />
       `);
 
-      assert.dom('[data-test-sbomScanComponentVulnerabilities-table]').exists();
+      assert.dom('[data-test-sbomComponentVulnerabilities-table]').exists();
 
       const vulnerabilityRows = findAll(
-        '[data-test-sbomScanComponentVulnerabilities-row]'
+        '[data-test-sbomComponentVulnerabilities-row]'
       );
 
       assert.strictEqual(
         vulnerabilityRows.length,
-        this.sbomScanComponentVulnerabilityAffects.length,
+        this.sbomVulnerabilityAudits.length,
         'renders the correct number of vulnerabilities'
       );
 
       // content check for first row cells
       const rowCell = vulnerabilityRows[0].querySelectorAll(
-        '[data-test-sbomScanComponentVulnerabilities-cell]'
+        '[data-test-sbomComponentVulnerabilities-cell]'
       );
 
       const store = this.owner.lookup('service:store');
 
       const normalized = store.normalize(
-        'sbom-scan-component-vulnerability-affect',
-        this.sbomScanComponentVulnerabilityAffects[0].toJSON()
+        'sbom-vulnerability-audit',
+        this.sbomVulnerabilityAudits[0].toJSON()
       );
 
-      const sbomScanComponentVulnerabilityAffect = store.push(normalized);
+      const sbomVulnerabilityAudit = store.push(normalized);
 
       assert
         .dom(rowCell[0])
-        .hasText(
-          `${sbomScanComponentVulnerabilityAffect.sbVulnerability.vulnerabilityId}`
-        );
+        .hasText(`${sbomVulnerabilityAudit.sbVulnerability.vulnerabilityId}`);
 
       const isUnknown =
-        sbomScanComponentVulnerabilityAffect.sbVulnerability.severity ===
+        sbomVulnerabilityAudit.sbVulnerability.severity ===
         VulnerabilitySeverity.UNKNOWN;
 
       assert
         .dom(rowCell[1])
         .hasText(
-          isUnknown
-            ? '-'
-            : `${sbomScanComponentVulnerabilityAffect.sbVulnerability.score}`
+          isUnknown ? '-' : `${sbomVulnerabilityAudit.sbVulnerability.score}`
         );
 
       assert
         .dom(rowCell[2])
-        .hasText(
-          sbomScanComponentVulnerabilityAffect.sbVulnerability
-            .severityDisplayValue
-        );
+        .hasText(sbomVulnerabilityAudit.sbVulnerability.severityDisplayValue);
     });
   }
 );

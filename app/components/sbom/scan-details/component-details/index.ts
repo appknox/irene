@@ -3,16 +3,16 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
-import SbomAppModel from 'irene/models/sbom-app';
-import SbomScanModel from 'irene/models/sbom-scan';
-import SbomScanComponentModel from 'irene/models/sbom-scan-component';
+import SbomProjectModel from 'irene/models/sbom-project';
+import SbomFileModel from 'irene/models/sbom-file';
+import SbomComponentModel from 'irene/models/sbom-component';
 import IntlService from 'ember-intl/services/intl';
 
 export interface SbomScanDetailsComponentDetailsSignature {
   Args: {
-    sbomScanComponent: SbomScanComponentModel | null;
-    sbomScan: SbomScanModel;
-    sbomApp: SbomAppModel;
+    sbomComponent: SbomComponentModel | null;
+    sbomFile: SbomFileModel;
+    sbomProject: SbomProjectModel;
     open?: boolean;
     onClose: () => void;
   };
@@ -42,7 +42,7 @@ export default class SbomScanDetailsComponentDetailsComponent extends Component<
       },
       {
         id: 'known_vulnerabilities',
-        badgeCount: this.args.sbomScanComponent?.vulnerabilitiesCount,
+        badgeCount: this.args.sbomComponent?.vulnerabilitiesCount,
         hasBadge: true,
         label: this.intl.t('sbomModule.knownVulnerabilities'),
         component: 'sbom/scan-details/component-details/vulnerabilities',

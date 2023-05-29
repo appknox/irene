@@ -14,24 +14,24 @@ import RouterService from '@ember/routing/router-service';
 import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import parseError from 'irene/utils/parse-error';
 
-import SbomAppModel from 'irene/models/sbom-app';
-import SbomScanModel from 'irene/models/sbom-scan';
-import SbomScanComponentModel from 'irene/models/sbom-scan-component';
-import { SbomScanComponentQueryParam } from 'irene/routes/authenticated/dashboard/sbom/scan-details';
+import SbomProjectModel from 'irene/models/sbom-project';
+import SbomFileModel from 'irene/models/sbom-file';
+import SbomComponentModel from 'irene/models/sbom-component';
+import { SbomComponentQueryParam } from 'irene/routes/authenticated/dashboard/sbom/scan-details';
 import SbomScanSummaryModel from 'irene/models/sbom-scan-summary';
 
 export interface SbomScanDetailsComponentListSignature {
   Element: HTMLDivElement;
   Args: {
-    sbomApp: SbomAppModel;
-    sbomScan: SbomScanModel;
+    sbomProject: SbomProjectModel;
+    sbomFile: SbomFileModel;
     sbomScanSummary: SbomScanSummaryModel | null;
-    queryParams: SbomScanComponentQueryParam;
+    queryParams: SbomComponentQueryParam;
   };
 }
 
-type SbomScanComponentQueryResponse =
-  DS.AdapterPopulatedRecordArray<SbomScanComponentModel> & {
+type SbomComponentQueryResponse =
+  DS.AdapterPopulatedRecordArray<SbomComponentModel> & {
     meta: { count: number };
   };
 
@@ -41,8 +41,8 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
   @service declare router: RouterService;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked componentQueryResponse: SbomScanComponentQueryResponse | null = null;
-  @tracked selectedComponent: SbomScanComponentModel | null = null;
+  @tracked componentQueryResponse: SbomComponentQueryResponse | null = null;
+  @tracked selectedComponent: SbomComponentModel | null = null;
 
   // translation variables
   tPleaseTryAgain: string;
@@ -58,7 +58,7 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
     const { component_limit, component_offset, component_query } =
       args.queryParams;
 
-    this.fetchSbomScanComponents.perform(
+    this.fetchSbomComponents.perform(
       component_limit,
       component_offset,
       component_query,
@@ -74,16 +74,16 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
     return Number(this.args.queryParams.component_offset);
   }
 
-  get sbomScanComponentList() {
+  get sbomComponentList() {
     return this.componentQueryResponse?.toArray() || [];
   }
 
-  get totalSbomScanComponentCount() {
+  get totalSbomComponentCount() {
     return this.componentQueryResponse?.meta?.count || 0;
   }
 
-  get hasNoSbomScanComponent() {
-    return this.totalSbomScanComponentCount === 0;
+  get hasNoSbomComponent() {
+    return this.totalSbomComponentCount === 0;
   }
 
   get columns() {
@@ -120,7 +120,7 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
   }
 
   @action
-  handleComponentClick({ rowValue }: { rowValue: SbomScanComponentModel }) {
+  handleComponentClick({ rowValue }: { rowValue: SbomComponentModel }) {
     this.selectedComponent = rowValue;
   }
 
@@ -128,18 +128,18 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
   handlePrevNextAction({ limit, offset }: PaginationProviderActionsArgs) {
     const { component_query } = this.args.queryParams;
 
-    this.fetchSbomScanComponents.perform(limit, offset, component_query);
+    this.fetchSbomComponents.perform(limit, offset, component_query);
   }
 
   @action
   handleItemPerPageChange({ limit }: PaginationProviderActionsArgs) {
     const { component_query } = this.args.queryParams;
 
-    this.fetchSbomScanComponents.perform(limit, 0, component_query);
+    this.fetchSbomComponents.perform(limit, 0, component_query);
   }
 
   @action
-  searchSbomScanComponentForQuery(event: Event) {
+  searchSbomComponentForQuery(event: Event) {
     const query = (event.target as HTMLInputElement).value;
 
     debounce(this, this.setSearchQuery, query, 500);
@@ -147,7 +147,7 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
 
   /* Set debounced searchQuery */
   setSearchQuery(query: string) {
-    this.fetchSbomScanComponents.perform(this.limit, 0, query);
+    this.fetchSbomComponents.perform(this.limit, 0, query);
   }
 
   setRouteQueryParams(limit: string | number, offset: string | number) {
@@ -159,7 +159,7 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
     });
   }
 
-  fetchSbomScanComponents = task(
+  fetchSbomComponents = task(
     { drop: true },
     async (
       limit: string | number,
@@ -173,14 +173,14 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
 
       try {
         this.componentQueryResponse = (await this.store.query(
-          'sbom-scan-component',
+          'sbom-component',
           {
             limit,
             offset,
             q: query,
-            sbomScanId: this.args.sbomScan.id,
+            sbomFileId: this.args.sbomFile.id,
           }
-        )) as SbomScanComponentQueryResponse;
+        )) as SbomComponentQueryResponse;
       } catch (e) {
         this.notify.error(parseError(e, this.tPleaseTryAgain));
       }

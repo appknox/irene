@@ -5,7 +5,7 @@ import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
-import { VulnerabilitySeverity } from 'irene/models/sbom-scan-component-vulnerability';
+import { VulnerabilitySeverity } from 'irene/models/sbom-vulnerability';
 
 module(
   'Integration | Component | sbom/scan-details/component-details/vulnerabilities/cvss-score',
@@ -15,7 +15,7 @@ module(
     setupIntl(hooks);
 
     test('it renders the right vulnerability cvss score data', async function (assert) {
-      const modelName = 'sbom-scan-component-vulnerability-affect';
+      const modelName = 'sbom-vulnerability-audit';
       const store = this.owner.lookup('service:store');
 
       const normalized = store.normalize(
@@ -23,25 +23,25 @@ module(
         this.server.create(modelName).toJSON()
       );
 
-      this.sbomScanComponentVulnerabilityAffect = store.push(normalized);
+      this.sbomVulnerabilityAudit = store.push(normalized);
 
       await render(hbs`
         <Sbom::ScanDetails::ComponentDetails::Vulnerabilities::CvssScore
-          @sbomScanComponentVulnerability={{this.sbomScanComponentVulnerabilityAffect.sbVulnerability}}
+          @sbomVulnerability={{this.sbomVulnerabilityAudit.sbVulnerability}}
         />
       `);
 
       const isUnknown =
-        this.sbomScanComponentVulnerabilityAffect.sbVulnerability.severity ===
+        this.sbomVulnerabilityAudit.sbVulnerability.severity ===
         VulnerabilitySeverity.UNKNOWN;
 
       assert
-        .dom('[data-test-sbomScanComponentVulnerabilities-cvssScore]')
+        .dom('[data-test-sbomComponentVulnerabilities-cvssScore]')
         .exists()
         .hasText(
           isUnknown
             ? '-'
-            : `${this.sbomScanComponentVulnerabilityAffect.sbVulnerability.score}`
+            : `${this.sbomVulnerabilityAudit.sbVulnerability.score}`
         );
     });
   }

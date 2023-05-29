@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 
 import FileModel from './file';
-import SbomAppModel from './sbom-app';
+import SbomProjectModel from './sbom-project';
 
 export enum SbomScanStatus {
   PENDING = 1,
@@ -12,14 +12,14 @@ export enum SbomScanStatus {
   FAILED = 4,
 }
 
-export default class SbomScanModel extends Model {
+export default class SbomFileModel extends Model {
   @service declare intl: IntlService;
 
   @belongsTo('file')
   declare file: AsyncBelongsTo<FileModel>;
 
-  @belongsTo('sbom-app')
-  declare sbProject: AsyncBelongsTo<SbomAppModel>;
+  @belongsTo('sbom-project')
+  declare sbProject: AsyncBelongsTo<SbomProjectModel>;
 
   @attr('number')
   declare status: SbomScanStatus;
@@ -71,6 +71,6 @@ export default class SbomScanModel extends Model {
 
 declare module 'ember-data/types/registries/model' {
   export default interface ModelRegistry {
-    'sbom-scan': SbomScanModel;
+    'sbom-file': SbomFileModel;
   }
 }

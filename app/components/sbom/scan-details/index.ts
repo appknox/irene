@@ -1,21 +1,21 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import SbomScanModel, { SbomScanStatus } from 'irene/models/sbom-scan';
+import SbomFileModel, { SbomScanStatus } from 'irene/models/sbom-file';
 import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import styles from './index.scss';
 
-import { SbomScanComponentQueryParam } from 'irene/routes/authenticated/dashboard/sbom/scan-details';
-import SbomAppModel from 'irene/models/sbom-app';
+import { SbomComponentQueryParam } from 'irene/routes/authenticated/dashboard/sbom/scan-details';
+import SbomProjectModel from 'irene/models/sbom-project';
 import SbomScanSummaryModel from 'irene/models/sbom-scan-summary';
 
 export interface SbomScanDetailsSignature {
   Args: {
-    sbomApp: SbomAppModel;
-    sbomScan: SbomScanModel;
+    sbomProject: SbomProjectModel;
+    sbomFile: SbomFileModel;
     sbomScanSummary: SbomScanSummaryModel | null;
-    queryParams: SbomScanComponentQueryParam;
+    queryParams: SbomComponentQueryParam;
   };
 }
 
@@ -32,7 +32,7 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
   }
 
   get scanStatusText() {
-    if (this.args.sbomScan.status === SbomScanStatus.FAILED) {
+    if (this.args.sbomFile.status === SbomScanStatus.FAILED) {
       return {
         title: this.intl.t('sbomModule.sbomScanStatusError.title'),
         description: this.intl.t('sbomModule.sbomScanStatusError.description'),
@@ -46,11 +46,11 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
   }
 
   get scanStatusCompleted() {
-    return this.args.sbomScan.status === SbomScanStatus.COMPLETED;
+    return this.args.sbomFile.status === SbomScanStatus.COMPLETED;
   }
 
   get scanStatusFailed() {
-    return this.args.sbomScan.status === SbomScanStatus.FAILED;
+    return this.args.sbomFile.status === SbomScanStatus.FAILED;
   }
 
   @action

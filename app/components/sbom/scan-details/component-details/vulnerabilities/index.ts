@@ -11,22 +11,22 @@ import Store from '@ember-data/store';
 import { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import parseError from 'irene/utils/parse-error';
 
-import SbomScanComponentModel from 'irene/models/sbom-scan-component';
-import SbomScanModel from 'irene/models/sbom-scan';
-import SbomScanComponentVulnerabilityAffectModel from 'irene/models/sbom-scan-component-vulnerability-affect';
-import SbomAppModel from 'irene/models/sbom-app';
+import SbomComponentModel from 'irene/models/sbom-component';
+import SbomFileModel from 'irene/models/sbom-file';
+import SbomVulnerabilityAuditModel from 'irene/models/sbom-vulnerability-audit';
+import SbomProjectModel from 'irene/models/sbom-project';
 
 export interface SbomScanDetailsComponentDetailsVulnerabilitiesSignature {
   Element: HTMLDivElement;
   Args: {
-    sbomScanComponent: SbomScanComponentModel | null;
-    sbomScan: SbomScanModel;
-    sbomApp: SbomAppModel;
+    sbomComponent: SbomComponentModel | null;
+    sbomFile: SbomFileModel;
+    sbomProject: SbomProjectModel;
   };
 }
 
-type SbomScanComponentVulnerabilityQueryResponse =
-  DS.AdapterPopulatedRecordArray<SbomScanComponentVulnerabilityAffectModel> & {
+type SbomVulnerabilityQueryResponse =
+  DS.AdapterPopulatedRecordArray<SbomVulnerabilityAuditModel> & {
     meta: { count: number };
   };
 
@@ -39,7 +39,7 @@ export default class SbomScanDetailsComponentDetailsVulnerabilitiesComponent ext
   @tracked offset = 0;
 
   @tracked
-  componentVulnerabilityQueryResponse: SbomScanComponentVulnerabilityQueryResponse | null =
+  componentVulnerabilityQueryResponse: SbomVulnerabilityQueryResponse | null =
     null;
 
   // translation variables
@@ -53,19 +53,19 @@ export default class SbomScanDetailsComponentDetailsVulnerabilitiesComponent ext
 
     this.tPleaseTryAgain = this.intl.t('pleaseTryAgain');
 
-    this.fetchSbomScanComponentVulnerabilities.perform(this.limit, this.offset);
+    this.fetchSbomComponentVulnerabilities.perform(this.limit, this.offset);
   }
 
-  get sbomScanComponentVulnerabilityList() {
+  get sbomVulnerabilityList() {
     return this.componentVulnerabilityQueryResponse?.toArray() || [];
   }
 
-  get totalSbomScanComponentVulnerabilityCount() {
+  get totalSbomVulnerabilityCount() {
     return this.componentVulnerabilityQueryResponse?.meta?.count || 0;
   }
 
-  get hasNoSbomScanComponentVulnerability() {
-    return this.totalSbomScanComponentVulnerabilityCount === 0;
+  get hasNoSbomVulnerability() {
+    return this.totalSbomVulnerabilityCount === 0;
   }
 
   get columns() {
@@ -95,27 +95,27 @@ export default class SbomScanDetailsComponentDetailsVulnerabilitiesComponent ext
     this.limit = limit;
     this.offset = offset;
 
-    this.fetchSbomScanComponentVulnerabilities.perform(limit, offset);
+    this.fetchSbomComponentVulnerabilities.perform(limit, offset);
   }
 
   @action
   handleItemPerPageChange({ limit }: PaginationProviderActionsArgs) {
     this.limit = limit;
 
-    this.fetchSbomScanComponentVulnerabilities.perform(limit, 0);
+    this.fetchSbomComponentVulnerabilities.perform(limit, 0);
   }
 
-  fetchSbomScanComponentVulnerabilities = task(
+  fetchSbomComponentVulnerabilities = task(
     async (limit: string | number, offset: string | number) => {
       try {
         this.componentVulnerabilityQueryResponse = (await this.store.query(
-          'sbom-scan-component-vulnerability-affect',
+          'sbom-vulnerability-audit',
           {
             limit,
             offset,
-            sbomScanComponentId: this.args.sbomScanComponent?.id,
+            sbomComponentId: this.args.sbomComponent?.id,
           }
-        )) as SbomScanComponentVulnerabilityQueryResponse;
+        )) as SbomVulnerabilityQueryResponse;
       } catch (e) {
         this.notify.error(parseError(e, this.tPleaseTryAgain));
       }

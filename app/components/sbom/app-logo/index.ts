@@ -1,15 +1,15 @@
 import Component from '@glimmer/component';
-import SbomAppModel from 'irene/models/sbom-app';
+import SbomProjectModel from 'irene/models/sbom-project';
 
 export interface SbomAppLogoSignature {
   Args: {
-    sbomApp?: SbomAppModel;
+    sbomProject?: SbomProjectModel;
   };
 }
 
 export default class SbomAppLogoComponent extends Component<SbomAppLogoSignature> {
   get iconUrl() {
-    return this.args.sbomApp?.project.get('lastFile')?.get('iconUrl');
+    return this.args.sbomProject?.project.get('lastFile')?.get('iconUrl');
   }
 }
 

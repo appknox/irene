@@ -1,11 +1,11 @@
-import { SbomScanReportType } from 'irene/models/sbom-scan-report';
+import { SbomReportType } from 'irene/models/sbom-report';
 import CommonDRFAdapter from './commondrf';
 
 export interface SbomScanDownloadReportDetails {
   url: string;
 }
 
-export default class SbomScanReportAdapter extends CommonDRFAdapter {
+export default class SbomReportAdapter extends CommonDRFAdapter {
   _buildURL(modelName?: string | number, id?: string | number) {
     const baseURL = `${this.namespace_v2}/sb_reports`;
 
@@ -16,50 +16,50 @@ export default class SbomScanReportAdapter extends CommonDRFAdapter {
     return this.buildURLFromBase(baseURL);
   }
 
-  urlForQuery(query: { sbomScanId: string }) {
+  urlForQuery(query: { sbomFileId: string }) {
     const baseURL = `${this.namespace_v2}/sb_files`;
 
     return this.buildURLFromBase(
-      `${baseURL}/${encodeURIComponent(query.sbomScanId)}/sb_reports`
+      `${baseURL}/${encodeURIComponent(query.sbomFileId)}/sb_reports`
     );
   }
 
   _buildDownloadReportUrl(
     modelName: string | number,
-    sbomScanReportId: string,
-    type: SbomScanReportType
+    sbomReportId: string,
+    type: SbomReportType
   ) {
-    const baseURL = this._buildURL(modelName, sbomScanReportId);
+    const baseURL = this._buildURL(modelName, sbomReportId);
 
     return `${baseURL}/${type}/download_url`;
   }
 
   _buildGenerateReportUrl(
     modelName: string | number,
-    sbomScanId: string,
-    type: SbomScanReportType
+    sbomFileId: string,
+    type: SbomReportType
   ) {
-    const baseURL = this._buildURL(modelName, sbomScanId);
+    const baseURL = this._buildURL(modelName, sbomFileId);
 
     return `${baseURL}/${type}/generate`;
   }
 
   generateScanReport(
     modelName: string | number,
-    sbomScanReportId: string,
-    type: SbomScanReportType
+    sbomReportId: string,
+    type: SbomReportType
   ) {
-    const url = this._buildGenerateReportUrl(modelName, sbomScanReportId, type);
+    const url = this._buildGenerateReportUrl(modelName, sbomReportId, type);
 
     return this.ajax(url, 'POST') as Promise<{ success: boolean }>;
   }
 
   fetchDownloadReportDetails(
     modelName: string | number,
-    sbomScanReportId: string,
-    type: SbomScanReportType
+    sbomReportId: string,
+    type: SbomReportType
   ) {
-    const url = this._buildDownloadReportUrl(modelName, sbomScanReportId, type);
+    const url = this._buildDownloadReportUrl(modelName, sbomReportId, type);
 
     return this.ajax(url, 'GET') as Promise<SbomScanDownloadReportDetails>;
   }
@@ -67,6 +67,6 @@ export default class SbomScanReportAdapter extends CommonDRFAdapter {
 
 declare module 'ember-data/types/registries/adapter' {
   export default interface AdapterRegistry {
-    'sbom-scan-report': SbomScanReportAdapter;
+    'sbom-report': SbomReportAdapter;
   }
 }

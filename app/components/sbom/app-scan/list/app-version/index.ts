@@ -1,16 +1,16 @@
 import Component from '@glimmer/component';
 
-import SbomScanModel from 'irene/models/sbom-scan';
+import SbomFileModel from 'irene/models/sbom-file';
 
 export interface SbomAppScanListAppVersionSignature {
   Args: {
-    sbomScan: SbomScanModel;
+    sbomFile: SbomFileModel;
   };
 }
 
 export default class SbomAppScanListAppVersionComponent extends Component<SbomAppScanListAppVersionSignature> {
   get version() {
-    return this.args.sbomScan.file.get('version');
+    return this.args.sbomFile.file.get('version');
   }
 }
 

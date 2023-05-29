@@ -40,21 +40,24 @@ module(
       });
       const sbomScanSummary = this.server.create('sbom-scan-summary', 1);
 
-      const sbomApp = this.server.create('sbom-app', 1, {
+      const sbomProject = this.server.create('sbom-project', 1, {
         project: project.id,
       });
 
-      const sbomScan = this.server.create('sbom-scan', 1, {
+      const sbomFile = this.server.create('sbom-file', 1, {
         file: file.id,
-        sb_project: sbomApp.id,
+        sb_project: sbomProject.id,
       });
 
-      sbomApp.latest_sb_file = sbomScan.id;
+      sbomProject.latest_sb_file = sbomFile.id;
 
-      const sbomAppNormalized = store.normalize('sbom-app', sbomApp.toJSON());
-      const sbomScanNormalized = store.normalize(
-        'sbom-scan',
-        sbomScan.toJSON()
+      const sbomProjectNormalized = store.normalize(
+        'sbom-project',
+        sbomProject.toJSON()
+      );
+      const sbomFileNormalized = store.normalize(
+        'sbom-file',
+        sbomFile.toJSON()
       );
 
       const sbomScanSummaryNormalized = store.normalize(
@@ -62,16 +65,13 @@ module(
         sbomScanSummary.toJSON()
       );
 
-      const sbomScanComponents = this.server.createList(
-        'sbom-scan-component',
-        10
-      );
+      const sbomComponents = this.server.createList('sbom-component', 10);
 
       this.setProperties({
-        sbomApp: store.push(sbomAppNormalized),
-        sbomScan: store.push(sbomScanNormalized),
+        sbomProject: store.push(sbomProjectNormalized),
+        sbomFile: store.push(sbomFileNormalized),
         sbomScanSummary: store.push(sbomScanSummaryNormalized),
-        sbomScanComponents,
+        sbomComponents,
         queryParams: {
           component_limit: 10,
           component_offset: 0,
@@ -84,30 +84,30 @@ module(
 
     test('it renders sbom scan component list', async function (assert) {
       this.server.get('/v2/sb_files/:scan_id/sb_components', (schema) => {
-        const results = schema.sbomScanComponents.all().models;
+        const results = schema.sbomComponents.all().models;
 
         return { count: results.length, next: null, previous: null, results };
       });
 
       await render(hbs`
       <Sbom::ScanDetails::ComponentList 
-        @sbomApp={{this.sbomApp}} 
-        @sbomScan={{this.sbomScan}} 
+        @sbomProject={{this.sbomProject}} 
+        @sbomFile={{this.sbomFile}} 
         @sbomScanSummary={{this.sbomScanSummary}} 
         @queryParams={{this.queryParams}} 
       />
     `);
 
       assert
-        .dom('[data-test-sbomScanComponent-title]')
+        .dom('[data-test-sbomComponent-title]')
         .hasText('t:sbomModule.allComponents:()');
 
-      // assert.dom('[data-test-sbomScanComponent-searchInput]').hasNoValue();
+      // assert.dom('[data-test-sbomComponent-searchInput]').hasNoValue();
 
-      assert.dom('[data-test-sbomScanComponent-table]').exists();
+      assert.dom('[data-test-sbomComponent-table]').exists();
 
       const headerRow = find(
-        '[data-test-sbomScanComponent-thead] tr'
+        '[data-test-sbomComponent-thead] tr'
       ).querySelectorAll('th');
 
       // assert header row
@@ -116,29 +116,27 @@ module(
       assert.dom(headerRow[2]).hasText('t:version:()');
       assert.dom(headerRow[3]).hasText('t:sbomModule.knownVulnerabilities:()');
 
-      const contentRows = findAll('[data-test-sbomScanComponent-row]');
+      const contentRows = findAll('[data-test-sbomComponent-row]');
 
-      assert.strictEqual(contentRows.length, this.sbomScanComponents.length);
+      assert.strictEqual(contentRows.length, this.sbomComponents.length);
 
       // first row sanity check
       const firstRow = contentRows[0].querySelectorAll(
-        '[data-test-sbomScanComponent-cell]'
+        '[data-test-sbomComponent-cell]'
       );
 
-      assert.dom(firstRow[0]).hasText(this.sbomScanComponents[0].name);
+      assert.dom(firstRow[0]).hasText(this.sbomComponents[0].name);
+
+      assert.dom(firstRow[1]).hasText(capitalize(this.sbomComponents[0].type));
 
       assert
-        .dom(firstRow[1])
-        .hasText(capitalize(this.sbomScanComponents[0].type));
+        .dom('[data-test-sbomComponent-version]', firstRow[2])
+        .hasText(this.sbomComponents[0].version);
 
       assert
-        .dom('[data-test-sbomScanComponent-version]', firstRow[2])
-        .hasText(this.sbomScanComponents[0].version);
-
-      assert
-        .dom('[data-test-sbomScanComponent-knownVulnerability]', firstRow[3])
+        .dom('[data-test-sbomComponent-knownVulnerability]', firstRow[3])
         .hasText(
-          this.sbomScanComponents[0].vulnerabilities_count > 0
+          this.sbomComponents[0].vulnerabilities_count > 0
             ? 'T:YES:()'
             : 'T:NO:()'
         );
@@ -146,23 +144,23 @@ module(
 
     test('it opens sbom scan component details drawer', async function (assert) {
       this.server.get('/v2/sb_files/:scan_id/sb_components', (schema) => {
-        const results = schema.sbomScanComponents.all().models;
+        const results = schema.sbomComponents.all().models;
 
         return { count: results.length, next: null, previous: null, results };
       });
 
       await render(hbs`
       <Sbom::ScanDetails::ComponentList 
-        @sbomApp={{this.sbomApp}} 
-        @sbomScan={{this.sbomScan}} 
+        @sbomProject={{this.sbomProject}} 
+        @sbomFile={{this.sbomFile}} 
         @sbomScanSummary={{this.sbomScanSummary}} 
         @queryParams={{this.queryParams}} 
       />
     `);
 
-      const contentRows = findAll('[data-test-sbomScanComponent-row]');
+      const contentRows = findAll('[data-test-sbomComponent-row]');
 
-      assert.strictEqual(contentRows.length, this.sbomScanComponents.length);
+      assert.strictEqual(contentRows.length, this.sbomComponents.length);
 
       await click(contentRows[2]);
 
@@ -177,7 +175,7 @@ module(
         },
         {
           id: 'known_vulnerabilities',
-          badgeCount: this.sbomScanComponents[2].vulnerabilities_count,
+          badgeCount: this.sbomComponents[2].vulnerabilities_count,
           hasBadge: true,
           label: 't:sbomModule.knownVulnerabilities:()',
         },
@@ -201,27 +199,27 @@ module(
       this.server.get('/v2/sb_files/:scan_id/sb_components', (schema, req) => {
         this.set('query', req.queryParams.q);
 
-        const results = schema.sbomScanComponents.all().models;
+        const results = schema.sbomComponents.all().models;
 
         return { count: results.length, next: null, previous: null, results };
       });
 
       await render(hbs`
       <Sbom::ScanDetails::ComponentList 
-        @sbomApp={{this.sbomApp}} 
-        @sbomScan={{this.sbomScan}} 
+        @sbomProject={{this.sbomProject}} 
+        @sbomFile={{this.sbomFile}} 
         @sbomScanSummary={{this.sbomScanSummary}} 
         @queryParams={{this.queryParams}} 
       />
     `);
 
-      assert.dom('[data-test-sbomScanComponent-searchInput]').hasNoValue();
+      assert.dom('[data-test-sbomComponent-searchInput]').hasNoValue();
 
-      await fillIn('[data-test-sbomScanComponent-searchInput]', 'some query');
-      await triggerEvent('[data-test-sbomScanComponent-searchInput]', 'keyup');
+      await fillIn('[data-test-sbomComponent-searchInput]', 'some query');
+      await triggerEvent('[data-test-sbomComponent-searchInput]', 'keyup');
 
       assert
-        .dom('[data-test-sbomScanComponent-searchInput]')
+        .dom('[data-test-sbomComponent-searchInput]')
         .isNotDisabled()
         .hasValue(this.queryParams.component_query);
 
@@ -229,56 +227,56 @@ module(
     });
 
     test('test sbom scan component version column', async function (assert) {
-      this.sbomScanComponents[0].version = '1.0.0';
+      this.sbomComponents[0].version = '1.0.0';
 
-      this.sbomScanComponents[0].latest_version = '1.0.0';
+      this.sbomComponents[0].latest_version = '1.0.0';
 
-      this.sbomScanComponents[1].version = '1.0.0';
+      this.sbomComponents[1].version = '1.0.0';
 
-      this.sbomScanComponents[1].latest_version = '2.0.0';
+      this.sbomComponents[1].latest_version = '2.0.0';
 
       this.server.get('/v2/sb_files/:scan_id/sb_components', () => {
-        const results = this.sbomScanComponents;
+        const results = this.sbomComponents;
         return { count: results.length, next: null, previous: null, results };
       });
 
       await render(hbs`
       <Sbom::ScanDetails::ComponentList 
-        @sbomApp={{this.sbomApp}} 
-        @sbomScan={{this.sbomScan}} 
+        @sbomProject={{this.sbomProject}} 
+        @sbomFile={{this.sbomFile}} 
         @sbomScanSummary={{this.sbomScanSummary}} 
         @queryParams={{this.queryParams}} 
       />
     `);
 
-      const contentRows = findAll('[data-test-sbomScanComponent-row]');
+      const contentRows = findAll('[data-test-sbomComponent-row]');
 
-      assert.strictEqual(contentRows.length, this.sbomScanComponents.length);
+      assert.strictEqual(contentRows.length, this.sbomComponents.length);
 
       // first row sanity check
       const firstRow = contentRows[0].querySelectorAll(
-        '[data-test-sbomScanComponent-cell]'
+        '[data-test-sbomComponent-cell]'
       );
 
       assert
-        .dom('[data-test-sbomScanComponent-version]', firstRow[2])
-        .hasText(this.sbomScanComponents[0].version);
+        .dom('[data-test-sbomComponent-version]', firstRow[2])
+        .hasText(this.sbomComponents[0].version);
 
       assert
-        .dom('[data-test-sbomScanComponent-versionOutdatedIcon]', firstRow[2])
+        .dom('[data-test-sbomComponent-versionOutdatedIcon]', firstRow[2])
         .doesNotExist();
 
       // second row sanity check
       const secondRow = contentRows[1].querySelectorAll(
-        '[data-test-sbomScanComponent-cell]'
+        '[data-test-sbomComponent-cell]'
       );
 
       assert
-        .dom('[data-test-sbomScanComponent-version]', secondRow[2])
-        .hasText(this.sbomScanComponents[1].version);
+        .dom('[data-test-sbomComponent-version]', secondRow[2])
+        .hasText(this.sbomComponents[1].version);
 
       assert
-        .dom('[data-test-sbomScanComponent-versionOutdatedIcon]', secondRow[2])
+        .dom('[data-test-sbomComponent-versionOutdatedIcon]', secondRow[2])
         .exists();
 
       assert.dom('[data-test-ak-tooltip-root]', secondRow[2]).exists();
@@ -289,7 +287,7 @@ module(
       );
 
       assert
-        .dom('[data-test-sbomScanComponent-versionOutdatedText]')
+        .dom('[data-test-sbomComponent-versionOutdatedText]')
         .hasText('t:sbomModule.sbomComponentOutdated:()');
     });
 
@@ -304,41 +302,41 @@ module(
 
       render(hbs`
       <Sbom::ScanDetails::ComponentList 
-        @sbomApp={{this.sbomApp}} 
-        @sbomScan={{this.sbomScan}} 
+        @sbomProject={{this.sbomProject}} 
+        @sbomFile={{this.sbomFile}} 
         @sbomScanSummary={{this.sbomScanSummary}} 
         @queryParams={{this.queryParams}} 
       />
     `);
 
-      await waitFor('[data-test-sbomScanComponent-title]', { timeout: 500 });
+      await waitFor('[data-test-sbomComponent-title]', { timeout: 500 });
 
       assert
-        .dom('[data-test-sbomScanComponent-title]')
+        .dom('[data-test-sbomComponent-title]')
         .hasText('t:sbomModule.allComponents:()');
 
-      // assert.dom('[data-test-sbomScanComponent-searchInput]').hasNoValue();
+      // assert.dom('[data-test-sbomComponent-searchInput]').hasNoValue();
 
-      assert.dom('[data-test-sbomScanComponent-table]').doesNotExist();
+      assert.dom('[data-test-sbomComponent-table]').doesNotExist();
 
       assert.dom('[data-test-sbom-loadingSvg]').exists();
 
       assert.dom('[data-test-sbom-loader]').exists();
       assert.dom('[data-test-sbom-loadingText]').hasText('t:loading:()...');
 
-      await waitFor('[data-test-sbomScanComponent-emptyTextTitle]', {
+      await waitFor('[data-test-sbomComponent-emptyTextTitle]', {
         timeout: 500,
       });
 
       assert
-        .dom('[data-test-sbomScanComponent-emptyTextTitle]')
+        .dom('[data-test-sbomComponent-emptyTextTitle]')
         .hasText('t:sbomModule.componentListEmptyText.title:()');
 
       assert
-        .dom('[data-test-sbomScanComponent-emptyTextDescription]')
+        .dom('[data-test-sbomComponent-emptyTextDescription]')
         .hasText('t:sbomModule.componentListEmptyText.description:()');
 
-      assert.dom('[data-test-sbomScanComponent-emptySvg]').exists();
+      assert.dom('[data-test-sbomComponent-emptySvg]').exists();
     });
   }
 );

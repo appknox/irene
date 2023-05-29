@@ -14,7 +14,7 @@
 
 <div class='my-3'>
   <AkPaginationProvider
-    @results={{this.sbomScanList}}
+    @results={{this.sbomFileList}}
     @onItemPerPageChange={{this.handleItemPerPageChange}}
     @totalItems={{this.totalSbomScanCount}}
     @nextAction={{this.handlePrevNextAction}}
@@ -26,7 +26,7 @@
   >
     <Sbom::EmptyLoadingView
       @empty={{this.hasNoSbomScan}}
-      @loading={{this.fetchSbomAppScans.isRunning}}
+      @loading={{this.fetchSbomProjectFiles.isRunning}}
       @loadingSvgHeight='200px'
       @height='350px'
     >
@@ -69,7 +69,7 @@
               <r.cell data-test-sbomScan-cell>
                 {{#let (component r.columnValue.component) as |Component|}}
                   <Component
-                    @sbomScan={{r.rowValue}}
+                    @sbomFile={{r.rowValue}}
                     @onViewReportClick={{this.handleViewReportDrawerOpen}}
                   />
                 {{/let}}
@@ -96,7 +96,7 @@
         <Sbom::ScanReportDrawer
           @open={{this.openViewReportDrawer}}
           @onClose={{this.handleViewReportDrawerClose}}
-          @sbomScan={{this.selectedSbomScan}}
+          @sbomFile={{this.selectedSbomFile}}
         />
       </:default>
     </Sbom::EmptyLoadingView>
