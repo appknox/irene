@@ -1,0 +1,102 @@
+{{! @glint-nocheck or, perform }}
+<AkList::Item
+  data-test-sbomScanReportList-reportlistItem
+  class='px-3'
+  @divider={{true}}
+  as |li|
+>
+  {{#if (or this.isReportGenerated this.isReportGenerating)}}
+    <li.leftIcon>
+      {{#let (component @reportDetails.iconComponent) as |Icon|}}
+        <Icon data-test-sbomScanReportList-reportIcon />
+      {{/let}}
+    </li.leftIcon>
+
+    <AkStack @direction='column' @width='full' @spacing='0.5' class='pl-1'>
+      <AkTypography
+        data-test-sbomScanReportList-reportPrimaryText
+        @variant='subtitle1'
+      >
+        {{@reportDetails.primaryText}}
+      </AkTypography>
+
+      {{#if this.isReportGenerating}}
+        <AkTypography
+          data-test-sbomScanReportList-reportGeneratingText
+          @color='textSecondary'
+        >
+          {{t 'generating'}}...
+        </AkTypography>
+      {{else}}
+        <AkStack @alignItems='center' @spacing='0.5'>
+          <AkTypography data-test-sbomScanReportList-reportSecondaryText>
+            {{@reportDetails.secondaryText}}
+          </AkTypography>
+
+          {{#if @reportDetails.copyText}}
+            <AkClipboard
+              @onSuccess={{this.handleCopySuccess}}
+              @onError={{this.handleCopyError}}
+              as |cb|
+            >
+              <AkIconButton
+                id={{cb.triggerId}}
+                @size='small'
+                data-clipboard-text={{@reportDetails.copyText}}
+                data-test-sbomScanReportList-reportCopyBtn
+              >
+                <AkIcon @iconName='content-copy' @color='primary' />
+              </AkIconButton>
+            </AkClipboard>
+          {{/if}}
+        </AkStack>
+      {{/if}}
+    </AkStack>
+
+    <li.rightIcon>
+      {{#if this.isReportGenerating}}
+        <AkLoader
+          data-test-sbomScanReportList-reportGeneratingLoader
+          @size={{18}}
+        />
+      {{else}}
+        <AkIconButton
+          {{on 'click' (perform this.handleDownloadReport @reportDetails.type)}}
+          disabled={{this.handleDownloadReport.isRunning}}
+          data-test-sbomScanReportList-reportDownloadBtn
+        >
+          <AkIcon @variant='outlined' @iconName='file-download' />
+        </AkIconButton>
+      {{/if}}
+    </li.rightIcon>
+  {{else}}
+    <AkStack @direction='column' @spacing='2' @width='full'>
+      <AkTypography
+        data-test-sbomScanReportList-reportGenerateTitle
+        @variant='subtitle1'
+      >
+        {{t 'sbomModule.sbomDownloadPdfPrimaryText'}}
+      </AkTypography>
+
+      <AkStack
+        local-class='generate-container'
+        @direction='column'
+        @spacing='2'
+      >
+        <AkSvg::GenerateReport data-test-sbomScanReportList-reportGenerateSvg />
+
+        <AkTypography data-test-sbomScanReportList-reportGenerateDescription>
+          {{t 'sbomModule.generateReportDescription'}}
+        </AkTypography>
+
+        <AkButton
+          {{on 'click' (perform this.handleGenerateReport @reportDetails.type)}}
+          @loading={{this.handleGenerateReport.isRunning}}
+          data-test-sbomScanReportList-reportGenerateBtn
+        >
+          {{t 'generateReport'}}
+        </AkButton>
+      </AkStack>
+    </AkStack>
+  {{/if}}
+</AkList::Item>

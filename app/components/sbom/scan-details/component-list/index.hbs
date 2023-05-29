@@ -1,0 +1,133 @@
+<div ...attributes class='my-4'>
+  <AkStack @alignItems='center' @justifyContent='space-between'>
+    <AkStack @alignItems='center' @spacing='1'>
+      <AkTypography data-test-sbomScanComponent-title @variant='h5'>
+        {{t 'sbomModule.allComponents'}}
+      </AkTypography>
+
+      {{#if @sbomScanSummary}}
+        <AkChip
+          @variant='semi-filled'
+          @color='primary'
+          @size='small'
+          @label='{{@sbomScanSummary.componentCount}}'
+        />
+      {{/if}}
+    </AkStack>
+
+    {{!-- <div {{style width='180px'}}>
+      <AkTextField
+        data-test-sbomScanComponent-searchInput
+        @placeholder={{t 'search'}}
+        @value={{@queryParams.component_query}}
+        {{on 'keyup' this.searchSbomScanComponentForQuery}}
+      >
+        <:leftAdornment>
+          <AkIcon @iconName='search' @color='textSecondary' />
+        </:leftAdornment>
+      </AkTextField>
+    </div> --}}
+  </AkStack>
+
+  <div class='mt-4'>
+    <AkPaginationProvider
+      @results={{this.sbomScanComponentList}}
+      @onItemPerPageChange={{this.handleItemPerPageChange}}
+      @totalItems={{this.totalSbomScanComponentCount}}
+      @nextAction={{this.handlePrevNextAction}}
+      @prevAction={{this.handlePrevNextAction}}
+      @itemPerPageOptions={{array 10 25 50}}
+      @defaultLimit={{this.limit}}
+      @offset={{this.offset}}
+      as |pgc|
+    >
+      <Sbom::EmptyLoadingView
+        @empty={{this.hasNoSbomScanComponent}}
+        @loading={{this.fetchSbomScanComponents.isRunning}}
+        @loadingSvgHeight='200px'
+        @height='350px'
+      >
+        <:emptySvg>
+          <AkSvg::NoResult data-test-sbomScanComponent-emptySvg />
+        </:emptySvg>
+
+        <:emptyText>
+          <AkStack
+            class='mt-2'
+            @direction='column'
+            @alignItems='center'
+            @spacing='1'
+          >
+            <AkTypography
+              data-test-sbomScanComponent-emptyTextTitle
+              @variant='h5'
+            >
+              {{t 'sbomModule.componentListEmptyText.title'}}
+            </AkTypography>
+
+            <AkTypography
+              data-test-sbomScanComponent-emptyTextDescription
+              {{style width='600px'}}
+              @color='textSecondary'
+              @align='center'
+            >
+              {{t 'sbomModule.componentListEmptyText.description'}}
+            </AkTypography>
+          </AkStack>
+        </:emptyText>
+
+        <:default>
+          <AkTable @hoverable={{true}} data-test-sbomScanComponent-table as |t|>
+            <t.head
+              data-test-sbomScanComponent-thead
+              @columns={{this.columns}}
+            />
+            <t.body @rows={{pgc.currentPageResults}} as |b|>
+              <b.row
+                {{style cursor='pointer'}}
+                @onClick={{this.handleComponentClick}}
+                data-test-sbomScanComponent-row
+                as |r|
+              >
+                <r.cell data-test-sbomScanComponent-cell as |value|>
+                  {{#if r.columnValue.component}}
+                    {{#let (component r.columnValue.component) as |Component|}}
+                      <Component @sbomScanComponent={{r.rowValue}} />
+                    {{/let}}
+                  {{else}}
+                    <AkTypography title={{value}} @noWrap={{true}}>
+                      {{value}}
+                    </AkTypography>
+                  {{/if}}
+                </r.cell>
+              </b.row>
+            </t.body>
+          </AkTable>
+
+          <AkPagination
+            @disableNext={{pgc.disableNext}}
+            @nextAction={{pgc.nextAction}}
+            @disablePrev={{pgc.disablePrev}}
+            @prevAction={{pgc.prevAction}}
+            @endItemIdx={{pgc.endItemIdx}}
+            @startItemIdx={{pgc.startItemIdx}}
+            @itemPerPageOptions={{pgc.itemPerPageOptions}}
+            @onItemPerPageChange={{pgc.onItemPerPageChange}}
+            @selectedOption={{pgc.selectedOption}}
+            @tableItemLabel={{t 'sbomModule.components'}}
+            @perPageTranslation={{t 'recordPerPage'}}
+            @totalItems={{pgc.totalItems}}
+          />
+
+          <Sbom::ScanDetails::ComponentDetails
+            @sbomApp={{@sbomApp}}
+            @sbomScan={{@sbomScan}}
+            @sbomScanComponent={{this.selectedComponent}}
+            @open={{this.openComponentDetailDrawer}}
+            @onClose={{this.handleComponentDetailDrawerClose}}
+          />
+        </:default>
+      </Sbom::EmptyLoadingView>
+    </AkPaginationProvider>
+  </div>
+</div>

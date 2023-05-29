@@ -11,6 +11,7 @@ interface Features {
   manualscan: boolean;
   partner_dashboard: boolean;
   sso: boolean;
+  sbom: boolean;
 }
 
 export default class OrganizationModel extends Model {

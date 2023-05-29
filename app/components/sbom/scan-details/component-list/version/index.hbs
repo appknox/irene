@@ -1,0 +1,35 @@
+<AkStack @alignItems='center' @spacing='1'>
+  {{#if @sbomScanComponent.version}}
+    <AkTypography data-test-sbomScanComponent-version @tag='span'>
+      {{@sbomScanComponent.version}}
+    </AkTypography>
+
+    {{#if @sbomScanComponent.isOutdated}}
+      <AkTooltip @placement='bottom-start' @arrow={{true}} @color='light'>
+        <:tooltipContent>
+          <div
+            data-test-sbomScanComponent-versionOutdatedText
+            local-class='tooltip-content-container'
+          >
+            <AkTypography @variant='body2'>
+              {{t 'sbomModule.sbomComponentOutdated'}}
+            </AkTypography>
+          </div>
+        </:tooltipContent>
+
+        <:default>
+          <AkIcon
+            data-test-sbomScanComponent-versionOutdatedIcon
+            @iconName='history-toggle-off'
+            @size='small'
+          />
+        </:default>
+      </AkTooltip>
+    {{/if}}
+
+  {{else}}
+    <AkTypography data-test-sbomScanComponent-version @tag='span'>
+      -
+    </AkTypography>
+  {{/if}}
+</AkStack>

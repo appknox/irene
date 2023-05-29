@@ -1,0 +1,115 @@
+<div class='px-3 py-1' data-test-sbomScanDetails-container>
+  <Sbom::ScanSummary @sbomApp={{@sbomApp}}>
+    <:actionBtn>
+      <AkStack @alignItems='center' @spacing='1'>
+        <AkLink
+          @class={{this.classes.akLinkBtn}}
+          @route='authenticated.dashboard.sbom.app-scans'
+          @model={{@sbomApp.id}}
+          @color='primary'
+          @underline='none'
+          data-test-sbomScanDetails-pastSbomAnalyses-link
+        >
+          {{t 'sbomModule.pastSbomAnalyses'}}
+        </AkLink>
+
+        {{#if this.scanStatusCompleted}}
+          <AkButton
+            {{on 'click' this.handleViewReportDrawerOpen}}
+            data-test-sbomScanDetails-viewReport-btn
+          >
+            {{t 'sbomModule.viewReport'}}
+          </AkButton>
+        {{/if}}
+      </AkStack>
+    </:actionBtn>
+
+    <:default>
+      <div local-class='show-more-container'>
+        {{#if this.showFileScanSummary}}
+          <Sbom::ScanDetails::FileScanSummary
+            @sbomScan={{@sbomScan}}
+            @sbomScanSummary={{@sbomScanSummary}}
+          />
+        {{/if}}
+
+        <AkButton
+          @variant='text'
+          @underline='always'
+          @color='primary'
+          @typographyVariant='subtitle1'
+          {{on 'click' this.handleFileScanSummaryToggle}}
+          data-test-sbomScanDetails-showMoreOrLess-btn
+        >
+          <:default>
+            {{if
+              this.showFileScanSummary
+              (t 'sbomModule.showLess')
+              (t 'sbomModule.showMore')
+            }}
+          </:default>
+
+          <:rightIcon>
+            <AkIcon
+              @iconName={{if
+                this.showFileScanSummary
+                'arrow-drop-up'
+                'arrow-drop-down'
+              }}
+              @color='primary'
+            />
+          </:rightIcon>
+        </AkButton>
+      </div>
+    </:default>
+  </Sbom::ScanSummary>
+
+  {{#if this.scanStatusCompleted}}
+    <Sbom::ScanDetails::ComponentList
+      @sbomApp={{@sbomApp}}
+      @sbomScan={{@sbomScan}}
+      @sbomScanSummary={{@sbomScanSummary}}
+      @queryParams={{@queryParams}}
+      data-test-sbomScanDetails-componentList-container
+    />
+  {{else}}
+    <AkStack
+      @direction='column'
+      @justifyContent='center'
+      @alignItems='center'
+      class='mt-7'
+    >
+      {{#if this.scanStatusFailed}}
+        <AkSvg::NoResult data-test-sbomScanDetails-scanStatusFailedSvg />
+      {{else}}
+        <AkSvg::InProgress data-test-sbomScanDetails-scanStatusInProgressSvg />
+      {{/if}}
+
+      <AkStack
+        class='mt-5'
+        @direction='column'
+        @alignItems='center'
+        @spacing='1'
+      >
+        <AkTypography data-test-sbomScanDetails-scanStatusTitle @variant='h5'>
+          {{this.scanStatusText.title}}
+        </AkTypography>
+
+        <AkTypography
+          data-test-sbomScanDetails-scanStatusDescription
+          {{style width='600px'}}
+          @color='textSecondary'
+          @align='center'
+        >
+          {{this.scanStatusText.description}}
+        </AkTypography>
+      </AkStack>
+    </AkStack>
+  {{/if}}
+</div>
+
+<Sbom::ScanReportDrawer
+  @sbomScan={{@sbomScan}}
+  @open={{this.openViewReportDrawer}}
+  @onClose={{this.handleViewReportDrawerClose}}
+/>

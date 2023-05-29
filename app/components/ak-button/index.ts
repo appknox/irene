@@ -12,7 +12,7 @@ export interface AkButtonSignature<T extends ButtonTags> {
     disabled?: boolean;
     variant?: 'filled' | 'text' | 'outlined';
     loading?: boolean;
-    underline?: 'none';
+    underline?: 'hover' | 'always' | 'none';
     iconSize?: 'small' | 'medium';
     type?: 'button' | 'reset' | 'submit';
     color?: ButtonColors;

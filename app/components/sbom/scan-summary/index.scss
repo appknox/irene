@@ -1,0 +1,11 @@
+.app-summary-container {
+  padding: 1.5em;
+  border-radius: var(--sbom-scan-summary-border-radius);
+  border: 1px solid var(--sbom-scan-summary-border-color);
+  box-sizing: border-box;
+
+  .app-platform-icon {
+    padding: 0;
+    width: unset;
+  }
+}

@@ -1,0 +1,93 @@
+<div ...attributes data-test-sbomScanComponentVulnerabilities>
+  <AkPaginationProvider
+    @results={{this.sbomScanComponentVulnerabilityList}}
+    @onItemPerPageChange={{this.handleItemPerPageChange}}
+    @totalItems={{this.totalSbomScanComponentVulnerabilityCount}}
+    @nextAction={{this.handlePrevNextAction}}
+    @prevAction={{this.handlePrevNextAction}}
+    @itemPerPageOptions={{array 10 25 50}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    as |pgc|
+  >
+    <Sbom::EmptyLoadingView
+      @empty={{this.hasNoSbomScanComponentVulnerability}}
+      @loading={{this.fetchSbomScanComponentVulnerabilities.isRunning}}
+    >
+      <:emptySvg>
+        <AkSvg::NoVulnerability
+          data-test-sbomScanComponentVulnerabilities-emptySvg
+        />
+      </:emptySvg>
+
+      <:emptyText>
+        <AkStack
+          class='mt-2'
+          @direction='column'
+          @alignItems='center'
+          @spacing='1'
+        >
+          <AkTypography
+            data-test-sbomScanComponentVulnerabilities-emptyTextTitle
+            @variant='h5'
+          >
+            {{t 'sbomModule.knownVulnerabilitiesEmptyText.title'}}
+          </AkTypography>
+
+          <AkTypography
+            data-test-sbomScanComponentVulnerabilities-emptyTextDescription
+            {{style width='400px'}}
+            @color='textSecondary'
+            @align='center'
+          >
+            {{t 'sbomModule.knownVulnerabilitiesEmptyText.description'}}
+          </AkTypography>
+        </AkStack>
+      </:emptyText>
+
+      <:default>
+        <AkTable data-test-sbomScanComponentVulnerabilities-table as |t|>
+          <t.head
+            data-test-sbomScanComponentVulnerabilities-thead
+            @columns={{this.columns}}
+          />
+          <t.body @rows={{pgc.currentPageResults}} as |b|>
+            <b.row data-test-sbomScanComponentVulnerabilities-row as |r|>
+              <r.cell
+                data-test-sbomScanComponentVulnerabilities-cell
+                as |value|
+              >
+                {{#if r.columnValue.component}}
+                  {{#let (component r.columnValue.component) as |Component|}}
+                    <Component
+                      @sbomScanComponentVulnerability={{r.rowValue.sbVulnerability}}
+                    />
+                  {{/let}}
+                {{else}}
+                  <AkTypography title={{value}} @noWrap={{true}}>
+                    {{value}}
+                  </AkTypography>
+                {{/if}}
+              </r.cell>
+            </b.row>
+          </t.body>
+        </AkTable>
+
+        <AkPagination
+          @disableNext={{pgc.disableNext}}
+          @nextAction={{pgc.nextAction}}
+          @disablePrev={{pgc.disablePrev}}
+          @prevAction={{pgc.prevAction}}
+          @endItemIdx={{pgc.endItemIdx}}
+          @startItemIdx={{pgc.startItemIdx}}
+          @itemPerPageOptions={{pgc.itemPerPageOptions}}
+          @onItemPerPageChange={{pgc.onItemPerPageChange}}
+          @selectedOption={{pgc.selectedOption}}
+          @tableItemLabel={{t 'vulnerabilities'}}
+          @perPageTranslation={{t 'recordPerPage'}}
+          @totalItems={{pgc.totalItems}}
+        />
+      </:default>
+    </Sbom::EmptyLoadingView>
+  </AkPaginationProvider>
+</div>

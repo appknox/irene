@@ -1,0 +1,44 @@
+{{#if this.fetchSbomScanReports.isRunning}}
+  <AkStack
+    data-test-sbomScanReportList-loader
+    class='p-2'
+    @alignItems='center'
+    @justifyContent='center'
+  >
+    <AkLoader @size={{18}} />
+  </AkStack>
+{{else if this.hasNoSbomScanReport}}
+  <AkStack
+    class='px-5'
+    {{style height='400px'}}
+    @alignItems='center'
+    @justifyContent='center'
+    @direction='column'
+    @spacing='2.5'
+  >
+    <AkSvg::NoResult data-test-sbomScanReportList-emptySvg />
+
+    <AkStack class='mt-2' @direction='column' @alignItems='center' @spacing='1'>
+      <AkTypography data-test-sbomScanReportList-emptyTextTitle @variant='h5'>
+        {{t 'sbomModule.scanReportEmptyText.title'}}
+      </AkTypography>
+
+      <AkTypography
+        data-test-sbomScanReportList-emptyTextDescription
+        @color='textSecondary'
+        @align='center'
+      >
+        {{t 'sbomModule.scanReportEmptyText.description'}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+{{else}}
+  <AkList data-test-sbomScanReportList-reportlist>
+    {{#each this.reportDetails as |details|}}
+      <Sbom::ScanReportDrawer::ReportList::Item
+        @reportDetails={{details}}
+        @sbomScanReport={{this.latestSbomScanReport}}
+      />
+    {{/each}}
+  </AkList>
+{{/if}}

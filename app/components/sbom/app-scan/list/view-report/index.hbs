@@ -1,0 +1,7 @@
+<AkIconButton
+  data-test-sbomScan-viewReportBtn
+  disabled={{this.disableViewReport}}
+  {{on 'click' (fn @onViewReportClick @sbomScan)}}
+>
+  <AkIcon @variant='outlined' @iconName='description' />
+</AkIconButton>

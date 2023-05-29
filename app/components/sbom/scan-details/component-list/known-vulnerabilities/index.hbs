@@ -1,0 +1,7 @@
+<AkChip
+  data-test-sbomScanComponent-knownVulnerability
+  @variant='semi-filled'
+  @color={{if @sbomScanComponent.isVulnerable 'primary'}}
+  @label={{this.hasVulnerabilitiesLabel}}
+  @size='small'
+/>

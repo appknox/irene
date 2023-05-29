@@ -104,6 +104,7 @@ Router.map(function () {
 
       this.route('dashboard', function () {
         this.route('notifications');
+
         this.route(
           'app-monitoring',
           { path: '/store-monitoring' },
@@ -115,6 +116,18 @@ Router.map(function () {
             );
           }
         );
+
+        this.route('sbom', function () {
+          this.route('apps');
+
+          this.route('app-scans', {
+            path: 'apps/:sbom_app_id/scans',
+          });
+
+          this.route('scan-details', {
+            path: 'apps/:sbom_app_id/scans/:sbom_scan_id',
+          });
+        });
       });
     }
   );

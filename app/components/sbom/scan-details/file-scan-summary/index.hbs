@@ -1,0 +1,86 @@
+<AkStack @direction='column' data-test-fileScanSummary-container>
+  {{#each this.fileSummary as |fs|}}
+    <AkStack
+      class='py-2'
+      data-test-sbomScanDetails-fileSummaryGroup='{{fs.label}}'
+    >
+      <AkTypography
+        {{style width='180px'}}
+        @color='textSecondary'
+        data-test-sbomScanDetails-fileSummaryGroup-label
+      >
+        {{fs.label}}
+      </AkTypography>
+
+      {{#if fs.link}}
+        <AkLink
+          @typographyVariant='h6'
+          @color='primary'
+          @underline='always'
+          @route={{fs.linkArgs.route}}
+          @model={{fs.linkArgs.model}}
+          data-test-sbomScanDetails-fileSummaryGroup-link
+        >
+          {{fs.value}}
+        </AkLink>
+      {{else}}
+        <AkTypography
+          @variant='h6'
+          data-test-sbomScanDetails-fileSummaryGroup-value
+        >
+          {{fs.value}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+
+    {{#unless fs.hideDivider}}
+      <AkDivider />
+    {{/unless}}
+  {{/each}}
+
+  {{#if this.scanStatusCompleted}}
+    <AkTypography class='mt-2' @variant='h5'>
+      {{t 'sbomModule.sbomSummary'}}
+    </AkTypography>
+
+    {{#each this.scanSummary as |ss|}}
+      <AkStack
+        class='py-2'
+        data-test-sbomScanDetails-scanSummaryGroup='{{ss.label}}'
+      >
+        <AkTypography
+          {{style width='180px'}}
+          @color='textSecondary'
+          data-test-sbomScanDetails-scanSummaryGroup-label
+        >
+          {{ss.label}}
+        </AkTypography>
+
+        <AkStack
+          {{style gap='0.5em 2.5em'}}
+          @alignItems='center'
+          @flexWrap='wrap'
+        >
+          {{#if ss.component}}
+            {{#let (component ss.component) as |Component|}}
+              <Component @sbomScan={{@sbomScan}} />
+            {{/let}}
+          {{else}}
+            {{#each ss.value as |val|}}
+              <AkTypography
+                @variant='h6'
+                data-test-sbomScanDetails-scanSummaryGroup-value='{{val}}'
+              >
+                {{val}}
+              </AkTypography>
+            {{/each}}
+          {{/if}}
+        </AkStack>
+      </AkStack>
+
+      {{#unless ss.isLast}}
+        <AkDivider />
+      {{/unless}}
+    {{/each}}
+  {{/if}}
+</AkStack>

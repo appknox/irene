@@ -1,0 +1,18 @@
+{{page-title 'App Scans'}}
+
+<AkBreadcrumbs::Container @id='app-scans-breadcrumb' class='px-3 pt-2 pb-3'>
+  <AkBreadcrumbs::Item
+    @route='authenticated.dashboard.sbom.apps'
+    @linkTitle={{t 'SBOM'}}
+  />
+
+  <AkBreadcrumbs::Item
+    @route='authenticated.dashboard.sbom.app-scans'
+    @linkTitle={{t 'sbomModule.pastSbomAnalyses'}}
+  />
+</AkBreadcrumbs::Container>
+
+<Sbom::AppScan
+  @sbomApp={{@model.sbomApp}}
+  @queryParams={{@model.queryParams}}
+/>
