@@ -101,8 +101,9 @@ export default class SbomScanDetailsComponentDetailsVulnerabilitiesComponent ext
   @action
   handleItemPerPageChange({ limit }: PaginationProviderActionsArgs) {
     this.limit = limit;
+    this.offset = 0;
 
-    this.fetchSbomComponentVulnerabilities.perform(limit, 0);
+    this.fetchSbomComponentVulnerabilities.perform(limit, this.offset);
   }
 
   fetchSbomComponentVulnerabilities = task(
