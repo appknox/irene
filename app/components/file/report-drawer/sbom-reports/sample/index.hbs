@@ -1,0 +1,85 @@
+{{! @glint-nocheck: perform }}
+<AkStack @width='full' data-test-fileReportDrawer-sbomReports-sampleReports>
+  <AkStack
+    @direction='column'
+    @spacing='1'
+    @width='full'
+    local-class='sample-report-description'
+    class='m-3 p-3'
+  >
+    {{#if this.hasContactedSupport}}
+      <AkSvg::ThumbsUpIcon data-test-sbomReports-contactSuccessIllustration />
+
+      <AkTypography
+        {{style width='90%'}}
+        data-test-sbomReports-contactSuccessSupportText1
+      >
+        {{t 'fileReport.sbomSampleContactSuccessMsg'}}
+      </AkTypography>
+
+    {{else}}
+      <AkSvg::GenerateReport data-test-sbomReports-contactSupportIllustration />
+
+      <AkTypography data-test-sbomReports-sbomSampleReportText1>
+        {{t 'fileReport.sbomSampleReportText1'}}
+      </AkTypography>
+
+      <AkStack @alignItems='center' @spacing='1'>
+        <AkButton
+          @variant='text'
+          @underline='always'
+          @typographyFontWeight='bold'
+          @color='primary'
+          {{style minWidth='unset'}}
+          {{on 'click' (perform this.contactSupport)}}
+          data-test-sbomReports-contactUsButton
+        >
+          {{t 'clickHere'}}
+        </AkButton>
+
+        <AkTypography
+          @fontWeight='bold'
+          {{style marginBottom='5px'}}
+          data-test-sbomReports-sbomSampleReportText2
+        >
+          {{t 'fileReport.sbomSampleReportText2'}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+</AkStack>
+
+{{#each this.sampleReportList as |item|}}
+  <AkList::Item data-test-sampleReportItem class='px-3' as |li|>
+    <li.leftIcon>
+      {{#let (component item.iconComponent) as |Icon|}}
+        <Icon data-test-sbomReportList-reportIcon />
+      {{/let}}
+    </li.leftIcon>
+
+    <AkStack @direction='column' @width='full' @spacing='0.5' class='pl-1'>
+      <AkTypography
+        data-test-sampleReportItem-reportPrimaryText
+        @variant='subtitle1'
+      >
+        {{item.primaryText}}
+      </AkTypography>
+
+      <AkTypography data-test-sampleReportItem-reportSecondaryText>
+        {{t 'fileReport.noPasswordRequired'}}
+      </AkTypography>
+    </AkStack>
+
+    <li.rightIcon>
+      <AkIconButton
+        disabled={{this.triggerSampleReportDownload.isRunning}}
+        {{on 'click' (perform this.triggerSampleReportDownload item.type)}}
+        data-test-sampleReportItem-reportDownloadBtn={{item.type}}
+      >
+        <AkIcon @variant='outlined' @iconName='file-download' />
+      </AkIconButton>
+    </li.rightIcon>
+  </AkList::Item>
+
+  <AkDivider />
+{{/each}}
