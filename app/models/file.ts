@@ -22,6 +22,7 @@ import TagModel from './tag';
 import FileReportModel from './file-report';
 import AnalysisModel from './analysis';
 import ProfileModel from './profile';
+import SbomFileModel from './sbom-file';
 
 const _getAnalysesCount = (
   analysis: AsyncHasMany<AnalysisModel>,
@@ -120,6 +121,9 @@ export default class FileModel extends ModelBaseMixin {
 
   @belongsTo('profile', { inverse: 'files' })
   declare profile: AsyncBelongsTo<ProfileModel>;
+
+  @belongsTo('sbom-file', { inverse: 'file' })
+  declare sbFile: AsyncBelongsTo<SbomFileModel>;
 
   analysesSorting = ['computedRisk:desc'];
 

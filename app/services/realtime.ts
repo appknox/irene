@@ -21,4 +21,5 @@ export default class RealtimeService extends Service {
   @tracked RegistrationRequestCounter = 0;
   @tracked namespace = '';
   @tracked ReportCounter = 0;
+  @tracked SbomReportCounter = 0;
 }

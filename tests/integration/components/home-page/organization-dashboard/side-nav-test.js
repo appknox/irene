@@ -22,6 +22,15 @@ class NotificationsStub extends Service {
   }
 }
 
+class ConfigurationStub extends Service {
+  frontendData = {};
+  themeData = {};
+  imageData = {};
+  serverData = {
+    enterprise: true,
+  };
+}
+
 class RealtimeStub extends Service {
   @tracked SubmissionCounter = 0;
 }
@@ -207,6 +216,18 @@ module(
           .dom('[data-test-submission-status-reason]', details[i])
           .hasText(s.reason);
       });
+    });
+
+    test('it should hide sbom link in side menu if org is an enterprise', async function (assert) {
+      this.owner.register('service:configuration', ConfigurationStub);
+
+      this.server.get('/submissions', () => {
+        return [];
+      });
+
+      await render(hbs`<HomePage::OrganizationDashboard::SideNav />`);
+
+      assert.dom(`[data-test-side-menu='t:SBOM:()']`).doesNotExist();
     });
 
     test('test submission-list triggers based on realtime submission counter', async function (assert) {

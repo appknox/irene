@@ -19,6 +19,17 @@ module('Integration | Component | file/report-btn', function (hooks) {
     this.setProperties({
       file: store.push(fileNormalized),
     });
+
+    this.server.get('/v2/files/:id', (schema, req) =>
+      schema.files.find(req.params.id)?.toJSON()
+    );
+
+    this.server.get('/v2/files/:id/sb_file', () => {
+      return {
+        id: null,
+        file: 1,
+      };
+    });
   });
 
   test('it renders', async function (assert) {

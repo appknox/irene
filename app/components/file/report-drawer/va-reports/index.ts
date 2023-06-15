@@ -40,6 +40,7 @@ export interface FileReportDetails {
 export interface FileReportDrawerVaReportsSignature {
   Args: {
     file: FileModel;
+    closeDrawer: () => void;
   };
 }
 

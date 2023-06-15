@@ -23,11 +23,19 @@ class NotificationsStub extends Service {
   }
 }
 
+class ConfigurationStub extends Service {
+  serverData = { enterprise: true };
+}
+
 // File report group list
 const fileReportGroups = [
   {
     id: 'va-reports',
     title: 't:fileReport.vaReports:()',
+  },
+  {
+    id: 'sbom-reports',
+    title: 't:fileReport.sbomReports:()',
   },
 ];
 
@@ -46,17 +54,27 @@ module('Integration | Component | file/report-drawer', function (hooks) {
     const fileNormalized = store.normalize('file', file.toJSON());
 
     this.setProperties({
+      onClose: function () {},
       file: store.push(fileNormalized),
     });
 
     this.server.get('/v2/files/:fileId/reports', () => {
       return { count: 0, next: null, previous: null, result: [] };
     });
+
+    this.server.get('/v2/files/:id', (schema, req) =>
+      schema.files.find(req.params.id)?.toJSON()
+    );
+
+    this.server.get('/v2/files/:id/sb_file', () => {
+      return {
+        id: null,
+        file: 1,
+      };
+    });
   });
 
   test('it renders report drawer', async function (assert) {
-    this.set('onClose', function () {});
-
     await render(
       hbs`<File::ReportDrawer @file={{this.file}} @open={{true}} @onClose={{this.onClose}} />`
     );
@@ -93,8 +111,6 @@ module('Integration | Component | file/report-drawer', function (hooks) {
   });
 
   test('it opens va reports accordion by default ', async function (assert) {
-    this.set('onClose', function () {});
-
     await render(
       hbs`<File::ReportDrawer @file={{this.file}} @open={{true}} @onClose={{this.onClose}} />`
     );
@@ -107,5 +123,25 @@ module('Integration | Component | file/report-drawer', function (hooks) {
       )
       .exists()
       .hasClass(/expanded/);
+  });
+
+  test('it hides sbom reports if org is an enterprise', async function (assert) {
+    this.owner.register('service:configuration', ConfigurationStub);
+
+    await render(
+      hbs`<File::ReportDrawer @file={{this.file}} @open={{true}} @onClose={{this.onClose}} />`
+    );
+
+    const reportGroups = findAll('[data-test-fileReportDrawer-group]');
+
+    assert.strictEqual(
+      reportGroups.length,
+      1,
+      'renders the correct number of file report groups'
+    );
+
+    assert
+      .dom(`[data-test-fileReportDrawer-groupItem="sbom-reports"]`)
+      .doesNotExist();
   });
 });
