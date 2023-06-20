@@ -1,4 +1,3 @@
-{{!@glint-nocheck}}
 <AkDrawer
   @open={{@open}}
   @onClose={{@onClose}}
@@ -33,21 +32,22 @@
       {{t 'fileReport.reportDrawerHeaderText'}}
     </AkTypography>
 
-    {{#each this.reportGroupList as |group|}}
-      <AkAccordion
-        @id={{group.id}}
-        @isExpanded={{group.expanded}}
-        @summaryText={{group.title}}
-        @onChange={{this.onReportGroupClick}}
-        data-test-fileReportDrawer-group
-        data-test-fileReportDrawer-groupItem='{{group.id}}'
-      >
-        <:content>
-          {{#let (component group.contentComponent) as |GroupContent|}}
-            <GroupContent @file={{@file}} />
-          {{/let}}
-        </:content>
-      </AkAccordion>
-    {{/each}}
+    <AkAccordion::Group @defaultOpen={{array 'va-reports'}} as |actx|>
+      {{#each this.reportGroupList as |group|}}
+        <AkAccordion
+          @id={{group.id}}
+          @accordionCtx={{actx}}
+          @summaryText={{group.title}}
+          data-test-fileReportDrawer-group
+          data-test-fileReportDrawer-groupItem='{{group.id}}'
+        >
+          <:content>
+            {{#let (component group.contentComponent) as |GroupContent|}}
+              <GroupContent @file={{@file}} />
+            {{/let}}
+          </:content>
+        </AkAccordion>
+      {{/each}}
+    </AkAccordion::Group>
   </div>
 </AkDrawer>

@@ -69,15 +69,19 @@
 
   {{#unless @disabled}}
     <div
-      local-class='details {{if this.expandAccordion "expanded"}}'
+      local-class='details {{if this.expandAccordion "expanded" "collapsed"}}'
       {{did-insert this.contentInserted}}
       data-test-ak-accordion-content-wrapper
     >
-      {{#if (has-block 'content')}}
-        {{yield to='content'}}
-      {{else}}
-        {{yield}}
-      {{/if}}
+      <div class='w-full'>
+        {{#if this.displayContent}}
+          {{#if (has-block 'content')}}
+            {{yield to='content'}}
+          {{else}}
+            {{yield}}
+          {{/if}}
+        {{/if}}
+      </div>
     </div>
   {{/unless}}
 </AkStack>

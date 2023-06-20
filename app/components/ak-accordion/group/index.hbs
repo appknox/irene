@@ -1,0 +1,10 @@
+<div data-test-ak-accordion-group ...attributes>
+  {{yield
+    (hash
+      openMultiple=@openMultiple
+      currentOpenId=this.currentOpenId
+      handleChange=this.handleChange
+      accordionOpenStates=this.accordionOpenStates
+    )
+  }}
+</div>

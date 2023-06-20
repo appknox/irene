@@ -248,6 +248,7 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
         query
       )) as FileReportQueryResponse;
     } catch (err) {
+      this.notify.error(parseError(err));
       this.reports = null;
     }
   });
