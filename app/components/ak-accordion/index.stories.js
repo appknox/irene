@@ -10,23 +10,23 @@ export const actionsData = {};
 
 const accordionList = [
   {
-    isExpanded: false,
+    id: 'accordion-secondary',
     summaryText: 'Secondary Variant - Summary Text',
     accordionVariant: 'secondary',
   },
   {
-    isExpanded: false,
+    id: 'accordion-primary',
     summaryText: 'Primary Variant - Summary Text',
     accordionVariant: 'primary',
   },
   {
-    isExpanded: true,
+    id: 'accordion-disabled',
     disabled: true,
     summaryText: 'Disabled Variant - Summary Text',
     accordionVariant: 'secondary',
   },
   {
-    isExpanded: true,
+    id: 'accordion-open',
     summaryText: 'Default Open - Summary Text',
     accordionVariant: 'secondary',
   },
@@ -39,7 +39,8 @@ const Template = (args) => ({
         <AkTypography @variant="subtitle1" @color="inherit">Experiment with this (Click to expand)</AkTypography>
         
         <AkAccordion
-            @isExpanded={{this.isExpanded}}
+            @isExpanded={{this.accordionExpanded}}
+            @onChange={{action this.handleChange}}
             @summaryText={{this.summaryText}}
             @summaryIconName={{this.summaryIconName}}
             @disabled={{this.disabled}}
@@ -58,20 +59,23 @@ const Template = (args) => ({
       <AkStack @direction="column" @width="full">
         <AkTypography @variant="subtitle1" @color="inherit" @gutterBottom={{true}}>Accordion Presets</AkTypography>
         
-        {{#each this.accordionList as |accordion|}}
-          <AkAccordion
-            @isExpanded={{accordion.isExpanded}}
-            @summaryText={{accordion.summaryText}}
-            @disabled={{accordion.disabled}}
-            @variant={{accordion.accordionVariant}}
-          >
-            <:content>
-              <div class="p-3 m-2" style="color: #ffffff; background-color: #424651;" >
-                <AkTypography @variant="subtitle1" @color="inherit">This is an accordion content</AkTypography>
-              </div>
-            </:content>
-          </AkAccordion>
-        {{/each}}
+        <AkAccordion::Group @openMultiple={{true}} @defaultOpen={{array "accordion-open"}} class="w-full" as |actx|>
+          {{#each this.accordionList as |accordion|}}
+            <AkAccordion
+              @id={{accordion.id}}
+              @accordionCtx={{actx}}
+              @summaryText={{accordion.summaryText}}
+              @disabled={{accordion.disabled}}
+              @variant={{accordion.accordionVariant}}
+            >
+              <:content>
+                <div class="p-3 m-2" style="color: #ffffff; background-color: #424651;" >
+                  <AkTypography @variant="subtitle1" @color="inherit">This is an accordion content</AkTypography>
+                </div>
+              </:content>
+            </AkAccordion>
+          {{/each}}
+        </AkAccordion::Group>
       </AkStack>
     </AkStack>
   `,
@@ -81,18 +85,23 @@ const Template = (args) => ({
 export const Default = Template.bind({});
 
 Default.args = {
-  isExpanded: false,
   disabled: false,
   summaryText: 'Experiment Summary Text',
   summaryIconName: 'account-box',
   accordionVariant: 'secondary',
+  accordionExpanded: false,
+  handleChange() {
+    this.set('accordionExpanded', !this.accordionExpanded);
+  },
 };
 
-const WithIconTemplate = () => ({
+const WithIconTemplate = (args) => ({
   template: hbs`
     <AkStack @direction="column" @spacing="1.5" @width="full" class="mt-3">
       <AkAccordion
-        @isExpanded={{false}}
+        @id="withIcon1"
+        @isExpanded={{this.withIcon1}}
+        @onChange={{action this.handleChange}}
         @summaryText="Secondary - Summary text with Icon"
         @variant="secondary"
         @summaryIconName="people"
@@ -105,7 +114,9 @@ const WithIconTemplate = () => ({
       </AkAccordion>
 
       <AkAccordion
-        @isExpanded={{false}}
+        @id="withIcon2"
+        @isExpanded={{this.withIcon2}}
+        @onChange={{action this.handleChange}}
         @summaryText="Primary - Summary text with Icon"
         @variant="primary"
         @summaryIconName="people"
@@ -118,7 +129,9 @@ const WithIconTemplate = () => ({
       </AkAccordion>
 
       <AkAccordion
-        @isExpanded={{false}}
+        @id="withIcon3"
+        @isExpanded={{this.withIcon3}}
+        @onChange={{action this.handleChange}}
         @disabled={{true}}
         @summaryText="Disabled - Summary text with Icon"
         @variant="secondary"
@@ -132,19 +145,31 @@ const WithIconTemplate = () => ({
       </AkAccordion>
     </AkStack>
   `,
-  context: {},
+  context: {
+    ...args,
+    withIcon1: false,
+    withIcon2: false,
+    withIcon3: false,
+    handleChange(id) {
+      this.set(id, !this[id]);
+    },
+  },
 });
 
 export const WithIcon = WithIconTemplate.bind({});
 
-const CustomTemplate = () => ({
+const CustomTemplate = (args) => ({
   template: hbs`
     <AkStack @direction="column" @spacing="3" @width="full" class="mt-3">
 
       <AkStack @direction="column" @width="full">
         <AkTypography @variant="subtitle1" @gutterBottom={{true}} @color="inherit">Customized Summary UI</AkTypography>
         
-        <AkAccordion @isExpanded={{false}}>
+        <AkAccordion  
+          @id="withIcon1"
+          @isExpanded={{this.withIcon1}}
+          @onChange={{action this.handleChange}}
+        >
           <:summary as |acs|>
             <AkStack @justifyContent="space-between" @alignItems="center" @width="full" class="p-2" {{style border="1px solid #2db421" cursor="pointer"}} {{on 'click' acs.onSummaryClick}}>
               <AkTypography @color="success">
@@ -172,7 +197,13 @@ const CustomTemplate = () => ({
       <AkStack @direction="column" @width="full">
         <AkTypography @variant="subtitle1" @gutterBottom={{true}} @color="inherit">Customized Summary Icon Only</AkTypography>
         
-        <AkAccordion @isExpanded={{false}} @variant="primary" @summaryText="Secondary Variant with custom icon.">
+        <AkAccordion    
+          @id="withIcon2"
+          @isExpanded={{this.withIcon2}}
+          @onChange={{action this.handleChange}}
+          @variant="primary" 
+          @summaryText="Secondary Variant with custom icon."
+         >
           <:summaryIcon>
             <AkIcon
               @iconName='people'
@@ -193,7 +224,13 @@ const CustomTemplate = () => ({
       <AkStack @direction="column" @width="full">
         <AkTypography @variant="subtitle1" @gutterBottom={{true}} @color="inherit">Customized Summary Text Only</AkTypography>
         
-        <AkAccordion @isExpanded={{false}} @variant="primary" @summaryIconName="people">
+        <AkAccordion    
+          @id="withIcon3"
+          @isExpanded={{this.withIcon3}}
+          @onChange={{action this.handleChange}}
+          @variant="primary" 
+          @summaryIconName="people"
+        >
           <:summaryText>
             <AkTypography @variant="subtitle1" @color="success">
               Custom Summary Text Only
@@ -207,11 +244,133 @@ const CustomTemplate = () => ({
           </:content>
         </AkAccordion>
       </AkStack>
-
-
     </AkStack>
   `,
-  context: {},
+  context: {
+    ...args,
+    withIcon1: false,
+    withIcon2: false,
+    withIcon3: false,
+    handleChange(id) {
+      this.set(id, !this[id]);
+    },
+  },
 });
 
 export const Custom = CustomTemplate.bind({});
+
+const GroupsTemplate = (args) => ({
+  template: hbs`
+    <AkStack @direction="column" @spacing="3" @width="full" class="mt-3">
+      <AkStack @direction="column" @width="full">
+        <AkTypography @variant="h4" @color="inherit" @gutterBottom={{true}}>Group with multple expanded</AkTypography>
+        
+        <AkAccordion::Group @openMultiple={{true}} @defaultOpen={{array "accordion-open"}} class="w-full" as |actx|>
+          {{#each this.accordionList as |accordion|}}
+            <AkAccordion
+              @id={{accordion.id}}
+              @accordionCtx={{actx}}
+              @summaryText={{accordion.summaryText}}
+              @disabled={{accordion.disabled}}
+              @variant={{accordion.accordionVariant}}
+            >
+              <:content>
+                <div class="p-3 m-2" style="color: #ffffff; background-color: #424651;" >
+                  <AkTypography @variant="subtitle1" @color="inherit">This is an accordion content</AkTypography>
+                </div>
+              </:content>
+            </AkAccordion>
+          {{/each}}
+        </AkAccordion::Group>
+      </AkStack>
+
+      <AkStack @direction="column" @width="full">
+        <AkTypography @variant="h4" @color="inherit" @gutterBottom={{true}}>Group with single expanded at a time</AkTypography>
+        
+        <AkAccordion::Group @defaultOpen={{array "accordion-secondary"}} class="w-full" as |actx|>
+          {{#each this.accordionList as |accordion|}}
+            <AkAccordion
+              @id={{accordion.id}}
+              @accordionCtx={{actx}}
+              @summaryText={{accordion.summaryText}}
+              @disabled={{accordion.disabled}}
+              @variant={{accordion.accordionVariant}}
+            >
+              <:content>
+                <div class="p-3 m-2" style="color: #ffffff; background-color: #424651;" >
+                  <AkTypography @variant="subtitle1" @color="inherit">This is an accordion content</AkTypography>
+                </div>
+              </:content>
+            </AkAccordion>
+          {{/each}}
+        </AkAccordion::Group>
+      </AkStack>
+    </AkStack>
+  `,
+  context: { ...args, accordionList: accordionList.slice(0, 2) },
+});
+
+export const Groups = GroupsTemplate.bind({});
+
+const MountAndUnmountContentTemplate = (args) => ({
+  template: hbs`
+    <AkStack @direction="column" @spacing="3" @width="full" class="mt-3">
+      <AkStack @direction="column" @spacing="1.5" @width="full">
+        <AkTypography @variant="subtitle1" @color="inherit">Content is mounted only on first expansion</AkTypography>
+        
+        <AkAccordion
+            @id="accordion1"
+            @isExpanded={{this.accordion1}}
+            @onChange={{action this.handleChange}}
+            @summaryText="Mounts content on expand"
+            @summaryIconName={{this.summaryIconName}}
+            @mountContentOnExpand={{this.mountContentOnExpand}}
+            @disabled={{this.disabled}}
+            @variant={{this.accordionVariant}}
+        >
+            <:content>
+              <div class="p-3 m-2" style="color: #ffffff; background-color: #424651;" >
+                <AkTypography @variant="subtitle1" @color="inherit">This is an accordion content that mounts only after first expansion</AkTypography>
+              </div>
+            </:content>
+        </AkAccordion>
+      </AkStack>
+
+      <AkStack @direction="column" @spacing="1.5" @width="full">
+        <AkTypography @variant="subtitle1" @color="inherit">Content is unmounted on collapse</AkTypography>
+        
+        <AkAccordion
+            @id="accordion2"
+            @isExpanded={{this.accordion2}}
+            @onChange={{action this.handleChange}}
+            @summaryText="Unmounts content on collapse"
+            @summaryIconName={{this.summaryIconName}}
+            @unmountContentOnCollapse={{this.unmountContentOnCollapse}}
+            @disabled={{this.disabled}}
+            @variant="primary"
+        >
+            <:content>
+              <div class="p-3 m-2" style="color: #ffffff; background-color: #424651;" >
+                <AkTypography @variant="subtitle1" @color="inherit">This is an accordion content that unmounts on collapse.</AkTypography>
+              </div>
+            </:content>
+        </AkAccordion>
+      </AkStack>
+    </AkStack>
+  `,
+  context: {
+    ...args,
+    disabled: false,
+    summaryIconName: 'account-box',
+    accordionVariant: 'secondary',
+    mountContentOnExpand: true,
+    unmountContentOnCollapse: true,
+    accordion1: false,
+    accordion2: false,
+    handleChange(id) {
+      this.set(id, !this[id]);
+    },
+  },
+});
+
+export const MountAndUnmountContent = MountAndUnmountContentTemplate.bind({});

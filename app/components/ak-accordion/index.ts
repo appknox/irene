@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { guidFor } from '@ember/object/internals';
 
 import { AkIconColorVariant } from 'irene/components/ak-icon';
 import {
@@ -9,12 +8,13 @@ import {
   TypographyVariant,
   TypographyFontWeight,
 } from '../ak-typography';
+import { AccordionCtxProps } from './group';
 
 export type AkAccordionVariant = 'primary' | 'secondary';
 export type AkAccordionTypographyVariant = TypographyVariant;
 export type AkAccordionFontWeightVariant = TypographyFontWeight;
 
-interface CustomsummaryAPI {
+export interface CustomsummaryAPI {
   onSummaryClick: () => void;
   disabled: boolean;
   isExpanded: boolean;
@@ -23,7 +23,8 @@ interface CustomsummaryAPI {
 export interface AkAccordionSignature {
   Element: HTMLElement;
   Args: {
-    id?: string;
+    id: string;
+    accordionCtx?: AccordionCtxProps;
     disabled?: boolean;
     isExpanded?: boolean;
     summaryText?: string;
@@ -32,7 +33,9 @@ export interface AkAccordionSignature {
     summaryIconName?: string;
     variant?: AkAccordionVariant;
     customSumaryClass?: string;
-    onChange?: (id: string, isExpanded: boolean) => void;
+    mountContentOnExpand?: boolean;
+    unmountContentOnCollapse?: boolean;
+    onChange?: (id: string, isExpanded?: boolean) => void;
   };
   Blocks: {
     default: [];
@@ -45,7 +48,7 @@ export interface AkAccordionSignature {
 
 export default class AkAccordionComponent extends Component<AkAccordionSignature> {
   @tracked content: HTMLDivElement | null = null;
-  @tracked isExpanded = false;
+  @tracked hasRenderedContent = false;
 
   summaryColorVariantMap = {
     primary: 'primary',
@@ -54,11 +57,22 @@ export default class AkAccordionComponent extends Component<AkAccordionSignature
 
   constructor(owner: unknown, args: AkAccordionSignature['Args']) {
     super(owner, args);
-    this.isExpanded = !!this.args.isExpanded;
+
+    // Sets content rendered state to true if accordion is expanded by default and mountContentOnExpand is true
+    if (this.isExpanded && this.args.mountContentOnExpand) {
+      this.hasRenderedContent = true;
+    }
+
+    // For standalone accordions, the expanded state must be provided
+    if (!this.accordionCtx && this.isExpanded === undefined) {
+      throw new Error(
+        'You must provide an open state for standalone accordions.'
+      );
+    }
   }
 
   get id() {
-    return this.args.id || `ak-accordion-${guidFor(this)}`;
+    return this.args.id;
   }
 
   get variant() {
@@ -85,8 +99,54 @@ export default class AkAccordionComponent extends Component<AkAccordionSignature
     return this.summaryColorVariantMap[this.variant] as AkIconColorVariant;
   }
 
+  get accordionCtx() {
+    return this.args.accordionCtx;
+  }
+
+  get isExpanded() {
+    // For accordion groups where a multiple accordions can be open
+    if (this.accordionCtx?.openMultiple) {
+      return !!this.accordionCtx.accordionOpenStates[this.id];
+    }
+
+    // For accordion groups where just a single accordion can be open at a time
+    if (this.accordionCtx) {
+      return this.accordionCtx.currentOpenId === this.id;
+    }
+
+    // For standalone accordions
+    return this.args.isExpanded;
+  }
+
+  get mountContentOnExpand() {
+    return this.args.mountContentOnExpand;
+  }
+
+  get unmountContentOnCollapse() {
+    return this.args.unmountContentOnCollapse;
+  }
+
   get expandAccordion() {
     return this.isExpanded && !this.isDisabled;
+  }
+
+  get displayContent() {
+    // Hides content always after collapse even when mountContentOnExpand is true
+    if (this.unmountContentOnCollapse && !this.isExpanded) {
+      return false;
+    }
+
+    // Displays content always after first mount when mountContentOnExpand is true
+    if (this.mountContentOnExpand && this.hasRenderedContent) {
+      return true;
+    }
+
+    // Necessary to pevent content from displaying initially when accordion is collaped when mountContentOnExpand is true
+    if (this.mountContentOnExpand) {
+      return this.isExpanded;
+    }
+
+    return true;
   }
 
   @action
@@ -95,17 +155,32 @@ export default class AkAccordionComponent extends Component<AkAccordionSignature
       return;
     }
 
-    this.toggleContentExpanded();
+    // For grouped accordions
+    this.accordionCtx?.handleChange(this.id);
 
     if (this.args.onChange) {
-      this.args.onChange(this.id, this.isExpanded);
+      this.args.onChange(this.id);
+    }
+
+    this.resolveRenderedContentState();
+    this.toggleContentExpanded();
+  }
+
+  @action
+  resolveRenderedContentState() {
+    // Renders content only once when content is mounted
+    if (this.mountContentOnExpand && !this.hasRenderedContent) {
+      this.hasRenderedContent = true;
+    }
+
+    // Unmounts content on collape if unmountContentOnCollapse is true
+    if (this.unmountContentOnCollapse && !this.isExpanded) {
+      this.hasRenderedContent = false;
     }
   }
 
   @action
   toggleContentExpanded() {
-    this.isExpanded = !this.isExpanded;
-
     if (this.content && !this.isExpanded) {
       this.content.style.maxHeight = '0px';
 
@@ -140,13 +215,11 @@ export default class AkAccordionComponent extends Component<AkAccordionSignature
         }
       });
 
-      // Observes the sizes of all children and updates the height of the content element accordingly
-      for (let i = 0; i < content.children.length; i++) {
-        const element = content.children[i];
+      // Observes the height first child and updates the height of the content element accordingly
+      const element = content.children[0];
 
-        if (element) {
-          observer.observe(element);
-        }
+      if (element) {
+        observer.observe(element);
       }
     }
   }
