@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { guidFor } from '@ember/object/internals';
 
 import { AkIconColorVariant } from 'irene/components/ak-icon';
 import {
@@ -23,7 +24,7 @@ export interface CustomsummaryAPI {
 export interface AkAccordionSignature {
   Element: HTMLElement;
   Args: {
-    id: string;
+    id?: string;
     accordionCtx?: AccordionCtxProps;
     disabled?: boolean;
     isExpanded?: boolean;
@@ -72,7 +73,7 @@ export default class AkAccordionComponent extends Component<AkAccordionSignature
   }
 
   get id() {
-    return this.args.id;
+    return this.args.id || `ak-accordion-${guidFor(this)}`;
   }
 
   get variant() {
@@ -163,7 +164,6 @@ export default class AkAccordionComponent extends Component<AkAccordionSignature
     }
 
     this.resolveRenderedContentState();
-    this.toggleContentExpanded();
   }
 
   @action
@@ -176,51 +176,6 @@ export default class AkAccordionComponent extends Component<AkAccordionSignature
     // Unmounts content on collape if unmountContentOnCollapse is true
     if (this.unmountContentOnCollapse && !this.isExpanded) {
       this.hasRenderedContent = false;
-    }
-  }
-
-  @action
-  toggleContentExpanded() {
-    if (this.content && !this.isExpanded) {
-      this.content.style.maxHeight = '0px';
-
-      return;
-    }
-
-    this.setContentElementHeight();
-  }
-
-  @action
-  contentInserted(element: HTMLDivElement) {
-    this.content = element;
-
-    if (!this.isExpanded) {
-      this.content.style.maxHeight = '0px';
-    } else {
-      this.setContentElementHeight();
-    }
-  }
-
-  @action
-  setContentElementHeight() {
-    const content = this.content;
-
-    if (content) {
-      // Necessary for components with dynamic heights
-      // For instance tables which load data gradually or whose limts can be changed.
-      // This is also to ensure a smooth transition when closing and opening the accordion content
-      const observer = new ResizeObserver(() => {
-        if (this.isExpanded) {
-          content.style.maxHeight = `${content.scrollHeight}px`;
-        }
-      });
-
-      // Observes the height first child and updates the height of the content element accordingly
-      const element = content.children[0];
-
-      if (element) {
-        observer.observe(element);
-      }
     }
   }
 }

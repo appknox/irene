@@ -8,8 +8,6 @@
   .details {
     height: auto;
     overflow: hidden;
-    will-change: max-height;
-    transition: max-height 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
     &.collapsed {
       max-height: 0px !important;
