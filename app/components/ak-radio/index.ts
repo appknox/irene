@@ -2,7 +2,25 @@ import Component from '@glimmer/component';
 import { guidFor } from '@ember/object/internals';
 import { action } from '@ember/object';
 
-export default class AkRadioComponent extends Component {
+interface AkRadioSignature {
+  Args: {
+    id?: string;
+    name?: string;
+    checked?: boolean;
+    disabled?: boolean;
+    readonly?: boolean;
+    value?: string | number;
+    radioCtx?: {
+      name: string;
+      value: string | number;
+      handleChange: (event: Event) => void;
+    };
+    onChange?: (event: Event, checked: boolean) => void;
+  };
+  Element: HTMLInputElement;
+}
+
+export default class AkRadioComponent extends Component<AkRadioSignature> {
   get id() {
     return this.args.id || `ak-radio-${guidFor(this)}`;
   }
@@ -17,7 +35,7 @@ export default class AkRadioComponent extends Component {
   }
 
   get checked() {
-    if (this.args.checked) {
+    if (!this.isEmpty(this.args.checked)) {
       return this.args.checked;
     }
 
@@ -31,7 +49,7 @@ export default class AkRadioComponent extends Component {
     return this.isEmpty(this.args.checked);
   }
 
-  isEmpty(value) {
+  isEmpty(value: unknown) {
     return (
       value === null ||
       value === undefined ||
@@ -39,7 +57,7 @@ export default class AkRadioComponent extends Component {
     );
   }
 
-  areEqualValues(a, b) {
+  areEqualValues(a: unknown, b: unknown) {
     if (typeof b === 'object' && b !== null) {
       return a === b;
     }
@@ -49,11 +67,17 @@ export default class AkRadioComponent extends Component {
   }
 
   @action
-  onChange(event) {
+  onChange(event: Event) {
     this.args.radioCtx?.handleChange(event);
 
     if (this.args.onChange) {
-      this.args.onChange(event, event.target.checked);
+      this.args.onChange(event, (event.target as HTMLInputElement).checked);
     }
+  }
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    AkRadio: typeof AkRadioComponent;
   }
 }

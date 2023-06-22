@@ -55,6 +55,29 @@ declare module '@glint/environment-ember-loose/registry' {
       };
     }>;
 
+    DatePicker: ComponentLike<{
+      Element: HTMLInputElement;
+      Args: {
+        value?: string | null;
+        onChange?: (event: Event, value: string) => void | null;
+        renderInPlace?: boolean;
+        minDate?: Date | null;
+        maxDate?: Date | null;
+        range?: boolean;
+        options?: boolean;
+        availableYearOffset?: number;
+        disabledDates?: boolean;
+        disableMonthPicker?: boolean;
+        disableYearPicker?: boolean;
+        horizontalPosition?: string;
+        verticalPosition?: string;
+        buttonClasses?: string;
+      };
+      Blocks: {
+        default: [api: [null | Date, null | Date | undefined]];
+      };
+    }>;
+
     t: HelperLike<{
       Args: {
         Positional: [string];
