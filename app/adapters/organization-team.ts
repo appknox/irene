@@ -42,6 +42,7 @@ export default class OrganizationTeamAdapter extends commondrf {
     memberId: string
   ) {
     const baseURL = this._buildURL(modelName, id);
+
     return [baseURL, 'members', memberId].join('/');
   }
 
