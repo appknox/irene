@@ -1,0 +1,88 @@
+<AkPaginationProvider
+  @results={{this.capturedApiList}}
+  @onItemPerPageChange={{this.handleItemPerPageChange}}
+  @totalItems={{this.totalCapturedApiCount}}
+  @nextAction={{this.handlePrevNextAction}}
+  @prevAction={{this.handlePrevNextAction}}
+  @itemPerPageOptions={{array 5 10 20}}
+  @defaultLimit={{this.limit}}
+  @offset={{this.offset}}
+  as |pgc|
+>
+  {{#if this.fetchCapturedApis.isRunning}}
+    <AkStack
+      local-class='loading-container'
+      @alignItems='center'
+      @justifyContent='center'
+    >
+      <AkStack @alignItems='center' @justifyContent='center' @spacing='1.5'>
+        <AkLoader @size={{16}} />
+        <AkTypography @color='textSecondary'>
+          {{t 'loading'}}...
+        </AkTypography>
+      </AkStack>
+    </AkStack>
+  {{else if this.hasNoCapturedApi}}
+    <AkStack @spacing='1.5'>
+      <AkIcon @iconName='info' />
+
+      <div>
+        <AkTypography
+          @variant='h6'
+          @gutterBottom={{true}}
+          data-test-capturedApi-emptyTitle
+        >
+          {{t 'capturedApiEmptyTitle'}}
+        </AkTypography>
+
+        <AkTypography data-test-capturedApi-emptyDescription>
+          {{t 'capturedApiEmptyDesc' htmlSafe=true}}
+        </AkTypography>
+      </div>
+    </AkStack>
+  {{else}}
+    <div class='mb-1' local-class='bordered-box'>
+      <AkStack @alignItems='center' @justifyContent='space-between'>
+        <AkTypography data-test-capturedApi-title @variant='subtitle1'>
+          {{t 'capturedApiTitle'}}
+        </AkTypography>
+
+        {{#if this.totalCapturedApiCount}}
+          <AkTypography
+            data-test-capturedApi-apiCount
+            @variant='body2'
+            @color='textSecondary'
+          >
+            {{t 'selected'}}
+            ({{this.selectedCount}}/{{this.totalCapturedApiCount}})
+          </AkTypography>
+        {{/if}}
+      </AkStack>
+
+      <AkStack class='mt-2' @direction='column' @spacing='1.5'>
+        {{#each pgc.currentPageResults as |ca|}}
+          <FileDetails::ScanActions::ApiScan::CapturedApis::Overview
+            @capturedApi={{ca}}
+            @toggleApi={{perform this.toggleApi ca}}
+          />
+        {{/each}}
+      </AkStack>
+    </div>
+
+    <AkPagination
+      @variant='compact'
+      @disableNext={{pgc.disableNext}}
+      @nextAction={{pgc.nextAction}}
+      @disablePrev={{pgc.disablePrev}}
+      @prevAction={{pgc.prevAction}}
+      @endItemIdx={{pgc.endItemIdx}}
+      @startItemIdx={{pgc.startItemIdx}}
+      @itemPerPageOptions={{pgc.itemPerPageOptions}}
+      @onItemPerPageChange={{pgc.onItemPerPageChange}}
+      @selectedOption={{pgc.selectedOption}}
+      @tableItemLabel={{t 'apis'}}
+      @perPageTranslation={{t 'recordPerPage'}}
+      @totalItems={{pgc.totalItems}}
+    />
+  {{/if}}
+</AkPaginationProvider>

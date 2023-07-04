@@ -99,11 +99,11 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
         assert.dom('[data-test-sbomScanDetails-viewReport-btn]').doesNotExist();
       }
 
-      // By default the "showMoreOrLess" button has a text of "t:sbomModule.showMore:()"
+      // By default the "showMoreOrLess" button has a text of "t:showMore:()"
       assert
         .dom('[data-test-sbomScanDetails-showMoreOrLess-btn]')
         .exists()
-        .containsText('t:sbomModule.showMore:()');
+        .containsText('t:showMore:()');
 
       if (status === SbomScanStatus.COMPLETED) {
         assert
@@ -164,14 +164,14 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
 
     assert
       .dom('[data-test-sbomScanDetails-showMoreOrLess-btn]')
-      .containsText('t:sbomModule.showMore:()');
+      .containsText('t:showMore:()');
 
     // Show file and scan summary
     await click('[data-test-sbomScanDetails-showMoreOrLess-btn]');
 
     assert
       .dom('[data-test-sbomScanDetails-showMoreOrLess-btn]')
-      .containsText('t:sbomModule.showLess:()');
+      .containsText('t:showLess:()');
 
     assert.dom('[data-test-fileScanSummary-container]').exists();
 
@@ -285,7 +285,7 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
 
     assert
       .dom('[data-test-sbomScanDetails-showMoreOrLess-btn]')
-      .containsText('t:sbomModule.showMore:()');
+      .containsText('t:showMore:()');
 
     assert.dom('[data-test-fileScanSummary-container]').doesNotExist();
   });

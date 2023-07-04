@@ -1,27 +1,45 @@
-<div
-  class='column severity-tags tag
-    {{this.analysisRiskStatus.cssclass}}
-    {{@columnSize}}'
-  data-test-analysis-risk-tag
-  data-test-analysis-risk-tag-label='{{this.analysisRiskStatus.label}}'
->
-  <i
-    class='fa risk-icons {{this.analysisRiskStatus.icon}}'
-    data-test-risk-tag-icon
-  ></i>
-  <div class='uppercase-text padding-l-h' data-test-risk-tag-label>
-    {{this.analysisRiskStatus.label}}
-  </div>
-  {{#if this.isNonPassedRiskOverridden}}
-    <img
-      src='/images/user-edited.svg'
-      class='user-edited-icon'
-      alt='edit icon'
-      data-test-risk-tag-edit-icon
-    />
-    <AttachTooltip @placement='top'>
-      {{t 'overriddenRisk'}},&nbsp;{{t 'orginalRisk'}}:
-      {{t (risk-text @analysis.risk)}}
-    </AttachTooltip>
-  {{/if}}
-</div>
+{{#if this.riskLabelAndClassExists}}
+  <AkStack
+    ...attributes
+    local-class='risk-tag {{@labelClass}}'
+    data-test-analysisRiskTag-root='{{@label}}'
+  >
+    <AkTypography
+      local-class='risk-tag-label'
+      @tag='span'
+      data-test-analysisRiskTag-label
+    >
+      {{@label}}
+    </AkTypography>
+  </AkStack>
+{{else}}
+  <AkStack
+    local-class='risk-tag {{this.analysisRiskStatus.cssclass}}'
+    @spacing='1'
+    data-test-analysisRiskTag-root='{{this.analysisRiskStatus.label}}'
+  >
+    <AkTypography
+      local-class='risk-tag-label'
+      @tag='span'
+      data-test-analysisRiskTag-label
+    >
+      {{this.analysisRiskStatus.label}}
+    </AkTypography>
+
+    {{#if this.isNonPassedRiskOverridden}}
+      <AkTooltip
+        @color='dark'
+        @arrow={{true}}
+        @title='{{t "overriddenRisk"}}, {{t "orginalRisk"}}:{{t
+          (risk-text @analysis.risk)
+        }}'
+      >
+        <AkIcon
+          data-test-analysisRiskTag-editIcon
+          local-class='risk-tag-icon'
+          @iconName='edit'
+        />
+      </AkTooltip>
+    {{/if}}
+  </AkStack>
+{{/if}}

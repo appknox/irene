@@ -1,0 +1,154 @@
+<div local-class='file-summary-root'>
+  <AkStack @alignItems='center' @justifyContent='space-between'>
+    <AkStack @alignItems='center' @spacing='1.5'>
+      <AkStack
+        local-class='app-logo-container'
+        @alignItems='center'
+        @justifyContent='center'
+      >
+        <img
+          data-test-fileDetailsSummary-appLogo
+          src={{@file.iconUrl}}
+          alt=''
+          role='none'
+        />
+      </AkStack>
+
+      <AkStack @direction='column' @spacing='0.5'>
+        <AkTypography data-test-fileDetailsSummary-appName @variant='subtitle1'>
+          {{@file.name}}
+        </AkTypography>
+
+        <AkTypography
+          data-test-fileDetailsSummary-appPackageName
+          @color='textSecondary'
+        >
+          {{this.packageName}}
+        </AkTypography>
+      </AkStack>
+    </AkStack>
+
+    <AkStack @alignItems='stretch' @spacing='1.5'>
+      <div>
+        <File::ReportBtn @file={{@file}} />
+      </div>
+
+      <AkIconButton
+        {{style padding='0.5em'}}
+        {{on 'click' this.handleFileMoreMenuOpen}}
+        @variant='outlined'
+        data-test-fileDetailsSummary-moreMenuBtn
+      >
+        <AkIcon @iconName='more-vert' />
+      </AkIconButton>
+    </AkStack>
+  </AkStack>
+
+  <div class='mt-3'>
+    <AkTypography
+      data-test-fileDetailsSummary-fileOverviewTitle
+      @variant='subtitle1'
+    >
+      {{t 'fileOverview'}}
+    </AkTypography>
+
+    <div class='my-1'>
+      {{#each this.fileSummary as |fs|}}
+        <AkStack
+          local-class='file-summary-padding'
+          data-test-fileDetailsSummary-fileOverviewGroup='{{fs.label}}'
+        >
+          <AkTypography
+            {{style width='160px'}}
+            @color='textSecondary'
+            data-test-fileDetailsSummary-fileOverviewLabel
+          >
+            {{fs.label}}
+          </AkTypography>
+
+          {{#if fs.component}}
+            {{#let (component fs.component) as |Component|}}
+              <Component @file={{@file}} />
+            {{/let}}
+          {{else if fs.value}}
+            <AkTypography
+              @variant='h6'
+              data-test-fileDetailsSummary-fileOverviewValue
+            >
+              {{fs.value}}
+            </AkTypography>
+          {{/if}}
+        </AkStack>
+
+        {{#unless fs.hideDivider}}
+          <AkDivider />
+        {{/unless}}
+      {{/each}}
+    </div>
+
+    {{#if this.showMoreFileSummary}}
+      <AkDivider />
+
+      <div class='my-2'>
+        <AkTypography
+          data-test-fileDetailsSummary-fileTagTitle
+          @variant='subtitle1'
+          @gutterBottom={{true}}
+        >
+          {{t 'tags'}}
+        </AkTypography>
+
+        <FileDetails::Summary::FileTags @file={{@file}} />
+      </div>
+    {{/if}}
+
+    <AkButton
+      @variant='text'
+      @underline='always'
+      @color='primary'
+      @typographyVariant='subtitle1'
+      {{on 'click' this.handleFileSummaryToggle}}
+      data-test-fileDetailsSummary-showMoreOrLessBtn
+    >
+      <:default>
+        {{if this.showMoreFileSummary (t 'showLess') (t 'showMore')}}
+      </:default>
+
+      <:rightIcon>
+        <AkIcon
+          @iconName={{if
+            this.showMoreFileSummary
+            'arrow-drop-up'
+            'arrow-drop-down'
+          }}
+          @color='primary'
+        />
+      </:rightIcon>
+    </AkButton>
+  </div>
+
+  <AkMenu
+    @anchorRef={{this.fileMoreMenuRef}}
+    @onClose={{this.handleFileMoreMenuClose}}
+    @arrow={{true}}
+    as |akm|
+  >
+    {{#each this.fileMoreMenuList as |it|}}
+      <akm.listItem
+        data-test-fileDetailsSummary-moreMenuItem
+        @link={{true}}
+        @button={{false}}
+        @route={{it.route}}
+        @model={{it.routeModel}}
+        @divider={{unless it.hideDivider true}}
+        as |li|
+      >
+        <li.leftIcon>
+          <AkIcon @iconName={{it.iconName}} />
+        </li.leftIcon>
+
+        <li.text @primaryText={{it.label}} />
+      </akm.listItem>
+    {{/each}}
+  </AkMenu>
+</div>

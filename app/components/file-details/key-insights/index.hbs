@@ -1,0 +1,55 @@
+<div class='p-3'>
+  <AkTypography>
+    Based on the comparison with previous
+    <AkLink
+      @color='primary'
+      @route='authenticated.dashboard.file'
+      @model={{this.previousFile.id}}
+      @underline='always'
+    >File ID - {{this.previousFile.id}}</AkLink>
+    uploaded on
+    <strong>{{this.previousFileUploadedOn}}</strong>, there are:
+  </AkTypography>
+
+  <div class='mt-2' local-class='insights-container'>
+    <div>
+      <AkStack @direction='column' @spacing='0.5'>
+        <AkTypography @variant='h4'>
+          {{this.comparison.recurring.length}}
+        </AkTypography>
+
+        <AkTypography @tag='span' @color='textSecondary'>Recurring Issues</AkTypography>
+      </AkStack>
+
+      <AkDivider @color='dark' class='mt-3' />
+    </div>
+
+    <div>
+      <AkStack @direction='column' @spacing='0.5'>
+        <AkTypography @variant='h4'>
+          {{this.comparison.resolved.length}}
+        </AkTypography>
+
+        <AkTypography @tag='span' @color='textSecondary'>Resolved Issues</AkTypography>
+      </AkStack>
+
+      <AkDivider @color='dark' class='mt-3' />
+    </div>
+
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography @variant='h4'>
+        {{this.comparison.newRisks.length}}
+      </AkTypography>
+
+      <AkTypography @tag='span' @color='textSecondary'>New Issues</AkTypography>
+    </AkStack>
+
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography @variant='h4'>
+        {{this.comparison.untested.length}}
+      </AkTypography>
+
+      <AkTypography @tag='span' @color='textSecondary'>Untested Issues</AkTypography>
+    </AkStack>
+  </div>
+</div>

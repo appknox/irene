@@ -20,6 +20,13 @@ export default Base.extend({
   is_api_done: faker.random.boolean(),
   can_generate_report: faker.random.boolean(),
 
+  risk_count_critical: () => faker.datatype.number(20),
+  risk_count_high: () => faker.datatype.number(20),
+  risk_count_low: () => faker.datatype.number(20),
+  risk_count_medium: () => faker.datatype.number(20),
+  risk_count_passed: () => faker.datatype.number(20),
+  risk_count_unknown: () => faker.datatype.number(20),
+
   icon_url() {
     return faker.internet.avatar();
   },
@@ -36,7 +43,9 @@ export default Base.extend({
     return faker.company.companyName();
   },
 
-  doughnut_data() {
+  created_on: faker.date.recent().toString(),
+
+  doughnutData() {
     const countRiskCritical = faker.datatype.number({
       min: 0,
       max: 10,

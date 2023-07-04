@@ -11,9 +11,11 @@ export interface AkModalSignature {
     disableClose?: boolean;
     disableOverlayClick?: boolean;
     blurOverlay?: boolean;
+    noGutter?: boolean;
   };
   Blocks: {
     default: [];
+    footer: [];
   };
 }
 
@@ -24,6 +26,7 @@ export default class AkModalComponent extends Component<AkModalSignature> {
     return {
       overlay: styles['ak-modal-overlay'],
       overlayBlur: styles['ak-modal-overlay-blur'],
+      modalDialogContainer: styles['ak-modal-dialog-container'],
     };
   }
 }

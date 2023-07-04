@@ -1,0 +1,51 @@
+{{#if this.proxy.hasProxyUrl}}
+  <AkStack
+    local-class='bordered-box'
+    data-test-proxySettingsView-container
+    @direction='column'
+    @spacing='1.5'
+  >
+    <AkStack @width='full' @justifyContent='space-between'>
+      <AkStack @width='full' @direction='column' @spacing='0.5'>
+        <AkTypography
+          data-test-proxySettingsView-enableApiProxyLabel
+          for='enable-api-proxy'
+          @tag='label'
+          @variant='h6'
+        >
+          {{t 'enable'}}
+          {{t 'proxySettingsTitle'}}
+        </AkTypography>
+
+        <AkToggle
+          local-class='api-proxy-toggle'
+          @id='enable-api-proxy'
+          @checked={{this.proxy.enabled}}
+          @onChange={{perform this.toggleProxy}}
+          @disabled={{this.toggleProxy.isRunning}}
+          @size='small'
+          data-test-proxySettingsView-enableApiProxyToggle
+        />
+      </AkStack>
+
+      <AkLink
+        @route='authenticated.project.settings'
+        @model={{this.projectId}}
+        @color='primary'
+        @underline='always'
+        title={{t 'proxyEdit'}}
+        data-test-proxySettingsView-editSettings
+      >
+        {{t 'edit'}}
+      </AkLink>
+    </AkStack>
+
+    <AkTypography
+      @color='textSecondary'
+      data-test-proxySettingsView-proxySettingRoute
+    >
+      {{t 'proxySettingsRouteVia'}}
+      {{this.proxy.host}}:{{this.proxy.port}}
+    </AkTypography>
+  </AkStack>
+{{/if}}

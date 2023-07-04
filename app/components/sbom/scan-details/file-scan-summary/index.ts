@@ -35,7 +35,7 @@ export default class SbomScanDetailsFileScanSummaryComponent extends Component<S
         value: this.args.sbomFile.file.get('id'),
         link: true,
         linkArgs: {
-          route: 'authenticated.file',
+          route: 'authenticated.dashboard.file',
           model: this.args.sbomFile.file.get('id'),
         },
         hideDivider: this.args.sbomFile.status !== SbomScanStatus.COMPLETED,

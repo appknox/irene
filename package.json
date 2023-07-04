@@ -181,6 +181,7 @@
     "@popperjs/core": "^2.11.6",
     "billboard.js": "^1.12.7",
     "clipboard": "^2.0.6",
+    "echarts": "^5.4.2",
     "ember-radio-button": "^2.0.1",
     "ember-websockets": "^10.2.1",
     "material-icons": "^1.11.6",

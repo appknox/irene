@@ -14,7 +14,10 @@
     </AkTypography>
   {{/if}}
 
-  <div local-class='ak-text-field-root {{if @label "ak-form-label-spacing"}}'>
+  <div
+    class={{@textFieldRootClass}}
+    local-class='ak-text-field-root {{if @label "ak-form-label-spacing"}}'
+  >
     {{#if (has-block 'leftAdornment')}}
       <div
         data-test-ak-text-field-left-adornment

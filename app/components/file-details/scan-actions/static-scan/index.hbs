@@ -1,0 +1,46 @@
+{{#if @file.isStaticCompleted}}
+  <AkStack @alignItems='stretch' @spacing='1.5'>
+    <AkButton
+      data-test-fileDetailScanActions-staticScanCompletedStatus
+      {{style pointerEvents='none'}}
+    >
+      <:leftIcon>
+        <AkIcon @iconName='done' />
+      </:leftIcon>
+
+      <:default>{{t 'completed'}}</:default>
+    </AkButton>
+
+    <AkIconButton
+      {{style padding='0.5em'}}
+      {{on 'click' this.handleRescanModalOpen}}
+      @variant='outlined'
+      @borderColor='primary'
+      data-test-fileDetailScanActions-staticScanRestartBtn
+    >
+      <AkIcon @iconName='refresh' @color='primary' />
+    </AkIconButton>
+  </AkStack>
+{{else}}
+  <AkButton
+    data-test-fileDetailScanActions-staticScanInProgressStatus
+    @variant='outlined'
+    @disabled={{true}}
+  >
+    {{t 'scanning'}}
+    :
+    {{@file.staticScanProgress}}%
+  </AkButton>
+{{/if}}
+
+{{#if @file.isStaticCompleted}}
+  <ConfirmBox
+    @isActive={{this.showRescanModal}}
+    @title={{t 'modalCard.rescan.title'}}
+    @description={{t 'modalCard.rescan.description'}}
+    @confirmText={{t 'yes'}}
+    @cancelText={{t 'no'}}
+    @confirmAction={{perform this.handleRescanApp}}
+    @disabled={{this.handleRescanApp.isRunning}}
+  />
+{{/if}}

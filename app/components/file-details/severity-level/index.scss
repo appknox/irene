@@ -1,0 +1,29 @@
+.severity-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.severity-critical {
+  background-color: var(--file-details-severity-level-color-critical);
+}
+
+.severity-high {
+  background-color: var(--file-details-severity-level-color-high);
+}
+
+.severity-medium {
+  background-color: var(--file-details-severity-level-color-medium);
+}
+
+.severity-low {
+  background-color: var(--file-details-severity-level-color-low);
+}
+
+.severity-passed {
+  background-color: var(--file-details-severity-level-color-passed);
+}
+
+.severity-none {
+  background-color: var(--file-details-severity-level-color-none);
+}

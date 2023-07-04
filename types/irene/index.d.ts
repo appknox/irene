@@ -106,12 +106,20 @@ declare global {
     message?: string;
     name?: string;
     errors?: Error[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    payload?: any;
   }
 
   interface Error {
     status?: string;
     title?: string;
     detail?: string;
+  }
+
+  export interface AjaxError {
+    status: number;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    payload: any;
   }
 }
 

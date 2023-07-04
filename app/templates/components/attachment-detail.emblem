@@ -1,8 +1,0 @@
-a.attachment data-type="{{ file-extension attachment.name }}" click="downloadAttachment" title="{{ attachment.uuid }}_{{ attachment_name }}"
-  span.attachment-label
-    | #{attachment.uuid}_#{attachment.name}
-  span.attachment-icon
-    if isDownloadingAttachment
-      i.fa.fa-spinner.fa-spin
-    else
-      i.fa.fa-download

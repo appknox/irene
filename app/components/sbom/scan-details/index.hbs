@@ -42,11 +42,7 @@
           data-test-sbomScanDetails-showMoreOrLess-btn
         >
           <:default>
-            {{if
-              this.showFileScanSummary
-              (t 'sbomModule.showLess')
-              (t 'sbomModule.showMore')
-            }}
+            {{if this.showFileScanSummary (t 'showLess') (t 'showMore')}}
           </:default>
 
           <:rightIcon>

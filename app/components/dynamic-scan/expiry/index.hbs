@@ -1,0 +1,40 @@
+<div>
+  <AkStack @justifyContent='center' @alignItems='center' @spacing='1'>
+    <AkTypography @tag='span' @variant='h5' @fontWeight='regular'>
+      {{this.timeRemaining.minutes}}:{{this.timeRemaining.seconds}}
+    </AkTypography>
+
+    {{#if this.extendtime.isRunning}}
+      <AkLoader @size={{16}} />
+    {{else}}
+      <AkTooltip
+        @disabled={{this.canExtend}}
+        @color='dark'
+        @placement='top'
+        @arrow={{true}}
+        @title={{t 'dynamicScanExtentionLimit'}}
+      >
+        <AkIconButton
+          @size='small'
+          disabled={{not this.canExtend}}
+          @variant='outlined'
+          {{on 'click' this.handleExtendTimeClick}}
+        >
+          <AkIcon @iconName='add' />
+        </AkIconButton>
+      </AkTooltip>
+    {{/if}}
+  </AkStack>
+
+  <AkMenu
+    @anchorRef={{this.extendBtnAnchorRef}}
+    @onClose={{this.handleExtendTimeMenuClose}}
+    as |akm|
+  >
+    {{#each this.extendTimeOptions as |time|}}
+      <akm.listItem @onClick={{perform this.extendtime time}} as |li|>
+        <li.text @primaryText='{{time}} mins' />
+      </akm.listItem>
+    {{/each}}
+  </AkMenu>
+</div>

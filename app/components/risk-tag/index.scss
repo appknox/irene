@@ -1,0 +1,68 @@
+.risk-tag {
+  width: 90px;
+  height: 26px;
+  font-family: var(--risk-tag-font-family);
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border-radius: var(--risk-tag-border-radius);
+  white-space: nowrap;
+  cursor: default;
+  outline: 0px;
+  text-decoration: none;
+  vertical-align: middle;
+  box-sizing: border-box;
+  color: inherit;
+
+  .risk-tag-label {
+    color: var(--risk-tag-text-color);
+  }
+
+  .risk-tag-icon {
+    color: var(--risk-tag-text-color);
+    font-size: 1rem !important;
+  }
+}
+
+.is-critical {
+  background-color: var(--risk-tag-color-critical);
+}
+
+.is-danger {
+  background-color: var(--risk-tag-color-high);
+}
+
+.is-warning {
+  background-color: var(--risk-tag-color-medium);
+}
+
+.is-info {
+  background-color: var(--risk-tag-color-low);
+}
+
+.is-success {
+  background-color: var(--risk-tag-color-passed);
+}
+
+.is-default {
+  background-color: var(--risk-tag-color-none);
+}
+
+.is-waiting,
+.is-progress {
+  border: 1px solid var(--risk-tag-color-waiting);
+
+  .risk-tag-label {
+    color: var(--risk-tag-color-waiting);
+  }
+}
+
+.is-errored {
+  border: 1px solid var(--risk-tag-color-critical);
+
+  .risk-tag-label {
+    color: var(--risk-tag-color-critical);
+  }
+}

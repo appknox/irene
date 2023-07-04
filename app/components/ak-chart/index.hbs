@@ -1,0 +1,6 @@
+<div
+  {{style width=(or @width '600px') height=(or @height '400px')}}
+  ...attributes
+  {{did-insert this.initialiseEChart}}
+  {{will-destroy this.disposeEChartInstance}}
+/>

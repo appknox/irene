@@ -1,6 +1,3 @@
-import { Model, belongsTo } from 'ember-cli-mirage';
+import { Model } from 'ember-cli-mirage';
 
-export default Model.extend({
-  file: belongsTo('file'),
-  vulnerability: belongsTo('vulnerability'),
-});
+export default Model.extend({});

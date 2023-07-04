@@ -39,6 +39,7 @@
   border-radius: var(--ak-select-dropdown-border-radius) !important;
   box-shadow: var(--ak-select-dropdown-box-shadow) !important;
   border: 1px solid var(--ak-select-dropdown-border-color) !important;
+  z-index: var(--ak-select-dropdown-zIndex) !important;
 
   :global(.ember-power-select-options) {
     padding: 0.5em 0;

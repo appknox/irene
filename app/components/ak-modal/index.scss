@@ -5,7 +5,11 @@
     background-color: var(--ak-modal-backdrop-overlay-background);
   }
 
-  :global(.ember-modal-dialog) {
+  .ak-modal-dialog-container {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: calc(100% - 64px);
     padding: 0;
     border-radius: var(--ak-modal-border-radius);
     box-shadow: none;
@@ -16,7 +20,12 @@
   }
 }
 
-.modal-body {
+.ak-modal-body {
   min-width: 400px;
-  padding: 1.2em;
+  flex: 1 1 auto;
+  overflow-y: auto;
+
+  &.ak-modal-body-gutter {
+    padding: 1.2em;
+  }
 }

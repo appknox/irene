@@ -1,0 +1,17 @@
+<AkStack class='p-3' @spacing='1'>
+  <AkChart
+    {{style maxWidth='350px'}}
+    @width='100%'
+    @height='200px'
+    @option={{this.owaspData.mobileOptions}}
+    data-test-complianceInsights-mobileChart
+  />
+
+  <AkChart
+    {{style maxWidth='350px'}}
+    @width='100%'
+    @height='200px'
+    @option={{this.owaspData.webOptions}}
+    data-test-complianceInsights-webChart
+  />
+</AkStack>

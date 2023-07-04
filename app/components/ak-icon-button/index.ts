@@ -7,6 +7,7 @@ interface AkIconButtonSignature {
     variant?: 'outlined' | 'default';
     type?: 'submit' | 'reset' | 'button';
     size?: 'medium' | 'small';
+    borderColor?: 'default' | 'primary' | 'secondary';
   };
 
   Blocks: {

@@ -1,0 +1,71 @@
+<div>
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkTypography data-test-apiFilter-title @variant='h6'>
+      {{t 'templates.apiScanURLFilter'}}
+    </AkTypography>
+
+    <AkTypography
+      data-test-apiFilter-description
+      @variant='body2'
+      @color='textSecondary'
+    >
+      {{t 'otherTemplates.specifyTheURL'}}
+    </AkTypography>
+  </AkStack>
+
+  <AkStack class='mt-2' @spacing='1.5'>
+    <AkTextField
+      data-test-apiFilter-apiEndpointInput
+      @formControlClass='w-8/12'
+      @placeholder={{t 'templates.enterAPIEndpoint'}}
+      @value={{this.newUrlFilter}}
+      @helperText={{t 'templates.enterEndpoint'}}
+    />
+
+    <AkButton
+      data-test-apiFilter-addApiEndpointBtn
+      @variant='outlined'
+      {{on 'click' this.addApiUrlFilter}}
+    >
+      <:leftIcon>
+        <AkIcon @iconName='add' />
+      </:leftIcon>
+
+      <:default>{{t 'templates.addNewUrlFilter'}}</:default>
+    </AkButton>
+  </AkStack>
+
+  {{#if this.apiScanOptions.hasApiUrlFilters}}
+    <div class='mt-2'>
+      <AkTable data-test-apiFilter-table @dense={{true}} as |t|>
+        <t.head data-test-apiFilter-thead @columns={{this.columns}} />
+        <t.body @rows={{this.apiUrlFilters}} as |b|>
+          <b.row data-test-apiFilter-row as |r|>
+            <r.cell data-test-apiFilter-cell as |value|>
+              {{#if r.columnValue.component}}
+                {{#let (component r.columnValue.component) as |Component|}}
+                  <Component
+                    @onDeleteClick={{fn this.openRemoveURLConfirmBox value}}
+                  />
+                {{/let}}
+              {{else}}
+                <AkTypography title={{value}} @noWrap={{true}}>
+                  {{value}}
+                </AkTypography>
+              {{/if}}
+            </r.cell>
+          </b.row>
+        </t.body>
+      </AkTable>
+    </div>
+  {{/if}}
+
+  <ConfirmBox
+    @isActive={{this.showRemoveURLConfirmBox}}
+    @description={{t 'confirmBox.removeURL'}}
+    @confirmText={{t 'yes'}}
+    @delegate={{this}}
+    @disabled={{this.saveApiUrlFilter.isRunning}}
+    @blurOverlay={{true}}
+  />
+</div>

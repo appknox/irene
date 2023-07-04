@@ -57,9 +57,9 @@ Router.map(function () {
           this.route('files');
         }
       );
-      this.route('file', {
-        path: '/file/:fileid',
-      });
+
+      this.route('file', { path: '/file/:fileid' });
+
       this.route('choose', {
         path: '/choose/:fileid',
       });
@@ -103,6 +103,10 @@ Router.map(function () {
       });
 
       this.route('dashboard', function () {
+        this.route('file', { path: '/file/:fileid' }, function () {
+          this.route('analysis', { path: '/analysis/:analysis_id' });
+        });
+
         this.route('notifications');
 
         this.route(
@@ -148,7 +152,7 @@ Router.map(function () {
 export const CSBMap = {
   'authenticated.projects': ENV.csb.navigateToProjects,
   'authenticated.analytics': ENV.csb.navigateToAnalytics,
-  'authenticated.file': ENV.csb.clickProjectCard,
+  'authenticated.dashboard.file': ENV.csb.clickProjectCard,
   'authenticated.settings': ENV.csb.navigateToSettings,
   'authenticated.project.files': ENV.csb.navigateToAllScans,
   'authenticated.choose': ENV.csb.naigateToCompareScans,

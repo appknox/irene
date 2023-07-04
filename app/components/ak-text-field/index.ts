@@ -10,6 +10,7 @@ export interface AkTextFieldSignature {
   Element: HTMLInputElement;
   Args: {
     formControlClass?: string;
+    textFieldRootClass?: string;
     id?: string;
     label?: string;
     labelTypographyVariant?: LabelTypographyVariant;

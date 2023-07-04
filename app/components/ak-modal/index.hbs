@@ -7,6 +7,7 @@
     @onClickOverlay
   }}
   @translucentOverlay={{true}}
+  @containerClass={{this.classes.modalDialogContainer}}
   @overlayClass='
     ak-modal-overlay
     {{this.classes.overlay}} 
@@ -15,7 +16,7 @@
 >
   {{#if @showHeader}}
     <AkAppbar data-test-ak-modal-header @justifyContent='space-between' as |ab|>
-      <AkTypography @variant='h5' @color='inherit'>
+      <AkTypography @variant='h5' @fontWeight='medium' @color='inherit'>
         {{@headerTitle}}
       </AkTypography>
 
@@ -30,7 +31,15 @@
       </AkIconButton>
     </AkAppbar>
   {{/if}}
-  <div data-test-ak-modal-body local-class='modal-body'>
+
+  <div
+    data-test-ak-modal-body
+    local-class='ak-modal-body {{unless @noGutter "ak-modal-body-gutter"}}'
+  >
     {{yield}}
   </div>
+
+  {{#if (has-block 'footer')}}
+    {{yield to='footer'}}
+  {{/if}}
 </Modal-Dialog>
