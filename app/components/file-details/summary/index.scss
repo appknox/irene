@@ -1,0 +1,25 @@
+.file-summary-root {
+  width: 100%;
+  padding: 1em;
+  border: 1px solid var(--file-details-summary-border-color);
+  box-sizing: border-box;
+
+  .app-logo-container {
+    width: 45px;
+    height: 45px;
+    padding: 0.5em;
+    border-radius: var(--file-details-summary-border-radius);
+    border: 1px solid var(--file-details-summary-border-color);
+    box-sizing: border-box;
+
+    img {
+      object-fit: contain;
+      background-image: none;
+      overflow: hidden;
+    }
+  }
+
+  .file-summary-padding {
+    padding: 0.75em 0;
+  }
+}

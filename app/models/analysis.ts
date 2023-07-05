@@ -25,11 +25,21 @@ import VulnerabilityModel from './vulnerability';
 const inflector = Inflector.inflector;
 inflector.irregular('asvs', 'asvses');
 
+export interface CvssMetricHumanized {
+  key: string;
+  value: string;
+}
+
+export interface Finding {
+  title: string | null;
+  description: string;
+}
+
 export default class AnalysisModel extends Model {
   @service declare intl: IntlService;
 
   @attr
-  declare findings: unknown;
+  declare findings: Finding[];
 
   @attr('number')
   declare risk: number;
@@ -47,16 +57,16 @@ export default class AnalysisModel extends Model {
   declare cvssVersion: number;
 
   @attr
-  declare cvssMetricsHumanized: unknown;
+  declare cvssMetricsHumanized: CvssMetricHumanized[];
 
   @attr('number')
   declare computedRisk: number;
 
   @attr('number')
-  declare overriddenRisk: number;
+  declare overriddenRisk: number | null;
 
   @attr('string')
-  declare overriddenRiskComment: string;
+  declare overriddenRiskComment: string | null;
 
   @attr('number')
   declare analiserVersion: string;
@@ -110,8 +120,9 @@ export default class AnalysisModel extends Model {
     return this.intl.t('critical');
   }
 
-  labelClass(risk: number) {
+  labelClass(risk: number | null) {
     const cls = 'tag';
+
     switch (risk) {
       case ENUMS.RISK.UNKNOWN:
         return `${cls} is-progress`;
@@ -138,12 +149,14 @@ export default class AnalysisModel extends Model {
     return types?.includes(type);
   }
 
-  iconClass(risk: number) {
+  iconClass(risk: number | null) {
     switch (risk) {
       case ENUMS.RISK.UNKNOWN:
         return 'fa-spinner fa-spin';
+
       case ENUMS.RISK.NONE:
         return 'fa-check';
+
       case ENUMS.RISK.CRITICAL:
       case ENUMS.RISK.HIGH:
       case ENUMS.RISK.LOW:
@@ -191,15 +204,16 @@ export default class AnalysisModel extends Model {
   }
 
   get showPcidss() {
-    return this.file.get('profile')?.get('reportPreference')?.show_pcidss.value;
+    return this.file.get('profile')?.get('reportPreference')?.show_pcidss
+      ?.value;
   }
 
   get showHipaa() {
-    return this.file.get('profile')?.get('reportPreference')?.show_hipaa.value;
+    return this.file.get('profile')?.get('reportPreference')?.show_hipaa?.value;
   }
 
   get showGdpr() {
-    return this.file.get('profile')?.get('reportPreference')?.show_gdpr.value;
+    return this.file.get('profile')?.get('reportPreference')?.show_gdpr?.value;
   }
 
   get vulnerabilityTypes() {

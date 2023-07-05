@@ -1,14 +1,14 @@
-/* eslint-disable ember/avoid-leaking-state-in-ember-objects */
-import { Factory } from 'ember-cli-mirage';
+import { Factory, trait } from 'ember-cli-mirage';
 import faker from 'faker';
 import ENUMS from 'irene/enums';
 
 export default Factory.extend({
-  analiserVersion: 1,
-  cvssVersion: 3,
-  cvssBase: 10.0,
-  cvssVector: 'CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H',
-  cvssMetricsHumanized: [
+  analiser_version: 1,
+  cvss_version: 3,
+  cvss_base: 10.0,
+  cvss_vector: 'CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H',
+
+  cvss_metrics_humanized: () => [
     { key: 'Attack Vector', value: 'Network' },
     { key: 'Attack Complexity', value: 'Low' },
     { key: 'Privileges Required', value: 'None' },
@@ -18,6 +18,7 @@ export default Factory.extend({
     { key: 'Integrity Impact', value: 'High' },
     { key: 'Availability Impact', value: 'High' },
   ],
+
   isIgnored: faker.datatype.boolean(),
   overridenRisk: faker.random.arrayElement([null, 1, 2, 3, 4]),
   status: faker.random.arrayElement(ENUMS.ANALYSIS.VALUES),
@@ -28,39 +29,91 @@ export default Factory.extend({
     return faker.random.arrayElement(ENUMS.RISK.VALUES);
   },
 
-  computedRisk() {
+  computed_risk() {
     return faker.random.arrayElement(ENUMS.RISK.VALUES);
   },
 
   findings() {
-    var desc = [];
+    let desc = [];
     const uuid = faker.datatype.uuid();
-    for (var i = 0; i < 3; i++) {
+
+    for (let i = 0; i < 3; i++) {
       desc.push({
         title: faker.lorem.sentence(),
         description: `/var/mobile/Containers/Data/Application/${uuid}/${faker.system.fileName()}`,
       });
     }
+
     return desc;
   },
 
-  isRisky() {
-    return ![ENUMS.RISK.NONE, ENUMS.RISK.UNKNOWN].includes(this.computedRisk);
-  },
+  withOwasp: trait({
+    afterCreate(model, server) {
+      model.update({
+        owasp: server.createList('owasp', 2).map((it) => it.id),
+      });
+    },
+  }),
 
-  vulnerabilityTypes() {
-    return this.vulnerability.types;
-  },
+  withCwe: trait({
+    afterCreate(model, server) {
+      model.update({
+        cwe: server.createList('cwe', 2).map((it) => it.id),
+      });
+    },
+  }),
 
-  afterCreate(model, server) {
-    model.update({
-      owasp: server.createList('owasp', 2),
-      cwe: server.createList('cwe', 2),
-      asvs: server.createList('asvs', 2),
-      mstg: server.createList('mstg', 2),
-      pcidss: server.createList('pcidss', 2),
-      hipaa: server.createList('hipaa', 2),
-      gdpr: server.createList('gdpr', 2),
-    });
-  },
+  withAsvs: trait({
+    afterCreate(model, server) {
+      model.update({
+        asvs: server.createList('asvs', 2).map((it) => it.id),
+      });
+    },
+  }),
+
+  withMstg: trait({
+    afterCreate(model, server) {
+      model.update({
+        mstg: server.createList('mstg', 2).map((it) => it.id),
+      });
+    },
+  }),
+
+  withPcidss: trait({
+    afterCreate(model, server) {
+      model.update({
+        pcidss: server.createList('pcidss', 2).map((it) => it.id),
+      });
+    },
+  }),
+
+  withHipaa: trait({
+    afterCreate(model, server) {
+      model.update({
+        hipaa: server.createList('hipaa', 2).map((it) => it.id),
+      });
+    },
+  }),
+
+  withGdpr: trait({
+    afterCreate(model, server) {
+      model.update({
+        gdpr: server.createList('gdpr', 2).map((it) => it.id),
+      });
+    },
+  }),
+
+  withAllRegulatory: trait({
+    afterCreate(model, server) {
+      model.update({
+        owasp: server.createList('owasp', 2).map((it) => it.id),
+        cwe: server.createList('cwe', 2).map((it) => it.id),
+        asvs: server.createList('asvs', 2).map((it) => it.id),
+        mstg: server.createList('mstg', 2).map((it) => it.id),
+        pcidss: server.createList('pcidss', 2).map((it) => it.id),
+        hipaa: server.createList('hipaa', 2).map((it) => it.id),
+        gdpr: server.createList('gdpr', 2).map((it) => it.id),
+      });
+    },
+  }),
 });

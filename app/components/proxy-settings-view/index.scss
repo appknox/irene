@@ -1,0 +1,10 @@
+.bordered-box {
+  border: 1px solid var(--proxy-settings-view-border-color);
+  padding: 1.25em;
+  box-sizing: border-box;
+}
+
+.api-proxy-toggle {
+  margin-left: 0;
+  margin-right: 0;
+}

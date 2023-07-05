@@ -15,7 +15,15 @@ type AkStackJustifyContentValues =
   | 'right'
   | 'normal';
 
-type AkStackAlignItemsValues = 'flex-start' | 'flex-end' | 'center' | 'stretch';
+type AkStackAlignItemsValues =
+  | 'flex-start'
+  | 'flex-end'
+  | 'center'
+  | 'stretch'
+  | 'space-between'
+  | 'space-around'
+  | 'space-evenly';
+
 type AkStackFlexWrapValues = 'wrap' | 'nowrap' | 'wrap-reverse';
 type AkStackWidthValues =
   | '1/12'

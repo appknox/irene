@@ -1,0 +1,6 @@
+.insights-container {
+  display: grid;
+  justify-items: stretch;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5em 2em;
+}

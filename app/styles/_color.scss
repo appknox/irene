@@ -68,6 +68,7 @@ body {
   --box-shadow-2: 4px 4px 10px 0px rgba(0, 0, 0, 0.15);
   --box-shadow-3: 4px 4px 15px rgba(0, 0, 0, 0.04);
   --box-shadow-4: 0px -4px 8px 4px rgba(0, 0, 0, 0.03);
+  --box-shadow-5: 3px 4px 6px rgba(216, 216, 216, 0.25);
 
   --hover-dark-background: rgba(255, 255, 255, 0.15);
   --hover-light-background: rgba(0, 0, 0, 0.04);
@@ -104,6 +105,7 @@ body {
   --severity-medium: #fad34a;
   --severity-low: #46cef9;
   --severity-info: #2141b4;
+  --severity-passed: #2db421;
   --severity-none: #a0a0a0;
   --severity-unknown: #202020;
 }

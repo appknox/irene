@@ -23,7 +23,7 @@ export default class ProjectModel extends ModelBaseMixin {
   declare packageName: string;
 
   @attr('boolean')
-  declare isManualScanAvailable: string;
+  declare isManualScanAvailable: boolean;
 
   @attr('string')
   declare githubRepo: string;

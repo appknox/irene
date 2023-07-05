@@ -3,7 +3,7 @@
     if hasObjects
       each sortedObjects as |file|
         .column.is-one-third
-          = link-to "authenticated.file" file.id
+          = link-to "authenticated.dashboard.file" file.id
             = file-overview file=file profileId=file.profile.id
     else
       .loading-container

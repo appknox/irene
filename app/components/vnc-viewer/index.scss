@@ -1,0 +1,37 @@
+.vnc-viewer-root {
+  padding: 1.5em;
+}
+
+.vnc-viewer-fullscreen {
+  position: fixed;
+  inset: 0px;
+  z-index: var(--vnc-viewer-modal-zIndex);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.vnc-viewer-backdrop {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inset: 0px;
+  background-color: var(--vnc-viewer-modal-backdrop-overlay-background);
+  z-index: -1;
+}
+
+.vnc-viewer-fullscreen-container {
+  padding: 2.5em;
+  background-color: var(--vnc-viewer-modal-background);
+  color: var(--vnc-viewer-modal-text-color);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 64px);
+  flex: 1 0 auto;
+  z-index: var(--vnc-viewer-modal-zIndex);
+  position: fixed;
+  outline: 0px;
+}

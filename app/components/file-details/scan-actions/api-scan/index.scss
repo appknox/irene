@@ -1,0 +1,9 @@
+.api-scan-modal-alert {
+  padding: 1em;
+  background-color: var(
+    --file-details-scan-actions-api-scan-alert-background-color
+  );
+  color: var(--file-details-scan-actions-api-scan-alert-text-color);
+  border: 1px solid var(--file-details-scan-actions-api-scan-alert-border-color);
+  border-radius: var(--file-details-scan-actions-api-scan-border-radius);
+}

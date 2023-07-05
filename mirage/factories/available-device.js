@@ -1,10 +1,9 @@
-/* eslint-disable prettier/prettier */
 import { Factory } from 'ember-cli-mirage';
 
 import faker from 'faker';
 
 export default Factory.extend({
-  isTablet: faker.random.boolean(),
-  platformVersion: "2.3",
-  platform: 1
+  is_tablet: () => faker.random.boolean(),
+  platform_version: () => faker.system.semver(),
+  platform: () => faker.random.arrayElement([0, 1]),
 });

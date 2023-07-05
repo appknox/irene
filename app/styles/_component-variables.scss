@@ -55,7 +55,9 @@ body {
   --ak-icon-button-color-text-disabled: var(--text-disabled);
   --ak-icon-button-color-text-primary: var(--text-primary);
   --ak-icon-button-border-radius: var(--border-radius);
-  --ak-icon-button-border-color: var(--border-color-2);
+  --ak-icon-button-border-color-default: var(--border-color-2);
+  --ak-icon-button-border-color-primary: var(--primary-main);
+  --ak-icon-button-border-color-secondary: var(--secondary-main);
   --ak-icon-button-hover-background: var(--hover-light-background);
 
   // variables for ak-list
@@ -78,6 +80,7 @@ body {
   --ak-select-dropdown-border-radius: var(--border-radius);
   --ak-select-dropdown-box-shadow: var(--box-shadow-2);
   --ak-select-dropdown-border-color: var(--border-color-1);
+  --ak-select-dropdown-zIndex: var(--zIndex-tooltip);
   --ak-select-option-color-text-primary: var(--text-primary);
   --ak-select-option-hover-background: var(--hover-light-background);
   --ak-select-option-selected-background: var(--primary-light);
@@ -577,4 +580,107 @@ body {
   // variables for sbom/app-summary
   --sbom-app-summary-border-radius: var(--border-radius);
   --sbom-app-summary-border-color: var(--border-color-1);
+
+  // variables for risk-tag
+  --risk-tag-font-family: var(--font-family);
+  --risk-tag-border-radius: var(--border-radius);
+  --risk-tag-text-color: var(--common-white);
+  --risk-tag-color-critical: var(--severity-critical);
+  --risk-tag-color-high: var(--severity-high);
+  --risk-tag-color-medium: var(--severity-medium);
+  --risk-tag-color-low: var(--severity-low);
+  --risk-tag-color-passed: var(--severity-passed);
+  --risk-tag-color-none: var(--severity-none);
+  --risk-tag-color-waiting: var(--neutral-grey-500);
+
+  // variables for file-details/severity-level
+  --file-details-severity-level-color-critical: var(--severity-critical);
+  --file-details-severity-level-color-high: var(--severity-high);
+  --file-details-severity-level-color-medium: var(--severity-medium);
+  --file-details-severity-level-color-low: var(--severity-low);
+  --file-details-severity-level-color-passed: var(--severity-passed);
+  --file-details-severity-level-color-none: var(--severity-none);
+
+  // variables for file-details/insights-wrapper
+  --file-details-insights-wrapper-border-color: var(--border-color-1);
+
+  // variables for file-details/summary
+  --file-details-summary-border-radius: var(--border-radius);
+  --file-details-summary-border-color: var(--border-color-1);
+
+  // variables for file-details/summary/app-platform
+  --file-details-summary-app-platform-color-ios: var(--ios);
+  --file-details-summary-app-platform-color-android: var(--android);
+
+  // variables for file-details/scan-actions
+  --file-details-scan-actions-border-color: var(--border-color-1);
+
+  // variables for file-details/scan-actions/api-scan
+  --file-details-scan-actions-api-scan-border-radius: var(--border-radius);
+  --file-details-scan-actions-api-scan-alert-background-color: var(
+    --error-light
+  );
+  --file-details-scan-actions-api-scan-alert-text-color: var(--error-main);
+  --file-details-scan-actions-api-scan-alert-border-color: var(--error-main);
+
+  // variables for file-details/scan-actions/api-scan/captured-apis
+  --file-details-scan-actions-api-scan-captured-apis-border-radius: var(
+    --border-radius
+  );
+  --file-details-scan-actions-api-scan-captured-apis-border-color: var(
+    --border-color-1
+  );
+
+  // variables for file-details/vulnerability-analysis
+  --file-details-vulnerability-analysis-border-color: var(--border-color-1);
+
+  // variables for file-details/vulnerability-analysis-details
+  --file-details-vulnerability-analysis-details-background-main: var(
+    --background-main
+  );
+  --file-details-vulnerability-analysis-details-header-box-shadow: var(
+    --box-shadow-5
+  );
+  --file-details-vulnerability-analysis-details-zIndex: var(--zIndex-appbar);
+  --file-details-vulnerability-analysis-details-vul-finding-border-color: var(
+    --border-color-1
+  );
+  --file-details-vulnerability-analysis-details-vul-finding-background-color: var(
+    --neutral-grey-100
+  );
+  --file-details-vulnerability-analysis-details-vul-finding-font-family: var(
+    --font-family
+  );
+  --file-details-vulnerability-analysis-details-color-primary: var(
+    --primary-main
+  );
+  --file-details-vulnerability-analysis-details-border-radius: var(
+    --border-radius
+  );
+
+  // variables for file-details/vulnerability-analysis-details/edit-analysis-button
+  --file-details-vulnerability-analysis-details-edit-analysis-button-background-main: var(
+    --background-main
+  );
+  --file-details-vulnerability-analysis-details-edit-analysis-button-box-shadow: var(
+    --box-shadow-5
+  );
+
+  // variables for vnc-viewer
+  --vnc-viewer-modal-zIndex: var(--zIndex-drawer);
+  --vnc-viewer-modal-backdrop-overlay-background: var(
+    --backdrop-overlay-background
+  );
+  --vnc-viewer-modal-background: var(--background-main);
+  --vnc-viewer-modal-text-color: var(--text-primary);
+
+  // variables for proxy-settings-view
+  --proxy-settings-view-border-color: var(--border-color-1);
+
+  // variables for dynamic-scan/modal
+  --dynamic-scan-modal-border-color: var(--border-color-1);
+  --dynamic-scan-modal-border-radius: var(--border-radius);
+  --dynamic-scan-modal-alert-background-color: var(--warn-light);
+  --dynamic-scan-modal-alert-text-color: var(--warn-dark);
+  --dynamic-scan-modal-alert-border-color: var(--warn-dark);
 }

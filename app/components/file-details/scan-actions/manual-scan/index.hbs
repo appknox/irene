@@ -1,0 +1,122 @@
+<div>
+  {{#if @file.isManualRequested}}
+    <AkButton data-test-manualScan-statusBtn {{style pointerEvents='none'}}>
+      <:leftIcon>
+        <AkIcon @iconName={{if @file.isManualDone 'done' 'schedule'}} />
+      </:leftIcon>
+
+      <:default>
+        {{if @file.isManualDone (t 'completed') (t 'requested')}}
+      </:default>
+    </AkButton>
+  {{else}}
+    <AkButton
+      data-test-manualScan-requestBtn
+      @variant='outlined'
+      {{on
+        'click'
+        (if
+          this.organization.selected.isTrial
+          this.handleManualScanRequestAccessModalOpen
+          this.handleManualScanModalOpen
+        )
+      }}
+      @disabled={{not @file.isActive}}
+    >
+      <:leftIcon>
+        <AkIcon @iconName='play-arrow' />
+      </:leftIcon>
+
+      <:default>{{t 'start'}}</:default>
+    </AkButton>
+  {{/if}}
+
+  {{#if this.showManualScanModal}}
+    <AkModal
+      @showHeader={{true}}
+      @headerTitle={{t 'modalCard.manual.title'}}
+      @onClose={{this.handleManualScanModalClose}}
+      @disableClose={{this.saveManualScanForm.isRunning}}
+      @noGutter={{true}}
+    >
+      <:default>
+        <div {{style width='600px'}}>
+          <AkTypography data-test-manualScanModal-description class='px-3 py-2'>
+            {{t 'modalCard.manual.description'}}
+          </AkTypography>
+
+          <AkAccordion::Group @defaultOpen={{array 'basic-info'}} as |actx|>
+            {{#each this.manualScanFormSections as |msf|}}
+              <AkAccordion
+                @id={{msf.id}}
+                @accordionCtx={{actx}}
+                @summaryText={{msf.summaryText}}
+              >
+                <:content>
+                  {{#let (component msf.contentComponent) as |Component|}}
+                    <Component
+                      @file={{@file}}
+                      @manualscan={{this.manualscan}}
+                    />
+                  {{/let}}
+                </:content>
+              </AkAccordion>
+            {{/each}}
+          </AkAccordion::Group>
+
+          <div class='my-2 px-3'>
+            <AkTypography
+              data-test-manualScanModal-additionalCommentLabel
+              @variant='h6'
+              @tag='label'
+              @color='textSecondary'
+              for='manual-scan-additional-comments'
+            >
+              {{t 'modalCard.manual.additionalComments'}}
+            </AkTypography>
+
+            <Textarea
+              data-test-manualScanModal-additionalCommentInput
+              id='manual-scan-additional-comments'
+              class='textarea-input mt-1'
+              rows='5'
+              @value={{this.manualscan.additionalComments}}
+            />
+          </div>
+        </div>
+      </:default>
+
+      <:footer>
+        <AkDivider />
+
+        <AkStack @justifyContent='flex-end' @spacing='1.5' class='px-3 py-2'>
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            {{on 'click' this.handleManualScanModalClose}}
+            data-test-manualScanModal-cancelBtn
+          >
+            {{t 'cancel'}}
+          </AkButton>
+
+          <AkButton
+            data-test-manualScanModal-requestBtn
+            {{on 'click' (perform this.saveManualScanForm)}}
+            @loading={{this.saveManualScanForm.isRunning}}
+          >
+            {{t 'modalCard.manual.title'}}
+          </AkButton>
+        </AkStack>
+      </:footer>
+    </AkModal>
+  {{/if}}
+
+  <ConfirmBox
+    @isActive={{this.showManualScanRequestAccessModal}}
+    @title={{t 'modalCard.requestAccess.title'}}
+    @description={{t 'modalCard.requestAccess.description'}}
+    @confirmText={{t 'modalCard.requestAccess.button'}}
+    @confirmAction={{perform this.requestManualScanAccess}}
+    @disabled={{this.requestManualScanAccess.isRunning}}
+  />
+</div>

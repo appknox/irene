@@ -78,6 +78,12 @@ declare module '@glint/environment-ember-loose/registry' {
       };
     }>;
 
+    'blank-template': ComponentLike<{
+      Blocks: {
+        default: [];
+      };
+    }>;
+
     t: HelperLike<{
       Args: {
         Positional: [string];

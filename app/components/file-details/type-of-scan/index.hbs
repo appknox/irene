@@ -1,0 +1,30 @@
+<AkStack
+  @justifyContent={{or @justifyContent 'flex-end'}}
+  @alignItems='center'
+  @flexWrap='wrap'
+  @spacing='1'
+>
+  {{#each this.tags as |tag|}}
+    <AkTooltip
+      @arrow={{true}}
+      @placement={{or @tooltipPlacement 'top'}}
+      @color='dark'
+      @title='{{t tag.text}} {{t
+        (if tag.status "scanCompleted" "scanNotCompleted")
+      }}'
+    >
+      <AkChip
+        {{style height=(if this.isSizeMedium '26px')}}
+        @variant='semi-filled'
+        @size='small'
+        @label={{t tag.text}}
+        @color={{if tag.status 'success' 'error'}}
+        data-test-vulnerability-analysis-scanTypeTag
+      >
+        <:icon>
+          <AkIcon @iconName={{if tag.status 'check-circle' 'cancel'}} />
+        </:icon>
+      </AkChip>
+    </AkTooltip>
+  {{/each}}
+</AkStack>
