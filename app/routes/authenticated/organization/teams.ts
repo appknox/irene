@@ -1,10 +1,6 @@
-/* eslint-disable ember/no-mixins, prettier/prettier */
 import Route from '@ember/routing/route';
-import { ScrollTopMixin } from '../../../mixins/scroll-top';
 
-export default class AuthenticatedOrganizationTeamsRoute extends ScrollTopMixin(
-  Route
-) {
+export default class AuthenticatedOrganizationTeamsRoute extends Route {
   queryParams = {
     team_limit: {
       refreshModel: true,
@@ -16,6 +12,10 @@ export default class AuthenticatedOrganizationTeamsRoute extends ScrollTopMixin(
       refreshModel: true,
     },
   };
+
+  activate() {
+    window.scrollTo(0, 0);
+  }
 
   model({ team_limit = 10, team_offset = 0, team_query = '' }) {
     return {

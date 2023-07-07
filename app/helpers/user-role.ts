@@ -2,7 +2,7 @@
 import { helper } from '@ember/component/helper';
 import ENUMS from 'irene/enums';
 
-export function userRole(params) {
+export function userRole(params: number[]) {
 
   const currentRole = params[0];
 
@@ -16,3 +16,9 @@ export function userRole(params) {
 }
 
 export default helper(userRole);
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    'user-role': typeof userRole;
+  }
+}

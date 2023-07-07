@@ -1,3 +1,4 @@
+{{! @glint-nocheck: perform }}
 <AkIconButton
   data-test-invitation-delete-btn
   title='{{t "deleteInvitation"}}'
@@ -12,7 +13,7 @@
   @description={{t 'confirmBox.deleteInvitation'}}
   @delegate={{this}}
   @confirmAction={{perform this.confirmDelete}}
-  @disabled={{this.isDeletetingInvitation}}
+  @disabled={{this.isDeletingInvitation}}
   @confirmText={{t 'delete'}}
   @key='delete'
   @blurOverlay={{@blurOverlay}}

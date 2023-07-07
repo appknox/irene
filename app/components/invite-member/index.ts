@@ -6,19 +6,40 @@ import { action } from '@ember/object';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import parseEmails from 'irene/utils/parse-emails';
 import { tracked } from '@glimmer/tracking';
+import IntlService from 'ember-intl/services/intl';
+import StoreService from '@ember-data/store';
+import RealtimeService from 'irene/services/realtime';
+import OrganizationModel from 'irene/models/organization';
+import OrganizationTeamModel from 'irene/models/organization-team';
 
-export default class InviteMemberComponent extends Component {
-  @service intl;
-  @service realtime;
-  @service store;
-  @service('notifications') notify;
+interface InviteMemberSignature {
+  Args: {
+    organization: OrganizationModel;
+    team?: OrganizationTeamModel;
+    reloadMembers?: () => void;
+  };
+  Element: HTMLDivElement;
+  Blocks: {
+    default?: () => void;
+    actionContent?: [
+      {
+        action: () => void;
+        actionLabel: string;
+        actionRunning: boolean;
+      }
+    ];
+  };
+}
+
+export default class InviteMemberComponent extends Component<InviteMemberSignature> {
+  @service declare intl: IntlService;
+  @service declare realtime: RealtimeService;
+  @service declare store: StoreService;
+  @service('notifications') declare notify: NotificationService;
 
   @tracked emailsFromText = '';
   @tracked isInvitingMember = false;
   @tracked emailErrorMsg = '';
-
-  tOrgMemberInvited = this.intl.t('orgMemberInvited');
-  tPleaseTryAgain = this.intl.t('pleaseTryAgain');
 
   get emailList() {
     return this.emailsFromText
@@ -28,7 +49,7 @@ export default class InviteMemberComponent extends Component {
   }
 
   @action
-  handleEmailDelete(index) {
+  handleEmailDelete(index: number) {
     const el = this.emailList;
 
     el.splice(index, 1);
@@ -77,17 +98,21 @@ export default class InviteMemberComponent extends Component {
         closeHandler();
       }
 
-      this.notify.success(this.tOrgMemberInvited);
+      this.notify.success(this.intl.t('orgMemberInvited'));
 
       this.emailsFromText = '';
       this.isInvitingMember = false;
 
-      triggerAnalytics('feature', ENV.csb.inviteMember);
-    } catch (err) {
-      let errMsg = this.tPleaseTryAgain;
+      triggerAnalytics(
+        'feature',
+        ENV.csb['inviteMember'] as CsbAnalyticsFeatureData
+      );
+    } catch (e) {
+      const err = e as AdapterError;
+      let errMsg = this.intl.t('pleaseTryAgain');
 
       if (err.errors && err.errors.length) {
-        errMsg = err.errors[0].detail || errMsg;
+        errMsg = err?.errors[0]?.detail || errMsg;
       } else if (err.message) {
         errMsg = err.message;
       }
@@ -96,4 +121,10 @@ export default class InviteMemberComponent extends Component {
       this.isInvitingMember = false;
     }
   });
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    InviteMember: typeof InviteMemberComponent;
+  }
 }
