@@ -1,0 +1,12 @@
+{{#if this.isAddingTeamMember}}
+  <AkLoader @size={{16}} class="my-1 mr-2" />
+{{else}}
+  <AkIconButton
+    data-test-addToTeam-btn
+    class="mr-1"
+    title='{{t "addToTeams"}}'
+    {{on 'click' (perform this.addTeamMember)}}
+  >
+    <AkIcon @iconName='person-add' />
+  </AkIconButton>
+{{/if}}

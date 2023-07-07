@@ -20,4 +20,5 @@ export default Factory.extend({
   role_display() {
     return roleDisplayMap[this.role];
   },
+  last_logged_in: faker.date.past(),
 });

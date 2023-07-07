@@ -355,6 +355,16 @@ body {
     --border-radius
   );
 
+  // variables for organization-member/list/member-details
+  --organization-member-list-member-details-border-radius: var(--border-radius);
+  --organization-member-list-member-details-border-color: var(--border-color-1);
+  --organization-member-list-member-details-divider-color: var(--neutral-grey-200);
+  --organization-member-list-member-details-box-shadow: var(--box-shadow-3);
+
+  // variables for organization-member/list/add-to-team
+  --organization-member-list-add-to-team-border-radius: var(--border-radius);
+  --organization-member-list-add-to-team-border-color: var(--border-color-1);
+
   // variables for organization-team
   --organization-team-loading-container-background: var(--background-light);
   --organization-team-loading-container-border: var(--border-color-1);

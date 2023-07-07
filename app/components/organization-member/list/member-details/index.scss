@@ -1,0 +1,31 @@
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5em;
+  margin-right: 1.5em;
+  margin-left: 1.5em;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  min-height: 150px;
+  border-radius: var(
+    --organization-member-list-member-details-border-radius
+  );
+  border: 1px solid
+    var(--organization-member-list-member-details-border-color);
+  box-sizing: border-box;
+
+  .empty-svg {
+    height: 120px;
+  }
+  }
+
+.box {
+  border-bottom: 1px solid var(--organization-member-list-member-details-divider-color) !important;
+  box-shadow: var(--organization-member-list-member-details-box-shadow);
+}
+
+.divider-gap {
+  margin-top: 0.65em;
+  margin-bottom: 0.65em;
+}

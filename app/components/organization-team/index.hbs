@@ -43,7 +43,7 @@
     </div>
   {{else if this.hasNoTeam}}
     <div local-class='emtpy-container'>
-      <AkSvg::OrgUsersEmpty local-class='empty-svg' />
+      <AkSvg::TeamsEmpty local-class='empty-svg' />
 
       <AkTypography @variant='h5'>
         {{if this.me.owner.is_admin (t 'noTeams') (t 'noTeamsMember')}}

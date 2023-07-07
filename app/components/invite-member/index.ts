@@ -9,12 +9,10 @@ import { tracked } from '@glimmer/tracking';
 import IntlService from 'ember-intl/services/intl';
 import StoreService from '@ember-data/store';
 import RealtimeService from 'irene/services/realtime';
-import OrganizationModel from 'irene/models/organization';
 import OrganizationTeamModel from 'irene/models/organization-team';
 
 interface InviteMemberSignature {
   Args: {
-    organization: OrganizationModel;
     team?: OrganizationTeamModel;
     reloadMembers?: () => void;
   };
@@ -70,9 +68,6 @@ export default class InviteMemberComponent extends Component<InviteMemberSignatu
 
       await orgInvite.save();
     }
-
-    // signal to update invitation list
-    this.realtime.incrementProperty('InvitationCounter');
   });
 
   /* Send invitation */
@@ -97,6 +92,9 @@ export default class InviteMemberComponent extends Component<InviteMemberSignatu
       if (typeof closeHandler === 'function') {
         closeHandler();
       }
+
+      // signal to update invitation list
+      this.realtime.incrementProperty('InvitationCounter');
 
       this.notify.success(this.intl.t('orgMemberInvited'));
 

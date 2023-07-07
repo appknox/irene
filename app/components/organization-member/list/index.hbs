@@ -1,4 +1,3 @@
-{{! template-lint-disable no-partial no-action }}
 <AkStack class='py-3'>
   <div local-class='search-input'>
     <AkTextField
@@ -58,6 +57,7 @@
         </AkTypography>
       </AkStack>
     </AkStack>
+
   {{else if this.hasNoUser}}
     <AkStack
       local-class='no-result-container'
@@ -72,13 +72,16 @@
         {{t 'noMembers'}}
       </AkTypography>
     </AkStack>
+
   {{else}}
-    <AkTable data-test-org-user-table as |t|>
+    <AkTable @hoverable={{true}} data-test-org-user-table as |t|>
       <t.head data-test-org-user-thead @columns={{this.columns}} />
       <t.body @rows={{pgc.currentPageResults}} as |b|>
         <b.row
           data-test-org-user-row
           class={{unless b.rowValue.member.isActive 'user-disabled'}}
+          {{style cursor='pointer'}}
+          @onClick={{this.handleShowUserDetails}}
           as |r|
         >
           <r.cell data-test-org-user-cell as |value|>
@@ -89,6 +92,7 @@
                   @organization={{@organization}}
                 />
               {{/let}}
+
             {{else}}
               <AkTypography title={{value}} @noWrap={{true}}>
                 {{value}}
@@ -115,3 +119,10 @@
     />
   {{/if}}
 </AkPaginationProvider>
+
+<OrganizationMember::List::MemberDrawer
+  @showUserDetailsView={{this.showUserDetailsView}}
+  @handleUserDetailClose={{this.handleUserDetailClose}}
+  @member={{this.selectedUser}}
+  @organization={{@organization}}
+/>

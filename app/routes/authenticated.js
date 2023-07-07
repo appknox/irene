@@ -45,6 +45,7 @@ export default class AuthenticatedRoute extends Route {
       userName: user.get('username'),
       userEmail: user.get('email'),
       userRole: membership.get('roleDisplay'),
+      lastLoggedIn: membership.get('lastLoggedIn'),
       accountId: this.get('org.selected.id'),
       accountName: company,
     };

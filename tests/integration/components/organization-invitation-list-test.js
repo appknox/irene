@@ -1,4 +1,4 @@
-import { render, findAll, find, click } from '@ember/test-helpers';
+import { render, findAll, find, click, settled } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import { Response } from 'miragejs';
 
 import Service from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 class RouterStub extends Service {
   currentRouteName = '';
@@ -16,6 +17,10 @@ class RouterStub extends Service {
   transitionTo({ queryParams }) {
     this.queryParams = queryParams;
   }
+}
+
+class RealtimeStub extends Service {
+  @tracked InvitationCounter = 0;
 }
 
 class NotificationsStub extends Service {
@@ -82,6 +87,7 @@ module(
       this.owner.register('service:me', OrganizationMeStub);
       this.owner.register('service:notifications', NotificationsStub);
       this.owner.register('service:router', RouterStub);
+      this.owner.register('service:realtime', RealtimeStub);
     });
 
     test('it renders organization user invitation list', async function (assert) {
@@ -360,5 +366,73 @@ module(
         }
       }
     );
+
+    test('test organization user invitation list reload', async function (assert) {
+      let apiCallCounter = 0;
+
+      this.server.get('/organizations/:id/invitations', (schema) => {
+        const results = schema.organizationInvitations.all().models;
+        apiCallCounter++;
+        return { count: results.length, next: null, previous: null, results };
+      });
+
+      this.server.get('/organizations/:id/users/:userId', (schema, req) => {
+        const user = schema.organizationUsers.find(req.params.userId);
+
+        return user?.toJSON();
+      });
+
+      this.server.get('/organizations/:id/teams/:teamId', (schema, req) => {
+        const user = schema.organizationTeams.find(req.params.teamId);
+
+        return user?.toJSON();
+      });
+
+      await render(hbs`
+        <OrganizationInvitationList @queryParams={{this.queryParams}} @organization={{this.organization}}>
+          <:headerContent>
+            <h5 data-test-invitation-list-title>
+              {{t 'pendingInvitations'}}
+            </h5>
+          </:headerContent>
+        </OrganizationInvitationList>
+      `);
+
+      assert
+        .dom('[data-test-invitation-list-title]')
+        .exists()
+        .hasText('t:pendingInvitations:()');
+
+      assert.dom('[data-test-invitation-list]').exists();
+
+      const realtime = this.owner.lookup('service:realtime');
+      realtime.incrementProperty('InvitationCounter');
+
+      await settled();
+
+      assert.strictEqual(apiCallCounter, 2);
+
+      const contentRows = findAll('[data-test-invitation-list-row]');
+      assert.strictEqual(
+        contentRows.length,
+        this.organizationInvitations.length
+      );
+
+      const firstRow = contentRows[0].querySelectorAll(
+        '[data-test-invitation-list-cell]'
+      );
+
+      assert.dom(firstRow[0]).hasText(this.organizationInvitations[0].email);
+      assert.dom(firstRow[1]).hasText('t:organization:()');
+
+      assert
+        .dom(firstRow[2])
+        .hasText(dayjs(this.organizationInvitations[0].created_on).fromNow());
+
+      assert
+        .dom('[data-test-invitation-resend-btn]', firstRow[3])
+        .exists()
+        .isNotDisabled();
+    });
   }
 );

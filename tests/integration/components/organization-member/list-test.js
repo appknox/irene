@@ -15,6 +15,7 @@ import { selectChoose } from 'ember-power-select/test-support';
 import { Response } from 'miragejs';
 
 import Service from '@ember/service';
+import dayjs from 'dayjs';
 
 class RouterStub extends Service {
   currentRouteName = '';
@@ -60,6 +61,8 @@ module('Integration | Component | organization-member/list', function (hooks) {
       5
     );
 
+    const organizationTeams = this.server.createList('organization-team', 3);
+
     const users = this.server.createList('organization-user', 5);
 
     // 0 is member, 1 is owner, 2 is admin
@@ -85,6 +88,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
     this.setProperties({
       organization: this.owner.lookup('service:organization').selected,
       organizationMembers,
+      organizationTeams,
       users,
       queryParams,
     });
@@ -142,7 +146,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
     assert.dom(headerRow[0]).hasText('t:user:()');
     assert.dom(headerRow[1]).hasText('t:email:()');
     assert.dom(headerRow[2]).hasText('t:role:()');
-    assert.dom(headerRow[3]).hasText('t:action:()');
+    assert.dom(headerRow[3]).hasText('t:lastLoggedIn:()');
 
     const contentRows = findAll('[data-test-org-user-row]');
 
@@ -161,9 +165,17 @@ module('Integration | Component | organization-member/list', function (hooks) {
       .hasAria('disabled', 'false')
       .hasText('t:owner:()');
 
-    assert
-      .dom('[data-test-org-user-more-action-btn]', firstRow[3])
-      .isNotDisabled();
+    if (this.organizationMembers[0].last_logged_in) {
+      assert
+        .dom(firstRow[3])
+        .hasText(
+          dayjs(this.organizationMembers[0].last_logged_in).format(
+            'MMM DD, YYYY'
+          )
+        );
+    } else {
+      assert.dom(firstRow[3]).hasText('t:never:()');
+    }
 
     // second row sanity check
     const secondRow = contentRows[1].querySelectorAll(
@@ -238,8 +250,7 @@ module('Integration | Component | organization-member/list', function (hooks) {
     assert.dom(headerRow[0]).hasText('t:user:()');
     assert.dom(headerRow[1]).hasText('t:email:()');
     assert.dom(headerRow[2]).hasText('t:role:()');
-
-    assert.notOk(headerRow[3]);
+    assert.dom(headerRow[3]).hasText('t:lastLoggedIn:()');
 
     const contentRows = findAll('[data-test-org-user-row]');
 
@@ -257,7 +268,17 @@ module('Integration | Component | organization-member/list', function (hooks) {
 
     assert.dom(firstRow[2]).hasText('t:owner:()');
 
-    assert.dom('[data-test-org-user-more-action-btn]').doesNotExist();
+    if (this.organizationMembers[0].last_logged_in) {
+      assert
+        .dom(firstRow[3])
+        .hasText(
+          dayjs(this.organizationMembers[0].last_logged_in).format(
+            'MMM DD, YYYY'
+          )
+        );
+    } else {
+      assert.dom(firstRow[3]).hasText('t:never:()');
+    }
 
     // second row sanity check
     const secondRow = contentRows[1].querySelectorAll(
@@ -276,6 +297,50 @@ module('Integration | Component | organization-member/list', function (hooks) {
     assert.dom('.user-role-select-trigger', forthRow[2]).doesNotExist();
 
     assert.dom(forthRow[2]).hasText('t:admin:()');
+  });
+
+  test('it opens a drawer with member details on row click', async function (assert) {
+    this.server.get('/organizations/:id/members', (schema) => {
+      const results = schema.organizationMembers.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.server.get('/organizations/:id/users/:userId', (schema, req) => {
+      const user = schema.organizationUsers.find(req.params.userId);
+
+      return user?.toJSON();
+    });
+
+    this.server.get('/organizations/:id/teams', (schema) => {
+      const results = schema.organizationTeams.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    await render(hbs`
+      <OrganizationMember::List @queryParams={{this.queryParams}} @organization={{this.organization}} />
+    `);
+
+    const contentRows = findAll('[data-test-org-user-row]');
+
+    assert.strictEqual(contentRows.length, this.organizationMembers.length);
+
+    // first row sanity check
+    const contentRow = contentRows[0].querySelectorAll(
+      '[data-test-org-user-cell]'
+    );
+
+    await click(contentRow[0]);
+
+    assert.dom('[data-test-member-drawer]').exists();
+    assert.dom('[data-test-member-drawer-title]').hasText('t:userDetails:()');
+    assert.dom('[data-test-add-to-team-button]').hasText('t:addToTeams:()');
+    assert.dom('[data-test-member-drawer-close-btn]').exists();
+
+    await click('[data-test-member-drawer-close-btn]');
+
+    assert.dom('[data-test-member-drawer]').doesNotExist();
   });
 
   test('test organization user role change success', async function (assert) {
@@ -360,237 +425,6 @@ module('Integration | Component | organization-member/list', function (hooks) {
     const notify = this.owner.lookup('service:notifications');
 
     assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
-  });
-
-  test('test organization user deactivate', async function (assert) {
-    this.server.get('/organizations/:id/members', (schema) => {
-      const results = schema.organizationMembers.all().models;
-
-      return { count: results.length, next: null, previous: null, results };
-    });
-
-    this.server.get('/organizations/:id/users/:userId', (schema, req) => {
-      const user = schema.organizationUsers.find(req.params.userId);
-
-      return user?.toJSON();
-    });
-
-    await render(hbs`
-      <OrganizationMember::List @queryParams={{this.queryParams}} @organization={{this.organization}} />
-    `);
-
-    const contentRows = findAll('[data-test-org-user-row]');
-
-    assert.strictEqual(contentRows.length, this.organizationMembers.length);
-
-    const contentRow = contentRows[0].querySelectorAll(
-      '[data-test-org-user-cell]'
-    );
-
-    assert
-      .dom('[data-test-org-user-username]', contentRow[0])
-      .hasText(this.users[0].username);
-
-    assert.dom('[data-test-inactive-chip]', contentRow[0]).doesNotExist();
-
-    await click(`#${contentRow[3].id} [data-test-org-user-more-action-btn]`);
-
-    assert
-      .dom('[data-test-user-active-toggle-opt]')
-      .exists()
-      .hasText('t:deactivateUser:()');
-
-    await click('[data-test-user-active-toggle-opt] button');
-
-    assert
-      .dom('[data-test-ak-modal-header]')
-      .hasText('t:userDeactivateTitle:()');
-
-    assert
-      .dom('[data-test-confirmbox-description]')
-      .hasText(
-        `t:userActivationChangeMessage:() ${this.users[0].username} t:inactive:() ?`
-      );
-
-    assert
-      .dom('[data-test-confirmbox-confirmBtn]')
-      .exists()
-      .isNotDisabled()
-      .hasText('t:confirm:()');
-
-    assert
-      .dom('[data-test-confirmbox-cancelBtn]')
-      .exists()
-      .isNotDisabled()
-      .hasText('t:cancel:()');
-
-    await click('[data-test-confirmbox-confirmBtn]');
-
-    const notify = this.owner.lookup('service:notifications');
-
-    assert.strictEqual(
-      notify.successMsg,
-      `t:deactivated:() ${this.users[0].username}`
-    );
-
-    assert.dom('[data-test-ak-modal-header]').doesNotExist();
-    assert.dom('[data-test-confirmbox-confirmBtn]').doesNotExist();
-    assert.dom('[data-test-confirmbox-cancelBtn]').doesNotExist();
-  });
-
-  test('test organization user activate', async function (assert) {
-    this.server.get('/organizations/:id/members', (schema) => {
-      const results = schema.organizationMembers.all().models;
-
-      return { count: results.length, next: null, previous: null, results };
-    });
-
-    this.server.get('/organizations/:id/users/:userId', (schema, req) => {
-      const user = schema.organizationUsers.find(req.params.userId);
-
-      return user?.toJSON();
-    });
-
-    await render(hbs`
-      <OrganizationMember::List @queryParams={{this.queryParams}} @organization={{this.organization}} />
-    `);
-
-    const contentRows = findAll('[data-test-org-user-row]');
-
-    assert.strictEqual(contentRows.length, this.organizationMembers.length);
-
-    const contentRow = contentRows[4].querySelectorAll(
-      '[data-test-org-user-cell]'
-    );
-
-    assert
-      .dom('[data-test-org-user-username]', contentRow[0])
-      .hasText(this.users[4].username);
-
-    assert
-      .dom('[data-test-inactive-chip]', contentRow[0])
-      .exists()
-      .hasText('t:chipStatus.inactive:()');
-
-    await click(`#${contentRow[3].id} [data-test-org-user-more-action-btn]`);
-
-    assert
-      .dom('[data-test-user-active-toggle-opt]')
-      .exists()
-      .hasText('t:activateUser:()');
-
-    await click('[data-test-user-active-toggle-opt] button');
-
-    assert.dom('[data-test-ak-modal-header]').hasText('t:userActivateTitle:()');
-
-    assert
-      .dom('[data-test-confirmbox-description]')
-      .hasText(
-        `t:userActivationChangeMessage:() ${this.users[4].username} t:active:() ?`
-      );
-
-    assert
-      .dom('[data-test-confirmbox-confirmBtn]')
-      .exists()
-      .isNotDisabled()
-      .hasText('t:confirm:()');
-
-    assert
-      .dom('[data-test-confirmbox-cancelBtn]')
-      .exists()
-      .isNotDisabled()
-      .hasText('t:cancel:()');
-
-    await click('[data-test-confirmbox-confirmBtn]');
-
-    const notify = this.owner.lookup('service:notifications');
-
-    assert.strictEqual(
-      notify.successMsg,
-      `t:activated:() ${this.users[4].username}`
-    );
-
-    assert.dom('[data-test-ak-modal-header]').doesNotExist();
-    assert.dom('[data-test-confirmbox-confirmBtn]').doesNotExist();
-    assert.dom('[data-test-confirmbox-cancelBtn]').doesNotExist();
-  });
-
-  test('test organization user activate/deactivate failure', async function (assert) {
-    this.server.get('/organizations/:id/members', (schema) => {
-      const results = schema.organizationMembers.all().models;
-
-      return { count: results.length, next: null, previous: null, results };
-    });
-
-    this.server.get('/organizations/:id/users/:userId', (schema, req) => {
-      const user = schema.organizationUsers.find(req.params.userId);
-
-      return user?.toJSON();
-    });
-
-    this.server.put('/organizations/:id/users/:userId', () => {
-      return new Response(500);
-    });
-
-    await render(hbs`
-      <OrganizationMember::List @queryParams={{this.queryParams}} @organization={{this.organization}} />
-    `);
-
-    const contentRows = findAll('[data-test-org-user-row]');
-
-    assert.strictEqual(contentRows.length, this.organizationMembers.length);
-
-    const contentRow = contentRows[4].querySelectorAll(
-      '[data-test-org-user-cell]'
-    );
-
-    assert
-      .dom('[data-test-org-user-username]', contentRow[0])
-      .hasText(this.users[4].username);
-
-    assert
-      .dom('[data-test-inactive-chip]', contentRow[0])
-      .exists()
-      .hasText('t:chipStatus.inactive:()');
-
-    await click(`#${contentRow[3].id} [data-test-org-user-more-action-btn]`);
-
-    assert
-      .dom('[data-test-user-active-toggle-opt]')
-      .exists()
-      .hasText('t:activateUser:()');
-
-    await click('[data-test-user-active-toggle-opt] button');
-
-    assert.dom('[data-test-ak-modal-header]').hasText('t:userActivateTitle:()');
-
-    assert
-      .dom('[data-test-confirmbox-description]')
-      .hasText(
-        `t:userActivationChangeMessage:() ${this.users[4].username} t:active:() ?`
-      );
-
-    assert
-      .dom('[data-test-confirmbox-confirmBtn]')
-      .exists()
-      .isNotDisabled()
-      .hasText('t:confirm:()');
-
-    assert
-      .dom('[data-test-confirmbox-cancelBtn]')
-      .exists()
-      .isNotDisabled()
-      .hasText('t:cancel:()');
-
-    await click('[data-test-confirmbox-confirmBtn]');
-
-    const notify = this.owner.lookup('service:notifications');
-
-    assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
-
-    assert.dom('[data-test-ak-modal-header]').exists();
-    assert.dom('[data-test-confirmbox-confirmBtn]').exists();
-    assert.dom('[data-test-confirmbox-cancelBtn]').exists();
   });
 
   test('test organization user inactive user checkbox', async function (assert) {

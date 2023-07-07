@@ -1,0 +1,21 @@
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5em;
+  margin-right: 1.5em;
+  margin-left: 1.5em;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  min-height: 150px;
+  border-radius: var(
+    --organization-member-list-add-to-team-border-radius
+  );
+  border: 1px solid
+    var(--organization-member-list-add-to-team-border-color);
+  box-sizing: border-box;
+
+  .empty-svg {
+    height: 120px;
+  }
+}

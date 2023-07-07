@@ -1,0 +1,168 @@
+<AkStack
+  data-test-member-details
+  @width='full'
+  local-class='box'
+  class='px-3 pt-3'
+>
+  <AkStack
+    @direction='column'
+    class='mb-3'
+    @width='9/12'
+    data-test-selected-user-details
+  >
+    {{#each this.memberDetails as |md|}}
+      <AkStack @alignItems='center' @width='full'>
+        <AkTypography
+          class='w-4/12'
+          @color='textSecondary'
+          data-test-selected-user-label
+        >
+          {{md.label}}
+        </AkTypography>
+
+        {{#let (component md.component) as |Component|}}
+          {{#if md.component}}
+            <Component @member={{@member}} @fontWeight='medium' />
+          {{else}}
+            <AkTypography
+              class='w-8/12'
+              @variant='h6'
+              data-test-selected-user-value
+            >
+              {{md.value}}
+            </AkTypography>
+          {{/if}}
+        {{/let}}
+      </AkStack>
+
+      {{#unless md.isLast}}
+        <AkDivider local-class='divider-gap' />
+      {{/unless}}
+    {{/each}}
+  </AkStack>
+
+  <AkStack
+    @direction='column'
+    class='mb-3'
+    @width='3/12'
+    @alignItems='flex-end'
+  >
+    <AkButton
+      data-test-add-to-team-button
+      @disabled={{this.isDeactivated}}
+      {{on 'click' @handleAddToTeam}}
+    >
+      {{t 'addToTeams'}}
+    </AkButton>
+  </AkStack>
+</AkStack>
+
+<AkStack @alignItems='center' @justifyContent='space-between' class='my-3 px-3'>
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkTypography data-test-teamList-title @variant='h6'>
+      {{t 'team'}}
+    </AkTypography>
+
+    <AkTypography
+      data-test-teamList-description
+      @color='textSecondary'
+      @variant='body2'
+    >
+      {{t 'usersTeamDesc'}}
+    </AkTypography>
+  </AkStack>
+
+  <AkStack @alignItems='center'>
+    <div {{style width='180px'}}>
+      <AkTextField
+        data-test-addUserList-searchInput
+        @placeholder={{t 'searchTeam'}}
+        {{on 'keyup' this.handleSearchQueryChange}}
+      >
+        <:leftAdornment>
+          <AkIcon @iconName='search' @color='textSecondary' />
+        </:leftAdornment>
+      </AkTextField>
+    </div>
+  </AkStack>
+</AkStack>
+
+<AkPaginationProvider
+  @results={{this.teamsList}}
+  @onItemPerPageChange={{this.handleItemPerPageChange}}
+  @totalItems={{this.totalTeamCount}}
+  @nextAction={{this.handleNextPrevAction}}
+  @prevAction={{this.handleNextPrevAction}}
+  @itemPerPageOptions={{array 5 10 20}}
+  @defaultLimit={{this.limit}}
+  @offset={{this.offset}}
+  as |pgc|
+>
+  {{#if this.fetchTeams.isRunning}}
+    <div local-class='empty-container' class='px-3'>
+      <AkStack @alignItems='center' @spacing='2'>
+        <AkLoader @size={{16}} />
+        <AkTypography>{{t 'loading'}}...</AkTypography>
+      </AkStack>
+    </div>
+
+  {{else if this.hasNoTeam}}
+    <div local-class='empty-container' class='px-3'>
+      <AkSvg::TeamsEmpty local-class='empty-svg' />
+
+      <AkTypography @variant='h6'>
+        {{t 'noTeams'}}
+      </AkTypography>
+    </div>
+
+  {{else}}
+    <div>
+      <AkTable @dense={{true}} class='px-3' data-test-teamList-table as |t|>
+        <t.head data-test-teamList-thead @columns={{this.columns}} />
+        <t.body @rows={{pgc.currentPageResults}} as |b|>
+          <b.row data-test-teamList-row as |r|>
+            <r.cell data-test-teamList-cell as |value|>
+              {{#if r.columnValue.component}}
+                {{#let (component r.columnValue.component) as |Component|}}
+                  <Component
+                    @member={{@member.member}}
+                    @team={{r.rowValue}}
+                    @reloadTeams={{this.handleReloadTeams}}
+                  />
+                {{/let}}
+              {{else}}
+                <AkTypography title={{value}} @noWrap={{true}}>
+                  {{value}}
+                </AkTypography>
+              {{/if}}
+            </r.cell>
+          </b.row>
+        </t.body>
+      </AkTable>
+    </div>
+
+    <AkStack class='px-3'>
+      <AkPagination
+        @disableNext={{pgc.disableNext}}
+        @nextAction={{pgc.nextAction}}
+        @disablePrev={{pgc.disablePrev}}
+        @prevAction={{pgc.prevAction}}
+        @endItemIdx={{pgc.endItemIdx}}
+        @startItemIdx={{pgc.startItemIdx}}
+        @itemPerPageOptions={{pgc.itemPerPageOptions}}
+        @onItemPerPageChange={{pgc.onItemPerPageChange}}
+        @selectedOption={{pgc.selectedOption}}
+        @tableItemLabel={{t 'teams'}}
+        @perPageTranslation={{t 'recordPerPage'}}
+        @totalItems={{pgc.totalItems}}
+        @variant='compact'
+      />
+    </AkStack>
+  {{/if}}
+</AkPaginationProvider>
+
+<AkDivider class='my-2' @color='dark' />
+
+<OrganizationMember::List::MemberDetails::ChangeActivityStatus
+  @member={{@member}}
+/>
