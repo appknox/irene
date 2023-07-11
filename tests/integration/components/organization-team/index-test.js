@@ -169,6 +169,10 @@ module('Integration | Component | organization-team', function (hooks) {
             });
       });
 
+      this.server.get('/organizations/:id', (schema, req) =>
+        schema.organizations.find(`${req.params.id}`)?.toJSON()
+      );
+
       await render(
         hbs`<OrganizationTeam @queryParams={{this.queryParams}} @organization={{this.organization}} />`
       );

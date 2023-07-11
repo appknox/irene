@@ -52,11 +52,16 @@ export default class OrganizationTeamCreateTeam extends Component {
 
       this.notify.success(this.tTeamCreated);
 
+      // reload organization to update team count
+      await this.args.organization.reload();
+
+      // reload teams list
       this.args.reloadTeams();
 
       this.showTeamModal = false;
       this.teamName = '';
       this.isCreatingTeam = false;
+
       triggerAnalytics('feature', ENV.csb.createTeam);
     } catch (err) {
       let errMsg = this.tPleaseTryAgain;

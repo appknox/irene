@@ -63,7 +63,7 @@
               {{#let (component r.columnValue.component) as |CheckBox|}}
                 <CheckBox
                   @checked={{r.rowValue.checked}}
-                  @onChange={{fn this.selectionChange r.rowValue}}
+                  @onChange={{fn this.selectionChange r.rowValue.user}}
                   @disabled={{this.isAddingMember}}
                 />
               {{/let}}
