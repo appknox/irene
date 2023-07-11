@@ -5,10 +5,6 @@ import Store from '@ember-data/store';
 export default class AuthenticatedFileIndexRoute extends Route {
   @service declare store: Store;
 
-  activate() {
-    window.scrollTo(0, 0);
-  }
-
   async model() {
     const { fileid } = this.paramsFor('authenticated.dashboard.file') as {
       fileid: string;

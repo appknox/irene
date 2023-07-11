@@ -1,4 +1,6 @@
 import EmberRouter from '@ember/routing/router';
+// import RouterScroll from 'ember-router-scroll/services';
+// import EmberRouterScroll from 'ember-router-scroll/locations/router-scroll';
 import ENV from 'irene/config/environment';
 import config from './config/environment';
 
