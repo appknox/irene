@@ -47,6 +47,9 @@ export default class OrganizationTeamDetailsTeamInfo extends Component {
 
       this.notify.success(`${this.args.team.name} ${this.tTeamDeleted}`);
 
+      // reload organization to update team count
+      await this.args.organization.reload();
+
       this.args.drawerCloseHandler();
 
       this.showTeamDeleteConfirm = false;

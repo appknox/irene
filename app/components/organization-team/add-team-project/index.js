@@ -31,17 +31,10 @@ export default class OrganizationTeamAddTeamProjectComponent extends Component {
   get projectList() {
     const list = this.projectResponse?.toArray() || [];
 
-    if (this.hasNoSelection) {
-      return list;
-    }
-
-    return list.map((it) => {
-      if (this.selectedProjects[it.id]) {
-        it.set('checked', true);
-      }
-
-      return it;
-    });
+    return list.map((project) => ({
+      project,
+      checked: !!this.selectedProjects[project.id],
+    }));
   }
 
   get totalProjectCount() {
@@ -133,6 +126,9 @@ export default class OrganizationTeamAddTeamProjectComponent extends Component {
       this.selectedProjects = {};
       this.searchQuery = '';
     }
+
+    // reload team to update project count
+    await this.args.team.reload();
 
     this.isAddingProject = false;
   });

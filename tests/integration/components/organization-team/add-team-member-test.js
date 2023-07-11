@@ -171,6 +171,10 @@ module(
           }
         );
 
+        this.server.get('/organizations/:id/teams/:teamId', (schema, req) =>
+          schema.organizationTeams.find(`${req.params.id}`)?.toJSON()
+        );
+
         await render(hbs`
           <OrganizationTeam::AddTeamMember @team={{this.organizationTeam}} @organization={{this.organization}}>
               <:actionContent as |ac|>

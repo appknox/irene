@@ -36,21 +36,24 @@ export default class OrganizationProjectOverview extends Component {
       this.isRemovingProject = true;
 
       const prj = this.args.project;
-      const teamId = this.args.team.id;
+      const team = this.args.team;
 
-      await prj.deleteProject(teamId);
+      await prj.deleteProject(team.id);
       await this.store.unloadRecord(prj);
 
-      this.notify.success(this.tProjectRemoved);
-
+      // reload project list
       this.args.reloadTeamProjects();
+
+      this.notify.success(this.tProjectRemoved);
 
       triggerAnalytics('feature', ENV.csb.teamProjectRemove);
 
       this.showRemoveProjectConfirm = false;
       this.isRemovingProject = false;
 
-      this.realtime.incrementProperty('OrganizationNonTeamProjectCounter');
+      // reload team to update project count
+      // for some reason because of 'reloadTeamProjects' this has to be last for test & implementation to work
+      await team.reload();
     } catch (err) {
       let errMsg = this.tPleaseTryAgain;
 

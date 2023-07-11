@@ -881,6 +881,10 @@ module('Integration | Component | organization-team/details', function (hooks) {
         return new Response(fail ? 500 : 204);
       });
 
+      this.server.get('/organizations/:id', (schema, req) =>
+        schema.organizations.find(`${req.params.id}`)?.toJSON()
+      );
+
       this.set('handleTeamDetailClose', () => {
         this.set('handleTeamDetailCloseCalled', true);
       });

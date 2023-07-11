@@ -33,17 +33,10 @@ export default class OrganizationTeamAddTeamMemberComponent extends Component {
   get userList() {
     const list = this.userResponse?.toArray() || [];
 
-    if (this.hasNoSelection) {
-      return list;
-    }
-
-    return list.map((it) => {
-      if (this.selectedMembers[it.id]) {
-        it.set('checked', true);
-      }
-
-      return it;
-    });
+    return list.map((user) => ({
+      user,
+      checked: !!this.selectedMembers[user.id],
+    }));
   }
 
   get totalUserCount() {
@@ -58,7 +51,7 @@ export default class OrganizationTeamAddTeamMemberComponent extends Component {
     return [
       {
         name: this.intl.t('name'),
-        valuePath: 'username',
+        valuePath: 'user.username',
         minWidth: 250,
       },
       {
@@ -134,6 +127,9 @@ export default class OrganizationTeamAddTeamMemberComponent extends Component {
 
       triggerAnalytics('feature', ENV.csb.addTeamMember);
     }
+
+    // reload team to update member count
+    await this.args.team.reload();
 
     this.isAddingMember = false;
   });

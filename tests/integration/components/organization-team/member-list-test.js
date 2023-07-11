@@ -194,6 +194,10 @@ module(
           }
         );
 
+        this.server.get('/organizations/:id/teams/:teamId', (schema, req) =>
+          schema.organizationTeams.find(`${req.params.id}`)?.toJSON()
+        );
+
         await render(
           hbs(
             `<OrganizationTeam::MemberList @members={{this.organizationTeam.members}} @organization={{this.organization}} @team={{this.organizationTeam}} @handleActiveAction={{this.handleActiveAction}} />`

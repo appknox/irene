@@ -62,9 +62,9 @@
             {{#if r.columnValue.component}}
               {{#let (component r.columnValue.component) as |Component|}}
                 <Component
-                  @project={{r.rowValue}}
+                  @project={{r.rowValue.project}}
                   @checked={{r.rowValue.checked}}
-                  @onChange={{fn this.selectionChange r.rowValue}}
+                  @onChange={{fn this.selectionChange r.rowValue.project}}
                   @disabled={{this.isAddingProject}}
                 />
               {{/let}}

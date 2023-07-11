@@ -14,7 +14,10 @@
   </div>
 
   {{#if this.me.org.is_admin}}
-    <OrganizationTeam::CreateTeam @reloadTeams={{this.handleReloadTeams}} />
+    <OrganizationTeam::CreateTeam
+      @organization={{this.organization.selected}}
+      @reloadTeams={{this.handleReloadTeams}}
+    />
   {{/if}}
 </AkStack>
 

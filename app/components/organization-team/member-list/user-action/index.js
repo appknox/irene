@@ -43,16 +43,20 @@ export default class OrganizationTeamMemberListUserAction extends Component {
       }
 
       const { team, member } = this.args;
+
       await team.deleteMember(member);
 
-      this.notify.success(this.tTeamMemberRemoved);
-
+      // reload member list
       this.args.reloadTeamMembers();
+
+      this.notify.success(this.tTeamMemberRemoved);
 
       this.showRemoveMemberPrompt = false;
       this.isRemovingMember = false;
 
-      this.realtime.incrementProperty('OrganizationNonTeamMemberCounter');
+      // reload team to update member count
+      // for some reason because of 'reloadTeamMembers' this has to be last for test & implementation to work
+      await team.reload();
     } catch (err) {
       let errMsg = this.tPleaseTryAgain;
 
