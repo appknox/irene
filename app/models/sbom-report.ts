@@ -13,7 +13,7 @@ export enum SbomReportStatus {
 
 export default class SbomReportModel extends Model {
   @belongsTo('sbom-file')
-  declare sbFile: AsyncBelongsTo<SbomFileModel>;
+  declare sbFile: AsyncBelongsTo<SbomFileModel> | null;
 
   @attr('string')
   declare language: 'en' | 'ja';

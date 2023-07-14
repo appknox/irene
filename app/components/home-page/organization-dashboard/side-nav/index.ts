@@ -7,6 +7,7 @@ import MeService from 'irene/services/me';
 import OrganizationService from 'irene/services/organization';
 import IntegrationService from 'irene/services/integration';
 import IntlService from 'ember-intl/services/intl';
+import ConfigurationService from 'irene/services/configuration';
 
 export interface HomePageOrganizationDashboardSideNavSignature {
   Args: {
@@ -29,6 +30,7 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
   @service declare organization: OrganizationService;
   @service declare integration: IntegrationService;
   @service declare intl: IntlService;
+  @service declare configuration: ConfigurationService;
 
   showMarketplace = ENV.enableMarketplace;
   productVersion = ENV.productVersion;
@@ -126,7 +128,10 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
   }
 
   get showSbomDashboard() {
-    return this.organization.selected?.features?.sbom;
+    return (
+      this.organization.selected?.features?.sbom &&
+      !this.configuration.serverData.enterprise
+    );
   }
 
   get enablePendo() {

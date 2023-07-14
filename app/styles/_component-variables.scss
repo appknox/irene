@@ -513,6 +513,10 @@ body {
     --background-light
   );
 
+  // variables for file/report-drawer/sbom-reports
+  --file-report-dr-sbom-reports-border-color: var(--neutral-grey-200);
+  --file-report-dr-sbom-reports-border-radius: var(--border-radius);
+
   // variables for sbom/app-logo
   --sbom-app-logo-border-radius: var(--border-radius);
   --sbom-app-logo-border-color: var(--neutral-grey-100);

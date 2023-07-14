@@ -1,8 +1,13 @@
 import Component from '@glimmer/component';
-import { TypographyColors, TypographyVariant } from '../ak-typography';
+import {
+  TypographyColors,
+  TypographyVariant,
+  TypographyFontWeight,
+} from '../ak-typography';
 
 type ButtonColors = TypographyColors;
 type ButtonVariants = TypographyVariant;
+type ButtonFontWeight = TypographyFontWeight;
 type ButtonTags = 'button' | 'a' | 'div' | 'label' | 'span';
 
 export interface AkButtonSignature<T extends ButtonTags> {
@@ -17,6 +22,7 @@ export interface AkButtonSignature<T extends ButtonTags> {
     type?: 'button' | 'reset' | 'submit';
     color?: ButtonColors;
     typographyVariant?: ButtonVariants;
+    typographyFontWeight?: ButtonFontWeight;
     leftIconClass?: string;
     rightIconClass?: string;
   };

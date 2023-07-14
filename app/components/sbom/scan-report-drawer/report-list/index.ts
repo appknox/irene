@@ -1,8 +1,10 @@
+/* eslint-disable ember/no-observers */
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
 import { tracked } from '@glimmer/tracking';
+import { addObserver, removeObserver } from '@ember/object/observers';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import { DS } from 'ember-data';
@@ -12,6 +14,7 @@ import parseError from 'irene/utils/parse-error';
 import SbomFileModel from 'irene/models/sbom-file';
 
 import SbomReportModel, { SbomReportStatus } from 'irene/models/sbom-report';
+import RealtimeService from 'irene/services/realtime';
 
 type SbomScanReportQueryResponse =
   DS.AdapterPopulatedRecordArray<SbomReportModel> & {
@@ -25,6 +28,7 @@ export interface SbomScanReportDrawerReportListSignature {
 }
 
 export default class SbomScanReportDrawerReportListComponent extends Component<SbomScanReportDrawerReportListSignature> {
+  @service declare realtime: RealtimeService;
   @service declare intl: IntlService;
   @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
@@ -43,6 +47,19 @@ export default class SbomScanReportDrawerReportListComponent extends Component<S
     this.tPleaseTryAgain = this.intl.t('pleaseTryAgain');
 
     this.fetchSbomScanReports.perform();
+
+    addObserver(
+      this.realtime,
+      'SbomReportCounter',
+      this,
+      this.observeSbomReportCounter
+    );
+  }
+
+  willDestroy() {
+    super.willDestroy();
+
+    this.removeSbomReportCounterObserver();
   }
 
   get sbomReports() {
@@ -81,6 +98,19 @@ export default class SbomScanReportDrawerReportListComponent extends Component<S
         status: SbomReportStatus.COMPLETED,
       },
     ];
+  }
+
+  observeSbomReportCounter() {
+    this.latestSbomScanReport?.reload();
+  }
+
+  removeSbomReportCounterObserver() {
+    removeObserver(
+      this.realtime,
+      'SbomReportCounter',
+      this,
+      this.observeSbomReportCounter
+    );
   }
 
   fetchSbomScanReports = task(async () => {

@@ -7,6 +7,7 @@ import { module, test } from 'qunit';
 
 import { SbomReportStatus } from 'irene/models/sbom-report';
 import Service from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -24,6 +25,10 @@ class NotificationsStub extends Service {
   info(msg) {
     this.infoMsg = msg;
   }
+}
+
+class RealtimeStub extends Service {
+  @tracked SbomReportCounter = 0;
 }
 
 class WindowStub extends Service {
@@ -68,6 +73,7 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     });
 
     this.owner.register('service:notifications', NotificationsStub);
+    this.owner.register('service:realtime', RealtimeStub);
     this.owner.register('service:browser/window', WindowStub);
   });
 
@@ -279,6 +285,133 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
 
     assert.strictEqual(window.url, 'some_pdf_download_url.com');
     assert.strictEqual(window.target, '_blank');
+  });
+
+  test('test pdf report realtime state updates', async function (assert) {
+    this.setProperties({
+      status: SbomReportStatus.PENDING,
+      open: true,
+    });
+
+    this.server.get('/v2/sb_files/:id/sb_reports', (schema) => {
+      const results = schema.sbomReports.all().models;
+
+      results[0].pdf_status = this.status;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.server.get('/v2/sb_reports/:id', (schema, req) => {
+      return {
+        ...schema.sbomReports.find(`${req.params.id}`)?.toJSON(),
+        pdf_status: this.status,
+      };
+    });
+
+    this.server.post('/v2/sb_reports/:id/pdf/generate', () => ({
+      success: true,
+    }));
+
+    await render(hbs`
+      <Sbom::ScanReportDrawer @sbomFile={{this.sbomFile}} @open={{this.open}} @onClose={{this.onClose}} />
+    `);
+
+    assert.dom('[data-test-sbomReportDrawer-drawer]').exists();
+    assert.dom('[data-test-sbomReportList-reportlist]').exists();
+
+    let reportList = findAll('[data-test-sbomReportList-reportlistItem]');
+
+    assert
+      .dom('[data-test-sbomReportList-reportGenerateBtn]', reportList[0])
+      .isNotDisabled()
+      .hasText('t:generateReport:()');
+
+    this.set('status', SbomReportStatus.STARTED);
+
+    await click(
+      reportList[0].querySelector(
+        '[data-test-sbomReportList-reportGenerateBtn]'
+      )
+    );
+
+    // refresh dom reference
+    reportList = findAll('[data-test-sbomReportList-reportlistItem]');
+
+    // previous state
+    assert
+      .dom('[data-test-sbomReportList-reportGenerateTitle]', reportList[0])
+      .doesNotExist();
+
+    assert
+      .dom('[data-test-sbomReportList-reportGenerateSvg]', reportList[0])
+      .doesNotExist();
+
+    assert
+      .dom(
+        '[data-test-sbomReportList-reportGenerateDescription]',
+        reportList[0]
+      )
+      .doesNotExist();
+
+    assert
+      .dom('[data-test-sbomReportList-reportGenerateBtn]', reportList[0])
+      .doesNotExist();
+
+    // current state
+    assert
+      .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[0])
+      .hasText('t:sbomModule.sbomDownloadPdfPrimaryText:()');
+
+    assert
+      .dom('[data-test-sbomReportList-reportGeneratingText]', reportList[0])
+      .hasText('t:generating:()...');
+
+    assert
+      .dom('[data-test-sbomReportList-reportGeneratingLoader]', reportList[0])
+      .exists();
+
+    // change status to completed and increment sbom report counter to notify
+    this.set('status', SbomReportStatus.COMPLETED);
+
+    const realtime = this.owner.lookup('service:realtime');
+    realtime.incrementProperty('SbomReportCounter');
+
+    // wait for api
+    await waitFor('[data-test-sbomReportList-reportCopyBtn]', {
+      timeout: 200,
+    });
+
+    // refresh dom reference
+    reportList = findAll('[data-test-sbomReportList-reportlistItem]');
+
+    // previous state
+    assert
+      .dom('[data-test-sbomReportList-reportGeneratingText]', reportList[0])
+      .doesNotExist();
+
+    assert
+      .dom('[data-test-sbomReportList-reportGeneratingLoader]', reportList[0])
+      .doesNotExist();
+
+    // completed state
+    assert
+      .dom('[data-test-sbomReportList-reportPrimaryText]', reportList[0])
+      .hasText('t:sbomModule.sbomDownloadPdfPrimaryText:()');
+
+    assert
+      .dom('[data-test-sbomReportList-reportSecondaryText]', reportList[0])
+      .hasText(
+        `t:sbomModule.sbomDownloadPdfSecondaryText:("password":"${this.sbomReport.report_password}")`
+      );
+
+    assert
+      .dom('[data-test-sbomReportList-reportCopyBtn]', reportList[0])
+      .isNotDisabled()
+      .hasAttribute('data-clipboard-text', this.sbomReport.report_password);
+
+    assert
+      .dom('[data-test-sbomReportList-reportDownloadBtn]', reportList[0])
+      .isNotDisabled();
   });
 
   test('test pdf report download (already generated)', async function (assert) {

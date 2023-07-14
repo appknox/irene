@@ -1,0 +1,130 @@
+{{! @glint-nocheck: or }}
+
+<AkStack
+  @direction='column'
+  @tag='section'
+  @justifyContent='center'
+  @width='full'
+  class='p-0'
+  data-test-fileReportDrawer-sbomReports-root
+>
+  {{#if this.showSampleReport}}
+
+    <File::ReportDrawer::SbomReports::Sample />
+
+  {{else if this.getSbomFile.isRunning}}
+    <AkStack
+      @alignItems='center'
+      @justifyContent='center'
+      @width='full'
+      class='p-2'
+      data-test-fileReportDrawer-sbomReports-reportLoader
+    >
+      <AkLoader @size={{18}} />
+    </AkStack>
+
+  {{else if (or this.sbomStatusIsPending this.showSbomReportList)}}
+    <AkStack
+      @width='full'
+      @direction='column'
+      @alignItems={{if this.sbomStatusIsPending 'center' 'stretch'}}
+      @spacing={{if this.sbomStatusIsPending '3' '0'}}
+      class={{if this.sbomStatusIsPending 'p-3'}}
+      data-test-fileReportDrawer-sbomReports-reportsList
+    >
+      {{#if this.sbomStatusIsPending}}
+        <AkSvg::InProgress
+          {{style width='90%'}}
+          data-test-fileReportDrawer-sbomReports-pendingIllustration
+        />
+
+        <AkTypography
+          @color='textSecondary'
+          @align='center'
+          {{style width='90%'}}
+          data-test-fileReportDrawer-sbomReports-pendingDescription
+        >
+          {{t 'fileReport.sbomReportInProgress'}}
+        </AkTypography>
+
+        <AkDivider />
+      {{else}}
+        <Sbom::ScanReportDrawer::ReportList @sbomFile={{this.sbomFile}} />
+      {{/if}}
+
+      <AkLink
+        @color='primary'
+        @route='authenticated.dashboard.sbom.scan-details'
+        @models={{array this.sbomFile.sbProject.content.id this.sbomFile.id}}
+        @fontWeight='bold'
+        @underline='always'
+        class={{unless this.sbomStatusIsPending 'mx-3 my-2'}}
+        target='_blank'
+        rel='noopener noreferrer'
+        {{style width='fit-content'}}
+        data-test-fileReportDrawer-sbomReports-sbomFileLink
+      >
+        <:leftIcon>
+          <AkIcon
+            @color='primary'
+            @iconName='open-in-new'
+            {{style fontSize='1.5714rem !important'}}
+          />
+        </:leftIcon>
+
+        <:default>
+          {{t 'fileReport.viewSbomDetails'}}
+        </:default>
+      </AkLink>
+    </AkStack>
+
+  {{else if this.showNoSbomReportMessage}}
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      @spacing='3'
+      @width='full'
+      class='p-3'
+      data-test-fileReportDrawer-sbomReports-noSbomReportsContainer
+    >
+      <AkSvg::NoResult
+        {{style width='90%'}}
+        data-test-fileReportDrawer-sbomReports-noSbomReportsIllustration
+      />
+
+      <AkTypography
+        @color='textSecondary'
+        @align='center'
+        {{style width='90%'}}
+        data-test-fileReportDrawer-sbomReports-noSbomReportsDescription
+      >
+        {{t 'fileReport.noSbomReportAvailable'}}
+      </AkTypography>
+
+      {{#unless this.currentFileIsLatestFile}}
+        <AkDivider />
+
+        <AkButton
+          @color='primary'
+          @variant='text'
+          @typographyFontWeight='bold'
+          @underline='always'
+          {{on 'click' this.goToLatestFile}}
+          data-test-fileReportDrawer-sbomReports-latestFileCTABtn
+        >
+          <:leftIcon>
+            <AkIcon
+              @color='primary'
+              @iconName='open-in-new'
+              {{style fontSize='1.5714rem !important'}}
+            />
+          </:leftIcon>
+
+          <:default>
+            {{t 'fileReport.goToLatestFile'}}
+          </:default>
+        </AkButton>
+      {{/unless}}
+    </AkStack>
+  {{/if}}
+</AkStack>

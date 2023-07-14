@@ -32,21 +32,27 @@
       {{t 'fileReport.reportDrawerHeaderText'}}
     </AkTypography>
 
-    <AkAccordion::Group @defaultOpen={{array 'va-reports'}} as |actx|>
+    <AkAccordion::Group
+      @defaultOpen={{array 'va-reports'}}
+      @openMultiple={{true}}
+      as |actx|
+    >
       {{#each this.reportGroupList as |group|}}
-        <AkAccordion
-          @id={{group.id}}
-          @accordionCtx={{actx}}
-          @summaryText={{group.title}}
-          data-test-fileReportDrawer-group
-          data-test-fileReportDrawer-groupItem='{{group.id}}'
-        >
-          <:content>
-            {{#let (component group.contentComponent) as |GroupContent|}}
-              <GroupContent @file={{@file}} />
-            {{/let}}
-          </:content>
-        </AkAccordion>
+        {{#unless group.hideGroup}}
+          <AkAccordion
+            @id={{group.id}}
+            @accordionCtx={{actx}}
+            @summaryText={{group.title}}
+            data-test-fileReportDrawer-group
+            data-test-fileReportDrawer-groupItem='{{group.id}}'
+          >
+            <:content>
+              {{#let (component group.contentComponent) as |GroupContent|}}
+                <GroupContent @file={{@file}} @closeDrawer={{@onClose}} />
+              {{/let}}
+            </:content>
+          </AkAccordion>
+        {{/unless}}
       {{/each}}
     </AkAccordion::Group>
   </div>
