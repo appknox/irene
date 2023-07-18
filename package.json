@@ -177,7 +177,7 @@
     "node": ">=16"
   },
   "dependencies": {
-    "@novnc/novnc": "^1.3.0",
+    "@novnc/novnc": "^1.4.0",
     "@popperjs/core": "^2.11.6",
     "billboard.js": "^1.12.7",
     "clipboard": "^2.0.6",
