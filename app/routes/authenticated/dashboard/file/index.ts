@@ -18,7 +18,7 @@ export default class AuthenticatedFileIndexRoute extends Route {
 
     return {
       file,
-      profileId: file.project.get('activeProfileId'),
+      profileId: (await file.project).activeProfileId,
     };
   }
 }
