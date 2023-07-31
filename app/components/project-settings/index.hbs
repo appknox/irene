@@ -1,0 +1,82 @@
+<div class="columns margin-bottom">
+    <div class="column">
+        <h4 class="bold black-text">
+            {{t "settings"}} | {{project.packageName}}
+        </h4>
+    </div>
+    <div class="column">
+        <LinkTo @route="authenticated.project.files" @model={{project.id}} class="button is-primary"
+            class="mp-settings-all-scans">
+            {{fa-icon "navicon"}}{{t "allUploads"}}
+        </LinkTo>
+    </div>
+</div>
+
+<div class="tabs is-medium is-boxed">
+    <ul>
+        <li class={{generalSettingsClass}}>
+            <a {{on "click" this.displayGeneralSettings class="mp-display-general-settings" }}>{{t
+                "generalSettings"}}</a>
+        </li>
+        <li class={{analysisSettingsClass}}>
+            <a {{on "click" this.displayAnalysisSettings class="mp-display-analysis-settings" }}>{{t
+                "analysisSettings"}}</a>
+        </li>
+    </ul>
+</div>
+
+{{#if isGeneralSettings}}
+<div class="box-container project-preference">
+    <ProjectPreferences @profileId={{project.activeProfileId}} @platform={{project.platform}} @project={{project}} />
+</div>
+<div class="box-container">
+    <div class="collaboration-settings">
+        <div class="columns">
+            <div class="column">
+                <h5 class="bold black-text margin-t-q margin-b-1">{{t "proxySettingsTitle"}}</h5>
+                <div class="margin-b-1">{{t "proxySettingsDescription"}}</div>
+            </div>
+        </div>
+        <ProxySettings @profile={{profile}} />
+    </div>
+</div>
+<div class="box-container">
+    <ApiFilter @profileId={{project.activeProfileId}} />
+</div>
+<div class="box-container collaboration-settings">
+    <div class="columns">
+        <div class="column">
+            <h5 class="bold black-text margin-t-q margin-b-1">{{t "teamsAndCollaborators"}}</h5>
+        </div>
+    </div>
+    <ProjectTeamList @project={{project}} />
+    <ProjectCollaboratorList @project={{project}} />
+</div>
+
+{{#if organization.selected.features.dynamicscan_automation}}
+<div class="box-container">
+    <DynamicscanAutomationSettings @profileId={{project.activeProfileId}} @project={{project}} />
+</div>
+{{/if}}
+
+<div class="box-container">
+    <GithubProject @project={{project}} />
+</div>
+
+<div class="margin-l-1 margin-b-4">
+    <JiraProject @project={{project}} />
+</div>
+{{/if}}
+
+{{#if isAnalysisSettings}}
+<div class="box-container">
+    <AnalysisSettings @project={{project}} />
+</div>
+<div class="box-container">
+    <RegulatoryPreferenceProfile @project={{project}} />
+</div>
+<div class="{{if this.me.org.is_admin 'box-container' 'box-container-w-b'}}">
+    <ReportPreference @project={{project}} />
+</div>
+<VulnerabilityList @project={{project}} />
+{{/if}}
