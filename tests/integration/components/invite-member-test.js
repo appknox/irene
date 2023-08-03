@@ -7,6 +7,7 @@ import { hbs } from 'ember-cli-htmlbars';
 import { Response } from 'miragejs';
 
 import Service from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -20,10 +21,18 @@ class NotificationsStub extends Service {
   }
 }
 
+class RealtimeStub extends Service {
+  @tracked InvitationCounter = 0;
+}
+
 module('Integration | Component | invite-member', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
   setupIntl(hooks);
+
+  hooks.beforeEach(async function () {
+    this.owner.register('service:realtime', RealtimeStub);
+  });
 
   test('it renders invite-member', async function (assert) {
     await render(hbs`<InviteMember />`);
@@ -176,6 +185,10 @@ module('Integration | Component | invite-member', function (hooks) {
       const notify = this.owner.lookup('service:notifications');
 
       assert.strictEqual(notify.successMsg, 't:orgMemberInvited:()');
+
+      const realtime = this.owner.lookup('service:realtime');
+
+      assert.strictEqual(realtime.InvitationCounter, 1);
     }
   );
 

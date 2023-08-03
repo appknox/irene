@@ -1,0 +1,18 @@
+<AkIconButton
+  data-test-remove-user
+  title='{{t "removeFromTeam"}}'
+  class="mr-1"
+  {{on 'click' this.openRemoveMemberPrompt}}
+>
+  <AkIcon @iconName='person-remove' />
+</AkIconButton>
+
+<ConfirmBox
+  @isActive={{this.showRemoveMemberPrompt}}
+  @confirmText={{this.confirmText}}
+  @confirmAction={{perform this.removeMember}}
+  @title={{t 'removeFromTeam'}}
+  @cancelAction={{this.closeRemoveMemberPrompt}}
+  @blurOverlay={{true}}
+  @description={{t 'confirmBox.removeUser'}}
+/>

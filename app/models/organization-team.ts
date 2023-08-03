@@ -1,6 +1,7 @@
 import Model, { attr, hasMany, AsyncHasMany } from '@ember-data/model';
 
 import OrganizationTeamMemberModel from './organization-team-member';
+import OrganizationUserModel from './organization-user';
 
 export type AddMemberData = { write: boolean };
 export type AddProjectData = { write: boolean };
@@ -29,16 +30,10 @@ export default class OrganizationTeamModel extends Model {
   @attr('number')
   declare projectsCount: number;
 
-  async deleteMember(member: OrganizationTeamMemberModel) {
+  async deleteMember(user: OrganizationUserModel) {
     const adapter = this.store.adapterFor(this.modelName);
 
-    await adapter.deleteMember(this.store, this.modelName, this, member);
-
-    // TODO: fix this to do after showing notification
-    this.members.removeObject(member);
-
-    await this.members.reload();
-    await this.store.unloadRecord(member);
+    await adapter.deleteMember(this.store, this.modelName, this, user);
   }
 
   async addMember(data: AddMemberData, id: string) {

@@ -5,14 +5,14 @@ import { debounce } from '@ember/runloop';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import IntlService from 'ember-intl/services/intl';
-import MeService from 'irene/services/me';
-import RouterService from '@ember/routing/router-service';
 import StoreService from '@ember-data/store';
+import RouterService from '@ember/routing/router-service';
+import MeService from 'irene/services/me';
 import OrganizationModel from 'irene/models/organization';
 import OrganizationMemberModel from 'irene/models/organization-member';
+import { OrganizationMembersRouteQueryParams } from 'irene/routes/authenticated/organization/users';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import DS from 'ember-data';
-import { OrganizationMembersRouteQueryParams } from 'irene/routes/authenticated/organization/users';
 
 export interface OrganizationMemberListComponentSignature {
   Args: {
@@ -23,10 +23,16 @@ export interface OrganizationMemberListComponentSignature {
   };
   Element: HTMLElement;
 }
-type userResponseModel =
+
+type UserResponseModel =
   DS.AdapterPopulatedRecordArray<OrganizationMemberModel> & {
     meta?: { count: number };
   };
+
+type UserRowClickArgs = {
+  rowValue: OrganizationMemberModel;
+  event: Event;
+};
 
 export default class OrganizationMemberListComponent extends Component<OrganizationMemberListComponentSignature> {
   @service declare intl: IntlService;
@@ -35,7 +41,35 @@ export default class OrganizationMemberListComponent extends Component<Organizat
   @service('notifications') declare notify: NotificationService;
   @service declare router: RouterService;
 
-  @tracked userResponse: userResponseModel | null = null;
+  @tracked userResponse: UserResponseModel | null = null;
+  @tracked showUserDetailsView = false;
+  @tracked selectedUser: OrganizationMemberModel | null = null;
+
+  @action
+  handleShowUserDetails(args: UserRowClickArgs) {
+    // should not open when role select is triggered
+    if (this.isUserRoleSelect(args.event.target as HTMLElement)) {
+      return;
+    }
+
+    this.selectedUser = args.rowValue;
+    this.showUserDetailsView = true;
+  }
+
+  isUserRoleSelect(element: HTMLElement) {
+    const targetClass = 'user-role-select-trigger';
+
+    return (
+      element.classList.contains(targetClass) ||
+      element.parentElement?.classList.contains(targetClass)
+    );
+  }
+
+  @action
+  handleUserDetailClose() {
+    this.selectedUser = null;
+    this.showUserDetailsView = false;
+  }
 
   constructor(
     owner: unknown,
@@ -84,13 +118,11 @@ export default class OrganizationMemberListComponent extends Component<Organizat
         component: 'organization-member/list/member-role',
         textAlign: this.me.org?.get('is_owner') ? 'center' : 'left',
       },
-      this.me.org?.get('is_owner')
-        ? {
-            name: this.intl.t('action'),
-            component: 'organization-member/list/member-action',
-            textAlign: 'center',
-          }
-        : null,
+      {
+        name: this.intl.t('lastLoggedIn'),
+        component: 'organization-member/list/member-last-login',
+        textAlign: 'center',
+      },
     ].filter(Boolean);
   }
 
@@ -127,7 +159,7 @@ export default class OrganizationMemberListComponent extends Component<Organizat
     debounce(
       this,
       this.setSearchQuery,
-      (event?.target as HTMLInputElement)?.value,
+      (event.target as HTMLInputElement).value,
       500
     );
   }

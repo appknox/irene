@@ -7,8 +7,7 @@ import OrganizationTeamModel, {
   CreateInviteData,
   OrganizationTeamModelName,
 } from 'irene/models/organization-team';
-
-import OrganizationTeamMemberModel from 'irene/models/organization-team-member';
+import OrganizationUserModel from 'irene/models/organization-user';
 
 export default class OrganizationTeamAdapter extends commondrf {
   _buildURL(modelName?: string | number, id?: string | number) {
@@ -25,12 +24,12 @@ export default class OrganizationTeamAdapter extends commondrf {
     store: Store,
     modelName: OrganizationTeamModelName,
     snapshot: OrganizationTeamModel,
-    member: OrganizationTeamMemberModel
+    user: OrganizationUserModel
   ) {
     const id = snapshot.id;
-    const memberId = member.id;
+    const userId = user.get('id');
 
-    const url = this.urlForDeleteMember(id, modelName, snapshot, memberId);
+    const url = this.urlForDeleteMember(id, modelName, snapshot, userId);
 
     return this.ajax(url, 'DELETE');
   }
@@ -39,11 +38,11 @@ export default class OrganizationTeamAdapter extends commondrf {
     id: string,
     modelName: OrganizationTeamModelName,
     snapshot: OrganizationTeamModel,
-    memberId: string
+    userId: string
   ) {
     const baseURL = this._buildURL(modelName, id);
 
-    return [baseURL, 'members', memberId].join('/');
+    return [baseURL, 'members', userId].join('/');
   }
 
   addMember(

@@ -1,0 +1,49 @@
+<AkDrawer
+  data-test-member-drawer
+  @onClose={{this.handleDrawerClose}}
+  @anchor='right'
+  @open={{@showUserDetailsView}}
+  as |dr|
+>
+  <AkStack local-class='drawer-content-container' @direction='column'>
+    <AkAppbar @justifyContent='space-between' class='px-3' as |ab|>
+      <AkTypography
+        data-test-member-drawer-title
+        @color='inherit'
+        @variant='h5'
+      >
+        {{if this.showAddToTeamView (t 'addToTeams') (t 'userDetails')}}
+      </AkTypography>
+
+      <AkIconButton
+        data-test-member-drawer-close-btn
+        {{on 'click' dr.closeHandler}}
+        class={{ab.classes.defaultIconBtn}}
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <div
+      data-test-member-drawer-content
+      local-class='user-drawer-content'
+      class='pb-3'
+    >
+      {{#if this.showAddToTeamView}}
+        <OrganizationMember::List::AddToTeam
+          @member={{@member}}
+          @organization={{@organization}}
+          @handleBackToTeamDetail={{this.handleBackToTeamDetail}}
+        />
+      {{else}}
+        <OrganizationMember::List::MemberDetails
+          @showUserDetailsView={{@showUserDetailsView}}
+          @handleUserDetailClose={{@handleUserDetailClose}}
+          @handleAddToTeam={{this.handleAddToTeam}}
+          @member={{@member}}
+          @organization={{@organization}}
+        />
+      {{/if}}
+    </div>
+  </AkStack>
+</AkDrawer>

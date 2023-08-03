@@ -18,6 +18,7 @@ export enum AkSvgComponentInvocationByNames {
   XlsxIcon,
   CsvIcon,
   NoVulnerability,
+  TeamsEmpty,
   ThumbsUpIcon,
 }
 

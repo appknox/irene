@@ -25,6 +25,9 @@ export default class OrganizationMemberModel extends Model {
   @attr('date')
   declare createdOn: Date;
 
+  @attr('date')
+  declare lastLoggedIn: Date;
+
   @hasMany('organization-team')
   declare teams: AsyncHasMany<OrganizationTeamModel>;
 }

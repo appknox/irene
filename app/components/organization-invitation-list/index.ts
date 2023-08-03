@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-observers */
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import DS from 'ember-data';
 import Component from '@glimmer/component';
@@ -11,6 +12,8 @@ import RouterService from '@ember/routing/router-service';
 import { PaginationProviderActionsArgs } from '../ak-pagination-provider';
 import OrganizationModel from 'irene/models/organization';
 import OrganizationMemberModel from 'irene/models/organization-member';
+import { addObserver, removeObserver } from '@ember/object/observers';
+import RealtimeService from 'irene/services/realtime';
 
 type InvitationQueryResponse =
   DS.AdapterPopulatedRecordArray<OrganizationMemberModel> & {
@@ -33,7 +36,7 @@ interface ExtraQueryStringsInterface {
 
 interface OrganizationInvitationListSignature {
   Args: {
-    organization?: OrganizationModel | null;
+    organization: OrganizationModel | null;
     limit?: number;
     offset?: number;
     targetModel?: string;
@@ -58,6 +61,7 @@ export default class OrganizationInvitationListComponent extends Component<Organ
   @service declare intl: IntlService;
   @service declare store: Store;
   @service declare router: RouterService;
+  @service declare realtime: RealtimeService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked inviteResponse: InvitationQueryResponse | null = null;
@@ -69,6 +73,32 @@ export default class OrganizationInvitationListComponent extends Component<Organ
     super(owner, args);
 
     this.fetchInvites.perform(this.limit, this.offset, '', false);
+
+    addObserver(
+      this.realtime,
+      'InvitationCounter',
+      this,
+      this.observeInvitationCounter
+    );
+  }
+
+  observeInvitationCounter() {
+    this.handleReloadInvites();
+  }
+
+  removeInvitationCounterObserver() {
+    removeObserver(
+      this.realtime,
+      'InvitationCounter',
+      this,
+      this.observeInvitationCounter
+    );
+  }
+
+  willDestroy() {
+    super.willDestroy();
+
+    this.removeInvitationCounterObserver();
   }
 
   get tPleaseTryAgain() {

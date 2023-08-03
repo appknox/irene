@@ -1,20 +1,20 @@
 {{#if this.me.org.is_owner}}
-  <AkStack @justifyContent='center'>
-    <div {{style width='120px'}}>
-      <AkSelect
-        @triggerClass='user-role-select-trigger'
-        @disabled={{this.userDisabled}}
-        @selected={{this.selectedRole}}
-        @options={{this.roles}}
-        @onChange={{perform this.selectMemberRole}}
-        as |role|
-      >
-        {{t (user-role role.value)}}
-      </AkSelect>
-    </div>
+  <AkStack @justifyContent='center' data-test-member-role-dropdown>
+    <AkSelect
+      @triggerClass='user-role-select-trigger'
+      @disabled={{this.userDisabled}}
+      @selected={{this.selectedRole}}
+      @options={{this.roles}}
+      @onChange={{perform this.selectMemberRole}}
+      {{style width='120px'}}
+      as |role|
+    >
+      {{t (user-role role.value)}}
+    </AkSelect>
   </AkStack>
+
 {{else}}
-  <AkTypography @color='textSecondary'>
+  <AkTypography @fontWeight={{@fontWeight}} data-test-member-role-text>
     {{t (user-role @member.role)}}
   </AkTypography>
 {{/if}}
