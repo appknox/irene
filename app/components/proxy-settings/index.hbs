@@ -1,0 +1,34 @@
+<div class="proxy-settings">
+  <form {{on "submit" (perform this.saveProxy)}} class="vertical-align-center">
+    <div class="margin-r-1">
+      <Input class="form-control input" @value={{this.changeset.host}} placeholder="Host" autofocus={{true}} />
+    </div>
+    <div class="margin-r-1">
+      <Input class="form-control input" @type="number" @value={{this.changeset.port}} placeholder="Port" />
+    </div>
+    <button type="submit" class="button is-default" disabled={{this.saveProxy.isRunning}}>
+      {{#if this.saveProxy.isRunning}}
+      <span class="fa-font-size">
+        <i class="fa fa-spinner fa-spin"></i>
+      </span>
+      {{else}}
+      {{t "save"}}
+      {{/if}}
+    </button>
+  </form>
+
+  {{#if this.hasProxyValues}}
+  <div class="margin-t-1h vertical-align-center">
+    <label class="vertical-align-center">
+      <div class="padding-r-1 bold">
+        {{t "proxyEnable"}}:
+      </div>
+      <label class="toggle-switch-on-off">
+        <Input class="switch-input" @type="checkbox" @checked={{this.changeset.enabled}}
+          disabled={{this.enableProxy.isRunning}} {{on "click" (perform this.enableProxy)}} />
+        <span class="knob"></span>
+      </label>
+    </label>
+  </div>
+  {{/if}}
+</div>

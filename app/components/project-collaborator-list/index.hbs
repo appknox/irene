@@ -1,0 +1,32 @@
+<div class="margin-b-2">
+  <div local-class="collaborators__header">
+    <h5 class="margin-v-0" local-class="collaborators__title">
+      {{t "collaborators"}}
+    </h5>
+    {{#if this.me.org.is_admin}}
+    <AddProjectCollaborator @project={{@project}} />
+    {{/if}}
+  </div>
+
+  <div>
+    {{#if this.objects.length}}
+    <table local-class="collaborators__table" class="org-table">
+      <tbody>
+        {{#each this.objects as |collaborator|}}
+        <ProjectCollaboratorOverview @project={{@project}} @collaborator={{collaborator}} />
+        {{/each}}
+      </tbody>
+    </table>
+    <div class="margin-t-1">
+      {{partial "paginate"}}
+    </div>
+    {{else}}
+    <div>
+      <div class="empty-state">
+        {{fa-icon "exclamation-triangle"}}
+        {{t "noCollaborators"}}
+      </div>
+    </div>
+    {{/if}}
+  </div>
+</div>

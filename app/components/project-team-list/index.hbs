@@ -1,0 +1,29 @@
+<div class="margin-b-2">
+  <div local-class="teams__header">
+    <h5 class="margin-v-0" local-class="teams__title">{{t "teams"}}</h5>
+    {{#if this.me.org.is_admin}}
+    <AddProjectTeam @project={{@project}} />
+    {{/if}}
+  </div>
+  <div>
+    {{#if this.objects.length}}
+    <table class="org-table" local-class="teams__table">
+      <tbody>
+        {{#each this.objects as |team|}}
+        <ProjectTeamOverview @project={{@project}} @team={{team}} />
+        {{/each}}
+      </tbody>
+    </table>
+    <div class="margin-t-1">
+      {{partial "paginate"}}
+    </div>
+    {{else}}
+    <div>
+      <div class="empty-state">
+        {{fa-icon "exclamation-triangle"}}
+        {{t "noTeams"}}
+      </div>
+    </div>
+    {{/if}}
+  </div>
+</div>
