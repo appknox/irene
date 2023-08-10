@@ -17,6 +17,7 @@ import { NfSastcmpltd1Context } from './messages/nf-sastcmpltd1/context';
 import { NfDastcmpltd1Context } from './messages/nf-dastcmpltd1/context';
 import { NfApistcmpltd1Context } from './messages/nf-apistcmpltd1/context';
 import { NfAmNewversnContext } from './messages/nf-am-newversn/context';
+import { NfSbomcmpltdContext } from './messages/nf-sbomcmpltd/context';
 
 export const NotificationMap = {
   ERROR: {
@@ -94,6 +95,10 @@ export const NotificationMap = {
   NF_AM_NEWVERSN: {
     component: 'notifications-page/messages/nf-am-newversn' as const,
     context: NfAmNewversnContext,
+  },
+  NF_SBOMCMPLTD: {
+    component: 'notifications-page/messages/nf-sbomcmpltd' as const,
+    context: NfSbomcmpltdContext,
   },
 } satisfies Record<string, { component: string; context: unknown }>;
 
