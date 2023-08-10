@@ -1,0 +1,65 @@
+<AkStack @direction='column' @spacing='1'>
+  <AkTypography data-test-nf-sbomcmpltd-primary-message>
+    {{t 'notificationModule.messages.nf-sbomcmpltd.prefix' htmlSafe=true}}
+
+    <AkLink
+      {{style verticalAlign='unset'}}
+      @color='primary'
+      @route='authenticated.dashboard.file'
+      @model={{@context.file_id}}
+      @underline='always'
+      @title='{{t "viewFile"}} {{@context.file_id}}'
+    >
+      {{t 'fileID'}}
+      {{@context.file_id}}
+    </AkLink>
+
+    {{t
+      'notificationModule.messages.nf-sbomcmpltd.suffix'
+      htmlSafe=true
+      platform_display=@context.platform_display
+      file_name=@context.file_name
+      package_name=@context.package_name
+    }}
+  </AkTypography>
+
+  <AkTypography data-test-nf-sbomcmpltd-version @variant='body2'>
+    {{t 'versionLowercase'}}:
+    {{@context.version}}
+    <span local-class='pipe'>|</span>
+    {{t 'versionCode'}}:
+    {{@context.version_code}}
+  </AkTypography>
+
+  <AkStack class='my-1' @direction='column' @spacing='0.5'>
+    <AkTypography data-test-nf-sbomcmpltd-summaryTitle @variant='h6'>
+      {{t 'summary'}}:
+    </AkTypography>
+
+    <AkStack
+      data-test-nf-sbomcmpltd-summaryValue
+      {{style gap='0 1.25em'}}
+      @flexWrap='wrap'
+    >
+      {{t
+        'notificationModule.messages.nf-sbomcmpltd.summary'
+        htmlSafe=true
+        total_components=@context.components_count
+        vulnerable_components=@context.vulnerabilities_count
+        outdated_components=@context.components_with_updates_count
+      }}
+    </AkStack>
+  </AkStack>
+
+  <div data-test-nf-sbomcmpltd-link>
+    <AkLink
+      @color='primary'
+      @route='authenticated.dashboard.sbom.scan-details'
+      @models={{array @context.sb_project_id @context.sb_file_id}}
+      @underline='always'
+      @title={{t 'notificationModule.viewSBOMResults'}}
+    >
+      {{t 'notificationModule.viewSBOMResults'}}
+    </AkLink>
+  </div>
+</AkStack>
