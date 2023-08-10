@@ -1,13 +1,22 @@
-<div class="analysis-settings">
-  <h5 class="bold black-text">
-    {{t "showUntestedAnalysis"}}
+<div class='analysis-settings'>
+  <h5 class='bold black-text'>
+    {{t 'showUntestedAnalysis'}}
   </h5>
+
   <h6>
-    {{t "otherTemplates.showUntestedAnalysis"}}
+    {{t 'otherTemplates.showUntestedAnalysis'}}
   </h6>
-  <label class="switch">
-    <input class="switch-input" id="show-unkown-analysis" type="checkbox" checked={{this.unknownAnalysisStatus.status}}
-      {{on "click" this.showUnknownAnalysis}} disabled={{this.isSavingStatus}} />
-    <span class="slider round"></span>
+
+  <label class='switch'>
+    <input
+      class='switch-input'
+      id='show-unkown-analysis'
+      type='checkbox'
+      checked={{this.unknownAnalysisStatus.status}}
+      {{on 'click' this.showUnknownAnalysis}}
+      disabled={{this.isSavingStatus}}
+    />
+
+    <span class='slider round'></span>
   </label>
 </div>

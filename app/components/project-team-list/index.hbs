@@ -1,29 +1,51 @@
-<div class="margin-b-2">
-  <div local-class="teams__header">
-    <h5 class="margin-v-0" local-class="teams__title">{{t "teams"}}</h5>
+<div class='margin-b-2' {{did-insert (perform this.getProjectTeamList)}}>
+  <div local-class='teams__header'>
+    <h5 class='margin-v-0' local-class='teams__title'>{{t 'teams'}}</h5>
+
     {{#if this.me.org.is_admin}}
-    <AddProjectTeam @project={{@project}} />
+      <AddProjectTeam @project={{@project}} />
     {{/if}}
   </div>
+
   <div>
-    {{#if this.objects.length}}
-    <table class="org-table" local-class="teams__table">
-      <tbody>
-        {{#each this.objects as |team|}}
-        <ProjectTeamOverview @project={{@project}} @team={{team}} />
-        {{/each}}
-      </tbody>
-    </table>
-    <div class="margin-t-1">
-      {{partial "paginate"}}
+    <div class='margin-t-1'>
+      <AkPaginationProvider
+        @results={{this.projectTeamList}}
+        @onItemPerPageChange={{this.onItemPerPageChange}}
+        @totalItems={{this.totalCount}}
+        @nextAction={{this.goToPage}}
+        @prevAction={{this.goToPage}}
+        @itemPerPageOptions={{array 10 25 50}}
+        @defaultLimit={{this.limit}}
+        @offset={{this.offset}}
+        as |pgc|
+      >
+        {{#if this.getProjectTeamList.isRunning}}
+          <div local-class='loading'>
+            <AkLoader />
+          </div>
+        {{else}}
+          {{#each pgc.currentPageResults as |team|}}
+            <ProjectTeamOverview @project={{@project}} @team={{team}} />
+          {{/each}}
+        {{/if}}
+
+        <AkPagination
+          @disableNext={{pgc.disableNext}}
+          @nextAction={{pgc.nextAction}}
+          @disablePrev={{pgc.disablePrev}}
+          @prevAction={{pgc.prevAction}}
+          @endItemIdx={{pgc.endItemIdx}}
+          @startItemIdx={{pgc.startItemIdx}}
+          @itemPerPageOptions={{pgc.itemPerPageOptions}}
+          @onItemPerPageChange={{pgc.onItemPerPageChange}}
+          @selectedOption={{pgc.selectedOption}}
+          @tableItemLabel='Team List'
+          @perPageTranslation='Records per page'
+          @totalItems={{pgc.totalItems}}
+        />
+      </AkPaginationProvider>
     </div>
-    {{else}}
-    <div>
-      <div class="empty-state">
-        {{fa-icon "exclamation-triangle"}}
-        {{t "noTeams"}}
-      </div>
-    </div>
-    {{/if}}
+
   </div>
 </div>
