@@ -1,6 +1,6 @@
 {{#if @namespace.isApproved}}
   <AkTypography @color='textSecondary' @tag='span'>
-    {{dayjs-from-now @namespace.approvedOn}}
+    {{this.approvedOnDate}}
   </AkTypography>
 
   {{#if @namespace.approvedBy}}
