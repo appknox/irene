@@ -1,0 +1,116 @@
+<FileCompare::Header
+  @file1={{@fileOld}}
+  data-test-fileCompare-compareListHeader-container
+>
+  <:breadcrumbs>
+    <AkBreadcrumbs::Container
+      data-test-fileCompare-compareList-breadcrumbContainer
+    >
+      {{#each this.breadcrumbItems as |item|}}
+        <AkBreadcrumbs::Item
+          @route={{item.route}}
+          @model={{item.model}}
+          @linkTitle={{item.linkTitle}}
+          data-test-fileCompare-compareListHeader-breadcrumbItem='{{item.linkTitle}}'
+        />
+      {{/each}}
+    </AkBreadcrumbs::Container>
+  </:breadcrumbs>
+
+  <:file1Content>
+    <AkTypography
+      @fontWeight='bold'
+      @variant='body2'
+      @color='secondary'
+      data-test-fileCompare-compareListHeader-baseFileId
+    >
+      {{this.fileOld.id}}
+    </AkTypography>
+  </:file1Content>
+
+  <:file2Content>
+    {{#if this.fileToCompare}}
+      <AkTypography
+        @fontWeight='bold'
+        @variant='body2'
+        @color='secondary'
+        data-test-fileCompare-compareListHeader-compareFileId
+      >
+        {{this.fileToCompare.id}}
+      </AkTypography>
+    {{else}}
+      <AkChip
+        @variant='outlined'
+        @label={{t 'fileCompare.selectBaseFile'}}
+        {{style height='30px'}}
+        data-test-fileCompare-compareListHeader-compareFileSelectTextChip
+      >
+        <:icon>
+          <AkIcon @iconName='info' @color='primary' />
+        </:icon>
+      </AkChip>
+    {{/if}}
+  </:file2Content>
+
+  <:headerCTA>
+    <AkButton
+      @disabled={{not this.fileToCompare}}
+      {{style minWidth='100px'}}
+      {{on 'click' this.onCompareBtnClick}}
+      data-test-fileCompare-compareListHeader-compareBtn
+    >
+      {{t 'compare'}}
+    </AkButton>
+  </:headerCTA>
+</FileCompare::Header>
+
+<div local-class='choose-list-files-root' data-test-compareList-root>
+  <AkPaginationProvider
+    @results={{this.otherFilesInTheProject}}
+    @onItemPerPageChange={{this.onItemPerPageChange}}
+    @totalItems={{this.totalFilesCount}}
+    @nextAction={{this.goToPage}}
+    @prevAction={{this.goToPage}}
+    @itemPerPageOptions={{array 9 27 45}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    as |pgc|
+  >
+    {{#if this.getFiles.isRunning}}
+      <FileCompare::Loader
+        @loadingText='{{t "loading"}}...'
+        data-test-compareList-loadingContainer
+      />
+
+    {{else if this.hasFiles}}
+      <div local-class='choose-list-container'>
+        {{#each this.otherFilesInTheProject as |file|}}
+          <FileCompare::FileOverview
+            @file={{file}}
+            @profileId={{file.profile.id}}
+            @isSelectedFile={{eq file.id this.fileToCompare.id}}
+            @onFileSelect={{this.handleFileSelect}}
+            @hideOpenInNewTabIcon={{true}}
+            data-test-fileCompare-compareList-fileOverview-item
+            data-test-fileCompare-compareList-fileOverview='{{file.id}}'
+          />
+        {{/each}}
+      </div>
+
+      <AkPagination
+        @disableNext={{pgc.disableNext}}
+        @nextAction={{pgc.nextAction}}
+        @disablePrev={{pgc.disablePrev}}
+        @prevAction={{pgc.prevAction}}
+        @endItemIdx={{pgc.endItemIdx}}
+        @startItemIdx={{pgc.startItemIdx}}
+        @itemPerPageOptions={{pgc.itemPerPageOptions}}
+        @onItemPerPageChange={{pgc.onItemPerPageChange}}
+        @selectedOption={{pgc.selectedOption}}
+        @tableItemLabel={{t 'files'}}
+        @perPageTranslation={{t 'recordPerPage'}}
+        @totalItems={{pgc.totalItems}}
+      />
+    {{/if}}
+  </AkPaginationProvider>
+</div>

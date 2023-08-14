@@ -1,0 +1,46 @@
+.file-overview-statistics {
+  padding: 1.4286em 3em;
+  gap: 3.9286em;
+
+  .statistics-item {
+    gap: 3.5714em;
+    min-width: 123px;
+
+    .statistics-item-title {
+      min-width: 90px;
+    }
+
+    .statistics-item-value {
+      min-width: 30px;
+    }
+  }
+
+  .statistics-item-divider:last-of-type {
+    display: none;
+  }
+}
+
+// Severity levels
+.severity-critical {
+  color: var(--file-details-severity-level-color-critical);
+}
+
+.severity-high {
+  color: var(--file-details-severity-level-color-high);
+}
+
+.severity-medium {
+  color: var(--file-details-severity-level-color-medium);
+}
+
+.severity-low {
+  color: var(--file-details-severity-level-color-low);
+}
+
+.severity-passed {
+  color: var(--file-details-severity-level-color-passed);
+}
+
+.severity-untested {
+  color: var(--file-details-severity-level-color-untested);
+}

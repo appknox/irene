@@ -95,6 +95,26 @@ declare module '@glint/environment-ember-loose/registry' {
       Return: string;
     }>;
 
+    'file-extension': HelperLike<{
+      Args: {
+        Positional: [string | undefined];
+      };
+      Return: string | null;
+    }>;
+
+    'page-title': HelperLike<{
+      Args: {
+        Positional: string[];
+        Named: {
+          [key: string]: unknown;
+          separator?: string;
+          prepend?: boolean;
+          replace?: boolean;
+        };
+      };
+      Return: void;
+    }>;
+
     style: ModifierLike<{
       Args: {
         Positional: [];

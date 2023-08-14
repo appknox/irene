@@ -1,0 +1,23 @@
+<AkStack
+  ...attributes
+  @direction='column'
+  local-class='file-compare-file-overview'
+  data-test-fileCompare-fileOverview-root
+>
+  <FileCompare::FileOverview::Header
+    @file={{@file}}
+    @disableSelection={{@disableSelection}}
+    @hideCTAs={{@hideCTAs}}
+    @hideOpenInNewTabIcon={{@hideOpenInNewTabIcon}}
+    @isSelectedFile={{@isSelectedFile}}
+    @onFileSelect={{@onFileSelect}}
+  />
+
+  <FileCompare::FileOverview::FileDetails @file={{@file}} />
+
+  <FileCompare::FileOverview::ScanStatuses @file={{@file}} />
+
+  <FileCompare::FileOverview::Chart @file={{@file}} @profileId={{@profileId}} />
+
+  {{yield}}
+</AkStack>

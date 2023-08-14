@@ -63,9 +63,7 @@ Router.map(function () {
       this.route('choose', {
         path: '/choose/:fileid',
       });
-      this.route('compare', {
-        path: '/compare/:files',
-      });
+
       this.route('payment-success');
       this.route('payment-failure');
       this.route('security', function () {
@@ -131,6 +129,22 @@ Router.map(function () {
           this.route('scan-details', {
             path: 'apps/:sbom_project_id/scans/:sbom_file_id',
           });
+        });
+
+        this.route(
+          'compare',
+          {
+            path: '/compare/:files',
+          },
+          function () {
+            this.route('recurring-issues');
+            this.route('untested-cases');
+            this.route('resolved-test-cases');
+          }
+        );
+
+        this.route('file-vul-compare', {
+          path: '/file-vul-compare/:files/:vulnerability_id',
         });
       });
     }

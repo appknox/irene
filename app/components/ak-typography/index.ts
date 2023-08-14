@@ -11,6 +11,7 @@ const variantMapping = {
   subtitle2: 'h6',
   body1: 'p',
   body2: 'p',
+  body3: 'p',
 };
 
 export type TypographyVariant = keyof typeof variantMapping;
@@ -39,6 +40,7 @@ export interface AkTypographySignature {
     align?: 'inherit' | 'left' | 'right' | 'center' | 'justify';
     noWrap?: boolean;
     underline?: 'none' | 'always' | 'hover';
+    italicized?: boolean;
   };
   Blocks: { default: [] };
 }

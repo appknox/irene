@@ -1,0 +1,24 @@
+.file-compare-table {
+  table {
+    background-color: transparent;
+  }
+
+  tr:first-of-type:hover td {
+    background-color: unset;
+  }
+
+  tr:first-of-type td {
+    cursor: default;
+  }
+
+  td,
+  th {
+    border-right: none !important;
+    border-left: none !important;
+  }
+
+  .table-row {
+    height: 5.5714em !important;
+    cursor: pointer;
+  }
+}

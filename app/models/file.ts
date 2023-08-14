@@ -6,16 +6,16 @@ import {
   belongsTo,
   hasMany,
 } from '@ember-data/model';
-
-import { computed } from '@ember/object';
 import ComputedProperty, { sort } from '@ember/object/computed';
+import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { Service as IntlService } from 'ember-intl';
+import Store from '@ember-data/store';
 
 import ENUMS from 'irene/enums';
 import { ModelBaseMixin } from 'irene/mixins/base-model';
+import { ECOption } from 'irene/components/ak-chart';
 import { RISK_COLOR_CODE } from 'irene/utils/constants';
-import { Service as IntlService } from 'ember-intl';
-import Store from '@ember-data/store';
 
 import ProjectModel from './project';
 import TagModel from './tag';
@@ -401,6 +401,67 @@ export default class FileModel extends ModelBaseMixin {
             RISK_COLOR_CODE.SUCCESS,
             RISK_COLOR_CODE.DEFAULT,
           ],
+        },
+      ],
+    };
+  }
+
+  get severityLevelCounts() {
+    const severityCountObjects = [
+      {
+        value: this.countRiskCritical,
+        name: this.intl.t('critical'),
+        severityType: 'critical',
+      },
+      {
+        value: this.countRiskHigh,
+        name: this.intl.t('high'),
+        severityType: 'high',
+      },
+      {
+        value: this.countRiskMedium,
+        name: this.intl.t('medium'),
+        severityType: 'medium',
+      },
+      {
+        value: this.countRiskLow,
+        name: this.intl.t('low'),
+        severityType: 'low',
+      },
+      {
+        value: this.countRiskNone,
+        name: this.intl.t('passed'),
+        severityType: 'passed',
+      },
+      {
+        value: this.countRiskUnknown,
+        name: this.intl.t('untested'),
+        severityType: 'untested',
+      },
+    ];
+
+    return severityCountObjects;
+  }
+
+  get echartPieChartOptions(): ECOption {
+    return {
+      color: this.severityLevelCounts.map((slc) =>
+        getComputedStyle(document.body).getPropertyValue(
+          `--file-details-severity-level-color-${slc.severityType}`
+        )
+      ),
+      tooltip: {
+        trigger: 'item',
+      },
+      series: [
+        {
+          type: 'pie',
+          radius: ['65%', '100%'],
+          label: {
+            show: false,
+          },
+          emphasis: { scale: false },
+          data: this.severityLevelCounts,
         },
       ],
     };

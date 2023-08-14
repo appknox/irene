@@ -83,6 +83,10 @@
   @extend .mi-arrow-right;
 }
 
+.ak-icon-west {
+  @extend .mi-west;
+}
+
 .ak-icon-close {
   @extend .mi-close;
 }
@@ -134,6 +138,7 @@
 .ak-icon-check-circle {
   @extend .mi-check-circle;
 }
+
 .ak-icon-cancel {
   @extend .mi-cancel;
 }
@@ -336,4 +341,32 @@
 
 .ak-icon-person {
   @extend .mi-person;
+}
+
+.ak-icon-error {
+  @extend .mi-error;
+}
+
+.ak-icon-circle {
+  @extend .mi-circle;
+}
+
+.ak-icon-timer {
+  @extend .mi-timer;
+}
+
+.ak-icon-check {
+  @extend .mi-check;
+}
+
+.ak-icon-drag-handle {
+  @extend .mi-drag-handle;
+}
+
+.ak-icon-remove-circle {
+  @extend .mi-remove-circle;
+}
+
+.ak-icon-text-snippet {
+  @extend .mi-text-snippet;
 }

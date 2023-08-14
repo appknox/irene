@@ -1,0 +1,64 @@
+<AkStack
+  @width='full'
+  @alignItems='center'
+  @justifyContent='space-between'
+  local-class='file-overview-statistics'
+>
+  <AkChart
+    @option={{this.chartOptions}}
+    {{style
+      maxWidth='145px'
+      minWidth='145px'
+      maxHeight='145px'
+      minHeight='145px'
+    }}
+    data-test-fileCompare-fileOverview-chart
+  />
+
+  <AkStack
+    @direction='column'
+    @alignItems='center'
+    local-class='statistics-values'
+  >
+    <AkStack
+      @direction='column'
+      @spacing='1'
+      data-test-fileCompare-fileOverview-severityValues
+    >
+      {{#each this.chartLegendData as |data|}}
+        <AkStack
+          @width='full'
+          @justifyContent='space-between'
+          local-class='statistics-item'
+          data-test-fileCompare-fileOverview-chartSeverity='{{data.name}}'
+        >
+          <AkStack @spacing='1' @alignItems='center'>
+            <AkIcon
+              @iconName='circle'
+              local-class='severity-{{data.severityType}}'
+              {{style fontSize='10px !important'}}
+              data-test-fileCompare-fileOverview-chartSeverity-colorIndicator
+            />
+
+            <AkTypography
+              local-class='statistics-item-title'
+              data-test-fileCompare-fileOverview-chartSeverityTitle
+            >
+              {{data.name}}
+            </AkTypography>
+          </AkStack>
+
+          <AkTypography
+            @fontWeight='bold'
+            local-class='statistics-item-value'
+            data-test-fileCompare-fileOverview-chartSeverityCount
+          >
+            {{data.value}}
+          </AkTypography>
+        </AkStack>
+
+        <AkDivider local-class='statistics-item-divider' />
+      {{/each}}
+    </AkStack>
+  </AkStack>
+</AkStack>

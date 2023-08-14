@@ -1,0 +1,64 @@
+<div class='pl-3 pr-3 mb-3' data-test-fileCompare-table-root>
+  <AkPaginationProvider
+    @results={{this.comparisonTableData}}
+    @onItemPerPageChange={{this.onItemPerPageChange}}
+    @totalItems={{this.filteredComparisons.length}}
+    @nextAction={{this.goToPage}}
+    @prevAction={{this.goToPage}}
+    @itemPerPageOptions={{array 10 20 30}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    as |pgc|
+  >
+
+    {{#if this.hasNoComparisons}}
+      {{! TODO: Resolve Empty state }}
+      <AppMonitoring::Empty
+        @header='No results found'
+        @body={{this.emptyResultMessage}}
+        data-test-fileCompareTable-emptyResults
+      />
+
+    {{else}}
+      <AkTable
+        @variant='full-bordered'
+        @borderColor='dark'
+        @hoverable={{true}}
+        local-class='file-compare-table'
+        as |tb|
+      >
+        <tb.head @columns={{this.columns}} />
+
+        <tb.body @rows={{pgc.currentPageResults}} as |b|>
+          <b.row
+            @onClick={{this.handleComparisonClick}}
+            local-class='table-row'
+            data-test-fileCompareTable-comparisonRow
+            as |r|
+          >
+            <r.cell>
+              {{#let (component r.columnValue.component) as |Component|}}
+                <Component @comparison={{r.rowValue}} />
+              {{/let}}
+            </r.cell>
+          </b.row>
+        </tb.body>
+      </AkTable>
+
+      <AkPagination
+        @disableNext={{pgc.disableNext}}
+        @nextAction={{pgc.nextAction}}
+        @disablePrev={{pgc.disablePrev}}
+        @prevAction={{pgc.prevAction}}
+        @endItemIdx={{pgc.endItemIdx}}
+        @startItemIdx={{pgc.startItemIdx}}
+        @itemPerPageOptions={{pgc.itemPerPageOptions}}
+        @onItemPerPageChange={{pgc.onItemPerPageChange}}
+        @selectedOption={{pgc.selectedOption}}
+        @tableItemLabel='Test Cases'
+        @perPageTranslation={{t 'recordPerPage'}}
+        @totalItems={{pgc.totalItems}}
+      />
+    {{/if}}
+  </AkPaginationProvider>
+</div>

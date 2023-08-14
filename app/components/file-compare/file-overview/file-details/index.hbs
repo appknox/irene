@@ -1,0 +1,115 @@
+{{!@glint-nocheck }}
+
+<AkStack
+  @width='full'
+  @justifyContent='space-between'
+  local-class='file-overview-file-details'
+>
+  <AkStack @spacing='0.5' @alignItems='center'>
+    {{#unless @file.isActive}}
+      <AkTooltip
+        @title={{t 'fileInactive'}}
+        @placement='top'
+        @arrow={{true}}
+        data-test-fileCompare-fileOverview-fileInactive-tooltip
+      >
+        <AkIcon
+          @iconName='error'
+          @color='secondary'
+          @size='small'
+          {{style fontSize='12px !important'}}
+          data-test-fileCompare-fileOverview-fileInactiveIndicator
+        />
+      </AkTooltip>
+    {{/unless}}
+
+    <AkTypography
+      @fontWeight='medium'
+      {{style letterSpacing='-0.246px'}}
+      data-test-fileCompare-fileOverview-fileID
+    >
+      {{t 'fileID'}}
+      -
+      {{@file.id}}
+    </AkTypography>
+  </AkStack>
+
+  <AkStack @spacing='1'>
+    <div
+      local-class='platform-{{@file.project.platformIconClass}}'
+      data-test-fileCompare-fileOverview-platformIcon
+    >
+      {{fa-icon @file.project.platformIconClass}}
+    </div>
+
+    {{! <AkSvg::AmPlaystoreLogo /> }}
+  </AkStack>
+</AkStack>
+
+<AkStack
+  @width='full'
+  @direction='column'
+  @spacing='1'
+  local-class='file-overview-versions-tags'
+>
+  {{#if @file.version}}
+    <AkStack
+      @width='full'
+      local-class='file-version-container'
+      {{style gap='1.4286em'}}
+      data-test-fileCompare-fileOverview-version
+    >
+      <AkTypography @color='textSecondary' local-class='file-version-title'>
+        {{t 'version'}}
+      </AkTypography>
+
+      <AkTypography @color='secondary' @fontWeight='medium'>
+        {{@file.version}}
+      </AkTypography>
+    </AkStack>
+  {{/if}}
+
+  {{#if @file.versionCode}}
+    <AkStack
+      @width='full'
+      local-class='file-version-container'
+      {{style gap='1.4286em'}}
+      data-test-fileCompare-fileOverview-versionCode
+    >
+      <AkTypography
+        @color='textSecondary'
+        local-class='file-version-title'
+        class='capitalize-text'
+      >
+        {{t 'versionCode'}}
+      </AkTypography>
+
+      <AkTypography @color='secondary' @fontWeight='medium'>
+        {{@file.versionCode}}
+      </AkTypography>
+    </AkStack>
+  {{/if}}
+
+  <div
+    local-class='file-tags-container'
+    data-test-fileCompare-fileOverview-tags
+  >
+    {{#if @file.tags.length}}
+      {{#each @file.tags as |tag|}}
+        <AkChip
+          data-test-fileCompare-fileOverview-tag='{{tag.name}}'
+          @label={{tag.name}}
+          @variant='outlined'
+        />
+      {{/each}}
+    {{else}}
+      <AkTypography
+        @color='textSecondary'
+        @italicized={{true}}
+        data-test-fileCompare-fileOverview-tags-empty
+      >
+        {{t 'fileCompare.noTagsMessage'}}
+      </AkTypography>
+    {{/if}}
+  </div>
+</AkStack>

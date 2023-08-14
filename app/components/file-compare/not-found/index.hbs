@@ -1,0 +1,20 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  @alignItems='center'
+  @justifyContent='center'
+  @spacing='3'
+  local-class='file-compare-not-found'
+>
+  <AkSvg::FileCompareError />
+
+  <AkStack @direction='column' @alignItems='center' {{style gap='0.7143em'}}>
+    <AkTypography @variant='h6' @align='center'>
+      {{t 'noResultsFound'}}
+    </AkTypography>
+
+    <AkTypography @align='center'>
+      {{t 'fileCompare.notFoundText'}}
+    </AkTypography>
+  </AkStack>
+</AkStack>

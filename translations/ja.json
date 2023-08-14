@@ -137,10 +137,6 @@
   "company": "Company",
   "companyName": "会社名",
   "compare": "比較",
-  "compareSummary1": "You are comparing file of ID",
-  "compareSummary2": "with file of ID",
-  "compareWarningOldFile": "You are comparing an old file with new file, the status below will not be accurate.",
-  "compareWarningSameFiles": "You are comparing 2 same files",
   "completed": "完了しました",
   "compliantSolution": "Compliant Solution",
   "confirm": "Confirm",
@@ -318,10 +314,29 @@
       "triggerError": "Problem with trigger"
     }
   },
+  "fileCompare": {
+    "newIssues": "New Issues",
+    "recurringIssues": "Recurring Issues",
+    "resolvedIssues": "Resolved Issues",
+    "untested": "Untested",
+    "summary1": "You are comparing file of ID",
+    "summary2": "with file of ID",
+    "noTagsMessage": "No tags available.",
+    "selectBaseFile": "Select Base File",
+    "selectCompareFile": "Select One More File ID",
+    "fileSelection": "File Selection",
+    "deselectFile": "Deselect one file to select this one",
+    "nonExistentTestCase": "Test case did not exist in this file",
+    "noDataAvailable": "No Data Available",
+    "notFoundText": "One or both of the files being compared doesn't exist"
+  },
   "fileCount": "ファイル数",
   "fileDetails": "ファイルの詳細",
   "fileID": "File ID",
   "fileInactive": "File Inactive",
+  "fileList": {
+    "selectFilesHeaderText": "View all the files uploaded under this Project. Select any 2 files to compare the scan results."
+  },
   "fileOverview": "File Overview",
   "fileReport": {
     "reportDrawerHeaderText": "You can download different types of scan reports here.",
@@ -714,6 +729,7 @@
   "off": "off",
   "ok": "OK",
   "on": "on",
+  "openInNewTab": "Open in new tab",
   "operational": "operational",
   "operatingSystem": "Operating System",
   "or": "または",
@@ -864,6 +880,7 @@
   "project": "プロジェクト",
   "projectCollaboratorAdded": "Added collaborator to project",
   "projectCount": "Projects count",
+  "projectID": "Project ID",
   "projectName": "プロジェクト名",
   "projectRemoved": "プロジェクトが削除されました",
   "projectTeamAdded": "Added team to project",
@@ -1050,6 +1067,7 @@
   "server": "Server",
   "serviceProvider": "Service Provider",
   "settings": "設定",
+  "severity": "Severity",
   "severityLevel": "重大度レベル",
   "showHiddenAnalysis": "Do you want to show the hidden analysis in the Report?",
   "showLess": "Show Less",
@@ -1128,6 +1146,7 @@
     "saveFilter": "フィルタを保存する",
     "addNewUrlFilter": "Add Filter"
   },
+  "testCase": "Test Case",
   "testCredentials": "テスト資格情報",
   "title": "Title",
   "toDate": "To Date",

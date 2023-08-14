@@ -10,7 +10,8 @@
       ak-typography-align-{{this.align}}
       ak-typography-underline-{{this.underline}}
       ak-typography-font-weight-{{@fontWeight}}
-      {{if @noWrap "no-wrap"}}'
+      {{if @noWrap "no-wrap"}}
+      {{if @italicized "italicized"}}'
   >
     {{yield}}
   </Tag>

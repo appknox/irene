@@ -151,6 +151,35 @@ module('Integration | Component | ak-button', function (hooks) {
       .hasClass(/ak-typography-color-warn/i);
   });
 
+  // note: font weight in text variant co-relate with typography font weight
+  test('test text variant button for font-weight', async function (assert) {
+    this.set('typographyFontWeight', 'medium');
+
+    await render(
+      hbs`<AkButton @variant="text" @typographyFontWeight={{this.typographyFontWeight}} >Button</AkButton>`
+    );
+
+    const button = find('[data-test-ak-button]');
+
+    assert
+      .dom(button)
+      .hasClass(/ak-button-text-root/i)
+      .hasNoClass(/ak-button-root/i);
+
+    assert
+      .dom('[data-test-ak-button-text]', button)
+      .exists()
+      .hasText('Button')
+      .hasClass(/ak-typography-font-weight-medium/i);
+
+    this.set('typographyFontWeight', 'bold');
+
+    assert
+      .dom('[data-test-ak-button-text]', button)
+      .exists()
+      .hasClass(/ak-typography-font-weight-bold/i);
+  });
+
   test('test text variant button for underline', async function (assert) {
     this.set('underline', 'none');
     await render(

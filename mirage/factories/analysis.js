@@ -22,8 +22,8 @@ export default Factory.extend({
   isIgnored: faker.datatype.boolean(),
   overridenRisk: faker.random.arrayElement([null, 1, 2, 3, 4]),
   status: faker.random.arrayElement(ENUMS.ANALYSIS.VALUES),
-  createdOn: faker.date.past(),
-  updatedOn: faker.date.past(),
+  created_on: faker.date.past(),
+  updated_on: faker.date.past(),
 
   risk() {
     return faker.random.arrayElement(ENUMS.RISK.VALUES);

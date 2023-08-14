@@ -358,7 +358,9 @@ body {
   // variables for organization-member/list/member-details
   --organization-member-list-member-details-border-radius: var(--border-radius);
   --organization-member-list-member-details-border-color: var(--border-color-1);
-  --organization-member-list-member-details-divider-color: var(--neutral-grey-200);
+  --organization-member-list-member-details-divider-color: var(
+    --neutral-grey-200
+  );
   --organization-member-list-member-details-box-shadow: var(--box-shadow-3);
 
   // variables for organization-member/list/add-to-team
@@ -613,6 +615,7 @@ body {
   --file-details-severity-level-color-medium: var(--severity-medium);
   --file-details-severity-level-color-low: var(--severity-low);
   --file-details-severity-level-color-passed: var(--severity-passed);
+  --file-details-severity-level-color-untested: var(--severity-none);
   --file-details-severity-level-color-none: var(--severity-none);
 
   // variables for file-details/insights-wrapper
@@ -697,4 +700,52 @@ body {
   --dynamic-scan-modal-alert-background-color: var(--warn-light);
   --dynamic-scan-modal-alert-text-color: var(--warn-dark);
   --dynamic-scan-modal-alert-border-color: var(--warn-dark);
+
+  // variables for file-list
+  --file-list-selected-file-chip-color: var(--text-primary);
+  --file-list-selected-file-chip-background: var(
+    --file-list-selected-file-chip-bg
+  );
+
+  // variables for file-compare/index
+  --file-compare-tabs-background-color: var(--file-compare-dark-bg);
+  --file-compare-tabs-background-color: var(--file-compare-dark-bg);
+
+  // variables for file-compare/analysis-details
+  --file-compare-analysis-details-border-color: var(--border-color-1);
+
+  // variables for file-compare/file-overview
+  --file-compare-file-overview-border-radius: var(--border-radius);
+  --file-compare-file-overview-background-white: var(--common-white);
+  --file-compare-file-overview-background-grey: var(--neutral-grey-100);
+  --file-compare-file-overview-border-color-light: var(--neutral-grey-100);
+  --file-compare-file-overview-border-color-dark: var(--border-color-1);
+  --file-compare-file-overview-color-android: var(--android);
+  --file-compare-file-overview-color-ios: var(--ios);
+
+  // variables for file-compare/header
+  --file-compare-header-white-background-color: var(--common-white);
+  --file-compare-header-dark-background-color: var(--file-compare-dark-bg);
+  --file-compare-header-divider-background-color: var(--border-color-2);
+  --file-compare-header-dark-border-color: var(--neutral-grey-300);
+  --file-compare-header-files-overview-border-color: var(--neutral-grey-200);
+  --file-compare-header-file-icon-border-color: var(--neutral-grey-100);
+  --file-compare-header-info-box-shadow: var(--file-compare-box-shadow);
+
+  // variables for file-compare/vulnerability-details
+  --file-compare-vulnerability-details-white-background: var(--common-white);
+  --file-compare-vulnerability-details-border-color: var(--neutral-grey-200);
+  --file-compare-vulnerability-details-header-wrapper-background-color: var(
+    --file-compare-dark-bg
+  );
+
+  // variables for file-compare/table/risk-type
+  --file-compare-table-risk-type-severity-critical: var(--severity-critical);
+  --file-compare-table-risk-type-severity-high: var(--severity-high);
+  --file-compare-table-risk-type-severity-medium: var(--severity-medium);
+  --file-compare-table-risk-type-severity-low: var(--severity-low);
+  --file-compare-table-risk-type-severity-info: var(--severity-info);
+  --file-compare-table-risk-type-severity-passed: var(--success-main);
+  --file-compare-table-risk-type-severity-not-started: var(--severity-none);
+  --file-compare-table-risk-type-severity-chip-text-color: var(--common-white);
 }

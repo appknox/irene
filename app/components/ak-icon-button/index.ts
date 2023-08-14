@@ -3,7 +3,6 @@ import Component from '@glimmer/component';
 interface AkIconButtonSignature {
   Element: HTMLButtonElement;
   Args: {
-    onDelete?: (event: MouseEvent) => void;
     variant?: 'outlined' | 'default';
     type?: 'submit' | 'reset' | 'button';
     size?: 'medium' | 'small';

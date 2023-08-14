@@ -1,19 +1,72 @@
 import { helper } from '@ember/component/helper';
 import ENUMS from 'irene/enums';
 
-export function analysisRiskStatus(params: [string, string, boolean]) {
-  let risk = null;
-  let status = null;
+// Risk classes types
+type RiskClassStatusValues = 'is-errored' | 'is-waiting' | 'is-progress';
+
+type RiskClassRiskValues =
+  | 'is-default'
+  | 'is-success'
+  | 'is-info'
+  | 'is-warning'
+  | 'is-danger'
+  | 'is-critical';
+
+type RiskClassRecord = {
+  status: Record<number, RiskClassStatusValues>;
+  risk: Record<number, RiskClassRiskValues>;
+};
+
+// Risk icon types
+type RiskIconStatusValues =
+  | 'fa-warning'
+  | 'fa-minus-circle'
+  | 'fa-spinner fa-spin';
+
+type RiskIconRiskValues = 'fa-close' | 'fa-check' | 'fa-warning';
+
+type RiskIconRecord = {
+  status: Record<number, RiskIconStatusValues>;
+  risk: Record<number, RiskIconRiskValues>;
+};
+
+// Risk label types
+type RiskLabelStatusValues = 'Errored' | 'Not started' | 'Scanning';
+
+type RiskLabelRiskValues =
+  | 'Untested'
+  | 'Passed'
+  | 'Low'
+  | 'Medium'
+  | 'High'
+  | 'Critical';
+
+type RiskLabelRecord = {
+  status: Record<number, RiskLabelStatusValues>;
+  risk: Record<number, RiskLabelRiskValues>;
+};
+
+export interface AnalysisRiskStatus {
+  cssclass: RiskClassStatusValues | RiskClassRiskValues | '';
+  icon: RiskIconStatusValues | RiskIconRiskValues | '';
+  label: RiskLabelStatusValues | RiskLabelRiskValues | '';
+}
+
+export function analysisRiskStatus(
+  params: (number | boolean | undefined)[]
+): AnalysisRiskStatus {
+  let risk: number | null = null;
+  let status: number | null = null;
   let isOverriddenRisk = false;
 
   try {
-    risk = parseInt(params[0]);
+    risk = parseInt(String(params[0]));
   } catch (_) {
     // null risk
   }
 
   try {
-    status = parseInt(params[1]);
+    status = parseInt(String(params[1]));
   } catch (_) {
     // null status
   }
@@ -24,7 +77,7 @@ export function analysisRiskStatus(params: [string, string, boolean]) {
     // null isOverriddenRisk
   }
 
-  const classes = {
+  const classes: RiskClassRecord = {
     status: {
       [ENUMS.ANALYSIS.ERROR]: 'is-errored',
       [ENUMS.ANALYSIS.WAITING]: 'is-waiting',
@@ -40,7 +93,7 @@ export function analysisRiskStatus(params: [string, string, boolean]) {
     },
   };
 
-  const icons = {
+  const icons: RiskIconRecord = {
     status: {
       [ENUMS.ANALYSIS.ERROR]: 'fa-warning',
       [ENUMS.ANALYSIS.WAITING]: 'fa-minus-circle',
@@ -56,7 +109,7 @@ export function analysisRiskStatus(params: [string, string, boolean]) {
     },
   };
 
-  const labels = {
+  const labels: RiskLabelRecord = {
     status: {
       [ENUMS.ANALYSIS.ERROR]: 'Errored',
       [ENUMS.ANALYSIS.WAITING]: 'Not started',
@@ -103,3 +156,9 @@ export function analysisRiskStatus(params: [string, string, boolean]) {
 }
 
 export default helper(analysisRiskStatus);
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    'analysis-risk-status': typeof analysisRiskStatus;
+  }
+}

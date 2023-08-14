@@ -1,37 +1,75 @@
-/* eslint-disable qunit/no-commented-tests, prettier/prettier */
-// import tHelper from 'ember-intl/helpers/t';
-// import { module, test } from 'qunit';
-// import { setupTest } from 'ember-qunit';
-// import { startMirage } from 'irene/initializers/ember-cli-mirage';
-// import { run } from '@ember/runloop';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { click, render } from '@ember/test-helpers';
+import { hbs } from 'ember-cli-htmlbars';
+import { setupIntl } from 'ember-intl/test-support';
+import { setupMirage } from 'ember-cli-mirage/test-support';
+import { fileExtension } from 'irene/helpers/file-extension';
+import Service from '@ember/service';
 
-// module('Integration | Component | attachment detail', function(hooks) {
-//   setupTest(hooks);
+class WindowStub extends Service {
+  url = null;
 
-//   hooks.beforeEach(function() {
-//     // set the locale and the config
-//     this.owner.lookup('service:intl').setLocale('en');
+  open(url) {
+    this.url = url;
+  }
+}
 
-//     // register t helper
-//     this.owner.register('helper:t', tHelper);
+module('Integration | Component | attachment-detail', function (hooks) {
+  setupRenderingTest(hooks);
+  setupIntl(hooks);
+  setupMirage(hooks);
 
-//     // start Mirage
-//     this.server = startMirage();
-//   });
+  hooks.beforeEach(async function () {
+    // Store service
+    const store = this.owner.lookup('service:store');
 
-//   hooks.afterEach(function() {
-//     // shutdown Mirage
-//     this.server.shutdown();
-//   });
+    const attachment = this.server.create('attachment');
 
-//   test('clicking download link fires an external action', function(assert) {
-//     var component = this.owner.factoryFor('component:attachment-detail').create();
+    this.attachment = store.createRecord('attachment', {
+      ...attachment.toJSON(),
+      downloadUrl: 'www.getdownloadurl.com',
+    });
+  });
 
-//     run(function() {
-//       component.set("attachment", {downloadUrl: '/api/attachments/20'});
-//       component.send('downloadAttachment');
-//       assert.equal(component.get('isDownloadingAttachment'),true);
-//     });
-//   });
-// });
+  test('it renders', async function (assert) {
+    await render(hbs`<AttachmentDetail @attachment={{this.attachment}} />`);
 
+    assert
+      .dom(`[data-type="${fileExtension([this.attachment.name])}"]`)
+      .exists();
+
+    assert
+      .dom('[data-test-attachmentDetail-label]')
+      .exists()
+      .containsText(`${this.attachment.uuid}_${this.attachment.name}`);
+
+    assert.dom('[data-test-attachmentDetail-downloadIcon]').exists();
+  });
+
+  test('it downloads an attachment', async function (assert) {
+    const DOWNLOAD_URL = 'www.downloadurl.com';
+
+    this.server.get('www.getdownloadurl.com', () => {
+      return {
+        data: {
+          url: DOWNLOAD_URL,
+        },
+      };
+    });
+
+    this.owner.register('service:browser/window', WindowStub);
+
+    await render(hbs`<AttachmentDetail @attachment={{this.attachment}} />`);
+
+    await click('[data-test-attachmentDetail-root]');
+
+    const window = this.owner.lookup('service:browser/window');
+
+    assert.strictEqual(
+      window.url,
+      DOWNLOAD_URL,
+      `opens the right download url`
+    );
+  });
+});

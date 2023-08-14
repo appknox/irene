@@ -4,7 +4,7 @@ import ENUMS from 'irene/enums';
 
 export interface FileDetailsVulnerabilityAnalysesTypeOfScanSignature {
   Args: {
-    analysis: AnalysisModel;
+    analysis?: AnalysisModel;
     chipSize?: 'small' | 'medium';
     justifyContent?: 'flex-start' | 'flex-end';
     tooltipPlacement?: 'top' | 'bottom';
@@ -17,7 +17,7 @@ export default class FileDetailsVulnerabilityAnalysesTypeOfScanComponent extends
   }
 
   get tags() {
-    const types = this.args.analysis.vulnerabilityTypes;
+    const types = this.args.analysis?.vulnerabilityTypes;
 
     if (types === undefined) {
       return [];
@@ -28,28 +28,28 @@ export default class FileDetailsVulnerabilityAnalysesTypeOfScanComponent extends
     for (const type of Array.from(types)) {
       if (type === ENUMS.VULNERABILITY_TYPE.STATIC) {
         tags.push({
-          status: this.args.analysis.file.get?.('isStaticDone'),
+          status: this.args.analysis?.file.get?.('isStaticDone'),
           text: 'static',
         });
       }
 
       if (type === ENUMS.VULNERABILITY_TYPE.DYNAMIC) {
         tags.push({
-          status: this.args.analysis.file.get?.('isDynamicDone'),
+          status: this.args.analysis?.file.get?.('isDynamicDone'),
           text: 'dynamic',
         });
       }
 
       if (type === ENUMS.VULNERABILITY_TYPE.MANUAL) {
         tags.push({
-          status: this.args.analysis.file.get?.('isManualDone'),
+          status: this.args.analysis?.file.get?.('isManualDone'),
           text: 'manual',
         });
       }
 
       if (type === ENUMS.VULNERABILITY_TYPE.API) {
         tags.push({
-          status: this.args.analysis.file.get?.('isApiDone'),
+          status: this.args.analysis?.file.get?.('isApiDone'),
           text: 'api',
         });
       }

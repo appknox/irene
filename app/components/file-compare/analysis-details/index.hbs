@@ -1,0 +1,431 @@
+<AkStack ...attributes @direction='column' local-class='analysis-details-root'>
+  <AkStack
+    @width='full'
+    class='p-3'
+    data-test-fileCompare-analysisDetails-severityDetails
+  >
+    <AkTypography @variant='h6' local-class='analysis-content-title'>
+      {{t 'severity'}}
+    </AkTypography>
+
+    <RiskTag @analysis={{@analysis}} />
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AkStack
+    @width='full'
+    class='p-3'
+    data-test-fileCompare-analysisDetails-analysisStatus
+  >
+    <AkTypography @variant='h6' local-class='analysis-content-title'>
+      {{t 'status'}}
+    </AkTypography>
+
+    <AkTypography local-class='analysis-content-value'>
+      {{@analysisStatus}}
+    </AkTypography>
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AkStack @width='full' class='p-3'>
+    <AkTypography
+      @variant='h6'
+      local-class='analysis-content-title'
+      title='{{t "cvssExpansion"}}'
+      data-test-fileCompare-analysisDetails-typeOfScan
+    >
+      {{t 'typeOfScan'}}
+    </AkTypography>
+
+    <FileDetails::TypeOfScan @analysis={{@analysis}} />
+
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AkStack @direction='column' @width='full' class='p-3'>
+    <AkTypography
+      data-test-analysisDetails-descriptionLabel
+      @variant='h6'
+      @gutterBottom={{true}}
+    >
+      {{t 'description'}}
+    </AkTypography>
+
+    <AkTypography
+      local-class='analysis-static-content'
+      data-test-analysisDetails-descriptionValue
+    >
+      {{this.vulnerabilityDescription}}
+    </AkTypography>
+  </AkStack>
+
+  {{#if (or @analysis.isRisky @analysis.attachments)}}
+    <AkDivider @color='dark' />
+
+    <AkStack @width='full' @direction='column' class='p-3'>
+      {{#if @analysis.isRisky}}
+        <AkTypography @variant='h6' @gutterBottom={{true}}>
+          {{t 'vulnerability'}}
+        </AkTypography>
+
+        {{#each @analysis.findings as |finding|}}
+          <AkTypography local-class='analysis-content-value'>
+            {{finding.title}}
+          </AkTypography>
+
+          <span class='scrollable-box'>
+            <pre class='pre-code'>{{finding.description}}</pre>
+          </span>
+        {{/each}}
+      {{/if}}
+    </AkStack>
+
+    {{#if @analysis.attachments}}
+      <AkStack @width='full' @direction='column' class='px-3 pb-3'>
+        <AkTypography @variant='h6' @gutterBottom={{true}}>
+          {{t 'attachments'}}
+        </AkTypography>
+
+        {{#each @analysis.attachments as |attachment|}}
+          <AttachmentDetail @attachment={{attachment}} />
+        {{/each}}
+      </AkStack>
+    {{/if}}
+  {{/if}}
+
+  {{#if (and @analysis.isRisky this.businessImplication)}}
+    <AkDivider @color='dark' />
+
+    <AkStack @direction='column' @width='full' class='p-3'>
+      <AkTypography
+        @variant='h6'
+        @gutterBottom={{true}}
+        data-test-analysisDetails-bussinessImpLabel
+      >
+        {{t 'businessImplication'}}
+      </AkTypography>
+
+      <AkTypography
+        local-class='analysis-static-content'
+        data-test-analysisDetails-bussinessImpValue
+      >
+        {{this.businessImplication}}
+      </AkTypography>
+    </AkStack>
+  {{/if}}
+
+  {{#if @analysis.isRisky}}
+    {{#if @analysis.vulnerability.compliant}}
+      <AkDivider @color='dark' />
+
+      <AkStack @direction='column' class='p-3'>
+        <AkTypography
+          @variant='h6'
+          @gutterBottom={{true}}
+          data-test-analysisDetails-compliantLabel
+        >
+          {{t 'compliantSolution'}}
+        </AkTypography>
+
+        <AkTypography
+          @tag='div'
+          local-class='analysis-static-content'
+          data-test-analysisDetails-compliantValue
+        >
+          {{this.compliantSolution}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+
+    {{#if @analysis.vulnerability.nonCompliant}}
+      <AkDivider @color='dark' />
+
+      <AkStack @direction='column' class='p-3'>
+        <AkTypography
+          @variant='h6'
+          @gutterBottom={{true}}
+          data-test-analysisDetails-nonCompliantLabel
+        >
+          {{t 'nonCompliantCodeExample'}}
+        </AkTypography>
+
+        <AkTypography
+          @tag='div'
+          local-class='analysis-static-content'
+          data-test-analysisDetails-nonCompliantValue
+        >
+          {{this.nonCompliantCodeExample}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+
+    {{#if (and (eq @analysis.cvssVersion 3) @analysis.cvssVector)}}
+      <AkDivider @color='dark' />
+
+      <AkStack data-test-analysisDetails-regulatory='cvssv3' class='p-3'>
+        <AkTypography
+          @variant='h6'
+          local-class='analysis-content-title'
+          title='{{t "cvssExpansion"}}'
+          data-test-analysisDetails-regulatoryLabel
+        >
+          CVSSv3
+        </AkTypography>
+
+        <AkTypography
+          local-class='analysis-content-value'
+          data-test-analysisDetails-regulatoryValue
+          class='column black-text'
+        >
+          {{@analysis.cvssBase}}
+        </AkTypography>
+      </AkStack>
+
+      <AkDivider @color='dark' />
+
+      <div data-test-analysisDetails-regulatory='cvssv3metrics' class='p-3'>
+        <AkTypography
+          @variant='h6'
+          @gutterBottom={{true}}
+          data-test-analysisDetails-regulatoryLabel
+        >
+          {{t 'cvssMetrics'}}
+        </AkTypography>
+
+        <FileCompare::AnalysisDetails::RegulatoryContent
+          @contents={{@analysis.cvssMetricsHumanized}}
+        >
+          <:label as |metric|>
+            <AkTypography>
+              {{metric.key}}
+            </AkTypography>
+          </:label>
+
+          <:value as |metric|>
+            <AkTypography>
+              {{metric.value}}
+            </AkTypography>
+          </:value>
+        </FileCompare::AnalysisDetails::RegulatoryContent>
+      </div>
+    {{/if}}
+
+    {{#if this.regulatoryContent.owasp}}
+      <AkDivider @color='dark' />
+
+      <div data-test-analysisDetails-regulatory='owasp' class='p-3'>
+        <AkTypography
+          title='{{t "owaspExpansion"}}'
+          data-test-analysisDetails-regulatoryLabel
+          @variant='h6'
+          @gutterBottom={{true}}
+        >
+          OWASP
+        </AkTypography>
+
+        <FileCompare::AnalysisDetails::RegulatoryContent
+          @contents={{this.regulatoryContent.owasp}}
+        />
+      </div>
+
+    {{/if}}
+
+    {{#if this.regulatoryContent.cwe}}
+      <AkDivider @color='dark' />
+
+      <div data-test-analysisDetails-regulatory='cwe' class='p-3'>
+        <AkTypography
+          data-test-analysisDetails-regulatoryLabel
+          title='{{t "cweExpansion"}}'
+          @variant='h6'
+          @gutterBottom={{true}}
+        >
+          CWE
+        </AkTypography>
+
+        <FileCompare::AnalysisDetails::RegulatoryContent
+          @contents={{this.regulatoryContent.cwe}}
+        >
+          <:value as |cwe|>
+            <AkButton
+              data-test-analysisDetails-regulatoryValue
+              @tag='a'
+              @variant='text'
+              @color='primary'
+              href='{{cwe.url}}'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              {{cwe.url}}
+            </AkButton>
+          </:value>
+        </FileCompare::AnalysisDetails::RegulatoryContent>
+      </div>
+
+    {{/if}}
+
+    {{#if this.regulatoryContent.asvs}}
+      <AkDivider @color='dark' />
+
+      <div data-test-analysisDetails-regulatory='asvs' class='p-3'>
+        <AkTypography
+          title='{{t "asvsExpansion"}}'
+          data-test-analysisDetails-regulatoryLabel
+          @variant='h6'
+          @gutterBottom={{true}}
+        >
+          ASVS
+        </AkTypography>
+
+        <FileCompare::AnalysisDetails::RegulatoryContent
+          @contents={{this.regulatoryContent.asvs}}
+        />
+      </div>
+    {{/if}}
+
+    {{#if this.regulatoryContent.mstg}}
+      <AkDivider @color='dark' />
+
+      <div data-test-analysisDetails-regulatory='mstg' class='p-3'>
+        <AkTypography
+          data-test-analysisDetails-regulatoryLabel
+          title='{{t "mstgExpansion"}}'
+          @variant='h6'
+          @gutterBottom={{true}}
+        >
+          MSTG
+        </AkTypography>
+
+        <FileCompare::AnalysisDetails::RegulatoryContent
+          @contents={{this.regulatoryContent.mstg}}
+        />
+      </div>
+
+    {{/if}}
+
+    {{#if @analysis.file.profile.reportPreference.show_pcidss.value}}
+      {{#if this.regulatoryContent.pcidss}}
+        <AkDivider @color='dark' />
+
+        <div data-test-analysisDetails-regulatory='pcidss' class='p-3'>
+          <AkTypography
+            data-test-analysisDetails-regulatoryLabel
+            title='{{t "pcidssExpansion"}}'
+            @variant='h6'
+            @gutterBottom={{true}}
+          >
+            PCI-DSS
+          </AkTypography>
+
+          <FileCompare::AnalysisDetails::RegulatoryContent
+            @contents={{this.regulatoryContent.pcidss}}
+            @hasMoreDetails={{true}}
+          />
+        </div>
+
+      {{/if}}
+    {{/if}}
+
+    {{#if @analysis.file.profile.reportPreference.show_hipaa.value}}
+      {{#if this.regulatoryContent.hipaa}}
+        <AkDivider @color='dark' />
+
+        <div data-test-analysisDetails-regulatory='hipaa' class='p-3'>
+          <AkTypography
+            data-test-analysisDetails-regulatoryLabel
+            title='{{t "hipaaExpansion"}}'
+            @variant='h6'
+            @gutterBottom={{true}}
+          >
+            HIPAA
+          </AkTypography>
+
+          <FileCompare::AnalysisDetails::RegulatoryContent
+            @contents={{this.regulatoryContent.hipaa}}
+          >
+            <:value as |hipaa showMoreFor showMoreHandler|>
+              <AkTypography @tag='div'>
+                {{hipaa.safeguard}}:
+                {{hipaa.title}}
+
+                {{#if (eq showMoreFor hipaa.id)}}
+                  <br />
+
+                  <div
+                    data-test-analysisDetail-regulatoryContent-valueStandardTitle
+                    class='my-2'
+                  >
+                    <strong>Standards</strong>
+                  </div>
+
+                  <AkStack class='mb-2' @direction='column' @spacing='3'>
+                    {{#each hipaa.standards as |std|}}
+                      <div
+                        data-test-analysisDetail-regulatoryContent-valueStandardGroup
+                      >
+                        <div
+                          data-test-analysisDetail-regulatoryContent-valueStandardLabel
+                          class='mb-1'
+                        >
+                          <AkTypography @tag='span' @variant='h6'>
+                            {{std.title}}
+                          </AkTypography>
+
+                          <AkTypography @color='textSecondary' @tag='span'>
+                            ({{std.specifications}})
+                          </AkTypography>
+                        </div>
+
+                        <AkTypography
+                          data-test-analysisDetail-regulatoryContent-valueStandardDescription
+                        >
+                          {{std.description}}
+                        </AkTypography>
+                      </div>
+                    {{/each}}
+                  </AkStack>
+                {{/if}}
+
+                <AkButton
+                  @variant='text'
+                  @color='primary'
+                  @underline='always'
+                  {{on 'click' (fn showMoreHandler hipaa.id)}}
+                  data-test-analysisDetail-regulatoryContent-valueMoreLessBtn
+                >
+                  {{if (eq showMoreFor hipaa.id) 'less details' 'more details'}}
+                </AkButton>
+              </AkTypography>
+            </:value>
+          </FileCompare::AnalysisDetails::RegulatoryContent>
+        </div>
+
+      {{/if}}
+    {{/if}}
+
+    {{#if @analysis.file.profile.reportPreference.show_gdpr.value}}
+      {{#if this.regulatoryContent.gdpr}}
+        <AkDivider @color='dark' />
+
+        <div data-test-analysisDetails-regulatory='gdpr' class='p-3'>
+          <AkTypography
+            data-test-analysisDetails-regulatoryLabel
+            title='{{t "gdprExpansion"}}'
+            @variant='h6'
+            @gutterBottom={{true}}
+          >
+            GDPR
+          </AkTypography>
+
+          <FileCompare::AnalysisDetails::RegulatoryContent
+            @contents={{this.regulatoryContent.gdpr}}
+          />
+        </div>
+      {{/if}}
+    {{/if}}
+  {{/if}}
+
+</AkStack>

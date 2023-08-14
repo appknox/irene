@@ -37,6 +37,14 @@ module('Integration | Component | file-details/scan-actions', function (hooks) {
   setupIntl(hooks);
 
   hooks.beforeEach(async function () {
+    this.server.get('/v2/files/:id', (schema, req) => {
+      return schema.files.find(`${req.params.id}`)?.toJSON();
+    });
+
+    this.server.get('/manualscans/:id', (schema, req) => {
+      return schema.manualscans.find(`${req.params.id}`)?.toJSON();
+    });
+
     this.server.createList('organization', 1);
 
     const store = this.owner.lookup('service:store');
@@ -46,6 +54,7 @@ module('Integration | Component | file-details/scan-actions', function (hooks) {
     });
 
     this.server.create('project', { file: file.id, id: '1' });
+    this.server.create('manualscan', { id: file.id });
 
     this.setProperties({
       file: store.push(store.normalize('file', file.toJSON())),
@@ -211,8 +220,6 @@ module('Integration | Component | file-details/scan-actions', function (hooks) {
   });
 
   test('it renders manual scan title & btn', async function (assert) {
-    this.server.create('manualscan', { id: this.file.id });
-
     this.file.manual = ENUMS.MANUAL.NONE;
     this.file.isManualDone = false;
 
@@ -224,10 +231,6 @@ module('Integration | Component | file-details/scan-actions', function (hooks) {
         ...schema.projects.find(`${req.params.id}`)?.toJSON(),
         is_manual_scan_available: true,
       };
-    });
-
-    this.server.get('/manualscans/:id', (schema, req) => {
-      return schema.manualscans.find(`${req.params.id}`)?.toJSON();
     });
 
     await render(hbs`
