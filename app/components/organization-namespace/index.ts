@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
-import StoreService from '@ember-data/store';
+import Store from '@ember-data/store';
 import RouterService from '@ember/routing/router-service';
 import MeService from 'irene/services/me';
 import ENV from 'irene/config/environment';
@@ -36,7 +36,7 @@ export default class OrganizationNamespaceComponent extends Component<Organizati
   @service declare intl: IntlService;
   @service declare me: MeService;
   @service('notifications') declare notify: NotificationService;
-  @service declare store: StoreService;
+  @service declare store: Store;
   @service declare router: RouterService;
 
   @tracked showRejectNamespaceConfirm = false;

@@ -7,19 +7,18 @@ import triggerAnalytics from 'irene/utils/trigger-analytics';
 import parseEmails from 'irene/utils/parse-emails';
 import { tracked } from '@glimmer/tracking';
 import IntlService from 'ember-intl/services/intl';
-import StoreService from '@ember-data/store';
+import Store from '@ember-data/store';
 import RealtimeService from 'irene/services/realtime';
 import OrganizationTeamModel from 'irene/models/organization-team';
 
 interface InviteMemberSignature {
   Args: {
     team?: OrganizationTeamModel;
-    reloadMembers?: () => void;
   };
   Element: HTMLDivElement;
   Blocks: {
-    default?: () => void;
-    actionContent?: [
+    default: () => void;
+    actionContent: [
       {
         action: () => void;
         actionLabel: string;
@@ -32,7 +31,7 @@ interface InviteMemberSignature {
 export default class InviteMemberComponent extends Component<InviteMemberSignature> {
   @service declare intl: IntlService;
   @service declare realtime: RealtimeService;
-  @service declare store: StoreService;
+  @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
 
   @tracked emailsFromText = '';

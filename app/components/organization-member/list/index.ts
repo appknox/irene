@@ -5,7 +5,7 @@ import { debounce } from '@ember/runloop';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import IntlService from 'ember-intl/services/intl';
-import StoreService from '@ember-data/store';
+import Store from '@ember-data/store';
 import RouterService from '@ember/routing/router-service';
 import MeService from 'irene/services/me';
 import OrganizationModel from 'irene/models/organization';
@@ -37,7 +37,7 @@ type UserRowClickArgs = {
 export default class OrganizationMemberListComponent extends Component<OrganizationMemberListComponentSignature> {
   @service declare intl: IntlService;
   @service declare me: MeService;
-  @service declare store: StoreService;
+  @service declare store: Store;
   @service('notifications') declare notify: NotificationService;
   @service declare router: RouterService;
 

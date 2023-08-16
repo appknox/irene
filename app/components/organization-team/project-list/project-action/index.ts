@@ -6,19 +6,31 @@ import { task } from 'ember-concurrency';
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import { tracked } from '@glimmer/tracking';
+import IntlService from 'ember-intl/services/intl';
+import Store from '@ember-data/store';
+import RealtimeService from 'irene/services/realtime';
+import MeService from 'irene/services/me';
+import OrganizationTeamProjectModel from 'irene/models/organization-team-project';
+import OrganizationTeamModel from 'irene/models/organization-team';
 
-export default class OrganizationProjectOverview extends Component {
-  @service intl;
-  @service realtime;
-  @service me;
-  @service('notifications') notify;
-  @service store;
+export interface OrganizationProjectOverviewComponentSignature {
+  Args: {
+    project: OrganizationTeamProjectModel;
+    team: OrganizationTeamModel;
+    reloadTeamProjects: () => void;
+  };
+  Element: HTMLElement;
+}
+
+export default class OrganizationProjectOverview extends Component<OrganizationProjectOverviewComponentSignature> {
+  @service declare intl: IntlService;
+  @service declare store: Store;
+  @service('notifications') declare notify: NotificationService;
+  @service declare me: MeService;
+  @service declare realtime: RealtimeService;
 
   @tracked showRemoveProjectConfirm = false;
   @tracked isRemovingProject = false;
-
-  tProjectRemoved = this.intl.t('projectRemoved');
-  tPleaseTryAgain = this.intl.t('pleaseTryAgain');
 
   get confirmText() {
     return capitalize(this.intl.t('remove'));
@@ -44,9 +56,12 @@ export default class OrganizationProjectOverview extends Component {
       // reload project list
       this.args.reloadTeamProjects();
 
-      this.notify.success(this.tProjectRemoved);
+      this.notify.success(this.intl.t('projectRemoved'));
 
-      triggerAnalytics('feature', ENV.csb.teamProjectRemove);
+      triggerAnalytics(
+        'feature',
+        ENV.csb['teamProjectRemove'] as CsbAnalyticsFeatureData
+      );
 
       this.showRemoveProjectConfirm = false;
       this.isRemovingProject = false;
@@ -54,11 +69,12 @@ export default class OrganizationProjectOverview extends Component {
       // reload team to update project count
       // for some reason because of 'reloadTeamProjects' this has to be last for test & implementation to work
       await team.reload();
-    } catch (err) {
-      let errMsg = this.tPleaseTryAgain;
+    } catch (e) {
+      const err = e as AdapterError;
+      let errMsg = this.intl.t('pleaseTryAgain');
 
       if (err.errors && err.errors.length) {
-        errMsg = err.errors[0].detail || errMsg;
+        errMsg = err.errors[0]?.detail || errMsg;
       } else if (err.message) {
         errMsg = err.message;
       }
@@ -67,4 +83,10 @@ export default class OrganizationProjectOverview extends Component {
       this.isRemovingProject = false;
     }
   });
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    'OrganizationTeam::ProjectList::ProjectAction': typeof OrganizationProjectOverview;
+  }
 }

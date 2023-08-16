@@ -1,31 +1,57 @@
-import { task } from 'ember-concurrency';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
-import ENV from 'irene/config/environment';
-import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import { debounce } from '@ember/runloop';
 import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency';
+import { action } from '@ember/object';
+import { debounce } from '@ember/runloop';
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
+import DS from 'ember-data';
+import Store from '@ember-data/store';
+import IntlService from 'ember-intl/services/intl';
+import RealtimeService from 'irene/services/realtime';
+import ENV from 'irene/config/environment';
+import triggerAnalytics from 'irene/utils/trigger-analytics';
+import OrganizationTeamModel from 'irene/models/organization-team';
+import OrganizationUserModel from 'irene/models/organization-user';
+import { ActionContentType } from '../details/active-action';
 
-export default class OrganizationTeamAddTeamMemberComponent extends Component {
-  @service intl;
-  @service realtime;
-  @service store;
-  @service('notifications') notify;
+export interface OrganizationTeamAddTeamMemberComponentSignature {
+  Args: {
+    team: OrganizationTeamModel;
+  };
+  Element: HTMLElement;
+  Blocks: {
+    default: () => void;
+    actionContent: [ActionContentType];
+  };
+}
+
+type UserResponseModel =
+  DS.AdapterPopulatedRecordArray<OrganizationUserModel> & {
+    meta?: { count: number };
+  };
+
+type SelectedMemberModel = Record<string, OrganizationUserModel>;
+
+export default class OrganizationTeamAddTeamMemberComponent extends Component<OrganizationTeamAddTeamMemberComponentSignature> {
+  @service declare intl: IntlService;
+  @service declare realtime: RealtimeService;
+  @service declare store: Store;
+  @service('notifications') declare notify: NotificationService;
 
   @tracked searchQuery = '';
   @tracked limit = 10;
   @tracked offset = 0;
-  @tracked userResponse = null;
+  @tracked userResponse: UserResponseModel | null = null;
   @tracked isAddingMember = false;
   @tracked addMemberErrorCount = 0;
-  @tracked selectedMembers = {};
+  @tracked selectedMembers: SelectedMemberModel = {};
 
-  tTeamMemberAdded = this.intl.t('teamMemberAdded');
-  tPleaseTryAgain = this.intl.t('pleaseTryAgain');
-
-  constructor() {
-    super(...arguments);
+  constructor(
+    owner: unknown,
+    args: OrganizationTeamAddTeamMemberComponentSignature['Args']
+  ) {
+    super(owner, args);
 
     this.fetchUsers.perform(this.limit, this.offset);
   }
@@ -63,10 +89,10 @@ export default class OrganizationTeamAddTeamMemberComponent extends Component {
   }
 
   @action
-  selectionChange(member, event) {
+  selectionChange(member: OrganizationUserModel, event: Event) {
     const selectedMembers = { ...this.selectedMembers };
 
-    if (event.target.checked) {
+    if ((event.target as HTMLInputElement).checked) {
       selectedMembers[member.id] = member;
     } else {
       delete selectedMembers[member.id];
@@ -90,11 +116,12 @@ export default class OrganizationTeamAddTeamMemberComponent extends Component {
       await team.addMember(data, member.id);
 
       this.realtime.incrementProperty('TeamMemberCounter');
-    } catch (err) {
-      let errMsg = this.tPleaseTryAgain;
+    } catch (e) {
+      const err = e as AdapterError;
+      let errMsg = this.intl.t('pleaseTryAgain');
 
       if (err.errors && err.errors.length) {
-        errMsg = err.errors[0].detail || errMsg;
+        errMsg = err.errors[0]?.detail || errMsg;
       } else if (err.message) {
         errMsg = err.message;
       }
@@ -118,14 +145,17 @@ export default class OrganizationTeamAddTeamMemberComponent extends Component {
     }
 
     if (this.addMemberErrorCount === 0) {
-      this.notify.success(this.tTeamMemberAdded);
+      this.notify.success(this.intl.t('teamMemberAdded'));
 
       this.fetchUsers.perform(this.limit, this.offset, this.searchQuery);
 
       this.searchQuery = '';
       this.selectedMembers = {};
 
-      triggerAnalytics('feature', ENV.csb.addTeamMember);
+      triggerAnalytics(
+        'feature',
+        ENV.csb['addTeamMember'] as CsbAnalyticsFeatureData
+      );
     }
 
     // reload team to update member count
@@ -135,7 +165,7 @@ export default class OrganizationTeamAddTeamMemberComponent extends Component {
   });
 
   @action
-  handleNextPrevAction({ limit, offset }) {
+  handleNextPrevAction({ limit, offset }: { limit: number; offset: number }) {
     this.limit = limit;
     this.offset = offset;
 
@@ -143,7 +173,7 @@ export default class OrganizationTeamAddTeamMemberComponent extends Component {
   }
 
   @action
-  handleItemPerPageChange({ limit }) {
+  handleItemPerPageChange({ limit }: { limit: number }) {
     this.limit = limit;
     this.offset = 0;
 
@@ -151,15 +181,20 @@ export default class OrganizationTeamAddTeamMemberComponent extends Component {
   }
 
   /* Set debounced searchQuery */
-  setSearchQuery(query) {
+  setSearchQuery(query: string) {
     this.searchQuery = query;
 
     this.fetchUsers.perform(this.limit, 0, query);
   }
 
   @action
-  handleSearchQueryChange(event) {
-    debounce(this, this.setSearchQuery, event.target.value, 500);
+  handleSearchQueryChange(event: Event) {
+    debounce(
+      this,
+      this.setSearchQuery,
+      (event.target as HTMLInputElement).value,
+      500
+    );
   }
 
   fetchUsers = task({ drop: true }, async (limit, offset, query = '') => {
@@ -175,11 +210,12 @@ export default class OrganizationTeamAddTeamMemberComponent extends Component {
         'organization-user',
         queryParams
       );
-    } catch (err) {
-      let errMsg = this.tPleaseTryAgain;
+    } catch (e) {
+      const err = e as AdapterError;
+      let errMsg = this.intl.t('pleaseTryAgain');
 
       if (err.errors && err.errors.length) {
-        errMsg = err.errors[0].detail || errMsg;
+        errMsg = err.errors[0]?.detail || errMsg;
       } else if (err.message) {
         errMsg = err.message;
       }
@@ -187,4 +223,10 @@ export default class OrganizationTeamAddTeamMemberComponent extends Component {
       this.notify.error(errMsg);
     }
   });
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    'OrganizationTeam::AddTeamMember': typeof OrganizationTeamAddTeamMemberComponent;
+  }
 }

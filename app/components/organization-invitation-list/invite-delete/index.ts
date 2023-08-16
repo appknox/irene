@@ -69,6 +69,7 @@ export default class OrganizationMemberInvitationListInviteDelete extends Compon
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
+    'organization-member-invitation-list/invite-delete': typeof OrganizationMemberInvitationListInviteDelete;
     'OrganizationMemberInvitationList::InviteDelete': typeof OrganizationMemberInvitationListInviteDelete;
   }
 }

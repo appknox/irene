@@ -66,6 +66,7 @@ export default class OrganizationInvitationListInviteResend extends Component<Or
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
+    'organization-invitation-list/invite-resend': typeof OrganizationInvitationListInviteResend;
     'OrganizationInvitationList::InviteResend': typeof OrganizationInvitationListInviteResend;
   }
 }

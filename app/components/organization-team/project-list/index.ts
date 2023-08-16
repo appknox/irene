@@ -5,23 +5,46 @@ import { capitalize } from '@ember/string';
 import { debounce } from '@ember/runloop';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
+import IntlService from 'ember-intl/services/intl';
+import MeService from 'irene/services/me';
+import Store from '@ember-data/store';
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
+import DS from 'ember-data';
+import OrganizationTeamModel from 'irene/models/organization-team';
+import OrganizationTeamProjectModel from 'irene/models/organization-team-project';
+import OrganizationModel from 'irene/models/organization';
+import { ActiveActionDetailsType } from '../details/active-action';
 
-export default class OrganizationTeamProjectListComponent extends Component {
-  @service intl;
-  @service me;
-  @service store;
-  @service('notifications') notify;
+type TeamProjectResponseModel =
+  DS.AdapterPopulatedRecordArray<OrganizationTeamProjectModel> & {
+    meta?: { count: number };
+  };
+
+export interface OrganizationTeamProjectListComponentSignature {
+  Args: {
+    handleActiveAction: (actionArgs: ActiveActionDetailsType) => void;
+    team: OrganizationTeamModel;
+    organization: OrganizationModel;
+  };
+  Element: HTMLElement;
+}
+
+export default class OrganizationTeamProjectListComponent extends Component<OrganizationTeamProjectListComponentSignature> {
+  @service declare intl: IntlService;
+  @service declare me: MeService;
+  @service('notifications') declare notify: NotificationService;
+  @service declare store: Store;
 
   @tracked searchQuery = '';
   @tracked limit = 5;
   @tracked offset = 0;
-  @tracked teamProjectResponse = null;
+  @tracked teamProjectResponse: TeamProjectResponseModel | null = null;
 
-  tPleaseTryAgain = this.intl.t('pleaseTryAgain');
-
-  constructor() {
-    super(...arguments);
-
+  constructor(
+    owner: unknown,
+    args: OrganizationTeamProjectListComponentSignature['Args']
+  ) {
+    super(owner, args);
     this.fetchTeamProjects.perform(this.limit, this.offset);
   }
 
@@ -44,13 +67,13 @@ export default class OrganizationTeamProjectListComponent extends Component {
         component: 'organization-team/project-list/project-info',
         minWidth: 150,
       },
-      this.me.org.get('is_admin')
+      this.me.org?.get('is_admin')
         ? {
             name: this.intl.t('accessPermissions'),
             component: 'organization-team/project-list/access-permission',
           }
         : null,
-      this.me.org.get('is_admin')
+      this.me.org?.get('is_admin')
         ? {
             name: this.intl.t('action'),
             component: 'organization-team/project-list/project-action',
@@ -68,7 +91,7 @@ export default class OrganizationTeamProjectListComponent extends Component {
   }
 
   @action
-  handleNextPrevAction({ limit, offset }) {
+  handleNextPrevAction({ limit, offset }: { limit: number; offset: number }) {
     this.limit = limit;
     this.offset = offset;
 
@@ -76,7 +99,7 @@ export default class OrganizationTeamProjectListComponent extends Component {
   }
 
   @action
-  handleItemPerPageChange({ limit }) {
+  handleItemPerPageChange({ limit }: { limit: number }) {
     this.limit = limit;
     this.offset = 0;
 
@@ -84,14 +107,19 @@ export default class OrganizationTeamProjectListComponent extends Component {
   }
 
   /* Set debounced searchQuery */
-  setSearchQuery(query) {
+  setSearchQuery(query: string) {
     this.searchQuery = query;
     this.fetchTeamProjects.perform(this.limit, 0, query);
   }
 
   @action
-  handleSearchQueryChange(event) {
-    debounce(this, this.setSearchQuery, event.target.value, 500);
+  handleSearchQueryChange(event: Event) {
+    debounce(
+      this,
+      this.setSearchQuery,
+      (event.target as HTMLInputElement).value,
+      500
+    );
   }
 
   @action
@@ -114,11 +142,12 @@ export default class OrganizationTeamProjectListComponent extends Component {
           'organization-team-project',
           queryParams
         );
-      } catch (err) {
-        let errMsg = this.tPleaseTryAgain;
+      } catch (e) {
+        const err = e as AdapterError;
+        let errMsg = this.intl.t('pleaseTryAgain');
 
         if (err.errors && err.errors.length) {
-          errMsg = err.errors[0].detail || errMsg;
+          errMsg = err.errors[0]?.detail || errMsg;
         } else if (err.message) {
           errMsg = err.message;
         }
@@ -127,4 +156,10 @@ export default class OrganizationTeamProjectListComponent extends Component {
       }
     }
   );
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    'OrganizationTeam::ProjectList': typeof OrganizationTeamProjectListComponent;
+  }
 }

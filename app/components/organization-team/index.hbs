@@ -46,7 +46,7 @@
       <AkSvg::TeamsEmpty local-class='empty-svg' />
 
       <AkTypography @variant='h5'>
-        {{if this.me.owner.is_admin (t 'noTeams') (t 'noTeamsMember')}}
+        {{if this.isAdmin (t 'noTeams') (t 'noTeamsMember')}}
       </AkTypography>
     </div>
   {{else}}

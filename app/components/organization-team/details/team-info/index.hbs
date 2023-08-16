@@ -93,7 +93,6 @@
         data-test-orgTeamDetailsInfo-deleteBtn
         {{on 'click' this.handleShowDeleteConfirm}}
         @variant='outlined'
-        @disabled={{@team.isDefaultTeam}}
       >
         <:leftIcon>
           <AkIcon @iconName='delete' />

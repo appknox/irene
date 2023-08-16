@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { debounce } from '@ember/runloop';
-import StoreService from '@ember-data/store';
+import Store from '@ember-data/store';
 import IntlService from 'ember-intl/services/intl';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import DS from 'ember-data';
@@ -31,7 +31,7 @@ type TeamResponseArray =
 export default class AddToTeamComponent extends Component<AddToTeamComponentSignature> {
   @service declare intl: IntlService;
   @service declare notify: NotificationService;
-  @service declare store: StoreService;
+  @service declare store: Store;
   @service declare router: RouterService;
   @service declare me: MeService;
 
