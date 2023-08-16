@@ -117,7 +117,7 @@ declare module '@glint/environment-ember-loose/registry' {
 
     ConfirmBox: ComponentLike<{
       Args: {
-        title: string | null;
+        title?: string | null;
         confirmText?: string;
         cancelText?: string;
         key?: string;

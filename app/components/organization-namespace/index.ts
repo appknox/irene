@@ -1,28 +1,53 @@
-import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-
+import IntlService from 'ember-intl/services/intl';
+import StoreService from '@ember-data/store';
+import RouterService from '@ember/routing/router-service';
+import MeService from 'irene/services/me';
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
+import OrganizationNamespaceModel from 'irene/models/organization-namespace';
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
+import DS from 'ember-data';
 
-export default class OrganizationNamespaceComponent extends Component {
-  @service intl;
-  @service('notifications') notify;
-  @service me;
-  @service store;
-  @service router;
+export interface OrganizationNamespaceQueryParams {
+  namespaceLimit: number;
+  namespaceOffset: number;
+}
+
+type NamespaceQueryResponse =
+  DS.AdapterPopulatedRecordArray<OrganizationNamespaceModel> & {
+    meta?: { count: number };
+  };
+
+export interface OrganizationNamespaceComponentSignature {
+  Args: {
+    queryParams: OrganizationNamespaceQueryParams;
+    limit?: number;
+    offset?: number;
+  };
+  Element: HTMLElement;
+}
+
+export default class OrganizationNamespaceComponent extends Component<OrganizationNamespaceComponentSignature> {
+  @service declare intl: IntlService;
+  @service declare me: MeService;
+  @service('notifications') declare notify: NotificationService;
+  @service declare store: StoreService;
+  @service declare router: RouterService;
 
   @tracked showRejectNamespaceConfirm = false;
-  @tracked selectedNamespace = null;
-  @tracked namespaceResponse = null;
+  @tracked selectedNamespace: OrganizationNamespaceModel | null = null;
+  @tracked namespaceResponse: NamespaceQueryResponse | null = null;
 
-  tNamespaceRejected = this.intl.t('namespaceRejected');
-  tPleaseTryAgain = this.intl.t('pleaseTryAgain');
-
-  constructor() {
-    super(...arguments);
+  constructor(
+    owner: unknown,
+    args: OrganizationNamespaceComponentSignature['Args']
+  ) {
+    super(owner, args);
     const { namespaceLimit, namespaceOffset } = this.args.queryParams;
 
     this.fetchNamespace.perform(namespaceLimit, namespaceOffset);
@@ -59,7 +84,7 @@ export default class OrganizationNamespaceComponent extends Component {
 
   /* Open reject-namespace confirmation */
   @action
-  rejectNamespaceConfirm(namespace) {
+  rejectNamespaceConfirm(namespace: OrganizationNamespaceModel) {
     this.showRejectNamespaceConfirm = true;
     this.selectedNamespace = namespace;
   }
@@ -71,7 +96,7 @@ export default class OrganizationNamespaceComponent extends Component {
   }
 
   @action
-  handleNextAction({ limit, offset }) {
+  handleNextAction({ limit, offset }: { limit: number; offset: number }) {
     this.router.transitionTo({
       queryParams: { namespace_limit: limit, namespace_offset: offset },
     });
@@ -80,7 +105,7 @@ export default class OrganizationNamespaceComponent extends Component {
   }
 
   @action
-  handlePrevAction({ limit, offset }) {
+  handlePrevAction({ limit, offset }: { limit: number; offset: number }) {
     this.router.transitionTo({
       queryParams: { namespace_limit: limit, namespace_offset: offset },
     });
@@ -89,7 +114,7 @@ export default class OrganizationNamespaceComponent extends Component {
   }
 
   @action
-  handleItemPerPageChange({ limit }) {
+  handleItemPerPageChange({ limit }: { limit: number }) {
     this.router.transitionTo({
       queryParams: { namespace_limit: limit, namespace_offset: 0 },
     });
@@ -106,11 +131,12 @@ export default class OrganizationNamespaceComponent extends Component {
           offset,
         }
       );
-    } catch (err) {
-      let errMsg = this.tPleaseTryAgain;
+    } catch (e) {
+      const err = e as AdapterError;
+      let errMsg = this.intl.t('pleaseTryAgain');
 
       if (err.errors && err.errors.length) {
-        errMsg = err.errors[0].detail || errMsg;
+        errMsg = err.errors[0]?.detail || errMsg;
       } else if (err.message) {
         errMsg = err.message;
       }
@@ -124,18 +150,22 @@ export default class OrganizationNamespaceComponent extends Component {
     try {
       const namespace = this.selectedNamespace;
 
-      namespace.deleteRecord();
-      await namespace.save();
+      namespace?.deleteRecord();
+      await namespace?.save();
 
-      this.notify.success(this.tNamespaceRejected);
-      triggerAnalytics('feature', ENV.csb.namespaceRejected);
+      this.notify.success(this.intl.t('namespaceRejected'));
+      triggerAnalytics(
+        'feature',
+        ENV.csb['namespaceRejected'] as CsbAnalyticsFeatureData
+      );
 
       this.showRejectNamespaceConfirm = false;
-    } catch (err) {
-      let errMsg = this.tPleaseTryAgain;
+    } catch (e) {
+      const err = e as AdapterError;
+      let errMsg = this.intl.t('pleaseTryAgain');
 
       if (err.errors && err.errors.length) {
-        errMsg = err.errors[0].detail || errMsg;
+        errMsg = err.errors[0]?.detail || errMsg;
       } else if (err.message) {
         errMsg = err.message;
       }
@@ -143,4 +173,10 @@ export default class OrganizationNamespaceComponent extends Component {
       this.notify.error(errMsg);
     }
   });
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    OrganizationNamespace: typeof OrganizationNamespaceComponent;
+  }
 }
