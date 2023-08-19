@@ -31,7 +31,7 @@ module(
           sb_project_id: 30,
           components_count: 1,
           platform_display: 'Android',
-          vulnerabilities_count: 0,
+          vulnerable_components_count: 0,
           components_with_updates_count: 0,
         }),
       });
@@ -64,7 +64,7 @@ module(
       assert.dom('[data-test-nf-sbomcmpltd-summaryValue]').hasText(
         t('notificationModule.messages.nf-sbomcmpltd.summary', {
           total_components: this.context.components_count,
-          vulnerable_components: this.context.vulnerabilities_count,
+          vulnerable_components: this.context.vulnerable_components_count,
           outdated_components: this.context.components_with_updates_count,
         })
       );

@@ -9,7 +9,7 @@ export class NfSbomcmpltdContext {
   sb_project_id: number;
   sb_file_id: number;
   components_with_updates_count: number;
-  vulnerabilities_count: number;
+  vulnerable_components_count: number;
   components_count: number;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -27,7 +27,7 @@ export class NfSbomcmpltdContext {
     this.components_with_updates_count =
       input_json.components_with_updates_count;
 
-    this.vulnerabilities_count = input_json.vulnerabilities_count;
+    this.vulnerable_components_count = input_json.vulnerable_components_count;
     this.components_count = input_json.components_count;
   }
 }
