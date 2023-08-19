@@ -9,6 +9,9 @@
     data-test-appPlatform-icon
     local-class='app-platform-icon-{{this.platformIconClass}}'
   >
-    {{fa-icon this.platformIconClass local-class='app-platform-icon'}}
+    <AkIcon
+      @iconName='{{this.platformIconClass}}'
+      local-class='app-platform-icon'
+    />
   </span>
 </AkStack>

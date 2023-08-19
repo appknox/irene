@@ -10,7 +10,7 @@
           div
             | #{file.project.packageName}{{#if file.version}} - v#{file.version}{{/if}}
         .column.os-icon
-          = fa-icon file.project.platformIconClass class="card-icon"
+          = ak-icon iconName=file.project.platformIconClass class="card-icon"
         .column.content-right.file-buttons
           if file.project.hasMultipleFiles
             = link-to 'authenticated.project.files' file.project.id local-class="link-btn" class="mp-detail-all-scans is-primary" tagName="button"

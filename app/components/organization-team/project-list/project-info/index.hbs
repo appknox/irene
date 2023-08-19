@@ -3,10 +3,7 @@
     class='mr-2'
     local-class='team-project-icon-{{this.teamProject.platformIconClass}}'
   >
-    {{fa-icon
-      this.teamProject.platformIconClass
-      local-class='team-project-icon'
-    }}
+    <AkIcon @iconName='{{this.teamProject.platformIconClass}}' local-class='team-project-icon' />
   </span>
 
   <AkLink

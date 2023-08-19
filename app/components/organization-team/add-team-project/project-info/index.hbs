@@ -3,7 +3,10 @@
     class='mr-2'
     local-class='team-project-icon-{{@project.platformIconClass}}'
   >
-    {{fa-icon @project.platformIconClass local-class='team-project-icon'}}
+    <AkIcon
+      @iconName={{@project.platformIconClass}}
+      local-class='team-project-icon'
+    />
   </span>
 
   <AkTypography @noWrap={{true}} title={{@project.packageName}}>

@@ -15,8 +15,11 @@
               <div class='hide-overflow' data-test-file-overview-file-name>
                 {{this.file.name}}
               </div>
-              <div data-test-file-overview-platform-icon>
-                {{fa-icon this.file.project.platformIconClass}}
+              <div>
+                <AkIcon
+                  data-test-file-overview-platform-icon
+                  @iconName='{{this.file.project.platformIconClass}}'
+                />
               </div>
             </div>
           </h5>

@@ -1,6 +1,6 @@
 <div local-class='project-card'>
   <span class='margin-l-q platform-icon--{{@project.platformIcon}}'>
-    {{fa-icon @project.platformIcon}}
+    <AkIcon @iconName='{{@project.platformIcon}}' />
   </span>
   <span class='black-text'>{{@project.packageName}}</span>
 </div>
