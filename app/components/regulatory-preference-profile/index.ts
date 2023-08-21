@@ -4,38 +4,50 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import parseError from 'irene/utils/parse-error';
+import Store from '@ember-data/store';
+import { Service as IntlService } from 'ember-intl';
+import ProjectModel from 'irene/models/project';
+import ProfileModel from 'irene/models/profile';
 
-export default class RegulatoryPreferenceProfileComponent extends Component {
-  @service intl;
-  @service store;
-  @service('notifications') notify;
+interface RegulatoryPreferenceSignature {
+  Args: {
+    project: ProjectModel | null;
+  };
+}
 
-  @tracked project;
-  @tracked profile;
+export default class RegulatoryPreferenceProfileComponent extends Component<RegulatoryPreferenceSignature> {
+  @service declare intl: IntlService;
+  @service declare store: Store;
+  @service('notifications') declare notify: NotificationService;
 
-  constructor() {
-    super(...arguments);
+  @tracked project: ProjectModel | any = null;
+  @tracked profile: ProfileModel | any = null;
+
+  constructor(owner: unknown, args: RegulatoryPreferenceSignature['Args']) {
+    super(owner, args);
     this.fetchProfile.perform();
   }
 
-  @task(function* () {
+  fetchProfile = task(async () => {
     try {
-      this.profile = yield this.store.findRecord(
-        'profile',
-        this.args.project.activeProfileId
-      );
+      if (this.args.project) {
+        this.profile = await this.store.findRecord(
+          'profile',
+          this.args.project.activeProfileId
+        );
+      }
     } catch {
       this.profile = null;
       return;
     }
-  })
-  fetchProfile;
+  });
 
   // PCIDSS
-  @task(function* (event) {
+
+  savePcidss = task(async (event) => {
     const status = event.target.checked;
     try {
-      yield this.profile.setShowPcidss({ value: status });
+      await this.profile.setShowPcidss({ value: status });
       const statusDisplay = status ? 'SHOW' : 'HIDE';
       this.notify.info(
         `PCI-DSS ${this.intl.t('preferenceSetTo')} ${statusDisplay}`
@@ -44,24 +56,23 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
       this.notify.error(parseError(err));
       event.target.checked = !status;
     }
-  })
-  savePcidss;
+  });
 
-  @task(function* () {
+  resetPcidss = task(async () => {
     try {
-      yield this.profile.unsetShowPcidss();
+      await this.profile.unsetShowPcidss();
       this.notify.info(this.intl.t('regulatoryPreferenceReset'));
     } catch (err) {
       this.notify.error(parseError(err));
     }
-  })
-  resetPcidss;
+  });
 
   // HIPAA
-  @task(function* (event) {
+
+  saveHipaa = task(async (event) => {
     const status = event.target.checked;
     try {
-      yield this.profile.setShowHipaa({ value: status });
+      await this.profile.setShowHipaa({ value: status });
 
       const statusDisplay = status ? 'SHOW' : 'HIDE';
       this.notify.info(
@@ -71,25 +82,23 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
       this.notify.error(parseError(err));
       event.target.checked = !status;
     }
-  })
-  saveHipaa;
+  });
 
-  @task(function* () {
+  resetHipaa = task(async () => {
     try {
-      yield this.profile.unsetShowHipaa();
+      await this.profile.unsetShowHipaa();
       this.notify.info(this.intl.t('regulatoryPreferenceReset'));
     } catch (err) {
       this.notify.error(parseError(err));
     }
-  })
-  resetHipaa;
+  });
 
   // GDPR
-  @task(function* (event) {
+
+  saveGdpr = task(async (event) => {
     const status = event.target.checked;
     try {
-      yield this.profile.setShowGdpr({ value: status });
-
+      await this.profile.setShowGdpr({ value: status });
       const statusDisplay = status ? 'SHOW' : 'HIDE';
       this.notify.info(
         `GDPR ${this.intl.t('preferenceSetTo')} ${statusDisplay}`
@@ -98,31 +107,29 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
       this.notify.error(parseError(err));
       event.target.checked = !status;
     }
-  })
-  saveGdpr;
+  });
 
-  @task(function* () {
+  resetGdpr = task(async () => {
     try {
-      yield this.profile.unsetShowGdpr();
+      await this.profile.unsetShowGdpr();
       this.notify.info(this.intl.t('regulatoryPreferenceReset'));
     } catch (err) {
       this.notify.error(parseError(err));
     }
-  })
-  resetGdpr;
+  });
 
   @action
-  onSavePcidss(event) {
+  onSavePcidss(event: Event) {
     this.savePcidss.perform(event);
   }
 
   @action
-  onSaveHipaa(event) {
+  onSaveHipaa(event: Event) {
     this.saveHipaa.perform(event);
   }
 
   @action
-  onSaveGdpr(event) {
+  onSaveGdpr(event: Event) {
     this.saveGdpr.perform(event);
   }
 
@@ -139,5 +146,12 @@ export default class RegulatoryPreferenceProfileComponent extends Component {
   @action
   onResetGdpr() {
     this.resetGdpr.perform();
+  }
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    RegulatoryPreference: typeof RegulatoryPreferenceProfileComponent;
+    'regulatory-preference': typeof RegulatoryPreferenceProfileComponent;
   }
 }

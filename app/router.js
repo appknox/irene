@@ -53,7 +53,9 @@ Router.map(function () {
           path: '/project/:projectid',
         },
         function () {
-          this.route('settings');
+          this.route('settings', function () {
+            this.route('analysis');
+          });
           this.route('files');
         }
       );

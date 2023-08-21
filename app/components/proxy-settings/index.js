@@ -19,7 +19,6 @@ export default class MyComponent extends Component {
   constructor() {
     super(...arguments);
 
-
     this.syncSettings.perform();
   }
 
@@ -35,7 +34,6 @@ export default class MyComponent extends Component {
   get hasProxyValues() {
     return !!this.changeset?.host && !!this.changeset?.port;
   }
-
 
   @task(function* () {
     try {
@@ -116,7 +114,6 @@ export default class MyComponent extends Component {
   })
   saveProxy;
 
-
   @task(function* () {
     try {
       const changeset = this.changeset;
@@ -142,5 +139,4 @@ export default class MyComponent extends Component {
     }
   })
   enableProxy;
-
 }

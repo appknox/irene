@@ -2,7 +2,9 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { PaginationMixin } from '../../mixins/paginate';
 
-export default class ProjectCollaboratorList extends PaginationMixin(Component) {
+export default class ProjectCollaboratorList extends PaginationMixin(
+  Component
+) {
   @service me;
   @service realtime;
 

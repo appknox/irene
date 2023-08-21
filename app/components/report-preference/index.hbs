@@ -1,63 +1,55 @@
-<div class='columns' {{did-insert this.getProfie}}>
-  <div class='column'>
-    <h5 class='bold black-text'>
-      Report Preferences
-    </h5>
-    <p>
-      Choose types of scans to be included in the report
-    </p>
-  </div>
-</div>
-<div>
-  <span>
-    <Input
-      local-class='report__preference__checkbox'
+<AkStack @direction='column' class='pl-3' {{did-insert this.getProfie}}>
+
+  <AkTypography @variant='h5' @color='textPrimary'>
+    {{t 'reportPreferences'}}
+  </AkTypography>
+
+  <AkTypography class='mt-1' @variant='body2' @color='textSecondary'>
+    {{t 'reportPreferencesChooseTypes'}}
+  </AkTypography>
+</AkStack>
+
+<AkStack @alignItems='center' class='mt-2 ml-2'>
+
+  <AkFormControlLabel @label={{t 'dynamicScan'}}>
+
+    <AkCheckbox
       @checked={{this.reportPreference.show_dynamic_scan}}
-      @type='checkbox'
-      aria-label='report preference checkbox'
-      {{on 'click' this.saveDynamic}}
-      data-test-show-dynamic-scan-checkbox
+      @onClick={{this.saveDynamic}}
     />
-    Dynamic Scan
-    <TaskSpin
-      @task={{this.saveDynamicReportPreference}}
-      data-test-dynamic-task-spinner
-    />
-  </span>
-</div>
-<div>
-  <span>
-    <Input
-      local-class='report__preference__checkbox'
+  </AkFormControlLabel>
+
+  <TaskSpin
+    @task={{this.saveDynamicReportPreference}}
+    data-test-dynamic-task-spinner
+  />
+</AkStack>
+
+<AkStack @alignItems='center' class='ml-2'>
+
+  <AkFormControlLabel @label={{t 'apiScan'}}>
+
+    <AkCheckbox
       @checked={{this.reportPreference.show_api_scan}}
-      @type='checkbox'
-      aria-label='report preference checkbox'
-      {{on 'click' this.saveAPI}}
-      data-test-show-api-scan-checkbox
+      @onClick={{this.saveAPI}}
     />
-    API Scan
-    <TaskSpin
-      @task={{this.saveAPIReportPreference}}
-      data-test-api-task-spinner
-    />
-  </span>
-</div>
+  </AkFormControlLabel>
+
+  <TaskSpin @task={{this.saveAPIReportPreference}} />
+</AkStack>
+
 {{#if this.project.isManualScanAvailable}}
-  <div data-test-manual-scan-container>
-    <span>
-      <Input
-        local-class='report__preference__checkbox'
+
+  <AkStack @alignItems='center' class='ml-2'>
+
+    <AkFormControlLabel @label={{t 'manualScan'}}>
+
+      <AkCheckbox
         @checked={{this.reportPreference.show_manual_scan}}
-        @type='checkbox'
-        aria-label='report preference checkbox'
-        {{on 'click' this.saveManual}}
-        data-test-show-manual-scan-checkbox
+        @onClick={{this.saveManual}}
       />
-      Manual Scan
-      <TaskSpin
-        @task={{this.saveManualReportPreference}}
-        data-test-manual-task-spinner
-      />
-    </span>
-  </div>
+    </AkFormControlLabel>
+
+    <TaskSpin @task={{this.saveManualReportPreference}} />
+  </AkStack>
 {{/if}}

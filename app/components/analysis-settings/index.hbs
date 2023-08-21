@@ -1,22 +1,17 @@
-<div class='analysis-settings'>
-  <h5 class='bold black-text'>
-    {{t 'showUntestedAnalysis'}}
-  </h5>
+<AkTypography @variant='h5' @color='textPrimary'>
+  {{t 'showUntestedAnalysis'}}
+</AkTypography>
 
-  <h6>
-    {{t 'otherTemplates.showUntestedAnalysis'}}
-  </h6>
-
-  <label class='switch'>
-    <input
-      class='switch-input'
-      id='show-unkown-analysis'
-      type='checkbox'
-      checked={{this.unknownAnalysisStatus.status}}
-      {{on 'click' this.showUnknownAnalysis}}
-      disabled={{this.isSavingStatus}}
-    />
-
-    <span class='slider round'></span>
-  </label>
-</div>
+<AkFormControlLabel
+  local-class='untested-analysis-toggle'
+  @label={{t 'otherTemplates.showUntestedAnalysis'}}
+  as |fcl|
+>
+  <AkToggle
+    class='ml-0'
+    @checked={{this.unknownAnalysisStatus.status}}
+    @size='small'
+    @disabled={{this.toggleUnknownAnalysis.isRunning}}
+    @onClick={{this.showUnknownAnalysis}}
+  />
+</AkFormControlLabel>
