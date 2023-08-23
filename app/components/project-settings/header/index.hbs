@@ -1,0 +1,67 @@
+<AkBreadcrumbs::Container>
+  {{#each this.breadcrumbItems as |item|}}
+    <AkBreadcrumbs::Item
+      @route={{item.route}}
+      @model={{item.model}}
+      @linkTitle={{item.linkTitle}}
+    />
+  {{/each}}
+</AkBreadcrumbs::Container>
+
+<div class='my-2'>
+  <AkTypography @variant='h5' @gutterBottom={{true}}>
+    {{t 'settings'}}
+  </AkTypography>
+
+  <AkTypography @variant='body2' local-class='settings-header-info-text'>
+    Lorem ipsum dolor sit amet consectetur. Porta augue mattis rhoncus leo.
+  </AkTypography>
+</div>
+
+<AkStack
+  @alignItems='center'
+  @justifyContent='space-between'
+  @width='full'
+  class='p-2'
+  local-class='project-details-card'
+>
+  <div local-class='file-icon'>
+    <img
+      src='{{@project.lastFile.iconUrl}}'
+      aria-hidden='true'
+      role='none'
+      data-test-fileCompareHeader-projectOverview-fileIconUrl
+    />
+  </div>
+
+  <AkStack
+    @direction='column'
+    @justifyContent='space-between'
+    @width='full'
+    class='ml-4'
+  >
+    <AkTypography @variant='body1' @color='textSecondary'>
+      {{this.project.packageName}}
+    </AkTypography>
+
+    <AkTypography @variant='h6' @color='textPrimary'>
+      {{t 'projectID'}}
+      -
+      {{this.project.lastFile.id}}
+    </AkTypography>
+  </AkStack>
+</AkStack>
+
+<AkTabs local-class='settings-header-tabs' as |Akt|>
+  {{#each this.tabItems as |item|}}
+    <Akt.tabItem
+      @id={{item.id}}
+      @route={{item.route}}
+      data-test-organization-details='{{item.id}}-tab'
+    >
+      <:default>
+        {{item.label}}
+      </:default>
+    </Akt.tabItem>
+  {{/each}}
+</AkTabs>

@@ -1,20 +1,12 @@
 <div local-class='container' data-test-container ...attributes>
   {{#if @label}}
     <div
-      local-class='check {{if @isOverridden 'overridden' 'inherited'}}'
+      local-class='check {{if @isOverridden "overridden" "inherited"}}'
       data-test-check
     >
-      <label local-class='label'>
-        <Input
-          @type='checkbox'
-          @checked={{@value}}
-          {{on 'click' @onToggle}}
-          data-test-input
-        />
-        <span title={{@title}} local-class='label-text' data-test-label>
-          {{@label}}
-        </span>
-      </label>
+      <AkFormControlLabel @label={{@label}} title={{@title}}>
+        <AkCheckbox @checked={{@value}} @onClick={{@onToggle}} />
+      </AkFormControlLabel>
 
       {{#if @isToggleRunning}}
         <span local-class='progress-spinner' data-test-progress-spinner>
@@ -23,17 +15,12 @@
       {{/if}}
 
       {{#if @isOverridden}}
-        <button
-          type='button'
-          local-class='reset'
-          onclick={{@onOverrideReset}}
-          data-test-reset
-        >
-          {{fa-icon 'times' local-class='remove-button-icon'}}
+        <div local-class='reset' {{on 'click' @onOverrideReset}}>
+          <AkIcon @iconName='close' @size='small' />
           <AttachTooltip @placement='top' data-test-reset-tooltip>
             {{t 'resetToDefault'}}
           </AttachTooltip>
-        </button>
+        </div>
       {{/if}}
     </div>
   {{/if}}

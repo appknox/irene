@@ -38,6 +38,10 @@ export default class DynamicScanModalComponent extends Component<DynamicScanModa
     return this.intl.t('pleaseTryAgain');
   }
 
+  get project() {
+    return this.args.file.get('project').content;
+  }
+
   get projectPlatform() {
     return this.args.file.project.get('platform');
   }

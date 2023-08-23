@@ -1,17 +1,16 @@
 .container {
-  width: 15rem;
+  width: 10rem;
   position: relative;
 }
 .check {
   display: flex;
   align-items: center;
-  padding: 0.5rem 0.9rem;
-  margin-top: 0.8rem;
+  padding: 0.15rem 1rem 0.15rem 0.5rem;
+  margin-top: 0.5rem;
   border-radius: 0.3rem;
 }
 .inherited {
-  background-color: var(--tri-state-checkbox-bg);
-  border: 1px solid var(--tri-state-checkbox-bg);
+  border: 1px solid transparent;
   color: var(--black-300);
 }
 .overridden {
@@ -39,20 +38,17 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  color: var(--black-300);
-  border-color: var(--black-300);
-  background: var(--white);
+  color: var(--neutral-grey-300);
+  border-color: var(--tri-state-cancel-color);
+  background-color: var(--tri-state-cancel-color);
+  cursor: pointer;
   margin-left: auto;
   border-radius: 1rem;
   position: absolute;
   right: 0;
   top: 0;
   transform: translateY(-35%) translateX(35%);
-  &:hover,
-  &:active,
-  &:focus {
-    color: var(--white);
-    background: var(--primary);
-    border-color: var(--primary);
+  .ak-icon {
+    color: var(--neutral-grey-300);
   }
 }
