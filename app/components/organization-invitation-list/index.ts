@@ -22,10 +22,14 @@ type InvitationQueryResponse =
 
 interface ColumnsInterface {
   name: string;
-  valuePath: string;
-  minWidth: number;
-  component?: undefined;
-  textAlign?: undefined;
+  valuePath?: string;
+  minWidth?: number;
+  component?:
+    | 'organization-invitation-list/invite-type'
+    | 'organization-invitation-list/invite-delete'
+    | 'organization-invitation-list/invite-resend'
+    | 'organization-invitation-list/invited-on';
+  textAlign?: 'center' | 'left';
 }
 
 interface ExtraQueryStringsInterface {

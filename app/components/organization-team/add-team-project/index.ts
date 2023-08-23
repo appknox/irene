@@ -4,26 +4,52 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { debounce } from '@ember/runloop';
 import { tracked } from '@glimmer/tracking';
+import Store from '@ember-data/store';
+import IntlService from 'ember-intl/services/intl';
+import RealtimeService from 'irene/services/realtime';
+import OrganizationTeamModel from 'irene/models/organization-team';
+import OrganizationProjectModel from 'irene/models/organization-project';
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
+import DS from 'ember-data';
+import { ActionContentType } from '../details/active-action';
 
-export default class OrganizationTeamAddTeamProjectComponent extends Component {
-  @service intl;
-  @service realtime;
-  @service store;
-  @service('notifications') notify;
+export interface OrganizationTeamAddTeamProjectComponentSignature {
+  Args: {
+    team: OrganizationTeamModel;
+  };
+  Element: HTMLElement;
+  Blocks: {
+    default: () => void;
+    actionContent: [ActionContentType];
+  };
+}
+
+type SelectedProjectModel = Record<string, OrganizationProjectModel>;
+
+type ProjectResponseModel =
+  DS.AdapterPopulatedRecordArray<OrganizationProjectModel> & {
+    meta?: { count: number };
+  };
+
+export default class OrganizationTeamAddTeamProjectComponent extends Component<OrganizationTeamAddTeamProjectComponentSignature> {
+  @service declare intl: IntlService;
+  @service declare realtime: RealtimeService;
+  @service declare store: Store;
+  @service('notifications') declare notify: NotificationService;
 
   @tracked searchQuery = '';
   @tracked limit = 10;
   @tracked offset = 0;
-  @tracked projectResponse = null;
+  @tracked projectResponse: ProjectResponseModel | null = null;
   @tracked isAddingProject = false;
   @tracked addProjectErrorCount = 0;
-  @tracked selectedProjects = {};
+  @tracked selectedProjects: SelectedProjectModel = {};
 
-  tTeamProjectAdded = this.intl.t('teamProjectAdded');
-  tPleaseTryAgain = this.intl.t('pleaseTryAgain');
-
-  constructor() {
-    super(...arguments);
+  constructor(
+    owner: unknown,
+    args: OrganizationTeamAddTeamProjectComponentSignature['Args']
+  ) {
+    super(owner, args);
 
     this.fetchProjects.perform(this.limit, this.offset);
   }
@@ -31,7 +57,7 @@ export default class OrganizationTeamAddTeamProjectComponent extends Component {
   get projectList() {
     const list = this.projectResponse?.toArray() || [];
 
-    return list.map((project) => ({
+    return list.map((project: OrganizationProjectModel) => ({
       project,
       checked: !!this.selectedProjects[project.id],
     }));
@@ -61,10 +87,10 @@ export default class OrganizationTeamAddTeamProjectComponent extends Component {
   }
 
   @action
-  selectionChange(project, event) {
+  selectionChange(project: OrganizationProjectModel, event: Event) {
     const selectedProjects = { ...this.selectedProjects };
 
-    if (event.target.checked) {
+    if ((event.target as HTMLInputElement).checked) {
       selectedProjects[project.id] = project;
     } else {
       delete selectedProjects[project.id];
@@ -90,11 +116,12 @@ export default class OrganizationTeamAddTeamProjectComponent extends Component {
         await team.addProject(data, project.id);
 
         this.realtime.incrementProperty('TeamProjectCounter');
-      } catch (err) {
-        let errMsg = this.tPleaseTryAgain;
+      } catch (e) {
+        const err = e as AdapterError;
+        let errMsg = this.intl.t('pleaseTryAgain');
 
         if (err.errors && err.errors.length) {
-          errMsg = err.errors[0].detail || errMsg;
+          errMsg = err.errors[0]?.detail || errMsg;
         } else if (err.message) {
           errMsg = err.message;
         }
@@ -119,7 +146,7 @@ export default class OrganizationTeamAddTeamProjectComponent extends Component {
     }
 
     if (this.addProjectErrorCount === 0) {
-      this.notify.success(this.tTeamProjectAdded);
+      this.notify.success(this.intl.t('teamProjectAdded'));
 
       this.fetchProjects.perform(this.limit, this.offset, this.searchQuery);
 
@@ -134,7 +161,7 @@ export default class OrganizationTeamAddTeamProjectComponent extends Component {
   });
 
   @action
-  handleNextPrevAction({ limit, offset }) {
+  handleNextPrevAction({ limit, offset }: { limit: number; offset: number }) {
     this.limit = limit;
     this.offset = offset;
 
@@ -142,7 +169,7 @@ export default class OrganizationTeamAddTeamProjectComponent extends Component {
   }
 
   @action
-  handleItemPerPageChange({ limit }) {
+  handleItemPerPageChange({ limit }: { limit: number }) {
     this.limit = limit;
     this.offset = 0;
 
@@ -150,15 +177,20 @@ export default class OrganizationTeamAddTeamProjectComponent extends Component {
   }
 
   /* Set debounced searchQuery */
-  setSearchQuery(query) {
+  setSearchQuery(query: string) {
     this.searchQuery = query;
 
     this.fetchProjects.perform(this.limit, 0, query);
   }
 
   @action
-  handleSearchQueryChange(event) {
-    debounce(this, this.setSearchQuery, event.target.value, 500);
+  handleSearchQueryChange(event: Event) {
+    debounce(
+      this,
+      this.setSearchQuery,
+      (event.target as HTMLInputElement).value,
+      500
+    );
   }
 
   fetchProjects = task({ drop: true }, async (limit, offset, query = '') => {
@@ -174,11 +206,12 @@ export default class OrganizationTeamAddTeamProjectComponent extends Component {
         'organization-project',
         queryParams
       );
-    } catch (err) {
-      let errMsg = this.tPleaseTryAgain;
+    } catch (e) {
+      const err = e as AdapterError;
+      let errMsg = this.intl.t('pleaseTryAgain');
 
       if (err.errors && err.errors.length) {
-        errMsg = err.errors[0].detail || errMsg;
+        errMsg = err.errors[0]?.detail || errMsg;
       } else if (err.message) {
         errMsg = err.message;
       }
@@ -186,4 +219,10 @@ export default class OrganizationTeamAddTeamProjectComponent extends Component {
       this.notify.error(errMsg);
     }
   });
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    'OrganizationTeam::AddTeamProject': typeof OrganizationTeamAddTeamProjectComponent;
+  }
 }
