@@ -46,8 +46,9 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
   });
 
   // PCIDSS
-  savePcidss = task(async (event) => {
-    const status = event.target.checked;
+  savePcidss = task(async (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    const status = target.checked;
     try {
       await this.profile?.setShowPcidss({ value: status });
       const statusDisplay = status ? 'SHOW' : 'HIDE';
@@ -56,7 +57,7 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
       );
     } catch (err) {
       this.notify.error(parseError(err));
-      event.target.checked = !status;
+      target.checked = !status;
     }
   });
 
@@ -70,8 +71,9 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
   });
 
   // HIPAA
-  saveHipaa = task(async (event) => {
-    const status = event.target.checked;
+  saveHipaa = task(async (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    const status = target.checked;
     try {
       await this.profile?.setShowHipaa({ value: status });
 
@@ -81,7 +83,7 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
       );
     } catch (err) {
       this.notify.error(parseError(err));
-      event.target.checked = !status;
+      target.checked = !status;
     }
   });
 
@@ -95,8 +97,9 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
   });
 
   // GDPR
-  saveGdpr = task(async (event) => {
-    const status = event.target.checked;
+  saveGdpr = task(async (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    const status = target.checked;
     try {
       await this.profile?.setShowGdpr({ value: status });
       const statusDisplay = status ? 'SHOW' : 'HIDE';
@@ -106,7 +109,7 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
       );
     } catch (err) {
       this.notify.error(parseError(err));
-      event.target.checked = !status;
+      target.checked = !status;
     }
   });
 

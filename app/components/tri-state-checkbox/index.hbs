@@ -9,9 +9,7 @@
       </AkFormControlLabel>
 
       {{#if @isToggleRunning}}
-        <span local-class='progress-spinner' data-test-progress-spinner>
-          {{fa-icon 'spinner fa-spin font-small'}}
-        </span>
+        <AkLoader class='ml-1' @size={{13}} />
       {{/if}}
 
       {{#if @isOverridden}}

@@ -15,11 +15,9 @@
       @onClick={{this.saveDynamic}}
     />
   </AkFormControlLabel>
-
-  <TaskSpin
-    @task={{this.saveDynamicReportPreference}}
-    data-test-dynamic-task-spinner
-  />
+  {{#if this.saveDynamicReportPreference.isRunning}}
+    <AkLoader class='ml-1' @size={{13}} />
+  {{/if}}
 </AkStack>
 
 <AkStack @alignItems='center' class='ml-2'>
@@ -30,7 +28,9 @@
     />
   </AkFormControlLabel>
 
-  <TaskSpin @task={{this.saveAPIReportPreference}} />
+  {{#if this.saveAPIReportPreference.isRunning}}
+    <AkLoader class='ml-1' @size={{13}} />
+  {{/if}}
 </AkStack>
 
 {{#if this.project.isManualScanAvailable}}
@@ -42,6 +42,8 @@
       />
     </AkFormControlLabel>
 
-    <TaskSpin @task={{this.saveManualReportPreference}} />
+    {{#if this.saveManualReportPreference.isRunning}}
+      <AkLoader class='ml-1' @size={{13}} />
+    {{/if}}
   </AkStack>
 {{/if}}

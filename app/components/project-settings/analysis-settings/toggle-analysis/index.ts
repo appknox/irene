@@ -42,9 +42,10 @@ export default class ProjectSettingsAnalysisSettingsToggleAnalysisComponent exte
     );
   });
 
-  toggleUnknownAnalysis = task(async (event: any) => {
+  toggleUnknownAnalysis = task(async (event: Event) => {
+    const target = event.target as HTMLInputElement;
     const tSavedPreferences = this.intl.t('savedPreferences');
-    const isChecked = event.target.checked;
+    const isChecked = target.checked;
     const profileId = this.args.project?.activeProfileId;
     const url = `${ENV.endpoints['profiles']}/${profileId}/${ENV.endpoints['unknownAnalysisStatus']}`;
     const data = { status: isChecked };
@@ -64,7 +65,7 @@ export default class ProjectSettingsAnalysisSettingsToggleAnalysisComponent exte
   });
 
   @action
-  async showUnknownAnalysis(event: any) {
+  async showUnknownAnalysis(event: Event) {
     this.toggleUnknownAnalysis.perform(event);
   }
 }
