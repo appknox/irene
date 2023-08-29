@@ -1,9 +1,10 @@
 import Component from '@glimmer/component';
 import OrganizationInvitationModel from 'irene/models/organization-invitation';
+import OrganizationTeamInvitationModel from 'irene/models/organization-team-invitation';
 
 export interface OrganizationInvitationListInviteTypeSignature {
   Args: {
-    invitation: OrganizationInvitationModel;
+    invitation: OrganizationInvitationModel | OrganizationTeamInvitationModel;
   };
   Element: HTMLElement;
 }

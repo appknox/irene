@@ -13,6 +13,27 @@ export default class OrganizationTeamInvitationModel extends Model {
 
   @belongsTo('organization')
   declare organization: AsyncBelongsTo<OrganizationModel>;
+
+  async delete() {
+    const invite = await this.store.findRecord(
+      'organization-invitation',
+      this.id
+    );
+
+    invite.deleteRecord();
+    this.deleteRecord();
+
+    return invite.save();
+  }
+
+  async resend() {
+    const invite = await this.store.findRecord(
+      'organization-invitation',
+      this.id
+    );
+
+    await invite.resend();
+  }
 }
 
 declare module 'ember-data/types/registries/model' {

@@ -18,9 +18,16 @@ export default class OrganizationInvitationModel extends Model {
   @belongsTo('organization')
   declare organization: AsyncBelongsTo<OrganizationModel>;
 
-  resend(): Promise<OrganizationInvitationModel> {
+  resend() {
     const adapter = this.store.adapterFor('organization-invitation');
+
     return adapter.resend(this.store, 'organization-invitation', this);
+  }
+
+  delete() {
+    this.deleteRecord();
+
+    return this.save();
   }
 }
 declare module 'ember-data/types/registries/model' {
