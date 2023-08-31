@@ -7,10 +7,11 @@ import triggerAnalytics from 'irene/utils/trigger-analytics';
 import { tracked } from '@glimmer/tracking';
 import IntlService from 'ember-intl/services/intl';
 import OrganizationInvitationModel from 'irene/models/organization-invitation';
+import OrganizationTeamInvitationModel from 'irene/models/organization-team-invitation';
 
 interface OrganizationInvitationListInviteResendSignature {
   Args: {
-    invitation: OrganizationInvitationModel;
+    invitation: OrganizationInvitationModel | OrganizationTeamInvitationModel;
     reloadInvites: () => void;
     blurOverlay?: boolean;
   };
