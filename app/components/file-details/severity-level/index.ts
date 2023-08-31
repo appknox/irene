@@ -69,6 +69,10 @@ export default class FileDetailsSeverityLevelComponent extends Component<FileDet
     return severityCountObjects;
   }
 
+  get totalRiskCount() {
+    return this.severityLevelCounts.reduce((acc, curr) => acc + curr.value, 0);
+  }
+
   get option(): ECOption {
     return {
       tooltip: {
@@ -87,7 +91,8 @@ export default class FileDetailsSeverityLevelComponent extends Component<FileDet
             )
           ),
           emphasis: { scale: false },
-          data: this.severityLevelCounts,
+          // if zero sum then show empty circle
+          data: this.totalRiskCount > 0 ? this.severityLevelCounts : [],
         },
       ],
     };

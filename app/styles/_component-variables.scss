@@ -358,7 +358,9 @@ body {
   // variables for organization-member/list/member-details
   --organization-member-list-member-details-border-radius: var(--border-radius);
   --organization-member-list-member-details-border-color: var(--border-color-1);
-  --organization-member-list-member-details-divider-color: var(--neutral-grey-200);
+  --organization-member-list-member-details-divider-color: var(
+    --neutral-grey-200
+  );
   --organization-member-list-member-details-box-shadow: var(--box-shadow-3);
 
   // variables for organization-member/list/add-to-team
@@ -670,6 +672,9 @@ body {
   );
   --file-details-vulnerability-analysis-details-border-radius: var(
     --border-radius
+  );
+  --file-details-vulnerability-analysis-details-divider-color: var(
+    --divider-dark
   );
 
   // variables for file-details/vulnerability-analysis-details/edit-analysis-button

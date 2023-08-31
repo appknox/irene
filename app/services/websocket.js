@@ -3,6 +3,7 @@ import { singularize } from 'ember-inflector';
 import Service from '@ember/service';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
+import { task, timeout } from 'ember-concurrency';
 
 export default class WebsocketService extends Service {
   @service store;
@@ -95,7 +96,8 @@ export default class WebsocketService extends Service {
     const objectType = data.type;
 
     const modelName = singularize(objectType);
-    this.pullModel(modelName, objectID);
+
+    this.enqueuePullModel.perform(modelName, objectID);
   }
 
   onNewObject(...args) {
@@ -166,13 +168,23 @@ export default class WebsocketService extends Service {
     this.logger.debug(`Realtime increment for ${data.type}`);
   }
 
-  pullModel(modelName, id) {
+  // this will ensure task run sequentially
+  enqueuePullModel = task({ enqueue: true }, async (modelName, id) => {
+    this.pullModel.perform(modelName, id);
+  });
+
+  pullModel = task({ keepLatest: true }, async (modelName, id) => {
     try {
       this.store.modelFor(modelName);
-      this.store.findRecord(modelName, id);
+
+      await this.store.findRecord(modelName, id);
+
+      // to cancel out some in between tasks
+      await timeout(250);
     } catch (error) {
       this.logger.error(error);
     }
+
     this.logger.debug(`Pulling ${modelName}: ${id}`);
-  }
+  });
 }
