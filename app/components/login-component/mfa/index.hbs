@@ -21,7 +21,7 @@
           from='irene/components/login-component/index.scss'
         }}'
     >
-      {{fa-icon 'key' class='input-icon' for='key'}}
+      <AkIcon @iconName='key' class='input-icon' for='key'/>
     </label>
     <Input
       data-test-login-mfa-otp-input
@@ -49,7 +49,7 @@
     {{on 'click' @login}}
   >
     {{#if @showSpinner}}
-      {{fa-icon 'spinner fa-spin'}}
+      <AkLoader />
     {{/if}}
     <span
       class='{{local-class

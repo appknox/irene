@@ -83,10 +83,6 @@
   @extend .mi-arrow-right;
 }
 
-.ak-icon-close {
-  @extend .mi-close;
-}
-
 .ak-icon-warning {
   @extend .mi-warning;
 }
@@ -196,6 +192,10 @@
 
 .ak-icon-person-remove {
   @extend .mi-person-remove;
+}
+
+.ak-icon-remove {
+  @extend .mi-remove;
 }
 
 .ak-icon-edit {
@@ -336,4 +336,108 @@
 
 .ak-icon-person {
   @extend .mi-person;
+}
+
+.ak-icon-undo {
+  @extend .mi-replay;
+}
+
+.ak-icon-arrow-down {
+  @extend .mi-keyboard-arrow-down;
+}
+
+.ak-icon-keyboard_backspace {
+  @extend .mi-keyboard-backspace;
+}
+
+.ak-icon-south {
+  @extend .mi-south
+}
+
+.ak-icon-east {
+  @extend .mi-east;
+}
+
+.ak-icon-power-off {
+  @extend .mi-power-settings-new;
+}
+
+.ak-icon-menu {
+  @extend .mi-menu;
+}
+
+.ak-icon-sync-alt {
+  @extend .mi-sync-alt;
+}
+
+.ak-icon-home {
+  @extend .mi-home;
+}
+
+.ak-icon-report-problem {
+  @extend .mi-report-problem;
+}
+
+.ak-icon-android {
+  @extend .mi-android;
+}
+
+.ak-icon-apple {
+  @extend .mi-apple;
+}
+
+.ak-icon-windows {
+  @extend .mi-laptop;
+}
+
+.ak-icon-mobile {
+  @extend .mi-phone-android;
+}
+
+.ak-icon-lock {
+  @extend .mi-lock;
+}
+
+.ak-icon-circle {
+  @extend .mi-circle;
+}
+
+.ak-icon-schedule {
+  @extend .mi-schedule;
+}
+
+.ak-icon-key {
+  @extend .mi-key;
+}
+
+.ak-icon-arrow-forward {
+  @extend .mi-arrow-forward;
+}
+
+.ak-icon-calendar-month {
+  @extend .mi-calendar-month;
+}
+
+.ak-icon-content-paste {
+  @extend .mi-content-paste;
+}
+
+.ak-icon-email {
+  @extend .mi-email;
+}
+
+.ak-icon-send {
+  @extend .mi-send;
+}
+
+.ak-icon-error {
+  @extend .mi-error;
+}
+
+.ak-icon-chevron-left {
+  @extend .mi-chevron-left;
+}
+
+.ak-icon-chevron-right {
+  @extend .mi-chevron-right;
 }

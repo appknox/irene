@@ -116,3 +116,14 @@
 .login-button-text {
   margin-left: 0.5em;
 }
+
+.ak-button-loader {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 0.5em;
+  margin-left: 0.5em;
+
+  :global(.ak-loader-circle-indicator) {
+    stroke: var(--login-component-button-loader-color) !important;
+  }
+}
