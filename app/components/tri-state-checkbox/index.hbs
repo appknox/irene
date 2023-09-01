@@ -5,7 +5,11 @@
       data-test-check
     >
       <AkFormControlLabel @label={{@label}} title={{@title}}>
-        <AkCheckbox @checked={{@value}} @onClick={{@onToggle}} />
+        <AkCheckbox
+          @checked={{@value}}
+          @onClick={{@onToggle}}
+          data-test-input
+        />
       </AkFormControlLabel>
 
       {{#if @isToggleRunning}}
@@ -13,7 +17,11 @@
       {{/if}}
 
       {{#if @isOverridden}}
-        <div local-class='reset' {{on 'click' @onOverrideReset}}>
+        <div
+          local-class='reset'
+          {{on 'click' @onOverrideReset}}
+          data-test-reset
+        >
           <AkIcon @iconName='close' @size='small' />
           <AttachTooltip @placement='top' data-test-reset-tooltip>
             {{t 'resetToDefault'}}

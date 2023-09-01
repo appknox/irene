@@ -13,10 +13,12 @@
     <AkCheckbox
       @checked={{this.reportPreference.show_dynamic_scan}}
       @onClick={{this.saveDynamic}}
+      data-test-show-dynamic-scan-checkbox
     />
   </AkFormControlLabel>
+
   {{#if this.saveDynamicReportPreference.isRunning}}
-    <AkLoader class='ml-1' @size={{13}} />
+    <AkLoader class='ml-1' @size={{13}} data-test-dynamic-task-spinner />
   {{/if}}
 </AkStack>
 
@@ -25,11 +27,12 @@
     <AkCheckbox
       @checked={{this.reportPreference.show_api_scan}}
       @onClick={{this.saveAPI}}
+      data-test-show-api-scan-checkbox
     />
   </AkFormControlLabel>
 
   {{#if this.saveAPIReportPreference.isRunning}}
-    <AkLoader class='ml-1' @size={{13}} />
+    <AkLoader class='ml-1' @size={{13}} data-test-manual-task-spinner />
   {{/if}}
 </AkStack>
 
@@ -39,6 +42,7 @@
       <AkCheckbox
         @checked={{this.reportPreference.show_manual_scan}}
         @onClick={{this.saveManual}}
+        data-test-show-manual-scan-checkbox
       />
     </AkFormControlLabel>
 

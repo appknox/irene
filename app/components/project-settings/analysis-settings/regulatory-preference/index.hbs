@@ -1,10 +1,24 @@
 {{#if (and @project this.profile)}}
-  <AkStack @width='9/12' @direction='column' class='pl-3'>
-    <AkTypography @variant='h5' @color='textPrimary'>
+  <AkStack
+    @width='9/12'
+    @direction='column'
+    class='pl-3'
+    data-test-regulatory-preferences
+  >
+    <AkTypography
+      @variant='h5'
+      @color='textPrimary'
+      data-test-preferences-title
+    >
       {{t 'regulatoryPreferences'}}
     </AkTypography>
 
-    <AkTypography class='mt-1' @variant='body2' @color='textSecondary'>
+    <AkTypography
+      class='mt-1'
+      @variant='body2'
+      @color='textSecondary'
+      data-test-preferences-desc
+    >
       {{t 'regulatoryPreferencesChooseForProfile'}}
       {{t 'regulatoryPreferencesWarning'}}
     </AkTypography>
@@ -14,12 +28,13 @@
       @variant='body2'
       @color='textSecondary'
       class='mt-1'
+      data-test-preferences-note
     >
       ({{t 'regulatoryPreferencesProfileNote'}})
     </AkTypography>
   </AkStack>
 
-  <div class='mt-2 ml-3'>
+  <div class='mt-2 ml-3' data-test-preferences-options>
     <TriStateCheckbox
       @label='PCI-DSS'
       @title={{t 'pcidssExpansion'}}

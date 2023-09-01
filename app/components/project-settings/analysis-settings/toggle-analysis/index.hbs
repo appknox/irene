@@ -1,4 +1,9 @@
-<AkTypography @variant='h5' @color='textPrimary' @gutterBottom={{true}}>
+<AkTypography
+  @variant='h5'
+  @color='textPrimary'
+  @gutterBottom={{true}}
+  data-test-settings-toggle-analysis-label
+>
   {{t 'showUntestedAnalysis'}}
 </AkTypography>
 
@@ -13,5 +18,6 @@
     @size='small'
     @disabled={{this.toggleUnknownAnalysis.isRunning}}
     @onClick={{this.showUnknownAnalysis}}
+    data-test-settings-toggle-analysis
   />
 </AkFormControlLabel>

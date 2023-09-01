@@ -18,15 +18,15 @@ function serializer(payload) {
 }
 
 module(
-  'Integration | Component | regulatory-preference-profile',
+  'Integration | Component | regulatory-preference',
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
     setupIntl(hooks);
 
     test('it does not render component if project is not passed', async function (assert) {
-      await render(hbs`<RegulatoryPreferenceProfile />`);
-      assert.dom('[data-test-preferences]').doesNotExist();
+      await render(hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference />`);
+      assert.dom('[data-test-regulatory-preferences]').doesNotExist();
     });
 
     test('it does not render component if profile does not exists for the project', async function (assert) {
@@ -35,18 +35,18 @@ module(
         this.server.create('project', 1, { activeProfileId: null })
       );
       await render(
-        hbs`<RegulatoryPreferenceProfile @project={{this.project}} />`
+        hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}} />`
       );
-      assert.dom('[data-test-preferences]').doesNotExist();
+      assert.dom('[data-test-regulatory-preferences]').doesNotExist();
 
       this.set(
         'profile',
         this.server.create('project', 1, { activeProfileId: 100 })
       );
       await render(
-        hbs`<RegulatoryPreferenceProfile @project={{this.project}} />`
+        hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}} />`
       );
-      assert.dom('[data-test-preferences]').doesNotExist();
+      assert.dom('[data-test-regulatory-preferences]').doesNotExist();
     });
 
     test('it renders regulatory preferences section correctly', async function (assert) {
@@ -61,7 +61,7 @@ module(
       });
 
       await render(
-        hbs`<RegulatoryPreferenceProfile @project={{this.project}}/>`
+        hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}}/>`
       );
 
       assert
@@ -90,7 +90,7 @@ module(
       });
 
       await render(
-        hbs`<RegulatoryPreferenceProfile @project={{this.project}}/>`
+        hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}}/>`
       );
 
       assert.dom('[data-test-preference-pcidss]').hasText('PCI-DSS');
@@ -141,7 +141,7 @@ module(
         const body = JSON.parse(request.requestBody);
 
         const profile = schema['profiles'].find(request.params.id);
-        profile.reportPreference.show_hipaa = {
+        profile.reportPreference.show_hip= {
           value: body.value,
           is_inherited: false,
         };
@@ -164,7 +164,7 @@ module(
       });
 
       await render(
-        hbs`<RegulatoryPreferenceProfile @project={{this.project}}/>`
+        hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}}/>`
       );
 
       const pcidss = this.element.querySelector(
@@ -176,7 +176,7 @@ module(
       await click(pcidssInput);
       assert.equal(pcidssInput.checked, !pcidssInitialValue);
 
-      const hipaa = this.element.querySelector('[data-test-preference-hipaa]');
+      const hip= this.element.querySelector('[data-test-preference-hipaa]');
       const hipaaInitialValue = profile.reportPreference.show_hipaa.value;
       const hipaaInput = hipaa.querySelector('[data-test-input]');
       assert.equal(hipaaInput.checked, hipaaInitialValue);
@@ -215,7 +215,7 @@ module(
       });
 
       await render(
-        hbs`<RegulatoryPreferenceProfile @project={{this.project}}/>`
+        hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}}/>`
       );
 
       const pcidss = this.element.querySelector(
@@ -229,7 +229,7 @@ module(
       await click(pcidssInput);
       assert.equal(pcidssInput.checked, pcidssInitialValue);
 
-      const hipaa = this.element.querySelector('[data-test-preference-hipaa]');
+      const hip= this.element.querySelector('[data-test-preference-hipaa]');
       const hipaaInitialValue = profile.reportPreference.show_hipaa.value;
       const hipaaInput = hipaa.querySelector('[data-test-input]');
       assert.equal(hipaaInput.checked, hipaaInitialValue);
@@ -276,7 +276,7 @@ module(
       });
 
       await render(
-        hbs`<RegulatoryPreferenceProfile @project={{this.project}}/>`
+        hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}}/>`
       );
 
       let pcidss = this.element.querySelector('[data-test-preference-pcidss]');
@@ -328,7 +328,7 @@ module(
       });
 
       await render(
-        hbs`<RegulatoryPreferenceProfile @project={{this.project}}/>`
+        hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}}/>`
       );
 
       let pcidss = this.element.querySelector('[data-test-preference-pcidss]');
