@@ -15,7 +15,7 @@ function profile_serializer(payload) {
   return serializedPayload;
 }
 
-module('Integration | Component | report-preference', function (hooks) {
+module('Integration | Component | project-settings/analysis-settings/report-preference', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
   setupIntl(hooks);

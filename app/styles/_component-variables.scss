@@ -748,4 +748,16 @@ body {
   --file-compare-table-risk-type-severity-passed: var(--success-main);
   --file-compare-table-risk-type-severity-not-started: var(--severity-none);
   --file-compare-table-risk-type-severity-chip-text-color: var(--common-white);
+
+  // variables for project-settings/analysis-settings/vulnerability-details
+  --project-settings-analysis-settings-vulnerability-details-border-color: var(--neutral-grey-200);
+  --project-settings-analysis-settings-vulnerability-details-border-radius: var(--border-radius-3);
+
+    // variables for project-settings/analysis-settings/vulnerability-list
+    --project-settings-analysis-settings-vulnerability-list-border-color: var(--neutral-grey-200);
+    --project-settings-analysis-settings-vulnerability-list-background-color: var(--neutral-grey-100);
+    --project-settings-analysis-settings-vulnerability-list-border-color-warning: var(--error-main);
+    --project-settings-analysis-settings-vulnerability-list-background-color-warning: var(--warning-background-color);
+    --project-settings-analysis-settings-vulnerability-list-border-radius: var(--border-radius);
+  
 }

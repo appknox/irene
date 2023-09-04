@@ -60,6 +60,7 @@ body {
   --divider-dark: #e9e9e9;
 
   --border-radius: 2px;
+  --border-radius-3: 3px;
 
   --border-color-1: #e9e9e9;
   --border-color-2: #c4c4c4;
@@ -105,6 +106,9 @@ body {
   // special case variable for app-bar & side-nav
   --box-shadow-dark: 1px 0px 8px -1px rgba(0, 0, 0, 0.3);
   --box-shadow-light: 4px 4px 20px rgba(222, 222, 222, 0.25);
+
+  // special case variable for vulnerability-list
+  --warning-background-color: rgba(215, 47, 47, 0.10);
 
   // special case variable for severity
   --severity-critical: #d72f2f;

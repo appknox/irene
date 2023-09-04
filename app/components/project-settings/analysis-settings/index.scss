@@ -1,11 +1,12 @@
-.settings-analysis-container{
-  border: 1px solid var(--neutral-grey-200);
+.settings-analysis-container {
+  border: 1px solid var(--project-settings-analysis-settings-border-color);
   border-top: 0;
-  border-radius: 0 0 2px 2px;
-  height: calc(100vh - 300px);
-  overflow: auto;
+  border-radius: var(--project-settings-analysis-settings-border-radius);
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
 }
 
-.section-divider{
-  border-bottom: 1px solid var(--neutral-grey-200);
+.section-divider {
+  border-bottom: 1px solid
+    var(--project-settings-analysis-settings-border-color);
 }

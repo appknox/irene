@@ -86,12 +86,8 @@ export default class ProjectSettingsAnalysisSettingsReportPreferenceComponent ex
 
   getProfileTask = task(async () => {
     const profileId = this.project?.activeProfileId;
-    if (profileId) {
-      const profile = await this.store.findRecord('profile', profileId);
-      this.profile = profile;
-    } else {
-      this.profile = null;
-    }
+    const profile = await this.store.findRecord('profile', Number(profileId));
+    this.profile = profile;
   });
 }
 

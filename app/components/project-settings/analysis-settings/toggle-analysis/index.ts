@@ -8,6 +8,7 @@ import { Service as IntlService } from 'ember-intl';
 import Store from '@ember-data/store';
 import UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
 import { task } from 'ember-concurrency';
+import parseError from 'irene/utils/parse-error';
 
 interface ProjectSettingsAnalysisSettingsToggleAnalysisSignature {
   Args: {
@@ -59,8 +60,8 @@ export default class ProjectSettingsAnalysisSettingsToggleAnalysisComponent exte
           this.unknownAnalysisStatus.status = isChecked;
         }
       }
-    } catch (error: any) {
-      this.notify.error(error.payload.message);
+    } catch (error) {
+      this.notify.error(parseError(error));
     }
   });
 

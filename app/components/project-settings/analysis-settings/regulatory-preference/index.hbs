@@ -3,7 +3,7 @@
     @width='9/12'
     @direction='column'
     class='pl-3'
-    data-test-regulatory-preferences
+    data-test-regulatory-preferences-root
   >
     <AkTypography
       @variant='h5'
@@ -36,7 +36,7 @@
 
   <div class='mt-2 ml-3' data-test-preferences-options>
     <TriStateCheckbox
-      @label='PCI-DSS'
+      @label={{t 'pcidss'}}
       @title={{t 'pcidssExpansion'}}
       @value={{this.profile.reportPreference.show_pcidss.value}}
       @onToggle={{this.onSavePcidss}}
@@ -49,7 +49,7 @@
     />
 
     <TriStateCheckbox
-      @label='HIPAA'
+      @label={{t 'hipaa'}}
       @title={{t 'hipaaExpansion'}}
       @value={{this.profile.reportPreference.show_hipaa.value}}
       @onToggle={{this.onSaveHipaa}}
@@ -62,7 +62,7 @@
     />
 
     <TriStateCheckbox
-      @label='GDPR'
+      @label={{t 'gdpr'}}
       @title={{t 'gdprExpansion'}}
       @value={{this.profile.reportPreference.show_gdpr.value}}
       @onToggle={{this.onSaveGdpr}}

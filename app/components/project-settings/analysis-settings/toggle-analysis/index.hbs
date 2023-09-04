@@ -8,15 +8,15 @@
 </AkTypography>
 
 <AkFormControlLabel
-  local-class='untested-analysis-toggle'
   @label={{t 'otherTemplates.showUntestedAnalysis'}}
+  @disabled={{this.toggleUnknownAnalysis.isRunning}}
   as |fcl|
 >
   <AkToggle
     class='ml-0'
     @checked={{this.unknownAnalysisStatus.status}}
     @size='small'
-    @disabled={{this.toggleUnknownAnalysis.isRunning}}
+    @disabled={{fcl.disabled}}
     @onClick={{this.showUnknownAnalysis}}
     data-test-settings-toggle-analysis
   />

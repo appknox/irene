@@ -1,4 +1,3 @@
-/* eslint-disable qunit/no-assert-equal, qunit/no-assert-equal-boolean */
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, click } from '@ember/test-helpers';
@@ -18,15 +17,17 @@ function serializer(payload) {
 }
 
 module(
-  'Integration | Component | regulatory-preference',
+  'Integration | Component | project-settings/analysis-settings/regulatory-preference',
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
     setupIntl(hooks);
 
     test('it does not render component if project is not passed', async function (assert) {
-      await render(hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference />`);
-      assert.dom('[data-test-regulatory-preferences]').doesNotExist();
+      await render(
+        hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference />`
+      );
+      assert.dom('[data-test-regulatory-preferences-root]').doesNotExist();
     });
 
     test('it does not render component if profile does not exists for the project', async function (assert) {
@@ -37,7 +38,7 @@ module(
       await render(
         hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}} />`
       );
-      assert.dom('[data-test-regulatory-preferences]').doesNotExist();
+      assert.dom('[data-test-regulatory-preferences-root]').doesNotExist();
 
       this.set(
         'profile',
@@ -46,7 +47,7 @@ module(
       await render(
         hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}} />`
       );
-      assert.dom('[data-test-regulatory-preferences]').doesNotExist();
+      assert.dom('[data-test-regulatory-preferences-root]').doesNotExist();
     });
 
     test('it renders regulatory preferences section correctly', async function (assert) {
@@ -93,9 +94,9 @@ module(
         hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}}/>`
       );
 
-      assert.dom('[data-test-preference-pcidss]').hasText('PCI-DSS');
-      assert.dom('[data-test-preference-hipaa]').hasText('HIPAA');
-      assert.dom('[data-test-preference-gdpr]').hasText('GDPR');
+      assert.dom('[data-test-preference-pcidss]').hasText('t:pcidss:()');
+      assert.dom('[data-test-preference-hipaa]').hasText('t:hipaa:()');
+      assert.dom('[data-test-preference-gdpr]').hasText('t:gdpr:()');
     });
 
     test('it toggles preference value for the corresponding regulatory on click', async function (assert) {
@@ -141,7 +142,7 @@ module(
         const body = JSON.parse(request.requestBody);
 
         const profile = schema['profiles'].find(request.params.id);
-        profile.reportPreference.show_hip= {
+        profile.reportPreference.show_hipaa = {
           value: body.value,
           is_inherited: false,
         };
@@ -172,23 +173,23 @@ module(
       );
       const pcidssInitialValue = profile.reportPreference.show_pcidss.value;
       const pcidssInput = pcidss.querySelector('[data-test-input]');
-      assert.equal(pcidssInput.checked, pcidssInitialValue);
+      assert.strictEqual(pcidssInput.checked, pcidssInitialValue);
       await click(pcidssInput);
-      assert.equal(pcidssInput.checked, !pcidssInitialValue);
+      assert.strictEqual(pcidssInput.checked, !pcidssInitialValue);
 
-      const hip= this.element.querySelector('[data-test-preference-hipaa]');
+      const hipaa = this.element.querySelector('[data-test-preference-hipaa]');
       const hipaaInitialValue = profile.reportPreference.show_hipaa.value;
       const hipaaInput = hipaa.querySelector('[data-test-input]');
-      assert.equal(hipaaInput.checked, hipaaInitialValue);
+      assert.strictEqual(hipaaInput.checked, hipaaInitialValue);
       await click(hipaaInput);
-      assert.equal(hipaaInput.checked, !hipaaInitialValue);
+      assert.strictEqual(hipaaInput.checked, !hipaaInitialValue);
 
       const gdpr = this.element.querySelector('[data-test-preference-gdpr]');
       const gdprInitialValue = profile.reportPreference.show_gdpr.value;
       const gdprInput = gdpr.querySelector('[data-test-input]');
-      assert.equal(gdprInput.checked, gdprInitialValue);
+      assert.strictEqual(gdprInput.checked, gdprInitialValue);
       await click(gdprInput);
-      assert.equal(gdprInput.checked, !gdprInitialValue);
+      assert.strictEqual(gdprInput.checked, !gdprInitialValue);
     });
 
     test('it does not toggle preference value on error', async function (assert) {
@@ -223,25 +224,25 @@ module(
       );
       const pcidssInitialValue = profile.reportPreference.show_pcidss.value;
       const pcidssInput = pcidss.querySelector('[data-test-input]');
-      assert.equal(pcidssInput.checked, pcidssInitialValue);
+      assert.strictEqual(pcidssInput.checked, pcidssInitialValue);
       await click(pcidssInput);
-      assert.equal(pcidssInput.checked, pcidssInitialValue);
+      assert.strictEqual(pcidssInput.checked, pcidssInitialValue);
       await click(pcidssInput);
-      assert.equal(pcidssInput.checked, pcidssInitialValue);
+      assert.strictEqual(pcidssInput.checked, pcidssInitialValue);
 
-      const hip= this.element.querySelector('[data-test-preference-hipaa]');
+      const hipaa = this.element.querySelector('[data-test-preference-hipaa]');
       const hipaaInitialValue = profile.reportPreference.show_hipaa.value;
       const hipaaInput = hipaa.querySelector('[data-test-input]');
-      assert.equal(hipaaInput.checked, hipaaInitialValue);
+      assert.strictEqual(hipaaInput.checked, hipaaInitialValue);
       await click(hipaaInput);
-      assert.equal(hipaaInput.checked, hipaaInitialValue);
+      assert.strictEqual(hipaaInput.checked, hipaaInitialValue);
 
       const gdpr = this.element.querySelector('[data-test-preference-gdpr]');
       const gdprInitialValue = profile.reportPreference.show_gdpr.value;
       const gdprInput = gdpr.querySelector('[data-test-input]');
-      assert.equal(gdprInput.checked, gdprInitialValue);
+      assert.strictEqual(gdprInput.checked, gdprInitialValue);
       await click(gdprInput);
-      assert.equal(gdprInput.checked, gdprInitialValue);
+      assert.strictEqual(gdprInput.checked, gdprInitialValue);
     });
 
     test('it displays overridden state with reset button if a preference is updated', async function (assert) {
@@ -283,17 +284,17 @@ module(
       let pcidssInput = pcidss.querySelector('[data-test-input]');
       let pcidssCheck = pcidss.querySelector('[data-test-check]');
 
-      assert.equal(pcidssInput.checked, false);
+      assert.strictEqual(pcidssInput.checked, false);
       assert.true(pcidssCheck.classList.contains(checkboxStyles['inherited']));
-      assert.equal(pcidss.querySelector('[data-test-reset]'), null);
+      assert.strictEqual(pcidss.querySelector('[data-test-reset]'), null);
 
       await click(pcidssInput);
-      assert.equal(pcidssInput.checked, true);
+      assert.strictEqual(pcidssInput.checked, true);
       assert.true(pcidssCheck.classList.contains(checkboxStyles['overridden']));
       assert.notEqual(pcidss.querySelector('[data-test-reset]'), null);
 
       await click(pcidssInput);
-      assert.equal(pcidssInput.checked, false);
+      assert.strictEqual(pcidssInput.checked, false);
       assert.true(pcidssCheck.classList.contains(checkboxStyles['overridden']));
       assert.notEqual(pcidss.querySelector('[data-test-reset]'), null);
     });
@@ -336,15 +337,15 @@ module(
       let pcidssInput = pcidss.querySelector('[data-test-input]');
       let pcidssReset = pcidss.querySelector('[data-test-reset]');
 
-      assert.equal(pcidssInput.checked, true);
+      assert.strictEqual(pcidssInput.checked, true);
       assert.true(pcidssCheck.classList.contains(checkboxStyles['overridden']));
       assert.notEqual(pcidssReset, null);
 
       await click(pcidssReset);
 
-      assert.equal(pcidssInput.checked, false);
+      assert.strictEqual(pcidssInput.checked, false);
       assert.true(pcidssCheck.classList.contains(checkboxStyles['inherited']));
-      assert.equal(pcidss.querySelector('[data-test-reset]'), null);
+      assert.strictEqual(pcidss.querySelector('[data-test-reset]'), null);
     });
   }
 );

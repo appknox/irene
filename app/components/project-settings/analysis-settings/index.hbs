@@ -1,23 +1,29 @@
 <div local-class='settings-analysis-container'>
-  <div class='py-2 px-3' local-class='section-divider'>
+  <div class='py-2 px-3'>
     <ProjectSettings::AnalysisSettings::ToggleAnalysis
       @project={{this.project}}
     />
   </div>
 
-  <div class='py-2' local-class='section-divider'>
+  <AkDivider @color='dark' />
+
+  <div class='py-2'>
     <ProjectSettings::AnalysisSettings::RegulatoryPreference
       @project={{this.project}}
     />
   </div>
 
-  <div class='py-2' local-class='section-divider'>
+  <AkDivider @color='dark' />
+
+  <div class='py-2'>
     <ProjectSettings::AnalysisSettings::ReportPreference
       @project={{this.project}}
     />
   </div>
 
-  <div class='py-2 px-3' local-class='section-divider'>
+  <AkDivider @color='dark' />
+
+  <div class='py-2 px-3'>
     <ProjectSettings::AnalysisSettings::VulnerabilityList
       @project={{this.project}}
     />

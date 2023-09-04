@@ -32,17 +32,10 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
   }
 
   fetchProfile = task(async () => {
-    try {
-      if (this.args.project) {
-        this.profile = await this.store.findRecord(
-          'profile',
-          this.args.project.activeProfileId
-        );
-      }
-    } catch {
-      this.profile = null;
-      return;
-    }
+    this.profile = await this.store.findRecord(
+      'profile',
+      String(this.args.project?.activeProfileId)
+    );
   });
 
   // PCIDSS
@@ -53,7 +46,9 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
       await this.profile?.setShowPcidss({ value: status });
       const statusDisplay = status ? 'SHOW' : 'HIDE';
       this.notify.info(
-        `PCI-DSS ${this.intl.t('preferenceSetTo')} ${statusDisplay}`
+        `${this.intl.t('pcidss')} ${this.intl.t(
+          'preferenceSetTo'
+        )} ${statusDisplay}`
       );
     } catch (err) {
       this.notify.error(parseError(err));
@@ -79,7 +74,9 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
 
       const statusDisplay = status ? 'SHOW' : 'HIDE';
       this.notify.info(
-        `HIPAA ${this.intl.t('preferenceSetTo')} ${statusDisplay}`
+        `${this.intl.t('hipaa')} ${this.intl.t(
+          'preferenceSetTo'
+        )} ${statusDisplay}`
       );
     } catch (err) {
       this.notify.error(parseError(err));
@@ -105,7 +102,9 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
       const statusDisplay = status ? 'SHOW' : 'HIDE';
 
       this.notify.info(
-        `GDPR ${this.intl.t('preferenceSetTo')} ${statusDisplay}`
+        `${this.intl.t('gdpr')} ${this.intl.t(
+          'preferenceSetTo'
+        )} ${statusDisplay}`
       );
     } catch (err) {
       this.notify.error(parseError(err));
