@@ -4,7 +4,7 @@
       local-class='check {{if @isOverridden "overridden" "inherited"}}'
       data-test-check
     >
-      <AkFormControlLabel @label={{@label}} title={{@title}}>
+      <AkFormControlLabel @label={{@label}} title={{@title}} data-test-label>
         <AkCheckbox
           @checked={{@value}}
           @onClick={{@onToggle}}
@@ -13,7 +13,7 @@
       </AkFormControlLabel>
 
       {{#if @isToggleRunning}}
-        <AkLoader class='ml-1' @size={{13}} />
+        <AkLoader class='ml-1' @size={{13}} data-test-progress-spinner />
       {{/if}}
 
       {{#if @isOverridden}}
