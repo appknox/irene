@@ -125,6 +125,9 @@ export default class FileModel extends ModelBaseMixin {
   @belongsTo('sbom-file', { inverse: 'file' })
   declare sbFile: AsyncBelongsTo<SbomFileModel>;
 
+  @belongsTo('file', { inverse: null })
+  declare previous_file: AsyncBelongsTo<FileModel>;
+
   analysesSorting = ['computedRisk:desc'];
 
   scanProgressClass(type?: boolean) {
