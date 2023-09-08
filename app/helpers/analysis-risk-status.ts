@@ -42,17 +42,17 @@ export function analysisRiskStatus(params: [string, string, boolean]) {
 
   const icons = {
     status: {
-      [ENUMS.ANALYSIS.ERROR]: 'fa-warning',
-      [ENUMS.ANALYSIS.WAITING]: 'fa-minus-circle',
-      [ENUMS.ANALYSIS.RUNNING]: 'fa-spinner fa-spin',
+      [ENUMS.ANALYSIS.ERROR]: 'warning',
+      [ENUMS.ANALYSIS.WAITING]: 'remove-circle',
+      [ENUMS.ANALYSIS.RUNNING]: 'loader',
     },
     risk: {
-      [ENUMS.RISK.UNKNOWN]: 'fa-close',
-      [ENUMS.RISK.NONE]: 'fa-check',
-      [ENUMS.RISK.LOW]: 'fa-warning',
-      [ENUMS.RISK.MEDIUM]: 'fa-warning',
-      [ENUMS.RISK.HIGH]: 'fa-warning',
-      [ENUMS.RISK.CRITICAL]: 'fa-warning',
+      [ENUMS.RISK.UNKNOWN]: 'close',
+      [ENUMS.RISK.NONE]: 'done',
+      [ENUMS.RISK.LOW]: 'warning',
+      [ENUMS.RISK.MEDIUM]: 'warning',
+      [ENUMS.RISK.HIGH]: 'warning',
+      [ENUMS.RISK.CRITICAL]: 'warning',
     },
   };
 

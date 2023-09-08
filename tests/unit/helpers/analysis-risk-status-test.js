@@ -10,75 +10,75 @@ module('Unit | Helper | analysis risk status', function() {
 
     let unknown = analysisRiskStatus([ENUMS.RISK.UNKNOWN, status]);
     assert.equal(unknown.cssclass, 'is-default');
-    assert.equal(unknown.icon, 'fa-close');
+    assert.equal(unknown.icon, 'close');
     assert.equal(unknown.label, 'Untested');
 
     let passed = analysisRiskStatus([ENUMS.RISK.NONE, status]);
     assert.equal(passed.cssclass, 'is-success');
-    assert.equal(passed.icon, 'fa-check');
+    assert.equal(passed.icon, 'done');
     assert.equal(passed.label, 'Passed');
 
     let low = analysisRiskStatus([ENUMS.RISK.LOW, status]);
     assert.equal(low.cssclass, 'is-info');
-    assert.equal(low.icon, 'fa-warning');
+    assert.equal(low.icon, 'warning');
     assert.equal(low.label, 'Low');
 
     let medium = analysisRiskStatus([ENUMS.RISK.MEDIUM, status]);
     assert.equal(medium.cssclass, 'is-warning');
-    assert.equal(medium.icon, 'fa-warning');
+    assert.equal(medium.icon, 'warning');
     assert.equal(medium.label, 'Medium');
 
     let high = analysisRiskStatus([ENUMS.RISK.HIGH, status]);
     assert.equal(high.cssclass, 'is-danger');
-    assert.equal(high.icon, 'fa-warning');
+    assert.equal(high.icon, 'warning');
     assert.equal(high.label, 'High');
 
     let critical = analysisRiskStatus([ENUMS.RISK.CRITICAL, status]);
     assert.equal(critical.cssclass, 'is-critical');
-    assert.equal(critical.icon, 'fa-warning');
+    assert.equal(critical.icon, 'warning');
     assert.equal(critical.label, 'Critical');
   });
 
   test('it return error status for errored analysis', function(assert) {
     let riskStatus = analysisRiskStatus([ENUMS.RISK.UNKNOWN, ENUMS.ANALYSIS.ERROR]);
     assert.equal(riskStatus.cssclass, 'is-errored');
-    assert.equal(riskStatus.icon, 'fa-warning');
+    assert.equal(riskStatus.icon, 'warning');
     assert.equal(riskStatus.label, 'Errored');
   });
 
   test('it return not-started status for waiting analysis', function(assert) {
     let riskStatus = analysisRiskStatus([ENUMS.RISK.UNKNOWN, ENUMS.ANALYSIS.WAITING]);
     assert.equal(riskStatus.cssclass, 'is-waiting');
-    assert.equal(riskStatus.icon, 'fa-minus-circle');
+    assert.equal(riskStatus.icon, 'remove-circle');
     assert.equal(riskStatus.label, 'Not started');
   });
 
   test('it return scanning status for running analysis', function(assert) {
     let riskStatus = analysisRiskStatus([ENUMS.RISK.UNKNOWN, ENUMS.ANALYSIS.RUNNING]);
     assert.equal(riskStatus.cssclass, 'is-progress');
-    assert.equal(riskStatus.icon, 'fa-spinner fa-spin');
+    assert.equal(riskStatus.icon, 'loader');
     assert.equal(riskStatus.label, 'Scanning');
   });
 
   test('it return risk status if status param is empty', function(assert) {
     let riskStatus = analysisRiskStatus([ENUMS.RISK.UNKNOWN]);
     assert.equal(riskStatus.cssclass, 'is-default');
-    assert.equal(riskStatus.icon, 'fa-close');
+    assert.equal(riskStatus.icon, 'close');
     assert.equal(riskStatus.label, 'Untested');
 
     let undefinedStatus = analysisRiskStatus([ENUMS.RISK.UNKNOWN, undefined]);
     assert.equal(undefinedStatus.cssclass, 'is-default');
-    assert.equal(undefinedStatus.icon, 'fa-close');
+    assert.equal(undefinedStatus.icon, 'close');
     assert.equal(undefinedStatus.label, 'Untested');
 
     let emptyStrStatus = analysisRiskStatus([ENUMS.RISK.UNKNOWN, '']);
     assert.equal(emptyStrStatus.cssclass, 'is-default');
-    assert.equal(emptyStrStatus.icon, 'fa-close');
+    assert.equal(emptyStrStatus.icon, 'close');
     assert.equal(emptyStrStatus.label, 'Untested');
 
     let nullStatus = analysisRiskStatus([ENUMS.RISK.UNKNOWN, null]);
     assert.equal(nullStatus.cssclass, 'is-default');
-    assert.equal(nullStatus.icon, 'fa-close');
+    assert.equal(nullStatus.icon, 'close');
     assert.equal(nullStatus.label, 'Untested');
   });
 
@@ -106,17 +106,17 @@ module('Unit | Helper | analysis risk status', function() {
 
     let undefinedRisk = analysisRiskStatus([undefined, status]);
     assert.equal(undefinedRisk.cssclass, 'is-errored');
-    assert.equal(undefinedRisk.icon, 'fa-warning');
+    assert.equal(undefinedRisk.icon, 'warning');
     assert.equal(undefinedRisk.label, 'Errored');
 
     let emptyStrRisk = analysisRiskStatus(['', status]);
     assert.equal(emptyStrRisk.cssclass, 'is-errored');
-    assert.equal(emptyStrRisk.icon, 'fa-warning');
+    assert.equal(emptyStrRisk.icon, 'warning');
     assert.equal(emptyStrRisk.label, 'Errored');
 
     let nullRisk = analysisRiskStatus([null, status]);
     assert.equal(nullRisk.cssclass, 'is-errored');
-    assert.equal(nullRisk.icon, 'fa-warning');
+    assert.equal(nullRisk.icon, 'warning');
     assert.equal(nullRisk.label, 'Errored');
   });
 
@@ -149,7 +149,7 @@ module('Unit | Helper | analysis risk status', function() {
   test('it return empty values for invalid risk & non-completed status', function(assert) {
     let invalidRiskErroredStatus = analysisRiskStatus([-2, ENUMS.ANALYSIS.ERROR]);
     assert.equal(invalidRiskErroredStatus.cssclass, 'is-errored');
-    assert.equal(invalidRiskErroredStatus.icon, 'fa-warning');
+    assert.equal(invalidRiskErroredStatus.icon, 'warning');
     assert.equal(invalidRiskErroredStatus.label, 'Errored');
   });
 
@@ -190,14 +190,14 @@ module('Unit | Helper | analysis risk status', function() {
   test('it return status for overriddenRisk with risk class & status label', function(assert) {
     let overriddenCriticalWaiting = analysisRiskStatus([ENUMS.RISK.CRITICAL, ENUMS.ANALYSIS.WAITING, true]);
     assert.equal(overriddenCriticalWaiting.cssclass, 'is-critical');
-    assert.equal(overriddenCriticalWaiting.icon, 'fa-minus-circle');
+    assert.equal(overriddenCriticalWaiting.icon, 'remove-circle');
     assert.equal(overriddenCriticalWaiting.label, 'Not started');
   });
 
   test('it return status for overriddenRisk with status class & label if risk is invalid', function(assert) {
     let overriddenInvalidWaiting = analysisRiskStatus([-2, ENUMS.ANALYSIS.WAITING, true]);
     assert.equal(overriddenInvalidWaiting.cssclass, 'is-waiting');
-    assert.equal(overriddenInvalidWaiting.icon, 'fa-minus-circle');
+    assert.equal(overriddenInvalidWaiting.icon, 'remove-circle');
     assert.equal(overriddenInvalidWaiting.label, 'Not started');
   });
 });

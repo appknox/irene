@@ -152,16 +152,16 @@ export default class AnalysisModel extends Model {
   iconClass(risk: number | null) {
     switch (risk) {
       case ENUMS.RISK.UNKNOWN:
-        return 'fa-spinner fa-spin';
+        return 'loader';
 
       case ENUMS.RISK.NONE:
-        return 'fa-check';
+        return 'done';
 
       case ENUMS.RISK.CRITICAL:
       case ENUMS.RISK.HIGH:
       case ENUMS.RISK.LOW:
       case ENUMS.RISK.MEDIUM:
-        return 'fa-warning';
+        return 'warning';
     }
   }
 

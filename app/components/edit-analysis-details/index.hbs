@@ -6,7 +6,7 @@
           @route='authenticated.security.file'
           @model={{this.analysisDetails.file.id}}
         >
-          {{fa-icon 'caret-left'}}&nbsp; View All Analyses</LinkTo>
+          <AkIcon @iconName='arrow-left' />&nbsp; View All Analyses</LinkTo>
       </div>
       <div class='column'>
         <h3>
@@ -75,7 +75,8 @@
             type='button'
             {{on 'click' (perform this.clearCvss)}}
           >
-            {{fa-icon 'window-close'}}<div class='margin-l-h'>
+            <AkIcon @iconName='close' />
+            <div class='margin-l-h'>
               Set to Untested
             </div>
           </button>
@@ -90,7 +91,8 @@
           >
             {{#if this.isInValidCvssBase}}
               <div class='font-legible padding-t-2 padding-b-1h'>
-                {{fa-icon 'warning'}}<div class='padding-t-h'>
+                <AkIcon @iconName='warning' />
+                <div class='padding-t-h'>
                   Invalid
                 </div>
                 <div>
@@ -525,7 +527,7 @@
                           (fn this.openRemoveFindingConfirmBox finding.id)
                         }}
                       >
-                        {{fa-icon 'trash-o'}}
+                        <AkIcon @iconName='delete' @variant='outlined' />
                       </div>
                     </td>
                   </tr>
@@ -659,7 +661,7 @@
                         }}
                         role='button'
                       >
-                        {{fa-icon 'trash-o'}}
+                        <AkIcon @iconName='delete' @variant='outlined' />
                       </span>
                     </td>
                     <td>
@@ -670,7 +672,7 @@
                         }}
                         role='button'
                       >
-                        {{fa-icon 'download'}}
+                        <AkIcon @iconName='download' />
                       </span>
                     </td>
                   </tr>

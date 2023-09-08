@@ -25,12 +25,12 @@ module('Unit | Model | analysis', function(hooks) {
       );
       assert.equal(analysis.hasType(1), true, "Has Type");
       analysis.set('risk', ENUMS.RISK.UNKNOWN);
-      assert.equal(analysis.iconClass(ENUMS.RISK.UNKNOWN), "fa-spinner fa-spin", "Loading");
+      assert.equal(analysis.iconClass(ENUMS.RISK.UNKNOWN), "loader", "Loading");
       analysis.set('risk', ENUMS.RISK.NONE);
-      assert.equal(analysis.iconClass(ENUMS.RISK.NONE), "fa-check", "Check");
+      assert.equal(analysis.iconClass(ENUMS.RISK.NONE), "done", "Check");
       analysis.set('risk', ENUMS.RISK.CRITICAL);
-      assert.equal(analysis.iconClass(ENUMS.RISK.CRITICAL), "fa-warning", "Warning");
-      assert.equal(analysis.get("riskIconClass"), "fa-warning", "Risk Icon Class");
+      assert.equal(analysis.iconClass(ENUMS.RISK.CRITICAL), "warning", "Warning");
+      assert.equal(analysis.get("riskIconClass"), "warning", "Risk Icon Class");
       const cls = 'tag';
       analysis.set('risk', ENUMS.RISK.UNKNOWN);
       assert.equal(analysis.labelClass(ENUMS.RISK.UNKNOWN), cls + " " + "is-progress", "Progress");
@@ -48,7 +48,7 @@ module('Unit | Model | analysis', function(hooks) {
       assert.equal(analysis.get('riskLabelClass'), "tag is-critical", "Risk Label Class");
 
       analysis.set('overriddenRisk', ENUMS.RISK.CRITICAL);
-      assert.equal(analysis.get("overriddenRiskIconClass"), "fa-warning", "Overridden Risk Icon Class");
+      assert.equal(analysis.get("overriddenRiskIconClass"), "warning", "Overridden Risk Icon Class");
       assert.equal(analysis.get("overriddenRiskLabelClass"), cls + " " + "is-critical", "Overridden Risk Icon Class");
     });
   });

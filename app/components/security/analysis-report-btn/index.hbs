@@ -23,9 +23,11 @@
         class='trigger-bootstrap-feel button is-primary'
         local-class='dd-trigger'
       >
-        <div local-class='trigger-item' data-test-report-download-trigger>
-          {{fa-icon 'ellipsis-v'}}
-        </div>
+        <AkIcon
+          data-test-report-download-trigger
+          local-class='trigger-item'
+          @iconName='more-vert'
+        />
       </dd.Trigger>
       <dd.Content @class='dropdown-content dropdown--default-content'>
         <div class='dropdown-pointer'></div>
@@ -42,7 +44,7 @@
               data-test-report-type='{{seq}}'
               {{on 'click' (perform this.downloadReport type)}}
             >
-              {{fa-icon type.icon}}
+              <AkIcon @iconName={{type.icon}} @size='small' @variant='outlined' />
               {{t 'download'}}
               {{type.label}}
             </a>

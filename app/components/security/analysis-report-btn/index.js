@@ -23,17 +23,17 @@ export default class SecurityFileAnalysisReportBtnComponent extends Component {
       {
         label: this.intl.t('excelReport'),
         format: 'xlsx',
-        icon: 'file-excel-o',
+        icon: 'description',
       },
       {
         label: this.intl.t('jaHTMLReport'),
         format: 'html_ja',
-        icon: 'file-code-o',
+        icon: 'integration-instructions',
       },
       {
         label: this.intl.t('enHTMLReport'),
         format: 'html_en',
-        icon: 'file-code-o',
+        icon: 'integration-instructions',
       },
     ];
   }

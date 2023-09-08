@@ -21,6 +21,6 @@
                     | #{ t (vulnerability-type tag)}
   else
     .not-found.no-issues
-      = fa-icon "exclamation-triangle"
+      = ak-icon iconName="report-problem" size="small"
 
       | No issues found
