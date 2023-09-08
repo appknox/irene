@@ -5,7 +5,7 @@
       |  | #{project.packageName}
   .column
     = link-to 'authenticated.project.files' project.id class="is-primary" tagName="button" class="mp-settings-all-scans"
-      = fa-icon "navicon"
+      = ak-icon iconName="menu"
       | &nbsp; #{t "allUploads"}
 
 .tabs.is-medium.is-boxed

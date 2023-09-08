@@ -1,6 +1,4 @@
-<div local-class="loading-container">
-  <div local-class="centering">
-    <i class="fa fa-spinner fa-spin"></i>
-    <div>{{t "loading"}}...</div>
-  </div>
-</div>
+<AkStack @justifyContent='center' @alignItems='center' @direction='column' @spacing='1' local-class='loading-container'>
+    <AkLoader />
+    <div>{{t 'loading'}}...</div>
+</AkStack>

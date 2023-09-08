@@ -12,6 +12,6 @@ if me.org.is_admin
 
   td
     button.is-primary.is-icon.no-border.no-hover-button title="{{t 'removeCollaborator'}}" click={(perform openRemoveCollaboratorConfirm)}
-      i.fa.fa-times
+      ak-icon iconName="close"
 
 = confirm-box isActive=showRemoveCollaboratorConfirm title=(t "confirmBox.removeProjectCollaborator") delegate=this confirmAction=(action "removeCollaboratorProxy") disabled=isRemovingCollaborator

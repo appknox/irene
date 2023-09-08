@@ -14,13 +14,13 @@
         .column.content-right.file-buttons
           if file.project.hasMultipleFiles
             = link-to 'authenticated.project.files' file.project.id local-class="link-btn" class="mp-detail-all-scans is-primary" tagName="button"
-              = fa-icon "navicon"
+              = ak-icon iconName="menu" size="small"
               | &nbsp; #{t "allUploads"}
             = link-to 'authenticated.choose' file.id local-class="link-btn" class="mp-detail-file-compare is-primary" tagName="button"
-              = fa-icon "exchange"
+              = ak-icon iconName="sync-alt" size="small"
               | &nbsp; #{t "compare"}
           = link-to 'authenticated.project.settings' file.project.id local-class="link-btn" class="mp-detail-project-settings is-primary" tagName="button"
-            = fa-icon "cog"
+            = ak-icon iconName="settings" size="small"
             | &nbsp; #{t "settings"}
       .columns
         .column.padding-b-0
@@ -29,13 +29,13 @@
               .filetag-form.vertical-align-center.margin-r-h
                 = input type="text" placeholder="add tag" class="form-control input filetag-input filetag-item" value=newTag autofocus="autofocus"
                 button.filetag-btn.btn-success.filetag-item.vertical-align-center.margin-l-q.margin-r-q disabled=invalidNewTag click={(perform addTag newTag)}
-                  = fa-icon "check"
+                  = ak-icon iconName="done"
                   | #{newTagNotEntered}
                 button.filetag-btn.btn-default.filetag-item.vertical-align-center click="hideAddTagForm"
-                  = fa-icon "times"
+                  = ak-icon iconName="close"
             if showAddTagBtn
               button.filetag-btn.filetag-btn-default.filetag-item.vertical-align-center.margin-r-h click="displayAddTagForm"
-                = fa-icon "plus"
+                = ak-icon iconName="add"
                 = attach-tooltip placement="top"
                   = t "addTags"
             if file.tags
@@ -74,7 +74,7 @@
             = file-details/scan-actions/manual-scan file=file
     if (not file.isActive)
       span local-class="file-in-active"
-        = fa-icon "exclamation-circle"
+        = ak-icon iconName="error"
         = attach-tooltip placement="top"
           = t "fileInactive"
 
@@ -93,7 +93,7 @@
     .column.content-right
       if organization.selected.isTrial
         button.is-primary.margin-top-5 click={(perform openRequestAccessModal)}
-          = fa-icon "download"
+          = ak-icon iconName="download"
           | &nbsp; #{ t "pdfReport"}
       else
         = file/report-btn file=file

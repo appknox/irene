@@ -60,10 +60,15 @@
 
 {{#if this.compareText}}
   <div class='columns'>
-    <div class='column compare-text'>
-      {{fa-icon 'exclamation-triangle'}}
+    <AkStack
+      @direction='row'
+      @justifyContent='center'
+      @alignItems='center'
+      class='column compare-text'
+    >
+      <AkIcon @iconName='report-problem' />
       {{this.compareText}}
-    </div>
+    </AkStack>
   </div>
 {{/if}}
 
@@ -86,7 +91,7 @@
           <div>File ID {{@file1.id}}</div>
           <div>{{t 'version'}} &nbsp; {{@file1.version}}</div>
           <span class='arrow-left'>
-            {{fa-icon 'long-arrow-left'}}
+            <AkIcon @iconName='keyboard-backspace' />
           </span>
         </td>
         <td>

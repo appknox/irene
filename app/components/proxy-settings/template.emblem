@@ -5,11 +5,7 @@
         = input class="form-control input" value=changeset.host placeholder="Host" autofocus="autofocus"
       .margin-r-1
         = input class="form-control input" type="number" value=changeset.port placeholder="Port"
-      button.button.is-default type="submit" disabled=saveProxy.isRunning
-        if saveProxy.isRunning
-          span.fa-font-size
-            i.fa class="fa-spinner fa-spin"
-        else
+      ak-button class='button is-default' type="submit" disabled=saveProxy.isRunning loading=saveProxy.isRunning
           = t "save"
     if hasProxyValues
       .margin-t-1h.vertical-align-center

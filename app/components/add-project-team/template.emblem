@@ -1,13 +1,13 @@
 button.is-primary click={(perform openAddTeamModal)}
-  i.fa.fa-users.margin-r-h
-  = t "addTeam"
+  = ak-icon iconName="groups" class="margin-r-h" 
+  | &nbsp; #{t "addTeam"}
 
 = modal-card class="input-modal user-search-modal" isActive=showAddProjectTeamModal title=(t 'modalCard.addTeam.title')
   .card-body
     .card-wrapper
       form
         .control.vertical-align-center.margin-b-1
-          = fa-icon "search"
+          = ak-icon iconName="search"
           = input class="form-control input input-width margin-left" placeholder="Search team" type="text" value=query autofocus="autofocus" key-up="searchQuery"
 
       if hasObjects
@@ -22,10 +22,10 @@ button.is-primary click={(perform openAddTeamModal)}
                        = team.name
                   td.team-project-action
                     button.is-default.is-icon.no-border click={(perform addProjectTeam project team)} disabled=isAddingTeam
-                      = fa-icon "plus"
+                      = ak-icon iconName="add"
           .margin-t-q
             = partial "paginate"
       else
         div.empty-state
-          = fa-icon "exclamation-triangle"
+          = ak-icon iconName="report-problem"
           = t "noProject"

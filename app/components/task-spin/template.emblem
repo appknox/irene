@@ -1,4 +1,4 @@
 if task.isRunning
     span.fa-font-size
-        i.fa class="fa-spinner fa-spin"
+        ak-loader size=13
         | &nbsp;

@@ -1,7 +1,7 @@
 <div local-class='container' data-test-container ...attributes>
   {{#if @label}}
     <div
-      local-class='check {{if @isOverridden 'overridden' 'inherited'}}'
+      local-class='check {{if @isOverridden "overridden" "inherited"}}'
       data-test-check
     >
       <label local-class='label'>
@@ -18,7 +18,7 @@
 
       {{#if @isToggleRunning}}
         <span local-class='progress-spinner' data-test-progress-spinner>
-          {{fa-icon 'spinner fa-spin font-small'}}
+          <AkLoader @size={{13}} />
         </span>
       {{/if}}
 
@@ -29,7 +29,11 @@
           onclick={{@onOverrideReset}}
           data-test-reset
         >
-          {{fa-icon 'times' local-class='remove-button-icon'}}
+          <AkIcon
+            @iconName='close'
+            @size='small'
+            local-class='remove-button-icon'
+          />
           <AttachTooltip @placement='top' data-test-reset-tooltip>
             {{t 'resetToDefault'}}
           </AttachTooltip>

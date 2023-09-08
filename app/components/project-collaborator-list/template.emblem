@@ -17,5 +17,5 @@ div class="margin-b-2"
     else
       div
         .empty-state
-          = fa-icon "exclamation-triangle"
+          = ak-icon iconName="report-problem" size="small"
           = t "noCollaborators"

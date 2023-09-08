@@ -7,9 +7,7 @@
             = file-overview file=file fileOld=fileOld profileId=file.profile.id redirectTo="authenticated.compare"
     else
       .loading-container
-        i.fa class="fa-spinner fa-spin"
-        div
-          | #{t "loading"}...
+        =loading-spinner
 
   if hasObjects
     = partial "paginate"
