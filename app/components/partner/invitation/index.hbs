@@ -1,6 +1,6 @@
 {{! template-lint-disable no-curly-component-invocation }}
 <div
-  local-class='invitation {{if @request.hasExpired 'invitation-expired'}}'
+  local-class='invitation {{if @request.hasExpired "invitation-expired"}}'
   ...attributes
 >
   <div local-class='user'>
@@ -40,7 +40,7 @@
       title='Resend invite mail'
       {{on 'click' (fn @onResend @request)}}
     >
-      {{fa-icon 'repeat'}}
+      <AkIcon @iconName='refresh' />
       <AttachTooltip @placemnet='top'>{{t 'resend'}}</AttachTooltip>
     </button>
     <button
@@ -50,7 +50,7 @@
       title='Delete invitation'
       {{on 'click' (fn @onDelete @request)}}
     >
-      {{fa-icon 'trash'}}
+      <AkIcon @iconName='delete' />
       <AttachTooltip @placemnet='top'>{{t 'delete'}}</AttachTooltip>
     </button>
   </div>

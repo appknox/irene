@@ -2,12 +2,12 @@
 {{#if this.partner.access.view_plans}}
   <div ...attributes {{did-insert (perform this.getClientPlan)}}>
     {{#if this.getClientPlan.isRunning}}
-      {{fa-icon 'circle-o-notch fa-spin text-lightgray'}}
+      <AkLoader @size={{13}} />
     {{else if this.clientPlan}}
       <div local-class='plan' data-test-client-plan>
         <div
           local-class='plan-type
-            {{if this.clientPlan.limitedScans 'per-scan' 'per-app'}}'
+            {{if this.clientPlan.limitedScans "per-scan" "per-app"}}'
           data-test-plan-type
         >
           <span>{{t
@@ -28,7 +28,7 @@
             </strong>
             <span
               local-class='expiry-date
-                {{if this.clientPlan.isPaymentExpired 'expiry-date-expired'}}'
+                {{if this.clientPlan.isPaymentExpired "expiry-date-expired"}}'
               data-test-plan-expiry
             >
               {{t

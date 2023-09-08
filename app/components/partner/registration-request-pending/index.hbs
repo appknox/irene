@@ -28,7 +28,7 @@
       title='Send invitation'
       data-test-pending-request-approve-button
       {{on 'click' (fn @onApprove @request)}}
-    >{{fa-icon 'check'}}&nbsp; Invite</button>
+    ><AkIcon @iconName='done'/>&nbsp; Invite</button>
     <button
       type='button'
       class='button is-primary margin-l-h'
@@ -36,6 +36,6 @@
       title='Reject request'
       data-test-pending-request-reject-button
       {{on 'click' (fn @onReject @request)}}
-    >{{fa-icon 'remove'}}&nbsp; Reject</button>
+    ><AkIcon @iconName='close'/>&nbsp; Reject</button>
   </div>
 </div>

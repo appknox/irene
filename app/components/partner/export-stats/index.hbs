@@ -15,7 +15,13 @@
         as |selectedDates|
       >
         <div local-class='date-range' data-test-date-range>
-          {{fa-icon 'calendar' class='font-small' title='Select date range'}}
+          <AkIcon
+            data-test-date-range-icon
+            @iconName='calendar-month'
+            @size='small'
+            class='font-small'
+            title='Select date range'
+          />
           <span data-test-date-range-selected>
             <span local-class='date' data-test-from-date>
               {{#if selectedDates.firstObject}}
@@ -39,18 +45,14 @@
         </div>
       </DatePicker>
     </div>
-    <button
-      type='button'
+    <AkButton
       class='is-primary button margin-left highlighted-button'
       {{on 'click' this.downloadCSV}}
-      disabled={{this.fetchDownloadUrl.isRunning}}
+      @loading={{this.fetchDownloadUrl.isRunning}}
+      @disabled={{this.fetchDownloadUrl.isRunning}}
       data-test-export-btn
     >
-      {{#if this.fetchDownloadUrl.isRunning}}
-        {{fa-icon 'spinner fa-spin'}}
-        &nbsp;
-      {{/if}}
       {{t 'exportCSV'}}
-    </button>
+    </AkButton>
   </div>
 </div>

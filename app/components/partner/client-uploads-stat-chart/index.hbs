@@ -67,7 +67,7 @@
       ></div>
       {{#if this.loadChart.isRunning}}
         <div local-class='loading-spinner'>
-          {{fa-icon 'spinner fa-spin'}}
+          <AkLoader @size={{16}} />
         </div>
       {{/if}}
     </div>

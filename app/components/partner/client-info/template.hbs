@@ -2,7 +2,7 @@
 <div local-class='client-info-card {{@client.type}}'>
   <div local-class='client-info-header'>
     <span local-class='thumbnail' data-test-thumbnail>
-      {{fa-icon 'users' local-class='thumbnail-icon'}}
+      <AkIcon @iconName='groups' local-class='thumbnail-icon' />
     </span>
     <div
       local-class='title {{if this.isEmptyTitle 'empty-title'}}'
@@ -84,7 +84,7 @@
             @route='authenticated.partner.client'
             @model={{@client.id}}
             class='button is-primary'
-          >{{fa-icon 'arrow-right'}}</LinkTo>
+          ><AkIcon @iconName='arrow-forward' /></LinkTo>
         </div>
       {{/if}}
     </div>

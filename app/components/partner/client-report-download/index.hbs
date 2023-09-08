@@ -35,7 +35,7 @@
               <span
                 class='vertical-align-center'
                 data-test-download-button-download-label
-              >{{fa-icon 'download'}}&nbsp; {{t 'download'}}</span>
+              ><AkIcon @iconName='download' />&nbsp; {{t 'download'}}</span>
             {{/if}}
           </button>
           <AttachTooltip @placement='top' @arrow={{true}} @animation='shift'>
@@ -69,7 +69,7 @@
             {{on 'click' this.onGenerate}}
             data-test-generate-report-button
           >
-            {{fa-icon 'repeat'}}
+            <AkIcon @iconName='refresh' />
           </button>
           <AttachTooltip @placement='top' @arrow={{true}} @animation='shift'>
             {{#if this.isGenerating}}
