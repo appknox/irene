@@ -5,7 +5,7 @@
     {{did-insert this.initalize}}
   >
     {{#if this.fetchPartnerPlan.isRunning}}
-      {{fa-icon 'circle-o-notch fa-spin text-lightgray'}}
+      <AkLoader @size={{13}} />
     {{else if this.partnerPlan}}
       {{#if this.partner.access.transfer_credits}}
         {{#if
@@ -13,7 +13,7 @@
         }}
           {{! NOTE 0 credits left warning }}
           <div data-test-warning-zero-scan-credits>
-            <div class='margin-r-1'>{{fa-icon 'exclamation-circle'}}</div>
+            <div class='margin-r-1'><AkIcon @iconName='error' /></div>
             <AttachTooltip @placement='top-end'>
               No credits left to transfer to the clients. Please upgrade your
               plan
@@ -22,7 +22,7 @@
         {{else if (not this.partnerPlan.limitedScans)}}
           {{! NOTE credit transfer unavailable warning }}
           <div data-test-warning-credit-transfer-unavailable>
-            <div class='margin-r-1'>{{fa-icon 'exclamation-circle'}}</div>
+            <div class='margin-r-1'><AkIcon @iconName='error' /></div>
             <AttachTooltip @placement='top-end'>
               Credit transfer option is unavailable in your plan. Please contact
               support for transferring credits to clients
@@ -39,8 +39,8 @@
           <div
             local-class='plan-type {{if
               this.partnerPlan.limitedScans
-              'per-scan'
-              'per-app'
+              "per-scan"
+              "per-app"
             }}'
             data-test-plan-type
           >

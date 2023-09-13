@@ -18,7 +18,7 @@
         type='button'
         {{on 'click' this.toggleModal}}
       >
-        {{fa-icon 'plus'}}
+        <AkIcon @iconName='add' />
         &nbsp;
         {{t 'transferCredits'}}
         {{#if this.buttonTooltip}}

@@ -22,7 +22,7 @@
       title='Move back to pending'
       {{on 'click' (fn @onUndoReject @request)}}
     >
-      {{fa-icon 'undo'}}
+      <AkIcon @iconName='undo' />
       <AttachTooltip @placemnet='top'>{{t 'undo'}}
         {{t 'reject'}}</AttachTooltip>
     </button>

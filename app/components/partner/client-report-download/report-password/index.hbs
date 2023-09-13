@@ -6,7 +6,7 @@
       local-class='dropdown-toggle'
       data-test-dropdown-toggle
     >
-      {{fa-icon 'key'}}
+      <AkIcon @iconName='key' />
     </button>
     <AttachTooltip @placement='top-end' @arrow={{true}} @animation='shift'>
       <span data-test-dropdown-tooltip-text>{{t 'reportPassword'}}</span>
@@ -30,7 +30,7 @@
         <div class='dropdown-content' data-test-report-password>
           {{#if this.getUnlockKey.isRunning}}
             <div local-class='password-loading' data-test-loading>
-              {{fa-icon 'circle-o-notch fa-spin text-lightgray'}}
+              <AkLoader @size={{13}} />
               {{t 'loading'}}
             </div>
           {{else if this.unlockKey}}
@@ -53,11 +53,11 @@
                 data-clipboard-action='copy'
                 {{on 'click' this.onCopyPassword}}
                 data-test-report-password-copy-button
-              >{{fa-icon 'clone'}}&nbsp; {{t 'copy'}}</button>
+              ><AkIcon @iconName='content-copy' />&nbsp; {{t 'copy'}}</button>
             </div>
           {{else if this.apiError}}
             <div local-class='password-loading-error' data-test-api-error>
-              <div>{{fa-icon 'warning'}}</div>
+              <AkIcon @iconName='warning' />
               <div>{{t 'somethingWentWrong'}}</div>
             </div>
           {{/if}}

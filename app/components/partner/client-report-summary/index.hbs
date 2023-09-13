@@ -5,7 +5,7 @@
     ...attributes
   >
     {{#if this.getFileSummary.isRunning}}
-      {{fa-icon 'circle-o-notch fa-spin text-lightgray'}}
+      <AkLoader @size={{13}} />
     {{else if this.fileSummary}}
       <div local-class='summary' data-test-risk-summary>
         <div local-class='riskbar' data-test-risk-summary-bar>

@@ -3,10 +3,10 @@
     {{@partnerPlan.scansLeft}}
     {{t 'pluralScans' itemCount=@partnerPlan.scansLeft}}
   </div>
-  {{fa-icon 'long-arrow-down' local-class='arrow-right-icon'}}
+  <AkIcon @iconName='south' local-class='tranfer-btn' />
   <div local-class='client'>
     <div
-      local-class='title {{unless @clientName 'empty-title'}}'
+      local-class='title {{unless @clientName "empty-title"}}'
       data-test-client-title
     >
       {{#if @clientName}}

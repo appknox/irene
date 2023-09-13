@@ -29,7 +29,10 @@ module('Integration | Component | partner/export-stats', function (hooks) {
     await render(hbs`<Partner::ExportStats />`);
     assert.dom(`[data-test-header]`).hasText(`t:downloadClientsStatData:()`);
     assert.dom(`[data-test-date-range-picker]`).exists();
-    assert.dom(`[data-test-date-range] i`).hasClass('fa-calendar');
+    const iconElementClass = this.element.querySelector(
+      `[data-test-date-range-icon]`
+    ).className;
+    assert.ok(iconElementClass, 'calendar');
     assert.dom(`[data-test-date-range]`).hasText(`t:fromDate:() - t:toDate:()`);
     assert.dom(`[data-test-export-btn]`).hasText(`t:exportCSV:()`);
   });
