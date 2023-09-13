@@ -71,6 +71,14 @@ export default Factory.extend({
     },
   }),
 
+  withMasvs: trait({
+    afterCreate(model, server) {
+      model.update({
+        masvs: server.createList('masvs', 2).map((it) => it.id),
+      });
+    },
+  }),
+
   withMstg: trait({
     afterCreate(model, server) {
       model.update({
@@ -109,6 +117,7 @@ export default Factory.extend({
         owasp: server.createList('owasp', 2).map((it) => it.id),
         cwe: server.createList('cwe', 2).map((it) => it.id),
         asvs: server.createList('asvs', 2).map((it) => it.id),
+        masvs: server.createList('masvs', 2).map((it) => it.id),
         mstg: server.createList('mstg', 2).map((it) => it.id),
         pcidss: server.createList('pcidss', 2).map((it) => it.id),
         hipaa: server.createList('hipaa', 2).map((it) => it.id),

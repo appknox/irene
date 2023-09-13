@@ -75,6 +75,10 @@ export default class EditAnalysisDetailsComponent extends Component {
     return this.store.findAll('mstg');
   }
 
+  get masvses() {
+    return this.store.findAll('masvs');
+  }
+
   get asvses() {
     return this.store.findAll('asvs');
   }
@@ -305,6 +309,10 @@ export default class EditAnalysisDetailsComponent extends Component {
     this.analysisDetails.mstg = param;
   }
 
+  @action selectMasvsCategory(param) {
+    this.analysisDetails.masvs = param;
+  }
+
   @action selectAsvsCategory(param) {
     this.analysisDetails.asvs = param;
   }
@@ -441,6 +449,7 @@ export default class EditAnalysisDetailsComponent extends Component {
     const owasp = this.analysisDetails.owasp;
     const pcidss = this.analysisDetails.pcidss;
     const hipaa = this.analysisDetails.hipaa;
+    const masvs = this.analysisDetails.masvs;
     const mstg = this.analysisDetails.mstg;
     const asvs = this.analysisDetails.asvs;
     const cwe = this.analysisDetails.cwe;
@@ -475,6 +484,7 @@ export default class EditAnalysisDetailsComponent extends Component {
       pcidss: pcidss.map((a) => a.id),
       hipaa: hipaa.map((a) => a.id),
       mstg: mstg.map((a) => a.id),
+      masvs: masvs.map((a) => a.id),
       asvs: asvs.map((a) => a.id),
       cwe: cwe.map((a) => a.id),
       gdpr: gdpr.map((a) => a.id),
