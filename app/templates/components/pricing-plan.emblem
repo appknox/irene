@@ -6,7 +6,8 @@
       = item
   .columns.choose-units
     .column
-      i.fa.fa-minus click="decrementPlanQuantity"
+      button.minus-icon click="decrementPlanQuantity" 
+        = ak-icon iconName="remove" 
     .column
       .columns
         .column
@@ -15,7 +16,8 @@
         .column.plan-text.uppercase-text
           = planText
     .column
-      i.fa.fa-plus click="incrementPlanQuantity"
+      button.plus-icon click="incrementPlanQuantity" 
+        = ak-icon iconName="add" 
   .flex-center
-    button.is-primary click="initiatePayment"
+    button.pay click="initiatePayment"
       = updatedPrice
