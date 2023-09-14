@@ -9,9 +9,11 @@ if isNotRevoked
         | #{personaltoken.key}
     td
       .align-middle
-        i.fa.fa-clipboard.remove.copy-token data-clipboard-target="#copy-#{personaltoken.id}"
+        .copy-token data-clipboard-target="#copy-#{personaltoken.id}"
+          ak-icon iconName="content-paste" color="info" size="small"
     td
       .align-middle
-        i.fa.fa-trash-o.remove click="openRevokePersonalTokenConfirmBox"
+        .remove click="openRevokePersonalTokenConfirmBox"
+          ak-icon iconName="delete" color="error" size="small"
 
 = confirm-box isActive=showRevokePersonalTokenConfirmBox title=(t 'confirmBox.revokePersonalToken') delegate=this disabled=isDeletingToken
