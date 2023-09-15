@@ -1,0 +1,36 @@
+.ak-skeleton-root,
+.ak-skeleton-variant-rectangular {
+  display: block;
+  background: linear-gradient(
+    306deg,
+    var(--ak-skeleton-linear-gradient-color-1) 19.42%,
+    var(--ak-skeleton-linear-gradient-color-2) 81.49%
+  );
+  animation: pulseKeyframe 3s ease-in-out 0.5s infinite normal none running;
+}
+
+.ak-skeleton-variant-circular {
+  border-radius: 50%;
+}
+
+.ak-skeleton-variant-rounded {
+  border-radius: 4px;
+}
+
+@keyframes pulseKeyframe {
+  0% {
+    opacity: 1;
+  }
+
+  33% {
+    opacity: 0.45;
+  }
+
+  66% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
