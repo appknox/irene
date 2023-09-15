@@ -1,0 +1,10 @@
+{{#let (element this.tag) as |Tag|}}
+  <Tag
+    data-test-ak-skeleton
+    ...attributes
+    {{style width=this.width height=this.height}}
+    local-class='
+      ak-skeleton-root
+      ak-skeleton-variant-{{this.variant}}'
+  />
+{{/let}}
