@@ -257,6 +257,10 @@ body {
   --ak-accordion-summary-secondary-border-color: var(--border-color-1);
   --ak-accordion-summary-primary-background: var(--primary-main-10);
   --ak-accordion-summary-primary-border-color: var(--primary-main-10);
+
+  // variables for ak-skeleton
+  --ak-skeleton-linear-gradient-color-1: var(--neutral-grey-100);
+  --ak-skeleton-linear-gradient-color-2: var(--neutral-grey-200);
 }
 
 body {
