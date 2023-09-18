@@ -30,6 +30,7 @@
     <AkIconButton
       data-test-login-check-button
       class='button is-primary highlighted-button margin-l-h'
+      @type='submit'
       {{on 'click' @check}}
     >
       {{#if @showSpinner}}
