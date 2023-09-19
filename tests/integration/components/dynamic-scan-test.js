@@ -427,6 +427,10 @@ module(
 
         if (this.file.canRunAutomatedDynamicscan) {
           assert
+            .dom('[data-test-dynamicScanModal-device-settings-warning]')
+            .doesNotExist();
+
+          assert
             .dom('[data-test-dynamicScanModal-automatedDynamicScanContainer]')
             .exists();
 
@@ -451,6 +455,12 @@ module(
             .isNotDisabled()
             .hasText('t:scheduleDynamicscan:()');
         } else {
+          assert
+            .dom('[data-test-dynamicScanModal-device-settings-warning]')
+            .hasText(
+              't:note:(): t:modalCard.dynamicScan.deviceSettingsWarning:()'
+            );
+
           assert
             .dom('[data-test-dynamicScanModal-automatedDynamicScanContainer]')
             .doesNotExist();
