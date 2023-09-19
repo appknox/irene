@@ -72,6 +72,19 @@
         />
       </div>
 
+      {{#unless @file.showScheduleAutomatedDynamicScan}}
+        <AkTypography
+          data-test-dynamicScanModal-device-settings-warning
+          local-class='device-settings-warning'
+          class='mt-2'
+          @variant='body2'
+          @color='textSecondary'
+        >
+          <strong>{{t 'note'}}:</strong>
+          {{t 'modalCard.dynamicScan.deviceSettingsWarning'}}
+        </AkTypography>
+      {{/unless}}
+
       <div class='mt-4'>
         <ProxySettingsView
           @profile={{@file.profile}}

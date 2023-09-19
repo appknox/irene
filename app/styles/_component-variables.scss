@@ -706,7 +706,10 @@ body {
   --dynamic-scan-modal-alert-background-color: var(--warn-light);
   --dynamic-scan-modal-alert-text-color: var(--warn-dark);
   --dynamic-scan-modal-alert-border-color: var(--warn-dark);
+  --dynamic-scan-modal-device-settings-warning-text-color: var(
+    --neutral-grey-500
+  );
 
   // variables for login-component
-  --login-component-button-loader-color: var(--primary-contrast-text)
+  --login-component-button-loader-color: var(--primary-contrast-text);
 }
