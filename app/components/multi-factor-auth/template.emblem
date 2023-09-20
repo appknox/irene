@@ -17,7 +17,7 @@
                       | #{mfa.display}
                       if mfa.enabled
                         | &nbsp;&nbsp;
-                        = fa-icon "check"
+                        = ak-icon iconName="done"
                     if mfa.isApp
                       .text-lightgray.margin-t-h
                         = t "mfaAppDesc"
@@ -44,7 +44,7 @@
         unless user.canDisableMfa
           .alert.alert-danger.alert-small.margin-t-2
             .vertical-align-center
-              = fa-icon "shield"
+              = ak-icon iconName="security"
               .margin-l-1
                 = t "disableMFADenied"
                 if me.org.is_owner
@@ -64,7 +64,7 @@
           button.is-primary.highlighted-button click={(perform continueDisableMFA)} disabled=sendDisableMFAOTPEmail.isRunning
             if sendDisableMFAOTPEmail.isRunning
               .fa-font-size
-                i.fa class="fa-spinner fa-spin"
+                ak-loader size=13
               | &nbsp;
             = t "continue"
           button.is-primary.margin-left click={(perform cancelMFADisable)}
@@ -72,7 +72,7 @@
       else
         .alert.alert-success.alert-small
           .vertical-align-center
-            = fa-icon "shield"
+            = ak-icon iconName="security"
             .margin-l-1
               = t "disableMFADenied"
 
@@ -91,7 +91,7 @@
           button.is-primary.highlighted-button click={(perform confirmDisableOTP)} disabled=isDisablingMFA
             if isDisablingMFA
               .fa-font-size
-                i.fa class="fa-spinner fa-spin"
+                ak-loader size=13
               | &nbsp;
             = t "confirm"
           button.is-primary.margin-left click={(perform cancelMFADisable)}
@@ -108,7 +108,7 @@
         button.is-primary.highlighted-button click={(perform sendEmailMFA)} disabled=getMFAEnableEmailToken.isRunning
           if getMFAEnableEmailToken.isRunning
             .fa-font-size
-              i.fa class="fa-spinner fa-spin"
+              ak-loader size=13
             | &nbsp;
           = t "continue"
         button.is-primary.margin-left click={(perform cancelEmailEnable)}
@@ -128,7 +128,7 @@
           button.is-primary.highlighted-button click={(perform confirmEmailOTP)} disabled=verifyEmailOTP.isRunning
             if verifyEmailOTP.isRunning
               .fa-font-size
-                i.fa class="fa-spinner fa-spin"
+                ak-loader size=13
               | &nbsp;
             = t "confirm"
 
@@ -145,7 +145,7 @@
         button.is-primary.highlighted-button click={(perform staOnConfirm)} disabled=staInitialEmail.isRunning
           if staInitialEmail.isRunning
             .fa-font-size
-              i.fa class="fa-spinner fa-spin"
+              ak-loader size=13
             | &nbsp;
           = t "continue"
         button.is-primary.margin-left click={(perform staCancel)}
@@ -166,7 +166,7 @@
           button.is-primary.highlighted-button click={(perform staOnConfirmEmailOTP)} disabled=staVerifyEmailOTP.isRunning
             if staVerifyEmailOTP.isRunning
               .fa-font-size
-                i.fa class="fa-spinner fa-spin"
+                ak-loader size=13
               | &nbsp;
             = t "confirm"
 
@@ -182,7 +182,7 @@
         button.is-primary.highlighted-button click={(perform onConfirmSwitchToEmail)} disabled=onConfirmSwitchToEmail.isRunning
           if onConfirmSwitchToEmail.isRunning
             .fa-font-size
-              i.fa class="fa-spinner fa-spin"
+              ak-loader size=13
             | &nbsp;
           = t "continue"
         button.is-primary.margin-left click={(perform cancelSwitchToEmail)}
@@ -199,7 +199,7 @@
           button.is-primary.highlighted-button click={(perform onConfirmSwitchToEmailAppOTP)} disabled=verifySwitchToEmailAppOTP.isRunning
             if verifySwitchToEmailAppOTP.isRunning
               .fa-font-size
-                i.fa class="fa-spinner fa-spin"
+                ak-loader size=13
               | &nbsp;
             = t "confirm"
           button.is-primary.margin-left click={(perform cancelSwitchToEmail)}
@@ -220,6 +220,6 @@
           button.is-primary.highlighted-button click={(perform onConfirmSwitchToEmailEmailOTP)} disabled=verifyEmailOTP.isRunning
             if verifyEmailOTP.isRunning
               .fa-font-size
-                i.fa class="fa-spinner fa-spin"
+                ak-loader size=13
               | &nbsp;
             = t "confirm"

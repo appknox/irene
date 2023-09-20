@@ -17,7 +17,7 @@
       data-test-delete-project-trigger
       {{on 'click' this.openDeleteJIRAConfirmBox}}
     >
-      <i class='fa risk-icons fa-trash-o'></i>
+      <AkIcon @iconName="delete" class='risk-icons' @variant='outlined' />
     </div>
     <div
       class='tag edit-tag remove'
@@ -25,19 +25,19 @@
       data-test-edit-project-trigger
       {{on 'click' this.editJiraRepoModal}}
     >
-      <i class='fa risk-icons fa-pencil'></i>
+      <AkIcon @iconName='edit' />
     </div>
   </h6>
 {{else}}
   <div class='padding-v-h'>
     {{#if this.fetchJIRAProjects.isRunning}}
       <div class='fa-font-size'>
-        <i class='fa fa-spinner fa-spin'></i>
+        <AkLoader />
         &nbsp;
       </div>
     {{/if}}{{#if this.fetchJIRAProjects.isIdle}}
       {{#if this.noAccess}}
-        <i class='fa fa-warning margin-r-h'></i>
+        <AkIcon @iconName='warning' class='margin-r-h' />
         <span>
           {{t 'adminPermissionProject'}}
         </span>
@@ -175,7 +175,7 @@
             >
               {{#if this.selectProject.isRunning}}
                 <div class='fa-font-size'>
-                  <i class='fa fa-spinner fa-spin'></i>
+                  <AkLoader />
                   &nbsp;
                 </div>
               {{/if}}

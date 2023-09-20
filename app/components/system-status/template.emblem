@@ -24,7 +24,7 @@
                 td
                   if getStorageStatus.isRunning
                     span class="has-text-grey-lighter" local-class="loading-indicator"
-                      i class="fa fa-spin fa-spinner"
+                      ak-loader size=14
                       t"checking"
                   else
                     ul
@@ -42,7 +42,7 @@
                 td
                   if getDeviceFarmStatus.isRunning
                     span class="has-text-grey-lighter" local-class="loading-indicator"
-                      i class="fa fa-spin fa-spinner"
+                      ak-loader
                       t"checking"
                   else
                     ul
@@ -60,7 +60,7 @@
                 td
                   if getAPIHostStatus.isRunning
                     span class="has-text-grey-lighter" local-class="loading-indicator"
-                      i class="fa fa-spin fa-spinner"
+                      ak-loader
                       t"checking"
                   else
                     ul

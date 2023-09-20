@@ -11,9 +11,8 @@ td
 td
   button.is-primary click="getInvoiceLink" disabled=isDownloadingInvoice
     if isDownloadingInvoice
-      .fa-font-size
-        i.fa class="fa-spinner fa-spin"
+        ak-loader size=14
         | &nbsp;
     else
-      = fa-icon "download" class="font-size-14"
+      = ak-icon iconName="download" class="font-size-14"
     | &nbsp; #{ t "download"}

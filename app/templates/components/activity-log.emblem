@@ -16,5 +16,5 @@
               | Scan Completed for MVFA
   else
     .not-found
-      = fa-icon "exclamation-triangle"
+      = ak-icon iconName="report-problem"
       | No activity found

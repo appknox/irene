@@ -10,6 +10,6 @@
           button.is-primary click="downloadApp" disabled=isDownloadingApp
             if isDownloadingApp
               .fa-font-size
-                i.fa class="fa-spinner fa-spin"
+                ak-loader size=13
               | &nbsp;
             | Download App

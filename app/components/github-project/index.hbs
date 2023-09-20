@@ -23,14 +23,14 @@
         class='tag delete-tag remove'
         {{on 'click' this.openDeleteGHConfirmBox}}
       >
-        <i class='fa risk-icons fa-trash-o'></i>
+        <AkIcon @iconName="delete" class='risk-icons' @variant='outlined' />
       </div>
       <div
         role='button'
         class='tag edit-tag remove'
         {{on 'click' this.editGithubRepoModal}}
       >
-        <i class='fa risk-icons fa-pencil'></i>
+        <AkIcon @iconName='edit' />
       </div>
     </h6>
   {{else}}
@@ -39,7 +39,7 @@
         (or this.fetchGithubRepos.isRunning this.setCurrentGithubRepo.isRunning)
       }}
         <div class='fa-font-size'>
-          <i class='fa fa-spinner fa-spin'></i>
+          <AkLoader />
           &nbsp;
         </div>
       {{else}}
@@ -168,9 +168,7 @@
                 disabled={{this.selectProject.isRunning}}
               >
                 {{#if this.selectProject.isRunning}}
-                  <div class='fa-font-size'>
-                    <i class='fa fa-spinner fa-spin'>&nbsp;</i>
-                  </div>
+                  <AkLoader size={{13}} />
                 {{/if}}
                 {{t 'save'}}
               </button>

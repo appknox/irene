@@ -27,7 +27,7 @@
           button.button.is-primary.login-button.mp-reset-password.highlighted-button click={(perform reset)} disabled=reset.IsRunning
             if reset.IsRunning
               .fa-font-size
-                i.fa class="fa-spinner fa-spin"
+                ak-loader
               | &nbsp;
             = t "reset"
         p.control.flex-center

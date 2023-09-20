@@ -9,8 +9,7 @@ form.margin-top
   .align-end
     button.is-primary.highlighted-button click={action "continue"} disabled=waiting
       if waiting
-        .fa-font-size
-          i.fa class="fa-spinner fa-spin"
+        ak-loader size=13
         | &nbsp;
       = t "continue"
     button.is-primary.margin-left click={action "cancel"}
