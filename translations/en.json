@@ -480,6 +480,8 @@
   "marketplace": "Marketplace",
   "marketplaceIntegrationDesc": "Connect your development workflow tools to get notified with the vulnerability updates",
   "marketplacePluginDesc": "Plug in your CI/CD pipeline to test for security issues on each build",
+  "masvs": "OWASP MASVS (v2)",
+  "masvsExpansion": "OWASP Mobile Application Security Verification Standard",
   "medium": "Medium",
   "member": "member",
   "memberCount": "Members count",

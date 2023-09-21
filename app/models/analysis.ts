@@ -20,6 +20,7 @@ import HipaaModel from './hipaa';
 import MstgModel from './mstg';
 import OwaspModel from './owasp';
 import PcidssModel from './pcidss';
+import MasvsModel from './masvs';
 import VulnerabilityModel from './vulnerability';
 
 const inflector = Inflector.inflector;
@@ -82,6 +83,9 @@ export default class AnalysisModel extends Model {
 
   @hasMany('asvs')
   declare asvs: AsyncHasMany<AsvsModel>;
+
+  @hasMany('masvs')
+  declare masvs: AsyncHasMany<MasvsModel>;
 
   @hasMany('mstg')
   declare mstg: AsyncHasMany<MstgModel>;

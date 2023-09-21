@@ -312,6 +312,28 @@
       <div class='columns'>
         <div class='column is-one-third'>
           <h5 class='bold-font'>
+            OWASP MASVS (v2) Requirements
+          </h5>
+        </div>
+      </div>
+      <div class='columns border-bottom-container'>
+        <div class='column margin-bottom20'>
+          <PowerSelectMultiple
+            @placeholder='Select OWASP MASVS (v2) Requirements'
+            @selected={{this.analysisDetails.masvs}}
+            @options={{this.masvses}}
+            @onChange={{this.selectMasvsCategory}}
+            as |key|
+          >
+            {{key.code}}
+            -
+            {{key.title}}
+          </PowerSelectMultiple>
+        </div>
+      </div>
+      <div class='columns'>
+        <div class='column is-one-third'>
+          <h5 class='bold-font'>
             MSTG Requirements
           </h5>
         </div>
