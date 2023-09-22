@@ -1,0 +1,25 @@
+<AkStack
+  ...attributes
+  @direction='column'
+  @alignItems='center'
+  local-class='empty-container'
+  data-test-fileCompare-emptyContainer
+>
+
+  <AkSvg::NoVulnerability
+    local-class='empty-state-vector'
+    data-test-fileCompare-emptyIllustration
+  />
+
+  <AkTypography
+    @variant='h5'
+    @gutterBottom={{true}}
+    data-test-fileCompare-emptyHeaderText
+  >
+    {{@header}}
+  </AkTypography>
+
+  <AkTypography local-class='body-text' data-test-fileCompare-emptyBodyText>
+    {{@body}}
+  </AkTypography>
+</AkStack>

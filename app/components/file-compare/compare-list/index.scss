@@ -1,0 +1,17 @@
+.file-compare-list-root {
+  background-color: var(--file-compare-compare-list-wrapper-background-color);
+  min-height: calc(100vh - 70px);
+
+  .file-compare-list-files-wrapper {
+    margin-top: 1.4286em;
+    margin-bottom: 5.7143em;
+    padding: 0em 0.9286em;
+  }
+
+  .file-compare-list-file-overviews {
+    display: grid;
+    justify-items: stretch;
+    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+    gap: 1.4286em;
+  }
+}

@@ -9,7 +9,7 @@ import {
   FileComparisonCategories,
   compareFiles,
   getFileComparisonCategories,
-} from 'irene/utils/compare-filles';
+} from 'irene/utils/compare-files';
 import dayjs from 'dayjs';
 
 export interface FileDetailsKeyInsightsSignature {

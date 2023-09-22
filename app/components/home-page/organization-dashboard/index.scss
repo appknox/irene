@@ -3,6 +3,7 @@
 
   .dashboard-main {
     width: calc(100% - 250px);
+    min-height: 100vh;
     margin-left: 250px;
     padding: 0.5em;
     box-sizing: border-box;

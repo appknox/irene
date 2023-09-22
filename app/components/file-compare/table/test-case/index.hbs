@@ -1,0 +1,9 @@
+{{#if this.isFirstRow}}
+  <AkTypography @fontWeight='bold'>
+    {{t 'fileCompare.nameOfTestCase'}}
+  </AkTypography>
+{{else}}
+  <AkTypography>
+    {{this.vulnerabilityName}}
+  </AkTypography>
+{{/if}}

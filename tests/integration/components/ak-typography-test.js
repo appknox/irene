@@ -46,6 +46,11 @@ module('Integration | Component | ak-typography', function (hooks) {
         className: /ak-typography-body2/i,
       },
       {
+        variant: 'body3',
+        tagName: 'p',
+        className: /ak-typography-body3/i,
+      },
+      {
         variant: 'non-existent-variant',
         tagName: 'span',
         className: /ak-typography-body1/i,

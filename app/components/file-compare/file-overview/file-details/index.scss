@@ -1,0 +1,38 @@
+.file-overview-file-details {
+  padding: 0.6429em 1.1429em;
+  border-bottom: 1px solid var(--file-compare-file-overview-border-color-light);
+}
+
+.file-overview-versions-tags {
+  padding: 1.1429em;
+  padding-top: 0.5714em;
+
+  .file-version-container {
+    padding: 0.5714em 0em;
+    border-bottom: 1px solid
+      var(--file-compare-file-overview-border-color-light);
+
+    .file-version-title {
+      min-width: 140px;
+    }
+  }
+
+  .file-tags-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    gap: 0.3571em;
+    height: 26px;
+    margin-top: 0.9286em;
+  }
+}
+
+// Icon styles
+.platform-android {
+  color: var(--file-compare-file-overview-color-android);
+}
+
+.platform-apple {
+  color: var(--file-compare-file-overview-color-ios);
+}

@@ -1,0 +1,77 @@
+{{!@glint-nocheck }}
+
+<AkStack
+  @width='full'
+  @tag='header'
+  @alignItems='center'
+  @justifyContent='space-between'
+  local-class='file-overview-header'
+  data-test-fileCompare-fileOverview-header
+>
+  <AkStack @spacing='2' @alignItems='center'>
+    <div local-class='file-icon'>
+      <img
+        src={{@file.iconUrl}}
+        aria-hidden='true'
+        role='none'
+        data-test-fileCompare-fileOverview-iconUrl
+      />
+    </div>
+
+    <AkStack @direction='column' local-class='file-names'>
+      <AkTypography @variant='h5' data-test-fileCompare-fileOverview-fileName>
+        {{@file.name}}
+      </AkTypography>
+
+      <AkTypography
+        @color='textSecondary'
+        data-test-fileCompare-fileOverview-packageName
+      >
+        {{this.packageName}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+
+  {{#unless @hideCTAs}}
+    <AkStack @alignItems='center'>
+      <AkTooltip
+        @title={{t 'fileCompare.deselectFile'}}
+        @disabled={{not @disableSelection}}
+        @arrow={{true}}
+        @placement='left'
+      >
+        <AkCheckbox
+          @checked={{@isSelectedFile}}
+          @disabled={{@disableSelection}}
+          @onChange={{this.handleFileSelect}}
+          data-test-fileCompare-fileOverview-selectCheckBox
+        />
+      </AkTooltip>
+
+      {{#unless @hideOpenInNewTabIcon}}
+        <AkTooltip
+          @title='{{t "openInNewTab"}}'
+          @arrow={{true}}
+          @placement='top'
+        >
+          <AkLink
+            @route='authenticated.dashboard.file'
+            @underline='none'
+            @model={{@file.id}}
+            @fontWeight='bold'
+            @linkTextClass={{this.openInNewTabLinkClass}}
+            target='_blank'
+            rel='noopener noreferrer'
+            local-class='open-in-new-tab-link'
+            data-test-fileCompare-fileOverview-openInNewTabLink
+          >
+            <AkIcon
+              @iconName='open-in-new'
+              data-test-fileCompare-fileOverview-icon
+            />
+          </AkLink>
+        </AkTooltip>
+      {{/unless}}
+    </AkStack>
+  {{/unless}}
+</AkStack>

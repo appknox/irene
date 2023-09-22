@@ -51,6 +51,8 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
         route: 'authenticated.projects',
         hasBadge: true,
         badgeLabel: this.organization.selected?.projectsCount,
+        currentWhen:
+          'authenticated.projects authenticated.project.files authenticated.dashboard.compare authenticated.file authenticated.dashboard.file-vul-compare authenticated.choose',
       },
       this.showAppMonitoringDashboard && {
         label: this.intl.t('appMonitoring'),

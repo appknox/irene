@@ -57,6 +57,10 @@ module('Integration | Component | file-details/scan-actions', function (hooks) {
   });
 
   test('it renders scan actions', async function (assert) {
+    this.server.get('/manualscans/:id', (schema, req) => {
+      return { id: req.params.id };
+    });
+
     this.server.get('/v2/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
     });
@@ -80,6 +84,10 @@ module('Integration | Component | file-details/scan-actions', function (hooks) {
         this.file.isStaticDone = false;
         this.file.staticScanProgress = 80;
       }
+
+      this.server.get('/manualscans/:id', (schema, req) => {
+        return { id: req.params.id };
+      });
 
       this.server.get('/v2/projects/:id', (schema, req) => {
         return schema.projects.find(`${req.params.id}`)?.toJSON();
@@ -115,6 +123,10 @@ module('Integration | Component | file-details/scan-actions', function (hooks) {
 
   test('test restart static scan', async function (assert) {
     this.file.isStaticDone = true;
+
+    this.server.get('/manualscans/:id', (schema, req) => {
+      return { id: req.params.id };
+    });
 
     this.server.get('/v2/projects/:id', (schema, req) => {
       return schema.projects.find(`${req.params.id}`)?.toJSON();
@@ -156,6 +168,10 @@ module('Integration | Component | file-details/scan-actions', function (hooks) {
   });
 
   test('it renders dynamic scan title & btn', async function (assert) {
+    this.server.get('/manualscans/:id', (schema, req) => {
+      return { id: req.params.id };
+    });
+
     this.file.dynamicStatus = ENUMS.DYNAMIC_STATUS.NONE;
     this.file.isDynamicDone = false;
 
@@ -181,6 +197,10 @@ module('Integration | Component | file-details/scan-actions', function (hooks) {
   });
 
   test('it renders api scan title & btn', async function (assert) {
+    this.server.get('/manualscans/:id', (schema, req) => {
+      return { id: req.params.id };
+    });
+
     this.file.dynamicStatus = ENUMS.DYNAMIC_STATUS.NONE;
     this.file.isDynamicDone = true;
     this.file.isApiDone = false;
@@ -249,6 +269,10 @@ module('Integration | Component | file-details/scan-actions', function (hooks) {
   });
 
   test('it renders inactive file icon', async function (assert) {
+    this.server.get('/manualscans/:id', (schema, req) => {
+      return { id: req.params.id };
+    });
+
     this.file.isActive = false;
 
     this.server.get('/v2/projects/:id', (schema, req) => {

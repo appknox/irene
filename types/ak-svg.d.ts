@@ -1,6 +1,7 @@
 import { ComponentLike } from '@glint/template';
 
 export enum AkSvgComponentInvocationByNames {
+  AmPlaystoreLogo,
   AppMonitoringTableEmpty,
   JsonReport,
   NotificationEmpty,
@@ -20,6 +21,10 @@ export enum AkSvgComponentInvocationByNames {
   NoVulnerability,
   TeamsEmpty,
   ThumbsUpIcon,
+  NoDataFound,
+  FileCompareError,
+  NoInsights,
+  NoTestCase,
 }
 
 export enum AkSvgComponentInvocationByPaths {

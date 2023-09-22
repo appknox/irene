@@ -7,7 +7,6 @@ export default Base.extend({
     return i + 1;
   },
 
-  name: faker.company.companyName(),
   version: faker.random.number(),
   github_repo: faker.company.companyName(),
   jira_project: faker.company.companyName(),
@@ -16,6 +15,11 @@ export default Base.extend({
   file_count: 2,
   show_unknown_analysis: faker.random.boolean(),
   show_ignored_analysis: faker.random.boolean(),
+  is_manual_scan_available: faker.random.boolean(),
+
+  name() {
+    return faker.company.companyName();
+  },
 
   active_profile_id(i) {
     return i + 1;
@@ -34,11 +38,6 @@ export default Base.extend({
   },
 
   package_name() {
-    return faker.internet.domainName();
-  },
-
-  // TODO: remove this (need to correct app-monitoring tests)
-  packageName() {
     return faker.internet.domainName();
   },
 

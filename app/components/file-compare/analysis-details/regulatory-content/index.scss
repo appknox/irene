@@ -1,0 +1,14 @@
+.regulatory-content-title {
+  width: 185px;
+}
+
+.regulatory-content-value {
+  width: calc(100% - 185px);
+
+  .regulatory-content-value-description {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+}

@@ -1,0 +1,22 @@
+.header-section {
+  width: 100%;
+  border: 1px solid var(--file-compare-list-skeleton-loader-border-color);
+  background-color: var(--file-compare-list-skeleton-loader-background-color);
+  box-sizing: border-box;
+
+  &:first-of-type {
+    border-bottom: none;
+  }
+}
+
+.breadcrumbs-seperator {
+  color: var(--file-compare-list-skeleton-loader-breadcrumbs-seperator-color);
+}
+
+.divider {
+  width: 1px;
+  height: 26px;
+  background-color: var(
+    --file-compare-list-skeleton-loader-divider-background-color
+  );
+}
