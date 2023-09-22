@@ -89,6 +89,7 @@ export default class AnalysisOverviewComponent extends Component {
           owasp: this.analysis.owasp.map((a) => a.get('id')),
           pcidss: this.analysis.pcidss.map((a) => a.get('id')),
           hipaa: this.analysis.hipaa.map((a) => a.get('id')),
+          masvs: this.analysis.masvs.map((a) => a.get('id')),
           mstg: this.analysis.mstg.map((a) => a.get('id')),
           asvs: this.analysis.asvs.map((a) => a.get('id')),
           cwe: this.analysis.cwe.map((a) => a.get('id')),
