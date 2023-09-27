@@ -3,8 +3,9 @@
     .columns
       .column.back-link
         = link-to 'authenticated.security.projects'
-          = fa-icon "caret-left"
-          | &nbsp; Back to Projects
+          ak-stack direction="row" alignItems="center"
+            = ak-icon iconName="arrow-left"
+            | Back to Projects
       .column.list-heading
         | LIST OF FILES
 if hasObjects

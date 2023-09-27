@@ -13,7 +13,7 @@
         @model={{this.project.id}}
         class='button is-primary mp-project-setting'
       >
-        {{fa-icon 'cog'}}&nbsp;
+        <AkIcon @iconName='settings' @size="small" />&nbsp;
         {{t 'settings'}}
       </LinkTo>
 
@@ -23,7 +23,7 @@
           @model={{this.project.id}}
           class='button is-primary mp-all-scans'
         >
-          {{fa-icon 'navicon'}}&nbsp;
+          <AkIcon @iconName='apps' @size="small" />&nbsp;
           {{t 'allUploads'}}
         </LinkTo>
 
@@ -32,7 +32,7 @@
           @model={{this.project.lastFile.id}}
           class='button is-primary mp-file-compare'
         >
-          {{fa-icon 'exchange'}}&nbsp;
+          <AkIcon @iconName='compare-arrows' @size="small" />&nbsp;
           {{t 'compare'}}
         </LinkTo>
       {{/if}}

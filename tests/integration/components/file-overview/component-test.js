@@ -179,14 +179,14 @@ module('Integration | Component | file-overview', function (hooks) {
       <FileOverview  @file={{this.file}} @profileId={{this.file.id}} />`
     );
 
-    assert.dom(`[data-test-file-overview-file-id] i`).exists();
+    assert.dom(`[data-test-file-overview-file-id-icon]`).exists();
 
     this.file.isActive = true;
     await render(
       hbs`
       <FileOverview  @file={{this.file}} @profileId={{this.file.id}} />`
     );
-    assert.dom(`[data-test-file-overview-file-id] i`).doesNotExist();
+    assert.dom(`[data-test-file-overview-file-id-icon]`).doesNotExist();
   });
 
   test('It renders the right number of tags if available', async function (assert) {
