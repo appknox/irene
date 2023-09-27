@@ -48,6 +48,10 @@ module(
             <FileDetails::SeverityLevel @file={{this.file}} />
         `);
 
+        assert
+          .dom('[data-test-fileDetailSeverityLevel-title]')
+          .hasText('t:severityLevel:()');
+
         const severityValues = [
           {
             value: this.file.countRiskCritical,
@@ -83,26 +87,26 @@ module(
 
         severityValues.forEach((st) => {
           const container = find(
-            `[data-test-fileDetailSeverityLevel-severityCountGroup="${st.name}"]`
+            `[data-test-fileChart-severityCountGroup="${st.name}"]`
           );
 
           assert
             .dom(
-              '[data-test-fileDetailSeverityLevel-severityCountIndicator]',
+              '[data-test-fileChartSeverityLevel-severityCountIndicator]',
               container
             )
             .hasClass(new RegExp(`severity-${st.severityType}`));
 
           assert
             .dom(
-              '[data-test-fileDetailSeverityLevel-severityCountName]',
+              '[data-test-fileChartSeverityLevel-severityCountName]',
               container
             )
             .hasText(st.name);
 
           assert
             .dom(
-              '[data-test-fileDetailSeverityLevel-severityCountValue]',
+              '[data-test-fileChartSeverityLevel-severityCountValue]',
               container
             )
             .hasText(String(st.value));

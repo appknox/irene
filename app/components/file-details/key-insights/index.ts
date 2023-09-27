@@ -1,16 +1,18 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
+import IntlService from 'ember-intl/services/intl';
 import Store from '@ember-data/store';
+import { tracked } from '@glimmer/tracking';
+import dayjs from 'dayjs';
 
 import FileModel from 'irene/models/file';
-import { tracked } from '@glimmer/tracking';
+import UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
+
 import {
-  FileComparisonCategories,
   compareFiles,
   getFileComparisonCategories,
 } from 'irene/utils/compare-files';
-import dayjs from 'dayjs';
 
 export interface FileDetailsKeyInsightsSignature {
   Args: {
@@ -18,16 +20,19 @@ export interface FileDetailsKeyInsightsSignature {
   };
 }
 
-export default class FileDetailsKeyInsightsComponent extends Component<FileDetailsKeyInsightsSignature> {
-  @service declare store: Store;
+type KeyInsight = { label: string; value?: number };
 
-  @tracked comparison: FileComparisonCategories | null = null;
-  @tracked previousFile?: FileModel;
+export default class FileDetailsKeyInsightsComponent extends Component<FileDetailsKeyInsightsSignature> {
+  @service declare intl: IntlService;
+  @service declare store: Store;
+  @service('notifications') declare notify: NotificationService;
+
+  @tracked unknownAnalysisStatus?: UnknownAnalysisStatusModel;
 
   constructor(owner: unknown, args: FileDetailsKeyInsightsSignature['Args']) {
     super(owner, args);
 
-    this.fetchPrevFileAndCompare.perform();
+    this.fetchUnknownAnalysisStatus.perform();
   }
 
   get currentFile() {
@@ -38,21 +43,54 @@ export default class FileDetailsKeyInsightsComponent extends Component<FileDetai
     return this.comparison !== null;
   }
 
+  get previousFile() {
+    return this.currentFile.get('previousFile').content;
+  }
+
+  get compareRouteModel() {
+    return `${this.currentFile.id}...${this.previousFile?.id}`;
+  }
+
+  get keyInsights() {
+    return [
+      {
+        label: this.intl.t('fileCompare.recurringIssues'),
+        value: this.comparison?.recurring.length,
+      },
+      {
+        label: this.intl.t('fileCompare.newIssues'),
+        value: this.comparison?.newRisks.length,
+      },
+      {
+        label: this.intl.t('fileCompare.resolvedIssues'),
+        value: this.comparison?.resolved.length,
+      },
+      this.unknownAnalysisStatus?.status && {
+        label: this.intl.t('fileCompare.untestedIssues'),
+        value: this.comparison?.untested.length,
+      },
+    ].filter(Boolean) as KeyInsight[];
+  }
+
   get previousFileUploadedOn() {
     return dayjs(this.previousFile?.createdOn).format('DD MMM YYYY');
   }
 
-  fetchPrevFileAndCompare = task(async () => {
-    if (this.currentFile.project.get('hasMultipleFiles')) {
-      this.previousFile = await this.store.findRecord(
-        'file',
-        parseInt(this.currentFile.id) - 1
-      );
+  get comparison() {
+    return this.previousFile
+      ? getFileComparisonCategories(
+          compareFiles(this.currentFile, this.previousFile)
+        )
+      : null;
+  }
 
-      this.comparison = getFileComparisonCategories(
-        compareFiles(this.currentFile, this.previousFile)
-      );
-    }
+  fetchUnknownAnalysisStatus = task(async () => {
+    this.unknownAnalysisStatus = await this.store.queryRecord(
+      'unknown-analysis-status',
+      {
+        id: this.args.file.profile.get('id'),
+      }
+    );
   });
 }
 

@@ -1,3 +1,14 @@
+.severity-level-root {
+  width: 100%;
+  border: 1px solid var(--file-details-severity-level-border-color);
+  box-sizing: border-box;
+
+  .severity-level-header {
+    padding: 0.75em 1.5em;
+    border-bottom: 1px solid var(--file-details-severity-level-border-color);
+  }
+}
+
 .severity-indicator {
   width: 10px;
   height: 10px;

@@ -1,55 +1,106 @@
-<div class='p-3'>
-  <AkTypography>
-    Based on the comparison with previous
-    <AkLink
-      @color='primary'
-      @route='authenticated.dashboard.file'
-      @model={{this.previousFile.id}}
-      @underline='always'
-    >File ID - {{this.previousFile.id}}</AkLink>
-    uploaded on
-    <strong>{{this.previousFileUploadedOn}}</strong>, there are:
-  </AkTypography>
+<div local-class='key-insights-root'>
+  <div local-class='key-insights-header'>
+    <AkTypography data-test-fileDetailKeyInsights-title @variant='subtitle1'>
+      {{t 'keyInsights'}}
+    </AkTypography>
+  </div>
 
-  <div class='mt-2' local-class='insights-container'>
-    <div>
-      <AkStack @direction='column' @spacing='0.5'>
-        <AkTypography @variant='h4'>
-          {{this.comparison.recurring.length}}
+  <div class='px-3 py-2'>
+    {{#if this.currentFile.previousFile.isPending}}
+      <AkStack
+        {{style height='100px'}}
+        @alignItems='center'
+        @justifyContent='center'
+        @spacing='1.5'
+      >
+        <AkLoader data-test-fileDetailKeyInsights-loader @size={{16}} />
+
+        <AkTypography data-test-fileDetailKeyInsights-loadingText>
+          {{t 'loading'}}...
+        </AkTypography>
+      </AkStack>
+    {{else}}
+      {{#if this.hasComparison}}
+        <AkTypography data-test-fileDetailKeyInsights-description>
+          {{t 'keyInsightDesc.part1'}}
+
+          <AkLink
+            target='_blank'
+            rel='noopener noreferrer'
+            @color='primary'
+            @route='authenticated.dashboard.file'
+            @model={{this.previousFile.id}}
+            @underline='always'
+          >{{t 'fileID'}} - {{this.previousFile.id}}</AkLink>
+
+          {{t
+            'keyInsightDesc.part2'
+            uploadedOn=this.previousFileUploadedOn
+            htmlSafe=true
+          }}
         </AkTypography>
 
-        <AkTypography @tag='span' @color='textSecondary'>Recurring Issues</AkTypography>
-      </AkStack>
+        <div class='my-2' local-class='insights-container'>
+          {{#each this.keyInsights as |ki|}}
+            <AkStack
+              local-class='insights-item'
+              @direction='column'
+              @spacing='0.5'
+              data-test-fileDetailKeyInsights-group='{{ki.label}}'
+            >
+              <AkTypography data-test-fileDetailKeyInsights-value @variant='h4'>
+                {{ki.value}}
+              </AkTypography>
 
-      <AkDivider @color='dark' class='mt-3' />
-    </div>
+              <AkTypography
+                data-test-fileDetailKeyInsights-label
+                @tag='span'
+                @color='textSecondary'
+              >
+                {{ki.label}}
+              </AkTypography>
+            </AkStack>
+          {{/each}}
+        </div>
 
-    <div>
-      <AkStack @direction='column' @spacing='0.5'>
-        <AkTypography @variant='h4'>
-          {{this.comparison.resolved.length}}
-        </AkTypography>
+        <AkLink
+          data-test-fileDetailKeyInsights-viewDetailsLink
+          class='mt-1'
+          local-class='ak-link-btn'
+          @route='authenticated.dashboard.compare'
+          @model={{this.compareRouteModel}}
+          @color='inherit'
+          @underline='none'
+        >
+          <:leftIcon>
+            <AkIcon @iconName='compare' />
+          </:leftIcon>
 
-        <AkTypography @tag='span' @color='textSecondary'>Resolved Issues</AkTypography>
-      </AkStack>
+          <:default>{{t 'viewDetails'}}</:default>
+        </AkLink>
+      {{else}}
+        <AkStack
+          class='p-3'
+          @alignItems='center'
+          @justifyContent='center'
+          @spacing='5'
+        >
+          <AkSvg::NoInsights data-test-fileDetailKeyInsights-emptySvg />
 
-      <AkDivider @color='dark' class='mt-3' />
-    </div>
+          <AkStack @direction='column' @spacing='0.5'>
+            <AkTypography
+              data-test-fileDetailKeyInsights-emptyTitle
+              @variant='h6'
+            >
+              {{t 'fileCompare.noDataAvailable'}}
+            </AkTypography>
 
-    <AkStack @direction='column' @spacing='0.5'>
-      <AkTypography @variant='h4'>
-        {{this.comparison.newRisks.length}}
-      </AkTypography>
-
-      <AkTypography @tag='span' @color='textSecondary'>New Issues</AkTypography>
-    </AkStack>
-
-    <AkStack @direction='column' @spacing='0.5'>
-      <AkTypography @variant='h4'>
-        {{this.comparison.untested.length}}
-      </AkTypography>
-
-      <AkTypography @tag='span' @color='textSecondary'>Untested Issues</AkTypography>
-    </AkStack>
+            <AkTypography data-test-fileDetailKeyInsights-emptyDescription>
+              {{t 'fileCompare.uploadMoreFileDescription'}}
+            </AkTypography>
+          </AkStack>
+        </AkStack>
+      {{/if}}
+    {{/if}}
   </div>
 </div>

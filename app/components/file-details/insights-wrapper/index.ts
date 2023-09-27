@@ -15,25 +15,20 @@ export interface FileDetailsInsightsWrapperSignature {
 export default class FileDetailsInsightsWrapperComponent extends Component<FileDetailsInsightsWrapperSignature> {
   @service declare intl: IntlService;
 
-  @tracked selectedTab = 'severity_level';
+  @tracked selectedTab = 'scan_summary';
 
   get tabItems() {
     return [
       {
-        id: 'severity_level',
-        label: this.intl.t('severityLevel'),
-        component: 'file-details/severity-level' as const,
+        id: 'scan_summary',
+        label: this.intl.t('scanSummary'),
+        component: 'file-details/scan-summary' as const,
       },
       {
         id: 'compliance_insights',
-        label: this.intl.t('complianceInsights'),
+        label: this.intl.t('owaspDetails'),
         component: 'file-details/compliance-insights' as const,
       },
-      // {
-      //   id: 'key_insights',
-      //   label: 'Key Insights',
-      //   component: 'file-details/key-insights' as const,
-      // },
     ];
   }
 

@@ -1,5 +1,5 @@
 <div local-class='file-summary-root'>
-  <AkStack @alignItems='center' @justifyContent='space-between'>
+  <AkStack class='p-2' @alignItems='center' @justifyContent='space-between'>
     <AkStack @alignItems='center' @spacing='1.5'>
       <AkStack
         local-class='app-logo-container'
@@ -44,15 +44,26 @@
     </AkStack>
   </AkStack>
 
-  <div class='mt-3'>
-    <AkTypography
-      data-test-fileDetailsSummary-fileOverviewTitle
-      @variant='subtitle1'
-    >
-      {{t 'fileOverview'}}
-    </AkTypography>
+  <AkDivider @color='dark' />
 
-    <div class='my-1'>
+  <div class='px-2'>
+    <AkStack
+      local-class='file-summary-padding'
+      @alignItems='center'
+      @justifyContent='space-between'
+    >
+      <AkTypography data-test-fileDetailsSummary-fileId @variant='subtitle1'>
+        {{t 'fileID'}}
+        -
+        {{@file.id}}
+      </AkTypography>
+
+      <FileDetails::Summary::AppPlatform @file={{@file}} />
+    </AkStack>
+
+    <AkDivider />
+
+    {{#if this.showMoreFileSummary}}
       {{#each this.fileSummary as |fs|}}
         <AkStack
           local-class='file-summary-padding'
@@ -66,28 +77,16 @@
             {{fs.label}}
           </AkTypography>
 
-          {{#if fs.component}}
-            {{#let (component fs.component) as |Component|}}
-              <Component @file={{@file}} />
-            {{/let}}
-          {{else if fs.value}}
-            <AkTypography
-              @variant='h6'
-              data-test-fileDetailsSummary-fileOverviewValue
-            >
-              {{fs.value}}
-            </AkTypography>
-          {{/if}}
+          <AkTypography
+            @variant='h6'
+            data-test-fileDetailsSummary-fileOverviewValue
+          >
+            {{fs.value}}
+          </AkTypography>
         </AkStack>
 
-        {{#unless fs.hideDivider}}
-          <AkDivider />
-        {{/unless}}
+        <AkDivider />
       {{/each}}
-    </div>
-
-    {{#if this.showMoreFileSummary}}
-      <AkDivider />
 
       <div class='my-2'>
         <AkTypography
@@ -100,31 +99,35 @@
 
         <FileDetails::Summary::FileTags @file={{@file}} />
       </div>
+
+      <AkDivider />
     {{/if}}
 
-    <AkButton
-      @variant='text'
-      @underline='always'
-      @color='primary'
-      @typographyVariant='subtitle1'
-      {{on 'click' this.handleFileSummaryToggle}}
-      data-test-fileDetailsSummary-showMoreOrLessBtn
-    >
-      <:default>
-        {{if this.showMoreFileSummary (t 'showLess') (t 'showMore')}}
-      </:default>
+    <div local-class='file-summary-padding'>
+      <AkButton
+        @variant='text'
+        @underline='always'
+        @color='primary'
+        @typographyVariant='subtitle1'
+        {{on 'click' this.handleFileSummaryToggle}}
+        data-test-fileDetailsSummary-showMoreOrLessBtn
+      >
+        <:default>
+          {{if this.showMoreFileSummary (t 'showLess') (t 'showMore')}}
+        </:default>
 
-      <:rightIcon>
-        <AkIcon
-          @iconName={{if
-            this.showMoreFileSummary
-            'arrow-drop-up'
-            'arrow-drop-down'
-          }}
-          @color='primary'
-        />
-      </:rightIcon>
-    </AkButton>
+        <:rightIcon>
+          <AkIcon
+            @iconName={{if
+              this.showMoreFileSummary
+              'arrow-drop-up'
+              'arrow-drop-down'
+            }}
+            @color='primary'
+          />
+        </:rightIcon>
+      </AkButton>
+    </div>
   </div>
 
   <AkMenu
@@ -134,6 +137,22 @@
     as |akm|
   >
     {{#each this.fileMoreMenuList as |it|}}
+      {{#if it.group}}
+        <AkList::Item
+          @noGutters={{true}}
+          local-class='file-more-menu-item-group'
+        >
+          <AkTypography
+            {{style fontSize='0.857rem'}}
+            @fontWeight='medium'
+            @tag='span'
+            @color='textSecondary'
+          >
+            {{it.group}}
+          </AkTypography>
+        </AkList::Item>
+      {{/if}}
+
       <akm.listItem
         data-test-fileDetailsSummary-moreMenuItem
         @link={{true}}

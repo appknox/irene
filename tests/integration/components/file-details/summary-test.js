@@ -80,40 +80,12 @@ module('Integration | Component | file-details/summary', function (hooks) {
     assert.dom('[data-test-fileDetailsSummary-moreMenuBtn]').isNotDisabled();
 
     assert
-      .dom('[data-test-fileDetailsSummary-fileOverviewTitle]')
-      .hasText('t:fileOverview:()');
+      .dom('[data-test-fileDetailsSummary-fileId]')
+      .hasText(`t:fileID:() - ${this.file.id}`);
 
-    const defaultFileOverviewDetails = [
-      {
-        label: 't:platform:()',
-        assertComponent: () => {
-          assert
-            .dom('[data-test-fileDetailsSummary-fileOverview-appPlatform]')
-            .exists();
-        },
-      },
-      {
-        label: 't:fileID:()',
-        assertComponent: () => {
-          assert
-            .dom('[data-test-fileDetailsSummary-fileOverview-fileId]')
-            .hasText(this.file.id);
-        },
-      },
-    ];
-
-    defaultFileOverviewDetails.forEach((fod) => {
-      assert
-        .dom(
-          '[data-test-fileDetailsSummary-fileOverviewLabel]',
-          find(
-            `[data-test-fileDetailsSummary-fileOverviewGroup='${fod.label}']`
-          )
-        )
-        .hasText(fod.label);
-
-      fod.assertComponent();
-    });
+    assert
+      .dom('[data-test-fileDetailsSummary-fileOverview-appPlatform]')
+      .exists();
 
     assert
       .dom('[data-test-fileDetailsSummary-showMoreOrLessBtn]')
@@ -130,49 +102,17 @@ module('Integration | Component | file-details/summary', function (hooks) {
         <FileDetails::Summary @file={{this.file}} />
     `);
 
-    const defaultFileOverviewDetails = [
-      {
-        label: 't:platform:()',
-        assertComponent: () => {
-          assert
-            .dom('[data-test-fileDetailsSummary-fileOverview-appPlatform]')
-            .exists();
-        },
-      },
-      {
-        label: 't:fileID:()',
-        assertComponent: () => {
-          assert
-            .dom('[data-test-fileDetailsSummary-fileOverview-fileId]')
-            .hasText(this.file.id);
-        },
-      },
-    ];
-
     const hiddenFileOverviewDetails = [
-      {
-        label: 't:scanStarted:()',
-        value: dayjs(this.file.createdOn).fromNow(),
-      },
       { label: 't:version:()', value: this.file.version },
       {
-        label: 't:versionCode:()',
+        label: 'T:versionCode:()',
         value: this.file.versionCode,
       },
+      {
+        label: 't:uploadedOn:()',
+        value: dayjs(this.file.createdOn).fromNow(),
+      },
     ];
-
-    defaultFileOverviewDetails.forEach((fod) => {
-      assert
-        .dom(
-          '[data-test-fileDetailsSummary-fileOverviewLabel]',
-          find(
-            `[data-test-fileDetailsSummary-fileOverviewGroup='${fod.label}']`
-          )
-        )
-        .hasText(fod.label);
-
-      fod.assertComponent();
-    });
 
     hiddenFileOverviewDetails.forEach((fod) => {
       assert
@@ -240,8 +180,8 @@ module('Integration | Component | file-details/summary', function (hooks) {
     // project file count is more than 1
     assert.strictEqual(menuItems.length, 3);
 
-    assert.dom(menuItems[0]).hasText('t:allUploads:()');
-    assert.dom(menuItems[1]).hasText('t:compare:()');
+    assert.dom(menuItems[0]).hasText('t:compare:()');
+    assert.dom(menuItems[1]).hasText('t:allUploads:()');
     assert.dom(menuItems[2]).hasText('t:settings:()');
 
     // close menu
