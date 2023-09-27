@@ -8,12 +8,14 @@ form.columns.margin-left
   .column.input-column
     = input class="form-control input" placeholder=(t 'name') type="text" value=tokenName
   .column.margin
-    button.margin-top10.is-primary click="generateToken" disabled=isGeneratingToken
+    button.margin-top10.is-primary.no-hover-button click="generateToken" disabled=isGeneratingToken
       if isGeneratingToken
-        .fa-font-size
-          i.fa class="fa-spinner fa-spin"
+        = ak-loader size=13
         | &nbsp;
-      | + #{t "personalAccessTokenCreate"}
+      else
+        = ak-icon iconName="add" size="small"
+      | &nbsp;
+      | #{t "personalAccessTokenCreate"}
 
 if hasObjects
   .margin-left

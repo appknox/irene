@@ -19,7 +19,7 @@
           | #{subscription.subscriptionText} #{subscription.expiryDateOnHumanized}
           if subscription.isNotCancelled
             button.is-primary.flex-center click="openCancelSubscriptionConfirmBox"
-              = fa-icon "times" class="font-size-18"
+              = ak-icon iconName="close" class="font-size-18"
               | &nbsp; #{ t "cancelSubsciption"}
 
 = confirm-box isActive=showCancelSubscriptionConfirmBox title=(t 'confirmBox.cancelSubsciption') delegate=this disabled=isCancellingSubscription
