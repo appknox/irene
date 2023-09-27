@@ -1,12 +1,12 @@
 .file-summary-root {
   width: 100%;
-  padding: 1em;
   border: 1px solid var(--file-details-summary-border-color);
+  background-color: var(--file-details-summary-background-color);
   box-sizing: border-box;
 
   .app-logo-container {
-    width: 45px;
-    height: 45px;
+    width: 53px;
+    height: 53px;
     padding: 0.5em;
     border-radius: var(--file-details-summary-border-radius);
     border: 1px solid var(--file-details-summary-border-color);
@@ -21,5 +21,13 @@
 
   .file-summary-padding {
     padding: 0.75em 0;
+  }
+}
+
+.file-more-menu-item-group {
+  padding: 0.5em 1em 0.75em 1em;
+
+  &:not(:first-child) {
+    padding-top: 1em;
   }
 }

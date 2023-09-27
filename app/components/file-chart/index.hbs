@@ -1,0 +1,56 @@
+{{#if this.fetchUnknownAnalysisStatus.isRunning}}
+  <AkStack {{style height='200px'}} @alignItems='center' @spacing='1.5'>
+    <AkLoader @size={{16}} />
+
+    <AkTypography>
+      {{t 'loading'}}...
+    </AkTypography>
+  </AkStack>
+{{else}}
+
+  <AkChart
+    @width='100%'
+    @height='200px'
+    @option={{this.option}}
+    ...attributes
+    data-test-fileChartSeverityLevel-chart
+  />
+
+  <AkStack
+    {{style maxWidth=(concat this.legendMaxWidth 'px') flex='1'}}
+    @direction='column'
+    @spacing='1'
+  >
+    {{#each this.severityLevelCounts as |slc|}}
+      <AkStack
+        @width='full'
+        @justifyContent='space-between'
+        @alignItems='center'
+        data-test-fileChart-severityCountGroup='{{slc.name}}'
+      >
+        <AkStack @alignItems='center' @spacing='2.5'>
+          <div
+            local-class='severity-indicator severity-{{slc.severityType}}'
+            data-test-fileChartSeverityLevel-severityCountIndicator
+          />
+
+          <AkTypography
+            data-test-fileChartSeverityLevel-severityCountName
+          >{{slc.name}}</AkTypography>
+        </AkStack>
+
+        <AkTypography
+          data-test-fileChartSeverityLevel-severityCountValue
+          class='px-2'
+          @variant='subtitle1'
+        >
+          {{slc.value}}
+        </AkTypography>
+      </AkStack>
+
+      {{#if (not-eq slc this.severityLevelCounts.lastObject)}}
+        <AkDivider />
+      {{/if}}
+    {{/each}}
+  </AkStack>
+{{/if}}

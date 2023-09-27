@@ -9,7 +9,7 @@ import AnalysisModel from 'irene/models/analysis';
 export interface RiskTagSignature {
   Element: HTMLElement;
   Args: {
-    analysis: AnalysisModel;
+    analysis?: AnalysisModel | null;
     label?: string;
     labelClass?: string;
     columnSize?: string;
@@ -29,16 +29,16 @@ export default class RiskTagComponent extends Component<RiskTagSignature> {
 
   get isNonPassedRiskOverridden() {
     return (
-      this.analysis.overriddenRisk !== null &&
-      this.analysis.risk !== ENUMS.RISK.NONE
+      this.analysis?.overriddenRisk !== null &&
+      this.analysis?.risk !== ENUMS.RISK.NONE
     );
   }
 
   get analysisRiskStatus() {
     return analysisRiskStatus([
-      String(this.analysis.computedRisk),
-      String(this.analysis.status),
-      this.analysis.isOverriddenRisk,
+      this.analysis?.computedRisk,
+      this.analysis?.status,
+      this.analysis?.isOverriddenRisk,
     ]);
   }
 }

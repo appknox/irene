@@ -614,19 +614,29 @@ body {
   --risk-tag-color-waiting: var(--neutral-grey-500);
 
   // variables for file-details/severity-level
-  --file-details-severity-level-color-critical: var(--severity-critical);
-  --file-details-severity-level-color-high: var(--severity-high);
-  --file-details-severity-level-color-medium: var(--severity-medium);
-  --file-details-severity-level-color-low: var(--severity-low);
-  --file-details-severity-level-color-passed: var(--severity-passed);
-  --file-details-severity-level-color-none: var(--severity-none);
+  --file-details-severity-level-border-color: var(--border-color-1);
 
   // variables for file-details/insights-wrapper
   --file-details-insights-wrapper-border-color: var(--border-color-1);
+  --file-details-insights-wrapper-background-color: var(--background-main);
+
+  // variables for file-details/skeleton-loader
+  --file-details-skeleton-loader-border-color: var(--border-color-1);
+  --file-details-skeleton-loader-background-color: var(--background-main);
+
+  // variables for file-details/key-insights
+  --file-details-key-insights-border-color: var(--border-color-1);
+  --file-details-key-insights-border-radius: var(--border-radius);
+  --file-details-key-insights-link-btn-background-color: var(--primary-main);
+  --file-details-key-insights-link-btn-contrast-text-color: var(
+    --primary-contrast-text
+  );
+  --file-details-key-insights-link-btn-hover-color: var(--primary-dark);
 
   // variables for file-details/summary
-  --file-details-summary-border-radius: var(--border-radius);
+  --file-details-summary-background-color: var(--background-main);
   --file-details-summary-border-color: var(--border-color-1);
+  --file-details-summary-border-radius: var(--border-radius);
 
   // variables for file-details/summary/app-platform
   --file-details-summary-app-platform-color-ios: var(--ios);
@@ -634,6 +644,7 @@ body {
 
   // variables for file-details/scan-actions
   --file-details-scan-actions-border-color: var(--border-color-1);
+  --file-details-scan-actions-background-color: var(--background-main);
 
   // variables for file-details/scan-actions/api-scan
   --file-details-scan-actions-api-scan-border-radius: var(--border-radius);
@@ -653,6 +664,9 @@ body {
 
   // variables for file-details/vulnerability-analysis
   --file-details-vulnerability-analysis-border-color: var(--border-color-1);
+  --file-details-vulnerability-analysis-background-color: var(
+    --background-main
+  );
 
   // variables for file-details/vulnerability-analysis-details
   --file-details-vulnerability-analysis-details-background-main: var(
@@ -710,6 +724,67 @@ body {
     --neutral-grey-500
   );
 
+  // variables for file-list
+  --file-list-root-background-color: var(--background-main);
+  --file-list-selected-file-chip-color: var(--text-primary);
+  --file-list-selected-file-chip-background: var(--primary-main-10);
+
+  // variables for file-compare/index
+  --file-compare-tabs-background-color: var(--common-white);
+
+  // variables for file-compare/analysis-details
+  --file-compare-analysis-details-border-color: var(--border-color-1);
+
+  // variables for file-compare/file-overview
+  --file-compare-file-overview-border-radius: var(--border-radius);
+  --file-compare-file-overview-background-white: var(--common-white);
+  --file-compare-file-overview-background-grey: var(--neutral-grey-100);
+  --file-compare-file-overview-border-color-light: var(--neutral-grey-100);
+  --file-compare-file-overview-open-in-new-icon-background-color: var(
+    --hover-light-background
+  );
+  --file-compare-file-overview-border-color-dark: var(--border-color-1);
+  --file-compare-file-overview-color-android: var(--android);
+  --file-compare-file-overview-color-ios: var(--ios);
+
+  // variables for file-compare/compare-list
+  --file-compare-compare-list-wrapper-background-color: var(--background-main);
+
+  // variables for file-compare/header
+  --file-compare-header-white-background-color: var(--common-white);
+  --file-compare-header-divider-background-color: var(--border-color-2);
+  --file-compare-header-dark-border-color: var(--neutral-grey-300);
+  --file-compare-header-files-overview-border-color: var(--neutral-grey-200);
+  --file-compare-header-file-icon-border-color: var(--neutral-grey-100);
+  --file-compare-header-file-icon-border-radius: var(--border-radius);
+  --file-compare-header-info-box-shadow: var(--box-shadow-6);
+
+  // variables for file-compare/vulnerability-details
+  --file-compare-vulnerability-details-white-background: var(--common-white);
+  --file-compare-vulnerability-details-border-color: var(--neutral-grey-200);
+  --file-compare-vulnerability-details-header-wrapper-background-color: var(
+    --common-white
+  );
+
+  // variables for file-compare/compare-list/skeleton-loader
+  --file-compare-list-skeleton-loader-border-color: var(--border-color-1);
+  --file-compare-list-skeleton-loader-background-color: var(--background-main);
+  --file-compare-list-skeleton-loader-breadcrumbs-seperator-color: var(
+    --neutral-grey-500
+  );
+  --file-compare-list-skeleton-loader-divider-background-color: var(
+    --border-color-2
+  );
+
   // variables for login-component
   --login-component-button-loader-color: var(--primary-contrast-text);
+
+  // variables for file-chart
+  --file-chart-severity-level-color-critical: var(--severity-critical);
+  --file-chart-severity-level-color-high: var(--severity-high);
+  --file-chart-severity-level-color-medium: var(--severity-medium);
+  --file-chart-severity-level-color-low: var(--severity-low);
+  --file-chart-severity-level-color-passed: var(--severity-passed);
+  --file-chart-severity-level-color-untested: var(--severity-untested);
+  --file-chart-severity-level-color-none: var(--severity-none);
 }

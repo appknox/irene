@@ -1,5 +1,6 @@
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { capitalize } from '@ember/string';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import dayjs from 'dayjs';
@@ -16,14 +17,8 @@ export interface FileDetailsSummarySignature {
   };
 }
 
-interface FileSummary {
-  label: string;
-  value?: string;
-  hideDivider?: boolean;
-  component?: unknown;
-}
-
 interface FileMoreMenuItem {
+  group?: string;
   label: string;
   iconName: string;
   route: string;
@@ -46,16 +41,18 @@ export default class FileDetailsSummaryComponent extends Component<FileDetailsSu
 
     return [
       hasMultipleFiles && {
-        label: this.intl.t('allUploads'),
-        iconName: 'format-list-bulleted',
-        route: 'authenticated.project.files',
-        routeModel: this.args.file.project.get('id'),
-      },
-      hasMultipleFiles && {
+        group: this.intl.t('fileLevel'),
         label: this.intl.t('compare'),
         iconName: 'compare-arrows',
         route: 'authenticated.choose',
         routeModel: this.args.file.id,
+      },
+      hasMultipleFiles && {
+        group: this.intl.t('projectLevel'),
+        label: this.intl.t('allUploads'),
+        iconName: 'apps',
+        route: 'authenticated.project.files',
+        routeModel: this.args.file.project.get('id'),
       },
       {
         label: this.intl.t('settings'),
@@ -68,39 +65,18 @@ export default class FileDetailsSummaryComponent extends Component<FileDetailsSu
   }
 
   get fileSummary() {
-    const summaryList: FileSummary[] = [
+    return [
+      { label: this.intl.t('version'), value: this.args.file.version },
       {
-        label: this.intl.t('platform'),
-        component: 'file-details/summary/app-platform',
+        label: capitalize(this.intl.t('versionCode')),
+        value: this.args.file.versionCode,
       },
       {
-        label: this.intl.t('fileID'),
-        component: 'file-details/summary/file-id',
+        label: this.intl.t('uploadedOn'),
+        value: dayjs(this.args.file.createdOn).fromNow(),
       },
     ];
-
-    if (this.showMoreFileSummary) {
-      summaryList.pushObjects([
-        {
-          label: this.intl.t('scanStarted'),
-          value: dayjs(this.args.file.createdOn).fromNow(),
-        },
-        { label: this.intl.t('version'), value: this.args.file.version },
-        {
-          label: this.intl.t('versionCode'),
-          value: this.args.file.versionCode,
-        },
-      ]);
-    }
-
-    // hiding divider for last item
-    (summaryList.lastObject as FileSummary).hideDivider = true;
-
-    return summaryList;
   }
-
-  @action
-  handleViewReportDrawerOpen() {}
 
   @action
   handleFileMoreMenuOpen(event: MouseEvent) {

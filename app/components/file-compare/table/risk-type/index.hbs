@@ -1,0 +1,94 @@
+<AkStack
+  @justifyContent='center'
+  @width='full'
+  data-test-fileCompareTable-riskType-fileDetailsRowItem
+>
+  {{#if this.isFirstRow}}
+    <AkStack
+      @spacing='2'
+      @alignItems='center'
+      @justifyContent='center'
+      local-class='first-row'
+    >
+      <AkStack
+        @direction='column'
+        @alignItems='center'
+        local-class='risk-type-file-ids'
+      >
+        <AkTypography @variant='body2' @fontWeight='bold'>
+          {{t 'fileID'}}
+          -
+          {{this.file1.id}}
+        </AkTypography>
+
+        <AkTooltip
+          @title='{{t "version"}} - {{this.file1.version}}'
+          @placement='top'
+          @arrow={{true}}
+        >
+          <AkTypography
+            @variant='body2'
+            @fontWeight='bold'
+            @noWrap={{true}}
+            {{style maxWidth='120px'}}
+          >
+            {{t 'version'}}
+            {{this.file1.version}}
+          </AkTypography>
+        </AkTooltip>
+      </AkStack>
+
+      <AkIcon @iconName='west' local-class='file-compare-arrow-left-icon' />
+
+      <AkStack @direction='column' @spacing='1' @alignItems='center'>
+        <AkTypography @variant='body2' @fontWeight='bold'>
+          {{t 'fileID'}}
+          -
+          {{this.file2.id}}
+        </AkTypography>
+
+        <AkTooltip
+          @title='{{t "version"}} - {{this.file2.version}}'
+          @placement='top'
+          @arrow={{true}}
+        >
+          <AkTypography
+            @variant='body2'
+            @fontWeight='bold'
+            @noWrap={{true}}
+            {{style maxWidth='120px'}}
+          >
+            {{t 'version'}}
+            {{this.file2.version}}
+          </AkTypography>
+        </AkTooltip>
+      </AkStack>
+    </AkStack>
+  {{/if}}
+
+  {{#if this.isVulnerabilityRow}}
+    <div
+      local-class='vulnerability-row-item'
+      data-test-fileCompareTable-riskType-vulnerabityRowItem
+    >
+      {{#each this.fileAnalyses as |analysis|}}
+        {{#if analysis}}
+          <RiskTag @analysis={{analysis}} />
+        {{else}}
+          <AkTooltip
+            @title={{t 'fileCompare.nonExistentTestCase'}}
+            @placement='top'
+            @arrow={{true}}
+            {{style height='fit-content'}}
+            data-test-fileCompareTable-riskType-vulnerabityRowItem-newTestCaseTootlip
+          >
+            <AkIcon
+              @iconName='error'
+              data-test-fileCompareTable-riskType-vulnerabityRowItem-newTestCaseIcon
+            />
+          </AkTooltip>
+        {{/if}}
+      {{/each}}
+    </div>
+  {{/if}}
+</AkStack>

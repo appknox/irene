@@ -1,0 +1,63 @@
+<AkStack
+  @width='full'
+  local-class='file-overview-statuses'
+  class='px-2 py-1'
+  data-test-fileCompare-fileOverview-scanStatuses
+>
+  <AkStack @alignItems='center' @spacing='1.5'>
+    {{#each this.scanStatuses as |status|}}
+      <AkStack
+        @alignItems='center'
+        @spacing='0.5'
+        data-test-fileCompare-fileOverview-scanStatuses='{{status.name}}'
+      >
+        <AkIcon
+          @iconName='{{if status.isDone "check-circle" "circle"}}'
+          @variant={{if status.isDone 'filled' 'outlined'}}
+          @color='success'
+          {{style fontSize='1.2857em !important'}}
+          data-test-fileCompare-fileOverview-scanStatus-icon
+        />
+
+        <AkTypography
+          {{style fontSize='0.85714em !important'}}
+          data-test-fileCompare-fileOverview-scanStatus-name
+        >
+          {{status.name}}
+        </AkTypography>
+      </AkStack>
+    {{/each}}
+
+    {{#unless this.isManualScanDisabled}}
+      <AkStack
+        @alignItems='center'
+        @spacing='0.5'
+        data-test-fileCompare-fileOverview-manualScanStatus
+      >
+        {{#if @file.isManualDone}}
+          <AkIcon
+            @iconName='check-circle'
+            @color='success'
+            {{style fontSize='1.2857em !important'}}
+            data-test-fileCompare-fileOverview-manualScanStatus-doneIcon
+          />
+        {{else}}
+          <AkIcon
+            @iconName='{{if @file.isManualRequested "timer" "circle"}}'
+            @color='success'
+            @variant='outlined'
+            {{style fontSize='1.2857em !important'}}
+            data-test-fileCompare-fileOverview-manualScanStatus-requestedPendingIcon
+          />
+        {{/if}}
+
+        <AkTypography
+          {{style fontSize='0.85714em !important'}}
+          data-test-fileCompare-fileOverview-manualScanStatus-name
+        >
+          {{t 'manual'}}
+        </AkTypography>
+      </AkStack>
+    {{/unless}}
+  </AkStack>
+</AkStack>

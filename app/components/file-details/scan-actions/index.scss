@@ -1,6 +1,7 @@
 .scan-actions-root {
   width: 100%;
   border: 1px solid var(--file-details-scan-actions-border-color);
+  background-color: var(--file-details-scan-actions-background-color);
   box-sizing: border-box;
 
   .scan-actions-header {

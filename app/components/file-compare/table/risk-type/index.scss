@@ -1,0 +1,28 @@
+.first-row {
+  position: sticky;
+  top: 300px;
+}
+
+.risk-type-file-ids {
+  gap: 0.35714em;
+
+  & * {
+    letter-spacing: -0.01636em;
+  }
+}
+
+.vulnerability-row-item,
+.first-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  align-items: center;
+  gap: 4em;
+}
+
+.file-compare-arrow-left-icon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}

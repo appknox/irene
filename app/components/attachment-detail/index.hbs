@@ -1,0 +1,20 @@
+<div
+  data-type={{file-extension this.attachment.name}}
+  title='{{this.attachment.uuid}}_{{this.attachment.name}}'
+  class='attachment w-full'
+  role='button'
+  {{on 'click' this.triggerDownloadAttachment}}
+  data-test-attachmentDetail-root
+>
+  <span class='attachment-label' data-test-attachmentDetail-label>
+    {{this.attachment.uuid}}_{{this.attachment.name}}
+  </span>
+  <span class='attachment-icon'>
+    {{#if this.isDownloadingAttachment}}
+      <i class='fa fa-spinner fa-spin' data-test-attachmentDetail-loadingIcon>
+      </i>
+    {{else}}
+      <i class='fa fa-download' data-test-attachmentDetail-downloadIcon></i>
+    {{/if}}
+  </span>
+</div>

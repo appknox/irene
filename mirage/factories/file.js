@@ -6,8 +6,6 @@ import Base from './base';
 export default Base.extend({
   uuid: faker.random.number(),
   device_token: faker.random.number(),
-  version: faker.random.number(),
-  version_code: faker.random.number(),
   md5hash: faker.random.number(),
   sha1hash: faker.random.number(),
   report: faker.internet.avatar(),
@@ -26,6 +24,14 @@ export default Base.extend({
   risk_count_medium: () => faker.datatype.number(20),
   risk_count_passed: () => faker.datatype.number(20),
   risk_count_unknown: () => faker.datatype.number(20),
+
+  version() {
+    return faker.random.number();
+  },
+
+  version_code() {
+    return faker.random.number();
+  },
 
   icon_url() {
     return faker.internet.avatar();

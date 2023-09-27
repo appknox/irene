@@ -1,0 +1,58 @@
+<div class='px-2 py-3'>
+  <AkStack @direction='column' @spacing='3'>
+    {{! header }}
+    <AkStack @spacing='0.5'>
+      <AkSkeleton @width='60px' @height='18px' />
+
+      <AkTypography local-class='breadcrumbs-seperator'>/</AkTypography>
+
+      <AkSkeleton @width='60px' @height='18px' />
+
+      <AkTypography local-class='breadcrumbs-seperator'>/</AkTypography>
+
+      <AkSkeleton @width='60px' @height='18px' />
+    </AkStack>
+
+    <AkStack @width='full' @direction='column'>
+      <div local-class='header-section'>
+        <div class='px-4 py-3'>
+          <AkStack @alignItems='center' @spacing='1.5'>
+
+            <AkStack @spacing='0.5' @alignItems='center'>
+              <AkSkeleton @variant='circular' @width='24px' @height='24px' />
+              <AkSkeleton @width='80px' @height='19px' />
+            </AkStack>
+
+            <AkDivider local-class='divider' />
+
+            <AkStack @spacing='0.5' @alignItems='center'>
+              <AkSkeleton @width='20px' @height='20px' />
+              <AkSkeleton @width='119px' @height='19px' />
+            </AkStack>
+
+          </AkStack>
+        </div>
+      </div>
+
+      <div local-class='header-section'>
+        <div class='p-3 pb-4'>
+          <AkStack @alignItems='center' @justifyContent='space-between'>
+
+            <AkStack @direction='column' @spacing='0.5'>
+              <AkSkeleton @width='72px' @height='22px' />
+              <AkSkeleton @width='300px' @height='24px' />
+            </AkStack>
+
+            <AkSkeleton @width='103px' @height='32px' />
+          </AkStack>
+        </div>
+      </div>
+    </AkStack>
+
+    {{! files loader}}
+    <FileCompare::Loader
+      @loadingText='{{t "loading"}}...'
+      data-test-compareList-loadingContainer
+    />
+  </AkStack>
+</div>

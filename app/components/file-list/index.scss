@@ -1,0 +1,27 @@
+.file-list-root {
+  background-color: var(--file-list-root-background-color);
+  min-height: calc(100vh - 70px);
+
+  .file-list-compare-header-chip {
+    height: 30px;
+
+    &.selected-file-chip {
+      border-style: dashed !important;
+      color: var(--file-list-selected-file-chip-color);
+      background-color: var(--file-list-selected-file-chip-background);
+    }
+  }
+
+  .file-list-wrapper {
+    margin-top: 1.4286em;
+    margin-bottom: 1em;
+    padding: 0em 0.9286em;
+  }
+
+  .file-list-container {
+    display: grid;
+    justify-items: stretch;
+    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+    gap: 1.4286em;
+  }
+}

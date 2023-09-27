@@ -83,6 +83,10 @@
   @extend .mi-arrow-right;
 }
 
+.ak-icon-west {
+  @extend .mi-west;
+}
+
 .ak-icon-warning {
   @extend .mi-warning;
 }
@@ -130,6 +134,7 @@
 .ak-icon-check-circle {
   @extend .mi-check-circle;
 }
+
 .ak-icon-cancel {
   @extend .mi-cancel;
 }
@@ -310,10 +315,6 @@
   @extend .mi-format-list-bulleted;
 }
 
-.ak-icon-schedule {
-  @extend .mi-schedule;
-}
-
 .ak-icon-play-arrow {
   @extend .mi-play-arrow;
 }
@@ -338,6 +339,10 @@
   @extend .mi-person;
 }
 
+.ak-icon-error {
+  @extend .mi-error;
+}
+
 .ak-icon-undo {
   @extend .mi-replay;
 }
@@ -351,7 +356,7 @@
 }
 
 .ak-icon-south {
-  @extend .mi-south
+  @extend .mi-south;
 }
 
 .ak-icon-east {
@@ -402,6 +407,26 @@
   @extend .mi-circle;
 }
 
+.ak-icon-timer {
+  @extend .mi-timer;
+}
+
+.ak-icon-check {
+  @extend .mi-check;
+}
+
+.ak-icon-drag-handle {
+  @extend .mi-drag-handle;
+}
+
+.ak-icon-remove-circle {
+  @extend .mi-remove-circle;
+}
+
+.ak-icon-text-snippet {
+  @extend .mi-text-snippet;
+}
+
 .ak-icon-schedule {
   @extend .mi-schedule;
 }
@@ -430,10 +455,6 @@
   @extend .mi-send;
 }
 
-.ak-icon-error {
-  @extend .mi-error;
-}
-
 .ak-icon-chevron-left {
   @extend .mi-chevron-left;
 }
@@ -450,6 +471,10 @@
   @extend .mi-keyboard-double-arrow-right;
 }
 
-.ak-icon-remove-circle {
-  @extend .mi-remove-circle;
+.ak-icon-apps {
+  @extend .mi-apps;
+}
+
+.ak-icon-compare {
+  @extend .mi-compare;
 }

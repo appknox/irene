@@ -6,16 +6,15 @@ import {
   belongsTo,
   hasMany,
 } from '@ember-data/model';
-
-import { computed } from '@ember/object';
 import ComputedProperty, { sort } from '@ember/object/computed';
+import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { Service as IntlService } from 'ember-intl';
+import Store from '@ember-data/store';
 
 import ENUMS from 'irene/enums';
 import { ModelBaseMixin } from 'irene/mixins/base-model';
 import { RISK_COLOR_CODE } from 'irene/utils/constants';
-import { Service as IntlService } from 'ember-intl';
-import Store from '@ember-data/store';
 
 import ProjectModel from './project';
 import TagModel from './tag';
@@ -126,7 +125,7 @@ export default class FileModel extends ModelBaseMixin {
   declare sbFile: AsyncBelongsTo<SbomFileModel>;
 
   @belongsTo('file', { inverse: null })
-  declare previous_file: AsyncBelongsTo<FileModel>;
+  declare previousFile: AsyncBelongsTo<FileModel>;
 
   analysesSorting = ['computedRisk:desc'];
 

@@ -1,0 +1,54 @@
+.analysis-details-root {
+  width: 50%;
+  border: 1px solid var(--file-compare-analysis-details-border-color);
+  border-top: none;
+  border-bottom-width: 1px;
+
+  .analysis-static-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+
+    code {
+      @extend .scrollable-box;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      margin: 0.4em 0 !important;
+    }
+
+    h3 {
+      margin: 0.4em 0 !important;
+    }
+
+    ul {
+      list-style: unset;
+    }
+
+    ul,
+    ol {
+      margin: 0.25em 1em;
+
+      li {
+        margin: 0.25em 1em;
+      }
+    }
+  }
+
+  &:first-of-type {
+    border-left-width: 1px;
+  }
+
+  &:last-of-type {
+    border-right-width: 1px;
+  }
+
+  .analysis-content-title {
+    width: 185px;
+  }
+
+  .analysis-content-value {
+    width: calc(100% - 185px);
+  }
+}

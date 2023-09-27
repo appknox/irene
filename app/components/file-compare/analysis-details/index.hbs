@@ -1,0 +1,149 @@
+<AkStack ...attributes @direction='column' local-class='analysis-details-root'>
+  <AkStack
+    @width='full'
+    class='p-3'
+    data-test-fileCompare-analysisDetails-severityDetails
+  >
+    <AkTypography @variant='h6' local-class='analysis-content-title'>
+      {{t 'severity'}}
+    </AkTypography>
+
+    <RiskTag @analysis={{@analysis}} />
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AkStack
+    @width='full'
+    class='p-3'
+    data-test-fileCompare-analysisDetails-analysisStatus
+  >
+    <AkTypography @variant='h6' local-class='analysis-content-title'>
+      {{t 'status'}}
+    </AkTypography>
+
+    <AkTypography local-class='analysis-content-value'>
+      {{@analysisStatus}}
+    </AkTypography>
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AkStack @width='full' class='p-3'>
+    <AkTypography
+      @variant='h6'
+      local-class='analysis-content-title'
+      title='{{t "cvssExpansion"}}'
+      data-test-fileCompare-analysisDetails-typeOfScan
+    >
+      {{t 'typeOfScan'}}
+    </AkTypography>
+
+    <FileDetails::TypeOfScan @analysis={{@analysis}} />
+
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AkStack @direction='column' @width='full' class='p-3'>
+    <AkTypography
+      data-test-analysisDetails-descriptionLabel
+      @variant='h6'
+      @gutterBottom={{true}}
+    >
+      {{t 'description'}}
+    </AkTypography>
+
+    <AkTypography
+      local-class='analysis-static-content'
+      data-test-analysisDetails-descriptionValue
+    >
+      {{this.vulnerabilityDescription}}
+    </AkTypography>
+  </AkStack>
+
+  {{#if (or @analysis.isRisky @analysis.attachments)}}
+    <AkDivider @color='dark' />
+
+    <AkStack @width='full' @direction='column' class='p-3'>
+      {{#if @analysis.isRisky}}
+        <AkTypography @variant='h6' @gutterBottom={{true}}>
+          {{t 'vulnerability'}}
+        </AkTypography>
+
+        {{#each @analysis.findings as |finding|}}
+          <AkTypography local-class='analysis-content-value'>
+            {{finding.title}}
+          </AkTypography>
+
+          <span class='scrollable-box'>
+            <pre class='pre-code'>{{finding.description}}</pre>
+          </span>
+        {{/each}}
+      {{/if}}
+    </AkStack>
+
+    {{#if @analysis.attachments}}
+      <AkStack @width='full' @direction='column' class='px-3 pb-3'>
+        <AkTypography @variant='h6' @gutterBottom={{true}}>
+          {{t 'attachments'}}
+        </AkTypography>
+
+        {{#each @analysis.attachments as |attachment|}}
+          <AttachmentDetail @attachment={{attachment}} />
+        {{/each}}
+      </AkStack>
+    {{/if}}
+  {{/if}}
+
+  {{#if (and (eq @analysis.cvssVersion 3) @analysis.cvssVector)}}
+    <AkDivider @color='dark' />
+
+    <AkStack data-test-analysisDetails-regulatory='cvssv3' class='p-3'>
+      <AkTypography
+        @variant='h6'
+        local-class='analysis-content-title'
+        title='{{t "cvssExpansion"}}'
+        data-test-analysisDetails-regulatoryLabel
+      >
+        {{t 'cvssV3'}}
+      </AkTypography>
+
+      <AkTypography
+        local-class='analysis-content-value'
+        data-test-analysisDetails-regulatoryValue
+        class='column black-text'
+      >
+        {{@analysis.cvssBase}}
+      </AkTypography>
+    </AkStack>
+
+    <AkDivider @color='dark' />
+
+    <div data-test-analysisDetails-regulatory='cvssv3metrics' class='p-3'>
+      <AkTypography
+        @variant='h6'
+        @gutterBottom={{true}}
+        data-test-analysisDetails-regulatoryLabel
+      >
+        {{t 'cvssMetrics'}}
+      </AkTypography>
+
+      <FileCompare::AnalysisDetails::RegulatoryContent
+        @contents={{@analysis.cvssMetricsHumanized}}
+      >
+        <:label as |metric|>
+          <AkTypography>
+            {{metric.key}}
+          </AkTypography>
+        </:label>
+
+        <:value as |metric|>
+          <AkTypography>
+            {{metric.value}}
+          </AkTypography>
+        </:value>
+      </FileCompare::AnalysisDetails::RegulatoryContent>
+    </div>
+  {{/if}}
+</AkStack>

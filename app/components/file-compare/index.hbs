@@ -1,0 +1,107 @@
+<FileCompare::Header
+  @file1={{@file1}}
+  @file2={{@file2}}
+  @expandFilesOverview={{this.expandFilesOverview}}
+  data-test-fileCompare-header
+>
+  <:breadcrumbs>
+    <AkBreadcrumbs::Container data-test-fileCompare-breadcrumbContainer>
+      {{#each this.breadcrumbItems as |item|}}
+        <AkBreadcrumbs::Item
+          @route={{item.route}}
+          @model={{item.model}}
+          @linkTitle={{item.linkTitle}}
+          data-test-fileCompare-breadcrumbItem='{{item.linkTitle}}'
+        />
+      {{/each}}
+    </AkBreadcrumbs::Container>
+  </:breadcrumbs>
+
+  <:file1Content>
+    {{#if this.file1}}
+      <AkTypography
+        @fontWeight='bold'
+        @variant='body2'
+        @color='secondary'
+        data-test-fileCompare-header-baseFileId
+      >
+        {{this.file1.id}}
+      </AkTypography>
+    {{else}}
+      -
+    {{/if}}
+  </:file1Content>
+
+  <:file2Content>
+    {{#if this.file2}}
+      <AkStack @alignItems='center'>
+        <AkTypography
+          @fontWeight='bold'
+          @variant='body2'
+          @color='secondary'
+          data-test-fileCompare-header-compareFileId
+        >
+          {{this.file2.id}}
+        </AkTypography>
+
+        <AkIconButton
+          {{on 'click' this.goToCompareSelect}}
+          data-test-fileCompare-header-compareFileEditIcon
+        >
+          <AkIcon
+            @iconName='edit'
+            @color='primary'
+            {{style fontSize='1em !important'}}
+          />
+        </AkIconButton>
+      </AkStack>
+    {{else}}
+      -
+    {{/if}}
+  </:file2Content>
+
+  <:headerCTA>
+    <AkStack @alignItems='center' @spacing='2'>
+      {{!-- <AkButton
+        local-class='file-compare-report-download-btn'
+        data-test-fileCompare-header-reportDownloadBtn
+      >
+        <:leftIcon>
+          <AkIcon @iconName='download' />
+        </:leftIcon>
+
+        <:default>
+          {{t 'downloadReport'}}
+        </:default>
+      </AkButton> --}}
+
+      <AkIconButton
+        {{on 'click' this.handleExpandFilesOverview}}
+        data-test-fileCompare-header-showFilesOverview-icon
+      >
+        <AkIcon
+          @iconName='arrow-drop-{{if this.expandFilesOverview "up" "down"}}'
+          @size='medium'
+          @color='secondary'
+        />
+      </AkIconButton>
+    </AkStack>
+  </:headerCTA>
+</FileCompare::Header>
+
+<div local-class='file-compare-tabs' class='px-3 pb-3'>
+  <AkTabs class='w-full' as |Akt|>
+    {{#each this.tabItems as |item|}}
+      <Akt.tabItem
+        @id={{item.id}}
+        @hasBadge={{true}}
+        @badgeCount={{item.badgeCount}}
+        @route={{item.route}}
+        @model={{concat @file1.id '...' @file2.id}}
+        data-test-file-compare-tabs='{{item.id}}-tab'
+      >
+        {{item.label}}
+      </Akt.tabItem>
+    {{/each}}
+  </AkTabs>
+</div>
