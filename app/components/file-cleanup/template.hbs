@@ -29,7 +29,7 @@
             <button type="button" local-class="save-input {{unless this.changeset.error.filesToKeep 'correct-input'}}"
               disabled={{if this.changeset.error.filesToKeep "disabled"}}
               {{on "click" (fn this.onChangePref this.changeset)}}>
-              {{fa-icon "check"}}
+              <AkIcon @iconName='done' />
             </button>
             {{#if this.changeset.error.filesToKeep}}
               <span local-class="file-count-err">{{this.changeset.error.filesToKeep.validation}}</span>

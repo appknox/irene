@@ -48,11 +48,13 @@
   <div local-class='app-information'>
     <div local-class='file-id-text' data-test-file-overview-file-id>
       {{#unless this.file.isActive}}
-        {{fa-icon
-          'exclamation-circle'
+        <AkIcon
+          data-test-file-overview-file-id-icon
+          @iconName='error'
+          @size='small'
           local-class='file-in-active-icon'
           class='margin-right'
-        }}
+        />
 
         <AttachTooltip @placement='top'>
           {{t 'fileInactive'}}
@@ -66,11 +68,11 @@
       <div class='scan-status-tag' data-test-static-scan-status-tag>
         {{#if this.file.isStaticDone}}
           <div class='scan-status-tag-icon scan-status-tag-icon-done'>
-            {{fa-icon 'check-circle'}}
+            <AkIcon @iconName='check-circle' @size='small' />
           </div>
         {{else}}
           <div class='scan-status-tag-icon'>
-            {{fa-icon 'circle-o'}}
+            <AkIcon @iconName='circle' @variant='outlined' @size='small' />
           </div>
         {{/if}}
         <div
@@ -83,11 +85,11 @@
       <div class='scan-status-tag' data-test-dynamic-scan-status-tag>
         {{#if this.file.isDynamicDone}}
           <div class='scan-status-tag-icon scan-status-tag-icon-done'>
-            {{fa-icon 'check-circle'}}
+            <AkIcon @iconName='check-circle' @size='small' />
           </div>
         {{else}}
           <div class='scan-status-tag-icon'>
-            {{fa-icon 'circle-o'}}
+            <AkIcon @iconName='circle' @variant='outlined' @size='small' />
           </div>
         {{/if}}
         <div
@@ -100,11 +102,11 @@
       <div class='scan-status-tag' data-test-api-scan-status-tag>
         {{#if this.file.isApiDone}}
           <div class='scan-status-tag-icon scan-status-tag-icon-done'>
-            {{fa-icon 'check-circle'}}
+            <AkIcon @iconName='check-circle' @size='small' />
           </div>
         {{else}}
           <div class='scan-status-tag-icon'>
-            {{fa-icon 'circle-o'}}
+            <AkIcon @iconName='circle' @variant='outlined' @size='small' />
           </div>
         {{/if}}
         <div class='scan-status-tag-label' data-test-api-scan-status-tag-label>
@@ -115,15 +117,15 @@
         <div class='scan-status-tag' data-test-manual-scan-status-tag>
           {{#if this.file.isManualDone}}
             <div class='scan-status-tag-icon scan-status-tag-icon-done'>
-              {{fa-icon 'check-circle'}}
+              <AkIcon @iconName='check-circle' @size='small' />
             </div>
           {{else if this.file.isManualRequested}}
             <div class='scan-status-tag-icon scan-status-tag-icon-done'>
-              {{fa-icon 'clock-o'}}
+              <AkIcon @iconName='timer' @variant="outlined" @size='small' />
             </div>
           {{else}}
             <div class='scan-status-tag-icon'>
-              {{fa-icon 'circle-o'}}
+              <AkIcon @iconName='circle' @variant='outlined' @size='small' />
             </div>
           {{/if}}
           <div

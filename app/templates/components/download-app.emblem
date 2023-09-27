@@ -9,7 +9,6 @@
             = input class="form-control input" id="file-number" placeholder="Enter the file number" type="text" value=fileNumber
           button.is-primary click="downloadApp" disabled=isDownloadingApp
             if isDownloadingApp
-              .fa-font-size
-                i.fa class="fa-spinner fa-spin"
+              ak-loader size=13
               | &nbsp;
             | Download App
