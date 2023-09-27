@@ -77,6 +77,13 @@ module('Integration | Component | file-compare/header', function (hooks) {
       .doesNotExist();
 
     assert
+      .dom('[data-test-fileCompareHeader-projectOverview-platformIcon]')
+      .exists()
+      .hasClass(
+        RegExp(`platform-${this.file1.project.get('platformIconClass')}`)
+      );
+
+    assert
       .dom('[data-test-fileCompareHeader-projectOverview-settingsBtn]')
       .doesNotExist();
 

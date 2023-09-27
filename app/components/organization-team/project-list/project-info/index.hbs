@@ -1,13 +1,8 @@
-<AkStack @alignItems='center'>
-  <span
-    class='mr-2'
-    local-class='team-project-icon-{{this.teamProject.platformIconClass}}'
-  >
-    {{fa-icon
-      this.teamProject.platformIconClass
-      local-class='team-project-icon'
-    }}
-  </span>
+<AkStack @alignItems='center' @spacing='2'>
+  <AkIcon
+    @iconName='{{this.teamProject.platformIconClass}}'
+    local-class='team-project-icon team-project-icon-{{this.teamProject.platformIconClass}}'
+  />
 
   <AkLink
     @route='authenticated.project.files'

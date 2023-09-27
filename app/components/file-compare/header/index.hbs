@@ -63,6 +63,16 @@
             </AkTypography>
           </AkStack>
         {{/if}}
+
+        <AkDivider local-class='divider' />
+
+        <AkStack @alignItems='center'>
+          <AkIcon
+            data-test-fileCompareHeader-projectOverview-platformIcon
+            @iconName='{{this.platformIconClass}}'
+            local-class='platform-{{this.platformIconClass}}'
+          />
+        </AkStack>
       </AkStack>
 
       {{#if @project}}

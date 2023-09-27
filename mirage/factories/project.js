@@ -26,7 +26,7 @@ export default Base.extend({
   },
 
   platform() {
-    return faker.random.arrayElement([0, 1, 2]);
+    return faker.random.arrayElement([0, 1]);
   },
 
   test_password() {

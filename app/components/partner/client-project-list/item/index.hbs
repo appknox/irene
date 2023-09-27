@@ -1,10 +1,11 @@
 {{! template-lint-disable no-curly-component-invocation }}
-<div
+<AkStack 
+  @alignItems='center'
   local-class='platform platform-{{@project.platformIcon}}'
   data-test-platform='{{@project.platformIcon}}'
 >
-  {{fa-icon @project.platformIcon}}
-</div>
+  <AkIcon @iconName='{{@project.platformIcon}}' />
+</AkStack>
 <div
   local-class='package-name'
   title='Project ID: {{@project.id}}'
