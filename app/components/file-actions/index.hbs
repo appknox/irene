@@ -19,7 +19,7 @@
             type='button'
             {{on 'click' (perform this.downloadApp)}}
           >
-            {{fa-icon 'download'}}&nbsp; Original
+            <AkIcon @iconName='download' />&nbsp; Original
             {{this.file.fileFormatDisplay}}
           </button>
           <button
@@ -27,7 +27,7 @@
             type='button'
             {{on 'click' (perform this.downloadAppModified)}}
           >
-            {{fa-icon 'download'}}&nbsp; Resigned
+            <AkIcon @iconName='download' />&nbsp; Resigned
           </button>
           <a
             href={{this.ireneFilePath}}

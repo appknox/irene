@@ -21,9 +21,8 @@
           {{risk-text this.analysis.risk}}
         </div>
         {{#if this.analysis.overriddenRisk}}
-          {{fa-icon 'long-arrow-right'}}<div
-            class='tag {{risk-label-class this.analysis.overriddenRisk}}'
-          >
+          <AkIcon @iconName='east' />
+          <div class='tag {{risk-label-class this.analysis.overriddenRisk}}'>
             {{risk-text this.analysis.overriddenRisk}}
           </div>
         {{/if}}
@@ -35,7 +34,7 @@
           type='button'
           {{on 'click' this.openMarkPassedConfirmBox}}
         >
-          {{fa-icon 'check'}}
+          <AkIcon @iconName='done' />
         </button>
       </div>
     </div>
@@ -46,13 +45,13 @@
         class='tag scan-tag {{if tag.status "finished-scan" "unfinished-scan"}}'
       >
         {{t tag.text}}{{#if tag.status}}
-          {{fa-icon 'check'}}
+          <AkIcon @iconName='done' @size='small' />
           <AttachTooltip @position='top'>
             {{tag.text}}
             {{t 'scanCompleted'}}
           </AttachTooltip>
         {{else}}
-          {{fa-icon 'times'}}
+          <AkIcon @iconName='close' @size='small' />
           <AttachTooltip @position='top'>
             {{tag.text}}
             {{t 'scanNotCompleted'}}

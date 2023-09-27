@@ -8,10 +8,17 @@
       </div>
       <div class='column content-right top-icons'>
         <a href='#'>
-          {{fa-icon 'user' class='sidebar-icons'}}
-          {{@user.username}}
-          &nbsp;
-          {{fa-icon 'angle-down' class='sidebar-icons'}}
+          <AkStack
+            @direction='row'
+            @justifyContent='center'
+            @alignItems='center'
+          >
+            <AkIcon @iconName='account-circle' />
+            &nbsp;
+            {{@user.username}}
+            &nbsp;
+            <AkIcon @iconName='arrow-down' />
+          </AkStack>
 
           <AttachPopover
             @interactive={{true}}
@@ -33,8 +40,11 @@
                   class='mp-auth-logout highlighted-button'
                   {{on 'click' @logoutAction}}
                 >
-                  {{fa-icon 'power-off' class='sidebar-icons'}}
-                  {{t 'logout'}}
+                  <AkStack @alignItems='center'>
+                    <AkIcon @iconName='logout' @size='small' />
+                    &nbsp;
+                    {{t 'logout'}}
+                  </AkStack>
                 </a>
               </div>
             </div>
