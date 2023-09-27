@@ -7,7 +7,7 @@
         form.input-form
           p.control
             = input class="form-control input" id="file-number" placeholder="Enter the file number" type="text" value=fileNumber
-          button.is-primary click="downloadApp" disabled=isDownloadingApp
+          button.is-primary class="{{if isDownloadingApp 'no-hover-button'}}" click="downloadApp" disabled=isDownloadingApp
             if isDownloadingApp
               ak-loader size=13
               | &nbsp;

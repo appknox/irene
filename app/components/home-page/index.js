@@ -2,7 +2,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 
 export default class HomePageComponent extends Component {
@@ -19,7 +18,7 @@ export default class HomePageComponent extends Component {
   @tracked isSecurityEnabled = false;
   @tracked isSecurityDashboard = false;
   @tracked isEmptyOrgName = this.checkIfOrgNameIsEmpty;
-  @tracked isUpdatingOrg = false;
+  @tracked showAddEditModal = this.isEmptyOrgName;
 
   tSomethingWentWrong = this.intl.t('somethingWentWrong');
   tOrganizationNameUpdated = this.intl.t('organizationNameUpdated');
@@ -82,29 +81,8 @@ export default class HomePageComponent extends Component {
     this.session.invalidate();
   }
 
-  @task(function* () {
-    this.isUpdatingOrg = true;
-    const org = this.organization.selected;
-    org.name = this.organizationName;
-    yield org.save();
-
-    try {
-      this.notifications.success(this.tOrganizationNameUpdated);
-      this.isEmptyOrgName = false;
-      this.isUpdatingOrg = false;
-    } catch (err) {
-      let errMsg = this.tSomethingWentWrong;
-      if (err.errors && err.errors.length) {
-        errMsg = err.errors[0].detail || errMsg;
-      } else if (err.message) {
-        errMsg = err.message;
-      }
-
-      this.isEmptyOrgName = false;
-      this.isUpdatingOrg = false;
-
-      this.notifications.error(errMsg);
-    }
-  })
-  updateOrgName;
+  @action
+  handleCancel() {
+    this.showAddEditModal = false;
+  }
 }

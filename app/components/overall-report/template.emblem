@@ -9,7 +9,7 @@
       .column.content-right
         = date-picker class="custom-styled-picker" renderInPlace=true  value=dateRange  maxDate=maxDate range=true options=datepickerOptions onChange=(action "updateDateRange") as |selectedDates|
           .align-middle
-            = fa-icon "calendar" class="font-small" title="Select date range"
+            = ak-icon iconName="calendar-month" class="font-small" title="Select date range"
             button local-class="date-btn"
               if selectedDates.firstObject
                 = day-js date=selectedDates.firstObject format="DD MMM YYYY"

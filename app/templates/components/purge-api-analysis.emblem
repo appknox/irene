@@ -8,9 +8,8 @@
       form.input-form
         p.control
           = input class="form-control input" placeholder="Enter the file ID" type="text" value=fileNumber
-        button.is-primary click="purgeAPIAnalyses" disabled=isPurgingAPIAnalyses
+        button.is-primary class="{{if isPurgingAPIAnalyses 'no-hover-button'}}" click="purgeAPIAnalyses" disabled=isPurgingAPIAnalyses
           if isPurgingAPIAnalyses
-            .fa-font-size
-              i.fa class="fa-spinner fa-spin"
+            ak-loader size=13
             | &nbsp;
           | SUBMIT
