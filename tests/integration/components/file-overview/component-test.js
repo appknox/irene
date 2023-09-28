@@ -151,7 +151,7 @@ module('Integration | Component | file-overview', function (hooks) {
     // Platform Icon
     assert.dom(`[data-test-file-overview-platform-icon]`).exists();
     const platformIconElementClass = this.element.querySelector(
-      `[data-test-file-overview-platform-icon] i`
+      `[data-test-file-overview-platform-icon]`
     )?.className;
 
     assert.ok(

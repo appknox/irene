@@ -1,6 +1,7 @@
-<div local-class='project-card'>
-  <span class='margin-l-q platform-icon--{{@project.platformIcon}}'>
-    {{fa-icon @project.platformIcon}}
-  </span>
+<AkStack local-class='project-card' @alignItems='center'>
+  <AkIcon
+    @iconName='{{@project.platformIcon}}'
+    class='platform-icon--{{@project.platformIcon}}'
+  />
   <span class='black-text'>{{@project.packageName}}</span>
-</div>
+</AkStack>

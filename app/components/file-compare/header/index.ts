@@ -38,6 +38,13 @@ export default class FileCompareHeaderComponent extends Component<FileCompareHea
     return this.args.file2;
   }
 
+  get platformIconClass() {
+    return (
+      this.args.project?.get('platformIconClass') ||
+      this.file1?.project.get('platformIconClass')
+    );
+  }
+
   get breadcrumbItems(): AkBreadcrumbsItemSignature['Args'][] {
     return [
       {
