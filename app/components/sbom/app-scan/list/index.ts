@@ -49,10 +49,6 @@ export default class SbomAppScanListComponent extends Component<SbomAppScanListS
     this.fetchSbomProjectFiles.perform(scan_limit, scan_offset, false);
   }
 
-  get projectName() {
-    return this.args.sbomProject.project.get('lastFile')?.get('name');
-  }
-
   get openViewReportDrawer() {
     return Boolean(this.selectedSbomFile);
   }

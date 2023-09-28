@@ -1,4 +1,3 @@
-{{! @glint-nocheck: fa-icon}}
 <AkStack
   ...attributes
   data-test-appPlatform-container
@@ -6,12 +5,9 @@
   @justifyContent='center'
   @alignItems='center'
 >
-  <span
+  <AkIcon
     data-test-appPlatform-icon
-  >
-    <AkIcon
-      @iconName='{{this.platformIconClass}}'
-      local-class='app-platform-icon-{{this.platformIconClass}}'
-    />
-  </span>
+    @iconName='{{this.platformIconClass}}'
+    local-class='app-platform-icon-{{this.platformIconClass}}'
+  />
 </AkStack>

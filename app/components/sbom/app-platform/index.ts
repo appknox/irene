@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import SbomProjectModel from 'irene/models/sbom-project';
 
 export interface SbomAppPlatformSignature {
-  Element: HTMLDivElement;
+  Element: HTMLElement;
   Args: {
     sbomProject?: SbomProjectModel;
     bordered?: boolean;

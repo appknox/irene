@@ -75,13 +75,23 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
       this.sbomFile.status = status;
 
       await render(hbs`
-      <Sbom::ScanDetails 
-        @sbomProject={{this.sbomProject}} 
-        @sbomFile={{this.sbomFile}} 
-        @sbomScanSummary={{this.sbomScanSummary}} 
-        @queryParams={{this.queryParams}} 
-      />
-    `);
+        <Sbom::ScanDetails 
+          @sbomProject={{this.sbomProject}} 
+          @sbomFile={{this.sbomFile}} 
+          @sbomScanSummary={{this.sbomScanSummary}} 
+          @queryParams={{this.queryParams}} 
+        />
+      `);
+
+      assert
+        .dom('[data-test-sbomScanDetails-componentTitle]')
+        .hasText('t:sbomModule.allComponents:()');
+
+      assert
+        .dom('[data-test-sbomScanDetails-componentDescription]')
+        .hasText('t:sbomModule.componentDescription:()');
+
+      // assert.dom('[data-test-sbomScanDetails-componentSearchInput]').hasNoValue();
 
       assert.dom('[data-test-sbomScanDetails-container]').exists();
 
@@ -99,11 +109,16 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
         assert.dom('[data-test-sbomScanDetails-viewReport-btn]').doesNotExist();
       }
 
-      // By default the "showMoreOrLess" button has a text of "t:showMore:()"
+      // By default the content is collapsed"
       assert
-        .dom('[data-test-sbomScanDetails-showMoreOrLess-btn]')
-        .exists()
-        .containsText('t:showMore:()');
+        .dom('[data-test-sbomSummaryHeader-collapsibleToggleBtn]')
+        .isNotDisabled();
+
+      assert
+        .dom('[data-test-sbomSummaryHeader-collapsibleContent]')
+        .doesNotExist();
+
+      assert.dom('[data-test-fileScanSummary-container]').doesNotExist();
 
       if (status === SbomScanStatus.COMPLETED) {
         assert
@@ -143,12 +158,10 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
       }
 
       assert.dom('[data-test-sbomReportDrawer-drawer]').doesNotExist();
-
-      assert.dom('[data-test-fileScanSummary-container]').doesNotExist();
     }
   );
 
-  test('it toggles file and scan  summary on "show more or less" button click', async function (assert) {
+  test('it toggles file and scan  summary on header toggle collapse button click', async function (assert) {
     this.sbomFile.status = SbomScanStatus.COMPLETED;
 
     await render(hbs`
@@ -163,15 +176,17 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
     assert.dom('[data-test-fileScanSummary-container]').doesNotExist();
 
     assert
-      .dom('[data-test-sbomScanDetails-showMoreOrLess-btn]')
-      .containsText('t:showMore:()');
-
-    // Show file and scan summary
-    await click('[data-test-sbomScanDetails-showMoreOrLess-btn]');
+      .dom('[data-test-sbomSummaryHeader-collapsibleToggleBtn]')
+      .isNotDisabled();
 
     assert
-      .dom('[data-test-sbomScanDetails-showMoreOrLess-btn]')
-      .containsText('t:showLess:()');
+      .dom('[data-test-sbomSummaryHeader-collapsibleContent]')
+      .doesNotExist();
+
+    // Show file and scan summary
+    await click('[data-test-sbomSummaryHeader-collapsibleToggleBtn]');
+
+    assert.dom('[data-test-sbomSummaryHeader-collapsibleContent]').exists();
 
     assert.dom('[data-test-fileScanSummary-container]').exists();
 
@@ -280,12 +295,8 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
       }
     }
 
-    // Show file and scan summary
-    await click('[data-test-sbomScanDetails-showMoreOrLess-btn]');
-
-    assert
-      .dom('[data-test-sbomScanDetails-showMoreOrLess-btn]')
-      .containsText('t:showMore:()');
+    // collapse file and scan summary
+    await click('[data-test-sbomSummaryHeader-collapsibleToggleBtn]');
 
     assert.dom('[data-test-fileScanSummary-container]').doesNotExist();
   });

@@ -131,6 +131,10 @@ Router.map(function () {
           this.route('scan-details', {
             path: 'apps/:sbom_project_id/scans/:sbom_file_id',
           });
+
+          this.route('component-details', {
+            path: 'apps/:sbom_project_id/scans/:sbom_file_id/components/:sbom_component_id',
+          });
         });
 
         this.route(

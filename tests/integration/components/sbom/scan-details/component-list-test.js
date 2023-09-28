@@ -77,6 +77,7 @@ module(
           component_offset: 0,
           component_query: '',
         },
+        store,
       });
 
       this.owner.register('service:router', RouterStub);
@@ -98,12 +99,6 @@ module(
       />
     `);
 
-      assert
-        .dom('[data-test-sbomComponent-title]')
-        .hasText('t:sbomModule.allComponents:()');
-
-      // assert.dom('[data-test-sbomComponent-searchInput]').hasNoValue();
-
       assert.dom('[data-test-sbomComponent-table]').exists();
 
       const headerRow = find(
@@ -114,7 +109,7 @@ module(
       assert.dom(headerRow[0]).hasText('t:sbomModule.componentName:()');
       assert.dom(headerRow[1]).hasText('t:sbomModule.componentType:()');
       assert.dom(headerRow[2]).hasText('t:version:()');
-      assert.dom(headerRow[3]).hasText('t:sbomModule.knownVulnerabilities:()');
+      assert.dom(headerRow[3]).hasText('t:status:()');
 
       const contentRows = findAll('[data-test-sbomComponent-row]');
 
@@ -125,24 +120,46 @@ module(
         '[data-test-sbomComponent-cell]'
       );
 
-      assert.dom(firstRow[0]).hasText(this.sbomComponents[0].name);
+      const sbomComponent = this.store.peekRecord(
+        'sbom-component',
+        this.sbomComponents[0].id
+      );
 
-      assert.dom(firstRow[1]).hasText(capitalize(this.sbomComponents[0].type));
+      assert.dom(firstRow[0]).hasText(sbomComponent.name);
+
+      assert.dom(firstRow[1]).hasText(capitalize(sbomComponent.type));
 
       assert
         .dom('[data-test-sbomComponent-version]', firstRow[2])
-        .hasText(this.sbomComponents[0].version);
+        .hasText(sbomComponent.version);
 
-      assert
-        .dom('[data-test-sbomComponent-knownVulnerability]', firstRow[3])
-        .hasText(
-          this.sbomComponents[0].vulnerabilities_count > 0
-            ? 'T:YES:()'
-            : 'T:NO:()'
-        );
+      if (sbomComponent.isOutdated) {
+        assert
+          .dom(
+            '[data-test-sbomComponent-status="t:chipStatus.outdated:()"]',
+            firstRow[3]
+          )
+          .hasText('t:chipStatus.outdated:()');
+      }
+
+      if (sbomComponent.isVulnerable) {
+        assert
+          .dom(
+            '[data-test-sbomComponent-status="t:chipStatus.vulnerable:()"]',
+            firstRow[3]
+          )
+          .hasText('t:chipStatus.vulnerable:()');
+      } else {
+        assert
+          .dom(
+            '[data-test-sbomComponent-status="t:chipStatus.secure:()"]',
+            firstRow[3]
+          )
+          .hasText('t:chipStatus.secure:()');
+      }
     });
 
-    test('it opens sbom scan component details drawer', async function (assert) {
+    test('it triggers sbom scan component details route on row click', async function (assert) {
       this.server.get('/v2/sb_files/:scan_id/sb_components', (schema) => {
         const results = schema.sbomComponents.all().models;
 
@@ -164,35 +181,20 @@ module(
 
       await click(contentRows[2]);
 
-      assert.dom('[data-test-componentDetails-container]').exists();
-      assert.dom('[data-test-componentDetails-tabs]').exists();
+      const router = this.owner.lookup('service:router');
+      const transitionToArgs = router.transitionToArgs;
 
-      // Tests for the component details tab
-      const componentDetailsTabs = [
-        {
-          id: 'component_details',
-          label: 't:sbomModule.componentDetails:()',
-        },
-        {
-          id: 'known_vulnerabilities',
-          badgeCount: this.sbomComponents[2].vulnerabilities_count,
-          hasBadge: true,
-          label: 't:sbomModule.knownVulnerabilities:()',
-        },
-      ];
+      assert.true(transitionToArgs.length > 0);
 
-      componentDetailsTabs.forEach((tab) => {
-        assert
-          .dom(`[data-test-componentDetails-tab='${tab.id}']`)
-          .exists()
-          .containsText(tab.label);
+      assert.strictEqual(
+        transitionToArgs[0],
+        'authenticated.dashboard.sbom.component-details'
+      );
+      assert.strictEqual(transitionToArgs[1], this.sbomProject.id);
 
-        if (tab.hasBadge) {
-          assert
-            .dom(`[data-test-componentDetails-tab='${tab.id}']`)
-            .containsText(`${tab.badgeCount}`);
-        }
-      });
+      assert.strictEqual(transitionToArgs[2], this.sbomFile.id);
+
+      assert.strictEqual(transitionToArgs[3], this.sbomComponents[2].id);
     });
 
     test.skip('test sbom scan component list search', async function (assert) {
@@ -226,7 +228,7 @@ module(
       assert.strictEqual(this.query, this.queryParams.component_query);
     });
 
-    test('test sbom scan component version column', async function (assert) {
+    test('test sbom scan component outdated version', async function (assert) {
       this.sbomComponents[0].version = '1.0.0';
 
       this.sbomComponents[0].latest_version = '1.0.0';
@@ -263,7 +265,10 @@ module(
         .hasText(this.sbomComponents[0].version);
 
       assert
-        .dom('[data-test-sbomComponent-versionOutdatedIcon]', firstRow[2])
+        .dom(
+          '[data-test-sbomComponent-status="t:chipStatus.outdated:()"]',
+          firstRow[3]
+        )
         .doesNotExist();
 
       // second row sanity check
@@ -276,19 +281,11 @@ module(
         .hasText(this.sbomComponents[1].version);
 
       assert
-        .dom('[data-test-sbomComponent-versionOutdatedIcon]', secondRow[2])
-        .exists();
-
-      assert.dom('[data-test-ak-tooltip-root]', secondRow[2]).exists();
-
-      await triggerEvent(
-        secondRow[2].querySelector('[data-test-ak-tooltip-root]'),
-        'mouseenter'
-      );
-
-      assert
-        .dom('[data-test-sbomComponent-versionOutdatedText]')
-        .hasText('t:sbomModule.sbomComponentOutdated:()');
+        .dom(
+          '[data-test-sbomComponent-status="t:chipStatus.outdated:()"]',
+          secondRow[3]
+        )
+        .hasText('t:chipStatus.outdated:()');
     });
 
     test('it renders sbom scan component list loading & empty state', async function (assert) {
@@ -309,11 +306,7 @@ module(
       />
     `);
 
-      await waitFor('[data-test-sbomComponent-title]', { timeout: 500 });
-
-      assert
-        .dom('[data-test-sbomComponent-title]')
-        .hasText('t:sbomModule.allComponents:()');
+      await waitFor('[data-test-sbom-loadingSvg]', { timeout: 500 });
 
       // assert.dom('[data-test-sbomComponent-searchInput]').hasNoValue();
 

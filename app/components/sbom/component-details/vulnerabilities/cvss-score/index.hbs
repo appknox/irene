@@ -1,0 +1,10 @@
+<AkTypography
+  @fontWeight='bold'
+  data-test-sbomComponentVulnerabilities-cvssScore
+>
+  {{#if this.isUnknownSeverity}}
+    -
+  {{else}}
+    {{this.score}}
+  {{/if}}
+</AkTypography>

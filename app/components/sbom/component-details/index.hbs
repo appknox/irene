@@ -1,0 +1,45 @@
+<div class='px-3 py-1' data-test-sbomComponentDetails-container>
+  <AkStack class='mb-3' @direction='column' @spacing='0.5'>
+    <AkTypography data-test-sbomComponentDetails-title @variant='h5'>
+      {{t 'sbomModule.componentDetails'}}
+    </AkTypography>
+
+    <AkTypography
+      data-test-sbomComponentDetails-description
+      @variant='body2'
+      @color='textSecondary'
+    >
+      {{t 'sbomModule.componentDetailsDescription'}}
+    </AkTypography>
+  </AkStack>
+
+  <Sbom::SummaryHeader>
+    <:summary>
+      <AkStack class='p-1'>
+        <AkTypography
+          data-test-sbomComponentDetails-headerTitleLabel
+          {{style width='160px'}}
+          @color='textSecondary'
+        >
+          {{t 'sbomModule.componentName'}}
+        </AkTypography>
+
+        <AkTypography
+          data-test-sbomComponentDetails-headerTitleValue
+          @variant='h6'
+        >
+          {{@sbomComponent.name}}
+        </AkTypography>
+      </AkStack>
+    </:summary>
+
+    <:collapsibleContent>
+      <Sbom::ComponentDetails::Summary @sbomComponent={{@sbomComponent}} />
+    </:collapsibleContent>
+  </Sbom::SummaryHeader>
+
+  <Sbom::ComponentDetails::Vulnerabilities
+    class='mt-3'
+    @sbomComponent={{@sbomComponent}}
+  />
+</div>

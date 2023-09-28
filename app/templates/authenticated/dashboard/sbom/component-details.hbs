@@ -1,0 +1,29 @@
+{{page-title 'Component Details'}}
+
+<AkBreadcrumbs::Container
+  @id='sbom-component-details-breadcrumb'
+  class='px-3 pt-2 pb-3'
+>
+  <AkBreadcrumbs::Item
+    @route='authenticated.dashboard.sbom.apps'
+    @linkTitle={{t 'SBOM'}}
+  />
+
+  <AkBreadcrumbs::Item
+    @route='authenticated.dashboard.sbom.scan-details'
+    @linkTitle='{{t
+      "sbomModule.allComponentsAndVulnerabilities"
+    }} ({{@model.sbomComponent.sbFile.sbProject.project.lastFile.name}})'
+    @models={{array
+      @model.sbomComponent.sbFile.sbProject.id
+      @model.sbomComponent.sbFile.id
+    }}
+  />
+
+  <AkBreadcrumbs::Item
+    @route='authenticated.dashboard.sbom.component-details'
+    @linkTitle={{t 'sbomModule.componentDetails'}}
+  />
+</AkBreadcrumbs::Container>
+
+<Sbom::ComponentDetails @sbomComponent={{@model.sbomComponent}} />

@@ -120,7 +120,10 @@
     "inProgress": "IN PROGRESS",
     "completed": "COMPLETED",
     "failed": "FAILED",
-    "neverInitiated": "NEVER INITIATED"
+    "neverInitiated": "NEVER INITIATED",
+    "outdated": "OUTDATED",
+    "vulnerable": "VULNERABLE",
+    "secure": "SECURE"
   },
   "circleCIPipeline": "Circle CI Pipeline",
   "clickOnDynamicScan": "Click on Start Dynamic Scan",
@@ -689,6 +692,7 @@
   "noUploads": "No uploads",
   "none": "None",
   "nonCompliantCodeExample": "Noncompliant Code Example",
+  "notAvailable": "Not Available",
   "notFound": "Not Found",
   "notScanned": "Not Scanned",
   "note": "Note",
@@ -995,6 +999,12 @@
   "sbomModule": {
     "applicationName": "Application Name",
     "applicationVersion": "Application Version",
+    "affectedVersions": "Affected Versions",
+    "affectedAndFixedVersion": {
+      "title": "Affected & Fixed Versions",
+      "emptyTitle": "No Data Available"
+    },
+    "fixedVersions": "Fixed Versions",
     "generatedDate": "Generated Date",
     "versionCode": "Version Code",
     "lastSbomAnalysisOn": "Last SBOM Analysis On",
@@ -1021,6 +1031,8 @@
     "components": "Components",
     "componentType": "Components Type",
     "componentDetails": "Component Details",
+    "componentDetailsDescription": "View additional information related to each component.",
+    "componentDescription": "View the list of components detected in your application.",
     "componentName": "Component Name",
     "componentListEmptyText": {
       "title": "No Components Found",
@@ -1046,7 +1058,6 @@
     "sbomDownloadPdfSecondaryText": "Report Password - {password}",
     "sbomDownloadJsonPrimaryText": "Cyclone DX (json)",
     "sbomDownloadJsonSecondaryText": "No Password Required",
-    "sbomComponentOutdated": "The current version of the component is outdated.",
     "viewReport": "View Report",
     "scanReports": "Scan Reports",
     "neverInitiated": "Never Initiated",
