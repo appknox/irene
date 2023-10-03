@@ -1,0 +1,38 @@
+<AkStack @direction='column' class='pl-3' {{did-insert this.getProfie}}>
+  <AkTypography
+    @variant='h5'
+    @color='textPrimary'
+    data-test-projectSetting-analysisSettings-reportPreference-headerText
+  >
+    {{t 'reportPreferences'}}
+  </AkTypography>
+
+  <AkTypography
+    class='mt-1'
+    @variant='body2'
+    @color='textSecondary'
+    data-test-projectSetting-analysisSettings-reportPreference-headerDesc
+  >
+    {{t 'reportPreferencesChooseTypes'}}
+  </AkTypography>
+</AkStack>
+
+<AkStack @direction='column' class='pl-2 mt-2'>
+  {{#each this.reportPreferenceOptions as |pref|}}
+    {{#unless pref.hidden}}
+      <AkStack @alignItems='center'>
+        <AkFormControlLabel @label={{pref.label}}>
+          <AkCheckbox
+            @checked={{pref.checked}}
+            @onClick={{pref.onChecboxClick}}
+            data-test-projectSetting-analysisSettings-reportPreference={{pref.label}}
+          />
+        </AkFormControlLabel>
+
+        {{#if pref.isSaving}}
+          <AkLoader class='ml-1' @size={{13}} />
+        {{/if}}
+      </AkStack>
+    {{/unless}}
+  {{/each}}
+</AkStack>

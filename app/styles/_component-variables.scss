@@ -794,4 +794,81 @@ body {
 
   // variables for account-settings/mfa
   --mfa-loader-primary-contrast-text: var(--primary-contrast-text);
+
+  // variables for project-settings/empty-list
+  --project-settings-empty-list-border-radius: var(--border-radius);
+  --project-settings-empty-list-border-color: var(--border-color-1);
+
+  // variables for project-settings/empty-list
+  --project-settings-loading-container-background: var(--background-light);
+  --project-settings-loading-container-border: var(--border-color-1);
+  --project-settings-loading-container-border-radius: var(--border-radius);
+
+  // variables for project-settings/header
+  --project-settings-header-background-color: var(--common-white);
+  --project-settings-header-border-color: var(--border-color-1);
+  --project-settings-header-border-radius: var(--border-radius);
+  --project-settings-header-info-text-color: var(--text-secondary-color);
+  --project-settings-header-tabs-box-shadow: var(--box-shadow-6);
+  --project-settings-header-project-details-box-shadow: var(--box-shadow-8);
+  --project-settings-header-color-android: var(--android);
+  --project-settings-header-color-ios: var(--ios);
+
+  // variables for project-settings/general-settings
+  --project-settings-general-settings-root-border-color: var(--border-color-1);
+
+  // variables for project-settings/general-settings/dynamicscan-automation-settings
+  --project-settings-general-settings-dynamicscan-automation-settings-box-shadow: var(
+    --box-shadow-7
+  );
+  --project-settings-general-settings-dynamicscan-automation-settings-border-radius: var(
+    --border-radius
+  );
+  --project-settings-general-settings-dynamicscan-automation-settings-border-color: var(
+    --border-color-1
+  );
+
+  // variables for project-settings/general-settings/github-project
+  --project-settings-general-settings-github-project-background-color: var(
+    --neutral-grey-200
+  );
+
+  // variables for project-settings/general-settings/jira-project
+  --project-settings-general-settings-jira-project-background-color: var(
+    --neutral-grey-200
+  );
+
+  // variables for project-settings/analysis-settings
+  --project-settings-analysis-settings-border-color: var(--neutral-grey-200);
+  --project-settings-analysis-settings-border-radius: var(--border-radius);
+
+  // variables for project-settings/analysis-settings/vulnerability-details
+  --project-settings-analysis-settings-vulnerability-details-border-color: var(
+    --neutral-grey-200
+  );
+  --project-settings-analysis-settings-vulnerability-details-border-radius: var(
+    --border-radius
+  );
+
+  // variables for project-settings/analysis-settings/vulnerability-list
+  --project-settings-analysis-settings-vulnerability-list-border-color: var(
+    --neutral-grey-200
+  );
+  --project-settings-analysis-settings-vulnerability-list-background-color: var(
+    --neutral-grey-100
+  );
+  --project-settings-analysis-settings-vulnerability-list-border-color-warning: var(
+    --error-main
+  );
+  --project-settings-analysis-settings-vulnerability-list-background-color-warning: var(
+    --primary-light
+  );
+  --project-settings-analysis-settings-vulnerability-list-border-radius: var(
+    --border-radius
+  );
+
+  // variables for tri-state-checkbox
+  --tri-state-checkbox-overridden-bg: var(--success-light);
+  --tri-state-checkbox-border-color: var(--success-main);
+  --tri-state-reset-icon-bg: var(--common-white);
 }

@@ -4,7 +4,7 @@ import faker from 'faker';
 
 export default Factory.extend({
   name: faker.company.companyName(),
-  reportPreference: {
+  report_preference: () => ({
     show_pcidss: {
       value: faker.datatype.boolean(),
       is_inherited: faker.datatype.boolean(),
@@ -17,5 +17,5 @@ export default Factory.extend({
       value: faker.datatype.boolean(),
       is_inherited: faker.datatype.boolean(),
     },
-  },
+  }),
 });

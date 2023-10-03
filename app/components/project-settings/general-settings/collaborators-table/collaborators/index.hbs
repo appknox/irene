@@ -1,0 +1,12 @@
+<AkStack
+  @direction='column'
+  data-test-generalSettings-collaboratorsTable-collaboratorInfo
+>
+  <AkTypography @fontWeight='medium' @variant='h6' @gutterBottom={{true}}>
+    {{@collaborator.username}}
+  </AkTypography>
+
+  <AkTypography @color='textSecondary' @variant='body2'>
+    {{this.orgMember.email}}
+  </AkTypography>
+</AkStack>

@@ -1,0 +1,21 @@
+<AkStack
+  @direction='column'
+  data-test-generalSettings-projectTeamTable-teamInfo
+>
+  <AkLink
+    @color='primary'
+    @route='authenticated.organization.teams'
+    @query={{hash team_query=@team.name}}
+    @fontWeight='medium'
+    @typographyVariant='h5'
+    {{style marginBottom='0.2857em'}}
+    data-test-generalSettings-projectTeamTable-teamInfoLink
+  >
+    {{@team.name}}
+  </AkLink>
+
+  <AkTypography @color='textSecondary' @variant='body2'>
+    {{@team.membersCount}}
+    {{t 'members'}}
+  </AkTypography>
+</AkStack>

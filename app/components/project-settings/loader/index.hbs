@@ -1,0 +1,18 @@
+<AkStack
+  @width='full'
+  @alignItems='center'
+  @justifyContent='center'
+  ...attributes
+>
+  <AkStack
+    local-class='loading-container'
+    @alignItems='center'
+    @justifyContent='center'
+    @spacing='1.5'
+  >
+    <AkLoader @size={{16}} />
+    <AkTypography local-class='loading-text' @color='textSecondary'>
+      {{t 'loading'}}...
+    </AkTypography>
+  </AkStack>
+</AkStack>

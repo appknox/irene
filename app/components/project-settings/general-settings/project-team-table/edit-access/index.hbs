@@ -1,0 +1,7 @@
+<AkCheckbox
+  @onChange={{this.onTeamWriteChange}}
+  @checked={{@team.write}}
+  @disabled={{this.changeTeamWrite.isRunning}}
+  name='can-write-{{@team.id}}'
+  data-test-generalSettings-projectTeamTable-editAccess='{{@team.name}}'
+/>

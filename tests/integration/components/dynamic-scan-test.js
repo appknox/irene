@@ -68,19 +68,19 @@ module(
       });
 
       const availableDevices = [
-        ...this.server.createList('available-device', 5, {
+        ...this.server.createList('project-available-device', 5, {
           is_tablet: true,
           platform: 0,
         }),
-        ...this.server.createList('available-device', 5, {
+        ...this.server.createList('project-available-device', 5, {
           is_tablet: true,
           platform: 1,
         }),
-        ...this.server.createList('available-device', 5, {
+        ...this.server.createList('project-available-device', 5, {
           is_tablet: false,
           platform: 0,
         }),
-        ...this.server.createList('available-device', 5, {
+        ...this.server.createList('project-available-device', 5, {
           is_tablet: false,
           platform: 1,
         }),
@@ -216,7 +216,7 @@ module(
         });
 
         this.server.get('/projects/:id/available-devices', (schema) => {
-          const results = schema.availableDevices.all().models;
+          const results = schema.projectAvailableDevices.all().models;
 
           return { count: results.length, next: null, previous: null, results };
         });
@@ -495,7 +495,7 @@ module(
       });
 
       this.server.get('/projects/:id/available-devices', (schema) => {
-        const results = schema.availableDevices.all().models;
+        const results = schema.projectAvailableDevices.all().models;
 
         return { count: results.length, next: null, previous: null, results };
       });
@@ -662,7 +662,7 @@ module(
       });
 
       this.server.get('/projects/:id/available-devices', (schema) => {
-        const results = schema.availableDevices.all().models;
+        const results = schema.projectAvailableDevices.all().models;
 
         return { count: results.length, next: null, previous: null, results };
       });
@@ -776,7 +776,7 @@ module(
         });
 
         this.server.get('/projects/:id/available-devices', (schema) => {
-          const results = schema.availableDevices.all().models;
+          const results = schema.projectAvailableDevices.all().models;
 
           return { count: results.length, next: null, previous: null, results };
         });
@@ -839,7 +839,7 @@ module(
           .dom(
             `[data-test-projectPreference-osVersionSelect] .${classes.trigger}`
           )
-          .hasText(this.devicePreference.platform_version);
+          .hasText(`${this.devicePreference.platform_version}`);
 
         await selectChoose(
           `[data-test-projectPreference-deviceTypeSelect] .${classes.trigger}`,
@@ -873,12 +873,12 @@ module(
           .dom(
             `[data-test-projectPreference-osVersionSelect] .${classes.trigger}`
           )
-          .hasText(filteredDevices[1].platform_version);
+          .hasText(`${filteredDevices[1].platform_version}`);
 
         // verify network data
         assert.strictEqual(
           this.requestBody.platform_version,
-          filteredDevices[1].platform_version
+          `${filteredDevices[1].platform_version}`
         );
 
         // enable api catpure

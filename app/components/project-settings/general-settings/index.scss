@@ -1,0 +1,8 @@
+.general-settings-root {
+  border: 1px solid var(--project-settings-general-settings-root-border-color);
+  border-top: 0px;
+
+  .settings-section {
+    max-width: 800px;
+  }
+}

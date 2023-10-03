@@ -1,0 +1,8 @@
+<AkIconButton
+  {{on 'click' this.addCollaborator}}
+  @size='small'
+  disabled={{this.addProjectCollaborator.isRunning}}
+  data-test-addProjectCollab-drawerContainer-tableRow-action='{{@member.member.email}}'
+>
+  <AkIcon @iconName='person-add' />
+</AkIconButton>

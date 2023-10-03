@@ -1,2 +1,7 @@
-{{page-title "Project Setting"}}
-<ProjectSettings @project={{@model}}></ProjectSettings>
+{{page-title 'Project Settings'}}
+
+<div class='px-3'>
+  <ProjectSettings::Header @project={{@model}} />
+
+  {{outlet}}
+</div>

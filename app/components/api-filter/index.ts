@@ -19,7 +19,10 @@ const isRegexFailed = function (url: string) {
 
 export interface ApiFilterSignature {
   Args: {
-    profileId?: string;
+    profileId?: string | number;
+  };
+  Blocks: {
+    title: [];
   };
 }
 

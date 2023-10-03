@@ -1,0 +1,17 @@
+.empty-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5em;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  min-height: 150px;
+  border-radius: var(--project-settings-empty-list-border-radius);
+  border: 1px solid var(--project-settings-empty-list-border-color);
+  box-sizing: border-box;
+
+  .empty-svg {
+    height: 120px;
+  }
+}

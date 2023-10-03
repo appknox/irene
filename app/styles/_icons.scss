@@ -407,10 +407,6 @@
   @extend .mi-timer;
 }
 
-.ak-icon-check {
-  @extend .mi-check;
-}
-
 .ak-icon-drag-handle {
   @extend .mi-drag-handle;
 }
@@ -477,4 +473,12 @@
 
 .ak-icon-shape-line {
   @extend .mi-shape-line;
+}
+
+.ak-icon-check {
+  @extend .mi-check;
+}
+
+.ak-icon-article {
+  @extend .mi-article;
 }
