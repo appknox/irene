@@ -25,56 +25,36 @@ export type FileComparisonCategories = Record<
 
 type CompareFile = FileModel | null;
 
-/**
- * Sorts test cases based on severity levels based file 2 analyses
- *
- * @param {FileComparisonItem} a
- * @param {FileComparisonItem} b
- *
- */
-
-const sortByFile2Analyses = (
-  a?: FileComparisonItem,
-  b?: FileComparisonItem
-) => {
-  const analysis1ComputedRisk = Number(a?.analysis2?.computedRisk);
-  const analysis2ComputedRisk = Number(b?.analysis2?.computedRisk);
-
-  if (analysis2ComputedRisk < analysis1ComputedRisk) {
-    return -1;
-  }
-
-  if (analysis2ComputedRisk > analysis1ComputedRisk) {
-    return 1;
-  }
-
-  return 0;
+// Sort order for file risks
+const sortPriorityMap = {
+  [ENUMS.RISK.NONE]: 0,
+  [ENUMS.RISK.UNKNOWN]: 1,
+  [ENUMS.RISK.LOW]: 2,
+  [ENUMS.RISK.MEDIUM]: 3,
+  [ENUMS.RISK.HIGH]: 4,
+  [ENUMS.RISK.CRITICAL]: 5,
 };
 
 /**
- * Sorts test cases based on severity levels based on file 1 analyses
- *
- * @param {FileComparisonItem} a
- * @param {FileComparisonItem} b
- *
+ * Sorts test cases based on severity levels based file analyses
+ * @param {AnalysisModel | undefined} analysis1
+ * @param {AnalysisModel | undefined} analysis2
  */
-
-const sortByFile1Analyses = (
-  a?: FileComparisonItem,
-  b?: FileComparisonItem
+const sortByFileAnalyses = (
+  analysis1?: AnalysisModel,
+  analysis2?: AnalysisModel
 ) => {
-  const analysis1ComputedRisk = Number(a?.analysis1?.computedRisk);
-  const analysis2ComputedRisk = Number(b?.analysis1?.computedRisk);
+  const analysis1ComputedRisk = Number(analysis1?.computedRisk);
+  const analysis2ComputedRisk = Number(analysis2?.computedRisk);
 
-  if (analysis2ComputedRisk < analysis1ComputedRisk) {
+  if (isNaN(analysis1ComputedRisk)) {
     return -1;
   }
 
-  if (analysis2ComputedRisk > analysis1ComputedRisk) {
-    return 1;
-  }
-
-  return 0;
+  return (
+    (sortPriorityMap[analysis2ComputedRisk] as number) -
+    (sortPriorityMap[analysis1ComputedRisk] as number)
+  );
 };
 
 /**
@@ -128,7 +108,9 @@ const compareFiles = (
     comparisons[vulnerability_id] = comparison;
   });
 
-  comparisons.sort(sortByFile2Analyses).removeObject(undefined);
+  comparisons
+    .sort((a, b) => sortByFileAnalyses(a?.analysis2, b?.analysis2))
+    .removeObject(undefined);
 
   return comparisons as FileComparisonItem[];
 };
@@ -170,10 +152,22 @@ const getFileComparisonCategories = (comparisons: FileComparisonItem[]) => {
   });
 
   // Sort to move severities in file2 to the top of list
-  categories.resolved.sort(sortByFile1Analyses);
-  categories.untested.sort(sortByFile1Analyses);
-  categories.newRisks.sort(sortByFile1Analyses);
-  categories.recurring.sort(sortByFile1Analyses);
+  categories.resolved.sort((a, b) =>
+    sortByFileAnalyses(a?.analysis2, b?.analysis2)
+  );
+
+  categories.untested.sort((a, b) =>
+    sortByFileAnalyses(a?.analysis2, b?.analysis2)
+  );
+
+  // Sort to move severities in file1 to the top of list
+  categories.newRisks.sort((a, b) =>
+    sortByFileAnalyses(a?.analysis1, b?.analysis1)
+  );
+
+  categories.recurring.sort((a, b) =>
+    sortByFileAnalyses(a?.analysis1, b?.analysis1)
+  );
 
   return categories;
 };
@@ -190,13 +184,9 @@ const getComputedRiskCategory = (
   file1ComputedRisk: number,
   file2ComputedRisk: number
 ) => {
-  // If a new test case is found in either files
-  if (isNaN(file2ComputedRisk) || isNaN(file1ComputedRisk)) {
-    return { newRisk: true };
-  }
-
   const file1RiskIsPassed = file1ComputedRisk === ENUMS.RISK.NONE;
   const file2RiskIsPassed = file2ComputedRisk === ENUMS.RISK.NONE;
+
   const severityLevels = [
     ENUMS.RISK.CRITICAL,
     ENUMS.RISK.HIGH,
@@ -204,24 +194,37 @@ const getComputedRiskCategory = (
     ENUMS.RISK.LOW,
   ];
 
-  // NEW: If file2 risk is passed and file1 risk is a severity
-  const newRisk =
-    file2RiskIsPassed && severityLevels.includes(file1ComputedRisk);
+  // RESOLVED: If file1 risk is passed
+  if (file1RiskIsPassed) {
+    return { resolved: true };
+  }
 
-  // UNTESTED: If either of the file computed risk is UNKNOWN
-  const untested = [file1ComputedRisk, file2ComputedRisk].includes(
-    ENUMS.RISK.UNKNOWN
-  );
+  // NEW: Matches the conditions below
+  // CONDITION-1: file1 risk is undefined and file2 risk is a unknown, passed, or a severity
+  const newCond1 =
+    isNaN(file1ComputedRisk) &&
+    (severityLevels.includes(file2ComputedRisk) ||
+      file2ComputedRisk === ENUMS.RISK.UNKNOWN ||
+      file2RiskIsPassed);
 
-  // RESOLVED: If file1 risk is passed and file2 risk is a severity or both risks are passed
-  const resolved =
-    (file1RiskIsPassed && severityLevels.includes(file2ComputedRisk)) ||
-    (file1RiskIsPassed && file2RiskIsPassed);
+  // CONDITION-2: file1 risk is a severity and file2 risk is a unknown, passed, or undefined
+  const newCond2 =
+    severityLevels.includes(file1ComputedRisk) &&
+    (file2ComputedRisk === ENUMS.RISK.UNKNOWN ||
+      file2RiskIsPassed ||
+      isNaN(file2ComputedRisk));
 
-  // RECURRING: If both file1 or file2 risks are untested or severities
+  if (newCond1 || newCond2) {
+    return { newRisk: true };
+  }
+
+  // UNTESTED: If file1 risk is unknown
+  const untested = file1ComputedRisk === ENUMS.RISK.UNKNOWN;
+
+  // RECURRING: If both file1 or file2 risks are severities
   const recurring = !untested && !file1RiskIsPassed && !file2RiskIsPassed;
 
-  return { newRisk, resolved, recurring, untested };
+  return { recurring, untested };
 };
 
 export { compareFiles, getFileComparisonCategories, getComputedRiskCategory };
