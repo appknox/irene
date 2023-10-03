@@ -5226,7 +5226,7 @@ ul.email-list {
     width: 2.3em;
 
     &-android {
-      color: #7bb054;
+      color: #33A852;
     }
 
     &-apple {
@@ -5245,11 +5245,11 @@ ul.email-list {
 
 .platform-icon {
   &--android {
-    color: #7bb054;
+    color: var(--android);
   }
 
   &--apple {
-    color: #8d9096;
+    color: var(--ios);
   }
 }
 
