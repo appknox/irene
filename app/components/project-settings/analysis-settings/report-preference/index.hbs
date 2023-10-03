@@ -1,0 +1,66 @@
+<AkStack @direction='column' class='pl-3' {{did-insert this.getProfie}}>
+  <AkTypography
+    @variant='h5'
+    @color='textPrimary'
+    data-test-projectSetting-analysisSettings-reportPreference-headerText
+  >
+    {{t 'reportPreferences'}}
+  </AkTypography>
+
+  <AkTypography
+    class='mt-1'
+    @variant='body2'
+    @color='textSecondary'
+    data-test-projectSetting-analysisSettings-reportPreference-headerDesc
+  >
+    {{t 'reportPreferencesChooseTypes'}}
+  </AkTypography>
+</AkStack>
+
+<AkStack @alignItems='center' class='mt-2 ml-2'>
+  <AkFormControlLabel @label={{t 'dynamicScan'}}>
+    <AkCheckbox
+      @checked={{this.reportPreference.show_dynamic_scan}}
+      @onClick={{this.saveDynamic}}
+      data-test-projectSetting-analysisSettings-reportPreference-showDynamicScanCheckbox
+    />
+  </AkFormControlLabel>
+
+  {{#if this.saveDynamicReportPreference.isRunning}}
+    <AkLoader class='ml-1' @size={{13}} data-test-dynamic-task-spinner />
+  {{/if}}
+</AkStack>
+
+<AkStack @alignItems='center' class='ml-2'>
+  <AkFormControlLabel @label={{t 'apiScan'}}>
+    <AkCheckbox
+      @checked={{this.reportPreference.show_api_scan}}
+      @onClick={{this.saveAPI}}
+      data-test-projectSetting-analysisSettings-reportPreference-showApiScanCheckbox
+    />
+  </AkFormControlLabel>
+
+  {{#if this.saveAPIReportPreference.isRunning}}
+    <AkLoader class='ml-1' @size={{13}} data-test-manual-task-spinner />
+  {{/if}}
+</AkStack>
+
+{{#if this.project.isManualScanAvailable}}
+  <AkStack
+    @alignItems='center'
+    class='ml-2'
+    data-test-projectSetting-analysisSettings-reportPreference-manualScanContainer
+  >
+    <AkFormControlLabel @label={{t 'manualScan'}}>
+      <AkCheckbox
+        @checked={{this.reportPreference.show_manual_scan}}
+        @onClick={{this.saveManual}}
+        data-test-projectSetting-analysisSettings-reportPreference-showManualScanCheckbox
+      />
+    </AkFormControlLabel>
+
+    {{#if this.saveManualReportPreference.isRunning}}
+      <AkLoader class='ml-1' @size={{13}} />
+    {{/if}}
+  </AkStack>
+{{/if}}

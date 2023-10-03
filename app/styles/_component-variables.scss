@@ -821,4 +821,33 @@ body {
   --project-settings-general-settings-jira-project-background-color: var(
     --neutral-grey-200
   );
+
+  // variables for project-settings/analysis-settings
+  --project-settings-analysis-settings-border-color: var(--neutral-grey-200);
+  --project-settings-analysis-settings-border-radius: var(--border-radius);
+
+  // variables for project-settings/analysis-settings/vulnerability-details
+  --project-settings-analysis-settings-vulnerability-details-border-color: var(
+    --neutral-grey-200
+  );
+  --project-settings-analysis-settings-vulnerability-details-border-radius: var(
+    --border-radius-3
+  );
+
+  // variables for project-settings/analysis-settings/vulnerability-list
+  --project-settings-analysis-settings-vulnerability-list-border-color: var(
+    --neutral-grey-200
+  );
+  --project-settings-analysis-settings-vulnerability-list-background-color: var(
+    --neutral-grey-100
+  );
+  --project-settings-analysis-settings-vulnerability-list-border-color-warning: var(
+    --error-main
+  );
+  --project-settings-analysis-settings-vulnerability-list-background-color-warning: var(
+    --primary-light
+  );
+  --project-settings-analysis-settings-vulnerability-list-border-radius: var(
+    --border-radius
+  );
 }

@@ -1,0 +1,78 @@
+{{#if (and @project this.profile)}}
+  <AkStack
+    @width='9/12'
+    @direction='column'
+    class='pl-3'
+    data-test-projectSetting-analysisSettings-regulatoryPreferences-root
+  >
+    <AkTypography
+      @variant='h5'
+      @color='textPrimary'
+      data-test-projectSetting-analysisSettings-regulatoryPreferences-title
+    >
+      {{t 'regulatoryPreferences'}}
+    </AkTypography>
+
+    <AkTypography
+      class='mt-1'
+      @variant='body2'
+      @color='textSecondary'
+      data-test-projectSetting-analysisSettings-regulatoryPreferences-desc
+    >
+      {{t 'regulatoryPreferencesChooseForProfile'}}
+      {{t 'regulatoryPreferencesWarning'}}
+    </AkTypography>
+
+    <AkTypography
+      @italicized={{true}}
+      @variant='body2'
+      @color='textSecondary'
+      class='mt-1'
+      data-test-projectSetting-analysisSettings-regulatoryPreferences-note
+    >
+      ({{t 'regulatoryPreferencesProfileNote'}})
+    </AkTypography>
+  </AkStack>
+
+  <div
+    class='mt-2 ml-3'
+    data-test-projectSetting-analysisSettings-regulatoryPreferences-options
+  >
+    <TriStateCheckbox
+      @label={{t 'pcidss'}}
+      @title={{t 'pcidssExpansion'}}
+      @value={{this.profile.reportPreference.show_pcidss.value}}
+      @onToggle={{this.onSavePcidss}}
+      @onOverrideReset={{this.onResetPcidss}}
+      @isToggleRunning={{this.savePcidss.isRunning}}
+      @isOverridden={{not
+        this.profile.reportPreference.show_pcidss.is_inherited
+      }}
+      data-test-projectSetting-analysisSettings-regulatoryPreferences-pcidss
+    />
+
+    <TriStateCheckbox
+      @label={{t 'hipaa'}}
+      @title={{t 'hipaaExpansion'}}
+      @value={{this.profile.reportPreference.show_hipaa.value}}
+      @onToggle={{this.onSaveHipaa}}
+      @onOverrideReset={{this.onResetHipaa}}
+      @isToggleRunning={{this.saveHipaa.isRunning}}
+      @isOverridden={{not
+        this.profile.reportPreference.show_hipaa.is_inherited
+      }}
+      data-test-projectSetting-analysisSettings-regulatoryPreferences-hipaa
+    />
+
+    <TriStateCheckbox
+      @label={{t 'gdpr'}}
+      @title={{t 'gdprExpansion'}}
+      @value={{this.profile.reportPreference.show_gdpr.value}}
+      @onToggle={{this.onSaveGdpr}}
+      @onOverrideReset={{this.onResetGdpr}}
+      @isToggleRunning={{this.saveGdpr.isRunning}}
+      @isOverridden={{not this.profile.reportPreference.show_gdpr.is_inherited}}
+      data-test-projectSetting-analysisSettings-regulatoryPreferences-gdpr
+    />
+  </div>
+{{/if}}

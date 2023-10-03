@@ -1,4 +1,3 @@
-/* eslint-disable qunit/no-assert-equal, qunit/no-assert-equal-boolean */
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, click } from '@ember/test-helpers';
@@ -18,15 +17,22 @@ function serializer(payload) {
 }
 
 module(
-  'Integration | Component | regulatory-preference-profile',
+  'Integration | Component | project-settings/analysis-settings/regulatory-preference',
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
     setupIntl(hooks);
 
     test('it does not render component if project is not passed', async function (assert) {
-      await render(hbs`<RegulatoryPreferenceProfile />`);
-      assert.dom('[data-test-preferences]').doesNotExist();
+      await render(
+        hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference />`
+      );
+
+      assert
+        .dom(
+          '[data-test-projectSetting-analysisSettings-regulatoryPreferences-root]'
+        )
+        .doesNotExist();
     });
 
     test('it does not render component if profile does not exists for the project', async function (assert) {
@@ -34,19 +40,36 @@ module(
         'project',
         this.server.create('project', 1, { activeProfileId: null })
       );
-      await render(
-        hbs`<RegulatoryPreferenceProfile @project={{this.project}} />`
-      );
-      assert.dom('[data-test-preferences]').doesNotExist();
 
-      this.set(
-        'profile',
-        this.server.create('project', 1, { activeProfileId: 100 })
-      );
+      this.server.get('profiles/:id', (schema, request) => {
+        return serializer(schema['profiles'].find(request.params.id));
+      });
+
       await render(
-        hbs`<RegulatoryPreferenceProfile @project={{this.project}} />`
+        hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}} />`
       );
-      assert.dom('[data-test-preferences]').doesNotExist();
+
+      assert
+        .dom(
+          '[data-test-projectSetting-analysisSettings-regulatoryPreferences-root]'
+        )
+        .doesNotExist();
+
+      const profile = this.server.create('profile', 1);
+
+      this.project = this.server.create('project', {
+        activeProfileId: profile.id,
+      });
+
+      await render(
+        hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}} />`
+      );
+
+      assert
+        .dom(
+          '[data-test-projectSetting-analysisSettings-regulatoryPreferences-root]'
+        )
+        .exists();
     });
 
     test('it renders regulatory preferences section correctly', async function (assert) {
@@ -54,6 +77,7 @@ module(
       const project = this.server.create('project', {
         activeProfileId: profile.id,
       });
+
       this.set('project', project);
 
       this.server.get('profiles/:id', (schema, request) => {
@@ -61,21 +85,34 @@ module(
       });
 
       await render(
-        hbs`<RegulatoryPreferenceProfile @project={{this.project}}/>`
+        hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}}/>`
       );
 
       assert
-        .dom('[data-test-preferences-title]')
+        .dom(
+          '[data-test-projectSetting-analysisSettings-regulatoryPreferences-title]'
+        )
         .hasText('t:regulatoryPreferences:()');
+
       assert
-        .dom('[data-test-preferences-desc]')
+        .dom(
+          '[data-test-projectSetting-analysisSettings-regulatoryPreferences-desc]'
+        )
         .hasText(
           't:regulatoryPreferencesChooseForProfile:() t:regulatoryPreferencesWarning:()'
         );
+
       assert
-        .dom('[data-test-preferences-note]')
+        .dom(
+          '[data-test-projectSetting-analysisSettings-regulatoryPreferences-note]'
+        )
         .hasText('(t:regulatoryPreferencesProfileNote:())');
-      assert.dom('[data-test-preferences-options]').exists();
+
+      assert
+        .dom(
+          '[data-test-projectSetting-analysisSettings-regulatoryPreferences-options]'
+        )
+        .exists();
     });
 
     test('it renders preferences for optional regulatories', async function (assert) {
@@ -90,12 +127,26 @@ module(
       });
 
       await render(
-        hbs`<RegulatoryPreferenceProfile @project={{this.project}}/>`
+        hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}}/>`
       );
 
-      assert.dom('[data-test-preference-pcidss]').hasText('PCI-DSS');
-      assert.dom('[data-test-preference-hipaa]').hasText('HIPAA');
-      assert.dom('[data-test-preference-gdpr]').hasText('GDPR');
+      assert
+        .dom(
+          '[data-test-projectSetting-analysisSettings-regulatoryPreferences-pcidss]'
+        )
+        .hasText('t:pcidss:()');
+
+      assert
+        .dom(
+          '[data-test-projectSetting-analysisSettings-regulatoryPreferences-hipaa]'
+        )
+        .hasText('t:hipaa:()');
+
+      assert
+        .dom(
+          '[data-test-projectSetting-analysisSettings-regulatoryPreferences-gdpr]'
+        )
+        .hasText('t:gdpr:()');
     });
 
     test('it toggles preference value for the corresponding regulatory on click', async function (assert) {
@@ -118,6 +169,7 @@ module(
       const project = this.server.create('project', {
         activeProfileId: profile.id,
       });
+
       this.set('project', project);
 
       this.server.get('profiles/:id', (schema, request) => {
@@ -164,31 +216,36 @@ module(
       });
 
       await render(
-        hbs`<RegulatoryPreferenceProfile @project={{this.project}}/>`
+        hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}}/>`
       );
 
       const pcidss = this.element.querySelector(
-        '[data-test-preference-pcidss]'
+        '[data-test-projectSetting-analysisSettings-regulatoryPreferences-pcidss]'
       );
       const pcidssInitialValue = profile.reportPreference.show_pcidss.value;
       const pcidssInput = pcidss.querySelector('[data-test-input]');
-      assert.equal(pcidssInput.checked, pcidssInitialValue);
+      assert.strictEqual(pcidssInput.checked, pcidssInitialValue);
       await click(pcidssInput);
-      assert.equal(pcidssInput.checked, !pcidssInitialValue);
+      assert.strictEqual(pcidssInput.checked, !pcidssInitialValue);
 
-      const hipaa = this.element.querySelector('[data-test-preference-hipaa]');
+      const hipaa = this.element.querySelector(
+        '[data-test-projectSetting-analysisSettings-regulatoryPreferences-hipaa]'
+      );
       const hipaaInitialValue = profile.reportPreference.show_hipaa.value;
       const hipaaInput = hipaa.querySelector('[data-test-input]');
-      assert.equal(hipaaInput.checked, hipaaInitialValue);
+      assert.strictEqual(hipaaInput.checked, hipaaInitialValue);
       await click(hipaaInput);
-      assert.equal(hipaaInput.checked, !hipaaInitialValue);
+      assert.strictEqual(hipaaInput.checked, !hipaaInitialValue);
 
-      const gdpr = this.element.querySelector('[data-test-preference-gdpr]');
+      const gdpr = this.element.querySelector(
+        '[data-test-projectSetting-analysisSettings-regulatoryPreferences-gdpr]'
+      );
+
       const gdprInitialValue = profile.reportPreference.show_gdpr.value;
       const gdprInput = gdpr.querySelector('[data-test-input]');
-      assert.equal(gdprInput.checked, gdprInitialValue);
+      assert.strictEqual(gdprInput.checked, gdprInitialValue);
       await click(gdprInput);
-      assert.equal(gdprInput.checked, !gdprInitialValue);
+      assert.strictEqual(gdprInput.checked, !gdprInitialValue);
     });
 
     test('it does not toggle preference value on error', async function (assert) {
@@ -215,33 +272,37 @@ module(
       });
 
       await render(
-        hbs`<RegulatoryPreferenceProfile @project={{this.project}}/>`
+        hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}}/>`
       );
 
       const pcidss = this.element.querySelector(
-        '[data-test-preference-pcidss]'
+        '[data-test-projectSetting-analysisSettings-regulatoryPreferences-pcidss]'
       );
       const pcidssInitialValue = profile.reportPreference.show_pcidss.value;
       const pcidssInput = pcidss.querySelector('[data-test-input]');
-      assert.equal(pcidssInput.checked, pcidssInitialValue);
+      assert.strictEqual(pcidssInput.checked, pcidssInitialValue);
       await click(pcidssInput);
-      assert.equal(pcidssInput.checked, pcidssInitialValue);
+      assert.strictEqual(pcidssInput.checked, pcidssInitialValue);
       await click(pcidssInput);
-      assert.equal(pcidssInput.checked, pcidssInitialValue);
+      assert.strictEqual(pcidssInput.checked, pcidssInitialValue);
 
-      const hipaa = this.element.querySelector('[data-test-preference-hipaa]');
+      const hipaa = this.element.querySelector(
+        '[data-test-projectSetting-analysisSettings-regulatoryPreferences-hipaa]'
+      );
       const hipaaInitialValue = profile.reportPreference.show_hipaa.value;
       const hipaaInput = hipaa.querySelector('[data-test-input]');
-      assert.equal(hipaaInput.checked, hipaaInitialValue);
+      assert.strictEqual(hipaaInput.checked, hipaaInitialValue);
       await click(hipaaInput);
-      assert.equal(hipaaInput.checked, hipaaInitialValue);
+      assert.strictEqual(hipaaInput.checked, hipaaInitialValue);
 
-      const gdpr = this.element.querySelector('[data-test-preference-gdpr]');
+      const gdpr = this.element.querySelector(
+        '[data-test-projectSetting-analysisSettings-regulatoryPreferences-gdpr]'
+      );
       const gdprInitialValue = profile.reportPreference.show_gdpr.value;
       const gdprInput = gdpr.querySelector('[data-test-input]');
-      assert.equal(gdprInput.checked, gdprInitialValue);
+      assert.strictEqual(gdprInput.checked, gdprInitialValue);
       await click(gdprInput);
-      assert.equal(gdprInput.checked, gdprInitialValue);
+      assert.strictEqual(gdprInput.checked, gdprInitialValue);
     });
 
     test('it displays overridden state with reset button if a preference is updated', async function (assert) {
@@ -276,24 +337,26 @@ module(
       });
 
       await render(
-        hbs`<RegulatoryPreferenceProfile @project={{this.project}}/>`
+        hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}}/>`
       );
 
-      let pcidss = this.element.querySelector('[data-test-preference-pcidss]');
+      let pcidss = this.element.querySelector(
+        '[data-test-projectSetting-analysisSettings-regulatoryPreferences-pcidss]'
+      );
       let pcidssInput = pcidss.querySelector('[data-test-input]');
       let pcidssCheck = pcidss.querySelector('[data-test-check]');
 
-      assert.equal(pcidssInput.checked, false);
+      assert.false(pcidssInput.checked);
       assert.true(pcidssCheck.classList.contains(checkboxStyles['inherited']));
-      assert.equal(pcidss.querySelector('[data-test-reset]'), null);
+      assert.strictEqual(pcidss.querySelector('[data-test-reset]'), null);
 
       await click(pcidssInput);
-      assert.equal(pcidssInput.checked, true);
+      assert.true(pcidssInput.checked);
       assert.true(pcidssCheck.classList.contains(checkboxStyles['overridden']));
       assert.notEqual(pcidss.querySelector('[data-test-reset]'), null);
 
       await click(pcidssInput);
-      assert.equal(pcidssInput.checked, false);
+      assert.false(pcidssInput.checked);
       assert.true(pcidssCheck.classList.contains(checkboxStyles['overridden']));
       assert.notEqual(pcidss.querySelector('[data-test-reset]'), null);
     });
@@ -328,23 +391,25 @@ module(
       });
 
       await render(
-        hbs`<RegulatoryPreferenceProfile @project={{this.project}}/>`
+        hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}}/>`
       );
 
-      let pcidss = this.element.querySelector('[data-test-preference-pcidss]');
+      let pcidss = this.element.querySelector(
+        '[data-test-projectSetting-analysisSettings-regulatoryPreferences-pcidss]'
+      );
       let pcidssCheck = pcidss.querySelector('[data-test-check]');
       let pcidssInput = pcidss.querySelector('[data-test-input]');
       let pcidssReset = pcidss.querySelector('[data-test-reset]');
 
-      assert.equal(pcidssInput.checked, true);
+      assert.true(pcidssInput.checked);
       assert.true(pcidssCheck.classList.contains(checkboxStyles['overridden']));
       assert.notEqual(pcidssReset, null);
 
       await click(pcidssReset);
 
-      assert.equal(pcidssInput.checked, false);
+      assert.false(pcidssInput.checked);
       assert.true(pcidssCheck.classList.contains(checkboxStyles['inherited']));
-      assert.equal(pcidss.querySelector('[data-test-reset]'), null);
+      assert.strictEqual(pcidss.querySelector('[data-test-reset]'), null);
     });
   }
 );

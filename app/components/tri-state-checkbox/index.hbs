@@ -1,39 +1,42 @@
 <div local-class='container' data-test-container ...attributes>
   {{#if @label}}
     <div
-      local-class='check {{if @isOverridden 'overridden' 'inherited'}}'
+      local-class='check {{if @isOverridden "overridden" "inherited"}}'
       data-test-check
     >
-      <label local-class='label'>
-        <Input
-          @type='checkbox'
+      <AkFormControlLabel @label={{@label}} title={{@title}} data-test-label>
+        <AkCheckbox
           @checked={{@value}}
-          {{on 'click' @onToggle}}
+          @onClick={{@onToggle}}
           data-test-input
         />
-        <span title={{@title}} local-class='label-text' data-test-label>
-          {{@label}}
-        </span>
-      </label>
+      </AkFormControlLabel>
 
       {{#if @isToggleRunning}}
-        <span local-class='progress-spinner' data-test-progress-spinner>
-          {{fa-icon 'spinner fa-spin font-small'}}
-        </span>
+        <AkLoader class='ml-1' @size={{13}} data-test-progress-spinner />
       {{/if}}
 
       {{#if @isOverridden}}
-        <button
-          type='button'
-          local-class='reset'
-          onclick={{@onOverrideReset}}
-          data-test-reset
-        >
-          {{fa-icon 'times' local-class='remove-button-icon'}}
-          <AttachTooltip @placement='top' data-test-reset-tooltip>
-            {{t 'resetToDefault'}}
-          </AttachTooltip>
-        </button>
+        <div local-class='reset-icon-btn-container'>
+          <AkTooltip
+            @placement='top'
+            @title=' {{t "resetToDefault"}}'
+            @renderInPlace={{true}}
+            @arrow={{true}}
+            data-test-reset-tooltip
+          >
+            <AkIconButton {{on 'click' @onOverrideReset}}>
+              <AkIcon
+                @iconName='cancel'
+                @color='textPrimary'
+                @variant='filled'
+                @size='small'
+                local-class='reset-icon'
+                data-test-reset
+              />
+            </AkIconButton>
+          </AkTooltip>
+        </div>
       {{/if}}
     </div>
   {{/if}}
