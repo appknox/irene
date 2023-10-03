@@ -1,7 +1,10 @@
 $primary: #fe4d3f;
 $secondary: #424651;
+$white: #ffffff;
 
-$success: #80c081;
+$success: #f4fff3;
+$success-border: #2db421;
+$cancel-color: #1c1b1f;
 
 $lightgreen: #ccf3cc;
 $lightblue: #dbe6ff;
@@ -16,6 +19,7 @@ $color-error: #fe4d3f;
 
 :root {
   /* base colors */
+  --white: #{$white};
   --primary: #{$primary};
   --secondary: #{$secondary};
   --lightgreen: #{$lightgreen};
@@ -24,6 +28,8 @@ $color-error: #fe4d3f;
   --darkblue: #{$darkblue};
   --lightorange: #{$lightorange};
   --darkorange: #{$darkorange};
+  --success: #{$success};
+  --success-border: #{$success-border};
 
   --black-025: #f0f1f3;
   --black-050: #eff0f1;
@@ -81,8 +87,10 @@ $color-error: #fe4d3f;
   --empty-state-color: var(--black-300);
 
   --tri-state-checkbox-bg: var(--bg-gray);
-  --tri-state-checkbox-overridden-bg: #{rgba($success, 0.1)};
-  --tri-state-checkbox-border-color: #{rgba($success, 0.6)};
+  --tri-state-checkbox-overridden-bg: var(--success);
+  --tri-state-checkbox-border-color: var(--success-border);
+  --tri-state-reset-icon-bg: var(--white);
+  --tri-state-cancel-color: #{$cancel-color};
 
   // --sidebar-bg: var(--secondary);
   // --navbar-bg: #{darken($secondary, 2%)};

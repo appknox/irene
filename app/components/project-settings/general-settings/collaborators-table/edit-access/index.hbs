@@ -1,0 +1,7 @@
+<AkCheckbox
+  @onChange={{this.changeTeamWrite}}
+  @checked={{@collaborator.write}}
+  @disabled={{this.changeCollaboratorWrite.isRunning}}
+  name='can-write-{{@collaborator.username}}'
+  data-test-generalSettings-collaboratorsTable-editAccess='{{@collaborator.username}}'
+/>

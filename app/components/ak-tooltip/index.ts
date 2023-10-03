@@ -17,6 +17,7 @@ export interface AkTooltipSignature {
     title?: string;
     enterDelay?: number;
     leaveDelay?: number;
+    renderInPlace?: boolean;
   };
   Blocks: { default: []; tooltipContent: [] };
 }

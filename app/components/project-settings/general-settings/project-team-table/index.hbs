@@ -1,0 +1,63 @@
+<AkPaginationProvider
+  @results={{this.projectTeamList}}
+  @onItemPerPageChange={{this.onItemPerPageChange}}
+  @totalItems={{this.totalCount}}
+  @nextAction={{this.goToPage}}
+  @prevAction={{this.goToPage}}
+  @itemPerPageOptions={{array 10 25 50}}
+  @defaultLimit={{this.limit}}
+  @offset={{this.offset}}
+  as |pgc|
+>
+  {{#if this.getProjectTeamList.isRunning}}
+    <ProjectSettings::Loader
+      data-test-projectSettings-generalSettings-projectTeamTableLoader
+    />
+
+  {{else if this.hasNoProjectTeams}}
+    <ProjectSettings::EmptyList
+      @emptyListText='{{t "noTeams"}}'
+      data-test-projectSettings-generalSettings-projectTeamTableEmpty
+    />
+
+  {{else}}
+    <AkTable
+      @variant='semi-bordered'
+      local-class='teams-table'
+      @borderColor='dark'
+      data-test-projectSettings-generalSettings-projectTeamTable
+      as |tb|
+    >
+      <tb.head @columns={{this.columns}} />
+
+      <tb.body @rows={{pgc.currentPageResults}} @renderAll={{true}} as |b|>
+        <b.row data-test-generalSettings-projectTeamTable-row as |r|>
+          <r.cell>
+            {{#let (component r.columnValue.component) as |Component|}}
+              <Component
+                @project={{@project}}
+                @team={{r.rowValue}}
+                @reloadTeamsList={{this.reloadTeamList}}
+              />
+            {{/let}}
+          </r.cell>
+        </b.row>
+      </tb.body>
+    </AkTable>
+
+    <AkPagination
+      @disableNext={{pgc.disableNext}}
+      @nextAction={{pgc.nextAction}}
+      @disablePrev={{pgc.disablePrev}}
+      @prevAction={{pgc.prevAction}}
+      @endItemIdx={{pgc.endItemIdx}}
+      @startItemIdx={{pgc.startItemIdx}}
+      @itemPerPageOptions={{pgc.itemPerPageOptions}}
+      @onItemPerPageChange={{pgc.onItemPerPageChange}}
+      @selectedOption={{pgc.selectedOption}}
+      @tableItemLabel='{{t "teams"}}'
+      @perPageTranslation='{{t "recordPerPage"}}'
+      @totalItems={{pgc.totalItems}}
+    />
+  {{/if}}
+</AkPaginationProvider>

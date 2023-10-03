@@ -1,0 +1,111 @@
+<AkStack
+  @direction='column'
+  @spacing='3/2'
+  class='mb-3 pt-3'
+  local-class='general-settings-root'
+  data-test-projectSettings-generalSettings-root
+>
+  <AkStack @direction='column' class='px-3'>
+    <ProjectPreferences
+      @profileId={{@project.activeProfileId}}
+      @platform={{@project.platform}}
+      @project={{@project}}
+    >
+      <:title>
+        <AkTypography @variant='h5'>
+          {{t 'devicePreferences'}}
+        </AkTypography>
+      </:title>
+    </ProjectPreferences>
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AkStack @direction='column' @spacing='2' class='px-3'>
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography @variant='h5'>
+        {{t 'proxySettingsTitle'}}
+      </AkTypography>
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'proxySettingsDescription'}}
+      </AkTypography>
+    </AkStack>
+
+    <ProjectSettings::GeneralSettings::ProxySettings
+      @profile={{this.profile}}
+    />
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AkStack class='px-3' @width='9/12'>
+    <ApiFilter @profileId={{this.project.activeProfileId}}>
+      <:title>
+        <AkTypography data-test-apiFilter-title @variant='h5'>
+          {{t 'templates.apiScanURLFilter'}}
+        </AkTypography>
+      </:title>
+    </ApiFilter>
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AkStack @width='9/12' @direction='column' @spacing='2' class='px-3'>
+    <AkStack @width='full' @alignItems='center' @justifyContent='space-between'>
+      <AkTypography @variant='h5'>{{t 'teams'}}</AkTypography>
+
+      {{#if this.me.org.is_admin}}
+        <ProjectSettings::GeneralSettings::AddProjectTeam
+          @project={{@project}}
+        />
+      {{/if}}
+    </AkStack>
+
+    <ProjectSettings::GeneralSettings::ProjectTeamTable
+      @project={{this.project}}
+    />
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AkStack @width='9/12' @direction='column' @spacing='2' class='px-3'>
+    <AkStack @width='full' @alignItems='center' @justifyContent='space-between'>
+      <AkTypography @variant='h5'>{{t 'collaborators'}}</AkTypography>
+
+      <ProjectSettings::GeneralSettings::AddProjectCollaborator
+        @project={{@project}}
+      />
+
+    </AkStack>
+
+    <ProjectSettings::GeneralSettings::CollaboratorsTable
+      @project={{this.project}}
+    />
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  {{#if this.organization.selected.features.dynamicscan_automation}}
+    <AkStack @width='full' class='px-3'>
+      <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings
+        @profileId={{this.project.activeProfileId}}
+        @project={{this.project}}
+      />
+    </AkStack>
+
+    <AkDivider @color='dark' />
+  {{/if}}
+
+  <AkStack @width='full' class='px-3'>
+    <ProjectSettings::GeneralSettings::GithubProject
+      @project={{this.project}}
+    />
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <AkStack @width='full' class='px-3'>
+    <ProjectSettings::GeneralSettings::JiraProject @project={{this.project}} />
+  </AkStack>
+</AkStack>

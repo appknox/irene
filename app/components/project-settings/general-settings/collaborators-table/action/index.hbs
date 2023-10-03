@@ -1,0 +1,17 @@
+{{#if this.me.org.is_admin}}
+  <AkIconButton
+    {{on 'click' this.openRemoveCollaboratorConfirm}}
+    data-test-generalSettings-collaboratorsTable-deleteIcon='{{@collaborator.username}}'
+  >
+    <AkIcon @iconName='delete' />
+  </AkIconButton>
+{{/if}}
+
+<ConfirmBox
+  @isActive={{this.showRemoveCollaboratorConfirm}}
+  @title={{t 'confirmBox.removeProjectCollaborator'}}
+  @confirmAction={{this.removeProjectCollaborator}}
+  @disabled={{this.removeCollaborator.isRunning}}
+  @confirmText={{t 'ok'}}
+  @blurOverlay={{true}}
+/>

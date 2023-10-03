@@ -1,8 +1,13 @@
 import Component from '@glimmer/component';
-import { TypographyColors, TypographyVariant } from '../ak-typography';
+import {
+  TypographyColors,
+  TypographyFontWeight,
+  TypographyVariant,
+} from '../ak-typography';
 import { ComponentLike } from '@glint/template';
 
 type LabelTypographyVariant = TypographyVariant;
+type LabelTypographyFontWeight = TypographyFontWeight;
 type LabelTypographyColor = TypographyColors;
 
 export interface AkFormControlLabelSignature {
@@ -11,6 +16,7 @@ export interface AkFormControlLabelSignature {
     placement?: 'right' | 'left';
     disabled?: boolean;
     label?: string;
+    labelTypographyFontWeight?: LabelTypographyFontWeight;
     labelTypographyVariant?: LabelTypographyVariant;
     labelTypographyNoWrap?: boolean;
     labelTypographyColor?: LabelTypographyColor;

@@ -789,4 +789,36 @@ body {
   --file-chart-severity-level-color-passed: var(--severity-passed);
   --file-chart-severity-level-color-untested: var(--severity-untested);
   --file-chart-severity-level-color-none: var(--severity-none);
+
+  // variables for project-settings/header
+  --project-settings-header-background-color: var(--background-light);
+  --project-settings-header-border-color: var(--border-color-1);
+  --project-settings-header-border-radius: var(--border-radius);
+  --project-settings-header-info-text-color: var(--text-secondary-color);
+  --project-settings-header-tabs-box-shadow: var(--box-shadow-6);
+  --project-settings-header-project-details-box-shadow: var(--box-shadow-8);
+
+  // variables for project-settings/general-settings
+  --project-settings-general-settings-root-border-color: var(--border-color-1);
+
+  // variables for project-settings/general-settings/dynamicscan-automation-settings
+  --project-settings-general-settings-dynamicscan-automation-settings-box-shadow: var(
+    --box-shadow-7
+  );
+  --project-settings-general-settings-dynamicscan-automation-settings-border-radius: var(
+    --border-radius
+  );
+  --project-settings-general-settings-dynamicscan-automation-settings-border-color: var(
+    --border-color-1
+  );
+
+  // variables for project-settings/general-settings/github-project
+  --project-settings-general-settings-github-project-background-color: var(
+    --neutral-grey-200
+  );
+
+  // variables for project-settings/general-settings/jira-project
+  --project-settings-general-settings-jira-project-background-color: var(
+    --neutral-grey-200
+  );
 }

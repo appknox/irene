@@ -11,7 +11,10 @@
 
   {{#unless @disabled}}
     {{#if this.anchorRef}}
-      <EmberWormhole @to='ak-component-wormhole'>
+      <EmberWormhole
+        @to='ak-component-wormhole'
+        @renderInPlace={{@renderInPlace}}
+      >
         <div role='tooltip' local-class='ak-tooltip-container-root'>
           <AkPopover
             data-test-ak-tooltip-popover

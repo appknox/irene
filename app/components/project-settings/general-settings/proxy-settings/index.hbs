@@ -1,0 +1,57 @@
+<AkStack
+  @direction='column'
+  @spacing='2'
+  data-test-projectSettings-genSettings-proxySettings-root
+>
+  <AkStack @spacing='1.5' @alignItems='center'>
+    <AkTextField
+      @formControlClass='w-8/12'
+      @placeholder={{t 'host'}}
+      @value={{this.changeset.host}}
+      data-test-projectSettings-genSettings-proxySettings-hostTextField
+    />
+
+    <AkTextField
+      @formControlClass='w-8/12'
+      @type='number'
+      @placeholder={{t 'port'}}
+      @value={{this.changeset.port}}
+      data-test-projectSettings-genSettings-proxySettings-portTextField
+    />
+
+    <AkStack @spacing='1.5' @alignItems='center'>
+      <AkButton
+        data-test-apiFilter-addApiEndpointBtn
+        @disabled={{this.saveProxy.isRunning}}
+        @variant='outlined'
+        {{style height='2.4286em'}}
+        {{on 'click' (perform this.saveProxy)}}
+        data-test-projectSettings-genSettings-proxySettings-saveProxyBtn
+      >
+        {{t 'save'}}
+      </AkButton>
+
+      {{#if this.saveProxy.isRunning}}
+        <AkLoader @size={{18}} />
+      {{/if}}
+    </AkStack>
+  </AkStack>
+
+  {{#if this.hasProxyValues}}
+    <AkFormControlLabel
+      @label={{t 'proxyEnable'}}
+      @labelTypographyFontWeight='medium'
+      @disabled={{this.enableProxy.isRunning}}
+      data-test-projectSettings-genSettings-proxySettings-proxyToggleLabel
+      as |fcl|
+    >
+      <AkToggle
+        @size='small'
+        @disabled={{fcl.disabled}}
+        @checked={{this.changeset.enabled}}
+        @onClick={{perform this.enableProxy}}
+        data-test-projectSettings-genSettings-proxySettings-proxyToggle
+      />
+    </AkFormControlLabel>
+  {{/if}}
+</AkStack>

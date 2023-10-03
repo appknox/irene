@@ -1,0 +1,80 @@
+<AkStack
+  @direction='column'
+  @spacing='2'
+  class='px-3 py-2'
+  data-test-addProjectCollab-drawerContainer-tableRoot
+>
+  <AkTextField
+    @placeholder='{{t "searchCollaborator"}}'
+    @value={{this.query}}
+    {{on 'keyup' this.setSearchQuery}}
+    data-test-addProjectCollab-drawerContainer-tableSearchTextField
+  >
+    <:leftAdornment>
+      <AkIcon
+        @iconName='search'
+        @color='textSecondary'
+        data-test-addProjectCollab-drawerContainer-tableSearchTextField-icon
+      />
+    </:leftAdornment>
+  </AkTextField>
+
+  <AkStack @direction='column' @width='full'>
+    <AkPaginationProvider
+      @results={{this.orgMembers}}
+      @onItemPerPageChange={{this.onItemPerPageChange}}
+      @totalItems={{this.orgMembersTotalCount}}
+      @nextAction={{this.goToPage}}
+      @prevAction={{this.goToPage}}
+      @itemPerPageOptions={{array 5 10 20}}
+      @defaultLimit={{this.limit}}
+      @offset={{this.offset}}
+      as |pgc|
+    >
+
+      {{#if this.fetchOrganizationMembers.isRunning}}
+        <ProjectSettings::Loader />
+
+      {{else if this.hasNoOrgMembers}}
+
+        <ProjectSettings::EmptyList @emptyListText={{t 'noMembers'}} />
+
+      {{else}}
+        <AkTable @variant='semi-bordered' @borderColor='dark' as |tb|>
+          <tb.head @columns={{this.columns}} />
+
+          <tb.body @rows={{pgc.currentPageResults}} @renderAll={{true}} as |b|>
+            <b.row data-test-addProjectCollab-drawerContainer-tableRow as |r|>
+              <r.cell>
+                {{#let (component r.columnValue.component) as |Component|}}
+                  <Component
+                    @handleReloadCollaborators={{this.handleReloadCollaborators}}
+                    @project={{@project}}
+                    @member={{r.rowValue}}
+                    @resetSearchQuery={{this.resetSearchQuery}}
+                  />
+                {{/let}}
+              </r.cell>
+            </b.row>
+          </tb.body>
+        </AkTable>
+
+        <AkPagination
+          @disableNext={{pgc.disableNext}}
+          @nextAction={{pgc.nextAction}}
+          @disablePrev={{pgc.disablePrev}}
+          @prevAction={{pgc.prevAction}}
+          @endItemIdx={{pgc.endItemIdx}}
+          @startItemIdx={{pgc.startItemIdx}}
+          @itemPerPageOptions={{pgc.itemPerPageOptions}}
+          @onItemPerPageChange={{pgc.onItemPerPageChange}}
+          @selectedOption={{pgc.selectedOption}}
+          @tableItemLabel={{t 'collaborators'}}
+          @perPageTranslation={{t 'recordPerPage'}}
+          @totalItems={{pgc.totalItems}}
+          @variant='compact'
+        />
+      {{/if}}
+    </AkPaginationProvider>
+  </AkStack>
+</AkStack>

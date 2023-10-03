@@ -1,0 +1,53 @@
+<AkStack data-test-projectSettings-generalSettings-addProjectCollab-root>
+  {{#if this.me.org.is_admin}}
+    <AkButton
+      @variant='outlined'
+      {{on 'click' this.openAddCollaboratorModal}}
+      data-test-generalSettings-addProjectCollab-button
+    >
+      <:leftIcon>
+        <AkIcon
+          @iconName='person'
+          data-test-generalSettings-addProjectCollab-buttonIcon
+        />
+      </:leftIcon>
+
+      <:default>
+        {{t 'addCollaborator'}}
+      </:default>
+    </AkButton>
+  {{/if}}
+
+  <AkDrawer
+    @open={{this.showAddProjectCollaboratorModal}}
+    @onClose={{this.closeAddCollaboratorModal}}
+    @anchor='right'
+    data-test-generalSettings-addProjectCollab-drawerContainer
+    as |dr|
+  >
+    <div {{style width='640px'}}>
+      <AkAppbar @justifyContent='space-between' class='px-3' as |ab|>
+        <AkTypography
+          @color='inherit'
+          @variant='h5'
+          @fontWeight='medium'
+          data-test-addProjectCollab-drawerContainer-title
+        >
+          {{t 'projectSettings.drawerTitles.addCollaborator'}}
+        </AkTypography>
+
+        <AkIconButton
+          {{on 'click' dr.closeHandler}}
+          class={{ab.classes.defaultIconBtn}}
+          data-test-addProjectCollab-drawerContainer-closeIconBtn
+        >
+          <AkIcon @iconName='close' />
+        </AkIconButton>
+      </AkAppbar>
+
+      <ProjectSettings::GeneralSettings::AddProjectCollaborator::Table
+        @project={{@project}}
+      />
+    </div>
+  </AkDrawer>
+</AkStack>

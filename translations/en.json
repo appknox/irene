@@ -66,7 +66,7 @@
   "appCenterPipeline": "App Center Build",
   "appOrS": "app(s)",
   "appiumFileUploadedSuccessfully": "File Uploaded Successfully",
-  "appiumScheduledAutomation": "Scheduled<br>Automation",
+  "appiumScheduledAutomation": "Scheduled Automation",
   "appiumScheduledAutomationSuccessOff": "Scheduled dynamic scan automation turned OFF",
   "appiumScheduledAutomationSuccessOn": "Scheduled dynamic scan automation turned ON",
   "appiumScriptInvalid": "Invalid script file. Please upload a valid Appium project",
@@ -134,6 +134,7 @@
   "collaborators": "Collaborators",
   "comingSoon": "Coming soon",
   "comment": "Comment",
+  "comments": "Comments",
   "company": "Company",
   "companyName": "Company Name",
   "compare": "Compare",
@@ -241,6 +242,7 @@
   "dynamicScanText": "Please refresh the page if the scan doesn't start in 1-2 mins",
   "dynamicShutDown": "Shutdown Device",
   "edit": "Edit",
+  "editAccess": "Edit Access",
   "editName": "Edit Name",
   "editTeamName": "Edit Team Name",
   "editTeamNameInputLabel": "Here you can edit the team name",
@@ -547,17 +549,11 @@
       "viaEmail": "sent via email",
       "viaApp": "from Authenticator app"
     },
-    "addCollaborator": {
-      "title": "Add collaborator to project"
-    },
     "addMember": {
       "title": "Add Member"
     },
     "addProject": {
       "title": "Add project to team"
-    },
-    "addTeam": {
-      "title": "Allow teams to access this project"
     },
     "dynamicScan": {
       "title": "Dynamic Scan",
@@ -848,6 +844,7 @@
   "pluralUsers": "{itemCount, plural, =0 {Users} =1 {User} other {Users} }",
   "pluralorganizationOwner": "{itemCount, plural, =0 {Organization owner} =1 {Organization owner} other {Organization owners} }",
   "popOutModal": "Full Screen",
+  "port": "Port",
   "preferenceSetTo": "preference set to",
   "previous": "Previous",
   "pricing": "Pricing",
@@ -898,12 +895,20 @@
   "project": "project",
   "projectCollaboratorAdded": "Added collaborator to project",
   "projectCount": "Projects count",
-  "projectName": "Project Name",
   "projectID": "Project ID",
   "projectLevel": "Project Level",
+  "projectName": "Project Name",
   "projectRemoved": "Project has been removed",
   "projectTeamAdded": "Added team to project",
   "projects": "Projects",
+  "projectSettings": {
+    "headerText": "View and update project general and analysis preferences",
+    "drawerTitles": {
+      "addCollaborator": "Add collaborator to project",
+      "addTeam": "Allow teams to access this project"
+    }
+  },
+  "projectUpdated": "Project updated successfully.",
   "promptBox": {
     "removeMemberPrompt": {
       "title": "Are you sure you want to remove this team member?",
@@ -950,6 +955,7 @@
   "removeCollaborator": "Remove Collaborator",
   "removeFromTeam": "Remove from team",
   "removedSSOSuccessfully": "SSO has been removed successfully",
+  "repo": "Repo",
   "repoIntegrated": "Repo successfully integrated",
   "repoNotIntegrated": "Something went wrong when trying to update this repo",
   "report": "Report",
@@ -958,6 +964,8 @@
   "reportGenerationInProgressWait": "Report generation in progress. Please wait",
   "reportIsGettingGenerated": "Please wait while the report is getting generated",
   "reportPassword": "Report Password",
+  "reportPreferences": "Report Preferences",
+  "reportPreferencesChooseTypes": "Choose types of scans to be included in the report",
   "reportSendTo": "and sent to following Email IDS:",
   "requestStatus": "Request",
   "requestToAddNamespace": "We have received your request to add a new namespace",
@@ -1070,6 +1078,7 @@
   "searchProject": "Search project",
   "searchInvite": "Search invite",
   "searchTeam": "Search team",
+  "searchCollaborator": "Search collaborator",
   "searchQuery": "Search By Package Name",
   "searchTeamByName": "Search by team name",
   "security": "Security",
@@ -1078,8 +1087,10 @@
   "selectDevice": "Select the device",
   "selectLanguage": "Select the preferred language below",
   "selectProject": "Select Project",
+  "selectRepo": "Select Repo",
   "selectRisk": "Select Risk",
   "selectTeam": "Select a team",
+  "selectThreshold": "Select Threshold",
   "selected": "Selected",
   "selectedDevice": "Selected Device Type",
   "selectedVersion": "Selected OS Version",
@@ -1094,7 +1105,7 @@
   "showHiddenAnalysis": "Do you want to show the hidden analysis in the Report?",
   "showLess": "Show Less",
   "showMore": "Show More",
-  "showUntestedAnalysis": "SHOW/HIDE Untested Analysis",
+  "showUntestedAnalysis": "Show/Hide Untested Analysis",
   "showVulnerability": "Show Vulnerability ",
   "signin": "Sign In",
   "singleSignOn": "Single Sign-On",
@@ -1160,7 +1171,6 @@
   "teamProjectAdded": "Project added to team",
   "teamRemoved": "Team removed from accessing this project",
   "teams": "Teams",
-  "teamsAndCollaborators": "Teams & Collaborators",
   "templates": {
     "apiScanURLFilter": "API Scanner URL Filter",
     "enterEndpoint": "Enter the API endpoint to scan: eg. subdomain.domain.com. Do not specify the scheme (http://...), port (:443/...) & path (.../users)",
@@ -1171,6 +1181,7 @@
   "testCase": "Test Case",
   "testCases": "Test Cases",
   "testCredentials": "Test Credentials",
+  "threshold": "Threshold",
   "title": "Title",
   "toDate": "To Date",
   "tokenCopied": "Token Copied!",

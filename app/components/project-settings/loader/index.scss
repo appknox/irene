@@ -1,0 +1,7 @@
+.loading-container {
+  width: 100%;
+  background: var(--organization-namespace-loading-container-background);
+  border: 1px solid var(--organization-namespace-loading-container-border);
+  border-radius: var(--organization-namespace-loading-container-border-radius);
+  padding: 2em;
+}

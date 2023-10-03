@@ -1,0 +1,17 @@
+{{#if this.me.org.is_admin}}
+  <AkIconButton
+    {{on 'click' this.openRemoveTeamConfirm}}
+    data-test-generalSettings-projectTeamTable-deleteIcon='{{@team.name}}'
+  >
+    <AkIcon @iconName='delete' />
+  </AkIconButton>
+{{/if}}
+
+<ConfirmBox
+  @isActive={{this.showRemoveTeamConfirm}}
+  @title={{t 'confirmBox.removeProjectTeam'}}
+  @confirmAction={{this.removeTeamProxy}}
+  @disabled={{this.removeTeam.isRunning}}
+  @confirmText={{t 'ok'}}
+  @blurOverlay={{true}}
+/>

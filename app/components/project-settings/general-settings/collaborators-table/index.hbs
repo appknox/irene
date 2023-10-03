@@ -1,0 +1,62 @@
+<AkPaginationProvider
+  @results={{this.projectCollaborators}}
+  @onItemPerPageChange={{this.onItemPerPageChange}}
+  @totalItems={{this.totalCount}}
+  @nextAction={{this.goToPage}}
+  @prevAction={{this.goToPage}}
+  @itemPerPageOptions={{array 10 25 50}}
+  @defaultLimit={{this.limit}}
+  @offset={{this.offset}}
+  as |pgc|
+>
+  {{#if this.getProjectCollaborators.isRunning}}
+    <ProjectSettings::Loader
+      data-test-projectSettings-generalSettings-collaboratorsTableLoader
+    />
+  {{else if this.hasNoProjectCollaborators}}
+    <ProjectSettings::EmptyList
+      @emptyListText='{{t "noCollaborators"}}'
+      data-test-projectSettings-generalSettings-collaboratorsTableEmpty
+    />
+
+  {{else}}
+    <AkTable
+      @variant='semi-bordered'
+      local-class='collaborators-table'
+      @borderColor='dark'
+      data-test-projectSettings-generalSettings-collaboratorsTable
+      as |tb|
+    >
+      <tb.head @columns={{this.columns}} />
+
+      <tb.body @rows={{pgc.currentPageResults}} @renderAll={{true}} as |b|>
+        <b.row data-test-generalSettings-collaboratorsTable-row as |r|>
+          <r.cell>
+            {{#let (component r.columnValue.component) as |Component|}}
+              <Component
+                @project={{@project}}
+                @collaborator={{r.rowValue}}
+                @reloadCollaborators={{this.reloadProjectCollaborators}}
+              />
+            {{/let}}
+          </r.cell>
+        </b.row>
+      </tb.body>
+    </AkTable>
+
+    <AkPagination
+      @disableNext={{pgc.disableNext}}
+      @nextAction={{pgc.nextAction}}
+      @disablePrev={{pgc.disablePrev}}
+      @prevAction={{pgc.prevAction}}
+      @endItemIdx={{pgc.endItemIdx}}
+      @startItemIdx={{pgc.startItemIdx}}
+      @itemPerPageOptions={{pgc.itemPerPageOptions}}
+      @onItemPerPageChange={{pgc.onItemPerPageChange}}
+      @selectedOption={{pgc.selectedOption}}
+      @tableItemLabel='{{t "collaborators"}}'
+      @perPageTranslation='{{t "recordPerPage"}}'
+      @totalItems={{pgc.totalItems}}
+    />
+  {{/if}}
+</AkPaginationProvider>

@@ -6,11 +6,23 @@ export default Factory.extend({
     return i + 1;
   },
 
-  name: faker.lorem.word(),
+  name() {
+    return faker.lorem.word();
+  },
+
   organization: 1,
-  created_on: faker.date.past(),
-  members_count: faker.datatype.number(),
-  projects_count: faker.datatype.number(),
+
+  created_on() {
+    return faker.date.past();
+  },
+
+  members_count() {
+    return faker.datatype.number();
+  },
+
+  projects_count() {
+    return faker.datatype.number();
+  },
 
   members() {
     return `https://api.appknox.com/api/organizations/${this.organization}/teams/${this.id}/members`;
