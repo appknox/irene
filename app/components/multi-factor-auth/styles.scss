@@ -15,3 +15,9 @@
   border-radius: 0.2em;
   padding: 0.3em 0.8em;
 }
+
+.ak-btn-loader {
+  :global(.ak-loader-circle-indicator) {
+    stroke: var(--mfa-loader-primary-contrast-text) !important;
+  }
+}

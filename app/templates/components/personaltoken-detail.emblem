@@ -10,10 +10,10 @@ if isNotRevoked
     td
       .align-middle
         .copy-token data-clipboard-target="#copy-#{personaltoken.id}"
-          ak-icon iconName="content-paste" color="info" size="small"
+          = ak-icon iconName="content-paste" color="info" size="small"
     td
       .align-middle
         .remove click="openRevokePersonalTokenConfirmBox"
-          ak-icon iconName="delete" color="error" size="small"
+          = ak-icon iconName="delete" color="error" size="small"
 
 = confirm-box isActive=showRevokePersonalTokenConfirmBox title=(t 'confirmBox.revokePersonalToken') delegate=this disabled=isDeletingToken

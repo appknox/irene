@@ -790,4 +790,7 @@ body {
   --file-chart-severity-level-color-passed: var(--severity-passed);
   --file-chart-severity-level-color-untested: var(--severity-untested);
   --file-chart-severity-level-color-none: var(--severity-none);
+
+  // variables for account-settings/mfa
+  --mfa-loader-primary-contrast-text: var(--primary-contrast-text);
 }

@@ -10,6 +10,6 @@
           = input class="form-control input" placeholder="Enter the file ID" type="text" value=fileNumber
         button.is-primary class="{{if isPurgingAPIAnalyses 'no-hover-button'}}" click="purgeAPIAnalyses" disabled=isPurgingAPIAnalyses
           if isPurgingAPIAnalyses
-            ak-loader size=13
+            = ak-loader size=13
             | &nbsp;
           | SUBMIT

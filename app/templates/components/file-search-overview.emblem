@@ -8,6 +8,6 @@ td.table-button
 td
   button.is-primary click="downloadApp" disabled=isDownloadingApp
     if isDownloadingApp
-      ak-loader size=13
+      = ak-loader size=13
       | &nbsp;
     | Download #{file.fileFormatDisplay}

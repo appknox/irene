@@ -8,15 +8,15 @@
       h6 {{invitation.user.username}} has invited you to {{invitation.team.name}} team
       p.control.has-icon.has-icon-left
         = input class="input" value=invitation.email readonly="true"
-        = fa-icon "envelope" class="is-primary"
+        = ak-icon iconName="email" class="is-primary"
 
       p.control.has-icon.has-icon-left
         = input class="input" placeholder=(t 'username') value=username autofocus="autofocus" autocomplete="new-username"
-        = fa-icon "user" class="is-primary"
+        = ak-icon iconName="person" class="is-primary"
 
       p.control.has-icon.has-icon-left
         = input class="input" placeholder=(t 'password') value=password type="password" autocomplete="new-password"
-        = fa-icon "lock" class="is-primary"
+        = ak-icon iconName="lock" class="is-primary"
 
       p.control.flex-center
         button.button.is-primary.highlighted-button type="submit"
