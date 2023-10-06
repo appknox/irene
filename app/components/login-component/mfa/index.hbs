@@ -21,7 +21,7 @@
           from='irene/components/login-component/index.scss'
         }}'
     >
-      <AkIcon @iconName='key' class='input-icon' for='key'/>
+      <AkIcon @iconName='key' class='input-icon' for='key' />
     </label>
     <Input
       data-test-login-mfa-otp-input
@@ -37,25 +37,23 @@
       {{autofocus}}
     />
   </div>
-  <button
+  <AkButton
     data-test-login-mfa-button
     class='button is-primary is-fullwidth highlighted-button
       {{local-class
         "login-button"
         from='irene/components/login-component/index.scss'
       }}'
-    type='submit'
-    disabled={{this.isOTPEmpty}}
+    @type='submit'
+    @disabled={{this.isOTPEmpty}}
+    @loading={{@showSpinner}}
     {{on 'click' @login}}
   >
-    {{#if @showSpinner}}
-      <AkLoader />
-    {{/if}}
     <span
       class='{{local-class
           "login-button-text"
           from='irene/components/login-component/index.scss'
         }}'
     >{{t 'login'}}</span>
-  </button>
+  </AkButton>
 </form>

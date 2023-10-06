@@ -23,9 +23,11 @@
                     = t "storage"
                 td
                   if getStorageStatus.isRunning
-                    span class="has-text-grey-lighter" local-class="loading-indicator"
-                      i class="fa fa-spin fa-spinner"
-                      t"checking"
+                    span class="has-text-grey-lighter" 
+                      = ak-stack alignItems="center" justifyContent="center" local-class="loading-indicator"
+                        = ak-loader size=14
+                        |&nbsp;
+                        t"checking"
                   else
                     ul
                       li local-class="operational-status {{if isStorageWorking 'online'}}"
@@ -41,9 +43,11 @@
                     = t "devicefarm"
                 td
                   if getDeviceFarmStatus.isRunning
-                    span class="has-text-grey-lighter" local-class="loading-indicator"
-                      i class="fa fa-spin fa-spinner"
-                      t"checking"
+                    span class="has-text-grey-lighter" 
+                      = ak-stack alignItems="center" justifyContent="center" local-class="loading-indicator"
+                        = ak-loader size=14
+                        |&nbsp;
+                        t"checking"
                   else
                     ul
                       li local-class="operational-status {{if isDeviceFarmWorking 'online'}}"
@@ -59,9 +63,11 @@
                     = t "server"
                 td
                   if getAPIHostStatus.isRunning
-                    span class="has-text-grey-lighter" local-class="loading-indicator"
-                      i class="fa fa-spin fa-spinner"
-                      t"checking"
+                    span class="has-text-grey-lighter" 
+                      = ak-stack alignItems="center" justifyContent="center" local-class="loading-indicator"
+                        = ak-loader size=14
+                        |&nbsp;
+                        t"checking"
                   else
                     ul
                       li local-class="operational-status {{if isAPIServerWorking 'online'}}"

@@ -9,11 +9,10 @@ td
 td
   = invoice.paidStatus
 td
-  button.is-primary click="getInvoiceLink" disabled=isDownloadingInvoice
+  button.is-primary click="getInvoiceLink" disabled=isDownloadingInvoice class="{{if isDownloadingInvoice 'no-hover-button' }}"
     if isDownloadingInvoice
-      .fa-font-size
-        i.fa class="fa-spinner fa-spin"
-        | &nbsp;
+      = ak-loader size=14
+      | &nbsp;
     else
-      = fa-icon "download" class="font-size-14"
+      = ak-icon iconName="download"
     | &nbsp; #{ t "download"}

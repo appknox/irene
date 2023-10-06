@@ -29,9 +29,8 @@ form
 
     .columns
       .column.is-one-third
-        button.is-primary.margin-top20.mp-change-password click={(perform changePassword)} disabled=changePassword.IsRunning
+        button.is-primary.margin-top20.mp-change-password click={(perform changePassword)} disabled=changePassword.IsRunning class="{{if changePassword.IsRunning 'no-hover-button'}}"
           if changePassword.IsRunning
-            .fa-font-size
-              i.fa class="fa-spinner fa-spin"
-              | &nbsp;
+            = ak-loader size=14
+            | &nbsp;
           = t "changePassword"

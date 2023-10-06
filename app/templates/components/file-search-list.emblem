@@ -3,7 +3,7 @@
     .columns
       .column.back-link
         = link-to 'authenticated.security.projects'
-          ak-stack direction="row" alignItems="center"
+          = ak-stack direction="row" alignItems="center"
             = ak-icon iconName="arrow-left"
             | Back to Projects
       .column.list-heading
