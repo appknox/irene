@@ -4305,31 +4305,6 @@ input:checked + .slider-nolabel:before {
   margin-left: 15px;
 }
 
-.pagination {
-  i {
-    font-size: 14px;
-  }
-
-  a.is-default {
-    margin: 0px 3px;
-
-    &:hover {
-      background-color: $critical;
-      color: #fff;
-      border-color: $critical;
-    }
-  }
-
-  .pagination-list {
-    a.is-primary,
-    a.is-default:hover {
-      background-color: $critical;
-      color: #fff;
-      border-color: $critical;
-    }
-  }
-}
-
 .switch-input[disabled] + .slider {
   opacity: 0.7;
   cursor: not-allowed;
@@ -5069,7 +5044,7 @@ $attachment-icon-width: 4em;
       margin-top: 60px !important;
     }
 
-    .pagination {
+    .paginate {
       padding: 10px 200px;
     }
   }

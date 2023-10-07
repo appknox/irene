@@ -1,0 +1,82 @@
+<div local-class='columns'>
+  <div local-class='column'>
+    <nav class='paginate' local-class='pagination'>
+      {{#if @hasPrevious}}
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          local-class='action'
+          {{on 'click' @gotoPageFirst}}
+        >
+          <:leftIcon>
+            <AkIcon @iconName='double-arrow-left' />
+          </:leftIcon>
+          <:default>
+            {{t 'first'}}
+          </:default>
+        </AkButton>
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          local-class='action'
+          {{on 'click' @gotoPagePrevious}}
+        >
+          <:leftIcon>
+            <AkIcon @iconName='chevron-left' />
+          </:leftIcon>
+          <:default>
+            {{t 'previous'}}
+          </:default>
+        </AkButton>
+      {{/if}}
+      <ul local-class='pagination-list'>
+        {{#if @preDot}}
+          <li>...</li>
+        {{/if}}
+        {{#each @pages as |page|}}
+          <li>
+            <AkButton
+              @variant='outlined'
+              @color='neutral'
+              local-class='page {{paginate-class @offset page}}'
+              {{on 'click' (fn @gotoPage page)}}
+            >
+              {{page-number page}}
+            </AkButton>
+          </li>
+        {{/each}}
+        {{#if @postDot}}
+          <li>...</li>
+        {{/if}}
+      </ul>
+      {{#if @hasNext}}
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          local-class='action'
+          {{on 'click' @gotoPageNext}}
+        >
+          <:default>
+            {{t 'next'}}
+          </:default>
+          <:rightIcon>
+            <AkIcon @iconName='chevron-right' />
+          </:rightIcon>
+        </AkButton>
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          local-class='action'
+          {{on 'click' @gotoPageLast}}
+        >
+          <:default>
+            {{t 'last'}}
+          </:default>
+          <:rightIcon>
+            <AkIcon @iconName='double-arrow-right' />
+          </:rightIcon>
+        </AkButton>
+      {{/if}}
+    </nav>
+  </div>
+</div>
