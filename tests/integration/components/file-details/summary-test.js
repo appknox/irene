@@ -185,7 +185,7 @@ module('Integration | Component | file-details/summary', function (hooks) {
     assert.dom(menuItems[2]).hasText('t:settings:()');
 
     // close menu
-    await click('[data-test-ak-menu-backdrop]');
+    await click('[data-test-ak-popover-backdrop]');
 
     // set project file count to 1
     project.fileCount = 1;

@@ -1,17 +1,7 @@
 .ak-menu-root {
   position: fixed;
   inset: 0px;
-  z-index: var(--ak-menu-z-index);
-}
-
-.backdrop-root {
-  position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  inset: 0px;
-  background-color: transparent;
-  z-index: -1;
+  z-index: var(--ak-menu-z-index) !important;
 }
 
 .ak-menu-dropdown-root {

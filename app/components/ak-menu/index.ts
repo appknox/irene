@@ -4,6 +4,7 @@ import { Modifier } from '@popperjs/core';
 import { WithBoundArgs } from '@glint/template';
 
 import AkListItemComponent from 'irene/components/ak-list/item';
+import styles from './index.scss';
 
 export interface AkMenuSignature {
   Args: {
@@ -32,6 +33,12 @@ export default class AkMenuComponent extends Component<AkMenuSignature> {
         },
       },
     ];
+  }
+
+  get classes() {
+    return {
+      akMenuArrowPopoverRoot: styles['ak-menu-arrow-popover-root'],
+    };
   }
 
   @action

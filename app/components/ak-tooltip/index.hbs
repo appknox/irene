@@ -6,38 +6,31 @@
   {{on 'mouseenter' this.handleShowTooltip}}
   {{on 'mouseleave' this.handleHideTooltip}}
 >
-
   {{yield}}
 
   {{#unless @disabled}}
-    {{#if this.anchorRef}}
-      <EmberWormhole @to='ak-component-wormhole'>
-        <div role='tooltip' local-class='ak-tooltip-container-root'>
-          <AkPopover
-            data-test-ak-tooltip-popover
-            @anchorRef={{this.anchorRef}}
-            @placement={{@placement}}
-            @arrow={{@arrow}}
-            @arrowColor={{or @color 'dark'}}
-            @modifiers={{this.modifiers}}
-            local-class='{{if @arrow "ak-tooltip-arrow-popover-root"}}'
-          >
-            <div
-              data-test-ak-tooltip-content
-              local-class='ak-tooltip-root ak-tooltip-color-{{or
-                @color
-                "dark"
-              }}'
-            >
-              {{#if (has-block 'tooltipContent')}}
-                {{yield to='tooltipContent'}}
-              {{else}}
-                {{@title}}
-              {{/if}}
-            </div>
-          </AkPopover>
-        </div>
-      </EmberWormhole>
-    {{/if}}
+    <AkPopover
+      data-test-ak-tooltip-popover
+      role='tooltip'
+      local-class='ak-tooltip-container-root'
+      @renderInPlace={{@renderInPlace}}
+      @anchorRef={{this.anchorRef}}
+      @placement={{@placement}}
+      @arrow={{@arrow}}
+      @arrowColor={{or @color 'dark'}}
+      @modifiers={{this.modifiers}}
+      @containerClass={{if @arrow this.classes.akTooltipArrowPopoverRoot}}
+    >
+      <div
+        data-test-ak-tooltip-content
+        local-class='ak-tooltip-root ak-tooltip-color-{{or @color "dark"}}'
+      >
+        {{#if (has-block 'tooltipContent')}}
+          {{yield to='tooltipContent'}}
+        {{else}}
+          {{@title}}
+        {{/if}}
+      </div>
+    </AkPopover>
   {{/unless}}
 </div>

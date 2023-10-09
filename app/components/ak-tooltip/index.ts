@@ -5,9 +5,12 @@ import { later, cancel } from '@ember/runloop';
 import { Placement } from '@popperjs/core';
 import { EmberRunTimer } from '@ember/runloop/types';
 
+import styles from './index.scss';
+
 export interface AkTooltipSignature {
   Element: HTMLDivElement;
   Args: {
+    renderInPlace?: boolean;
     disabled?: boolean;
     placement?: Placement;
     arrow?: boolean;
@@ -86,6 +89,12 @@ export default class AkTooltipComponent extends Component<AkTooltipSignature> {
     if (this.args.onClose) {
       this.args.onClose(event);
     }
+  }
+
+  get classes() {
+    return {
+      akTooltipArrowPopoverRoot: styles['ak-tooltip-arrow-popover-root'],
+    };
   }
 
   get modifiers() {

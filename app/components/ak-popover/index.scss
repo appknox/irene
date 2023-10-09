@@ -1,3 +1,18 @@
+.ak-popover-root {
+  position: fixed;
+  z-index: var(--ak-popover-zIndex);
+}
+
+.backdrop-root {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inset: 0px;
+  background-color: transparent;
+  z-index: -1;
+}
+
 .ak-popover-arrow {
   position: absolute;
   font-size: 10px;
@@ -24,7 +39,7 @@
   background-color: var(--ak-popover-arrow-background-dark);
 }
 
-.ak-popover-root {
+.ak-popover-container {
   z-index: 1;
 
   &[data-popper-placement*='bottom'] {
