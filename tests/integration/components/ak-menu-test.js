@@ -39,8 +39,8 @@ module('Integration | Component | ak-menu', function (hooks) {
 
     await click('[data-test-more-btn]');
 
-    assert.dom('[data-test-ak-menu-root]').exists();
-    assert.dom('[data-test-ak-menu-backdrop]').exists();
+    assert.dom('[data-test-ak-popover-root]').exists();
+    assert.dom('[data-test-ak-popover-backdrop]').exists();
     assert.dom('[data-test-ak-menu]').exists();
   });
 
@@ -68,11 +68,11 @@ module('Integration | Component | ak-menu', function (hooks) {
 
     await click('[data-test-more-btn]');
 
-    assert.dom('[data-test-ak-menu-root]').exists();
-    assert.dom('[data-test-ak-menu-backdrop]').exists();
+    assert.dom('[data-test-ak-popover-root]').exists();
+    assert.dom('[data-test-ak-popover-backdrop]').exists();
 
     assert
-      .dom('[data-test-ak-menu-popover]')
+      .dom('[data-test-ak-menu-popover] [data-test-ak-popover-container]')
       .exists()
       .doesNotHaveClass(/ak-menu-arrow-popover-root/i);
 
@@ -81,7 +81,7 @@ module('Integration | Component | ak-menu', function (hooks) {
     this.set('arrow', true);
 
     assert
-      .dom('[data-test-ak-menu-popover]')
+      .dom('[data-test-ak-menu-popover] [data-test-ak-popover-container]')
       .hasClass(/ak-menu-arrow-popover-root/i);
 
     assert.dom('[data-popper-arrow]').exists();
@@ -111,8 +111,8 @@ module('Integration | Component | ak-menu', function (hooks) {
 
     await click('[data-test-more-btn]');
 
-    assert.dom('[data-test-ak-menu-root]').exists();
-    assert.dom('[data-test-ak-menu-backdrop]').exists();
+    assert.dom('[data-test-ak-popover-root]').exists();
+    assert.dom('[data-test-ak-popover-backdrop]').exists();
 
     assert
       .dom('[data-test-ak-menu]')
@@ -151,14 +151,14 @@ module('Integration | Component | ak-menu', function (hooks) {
 
     await click('[data-test-more-btn]');
 
-    assert.dom('[data-test-ak-menu-root]').exists();
-    assert.dom('[data-test-ak-menu-backdrop]').exists();
+    assert.dom('[data-test-ak-popover-root]').exists();
+    assert.dom('[data-test-ak-popover-backdrop]').exists();
     assert.dom('[data-test-ak-menu]').exists();
 
-    await click('[data-test-ak-menu-backdrop]');
+    await click('[data-test-ak-popover-backdrop]');
 
-    assert.dom('[data-test-ak-menu-root]').doesNotExist();
-    assert.dom('[data-test-ak-menu-backdrop]').doesNotExist();
+    assert.dom('[data-test-ak-popover-root]').doesNotExist();
+    assert.dom('[data-test-ak-popover-backdrop]').doesNotExist();
     assert.dom('[data-test-ak-menu]').doesNotExist();
   });
 
@@ -197,8 +197,8 @@ module('Integration | Component | ak-menu', function (hooks) {
 
     await click('[data-test-more-btn]');
 
-    assert.dom('[data-test-ak-menu-root]').exists();
-    assert.dom('[data-test-ak-menu-backdrop]').exists();
+    assert.dom('[data-test-ak-popover-root]').exists();
+    assert.dom('[data-test-ak-popover-backdrop]').exists();
     assert.dom('[data-test-ak-menu]').exists();
 
     const menuListItems = findAll('[data-test-ak-list-item-button]');
@@ -209,8 +209,8 @@ module('Integration | Component | ak-menu', function (hooks) {
 
     assert.strictEqual(itemLabel, this.menuData[itemIndex].label);
 
-    assert.dom('[data-test-ak-menu-root]').doesNotExist();
-    assert.dom('[data-test-ak-menu-backdrop]').doesNotExist();
+    assert.dom('[data-test-ak-popover-root]').doesNotExist();
+    assert.dom('[data-test-ak-popover-backdrop]').doesNotExist();
     assert.dom('[data-test-ak-menu]').doesNotExist();
   });
 });

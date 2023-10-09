@@ -1,38 +1,26 @@
 {{! @glint-nocheck : or}}
-{{#if @anchorRef}}
-  <EmberWormhole @to='ak-component-wormhole' @renderInPlace={{@renderInPlace}}>
-    <div data-test-ak-menu-root role='presentation' local-class='ak-menu-root'>
-      <div
-        data-test-ak-menu-backdrop
-        role='button'
-        aria-hidden='true'
-        local-class='backdrop-root'
-        {{on 'click' this.handleBackdropClick}}
-      ></div>
-
-      <AkPopover
-        data-test-ak-menu-popover
-        @anchorRef={{@anchorRef}}
-        @placement='bottom-start'
-        @modifiers={{this.modifiers}}
-        @arrow={{@arrow}}
-        @sameWidthAsRef={{@sameWidthAsRef}}
-        local-class='{{if @arrow "ak-menu-arrow-popover-root"}}'
-      >
-        <div
-          data-test-ak-menu
-          local-class='ak-menu-dropdown-root
+<AkPopover
+  data-test-ak-menu-popover
+  local-class='ak-menu-root'
+  @anchorRef={{@anchorRef}}
+  @placement='bottom-start'
+  @modifiers={{this.modifiers}}
+  @arrow={{@arrow}}
+  @sameWidthAsRef={{@sameWidthAsRef}}
+  @hasBackdrop={{true}}
+  @onBackdropClick={{this.handleBackdropClick}}
+  @renderInPlace={{@renderInPlace}}
+  @containerClass={{if @arrow this.classes.akMenuArrowPopoverRoot}}
+>
+  <div
+    data-test-ak-menu
+    local-class='ak-menu-dropdown-root
             {{if @sameWidthAsRef "ak-menu-dropdown-full-width"}}'
-        >
-          <AkList local-class='ak-menu-dropdown-list' role={{or @role 'menu'}}>
-            {{yield
-              (hash
-                listItem=(component 'ak-list/item' button=true role='menuitem')
-              )
-            }}
-          </AkList>
-        </div>
-      </AkPopover>
-    </div>
-  </EmberWormhole>
-{{/if}}
+  >
+    <AkList local-class='ak-menu-dropdown-list' role={{or @role 'menu'}}>
+      {{yield
+        (hash listItem=(component 'ak-list/item' button=true role='menuitem'))
+      }}
+    </AkList>
+  </div>
+</AkPopover>

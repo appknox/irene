@@ -90,7 +90,7 @@ module('Integration | Component | ak-tooltip', function (hooks) {
     await triggerEvent(tooltipRoot, 'mouseenter');
 
     assert
-      .dom('[data-test-ak-tooltip-popover]')
+      .dom('[data-test-ak-tooltip-popover] [data-test-ak-popover-container]')
       .exists()
       .doesNotHaveClass(/ak-tooltip-arrow-popover-root/i);
 
@@ -102,7 +102,7 @@ module('Integration | Component | ak-tooltip', function (hooks) {
     assert.dom('[data-popper-arrow]').exists();
 
     assert
-      .dom('[data-test-ak-tooltip-popover]')
+      .dom('[data-test-ak-tooltip-popover] [data-test-ak-popover-container]')
       .hasClass(/ak-tooltip-arrow-popover-root/i);
   });
 

@@ -6,6 +6,7 @@ import {
   Modifier,
   Instance as PopperInstance,
 } from '@popperjs/core';
+import { inject as service } from '@ember/service';
 
 export interface AkPopoverSignature {
   Element: HTMLDivElement;
@@ -16,6 +17,12 @@ export interface AkPopoverSignature {
     sameWidthAsRef?: boolean;
     placement?: Placement;
     modifiers?: Partial<Modifier<string, object>>[];
+    renderInPlace?: boolean;
+    containerClass?: string;
+    hasBackdrop?: boolean;
+    onBackdropClick?: (event: MouseEvent) => void;
+    clickOutsideToClose?: boolean;
+    closeHandler?: () => void;
   };
   Blocks: { default: [] };
 }
@@ -39,6 +46,8 @@ const sameWidth: SameWidthFunc = (enabled: boolean) => ({
 });
 
 export default class PopoverComponent extends Component<AkPopoverSignature> {
+  @service('browser/window') declare window: Window;
+
   defaultPlacement: Placement = 'auto';
   defaultModifiers = [];
 
@@ -54,19 +63,49 @@ export default class PopoverComponent extends Component<AkPopoverSignature> {
         ...(this.args.modifiers || []),
       ],
     });
+
+    if (this.args.closeHandler && this.args.clickOutsideToClose) {
+      // Register click outside event listener when popover opens
+      this.window.addEventListener('mousedown', this.handleOutsideClick);
+    }
   }
 
   @action
-  elementWillDestroy() {
+  handleWillDestroyCleanup() {
     this.popper?.destroy();
     this.popper = null;
+
+    if (this.args.closeHandler && this.args.clickOutsideToClose) {
+      // Unregister click outside event listener when popover closes
+      this.window.removeEventListener('mousedown', this.handleOutsideClick);
+    }
+  }
+
+  @action
+  handleOutsideClick(event: MouseEvent) {
+    if (this.popper) {
+      const popoverElement = this.popper.state.elements.popper as HTMLElement;
+      const anchorRef = this.popper.state.elements.reference as HTMLElement;
+
+      if (
+        !popoverElement.contains(event.target as Node) &&
+        anchorRef &&
+        !anchorRef.contains(event.target as Node)
+      ) {
+        this.args.closeHandler?.();
+      }
+    }
+  }
+
+  @action
+  handleBackdropClick(event: MouseEvent) {
+    this.args.onBackdropClick?.(event);
   }
 
   willDestroy() {
     super.willDestroy();
 
-    this.popper?.destroy();
-    this.popper = null;
+    this.handleWillDestroyCleanup();
   }
 }
 
