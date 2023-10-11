@@ -434,6 +434,7 @@
   "includeInactiveMembers": "Include inactive users",
   "info": "Info",
   "installAppknoxPluginTo": "Install plugin to ",
+  "inProgress": "In Progress",
   "integrateAppknoxTo": "Integrate to ",
   "integrateAppknoxToCICDPipeline": "Integrate To CI/CD Pipeline",
   "integrateGithub": "Integrate GitHub",
