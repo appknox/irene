@@ -26,14 +26,17 @@ module('Integration | Component | attachment-detail', function (hooks) {
 
     const attachment = this.server.create('attachment');
 
-    this.attachment = store.createRecord('attachment', {
-      ...attachment.toJSON(),
-      downloadUrl: 'www.getdownloadurl.com',
-    });
+    this.attachment = store.push(
+      store.normalize('attachment', attachment.toJSON())
+    );
   });
 
   test('it renders', async function (assert) {
     await render(hbs`<AttachmentDetail @attachment={{this.attachment}} />`);
+
+    assert
+      .dom(`[data-test-attachmentDetail-btn="${this.attachment.uuid}"]`)
+      .exists();
 
     assert
       .dom(`[data-type="${fileExtension([this.attachment.name])}"]`)
@@ -50,26 +53,22 @@ module('Integration | Component | attachment-detail', function (hooks) {
   test('it downloads an attachment', async function (assert) {
     const DOWNLOAD_URL = 'www.downloadurl.com';
 
-    this.server.get('www.getdownloadurl.com', () => {
-      return {
-        data: {
-          url: DOWNLOAD_URL,
-        },
-      };
-    });
+    this.server.get('/dummy_attachment_download_url/:id', () => ({
+      data: { url: DOWNLOAD_URL },
+    }));
 
     this.owner.register('service:browser/window', WindowStub);
 
     await render(hbs`<AttachmentDetail @attachment={{this.attachment}} />`);
 
-    await click('[data-test-attachmentDetail-root]');
+    await click(`[data-test-attachmentDetail-btn="${this.attachment.uuid}"]`);
 
     const window = this.owner.lookup('service:browser/window');
 
     assert.strictEqual(
       window.url,
       DOWNLOAD_URL,
-      `opens the right download url`
+      'opens the right download url'
     );
   });
 });
