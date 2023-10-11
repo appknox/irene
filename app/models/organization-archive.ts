@@ -1,7 +1,7 @@
-import Model, { attr, belongsTo } from '@ember-data/model';
+import Model, { AsyncBelongsTo, attr, belongsTo } from '@ember-data/model';
 import { inject as service } from '@ember/service';
 import LoggerService from 'irene/services/logger';
-import OrganizationUserModel from './organization-user';
+import type OrganizationUserModel from './organization-user';
 import IntlService from 'ember-intl/services/intl';
 
 export enum OrganizationArchiveModelGeneratedVia {
@@ -19,15 +19,19 @@ export default class OrganizationArchiveModel extends Model {
   get EXPIRED() {
     return this.intl.t('expired');
   }
+
   get INPROGRESS() {
     return this.intl.t('inProgress');
   }
+
   get AVAILABLE() {
     return this.intl.t('available');
   }
+
   get ERRORED() {
     return this.intl.t('errored');
   }
+
   get SYSTEM() {
     return this.intl.t('system');
   }
@@ -39,7 +43,7 @@ export default class OrganizationArchiveModel extends Model {
   declare availableUntil: Date;
 
   @belongsTo('organization-user', { inverse: null })
-  declare generatedBy: OrganizationUserModel;
+  declare generatedBy: AsyncBelongsTo<OrganizationUserModel>;
 
   @attr('date')
   declare fromDate: Date;
@@ -55,8 +59,10 @@ export default class OrganizationArchiveModel extends Model {
 
   async downloadURL() {
     const adapter = this.store.adapterFor('organization-archive');
+
     try {
       const response = await adapter.getDownloadURL(this.id);
+
       if (response && response.url && response.url.length) {
         return response.url;
       }
@@ -66,6 +72,7 @@ export default class OrganizationArchiveModel extends Model {
         err
       );
     }
+
     return '';
   }
 
@@ -83,7 +90,6 @@ export default class OrganizationArchiveModel extends Model {
   get status() {
     const expiryDate = this.availableUntil;
     const progressPercent = this.progressPercent;
-
     const currentDateTime = new Date();
 
     // check expiry first before progress to notify of expiry as priority
@@ -98,18 +104,22 @@ export default class OrganizationArchiveModel extends Model {
     if (progressPercent === 100) {
       return this.AVAILABLE;
     }
+
     return this.ERRORED;
   }
 
   get isAvailable() {
     return this.status == this.AVAILABLE;
   }
+
   get isInProgress() {
     return this.status == this.INPROGRESS;
   }
+
   get isExpired() {
     return this.status == this.EXPIRED;
   }
+
   get isErrrored() {
     return this.status == this.ERRORED;
   }

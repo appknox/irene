@@ -1,20 +1,19 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Service from '@ember/service';
 
 export default class LoggerService extends Service {
-  error(...args: any[]) {
+  error(...args: unknown[]) {
     console.error(...args);
   }
 
-  warn(...args: any[]) {
+  warn(...args: unknown[]) {
     console.warn(...args);
   }
 
-  info(...args: any[]) {
+  info(...args: unknown[]) {
     console.info(...args);
   }
 
-  debug(...args: any[]) {
+  debug(...args: unknown[]) {
     console.debug(...args);
   }
 }

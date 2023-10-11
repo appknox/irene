@@ -1,6 +1,6 @@
 import commondrf from './commondrf';
 
-export default class OrganizationArchive extends commondrf {
+export default class OrganizationArchiveAdapter extends commondrf {
   _buildURL(moduleName: string, id: string) {
     const organizationService = this.organization;
     const organizationID = organizationService.selected?.id;
@@ -10,6 +10,7 @@ export default class OrganizationArchive extends commondrf {
     if (id) {
       return this.buildURLFromBase(`${baseurl}/${encodeURIComponent(id)}`);
     }
+
     return this.buildURLFromBase(baseurl);
   }
 
@@ -22,6 +23,6 @@ export default class OrganizationArchive extends commondrf {
 
 declare module 'ember-data/types/registries/adapter' {
   export default interface AdapterRegistry {
-    'organization-archive': OrganizationArchive;
+    'organization-archive': OrganizationArchiveAdapter;
   }
 }
