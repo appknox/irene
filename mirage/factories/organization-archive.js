@@ -18,4 +18,5 @@ export default Factory.extend({
   to_date: faker.date.recent(),
   task_id: null,
   progress_percent: 100,
+  generated_via: 0,
 });
