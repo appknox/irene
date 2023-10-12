@@ -39,7 +39,9 @@
       {{t 'typeOfScan'}}
     </AkTypography>
 
-    <FileDetails::TypeOfScan @analysis={{@analysis}} />
+    {{#if @analysis}}
+      <FileDetails::TypeOfScan @analysis={{@analysis}} />
+    {{/if}}
 
   </AkStack>
 
