@@ -1,0 +1,14 @@
+.summary-header-root {
+  border-radius: var(--sbom-summary-header-border-radius);
+  border: 1px solid var(--sbom-summary-header-border-color);
+  box-sizing: border-box;
+
+  .summary-header-container,
+  .summary-header-collapsible-container {
+    padding: 0.75em 1em;
+  }
+
+  .summary-header-collapsible-container {
+    border-top: 1px solid var(--sbom-summary-header-border-color);
+  }
+}

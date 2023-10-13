@@ -1,0 +1,41 @@
+<div ...attributes data-test-sbomScanDetails-componentDetails-summary>
+  {{#each this.componentSummary as |cs|}}
+    <AkStack
+      class='p-1'
+      data-test-sbomScanDetails-componentDetails-summary='{{cs.label}}'
+    >
+      <AkTypography {{style width='160px'}} @color='textSecondary'>
+        {{cs.label}}
+      </AkTypography>
+
+      {{#if cs.component}}
+        {{#let (component cs.component) as |Component|}}
+          <Component @sbomComponent={{@sbomComponent}} />
+        {{/let}}
+      {{else}}
+        <AkTypography @variant='h6'>
+          {{or cs.value '-'}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+
+    {{#unless cs.isLast}}
+      <AkDivider />
+    {{/unless}}
+  {{/each}}
+
+  {{!-- {{#if @sbomComponent.remediation}}
+    <AkStack class='my-4 px-2' @direction='column' @spacing='1.5'>
+      <AkTypography
+        data-test-sbomScanDetails-componentDetails-howToFixTitle
+        @variant='h5'
+      >
+        {{t 'howToFix'}}
+      </AkTypography>
+
+      <AkTypography data-test-sbomScanDetails-componentDetails-howToFixRemedy>
+        {{@sbomComponent.remediation}}
+      </AkTypography>
+    </AkStack>
+  {{/if}} --}}
+</div>

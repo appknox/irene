@@ -1,12 +1,52 @@
 <div class='px-3 py-1' data-test-sbomScanDetails-container>
-  <Sbom::AppSummary @sbomProject={{@sbomProject}}>
+  <AkStack class='mb-3' @alignItems='center' @justifyContent='space-between'>
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography data-test-sbomScanDetails-componentTitle @variant='h5'>
+        {{t 'sbomModule.allComponents'}}
+      </AkTypography>
+
+      <AkTypography
+        data-test-sbomScanDetails-componentDescription
+        @variant='body2'
+        @color='textSecondary'
+      >
+        {{t 'sbomModule.componentDescription'}}
+      </AkTypography>
+    </AkStack>
+
+    {{!-- <div {{style width='180px'}}>
+      <AkTextField
+        data-test-sbomScanDetails-componentSearchInput
+        @placeholder={{t 'search'}}
+        @value={{@queryParams.component_query}}
+        {{on 'keyup' this.searchSbomComponentForQuery}}
+      >
+        <:leftAdornment>
+          <AkIcon @iconName='search' @color='textSecondary' />
+        </:leftAdornment>
+      </AkTextField>
+    </div> --}}
+  </AkStack>
+
+  <Sbom::SummaryHeader>
+    <:summary>
+      <AkStack @alignItems='center' @spacing='1.5'>
+        <Sbom::AppLogo @sbomProject={{@sbomProject}} />
+
+        <AkTypography data-test-sbomAppSummary-appPackageName @variant='h6'>
+          {{this.packageName}}
+        </AkTypography>
+
+        <Sbom::AppPlatform @sbomProject={{@sbomProject}} />
+      </AkStack>
+    </:summary>
+
     <:actionBtn>
-      <AkStack @alignItems='center' @spacing='1'>
+      <AkStack @alignItems='stretch' @spacing='1'>
         <AkLink
           @class={{this.classes.akLinkBtn}}
           @route='authenticated.dashboard.sbom.app-scans'
           @model={{@sbomProject.id}}
-          @color='primary'
           @underline='none'
           data-test-sbomScanDetails-pastSbomAnalyses-link
         >
@@ -24,41 +64,13 @@
       </AkStack>
     </:actionBtn>
 
-    <:default>
-      <div local-class='show-more-container'>
-        {{#if this.showFileScanSummary}}
-          <Sbom::ScanDetails::FileScanSummary
-            @sbomFile={{@sbomFile}}
-            @sbomScanSummary={{@sbomScanSummary}}
-          />
-        {{/if}}
-
-        <AkButton
-          @variant='text'
-          @underline='always'
-          @color='primary'
-          @typographyVariant='subtitle1'
-          {{on 'click' this.handleFileScanSummaryToggle}}
-          data-test-sbomScanDetails-showMoreOrLess-btn
-        >
-          <:default>
-            {{if this.showFileScanSummary (t 'showLess') (t 'showMore')}}
-          </:default>
-
-          <:rightIcon>
-            <AkIcon
-              @iconName={{if
-                this.showFileScanSummary
-                'arrow-drop-up'
-                'arrow-drop-down'
-              }}
-              @color='primary'
-            />
-          </:rightIcon>
-        </AkButton>
-      </div>
-    </:default>
-  </Sbom::AppSummary>
+    <:collapsibleContent>
+      <Sbom::ScanDetails::FileScanSummary
+        @sbomFile={{@sbomFile}}
+        @sbomScanSummary={{@sbomScanSummary}}
+      />
+    </:collapsibleContent>
+  </Sbom::SummaryHeader>
 
   {{#if this.scanStatusCompleted}}
     <Sbom::ScanDetails::ComponentList

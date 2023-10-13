@@ -1,0 +1,48 @@
+.severity-chip {
+  width: 80px;
+  color: var(
+    --sbom-component-details-vulnerabilities-severity-chip-text-color
+  ) !important;
+}
+
+.severity-chip-critical {
+  background-color: var(
+    --sbom-component-details-vulnerabilities-severity-critical
+  ) !important;
+}
+
+.severity-chip-high {
+  background-color: var(
+    --sbom-component-details-vulnerabilities-severity-high
+  ) !important;
+}
+
+.severity-chip-medium {
+  background-color: var(
+    --sbom-component-details-vulnerabilities-severity-medium
+  ) !important;
+}
+
+.severity-chip-low {
+  background-color: var(
+    --sbom-component-details-vulnerabilities-severity-low
+  ) !important;
+}
+
+.severity-chip-info {
+  background-color: var(
+    --sbom-component-details-vulnerabilities-severity-info
+  ) !important;
+}
+
+.severity-chip-none {
+  background-color: var(
+    --sbom-component-details-vulnerabilities-severity-none
+  ) !important;
+}
+
+.severity-chip-unknown {
+  background-color: var(
+    --sbom-component-details-vulnerabilities-severity-unknown
+  ) !important;
+}

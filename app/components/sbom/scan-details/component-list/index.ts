@@ -42,7 +42,6 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
   @service('notifications') declare notify: NotificationService;
 
   @tracked componentQueryResponse: SbomComponentQueryResponse | null = null;
-  @tracked selectedComponent: SbomComponentModel | null = null;
 
   // translation variables
   tPleaseTryAgain: string;
@@ -100,28 +99,22 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
       {
         name: this.intl.t('version'),
         component: 'sbom/scan-details/component-list/version',
-        width: 150,
       },
       {
-        name: this.intl.t('sbomModule.knownVulnerabilities'),
-        component: 'sbom/scan-details/component-list/known-vulnerabilities',
-        textAlign: 'center',
+        name: this.intl.t('status'),
+        component: 'sbom/component-status',
       },
     ];
   }
 
-  get openComponentDetailDrawer() {
-    return Boolean(this.selectedComponent);
-  }
-
-  @action
-  handleComponentDetailDrawerClose() {
-    this.selectedComponent = null;
-  }
-
   @action
   handleComponentClick({ rowValue }: { rowValue: SbomComponentModel }) {
-    this.selectedComponent = rowValue;
+    this.router.transitionTo(
+      'authenticated.dashboard.sbom.component-details',
+      this.args.sbomProject.id,
+      this.args.sbomFile.id,
+      rowValue.id
+    );
   }
 
   @action

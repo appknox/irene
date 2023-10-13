@@ -25,6 +25,7 @@ export enum AkSvgComponentInvocationByNames {
   FileCompareError,
   NoInsights,
   NoTestCase,
+  AffectedFixedVersionEmpty,
 }
 
 export enum AkSvgComponentInvocationByPaths {

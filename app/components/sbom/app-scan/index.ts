@@ -10,7 +10,15 @@ export interface SbomAppScanSignature {
   };
 }
 
-export default class SbomAppScanComponent extends Component<SbomAppScanSignature> {}
+export default class SbomAppScanComponent extends Component<SbomAppScanSignature> {
+  get packageName() {
+    return this.args.sbomProject.project.get('packageName');
+  }
+
+  get projectName() {
+    return this.args.sbomProject.project.get('lastFile')?.get('name');
+  }
+}
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {

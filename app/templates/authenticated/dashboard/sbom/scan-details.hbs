@@ -11,7 +11,9 @@
 
   <AkBreadcrumbs::Item
     @route='authenticated.dashboard.sbom.scan-details'
-    @linkTitle={{t 'sbomModule.allComponentsAndVulnerabilities'}}
+    @linkTitle='{{t
+      "sbomModule.allComponentsAndVulnerabilities"
+    }} ({{@model.sbomProject.project.lastFile.name}})'
   />
 </AkBreadcrumbs::Container>
 

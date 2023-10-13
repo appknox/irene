@@ -139,14 +139,9 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
 
       assert.dom('[data-test-sbomApp-logo]').exists();
 
-      // latest file
-      assert
-        .dom('[data-test-sbomAppSummary-appName]')
-        .hasText(this.files[0].name);
-
       // latest project
       assert
-        .dom('[data-test-sbomAppSummary-appPackageName]')
+        .dom('[data-test-sbomScan-appPackageName]')
         .hasText(this.projects[0].package_name);
 
       assert
@@ -357,7 +352,7 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
 
     await waitUntil(
       () =>
-        find('[data-test-sbomAppSummary-appName]').textContent.includes(
+        find('[data-test-sbomScan-description]').textContent.includes(
           this.files[0].name
         ),
       { timeout: 500 }
@@ -368,14 +363,9 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
 
     assert.dom('[data-test-sbomApp-logo]').exists();
 
-    // latest file
-    assert
-      .dom('[data-test-sbomAppSummary-appName]')
-      .hasText(this.files[0].name);
-
     // latest project
     assert
-      .dom('[data-test-sbomAppSummary-appPackageName]')
+      .dom('[data-test-sbomScan-appPackageName]')
       .hasText(this.projects[0].package_name);
 
     assert

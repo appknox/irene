@@ -1,0 +1,40 @@
+.vulnerability-detail-content-root {
+  width: calc(100% - 2.4em);
+  margin: 0.25em 1.2em 1.2em;
+  background-color: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-background-color-light
+  );
+  border-radius: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-border-radius
+  );
+  border: 1px solid
+    var(--sbom-component-details-vulnerabilities-detail-wrapper-border-color);
+  box-sizing: border-box;
+}
+
+.empty-container {
+  width: 100%;
+  padding: 2em;
+  background-color: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-background-color-main
+  );
+  border: 1px solid
+    var(--sbom-component-details-vulnerabilities-detail-wrapper-border-color);
+  border-radius: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-border-radius
+  );
+}
+
+.vulnerability-detail-content {
+  max-width: 650px;
+  padding: 2em;
+
+  .vulnerability-reference-list {
+    list-style: unset;
+    padding: unset;
+
+    li {
+      margin: 0.25em;
+    }
+  }
+}

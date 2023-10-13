@@ -1,7 +1,7 @@
 <AkStack @direction='column' data-test-fileScanSummary-container>
   {{#each this.fileSummary as |fs|}}
     <AkStack
-      class='py-2'
+      class='py-1'
       data-test-sbomScanDetails-fileSummaryGroup='{{fs.label}}'
     >
       <AkTypography
@@ -39,13 +39,15 @@
   {{/each}}
 
   {{#if this.scanStatusCompleted}}
-    <AkTypography class='mt-2' @variant='h5'>
-      {{t 'sbomModule.sbomSummary'}}
-    </AkTypography>
+    <div class='my-2'>
+      <AkTypography @variant='h5'>
+        {{t 'sbomModule.sbomSummary'}}
+      </AkTypography>
+    </div>
 
     {{#each this.scanSummary as |ss|}}
       <AkStack
-        class='py-2'
+        class='py-1'
         data-test-sbomScanDetails-scanSummaryGroup='{{ss.label}}'
       >
         <AkTypography

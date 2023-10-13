@@ -1,0 +1,44 @@
+<div local-class='summary-header-root'>
+  <AkStack
+    @alignItems='center'
+    @justifyContent='space-between'
+    @spacing='1.5'
+    local-class='summary-header-container'
+  >
+    <div class='width-full'>
+      {{yield to='summary'}}
+    </div>
+
+    <AkStack @alignItems='center' @spacing='1.5'>
+      {{#if (has-block 'actionBtn')}}
+        <div>
+          {{yield to='actionBtn'}}
+        </div>
+      {{/if}}
+
+      {{#if (has-block 'collapsibleContent')}}
+        <AkIconButton
+          data-test-sbomSummaryHeader-collapsibleToggleBtn
+          {{on 'click' this.handleToggleCollapsibleContent}}
+        >
+          <AkIcon
+            @iconName={{if
+              this.showCollapsibleContent
+              'arrow-drop-up'
+              'arrow-drop-down'
+            }}
+          />
+        </AkIconButton>
+      {{/if}}
+    </AkStack>
+  </AkStack>
+
+  {{#if (and (has-block 'collapsibleContent') this.showCollapsibleContent)}}
+    <div
+      data-test-sbomSummaryHeader-collapsibleContent
+      local-class='summary-header-collapsible-container'
+    >
+      {{yield to='collapsibleContent'}}
+    </div>
+  {{/if}}
+</div>

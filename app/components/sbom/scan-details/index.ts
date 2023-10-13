@@ -23,12 +23,15 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
   @service declare intl: IntlService;
 
   @tracked openViewReportDrawer = false;
-  @tracked showFileScanSummary = false;
 
   get classes() {
     return {
       akLinkBtn: styles['ak-link-btn'],
     };
+  }
+
+  get packageName() {
+    return this.args.sbomProject.project.get('packageName');
   }
 
   get scanStatusText() {
@@ -51,11 +54,6 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
 
   get scanStatusFailed() {
     return this.args.sbomFile.status === SbomScanStatus.FAILED;
-  }
-
-  @action
-  handleFileScanSummaryToggle() {
-    this.showFileScanSummary = !this.showFileScanSummary;
   }
 
   @action

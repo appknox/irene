@@ -560,48 +560,52 @@ body {
   --sbom-scan-details-link-border-radius: var(--border-radius);
   --sbom-scan-details-link-border-color: var(--border-color-1);
 
-  // variables for sbom/scan-details/component-details
-  --sbom-scan-details-component-details-tab-background: var(--background-main);
-  --sbom-scan-details-component-details-tab-box-shadow: var(--box-shadow-3);
-  --sbom-scan-details-component-details-tab-zIndex: var(--zIndex-appbar);
-
-  // variables for sbom/scan-details/component-details/summary
-  --sbom-scan-details-component-details-summary-border-radius: var(
-    --border-radius
+  // variables for sbom/component-details/vulnerabilities
+  --sbom-component-details-vulnerabilities-list-header-background-color: var(
+    --ak-table-header-background-neutral
   );
-  --sbom-scan-details-component-details-summary-border-color: var(
+  --sbom-component-details-vulnerabilities-list-header-border-color-dark: var(
+    --ak-table-border-dark
+  );
+  --sbom-component-details-vulnerabilities-list-border-color-light: var(
+    --ak-table-border-light
+  );
+
+  // variables for sbom/component-details/vulnerabilities/detail-wrapper
+  --sbom-component-details-vulnerabilities-detail-wrapper-background-color-main: var(
+    --background-main
+  );
+  --sbom-component-details-vulnerabilities-detail-wrapper-background-color-light: var(
+    --background-light
+  );
+  --sbom-component-details-vulnerabilities-detail-wrapper-border-color: var(
     --border-color-1
   );
+  --sbom-component-details-vulnerabilities-detail-wrapper-border-radius: var(
+    --border-radius
+  );
 
-  // variables for sbom/scan-details/component-details/vulnerabilities
-  --sbom-scan-details-component-details-vulnerabilities-severity-critical: var(
+  // variables for sbom/component-details/vulnerabilities/severity
+  --sbom-component-details-vulnerabilities-severity-critical: var(
     --severity-critical
   );
-  --sbom-scan-details-component-details-vulnerabilities-severity-high: var(
-    --severity-high
-  );
-  --sbom-scan-details-component-details-vulnerabilities-severity-medium: var(
+  --sbom-component-details-vulnerabilities-severity-high: var(--severity-high);
+  --sbom-component-details-vulnerabilities-severity-medium: var(
     --severity-medium
   );
-  --sbom-scan-details-component-details-vulnerabilities-severity-low: var(
-    --severity-low
-  );
-  --sbom-scan-details-component-details-vulnerabilities-severity-info: var(
-    --severity-info
-  );
-  --sbom-scan-details-component-details-vulnerabilities-severity-none: var(
-    --severity-none
-  );
-  --sbom-scan-details-component-details-vulnerabilities-severity-unknown: var(
+  --sbom-component-details-vulnerabilities-severity-low: var(--severity-low);
+  --sbom-component-details-vulnerabilities-severity-info: var(--severity-info);
+  --sbom-component-details-vulnerabilities-severity-none: var(--severity-none);
+  --sbom-component-details-vulnerabilities-severity-unknown: var(
     --severity-unknown
   );
-  --sbom-scan-details-component-details-vulnerabilities-severity-chip-text-color: var(
+  --sbom-component-details-vulnerabilities-severity-chip-text-color: var(
     --common-white
   );
 
-  // variables for sbom/app-summary
-  --sbom-app-summary-border-radius: var(--border-radius);
-  --sbom-app-summary-border-color: var(--border-color-1);
+  // variables for sbom/summary-header
+  --sbom-summary-header-border-radius: var(--border-radius);
+  --sbom-summary-header-border-color: var(--border-color-1);
 
   // variables for risk-tag
   --risk-tag-font-family: var(--font-family);
