@@ -52,7 +52,7 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
         hasBadge: true,
         badgeLabel: this.organization.selected?.projectsCount,
         currentWhen:
-          'authenticated.projects authenticated.project.files authenticated.dashboard.compare authenticated.file authenticated.dashboard.file-vul-compare authenticated.choose',
+          'authenticated.projects authenticated.project.files authenticated.project.settings authenticated.dashboard.compare authenticated.file authenticated.dashboard.file-vul-compare authenticated.choose authenticated.dashboard.file',
       },
       this.showAppMonitoringDashboard && {
         label: this.intl.t('appMonitoring'),

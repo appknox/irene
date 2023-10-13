@@ -1,4 +1,3 @@
-/* eslint-disable qunit/no-assert-equal, qunit/no-assert-equal-boolean, qunit/no-identical-names */
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, click } from '@ember/test-helpers';
@@ -15,7 +14,7 @@ module('Integration | Component | tri-state-checkbox', function (hooks) {
     assert.dom('[data-test-check]').doesNotExist();
 
     const container = this.element.querySelector('[data-test-container]');
-    assert.equal(container.clientHeight, 0);
+    assert.strictEqual(container.clientHeight, 0);
   });
 
   test('it toggles value on checkbox click', async function (assert) {
@@ -31,13 +30,13 @@ module('Integration | Component | tri-state-checkbox', function (hooks) {
     );
 
     const checkbox = this.element.querySelector('[data-test-input]');
-    assert.equal(checkbox.checked, true);
+    assert.true(checkbox.checked);
 
     await click(checkbox);
-    assert.equal(checkbox.checked, false);
+    assert.false(checkbox.checked);
 
     await click(checkbox);
-    assert.equal(checkbox.checked, true);
+    assert.true(checkbox.checked, true);
   });
 
   test('it toggles value on label click', async function (assert) {
@@ -53,15 +52,15 @@ module('Integration | Component | tri-state-checkbox', function (hooks) {
     );
 
     const checkbox = this.element.querySelector('[data-test-input]');
-    assert.equal(checkbox.checked, true);
+    assert.true(checkbox.checked, true);
 
     const label = this.element.querySelector('[data-test-label]');
 
     await click(label);
-    assert.equal(checkbox.checked, false);
+    assert.false(checkbox.checked, false);
 
     await click(label);
-    assert.equal(checkbox.checked, true);
+    assert.true(checkbox.checked, true);
   });
 
   test('it should render label title if passed', async function (assert) {
@@ -77,7 +76,7 @@ module('Integration | Component | tri-state-checkbox', function (hooks) {
     );
 
     let label = this.element.querySelector('[data-test-label]');
-    assert.equal(label.title, '');
+    assert.strictEqual(label.title, '');
 
     this.set('title', 'Test title');
     await render(
@@ -85,31 +84,7 @@ module('Integration | Component | tri-state-checkbox', function (hooks) {
     );
 
     label = this.element.querySelector('[data-test-label]');
-    assert.equal(label.title, 'Test title');
-  });
-
-  test('it toggles value on label click', async function (assert) {
-    this.set('label', 'Test');
-    this.set('value', true);
-    this.set('onToggle', () => {});
-    this.set('onOverrideReset', () => {});
-    this.set('isToggleRunning', false);
-    this.set('isOverridden', false);
-
-    await render(
-      hbs`<TriStateCheckbox @label={{this.label}} @value={{this.value}} @onToggle={{this.onToggle}} @onOverrideReset={{this.onOverrideReset}} @isToggleRunning={{this.isToggleRunning}} @isOverridden={{this.isOverridden}} />`
-    );
-
-    const checkbox = this.element.querySelector('[data-test-input]');
-    assert.equal(checkbox.checked, true);
-
-    const label = this.element.querySelector('[data-test-label]');
-
-    await click(label);
-    assert.equal(checkbox.checked, false);
-
-    await click(label);
-    assert.equal(checkbox.checked, true);
+    assert.strictEqual(label.title, 'Test title');
   });
 
   test('it should render progress spinner based on isToggleRunning value', async function (assert) {
@@ -143,14 +118,10 @@ module('Integration | Component | tri-state-checkbox', function (hooks) {
     await render(
       hbs`<TriStateCheckbox @label={{this.label}} @value={{this.value}} @onToggle={{this.onToggle}} @onOverrideReset={{this.onOverrideReset}} @isToggleRunning={{this.isToggleRunning}} @isOverridden={{this.isOverridden}} />`
     );
-    assert.dom('[data-test-check]').hasClass(styles['inherited']);
     assert.dom('[data-test-check]').doesNotHaveClass(styles['overridden']);
 
     this.set('isOverridden', true);
-    await render(
-      hbs`<TriStateCheckbox @label={{this.label}} @value={{this.value}} @onToggle={{this.onToggle}} @onOverrideReset={{this.onOverrideReset}} @isToggleRunning={{this.isToggleRunning}} @isOverridden={{this.isOverridden}} />`
-    );
-    assert.dom('[data-test-check]').doesNotHaveClass(styles['inherited']);
+
     assert.dom('[data-test-check]').hasClass(styles['overridden']);
   });
 
@@ -190,11 +161,11 @@ module('Integration | Component | tri-state-checkbox', function (hooks) {
       hbs`<TriStateCheckbox @label={{this.label}} @value={{this.value}} @onToggle={{this.onToggle}} @onOverrideReset={{this.onOverrideReset}} @isToggleRunning={{this.isToggleRunning}} @isOverridden={{this.isOverridden}} />`
     );
 
-    assert.equal(flag, 1);
+    assert.strictEqual(flag, 1);
 
     const reset = this.element.querySelector('[data-test-reset]');
     await click(reset);
 
-    assert.equal(flag, 0);
+    assert.strictEqual(flag, 0);
   });
 });

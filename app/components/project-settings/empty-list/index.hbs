@@ -1,0 +1,11 @@
+<AkStack @width='full' local-class='empty-container' ...attributes>
+  {{#if (has-block 'illustration')}}
+    {{yield to='illustration'}}
+  {{else}}
+    <AkSvg::TeamsEmpty local-class='empty-svg' />
+  {{/if}}
+
+  <AkTypography @variant='h6'>
+    {{@emptyListText}}
+  </AkTypography>
+</AkStack>

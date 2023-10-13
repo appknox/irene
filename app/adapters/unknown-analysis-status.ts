@@ -11,3 +11,9 @@ export default class UnknownAnalysisStatus extends commondrf {
     return this.buildURLFromBase(baseurl);
   }
 }
+
+declare module 'ember-data/types/registries/adapter' {
+  export default interface AdapterRegistry {
+    'unknown-analysis-status': UnknownAnalysisStatus;
+  }
+}

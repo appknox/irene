@@ -1,0 +1,58 @@
+<AkStack data-test-projectSettings-generalSettings-addProjectTeam-root>
+  {{#if this.me.org.is_admin}}
+    <AkButton
+      @variant='outlined'
+      {{on 'click' this.openAddTeamDrawer}}
+      data-test-generalSettings-addProjectTeam-button
+    >
+      <:leftIcon>
+        <AkIcon
+          @iconName='groups'
+          data-test-generalSettings-addProjectTeam-buttonIcon
+        />
+      </:leftIcon>
+
+      <:default>
+        {{t 'addTeam'}}
+      </:default>
+    </AkButton>
+  {{/if}}
+
+  <AkDrawer
+    @open={{this.showAddProjectTeamDrawer}}
+    @onClose={{this.closeAddTeamDrawer}}
+    @anchor='right'
+    data-test-generalSettings-addProjectTeam-drawerContainer
+    as |dr|
+  >
+    <AkStack @direction='column' {{style width='640px'}}>
+      <AkAppbar
+        @position='sticky'
+        @justifyContent='space-between'
+        class='px-3'
+        as |ab|
+      >
+        <AkTypography
+          @color='inherit'
+          @variant='h5'
+          @fontWeight='medium'
+          data-test-addProjectTeam-drawerContainer-title
+        >
+          {{t 'projectSettings.drawerTitles.addTeam'}}
+        </AkTypography>
+
+        <AkIconButton
+          {{on 'click' dr.closeHandler}}
+          class={{ab.classes.defaultIconBtn}}
+          data-test-addProjectTeam-drawerContainer-closeIconBtn
+        >
+          <AkIcon @iconName='close' />
+        </AkIconButton>
+      </AkAppbar>
+
+      <ProjectSettings::GeneralSettings::AddProjectTeam::Table
+        @project={{@project}}
+      />
+    </AkStack>
+  </AkDrawer>
+</AkStack>

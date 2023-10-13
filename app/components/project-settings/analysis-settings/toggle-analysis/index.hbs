@@ -1,0 +1,23 @@
+<AkTypography
+  @variant='h5'
+  @color='textPrimary'
+  @gutterBottom={{true}}
+  data-test-settings-toggle-analysis-label
+>
+  {{t 'showUntestedAnalysis'}}
+</AkTypography>
+
+<AkFormControlLabel
+  @label={{t 'otherTemplates.showUntestedAnalysis'}}
+  @disabled={{this.toggleUnknownAnalysis.isRunning}}
+  as |fcl|
+>
+  <AkToggle
+    class='ml-0'
+    @checked={{this.unknownAnalysisStatus.status}}
+    @size='small'
+    @disabled={{fcl.disabled}}
+    @onClick={{this.showUnknownAnalysis}}
+    data-test-settings-toggle-analysis
+  />
+</AkFormControlLabel>

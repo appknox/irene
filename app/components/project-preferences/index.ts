@@ -1,3 +1,6 @@
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
+import DS from 'ember-data';
+
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import ENUMS from 'irene/enums';
@@ -6,10 +9,7 @@ import IntlService from 'ember-intl/services/intl';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import Store from '@ember-data/store';
-import { AsyncBelongsTo } from '@ember-data/model';
 import { task } from 'ember-concurrency';
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import DS from 'ember-data';
 
 import ProjectModel from 'irene/models/project';
 import DevicePreferenceModel from 'irene/models/device-preference';
@@ -17,9 +17,12 @@ import ProjectAvailableDeviceModel from 'irene/models/project-available-device';
 
 export interface ProjectPreferencesSignature {
   Args: {
-    project: AsyncBelongsTo<ProjectModel>;
-    profileId?: string;
+    project?: ProjectModel | null;
+    profileId?: number | string;
     platform?: number;
+  };
+  Blocks: {
+    title: [];
   };
 }
 
@@ -68,7 +71,7 @@ export default class ProjectPreferencesComponent extends Component<ProjectPrefer
 
   fetchDevices = task(async () => {
     this.devices = await this.store.query('project-available-device', {
-      projectId: this.args.project.get('id'),
+      projectId: this.args.project?.get('id'),
     });
   });
 
@@ -80,7 +83,7 @@ export default class ProjectPreferencesComponent extends Component<ProjectPrefer
 
   get availableDevices() {
     return this.devices?.filter(
-      (d) => d.platform === this.args.project.get('platform')
+      (d) => d.platform === this.args.project?.get('platform')
     );
   }
 

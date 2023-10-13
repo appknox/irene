@@ -1,8 +1,0 @@
-.analysis-settings
-  h5.bold.black-text
-    = t "showUntestedAnalysis"
-  h6
-    = t "otherTemplates.showUntestedAnalysis"
-  label class="switch"
-    input class="switch-input" id="show-unkown-analysis" type="checkbox" checked=unknownAnalysisStatus.status click="showUnknownAnalysis" disabled=isSavingStatus
-    span class="slider round"

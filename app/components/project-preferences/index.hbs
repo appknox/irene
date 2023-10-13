@@ -1,7 +1,11 @@
 <AkStack @direction='column' @spacing='0.5'>
-  <AkTypography data-test-projectPreference-title @variant='h6'>
-    {{t 'devicePreferences'}}
-  </AkTypography>
+  {{#if (has-block 'title')}}
+    {{yield to='title'}}
+  {{else}}
+    <AkTypography data-test-projectPreference-title @variant='h6'>
+      {{t 'devicePreferences'}}
+    </AkTypography>
+  {{/if}}
 
   <AkTypography
     data-test-projectPreference-description

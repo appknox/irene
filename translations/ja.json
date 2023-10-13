@@ -134,6 +134,7 @@
   "collaborators": "Collaborators",
   "comingSoon": "Coming soon",
   "comment": "Comment",
+  "comments": "Comments",
   "company": "Company",
   "companyName": "会社名",
   "compare": "比較",
@@ -241,6 +242,7 @@
   "dynamicScanText": "Please refresh the page if the scan doesn't start in 1-2 mins",
   "dynamicShutDown": "動的診断を終了",
   "edit": "Edit",
+  "editAccess": "Edit Access",
   "editName": "Edit Name",
   "editTeamName": "Edit Team Name",
   "editTeamNameInputLabel": "Here you can edit the team name",
@@ -547,17 +549,11 @@
       "viaEmail": "sent via email",
       "viaApp": "from Authenticator app"
     },
-    "addCollaborator": {
-      "title": "Add collaborator to project"
-    },
     "addMember": {
       "title": "メンバーを追加"
     },
     "addProject": {
       "title": "Add project to team"
-    },
-    "addTeam": {
-      "title": "Allow teams to access this project"
     },
     "dynamicScan": {
       "title": "Dynamic Scan",
@@ -848,6 +844,7 @@
   "pluralUsers": "{itemCount, plural, =0 {Users} =1 {User} other {Users} }",
   "pluralorganizationOwner": "{itemCount, plural, =0 {Organization owner} =1 {Organization owner} other {Organization owners} }",
   "popOutModal": "全画面",
+  "port": "Port",
   "preferenceSetTo": "preference set to",
   "previous": "前",
   "pricing": "価格",
@@ -904,6 +901,14 @@
   "projectRemoved": "プロジェクトが削除されました",
   "projectTeamAdded": "Added team to project",
   "projects": "プロジェクト",
+  "projectSettings": {
+    "headerText": "View and update project general and analysis preferences",
+    "drawerTitles": {
+      "addCollaborator": "Add collaborator to project",
+      "addTeam": "Allow teams to access this project"
+    }
+  },
+  "projectUpdated": "Project updated successfully.",
   "promptBox": {
     "removeMemberPrompt": {
       "title": "このチームメンバーを削除してもよろしいですか？",
@@ -950,6 +955,7 @@
   "removeCollaborator": "Remove Collaborator",
   "removeFromTeam": "Remove from team",
   "removedSSOSuccessfully": "SSO has been removed successfully",
+  "repo": "Repo",
   "repoIntegrated": "リポジトリの連携に成功しました",
   "repoNotIntegrated": "リポジトリの更新時に問題が発生しました",
   "report": "Report",
@@ -958,6 +964,8 @@
   "reportGenerationInProgressWait": "Report generation in progress. Please wait",
   "reportIsGettingGenerated": "レポートが生成されている間お待ちください",
   "reportPassword": "レポートのパスワード",
+  "reportPreferences": "Report Preferences",
+  "reportPreferencesChooseTypes": "Choose types of scans to be included in the report",
   "reportSendTo": "and sent to following Email IDS:",
   "requestStatus": "Request",
   "requestToAddNamespace": "新しい名前空間の追加をリクエストしました",
@@ -1070,6 +1078,7 @@
   "searchProject": "Search project",
   "searchInvite": "Search invite",
   "searchTeam": "Search team",
+  "searchCollaborator": "Search collaborator",
   "searchQuery": "パッケージ名で検索",
   "searchTeamByName": "Search by team name",
   "security": "セキュリティ",
@@ -1078,8 +1087,10 @@
   "selectDevice": "デバイスを選択する",
   "selectLanguage": "以下より言語を選択してください",
   "selectProject": "Select Project",
+  "selectRepo": "Select Repo",
   "selectRisk": "Select Risk",
   "selectTeam": "チームを選択してください",
+  "selectThreshold": "Select Threshold",
   "selected": "Selected",
   "selectedDevice": "選択したデバイスの種類",
   "selectedVersion": "選択したOSのバージョン",
@@ -1094,7 +1105,7 @@
   "showHiddenAnalysis": "Do you want to show the hidden analysis in the Report?",
   "showLess": "Show Less",
   "showMore": "Show More",
-  "showUntestedAnalysis": "SHOW/HIDE Untested Analysis",
+  "showUntestedAnalysis": "Show/Hide Untested Analysis",
   "showVulnerability": "脆弱性を表示する",
   "signin": "サインイン",
   "singleSignOn": "Single Sign-On",
@@ -1160,7 +1171,6 @@
   "teamProjectAdded": "Project added to team",
   "teamRemoved": "Team removed from accessing this project",
   "teams": "チーム",
-  "teamsAndCollaborators": "Teams & Collaborators",
   "templates": {
     "apiScanURLFilter": "API診断のURLフィルタ",
     "enterEndpoint": "診断するAPIエンドポイントを入力してください。 subdomain.domain.com. スキーム（http：// ...）、ポート（：443 / ...）、パス（... / users）は指定しないでください。",
@@ -1171,6 +1181,7 @@
   "testCase": "Test Case",
   "testCases": "Test Cases",
   "testCredentials": "テスト資格情報",
+  "threshold": "Threshold",
   "title": "Title",
   "toDate": "To Date",
   "tokenCopied": "トークンがコピーされました",

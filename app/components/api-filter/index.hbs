@@ -1,8 +1,12 @@
-<div>
+<AkStack @width='full' @direction='column'>
   <AkStack @direction='column' @spacing='0.5'>
-    <AkTypography data-test-apiFilter-title @variant='h6'>
-      {{t 'templates.apiScanURLFilter'}}
-    </AkTypography>
+    {{#if (has-block 'title')}}
+      {{yield to='title'}}
+    {{else}}
+      <AkTypography data-test-apiFilter-title @variant='h6'>
+        {{t 'templates.apiScanURLFilter'}}
+      </AkTypography>
+    {{/if}}
 
     <AkTypography
       data-test-apiFilter-description
@@ -20,6 +24,7 @@
       @placeholder={{t 'templates.enterAPIEndpoint'}}
       @value={{this.newUrlFilter}}
       @helperText={{t 'templates.enterEndpoint'}}
+      {{style maxWidth='600px'}}
     />
 
     <AkButton
@@ -68,4 +73,4 @@
     @disabled={{this.saveApiUrlFilter.isRunning}}
     @blurOverlay={{true}}
   />
-</div>
+</AkStack>

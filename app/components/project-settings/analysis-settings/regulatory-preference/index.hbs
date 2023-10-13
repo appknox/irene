@@ -1,0 +1,55 @@
+{{#if (and @project this.profile)}}
+  <AkStack
+    @width='9/12'
+    @direction='column'
+    class='pl-3'
+    data-test-projectSetting-analysisSettings-regulatoryPreferences-root
+  >
+    <AkTypography
+      @variant='h5'
+      @color='textPrimary'
+      data-test-projectSetting-analysisSettings-regulatoryPreferences-title
+    >
+      {{t 'regulatoryPreferences'}}
+    </AkTypography>
+
+    <AkTypography
+      class='mt-1'
+      @variant='body2'
+      @color='textSecondary'
+      data-test-projectSetting-analysisSettings-regulatoryPreferences-desc
+    >
+      {{t 'regulatoryPreferencesChooseForProfile'}}
+      {{t 'regulatoryPreferencesWarning'}}
+    </AkTypography>
+
+    <AkTypography
+      @tag='em'
+      @variant='body2'
+      @color='textSecondary'
+      class='mt-1'
+      data-test-projectSetting-analysisSettings-regulatoryPreferences-note
+    >
+      ({{t 'regulatoryPreferencesProfileNote'}})
+    </AkTypography>
+  </AkStack>
+
+  <AkStack
+    @direction='column'
+    class='mt-2 ml-3'
+    data-test-projectSetting-analysisSettings-regulatoryPreferences-options
+  >
+    {{#each this.regulatoryPrefCheckboxOptions as |option|}}
+      <TriStateCheckbox
+        @label={{option.label}}
+        @title={{option.title}}
+        @value={{option.value}}
+        @onToggle={{option.toggleHandler}}
+        @onOverrideReset={{option.resetHandler}}
+        @isToggleRunning={{option.isSaving}}
+        @isOverridden={{option.isOverriden}}
+        data-test-projectSetting-analysisSettings-regulatoryPreferences={{option.label}}
+      />
+    {{/each}}
+  </AkStack>
+{{/if}}

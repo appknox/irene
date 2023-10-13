@@ -1,0 +1,7 @@
+<AkIconButton
+  {{on 'click' (perform this.addProjectTeam)}}
+  @size='small'
+  disabled={{this.addProjectTeam.isRunning}}
+>
+  <AkIcon @iconName='person-add' />
+</AkIconButton>
