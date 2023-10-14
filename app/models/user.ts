@@ -5,7 +5,7 @@ import { computed } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
-import { Service as IntlService } from 'ember-intl';
+import IntlService from 'ember-intl/services/intl';
 
 import ProjectModel from './project';
 import PricingModel from './pricing';

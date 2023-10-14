@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import ENV from 'irene/config/environment';
 import ProjectModel from 'irene/models/project';
-import { Service as IntlService } from 'ember-intl';
+import IntlService from 'ember-intl/services/intl';
 import Store from '@ember-data/store';
 import UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
 import { task } from 'ember-concurrency';

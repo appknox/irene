@@ -2,7 +2,7 @@
 import Model, { attr } from '@ember-data/model';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
-import { Service as IntlService } from 'ember-intl';
+import IntlService from 'ember-intl/services/intl';
 
 export default class InvoiceModel extends Model {
   @service declare intl: IntlService;
