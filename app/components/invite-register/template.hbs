@@ -144,14 +144,14 @@
           </div>
         </div>
         <p class='control flex-center margin-top'>
-          <button
+          <AkButton
             {{on 'click' (fn this.register this.changeset)}}
-            class='button is-primary is-fullwidth login-button mp-login-button highlighted-button'
-            type='button'
+            class="is-fullwidth login-button mp-login-button" 
+            @loading={{this.registerTask.isRunning}}
+            @type='button'
           >
             {{t 'register'}}
-            <TaskSpin @task={{this.registerTask}} />
-          </button>
+          </AkButton>
         </p>
       </div>
     </form>

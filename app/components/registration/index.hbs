@@ -107,16 +107,15 @@
           <GRecaptcha @size='invisible' data-test-recaptcha='true' />
         {{/if}}
         <div local-class='register-button-container'>
-          <button
-            type='submit'
+          <AkButton
             data-test-register-btn
             {{on 'click' (fn this.register this.changeset)}}
-            class='button is-primary highlighted-button'
+            @type='submit'
+            @loading={{this.registerTask.isRunning}}
             local-class='register-button'
           >
             {{t 'register'}}
-            <TaskSpin @task={{this.registerTask}} />
-          </button>
+          </AkButton>
         </div>
       </div>
       <div local-class='login-footer-container'>
