@@ -1,0 +1,14 @@
+{{! template-lint-disable }}
+<Pagination
+  @hasPrevious={{this.hasPrevious}}
+  @hasNext={{this.hasNext}}
+  @preDot={{this.preDot}}
+  @postDot={{this.postDot}}
+  @gotoPageFirst={{action 'gotoPageFirst'}}
+  @gotoPagePrevious={{action 'gotoPagePrevious'}}
+  @gotoPageNext={{action 'gotoPageNext'}}
+  @gotoPageLast={{action 'gotoPageLast'}}
+  @gotoPage={{action 'gotoPage'}}
+  @pages={{this.pages}}
+  @offset={{this.offset}}
+/>
