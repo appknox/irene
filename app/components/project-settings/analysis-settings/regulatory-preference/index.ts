@@ -5,7 +5,7 @@ import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import parseError from 'irene/utils/parse-error';
 import Store from '@ember-data/store';
-import { Service as IntlService } from 'ember-intl';
+import IntlService from 'ember-intl/services/intl';
 import ProjectModel from 'irene/models/project';
 import ProfileModel from 'irene/models/profile';
 

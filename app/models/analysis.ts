@@ -9,7 +9,7 @@ import Model, {
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import Inflector from 'ember-inflector';
-import { Service as IntlService } from 'ember-intl';
+import IntlService from 'ember-intl/services/intl';
 import ENUMS from 'irene/enums';
 import AsvsModel from './asvs';
 import AttachmentModel from './attachment';
