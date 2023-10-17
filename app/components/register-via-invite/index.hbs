@@ -159,15 +159,15 @@
                 {{/if}}
               </div>
             </div>
-            <button
+            <AkButton
               {{on 'click' (fn this.register this.changeset)}}
-              class='button is-primary is-fullwidth highlighted-button'
-              type='submit'
+              @type='submit'
+              class="is-fullwidth" 
+              @loading={{this.registerTask.isRunning}}
               local-class='register-button'
             >
               {{t 'register'}}
-              <TaskSpin @task={{this.registerTask}} />
-            </button>
+            </AkButton>
           {{/if}}
         {{/if}}
       </div>
