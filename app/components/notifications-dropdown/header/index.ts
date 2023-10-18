@@ -20,3 +20,9 @@ export default class NotificationsDropdownHeaderComponent extends Component {
     this.akNotifications.markAllAsRead.perform();
   }
 }
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    'NotificationsDropdown::Header': typeof NotificationsDropdownHeaderComponent;
+  }
+}
