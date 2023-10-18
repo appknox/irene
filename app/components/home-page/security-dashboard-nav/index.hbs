@@ -12,6 +12,7 @@
             @direction='row'
             @justifyContent='center'
             @alignItems='center'
+            {{on 'click' this.toggleProfileMenuView}}
           >
             <AkIcon @iconName='account-circle' />
             &nbsp;
@@ -20,37 +21,39 @@
             <AkIcon @iconName='arrow-down' />
           </AkStack>
 
-          <AttachPopover
-            @interactive={{true}}
-            @placement='bottom'
-            @showOn='click'
-            @hideOn='clickout'
-          >
-            <div class='user-info-popover'>
-              <div class='user-name'>
-                {{@user.username}}
-              </div>
-              <div class='user-email'>
-                {{@user.email}}
-              </div>
-              <div class='content-right'>
-                {{! template-lint-disable no-nested-interactive }}
-                <a
-                  href='#'
-                  class='mp-auth-logout highlighted-button'
-                  {{on 'click' @logoutAction}}
-                >
-                  <AkStack @alignItems='center'>
-                    <AkIcon @iconName='logout' @size='small' />
-                    &nbsp;
-                    {{t 'logout'}}
-                  </AkStack>
-                </a>
-              </div>
-            </div>
-          </AttachPopover>
         </a>
       </div>
+
+      <AkPopover
+        @anchorRef={{this.profileAnchorRef}}
+        @placement='bottom'
+        @renderInPlace={{true}}
+        @closeHandler={{this.handleProfileMenuClose}}
+        @clickOutsideToClose={{true}}
+        @containerClass={{this.classes.profileMenuPopoverContainerClass}}
+      >
+        <div class='user-info-popover'>
+          <div class='user-name'>
+            {{@user.username}}
+          </div>
+          <div class='user-email'>
+            {{@user.email}}
+          </div>
+          <div class='content-right'>
+            <a
+              href='#'
+              class='mp-auth-logout highlighted-button'
+              {{on 'click' @logoutAction}}
+            >
+              <AkStack @alignItems='center'>
+                <AkIcon @iconName='logout' @size='small' />
+                &nbsp;
+                {{t 'logout'}}
+              </AkStack>
+            </a>
+          </div>
+        </div>
+      </AkPopover>
     </div>
   </div>
 </div>
