@@ -1,39 +1,50 @@
-<AttachPopover
-  @interactive={{true}}
+<AkPopover
   @arrow={{true}}
-  @isShown={{@show}}
-  @placement='bottom-start'
-  @lazyRender={{true}}
-  @showOn='click'
-  @hideOn='clickout click'
-  @animation='shift'
-  @class='ember-attacher-popper {{local-class "popper"}}'
-  @popperTarget={{@anchorRef}}
-  as |attacher|
+  @anchorRef={{@anchorRef}}
+  @placement='bottom-end'
+  @clickOutsideToClose={{true}}
+  @closeHandler={{this.closeNotifications}}
+  @unmountOnClose={{false}}
+  @modifiers={{this.modifiers}}
+  local-class='notification-popover-container'
 >
   <div
     data-test-notification-dropdown
     local-class='notification-dropdown-container'
   >
     <NotificationsDropdown::Header />
-    <main local-class='notification_main_list'>
+
+    <AkStack
+      @tag='main'
+      @direction='column'
+      local-class='notification_main_list'
+    >
       {{#if this.isLoading}}
         <NotificationsPage::Divider />
-        <div local-class='loading'>
+
+        <AkStack
+          @width='full'
+          @alignItems='center'
+          @justifyContent='center'
+          local-class='loading'
+        >
           <AkLoader />
-        </div>
+        </AkStack>
       {{else if this.isEmpty}}
         <NotificationsPage::Divider />
+
         <NotificationsPage::Empty @message='No unread notifications' />
       {{else}}
         {{#each this.akNotifications.notificaions_drop_down as |notification|}}
           <NotificationsPage::Divider />
+
           <NotificationsPage::Message @notification={{notification}} />
         {{/each}}
       {{/if}}
-    </main>
+    </AkStack>
+
     <NotificationsDropdown::Footer
-      @onViewAllNotificationClick={{attacher.hide}}
+      @onViewAllNotificationClick={{this.closeNotifications}}
     />
   </div>
-</AttachPopover>
+</AkPopover>

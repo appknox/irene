@@ -482,8 +482,11 @@ body {
   //variables for notifications
   --notification-bell-icon-dot-background-color: var(--primary);
   --notification-bell-icon-dot-border-color: var(--black-700);
+  --notification-bell-icon-color: var(--background-main);
+
   &.theme-light {
-    --notification-bell-icon-dot-border-color: #f3f3f3; /* this is .top-nav background color, migrate to CSS var on navbar refactor */
+    --notification-bell-icon-dot-border-color: var(--background-main);
+    --notification-bell-icon-color: var(--text-primary);
   }
 
   --notification-unread-count-color-primary: var(--primary-main);
@@ -500,6 +503,11 @@ body {
   --notification-message-color-text-primary: var(--text-primary);
   --notification-dropdown-border-color: var(--neutral-grey-100);
   --notification-dropdown-arrow-border-color: var(--neutral-grey-200);
+
+  //variables for notifications-dropdown
+  --notifications-dropdown-background-color: var(--background-main);
+  --notifications-dropdown-border-color: var(--border-color-1);
+  --notifications-dropdown-box-shadow: var(--box-shadow-9);
 
   //variables for appmonitoring
   --appmonitoring-font-weight-medium: var(--font-weight-medium);

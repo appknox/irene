@@ -1,23 +1,22 @@
-<button
-  type='button'
-  local-class='nf-icon nf-button'
-  {{on 'click' this.onClick}}
-  title='{{this.akNotifications.unReadCount}} unread notifications'
-  data-test-bell-icon
->
-  <div
-    local-class='icon-container'
-    {{did-insert this.registerAnchorRef}}
-    data-test-bell-icon-trigger
+<div local-class='nf-icon-container' {{did-insert this.fetchNotifications}}>
+  <button
+    type='button'
+    local-class='nf-icon nf-button'
+    {{on 'click' this.onClick}}
+    title='{{this.akNotifications.unReadCount}} unread notifications'
+    data-test-bell-icon
   >
-    <AkIcon @iconName='notifications' data-test-notification-icon />
-    {{#if this.akNotifications.hasUnReadNotifications}}
-      <div local-class='nf-unread-dot' data-test-unread-dot></div>
-    {{/if}}
-  </div>
-</button>
-<NotificationsDropdown
-  @show={{this.showDropDown}}
-  @anchorRef={{this.anchorRef}}
-  @onClose={{this.closeNotification}}
-/>
+    <div local-class='icon-container' data-test-bell-icon-trigger>
+      <AkIcon @iconName='notifications' data-test-notification-icon />
+      {{#if this.akNotifications.hasUnReadNotifications}}
+        <div local-class='nf-unread-dot' data-test-unread-dot></div>
+      {{/if}}
+    </div>
+
+  </button>
+
+  <NotificationsDropdown
+    @anchorRef={{this.anchorRef}}
+    @onClose={{this.closeNotification}}
+  />
+</div>
