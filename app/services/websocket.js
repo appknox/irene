@@ -3,7 +3,8 @@ import { singularize } from 'ember-inflector';
 import Service from '@ember/service';
 import ENUMS from 'irene/enums';
 import ENV from 'irene/config/environment';
-import { task, timeout } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
+import { debounce } from '@ember/runloop';
 
 export default class WebsocketService extends Service {
   @service store;
@@ -20,6 +21,7 @@ export default class WebsocketService extends Service {
   currentUser = null;
   currentSocketID = null;
   connectedSocket = null;
+  modelNameIdMapper = {};
 
   reset() {
     this.currentUser = null;
@@ -170,17 +172,29 @@ export default class WebsocketService extends Service {
 
   // this will ensure task run sequentially
   enqueuePullModel = task({ enqueue: true }, async (modelName, id) => {
-    this.pullModel.perform(modelName, id);
+    // store all unique modelName & id until debounce handler
+    this.modelNameIdMapper[`${modelName}-${id}`] = { modelName, id };
+
+    // debounce and pass copy of mapper object
+    debounce(this, this.handlePullModel, { ...this.modelNameIdMapper }, 300);
   });
 
-  pullModel = task({ keepLatest: true }, async (modelName, id) => {
+  // debounce handler
+  handlePullModel(mapper) {
+    // reset global mapper for next set of messages
+    this.modelNameIdMapper = {};
+
+    // pull all models from mapper
+    Object.values(mapper).forEach(({ modelName, id }) => {
+      this.pullModel.perform(modelName, id);
+    });
+  }
+
+  pullModel = task(async (modelName, id) => {
     try {
       this.store.modelFor(modelName);
 
       await this.store.findRecord(modelName, id);
-
-      // to cancel out some in between tasks
-      await timeout(250);
     } catch (error) {
       this.logger.error(error);
     }
