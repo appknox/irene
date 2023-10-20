@@ -44,7 +44,7 @@ export default class OrganizationArchiveListComponent extends Component {
       },
       {
         name: this.intl.t('organizationTableGeneratedBy'),
-        valuePath: 'generatedBy.username',
+        valuePath: 'generatedByDisplay',
       },
       {
         name: this.intl.t('organizationTableDuration'),
@@ -91,10 +91,15 @@ export default class OrganizationArchiveListComponent extends Component {
         offset,
       };
 
-      this.archiveResponse = await this.store.query(
-        'organization-archive',
-        queryParams
-      );
+      const data = await this.store.query('organization-archive', queryParams);
+
+      try {
+        await Promise.allSettled(data.mapBy('generatedBy'));
+      } catch {
+        //ignore it as the user is not accessiable;
+      }
+
+      this.archiveResponse = data;
     } catch (err) {
       let errMsg = this.tPleaseTryAgain;
 

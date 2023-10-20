@@ -41,8 +41,11 @@ export default class OrganizationArchiveComponent extends Component {
           m: 0,
           s: 0,
         });
-        requestParams['from_date'] = startDateObj.toISOString();
+
+        // model serializer expects native date object;
+        requestParams['from_date'] = startDateObj.toDate();
       }
+
       if (endDateObj) {
         const now = dayjs();
         if (endDateObj.isBefore(now, 'day')) {
@@ -58,7 +61,9 @@ export default class OrganizationArchiveComponent extends Component {
             s: 0,
           });
         }
-        requestParams['to_date'] = endDateObj.toISOString();
+
+        // model serializer expects native date object;
+        requestParams['to_date'] = endDateObj.toDate();
       }
 
       const archiveRecord = await this.store.createRecord(

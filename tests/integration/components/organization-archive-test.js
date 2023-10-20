@@ -333,4 +333,66 @@ module('Integration | Component | organization-archive', function (hooks) {
       }
     }
   );
+
+  test('it should render system if CRM generated', async function (assert) {
+    this.server.schema.organizationArchives.all().destroy();
+    this.server.schema.organizationUsers.all().destroy();
+
+    const systemUser = this.server.create('organization-user', {
+      username: 'system-user1',
+    });
+
+    const nonSystemUser = this.server.create('organization-user', {
+      username: 'non-system-user1',
+    });
+
+    this.server.create('organization-archive', {
+      generated_by: nonSystemUser.id,
+    });
+
+    this.server.create('organization-archive', {
+      generated_by: nonSystemUser.id,
+      generated_via: 2,
+    });
+
+    this.server.create('organization-archive', {
+      generated_by: systemUser.id,
+      generated_via: 1,
+    });
+
+    this.server.get('/organizations/:id/archives', (schema) => {
+      const results = schema.organizationArchives.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.server.get('/organizations/:id/users/:userId', (schema, req) => {
+      const user = schema.organizationUsers.find(req.params.userId);
+      if (user.id == systemUser.id) {
+        return new Response(404, {});
+      }
+      return user?.toJSON();
+    });
+
+    await render(hbs`<OrganizationArchive />`);
+
+    const cells = findAll('[data-test-orgArchiveList-cell]');
+    const systemText = 't:system:()';
+
+    const contentWithSystem = cells
+      .map((_) => _.textContent.trim())
+      .filter((_) => _.includes(systemText));
+
+    assert.strictEqual(
+      contentWithSystem.length,
+      1,
+      'contains 1 System generatedBy'
+    );
+
+    assert.strictEqual(
+      contentWithSystem[0],
+      't:system:()',
+      'System generatedBy exists'
+    );
+  });
 });
