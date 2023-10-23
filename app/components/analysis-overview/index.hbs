@@ -41,23 +41,23 @@
   </td>
   <td>
     {{#each this.tags as |tag|}}
-      <span
-        class='tag scan-tag {{if tag.status "finished-scan" "unfinished-scan"}}'
+      <AkTooltip
+        @placement='top'
+        @arrow={{true}}
+        @title=' {{tag.text}} {{if
+          tag.status
+          (t "scanCompleted")
+          (t "scanNotCompleted")
+        }}'
       >
-        {{t tag.text}}{{#if tag.status}}
-          <AkIcon @iconName='done' @size='small' />
-          <AttachTooltip @position='top'>
-            {{tag.text}}
-            {{t 'scanCompleted'}}
-          </AttachTooltip>
-        {{else}}
-          <AkIcon @iconName='close' @size='small' />
-          <AttachTooltip @position='top'>
-            {{tag.text}}
-            {{t 'scanNotCompleted'}}
-          </AttachTooltip>
-        {{/if}}
-      </span>
+        <span
+          class='tag scan-tag
+            {{if tag.status "finished-scan" "unfinished-scan"}}'
+        >
+          {{t tag.text}}
+          <AkIcon @iconName={{if tag.status 'done' 'close'}} @size='small' />
+        </span>
+      </AkTooltip>
     {{/each}}
   </td>
   <td>
