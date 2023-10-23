@@ -925,10 +925,10 @@ canvas.other-devices {
   justify-content: center;
   cursor: pointer;
 
-    &:hover {
-      background-color: darken($success, 5%);
-      border-color: #80c081 !important;
-    }
+  &:hover {
+    background-color: darken($success, 5%);
+    border-color: #80c081 !important;
+  }
 }
 
 .minus-icon {
@@ -5201,7 +5201,7 @@ ul.email-list {
     width: 2.3em;
 
     &-android {
-      color: #33A852;
+      color: #33a852;
     }
 
     &-apple {
@@ -5364,57 +5364,6 @@ $dropdown-default-theme: $color-table;
 
   i {
     margin-top: 0;
-  }
-}
-
-.file-tags {
-  display: flex;
-  margin: 1em 1em 0 1em;
-  overflow: auto;
-  height: 3em;
-}
-
-$filetag-bg: #f3f5f8;
-
-.filetag {
-  &-container {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-
-  &-btn {
-    padding-left: 0.4em;
-    padding-right: 0.4em;
-  }
-
-  &-btn-default {
-    background: white;
-    border-color: darken($filetag-bg, 5%);
-    color: mix(darken($filetag-bg, 20%), rgba($default, 0.7), 10%);
-
-    &:hover,
-    &:active,
-    &:focus {
-      // background: lighten($primary, 30%)
-      // border-color: darken($filetag-bg, 10%)
-      color: $primary;
-    }
-  }
-
-  &-form {
-    background: $filetag-bg;
-    border-radius: 0.2em;
-    padding: 0.2em;
-  }
-
-  &-input {
-    width: 10em;
-  }
-
-  &-item {
-    height: 1.6em;
-    border-radius: 0.2em;
   }
 }
 
