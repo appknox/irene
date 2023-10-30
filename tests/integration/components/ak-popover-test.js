@@ -3,8 +3,13 @@ import { setupRenderingTest } from 'ember-qunit';
 import { click, render } from '@ember/test-helpers';
 import { setupBrowserFakes } from 'ember-browser-services/test-support';
 import { hbs } from 'ember-cli-htmlbars';
+import styles from 'irene/components/ak-popover/index.scss';
 
-const styles = {
+const classes = {
+  hide: styles['hide'],
+};
+
+const containerStyles = {
   container: {
     width: 'max-content',
     background: '#fff',
@@ -20,10 +25,15 @@ module('Integration | Component | ak-popover', function (hooks) {
 
   hooks.beforeEach(async function () {
     this.setProperties({
-      styles,
+      containerStyles: containerStyles,
 
       handleMoreClick: (event) => {
-        this.set('anchorRef', event.currentTarget);
+        if (!this.anchorRef) {
+          this.set('anchorRef', event.currentTarget);
+          return;
+        }
+
+        this.set('anchorRef', null);
       },
 
       handleClose: () => {
@@ -48,7 +58,7 @@ module('Integration | Component | ak-popover', function (hooks) {
         @hasBackdrop={{this.hasBackdrop}} 
         @onBackdropClick={{this.handleClose}}
         >
-          <div data-test-popover-content {{style this.styles.container}} class="p-2">
+          <div data-test-popover-content {{style this.styles.containerStyles}} class="p-2">
               <AkTypography>{{this.popoverContent}}</AkTypography>
           </div>
       </AkPopover>
@@ -85,7 +95,7 @@ module('Integration | Component | ak-popover', function (hooks) {
         @anchorRef={{this.anchorRef}} 
         @hasBackdrop={{this.hasBackdrop}} 
         >
-          <div data-test-popover-content {{style this.styles.container}} class="p-2">
+          <div data-test-popover-content {{style this.styles.containerStyles}} class="p-2">
               <AkTypography>{{this.popoverContent}}</AkTypography>
           </div>
       </AkPopover>
@@ -100,7 +110,7 @@ module('Integration | Component | ak-popover', function (hooks) {
     assert.dom('[data-test-popover-content]').hasText(this.popoverContent);
 
     // close popover
-    this.set('anchorRef', null);
+    await click('[data-test-more-btn]');
 
     assert.dom('[data-test-ak-popover-root]').doesNotExist();
     assert.dom('[data-test-popover-content]').doesNotExist();
@@ -126,7 +136,7 @@ module('Integration | Component | ak-popover', function (hooks) {
         @clickOutsideToClose={{this.clickOutsideToClose}}
         @closeHandler={{this.handleClose}}
         >
-          <div data-test-popover-content {{style this.styles.container}} class="p-2">
+          <div data-test-popover-content {{style this.styles.containerStyles}} class="p-2">
             <AkTypography>{{this.popoverContent}}</AkTypography>
           </div>
       </AkPopover>
@@ -139,10 +149,6 @@ module('Integration | Component | ak-popover', function (hooks) {
     assert.dom('[data-test-ak-popover-backdrop]').doesNotExist();
 
     assert.dom('[data-test-popover-content]').hasText(this.popoverContent);
-
-    // should be open when trigger element is clicked
-    await click('[data-test-more-btn]');
-    assert.dom('[data-test-ak-popover-root]').exists();
 
     // should be open when popover element is clicked
     await click('[data-test-ak-popover-container]');
@@ -177,7 +183,7 @@ module('Integration | Component | ak-popover', function (hooks) {
         @clickOutsideToClose={{this.clickOutsideToClose}}
         @closeHandler={{this.handleClose}}
         >
-          <div data-test-popover-content {{style this.styles.container}} class="p-2">
+          <div data-test-popover-content {{style this.styles.containerStyles}} class="p-2">
             <AkTypography>{{this.popoverContent}}</AkTypography>
           </div>
       </AkPopover>
@@ -190,10 +196,6 @@ module('Integration | Component | ak-popover', function (hooks) {
     assert.dom('[data-test-ak-popover-backdrop]').exists();
 
     assert.dom('[data-test-popover-content]').hasText(this.popoverContent);
-
-    // should be open when trigger element is clicked
-    await click('[data-test-more-btn]');
-    assert.dom('[data-test-ak-popover-root]').exists();
 
     // should be open when popover element is clicked
     await click('[data-test-ak-popover-container]');
@@ -234,7 +236,7 @@ module('Integration | Component | ak-popover', function (hooks) {
           @arrow={{this.arrow}}
           @arrowColor={{this.arrowColor}}
           >
-            <div data-test-popover-content {{style this.styles.container}} class="p-2">
+            <div data-test-popover-content {{style this.styles.containerStyles}} class="p-2">
                 <AkTypography>{{this.popoverContent}}</AkTypography>
             </div>
         </AkPopover>
@@ -278,7 +280,7 @@ module('Integration | Component | ak-popover', function (hooks) {
         @anchorRef={{this.anchorRef}} 
         @containerClass={{this.containerClass}}
         >
-          <div data-test-popover-content {{style this.styles.container}} class="p-2">
+          <div data-test-popover-content {{style this.styles.containerStyles}} class="p-2">
               <AkTypography>{{this.popoverContent}}</AkTypography>
           </div>
       </AkPopover>
@@ -296,4 +298,168 @@ module('Integration | Component | ak-popover', function (hooks) {
 
     assert.dom('[data-test-popover-content]').hasText(this.popoverContent);
   });
+
+  test.each(
+    'it mounts and unmounts content',
+    [
+      [true, false],
+      [false, false],
+      [false, true],
+      [true, true],
+    ],
+    async function (assert, [mountOnOpen, unmountOnClose]) {
+      this.setProperties({
+        popoverContent: 'I am mounted by default!',
+        containerClass: 'custom-container-class',
+        mountOnOpen,
+        unmountOnClose,
+      });
+
+      await render(hbs`
+      <AkIconButton data-test-more-btn @variant="outlined" {{on 'click' this.handleMoreClick}}>
+        <AkIcon @iconName="more-vert" />
+      </AkIconButton>
+
+      <AkPopover 
+        @anchorRef={{this.anchorRef}} 
+        @containerClass={{this.containerClass}}
+        @mountOnOpen={{this.mountOnOpen}}
+        @unmountOnClose={{this.unmountOnClose}}
+        >
+          <div data-test-popover-content {{style this.styles.containerStyles}} class="p-2">
+              <AkTypography>{{this.popoverContent}}</AkTypography>
+          </div>
+      </AkPopover>
+    `);
+
+      // Content is mounted only on first open and left mounted thereafter
+      if (mountOnOpen && !unmountOnClose) {
+        // open popover
+        // Mounts content
+        await click('[data-test-more-btn]');
+
+        assert.dom('[data-test-ak-popover-root]').exists();
+
+        assert
+          .dom('[data-test-ak-popover-container]')
+          .hasClass(this.containerClass);
+
+        assert.dom('[data-test-popover-content]').hasText(this.popoverContent);
+
+        // close popover
+        await click('[data-test-more-btn]');
+
+        // Content is still mounted but hidden
+        assert
+          .dom('[data-test-ak-popover-root]')
+          .exists()
+          .hasClass(classes.hide);
+
+        assert.dom('[data-test-popover-content]').exists();
+
+        // open popover
+        await click('[data-test-more-btn]');
+
+        assert
+          .dom('[data-test-ak-popover-root]')
+          .exists()
+          .doesNotHaveClass(classes.hide);
+
+        assert.dom('[data-test-popover-content]').exists();
+      }
+
+      // Content is mounted by default and left mounted thereafter
+      if (!mountOnOpen && !unmountOnClose) {
+        assert
+          .dom('[data-test-ak-popover-root]')
+          .exists()
+          .hasClass(classes.hide);
+
+        assert
+          .dom('[data-test-ak-popover-container]')
+          .hasClass(this.containerClass);
+
+        assert.dom('[data-test-popover-content]').hasText(this.popoverContent);
+
+        // open popover
+        await click('[data-test-more-btn]');
+
+        assert
+          .dom('[data-test-ak-popover-root]')
+          .exists()
+          .doesNotHaveClass(classes.hide);
+
+        assert.dom('[data-test-popover-content]').exists();
+
+        // close popover
+        await click('[data-test-more-btn]');
+
+        assert
+          .dom('[data-test-ak-popover-root]')
+          .exists()
+          .hasClass(classes.hide);
+
+        assert.dom('[data-test-popover-content]').exists();
+      }
+
+      // Content is mounted by default and unmounted when closed
+      if (!mountOnOpen && unmountOnClose) {
+        // Content is mounted by default but hidden
+        assert
+          .dom('[data-test-ak-popover-root]')
+          .exists()
+          .hasClass(classes.hide);
+
+        assert
+          .dom('[data-test-ak-popover-container]')
+          .hasClass(this.containerClass);
+
+        assert.dom('[data-test-popover-content]').hasText(this.popoverContent);
+
+        // open popover
+        await click('[data-test-more-btn]');
+
+        assert
+          .dom('[data-test-ak-popover-root]')
+          .exists()
+          .doesNotHaveClass(classes.hide);
+
+        assert.dom('[data-test-popover-content]').exists();
+
+        // close popover
+        await click('[data-test-more-btn]');
+
+        assert.dom('[data-test-ak-popover-root]').doesNotExist();
+        assert.dom('[data-test-popover-content]').doesNotExist();
+      }
+
+      // Content is mounted on open and and unmounted when closed
+      if (mountOnOpen && unmountOnClose) {
+        assert.dom('[data-test-ak-popover-root]').doesNotExist();
+        assert.dom('[data-test-popover-content]').doesNotExist();
+
+        // open popover
+        await click('[data-test-more-btn]');
+
+        // Content is mounted
+        assert
+          .dom('[data-test-ak-popover-root]')
+          .exists()
+          .doesNotHaveClass(classes.hide);
+
+        assert
+          .dom('[data-test-ak-popover-container]')
+          .hasClass(this.containerClass);
+
+        assert.dom('[data-test-popover-content]').hasText(this.popoverContent);
+
+        // close popover
+        await click('[data-test-more-btn]');
+
+        // Content is unmounted
+        assert.dom('[data-test-ak-popover-root]').doesNotExist();
+        assert.dom('[data-test-popover-content]').doesNotExist();
+      }
+    }
+  );
 });
