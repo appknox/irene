@@ -26,6 +26,9 @@ export enum AkSvgComponentInvocationByNames {
   NoInsights,
   NoTestCase,
   AffectedFixedVersionEmpty,
+  MainLoaderImage1,
+  MainLoaderImage2,
+  MainLoaderImage3,
 }
 
 export enum AkSvgComponentInvocationByPaths {

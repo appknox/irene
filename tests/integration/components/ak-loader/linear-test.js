@@ -43,16 +43,19 @@ module('Integration | Component | ak-loader/linear', function (hooks) {
       '[data-test-ak-loader-linear-indicator]'
     );
 
-    assert
-      .dom(linearProgressIndicator)
-      .exists()
-      .hasStyle({ left: `${this.progress - this.width}px` });
+    assert.dom(linearProgressIndicator).exists();
+
+    assert.strictEqual(
+      linearProgressIndicator.style.transform,
+      'translateX(-70%)'
+    );
 
     this.set('progress', 45.5);
 
-    assert
-      .dom(linearProgressIndicator)
-      .hasStyle({ left: `${this.progress - this.width}px` });
+    assert.strictEqual(
+      linearProgressIndicator.style.transform,
+      'translateX(-54.5%)'
+    );
   });
 
   test('test ak-loader linear label', async function (assert) {

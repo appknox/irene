@@ -132,7 +132,6 @@
     "ember-export-application-global": "^2.0.1",
     "ember-fetch": "^8.1.1",
     "ember-file-upload": "^4.0.3",
-    "ember-font-awesome": "4.0.0-rc.4",
     "ember-g-recaptcha": "^1.3.0",
     "ember-intl": "^6.0.0-beta.4",
     "ember-load-initializers": "^2.1.2",

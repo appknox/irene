@@ -28,4 +28,8 @@ if hasObjects
   = partial "paginate"
 
 else
-  = loading-spinner
+  .empty-state.columns.column.table-container.is-half.margin-auto
+    = ak-stack justifyContent="center" alignItems="center" spacing="1" 
+      = ak-loader size="16"
+      = ak-typography variant="h6" fontWeight="light"
+        | Loading...
