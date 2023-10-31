@@ -87,6 +87,7 @@ export default class AnalysisOverviewComponent extends Component {
         data: JSON.stringify({
           ...this.PASSED_STATE,
           owasp: this.analysis.owasp.map((a) => a.get('id')),
+          owaspapi2023: this.analysis.owaspapi2023.map((a) => a.get('id')),
           pcidss: this.analysis.pcidss.map((a) => a.get('id')),
           hipaa: this.analysis.hipaa.map((a) => a.get('id')),
           masvs: this.analysis.masvs.map((a) => a.get('id')),

@@ -29,6 +29,7 @@ export default Model.extend({
   computedRisk: attr('string'),
   file: belongsTo('security/file'),
   owasp: hasMany('owasp'),
+  owaspapi2023: hasMany('owaspapi2023'),
   pcidss: hasMany('pcidss'),
   mstg: hasMany('mstg'),
   masvs: hasMany('masvs'),

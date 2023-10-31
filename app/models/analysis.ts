@@ -22,6 +22,7 @@ import OwaspModel from './owasp';
 import PcidssModel from './pcidss';
 import MasvsModel from './masvs';
 import VulnerabilityModel from './vulnerability';
+import OwaspApi2023Model from './owaspapi2023';
 
 const inflector = Inflector.inflector;
 inflector.irregular('asvs', 'asvses');
@@ -77,6 +78,9 @@ export default class AnalysisModel extends Model {
 
   @hasMany('owasp')
   declare owasp: AsyncHasMany<OwaspModel>;
+
+  @hasMany('owaspapi2023')
+  declare owaspapi2023: AsyncHasMany<OwaspApi2023Model>;
 
   @hasMany('cwe')
   declare cwe: AsyncHasMany<CweModel>;
