@@ -7,13 +7,16 @@
     @file={{this.project.lastFile}}
     @profileId={{this.project.activeProfileId}}
   >
-    <div class='flex-row flex-justify-center flex-row-gap-2 px-1 pb-2'>
+    <div
+      class='flex-row flex-justify-center flex-row-gap-2 px-1 pb-2'
+      {{style marginTop='auto'}}
+    >
       <LinkTo
         @route='authenticated.project.settings'
         @model={{this.project.id}}
         class='button is-primary mp-project-setting'
       >
-        <AkIcon @iconName='settings' @size="small" />&nbsp;
+        <AkIcon @iconName='settings' @size='small' />&nbsp;
         {{t 'settings'}}
       </LinkTo>
 
@@ -23,7 +26,7 @@
           @model={{this.project.id}}
           class='button is-primary mp-all-scans'
         >
-          <AkIcon @iconName='apps' @size="small" />&nbsp;
+          <AkIcon @iconName='apps' @size='small' />&nbsp;
           {{t 'allUploads'}}
         </LinkTo>
 
@@ -32,7 +35,7 @@
           @model={{this.project.lastFile.id}}
           class='button is-primary mp-file-compare'
         >
-          <AkIcon @iconName='compare-arrows' @size="small" />&nbsp;
+          <AkIcon @iconName='compare-arrows' @size='small' />&nbsp;
           {{t 'compare'}}
         </LinkTo>
       {{/if}}

@@ -1,4 +1,4 @@
-import { render } from '@ember/test-helpers';
+import { find, findAll, render, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
@@ -179,20 +179,31 @@ module('Integration | Component | file-overview', function (hooks) {
       <FileOverview  @file={{this.file}} @profileId={{this.file.id}} />`
     );
 
-    assert.dom(`[data-test-file-overview-file-id-icon]`).exists();
+    assert.dom(`[data-test-file-overview-file-inactive-icon]`).exists();
+
+    const fileInactiveTooltip = find(
+      '[data-test-file-overview-file-id] [data-test-file-overview-file-inactive-tooltip]'
+    );
+
+    await triggerEvent(fileInactiveTooltip, 'mouseenter');
+
+    assert.dom('[data-test-ak-tooltip-content]').hasText('t:fileInactive:()');
 
     this.file.isActive = true;
+
     await render(
       hbs`
       <FileOverview  @file={{this.file}} @profileId={{this.file.id}} />`
     );
-    assert.dom(`[data-test-file-overview-file-id-icon]`).doesNotExist();
+
+    assert.dom('[data-test-file-overview-file-inactive-icon]').doesNotExist();
   });
 
   test('It renders the right number of tags if available', async function (assert) {
     let tags = [];
     for (let i = 0; i < 2; i++) {
-      tags.push(this.store.createRecord('tag', { id: i }));
+      const tag = this.server.create('tag', { id: i });
+      tags.push(this.store.push(this.store.normalize('tag', tag.toJSON())));
     }
 
     this.file.tags = tags;
@@ -202,9 +213,14 @@ module('Integration | Component | file-overview', function (hooks) {
       hbs`
       <FileOverview  @file={{this.file}} @profileId={{this.file.id}} />`
     );
-    assert.dom(`[data-test-file-tags]`).exists();
-    const fileTags = this.element.querySelectorAll('[data-test="file-tag"]');
+    assert.dom('[data-test-file-tags]').exists();
+
+    const fileTags = findAll('[data-test-file-tag]');
     assert.strictEqual(fileTags.length, 2);
+
+    tags.map((tag) =>
+      assert.dom(`[data-test-tag="${tag.name}"]`).exists().hasText(tag.name)
+    );
   });
 
   test('It hides manual scan tag if manual scan feature is disabled', async function (assert) {

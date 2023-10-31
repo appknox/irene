@@ -1,5 +1,12 @@
-<div class='card file-card is-fullwidth' data-test-file-overview-container>
-  <header local-class='card-header'>
+<AkStack
+  @width='full'
+  @direction='column'
+  @alignItems='center'
+  class='card file-card'
+  {{style height='100%'}}
+  data-test-file-overview-container
+>
+  <AkStack @width='full' local-class='card-header'>
     <div class='card-header-icon'>
       <img
         src={{this.file.iconUrl}}
@@ -45,21 +52,30 @@
         </li>
       </ul>
     </p>
-  </header>
-  <div local-class='app-information'>
+  </AkStack>
+
+  <AkStack
+    @width='full'
+    @alignItems='center'
+    @justifyContent='space-between'
+    local-class='app-information'
+  >
     <div local-class='file-id-text' data-test-file-overview-file-id>
       {{#unless this.file.isActive}}
-        <AkIcon
-          data-test-file-overview-file-id-icon
-          @iconName='error'
-          @size='small'
-          local-class='file-in-active-icon'
+        <AkTooltip
+          @placement='top'
+          @title='{{t "fileInactive"}}'
+          @arrow={{true}}
           class='margin-right'
-        />
-
-        <AttachTooltip @placement='top'>
-          {{t 'fileInactive'}}
-        </AttachTooltip>
+          data-test-file-overview-file-inactive-tooltip
+        >
+          <AkIcon
+            @iconName='error'
+            @size='small'
+            local-class='file-in-active-icon'
+            data-test-file-overview-file-inactive-icon
+          />
+        </AkTooltip>
       {{/unless}}
 
       FILE ID -
@@ -122,7 +138,7 @@
             </div>
           {{else if this.file.isManualRequested}}
             <div class='scan-status-tag-icon scan-status-tag-icon-done'>
-              <AkIcon @iconName='timer' @variant="outlined" @size='small' />
+              <AkIcon @iconName='timer' @variant='outlined' @size='small' />
             </div>
           {{else}}
             <div class='scan-status-tag-icon'>
@@ -138,24 +154,32 @@
         </div>
       {{/unless}}
     </div>
-  </div>
-  <div class='card-content'>
-    <div class='content'>
-      <div class='flex-row flex-justify-center mt-3'>
-        <div
-          class='flex-row flex-justify-center {{if @isReverse "is-reverse"}}'
-        >
-          <div class='flex-center px-3'>
-            <EmberChart
-              @type='doughnut'
-              @data={{this.file.doughnutData}}
-              @width={{150}}
-              @height={{150}}
-              @options={{this.chartOptions}}
-            />
-          </div>
-          <div class='px-3'>
-            <div class='lowercase-text text-centre'>
+  </AkStack>
+
+  <AkStack
+    @direction='column'
+    @alignItems='center'
+    @width='full'
+    class='card-content'
+  >
+    <div class='flex-row flex-justify-center mt-3'>
+      <div class='flex-row flex-justify-center {{if @isReverse "is-reverse"}}'>
+        <div class='flex-center px-3'>
+          <EmberChart
+            @type='doughnut'
+            @data={{this.file.doughnutData}}
+            @width={{150}}
+            @height={{150}}
+            @options={{this.chartOptions}}
+          />
+        </div>
+        <div class='px-3'>
+          <div class='lowercase-text text-centre'>
+            <AkTooltip
+              @placement='bottom'
+              @arrow={{true}}
+              @title='{{this.file.createdOnDateTime}}'
+            >
               <div
                 class='overflow ellipse'
                 data-test-file-overview-date-created
@@ -163,90 +187,108 @@
                 {{t 'started'}}&nbsp;
                 {{dayjs-from-now this.file.createdOn}}
               </div>
-              <AttachTooltip @placement='bottom'>
-                {{this.file.createdOnDateTime}}
-              </AttachTooltip>
-            </div>
-            <ul class='risk-table'>
-              <div class='risk-values'>
-                <div class='columns'>
-                  <div class='column'>
-                    <li class='is-critical'>
-                      {{t 'critical'}}
-                    </li>
-                  </div>
-                  <div class='column' data-test-critical-risk-count>
-                    {{this.file.countRiskCritical}}
-                  </div>
+            </AkTooltip>
+          </div>
+          <ul class='risk-table'>
+            <div class='risk-values'>
+              <div class='columns'>
+                <div class='column'>
+                  <li class='is-critical'>
+                    {{t 'critical'}}
+                  </li>
                 </div>
-                <div class='columns'>
-                  <div class='column'>
-                    <li class='is-danger'>
-                      {{t 'high'}}
-                    </li>
-                  </div>
-                  <div class='column' data-test-count-risk-high>
-                    {{this.file.countRiskHigh}}
-                  </div>
-                </div>
-                <div class='columns'>
-                  <div class='column'>
-                    <li class='is-warning'>
-                      {{t 'medium'}}
-                    </li>
-                  </div>
-                  <div class='column' data-test-count-risk-medium>
-                    {{this.file.countRiskMedium}}
-                  </div>
-                </div>
-                <div class='columns'>
-                  <div class='column'>
-                    <li class='is-info'>
-                      {{t 'low'}}
-                    </li>
-                  </div>
-                  <div class='column' data-test-count-risk-low>
-                    {{this.file.countRiskLow}}
-                  </div>
-                </div>
-                <div class='columns'>
-                  <div class='column'>
-                    <li class='is-success'>
-                      {{t 'passed'}}
-                    </li>
-                  </div>
-                  <div class='column' data-test-count-risk-none>
-                    {{this.file.countRiskNone}}
-                  </div>
-                </div>
-                <div
-                  class='columns
-                    {{if
-                      this.unknownAnalysisStatus.status
-                      "visible"
-                      "invisible"
-                    }}'
-                >
-                  <div class='column'>
-                    <li class='is-default'>
-                      {{t 'untested'}}
-                    </li>
-                  </div>
-                  <div class='column' data-test-count-risk-unknown>
-                    {{this.file.countRiskUnknown}}
-                  </div>
+                <div class='column' data-test-critical-risk-count>
+                  {{this.file.countRiskCritical}}
                 </div>
               </div>
-            </ul>
-          </div>
+              <div class='columns'>
+                <div class='column'>
+                  <li class='is-danger'>
+                    {{t 'high'}}
+                  </li>
+                </div>
+                <div class='column' data-test-count-risk-high>
+                  {{this.file.countRiskHigh}}
+                </div>
+              </div>
+              <div class='columns'>
+                <div class='column'>
+                  <li class='is-warning'>
+                    {{t 'medium'}}
+                  </li>
+                </div>
+                <div class='column' data-test-count-risk-medium>
+                  {{this.file.countRiskMedium}}
+                </div>
+              </div>
+              <div class='columns'>
+                <div class='column'>
+                  <li class='is-info'>
+                    {{t 'low'}}
+                  </li>
+                </div>
+                <div class='column' data-test-count-risk-low>
+                  {{this.file.countRiskLow}}
+                </div>
+              </div>
+              <div class='columns'>
+                <div class='column'>
+                  <li class='is-success'>
+                    {{t 'passed'}}
+                  </li>
+                </div>
+                <div class='column' data-test-count-risk-none>
+                  {{this.file.countRiskNone}}
+                </div>
+              </div>
+              <div
+                class='columns
+                  {{if
+                    this.unknownAnalysisStatus.status
+                    "visible"
+                    "invisible"
+                  }}'
+              >
+                <div class='column'>
+                  <li class='is-default'>
+                    {{t 'untested'}}
+                  </li>
+                </div>
+                <div class='column' data-test-count-risk-unknown>
+                  {{this.file.countRiskUnknown}}
+                </div>
+              </div>
+            </div>
+          </ul>
         </div>
       </div>
-      <div class='file-tags align-center' data-test-file-tags>
-        {{#each this.file.tags as |tag|}}
-          <AkTag @tag={{tag}} />
-        {{/each}}
-      </div>
     </div>
-  </div>
+
+    <AkStack
+      @width='full'
+      @direction='row'
+      @justifyContent='center'
+      class='pr-2 pt-2 pl-2'
+    >
+      <AkStack
+        @direction='row'
+        @alignItems='center'
+        @width='fit-content'
+        @spacing='1'
+        local-class='file-tags-container'
+        data-test-file-tags
+      >
+        {{#each this.file.tags as |tag|}}
+          <AkChip
+            @label={{tag.name}}
+            {{style height='26px'}}
+            data-test-file-tag
+            data-test-tag='{{tag.name}}'
+          />
+        {{/each}}
+      </AkStack>
+    </AkStack>
+  </AkStack>
+
   {{yield}}
-</div>
+</AkStack>

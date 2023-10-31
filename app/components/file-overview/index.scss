@@ -1,14 +1,10 @@
 .card-header {
-  display: flex;
   background-color: var(--neutral-grey-100);
   padding: 1em;
   box-sizing: border-box;
 }
 
 .app-information {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   background-color: var(--neutral-grey-50);
   padding: 0.2em 1em;
   border: 1px solid var(--neutral-grey-100);
@@ -26,4 +22,9 @@
       font-size: 13px;
     }
   }
+}
+
+.file-tags-container {
+  overflow-x: auto;
+  min-height: 26px;
 }

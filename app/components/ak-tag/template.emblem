@@ -1,7 +1,0 @@
-span.vertical-align-center data-test="file-tag"
-  | #{tag.name}
-  if editable
-    button.margin-l-h local-class="filetag-btn-delete" click={(perform onclick tag.id)}
-      = ak-icon iconName="close" size="small"
-      = attach-tooltip placement="top"
-        = t "delete"
