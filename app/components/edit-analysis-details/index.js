@@ -63,6 +63,10 @@ export default class EditAnalysisDetailsComponent extends Component {
     return this.store.findAll('owasp');
   }
 
+  get owaspapi2023s() {
+    return this.store.findAll('owaspapi2023');
+  }
+
   get pcidsses() {
     return this.store.findAll('pcidss');
   }
@@ -297,6 +301,10 @@ export default class EditAnalysisDetailsComponent extends Component {
     this.analysisDetails.owasp = param;
   }
 
+  @action selectOwaspApi2023Category(param) {
+    this.analysisDetails.owaspapi2023 = param;
+  }
+
   @action selectPcidssCategory(param) {
     this.analysisDetails.pcidss = param;
   }
@@ -447,6 +455,7 @@ export default class EditAnalysisDetailsComponent extends Component {
 
     const risk = this.analysisDetails.risk;
     const owasp = this.analysisDetails.owasp;
+    const owaspapi2023 = this.analysisDetails.owaspapi2023;
     const pcidss = this.analysisDetails.pcidss;
     const hipaa = this.analysisDetails.hipaa;
     const masvs = this.analysisDetails.masvs;
@@ -481,6 +490,7 @@ export default class EditAnalysisDetailsComponent extends Component {
       risk,
       status,
       owasp: owasp.map((a) => a.id),
+      owaspapi2023: owaspapi2023.map((a) => a.id),
       pcidss: pcidss.map((a) => a.id),
       hipaa: hipaa.map((a) => a.id),
       mstg: mstg.map((a) => a.id),

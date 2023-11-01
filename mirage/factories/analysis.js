@@ -55,6 +55,14 @@ export default Factory.extend({
     },
   }),
 
+  withOwaspApi2023: trait({
+    afterCreate(model, server) {
+      model.update({
+        owaspapi2023: server.createList('owaspapi2023', 2).map((it) => it.id),
+      });
+    },
+  }),
+
   withCwe: trait({
     afterCreate(model, server) {
       model.update({
@@ -115,6 +123,7 @@ export default Factory.extend({
     afterCreate(model, server) {
       model.update({
         owasp: server.createList('owasp', 2).map((it) => it.id),
+        owaspapi2023: server.createList('owaspapi2023', 2).map((it) => it.id),
         cwe: server.createList('cwe', 2).map((it) => it.id),
         asvs: server.createList('asvs', 2).map((it) => it.id),
         masvs: server.createList('masvs', 2).map((it) => it.id),

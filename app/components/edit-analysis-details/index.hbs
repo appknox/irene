@@ -271,6 +271,28 @@
       <div class='columns'>
         <div class='column is-one-third'>
           <h5 class='bold-font'>
+            OWASP API TOP 10 (2023)
+          </h5>
+        </div>
+      </div>
+      <div class='columns border-bottom-container'>
+        <div class='column margin-bottom20'>
+          <PowerSelectMultiple
+            @placeholder='Select OWASP API TOP 10 (2023) Section'
+            @selected={{this.analysisDetails.owaspapi2023}}
+            @options={{this.owaspapi2023s}}
+            @onChange={{this.selectOwaspApi2023Category}}
+            as |key|
+          >
+            {{key.code}}
+            -
+            {{key.title}}
+          </PowerSelectMultiple>
+        </div>
+      </div>
+      <div class='columns'>
+        <div class='column is-one-third'>
+          <h5 class='bold-font'>
             PCI-DSS Risk Category
           </h5>
         </div>

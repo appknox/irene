@@ -790,6 +790,8 @@
   "overrideRisk": "Override Risk",
   "overview": "Overview",
   "owasp": "OWASP",
+  "owaspapi2023": "OWASP API Top 10 (2023)",
+  "owaspApiTop10Expansion": "OWASP API Top 10",
   "owaspDetails": "OWASP Details",
   "owaspExpansion": "Open Web Application Security Project",
   "owner": "Owner",
