@@ -1,11 +1,11 @@
 {{! @glint-nocheck : did-insert, will-destroy, or}}
-{{#if @anchorRef}}
+{{#if this.mountContent}}
   <EmberWormhole @to='ak-component-wormhole' @renderInPlace={{@renderInPlace}}>
     <div
       role='presentation'
       ...attributes
       data-test-ak-popover-root
-      local-class='ak-popover-root'
+      local-class='ak-popover-root {{unless @anchorRef "hide"}}'
     >
       {{#if @hasBackdrop}}
         <div
@@ -21,7 +21,7 @@
         data-test-ak-popover-container
         class='ak-popover {{@containerClass}}'
         local-class='ak-popover-container'
-        {{did-insert (fn this.elementInserted @anchorRef)}}
+        {{did-insert this.elementInserted}}
         {{will-destroy this.handleWillDestroyCleanup}}
       >
         {{yield}}

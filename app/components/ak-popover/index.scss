@@ -1,6 +1,12 @@
 .ak-popover-root {
   position: fixed;
   z-index: var(--ak-popover-zIndex);
+  display: block;
+}
+
+.ak-popover-root.hide {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .backdrop-root {
