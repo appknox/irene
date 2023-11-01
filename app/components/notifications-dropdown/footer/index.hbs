@@ -1,10 +1,18 @@
-<div local-class='notification-dropdown-footer'>
+<AkStack
+  @width='full'
+  @alignItems='center'
+  @justifyContent='center'
+  local-class='notification-dropdown-footer'
+  class='py-2'
+>
   <AkLink
     @color='primary'
     @route='authenticated.dashboard.notifications'
     @underline='always'
     @title='View notifications'
-    data-test-notification-dropdown-link
     {{on 'click' this.onClick}}
-  ><strong>View All Notifications</strong></AkLink>
-</div>
+    data-test-notification-dropdown-link
+  >
+    <strong>View All Notifications</strong>
+  </AkLink>
+</AkStack>

@@ -1,15 +1,16 @@
+.notification-popover-container {
+  inset: 0px;
+}
+
 .notification-dropdown-container {
-  position: relative;
   width: 35em;
-  background: white;
-  border: 1px #f1f1f1 solid;
-  box-shadow: 0 5px 20px 0px rgba(0, 0, 0, 0.1);
-  margin-right: 2em;
+  background: var(--notifications-dropdown-background-color);
+  border: 1px solid var(--notifications-dropdown-border-color);
+  box-shadow: var(--notifications-dropdown-box-shadow);
+  margin-top: 10px;
 }
 
 .notification_main_list {
-  display: flex;
-  flex-direction: column;
   min-height: 30em;
   max-height: 70vh;
   overflow-y: scroll;
@@ -17,20 +18,5 @@
 
 // Loading styles
 .loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   height: 12.5em;
-}
-
-.popper {
-  position: relative;
-  div[x-arrow] {
-    background-color: white;
-    border-bottom: 1px solid var(--notification-dropdown-arrow-border-color);
-    border-left: 1px solid var(--notification-dropdown-arrow-border-color);
-    height: 1em;
-    width: 1em;
-    position: absolute;
-  }
 }

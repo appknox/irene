@@ -1,12 +1,12 @@
-.nf-icon {
+.nf-icon-container {
   position: relative;
-  color: var(--top-nav-icon-color);
 }
 
+.nf-icon,
 .nf-icon:hover,
 .nf-icon:focus,
 .nf-icon:active {
-  color: var(--top-nav-icon-color-hover);
+  color: var(--notification-bell-icon-color);
 }
 
 .nf-button {

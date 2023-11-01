@@ -57,3 +57,9 @@ export default class NotificationsPageMessageComponent extends Component<Notific
     this.notification.save();
   }
 }
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    'NotificationsPage::Message': typeof NotificationsPageMessageComponent;
+  }
+}

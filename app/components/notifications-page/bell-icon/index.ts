@@ -5,23 +5,28 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class NotificationsPageBellIconComponent extends Component {
-  @tracked anchorRef?: HTMLElement;
-  @tracked showDropDown = false;
+  @tracked anchorRef: HTMLElement | null = null;
   @service declare akNotifications: AkNotificationsService;
 
   @action
-  onClick() {
-    this.showDropDown = true;
-    this.akNotifications.fetchUnRead.perform();
+  onClick(event: Event) {
+    if (this.anchorRef) {
+      this.closeNotification();
+
+      return;
+    }
+
+    this.anchorRef = event.currentTarget as HTMLElement;
+    this.fetchNotifications();
   }
 
   @action
   closeNotification() {
-    this.showDropDown = false;
+    this.anchorRef = null;
   }
 
-  @action registerAnchorRef(element: HTMLElement) {
-    this.anchorRef = element;
+  @action
+  fetchNotifications() {
     this.akNotifications.fetchUnRead.perform();
   }
 }

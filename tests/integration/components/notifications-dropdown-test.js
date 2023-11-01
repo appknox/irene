@@ -34,25 +34,36 @@ module('Integration | Component | notifications-dropdown', function (hooks) {
       component: 'notification-message-test',
       context: NotificationTestContext,
     };
+
+    const template = hbs`
+      <div {{style position="relative"}}>
+        <button id="notification-button" type="button" {{on "click" this.openDropdown}}>Button</button>
+        <NotificationsDropdown
+            @onClose={{this.closeDropdown}}
+            @anchorRef={{this.anchorRef}}
+          />
+      </div>
+    
+    `;
+
+    this.setProperties({
+      anchorRef: null,
+      openDropdown: (event) => {
+        this.set('anchorRef', event.target);
+      },
+      closeDropdown: () => {
+        this.anchorRef = null;
+      },
+      template,
+    });
   });
 
   test('it renders', async function (assert) {
-    this.registerRef = (element) => {
-      this.anchorRef = element;
-    };
-
-    this.showDropDown = false;
-
-    const template = hbs`
-      <button id="notification-button" type="button" {{did-insert this.registerRef}}></button>
-      <NotificationsDropdown
-        @show={{this.showDropDown}}
-        @anchorRef={{this.anchorRef}}
-      />
-    `;
-    await render(template);
+    await render(this.template);
     await click('#notification-button');
+
     assert.dom('[data-test-notification-dropdown]').exists();
+
     assert.notEqual(
       this.element.textContent.trim().indexOf('t:notifications:()'),
       -1
@@ -76,20 +87,9 @@ module('Integration | Component | notifications-dropdown', function (hooks) {
       },
     });
 
-    this.registerRef = (element) => {
-      this.anchorRef = element;
-    };
+    await render(this.template);
 
-    this.showDropDown = false;
-
-    const template = hbs`
-      <button id="notification-button" type="button" {{did-insert this.registerRef}}></button>
-      <NotificationsDropdown
-        @show={{this.showDropDown}}
-        @anchorRef={{this.anchorRef}}
-      />
-    `;
-    await render(template);
+    await click('#notification-button');
     await click('#notification-button');
     const service = this.owner.lookup('service:ak-notifications');
     await service.reload();
@@ -98,20 +98,7 @@ module('Integration | Component | notifications-dropdown', function (hooks) {
   });
 
   test('it should render empty', async function (assert) {
-    this.registerRef = (element) => {
-      this.anchorRef = element;
-    };
-
-    this.showDropDown = false;
-
-    const template = hbs`
-      <button id="notification-button" type="button" {{did-insert this.registerRef}}></button>
-      <NotificationsDropdown
-        @show={{this.showDropDown}}
-        @anchorRef={{this.anchorRef}}
-      />
-    `;
-    await render(template);
+    await render(this.template);
     await click('#notification-button');
     const service = this.owner.lookup('service:ak-notifications');
     await service.reload();
@@ -120,26 +107,17 @@ module('Integration | Component | notifications-dropdown', function (hooks) {
   });
 
   test('it should render loading', async function (assert) {
-    this.registerRef = (element) => {
-      this.anchorRef = element;
-    };
+    await render(this.template);
+    await click('#notification-button');
 
-    this.showDropDown = false;
-
-    const template = hbs`
-      <button id="notification-button" type="button" {{did-insert this.registerRef}}></button>
-      <NotificationsDropdown
-        @show={{this.showDropDown}}
-        @anchorRef={{this.anchorRef}}
-      />
-    `;
     const service = this.owner.lookup('service:ak-notifications');
-    await service.reload();
+    service.reload();
     service.fetchUnRead = {
       isRunning: true,
     };
-    await render(template);
-    await click('#notification-button');
+
+    await render(this.template);
+
     assert.dom('[data-test-notification-message]').doesNotExist();
     assert.dom('[data-test-notification-empty]').doesNotExist();
     assert.dom('[data-test-ak-loader]').exists();
