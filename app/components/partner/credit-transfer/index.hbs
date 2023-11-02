@@ -8,29 +8,28 @@
     {{did-insert this.initializeComp}}
   >
     {{#if this.partnerPlan.limitedScans}}
-      <button
-        class='button is-default'
-        local-class='credit-transfer-btn {{if
-          this.disableTransfer
-          'disabled-btn'
-        }}'
-        data-test-plus-btn
-        type='button'
-        {{on 'click' this.toggleModal}}
+      <AkTooltip
+        @arrow={{true}}
+        @placement='top'
+        @title={{this.buttonTooltip}}
+        @disabled={{not this.buttonTooltip}}
+        data-test-tooltip
       >
-        <AkIcon @iconName='add' />
-        &nbsp;
-        {{t 'transferCredits'}}
-        {{#if this.buttonTooltip}}
-          <AttachTooltip
-            @placement='top-end'
-            data-test-tooltip
-            @id='client-{{@client.id}}-tooltip'
-          >
-            {{this.buttonTooltip}}
-          </AttachTooltip>
-        {{/if}}
-      </button>
+        <button
+          class='button is-default'
+          local-class='credit-transfer-btn {{if
+            this.disableTransfer
+            "disabled-btn"
+          }}'
+          data-test-plus-btn
+          type='button'
+          {{on 'click' this.toggleModal}}
+        >
+          <AkIcon @iconName='add' />
+          &nbsp;
+          {{t 'transferCredits'}}
+        </button>
+      </AkTooltip>
     {{/if}}
   </div>
 {{/if}}
@@ -41,7 +40,6 @@
     @showHeader={{true}}
     @headerTitle={{t 'creditTransfer'}}
   >
-
     <div
       local-class='credit-transfer-container'
       data-test-credit-transfer-modal

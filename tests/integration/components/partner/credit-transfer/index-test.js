@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
-import { click, render } from '@ember/test-helpers';
+import { click, find, render, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { underscore } from '@ember/string';
 import styles from 'irene/components/partner/credit-transfer/index.scss';
@@ -115,6 +115,7 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
       return serializer(schema['partner/plans'].find(1));
     });
     await this.owner.lookup('service:partner').load();
+
     await render(hbs`<Partner::CreditTransfer />`);
     assert.dom('[data-test-credit-transfer]').exists();
     assert.dom('[data-test-plus-btn]').doesNotExist();
@@ -172,10 +173,18 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
     this.set('client', this.server.create('partner/partnerclient'));
 
     await render(hbs`<Partner::CreditTransfer @client={{this.client}}/>`);
+
     assert.dom('[data-test-plus-btn]').exists();
     assert.dom('[data-test-plus-btn]').hasClass(styles['disabled-btn']);
+
+    const creditTransferTooltip = find(
+      '[data-test-credit-transfer] [data-test-ak-tooltip-root]'
+    );
+
+    await triggerEvent(creditTransferTooltip, 'mouseenter');
+
     assert
-      .dom(`#client-${this.client.id}-tooltip`)
+      .dom('[data-test-ak-tooltip-popover]')
       .hasText(`t:perAppCreditTransferStatus:()`);
   });
 
@@ -211,8 +220,15 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
     await render(hbs`<Partner::CreditTransfer @client={{this.client}}/>`);
     assert.dom('[data-test-plus-btn]').exists();
     assert.dom('[data-test-plus-btn]').hasClass(styles['disabled-btn']);
+
+    const creditTransferTooltip = find(
+      '[data-test-credit-transfer] [data-test-ak-tooltip-root]'
+    );
+
+    await triggerEvent(creditTransferTooltip, 'mouseenter');
+
     assert
-      .dom(`#client-${this.client.id}-tooltip`)
+      .dom('[data-test-ak-tooltip-popover]')
       .hasText(`t:0sharableCredits:()`);
   });
 

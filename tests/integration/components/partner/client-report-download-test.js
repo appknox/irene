@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { Response } from 'miragejs';
 import { setupRenderingTest } from 'ember-qunit';
 import Service from '@ember/service';
-import { render, click } from '@ember/test-helpers';
+import { render, click, find, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -117,11 +117,20 @@ module(
       );
       assert.dom('[data-test-report-download]').exists();
       assert.dom('[data-test-download-report-button]').hasAttribute('disabled');
+
       assert
         .dom('[data-test-download-button-download-label]')
         .includesText(`t:download:()`);
+
+      const downloadActionTooltip = find(
+        '[data-test-action-download] [data-test-ak-tooltip-root]'
+      );
+
+      await triggerEvent(downloadActionTooltip, 'mouseenter');
+
       assert
         .dom('[data-test-download-button-no-report-tooltip]')
+        .exists()
         .hasText(`t:noReportsGenerated:()`);
     });
 
@@ -159,6 +168,13 @@ module(
       assert
         .dom('[data-test-download-button-download-label]')
         .includesText(`t:download:()`);
+
+      const downloadActionTooltip = find(
+        '[data-test-action-download] [data-test-ak-tooltip-root]'
+      );
+
+      await triggerEvent(downloadActionTooltip, 'mouseenter');
+
       assert
         .dom('[data-test-download-button-no-report-tooltip]')
         .hasText(`t:noReportsGenerated:()`);
@@ -210,6 +226,13 @@ module(
       assert
         .dom('[data-test-download-button-generating-label]')
         .hasText(`t:generating:()`);
+
+      const downloadActionTooltip = find(
+        '[data-test-action-download] [data-test-ak-tooltip-root]'
+      );
+
+      await triggerEvent(downloadActionTooltip, 'mouseenter');
+
       assert
         .dom('[data-test-download-button-generating-tooltip]')
         .hasText(`Progress: ${report.progress}%`);
@@ -256,6 +279,13 @@ module(
       assert
         .dom('[data-test-download-button-download-label]')
         .includesText(`t:download:()`);
+
+      const downloadActionTooltip = find(
+        '[data-test-action-download] [data-test-ak-tooltip-root]'
+      );
+
+      await triggerEvent(downloadActionTooltip, 'mouseenter');
+
       assert
         .dom('[data-test-download-button-tooltip]')
         .hasText(
@@ -335,6 +365,13 @@ module(
         .dom('[data-test-generate-report-button]')
         .doesNotHaveAttribute('disabled')
         .hasText('');
+
+      const genActionTooltip = find(
+        '[data-test-action-generate] [data-test-ak-tooltip-root]'
+      );
+
+      await triggerEvent(genActionTooltip, 'mouseenter');
+
       assert
         .dom('[data-test-generate-button-tooltip]')
         .hasText(`t:generateNewReport:()`);
@@ -377,6 +414,13 @@ module(
         .dom('[data-test-generate-report-button]')
         .hasAttribute('disabled')
         .hasText('');
+
+      const genActionTooltip = find(
+        '[data-test-action-generate] [data-test-ak-tooltip-root]'
+      );
+
+      await triggerEvent(genActionTooltip, 'mouseenter');
+
       assert
         .dom('[data-test-generate-button-progress-tooltip]')
         .hasText(`t:reportGenerationInProgressWait:()`);

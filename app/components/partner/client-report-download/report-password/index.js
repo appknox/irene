@@ -12,6 +12,7 @@ export default class PartnerClientReportDownloadReportPasswordComponent extends 
   @service('notifications') notify;
 
   @tracked unlockKey = null;
+  @tracked anchorRef = null;
   @tracked apiError = false;
 
   @task(function* () {
@@ -30,11 +31,30 @@ export default class PartnerClientReportDownloadReportPasswordComponent extends 
   })
   getUnlockKey;
 
+  @action togglePassTrayVisibility(event) {
+    if (this.anchorRef) {
+      this.closeReportPassTray();
+
+      return;
+    }
+
+    if (!this.unlockKey) {
+      this.getUnlockKey.perform();
+    }
+
+    this.anchorRef = event.currentTarget;
+  }
+
+  @action closeReportPassTray() {
+    this.anchorRef = null;
+  }
+
   @action
   onCopyPassword() {
     let clipboard = new ClipboardJS(
       `.copy-unlock-key-button-${this.args.reportId}`
     );
+
     clipboard.on('success', async (err) => {
       this.notify.info(
         `Report password copied for file ID ${this.args.fileId}`
@@ -42,6 +62,7 @@ export default class PartnerClientReportDownloadReportPasswordComponent extends 
       err.clearSelection();
       clipboard.destroy();
     });
+
     clipboard.on('error', () => {
       this.notify.error(this.intl.t('tPleaseTryAgain'));
       clipboard.destroy();

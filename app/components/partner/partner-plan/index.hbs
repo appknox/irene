@@ -13,20 +13,34 @@
         }}
           {{! NOTE 0 credits left warning }}
           <div data-test-warning-zero-scan-credits>
-            <div class='margin-r-1'><AkIcon @iconName='error' /></div>
-            <AttachTooltip @placement='top-end'>
-              No credits left to transfer to the clients. Please upgrade your
-              plan
-            </AttachTooltip>
+            <AkTooltip
+              @placement='top'
+              @arrow={{true}}
+              @title='No credits left to transfer to the clients. Please upgrade your plan'
+            >
+              <div class='margin-r-1'><AkIcon @iconName='error' /></div>
+            </AkTooltip>
           </div>
         {{else if (not this.partnerPlan.limitedScans)}}
           {{! NOTE credit transfer unavailable warning }}
           <div data-test-warning-credit-transfer-unavailable>
-            <div class='margin-r-1'><AkIcon @iconName='error' /></div>
-            <AttachTooltip @placement='top-end'>
-              Credit transfer option is unavailable in your plan. Please contact
-              support for transferring credits to clients
-            </AttachTooltip>
+            <div class='margin-r-1'>
+              <AkTooltip @placement='left' @arrow={{true}}>
+                <:tooltipContent>
+                  <AkStack
+                    @tag='span'
+                    {{style width='320px' whiteSpace='normal'}}
+                  >
+                    Credit transfer option is unavailable in your plan. Please
+                    contact support for transferring credits to clients
+                  </AkStack>
+                </:tooltipContent>
+
+                <:default>
+                  <AkIcon @iconName='error' />
+                </:default>
+              </AkTooltip>
+            </div>
           </div>
         {{/if}}
       {{/if}}

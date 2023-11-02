@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { Response } from 'miragejs';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { find, render, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -98,7 +98,7 @@ module(
         .hasClass(styles['riskblock--untested']);
     });
 
-    test('it should render risk index popover on mouseenter', async function (assert) {
+    test('it should render risk index tooltip on mouseenter', async function (assert) {
       this.server.create('partner/partner', {
         access: { list_files: true },
       });
@@ -121,29 +121,35 @@ module(
       this.set('indexPlacement', 'bottom');
 
       await render(
-        hbs`<Partner::ClientReportSummary
+        hbs`
+        <Partner::ClientReportSummary
           @clientId={{this.clientId}}
           @fileId={{this.fileId}}
           @indexPlacement={{this.indexPlacement}}
         />`
       );
+
       assert.dom('[data-test-report-summary]').exists();
       assert.dom('[data-test-risk-summary]').exists();
 
       assert.dom('[data-test-risk-summary-bar]').exists();
 
-      assert.dom('[class="ember-attacher"]').exists();
-      assert
-        .dom('[class="ember-attacher"]')
-        .hasAttribute('x-placement', this.indexPlacement);
-      assert.dom('[data-test-riskpopover]').exists();
+      const reportSummaryTooltip = find(
+        '[data-test-report-summary] [data-test-ak-tooltip-root]'
+      );
+
+      await triggerEvent(reportSummaryTooltip, 'mouseenter');
+
+      assert.dom('[data-test-risk-summary-tooltip]').exists();
 
       assert
         .dom(`[data-test-riskindex-critical-key]`)
         .hasClass(styles['riskkey-color--critical']);
+
       assert
         .dom(`[data-test-riskindex-critical-label]`)
         .hasText(`t:critical:()`);
+
       assert
         .dom(`[data-test-riskindex-critical-count]`)
         .hasText(`${fileSummary.riskCountCritical}`);
@@ -151,7 +157,9 @@ module(
       assert
         .dom(`[data-test-riskindex-high-key]`)
         .hasClass(styles['riskkey-color--high']);
+
       assert.dom(`[data-test-riskindex-high-label]`).hasText(`t:high:()`);
+
       assert
         .dom(`[data-test-riskindex-high-count]`)
         .hasText(`${fileSummary.riskCountHigh}`);
@@ -159,7 +167,9 @@ module(
       assert
         .dom(`[data-test-riskindex-medium-key]`)
         .hasClass(styles['riskkey-color--medium']);
+
       assert.dom(`[data-test-riskindex-medium-label]`).hasText(`t:medium:()`);
+
       assert
         .dom(`[data-test-riskindex-medium-count]`)
         .hasText(`${fileSummary.riskCountMedium}`);
@@ -167,7 +177,9 @@ module(
       assert
         .dom(`[data-test-riskindex-low-key]`)
         .hasClass(styles['riskkey-color--low']);
+
       assert.dom(`[data-test-riskindex-low-label]`).hasText(`t:low:()`);
+
       assert
         .dom(`[data-test-riskindex-low-count]`)
         .hasText(`${fileSummary.riskCountLow}`);
@@ -175,7 +187,9 @@ module(
       assert
         .dom(`[data-test-riskindex-passed-key]`)
         .hasClass(styles['riskkey-color--passed']);
+
       assert.dom(`[data-test-riskindex-passed-label]`).hasText(`t:passed:()`);
+
       assert
         .dom(`[data-test-riskindex-passed-count]`)
         .hasText(`${fileSummary.riskCountPassed}`);
@@ -183,19 +197,14 @@ module(
       assert
         .dom(`[data-test-riskindex-untested-key]`)
         .hasClass(styles['riskkey-color--untested']);
+
       assert
         .dom(`[data-test-riskindex-untested-label]`)
         .hasText(`t:untested:()`);
+
       assert
         .dom(`[data-test-riskindex-untested-count]`)
         .hasText(`${fileSummary.riskCountUntested}`);
-
-      assert.dom('[class="ember-attacher"]').hasStyle({ display: 'none' });
-
-      // Note: mouseenter event on data-test-risk-summary element should remove
-      // display: none from ember-attacher, and vice versa for mouseleave
-      // Testing this is pending because those mouse events are not supported in
-      // ember test helpers
     });
 
     test('it should not render graph and popover if summary api fails', async function (assert) {

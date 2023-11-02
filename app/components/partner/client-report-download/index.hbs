@@ -7,87 +7,90 @@
   >
     {{#unless this.reportListAPIError}}
       <div local-class='report-actions' data-test-report-actions>
-
         <div data-test-action-download>
-          <button
-            type='button'
-            class='button is-primary is-small'
-            local-class='{{if
-              this.isGenerating
-              "button-progress"
-            }} download-button button-small'
-            disabled={{this.isDownloadButtonDisabled}}
-            {{on 'click' (fn this.onDownload this.latestReport.id)}}
-            data-test-download-report-button
-          >
-            {{#if this.isGenerating}}
-              <span
-                class='is-progress'
-                local-class='progress-loader'
-                style={{this.generationProgressStyle}}
-                data-test-download-button-generating-progress
-              ></span>
-              <span
-                class='vertical-align-center'
-                data-test-download-button-generating-label
-              >{{t 'generating'}}</span>
-            {{else}}
-              <span
-                class='vertical-align-center'
-                data-test-download-button-download-label
-              ><AkIcon @iconName='download' />&nbsp; {{t 'download'}}</span>
-            {{/if}}
-          </button>
-          <AttachTooltip @placement='top' @arrow={{true}} @animation='shift'>
-            {{#if this.isGenerating}}
-              <span data-test-download-button-generating-tooltip>
-                Progress:
-                {{this.latestReport.progress}}%
-              </span>
-            {{else if this.latestReport.id}}
-              <span data-test-download-button-tooltip>
-                {{t 'generatedOn'}}
-                {{day-js
-                  date=this.latestReport.generatedOn
-                  format='DD MMM YYYY hh:mm a'
-                }}
-              </span>
-            {{else}}
-              <span data-test-download-button-no-report-tooltip>
-                {{t 'noReportsGenerated'}}
-              </span>
-            {{/if}}
-          </AttachTooltip>
+          <AkTooltip @placement='top' @arrow={{true}}>
+            <:tooltipContent>
+              {{#if this.isGenerating}}
+                <span data-test-download-button-generating-tooltip>
+                  Progress:
+                  {{this.latestReport.progress}}%
+                </span>
+              {{else if this.latestReport.id}}
+                <span data-test-download-button-tooltip>
+                  {{t 'generatedOn'}}
+                  {{day-js
+                    date=this.latestReport.generatedOn
+                    format='DD MMM YYYY hh:mm a'
+                  }}
+                </span>
+              {{else}}
+                <span data-test-download-button-no-report-tooltip>
+                  {{t 'noReportsGenerated'}}
+                </span>
+              {{/if}}
+            </:tooltipContent>
+
+            <:default>
+              <button
+                type='button'
+                class='button is-primary is-small'
+                local-class='{{if
+                  this.isGenerating
+                  "button-progress"
+                }} download-button button-small'
+                disabled={{this.isDownloadButtonDisabled}}
+                {{on 'click' (fn this.onDownload this.latestReport.id)}}
+                data-test-download-report-button
+              >
+                {{#if this.isGenerating}}
+                  <span
+                    class='is-progress'
+                    local-class='progress-loader'
+                    style={{this.generationProgressStyle}}
+                    data-test-download-button-generating-progress
+                  ></span>
+                  <span
+                    class='vertical-align-center'
+                    data-test-download-button-generating-label
+                  >{{t 'generating'}}</span>
+                {{else}}
+                  <span
+                    class='vertical-align-center'
+                    data-test-download-button-download-label
+                  ><AkIcon @iconName='download' />&nbsp; {{t 'download'}}</span>
+                {{/if}}
+              </button>
+            </:default>
+          </AkTooltip>
         </div>
 
         <div data-test-action-generate>
-          <button
-            type='button'
-            class='button is-default'
-            local-class='button-small'
-            disabled={{this.isGenerateButtonDisabled}}
-            {{on 'click' this.onGenerate}}
-            data-test-generate-report-button
-          >
-            <AkIcon @iconName='refresh' />
-          </button>
-          <AttachTooltip @placement='top' @arrow={{true}} @animation='shift'>
-            {{#if this.isGenerating}}
-              <div
-                local-class='generate-tooltip'
-                data-test-generate-button-progress-tooltip
+          <AkTooltip @placement='top' @arrow={{true}}>
+            <:tooltipContent>
+              {{#if this.isGenerating}}
+                <div data-test-generate-button-progress-tooltip>
+                  {{t 'reportGenerationInProgressWait'}}
+                </div>
+              {{else}}
+                <div data-test-generate-button-tooltip>
+                  {{t 'generateNewReport'}}
+                </div>
+              {{/if}}
+            </:tooltipContent>
+
+            <:default>
+              <button
+                type='button'
+                class='button is-default'
+                local-class='button-small'
+                disabled={{this.isGenerateButtonDisabled}}
+                {{on 'click' this.onGenerate}}
+                data-test-generate-report-button
               >
-                {{t 'reportGenerationInProgressWait'}}
-              </div>
-            {{else}}
-              <div
-                local-class='generate-tooltip'
-                data-test-generate-button-tooltip
-              >
-                {{t 'generateNewReport'}}
-              </div>
-            {{/if}}
-          </AttachTooltip>
+                <AkIcon @iconName='refresh' />
+              </button>
+            </:default>
+          </AkTooltip>
         </div>
 
         {{#if this.latestReport.id}}
@@ -96,7 +99,6 @@
               @clientId={{@clientId}}
               @fileId={{@fileId}}
               @reportId={{this.latestReport.id}}
-              id='password-toggle-{{this.latestReport.id}}'
               data-test-report-password-toggle-id='{{this.latestReport.id}}'
             />
           </div>

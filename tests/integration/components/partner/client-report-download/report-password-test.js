@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { Response } from 'miragejs';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, click } from '@ember/test-helpers';
+import { render, click, triggerEvent, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -66,7 +66,14 @@ module(
       />`
       );
 
+      const genActionTooltip = find(
+        '[data-test-dropdown] [data-test-ak-tooltip-root]'
+      );
+
+      await triggerEvent(genActionTooltip, 'mouseenter');
+
       assert.dom('[data-test-dropdown-tooltip-text]').exists();
+
       assert
         .dom('[data-test-dropdown-tooltip-text]')
         .hasText(`t:reportPassword:()`);
