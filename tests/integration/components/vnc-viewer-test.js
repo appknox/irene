@@ -4,8 +4,23 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
+import Service from '@ember/service';
 
 import ENUMS from 'irene/enums';
+
+class PollServiceStub extends Service {
+  callback = null;
+  interval = null;
+
+  startPolling(cb, interval) {
+    function stop() {}
+
+    this.callback = cb;
+    this.interval = interval;
+
+    return stop;
+  }
+}
 
 module('Integration | Component | vnc-viewer', function (hooks) {
   setupRenderingTest(hooks);
@@ -38,6 +53,8 @@ module('Integration | Component | vnc-viewer', function (hooks) {
       activeProfileId: profile.id,
       store,
     });
+
+    this.owner.register('service:poll', PollServiceStub);
   });
 
   test.each(

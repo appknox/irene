@@ -28,6 +28,20 @@ class NotificationsStub extends Service {
   }
 }
 
+class PollServiceStub extends Service {
+  callback = null;
+  interval = null;
+
+  startPolling(cb, interval) {
+    function stop() {}
+
+    this.callback = cb;
+    this.interval = interval;
+
+    return stop;
+  }
+}
+
 module(
   'Integration | Component | partner/client-report-download',
   function (hooks) {
@@ -38,6 +52,7 @@ module(
     hooks.beforeEach(async function () {
       this.owner.register('service:notifications', NotificationsStub);
       this.owner.register('service:window', WindowStub);
+      this.owner.register('service:poll', PollServiceStub);
 
       await this.server.create('organization');
       await this.owner.lookup('service:organization').load();

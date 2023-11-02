@@ -4,10 +4,10 @@ import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
-import poll from 'irene/services/poll';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
 import { tracked } from '@glimmer/tracking';
 import FileModel from 'irene/models/file';
+import PollService from 'irene/services/poll';
 
 export interface DynamicScanSignature {
   Args: {
@@ -21,6 +21,7 @@ export interface DynamicScanSignature {
 export default class DynamicScanComponent extends Component<DynamicScanSignature> {
   @service declare ajax: any;
   @service('notifications') declare notify: NotificationService;
+  @service declare poll: PollService;
 
   @tracked showDynamicScanModal = false;
 
@@ -58,7 +59,7 @@ export default class DynamicScanComponent extends Component<DynamicScanSignature
       return;
     }
 
-    const stopPoll = poll(
+    const stopPoll = this.poll.startPolling(
       () =>
         file
           .reload()

@@ -31,6 +31,20 @@ class NotificationsStub extends Service {
   }
 }
 
+class PollServiceStub extends Service {
+  callback = null;
+  interval = null;
+
+  startPolling(cb, interval) {
+    function stop() {}
+
+    this.callback = cb;
+    this.interval = interval;
+
+    return stop;
+  }
+}
+
 module('Integration | Component | file-details/scan-actions', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
@@ -54,6 +68,7 @@ module('Integration | Component | file-details/scan-actions', function (hooks) {
 
     await this.owner.lookup('service:organization').load();
     this.owner.register('service:notifications', NotificationsStub);
+    this.owner.register('service:poll', PollServiceStub);
   });
 
   test('it renders scan actions', async function (assert) {

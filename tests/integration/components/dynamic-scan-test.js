@@ -48,6 +48,20 @@ class NotificationsStub extends Service {
   }
 }
 
+class PollServiceStub extends Service {
+  callback = null;
+  interval = null;
+
+  startPolling(cb, interval) {
+    function stop() {}
+
+    this.callback = cb;
+    this.interval = interval;
+
+    return stop;
+  }
+}
+
 module(
   'Integration | Component | file-details/scan-actions/dynamic-scan',
   function (hooks) {
@@ -102,6 +116,7 @@ module(
 
       await this.owner.lookup('service:organization').load();
       this.owner.register('service:notifications', NotificationsStub);
+      this.owner.register('service:poll', PollServiceStub);
     });
 
     test.each(
@@ -735,12 +750,19 @@ module(
       'test start dynamic scan',
       [{ automatedScan: false }, { automatedScan: true }],
       async function (assert, { automatedScan }) {
-        this.file.dynamicStatus = ENUMS.DYNAMIC_STATUS.NONE;
-        this.file.isDynamicDone = false;
+        const file = this.server.create('file', {
+          project: '1',
+          profile: '100',
+          dynamic_status: ENUMS.DYNAMIC_STATUS.NONE,
+          is_dynamic_done: false,
+          can_run_automated_dynamicscan: automatedScan,
+          is_active: true,
+        });
 
-        if (automatedScan) {
-          this.file.canRunAutomatedDynamicscan = true;
-        }
+        this.set(
+          'file',
+          this.store.push(this.store.normalize('file', file.toJSON()))
+        );
 
         this.server.get('/v2/projects/:id', (schema, req) => {
           return {
@@ -817,8 +839,8 @@ module(
         );
 
         await render(hbs`
-        <DynamicScan @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
-      `);
+          <DynamicScan @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+        `);
 
         assert
           .dom('[data-test-dynamicScan-startBtn]')
@@ -922,6 +944,7 @@ module(
         }
 
         const notify = this.owner.lookup('service:notifications');
+        const poll = this.owner.lookup('service:poll');
 
         assert.strictEqual(
           notify.successMsg,
@@ -930,40 +953,63 @@ module(
             : 't:startingScan:()'
         );
 
-        // assert.strictEqual(
-        //   this.file.dynamicStatus,
-        //   automatedScan
-        //     ? ENUMS.DYNAMIC_STATUS.INQUEUE
-        //     : ENUMS.DYNAMIC_STATUS.BOOTING
-        // );
+        // simulate polling
+        if (poll.callback) {
+          await poll.callback();
+        }
+
+        assert.strictEqual(
+          this.file.dynamicStatus,
+          automatedScan
+            ? ENUMS.DYNAMIC_STATUS.INQUEUE
+            : ENUMS.DYNAMIC_STATUS.BOOTING
+        );
 
         // modal should close
         assert.dom('[data-test-ak-modal-header]').doesNotExist();
 
-        // assert
-        //   .dom('[data-test-dynamicScan-startBtn]')
-        //   .hasText(
-        //     dynamicScanStatusText[
-        //       automatedScan
-        //         ? ENUMS.DYNAMIC_STATUS.INQUEUE
-        //         : ENUMS.DYNAMIC_STATUS.BOOTING
-        //     ]
-        //   );
+        assert
+          .dom('[data-test-dynamicScan-startBtn]')
+          .hasText(
+            dynamicScanStatusText[
+              automatedScan
+                ? ENUMS.DYNAMIC_STATUS.INQUEUE
+                : ENUMS.DYNAMIC_STATUS.BOOTING
+            ]
+          );
       }
     );
 
     test('test stop dynamic scan', async function (assert) {
-      this.file.dynamicStatus = ENUMS.DYNAMIC_STATUS.READY;
-      this.file.isDynamicDone = false;
+      const file = this.server.create('file', {
+        project: '1',
+        profile: '100',
+        dynamic_status: ENUMS.DYNAMIC_STATUS.READY,
+        is_dynamic_done: false,
+        is_active: true,
+      });
 
-      // make sure file is active
-      this.file.isActive = true;
+      this.set(
+        'file',
+        this.store.push(this.store.normalize('file', file.toJSON()))
+      );
+
+      this.server.get('/v2/files/:id', (schema, req) => {
+        return schema.files.find(`${req.params.id}`)?.toJSON();
+      });
 
       this.server.get('/v2/projects/:id', (schema, req) => {
         return schema.projects.find(`${req.params.id}`)?.toJSON();
       });
 
-      this.server.delete('/dynamicscan/:id', () => new Response(204));
+      this.server.delete('/dynamicscan/:id', (schema, req) => {
+        schema.db.files.update(`${req.params.id}`, {
+          dynamic_status: ENUMS.DYNAMIC_STATUS.NONE,
+          is_dynamic_done: true,
+        });
+
+        return new Response(204);
+      });
 
       await render(hbs`
         <DynamicScan @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
@@ -973,6 +1019,20 @@ module(
       assert.dom('[data-test-dynamicScan-restartBtn]').doesNotExist();
 
       await click('[data-test-dynamicScan-stopBtn]');
+
+      assert
+        .dom('[data-test-dynamicScan-startBtn]')
+        .hasText(dynamicScanStatusText[ENUMS.DYNAMIC_STATUS.SHUTTING_DOWN]);
+
+      const poll = this.owner.lookup('service:poll');
+
+      // simulate polling
+      if (poll.callback) {
+        await poll.callback();
+      }
+
+      assert.dom('[data-test-dynamicScan-startBtn]').hasText('t:completed:()');
+      assert.dom('[data-test-dynamicScan-restartBtn]').exists();
     });
   }
 );
