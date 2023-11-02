@@ -2,23 +2,23 @@
   height: 2rem;
   padding: 0.5rem;
 }
+
 .dropdown-tray {
-  padding: 0.2rem;
-  width: 16rem;
+  background-color: var(--background-main);
+  border: 1px solid var(--border-color-1);
+  border-radius: 0.3rem;
+  width: 19rem;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.dropdown-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin-top: 10px;
 }
 
 .password-title {
   text-align: center;
   padding-bottom: 1rem;
 }
+
 .password-display {
   display: flex;
   align-items: center;
@@ -26,9 +26,11 @@
   gap: 0.5rem;
   width: 15rem;
 }
+
 .password-loading {
   color: var(--black-400);
 }
+
 .password-loading-error {
   color: var(--text-error);
   display: flex;
@@ -36,6 +38,7 @@
   justify-content: center;
   gap: 0.8rem;
 }
+
 .password-input {
   background-color: var(--black-025);
   border: 1px solid var(--black-100);

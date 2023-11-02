@@ -1,33 +1,34 @@
 {{#if this.partner.access.view_reports}}
-  <div local-class='dropdown' data-test-dropdown ...attributes>
-    <button
-      type='button'
-      class='button is-default no-border no-hover-button'
-      local-class='dropdown-toggle'
-      data-test-dropdown-toggle
-    >
-      <AkIcon @iconName='key' />
-    </button>
-    <AttachTooltip @placement='top-end' @arrow={{true}} @animation='shift'>
-      <span data-test-dropdown-tooltip-text>{{t 'reportPassword'}}</span>
-    </AttachTooltip>
-    <AttachPopover
-      @interactive={{true}}
+  <div data-test-dropdown ...attributes>
+    <AkTooltip @placement='top' @arrow={{true}}>
+      <:tooltipContent>
+        <span data-test-dropdown-tooltip-text>{{t 'reportPassword'}}</span>
+      </:tooltipContent>
+
+      <:default>
+        <button
+          type='button'
+          class='button is-default no-border no-hover-button'
+          local-class='dropdown-toggle'
+          id='password-toggle-{{@reportId}}'
+          {{on 'click' this.togglePassTrayVisibility}}
+          data-test-dropdown-toggle
+        >
+          <AkIcon @iconName='key' />
+        </button>
+      </:default>
+    </AkTooltip>
+
+    <AkPopover
       @arrow={{true}}
-      @placement='bottom-end'
-      @isShown={{false}}
-      @lazyRender={{true}}
-      @showOn='click'
-      @hideOn='clickout click'
-      @animation='shift'
-      @class='ember-attacher-popper popper--white'
+      @anchorRef={{this.anchorRef}}
+      @placement='bottom-start'
+      @clickOutsideToClose={{true}}
+      @closeHandler={{this.closeReportPassTray}}
+      @unmountOnClose={{false}}
     >
-      <div
-        local-class='dropdown-tray'
-        {{did-insert (perform this.getUnlockKey)}}
-        data-test-dropdown-tray
-      >
-        <div class='dropdown-content' data-test-report-password>
+      <div local-class='dropdown-tray' class='p-2' data-test-dropdown-tray>
+        <div data-test-report-password>
           {{#if this.getUnlockKey.isRunning}}
             <div local-class='password-loading' data-test-loading>
               <AkLoader @size={{13}} />
@@ -45,6 +46,7 @@
                 value={{this.unlockKey.unlockKey}}
                 data-test-report-password-value
               />
+
               <button
                 type='button'
                 class='button is-primary highlighted-button copy-unlock-key-button-{{@reportId}}'
@@ -53,7 +55,10 @@
                 data-clipboard-action='copy'
                 {{on 'click' this.onCopyPassword}}
                 data-test-report-password-copy-button
-              ><AkIcon @iconName='content-copy' />&nbsp; {{t 'copy'}}</button>
+              >
+                <AkIcon @iconName='content-copy' />
+                {{t 'copy'}}
+              </button>
             </div>
           {{else if this.apiError}}
             <div local-class='password-loading-error' data-test-api-error>
@@ -63,6 +68,6 @@
           {{/if}}
         </div>
       </div>
-    </AttachPopover>
+    </AkPopover>
   </div>
 {{/if}}

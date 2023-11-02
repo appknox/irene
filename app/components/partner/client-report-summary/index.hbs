@@ -7,63 +7,15 @@
     {{#if this.getFileSummary.isRunning}}
       <AkLoader @size={{13}} />
     {{else if this.fileSummary}}
-      <div local-class='summary' data-test-risk-summary>
-        <div local-class='riskbar' data-test-risk-summary-bar>
-          {{#if this.fileSummary.riskCountCritical}}
-            <div
-              local-class='riskblock riskblock--critical'
-              style={{this.criticalWidthStyle}}
-              data-test-riskblock-critical
-            ></div>
-          {{/if}}
-          {{#if this.fileSummary.riskCountHigh}}
-            <div
-              local-class='riskblock riskblock--high'
-              style={{this.highWidthStyle}}
-              data-test-riskblock-high
-            ></div>
-          {{/if}}
-          {{#if this.fileSummary.riskCountMedium}}
-            <div
-              local-class='riskblock riskblock--medium'
-              style={{this.mediumWidthStyle}}
-              data-test-riskblock-medium
-            ></div>
-          {{/if}}
-          {{#if this.fileSummary.riskCountLow}}
-            <div
-              local-class='riskblock riskblock--low'
-              style={{this.lowWidthStyle}}
-              data-test-riskblock-low
-            ></div>
-          {{/if}}
-          {{#if this.fileSummary.riskCountPassed}}
-            <div
-              local-class='riskblock riskblock--passed'
-              style={{this.passedWidthStyle}}
-              data-test-riskblock-passed
-            ></div>
-          {{/if}}
-          {{#if this.fileSummary.riskCountUntested}}
-            <div
-              local-class='riskblock riskblock--untested'
-              style={{this.untestedWidthStyle}}
-              data-test-riskblock-untested
-            ></div>
-          {{/if}}
-        </div>
-        <AttachPopover
-          @interactive={{true}}
-          @arrow={{true}}
-          @placement={{this.popoverPlacement}}
-          @isShown={{false}}
-          @showOn='mouseenter focus'
-          @hideOn='mouseleave blur escapekey'
-          @animation='shift'
-          @class='ember-attacher-popper popper--white'
-          data-test-risk-summary-popover
-        >
-          <div local-class='popover' data-test-riskpopover>
+      <AkTooltip
+        @arrow={{true}}
+        @placement={{this.popoverPlacement}}
+        @color='light'
+        {{style width='100%'}}
+        data-test-risk-summary-popover
+      >
+        <:tooltipContent>
+          <div local-class='popover' class='p-1' data-test-risk-summary-tooltip>
             <div local-class='index' data-test-riskindex>
               <div local-class='riskkey' data-test-riskindex-critical>
                 <div local-class='riskkey-label'>
@@ -163,8 +115,62 @@
               </div>
             </div>
           </div>
-        </AttachPopover>
-      </div>
+        </:tooltipContent>
+
+        <:default>
+          <div local-class='summary' data-test-risk-summary>
+            <div local-class='riskbar' data-test-risk-summary-bar>
+              {{#if this.fileSummary.riskCountCritical}}
+                <div
+                  local-class='riskblock riskblock--critical'
+                  style={{this.criticalWidthStyle}}
+                  data-test-riskblock-critical
+                ></div>
+              {{/if}}
+
+              {{#if this.fileSummary.riskCountHigh}}
+                <div
+                  local-class='riskblock riskblock--high'
+                  style={{this.highWidthStyle}}
+                  data-test-riskblock-high
+                ></div>
+              {{/if}}
+
+              {{#if this.fileSummary.riskCountMedium}}
+                <div
+                  local-class='riskblock riskblock--medium'
+                  style={{this.mediumWidthStyle}}
+                  data-test-riskblock-medium
+                ></div>
+              {{/if}}
+
+              {{#if this.fileSummary.riskCountLow}}
+                <div
+                  local-class='riskblock riskblock--low'
+                  style={{this.lowWidthStyle}}
+                  data-test-riskblock-low
+                ></div>
+              {{/if}}
+
+              {{#if this.fileSummary.riskCountPassed}}
+                <div
+                  local-class='riskblock riskblock--passed'
+                  style={{this.passedWidthStyle}}
+                  data-test-riskblock-passed
+                ></div>
+              {{/if}}
+
+              {{#if this.fileSummary.riskCountUntested}}
+                <div
+                  local-class='riskblock riskblock--untested'
+                  style={{this.untestedWidthStyle}}
+                  data-test-riskblock-untested
+                ></div>
+              {{/if}}
+            </div>
+          </div>
+        </:default>
+      </AkTooltip>
     {{/if}}
   </div>
 {{/if}}

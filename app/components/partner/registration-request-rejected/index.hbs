@@ -15,16 +15,21 @@
     title='{{day-js date=@request.updatedOn format='DD MMM YYYY HH:mm A'}}'
   >{{dayjs-from-now @request.updatedOn}}</div>
   <div local-class='action'>
-    <button
-      type='button'
-      class='is-danger is-icon no-border no-hover-button'
-      local-class='reject'
-      title='Move back to pending'
-      {{on 'click' (fn @onUndoReject @request)}}
+
+    <AkTooltip
+      @placement='top'
+      @arrow={{true}}
+      @title=' {{t "undo"}} {{t "reject"}}'
     >
-      <AkIcon @iconName='undo' />
-      <AttachTooltip @placemnet='top'>{{t 'undo'}}
-        {{t 'reject'}}</AttachTooltip>
-    </button>
+      <button
+        type='button'
+        class='is-danger is-icon no-border no-hover-button'
+        local-class='reject'
+        title='Move back to pending'
+        {{on 'click' (fn @onUndoReject @request)}}
+      >
+        <AkIcon @iconName='undo' />
+      </button>
+    </AkTooltip>
   </div>
 </div>
