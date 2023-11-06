@@ -6,7 +6,6 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { REPORT } from 'irene/utils/constants';
-import poll from 'irene/services/poll';
 import parseError from 'irene/utils/parse-error';
 
 export default class PartnerClientReportDownloadComponent extends Component {
@@ -14,6 +13,7 @@ export default class PartnerClientReportDownloadComponent extends Component {
   @service store;
   @service partner;
   @service window;
+  @service poll;
   @service('notifications') notify;
 
   @tracked reports = null;
@@ -83,7 +83,7 @@ export default class PartnerClientReportDownloadComponent extends Component {
     if (!reportId) {
       return;
     }
-    let stopPoll = poll(async () => {
+    let stopPoll = this.poll.startPolling(async () => {
       try {
         let report = await this.store.queryRecord(
           'partner/partnerclient-report',

@@ -1,80 +1,87 @@
 // Ref: https://gist.github.com/paulirish/1579671
+import Service from '@ember/service';
 
-let lastTime = 0;
+export default class PollService extends Service {
+  constructor(properties?: object) {
+    super(properties);
 
-const vendors = ['ms', 'moz', 'webkit', 'o'];
+    let lastTime = 0;
 
-for (let x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-  // @ts-expect-error TODO: fix this
-  window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+    const vendors = ['ms', 'moz', 'webkit', 'o'];
 
-  // @ts-expect-error TODO: fix this
-  // prettier-ignore
-  window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
-}
+    for (let x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+      // @ts-expect-error TODO: fix this
+      // prettier-ignore
+      window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
 
-if (!window.requestAnimationFrame) {
-  window.requestAnimationFrame = function (callback) {
-    const currTime = new Date().getTime();
-    const timeToCall = Math.max(0, 16 - (currTime - lastTime));
+      // @ts-expect-error TODO: fix this
+      // prettier-ignore
+      window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
+    }
 
-    const id = window.setTimeout(function () {
-      callback(currTime + timeToCall);
-    }, timeToCall);
+    if (!window.requestAnimationFrame) {
+      window.requestAnimationFrame = function (callback) {
+        const currTime = new Date().getTime();
+        const timeToCall = Math.max(0, 16 - (currTime - lastTime));
 
-    lastTime = currTime + timeToCall;
+        const id = window.setTimeout(function () {
+          callback(currTime + timeToCall);
+        }, timeToCall);
 
-    return id;
-  };
-}
-if (!window.cancelAnimationFrame) {
-  window.cancelAnimationFrame = function (id) {
-    clearTimeout(id);
-  };
-}
+        lastTime = currTime + timeToCall;
 
-function poll(cb: () => Promise<unknown> | unknown, intvl: number) {
-  let shouldStop = false;
-  let previousExecuteTime = Date.now();
+        return id;
+      };
+    }
 
-  function stop() {
-    shouldStop = true;
+    if (!window.cancelAnimationFrame) {
+      window.cancelAnimationFrame = function (id) {
+        clearTimeout(id);
+      };
+    }
   }
 
-  function repeat() {
-    if (shouldStop) {
-      return;
+  startPolling(cb: () => Promise<unknown> | unknown, intvl: number) {
+    let shouldStop = false;
+    let previousExecuteTime = Date.now();
+
+    function stop() {
+      shouldStop = true;
     }
 
-    if (Date.now() - previousExecuteTime < intvl) {
-      return window.requestAnimationFrame(repeat); //NOSONAR
+    function repeat() {
+      if (shouldStop) {
+        return;
+      }
+
+      if (Date.now() - previousExecuteTime < intvl) {
+        return window.requestAnimationFrame(repeat); //NOSONAR
+      }
+
+      const ret = cb();
+
+      if (ret && (ret as Promise<unknown>).then) {
+        return (ret as Promise<unknown>).then(
+          (data) => {
+            previousExecuteTime = Date.now();
+            window.requestAnimationFrame(repeat); //NOSONAR
+
+            return data;
+          },
+          (err) => {
+            previousExecuteTime = Date.now();
+            window.requestAnimationFrame(repeat); //NOSONAR
+
+            throw err;
+          }
+        );
+      }
+
+      previousExecuteTime = Date.now();
+      window.requestAnimationFrame(repeat); //NOSONAR
     }
 
-    const ret = cb();
-
-    if (ret && (ret as Promise<unknown>).then) {
-      return (ret as Promise<unknown>).then(
-        (data) => {
-          previousExecuteTime = Date.now();
-          window.requestAnimationFrame(repeat); //NOSONAR
-
-          return data;
-        },
-        (err) => {
-          previousExecuteTime = Date.now();
-          window.requestAnimationFrame(repeat); //NOSONAR
-
-          throw err;
-        }
-      );
-    }
-
-    previousExecuteTime = Date.now();
     window.requestAnimationFrame(repeat); //NOSONAR
+    return stop;
   }
-
-  window.requestAnimationFrame(repeat); //NOSONAR
-  return stop;
 }
-
-export default poll;
