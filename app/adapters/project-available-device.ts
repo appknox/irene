@@ -14,6 +14,7 @@ export default class ProjectAvailableDeviceAdapter extends commondrf {
   _buildNestedURL(modelName: string | number, projectId: string | number) {
     const projectURL = this._buildURL(modelName, projectId);
     const availableDevicesURL = [projectURL, 'available-devices'].join('/');
+
     return availableDevicesURL;
   }
 

@@ -6,6 +6,7 @@ import ModelRegistry from 'ember-data/types/registries/model';
 export default class JiraRepoAdapter extends commondrf {
   _buildURL(modelName: string | number, id: string) {
     const baseurl = `${this.namespace}/projects/${id}/jira`;
+
     return this.buildURLFromBase(baseurl);
   }
 
