@@ -1,5 +1,4 @@
-{{! template-lint-disable no-partial }}
-{{#if (or this.hasProjects this.objects)}}
+{{#if this.hasProjects}}
   <div class='flex-column'>
     <div class='box-container home-page'>
       <div local-class='filters'>
@@ -8,7 +7,7 @@
           <div class='margin-top'>
             <Input
               @type='search'
-              @value={{this.tempQuery}}
+              @value={{this.query}}
               placeholder={{t 'searchQuery'}}
               class='input mp-search-query'
               {{on 'input' this.onQueryChange}}
@@ -50,9 +49,9 @@
             >
               {{#each this.sortingKeyObjects as |sortingKeyObject|}}
                 <option
-                  action='foo'
-                  value='{{filter-platform sortingKeyObject}}'
-                  data-test-project-sort-property-option
+                  value='{{sortingKeyObject.key}}'
+                  selected={{eq this.sortKey sortingKeyObject.key}}
+                  data-test-project-sort-property-option='{{sortingKeyObject.key}}'
                 >
                   {{sortingKeyObject.text}}
                 </option>
@@ -73,6 +72,7 @@
               </option>
               {{#each this.platformObjects as |platformObject|}}
                 <option
+                  selected={{eq this.platform platformObject.value}}
                   value={{platformObject.value}}
                   data-test-platform-filter-option
                 >
@@ -90,12 +90,41 @@
           <ThreeBounceSpinner />
         </div>
       {{else if this.showProjectResults}}
-        <div local-class='project-grid'>
-          {{#each this.objects as |project|}}
-            <ProjectOverview @project={{project}} />
-          {{/each}}
-        </div>
-      {{else if this.isEmpty}}
+        <AkPaginationProvider
+          @results={{this.projects}}
+          @onItemPerPageChange={{this.handleItemPerPageChange}}
+          @totalItems={{this.totalProjectCount}}
+          @nextAction={{this.handlePrevNextAction}}
+          @prevAction={{this.handlePrevNextAction}}
+          @itemPerPageOptions={{array 10 25 50}}
+          @defaultLimit={{this.limit}}
+          @offset={{this.offset}}
+          as |pgc|
+        >
+          <div local-class='project-grid'>
+            {{#each pgc.currentPageResults as |project|}}
+              <ProjectOverview @project={{project}} />
+            {{/each}}
+          </div>
+
+          {{#if this.showPagination}}
+            <AkPagination
+              @disableNext={{pgc.disableNext}}
+              @nextAction={{pgc.nextAction}}
+              @disablePrev={{pgc.disablePrev}}
+              @prevAction={{pgc.prevAction}}
+              @endItemIdx={{pgc.endItemIdx}}
+              @startItemIdx={{pgc.startItemIdx}}
+              @itemPerPageOptions={{pgc.itemPerPageOptions}}
+              @onItemPerPageChange={{pgc.onItemPerPageChange}}
+              @selectedOption={{pgc.selectedOption}}
+              @tableItemLabel={{t 'projects'}}
+              @perPageTranslation={{t 'recordPerPage'}}
+              @totalItems={{pgc.totalItems}}
+            />
+          {{/if}}
+        </AkPaginationProvider>
+      {{else if this.hasNoProjects}}
         <div local-class='no-result-found'>
           <h5 class='capitalize-text'>
             {{t 'noResultsFound'}}
@@ -110,9 +139,6 @@
         </div>
       {{/if}}
     </div>
-    {{#if this.showPagination}}
-      {{partial 'paginate'}}
-    {{/if}}
   </div>
 {{else}}
   <div local-class='no-project-container' data-test-no-project-container>
