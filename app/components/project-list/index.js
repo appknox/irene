@@ -1,41 +1,33 @@
-/* eslint-disable ember/no-mixins */
 import { action } from '@ember/object';
-import { run } from '@ember/runloop';
 import { inject as service } from '@ember/service';
-import { underscore } from '@ember/string';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import ENUMS from 'irene/enums';
-import { filterPlatformValues } from 'irene/helpers/filter-platform';
-import { INPUT } from 'irene/utils/constants';
-import { PaginationMixin } from '../../mixins/paginate';
+import { isEmpty } from '@ember/utils';
 
-export default class ProjectListComponent extends PaginationMixin(Component) {
+import ENUMS from 'irene/enums';
+import { INPUT } from 'irene/utils/constants';
+import { DEFAULT_PROJECT_QUERY_PARAMS } from 'irene/services/project';
+
+export default class ProjectListComponent extends Component {
   @service intl;
   @service organization;
-  @service realtime;
   @service store;
+  @service('project') projectService;
 
-  constructor() {
-    super(...arguments);
-  }
-
-  targetModel = 'Project';
-  platformType = ENUMS.PLATFORM.UNKNOWN;
   tDateUpdated = this.intl.t('dateUpdated');
   tDateCreated = this.intl.t('dateCreated');
   tProjectName = this.intl.t('projectName');
   tPackageName = this.intl.t('packageName');
   tMostRecent = this.intl.t('mostRecent');
   tLeastRecent = this.intl.t('leastRecent');
-  tempQuery = '';
 
-  @tracked projects = null;
-  @tracked query = '';
-  @tracked sortingKey = 'lastFileCreatedOn';
-  @tracked sortingReversed = true;
-  @tracked limit = 12;
+  @tracked limit = DEFAULT_PROJECT_QUERY_PARAMS.limit;
+  @tracked offset = DEFAULT_PROJECT_QUERY_PARAMS.offset;
+  @tracked query = DEFAULT_PROJECT_QUERY_PARAMS.query;
+  @tracked sortKey = DEFAULT_PROJECT_QUERY_PARAMS.sortKey;
+  @tracked platform = DEFAULT_PROJECT_QUERY_PARAMS.platform;
+  @tracked team = DEFAULT_PROJECT_QUERY_PARAMS.team;
 
   /**
    * @property {Array} teams
@@ -59,8 +51,29 @@ export default class ProjectListComponent extends PaginationMixin(Component) {
     name: 'All',
   };
 
+  constructor() {
+    super(...arguments);
+
+    this.projectService.fetchProjects.perform();
+  }
+
+  get isLoading() {
+    return this.projectService.fetchProjects.isRunning;
+  }
+
+  get projects() {
+    return this.projectService.projectQueryResponse?.toArray() || [];
+  }
+
   get hasProjects() {
-    return this.organization.selected.projectsCount > 0;
+    return (
+      this.organization.selected.projectsCount > 0 ||
+      !isEmpty(this.projectService.projectQueryResponse)
+    );
+  }
+
+  get totalProjectCount() {
+    return this.projectService.projectQueryResponse?.meta?.count || 0;
   }
 
   /**
@@ -69,147 +82,120 @@ export default class ProjectListComponent extends PaginationMixin(Component) {
    * It has a similar implementation with the hasObject property from the PaginationMixin.
    */
   get showProjectResults() {
-    return this.objects.length > 0;
+    return this.projects.length > 0;
+  }
+
+  get hasNoProjects() {
+    return this.totalProjectCount === 0;
   }
 
   get showPagination() {
     return this.showProjectResults && !this.isLoading;
   }
 
-  get extraQueryStrings() {
-    const platform = this.platformType;
-    const reverse = this.sortingReversed;
-    const sorting = underscore(this.sortingKey);
-    const team = this.selectedTeam;
-    const query = {
-      q: this.query,
-      sorting: sorting,
-    };
-    if (platform != null && platform != -1) {
-      query['platform'] = platform;
-    }
-    if (reverse) {
-      query['sorting'] = '-' + sorting;
-    }
-
-    if (team && team.id) {
-      query['team'] = team.id;
-    }
-    return JSON.stringify(query, Object.keys(query).sort());
-  }
-
-  get sortProperties() {
-    let sortingKey = this.sortingKey;
-    const sortingReversed = this.sortingReversed;
-    if (sortingReversed) {
-      sortingKey = `${sortingKey}:desc`;
-    }
-    return [sortingKey];
-  }
-
-  get offsetResetter() {
-    return (() => {
-      const result = [];
-      for (let property of [
-        'query',
-        'sortingKey',
-        'sortingReversed',
-        'platformType',
-      ]) {
-        const propertyOldName = `_${property}`;
-        const propertyNewValue = this[property];
-        const propertyOldValue = this[propertyOldName];
-        const propertyChanged = propertyOldValue !== propertyNewValue;
-
-        if (propertyChanged) {
-          this.propertyOldName = propertyNewValue;
-          result.push(run.once(this, '_resetOffset'));
-        } else {
-          result.push(undefined);
-        }
-      }
-      return result;
-    })();
-  }
-
   get sortingKeyObjects() {
-    const tDateUpdated = this.tDateUpdated;
-    const tDateCreated = this.tDateCreated;
-    const tPackageName = this.tPackageName;
-    const tLeastRecent = this.tLeastRecent;
-    const tMostRecent = this.tMostRecent;
-
-    const keyObjects = [
+    return [
       {
-        key: 'lastFileCreatedOn',
-        text: tDateUpdated,
+        key: '-last_file_created_on',
+        text: `${this.tDateUpdated} ${this.tMostRecent}`,
+      },
+      {
+        key: 'last_file_created_on',
+        text: `${this.tDateUpdated} ${this.tLeastRecent}`,
+      },
+      {
+        key: '-id',
+        text: `${this.tDateCreated} ${this.tMostRecent}`,
       },
       {
         key: 'id',
-        text: tDateCreated,
+        text: `${this.tDateCreated} ${this.tLeastRecent}`,
       },
       {
-        key: 'packageName',
-        text: tPackageName,
+        key: '-package_name',
+        text: `${this.tPackageName} (Z -> A)`,
+      },
+      {
+        key: 'package_name',
+        text: `${this.tPackageName} (A -> Z)`,
       },
     ];
-
-    const keyObjectsWithReverse = [];
-
-    for (let keyObject of Array.from(keyObjects)) {
-      for (let reverse of [true, false]) {
-        const keyObjectFull = {};
-        keyObjectFull.reverse = reverse;
-        keyObjectFull.key = keyObject.key;
-        keyObjectFull.text = keyObject.text;
-        if (reverse) {
-          if (['lastFileCreatedOn', 'id'].includes(keyObject.key)) {
-            keyObjectFull.text += tMostRecent;
-          } else {
-            keyObjectFull.text += '(Z -> A)';
-          }
-        } else {
-          if (['lastFileCreatedOn', 'id'].includes(keyObject.key)) {
-            keyObjectFull.text += tLeastRecent;
-          } else {
-            keyObjectFull.text += '(A -> Z)';
-          }
-        }
-        keyObjectsWithReverse.push(keyObjectFull);
-      }
-    }
-    return keyObjectsWithReverse;
   }
 
   get platformObjects() {
     return ENUMS.PLATFORM.CHOICES.slice(0, +-4 + 1 || undefined);
   }
 
-  _resetOffset() {
+  @action
+  handlePrevNextAction({ limit, offset }) {
+    this.limit = limit;
+    this.offset = offset;
+
+    this.projectService.fetchProjects.perform(
+      limit,
+      offset,
+      this.query,
+      this.sortKey,
+      this.platform,
+      this.team
+    );
+  }
+
+  @action
+  handleItemPerPageChange({ limit }) {
+    this.limit = limit;
     this.offset = 0;
+
+    this.projectService.fetchProjects.perform(
+      limit,
+      0,
+      this.query,
+      this.sortKey,
+      this.platform,
+      this.team
+    );
   }
 
   @action sortProjects(event) {
-    const [sortingKey, sortingReversed] = filterPlatformValues(
-      event?.target?.value
+    this.sortKey = event?.target?.value;
+    this.offset = 0;
+
+    this.projectService.fetchProjects.perform(
+      this.limit,
+      0,
+      this.query,
+      this.sortKey,
+      this.platform,
+      this.team
     );
-    this.sortingKey = sortingKey;
-    this.sortingReversed = sortingReversed;
-    this.reload();
   }
 
   @action filterPlatform(event) {
-    this.isLoading = true; // state will be updated in the paginate mixin
-    this.platformType = event?.target?.value;
-    this._resetOffset();
-    this.reload();
+    this.platform = parseInt(event?.target?.value);
+    this.offset = 0;
+
+    this.projectService.fetchProjects.perform(
+      this.limit,
+      0,
+      this.query,
+      this.sortKey,
+      this.platform,
+      this.team
+    );
   }
 
   @action onSelectTeam(team) {
-    this.isLoading = true; // state will be updated in the paginate mixin
     this.selectedTeam = team;
-    this._resetOffset();
-    this.reload();
+    this.team = team?.id || '';
+
+    this.projectService.fetchProjects.perform(
+      this.limit,
+      0,
+      this.query,
+      this.sortKey,
+      this.platform,
+      this.team
+    );
   }
 
   @action onOpenTFilter() {
@@ -229,10 +215,19 @@ export default class ProjectListComponent extends PaginationMixin(Component) {
   }
 
   @action onQueryChange(event) {
-    this.tempQuery = event.target.value;
-    if (this.tempQuery.length >= INPUT.MIN_LENGTH || this.tempQuery === '') {
-      this.query = this.tempQuery;
-      this.reload();
+    const query = event.target.value;
+
+    if (query.length >= INPUT.MIN_LENGTH || query === '') {
+      this.query = query;
+
+      this.projectService.fetchProjects.perform(
+        this.limit,
+        0,
+        this.query,
+        this.sortKey,
+        this.platform,
+        this.team
+      );
     }
   }
 
@@ -241,16 +236,17 @@ export default class ProjectListComponent extends PaginationMixin(Component) {
    * @param {String} teamName
    * Method to query all the matching teams with given name
    */
-  @task(function* (query) {
+  queryTeams = task(async (query) => {
     const teamList = [this.defaultTeam];
-    const teams = yield this.store.query('organization-team', query);
+    const teams = await this.store.query('organization-team', query);
+
     teams.forEach((team) => {
       teamList.push({
         name: team.name,
         id: team.id,
       });
     });
+
     this.teams = teamList;
-  })
-  queryTeams;
+  });
 }
