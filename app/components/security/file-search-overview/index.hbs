@@ -1,0 +1,34 @@
+<tr>
+  <td>
+    {{@file.id}}
+  </td>
+  <td>
+    {{@file.name}}
+  </td>
+
+  <td class='table-button'>
+    <LinkTo
+      @route='authenticated.security.file'
+      @model={{@file.id}}
+      class='button mp-all-scans is-primary'
+    >
+      View
+    </LinkTo>
+  </td>
+
+  <td>
+    <button
+      disabled={{this.triggerDownloadApp.isRunning}}
+      class='button mp-all-scans is-primary'
+      type='button'
+      {{on 'click' this.downloadApp}}
+    >
+      {{#if this.triggerDownloadApp.isRunning}}
+        <AkLoader @size={{13}} class='mr-1' />
+      {{/if}}
+
+      Download
+      {{@file.fileFormatDisplay}}
+    </button>
+  </td>
+</tr>

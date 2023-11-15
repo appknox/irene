@@ -1,0 +1,15 @@
+<div>
+  <div class='tabs is-medium is-boxed is-centered margin-top50 mb-3'>
+    <ul>
+      {{#each this.menuItems as |item|}}
+        <li class={{if item.isActive 'is-active'}}>
+          <LinkTo @route={{item.route}}>
+            {{item.label}}
+          </LinkTo>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+</div>
+
+{{yield}}

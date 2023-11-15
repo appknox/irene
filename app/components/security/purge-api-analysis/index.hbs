@@ -1,0 +1,39 @@
+<div class='columns'>
+  <div class='column is-one-third margin-auto'>
+    <div class='box margin-top10'>
+      <h3>
+        Purge API Analyses
+      </h3>
+
+      <h6>
+        Please enter the id of the file you want to purge off API Analyses
+      </h6>
+
+      <form class='input-form'>
+        <div class='control'>
+          <Input
+            id='file-id-input'
+            class='form-control input'
+            placeholder={{'Enter the file ID'}}
+            @type='text'
+            @value={{this.fileNumber}}
+          />
+        </div>
+
+        <button
+          disabled={{this.isPurgingAPIAnalyses}}
+          class='button is-primary
+            {{if this.isPurgingAPIAnalyses "no-hover-button"}}'
+          type='button'
+          {{on 'click' (perform this.purgeAPIAnalyses)}}
+        >
+          {{#if this.isPurgingAPIAnalyses}}
+            <AkLoader @size={{13}} class='mr-1' />
+          {{/if}}
+
+          SUBMIT
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

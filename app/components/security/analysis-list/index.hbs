@@ -1,0 +1,32 @@
+<div class='table-container'>
+  <table class='security-list-table'>
+    <thead class='w-full'>
+      <tr>
+        <th>
+          Analysis ID
+        </th>
+        <th>
+          Vulnerability
+        </th>
+        <th>
+          Risk
+        </th>
+        <th>
+          Scan Type
+        </th>
+        <th>
+          Status
+        </th>
+      </tr>
+    </thead>
+
+    <tbody class='w-full'>
+      {{#each this.sortedAnalyses as |analysis|}}
+        <Security::AnalysisOverview
+          @analysis={{analysis}}
+          @fileDetails={{@fileDetails}}
+        />
+      {{/each}}
+    </tbody>
+  </table>
+</div>
