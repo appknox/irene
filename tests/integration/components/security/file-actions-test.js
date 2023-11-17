@@ -30,8 +30,10 @@ module('Integration | Component | file-actions', function (hooks) {
       name: 'MFVA',
     });
 
-    await render(hbs`<FileActions @file={{this.file}} />`);
+    await render(hbs`<Security::FileActions @file={{this.file}} />`);
+
     assert.dom('[data-test-file-actions-container]').exists();
+
     assert
       .dom('[data-test-file-actions-name-id]')
       .exists()
@@ -55,7 +57,7 @@ module('Integration | Component | file-actions', function (hooks) {
       name: 'Appknox-MFVA',
     });
 
-    await render(hbs`<FileActions @file={{this.file}} />`);
+    await render(hbs`<Security::FileActions @file={{this.file}} />`);
     assert.dom('[data-test-manual-scan-statuses]').doesNotExist();
   });
 });

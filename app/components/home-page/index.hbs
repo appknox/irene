@@ -4,7 +4,10 @@
       @user={{@user}}
       @logoutAction={{this.invalidateSession}}
     />
-    <SecuritySplit />
+
+    <Security::NavMenu>
+      {{yield}}
+    </Security::NavMenu>
   {{else}}
     <HomePage::OrganizationDashboard
       @isSecurityEnabled={{this.isSecurityEnabled}}

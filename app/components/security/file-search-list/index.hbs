@@ -1,0 +1,106 @@
+<div class='columns'>
+  <div class='column table-container'>
+    <div class='columns'>
+      <div class='column back-link'>
+        <AkLink
+          @underline='none'
+          @color='primary'
+          @route='authenticated.security.projects'
+        >
+          <AkStack @direction='row' @alignItems='center'>
+            <AkIcon @iconName='arrow-left' />
+            Back to Projects
+          </AkStack>
+        </AkLink>
+      </div>
+
+      <div class='column list-heading'>
+        LIST OF FILES
+      </div>
+    </div>
+  </div>
+</div>
+
+<AkStack @direction='column' @width='full' @alignItems='center'>
+  <AkPaginationProvider
+    @results={{this.sortedSecurityFiles}}
+    @onItemPerPageChange={{this.handleItemPerPageChange}}
+    @totalItems={{this.totalFiles}}
+    @nextAction={{this.handlePrevNextAction}}
+    @prevAction={{this.handlePrevNextAction}}
+    @itemPerPageOptions={{array 10 25 50}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    as |pgc|
+  >
+    {{#if this.fetchSecurityFiles.isRunning}}
+      <AkStack
+        @width='6/12'
+        @justifyContent='center'
+        @alignItems='center'
+        @spacing='1'
+        class='my-6 empty-state'
+      >
+        <AkLoader @size={{16}} />
+
+        <AkTypography @variant='h6' @fontWeight='light'>
+          Loading...
+        </AkTypography>
+      </AkStack>
+
+    {{else if this.hasNoSecurityFiles}}
+      <div class='column is-fullwidth no-project-container'>
+        <h4 class='capitalize-text text-centre'>
+          {{t 'noFiles'}}
+        </h4>
+      </div>
+
+    {{else}}
+      <AkStack @width='6/12' @justifyContent='center'>
+        <table class='security-list-table'>
+          <thead>
+            <tr>
+              <th>
+                File ID
+              </th>
+              <th>
+                File Name
+              </th>
+              <th>
+                View
+              </th>
+              <th>
+                Action
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {{#each this.sortedSecurityFiles as |file|}}
+              <Security::FileSearchOverview @file={{file}} />
+            {{/each}}
+          </tbody>
+        </table>
+      </AkStack>
+
+      {{#unless this.hidePagination}}
+        <AkStack @width='6/12' class='pb-6'>
+          <AkPagination
+            @disableNext={{pgc.disableNext}}
+            @nextAction={{pgc.nextAction}}
+            @disablePrev={{pgc.disablePrev}}
+            @prevAction={{pgc.prevAction}}
+            @endItemIdx={{pgc.endItemIdx}}
+            @startItemIdx={{pgc.startItemIdx}}
+            @itemPerPageOptions={{pgc.itemPerPageOptions}}
+            @onItemPerPageChange={{pgc.onItemPerPageChange}}
+            @selectedOption={{pgc.selectedOption}}
+            @tableItemLabel={{t 'files'}}
+            @perPageTranslation={{t 'recordPerPage'}}
+            @totalItems={{pgc.totalItems}}
+          />
+        </AkStack>
+      {{/unless}}
+    {{/if}}
+  </AkPaginationProvider>
+</AkStack>

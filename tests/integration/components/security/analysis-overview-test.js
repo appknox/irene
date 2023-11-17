@@ -44,11 +44,15 @@ module('Integration | Component | analysis-overview', function (hooks) {
       status: ENUMS.ANALYSIS_STATUS.COMPLETED,
     });
 
-    await render(hbs`<AnalysisOverview  @analysis={{this.analysis }}/>`);
+    await render(
+      hbs`<Security::AnalysisOverview  @analysis={{this.analysis }}/>`
+    );
+
     assert
       .dom('[data-test-analysis-id]')
       .exists()
       .hasTextContaining(this.analysis.id);
+
     assert
       .dom('[data-test-analysis-vulnerability-name]')
       .exists()
@@ -58,6 +62,7 @@ module('Integration | Component | analysis-overview', function (hooks) {
       .dom('[data-test-analysis-risk]')
       .exists()
       .hasTextContaining(`${riskText([this.analysis.risk])}`);
+
     assert
       .dom('[data-test-analysis-status]')
       .exists()
