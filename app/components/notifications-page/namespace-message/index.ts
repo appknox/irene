@@ -3,20 +3,35 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import Store from '@ember-data/store';
 import { task } from 'ember-concurrency';
+
 import MeService from 'irene/services/me';
 import OrganizationNamespaceModel from 'irene/models/organization-namespace';
-import { NfNsreqstd1Context } from './context';
 import UserModel from 'irene/models/user';
 import OrganizationUserModel from 'irene/models/organization-user';
 
-interface NfNsreqstd1ComponentArgs {
-  context: NfNsreqstd1Context;
+import { NfNsreqstd2Context } from '../messages/nf-nsreqstd2/context';
+import { NfNsreqstd1Context } from '../messages/nf-nsreqstd1/context';
+import { NfStrUrlNsreqstd2Context } from '../messages/nf-str-url-nsreqstd2/context';
+import { NfStrUrlNsreqstd1Context } from '../messages/nf-str-url-nsreqstd1/context';
+
+interface NotificationsPageNamespaceMessageSignature {
+  Args: {
+    context:
+      | NfNsreqstd2Context
+      | NfNsreqstd1Context
+      | NfStrUrlNsreqstd2Context
+      | NfStrUrlNsreqstd1Context;
+    primaryMessage: string;
+  };
+  Blocks: {
+    approved: [{ moderaterName: string }];
+    rejected: [];
+  };
 }
 
-export default class NfNsreqstd1Component extends Component<NfNsreqstd1ComponentArgs> {
+export default class NotificationsPageNamespaceMessageComponent extends Component<NotificationsPageNamespaceMessageSignature> {
   @service declare store: Store;
   @service declare me: MeService;
-  @service declare notification: NotificationService;
 
   @tracked namespace?: OrganizationNamespaceModel | null;
   @tracked currentUser?: UserModel;
@@ -31,13 +46,16 @@ export default class NfNsreqstd1Component extends Component<NfNsreqstd1Component
       await this.fetchNamespace.perform(),
       await this.me.user(),
     ]);
+
     const approver = await namespace?.approvedBy;
+
     this.approver = approver;
     this.currentUser = user;
   });
 
   fetchNamespace = task({ drop: true }, async () => {
     const namespace_id = this.context.namespace_id;
+
     try {
       this.namespace = await this.store.findRecord(
         'organization-namespace',
@@ -46,12 +64,14 @@ export default class NfNsreqstd1Component extends Component<NfNsreqstd1Component
     } catch (err: unknown) {
       this.namespace = null;
     }
+
     return this.namespace;
   });
 
   get namespaceModeratorDisplay(): string {
     const currentUsername = this.currentUser?.username;
     const approverUsername = this.approver?.username || '';
+
     if (!currentUsername) {
       return approverUsername;
     }
@@ -59,25 +79,32 @@ export default class NfNsreqstd1Component extends Component<NfNsreqstd1Component
     if (currentUsername == approverUsername) {
       return 'You';
     }
+
     return approverUsername;
   }
 
   approveNamespace = task(async () => {
     const ns = this.namespace;
+
     if (!ns) {
       return;
     }
+
     ns.isApproved = true;
+
     await ns.save();
     await this.fetch.perform();
   });
 
   rejectNamespace = task(async () => {
     const ns = this.namespace;
+
     if (!ns) {
       return;
     }
+
     ns.deleteRecord();
+
     await ns.save();
     await this.fetch.perform();
   });
@@ -86,6 +113,7 @@ export default class NfNsreqstd1Component extends Component<NfNsreqstd1Component
     if (!this.namespace) {
       return false;
     }
+
     return this.namespace.isApproved;
   }
 
@@ -93,6 +121,7 @@ export default class NfNsreqstd1Component extends Component<NfNsreqstd1Component
     if (this.namespace == null) {
       return true;
     }
+
     return false;
   }
 
@@ -100,10 +129,17 @@ export default class NfNsreqstd1Component extends Component<NfNsreqstd1Component
     if (!this.namespace) {
       return false;
     }
+
     return !!this.namespace.isApproved;
   }
 
   get isLoading() {
     return this.fetchNamespace.isRunning;
+  }
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    'NotificationsPage::NamespaceMessage': typeof NotificationsPageNamespaceMessageComponent;
   }
 }

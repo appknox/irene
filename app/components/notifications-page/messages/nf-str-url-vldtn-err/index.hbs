@@ -1,0 +1,39 @@
+<AkStack @direction='column' @spacing='1'>
+  <AkTypography data-test-nf-str-url-vldtn-err-primary-message>
+    {{t
+      'notificationModule.messages.nf-str-url-vldtn-err'
+      htmlSafe=true
+      store_name=(store-name-for-url @context.store_url)
+    }}
+  </AkTypography>
+
+  <div local-class='error-container'>
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <AkIcon @color='error' @iconName='warning' @size='small' />
+
+      <AkTypography
+        data-test-nf-str-url-vldtn-err-errorLabel
+        @variant='subtitle2'
+      >
+        {{t 'errorMessage'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkTypography data-test-nf-str-url-vldtn-err-errorValue class='mt-1'>
+      {{@context.error_message}}
+    </AkTypography>
+  </div>
+
+  <div data-test-nf-str-url-vldtn-err-link>
+    <AkLink
+      @color='primary'
+      @underline='always'
+      target='_blank'
+      href={{@context.store_url}}
+      rel='noopener noreferrer'
+      @title={{t 'notificationModule.viewAppOnStore'}}
+    >
+      {{t 'notificationModule.viewAppOnStore'}}
+    </AkLink>
+  </div>
+</AkStack>

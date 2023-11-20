@@ -18,6 +18,17 @@ import { NfDastcmpltd1Context } from './messages/nf-dastcmpltd1/context';
 import { NfApistcmpltd1Context } from './messages/nf-apistcmpltd1/context';
 import { NfAmNewversnContext } from './messages/nf-am-newversn/context';
 import { NfSbomcmpltdContext } from './messages/nf-sbomcmpltd/context';
+import { NfStrUrlUpldfailpayrq1Context } from './messages/nf-str-url-upldfailpayrq1/context';
+import { NfStrUrlUpldfailpay2Context } from './messages/nf-str-url-upldfailpay2/context';
+import { NfStrUrlUpldfailnscreatd1Context } from './messages/nf-str-url-upldfailnscreatd1/context';
+import { NfStrUrlNsreqstd1Context } from './messages/nf-str-url-nsreqstd1/context';
+import { NfStrUrlUpldfailnsunaprv1Context } from './messages/nf-str-url-upldfailnsunaprv1/context';
+import { NfStrUrlNsreqstd2Context } from './messages/nf-str-url-nsreqstd2/context';
+import { NfStrUrlUpldfailnprjdeny1Context } from './messages/nf-str-url-upldfailnprjdeny1/context';
+import { NfStrUrlUpldfailnprjdeny2Context } from './messages/nf-str-url-upldfailnprjdeny2/context';
+import { NfStrUrlVldtnErrContext } from './messages/nf-str-url-vldtn-err/context';
+import { NfStrUrlUploadSuccessContext } from './messages/nf-str-url-upload-success/context';
+import { NfSystmFileUploadSuccessContext } from './messages/nf-systm-file-upload-success/context';
 
 export const NotificationMap = {
   ERROR: {
@@ -99,6 +110,55 @@ export const NotificationMap = {
   NF_SBOMCMPLTD: {
     component: 'notifications-page/messages/nf-sbomcmpltd' as const,
     context: NfSbomcmpltdContext,
+  },
+  NF_STR_URL_UPLDFAILPAYRQ1: {
+    component: 'notifications-page/messages/nf-str-url-upldfailpayrq1' as const,
+    context: NfStrUrlUpldfailpayrq1Context,
+  },
+  NF_STR_URL_UPLDFAILPAY2: {
+    component: 'notifications-page/messages/nf-str-url-upldfailpay2' as const,
+    context: NfStrUrlUpldfailpay2Context,
+  },
+  NF_STR_URL_UPLDFAILNSCREATD1: {
+    component:
+      'notifications-page/messages/nf-str-url-upldfailnscreatd1' as const,
+    context: NfStrUrlUpldfailnscreatd1Context,
+  },
+  NF_STR_URL_NSREQSTD1: {
+    component: 'notifications-page/messages/nf-str-url-nsreqstd1' as const,
+    context: NfStrUrlNsreqstd1Context,
+  },
+  NF_STR_URL_UPLDFAILNSUNAPRV1: {
+    component:
+      'notifications-page/messages/nf-str-url-upldfailnsunaprv1' as const,
+    context: NfStrUrlUpldfailnsunaprv1Context,
+  },
+  NF_STR_URL_NSREQSTD2: {
+    component: 'notifications-page/messages/nf-str-url-nsreqstd2' as const,
+    context: NfStrUrlNsreqstd2Context,
+  },
+  NF_STR_URL_UPLDFAILNPRJDENY1: {
+    component:
+      'notifications-page/messages/nf-str-url-upldfailnprjdeny1' as const,
+    context: NfStrUrlUpldfailnprjdeny1Context,
+  },
+  NF_STR_URL_UPLDFAILNPRJDENY2: {
+    component:
+      'notifications-page/messages/nf-str-url-upldfailnprjdeny2' as const,
+    context: NfStrUrlUpldfailnprjdeny2Context,
+  },
+  NF_STR_URL_VLDTN_ERR: {
+    component: 'notifications-page/messages/nf-str-url-vldtn-err' as const,
+    context: NfStrUrlVldtnErrContext,
+  },
+  NF_STR_URL_UPLOAD_SUCCESS: {
+    component: 'notifications-page/messages/nf-str-url-upload-success' as const,
+    context: NfStrUrlUploadSuccessContext,
+  },
+  NF_SYSTM_FILE_UPLOAD_SUCCESS: {
+    component:
+      'notifications-page/messages/nf-systm-file-upload-success' as const,
+    context: NfSystmFileUploadSuccessContext,
   },
 } satisfies Record<string, { component: string; context: unknown }>;
 

@@ -7,13 +7,13 @@ import { hbs } from 'ember-cli-htmlbars';
 import { NotificationMap } from 'irene/components/notifications-page/notification_map';
 
 module(
-  'Integration | Component | notifications-page/messages/nf-nsreqstd2',
+  'Integration | Component | notifications-page/messages/nf-str-url-nsreqstd2',
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
     setupIntl(hooks);
 
-    const ContextClass = NotificationMap['NF_NSREQSTD2'].context;
+    const ContextClass = NotificationMap['NF_STR_URL_NSREQSTD2'].context;
 
     hooks.beforeEach(async function () {
       const organization = this.server.create('organization', {});
@@ -68,7 +68,7 @@ module(
 
       this.notification = this.server.create('nf-in-app-notification', {
         hasRead: true,
-        messageCode: 'NF_NSREQSTD2',
+        messageCode: 'NF_STR_URL_NSREQSTD2',
         context: new ContextClass({
           namespace_id: namespace.id,
           namespace_created_on: new Date(),
@@ -82,11 +82,11 @@ module(
 
       this.context = this.notification.context;
 
-      await render(hbs`<NotificationsPage::Messages::NfNsreqstd2 @notification={{this.notification}}
+      await render(hbs`<NotificationsPage::Messages::NfStrUrlNsreqstd2 @notification={{this.notification}}
       @context={{this.context}}/>`);
 
       assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
-        t('notificationModule.messages.nf-nsreqstd2', {
+        t('notificationModule.messages.nf-str-url-nsreqstd2', {
           current_requester_username: 'appknox_requester',
           platform_display: 'android',
           namespace_value: 'com.mfva.test',
@@ -134,7 +134,7 @@ module(
 
       this.notification = this.server.create('nf-in-app-notification', {
         hasRead: true,
-        messageCode: 'NF_NSREQSTD2',
+        messageCode: 'NF_STR_URL_NSREQSTD2',
         context: new ContextClass({
           namespace_id: namespace.id,
           namespace_created_on: new Date(),
@@ -148,11 +148,11 @@ module(
 
       this.context = this.notification.context;
 
-      await render(hbs`<NotificationsPage::Messages::NfNsreqstd2 @notification={{this.notification}}
+      await render(hbs`<NotificationsPage::Messages::NfStrUrlNsreqstd2 @notification={{this.notification}}
       @context={{this.context}}/>`);
 
       assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
-        t('notificationModule.messages.nf-nsreqstd2', {
+        t('notificationModule.messages.nf-str-url-nsreqstd2', {
           current_requester_username: 'appknox_requester',
           platform_display: 'android',
           namespace_value: 'com.mfva.test',
@@ -175,7 +175,7 @@ module(
     test('it should show rejected state if namespace is rejected', async function (assert) {
       this.notification = this.server.create('nf-in-app-notification', {
         hasRead: true,
-        messageCode: 'NF_NSREQSTD2',
+        messageCode: 'NF_STR_URL_NSREQSTD2',
         context: new ContextClass({
           namespace_id: 2000,
           namespace_created_on: new Date(),
@@ -189,11 +189,11 @@ module(
 
       this.context = this.notification.context;
 
-      await render(hbs`<NotificationsPage::Messages::NfNsreqstd2 @notification={{this.notification}}
+      await render(hbs`<NotificationsPage::Messages::NfStrUrlNsreqstd2 @notification={{this.notification}}
       @context={{this.context}}/>`);
 
       assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
-        t('notificationModule.messages.nf-nsreqstd2', {
+        t('notificationModule.messages.nf-str-url-nsreqstd2', {
           current_requester_username: 'appknox_requester',
           platform_display: 'android',
           namespace_value: 'com.mfva.test',
@@ -234,7 +234,7 @@ module(
 
       this.notification = this.server.create('nf-in-app-notification', {
         hasRead: true,
-        messageCode: 'NF_NSREQSTD2',
+        messageCode: 'NF_STR_URL_NSREQSTD2',
         context: new ContextClass({
           namespace_id: namespace.id,
           namespace_created_on: new Date(),
@@ -248,11 +248,11 @@ module(
 
       this.context = this.notification.context;
 
-      await render(hbs`<NotificationsPage::Messages::NfNsreqstd2 @notification={{this.notification}}
+      await render(hbs`<NotificationsPage::Messages::NfStrUrlNsreqstd2 @notification={{this.notification}}
       @context={{this.context}}/>`);
 
       assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
-        t('notificationModule.messages.nf-nsreqstd2', {
+        t('notificationModule.messages.nf-str-url-nsreqstd2', {
           current_requester_username: 'appknox_requester',
           platform_display: 'android',
           namespace_value: 'com.mfva.test',
@@ -296,7 +296,7 @@ module(
 
       this.notification = this.server.create('nf-in-app-notification', {
         hasRead: true,
-        messageCode: 'NF_NSREQSTD2',
+        messageCode: 'NF_STR_URL_NSREQSTD2',
         context: new ContextClass({
           namespace_id: namespace.id,
           namespace_created_on: new Date(),
@@ -310,11 +310,11 @@ module(
 
       this.context = this.notification.context;
 
-      await render(hbs`<NotificationsPage::Messages::NfNsreqstd2 @notification={{this.notification}}
+      await render(hbs`<NotificationsPage::Messages::NfStrUrlNsreqstd2 @notification={{this.notification}}
       @context={{this.context}}/>`);
 
       assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
-        t('notificationModule.messages.nf-nsreqstd2', {
+        t('notificationModule.messages.nf-str-url-nsreqstd2', {
           current_requester_username: 'appknox_requester',
           platform_display: 'android',
           namespace_value: 'com.mfva.test',
@@ -340,7 +340,7 @@ module(
       assert.dom('[data-test-namespaceMessage-reject-button]').doesNotExist();
 
       assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
-        t('notificationModule.messages.nf-nsreqstd2', {
+        t('notificationModule.messages.nf-str-url-nsreqstd2', {
           current_requester_username: 'appknox_requester',
           platform_display: 'android',
           namespace_value: 'com.mfva.test',
@@ -382,7 +382,7 @@ module(
 
       this.notification = this.server.create('nf-in-app-notification', {
         hasRead: true,
-        messageCode: 'NF_NSREQSTD2',
+        messageCode: 'NF_STR_URL_NSREQSTD2',
         context: new ContextClass({
           namespace_id: namespace.id,
           namespace_created_on: new Date(),
@@ -396,11 +396,11 @@ module(
 
       this.context = this.notification.context;
 
-      await render(hbs`<NotificationsPage::Messages::NfNsreqstd2 @notification={{this.notification}}
+      await render(hbs`<NotificationsPage::Messages::NfStrUrlNsreqstd2 @notification={{this.notification}}
       @context={{this.context}}/>`);
 
       assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
-        t('notificationModule.messages.nf-nsreqstd2', {
+        t('notificationModule.messages.nf-str-url-nsreqstd2', {
           current_requester_username: 'appknox_requester',
           platform_display: 'android',
           namespace_value: 'com.mfva.test',
@@ -426,7 +426,7 @@ module(
       assert.dom('[data-test-namespaceMessage-reject-button]').doesNotExist();
 
       assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
-        t('notificationModule.messages.nf-nsreqstd2', {
+        t('notificationModule.messages.nf-str-url-nsreqstd2', {
           current_requester_username: 'appknox_requester',
           platform_display: 'android',
           namespace_value: 'com.mfva.test',

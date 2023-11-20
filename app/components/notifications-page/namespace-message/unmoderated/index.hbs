@@ -1,0 +1,29 @@
+<AkStack class='mt-1' @alignItems='center' @spacing='1'>
+  <AkButton
+    data-test-namespaceMessage-approve-button
+    @color='primary'
+    {{on 'click' @onApprove}}
+  >
+    {{t 'approve'}}
+  </AkButton>
+
+  <AkButton
+    data-test-namespaceMessage-reject-button
+    @color='neutral'
+    @variant='outlined'
+    {{on 'click' @onReject}}
+  >
+    {{t 'reject'}}
+  </AkButton>
+</AkStack>
+
+<div class='mt-1' data-test-namespaceMessage-link>
+  <AkLink
+    @color='primary'
+    @route='authenticated.organization.namespaces'
+    @underline='always'
+    @title='{{t "notificationModule.viewNamespaces"}}'
+  >
+    {{t 'notificationModule.viewNamespaces'}}
+  </AkLink>
+</div>

@@ -1,12 +1,12 @@
 <NotificationsPage::NamespaceMessage
   @context={{@context}}
   @primaryMessage={{t
-    'notificationModule.messages.nf-nsreqstd2'
+    'notificationModule.messages.nf-str-url-nsreqstd2'
     htmlSafe=true
     current_requester_username=@context.current_requester_username
+    initial_requester_username=@context.initial_requester_username
     platform_display=@context.platform_display
     namespace_value=@context.namespace_value
-    initial_requester_username=@context.initial_requester_username
     namespace_created_on=(format-date
       @context.namespace_created_on day='numeric' month='long' year='numeric'
     )
