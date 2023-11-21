@@ -6,15 +6,18 @@ export default class NfInAppNotificationAdapter extends commondrf {
   }
   _buildURL(modelName: string, id: number | string) {
     const baseurl = this.baseurl;
+
     if (id) {
       return this.buildURLFromBase(`${baseurl}/${encodeURIComponent(id)}`);
     }
+
     return this.buildURLFromBase(baseurl);
   }
 
   markAllAsRead() {
     const baseurl = this.baseurl;
     const url = this.buildURLFromBase(`${baseurl}/mark_all_as_read`);
+
     return this.ajax(url, 'POST');
   }
 }
