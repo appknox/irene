@@ -76,6 +76,7 @@
   "approvalStatus": "Approval",
   "approve": "Approve",
   "apps": " Apps",
+  "appleAppstoreLowercase": "apple appstore",
   "application": "Application",
   "assignTeam": "Assign Team",
   "asvs": "ASVS",
@@ -286,6 +287,7 @@
   "errorWhileFetching": "Error while fetching signed url",
   "errorWhileUploading": "Error while uploading file to presigned URL",
   "errored": "Errored",
+  "errorMessage": "Error message",
   "excelReport": "Excel Report",
   "experimentalFeature": "Experimental Feature",
   "expired": "Expired ",
@@ -710,16 +712,8 @@
       "nf-nsautoapprvd2": "{platform_display} <strong>namespace {namespace_value}</strong> requested by {requester_username} was <strong>auto approved</strong>.",
       "nf-nsrejctd1": "Your <strong>namespace request</strong> for {platform_display} app <strong>{namespace_value}</strong> created on {namespace_created_on} was <strong>not approved</strong>.",
       "nf-nsrejctd2": "{platform_display} <strong>namespace {namespace_value}</strong> requested by {requester_username} was <strong>rejected</strong> by {moderator_username}.",
-      "nf-nsreqstd1": {
-        "primary": "{requester_username} has <strong>requested for {platform_display} namespace {namespace_value}</strong>.",
-        "approved": "{moderaterName} approved this namespace",
-        "rejected": "This namespace was rejected"
-      },
-      "nf-nsreqstd2": {
-        "primary": "{current_requester_username} has <strong>requested for an unapproved {platform_display} namespace {namespace_value}</strong> (initially requested by {initial_requester_username} on {namespace_created_on}).",
-        "approved": "{moderaterName} approved this namespace",
-        "rejected": "This namespace was rejected"
-      },
+      "nf-nsreqstd1": "{requester_username} has <strong>requested for {platform_display} namespace {namespace_value}</strong>.",
+      "nf-nsreqstd2": "{current_requester_username} has <strong>requested for an unapproved {platform_display} namespace {namespace_value}</strong> (initially requested by {initial_requester_username} on {namespace_created_on}).",
       "nf-sastcmpltd1": "<strong>Static scan completed</strong> for {platform_display} app <strong>{file_name} ({package_name})</strong>.",
       "nf-sbomcmpltd": {
         "prefix": "<strong>SBOM generated successfully</strong> for the ",
@@ -733,8 +727,32 @@
       },
       "nf-upldfailnscreatd1": "Your {platform_display} app upload of {namespace_value} <strong>failed due to non-existent namespace</strong>. New namespace request has been submitted to your organization owner for approval.",
       "nf-upldfailnsunaprv1": "Your upload of {platform_display} app {namespace_value} <strong>failed due to unapproved namespace</strong>.",
-      "nf-upldfailpay2": "App {package_name} upload by {requester_username} <strong>failed due to insufficient payment credits</strong>.",
-      "nf-upldfailpayrq1": "Failed to upload app {package_name}. Your organization has <strong>no payment credits</strong> left."
+      "nf-upldfailpay2": "App {package_name} upload by {requester_username} <strong>failed due to insufficient payment credits</strong>. Please upgrade your plan.",
+      "nf-upldfailpayrq1": "Failed to upload app {package_name}. Your organization has <strong>no payment credits</strong> left. Please upgrade your plan.",
+      "nf-str-url-upload-success": {
+        "prefix": "Your {platform_display} app upload of <strong>{package_name}</strong> from {store_name} is <strong>successful</strong>. Please go to the ",
+        "suffix": " to perform the vulnerability assessment."
+      },
+      "nf-systm-file-upload-success": {
+        "prefix": "Your {platform_display} app upload of <strong>{package_name}</strong> is <strong>successful</strong>. Please go to the ",
+        "suffix": " to perform the vulnerability assessment."
+      },
+      "nf-str-url-vldtn-err": "The app upload you initiated from the {store_name} has <strong>failed</strong> due to error",
+      "nf-str-url-upldfailnprjdeny1": "The app upload you initiated from {store_name} has <strong>failed due to Namespace Permission Error</strong>. You don't have permission to upload to project <strong>{package_name}</strong>.",
+      "nf-str-url-upldfailnprjdeny2": {
+        "primary": "Upload of {platform_display} app {package_name} by {requester_username} ({requester_role} role) failed. <strong>User does not have access to the project</strong>.",
+        "secondary": "Access can be provided to the user via team or collaborator settings if required"
+      },
+      "nf-str-url-nsreqstd1": "{requester_username} has <strong>requested for {platform_display} namespace {namespace_value}</strong>.",
+      "nf-str-url-nsreqstd2": "{current_requester_username} has <strong>requested for an unapproved {platform_display} namespace {namespace_value}</strong> (initially requested by {initial_requester_username} on {namespace_created_on}).",
+      "nf-str-url-upldfailnsunaprv1": "The app upload you initiated from {store_name} has <strong>failed due to unapproved namespace</strong>.",
+      "nf-str-url-upldfailnscreatd1": "The app upload you initiated from {store_name} has <strong>failed due to non-existent namespace</strong>. New namespace request has been submitted to your organization owner for approval.",
+      "nf-str-url-upldfailpay2": "App {package_name} upload by {requester_username} from {store_name} has <strong>failed due to Insufficient Credits Error</strong>. Please upgrade your plan.",
+      "nf-str-url-upldfailpayrq1": "The app upload you initiated from {store_name} has <strong>failed due to Insufficient Credits Error</strong>. Please upgrade your plan."
+    },
+    "namespaceMessage": {
+      "approved": "{moderaterName} approved this namespace",
+      "rejected": "This namespace was rejected"
     },
     "projectSettings": "Project settings",
     "riskStatus": "Risk status",
@@ -742,7 +760,8 @@
     "viewProjectSettings": "View project settings",
     "viewStoreMonitoring": "View store monitoring",
     "viewStoreMonitoringResults": "View store monitoring results",
-    "viewSBOMResults": "View SBOM results"
+    "viewSBOMResults": "View SBOM results",
+    "viewAppOnStore": "View App on Store"
   },
   "off": "off",
   "ok": "Ok",
@@ -835,6 +854,7 @@
   "planName": "PLAN NAME",
   "plans": "Plans",
   "platform": "Platform",
+  "googlePlaystoreLowercase": "google playstore",
   "pleaseEnterAllDetails": "Please enter all the details",
   "pleaseEnterAnyNamespace": "Please enter any namespace",
   "pleaseEnterValidAccountDetail": "Please enter valid account details",
@@ -1151,6 +1171,7 @@
   "stop": "Stop",
   "storage": "Storage",
   "storageManagement": "Storage Management",
+  "storeLowercase": "store",
   "submitUrl": "Submit URL",
   "subscription": "Subscription",
   "subscriptionCancelled": "Subscription Cancelled Successfully",

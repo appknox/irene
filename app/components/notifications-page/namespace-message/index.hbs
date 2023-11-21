@@ -1,0 +1,29 @@
+<div {{did-insert (perform this.fetch)}}>
+  <AkTypography data-test-namespaceMessage-primary-message>
+    {{@primaryMessage}}
+  </AkTypography>
+
+  {{#if this.isApproved}}
+    {{#if (has-block 'approved')}}
+      {{yield
+        (hash moderaterName=this.namespaceModeratorDisplay)
+        to='approved'
+      }}
+    {{else}}
+      <NotificationsPage::NamespaceMessage::Approved
+        @moderaterName={{this.namespaceModeratorDisplay}}
+      />
+    {{/if}}
+  {{else if this.isRejected}}
+    {{#if (has-block 'rejected')}}
+      {{yield to='rejected'}}
+    {{else}}
+      <NotificationsPage::NamespaceMessage::Rejected />
+    {{/if}}
+  {{else}}
+    <NotificationsPage::NamespaceMessage::Unmoderated
+      @onApprove={{perform this.approveNamespace}}
+      @onReject={{perform this.rejectNamespace}}
+    />
+  {{/if}}
+</div>

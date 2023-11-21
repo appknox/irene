@@ -1,0 +1,23 @@
+<AkStack @direction='column' @spacing='1'>
+  <AkTypography data-test-nf-str-url-upldfailnprjdeny1-primary-message>
+    {{t
+      'notificationModule.messages.nf-str-url-upldfailnprjdeny1'
+      htmlSafe=true
+      package_name=@context.package_name
+      store_name=(store-name-for-url @context.store_url)
+    }}
+  </AkTypography>
+
+  <div data-test-nf-str-url-upldfailnprjdeny1-link>
+    <AkLink
+      @color='primary'
+      @underline='always'
+      target='_blank'
+      href={{@context.store_url}}
+      rel='noopener noreferrer'
+      @title={{t 'notificationModule.viewAppOnStore'}}
+    >
+      {{t 'notificationModule.viewAppOnStore'}}
+    </AkLink>
+  </div>
+</AkStack>

@@ -1,0 +1,14 @@
+<AkStack class='mt-1' @alignItems='center' @spacing='1'>
+  <AkIcon
+    data-test-namespaceMessage-approved-icon
+    @iconName='check-circle'
+    @color='success'
+  />
+
+  <AkTypography data-test-namespaceMessage-approved-message>
+    {{t
+      'notificationModule.namespaceMessage.approved'
+      moderaterName=@moderaterName
+    }}
+  </AkTypography>
+</AkStack>

@@ -1,0 +1,38 @@
+<AkStack @direction='column' @spacing='1'>
+  <div>
+    <AkTypography data-test-nf-str-url-upldfailnprjdeny2-primary-message>
+      {{t
+        'notificationModule.messages.nf-str-url-upldfailnprjdeny2.primary'
+        htmlSafe=true
+        platform_display=@context.platform_display
+        package_name=@context.package_name
+        requester_username=@context.requester_username
+        requester_role=@context.requester_role
+      }}
+    </AkTypography>
+
+    <AkTypography
+      @color='textSecondary'
+      data-test-nf-str-url-upldfailnprjdeny2-secodary-message
+    >
+      <em>
+        ({{t
+          'notificationModule.messages.nf-str-url-upldfailnprjdeny2.secondary'
+        }})
+      </em>
+    </AkTypography>
+  </div>
+
+  <div data-test-nf-str-url-upldfailnprjdeny2-link>
+    <AkLink
+      @color='primary'
+      @underline='always'
+      target='_blank'
+      href={{@context.store_url}}
+      rel='noopener noreferrer'
+      @title={{t 'notificationModule.viewAppOnStore'}}
+    >
+      {{t 'notificationModule.viewAppOnStore'}}
+    </AkLink>
+  </div>
+</AkStack>

@@ -1,0 +1,49 @@
+<AkStack @direction='column' @spacing='1'>
+  <AkTypography data-test-nf-str-url-upload-success-primary-message>
+    {{t
+      'notificationModule.messages.nf-str-url-upload-success.prefix'
+      htmlSafe=true
+      platform_display=@context.platform_display
+      package_name=@context.package_name
+      store_name=(store-name-for-url @context.store_url)
+    }}
+
+    <AkLink
+      {{style verticalAlign='unset'}}
+      @color='primary'
+      @route='authenticated.dashboard.file'
+      @model={{@context.file_id}}
+      @underline='always'
+      @title='{{t "viewFile"}} {{@context.file_id}}'
+    >
+      {{t 'fileID'}}
+      {{@context.file_id}}
+    </AkLink>
+
+    {{t
+      'notificationModule.messages.nf-str-url-upload-success.suffix'
+      htmlSafe=true
+    }}
+  </AkTypography>
+
+  <AkTypography data-test-nf-str-url-upload-success-version @variant='body2'>
+    {{t 'versionLowercase'}}:
+    {{@context.version}}
+    <span local-class='pipe'>|</span>
+    {{t 'versionCode'}}:
+    {{@context.version_code}}
+  </AkTypography>
+
+  <div data-test-nf-str-url-upload-success-link>
+    <AkLink
+      @color='primary'
+      @underline='always'
+      target='_blank'
+      href={{@context.store_url}}
+      rel='noopener noreferrer'
+      @title={{t 'notificationModule.viewAppOnStore'}}
+    >
+      {{t 'notificationModule.viewAppOnStore'}}
+    </AkLink>
+  </div>
+</AkStack>
