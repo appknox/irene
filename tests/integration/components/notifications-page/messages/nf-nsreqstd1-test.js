@@ -84,6 +84,10 @@ module(
       await render(hbs`<NotificationsPage::Messages::NfNsreqstd1 @notification={{this.notification}}
       @context={{this.context}}/>`);
 
+      assert
+        .dom('[data-test-namespaceMessage-title]')
+        .hasText(t('approvalRequest'));
+
       assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
         t('notificationModule.messages.nf-nsreqstd1', {
           requester_username: 'appknox_requester',
@@ -144,6 +148,10 @@ module(
       await render(hbs`<NotificationsPage::Messages::NfNsreqstd1 @notification={{this.notification}}
       @context={{this.context}}/>`);
 
+      assert
+        .dom('[data-test-namespaceMessage-title]')
+        .hasText(t('approvalRequest'));
+
       assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
         t('notificationModule.messages.nf-nsreqstd1', {
           requester_username: 'appknox_requester',
@@ -178,6 +186,10 @@ module(
 
       await render(hbs`<NotificationsPage::Messages::NfNsreqstd1 @notification={{this.notification}}
       @context={{this.context}}/>`);
+
+      assert
+        .dom('[data-test-namespaceMessage-title]')
+        .hasText(t('approvalRequest'));
 
       assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
         t('notificationModule.messages.nf-nsreqstd1', {
@@ -232,6 +244,10 @@ module(
       await render(hbs`<NotificationsPage::Messages::NfNsreqstd1 @notification={{this.notification}}
       @context={{this.context}}/>`);
 
+      assert
+        .dom('[data-test-namespaceMessage-title]')
+        .hasText(t('approvalRequest'));
+
       assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
         t('notificationModule.messages.nf-nsreqstd1', {
           requester_username: 'appknox_requester',
@@ -245,7 +261,7 @@ module(
       assert.dom('[data-test-namespaceMessage-reject-button]').exists();
 
       assert
-        .dom('[data-test-namespaceMessage-link]')
+        .dom('[data-test-namespaceMessage-viewNamespacelink]')
         .exists()
         .hasText(t('notificationModule.viewNamespaces'));
     });
@@ -288,6 +304,10 @@ module(
       await render(hbs`<NotificationsPage::Messages::NfNsreqstd1 @notification={{this.notification}}
       @context={{this.context}}/>`);
 
+      assert
+        .dom('[data-test-namespaceMessage-title]')
+        .hasText(t('approvalRequest'));
+
       assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
         t('notificationModule.messages.nf-nsreqstd1', {
           requester_username: 'appknox_requester',
@@ -297,7 +317,7 @@ module(
       );
 
       assert
-        .dom('[data-test-namespaceMessage-link]')
+        .dom('[data-test-namespaceMessage-viewNamespacelink]')
         .exists()
         .hasText(t('notificationModule.viewNamespaces'));
 
@@ -363,6 +383,10 @@ module(
       await render(hbs`<NotificationsPage::Messages::NfNsreqstd1 @notification={{this.notification}}
       @context={{this.context}}/>`);
 
+      assert
+        .dom('[data-test-namespaceMessage-title]')
+        .hasText(t('approvalRequest'));
+
       assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
         t('notificationModule.messages.nf-nsreqstd1', {
           requester_username: 'appknox_requester',
@@ -372,7 +396,7 @@ module(
       );
 
       assert
-        .dom('[data-test-namespaceMessage-link]')
+        .dom('[data-test-namespaceMessage-viewNamespacelink]')
         .exists()
         .hasText(t('notificationModule.viewNamespaces'));
 

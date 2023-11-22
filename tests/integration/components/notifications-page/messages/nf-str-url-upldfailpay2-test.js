@@ -41,7 +41,7 @@ module(
           t('notificationModule.messages.nf-str-url-upldfailpay2', {
             package_name: this.context.package_name,
             requester_username: this.context.requester_username,
-            store_name: t('googlePlaystoreLowercase'),
+            store_name: t('googlePlayStore'),
           })
         );
 

@@ -77,6 +77,7 @@ module(
           platform_display: 'android',
           initial_requester_username: 'appknox_requester_previous',
           current_requester_username: 'appknox_requester',
+          store_url: 'https://play.google.com/mfva',
         }),
       });
 
@@ -84,6 +85,10 @@ module(
 
       await render(hbs`<NotificationsPage::Messages::NfStrUrlNsreqstd2 @notification={{this.notification}}
       @context={{this.context}}/>`);
+
+      assert
+        .dom('[data-test-namespaceMessage-title]')
+        .hasText(t('approvalRequest'));
 
       assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
         t('notificationModule.messages.nf-str-url-nsreqstd2', {
@@ -103,7 +108,13 @@ module(
           moderaterName: 'You',
         })
       );
+
       assert.dom('[data-test-namespaceMessage-approved-icon]').exists();
+
+      assert
+        .dom('[data-test-namespaceMessage-viewAppOnStorelink]')
+        .exists()
+        .hasText(t('notificationModule.viewAppOnStore'));
     });
 
     test('it should show approved state if namespace is approved', async function (assert) {
@@ -143,6 +154,7 @@ module(
           platform_display: 'android',
           initial_requester_username: 'appknox_requester_previous',
           current_requester_username: 'appknox_requester',
+          store_url: 'https://play.google.com/mfva',
         }),
       });
 
@@ -150,6 +162,10 @@ module(
 
       await render(hbs`<NotificationsPage::Messages::NfStrUrlNsreqstd2 @notification={{this.notification}}
       @context={{this.context}}/>`);
+
+      assert
+        .dom('[data-test-namespaceMessage-title]')
+        .hasText(t('approvalRequest'));
 
       assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
         t('notificationModule.messages.nf-str-url-nsreqstd2', {
@@ -169,7 +185,13 @@ module(
           moderaterName: 'appknox_approver',
         })
       );
+
       assert.dom('[data-test-namespaceMessage-approved-icon]').exists();
+
+      assert
+        .dom('[data-test-namespaceMessage-viewAppOnStorelink]')
+        .exists()
+        .hasText(t('notificationModule.viewAppOnStore'));
     });
 
     test('it should show rejected state if namespace is rejected', async function (assert) {
@@ -184,6 +206,7 @@ module(
           platform_display: 'android',
           initial_requester_username: 'appknox_requester_previous',
           current_requester_username: 'appknox_requester',
+          store_url: 'https://play.google.com/mfva',
         }),
       });
 
@@ -191,6 +214,10 @@ module(
 
       await render(hbs`<NotificationsPage::Messages::NfStrUrlNsreqstd2 @notification={{this.notification}}
       @context={{this.context}}/>`);
+
+      assert
+        .dom('[data-test-namespaceMessage-title]')
+        .hasText(t('approvalRequest'));
 
       assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
         t('notificationModule.messages.nf-str-url-nsreqstd2', {
@@ -210,6 +237,11 @@ module(
         .hasText(t('notificationModule.namespaceMessage.rejected'));
 
       assert.dom('[data-test-namespaceMessage-rejected-icon]').exists();
+
+      assert
+        .dom('[data-test-namespaceMessage-viewAppOnStorelink]')
+        .exists()
+        .hasText(t('notificationModule.viewAppOnStore'));
     });
 
     test('it should show approve and reject for unmoderated namespace', async function (assert) {
@@ -243,6 +275,7 @@ module(
           platform_display: 'android',
           initial_requester_username: 'appknox_requester_previous',
           current_requester_username: 'appknox_requester',
+          store_url: 'https://play.google.com/mfva',
         }),
       });
 
@@ -250,6 +283,10 @@ module(
 
       await render(hbs`<NotificationsPage::Messages::NfStrUrlNsreqstd2 @notification={{this.notification}}
       @context={{this.context}}/>`);
+
+      assert
+        .dom('[data-test-namespaceMessage-title]')
+        .hasText(t('approvalRequest'));
 
       assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
         t('notificationModule.messages.nf-str-url-nsreqstd2', {
@@ -269,9 +306,14 @@ module(
       assert.dom('[data-test-namespaceMessage-reject-button]').exists();
 
       assert
-        .dom('[data-test-namespaceMessage-link]')
+        .dom('[data-test-namespaceMessage-viewNamespacelink]')
         .exists()
         .hasText(t('notificationModule.viewNamespaces'));
+
+      assert
+        .dom('[data-test-namespaceMessage-viewAppOnStorelink]')
+        .exists()
+        .hasText(t('notificationModule.viewAppOnStore'));
     });
 
     test('it should approve namespace when approve is clicked for unmoderated namespace', async function (assert) {
@@ -305,6 +347,7 @@ module(
           platform_display: 'android',
           initial_requester_username: 'appknox_requester_previous',
           current_requester_username: 'appknox_requester',
+          store_url: 'https://play.google.com/mfva',
         }),
       });
 
@@ -312,6 +355,10 @@ module(
 
       await render(hbs`<NotificationsPage::Messages::NfStrUrlNsreqstd2 @notification={{this.notification}}
       @context={{this.context}}/>`);
+
+      assert
+        .dom('[data-test-namespaceMessage-title]')
+        .hasText(t('approvalRequest'));
 
       assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
         t('notificationModule.messages.nf-str-url-nsreqstd2', {
@@ -327,9 +374,14 @@ module(
       );
 
       assert
-        .dom('[data-test-namespaceMessage-link]')
+        .dom('[data-test-namespaceMessage-viewNamespacelink]')
         .exists()
         .hasText(t('notificationModule.viewNamespaces'));
+
+      assert
+        .dom('[data-test-namespaceMessage-viewAppOnStorelink]')
+        .exists()
+        .hasText(t('notificationModule.viewAppOnStore'));
 
       assert.dom('[data-test-namespaceMessage-approve-button]').exists();
       assert.dom('[data-test-namespaceMessage-reject-button]').exists();
@@ -391,6 +443,7 @@ module(
           platform_display: 'android',
           initial_requester_username: 'appknox_requester_previous',
           current_requester_username: 'appknox_requester',
+          store_url: 'https://play.google.com/mfva',
         }),
       });
 
@@ -398,6 +451,10 @@ module(
 
       await render(hbs`<NotificationsPage::Messages::NfStrUrlNsreqstd2 @notification={{this.notification}}
       @context={{this.context}}/>`);
+
+      assert
+        .dom('[data-test-namespaceMessage-title]')
+        .hasText(t('approvalRequest'));
 
       assert.dom('[data-test-namespaceMessage-primary-message]').hasText(
         t('notificationModule.messages.nf-str-url-nsreqstd2', {
@@ -413,9 +470,14 @@ module(
       );
 
       assert
-        .dom('[data-test-namespaceMessage-link]')
+        .dom('[data-test-namespaceMessage-viewNamespacelink]')
         .exists()
         .hasText(t('notificationModule.viewNamespaces'));
+
+      assert
+        .dom('[data-test-namespaceMessage-viewAppOnStorelink]')
+        .exists()
+        .hasText(t('notificationModule.viewAppOnStore'));
 
       assert.dom('[data-test-namespaceMessage-approve-button]').exists();
       assert.dom('[data-test-namespaceMessage-reject-button]').exists();

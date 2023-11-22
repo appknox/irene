@@ -37,7 +37,7 @@ module(
         .exists()
         .hasText(
           t('notificationModule.messages.nf-str-url-vldtn-err', {
-            store_name: t('appleAppstoreLowercase'),
+            store_name: t('appleAppStore'),
           })
         );
 

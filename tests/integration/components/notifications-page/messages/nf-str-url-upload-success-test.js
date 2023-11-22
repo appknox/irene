@@ -44,7 +44,7 @@ module(
           t('notificationModule.messages.nf-str-url-upload-success.prefix', {
             platform_display: this.context.platform_display,
             package_name: this.context.package_name,
-            store_name: t('googlePlaystoreLowercase'),
+            store_name: t('googlePlayStore'),
           })
             .concat(` ${t('fileID')} ${this.context.file_id} `)
             .concat(

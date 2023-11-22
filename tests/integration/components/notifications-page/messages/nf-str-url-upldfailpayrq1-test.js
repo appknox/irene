@@ -38,7 +38,7 @@ module(
         .exists()
         .hasText(
           t('notificationModule.messages.nf-str-url-upldfailpayrq1', {
-            store_name: t('googlePlaystoreLowercase'),
+            store_name: t('googlePlayStore'),
           })
         );
 

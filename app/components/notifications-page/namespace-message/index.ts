@@ -126,11 +126,7 @@ export default class NotificationsPageNamespaceMessageComponent extends Componen
   }
 
   get isUnModerated() {
-    if (!this.namespace) {
-      return false;
-    }
-
-    return !!this.namespace.isApproved;
+    return !this.isApproved && !this.isRejected;
   }
 
   get isLoading() {
