@@ -23,16 +23,31 @@
     </AkTypography>
   </div>
 
-  <div data-test-nf-str-url-upldfailnprjdeny2-link>
+  <AkStack @spacing='1.5'>
     <AkLink
+      data-test-nf-str-url-upldfailnprjdeny2-projectSettingslink
       @color='primary'
+      @route='authenticated.project.settings'
+      @model={{@context.project_id}}
       @underline='always'
-      target='_blank'
-      href={{@context.store_url}}
-      rel='noopener noreferrer'
-      @title={{t 'notificationModule.viewAppOnStore'}}
+      @title='{{t "notificationModule.viewProjectSettings"}}'
     >
-      {{t 'notificationModule.viewAppOnStore'}}
+      {{t 'notificationModule.projectSettings'}}
     </AkLink>
-  </div>
+
+    {{#if @context.store_url}}
+      <span local-class='pipe'>|</span>
+
+      <AkLink
+        data-test-nf-str-url-upldfailnprjdeny2-viewAppOnStorelink
+        @underline='always'
+        target='_blank'
+        href={{@context.store_url}}
+        rel='noopener noreferrer'
+        @title={{t 'notificationModule.viewAppOnStore'}}
+      >
+        {{t 'notificationModule.viewAppOnStore'}}
+      </AkLink>
+    {{/if}}
+  </AkStack>
 </AkStack>

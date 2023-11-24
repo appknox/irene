@@ -11,8 +11,8 @@ module('Integration | Helper | store-name-for-url', function (hooks) {
   test.each(
     'it renders',
     [
-      ['https://play.google.com/mfva', 't:googlePlaystoreLowercase:()'],
-      ['https://apps.apple.com/mfva', 't:appleAppstoreLowercase:()'],
+      ['https://play.google.com/mfva', 't:googlePlayStore:()'],
+      ['https://apps.apple.com/mfva', 't:appleAppStore:()'],
       ['https://unknown.domain.com/mfva', 't:storeLowercase:()'],
     ],
     async function (assert, [url, storeName]) {

@@ -1,29 +1,73 @@
 <div {{did-insert (perform this.fetch)}}>
-  <AkTypography data-test-namespaceMessage-primary-message>
-    {{@primaryMessage}}
-  </AkTypography>
+  <AkStack data-test-namespaceMessage-title @alignItems='center' @spacing='0.5'>
+    <AkIcon @iconName='description' @size='small' />
 
-  {{#if this.isApproved}}
-    {{#if (has-block 'approved')}}
-      {{yield
-        (hash moderaterName=this.namespaceModeratorDisplay)
-        to='approved'
-      }}
+    <AkTypography @variant='subtitle2'>
+      {{t 'approvalRequest'}}
+    </AkTypography>
+  </AkStack>
+
+  <div local-class='message-container'>
+    <AkTypography data-test-namespaceMessage-primary-message>
+      {{@primaryMessage}}
+    </AkTypography>
+
+    {{#if this.isApproved}}
+      {{#if (has-block 'approved')}}
+        {{yield
+          (hash moderaterName=this.namespaceModeratorDisplay)
+          to='approved'
+        }}
+      {{else}}
+        <NotificationsPage::NamespaceMessage::Approved
+          @moderaterName={{this.namespaceModeratorDisplay}}
+        />
+      {{/if}}
+    {{else if this.isRejected}}
+      {{#if (has-block 'rejected')}}
+        {{yield to='rejected'}}
+      {{else}}
+        <NotificationsPage::NamespaceMessage::Rejected />
+      {{/if}}
     {{else}}
-      <NotificationsPage::NamespaceMessage::Approved
-        @moderaterName={{this.namespaceModeratorDisplay}}
+      <NotificationsPage::NamespaceMessage::Unmoderated
+        @onApprove={{perform this.approveNamespace}}
+        @onReject={{perform this.rejectNamespace}}
       />
     {{/if}}
-  {{else if this.isRejected}}
-    {{#if (has-block 'rejected')}}
-      {{yield to='rejected'}}
-    {{else}}
-      <NotificationsPage::NamespaceMessage::Rejected />
-    {{/if}}
-  {{else}}
-    <NotificationsPage::NamespaceMessage::Unmoderated
-      @onApprove={{perform this.approveNamespace}}
-      @onReject={{perform this.rejectNamespace}}
-    />
+  </div>
+
+  {{#if (or this.isUnModerated @context.store_url)}}
+    <AkStack @spacing='1.5'>
+      {{#if this.isUnModerated}}
+        <AkLink
+          data-test-namespaceMessage-viewNamespacelink
+          @color='primary'
+          @route='authenticated.organization.namespaces'
+          @underline='always'
+          @title='{{t "notificationModule.viewNamespaces"}}'
+        >
+          {{t 'notificationModule.viewNamespaces'}}
+        </AkLink>
+      {{/if}}
+
+      {{#if (and this.isUnModerated @context.store_url)}}
+        <span local-class='pipe'>|</span>
+      {{/if}}
+
+      {{#if @context.store_url}}
+        <AkLink
+          data-test-namespaceMessage-viewAppOnStorelink
+          @color={{unless this.isUnModerated 'primary'}}
+          @underline='always'
+          target='_blank'
+          href={{@context.store_url}}
+          rel='noopener noreferrer'
+          @title={{t 'notificationModule.viewAppOnStore'}}
+        >
+          {{t 'notificationModule.viewAppOnStore'}}
+        </AkLink>
+      {{/if}}
+    </AkStack>
   {{/if}}
 </div>

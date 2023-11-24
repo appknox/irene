@@ -63,9 +63,14 @@ module(
         );
 
       assert
-        .dom('[data-test-nf-str-url-upldfailnprjdeny2-link]')
+        .dom('[data-test-nf-str-url-upldfailnprjdeny2-projectSettingslink]')
         .exists()
-        .containsText(`${t('notificationModule.viewAppOnStore')}`);
+        .hasText(t('notificationModule.projectSettings'));
+
+      assert
+        .dom('[data-test-nf-str-url-upldfailnprjdeny2-viewAppOnStorelink]')
+        .exists()
+        .hasText(t('notificationModule.viewAppOnStore'));
     });
   }
 );

@@ -24,10 +24,10 @@ export default class StoreNameForUrlHelper extends Helper<StoreNameForUrlSignatu
 
     switch (url.hostname) {
       case GOOGLE_PLAYSTORE_DOMAIN:
-        return this.intl.t('googlePlaystoreLowercase');
+        return this.intl.t('googlePlayStore');
 
       case APPLE_APPSTORE_DOMAIN:
-        return this.intl.t('appleAppstoreLowercase');
+        return this.intl.t('appleAppStore');
 
       default:
         return this.intl.t('storeLowercase');

@@ -41,7 +41,7 @@ module(
         .hasText(
           t('notificationModule.messages.nf-str-url-upldfailnprjdeny1', {
             package_name: this.context.package_name,
-            store_name: t('googlePlaystoreLowercase'),
+            store_name: t('googlePlayStore'),
           })
         );
 
