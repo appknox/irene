@@ -1,0 +1,56 @@
+<div>
+  {{#if this.hasSubscription}}
+    <div class='box-container'>
+      <div class='columns plan-durations'>
+        <h4 class='bold black-text'>
+          {{t 'activeSubscription'}}
+        </h4>
+      </div>
+
+      <div class='columns plan-list flex-center'>
+        <OrganizationBilling::Subscription
+          @subscription={{this.subscription}}
+        />
+      </div>
+    </div>
+  {{/if}}
+
+  {{#if this.hasNoSubscription}}
+    <div class='box-container'>
+      <div class='columns plan-durations'>
+        <h4 class='bold black-text'>
+          {{t 'plans'}}
+        </h4>
+
+        <div class='column flex-center margin-left-80'>
+          {{#each this.durations as |duration|}}
+            <button
+              {{style borderRadius='5px'}}
+              type='button'
+              class='margin-left mp-pricing-duration
+                {{if
+                  (eq this.paymentDuration duration.value)
+                  "is-primary is-active"
+                  "is-default"
+                }}'
+              {{on 'click' (fn this.selectDuration duration.value)}}
+            >
+              {{duration.label}}
+            </button>
+          {{/each}}
+        </div>
+      </div>
+
+      <div class='columns plan-list flex-center'>
+        {{#each this.sortedPlans as |plan|}}
+          <OrganizationBilling::Plan
+            @plan={{plan}}
+            @paymentDuration={{this.paymentDuration}}
+          />
+        {{/each}}
+      </div>
+    </div>
+  {{/if}}
+
+  <OrganizationBilling::InvoiceList />
+</div>

@@ -1,0 +1,62 @@
+<div>
+  <div class='subscription-container'>
+    {{#if this.isNotPerScan}}
+      <table>
+        <thead>
+          <tr>
+            <th colspan='2'>{{t 'subscriptionDetails'}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class='td-heading'>
+              {{t 'currentPlan'}}
+            </td>
+
+            <td>{{@subscription.planName}}</td>
+          </tr>
+
+          <tr>
+            <td class='td-heading'>
+              {{t 'billingPeriod'}}
+            </td>
+
+            <td>{{@subscription.billingPeriodText}}</td>
+          </tr>
+
+          <tr>
+            <td colspan='2'>
+              <AkStack @direction='column' @alignItems='center'>
+                <span>
+                  {{@subscription.subscriptionText}}
+                  {{@subscription.expiryDateOnHumanized}}
+                </span>
+
+                {{#if @subscription.isNotCancelled}}
+                  <AkButton
+                    @variant='outlined'
+                    {{on 'click' this.openCancelSubscriptionConfirmBox}}
+                  >
+                    <:leftIcon>
+                      <AkIcon @iconName='close' />
+                    </:leftIcon>
+
+                    <:default>{{t 'cancelSubsciption'}}</:default>
+                  </AkButton>
+                {{/if}}
+              </AkStack>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    {{/if}}
+  </div>
+
+  <ConfirmBox
+    @isActive={{this.showCancelSubscriptionConfirmBox}}
+    @description={{t 'confirmBox.cancelSubsciption'}}
+    @confirmAction={{perform this.confirmCancelSubscription}}
+    @cancelAction={{this.closeCancelSubscriptionConfirmBox}}
+    @disabled={{this.confirmCancelSubscription.isRunning}}
+  />
+</div>

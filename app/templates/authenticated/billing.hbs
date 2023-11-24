@@ -1,8 +1,9 @@
-{{page-title "Billing"}}
+{{page-title 'Billing'}}
+
 {{#if @model.organization.showBilling}}
   {{#if @model.showLicense}}
-    <LicenseDetail @license={{@model.license}}></LicenseDetail>
+    <LicenseDetail @license={{@model.license}} />
   {{else}}
-    <PricingList></PricingList>
+    <OrganizationBilling />
   {{/if}}
 {{/if}}

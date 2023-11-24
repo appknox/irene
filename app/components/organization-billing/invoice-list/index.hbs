@@ -1,0 +1,28 @@
+<div class='invoice-table'>
+  {{#if this.hasInvoices}}
+    <h4 class='margin-left20 bold black-text'>
+      {{t 'invoices'}}
+    </h4>
+
+    <div class='invoice-list-container'>
+      <table>
+        <thead>
+          <tr>
+            <th>{{t 'invoiceId'}}</th>
+            <th>{{t 'planName'}}</th>
+            <th>{{t 'amountPaid'}}</th>
+            <th>{{t 'date'}}</th>
+            <th class='uppercase-text'>{{t 'status'}}</th>
+            <th>{{t 'invoice'}}</th>
+          </tr>
+        </thead>
+
+        <tbody local-class='invoice-tbody'>
+          {{#each this.invoices as |invoice|}}
+            <OrganizationBilling::InvoiceList::Overview @invoice={{invoice}} />
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  {{/if}}
+</div>
