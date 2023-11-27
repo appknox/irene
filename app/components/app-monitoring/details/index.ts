@@ -21,6 +21,12 @@ export default class AppMonitoringDetailsComponent extends Component<AppMonitori
           'authenticated.dashboard.app-monitoring.monitoring-details.index',
         label: this.intl.t('appMonitoringModule.monitoringDetails'),
       },
+      {
+        id: 'monitoring-history',
+        route:
+          'authenticated.dashboard.app-monitoring.monitoring-details.history',
+        label: this.intl.t('appMonitoringModule.monitoringHistory'),
+      },
     ];
   }
 

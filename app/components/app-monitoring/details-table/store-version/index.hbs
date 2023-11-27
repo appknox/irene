@@ -6,33 +6,5 @@
 >
   {{#if this.amAppVersion.displayVersion}}
     {{this.amAppVersion.displayVersion}}
-
-    <AkStack @alignItems='center' class='mt-1'>
-      <AppMonitoring::Status
-        @condition={{this.versionStatusCondition}}
-        @label={{this.versionStatusText}}
-        data-test-amDetailsTable-storeVersionStatus
-      />
-
-      {{#if this.amAppVersion.latestFile.id}}
-        <AkStack>
-          <AkLink
-            @underline='always'
-            @color='primary'
-            @fontWeight='medium'
-            @route='authenticated.dashboard.file'
-            @model={{this.amAppVersion.latestFile.id}}
-            target='_blank'
-            rel='noopener noreferrer'
-            class='ml-2'
-            data-test-amDetailsTable-storeVersion-fileID
-          >
-            {{t 'fileID'}}
-            -
-            {{this.amAppVersion.latestFile.id}}
-          </AkLink>
-        </AkStack>
-      {{/if}}
-    </AkStack>
   {{/if}}
 </AkStack>

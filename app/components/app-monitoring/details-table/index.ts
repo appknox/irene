@@ -9,11 +9,7 @@ import Store from '@ember-data/store';
 import AmAppRecordModel from 'irene/models/am-app-record';
 import AmAppModel from 'irene/models/am-app';
 import { action } from '@ember/object';
-
-interface LimitOffset {
-  limit: number;
-  offset: number;
-}
+import AmAppVersionModel from 'irene/models/am-app-version';
 
 type AmAppRecordModelArray =
   DS.AdapterPopulatedRecordArray<AmAppRecordModel> & {
@@ -31,6 +27,11 @@ export default class AppMonitoringDetailsTableComponent extends Component<AppMon
   @service declare store: Store;
 
   @tracked amAppRecordsData: AmAppRecordModel[] = [];
+  @tracked groupedStoreVersions: Record<string, AmAppRecordModel[]> = {};
+  @tracked storeVersionsToDisplay: {
+    version: DS.PromiseObject<AmAppVersionModel>;
+    versionRecords: AmAppRecordModel[] | undefined;
+  }[] = [];
   @tracked amAppRecordsTotalCount = 0;
   @tracked limit = 50;
   @tracked offset = 0;
@@ -51,9 +52,21 @@ export default class AppMonitoringDetailsTableComponent extends Component<AppMon
         width: 200,
       },
       {
-        name: this.intl.t('country'),
+        name: 'App status',
+        component: 'app-monitoring/details-table/scan-status',
+        width: 200,
+        textAlign: 'center',
+      },
+      {
+        name: this.intl.t('countries'),
         component: 'app-monitoring/details-table/country',
-        width: 20,
+        width: 100,
+        textAlign: 'center',
+      },
+      {
+        name: 'Action',
+        component: 'app-monitoring/details-table/initiate-scan',
+        width: 80,
         textAlign: 'center',
       },
     ];
@@ -63,38 +76,14 @@ export default class AppMonitoringDetailsTableComponent extends Component<AppMon
     return this.args.amApp;
   }
 
-  get fixTableHeight() {
-    return this.amAppRecordsData.length > 10;
-  }
-
   get hasNoAmAppVersions() {
-    return this.amAppRecordsData.length < 1;
+    return this.storeVersionsToDisplay.length < 1;
   }
 
   get showPendingStateLoader() {
     return (
       this.hasNoAmAppVersions && this.amApp?.isPending && this.amApp.isActive
     );
-  }
-
-  // Table Actions
-  @action goToPage(args: LimitOffset) {
-    const { limit, offset } = args;
-
-    this.limit = limit;
-    this.offset = offset;
-
-    this.fetchAmAppRecords.perform();
-  }
-
-  @action onItemPerPageChange(args: LimitOffset) {
-    const { limit } = args;
-    const offset = 0;
-
-    this.limit = limit;
-    this.offset = offset;
-
-    this.fetchAmAppRecords.perform();
   }
 
   @action
@@ -112,8 +101,33 @@ export default class AppMonitoringDetailsTableComponent extends Component<AppMon
         offset: this.offset,
       })) as AmAppRecordModelArray;
 
-      this.amAppRecordsData = amAppRecordsData.toArray();
-      this.amAppRecordsTotalCount = amAppRecordsData.meta.count;
+      const groupedVersions: Record<number | string, AmAppRecordModel[]> = {};
+
+      amAppRecordsData.forEach((record) => {
+        const recordVersion = record.amAppVersion.get('id') as string;
+
+        if (!groupedVersions[recordVersion]) {
+          groupedVersions[recordVersion] = [];
+        }
+
+        groupedVersions[recordVersion]?.push(record);
+      });
+
+      this.storeVersionsToDisplay = Object.keys(groupedVersions)
+        .map((id) => ({
+          version: this.store.findRecord('am-app-version', id),
+          versionRecords: groupedVersions[id],
+        }))
+        .sort((a) => {
+          if (
+            a.version.get('comparableVersion') &&
+            a.version.get('latestFile')?.get('id')
+          ) {
+            return 1;
+          }
+
+          return -1;
+        });
     }
   });
 }
