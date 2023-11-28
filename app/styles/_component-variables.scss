@@ -204,6 +204,13 @@ body {
     --ak-appbar-box-shadow: var(--box-shadow-dark);
   }
 
+  // variables for ak-autocomplete
+  --ak-autocomplete-x-btn-zIndex: var(--zIndex-tooltip);
+  --ak-autocomplete-background: var(--background-main);
+  --ak-autocomplete-border-radius: var(--border-radius);
+  --ak-autocomplete-box-shadow: var(--box-shadow-2);
+  --ak-autocomplete-border-color: var(--border-color-1);
+
   // variables for ak-drawer
   --ak-drawer-backdrop-overlay-background: var(--backdrop-overlay-background);
   --ak-drawer-background: var(--background-main);
