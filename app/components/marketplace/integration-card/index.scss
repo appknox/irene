@@ -4,15 +4,17 @@
   display: block;
   box-shadow: 0px 0px 6px #ccc;
   padding: 1em;
-  color: #6B6B6B;
-}
-.marketplace-card:hover {
-  box-shadow: 1px 1px 20px #999;
-}
-.marketplace-card-disabled {
-  opacity: 0.5;
-}
-.marketplace-card-disabled .marketplace-card:hover {
-  box-shadow: 0px 0px 6px #ccc;
+  color: #6b6b6b;
+
+  &:hover {
+    box-shadow: 1px 1px 20px #999;
+  }
 }
 
+.marketplace-card-disabled {
+  opacity: 0.5;
+
+  .marketplace-card:hover {
+    box-shadow: 0px 0px 6px #ccc;
+  }
+}
