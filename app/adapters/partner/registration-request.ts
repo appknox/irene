@@ -27,7 +27,6 @@ export default class RegistrationRequestAdapter extends commondrf {
   async patch(
     id: string | number,
     modelName: string | number,
-    snapshot: Snapshot,
     data: { approval_status: string }
   ) {
     const url = this.buildURL(modelName, id);
