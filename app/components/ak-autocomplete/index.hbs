@@ -1,0 +1,80 @@
+<AkTextField
+  @placeholder={{if @placeholder @placeholder 'Type here...'}}
+  @value={{this.searchQuery}}
+  @label={{@label}}
+  @error={{@error}}
+  @helperText={{@helperText}}
+  @labelTypographyVariant={{@labelTypographyVariant}}
+  @labelTypographyColor={{@labelTypographyColor}}
+  @required={{@required}}
+  @disabled={{@disabled}}
+  @formControlClass={{@formControlClass}}
+  @textFieldRootClass='{{this.textFieldRootClass}} {{@textFieldRootClass}}'
+  @id={{@id}}
+  @type={{@type}}
+  @autofocus={{@autofocus}}
+  @readonly={{@readonly}}
+  {{on 'input' this.handleInputChange}}
+  local-class='ak-autocomplete-text-field'
+  ...attributes
+  {{on 'click' this.handleClick}}
+  data-test-ak-autocomplete-text-field
+>
+  <:rightAdornment>
+    {{#if this.searchQuery}}
+      <AkIconButton
+        @size='small'
+        local-class='ak-autocomplete-clear-button  {{if @label ""}}'
+        {{on 'click' this.handleClear}}
+        data-test-ak-autocomplete-clear-btn
+      >
+        <AkIcon @iconName='close' @color='textSecondary' @size='small' />
+      </AkIconButton>
+    {{/if}}
+  </:rightAdornment>
+</AkTextField>
+
+<AkPopover
+  @anchorRef={{this.anchorRef}}
+  @placement='bottom-start'
+  @arrow={{false}}
+  @sameWidthAsRef={{true}}
+  @closeHandler={{this.handleOptionsClose}}
+  @clickOutsideToClose={{true}}
+  @renderInPlace={{@renderInPlace}}
+>
+  <div data-test-ak-autocomplete local-class='ak-autocomplete-dropdown-root'>
+    <AkList local-class='ak-autocomplete-dropdown-list'>
+      {{#if @loading}}
+        {{#if (has-block 'loading')}}
+          {{yield to='loading'}}
+        {{else}}
+          <AkList::Item data-test-ak-autocomplete-loading>
+            <AkTypography>Loading...</AkTypography>
+          </AkList::Item>
+        {{/if}}
+
+      {{else if (eq this.filteredOptions.length 0)}}
+        {{#if (has-block 'empty')}}
+          {{yield to='empty'}}
+        {{else}}
+          <AkList::Item data-test-ak-autocomplete-empty>
+            <AkTypography>No matching items</AkTypography>
+          </AkList::Item>
+        {{/if}}
+
+      {{else}}
+        {{#each this.filteredOptions as |option|}}
+          <AkList::Item
+            data-test-ak-autocomplete-item
+            @button={{true}}
+            @divider={{not-eq this.filteredOptions.lastObject option}}
+            {{on 'click' (fn this.onOptionClick option)}}
+          >
+            {{yield option}}
+          </AkList::Item>
+        {{/each}}
+      {{/if}}
+    </AkList>
+  </div>
+</AkPopover>
