@@ -1,0 +1,55 @@
+<div class='column is-one-third'>
+  <div class='box-section'>
+    <h2>
+      {{@plan.name}}
+    </h2>
+
+    {{#each @plan.descriptionItems as |item|}}
+      <div class='box-section-content'>
+        {{item}}
+      </div>
+    {{/each}}
+
+    <div class='columns choose-units'>
+      <div class='column'>
+        <button
+          type='button'
+          class='minus-icon'
+          {{on 'click' this.decrementPlanQuantity}}
+        >
+          <AkIcon @iconName='remove' />
+        </button>
+      </div>
+
+      <div class='column'>
+        <div class='columns'>
+          <div class='column'>
+            <h3>{{this.planQuantity}}</h3>
+          </div>
+        </div>
+
+        <div class='columns'>
+          <div class='column plan-text uppercase-text'>
+            {{this.planText}}
+          </div>
+        </div>
+      </div>
+
+      <div class='column'>
+        <button
+          type='button'
+          class='plus-icon'
+          {{on 'click' this.incrementPlanQuantity}}
+        >
+          <AkIcon @iconName='add' />
+        </button>
+      </div>
+    </div>
+
+    <div class='flex-center'>
+      <button type='button' class='pay' {{on 'click' this.initiatePayment}}>
+        {{this.updatedPrice}}
+      </button>
+    </div>
+  </div>
+</div>

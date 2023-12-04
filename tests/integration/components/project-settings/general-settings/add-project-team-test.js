@@ -182,7 +182,10 @@ module(
         '[data-test-addProjectTeam-drawerContainer-tableRow]'
       );
 
-      assert.strictEqual(teamsRows.length, 1);
+      assert.strictEqual(
+        teamsRows.length,
+        this.orgTeamModels.filter((t) => t.name.includes(this.query)).length
+      );
     });
   }
 );

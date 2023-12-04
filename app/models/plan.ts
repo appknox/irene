@@ -30,17 +30,17 @@ export default class PlanModel extends Model {
   @attr('string')
   declare yearlyUrl: string;
 
-  @attr('string')
-  declare monthlyPrice: string;
+  @attr('number')
+  declare monthlyPrice: number;
 
-  @attr('string')
-  declare quarterlyPrice: string;
+  @attr('number')
+  declare quarterlyPrice: number;
 
-  @attr('string')
-  declare halfYearlyPrice: string;
+  @attr('number')
+  declare halfYearlyPrice: number;
 
-  @attr('string')
-  declare yearlyPrice: string;
+  @attr('number')
+  declare yearlyPrice: number;
 
   @computed('description')
   get descriptionItems() {
