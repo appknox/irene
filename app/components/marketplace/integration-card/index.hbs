@@ -1,0 +1,31 @@
+{{#let
+  (component
+    'marketplace/card-content'
+    title=@data.title
+    logo=@data.logo
+    text=@data.description
+  )
+  as |Component|
+}}
+  {{#if @data.link}}
+    {{#if this.me.org.is_admin}}
+      <LinkTo @route={{@data.link}} local-class='marketplace-card'>
+        <Component />
+      </LinkTo>
+    {{else}}
+      <a
+        local-class='marketplace-card'
+        href='#'
+        {{on 'click' this.showIntegrationsPermissionDenied}}
+      >
+        <Component />
+      </a>
+    {{/if}}
+  {{else}}
+    <div local-class='marketplace-card-disabled'>
+      <div local-class='marketplace-card'>
+        <Component />
+      </div>
+    </div>
+  {{/if}}
+{{/let}}

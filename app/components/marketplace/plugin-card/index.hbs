@@ -1,0 +1,48 @@
+{{#let
+  (component
+    'marketplace/card-content'
+    title=@data.title
+    logo=@data.logo
+    text=@data.description
+  )
+  as |Component|
+}}
+  {{#if @data.published}}
+    <a
+      local-class='marketplace-card'
+      href={{@data.link}}
+      target='_blank'
+      rel='noopener noreferrer'
+    >
+      <Component />
+    </a>
+  {{else}}
+    <a
+      local-class='marketplace-card'
+      href='#'
+      {{on 'click' this.openInstructionsModal}}
+    >
+      <Component />
+    </a>
+  {{/if}}
+{{/let}}
+
+{{#if this.showInstructionsModal}}
+  <AkModal
+    @showHeader={{true}}
+    @headerTitle={{t 'integrateAppknoxToCICDPipeline'}}
+    @onClose={{this.closeInstructionsModal}}
+  >
+    <div local-class='marketplace-modal-logo'>
+      <img src={{@data.logo}} alt='ci-logo' />
+    </div>
+
+    <div class='black-text bold font-medium text-centre padding-b-1h'>
+      {{@data.title}}
+    </div>
+
+    <div>
+      {{@data.instructions}}
+    </div>
+  </AkModal>
+{{/if}}

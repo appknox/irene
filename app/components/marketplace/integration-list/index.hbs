@@ -1,0 +1,7 @@
+<div class='vertical-align-center' local-class='marketplace-list'>
+  {{#each this.data as |d|}}
+    <div local-class='marketplace-icon'>
+      <Marketplace::IntegrationCard @data={{d}} />
+    </div>
+  {{/each}}
+</div>

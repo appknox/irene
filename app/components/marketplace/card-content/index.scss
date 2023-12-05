@@ -3,11 +3,13 @@
   width: 50%;
   margin: auto;
   padding: 1rem 0;
+
+  img {
+    height: 6rem;
+    width: 6rem;
+  }
 }
-.marketplace-card-logo img {
-  height: 6rem;
-  width: 6rem;
-}
+
 .marketplace-card-desc {
   height: 3rem;
   display: flex;

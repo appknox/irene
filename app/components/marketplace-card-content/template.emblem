@@ -1,6 +1,0 @@
-.black-text.bold.font-medium
-  | #{title}
-div local-class="marketplace-card-logo"
-  img src={logo}
-div local-class="marketplace-card-desc"
-  | #{text}

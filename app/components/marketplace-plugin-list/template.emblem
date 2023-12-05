@@ -1,4 +1,0 @@
-.vertical-align-center local-class="marketplace-list"
-  each data as |d|
-    div local-class="marketplace-icon" 
-      = marketplace-plugin-card data=d
