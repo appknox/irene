@@ -66,28 +66,28 @@
       </AkStack>
 
       {{! This is to hide the monitoring action button until it's ready for release }}
-      {{!-- <AkStack
-          @direction='column'
-          @alignItems='flex-start'
-          @justifyContent='center'
-          local-class='monitoring-toggle-container'
+      <AkStack
+        @direction='column'
+        @alignItems='flex-start'
+        @justifyContent='center'
+        local-class='monitoring-toggle-container'
+      >
+        <AkTypography
+          @tag='p'
+          @variant='h6'
+          @color='secondary'
+          @gutterBottom={{true}}
         >
-          <AkTypography
-            @tag='p'
-            @variant='h6'
-            @color='secondary'
-            @gutterBottom={{true}}
-          >
-            {{t 'appMonitoringModule.monitoringAction'}}
-          </AkTypography>
+          {{t 'appMonitoringModule.monitoringAction'}}
+        </AkTypography>
 
-          <AkToggle
-            @size='small'
-            @checked={{@amApp.monitoringEnabled}}
-            local-class='monitoring-toggle'
-            data-test-app-monitoring-toggle
-          />
-        </AkStack> --}}
+        <AkToggle
+          @size='small'
+          @checked={{@amApp.monitoringEnabled}}
+          local-class='monitoring-toggle'
+          data-test-app-monitoring-toggle
+        />
+      </AkStack>
 
     </AkStack>
 

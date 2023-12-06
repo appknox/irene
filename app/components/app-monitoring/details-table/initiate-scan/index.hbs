@@ -1,3 +1,5 @@
-<AkButton data-test-amDetailsTable-scan-button>
-  {{t 'appMonitoringModule.startScan'}}
-</AkButton>
+{{#unless this.amAppVersion.latestFile.id}}
+  <AkButton data-test-amDetailsTable-scan-button>
+    {{t 'appMonitoringModule.initiateUpload'}}
+  </AkButton>
+{{/unless}}

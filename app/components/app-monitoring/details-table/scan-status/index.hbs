@@ -1,0 +1,48 @@
+<AkStack @alignItems='center' @justifyContent='center' @spacing='2'>
+
+  <AppMonitoring::Status
+    @condition='error'
+    @label='{{t "notScanned"}}'
+    data-test-amDetailsTable-storeVersionStatus
+  />
+
+  {{#if this.amAppVersion.latestFile.id}}
+    <AkIcon @iconName='east' />
+
+    <AkStack @spacing='1'>
+      <AppMonitoring::Status
+        @condition={{this.versionStatusDetails.status}}
+        @label={{this.versionStatusDetails.statusText}}
+        data-test-amDetailsTable-storeVersionStatus
+      />
+
+      -
+
+      <AkLink
+        @underline='always'
+        @color='primary'
+        @fontWeight='medium'
+        @route='authenticated.dashboard.file'
+        @model={{this.amAppVersion.latestFile.id}}
+        target='_blank'
+        rel='noopener noreferrer'
+        data-test-amDetailsTable-storeVersion-fileID
+      >
+        {{t 'fileID'}}
+        -
+        {{this.amAppVersion.latestFile.id}}
+      </AkLink>
+
+    </AkStack>
+  {{/if}}
+
+  {{#if this.amAppVersion.isScanned}}
+    <AkIcon @iconName='east' />
+
+    <AppMonitoring::Status
+      @condition='success'
+      @label='{{t "scanned"}}'
+      data-test-amDetailsTable-storeVersionStatus
+    />
+  {{/if}}
+</AkStack>

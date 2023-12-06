@@ -5,7 +5,7 @@ import Component from '@glimmer/component';
 import AmAppRecordModel from 'irene/models/am-app-record';
 import AmAppVersionModel from 'irene/models/am-app-version';
 
-interface AppMonitoringDetailsTableStoreVersionSignature {
+interface AppMonitoringDetailsTableActionSignature {
   Args: {
     storeVersionInfo: {
       version: DS.PromiseObject<AmAppVersionModel>;
@@ -14,7 +14,7 @@ interface AppMonitoringDetailsTableStoreVersionSignature {
   };
 }
 
-export default class AppMonitoringDetailsTableStoreVersionComponent extends Component<AppMonitoringDetailsTableStoreVersionSignature> {
+export default class AppMonitoringDetailsTableActionComponent extends Component<AppMonitoringDetailsTableActionSignature> {
   get amAppVersion() {
     return this.args.storeVersionInfo.version;
   }
