@@ -1,0 +1,96 @@
+<form>
+  <div class='control'>
+    <div class='columns'>
+      <div class='column is-half'>
+        <div
+          class='input-wrap
+            {{if this.changeset.error.old_password "has-error"}}'
+        >
+          <div class='label-error'>
+            <label>
+              {{t 'currentPassword'}}
+            </label>
+
+            {{#if this.changeset.error.old_password}}
+              <span class='error-msg'>
+                {{this.changeset.error.old_password.validation}}
+              </span>
+            {{/if}}
+          </div>
+
+          <Input
+            id='security-pc-old-password'
+            class='input-field'
+            @type='password'
+            @value={{this.changeset.old_password}}
+            autocomplete='password'
+          />
+        </div>
+
+        <div
+          class='input-wrap {{if this.changeset.error.password "has-error"}}'
+        >
+          <div class='label-error'>
+            <label>
+              {{t 'newPassword'}}
+            </label>
+
+            {{#if this.changeset.error.password}}
+              <span class='error-msg'>
+                {{this.changeset.error.password.validation}}
+              </span>
+            {{/if}}
+          </div>
+
+          <Input
+            id='security-pc-new-password'
+            class='input-field'
+            @type='password'
+            @value={{this.changeset.password}}
+            autocomplete='new-password'
+          />
+        </div>
+
+        <div
+          class='input-wrap
+            {{if this.changeset.error.confirm_password "has-error"}}'
+        >
+          <div class='label-error'>
+            <label>
+              {{t 'confirmPassword'}}
+            </label>
+
+            {{#if this.changeset.error.confirm_password}}
+              <span class='error-msg'>
+                {{this.changeset.error.confirm_password.validation}}
+              </span>
+            {{/if}}
+          </div>
+
+          <Input
+            id='security-pc-confirm-password'
+            class='input-field'
+            @type='password'
+            @value={{this.changeset.confirm_password}}
+            autocomplete='new-password'
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class='columns'>
+      <div class='column is-one-third'>
+        <AkButton
+          @variant='outlined'
+          {{on 'click' (perform this.changePassword)}}
+        >
+          {{#if this.changePassword.isRunning}}
+            <AkLoader @size={{14}} class='mr-1' />
+          {{/if}}
+
+          {{t 'changePassword'}}
+        </AkButton>
+      </div>
+    </div>
+  </div>
+</form>

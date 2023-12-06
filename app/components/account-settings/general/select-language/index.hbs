@@ -1,0 +1,14 @@
+<div class='control'>
+  <select
+    id='settings-select-language'
+    class='mp-select-language'
+    {{on 'change' (perform this.setLocale)}}
+    disabled={{this.setLocale.isRunning}}
+  >
+    {{#each this.allLocales as |al|}}
+      <option selected={{eq this.currentLocale al.locale}} value={{al.locale}}>
+        {{al.localeString}}
+      </option>
+    {{/each}}
+  </select>
+</div>

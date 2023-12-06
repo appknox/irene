@@ -1,0 +1,483 @@
+<div class='mfa is-two-third'>
+  <h5 class='bold black-text is-fullwidth'>
+    {{t 'multiFactorAuth'}}
+  </h5>
+
+  {{t 'mfaDescription'}}
+
+  <div class='margin-t-1'>
+    {{t 'mfaSelect'}}
+  </div>
+
+  <div class='margin-t-1'>
+    <div class='columns'>
+      <div class='column'>
+        <table class='org-table'>
+          <tbody>
+            {{#each this.mfas.records as |mfa|}}
+              <tr class={{if mfa.enabled 'fill-success-box'}}>
+                <td>
+                  <div class='vertical-align-top padding-v-h padding-h-h'>
+                    <div class='div'>
+                      <div class='bold black-text font-medium'>
+                        <AkStack @alignItems='center' @spacing='1'>
+                          {{mfa.display}}
+
+                          {{#if mfa.enabled}}
+                            <AkIcon @iconName='done' @color='success' />
+                          {{/if}}
+                        </AkStack>
+                      </div>
+
+                      {{#if mfa.isApp}}
+                        <div class='text-lightgray margin-t-h'>
+                          {{t 'mfaAppDesc'}}
+                        </div>
+
+                        <ul class='margin-t-1'>
+                          <li>
+                            For Android, iOS, and Blackberry:
+                            <a
+                              href='https://support.google.com/accounts/answer/1066447?hl=en'
+                              target='_blank'
+                              rel='noopener noreferrer'
+                            >
+                              Google Authenticator
+                            </a>
+                          </li>
+
+                          <li>
+                            For Android & iOS:
+                            <a
+                              href='https://guide.duo.com/third-party-accounts'
+                              target='_blank'
+                              rel='noopener noreferrer'
+                            >
+                              Duo Mobile
+                            </a>
+                          </li>
+
+                          <li>
+                            For Windows Phone:
+                            <a
+                              href='https://www.microsoft.com/en-us/store/p/authenticator/9wzdncrfj3rj'
+                              target='_blank'
+                              rel='noopener noreferrer'
+                            >
+                              Authenticator
+                            </a>
+                          </li>
+                        </ul>
+                      {{/if}}
+
+                      {{#if mfa.isEmail}}
+                        <div class='text-lightgray margin-t-h'>
+                          {{t 'mfaEmailDesc'}}
+                        </div>
+                      {{/if}}
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <div class='div'>
+                    {{#if mfa.enabled}}
+                      {{#if this.user.canDisableMfa}}
+                        <button
+                          {{style borderRadius='5px'}}
+                          class='is-primary'
+                          type='button'
+                          {{on 'click' (perform this.disableMFA mfa.method)}}
+                          disabled={{not this.user.canDisableMfa}}
+                        >
+                          {{t 'disable'}}
+                        </button>
+                      {{/if}}
+                    {{else}}
+                      <button
+                        {{style borderRadius='5px'}}
+                        class='is-default is-small'
+                        type='button'
+                        {{on 'click' (perform this.enableMFA mfa.method)}}
+                      >
+                        {{t 'enable'}}
+                      </button>
+                    {{/if}}
+                  </div>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+
+        {{#unless this.user.canDisableMfa}}
+          <div class='alert alert-danger alert-small margin-t-2'>
+            <div class='vertical-align-center'>
+              <AkIcon @iconName='security' />
+
+              <div class='margin-l-1'>
+                {{t 'disableMFADenied'}}
+
+                {{#if this.me.org.is_owner}}
+                  <div>
+                    {{t 'disableThisIn'}}
+
+                    <LinkTo
+                      @route='authenticated.organization-settings'
+                      class='alert-link'
+                    >
+                      {{t 'organizationSettings'}}
+                    </LinkTo>
+                  </div>
+                {{/if}}
+              </div>
+            </div>
+          </div>
+        {{/unless}}
+      </div>
+    </div>
+  </div>
+</div>
+
+{{#if this.showMFADisableModal}}
+  <AkModal
+    @showHeader={{true}}
+    @headerTitle={{t 'modalCard.mfaTitle.disable'}}
+    @onClose={{this.cancelMFADisable}}
+  >
+    <:default>
+      {{#if (and this.showConfirmDisableMFA this.user.canDisableMfa)}}
+        <AkTypography>
+          {{t 'modalCard.enableMFAEmail.sendMailMsg'}}
+        </AkTypography>
+      {{else}}
+        <div
+          {{style width='450px'}}
+          class='alert alert-success alert-small mb-2'
+        >
+          <AkStack @alignItems='center' @spacing='1'>
+            <AkIcon @iconName='security' />
+
+            <AkTypography>{{t 'disableMFADenied'}}</AkTypography>
+          </AkStack>
+        </div>
+      {{/if}}
+
+      {{#if this.showDisableMFA}}
+        <AkTypography>
+          {{t 'modalCard.disableMFA.enterOTP'}}
+
+          {{#if this.isEmailMFAEnabled}}
+            {{t 'modalCard.disableMFA.viaEmail'}}
+          {{/if}}
+
+          {{#if this.isAppMFAEnabled}}
+            {{t 'modalCard.disableMFA.viaApp'}}
+          {{/if}}
+        </AkTypography>
+
+        <form aria-label='Disable MFA Otp' class='mt-3'>
+          <AkTextField @value={{this.disableOTP}} />
+        </form>
+      {{/if}}
+    </:default>
+
+    <:footer>
+      <AkStack
+        class='px-3 py-2'
+        @alignItems='center'
+        @justifyContent='flex-end'
+        @spacing='1.5'
+      >
+        {{#if (and this.showConfirmDisableMFA this.user.canDisableMfa)}}
+          <AkButton
+            @loading={{this.sendDisableMFAOTPEmail.isRunning}}
+            {{on 'click' this.continueDisableMFA}}
+          >
+            {{t 'continue'}}
+          </AkButton>
+
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            {{on 'click' this.cancelMFADisable}}
+          >
+            {{t 'cancel'}}
+          </AkButton>
+        {{/if}}
+
+        {{#if this.showDisableMFA}}
+          <AkButton
+            @loading={{this.verifyDisableOTP.isRunning}}
+            {{on 'click' this.confirmDisableOTP}}
+          >
+            {{t 'confirm'}}
+          </AkButton>
+
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            {{on 'click' this.cancelMFADisable}}
+          >
+            {{t 'cancel'}}
+          </AkButton>
+        {{/if}}
+      </AkStack>
+    </:footer>
+  </AkModal>
+{{/if}}
+
+{{#if this.showEmailEnableModal}}
+  <AkModal
+    @showHeader={{true}}
+    @headerTitle={{t 'modalCard.mfaTitle.enable'}}
+    @onClose={{this.cancelEmailEnable}}
+  >
+    <:default>
+      {{#if this.showEmailSendConfirm}}
+        <AkTypography>
+          {{t 'modalCard.enableMFAEmail.sendMailMsg'}}
+          <strong>{{this.user.email}}</strong>
+        </AkTypography>
+      {{/if}}
+
+      {{#if this.showEmailOTPEnter}}
+        <div class='fill-silver px-3 py-2'>
+          <AkTypography>
+            {{t 'modalCard.enableMFAEmail.description'}}
+            <strong>{{this.user.email}}</strong>
+          </AkTypography>
+        </div>
+
+        <form aria-label='Enable MFA Email Otp' class='mt-3'>
+          <AkTextField
+            @label={{t 'modalCard.enableMFAEmail.enterCode'}}
+            @value={{this.emailOTP}}
+          />
+        </form>
+      {{/if}}
+    </:default>
+
+    <:footer>
+      <AkStack
+        class='px-3 py-2'
+        @alignItems='center'
+        @justifyContent='flex-end'
+        @spacing='1.5'
+      >
+        {{#if this.showEmailSendConfirm}}
+          <AkButton
+            @loading={{this.getMFAEnableEmailToken.isRunning}}
+            {{on 'click' this.sendEmailMFA}}
+          >
+            {{t 'continue'}}
+          </AkButton>
+
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            {{on 'click' this.cancelEmailEnable}}
+          >
+            {{t 'cancel'}}
+          </AkButton>
+        {{/if}}
+
+        {{#if this.showEmailOTPEnter}}
+          <AkButton
+            @loading={{this.verifyEmailOTP.isRunning}}
+            {{on 'click' this.confirmEmailOTP}}
+          >
+            {{t 'confirm'}}
+          </AkButton>
+        {{/if}}
+      </AkStack>
+    </:footer>
+  </AkModal>
+{{/if}}
+
+{{#if this.showAppEnableModal}}
+  <AkModal
+    @showHeader={{true}}
+    @headerTitle={{t 'modalCard.mfaTitle.enable'}}
+    @onClose={{this.cancelAppEnable}}
+  >
+    <AccountSettings::Security::MfaAppverify
+      @secret={{this.mfaAppSecret}}
+      @email='{{this.user.email}}'
+      @otp={{this.appOTP}}
+      @onContinue={{this.confirmAppOTP}}
+      @onCancel={{this.cancelAppEnable}}
+      @waiting={{this.verifyAppOTP.isRunning}}
+    />
+  </AkModal>
+{{/if}}
+
+{{#if this.staModalActive}}
+  <AkModal
+    @showHeader={{true}}
+    @headerTitle={{t 'mfaSwitchToAppTitle'}}
+    @onClose={{this.staCancel}}
+  >
+    <:default>
+      {{#if this.staAppConfirmActive}}
+        <AkTypography>
+          {{t 'mfaSwitchToAppDescription' htmlSafe=true}}
+        </AkTypography>
+      {{/if}}
+
+      {{#if this.staEmailVerifyActive}}
+        <div class='fill-silver px-3 py-2'>
+          <AkTypography>
+            {{t 'modalCard.enableMFAEmail.description'}}
+            <strong>{{this.user.email}}</strong>
+          </AkTypography>
+        </div>
+
+        <form aria-label='Switch MFA to App Email Otp' class='mt-3'>
+          <AkTextField
+            @label={{t 'modalCard.enableMFAEmail.enterCode'}}
+            @value={{this.emailOTP}}
+          />
+        </form>
+      {{/if}}
+
+      {{#if this.staAppVerifyActive}}
+        <AccountSettings::Security::MfaAppverify
+          @secret={{this.mfaAppSecret}}
+          @email='{{this.user.email}}'
+          @otp={{this.appOTP}}
+          @onContinue={{this.staOnConfirmAppOTP}}
+          @onCancel={{this.staCancel}}
+          @waiting={{this.staVerifyAppOTP.isRunning}}
+        />
+      {{/if}}
+    </:default>
+
+    <:footer>
+      <AkStack
+        class='px-3 py-2'
+        @alignItems='center'
+        @justifyContent='flex-end'
+        @spacing='1.5'
+      >
+        {{#if this.staAppConfirmActive}}
+          <AkButton
+            @loading={{this.staInitialEmail.isRunning}}
+            {{on 'click' this.staOnConfirm}}
+          >
+            {{t 'continue'}}
+          </AkButton>
+
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            {{on 'click' this.staCancel}}
+          >
+            {{t 'cancel'}}
+          </AkButton>
+        {{/if}}
+
+        {{#if this.staEmailVerifyActive}}
+          <AkButton
+            @loading={{this.staVerifyEmailOTP.isRunning}}
+            {{on 'click' this.staOnConfirmEmailOTP}}
+          >
+            {{t 'confirm'}}
+          </AkButton>
+        {{/if}}
+      </AkStack>
+    </:footer>
+  </AkModal>
+{{/if}}
+
+{{#if this.showSwitchToEmailModal}}
+  <AkModal
+    @showHeader={{true}}
+    @headerTitle={{t 'mfaSwitchToEmailTitle'}}
+    @onClose={{this.cancelSwitchToEmail}}
+  >
+    <:default>
+      {{#if this.showSwitchToEmailConfirm}}
+        <AkTypography>
+          {{t 'mfaSwitchToEmailDescription' htmlSafe=true}}
+        </AkTypography>
+      {{/if}}
+
+      {{#if this.showSwitchTOEmailAppVerify}}
+        <AkTypography>
+          {{t 'modalCard.disableMFA.enterOTP'}}
+          {{t 'modalCard.disableMFA.viaApp'}}
+        </AkTypography>
+
+        <form aria-label='Switch to Email disable app MFA Otp' class='mt-3'>
+          <AkTextField @value={{this.appOTP}} />
+        </form>
+      {{/if}}
+
+      {{#if this.showSwitchTOEmailEmailVerify}}
+        <div class='fill-silver px-3 py-2'>
+          <AkTypography>
+            {{t 'modalCard.enableMFAEmail.description'}}
+            <strong>{{this.user.email}}</strong>
+          </AkTypography>
+        </div>
+
+        <form aria-label='Switch to Email MFA Otp' class='mt-3'>
+          <AkTextField
+            @label={{t 'modalCard.enableMFAEmail.enterCode'}}
+            @value={{this.emailOTP}}
+          />
+        </form>
+      {{/if}}
+    </:default>
+
+    <:footer>
+      <AkStack
+        class='px-3 py-2'
+        @alignItems='center'
+        @justifyContent='flex-end'
+        @spacing='1.5'
+      >
+        {{#if this.showSwitchToEmailConfirm}}
+          <AkButton {{on 'click' this.onConfirmSwitchToEmail}}>
+            {{t 'continue'}}
+          </AkButton>
+
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            {{on 'click' this.cancelSwitchToEmail}}
+          >
+            {{t 'cancel'}}
+          </AkButton>
+        {{/if}}
+
+        {{#if this.showSwitchTOEmailAppVerify}}
+          <AkButton
+            @loading={{this.verifySwitchToEmailAppOTP.isRunning}}
+            {{on 'click' this.onConfirmSwitchToEmailAppOTP}}
+          >
+            {{t 'confirm'}}
+          </AkButton>
+
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            {{on 'click' this.cancelSwitchToEmail}}
+          >
+            {{t 'cancel'}}
+          </AkButton>
+        {{/if}}
+
+        {{#if this.showSwitchTOEmailEmailVerify}}
+          <AkButton
+            @loading={{this.verifySwitchToEmailEmailOTP.isRunning}}
+            {{on 'click' this.onConfirmSwitchToEmailEmailOTP}}
+          >
+            {{t 'confirm'}}
+          </AkButton>
+        {{/if}}
+      </AkStack>
+    </:footer>
+  </AkModal>
+{{/if}}

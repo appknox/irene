@@ -1,0 +1,37 @@
+<div {{style width='450px'}}>
+  <AkStack
+    @direction='column'
+    @alignItems='center'
+    @justifyContent='center'
+    @spacing='2'
+  >
+    <AkTypography @variant='h4' @fontWeight='regular'>
+      {{t 'modalCard.enableMFAApp.scanBarcode'}}
+    </AkTypography>
+
+    <canvas {{did-insert this.onCanvasElementInsert}} />
+  </AkStack>
+
+  <form aria-label='Enable MFA App Otp'>
+    <AkTypography @color='textSecondary'>
+      {{t 'modalCard.enableMFAApp.enterCode'}}
+    </AkTypography>
+
+    <AkTextField @formControlClass='mt-2' @value={{@otp}} />
+
+    <AkStack
+      class='mt-2'
+      @alignItems='center'
+      @justifyContent='flex-end'
+      @spacing='1.5'
+    >
+      <AkButton @loading={{@waiting}} {{on 'click' this.continue}}>
+        {{t 'continue'}}
+      </AkButton>
+
+      <AkButton @variant='outlined' @color='neutral' {{on 'click' this.cancel}}>
+        {{t 'cancel'}}
+      </AkButton>
+    </AkStack>
+  </form>
+</div>

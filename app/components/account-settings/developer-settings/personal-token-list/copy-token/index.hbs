@@ -1,0 +1,13 @@
+<AkClipboard
+  @onSuccess={{this.handleCopySuccess}}
+  @onError={{this.handleCopyError}}
+  as |ac|
+>
+  <AkIconButton
+    data-clipboard-text={{@personalToken.key}}
+    id={{ac.triggerId}}
+    @size='small'
+  >
+    <AkIcon @iconName='content-paste' @color='info' />
+  </AkIconButton>
+</AkClipboard>
