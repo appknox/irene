@@ -1,0 +1,67 @@
+<div class='m-2 w-full'>
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkTypography @variant='h5'>
+      {{t 'personalAccessTokens'}}
+    </AkTypography>
+
+    <AkTypography @color='textSecondary'>
+      {{t 'personalAccessTokenDesc'}}
+    </AkTypography>
+  </AkStack>
+
+  <form {{style width='100%' maxWidth='650px'}} class='my-5'>
+    <AkStack @width='full' @alignItems='center' @spacing='1.5'>
+      <AkTextField
+        id='personal-token-input'
+        placeholder={{t 'name'}}
+        @value={{this.tokenName}}
+      />
+
+      <div>
+        <AkButton
+          @loading={{this.generateToken.isRunning}}
+          {{on 'click' (perform this.generateToken)}}
+        >
+          <:leftIcon>
+            <AkIcon @iconName='add' />
+          </:leftIcon>
+
+          <:default>{{t 'personalAccessTokenCreate'}}</:default>
+        </AkButton>
+      </div>
+    </AkStack>
+  </form>
+
+  {{#if this.hasPersonalTokens}}
+    <AkTable
+      {{style maxWidth='850px'}}
+      @dense={{true}}
+      data-test-developerSettingsPersonalToken-table
+      as |t|
+    >
+      <t.head
+        data-test-developerSettingsPersonalToken-thead
+        @columns={{this.columns}}
+      />
+
+      <t.body @rows={{this.personalTokenList}} as |b|>
+        <b.row data-test-developerSettingsPersonalToken-row as |r|>
+          <r.cell data-test-developerSettingsPersonalToken-cell as |value|>
+            {{#if r.columnValue.component}}
+              {{#let (component r.columnValue.component) as |Component|}}
+                <Component
+                  @personalToken={{r.rowValue}}
+                  @reloadTokens={{this.personalTokens.retry}}
+                />
+              {{/let}}
+            {{else}}
+              <AkTypography title={{value}} @noWrap={{true}}>
+                {{value}}
+              </AkTypography>
+            {{/if}}
+          </r.cell>
+        </b.row>
+      </t.body>
+    </AkTable>
+  {{/if}}
+</div>

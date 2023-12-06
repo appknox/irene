@@ -1,0 +1,15 @@
+<AkIconButton
+  @size='small'
+  {{on 'click' this.openRevokePersonalTokenConfirmBox}}
+>
+  <AkIcon @iconName='delete' @color='error' />
+</AkIconButton>
+
+<ConfirmBox
+  @isActive={{this.showRevokePersonalTokenConfirmBox}}
+  @description={{t 'confirmBox.revokePersonalToken'}}
+  @disabled={{this.revokePersonalToken.isRunning}}
+  @confirmText={{t 'delete'}}
+  @confirmAction={{perform this.revokePersonalToken}}
+  @cancelAction={{this.closeRevokePersonalTokenConfirmBox}}
+/>

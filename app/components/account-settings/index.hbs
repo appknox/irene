@@ -1,0 +1,11 @@
+<div class='tabs is-medium is-boxed'>
+  <ul>
+    {{#each this.tabs as |tab|}}
+      <li class={{if tab.isActive 'is-active'}}>
+        <LinkTo @route={{tab.route}}>
+          {{tab.label}}
+        </LinkTo>
+      </li>
+    {{/each}}
+  </ul>
+</div>
