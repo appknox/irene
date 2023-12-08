@@ -1,0 +1,8 @@
+<div class='pr-2'>
+  <AkToggle
+    @checked={{@scenario.isActive}}
+    @size='small'
+    @onChange={{this.toggleScenarioStatus}}
+    {{on 'click' this.handleToggleClick}}
+  />
+</div>

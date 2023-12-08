@@ -7,4 +7,14 @@ export default Base.extend({
   teamCount: faker.random.number(),
   invitationCount: faker.random.number(),
   projects_count: faker.random.number(),
+  features() {
+    return {
+      sso: false,
+      dynamicscan_automation: true,
+      partner_dashboard: false,
+      app_monitoring: false,
+      manualscan: false,
+      sbom: false,
+    };
+  },
 });

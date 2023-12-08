@@ -94,6 +94,9 @@ body {
   --zIndex-modal: 1300;
   --zIndex-snackbar: 1400;
   --zIndex-tooltip: 1500;
+  
+  // for ak-autocomplete component
+  --zIndex-clear-btn: 1501;
 
   // special case variable for home-page/organization-dashboard/side-nav
   --side-menu-active-background-dark: #303339;

@@ -5,7 +5,7 @@
   local-class='general-settings-root'
   data-test-projectSettings-generalSettings-root
 >
-  <AkStack @direction='column' class='px-3'>
+  {{!-- <AkStack @direction='column' class='px-3'>
     <ProjectPreferences
       @profileId={{@project.activeProfileId}}
       @platform={{@project.platform}}
@@ -83,7 +83,7 @@
     />
   </AkStack>
 
-  <AkDivider @color='dark' />
+  <AkDivider @color='dark' /> --}}
 
   {{#if this.organization.selected.features.dynamicscan_automation}}
     <AkStack @width='9/12' class='px-3'>
@@ -96,7 +96,7 @@
     <AkDivider @color='dark' />
   {{/if}}
 
-  <AkStack @width='9/12' class='px-3'>
+  {{!-- <AkStack @width='9/12' class='px-3'>
     <ProjectSettings::GeneralSettings::GithubProject
       @project={{this.project}}
     />
@@ -106,5 +106,5 @@
 
   <AkStack @width='9/12' class='px-3'>
     <ProjectSettings::GeneralSettings::JiraProject @project={{this.project}} />
-  </AkStack>
+  </AkStack> --}}
 </AkStack>

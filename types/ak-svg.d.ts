@@ -29,6 +29,7 @@ export enum AkSvgComponentInvocationByNames {
   MainLoaderImage1,
   MainLoaderImage2,
   MainLoaderImage3,
+  NoScenarioData,
 }
 
 export enum AkSvgComponentInvocationByPaths {

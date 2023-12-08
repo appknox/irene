@@ -1,0 +1,177 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  class='py-4'
+  {{style gap='1.4286em'}}
+>
+  <AkStack
+    @tag='header'
+    @alignItems='center'
+    @justifyContent='space-between'
+    @width='full'
+    class='p-2 px-3'
+    local-class='dast-automation-settings-header-root'
+  >
+
+    <AkStack @alignItems='center' @spacing='4'>
+      <AkStack @direction='column' @spacing='1' @width='full'>
+        <AkTypography
+          @variant='body1'
+          @color='textSecondary'
+          @fontWeight='medium'
+          data-test-projectSettingsHeader-projectDetails-packageName
+        >
+          Scenario
+        </AkTypography>
+
+        <AkTypography
+          @variant='body1'
+          @color='textPrimary'
+          @fontWeight='medium'
+          data-test-projectSettingsHeader-projectDetails-projectID
+        >
+          Admin
+        </AkTypography>
+      </AkStack>
+
+      <AkStack @direction='column' @spacing='1.5' @width='full'>
+        <AkTypography
+          @variant='body1'
+          @color='textSecondary'
+          @fontWeight='medium'
+          data-test-projectSettingsHeader-projectDetails-packageName
+        >
+          Status
+        </AkTypography>
+
+        <AkToggle @size='small' {{style margin='0px'}} />
+      </AkStack>
+    </AkStack>
+
+    <AkIcon @iconName='delete' />
+  </AkStack>
+
+  <AkStack @width='full' @direction='column' {{style overflowX='auto'}}>
+    <div class='px-3' local-class='scenario-details-columns-container'>
+      <AkFormControlLabel
+        @label='Input Type'
+        @labelTypographyFontWeight='medium'
+        local-class='info-column-header-title'
+      />
+
+      <AkFormControlLabel
+        @label='Input Value'
+        @labelTypographyFontWeight='medium'
+        local-class='info-column-header-title'
+      />
+    </div>
+
+    <div class='p-2 px-3' local-class='scenario-add-form-container'>
+      <div>
+        <AkAutocomplete
+          @placeholder='Enter Type'
+          @labelTypographyColor='secondary'
+          @searchQuery={{this.scenarioInputType}}
+          @onChange={{this.handleScenarioTypeChange}}
+          @options={{this.inputTypeSuggestions}}
+          as |mi|
+        >
+          <AkTypography>{{mi}}</AkTypography>
+        </AkAutocomplete>
+      </div>
+
+      <AkTextField
+        @placeholder='Enter Value'
+        @labelTypographyColor='secondary'
+        @value={{this.scenarioInputValue}}
+        {{on 'input' this.handleScenarioValueChange}}
+      >
+        <:rightAdornment>
+          {{#if this.scenarioInputValue}}
+            <AkIconButton
+              @size='small'
+              {{on 'click' this.handleClearScenarioValue}}
+            >
+              <AkIcon @iconName='close' @size='small' @color='textSecondary' />
+            </AkIconButton>
+          {{/if}}
+        </:rightAdornment>
+      </AkTextField>
+
+      <AkButton @disabled={{this.disableAddBtn}}>Add</AkButton>
+    </div>
+
+    {{#if (eq this.scenarioList.length 0)}}
+      <AkStack
+        @justifyContent='center'
+        @alignItems='center'
+        @width='full'
+        @spacing='6'
+        local-class='empty-secanario-container'
+        {{style padding='5.7143em 3.7143em'}}
+      >
+        <AkSvg::NoScenarioData />
+
+        <AkStack @direction='column' @spacing='1'>
+          <AkTypography @variant='h6'>No Data available</AkTypography>
+
+          <AkTypography {{style maxWidth='356px'}}>Lorem ipsum dolor sit amet
+            consectetur. Risus diam enim consequat tempus nibh feugiat penatibus
+            facilisis sit.</AkTypography>
+        </AkStack>
+      </AkStack>
+
+    {{else}}
+      <AkStack @direction='column' @width='full'>
+        {{#each this.scenarioList key='id' as |sn|}}
+          <AkStack
+            @alignItems='center'
+            class='p-2 px-3'
+            local-class='scenario-details-group'
+          >
+            <AkTypography {{style padding='0px 8px'}}>
+              {{sn.name}}
+            </AkTypography>
+
+            <div local-class='group-secure-field'>
+              <AkTextField
+                id={{sn.id}}
+                type={{if this.toggleShowSecureField 'text' 'password'}}
+                @value={{sn.value}}
+                {{on 'input' this.handleSecureFieldChange}}
+              >
+                <:rightAdornment>
+                  <AkIcon
+                    @iconName={{if
+                      this.toggleShowSecureField
+                      'visibility-off'
+                      'visibility'
+                    }}
+                    {{on
+                      'click'
+                      (fn this.handleToggleSecureFieldVisibility sn.id)
+                    }}
+                    {{style cursor='pointer'}}
+                  />
+                </:rightAdornment>
+              </AkTextField>
+            </div>
+
+            <AkIconButton
+              local-class='details-delete-btn'
+              {{on 'click' this.showDeleteParameterModal}}
+            >
+              <AkIcon @iconName='delete' />
+            </AkIconButton>
+          </AkStack>
+        {{/each}}
+      </AkStack>
+    {{/if}}
+  </AkStack>
+</AkStack>
+
+<ConfirmBox
+  @isActive={{this.showDeleteScenarioParameter}}
+  @description='Delete Parameter?'
+  @cancelAction={{this.cancelDeleteParameter}}
+/>

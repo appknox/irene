@@ -86,6 +86,14 @@ function routes() {
 
   this.namespace = config.namespace;
 
+  this.get('/v2/projects/:id', (schema, req) => {
+    return schema.projects.find(`${req.params.id}`)?.toJSON();
+  });
+
+  this.get('/v2/files/:id', (schema, req) => {
+    return schema.files.find(`${req.params.id}`)?.toJSON();
+  });
+
   this.get('/organizations/:id/projects', (schema) => {
     return schema.projects.all().models;
   });
@@ -308,8 +316,20 @@ function routes() {
   });
 
   this.get('/profiles/:id/unknown_analysis_status', 'unknown-analysis-status');
-  this.get('/users/:id', 'user');
-  this.get('/users', 'user');
+
+  this.get('/users/:id', (schema, req) => {
+    return {
+      data: {
+        attributes: schema.users.find(`${req.params.id}`)?.toJSON(),
+        id: req.params.id,
+        relationships: {},
+        type: 'users',
+      },
+    };
+  });
+
+  // this.get('/users', 'user');
+
   this.get('/projects/:id', 'project');
   this.get('/projects', 'project');
   this.get('/pricings', 'pricing');
@@ -324,9 +344,18 @@ function routes() {
   this.get('/submissions', 'submission');
   this.get('/files/:id', 'file');
   this.get('/vulnerabilities/:id', 'vulnerability');
+
   this.get('/vulnerabilities', (schema) => {
-    return schema.vulnerabilities.all().models;
+    return {
+      data: schema.vulnerabilities.all().models.map((model) => ({
+        attributes: model,
+        id: model.id,
+        relationships: {},
+        type: 'vulnerabilities',
+      })),
+    };
   });
+
   this.get('/invitations/:id', 'invitation');
   this.get('/devices', 'device');
   this.get('/invoices', 'invoice');
@@ -604,7 +633,7 @@ function routes() {
   });
 
   this.get('/organizations/:orgId/members/:memId', (schema, request) => {
-    return schema.organizationMembers.find(request.params.memId);
+    return schema.organizationMembers.find(request.params.memId)?.toJSON();
   });
 
   this.put('/organizations/:orgId/members/:memId', () => {
@@ -631,12 +660,14 @@ function routes() {
     return {};
   });
 
-  this.get('/organizations/:id/me', function (schema, req) {
-    const currentUser = schema.currentUsers.findBy({
-      organizationId: req.params.id,
-    });
-    const me = schema.organizationMes.find(currentUser.id);
-    return this.serialize(me).organizationMe;
+  this.get('/organizations/:id/me', function (schema) {
+    // const currentUser = schema.currentUsers.findBy({
+    //   organizationId: req.params.id,
+    // });
+    // const me = schema.organizationMes.find(currentUser.id);
+    // return this.serialize(me).organizationMe;
+
+    return schema.organizationMes.all().models[0]?.toJSON();
   });
 
   this.put('/v2/am_configurations/:id', () => {
@@ -690,6 +721,105 @@ function routes() {
     notifications.update('hasRead', true);
     return new Response(204, {}, {});
   });
+
+  // DAST Automation Scenario Requests
+  this.get('/v2/scan_parameters/:id', (schema, req) =>
+    schema.scanParameters.find(req.params.id).toJSON()
+  );
+
+  this.get(
+    '/v2/scan_parameter_groups/:groupId/scan_parameters/:id',
+    (schema, req) => schema.scanParameters.find(req.params.id).toJSON()
+  );
+
+  this.get('/v2/scan_parameter_groups/:id', (schema, req) =>
+    schema.scanParameterGroups.find(req.params.id).toJSON()
+  );
+
+  this.get('/v2/projects/:projectId/scan_parameter_groups/:id', (schema, req) =>
+    schema.scanParameterGroups.find(req.params.id).toJSON()
+  );
+
+  this.get(
+    '/v2/scan_parameter_groups/:groupId/scan_parameters',
+    (schema, request) => {
+      const data = schema.scanParameters.all();
+
+      let limit = data.length;
+      let offset = 0;
+
+      if (request.queryParams.limit) {
+        limit = request.queryParams.limit;
+      }
+
+      if (request.queryParams.offset) {
+        offset = request.queryParams.offset;
+      }
+
+      const retdata = data.slice(offset, offset + limit);
+
+      return {
+        count: data.length,
+        next: null,
+        previous: null,
+        results: this.serialize(retdata).scanParameters,
+      };
+    }
+  );
+
+  this.get(
+    '/v2/projects/:projectId/scan_parameter_groups',
+    function (schema, request) {
+      const data = schema.scanParameterGroups.all().models;
+
+      let limit = data.length;
+      let offset = 0;
+
+      if (request.queryParams.limit) {
+        limit = request.queryParams.limit;
+      }
+
+      if (request.queryParams.offset) {
+        offset = request.queryParams.offset;
+      }
+
+      const retdata = data.slice(offset, offset + limit);
+
+      return {
+        count: data.length,
+        next: null,
+        previous: null,
+        results: retdata,
+      };
+    }
+  );
+
+  this.post(
+    '/v2/projects/:projectId/scan_parameter_groups',
+    function (schema, request) {
+      const { name, description } = this.normalizedRequestAttrs();
+
+      return schema.scanParameterGroups
+        .create({
+          name,
+          description,
+          project: request.params.projectId,
+        })
+        .toJSON();
+    }
+  );
+
+  this.put(
+    '/v2/projects/:projectId/scan_parameter_groups/:id',
+    function (schema, request) {
+      const { is_active, ...rest } = this.normalizedRequestAttrs();
+      const id = request.params.id;
+
+      return schema.scanParameterGroups
+        .find(id)
+        .update({ is_active: Boolean(is_active), ...rest });
+    }
+  );
 
   this.passthrough();
 }

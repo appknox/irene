@@ -1,0 +1,119 @@
+<AkStack @direction='column' @spacing='2.5' @width='full'>
+  <AkStack
+    @direction='row'
+    @alignItems='center'
+    @justifyContent='space-between'
+    @flexWrap='wrap'
+    @spacing='2'
+    @width='full'
+  >
+    <AkStack @direction='column' {{style maxWidth='522px'}}>
+      <AkTypography @variant='h5' @gutterBottom={{true}}>
+        Dynamic Scan Automation
+      </AkTypography>
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        Create multiple scenarios and configure them with the necessary settings
+        for utilization in the automation of Dynamic Application Security
+        Testing (DAST)
+      </AkTypography>
+    </AkStack>
+
+    <AkButton @variant='outlined' {{on 'click' this.openAddScenarioModal}}>
+      <:leftIcon>
+        <AkIcon @iconName='add' />
+      </:leftIcon>
+
+      <:default>Add Scenario</:default>
+    </AkButton>
+  </AkStack>
+
+  <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings::ScenarioTable
+    @project={{@project}}
+    @scenarioList={{this.scenarioList}}
+    @loadingScenarioList={{this.fetchProjectScenarios.isRunning}}
+    @reloadScenarioList={{this.reloadProjectScenarios}}
+  />
+</AkStack>
+
+{{#if this.showAddScenarioModal}}
+  <AkModal
+    @showHeader={{true}}
+    @blurOverlay={{true}}
+    @headerTitle='Add Scenario'
+    @onClose={{this.closeAddScenarioModal}}
+    @onClickOverlay={{this.closeAddScenarioModal}}
+    @noGutter={{true}}
+  >
+    <:default>
+      <AkStack
+        @direction='column'
+        @spacing='2'
+        local-class='scenario-details-container'
+        class='p-3 pr-6'
+        {{style minWidth='423px'}}
+      >
+        <AkStack @width='full' @spacing='4' @alignItems='center'>
+          <AkTypography
+            @fontWeight='regular'
+            @color='neutral'
+            {{style minWidth='75px'}}
+          >
+            Scenario
+          </AkTypography>
+
+          <AkTextField
+            @value={{this.scenarioName}}
+            @placeholder='Enter the Scenario'
+            {{on 'input' this.handleScenarioNameChange}}
+          />
+        </AkStack>
+
+        <AkStack @spacing='4' @alignItems='center'>
+          <AkTypography
+            @fontWeight='regular'
+            @color='neutral'
+            {{style minWidth='75px'}}
+          >
+            Status
+          </AkTypography>
+
+          <AkToggle
+            @checked={{this.scenarioStatus}}
+            @size='small'
+            @onChange={{this.toggleScenarioStatus}}
+            {{style margin='0'}}
+          />
+        </AkStack>
+      </AkStack>
+    </:default>
+
+    <:footer>
+      <AkDivider />
+
+      <AkStack
+        @justifyContent='flex-start'
+        @alignItems='center'
+        @spacing='1.5'
+        class='px-3 py-2'
+      >
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          {{on 'click' this.closeAddScenarioModal}}
+        >
+          {{t 'cancel'}}
+        </AkButton>
+
+        <AkButton
+          @disabled={{this.disableScenarioAddBtn}}
+          @variant='filled'
+          @loading={{this.addScenarioToProject.isRunning}}
+          {{on 'click' this.createScenario}}
+        >
+          Add
+        </AkButton>
+      </AkStack>
+    </:footer>
+  </AkModal>
+{{/if}}

@@ -6,6 +6,7 @@ import ProjectModel from 'irene/models/project';
 interface ProjectSettingsHeaderSignature {
   Args: {
     project: ProjectModel | null;
+    hideProjectHeaderAndTabs?: boolean;
   };
 }
 
@@ -27,11 +28,17 @@ export default class ProjectSettingsHeaderComponent extends Component<ProjectSet
         linkTitle: this.project?.get('packageName'),
         model: this.project?.get('id'),
       },
-      {
-        route: 'authenticated.project.settings',
-        linkTitle: this.intl.t('settings'),
-        model: this.project?.get('id'),
-      },
+      this.args.hideProjectHeaderAndTabs
+        ? {
+            route: 'authenticated.project.settings',
+            linkTitle: 'Dast Automation',
+            model: this.project?.get('id'),
+          }
+        : {
+            route: 'authenticated.project.settings',
+            linkTitle: this.intl.t('settings'),
+            model: this.project?.get('id'),
+          },
     ];
   }
 

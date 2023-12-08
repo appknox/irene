@@ -313,6 +313,9 @@ module.exports = function (environment) {
       saml2SPMetadata: 'v2/sso/saml2/metadata',
       saml2Login: 'sso/saml2/login',
       files: 'files',
+      projects: 'projects',
+      scanParameterGroups: 'scan_parameter_groups',
+      scanParameters: 'scan_parameters',
       profiles: 'profiles',
       analyses: 'analyses',
       vulnerabilityPreferences: 'vulnerability_preferences',
@@ -555,7 +558,7 @@ module.exports = function (environment) {
 
   if (environment === 'development') {
     ENV['ember-cli-mirage'] = {
-      enabled: false,
+      enabled: true,
     };
   }
 
