@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
 
@@ -7,6 +6,6 @@ import localeData from 'dayjs/plugin/localeData';
  * Method to get list of months in humanized forms
  */
 export function humanizeMonths() {
-  dayjs.extend(localeData)
+  dayjs.extend(localeData);
   return dayjs().localeData().months();
 }

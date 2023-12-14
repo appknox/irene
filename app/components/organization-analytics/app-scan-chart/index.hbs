@@ -1,0 +1,67 @@
+<div class='columns'>
+  <div class='column content-right'>
+    <AkDatePicker
+      @renderInPlace={{true}}
+      @value={{this.dateRange}}
+      @maxDate={{this.maxDate}}
+      @range={{true}}
+      @options={{this.datepickerOptions}}
+      @onChange={{this.updateDateRange}}
+      as |selectedDates|
+    >
+      <AkStack
+        data-test-date-picker-toggle-button
+        local-class='date-picker-btn'
+        @alignItems='center'
+      >
+        <AkIcon
+          @iconName='event'
+          @size='small'
+          @color='textPrimary'
+          title='Select date range'
+          local-class='date-picker-icon'
+        />
+
+        <div
+          data-test-orgArchive-dateRangeLabel
+          local-class='date-picker-dateText'
+        >
+          {{#if selectedDates.firstObject}}
+            <AkTypography @tag='span' @color='textPrimary'>
+              {{this.startDate}}
+            </AkTypography>
+          {{else}}
+            <AkTypography @tag='span' @color='textSecondary'>
+              {{t 'fromDate'}}
+            </AkTypography>
+          {{/if}}
+
+          <AkTypography @tag='span' @color='textSecondary'>
+            -
+          </AkTypography>
+
+          {{#if selectedDates.lastObject}}
+            <AkTypography @tag='span' @color='textPrimary'>
+              {{this.endDate}}
+            </AkTypography>
+          {{else}}
+            <AkTypography @tag='span' @color='textSecondary'>
+              {{t 'toDate'}}
+            </AkTypography>
+          {{/if}}
+        </div>
+      </AkStack>
+    </AkDatePicker>
+  </div>
+</div>
+
+<div class='columns'>
+  <div class='column'>
+    <AkChart
+      @width='100%'
+      @height='350px'
+      @onInit={{this.handleOnChartInit}}
+      @option={{this.chartOption}}
+    />
+  </div>
+</div>

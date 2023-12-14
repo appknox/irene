@@ -1,0 +1,160 @@
+<div class='license-detail margin-h-1h padding-t-1'>
+  <h4 class='bold black-text'>
+    License
+  </h4>
+
+  <table class='org-table'>
+    <thead>
+      <tr>
+        <th
+          colspan='3'
+          class='{{if @license.isActive "success" "critical"}} p-2'
+        >
+          <div class='align-both-centered'>
+            <div class='font-legible bold'>
+              {{#if @license.isLimitedScans}}
+                {{@license.perScanName}}
+              {{else}}
+                {{@license.perAppName}}
+              {{/if}}
+            </div>
+
+            <div class='text-right'>
+              <AkStack @alignItems='center'>
+                {{#if @license.isActive}}
+                  <AkIcon @iconName='done' @color='success' @size='small' />
+                {{else}}
+                  <AkIcon @iconName='close' @color='error' @size='small' />
+                {{/if}}
+
+                <span class='padding-l-q'>
+                  {{@license.status}}
+                </span>
+              </AkStack>
+            </div>
+          </div>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>
+          <div class='font-legible black-text'>
+            <AkStack @alignItems='center' @spacing='0.5'>
+              <AkIcon
+                @iconName='shape-line'
+                class='padding-r-h'
+                @size='small'
+              />
+
+              <span>Features</span>
+            </AkStack>
+          </div>
+        </td>
+
+        <td>
+          {{#if @license.isLimitedScans}}
+            <div class='uppercase-text margin-b-h font-small'>
+              No. of Scans
+            </div>
+
+            <div class='semi-bold font-legible black-text'>
+              {{@license.perScanQuantity}}
+            </div>
+          {{else}}
+            <div class='uppercase-text margin-b-h font-small'>
+              No. of Apps
+            </div>
+
+            <div class='semi-bold font-legible black-text'>
+              {{@license.perAppQuantity}}
+            </div>
+          {{/if}}
+        </td>
+
+        <td>
+          <em class='font-legible text-lightgray'>
+            {{#if @license.isLimitedScans}}
+              {{@license.perScanDescription}}
+            {{else}}
+              {{@license.perAppDescription}}
+            {{/if}}
+          </em>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <div class='font-legible black-text'>
+            <AkStack @alignItems='center' @spacing='0.5'>
+              <AkIcon
+                @iconName='calendar-month'
+                class='padding-r-h'
+                @size='small'
+              />
+
+              <span>Validity</span>
+            </AkStack>
+          </div>
+        </td>
+
+        <td>
+          <div class='uppercase-text margin-b-h font-small'>
+            Start Date
+          </div>
+
+          <div class='semi-bold font-legible black-text'>
+            {{this.startDate}}
+          </div>
+        </td>
+
+        <td>
+          <div class='uppercase-text margin-b-h font-small'>
+            Expiry Date
+          </div>
+
+          <div class='semi-bold font-legible black-text'>
+            {{this.expiryDate}}
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <div class='font-legible black-text'>
+            <AkStack @alignItems='center' @spacing='0.5'>
+              <AkIcon @iconName='person' class='padding-r-h' @size='small' />
+
+              <span>Registration</span>
+            </AkStack>
+          </div>
+        </td>
+
+        <td>
+          <div class='uppercase-text margin-b-h font-small'>
+            License Key
+          </div>
+
+          <div class='semi-bold font-legible black-text'>
+            {{@license.key}}
+          </div>
+        </td>
+
+        <td>
+          <div class='uppercase-text margin-b-h font-small'>
+            Licensed to
+          </div>
+
+          <div class='vertical-align-center semi-bold font-legible black-text'>
+            {{@license.name}}
+
+            <div class='margin-l-h semi-bold black-text'>
+              &lt;{{@license.email}}&gt;
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

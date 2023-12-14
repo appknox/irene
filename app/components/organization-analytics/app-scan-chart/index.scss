@@ -1,0 +1,16 @@
+.date-picker-btn {
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid var(--organization-analytics-app-scan-chart-border-color);
+  border-radius: var(--organization-analytics-app-scan-chart-border-radius);
+
+  .date-picker-dateText {
+    padding: 0.5em 1em;
+    border-left: 1px solid
+      var(--organization-analytics-app-scan-chart-border-color);
+  }
+
+  .date-picker-icon {
+    margin: 0 0.6em;
+  }
+}

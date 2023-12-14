@@ -56,6 +56,10 @@ export default class FileActionsNewComponent extends Component {
     this.showAddAnalysisModal = true;
   }
 
+  @action closeAddAnalysisModal() {
+    this.showAddAnalysisModal = false;
+  }
+
   @action selectVulnerabilty(value) {
     this.selectedVulnerability = value;
   }

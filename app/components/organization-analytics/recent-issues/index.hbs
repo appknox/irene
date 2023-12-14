@@ -1,0 +1,45 @@
+<div class='main-box-container'>
+  <h5 class='box-main-heading'>
+    Top Issues
+  </h5>
+
+  {{#if this.recentIssues.records}}
+    <div class='box-content scrolling-box'>
+      <div class='box-lists'>
+        {{#each this.recentIssues.records as |issue|}}
+          <div class='box-list-items'>
+            <div class='columns'>
+              <div class='column'>
+                <div class='box-heading-issues'>
+                  <h5>{{issue.vulnerability.name}}</h5>
+                </div>
+              </div>
+            </div>
+
+            <div class='columns'>
+              <div class='column'>
+                <small>Found in {{issue.count}} file(s)</small>
+              </div>
+
+              <div class='column content-right'>
+                {{#each issue.vulnerability.types as |tag|}}
+                  <div class='tag is-default'>
+                    {{t (vulnerability-type tag)}}
+                  </div>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  {{else}}
+    <div class='not-found no-issues'>
+      <AkStack @alignItems='center' @justifyContent='center' @spacing='1'>
+        <AkIcon @iconName='report-problem' />
+
+        <span>No issues found</span>
+      </AkStack>
+    </div>
+  {{/if}}
+</div>

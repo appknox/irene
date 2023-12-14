@@ -145,50 +145,49 @@
   </div>
 </div>
 
-<ModalCard
-  @isActive={{this.showAddAnalysisModal}}
-  @title='Add Analysis'
-  class='input-modal vuln-modal'
->
-  <div class='card-body'>
-    <div class='card-wrapper'>
-      <div class='columns'>
-        <div class='column'>
-          Vulnerability
-        </div>
-      </div>
-      <div class='columns'>
-        <div class='column margin-top20'>
-          <PowerSelect
-            @searchField='name'
-            @placeholder='Select the Vulnerability'
-            @renderInPlace={{true}}
-            @selected={{this.selectedVulnerability}}
-            @options={{this.vulnerabilities}}
-            @onChange={{this.selectVulnerabilty}}
-            as |key|
-          >
-            {{key.id}}
-            -
-            {{key.name}}
-          </PowerSelect>
-
-        </div>
-      </div>
-      <div class='columns'>
-        <div class='column margin-top20'>
-          <button
-            class='button is-primary'
-            type='button'
-            {{on 'click' (perform this.addAnalysis)}}
-          >
-            Add Analysis
-          </button>
-        </div>
+{{#if this.showAddAnalysisModal}}
+  <AkModal
+    @headerTitle='Add Analysis'
+    @showHeader={{true}}
+    @onClose={{this.closeAddAnalysisModal}}
+  >
+    <div class='columns'>
+      <div class='column'>
+        Vulnerability
       </div>
     </div>
-  </div>
-</ModalCard>
+
+    <div class='columns'>
+      <div class='column margin-top20'>
+        <AkSelect
+          {{style width='600px'}}
+          @searchField='name'
+          @placeholder='Select the Vulnerability'
+          @selected={{this.selectedVulnerability}}
+          @options={{this.vulnerabilities}}
+          @onChange={{this.selectVulnerabilty}}
+          as |key|
+        >
+          {{key.id}}
+          -
+          {{key.name}}
+        </AkSelect>
+      </div>
+    </div>
+
+    <div class='columns'>
+      <div class='column margin-top20'>
+        <button
+          class='button is-primary'
+          type='button'
+          {{on 'click' (perform this.addAnalysis)}}
+        >
+          Add Analysis
+        </button>
+      </div>
+    </div>
+  </AkModal>
+{{/if}}
 
 <ConfirmBox
   @isActive={{this.showPurgeAPIAnalysisConfirmBox}}
