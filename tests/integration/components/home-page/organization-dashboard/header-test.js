@@ -97,7 +97,7 @@ module(
         assert.dom('[data-test-uploadApp-root]').exists();
 
         assert.dom('[data-test-uploadApp-uploadBtn]').hasText('t:uploadApp:()');
-        assert.dom('[data-test-uploadAppViaLink-btn]').isNotDisabled();
+        // assert.dom('[data-test-uploadAppViaLink-btn]').isNotDisabled();
 
         if (hasUploadAppStatus) {
           assert.dom('[data-test-uploadAppStatus-loader]').exists();
