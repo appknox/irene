@@ -1,0 +1,67 @@
+<div class='columns home-page box-container'>
+  <div class='column'>
+    <div class='columns'>
+      <div class='column'>
+        <OrganizationAnalytics::ScanCountChart @scanCount={{this.scanCount}} />
+      </div>
+    </div>
+  </div>
+
+  <div class='column'>
+    <OrganizationAnalytics::AppScanChart />
+  </div>
+</div>
+
+<div class='columns'>
+  <div class='column'>
+    <div class='main-box-container'>
+      <h5 class='box-main-heading'>
+        Overall Scan Count
+      </h5>
+
+      <div class='columns scan-list'>
+        <div class='column'>
+          <h5>Total Static Scans</h5>
+        </div>
+
+        <div class='column'>
+          <h5>{{this.scanCount.static_scan_count}}</h5>
+        </div>
+      </div>
+
+      <div class='columns scan-list'>
+        <div class='column'>
+          <h5>Total Dynamic Scans</h5>
+        </div>
+
+        <div class='column'>
+          <h5>{{this.scanCount.dynamic_scan_count}}</h5>
+        </div>
+      </div>
+
+      <div class='columns scan-list'>
+        <div class='column'>
+          <h5>Total API Scans</h5>
+        </div>
+
+        <div class='column'>
+          <h5>{{this.scanCount.api_scan_count}}</h5>
+        </div>
+      </div>
+
+      <div class='columns scan-list'>
+        <div class='column'>
+          <h5>Total Manual Scans</h5>
+        </div>
+
+        <div class='column'>
+          <h5>{{this.scanCount.manual_scan_count}}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class='column'>
+    <OrganizationAnalytics::RecentIssues />
+  </div>
+</div>

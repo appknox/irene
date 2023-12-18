@@ -1,0 +1,157 @@
+<div class='auth-main-container'>
+  <div class='align-middle contain-width'>
+    <div>
+      <AuthAssets />
+    </div>
+  </div>
+
+  <div class='columns'>
+    <div class='column is-half margin-auto'>
+      <div local-class='system-status-container'>
+        <div local-class='system-status-box'>
+          <h4>{{t 'systemStatus'}}</h4>
+
+          <table local-class='system-status-table'>
+            <thead>
+              <tr>
+                <th>{{t 'system'}}</th>
+                <th>{{t 'status'}}</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>
+                  <div local-class='status-label'>
+                    {{t 'storage'}}
+                  </div>
+                </td>
+
+                <td>
+                  {{#if this.getStorageStatus.isRunning}}
+                    <AkStack
+                      @alignItems='center'
+                      @justifyContent='center'
+                      @spacing='0.5'
+                      local-class='loading-indicator'
+                    >
+                      <AkLoader @size={{14}} />
+
+                      <span class='has-text-grey-lighter'>
+                        {{t 'checking'}}
+                      </span>
+                    </AkStack>
+                  {{else}}
+                    <ul>
+                      <li
+                        local-class='operational-status {{if
+                          this.isStorageWorking
+                          "online"
+                        }}'
+                      >
+                        <span local-class='operational-text'>
+                          {{t 'operational'}}
+                        </span>
+
+                        <span local-class='unavailable-text'>
+                          {{t 'unreachable'}}
+
+                          <small>{{t 'proxyWarning'}}</small>
+                        </span>
+                      </li>
+                    </ul>
+                  {{/if}}
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <div local-class='status-label'>
+                    {{t 'devicefarm'}}
+                  </div>
+                </td>
+
+                <td>
+                  {{#if this.getDeviceFarmStatus.isRunning}}
+                    <AkStack
+                      @alignItems='center'
+                      @justifyContent='center'
+                      @spacing='0.5'
+                      local-class='loading-indicator'
+                    >
+                      <AkLoader @size={{14}} />
+
+                      <span class='has-text-grey-lighter'>
+                        {{t 'checking'}}
+                      </span>
+                    </AkStack>
+                  {{else}}
+                    <ul>
+                      <li
+                        local-class='operational-status {{if
+                          this.isDeviceFarmWorking
+                          "online"
+                        }}'
+                      >
+                        <span local-class='operational-text'>
+                          {{t 'operational'}}
+                        </span>
+
+                        <span local-class='unavailable-text'>
+                          {{t 'unreachable'}}
+                        </span>
+                      </li>
+                    </ul>
+                  {{/if}}
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <div local-class='status-label'>
+                    {{t 'api'}}
+                    {{t 'server'}}
+                  </div>
+                </td>
+
+                <td>
+                  {{#if this.getAPIServerStatus.isRunning}}
+                    <AkStack
+                      @alignItems='center'
+                      @justifyContent='center'
+                      @spacing='0.5'
+                      local-class='loading-indicator'
+                    >
+                      <AkLoader @size={{14}} />
+
+                      <span class='has-text-grey-lighter'>
+                        {{t 'checking'}}
+                      </span>
+                    </AkStack>
+                  {{else}}
+                    <ul>
+                      <li
+                        local-class='operational-status {{if
+                          this.isAPIServerWorking
+                          "online"
+                        }}'
+                      >
+                        <span local-class='operational-text'>
+                          {{t 'operational'}}
+                        </span>
+
+                        <span local-class='unavailable-text'>
+                          {{t 'unreachable'}}
+                        </span>
+                      </li>
+                    </ul>
+                  {{/if}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

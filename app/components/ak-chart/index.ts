@@ -24,6 +24,8 @@ import {
   DatasetComponent,
   DatasetComponentOption,
   TransformComponent,
+  LegendComponent,
+  LegendComponentOption,
 } from 'echarts/components';
 
 // Features like Universal Transition and Label Layout
@@ -44,6 +46,7 @@ echarts.use([
   GridComponent,
   DatasetComponent,
   TransformComponent,
+  LegendComponent,
   LabelLayout,
   UniversalTransition,
   CanvasRenderer,
@@ -57,6 +60,7 @@ export type ECOption = echarts.ComposeOption<
   | TooltipComponentOption
   | GridComponentOption
   | DatasetComponentOption
+  | LegendComponentOption
 >;
 
 export type ECInstance = echarts.ECharts;

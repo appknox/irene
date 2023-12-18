@@ -890,4 +890,8 @@ body {
   --tri-state-checkbox-overridden-bg: var(--success-light);
   --tri-state-checkbox-border-color: var(--success-main);
   --tri-state-reset-icon-bg: var(--common-white);
+
+  // variables for organization-analytics/app-scan-chart
+  --organization-analytics-app-scan-chart-border-color: var(--border-color-1);
+  --organization-analytics-app-scan-chart-border-radius: var(--border-radius);
 }
