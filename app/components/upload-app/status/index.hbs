@@ -1,0 +1,94 @@
+<AkStack @spacing='1.5' @alignItems='center'>
+  {{#if this.hasSubmissions}}
+    <div local-class='divider'></div>
+
+    <AkLoader
+      data-test-uploadAppStatus-loader
+      @size={{30}}
+      @thickness={{5}}
+      local-class='{{this.loaderColorClass}} cursor-pointer'
+      @progress={{100}}
+      @variant={{this.loaderVariant}}
+      {{on 'click' this.registerAnchorRef}}
+      {{did-insert this.registerAnchorRefOnInsert}}
+    >
+      <:label>
+        <AkIcon
+          data-test-uploadAppStatus-icon
+          @iconName='file-upload'
+          @variant='outlined'
+          @size='small'
+        />
+      </:label>
+    </AkLoader>
+  {{/if}}
+</AkStack>
+
+{{#if this.hasSubmissions}}
+  <AkPopover
+    @arrow={{true}}
+    @anchorRef={{this.anchorRef}}
+    @placement='bottom'
+    @clickOutsideToClose={{true}}
+    @closeHandler={{this.closeSubmissionStatus}}
+    @hasBackdrop={{true}}
+    local-class='submission-status-popover-container'
+  >
+    <AkStack
+      @width='full'
+      @direction='column'
+      local-class='submission-status-dropdown-container'
+      data-test-uploadAppStatusPopover-container
+    >
+      <AkStack @width='full' @justifyContent='space-between' class='p-2'>
+        <AkStack @spacing='1'>
+          <AkIcon @iconName='show-chart' />
+
+          <AkTypography
+            data-test-uploadAppStatusPopover-title
+            @variant='subtitle1'
+          >
+            {{t 'uploadStatus'}}
+          </AkTypography>
+        </AkStack>
+
+        <AkStack @spacing='2'>
+          {{#each this.statusNumbers as |sn|}}
+            <AkStack
+              data-test-uploadAppStatus-submissionCount={{sn.appStatus}}
+              @alignItems='center'
+              @spacing='0.5'
+            >
+              <AkIcon
+                @iconName={{sn.iconName}}
+                @color={{sn.iconColor}}
+                @size='small'
+              />
+
+              <AkTypography @variant='body2'>
+                {{sn.value}}
+              </AkTypography>
+            </AkStack>
+          {{/each}}
+        </AkStack>
+      </AkStack>
+      <AkDivider />
+
+      <AkStack
+        @width='full'
+        @spacing='2'
+        class='p-2'
+        @direction='column'
+        local-class='popup-height'
+      >
+        {{#each this.computedSubmissionList as |submission|}}
+          <UploadApp::Status::Details
+            data-test-uploadAppStatus-submission='{{submission.id}}'
+            @submission={{submission}}
+            @submissionSet={{this.submissionSet}}
+          />
+        {{/each}}
+      </AkStack>
+    </AkStack>
+  </AkPopover>
+{{/if}}

@@ -7,6 +7,7 @@ import LoggerService from './logger';
 type ServerData = {
   websocket: string;
   enterprise: string | boolean;
+  urlUploadAllowed: boolean;
 };
 
 export default class ConfigurationService extends Service {
@@ -56,6 +57,7 @@ export default class ConfigurationService extends Service {
   serverData: ServerData = {
     websocket: '',
     enterprise: '',
+    urlUploadAllowed: false,
   };
 
   async fetchConfig(url: string) {
@@ -142,6 +144,7 @@ export default class ConfigurationService extends Service {
 
       this.serverData.websocket ||= data.websocket;
       this.serverData.enterprise ||= data.enterprise == true;
+      this.serverData.urlUploadAllowed ||= data.url_upload_allowed;
     } catch (error) {
       this.logger.error('Error getting server configuration', error);
     }

@@ -22,10 +22,43 @@
               <div class='hide-overflow' data-test-file-overview-file-name>
                 {{this.file.name}}
               </div>
-              <AkIcon
-                data-test-file-overview-platform-icon
-                @iconName='{{this.file.project.platformIconClass}}'
-              />
+
+              <AkStack @alignItems='center' @spacing='1'>
+                <AkIcon
+                  data-test-file-overview-platform-icon
+                  @iconName='{{this.file.project.platformIconClass}}'
+                />
+
+                {{#if this.file.submission.url}}
+                  <AkTooltip
+                    @placement='top'
+                    @arrow={{true}}
+                    @title='{{if
+                      this.file.submission.isIos
+                      (t "openInAppstore")
+                      (t "openInPlaystore")
+                    }}'
+                  >
+                    <a
+                      target='_blank'
+                      href={{this.file.submission.url}}
+                      rel='noopener noreferrer'
+                      {{on 'click' this.handleLinkClick}}
+                      local-class='store-logo-container'
+                    >
+                      {{#if this.file.submission.isIos}}
+                        <AkSvg::AppstoreLogo
+                          local-class='appstore-logo-vector'
+                        />
+                      {{/if}}
+
+                      {{#if this.file.submission.isAndroid}}
+                        <AkSvg::PlaystoreLogo />
+                      {{/if}}
+                    </a>
+                  </AkTooltip>
+                {{/if}}
+              </AkStack>
             </div>
           </h5>
         </li>

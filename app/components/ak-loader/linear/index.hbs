@@ -17,12 +17,18 @@
         "indeterminate-indicator-bar--1"
         "ak-loader-linear-indicator"
       }}'
-      {{style transform=(concat 'translateX(' this.progressIndicatorPosition '%)')}}
+      class='ak-loader-linear-indicator'
+      {{style
+        transform=(concat 'translateX(' this.progressIndicatorPosition '%)')
+      }}
       data-test-ak-loader-linear-indicator
     ></span>
 
     {{#if this.isIndeterminateLoader}}
-      <span local-class='indeterminate-indicator-bar--2'></span>
+      <span
+        local-class='indeterminate-indicator-bar--2'
+        data-test-ak-loader-linear-indicator
+      ></span>
     {{/if}}
   </span>
 

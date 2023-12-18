@@ -36,3 +36,20 @@
 .platform-apple {
   color: var(--file-compare-file-overview-color-ios);
 }
+
+.store-logo-container {
+  display: flex;
+  height: 24px;
+  width: 24px;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    border: 1px solid var(--file-compare-store-logo-container-background-color);
+  }
+}
+
+.appstore-logo-vector {
+  height: 16px;
+  width: 16px;
+}

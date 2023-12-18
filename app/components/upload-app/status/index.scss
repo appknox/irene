@@ -1,0 +1,36 @@
+.submission-status-popover-container {
+  inset: 0;
+}
+
+.submission-status-dropdown-container {
+  margin-top: 10px;
+  position: relative;
+  width: 30em;
+  background: var(--app-upload-status-dropdown-background-color);
+  border: 1px solid var(--app-upload-status-dropdown-border-color);
+  box-shadow: var(--app-upload-status-dropdown-box-shadow);
+}
+
+.green-loader {
+  :global(.ak-loader-circle-indicator) {
+    stroke: var(--app-upload-status-green-loader-color) !important;
+  }
+
+  :global(.ak-loader-svg-track) {
+    stroke: var(--app-upload-status-green-loader-track-color) !important;
+  }
+}
+
+.divider {
+  border-left: 1px solid;
+  height: 30px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.popup-height {
+  max-height: 70vh;
+  overflow: auto;
+}

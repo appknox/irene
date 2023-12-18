@@ -31,3 +31,24 @@
     padding-top: 1em;
   }
 }
+
+.store-logo-container {
+  display: flex;
+  height: 24px;
+  width: 24px;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: var(
+      --file-details-summary-store-logo-container-background-color
+    );
+    border: 1px solid
+      var(--file-details-summary-store-logo-container-border-color);
+  }
+}
+
+.appstore-logo-vector {
+  height: 16px;
+  width: 16px;
+}

@@ -25,7 +25,7 @@ class RollbarStub extends Service {
   critical() {}
 }
 
-module('Integration | Component | upload-app', function (hooks) {
+module('Integration | Component | upload-app/via-system', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
   setupIntl(hooks);
@@ -48,7 +48,7 @@ module('Integration | Component | upload-app', function (hooks) {
   });
 
   test('it renders upload app', async function (assert) {
-    await render(hbs`<UploadApp />`);
+    await render(hbs`<UploadApp::ViaSystem />`);
 
     assert.dom('[data-test-uploadApp-root]').exists();
 
@@ -75,7 +75,7 @@ module('Integration | Component | upload-app', function (hooks) {
         { timing: 500 }
       );
 
-      await render(hbs`<UploadApp />`);
+      await render(hbs`<UploadApp::ViaSystem />`);
 
       assert.dom('[data-test-uploadApp-root]').exists();
 

@@ -1,5 +1,6 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
 
 export default class FileOverviewComponent extends Component {
   @service store;
@@ -30,5 +31,10 @@ export default class FileOverviewComponent extends Component {
     return this.store.queryRecord('unknown-analysis-status', {
       id: this.profileId,
     });
+  }
+
+  @action
+  handleLinkClick(event) {
+    event.stopPropagation();
   }
 }

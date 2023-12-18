@@ -536,9 +536,6 @@ body {
   //variables for appmonitoring/table/status-column
   --appmonitoring-table-status-last-sync-color: var(--neutral-grey-600);
 
-  //variables for upload-app
-  --upload-app-color-primary-contrast-text: var(--primary-contrast-text);
-
   // variables for file/report-drawer/va-reports
   --file-report-dr-va-reports-border-radius: var(--border-radius);
   --file-report-dr-va-reports-border-color: var(--border-color-1);
@@ -658,6 +655,12 @@ body {
   --file-details-summary-background-color: var(--background-main);
   --file-details-summary-border-color: var(--border-color-1);
   --file-details-summary-border-radius: var(--border-radius);
+  --file-details-summary-store-logo-container-background-color: var(
+    --common-white
+  );
+  --file-details-summary-store-logo-container-border-color: var(
+    --neutral-grey-200
+  );
 
   // variables for file-details/summary/app-platform
   --file-details-summary-app-platform-color-ios: var(--ios);
@@ -767,6 +770,7 @@ body {
   --file-compare-file-overview-border-color-dark: var(--border-color-1);
   --file-compare-file-overview-color-android: var(--android);
   --file-compare-file-overview-color-ios: var(--ios);
+  --file-compare-store-logo-container-background-color: var(--neutral-grey-200);
 
   // variables for file-compare/compare-list
   --file-compare-compare-list-wrapper-background-color: var(--background-main);
@@ -894,4 +898,41 @@ body {
   // variables for organization-analytics/app-scan-chart
   --organization-analytics-app-scan-chart-border-color: var(--border-color-1);
   --organization-analytics-app-scan-chart-border-radius: var(--border-radius);
+
+  // variables for app-upload/status/details
+  --app-upload-status-details-footer-background-color: var(--background-light);
+  --app-upload-status-details-footer-border-color: var(--neutral-grey-100);
+  --app-upload-status-details-image-border-color: var(--neutral-grey-100);
+  --app-upload-status-details-loader-background-color: var(--success-main);
+
+  // variables for app-upload/status
+  --app-upload-status-arrow-border-color: var(--neutral-grey-200);
+  --app-upload-status-dropdown-background-color: var(--common-white);
+  --app-upload-status-dropdown-border-color: var(--neutral-white-100);
+  --app-upload-status-dropdown-box-shadow: var(--box-shadow-9);
+  --app-upload-status-green-loader-color: var(--success-main);
+  --app-upload-status-green-loader-track-color: var(--success-light);
+
+  // variables for app-upload/via-link
+  --app-upload-via-link-button-stack-shadow: var(--box-shadow-4);
+  --app-upload-via-link-url-format-bullet-color: var(--text-primary);
+
+  &.theme-light {
+    --app-upload-via-link-button-color: var(--text-primary);
+  }
+
+  &.theme-dark {
+    --app-upload-via-link-button-color: var(--common-white);
+  }
+
+  // variables for app-upload/via-link/preview
+  --app-upload-via-link-preview-background-color: var(--background-light);
+  --app-upload-via-link-preview-border-color: var(--neutral-grey-100);
+  --app-upload-via-link-preview-footer-background-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for file-overview
+  --file-overview-store-logo-container-background-color: var(--common-white);
+  --file-overview-store-logo-container-border-color: var(--neutral-grey-200);
 }

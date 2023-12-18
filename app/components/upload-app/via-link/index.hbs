@@ -1,0 +1,101 @@
+{{! @glint-nocheck: perform }}
+<div>
+  <AkIconButton
+    data-test-uploadAppViaLink-btn
+    @variant='outlined'
+    {{on 'click' this.openLinkUploadModal}}
+  >
+    <AkIcon @iconName='link' local-class='link-icon' />
+  </AkIconButton>
+
+  {{#if this.showLinkUploadModal}}
+    <AkModal
+      @showHeader={{true}}
+      @headerTitle={{t 'uploadAppModule.linkUploadPopupHeader'}}
+      @onClose={{this.closeLinkUploadModal}}
+    >
+      <:default>
+        <AkStack
+          @direction='column'
+          @spacing='2'
+          local-class='upload-modal-container'
+        >
+          <AkTextField
+            data-test-uploadAppViaLinkModal-linkInput
+            @label={{t 'uploadAppModule.linkInputLabel'}}
+            @labelTypographyVariant='subtitle1'
+            @labelTypographyColor='textPrimary'
+            @placeholder={{t 'uploadAppModule.linkPastePlaceholder'}}
+            @value={{this.changeset.url}}
+            @helperText={{get this.changeset.error.url.validation 0}}
+            @error={{this.changeset.isInvalid}}
+          />
+
+          <AkTypography
+            data-test-uploadAppViaLinkModal-linkInputHelperText
+            @variant='subtitle2'
+          >
+            {{t 'uploadAppModule.supportedStores'}}
+            :
+            <AkTypography @variant='body2' @tag='span'>
+              {{t 'uploadAppModule.stores'}}
+            </AkTypography>
+          </AkTypography>
+
+          <AkStack @direction='column'>
+            <AkTypography
+              @variant='subtitle2'
+              data-test-uploadAppViaLinkModal-validFormatText
+            >
+              {{t 'uploadAppModule.validURLFormatTitle'}}
+            </AkTypography>
+
+            <ul local-class='valid-url-format-list'>
+              <li>
+                <AkTypography
+                  @variant='body2'
+                  data-test-uploadAppViaLinkModal-playstoreValidUrl
+                >
+                  https://play.google.com/store/apps/details?id={package_name}
+                </AkTypography>
+              </li>
+
+              <li>
+                <AkTypography
+                  @variant='body2'
+                  data-test-uploadAppViaLinkModal-appstoreValidUrl
+                >
+                  https://apps.apple.com/{country_code}/app/{app_slug}/id{app_id}
+                </AkTypography>
+              </li>
+            </ul>
+          </AkStack>
+
+          {{! <AkDivider @color='dark' />
+
+        <UploadApp::ViaLink::Preview /> }}
+        </AkStack>
+      </:default>
+
+      <:footer>
+        <AkStack
+          @direction='column'
+          @spacing='2'
+          class='py-2 px-3'
+          local-class='upload-button-stack'
+        >
+          <AkButton
+            data-test-uploadAppViaLinkModal-confirmBtn
+            @disabled={{or
+              this.changeset.isInvalid
+              (not this.changeset.isDirty)
+            }}
+            {{on 'click' (perform this.uploadAppViaLink)}}
+          >
+            {{t 'upload'}}
+          </AkButton>
+        </AkStack>
+      </:footer>
+    </AkModal>
+  {{/if}}
+</div>

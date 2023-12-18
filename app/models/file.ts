@@ -22,6 +22,7 @@ import FileReportModel from './file-report';
 import AnalysisModel from './analysis';
 import ProfileModel from './profile';
 import SbomFileModel from './sbom-file';
+import SubmissionModel from './submission';
 
 const _getAnalysesCount = (
   analysis: AsyncHasMany<AnalysisModel>,
@@ -123,6 +124,9 @@ export default class FileModel extends ModelBaseMixin {
 
   @belongsTo('sbom-file', { inverse: 'file' })
   declare sbFile: AsyncBelongsTo<SbomFileModel>;
+
+  @belongsTo('submission')
+  declare submission: AsyncBelongsTo<SubmissionModel>;
 
   @belongsTo('file', { inverse: null })
   declare previousFile: AsyncBelongsTo<FileModel>;

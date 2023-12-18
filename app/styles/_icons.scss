@@ -482,3 +482,23 @@
 .ak-icon-article {
   @extend .mi-article;
 }
+
+.ak-icon-link {
+  @extend .mi-link;
+}
+
+.ak-icon-show-chart {
+  @extend .mi-show-chart;
+}
+
+.ak-icon-downloading {
+  @extend .mi-downloading;
+}
+
+.ak-icon-download-done {
+  @extend .mi-download-done;
+}
+
+.ak-icon-desktop-windows {
+  @extend .mi-desktop-windows;
+}

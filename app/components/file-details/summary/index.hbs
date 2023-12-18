@@ -58,7 +58,36 @@
         {{@file.id}}
       </AkTypography>
 
-      <FileDetails::Summary::AppPlatform @file={{@file}} />
+      <AkStack @alignItems='center' @spacing='1'>
+        <FileDetails::Summary::AppPlatform @file={{@file}} />
+
+        {{#if @file.submission.url}}
+          <AkTooltip
+            @placement='top'
+            @arrow={{true}}
+            @title='{{if
+              @file.submission.isIos
+              (t "openInAppstore")
+              (t "openInPlaystore")
+            }}'
+          >
+            <a
+              target='_blank'
+              href={{@file.submission.url}}
+              rel='noopener noreferrer'
+              local-class='store-logo-container'
+            >
+              {{#if @file.submission.isIos}}
+                <AkSvg::AppstoreLogo local-class='appstore-logo-vector' />
+              {{/if}}
+
+              {{#if @file.submission.isAndroid}}
+                <AkSvg::PlaystoreLogo />
+              {{/if}}
+            </a>
+          </AkTooltip>
+        {{/if}}
+      </AkStack>
     </AkStack>
 
     <AkDivider />

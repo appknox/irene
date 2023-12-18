@@ -6,6 +6,7 @@ import { click, findAll, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
 import Service from '@ember/service';
+import ENUMS from 'irene/enums';
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -21,6 +22,10 @@ class NotificationsStub extends Service {
 
 class FreshdeskStub extends Service {
   isSupportWidgetEnabled = false;
+}
+
+class ConfigurationStub extends Service {
+  serverData = { urlUploadAllowed: true };
 }
 
 module(
@@ -56,21 +61,31 @@ module(
         organization: organization,
         user: store.createRecord('user', this.server.create('user').toJSON()),
       });
+
+      // handle submissions api for each test
+      this.server.get('/submissions', () => []);
     });
 
     test.each(
       'it renders organization-dashboard header',
-      [{ knowledgeBase: true }, {}],
-      async function (assert, { securityDashboard, knowledgeBase }) {
-        this.setProperties({
-          isSecurityEnabled: securityDashboard,
-        });
+      [{ knowledgeBase: true, hasUploadAppStatus: true }, {}],
+      async function (assert, { knowledgeBase, hasUploadAppStatus }) {
+        this.owner.register('service:configuration', ConfigurationStub);
+        if (hasUploadAppStatus) {
+          this.server.createList('submission', 2, {
+            status: ENUMS.SUBMISSION_STATUS.VALIDATING,
+          });
+
+          this.server.get('/submissions', (schema) => {
+            return schema.submissions.all().models;
+          });
+        }
 
         const freshdesk = this.owner.lookup('service:freshdesk');
         freshdesk.isSupportWidgetEnabled = knowledgeBase;
 
         await render(hbs`
-        <HomePage::OrganizationDashboard::Header @user={{this.user}} @isSecurityEnabled={{this.isSecurityEnabled}} />
+        <HomePage::OrganizationDashboard::Header @user={{this.user}} />
       `);
 
         assert.dom('[data-test-organizationDashboardHeader]').exists();
@@ -82,6 +97,15 @@ module(
         assert.dom('[data-test-uploadApp-root]').exists();
 
         assert.dom('[data-test-uploadApp-uploadBtn]').hasText('t:uploadApp:()');
+        // assert.dom('[data-test-uploadAppViaLink-btn]').isNotDisabled();
+
+        if (hasUploadAppStatus) {
+          assert.dom('[data-test-uploadAppStatus-loader]').exists();
+          assert.dom('[data-test-uploadAppStatus-icon]').exists();
+        } else {
+          assert.dom('[data-test-uploadAppStatus-loader]').doesNotExist();
+          assert.dom('[data-test-uploadAppStatus-icon]').doesNotExist();
+        }
 
         if (knowledgeBase) {
           assert
