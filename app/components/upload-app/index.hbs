@@ -1,38 +1,7 @@
-{{! @glint-nocheck : FileUpload}}
-<FileUpload
-  data-test-uploadApp-root
-  @name='uploadApp'
-  @onfileadd={{perform this.handleUploadApp (file-queue name='uploadApp')}}
-  @disabled={{this.handleUploadApp.isRunning}}
-  {{style cursor='auto'}}
-  as |queue|
->
-  {{#let
-    (or queue.files.length this.handleUploadApp.isRunning)
-    as |isUploading|
-  }}
-    <AkButton
-      {{style pointerEvents=(if isUploading 'none' '')}}
-      @tag='a'
-      data-test-uploadApp-uploadBtn
-    >
-      {{#if isUploading}}
-        <AkLoader local-class='upload-btn-loader' @size={{13}} />
-      {{else}}
-        <AkIcon @iconName='cloud-upload' />
-      {{/if}}
+<UploadApp::ViaSystem />
 
-      <span class='ml-1'>
-        {{#if isUploading}}
-          {{t 'uploading'}}
+{{#if this.urlUploadAllowed}}
+  <UploadApp::ViaLink />
+{{/if}}
 
-          {{#if queue.files.length}}
-            {{queue.progress}}%
-          {{/if}}
-        {{else}}
-          {{t 'uploadApp'}}
-        {{/if}}
-      </span>
-    </AkButton>
-  {{/let}}
-</FileUpload>
+<UploadApp::Status />

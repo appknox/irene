@@ -1,0 +1,19 @@
+.loading-preview-stack {
+  background-color: var(--app-upload-via-link-preview-background-color);
+  border: 1px solid var(--app-upload-via-link-preview-border-color);
+  border-radius: 2px;
+  height: 125px;
+}
+
+.preview-stack {
+  border: 1px solid var(--app-upload-via-link-preview-background-color);
+}
+
+.store-link-stack {
+  background-color: var(--app-upload-via-link-preview-footer-background-color);
+}
+
+.preview-error-stack {
+  border: 1px solid var(--app-upload-via-link-preview-background-color);
+  padding: 32px;
+}

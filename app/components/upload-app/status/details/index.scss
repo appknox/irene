@@ -1,0 +1,31 @@
+.progress-card {
+  width: 100%;
+  border: 1px solid var(--app-upload-status-details-footer-border-color);
+  border-radius: 2px;
+}
+
+.upload-status-footer {
+  border-top: 1px solid var(--app-upload-status-details-footer-border-color);
+  background: var(--app-upload-status-details-footer-background-color);
+}
+
+.file-icon {
+  min-width: 40px;
+  max-width: 40px;
+  height: 40px;
+  box-sizing: border-box;
+
+  img {
+    object-fit: contain;
+    background-image: none;
+    overflow: hidden;
+    border-radius: 50%;
+    border: 1px solid var(--app-upload-status-details-image-border-color);
+  }
+}
+
+.loader {
+  :global(.ak-loader-linear-indicator) {
+    background-color: var(--app-upload-status-details-loader-background-color);
+  }
+}

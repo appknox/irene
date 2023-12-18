@@ -1,0 +1,78 @@
+{{! @glint-nocheck: perform }}
+<AkTypography @variant='subtitle1'>Preview</AkTypography>
+{{! When Preview is loading }}
+
+{{#if this.xyz}}
+  <AkStack
+    @alignItems='center'
+    @width='full'
+    @justifyContent='center'
+    @spacing='1'
+    local-class='loading-preview-stack'
+  >
+    <AkLoader @size={{16}} />
+
+    <AkTypography>Fetching the app details for preview</AkTypography>
+  </AkStack>
+{{/if}}
+
+{{! When Preview is loaded and has no error }}
+{{#if this.xyz}}
+  <AkStack @direction='column' @width='full' local-class='preview-stack'>
+    <AkStack @alignItems='center' class='px-2 py-1'>
+      Logo
+      <AkStack @direction='column' class='pl-1'>
+        <AkTypography @variant='subtitle1'>HDFC Banking App</AkTypography>
+
+        <AkTypography @variant='body1'>com.hdfcbanking.android</AkTypography>
+      </AkStack>
+    </AkStack>
+
+    <AkDivider />
+
+    <AkStack @alignItems='center' class='p-2'>
+      <AkStack @direction='column' @spacing='1'>
+        <AkTypography @variant='body1'>Version</AkTypography>
+
+        <AkTypography @variant='body1'>Released on</AkTypography>
+      </AkStack>
+
+      <AkStack @direction='column' @spacing='1' class='pl-4'>
+        <AkTypography @variant='body1'>12.1.1</AkTypography>
+
+        <AkTypography @variant='body1'>21 Aug 2023</AkTypography>
+      </AkStack>
+    </AkStack>
+
+    <AkDivider />
+
+    <AkStack
+      @alignItems='center'
+      @width='full'
+      @spacing='1'
+      class='py-1 pl-2'
+      local-class='store-link-stack'
+    >
+      <AkSvg::PlaystoreLogo />
+
+      <AkLink @color='primary'>View Store Link</AkLink>
+    </AkStack>
+
+  </AkStack>
+{{/if}}
+
+{{#if this.abc}}
+  <AkStack
+    @alignItems='center'
+    @width='full'
+    @direction='column'
+    @justifyContent='center'
+    local-class='preview-error-stack'
+  >
+    <AkSvg::InvalidUrl />
+
+    <AkTypography @variant='body1' class="pt-2">Invalid URL</AkTypography>
+    
+    <AkTypography @variant='body1' class="pt-1">Lorem ipsum dolor sit amet consectetur.</AkTypography>
+  </AkStack>
+{{/if}}
