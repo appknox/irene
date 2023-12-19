@@ -1,12 +1,8 @@
-/* eslint-disable ember/no-mixins */
-import DRFAdapter from 'ember-django-adapter/adapters/drf';
 import ENV from 'irene/config/environment';
-import IreneAdapterMixin from 'irene/mixins/data-adapter-mixin';
 import { inject as service } from '@ember/service';
+import { DRFAuthenticationBase } from './auth-base';
 
-export default class CommonDRFAdapter extends DRFAdapter.extend(
-  IreneAdapterMixin
-) {
+export default class CommonDRFAdapter extends DRFAuthenticationBase {
   host = ENV.host;
   namespace = ENV.namespace;
   namespace_v2 = ENV.namespace_v2;

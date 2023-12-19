@@ -7,12 +7,16 @@ export default class ApplicationRoute extends Route {
   @service intl;
   @service whitelabel;
   @service configuration;
+  @service session;
 
   async beforeModel() {
+    await this.session.setup();
+
     await all([
       this.configuration.serverConfigFetch(),
       this.configuration.getFrontendConfig(),
     ]);
+
     return this.intl.setLocale(['en']);
   }
 
