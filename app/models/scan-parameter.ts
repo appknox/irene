@@ -10,6 +10,9 @@ export default class ScanParameterModel extends Model {
   @attr('string')
   declare value: string;
 
+  @attr('boolean')
+  declare isSecure: boolean;
+
   @attr('date')
   declare createdOn: Date;
 
