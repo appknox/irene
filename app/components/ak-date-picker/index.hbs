@@ -1,20 +1,93 @@
-<DatePicker
-  class='{{this.classes.root}} {{@class}}'
-  @renderInPlace={{true}}
-  @minDate={{@minDate}}
-  @maxDate={{@maxDate}}
-  @value={{@value}}
-  @range={{@range}}
-  @options={{@options}}
-  @onChange={{@onChange}}
-  @availableYearOffset={{@availableYearOffset}}
-  @buttonClasses={{@buttonClasses}}
-  @disabledDates={{@disabledDates}}
-  @disableMonthPicker={{@disableMonthPicker}}
-  @disableYearPicker={{@disableYearPicker}}
-  @horizontalPosition={{@horizontalPosition}}
-  @verticalPosition={{@verticalPosition}}
-  as |api|
->
-  {{yield api}}
-</DatePicker>
+{{#let
+  (component (ensure-safe-component this.componentName))
+  as |CalendarComponent|
+}}
+  <div ...attributes>
+    <div
+      local-class='ak-date-picker-trigger'
+      role='button'
+      {{on 'click' this.handlePopoverOpen}}
+    >
+      {{yield}}
+    </div>
+
+    <AkPopover
+      data-test-akDatePicker-popover
+      @containerClass={{@popoverContainerClass}}
+      @anchorRef={{this.anchorRef}}
+      @renderInPlace={{@renderInPlace}}
+      @placement={{this.placement}}
+      @modifiers={{@modifiers}}
+      @hasBackdrop={{true}}
+      @onBackdropClick={{this.handlePopoverClose}}
+      @mountOnOpen={{@mountOnOpen}}
+      @unmountOnClose={{@unmountOnClose}}
+    >
+      <div
+        local-class='ak-date-picker-popup-container ak-date-picker-{{this.calendarType}}'
+      >
+        <CalendarComponent
+          data-test-akDatePicker-calendar
+          class='ak-date-picker-calendar'
+          @navComponent={{this.navComponent}}
+          @center={{this.center}}
+          @onCenterChange={{this.handleCenterChange}}
+          @selected={{@selected}}
+          @onSelect={{this.handleSelectChange}}
+          @minRange={{@minRange}}
+          @maxRange={{@maxRange}}
+          @maxLength={{@maxLength}}
+          @proximitySelection={{@proximitySelection}}
+          as |calendar|
+        >
+          <div class='p-2'>
+            <calendar.Nav />
+
+            <calendar.Days
+              @dayClass={{@dayClass}}
+              @startOfWeek={{@startOfWeek}}
+              @weekdayFormat={{this.weekdayFormat}}
+              @showDaysAround={{@showDaysAround}}
+              @minDate={{@minDate}}
+              @maxDate={{@maxDate}}
+              @disabledDates={{@disabledDates}}
+            />
+          </div>
+
+          {{#unless @hideQuickSelectOptions}}
+            <div
+              class='p-2'
+              local-class='ak-date-picker-quick-select-container'
+            >
+              <div local-class='ak-date-picker-quick-select-header'>
+                <AkTypography
+                  data-test-akDatePicker-quickSelectTitle
+                  @variant='h6'
+                >
+                  {{or @quickSelectTitle 'Quick Selection'}}
+                </AkTypography>
+              </div>
+
+              {{#each this.finalQuickSelectOptions as |opt|}}
+                <div class='px-1'>
+                  <AkButton
+                    data-test-akDatePicker-quickSelectBtn='{{opt.label}}'
+                    {{style minWidth='unset'}}
+                    @variant='text'
+                    @color='primary'
+                    {{on
+                      'click'
+                      (fn this.handleQuickSelectClick opt.value calendar)
+                    }}
+                  >
+                    {{opt.label}}
+                  </AkButton>
+                </div>
+              {{/each}}
+            </div>
+          {{/unless}}
+        </CalendarComponent>
+      </div>
+    </AkPopover>
+  </div>
+{{/let}}

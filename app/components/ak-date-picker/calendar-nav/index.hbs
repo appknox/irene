@@ -1,0 +1,24 @@
+<AkStack @tag='nav' @alignItems='center' class='pb-2'>
+  <AkIconButton {{on 'click' (fn this.handleMoveCenter -1 'month')}}>
+    <AkIcon {{style fontSize='1.5em !important'}} @iconName='arrow-left' />
+  </AkIconButton>
+
+  <AkStack class='mx-auto' @alignItems='center' @spacing='1'>
+    <AkTypography @variant='h4' @fontWeight='regular' @tag='span'>
+      {{this.centerMonth}}
+    </AkTypography>
+
+    <AkTypography
+      @variant='h4'
+      @fontWeight='regular'
+      @tag='span'
+      @color='textSecondary'
+    >
+      {{this.centerYear}}
+    </AkTypography>
+  </AkStack>
+
+  <AkIconButton {{on 'click' (fn this.handleMoveCenter 1 'month')}}>
+    <AkIcon {{style fontSize='1.5em !important'}} @iconName='arrow-right' />
+  </AkIconButton>
+</AkStack>

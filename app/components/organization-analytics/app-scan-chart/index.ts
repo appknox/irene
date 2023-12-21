@@ -6,12 +6,16 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import dayjs from 'dayjs';
 import { BarSeriesOption } from 'echarts/charts';
-import moment from 'moment';
 
 import OrganizationService from 'irene/services/organization';
 import { ECInstance, ECOption } from 'irene/components/ak-chart';
 import parseError from 'irene/utils/parse-error';
 import { humanizeMonths } from 'irene/utils/date-time';
+
+import {
+  CalendarOnSelectFunc,
+  RangeDateObject,
+} from 'irene/components/ak-date-picker';
 
 export interface IAppScanResult {
   created_on_date: string;
@@ -50,10 +54,13 @@ export default class OrganizationAnalyticsAppScanChartComponent extends Componen
    * @property {Array} dateRange
    * Property holds default range of last 6 months
    */
-  @tracked dateRange = [moment().subtract(6, 'months'), moment()];
+  @tracked dateRange: [dayjs.Dayjs | null, dayjs.Dayjs | null] = [
+    dayjs().subtract(6, 'months'),
+    dayjs(),
+  ];
 
   datepickerOptions = ['last3Months', 'last6Months', 'lastYear'];
-  maxDate = dayjs(Date.now());
+  maxDate = dayjs(Date.now()).toDate();
 
   constructor(owner: unknown, args: object) {
     super(owner, args);
@@ -61,9 +68,19 @@ export default class OrganizationAnalyticsAppScanChartComponent extends Componen
     this.fetchAppScan.perform();
   }
 
+  get selectedDateRange() {
+    const start = this.dateRange[0];
+    const end = this.dateRange[1];
+
+    return { start: start?.toDate() ?? null, end: end?.toDate() ?? null };
+  }
+
   @action
-  updateDateRange(dateRange: moment.Moment[]) {
-    this.dateRange = dateRange;
+  updateDateRange(...args: Parameters<CalendarOnSelectFunc>) {
+    const range = args[0] as RangeDateObject;
+
+    this.dateRange = [range.dayjs.start, range.dayjs.end];
+
     this.fetchAppScan.perform();
   }
 

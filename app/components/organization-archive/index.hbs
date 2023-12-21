@@ -27,13 +27,11 @@
 
     <AkStack class='mt-2' @alignItems='center' @spacing='1.5'>
       <AkDatePicker
-        @renderInPlace={{true}}
         @maxDate={{this.maxDate}}
         @range={{true}}
-        @value={{array this.startDate this.endDate}}
-        @options={{this.datepickerOptions}}
-        @onChange={{this.setDuration}}
-        as |selectedDates|
+        @selected={{hash start=this.startDate end=this.endDate}}
+        @quickSelectOptions={{this.datepickerOptions}}
+        @onSelect={{this.setDuration}}
       >
         <AkStack
           data-test-date-picker-toggle-button
@@ -52,7 +50,7 @@
             data-test-orgArchive-dateRangeLabel
             local-class='date-picker-dateText'
           >
-            {{#if (and selectedDates.firstObject this.startDate)}}
+            {{#if this.startDate}}
               <AkTypography @tag='span' @color='textPrimary'>
                 {{day-js date=this.startDate format='DD MMM YYYY'}}
               </AkTypography>
@@ -66,7 +64,7 @@
               -
             </AkTypography>
 
-            {{#if (and selectedDates.lastObject this.endDate)}}
+            {{#if this.endDate}}
               <AkTypography @tag='span' @color='textPrimary'>
                 {{day-js date=this.endDate format='DD MMM YYYY'}}
               </AkTypography>
