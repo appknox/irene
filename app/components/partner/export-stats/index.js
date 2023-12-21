@@ -12,7 +12,7 @@ export default class PartnerExportStatsComponent extends Component {
 
   @tracked dateRange = [...this.initialDateRange];
 
-  maxDate = dayjs(Date.now());
+  maxDate = dayjs(Date.now()).toDate();
 
   datepickerOptions = [
     'clear',
@@ -37,9 +37,16 @@ export default class PartnerExportStatsComponent extends Component {
     return [null, null];
   }
 
+  get selectedDateRange() {
+    const start = this.dateRange[0] ?? null;
+    const end = this.dateRange[1] ?? null;
+
+    return { start, end };
+  }
+
   @action
-  updateDateRange(range) {
-    this.dateRange = range;
+  updateDateRange({ date }) {
+    this.dateRange = [date.start, date.end];
   }
 
   @action

@@ -10,7 +10,6 @@ import advancedFormat from 'dayjs/plugin/advancedFormat';
 import weekday from 'dayjs/plugin/weekday';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import { task } from 'ember-concurrency';
-import moment from 'moment';
 import styles from './index.scss';
 
 export default class PartnerClientUploadsStatChartComponent extends Component {
@@ -84,15 +83,23 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
 
   @tracked chartContainer = null;
 
-  @tracked dateRange = [moment().subtract(1, 'months'), moment()];
+  @tracked dateRange = [dayjs().subtract(1, 'months'), dayjs()];
 
-  maxDate = dayjs(Date.now());
+  maxDate = dayjs(Date.now()).toDate();
 
   get startDate() {
     return this.dateRange.objectAt(0);
   }
+
   get endDate() {
     return this.dateRange.objectAt(1);
+  }
+
+  get selectedDateRange() {
+    const start = this.startDate;
+    const end = this.endDate;
+
+    return { start: start?.toDate() ?? null, end: end?.toDate() ?? null };
   }
 
   get targetModel() {
@@ -109,9 +116,11 @@ export default class PartnerClientUploadsStatChartComponent extends Component {
     this.isRedrawChart = true;
     this.loadChart.perform();
   }
+
   @action
-  updateDateRange(dateRange) {
-    this.dateRange = dateRange;
+  updateDateRange({ dayjs }) {
+    this.dateRange = [dayjs.start, dayjs.end];
+
     this.isRedrawChart = true;
     this.loadChart.perform();
   }

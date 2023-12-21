@@ -223,16 +223,18 @@ body {
   --ak-radio-color-success-main: var(--success-main);
 
   // variables for ak-date-picker
+  --ak-date-picker-background: var(--background-main);
   --ak-date-picker-border-color: var(--border-color-1);
+  --ak-date-picker-day-border-color: var(--common-white);
   --ak-date-picker-border-radius: var(--border-radius);
   --ak-date-picker-box-shadow: var(--box-shadow-2);
-  --ak-date-picker-header-btn-hover-background: var(--hover-light-background);
+  --ak-date-picker-day-btn-hover-background: var(--hover-light-background);
   --ak-date-picker-color-text-primary: var(--text-primary);
   --ak-date-picker-color-text-secondary: var(--text-secondary);
+  --ak-date-picker-color-text-disabled: var(--text-disabled);
   --ak-date-picker-color-primary: var(--primary-main);
   --ak-date-picker-color-primary-light: var(--primary-light);
   --ak-date-picker-color-primary-contrast-text: var(--primary-contrast-text);
-  --ak-date-picker-weekday-color: var(--neutral-grey-900);
   --ak-date-picker-font-family: var(--font-family);
   --ak-date-picker-font-weight-regular: var(--font-weight-regular);
   --ak-date-picker-font-weight-medium: var(--font-weight-medium);

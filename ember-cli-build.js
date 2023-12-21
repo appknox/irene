@@ -29,7 +29,6 @@ module.exports = function (defaults) {
       includePaths: [
         'node_modules/bohemia',
         'node_modules/billboard.js/dist/',
-        'node_modules/pikaday/css/',
         'node_modules/material-icons/css/',
       ],
       // onlyIncluded: true,

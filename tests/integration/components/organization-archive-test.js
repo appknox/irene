@@ -5,8 +5,10 @@ import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
-import { getDatePicker } from 'ember-date-components/test-support/helpers/date-picker';
-import styles from 'irene/components/ak-date-picker/index.scss';
+import {
+  calendarCenter,
+  calendarSelect,
+} from 'ember-power-calendar/test-support';
 
 import Service from '@ember/service';
 import dayjs from 'dayjs';
@@ -296,24 +298,28 @@ module('Integration | Component | organization-archive', function (hooks) {
         .isNotDisabled()
         .hasText('Clear');
 
-      const datePicker = await getDatePicker(
-        `.${styles['ak-date-picker-root']}`
-      );
+      assert.dom('[data-test-akDatePicker-calendar]').doesNotExist();
 
-      await datePicker.toggle();
-      await datePicker.previousMonth();
+      // open date picker
+      await click('[data-test-date-picker-toggle-button]');
+
+      assert.dom('[data-test-akDatePicker-calendar]').exists();
 
       const prevMonth = dayjs().subtract(1, 'month');
 
-      const dateFrom = `${prevMonth.year()}-${prevMonth.month()}-1`;
-      const dateTo = `${prevMonth.year()}-${prevMonth.month()}-24`;
+      await calendarCenter(
+        '[data-test-akDatePicker-calendar]',
+        prevMonth.toDate()
+      );
 
-      await click(`[data-test-date-picker-day="${dateFrom}"]`);
-      await click(`[data-test-date-picker-day="${dateTo}"]`);
+      const dateFrom = new Date(prevMonth.year(), prevMonth.month(), 1);
+      const dateTo = new Date(prevMonth.year(), prevMonth.month(), 24);
 
-      // adding a month above month is 0 indexed
-      const fomatedFrom = dayjs(dateFrom).add(1, 'month').format('DD MMM YYYY');
-      const fomatedTo = dayjs(dateTo).add(1, 'month').format('DD MMM YYYY');
+      await calendarSelect('[data-test-akDatePicker-calendar]', dateFrom);
+      await calendarSelect('[data-test-akDatePicker-calendar]', dateTo);
+
+      const fomatedFrom = dayjs(dateFrom).format('DD MMM YYYY');
+      const fomatedTo = dayjs(dateTo).format('DD MMM YYYY');
 
       assert
         .dom('[data-test-orgArchive-dateRangeLabel]')

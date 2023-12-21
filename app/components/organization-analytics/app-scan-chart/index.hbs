@@ -1,13 +1,11 @@
 <div class='columns'>
   <div class='column content-right'>
     <AkDatePicker
-      @renderInPlace={{true}}
-      @value={{this.dateRange}}
+      @selected={{this.selectedDateRange}}
       @maxDate={{this.maxDate}}
       @range={{true}}
-      @options={{this.datepickerOptions}}
-      @onChange={{this.updateDateRange}}
-      as |selectedDates|
+      @quickSelectOptions={{this.datepickerOptions}}
+      @onSelect={{this.updateDateRange}}
     >
       <AkStack
         data-test-date-picker-toggle-button
@@ -26,7 +24,7 @@
           data-test-orgArchive-dateRangeLabel
           local-class='date-picker-dateText'
         >
-          {{#if selectedDates.firstObject}}
+          {{#if this.dateRange.firstObject}}
             <AkTypography @tag='span' @color='textPrimary'>
               {{this.startDate}}
             </AkTypography>
@@ -40,7 +38,7 @@
             -
           </AkTypography>
 
-          {{#if selectedDates.lastObject}}
+          {{#if this.dateRange.lastObject}}
             <AkTypography @tag='span' @color='textPrimary'>
               {{this.endDate}}
             </AkTypography>

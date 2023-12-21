@@ -5,14 +5,13 @@
   </div>
   <div local-class='body'>
     <div local-class='date-range-picker' data-test-date-range-picker-container>
-      <DatePicker
+      <AkDatePicker
         @range={{true}}
-        @value={{this.dateRange}}
+        @selected={{this.selectedDateRange}}
         @maxDate={{this.maxDate}}
-        @onChange={{this.updateDateRange}}
-        @options={{this.datepickerOptions}}
+        @onSelect={{this.updateDateRange}}
+        @quickSelectOptions={{this.datepickerOptions}}
         data-test-date-range-picker
-        as |selectedDates|
       >
         <div local-class='date-range' data-test-date-range>
           <AkIcon
@@ -24,8 +23,8 @@
           />
           <span data-test-date-range-selected>
             <span local-class='date' data-test-from-date>
-              {{#if selectedDates.firstObject}}
-                {{day-js date=selectedDates.firstObject format='DD/MM/YYYY'}}
+              {{#if this.selectedDateRange.start}}
+                {{day-js date=this.selectedDateRange.start format='DD/MM/YYYY'}}
               {{else}}
                 {{t 'fromDate'}}
               {{/if}}
@@ -35,15 +34,15 @@
               -
             </span>
             <span local-class='date' data-test-to-date>
-              {{#if selectedDates.lastObject}}
-                {{day-js date=selectedDates.lastObject format='DD/MM/YYYY'}}
+              {{#if this.selectedDateRange.end}}
+                {{day-js date=this.selectedDateRange.end format='DD/MM/YYYY'}}
               {{else}}
                 {{t 'toDate'}}
               {{/if}}
             </span>
           </span>
         </div>
-      </DatePicker>
+      </AkDatePicker>
     </div>
     <AkButton
       class='is-primary button margin-left highlighted-button'

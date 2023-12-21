@@ -6,6 +6,8 @@ import Resolver from 'ember-resolver';
 import loadInitializers from 'ember-load-initializers';
 import installHotjar from 'irene/utils/install-hotjar';
 import customerSuccessBox from 'irene/utils/customer-success-box';
+import { registerDateLibrary } from 'ember-power-calendar';
+import DateUtils from 'irene/utils/power-calendar-dayjs';
 
 config.isDevknox = 'secure.devknox.io' === location.hostname;
 config.isAppknox = !config.isDevknox;
@@ -21,6 +23,7 @@ if (config.isAppknox) {
 installPendo();
 installHotjar();
 customerSuccessBox();
+registerDateLibrary(DateUtils);
 
 export default class App extends Application {
   modulePrefix = config.modulePrefix;

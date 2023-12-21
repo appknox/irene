@@ -17,11 +17,10 @@ export default class OrganizationArchiveComponent extends Component {
 
   @tracked startDate = null;
   @tracked endDate = null;
-  @tracked maxDate = dayjs(Date.now());
+  @tracked maxDate = dayjs(Date.now()).toDate();
   @tracked archiveListRef = {};
 
   datepickerOptions = [
-    'today',
     'last7Days',
     'last30Days',
     'last3Months',
@@ -31,39 +30,31 @@ export default class OrganizationArchiveComponent extends Component {
 
   tiggerGenerateArchive = task(async () => {
     try {
-      const startDateObj = this.startDate;
-      const endDateObj = this.endDate;
       const requestParams = {};
 
-      if (startDateObj) {
-        startDateObj.set({
-          h: 0,
-          m: 0,
-          s: 0,
-        });
+      if (this.startDate) {
+        const startDateObj = dayjs(this.startDate);
 
         // model serializer expects native date object;
-        requestParams['from_date'] = startDateObj.toDate();
+        requestParams['from_date'] = startDateObj
+          .set('hour', 0)
+          .set('minute', 0)
+          .set('second', 0)
+          .toDate();
       }
 
-      if (endDateObj) {
+      if (this.endDate) {
+        let endDateObj = dayjs(this.endDate);
         const now = dayjs();
-        if (endDateObj.isBefore(now, 'day')) {
-          endDateObj.set({
-            h: 23,
-            m: 59,
-            s: 59,
-          });
-        } else {
-          endDateObj.set({
-            h: now.hour(),
-            m: now.minute(),
-            s: 0,
-          });
-        }
+
+        const isBeforeNow = endDateObj.isBefore(now, 'day');
 
         // model serializer expects native date object;
-        requestParams['to_date'] = endDateObj.toDate();
+        requestParams['to_date'] = endDateObj
+          .set('hour', isBeforeNow ? 23 : now.hour())
+          .set('minute', isBeforeNow ? 59 : now.minute())
+          .set('second', isBeforeNow ? 59 : 0)
+          .toDate();
       }
 
       const archiveRecord = await this.store.createRecord(
@@ -87,9 +78,9 @@ export default class OrganizationArchiveComponent extends Component {
   });
 
   @action
-  setDuration(dates) {
-    this.startDate = dates[0];
-    this.endDate = dates[1];
+  setDuration({ date }) {
+    this.startDate = date.start;
+    this.endDate = date.end;
   }
 
   @action
