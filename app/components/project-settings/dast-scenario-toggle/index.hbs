@@ -1,0 +1,25 @@
+<AkStack
+  @alignItems='center'
+  @justifyContent='flex-end'
+  @spacing='1'
+  class='pr-2'
+>
+  <AkToggle
+    @size='small'
+    @checked={{@scenario.isActive}}
+    @onChange={{this.toggleScenarioStatus}}
+    @disabled={{this.updateScenarioStatus.isRunning}}
+    {{on 'click' this.handleToggleClick}}
+    {{style margin='0px'}}
+    data-test-projectSettings-dastScenario-toggle
+  />
+
+  {{#unless @hideToggleLoader}}
+    {{#if this.updateScenarioStatus.isRunning}}
+      <AkLoader
+        @size={{14}}
+        data-test-projectSettings-dastScenario-statusToggleLoading
+      />
+    {{/if}}
+  {{/unless}}
+</AkStack>

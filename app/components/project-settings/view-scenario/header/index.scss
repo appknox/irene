@@ -1,0 +1,15 @@
+.view-scenario-header-root {
+  background-color: var(--project-settings-view-scenario-background-white);
+}
+
+.view-scenario-header-root {
+  border: 1px solid var(--project-settings-view-scenario-header-border-color);
+  border-radius: var(--project-settings-view-scenario-header-border-radius);
+  box-shadow: var(
+    --project-settings-view-scenario-header-scenario-details-box-shadow
+  );
+}
+
+.scenario-delete-footer-container {
+  box-shadow: var(--project-settings-view-scenario-modal-footer-box-shadow);
+}

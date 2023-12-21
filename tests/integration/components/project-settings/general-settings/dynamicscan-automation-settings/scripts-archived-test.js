@@ -34,7 +34,7 @@ const getRequestObj = (body) =>
   );
 
 module(
-  'Integration | Component | project-settings/general-settings/dynamicscan-automation-settings',
+  'Integration | Component | project-settings/general-settings/dynamicscan-automation-settings/scripts-archived',
   function (hooks) {
     setupRenderingTest(hooks);
     setupMirage(hooks);
@@ -89,9 +89,12 @@ module(
         dynamicscan_mode: 'Manual',
       });
 
-      await render(
-        hbs`<ProjectSettings::GeneralSettings::DynamicscanAutomationSettings @project={{this.project}} @profileId={{this.project.activeProfileId}} />`
-      );
+      await render(hbs`
+        <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings::ScriptsArchived
+          @project={{this.project}} 
+          @profileId={{this.project.activeProfileId}} 
+        />
+      `);
 
       assert
         .dom('[data-test-projectSettings-genSettings-dynScanAutoSettings-root]')
@@ -120,7 +123,7 @@ module(
       assert
         .dom('[data-test-genSettings-dynScanAutoSettings-headerInfoDescNote]')
         .exists()
-        .hasText('t:appiumScriptsNote:()');
+        .hasText('t:appiumScriptsSchedNote:()');
     });
 
     test.each(
@@ -178,9 +181,12 @@ module(
 
         this.set('fileName', 'test.zip');
 
-        await render(
-          hbs`<ProjectSettings::GeneralSettings::DynamicscanAutomationSettings @project={{this.project}} @profileId={{this.project.activeProfileId}} />`
-        );
+        await render(hbs`
+          <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings::ScriptsArchived
+            @project={{this.project}} 
+            @profileId={{this.project.activeProfileId}} 
+          />
+        `);
 
         assert
           .dom('[data-test-genSettings-dynScanAutoSettings-uploadZip]')
@@ -317,9 +323,12 @@ module(
 
       this.set('fileName', 'test.zip');
 
-      await render(
-        hbs`<ProjectSettings::GeneralSettings::DynamicscanAutomationSettings @project={{this.project}} @profileId={{this.project.activeProfileId}} />`
-      );
+      await render(hbs`
+        <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings::ScriptsArchived
+          @project={{this.project}} 
+          @profileId={{this.project.activeProfileId}} 
+        />
+      `);
 
       let file = new File(['Test zip file'], this.fileName, {
         type: 'application/zip',

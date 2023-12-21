@@ -87,6 +87,11 @@
 
   {{#if this.organization.selected.features.dynamicscan_automation}}
     <AkStack @width='9/12' class='px-3'>
+      {{!-- <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings::ScriptsArchived
+        @project={{@project}}
+        @profileId={{@profileId}}
+      /> --}}
+
       <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings
         @profileId={{this.project.activeProfileId}}
         @project={{this.project}}

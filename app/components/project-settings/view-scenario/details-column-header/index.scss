@@ -1,0 +1,16 @@
+.scenario-details-columns-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 260px 260px 80px;
+  column-gap: 2.1428em;
+  align-content: center;
+  min-width: 800px;
+  padding-top: 0.7857em;
+  padding-bottom: 0.7857em;
+
+  .tooltip-content {
+    width: 264px;
+    padding: 0.5em;
+    box-sizing: border-box;
+  }
+}

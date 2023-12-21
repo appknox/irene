@@ -1,0 +1,49 @@
+.scenario-details-group {
+  width: 100%;
+  column-gap: 2.1428em;
+  display: grid;
+  grid-template-columns: 260px 260px 80px 1fr;
+  align-content: center;
+  min-width: 800px;
+  min-height: 60px;
+  background-color: var(--project-settings-view-scenario-background-white);
+  border-bottom: 1px solid
+    var(--project-settings-view-scenario-parameter-item-border-color);
+
+  .details-delete-btn,
+  .secure-icon.hide {
+    display: none;
+  }
+
+  &:hover .details-delete-btn,
+  &:hover .secure-icon.hide,
+  .secure-icon.show {
+    display: flex;
+  }
+
+  .parameter-value-text-field-form-control {
+    background-color: var(
+      --project-settings-view-scenario-parameter-text-field-background
+    );
+  }
+
+  .parameter-value-text-field-root {
+    cursor: text;
+    background: transparent;
+  }
+
+  .parameter-value-text-field {
+    & ~ :global(.ak-text-input-outlined) {
+      border: 0px solid var(--project-settings-view-scenario-border-light) !important;
+    }
+
+    &:active ~ :global(.ak-text-input-outlined),
+    &:focus ~ :global(.ak-text-input-outlined) {
+      border-width: 2px !important;
+    }
+  }
+}
+
+.parameter-modal-footer-container {
+  box-shadow: var(--project-settings-view-scenario-modal-footer-box-shadow);
+}

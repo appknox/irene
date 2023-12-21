@@ -1,0 +1,21 @@
+.scenario-add-form-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 260px 260px 80px;
+  column-gap: 2.1428em;
+  align-content: center;
+  min-width: 800px;
+  border: 1px solid var(--project-settings-view-scenario-border-light);
+  background: var(--project-settings-view-scenario-background-dark);
+  margin-bottom: 1.4286em;
+
+  .add-parameter-text-field-form-root {
+    background-color: var(--project-settings-view-scenario-background-white);
+  }
+
+  .tooltip-content {
+    width: 264px;
+    padding: 0.5em;
+    box-sizing: border-box;
+  }
+}

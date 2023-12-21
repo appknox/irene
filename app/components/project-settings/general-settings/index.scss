@@ -1,6 +1,9 @@
 .general-settings-root {
   border: 1px solid var(--project-settings-general-settings-root-border-color);
-  border-top: 0px;
+  border-top: 0em;
+  background-color: var(
+    --project-settings-general-settings-root-background-color
+  );
 
   .settings-section {
     max-width: 800px;

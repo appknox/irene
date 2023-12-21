@@ -1,0 +1,10 @@
+.dast-scenario-table {
+  tbody tr {
+    cursor: pointer;
+  }
+
+  tbody tr td:last-of-type,
+  thead tr th:last-of-type {
+    padding-right: 2em;
+  }
+}

@@ -1,0 +1,90 @@
+<div
+  local-class='scenario-add-form-container'
+  class='p-2 px-3'
+  data-test-projectSettings-viewScenario-addParameterRoot
+>
+  <AkTextField
+    id='inputType'
+    @placeholder={{t 'dastAutomation.enterType'}}
+    @textFieldRootClass={{this.addScenarioTextFieldClassess.root}}
+    @value={{this.changeset.parameterType}}
+    @error={{this.parameterInputTypeHasError}}
+    @helperText={{this.parameterInputTypeError}}
+    data-test-projectSettings-viewScenario-inputTypeTextField
+  >
+    <:rightAdornment>
+      {{#if this.parameterInputTypeError}}
+        <AkTooltip
+          @placement='bottom-end'
+          @arrow={{true}}
+          @disabled={{not this.changeset.parameterType}}
+          data-test-projectSettings-viewScenario-inputTypeTextField-errorTooltip
+        >
+          <:tooltipContent>
+            <div local-class='tooltip-content'>
+              <AkTypography
+                @variant='body2'
+                @color='inherit'
+                {{style whiteSpace='wrap' minWidth='220px'}}
+                data-test-projectSettings-viewScenario-inputTypeTextField-errorText
+              >
+                {{t
+                  'dastAutomation.paramTypeDupText'
+                  htmlSafe=true
+                  type=this.changeset.parameterType
+                }}
+              </AkTypography>
+            </div>
+          </:tooltipContent>
+
+          <:default>
+            <AkIcon
+              @iconName='info'
+              @color='error'
+              data-test-projectSettings-viewScenario-inputTypeTextField-errorIcon
+            />
+          </:default>
+        </AkTooltip>
+
+      {{else if this.changeset.parameterType}}
+        <AkIconButton
+          @size='small'
+          {{on 'click' this.handleClearParameterType}}
+          data-test-projectSettings-viewScenario-inputTypeTextField-clearBtn
+        >
+          <AkIcon @iconName='close' @size='small' @color='textSecondary' />
+        </AkIconButton>
+      {{/if}}
+    </:rightAdornment>
+  </AkTextField>
+
+  <AkTextField
+    id='inputValue'
+    @placeholder={{t 'dastAutomation.enterType'}}
+    @textFieldRootClass={{this.addScenarioTextFieldClassess.root}}
+    @value={{this.changeset.parameterValue}}
+    data-test-projectSettings-viewScenario-inputValueTextField
+  >
+    <:rightAdornment>
+      {{#if this.changeset.parameterValue}}
+        <AkIconButton
+          @size='small'
+          {{on 'click' this.handleClearParameterValue}}
+          data-test-projectSettings-viewScenario-inputValueTextField-clearBtn
+        >
+          <AkIcon @iconName='close' @size='small' @color='textSecondary' />
+        </AkIconButton>
+      {{/if}}
+    </:rightAdornment>
+  </AkTextField>
+
+  <AkButton
+    @loading={{this.createScanParameter.isRunning}}
+    @disabled={{or this.disableAddBtn this.createScanParameter.isRunning}}
+    {{on 'click' (perform this.createScanParameter)}}
+    {{style height='fit-content'}}
+    data-test-projectSettings-viewScenario-addParamerBtn
+  >
+    {{t 'add'}}
+  </AkButton>
+</div>

@@ -502,3 +502,15 @@
 .ak-icon-desktop-windows {
   @extend .mi-desktop-windows;
 }
+
+.ak-icon-visibility {
+  @extend .mi-visibility;
+}
+
+.ak-icon-visibility-off {
+  @extend .mi-visibility-off;
+}
+
+.ak-icon-lock-open {
+  @extend .mi-lock-open;
+}

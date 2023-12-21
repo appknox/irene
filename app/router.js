@@ -55,6 +55,10 @@ Router.map(function () {
         function () {
           this.route('settings', function () {
             this.route('analysis');
+
+            this.route('dast-automation-scenario', {
+              path: '/dast-automation-scenario/:scenario_id',
+            });
           });
           this.route('files');
         }
