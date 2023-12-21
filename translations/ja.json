@@ -74,6 +74,51 @@
   "appiumScripts": "Appium scripts",
   "appiumScriptsDescription": "As a part of our upcoming automated dynamic scan feature, we are currently supporting <strong>scheduled dynamic scans</strong> option using Appium scripts. Upload your app's Appium test scripts here as a zip file, dynamic scans would be automatically scheduled for all your future app uploads in this project.",
   "appiumScriptsSchedNote": "Scheduled dynamic scans may take upto 24 hours to be completed.",
+  "appMonitoring": "Store Monitoring",
+  "appMonitoringMessages": {
+    "noOrgProjects": {
+      "header": "No Projects Uploaded",
+      "body": "Upload a Project and then Enable the Store Monitoring Setting to initiate the monitoring of your applications in Playstore or Appstore."
+    },
+    "emptyResults": {
+      "header": "Store Monitoring is Initiated",
+      "body": "We are looking for unscanned versions of your applications on Playstore or Appstore. This data will be available to you in some time."
+    },
+    "monitoringDetailsEmpty": {
+      "body": "This application could not be located on the Play Store or App Store."
+    },
+    "monitoringHistoryEmpty": {
+      "body": "No history information was found for this application."
+    },
+    "pendingStateLoadingText": "Store monitoring has been initiated for this application for the first time. Kindly visit this page after 24hrs to check the results"
+  },
+  "appMonitoringModule": {
+    "lastUploadAttemptText": "Upload was last attempted on",
+    "retryUpload": "Retry Upload",
+    "checkDetails": "Check Details",
+    "applicationName": "Application Name",
+    "scannedOnAppknox": "Scanned on Appknox",
+    "foundOn": "Found On",
+    "appStatus": "App status",
+    "initiateScan": "Initiate Scan",
+    "storeVersion": "Store Version",
+    "countryCode": "Country Code",
+    "initiateUpload": "Initiate Upload",
+    "monitoringDetails": "Monitoring Details",
+    "monitoringHistory": "Monitoring History",
+    "monitoringStatus": "Monitoring Status",
+    "syncInProgress": "Sync in progress",
+    "monitoringAction": "Monitoring Action",
+    "latestScannedVersion": "Latest Scanned Version",
+    "lastMonitoredOn": "Last monitored on",
+    "actionsInfo": "Initiate Upload button will be available in instances where an Unscanned version of the app was detected.",
+    "multiGeoToolTip": {
+      "headerText": "Multiple versions detected.",
+      "bodyText": "Click on this row to get more details."
+    }
+  },
+  "appMonitoringHeading": "Store Monitoring Setting",
+  "appMonitoringDescription": "Once enabled, our platform will monitor for any unscanned versions of your applications on Google Play Store or Apple App Store. If any such applications are found, the list below will be updated automatically at 24 hour intervals.",
   "approvalStatus": "Approval",
   "approvalRequest": "Approval Request",
   "approve": "Approve",
@@ -173,6 +218,7 @@
   "container": "Container",
   "continue": "続ける",
   "copy": "コピー",
+  "countries": "Countries",
   "country": "Country",
   "createAccount": "Create Account",
   "createTeam": "チームの作成",
@@ -316,6 +362,7 @@
   "enterValidPassword": "有効なパスワードを入力してください",
   "enterValidURL": "有効なURLを入力してください",
   "entityID": "Entity ID",
+  "error": "Error",
   "errorCouldNotLoadData": "Error: Could not load data",
   "errorWhileFetching": "署名付きURLの取得時にエラー",
   "errorWhileUploading": "事前署名付きURLへのファイルのアップロード中にエラー",
@@ -704,6 +751,7 @@
   "nistsp80053": "NIST SP 800-53",
   "nistsp800171": "NIST SP 800-171",
   "no": "いいえ",
+  "noActionRequired": "<em>No Action Required</em>",
   "noArchive": "No Archive Generated Yet...",
   "noArchiveExports": "No Archive Exports",
   "noClientUploads": "This client has not uploaded any apps",
@@ -921,46 +969,6 @@
   "proceed": "診断を続行する",
   "processing": "Processing ...",
   "production": "プロダクション",
-  "appMonitoring": "Store Monitoring",
-  "appMonitoringMessages": {
-    "noOrgProjects": {
-      "header": "No Projects Uploaded",
-      "body": "Upload a Project and then Enable the Store Monitoring Setting to initiate the monitoring of your applications in Playstore or Appstore."
-    },
-    "emptyResults": {
-      "header": "Store Monitoring is Initiated",
-      "body": "We are looking for unscanned versions of your applications on Playstore or Appstore. This data will be available to you in some time."
-    },
-    "monitoringDetailsEmpty": {
-      "body": "This application could not be located on the Play Store or App Store."
-    },
-    "monitoringHistoryEmpty": {
-      "body": "There have been no instances where we have detected an unscanned version of this application in the Play Store/App Store yet."
-    },
-    "pendingStateLoadingText": "Store monitoring has been initiated for this application for the first time. Kindly visit this page after 24hrs to check the results"
-  },
-  "appMonitoringModule": {
-    "applicationName": "Application Name",
-    "scannedOnAppknox": "Scanned on Appknox",
-    "foundOn": "Found On",
-    "initiateScan": "Initiate Scan",
-    "storeVersion": "Store Version",
-    "countryCode": "Country Code",
-    "startScan": "Start Scan",
-    "monitoringDetails": "Monitoring Details",
-    "monitoringHistory": "Monitoring History",
-    "monitoringStatus": "Monitoring Status",
-    "syncInProgress": "Sync in progress",
-    "monitoringAction": "Monitoring Action",
-    "latestScannedVersion": "Latest Scanned Version",
-    "lastMonitoredOn": "Last monitored on",
-    "multiGeoToolTip": {
-      "headerText": "Multiple versions detected.",
-      "bodyText": "Click on this row to get more details."
-    }
-  },
-  "appMonitoringHeading": "Store Monitoring Setting",
-  "appMonitoringDescription": "Once enabled, our platform will monitor for any unscanned versions of your applications on Google Play Store or Apple App Store. If any such applications are found, the list below will be updated automatically at 24 hour intervals.",
   "project": "プロジェクト",
   "projectCollaboratorAdded": "Added collaborator to project",
   "projectCount": "Projects count",

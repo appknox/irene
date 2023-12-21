@@ -1,0 +1,7 @@
+{{#if this.fetchAmAppVersionRecords.isRunning}}
+  <AkLoader @size={{16}} data-test-details-table-countriesCodesLoader />
+{{else}}
+  <AkTypography data-test-details-table-countriesCodes>
+    {{this.countryCodes}}
+  </AkTypography>
+{{/if}}

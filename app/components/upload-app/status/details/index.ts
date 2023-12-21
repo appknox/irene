@@ -78,40 +78,7 @@ export default class UploadAppStatusDetailsComponent extends Component<UploadApp
   }
 
   get submissionStatus() {
-    const status = this.args.submission.status;
-
-    switch (status) {
-      case ENUMS.SUBMISSION_STATUS.DOWNLOAD_FAILED:
-      case ENUMS.SUBMISSION_STATUS.VALIDATE_FAILED:
-      case ENUMS.SUBMISSION_STATUS.STORE_URL_VALIDATION_FAILED:
-      case ENUMS.SUBMISSION_STATUS.STORE_DOWNLOAD_FAILED:
-      case ENUMS.SUBMISSION_STATUS.STORE_UPLOAD_FAILED:
-        return {
-          label: this.intl.t('failed'),
-          icon: 'error',
-          iconColor: 'error' as const,
-          running: false,
-          failed: true,
-        };
-
-      case ENUMS.SUBMISSION_STATUS.ANALYZING:
-        return {
-          label: this.intl.t('completed'),
-          icon: 'download-done',
-          iconColor: 'success' as const,
-          running: false,
-          failed: false,
-        };
-
-      default:
-        return {
-          label: this.intl.t('inProgress'),
-          icon: 'downloading',
-          iconColor: 'info' as const,
-          running: true,
-          failed: false,
-        };
-    }
+    return this.args.submission.submissionStatus;
   }
 
   get createdOn() {
