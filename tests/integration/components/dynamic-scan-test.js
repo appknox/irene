@@ -462,10 +462,6 @@ module(
             .hasText('t:scheduleDynamicscanDesc:()');
 
           assert
-            .dom('[data-test-dynamicScanModal-automatedDynamicScanAppiumNote]')
-            .hasText('t:appiumScriptsNote:()');
-
-          assert
             .dom('[data-test-dynamicScanModal-automatedDynamicScanScheduleBtn]')
             .isNotDisabled()
             .hasText('t:scheduleDynamicscan:()');

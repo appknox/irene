@@ -156,16 +156,7 @@
               {{t 'scheduleDynamicscanDesc'}}
             </AkTypography>
 
-            <AkTypography
-              class='mt-1'
-              @color='textSecondary'
-              @variant='body2'
-              data-test-dynamicScanModal-automatedDynamicScanAppiumNote
-            >
-              {{t 'appiumScriptsNote'}}
-            </AkTypography>
-
-            <AkStack class='mt-3' @justifyContent='flex-end'>
+            <AkStack class='mt-3' @justifyContent='flex-start'>
               <AkButton
                 @variant='outlined'
                 {{on 'click' (perform this.scheduleDynamicScan)}}

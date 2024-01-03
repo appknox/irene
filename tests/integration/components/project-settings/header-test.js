@@ -10,81 +10,97 @@ module('Integration | Component | project-settings/header', function (hooks) {
   setupMirage(hooks);
   setupIntl(hooks);
 
-  test('it renders', async function (assert) {
-    // Server mocks
-    this.server.get('/v2/projects/:id', (schema, req) => {
-      return schema.projects.find(req.params.id).toJSON();
-    });
+  test.each(
+    'it renders',
+    [true, false],
+    async function (assert, isDASTScenarioPage) {
+      this.set('isDASTScenarioPage', isDASTScenarioPage);
 
-    this.server.get('/v2/files/:id', (schema, req) => {
-      return schema.files.find(`${req.params.id}`)?.toJSON();
-    });
+      // Server mocks
+      this.server.get('/v2/projects/:id', (schema, req) => {
+        return schema.projects.find(req.params.id).toJSON();
+      });
 
-    const store = this.owner.lookup('service:store');
-    const file = this.server.create('file', 1);
-    const project = this.server.create('project', {
-      id: 1,
-      last_file_id: file.id,
-    });
+      this.server.get('/v2/files/:id', (schema, req) => {
+        return schema.files.find(`${req.params.id}`)?.toJSON();
+      });
 
-    const normalizedProject = store.normalize('project', {
-      ...project.toJSON(),
-    });
+      const store = this.owner.lookup('service:store');
+      const file = this.server.create('file', 1);
+      const project = this.server.create('project', {
+        id: 1,
+        last_file_id: file.id,
+      });
 
-    this.project = store.push(normalizedProject);
+      const normalizedProject = store.normalize('project', {
+        ...project.toJSON(),
+      });
 
-    await render(hbs`<ProjectSettings::Header @project={{this.project}} />`);
+      this.project = store.push(normalizedProject);
 
-    const breadcrumbItems = [
-      't:allProjects:()',
-      this.project.get('packageName'),
-      't:settings:()',
-    ];
+      await render(
+        hbs`<ProjectSettings::Header @project={{this.project}} @isDASTScenarioPage={{this.isDASTScenarioPage}} />`
+      );
 
-    // Checks rendering of breadcrumbs
-    breadcrumbItems.forEach((item) => {
-      assert
-        .dom(`[data-test-projectSettingsHeader-breadcrumbItem="${item}"]`)
-        .exists();
-    });
+      const breadcrumbItems = [
+        't:allProjects:()',
+        this.project.get('packageName'),
+        isDASTScenarioPage
+          ? 't:dastAutomation.dastAutomationScenario:()'
+          : 't:settings:()',
+      ];
 
-    assert
-      .dom('[data-test-projectSettingsHeader-descText]')
-      .exists()
-      .containsText('t:settings:()')
-      .containsText('t:projectSettings.headerText:()');
+      // Checks rendering of breadcrumbs
+      breadcrumbItems.forEach((item) => {
+        assert
+          .dom(`[data-test-projectSettingsHeader-breadcrumbItem="${item}"]`)
+          .exists();
+      });
 
-    assert.dom('[data-test-projectSettingsHeader-projectDetails]').exists();
+      if (!isDASTScenarioPage) {
+        assert
+          .dom('[data-test-projectSettingsHeader-descText]')
+          .exists()
+          .containsText('t:settings:()')
+          .containsText('t:projectSettings.headerText:()');
 
-    assert
-      .dom('[data-test-projectSettingsHeader-projectDetails-lastFileIconUrl]')
-      .exists()
-      .hasAttribute('src', this.project.get('lastFile').get('iconUrl'));
+        assert.dom('[data-test-projectSettingsHeader-projectDetails]').exists();
 
-    assert
-      .dom('[data-test-projectSettingsHeader-projectDetails-packageName]')
-      .exists()
-      .containsText(this.project.get('packageName'));
+        assert
+          .dom(
+            '[data-test-projectSettingsHeader-projectDetails-lastFileIconUrl]'
+          )
+          .exists()
+          .hasAttribute('src', this.project.get('lastFile').get('iconUrl'));
 
-    assert
-      .dom('[data-test-projectSettingsHeader-projectDetails-projectID]')
-      .exists()
-      .containsText('t:projectID:()')
-      .containsText(this.project.id);
+        assert
+          .dom('[data-test-projectSettingsHeader-projectDetails-packageName]')
+          .exists()
+          .containsText(this.project.get('packageName'));
 
-    assert
-      .dom('[data-test-projectSettingsHeader-platformIcon]')
-      .exists()
-      .hasClass(RegExp(`platform-${this.project.get('platformIconClass')}`));
+        assert
+          .dom('[data-test-projectSettingsHeader-projectDetails-projectID]')
+          .exists()
+          .containsText('t:projectID:()')
+          .containsText(this.project.id);
 
-    // Checks rendering of tabs
-    const tabItems = ['t:generalSettings:()', 't:analysisSettings:()'];
+        assert
+          .dom('[data-test-projectSettingsHeader-platformIcon]')
+          .exists()
+          .hasClass(
+            RegExp(`platform-${this.project.get('platformIconClass')}`)
+          );
 
-    tabItems.forEach((tab) => {
-      assert
-        .dom(`[data-test-projectSettingsHeader-tab="${tab}"]`)
-        .exists()
-        .hasText(tab);
-    });
-  });
+        // Checks rendering of tabs
+        const tabItems = ['t:generalSettings:()', 't:analysisSettings:()'];
+
+        tabItems.forEach((tab) => {
+          assert
+            .dom(`[data-test-projectSettingsHeader-tab="${tab}"]`)
+            .exists()
+            .hasText(tab);
+        });
+      }
+    }
+  );
 });

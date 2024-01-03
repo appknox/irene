@@ -829,8 +829,11 @@ body {
   --project-settings-loading-container-border: var(--border-color-1);
   --project-settings-loading-container-border-radius: var(--border-radius);
 
+  // variables for project-settings/page-wrapper
+  --project-settings-page-wrapper-background-color: var(--background-light);
+
   // variables for project-settings/header
-  --project-settings-header-background-color: var(--common-white);
+  --project-settings-header-background-color: var(--background-light);
   --project-settings-header-border-color: var(--border-color-1);
   --project-settings-header-border-radius: var(--border-radius);
   --project-settings-header-info-text-color: var(--text-secondary-color);
@@ -841,6 +844,9 @@ body {
 
   // variables for project-settings/general-settings
   --project-settings-general-settings-root-border-color: var(--border-color-1);
+  --project-settings-general-settings-root-background-color: var(
+    --background-main
+  );
 
   // variables for project-settings/general-settings/dynamicscan-automation-settings
   --project-settings-general-settings-dynamicscan-automation-settings-box-shadow: var(
@@ -851,6 +857,14 @@ body {
   );
   --project-settings-general-settings-dynamicscan-automation-settings-border-color: var(
     --border-color-1
+  );
+
+  // variables for project-settings/general-settings/dynamicscan-automation-settings/scenario
+  --project-settings-general-settings-dynamicscan-automation-scenario-textfield-bg: var(
+    --neutral-grey-100
+  );
+  --project-settings-general-settings-dynamicscan-automation-scenario-form-footer-box-shadow: var(
+    --box-shadow-4
   );
 
   // variables for project-settings/general-settings/github-project
@@ -890,6 +904,25 @@ body {
   );
   --project-settings-analysis-settings-vulnerability-list-border-radius: var(
     --border-radius
+  );
+
+  // variables for project-settings/view-scenario
+  --project-settings-view-scenario-background-white: var(--background-main);
+  --project-settings-view-scenario-background-dark: var(--neutral-grey-100);
+  --project-settings-view-scenario-modal-footer-box-shadow: var(--box-shadow-4);
+  --project-settings-view-scenario-border-light: var(--border-color-1);
+  --project-settings-view-scenario-header-border-color: var(--border-color-1);
+  --project-settings-view-scenario-header-border-radius: var(--border-radius);
+  --project-settings-view-scenario-header-scenario-details-box-shadow: var(
+    --box-shadow-8
+  );
+
+  // variables for project-settings/view-scenario/parameter-item
+  --project-settings-view-scenario-parameter-item-border-color: var(
+    --neutral-grey-100
+  );
+  --project-settings-view-scenario-parameter-text-field-background: var(
+    --neutral-grey-100
   );
 
   // variables for tri-state-checkbox

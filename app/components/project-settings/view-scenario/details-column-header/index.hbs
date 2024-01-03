@@ -1,0 +1,49 @@
+<div class='px-3' local-class='scenario-details-columns-container'>
+  <AkStack @alignItems='center' @spacing='0.5'>
+    <AkFormControlLabel
+      @label={{t 'dastAutomation.inputType'}}
+      @labelTypographyFontWeight='medium'
+      for='inputType'
+      data-test-projectSettings-scenarioDetails-inputTypeColumnHeader
+    />
+
+    <AkTooltip
+      @placement='bottom-end'
+      @arrow={{true}}
+      data-test-projectSettings-scenarioDetails-inputTypeColumnHeader-tooltip
+    >
+      <:tooltipContent>
+        <div
+          local-class='tooltip-content'
+          data-test-projectSettings-scenarioDetails-inputTypeColumnHeader-tooltipContent
+        >
+          <AkTypography
+            @variant='body2'
+            @color='inherit'
+            {{style whiteSpace='wrap' minWidth='220px'}}
+          >
+            {{t 'dastAutomation.inputTypeColumnHeaderInfo' htmlSafe=true}}
+          </AkTypography>
+        </div>
+      </:tooltipContent>
+
+      <:default>
+        <AkIcon
+          @iconName='help'
+          @color='textSecondary'
+          @variant='filled'
+          @size='small'
+          {{style fontSize='1.14286em'}}
+          data-test-projectSettings-scenarioDetails-inputTypeColumnHeader-tooltipIcon
+        />
+      </:default>
+    </AkTooltip>
+  </AkStack>
+
+  <AkFormControlLabel
+    @label={{t 'dastAutomation.inputValue'}}
+    @labelTypographyFontWeight='medium'
+    for='inputValue'
+    data-test-projectSettings-scenarioDetails-inputValueColumnHeader
+  />
+</div>

@@ -1,0 +1,134 @@
+<AkStack
+  @tag='header'
+  @alignItems='center'
+  @justifyContent='space-between'
+  @width='full'
+  local-class='view-scenario-header-root'
+  class='p-2 px-3'
+  data-test-projectSettings-viewScenario-header-root
+>
+  <AkStack
+    @alignItems='center'
+    @justifyContent='flex-start'
+    @spacing='6'
+    @width='full'
+  >
+    <AkStack
+      @direction='column'
+      @spacing='1'
+      data-test-projectSettings-viewScenarioHeader-scenarioName
+    >
+      <AkTypography
+        @variant='body1'
+        @color='textSecondary'
+        @fontWeight='medium'
+      >
+        {{t 'scenario'}}
+      </AkTypography>
+
+      <AkTypography
+        @variant='body1'
+        @color='textPrimary'
+        @fontWeight='medium'
+        @noWrap={{true}}
+      >
+        {{@scenario.name}}
+      </AkTypography>
+    </AkStack>
+
+    <AkStack
+      @direction='column'
+      @spacing='1.5'
+      @width='full'
+      data-test-projectSettings-viewScenarioHeader-scenarioStatus
+    >
+      <AkTypography
+        @variant='body1'
+        @color='textSecondary'
+        @fontWeight='medium'
+      >
+        {{t 'enabled'}}
+      </AkTypography>
+
+      <ProjectSettings::DastScenarioToggle
+        @project={{@project}}
+        @scenario={{@scenario}}
+      />
+    </AkStack>
+  </AkStack>
+
+  <AkTooltip
+    @disabled={{this.isNotDefaultScenario}}
+    @arrow={{true}}
+    @title={{t 'dastAutomation.deleteDefaultScenarioInfo'}}
+    data-test-projectSettings-viewScenarioHeader-deleteDefaultScenarioInfo-tooltip
+  >
+    <AkIconButton
+      disabled={{@scenario.isDefault}}
+      {{on 'click' this.handleDeleteScenario}}
+      data-test-projectSettings-viewScenarioHeader-deleteScenarioModalTrigger
+    >
+      <AkIcon @iconName='delete' />
+    </AkIconButton>
+  </AkTooltip>
+</AkStack>
+
+{{#if this.showDeleteScenarioModal}}
+  <AkModal
+    @headerTitle={{t 'confirmation'}}
+    @onClose={{this.hideDeleteScenarioModal}}
+    @disableClose={{this.deleteProjectScenario.isRunning}}
+    @showHeader={{true}}
+    @noGutter={{true}}
+  >
+    <:default>
+      <AkStack
+        @direction='column'
+        @spacing='2'
+        class='p-3 pr-6'
+        {{style maxWidth='420px'}}
+      >
+        <AkTypography
+          data-test-projectSettings-viewScenario-deleteScenarioConfirmText
+        >
+          {{t
+            'dastAutomation.scenarioDeleteConfirm'
+            htmlSafe=true
+            scenarioName=@scenario.name
+          }}
+        </AkTypography>
+      </AkStack>
+    </:default>
+
+    <:footer>
+      <AkDivider />
+
+      <AkStack
+        @justifyContent='flex-start'
+        @alignItems='center'
+        @spacing='1.5'
+        local-class='scenario-delete-footer-container'
+        class='px-3 py-2'
+      >
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          @disabled={{this.deleteProjectScenario.isRunning}}
+          {{on 'click' this.hideDeleteScenarioModal}}
+          data-test-projectSettings-viewScenario-deleteScenarioCancelBtn
+        >
+          {{t 'cancel'}}
+        </AkButton>
+
+        <AkButton
+          @loading={{this.deleteProjectScenario.isRunning}}
+          @variant='filled'
+          {{on 'click' this.deleteScenario}}
+          data-test-projectSettings-viewScenario-deleteScenarioDeleteBtn
+        >
+          {{t 'yesDelete'}}
+        </AkButton>
+      </AkStack>
+    </:footer>
+  </AkModal>
+{{/if}}

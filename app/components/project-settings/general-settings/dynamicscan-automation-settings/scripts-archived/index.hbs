@@ -1,0 +1,164 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  data-test-projectSettings-genSettings-dynScanAutoSettings-root
+>
+  <AkStack @spacing='1' @alignItems='center' class='mb-1'>
+    <AkTypography
+      @variant='h5'
+      data-test-genSettings-dynScanAutoSettings-headerTitle
+    >
+      {{t 'dynamicScanAutomation'}}
+    </AkTypography>
+
+    <AkChip
+      @label={{t 'experimentalFeature'}}
+      @variant='semi-filled'
+      @size='small'
+      @color='warn'
+      data-test-genSettings-dynScanAutoSettings-headerInfoChip
+    >
+      <:icon>
+        <AkIcon @iconName='build' />
+      </:icon>
+    </AkChip>
+  </AkStack>
+
+  <AkTypography
+    @variant='h6'
+    @gutterBottom={{true}}
+    data-test-genSettings-dynScanAutoSettings-headerInfoDescHeader
+  >
+    {{t 'appiumScripts'}}
+  </AkTypography>
+
+  <AkStack
+    @direction='column'
+    @spacing='2'
+    class='mb-2'
+    {{style maxWidth='700px'}}
+  >
+    <AkTypography
+      @variant='body2'
+      @color='textSecondary'
+      data-test-genSettings-dynScanAutoSettings-headerInfoDescText
+    >
+      {{t 'appiumScriptsDescription' htmlSafe=true}}
+    </AkTypography>
+
+    <AkTypography
+      @variant='body3'
+      data-test-genSettings-dynScanAutoSettings-headerInfoDescNote
+    >
+      {{t 'appiumScriptsSchedNote'}}
+    </AkTypography>
+  </AkStack>
+
+  <FileUpload
+    @name='files'
+    @accept='*/*'
+    disabled={{this.uploadFile.isRunning}}
+    @onfileadd={{this.uploadFileWrapper}}
+    data-test-genSettings-dynScanAutoSettings-uploadZip
+  >
+    <AkButton
+      @tag='a'
+      @variant='outlined'
+      @typographyFontWeight='medium'
+      data-test-genSettings-dynScanAutoSettings-uploadZipBtn
+    >
+      {{#if this.uploadFile.isRunning}}
+        {{t 'uploading'}}...
+      {{else}}
+        {{t 'uploadZipFile'}}
+      {{/if}}
+    </AkButton>
+  </FileUpload>
+
+  {{#if this.automationScripts}}
+    <AkStack
+      @width='full'
+      @direction='column'
+      class='mt-2'
+      data-test-genSettings-dynScanAutoSettings-autoScriptsRoot
+    >
+      {{#each this.automationScripts as |script|}}
+        <AkStack
+          @width='full'
+          @direction='column'
+          local-class='script-details-container'
+          data-test-genSettings-dynScanAutoSettings-autoScript='{{script.fileKey}}'
+        >
+          <AkFormControlLabel
+            @label='{{t "appiumScheduledAutomation"}}'
+            @labelTypographyFontWeight='medium'
+            @disabled={{this.toggleDynamicscanMode.isRunning}}
+            class='p-2'
+            data-test-genSettings-dynScanAutoSettings-autoScript-dynamicscanModeToggleLabel
+            as |fcl|
+          >
+            <AkToggle
+              @size='small'
+              @disabled={{fcl.disabled}}
+              @checked={{this.automationEnabled}}
+              @onClick={{perform this.toggleDynamicscanMode}}
+              data-test-genSettings-dynScanAutoSettings-autoScript-dynamicscanModeToggle
+            />
+          </AkFormControlLabel>
+
+          <AkStack
+            @width='full'
+            @direction='column'
+            @spacing='0.5'
+            local-class='script-file-details'
+            class='p-2'
+          >
+            <AkStack
+              @alignItems='center'
+              @spacing='0.5'
+              local-class='text-with-icon'
+              data-test-genSettings-dynScanAutoSettings-autoScript-fileKey
+            >
+              <AkIcon
+                @iconName='article'
+                @color='textPrimary'
+                @variant='filled'
+                data-test-genSettings-dynScanAutoSettings-autoScript-fileKeyIcon
+              />
+
+              <AkTypography @fontWeight='medium'>
+                {{script.fileKey}}
+              </AkTypography>
+            </AkStack>
+
+            <AkTypography
+              @color='textSecondary'
+              data-test-genSettings-dynScanAutoSettings-autoScript-dateCreated
+            >
+              {{t 'uploaded'}}
+              {{dayjs-from-now script.createdOn}}
+            </AkTypography>
+
+            {{#if (eq script.isValid false)}}
+              <AkStack @alignItems='center' local-class='text-with-icon'>
+                <AkIcon
+                  @iconName='warning'
+                  @color='error'
+                  @variant='filled'
+                  data-test-genSettings-dynScanAutoSettings-autoScript-invalidScript-errorIcon
+                />
+
+                <AkTypography
+                  @color='error'
+                  data-test-genSettings-dynScanAutoSettings-autoScript-invalidScript-text
+                >
+                  {{t 'appiumScriptInvalid'}}
+                </AkTypography>
+              </AkStack>
+            {{/if}}
+          </AkStack>
+        </AkStack>
+      {{/each}}
+    </AkStack>
+  {{/if}}
+</AkStack>

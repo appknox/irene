@@ -1,0 +1,67 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  class='py-4'
+  {{style gap='1.4286em'}}
+>
+  <ProjectSettings::ViewScenario::Header
+    @project={{@project}}
+    @scenario={{@scenario}}
+  />
+
+  <AkStack @width='full' @direction='column' {{style overflowX='auto'}}>
+    <ProjectSettings::ViewScenario::DetailsColumnHeader />
+
+    <ProjectSettings::ViewScenario::AddParameterForm
+      @scenario={{@scenario}}
+      @reloadParameterList={{this.reloadParameterList}}
+    />
+
+    {{#if this.fetchScanParameters.isRunning}}
+      <ProjectSettings::Loader
+        data-test-projectSettings-viewScenario-paramListLoader
+      />
+
+    {{else if (eq this.parameterList.length 0)}}
+      <AkStack
+        @justifyContent='center'
+        @alignItems='center'
+        @width='full'
+        @spacing='6'
+        local-class='empty-secanario-container'
+        data-test-projectSettings-viewScenario-paramListEmpty
+      >
+        <AkSvg::NoParameterData
+          data-test-projectSettings-viewScenario-paramListEmptyIllustration
+        />
+
+        <AkStack @direction='column' @spacing='1'>
+          <AkTypography
+            @variant='h6'
+            data-test-projectSettings-viewScenario-paramListEmptyHeaderText
+          >
+            {{t 'noDataAvailable'}}
+          </AkTypography>
+
+          <AkTypography
+            {{style maxWidth='356px'}}
+            data-test-projectSettings-viewScenario-paramListEmptyDescText
+          >
+            {{t 'dastAutomation.noParamaterAvailable'}}
+          </AkTypography>
+        </AkStack>
+      </AkStack>
+
+    {{else}}
+      <AkStack @direction='column' @width='full'>
+        {{#each this.parameterList as |pm|}}
+          <ProjectSettings::ViewScenario::ParameterItem
+            @scenario={{@scenario}}
+            @parameter={{pm}}
+            @reloadParameterList={{this.reloadParameterList}}
+          />
+        {{/each}}
+      </AkStack>
+    {{/if}}
+  </AkStack>
+</AkStack>

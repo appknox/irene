@@ -31,6 +31,7 @@ export enum AkSvgComponentInvocationByNames {
   MainLoaderImage3,
   AppstoreLogo,
   PlaystoreLogo,
+  NoParameterData,
 }
 
 export enum AkSvgComponentInvocationByPaths {

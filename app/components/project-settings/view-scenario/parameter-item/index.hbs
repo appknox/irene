@@ -1,0 +1,269 @@
+<AkStack
+  @alignItems='center'
+  class='p-2 px-3'
+  local-class='scenario-details-group'
+  data-test-projectSettings-viewScenario-parameterItem-root
+>
+  <AkTypography
+    {{style padding='0em 0.5714em'}}
+    data-test-projectSettings-viewScenario-parameterItem-name
+  >
+    {{@parameter.name}}
+  </AkTypography>
+
+  <AkTooltip
+    @disabled={{this.isEditing}}
+    @arrow={{true}}
+    @placement='left'
+    @title={{t 'dastAutomation.clickToEdit'}}
+    data-test-projectSettings-viewScenario-parameterItem-valueTextFieldTooltip
+  >
+    <AkTextField
+      id={{@parameter.id}}
+      @disabled={{this.editParameter.isRunning}}
+      @type={{if this.hideParameterValueText 'password' 'text'}}
+      @value={{this.parameterValueEditText}}
+      @formControlClass={{if this.isEditing this.textFieldClasses.formControl}}
+      @textFieldRootClass={{this.textFieldClasses.root}}
+      autocomplete='new-password'
+      local-class='parameter-value-text-field {{if
+        @parameter.isSecure
+        "is-secured"
+      }}'
+      {{on 'input' this.handleParamFieldChange}}
+      {{on 'focus' this.handleParamFieldEditing}}
+      {{on 'focusout' this.handleParameterEditDone}}
+      data-test-projectSettings-viewScenario-parameterItem-valueTextField
+    >
+      <:rightAdornment>
+        {{#if this.editParameter.isRunning}}
+          <AkLoader
+            @size={{16}}
+            data-test-projectSettings-viewScenario-parameterItem-editSaveLoader
+          />
+
+        {{else}}
+          <AkTooltip
+            @disabled={{this.isNotSecure}}
+            @placement='top'
+            @arrow={{true}}
+            @title={{t 'dastAutomation.unmaskNotAllowed'}}
+            data-test-projectSettings-parameterItem-valueTextField-secureTooltip
+          >
+            <AkIcon
+              @variant={{if @parameter.isSecure 'filled' 'outlined'}}
+              @iconName={{if @parameter.isSecure 'lock' 'lock-open'}}
+              local-class='secure-icon {{if this.isEditing "show" "hide"}}'
+              {{on 'click' this.showMaskParameterValueModal}}
+              {{style
+                cursor=(if @parameter.isSecure 'not-allowed' 'pointer')
+                fontSize='1.2143em !important'
+              }}
+              data-test-projectSettings-parameterItem-valueTextField-secureIcon
+            />
+          </AkTooltip>
+        {{/if}}
+      </:rightAdornment>
+    </AkTextField>
+  </AkTooltip>
+
+  <AkStack @spacing='0.5' @justifyContent='center'>
+    {{#if this.isEditing}}
+      <AkIconButton
+        @variant='outlined'
+        @size='small'
+        disabled={{this.editParameter.isRunning}}
+        {{on 'click' this.cancelParameterValueEdit}}
+        data-test-projectSettings-parameterItem-valueTextField-editCancelButton
+      >
+        <AkIcon
+          @iconName='close'
+          @color='error'
+          data-test-projectSettings-parameterItem-valueTextField-editCancelBtnIcon
+        />
+      </AkIconButton>
+
+      <AkIconButton
+        @variant='outlined'
+        @size='small'
+        disabled={{this.editParameter.isRunning}}
+        {{on 'click' this.saveParameterValueEdit}}
+        data-test-projectSettings-parameterItem-valueTextField-editSaveButton
+      >
+        <AkIcon
+          @iconName='done'
+          @color='success'
+          data-test-projectSettings-parameterItem-valueTextField-editSaveBtnIcon
+        />
+      </AkIconButton>
+    {{/if}}
+  </AkStack>
+
+  <AkStack @width='full' @justifyContent='flex-end'>
+    <AkIconButton
+      local-class='details-delete-btn'
+      {{on 'click' this.showDeleteParameterModal}}
+      {{style width='fit-content'}}
+      data-test-projectSettings-viewScenario-parameterItem-deleteButton
+    >
+      <AkIcon
+        @iconName='delete'
+        data-test-projectSettings-viewScenario-parameterItem-deleteButtonIcon
+      />
+    </AkIconButton>
+  </AkStack>
+</AkStack>
+
+{{#if this.showDeleteScenarioParameter}}
+  <AkModal
+    @headerTitle={{t 'confirmation'}}
+    @onClose={{this.hideDeleteParameterModal}}
+    @disableClose={{this.deleteScenarioParameter.isRunning}}
+    @showHeader={{true}}
+    @noGutter={{true}}
+  >
+    <:default>
+      <AkStack
+        @direction='column'
+        @spacing='2'
+        class='p-3 pr-6'
+        {{style minWidth='420px'}}
+      >
+        <AkTypography
+          data-test-projectSettings-viewScenario-deleteParamModal-confirmText
+        >
+          {{t
+            'dastAutomation.parameterDeleteConfirm'
+            htmlSafe=true
+            scenarioName=@scenario.name
+          }}
+        </AkTypography>
+
+        <AkStack @direction='column' @spacing='1.5'>
+          <AkStack
+            @spacing='6'
+            @alignItems='center'
+            data-test-projectSettings-viewScenario-deleteParamModal-inputTypeInfo
+          >
+            <AkTypography
+              @fontWeight='regular'
+              @color='neutral'
+              {{style minWidth='75px'}}
+            >
+              {{t 'dastAutomation.inputType'}}
+            </AkTypography>
+
+            <AkTypography>
+              {{@parameter.name}}
+            </AkTypography>
+          </AkStack>
+
+          <AkStack
+            @spacing='6'
+            @alignItems='center'
+            data-test-projectSettings-viewScenario-deleteParamModal-inputValueInfo
+          >
+            <AkTypography
+              @fontWeight='regular'
+              @color='neutral'
+              {{style minWidth='75px'}}
+            >
+              {{t 'dastAutomation.inputValue'}}
+            </AkTypography>
+
+            <AkTypography>
+              {{@parameter.value}}
+            </AkTypography>
+          </AkStack>
+        </AkStack>
+      </AkStack>
+    </:default>
+
+    <:footer>
+      <AkDivider />
+
+      <AkStack
+        @justifyContent='flex-start'
+        @alignItems='center'
+        @spacing='1.5'
+        local-class='parameter-modal-footer-container'
+        class='px-3 py-2'
+      >
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          @disabled={{this.deleteScenarioParameter.isRunning}}
+          {{on 'click' this.hideDeleteParameterModal}}
+          data-test-projectSettings-viewScenario-deleteParamModal-deleteCancelBtn
+        >
+          {{t 'cancel'}}
+        </AkButton>
+
+        <AkButton
+          @variant='filled'
+          @loading={{this.deleteScenarioParameter.isRunning}}
+          {{on 'click' this.deleteParameter}}
+          data-test-projectSettings-viewScenario-deleteParamModal-deleteConfirmBtn
+        >
+          {{t 'yesDelete'}}
+        </AkButton>
+      </AkStack>
+    </:footer>
+  </AkModal>
+{{/if}}
+
+{{#if this.showMaskSecureFieldModal}}
+  <AkModal
+    @headerTitle={{t 'confirmation'}}
+    @onClose={{this.closeMaskParameterValueModal}}
+    @disableClose={{this.editParameter.isRunning}}
+    @noGutter={{true}}
+    @showHeader={{true}}
+  >
+    <:default>
+      <AkStack
+        @direction='column'
+        @spacing='2'
+        class='p-3 pr-6'
+        {{style maxWidth='420px'}}
+      >
+        <AkTypography
+          data-test-projectSettings-viewScenario-maskFieldModal-maskParameterText
+        >
+          {{t 'dastAutomation.maskParameterText'}}
+        </AkTypography>
+      </AkStack>
+    </:default>
+
+    <:footer>
+      <AkDivider />
+
+      <AkStack
+        @justifyContent='flex-start'
+        @alignItems='center'
+        @spacing='1.5'
+        local-class='parameter-modal-footer-container'
+        class='px-3 py-2'
+      >
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          @disabled={{this.editParameter.isRunning}}
+          {{on 'click' this.closeMaskParameterValueModal}}
+          data-test-projectSettings-viewScenario-maskFieldModal-maskCancelBtn
+        >
+          {{t 'cancel'}}
+        </AkButton>
+
+        <AkButton
+          @variant='filled'
+          @loading={{this.editParameter.isRunning}}
+          {{on 'click' this.secureParameterValue}}
+          data-test-projectSettings-viewScenario-maskFieldModal-maskSaveBtn
+        >
+          {{t 'yesSecure'}}
+        </AkButton>
+      </AkStack>
+    </:footer>
+  </AkModal>
+{{/if}}
