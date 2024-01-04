@@ -95,6 +95,14 @@ export default class EditAnalysisDetailsComponent extends Component {
     return this.store.findAll('gdpr');
   }
 
+  get nistsp80053s() {
+    return this.store.findAll('nistsp80053');
+  }
+
+  get nistsp800171s() {
+    return this.store.findAll('nistsp800171');
+  }
+
   get allFindings() {
     let findingId = this.findingId;
     const findings = this.addedFindings || this.analysisDetails.findings;
@@ -333,6 +341,14 @@ export default class EditAnalysisDetailsComponent extends Component {
     this.analysisDetails.gdpr = param;
   }
 
+  @action selectNistsp800171Category(param) {
+    this.analysisDetails.nistsp800171 = param;
+  }
+
+  @action selectNistsp80053Category(param) {
+    this.analysisDetails.nistsp80053 = param;
+  }
+
   @action selectOverriddenRisk(param) {
     this.analysisDetails.overriddenRisk = param;
   }
@@ -463,6 +479,9 @@ export default class EditAnalysisDetailsComponent extends Component {
     const asvs = this.analysisDetails.asvs;
     const cwe = this.analysisDetails.cwe;
     const gdpr = this.analysisDetails.gdpr;
+    const nistsp800171 = this.analysisDetails.nistsp800171;
+    const nistsp80053 = this.analysisDetails.nistsp80053;
+
     let status = this.analysisDetails.status;
     if (typeof status === 'object') {
       status = status.value;
@@ -499,6 +518,8 @@ export default class EditAnalysisDetailsComponent extends Component {
       cwe: cwe.map((a) => a.id),
       gdpr: gdpr.map((a) => a.id),
       findings,
+      nistsp80053: nistsp80053.map((a) => a.id),
+      nistsp800171: nistsp800171.map((a) => a.id),
       overridden_risk: overriddenRisk,
       overridden_risk_comment: overriddenRiskComment,
       overridden_risk_to_profile: overriddenRiskToProfile,

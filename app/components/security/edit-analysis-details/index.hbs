@@ -449,6 +449,50 @@
       <div class='columns'>
         <div class='column is-one-third'>
           <h5 class='bold-font'>
+            NIST SP 800-171
+          </h5>
+        </div>
+      </div>
+      <div class='columns border-bottom-container'>
+        <div class='column margin-bottom20'>
+          <PowerSelectMultiple
+            @placeholder='Select NIST SP 800-171 Section'
+            @selected={{this.analysisDetails.nistsp800171}}
+            @options={{this.nistsp800171s}}
+            @onChange={{this.selectNistsp800171Category}}
+            as |key|
+          >
+            {{key.code}}
+            -
+            {{key.title}}
+          </PowerSelectMultiple>
+        </div>
+      </div>
+      <div class='columns'>
+        <div class='column is-one-third'>
+          <h5 class='bold-font'>
+            NIST SP 800-53
+          </h5>
+        </div>
+      </div>
+      <div class='columns border-bottom-container'>
+        <div class='column margin-bottom20'>
+          <PowerSelectMultiple
+            @placeholder='Select NIST SP 800-53 Section'
+            @selected={{this.analysisDetails.nistsp80053}}
+            @options={{this.nistsp80053s}}
+            @onChange={{this.selectNistsp80053Category}}
+            as |key|
+          >
+            {{key.code}}
+            -
+            {{key.title}}
+          </PowerSelectMultiple>
+        </div>
+      </div>
+      <div class='columns'>
+        <div class='column is-one-third'>
+          <h5 class='bold-font'>
             Override Risk
           </h5>
         </div>

@@ -20,6 +20,8 @@ import GdprModel from '../gdpr';
 import HipaaModel from '../hipaa';
 import SecurityAttachmentModel from './attachment';
 import VulnerabilityModel from '../vulnerability';
+import Nistsp80053Model from '../nistsp80053';
+import Nistsp800171Model from '../nistsp800171';
 
 const inflector = Inflector.inflector;
 inflector.irregular('asvs', 'asvses');
@@ -105,6 +107,12 @@ export default class SecurityAnalysisModel extends Model {
 
   @hasMany('hipaa')
   declare hipaa: AsyncHasMany<HipaaModel>;
+
+  @hasMany('nistsp80053')
+  declare nistsp80053: AsyncHasMany<Nistsp80053Model>;
+
+  @hasMany('nistsp800171')
+  declare nistsp800171: AsyncHasMany<Nistsp800171Model>;
 
   @hasMany('security/attachment')
   declare attachments: AsyncHasMany<SecurityAttachmentModel>;
