@@ -1,0 +1,59 @@
+.search-input-conntainer-width {
+  width: 200px;
+}
+
+.search-package-name-input {
+  font-size: 0.857rem !important;
+}
+
+.header-home-page {
+  background-color: var(--project-list-header-background-color);
+  border: 1px solid var(--project-list-header-border-color);
+  border-radius: var(--project-list-header-border-radius);
+}
+
+.header-home-page-title {
+  padding: 1em 1.285em;
+}
+
+.header-home-page-sorting-filter {
+  padding: 0.785em 1.285em;
+}
+
+.select-team-class {
+  padding-left: 0.714em;
+}
+
+.filter-input {
+  border-color: var(--project-list-header-filter-border-color) !important;
+  padding: 0px 8px !important;
+
+  :global(.ember-power-select-status-icon) {
+    display: none;
+  }
+
+  &:hover {
+    border-color: var(
+      --project-list-header-filter-hover-border-color
+    ) !important;
+  }
+}
+
+.filter-input-dropdown {
+  min-width: max-content !important;
+
+  :global(.ember-power-select-option) {
+    background-color: var(--project-list-header-background-color) !important;
+    padding: 0.5em 0.75em !important;
+
+    &[aria-current='true'] {
+      background-color: var(
+        --project-list-header-filter-option-hover-background
+      ) !important;
+    }
+  }
+
+  :global(.ember-power-select-options) {
+    padding: 0 !important;
+  }
+}

@@ -1,0 +1,162 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  local-class='header-home-page'
+  class='mb-4'
+>
+  <AkStack
+    @width='full'
+    @justifyContent='space-between'
+    @alignItems='center'
+    local-class='header-home-page-title'
+  >
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography @variant='h5'>{{t 'allProjects'}}</AkTypography>
+
+      <AkTypography @variant='body2'>
+        {{t 'allProjectsDescription'}}
+      </AkTypography>
+    </AkStack>
+
+    {{#if @hasProjects}}
+      <div local-class='search-input-conntainer-width'>
+        <AkTextField
+          @placeholder={{t 'searchQuery'}}
+          @value={{@query}}
+          {{on 'input' this.onSearchQueryChange}}
+          local-class='search-package-name-input'
+          data-test-search-query-input
+        >
+          <:leftAdornment>
+            <AkIcon @iconName='search' @color='textSecondary' />
+          </:leftAdornment>
+
+          <:rightAdornment>
+            {{#if @query}}
+              <AkIcon
+                @iconName='close'
+                @color='textSecondary'
+                {{on 'click' this.clearSearchInput}}
+              />
+            {{/if}}
+          </:rightAdornment>
+        </AkTextField>
+      </div>
+    {{/if}}
+  </AkStack>
+
+  {{#if @hasProjects}}
+    <AkDivider @color='dark' />
+
+    <AkStack
+      @alignItems='center'
+      @justifyContent='space-between'
+      @width='full'
+      local-class='header-home-page-sorting-filter'
+    >
+      <AkStack>
+        <AkSelect
+          @onChange={{this.filterPlatformChange}}
+          @options={{this.platformObjects}}
+          @selected={{this.selectedPlatform}}
+          @verticalPosition='auto'
+          @triggerClass={{this.triggerClass}}
+          @dropdownClass={{this.dropDownClass}}
+          @optionTitle='Platform'
+          @extra={{hash
+            selectedItem=this.selectedPlatform.key
+            showLabel=true
+            iconName='filter-list'
+          }}
+          @selectedItemComponent='project-list/filter-selected-item'
+          {{style width='auto'}}
+          class='select-platform-class'
+          data-test-select-platform-container
+          as |platformObject|
+        >
+          <AkStack @spacing='1'>
+            <AkStack @alignItems='center'>
+              {{#if (eq @platform platformObject.value)}}
+                <AkIcon @iconName='radio-button-checked' @color='success' />
+              {{else}}
+                <AkIcon @iconName='radio-button-unchecked' />
+              {{/if}}
+            </AkStack>
+
+            {{platformObject.key}}
+          </AkStack>
+        </AkSelect>
+
+        <AkSelect
+          @triggerClass={{this.triggerClass}}
+          @dropdownClass={{this.dropDownClass}}
+          @renderInPlace={{true}}
+          @searchPlaceholder={{t 'searchTeamByName'}}
+          @search={{this.searchTeams}}
+          @searchEnabled={{true}}
+          @options={{this.teams}}
+          @selected={{this.selectedTeam}}
+          @loadingMessage={{t 'loadingTeam'}}
+          @onChange={{this.onSelectTeamChange}}
+          @onOpen={{this.onOpenTFilter}}
+          @tagName='div'
+          @optionTitle='Team'
+          @extra={{hash
+            selectedItem=this.selectedTeamName
+            showLabel=true
+            iconName='filter-list'
+          }}
+          @selectedItemComponent='project-list/filter-selected-item'
+          class='select-team-class'
+          local-class='select-team-class'
+          data-test-select-team-container
+          as |team|
+        >
+          <AkStack @spacing='1'>
+            <AkStack @alignItems='center'>
+              {{#if (eq this.selectedTeamName team.name)}}
+                <AkIcon @iconName='radio-button-checked' @color='success' />
+              {{else}}
+                <AkIcon @iconName='radio-button-unchecked' />
+              {{/if}}
+            </AkStack>
+
+            {{team.name}}
+          </AkStack>
+        </AkSelect>
+      </AkStack>
+
+      <AkSelect
+        @onChange={{this.onSortProjectsChange}}
+        @options={{this.sortingKeyObjects}}
+        @selected={{this.selectedSortKey}}
+        @verticalPosition='below'
+        @triggerClass={{this.triggerClass}}
+        @dropdownClass={{this.dropDownClass}}
+        @optionTitle='Sort By'
+        @extra={{hash
+          selectedItem=this.selectedSortKey.text
+          showLabel=false
+          iconName='sort'
+        }}
+        @selectedItemComponent='project-list/filter-selected-item'
+        {{style width='auto'}}
+        class='select-sort-class'
+        data-test-project-sort-property
+        as |sortingKeyObject|
+      >
+        <AkStack @spacing='1' @alignItems='center'>
+          <AkStack @alignItems='center'>
+            {{#if (eq @sortKey sortingKeyObject.key)}}
+              <AkIcon @iconName='radio-button-checked' @color='success' />
+            {{else}}
+              <AkIcon @iconName='radio-button-unchecked' />
+            {{/if}}
+          </AkStack>
+
+          {{sortingKeyObject.text}}
+        </AkStack>
+      </AkSelect>
+    </AkStack>
+  {{/if}}
+</AkStack>

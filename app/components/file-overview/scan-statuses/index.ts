@@ -3,14 +3,14 @@ import Component from '@glimmer/component';
 import IntlService from 'ember-intl/services/intl';
 import FileModel from 'irene/models/file';
 
-interface FileCompareFileOverviewScanStatusesSignature {
+interface FileOverviewScanStatusesSignature {
   Element: HTMLElement;
   Args: {
     file: FileModel | null;
   };
 }
 
-export default class FileCompareFileOverviewScanStatusesComponent extends Component<FileCompareFileOverviewScanStatusesSignature> {
+export default class FileOverviewScanStatusesComponent extends Component<FileOverviewScanStatusesSignature> {
   @service declare intl: IntlService;
 
   get file() {
@@ -18,7 +18,7 @@ export default class FileCompareFileOverviewScanStatusesComponent extends Compon
   }
 
   get isManualScanDisabled() {
-    return !this.file?.project.get('isManualScanAvailable');
+    return !this.file?.project?.get('isManualScanAvailable');
   }
 
   get scanStatuses() {
@@ -41,6 +41,6 @@ export default class FileCompareFileOverviewScanStatusesComponent extends Compon
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
-    'FileCompare::FileOverview::ScanStatuses': typeof FileCompareFileOverviewScanStatusesComponent;
+    'FileOverview::ScanStatuses': typeof FileOverviewScanStatusesComponent;
   }
 }

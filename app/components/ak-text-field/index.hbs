@@ -15,13 +15,14 @@
   {{/if}}
 
   <div
-    class={{@textFieldRootClass}}
+    class='{{@textFieldRootClass}}'
     local-class='ak-text-field-root {{if @label "ak-form-label-spacing"}}'
   >
     {{#if (has-block 'leftAdornment')}}
       <div
         data-test-ak-text-field-left-adornment
         local-class='ak-text-field-left-adornment'
+        class='ak-text-field-left-adornment'
       >
         {{yield to='leftAdornment'}}
       </div>
@@ -31,6 +32,7 @@
       data-test-text-input
       id={{this.id}}
       local-class='ak-text-input'
+      class={{@textInputRootClass}}
       @type={{or @type 'text'}}
       @value={{@value}}
       required={{@required}}

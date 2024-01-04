@@ -1,0 +1,23 @@
+.before-option-label {
+  height: 35px;
+  display: flex;
+  align-items: center;
+  padding-left: 1em !important;
+  border-bottom: 1px solid var(--ak-select-before-option-border-color);
+}
+
+.before-option-search {
+  border-bottom: 1px solid var(--ak-select-before-option-border-color);
+  :global(.ak-text-field-left-adornment) {
+    margin-left: 0.8em;
+  }
+
+  :global(.ak-text-input-outlined) {
+    border: 0;
+  }
+}
+
+.team-name-text-input {
+  height: 35px !important;
+  font-size: 0.857rem !important;
+}

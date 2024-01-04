@@ -7,7 +7,11 @@ export interface FileDetailsSeverityLevelSignature {
   };
 }
 
-export default class FileDetailsSeverityLevelComponent extends Component<FileDetailsSeverityLevelSignature> {}
+export default class FileDetailsSeverityLevelComponent extends Component<FileDetailsSeverityLevelSignature> {
+  get profileId() {
+    return this.args.file.profile;
+  }
+}
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {

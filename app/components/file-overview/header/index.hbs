@@ -1,0 +1,124 @@
+{{!@glint-nocheck }}
+
+<AkStack
+  @width='full'
+  @tag='header'
+  @alignItems='center'
+  @justifyContent='space-between'
+  local-class='file-overview-header'
+  data-test-fileOverview-header
+>
+  <AkStack @spacing='1' @alignItems='center'>
+    <div local-class='file-icon'>
+      {{#if @file.iconUrl}}
+        <img
+          src={{@file.iconUrl}}
+          aria-hidden='true'
+          role='none'
+          data-test-fileOverview-iconUrl
+        />
+      {{else}}
+        <AkSkeleton @width='100px' @height='100%' @variant='rectangular' />
+      {{/if}}
+    </div>
+
+    <AkStack @direction='column'>
+      <AkTypography @variant='h5' data-test-fileOverview-fileName>
+        {{@file.name}}
+      </AkTypography>
+
+      <AkTypography @variant='body1' data-test-fileOverview-packageName>
+        {{this.packageName}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+
+  {{#if @showMenuButton}}
+    <AkIconButton
+      @variant='outlined'
+      @size='small'
+      local-class='card-header-more-icon'
+      {{on 'click' this.handleFileMoreMenuOpen}}
+    >
+      <AkIcon @iconName='more-vert' />
+    </AkIconButton>
+  {{/if}}
+
+  {{#unless @hideCTAs}}
+    <AkStack @alignItems='center'>
+      <AkTooltip
+        @title={{t 'fileCompare.deselectFile'}}
+        @disabled={{not @disableSelection}}
+        @arrow={{true}}
+        @placement='left'
+      >
+        <AkCheckbox
+          @checked={{@isSelectedFile}}
+          @disabled={{@disableSelection}}
+          @onChange={{this.handleFileSelect}}
+          data-test-fileOverview-selectCheckBox
+        />
+      </AkTooltip>
+
+      {{#unless @hideOpenInNewTabIcon}}
+        <AkTooltip
+          @title='{{t "openInNewTab"}}'
+          @arrow={{true}}
+          @placement='top'
+        >
+          <AkLink
+            @route='authenticated.dashboard.file'
+            @underline='none'
+            @model={{@file.id}}
+            @fontWeight='bold'
+            @linkTextClass={{this.openInNewTabLinkClass}}
+            target='_blank'
+            rel='noopener noreferrer'
+            local-class='open-in-new-tab-link'
+            data-test-fileOverview-openInNewTabLink
+          >
+            <AkIcon @iconName='open-in-new' data-test-fileOverview-icon />
+          </AkLink>
+        </AkTooltip>
+      {{/unless}}
+    </AkStack>
+  {{/unless}}
+</AkStack>
+
+<AkMenu
+  @anchorRef={{this.fileMoreMenuRef}}
+  @onClose={{this.handleFileMoreMenuClose}}
+  @arrow={{true}}
+  as |akm|
+>
+  {{#each this.fileMoreMenuList as |it|}}
+    {{#if it.group}}
+      <AkList::Item @noGutters={{true}} local-class='card-more-menu-item-group'>
+        <AkTypography
+          {{style fontSize='0.857rem'}}
+          @fontWeight='bold'
+          @tag='span'
+        >
+          {{it.group}}
+        </AkTypography>
+      </AkList::Item>
+    {{/if}}
+
+    <akm.listItem
+      data-test-fileDetailsSummary-moreMenuItem
+      local-class='card-more-menu-item'
+      @link={{true}}
+      @button={{false}}
+      @route={{it.route}}
+      @model={{it.routeModel}}
+      @divider={{unless it.hideDivider true}}
+      as |li|
+    >
+      <li.leftIcon>
+        <AkIcon @iconName={{it.iconName}} />
+      </li.leftIcon>
+
+      <li.text @primaryText={{it.label}} />
+    </akm.listItem>
+  {{/each}}
+</AkMenu>

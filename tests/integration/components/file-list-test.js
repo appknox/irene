@@ -170,14 +170,11 @@ module('Integration | Component | file-list', function (hooks) {
       .containsText(this.fileRecords[0].versionCode);
 
     assert
-      .dom('[data-test-fileCompare-fileOverview-selectCheckBox]', fileOverview1)
+      .dom('[data-test-fileOverview-selectCheckBox]', fileOverview1)
       .exists();
 
     assert
-      .dom(
-        '[data-test-fileCompare-fileOverview-openInNewTabLink]',
-        fileOverview1
-      )
+      .dom('[data-test-fileOverview-openInNewTabLink]', fileOverview1)
       .exists();
   });
 
@@ -194,9 +191,7 @@ module('Integration | Component | file-list', function (hooks) {
     const compareFileSelector = `[data-test-fileList-fileOverview='${compareFile.id}']`;
 
     // Selects only base file
-    await click(
-      `${baseFileSelector} [data-test-fileCompare-fileOverview-selectCheckBox]`
-    );
+    await click(`${baseFileSelector} [data-test-fileOverview-selectCheckBox]`);
 
     assert
       .dom('[data-test-fileList-projectOverview-header-noSelectedFileText]')
@@ -253,7 +248,7 @@ module('Integration | Component | file-list', function (hooks) {
 
     // Selects compare  file
     await click(
-      `${compareFileSelector} [data-test-fileCompare-fileOverview-selectCheckBox]`
+      `${compareFileSelector} [data-test-fileOverview-selectCheckBox]`
     );
 
     assert
@@ -263,9 +258,7 @@ module('Integration | Component | file-list', function (hooks) {
       .doesNotExist();
 
     // Unselects base file
-    await click(
-      `${baseFileSelector} [data-test-fileCompare-fileOverview-selectCheckBox]`
-    );
+    await click(`${baseFileSelector} [data-test-fileOverview-selectCheckBox]`);
 
     assert
       .dom(
@@ -282,7 +275,7 @@ module('Integration | Component | file-list', function (hooks) {
 
     // Unselects compare file
     await click(
-      `${compareFileSelector} [data-test-fileCompare-fileOverview-selectCheckBox]`
+      `${compareFileSelector} [data-test-fileOverview-selectCheckBox]`
     );
 
     assert
@@ -311,12 +304,10 @@ module('Integration | Component | file-list', function (hooks) {
     const compareFileSelector = `[data-test-fileList-fileOverview='${compareFile.id}']`;
 
     // Selects base and compare files
-    await click(
-      `${baseFileSelector} [data-test-fileCompare-fileOverview-selectCheckBox]`
-    );
+    await click(`${baseFileSelector} [data-test-fileOverview-selectCheckBox]`);
 
     await click(
-      `${compareFileSelector} [data-test-fileCompare-fileOverview-selectCheckBox]`
+      `${compareFileSelector} [data-test-fileOverview-selectCheckBox]`
     );
 
     assert
@@ -352,18 +343,14 @@ module('Integration | Component | file-list', function (hooks) {
     );
 
     // Selects base and compare files
-    await click(
-      `${baseFileSelector} [data-test-fileCompare-fileOverview-selectCheckBox]`
-    );
+    await click(`${baseFileSelector} [data-test-fileOverview-selectCheckBox]`);
 
     await click(
-      `${compareFileSelector} [data-test-fileCompare-fileOverview-selectCheckBox]`
+      `${compareFileSelector} [data-test-fileOverview-selectCheckBox]`
     );
 
     assert
-      .dom(
-        `${otherFileSelector} [data-test-fileCompare-fileOverview-selectCheckBox]`
-      )
+      .dom(`${otherFileSelector} [data-test-fileOverview-selectCheckBox]`)
       .exists()
       .hasAttribute('disabled');
 
@@ -373,9 +360,7 @@ module('Integration | Component | file-list', function (hooks) {
     );
 
     assert
-      .dom(
-        `${otherFileSelector} [data-test-fileCompare-fileOverview-selectCheckBox]`
-      )
+      .dom(`${otherFileSelector} [data-test-fileOverview-selectCheckBox]`)
       .exists()
       .doesNotHaveAttribute('disabled');
   });

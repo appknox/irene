@@ -55,15 +55,11 @@ module('Integration | Component | project list', function (hooks) {
 
     assert
       .dom('[data-test-no-project-header]')
-      .hasTextContaining('t:noProject:()');
+      .hasTextContaining('t:uploadAnApp:()');
 
     assert
-      .dom('[data-test-no-project-uploaded-text]')
-      .hasTextContaining('t:noProjectUploaded:()');
-
-    assert
-      .dom('[data-test-upload-new-project-text]')
-      .hasTextContaining('t:uploadNewProject:()');
+      .dom('[data-test-no-project-text]')
+      .hasTextContaining('t:noProjectExists:()');
   });
 
   test('It renders successfully with at least one project', async function (assert) {
@@ -141,10 +137,10 @@ module('Integration | Component | project list', function (hooks) {
       'Team list length is correct.'
     );
 
-    assert.dom(teamSelectOptions[0]).hasText('All');
+    assert.dom(teamSelectOptions[0]).containsText('All');
 
     teams.forEach((t, i) => {
-      assert.dom(teamSelectOptions[i + 1]).hasText(t.name);
+      assert.dom(teamSelectOptions[i + 1]).containsText(t.name);
     });
   });
 
@@ -220,14 +216,14 @@ module('Integration | Component | project list', function (hooks) {
   test.each(
     'it renders with correct sortBy selected',
     [
-      ['-last_file_created_on', 't:dateUpdated:() t:mostRecent:()'],
-      ['last_file_created_on', 't:dateUpdated:() t:leastRecent:()'],
-      ['-id', 't:dateCreated:() t:mostRecent:()'],
-      ['id', 't:dateCreated:() t:leastRecent:()'],
-      ['-package_name', 't:packageName:() (Z -> A)'],
-      ['package_name', 't:packageName:() (A -> Z)'],
+      ['t:dateUpdated:() t:mostRecent:()', 0],
+      ['t:dateUpdated:() t:leastRecent:()', 1],
+      ['t:dateCreated:() t:mostRecent:()', 2],
+      ['t:dateCreated:() t:leastRecent:()', 3],
+      ['t:packageName:() (Z -> A)', 4],
+      ['t:packageName:() (A -> Z)', 5],
     ],
-    async function (assert, [sortKey, sortLabel]) {
+    async function (assert, [sortLabel, index]) {
       const projects = this.server.createList('project', 4);
 
       this.server.get('/organizations/:id/projects', (schema) => {
@@ -251,16 +247,15 @@ module('Integration | Component | project list', function (hooks) {
 
       assert.strictEqual(projects.length, projectContainerList.length);
 
-      await select('[data-test-project-sort-property]', sortKey);
+      await clickTrigger('[data-test-project-sort-property]');
 
-      assert.dom('[data-test-project-sort-property]').hasValue(sortKey);
-
-      const sortOption = find(
-        `[data-test-project-sort-property-option=${sortKey}]`
+      await selectChoose(
+        '.select-sort-class',
+        '.ember-power-select-option',
+        index
       );
 
-      assert.true(sortOption.selected);
-      assert.dom(sortOption).hasText(sortLabel);
+      assert.dom('[data-test-project-sort-property]').containsText(sortLabel);
     }
   );
 
@@ -351,41 +346,58 @@ module('Integration | Component | project list', function (hooks) {
 
     await render(hbs`<ProjectList />`);
 
-    const platformOptions = findAll('[data-test-platform-filter-option]');
-
-    // Selecting a platform value equal to 0 from the plaform filter options
-    await select('[data-test-platform-filter]', platformOptions[1].value);
-
-    assert.strictEqual(this.platform, platformOptions[1].value);
-
     let projectContainerList = findAll(
       '[data-test-project-overview-container]'
     );
 
     assert.strictEqual(
-      projects.filter((p) => p.platform === parseInt(platformOptions[1].value))
-        .length,
+      projectContainerList.length,
+      projects.length,
+      'Contains correct number of project overview cards.'
+    );
+
+    await clickTrigger('[data-test-select-platform-container]');
+
+    await selectChoose(
+      '.select-platform-class',
+      '.ember-power-select-option',
+      1
+    );
+
+    assert.strictEqual(this.platform, '0');
+
+    projectContainerList = findAll('[data-test-project-overview-container]');
+
+    assert.strictEqual(
+      projects.filter((p) => p.platform === 0).length,
       projectContainerList.length,
       'Project list items all have platform values matching "0".'
     );
 
     // Selecting a platform value equal to 1 from the plaform filter options
-    await select('[data-test-platform-filter]', platformOptions[2].value);
+    await selectChoose(
+      '.select-platform-class',
+      '.ember-power-select-option',
+      2
+    );
 
-    assert.strictEqual(this.platform, platformOptions[2].value);
+    assert.strictEqual(this.platform, '1');
 
     projectContainerList = findAll('[data-test-project-overview-container]');
 
     assert.strictEqual(
-      projects.filter((p) => p.platform === parseInt(platformOptions[2].value))
-        .length,
+      projects.filter((p) => p.platform === 1).length,
       projectContainerList.length,
       'Project list items all have platform values matching "1".'
     );
 
     // Selecting a platform value equal to -1 from the plaform filter options
     // This should return the entire project list
-    await select('[data-test-platform-filter]', platformOptions[0].value);
+    await selectChoose(
+      '.select-platform-class',
+      '.ember-power-select-option',
+      0
+    );
 
     assert.strictEqual(typeof this.platform, 'undefined');
 

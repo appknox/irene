@@ -1,0 +1,17 @@
+<AkStack @spacing='0.5' @alignItems='center'>
+
+  <AkStack @spacing='1' @alignItems='center'>
+    <AkIcon @iconName={{this.iconName}} @size='small' @color='primary' />
+
+    {{#if this.showLabel}}
+      <AkTypography local-class='trigger-label'>
+        {{this.beforeOptionLabel}}
+        -
+      </AkTypography>
+    {{/if}}
+  </AkStack>
+
+  <AkTypography @fontWeight='medium' local-class='trigger-label'>
+    {{this.selectedItem}}
+  </AkTypography>
+</AkStack>

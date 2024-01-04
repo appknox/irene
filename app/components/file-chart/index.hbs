@@ -1,11 +1,5 @@
 {{#if this.fetchUnknownAnalysisStatus.isRunning}}
-  <AkStack {{style height='200px'}} @alignItems='center' @spacing='1.5'>
-    <AkLoader @size={{16}} />
-
-    <AkTypography>
-      {{t 'loading'}}...
-    </AkTypography>
-  </AkStack>
+  <AkSkeleton @width='100%' @height='200px' @variant='rectangular' />
 {{else}}
 
   <AkChart

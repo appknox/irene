@@ -17,6 +17,7 @@ interface AkSelectNamedArgs<O> extends PowerSelectArgs {
   label?: string;
   helperText?: string;
   triggerClass?: string;
+  dropdownClass?: string;
   placeholder?: string;
   renderInPlace?: boolean;
   error?: string;
@@ -26,6 +27,13 @@ interface AkSelectNamedArgs<O> extends PowerSelectArgs {
   labelTypographyColor?: AkSelectLabelTypographyColor;
   verticalPosition?: 'above' | 'below' | 'auto';
   options: O[];
+  searchPlaceholder?: string;
+  searchEnabled?: boolean;
+  extra?: Record<string, unknown>;
+  optionTitle?: string;
+  onInput?: (term: string, select: Select, e: Event) => string | false | void;
+  onFocus?: (select: Select, event: FocusEvent) => void;
+  onBlur?: (select: Select, event: FocusEvent) => void;
 }
 
 export interface AkSelectSignature<O> {
@@ -41,6 +49,10 @@ export default class AkSelectComponent<O> extends Component<
 > {
   get labelId() {
     return this.args.labelId || `ak-select-${guidFor(this)}`;
+  }
+
+  get extra() {
+    return { ...(this.args.extra || {}), optionTitle: this.args.optionTitle };
   }
 
   get classes() {

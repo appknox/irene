@@ -139,7 +139,7 @@
 
 {{#if @expandFilesOverview}}
   <AkStack local-class='files-overview-container'>
-    <FileCompare::FileOverview
+    <FileOverview
       @file={{@file1}}
       @profileId={{@file1.profile.id}}
       @hideCTAs={{true}}
@@ -147,7 +147,7 @@
     />
 
     {{#if @file2}}
-      <FileCompare::FileOverview
+      <FileOverview
         @file={{@file2}}
         @profileId={{@file2.profile.id}}
         @hideCTAs={{true}}

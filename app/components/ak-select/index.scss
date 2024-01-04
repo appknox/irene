@@ -41,6 +41,15 @@
   border: 1px solid var(--ak-select-dropdown-border-color) !important;
   z-index: var(--ak-select-dropdown-zIndex) !important;
 
+  :global(.ember-power-select-search) {
+    border-bottom: 1px solid var(--ak-select-option-divider-color);
+
+    :global(.ember-power-select-search-input) {
+      padding: 0;
+      border: 0;
+    }
+  }
+
   :global(.ember-power-select-options) {
     padding: 0.5em 0;
 

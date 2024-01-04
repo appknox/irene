@@ -1,10 +1,17 @@
 const ENUMS = {
   PLATFORM: {
+    ALL: -1,
     ANDROID: 0,
     IOS: 1,
     WINDOWS: 2,
     BLACKBERRY: 3,
     FIREFOX: 4,
+  },
+
+  PLATFORM_TEXT: {
+    ALL: 'All',
+    ANDROID: 'Android',
+    IOS: 'iOS',
   },
 
   RISK: {
@@ -209,6 +216,10 @@ const ENUMS = {
     NONE: 0,
     SHOW: 1,
     HIDE: 2,
+  },
+
+  TEAM: {
+    ALL: 'All',
   },
 };
 

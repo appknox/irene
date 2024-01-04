@@ -62,7 +62,7 @@ export default class ProjectModel extends ModelBaseMixin {
   declare lastFileId: AsyncBelongsTo<FileModel>;
 
   @alias('lastFileId')
-  declare lastFile: ComputedProperty<FileModel>;
+  declare lastFile: AsyncBelongsTo<FileModel>;
 
   @hasMany('file', { inverse: 'project' })
   declare files: AsyncHasMany<FileModel>;

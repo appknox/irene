@@ -1,0 +1,51 @@
+.file-overview-header {
+  background-color: var(--file-overview-background-grey);
+  border-bottom: 1px solid var(--file-overview-border-color-dark);
+  padding: 1em 1.285em;
+
+  .file-icon {
+    min-width: 44px;
+    max-width: 44px;
+    height: 44px;
+    box-sizing: border-box;
+
+    img {
+      object-fit: contain;
+      background-image: none;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+  }
+
+  .open-in-new-tab-link-class {
+    display: inline-flex;
+  }
+
+  .open-in-new-tab-link:hover::after {
+    content: '';
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border-radius: 100%;
+    background-color: var(--file-overview-open-in-new-icon-background-color);
+  }
+}
+
+.card-header-more-icon {
+  background-color: var(--file-overview-background-white);
+}
+
+.card-more-menu-item-group {
+  padding: 0 0.5em;
+  padding-bottom: 0.5em;
+
+  &:not(:first-child) {
+    padding-top: 0.5em;
+  }
+}
+
+.card-more-menu-item {
+  a {
+    padding: 0.5em !important;
+  }
+}

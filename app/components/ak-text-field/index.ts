@@ -11,6 +11,7 @@ export interface AkTextFieldSignature {
   Args: {
     formControlClass?: string;
     textFieldRootClass?: string;
+    textInputRootClass?: string;
     id?: string;
     label?: string;
     labelTypographyVariant?: LabelTypographyVariant;
