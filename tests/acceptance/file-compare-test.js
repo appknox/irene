@@ -104,7 +104,7 @@ module('Acceptance | file compare', function (hooks) {
     const compareFileSelector = `[data-test-fileCompare-compareList-fileOverview='${compareFile.id}']`;
 
     await click(
-      `${compareFileSelector} [data-test-fileCompare-fileOverview-selectCheckBox]`
+      `${compareFileSelector} [data-test-fileOverview-selectCheckBox]`
     );
 
     assert
@@ -129,12 +129,10 @@ module('Acceptance | file compare', function (hooks) {
     const compareFileSelector = `[data-test-fileList-fileOverview='${compareFile.id}']`;
 
     // Selects base and compare files
-    await click(
-      `${baseFileSelector} [data-test-fileCompare-fileOverview-selectCheckBox]`
-    );
+    await click(`${baseFileSelector} [data-test-fileOverview-selectCheckBox]`);
 
     await click(
-      `${compareFileSelector} [data-test-fileCompare-fileOverview-selectCheckBox]`
+      `${compareFileSelector} [data-test-fileOverview-selectCheckBox]`
     );
 
     await click('[data-test-fileList-projectOverview-header-compareBtn]');

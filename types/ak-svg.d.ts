@@ -32,6 +32,7 @@ export enum AkSvgComponentInvocationByNames {
   AppstoreLogo,
   PlaystoreLogo,
   NoParameterData,
+  ProjectListEmpty,
 }
 
 export enum AkSvgComponentInvocationByPaths {

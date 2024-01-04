@@ -1,0 +1,13 @@
+.file-tags-container {
+  overflow-x: auto;
+  min-height: 26px;
+}
+
+.card-chips {
+  background-color: var(--file-overview-background-grey);
+  border-radius: 4px;
+}
+
+.text-nowrap {
+  white-space: nowrap;
+}

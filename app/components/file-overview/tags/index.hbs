@@ -1,0 +1,36 @@
+<AkStack
+  @width='full'
+  @direction='row'
+  @justifyContent='left'
+  @alignItems='center'
+  @spacing='1.5'
+  local-class='text-nowrap'
+  class='p-2'
+>
+  <AkTypography @variant='subtitle2'>{{t 'tags'}}</AkTypography>
+
+  <AkStack
+    @direction='row'
+    @alignItems='center'
+    @width='fit-content'
+    @spacing='1'
+    local-class='file-tags-container'
+    data-test-fileOverview-tags
+  >
+    {{#if (gt @file.tags.length 0)}}
+      {{#each @file.tags as |tag|}}
+        <AkChip
+          @label={{tag.name}}
+          @variant='outlined'
+          local-class='card-chips'
+          {{style height='26px'}}
+          data-test-fileOverview-tag='{{tag.name}}'
+        />
+      {{/each}}
+    {{else}}
+      <AkTypography @variant='body2' data-test-fileOverview-tags-empty>
+        {{t 'fileCompare.noTagsMessage'}}
+      </AkTypography>
+    {{/if}}
+  </AkStack>
+</AkStack>

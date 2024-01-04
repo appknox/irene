@@ -11,16 +11,21 @@ interface FileCompareFileOverviewSignature {
     profileId: string | number;
     hideCTAs?: boolean;
     hideOpenInNewTabIcon?: boolean;
+    showMenuButton?: boolean;
   };
   Blocks: {
     default: [];
   };
 }
 
-export default class FileCompareFileOverviewComponent extends Component<FileCompareFileOverviewSignature> {}
+export default class FileCompareFileOverviewComponent extends Component<FileCompareFileOverviewSignature> {
+  get profileId() {
+    return this.args.file?.profile.get('id');
+  }
+}
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {
-    'FileCompare::FileOverview': typeof FileCompareFileOverviewComponent;
+    FileOverview: typeof FileCompareFileOverviewComponent;
   }
 }

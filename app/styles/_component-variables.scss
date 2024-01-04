@@ -93,6 +93,9 @@ body {
   --ak-select-trigger-disabled-background: var(--disabled-background-textfield);
   --ak-select-trigger-arrow-color: var(--text-primary);
 
+  // variables for ak-select/before-option
+  --ak-select-before-option-border-color: var(--neutral-grey-100);
+
   // variables for ak-modal
   --ak-modal-zIndex: var(--zIndex-modal);
   --ak-modal-backdrop-overlay-background: var(--backdrop-overlay-background);
@@ -762,19 +765,6 @@ body {
   // variables for file-compare/analysis-details
   --file-compare-analysis-details-border-color: var(--border-color-1);
 
-  // variables for file-compare/file-overview
-  --file-compare-file-overview-border-radius: var(--border-radius);
-  --file-compare-file-overview-background-white: var(--common-white);
-  --file-compare-file-overview-background-grey: var(--neutral-grey-100);
-  --file-compare-file-overview-border-color-light: var(--neutral-grey-100);
-  --file-compare-file-overview-open-in-new-icon-background-color: var(
-    --hover-light-background
-  );
-  --file-compare-file-overview-border-color-dark: var(--border-color-1);
-  --file-compare-file-overview-color-android: var(--android);
-  --file-compare-file-overview-color-ios: var(--ios);
-  --file-compare-store-logo-container-background-color: var(--neutral-grey-200);
-
   // variables for file-compare/compare-list
   --file-compare-compare-list-wrapper-background-color: var(--background-main);
 
@@ -817,6 +807,21 @@ body {
   --file-chart-severity-level-color-passed: var(--severity-passed);
   --file-chart-severity-level-color-untested: var(--severity-untested);
   --file-chart-severity-level-color-none: var(--severity-none);
+
+  // variables for file-overview
+  --file-overview-border-radius: var(--border-radius);
+  --file-overview-background-white: var(--common-white);
+  --file-overview-background-grey: var(--neutral-grey-100);
+  --file-overview-border-color-light: var(--neutral-grey-100);
+  --file-overview-open-in-new-icon-background-color: var(
+    --hover-light-background
+  );
+  --file-overview-border-color-dark: var(--border-color-1);
+  --file-overview-color-android: var(--android);
+  --file-overview-color-ios: var(--ios);
+  --file-overview-store-logo-container-background-color: var(
+    --neutral-grey-200
+  );
 
   // variables for account-settings/mfa
   --mfa-loader-primary-contrast-text: var(--primary-contrast-text);
@@ -971,4 +976,29 @@ body {
   // variables for file-overview
   --file-overview-store-logo-container-background-color: var(--common-white);
   --file-overview-store-logo-container-border-color: var(--neutral-grey-200);
+
+  // variables for project-list
+  --project-list-background-color: var(--common-white);
+  --project-list-border-color: var(--neutral-white-100);
+  --project-list-border-radius: var(--border-radius);
+
+  // variables for project-list/loader
+  --project-list-loader-border-color: var(--neutral-white-100);
+  --project-list-loader-border-radius: var(--border-radius);
+
+  // variables for project-list/header
+  --project-list-header-background-color: var(--common-white);
+  --project-list-header-border-color: var(--neutral-white-100);
+  --project-list-header-border-radius: var(--border-radius);
+  --project-list-header-filter-border-color: var(--neutral-grey-200);
+  --project-list-header-filter-hover-border-color: var(--neutral-grey-400);
+  --project-list-header-filter-option-hover-background: var(
+    --hover-light-background
+  );
+  --project-list-header-divider-background-color: var(--neutral-grey-200);
+  --project-list-header-clear-filter-color: var(--neutral-grey-600);
+  --project-list-header-clear-filter-hover-color: var(--primary-main);
+
+  // variables for project-overview
+  --project-overview-card-hover-shadow: var(--box-shadow-7);
 }

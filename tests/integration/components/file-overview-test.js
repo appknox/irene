@@ -22,23 +22,27 @@ module(
         this.server.create('analysis', { vulnerability: v.id }).toJSON()
       );
 
-      // File Model
-      const file = this.server.create('file');
-      const normalizedFile = this.store.normalize('file', {
-        ...file.toJSON(),
-        project: project.id,
-        analyses,
-        tags,
-      });
-      const fileModel = this.store.push(normalizedFile);
-
       // Profile Model
       const profile = this.server.create('profile');
+
       const normalizedProfile = this.store.normalize(
         'profile',
         profile.toJSON()
       );
+
       const profileModel = this.store.push(normalizedProfile);
+
+      // File Model
+      const file = this.server.create('file');
+
+      const normalizedFile = this.store.normalize('file', {
+        ...file.toJSON(),
+        project: project.id,
+        profile: profile.id,
+        analyses,
+        tags,
+      });
+      const fileModel = this.store.push(normalizedFile);
 
       // Common test props
       this.setProperties({
@@ -61,66 +65,67 @@ module(
 
     test('it renders', async function (assert) {
       await render(
-        hbs`<FileCompare::FileOverview @file={{this.file}} @profileId={{this.profile.id}} />`
+        hbs`<FileOverview @file={{this.file}} @profileId={{this.profile.id}} />`
       );
 
-      assert.dom('[data-test-fileCompare-fileOverview-root]').exists();
-      assert.dom('[data-test-fileCompare-fileOverview-header]').exists();
+      assert.dom('[data-test-fileOverview-root]').exists();
+      assert.dom('[data-test-fileOverview-header]').exists();
 
-      const fileIcon = find('[data-test-fileCompare-fileOverview-iconUrl]');
+      const fileIcon = find('[data-test-fileOverview-iconUrl]');
 
       assert.strictEqual(fileIcon?.getAttribute('src'), this.file?.iconUrl);
 
       assert
-        .dom('[data-test-fileCompare-fileOverview-fileName]')
+        .dom('[data-test-fileOverview-fileName]')
         .exists()
         .hasText(this.file.name);
 
       assert
-        .dom('[data-test-fileCompare-fileOverview-packageName]')
+        .dom('[data-test-fileOverview-packageName]')
         .exists()
         .hasText(`${this.file.project.get('packageName')}`);
 
-      assert
-        .dom('[data-test-fileCompare-fileOverview-selectCheckBox]')
-        .exists();
+      assert.dom('[data-test-fileOverview-selectCheckBox]').exists();
 
       assert
-        .dom('[data-test-fileCompare-fileOverview-openInNewTabLink]')
+        .dom('[data-test-fileOverview-openInNewTabLink]')
         .exists()
         .hasAttribute('href', new RegExp(this.file.id))
         .hasAttribute('target', '_blank');
 
-      assert.dom('[data-test-fileCompare-fileOverview-icon]').exists();
+      assert.dom('[data-test-fileOverview-icon]').exists();
 
       assert
-        .dom('[data-test-fileCompare-fileOverview-version]')
+        .dom('[data-test-fileOverview-version]')
         .exists()
         .containsText('t:version:()')
         .containsText(this.file.version);
 
       assert
-        .dom('[data-test-fileCompare-fileOverview-versionCode]')
+        .dom('[data-test-fileOverview-versionCodeText]')
         .exists()
-        .containsText('T:versionCode:()')
+        .containsText('t:versionCodeTitleCase:() -');
+
+      assert
+        .dom('[data-test-fileOverview-versionCode]')
+        .exists()
         .containsText(this.file.versionCode);
 
-      assert.dom('[data-test-fileCompare-fileOverview-scanStatuses]').exists();
+      assert.dom('[data-test-fileOverview-scanStatuses]').exists();
 
       assert
-        .dom('[data-test-fileCompare-fileOverview-fileID]')
-        .containsText('t:fileID:()')
-        .containsText(this.file.id);
+        .dom('[data-test-fileOverview-fileID-text]')
+        .containsText('t:fileID:() -');
 
-      assert.dom('[data-test-fileCompare-fileOverview-platformIcon]').exists();
+      assert.dom('[data-test-fileOverview-fileID]').containsText(this.file.id);
+
+      assert.dom('[data-test-fileOverview-platformIcon]').exists();
 
       assert
-        .dom(
-          '[  data-test-fileCompare-fileOverview-severityCountChartAndValues]'
-        )
+        .dom('[  data-test-fileOverview-severityCountChartAndValues]')
         .exists();
 
-      assert.dom('[data-test-fileCompare-fileOverview-chart]').exists();
+      assert.dom('[data-test-fileOverview-chart]').exists();
 
       // Chart legend data was formulated from the file severity level counts
       const severityValues = [
@@ -184,11 +189,11 @@ module(
       });
 
       // Tags test
-      assert.dom('[data-test-fileCompare-fileOverview-tags]').exists();
+      assert.dom('[data-test-fileOverview-tags]').exists();
 
       this.file.tags.forEach((tag) => {
         assert
-          .dom(`[data-test-fileCompare-fileOverview-tag='${tag.name}']`)
+          .dom(`[data-test-fileOverview-tag='${tag.name}']`)
           .exists()
           .hasText(tag.name);
       });
@@ -199,7 +204,7 @@ module(
       this.set('hideOpenInNewTabIcon', false);
 
       await render(
-        hbs`<FileCompare::FileOverview 
+        hbs`<FileOverview 
             @hideCTAs={{this.hideCTAs}} 
             @file={{this.file}} 
             @profileId={{this.profile.id}}
@@ -207,33 +212,21 @@ module(
          />`
       );
 
-      assert
-        .dom('[data-test-fileCompare-fileOverview-selectCheckBox]')
-        .doesNotExist();
+      assert.dom('[data-test-fileOverview-selectCheckBox]').doesNotExist();
 
-      assert
-        .dom('[data-test-fileCompare-fileOverview-openInNewTabLink]')
-        .doesNotExist();
+      assert.dom('[data-test-fileOverview-openInNewTabLink]').doesNotExist();
 
       this.set('hideCTAs', false);
 
-      assert
-        .dom('[data-test-fileCompare-fileOverview-selectCheckBox]')
-        .exists();
+      assert.dom('[data-test-fileOverview-selectCheckBox]').exists();
 
-      assert
-        .dom('[data-test-fileCompare-fileOverview-openInNewTabLink]')
-        .exists();
+      assert.dom('[data-test-fileOverview-openInNewTabLink]').exists();
 
       this.set('hideOpenInNewTabIcon', true);
 
-      assert
-        .dom('[data-test-fileCompare-fileOverview-selectCheckBox]')
-        .exists();
+      assert.dom('[data-test-fileOverview-selectCheckBox]').exists();
 
-      assert
-        .dom('[data-test-fileCompare-fileOverview-openInNewTabLink]')
-        .doesNotExist();
+      assert.dom('[data-test-fileOverview-openInNewTabLink]').doesNotExist();
     });
 
     test('it checks and unchecks the overview select checkbox', async function (assert) {
@@ -245,7 +238,7 @@ module(
       });
 
       await render(
-        hbs`<FileCompare::FileOverview 
+        hbs`<FileOverview 
             @file={{this.file}} 
             @profileId={{this.profile.id}} 
             @isSelectedFile={{eq this.file.id this.selectedFile.id}}
@@ -256,15 +249,13 @@ module(
       assert.notEqual(this.selectedFile?.id, this.file.id);
 
       assert
-        .dom('[data-test-fileCompare-fileOverview-selectCheckBox]')
+        .dom('[data-test-fileOverview-selectCheckBox]')
         .exists()
         .isNotChecked();
 
-      await click('[data-test-fileCompare-fileOverview-selectCheckBox]');
+      await click('[data-test-fileOverview-selectCheckBox]');
 
-      assert
-        .dom('[data-test-fileCompare-fileOverview-selectCheckBox]')
-        .isChecked();
+      assert.dom('[data-test-fileOverview-selectCheckBox]').isChecked();
 
       assert.strictEqual(this.selectedFile.id, this.file.id);
     });
@@ -273,15 +264,12 @@ module(
       this.file.isActive = false;
 
       await render(
-        hbs`<FileCompare::FileOverview @file={{this.file}} @profileId={{this.profile.id}} />`
+        hbs`<FileOverview @file={{this.file}} @profileId={{this.profile.id}} />`
       );
 
-      assert
-        .dom('[data-test-fileCompare-fileOverview-fileInactiveIndicator]')
-        .exists();
+      assert.dom('[data-test-fileOverview-fileInactiveIndicator]').exists();
 
-      const tooltipSelector =
-        '[data-test-fileCompare-fileOverview-fileInactive-tooltip]';
+      const tooltipSelector = '[data-test-fileOverview-fileInactive-tooltip]';
       const tooltipContentSelector = '[data-test-ak-tooltip-content]';
 
       const fileInactiveTooltip = find(tooltipSelector);
@@ -308,7 +296,7 @@ module(
       this.file.isActive = false;
 
       await render(
-        hbs`<FileCompare::FileOverview @file={{this.file}} @profileId={{this.profile.id}} />`
+        hbs`<FileOverview @file={{this.file}} @profileId={{this.profile.id}} />`
       );
 
       // All scan statuses except manual scan
@@ -329,42 +317,40 @@ module(
 
       scanStatuses.forEach((status) => {
         assert
-          .dom(
-            `[data-test-fileCompare-fileOverview-scanStatuses='${status.name}']`
-          )
+          .dom(`[data-test-fileOverview-scanStatuses='${status.name}']`)
           .exists();
 
         const iconName = status.isDone ? /check-circle/ : /circle/;
 
         assert
           .dom(
-            `[data-test-fileCompare-fileOverview-scanStatuses='${status.name}'] [data-test-fileCompare-fileOverview-scanStatus-icon]`
+            `[data-test-fileOverview-scanStatuses='${status.name}'] [data-test-fileOverview-scanStatus-icon]`
           )
           .hasClass(iconName);
       });
 
       // Test for manual scan status
       const manualScanContainerSelector =
-        '[data-test-fileCompare-fileOverview-manualScanStatus]';
+        '[data-test-fileOverview-manualScanStatus]';
 
       assert.dom(manualScanContainerSelector).exists();
 
       if (this.file.isManualDone) {
         assert
           .dom(
-            `${manualScanContainerSelector} [data-test-fileCompare-fileOverview-manualScanStatus-doneIcon]`
+            `${manualScanContainerSelector} [data-test-fileOverview-manualScanStatus-doneIcon]`
           )
           .hasClass(/check-circle/);
       } else {
         assert
           .dom(
-            `${manualScanContainerSelector} [data-test-fileCompare-fileOverview-manualScanStatus-requestedPendingIcon]`
+            `${manualScanContainerSelector} [data-test-fileOverview-manualScanStatus-requestedPendingIcon]`
           )
           .hasClass(this.file.isManualRequested ? /timer/ : /circle/);
       }
 
       assert
-        .dom('[data-test-fileCompare-fileOverview-manualScanStatus-name]')
+        .dom('[data-test-fileOverview-manualScanStatus-name]')
         .hasText('t:manual:()');
     });
 
@@ -377,30 +363,26 @@ module(
       });
 
       await render(
-        hbs`<FileCompare::FileOverview @file={{this.file}} @profileId={{this.profile.id}} />`
+        hbs`<FileOverview @file={{this.file}} @profileId={{this.profile.id}} />`
       );
 
       const legendContainer =
-        "[data-test-fileCompare-fileOverview-chartSeverity='t:untested:()']";
+        "[data-test-fileOverview-chartSeverity='t:untested:()']";
 
       assert.dom(legendContainer).doesNotExist();
 
       assert
         .dom(
-          `${legendContainer} [data-test-fileCompare-fileOverview-chartSeverity-colorIndicator]`
+          `${legendContainer} [data-test-fileOverview-chartSeverity-colorIndicator]`
         )
         .doesNotExist();
 
       assert
-        .dom(
-          `${legendContainer} [data-test-fileCompare-fileOverview-chartSeverityTitle]`
-        )
+        .dom(`${legendContainer} [data-test-fileOverview-chartSeverityTitle]`)
         .doesNotExist();
 
       assert
-        .dom(
-          `${legendContainer} [data-test-fileCompare-fileOverview-chartSeverityCount]`
-        )
+        .dom(`${legendContainer} [data-test-fileOverview-chartSeverityCount]`)
         .doesNotExist();
     });
 
@@ -409,12 +391,12 @@ module(
 
       await render(
         hbs`
-        <FileCompare::FileOverview @file={{this.file}} @profileId={{this.profile.id}} />
+        <FileOverview @file={{this.file}} @profileId={{this.profile.id}} />
         `
       );
 
       assert
-        .dom('[data-test-fileCompare-fileOverview-tags-empty]')
+        .dom('[data-test-fileOverview-tags-empty]')
         .exists()
         .hasText('t:fileCompare.noTagsMessage:()');
     });
@@ -422,9 +404,9 @@ module(
     test('it renders yielded content', async function (assert) {
       await render(
         hbs`
-        <FileCompare::FileOverview @file={{this.file}} @profileId={{this.profile.id}}>
+        <FileOverview @file={{this.file}} @profileId={{this.profile.id}}>
           <AkButton data-test-yielded-content>Button</AkButton>
-        </FileCompare::FileOverview>`
+        </FileOverview>`
       );
 
       assert.dom('[data-test-yielded-content]').exists();

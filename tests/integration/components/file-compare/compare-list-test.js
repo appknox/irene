@@ -194,7 +194,7 @@ module('Integration | Component | file-compare/compare-list', function (hooks) {
 
     // Selects compare file
     await click(
-      `${compareFileSelector} [data-test-fileCompare-fileOverview-selectCheckBox]`
+      `${compareFileSelector} [data-test-fileOverview-selectCheckBox]`
     );
 
     assert
@@ -209,7 +209,7 @@ module('Integration | Component | file-compare/compare-list', function (hooks) {
 
     // Unselects compare file
     await click(
-      `${compareFileSelector} [data-test-fileCompare-fileOverview-selectCheckBox]`
+      `${compareFileSelector} [data-test-fileOverview-selectCheckBox]`
     );
 
     assert
