@@ -98,6 +98,8 @@ declare global {
       message: string,
       options?: Omit<NotificationOption, 'message' | 'type'>
     ) => void;
+
+    setDefaultAutoClear: (value: boolean) => void;
   }
 
   export interface AdapterError {
@@ -111,7 +113,7 @@ declare global {
   }
 
   interface Error {
-    status?: string;
+    status?: string | number;
     title?: string;
     detail?: string;
   }
