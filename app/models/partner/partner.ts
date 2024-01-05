@@ -1,6 +1,6 @@
 import Model, { attr } from '@ember-data/model';
 
-interface PartnerAccessData {
+export interface PartnerAccessData {
   view_plans: boolean;
   transfer_credits: boolean;
   list_projects: boolean;

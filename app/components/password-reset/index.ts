@@ -120,3 +120,9 @@ export default class PasswordResetComponent extends Component<PasswordResetSigna
     }
   });
 }
+
+declare module '@glint/environment-ember-loose/registry' {
+  export default interface Registry {
+    PasswordReset: typeof PasswordResetComponent;
+  }
+}

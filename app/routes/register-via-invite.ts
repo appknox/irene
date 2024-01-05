@@ -1,10 +1,9 @@
-/* eslint-disable prettier/prettier */
 import Route from '@ember/routing/route';
 
 export default class RegisterViaInviteRoute extends Route {
-  model(params) {
+  model(params: { token: string }) {
     return {
-      'token': params.token
+      token: params.token,
     };
   }
 }

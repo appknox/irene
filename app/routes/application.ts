@@ -1,15 +1,19 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import IntlService from 'ember-intl/services/intl';
 import { all } from 'rsvp';
 
-export default class ApplicationRoute extends Route {
-  @service headData;
-  @service intl;
-  @service whitelabel;
-  @service configuration;
-  @service session;
+import ConfigurationService from 'irene/services/configuration';
+import WhitelabelService from 'irene/services/whitelabel';
 
-  async beforeModel() {
+export default class ApplicationRoute extends Route {
+  @service declare headData: any;
+  @service declare intl: IntlService;
+  @service declare whitelabel: WhitelabelService;
+  @service declare configuration: ConfigurationService;
+  @service declare session: any;
+
+  async beforeModel(): Promise<void> {
     await this.session.setup();
 
     await all([
@@ -20,7 +24,7 @@ export default class ApplicationRoute extends Route {
     return this.intl.setLocale(['en']);
   }
 
-  afterModel() {
+  afterModel(): void {
     this.headData.title = this.whitelabel.name;
     this.headData.favicon = this.whitelabel.favicon;
   }
