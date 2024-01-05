@@ -95,6 +95,8 @@ export default class AnalysisOverviewComponent extends Component {
           asvs: this.analysis.asvs.map((a) => a.get('id')),
           cwe: this.analysis.cwe.map((a) => a.get('id')),
           gdpr: this.analysis.gdpr.map((a) => a.get('id')),
+          nistsp80053: this.analysis.nistsp80053.map((a) => a.get('id')),
+          nistsp800171: this.analysis.nistsp800171.map((a) => a.get('id')),
           findings: this.analysis.findings,
           overridden_risk: this.analysis.overridden_risk || 'None',
           overridden_risk_comment: this.analysis.overridden_risk_comment || '',
