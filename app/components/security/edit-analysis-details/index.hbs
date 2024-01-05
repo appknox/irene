@@ -552,6 +552,10 @@
                   </div>
                   <label class='contain-width' for='risk-overide-reason'>
                     <Textarea
+                      autocomplete='off'
+                      autocorrect='off'
+                      autocapitalize='off'
+                      spellcheck='false'
                       rows='2'
                       placeholder={{t 'reasonForOverride'}}
                       @value={{this.analysisDetails.overriddenRiskComment}}
@@ -594,6 +598,10 @@
                     <td>
                       <label>
                         <Textarea
+                          autocomplete='off'
+                          autocorrect='off'
+                          autocapitalize='off'
+                          spellcheck='false'
                           type='text'
                           @value={{finding.title}}
                           class='form-control input'
@@ -603,6 +611,10 @@
                     <td>
                       <label>
                         <Textarea
+                          autocomplete='off'
+                          autocorrect='off'
+                          autocapitalize='off'
+                          spellcheck='false'
                           type='text'
                           @value={{finding.description}}
                           class='form-control input'
@@ -635,6 +647,10 @@
               <p class='control is-fullwidth'>
                 <label for='add-finding-form-title'>
                   <Textarea
+                    autocomplete='off'
+                    autocorrect='off'
+                    autocapitalize='off'
+                    spellcheck='false'
                     type='text'
                     @value={{this.findingTitle}}
                     placeholder='TITLE'
@@ -648,6 +664,10 @@
               <p class='control is-fullwidth'>
                 <label for='add-finding-form-description'>
                   <Textarea
+                    autocomplete='off'
+                    autocorrect='off'
+                    autocapitalize='off'
+                    spellcheck='false'
                     type='text'
                     @value={{this.findingDescription}}
                     placeholder='DESCRIPTION'
