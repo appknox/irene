@@ -22,7 +22,7 @@ interface PasswordResetSignature {
   };
 }
 
-type ChangesetBufferProps = Partial<BufferedChangeset> & {
+type ChangesetBufferProps = BufferedChangeset & {
   password: string;
   confirm_password: string;
 };

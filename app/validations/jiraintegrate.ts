@@ -1,9 +1,7 @@
-/* eslint-disable prettier/prettier */
 import {
   validatePresence,
-  validateFormat
+  validateFormat,
 } from 'ember-changeset-validations/validators';
-
 
 export default {
   host: validateFormat({ type: 'url' }),

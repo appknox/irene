@@ -1,21 +1,21 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import ENV from 'irene/config/environment';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
 import { task } from 'ember-concurrency';
+import RouterService from '@ember/routing/router-service';
+import { tracked } from '@glimmer/tracking';
+import IntlService from 'ember-intl/services/intl';
 import lookupValidator from 'ember-changeset-validations';
-import { Changeset } from 'ember-changeset';
 import { BufferedChangeset } from 'ember-changeset/types';
-
 import {
   validatePresence,
   validateConfirmation,
 } from 'ember-changeset-validations/validators';
-import IntlService from 'ember-intl/services/intl';
-import RouterService from '@ember/routing/router-service';
-import { tracked } from '@glimmer/tracking';
+import { Changeset } from 'ember-changeset';
 
-type ChangesetBufferProps = Partial<BufferedChangeset> & {
+import ENV from 'irene/config/environment';
+import triggerAnalytics from 'irene/utils/trigger-analytics';
+
+type ChangesetBufferProps = BufferedChangeset & {
   old_password: string;
   password: string;
   confirm_password: string;
