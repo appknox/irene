@@ -138,7 +138,7 @@
     "ember-named-blocks-polyfill": "^0.2.5",
     "ember-page-title": "^6.2.2",
     "ember-power-calendar": "^0.21.0",
-    "ember-power-select": "^6.0.1",
+    "ember-power-select": "^7.2.0",
     "ember-qunit": "^5.1.5",
     "ember-resolver": "^8.1.0",
     "ember-rollbar-client": "^0.10.0",
