@@ -1,3 +1,4 @@
+{{! template-lint-disable no-curly-component-invocation }}
 {{#unless this.isHideSettings}}
   <div class="org-settings-subtitle black-text is-fullwidth" {{did-insert (perform this.loadCleanupPref)}}>
     {{t 'storageManagement'}}
@@ -40,7 +41,7 @@
             <label local-class="last-activity" class="margin-right black-text">
               {{t 'fileCleanup.lastActivity'}}
             </label>
-            <span class="margin-right">{{moment-format this.changeset.lastCleanedAt "DD MMM YYYY"}}</span>
+            <span class="margin-right">{{day-js date=this.changeset.lastCleanedAt format="DD MMM YYYY"}}</span>
             <button class="view-all-cleanup button is-primary" {{on "click" this.onViewAllCleanup}} type="button">
               {{t 'fileCleanup.viewList'}}
             </button>

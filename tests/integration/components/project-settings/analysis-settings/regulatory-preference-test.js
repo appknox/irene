@@ -142,6 +142,7 @@ module(
         't:pcidss:()',
         't:hipaa:()',
         't:gdpr:()',
+        't:nist:()',
       ];
 
       optionalRegulatoriesLabels.map((regLabel) =>
@@ -165,6 +166,10 @@ module(
             is_inherited: false,
           },
           show_gdpr: {
+            value: false,
+            is_inherited: false,
+          },
+          show_nist: {
             value: false,
             is_inherited: false,
           },
@@ -223,6 +228,19 @@ module(
         return profile.report_preference.show_gdpr;
       });
 
+      this.server.put('profiles/:id/show_nist', (schema, request) => {
+        const body = JSON.parse(request.requestBody);
+
+        const profile = schema['profiles'].find(request.params.id);
+        profile.report_preference.show_nist = {
+          value: body.value,
+          is_inherited: false,
+        };
+        profile.save();
+
+        return profile.report_preference.show_nist;
+      });
+
       await render(
         hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}}/>`
       );
@@ -254,6 +272,16 @@ module(
       assert.strictEqual(gdprInput.checked, gdprInitialValue);
       await click(gdprInput);
       assert.strictEqual(gdprInput.checked, !gdprInitialValue);
+
+      const nist = this.element.querySelector(
+        '[data-test-projectSetting-analysisSettings-regulatoryPreferences="t:nist:()"]'
+      );
+
+      const nistInitialValue = profile.report_preference.show_nist.value;
+      const nistInput = nist.querySelector('[data-test-input]');
+      assert.strictEqual(nistInput.checked, nistInitialValue);
+      await click(nistInput);
+      assert.strictEqual(gdprInput.checked, !nistInitialValue);
     });
 
     test('it does not toggle preference value on error', async function (assert) {
@@ -268,6 +296,10 @@ module(
             is_inherited: false,
           },
           show_gdpr: {
+            value: false,
+            is_inherited: false,
+          },
+          show_nist: {
             value: false,
             is_inherited: false,
           },
@@ -296,6 +328,10 @@ module(
       });
 
       this.server.put('profiles/:id/show_gdpr', () => {
+        return new Response(400, {}, { value: ['Must be a valid boolean.'] });
+      });
+
+      this.server.put('profiles/:id/show_nist', () => {
         return new Response(400, {}, { value: ['Must be a valid boolean.'] });
       });
 
@@ -330,6 +366,15 @@ module(
       assert.strictEqual(gdprInput.checked, gdprInitialValue);
       await click(gdprInput);
       assert.strictEqual(gdprInput.checked, gdprInitialValue);
+
+      const nist = this.element.querySelector(
+        '[data-test-projectSetting-analysisSettings-regulatoryPreferences="t:nist:()"]'
+      );
+      const nistInitialValue = profile.report_preference.show_nist.value;
+      const nistInput = nist.querySelector('[data-test-input]');
+      assert.strictEqual(nistInput.checked, nistInitialValue);
+      await click(nistInput);
+      assert.strictEqual(nistInput.checked, nistInitialValue);
     });
 
     test('it displays overridden state with reset button if a preference is updated', async function (assert) {

@@ -75,6 +75,10 @@ module(
       assert
         .dom('[data-test-ak-form-label]', find('[data-test-preference="GDPR"]'))
         .hasText('GDPR');
+
+      assert
+        .dom('[data-test-ak-form-label]', find('[data-test-preference="NIST"]'))
+        .hasText('NIST');
     });
 
     test('it renders regulatory list tooltip', async function (assert) {
@@ -87,6 +91,7 @@ module(
       const pcidssContainer = find('[data-test-preference="PCI-DSS"]');
       const hipaaContainer = find('[data-test-preference="HIPAA"]');
       const gdprContainer = find('[data-test-preference="GDPR"]');
+      const nistContainer = find('[data-test-preference="NIST"]');
 
       // pci-dss
       await triggerEvent(
@@ -138,6 +143,23 @@ module(
       );
 
       assert.dom('[data-test-ak-tooltip-content]').doesNotExist();
+
+      // nist
+      await triggerEvent(
+        `#${nistContainer.id} [data-test-ak-tooltip-root]`,
+        'mouseenter'
+      );
+
+      assert
+        .dom('[data-test-ak-tooltip-content]')
+        .hasText('t:nistExpansion:()');
+
+      await triggerEvent(
+        `#${nistContainer.id} [data-test-ak-tooltip-root]`,
+        'mouseleave'
+      );
+
+      assert.dom('[data-test-ak-tooltip-content]').doesNotExist();
     });
 
     test('it renders regulatory inclusion status based on organization preference', async function (assert) {
@@ -146,6 +168,7 @@ module(
         json.report_preference.show_pcidss = true;
         json.report_preference.show_hipaa = false;
         json.report_preference.show_gdpr = true;
+        json.report_preference.show_nist = true;
 
         return json;
       });
@@ -172,6 +195,13 @@ module(
           find('[data-test-preference="GDPR"]')
         )
         .isChecked();
+
+      assert
+        .dom(
+          '[data-test-preference-checkbox]',
+          find('[data-test-preference="NIST"]')
+        )
+        .isChecked();
     });
 
     test('it toggles regulatory preference on label click', async function (assert) {
@@ -180,6 +210,7 @@ module(
         json.report_preference.show_pcidss = false;
         json.report_preference.show_hipaa = false;
         json.report_preference.show_gdpr = false;
+        json.report_preference.show_nist = false;
 
         return json;
       });
@@ -193,6 +224,7 @@ module(
       const pcidssContainer = find('[data-test-preference="PCI-DSS"]');
       const hipaaContainer = find('[data-test-preference="HIPAA"]');
       const gdprContainer = find('[data-test-preference="GDPR"]');
+      const nistContainer = find('[data-test-preference="NIST"]');
 
       assert
         .dom('[data-test-preference-checkbox]', pcidssContainer)
@@ -206,6 +238,11 @@ module(
 
       assert
         .dom('[data-test-preference-checkbox]', gdprContainer)
+        .isNotDisabled()
+        .isNotChecked();
+
+      assert
+        .dom('[data-test-preference-checkbox]', nistContainer)
         .isNotDisabled()
         .isNotChecked();
 
@@ -223,6 +260,10 @@ module(
 
       assert.dom('[data-test-preference-checkbox]', gdprContainer).isChecked();
 
+      await click(`#${nistContainer.id} [data-test-ak-form-label]`);
+
+      assert.dom('[data-test-preference-checkbox]', nistContainer).isChecked();
+
       await click(`#${pcidssContainer.id} [data-test-ak-form-label]`);
 
       assert
@@ -239,6 +280,12 @@ module(
 
       assert
         .dom('[data-test-preference-checkbox]', gdprContainer)
+        .isNotChecked();
+
+      await click(`#${nistContainer.id} [data-test-ak-form-label]`);
+
+      assert
+        .dom('[data-test-preference-checkbox]', nistContainer)
         .isNotChecked();
     });
 
@@ -267,6 +314,7 @@ module(
       const pcidssContainer = find('[data-test-preference="PCI-DSS"]');
       const hipaaContainer = find('[data-test-preference="HIPAA"]');
       const gdprContainer = find('[data-test-preference="GDPR"]');
+      const nistContainer = find('[data-test-preference="NIST"]');
 
       await click(`#${pcidssContainer.id} [data-test-ak-form-label]`);
 
@@ -302,6 +350,20 @@ module(
       assert
         .dom('[data-test-preference-checkbox]', gdprContainer)
         [pref.show_gdpr ? 'isChecked' : 'isNotChecked']();
+
+      assert.strictEqual(
+        notify.errorMsg,
+        errorObj.report_preference.non_field_errors[0]
+      );
+
+      notify.errorMsg = null;
+
+      await click(`#${nistContainer.id} [data-test-ak-form-label]`);
+
+      // no change to state
+      assert
+        .dom('[data-test-preference-checkbox]', nistContainer)
+        [pref.show_nist ? 'isChecked' : 'isNotChecked']();
 
       assert.strictEqual(
         notify.errorMsg,

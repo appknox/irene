@@ -1,6 +1,7 @@
 import commondrf from './commondrf';
 
 import ProfileModel, {
+  ProfileRegulatoryReportPreference,
   SaveReportPreferenceData,
   SetProfileRegulatorPrefData,
 } from 'irene/models/profile';
@@ -18,63 +19,25 @@ export default class ProfileAdapter extends commondrf {
     return this.store.findRecord('profile', modelId);
   }
 
-  async setShowPcidss(
+  async setShowPreference(
     modelInstance: ProfileModel,
+    preference: ProfileRegulatoryReportPreference,
     data: SetProfileRegulatorPrefData
   ) {
     const modelId = modelInstance.get('id');
-    const url = this.buildURL('profile', modelId) + '/show_pcidss';
+    const url = this.buildURL('profile', modelId) + `/show_${preference}`;
 
     await this.ajax(url, 'PUT', { data });
 
     return this.store.findRecord('profile', modelId);
   }
 
-  async unsetShowPcidss(modelInstance: ProfileModel) {
-    const modelId = modelInstance.get('id');
-    const url = this.buildURL('profile', modelId) + '/show_pcidss';
-
-    await this.ajax(url, 'DELETE');
-
-    return this.store.findRecord('profile', modelId);
-  }
-
-  async setShowHipaa(
+  async unsetShowPreference(
     modelInstance: ProfileModel,
-    data: SetProfileRegulatorPrefData
+    preference: ProfileRegulatoryReportPreference
   ) {
     const modelId = modelInstance.get('id');
-    const url = this.buildURL('profile', modelId) + '/show_hipaa';
-
-    await this.ajax(url, 'PUT', { data });
-
-    return this.store.findRecord('profile', modelId);
-  }
-
-  async unsetShowHipaa(modelInstance: ProfileModel) {
-    const modelId = modelInstance.get('id');
-    const url = this.buildURL('profile', modelId) + '/show_hipaa';
-
-    await this.ajax(url, 'DELETE');
-
-    return this.store.findRecord('profile', modelId);
-  }
-
-  async setShowGdpr(
-    modelInstance: ProfileModel,
-    data: SetProfileRegulatorPrefData
-  ) {
-    const modelId = modelInstance.get('id');
-    const url = this.buildURL('profile', modelId) + '/show_gdpr';
-
-    await this.ajax(url, 'PUT', { data });
-
-    return this.store.findRecord('profile', modelId);
-  }
-
-  async unsetShowGdpr(modelInstance: ProfileModel) {
-    const modelId = modelInstance.get('id');
-    const url = this.buildURL('profile', modelId) + '/show_gdpr';
+    const url = this.buildURL('profile', modelId) + `/show_${preference}`;
 
     await this.ajax(url, 'DELETE');
 

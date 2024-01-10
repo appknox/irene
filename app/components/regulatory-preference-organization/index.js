@@ -37,6 +37,12 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
         task: this.saveGdpr,
         title: this.intl.t('gdprExpansion'),
       },
+      {
+        label: 'NIST',
+        checked: Boolean(this.orgPreference?.reportPreference.show_nist),
+        task: this.saveNist,
+        title: this.intl.t('nistExpansion'),
+      },
     ];
   }
 
@@ -62,6 +68,10 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
 
   saveGdpr = task(async (event) => {
     await this.saveReportPreference.perform('show_gdpr', event);
+  });
+
+  saveNist = task(async (event) => {
+    await this.saveReportPreference.perform('show_nist', event);
   });
 
   saveReportPreference = task(async (regulator, event) => {

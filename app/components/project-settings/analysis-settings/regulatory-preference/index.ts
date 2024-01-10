@@ -1,13 +1,14 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import parseError from 'irene/utils/parse-error';
 import Store from '@ember-data/store';
 import IntlService from 'ember-intl/services/intl';
 import ProjectModel from 'irene/models/project';
-import ProfileModel from 'irene/models/profile';
+import ProfileModel, {
+  ProfileRegulatoryReportPreference,
+} from 'irene/models/profile';
 
 interface ProjectSettingsAnalysisSettingsRegulatoryPreferenceSignature {
   Args: {
@@ -39,7 +40,7 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
         value: this.profile?.reportPreference.show_pcidss?.value,
         toggleHandler: this.onSavePcidss,
         resetHandler: this.onResetPcidss,
-        isSaving: this.savePcidss.isRunning,
+        isSaving: this.onSavePcidss.isRunning,
         isOverriden: !this.profile?.reportPreference.show_pcidss?.is_inherited,
       },
       {
@@ -48,18 +49,26 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
         value: this.profile?.reportPreference.show_hipaa?.value,
         toggleHandler: this.onSaveHipaa,
         resetHandler: this.onResetHipaa,
-        isSaving: this.saveHipaa.isRunning,
+        isSaving: this.onSaveHipaa.isRunning,
         isOverriden: !this.profile?.reportPreference.show_hipaa?.is_inherited,
       },
-
       {
         label: this.intl.t('gdpr'),
         title: this.intl.t('gdprExpansion'),
         value: this.profile?.reportPreference.show_gdpr?.value,
         toggleHandler: this.onSaveGdpr,
         resetHandler: this.onResetGdpr,
-        isSaving: this.saveGdpr.isRunning,
+        isSaving: this.onSaveGdpr.isRunning,
         isOverriden: !this.profile?.reportPreference.show_gdpr?.is_inherited,
+      },
+      {
+        label: this.intl.t('nist'),
+        title: this.intl.t('nistExpansion'),
+        value: this.profile?.reportPreference.show_nist?.value,
+        toggleHandler: this.onSaveNist,
+        resetHandler: this.onResetNist,
+        isSaving: this.onSaveNist.isRunning,
+        isOverriden: !this.profile?.reportPreference.show_nist?.is_inherited,
       },
     ];
   }
@@ -73,118 +82,70 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
     }
   });
 
-  // PCIDSS
-  savePcidss = task(async (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    const status = target.checked;
-    try {
-      await this.profile?.setShowPcidss({ value: status });
-      const statusDisplay = status ? 'SHOW' : 'HIDE';
-      this.notify.info(
-        `${this.intl.t('pcidss')} ${this.intl.t(
-          'preferenceSetTo'
-        )} ${statusDisplay}`
-      );
-    } catch (err) {
-      this.notify.error(parseError(err));
-      target.checked = !status;
+  savePreference = task(
+    async (event: Event, preference: ProfileRegulatoryReportPreference) => {
+      const target = event.target as HTMLInputElement;
+      const status = target.checked;
+
+      try {
+        await this.profile?.setShowPreference(preference, { value: status });
+
+        const statusDisplay = status ? 'SHOW' : 'HIDE';
+
+        this.notify.info(
+          `${this.intl.t(preference)} ${this.intl.t(
+            'preferenceSetTo'
+          )} ${statusDisplay}`
+        );
+      } catch (err) {
+        this.notify.error(parseError(err));
+        target.checked = !status;
+      }
     }
+  );
+
+  resetPreference = task(
+    async (preference: ProfileRegulatoryReportPreference) => {
+      try {
+        await this.profile?.unsetShowPreference(preference);
+        this.notify.info(this.intl.t('regulatoryPreferenceReset'));
+      } catch (err) {
+        this.notify.error(parseError(err));
+      }
+    }
+  );
+
+  onSavePcidss = task(async (event: Event) => {
+    await this.savePreference.perform(event, 'pcidss');
   });
 
-  resetPcidss = task(async () => {
-    try {
-      await this.profile?.unsetShowPcidss();
-      this.notify.info(this.intl.t('regulatoryPreferenceReset'));
-    } catch (err) {
-      this.notify.error(parseError(err));
-    }
+  onSaveHipaa = task(async (event: Event) => {
+    await this.savePreference.perform(event, 'hipaa');
   });
 
-  // HIPAA
-  saveHipaa = task(async (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    const status = target.checked;
-    try {
-      await this.profile?.setShowHipaa({ value: status });
-
-      const statusDisplay = status ? 'SHOW' : 'HIDE';
-      this.notify.info(
-        `${this.intl.t('hipaa')} ${this.intl.t(
-          'preferenceSetTo'
-        )} ${statusDisplay}`
-      );
-    } catch (err) {
-      this.notify.error(parseError(err));
-      target.checked = !status;
-    }
+  onSaveGdpr = task(async (event: Event) => {
+    await this.savePreference.perform(event, 'gdpr');
   });
 
-  resetHipaa = task(async () => {
-    try {
-      await this.profile?.unsetShowHipaa();
-      this.notify.info(this.intl.t('regulatoryPreferenceReset'));
-    } catch (err) {
-      this.notify.error(parseError(err));
-    }
+  onSaveNist = task(async (event: Event) => {
+    await this.savePreference.perform(event, 'nist');
   });
 
-  // GDPR
-  saveGdpr = task(async (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    const status = target.checked;
-    try {
-      await this.profile?.setShowGdpr({ value: status });
-      const statusDisplay = status ? 'SHOW' : 'HIDE';
-
-      this.notify.info(
-        `${this.intl.t('gdpr')} ${this.intl.t(
-          'preferenceSetTo'
-        )} ${statusDisplay}`
-      );
-    } catch (err) {
-      this.notify.error(parseError(err));
-      target.checked = !status;
-    }
+  onResetPcidss = task(async () => {
+    await this.resetPreference.perform('pcidss');
   });
 
-  resetGdpr = task(async () => {
-    try {
-      await this.profile?.unsetShowGdpr();
-      this.notify.info(this.intl.t('regulatoryPreferenceReset'));
-    } catch (err) {
-      this.notify.error(parseError(err));
-    }
+  onResetHipaa = task(async () => {
+    await this.resetPreference.perform('hipaa');
   });
 
-  @action
-  onSavePcidss(event: Event) {
-    this.savePcidss.perform(event);
-  }
+  onResetGdpr = task(async () => {
+    await this.resetPreference.perform('gdpr');
+  });
 
-  @action
-  onSaveHipaa(event: Event) {
-    this.saveHipaa.perform(event);
-  }
-
-  @action
-  onSaveGdpr(event: Event) {
-    this.saveGdpr.perform(event);
-  }
-
-  @action
-  onResetPcidss() {
-    this.resetPcidss.perform();
-  }
-
-  @action
-  onResetHipaa() {
-    this.resetHipaa.perform();
-  }
-
-  @action
-  onResetGdpr() {
-    this.resetGdpr.perform();
-  }
+  onResetNist = task(async () => {
+    await this.resetPreference.perform('nist');
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

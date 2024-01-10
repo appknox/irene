@@ -10,6 +10,7 @@ export interface ProfileReportPreference {
   show_pcidss: ValueObject;
   show_hipaa: ValueObject;
   show_gdpr: ValueObject;
+  show_nist: ValueObject;
 }
 
 interface ValueObject {
@@ -23,6 +24,12 @@ export type SaveReportPreferenceData = Pick<
 >;
 
 export type SetProfileRegulatorPrefData = { value: boolean };
+
+export type ProfileRegulatoryReportPreference =
+  | 'pcidss'
+  | 'hipaa'
+  | 'gdpr'
+  | 'nist';
 
 type ProfileAdapterName = 'profile';
 
@@ -44,40 +51,19 @@ export default class ProfileModel extends Model {
     return adapter.saveReportPreference(this, data);
   }
 
-  setShowPcidss(data: SetProfileRegulatorPrefData) {
+  setShowPreference(
+    preference: ProfileRegulatoryReportPreference,
+    data: SetProfileRegulatorPrefData
+  ) {
     const adapter = this.store.adapterFor(this.adapterName);
 
-    return adapter.setShowPcidss(this, data);
+    return adapter.setShowPreference(this, preference, data);
   }
 
-  unsetShowPcidss() {
+  unsetShowPreference(preference: ProfileRegulatoryReportPreference) {
     const adapter = this.store.adapterFor(this.adapterName);
 
-    return adapter.unsetShowPcidss(this);
-  }
-
-  setShowHipaa(data: SetProfileRegulatorPrefData) {
-    const adapter = this.store.adapterFor(this.adapterName);
-
-    return adapter.setShowHipaa(this, data);
-  }
-
-  unsetShowHipaa() {
-    const adapter = this.store.adapterFor(this.adapterName);
-
-    return adapter.unsetShowHipaa(this);
-  }
-
-  setShowGdpr(data: SetProfileRegulatorPrefData) {
-    const adapter = this.store.adapterFor(this.adapterName);
-
-    return adapter.setShowGdpr(this, data);
-  }
-
-  unsetShowGdpr() {
-    const adapter = this.store.adapterFor(this.adapterName);
-
-    return adapter.unsetShowGdpr(this);
+    return adapter.unsetShowPreference(this, preference);
   }
 }
 

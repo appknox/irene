@@ -1,4 +1,4 @@
-{{! template-lint-disable no-partial }}
+{{! template-lint-disable no-partial no-curly-component-invocation }}
 <div local-class="file-cleanup-list-container">
   <div local-class="list-table">
     <div local-class="list-head">
@@ -14,7 +14,7 @@
       {{else}}
         {{#each this.objects as |cleanup|}}
           <div local-class="list-body__row">
-            <span local-class="list-body__row-item">{{moment-format cleanup.createdOn 'DD MMM YYYY'}}</span>
+            <span local-class="list-body__row-item">{{day-js date=cleanup.createdOn format='DD MMM YYYY'}}</span>
             {{#if cleanup.isManual}}
               <span local-class="list-body__row-item">{{cleanup.typeValue}} <span
                   local-class="username">({{cleanup.user.username}})</span></span>
