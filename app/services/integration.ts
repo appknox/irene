@@ -6,6 +6,7 @@ import UserModel from 'irene/models/user';
 import ConfigurationService from './configuration';
 import LoggerService from './logger';
 import FreshdeskService from './freshdesk';
+import { removeCrispListeners, scaleCrispChatbox } from 'irene/utils/chat';
 
 export default class IntegrationService extends Service {
   // https://github.com/ember-cli/ember-page-title/blob/a886af4d83c7a3a3c716372e8a322258a4f92991/addon/services/page-title-list.js#L27
@@ -20,6 +21,11 @@ export default class IntegrationService extends Service {
 
   get window() {
     return window;
+  }
+
+  willDestroy() {
+    super.willDestroy();
+    removeCrispListeners();
   }
 
   async configure(user: UserModel) {
@@ -57,6 +63,7 @@ export default class IntegrationService extends Service {
   // this window.CRISP_WEBSITE_ID is retrieved from configuration module
   async installCrisp() {
     const window = this.window;
+    // @ts-expect-error crisp type issue
     window.$crisp = [];
     window.CRISP_WEBSITE_ID = this.crispToken;
     const d = this.document;
@@ -69,6 +76,9 @@ export default class IntegrationService extends Service {
     // @ts-ignore
     d.getElementsByTagName('head')[0].appendChild(s);
     window.$crisp.push(['safe', true]);
+
+    // to hide chat button
+    window.$crisp.push(['on', 'session:loaded', scaleCrispChatbox]);
   }
 
   // Pendo
