@@ -1,11 +1,21 @@
-<div local-class='organization-dashboard-root'>
+<div
+  local-class='organization-dashboard-root {{if
+    this.isSidebarCollapsed
+    "collapsed"
+    "expanded"
+  }}'
+>
   <HomePage::OrganizationDashboard::Header
+    local-class='dashboard-header'
     @user={{@user}}
     @logoutAction={{@logoutAction}}
   />
 
   <HomePage::OrganizationDashboard::SideNav
+    local-class='dashboard-sidenav'
     @isSecurityEnabled={{@isSecurityEnabled}}
+    @isCollapsed={{this.isSidebarCollapsed}}
+    @toggleSidebar={{this.toggleSidebar}}
   />
 
   <main local-class='dashboard-main'>

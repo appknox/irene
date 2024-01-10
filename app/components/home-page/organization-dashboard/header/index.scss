@@ -1,9 +1,8 @@
 .navbar-root {
-  width: calc(100% - 250px);
-  margin-left: 250px;
   padding: 0.65em 1em;
   background-color: var(--organization-dashboard-header-background-color);
   color: var(--organization-dashboard-header-text-color);
+  max-height: 4em;
 
   .navbar-btn {
     color: var(--organization-dashboard-header-text-color);

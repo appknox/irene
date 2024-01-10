@@ -1,7 +1,7 @@
 .file-compare-tabs {
   position: sticky;
   margin-top: 1.4286em;
-  top: 254px;
+  top: calc(200px - 0.5em);
   z-index: 10;
   background: var(--file-compare-tabs-background-color);
 }

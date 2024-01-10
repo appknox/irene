@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, findAll } from '@ember/test-helpers';
+import { render, findAll, click, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
@@ -29,6 +29,16 @@ class ConfigurationStub extends Service {
   };
 }
 
+class IntegrationStub extends Service {
+  async configure(user) {
+    this.currentUser = user;
+  }
+
+  isPendoEnabled() {
+    return false;
+  }
+}
+
 const menuItems = ({
   analytics,
   appMonitoring,
@@ -39,7 +49,7 @@ const menuItems = ({
   sbom,
 }) =>
   [
-    { label: 't:projects:()', icon: 'folder', hasBadge: true },
+    { label: 't:allProjects:()', icon: 'folder', hasBadge: true },
     appMonitoring && { label: 't:appMonitoring:()', icon: 'inventory-2' },
     sbom && { label: 't:SBOM:()', icon: 'receipt-long' },
     analytics && { label: 't:analytics:()', icon: 'graphic-eq' },
@@ -65,6 +75,23 @@ const sections = (enabled) => ({
   sbom: enabled,
 });
 
+const lowerMenuItems = [
+  {
+    title: 't:chatSupport:()',
+    icon: 'chat-bubble',
+  },
+  {
+    title: 't:version:()',
+    icon: 'info',
+    enablePendo: false,
+    divider: true,
+  },
+  {
+    title: 't:collapse:()',
+    icon: 'keyboard-tab',
+  },
+];
+
 module(
   'Integration | Component | home-page/organization-dashboard/side-nav',
   function (hooks) {
@@ -89,17 +116,13 @@ module(
       await this.owner.lookup('service:organization').load();
 
       this.owner.register('service:me', OrganizationMeStub);
+      this.owner.register('service:integration', IntegrationStub);
       this.owner.register('service:notifications', NotificationsStub);
 
       const organization = this.owner.lookup('service:organization');
 
       this.setProperties({
         organization: organization,
-      });
-
-      // TODO: remove this
-      this.server.get('/submissions', () => {
-        return [];
       });
     });
 
@@ -128,6 +151,10 @@ module(
       ) {
         this.setProperties({
           isSecurityEnabled: security,
+          isCollapsed: false,
+          toggleSidebar: () => {
+            this.isCollapsed = !this.isCollapsed;
+          },
         });
 
         const me = this.owner.lookup('service:me');
@@ -146,7 +173,7 @@ module(
         };
 
         await render(
-          hbs`<HomePage::OrganizationDashboard::SideNav @isSecurityEnabled={{this.isSecurityEnabled}} />`
+          hbs`<HomePage::OrganizationDashboard::SideNav @isSecurityEnabled={{this.isSecurityEnabled}} @isCollapsed={{this.isCollapsed}} @toggleSidebar={{this.toggleSidebar}} />`
         );
 
         assert.dom('[data-test-img-logo]').exists();
@@ -183,12 +210,150 @@ module(
       }
     );
 
+    test.each(
+      'it should show collapsed menu if isCollapsed is false',
+      [
+        { owner: true, admin: true, ...sections(true) },
+        { owner: true, admin: true, ...sections(false) },
+        { owner: false, admin: true, ...sections(true) },
+        { owner: false, admin: true, ...sections(false) },
+        { owner: false, admin: false, ...sections(true) },
+        { owner: false, admin: false, ...sections(false) },
+      ],
+      async function (
+        assert,
+        {
+          owner,
+          admin,
+          billing,
+          partner,
+          market,
+          appMonitoring,
+          security,
+          sbom,
+        }
+      ) {
+        this.setProperties({
+          isCollapsed: true,
+          isSecurityEnabled: security,
+          toggleSidebar: () => {
+            this.isCollapsed = !this.isCollapsed;
+          },
+        });
+
+        const me = this.owner.lookup('service:me');
+
+        me.org.is_owner = owner;
+        me.org.is_admin = admin;
+        me.org.can_access_partner_dashboard = partner;
+
+        ENV.enableMarketplace = market;
+
+        this.organization.selected.billingHidden = !billing;
+
+        this.organization.selected.features = {
+          app_monitoring: appMonitoring,
+          sbom,
+        };
+
+        await render(
+          hbs`<HomePage::OrganizationDashboard::SideNav @isSecurityEnabled={{this.isSecurityEnabled}} @isCollapsed={{this.isCollapsed}} @toggleSidebar={{this.toggleSidebar}} />`
+        );
+
+        const menuItemEle = findAll('[data-test-side-menu-item]');
+
+        menuItems({
+          analytics: owner || admin,
+          billing: owner && billing,
+          market,
+          appMonitoring,
+          partner,
+          security,
+          sbom,
+        }).forEach((it, index) => {
+          assert
+            .dom('[data-test-side-menu-item-icon]', menuItemEle[index])
+            .hasClass(`ak-icon-${it.icon}`);
+        });
+      }
+    );
+
     test('it should hide sbom link in side menu if org is an enterprise', async function (assert) {
       this.owner.register('service:configuration', ConfigurationStub);
 
-      await render(hbs`<HomePage::OrganizationDashboard::SideNav />`);
+      this.setProperties({
+        isCollapsed: false,
+        toggleSidebar: () => {
+          this.isCollapsed = !this.isCollapsed;
+        },
+      });
 
-      assert.dom(`[data-test-side-menu='t:SBOM:()']`).doesNotExist();
+      await render(
+        hbs`<HomePage::OrganizationDashboard::SideNav @isCollapsed={{this.isCollapsed}} @toggleSidebar={{this.toggleSidebar}}  />`
+      );
+
+      assert.dom(`[data-test-side-menu-item='t:SBOM:()']`).doesNotExist();
+    });
+
+    test('it should show lower menu items', async function (assert) {
+      this.setProperties({
+        isCollapsed: false,
+        toggleSidebar: () => {
+          this.set('isCollapsed', !this.isCollapsed);
+        },
+      });
+
+      await render(
+        hbs`<HomePage::OrganizationDashboard::SideNav @isCollapsed={{this.isCollapsed}} @toggleSidebar={{this.toggleSidebar}}  />`
+      );
+
+      assert.dom('[data-test-side-lower-menu]').exists();
+
+      assert.dom('[data-test-side-lower-menu-divider]').exists();
+
+      const lowerMenuItemEle = findAll('[data-test-side-lower-menu-item]');
+
+      const collapseButton = find(`[
+        data-test-side-lower-menu-item='t:collapse:()'
+      ]`);
+
+      assert.ok(collapseButton, 'Collapse button should exist');
+
+      await click(collapseButton);
+
+      assert.ok(
+        this.isCollapsed,
+        'Sidebar should be collapsed after clicking the expand button'
+      );
+
+      assert.dom('[data-test-side-lower-menu-item-text]').doesNotExist();
+
+      lowerMenuItems.forEach((it, index) => {
+        assert
+          .dom('[data-test-side-lower-menu-item-icon]', lowerMenuItemEle[index])
+          .hasClass(`ak-icon-${it.icon}`);
+      });
+
+      const expandButton = find(`[
+        data-test-side-lower-menu-item='t:expand:()'
+      ]`);
+
+      await click(expandButton);
+
+      assert.notOk(
+        this.isCollapsed,
+        'Sidebar should be expanded after clicking the expand button'
+      );
+
+      lowerMenuItems.forEach((it, index) => {
+        assert
+          .dom('[data-test-side-lower-menu-item-text]', lowerMenuItemEle[index])
+          .containsText(it.title);
+
+        assert
+          .dom('[data-test-side-lower-menu-item-icon]', lowerMenuItemEle[index])
+          .hasClass(`ak-icon-${it.icon}`);
+      });
     });
   }
 );

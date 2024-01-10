@@ -113,6 +113,7 @@
   "changedMandatoryMFA": "Changed MFA setting",
   "checking": "Checking",
   "complianceInsights": "Compliance Insights",
+  "chatSupport": "Chat Support",
   "chooseAFile": "比較するファイルを選択してください",
   "chipStatus": {
     "active": "ACTIVE",
@@ -138,6 +139,7 @@
   "closeModal": "全画面を終了",
   "collaboratorRemoved": "Removed Collaborator",
   "collaborators": "Collaborators",
+  "collapse": "Collapse",
   "comingSoon": "Coming soon",
   "comment": "Comment",
   "comments": "Comments",
@@ -320,6 +322,7 @@
   "errored": "Errored",
   "errorMessage": "Error message",
   "excelReport": "Excel Report",
+  "expand": "Expand",
   "experimentalFeature": "Experimental Feature",
   "expired": "期限切れ",
   "expiredOn": "Expired on",

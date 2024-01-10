@@ -1,0 +1,36 @@
+<a
+  href='/security/projects'
+  target='_blank'
+  rel='noopener noreferrer'
+  class={{@classes.menuItemLink}}
+  data-test-side-menu-item
+>
+  <AkTooltip
+    @color='dark'
+    @placement='right'
+    @arrow={{true}}
+    @title={{t 'securityDashboard'}}
+    @disabled={{not @isCollapsed}}
+    class={{@classes.menuItemTooltip}}
+  >
+    <AkList::ItemIcon @rightGutter={{not @isCollapsed}}>
+      <AkIcon
+        data-test-side-menu-item-icon
+        @iconName='security'
+        class={{@classes.menuItemText}}
+      />
+    </AkList::ItemIcon>
+
+    {{#unless @isCollapsed}}
+      <AkList::ItemText
+        data-test-side-menu-item-text
+        @primaryText={{t 'securityDashboard'}}
+        @primaryTextClass={{@classes.menuItemText}}
+      />
+
+      <AkList::ItemIcon @leftGutter={{true}}>
+        <AkIcon @iconName='open-in-new' class={{@classes.menuItemText}} />
+      </AkList::ItemIcon>
+    {{/unless}}
+  </AkTooltip>
+</a>
