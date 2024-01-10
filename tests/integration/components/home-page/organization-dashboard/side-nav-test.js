@@ -37,6 +37,10 @@ class IntegrationStub extends Service {
   isPendoEnabled() {
     return false;
   }
+
+  isCrispEnabled() {
+    return true;
+  }
 }
 
 const menuItems = ({

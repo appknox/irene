@@ -28,6 +28,16 @@ class ConfigurationStub extends Service {
   serverData = { urlUploadAllowed: true };
 }
 
+class IntegrationStub extends Service {
+  async configure(user) {
+    this.currentUser = user;
+  }
+
+  isCrispEnabled() {
+    return true;
+  }
+}
+
 module(
   'Integration | Component | home-page/organization-dashboard/header',
   function (hooks) {
@@ -54,6 +64,7 @@ module(
       this.owner.register('service:me', OrganizationMeStub);
       this.owner.register('service:notifications', NotificationsStub);
       this.owner.register('service:freshdesk', FreshdeskStub);
+      this.owner.register('service:integration', IntegrationStub);
 
       const organization = this.owner.lookup('service:organization');
 

@@ -134,7 +134,7 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
 
   get lowerMenuItems() {
     return [
-      {
+      this.enableCrisp && {
         title: this.intl.t('chatSupport'),
         icon: 'chat-bubble',
         onClick: this.openChatBox,
@@ -194,6 +194,10 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
 
   get enablePendo() {
     return this.integration.isPendoEnabled();
+  }
+
+  get enableCrisp() {
+    return this.integration.isCrispEnabled();
   }
 
   get isSidebarExpanded() {

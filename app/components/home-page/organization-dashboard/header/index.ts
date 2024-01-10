@@ -28,6 +28,10 @@ export default class HomePageOrganizationDashboardHeaderComponent extends Compon
     return this.freshdesk.isSupportWidgetEnabled;
   }
 
+  get enableCrisp() {
+    return this.integration.isCrispEnabled();
+  }
+
   get profileMenuItems() {
     return [
       {

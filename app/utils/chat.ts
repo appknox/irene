@@ -37,6 +37,7 @@ export function scaleCrispChatbox() {
 
     if (crispButton) {
       crispButton.style.transform = 'scale(0)';
+      window.$crisp.push(['do', 'chat:close']);
 
       window.$crisp.on('chat:opened', () => {
         crispButton = getChatButtonElement();

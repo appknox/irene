@@ -32,17 +32,19 @@
       </AkButton>
     {{/if}}
 
-    <AkButton
-      local-class='navbar-btn'
-      {{on 'click' this.openChatBox}}
-      data-test-organizationDashboardHeader-supportBtn
-    >
-      <:leftIcon>
-        <AkIcon @iconName='support' />
-      </:leftIcon>
+    {{#if this.enableCrisp}}
+      <AkButton
+        local-class='navbar-btn'
+        {{on 'click' this.openChatBox}}
+        data-test-organizationDashboardHeader-supportBtn
+      >
+        <:leftIcon>
+          <AkIcon @iconName='support' />
+        </:leftIcon>
 
-      <:default>{{t 'support'}}</:default>
-    </AkButton>
+        <:default>{{t 'support'}}</:default>
+      </AkButton>
+    {{/if}}
 
     <NotificationsPage::BellIcon />
 
