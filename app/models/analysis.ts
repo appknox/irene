@@ -23,6 +23,8 @@ import PcidssModel from './pcidss';
 import MasvsModel from './masvs';
 import VulnerabilityModel from './vulnerability';
 import OwaspApi2023Model from './owaspapi2023';
+import Nistsp800171Model from './nistsp800171';
+import Nistsp80053Model from './nistsp80053';
 
 const inflector = Inflector.inflector;
 inflector.irregular('asvs', 'asvses');
@@ -102,6 +104,12 @@ export default class AnalysisModel extends Model {
 
   @hasMany('gdpr')
   declare gdpr: AsyncHasMany<GdprModel>;
+
+  @hasMany('nistsp800171')
+  declare nistsp800171: AsyncHasMany<Nistsp800171Model>;
+
+  @hasMany('nistsp80053')
+  declare nistsp80053: AsyncHasMany<Nistsp80053Model>;
 
   @belongsTo('vulnerability')
   declare vulnerability: AsyncBelongsTo<VulnerabilityModel>;
@@ -222,6 +230,10 @@ export default class AnalysisModel extends Model {
 
   get showGdpr() {
     return this.file.get('profile')?.get('reportPreference')?.show_gdpr?.value;
+  }
+
+  get showNist() {
+    return this.file.get('profile')?.get('reportPreference')?.show_nist?.value;
   }
 
   get vulnerabilityTypes() {

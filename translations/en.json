@@ -701,6 +701,8 @@
   "next": "Next",
   "nist": "NIST",
   "nistExpansion": "National Institute of Standards and Technology",
+  "nistsp80053": "NIST SP 800-53",
+  "nistsp800171": "NIST SP 800-171",
   "no": "No",
   "noArchive": "No Archive Generated Yet...",
   "noArchiveExports": "No Archive Exports",

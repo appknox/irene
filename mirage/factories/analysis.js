@@ -119,6 +119,22 @@ export default Factory.extend({
     },
   }),
 
+  withNistsp80053: trait({
+    afterCreate(model, server) {
+      model.update({
+        nistsp80053: server.createList('nistsp80053', 2).map((it) => it.id),
+      });
+    },
+  }),
+
+  withNistsp800171: trait({
+    afterCreate(model, server) {
+      model.update({
+        nistsp800171: server.createList('nistsp800171', 2).map((it) => it.id),
+      });
+    },
+  }),
+
   withAllRegulatory: trait({
     afterCreate(model, server) {
       model.update({
@@ -131,6 +147,8 @@ export default Factory.extend({
         pcidss: server.createList('pcidss', 2).map((it) => it.id),
         hipaa: server.createList('hipaa', 2).map((it) => it.id),
         gdpr: server.createList('gdpr', 2).map((it) => it.id),
+        nistsp80053: server.createList('nistsp80053', 2).map((it) => it.id),
+        nistsp800171: server.createList('nistsp800171', 2).map((it) => it.id),
       });
     },
   }),
