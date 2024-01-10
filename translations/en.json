@@ -113,6 +113,7 @@
   "changedMandatoryMFA": "Changed MFA setting",
   "checking": "Checking",
   "complianceInsights": "Compliance Insights",
+  "chatSupport": "Chat Support",
   "chooseAFile": "Choose a file to compare",
   "chipStatus": {
     "active": "ACTIVE",
@@ -138,6 +139,7 @@
   "closeModal": "Exit Full Screen",
   "collaboratorRemoved": "Removed Collaborator",
   "collaborators": "Collaborators",
+  "collapse": "Collapse",
   "comingSoon": "Coming soon",
   "comment": "Comment",
   "comments": "Comments",
@@ -320,6 +322,7 @@
   "errored": "Errored",
   "errorMessage": "Error message",
   "excelReport": "Excel Report",
+  "expand": "Expand",
   "experimentalFeature": "Experimental Feature",
   "expired": "Expired ",
   "expiredOn": "Expired on",

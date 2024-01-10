@@ -14,6 +14,7 @@ export interface HomePageOrganizationDashboardHeaderSignature {
     logoutAction: () => void;
     user: UserModel;
   };
+  Element: HTMLElement;
 }
 
 export default class HomePageOrganizationDashboardHeaderComponent extends Component<HomePageOrganizationDashboardHeaderSignature> {

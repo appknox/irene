@@ -57,9 +57,26 @@ declare global {
 
   type CsbAnalyticsData = CsbAnalyticsFeatureData | CsbAnalyticsLoginData;
 
+  interface CrispInstance {
+    push: (...args: unknown[]) => void;
+    show: (...args: unknown[]) => void;
+    on: (...args: unknown[]) => void;
+    off: (...args: unknown[]) => void;
+  }
+
+  interface PendoInstance {
+    getActiveGuides: () => PendoGuide[];
+  }
+
+  interface PendoGuide {
+    show: () => Promise<boolean>;
+    launchMethod: 'auto-badge';
+  }
+
   interface Window {
     FreshworksWidget: (...args: unknown[]) => void;
-    $crisp: unknown[];
+    $crisp: CrispInstance;
+    pendo: PendoInstance;
     CRISP_WEBSITE_ID: string;
     fwSettings: { widget_id: string };
     analytics?: CsbAnalytics;

@@ -8,21 +8,39 @@ import OrganizationService from 'irene/services/organization';
 import IntegrationService from 'irene/services/integration';
 import IntlService from 'ember-intl/services/intl';
 import ConfigurationService from 'irene/services/configuration';
+import WhitelabelService from 'irene/services/whitelabel';
+import { action } from '@ember/object';
+import * as chat from 'irene/utils/chat';
 
 export interface HomePageOrganizationDashboardSideNavSignature {
   Args: {
     isSecurityEnabled?: boolean;
+    isCollapsed: boolean;
+    toggleSidebar: () => void;
   };
+  Element: HTMLElement;
 }
 
 interface MenuItem {
   label: string;
-  icon: string;
-  route: string;
+  icon?: string;
+  route?: string;
   query?: Record<string, string | number>;
   currentWhen?: string;
   hasBadge?: boolean;
   badgeLabel?: string;
+  component?: 'home-page/organization-dashboard/side-nav/security-menu-item';
+}
+
+interface LowerMenuItem {
+  title: string;
+  icon?: string;
+  divider?: boolean;
+  onClick: () => void;
+  enablePendo?: boolean;
+  iconClass?: string;
+  textClass?: string;
+  listItemClass?: string;
 }
 
 export default class HomePageOrganizationDashboardSideNavComponent extends Component<HomePageOrganizationDashboardSideNavSignature> {
@@ -31,6 +49,8 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
   @service declare integration: IntegrationService;
   @service declare intl: IntlService;
   @service declare configuration: ConfigurationService;
+  @service declare whitelabel: WhitelabelService;
+  @service('browser/window') declare window: Window;
 
   showMarketplace = ENV.enableMarketplace;
   productVersion = ENV.productVersion;
@@ -40,13 +60,14 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
       menuItemText: styles['menu-item-text'],
       menuItemLink: styles['menu-item-link'],
       menuItemLinkActive: styles['active'],
+      menuItemTooltip: styles['menu-item-tooltip'],
     };
   }
 
   get menuItems() {
     return [
       {
-        label: this.intl.t('projects'),
+        label: this.intl.t('allProjects'),
         icon: 'folder',
         route: 'authenticated.projects',
         hasBadge: true,
@@ -103,7 +124,42 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
         hasBadge: true,
         badgeLabel: this.intl.t('beta'),
       },
+      this.args.isSecurityEnabled && {
+        label: this.intl.t('security'),
+        component:
+          'home-page/organization-dashboard/side-nav/security-menu-item' as const,
+      },
     ].filter(Boolean) as MenuItem[];
+  }
+
+  get lowerMenuItems() {
+    return [
+      {
+        title: this.intl.t('chatSupport'),
+        icon: 'chat-bubble',
+        onClick: this.openChatBox,
+        iconClass: 'lower-menu-chat',
+        textClass: styles['lower-menu-chat'],
+      },
+      {
+        title: this.versionText,
+        icon: this.enablePendo ? null : 'info',
+        enablePendo: this.enablePendo,
+        onClick: this.showGuide,
+        divider: true,
+        textClass: styles['menu-item-text'],
+        listItemClass: this.enablePendo ? '' : 'no-hover',
+      },
+      {
+        title: this.args.isCollapsed
+          ? this.intl.t('expand')
+          : this.intl.t('collapse'),
+        icon: 'keyboard-tab',
+        onClick: this.args.toggleSidebar,
+        textClass: styles['menu-item-text'],
+        iconClass: this.isSidebarExpanded ? 'rotated-icon' : '',
+      },
+    ].filter(Boolean) as LowerMenuItem[];
   }
 
   /**
@@ -138,6 +194,36 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
 
   get enablePendo() {
     return this.integration.isPendoEnabled();
+  }
+
+  get isSidebarExpanded() {
+    return !this.args.isCollapsed;
+  }
+
+  get versionText() {
+    const version = this.productVersion;
+    const translated = this.intl.t('version');
+    return `${translated} - ${version}`;
+  }
+
+  @action async showGuide() {
+    if (this.enablePendo) {
+      try {
+        const guide = this.window.pendo
+          .getActiveGuides()
+          .find(function (element) {
+            return element.launchMethod === 'auto-badge';
+          });
+
+        await guide?.show();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
+
+  @action openChatBox() {
+    chat.openChatBox();
   }
 }
 
