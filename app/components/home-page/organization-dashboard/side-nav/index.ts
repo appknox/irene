@@ -55,6 +55,19 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
   showMarketplace = ENV.enableMarketplace;
   productVersion = ENV.productVersion;
 
+  faviconImage: HTMLImageElement = new Image();
+  appLogoImage: HTMLImageElement = new Image();
+
+  constructor(
+    owner: unknown,
+    args: HomePageOrganizationDashboardSideNavSignature['Args']
+  ) {
+    super(owner, args);
+
+    this.faviconImage.src = this.whitelabel.favicon;
+    this.appLogoImage.src = this.whitelabel.logo;
+  }
+
   get classes() {
     return {
       menuItemText: styles['menu-item-text'],
