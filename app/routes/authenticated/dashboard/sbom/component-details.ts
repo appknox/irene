@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import Store from '@ember-data/store';
 
 import SbomComponentModel from 'irene/models/sbom-component';
+import { ScrollToTop } from 'irene/utils/scroll-to-top';
 
 export interface SbomAppScanQueryParam {
   vulnerability_limit: string;
@@ -22,7 +23,9 @@ export interface ComponentDetailsModel {
   queryParams: SbomAppScanQueryParam;
 }
 
-export default class AuthenticatedDashboardSbomComponentDetailsRoute extends Route {
+export default class AuthenticatedDashboardSbomComponentDetailsRoute extends ScrollToTop(
+  Route
+) {
   @service declare store: Store;
 
   queryParams = {
@@ -36,10 +39,6 @@ export default class AuthenticatedDashboardSbomComponentDetailsRoute extends Rou
       refreshModel: true,
     },
   };
-
-  activate() {
-    window.scrollTo(0, 0);
-  }
 
   async model(params: SbomAppScanParam) {
     const {

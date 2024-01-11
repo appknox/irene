@@ -18,7 +18,8 @@
     @toggleSidebar={{this.toggleSidebar}}
   />
 
-  <main local-class='dashboard-main'>
+  {{! #id is required for scroll-to-top util }}
+  <main id='ak-organization-dashboard-main' local-class='dashboard-main'>
     {{yield}}
   </main>
 </div>

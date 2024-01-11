@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { ScrollToTop } from 'irene/utils/scroll-to-top';
 
 export interface OrganizationMembersRouteQueryParams {
   user_limit: number;
@@ -9,7 +10,9 @@ export interface OrganizationMembersRouteQueryParams {
   invite_offset: number;
 }
 
-export default class AuthenticatedOrganizationMembersRoute extends Route {
+export default class AuthenticatedOrganizationMembersRoute extends ScrollToTop(
+  Route
+) {
   queryParams = {
     user_limit: {
       refreshModel: true,
@@ -30,9 +33,6 @@ export default class AuthenticatedOrganizationMembersRoute extends Route {
       refreshModel: true,
     },
   };
-  activate() {
-    window.scrollTo(0, 0);
-  }
 
   model(params: Partial<OrganizationMembersRouteQueryParams>) {
     const {
