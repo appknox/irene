@@ -1,13 +1,10 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import Store from '@ember-data/store';
+import { ScrollToTop } from 'irene/utils/scroll-to-top';
 
-export default class AuthenticatedFileIndexRoute extends Route {
+export default class AuthenticatedFileIndexRoute extends ScrollToTop(Route) {
   @service declare store: Store;
-
-  activate() {
-    window.scrollTo(0, 0);
-  }
 
   async model() {
     const { fileid } = this.paramsFor('authenticated.dashboard.file') as {

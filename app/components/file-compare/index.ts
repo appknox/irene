@@ -7,11 +7,14 @@ import RouterService from '@ember/routing/router-service';
 import { tracked } from '@glimmer/tracking';
 
 import FileModel from 'irene/models/file';
+
 import {
   compareFiles,
   getFileComparisonCategories,
 } from 'irene/utils/compare-files';
+
 import UnknownAnalysisStatusModel from 'irene/models/unknown-analysis-status';
+import { scrollOrganizationDashboardMainContainerTo } from 'irene/utils/scroll-to-top';
 
 interface FileCompareSignature {
   Args: {
@@ -24,7 +27,6 @@ interface FileCompareSignature {
 export default class FileCompareComponent extends Component<FileCompareSignature> {
   @service declare intl: IntlService;
   @service declare store: Store;
-  @service('browser/window') declare window: Window;
   @service declare router: RouterService;
 
   @tracked expandFilesOverview = false;
@@ -136,7 +138,8 @@ export default class FileCompareComponent extends Component<FileCompareSignature
   @action
   handleExpandFilesOverview() {
     this.expandFilesOverview = !this.expandFilesOverview;
-    this.window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    scrollOrganizationDashboardMainContainerTo({ top: 0, behavior: 'smooth' });
   }
 }
 

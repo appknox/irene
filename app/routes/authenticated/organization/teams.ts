@@ -1,6 +1,9 @@
 import Route from '@ember/routing/route';
+import { ScrollToTop } from 'irene/utils/scroll-to-top';
 
-export default class AuthenticatedOrganizationTeamsRoute extends Route {
+export default class AuthenticatedOrganizationTeamsRoute extends ScrollToTop(
+  Route
+) {
   queryParams = {
     team_limit: {
       refreshModel: true,
@@ -12,10 +15,6 @@ export default class AuthenticatedOrganizationTeamsRoute extends Route {
       refreshModel: true,
     },
   };
-
-  activate() {
-    window.scrollTo(0, 0);
-  }
 
   model({ team_limit = 10, team_offset = 0, team_query = '' }) {
     return {

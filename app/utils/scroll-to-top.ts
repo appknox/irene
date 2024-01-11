@@ -4,6 +4,16 @@ import Transition from '@ember/routing/transition';
 // Route constructor
 type Constructor<T = object> = new (...args: (object | undefined)[]) => T;
 
+export const scrollOrganizationDashboardMainContainerTo = (
+  options?: ScrollToOptions
+) => {
+  const organizationDashboardMainContainer = document.querySelector(
+    '#ak-organization-dashboard-main'
+  );
+
+  organizationDashboardMainContainer?.scrollTo(options);
+};
+
 /**
  * Scroll to top utility for routes
  * A Shift from the mixin approach
@@ -18,6 +28,9 @@ export const ScrollToTop = <Model = unknown, Params extends object = object>(
   class extends Superclass {
     activate(_transition: Transition) {
       super.activate(_transition);
+
+      scrollOrganizationDashboardMainContainerTo({ top: 0, left: 0 });
+
       window.scrollTo(0, 0);
     }
   };
