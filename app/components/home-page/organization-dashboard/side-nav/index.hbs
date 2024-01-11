@@ -6,7 +6,7 @@
     <LinkTo @route='authenticated.index'>
       <img
         data-test-img-logo
-        src={{if @isCollapsed this.whitelabel.favicon this.whitelabel.logo}}
+        src={{if @isCollapsed this.faviconImage.src this.appLogoImage.src}}
         alt={{this.whitelabel.name}}
       />
     </LinkTo>
