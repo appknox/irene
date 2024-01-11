@@ -19,7 +19,7 @@
 
   &.collapsed {
     .divider {
-      width: 75%;  
+      width: 75%;
     }
 
     .scroll-container {
@@ -33,13 +33,13 @@
   }
 
   .app-logo {
-    padding-top: 3.5em;
-    padding-bottom: 3em;
-    margin: auto;
+    margin: 3em auto;
     max-width: 56%;
     max-height: 9em;
 
     img {
+      max-width: 100%;
+      max-height: 100%;
       object-fit: contain;
     }
   }
@@ -47,10 +47,11 @@
   .favicon-logo {
     max-width: 35px;
     max-height: 35px;
-    margin: auto;
-    margin-bottom: 1em;
+    margin: 0.5em auto 1em auto;
 
-    .img {
+    img {
+      max-width: 100%;
+      max-height: 100%;
       object-fit: contain;
     }
   }
@@ -64,7 +65,7 @@
     box-sizing: border-box;
     overflow-x: hidden;
   }
-  
+
   .scroll-container {
     height: 100%;
     overflow-y: auto;
@@ -161,12 +162,17 @@
     .pendo-icon {
       height: 18px;
       width: 18px;
+      position: absolute;
+    }
+
+    .pendo-ak-icon {
+      position: relative;
     }
 
     .rotated-icon {
       transform: rotate(180deg);
     }
-  
+
     .lower-menu-chat {
       color: var(--organization-dashboard-side-nav-text-primary) !important;
     }

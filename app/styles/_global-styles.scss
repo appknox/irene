@@ -1,39 +1,44 @@
 @font-face {
-    font-family: 'Open Sans';
-    font-weight: normal;
-    font-style: normal;
-    src: url('/fonts/OpenSans-Regular.ttf') format('truetype');
+  font-family: 'Open Sans';
+  font-weight: normal;
+  font-style: normal;
+  src: url('/fonts/OpenSans-Regular.ttf') format('truetype');
 }
-  
+
 @font-face {
-   font-family: 'Open Sans';
-   font-weight: 600;
-   font-style: normal;
-   src: url('/fonts/OpenSans-SemiBold.ttf') format('truetype');
+  font-family: 'Open Sans';
+  font-weight: 600;
+  font-style: normal;
+  src: url('/fonts/OpenSans-SemiBold.ttf') format('truetype');
 }
-  
+
 @font-face {
-   font-family: 'Open Sans';
-   font-weight: 700;
-   font-style: normal;
-   src: url('/fonts/OpenSans-Bold.ttf') format('truetype');
+  font-family: 'Open Sans';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/fonts/OpenSans-Bold.ttf') format('truetype');
 }
-  
+
 @font-face {
-   font-family: 'Open Sans';
-   font-weight: 700;
-   font-style: italic;
-   src: url('/fonts/OpenSans-Italic.ttf') format('truetype');
+  font-family: 'Open Sans';
+  font-weight: 700;
+  font-style: italic;
+  src: url('/fonts/OpenSans-Italic.ttf') format('truetype');
 }
-  
+
 @font-face {
-   font-family: 'Source Code Pro';
-   src: url('/fonts/SourceCodePro-Regular.ttf') format('truetype');
+  font-family: 'Source Code Pro';
+  src: url('/fonts/SourceCodePro-Regular.ttf') format('truetype');
 }
-  
-  // text styling and utils
+
+// hide pendo img icon
+img._pendo-image._pendo-badge-image {
+  visibility: hidden;
+}
+
+// text styling and utils
 body {
-   font-family: 'Open Sans', sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
 
 html {
