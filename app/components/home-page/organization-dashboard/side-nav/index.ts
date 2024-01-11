@@ -34,7 +34,7 @@ interface MenuItem {
 
 interface LowerMenuItem {
   title: string;
-  icon?: string;
+  icon: string;
   divider?: boolean;
   onClick: () => void;
   enablePendo?: boolean;
@@ -143,7 +143,8 @@ export default class HomePageOrganizationDashboardSideNavComponent extends Compo
       },
       {
         title: this.versionText,
-        icon: this.enablePendo ? null : 'info',
+        icon: 'info',
+        iconClass: 'pendo-ak-icon',
         enablePendo: this.enablePendo,
         onClick: this.showGuide,
         divider: true,
