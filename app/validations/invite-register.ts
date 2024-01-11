@@ -3,7 +3,8 @@ import {
   validateLength,
   validateConfirmation,
 } from 'ember-changeset-validations/validators';
-import validateEquality from './validators/value-equality';
+
+import validateEquality from 'irene/validations/common/value-equality';
 
 export default {
   username: validatePresence(true),

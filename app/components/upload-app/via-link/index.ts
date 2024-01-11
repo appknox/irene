@@ -14,7 +14,7 @@ import { BufferedChangeset } from 'ember-changeset/types';
 import { validateStoreDomain, validateStorePathname } from './validator';
 import { validatePresence } from 'ember-changeset-validations/validators';
 
-type ChangesetBufferProps = Partial<BufferedChangeset> & {
+type ChangesetBufferProps = BufferedChangeset & {
   url: string;
 };
 

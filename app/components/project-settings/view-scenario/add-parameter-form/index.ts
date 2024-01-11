@@ -16,7 +16,7 @@ import parseError from 'irene/utils/parse-error';
 
 import styles from './index.scss';
 
-type ChangesetBufferProps = Partial<BufferedChangeset> & {
+type ChangesetBufferProps = BufferedChangeset & {
   parameterValue: string;
   parameterType: string;
 };
