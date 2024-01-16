@@ -50,7 +50,7 @@ module('Integration | Component | upload-app/via-system', function (hooks) {
   test('it renders upload app', async function (assert) {
     await render(hbs`<UploadApp::ViaSystem />`);
 
-    assert.dom('[data-test-uploadApp-root]').exists();
+    assert.dom('[data-test-uploadApp-input]').exists();
 
     assert.dom('[data-test-uploadApp-uploadBtn]').hasText('t:uploadApp:()');
   });
@@ -67,17 +67,13 @@ module('Integration | Component | upload-app/via-system', function (hooks) {
         return new Response(200);
       });
 
-      this.server.put(
-        '/:id/s3_upload_file',
-        () => {
-          return fail ? new Response(500) : new Response(200);
-        },
-        { timing: 500 }
-      );
+      this.server.put('/:id/s3_upload_file', () => {
+        return fail ? new Response(500) : new Response(200);
+      });
 
       await render(hbs`<UploadApp::ViaSystem />`);
 
-      assert.dom('[data-test-uploadApp-root]').exists();
+      assert.dom('[data-test-uploadApp-input]').exists();
 
       assert.dom('[data-test-uploadApp-uploadBtn]').hasText('t:uploadApp:()');
 
@@ -85,7 +81,7 @@ module('Integration | Component | upload-app/via-system', function (hooks) {
         type: 'application/vnd.android.package-archive',
       });
 
-      await selectFiles('[data-test-uploadApp-root] input', file);
+      await selectFiles('[data-test-uploadApp-input]', file);
 
       const notify = this.owner.lookup('service:notifications');
 

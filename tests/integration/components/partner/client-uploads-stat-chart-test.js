@@ -151,11 +151,12 @@ module(
         };
       });
 
+      await this.owner.lookup('service:partner').load();
+
       // The default values of the start and end dates to be set in the ClientUploadsStatChart Component
       this.set('startDate', dayjs().subtract(1, 'months'));
       this.set('endDate', dayjs());
 
-      await this.owner.lookup('service:partner').load();
       await render(hbs`
         <Partner::ClientUploadsStatChart 
           @title='Clients Overall'

@@ -1,17 +1,12 @@
 import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-
-export type UploadAppFileQueue = {
-  files: {
-    progress: number;
-  }[];
-};
+import { Queue } from 'ember-file-upload/queue';
 
 export default class UploadAppService extends Service {
   @tracked
-  systemFileQueue: UploadAppFileQueue | null = null;
+  systemFileQueue: Queue | null = null;
 
-  updateSystemFileQueue(queue: UploadAppFileQueue) {
+  updateSystemFileQueue(queue: Queue | null) {
     this.systemFileQueue = queue;
   }
 }

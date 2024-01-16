@@ -3,6 +3,7 @@ import Component from '@glimmer/component';
 import Store from '@ember-data/store';
 import IntlService from 'ember-intl/services/intl';
 import { task } from 'ember-concurrency';
+import FileQueueService from 'ember-file-upload/services/file-queue';
 
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
@@ -14,10 +15,13 @@ export default class UploadAppViaSystemComponent extends Component {
   @service declare rollbar: any;
   @service('notifications') declare notify: NotificationService;
   @service declare uploadApp: UploadAppService;
+  @service declare fileQueue: FileQueueService;
 
   tErrorWhileFetching: string;
   tErrorWhileUploading: string;
   tFileUploadedSuccessfully: string;
+
+  fileQueueName = 'uploadApp';
 
   constructor(owner: unknown, args: object) {
     super(owner, args);
@@ -27,7 +31,9 @@ export default class UploadAppViaSystemComponent extends Component {
     this.tFileUploadedSuccessfully = this.intl.t('fileUploadedSuccessfully');
   }
 
-  handleUploadApp = task(async (queue, file) => {
+  handleUploadApp = task(async (file) => {
+    const queue = this.fileQueue.find(this.fileQueueName) || null;
+
     try {
       this.uploadApp.updateSystemFileQueue(queue);
 
@@ -53,7 +59,7 @@ export default class UploadAppViaSystemComponent extends Component {
       this.notify.error(err);
 
       this.rollbar.critical(err, e);
-      queue.remove(file); // since queue won't flush for failed uploads
+      queue?.remove(file); // since queue won't flush for failed uploads
 
       this.uploadApp.updateSystemFileQueue(queue);
     }

@@ -1,15 +1,22 @@
-{{! @glint-nocheck : FileUpload}}
-<FileUpload
-  data-test-uploadApp-root
-  @name='uploadApp'
-  @onfileadd={{perform this.handleUploadApp (file-queue name='uploadApp')}}
-  {{style cursor='auto'}}
->
-  <AkButton @tag='a' data-test-uploadApp-uploadBtn>
+{{#let
+  (file-queue
+    name=this.fileQueueName onFileAdded=(perform this.handleUploadApp)
+  )
+  as |queue|
+}}
+  <AkButton data-test-uploadApp-uploadBtn @tag='label'>
     <AkIcon @iconName='cloud-upload' />
 
     <span class='ml-1'>
       {{t 'uploadApp'}}
     </span>
+
+    <input
+      data-test-uploadApp-input
+      type='file'
+      id='upload-app-input'
+      {{style width='1px' height='1px'}}
+      {{queue.selectFile}}
+    />
   </AkButton>
-</FileUpload>
+{{/let}}

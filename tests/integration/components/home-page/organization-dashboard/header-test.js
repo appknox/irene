@@ -105,7 +105,7 @@ module(
           .dom('[data-test-organizationDashboardHeader-startScanLabel]')
           .hasText('t:startNewScan:()');
 
-        assert.dom('[data-test-uploadApp-root]').exists();
+        assert.dom('[data-test-uploadApp-input]').exists();
 
         assert.dom('[data-test-uploadApp-uploadBtn]').hasText('t:uploadApp:()');
         // assert.dom('[data-test-uploadAppViaLink-btn]').isNotDisabled();

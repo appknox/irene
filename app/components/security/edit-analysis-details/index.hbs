@@ -714,20 +714,29 @@
         <div class='column'>
           <form aria-label='file upload form'>
             <p class='control is-fullwidth'>
-              <FileUpload
-                @name='files'
-                @accept='*/*'
-                @onfileadd={{this.uploadFileWrapper}}
-              >
-                {{! template-lint-disable link-href-attributes }}
-                <a disabled={{this.isUploading}} class='button is-primary'>
+              {{#let
+                (file-queue
+                  name='uploadAnalysisDetails'
+                  onFileAdded=this.uploadFileWrapper
+                )
+                as |queue|
+              }}
+                <label disabled={{this.isUploading}} class='button is-primary'>
                   {{#if this.isUploading}}
                     Uploading...
                   {{else}}
                     Upload file
                   {{/if}}
-                </a>
-              </FileUpload>
+
+                  <input
+                    type='file'
+                    id='upload-analysis-details-input'
+                    disabled={{this.isUploading}}
+                    {{style width='1px' height='1px'}}
+                    {{queue.selectFile}}
+                  />
+                </label>
+              {{/let}}
             </p>
           </form>
         </div>

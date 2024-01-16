@@ -61,7 +61,7 @@ module('Integration | Component | upload-app', function (hooks) {
 
     await render(hbs`<UploadApp />`);
 
-    assert.dom('[data-test-uploadApp-root]').exists();
+    assert.dom('[data-test-uploadApp-input]').exists();
 
     assert.dom('[data-test-uploadApp-uploadBtn]').hasText('t:uploadApp:()');
     // assert.dom('[data-test-uploadAppViaLink-btn]').isNotDisabled();
@@ -129,7 +129,7 @@ module('Integration | Component | upload-app', function (hooks) {
 
     await render(hbs`<UploadApp />`);
 
-    assert.dom('[data-test-uploadApp-root]').exists();
+    assert.dom('[data-test-uploadApp-input]').exists();
 
     assert.dom('[data-test-uploadApp-uploadBtn]').hasText('t:uploadApp:()');
     // assert.dom('[data-test-uploadAppViaLink-btn]').isNotDisabled();
@@ -171,7 +171,7 @@ module('Integration | Component | upload-app', function (hooks) {
       type: 'application/vnd.android.package-archive',
     });
 
-    await selectFiles('[data-test-uploadApp-root] input', file);
+    await selectFiles('[data-test-uploadApp-input]', file);
 
     // open popover
     // await click('[data-test-uploadAppStatus-loader]');

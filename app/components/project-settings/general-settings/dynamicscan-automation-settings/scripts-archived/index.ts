@@ -8,6 +8,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import Store from '@ember-data/store';
 import IntlService from 'ember-intl/services/intl';
+import { UploadFile } from 'ember-file-upload';
 
 import ENV from 'irene/config/environment';
 import ProjectModel from 'irene/models/project';
@@ -116,7 +117,7 @@ export default class ProjectSettingsGeneralSettingsDyanmicscanAutomationSettings
     }
   });
 
-  uploadFile = task(async (file: any) => {
+  uploadFile = task(async (file: UploadFile) => {
     try {
       const urlGetSignedUrl = [
         ENV.endpoints['profiles'],
@@ -125,7 +126,7 @@ export default class ProjectSettingsGeneralSettingsDyanmicscanAutomationSettings
       ].join('/');
 
       const signedUrlData = {
-        file_name: file.blob.name,
+        file_name: file.name,
       };
 
       const signedUrlResponse = await this.ajax.post(urlGetSignedUrl, {
@@ -175,7 +176,7 @@ export default class ProjectSettingsGeneralSettingsDyanmicscanAutomationSettings
   });
 
   @action
-  uploadFileWrapper(file: any) {
+  uploadFileWrapper(file: UploadFile) {
     this.uploadFile.perform(file);
   }
 }
