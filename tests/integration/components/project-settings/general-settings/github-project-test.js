@@ -10,7 +10,7 @@ import {
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { Response } from 'miragejs';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 
 class NotificationsStub extends Service {
   errorMsg = null;

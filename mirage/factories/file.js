@@ -1,36 +1,36 @@
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import ENUMS from 'irene/enums';
 import { RISK_COLOR_CODE } from 'irene/utils/constants';
 import Base from './base';
 
 export default Base.extend({
-  uuid: faker.random.number(),
-  device_token: faker.random.number(),
-  md5hash: faker.random.number(),
-  sha1hash: faker.random.number(),
+  uuid: faker.number.int(),
+  device_token: faker.number.int(),
+  md5hash: faker.number.int(),
+  sha1hash: faker.number.int(),
   report: faker.internet.avatar(),
   manual: false,
-  api_scan_progress: faker.random.number(),
-  static_scan_progress: faker.random.number(),
-  is_static_done: faker.random.boolean(),
-  is_dynamic_done: faker.random.boolean(),
-  is_manual_done: faker.random.boolean(),
-  is_api_done: faker.random.boolean(),
-  can_generate_report: faker.random.boolean(),
+  api_scan_progress: faker.number.int(),
+  static_scan_progress: faker.number.int(),
+  is_static_done: faker.datatype.boolean(),
+  is_dynamic_done: faker.datatype.boolean(),
+  is_manual_done: faker.datatype.boolean(),
+  is_api_done: faker.datatype.boolean(),
+  can_generate_report: faker.datatype.boolean(),
 
-  risk_count_critical: () => faker.datatype.number(20),
-  risk_count_high: () => faker.datatype.number(20),
-  risk_count_low: () => faker.datatype.number(20),
-  risk_count_medium: () => faker.datatype.number(20),
-  risk_count_passed: () => faker.datatype.number(20),
-  risk_count_unknown: () => faker.datatype.number(20),
+  risk_count_critical: () => faker.number.int(20),
+  risk_count_high: () => faker.number.int(20),
+  risk_count_low: () => faker.number.int(20),
+  risk_count_medium: () => faker.number.int(20),
+  risk_count_passed: () => faker.number.int(20),
+  risk_count_unknown: () => faker.number.int(20),
 
   version() {
-    return faker.random.number();
+    return faker.number.int();
   },
 
   version_code() {
-    return faker.random.number();
+    return faker.number.int();
   },
 
   icon_url() {
@@ -38,46 +38,46 @@ export default Base.extend({
   },
 
   is_active() {
-    return faker.random.boolean();
+    return faker.datatype.boolean();
   },
 
   dynamic_status() {
-    return faker.random.arrayElement(ENUMS.DYNAMIC_STATUS.VALUES);
+    return faker.helpers.arrayElement(ENUMS.DYNAMIC_STATUS.VALUES);
   },
 
   name() {
-    return faker.company.companyName();
+    return faker.company.name();
   },
 
   created_on: faker.date.recent().toString(),
 
   doughnutData() {
-    const countRiskCritical = faker.datatype.number({
+    const countRiskCritical = faker.number.int({
       min: 0,
       max: 10,
     });
 
-    const countRiskHigh = faker.datatype.number({
+    const countRiskHigh = faker.number.int({
       min: 0,
       max: 10,
     });
 
-    const countRiskMedium = faker.datatype.number({
+    const countRiskMedium = faker.number.int({
       min: 0,
       max: 10,
     });
 
-    const countRiskLow = faker.datatype.number({
+    const countRiskLow = faker.number.int({
       min: 0,
       max: 10,
     });
 
-    const countRiskNone = faker.datatype.number({
+    const countRiskNone = faker.number.int({
       min: 0,
       max: 10,
     });
 
-    const countRiskUnknown = faker.datatype.number({
+    const countRiskUnknown = faker.number.int({
       min: 0,
       max: 10,
     });

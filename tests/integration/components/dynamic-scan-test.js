@@ -7,7 +7,7 @@ import { module, test } from 'qunit';
 import Service from '@ember/service';
 import { Response } from 'miragejs';
 import { selectChoose } from 'ember-power-select/test-support';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 
 import ENUMS from 'irene/enums';
 import { deviceType } from 'irene/helpers/device-type';

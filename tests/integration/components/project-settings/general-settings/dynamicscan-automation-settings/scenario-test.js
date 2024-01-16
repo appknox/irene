@@ -14,7 +14,7 @@ import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
 import Service from '@ember/service';
-import { Response } from 'ember-cli-mirage';
+import { Response } from 'miragejs';
 
 class NotificationsStub extends Service {
   errorMsg = null;

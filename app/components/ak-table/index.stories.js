@@ -1,5 +1,5 @@
 import { hbs } from 'ember-cli-htmlbars';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 
 export default {
   title: 'AkTable',
@@ -12,13 +12,13 @@ export const actionsData = {};
 const rows = Array.from(new Array(8)).map(() => {
   const data = {};
 
-  data.id = faker.datatype.number();
-  data.name = faker.name.firstName();
-  data.gender = faker.name.gender(true);
+  data.id = faker.number.int();
+  data.name = faker.person.firstName();
+  data.gender = faker.person.gender(true);
 
-  data.age = faker.datatype.number({ min: 18, max: 50 });
+  data.age = faker.number.int({ min: 18, max: 50 });
 
-  data.nationality = faker.address.country();
+  data.nationality = faker.location.country();
 
   return data;
 });

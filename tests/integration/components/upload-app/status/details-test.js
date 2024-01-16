@@ -4,7 +4,7 @@ import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 
 import ENUMS from 'irene/enums';
 import dayjs from 'dayjs';

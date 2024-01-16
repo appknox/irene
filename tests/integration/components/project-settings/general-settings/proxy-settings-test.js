@@ -4,7 +4,7 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
 import { click, fillIn, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import Service from '@ember/service';
 
 class NotificationsStub extends Service {

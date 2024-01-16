@@ -4,7 +4,7 @@ import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import styles from 'irene/components/app-monitoring/details/index.scss';
 
 module('Integration | Component | app-monitoring/details', function (hooks) {
@@ -18,7 +18,7 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
     this.file = this.store.createRecord('file', {
       id: 1,
       iconUrl: faker.internet.avatar(),
-      name: faker.company.companyName(),
+      name: faker.company.name(),
       version: '23.2.75',
       versionCode: '23.2.75',
     });
@@ -30,7 +30,7 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
     this.project = this.store.createRecord('project', {
       id: 1,
       lastFile: this.file,
-      platform: faker.random.arrayElement([0, 1]),
+      platform: faker.helpers.arrayElement([0, 1]),
       packageName: 'package_name.com',
     });
   });

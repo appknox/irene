@@ -8,7 +8,7 @@ import { setupIntl } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
 import Service from '@ember/service';
 import dayjs from 'dayjs';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 
 const idpMetadataFactory = () => ({
   id: 1,

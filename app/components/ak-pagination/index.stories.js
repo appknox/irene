@@ -2,7 +2,7 @@
 
 import { hbs } from 'ember-cli-htmlbars';
 import { computed } from '@ember/object';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 
 const paginationCommonArgs = {
   prevBtnLabel: 'Previous',

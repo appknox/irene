@@ -4,7 +4,7 @@ import { find, findAll, render, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 
 import ENUMS from 'irene/enums';
 import { analysisRiskStatus } from 'irene/helpers/analysis-risk-status';
@@ -97,7 +97,7 @@ module('Integration | Component | file-compare/table', function (hooks) {
       [
         'newRisks',
         ENUMS.ANALYSIS.COMPLETED,
-        faker.random.arrayElement(riskTypes),
+        faker.helpers.arrayElement(riskTypes),
         ENUMS.RISK.NONE,
       ],
       ['recurring', ENUMS.ANALYSIS.COMPLETED, ENUMS.RISK.HIGH, ENUMS.RISK.LOW],
