@@ -6,6 +6,6 @@ export default Factory.extend({
     return `nistsp80053-${i}`;
   },
 
-  title: faker.lorem.sentence(),
+  title: faker.lorem.sentence(5),
   description: faker.lorem.paragraph(),
 });

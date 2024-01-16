@@ -1,4 +1,4 @@
-{{! template-lint-disable no-curly-component-invocation link-href-attributes }}
+{{! template-lint-disable no-curly-component-invocation }}
 <div local-class='sso-settings-header-container'>
   <AkTypography data-test-ssoSetting-title @variant='h5' @gutterBottom={{true}}>
     {{t 'singleSignOn'}}
@@ -349,55 +349,65 @@
             </AkStack>
           </AkStack>
         {{else}}
-          <FileDropzone @name='files' as |dropzone|>
-            {{#if dropzone.supported}}
-              <AkStack
-                @direction='column'
-                @alignItems='center'
-                @justifyContent='center'
-                @spacing='2'
-                class='p-2'
-                local-class='{{if dropzone.active "dropzone-upload-active"}}'
-              >
-                <img
-                  data-test-ssoSetting-idpUploadFileIcon
-                  width='32'
-                  src='/images/xml.svg'
-                  alt='xml'
-                />
-
+          {{#let
+            (file-queue
+              name='uploadIdpMetadataXml'
+              onFileAdded=(perform this.parseIdpMetadataXml)
+            )
+            as |queue|
+          }}
+            <FileDropzone @queue={{queue}} as |dropzone|>
+              {{#if dropzone.supported}}
                 <AkStack
-                  data-test-ssoSetting-idpUploadFileDragDropText
+                  @direction='column'
                   @alignItems='center'
-                  @spacing='1'
+                  @justifyContent='center'
+                  @spacing='2'
+                  class='p-2'
+                  local-class='{{if dropzone.active "dropzone-upload-active"}}'
                 >
-                  <AkIcon @color='textPrimary' @iconName='file-upload' />
+                  <img
+                    data-test-ssoSetting-idpUploadFileIcon
+                    width='32'
+                    src='/images/xml.svg'
+                    alt='xml'
+                  />
 
-                  <AkTypography>
-                    {{t 'dragDropFile'}}
-                  </AkTypography>
+                  <AkStack
+                    data-test-ssoSetting-idpUploadFileDragDropText
+                    @alignItems='center'
+                    @spacing='1'
+                  >
+                    <AkIcon @color='textPrimary' @iconName='file-upload' />
 
-                  <AkTypography @color='textSecondary'>
-                    {{t 'or'}}
-                  </AkTypography>
-                </AkStack>
+                    <AkTypography>
+                      {{t 'dragDropFile'}}
+                    </AkTypography>
 
-                <FileUpload
-                  data-test-ssoSetting-idpUploadFileLabel
-                  @name='files'
-                  @accept='text/xml'
-                  @onfileadd={{perform this.parseIdpMetadataXml}}
-                >
-                  <a
+                    <AkTypography @color='textSecondary'>
+                      {{t 'or'}}
+                    </AkTypography>
+                  </AkStack>
+
+                  <label
                     data-test-ssoSetting-idpUploadFileBtn
                     local-class='browse-file-btn'
                   >
                     {{t 'browseFiles'}}
-                  </a>
-                </FileUpload>
-              </AkStack>
-            {{/if}}
-          </FileDropzone>
+
+                    <input
+                      data-test-ssoSetting-idpUploadFileInput
+                      type='file'
+                      id='upload-idp-metadata-xml-file-input'
+                      accept='text/xml'
+                      {{style width='1px' height='1px'}}
+                      {{queue.selectFile}}
+                    />
+                  </label>
+                </AkStack>
+              {{/if}}
+            </FileDropzone>
+          {{/let}}
         {{/if}}
       {{/if}}
     {{/if}}

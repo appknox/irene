@@ -1,13 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import {
-  render,
-  findAll,
-  find,
-  click,
-  triggerEvent,
-  waitUntil,
-} from '@ember/test-helpers';
+import { render, findAll, find, click, waitUntil } from '@ember/test-helpers';
+import { dragAndDrop, selectFiles } from 'ember-file-upload/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
@@ -305,7 +299,7 @@ module('Integration | Component | sso-settings', function (hooks) {
       .dom('[data-test-ssoSetting-idpUploadFileDragDropText]')
       .hasText('t:dragDropFile:() t:or:()');
 
-    assert.dom('[data-test-ssoSetting-idpUploadFileLabel]').exists();
+    assert.dom('[data-test-ssoSetting-idpUploadFileInput]').exists();
 
     assert
       .dom('[data-test-ssoSetting-idpUploadFileBtn]')
@@ -375,8 +369,8 @@ module('Integration | Component | sso-settings', function (hooks) {
 
   test.each(
     'it should upload IdP metadata in sso-settings',
-    [{ fail: false }, { fail: true }],
-    async function (assert, { fail }) {
+    [{ fail: false }, { dragDrop: true, fail: false }, { fail: true }],
+    async function (assert, { fail, dragDrop }) {
       const organization = this.owner.lookup('service:organization').selected;
 
       this.setProperties({ organization, returnIdpMetaData: false });
@@ -405,20 +399,17 @@ module('Integration | Component | sso-settings', function (hooks) {
 
       await render(hbs`<SsoSettings @organization={{this.organization}} />`);
 
-      assert.dom('[data-test-ssoSetting-idpUploadFileLabel]').exists();
+      assert.dom('[data-test-ssoSetting-idpUploadFileInput]').exists();
 
       const { metadata } = this.metadata;
 
-      let blob = new Blob([metadata], { type: 'text/xml' });
-      blob.name = 'appknox.xml';
+      let file = new File([metadata], 'appknox.xml', { type: 'text/xml' });
 
-      await triggerEvent(
-        '[data-test-ssoSetting-idpUploadFileLabel] input',
-        'change',
-        {
-          files: [blob],
-        }
-      );
+      if (dragDrop) {
+        await dragAndDrop('[data-test-ssoSetting-idpUploadFileInput]', file);
+      } else {
+        await selectFiles('[data-test-ssoSetting-idpUploadFileInput]', file);
+      }
 
       await waitUntil(
         () => {

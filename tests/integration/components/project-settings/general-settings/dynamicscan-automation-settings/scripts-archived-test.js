@@ -189,7 +189,7 @@ module(
         `);
 
         assert
-          .dom('[data-test-genSettings-dynScanAutoSettings-uploadZip]')
+          .dom('[data-test-genSettings-dynScanAutoSettings-uploadZipInput]')
           .exists();
 
         assert
@@ -205,7 +205,7 @@ module(
         });
 
         await selectFiles(
-          '[data-test-genSettings-dynScanAutoSettings-uploadZip] input',
+          '[data-test-genSettings-dynScanAutoSettings-uploadZipInput]',
           file
         );
 
@@ -335,7 +335,7 @@ module(
       });
 
       await selectFiles(
-        '[data-test-genSettings-dynScanAutoSettings-uploadZip] input',
+        '[data-test-genSettings-dynScanAutoSettings-uploadZipInput]',
         file
       );
 

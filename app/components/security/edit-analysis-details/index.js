@@ -544,7 +544,7 @@ export default class EditAnalysisDetailsComponent extends Component {
 
   @task(function* (file) {
     this.isUploading = true;
-    const fileName = file.blob.name;
+    const fileName = file.name;
     const data = {
       name: fileName,
     };

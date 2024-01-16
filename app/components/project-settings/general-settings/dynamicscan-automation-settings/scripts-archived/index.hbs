@@ -54,17 +54,18 @@
     </AkTypography>
   </AkStack>
 
-  <FileUpload
-    @name='files'
-    @accept='*/*'
-    disabled={{this.uploadFile.isRunning}}
-    @onfileadd={{this.uploadFileWrapper}}
-    data-test-genSettings-dynScanAutoSettings-uploadZip
-  >
+  {{#let
+    (file-queue
+      name='uploadDynamicscanAutomationScript'
+      onFileAdded=this.uploadFileWrapper
+    )
+    as |queue|
+  }}
     <AkButton
-      @tag='a'
+      @tag='label'
       @variant='outlined'
       @typographyFontWeight='medium'
+      @disabled={{this.uploadFile.isRunning}}
       data-test-genSettings-dynScanAutoSettings-uploadZipBtn
     >
       {{#if this.uploadFile.isRunning}}
@@ -72,8 +73,17 @@
       {{else}}
         {{t 'uploadZipFile'}}
       {{/if}}
+
+      <input
+        data-test-genSettings-dynScanAutoSettings-uploadZipInput
+        type='file'
+        id='upload-dynamicscan-automation-script-input'
+        disabled={{this.uploadFile.isRunning}}
+        {{style width='1px' height='1px'}}
+        {{queue.selectFile}}
+      />
     </AkButton>
-  </FileUpload>
+  {{/let}}
 
   {{#if this.automationScripts}}
     <AkStack
