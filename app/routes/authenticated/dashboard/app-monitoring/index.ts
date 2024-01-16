@@ -3,10 +3,13 @@ import { inject as service } from '@ember/service';
 import OrganizationService from 'irene/services/organization';
 import AppMonitoringService from 'irene/services/appmonitoring';
 import AMConfigurationModel from 'irene/models/amconfiguration';
+import RouterService from '@ember/routing/router-service';
 
 interface QueryParams {
   app_limit: number;
   app_offset: number;
+  app_query: string;
+  app_platform: number;
 }
 
 export interface AppMonitoringRouteModel {
@@ -16,6 +19,7 @@ export interface AppMonitoringRouteModel {
 export default class AuthenticatedDashboardAppMonitoringIndexRoute extends Route {
   @service declare organization: OrganizationService;
   @service declare appmonitoring: AppMonitoringService;
+  @service declare router: RouterService;
 
   queryParams = {
     app_limit: {
@@ -24,21 +28,29 @@ export default class AuthenticatedDashboardAppMonitoringIndexRoute extends Route
     app_offset: {
       refreshModel: true,
     },
+    app_query: {
+      refreshModel: true,
+    },
+    app_platform: {
+      refreshModel: true,
+    },
   };
 
   beforeModel() {
     if (!this.organization.selected?.features.app_monitoring) {
-      this.transitionTo('authenticated.projects');
+      this.router.transitionTo('authenticated.projects');
     }
   }
 
   async model(q: QueryParams): Promise<AppMonitoringRouteModel> {
-    const { app_limit, app_offset } = q;
+    const { app_limit, app_offset, app_query, app_platform } = q;
 
-    await this.appmonitoring
+    this.appmonitoring
       .setLimitOffset({
         limit: app_limit,
         offset: app_offset,
+        query: app_query,
+        platform: app_platform,
       })
       .reload();
 

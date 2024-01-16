@@ -963,8 +963,8 @@
       "bodyText": "Click on this row to get more details."
     }
   },
-  "appMonitoringHeading": "Store Monitoring Setting",
-  "appMonitoringDescription": "Once enabled, our platform will monitor for any unscanned versions of your applications on Google Play Store or Apple App Store. If any such applications are found, the list below will be updated automatically at 24 hour intervals.",
+  "appMonitoringHeading": "Store Monitoring",
+  "appMonitoringDescription": "Once enabled, our platform will monitor for any unscanned versions of your applications on Google Play Store or Apple App Store.",
   "project": "project",
   "projectCollaboratorAdded": "Added collaborator to project",
   "projectCount": "Projects count",
