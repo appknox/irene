@@ -6,7 +6,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { Response } from 'miragejs';
 import { selectChoose } from 'ember-power-select/test-support';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 
 import ENUMS from 'irene/enums';
 import Service from '@ember/service';

@@ -1,7 +1,7 @@
 import { click, findAll, render, select } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupRenderingTest } from 'ember-qunit';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import { module, test } from 'qunit';
 import { selectChoose } from 'ember-power-select/test-support';
 import styles from 'irene/components/ak-pagination/index.scss';

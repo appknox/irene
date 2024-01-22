@@ -4,7 +4,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { setupIntl } from 'ember-intl/test-support';
 import { click, fillIn, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import styles from 'irene/components/partner/credit-transfer/credit-transfer-input/index.scss';
 
 module(
@@ -17,7 +17,7 @@ module(
       this.set('partnerPlan', {
         scansLeft: 21,
       });
-      this.set('clientName', faker.company.companyName());
+      this.set('clientName', faker.company.name());
       this.set('transferCount', 20);
       this.set('remainingCredits', 1);
       this.set('toggleMode', () => {});

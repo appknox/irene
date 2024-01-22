@@ -1,10 +1,10 @@
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import Base from './base';
 
 export default Base.extend({
-  automated_upload: faker.random.boolean(),
-  monitoring_enabled: faker.random.boolean(),
-  is_active: faker.random.boolean(),
+  automated_upload: faker.datatype.boolean(),
+  monitoring_enabled: faker.datatype.boolean(),
+  is_active: faker.datatype.boolean(),
 
   is_pending() {
     return !this.last_sync?.id;

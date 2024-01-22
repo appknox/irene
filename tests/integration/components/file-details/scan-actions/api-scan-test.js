@@ -6,7 +6,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import Service from '@ember/service';
 import { Response } from 'miragejs';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 
 import ENUMS from 'irene/enums';
 

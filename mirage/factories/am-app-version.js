@@ -1,4 +1,4 @@
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import ENUMS from 'irene/enums';
 import Base from './base';
 
@@ -8,22 +8,24 @@ export default Base.extend({
   },
 
   app_name() {
-    return faker.company.companyName();
+    return faker.company.name();
   },
 
   version() {
-    return faker.random.number();
+    return faker.number.int();
   },
 
   version_code() {
-    return faker.random.number();
+    return faker.number.int();
   },
 
   comparable_version() {
     const platform = this.am_app?.project?.platform;
+
     if (platform === ENUMS.PLATFORM.IOS) {
       return this.version;
     }
+
     return this.version_code;
   },
 

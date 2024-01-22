@@ -1,5 +1,5 @@
-import { Factory, trait } from 'ember-cli-mirage';
-import faker from 'faker';
+import { Factory, trait } from 'miragejs';
+import { faker } from '@faker-js/faker';
 import ENUMS from 'irene/enums';
 
 export default Factory.extend({
@@ -20,17 +20,17 @@ export default Factory.extend({
   ],
 
   isIgnored: faker.datatype.boolean(),
-  overridenRisk: faker.random.arrayElement([null, 1, 2, 3, 4]),
-  status: faker.random.arrayElement(ENUMS.ANALYSIS.VALUES),
+  overridenRisk: faker.helpers.arrayElement([null, 1, 2, 3, 4]),
+  status: faker.helpers.arrayElement(ENUMS.ANALYSIS.VALUES),
   created_on: faker.date.past(),
   updated_on: faker.date.past(),
 
   risk() {
-    return faker.random.arrayElement(ENUMS.RISK.VALUES);
+    return faker.helpers.arrayElement(ENUMS.RISK.VALUES);
   },
 
   computed_risk() {
-    return faker.random.arrayElement(ENUMS.RISK.VALUES);
+    return faker.helpers.arrayElement(ENUMS.RISK.VALUES);
   },
 
   findings() {

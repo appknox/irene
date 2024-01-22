@@ -12,7 +12,7 @@ import {
 
 import Service from '@ember/service';
 import dayjs from 'dayjs';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 
 class OrganizationMeStub extends Service {
   org = {

@@ -12,7 +12,7 @@ import {
 
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 
 class OrganizationStub extends Service {
   selected = {
@@ -327,7 +327,7 @@ module('Integration | Component | project list', function (hooks) {
     // Creating project list with atleast 1 item having platform value of 0
     const projects = Array.from(new Array(8)).map((_, i) => {
       return this.server.create('project', {
-        platform: i === 2 ? 0 : faker.random.arrayElement([0, 1]),
+        platform: i === 2 ? 0 : faker.helpers.arrayElement([0, 1]),
       });
     });
 

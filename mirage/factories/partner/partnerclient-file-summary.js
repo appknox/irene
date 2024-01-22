@@ -1,13 +1,13 @@
-import { Factory } from 'ember-cli-mirage';
-import faker from 'faker';
+import { Factory } from 'miragejs';
+import { faker } from '@faker-js/faker';
 
 export default Factory.extend({
-  riskCountCritical: faker.datatype.number({ min: 0, max: 100 }),
-  riskCountHigh: faker.datatype.number({ min: 0, max: 100 }),
-  riskCountMedium: faker.datatype.number({ min: 0, max: 100 }),
-  riskCountLow: faker.datatype.number({ min: 0, max: 100 }),
-  riskCountPassed: faker.datatype.number({ min: 0, max: 100 }),
-  riskCountUntested: faker.datatype.number({ min: 0, max: 100 }),
+  riskCountCritical: faker.number.int({ min: 0, max: 100 }),
+  riskCountHigh: faker.number.int({ min: 0, max: 100 }),
+  riskCountMedium: faker.number.int({ min: 0, max: 100 }),
+  riskCountLow: faker.number.int({ min: 0, max: 100 }),
+  riskCountPassed: faker.number.int({ min: 0, max: 100 }),
+  riskCountUntested: faker.number.int({ min: 0, max: 100 }),
 
   totalCount() {
     return (
@@ -19,6 +19,7 @@ export default Factory.extend({
       this.riskCountUntested
     );
   },
+
   criticalPercent() {
     return (this.riskCountCritical / this.totalCount) * 100;
   },

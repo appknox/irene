@@ -1,8 +1,7 @@
 import config from 'irene/config/environment';
-import { Response } from 'miragejs';
+import { Response, createServer } from 'miragejs';
 
 import {
-  createServer,
   discoverEmberDataModels,
   applyEmberDataSerializers,
 } from 'ember-cli-mirage';
@@ -11,7 +10,7 @@ export default function makeServer(config) {
   let finalConfig = {
     ...config,
     models: {
-      ...discoverEmberDataModels(),
+      ...discoverEmberDataModels(config.store),
       ...config.models,
     },
     serializers: applyEmberDataSerializers(config.serializers),

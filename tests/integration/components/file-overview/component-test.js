@@ -3,7 +3,7 @@ import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import { module, test } from 'qunit';
 
 module('Integration | Component | file-overview', function (hooks) {
@@ -16,18 +16,18 @@ module('Integration | Component | file-overview', function (hooks) {
     this.project = this.store.createRecord('project', {
       id: 1,
       isManualScanAvailable: true,
-      name: faker.company.companyName(),
+      name: faker.company.name(),
       packageName: 'MFVA',
     });
 
     this.file = this.store.createRecord('file', {
       id: 1,
       project: this.project,
-      name: faker.company.companyName(),
+      name: faker.company.name(),
       iconUrl:
         'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/315.jpg',
-      version: faker.random.number(),
-      versionCode: faker.random.number(),
+      version: faker.number.int(),
+      versionCode: faker.number.int(),
     });
 
     this.server.create('profile');

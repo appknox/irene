@@ -4,7 +4,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { setupIntl } from 'ember-intl/test-support';
 import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 
 module(
   'Integration | Component | partner/credit-transfer/credit-transfer-confirm',
@@ -48,7 +48,7 @@ module(
 
     test('it renders client credits section', async function (assert) {
       this.set('clientPlan', { scansLeft: 26 });
-      this.set('clientName', faker.company.companyName());
+      this.set('clientName', faker.company.name());
       this.set('transferCount', 15);
 
       await render(hbs`<Partner::CreditTransfer::CreditTransferConfirm

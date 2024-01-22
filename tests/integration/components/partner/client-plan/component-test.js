@@ -5,7 +5,7 @@ import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
 import dayjs from 'dayjs';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import { underscore } from '@ember/string';
 import styles from 'irene/components/partner/client-plan/styles';
 
