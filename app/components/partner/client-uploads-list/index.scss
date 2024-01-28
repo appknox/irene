@@ -4,6 +4,7 @@
   display: flex;
   align-items: center;
 }
+
 .title {
   font-size: 1.1rem;
   font-weight: bold;
@@ -15,6 +16,7 @@
   border: 1px solid var(--border-table);
   border-radius: 0.3rem;
 }
+
 .table-header {
   display: grid;
   align-items: center;
@@ -24,6 +26,7 @@
   word-break: break-all;
   text-transform: capitalize;
 }
+
 .table-row {
   border-top: 1px solid var(--border-table);
   display: grid;
@@ -33,14 +36,17 @@
   padding: 0.5rem 0.8rem;
   min-height: 2.5rem;
 }
+
 .table-header,
 .table-row {
   grid-template-columns: 1.3fr 1fr 1fr;
   gap: 2rem;
+
   &.has-report-column {
     grid-template-columns: 1fr 16% 13% 0.6fr 14rem;
     gap: 0.8rem;
   }
+
   &.has-results-column {
     grid-template-columns: 1fr 16% 13% 0.6fr;
     gap: 0.8rem;
@@ -52,6 +58,7 @@
   grid-template-columns: 3rem 1fr;
   gap: 0.5rem;
 }
+
 .app-icon {
   width: 3rem;
   height: 3rem;
@@ -62,6 +69,7 @@
   background-position: center center;
   background-repeat: no-repeat;
 }
+
 .app-name {
   color: var(--black-900);
 }
@@ -69,25 +77,32 @@
 .fileid-key {
   color: var(--black-300);
 }
+
 .fileid-value {
   color: var(--black-900);
 }
+
 .version-info {
   font-size: 0.95em;
 }
+
 .version {
   width: 100%;
   word-break: break-word;
 }
+
 .version-key {
   color: var(--black-300);
 }
+
 .version-value {
   color: var(--black-900);
 }
+
 .uploaded {
   color: var(--black-300);
 }
+
 .summary {
   padding-right: 2rem;
 }

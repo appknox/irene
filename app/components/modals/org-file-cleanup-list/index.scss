@@ -3,14 +3,10 @@
     display: grid;
     grid-template-columns: 100px 1fr 1fr;
     align-items: center;
-  }
-
-  .list-head {
     height: 40px;
     font-weight: bold;
     box-shadow: 0px 2px 4px -4px #000;
     padding: 0 8px;
-    font-weight: bold;
   }
 
   .list-body {
