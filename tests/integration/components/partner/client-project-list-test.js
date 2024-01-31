@@ -6,6 +6,20 @@ import { setupIntl } from 'ember-intl/test-support';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
+import Service from '@ember/service';
+
+class NotificationsStub extends Service {
+  errorMsg = null;
+  successMsg = null;
+
+  error(msg) {
+    this.errorMsg = msg;
+  }
+  success(msg) {
+    this.successMsg = msg;
+  }
+}
+
 function serializer(data, many = false) {
   if (many === true) {
     return {
@@ -42,6 +56,8 @@ module(
     hooks.beforeEach(async function () {
       await this.server.createList('organization', 2);
       await this.owner.lookup('service:organization').load();
+
+      this.owner.register('service:notifications', NotificationsStub);
     });
 
     test('it should show header with title and total count as 0', async function (assert) {
@@ -169,7 +185,7 @@ module(
       });
       await this.owner.lookup('service:partner').load();
 
-      this.server.createList('partner/partnerclient-project', 10);
+      this.server.createList('partner/partnerclient-project', 12);
 
       this.server.get('v2/partnerclients/:clientId/projects', (schema) => {
         const data = schema['partner/partnerclientProjects'].all();

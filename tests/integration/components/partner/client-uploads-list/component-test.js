@@ -242,7 +242,7 @@ module(
         };
       });
       await this.owner.lookup('service:partner').load();
-      this.server.createList('partner/partnerclient-project-file', 10);
+      this.server.createList('partner/partnerclient-project-file', 12);
       this.server.get(
         'v2/partnerclients/:clientId/projects/:projectId/files',
         (schema) => {
