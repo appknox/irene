@@ -4,10 +4,12 @@
     // The combination of `baseUrl` with `paths` allows Ember's classic package
     // layout, which is not resolvable with the Node resolution algorithm, to
     // work with TypeScript.
+    "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
       "irene/tests/*": ["tests/*"],
       "irene/mirage/*": ["mirage/*"],
+      "irene/cypress/*": ["cypress/*"],
       "irene/*": ["app/*"],
       "*": ["types/*"]
     }
@@ -15,5 +17,11 @@
   "glint": {
     "environment": "ember-loose"
   },
-  "include": ["app/**/*", "tests/**/*", "types/**/*", "mirage/**/*"]
+  "include": [
+    "app/**/*",
+    "tests/**/*",
+    "types/**/*",
+    "mirage/**/*",
+    "cypress/support/Mirage/e2e.config.ts"
+  ]
 }
