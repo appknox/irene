@@ -2,8 +2,8 @@ import { faker } from '@faker-js/faker';
 import ENUMS from 'irene/enums';
 import Base from './base';
 
-export default Base.extend({
-  id(i) {
+export const PROJECT_FACTORY_DEF = {
+  id(i: number) {
     return i + 1;
   },
 
@@ -21,7 +21,7 @@ export default Base.extend({
     return faker.company.name();
   },
 
-  active_profile_id(i) {
+  active_profile_id(i: number) {
     return i + 1;
   },
 
@@ -46,7 +46,9 @@ export default Base.extend({
   },
 
   platformIconClass() {
-    switch (this.platform) {
+    const platform = this.platform as unknown as number;
+
+    switch (platform) {
       case ENUMS.PLATFORM.ANDROID:
         return 'android';
       case ENUMS.PLATFORM.IOS:
@@ -67,4 +69,6 @@ export default Base.extend({
 
     return desc.join(',');
   },
-});
+};
+
+export default Base.extend(PROJECT_FACTORY_DEF);

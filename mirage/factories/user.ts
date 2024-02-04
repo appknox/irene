@@ -1,8 +1,8 @@
 import { Factory } from 'miragejs';
 import { faker } from '@faker-js/faker';
 
-export default Factory.extend({
-  id(i) {
+export const USER_FACTORY_DEF = {
+  id(i: number) {
     return i + 1;
   },
 
@@ -26,4 +26,6 @@ export default Factory.extend({
   'crisp-hash':
     '662b72521f5ae389e23bfcbad9c45910167e576f93f865cf8edb5e895fa08a38',
   'can-disable-mfa': faker.datatype.boolean(),
-});
+};
+
+export default Factory.extend(USER_FACTORY_DEF);

@@ -7,7 +7,7 @@ const roleDisplayMap = {
   2: 'Admin',
 };
 
-export default Factory.extend({
+export const ORGANIZATION_MEMBER_FACTORY_DEF = {
   created_on: faker.date.past(),
   is_active: true,
 
@@ -17,7 +17,7 @@ export default Factory.extend({
     return role === 1 || role === 2;
   },
 
-  member(i) {
+  member(i: number) {
     return i + 1;
   },
 
@@ -30,4 +30,6 @@ export default Factory.extend({
   },
 
   last_logged_in: faker.date.past(),
-});
+};
+
+export default Factory.extend(ORGANIZATION_MEMBER_FACTORY_DEF);
