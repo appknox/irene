@@ -1,0 +1,29 @@
+{
+  "name": "Appknox",
+  "hide_poweredby_logo": true,
+  "url": "https://secure.appknox.com",
+  "registration_enabled": false,
+  "registration_link": "https://www.appknox.com/book-a-demo",
+  "integrations": {
+    "crisp_key": "806bf0a8-c022-4a1f-ae9b-ecb859c001b4",
+    "hotjar_key": "",
+    "pendo_key": "",
+    "csb_key": "",
+    "rollbar_key": "",
+    "freshdesk_configuration": {
+      "widget_id": ""
+    }
+  },
+  "images": {
+    "logo_on_darkbg": "",
+    "logo_on_lightbg": "",
+    "favicon": ""
+  },
+  "theme": {
+    "scheme": "dark",
+    "primary_color": "#FF4C50",
+    "primary_alt_color": "#DF4500",
+    "secondary_color": "",
+    "secondary_alt_color": ""
+  }
+}

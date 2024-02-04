@@ -2,7 +2,7 @@ import { Factory } from 'miragejs';
 import { faker } from '@faker-js/faker';
 import ENUMS from 'irene/enums';
 
-export default Factory.extend({
+export const SUBMISSION_FACTORY_DEF = {
   meta_data: faker.lorem.sentence(),
   reason: faker.lorem.sentence(),
   package_name: faker.internet.domainName(),
@@ -28,4 +28,6 @@ export default Factory.extend({
   }),
 
   created_on: () => faker.date.recent().toString(),
-});
+};
+
+export default Factory.extend(SUBMISSION_FACTORY_DEF);
