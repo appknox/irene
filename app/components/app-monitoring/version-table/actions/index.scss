@@ -1,0 +1,18 @@
+.horizontal-divider {
+  display: block;
+  height: 17px;
+  width: 1px;
+  background-color: var(--appmonitoring-version-table-divider-bg);
+  margin: 0 0.5em;
+}
+
+.tooltip-content {
+  width: 260px;
+  padding: 0.5em;
+  box-sizing: border-box;
+  white-space: normal;
+}
+
+.flip-icon {
+  transform: rotate(180deg);
+}

@@ -7,6 +7,9 @@
   />
 </AkBreadcrumbs::Container>
 
-<AppMonitoring::Details @amApp={{@model}} />
+<AppMonitoring::Details
+  @amApp={{@model.amApp}}
+  @amOrgSettings={{@model.settings}}
+/>
 
 {{outlet}}

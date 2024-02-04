@@ -1,0 +1,180 @@
+{{#if this.showNoActionText}}
+  <AkTypography
+    @color='textSecondary'
+    data-test-amVersionTable-noActionRequired
+  >
+    {{t 'noActionRequired' htmlSafe=true}}
+  </AkTypography>
+{{else}}
+  {{#if (or this.showAppUploadState this.relatedVersionSubmissionRecord)}}
+    {{#if this.submissionStatus.failed}}
+      <AkStack @alignItems='center' @justifyContent='center'>
+        <AkStack @alignItems='center' @justifyContent='center' @spacing='1'>
+          <AkIcon
+            @iconName='error'
+            @size='small'
+            @color='error'
+            data-test-amVersionTable-initiateUpload-errorIcon
+          />
+
+          <AkTypography data-test-amVersionTable-initiateUpload-errorText>
+            {{t 'error'}}
+          </AkTypography>
+        </AkStack>
+
+        <span local-class='horizontal-divider'></span>
+
+        <AkButton
+          @typographyFontWeight='medium'
+          @variant='text'
+          @underline='always'
+          @color='primary'
+          {{on 'click' this.toggleShowErrorDetailsModal}}
+          data-test-amVersionTable-initiateUpload-errorInfoModalTrigger
+        >
+          {{t 'appMonitoringModule.checkDetails'}}
+        </AkButton>
+      </AkStack>
+
+    {{else}}
+      <AkStack @alignItems='center' @justifyContent='center' @spacing='1'>
+        <AkIcon
+          @iconName={{if this.appIsAnalyzing 'download-done' 'downloading'}}
+          @size='small'
+          @color={{if this.appIsAnalyzing 'success' 'info'}}
+          local-class='{{unless this.appIsAnalyzing "flip-icon"}}'
+          data-test-amVersionTable-initiateUpload-loadingOrSuccessIcon
+        />
+
+        <AkTypography
+          data-test-amVersionTable-initiateUpload-loadingOrSuccessText
+        >
+          {{if
+            this.appIsAnalyzing
+            (t 'completed')
+            (concat (t 'uploading') '...')
+          }}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  {{else if this.resolveVersionSubmission.isRunning}}
+    <AkLoader @size={{16}} />
+  {{else}}
+    <AkTooltip
+      @disabled={{not this.isIOSApp}}
+      @placement='left'
+      @arrow={{true}}
+      data-test-amVersionTable-initiateUploadBtn-tooltip
+    >
+      <:tooltipContent>
+        <div local-class='tooltip-content'>
+          <AkTypography
+            @color='inherit'
+            data-test-amVersionTable-initiateUploadBtn-tooltipText
+          >
+            {{t 'appMonitoringModule.initiateUploadComingSoon'}}
+          </AkTypography>
+        </div>
+      </:tooltipContent>
+
+      <:default>
+        <AkButton
+          @disabled={{this.isIOSApp}}
+          @loading={{this.initiateUpload.isRunning}}
+          {{on 'click' this.triggerInitiateUpload}}
+          data-test-amVersionTable-initiateUploadBtn
+        >
+          <:leftIcon>
+            <AkIcon @iconName='cloud-upload' @variant='filled' />
+          </:leftIcon>
+
+          <:default>
+            {{t 'appMonitoringModule.initiateUpload'}}
+          </:default>
+        </AkButton>
+      </:default>
+    </AkTooltip>
+  {{/if}}
+{{/if}}
+
+{{#if this.showErrorDetailsModal}}
+  <AkModal
+    @headerTitle='Error Details'
+    @onClose={{this.toggleShowErrorDetailsModal}}
+    @noGutter={{true}}
+    @showHeader={{true}}
+  >
+    <:default>
+      <AkStack
+        @direction='column'
+        @spacing='3'
+        class='p-3'
+        {{style maxWidth='500px'}}
+        data-test-amVersionTable-initiateUpload-errorInfoModalContainer
+      >
+        <AkSvg::AmVersionUploadError
+          data-test-amVersionTable-initiateUpload-errorInfoIllustration
+        />
+
+        <AkStack @width='full' @direction='column' class='pl-1' @spacing='1.5'>
+          <AkTypography data-test-amVersionTable-initiateUpload-errorReasonText>
+            {{this.relatedVersionSubmissionRecord.reason}}
+          </AkTypography>
+
+          <AkDivider @color='light' />
+
+          <AkStack @spacing='0.5'>
+            <AkIcon
+              @iconName='event-note'
+              data-test-amVersionTable-initiateUpload-lastUploadAttemptCalendarIcon
+            />
+
+            <AkTypography
+              @fontWeight='medium'
+              @color='secondary'
+              data-test-amVersionTable-initiateUpload-lastUploadAttempt
+            >
+              {{t 'appMonitoringModule.lastUploadAttemptText'}}
+              -
+              {{day-js
+                date=this.relatedVersionSubmissionRecord.createdOn
+                format='Do MMM YYYY'
+              }}
+            </AkTypography>
+          </AkStack>
+        </AkStack>
+      </AkStack>
+    </:default>
+
+    <:footer>
+      <AkDivider />
+
+      <AkStack
+        @justifyContent='flex-start'
+        @alignItems='center'
+        @spacing='1.5'
+        local-class='parameter-modal-footer-container'
+        class='px-3 py-2'
+        data-test-amVersionTable-initiateUpload-errorInfoModalFooterContainer
+      >
+        <AkButton
+          @variant='filled'
+          @loading={{this.initiateUpload.isRunning}}
+          {{on 'click' (perform this.retryAppVersionUpload)}}
+          data-test-amVersionTable-initiateUpload-retryBtn
+        >
+          {{t 'appMonitoringModule.retryUpload'}}
+        </AkButton>
+
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          {{on 'click' this.toggleShowErrorDetailsModal}}
+          data-test-amVersionTable-initiateUpload-retryCancelBtn
+        >
+          {{t 'cancel'}}
+        </AkButton>
+      </AkStack>
+    </:footer>
+  </AkModal>
+{{/if}}
