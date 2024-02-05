@@ -34,27 +34,27 @@ export default class FileChartComponent extends Component<FileChartSignature> {
 
     const severityCountObjects = [
       {
-        value: file?.countRiskCritical,
+        value: file?.get('countRiskCritical'),
         name: this.intl.t('critical'),
         severityType: 'critical',
       },
       {
-        value: file?.countRiskHigh,
+        value: file?.get('countRiskHigh'),
         name: this.intl.t('high'),
         severityType: 'high',
       },
       {
-        value: file?.countRiskMedium,
+        value: file?.get('countRiskMedium'),
         name: this.intl.t('medium'),
         severityType: 'medium',
       },
       {
-        value: file?.countRiskLow,
+        value: file?.get('countRiskLow'),
         name: this.intl.t('low'),
         severityType: 'low',
       },
       {
-        value: file?.countRiskNone,
+        value: file?.get('countRiskNone'),
         name: this.intl.t('passed'),
         severityType: 'passed',
       },
@@ -62,7 +62,7 @@ export default class FileChartComponent extends Component<FileChartSignature> {
 
     if (this.unknownAnalysisStatus?.status) {
       severityCountObjects.push({
-        value: file?.countRiskUnknown,
+        value: file?.get('countRiskUnknown'),
         name: this.intl.t('untested'),
         severityType: 'none',
       });

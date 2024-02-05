@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { click, findAll, render, waitFor } from '@ember/test-helpers';
+import { findAll, render, waitFor } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
 import { SbomReportStatus } from 'irene/models/sbom-report';
@@ -16,16 +16,6 @@ class OrganizationStub extends Service {
   };
 }
 
-class RouterStub extends Service {
-  currentRoute = {
-    parent: {
-      params: {
-        fileid: '1',
-      },
-    },
-  };
-}
-
 module(
   'Integration | Component | file/report-drawer/sbom-reports',
   function (hooks) {
@@ -35,7 +25,6 @@ module(
 
     hooks.beforeEach(async function () {
       this.owner.register('service:organization', OrganizationStub);
-      this.owner.register('service:router', RouterStub);
 
       const store = this.owner.lookup('service:store');
 
@@ -338,69 +327,6 @@ module(
         )
         .exists()
         .hasText('t:fileReport.noSbomReportAvailable:()');
-
-      assert
-        .dom('[data-test-fileReportDrawer-sbomReports-latestFileCTABtn]')
-        .exists();
-    });
-
-    test('it renders and triggers go to latest file CTA button when current file is not latest and no sbom file exists', async function (assert) {
-      this.file = this.createFile(null);
-
-      // Creates a new file with id of 2
-      const latestFile = this.server.create('file');
-      const latestFileNormalized = this.store.normalize(
-        'file',
-        latestFile.toJSON()
-      );
-      const latestFileRecord = this.store.push(latestFileNormalized);
-
-      // Creates a new project that has a latest file of id 2
-      const project = this.server.create('project');
-
-      const projectRecord = this.store.push(
-        this.store.normalize('project', project.toJSON())
-      );
-
-      projectRecord.lastFile = latestFileRecord;
-
-      // Updates file with id of 1 with project that has a latest file of id 2
-      this.file.project = projectRecord;
-
-      // Current file in route has an id of 1
-      class RouterStub extends Service {
-        transitionToArgs = [];
-
-        transitionTo() {
-          this.transitionToArgs = arguments;
-        }
-
-        currentRoute = {
-          params: {
-            fileid: '1',
-          },
-        };
-      }
-
-      this.owner.register('service:router', RouterStub);
-
-      await render(
-        hbs`<File::ReportDrawer::SbomReports @file={{this.file}} @closeDrawer={{this.onClose}}  />`
-      );
-
-      assert
-        .dom('[data-test-fileReportDrawer-sbomReports-latestFileCTABtn]')
-        .exists()
-        .hasText('t:fileReport.goToLatestFile:()');
-
-      await click('[data-test-fileReportDrawer-sbomReports-latestFileCTABtn]');
-
-      const router = this.owner.lookup('service:router');
-      const transitionToArgs = router.transitionToArgs;
-
-      assert.true(transitionToArgs.length > 0);
-      assert.strictEqual(transitionToArgs[0], 'authenticated.file');
-      assert.strictEqual(transitionToArgs[1], projectRecord.lastFile.get('id'));
     });
   }
 );

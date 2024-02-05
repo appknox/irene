@@ -65,9 +65,9 @@ module('Integration | Component | partner/invitation-list', function (hooks) {
   test('it should add new entry in invitations list on successful client invite', async function (assert) {
     const rrCount = 2;
     const rrInvites = this.server.createList(
-      'partner/registrationRequest',
+      'partner/registration-request',
       rrCount,
-      { approvalStatus: 'approved', source: 'invitation' }
+      { approval_status: 'approved', source: 'invitation' }
     );
     const rrItem = rrInvites[0];
 
@@ -77,8 +77,8 @@ module('Integration | Component | partner/invitation-list', function (hooks) {
         const is_activated = request.queryParams.is_activated;
         const status = request.queryParams.approval_status;
         const data = schema['partner/registrationRequests'].where({
-          isActivated: is_activated,
-          approvalStatus: status,
+          is_activated: is_activated,
+          approval_status: status,
         });
         return registrationRequestSerializer(data, true);
       }
@@ -96,9 +96,9 @@ module('Integration | Component | partner/invitation-list', function (hooks) {
             first_name: body.first_name,
             last_name: body.last_name,
           },
-          approvalStatus: 'approved',
+          approval_status: 'approved',
           source: 'invitation',
-          isActivated: false,
+          is_activated: false,
         });
         const serData = registrationRequestSerializer(obj);
         return serData;

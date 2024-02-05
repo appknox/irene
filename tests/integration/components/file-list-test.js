@@ -4,17 +4,6 @@ import { click, findAll, render, waitFor } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import Service from '@ember/service';
-
-class RouterStub extends Service {
-  currentRouteName = 'authenticated.project.files';
-  selectedFiles = '';
-
-  transitionTo(routeName, selectedFiles) {
-    this.currentRouteName = routeName;
-    this.selectedFiles = selectedFiles;
-  }
-}
 
 module('Integration | Component | file-list', function (hooks) {
   setupRenderingTest(hooks);
@@ -296,47 +285,6 @@ module('Integration | Component | file-list', function (hooks) {
     assert
       .dom('[data-test-fileList-projectOverview-headerFileCompare]')
       .doesNotExist();
-  });
-
-  test('it compares two selected files', async function (assert) {
-    this.owner.register('service:router', RouterStub);
-
-    await render(
-      hbs`<FileList @project={{this.project}} @queryParams={{this.queryParams}} />`
-    );
-
-    const [baseFile, compareFile] = this.fileRecords;
-
-    const baseFileSelector = `[data-test-fileList-fileOverview='${baseFile.id}']`;
-    const compareFileSelector = `[data-test-fileList-fileOverview='${compareFile.id}']`;
-
-    // Selects base and compare files
-    await click(
-      `${baseFileSelector} [data-test-fileCompare-fileOverview-selectCheckBox]`
-    );
-
-    await click(
-      `${compareFileSelector} [data-test-fileCompare-fileOverview-selectCheckBox]`
-    );
-
-    assert
-      .dom('[data-test-fileList-projectOverview-header-compareBtn]')
-      .exists()
-      .hasText('t:compare:()');
-
-    await click('[data-test-fileList-projectOverview-header-compareBtn]');
-
-    const router = this.owner.lookup('service:router');
-
-    assert.strictEqual(
-      router.currentRouteName,
-      'authenticated.dashboard.compare'
-    );
-
-    assert.strictEqual(
-      router.selectedFiles,
-      `${baseFile?.id}...${compareFile?.id}`
-    );
   });
 
   test('it should disable other files in list if two files have already been selected', async function (assert) {

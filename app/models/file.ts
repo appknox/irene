@@ -5,7 +5,9 @@ import {
   attr,
   belongsTo,
   hasMany,
+  SyncHasMany,
 } from '@ember-data/model';
+
 import ComputedProperty, { sort } from '@ember/object/computed';
 import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
@@ -25,7 +27,7 @@ import SbomFileModel from './sbom-file';
 import SubmissionModel from './submission';
 
 const _getAnalysesCount = (
-  analysis: AsyncHasMany<AnalysisModel>,
+  analysis: SyncHasMany<AnalysisModel>,
   risk: number
 ) => {
   return analysis.filter((analysis) => analysis.computedRisk === risk).length;
@@ -107,14 +109,14 @@ export default class FileModel extends ModelBaseMixin {
   @attr('boolean')
   declare canRunAutomatedDynamicscan: boolean;
 
-  @hasMany('tag')
-  declare tags: AsyncHasMany<TagModel>;
+  @hasMany('tag', { async: false })
+  declare tags: SyncHasMany<TagModel>;
 
   @hasMany('file-report', { async: true })
   declare reports: AsyncHasMany<FileReportModel>;
 
-  @hasMany('analysis', { inverse: 'file' })
-  declare analyses: AsyncHasMany<AnalysisModel>;
+  @hasMany('analysis', { inverse: 'file', async: false })
+  declare analyses: SyncHasMany<AnalysisModel>;
 
   @belongsTo('project', { inverse: 'files' })
   declare project: AsyncBelongsTo<ProjectModel>;

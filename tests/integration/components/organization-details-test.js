@@ -36,6 +36,9 @@ module('Integration | Component | organization-details', function (hooks) {
     await this.owner.lookup('service:organization').load();
 
     this.owner.register('service:me', OrganizationMeStub);
+
+    // unregister to override any lookup
+    this.owner.unregister('service:router');
     this.owner.register('service:router', RouterStub);
   });
 
