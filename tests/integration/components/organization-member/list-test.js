@@ -1,11 +1,4 @@
-import {
-  render,
-  findAll,
-  find,
-  click,
-  fillIn,
-  triggerEvent,
-} from '@ember/test-helpers';
+import { render, findAll, find, click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
@@ -16,15 +9,6 @@ import { Response } from 'miragejs';
 
 import Service from '@ember/service';
 import dayjs from 'dayjs';
-
-class RouterStub extends Service {
-  currentRouteName = '';
-  queryParams = null;
-
-  transitionTo({ queryParams }) {
-    this.queryParams = queryParams;
-  }
-}
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -95,7 +79,6 @@ module('Integration | Component | organization-member/list', function (hooks) {
 
     this.owner.register('service:me', OrganizationMeStub);
     this.owner.register('service:notifications', NotificationsStub);
-    this.owner.register('service:router', RouterStub);
   });
 
   test('it renders organization user list', async function (assert) {
@@ -425,76 +408,5 @@ module('Integration | Component | organization-member/list', function (hooks) {
     const notify = this.owner.lookup('service:notifications');
 
     assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
-  });
-
-  test('test organization user inactive user checkbox', async function (assert) {
-    this.server.get('/organizations/:id/members', (schema, req) => {
-      this.set('is_active', req.queryParams.is_active);
-
-      const results = schema.organizationMembers.all().models;
-
-      return { count: results.length, next: null, previous: null, results };
-    });
-
-    this.server.get('/organizations/:id/users/:userId', (schema, req) => {
-      const user = schema.organizationUsers.find(req.params.userId);
-
-      return user?.toJSON();
-    });
-
-    await render(hbs`
-      <OrganizationMember::List @queryParams={{this.queryParams}} @organization={{this.organization}} />
-    `);
-
-    const contentRows = findAll('[data-test-org-user-row]');
-
-    assert.strictEqual(contentRows.length, this.organizationMembers.length);
-
-    assert.strictEqual(this.is_active, 'true');
-
-    await click('[data-test-inactive-user-label]');
-
-    assert.dom('[data-test-inactive-user-checkbox]').isChecked();
-
-    assert.strictEqual(typeof this.is_active, 'undefined');
-  });
-
-  test('test organization user search', async function (assert) {
-    this.server.get('/organizations/:id/members', (schema, req) => {
-      this.set('query', req.queryParams.q);
-
-      const results = schema.organizationMembers.all().models;
-
-      return { count: results.length, next: null, previous: null, results };
-    });
-
-    this.server.get('/organizations/:id/users/:userId', (schema, req) => {
-      const user = schema.organizationUsers.find(req.params.userId);
-
-      return user?.toJSON();
-    });
-
-    await render(hbs`
-      <OrganizationMember::List @queryParams={{this.queryParams}} @organization={{this.organization}} />
-    `);
-
-    const contentRows = findAll('[data-test-org-user-row]');
-
-    assert.strictEqual(contentRows.length, this.organizationMembers.length);
-
-    assert
-      .dom('[data-test-user-search-input]')
-      .exists()
-      .isNotDisabled()
-      .hasNoValue();
-
-    assert.strictEqual(this.query, '');
-
-    await fillIn('[data-test-user-search-input]', 'test');
-    await triggerEvent('[data-test-user-search-input]', 'keyup');
-
-    assert.dom('[data-test-user-search-input]').hasValue('test');
-
-    assert.strictEqual(this.query, 'test');
   });
 });

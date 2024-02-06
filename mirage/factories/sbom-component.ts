@@ -36,7 +36,7 @@ export default Factory.extend({
   },
 
   vulnerabilities_count() {
-    return faker.helpers.arrayElement([faker.datatype.number(1000), 0]);
+    return faker.helpers.arrayElement([faker.number.int(1000), 0]);
   },
 
   remediation: () => faker.lorem.paragraphs(),

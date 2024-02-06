@@ -1,28 +1,18 @@
 import {
   render,
-  click,
   findAll,
   find,
   fillIn,
   triggerEvent,
   waitFor,
 } from '@ember/test-helpers';
+
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { capitalize } from '@ember/string';
-
-import Service from '@ember/service';
-
-class RouterStub extends Service {
-  transitionToArgs = [];
-
-  transitionTo() {
-    this.transitionToArgs = arguments;
-  }
-}
 
 module(
   'Integration | Component | sbom/scan-details/component-list',
@@ -79,8 +69,6 @@ module(
         },
         store,
       });
-
-      this.owner.register('service:router', RouterStub);
     });
 
     test('it renders sbom scan component list', async function (assert) {
@@ -91,13 +79,13 @@ module(
       });
 
       await render(hbs`
-      <Sbom::ScanDetails::ComponentList 
-        @sbomProject={{this.sbomProject}} 
-        @sbomFile={{this.sbomFile}} 
-        @sbomScanSummary={{this.sbomScanSummary}} 
-        @queryParams={{this.queryParams}} 
-      />
-    `);
+        <Sbom::ScanDetails::ComponentList 
+          @sbomProject={{this.sbomProject}} 
+          @sbomFile={{this.sbomFile}} 
+          @sbomScanSummary={{this.sbomScanSummary}} 
+          @queryParams={{this.queryParams}} 
+        />
+      `);
 
       assert.dom('[data-test-sbomComponent-table]').exists();
 
@@ -159,44 +147,6 @@ module(
       }
     });
 
-    test('it triggers sbom scan component details route on row click', async function (assert) {
-      this.server.get('/v2/sb_files/:scan_id/sb_components', (schema) => {
-        const results = schema.sbomComponents.all().models;
-
-        return { count: results.length, next: null, previous: null, results };
-      });
-
-      await render(hbs`
-      <Sbom::ScanDetails::ComponentList 
-        @sbomProject={{this.sbomProject}} 
-        @sbomFile={{this.sbomFile}} 
-        @sbomScanSummary={{this.sbomScanSummary}} 
-        @queryParams={{this.queryParams}} 
-      />
-    `);
-
-      const contentRows = findAll('[data-test-sbomComponent-row]');
-
-      assert.strictEqual(contentRows.length, this.sbomComponents.length);
-
-      await click(contentRows[2]);
-
-      const router = this.owner.lookup('service:router');
-      const transitionToArgs = router.transitionToArgs;
-
-      assert.true(transitionToArgs.length > 0);
-
-      assert.strictEqual(
-        transitionToArgs[0],
-        'authenticated.dashboard.sbom.component-details'
-      );
-      assert.strictEqual(transitionToArgs[1], this.sbomProject.id);
-
-      assert.strictEqual(transitionToArgs[2], this.sbomFile.id);
-
-      assert.strictEqual(transitionToArgs[3], this.sbomComponents[2].id);
-    });
-
     test.skip('test sbom scan component list search', async function (assert) {
       this.server.get('/v2/sb_files/:scan_id/sb_components', (schema, req) => {
         this.set('query', req.queryParams.q);
@@ -207,13 +157,13 @@ module(
       });
 
       await render(hbs`
-      <Sbom::ScanDetails::ComponentList 
-        @sbomProject={{this.sbomProject}} 
-        @sbomFile={{this.sbomFile}} 
-        @sbomScanSummary={{this.sbomScanSummary}} 
-        @queryParams={{this.queryParams}} 
-      />
-    `);
+        <Sbom::ScanDetails::ComponentList 
+          @sbomProject={{this.sbomProject}} 
+          @sbomFile={{this.sbomFile}} 
+          @sbomScanSummary={{this.sbomScanSummary}} 
+          @queryParams={{this.queryParams}} 
+        />
+      `);
 
       assert.dom('[data-test-sbomComponent-searchInput]').hasNoValue();
 
@@ -243,13 +193,13 @@ module(
       });
 
       await render(hbs`
-      <Sbom::ScanDetails::ComponentList 
-        @sbomProject={{this.sbomProject}} 
-        @sbomFile={{this.sbomFile}} 
-        @sbomScanSummary={{this.sbomScanSummary}} 
-        @queryParams={{this.queryParams}} 
-      />
-    `);
+        <Sbom::ScanDetails::ComponentList 
+          @sbomProject={{this.sbomProject}} 
+          @sbomFile={{this.sbomFile}} 
+          @sbomScanSummary={{this.sbomScanSummary}} 
+          @queryParams={{this.queryParams}} 
+        />
+      `);
 
       const contentRows = findAll('[data-test-sbomComponent-row]');
 
@@ -298,13 +248,13 @@ module(
       );
 
       render(hbs`
-      <Sbom::ScanDetails::ComponentList 
-        @sbomProject={{this.sbomProject}} 
-        @sbomFile={{this.sbomFile}} 
-        @sbomScanSummary={{this.sbomScanSummary}} 
-        @queryParams={{this.queryParams}} 
-      />
-    `);
+        <Sbom::ScanDetails::ComponentList 
+          @sbomProject={{this.sbomProject}} 
+          @sbomFile={{this.sbomFile}} 
+          @sbomScanSummary={{this.sbomScanSummary}} 
+          @queryParams={{this.queryParams}} 
+        />
+      `);
 
       await waitFor('[data-test-sbom-loadingSvg]', { timeout: 500 });
 

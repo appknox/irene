@@ -7,11 +7,11 @@ export default Factory.extend({
     return `test${i}@example.test`;
   },
 
-  createdOn() {
+  created_on() {
     return dayjs(faker.date.past()).toISOString();
   },
 
-  updatedOn() {
+  updated_on() {
     return dayjs(faker.date.recent()).toISOString();
   },
 
@@ -27,11 +27,11 @@ export default Factory.extend({
     ]);
   },
 
-  isActivated() {
+  is_activated() {
     return false;
   },
 
-  approvalStatus() {
+  approval_status() {
     return faker.helpers.arrayElement(['pending', 'rejected', 'approved']);
   },
 

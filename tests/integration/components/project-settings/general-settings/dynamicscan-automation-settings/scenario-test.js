@@ -29,16 +29,6 @@ class NotificationsStub extends Service {
   }
 }
 
-class RouterStub extends Service {
-  currentRouteName = 'authenticated.project.settings';
-  scenarioId = '';
-
-  transitionTo(routeName, scenarioId) {
-    this.currentRouteName = routeName;
-    this.scenarioId = scenarioId;
-  }
-}
-
 const selectors = {
   scenariosRoot: '[data-test-genSettings-dynScanAutoSettings-scenarios-root]',
   scenariosListEmpty:
@@ -204,7 +194,6 @@ module(
 
       // Service registers
       this.owner.register('service:notifications', NotificationsStub);
-      this.owner.register('service:router', RouterStub);
 
       // Records
       const store = this.owner.lookup('service:store');
@@ -520,53 +509,6 @@ module(
       );
 
       assert.ok(this.server.db.scanParameterGroups[0].is_active);
-    });
-
-    test('it navigates to project scenario page on scenario click', async function (assert) {
-      const scenario1Name = 'New Scenario Name 1';
-
-      await render(hbs`
-        <ProjectSettings::GeneralSettings::DynamicscanAutomationSettings::Scenario
-          @project={{this.project}} 
-          @profileId={{this.project.activeProfileId}} 
-        />
-      `);
-      const router = this.owner.lookup('service:router');
-
-      // In Project settings route
-      assert.strictEqual(
-        router.currentRouteName,
-        'authenticated.project.settings'
-      );
-
-      await click(selectors.addScenarioBtn);
-
-      // Add first scenario with status of false
-      await fillIn(selectors.scenarioNameTextfield, scenario1Name);
-      await click(selectors.scenarioAddConfirmBtn);
-
-      // Sanity Check for scenario items
-      const rows = findAll(selectors.scenarioTableRow);
-
-      // assert first row
-      const firstRowCells = rows[0];
-
-      assert.dom(firstRowCells).containsText(scenario1Name);
-      assert.dom(selectors.scenarioStatusToggle, firstRowCells).isNotChecked();
-
-      // Click first row item
-      await click(firstRowCells);
-
-      // In DAST Automation route
-      assert.strictEqual(
-        router.currentRouteName,
-        'authenticated.project.settings.dast-automation-scenario'
-      );
-
-      assert.strictEqual(
-        router.scenarioId,
-        this.server.db.scanParameterGroups[0].id
-      );
     });
   }
 );

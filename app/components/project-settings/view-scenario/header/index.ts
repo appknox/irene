@@ -49,7 +49,6 @@ export default class ProjectSettingsViewScenarioHeaderComponent extends Componen
       const adapterOptions = { projectId: this.args.project?.id };
 
       await this.scenario.destroyRecord({ adapterOptions });
-      this.scenario.unloadRecord();
 
       this.notify.success(
         this.intl.t('dastAutomation.scenarioDeleted', {

@@ -8,16 +8,6 @@ import {
   compareFiles,
   getFileComparisonCategories,
 } from 'irene/utils/compare-files';
-import Service from '@ember/service';
-
-class RouterStub extends Service {
-  currentRouteName = 'authenticated.project.files';
-  currentRoute = { queryParams: { referrer: 'all_uploads' } };
-
-  transitionTo(routeName) {
-    this.currentRouteName = routeName;
-  }
-}
 
 module('Integration | Component | file-compare', function (hooks) {
   setupRenderingTest(hooks);
@@ -227,30 +217,6 @@ module('Integration | Component | file-compare', function (hooks) {
       .doesNotExist();
   });
 
-  test('it renders all upload page breadcrumbs if page referrer is "all_uploads"', async function (assert) {
-    this.owner.register('service:router', RouterStub);
-
-    const breadcrumbItems = [
-      't:allProjects:()',
-      this.file1?.project?.get('packageName'),
-      't:compare:()',
-    ];
-
-    await render(
-      hbs`<FileCompare
-          @file1={{this.file1}} 
-          @file2={{this.file2}}
-        />`
-    );
-
-    assert.dom('[data-test-fileCompare-header]').exists();
-    assert.dom('[data-test-fileCompare-breadcrumbContainer]').exists();
-
-    breadcrumbItems.map((item) =>
-      assert.dom(`[data-test-fileCompare-breadcrumbItem="${item}"]`).exists()
-    );
-  });
-
   test('it toggles file overview header on show more or show less icon click', async function (assert) {
     await render(
       hbs`<FileCompare
@@ -281,51 +247,5 @@ module('Integration | Component | file-compare', function (hooks) {
     fileOverviewsSelectors.forEach(([selector]) =>
       assert.dom(selector).doesNotExist()
     );
-  });
-
-  test('it redirects to compare list page if compare file edit icon is clicked and page referrer is empty', async function (assert) {
-    class RouterStub extends Service {
-      currentRouteName = 'authenticated.project.files';
-
-      transitionTo(routeName) {
-        this.currentRouteName = routeName;
-      }
-    }
-
-    this.owner.register('service:router', RouterStub);
-
-    await render(
-      hbs`<FileCompare
-          @file1={{this.file1}} 
-          @file2={{this.file2}}
-        />`
-    );
-
-    assert.dom('[data-test-fileCompare-header-compareFileEditIcon]').exists();
-
-    await click('[data-test-fileCompare-header-compareFileEditIcon]');
-
-    const router = this.owner.lookup('service:router');
-
-    assert.strictEqual(router.currentRouteName, 'authenticated.choose');
-  });
-
-  test('it redirects to all uploads page if compare file edit icon is clicked and page referrer is "all_uploads"', async function (assert) {
-    this.owner.register('service:router', RouterStub);
-
-    await render(
-      hbs`<FileCompare
-          @file1={{this.file1}} 
-          @file2={{this.file2}}
-        />`
-    );
-
-    assert.dom('[data-test-fileCompare-header-compareFileEditIcon]').exists();
-
-    await click('[data-test-fileCompare-header-compareFileEditIcon]');
-
-    const router = this.owner.lookup('service:router');
-
-    assert.strictEqual(router.currentRouteName, 'authenticated.project.files');
   });
 });

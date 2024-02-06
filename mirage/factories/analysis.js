@@ -35,7 +35,7 @@ export default Factory.extend({
 
   findings() {
     let desc = [];
-    const uuid = faker.datatype.uuid();
+    const uuid = faker.string.uuid();
 
     for (let i = 0; i < 3; i++) {
       desc.push({

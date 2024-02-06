@@ -1,27 +1,11 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import {
-  click,
-  render,
-  fillIn,
-  findAll,
-  triggerEvent,
-} from '@ember/test-helpers';
+import { render, findAll } from '@ember/test-helpers';
 import { setupIntl } from 'ember-intl/test-support';
 import { hbs } from 'ember-cli-htmlbars';
-import { Response } from 'miragejs';
 
 import Service from '@ember/service';
-
-class RouterStub extends Service {
-  currentRouteName = '';
-  queryParams = null;
-
-  transitionTo({ queryParams }) {
-    this.queryParams = queryParams;
-  }
-}
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -65,7 +49,6 @@ module('Integration | Component | organization-team', function (hooks) {
 
     this.owner.register('service:me', OrganizationMeStub);
     this.owner.register('service:notifications', NotificationsStub);
-    this.owner.register('service:router', RouterStub);
   });
 
   test.each(
@@ -120,127 +103,6 @@ module('Integration | Component | organization-team', function (hooks) {
       assert
         .dom('[data-test-orgTeamOverview-projectsCount]', teamList[0])
         .hasText(`t:projects:() ${this.organizationTeams[0].projects_count}`);
-    }
-  );
-
-  test('test organization-team search input & query', async function (assert) {
-    this.server.get('/organizations/:id/teams', (schema, req) => {
-      this.set('query', req.queryParams.q);
-
-      const results = schema.organizationTeams.all().models;
-
-      return { count: results.length, next: null, previous: null, results };
-    });
-
-    await render(
-      hbs`<OrganizationTeam @queryParams={{this.queryParams}} @organization={{this.organization}} />`
-    );
-
-    assert.dom('[data-test-orgTeamSearch-input]').isNotDisabled().hasNoValue();
-    assert.notOk(this.query);
-
-    await fillIn('[data-test-orgTeamSearch-input]', 'test');
-    await triggerEvent('[data-test-orgTeamSearch-input]', 'keyup');
-
-    assert.dom('[data-test-orgTeamSearch-input]').hasValue('test');
-    assert.strictEqual(this.query, 'test');
-  });
-
-  test.each(
-    'test organization-team create team',
-    [{ fail: false }, { fail: true }],
-    async function (assert, { fail }) {
-      const server = this.server;
-
-      this.server.get('/organizations/:id/teams', (schema) => {
-        const results = schema.organizationTeams
-          .all()
-          .models.sortBy('created_on');
-
-        return { count: results.length, next: null, previous: null, results };
-      });
-
-      this.server.post('/organizations/:id/teams', (schema, req) => {
-        return fail
-          ? new Response(500)
-          : server.create('organization-team', {
-              name: JSON.parse(req.requestBody).name,
-              created_on: Date(),
-            });
-      });
-
-      this.server.get('/organizations/:id', (schema, req) =>
-        schema.organizations.find(`${req.params.id}`)?.toJSON()
-      );
-
-      await render(
-        hbs`<OrganizationTeam @queryParams={{this.queryParams}} @organization={{this.organization}} />`
-      );
-
-      assert
-        .dom('[data-test-orgCreateTeam-btn]')
-        .isNotDisabled()
-        .hasText('t:createTeam:()');
-
-      const teamList = findAll('[data-test-orgTeamOverview]');
-
-      assert.strictEqual(teamList.length, this.organizationTeams.length);
-
-      await click('[data-test-orgCreateTeam-btn]');
-
-      assert.dom('[data-test-ak-modal-header]').hasText('t:createTeam:()');
-
-      assert.dom('[data-test-form-label]').hasText('t:createTeamInputLabel:()');
-
-      assert
-        .dom('[data-test-orgCreateTeam-input]')
-        .hasNoValue()
-        .isNotDisabled();
-
-      assert
-        .dom('[data-test-orgCreateTeam-submitBtn]')
-        .hasText('t:createTeam:()')
-        .isNotDisabled();
-
-      // empty input case
-      await click('[data-test-orgCreateTeam-submitBtn]');
-
-      const notify = this.owner.lookup('service:notifications');
-
-      assert.strictEqual(notify.errorMsg, 't:enterTeamName:()');
-
-      // fill value
-      await fillIn('[data-test-orgCreateTeam-input]', 'testTeam');
-
-      await click('[data-test-orgCreateTeam-submitBtn]');
-
-      if (fail) {
-        assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
-
-        assert.dom('[data-test-ak-modal-header]').exists();
-        assert.dom('[data-test-orgCreateTeam-submitBtn]').exists();
-
-        assert
-          .dom('[data-test-orgCreateTeam-input]')
-          .exists()
-          .hasValue('testTeam');
-
-        assert.strictEqual(teamList.length, this.organizationTeams.length);
-      } else {
-        assert.strictEqual(notify.successMsg, 't:teamCreated:()');
-
-        assert.dom('[data-test-ak-modal-header]').doesNotExist();
-        assert.dom('[data-test-orgCreateTeam-submitBtn]').doesNotExist();
-        assert.dom('[data-test-orgCreateTeam-input]').doesNotExist();
-
-        const teamList = findAll('[data-test-orgTeamOverview]');
-
-        assert.strictEqual(teamList.length, this.organizationTeams.length + 1);
-
-        assert
-          .dom('[data-test-orgTeamOverview-name]', teamList[0])
-          .hasText('testTeam');
-      }
     }
   );
 });

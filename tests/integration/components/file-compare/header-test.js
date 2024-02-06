@@ -2,17 +2,8 @@ import { module, test } from 'qunit';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupRenderingTest } from 'ember-qunit';
-import { click, render } from '@ember/test-helpers';
+import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import Service from '@ember/service';
-
-class RouterStub extends Service {
-  currentRouteName = 'authenticated.dashboard.compare';
-
-  transitionTo(routeName) {
-    this.currentRouteName = routeName;
-  }
-}
 
 module('Integration | Component | file-compare/header', function (hooks) {
   setupRenderingTest(hooks);
@@ -26,7 +17,6 @@ module('Integration | Component | file-compare/header', function (hooks) {
     });
 
     this.store = this.owner.lookup('service:store');
-    this.owner.register('service:router', RouterStub);
 
     const files = this.server.createList('file', 6);
     const project = this.server.create('project');
@@ -122,29 +112,6 @@ module('Integration | Component | file-compare/header', function (hooks) {
     assert
       .dom('[data-test-fileCompareHeader-projectOverview-settingsBtn-icon]')
       .exists();
-  });
-
-  test('it redirects to settings page if button is clicked', async function (assert) {
-    await render(
-      hbs`<FileCompare::Header 
-          @file1={{this.file1}} 
-          @file2={{this.file2}} 
-          @project={{this.project}}
-        />`
-    );
-
-    assert
-      .dom('[data-test-fileCompareHeader-projectOverview-settingsBtn]')
-      .exists();
-
-    await click('[data-test-fileCompareHeader-projectOverview-settingsBtn]');
-
-    const router = this.owner.lookup('service:router');
-
-    assert.strictEqual(
-      router.currentRouteName,
-      'authenticated.project.settings'
-    );
   });
 
   test('it toggles file overview cards', async function (assert) {

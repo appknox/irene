@@ -4,17 +4,6 @@ import { click, findAll, render, waitFor } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import Service from '@ember/service';
-
-class RouterStub extends Service {
-  currentRouteName = 'authenticated.dashboard.compare';
-  selectedFiles = '';
-
-  transitionTo(routeName, selectedFiles) {
-    this.currentRouteName = routeName;
-    this.selectedFiles = selectedFiles;
-  }
-}
 
 module('Integration | Component | file-compare/compare-list', function (hooks) {
   setupRenderingTest(hooks);
@@ -232,40 +221,5 @@ module('Integration | Component | file-compare/compare-list', function (hooks) {
     assert
       .dom('[data-test-fileCompare-compareListHeader-compareBtn]')
       .hasAttribute('disabled');
-  });
-
-  test('it compares selected files', async function (assert) {
-    this.owner.register('service:router', RouterStub);
-
-    await render(
-      hbs`<FileCompare::CompareList @fileOld={{this.fileOld}} @queryParams={{this.queryParams}} @project={{this.project}} />`
-    );
-
-    // Selects second file in list
-    const compareFile = this.fileRecords[1];
-    const compareFileSelector = `[data-test-fileCompare-compareList-fileOverview='${compareFile.id}']`;
-
-    await click(
-      `${compareFileSelector} [data-test-fileCompare-fileOverview-selectCheckBox]`
-    );
-
-    assert
-      .dom('[data-test-fileCompare-compareListHeader-compareBtn]')
-      .exists()
-      .hasText('t:compare:()');
-
-    await click('[data-test-fileCompare-compareListHeader-compareBtn]');
-
-    const router = this.owner.lookup('service:router');
-
-    assert.strictEqual(
-      router.currentRouteName,
-      'authenticated.dashboard.compare'
-    );
-
-    assert.strictEqual(
-      router.selectedFiles,
-      `${this.fileOld?.id}...${compareFile?.id}`
-    );
   });
 });

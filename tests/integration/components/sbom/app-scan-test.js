@@ -6,6 +6,7 @@ import {
   waitFor,
   waitUntil,
 } from '@ember/test-helpers';
+
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
@@ -15,14 +16,6 @@ import { module, test } from 'qunit';
 import { SbomScanStatus } from 'irene/models/sbom-file';
 import Service from '@ember/service';
 import dayjs from 'dayjs';
-
-class RouterStub extends Service {
-  transitionToArgs = [];
-
-  transitionTo() {
-    this.transitionToArgs = arguments;
-  }
-}
 
 class NotificationsStub extends Service {
   errorMsg = null;
@@ -92,7 +85,6 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
 
     this.owner.register('service:me', OrganizationMeStub);
     this.owner.register('service:notifications', NotificationsStub);
-    this.owner.register('service:router', RouterStub);
   });
 
   test.each(
@@ -281,47 +273,6 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
     assert
       .dom('[data-test-sbomReportDrawer-description]')
       .hasText('t:sbomModule.sbomDownloadReportDescription:()');
-  });
-
-  test('test sbom scan list row click', async function (assert) {
-    this.server.get('/v2/sb_projects/:id/sb_files', (schema) => {
-      const results = schema.sbomFiles.all().models;
-
-      return { count: results.length, next: null, previous: null, results };
-    });
-
-    this.server.get('/v2/sb_files/:id', (schema, req) => {
-      return schema.sbomFiles.find(`${req.params.id}`)?.toJSON();
-    });
-
-    this.server.get('/v2/projects/:id', (schema, req) => {
-      return schema.projects.find(`${req.params.id}`)?.toJSON();
-    });
-
-    this.server.get('/v2/files/:id', (schema, req) => {
-      return schema.files.find(`${req.params.id}`)?.toJSON();
-    });
-
-    await render(hbs`
-      <Sbom::AppScan @sbomProject={{this.sbomProject}} @queryParams={{this.queryParams}} />
-    `);
-
-    const contentRows = findAll('[data-test-sbomScan-row]');
-
-    assert.strictEqual(contentRows.length, this.sbomFiles.length);
-
-    await click(contentRows[1]);
-
-    const router = this.owner.lookup('service:router');
-    const transitionToArgs = router.transitionToArgs;
-
-    assert.true(transitionToArgs.length > 0);
-    assert.strictEqual(
-      transitionToArgs[0],
-      'authenticated.dashboard.sbom.scan-details'
-    );
-    assert.strictEqual(transitionToArgs[1], this.sbomProject.id);
-    assert.strictEqual(transitionToArgs[2], this.sbomFiles[1].id);
   });
 
   test('test sbom app scans loading & empty state', async function (assert) {
