@@ -94,7 +94,7 @@ module('Integration | Component | app-monitoring-settings', function (hooks) {
   });
 
   test('should toggle app monitoring enabled', async function (assert) {
-    this.server.put('/v2/am_configuration/:id', (schema, req) => ({
+    this.server.put('/v2/am_configurations/:id', (schema, req) => ({
       id: 1,
       enabled: false,
       organization: req.params.id,
@@ -105,7 +105,7 @@ module('Integration | Component | app-monitoring-settings', function (hooks) {
       enabled: true,
     });
 
-    this.server.get('v2/am_apps', () => {
+    this.server.get('/v2/am_apps', () => {
       return [];
     });
 
@@ -136,7 +136,7 @@ module('Integration | Component | app-monitoring-settings', function (hooks) {
   test('it should reload app monitoring data when settings is toggled', async function (assert) {
     assert.expect(3);
 
-    this.server.put('/v2/am_configuration/:id', (schema, req) => ({
+    this.server.put('/v2/am_configurations/:id', (schema, req) => ({
       id: 1,
       enabled: false,
       organization: req.params.id,
@@ -147,7 +147,7 @@ module('Integration | Component | app-monitoring-settings', function (hooks) {
       enabled: true,
     });
 
-    this.server.get('v2/am_apps', () => {
+    this.server.get('/v2/am_apps', () => {
       return [];
     });
 
@@ -192,7 +192,7 @@ module('Integration | Component | app-monitoring-settings', function (hooks) {
     }
     this.owner.register('service:organization', OrganizationStub);
 
-    this.server.put('/v2/am_configuration/:id', (schema, req) => ({
+    this.server.put('/v2/am_configurations/:id', (schema, req) => ({
       id: 1,
       enabled: false,
       organization: req.params.id,

@@ -339,6 +339,14 @@ module('Integration | Component | organization-member/list', function (hooks) {
       return user?.toJSON();
     });
 
+    this.server.put('/organizations/:id/members/:memId', (schema, req) => {
+      const data = JSON.parse(req.requestBody);
+
+      schema.db.organizationMembers.update(`${req.params.memId}`, data);
+
+      return schema.organizationMembers.find(req.params.memId).toJSON();
+    });
+
     await render(hbs`
       <OrganizationMember::List @queryParams={{this.queryParams}} @organization={{this.organization}} />
     `);

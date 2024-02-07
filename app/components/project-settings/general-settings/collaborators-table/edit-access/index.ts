@@ -4,6 +4,7 @@ import { task } from 'ember-concurrency';
 import Store from '@ember-data/store';
 import { action } from '@ember/object';
 import IntlService from 'ember-intl/services/intl';
+import { waitForPromise } from '@ember/test-waiters';
 
 import ProjectModel from 'irene/models/project';
 import parseError from 'irene/utils/parse-error';
@@ -37,7 +38,13 @@ export default class ProjectSettingsGeneralSettingsCollaboratorsTableEditAccessC
     try {
       const clb = this.args.collaborator;
       clb?.set('write', checked);
-      await clb?.updateCollaborator(String(this.args.project?.id));
+
+      await waitForPromise(
+        (clb as ProjectCollaboratorModel).updateCollaborator(
+          String(this.args.project?.id)
+        )
+      );
+
       this.notify.success(this.tPermissionChanged);
     } catch (error) {
       this.notify.error(parseError(error, this.tPleaseTryAgain));

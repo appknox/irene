@@ -7,13 +7,15 @@ import { tracked } from '@glimmer/tracking';
 import IntlService from 'ember-intl/services/intl';
 import MeService from 'irene/services/me';
 import Store from '@ember-data/store';
+import { AsyncHasMany } from '@ember-data/model';
+import { waitForPromise } from '@ember/test-waiters';
+
 import OrganizationTeamModel from 'irene/models/organization-team';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import DS from 'ember-data';
 import OrganizationTeamMemberModel from 'irene/models/organization-team-member';
 import OrganizationModel from 'irene/models/organization';
 import { ActiveActionDetailsType } from '../details/active-action';
-import { AsyncHasMany } from '@ember-data/model';
 
 export interface OrganizationTeamMemberListComponentSignature {
   Args: {
@@ -138,9 +140,8 @@ export default class OrganizationTeamMemberListComponent extends Component<Organ
         teamId: this.args.team.id,
       };
 
-      this.teamMemberResponse = await this.store.query(
-        'organization-team-member',
-        queryParams
+      this.teamMemberResponse = await waitForPromise(
+        this.store.query('organization-team-member', queryParams)
       );
     } catch (e) {
       const err = e as AdapterError;

@@ -154,12 +154,8 @@ module(
       'test add-to-team add user action',
       [{ fail: false }, { fail: true }],
       async function (assert, { fail }) {
-        this.set('userAdded', false);
-
         this.server.get('organizations/:id/teams', (schema) => {
-          const results = this.userAdded
-            ? schema.organizationTeams.all().models.slice(1)
-            : schema.organizationTeams.all().models;
+          const results = schema.organizationTeams.all().models;
 
           return { count: results.length, next: null, previous: null, results };
         });
@@ -172,8 +168,10 @@ module(
 
         this.server.put(
           '/organizations/:id/teams/:teamId/members/:memId',
-          () => {
-            return fail ? new Response(500) : {};
+          (schema, req) => {
+            schema.db.organizationTeams.remove(req.params.teamId);
+
+            return fail ? new Response(500) : { id: req.params.memId };
           }
         );
 
@@ -205,13 +203,10 @@ module(
           .dom(contentRow[1].querySelector('[data-test-addToTeam-btn]'))
           .exists();
 
-        if (!fail) {
-          this.set('userAdded', true);
-        }
-
         await click(contentRow[1].querySelector('[data-test-addToTeam-btn]'));
 
         const notify = this.owner.lookup('service:notifications');
+
         const latestRows = findAll('[data-test-teamList-row]');
 
         if (fail) {

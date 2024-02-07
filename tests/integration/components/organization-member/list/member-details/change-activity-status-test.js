@@ -91,6 +91,14 @@ module(
         return user?.toJSON();
       });
 
+      this.server.put('/organizations/:id/users/:userId', (schema, req) => {
+        const data = JSON.parse(req.requestBody);
+
+        schema.db.organizationUsers.update(`${req.params.userId}`, data);
+
+        return schema.organizationUsers.find(req.params.userId).toJSON();
+      });
+
       await render(hbs`
         <OrganizationMember::List::MemberDetails::ChangeActivityStatus 
           @member={{this.member}} 

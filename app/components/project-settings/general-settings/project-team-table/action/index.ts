@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import Store from '@ember-data/store';
 import { action } from '@ember/object';
 import IntlService from 'ember-intl/services/intl';
+import { waitForPromise } from '@ember/test-waiters';
 
 import ENV from 'irene/config/environment';
 import ProjectTeamModel from 'irene/models/project-team';
@@ -63,15 +64,16 @@ export default class ProjectSettingsGeneralSettingsProjectTeamTableActionCompone
 
   removeTeam = task(async () => {
     try {
-      const orgTeamProjects = await this.store.queryRecord(
-        'organization-team-project',
-        {
+      const orgTeamProjects = await waitForPromise(
+        this.store.queryRecord('organization-team-project', {
           teamId: this.team?.id,
           id: this.project?.id,
-        }
+        })
       );
 
-      await orgTeamProjects.deleteProject(String(this.team?.id));
+      await waitForPromise(
+        orgTeamProjects.deleteProject(String(this.team?.id))
+      );
 
       this.realtime.incrementProperty('ProjectNonTeamCounter');
       this.store.unloadRecord(this.team as ProjectTeamModel);

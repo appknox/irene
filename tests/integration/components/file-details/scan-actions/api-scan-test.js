@@ -341,7 +341,7 @@ module(
           is_active: data.is_active,
         });
 
-        return new Response(200);
+        return schema.capturedapis.find(`${req.params.id}`)?.toJSON();
       });
 
       this.server.get('/profiles/:id', (schema, req) =>

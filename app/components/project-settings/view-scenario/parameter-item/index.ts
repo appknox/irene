@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import Store from '@ember-data/store';
+import { waitForPromise } from '@ember/test-waiters';
 
 import ScanParameterGroupModel from 'irene/models/scan-parameter-group';
 import parseError from 'irene/utils/parse-error';
@@ -137,7 +138,7 @@ export default class ProjectSettingsViewScenarioParameterItemComponent extends C
       });
 
       const adapterOptions = { scenarioId: this.scenario.id };
-      await this.parameter.save({ adapterOptions });
+      await waitForPromise(this.parameter.save({ adapterOptions }));
 
       this.isEditing = false;
 
@@ -152,7 +153,7 @@ export default class ProjectSettingsViewScenarioParameterItemComponent extends C
   deleteScenarioParameter = task(async () => {
     try {
       const adapterOptions = { scenarioId: this.scenario.id };
-      await this.parameter.destroyRecord({ adapterOptions });
+      await waitForPromise(this.parameter.destroyRecord({ adapterOptions }));
       this.parameter.unloadRecord();
 
       this.hideDeleteParameterModal();

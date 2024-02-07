@@ -124,8 +124,10 @@ module('Integration | Component | organization-name-header', function (hooks) {
     'it should edit organization name',
     [{ fail: false }, { fail: true }],
     async function (assert, { fail }) {
-      this.server.put('/organizations/:id', () => {
-        return fail ? new Response(500) : {};
+      this.server.put('/organizations/:id', (_, req) => {
+        return fail
+          ? new Response(500)
+          : { id: req.params.id, ...JSON.parse(req.requestBody) };
       });
 
       const organization = this.owner.lookup('service:organization');
@@ -214,8 +216,10 @@ module('Integration | Component | organization-name-header', function (hooks) {
     'it should add organization name',
     [{ fail: false }, { fail: true }],
     async function (assert, { fail }) {
-      this.server.put('/organizations/:id', () => {
-        return fail ? new Response(500) : {};
+      this.server.put('/organizations/:id', (_, req) => {
+        return fail
+          ? new Response(500)
+          : { id: req.params.id, ...JSON.parse(req.requestBody) };
       });
 
       const organization = this.owner.lookup('service:organization');

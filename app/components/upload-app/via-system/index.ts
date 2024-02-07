@@ -4,6 +4,7 @@ import Store from '@ember-data/store';
 import IntlService from 'ember-intl/services/intl';
 import { task } from 'ember-concurrency';
 import FileQueueService from 'ember-file-upload/services/file-queue';
+import { waitForPromise } from '@ember/test-waiters';
 
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
@@ -37,14 +38,18 @@ export default class UploadAppViaSystemComponent extends Component {
     try {
       this.uploadApp.updateSystemFileQueue(queue);
 
-      const uploadItem = await this.store.queryRecord('uploadApp', {});
+      const uploadItem = await waitForPromise(
+        this.store.queryRecord('uploadApp', {})
+      );
 
-      await file.uploadBinary(uploadItem.url, {
-        method: 'PUT',
-        withCredentials: false,
-      });
+      await waitForPromise(
+        file.uploadBinary(uploadItem.url, {
+          method: 'PUT',
+          withCredentials: false,
+        })
+      );
 
-      await uploadItem.save();
+      await waitForPromise(uploadItem.save());
 
       triggerAnalytics(
         'feature',

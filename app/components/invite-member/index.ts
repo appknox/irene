@@ -1,13 +1,15 @@
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import ENV from 'irene/config/environment';
 import { action } from '@ember/object';
-import triggerAnalytics from 'irene/utils/trigger-analytics';
-import parseEmails from 'irene/utils/parse-emails';
-import { tracked } from '@glimmer/tracking';
 import IntlService from 'ember-intl/services/intl';
 import Store from '@ember-data/store';
+import { waitForPromise } from '@ember/test-waiters';
+
+import triggerAnalytics from 'irene/utils/trigger-analytics';
+import parseEmails from 'irene/utils/parse-emails';
+import ENV from 'irene/config/environment';
 import RealtimeService from 'irene/services/realtime';
 import OrganizationTeamModel from 'irene/models/organization-team';
 
@@ -65,7 +67,7 @@ export default class InviteMemberComponent extends Component<InviteMemberSignatu
         { email }
       );
 
-      await orgInvite.save();
+      await waitForPromise(orgInvite.save());
     }
   });
 
@@ -84,7 +86,7 @@ export default class InviteMemberComponent extends Component<InviteMemberSignatu
       this.isInvitingMember = true;
 
       for (let i = 0; i < emails.length; i++) {
-        await this.inviteMember.perform(emails[i]);
+        await waitForPromise(this.inviteMember.perform(emails[i]));
       }
 
       // cleanup or close function

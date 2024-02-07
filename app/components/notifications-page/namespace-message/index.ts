@@ -106,7 +106,9 @@ export default class NotificationsPageNamespaceMessageComponent extends Componen
     ns.deleteRecord();
 
     await ns.save();
-    await this.fetch.perform();
+
+    ns.unloadRecord();
+    this.namespace = null;
   });
 
   get isApproved() {

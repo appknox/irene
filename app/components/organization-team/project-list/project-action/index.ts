@@ -12,6 +12,7 @@ import RealtimeService from 'irene/services/realtime';
 import MeService from 'irene/services/me';
 import OrganizationTeamProjectModel from 'irene/models/organization-team-project';
 import OrganizationTeamModel from 'irene/models/organization-team';
+import { waitForPromise } from '@ember/test-waiters';
 
 export interface OrganizationProjectOverviewComponentSignature {
   Args: {
@@ -50,7 +51,7 @@ export default class OrganizationProjectOverview extends Component<OrganizationP
       const prj = this.args.project;
       const team = this.args.team;
 
-      await prj.deleteProject(team.id);
+      await waitForPromise(prj.deleteProject(team.id));
       await this.store.unloadRecord(prj);
 
       // reload project list
@@ -68,7 +69,7 @@ export default class OrganizationProjectOverview extends Component<OrganizationP
 
       // reload team to update project count
       // for some reason because of 'reloadTeamProjects' this has to be last for test & implementation to work
-      await team.reload();
+      await waitForPromise(team.reload());
     } catch (e) {
       const err = e as AdapterError;
       let errMsg = this.intl.t('pleaseTryAgain');

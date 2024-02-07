@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import Store from '@ember-data/store';
 import { action } from '@ember/object';
 import IntlService from 'ember-intl/services/intl';
+import { waitForPromise } from '@ember/test-waiters';
 
 import ENV from 'irene/config/environment';
 import MeService from 'irene/services/me';
@@ -61,7 +62,12 @@ export default class ProjectSettingsGeneralSettingsCollaboratorsTableActionCompo
 
   removeCollaborator = task(async () => {
     try {
-      await this.collaborator?.deleteCollaborator(String(this.project?.id));
+      await waitForPromise(
+        (this.collaborator as ProjectCollaboratorModel).deleteCollaborator(
+          String(this.project?.id)
+        )
+      );
+
       this.store.unloadRecord(this.collaborator as ProjectCollaboratorModel);
 
       this.notify.success(this.tCollaboratorRemoved);

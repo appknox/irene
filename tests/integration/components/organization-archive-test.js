@@ -267,6 +267,8 @@ module('Integration | Component | organization-archive', function (hooks) {
     'it should export excel archive for selected dates',
     [{ fail: false }, { fail: true }],
     async function (assert, { fail }) {
+      const createOrgArchive = () => this.server.create('organization-archive');
+
       this.server.get('/organizations/:id/archives', (schema) => {
         const results = schema.organizationArchives.all().models;
 
@@ -274,7 +276,7 @@ module('Integration | Component | organization-archive', function (hooks) {
       });
 
       this.server.post('/organizations/:id/archives', () => {
-        return fail ? new Response(500) : {};
+        return fail ? new Response(500) : createOrgArchive()?.toJSON();
       });
 
       this.server.get('/organizations/:id/users/:userId', (schema, req) => {

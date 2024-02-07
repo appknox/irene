@@ -163,7 +163,7 @@ module('Integration | Component | organization-email-domain', function (hooks) {
 
         this.set('response', domain);
 
-        return domain;
+        return domain.toJSON();
       });
 
       this.set('isEditable', true);
@@ -191,7 +191,7 @@ module('Integration | Component | organization-email-domain', function (hooks) {
           0
         );
 
-        assert.dom('[data-test-orgEmailDomain-chip="0-"]').doesNotExist();
+        assert.dom('[data-test-orgEmailDomain-chip]').doesNotExist();
       } else {
         assert.strictEqual(
           notify.successMsg,
@@ -204,7 +204,7 @@ module('Integration | Component | organization-email-domain', function (hooks) {
         );
 
         assert
-          .dom('[data-test-orgEmailDomain-chip="0-"]')
+          .dom(`[data-test-orgEmailDomain-chip="0-${this.response.id}"]`)
           .hasText(this.response.domain_name);
       }
     }

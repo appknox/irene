@@ -45,7 +45,7 @@ export default class AkAccordionGroupComponent extends Component<AkAccordionGrou
     if (this.args.openMultiple && this.args.defaultOpen?.length) {
       this.accordionOpenStates = this.args.defaultOpen.reduce(
         (acc, curr) => ({ ...acc, [curr]: true }),
-        this.accordionOpenStates
+        {}
       );
     }
   }

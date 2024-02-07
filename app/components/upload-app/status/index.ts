@@ -9,6 +9,7 @@ import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { waitForPromise } from '@ember/test-waiters';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import DS from 'ember-data';
@@ -216,9 +217,11 @@ export default class UploadAppStatusComponent extends Component {
 
   getSubmissions = task(async () => {
     try {
-      await this.store.query('submission', {
-        status: ENUMS.SUBMISSION_STATUS.VALIDATING,
-      });
+      await waitForPromise(
+        this.store.query('submission', {
+          status: ENUMS.SUBMISSION_STATUS.VALIDATING,
+        })
+      );
 
       this.submissions = this.store.peekAll('submission');
     } catch (err) {

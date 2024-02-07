@@ -5,6 +5,8 @@ import { htmlSafe } from '@ember/template';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import { waitForPromise } from '@ember/test-waiters';
+
 import { REPORT } from 'irene/utils/constants';
 import parseError from 'irene/utils/parse-error';
 
@@ -36,9 +38,9 @@ export default class PartnerClientReportDownloadComponent extends Component {
     return this.reports == null || this.isGenerating;
   }
 
-  @task(function* (id) {
+  getReport = task(async (id) => {
     try {
-      this.latestReport = yield this.store.queryRecord(
+      this.latestReport = await this.store.queryRecord(
         'partner/partnerclient-report',
         {
           clientId: this.args.clientId,
@@ -48,12 +50,11 @@ export default class PartnerClientReportDownloadComponent extends Component {
     } catch (err) {
       this.latestReport = {};
     }
-  })
-  getReport;
+  });
 
-  @task(function* () {
+  getReports = task(async () => {
     try {
-      this.reports = yield this.store.query(
+      this.reports = await this.store.query(
         'partner/partnerclient-file-report',
         {
           clientId: this.args.clientId,
@@ -62,7 +63,10 @@ export default class PartnerClientReportDownloadComponent extends Component {
         }
       );
       if (this.reports.length) {
-        yield this.getReport.perform(this.reports.firstObject.id);
+        await waitForPromise(
+          this.getReport.perform(this.reports.firstObject.id)
+        );
+
         this.pollReportProgress();
       } else {
         this.latestReport = {};
@@ -71,18 +75,19 @@ export default class PartnerClientReportDownloadComponent extends Component {
       this.reports = null;
       this.reportListAPIError = true;
     }
-  })
-  getReports;
+  });
 
   @action
   pollReportProgress() {
     if (this.latestReport.progress == 100) {
       return;
     }
+
     const reportId = this.latestReport.id;
     if (!reportId) {
       return;
     }
+
     let stopPoll = this.poll.startPolling(async () => {
       try {
         let report = await this.store.queryRecord(
@@ -92,6 +97,7 @@ export default class PartnerClientReportDownloadComponent extends Component {
             id: this.reports.firstObject.id,
           }
         );
+
         if (report.progress == 100) {
           stopPoll();
         }
@@ -101,35 +107,41 @@ export default class PartnerClientReportDownloadComponent extends Component {
     }, 5000);
   }
 
-  @task(function* () {
+  generatePDFReport = task(async () => {
     try {
-      let file = yield this.store.queryRecord('partner/partnerclient-file', {
+      let file = await this.store.queryRecord('partner/partnerclient-file', {
         clientId: this.args.clientId,
         id: this.args.fileId,
       });
-      yield file.createReport(this.args.clientId, this.args.fileId, {});
-      yield this.getReports.perform();
+
+      await waitForPromise(
+        file.createReport(this.args.clientId, this.args.fileId, {})
+      );
+
+      await waitForPromise(this.getReports.perform());
+
       this.pollReportProgress();
-      yield this.notify.success(this.intl.t('reportIsGettingGenerated'));
+      this.notify.success(this.intl.t('reportIsGettingGenerated'));
     } catch (err) {
       this.notify.error(parseError(err, this.intl.t('reportGenerateError')));
     }
-  })
-  generatePDFReport;
+  });
 
   @action
   onGenerate() {
     this.generatePDFReport.perform();
   }
 
-  @task(function* (reportId) {
+  downloadPDFReport = task(async (reportId) => {
     try {
       const adapter = this.store.adapterFor('file-report');
-      const pdfReport = yield adapter.getReportByType(
+
+      const pdfReport = await adapter.getReportByType(
         'file-report',
         reportId,
         REPORT.TYPE.PDF
       );
+
       if (!pdfReport || !pdfReport.url) {
         throw new Error(this.intl.t('downloadUrlNotFound'));
       }
@@ -143,8 +155,7 @@ export default class PartnerClientReportDownloadComponent extends Component {
     } catch {
       this.notify.error(this.intl.t('downloadUrlNotFound'));
     }
-  })
-  downloadPDFReport;
+  });
 
   @action
   onDownload(reportId) {

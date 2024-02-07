@@ -13,6 +13,7 @@ import { Changeset } from 'ember-changeset';
 import { BufferedChangeset } from 'ember-changeset/types';
 import { validateStoreDomain, validateStorePathname } from './validator';
 import { validatePresence } from 'ember-changeset-validations/validators';
+import { waitForPromise } from '@ember/test-waiters';
 
 type ChangesetBufferProps = BufferedChangeset & {
   url: string;
@@ -54,7 +55,7 @@ export default class UploadAppViaLinkComponent extends Component {
   }
 
   uploadAppViaLink = task(async () => {
-    await this.changeset?.validate?.();
+    await waitForPromise((this.changeset as ChangesetBufferProps).validate?.());
 
     if (!this.changeset?.isValid) {
       return;
@@ -65,7 +66,7 @@ export default class UploadAppViaLinkComponent extends Component {
         url: this.changeset.url,
       });
 
-      await uploadAppUrl.save();
+      await waitForPromise(uploadAppUrl.save());
 
       this.closeLinkUploadModal();
     } catch (error) {

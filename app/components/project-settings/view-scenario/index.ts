@@ -6,6 +6,7 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import Store from '@ember-data/store';
 import RouterService from '@ember/routing/router-service';
+import { waitForPromise } from '@ember/test-waiters';
 
 import ProjectModel from 'irene/models/project';
 import ScanParameterGroupModel from 'irene/models/scan-parameter-group';
@@ -49,9 +50,11 @@ export default class ProjectSettingsViewScenarioComponent extends Component<Proj
 
   fetchScanParameters = task(async () => {
     try {
-      const parameterList = await this.store.query('scan-parameter', {
-        groupId: this.args.scenario?.id,
-      });
+      const parameterList = await waitForPromise(
+        this.store.query('scan-parameter', {
+          groupId: this.args.scenario?.id,
+        })
+      );
 
       this.parameterList = parameterList.toArray();
     } catch (error) {

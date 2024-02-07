@@ -4,9 +4,10 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import Store from '@ember-data/store';
+import IntlService from 'ember-intl/services/intl';
+import { waitForPromise } from '@ember/test-waiters';
 import ProjectModel from 'irene/models/project';
 import ProfileModel from 'irene/models/profile';
-import IntlService from 'ember-intl/services/intl';
 
 interface ProjectSettingsAnalysisSettingsReportPreferenceSignature {
   Args: {
@@ -78,7 +79,9 @@ export default class ProjectSettingsAnalysisSettingsReportPreferenceComponent ex
     const apiScan = !!this.reportPreference?.show_api_scan;
     const manualScan = !!this.reportPreference?.show_manual_scan;
 
-    await this.saveReportPreference.perform(dynamicScan, apiScan, manualScan);
+    await waitForPromise(
+      this.saveReportPreference.perform(dynamicScan, apiScan, manualScan)
+    );
   });
 
   saveAPIReportPreference = task(async (apiScanChecked: boolean) => {
@@ -86,7 +89,9 @@ export default class ProjectSettingsAnalysisSettingsReportPreferenceComponent ex
     const apiScan = apiScanChecked;
     const manualScan = !!this.reportPreference?.show_manual_scan;
 
-    await this.saveReportPreference.perform(dynamicScan, apiScan, manualScan);
+    await waitForPromise(
+      this.saveReportPreference.perform(dynamicScan, apiScan, manualScan)
+    );
   });
 
   saveManualReportPreference = task(async (manualScanChecked: boolean) => {
@@ -94,7 +99,9 @@ export default class ProjectSettingsAnalysisSettingsReportPreferenceComponent ex
     const apiScan = !!this.reportPreference?.show_api_scan;
     const manualScan = manualScanChecked;
 
-    await this.saveReportPreference.perform(dynamicScan, apiScan, manualScan);
+    await waitForPromise(
+      this.saveReportPreference.perform(dynamicScan, apiScan, manualScan)
+    );
   });
 
   saveReportPreference = task(

@@ -3,6 +3,7 @@ import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
 import { action } from '@ember/object';
+import { waitForPromise } from '@ember/test-waiters';
 
 import parseError from 'irene/utils/parse-error';
 import ClipboardJS from 'clipboard/src/clipboard';
@@ -78,11 +79,11 @@ export default class SbomScanReportDrawerReportListItemComponent extends Compone
 
   handleDownloadReport = task(async (type: SbomReportType) => {
     try {
-      const data = await this.sbomReport?.downloadReport(type);
+      const data = await waitForPromise(
+        (this.sbomReport as SbomReportModel).downloadReport(type)
+      );
 
-      if (data) {
-        this.window.open(data.url, '_blank');
-      }
+      this.window.open(data.url, '_blank');
     } catch (e) {
       this.notify.error(parseError(e, this.tPleaseTryAgain));
     }
@@ -90,8 +91,11 @@ export default class SbomScanReportDrawerReportListItemComponent extends Compone
 
   handleGenerateReport = task(async (type: SbomReportType) => {
     try {
-      await this.sbomReport?.generateReport(type);
-      await this.sbomReport?.reload();
+      await waitForPromise(
+        (this.sbomReport as SbomReportModel).generateReport(type)
+      );
+
+      await waitForPromise((this.sbomReport as SbomReportModel).reload());
     } catch (e) {
       this.notify.error(parseError(e, this.tPleaseTryAgain));
     }

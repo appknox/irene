@@ -1,6 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
+
 import {
   click,
   render,
@@ -8,6 +9,7 @@ import {
   fillIn,
   triggerEvent,
 } from '@ember/test-helpers';
+
 import { setupIntl } from 'ember-intl/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 import { Response } from 'miragejs';
@@ -154,20 +156,18 @@ module(
       'test add-team-member add user action',
       [{ fail: false }, { fail: true }],
       async function (assert, { fail }) {
-        this.set('usersAdded', false);
-
-        this.server.get('organizations/:id/users', (schema) => {
-          const results = this.usersAdded
-            ? schema.organizationUsers.all().models.slice(2)
-            : schema.organizationUsers.all().models;
+        this.server.get('/organizations/:id/users', (schema) => {
+          const results = schema.organizationUsers.all().models;
 
           return { count: results.length, next: null, previous: null, results };
         });
 
         this.server.put(
           '/organizations/:id/teams/:teamId/members/:memId',
-          () => {
-            return fail ? new Response(500) : {};
+          (schema, req) => {
+            schema.db.organizationUsers.remove(req.params.memId);
+
+            return fail ? new Response(500) : { id: req.params.teamId };
           }
         );
 
@@ -229,23 +229,23 @@ module(
           .isChecked()
           .isNotDisabled();
 
-        if (!fail) {
-          this.set('usersAdded', true);
-        }
-
         await click('[data-test-action-btn]');
 
         const notify = this.owner.lookup('service:notifications');
-        const latestRows = findAll('[data-test-addUserList-row]');
+
+        const latestRows = () => findAll('[data-test-addUserList-row]');
 
         if (fail) {
           assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
-          assert.strictEqual(latestRows.length, this.organizationUsers.length);
+          assert.strictEqual(
+            latestRows().length,
+            this.organizationUsers.length
+          );
         } else {
           assert.strictEqual(notify.successMsg, 't:teamMemberAdded:()');
 
           assert.strictEqual(
-            latestRows.length,
+            latestRows().length,
             this.organizationUsers.length - 2
           );
         }

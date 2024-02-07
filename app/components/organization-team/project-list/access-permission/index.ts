@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import OrganizationTeamModel from 'irene/models/organization-team';
 import OrganizationTeamProjectModel from 'irene/models/organization-team-project';
+import { waitForPromise } from '@ember/test-waiters';
 
 export interface OrganizationTeamProjectListAccessPermissionComponentSignature {
   Args: {
@@ -23,7 +24,7 @@ export default class OrganizationTeamProjectListAccessPermission extends Compone
 
       prj.write = checked;
 
-      await prj.updateProject(this.args.team.id);
+      await waitForPromise(prj.updateProject(this.args.team.id));
 
       this.notify.success(this.intl.t('permissionChanged'));
     } catch (e) {

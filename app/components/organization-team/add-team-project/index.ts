@@ -12,6 +12,7 @@ import OrganizationProjectModel from 'irene/models/organization-project';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import DS from 'ember-data';
 import { ActionContentType } from '../details/active-action';
+import { waitForPromise } from '@ember/test-waiters';
 
 export interface OrganizationTeamAddTeamProjectComponentSignature {
   Args: {
@@ -113,7 +114,7 @@ export default class OrganizationTeamAddTeamProjectComponent extends Component<O
         };
 
         const team = this.args.team;
-        await team.addProject(data, project.id);
+        await waitForPromise(team.addProject(data, project.id));
 
         this.realtime.incrementProperty('TeamProjectCounter');
       } catch (e) {
@@ -142,7 +143,7 @@ export default class OrganizationTeamAddTeamProjectComponent extends Component<O
     }
 
     for (let i = 0; i < selectedProjects.length; i++) {
-      await this.addTeamProject.perform(selectedProjects[i]);
+      await waitForPromise(this.addTeamProject.perform(selectedProjects[i]));
     }
 
     if (this.addProjectErrorCount === 0) {
@@ -155,7 +156,7 @@ export default class OrganizationTeamAddTeamProjectComponent extends Component<O
     }
 
     // reload team to update project count
-    await this.args.team.reload();
+    await waitForPromise(this.args.team.reload());
 
     this.isAddingProject = false;
   });
@@ -202,9 +203,8 @@ export default class OrganizationTeamAddTeamProjectComponent extends Component<O
         exclude_team: this.args.team.id,
       };
 
-      this.projectResponse = await this.store.query(
-        'organization-project',
-        queryParams
+      this.projectResponse = await waitForPromise(
+        this.store.query('organization-project', queryParams)
       );
     } catch (e) {
       const err = e as AdapterError;

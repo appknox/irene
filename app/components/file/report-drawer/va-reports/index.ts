@@ -9,6 +9,7 @@ import { addObserver, removeObserver } from '@ember/object/observers';
 import Store from '@ember-data/store';
 import IntlService from 'ember-intl/services/intl';
 import { action } from '@ember/object';
+import { waitForPromise } from '@ember/test-waiters';
 
 import parseError from 'irene/utils/parse-error';
 import FileModel from 'irene/models/file';
@@ -226,7 +227,7 @@ export default class FileReportDrawerVaReportsComponent extends Component<FileRe
         fileId: this.fileId,
       });
 
-      await genReport.save();
+      await waitForPromise(genReport.save());
       await this.getReports.perform();
 
       this.notify.success(this.intl.t('reportIsGettingGenerated'));
