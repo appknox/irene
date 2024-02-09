@@ -1,0 +1,132 @@
+{{!@glint-nocheck }}
+
+<AkStack
+  @width='full'
+  @justifyContent='space-between'
+  local-class='file-overview-details'
+>
+  <AkStack @spacing='0.5' @alignItems='center'>
+    {{#if (eq @file.isActive false)}}
+      <AkTooltip
+        @title={{t 'fileInactive'}}
+        @placement='top'
+        @arrow={{true}}
+        data-test-fileOverview-fileInactive-tooltip
+      >
+        <AkIcon
+          @iconName='error'
+          @color='secondary'
+          @size='small'
+          {{style fontSize='12px !important'}}
+          data-test-fileOverview-fileInactiveIndicator
+        />
+      </AkTooltip>
+    {{/if}}
+
+    <AkTypography
+      @variant='body1'
+      @color='textSecondary'
+      data-test-fileOverview-fileID-text
+    >
+      {{t 'fileID'}}
+      -
+    </AkTypography>
+
+    <AkTypography @variant='h6' data-test-fileOverview-fileID>
+      {{@file.id}}
+    </AkTypography>
+  </AkStack>
+
+  <AkStack @spacing='1'>
+    <AkStack
+      local-class='platform-{{@file.project.platformIconClass}}'
+      data-test-fileOverview-platformIcon
+    >
+      <AkIcon @iconName={{@file.project.platformIconClass}} />
+    </AkStack>
+
+    {{#if @file.submission.url}}
+      <AkTooltip
+        @placement='right'
+        @arrow={{true}}
+        @title='{{if
+          @file.submission.isIos
+          (t "openInAppstore")
+          (t "openInPlaystore")
+        }}'
+      >
+        <a
+          target='_blank'
+          href={{@file.submission.url}}
+          rel='noopener noreferrer'
+          local-class='store-logo-container'
+        >
+          {{#if @file.submission.isIos}}
+            <AkSvg::AppstoreLogo local-class='appstore-logo-vector' />
+          {{/if}}
+
+          {{#if @file.submission.isAndroid}}
+            <AkSvg::PlaystoreLogo />
+          {{/if}}
+        </a>
+      </AkTooltip>
+    {{/if}}
+  </AkStack>
+</AkStack>
+
+<AkDivider @color='dark' />
+
+<AkStack
+  @width='full'
+  @justifyContent='space-between'
+  local-class='file-overview-details'
+>
+  <AkStack data-test-fileOverview-version @spacing='0.5'>
+    {{#if this.hasVersion}}
+      <AkTypography @variant='body1' @color='textSecondary'>
+        {{t 'version'}}
+        -
+      </AkTypography>
+
+      <AkTooltip
+        @title='{{t "version"}} - {{@file.version}}'
+        @arrow={{true}}
+        {{style maxWidth='50px'}}
+      >
+        <AkTypography @variant='h6' @noWrap={{true}}>
+          {{@file.version}}
+        </AkTypography>
+      </AkTooltip>
+    {{else}}
+      <AkSkeleton @width='100px' @height='20px' @variant='rectangular' />
+    {{/if}}
+  </AkStack>
+
+  <AkStack @spacing='0.5'>
+    {{#if @file.versionCode}}
+      <AkTypography
+        @variant='body1'
+        @color='textSecondary'
+        data-test-fileOverview-versionCodeText
+      >
+        {{t 'versionCodeTitleCase'}}
+        -
+      </AkTypography>
+
+      <AkTooltip
+        @title='{{t "versionCodeTitleCase"}} - {{@file.versionCode}}'
+        @arrow={{true}}
+        {{style maxWidth='50px'}}
+      >
+        <AkTypography
+          @variant='h6'
+          @noWrap={{true}}
+          data-test-fileOverview-versionCode
+        >
+          {{@file.versionCode}}
+        </AkTypography>
+      </AkTooltip>
+
+    {{/if}}
+  </AkStack>
+</AkStack>

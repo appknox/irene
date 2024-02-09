@@ -146,7 +146,7 @@
       {{else if this.hasFiles}}
         <div local-class='file-list-container'>
           {{#each this.files as |file|}}
-            <FileCompare::FileOverview
+            <FileOverview
               @file={{file}}
               @profileId={{file.profile.id}}
               @isSelectedFile={{or

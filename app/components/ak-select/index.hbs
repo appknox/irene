@@ -20,7 +20,7 @@
     >
       <PowerSelect
         @triggerId={{this.labelId}}
-        @dropdownClass='{{this.classes.dropdown}}'
+        @dropdownClass='{{@dropdownClass}} {{this.classes.dropdown}}'
         @triggerClass='
           {{@triggerClass}}
           {{this.classes.trigger}} 
@@ -37,6 +37,14 @@
         @loadingMessage={{@loadingMessage}}
         @selectedItemComponent={{@selectedItemComponent}}
         @verticalPosition={{or @verticalPosition 'below'}}
+        @searchEnabled={{@searchEnabled}}
+        @searchPlaceholder={{@searchPlaceholder}}
+        @extra={{this.extra}}
+        @search={{@search}}
+        @beforeOptionsComponent={{or
+          @beforeOptionsComponent
+          'ak-select/before-option'
+        }}
         data-test-power-select
         as |option|
       >

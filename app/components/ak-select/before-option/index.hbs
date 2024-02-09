@@ -1,0 +1,25 @@
+{{#if this.optionTitle}}
+  <AkTypography @variant='subtitle1' local-class='before-option-label'>
+    {{this.optionTitle}}
+  </AkTypography>
+{{/if}}
+
+{{#if @searchEnabled}}
+  <div local-class='before-option-search'>
+    <AkTextField
+      @placeholder={{@searchPlaceholder}}
+      @value={{@select.searchText}}
+      {{on 'input' this.handleInput}}
+      {{on 'focus' @onFocus}}
+      {{on 'blur' @onBlur}}
+      {{on 'keyup' this.handleKeydown}}
+      {{did-insert this.focusInput}}
+      {{will-destroy this.clearSearch}}
+      local-class='team-name-text-input'
+    >
+      <:leftAdornment>
+        <AkIcon @iconName='search' @color='textSecondary' />
+      </:leftAdornment>
+    </AkTextField>
+  </div>
+{{/if}}

@@ -1,44 +1,13 @@
 <LinkTo
   @route='authenticated.dashboard.file'
-  @model={{this.project.lastFile.id}}
+  @model={{this.lastFile.id}}
+  local-class='project-card'
   data-test-project-overview-container
 >
   <FileOverview
-    @file={{this.project.lastFile}}
+    @file={{this.lastFile}}
     @profileId={{this.project.activeProfileId}}
-  >
-    <div
-      class='flex-row flex-justify-center flex-row-gap-2 px-1 pb-2'
-      {{style marginTop='auto'}}
-    >
-      <LinkTo
-        @route='authenticated.project.settings'
-        @model={{this.project.id}}
-        class='button is-primary mp-project-setting'
-      >
-        <AkIcon @iconName='settings' @size='small' />&nbsp;
-        {{t 'settings'}}
-      </LinkTo>
-
-      {{#if this.project.hasMultipleFiles}}
-        <LinkTo
-          @route='authenticated.project.files'
-          @model={{this.project.id}}
-          class='button is-primary mp-all-scans'
-        >
-          <AkIcon @iconName='apps' @size='small' />&nbsp;
-          {{t 'allUploads'}}
-        </LinkTo>
-
-        <LinkTo
-          @route='authenticated.choose'
-          @model={{this.project.lastFile.id}}
-          class='button is-primary mp-file-compare'
-        >
-          <AkIcon @iconName='compare-arrows' @size='small' />&nbsp;
-          {{t 'compare'}}
-        </LinkTo>
-      {{/if}}
-    </div>
-  </FileOverview>
+    @hideCTAs={{true}}
+    @showMenuButton={{true}}
+  />
 </LinkTo>

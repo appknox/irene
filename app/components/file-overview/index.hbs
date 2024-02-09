@@ -1,327 +1,51 @@
 <AkStack
-  @width='full'
+  ...attributes
   @direction='column'
-  @alignItems='center'
-  class='card file-card'
-  {{style height='100%'}}
-  data-test-file-overview-container
+  local-class='file-overview'
+  data-test-fileOverview-root
 >
-  <AkStack @width='full' local-class='card-header'>
-    <div class='card-header-icon'>
-      <img
-        src={{this.file.iconUrl}}
-        alt={{this.file.name}}
-        data-test-file-overview-icon-url
+  <FileOverview::Header
+    @file={{@file}}
+    @disableSelection={{@disableSelection}}
+    @hideCTAs={{@hideCTAs}}
+    @hideOpenInNewTabIcon={{@hideOpenInNewTabIcon}}
+    @isSelectedFile={{@isSelectedFile}}
+    @onFileSelect={{@onFileSelect}}
+    @showMenuButton={{@showMenuButton}}
+  />
+
+  <FileOverview::FileDetails @file={{@file}} />
+
+  <AkDivider @color='dark' />
+
+  <FileOverview::ScanStatuses @file={{@file}} />
+
+  <AkDivider @color='dark' />
+
+  <AkStack
+    @width='full'
+    @alignItems='center'
+    @justifyContent='center'
+    @spacing='6'
+    class='p-3'
+    local-class='file-overview-chart'
+    data-test-fileOverview-severityCountChartAndValues
+  >
+    {{#if this.profileId}}
+      <FileChart
+        {{style maxWidth='145px' maxHeight='145px'}}
+        @file={{@file}}
+        @legendMaxWidth={{200}}
+        data-test-fileOverview-chart
       />
-    </div>
-    <p class='card-header-title'>
-      <ul class='is-fullwidth'>
-        <li>
-          <h5>
-            <div class='flex-row flex-align-center flex-justify-space-between'>
-              <div class='hide-overflow' data-test-file-overview-file-name>
-                {{this.file.name}}
-              </div>
-
-              <AkStack @alignItems='center' @spacing='1'>
-                <AkIcon
-                  data-test-file-overview-platform-icon
-                  @iconName='{{this.file.project.platformIconClass}}'
-                />
-
-                {{#if this.file.submission.url}}
-                  <AkTooltip
-                    @placement='top'
-                    @arrow={{true}}
-                    @title='{{if
-                      this.file.submission.isIos
-                      (t "openInAppstore")
-                      (t "openInPlaystore")
-                    }}'
-                  >
-                    <a
-                      target='_blank'
-                      href={{this.file.submission.url}}
-                      rel='noopener noreferrer'
-                      {{on 'click' this.handleLinkClick}}
-                      local-class='store-logo-container'
-                    >
-                      {{#if this.file.submission.isIos}}
-                        <AkSvg::AppstoreLogo
-                          local-class='appstore-logo-vector'
-                        />
-                      {{/if}}
-
-                      {{#if this.file.submission.isAndroid}}
-                        <AkSvg::PlaystoreLogo />
-                      {{/if}}
-                    </a>
-                  </AkTooltip>
-                {{/if}}
-              </AkStack>
-            </div>
-          </h5>
-        </li>
-        <li
-          title={{this.file.project.packageName}}
-          class='hide-overflow package-name'
-          data-test-file-overview-package-name
-        >
-          {{this.file.project.packageName}}
-        </li>
-        <li
-          class='hide-overflow font-small text-lightgray'
-          data-test-file-overview-version
-        >
-          {{#if this.file.version}}
-            version:
-            {{this.file.version}}
-          {{/if}}
-          {{#if this.file.versionCode}}
-            <span class='margin-l-1'></span>
-            version code:
-            {{this.file.versionCode}}
-          {{/if}}
-        </li>
-      </ul>
-    </p>
+    {{else}}
+      <AkSkeleton @width='100%' @height='200px' @variant='rectangular' />
+    {{/if}}
   </AkStack>
 
-  <AkStack
-    @width='full'
-    @alignItems='center'
-    @justifyContent='space-between'
-    local-class='app-information'
-  >
-    <div local-class='file-id-text' data-test-file-overview-file-id>
-      {{#unless this.file.isActive}}
-        <AkTooltip
-          @placement='top'
-          @title='{{t "fileInactive"}}'
-          @arrow={{true}}
-          class='margin-right'
-          data-test-file-overview-file-inactive-tooltip
-        >
-          <AkIcon
-            @iconName='error'
-            @size='small'
-            local-class='file-in-active-icon'
-            data-test-file-overview-file-inactive-icon
-          />
-        </AkTooltip>
-      {{/unless}}
+  <AkDivider @color='dark' />
 
-      FILE ID -
-      {{this.file.id}}
-    </div>
-    <div class='file-overview-scan-status'>
-      <div class='scan-status-tag' data-test-static-scan-status-tag>
-        {{#if this.file.isStaticDone}}
-          <div class='scan-status-tag-icon scan-status-tag-icon-done'>
-            <AkIcon @iconName='check-circle' @size='small' />
-          </div>
-        {{else}}
-          <div class='scan-status-tag-icon'>
-            <AkIcon @iconName='circle' @variant='outlined' @size='small' />
-          </div>
-        {{/if}}
-        <div
-          class='scan-status-tag-label'
-          data-test-static-scan-status-tag-label
-        >
-          {{t 'static'}}
-        </div>
-      </div>
-      <div class='scan-status-tag' data-test-dynamic-scan-status-tag>
-        {{#if this.file.isDynamicDone}}
-          <div class='scan-status-tag-icon scan-status-tag-icon-done'>
-            <AkIcon @iconName='check-circle' @size='small' />
-          </div>
-        {{else}}
-          <div class='scan-status-tag-icon'>
-            <AkIcon @iconName='circle' @variant='outlined' @size='small' />
-          </div>
-        {{/if}}
-        <div
-          class='scan-status-tag-label'
-          data-test-dynamic-scan-status-tag-label
-        >
-          {{t 'dynamic'}}
-        </div>
-      </div>
-      <div class='scan-status-tag' data-test-api-scan-status-tag>
-        {{#if this.file.isApiDone}}
-          <div class='scan-status-tag-icon scan-status-tag-icon-done'>
-            <AkIcon @iconName='check-circle' @size='small' />
-          </div>
-        {{else}}
-          <div class='scan-status-tag-icon'>
-            <AkIcon @iconName='circle' @variant='outlined' @size='small' />
-          </div>
-        {{/if}}
-        <div class='scan-status-tag-label' data-test-api-scan-status-tag-label>
-          {{t 'api'}}
-        </div>
-      </div>
-      {{#unless this.isManualScanDisabled}}
-        <div class='scan-status-tag' data-test-manual-scan-status-tag>
-          {{#if this.file.isManualDone}}
-            <div class='scan-status-tag-icon scan-status-tag-icon-done'>
-              <AkIcon @iconName='check-circle' @size='small' />
-            </div>
-          {{else if this.file.isManualRequested}}
-            <div class='scan-status-tag-icon scan-status-tag-icon-done'>
-              <AkIcon @iconName='timer' @variant='outlined' @size='small' />
-            </div>
-          {{else}}
-            <div class='scan-status-tag-icon'>
-              <AkIcon @iconName='circle' @variant='outlined' @size='small' />
-            </div>
-          {{/if}}
-          <div
-            class='scan-status-tag-label'
-            data-test-manual-scan-status-tag-label
-          >
-            {{t 'manual'}}
-          </div>
-        </div>
-      {{/unless}}
-    </div>
-  </AkStack>
-
-  <AkStack
-    @direction='column'
-    @alignItems='center'
-    @width='full'
-    class='card-content'
-  >
-    <div class='flex-row flex-justify-center mt-3'>
-      <div class='flex-row flex-justify-center {{if @isReverse "is-reverse"}}'>
-        <div class='flex-center px-3'>
-          <EmberChart
-            @type='doughnut'
-            @data={{this.file.doughnutData}}
-            @width={{150}}
-            @height={{150}}
-            @options={{this.chartOptions}}
-          />
-        </div>
-        <div class='px-3'>
-          <div class='lowercase-text text-centre'>
-            <AkTooltip
-              @placement='bottom'
-              @arrow={{true}}
-              @title='{{this.file.createdOnDateTime}}'
-            >
-              <div
-                class='overflow ellipse'
-                data-test-file-overview-date-created
-              >
-                {{t 'started'}}&nbsp;
-                {{dayjs-from-now this.file.createdOn}}
-              </div>
-            </AkTooltip>
-          </div>
-          <ul class='risk-table'>
-            <div class='risk-values'>
-              <div class='columns'>
-                <div class='column'>
-                  <li class='is-critical'>
-                    {{t 'critical'}}
-                  </li>
-                </div>
-                <div class='column' data-test-critical-risk-count>
-                  {{this.file.countRiskCritical}}
-                </div>
-              </div>
-              <div class='columns'>
-                <div class='column'>
-                  <li class='is-danger'>
-                    {{t 'high'}}
-                  </li>
-                </div>
-                <div class='column' data-test-count-risk-high>
-                  {{this.file.countRiskHigh}}
-                </div>
-              </div>
-              <div class='columns'>
-                <div class='column'>
-                  <li class='is-warning'>
-                    {{t 'medium'}}
-                  </li>
-                </div>
-                <div class='column' data-test-count-risk-medium>
-                  {{this.file.countRiskMedium}}
-                </div>
-              </div>
-              <div class='columns'>
-                <div class='column'>
-                  <li class='is-info'>
-                    {{t 'low'}}
-                  </li>
-                </div>
-                <div class='column' data-test-count-risk-low>
-                  {{this.file.countRiskLow}}
-                </div>
-              </div>
-              <div class='columns'>
-                <div class='column'>
-                  <li class='is-success'>
-                    {{t 'passed'}}
-                  </li>
-                </div>
-                <div class='column' data-test-count-risk-none>
-                  {{this.file.countRiskNone}}
-                </div>
-              </div>
-              <div
-                class='columns
-                  {{if
-                    this.unknownAnalysisStatus.status
-                    "visible"
-                    "invisible"
-                  }}'
-              >
-                <div class='column'>
-                  <li class='is-default'>
-                    {{t 'untested'}}
-                  </li>
-                </div>
-                <div class='column' data-test-count-risk-unknown>
-                  {{this.file.countRiskUnknown}}
-                </div>
-              </div>
-            </div>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <AkStack
-      @width='full'
-      @direction='row'
-      @justifyContent='center'
-      class='pr-2 pt-2 pl-2'
-    >
-      <AkStack
-        @direction='row'
-        @alignItems='center'
-        @width='fit-content'
-        @spacing='1'
-        local-class='file-tags-container'
-        data-test-file-tags
-      >
-        {{#each this.file.tags as |tag|}}
-          <AkChip
-            @label={{tag.name}}
-            {{style height='26px'}}
-            data-test-file-tag
-            data-test-tag='{{tag.name}}'
-          />
-        {{/each}}
-      </AkStack>
-    </AkStack>
-  </AkStack>
+  <FileOverview::Tags @file={{@file}} />
 
   {{yield}}
 </AkStack>

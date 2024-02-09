@@ -89,7 +89,7 @@
       {{else if this.hasFiles}}
         <div local-class='file-compare-list-file-overviews'>
           {{#each this.otherFilesInTheProject as |file|}}
-            <FileCompare::FileOverview
+            <FileOverview
               @file={{file}}
               @profileId={{file.profile.id}}
               @isSelectedFile={{eq file.id this.fileToCompare.id}}

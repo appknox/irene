@@ -1,28 +1,25 @@
 <AkStack
   @width='full'
-  local-class='file-overview-statuses'
-  class='px-2 py-1'
-  data-test-fileCompare-fileOverview-scanStatuses
+  @justifyContent='space-between'
+  local-class='file-overview-status'
+  data-test-fileOverview-scanStatuses
 >
-  <AkStack @alignItems='center' @spacing='1.5'>
+  <AkStack @spacing='1'>
     {{#each this.scanStatuses as |status|}}
       <AkStack
         @alignItems='center'
         @spacing='0.5'
-        data-test-fileCompare-fileOverview-scanStatuses='{{status.name}}'
+        data-test-fileOverview-scanStatuses='{{status.name}}'
       >
         <AkIcon
           @iconName='{{if status.isDone "check-circle" "circle"}}'
           @variant={{if status.isDone 'filled' 'outlined'}}
           @color='success'
-          {{style fontSize='1.2857em !important'}}
-          data-test-fileCompare-fileOverview-scanStatus-icon
+          local-class='file-overview-status-icon'
+          data-test-fileOverview-scanStatus-icon
         />
 
-        <AkTypography
-          {{style fontSize='0.85714em !important'}}
-          data-test-fileCompare-fileOverview-scanStatus-name
-        >
+        <AkTypography @variant='body2' data-test-fileOverview-scanStatus-name>
           {{status.name}}
         </AkTypography>
       </AkStack>
@@ -32,32 +29,40 @@
       <AkStack
         @alignItems='center'
         @spacing='0.5'
-        data-test-fileCompare-fileOverview-manualScanStatus
+        data-test-fileOverview-manualScanStatus
       >
         {{#if @file.isManualDone}}
           <AkIcon
             @iconName='check-circle'
             @color='success'
-            {{style fontSize='1.2857em !important'}}
-            data-test-fileCompare-fileOverview-manualScanStatus-doneIcon
+            local-class='file-overview-status-icon'
+            data-test-fileOverview-manualScanStatus-doneIcon
           />
         {{else}}
           <AkIcon
             @iconName='{{if @file.isManualRequested "timer" "circle"}}'
             @color='success'
             @variant='outlined'
-            {{style fontSize='1.2857em !important'}}
-            data-test-fileCompare-fileOverview-manualScanStatus-requestedPendingIcon
+            local-class='file-overview-status-icon'
+            data-test-fileOverview-manualScanStatus-requestedPendingIcon
           />
         {{/if}}
 
         <AkTypography
-          {{style fontSize='0.85714em !important'}}
-          data-test-fileCompare-fileOverview-manualScanStatus-name
+          @variant='body2'
+          data-test-fileOverview-manualScanStatus-name
         >
           {{t 'manual'}}
         </AkTypography>
       </AkStack>
     {{/unless}}
   </AkStack>
+
+  <AkTooltip
+    @placement='bottom'
+    @arrow={{true}}
+    @title='{{this.file.createdOnDateTime}}'
+  >
+    <AkIcon @iconName='event' @color='textPrimary' />
+  </AkTooltip>
 </AkStack>

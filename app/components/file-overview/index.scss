@@ -1,50 +1,10 @@
-.card-header {
-  background-color: var(--neutral-grey-100);
-  padding: 1em;
-  box-sizing: border-box;
+.file-overview {
+  border-radius: var(--file-overview-border-radius);
+  border: 1px solid var(--file-overview-border-color-dark);
+  background-color: var(--file-overview-background-white);
+  height: 100%;
 }
 
-.app-information {
-  background-color: var(--neutral-grey-50);
-  padding: 0.2em 1em;
-  border: 1px solid var(--neutral-grey-100);
-  box-sizing: border-box;
-
-  .file-id-text {
-    display: flex;
-    align-items: center;
-    font-weight: bold;
-    font-size: 0.75em;
-    line-height: 1.4;
-    color: var(--neutral-grey-800);
-
-    .file-in-active-icon {
-      font-size: 13px;
-    }
-  }
-}
-
-.file-tags-container {
-  overflow-x: auto;
-  min-height: 26px;
-}
-
-.store-logo-container {
-  display: flex;
-  height: 24px;
-  width: 24px;
-  align-items: center;
-  justify-content: center;
-
-  &:hover {
-    background-color: var(
-      --file-overview-store-logo-container-background-color
-    );
-    border: 1px solid var(--file-overview-store-logo-container-border-color);
-  }
-}
-
-.appstore-logo-vector {
-  height: 16px;
-  width: 16px;
+.file-overview-chart {
+  flex: 1;
 }

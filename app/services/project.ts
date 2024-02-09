@@ -16,7 +16,7 @@ type ProjectQueryResponse = DS.AdapterPopulatedRecordArray<ProjectModel> & {
 };
 
 export const DEFAULT_PROJECT_QUERY_PARAMS = {
-  limit: 10,
+  limit: 12,
   offset: 0,
   query: '',
   sortKey: '-last_file_created_on',

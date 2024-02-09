@@ -1,0 +1,14 @@
+.file-overview-statuses {
+  background: var(--file-overview-background-grey);
+  border: 1px solid var(--file-overview-border-color-dark);
+  border-left: none;
+  border-right: none;
+}
+
+.file-overview-status {
+  padding: 0.57em 1.2em;
+}
+
+.file-overview-status-icon {
+  font-size: 1.357rem !important;
+}

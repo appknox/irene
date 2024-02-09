@@ -1,93 +1,24 @@
-{{#if this.hasProjects}}
-  <div class='flex-column'>
-    <div class='box-container home-page'>
-      <div local-class='filters'>
-        <label>
-          {{t 'search'}}
-          <div class='margin-top'>
-            <Input
-              @type='search'
-              @value={{this.query}}
-              placeholder={{t 'searchQuery'}}
-              class='input mp-search-query'
-              {{on 'input' this.onQueryChange}}
-              data-test-search-query-input
-            />
-          </div>
-        </label>
-        <div>
-          {{concat (t 'filterBy') ' ' (t 'team')}}
-          <div class='margin-top' data-test-select-team-container>
-            <PowerSelect
-              @triggerClass='input'
-              @dropdownClass='power-select-custom-repo'
-              @renderInPlace={{true}}
-              @searchPlaceholder={{t 'searchTeamByName'}}
-              @search={{this.searchTeams}}
-              @searchEnabled={{true}}
-              @options={{this.teams}}
-              @selected={{this.selectedTeam}}
-              @loadingMessage={{t 'loadingTeam'}}
-              @onChange={{this.onSelectTeam}}
-              @onOpen={{this.onOpenTFilter}}
-              @tagName='div'
-              class='select-team-class'
-              as |team|
-            >
-              {{team.name}}
-            </PowerSelect>
-          </div>
-        </div>
-        <div>
-          {{t 'sortBy'}}<div class='margin-top'>
-            <select
-              id='project-sort-property'
-              local-class='sorting-select'
-              class='input'
-              {{on 'change' this.sortProjects}}
-              data-test-project-sort-property
-            >
-              {{#each this.sortingKeyObjects as |sortingKeyObject|}}
-                <option
-                  value='{{sortingKeyObject.key}}'
-                  selected={{eq this.sortKey sortingKeyObject.key}}
-                  data-test-project-sort-property-option='{{sortingKeyObject.key}}'
-                >
-                  {{sortingKeyObject.text}}
-                </option>
-              {{/each}}
-            </select>
-          </div>
-        </div>
-        <div>
-          {{t 'filterBy'}}<div class='margin-top'>
-            <select
-              id='project-filter-platform'
-              class='input'
-              {{on 'change' this.filterPlatform}}
-              data-test-platform-filter
-            >
-              <option value='-1' data-test-platform-filter-option>
-                {{t 'allPlatforms'}}
-              </option>
-              {{#each this.platformObjects as |platformObject|}}
-                <option
-                  selected={{eq this.platform platformObject.value}}
-                  value={{platformObject.value}}
-                  data-test-platform-filter-option
-                >
-                  {{platformObject.key}}
-                </option>
-              {{/each}}
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class='py-3 px-2'>
+<div class='flex-column' local-class='home-page-container'>
+  <ProjectList::Header
+    @hasProjects={{this.hasProjects}}
+    @query={{this.query}}
+    @platform={{this.platform}}
+    @sortKey={{this.sortKey}}
+    @onQueryChange={{this.onQueryChange}}
+    @handleClear={{this.handleClear}}
+    @filterPlatform={{this.filterPlatform}}
+    @onSelectTeam={{this.onSelectTeam}}
+    @sortProjects={{this.sortProjects}}
+  />
+
+  {{#if this.hasProjects}}
+    <div>
       {{#if this.isLoading}}
-        <div class='flex-row flex-justify-center mt-7'>
-          <ThreeBounceSpinner />
+        <div class='flex-row flex-justify-center'>
+          <ProjectList::Loader
+            @loadingText='{{t "loading"}}...'
+            data-test-fileList-loadingContainer
+          />
         </div>
       {{else if this.showProjectResults}}
         <AkPaginationProvider
@@ -96,7 +27,7 @@
           @totalItems={{this.totalProjectCount}}
           @nextAction={{this.handlePrevNextAction}}
           @prevAction={{this.handlePrevNextAction}}
-          @itemPerPageOptions={{array 10 25 50}}
+          @itemPerPageOptions={{array 12 24 48}}
           @defaultLimit={{this.limit}}
           @offset={{this.offset}}
           as |pgc|
@@ -125,33 +56,56 @@
           {{/if}}
         </AkPaginationProvider>
       {{else if this.hasNoProjects}}
-        <div local-class='no-result-found'>
-          <h5 class='capitalize-text'>
+        <AkStack
+          local-class='no-project-container'
+          @alignItems='center'
+          @justifyContent='center'
+          @direction='column'
+        >
+          <AkSvg::ProjectListEmpty />
+
+          <AkTypography @variant='h4' @fontWeight='bold' class='pt-3 pb-1'>
             {{t 'noResultsFound'}}
-          </h5>
-          <h6>
+          </AkTypography>
+
+          <AkTypography @variant='h5' @fontWeight='regular' @align='center'>
             {{t 'tryAdjustingFilter'}}
-          </h6>
-        </div>
+          </AkTypography>
+
+        </AkStack>
       {{else}}
-        <div class='flex-row flex-justify-center mt-7'>
-          <ThreeBounceSpinner />
+        <div class='flex-row flex-justify-center'>
+          <ProjectList::Loader @loadingText='{{t "loading"}}...' />
         </div>
       {{/if}}
     </div>
-  </div>
-{{else}}
-  <div local-class='no-project-container' data-test-no-project-container>
-    <div local-class='no-project'>
-      <h4 class='capitalize-text' data-test-no-project-header>
-        {{t 'noProject'}}!!
-      </h4>
-      <h5 data-test-no-project-uploaded-text>
-        {{t 'noProjectUploaded'}}
-      </h5>
-      <h6 data-test-upload-new-project-text>
-        {{t 'uploadNewProject' htmlSafe=true}}
-      </h6>
-    </div>
-  </div>
-{{/if}}
+  {{else}}
+    <AkStack
+      local-class='no-project-container'
+      @alignItems='center'
+      @justifyContent='center'
+      @direction='column'
+      data-test-no-project-container
+    >
+      <AkSvg::ProjectListEmpty />
+
+      <AkTypography
+        @variant='h4'
+        @fontWeight='bold'
+        class='pt-3 pb-1'
+        data-test-no-project-header
+      >
+        {{t 'uploadAnApp'}}
+      </AkTypography>
+
+      <AkTypography
+        @variant='h5'
+        @fontWeight='regular'
+        @align='center'
+        data-test-no-project-text
+      >
+        {{t 'noProjectExists'}}
+      </AkTypography>
+    </AkStack>
+  {{/if}}
+</div>
