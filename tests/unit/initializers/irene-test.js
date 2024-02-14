@@ -1,19 +1,21 @@
-/* eslint-disable prettier/prettier */
+import Application from '@ember/application';
+import Resolver from 'ember-resolver';
 import { module, test } from 'qunit';
 import { run } from '@ember/runloop';
-import Application from '@ember/application'
 
 let application = null;
 
-module('Unit | Initializer | irene', function(hooks) {
-  hooks.beforeEach(function() {
-    return run(function() {
-      application = Application.create();
-      return application.deferReadiness();
+module('Unit | Initializer | irene', function (hooks) {
+  hooks.beforeEach(function () {
+    run(() => {
+      application = Application.create({
+        Resolver,
+      });
+      application.deferReadiness();
     });
   });
 
-  test('it works', assert =>
-    assert.ok(true)
-  );
+  test('it works', function (assert) {
+    assert.ok(true);
+  });
 });

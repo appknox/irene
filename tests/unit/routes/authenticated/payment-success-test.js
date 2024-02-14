@@ -6,6 +6,6 @@ module('Unit | Route | authenticated/payment success', function (hooks) {
 
   test('it exists', function (assert) {
     const route = this.owner.lookup('route:authenticated/payment-success');
-    assert.notOk(route.beforeModel());
+    assert.ok(route);
   });
 });

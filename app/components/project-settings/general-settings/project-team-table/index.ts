@@ -9,6 +9,7 @@ import { tracked } from '@glimmer/tracking';
 import Store from '@ember-data/store';
 import { action } from '@ember/object';
 import IntlService from 'ember-intl/services/intl';
+import { waitForPromise } from '@ember/test-waiters';
 
 import ProjectTeamModel from 'irene/models/project-team';
 import MeService from 'irene/services/me';
@@ -136,11 +137,13 @@ export default class ProjectSettingsGeneralSettingsProjectTeamTableComponent ext
 
   getProjectTeamList = task(async () => {
     try {
-      this.projectTeamListResponse = (await this.store.query('project-team', {
-        limit: this.limit,
-        offset: this.offset,
-        projectId: this.args.project?.id,
-      })) as ProjectTeamQueryResponse;
+      this.projectTeamListResponse = (await waitForPromise(
+        this.store.query('project-team', {
+          limit: this.limit,
+          offset: this.offset,
+          projectId: this.args.project?.id,
+        })
+      )) as ProjectTeamQueryResponse;
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }

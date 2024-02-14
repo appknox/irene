@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
+import { waitForPromise } from '@ember/test-waiters';
 
 export default class OrganizationArchiveListArchiveActionComponent extends Component {
   @service('notifications') notify;
@@ -9,7 +10,7 @@ export default class OrganizationArchiveListArchiveActionComponent extends Compo
   tdownloadFailed = this.intl.t('organizationArchiveDownloadErrored');
 
   downloadArchive = task(async () => {
-    const downloadURL = await this.args.archive.downloadURL();
+    const downloadURL = await waitForPromise(this.args.archive.downloadURL());
 
     if (downloadURL) {
       window.open(downloadURL);

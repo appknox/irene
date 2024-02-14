@@ -96,6 +96,15 @@ module(
       await this.owner.lookup('service:organization').load();
       this.owner.register('service:notifications', NotificationsStub);
 
+      const createOrgInvite = (email) =>
+        this.server.create('organization-invitation', { email });
+
+      this.server.post('/organizations/:id/invitations', (_, req) => {
+        const data = JSON.parse(req.requestBody);
+
+        return createOrgInvite(data.email)?.toJSON();
+      });
+
       await render(hbs`<OrganizationMember::InviteUser />`);
 
       assert

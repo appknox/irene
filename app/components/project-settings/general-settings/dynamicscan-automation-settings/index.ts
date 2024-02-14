@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import Store from '@ember-data/store';
 import IntlService from 'ember-intl/services/intl';
+import { waitForPromise } from '@ember/test-waiters';
 
 import ENV from 'irene/config/environment';
 import ProjectModel from 'irene/models/project';
@@ -55,9 +56,11 @@ export default class ProjectSettingsGeneralSettingsDyanmicscanAutomationSettings
 
   getDynamicscanMode = task(async () => {
     try {
-      const dynScanMode = await this.store.queryRecord('dynamicscan-mode', {
-        id: this.profileId,
-      });
+      const dynScanMode = await waitForPromise(
+        this.store.queryRecord('dynamicscan-mode', {
+          id: this.profileId,
+        })
+      );
 
       this.automationEnabled = dynScanMode.dynamicscanMode === 'Automated';
     } catch (error) {
@@ -79,7 +82,7 @@ export default class ProjectSettingsGeneralSettingsDyanmicscanAutomationSettings
         dynamicscan_mode: this.automationEnabled ? 'Automated' : 'Manual',
       };
 
-      await this.ajax.put(dynamicscanMode, { data });
+      await waitForPromise(this.ajax.put(dynamicscanMode, { data }));
 
       const successMsg = this.automationEnabled
         ? this.tAppiumScheduledAutomationSuccessOn

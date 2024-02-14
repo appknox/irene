@@ -2,9 +2,11 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import parseError from 'irene/utils/parse-error';
 import Store from '@ember-data/store';
 import IntlService from 'ember-intl/services/intl';
+import { waitForPromise } from '@ember/test-waiters';
+
+import parseError from 'irene/utils/parse-error';
 import ProjectModel from 'irene/models/project';
 import ProfileModel, {
   ProfileRegulatoryReportPreference,
@@ -88,7 +90,11 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
       const status = target.checked;
 
       try {
-        await this.profile?.setShowPreference(preference, { value: status });
+        await waitForPromise(
+          (this.profile as ProfileModel).setShowPreference(preference, {
+            value: status,
+          })
+        );
 
         const statusDisplay = status ? 'SHOW' : 'HIDE';
 
@@ -107,7 +113,10 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
   resetPreference = task(
     async (preference: ProfileRegulatoryReportPreference) => {
       try {
-        await this.profile?.unsetShowPreference(preference);
+        await waitForPromise(
+          (this.profile as ProfileModel).unsetShowPreference(preference)
+        );
+
         this.notify.info(this.intl.t('regulatoryPreferenceReset'));
       } catch (err) {
         this.notify.error(parseError(err));

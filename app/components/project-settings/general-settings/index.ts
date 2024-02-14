@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import Store from '@ember-data/store';
+import { waitForPromise } from '@ember/test-waiters';
 
 import MeService from 'irene/services/me';
 import ProjectModel from 'irene/models/project';
@@ -38,7 +39,10 @@ export default class ProjectSettingsGeneralSettingsComponent extends Component<P
   fetchProfile = task(async () => {
     try {
       const profileId = this.args.project?.activeProfileId;
-      this.profile = await this.store.findRecord('profile', String(profileId));
+
+      this.profile = await waitForPromise(
+        this.store.findRecord('profile', String(profileId))
+      );
     } catch (e) {
       this.profile = null;
       return;

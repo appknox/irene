@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import Store from '@ember-data/store';
 import { action } from '@ember/object';
 import IntlService from 'ember-intl/services/intl';
+import { waitForPromise } from '@ember/test-waiters';
 
 import ProjectTeamModel from 'irene/models/project-team';
 import ProjectModel from 'irene/models/project';
@@ -48,13 +49,15 @@ export default class ProjectSettingsGeneralSettingsProjectTeamTableEditAccessCom
 
   changeTeamWrite = task(async (checked: boolean) => {
     try {
-      const prj = await this.store.queryRecord('organization-team-project', {
-        teamId: this.team?.id,
-        id: this.project?.id,
-      });
+      const prj = await waitForPromise(
+        this.store.queryRecord('organization-team-project', {
+          teamId: this.team?.id,
+          id: this.project?.id,
+        })
+      );
 
       prj.set('write', checked);
-      await prj.updateProject(String(this.team?.id));
+      await waitForPromise(prj.updateProject(String(this.team?.id)));
 
       this.notify.success(this.tPermissionChanged);
     } catch (error) {

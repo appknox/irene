@@ -251,7 +251,9 @@ module(
       const pcidssInitialValue = profile.report_preference.show_pcidss.value;
       const pcidssInput = pcidss.querySelector('[data-test-input]');
       assert.strictEqual(pcidssInput.checked, pcidssInitialValue);
+
       await click(pcidssInput);
+
       assert.strictEqual(pcidssInput.checked, !pcidssInitialValue);
 
       const hipaa = this.element.querySelector(
@@ -259,8 +261,11 @@ module(
       );
       const hipaaInitialValue = profile.report_preference.show_hipaa.value;
       const hipaaInput = hipaa.querySelector('[data-test-input]');
+
       assert.strictEqual(hipaaInput.checked, hipaaInitialValue);
+
       await click(hipaaInput);
+
       assert.strictEqual(hipaaInput.checked, !hipaaInitialValue);
 
       const gdpr = this.element.querySelector(
@@ -280,7 +285,9 @@ module(
       const nistInitialValue = profile.report_preference.show_nist.value;
       const nistInput = nist.querySelector('[data-test-input]');
       assert.strictEqual(nistInput.checked, nistInitialValue);
+
       await click(nistInput);
+
       assert.strictEqual(gdprInput.checked, !nistInitialValue);
     });
 
@@ -347,6 +354,7 @@ module(
       assert.strictEqual(pcidssInput.checked, pcidssInitialValue);
 
       await click(pcidssInput);
+
       assert.strictEqual(pcidssInput.checked, pcidssInitialValue);
 
       const hipaa = this.element.querySelector(
@@ -354,8 +362,11 @@ module(
       );
       const hipaaInitialValue = profile.report_preference.show_hipaa.value;
       const hipaaInput = hipaa.querySelector('[data-test-input]');
+
       assert.strictEqual(hipaaInput.checked, hipaaInitialValue);
+
       await click(hipaaInput);
+
       assert.strictEqual(hipaaInput.checked, hipaaInitialValue);
 
       const gdpr = this.element.querySelector(
@@ -363,8 +374,11 @@ module(
       );
       const gdprInitialValue = profile.report_preference.show_gdpr.value;
       const gdprInput = gdpr.querySelector('[data-test-input]');
+
       assert.strictEqual(gdprInput.checked, gdprInitialValue);
+
       await click(gdprInput);
+
       assert.strictEqual(gdprInput.checked, gdprInitialValue);
 
       const nist = this.element.querySelector(
@@ -372,8 +386,11 @@ module(
       );
       const nistInitialValue = profile.report_preference.show_nist.value;
       const nistInput = nist.querySelector('[data-test-input]');
+
       assert.strictEqual(nistInput.checked, nistInitialValue);
+
       await click(nistInput);
+
       assert.strictEqual(nistInput.checked, nistInitialValue);
     });
 

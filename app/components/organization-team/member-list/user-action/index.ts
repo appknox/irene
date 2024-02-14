@@ -9,6 +9,7 @@ import MeService from 'irene/services/me';
 import RealtimeService from 'irene/services/realtime';
 import OrganizationTeamModel from 'irene/models/organization-team';
 import OrganizationTeamMemberModel from 'irene/models/organization-team-member';
+import { waitForPromise } from '@ember/test-waiters';
 
 export interface OrganizationTeamMemberListUserActionComponentSignature {
   Args: {
@@ -55,7 +56,7 @@ export default class OrganizationTeamMemberListUserAction extends Component<Orga
 
       const user = await this.args.member.user;
 
-      await team.deleteMember(user);
+      await waitForPromise(team.deleteMember(user));
 
       // reload member list
       this.args.reloadTeamMembers();

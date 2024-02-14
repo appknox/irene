@@ -5,6 +5,7 @@ import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
 
+import ENUMS from 'irene/enums';
 import Service from '@ember/service';
 
 class NotificationsStub extends Service {
@@ -82,7 +83,7 @@ module('Integration | Component | organization-mfa', function (hooks) {
 
   test('it should render with mfa enbaled and not disabled', async function (assert) {
     this.organization.set('mandatoryMfa', true);
-    this.user.set('mfaEnabled', true);
+    this.user.set('mfaMethod', ENUMS.MFA_METHOD.TOTP);
 
     await render(
       hbs`<OrganizationMfa @organization={{this.organization}} @user={{this.user}} />`
@@ -94,9 +95,9 @@ module('Integration | Component | organization-mfa', function (hooks) {
   });
 
   test('it should toggle mfa', async function (assert) {
-    assert.expect(10);
+    assert.expect(11);
 
-    this.server.put('/organizations/', (schema, req) => {
+    this.server.put('/organizations/:id', (schema, req) => {
       const orgUpdateReqBody = JSON.parse(req.requestBody);
 
       assert.strictEqual(
@@ -104,10 +105,10 @@ module('Integration | Component | organization-mfa', function (hooks) {
         orgUpdateReqBody.mandatory_mfa
       );
 
-      return orgUpdateReqBody;
+      return { id: req.params.id, ...orgUpdateReqBody };
     });
 
-    this.user.set('mfaEnabled', true);
+    this.user.set('mfaMethod', ENUMS.MFA_METHOD.TOTP);
     const notify = this.owner.lookup('service:notifications');
 
     await render(

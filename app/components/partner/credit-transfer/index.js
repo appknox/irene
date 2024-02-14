@@ -4,6 +4,7 @@ import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
+import { waitForPromise } from '@ember/test-waiters';
 
 export default class PartnerCreditTransferComponent extends Component {
   @service store;
@@ -79,30 +80,29 @@ export default class PartnerCreditTransferComponent extends Component {
     this.transferCreditsToClient.perform();
   }
 
-  @task(function* () {
+  fetchPartnerPlan = task(async () => {
     try {
-      this.partnerPlan = yield this.store.queryRecord('partner/plan', {});
+      this.partnerPlan = await this.store.queryRecord('partner/plan', {});
     } catch {
       return;
     }
-  })
-  fetchPartnerPlan;
+  });
 
-  @task(function* () {
+  fetchClientPlan = task(async () => {
     try {
-      this.clientPlan = yield this.store.find(
+      this.clientPlan = await this.store.find(
         'partner/partnerclient-plan',
         this.args.client.id
       );
     } catch {
       return;
     }
-  })
-  fetchClientPlan;
+  });
 
-  @task(function* () {
+  transferCreditsToClient = task(async () => {
     try {
-      yield this.clientPlan.transferScans(this.transferCount);
+      await waitForPromise(this.clientPlan.transferScans(this.transferCount));
+
       this.notify.success(this.intl.t('creditTransferSuccess'));
       // Refresh credit balance for partner & client
       this.fetchClientPlan.perform();
@@ -112,8 +112,7 @@ export default class PartnerCreditTransferComponent extends Component {
     } catch {
       this.notify.error(this.intl.t('creditTransferError'));
     }
-  })
-  transferCreditsToClient;
+  });
 
   resetToDefault() {
     this.transferCount = 1;

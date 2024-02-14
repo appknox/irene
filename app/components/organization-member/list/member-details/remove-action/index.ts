@@ -8,6 +8,7 @@ import IntlService from 'ember-intl/services/intl';
 import MeService from 'irene/services/me';
 import OrganizationTeamModel from 'irene/models/organization-team';
 import OrganizationUserModel from 'irene/models/organization-user';
+import { waitForPromise } from '@ember/test-waiters';
 
 interface MemberRemoveActionSignature {
   Args: {
@@ -44,7 +45,7 @@ export default class MemberRemoveActionComponent extends Component<MemberRemoveA
   removeMember = task(async () => {
     try {
       const { team, member } = this.args;
-      await team.deleteMember(member);
+      await waitForPromise(team.deleteMember(member));
 
       this.notify.success(this.intl.t('teamMemberRemoved'));
 

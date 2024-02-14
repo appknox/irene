@@ -7,6 +7,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import Store from '@ember-data/store';
 import IntlService from 'ember-intl/services/intl';
+import { waitForPromise } from '@ember/test-waiters';
 
 import ProjectModel from 'irene/models/project';
 import ENV from 'irene/config/environment';
@@ -97,11 +98,11 @@ export default class ProjectSettingsGeneralSettingsDyanmicscanAutomationSettings
       });
 
       const adapterOptions = { projectId: this.args.project?.id };
-      await scenario.save({ adapterOptions });
+      await waitForPromise(scenario.save({ adapterOptions }));
 
       if (this.scenarioStatus) {
         scenario.set('isActive', this.scenarioStatus);
-        await scenario.save({ adapterOptions });
+        await waitForPromise(scenario.save({ adapterOptions }));
       }
 
       this.notify.success(this.intl.t('dastAutomation.scenarioAdded'));

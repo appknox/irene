@@ -6,6 +6,7 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
 import Store from '@ember-data/store';
+import { waitForPromise } from '@ember/test-waiters';
 
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import { DS } from 'ember-data';
@@ -113,7 +114,7 @@ export default class PartnerRegistrationRequestPendingListComponent extends Comp
 
   approveRequest = task(async (request: PartnerRegistrationRequestModel) => {
     try {
-      await request.updateStatus('approved');
+      await waitForPromise(request.updateStatus('approved'));
 
       this.realtime.incrementProperty('RegistrationRequestCounter');
 
@@ -127,7 +128,7 @@ export default class PartnerRegistrationRequestPendingListComponent extends Comp
 
   rejectRequest = task(async (request: PartnerRegistrationRequestModel) => {
     try {
-      await request.updateStatus('rejected');
+      await waitForPromise(request.updateStatus('rejected'));
 
       this.realtime.incrementProperty('RegistrationRequestCounter');
 

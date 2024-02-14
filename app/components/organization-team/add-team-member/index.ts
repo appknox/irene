@@ -14,6 +14,7 @@ import triggerAnalytics from 'irene/utils/trigger-analytics';
 import OrganizationTeamModel from 'irene/models/organization-team';
 import OrganizationUserModel from 'irene/models/organization-user';
 import { ActionContentType } from '../details/active-action';
+import { waitForPromise } from '@ember/test-waiters';
 
 export interface OrganizationTeamAddTeamMemberComponentSignature {
   Args: {
@@ -113,7 +114,7 @@ export default class OrganizationTeamAddTeamMemberComponent extends Component<Or
       };
 
       const team = this.args.team;
-      await team.addMember(data, member.id);
+      await waitForPromise(team.addMember(data, member.id));
 
       this.realtime.incrementProperty('TeamMemberCounter');
     } catch (e) {
@@ -141,7 +142,7 @@ export default class OrganizationTeamAddTeamMemberComponent extends Component<Or
     }
 
     for (let i = 0; i < selectedMembers.length; i++) {
-      await this.addTeamMember.perform(selectedMembers[i]);
+      await waitForPromise(this.addTeamMember.perform(selectedMembers[i]));
     }
 
     if (this.addMemberErrorCount === 0) {
@@ -206,9 +207,8 @@ export default class OrganizationTeamAddTeamMemberComponent extends Component<Or
         exclude_team: this.args.team.id,
       };
 
-      this.userResponse = await this.store.query(
-        'organization-user',
-        queryParams
+      this.userResponse = await waitForPromise(
+        this.store.query('organization-user', queryParams)
       );
     } catch (e) {
       const err = e as AdapterError;

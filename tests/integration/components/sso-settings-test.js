@@ -485,9 +485,14 @@ module('Integration | Component | sso-settings', function (hooks) {
         return this.idpMetadata;
       });
 
-      this.server.delete('/organizations/:id/sso/saml2/idp_metadata', () => {
-        return fail ? new Response(500) : {};
-      });
+      this.server.delete(
+        '/organizations/:id/sso/saml2/idp_metadata',
+        (_, req) => {
+          return fail
+            ? new Response(500)
+            : { id: req.params.id, ...JSON.parse(req.requestBody) };
+        }
+      );
 
       await render(hbs`<SsoSettings @organization={{this.organization}} />`);
 
@@ -554,8 +559,10 @@ module('Integration | Component | sso-settings', function (hooks) {
         return { ...json, enabled: false };
       });
 
-      this.server.put('/organizations/:id/sso/saml2', () => {
-        return fail ? new Response(500) : {};
+      this.server.put('/organizations/:id/sso/saml2', (_, req) => {
+        return fail
+          ? new Response(500)
+          : { id: req.params.id, ...JSON.parse(req.requestBody) };
       });
 
       this.server.get('/v2/sso/saml2/metadata', () => {
@@ -620,8 +627,10 @@ module('Integration | Component | sso-settings', function (hooks) {
         return { ...json, enabled: true, enforced: false };
       });
 
-      this.server.put('/organizations/:id/sso/saml2', () => {
-        return fail ? new Response(500) : {};
+      this.server.put('/organizations/:id/sso/saml2', (_, req) => {
+        return fail
+          ? new Response(500)
+          : { id: req.params.id, ...JSON.parse(req.requestBody) };
       });
 
       this.server.get('/v2/sso/saml2/metadata', () => {

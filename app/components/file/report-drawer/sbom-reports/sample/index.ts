@@ -6,6 +6,7 @@ import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { task } from 'ember-concurrency';
 import Store from '@ember-data/store';
+import { waitForPromise } from '@ember/test-waiters';
 
 import NetworkService from 'irene/services/network';
 import SbomReportModel, { SbomReportType } from 'irene/models/sbom-report';
@@ -57,7 +58,8 @@ export default class FileReportDrawerSbomReportsSampleComponent extends Componen
 
   contactSupport = task(async () => {
     try {
-      await this.ajax.post(this.CONTACT_SUPPORT_ENDPOINT);
+      await waitForPromise(this.ajax.post(this.CONTACT_SUPPORT_ENDPOINT));
+
       this.hasContactedSupport = true;
     } catch (err) {
       this.notify.error(parseError(err, this.tPleaseTryAgain));
@@ -66,9 +68,8 @@ export default class FileReportDrawerSbomReportsSampleComponent extends Componen
 
   fetchSampleReport = task(async () => {
     try {
-      this.sampleSbomReport = await this.store.findRecord(
-        'sbom-report',
-        'sample'
+      this.sampleSbomReport = await waitForPromise(
+        this.store.findRecord('sbom-report', 'sample')
       );
     } catch (e) {
       this.notify.error(parseError(e, this.tPleaseTryAgain));
@@ -77,7 +78,10 @@ export default class FileReportDrawerSbomReportsSampleComponent extends Componen
 
   triggerSampleReportDownload = task(async (type: SbomReportType) => {
     try {
-      const data = await this.sampleSbomReport?.downloadReport(type);
+      const data = await waitForPromise(
+        (this.sampleSbomReport as SbomReportModel).downloadReport(type)
+      );
+
       const { url } = data || {};
 
       if (url) {

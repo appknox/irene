@@ -1,11 +1,13 @@
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
+import IntlService from 'ember-intl/services/intl';
+import { waitForPromise } from '@ember/test-waiters';
+
 import ENV from 'irene/config/environment';
 import triggerAnalytics from 'irene/utils/trigger-analytics';
-import { tracked } from '@glimmer/tracking';
-import IntlService from 'ember-intl/services/intl';
 import OrganizationInvitationModel from 'irene/models/organization-invitation';
 import OrganizationTeamInvitationModel from 'irene/models/organization-team-invitation';
 
@@ -38,7 +40,7 @@ export default class OrganizationInvitationListInviteResend extends Component<Or
       this.isResendingInvitation = true;
       const invite = this.args.invitation;
 
-      await invite.resend();
+      await waitForPromise(invite.resend());
 
       this.notify.success(this.intl.t('invitationReSent'));
       triggerAnalytics(

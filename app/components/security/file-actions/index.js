@@ -1,5 +1,6 @@
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { waitForPromise } from '@ember/test-waiters';
 import { isEmpty } from '@ember/utils';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
@@ -76,15 +77,15 @@ export default class FileActionsNewComponent extends Component {
     this.showPurgeAPIAnalysisConfirmBox = true;
   }
 
-  @task(function* (isApiDone) {
+  setApiScanStatus = task(async (isApiDone) => {
     const apiScanStatus = isApiDone
       ? ENUMS.SCAN_STATUS.COMPLETED
       : ENUMS.SCAN_STATUS.UNKNOWN;
 
     try {
-      const file = yield this.file;
+      const file = await this.file;
       file.set('apiScanStatus', apiScanStatus);
-      yield file.save();
+      await file.save();
       this.notifications.success('Successfully saved the API scan status');
     } catch (error) {
       let errMsg = this.tPleaseTryAgain;
@@ -95,14 +96,13 @@ export default class FileActionsNewComponent extends Component {
       }
       this.notifications.error(errMsg);
     }
-  })
-  setApiScanStatus;
+  });
 
-  @task(function* (isDynamicDone) {
+  setDynamicDone = task(async (isDynamicDone) => {
     try {
-      const file = yield this.file;
+      const file = await this.file;
       file.set('isDynamicDone', isDynamicDone);
-      yield file.save();
+      await file.save();
       this.notifications.success('Dynamic scan status updated');
     } catch (error) {
       let errMsg = this.tPleaseTryAgain;
@@ -113,14 +113,13 @@ export default class FileActionsNewComponent extends Component {
       }
       this.notifications.error(errMsg);
     }
-  })
-  setDynamicDone;
+  });
 
-  @task(function* (status) {
+  updateManualScan = task(async (status) => {
     try {
-      const file = yield this.file;
+      const file = this.file;
       file.set('manual', status);
-      yield file.save();
+      await waitForPromise(file.save());
       this.notifications.success('Manual Scan Status Updated');
     } catch (error) {
       let errMsg = this.tPleaseTryAgain;
@@ -131,10 +130,9 @@ export default class FileActionsNewComponent extends Component {
       }
       this.notifications.error(errMsg);
     }
-  })
-  updateManualScan;
+  });
 
-  @task(function* () {
+  confirmPurge = task(async () => {
     this.isPurgingAPIAnalysis = true;
 
     const url = [
@@ -143,7 +141,7 @@ export default class FileActionsNewComponent extends Component {
       ENV.endpoints.purgeAPIAnalyses,
     ].join('/');
 
-    yield this.ajax.post(url, { namespace: 'api/hudson-api' });
+    await this.ajax.post(url, { namespace: 'api/hudson-api' });
 
     try {
       this.store.findRecord('security/file', this.fileId);
@@ -162,15 +160,15 @@ export default class FileActionsNewComponent extends Component {
 
       this.isPurgingAPIAnalysis = false;
     }
-  })
-  confirmPurge;
+  });
 
-  @task(function* () {
+  downloadApp = task(async () => {
     try {
       const url = [ENV.endpoints.apps, this.fileId].join('/');
-      const data = yield this.ajax.request(url, {
+      const data = await this.ajax.request(url, {
         namespace: 'api/hudson-api',
       });
+
       window.location = data.url;
     } catch (error) {
       let errMsg = this.tPleaseTryAgain;
@@ -181,19 +179,18 @@ export default class FileActionsNewComponent extends Component {
       }
       this.notifications.error(errMsg);
     }
-  })
-  downloadApp;
+  });
 
-  @task(function* () {
+  downloadAppModified = task(async () => {
     const url = [ENV.endpoints.apps, this.fileId, 'modified'].join('/');
-    const data = yield this.ajax.request(url, {
+    const data = await this.ajax.request(url, {
       namespace: 'api/hudson-api',
     });
-    window.location = data.url;
-  })
-  downloadAppModified;
 
-  @task(function* () {
+    window.location = data.url;
+  });
+
+  addAnalysis = task(async () => {
     const vulnerability = this.selectedVulnerability;
     const file = this.file;
 
@@ -201,13 +198,14 @@ export default class FileActionsNewComponent extends Component {
       return this.notifications.error('Please select a vulnerability');
     }
 
-    const analysis = yield this.store.createRecord('security/analysis', {
+    const analysis = await this.store.createRecord('security/analysis', {
       vulnerability: vulnerability,
       file: file,
     });
 
     try {
-      yield analysis.save();
+      await waitForPromise(analysis.save());
+
       this.showAddAnalysisModal = false;
       this.notifications.success('Analysis Added Successfully');
     } catch (error) {
@@ -220,12 +218,12 @@ export default class FileActionsNewComponent extends Component {
       }
       this.notifications.error(errMsg);
     }
-  })
-  addAnalysis;
+  });
 
-  @task(function* () {
+  getVulnerabilities = task(async () => {
     const store = this.store;
-    this.vulnerabilities = yield store
+
+    this.vulnerabilities = await store
       .query('vulnerability', {
         projectId: this.projectId,
         limit: 0,
@@ -236,6 +234,5 @@ export default class FileActionsNewComponent extends Component {
           limit: data.meta.count,
         })
       );
-  })
-  getVulnerabilities;
+  });
 }

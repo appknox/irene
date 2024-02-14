@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import parseError from 'irene/utils/parse-error';
+import { waitForPromise } from '@ember/test-waiters';
 
 export default class RegulatoryPreferenceOrganizationComponent extends Component {
   @service intl;
@@ -48,9 +49,8 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
 
   fetchOrganizationPreference = task(async () => {
     try {
-      this.orgPreference = await this.store.queryRecord(
-        'organization-preference',
-        {}
+      this.orgPreference = await waitForPromise(
+        this.store.queryRecord('organization-preference', {})
       );
     } catch (err) {
       this.orgPreference = null;
@@ -77,7 +77,7 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
   saveReportPreference = task(async (regulator, event) => {
     try {
       this.orgPreference.reportPreference[regulator] = event.target.checked;
-      await this.orgPreference.save();
+      await waitForPromise(this.orgPreference.save());
     } catch (err) {
       this.notify.error(parseError(err));
       event.target.checked = !event.target.checked;

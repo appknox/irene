@@ -4,8 +4,10 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import IntlService from 'ember-intl/services/intl';
-import ENUMS from 'irene/enums';
 import Store from '@ember-data/store';
+import { waitForPromise } from '@ember/test-waiters';
+
+import ENUMS from 'irene/enums';
 import OrganizationService from 'irene/services/organization';
 import ProjectModel from 'irene/models/project';
 import GithubRepoModel, { GithubRepoDetails } from 'irene/models/github-repo';
@@ -146,9 +148,8 @@ export default class ProjectSettingsGeneralSettingsGithubProjectComponent extend
 
   setCurrentGithubRepo = task(async () => {
     try {
-      const githubrepo = await this.store.findRecord(
-        'github-repo',
-        Number(this.project?.id)
+      const githubrepo = await waitForPromise(
+        this.store.findRecord('github-repo', Number(this.project?.id))
       );
 
       this.currentGithubRepo = githubrepo;
@@ -184,7 +185,9 @@ export default class ProjectSettingsGeneralSettingsGithubProjectComponent extend
 
   fetchGithubRepos = task(async () => {
     try {
-      const repos = (await this.ajax.request(this.githubReposEndpoint)) as {
+      const repos = (await waitForPromise(
+        this.ajax.request(this.githubReposEndpoint)
+      )) as {
         results: GithubRepoDetails[];
       };
 
@@ -229,7 +232,8 @@ export default class ProjectSettingsGeneralSettingsGithubProjectComponent extend
     githubRepo.riskThreshold = this.selectedThreshold;
 
     try {
-      const currentGithubRepo = await githubRepo.save();
+      const currentGithubRepo = await waitForPromise(githubRepo.save());
+
       this.currentGithubRepo = currentGithubRepo;
       this.notify.success(successMsg);
       this.showEditGithubModal = false;
@@ -268,7 +272,10 @@ export default class ProjectSettingsGeneralSettingsGithubProjectComponent extend
 
   deleteRepo = task(async () => {
     try {
-      await this.currentGithubRepo?.destroyRecord();
+      await waitForPromise(
+        (this.currentGithubRepo as GithubRepoModel).destroyRecord()
+      );
+
       this.currentGithubRepo?.unloadRecord();
       this.notify.success(this.tProjectRemoved);
       this.currentGithubRepo = null;

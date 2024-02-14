@@ -7,6 +7,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import Store from '@ember-data/store';
 import IntlService from 'ember-intl/services/intl';
+import { waitForPromise } from '@ember/test-waiters';
 
 import ENUMS from 'irene/enums';
 import ProjectModel from 'irene/models/project';
@@ -140,9 +141,8 @@ export default class ProjectSettingsGeneralSettingsJiraProjectComponent extends 
 
   setCurrentJiraRepo = task(async () => {
     try {
-      const jiraProject = await this.store.findRecord(
-        'jira-repo',
-        Number(this.project?.id)
+      const jiraProject = await waitForPromise(
+        this.store.findRecord('jira-repo', Number(this.project?.id))
       );
 
       this.currentJiraProject = jiraProject;
@@ -187,9 +187,8 @@ export default class ProjectSettingsGeneralSettingsJiraProjectComponent extends 
     this.noIntegration = false;
 
     try {
-      const jiraprojects = (await this.store.query(
-        'organization-jiraproject',
-        {}
+      const jiraprojects = (await waitForPromise(
+        this.store.query('organization-jiraproject', {})
       )) as JiraProjectsQueryResponse;
 
       this.jiraProjectsResponse = jiraprojects;
@@ -214,7 +213,9 @@ export default class ProjectSettingsGeneralSettingsJiraProjectComponent extends 
 
   deleteRepo = task(async () => {
     try {
-      await this.currentJiraProject?.destroyRecord();
+      await waitForPromise(
+        (this.currentJiraProject as JiraRepoModel).destroyRecord()
+      );
       this.currentJiraProject?.unloadRecord();
 
       this.notify.success(this.tProjectRemoved);
@@ -252,7 +253,7 @@ export default class ProjectSettingsGeneralSettingsJiraProjectComponent extends 
     }
 
     try {
-      await jiraProject?.save();
+      await waitForPromise((jiraProject as JiraRepoModel).save());
       this.currentJiraProject = jiraProject;
       this.showEditJiraModal = false;
 

@@ -8,6 +8,7 @@ import IntlService from 'ember-intl/services/intl';
 import OrganizationTeamModel from 'irene/models/organization-team';
 import OrganizationModel from 'irene/models/organization';
 import { ActiveActionDetailsType } from '../active-action';
+import { waitForPromise } from '@ember/test-waiters';
 
 export interface OrganizationTeamDetailsTeamInfoComponentSignature {
   Args: {
@@ -55,14 +56,14 @@ export default class OrganizationTeamDetailsTeamInfo extends Component<Organizat
       }
 
       t.deleteRecord();
-      await t.save();
+      await waitForPromise(t.save());
 
       this.notify.success(
         `${this.args.team.name} ${this.intl.t('teamDeleted')}`
       );
 
       // reload organization to update team count
-      await this.args.organization.reload();
+      await waitForPromise(this.args.organization.reload());
 
       this.args.drawerCloseHandler();
 

@@ -415,6 +415,7 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
     });
 
     this.server.create('partner/plan', { limitedScans: true, scansLeft: 10 });
+
     this.server.get('v2/partners/:id/plan', (schema) => {
       return serializer(schema['partner/plans'].find(1));
     });
@@ -422,12 +423,15 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
     this.server.create('partner/partnerclient-plan', {
       limitedScans: true,
     });
+
     this.server.get('v2/partnerclients/:id/plan', (schema) => {
       return serializer(schema['partner/partnerclientPlans'].find(1));
     });
+
     this.server.post('v2/partnerclients/:id/transfer_scans', (schema) => {
       return serializer(schema['partner/partnerclientPlans'].find(1));
     });
+
     await this.owner.lookup('service:partner').load();
 
     this.set('client', this.server.create('partner/partnerclient'));
@@ -437,13 +441,17 @@ module('Integration | Component | partner/credit-transfer', function (hooks) {
     await click(this.element.querySelector('[data-test-plus-btn]'));
 
     assert.dom('[data-test-credit-transfer-modal]').exists('Modal opened');
+
     assert
       .dom(`[data-test-credit-transfer-input]`)
       .exists('Input screen shown by default');
+
     assert
       .dom(`[data-test-credit-transfer-confirm]`)
       .doesNotExist(`Confirm screen isn't visible by default`);
+
     await click(this.element.querySelector(`[data-test-transfer-btn]`));
+
     assert
       .dom(`[data-test-credit-transfer-confirm]`)
       .exists('Confirm screen shown after hit transfer credits btn');

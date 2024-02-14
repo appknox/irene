@@ -1,6 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
+
 import {
   click,
   render,
@@ -8,6 +9,7 @@ import {
   fillIn,
   triggerEvent,
 } from '@ember/test-helpers';
+
 import { setupIntl } from 'ember-intl/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 import { Response } from 'miragejs';
@@ -153,20 +155,18 @@ module(
       'test add-team-project add projects action',
       [{ fail: false }, { fail: true }],
       async function (assert, { fail }) {
-        this.set('projectsAdded', false);
-
         this.server.get('organizations/:id/projects', (schema) => {
-          const results = this.projectsAdded
-            ? schema.projects.all().models.slice(2)
-            : schema.projects.all().models;
+          const results = schema.projects.all().models;
 
           return { count: results.length, next: null, previous: null, results };
         });
 
         this.server.put(
           '/organizations/:id/teams/:teamId/projects/:projectId',
-          () => {
-            return fail ? new Response(500) : {};
+          (schema, req) => {
+            schema.db.projects.remove(req.params.projectId);
+
+            return fail ? new Response(500) : { id: req.params.teamId };
           }
         );
 
@@ -228,21 +228,18 @@ module(
           .isChecked()
           .isNotDisabled();
 
-        if (!fail) {
-          this.set('projectsAdded', true);
-        }
-
         await click('[data-test-action-btn]');
 
         const notify = this.owner.lookup('service:notifications');
-        const latestRows = findAll('[data-test-addProjectList-row]');
+
+        const latestRows = () => findAll('[data-test-addProjectList-row]');
 
         if (fail) {
           assert.strictEqual(notify.errorMsg, 't:pleaseTryAgain:()');
-          assert.strictEqual(latestRows.length, this.projects.length);
+          assert.strictEqual(latestRows().length, this.projects.length);
         } else {
           assert.strictEqual(notify.successMsg, 't:teamProjectAdded:()');
-          assert.strictEqual(latestRows.length, this.projects.length - 2);
+          assert.strictEqual(latestRows().length, this.projects.length - 2);
         }
       }
     );

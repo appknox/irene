@@ -3,6 +3,7 @@ import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import IntlService from 'ember-intl/services/intl';
+import { waitForPromise } from '@ember/test-waiters';
 
 import ScanParameterGroupModel from 'irene/models/scan-parameter-group';
 import ProjectModel from 'irene/models/project';
@@ -37,7 +38,7 @@ export default class ProjectSettingsDastScenarioStatusToggleComponent extends Co
       this.scenario.set('isActive', checked);
 
       const adapterOptions = { projectId: this.args.project?.id };
-      await this.scenario.save({ adapterOptions });
+      await waitForPromise(this.scenario.save({ adapterOptions }));
 
       this.notify.success(this.intl.t('dastAutomation.scenarioStatusUpdated'));
     } catch (error) {

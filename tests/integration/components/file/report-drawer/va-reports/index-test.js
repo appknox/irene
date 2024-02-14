@@ -38,16 +38,16 @@ module(
         uuid: '1-123-33-1-12345',
       });
 
-      const file = store.createRecord('file', {
+      const file = this.server.create('file', {
         id: 1,
-        project,
-        isApiDone: false,
-        isStaticDone: true,
-        isManualDone: true,
-        isDynamicDone: true,
+        project: project.id,
+        is_api_done: false,
+        is_static_done: true,
+        is_manual_done: true,
+        is_dynamic_done: true,
       });
 
-      this.set('file', file);
+      this.set('file', store.push(store.normalize('file', file.toJSON())));
 
       this.server.get('/v2/files/:id', () => {
         return { id: file.id, ...file.toJSON() };
@@ -103,14 +103,14 @@ module(
         serializer(schema.fileReports.all(), true)
       );
 
-      this.server.get('/v2/files/:id', () => {
-        const response = { id: this.file.id, ...this.file.toJSON() };
+      this.server.get('/v2/files/:id', (schema, req) => {
+        const file = schema.files.find(`${req.params.id}`)?.toJSON();
 
         if (this.hasGeneratedReport) {
-          this.file.canGenerateReport = false;
+          file.can_generate_report = false;
         }
 
-        return response;
+        return file;
       });
 
       this.server.post(
@@ -123,7 +123,7 @@ module(
 
           this.hasGeneratedReport = true;
 
-          return fileReport;
+          return fileReport.toJSON();
         },
         { timing: 100 }
       );
@@ -200,14 +200,14 @@ module(
         serializer(schema.fileReports.all(), true)
       );
 
-      this.server.get('/v2/files/:id', () => {
-        const response = { id: this.file.id, ...this.file.toJSON() };
+      this.server.get('/v2/files/:id', (schema, req) => {
+        const file = schema.files.find(`${req.params.id}`)?.toJSON();
 
         if (this.hasGeneratedReport) {
-          this.file.canGenerateReport = false;
+          file.can_generate_report = false;
         }
 
-        return response;
+        return file;
       });
 
       this.server.post(
@@ -221,7 +221,7 @@ module(
           this.fileReport = fileReport;
           this.hasGeneratedReport = true;
 
-          return fileReport;
+          return fileReport.toJSON();
         },
         { timing: 100 }
       );

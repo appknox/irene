@@ -72,7 +72,7 @@
       <t.head data-test-teamUserList-thead @columns={{this.columns}} />
       <t.body @rows={{pgc.currentPageResults}} as |b|>
         <b.row data-test-teamUserList-row as |r|>
-          <r.cell data-test-teamUserList-cell as |value|>
+          <r.cell data-test-teamUserList-cell>
             {{#if r.columnValue.component}}
               {{#let (component r.columnValue.component) as |Component|}}
                 <Component
@@ -83,8 +83,8 @@
                 />
               {{/let}}
             {{else}}
-              <AkTypography title={{value}} @noWrap={{true}}>
-                {{value}}
+              <AkTypography title={{r.cellValue}} @noWrap={{true}}>
+                {{r.cellValue}}
               </AkTypography>
             {{/if}}
           </r.cell>

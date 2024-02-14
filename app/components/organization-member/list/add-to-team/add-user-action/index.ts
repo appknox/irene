@@ -7,6 +7,7 @@ import MeService from 'irene/services/me';
 import OrganizationMemberModel from 'irene/models/organization-member';
 import OrganizationTeamModel from 'irene/models/organization-team';
 import { tracked } from '@glimmer/tracking';
+import { waitForPromise } from '@ember/test-waiters';
 
 interface OrganizationMemberListUserActionSignature {
   Args: {
@@ -38,7 +39,7 @@ export default class OrganizationMemberListUserActionComponent extends Component
       const member = this.args.member;
       const team = this.args.team;
 
-      await team.addMember(data, member.id);
+      await waitForPromise(team.addMember(data, member.id));
 
       this.isAddingTeamMember = false;
 
