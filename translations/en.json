@@ -1116,7 +1116,7 @@
     "cvssV3Score": "CVSS V3 Score",
     "severity": "Severity",
     "sbomAppTitle": "Software Bill of Materials (SBOM)",
-    "sbomAppDescription": "Identify the components used in your mobile application and any vulnerabilities associated with it",
+    "sbomAppDescription": "Identify the components used in your mobile application and any vulnerabilities associated with it.",
     "sbomAppEmptyText": {
       "title": "No SBOM Applications",
       "description": "Uh, Oh!. Looks like you have not been granted access to any application (Project) or there have been no applications uploaded yet. Please contact the 'Owner' in your organization for more details."

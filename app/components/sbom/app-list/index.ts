@@ -28,6 +28,11 @@ export interface SbomAppListSignature {
   };
 }
 
+interface PlatformObject {
+  key: string;
+  value: number;
+}
+
 export default class SbomAppListComponent extends Component<SbomAppListSignature> {
   @service declare intl: IntlService;
   @service declare store: Store;
@@ -46,9 +51,15 @@ export default class SbomAppListComponent extends Component<SbomAppListSignature
 
     this.tPleaseTryAgain = this.intl.t('pleaseTryAgain');
 
-    const { app_limit, app_offset, app_query } = args.queryParams;
+    const { app_limit, app_offset, app_query, app_platform } = args.queryParams;
 
-    this.fetchSbomProjects.perform(app_limit, app_offset, app_query, false);
+    this.fetchSbomProjects.perform(
+      app_limit,
+      app_offset,
+      app_query,
+      app_platform,
+      false
+    );
   }
 
   get limit() {
@@ -138,16 +149,16 @@ export default class SbomAppListComponent extends Component<SbomAppListSignature
 
   @action
   handlePrevNextAction({ limit, offset }: PaginationProviderActionsArgs) {
-    const { app_query } = this.args.queryParams;
+    const { app_query, app_platform } = this.args.queryParams;
 
-    this.fetchSbomProjects.perform(limit, offset, app_query);
+    this.fetchSbomProjects.perform(limit, offset, app_query, app_platform);
   }
 
   @action
   handleItemPerPageChange({ limit }: PaginationProviderActionsArgs) {
-    const { app_query } = this.args.queryParams;
+    const { app_query, app_platform } = this.args.queryParams;
 
-    this.fetchSbomProjects.perform(limit, 0, app_query);
+    this.fetchSbomProjects.perform(limit, 0, app_query, app_platform);
   }
 
   @action
@@ -159,14 +170,44 @@ export default class SbomAppListComponent extends Component<SbomAppListSignature
 
   /* Set debounced searchQuery */
   setSearchQuery(query: string) {
-    this.fetchSbomProjects.perform(this.limit, 0, query);
+    const { app_platform } = this.args.queryParams;
+
+    this.fetchSbomProjects.perform(this.limit, 0, query, app_platform);
   }
 
-  setRouteQueryParams(limit: string | number, offset: string | number) {
+  @action
+  handleClear() {
+    const { app_platform } = this.args.queryParams;
+
+    this.fetchSbomProjects.perform(this.limit, 0, '', app_platform);
+  }
+
+  @action filterPlatform(platform: PlatformObject) {
+    const { app_limit, app_query } = this.args.queryParams;
+
+    this.fetchSbomProjects.perform(
+      app_limit,
+      0,
+      app_query,
+      platform.value.toString()
+    );
+  }
+
+  setRouteQueryParams(
+    limit: string | number,
+    offset: string | number,
+    query: string,
+    platform: string
+  ) {
+    const searchQueryParam = query || null;
+    const platformQuery = Number(platform) >= 0 ? platform : null;
+
     this.router.transitionTo({
       queryParams: {
         app_limit: limit,
         app_offset: offset,
+        app_query: searchQueryParam,
+        app_platform: platformQuery,
       },
     });
   }
@@ -177,10 +218,11 @@ export default class SbomAppListComponent extends Component<SbomAppListSignature
       limit: string | number,
       offset: string | number,
       query: string,
+      platform: string,
       setQueryParams = true
     ) => {
       if (setQueryParams) {
-        this.setRouteQueryParams(limit, offset);
+        this.setRouteQueryParams(limit, offset, query, platform);
       }
 
       try {
@@ -190,6 +232,9 @@ export default class SbomAppListComponent extends Component<SbomAppListSignature
             limit,
             offset,
             q: query,
+            ...(platform !== null && Number(platform) !== -1
+              ? { platform }
+              : {}),
           }
         )) as SbomProjectQueryResponse;
       } catch (e) {

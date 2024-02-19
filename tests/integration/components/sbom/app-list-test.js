@@ -1,12 +1,4 @@
-import {
-  render,
-  findAll,
-  find,
-  click,
-  fillIn,
-  triggerEvent,
-  waitFor,
-} from '@ember/test-helpers';
+import { render, findAll, find, click, waitFor } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
@@ -373,47 +365,6 @@ module('Integration | Component | sbom/app-list', function (hooks) {
     assert
       .dom('[data-test-sbomReportDrawer-description]')
       .hasText('t:sbomModule.sbomDownloadReportDescription:()');
-  });
-
-  test.skip('test search in sbom app list', async function (assert) {
-    this.server.get('/v2/sb_projects', (schema, req) => {
-      this.set('query', req.queryParams.q);
-
-      const results = schema.sbomProjects.all().models;
-
-      return { count: results.length, next: null, previous: null, results };
-    });
-
-    this.server.get('/v2/sb_files/:id', (schema, req) => {
-      return schema.sbomFiles.find(`${req.params.id}`)?.toJSON();
-    });
-
-    this.server.get('/v2/projects/:id', (schema, req) => {
-      return schema.projects.find(`${req.params.id}`)?.toJSON();
-    });
-
-    this.server.get('/v2/files/:id', (schema, req) => {
-      return schema.files.find(`${req.params.id}`)?.toJSON();
-    });
-
-    await render(hbs`
-      <Sbom::AppList @queryParams={{this.queryParams}} />
-    `);
-
-    assert
-      .dom('[data-test-sbomApp-searchInput]')
-      .isNotDisabled()
-      .hasValue(this.queryParams.app_query);
-
-    await fillIn('[data-test-sbomApp-searchInput]', 'some query');
-    await triggerEvent('[data-test-sbomApp-searchInput]', 'keyup');
-
-    assert
-      .dom('[data-test-sbomApp-searchInput]')
-      .isNotDisabled()
-      .hasValue(this.queryParams.app_query);
-
-    assert.strictEqual(this.query, this.queryParams.app_query);
   });
 
   test('it renders sbom app list loading & empty state', async function (assert) {

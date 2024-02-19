@@ -5,6 +5,11 @@ import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { t } from 'ember-intl/test-support';
 import Service from '@ember/service';
+import { faker } from '@faker-js/faker';
+import {
+  clickTrigger,
+  selectChoose,
+} from 'ember-power-select/test-support/helpers';
 
 import { SbomScanStatus } from 'irene/models/sbom-file';
 
@@ -43,8 +48,11 @@ module('Acceptance | sbom', function (hooks) {
 
     const files = this.server.createList('file', 5);
 
-    files.map((file) =>
-      this.server.create('project', { last_file_id: file.id })
+    const projects = files.map((file, i) =>
+      this.server.create('project', {
+        last_file_id: file.id,
+        platform: i === 2 ? 0 : faker.helpers.arrayElement([0, 1]),
+      })
     );
 
     const sbomFiles = this.server.createList('sbom-file', 5);
@@ -106,6 +114,7 @@ module('Acceptance | sbom', function (hooks) {
     this.owner.register('service:websocket', WebsocketStub);
 
     this.setProperties({
+      projects,
       sbomProjects,
       sbomFiles,
       sbomComponents,
@@ -201,5 +210,145 @@ module('Acceptance | sbom', function (hooks) {
       currentURL(),
       `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}/components/${this.sbomComponents[2].id}`
     );
+  });
+
+  test('test search in sbom app list', async function (assert) {
+    this.server.get('/v2/sb_projects', (schema, req) => {
+      this.set('query', req.queryParams.q);
+
+      const results = this.query
+        ? schema.projects.where((p) =>
+            p.package_name.toLowerCase().includes(this.query)
+          ).models
+        : schema.projects.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    await visit(
+      `/dashboard/sbom/apps?app_query=${this.projects[0].package_name}`
+    );
+
+    let projectContainerList = findAll('[data-test-sbomapp-row]');
+
+    assert.strictEqual(
+      projectContainerList.length,
+      1,
+      'Contains correct number of sbom table rows matching search query.'
+    );
+  });
+
+  test('It filters sbom project list when platform value changes', async function (assert) {
+    this.server.get('/v2/sb_projects', (schema, req) => {
+      const platform = req.queryParams.platform;
+
+      this.set('platform', platform);
+
+      const results =
+        platform && parseInt(platform) !== -1
+          ? schema.projects.where((p) => p.platform === parseInt(platform))
+              .models
+          : schema.projects.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    await visit(`/dashboard/sbom/apps`);
+
+    let projectContainerList = findAll('[data-test-sbomapp-row]');
+
+    assert.strictEqual(
+      projectContainerList.length,
+      this.projects.length,
+      'Contains correct number of sbom table rows.'
+    );
+
+    await clickTrigger('[data-test-select-platform-container]');
+
+    await selectChoose(
+      '.select-platform-class',
+      '.ember-power-select-option',
+      1
+    );
+
+    assert.strictEqual(this.platform, '0');
+
+    projectContainerList = findAll('[data-test-sbomapp-row]');
+
+    assert.strictEqual(
+      this.projects.filter((p) => p.platform === 0).length,
+      projectContainerList.length,
+      'Sbom list items all have platform values matching "0".'
+    );
+
+    // Selecting a platform value equal to 1 from the plaform filter options
+    await selectChoose(
+      '.select-platform-class',
+      '.ember-power-select-option',
+      2
+    );
+
+    assert.strictEqual(this.platform, '1');
+
+    projectContainerList = findAll('[data-test-sbomapp-row]');
+
+    assert.strictEqual(
+      this.projects.filter((p) => p.platform === 1).length,
+      projectContainerList.length,
+      'Sbom list items all have platform values matching "1".'
+    );
+
+    // Selecting a platform value equal to -1 from the plaform filter options
+    // This should return the entire sbom list
+    await selectChoose(
+      '.select-platform-class',
+      '.ember-power-select-option',
+      0
+    );
+
+    assert.strictEqual(typeof this.platform, 'undefined');
+
+    projectContainerList = findAll('[data-test-sbomapp-row]');
+
+    assert.strictEqual(
+      this.projects.length,
+      projectContainerList.length,
+      'Sbom list defaults to complete list when platform value is "-1".'
+    );
+  });
+
+  test('It clears filter after filter is applied', async function (assert) {
+    this.server.get('/v2/sb_projects', (schema, req) => {
+      const platform = req.queryParams.platform;
+
+      this.set('platform', platform);
+
+      const results =
+        platform && parseInt(platform) !== -1
+          ? schema.projects.where((p) => p.platform === parseInt(platform))
+              .models
+          : schema.projects.all().models;
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    await visit(`/dashboard/sbom/apps`);
+
+    assert.dom('[data-test-sbom-list-header-clear-filter]').doesNotExist();
+
+    await clickTrigger('[data-test-select-platform-container]');
+
+    await selectChoose(
+      '.select-platform-class',
+      '.ember-power-select-option',
+      1
+    );
+
+    assert.dom('[data-test-sbom-list-header-clear-filter]').exists();
+
+    // Clear Filter
+    await click('[data-test-sbom-list-header-clear-filter]');
+
+    assert.dom('[data-test-sbom-list-header-clear-filter]').doesNotExist();
   });
 });

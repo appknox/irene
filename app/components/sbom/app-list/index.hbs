@@ -1,32 +1,12 @@
-<div class='px-3 py-1'>
-  <AkStack @alignItems='center' @justifyContent='space-between'>
-    <AkStack @direction='column' @spacing='0.5'>
-      <AkTypography data-test-sbomApp-title @variant='h5'>
-        {{t 'sbomModule.sbomAppTitle'}}
-      </AkTypography>
+<div local-class='sbom-app-list-container'>
 
-      <AkTypography
-        data-test-sbomApp-description
-        @variant='body2'
-        @color='textSecondary'
-      >
-        {{t 'sbomModule.sbomAppDescription'}}
-      </AkTypography>
-    </AkStack>
-
-    {{!-- <div {{style width='180px'}}>
-      <AkTextField
-        data-test-sbomApp-searchInput
-        @value={{@queryParams.app_query}}
-        @placeholder={{t 'search'}}
-        {{on 'keyup' this.searchSbomProjectForQuery}}
-      >
-        <:leftAdornment>
-          <AkIcon @iconName='search' @color='textSecondary' />
-        </:leftAdornment>
-      </AkTextField>
-    </div> --}}
-  </AkStack>
+  <Sbom::AppList::Header
+    @packageNameSearchQuery={{@queryParams.app_query}}
+    @onQueryChange={{this.searchSbomProjectForQuery}}
+    @handleClear={{this.handleClear}}
+    @filterPlatform={{this.filterPlatform}}
+    @selectedPlatformValue={{@queryParams.app_platform}}
+  />
 
   <div class='my-3'>
     <AkPaginationProvider
