@@ -17,14 +17,12 @@
     data-test-amTableRow-last-sync
   >
     {{#if @amApp.lastSync.syncedOn}}
-      {{t 'appMonitoringModule.lastMonitoredOn'}}
-
       <AkTypography
-        @variant='subtitle2'
+        @variant='body2'
         @color='textSecondary'
-        class='ml-1'
         data-test-amTableRow-last-sync-date
       >
+        {{t 'appMonitoringModule.lastMonitoredOn'}}
         {{day-js date=@amApp.lastSync.syncedOn format='DD MMM YYYY'}}
       </AkTypography>
 

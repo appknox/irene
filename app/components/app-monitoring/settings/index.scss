@@ -9,3 +9,92 @@
     max-width: 900px;
   }
 }
+
+.header-app-moitoring-page {
+  background-color: var(--appmonitoring-settings-header-background-color);
+  border: 1px solid var(--appmonitoring-settings-header-border-color);
+  border-radius: var(--appmonitoring-settings-header-border-radius);
+
+  .header-app-moitoring-page-title {
+    padding: 1em 1.285em;
+  }
+}
+
+.header-app-moitoring-page-sorting-filter {
+  padding: 0.785em 1.285em;
+}
+
+.filter-input {
+  border-color: var(
+    --appmonitoring-settings-header-filter-border-color
+  ) !important;
+  padding: 0px 8px !important;
+
+  :global(.ember-power-select-status-icon) {
+    display: none;
+  }
+
+  &:hover {
+    border-color: var(
+      --appmonitoring-settings-header-filter-hover-border-color
+    ) !important;
+  }
+}
+
+.filter-input-dropdown {
+  min-width: max-content !important;
+
+  :global(.ember-power-select-option) {
+    background-color: var(
+      --appmonitoring-settings-header-background-color
+    ) !important;
+    padding: 0.5em 0.75em !important;
+
+    &[aria-current='true'] {
+      background-color: var(
+        --appmonitoring-settings-header-filter-option-hover-background
+      ) !important;
+    }
+  }
+
+  :global(.ember-power-select-options) {
+    padding: 0 !important;
+  }
+}
+
+.search-input-container-width {
+  width: 200px;
+}
+
+.search-package-name-input {
+  font-size: 0.857rem !important;
+}
+
+.divider {
+  width: 1px;
+  height: 32px;
+  background-color: var(--appmonitoring-settings-header-divider-background-color);
+  margin-left: 0.714em;
+}
+
+.clear-filter-label {
+  font-size: 0.857rem !important;
+  text-decoration: underline;
+  color: var(--appmonitoring-settings-header-clear-filter-color) !important;
+}
+
+.clear-filter-icon {
+  margin-right: 0.2em;
+  color: var(--appmonitoring-settings-header-clear-filter-color) !important;
+}
+
+.clear-filter:hover {
+  box-shadow: none;
+
+  &:hover {
+    .clear-filter-icon,
+    .clear-filter-label {
+      color: var(--appmonitoring-settings-header-clear-filter-hover-color) !important;
+    }
+  }
+}

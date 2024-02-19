@@ -71,6 +71,7 @@ module('Unit | Service | appmonitoring', function (hooks) {
       assert.deepEqual(queryParams, {
         limit: String(limit),
         offset: String(offset),
+        q: '',
       });
 
       const results = schema.amApps.all().models;
@@ -116,6 +117,7 @@ module('Unit | Service | appmonitoring', function (hooks) {
         {
           limit: String(limit),
           offset: String(offset),
+          q: '',
         },
         `
         Requset limit = ${limit}; 
