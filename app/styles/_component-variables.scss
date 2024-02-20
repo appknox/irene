@@ -548,12 +548,18 @@ body {
   --appmonitoring-settings-header-filter-option-hover-background: var(
     --hover-light-background
   );
-  --appmonitoring-settings-header-divider-background-color: var(--neutral-grey-200);
+  --appmonitoring-settings-header-divider-background-color: var(
+    --neutral-grey-200
+  );
   --appmonitoring-settings-header-clear-filter-color: var(--neutral-grey-600);
   --appmonitoring-settings-header-clear-filter-hover-color: var(--primary-main);
 
   //variables for appmonitoring/table/status-column
   --appmonitoring-table-status-last-sync-color: var(--neutral-grey-600);
+
+  //variables for appmonitoring/table/application
+  --appmonitoring-table-application-logo-border-radius: var(--border-radius);
+  --appmonitoring-table-application-logo-border-color: var(--neutral-grey-100);
 
   // variables for file/report-drawer/va-reports
   --file-report-dr-va-reports-border-radius: var(--border-radius);

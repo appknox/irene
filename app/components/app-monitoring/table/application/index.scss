@@ -3,3 +3,18 @@
   width: 100%;
   letter-spacing: -0.02857em;
 }
+
+.app-logo-container {
+  width: 40px;
+  height: 40px;
+  padding: 0.5em;
+  border-radius: var(--appmonitoring-table-application-logo-border-radius);
+  border: 1px solid var(--appmonitoring-table-application-logo-border-color);
+  box-sizing: border-box;
+
+  img {
+    object-fit: contain;
+    background-image: none;
+    overflow: hidden;
+  }
+}
