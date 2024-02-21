@@ -1,24 +1,38 @@
-<AkStack @direction='column' data-test-amTable-rowItem>
-  <AkTypography
-    @color='secondary'
-    @gutterBottom={{true}}
-    @noWrap={{true}}
-    title={{@amApp.project.packageName}}
-    local-class='app-namespace'
-    class='pr-4'
-    data-test-amTableRow-app-namespace
+<AkStack @alignItems='center' @spacing='1.5' data-test-amTable-rowItem>
+  <AkStack
+    local-class='app-logo-container'
+    @alignItems='center'
+    @justifyContent='center'
   >
-    {{@amApp.project.packageName}}
-  </AkTypography>
+    <img
+      data-test-amTableRow-app-logo
+      src={{@amApp.project.lastFile.iconUrl}}
+      alt=''
+      role='none'
+    />
+  </AkStack>
 
-  <AkTypography
-    @color='neutral'
-    @noWrap={{true}}
-    title={{@amApp.project.lastFile.name}}
-    local-class='app-name'
-    class='pr-4'
-    data-test-amTableRow-app-name
-  >
-    {{@amApp.project.lastFile.name}}
-  </AkTypography>
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkTypography
+      @color='secondary'
+      @noWrap={{true}}
+      title={{@amApp.project.packageName}}
+      local-class='app-namespace'
+      class='pr-4'
+      data-test-amTableRow-app-namespace
+    >
+      {{@amApp.project.packageName}}
+    </AkTypography>
+
+    <AkTypography
+      @color='neutral'
+      @noWrap={{true}}
+      title={{@amApp.project.lastFile.name}}
+      local-class='app-name'
+      class='pr-4'
+      data-test-amTableRow-app-name
+    >
+      {{@amApp.project.lastFile.name}}
+    </AkTypography>
+  </AkStack>
 </AkStack>

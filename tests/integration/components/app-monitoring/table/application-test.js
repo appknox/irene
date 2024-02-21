@@ -49,6 +49,13 @@ module(
       );
 
       assert
+        .dom('[data-test-amTableRow-app-logo]')
+        .hasAttribute(
+          'src',
+          this.amApp.get('project').get('lastFile').get('iconUrl')
+        );
+
+      assert
         .dom(`[data-test-amTableRow-app-namespace]`)
         .containsText(this.amApp.get('project').get('packageName'));
 
