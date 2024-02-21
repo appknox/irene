@@ -81,7 +81,11 @@
   @justifyContent='space-between'
   local-class='file-overview-details'
 >
-  <AkStack data-test-fileOverview-version @spacing='0.5'>
+  <AkStack
+    data-test-cy='fileOverview-version'
+    data-test-fileOverview-version
+    @spacing='0.5'
+  >
     {{#if this.hasVersion}}
       <AkTypography @variant='body1' @color='textSecondary'>
         {{t 'version'}}
@@ -102,7 +106,7 @@
     {{/if}}
   </AkStack>
 
-  <AkStack @spacing='0.5'>
+  <AkStack data-test-cy='fileOverview-versionCode' @spacing='0.5'>
     {{#if @file.versionCode}}
       <AkTypography
         @variant='body1'

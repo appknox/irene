@@ -1,11 +1,12 @@
 import Component from '@glimmer/component';
 import ProjectModel from 'irene/models/project';
 
-interface ProjectOverviewArgs {
-  project: ProjectModel;
+interface ProjectOverviewSignature {
+  Element: HTMLElement;
+  Args: { project: ProjectModel };
 }
 
-export default class ProjectOverviewComponent extends Component<ProjectOverviewArgs> {
+export default class ProjectOverviewComponent extends Component<ProjectOverviewSignature> {
   get project() {
     return this.args.project || null;
   }

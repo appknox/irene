@@ -6,6 +6,7 @@
 >
   {{#each this.tags as |tag|}}
     <AkTooltip
+      aria-label={{concat (t tag.text) ' scan tag tooltip'}}
       @arrow={{true}}
       @placement={{or @tooltipPlacement 'top'}}
       @color='dark'

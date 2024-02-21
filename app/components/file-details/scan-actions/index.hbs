@@ -27,7 +27,12 @@
   <AkDivider @color='dark' />
 
   <AkStack class='p-3' @spacing='6' @alignItems='center'>
-    <AkStack @direction='column' @alignItems='center' @spacing='1.5'>
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      @spacing='1.5'
+      data-test-cy='staticScan-infoContainer'
+    >
       <AkTypography
         data-test-fileDetailScanActions-staticScanTitle
         @variant='h6'

@@ -57,6 +57,7 @@
               <b.row
                 {{style cursor='pointer'}}
                 @onClick={{this.handleSbomProjectRowClick}}
+                data-test-cy='sbomApp-row-{{b.rowValue.id}}'
                 data-test-sbomApp-row
                 as |r|
               >
