@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { findAll, render, waitFor } from '@ember/test-helpers';
+import { find, findAll, render, waitFor, waitUntil } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
 import { SbomReportStatus } from 'irene/models/sbom-report';
@@ -207,6 +207,13 @@ module(
       assert
         .dom('[data-test-sbomReportList-reportDownloadBtn]', reportList[1])
         .isNotDisabled();
+
+      await waitUntil(
+        () =>
+          find(
+            '[data-test-fileReportDrawer-sbomReports-sbomFileLink]'
+          ).getAttribute('href') !== '#'
+      );
 
       // Link to sbom file
       assert

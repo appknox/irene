@@ -9,10 +9,6 @@ export default class ProjectOverviewComponent extends Component<ProjectOverviewA
   get project() {
     return this.args.project || null;
   }
-
-  get lastFile() {
-    return this.project.get('lastFileId').content || null;
-  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

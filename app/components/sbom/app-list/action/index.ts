@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import IntlService from 'ember-intl/services/intl';
+import { isEmpty } from '@ember/utils';
 
 import { AkIconSignature } from 'irene/components/ak-icon';
 import SbomProjectModel from 'irene/models/sbom-project';
@@ -34,7 +35,7 @@ export default class SbomProjectListActionComponent extends Component<SbomProjec
   @tracked anchorRef: HTMLElement | null = null;
 
   get hasNoSbomScan() {
-    return this.args.sbomProject.latestSbFile?.content === null;
+    return isEmpty(this.args.sbomProject.latestSbFile?.get('id'));
   }
 
   get scanStatusCompleted() {

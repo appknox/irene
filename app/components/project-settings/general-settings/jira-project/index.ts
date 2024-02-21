@@ -132,7 +132,10 @@ export default class ProjectSettingsGeneralSettingsJiraProjectComponent extends 
   }
 
   @action selectRepo(repo: OrganizationJiraProjectModel) {
-    this.selectedRepo = repo.toJSON() as JiraSelectedRepoProps;
+    this.selectedRepo = {
+      key: repo.key,
+      name: repo.name,
+    } as JiraSelectedRepoProps;
   }
 
   @action selectThreshold(threshold: number) {
@@ -216,7 +219,6 @@ export default class ProjectSettingsGeneralSettingsJiraProjectComponent extends 
       await waitForPromise(
         (this.currentJiraProject as JiraRepoModel).destroyRecord()
       );
-      this.currentJiraProject?.unloadRecord();
 
       this.notify.success(this.tProjectRemoved);
       this.showDeleteJIRAConfirmBox = false;
@@ -268,7 +270,7 @@ export default class ProjectSettingsGeneralSettingsJiraProjectComponent extends 
       const error = err as any;
 
       if (
-        error?.errors?.[0]?.source?.pointer === '/data/attributes/project_key'
+        error.errors?.[0]?.source?.pointer === '/data/attributes/project_key'
       ) {
         this.notify.error(this.tInvalidRepo);
         return;

@@ -172,6 +172,7 @@
     "prettier": "^2.7.1",
     "qunit": "^2.20.0",
     "qunit-dom": "^2.0.0",
+    "tracked-built-ins": "^3.3.0",
     "typescript": "^5.2.0",
     "webpack": "^5.76.0"
   },

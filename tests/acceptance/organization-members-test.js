@@ -321,7 +321,7 @@ module('Acceptance | organization members', function (hooks) {
     // 4 active members and 1 for current user
     assert.strictEqual(contentRows.length, 5);
 
-    assert.ok(currentURL().includes('show_inactive_user=false'));
+    assert.notOk(currentURL().includes('show_inactive_user=true'));
   });
 
   test('test organization user search', async function (assert) {

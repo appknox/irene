@@ -254,7 +254,8 @@ export default class ProjectSettingsGeneralSettingsGithubProjectComponent extend
         return;
       }
       if (
-        err.errors[0]?.source?.pointer === '/data/attributes/risk_threshold'
+        err.errors[0]?.source?.pointer === '/data/attributes/risk_threshold' ||
+        err.errors[0]?.source?.pointer === '/data/attributes/riskThreshold'
       ) {
         this.notify.error(this.tInvalidRisk);
         return;
@@ -276,7 +277,6 @@ export default class ProjectSettingsGeneralSettingsGithubProjectComponent extend
         (this.currentGithubRepo as GithubRepoModel).destroyRecord()
       );
 
-      this.currentGithubRepo?.unloadRecord();
       this.notify.success(this.tProjectRemoved);
       this.currentGithubRepo = null;
       this.showDeleteGHConfirmBox = false;

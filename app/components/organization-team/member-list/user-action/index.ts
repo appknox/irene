@@ -43,9 +43,15 @@ export default class OrganizationTeamMemberListUserAction extends Component<Orga
   /* Remove member */
   removeMember = task(async () => {
     try {
+      const user = this.args.member.user;
+
+      if (!user) {
+        return;
+      }
+
       this.isRemovingMember = true;
 
-      const memberName = (await this.args.member.user).username.toLowerCase();
+      const memberName = user.username.toLowerCase();
       const promptMemberName = this.promptMemberName.toLowerCase();
 
       if (promptMemberName !== memberName) {
@@ -53,8 +59,6 @@ export default class OrganizationTeamMemberListUserAction extends Component<Orga
       }
 
       const { team } = this.args;
-
-      const user = await this.args.member.user;
 
       await waitForPromise(team.deleteMember(user));
 

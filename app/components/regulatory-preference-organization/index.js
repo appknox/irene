@@ -49,8 +49,9 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
 
   fetchOrganizationPreference = task(async () => {
     try {
-      this.orgPreference = await waitForPromise(
-        this.store.queryRecord('organization-preference', {})
+      this.orgPreference = await this.store.queryRecord(
+        'organization-preference',
+        {}
       );
     } catch (err) {
       this.orgPreference = null;

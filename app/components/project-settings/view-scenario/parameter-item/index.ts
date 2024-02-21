@@ -154,7 +154,6 @@ export default class ProjectSettingsViewScenarioParameterItemComponent extends C
     try {
       const adapterOptions = { scenarioId: this.scenario.id };
       await waitForPromise(this.parameter.destroyRecord({ adapterOptions }));
-      this.parameter.unloadRecord();
 
       this.hideDeleteParameterModal();
       this.notify.success(this.intl.t('dastAutomation.paramDeleteSuccess'));

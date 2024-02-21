@@ -51,8 +51,10 @@ module(
       this.owner.register('service:notifications', NotificationsStub);
       this.notifyService = this.owner.lookup('service:notifications');
 
-      this.server.get('/projects/:id/github', (schema, req) => {
-        return schema.githubRepos.find(req.params.id).toJSON();
+      this.server.get('/projects/:id/github', (schema) => {
+        const results = schema.githubRepos.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
       });
 
       this.server.get('/v2/projects/:id', (schema, req) => {

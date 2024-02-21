@@ -273,6 +273,8 @@ module(
           this.jiraProjects[0].name,
           'Selected project "name" is equal to first item name on dropdown list'
         );
+
+        return new Response(201, {}, this.jiraProjects[0].toJSON());
       });
 
       await render(
@@ -441,7 +443,7 @@ module(
           (project) => project.key === requestBody.project_key
         );
 
-        return { ...targetedProject.toJSON() };
+        return { ...targetedProject.toJSON(), id: request.params.id };
       });
 
       await render(

@@ -5,7 +5,6 @@ import ENV from 'irene/config/environment';
 import lookupValidator from 'ember-changeset-validations';
 import Changeset from 'ember-changeset';
 import { validatePresence } from 'ember-changeset-validations/validators';
-import { t } from 'ember-intl';
 import { tracked } from '@glimmer/tracking';
 
 const ResetValidator = {
@@ -16,11 +15,12 @@ export default class PasswordRecoverComponent extends Component {
   @service ajax;
   @service('notifications') notify;
   @service('rollbar') logger;
+  @service intl;
 
   @tracked mailSent = false;
 
   recoverURL = ENV.endpoints.recover;
-  tSomethingWentWrong = t('somethingWentWrong');
+  tSomethingWentWrong = this.intl.t('somethingWentWrong');
   model = {};
 
   constructor(...args) {
