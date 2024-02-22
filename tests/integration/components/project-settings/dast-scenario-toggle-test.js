@@ -78,7 +78,8 @@ module(
 
           return schema.scanParameterGroups
             .find(id)
-            .update({ is_active: is_active === 'true', ...rest });
+            .update({ is_active, ...rest })
+            .toJSON();
         },
         { timing: 150 }
       );

@@ -168,16 +168,22 @@
           />
         {{/if}}
 
-        <AkLink
+        <a
           data-test-uploadAppStatusDetails-storeLink
-          @color='primary'
-          @typographyVariant='body2'
           class='ml-1'
           href={{@submission.url}}
+          rel='noopener noreferrer'
           target='_blank'
         >
-          {{t 'viewStoreLink'}}
-        </AkLink>
+          <AkTypography
+            @tag='span'
+            @underline='hover'
+            @variant='body2'
+            @color='primary'
+          >
+            {{t 'viewStoreLink'}}
+          </AkTypography>
+        </a>
       </AkStack>
     {{/if}}
   </AkStack>

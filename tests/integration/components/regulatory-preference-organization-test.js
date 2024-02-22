@@ -215,8 +215,10 @@ module(
         return json;
       });
 
-      this.server.put('organizations/:id/preference', () => {
-        return {};
+      this.server.put('organizations/:id/preference', (_, request) => {
+        const data = JSON.parse(request.requestBody);
+
+        return this.server.create('organization-preference', data);
       });
 
       await render(hbs`<RegulatoryPreferenceOrganization />`);

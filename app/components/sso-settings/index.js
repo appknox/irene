@@ -67,10 +67,10 @@ export default class SsoSettingsComponent extends Component {
   // Fetch IdP Metadata
   getIdPMetadata = task({ restartable: true }, async () => {
     try {
-      const idpMetadata = await waitForPromise(
-        this.store.queryRecord('saml2-idp-metadata', {})
+      const idpMetadata = await this.store.queryRecord(
+        'saml2-idp-metadata',
+        {}
       );
-
       this.idpMetadata = idpMetadata;
     } catch (error) {
       // catch error

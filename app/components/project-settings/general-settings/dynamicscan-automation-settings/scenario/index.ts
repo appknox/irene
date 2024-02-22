@@ -16,7 +16,7 @@ import ScanParameterGroupModel from 'irene/models/scan-parameter-group';
 
 import styles from './index.scss';
 
-type ProjectSceanriosArrayResponse =
+type ProjectScenariosArrayResponse =
   DS.AdapterPopulatedRecordArray<ScanParameterGroupModel>;
 
 export interface ProjectSettingsGeneralSettingsDyanmicscanAutomationSettingsScenarioSignature {
@@ -34,7 +34,7 @@ export default class ProjectSettingsGeneralSettingsDyanmicscanAutomationSettings
   @tracked showAddScenarioModal = false;
   @tracked scenarioName = '';
   @tracked scenarioStatus = false;
-  @tracked projectScenarios: ProjectSceanriosArrayResponse | null = null;
+  @tracked projectScenarios: ProjectScenariosArrayResponse | null = null;
 
   namespace = ENV.namespace_v2;
 
@@ -129,7 +129,7 @@ export default class ProjectSettingsGeneralSettingsDyanmicscanAutomationSettings
     try {
       this.projectScenarios = (await this.store.query('scan-parameter-group', {
         projectId: this.args.project?.id,
-      })) as ProjectSceanriosArrayResponse;
+      })) as ProjectScenariosArrayResponse;
     } catch (error) {
       this.notify.error(parseError(error));
     }

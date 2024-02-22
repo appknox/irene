@@ -168,7 +168,8 @@ module(
 
             return schema.scanParameters
               .find(id)
-              .update({ is_secure: is_secure === 'true', ...rest });
+              .update({ is_secure, ...rest })
+              .toJSON();
           },
           { timing: 150 }
         );
@@ -257,7 +258,10 @@ module(
           // Sets the value of paramter
           this.parameter.set('isSecure', is_secure);
 
-          return schema.scanParameters.find(id).update({ is_secure, ...rest });
+          return schema.scanParameters
+            .find(id)
+            .update({ is_secure, ...rest })
+            .toJSON();
         }
       );
 

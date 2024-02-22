@@ -140,7 +140,7 @@ module('Integration | Component | upload-app/via-link', function (hooks) {
       const appLink =
         'https://play.google.com/store/apps/details?id=com.example.app';
 
-      this.server.post('/organizations/:id/upload_app_url', (_, req) => {
+      this.server.post('/organizations/:id/upload_app_url', (schema, req) => {
         if (fail) {
           return new Response(500);
         }
@@ -149,7 +149,7 @@ module('Integration | Component | upload-app/via-link', function (hooks) {
 
         assert.strictEqual(data.url, appLink);
 
-        return new Response(200);
+        return schema.create('uploadApp', data);
       });
 
       await render(hbs`<UploadApp::ViaLink />`);

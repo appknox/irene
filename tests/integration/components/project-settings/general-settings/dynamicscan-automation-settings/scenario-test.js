@@ -166,7 +166,8 @@ module(
 
           return schema.scanParameterGroups
             .find(id)
-            .update({ is_active, ...rest });
+            .update({ is_active, ...rest })
+            .toJSON();
         }
       );
 

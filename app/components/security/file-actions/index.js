@@ -83,26 +83,32 @@ export default class FileActionsNewComponent extends Component {
       : ENUMS.SCAN_STATUS.UNKNOWN;
 
     try {
-      const file = await this.file;
+      const file = this.file;
       file.set('apiScanStatus', apiScanStatus);
-      await file.save();
+
+      await waitForPromise(file.save());
+
       this.notifications.success('Successfully saved the API scan status');
     } catch (error) {
       let errMsg = this.tPleaseTryAgain;
+
       if (error.errors && error.errors.length) {
         errMsg = error.errors[0].detail || errMsg;
       } else if (error.message) {
         errMsg = error.message;
       }
+
       this.notifications.error(errMsg);
     }
   });
 
   setDynamicDone = task(async (isDynamicDone) => {
     try {
-      const file = await this.file;
+      const file = this.file;
       file.set('isDynamicDone', isDynamicDone);
-      await file.save();
+
+      await waitForPromise(file.save());
+
       this.notifications.success('Dynamic scan status updated');
     } catch (error) {
       let errMsg = this.tPleaseTryAgain;
@@ -119,15 +125,19 @@ export default class FileActionsNewComponent extends Component {
     try {
       const file = this.file;
       file.set('manual', status);
+
       await waitForPromise(file.save());
+
       this.notifications.success('Manual Scan Status Updated');
     } catch (error) {
       let errMsg = this.tPleaseTryAgain;
+
       if (error.errors && error.errors.length) {
         errMsg = error.errors[0].detail || errMsg;
       } else if (error.message) {
         errMsg = error.message;
       }
+
       this.notifications.error(errMsg);
     }
   });
@@ -165,28 +175,30 @@ export default class FileActionsNewComponent extends Component {
   downloadApp = task(async () => {
     try {
       const url = [ENV.endpoints.apps, this.fileId].join('/');
+
       const data = await this.ajax.request(url, {
         namespace: 'api/hudson-api',
       });
-
       window.location = data.url;
     } catch (error) {
       let errMsg = this.tPleaseTryAgain;
+
       if (error.errors && error.errors.length) {
         errMsg = error.errors[0].detail || errMsg;
       } else if (error.message) {
         errMsg = error.message;
       }
+
       this.notifications.error(errMsg);
     }
   });
 
   downloadAppModified = task(async () => {
     const url = [ENV.endpoints.apps, this.fileId, 'modified'].join('/');
+
     const data = await this.ajax.request(url, {
       namespace: 'api/hudson-api',
     });
-
     window.location = data.url;
   });
 
@@ -202,7 +214,6 @@ export default class FileActionsNewComponent extends Component {
       vulnerability: vulnerability,
       file: file,
     });
-
     try {
       await waitForPromise(analysis.save());
 
@@ -211,11 +222,13 @@ export default class FileActionsNewComponent extends Component {
     } catch (error) {
       analysis.unloadRecord();
       let errMsg = this.tPleaseTryAgain;
+
       if (error.errors && error.errors.length) {
         errMsg = error.errors[0].detail || errMsg;
       } else if (error.message) {
         errMsg = error.message;
       }
+
       this.notifications.error(errMsg);
     }
   });
@@ -231,7 +244,7 @@ export default class FileActionsNewComponent extends Component {
       .then((data) =>
         store.query('vulnerability', {
           projectId: this.projectId,
-          limit: data.meta.count,
+          limit: data?.meta?.count || 0,
         })
       );
   });
