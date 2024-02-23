@@ -1,4 +1,3 @@
-/* eslint-disable qunit/no-assert-equal */
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -215,10 +214,16 @@ module(
         return json;
       });
 
-      this.server.put('organizations/:id/preference', (_, request) => {
+      this.server.put('organizations/:id/preference', (schema, request) => {
         const data = JSON.parse(request.requestBody);
 
-        return this.server.create('organization-preference', data);
+        schema.organizationPreferences
+          .find(request.params.id)
+          .update(data)
+          .toJSON();
+
+        // TODO: need to figure out why passing response obj is not working
+        return new Response(204);
       });
 
       await render(hbs`<RegulatoryPreferenceOrganization />`);

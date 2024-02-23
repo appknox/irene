@@ -89,7 +89,7 @@ module('Integration | Component | upload-app', function (hooks) {
     this.server.post('/organizations/:id/upload_app', (schema, req) => {
       const data = JSON.parse(req.requestBody);
 
-      return schema.create('uploadApp', data);
+      return schema.create('uploadApp', data).toJSON();
     });
 
     this.server.put(
