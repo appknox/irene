@@ -2,6 +2,13 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 
 import { faker } from '@faker-js/faker';
 
+export async function createAuthSession(userId = '1') {
+  await authenticateSession({
+    authToken: faker.git.commitSha(),
+    user_id: userId,
+  });
+}
+
 export async function setupRequiredEndpoints(server, skipLogin = true) {
   // clear out default data
   server.db.emptyData();
@@ -24,10 +31,7 @@ export async function setupRequiredEndpoints(server, skipLogin = true) {
   });
 
   if (skipLogin) {
-    await authenticateSession({
-      authToken: faker.git.commitSha(),
-      user_id: currentUser.id,
-    });
+    await createAuthSession(currentUser.id);
   } else {
     // login endpoints
   }

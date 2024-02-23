@@ -86,6 +86,7 @@
   "asvsExpansion": "Application Security Verification Standard",
   "attachments": "Attachments",
   "author": "Author",
+  "authorize": "Authorize",
   "automated": "Automated",
   "available": "available",
   "availableCredits": "Available Scan Credits",
@@ -808,6 +809,11 @@
     "viewAppOnStore": "View App on Store"
   },
   "off": "off",
+  "oidcModule": {
+    "permissionHeading": "{applicationName} requires the following permissions",
+    "errorHelperText": "Not sure what to do? Try Logging in again from start.",
+    "openIdConnectAuthorize": "Open ID Connect Authorize"
+  },
   "ok": "Ok",
   "on": "on",
   "openInNewTab": "Open in new tab",
@@ -1287,7 +1293,7 @@
   "upload": "Upload",
   "uploadApp": "Upload App",
   "uploadAnApp": "Upload an App",
-  "uploadAppModule":{
+  "uploadAppModule": {
     "linkPastePlaceholder": "Paste the link here...",
     "viaLink": "Via Link",
     "supportedStores": "Supported Stores",

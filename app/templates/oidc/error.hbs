@@ -1,0 +1,38 @@
+<AkStack
+  {{style
+    height='100vh'
+    backgroundColor='var(--oidc-error-container-background-color)'
+  }}
+  @width='full'
+  @alignItems='center'
+  @justifyContent='center'
+>
+  <AkStack
+    {{style
+      backgroundColor='var(--oidc-error-card-background-color)'
+      borderRadius='var(--oidc-error-card-border-radius)'
+    }}
+    class='m-4 p-7'
+    @direction='column'
+    @alignItems='center'
+    @justifyContent='center'
+    @spacing='6'
+  >
+    <AkSvg::NoResult data-test-oidcError-SvgIcon />
+
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      @justifyContent='center'
+      @spacing='2'
+    >
+      <AkTypography data-test-oidcError-text @variant='h6'>
+        {{or this.error.description (t 'somethingWentWrong')}}
+      </AkTypography>
+
+      <AkTypography data-test-oidcError-helperText @color='textSecondary'>
+        {{t 'oidcModule.errorHelperText'}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+</AkStack>

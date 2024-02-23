@@ -86,6 +86,7 @@
   "asvsExpansion": "Application Security Verification Standard",
   "attachments": "添付ファイル",
   "author": "Author",
+  "authorize": "Authorize",
   "automated": "Automated",
   "available": "available",
   "availableCredits": "Available Scan Credits",
@@ -807,6 +808,11 @@
     "viewAppOnStore": "View App on Store"
   },
   "off": "off",
+  "oidcModule": {
+    "permissionHeading": "{applicationName} requires the following permissions",
+    "errorHelperText": "Not sure what to do? Try Logging in again from start.",
+    "openIdConnectAuthorize": "Open ID Connect Authorize"
+  },
   "ok": "OK",
   "on": "on",
   "openInNewTab": "Open in new tab",
@@ -1286,7 +1292,7 @@
   "upload": "Upload",
   "uploadApp": "アプリのアップロード",
   "uploadAnApp": "Upload an App",
-  "uploadAppModule":{
+  "uploadAppModule": {
     "linkPastePlaceholder": "Paste the link here...",
     "viaLink": "Via Link",
     "supportedStores": "Supported Stores",

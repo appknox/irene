@@ -16,6 +16,11 @@ Router.map(function () {
     this.route('redirect');
   });
 
+  this.route('oidc', { path: 'dashboard/oidc' }, function () {
+    this.route('redirect');
+    this.route('authorize');
+  });
+
   this.route('register');
 
   this.route('register-via-invite', {

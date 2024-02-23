@@ -13,6 +13,7 @@ import DatetimeService from 'irene/services/datetime';
 import TrialService from 'irene/services/trial';
 import IntegrationService from 'irene/services/integration';
 import OrganizationService from 'irene/services/organization';
+import OidcService from 'irene/services/oidc';
 import UserModel from 'irene/models/user';
 import { CSBMap } from 'irene/router';
 import ENV from 'irene/config/environment';
@@ -29,13 +30,16 @@ export default class AuthenticatedRoute extends Route {
   @service declare websocket: any;
   @service declare integration: IntegrationService;
   @service declare store: Store;
+  @service declare oidc: OidcService;
   @service('notifications') declare notify: NotificationService;
   @service('organization') declare org: OrganizationService;
+  @service('browser/window') declare window: Window;
 
   @tracked lastTransition?: Transition;
 
   beforeModel(transition: Transition) {
     this.session.requireAuthentication(transition, 'login');
+    this.oidc.checkForOidcTokenAndRedirect();
 
     this.lastTransition = transition;
   }
