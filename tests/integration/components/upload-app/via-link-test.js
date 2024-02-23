@@ -149,7 +149,7 @@ module('Integration | Component | upload-app/via-link', function (hooks) {
 
         assert.strictEqual(data.url, appLink);
 
-        return schema.create('uploadApp', data);
+        return schema.create('uploadApp', data).toJSON();
       });
 
       await render(hbs`<UploadApp::ViaLink />`);

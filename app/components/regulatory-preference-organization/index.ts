@@ -2,19 +2,23 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import parseError from 'irene/utils/parse-error';
 import { waitForPromise } from '@ember/test-waiters';
+import IntlService from 'ember-intl/services/intl';
+import Store from '@ember-data/store';
+
+import OrganizationPreferenceModel from 'irene/models/organization-preference';
+import parseError from 'irene/utils/parse-error';
 
 export default class RegulatoryPreferenceOrganizationComponent extends Component {
-  @service intl;
-  @service store;
-  @service('notifications') notify;
-  @service organization;
+  @service declare intl: IntlService;
+  @service declare store: Store;
+  @service('notifications') declare notify: NotificationService;
 
-  @tracked orgPreference;
+  @tracked orgPreference: OrganizationPreferenceModel | null = null;
 
-  constructor() {
-    super(...arguments);
+  constructor(owner: unknown, args: object) {
+    super(owner, args);
+
     this.fetchOrganizationPreference.perform();
   }
 
@@ -40,7 +44,7 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
       },
       {
         label: 'NIST',
-        checked: Boolean(this.orgPreference?.reportPreference.show_nist),
+        checked: Boolean(this.orgPreference?.reportPreference?.show_nist),
         task: this.saveNist,
         title: this.intl.t('nistExpansion'),
       },
@@ -55,6 +59,7 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
       );
     } catch (err) {
       this.orgPreference = null;
+
       return;
     }
   });
@@ -75,13 +80,20 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
     await this.saveReportPreference.perform('show_nist', event);
   });
 
-  saveReportPreference = task(async (regulator, event) => {
-    try {
-      this.orgPreference.reportPreference[regulator] = event.target.checked;
-      await waitForPromise(this.orgPreference.save());
-    } catch (err) {
-      this.notify.error(parseError(err));
-      event.target.checked = !event.target.checked;
+  saveReportPreference = task(
+    async (
+      regulator: 'show_pcidss' | 'show_hipaa' | 'show_gdpr' | 'show_nist',
+      event
+    ) => {
+      const preference = this.orgPreference as OrganizationPreferenceModel;
+      try {
+        preference.reportPreference[regulator] = event.target.checked;
+
+        await waitForPromise(preference.save());
+      } catch (err) {
+        this.notify.error(parseError(err));
+        event.target.checked = !event.target.checked;
+      }
     }
-  });
+  );
 }

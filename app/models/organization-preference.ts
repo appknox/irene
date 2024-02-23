@@ -4,6 +4,7 @@ interface ReportPreferenceData {
   show_gdpr: boolean;
   show_hipaa: boolean;
   show_pcidss: boolean;
+  show_nist: boolean;
 }
 
 export default class OrganizationPreferenceModel extends Model {

@@ -66,7 +66,7 @@ module('Integration | Component | upload-app/via-system', function (hooks) {
       this.server.post('/organizations/:id/upload_app', (schema, req) => {
         const data = JSON.parse(req.requestBody);
 
-        return schema.create('uploadApp', data);
+        return schema.create('uploadApp', data).toJSON();
       });
 
       this.server.put('/:id/s3_upload_file', () => {
