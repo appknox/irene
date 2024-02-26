@@ -1,6 +1,8 @@
 import { BASE_FACTORY_DEF } from 'irene/mirage/factories/base';
 import FileFactory, { FILE_FACTORY_DEF } from 'irene/mirage/factories/file';
 import User, { USER_FACTORY_DEF } from 'irene/mirage/factories/user';
+import { SBOM_PROJECT_FACTORY_DEF } from 'irene/mirage/factories/sbom-project';
+import { SBOM_FILE_FACTORY_DEF } from 'irene/mirage/factories/sbom-file';
 
 import ProjectFactory, {
   PROJECT_FACTORY_DEF,
@@ -18,6 +20,14 @@ import OrganizationMember, {
   ORGANIZATION_MEMBER_FACTORY_DEF,
 } from 'irene/mirage/factories/organization-member';
 
+import UploadApp, {
+  UPLOAD_APP_FACTORY_DEF,
+} from 'irene/mirage/factories/upload-app';
+
+import Submission, {
+  SUBMISSION_FACTORY_DEF,
+} from 'irene/mirage/factories/submission';
+
 // Extract factory method return values from a factory definition
 type FlattenFactoryMethods<T> = {
   [K in keyof T]: T[K] extends (n: number) => infer V ? V : T[K];
@@ -31,6 +41,11 @@ type IncludeBaseFactoryProps<T> = FlattenFactoryMethods<T> &
 
 export interface MirageFactoryDefProps {
   user: FlattenFactoryMethods<typeof USER_FACTORY_DEF>;
+  submission: FlattenFactoryMethods<typeof SUBMISSION_FACTORY_DEF>;
+  'upload-app': FlattenFactoryMethods<typeof UPLOAD_APP_FACTORY_DEF>;
+  'sbom-file': FlattenFactoryMethods<typeof SBOM_FILE_FACTORY_DEF>;
+  'sbom-project': FlattenFactoryMethods<typeof SBOM_PROJECT_FACTORY_DEF>;
+
   'organization-member': FlattenFactoryMethods<
     typeof ORGANIZATION_MEMBER_FACTORY_DEF
   >;
@@ -55,6 +70,8 @@ const MIRAGE_FACTORIES = {
   'unknown-analysis-status': UnknownAnalysisStatus,
   'organization-member': OrganizationMember,
   user: User,
+  'upload-app': UploadApp,
+  submission: Submission,
 };
 
 export { MIRAGE_FACTORIES };

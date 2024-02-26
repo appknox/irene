@@ -25,7 +25,7 @@ export const PROJECT_FACTORY_DEF = {
     return i + 1;
   },
 
-  platform() {
+  get platform() {
     return faker.helpers.arrayElement([0, 1]);
   },
 
@@ -46,7 +46,7 @@ export const PROJECT_FACTORY_DEF = {
   },
 
   platformIconClass() {
-    const platform = this.platform as unknown as number;
+    const platform = this.platform;
 
     switch (platform) {
       case ENUMS.PLATFORM.ANDROID:

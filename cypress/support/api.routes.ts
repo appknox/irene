@@ -16,14 +16,22 @@ export const API_ROUTES = {
     route: '/websocket/**',
     alias: 'websockets',
   },
+  uploadApp: {
+    route: '/api/organizations/*/upload_app',
+    alias: 'uploadAppReq',
+  },
 
   // Auth
   login: { route: '/api/login' },
 
   // Listing Routes
+  sbomProjectList: {
+    route: '/api/v2/sb_projects*',
+    alias: 'sbomProjectList',
+  },
   organizationList: {
-    route: '/api/organizations',
-    alias: 'availableOrgs',
+    route: '/api/organizations*',
+    alias: 'availableOrgsList',
   },
   submissionList: {
     route: '/api/submissions*',
@@ -43,7 +51,8 @@ export const API_ROUTES = {
   },
 
   // Single Record routes
-  file: { route: '/api/v2/files/**', alias: 'file' },
+  file: { route: '/api/v2/files', alias: 'file' },
+  sbom: { route: '/api/v2/sb_files', alias: 'sbomFile' },
   unknownAnalysisStatus: {
     route: '/api/profiles/*/unknown_analysis_status*',
     alias: 'unknownAnalysisStatus',
@@ -51,5 +60,13 @@ export const API_ROUTES = {
   userInfo: {
     route: '/api/users/**',
     alias: 'userInfo',
+  },
+  analysis: {
+    route: '/api/v2/analyses',
+    alias: 'analysisItem',
+  },
+  submissionItem: {
+    route: '/api/submissions',
+    alias: 'submission',
   },
 } as const;

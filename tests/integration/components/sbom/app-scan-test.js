@@ -110,6 +110,10 @@ module('Integration | Component | sbom/app-scan', function (hooks) {
         return { count: results.length, next: null, previous: null, results };
       });
 
+      this.server.get('/v2/sb_projects/:id', (schema, req) => {
+        return schema.sbomProjects.find(`${req.params.id}`)?.toJSON();
+      });
+
       this.server.get('/v2/sb_files/:id', (schema, req) => {
         return schema.sbomFiles.find(`${req.params.id}`)?.toJSON();
       });

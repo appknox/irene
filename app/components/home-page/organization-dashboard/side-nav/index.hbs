@@ -17,6 +17,7 @@
       {{#each this.menuItems as |it|}}
         {{#if it.component}}
           <akl.listItem
+            aria-label='{{it.label}} side menu item'
             @noGutters={{true}}
             data-test-side-menu-item='{{it.label}}'
           >
@@ -30,6 +31,7 @@
 
         {{else}}
           <akl.listItem
+            aria-label='{{it.label}} side menu item'
             @noGutters={{true}}
             @link={{true}}
             @route={{it.route}}
