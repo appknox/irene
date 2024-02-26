@@ -18,7 +18,9 @@ export interface AkMenuSignature {
   };
   Blocks: {
     default: [
-      { listItem: WithBoundArgs<typeof AkListItemComponent, 'button' | 'role'> }
+      {
+        listItem: WithBoundArgs<typeof AkListItemComponent, 'button' | 'role'>;
+      },
     ];
   };
 }

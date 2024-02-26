@@ -54,6 +54,10 @@ export default class AkLinkComponent extends Component<AkLinkSignature> {
 
     return [];
   }
+
+  get query() {
+    return this.args.query || {};
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

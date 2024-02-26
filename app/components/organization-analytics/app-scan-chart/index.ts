@@ -250,59 +250,62 @@ export default class OrganizationAnalyticsAppScanChartComponent extends Componen
 
     return {
       [type]: monthsOrYears, // set year or month values
-      data: appScan.reduce((acc, curr) => {
-        // month or year
-        const key =
-          type === 'months'
-            ? (this.monthNames[dayjs(curr.created_on_date).month()] as string)
-            : dayjs(curr.created_on_date).year();
+      data: appScan.reduce(
+        (acc, curr) => {
+          // month or year
+          const key =
+            type === 'months'
+              ? (this.monthNames[dayjs(curr.created_on_date).month()] as string)
+              : dayjs(curr.created_on_date).year();
 
-        const appScanDataItems = acc[key];
+          const appScanDataItems = acc[key];
 
-        if (appScanDataItems) {
-          const currentDataItem = this.setAppScanDataItem(curr);
-          const packageNameIndexMap = monthOrYearPackageNameIndexMap[key];
+          if (appScanDataItems) {
+            const currentDataItem = this.setAppScanDataItem(curr);
+            const packageNameIndexMap = monthOrYearPackageNameIndexMap[key];
 
-          if (
-            packageNameIndexMap &&
-            typeof packageNameIndexMap[curr.package_name] !== 'undefined'
-          ) {
-            const previousDataItem =
-              appScanDataItems[
-                packageNameIndexMap[curr.package_name] as number
-              ];
+            if (
+              packageNameIndexMap &&
+              typeof packageNameIndexMap[curr.package_name] !== 'undefined'
+            ) {
+              const previousDataItem =
+                appScanDataItems[
+                  packageNameIndexMap[curr.package_name] as number
+                ];
 
-            if (previousDataItem) {
-              previousDataItem.value += currentDataItem.value;
-              previousDataItem.meta.createdOnDate.push(curr.created_on_date);
+              if (previousDataItem) {
+                previousDataItem.value += currentDataItem.value;
+                previousDataItem.meta.createdOnDate.push(curr.created_on_date);
 
-              return acc;
+                return acc;
+              }
             }
+
+            monthOrYearPackageNameIndexMap[key] = {
+              ...(monthOrYearPackageNameIndexMap[key] || {}),
+              [curr.package_name]: appScanDataItems.length,
+            };
+
+            return {
+              ...acc,
+              [key]: [...appScanDataItems, currentDataItem],
+            };
           }
 
+          // push month/year if does not exist
+          monthsOrYears.push(key);
+
           monthOrYearPackageNameIndexMap[key] = {
-            ...(monthOrYearPackageNameIndexMap[key] || {}),
-            [curr.package_name]: appScanDataItems.length,
+            [curr.package_name]: 0,
           };
 
           return {
             ...acc,
-            [key]: [...appScanDataItems, currentDataItem],
+            [key]: [this.setAppScanDataItem(curr)],
           };
-        }
-
-        // push month/year if does not exist
-        monthsOrYears.push(key);
-
-        monthOrYearPackageNameIndexMap[key] = {
-          [curr.package_name]: 0,
-        };
-
-        return {
-          ...acc,
-          [key]: [this.setAppScanDataItem(curr)],
-        };
-      }, {} as Record<string, AppScanDataItem[]>),
+        },
+        {} as Record<string, AppScanDataItem[]>
+      ),
     } as AppScanDataItemGroup;
   }
 
@@ -311,27 +314,32 @@ export default class OrganizationAnalyticsAppScanChartComponent extends Componen
 
     return {
       days,
-      data: appScan.reduce((acc, curr) => {
-        const day = dayjs(curr.created_on_date).format('DD MMM, YY') as string;
+      data: appScan.reduce(
+        (acc, curr) => {
+          const day = dayjs(curr.created_on_date).format(
+            'DD MMM, YY'
+          ) as string;
 
-        if (acc[day]) {
+          if (acc[day]) {
+            return {
+              ...acc,
+              [day]: [
+                ...(acc[day] as AppScanDataItem[]),
+                this.setAppScanDataItem(curr),
+              ],
+            };
+          }
+
+          // push day if does not exist
+          days.push(day);
+
           return {
             ...acc,
-            [day]: [
-              ...(acc[day] as AppScanDataItem[]),
-              this.setAppScanDataItem(curr),
-            ],
+            [day]: [this.setAppScanDataItem(curr)],
           };
-        }
-
-        // push day if does not exist
-        days.push(day);
-
-        return {
-          ...acc,
-          [day]: [this.setAppScanDataItem(curr)],
-        };
-      }, {} as Record<string, AppScanDataItem[]>),
+        },
+        {} as Record<string, AppScanDataItem[]>
+      ),
     };
   }
 

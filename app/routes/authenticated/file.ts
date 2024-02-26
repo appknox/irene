@@ -7,11 +7,13 @@ export default class AuthenticatedFileRoute extends Route {
   @service declare router: RouterService;
 
   beforeModel(transition: Transition) {
-    const { params } = transition.to;
+    const { params } = transition.to || {};
 
-    this.router.transitionTo(
-      'authenticated.dashboard.file',
-      params['fileid'] as string
-    );
+    if (params) {
+      this.router.transitionTo(
+        'authenticated.dashboard.file',
+        params['fileid'] as string
+      );
+    }
   }
 }

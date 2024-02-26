@@ -123,7 +123,7 @@ export default class AuthenticatedRoute extends Route {
 
   @action
   willTransition(transition: Transition) {
-    const currentRoute = transition.to.name as keyof typeof CSBMap;
+    const currentRoute = transition.to?.name as keyof typeof CSBMap;
     const csbDict = CSBMap[currentRoute];
 
     if (!isEmpty(csbDict)) {

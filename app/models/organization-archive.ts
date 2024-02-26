@@ -7,6 +7,7 @@ import IntlService from 'ember-intl/services/intl';
 export enum OrganizationArchiveModelGeneratedVia {
   DASHBOARD = 0,
   CRM = 1,
+  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
   PARTNER = 1,
 }
 

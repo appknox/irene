@@ -21,8 +21,8 @@ class OrganizationNameHeader extends Component {
     return this.me.get('org.is_owner')
       ? 'owner'
       : this.me.get('org.is_admin')
-      ? 'admin'
-      : 'member';
+        ? 'admin'
+        : 'member';
   }
 
   @action

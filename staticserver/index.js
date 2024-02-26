@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
+// eslint-disable-next-line n/no-missing-require
 const expressStaticGzip = require('express-static-gzip');
 
 const staticDir = path.join(__dirname, 'dist');

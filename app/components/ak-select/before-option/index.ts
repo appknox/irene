@@ -2,7 +2,6 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { Select } from 'ember-power-select/components/power-select';
 import { later, scheduleOnce } from '@ember/runloop';
-import styles from './index.scss';
 
 interface AkSelectBeforeOptionArgs {
   select: Select;

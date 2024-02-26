@@ -18,7 +18,7 @@ export interface SbomComponentDetailsVulnerabilitiesDetailWrapperSignature {
   };
   Blocks: {
     default: [
-      { isContentCollapsed: boolean; collapsibleContentHandler: () => void }
+      { isContentCollapsed: boolean; collapsibleContentHandler: () => void },
     ];
   };
 }

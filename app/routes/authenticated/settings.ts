@@ -14,7 +14,7 @@ export default class AuthenticatedSettingsRoute extends ScrollToTop(Route) {
   }
 
   redirect(model: unknown, transition: Transition) {
-    const currentRoute = transition.to.name;
+    const currentRoute = transition.to?.name;
 
     if (currentRoute === 'authenticated.settings.index') {
       this.router.transitionTo('/settings/general');

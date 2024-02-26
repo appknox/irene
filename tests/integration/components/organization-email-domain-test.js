@@ -113,9 +113,7 @@ module('Integration | Component | organization-email-domain', function (hooks) {
 
       assert.strictEqual(findAll('[data-test-orgEmailDomain-chip]').length, 5);
 
-      const chipSelector = `[data-test-orgEmailDomain-chip="${1}-${
-        this.domains[1].id
-      }"]`;
+      const chipSelector = `[data-test-orgEmailDomain-chip="${1}-${this.domains[1].id}"]`;
 
       await click(`${chipSelector} [data-test-chip-delete-btn]`);
 

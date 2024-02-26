@@ -13,7 +13,7 @@
     {{if @noWrap "ak-link-noWrap"}}'
   @route={{@route}}
   @models={{this.modelOrModels}}
-  @query={{@query}}
+  @query={{this.query}}
 >
   {{#if (has-block 'leftIcon')}}
     <div data-test-ak-link-left-icon local-class='ak-link-left-icon'>
