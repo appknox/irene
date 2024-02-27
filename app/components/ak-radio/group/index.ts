@@ -13,7 +13,7 @@ interface AkRadioGroupSignature {
   Element: HTMLElement;
   Blocks: {
     default: [
-      { value: string; handleChange: (event: Event) => void; name: string }
+      { value: string; handleChange: (event: Event) => void; name: string },
     ];
   };
 }

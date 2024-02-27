@@ -25,7 +25,7 @@ interface InviteMemberSignature {
         action: () => void;
         actionLabel: string;
         actionRunning: boolean;
-      }
+      },
     ];
   };
 }

@@ -23,12 +23,15 @@ module.exports = {
   rules: {
     curly: 'error',
     '@typescript-eslint/no-empty-function': 'off',
+    '@typescript-eslint/no-explicit-any': 'warn',
+    'no-debugger': 'error',
     'ember/no-empty-glimmer-component-classes': 'off',
   },
   overrides: [
     // node files
     {
       files: [
+        './.stylelintrc.js',
         './.eslintrc.js',
         './.prettierrc.js',
         './.template-lintrc.js',
@@ -46,8 +49,7 @@ module.exports = {
         browser: false,
         node: true,
       },
-      plugins: ['node'],
-      extends: ['plugin:node/recommended'],
+      extends: ['plugin:n/recommended'],
       rules: {
         // this can be removed once the following is fixed
         // https://github.com/mysticatea/eslint-plugin-node/issues/77
@@ -64,8 +66,7 @@ module.exports = {
         browser: false,
         node: true,
       },
-      plugins: ['node'],
-      extends: ['plugin:node/recommended'],
+      extends: ['plugin:n/recommended'],
       rules: {
         // this can be removed once the following is fixed
         // https://github.com/mysticatea/eslint-plugin-node/issues/77
@@ -78,6 +79,9 @@ module.exports = {
       // test files
       files: ['tests/**/*-test.{js,ts}'],
       extends: ['plugin:qunit/recommended'],
+      rules: {
+        'qunit/require-expect': ['error', 'except-simple'],
+      },
     },
   ],
 };

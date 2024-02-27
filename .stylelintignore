@@ -1,0 +1,14 @@
+# unconventional files
+/blueprints/*/files/
+
+# compiled output
+/dist/
+/coverage/
+
+# addons
+/.node_modules.ember-try/
+
+/app/styles/_global-styles-deprecated.scss
+
+# TODD: for now ignore everything need to fix linting issues
+/app/

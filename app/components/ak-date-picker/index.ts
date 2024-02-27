@@ -191,8 +191,8 @@ export default class AkDatePickerComponent extends Component<AkDatePickerSignatu
     return this.args.range
       ? 'range'
       : this.args.multiple
-      ? 'multiple'
-      : 'single';
+        ? 'multiple'
+        : 'single';
   }
 
   get componentName() {

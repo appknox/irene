@@ -26,7 +26,7 @@ export interface AkFormControlLabelSignature {
       {
         control: ComponentLike<{ Blocks: { default: [] } }>;
         disabled?: boolean;
-      }
+      },
     ];
     label: [];
   };

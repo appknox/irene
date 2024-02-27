@@ -36,7 +36,7 @@ export interface AkListItemSignature {
           'disabled' | 'leftGutter'
         >;
         text: WithBoundArgs<typeof AkListItemTextComponent, 'disabled'>;
-      }
+      },
     ];
   };
 }
@@ -46,6 +46,10 @@ export default class AkListItemComponent extends Component<AkListItemSignature> 
 
   get route() {
     return this.args.route || '';
+  }
+
+  get query() {
+    return this.args.query || {};
   }
 
   get modelOrModels() {

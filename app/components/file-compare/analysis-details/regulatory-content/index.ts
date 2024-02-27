@@ -3,7 +3,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
 export interface FileCompareAnalysisDetailsRegulatoryContentSignature<
-  T extends object
+  T extends object,
 > {
   Args: {
     contents: T[];
@@ -14,13 +14,13 @@ export interface FileCompareAnalysisDetailsRegulatoryContentSignature<
     value: [
       content: T,
       showMoreFor: string | null,
-      showMoreHandler: (id: string) => void
+      showMoreHandler: (id: string) => void,
     ];
   };
 }
 
 export default class FileCompareAnalysisDetailsRegulatoryComponent<
-  T extends object
+  T extends object,
 > extends Component<FileCompareAnalysisDetailsRegulatoryContentSignature<T>> {
   @tracked showMoreDetailsFor: string | null = null;
 

@@ -13,7 +13,7 @@ export default class AuthenticatedGithubRedirectRoute extends Route {
 
   async beforeModel(transition: Transition) {
     const token = encodeURIComponent(
-      transition.to.queryParams['token'] as string
+      transition.to?.queryParams['token'] as string
     );
 
     const url = `/api/organizations/${this.organization.selected?.id}/github`;
