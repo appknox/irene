@@ -1033,4 +1033,23 @@ body {
 
   // variables for project-overview
   --project-overview-card-hover-shadow: var(--box-shadow-7);
+
+  // variables for oidc-authorize
+  &.theme-light {
+    --oidc-authorize-container-background-color: var(--background-main);
+    --oidc-authorize-card-border-color: var(--border-color-1);
+  }
+
+  &.theme-dark {
+    --oidc-authorize-container-background-color: var(--background-dark);
+    --oidc-authorize-card-border-color: transparent;
+  }
+
+  --oidc-authorize-card-background-color: var(--background-main);
+  --oidc-authorize-card-box-shadow: var(--box-shadow-7);
+
+  // variables for oidc/error
+  --oidc-error-container-background-color: var(--background-light);
+  --oidc-error-card-background-color: var(--background-main);
+  --oidc-error-card-border-radius: var(--border-radius);
 }

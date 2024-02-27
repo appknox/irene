@@ -1,0 +1,22 @@
+.oidc-authorize-root {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  background-color: var(--oidc-authorize-container-background-color);
+  overflow: auto;
+  padding: 3em;
+  box-sizing: border-box;
+
+  .oidc-authorize-container {
+    margin: auto;
+  }
+
+  .oidc-authorize-card {
+    width: 360px;
+    border-radius: 4px;
+    background-color: var(--oidc-authorize-card-background-color);
+    box-shadow: var(--oidc-authorize-card-box-shadow);
+    border: 1px solid var(--oidc-authorize-card-border-color);
+  }
+}

@@ -1,0 +1,69 @@
+{{#if @data.form_data.authorization_needed}}
+  <div local-class='oidc-authorize-root'>
+    <div local-class='oidc-authorize-container'>
+      <div class='mb-6'>
+        <AuthAssets />
+      </div>
+
+      <div class='py-3' local-class='oidc-authorize-card'>
+        <AkTypography
+          data-test-oidcAuthorize-heading
+          class='px-3'
+          @variant='h6'
+        >
+          {{t
+            'oidcModule.permissionHeading'
+            applicationName=this.applicationName
+          }}
+        </AkTypography>
+
+        <div class='py-1 px-3'>
+          <AkList as |akl|>
+            {{#each this.scopeDescriptions as |sd|}}
+              <akl.listItem
+                data-test-oidcAuthorize-scopeDescription='{{sd}}'
+                as |li|
+              >
+                <li.leftIcon @disabled={{true}}>
+                  <AkIcon @iconName='chevron-right' />
+                </li.leftIcon>
+
+                <li.text @primaryText={{sd}} />
+              </akl.listItem>
+            {{/each}}
+          </AkList>
+        </div>
+
+        <AkDivider class='mb-3' />
+
+        <AkStack
+          class='px-3'
+          @alignItems='center'
+          @justifyContent='space-between'
+          @spacing='1.5'
+        >
+          <AkButton
+            data-test-oidcAuthorize-cancelBtn
+            class='w-full'
+            @variant='outlined'
+            @color='neutral'
+            {{on 'click' (perform this.cancelAuthorization)}}
+            @disabled={{this.oidc.authorizeOidcAppPermissions.isRunning}}
+          >
+            {{t 'cancel'}}
+          </AkButton>
+
+          <AkButton
+            data-test-oidcAuthorize-authorizeBtn
+            class='w-full'
+            @disabled={{this.oidc.authorizeOidcAppPermissions.isRunning}}
+            @loading={{this.allowAuthorization.isRunning}}
+            {{on 'click' (perform this.allowAuthorization)}}
+          >
+            {{t 'authorize'}}
+          </AkButton>
+        </AkStack>
+      </div>
+    </div>
+  </div>
+{{/if}}
