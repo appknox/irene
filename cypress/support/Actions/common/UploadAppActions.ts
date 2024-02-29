@@ -21,14 +21,14 @@ export default class UploadAppActions {
    */
   openUploadAppModal() {
     return cy.get('body').then(($body) => {
+      // First check if modal popover is open and close it
+      // This step is useful in a scenario where you're unsure if the upload app modal is open
       if ($body.find(this.submissionsPopoverSelector).length >= 1) {
-        // First check if modal popover is open and close it
-        // This step is useful in a scenario where you're unsure if the upload app modal is open
         cy.get(this.submissionsPopoverSelector).first().click();
-
-        // Click on upload app progress bar to open modal
-        cy.get('[role="progressbar"]').first().click();
       }
+
+      // Click on upload app progress bar to open modal
+      cy.get('[role="progressbar"]').first().click({ force: true });
     });
   }
 

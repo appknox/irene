@@ -87,10 +87,10 @@ describe('User Login', () => {
     networkActions.mockNetworkReq({
       ...API_ROUTES.vulnerabilityList,
       dataOverride: {
-        data: mirageServer.createRecordList('vulnerability', 1).map((_) => ({
-          id: _.id,
+        data: mirageServer.createRecordList('vulnerability', 1).map((it) => ({
+          id: it.id,
           type: 'vulnerabilities',
-          attributes: _,
+          attributes: it,
           relationships: {},
         })),
       },
@@ -103,11 +103,11 @@ describe('User Login', () => {
 
     networkActions.mockNetworkReq({
       ...API_ROUTES.unknownAnalysisStatus,
-      dataOverride: unknownAnalysisStatus,
+      dataOverride: unknownAnalysisStatus.attrs,
     });
 
     //  Intercept file request
-    const file = mirageServer.createRecord('file');
+    const file = mirageServer.createRecord('file').attrs;
 
     networkActions.mockNetworkReq({
       ...API_ROUTES.file,
@@ -120,7 +120,7 @@ describe('User Login', () => {
       resDataOverride: {
         results: mirageServer
           .createRecordList('project', 1)
-          .map((_) => ({ ..._, file: file.id })),
+          .map((prj) => ({ ...prj, file: file.id })),
       },
     });
 

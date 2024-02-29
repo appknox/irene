@@ -1,8 +1,16 @@
+import { FactoryDefinition } from 'miragejs/-types';
+
 import { BASE_FACTORY_DEF } from 'irene/mirage/factories/base';
 import FileFactory, { FILE_FACTORY_DEF } from 'irene/mirage/factories/file';
 import User, { USER_FACTORY_DEF } from 'irene/mirage/factories/user';
-import { SBOM_PROJECT_FACTORY_DEF } from 'irene/mirage/factories/sbom-project';
-import { SBOM_FILE_FACTORY_DEF } from 'irene/mirage/factories/sbom-file';
+
+import SbomProjectFactory, {
+  SBOM_PROJECT_FACTORY_DEF,
+} from 'irene/mirage/factories/sbom-project';
+
+import SbomFileFactory, {
+  SBOM_FILE_FACTORY_DEF,
+} from 'irene/mirage/factories/sbom-file';
 
 import ProjectFactory, {
   PROJECT_FACTORY_DEF,
@@ -63,7 +71,10 @@ export interface MirageFactoryDefProps {
 /**
  * Mirage Model Factories for data mocking
  */
-const MIRAGE_FACTORIES = {
+const MIRAGE_FACTORIES: Record<
+  keyof MirageFactoryDefProps,
+  FactoryDefinition<object>
+> = {
   file: FileFactory,
   project: ProjectFactory,
   vulnerability: VulnerabilityFactory,
@@ -72,6 +83,8 @@ const MIRAGE_FACTORIES = {
   user: User,
   'upload-app': UploadApp,
   submission: Submission,
+  'sbom-file': SbomFileFactory,
+  'sbom-project': SbomProjectFactory,
 };
 
 export { MIRAGE_FACTORIES };

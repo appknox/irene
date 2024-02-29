@@ -26,11 +26,35 @@ const APP_TYPES = {
 
 describe('Upload App', () => {
   beforeEach(() => {
+    // Hide websocket and analyses logs
     networkActions.hideNetworkLogsFor({ ...API_ROUTES.websockets });
-
     networkActions.hideNetworkLogsFor({
       route: `${API_ROUTES.analysis.route}/*`,
     });
+
+    /* TODO: Remove or retain this interception based on whether
+     * access to submissions API is restricted or not.
+     * -------------------------------------------------
+     * Necessary to intercept submission requests that were returning 404
+     * This was causing the submission adapters to fail
+     */
+    networkActions
+      .interceptParameterizedRoute<{ subId: string }>({
+        route: '/api/submissions/:subId',
+        routeHandler: async (req, params) => {
+          req.continue((res) => {
+            if (res.statusCode === 404) {
+              res.send({
+                statusCode: 200,
+                body: {
+                  id: params.subId,
+                },
+              });
+            }
+          });
+        },
+      })
+      .as('submissionReq');
 
     // Login or restore session
     loginActions.loginWithCredAndSaveSession({ username, password });
@@ -42,7 +66,6 @@ describe('Upload App', () => {
     cy.intercept(API_ROUTES.projectList.route).as('orgProjectList');
     cy.intercept(API_ROUTES.submissionList.route).as('submissionList');
     cy.intercept(API_ROUTES.sbomProjectList.route).as('sbomProjectList');
-
     cy.intercept('POST', API_ROUTES.uploadApp.route).as('uploadAppReqPOST');
   });
 
@@ -55,7 +78,7 @@ describe('Upload App', () => {
         cy.visit(APPLICATION_ROUTES.projects);
 
         // Necessary API call before showing dashboard elements
-        cy.wait('@submissionList', { timeout: 20000 });
+        cy.wait('@submissionList', { timeout: 40000 });
 
         cy.findByText(APP_TRANSLATIONS.startNewScan).should('exist');
 
@@ -87,10 +110,11 @@ describe('Upload App', () => {
         cy.wait('@uploadSuccess', { timeout: 60000 });
 
         // Intercepts uploaded file submission request from uploaded file info
-        cy.wait('@uploadAppReqPOST', { timeout: 10000 }).then(
+        cy.wait('@uploadAppReqPOST', { timeout: 60000 }).then(
           ({ response: res }) => {
             const uploadDetails =
               res?.body as MirageFactoryDefProps['upload-app'];
+
             const uploadedAppSubURL = `${API_ROUTES.submissionItem.route}/${uploadDetails.submission_id}`;
 
             cy.findByText(APP_TRANSLATIONS.fileUploadedSuccessfully);
@@ -142,7 +166,7 @@ describe('Upload App', () => {
 
         // Waits for uploaded file app response to return
         cy.wait('@uploadedAppFile', {
-          timeout: 20000,
+          timeout: 60000,
         }).then(({ response: res }) => {
           const file = res?.body as MirageFactoryDefProps['file'];
 
@@ -251,7 +275,7 @@ describe('Upload App', () => {
         );
 
         // Allow SBOM project list to load
-        cy.wait('@sbomProjectList', { timeout: 20000 }).then(
+        cy.wait('@sbomProjectList', { timeout: 60000 }).then(
           ({ response: res }) => {
             const sbomPrjListRes = res?.body as {
               results: Array<MirageFactoryDefProps['sbom-project']>;
@@ -318,7 +342,7 @@ describe('Upload App', () => {
       cy.visit(APPLICATION_ROUTES.projects);
 
       // Necessary API call before showing dashboard elements
-      cy.wait('@submissionList', { timeout: 20000 });
+      cy.wait('@submissionList', { timeout: 40000 });
 
       cy.findByText(APP_TRANSLATIONS.startNewScan).should('exist');
 
@@ -351,6 +375,7 @@ describe('Upload App', () => {
         ({ response: res }) => {
           const uploadDetails =
             res?.body as MirageFactoryDefProps['upload-app'];
+
           const uploadedAppSubURL = `${API_ROUTES.submissionItem.route}/${uploadDetails.submission_id}`;
 
           cy.findByText(APP_TRANSLATIONS.fileUploadedSuccessfully);

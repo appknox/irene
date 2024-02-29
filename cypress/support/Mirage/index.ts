@@ -1,4 +1,4 @@
-import { Model, Server } from 'miragejs';
+import { Instantiate, Model, Server } from 'miragejs';
 import { ModelDefinition } from 'miragejs/-types';
 
 import { MIRAGE_FACTORIES, MirageFactoryDefProps } from './factories.config';
@@ -60,8 +60,8 @@ class MirageE2EServer {
       this.createServer();
     }
 
-    return (this.instance?.create(modelName, propertyOverride).attrs ||
-      {}) as MirageFactoryDefProps[T];
+    return (this.instance?.create(modelName, propertyOverride) ||
+      {}) as Instantiate<MirageFactoryDefProps, T>;
   }
 
   /**
@@ -75,8 +75,9 @@ class MirageE2EServer {
       this.createServer();
     }
 
-    return (this.instance?.createList(modelName, size).map((it) => it.attrs) ||
-      []) as Array<MirageFactoryDefProps[T]>;
+    return (this.instance?.createList(modelName, size) || []) as Array<
+      Instantiate<MirageFactoryDefProps, T>
+    >;
   }
 }
 

@@ -4,7 +4,7 @@
   "exclude": [],
   "compilerOptions": {
     "types": ["cypress", "@testing-library/cypress", "@cypress/grep"],
-    "lib": ["es2015", "dom"],
+    "lib": ["es2015", "dom", "es2018.regexp"],
     "isolatedModules": false,
     "allowJs": true,
     "noEmit": true
