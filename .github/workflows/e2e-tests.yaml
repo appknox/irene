@@ -37,6 +37,7 @@ jobs:
         env:
           CYPRESS_TEST_USERNAME: ${{ secrets.CYPRESS_TEST_USERNAME}}
           CYPRESS_TEST_PASSWORD: ${{ secrets.CYPRESS_TEST_PASSWORD }}
+          CYPRESS_TEST_GOOGLE_PASSWORD: ${{ secrets.CYPRESS_TEST_GOOGLE_PASSWORD }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_TEST_RECORD_ID}}
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_TEST_PROJECT_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

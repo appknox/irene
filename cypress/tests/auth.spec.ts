@@ -18,6 +18,59 @@ const password = Cypress.env('TEST_PASSWORD');
 describe('User Login', () => {
   beforeEach(() => {
     networkActions.hideNetworkLogsFor({ ...API_ROUTES.websockets });
+
+    cy.intercept(API_ROUTES.check.route).as('checkUserRoute');
+    cy.intercept(API_ROUTES.userInfo.route).as('userInfoRoute');
+
+    //  Intercept vulnerabilities route
+    networkActions.mockNetworkReq({
+      ...API_ROUTES.vulnerabilityList,
+      dataOverride: {
+        data: mirageServer.createRecordList('vulnerability', 1).map((_) => ({
+          id: _.id,
+          type: 'vulnerabilities',
+          attributes: _,
+          relationships: {},
+        })),
+      },
+    });
+
+    //  Intercept unknown analysis request
+    const unknownAnalysisStatus = mirageServer.createRecord(
+      'unknown-analysis-status'
+    );
+
+    networkActions.mockNetworkReq({
+      ...API_ROUTES.unknownAnalysisStatus,
+      dataOverride: unknownAnalysisStatus,
+    });
+
+    //  Intercept file request
+    const file = mirageServer.createRecord('file');
+
+    networkActions.mockNetworkReq({
+      ...API_ROUTES.file,
+      dataOverride: file,
+    });
+
+    //  Intercept projects route
+    networkActions.mockPaginatedNetworkReq({
+      ...API_ROUTES.projectList,
+      resDataOverride: {
+        results: mirageServer
+          .createRecordList('project', 1)
+          .map((_) => ({ ..._, file: file.id })),
+      },
+    });
+
+    //  Return empty submissions data
+    networkActions.mockPaginatedNetworkReq({
+      route: API_ROUTES.submissionList.route,
+      alias: 'submissionList',
+      resDataOverride: {
+        results: [],
+      },
+    });
   });
 
   it('should redirect unauthenticated user to login page', function () {
@@ -158,12 +211,35 @@ describe('User Login', () => {
       }
     });
 
-    // Assertion for different dashboard elements
-    cy.findByText(APP_TRANSLATIONS.startNewScan).should('exist');
-    cy.findByText(APP_TRANSLATIONS.uploadApp).should('exist');
-    cy.findByText(APP_TRANSLATIONS.allProjects).should('exist');
-    cy.findByText(APP_TRANSLATIONS.allProjectsDescription).should('exist');
-    cy.findByText(APP_TRANSLATIONS.support).should('exist');
-    cy.findByText(APP_TRANSLATIONS.knowledgeBase).should('exist');
+    loginActions.verifyDashboardElements();
+  });
+
+  it('should redirect authenticated user to dashboard after logging in via SSO', () => {
+    // Logs user to dashboard via API
+    loginActions.loginWithSSOAndSaveSession({ username });
+
+    cy.visit('/');
+
+    // Navigates to project listing route
+    cy.url({ timeout: 15000 }).should('include', APPLICATION_ROUTES.projects);
+
+    // Necessary API call before showing dashboard elements
+    cy.wait('@submissionList', { timeout: 15000 });
+
+    // Programmatically check for page elements based on user information.
+    cy.wait('@userInfoRoute').then(({ response }) => {
+      const orgUser = response?.body?.data?.attributes as Partial<
+        MirageFactoryDefProps['user']
+      >;
+
+      const username = orgUser?.username;
+
+      // Programmatically check for user name in navbar
+      if (username) {
+        cy.findByText(username).should('exist');
+      }
+    });
+
+    loginActions.verifyDashboardElements();
   });
 });
