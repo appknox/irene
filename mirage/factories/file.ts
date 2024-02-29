@@ -8,7 +8,7 @@ export const FILE_FACTORY_DEF = {
   device_token: faker.number.int(),
   md5hash: faker.number.int(),
   sha1hash: faker.number.int(),
-  report: faker.internet.avatar(),
+  report: faker.image.avatar(),
   manual: false,
   api_scan_progress: faker.number.int(),
   static_scan_progress: faker.number.int(),
@@ -41,7 +41,7 @@ export const FILE_FACTORY_DEF = {
   },
 
   icon_url() {
-    return faker.internet.avatar();
+    return faker.image.avatar();
   },
 
   is_active() {

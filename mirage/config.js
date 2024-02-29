@@ -9,6 +9,7 @@ import {
 export default function makeServer(config) {
   let finalConfig = {
     ...config,
+    trackRequests: true,
     models: {
       ...discoverEmberDataModels(config.store),
       ...config.models,

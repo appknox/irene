@@ -8,7 +8,7 @@ export default Base.extend({
   },
 
   platform_version() {
-    return faker.datatype.number();
+    return faker.number.int();
   },
 
   is_tablet() {
