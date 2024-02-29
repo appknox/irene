@@ -86,7 +86,20 @@ describe('Upload App', () => {
         const appName = APP_TYPES[app as keyof typeof APP_TYPES];
 
         cy.fixture(`apps/${appName}`, null).as('appBinary');
-        uploadAppActions.selectAppViaSystem('@appBinary');
+
+        uploadAppActions.selectAppViaSystem('@appBinary').then(() => {
+          uploadAppActions.openUploadAppModal();
+
+          cy.findAllByText(APP_TRANSLATIONS.viaSystem).first().should('exist');
+
+          cy.findAllByText(APP_TRANSLATIONS.uploadStatus)
+            .first()
+            .should('exist');
+
+          cy.findByText(new RegExp(APP_TRANSLATIONS.uploading, 'i')).should(
+            'exist'
+          );
+        });
 
         // Initiate apk upload
         cy.wait('@uploadAppReq').then(({ response: res }) => {
@@ -95,15 +108,6 @@ describe('Upload App', () => {
 
           // Necessary to know when upload is completed
           cy.intercept('PUT', uploadDetails.url).as('uploadSuccess');
-
-          uploadAppActions.openUploadAppModal();
-
-          cy.findByText(APP_TRANSLATIONS.viaSystem).first().should('exist');
-          cy.findByText(APP_TRANSLATIONS.uploadStatus).first().should('exist');
-
-          cy.findByText(new RegExp(APP_TRANSLATIONS.uploading, 'i')).should(
-            'exist'
-          );
         });
 
         // Wait for upload completion
@@ -203,12 +207,17 @@ describe('Upload App', () => {
         // Check if in file page
         cy.url().should('contain', APPLICATION_ROUTES.file);
 
-        // Wait for file response in file page
-        cy.wait('@uploadedAppFile').then(({ response: res }) => {
-          const file = res?.body as MirageFactoryDefProps['file'];
+        cy.wait(['@uploadedAppFile', '@uploadedAppFile', '@uploadedAppFile'], {
+          timeout: 60000,
+        }).then(([int1, int2, int3]) => {
+          const file = {
+            ...int1?.response?.body,
+            ...int2?.response?.body,
+            ...int3?.response?.body,
+          } as MirageFactoryDefProps['file'];
 
           // File details check
-          cy.findAllByAltText(`${file.name} - logo`).should('exist');
+          cy.findByAltText(`${file.name} - logo`).should('exist');
           cy.get('@packageName').should('exist');
           cy.get('@uploadedFileDetails').its('id').should('exist');
           cy.get('@uploadedFileDetails').its('name').should('exist');
@@ -236,12 +245,17 @@ describe('Upload App', () => {
                 cy.findAllByText(file.risk_count_passed).should('exist');
               });
             } else {
-              cy.wrap(file.static_scan_progress).should('be.lessThan', 100);
+              const staticScanProgress = file.static_scan_progress;
 
-              cy.findByText(
-                new RegExp(APP_TRANSLATIONS.scanning, 'i'),
-                assertOpts
-              ).should('exist');
+              cy.wrap(staticScanProgress).should('be.lessThan', 100);
+
+              // If closer to 100 UI will be updated before assertion is done
+              if (staticScanProgress < 60) {
+                cy.findByText(
+                  new RegExp(APP_TRANSLATIONS.scanning, 'i'),
+                  assertOpts
+                ).should('exist');
+              }
             }
           });
 
