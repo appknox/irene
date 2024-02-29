@@ -12,7 +12,7 @@ export default Base.extend({
   },
 
   members_count() {
-    return faker.datatype.number();
+    return faker.number.int();
   },
 
   name() {

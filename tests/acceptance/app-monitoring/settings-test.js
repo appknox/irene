@@ -24,6 +24,12 @@ class IntegrationStub extends Service {
   }
 }
 
+class WebsocketStub extends Service {
+  async connect() {}
+
+  async configure() {}
+}
+
 module('Acceptance | Component | app-monitoring-settings', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
@@ -32,6 +38,7 @@ module('Acceptance | Component | app-monitoring-settings', function (hooks) {
     const { organization } = await setupRequiredEndpoints(this.server);
 
     this.owner.register('service:integration', IntegrationStub);
+    this.owner.register('service:websocket', WebsocketStub);
 
     organization.update({
       features: {

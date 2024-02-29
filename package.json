@@ -131,7 +131,6 @@
     "ember-data": "~3.28.1",
     "ember-data-resources": "^5.0.0",
     "ember-dayjs-helpers": "^0.5.12",
-    "ember-django-adapter": "^2.1.1",
     "ember-export-application-global": "^2.0.1",
     "ember-fetch": "^8.1.1",
     "ember-file-upload": "^8.1.1",
@@ -198,5 +197,10 @@
   "volta": {
     "node": "18.19.1",
     "npm": "10.2.4"
+  },
+  "ember-addon": {
+    "paths": [
+      "lib/ember-django-adapter"
+    ]
   }
 }
