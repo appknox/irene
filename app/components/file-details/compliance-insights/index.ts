@@ -16,8 +16,8 @@ export default class FileDetailsComplianceInsightsComponent extends Component<Fi
     return this.args.file.analyses;
   }
 
-  get owasps() {
-    const owasps: string[] = [];
+  get owaspmobile2024s() {
+    const owaspmobile2024s: string[] = [];
 
     const risks = [
       ENUMS.RISK.CRITICAL,
@@ -27,14 +27,14 @@ export default class FileDetailsComplianceInsightsComponent extends Component<Fi
     ];
 
     this.analyses.forEach((analysis) => {
-      analysis.owasp.forEach((owasp) => {
+      analysis.owaspmobile2024.forEach((owaspmobile2024) => {
         if (risks.includes(analysis.get('risk'))) {
-          owasps.push(owasp.id);
+          owaspmobile2024s.push(owaspmobile2024.id);
         }
       });
     });
 
-    return owasps;
+    return owaspmobile2024s;
   }
 
   get owaspData(): OwaspChartDataOptions {
@@ -50,8 +50,8 @@ export default class FileDetailsComplianceInsightsComponent extends Component<Fi
       {}
     ) as Record<string, number>;
 
-    this.owasps.forEach((owasp) => {
-      const [key] = owasp.split('_');
+    this.owaspmobile2024s.forEach((owaspmobile2024) => {
+      const [key] = owaspmobile2024.split('_');
 
       if (key && typeof owaspACounts[key] !== 'undefined') {
         owaspACounts[key]++;

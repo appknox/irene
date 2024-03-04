@@ -1,6 +1,6 @@
 import Model, { attr } from '@ember-data/model';
 
-export default class OwaspModel extends Model {
+export default class OwaspMobile2024Model extends Model {
   @attr('string')
   declare code: string;
 
@@ -8,14 +8,11 @@ export default class OwaspModel extends Model {
   declare title: string;
 
   @attr('string')
-  declare description: string;
-
-  @attr('string')
   declare year: string;
 }
 
 declare module 'ember-data/types/registries/model' {
   export default interface ModelRegistry {
-    owasp: OwaspModel;
+    owaspmobile2024: OwaspMobile2024Model;
   }
 }
