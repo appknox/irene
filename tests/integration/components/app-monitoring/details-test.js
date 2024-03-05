@@ -17,7 +17,7 @@ module('Integration | Component | app-monitoring/details', function (hooks) {
 
     this.file = this.store.createRecord('file', {
       id: 1,
-      iconUrl: faker.internet.avatar(),
+      iconUrl: faker.image.avatar(),
       name: faker.company.name(),
       version: '23.2.75',
       versionCode: '23.2.75',

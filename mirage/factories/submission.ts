@@ -20,7 +20,7 @@ export const SUBMISSION_FACTORY_DEF = {
   app_data: () => ({
     name: faker.company.name(),
     package_name: faker.internet.domainName(),
-    icon_url: faker.internet.avatar(),
+    icon_url: faker.image.avatar(),
     platform: faker.helpers.arrayElement([
       ENUMS.PLATFORM.ANDROID,
       ENUMS.PLATFORM.IOS,
