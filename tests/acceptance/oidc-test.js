@@ -68,9 +68,25 @@ module('Acceptance | oidc login', function (hooks) {
   hooks.beforeEach(async function () {
     const token = (length) => faker.string.alphanumeric({ length });
 
+    const router = this.owner.lookup('service:router');
+
+    this.routeHandler = (transition) => {
+      // abort route after login since window is stubbed
+      if (transition.to.name === 'authenticated.index') {
+        transition?.abort();
+      }
+    };
+
+    router.on('routeWillChange', this.routeHandler);
+
     this.setProperties({
+      router,
       oidcToken: encodeURIComponent(`${token(84)}:${token(6)}:${token(43)}`),
     });
+  });
+
+  hooks.afterEach(async function () {
+    this.router.off('routeWillChange', this.routeHandler);
   });
 
   const handleUserAuthorizeFlow = async (
@@ -215,6 +231,8 @@ module('Acceptance | oidc login', function (hooks) {
     ) {
       assert.expect(assertions);
 
+      const window = this.owner.lookup('service:browser/window');
+
       const tokenValidateResponse = createOidcTokenValidateResponse();
 
       const oidcAuthorizationResponse = createOidcAuthorizeFormResponse();
@@ -279,6 +297,9 @@ module('Acceptance | oidc login', function (hooks) {
         if (loginBySSO) {
           await handleUserLoginFlow(assert, this.server, true);
         }
+
+        // Simulating redirect from authenticator since window is stubbed
+        await visit(window.location.pathname + window.location.search);
       }
 
       await waitUntil(() => currentURL().includes('/dashboard/oidc/authorize'));
@@ -292,8 +313,6 @@ module('Acceptance | oidc login', function (hooks) {
       if (authorizationNeeded) {
         await handleUserAuthorizeFlow(assert, oidcAuthorizationResponse, true);
       }
-
-      const window = this.owner.lookup('service:browser/window');
 
       await waitUntil(
         () => oidcAuthorizeResponse.redirect_url === window.location.href,
